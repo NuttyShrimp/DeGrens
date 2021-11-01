@@ -497,14 +497,14 @@ function DGCore.Player.Save(source)
             position = json.encode(pcoords),
             metadata = json.encode(PlayerData.metadata),
 
-            firstname = PlayerData.firstname,
-            lastname = PlayerData.lastname,
-            birthdate = PlayerData.birthdate,
-            gender = PlayerData.gender,
-            backstory = PlayerData.backstory,
-            nationality = PlayerData.nationality,
-            phone = PlayerData.phone,
-            account = PlayerData.account
+            firstname = PlayerData.charinfo.firstname,
+            lastname = PlayerData.charinfo.lastname,
+            birthdate = PlayerData.charinfo.birthdate,
+            gender = PlayerData.charinfo.gender,
+            backstory = PlayerData.charinfo.backstory,
+            nationality = PlayerData.charinfo.nationality,
+            phone = PlayerData.charinfo.phone,
+            account = PlayerData.charinfo.account,
         })
         DGCore.Player.SaveInventory(src)
         DGCore.ShowSuccess(GetCurrentResourceName(), PlayerData.name .. ' PLAYER SAVED!')
