@@ -1,3 +1,6 @@
 [submodule ".\\resources\\[clothes]"]
 	path = .\\resources\\[clothes]
 	url = https://gitlab.pieter557.dscloud.me/degrens-21/degrens-clothing.git
+[submodule ".\\resources\\[vehicles]"]
+	path = .\\resources\\[vehicles]
+	url = https://gitlab.pieter557.dscloud.me/degrens-21/degrens-vehicles.git
