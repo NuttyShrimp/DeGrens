@@ -22,7 +22,7 @@ AddEventHandler('onResourceStop', function(resource)
         if houseObj ~= nil then
             exports['qb-interior']:DespawnInterior(houseObj, function()
                 CurrentApartment = nil
-                TriggerEvent('qb-weathersync:client:EnableSync')
+                TriggerEvent('dg-weathersync:client:EnableSync')
                 DoScreenFadeIn(500)
                 while not IsScreenFadedOut() do
                     Citizen.Wait(10)
@@ -75,7 +75,7 @@ local function EnterApartment(house, apartmentId, new)
                 ClosestHouse = house
                 rangDoorbell = nil
                 Citizen.Wait(500)
-                TriggerEvent('qb-weathersync:client:DisableSync')
+                TriggerEvent('dg-weathersync:client:DisableSync')
                 Citizen.Wait(100)
                 TriggerServerEvent('qb-apartments:server:SetInsideMeta', house, apartmentId, true)
                 TriggerServerEvent("InteractSound_SV:PlayOnSource", "houses_door_close", 0.1)
@@ -96,7 +96,7 @@ local function EnterApartment(house, apartmentId, new)
             InApartment = true
             CurrentApartment = apartmentId
             Citizen.Wait(500)
-            TriggerEvent('qb-weathersync:client:DisableSync')
+            TriggerEvent('dg-weathersync:client:DisableSync')
             Citizen.Wait(100)
             TriggerServerEvent("InteractSound_SV:PlayOnSource", "houses_door_close", 0.1)
             TriggerServerEvent("DGCore:Server:SetMetaData", "currentapartment", CurrentApartment)
@@ -120,7 +120,7 @@ local function LeaveApartment(house)
     DoScreenFadeOut(500)
     while not IsScreenFadedOut() do Wait(10) end
     exports['qb-interior']:DespawnInterior(houseObj, function()
-        TriggerEvent('qb-weathersync:client:EnableSync')
+        TriggerEvent('dg-weathersync:client:EnableSync')
         SetEntityCoords(PlayerPedId(), Apartments.Locations[house].coords.enter.x, Apartments.Locations[house].coords.enter.y,Apartments.Locations[house].coords.enter.z)
         SetEntityHeading(PlayerPedId(), Apartments.Locations[house].coords.enter.w)
         Citizen.Wait(1000)

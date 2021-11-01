@@ -136,7 +136,7 @@ function enterRobberyHouse(house)
     inside = true
     currentHouse = house
     Wait(500)
-    TriggerEvent('qb-weathersync:client:DisableSync')
+    TriggerEvent('dg-weathersync:client:DisableSync')
 end
 
 function leaveRobberyHouse(house)
@@ -147,7 +147,7 @@ function leaveRobberyHouse(house)
     DoScreenFadeOut(250)
     Wait(500)
     exports['qb-interior']:DespawnInterior(houseObj, function()
-        TriggerEvent('qb-weathersync:client:EnableSync')
+        TriggerEvent('dg-weathersync:client:EnableSync')
         Wait(250)
         DoScreenFadeIn(250)
         SetEntityCoords(ped, Config.Houses[house]["coords"]["x"], Config.Houses[house]["coords"]["y"], Config.Houses[house]["coords"]["z"] + 0.5)

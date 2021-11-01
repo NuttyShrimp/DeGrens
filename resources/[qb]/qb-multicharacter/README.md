@@ -25,7 +25,7 @@ Multi Character Feature for dg-core Framework :people_holding_hands:
 - [qb-spawn](https://github.com/DGCore-framework/qb-spawn) - Spawn selector
 - [qb-apartments](https://github.com/DGCore-framework/qb-apartments) - For giving the player a apartment after creating a character.
 - [qb-clothing](https://github.com/DGCore-framework/qb-clothing) - For the character creation and saving outfits.
-- [qb-weathersync](https://github.com/DGCore-framework/qb-weathersync) - For adjusting the weather while player is creating a character.
+- [dg-weathersync](https://github.com/DGCore-framework/dg-weathersync) - For adjusting the weather while player is creating a character.
 
 ## Screenshots
 ![Character Selection](https://i.imgur.com/EUB5X6Y.png)
@@ -45,5 +45,5 @@ ensure qb-multicharacter
 ensure qb-spawn
 ensure qb-apartments
 ensure qb-clothing
-ensure qb-weathersync
+ensure dg-weathersync
 ```

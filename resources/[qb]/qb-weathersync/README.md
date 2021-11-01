@@ -1,4 +1,4 @@
-# qb-weathersync
+# dg-weathersync
 Synced weather and time for dg-core Framework :sunrise:
 
 # License
@@ -39,8 +39,8 @@ Synced weather and time for dg-core Framework :sunrise:
 - Add the following code to your server.cfg/resouces.cfg
 ```
 ensure dg-core
-ensure qb-weathersync
+ensure dg-weathersync
 ```
 
 ## Configuration
-You can adjust available weather and time types in qb-weathersync\server\main.lua
+You can adjust available weather and time types in dg-weathersync\server\main.lua

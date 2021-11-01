@@ -28,7 +28,7 @@ Real Estate for dg-core Framework :house_with_garden:
 - [qb-garages](https://github.com/DGCore-framework/qb-garages) - House Garage
 - [qb-interior](https://github.com/DGCore-framework/qb-interior) - Necessary for house interiors
 - [qb-clothing](https://github.com/DGCore-framework/qb-clothing) - Outfits
-- [qb-weathersync](https://github.com/DGCore-framework/qb-weathersync) - Desync weather inside house
+- [dg-weathersync](https://github.com/DGCore-framework/dg-weathersync) - Desync weather inside house
 - [qb-weed](https://github.com/DGCore-framework/qb-weed) - Weed plant
 - [qb-skillbar](https://github.com/DGCore-framework/qb-skillbar) - Skills
 
@@ -97,7 +97,7 @@ ensure qb-multicharacter
 ensure qb-garages
 ensure qb-interior
 ensure qb-clothing
-ensure qb-weathersync
+ensure dg-weathersync
 ensure qb-weed
 ensure qb-skillbar
 ```

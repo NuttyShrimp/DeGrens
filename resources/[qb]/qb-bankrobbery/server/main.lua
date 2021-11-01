@@ -12,7 +12,7 @@ Citizen.CreateThread(function()
     while true do
         Citizen.Wait(1000 * 60 * 10)
         if blackoutActive then
-            TriggerEvent("qb-weathersync:server:toggleBlackout")
+            TriggerEvent("dg-weathersync:server:toggleBlackout")
             TriggerClientEvent("police:client:EnableAllCameras", -1)
             TriggerClientEvent("qb-bankrobbery:client:enableAllBankSecurity", -1)
             blackoutActive = false
@@ -280,7 +280,7 @@ AddEventHandler('qb-bankrobbery:server:SetStationStatus', function(key, isHit)
     Config.PowerStations[key].hit = isHit
     TriggerClientEvent("qb-bankrobbery:client:SetStationStatus", -1, key, isHit)
     if AllStationsHit() then
-        TriggerEvent("qb-weathersync:server:toggleBlackout")
+        TriggerEvent("dg-weathersync:server:toggleBlackout")
         TriggerClientEvent("police:client:DisableAllCameras", -1)
         TriggerClientEvent("qb-bankrobbery:client:disableAllBankSecurity", -1)
         blackoutActive = true

@@ -28,5 +28,5 @@ dependencies {
 	'dg-core',
 	'qb-interior',
 	'qb-clothing',
-	'qb-weathersync'
+	'dg-weathersync'
 }

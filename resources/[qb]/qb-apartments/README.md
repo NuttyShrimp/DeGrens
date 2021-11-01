@@ -25,7 +25,7 @@ Apartments System for dg-core Framework :office:
 - [qb-clothing](https://github.com/DGCore-framework/qb-clothing) - To save outfits
 - [qb-houses](https://github.com/DGCore-framework/qb-houses) - House logic
 - [qb-interior](https://github.com/DGCore-framework/qb-interior) - Interior logic
-- [qb-weathersync](https://github.com/DGCore-framework/qb-weathersync) - To desync weather while inside
+- [dg-weathersync](https://github.com/DGCore-framework/dg-weathersync) - To desync weather while inside
 - [qb-spawn](https://github.com/DGCore-framework/qb-spawn) - To spawn the player at apartment if last location was in apartment
 
 ## Screenshots
@@ -50,7 +50,7 @@ Apartments System for dg-core Framework :office:
 ```
 ensure dg-core
 ensure qb-interior
-ensure qb-weathersync
+ensure dg-weathersync
 ensure qb-clothing
 ensure qb-houses
 ensure qb-spawn
