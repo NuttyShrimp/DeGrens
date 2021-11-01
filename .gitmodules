@@ -1,0 +1,3 @@
+[submodule ".\\resources\\[clothes]"]
+	path = .\\resources\\[clothes]
+	url = https://gitlab.pieter557.dscloud.me/degrens-qb/degrens-clothing.git
