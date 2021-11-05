@@ -1,6 +1,6 @@
 var selectedChar = null;
 var WelcomePercentage = "30vh"
-qbMultiCharacters = {}
+dgChars = {}
 var Loaded = false;
 
 $(document).ready(function (){
@@ -11,7 +11,7 @@ $(document).ready(function (){
             if (data.toggle) {
                 $('.container').show();
                 $(".welcomescreen").fadeIn(150);
-                qbMultiCharacters.resetAll();
+                dgChars.resetAll();
 
                 var originalText = "Retrieving player data";
                 var loadingProgress = 0;
@@ -40,20 +40,19 @@ $(document).ready(function (){
                 }, 500);
             
                 setTimeout(function(){
-                    $.post('https://qb-multicharacter/setupCharacters');
+                    
                     setTimeout(function(){
                         clearInterval(DotsInterval);
                         loadingProgress = 0;
                         originalText = "Retrieving data";
                         $(".welcomescreen").fadeOut(150);
-                        qbMultiCharacters.fadeInDown('.character-info', '20%', 400);
-                        qbMultiCharacters.fadeInDown('.characters-list', '20%', 400);
-                        $.post('https://qb-multicharacter/removeBlur');
+                        $.post('https://dg-chars/removeBlur');
+                        dgChars.fadeInDown('.characters-list', '15%', 400);
                     }, 2000);
                 }, 2000);
             } else {
                 $('.container').fadeOut(250);
-                qbMultiCharacters.resetAll();
+                dgChars.resetAll();
             }
         }
 
@@ -216,7 +215,7 @@ $(document).on('click', '#create', function (e) {
         $(".container").fadeOut(150);
         $('.characters-list').css("filter", "none");
         $('.character-info').css("filter", "none");
-        qbMultiCharacters.fadeOutDown('.character-register', '125%', 400);
+        dgChars.fadeOutDown('.character-register', '125%', 400);
         refreshCharacters()
     }
 });
@@ -244,7 +243,7 @@ function refreshCharacters() {
         $.post('https://qb-multicharacter/setupCharacters');
         $("#delete").css({"display":"none"});
         $("#play").css({"display":"none"});
-        qbMultiCharacters.resetAll();
+        dgChars.resetAll();
     }, 100)
 }
 
@@ -252,7 +251,7 @@ $("#close-reg").click(function (e) {
     e.preventDefault();
     $('.characters-list').css("filter", "none")
     $('.character-info').css("filter", "none")
-    qbMultiCharacters.fadeOutDown('.character-register', '125%', 400);
+    dgChars.fadeOutDown('.character-register', '125%', 400);
 })
 
 $("#close-del").click(function (e) {
@@ -271,14 +270,14 @@ $(document).on('click', '#play', function(e) {
                 cData: $(selectedChar).data('cData')
             }));
             setTimeout(function(){
-                qbMultiCharacters.fadeOutDown('.characters-list', "-40%", 400);
-                qbMultiCharacters.fadeOutDown('.character-info', "-40%", 400);
-                qbMultiCharacters.resetAll();
+                dgChars.fadeOutDown('.characters-list', "-40%", 400);
+                dgChars.fadeOutDown('.character-info', "-40%", 400);
+                dgChars.resetAll();
             }, 1500);
         } else {
             $('.characters-list').css("filter", "blur(2px)")
             $('.character-info').css("filter", "blur(2px)")
-            qbMultiCharacters.fadeInDown('.character-register', '25%', 400);
+            dgChars.fadeInDown('.character-register', '25%', 400);
         }
     }
 });
@@ -295,13 +294,13 @@ $(document).on('click', '#delete', function(e) {
     }
 });
 
-qbMultiCharacters.fadeOutUp = function(element, time) {
+dgChars.fadeOutUp = function(element, time) {
     $(element).css({"display":"block"}).animate({top: "-80.5%",}, time, function(){
         $(element).css({"display":"none"});
     });
 }
 
-qbMultiCharacters.fadeOutDown = function(element, percent, time) {
+dgChars.fadeOutDown = function(element, percent, time) {
     if (percent !== undefined) {
         $(element).css({"display":"block"}).animate({top: percent,}, time, function(){
             $(element).css({"display":"none"});
@@ -313,11 +312,11 @@ qbMultiCharacters.fadeOutDown = function(element, percent, time) {
     }
 }
 
-qbMultiCharacters.fadeInDown = function(element, percent, time) {
+dgChars.fadeInDown = function(element, percent, time) {
     $(element).css({"display":"block"}).animate({top: percent,}, time);
 }
 
-qbMultiCharacters.resetAll = function() {
+dgChars.resetAll = function() {
     $('.characters-list').hide();
     $('.characters-list').css("top", "-40");
     $('.character-info').hide();

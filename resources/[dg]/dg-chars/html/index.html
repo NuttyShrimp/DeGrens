@@ -4,13 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link href="reset.css" rel="stylesheet">
-    <link href="materialize.css" rel="stylesheet">
     <link href="style.css" rel="stylesheet">
+    <link href="https://cfx-nui-dg-ui/html/css/dgstyle.css" rel="stylesheet">
     <script src="nui://game/ui/jquery.js" type="text/javascript"></script>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <title>QB-Multicharacter</title>
+    <title>DG-CHARS</title>
 </head>
     <body>
         <div class="container">                     
@@ -22,51 +21,40 @@
                     </div>
                 </div>
                 <div class="row characters-list">
-                    <div class="col s2 offset-s1 character" id="char-1" data-cid="">
-                        <span class="character" id="slot-name">Create New Character</span>
+                    <div class="col s2 offset-s1" id="char-1" data-cid="">
+                        <div class="char-box" id="box-1">
+                        
+                        </div>
+                        <div class="character">
+                            <span id="slot-name">Create New Character</span>
+                        </div>
                     </div>
-                    <div class="col s2 character" id="char-2" data-cid="">
-                        <span id="slot-name">Create New Character</span>
+                    <div class="col s2" id="char-2" data-cid="">
+                        <div class="char-box" id="box-2"></div>
+                        <div class="character">
+                            <span id="slot-name">Create New Character</span>
+                        </div>
                     </div>
-                    <div class="col s2 character" id="char-3" data-cid="">
-                        <span id="slot-name">Create New Character</span>
+                    <div class="col s2" id="char-3" data-cid="">
+                        <div class="char-box" id="box-3"></div>
+                        <div class="character">
+                            <span id="slot-name">Create New Character</span>
+                        </div>
                     </div>
-                    <div class="col s2 character" id="char-4" data-cid="">
-                        <span id="slot-name">Create New Character</span>
+                    <div class="col s2" id="char-4" data-cid="">
+                        <div class="char-box" id="box-4"></div>
+                        <div class="character">
+                            <span id="slot-name">Create New Character</span>
+                        </div>
                     </div>
-                    <div class="col s2 character" id="char-5" data-cid="">
-                        <span id="slot-name">Create New Character</span>
+                    <div class="col s2" id="char-5" data-cid="">
+                        <div class="char-box" id="box-5"></div>
+                        <div class="character">
+                            <span id="slot-name">Create New Character</span>
+                        </div>
                     </div>
                 </div>
                 
-                <div class="character-register">
-                    <div class="characters-register-block-header">
-                        <p>Character Registration</p>
-                        <i class="material-icons-one" id="close-reg">close</i>
-                    </div>
-                    <div class="char-register-inputs">
-                        <input type="text" id="first_name" placeholder="First Name" class="char-reg-input">
-                        <input type="text" id="last_name" placeholder="Last Name" class="char-reg-input">
-                        <input type="text" id="nationality" placeholder="Nationality" class="char-reg-input">
-                        <input type="date" id="birthdate" placeholder="Birth Date" min="1900-01-01" max="2999-12-31" class="char-reg-input">
-                        <select id="gender" name="gender">
-                            <option value="Male" selected>Man</option>
-                            <option value="Female">Woman</option>
-                        </select>
-                    </div>
-                    <div class="character-reg-btn" id="create"><p id="create-text">Confirm</p></div>
-                </div>
-
-                <div class="character-delete">
-                    <div class="characters-delete-block-header">
-                        <p>Delete Character</p>
-                    </div>
-
-                    <p>Are You Sure You Want To Delete Your Character?</p>
-
-                    <div class="character-acceptdel-btn" id="accept-delete"><p id="accept-text">Confirm</p></div>
-                    <div class="character-canceldel-btn" id="cancel-delete"><p id="cancel-text">Return</p></div>
-                </div>
             </div>
         </div>
     </body>

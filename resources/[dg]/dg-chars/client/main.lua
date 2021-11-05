@@ -48,52 +48,56 @@ local function setPeds(bool)
             characters = result
         })
         DGCore.Functions.TriggerCallback("dg-chars:server:setupCharacters", function(result)
-                for i=1 , 5 , 1 do
-                    if result[i] then
-                        model = result[i].model
-                        data = result[i].skin
-                        model = model ~= nil and tonumber(model) or false
-                        Citizen.CreateThread(function()
-                            RequestModel(model)
-                            while not HasModelLoaded(model) do
-                                Citizen.Wait(0)
-                            end
-                            charPed = CreatePed(2, model, Config.PedLocations[i].x, Config.PedLocations[i].y, Config.PedLocations[i].z - 0.98, Config.PedLocations[i].w, false, true)
-                            SetPedComponentVariation(charPed, 0, 0, 0, 2)
-                            FreezeEntityPosition(charPed, false)
-                            SetEntityInvincible(charPed, true)
-                            PlaceObjectOnGroundProperly(charPed)
-                            SetBlockingOfNonTemporaryEvents(charPed, true)
-                            data = json.decode(data)
-                            TriggerEvent('qb-clothing:client:loadPlayerClothing', data, charPed)
-                         end)
-                    else
-                        -- Citizen.CreateThread(function()
-                        --     local randommodels = {
-                        --         "mp_m_freemode_01",
-                        --         "mp_f_freemode_01",
-                        --     }
-                        --     local model = GetHashKey(randommodels[math.random(1, #randommodels)])
-                        --     RequestModel(model)
-                        --     while not HasModelLoaded(model) do
-                        --         Citizen.Wait(0)
-                        --     end
-                        --     charPed = CreatePed(2, model, Config.PedLocations[i].x, Config.PedLocations[i].y, Config.PedLocations[i].z - 0.98, Config.PedLocations[i].w, false, true)
-                        --     SetPedComponentVariation(charPed, 0, 0, 0, 2)
-                        --     FreezeEntityPosition(charPed, false)
-                        --     SetEntityInvincible(charPed, true)
-                        --     PlaceObjectOnGroundProperly(charPed)
-                        --     SetBlockingOfNonTemporaryEvents(charPed, true)
-                        -- end)
-                        CreateThread(function()
-                            while true do
-                                -- draw every frame
-                                Wait(0)
-                                DrawMarker(25, Config.PedLocations[i].x, Config.PedLocations[i].y, Config.PedLocations[i].z, 0.0, 0.0, 0.0, 0.0, 180.0, 0.0, 0.8, 0.8, 0.8, 50, 50, 50, 200, false, true, 2, nil, nil, false)
-                            end
-                        end)
-                    end
+            SendNUIMessage({
+                action = "setupCharacters",
+                characters = result
+            })
+            for i=1 , 5 , 1 do
+                if result[i] then
+                    model = result[i].model
+                    data = result[i].skin
+                    model = model ~= nil and tonumber(model) or false
+                    Citizen.CreateThread(function()
+                        RequestModel(model)
+                        while not HasModelLoaded(model) do
+                            Citizen.Wait(0)
+                        end
+                        charPed = CreatePed(2, model, Config.PedLocations[i].x, Config.PedLocations[i].y, Config.PedLocations[i].z - 0.98, Config.PedLocations[i].w, false, true)
+                        SetPedComponentVariation(charPed, 0, 0, 0, 2)
+                        FreezeEntityPosition(charPed, false)
+                        SetEntityInvincible(charPed, true)
+                        PlaceObjectOnGroundProperly(charPed)
+                        SetBlockingOfNonTemporaryEvents(charPed, true)
+                        data = json.decode(data)
+                        TriggerEvent('qb-clothing:client:loadPlayerClothing', data, charPed)
+                     end)
+                else
+                    -- Citizen.CreateThread(function()
+                    --     local randommodels = {
+                    --         "mp_m_freemode_01",
+                    --         "mp_f_freemode_01",
+                    --     }
+                    --     local model = GetHashKey(randommodels[math.random(1, #randommodels)])
+                    --     RequestModel(model)
+                    --     while not HasModelLoaded(model) do
+                    --         Citizen.Wait(0)
+                    --     end
+                    --     charPed = CreatePed(2, model, Config.PedLocations[i].x, Config.PedLocations[i].y, Config.PedLocations[i].z - 0.98, Config.PedLocations[i].w, false, true)
+                    --     SetPedComponentVariation(charPed, 0, 0, 0, 2)
+                    --     FreezeEntityPosition(charPed, false)
+                    --     SetEntityInvincible(charPed, true)
+                    --     PlaceObjectOnGroundProperly(charPed)
+                    --     SetBlockingOfNonTemporaryEvents(charPed, true)
+                    -- end)
+                    CreateThread(function()
+                        while true do
+                            -- draw every frame
+                            Wait(0)
+                            DrawMarker(25, Config.PedLocations[i].x, Config.PedLocations[i].y, Config.PedLocations[i].z, 0.0, 0.0, 0.0, 0.0, 180.0, 0.0, 0.8, 0.8, 0.8, 50, 50, 50, 200, false, true, 2, nil, nil, false)
+                        end
+                    end)
                 end
+            end
     
         end)
     end
