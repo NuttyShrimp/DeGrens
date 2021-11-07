@@ -43,10 +43,6 @@ end
 
 local function setPeds(bool)
     if bool then
-        SendNUIMessage({
-            action = "setupCharacters",
-            characters = result
-        })
         DGCore.Functions.TriggerCallback("dg-chars:server:setupCharacters", function(result)
             SendNUIMessage({
                 action = "setupCharacters",
@@ -115,27 +111,27 @@ end
 
 -- Events
 
-RegisterNetEvent('qb-multicharacter:client:closeNUIdefault', function() -- This event is only for no starting apartments
-    SetNuiFocus(false, false)
-    DoScreenFadeOut(500)
-    Citizen.Wait(2000)
-    SetEntityCoords(PlayerPedId(), Config.DefaultSpawn.x, Config.DefaultSpawn.y, Config.DefaultSpawn.z)
-    TriggerServerEvent('DGCore:Server:OnPlayerLoaded')
-    TriggerEvent('DGCore:Client:OnPlayerLoaded')
-    TriggerServerEvent('qb-houses:server:SetInsideMeta', 0, false)
-    TriggerServerEvent('qb-apartments:server:SetInsideMeta', 0, 0, false)
-    Citizen.Wait(500)
-    openCharMenu()
-    SetEntityVisible(PlayerPedId(), true)
-    Citizen.Wait(500)
-    DoScreenFadeIn(250)
-    TriggerEvent('dg-weathersync:client:EnableSync')
-    TriggerEvent('qb-clothes:client:CreateFirstCharacter')
-end)
+-- RegisterNetEvent('qb-multicharacter:client:closeNUIdefault', function() -- This event is only for no starting apartments
+--     SetNuiFocus(false, false)
+--     DoScreenFadeOut(500)
+--     Citizen.Wait(2000)
+--     SetEntityCoords(PlayerPedId(), Config.DefaultSpawn.x, Config.DefaultSpawn.y, Config.DefaultSpawn.z)
+--     TriggerServerEvent('DGCore:Server:OnPlayerLoaded')
+--     TriggerEvent('DGCore:Client:OnPlayerLoaded')
+--     TriggerServerEvent('qb-houses:server:SetInsideMeta', 0, false)
+--     TriggerServerEvent('qb-apartments:server:SetInsideMeta', 0, 0, false)
+--     Citizen.Wait(500)
+--     openCharMenu()
+--     SetEntityVisible(PlayerPedId(), true)
+--     Citizen.Wait(500)
+--     DoScreenFadeIn(250)
+--     TriggerEvent('dg-weathersync:client:EnableSync')
+--     TriggerEvent('qb-clothes:client:CreateFirstCharacter')
+-- end)
 
-RegisterNetEvent('qb-multicharacter:client:closeNUI', function()
-    SetNuiFocus(false, false)
-end)
+-- RegisterNetEvent('qb-multicharacter:client:closeNUI', function()
+--     SetNuiFocus(false, false)
+-- end)
 
 RegisterNetEvent('dg-chars:client:chooseChar', function()
     SetNuiFocus(false, false)
@@ -155,38 +151,38 @@ RegisterNUICallback('closeUI', function()
     openCharMenu(false)
 end)
 
-RegisterNUICallback('disconnectButton', function()
-    SetEntityAsMissionEntity(charPed, true, true)
-    DeleteEntity(charPed)
-    TriggerServerEvent('qb-multicharacter:server:disconnect')
-end)
+-- RegisterNUICallback('disconnectButton', function()
+--     SetEntityAsMissionEntity(charPed, true, true)
+--     DeleteEntity(charPed)
+--     TriggerServerEvent('qb-multicharacter:server:disconnect')
+-- end)
 
-RegisterNUICallback('selectCharacter', function(data)
-    local cData = data.cData
-    DoScreenFadeOut(10)
-    TriggerServerEvent('qb-multicharacter:server:loadUserData', cData)
-    openCharMenu(false)
-    SetEntityAsMissionEntity(charPed, true, true)
-    DeleteEntity(charPed)
-end)
+-- RegisterNUICallback('selectCharacter', function(data)
+--     local cData = data.cData
+--     DoScreenFadeOut(10)
+--     TriggerServerEvent('qb-multicharacter:server:loadUserData', cData)
+--     openCharMenu(false)
+--     SetEntityAsMissionEntity(charPed, true, true)
+--     DeleteEntity(charPed)
+-- end)
 
 RegisterNUICallback('removeBlur', function()
     SetTimecycleModifier('default')
 end)
 
-RegisterNUICallback('createNewCharacter', function(data)
-    local cData = data
-    DoScreenFadeOut(150)
-    if cData.gender == "Male" then
-        cData.gender = 0
-    elseif cData.gender == "Female" then
-        cData.gender = 1
-    end
-    TriggerServerEvent('qb-multicharacter:server:createCharacter', cData)
-    Citizen.Wait(500)
-end)
+-- RegisterNUICallback('createNewCharacter', function(data)
+--     local cData = data
+--     DoScreenFadeOut(150)
+--     if cData.gender == "Male" then
+--         cData.gender = 0
+--     elseif cData.gender == "Female" then
+--         cData.gender = 1
+--     end
+--     TriggerServerEvent('qb-multicharacter:server:createCharacter', cData)
+--     Citizen.Wait(500)
+-- end)
 
-RegisterNUICallback('removeCharacter', function(data)
-    TriggerServerEvent('qb-multicharacter:server:deleteCharacter', data.citizenid)
-    TriggerEvent('qb-multicharacter:client:chooseChar')
-end)
+-- RegisterNUICallback('removeCharacter', function(data)
+--     TriggerServerEvent('qb-multicharacter:server:deleteCharacter', data.citizenid)
+--     TriggerEvent('qb-multicharacter:client:chooseChar')
+-- end)

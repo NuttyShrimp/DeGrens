@@ -138,7 +138,7 @@ DGCore.Functions.CreateCallback("dg-chars:server:setupCharacters", function(sour
     local license = DGCore.Functions.GetIdentifier(source, 'license')
     local plyChars = {}
     exports.oxmysql:execute('SELECT p.firstname, p.lastname, p.gender, p.money, p.job, ps.model, ps.skin FROM players p JOIN playerskins ps ON P.citizenid = ps.citizenid WHERE license = ?', {license}, function(dbResult)
-        
+    --exports.oxmysql:execute('SELECT p.firstname, p.lastname FROM players p JOIN playerskins ps ON P.citizenid = ps.citizenid WHERE license = ?', {license}, function(dbResult)
 
         for i = 1, (#dbResult), 1 do
             plyChars[i] = {}

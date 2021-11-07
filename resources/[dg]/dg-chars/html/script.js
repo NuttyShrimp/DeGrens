@@ -57,7 +57,13 @@ $(document).ready(function (){
         }
 
         if (data.action == "setupCharacters") {
-            setupCharacters(event.data.characters)
+            var chars = data.characters;
+
+            console.log(chars[1]);
+            console.log(chars[2]);
+            console.log(chars[3]);
+
+
         }
 
         if (data.action == "setupCharInfo") {
@@ -98,17 +104,17 @@ function setupCharInfo(cData) {
     }
 }
 
-function setupCharacters(characters) {
-    $.each(characters, function(index, char){
-        $('#char-'+char.cid).html("");
-        $('#char-'+char.cid).data("citizenid", char.citizenid);
-        setTimeout(function(){
-            $('#char-'+char.cid).html('<span id="slot-name">'+char.charinfo.firstname+' '+char.charinfo.lastname+'<span id="cid">' + char.citizenid + '</span></span>');
-            $('#char-'+char.cid).data('cData', char)
-            $('#char-'+char.cid).data('cid', char.cid)
-        }, 100)
-    })
-}
+// function setupCharacters(characters) {
+//     $.each(characters, function(index, char){
+//         $('#char-'+char.cid).html("");
+//         $('#char-'+char.cid).data("citizenid", char.citizenid);
+//         setTimeout(function(){
+//             $('#char-'+char.cid).html('<span id="slot-name">'+char.charinfo.firstname+' '+char.charinfo.lastname+'<span id="cid">' + char.citizenid + '</span></span>');
+//             $('#char-'+char.cid).data('cData', char)
+//             $('#char-'+char.cid).data('cid', char.cid)
+//         }, 100)
+//     })
+// }
 
 $(document).on('click', '#close-log', function(e){
     e.preventDefault();
