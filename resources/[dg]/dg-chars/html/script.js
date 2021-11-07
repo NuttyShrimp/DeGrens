@@ -59,10 +59,12 @@ $(document).ready(function (){
         if (data.action == "setupCharacters") {
             var chars = data.characters;
 
-            console.log(chars[1]);
-            console.log(chars[2]);
-            console.log(chars[3]);
+            for (i=0; i<5; i++){
+                count = i+1;   
+                $('#slot-name-'+count).text( chars[i].firstname + ' ' + chars[i].lastname);
+                
 
+            }
 
         }
 
@@ -85,24 +87,24 @@ $('.disconnect-btn').click(function(e){
     $.post('https://qb-multicharacter/disconnectButton');
 });
 
-function setupCharInfo(cData) {
-    if (cData == 'empty') {
-        $('.character-info-valid').html('<span id="no-char">The selected character slot is not in use yet.<br><br>This character doesn\'t have information yet.</span>');
-    } else {
-        var gender = "Man"
-        if (cData.charinfo.gender == 1) { gender = "Woman" }
-        $('.character-info-valid').html(
-        '<div class="character-info-box"><span id="info-label">Name: </span><span class="char-info-js">'+cData.charinfo.firstname+' '+cData.charinfo.lastname+'</span></div>' +
-        '<div class="character-info-box"><span id="info-label">Birth date: </span><span class="char-info-js">'+cData.charinfo.birthdate+'</span></div>' +
-        '<div class="character-info-box"><span id="info-label">Gender: </span><span class="char-info-js">'+gender+'</span></div>' +
-        '<div class="character-info-box"><span id="info-label">Nationality: </span><span class="char-info-js">'+cData.charinfo.nationality+'</span></div>' +
-        '<div class="character-info-box"><span id="info-label">Job: </span><span class="char-info-js">'+cData.job.label+'</span></div>' +
-        '<div class="character-info-box"><span id="info-label">Cash: </span><span class="char-info-js">&#36; '+cData.money.cash+'</span></div>' +
-        '<div class="character-info-box"><span id="info-label">Bank: </span><span class="char-info-js">&#36; '+cData.money.bank+'</span></div>' +
-        '<div class="character-info-box"><span id="info-label">Phone number: </span><span class="char-info-js">'+cData.charinfo.phone+'</span></div>' +
-        '<div class="character-info-box"><span id="info-label">Account number: </span><span class="char-info-js">'+cData.charinfo.account+'</span></div>');
-    }
-}
+// function setupCharInfo(cData) {
+//     if (cData == 'empty') {
+//         $('.character-info-valid').html('<span id="no-char">The selected character slot is not in use yet.<br><br>This character doesn\'t have information yet.</span>');
+//     } else {
+//         var gender = "Man"
+//         if (cData.charinfo.gender == 1) { gender = "Woman" }
+//         $('.character-info-valid').html(
+//         '<div class="character-info-box"><span id="info-label">Name: </span><span class="char-info-js">'+cData.charinfo.firstname+' '+cData.charinfo.lastname+'</span></div>' +
+//         '<div class="character-info-box"><span id="info-label">Birth date: </span><span class="char-info-js">'+cData.charinfo.birthdate+'</span></div>' +
+//         '<div class="character-info-box"><span id="info-label">Gender: </span><span class="char-info-js">'+gender+'</span></div>' +
+//         '<div class="character-info-box"><span id="info-label">Nationality: </span><span class="char-info-js">'+cData.charinfo.nationality+'</span></div>' +
+//         '<div class="character-info-box"><span id="info-label">Job: </span><span class="char-info-js">'+cData.job.label+'</span></div>' +
+//         '<div class="character-info-box"><span id="info-label">Cash: </span><span class="char-info-js">&#36; '+cData.money.cash+'</span></div>' +
+//         '<div class="character-info-box"><span id="info-label">Bank: </span><span class="char-info-js">&#36; '+cData.money.bank+'</span></div>' +
+//         '<div class="character-info-box"><span id="info-label">Phone number: </span><span class="char-info-js">'+cData.charinfo.phone+'</span></div>' +
+//         '<div class="character-info-box"><span id="info-label">Account number: </span><span class="char-info-js">'+cData.charinfo.account+'</span></div>');
+//     }
+// }
 
 // function setupCharacters(characters) {
 //     $.each(characters, function(index, char){
@@ -116,65 +118,65 @@ function setupCharInfo(cData) {
 //     })
 // }
 
-$(document).on('click', '#close-log', function(e){
-    e.preventDefault();
-    selectedLog = null;
-    $('.welcomescreen').css("filter", "none");
-    $('.server-log').css("filter", "none");
-    $('.server-log-info').fadeOut(250);
-    logOpen = false;
-});
+// $(document).on('click', '#close-log', function(e){
+//     e.preventDefault();
+//     selectedLog = null;
+//     $('.welcomescreen').css("filter", "none");
+//     $('.server-log').css("filter", "none");
+//     $('.server-log-info').fadeOut(250);
+//     logOpen = false;
+// });
 
-$(document).on('click', '.character', function(e) {
-    var cDataPed = $(this).data('cData');
-    e.preventDefault();
-    if (selectedChar === null) {
-        selectedChar = $(this);
-        if ((selectedChar).data('cid') == "") {
-            $(selectedChar).addClass("char-selected");
-            setupCharInfo('empty')
-            $("#play-text").html("Create");
-            $("#play").css({"display":"block"});
-            $("#delete").css({"display":"none"});
-            $.post('https://qb-multicharacter/cDataPed', JSON.stringify({
-                cData: cDataPed
-            }));
-        } else {
-            $(selectedChar).addClass("char-selected");
-            setupCharInfo($(this).data('cData'))
-            $("#play-text").html("Play");
-            $("#delete-text").html("Delete");
-            $("#play").css({"display":"block"});
-            $("#delete").css({"display":"block"});
-            $.post('https://qb-multicharacter/cDataPed', JSON.stringify({
-                cData: cDataPed
-            }));
-        }
-    } else if ($(selectedChar).attr('id') !== $(this).attr('id')) {
-        $(selectedChar).removeClass("char-selected");
-        selectedChar = $(this);
-        if ((selectedChar).data('cid') == "") {
-            $(selectedChar).addClass("char-selected");
-            setupCharInfo('empty')
-            $("#play-text").html("Register");
-            $("#play").css({"display":"block"});
-            $("#delete").css({"display":"none"});
-            $.post('https://qb-multicharacter/cDataPed', JSON.stringify({
-                cData: cDataPed
-            }));
-        } else {
-            $(selectedChar).addClass("char-selected");
-            setupCharInfo($(this).data('cData'))
-            $("#play-text").html("Play");
-            $("#delete-text").html("Delete");
-            $("#play").css({"display":"block"});
-            $("#delete").css({"display":"block"});
-            $.post('https://qb-multicharacter/cDataPed', JSON.stringify({
-                cData: cDataPed
-            }));
-        }
-    }
-});
+// $(document).on('click', '.character', function(e) {
+//     var cDataPed = $(this).data('cData');
+//     e.preventDefault();
+//     if (selectedChar === null) {
+//         selectedChar = $(this);
+//         if ((selectedChar).data('cid') == "") {
+//             $(selectedChar).addClass("char-selected");
+//             setupCharInfo('empty')
+//             $("#play-text").html("Create");
+//             $("#play").css({"display":"block"});
+//             $("#delete").css({"display":"none"});
+//             $.post('https://qb-multicharacter/cDataPed', JSON.stringify({
+//                 cData: cDataPed
+//             }));
+//         } else {
+//             $(selectedChar).addClass("char-selected");
+//             setupCharInfo($(this).data('cData'))
+//             $("#play-text").html("Play");
+//             $("#delete-text").html("Delete");
+//             $("#play").css({"display":"block"});
+//             $("#delete").css({"display":"block"});
+//             $.post('https://qb-multicharacter/cDataPed', JSON.stringify({
+//                 cData: cDataPed
+//             }));
+//         }
+//     } else if ($(selectedChar).attr('id') !== $(this).attr('id')) {
+//         $(selectedChar).removeClass("char-selected");
+//         selectedChar = $(this);
+//         if ((selectedChar).data('cid') == "") {
+//             $(selectedChar).addClass("char-selected");
+//             setupCharInfo('empty')
+//             $("#play-text").html("Register");
+//             $("#play").css({"display":"block"});
+//             $("#delete").css({"display":"none"});
+//             $.post('https://qb-multicharacter/cDataPed', JSON.stringify({
+//                 cData: cDataPed
+//             }));
+//         } else {
+//             $(selectedChar).addClass("char-selected");
+//             setupCharInfo($(this).data('cData'))
+//             $("#play-text").html("Play");
+//             $("#delete-text").html("Delete");
+//             $("#play").css({"display":"block"});
+//             $("#delete").css({"display":"block"});
+//             $.post('https://qb-multicharacter/cDataPed', JSON.stringify({
+//                 cData: cDataPed
+//             }));
+//         }
+//     }
+// });
 
 var entityMap = {
     '&': '&amp;',

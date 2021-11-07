@@ -50,8 +50,9 @@ local function setPeds(bool)
             })
             for i=1 , 5 , 1 do
                 if result[i] then
-                    model = result[i].model
-                    data = result[i].skin
+                    print(result[i].firstname, result[i].lastname)
+                    local model = result[i].model
+                    local skin = result[i].skin
                     model = model ~= nil and tonumber(model) or false
                     Citizen.CreateThread(function()
                         RequestModel(model)
@@ -64,8 +65,9 @@ local function setPeds(bool)
                         SetEntityInvincible(charPed, true)
                         PlaceObjectOnGroundProperly(charPed)
                         SetBlockingOfNonTemporaryEvents(charPed, true)
-                        data = json.decode(data)
-                        TriggerEvent('qb-clothing:client:loadPlayerClothing', data, charPed)
+                        skindata = json.decode(tostring(skin))
+                        TriggerEvent('qb-clothing:client:loadPlayerClothing', skindata, charPed)
+                        Wait(100)
                      end)
                 else
                     -- Citizen.CreateThread(function()

@@ -67,7 +67,7 @@
     background-color: rgba(0, 0, 0, 0.691);
 }
 
-#slot-name {
+.slot-name {
     position: relative;
     color: #ededed;
     font-size: 17px;
