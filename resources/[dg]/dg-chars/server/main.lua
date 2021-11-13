@@ -19,7 +19,7 @@ local function GiveStarterItems(source)
             info.firstname = Player.PlayerData.charinfo.firstname
             info.lastname = Player.PlayerData.charinfo.lastname
             info.birthdate = Player.PlayerData.charinfo.birthdate
-            info.type = "Class C Driver License"
+            info.type = "Categorie: B"
         end
         Player.Functions.AddItem(v.item, v.amount, false, info)
     end
@@ -128,20 +128,15 @@ DGCore.Functions.CreateCallback("qb-multicharacter:server:GetUserCharacters", fu
     end)
 end)
 
-DGCore.Functions.CreateCallback("qb-multicharacter:server:GetServerLogs", function(source, cb)
-    exports.oxmysql:execute('SELECT * FROM server_logs', {}, function(result)
-        cb(result)
-    end)
-end)
-
 DGCore.Functions.CreateCallback("dg-chars:server:setupCharacters", function(source, cb)
     local license = DGCore.Functions.GetIdentifier(source, 'license')
     local plyChars = {}
-    exports.oxmysql:execute('SELECT p.firstname, p.lastname, p.gender, p.money, p.job, ps.model, ps.skin FROM players p JOIN playerskins ps ON P.citizenid = ps.citizenid WHERE license = ?', {license}, function(dbResult)
+    exports.oxmysql:execute('SELECT p.citizenid, p.firstname, p.lastname, p.gender, p.money, p.job, ps.model, ps.skin FROM players p JOIN playerskins ps ON P.citizenid = ps.citizenid WHERE license = ?', {license}, function(dbResult)
     --exports.oxmysql:execute('SELECT p.firstname, p.lastname FROM players p JOIN playerskins ps ON P.citizenid = ps.citizenid WHERE license = ?', {license}, function(dbResult)
 
         for i = 1, (#dbResult), 1 do
             plyChars[i] = {}
+            plyChars[i].citizenid = dbResult[i].citizenid
             plyChars[i].firstname = dbResult[i].firstname
             plyChars[i].lastname = dbResult[i].lastname
             plyChars[i].gender = dbResult[i].gender
@@ -151,13 +146,4 @@ DGCore.Functions.CreateCallback("dg-chars:server:setupCharacters", function(sour
         end
         cb(plyChars)
     end)
-end)
-
-DGCore.Functions.CreateCallback("qb-multicharacter:server:getSkin", function(source, cb, cid)
-    local result = exports.oxmysql:executeSync('SELECT * FROM playerskins WHERE citizenid = ? AND active = ?', {cid, 1})
-    if result[1] ~= nil then
-        cb(result[1].model, result[1].skin)
-    else
-        cb(nil)
-    end
 end)

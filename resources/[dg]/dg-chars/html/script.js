@@ -56,24 +56,43 @@ $(document).ready(function (){
             }
         }
 
+
+
         if (data.action == "setupCharacters") {
             var chars = data.characters;
 
             for (i=0; i<5; i++){
-                count = i+1;   
-                $('#slot-name-'+count).text( chars[i].firstname + ' ' + chars[i].lastname);
-                
-
+                var charinfo = [chars[i].firstname,chars[i].lasttname,chars[i].gender,chars[i].birthdate];
+                count = i+1;
+                if (jQuery.isEmptyObject(chars[i]) == false){
+                    $('#slot-name-'+count).text( chars[i].firstname + ' ' + chars[i].lastname);
+                    $('#char-'+count).data('cid', chars[i].citizenid);
+                    $('#char-'+count).data('cinfo', charInfo);
+                    $('#char-'+count).data('count', count);
+                } 
+                else {
+                    $('#slot-name-'+count).text('Maak een karakter');
+                }
             }
 
-        }
-
-        if (data.action == "setupCharInfo") {
-            setupCharInfo(event.data.chardata)
         }
     });
 
     $('.datepicker').datepicker();
+});
+
+//Char Button Clicks
+
+$('.char-wrap').click(function(e){
+    e.preventDefault();
+    var citizenid = ($(this).data('cid'));
+    var info = ($(this).data('cinfo'));
+    var count = ($(this).data('count'));
+
+    $.post('https://dg-chars/zoomToChar', JSON.stringify({
+        count: count,
+    }));
+
 });
 
 $('.continue-btn').click(function(e){

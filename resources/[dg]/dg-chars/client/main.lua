@@ -50,7 +50,6 @@ local function setPeds(bool)
             })
             for i=1 , 5 , 1 do
                 if result[i] then
-                    print(result[i].firstname, result[i].lastname)
                     local model = result[i].model
                     local skin = result[i].skin
                     model = model ~= nil and tonumber(model) or false
@@ -89,9 +88,8 @@ local function setPeds(bool)
                     -- end)
                     CreateThread(function()
                         while true do
-                            -- draw every frame
                             Wait(0)
-                            DrawMarker(25, Config.PedLocations[i].x, Config.PedLocations[i].y, Config.PedLocations[i].z, 0.0, 0.0, 0.0, 0.0, 180.0, 0.0, 0.8, 0.8, 0.8, 50, 50, 50, 200, false, true, 2, nil, nil, false)
+                            DrawMarker(25, Config.PedLocations[i].x, Config.PedLocations[i].y, Config.PedLocations[i].z, 0.0, 0.0, 0.0, 0.0, 180.0, 0.0, 0.8, 0.8, 0.8, 50, 50, 50, 220, false, true, 2, nil, nil, false)
                         end
                     end)
                 end
@@ -153,6 +151,14 @@ RegisterNUICallback('closeUI', function()
     openCharMenu(false)
 end)
 
+RegisterNUICallback('zoomToChar', function(data)
+    local count = data.count
+    
+    newCamCoords = GetEntityCoords(ped) + vector3(0,0,0.3) + Chars.DirectionVector(GetEntityRotation(ped)) * 3
+	newCamRot = GetEntityRotation(ped)+vector3(0,0,180)
+	Chars.moveCam(newCamCoords, newCamRot)
+	TaskLookAtCoord(ped, newCamCoords, -1, 0, 2)
+end)
 -- RegisterNUICallback('disconnectButton', function()
 --     SetEntityAsMissionEntity(charPed, true, true)
 --     DeleteEntity(charPed)
