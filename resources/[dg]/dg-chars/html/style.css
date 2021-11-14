@@ -117,6 +117,7 @@
     background-color: #eb3434;
 }
 
+*/
 .character-info {
     display: none;
     position: absolute;
@@ -130,6 +131,7 @@
     overflow: visible !important;
 }
 
+/*
 #char-info-icon {
     position: relative;
     font-size: 1.5vh;

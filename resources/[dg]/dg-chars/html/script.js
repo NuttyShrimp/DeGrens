@@ -92,6 +92,8 @@ $('.char-wrap').click(function(e){
     $.post('https://dg-chars/zoomToChar', JSON.stringify({
         count: count,
     }));
+    $(".characters-list").fadeOut(150);
+    dgChars.fadeInDown('.character-info', '15%', 400);
 
 });
 

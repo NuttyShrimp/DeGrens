@@ -15,3 +15,10 @@ Config.PedLocations = {
 	vector4(183.20, -677.68, 42.14, 301.5),
 } -- Coords where peds get spawned
 
+Config.camLocations = {
+	vector4(187.99, -677.03, 43.64, 38.5),
+	vector4(187.46, -679.44, 43.64, 23.5),
+	vector4(185.90, -679.38, 43.64, 350.0),-- Middle
+	vector4(184.30, -678.64, 43.64, 329.5),
+	vector4(183.20, -677.68, 43.64, 301.5),
+} -- Coords where peds get spawned
