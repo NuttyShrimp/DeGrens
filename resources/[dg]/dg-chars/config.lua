@@ -4,7 +4,8 @@ Config.Interior = vector3(-814.89, 181.95, 76.85) -- Interior to load where char
 Config.DefaultSpawn = vector3(-1035.71, -2731.87, 12.86) -- Default spawn coords if you have start apartments disabled
 Config.PedCoords = vector4(186.11, -679.31, 42.14, 350.0) -- Create preview ped at these coordinates
 Config.HiddenCoords = vector4(187.28, -673.35, 44.48, 156.5) -- Hides your actual ped while you are in selection
-Config.CamCoords = {x = 187.28, y = -673.35, z = 44.48, h = 166.5} -- Camera coordinates for character preview screen
+Config.CamCoords = {x = 187.28, y = -673.35, z = 44.48, h = 166.5}
+Config.standardCamCoords = vector4(187.28, -673.35, 44.48, 166.5)-- Camera coordinates for character preview screen
 
 Config.PedLocations = {
 	vector4(188.99, -679.03, 42.14, 35.5),

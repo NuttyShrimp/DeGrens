@@ -153,11 +153,24 @@ end)
 
 RegisterNUICallback('zoomToChar', function(data)
     local count = data.count
-    
-    newCamCoords = GetEntityCoords(ped) + vector3(0,0,0.3) + Chars.DirectionVector(GetEntityRotation(ped)) * 3
-	newCamRot = GetEntityRotation(ped)+vector3(0,0,180)
-	Chars.moveCam(newCamCoords, newCamRot)
-	TaskLookAtCoord(ped, newCamCoords, -1, 0, 2)
+    print(count)
+
+-- cam move
+    newCamCoords = vector3(Config.PedLocations[count].x, Config.PedLocations[count].y, Config.PedLocations[count].z + 0.3)
+    newCamRot = vector3(Config.PedLocations[count].w, 0, 0)
+    oldCamCoords = vector3(Config.standardCamCoords.x, Config.standardCamCoords.y, Config.standardCamCoords.z)
+    oldCamRot =  vector3(Config.standardCamCoords.w, 0, 0)
+    diffCoords = newCamCoords - oldCamCoords
+    diffRot = newCamRot - oldCamRot
+
+    for i = 1, 75, 1 do
+		SetCamCoord(cam, oldCamCoords+diffCoords/75*i)
+        --SetCamRot(cam, oldCamRot+diffRot/75*i)
+        --SetCamRot(cam, oldCamRot)
+		
+		Citizen.Wait(i/8)
+	end
+
 end)
 -- RegisterNUICallback('disconnectButton', function()
 --     SetEntityAsMissionEntity(charPed, true, true)

@@ -62,12 +62,12 @@ $(document).ready(function (){
             var chars = data.characters;
 
             for (i=0; i<5; i++){
-                var charinfo = [chars[i].firstname,chars[i].lasttname,chars[i].gender,chars[i].birthdate];
+               // var charInfo = [chars[i].firstname,chars[i].lasttname,chars[i].gender,chars[i].birthdate];
                 count = i+1;
                 if (jQuery.isEmptyObject(chars[i]) == false){
                     $('#slot-name-'+count).text( chars[i].firstname + ' ' + chars[i].lastname);
                     $('#char-'+count).data('cid', chars[i].citizenid);
-                    $('#char-'+count).data('cinfo', charInfo);
+                    //$('#char-'+count).data('cinfo', charInfo);
                     $('#char-'+count).data('count', count);
                 } 
                 else {
