@@ -62,7 +62,7 @@ $(document).ready(function (){
             var chars = data.characters;
 
             for (i=0; i<5; i++){
-                var charInfo = JSON.stringify(chars);
+                var charInfo = JSON.stringify(chars[i]);
                 count = i+1;
                 if (jQuery.isEmptyObject(chars[i]) == false){
                     $('#slot-name-'+count).text( chars[i].firstname + ' ' + chars[i].lastname);
@@ -101,14 +101,14 @@ $('.char-wrap').click(function(e){
     } else if (info.gender == 1) {
         selectedChar.gender = "Vrouw" ;
     }
-    //selectedChar.job = JSON.parse(info.job);
+    selectedChar.job = JSON.parse(info.job);
     selectedChar.birthdate = info.birthdate;
 
     $('#name').text( selectedChar.firstname + ' ' + selectedChar.lastname);
     $('#citizenid').text( selectedChar.citizenid);
     $('#gender').text( selectedChar.gender);
     $('#birthdate').text( selectedChar.birthdate);
-    //$('#job').text( selectedChar.birthdate.label);
+    $('#job').text( selectedChar.job.label);
 
 
 

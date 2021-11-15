@@ -131,7 +131,7 @@ end)
 DGCore.Functions.CreateCallback("dg-chars:server:setupCharacters", function(source, cb)
     local license = DGCore.Functions.GetIdentifier(source, 'license')
     local plyChars = {}
-    exports.oxmysql:execute('SELECT p.citizenid, p.firstname, p.lastname, p.gender, p.money, p.job, ps.model, ps.skin FROM players p JOIN playerskins ps ON P.citizenid = ps.citizenid WHERE license = ?', {license}, function(dbResult)
+    exports.oxmysql:execute('SELECT p.citizenid, p.firstname, p.lastname, p.gender, p.money, p.job, p.birthdate, ps.model, ps.skin FROM players p JOIN playerskins ps ON P.citizenid = ps.citizenid WHERE license = ?', {license}, function(dbResult)
     --exports.oxmysql:execute('SELECT p.firstname, p.lastname FROM players p JOIN playerskins ps ON P.citizenid = ps.citizenid WHERE license = ?', {license}, function(dbResult)
 
         for i = 1, (#dbResult), 1 do
@@ -140,9 +140,9 @@ DGCore.Functions.CreateCallback("dg-chars:server:setupCharacters", function(sour
             plyChars[i].firstname = dbResult[i].firstname
             plyChars[i].lastname = dbResult[i].lastname
             plyChars[i].gender = dbResult[i].gender
-            plyChars[i].birthdate = dbResult.birthdate
-            plyChars[i].job = dbResult.job
-            plyChars[i].money = dbResult.money
+            plyChars[i].birthdate = dbResult[i].birthdate
+            plyChars[i].job = dbResult[i].job
+            plyChars[i].money = dbResult[i].money
             plyChars[i].model = dbResult[i].model
             plyChars[i].skin = dbResult[i].skin
         end
