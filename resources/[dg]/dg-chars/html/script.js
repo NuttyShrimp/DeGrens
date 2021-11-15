@@ -62,12 +62,12 @@ $(document).ready(function (){
             var chars = data.characters;
 
             for (i=0; i<5; i++){
-               // var charInfo = [chars[i].firstname,chars[i].lasttname,chars[i].gender,chars[i].birthdate];
+                var charInfo = JSON.stringify(chars);
                 count = i+1;
                 if (jQuery.isEmptyObject(chars[i]) == false){
                     $('#slot-name-'+count).text( chars[i].firstname + ' ' + chars[i].lastname);
                     $('#char-'+count).data('cid', chars[i].citizenid);
-                    //$('#char-'+count).data('cinfo', charInfo);
+                    $('#char-'+count).data('cinfo', charInfo);
                     $('#char-'+count).data('count', count);
                 } 
                 else {
@@ -85,15 +85,45 @@ $(document).ready(function (){
 
 $('.char-wrap').click(function(e){
     e.preventDefault();
-    var citizenid = ($(this).data('cid'));
-    var info = ($(this).data('cinfo'));
+    var cinfo = ($(this).data('cinfo'));
+    var info = JSON.parse(cinfo);
     var count = ($(this).data('count'));
+
+    console.log(info);
+
+    const selectedChar = {}
+    selectedChar.id = count;
+    selectedChar.citizenid = info.citizenid;
+    selectedChar.firstname = info.firstname;
+    selectedChar.lastname = info.lastname;
+    if (info.gender == 0) {
+    selectedChar.gender = "Man" ;
+    } else if (info.gender == 1) {
+        selectedChar.gender = "Vrouw" ;
+    }
+    //selectedChar.job = JSON.parse(info.job);
+    selectedChar.birthdate = info.birthdate;
+
+    $('#name').text( selectedChar.firstname + ' ' + selectedChar.lastname);
+    $('#citizenid').text( selectedChar.citizenid);
+    $('#gender').text( selectedChar.gender);
+    $('#birthdate').text( selectedChar.birthdate);
+    //$('#job').text( selectedChar.birthdate.label);
+
+
+
 
     $.post('https://dg-chars/zoomToChar', JSON.stringify({
         count: count,
     }));
+
+
+
     $(".characters-list").fadeOut(150);
     dgChars.fadeInDown('.character-info', '15%', 400);
+
+
+
 
 });
 

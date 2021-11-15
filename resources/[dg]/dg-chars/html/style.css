@@ -26,29 +26,6 @@
     width: 100%;
 }
 
-.character {
-    margin-top: 20px;
-    padding-left: 10px;
-    padding-right: 10px;
-    font-family: 'Poppins', sans-serif;
-    border: 0.2px solid #303030;
-    border-left: 4px solid #202020;
-    background-color: #8f8f8fc4;
-    
-}
-
-.character>span {
-    color: #ededed;
-    font-weight: 900;
-    text-transform: uppercase;
-    letter-spacing: .1vh;
-    font-family: 'Poppins', sans-serif;
-}
-
-.character:hover {
-    color: #ededed;
-    background-color: #616161c4;
-}
 
 .char-wrap:hover ~ .character {
     color: #ededed;
@@ -64,14 +41,20 @@
     background-color: rgba(0, 0, 0, 0.691);
 }
 
-.slot-name {
+.character-info {
+    display: none;
+    position: absolute;
+    width: 100%;
+}
+
+/* .slot-name {
     position: relative;
     color: #ededed;
     font-size: 17px;
     line-height: 80px;
     left: 20px;
     font-family: 'Poppins', sans-serif;
-}
+} */
 
 /* .character-btn {
     position: relative;
@@ -117,21 +100,6 @@
     background-color: #eb3434;
 }
 
-*/
-.character-info {
-    display: none;
-    position: absolute;
-    width: 20%;
-    height: 40%;
-    right: 14%;
-    top: -40%;
-    border-radius: .8vh;
-    padding: 30px;
-    background-color: rgb(23 23 23 / 80%);
-    overflow: visible !important;
-}
-
-/*
 #char-info-icon {
     position: relative;
     font-size: 1.5vh;

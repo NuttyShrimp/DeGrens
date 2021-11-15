@@ -141,6 +141,8 @@ DGCore.Functions.CreateCallback("dg-chars:server:setupCharacters", function(sour
             plyChars[i].lastname = dbResult[i].lastname
             plyChars[i].gender = dbResult[i].gender
             plyChars[i].birthdate = dbResult.birthdate
+            plyChars[i].job = dbResult.job
+            plyChars[i].money = dbResult.money
             plyChars[i].model = dbResult[i].model
             plyChars[i].skin = dbResult[i].skin
         end
