@@ -127,8 +127,10 @@ $('.char-wrap').click(function(e){
 
 });
 
-$('.continue-btn').click(function(e){
+$('#back-btn').click(function(e){
     e.preventDefault();
+    $.post('https://dg-chars/zoomToChar')
+    selectCharacter = {}
 });
 
 $('.disconnect-btn').click(function(e){
@@ -229,117 +231,117 @@ $('.disconnect-btn').click(function(e){
 //     }
 // });
 
-var entityMap = {
-    '&': '&amp;',
-    '<': '&lt;',
-    '>': '&gt;',
-    '"': '&quot;',
-    "'": '&#39;',
-    '/': '&#x2F;',
-    '': '&#x60;',
-    '=': '&#x3D;'
-};
+// var entityMap = {
+//     '&': '&amp;',
+//     '<': '&lt;',
+//     '>': '&gt;',
+//     '"': '&quot;',
+//     "'": '&#39;',
+//     '/': '&#x2F;',
+//     '': '&#x60;',
+//     '=': '&#x3D;'
+// };
 
-function escapeHtml(string) {
-    return String(string).replace(/[&<>"'=/]/g, function (s) {
-        return entityMap[s];
-    });
-}
-function hasWhiteSpace(s) {
-    return /\s/g.test(s);
-  }
-$(document).on('click', '#create', function (e) {
-    e.preventDefault();
+// function escapeHtml(string) {
+//     return String(string).replace(/[&<>"'=/]/g, function (s) {
+//         return entityMap[s];
+//     });
+// }
+// function hasWhiteSpace(s) {
+//     return /\s/g.test(s);
+//   }
+// $(document).on('click', '#create', function (e) {
+//     e.preventDefault();
    
-        let firstname= escapeHtml($('#first_name').val())
-        let lastname= escapeHtml($('#last_name').val())
-        let nationality= escapeHtml($('#nationality').val())
-        let birthdate= escapeHtml($('#birthdate').val())
-        let gender= escapeHtml($('select[name=gender]').val())
-        let cid = escapeHtml($(selectedChar).attr('id').replace('char-', ''))
+//         let firstname= escapeHtml($('#first_name').val())
+//         let lastname= escapeHtml($('#last_name').val())
+//         let nationality= escapeHtml($('#nationality').val())
+//         let birthdate= escapeHtml($('#birthdate').val())
+//         let gender= escapeHtml($('select[name=gender]').val())
+//         let cid = escapeHtml($(selectedChar).attr('id').replace('char-', ''))
         
-    //An Ugly check of null objects
+//     //An Ugly check of null objects
 
-    if (!firstname || !lastname || !nationality || !birthdate || hasWhiteSpace(firstname) || hasWhiteSpace(lastname)|| hasWhiteSpace(nationality) ){
-    console.log("FIELDS REQUIRED")
-    }else{
-        $.post('https://qb-multicharacter/createNewCharacter', JSON.stringify({
-            firstname: firstname,
-            lastname: lastname,
-            nationality: nationality,
-            birthdate: birthdate,
-            gender: gender,
-            cid: cid,
-        }));
-        $(".container").fadeOut(150);
-        $('.characters-list').css("filter", "none");
-        $('.character-info').css("filter", "none");
-        dgChars.fadeOutDown('.character-register', '125%', 400);
-        refreshCharacters()
-    }
-});
+//     if (!firstname || !lastname || !nationality || !birthdate || hasWhiteSpace(firstname) || hasWhiteSpace(lastname)|| hasWhiteSpace(nationality) ){
+//     console.log("FIELDS REQUIRED")
+//     }else{
+//         $.post('https://qb-multicharacter/createNewCharacter', JSON.stringify({
+//             firstname: firstname,
+//             lastname: lastname,
+//             nationality: nationality,
+//             birthdate: birthdate,
+//             gender: gender,
+//             cid: cid,
+//         }));
+//         $(".container").fadeOut(150);
+//         $('.characters-list').css("filter", "none");
+//         $('.character-info').css("filter", "none");
+//         dgChars.fadeOutDown('.character-register', '125%', 400);
+//         refreshCharacters()
+//     }
+// });
 
-$(document).on('click', '#accept-delete', function(e){
-    $.post('https://qb-multicharacter/removeCharacter', JSON.stringify({
-        citizenid: $(selectedChar).data("citizenid"),
-    }));
-    $('.character-delete').fadeOut(150);
-    $('.characters-block').css("filter", "none");
-    refreshCharacters();
-});
+// $(document).on('click', '#accept-delete', function(e){
+//     $.post('https://qb-multicharacter/removeCharacter', JSON.stringify({
+//         citizenid: $(selectedChar).data("citizenid"),
+//     }));
+//     $('.character-delete').fadeOut(150);
+//     $('.characters-block').css("filter", "none");
+//     refreshCharacters();
+// });
 
-$(document).on('click', '#cancel-delete', function(e){
-    e.preventDefault();
-    $('.characters-block').css("filter", "none");
-    $('.character-delete').fadeOut(150);
-});
+// $(document).on('click', '#cancel-delete', function(e){
+//     e.preventDefault();
+//     $('.characters-block').css("filter", "none");
+//     $('.character-delete').fadeOut(150);
+// });
 
-function refreshCharacters() {
-    $('.characters-list').html('<div class="character" id="char-1" data-cid=""><span id="slot-name">Empty Slot<span id="cid"></span></span></div><div class="character" id="char-2" data-cid=""><span id="slot-name">Empty Slot<span id="cid"></span></span></div><div class="character" id="char-3" data-cid=""><span id="slot-name">Empty Slot<span id="cid"></span></span></div><div class="character" id="char-4" data-cid=""><span id="slot-name">Empty Slot<span id="cid"></span></span></div><div class="character" id="char-5" data-cid=""><span id="slot-name">Empty Slot<span id="cid"></span></span></div><div class="character-btn" id="play"><p id="play-text">Select a character</p></div><div class="character-btn" id="delete"><p id="delete-text">Select a character</p></div>')
-    setTimeout(function(){
-        $(selectedChar).removeClass("char-selected");
-        selectedChar = null;
-        $.post('https://qb-multicharacter/setupCharacters');
-        $("#delete").css({"display":"none"});
-        $("#play").css({"display":"none"});
-        dgChars.resetAll();
-    }, 100)
-}
+// function refreshCharacters() {
+//     $('.characters-list').html('<div class="character" id="char-1" data-cid=""><span id="slot-name">Empty Slot<span id="cid"></span></span></div><div class="character" id="char-2" data-cid=""><span id="slot-name">Empty Slot<span id="cid"></span></span></div><div class="character" id="char-3" data-cid=""><span id="slot-name">Empty Slot<span id="cid"></span></span></div><div class="character" id="char-4" data-cid=""><span id="slot-name">Empty Slot<span id="cid"></span></span></div><div class="character" id="char-5" data-cid=""><span id="slot-name">Empty Slot<span id="cid"></span></span></div><div class="character-btn" id="play"><p id="play-text">Select a character</p></div><div class="character-btn" id="delete"><p id="delete-text">Select a character</p></div>')
+//     setTimeout(function(){
+//         $(selectedChar).removeClass("char-selected");
+//         selectedChar = null;
+//         $.post('https://qb-multicharacter/setupCharacters');
+//         $("#delete").css({"display":"none"});
+//         $("#play").css({"display":"none"});
+//         dgChars.resetAll();
+//     }, 100)
+// }
 
-$("#close-reg").click(function (e) {
-    e.preventDefault();
-    $('.characters-list').css("filter", "none")
-    $('.character-info').css("filter", "none")
-    dgChars.fadeOutDown('.character-register', '125%', 400);
-})
+// $("#close-reg").click(function (e) {
+//     e.preventDefault();
+//     $('.characters-list').css("filter", "none")
+//     $('.character-info').css("filter", "none")
+//     dgChars.fadeOutDown('.character-register', '125%', 400);
+// })
 
-$("#close-del").click(function (e) {
-    e.preventDefault();
-    $('.characters-block').css("filter", "none");
-    $('.character-delete').fadeOut(150);
-})
+// $("#close-del").click(function (e) {
+//     e.preventDefault();
+//     $('.characters-block').css("filter", "none");
+//     $('.character-delete').fadeOut(150);
+// })
 
-$(document).on('click', '#play', function(e) {
-    e.preventDefault();
-    var charData = $(selectedChar).data('cid');
+// $(document).on('click', '#play', function(e) {
+//     e.preventDefault();
+//     var charData = $(selectedChar).data('cid');
 
-    if (selectedChar !== null) {
-        if (charData !== "") {
-            $.post('https://qb-multicharacter/selectCharacter', JSON.stringify({
-                cData: $(selectedChar).data('cData')
-            }));
-            setTimeout(function(){
-                dgChars.fadeOutDown('.characters-list', "-40%", 400);
-                dgChars.fadeOutDown('.character-info', "-40%", 400);
-                dgChars.resetAll();
-            }, 1500);
-        } else {
-            $('.characters-list').css("filter", "blur(2px)")
-            $('.character-info').css("filter", "blur(2px)")
-            dgChars.fadeInDown('.character-register', '25%', 400);
-        }
-    }
-});
+//     if (selectedChar !== null) {
+//         if (charData !== "") {
+//             $.post('https://qb-multicharacter/selectCharacter', JSON.stringify({
+//                 cData: $(selectedChar).data('cData')
+//             }));
+//             setTimeout(function(){
+//                 dgChars.fadeOutDown('.characters-list', "-40%", 400);
+//                 dgChars.fadeOutDown('.character-info', "-40%", 400);
+//                 dgChars.resetAll();
+//             }, 1500);
+//         } else {
+//             $('.characters-list').css("filter", "blur(2px)")
+//             $('.character-info').css("filter", "blur(2px)")
+//             dgChars.fadeInDown('.character-register', '25%', 400);
+//         }
+//     }
+// });
 
 $(document).on('click', '#delete', function(e) {
     e.preventDefault();

@@ -1,5 +1,5 @@
 local cam = nil
-local charPed = nil
+local charPed = {}
 local DGCore = exports['dg-core']:GetCoreObject()
 
 -- Main Thread
@@ -58,7 +58,7 @@ local function setPeds(bool)
                         while not HasModelLoaded(model) do
                             Citizen.Wait(0)
                         end
-                        charPed = CreatePed(2, model, Config.PedLocations[i].x, Config.PedLocations[i].y, Config.PedLocations[i].z - 0.98, Config.PedLocations[i].w, false, true)
+                        charPed[i] = CreatePed(2, model, Config.PedLocations[i].x, Config.PedLocations[i].y, Config.PedLocations[i].z - 0.98, Config.PedLocations[i].w, false, true)
                         SetPedComponentVariation(charPed, 0, 0, 0, 2)
                         FreezeEntityPosition(charPed, false)
                         SetEntityInvincible(charPed, true)
@@ -111,27 +111,6 @@ end
 
 -- Events
 
--- RegisterNetEvent('qb-multicharacter:client:closeNUIdefault', function() -- This event is only for no starting apartments
---     SetNuiFocus(false, false)
---     DoScreenFadeOut(500)
---     Citizen.Wait(2000)
---     SetEntityCoords(PlayerPedId(), Config.DefaultSpawn.x, Config.DefaultSpawn.y, Config.DefaultSpawn.z)
---     TriggerServerEvent('DGCore:Server:OnPlayerLoaded')
---     TriggerEvent('DGCore:Client:OnPlayerLoaded')
---     TriggerServerEvent('qb-houses:server:SetInsideMeta', 0, false)
---     TriggerServerEvent('qb-apartments:server:SetInsideMeta', 0, 0, false)
---     Citizen.Wait(500)
---     openCharMenu()
---     SetEntityVisible(PlayerPedId(), true)
---     Citizen.Wait(500)
---     DoScreenFadeIn(250)
---     TriggerEvent('dg-weathersync:client:EnableSync')
---     TriggerEvent('qb-clothes:client:CreateFirstCharacter')
--- end)
-
--- RegisterNetEvent('qb-multicharacter:client:closeNUI', function()
---     SetNuiFocus(false, false)
--- end)
 
 RegisterNetEvent('dg-chars:client:chooseChar', function()
     SetNuiFocus(false, false)
@@ -176,6 +155,38 @@ RegisterNUICallback('zoomToChar', function(data)
     end
 
 end)
+
+RegisterNUICallback('zoomToMain', function(data)
+    local count = data.count
+    if count then
+        -- change UI
+        
+        -- cam move
+        newCamCoords = vector3(Config.standardCamCoords.x, Config.standardCamCoords.y, Config.standardCamCoords.z)
+        newCamRot = vector3( 0, 0, Config.standardCamCoords.w)
+        oldCamCoords = GetCamCoord(cam)
+        oldCamRot =  GetCamRot(cam, 2)
+        diffCoords = newCamCoords - oldCamCoords
+        diffRot = newCamRot - oldCamRot
+
+        for i = 1, 75, 1 do
+            SetCamCoord(cam, oldCamCoords+diffCoords/75*i)
+            SetCamRot(cam, oldCamRot+diffRot/75*i)
+            
+            Citizen.Wait(i/8)
+        end
+
+
+    else
+    end
+
+end)
+
+
+-- Load Player
+--TriggerServerEvent('dg-chars:server:loadUserData', cData)
+-- + delete entities
+
 -- RegisterNUICallback('disconnectButton', function()
 --     SetEntityAsMissionEntity(charPed, true, true)
 --     DeleteEntity(charPed)
@@ -185,7 +196,7 @@ end)
 -- RegisterNUICallback('selectCharacter', function(data)
 --     local cData = data.cData
 --     DoScreenFadeOut(10)
---     TriggerServerEvent('qb-multicharacter:server:loadUserData', cData)
+--     TriggerServerEvent('dg-chars:server:loadUserData', cData)
 --     openCharMenu(false)
 --     SetEntityAsMissionEntity(charPed, true, true)
 --     DeleteEntity(charPed)

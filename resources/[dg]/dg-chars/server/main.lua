@@ -76,7 +76,7 @@ RegisterNetEvent('qb-multicharacter:server:disconnect', function()
     DropPlayer(src, "You have disconnected from DGCore")
 end)
 
-RegisterNetEvent('qb-multicharacter:server:loadUserData', function(cData)
+RegisterNetEvent('dg-chars:server:loadUserData', function(cData)
     local src = source
     if DGCore.Player.Login(src, cData.citizenid) then
         print('^2[dg-core]^7 '..GetPlayerName(src)..' (Citizen ID: '..cData.citizenid..') has succesfully loaded!')
