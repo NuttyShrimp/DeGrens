@@ -5,7 +5,7 @@ ui_page 'html/index.html'
 
 files {
     'html/index.html',
-    'html/css/dgstyle.css',
+    'html/css/*.css',
     'html/js/ui.js',
 }
 
