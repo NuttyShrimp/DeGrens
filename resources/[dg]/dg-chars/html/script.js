@@ -71,6 +71,7 @@ $(document).ready(function (){
                     $('#char-'+count).data('count', count);
                 } 
                 else {
+                    $('#char-'+count).data('count', "empty");
                     $('#slot-name-'+count).text('Maak een karakter');
                 }
             }
@@ -84,36 +85,40 @@ $(document).ready(function (){
 
 $('.char-wrap').click(function(e){
     e.preventDefault();
-    var cinfo = ($(this).data('cinfo'));
-    var info = JSON.parse(cinfo);
     var count = ($(this).data('count'));
+    if(count != "empty"){
+        var cinfo = ($(this).data('cinfo'));
+        var info = JSON.parse(cinfo);
+        
 
-    selectedChar = {}
-    selectedChar.id = count;
-    selectedChar.citizenid = info.citizenid;
-    selectedChar.firstname = info.firstname;
-    selectedChar.lastname = info.lastname;
-    if (info.gender == 0) {
-    selectedChar.gender = "Man" ;
-    } else if (info.gender == 1) {
-        selectedChar.gender = "Vrouw" ;
+        selectedChar = {}
+        selectedChar.id = count;
+        selectedChar.citizenid = info.citizenid;
+        selectedChar.firstname = info.firstname;
+        selectedChar.lastname = info.lastname;
+        if (info.gender == 0) {
+        selectedChar.gender = "Man" ;
+        } else if (info.gender == 1) {
+            selectedChar.gender = "Vrouw" ;
+        }
+        selectedChar.job = JSON.parse(info.job);
+        selectedChar.birthdate = info.birthdate;
+
+        $('#name').text( selectedChar.firstname + ' ' + selectedChar.lastname);
+        $('#citizenid').text( selectedChar.citizenid);
+        $('#gender').text( selectedChar.gender);
+        $('#birthdate').text( selectedChar.birthdate);
+        $('#job').text( selectedChar.job.label);
+        $.post('https://dg-chars/zoomToChar', JSON.stringify({
+            count: count,
+        }));
+        $(".characters-list").fadeOut(150);
+        $('.disconnect').fadeOut(150);
+        setTimeout(function(){
+            dgChars.fadeInDown('.character-info', '15%', 400);
+        }, 1500);
     }
-    selectedChar.job = JSON.parse(info.job);
-    selectedChar.birthdate = info.birthdate;
-
-    $('#name').text( selectedChar.firstname + ' ' + selectedChar.lastname);
-    $('#citizenid').text( selectedChar.citizenid);
-    $('#gender').text( selectedChar.gender);
-    $('#birthdate').text( selectedChar.birthdate);
-    $('#job').text( selectedChar.job.label);
-    $.post('https://dg-chars/zoomToChar', JSON.stringify({
-        count: count,
-    }));
-    $(".characters-list").fadeOut(150);
-    $('.disconnect').fadeOut(150);
-    setTimeout(function(){
-        dgChars.fadeInDown('.character-info', '15%', 400);
-    }, 1500);
+    console.log(count);
 });
 
 $('#back-btn').click(function(e){
@@ -142,16 +147,6 @@ $('#play').click(function(e){
         count: selectedChar.id,
     }));
 });
-
-
-// $(document).on('click', '#close-log', function(e){
-//     e.preventDefault();
-//     selectedLog = null;
-//     $('.welcomescreen').css("filter", "none");
-//     $('.server-log').css("filter", "none");
-//     $('.server-log-info').fadeOut(250);
-//     logOpen = false;
-// });
 
 // $(document).on('click', '.character', function(e) {
 //     var cDataPed = $(this).data('cData');
