@@ -19,7 +19,7 @@ local function GiveStarterItems(source)
             info.firstname = Player.PlayerData.charinfo.firstname
             info.lastname = Player.PlayerData.charinfo.lastname
             info.birthdate = Player.PlayerData.charinfo.birthdate
-            info.type = "Class C Driver License"
+            info.type = "Categorie: B"
         end
         Player.Functions.AddItem(v.item, v.amount, false, info)
     end
@@ -64,26 +64,22 @@ DGCore.Commands.Add("logout", "Logout of Character (Admin Only)", {}, false, fun
     TriggerClientEvent('qb-multicharacter:client:chooseChar', src)
 end, "admin")
 
-DGCore.Commands.Add("closeNUI", "Close Multi NUI", {}, false, function(source)
-    local src = source
-    TriggerClientEvent('qb-multicharacter:client:closeNUI', src)
-end)
 
 -- Events
 
-RegisterNetEvent('qb-multicharacter:server:disconnect', function()
+RegisterNetEvent('dg-char:server:disconnect', function()
     local src = source
-    DropPlayer(src, "You have disconnected from DGCore")
+    DropPlayer(src, "Disconnected van De Grens")
 end)
 
-RegisterNetEvent('qb-multicharacter:server:loadUserData', function(cData)
+RegisterNetEvent('dg-chars:server:loadUserData', function(citizenid)
     local src = source
-    if DGCore.Player.Login(src, cData.citizenid) then
-        print('^2[dg-core]^7 '..GetPlayerName(src)..' (Citizen ID: '..cData.citizenid..') has succesfully loaded!')
+    if DGCore.Player.Login(src, citizenid) then
+        print('^2[dg-core]^7 '..GetPlayerName(src)..' (Citizen ID: '..citizenid..') has succesfully loaded!')
         DGCore.Commands.Refresh(src)
         loadHouseData()
-        TriggerClientEvent('apartments:client:setupSpawnUI', src, cData)
-        TriggerEvent("qb-log:server:CreateLog", "joinleave", "Loaded", "green", "**".. GetPlayerName(src) .. "** ("..cData.citizenid.." | "..src..") loaded..")
+        TriggerClientEvent('apartments:client:setupSpawnUI', src, citizenid)
+        TriggerEvent("qb-log:server:CreateLog", "joinleave", "Loaded", "green", "**".. GetPlayerName(src) .. "** ("..citizenid.." | "..src..") loaded..")
 	end
 end)
 
@@ -128,31 +124,24 @@ DGCore.Functions.CreateCallback("qb-multicharacter:server:GetUserCharacters", fu
     end)
 end)
 
-DGCore.Functions.CreateCallback("qb-multicharacter:server:GetServerLogs", function(source, cb)
-    exports.oxmysql:execute('SELECT * FROM server_logs', {}, function(result)
-        cb(result)
-    end)
-end)
-
-DGCore.Functions.CreateCallback("qb-multicharacter:server:setupCharacters", function(source, cb)
+DGCore.Functions.CreateCallback("dg-chars:server:setupCharacters", function(source, cb)
     local license = DGCore.Functions.GetIdentifier(source, 'license')
     local plyChars = {}
-    exports.oxmysql:execute('SELECT * FROM players WHERE license = ?', {license}, function(result)
-        for i = 1, (#result), 1 do
-            result[i].charinfo = json.decode(result[i].charinfo)
-            result[i].money = json.decode(result[i].money)
-            result[i].job = json.decode(result[i].job)
-            plyChars[#plyChars+1] = result[i]
+    exports.oxmysql:execute('SELECT p.citizenid, p.firstname, p.lastname, p.gender, p.money, p.job, p.birthdate, ps.model, ps.skin FROM players p JOIN playerskins ps ON P.citizenid = ps.citizenid WHERE license = ?', {license}, function(dbResult)
+    --exports.oxmysql:execute('SELECT p.firstname, p.lastname FROM players p JOIN playerskins ps ON P.citizenid = ps.citizenid WHERE license = ?', {license}, function(dbResult)
+
+        for i = 1, (#dbResult), 1 do
+            plyChars[i] = {}
+            plyChars[i].citizenid = dbResult[i].citizenid
+            plyChars[i].firstname = dbResult[i].firstname
+            plyChars[i].lastname = dbResult[i].lastname
+            plyChars[i].gender = dbResult[i].gender
+            plyChars[i].birthdate = dbResult[i].birthdate
+            plyChars[i].job = dbResult[i].job
+            plyChars[i].money = dbResult[i].money
+            plyChars[i].model = dbResult[i].model
+            plyChars[i].skin = dbResult[i].skin
         end
         cb(plyChars)
     end)
-end)
-
-DGCore.Functions.CreateCallback("qb-multicharacter:server:getSkin", function(source, cb, cid)
-    local result = exports.oxmysql:executeSync('SELECT * FROM playerskins WHERE citizenid = ? AND active = ?', {cid, 1})
-    if result[1] ~= nil then
-        cb(result[1].model, result[1].skin)
-    else
-        cb(nil)
-    end
 end)

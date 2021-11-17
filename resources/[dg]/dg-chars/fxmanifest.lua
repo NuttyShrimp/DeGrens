@@ -13,6 +13,7 @@ ui_page 'html/index.html'
 files {
     'html/index.html',
     'html/style.css',
+    'html/materialize.css',
     'html/reset.css',
     'html/script.js'
 }
