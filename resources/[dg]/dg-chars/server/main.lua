@@ -64,26 +64,22 @@ DGCore.Commands.Add("logout", "Logout of Character (Admin Only)", {}, false, fun
     TriggerClientEvent('qb-multicharacter:client:chooseChar', src)
 end, "admin")
 
-DGCore.Commands.Add("closeNUI", "Close Multi NUI", {}, false, function(source)
-    local src = source
-    TriggerClientEvent('qb-multicharacter:client:closeNUI', src)
-end)
 
 -- Events
 
-RegisterNetEvent('qb-multicharacter:server:disconnect', function()
+RegisterNetEvent('dg-char:server:disconnect', function()
     local src = source
-    DropPlayer(src, "You have disconnected from DGCore")
+    DropPlayer(src, "Disconnected van De Grens")
 end)
 
-RegisterNetEvent('dg-chars:server:loadUserData', function(cData)
+RegisterNetEvent('dg-chars:server:loadUserData', function(citizenid)
     local src = source
-    if DGCore.Player.Login(src, cData.citizenid) then
-        print('^2[dg-core]^7 '..GetPlayerName(src)..' (Citizen ID: '..cData.citizenid..') has succesfully loaded!')
+    if DGCore.Player.Login(src, citizenid) then
+        print('^2[dg-core]^7 '..GetPlayerName(src)..' (Citizen ID: '..citizenid..') has succesfully loaded!')
         DGCore.Commands.Refresh(src)
         loadHouseData()
-        TriggerClientEvent('apartments:client:setupSpawnUI', src, cData)
-        TriggerEvent("qb-log:server:CreateLog", "joinleave", "Loaded", "green", "**".. GetPlayerName(src) .. "** ("..cData.citizenid.." | "..src..") loaded..")
+        TriggerClientEvent('apartments:client:setupSpawnUI', src, citizenid)
+        TriggerEvent("qb-log:server:CreateLog", "joinleave", "Loaded", "green", "**".. GetPlayerName(src) .. "** ("..citizenid.." | "..src..") loaded..")
 	end
 end)
 

@@ -1,4 +1,5 @@
 local cam = nil
+local movingCam = false
 local charPed = {}
 local DGCore = exports['dg-core']:GetCoreObject()
 
@@ -59,13 +60,13 @@ local function setPeds(bool)
                             Citizen.Wait(0)
                         end
                         charPed[i] = CreatePed(2, model, Config.PedLocations[i].x, Config.PedLocations[i].y, Config.PedLocations[i].z - 0.98, Config.PedLocations[i].w, false, true)
-                        SetPedComponentVariation(charPed, 0, 0, 0, 2)
-                        FreezeEntityPosition(charPed, false)
-                        SetEntityInvincible(charPed, true)
-                        PlaceObjectOnGroundProperly(charPed)
-                        SetBlockingOfNonTemporaryEvents(charPed, true)
+                        SetPedComponentVariation(charPed[i], 0, 0, 0, 2)
+                        FreezeEntityPosition(charPed[i], false)
+                        SetEntityInvincible(charPed[i], true)
+                        PlaceObjectOnGroundProperly(charPed[i])
+                        SetBlockingOfNonTemporaryEvents(charPed[i], true)
                         skindata = json.decode(tostring(skin))
-                        TriggerEvent('qb-clothing:client:loadPlayerClothing', skindata, charPed)
+                        TriggerEvent('qb-clothing:client:loadPlayerClothing', skindata, charPed[i])
                         Wait(100)
                      end)
                 else
@@ -109,6 +110,30 @@ local function openCharMenu(bool)
     skyCam(bool)
 end
 
+function moveCam(newCoords, newRot)
+	oldCamCoords = GetCamCoord(cam)
+	oldCamRot = GetCamRot(cam)
+	if(movingCam or (newCoords == oldCamCoords and newRot == oldCamRot)) then return end
+	movingCam = true
+	diffCoords = newCoords-GetCamCoord(cam)
+	diffRot = newRot-oldCamRot
+	if diffRot.z > 180 then
+		diffRot = diffRot - vector3(0,0,360)
+	end
+	for i = 1, 75, 1 do
+		SetCamCoord(cam, oldCamCoords+diffCoords/75*i)
+		SetCamRot(cam, oldCamRot+diffRot/75*i)
+		Citizen.Wait(i/8)
+	end
+	movingCam = false
+end
+
+function deleteCharEntities()
+    for i,char in pairs(charPed) do
+        DeleteEntity(charPed[i])
+    end
+end
+
 -- Events
 
 
@@ -133,46 +158,33 @@ end)
 RegisterNUICallback('zoomToChar', function(data)
     local count = data.count
     if count then
-        -- change UI
-        
-        -- cam move
         newCamCoords = vector3(Config.camLocations[count].x , Config.camLocations[count].y , Config.camLocations[count].z)
         newCamRot = vector3( -10, 0, Config.camLocations[count].w + 180)
-        oldCamCoords = vector3(Config.standardCamCoords.x, Config.standardCamCoords.y, Config.standardCamCoords.z)
-        oldCamRot =  vector3( 0, 0, Config.standardCamCoords.w)
-        diffCoords = newCamCoords - oldCamCoords
-        diffRot = newCamRot - oldCamRot
-
-        for i = 1, 75, 1 do
-            SetCamCoord(cam, oldCamCoords+diffCoords/75*i)
-            SetCamRot(cam, oldCamRot+diffRot/75*i)
-            
-            Citizen.Wait(i/8)
-        end
-
-
+        moveCam(newCamCoords, newCamRot)
     else
     end
+end)
+
+RegisterNUICallback('zoomToMain', function()
+        
+        newCamCoords = vector3(Config.CamCoords.x, Config.CamCoords.y, Config.CamCoords.z)
+        newCamRot = vector3( -20, 0, Config.CamCoords.h)
+        moveCam(newCamCoords, newCamRot)
 
 end)
 
-RegisterNUICallback('zoomToMain', function(data)
-        
-        -- cam move
-        newCamCoords = vector3(Config.standardCamCoords.x, Config.standardCamCoords.y, Config.standardCamCoords.z)
-        newCamRot = vector3( 0, 0, Config.standardCamCoords.w)
-        oldCamCoords = GetCamCoord(cam)
-        oldCamRot =  GetCamRot(cam, 2)
-        diffCoords = newCamCoords - oldCamCoords
-        diffRot = newCamRot - oldCamRot
+RegisterNUICallback('disconnect', function()
+    deleteCharEntities()
+    TriggerServerEvent('dg-char:server:disconnect')
+end)
 
-        for i = 1, 75, 1 do
-            SetCamCoord(cam, oldCamCoords+diffCoords/75*i)
-            SetCamRot(cam, oldCamRot+diffRot/75*i)
-            
-            Citizen.Wait(i/8)
-        end
-
+RegisterNUICallback('play', function(data)
+    local citizenid = data.citizenid
+    local count = data.id
+    TriggerServerEvent('dg-chars:server:loadUserData', citizenid)
+    openCharMenu(false)
+    SetEntityAsMissionEntity(charPed[count], true, true)
+    deleteCharEntities()
 end)
 
 
@@ -180,11 +192,7 @@ end)
 --TriggerServerEvent('dg-chars:server:loadUserData', cData)
 -- + delete entities
 
--- RegisterNUICallback('disconnectButton', function()
---     SetEntityAsMissionEntity(charPed, true, true)
---     DeleteEntity(charPed)
---     TriggerServerEvent('qb-multicharacter:server:disconnect')
--- end)
+
 
 -- RegisterNUICallback('selectCharacter', function(data)
 --     local cData = data.cData

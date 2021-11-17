@@ -81,7 +81,6 @@ $(document).ready(function (){
     $('.datepicker').datepicker();
 });
 
-//Char Button Clicks
 
 $('.char-wrap').click(function(e){
     e.preventDefault();
@@ -89,9 +88,7 @@ $('.char-wrap').click(function(e){
     var info = JSON.parse(cinfo);
     var count = ($(this).data('count'));
 
-    console.log(info);
-
-    const selectedChar = {}
+    selectedChar = {}
     selectedChar.id = count;
     selectedChar.citizenid = info.citizenid;
     selectedChar.firstname = info.firstname;
@@ -109,69 +106,43 @@ $('.char-wrap').click(function(e){
     $('#gender').text( selectedChar.gender);
     $('#birthdate').text( selectedChar.birthdate);
     $('#job').text( selectedChar.job.label);
-
-
-
-
     $.post('https://dg-chars/zoomToChar', JSON.stringify({
         count: count,
     }));
-
-
-
     $(".characters-list").fadeOut(150);
-    dgChars.fadeInDown('.character-info', '15%', 400);
-
-
-
-
+    $('.disconnect').fadeOut(150);
+    setTimeout(function(){
+        dgChars.fadeInDown('.character-info', '15%', 400);
+    }, 1500);
 });
 
 $('#back-btn').click(function(e){
     e.preventDefault();
     $.post('https://dg-chars/zoomToMain')
     selectCharacter = {}
+    setTimeout(function(){
+        dgChars.fadeInDown('.characters-list', '15%', 400);
+    }, 1500);
+    $('.character-info').fadeOut(150);
 });
 
 
 
-$('.disconnect-btn').click(function(e){
+$('#disconnect').click(function(e){
     e.preventDefault();
 
-    $.post('https://qb-multicharacter/closeUI');
-    $.post('https://qb-multicharacter/disconnectButton');
+    $.post('https://dg-chars/closeUI');
+    $.post('https://dg-chars/disconnect');
 });
 
-// function setupCharInfo(cData) {
-//     if (cData == 'empty') {
-//         $('.character-info-valid').html('<span id="no-char">The selected character slot is not in use yet.<br><br>This character doesn\'t have information yet.</span>');
-//     } else {
-//         var gender = "Man"
-//         if (cData.charinfo.gender == 1) { gender = "Woman" }
-//         $('.character-info-valid').html(
-//         '<div class="character-info-box"><span id="info-label">Name: </span><span class="char-info-js">'+cData.charinfo.firstname+' '+cData.charinfo.lastname+'</span></div>' +
-//         '<div class="character-info-box"><span id="info-label">Birth date: </span><span class="char-info-js">'+cData.charinfo.birthdate+'</span></div>' +
-//         '<div class="character-info-box"><span id="info-label">Gender: </span><span class="char-info-js">'+gender+'</span></div>' +
-//         '<div class="character-info-box"><span id="info-label">Nationality: </span><span class="char-info-js">'+cData.charinfo.nationality+'</span></div>' +
-//         '<div class="character-info-box"><span id="info-label">Job: </span><span class="char-info-js">'+cData.job.label+'</span></div>' +
-//         '<div class="character-info-box"><span id="info-label">Cash: </span><span class="char-info-js">&#36; '+cData.money.cash+'</span></div>' +
-//         '<div class="character-info-box"><span id="info-label">Bank: </span><span class="char-info-js">&#36; '+cData.money.bank+'</span></div>' +
-//         '<div class="character-info-box"><span id="info-label">Phone number: </span><span class="char-info-js">'+cData.charinfo.phone+'</span></div>' +
-//         '<div class="character-info-box"><span id="info-label">Account number: </span><span class="char-info-js">'+cData.charinfo.account+'</span></div>');
-//     }
-// }
+$('#play').click(function(e){
+    e.preventDefault();
+    $.post('https://dg-chars/play', JSON.stringify({
+        citizenid: selectedChar.citizenid,
+        count: selectedChar.id,
+    }));
+});
 
-// function setupCharacters(characters) {
-//     $.each(characters, function(index, char){
-//         $('#char-'+char.cid).html("");
-//         $('#char-'+char.cid).data("citizenid", char.citizenid);
-//         setTimeout(function(){
-//             $('#char-'+char.cid).html('<span id="slot-name">'+char.charinfo.firstname+' '+char.charinfo.lastname+'<span id="cid">' + char.citizenid + '</span></span>');
-//             $('#char-'+char.cid).data('cData', char)
-//             $('#char-'+char.cid).data('cid', char.cid)
-//         }, 100)
-//     })
-// }
 
 // $(document).on('click', '#close-log', function(e){
 //     e.preventDefault();
