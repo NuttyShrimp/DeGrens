@@ -474,6 +474,12 @@ CREATE TABLE `trunkitems` (
   `items` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+CREATE TABLE api_tokens (
+  token VARCHAR(255) NOT NULL DEFAULT '',
+  timestamp TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (token)
+);
+
 --
 -- Indexes for dumped tables
 --
