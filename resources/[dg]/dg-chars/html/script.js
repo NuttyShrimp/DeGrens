@@ -129,9 +129,11 @@ $('.char-wrap').click(function(e){
 
 $('#back-btn').click(function(e){
     e.preventDefault();
-    $.post('https://dg-chars/zoomToChar')
+    $.post('https://dg-chars/zoomToMain')
     selectCharacter = {}
 });
+
+
 
 $('.disconnect-btn').click(function(e){
     e.preventDefault();

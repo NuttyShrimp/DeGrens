@@ -157,9 +157,6 @@ RegisterNUICallback('zoomToChar', function(data)
 end)
 
 RegisterNUICallback('zoomToMain', function(data)
-    local count = data.count
-    if count then
-        -- change UI
         
         -- cam move
         newCamCoords = vector3(Config.standardCamCoords.x, Config.standardCamCoords.y, Config.standardCamCoords.z)
@@ -175,10 +172,6 @@ RegisterNUICallback('zoomToMain', function(data)
             
             Citizen.Wait(i/8)
         end
-
-
-    else
-    end
 
 end)
 
