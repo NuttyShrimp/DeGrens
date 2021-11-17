@@ -809,7 +809,7 @@ module.exports = genfun
 
 "use strict";
 
-var Buffer = __webpack_require__(2399).Buffer;
+var Buffer = (__webpack_require__(2399).Buffer);
 
 // Multibyte codec. In this scheme, a character is represented by 1 or more bytes.
 // Our codec supports UTF-16 surrogates, extensions for GB18030 and unicode sequences.
@@ -1505,7 +1505,7 @@ module.exports = {
     // GBK (~22000 chars) is an extension of CP936 that added user-mapped chars and some other.
     'gbk': {
         type: '_dbcs',
-        table: function() { return __webpack_require__(3336).concat(__webpack_require__(4346)) },
+        table: function() { return (__webpack_require__(3336).concat)(__webpack_require__(4346)) },
     },
     'xgbk': 'gbk',
     'isoir58': 'gbk',
@@ -1517,7 +1517,7 @@ module.exports = {
     // http://www.khngai.com/chinese/charmap/tblgbk.php?page=0
     'gb18030': {
         type: '_dbcs',
-        table: function() { return __webpack_require__(3336).concat(__webpack_require__(4346)) },
+        table: function() { return (__webpack_require__(3336).concat)(__webpack_require__(4346)) },
         gb18030: function() { return __webpack_require__(6258) },
         encodeSkipVals: [0x80],
         encodeAdd: {'€': 0xA2E3},
@@ -1581,7 +1581,7 @@ module.exports = {
     'big5': 'big5hkscs',
     'big5hkscs': {
         type: '_dbcs',
-        table: function() { return __webpack_require__(4284).concat(__webpack_require__(3480)) },
+        table: function() { return (__webpack_require__(4284).concat)(__webpack_require__(3480)) },
         encodeSkipVals: [
             // Although Encoding Standard says we should avoid encoding to HKSCS area (See Step 1 of
             // https://encoding.spec.whatwg.org/#index-big5-pointer), we still do it to increase compatibility with ICU.
@@ -1641,7 +1641,7 @@ for (var i = 0; i < modules.length; i++) {
 
 "use strict";
 
-var Buffer = __webpack_require__(2399).Buffer;
+var Buffer = (__webpack_require__(2399).Buffer);
 
 // Export Node.js internal encodings.
 
@@ -1688,7 +1688,7 @@ InternalCodec.prototype.decoder = InternalDecoder;
 //------------------------------------------------------------------------------
 
 // We use node.js internal decoder. Its signature is the same as ours.
-var StringDecoder = __webpack_require__(1576).StringDecoder;
+var StringDecoder = (__webpack_require__(1576).StringDecoder);
 
 if (!StringDecoder.prototype.end) // Node v0.8 doesn't have this method.
     StringDecoder.prototype.end = function() {};
@@ -1847,7 +1847,7 @@ InternalDecoderCesu8.prototype.end = function() {
 
 "use strict";
 
-var Buffer = __webpack_require__(2399).Buffer;
+var Buffer = (__webpack_require__(2399).Buffer);
 
 // Single-byte codec. Needs a 'chars' string parameter that contains 256 or 128 chars that
 // correspond to encoded bytes (if 128 - then lower half is ASCII). 
@@ -2572,7 +2572,7 @@ module.exports = {
 
 "use strict";
 
-var Buffer = __webpack_require__(2399).Buffer;
+var Buffer = (__webpack_require__(2399).Buffer);
 
 // Note: UTF16-LE (or UCS2) codec is Node.js native. See encodings/internal.js
 
@@ -2778,7 +2778,7 @@ function detectEncoding(bufs, defaultEncoding) {
 "use strict";
 
 
-var Buffer = __webpack_require__(2399).Buffer;
+var Buffer = (__webpack_require__(2399).Buffer);
 
 // == UTF32-LE/BE codec. ==========================================================
 
@@ -3104,7 +3104,7 @@ function detectEncoding(bufs, defaultEncoding) {
 
 "use strict";
 
-var Buffer = __webpack_require__(2399).Buffer;
+var Buffer = (__webpack_require__(2399).Buffer);
 
 // UTF-7 codec, according to https://tools.ietf.org/html/rfc2152
 // See also below a UTF-7-IMAP codec, according to http://tools.ietf.org/html/rfc3501#section-5.1.3
@@ -3463,7 +3463,7 @@ StripBOMWrapper.prototype.end = function() {
 "use strict";
 
 
-var Buffer = __webpack_require__(2399).Buffer;
+var Buffer = (__webpack_require__(2399).Buffer);
 
 var bomHandling = __webpack_require__(5395),
     iconv = module.exports;
@@ -3649,7 +3649,7 @@ if (false) {}
 "use strict";
 
 
-var Buffer = __webpack_require__(2399).Buffer;
+var Buffer = (__webpack_require__(2399).Buffer);
 
 // NOTE: Due to 'stream' module being pretty large (~100Kb, significant in browser environments), 
 // we opt to dependency-inject it instead of creating a hard dependency.
@@ -5499,17 +5499,17 @@ exports.raw = SqlString.raw;
 
 exports.__defineGetter__(
   'createConnectionPromise',
-  () => __webpack_require__(8425)/* .createConnection */ .I5
+  () => (__webpack_require__(8425)/* .createConnection */ .I5)
 );
 
 exports.__defineGetter__(
   'createPoolPromise',
-  () => __webpack_require__(8425)/* .createPool */ .Kz
+  () => (__webpack_require__(8425)/* .createPool */ .Kz)
 );
 
 exports.__defineGetter__(
   'createPoolClusterPromise',
-  () => __webpack_require__(8425)/* .createPoolCluster */ .Xy
+  () => (__webpack_require__(8425)/* .createPoolCluster */ .Xy)
 );
 
 exports.__defineGetter__('Types', () => __webpack_require__(3311));
@@ -6351,7 +6351,7 @@ class ClientHandshake extends Command {
     if (!connection.authorized) {
       connection.authorized = true;
       if (connection.config.compress) {
-        const enableCompression = __webpack_require__(8629).enableCompression;
+        const enableCompression = (__webpack_require__(8629).enableCompression);
         enableCompression(connection);
       }
     }
@@ -6398,7 +6398,7 @@ module.exports = CloseStatement;
 "use strict";
 
 
-const EventEmitter = __webpack_require__(2361).EventEmitter;
+const EventEmitter = (__webpack_require__(2361).EventEmitter);
 const Timers = __webpack_require__(9512);
 
 class Command extends EventEmitter {
@@ -6797,7 +6797,7 @@ module.exports = Prepare;
 const process = __webpack_require__(7282);
 const Timers = __webpack_require__(9512);
 
-const Readable = __webpack_require__(2781).Readable;
+const Readable = (__webpack_require__(2781).Readable);
 
 const Command = __webpack_require__(1651);
 const Packets = __webpack_require__(5077);
@@ -7009,7 +7009,7 @@ class Query extends Command {
     if (this._receivedFieldsCount === this._fieldCount) {
       const fields = this._fields[this._resultIndex];
       this.emit('fields', fields);
-      this._rowParser = new (getTextParser(fields, this.options, connection.config))();
+      this._rowParser = new (getTextParser(fields, this.options, connection.config))(fields);
       return Query.prototype.fieldsEOF;
     }
     return Query.prototype.readField;
@@ -7516,8 +7516,8 @@ module.exports = {
 const Net = __webpack_require__(1808);
 const Tls = __webpack_require__(4404);
 const Timers = __webpack_require__(9512);
-const EventEmitter = __webpack_require__(2361).EventEmitter;
-const Readable = __webpack_require__(2781).Readable;
+const EventEmitter = (__webpack_require__(2361).EventEmitter);
+const Readable = (__webpack_require__(2781).Readable);
 const Queue = __webpack_require__(5001);
 const SqlString = __webpack_require__(2655);
 const LRU = __webpack_require__(9593);
@@ -7643,7 +7643,7 @@ class Connection extends EventEmitter {
   }
 
   promise(promiseImpl) {
-    const PromiseConnection = __webpack_require__(8425)/* .PromiseConnection */ .WE;
+    const PromiseConnection = (__webpack_require__(8425)/* .PromiseConnection */ .WE);
     return new PromiseConnection(this, promiseImpl);
   }
 
@@ -8634,7 +8634,6 @@ class ConnectionConfig {
       'LONG_PASSWORD',
       'FOUND_ROWS',
       'LONG_FLAG',
-      'CONNECT_WITH_DB',
       'ODBC',
       'LOCAL_FILES',
       'IGNORE_SPACE',
@@ -8649,6 +8648,9 @@ class ConnectionConfig {
     ];
     if (options && options.multipleStatements) {
       defaultFlags.push('MULTI_STATEMENTS');
+    }
+    if (options && options.database) {
+      defaultFlags.push('CONNECT_WITH_DB');
     }
     defaultFlags.push('PLUGIN_AUTH');
     defaultFlags.push('PLUGIN_AUTH_LENENC_CLIENT_DATA');
@@ -13923,7 +13925,7 @@ class Handshake {
   }
 
   setScrambleData(cb) {
-    __webpack_require__(6113).randomBytes(20, (err, data) => {
+    (__webpack_require__(6113).randomBytes)(20, (err, data) => {
       if (err) {
         cb(err);
         return;
@@ -14337,7 +14339,7 @@ exports.Error = Error;
 
 
 const ErrorCodeToName = __webpack_require__(8282);
-const NativeBuffer = __webpack_require__(4300).Buffer;
+const NativeBuffer = (__webpack_require__(4300).Buffer);
 const Long = __webpack_require__(3720);
 const StringParser = __webpack_require__(9606);
 
@@ -15982,6 +15984,25 @@ function compile(fields, options, config) {
     options.typeCast = config.typeCast;
   }
 
+  function wrap(field, _this) {
+    return {
+      type: typeNames[field.columnType],
+      length: field.columnLength,
+      db: field.schema,
+      table: field.table,
+      name: field.name,
+      string: function() {
+        return _this.packet.readLengthCodedString(field.encoding);
+      },
+      buffer: function() {
+        return _this.packet.readLengthCodedBuffer();
+      },
+      geometry: function() {
+        return _this.packet.parseGeometryValue();
+      }
+    };
+  }
+
   const parserFn = genFunc();
 
   /* eslint-disable no-trailing-spaces */
@@ -15992,42 +16013,14 @@ function compile(fields, options, config) {
   );
 
   // constructor method
-  parserFn('constructor() {');
+  parserFn('constructor(fields) {');
   // node-mysql typeCast compatibility wrapper
   // see https://github.com/mysqljs/mysql/blob/96fdd0566b654436624e2375c7b6604b1f50f825/lib/protocol/packets/Field.js
   if (typeof options.typeCast === 'function') {
     parserFn('const _this = this;');
-    for(let i=0; i<fields.length; ++i) {
-      const field = fields[i];
-      const encodingExpr = helpers.srcEscape(field.encoding);
-      const readCode = readCodeFor(
-        fields[i].columnType,
-        fields[i].characterSet,
-        encodingExpr,
-        config,
-        options
-      );
-      parserFn(`this.wrap${i} = {
-        type: ${helpers.srcEscape(typeNames[field.columnType])},
-        length: ${field.columnLength},
-        db: ${helpers.srcEscape(field.schema)},
-        table: ${helpers.srcEscape(field.table)},
-        name: ${helpers.srcEscape(field.name)},
-        string: function() {
-          return _this.packet.readLengthCodedString(${encodingExpr});
-        },
-        buffer: function() {
-          return _this.packet.readLengthCodedBuffer();
-        },
-        geometry: function() {
-          return _this.packet.parseGeometryValue();
-        },
-        readNext: function() {
-          const packet = _this.packet;
-          return ${readCode};
-        }
-      };`);
-    }
+    parserFn('for(let i=0; i<fields.length; ++i) {');
+    parserFn('this[`wrap${i}`] = wrap(fields[i], _this);');
+    parserFn('}');
   }
   parserFn('}');
 
@@ -16069,9 +16062,7 @@ function compile(fields, options, config) {
     } else {
       lvalue = `result[${fieldName}]`;
     }
-    if (typeof options.typeCast === 'function') {
-      parserFn(`${lvalue} = options.typeCast(this.wrap${i}, this.wrap${i}.readNext);`);
-    } else if (options.typeCast === false) {
+    if (options.typeCast === false) {
       parserFn(`${lvalue} = packet.readLengthCodedBuffer();`);
     } else {
       const encodingExpr = `fields[${i}].encoding`;
@@ -16082,8 +16073,12 @@ function compile(fields, options, config) {
         config,
         options
       );
-      parserFn(`${lvalue} = ${readCode};`);
-    }
+      if (typeof options.typeCast === 'function') {
+        parserFn(`${lvalue} = options.typeCast(this.wrap${i}, function() { return ${readCode} });`);
+      }  else {
+        parserFn(`${lvalue} = ${readCode};`);
+      }
+    }  
   }
 
   parserFn('return result;');
@@ -16100,6 +16095,9 @@ function compile(fields, options, config) {
       parserFn.toString()
     );
   }
+  if (typeof options.typeCast === 'function') {
+    return parserFn.toFunction({wrap});
+  } 
   return parserFn.toFunction();
 }
 
@@ -16121,7 +16119,7 @@ module.exports = getTextParser;
 const process = __webpack_require__(7282);
 const mysql = __webpack_require__(420);
 
-const EventEmitter = __webpack_require__(2361).EventEmitter;
+const EventEmitter = (__webpack_require__(2361).EventEmitter);
 const PoolConnection = __webpack_require__(8751);
 const Queue = __webpack_require__(5001);
 const Connection = __webpack_require__(4855);
@@ -16148,7 +16146,7 @@ class Pool extends EventEmitter {
   }
 
   promise(promiseImpl) {
-    const PromisePool = __webpack_require__(8425)/* .PromisePool */ .Kk;
+    const PromisePool = (__webpack_require__(8425)/* .PromisePool */ .Kk);
     return new PromisePool(this, promiseImpl);
   }
 
@@ -16343,7 +16341,7 @@ const process = __webpack_require__(7282);
 const Pool = __webpack_require__(1001);
 const PoolConfig = __webpack_require__(5357);
 const Connection = __webpack_require__(4855);
-const EventEmitter = __webpack_require__(2361).EventEmitter;
+const EventEmitter = (__webpack_require__(2361).EventEmitter);
 
 /**
  * Selector
@@ -16661,7 +16659,7 @@ module.exports = PoolConfig;
 "use strict";
 
 
-const Connection = __webpack_require__(420).Connection;
+const Connection = (__webpack_require__(420).Connection);
 
 class PoolConnection extends Connection {
   constructor(pool, options) {
@@ -16687,7 +16685,7 @@ class PoolConnection extends Connection {
   }
 
   promise(promiseImpl) {
-    const PromisePoolConnection = __webpack_require__(8425)/* .PromisePoolConnection */ .Qr;
+    const PromisePoolConnection = (__webpack_require__(8425)/* .PromisePoolConnection */ .Qr);
     return new PromisePoolConnection(this, promiseImpl);
   }
 
@@ -16735,7 +16733,7 @@ PoolConnection.prototype._realEnd = Connection.prototype.end;
 
 
 const net = __webpack_require__(1808);
-const EventEmitter = __webpack_require__(2361).EventEmitter;
+const EventEmitter = (__webpack_require__(2361).EventEmitter);
 
 const Connection = __webpack_require__(4855);
 const ConnectionConfig = __webpack_require__(7702);
@@ -16781,7 +16779,7 @@ var __webpack_unused_export__;
 
 
 const core = __webpack_require__(420);
-const EventEmitter = __webpack_require__(2361).EventEmitter;
+const EventEmitter = (__webpack_require__(2361).EventEmitter);
 
 function makeDoneCb(resolve, reject, localErr) {
   return function (err, rows, fields, executionTime) {
@@ -18613,7 +18611,7 @@ module.exports = __webpack_require__(6947);
 /***/ 6947:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-var EventEmitter = __webpack_require__(2361).EventEmitter;
+var EventEmitter = (__webpack_require__(2361).EventEmitter);
 var util = __webpack_require__(3837);
 
 var DEFAULT_TIMEOUT = 3000;
@@ -19852,15 +19850,16 @@ const parseSemiColons = () => {
   }, {});
 };
 
+// @TODO: refactor acceptable options when using semicolon connection; this or stuff is getting old
 const createConnection = () => {
-  if (connectionString.includes('database=')) {
+  if (connectionString.includes('host=')) {
     const options = parseSemiColons();
 
     return (0,promise/* createPool */.Kz)({
       host: options.host || 'localhost',
       port: options.port || 3306,
-      user: options.username || options.user || options.userid || 'root',
-      password: options.password || options.pass || '',
+      user: options.username || options.user || options.userid || options.uid || 'root',
+      password: options.password || options.pass || options.pwd || '',
       database: options.endpoint || options.database,
       charset: 'utf8mb4_unicode_ci',
       connectTimeout: 30000,
