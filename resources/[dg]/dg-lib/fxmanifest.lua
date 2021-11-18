@@ -17,7 +17,7 @@ client_scripts {
 	"client/cl_*.lua",
 	"client/cl_*.js",
 	"client/**/*.lua",
-	"client/**/*.ytyp"
+	"client/**/*.ytyp.xml"
 }
 
 ui_page "ui/index.html"
