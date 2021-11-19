@@ -1,34 +1,35 @@
+DGCore = exports['dg-core']:GetCoreObject()
 local PlayerData
 local Players, Entities, Models, Zones, PedFlags =  {}, {}, {}, {}, {}
 local playerPed, currentFlag, targetActive, hasFocus, success, AllowTarget, sendData = PlayerPedId(), 30, false, false, false, true, nil
 
 AddEventHandler("onResourceStart", function(resourceName)
     if resourceName ~= GetCurrentResourceName() then return end
-    PlayerData = QBCore.Functions.GetPlayerData()
+    PlayerData = DGCore.Functions.GetPlayerData()
 end)
 
-RegisterNetEvent("QBCore:Client:OnPlayerLoaded")
-AddEventHandler("QBCore:Client:OnPlayerLoaded", function()
-    PlayerData = QBCore.Functions.GetPlayerData()
+RegisterNetEvent("DGCore:Client:OnPlayerLoaded")
+AddEventHandler("DGCore:Client:OnPlayerLoaded", function()
+    PlayerData = DGCore.Functions.GetPlayerData()
 end)
 
-RegisterNetEvent("QBCore:Client:OnPlayerUnload")
-AddEventHandler("QBCore:Client:OnPlayerUnload", function()
+RegisterNetEvent("DGCore:Client:OnPlayerUnload")
+AddEventHandler("DGCore:Client:OnPlayerUnload", function()
     PlayerData = {}
 end)
 
-RegisterNetEvent("QBCore:Client:OnJobUpdate")
-AddEventHandler("QBCore:Client:OnJobUpdate", function(JobInfo)
+RegisterNetEvent("DGCore:Client:OnJobUpdate")
+AddEventHandler("DGCore:Client:OnJobUpdate", function(JobInfo)
     PlayerData.job = JobInfo
 end)
 
-RegisterNetEvent("QBCore:Client:OnGangUpdate")
-AddEventHandler("QBCore:Client:OnGangUpdate", function(GangInfo)
+RegisterNetEvent("DGCore:Client:OnGangUpdate")
+AddEventHandler("DGCore:Client:OnGangUpdate", function(GangInfo)
     PlayerData.gang = GangInfo
 end)
 
-RegisterNetEvent("QBCore:Client:SetPlayerData")
-AddEventHandler("QBCore:Client:SetPlayerData", function(data)
+RegisterNetEvent("DGCore:Client:SetPlayerData")
+AddEventHandler("DGCore:Client:SetPlayerData", function(data)
     PlayerData = data
 end)
 
@@ -601,8 +602,8 @@ RegisterNUICallback("selectTarget", function(option, cb)
                     TriggerServerEvent(data.event, data)
                 elseif data.type == "command" then
                     ExecuteCommand(data.event)
-                elseif data.type == "qbcommand" then
-                    TriggerServerEvent("QBCore:CallCommand", data.event, data)
+                elseif data.type == "dgcommand" then
+                    TriggerServerEvent("DGCore:CallCommand", data.event, data)
                 else
                     TriggerEvent(data.event, data)
                 end
