@@ -23,6 +23,18 @@ createPlayerApartment = function(src)
 	return exports.oxmysql:insertSync('INSERT INTO apartments_new (cid) VALUES (?) ', {Player.PlayerData.citizenid})
 end
 
+setInsideMeta = function(src, aId)
+	local Player = DGCore.Functions.GetPlayer(src)
+	local insideMeta = Player.PlayerData.metadata["inside"]
+	insideMeta.apartment.id = aId > 0 and aId or nil
+	insideMeta.house = nil
+	Player.Functions.SetMetaData("inside", insideMeta)
+end
+
+RegisterNetEvent('dg-apartments:server:setInsideMeta', function(aId)
+	setInsideMeta(source, aId)
+end)
+
 -- id is an optional parameter
 enterApartment = function(src, id, new)
 	local Player = DGCore.Functions.GetPlayer(src)
@@ -45,6 +57,7 @@ enterApartment = function(src, id, new)
 	-- disable weathersynv
 	TriggerClientEvent('dg-weathersync:client:DisableSync', src)
 	-- Set insidemeta
+	setInsideMeta(src, id)
 	TriggerClientEvent('dg-apartments:client:fadeScreen', src, false)
 	if new then
 		Citizen.SetTimeout(1000, function()
@@ -73,6 +86,7 @@ leaveApartment = function(src)
 
 	TriggerClientEvent('dg-apartments:client:removeRoom', src)
 	TriggerClientEvent('dg-weathersync:client:EnableSync', src)
+	setInsideMeta(src, 0)
 
 	TriggerClientEvent('dg-apartments:client:fadeScreen', src, false)
 	TriggerEvent("InteractSound_SV:PlayOnOne", src, "houses_door_close", 0.1)

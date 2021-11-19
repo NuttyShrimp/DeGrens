@@ -114,3 +114,7 @@ function openDoorAnim()
 	Citizen.Wait(400)
 	ClearPedTasks(PlayerPedId())
 end
+
+exports('getEnterCoords', function()
+	return Config.Locations[1].enter.center
+end)
