@@ -5,7 +5,10 @@ description 'Jens-CarBoosting'
 version '1.0.0'
 
 shared_scripts {
+<<<<<<< HEAD
     '@qb-core/import.lua',
+=======
+>>>>>>> nutty
 	'config.lua'
 }
 
