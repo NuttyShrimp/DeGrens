@@ -70,23 +70,24 @@ local function setPeds(bool)
                         Wait(100)
                      end)
                 else
-                    -- Citizen.CreateThread(function()
-                    --     local randommodels = {
-                    --         "mp_m_freemode_01",
-                    --         "mp_f_freemode_01",
-                    --     }
-                    --     local model = GetHashKey(randommodels[math.random(1, #randommodels)])
-                    --     RequestModel(model)
-                    --     while not HasModelLoaded(model) do
-                    --         Citizen.Wait(0)
-                    --     end
-                    --     charPed = CreatePed(2, model, Config.PedLocations[i].x, Config.PedLocations[i].y, Config.PedLocations[i].z - 0.98, Config.PedLocations[i].w, false, true)
-                    --     SetPedComponentVariation(charPed, 0, 0, 0, 2)
-                    --     FreezeEntityPosition(charPed, false)
-                    --     SetEntityInvincible(charPed, true)
-                    --     PlaceObjectOnGroundProperly(charPed)
-                    --     SetBlockingOfNonTemporaryEvents(charPed, true)
-                    -- end)
+                    Citizen.CreateThread(function()
+                        local randommodels = {
+                            "mp_m_freemode_01",
+                            "mp_f_freemode_01",
+                        }
+                        local model = GetHashKey(randommodels[math.random(1, #randommodels)])
+                        RequestModel(model)
+                        while not HasModelLoaded(model) do
+                            Citizen.Wait(0)
+                        end
+                        charPed[i] = CreatePed(2, model, Config.PedLocations[i].x, Config.PedLocations[i].y, Config.PedLocations[i].z - 0.98, Config.PedLocations[i].w, false, true)
+                        SetPedComponentVariation(charPed[i], 0, 0, 0, 2)
+                        FreezeEntityPosition(charPed[i], false)
+                        SetEntityInvincible(charPed[i], true)
+                        PlaceObjectOnGroundProperly(charPed[i])
+                        SetBlockingOfNonTemporaryEvents(charPed[i], true)
+                        SetEntityAlpha(charPed[i], 10)
+                    end)
                     CreateThread(function()
                         while true do
                             Wait(0)
@@ -134,6 +135,16 @@ function deleteCharEntities()
     end
 end
 
+function DirectionVector(rotation)
+	local z = math.rad(rotation.z)
+	local x = math.rad(rotation.x)
+	local abscos = math.abs(math.cos(x))
+
+	local vec3dir = vector3(-math.sin(z)*abscos, math.cos(z)*abscos, math.sin(x))
+	return vec3dir
+end
+
+
 -- Events
 
 
@@ -158,9 +169,15 @@ end)
 RegisterNUICallback('zoomToChar', function(data)
     local count = data.count
     if count then
-        newCamCoords = vector3(Config.camLocations[count].x , Config.camLocations[count].y , Config.camLocations[count].z)
-        newCamRot = vector3( -10, 0, Config.camLocations[count].w + 180)
+        -- newCamCoords = vector3(Config.camLocations[count].x , Config.camLocations[count].y , Config.camLocations[count].z)
+        -- newCamRot = vector3( -10, 0, Config.camLocations[count].w + 180)
+        -- moveCam(newCamCoords, newCamRot)
+
+        ped = charPed[count]
+        newCamCoords = GetEntityCoords(ped) + vector3(1, 0.0,0.35) + DirectionVector(GetEntityRotation(ped)) * 3
+        newCamRot = GetEntityRotation(ped)+vector3(-10,0,180)
         moveCam(newCamCoords, newCamRot)
+        TaskLookAtCoord(ped, newCamCoords, -1, 0, 2)
     else
     end
 end)

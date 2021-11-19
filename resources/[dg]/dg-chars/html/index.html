@@ -64,7 +64,7 @@
                             <h4 id="name">Naam Achternaam</h4>
                             <div class="dgInnerBox">
                                 <h6>Karakter Info:</h6>
-                                <ul>
+                                <ul style="margin-bottom: 40%;">
                                     <li>
                                         <strong>Rijksregister Nr:</strong>
                                         <span id="citizenid"></span>
@@ -92,6 +92,52 @@
                                 </div>
                                 <div class="col s4">
                                     <div class="dgBtn-red"><i class="material-icons">delete</i> Verwijder </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="row character-create">
+                    <div class="col s5 offset-s1">
+                        <div class="dgBox">
+                            <h4 id="name">Karakter Maken</h4>
+                            <div class="row dgInnerBox">
+                                <div class="input-field col s12">
+                                    <input id="first_name" type="text" class="white-text validate">
+                                    <label for="first_name">Voornaam</label>
+                                </div>
+                                <div class="input-field col s12">
+                                    <input id="last_name" type="text" class="white-text validate">
+                                    <label for="last_name">Achternaam</label>
+                                </div>
+                                <div class="input-field col s12">
+                                    <input id="nationality" type="text" class="white-text validate">
+                                    <label for="nationality">Nationaliteit</label>
+                                </div>
+                                <div class="col s12">
+                                    <strong>Geslacht</strong>
+                                </div>
+                                <div class="col s12">
+                                    <label>
+                                        <input name="group1" type="radio" />
+                                        <span>Man</span>
+                                    </label>
+                                    <label>
+                                        <input name="group1" type="radio" />
+                                        <span>Vrouw</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col s12">
+                                    <div class="dgBtn-green" id="play"><i class="material-icons">add</i> Bevestigen </div>
+                                </div>
+                                <div class="col s8">
+                                    <div class="dgBtn-red" id="cancel-btn"><i class="material-icons">close</i> Cancel</div>         
+                                </div>
+                                <div class="col s8">
                                 </div>
                             </div>
                         </div>

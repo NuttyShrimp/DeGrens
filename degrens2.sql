@@ -23,17 +23,11 @@ SET time_zone = "+00:00";
 
 -- --------------------------------------------------------
 
---
--- Table structure for table `apartments`
---
-
-CREATE TABLE `apartments` (
-  `id` int(11) NOT NULL,
-  `name` varchar(255) DEFAULT NULL,
-  `type` varchar(255) DEFAULT NULL,
-  `label` varchar(255) DEFAULT NULL,
-  `citizenid` varchar(255) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+CREATE TABLE apartments_new (
+  id INT(11) NOT NULL AUTO_INCREMENT,
+  cid VARCHAR(255) NOT NULL UNIQUE,
+  PRIMARY KEY (id)
+);
 
 --
 -- Dumping data for table `apartments`
@@ -474,17 +468,15 @@ CREATE TABLE `trunkitems` (
   `items` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+CREATE TABLE api_tokens (
+  token VARCHAR(255) NOT NULL DEFAULT '',
+  timestamp TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (token)
+);
+
 --
 -- Indexes for dumped tables
 --
-
---
--- Indexes for table `apartments`
---
-ALTER TABLE `apartments`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `citizenid` (`citizenid`),
-  ADD KEY `name` (`name`);
 
 --
 -- Indexes for table `bank_accounts`
@@ -685,12 +677,6 @@ ALTER TABLE `trunkitems`
 --
 -- AUTO_INCREMENT for dumped tables
 --
-
---
--- AUTO_INCREMENT for table `apartments`
---
-ALTER TABLE `apartments`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `bank_accounts`

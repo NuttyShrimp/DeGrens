@@ -71,7 +71,8 @@ $(document).ready(function (){
                     $('#char-'+count).data('count', count);
                 } 
                 else {
-                    $('#char-'+count).data('count', "empty");
+                    $('#char-'+count).data('count', count);
+                    $('#char-'+count).data('cinfo', "empty");
                     $('#slot-name-'+count).text('Maak een karakter');
                 }
             }
@@ -86,8 +87,9 @@ $(document).ready(function (){
 $('.char-wrap').click(function(e){
     e.preventDefault();
     var count = ($(this).data('count'));
-    if(count != "empty"){
-        var cinfo = ($(this).data('cinfo'));
+    var cinfo = ($(this).data('cinfo'));
+    if(cinfo != "empty"){
+        
         var info = JSON.parse(cinfo);
         
 
@@ -113,12 +115,18 @@ $('.char-wrap').click(function(e){
             count: count,
         }));
         $(".characters-list").fadeOut(150);
-        $('.disconnect').fadeOut(150);
         setTimeout(function(){
-            dgChars.fadeInDown('.character-info', '15%', 400);
+            dgChars.fadeInDown('.character-info', '10%', 400);
+        }, 1500);
+    } else if (cinfo == "empty") {
+        $.post('https://dg-chars/zoomToChar', JSON.stringify({
+            count: count,
+        }));
+        $(".characters-list").fadeOut(150);
+        setTimeout(function(){
+            dgChars.fadeInDown('.character-create', '10%', 400);
         }, 1500);
     }
-    console.log(count);
 });
 
 $('#back-btn').click(function(e){
@@ -126,12 +134,19 @@ $('#back-btn').click(function(e){
     $.post('https://dg-chars/zoomToMain')
     selectCharacter = {}
     setTimeout(function(){
-        dgChars.fadeInDown('.characters-list', '15%', 400);
+        dgChars.fadeInDown('.characters-list', '15%', 250);
     }, 1500);
     $('.character-info').fadeOut(150);
 });
 
-
+$('#cancel-btn').click(function(e){
+    e.preventDefault();
+    $.post('https://dg-chars/zoomToMain')
+    setTimeout(function(){
+        dgChars.fadeInDown('.characters-list', '15%', 250);
+    }, 1500);
+    $('.character-create').fadeOut(150);
+});
 
 $('#disconnect').click(function(e){
     e.preventDefault();

@@ -4563,7 +4563,7 @@ em {
 }
 
 strong {
-  font-weight: 500;
+  font-weight: 900;
 }
 
 small {
@@ -6225,9 +6225,9 @@ input[type=tel]:not(.browser-default):focus:not([readonly]),
 input[type=number]:not(.browser-default):focus:not([readonly]),
 input[type=search]:not(.browser-default):focus:not([readonly]),
 textarea.materialize-textarea:focus:not([readonly]) {
-  border-bottom: 1px solid #26a69a;
-  -webkit-box-shadow: 0 1px 0 0 #26a69a;
-          box-shadow: 0 1px 0 0 #26a69a;
+  border-bottom: 1px solid #ffc72a;
+  -webkit-box-shadow: 0 1px 0 0 #ffc72a;
+          box-shadow: 0 1px 0 0 #ffc72a;
 }
 
 input:not([type]):focus:not([readonly]) + label,
@@ -6243,7 +6243,7 @@ input[type=tel]:not(.browser-default):focus:not([readonly]) + label,
 input[type=number]:not(.browser-default):focus:not([readonly]) + label,
 input[type=search]:not(.browser-default):focus:not([readonly]) + label,
 textarea.materialize-textarea:focus:not([readonly]) + label {
-  color: #26a69a;
+  color: #ffc72a;
 }
 
 input:not([type]):focus.valid ~ label,
@@ -6527,7 +6527,8 @@ textarea.materialize-textarea + label:after, .select-wrapper + label:after {
 }
 
 .input-field > label {
-  color: #9e9e9e;
+  color: #ffffff;
+  font-weight: 400;
   position: absolute;
   top: 0;
   left: 0;
