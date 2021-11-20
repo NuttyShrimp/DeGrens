@@ -4,7 +4,7 @@ local activeApartments = {}
 local isValueInArray = function(value, array)
   for k, v in ipairs(array) do
     if v == value then
-      return true
+      return k
     end
   end
   return false
@@ -48,6 +48,7 @@ joinApartment = function(id, ply)
 		createApartment(id, ply)
 	end
 	activeApartments[id].inside[#activeApartments[id].inside + 1] = ply
+
 	return activeApartments[id]
 end
 
@@ -63,6 +64,29 @@ removeFromApartment = function(id, ply)
 	if(#activeApartments[id].inside == 0) then
     activeApartments[id] = nil
   end
+end
+
+inviteToApartment = function(aId, plyId)
+	if (not activeApartments[aId]) then
+    return
+  end
+  activeApartments[aId].invited[#activeApartments[aId].invited + 1] = plyId
+end
+removeInviteFromApartment = function(aId, target)
+	local isInvited = isValueInArray(target, activeApartments[aId].invited)
+	if (isInvited) then
+		activeApartments[aId].invited[isInvited] = nil
+	end
+end
+
+getApartmentInvites = function(aId, src)
+	if (not activeApartments[aId]) then
+    return
+  end
+	if (not isValueInArray(src, activeApartments[aId].inside)) then
+    return
+  end
+  return activeApartments[aId].invited
 end
 
 --- get all apartments that are unlocked
