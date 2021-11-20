@@ -97,8 +97,6 @@
                         </div>
                     </div>
                 </div>
-
-
                 <div class="row character-create">
                     <div class="col s5 offset-s1">
                         <div class="dgBox">
@@ -129,6 +127,10 @@
                                         <span>Vrouw</span>
                                     </label>
                                 </div>
+                                <div class="input-field col s12">
+                                    <input type=text name="bdate" id="bdate" class="white-text datepicker" required>
+                                    <label for="bdate">Birthday</label>
+                                  </div>
                             </div>
                             <div class="row">
                                 <div class="col s12">
@@ -136,8 +138,6 @@
                                 </div>
                                 <div class="col s8">
                                     <div class="dgBtn-red" id="cancel-btn"><i class="material-icons">close</i> Cancel</div>         
-                                </div>
-                                <div class="col s8">
                                 </div>
                             </div>
                         </div>
@@ -149,4 +149,9 @@
     </body>
     <script type="text/javascript" src="script.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script>
+    $(document).ready(function(){
+        $('.datepicker').datepicker();
+    });
+    </script>
 </html>

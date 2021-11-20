@@ -163,6 +163,37 @@ $('#play').click(function(e){
     }));
 });
 
+$(document).on('click', '#create', function (e) {
+    e.preventDefault();
+   
+        let firstname= escapeHtml($('#first_name').val())
+        let lastname= escapeHtml($('#last_name').val())
+        let nationality= escapeHtml($('#nationality').val())
+        let birthdate= escapeHtml($('#birthdate').val())
+        let gender= escapeHtml($('select[name=gender]').val())
+        
+        
+    //An Ugly check of null objects
+
+    if (!firstname || !lastname || !nationality || !birthdate || hasWhiteSpace(firstname) || hasWhiteSpace(lastname)|| hasWhiteSpace(nationality) ){
+    console.log("FIELDS REQUIRED")
+    }else{
+        $.post('https://qb-multicharacter/createNewCharacter', JSON.stringify({
+            firstname: firstname,
+            lastname: lastname,
+            nationality: nationality,
+            birthdate: birthdate,
+            gender: gender,
+            cid: cid,
+        }));
+        $(".container").fadeOut(150);
+        $('.characters-list').css("filter", "none");
+        $('.character-info').css("filter", "none");
+        dgChars.fadeOutDown('.character-register', '125%', 400);
+        refreshCharacters()
+    }
+});
+
 // $(document).on('click', '.character', function(e) {
 //     var cDataPed = $(this).data('cData');
 //     e.preventDefault();
@@ -233,36 +264,8 @@ $('#play').click(function(e){
 // function hasWhiteSpace(s) {
 //     return /\s/g.test(s);
 //   }
-// $(document).on('click', '#create', function (e) {
-//     e.preventDefault();
-   
-//         let firstname= escapeHtml($('#first_name').val())
-//         let lastname= escapeHtml($('#last_name').val())
-//         let nationality= escapeHtml($('#nationality').val())
-//         let birthdate= escapeHtml($('#birthdate').val())
-//         let gender= escapeHtml($('select[name=gender]').val())
-//         let cid = escapeHtml($(selectedChar).attr('id').replace('char-', ''))
-        
-//     //An Ugly check of null objects
 
-//     if (!firstname || !lastname || !nationality || !birthdate || hasWhiteSpace(firstname) || hasWhiteSpace(lastname)|| hasWhiteSpace(nationality) ){
-//     console.log("FIELDS REQUIRED")
-//     }else{
-//         $.post('https://qb-multicharacter/createNewCharacter', JSON.stringify({
-//             firstname: firstname,
-//             lastname: lastname,
-//             nationality: nationality,
-//             birthdate: birthdate,
-//             gender: gender,
-//             cid: cid,
-//         }));
-//         $(".container").fadeOut(150);
-//         $('.characters-list').css("filter", "none");
-//         $('.character-info').css("filter", "none");
-//         dgChars.fadeOutDown('.character-register', '125%', 400);
-//         refreshCharacters()
-//     }
-// });
+
 
 // $(document).on('click', '#accept-delete', function(e){
 //     $.post('https://qb-multicharacter/removeCharacter', JSON.stringify({

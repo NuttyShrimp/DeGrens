@@ -169,10 +169,6 @@ end)
 RegisterNUICallback('zoomToChar', function(data)
     local count = data.count
     if count then
-        -- newCamCoords = vector3(Config.camLocations[count].x , Config.camLocations[count].y , Config.camLocations[count].z)
-        -- newCamRot = vector3( -10, 0, Config.camLocations[count].w + 180)
-        -- moveCam(newCamCoords, newCamRot)
-
         ped = charPed[count]
         newCamCoords = GetEntityCoords(ped) + vector3(1, 0.0,0.35) + DirectionVector(GetEntityRotation(ped)) * 3
         newCamRot = GetEntityRotation(ped)+vector3(-10,0,180)
@@ -204,37 +200,23 @@ RegisterNUICallback('play', function(data)
     deleteCharEntities()
 end)
 
-
--- Load Player
---TriggerServerEvent('dg-chars:server:loadUserData', cData)
--- + delete entities
-
-
-
--- RegisterNUICallback('selectCharacter', function(data)
---     local cData = data.cData
---     DoScreenFadeOut(10)
---     TriggerServerEvent('dg-chars:server:loadUserData', cData)
---     openCharMenu(false)
---     SetEntityAsMissionEntity(charPed, true, true)
---     DeleteEntity(charPed)
--- end)
-
 RegisterNUICallback('removeBlur', function()
     SetTimecycleModifier('default')
 end)
 
--- RegisterNUICallback('createNewCharacter', function(data)
---     local cData = data
---     DoScreenFadeOut(150)
---     if cData.gender == "Male" then
---         cData.gender = 0
---     elseif cData.gender == "Female" then
---         cData.gender = 1
---     end
---     TriggerServerEvent('qb-multicharacter:server:createCharacter', cData)
---     Citizen.Wait(500)
--- end)
+
+
+RegisterNUICallback('createNewCharacter', function(data)
+    local cData = data
+    DoScreenFadeOut(150)
+    if cData.gender == "Male" then
+        cData.gender = 0
+    elseif cData.gender == "Female" then
+        cData.gender = 1
+    end
+    TriggerServerEvent('qb-multicharacter:server:createCharacter', cData)
+    Citizen.Wait(500)
+end)
 
 -- RegisterNUICallback('removeCharacter', function(data)
 --     TriggerServerEvent('qb-multicharacter:server:deleteCharacter', data.citizenid)
