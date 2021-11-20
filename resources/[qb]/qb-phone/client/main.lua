@@ -1868,9 +1868,10 @@ RegisterNUICallback('SetGPSLocation', function(data, cb)
 end)
 
 RegisterNUICallback('SetApartmentLocation', function(data, cb)
-    local TypeData = exports["dg-apartments"]:getEnterCoords()
+    local ApartmentData = data.data.appartmentdata
+    local TypeData = Apartments.Locations[ApartmentData.type]
 
-    SetNewWaypoint(TypeData.x, TypeData.y)
+    SetNewWaypoint(TypeData.coords.enter.x, TypeData.coords.enter.y)
     DGCore.Functions.Notify('GPS has been set!', 'success')
 end)
 

@@ -23,23 +23,11 @@ createPlayerApartment = function(src)
 	return exports.oxmysql:insertSync('INSERT INTO apartments_new (cid) VALUES (?) ', {Player.PlayerData.citizenid})
 end
 
-setInsideMeta = function(src, aId)
-	local Player = DGCore.Functions.GetPlayer(src)
-	local insideMeta = Player.PlayerData.metadata["inside"]
-	insideMeta.apartment.id = aId > 0 and aId or nil
-	insideMeta.house = nil
-	Player.Functions.SetMetaData("inside", insideMeta)
-end
-
-RegisterNetEvent('dg-apartments:server:setInsideMeta', function(aId)
-	setInsideMeta(source, aId)
-end)
-
 -- id is an optional parameter
 enterApartment = function(src, id, new)
 	local Player = DGCore.Functions.GetPlayer(src)
 	if (state.isInLockdown) then
-    TriggerClientEvent('DGCore:Notify', src, "Het appartementsblok is momenteel onder lockdown", "error")
+    TriggerClientEvent('DGCore:Notify', "Het appartementsblok is momenteel onder lockdown", "error")
     return
   end
 	if (not id) then
@@ -57,7 +45,6 @@ enterApartment = function(src, id, new)
 	-- disable weathersynv
 	TriggerClientEvent('dg-weathersync:client:DisableSync', src)
 	-- Set insidemeta
-	setInsideMeta(src, id)
 	TriggerClientEvent('dg-apartments:client:fadeScreen', src, false)
 	if new then
 		Citizen.SetTimeout(1000, function()
@@ -86,7 +73,6 @@ leaveApartment = function(src)
 
 	TriggerClientEvent('dg-apartments:client:removeRoom', src)
 	TriggerClientEvent('dg-weathersync:client:EnableSync', src)
-	setInsideMeta(src, 0)
 
 	TriggerClientEvent('dg-apartments:client:fadeScreen', src, false)
 	TriggerEvent("InteractSound_SV:PlayOnOne", src, "houses_door_close", 0.1)
@@ -96,33 +82,8 @@ RegisterNetEvent('dg-apartments:server:leaveApartment', function()
 	leaveApartment(source)
 end)
 
-RegisterNetEvent('dg-apartments:server:toggleLockDown', function()
-	local Player = DGCore.Functions.GetPlayer(source)
-	if (Player.PlayerData.job.name ~= "police" or not Player.PlayerData.job.onduty) then
-		-- TODO add ban for injection
-	end
-	state.isInLockdown = not state.isInLockdown
-	TriggerClientEvent('DGCore:Notify', source,state.isInLockdown and 'The apartment is under lockdown' or 'The lockdown has been lifted')
-end)
-
-RegisterNetEvent('dg-apartments:server:inviteApartment')
-AddEventHandler('dg-apartments:server:inviteApartment', function(targetId)
-	local apartment = getCurrentApartment(source)
-	if (not apartment or not apartment.id) then return end
-	inviteToApartment(apartment.id, targetId)
-	TriggerClientEvent('DGCore:Notify', source, 'You invited ' .. GetPlayerName(targetId) .. ' to your apartment')
-end)
-
-RegisterNetEvent('dg-apartments:server:removeInvite', function(targetId)
-	local apartment = getCurrentApartment(source)
-	if (not apartment or not apartment.id) then return end
-	removeInviteFromApartment(apartment.id, targetId)
-	TriggerClientEvent('DGCore:Notify', source, 'You have removed ' .. GetPlayerName(targetId) .. '\'s invite from the apartment')
-end)
-
 -- Callbacks
 DGCore.Functions.CreateCallback('dg-apartments:server:getApartmentMenu', function(src, cb)
-	local Player = DGCore.Functions.GetPlayer(src)
 	local ownedApartment = getPlayerApartment(src)
 	local invApart = getInvitedApartments(src)
 	local openApart = getOpenApartments()
@@ -145,13 +106,6 @@ DGCore.Functions.CreateCallback('dg-apartments:server:getApartmentMenu', functio
       table.insert(openApart, v)
     end
   end
-
-	if (Player.PlayerData.job.name == "police" and Player.PlayerData.job.onduty) then
-		table.insert(apartList, {
-      title = "Raid apartment",
-			action = "dg-apartments:client:openRaidMenu"
-    })
-	end
 
 	-- add entries to apartList
 	for k,v in pairs(openApart) do
@@ -186,47 +140,10 @@ DGCore.Functions.CreateCallback('dg-apartments:server:getApartmentMenu', functio
 			submenus = apartList,
 		},
 	}
-
-	if (Player.PlayerData.job.name == "police" and Player.PlayerData.job.onduty) then
-		menu[#menu+1] = {
-			title = ("%s"):format(state.isInLockdown and "Remove lockdown" or "Lockdown apartment"),
-			description = "Prevent citizens to enter their apartment",
-			action = "dg-apartments:client:toggleLockDown",
-			data = {}
-		}
-	end
-
 	cb(menu)
 end)
 
 DGCore.Functions.CreateCallback('dg-apartments:server:getCurrentApartment', function(src,cb)
 	local apartment = getCurrentApartment(src)
   cb(apartment.id)
-end)
-
-DGCore.Functions.CreateCallback('dg-apartments:server:getApartmentInvites', function(src, cb)
-	local apartment = getCurrentApartment(src)
-	local invites = getApartmentInvites(apartment.id, src)
-	local menu = {
-    {
-      title = "Go back",
-      back = true
-    }
-  }
-	for k,v in pairs(invites) do
-		menu[#menu+1] = {
-			title = ('%s(%s)'):format(GetPlayerName(v), v),
-			description = "Remove invite",
-			action = "dg-apartments:client:removeInvite",
-			data  = {
-				id = v
-			}
-		}
-	end
-	if (#menu < 2) then
-    menu[#menu+1] = {
-      title = "No invites",
-    }
-  end
-	cb(menu)
 end)

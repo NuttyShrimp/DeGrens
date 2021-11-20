@@ -41,7 +41,7 @@ const clickHandler = (m) => {
 	if (m.action) {
 		triggerActionEvent("triggerCMAction", {action: m.action, data: m.data});
 		if (!m.submenus) {
-			triggerActionEvent('close');
+			closeMenu();
 		}
 	}
 	if (m.submenus) {

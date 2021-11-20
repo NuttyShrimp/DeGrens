@@ -128,7 +128,11 @@ Config.GlobalPlayerOptions = {
             icon = "fas fa-handshake",
             label = "Give Item",
             action = function(entity)
+<<<<<<< HEAD
+                local player = QBCore.Functions.GetClosestPlayer(GetEntityCoords(entity))
+=======
                 local player = DGCore.Functions.GetClosestPlayer(GetEntityCoords(entity))
+>>>>>>> nutty
                 local playerId = GetPlayerServerId(player)
                 TriggerEvent("inventory:server:GiveItemToPlayer", playerId)
             end,

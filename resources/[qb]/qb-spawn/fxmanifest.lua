@@ -6,6 +6,7 @@ version '1.0.0'
 
 shared_scripts {
 	'@qb-houses/config.lua',
+	'@qb-apartments/config.lua'
 }
 
 client_scripts {
@@ -28,5 +29,5 @@ dependencies {
 	'dg-core',
 	'qb-houses',
 	'qb-interior',
-	'dg-apartments'
+	'qb-apartments'
 }

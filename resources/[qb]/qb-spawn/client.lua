@@ -60,19 +60,10 @@ RegisterNetEvent('qb-spawn:client:setupSpawns', function(cData, new, apps)
             })
         end, cData.citizenid)
     elseif new then
-			SetDisplay(false)
-			DoScreenFadeOut(500)
-			Citizen.Wait(5000)
-			TriggerServerEvent('dg-apartments:server:enterApartment', nil, true)
-			TriggerServerEvent('DGCore:Server:OnPlayerLoaded')
-			TriggerEvent('DGCore:Client:OnPlayerLoaded')
-			FreezeEntityPosition(ped, false)
-			RenderScriptCams(false, true, 500, true, true)
-			SetCamActive(cam, false)
-			DestroyCam(cam, true)
-			SetCamActive(cam2, false)
-			DestroyCam(cam2, true)
-			SetEntityVisible(PlayerPedId(), true)
+        SendNUIMessage({
+            action = "setupAppartements",
+            locations = apps,
+        })
     end
 end)
 
@@ -150,7 +141,7 @@ RegisterNUICallback('setCam', function(data)
         SetCamActiveWithInterp(cam, cam2, cam2Time, true, true)
         SetEntityCoords(PlayerPedId(), campos.x, campos.y, campos.z)
     elseif type == "appartment" then
-        local campos = exports['dg-apartments']:getEnterCoords()
+        local campos = Apartments.Locations[location].coords.enter
 
         cam2 = CreateCamWithParams("DEFAULT_SCRIPTED_CAMERA", campos.x, campos.y, campos.z + camZPlus1, 300.00,0.00,0.00, 110.00, false, 0)
         PointCamAtCoord(cam2, campos.x, campos.y, campos.z + pointCamCoords)
@@ -172,7 +163,7 @@ RegisterNUICallback('chooseAppa', function(data)
     SetDisplay(false)
     DoScreenFadeOut(500)
     Citizen.Wait(5000)
-    TriggerServerEvent("dg-apartments:server:enterApartment", appaYeet)
+    TriggerServerEvent("apartments:server:CreateApartment", appaYeet, Apartments.Locations[appaYeet].label)
     TriggerServerEvent('DGCore:Server:OnPlayerLoaded')
     TriggerEvent('DGCore:Client:OnPlayerLoaded')
     FreezeEntityPosition(ped, false)
@@ -204,8 +195,10 @@ RegisterNUICallback('spawnplayer', function(data)
         if insideMeta.house ~= nil then
             local houseId = insideMeta.house
             TriggerEvent('qb-houses:client:LastLocationHouse', houseId)
-        elseif insideMeta.apartment.id ~= nil then
-            TriggerServerEvent('dg-apartments:server:enterApartment', insideMeta.apartment.id)
+        elseif insideMeta.apartment.apartmentType ~= nil or insideMeta.apartment.apartmentId ~= nil then
+            local apartmentType = insideMeta.apartment.apartmentType
+            local apartmentId = insideMeta.apartment.apartmentId
+            TriggerEvent('qb-apartments:client:LastLocationHouse', apartmentType, apartmentId)
         end
         TriggerServerEvent('DGCore:Server:OnPlayerLoaded')
         TriggerEvent('DGCore:Client:OnPlayerLoaded')
@@ -226,7 +219,7 @@ RegisterNUICallback('spawnplayer', function(data)
         TriggerServerEvent('DGCore:Server:OnPlayerLoaded')
         TriggerEvent('DGCore:Client:OnPlayerLoaded')
         TriggerServerEvent('qb-houses:server:SetInsideMeta', 0, false)
-        TriggerServerEvent('dg-apartments:server:setInsideMeta', 0)
+        TriggerServerEvent('qb-apartments:server:SetInsideMeta', 0, 0, false)
         FreezeEntityPosition(ped, false)
         RenderScriptCams(false, true, 500, true, true)
         SetCamActive(cam, false)
@@ -245,7 +238,7 @@ RegisterNUICallback('spawnplayer', function(data)
         TriggerServerEvent('DGCore:Server:OnPlayerLoaded')
         TriggerEvent('DGCore:Client:OnPlayerLoaded')
         TriggerServerEvent('qb-houses:server:SetInsideMeta', 0, false)
-			TriggerServerEvent('dg-apartments:server:setInsideMeta', 0)
+        TriggerServerEvent('qb-apartments:server:SetInsideMeta', 0, 0, false)
         Citizen.Wait(500)
         SetEntityCoords(ped, pos.x, pos.y, pos.z)
         SetEntityHeading(ped, pos.w)
