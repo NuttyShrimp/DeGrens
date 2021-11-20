@@ -6733,6 +6733,7 @@ textarea.materialize-textarea {
   height: 25px;
   line-height: 25px;
   font-size: 1rem;
+  font-weight: 900;
   -webkit-transition: .28s ease;
   transition: .28s ease;
   -webkit-user-select: none;

@@ -166,14 +166,15 @@ $('#play').click(function(e){
 $(document).on('click', '#create', function (e) {
     e.preventDefault();
    
-        let firstname= escapeHtml($('#first_name').val())
-        let lastname= escapeHtml($('#last_name').val())
-        let nationality= escapeHtml($('#nationality').val())
-        let birthdate= escapeHtml($('#birthdate').val())
-        let gender= escapeHtml($('select[name=gender]').val())
+        let firstname= $('#first_name').val()
+        let lastname= $('#last_name').val()
+        let nationality= $('#nationality').val()
+        let birthdate= $('#bdate').val()
+        let gender= $('input[name="group1"]:checked').val();
         
+
         
-    //An Ugly check of null objects
+//    An Ugly check of null objects
 
     if (!firstname || !lastname || !nationality || !birthdate || hasWhiteSpace(firstname) || hasWhiteSpace(lastname)|| hasWhiteSpace(nationality) ){
     console.log("FIELDS REQUIRED")

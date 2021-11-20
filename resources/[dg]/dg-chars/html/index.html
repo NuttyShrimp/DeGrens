@@ -119,11 +119,11 @@
                                 </div>
                                 <div class="col s12">
                                     <label>
-                                        <input name="group1" type="radio" />
+                                        <input name="group1" type="radio" value="0" />
                                         <span>Man</span>
                                     </label>
                                     <label>
-                                        <input name="group1" type="radio" />
+                                        <input name="group1" type="radio" value="1" />
                                         <span>Vrouw</span>
                                     </label>
                                 </div>
@@ -134,7 +134,7 @@
                             </div>
                             <div class="row">
                                 <div class="col s12">
-                                    <div class="dgBtn-green" id="play"><i class="material-icons">add</i> Bevestigen </div>
+                                    <div class="dgBtn-green" id="create"><i class="material-icons">add</i> Bevestigen </div>
                                 </div>
                                 <div class="col s8">
                                     <div class="dgBtn-red" id="cancel-btn"><i class="material-icons">close</i> Cancel</div>         
@@ -150,8 +150,16 @@
     <script type="text/javascript" src="script.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
     <script>
-    $(document).ready(function(){
-        $('.datepicker').datepicker();
+    var currYear = (new Date()).getFullYear();
+
+    $(document).ready(function() {
+    $(".datepicker").datepicker({
+        defaultDate: new Date(currYear-5,1,31),
+        // setDefaultDate: new Date(2000,01,31),
+        maxDate: new Date(currYear-10,12,31),
+        yearRange: [1928, currYear-10],
+        format: "dd/mm/yyyy"    
+    });
     });
     </script>
 </html>
