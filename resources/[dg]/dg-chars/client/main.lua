@@ -144,6 +144,12 @@ function DirectionVector(rotation)
 	return vec3dir
 end
 
+function DeleteCamera()
+	DestroyAllCams(true)
+	RenderScriptCams(false, true, 1, true, true)
+end
+
+
 
 -- Events
 
@@ -160,9 +166,14 @@ RegisterNetEvent('dg-chars:client:chooseChar', function()
     openCharMenu(true)
 end)
 
+RegisterNetEvent('dg-chars:client:closeNUI', function()
+    SetNuiFocus(false, false)
+end)
+
 -- NUI Callbacks
 
 RegisterNUICallback('closeUI', function()
+    DeleteCamera()
     openCharMenu(false)
 end)
 
@@ -204,21 +215,40 @@ RegisterNUICallback('removeBlur', function()
     SetTimecycleModifier('default')
 end)
 
-
+RegisterNUICallback('removeCharacter', function(data)
+    TriggerServerEvent('dg-chars:server:deleteCharacter', data.citizenid)
+    TriggerEvent('dg-chars:client:chooseChar')
+end)
 
 RegisterNUICallback('createNewCharacter', function(data)
     local cData = data
-    DoScreenFadeOut(150)
-    if cData.gender == "Male" then
-        cData.gender = 0
-    elseif cData.gender == "Female" then
-        cData.gender = 1
+    local count = data.cid
+    local model = nil
+
+    if cData.gender == "0" then
+        model = GetHashKey("mp_m_freemode_01")
+       
+    elseif cData.gender == "1" then
+        model = GetHashKey("mp_f_freemode_01")
     end
-    TriggerServerEvent('qb-multicharacter:server:createCharacter', cData)
+
+    RequestModel(model)
+    while not HasModelLoaded(model) do
+        Citizen.Wait(0)
+    end
+    
+    SetPlayerModel(PlayerId(), model)
+    SetPedComponentVariation(GetPlayerPed(-1), 0, 0, 0, 2)
+    SetEntityRotation(PlayerPedId(), 0, 0, Config.PedLocations[count].w)
+    SetEntityCoords(PlayerPedId(), Config.PedLocations[count].x, Config.PedLocations[count].y, Config.PedLocations[count].z)
+    deleteCharEntities()
     Citizen.Wait(500)
+    TriggerServerEvent('dg-chars:server:createCharacter', cData)
 end)
 
--- RegisterNUICallback('removeCharacter', function(data)
---     TriggerServerEvent('qb-multicharacter:server:deleteCharacter', data.citizenid)
---     TriggerEvent('qb-multicharacter:client:chooseChar')
--- end)
+RegisterNUICallback('validationMsg', function(data)
+    local text = data.text
+    local type = "error"
+    local length = 5000
+    DGCore.Functions.Notify(text, type, length)
+end)

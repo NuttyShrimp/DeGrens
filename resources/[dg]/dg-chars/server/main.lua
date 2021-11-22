@@ -5,7 +5,7 @@ local DGCore = exports['dg-core']:GetCoreObject()
 local function GiveStarterItems(source)
     local src = source
     local Player = DGCore.Functions.GetPlayer(src)
-
+    
     for k, v in pairs(DGCore.Shared.StarterItems) do
         local info = {}
         if v.item == "id_card" then
@@ -56,15 +56,6 @@ local function loadHouseData()
     TriggerClientEvent("qb-houses:client:setHouseConfig", -1, Houses)
 end
 
--- Commands
-
-DGCore.Commands.Add("logout", "Logout of Character (Admin Only)", {}, false, function(source)
-    local src = source
-    DGCore.Player.Logout(src)
-    TriggerClientEvent('qb-multicharacter:client:chooseChar', src)
-end, "admin")
-
-
 -- Events
 
 RegisterNetEvent('dg-char:server:disconnect', function()
@@ -84,47 +75,38 @@ RegisterNetEvent('dg-chars:server:loadUserData', function(citizenid)
 	end
 end)
 
-RegisterNetEvent('qb-multicharacter:server:createCharacter', function(data)
+RegisterNetEvent('dg-chars:server:createCharacter', function(data)
     local src = source
     local newData = {}
     newData.cid = data.cid
     newData.charinfo = data
+    print("Source:", src)
     if DGCore.Player.Login(src, false, newData) then
-        if Config.StartingApartment then
             local randbucket = (GetPlayerPed(src) .. math.random(1,999))
             SetPlayerRoutingBucket(src, randbucket)
-            print('^2[dg-core]^7 '..GetPlayerName(src)..' has succesfully loaded!')
-            DGCore.Commands.Refresh(src)
-            loadHouseData()
-            TriggerClientEvent("qb-multicharacter:client:closeNUI", src)
-						TriggerEvent('qb-spawn:client:setupSpawns', newData, false, nil)
-						TriggerEvent('qb-spawn:client:openUI', true)
-						GiveStarterItems(src)
-        else
-            print('^2[dg-core]^7 '..GetPlayerName(src)..' has succesfully loaded!')
-            DGCore.Commands.Refresh(src)
-            loadHouseData()
-            TriggerClientEvent("qb-multicharacter:client:closeNUIdefault", src)
-            GiveStarterItems(src)
-        end
+            print('^2[qb-core]^7 '..GetPlayerName(src)..' has succesfully loaded!')
+            DGCore.Commands.Refresh(src) 
+            TriggerClientEvent('qb-clothes:client:CreateFirstCharacter', src)
+            -- GiveStarterItems(src) 
 	end
+
+
+
 end)
 
-RegisterNetEvent('qb-multicharacter:server:deleteCharacter', function(citizenid)
+RegisterNetEvent('dg-chars:server:readyToSpawn', function()
+    local src = source
+    TriggerClientEvent("dg-chars:client:closeNUI", src)
+    print("Go To House")
+    GiveStarterItems(src)
+end)
+
+RegisterNetEvent('dg-chars:server:deleteCharacter', function(citizenid)
     local src = source
     DGCore.Player.DeleteCharacter(src, citizenid)
 end)
 
 -- Callbacks
-
-DGCore.Functions.CreateCallback("qb-multicharacter:server:GetUserCharacters", function(source, cb)
-    local src = source
-    local license = DGCore.Functions.GetIdentifier(src, 'license')
-
-    exports.oxmysql:execute('SELECT * FROM players WHERE license = ?', {license}, function(result)
-        cb(result)
-    end)
-end)
 
 DGCore.Functions.CreateCallback("dg-chars:server:setupCharacters", function(source, cb)
     local license = DGCore.Functions.GetIdentifier(source, 'license')

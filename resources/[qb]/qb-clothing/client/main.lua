@@ -6,6 +6,7 @@ local customCamLocation = nil
 local isLoggedIn = false
 local PlayerData = {}
 local previousSkinData = {}
+local FromChars = false
 
 local skinData = {
     ["face"] = {
@@ -1543,6 +1544,10 @@ RegisterNUICallback('setCurrentPed', function(data, cb)
 end)
 
 RegisterNUICallback('saveClothing', function(data)
+    if FromChars == true then
+        TriggerServerEvent('dg-chars:server:readyToSpawn')
+    end
+    FromChars = false
     SaveSkin()
 end)
 
@@ -1561,6 +1566,8 @@ AddEventHandler('qb-clothes:client:CreateFirstCharacter', function()
             {menu = "clothing", label = "Features", selected = false},
             {menu = "accessoires", label = "Accessories", selected = false}
         })
+
+        FromChars = true
 
         if PlayerData.charinfo.gender == 1 then 
             skin = "mp_f_freemode_01" 

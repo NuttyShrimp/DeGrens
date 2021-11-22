@@ -119,12 +119,14 @@ $('.char-wrap').click(function(e){
             dgChars.fadeInDown('.character-info', '10%', 400);
         }, 1500);
     } else if (cinfo == "empty") {
+        selectedChar = {}
+        selectedChar.id = count;
         $.post('https://dg-chars/zoomToChar', JSON.stringify({
             count: count,
         }));
         $(".characters-list").fadeOut(150);
         setTimeout(function(){
-            dgChars.fadeInDown('.character-create', '10%', 400);
+            dgChars.fadeInDown('.character-create', '10%', 200);
         }, 1500);
     }
 });
@@ -166,169 +168,67 @@ $('#play').click(function(e){
 $(document).on('click', '#create', function (e) {
     e.preventDefault();
    
-        let firstname= $('#first_name').val()
-        let lastname= $('#last_name').val()
-        let nationality= $('#nationality').val()
-        let birthdate= $('#bdate').val()
+        let firstname= $('#first_name').val();
+        let lastname= $('#last_name').val();
+        let nationality= $('#nationality').val();
+        let birthdate= $('#bdate').val();
         let gender= $('input[name="group1"]:checked').val();
+                
+// Ugly Validation 
+    if (!firstname){
+        $('#first_name').addClass('invalid');
+        $.post('https://dg-chars/validationMsg', JSON.stringify({
+            text: "Je moet een voornaam invullen!",
+        }));
+        console.log('empty First_name');
+    } else if (!lastname){
+        $('#last_name').addClass('invalid');
+        $.post('https://dg-chars/validationMsg', JSON.stringify({
+            text: "Je moet een achternaamnaam invullen!",
+        }));
+        console.log('empty Last_name');
+    } else if (!nationality){
+        $('#nationality').addClass('invalid');
+        $.post('https://dg-chars/validationMsg', JSON.stringify({
+            text: "Vul je nationaliteit in!",
+        }));
+        console.log('empty Nationality');
+    } else if (!birthdate){
+        $('#bdate').addClass('invalid');
+        $.post('https://dg-chars/validationMsg', JSON.stringify({
+            text: "Vul je geboortedatum in!",
+        }));
+        console.log('empty Birthdate');
+    } else if (!gender){
+        $('#gender').addClass('invalid');
+        $.post('https://dg-chars/validationMsg', JSON.stringify({
+            text: "Je moet een geslacht selecteren!",
+        }));
+        console.log('empty gender');
         
-
-        
-//    An Ugly check of null objects
-
-    if (!firstname || !lastname || !nationality || !birthdate || hasWhiteSpace(firstname) || hasWhiteSpace(lastname)|| hasWhiteSpace(nationality) ){
-    console.log("FIELDS REQUIRED")
-    }else{
-        $.post('https://qb-multicharacter/createNewCharacter', JSON.stringify({
+// End of Ugly Validation
+    } else{
+        $.post('https://dg-chars/createNewCharacter', JSON.stringify({
             firstname: firstname,
             lastname: lastname,
             nationality: nationality,
             birthdate: birthdate,
             gender: gender,
-            cid: cid,
+            cid: selectedChar.id,
         }));
         $(".container").fadeOut(150);
         $('.characters-list').css("filter", "none");
         $('.character-info').css("filter", "none");
-        dgChars.fadeOutDown('.character-register', '125%', 400);
-        refreshCharacters()
+        dgChars.fadeOutDown('.character-create', '125%', 400);
+        dgChars.resetAll();
     }
 });
 
-// $(document).on('click', '.character', function(e) {
-//     var cDataPed = $(this).data('cData');
-//     e.preventDefault();
-//     if (selectedChar === null) {
-//         selectedChar = $(this);
-//         if ((selectedChar).data('cid') == "") {
-//             $(selectedChar).addClass("char-selected");
-//             setupCharInfo('empty')
-//             $("#play-text").html("Create");
-//             $("#play").css({"display":"block"});
-//             $("#delete").css({"display":"none"});
-//             $.post('https://qb-multicharacter/cDataPed', JSON.stringify({
-//                 cData: cDataPed
-//             }));
-//         } else {
-//             $(selectedChar).addClass("char-selected");
-//             setupCharInfo($(this).data('cData'))
-//             $("#play-text").html("Play");
-//             $("#delete-text").html("Delete");
-//             $("#play").css({"display":"block"});
-//             $("#delete").css({"display":"block"});
-//             $.post('https://qb-multicharacter/cDataPed', JSON.stringify({
-//                 cData: cDataPed
-//             }));
-//         }
-//     } else if ($(selectedChar).attr('id') !== $(this).attr('id')) {
-//         $(selectedChar).removeClass("char-selected");
-//         selectedChar = $(this);
-//         if ((selectedChar).data('cid') == "") {
-//             $(selectedChar).addClass("char-selected");
-//             setupCharInfo('empty')
-//             $("#play-text").html("Register");
-//             $("#play").css({"display":"block"});
-//             $("#delete").css({"display":"none"});
-//             $.post('https://qb-multicharacter/cDataPed', JSON.stringify({
-//                 cData: cDataPed
-//             }));
-//         } else {
-//             $(selectedChar).addClass("char-selected");
-//             setupCharInfo($(this).data('cData'))
-//             $("#play-text").html("Play");
-//             $("#delete-text").html("Delete");
-//             $("#play").css({"display":"block"});
-//             $("#delete").css({"display":"block"});
-//             $.post('https://qb-multicharacter/cDataPed', JSON.stringify({
-//                 cData: cDataPed
-//             }));
-//         }
-//     }
-// });
-
-// var entityMap = {
-//     '&': '&amp;',
-//     '<': '&lt;',
-//     '>': '&gt;',
-//     '"': '&quot;',
-//     "'": '&#39;',
-//     '/': '&#x2F;',
-//     '': '&#x60;',
-//     '=': '&#x3D;'
-// };
-
-// function escapeHtml(string) {
-//     return String(string).replace(/[&<>"'=/]/g, function (s) {
-//         return entityMap[s];
-//     });
-// }
-// function hasWhiteSpace(s) {
-//     return /\s/g.test(s);
-//   }
-
-
-
-// $(document).on('click', '#accept-delete', function(e){
-//     $.post('https://qb-multicharacter/removeCharacter', JSON.stringify({
-//         citizenid: $(selectedChar).data("citizenid"),
-//     }));
-//     $('.character-delete').fadeOut(150);
-//     $('.characters-block').css("filter", "none");
-//     refreshCharacters();
-// });
-
-// $(document).on('click', '#cancel-delete', function(e){
-//     e.preventDefault();
-//     $('.characters-block').css("filter", "none");
-//     $('.character-delete').fadeOut(150);
-// });
-
-// function refreshCharacters() {
-//     $('.characters-list').html('<div class="character" id="char-1" data-cid=""><span id="slot-name">Empty Slot<span id="cid"></span></span></div><div class="character" id="char-2" data-cid=""><span id="slot-name">Empty Slot<span id="cid"></span></span></div><div class="character" id="char-3" data-cid=""><span id="slot-name">Empty Slot<span id="cid"></span></span></div><div class="character" id="char-4" data-cid=""><span id="slot-name">Empty Slot<span id="cid"></span></span></div><div class="character" id="char-5" data-cid=""><span id="slot-name">Empty Slot<span id="cid"></span></span></div><div class="character-btn" id="play"><p id="play-text">Select a character</p></div><div class="character-btn" id="delete"><p id="delete-text">Select a character</p></div>')
-//     setTimeout(function(){
-//         $(selectedChar).removeClass("char-selected");
-//         selectedChar = null;
-//         $.post('https://qb-multicharacter/setupCharacters');
-//         $("#delete").css({"display":"none"});
-//         $("#play").css({"display":"none"});
-//         dgChars.resetAll();
-//     }, 100)
-// }
-
-// $("#close-reg").click(function (e) {
-//     e.preventDefault();
-//     $('.characters-list').css("filter", "none")
-//     $('.character-info').css("filter", "none")
-//     dgChars.fadeOutDown('.character-register', '125%', 400);
-// })
-
-// $("#close-del").click(function (e) {
-//     e.preventDefault();
-//     $('.characters-block').css("filter", "none");
-//     $('.character-delete').fadeOut(150);
-// })
-
-// $(document).on('click', '#play', function(e) {
-//     e.preventDefault();
-//     var charData = $(selectedChar).data('cid');
-
-//     if (selectedChar !== null) {
-//         if (charData !== "") {
-//             $.post('https://qb-multicharacter/selectCharacter', JSON.stringify({
-//                 cData: $(selectedChar).data('cData')
-//             }));
-//             setTimeout(function(){
-//                 dgChars.fadeOutDown('.characters-list', "-40%", 400);
-//                 dgChars.fadeOutDown('.character-info', "-40%", 400);
-//                 dgChars.resetAll();
-//             }, 1500);
-//         } else {
-//             $('.characters-list').css("filter", "blur(2px)")
-//             $('.character-info').css("filter", "blur(2px)")
-//             dgChars.fadeInDown('.character-register', '25%', 400);
-//         }
-//     }
-// });
+$(document).on('click', '#accept-delete', function(e){
+    $.post('https://qb-multicharacter/removeCharacter', JSON.stringify({
+        citizenid: selectedChar.citizenid,
+    }));
+});
 
 $(document).on('click', '#delete', function(e) {
     e.preventDefault();
@@ -369,7 +269,6 @@ dgChars.resetAll = function() {
     $('.characters-list').css("top", "-40");
     $('.character-info').hide();
     $('.character-info').css("top", "-40");
-    $('.welcomescreen').css("top", WelcomePercentage);
-    $('.server-log').show();
-    $('.server-log').css("top", "25%");
+    $('.character-create').hide();
+    $('.character-create').css("top", "-40");
 }
