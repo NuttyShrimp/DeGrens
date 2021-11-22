@@ -225,9 +225,10 @@ $(document).on('click', '#create', function (e) {
 });
 
 $(document).on('click', '#accept-delete', function(e){
-    $.post('https://qb-multicharacter/removeCharacter', JSON.stringify({
+    $.post('https://dg-chars/removeCharacter', JSON.stringify({
         citizenid: selectedChar.citizenid,
     }));
+    $("#MyModal").modal('close');
 });
 
 $(document).on('click', '#delete', function(e) {

@@ -9095,6 +9095,10 @@ input[type=range]::-ms-thumb {
 /* ------------- DG Style ------------- */
 
 /* Boxes */
+.dgBgDark{
+  background-color: rgba(20, 20, 20, 0.95) !important;
+}
+
 .dgBox {
   font-family: 'Poppins', sans-serif;
   color: rgb(250, 250, 250);

@@ -97,7 +97,8 @@ end)
 RegisterNetEvent('dg-chars:server:readyToSpawn', function()
     local src = source
     TriggerClientEvent("dg-chars:client:closeNUI", src)
-    print("Go To House")
+    --TriggerEvent('dg-apartments:server:enterApartment', src)
+    exports['dg-apartments']:enterApartment(src)
     GiveStarterItems(src)
 end)
 
@@ -111,12 +112,13 @@ end)
 DGCore.Functions.CreateCallback("dg-chars:server:setupCharacters", function(source, cb)
     local license = DGCore.Functions.GetIdentifier(source, 'license')
     local plyChars = {}
-    exports.oxmysql:execute('SELECT p.citizenid, p.firstname, p.lastname, p.gender, p.money, p.job, p.birthdate, ps.model, ps.skin FROM players p JOIN playerskins ps ON p.citizenid = ps.citizenid WHERE license = ?', {license}, function(dbResult)
+    exports.oxmysql:execute('SELECT p.citizenid, p.cid, p.firstname, p.lastname, p.gender, p.money, p.job, p.birthdate, ps.model, ps.skin FROM players p JOIN playerskins ps ON p.citizenid = ps.citizenid WHERE license = ?', {license}, function(dbResult)
     --exports.oxmysql:execute('SELECT p.firstname, p.lastname FROM players p JOIN playerskins ps ON P.citizenid = ps.citizenid WHERE license = ?', {license}, function(dbResult)
 
         for i = 1, (#dbResult), 1 do
             plyChars[i] = {}
             plyChars[i].citizenid = dbResult[i].citizenid
+            plyChars[i].cid = dbResult[i].cid
             plyChars[i].firstname = dbResult[i].firstname
             plyChars[i].lastname = dbResult[i].lastname
             plyChars[i].gender = dbResult[i].gender
