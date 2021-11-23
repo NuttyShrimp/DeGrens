@@ -2,7 +2,7 @@ local cam = nil
 local movingCam = false
 local charPed = {}
 local DGCore = exports['dg-core']:GetCoreObject()
-
+local CanDraw = false
 -- Main Thread
 
 Citizen.CreateThread(function()
@@ -50,50 +50,54 @@ local function setPeds(bool)
                 characters = result
             })
             for i=1 , 5 , 1 do
-                if result[i] then
-                    local model = result[i].model
-                    local skin = result[i].skin
-                    model = model ~= nil and tonumber(model) or false
-                    Citizen.CreateThread(function()
-                        RequestModel(model)
-                        while not HasModelLoaded(model) do
-                            Citizen.Wait(0)
-                        end
-                        charPed[i] = CreatePed(2, model, Config.PedLocations[i].x, Config.PedLocations[i].y, Config.PedLocations[i].z - 0.98, Config.PedLocations[i].w, false, true)
-                        SetPedComponentVariation(charPed[i], 0, 0, 0, 2)
-                        FreezeEntityPosition(charPed[i], false)
-                        SetEntityInvincible(charPed[i], true)
-                        PlaceObjectOnGroundProperly(charPed[i])
-                        SetBlockingOfNonTemporaryEvents(charPed[i], true)
-                        skindata = json.decode(tostring(skin))
-                        TriggerEvent('qb-clothing:client:loadPlayerClothing', skindata, charPed[i])
-                        Wait(100)
-                     end)
-                else
-                    Citizen.CreateThread(function()
-                        local randommodels = {
-                            "mp_m_freemode_01",
-                            "mp_f_freemode_01",
-                        }
-                        local model = GetHashKey(randommodels[math.random(1, #randommodels)])
-                        RequestModel(model)
-                        while not HasModelLoaded(model) do
-                            Citizen.Wait(0)
-                        end
-                        charPed[i] = CreatePed(2, model, Config.PedLocations[i].x, Config.PedLocations[i].y, Config.PedLocations[i].z - 0.98, Config.PedLocations[i].w, false, true)
-                        SetPedComponentVariation(charPed[i], 0, 0, 0, 2)
-                        FreezeEntityPosition(charPed[i], false)
-                        SetEntityInvincible(charPed[i], true)
-                        PlaceObjectOnGroundProperly(charPed[i])
-                        SetBlockingOfNonTemporaryEvents(charPed[i], true)
-                        SetEntityAlpha(charPed[i], 10)
-                    end)
-                    CreateThread(function()
-                        while true do
-                            Wait(0)
-                            DrawMarker(25, Config.PedLocations[i].x, Config.PedLocations[i].y, Config.PedLocations[i].z, 0.0, 0.0, 0.0, 0.0, 180.0, 0.0, 0.8, 0.8, 0.8, 50, 50, 50, 220, false, true, 2, nil, nil, false)
-                        end
-                    end)
+                for k, resultChar in pairs(result) do
+                    if result[i].cid == i then
+                        local model = resultChar.model
+                        local skin = resultChar.skin
+                        model = model ~= nil and tonumber(model) or false
+                        Citizen.CreateThread(function()
+                            RequestModel(model)
+                            while not HasModelLoaded(model) do
+                                Citizen.Wait(0)
+                            end
+                            charPed[i] = CreatePed(2, model, Config.PedLocations[i].x, Config.PedLocations[i].y, Config.PedLocations[i].z - 0.98, Config.PedLocations[i].w, false, true)
+                            SetPedComponentVariation(charPed[i], 0, 0, 0, 2)
+                            FreezeEntityPosition(charPed[i], false)
+                            SetEntityInvincible(charPed[i], true)
+                            PlaceObjectOnGroundProperly(charPed[i])
+                            SetBlockingOfNonTemporaryEvents(charPed[i], true)
+                            skindata = json.decode(tostring(skin))
+                            TriggerEvent('qb-clothing:client:loadPlayerClothing', skindata, charPed[i])
+                            Wait(100)
+                        end)
+                        break
+                    else
+                        Citizen.CreateThread(function()
+                            CanDraw = true
+                            local randommodels = {
+                                "mp_m_freemode_01",
+                                "mp_f_freemode_01",
+                            }
+                            local model = GetHashKey(randommodels[math.random(1, #randommodels)])
+                            RequestModel(model)
+                            while not HasModelLoaded(model) do
+                                Citizen.Wait(0)
+                            end
+                            charPed[i] = CreatePed(2, model, Config.PedLocations[i].x, Config.PedLocations[i].y, Config.PedLocations[i].z - 0.98, Config.PedLocations[i].w, false, true)
+                            SetPedComponentVariation(charPed[i], 0, 0, 0, 2)
+                            FreezeEntityPosition(charPed[i], false)
+                            SetEntityInvincible(charPed[i], true)
+                            PlaceObjectOnGroundProperly(charPed[i])
+                            SetBlockingOfNonTemporaryEvents(charPed[i], true)
+                            SetEntityAlpha(charPed[i], 10)
+                        end)
+                        CreateThread(function()
+                            while CanDraw == true do
+                                Wait(0)
+                                DrawMarker(25, Config.PedLocations[i].x, Config.PedLocations[i].y, Config.PedLocations[i].z, 0.0, 0.0, 0.0, 0.0, 180.0, 0.0, 0.8, 0.8, 0.8, 50, 50, 50, 220, false, true, 2, nil, nil, false)
+                            end
+                        end)
+                    end
                 end
             end
     

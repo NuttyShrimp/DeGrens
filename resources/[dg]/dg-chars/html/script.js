@@ -64,16 +64,19 @@ $(document).ready(function (){
             for (i=0; i<5; i++){
                 var charInfo = JSON.stringify(chars[i]);
                 count = i+1;
-                if (jQuery.isEmptyObject(chars[i]) == false){
-                    $('#slot-name-'+count).text( chars[i].firstname + ' ' + chars[i].lastname);
-                    $('#char-'+count).data('cid', chars[i].citizenid);
-                    $('#char-'+count).data('cinfo', charInfo);
-                    $('#char-'+count).data('count', count);
-                } 
-                else {
-                    $('#char-'+count).data('count', count);
-                    $('#char-'+count).data('cinfo', "empty");
-                    $('#slot-name-'+count).text('Maak een karakter');
+                for (k=0; i<chars.length(); k++){
+                    if (chars[k].cid == i){
+                        $('#slot-name-'+count).text( chars[i].firstname + ' ' + chars[i].lastname);
+                        $('#char-'+count).data('cid', chars[i].citizenid);
+                        $('#char-'+count).data('cinfo', charInfo);
+                        $('#char-'+count).data('count', count);
+                        break;
+                    } 
+                    else {
+                        $('#char-'+count).data('count', count);
+                        $('#char-'+count).data('cinfo', "empty");
+                        $('#slot-name-'+count).text('Maak een karakter');
+                    }
                 }
             }
 
