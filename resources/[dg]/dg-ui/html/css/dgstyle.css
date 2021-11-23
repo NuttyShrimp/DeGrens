@@ -6733,6 +6733,7 @@ textarea.materialize-textarea {
   height: 25px;
   line-height: 25px;
   font-size: 1rem;
+  font-weight: 900;
   -webkit-transition: .28s ease;
   transition: .28s ease;
   -webkit-user-select: none;
@@ -6783,12 +6784,12 @@ textarea.materialize-textarea {
 [type="radio"]:checked + span:after,
 [type="radio"].with-gap:checked + span:before,
 [type="radio"].with-gap:checked + span:after {
-  border: 2px solid #26a69a;
+  border: 2px solid #ffc72a;
 }
 
 [type="radio"]:checked + span:after,
 [type="radio"].with-gap:checked + span:after {
-  background-color: #26a69a;
+  background-color: #ffc72a;
 }
 
 [type="radio"]:checked + span:after {
@@ -8656,6 +8657,8 @@ input[type=range]::-ms-thumb {
 }
 
 .datepicker-container.modal-content {
+  border: 2px solid rgb(110, 120, 212);
+  border-left: 8px solid rgb(110, 120, 212);
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -8719,11 +8722,12 @@ input[type=range]::-ms-thumb {
 
 /* Date Display */
 .datepicker-date-display {
+  background-color: rgba(20, 20, 20, 0.95);
   -webkit-box-flex: 1;
   -webkit-flex: 1 auto;
       -ms-flex: 1 auto;
           flex: 1 auto;
-  background-color: #26a69a;
+  background-color: rgba(20, 20, 20, 0.95);
   color: #fff;
   padding: 20px 22px;
   font-weight: 500;
@@ -8768,6 +8772,7 @@ input[type=range]::-ms-thumb {
 
 .datepicker-table tr {
   border: none;
+  color: rgba(20, 20, 20, 0.95);
 }
 
 .datepicker-table abbr {
@@ -8781,11 +8786,11 @@ input[type=range]::-ms-thumb {
 }
 
 .datepicker-table td.is-today {
-  color: #26a69a;
+  color: rgb(110, 120, 212);
 }
 
 .datepicker-table td.is-selected {
-  background-color: #26a69a;
+  background-color: #ffc72a;
   color: #fff;
 }
 
@@ -8829,7 +8834,7 @@ input[type=range]::-ms-thumb {
 .datepicker-clear,
 .datepicker-today,
 .datepicker-done {
-  color: #26a69a;
+  color: #ffc72a;
   padding: 0 1rem;
 }
 
@@ -9090,6 +9095,10 @@ input[type=range]::-ms-thumb {
 /* ------------- DG Style ------------- */
 
 /* Boxes */
+.dgBgDark{
+  background-color: rgba(20, 20, 20, 0.95) !important;
+}
+
 .dgBox {
   font-family: 'Poppins', sans-serif;
   color: rgb(250, 250, 250);

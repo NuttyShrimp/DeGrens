@@ -14,13 +14,13 @@ end
 
 getPlayerApartment = function(src)
 	local Player = DGCore.Functions.GetPlayer(src);
-	local result = exports.oxmysql:executeSync('SELECT id,cid FROM apartments_new WHERE cid = ?', {Player.PlayerData.citizenid})
+	local result = exports.oxmysql:executeSync('SELECT id,citizenid FROM apartments WHERE citizenid = ?', {Player.PlayerData.citizenid})
 	return result[1]
 end
 
 createPlayerApartment = function(src)
 	local Player = DGCore.Functions.GetPlayer(src);
-	return exports.oxmysql:insertSync('INSERT INTO apartments_new (cid) VALUES (?) ', {Player.PlayerData.citizenid})
+	return exports.oxmysql:insertSync('INSERT INTO apartments (citizenid) VALUES (?) ', {Player.PlayerData.citizenid})
 end
 
 setInsideMeta = function(src, aId)
@@ -65,6 +65,7 @@ enterApartment = function(src, id, new)
 		end)
 	end
 end
+exports('enterApartment', enterApartment)
 
 RegisterNetEvent('dg-apartments:server:enterApartment', function(id, new)
   enterApartment(source, id, new)

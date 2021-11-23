@@ -1,8 +1,9 @@
 local cam = nil
 local movingCam = false
 local charPed = {}
+local charLoc = {}
 local DGCore = exports['dg-core']:GetCoreObject()
-
+local CanDraw = false
 -- Main Thread
 
 Citizen.CreateThread(function()
@@ -45,58 +46,66 @@ end
 local function setPeds(bool)
     if bool then
         DGCore.Functions.TriggerCallback("dg-chars:server:setupCharacters", function(result)
-            SendNUIMessage({
-                action = "setupCharacters",
-                characters = result
-            })
-            for i=1 , 5 , 1 do
-                if result[i] then
-                    local model = result[i].model
-                    local skin = result[i].skin
-                    model = model ~= nil and tonumber(model) or false
-                    Citizen.CreateThread(function()
-                        RequestModel(model)
-                        while not HasModelLoaded(model) do
-                            Citizen.Wait(0)
-                        end
-                        charPed[i] = CreatePed(2, model, Config.PedLocations[i].x, Config.PedLocations[i].y, Config.PedLocations[i].z - 0.98, Config.PedLocations[i].w, false, true)
-                        SetPedComponentVariation(charPed[i], 0, 0, 0, 2)
-                        FreezeEntityPosition(charPed[i], false)
-                        SetEntityInvincible(charPed[i], true)
-                        PlaceObjectOnGroundProperly(charPed[i])
-                        SetBlockingOfNonTemporaryEvents(charPed[i], true)
-                        skindata = json.decode(tostring(skin))
-                        TriggerEvent('qb-clothing:client:loadPlayerClothing', skindata, charPed[i])
-                        Wait(100)
-                     end)
-                else
-                    Citizen.CreateThread(function()
-                        local randommodels = {
-                            "mp_m_freemode_01",
-                            "mp_f_freemode_01",
-                        }
-                        local model = GetHashKey(randommodels[math.random(1, #randommodels)])
-                        RequestModel(model)
-                        while not HasModelLoaded(model) do
-                            Citizen.Wait(0)
-                        end
-                        charPed[i] = CreatePed(2, model, Config.PedLocations[i].x, Config.PedLocations[i].y, Config.PedLocations[i].z - 0.98, Config.PedLocations[i].w, false, true)
-                        SetPedComponentVariation(charPed[i], 0, 0, 0, 2)
-                        FreezeEntityPosition(charPed[i], false)
-                        SetEntityInvincible(charPed[i], true)
-                        PlaceObjectOnGroundProperly(charPed[i])
-                        SetBlockingOfNonTemporaryEvents(charPed[i], true)
-                        SetEntityAlpha(charPed[i], 10)
-                    end)
-                    CreateThread(function()
-                        while true do
-                            Wait(0)
-                            DrawMarker(25, Config.PedLocations[i].x, Config.PedLocations[i].y, Config.PedLocations[i].z, 0.0, 0.0, 0.0, 0.0, 180.0, 0.0, 0.8, 0.8, 0.8, 50, 50, 50, 220, false, true, 2, nil, nil, false)
-                        end
-                    end)
-                end
+            for k , resultChar in pairs(result) do
+                SendNUIMessage({
+                    action = "setupCharacter",
+                    character = resultChar
+                })
+                        charLoc[resultChar.cid] = true
+                        local model = resultChar.model
+                        local skin = resultChar.skin
+                        model = model ~= nil and tonumber(model) or false
+                        Citizen.CreateThread(function()
+                            RequestModel(model)
+                            while not HasModelLoaded(model) do
+                                Citizen.Wait(0)
+                            end
+                            charPed[resultChar.cid] = CreatePed(2, model, Config.PedLocations[resultChar.cid].x, Config.PedLocations[resultChar.cid].y, Config.PedLocations[resultChar.cid].z - 0.98, Config.PedLocations[resultChar.cid].w, false, true)
+                            SetPedComponentVariation(charPed[resultChar.cid], 0, 0, 0, 2)
+                            FreezeEntityPosition(charPed[resultChar.cid], false)
+                            SetEntityInvincible(charPed[resultChar.cid], true)
+                            PlaceObjectOnGroundProperly(charPed[resultChar.cid])
+                            SetBlockingOfNonTemporaryEvents(charPed[resultChar.cid], true)
+                            skindata = json.decode(tostring(skin))
+                            TriggerEvent('qb-clothing:client:loadPlayerClothing', skindata, charPed[resultChar.cid])
+                            Wait(100)
+                        end)
             end
-    
+            for i=1, 5, 1 do
+                    if not charLoc[i] then
+                        SendNUIMessage({
+                            action = "setupEmpty",
+                            count = i
+                        })
+                        Citizen.CreateThread(function()
+                            CanDraw = true
+                            local randommodels = {
+                                "mp_m_freemode_01",
+                                "mp_f_freemode_01",
+                            }
+                            local model = GetHashKey(randommodels[math.random(1, #randommodels)])
+                            RequestModel(model)
+                            while not HasModelLoaded(model) do
+                                Citizen.Wait(0)
+                            end
+                            charPed[i] = CreatePed(2, model, Config.PedLocations[i].x, Config.PedLocations[i].y, Config.PedLocations[i].z - 0.98, Config.PedLocations[i].w, false, true)
+                            SetPedComponentVariation(charPed[i], 0, 0, 0, 2)
+                            FreezeEntityPosition(charPed[i], false)
+                            SetEntityInvincible(charPed[i], true)
+                            PlaceObjectOnGroundProperly(charPed[i])
+                            SetBlockingOfNonTemporaryEvents(charPed[i], true)
+                            SetEntityAlpha(charPed[i], 10)
+                        end)
+                        CreateThread(function()
+                            while CanDraw == true do
+                                Wait(0)
+                                DrawMarker(25, Config.PedLocations[i].x, Config.PedLocations[i].y, Config.PedLocations[i].z, 0.0, 0.0, 0.0, 0.0, 180.0, 0.0, 0.8, 0.8, 0.8, 50, 50, 50, 220, false, true, 2, nil, nil, false)
+                            end
+                        end)
+                    end
+            
+            end
+            print(json.encode(charPed))
         end)
     end
 end
@@ -130,9 +139,12 @@ function moveCam(newCoords, newRot)
 end
 
 function deleteCharEntities()
+    CanDraw = false
     for i,char in pairs(charPed) do
-        DeleteEntity(charPed[i])
+        DeleteEntity(char)
     end
+    charLoc = {}
+    charPed = {}
 end
 
 function DirectionVector(rotation)
@@ -143,6 +155,12 @@ function DirectionVector(rotation)
 	local vec3dir = vector3(-math.sin(z)*abscos, math.cos(z)*abscos, math.sin(x))
 	return vec3dir
 end
+
+function DeleteCamera()
+	DestroyAllCams(true)
+	RenderScriptCams(false, true, 1, true, true)
+end
+
 
 
 -- Events
@@ -160,19 +178,21 @@ RegisterNetEvent('dg-chars:client:chooseChar', function()
     openCharMenu(true)
 end)
 
+RegisterNetEvent('dg-chars:client:closeNUI', function()
+    DeleteCamera()
+    SetNuiFocus(false, false)
+end)
+
 -- NUI Callbacks
 
 RegisterNUICallback('closeUI', function()
+    DeleteCamera()
     openCharMenu(false)
 end)
 
 RegisterNUICallback('zoomToChar', function(data)
     local count = data.count
     if count then
-        -- newCamCoords = vector3(Config.camLocations[count].x , Config.camLocations[count].y , Config.camLocations[count].z)
-        -- newCamRot = vector3( -10, 0, Config.camLocations[count].w + 180)
-        -- moveCam(newCamCoords, newCamRot)
-
         ped = charPed[count]
         newCamCoords = GetEntityCoords(ped) + vector3(1, 0.0,0.35) + DirectionVector(GetEntityRotation(ped)) * 3
         newCamRot = GetEntityRotation(ped)+vector3(-10,0,180)
@@ -204,39 +224,46 @@ RegisterNUICallback('play', function(data)
     deleteCharEntities()
 end)
 
-
--- Load Player
---TriggerServerEvent('dg-chars:server:loadUserData', cData)
--- + delete entities
-
-
-
--- RegisterNUICallback('selectCharacter', function(data)
---     local cData = data.cData
---     DoScreenFadeOut(10)
---     TriggerServerEvent('dg-chars:server:loadUserData', cData)
---     openCharMenu(false)
---     SetEntityAsMissionEntity(charPed, true, true)
---     DeleteEntity(charPed)
--- end)
-
 RegisterNUICallback('removeBlur', function()
     SetTimecycleModifier('default')
 end)
 
--- RegisterNUICallback('createNewCharacter', function(data)
---     local cData = data
---     DoScreenFadeOut(150)
---     if cData.gender == "Male" then
---         cData.gender = 0
---     elseif cData.gender == "Female" then
---         cData.gender = 1
---     end
---     TriggerServerEvent('qb-multicharacter:server:createCharacter', cData)
---     Citizen.Wait(500)
--- end)
+RegisterNUICallback('removeCharacter', function(data)
+    openCharMenu(false)
+    deleteCharEntities()
+    TriggerServerEvent('dg-chars:server:deleteCharacter', data.citizenid)
+    TriggerEvent('dg-chars:client:chooseChar')
+end)
 
--- RegisterNUICallback('removeCharacter', function(data)
---     TriggerServerEvent('qb-multicharacter:server:deleteCharacter', data.citizenid)
---     TriggerEvent('qb-multicharacter:client:chooseChar')
--- end)
+RegisterNUICallback('createNewCharacter', function(data)
+    local cData = data
+    local count = data.cid
+    local model = nil
+
+    if cData.gender == "0" then
+        model = GetHashKey("mp_m_freemode_01")
+       
+    elseif cData.gender == "1" then
+        model = GetHashKey("mp_f_freemode_01")
+    end
+
+    RequestModel(model)
+    while not HasModelLoaded(model) do
+        Citizen.Wait(0)
+    end
+    
+    SetPlayerModel(PlayerId(), model)
+    SetPedComponentVariation(GetPlayerPed(-1), 0, 0, 0, 2)
+    SetEntityRotation(PlayerPedId(), 0, 0, Config.PedLocations[count].w)
+    SetEntityCoords(PlayerPedId(), Config.PedLocations[count].x, Config.PedLocations[count].y, Config.PedLocations[count].z)
+    deleteCharEntities()
+    Citizen.Wait(500)
+    TriggerServerEvent('dg-chars:server:createCharacter', cData)
+end)
+
+RegisterNUICallback('validationMsg', function(data)
+    local text = data.text
+    local type = "error"
+    local length = 5000
+    DGCore.Functions.Notify(text, type, length)
+end)

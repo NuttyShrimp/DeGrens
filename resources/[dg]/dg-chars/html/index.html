@@ -91,14 +91,12 @@
                                     <div class="dgBtn" id="back-btn"><i class="material-icons">arrow_back</i> Terug </div>         
                                 </div>
                                 <div class="col s4">
-                                    <div class="dgBtn-red"><i class="material-icons">delete</i> Verwijder </div>
+                                    <div id="deleteBtn" class="dgBtn-red"><i class="material-icons">delete</i> Verwijder </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-
-
                 <div class="row character-create">
                     <div class="col s5 offset-s1">
                         <div class="dgBox">
@@ -121,32 +119,69 @@
                                 </div>
                                 <div class="col s12">
                                     <label>
-                                        <input name="group1" type="radio" />
+                                        <input name="group1" type="radio" value="0" />
                                         <span>Man</span>
                                     </label>
                                     <label>
-                                        <input name="group1" type="radio" />
+                                        <input name="group1" type="radio" value="1" />
                                         <span>Vrouw</span>
                                     </label>
                                 </div>
+                                <div class="input-field col s12">
+                                    <input type=text name="bdate" id="bdate" class="white-text datepicker" required>
+                                    <label for="bdate">Birthday</label>
+                                  </div>
                             </div>
                             <div class="row">
-                                <div class="col s12">
-                                    <div class="dgBtn-green" id="play"><i class="material-icons">add</i> Bevestigen </div>
+                                <div class="col s6">
+                                    <div class="dgBtn-green" id="create"><i class="material-icons">add</i> Bevestigen </div>
                                 </div>
-                                <div class="col s8">
-                                    <div class="dgBtn-red" id="cancel-btn"><i class="material-icons">close</i> Cancel</div>         
-                                </div>
-                                <div class="col s8">
+                                <div class="col s6">
+                                    <div class="dgBtn" id="cancel-btn"><i class="material-icons">close</i> Cancel</div>         
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                
+                <div id="MyModal" class="modal dgBgDark white-text">
+                    <div class="modal-content">
+                      <h4>Zeker dat je je karakter wilt verwijderen ?</h4>
+                      <div class="row">
+                        <div class="col s6">
+                            <div class="dgBtn-red" id="accept-delete"><i class="material-icons">delete</i> Verwijderen </div>
+                        </div>
+                        <div class="col s6">
+                            <div class="dgBtn" id="cancel-delete"><i class="material-icons">close</i> Cancel</div>         
+                        </div>
+                    </div>
+                    </div>
+                </div>
             </div>
         </div>
     </body>
     <script type="text/javascript" src="script.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script>
+    var currYear = (new Date()).getFullYear();
+
+    $(document).ready(function() {
+        $(".datepicker").datepicker({
+            defaultDate: new Date(currYear-5,1,31),
+            // setDefaultDate: new Date(2000,01,31),
+            maxDate: new Date(currYear-10,12,31),
+            yearRange: [1928, currYear-10],
+            format: "dd/mm/yyyy"    
+        });
+        
+
+        $('#MyModal').modal();
+    });
+    $("#deleteBtn").click(function(){
+        $("#MyModal").modal('open');
+    });
+    $("#cancel-delete").click(function(){
+        $("#MyModal").modal('close')
+    });
+
+    </script>
 </html>
