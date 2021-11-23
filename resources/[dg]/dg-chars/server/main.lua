@@ -97,9 +97,10 @@ end)
 RegisterNetEvent('dg-chars:server:readyToSpawn', function()
     local src = source
     TriggerClientEvent("dg-chars:client:closeNUI", src)
+    GiveStarterItems(src)
     --TriggerEvent('dg-apartments:server:enterApartment', src)
     exports['dg-apartments']:enterApartment(src)
-    GiveStarterItems(src)
+    
 end)
 
 RegisterNetEvent('dg-chars:server:deleteCharacter', function(citizenid)

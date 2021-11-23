@@ -1,6 +1,7 @@
 local cam = nil
 local movingCam = false
 local charPed = {}
+local charLoc = {}
 local DGCore = exports['dg-core']:GetCoreObject()
 local CanDraw = false
 -- Main Thread
@@ -45,13 +46,12 @@ end
 local function setPeds(bool)
     if bool then
         DGCore.Functions.TriggerCallback("dg-chars:server:setupCharacters", function(result)
-            SendNUIMessage({
-                action = "setupCharacters",
-                characters = result
-            })
-            for i=1 , 5 , 1 do
-                for k, resultChar in pairs(result) do
-                    if result[i].cid == i then
+            for k , resultChar in pairs(result) do
+                SendNUIMessage({
+                    action = "setupCharacter",
+                    character = resultChar
+                })
+                        charLoc[resultChar.cid] = true
                         local model = resultChar.model
                         local skin = resultChar.skin
                         model = model ~= nil and tonumber(model) or false
@@ -60,18 +60,23 @@ local function setPeds(bool)
                             while not HasModelLoaded(model) do
                                 Citizen.Wait(0)
                             end
-                            charPed[i] = CreatePed(2, model, Config.PedLocations[i].x, Config.PedLocations[i].y, Config.PedLocations[i].z - 0.98, Config.PedLocations[i].w, false, true)
-                            SetPedComponentVariation(charPed[i], 0, 0, 0, 2)
-                            FreezeEntityPosition(charPed[i], false)
-                            SetEntityInvincible(charPed[i], true)
-                            PlaceObjectOnGroundProperly(charPed[i])
-                            SetBlockingOfNonTemporaryEvents(charPed[i], true)
+                            charPed[resultChar.cid] = CreatePed(2, model, Config.PedLocations[resultChar.cid].x, Config.PedLocations[resultChar.cid].y, Config.PedLocations[resultChar.cid].z - 0.98, Config.PedLocations[resultChar.cid].w, false, true)
+                            SetPedComponentVariation(charPed[resultChar.cid], 0, 0, 0, 2)
+                            FreezeEntityPosition(charPed[resultChar.cid], false)
+                            SetEntityInvincible(charPed[resultChar.cid], true)
+                            PlaceObjectOnGroundProperly(charPed[resultChar.cid])
+                            SetBlockingOfNonTemporaryEvents(charPed[resultChar.cid], true)
                             skindata = json.decode(tostring(skin))
-                            TriggerEvent('qb-clothing:client:loadPlayerClothing', skindata, charPed[i])
+                            TriggerEvent('qb-clothing:client:loadPlayerClothing', skindata, charPed[resultChar.cid])
                             Wait(100)
                         end)
-                        break
-                    else
+            end
+            for i=1, 5, 1 do
+                    if not charLoc[i] then
+                        SendNUIMessage({
+                            action = "setupEmpty",
+                            count = i
+                        })
                         Citizen.CreateThread(function()
                             CanDraw = true
                             local randommodels = {
@@ -98,9 +103,9 @@ local function setPeds(bool)
                             end
                         end)
                     end
-                end
+            
             end
-    
+            print(json.encode(charPed))
         end)
     end
 end
@@ -134,9 +139,12 @@ function moveCam(newCoords, newRot)
 end
 
 function deleteCharEntities()
+    CanDraw = false
     for i,char in pairs(charPed) do
-        DeleteEntity(charPed[i])
+        DeleteEntity(char)
     end
+    charLoc = {}
+    charPed = {}
 end
 
 function DirectionVector(rotation)
@@ -171,6 +179,7 @@ RegisterNetEvent('dg-chars:client:chooseChar', function()
 end)
 
 RegisterNetEvent('dg-chars:client:closeNUI', function()
+    DeleteCamera()
     SetNuiFocus(false, false)
 end)
 
@@ -220,6 +229,8 @@ RegisterNUICallback('removeBlur', function()
 end)
 
 RegisterNUICallback('removeCharacter', function(data)
+    openCharMenu(false)
+    deleteCharEntities()
     TriggerServerEvent('dg-chars:server:deleteCharacter', data.citizenid)
     TriggerEvent('dg-chars:client:chooseChar')
 end)

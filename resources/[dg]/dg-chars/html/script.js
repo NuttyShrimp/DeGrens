@@ -58,28 +58,21 @@ $(document).ready(function (){
 
 
 
-        if (data.action == "setupCharacters") {
-            var chars = data.characters;
-
-            for (i=0; i<5; i++){
-                var charInfo = JSON.stringify(chars[i]);
-                count = i+1;
-                for (k=0; i<chars.length(); k++){
-                    if (chars[k].cid == i){
-                        $('#slot-name-'+count).text( chars[i].firstname + ' ' + chars[i].lastname);
-                        $('#char-'+count).data('cid', chars[i].citizenid);
-                        $('#char-'+count).data('cinfo', charInfo);
-                        $('#char-'+count).data('count', count);
-                        break;
-                    } 
-                    else {
-                        $('#char-'+count).data('count', count);
-                        $('#char-'+count).data('cinfo', "empty");
-                        $('#slot-name-'+count).text('Maak een karakter');
-                    }
-                }
-            }
-
+        if (data.action == "setupCharacter") {
+            var char = data.character;
+            count = char.cid;
+            var charInfo = JSON.stringify(char);
+            $('#slot-name-'+count).text( char.firstname + ' ' + char.lastname);
+            $('#char-'+count).data('cid', char.citizenid);
+            $('#char-'+count).data('cinfo', charInfo);
+            $('#char-'+count).data('count', count);
+        }
+        if (data.action == "setupEmpty") {
+            var count = data.count;
+            count = count;
+            $('#char-'+count).data('count', count);
+            $('#char-'+count).data('cinfo', "empty");
+            $('#slot-name-'+count).text('Maak een karakter');
         }
     });
 
