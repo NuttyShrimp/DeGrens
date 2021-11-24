@@ -43,6 +43,27 @@ RegisterNetEvent('qb-spawn:client:setupSpawns', function(cData, new, apps)
     if not new then
         DGCore.Functions.TriggerCallback('qb-spawn:server:getOwnedHouses', function(houses)
             local myHouses = {}
+            
+            if PlayerJob.name == 'police' then
+                local policeLoc = {["Police"] = {
+                    coords = vector4(-268.83, -962.34, 31.23, 295.95),
+                    location = "police",
+                    label = "PZ De Grens: Hoofd Bureau",
+                }}
+                table.insert(Config.Spawn, policeLoc)
+            end
+
+            if  PlayerJob.name =="ambulance" then
+                local policeLoc = {["Hostpital"] = {
+                    coords = vector4(1085.26, -698.2, 31.23, 59.04, 253.5),
+                    location = "hospital",
+                    label = "AZ De Grens: Spoedgevallen",
+                }}
+
+                table.insert(Config.Spawn, policeLoc)
+            end
+
+
             if houses ~= nil then
                 for i = 1, (#houses), 1 do
                     table.insert(myHouses, {
@@ -55,7 +76,7 @@ RegisterNetEvent('qb-spawn:client:setupSpawns', function(cData, new, apps)
             Citizen.Wait(500)
             SendNUIMessage({
                 action = "setupLocations",
-                locations = QB.Spawns,
+                locations = Config.Spawns,
                 houses = myHouses,
             })
         end, cData.citizenid)
@@ -135,7 +156,7 @@ RegisterNUICallback('setCam', function(data)
         SetCamActiveWithInterp(cam, cam2, cam2Time, true, true)
         SetEntityCoords(PlayerPedId(), campos.x, campos.y, campos.z)
     elseif type == "normal" then
-        local campos = QB.Spawns[location].coords
+        local campos = Config.Spawns[location].coords
 
         cam2 = CreateCamWithParams("DEFAULT_SCRIPTED_CAMERA", campos.x, campos.y, campos.z + camZPlus1, 300.00,0.00,0.00, 110.00, false, 0)
         PointCamAtCoord(cam2, campos.x, campos.y, campos.z + pointCamCoords)
@@ -237,7 +258,7 @@ RegisterNUICallback('spawnplayer', function(data)
         Citizen.Wait(500)
         DoScreenFadeIn(250)
     elseif type == "normal" then
-        local pos = QB.Spawns[location].coords
+        local pos = Config.Spawns[location].coords
         SetDisplay(false)
         DoScreenFadeOut(500)
         Citizen.Wait(2000)
