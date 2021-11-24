@@ -7,6 +7,7 @@ local cam2Time = 1000
 local choosingSpawn = false
 local cam, cam2 = nil, nil
 local DGCore = exports['dg-core']:GetCoreObject()
+local playerJob = DGCore.Functions.GetPlayerData().job.name
 
 -- Functions
 
@@ -44,23 +45,23 @@ RegisterNetEvent('qb-spawn:client:setupSpawns', function(cData, new, apps)
         DGCore.Functions.TriggerCallback('qb-spawn:server:getOwnedHouses', function(houses)
             local myHouses = {}
             
-            if PlayerJob.name == 'police' then
-                local policeLoc = {["Police"] = {
+            if playerJob == 'police' then
+                local policeLoc = {["police"] = {
                     coords = vector4(-268.83, -962.34, 31.23, 295.95),
                     location = "police",
                     label = "PZ De Grens: Hoofd Bureau",
                 }}
-                table.insert(Config.Spawn, policeLoc)
+                table.insert(Config.Spawns, policeLoc)
             end
 
-            if  PlayerJob.name =="ambulance" then
-                local policeLoc = {["Hostpital"] = {
+            if  playerJob =="ambulance" then
+                local ambuLoc = {["hostpital"] = {
                     coords = vector4(1085.26, -698.2, 31.23, 59.04, 253.5),
                     location = "hospital",
                     label = "AZ De Grens: Spoedgevallen",
                 }}
 
-                table.insert(Config.Spawn, policeLoc)
+                table.insert(Config.Spawns, ambuLoc)
             end
 
 
