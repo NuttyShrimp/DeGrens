@@ -21,7 +21,7 @@ end
 
 -- Events
 
-RegisterNetEvent('qb-spawn:client:openUI', function(value)
+RegisterNetEvent('dg-spawn:client:openUI', function(value)
     SetEntityVisible(PlayerPedId(), false)
     DoScreenFadeOut(250)
     Citizen.Wait(1000)
@@ -39,9 +39,9 @@ RegisterNetEvent('qb-houses:client:setHouseConfig', function(houseConfig)
     Config.Houses = houseConfig
 end)
 
-RegisterNetEvent('qb-spawn:client:setupSpawns', function(cData, new, apps)
+RegisterNetEvent('dg-spawn:client:setupSpawns', function(cData, new, apps)
     if not new then
-        DGCore.Functions.TriggerCallback('qb-spawn:server:getOwnedHouses', function(houses)
+        DGCore.Functions.TriggerCallback('dg-spawn:server:getOwnedHouses', function(houses)
             local myHouses = {}
             if houses ~= nil then
                 for i = 1, (#houses), 1 do

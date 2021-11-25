@@ -1,6 +1,6 @@
 local DGCore = exports['dg-core']:GetCoreObject()
 
-DGCore.Functions.CreateCallback('qb-spawn:server:getOwnedHouses', function(source, cb, cid)
+DGCore.Functions.CreateCallback('dg-spawn:server:getOwnedHouses', function(source, cb, cid)
     if cid ~= nil then
         local houses = exports.oxmysql:executeSync('SELECT * FROM player_houses WHERE citizenid = ?', {cid})
         if houses[1] ~= nil then
