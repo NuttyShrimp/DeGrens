@@ -27,7 +27,6 @@ CREATE TABLE apartments (
   `id` INT(11) NOT NULL AUTO_INCREMENT,
   `citizenid` VARCHAR(255) NOT NULL UNIQUE,
   PRIMARY KEY (`id`),
-  FOREIGN KEY (`citizenid`) REFERENCES players(`citizenid`)
 );
 
 --
