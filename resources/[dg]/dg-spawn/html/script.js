@@ -56,7 +56,7 @@ $(document).on('click', '#submit-spawn', function(evt){
         $(".hideContainer").removeClass("hideContainer");
     }, 900);
     if (spawnType !== "appartment") {
-        $.post('https:/dg-spawn/spawnplayer', JSON.stringify({
+        $.post('https://dg-spawn/spawnplayer', JSON.stringify({
             spawnloc: location,
             typeLoc: spawnType
         }));
