@@ -15,6 +15,10 @@ end
 getPlayerApartment = function(src)
 	local Player = DGCore.Functions.GetPlayer(src);
 	local result = exports.oxmysql:executeSync('SELECT id,citizenid FROM apartments WHERE citizenid = ?', {Player.PlayerData.citizenid})
+	if (result == nil or result[1] == nil) then
+		createPlayerApartment(src)
+		return getPlayerApartment(src)
+	end
 	return result[1]
 end
 
