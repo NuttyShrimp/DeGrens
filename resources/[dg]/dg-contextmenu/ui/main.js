@@ -39,7 +39,7 @@ const searchParentMenu = (key, menu, parent) => {
 
 const clickHandler = (m) => {
 	if (m.action) {
-		triggerActionEvent("triggerCMAction", {action: m.action, data: m.data});
+		triggerActionEvent("triggerCMAction", {action: m.action, data: m.data, isServer: m.isServer || false});
 		if (!m.submenus) {
 			triggerActionEvent('close');
 		}
@@ -91,7 +91,7 @@ const generateMenu = (menu) => {
 
 		const bodyEl = document.createElement('div');
 		$(bodyEl).addClass("txt");
-		$(bodyEl).text(m.description);
+		$(bodyEl).html(m.description);
 		$(buttonEl).append(bodyEl);
 
 		$(buttonEl).on('click', ()=>clickHandler(m));

@@ -35,7 +35,7 @@ $(document).on('click', '.location', function(evt){
         $("#submit-spawn").attr("data-location", location);
         $("#submit-spawn").attr("data-type", type);
         $("#submit-spawn").fadeIn(100)
-        $.post('https://qb-spawn/setCam', JSON.stringify({
+        $.post('https://dg-spawn/setCam', JSON.stringify({
             posname: location,
             type: type,
         }));
@@ -56,37 +56,41 @@ $(document).on('click', '#submit-spawn', function(evt){
         $(".hideContainer").removeClass("hideContainer");
     }, 900);
     if (spawnType !== "appartment") {
-        $.post('https://qb-spawn/spawnplayer', JSON.stringify({
+        $.post('https://dg-spawn/spawnplayer', JSON.stringify({
             spawnloc: location,
             typeLoc: spawnType
         }));
     } else {
-        $.post('https://qb-spawn/chooseAppa', JSON.stringify({
+        $.post('https://dg-spawn/chooseAppa', JSON.stringify({
             appType: location,
         }));
     }
 });
 
 function setupLocations(locations, myHouses) {
-    var parent = $('.spawn-locations')
-    $(parent).html("");
 
-    $(parent).append('<div class="loclabel" id="location" data-location="null" data-type="lab" data-label="Where would you like to start?"><p><span id="null">Where would you like to start?</span></p></div>')
-    
+    $('.spawn-locations').append('<div class="col s12 center-align" id="location" data-location="null" data-type="lab" data-label="Waar wil je starten?"><p><span id="null">Waar wil je starten?</span></p></div>');
+    $('.spawn-locations').append('<div class="col s12 center-align latestBox"></div>');
+    $('.spawn-locations').append('<div class="dgInnerBox col s12 center-align locationBox"></div>');
+    if (myHouses != undefined) {
+        $('.spawn-locations').append('<div class="dgInnerBox col s12 center-align houseBox"></div>');
+    }
+    $('.spawn-locations').append('<div class="col s12 center-align submitBox"></div>');
     setTimeout(function(){
-        $(parent).append('<div class="location" id="location" data-location="current" data-type="current" data-label="Last Location"><p><span id="current-location">Last Location</span></p></div>');
+        $('.latestBox').append('<div class="location dgInnerBtn-highlight" id="location" data-location="current" data-type="current" data-label="Last Location"><p><span id="current-location">Last Location</span></p></div>');
         
+
         $.each(locations, function(index, location){
-            $(parent).append('<div class="location" id="location" data-location="'+location.location+'" data-type="normal" data-label="'+location.label+'"><p><span id="'+location.location+'">'+location.label+'</span></p></div>')
+            $('.locationBox').append('<div class="location dgInnerBtn" id="location" data-location="'+location.location+'" data-type="normal" data-label="'+location.label+'"><p><span id="'+location.location+'">'+location.label+'</span></p></div>')
         });
 
         if (myHouses != undefined) {
             $.each(myHouses, function(index, house){
-                $(parent).append('<div class="location" id="location" data-location="'+house.house+'" data-type="house" data-label="'+house.label+'"><p><span id="'+house.house+'">'+house.label+'</span></p></div>')
+                $('.houseBox').append('<div class="location dgInnerBtn" id="location" data-location="'+house.house+'" data-type="house" data-label="'+house.label+'"><p><span id="'+house.house+'">'+house.label+'</span></p></div>')
             });
         }
 
-        $(parent).append('<div class="submit-spawn" id="submit-spawn"><p><span id="spawn-label"></span></p></div>');
+        $('.submitBox').append('<div class="submit-spawn dgBtn-green" id="submit-spawn"><p><span id="spawn-label"></span></p></div>');
         $('.submit-spawn').hide();
     }, 100)
 }

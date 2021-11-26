@@ -36,7 +36,7 @@ RegisterNetEvent('dg-apartments:server:setInsideMeta', function(aId)
 end)
 
 -- id is an optional parameter
-enterApartment = function(src, id, new)
+enterApartment = function(src, id)
 	local Player = DGCore.Functions.GetPlayer(src)
 	if (state.isInLockdown) then
     TriggerClientEvent('DGCore:Notify', src, "Het appartementsblok is momenteel onder lockdown", "error")
@@ -59,16 +59,11 @@ enterApartment = function(src, id, new)
 	-- Set insidemeta
 	setInsideMeta(src, id)
 	TriggerClientEvent('dg-apartments:client:fadeScreen', src, false)
-	if new then
-		Citizen.SetTimeout(1000, function()
-			TriggerEvent('qb-clothes:client:CreateFirstCharacter')
-		end)
-	end
 end
 exports('enterApartment', enterApartment)
 
-RegisterNetEvent('dg-apartments:server:enterApartment', function(id, new)
-  enterApartment(source, id, new)
+RegisterNetEvent('dg-apartments:server:enterApartment', function(id)
+  enterApartment(source, id)
 end)
 
 leaveApartment = function(src)
@@ -92,6 +87,7 @@ leaveApartment = function(src)
 	TriggerClientEvent('dg-apartments:client:fadeScreen', src, false)
 	TriggerEvent("InteractSound_SV:PlayOnOne", src, "houses_door_close", 0.1)
 end
+exports('leaveApartment', leaveApartment)
 
 RegisterNetEvent('dg-apartments:server:leaveApartment', function()
 	leaveApartment(source)

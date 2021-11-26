@@ -9,12 +9,10 @@
     position: absolute;
     top: 10vh;
     left: 10vh;
-    background-color: rgb(23 23 23 / 80%);
-    border-radius: .8vh;
-    padding: 30px;
+    width: 50vh;
 }
 
-.location {
+/* .location {
     width: 28vh;
     height: 4.5vh;
     margin-bottom: 2vh;
@@ -83,4 +81,4 @@
     color: #ededed;
     text-align: center;
     font-size: 1.5vh;
-}
+} */
