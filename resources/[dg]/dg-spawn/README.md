@@ -47,7 +47,7 @@ ensure qb-garages
 ## Configuration
 An example to add spawn option
 ```
-QB.Spawns = {
+Config.Spawns  = {
     ["spawn1"] = { -- Needs to be unique
         coords = {
             x = 0.0, -- Coords player will be spawned
