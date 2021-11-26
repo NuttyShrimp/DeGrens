@@ -9191,3 +9191,46 @@ input[type=range]::-ms-thumb {
 .dgBtn-green > i {
   vertical-align: middle;
 }
+
+.dgInnerBtn {
+  font-family: 'Poppins', sans-serif;
+  color: rgba(245, 245, 245, 0.8);
+   font-size: 1.2em;
+  font-weight: 500;
+  background-color: rgba(40, 40, 40, 0.95);
+  padding: 10px;
+  margin: 20px 0px 20px 0px;
+  text-align: center;
+  transition: ease 0.3s;
+}
+
+.dgInnerBtn:hover {
+  cursor: pointer;
+  color: rgba(255, 255, 255, 1);
+  background-color: rgba(70, 70, 70, 0.95);
+}
+
+.dgInnerBtn > i {
+  vertical-align: middle;
+}
+
+.dgInnerBtn-highlight {
+  font-family: 'Poppins', sans-serif;
+  color: rgba(245, 245, 245, 0.8);
+   font-size: 1.2em;
+  font-weight: 500;
+  background-color: rgba(70, 70, 100, 0.95);
+  padding: 10px;
+  margin: 20px 0px 20px 0px;
+  text-align: center;
+  transition: ease 0.3s;
+}
+.dgInnerBtn-highlight:hover {
+  cursor: pointer;
+  color: rgba(255, 255, 255, 1);
+  background-color: rgba(120, 120, 10, 0.95);
+}
+
+.dgInnerBtn-highlight > i {
+  vertical-align: middle;
+}
