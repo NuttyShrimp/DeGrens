@@ -8,6 +8,9 @@ local choosingSpawn = false
 local cam, cam2 = nil, nil
 local DGCore = exports['dg-core']:GetCoreObject()
 
+local playerJob = DGCore.Functions.GetPlayerData().job.name
+
+
 -- Functions
 
 local function SetDisplay(bool)
@@ -21,7 +24,7 @@ end
 
 -- Events
 
-RegisterNetEvent('qb-spawn:client:openUI', function(value)
+RegisterNetEvent('dg-spawn:client:openUI', function(value)
     SetEntityVisible(PlayerPedId(), false)
     DoScreenFadeOut(250)
     Citizen.Wait(1000)
@@ -39,10 +42,41 @@ RegisterNetEvent('qb-houses:client:setHouseConfig', function(houseConfig)
     Config.Houses = houseConfig
 end)
 
-RegisterNetEvent('qb-spawn:client:setupSpawns', function(cData, new, apps)
+RegisterNetEvent('dg-spawn:client:setupSpawns', function(cData, new, apps)
     if not new then
-        DGCore.Functions.TriggerCallback('qb-spawn:server:getOwnedHouses', function(houses)
+        DGCore.Functions.TriggerCallback('dg-spawn:server:getOwnedHouses', function(houses)
             local myHouses = {}
+            local allSpawns = Config.Spawns
+            if playerJob == "police" then
+                allSpawns["policedp"] = {
+                        coords = vector4(428.23, -984.28, 29.76, 3.5),
+                        location = "policedp",
+                        label = "PZ De Grens - Hoofd Bureau",
+                    }
+            end
+
+            if playerJob == "ambulance" then
+                    allSpawns["hospital"] = {
+                        coords = vector4(292.69, -562.45, 43.26, 65.86),
+                        location = "hospital",
+                        label = "AZ De Grens - Spoedgevallen",
+                    }
+            end
+            if playerJob == "mechanic" then
+                    allSpawns["mechanic"] = {
+                        coords = vector4(965.67, -987.94, 41.14, 92.38),
+                        location = "mechanic",
+                        label = "De Flierefluiters - Garage",
+                    }
+            end
+            if playerJob == "lawyer" then
+                    allSpawns["justice"] = {
+                        coords = vector4(408.84, -1092.89, 29.4, 355.59),
+                        location = "justice",
+                        label = "Gerechtsgebouw De Grens",
+                    }
+            end
+
             if houses ~= nil then
                 for i = 1, (#houses), 1 do
                     table.insert(myHouses, {
@@ -52,10 +86,12 @@ RegisterNetEvent('qb-spawn:client:setupSpawns', function(cData, new, apps)
                 end
             end
 
+            print(json.encode(allSpawns))
+
             Citizen.Wait(500)
             SendNUIMessage({
                 action = "setupLocations",
-                locations = QB.Spawns,
+                locations = allSpawns ,
                 houses = myHouses,
             })
         end, cData.citizenid)
@@ -135,7 +171,7 @@ RegisterNUICallback('setCam', function(data)
         SetCamActiveWithInterp(cam, cam2, cam2Time, true, true)
         SetEntityCoords(PlayerPedId(), campos.x, campos.y, campos.z)
     elseif type == "normal" then
-        local campos = QB.Spawns[location].coords
+        local campos = Config.Spawns [location].coords
 
         cam2 = CreateCamWithParams("DEFAULT_SCRIPTED_CAMERA", campos.x, campos.y, campos.z + camZPlus1, 300.00,0.00,0.00, 110.00, false, 0)
         PointCamAtCoord(cam2, campos.x, campos.y, campos.z + pointCamCoords)
@@ -237,7 +273,7 @@ RegisterNUICallback('spawnplayer', function(data)
         Citizen.Wait(500)
         DoScreenFadeIn(250)
     elseif type == "normal" then
-        local pos = QB.Spawns[location].coords
+        local pos = Config.Spawns [location].coords
         SetDisplay(false)
         DoScreenFadeOut(500)
         Citizen.Wait(2000)

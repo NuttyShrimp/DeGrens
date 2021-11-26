@@ -39,10 +39,32 @@ import van de hoofd styling
 ```
 
 ```css
-.dgButton-light 
+.dgButton
 ```
 
 ```css
-.dgButton-Dark
+.dgButton-red
 ```
+
+```css
+.dgButton-green
+```
+
+```css
+.dgButton
+```
+
+### Dependencies
+```
+ensure dg-core
+ensure dg-chars
+ensure dg-spawn
+ensure dg-apartments
+ensure qb-clothing
+ensure dg-weathersync
+```
+
+##### Resource Dev
+- Synergie
+
 

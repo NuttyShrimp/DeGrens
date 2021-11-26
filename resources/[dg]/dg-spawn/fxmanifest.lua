@@ -1,7 +1,7 @@
 fx_version 'cerulean'
 game 'gta5'
 
-description 'QB-Spawn'
+description 'DG-Spawn'
 version '1.0.0'
 
 shared_scripts {
@@ -10,10 +10,10 @@ shared_scripts {
 
 client_scripts {
 	'config.lua',
-	'client.lua'
+	'client/main.lua'
 }
 
-server_script 'server.lua'
+server_script 'server/main.lua'
 
 ui_page 'html/index.html'
 
