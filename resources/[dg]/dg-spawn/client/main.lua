@@ -8,9 +8,6 @@ local choosingSpawn = false
 local cam, cam2 = nil, nil
 local DGCore = exports['dg-core']:GetCoreObject()
 
-local playerJob = DGCore.Functions.GetPlayerData().job.name
-
-
 -- Functions
 
 local function SetDisplay(bool)
@@ -45,6 +42,7 @@ end)
 RegisterNetEvent('dg-spawn:client:setupSpawns', function(cData, new, apps)
     if not new then
         DGCore.Functions.TriggerCallback('dg-spawn:server:getOwnedHouses', function(houses)
+            local playerJob = DGCore.Functions.GetPlayerData().job.name
             local myHouses = {}
             local allSpawns = Config.Spawns
             if playerJob == "police" then
