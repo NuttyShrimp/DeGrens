@@ -83,9 +83,6 @@ RegisterNetEvent('dg-spawn:client:setupSpawns', function(cData, new, apps)
                     })
                 end
             end
-
-            print(json.encode(allSpawns))
-
             Citizen.Wait(500)
             SendNUIMessage({
                 action = "setupLocations",

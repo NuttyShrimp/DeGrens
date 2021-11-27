@@ -105,7 +105,6 @@ local function setPeds(bool)
                     end
             
             end
-            print(json.encode(charPed))
         end)
     end
 end
