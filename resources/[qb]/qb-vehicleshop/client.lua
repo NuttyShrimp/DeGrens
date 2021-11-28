@@ -31,30 +31,24 @@ end)
 
 local vehHeaderMenu = {
     {
-        header = 'Vehicle Options',
-        txt = 'Interact with the current vehicle',
-        params = {
-            event = 'qb-vehicleshop:client:showVehOptions'
-        }
+        title = 'Vehicle Options',
+        description = 'Interact with the current vehicle',
+				action = 'qb-vehicleshop:client:showVehOptions'
     }
 }
 
 local financeMenu = {
     {
-        header = 'Financed Vehicles',
-        txt = 'Browse your owned vehicles',
-        params = {
-            event = 'qb-vehicleshop:client:getVehicles'
-        }
+        title = 'Financed Vehicles',
+        description = 'Browse your owned vehicles',
+				action = 'qb-vehicleshop:client:getVehicles'
     }
 }
 
 local returnTestDrive = {
     {
-        header = 'Finish Test Drive',
-        params = {
-            event = 'qb-vehicleshop:client:TestDriveReturn'
-        }
+        title = 'Finish Test Drive',
+				action = 'qb-vehicleshop:client:TestDriveReturn'
     }
 }
 
@@ -126,9 +120,9 @@ local function createTestDriveReturn()
 
     testDriveZone:onPlayerInOut(function(isPointInside)
         if isPointInside and IsPedInAnyVehicle(PlayerPedId()) then
-            exports['qb-menu']:openMenu(returnTestDrive)
+            exports['dg-contextmenu']:openMenu(returnTestDrive)
         else
-            exports['qb-menu']:closeMenu()
+            exports['dg-contextmenu']:closeMenu()
         end
     end)
 end
@@ -163,10 +157,10 @@ local function createVehZones() -- This will create an entity zone if config is 
         combo:onPlayerInOut(function(isPointInside)
             if isPointInside then
                 if PlayerData.job.name == Config.Shops[ClosestShop]['Job'] or Config.Shops[ClosestShop]['Job'] == 'none' then
-                    exports['qb-menu']:showHeader(vehHeaderMenu)
+                    exports['dg-contextmenu']:openMenu(vehHeaderMenu, true)
                 end
             else
-                exports['qb-menu']:closeMenu()
+                exports['dg-contextmenu']:closeMenu()
             end
         end)
     else
@@ -241,44 +235,35 @@ pdm:onPlayerInOut(function(isPointInside)
                 setClosestShowroomVehicle()
                 vehicleMenu = {
                     {
-                        isMenuHeader = true,
-                        header = getVehBrand():upper().. ' '..getVehName():upper().. ' - $' ..getVehPrice(),
+                        title = getVehBrand():upper().. ' '..getVehName():upper().. ' - $' ..getVehPrice(),
                     },
                     {
-                        header = 'Test Drive',
-                        txt = 'Test drive currently selected vehicle',
-                        params = {
-                            event = 'qb-vehicleshop:client:TestDrive',
-                        }
+                        title = 'Test Drive',
+                        description = 'Test drive currently selected vehicle',
+												action = 'qb-vehicleshop:client:TestDrive',
                     },
                     {
-                        header = "Buy Vehicle",
-                        txt = 'Purchase currently selected vehicle',
-                        params = {
-                            isServer = true,
-                            event = 'qb-vehicleshop:server:buyShowroomVehicle',
-                            args = {
-                                buyVehicle = Config.Shops[ClosestShop]["ShowroomVehicles"][ClosestVehicle].chosenVehicle
-                            }
-                        }
+                        title = "Buy Vehicle",
+                        description = 'Purchase currently selected vehicle',
+												isServer = true,
+												action = 'qb-vehicleshop:server:buyShowroomVehicle',
+												data = {
+														buyVehicle = Config.Shops[ClosestShop]["ShowroomVehicles"][ClosestVehicle].chosenVehicle
+												}
                     },
                     {
-                        header = 'Finance Vehicle',
-                        txt = 'Finance currently selected vehicle',
-                        params = {
-                            event = 'qb-vehicleshop:client:openFinance',
-                            args = {
-                                price = getVehPrice(),
-                                buyVehicle = Config.Shops[ClosestShop]["ShowroomVehicles"][ClosestVehicle].chosenVehicle
-                            }
-                        }
+                        title = 'Finance Vehicle',
+                        description = 'Finance currently selected vehicle',
+												action = 'qb-vehicleshop:client:openFinance',
+												data = {
+														price = getVehPrice(),
+														buyVehicle = Config.Shops[ClosestShop]["ShowroomVehicles"][ClosestVehicle].chosenVehicle
+												}
                     },
                     {
-                        header = 'Swap Vehicle',
-                        txt = 'Change currently selected vehicle',
-                        params = {
-                            event = 'qb-vehicleshop:client:vehCategories',
-                        }
+                        title = 'Swap Vehicle',
+                        description = 'Change currently selected vehicle',
+												action = 'qb-vehicleshop:client:vehCategories',
                     },
                 }
                 Wait(1000)
@@ -318,48 +303,39 @@ luxury:onPlayerInOut(function(isPointInside)
                 setClosestShowroomVehicle()
                 vehicleMenu = {
                     {
-                        isMenuHeader = true,
-                        header = getVehBrand():upper().. ' '..getVehName():upper().. ' - $' ..getVehPrice(),
+                        title = getVehBrand():upper().. ' '..getVehName():upper().. ' - $' ..getVehPrice(),
                     },
                     {
-                        header = 'Test Drive',
-                        txt = 'Send the closest citizen for a test drive',
-                        params = {
-                            isServer = true,
-                            event = 'qb-vehicleshop:server:customTestDrive',
-                            args = {
-                                testVehicle = Config.Shops[ClosestShop]["ShowroomVehicles"][ClosestVehicle].chosenVehicle
-                            }
-                        }
+                        title = 'Test Drive',
+                        description = 'Send the closest citizen for a test drive',
+												isServer = true,
+												action = 'qb-vehicleshop:server:customTestDrive',
+												data = {
+														testVehicle = Config.Shops[ClosestShop]["ShowroomVehicles"][ClosestVehicle].chosenVehicle
+												}
                     },
                     {
-                        header = "Sell Vehicle",
-                        txt = 'Sell vehicle to closest citizen',
-                        params = {
-                            isServer = true,
-                            event = 'qb-vehicleshop:server:sellShowroomVehicle',
-                            args = {
-                                buyVehicle = Config.Shops[ClosestShop]["ShowroomVehicles"][ClosestVehicle].chosenVehicle
-                            }
-                        }
+                        title = "Sell Vehicle",
+                        description = 'Sell vehicle to closest citizen',
+												isServer = true,
+												action = 'qb-vehicleshop:server:sellShowroomVehicle',
+												data = {
+														buyVehicle = Config.Shops[ClosestShop]["ShowroomVehicles"][ClosestVehicle].chosenVehicle
+												}
                     },
                     {
-                        header = 'Finance Vehicle',
-                        txt = 'Finance vehicle to closest citizen',
-                        params = {
-                            event = 'qb-vehicleshop:client:openCustomFinance',
-                            args = {
-                                price = getVehPrice(),
-                                buyVehicle = Config.Shops[ClosestShop]["ShowroomVehicles"][ClosestVehicle].chosenVehicle
-                            }
-                        }
+                        title = 'Finance Vehicle',
+                        description = 'Finance vehicle to closest citizen',
+												action = 'qb-vehicleshop:client:openCustomFinance',
+												data = {
+														price = getVehPrice(),
+														buyVehicle = Config.Shops[ClosestShop]["ShowroomVehicles"][ClosestVehicle].chosenVehicle
+												}
                     },
                     {
-                        header = 'Swap Vehicle',
-                        txt = 'Change currently selected vehicle',
-                        params = {
-                            event = 'qb-vehicleshop:client:vehCategories',
-                        }
+                        title = 'Swap Vehicle',
+                        description = 'Change currently selected vehicle',
+												action = 'qb-vehicleshop:client:vehCategories',
                     },
                 }
                 Wait(1000)
@@ -374,11 +350,13 @@ end)
 -- Events
 
 RegisterNetEvent('qb-vehicleshop:client:homeMenu', function()
-    exports['qb-menu']:openMenu(vehicleMenu)
+		Wait(10)
+    exports['dg-contextmenu']:openMenu(vehicleMenu)
 end)
 
 RegisterNetEvent('qb-vehicleshop:client:showVehOptions', function()
-    exports['qb-menu']:openMenu(vehicleMenu)
+		Wait(10)
+    exports['dg-contextmenu']:openMenu(vehicleMenu)
 end)
 
 RegisterNetEvent('qb-vehicleshop:client:TestDrive', function()
@@ -450,7 +428,7 @@ RegisterNetEvent('qb-vehicleshop:client:TestDriveReturn', function()
         testDriveVeh = 0
         inTestDrive = false
         DGCore.Functions.DeleteVehicle(veh)
-        exports['qb-menu']:closeMenu()
+        exports['dg-contextmenu']:closeMenu()
         testDriveZone:destroy()
     else
         DGCore.Functions.Notify('This is not your test drive vehicle', 'error')
@@ -460,53 +438,47 @@ end)
 RegisterNetEvent('qb-vehicleshop:client:vehCategories', function()
     local categoryMenu = {
         {
-            header = '< Go Back',
-            params = {
-                event = 'qb-vehicleshop:client:homeMenu'
-            }
+            title = '< Go Back',
+						action = 'qb-vehicleshop:client:homeMenu'
         }
     }
     for k,v in pairs(Config.Shops[ClosestShop]['Categories']) do
         categoryMenu[#categoryMenu + 1] = {
-            header = v,
-            params = {
-                event = 'qb-vehicleshop:client:openVehCats',
-                args = {
-                    catName = k
-                }
-            }
+            title = v,
+						action = 'qb-vehicleshop:client:openVehCats',
+						data = {
+								catName = k
+						}
         }
     end
-    exports['qb-menu']:openMenu(categoryMenu)
+		Wait(10)
+    exports['dg-contextmenu']:openMenu(categoryMenu)
 end)
 
 RegisterNetEvent('qb-vehicleshop:client:openVehCats', function(data)
     local vehicleMenu = {
         {
-            header = '< Go Back',
-            params = {
-                event = 'qb-vehicleshop:client:vehCategories'
-            }
+            title = '< Go Back',
+						action = 'qb-vehicleshop:client:vehCategories'
         }
     }
     for k,v in pairs(DGCore.Shared.Vehicles) do
         if DGCore.Shared.Vehicles[k]["category"] == data.catName and DGCore.Shared.Vehicles[k]["shop"] == ClosestShop then
             vehicleMenu[#vehicleMenu + 1] = {
-                header = v.name,
-                txt = 'Price: $'..v.price,
-                params = {
-                    isServer = true,
-                    event = 'qb-vehicleshop:server:swapVehicle',
-                    args = {
-                        toVehicle = v.model,
-                        ClosestVehicle = ClosestVehicle,
-                        ClosestShop = ClosestShop
-                    }
-                }
+                title = v.name,
+                description = 'Price: $'..v.price,
+								isServer = true,
+								action = 'qb-vehicleshop:server:swapVehicle',
+								data = {
+										toVehicle = v.model,
+										ClosestVehicle = ClosestVehicle,
+										ClosestShop = ClosestShop
+								}
             }
         end
     end
-    exports['qb-menu']:openMenu(vehicleMenu)
+		Wait(10)
+    exports['dg-contextmenu']:openMenu(vehicleMenu)
 end)
 
 RegisterNetEvent('qb-vehicleshop:client:openFinance', function(data)
@@ -580,7 +552,7 @@ RegisterNetEvent('qb-vehicleshop:client:swapVehicle', function(data)
         SetVehicleNumberPlateText(veh, 'BUY ME')
         Config.Shops[data.ClosestShop]["ShowroomVehicles"][data.ClosestVehicle].chosenVehicle = data.toVehicle
         Wait(1000) -- Must wait 1000 for our closest vehicle function to refresh
-        exports['qb-menu']:openMenu(vehicleMenu)
+        exports['dg-contextmenu']:openMenu(vehicleMenu)
     end
 end)
 
@@ -604,71 +576,62 @@ RegisterNetEvent('qb-vehicleshop:client:getVehicles', function()
                 local name = DGCore.Shared.Vehicles[v.vehicle]["name"]
                 local plate = v.plate:upper()
                 ownedVehicles[#ownedVehicles + 1] = {
-                    header = ''..name..'',
-                    txt = 'Plate: ' ..plate,
-                    params = {
-                        event = 'qb-vehicleshop:client:getVehicleFinance',
-                        args = {
-                            vehiclePlate = plate,
-                            balance = v.balance,
-                            paymentsLeft = v.paymentsleft,
-                            paymentAmount = v.paymentamount
-                        }
-                    }
+                    title = ''..name..'',
+                    description = 'Plate: ' ..plate,
+										action = 'qb-vehicleshop:client:getVehicleFinance',
+										data = {
+												vehiclePlate = plate,
+												balance = v.balance,
+												paymentsLeft = v.paymentsleft,
+												paymentAmount = v.paymentamount
+										}
                 }
             end
         end
-        exports['qb-menu']:openMenu(ownedVehicles)
+				Wait(10)
+        exports['dg-contextmenu']:openMenu(ownedVehicles)
     end)
 end)
 
 RegisterNetEvent('qb-vehicleshop:client:getVehicleFinance', function(data)
     local vehFinance = {
         {
-            header = '< Go Back',
-            params = {
-                event = 'qb-vehicleshop:client:getVehicles'
-            }
+            title = '< Go Back',
+						action = 'qb-vehicleshop:client:getVehicles'
         },
         {
-            isMenuHeader = true,
-            header = 'Total Balance Remaining',
-            txt = '$'..comma_value(data.balance)..''
+            title = 'Total Balance Remaining',
+            description = '$'..comma_value(data.balance)..''
         },
         {
-            isMenuHeader = true,
-            header = 'Total Payments Remaining',
-            txt = ''..data.paymentsLeft..''
+            title = 'Total Payments Remaining',
+            description = ''..data.paymentsLeft..''
         },
         {
-            isMenuHeader = true,
-            header = 'Recurring Payment Amount',
-            txt = '$'..comma_value(data.paymentAmount)..''
+            title = 'Recurring Payment Amount',
+            description = '$'..comma_value(data.paymentAmount)..''
         },
         {
-            header = 'Make a payment',
-            params = {
-                event = 'qb-vehicleshop:client:financePayment',
-                args = {
-                    vehData = data,
-                    paymentsLeft = data.paymentsleft,
-                    paymentAmount = data.paymentamount
-                }
-            }
+            title = 'Make a payment',
+						action = 'qb-vehicleshop:client:financePayment',
+						data = {
+								vehData = data,
+								paymentsLeft = data.paymentsleft,
+								paymentAmount = data.paymentamount
+						}
         },
         {
-            header = 'Payoff vehicle',
-            params = {
-                isServer = true,
-                event = 'qb-vehicleshop:server:financePaymentFull',
-                args = {
-                    vehBalance = data.balance,
-                    vehPlate = data.vehiclePlate
-                }
-            }
+            title = 'Payoff vehicle',
+						isServer = true,
+						action = 'qb-vehicleshop:server:financePaymentFull',
+						data = {
+								vehBalance = data.balance,
+								vehPlate = data.vehiclePlate
+						}
         },
     }
-    exports['qb-menu']:openMenu(vehFinance)
+		Wait(10)
+    exports['dg-contextmenu']:openMenu(vehFinance)
 end)
 
 RegisterNetEvent('qb-vehicleshop:client:financePayment', function(data)
@@ -716,9 +679,9 @@ CreateThread(function()
 
     financeZone:onPlayerInOut(function(isPointInside)
         if isPointInside then
-            exports['qb-menu']:showHeader(financeMenu)
+            exports['dg-contextmenu']:openMenu(financeMenu, trur)
         else
-            exports['qb-menu']:closeMenu()
+            exports['dg-contextmenu']:closeMenu()
         end
     end)
 end)

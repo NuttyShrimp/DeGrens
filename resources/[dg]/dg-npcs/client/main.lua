@@ -1,3 +1,4 @@
+DGCore = exports['dg-core']:GetCoreObject()
 Citizen.CreateThread(function()
     TriggerServerEvent("dg-npc:server:FetchNpcs")
     Handler.StartThread()

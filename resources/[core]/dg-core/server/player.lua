@@ -112,8 +112,7 @@ function DGCore.Player.CheckPlayerData(source, PlayerData)
     PlayerData.metadata['inside'] = PlayerData.metadata['inside'] or {
         house = nil,
         apartment = {
-            apartmentType = nil,
-            apartmentId = nil,
+            id = nil,
         }
     }
     PlayerData.metadata['phonedata'] = PlayerData.metadata['phonedata'] or {
