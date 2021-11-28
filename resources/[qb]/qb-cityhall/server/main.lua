@@ -27,7 +27,7 @@ AddEventHandler('qb-cityhall:server:requestId', function(identityData)
 
     Player.Functions.AddItem(identityData.item, 1, nil, info)
 
-    TriggerClientEvent('inventory:client:ItemBox', src, DGCore.Shared.Items[identityData.item], 'add')
+    TriggerClientEvent('inventory:client:ItemBox', src, exports["dg-inventory"]:GetItemData()[identityData.item], 'add')
 end)
 
 

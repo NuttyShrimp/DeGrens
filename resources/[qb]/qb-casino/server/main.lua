@@ -43,7 +43,7 @@ end)
 
         if Player ~= nil then
             Player.Functions.RemoveItem("casinochips", amount)
-            TriggerClientEvent('inventory:client:ItemBox', source, DGCore.Shared.Items['casinochips'], "remove")
+            TriggerClientEvent('inventory:client:ItemBox', source, exports["dg-inventory"]:GetItemData()['casinochips'], "remove")
             TriggerEvent("qb-log:server:CreateLog", "casino", "Chips", "yellow", "**"..GetPlayerName(source) .. "** put $"..amount.." in table")
         end
     end)
@@ -53,7 +53,7 @@ end)
 
         if Player ~= nil then
             Player.Functions.AddItem("casinochips", amount)
-            TriggerClientEvent('inventory:client:ItemBox', source, DGCore.Shared.Items['casinochips'], "add")
+            TriggerClientEvent('inventory:client:ItemBox', source, exports["dg-inventory"]:GetItemData()['casinochips'], "add")
             TriggerEvent("qb-log:server:CreateLog", "casino", "Chips", "red", "**"..GetPlayerName(source) .. "** got $"..amount.." from table table and he won the double")
         end
     end)

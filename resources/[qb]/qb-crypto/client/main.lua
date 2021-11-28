@@ -1,7 +1,7 @@
 -- Variables
 local DGCore = exports['dg-core']:GetCoreObject()
 local requiredItemsShowed = false
-local requiredItems = {[1] = {name = DGCore.Shared.Items["cryptostick"]["name"], image = DGCore.Shared.Items["cryptostick"]["image"]}}
+local requiredItems = {}
 
 -- Functions
 
@@ -61,6 +61,11 @@ local function HackingSuccess(success)
 end
 
 CreateThread(function()
+    Citizen.Wait(500)
+    requiredItems = {
+        [1] = {name = exports["dg-inventory"]:GetItemData()["cryptostick"]["name"], image = exports["dg-inventory"]:GetItemData()["cryptostick"]["image"]}
+    }
+
 	while true do
 		sleep = 5000
 		if LocalPlayer.state['isLoggedIn'] then

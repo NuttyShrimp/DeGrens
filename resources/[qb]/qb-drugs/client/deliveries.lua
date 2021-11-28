@@ -236,7 +236,7 @@ function requestDelivery()
         TriggerServerEvent('qb-phone:server:sendNewMail', {
             sender = Config.Dealers[currentDealer]["name"],
             subject = "Delivery Location",
-            message = "Here is all info about the delivery, <br>Items: <br> "..amount.."x "..DGCore.Shared.Items[waitingDelivery["itemData"]["item"]]["label"].."<br><br> be in time!!",
+            message = "Here is all info about the delivery, <br>Items: <br> "..amount.."x "..exports["dg-inventory"]:GetItemData()[waitingDelivery["itemData"]["item"]]["label"].."<br><br> be in time!!",
             button = {
                 enabled = true,
                 buttonEvent = "qb-drugs:client:setLocation",
@@ -299,7 +299,7 @@ AddEventHandler('qb-drugs:client:setLocation', function(locationData)
                 if dist < 15 then
                     inDeliveryRange = true
                     if dist < 1.5 then
-                        DrawText3D(activeDelivery["coords"]["x"], activeDelivery["coords"]["y"], activeDelivery["coords"]["z"], '[E] '..activeDelivery["amount"]..'x '..DGCore.Shared.Items[activeDelivery["itemData"]["item"]]["label"]..' deliver.')
+                        DrawText3D(activeDelivery["coords"]["x"], activeDelivery["coords"]["y"], activeDelivery["coords"]["z"], '[E] '..activeDelivery["amount"]..'x '..exports["dg-inventory"]:GetItemData()[activeDelivery["itemData"]["item"]]["label"]..' deliver.')
 
                         if IsControlJustPressed(0, 38) then
                             deliverStuff(activeDelivery)

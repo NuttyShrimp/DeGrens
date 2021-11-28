@@ -33,12 +33,12 @@ AddEventHandler('qb-ifruitstore:server:SafeReward', function()
     local Player = DGCore.Functions.GetPlayer(src)
     Player.Functions.AddMoney('cash', math.random(1500, 2000), "robbery-ifruit")
     Player.Functions.AddItem("certificate", certificateAmount)
-    TriggerClientEvent('inventory:client:ItemBox', src, DGCore.Shared.Items["certificate"], "add")
+    TriggerClientEvent('inventory:client:ItemBox', src, exports["dg-inventory"]:GetItemData()["certificate"], "add")
     Citizen.Wait(500)
     local luck = math.random(1, 100)
     if luck <= 10 then
         Player.Functions.AddItem("goldbar", math.random(1, 2))
-        TriggerClientEvent('inventory:client:ItemBox', src, DGCore.Shared.Items["goldbar"], "add")
+        TriggerClientEvent('inventory:client:ItemBox', src, exports["dg-inventory"]:GetItemData()["goldbar"], "add")
     end
 end)
 
@@ -59,7 +59,7 @@ AddEventHandler('qb-ifruitstore:server:itemReward', function(spot)
     local item = Config.Locations["takeables"][spot].reward
 
     if Player.Functions.AddItem(item.name, item.amount) then
-        TriggerClientEvent('inventory:client:ItemBox', src, DGCore.Shared.Items[item.name], 'add')
+        TriggerClientEvent('inventory:client:ItemBox', src, exports["dg-inventory"]:GetItemData()[item.name], 'add')
     else
         TriggerClientEvent('DGCore:Notify', src, 'You have to much in your pocket ..', 'error')
     end    

@@ -1,6 +1,6 @@
 DGCore = {}
 DGCore.Config = QBConfig
-DGCore.Shared = QBShared
+DGCore.Shared = DGShared
 DGCore.ServerCallbacks = {}
 DGCore.UseableItems = {}
 
@@ -26,3 +26,4 @@ CreateThread(function()
         end
     end
 end)
+

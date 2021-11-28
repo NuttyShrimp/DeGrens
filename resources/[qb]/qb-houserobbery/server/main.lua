@@ -7,7 +7,7 @@ end)
 RegisterServerEvent('qb-houserobbery:server:enterHouse')
 AddEventHandler('qb-houserobbery:server:enterHouse', function(house)
     local src = source
-    local itemInfo = DGCore.Shared.Items["lockpick"]
+    local itemInfo = exports["dg-inventory"]:GetItemData()["lockpick"]
     local Player = DGCore.Functions.GetPlayer(src)
     
     if not Config.Houses[house]["opened"] then
@@ -57,15 +57,15 @@ AddEventHandler('qb-houserobbery:server:searchCabin', function(cabin, house)
 
         for i = 1, itemCount, 1 do
             local randomItem = Config.Rewards[Tier][Config.Houses[house]["furniture"][cabin]["type"]][math.random(1, #Config.Rewards[Tier][Config.Houses[house]["furniture"][cabin]["type"]])]
-            local itemInfo = DGCore.Shared.Items[randomItem]
+            local itemInfo = exports["dg-inventory"]:GetItemData()[randomItem]
             if math.random(1, 100) == 69 then
                 randomItem = "painkillers"
-                itemInfo = DGCore.Shared.Items[randomItem]
+                itemInfo = exports["dg-inventory"]:GetItemData()[randomItem]
                 Player.Functions.AddItem(randomItem, 2)
                 TriggerClientEvent('inventory:client:ItemBox', src, itemInfo, "add")
             elseif math.random(1, 100) == 35 then
                     randomItem = "weed_og-kush_seed"
-                    itemInfo = DGCore.Shared.Items[randomItem]
+                    itemInfo = exports["dg-inventory"]:GetItemData()[randomItem]
                     Player.Functions.AddItem(randomItem, 1)
                     TriggerClientEvent('inventory:client:ItemBox', src, itemInfo, "add")
             else

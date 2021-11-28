@@ -158,14 +158,14 @@ AddEventHandler('qb-diving:server:SellCoral', function()
             if Item.amount > 1 then
                 for i = 1, Item.amount, 1 do
                     Player.Functions.RemoveItem(Item.name, 1)
-                    TriggerClientEvent('inventory:client:ItemBox', src, DGCore.Shared.Items[Item.name], "remove")
+                    TriggerClientEvent('inventory:client:ItemBox', src, exports["dg-inventory"]:GetItemData()[Item.name], "remove")
                     Player.Functions.AddMoney('cash', math.ceil((Reward / Item.amount)), "sold-coral")
                     Citizen.Wait(250)
                 end
             else
                 Player.Functions.RemoveItem(Item.name, 1)
                 Player.Functions.AddMoney('cash', Reward, "sold-coral")
-                TriggerClientEvent('inventory:client:ItemBox', src, DGCore.Shared.Items[Item.name], "remove")
+                TriggerClientEvent('inventory:client:ItemBox', src, exports["dg-inventory"]:GetItemData()[Item.name], "remove")
             end
         end
     else

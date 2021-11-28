@@ -193,7 +193,7 @@ function AddHouseItem(traphouseId, slot, itemName, amount, info, source)
     if Config.TrapHouses[traphouseId].inventory[slot] ~= nil and Config.TrapHouses[traphouseId].inventory[slot].name == itemName then
         Config.TrapHouses[traphouseId].inventory[slot].amount = Config.TrapHouses[traphouseId].inventory[slot].amount + amount
     else
-        local itemInfo = DGCore.Shared.Items[itemName:lower()]
+        local itemInfo = exports["dg-inventory"]:GetItemData()[itemName:lower()]
         Config.TrapHouses[traphouseId].inventory[slot] = {
             name = itemInfo["name"],
             amount = amount,
@@ -202,7 +202,7 @@ function AddHouseItem(traphouseId, slot, itemName, amount, info, source)
             description = itemInfo["description"] ~= nil and itemInfo["description"] or "",
             weight = itemInfo["weight"], 
             type = itemInfo["type"], 
-            unique = itemInfo["unique"], 
+            stackable = itemInfo["stackable"], 
             useable = itemInfo["useable"], 
             image = itemInfo["image"],
             slot = slot,
@@ -264,7 +264,7 @@ AddEventHandler('qb-traphouse:server:RobNpc', function(Traphouse)
             label = "Traphouse Pincode: "..Config.TrapHouses[Traphouse].pincode
         }
         Player.Functions.AddItem("stickynote", 1, false, info)
-        TriggerClientEvent('inventory:client:ItemBox', src, DGCore.Shared.Items["stickynote"], "add")
+        TriggerClientEvent('inventory:client:ItemBox', src, exports["dg-inventory"]:GetItemData()["stickynote"], "add")
     else
         local amount = math.random(1, 80)
         Player.Functions.AddMoney('cash', amount)

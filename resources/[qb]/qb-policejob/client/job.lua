@@ -80,7 +80,7 @@ end
 local function SetCarItemsInfo()
 	local items = {}
 	for k, item in pairs(Config.CarItems) do
-		local itemInfo = DGCore.Shared.Items[item.name:lower()]
+		local itemInfo = exports["dg-inventory"]:GetItemData()[item.name:lower()]
 		items[item.slot] = {
 			name = itemInfo["name"],
 			amount = tonumber(item.amount),
@@ -89,7 +89,7 @@ local function SetCarItemsInfo()
 			description = itemInfo["description"] and itemInfo["description"] or "",
 			weight = itemInfo["weight"], 
 			type = itemInfo["type"], 
-			unique = itemInfo["unique"], 
+			stackable = itemInfo["stackable"], 
 			useable = itemInfo["useable"], 
 			image = itemInfo["image"],
 			slot = item.slot,

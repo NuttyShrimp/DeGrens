@@ -219,7 +219,7 @@ Citizen.CreateThread(function()
 
 							if IsControlJustReleased(0, 38) then
 								TriggerServerEvent('DGCore:Server:AddItem', "weapon_petrolcan", 1)
-								TriggerEvent("inventory:client:ItemBox", DGCore.Shared.Items["weapon_petrolcan"], "add")
+								TriggerEvent("inventory:client:ItemBox", exports["dg-inventory"]:GetItemData()["weapon_petrolcan"], "add")
 								TriggerServerEvent('fuel:pay', Config.JerryCanCost, GetPlayerServerId(PlayerId()))
 							end
 						else
