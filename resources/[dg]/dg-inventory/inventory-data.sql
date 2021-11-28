@@ -1,34 +1,3 @@
--- table for items in saved inventories
-
-CREATE TABLE IF NOT EXISTS `inventoryitems` (
-  `inventorytype` varchar(10) NOT NULL,
-  `inventoryid` varchar(50) NOT NULL,
-  `slot` int(11) NOT NULL,
-  `name` varchar(50) DEFAULT NULL,
-  `info` longtext DEFAULT NULL,
-  `amount` int(11) DEFAULT NULL,
-  `quality` int(11) DEFAULT NULL,
-  `createtime` int(11) DEFAULT NULL,
-  PRIMARY KEY (`inventorytype`,`inventoryid`,`slot`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
--- table for all items ingame
-CREATE TABLE IF NOT EXISTS `items` (
-  `name` varchar(50) NOT NULL,
-  `label` varchar(50) DEFAULT NULL,
-  `weight` int(11) DEFAULT NULL,
-  `type` varchar(10) DEFAULT NULL,
-  `ammotype` varchar(32) DEFAULT NULL,
-  `stackable` tinyint(1) DEFAULT NULL,
-  `usable` tinyint(1) DEFAULT NULL,
-  `shouldClose` tinyint(1) DEFAULT NULL,
-  `combinable` text DEFAULT NULL,
-  `decayrate` int(11) DEFAULT NULL,
-  `image` varchar(50) DEFAULT NULL,
-  `description` text DEFAULT NULL,
-  PRIMARY KEY (`name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
 INSERT INTO `items` (`name`, `label`, `weight`, `type`, `ammotype`, `stackable`, `usable`, `shouldClose`, `combinable`, `decayrate`, `image`, `description`) VALUES
 ('10kgoldchain', '10k Gold Chain', 2000, 'item', NULL, 0, 0, 1, NULL, NULL, '10kgoldchain.png', '10 carat golden chain'),
 ('acetone', 'Acetone', 200, 'item', NULL, 0, 1, 0, NULL, NULL, 'chemical2.png', 'Breathing moderate amounts for a short amount of time can irritate your nose, throat, lungs and eyes'),
