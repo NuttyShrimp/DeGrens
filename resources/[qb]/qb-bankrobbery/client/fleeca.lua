@@ -79,11 +79,11 @@ end)
 Citizen.CreateThread(function()
     Citizen.Wait(2000)
     local requiredItems = {
-        [1] = {name = DGCore.Shared.Items["electronickit"]["name"], image = DGCore.Shared.Items["electronickit"]["image"]},
-        [2] = {name = DGCore.Shared.Items["trojan_usb"]["name"], image = DGCore.Shared.Items["trojan_usb"]["image"]},
+        [1] = {name = exports["dg-inventory"]:GetItemData()["electronickit"]["name"], image = exports["dg-inventory"]:GetItemData()["electronickit"]["image"]},
+        [2] = {name = exports["dg-inventory"]:GetItemData()["trojan_usb"]["name"], image = exports["dg-inventory"]:GetItemData()["trojan_usb"]["image"]},
     }
     local requiredItems2 = {
-        [1] = {name = DGCore.Shared.Items["thermite"]["name"], image = DGCore.Shared.Items["thermite"]["image"]},
+        [1] = {name = exports["dg-inventory"]:GetItemData()["thermite"]["name"], image = exports["dg-inventory"]:GetItemData()["thermite"]["image"]},
     }
     while true do
         local ped = PlayerPedId()
@@ -182,9 +182,9 @@ AddEventHandler('electronickit:UseElectronickit', function()
                                             StopAnimTask(PlayerPedId(), "anim@gangops@facility@servers@", "hotwire", 1.0)
                                             
                                             TriggerServerEvent("DGCore:Server:RemoveItem", "electronickit", 1)
-                                            TriggerEvent('inventory:client:ItemBox', DGCore.Shared.Items["electronickit"], "remove")
+                                            TriggerEvent('inventory:client:ItemBox', exports["dg-inventory"]:GetItemData()["electronickit"], "remove")
                                             TriggerServerEvent("DGCore:Server:RemoveItem", "trojan_usb", 1)
-                                            TriggerEvent('inventory:client:ItemBox', DGCore.Shared.Items["trojan_usb"], "remove")
+                                            TriggerEvent('inventory:client:ItemBox', exports["dg-inventory"]:GetItemData()["trojan_usb"], "remove")
 
                                             TriggerEvent("mhacking:show")
                                             TriggerEvent("mhacking:start", math.random(6, 7), math.random(12, 15), OnHackDone)

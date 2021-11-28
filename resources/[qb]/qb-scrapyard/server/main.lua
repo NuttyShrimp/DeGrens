@@ -30,7 +30,7 @@ RegisterNetEvent('qb-scrapyard:server:ScrapVehicle', function(listKey)
         for i = 1, math.random(2, 4), 1 do
             local item = Config.Items[math.random(1, #Config.Items)]
             Player.Functions.AddItem(item, math.random(25, 45))
-            TriggerClientEvent('inventory:client:ItemBox', src, DGCore.Shared.Items[item], 'add')
+            TriggerClientEvent('inventory:client:ItemBox', src, exports["dg-inventory"]:GetItemData()[item], 'add')
             Citizen.Wait(500)
         end
         local Luck = math.random(1, 8)
@@ -38,7 +38,7 @@ RegisterNetEvent('qb-scrapyard:server:ScrapVehicle', function(listKey)
         if Luck == Odd then
             local random = math.random(10, 20)
             Player.Functions.AddItem("rubber", random)
-            TriggerClientEvent('inventory:client:ItemBox', src, DGCore.Shared.Items["rubber"], 'add')
+            TriggerClientEvent('inventory:client:ItemBox', src, exports["dg-inventory"]:GetItemData()["rubber"], 'add')
 
         end
         Config.CurrentVehicles[listKey] = nil

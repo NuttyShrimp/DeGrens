@@ -5,10 +5,6 @@ description "DG-Peek"
 
 ui_page "html/index.html"
 
-shared_scripts {
-    "@qb-core/import.lua"
-}
-
 client_scripts {
 	"@PolyZone/client.lua",
 	"@PolyZone/BoxZone.lua",

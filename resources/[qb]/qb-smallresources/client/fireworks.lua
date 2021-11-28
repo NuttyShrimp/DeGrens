@@ -84,7 +84,7 @@ AddEventHandler("fireworks:client:UseFirework", function(itemName, assetName)
     }, {}, {}, function() -- Done
         StopAnimTask(PlayerPedId(), "anim@narcotics@trash", "drop_front", 1.0)
         TriggerServerEvent("DGCore:Server:RemoveItem", itemName, 1)
-        TriggerEvent("inventory:client:ItemBox", DGCore.Shared.Items[itemName], "remove")
+        TriggerEvent("inventory:client:ItemBox", exports["dg-inventory"]:GetItemData()[itemName], "remove")
         local pos = GetEntityCoords(PlayerPedId())
         DoFireWork(assetName, pos)
     end, function() -- Cancel

@@ -28,7 +28,7 @@ Citizen.CreateThread(function()
                     if not Config.Locations["thermite"].isDone then 
                         if not requiredItemsShowed then
                             requiredItems = {
-                                [1] = {name = DGCore.Shared.Items["thermite"]["name"], image = DGCore.Shared.Items["thermite"]["image"]},
+                                [1] = {name = exports["dg-inventory"]:GetItemData()["thermite"]["name"], image = exports["dg-inventory"]:GetItemData()["thermite"]["image"]},
                             }
                             requiredItemsShowed = true
                             TriggerEvent('inventory:client:requiredItems', requiredItems, true)
@@ -38,7 +38,7 @@ Citizen.CreateThread(function()
             else
                 if requiredItemsShowed then
                     requiredItems = {
-                        [1] = {name = DGCore.Shared.Items["thermite"]["name"], image = DGCore.Shared.Items["thermite"]["image"]},
+                        [1] = {name = exports["dg-inventory"]:GetItemData()["thermite"]["name"], image = exports["dg-inventory"]:GetItemData()["thermite"]["image"]},
                     }
                     requiredItemsShowed = false
                     TriggerEvent('inventory:client:requiredItems', requiredItems, false)
@@ -63,7 +63,7 @@ Citizen.CreateThread(function()
                     if dist < 0.6 then
                         if not requiredItemsShowed2 then
                             requiredItems = {
-                                [1] = {name = DGCore.Shared.Items["advancedlockpick"]["name"], image = DGCore.Shared.Items["advancedlockpick"]["image"]},
+                                [1] = {name = exports["dg-inventory"]:GetItemData()["advancedlockpick"]["name"], image = exports["dg-inventory"]:GetItemData()["advancedlockpick"]["image"]},
                             }
                             requiredItemsShowed2 = true
                             TriggerEvent('inventory:client:requiredItems', requiredItems, true)
@@ -92,7 +92,7 @@ Citizen.CreateThread(function()
                     else
                         if requiredItemsShowed2 then
                             requiredItems = {
-                                [1] = {name = DGCore.Shared.Items["advancedlockpick"]["name"], image = DGCore.Shared.Items["advancedlockpick"]["image"]},
+                                [1] = {name = exports["dg-inventory"]:GetItemData()["advancedlockpick"]["name"], image = exports["dg-inventory"]:GetItemData()["advancedlockpick"]["image"]},
                             }
                             requiredItemsShowed2 = false
                             TriggerEvent('inventory:client:requiredItems', requiredItems, false)
@@ -104,7 +104,7 @@ Citizen.CreateThread(function()
             if not inRange then
                 if requiredItemsShowed2 then
                     requiredItems = {
-                        [1] = {name = DGCore.Shared.Items["advancedlockpick"]["name"], image = DGCore.Shared.Items["advancedlockpick"]["image"]},
+                        [1] = {name = exports["dg-inventory"]:GetItemData()["advancedlockpick"]["name"], image = exports["dg-inventory"]:GetItemData()["advancedlockpick"]["image"]},
                     }
                     requiredItemsShowed2 = false
                     TriggerEvent('inventory:client:requiredItems', requiredItems, false)
@@ -129,7 +129,7 @@ function lockpickDone(success)
         end
         if math.random(1, 100) <= 10 then
             TriggerServerEvent("DGCore:Server:RemoveItem", "advancedlockpick", 1)
-            TriggerEvent('inventory:client:ItemBox', DGCore.Shared.Items["advancedlockpick"], "remove")
+            TriggerEvent('inventory:client:ItemBox', exports["dg-inventory"]:GetItemData()["advancedlockpick"], "remove")
         end
     end
 end
@@ -224,7 +224,7 @@ AddEventHandler('thermite:UseThermite', function()
             end
             if requiredItemsShowed then
                 requiredItems = {
-                    [1] = {name = DGCore.Shared.Items["thermite"]["name"], image = DGCore.Shared.Items["thermite"]["image"]},
+                    [1] = {name = exports["dg-inventory"]:GetItemData()["thermite"]["name"], image = exports["dg-inventory"]:GetItemData()["thermite"]["image"]},
                 }
                 requiredItemsShowed = false
                 TriggerEvent('inventory:client:requiredItems', requiredItems, false)
@@ -309,7 +309,7 @@ RegisterNUICallback('thermitefailed', function()
     PlaySound(-1, "Place_Prop_Fail", "DLC_Dmod_Prop_Editor_Sounds", 0, 0, 1)
     TriggerServerEvent("qb-ifruitstore:server:SetThermiteStatus", "isBusy", false)
     TriggerServerEvent("DGCore:Server:RemoveItem", "thermite", 1)
-    TriggerEvent('inventory:client:ItemBox', DGCore.Shared.Items["thermite"], "remove")
+    TriggerEvent('inventory:client:ItemBox', exports["dg-inventory"]:GetItemData()["thermite"], "remove")
     local coords = GetEntityCoords(PlayerPedId())
     local randTime = math.random(10000, 15000)
     CreateFire(coords, randTime)

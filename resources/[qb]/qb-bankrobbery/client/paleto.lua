@@ -4,11 +4,11 @@ local requiredItemsShowed2 = false
 Citizen.CreateThread(function()
     Citizen.Wait(2000)
     local requiredItems = {
-        [1] = {name = DGCore.Shared.Items["security_card_01"]["name"], image = DGCore.Shared.Items["security_card_01"]["image"]},
+        [1] = {name = exports["dg-inventory"]:GetItemData()["security_card_01"]["name"], image = exports["dg-inventory"]:GetItemData()["security_card_01"]["image"]},
     }
 
     local requiredItems2 = {
-        [1] = {name = DGCore.Shared.Items["thermite"]["name"], image = DGCore.Shared.Items["thermite"]["image"]},
+        [1] = {name = exports["dg-inventory"]:GetItemData()["thermite"]["name"], image = exports["dg-inventory"]:GetItemData()["thermite"]["image"]},
     }
     while true do
         local ped = PlayerPedId()

@@ -188,7 +188,7 @@ Citizen.CreateThread(function()
             local PlayerPed = PlayerPedId()
             local player = PlayerId()
             local CurrentWeapon = GetSelectedPedWeapon(PlayerPed)
-            local WeaponInformation = DGCore.Shared.Weapons[CurrentWeapon]
+            local WeaponInformation = exports["dg-inventory"]:GetItemData()[CurrentWeapon]
 
             if WeaponInformation["name"] ~= "weapon_unarmed" then
                 DGCore.Functions.TriggerCallback('qb-anticheat:server:HasWeaponInInventory', function(HasWeapon)

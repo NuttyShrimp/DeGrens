@@ -1,34 +1,38 @@
+DGCore = exports['dg-core']:GetCoreObject()
+
 local PlayerData
 local Players, Entities, Models, Zones, PedFlags =  {}, {}, {}, {}, {}
 local playerPed, currentFlag, targetActive, hasFocus, success, AllowTarget, sendData = PlayerPedId(), 30, false, false, false, true, nil
 
+local targettedPlayer = nil
+
 AddEventHandler("onResourceStart", function(resourceName)
     if resourceName ~= GetCurrentResourceName() then return end
-    PlayerData = QBCore.Functions.GetPlayerData()
+    PlayerData = DGCore.Functions.GetPlayerData()
 end)
 
-RegisterNetEvent("QBCore:Client:OnPlayerLoaded")
-AddEventHandler("QBCore:Client:OnPlayerLoaded", function()
-    PlayerData = QBCore.Functions.GetPlayerData()
+RegisterNetEvent("DGCore:Client:OnPlayerLoaded")
+AddEventHandler("DGCore:Client:OnPlayerLoaded", function()
+    PlayerData = DGCore.Functions.GetPlayerData()
 end)
 
-RegisterNetEvent("QBCore:Client:OnPlayerUnload")
-AddEventHandler("QBCore:Client:OnPlayerUnload", function()
+RegisterNetEvent("DGCore:Client:OnPlayerUnload")
+AddEventHandler("DGCore:Client:OnPlayerUnload", function()
     PlayerData = {}
 end)
 
-RegisterNetEvent("QBCore:Client:OnJobUpdate")
-AddEventHandler("QBCore:Client:OnJobUpdate", function(JobInfo)
+RegisterNetEvent("DGCore:Client:OnJobUpdate")
+AddEventHandler("DGCore:Client:OnJobUpdate", function(JobInfo)
     PlayerData.job = JobInfo
 end)
 
-RegisterNetEvent("QBCore:Client:OnGangUpdate")
-AddEventHandler("QBCore:Client:OnGangUpdate", function(GangInfo)
+RegisterNetEvent("DGCore:Client:OnGangUpdate")
+AddEventHandler("DGCore:Client:OnGangUpdate", function(GangInfo)
     PlayerData.gang = GangInfo
 end)
 
-RegisterNetEvent("QBCore:Client:SetPlayerData")
-AddEventHandler("QBCore:Client:SetPlayerData", function(data)
+RegisterNetEvent("DGCore:Client:SetPlayerData")
+AddEventHandler("DGCore:Client:SetPlayerData", function(data)
     PlayerData = data
 end)
 
@@ -128,6 +132,10 @@ function EnableTarget()
         while targetActive do
 			local playerCoords = GetEntityCoords(playerPed)
 			local hit, coords, entity, entityType = RaycastCamera(SwitchFlag())
+            
+            if entityType ~= 1 then
+                targettedPlayer = nil
+            end 
 
 			if entityType > 0 then
 				if NetworkGetEntityIsNetworked(entity) then
@@ -139,9 +147,25 @@ function EnableTarget()
 
                 if entityType == 1 then
                     if IsPedAPlayer(entity) then
-                        local data = Players
-                        if data then
-                            CheckEntity(hit, data, entity, #(playerCoords - coords))
+                        if not targettedPlayer then
+                            Citizen.CreateThread(function()
+                                targettedPlayer = entity
+    
+                                local counter = 0
+                                while targettedPlayer and targettedPlayer == entity do
+                                    Citizen.Wait(100)
+                                    counter = counter + 1
+                                    if counter >= 20 then
+                                        local data = Players
+                                        if data then
+                                            CheckEntity(hit, data, entity, #(playerCoords - coords))
+                                        end
+                                        break
+                                    end
+                                end
+                                
+                                targettedPlayer = nil
+                            end)
                         end
                     else
                         local data = PedFlags[Entity(entity).state.flagName]
@@ -149,7 +173,7 @@ function EnableTarget()
                             CheckEntity(hit, data, entity, #(playerCoords - coords))
                         end 
                     end
-                elseif entityType >= 2 then
+                elseif entityType >= 2 then    
                     local data = Models[GetEntityModel(entity)]
                     if data then
                         CheckEntity(hit, data, entity, #(playerCoords - coords))
@@ -251,7 +275,9 @@ function CheckEntity(hit, datatable, entity, distance)
 			send_options[slot] = data
 			send_options[slot].entity = entity
 			send_distance[data.distance] = true
-		else send_distance[data.distance] = false end
+		else 
+            send_distance[data.distance] = false 
+        end
 	end
 
 	sendData = send_options
@@ -294,11 +320,13 @@ function CheckIfReleasedButtonOrLeftTarget()
 end
 
 function CheckOptions(data, entity, distance)
-    if (not data.distance or distance <= data.distance)
-    and (not data.job or data.job == PlayerData.job.name or (data.job[PlayerData.job.name] and data.job[PlayerData.job.name] <= PlayerData.job.grade.level))
-    and (not data.gang or data.gang == PlayerData.gang.name or (data.gang[PlayerData.gang.name] and data.gang[PlayerData.gang.name] <= PlayerData.gang.grade.level))
-    and (not data.item or data.item and HasItem(data.item))
-    and (not data.canInteract or data.canInteract(entity, distance, data)) then return true
+    if 
+    (not data.distance or distance <= data.distance) and 
+    (not data.job or data.job == PlayerData.job.name or (data.job[PlayerData.job.name] and data.job[PlayerData.job.name] <= PlayerData.job.grade.level)) and 
+    (not data.gang or data.gang == PlayerData.gang.name or (data.gang[PlayerData.gang.name] and data.gang[PlayerData.gang.name] <= PlayerData.gang.grade.level)) and 
+    (not data.item or data.item and HasItem(data.item)) and 
+    (not data.canInteract or data.canInteract(entity, distance, data)) then 
+        return true
     end
     return false
 end
@@ -601,8 +629,8 @@ RegisterNUICallback("selectTarget", function(option, cb)
                     TriggerServerEvent(data.event, data)
                 elseif data.type == "command" then
                     ExecuteCommand(data.event)
-                elseif data.type == "qbcommand" then
-                    TriggerServerEvent("QBCore:CallCommand", data.event, data)
+                elseif data.type == "dgcommand" then
+                    TriggerServerEvent("DGCore:CallCommand", data.event, data)
                 else
                     TriggerEvent(data.event, data)
                 end

@@ -48,7 +48,7 @@ end)
 RegisterNetEvent("addAttachment", function(component)
     local ped = PlayerPedId()
     local weapon = GetSelectedPedWeapon(ped)
-    local WeaponData = DGCore.Shared.Weapons[weapon]
+    local WeaponData = exports["dg-inventory"]:GetItemData()[weapon]
     GiveWeaponComponentToPed(ped, GetHashKey(WeaponData.name), GetHashKey(component))
 end)
 
@@ -77,7 +77,7 @@ RegisterNetEvent('weapon:client:AddAmmo', function(type, amount, itemData)
     local ped = PlayerPedId()
     local weapon = GetSelectedPedWeapon(ped)
     if CurrentWeaponData then
-        if DGCore.Shared.Weapons[weapon]["name"] ~= "weapon_unarmed" and DGCore.Shared.Weapons[weapon]["ammotype"] == type:upper() then
+        if exports["dg-inventory"]:GetItemData()[weapon]["name"] ~= "weapon_unarmed" and exports["dg-inventory"]:GetItemData()[weapon]["ammotype"] == type:upper() then
             local total = GetAmmoInPedWeapon(ped, weapon)
             local found, maxAmmo = GetMaxAmmo(ped, weapon)
             if total < maxAmmo then
@@ -87,12 +87,12 @@ RegisterNetEvent('weapon:client:AddAmmo', function(type, amount, itemData)
                     disableMouse = false,
                     disableCombat = true,
                 }, {}, {}, {}, function() -- Done
-                    if DGCore.Shared.Weapons[weapon] then
+                    if exports["dg-inventory"]:GetItemData()[weapon] then
                         AddAmmoToPed(ped,weapon,amount)
                         TaskReloadWeapon(ped)
                         TriggerServerEvent("weapons:server:AddWeaponAmmo", CurrentWeaponData, total + amount)
                         TriggerServerEvent('DGCore:Server:RemoveItem', itemData.name, 1, itemData.slot)
-                        TriggerEvent('inventory:client:ItemBox', DGCore.Shared.Items[itemData.name], "remove")
+                        TriggerEvent('inventory:client:ItemBox', exports["dg-inventory"]:GetItemData()[itemData.name], "remove")
                         TriggerEvent('DGCore:Notify', 'Reloaded', "success")
                     end
                 end, function()
@@ -112,7 +112,7 @@ end)
 RegisterNetEvent("weapons:client:EquipAttachment", function(ItemData, attachment)
     local ped = PlayerPedId()
     local weapon = GetSelectedPedWeapon(ped)
-    local WeaponData = DGCore.Shared.Weapons[weapon]
+    local WeaponData = exports["dg-inventory"]:GetItemData()[weapon]
     if weapon ~= GetHashKey("WEAPON_UNARMED") then
         WeaponData.name = WeaponData.name:upper()
         if WeaponAttachments[WeaponData.name] then
@@ -150,6 +150,7 @@ CreateThread(function()
 end)
 
 CreateThread(function()
+    Citizen.Wait(500)
     while true do
         if LocalPlayer.state['isLoggedIn'] then
             local ped = PlayerPedId()
@@ -158,13 +159,13 @@ CreateThread(function()
                     if CanShoot then
                         local weapon = GetSelectedPedWeapon(ped)
                         local ammo = GetAmmoInPedWeapon(ped, weapon)
-                        if DGCore.Shared.Weapons[weapon]["name"] == "weapon_snowball" then
+                        if exports["dg-inventory"]:GetItemData()[weapon]["name"] == "weapon_snowball" then
                             TriggerServerEvent('DGCore:Server:RemoveItem', "snowball", 1)
-                        elseif DGCore.Shared.Weapons[weapon]["name"] == "weapon_pipebomb" then
+                        elseif exports["dg-inventory"]:GetItemData()[weapon]["name"] == "weapon_pipebomb" then
                             TriggerServerEvent('DGCore:Server:RemoveItem', "weapon_pipebomb", 1)
-                        elseif DGCore.Shared.Weapons[weapon]["name"] == "weapon_molotov" then
+                        elseif exports["dg-inventory"]:GetItemData()[weapon]["name"] == "weapon_molotov" then
                             TriggerServerEvent('DGCore:Server:RemoveItem', "weapon_molotov", 1)
-                        elseif DGCore.Shared.Weapons[weapon]["name"] == "weapon_stickybomb" then
+                        elseif exports["dg-inventory"]:GetItemData()[weapon]["name"] == "weapon_stickybomb" then
                             TriggerServerEvent('DGCore:Server:RemoveItem', "weapon_stickybomb", 1)
                         else
                             if ammo > 0 then
@@ -174,7 +175,7 @@ CreateThread(function()
                     else
 			            local weapon = GetSelectedPedWeapon(ped)
                         if weapon ~= -1569615261 then
-                            TriggerEvent('inventory:client:CheckWeapon', DGCore.Shared.Weapons[weapon]["name"])
+                            TriggerEvent('inventory:client:CheckWeapon', exports["dg-inventory"]:GetItemData()[weapon]["name"])
                             DGCore.Functions.Notify("This weapon is broken and can not be used.", "error")
                             MultiplierAmount = 0
                         end
@@ -210,7 +211,7 @@ CreateThread(function()
                         else
                             if CurrentWeaponData and next(CurrentWeaponData) then
                                 if not data.RepairingData.Ready then
-                                    local WeaponData = DGCore.Shared.Weapons[GetHashKey(CurrentWeaponData.name)]
+                                    local WeaponData = exports["dg-inventory"]:GetItemData()[GetHashKey(CurrentWeaponData.name)]
                                     local WeaponClass = (DGCore.Shared.SplitStr(WeaponData.ammotype, "_")[2]):lower()
                                     DrawText3Ds(data.coords.x, data.coords.y, data.coords.z, '[E] Repair Weapon, ~g~$'..Config.WeaponRepairCotsts[WeaponClass]..'~w~')
                                     if IsControlJustPressed(0, 38) then
