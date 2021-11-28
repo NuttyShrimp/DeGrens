@@ -33,11 +33,12 @@ function DrawText3Ds(x, y, z, text)
 end
 
 CreateThread(function()
-    Wait(500)
+    Citizen.Wait(500)
     requiredItems = {
-        [1] = {name = DGCore.Shared.Items["lockpick"]["name"], image = DGCore.Shared.Items["lockpick"]["image"]},
-        [2] = {name = DGCore.Shared.Items["screwdriverset"]["name"], image = DGCore.Shared.Items["screwdriverset"]["image"]},
+        [1] = {name = exports["dg-inventory"]:GetItemData()["lockpick"]["name"], image = exports["dg-inventory"]:GetItemData()["lockpick"]["image"]},
+        [2] = {name = exports["dg-inventory"]:GetItemData()["screwdriverset"]["name"], image = exports["dg-inventory"]:GetItemData()["screwdriverset"]["image"]},
     }
+
     while true do
         inRange = false
         local PlayerPed = PlayerPedId()
@@ -281,13 +282,13 @@ function lockpickFinish(success)
         DGCore.Functions.Notify('It worked!', 'success', 2500)
     else
         if usingAdvanced then
-            local itemInfo = DGCore.Shared.Items["advancedlockpick"]
+            local itemInfo = exports["dg-inventory"]:GetItemData()["advancedlockpick"]
             if math.random(1, 100) < 20 then
                 TriggerServerEvent("DGCore:Server:RemoveItem", "advancedlockpick", 1)
                 TriggerEvent('inventory:client:ItemBox', itemInfo, "remove")
             end
         else
-            local itemInfo = DGCore.Shared.Items["lockpick"]
+            local itemInfo = exports["dg-inventory"]:GetItemData()["lockpick"]
             if math.random(1, 100) < 40 then
                 TriggerServerEvent("DGCore:Server:RemoveItem", "lockpick", 1)
                 TriggerEvent('inventory:client:ItemBox', itemInfo, "remove")

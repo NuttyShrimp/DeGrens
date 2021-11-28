@@ -183,10 +183,10 @@ RegisterNetEvent('DGCore:Server:RemoveItem', function(itemName, amount, slot)
     Player.Functions.RemoveItem(itemName, amount, slot)
 end)
 
-RegisterNetEvent('DGCore:Server:AddItem', function(itemName, amount, slot, info)
+RegisterNetEvent('DGCore:Server:AddItem', function(itemName, amount, slot, info, quality)
     local src = source
     local Player = DGCore.Functions.GetPlayer(src)
-    Player.Functions.AddItem(itemName, amount, slot, info)
+    Player.Functions.AddItem(itemName, amount, slot, info, quality)
 end)
 
 -- Non-Chat Command Calling (ex: qb-adminmenu)

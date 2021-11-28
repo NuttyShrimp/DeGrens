@@ -26,8 +26,8 @@ local Gates = {
 Citizen.CreateThread(function()
     Citizen.Wait(500)
     requiredItems = {
-        [1] = {name = DGCore.Shared.Items["electronickit"]["name"], image = DGCore.Shared.Items["electronickit"]["image"]},
-        [2] = {name = DGCore.Shared.Items["gatecrack"]["name"], image = DGCore.Shared.Items["gatecrack"]["image"]},
+        [1] = {name = exports["dg-inventory"]:GetItemData()["electronickit"]["name"], image = exports["dg-inventory"]:GetItemData()["electronickit"]["image"]},
+        [2] = {name = exports["dg-inventory"]:GetItemData()["gatecrack"]["name"], image = exports["dg-inventory"]:GetItemData()["gatecrack"]["image"]},
     }
     while true do 
         Citizen.Wait(5)

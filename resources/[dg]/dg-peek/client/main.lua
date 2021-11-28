@@ -1,7 +1,10 @@
 DGCore = exports['dg-core']:GetCoreObject()
+
 local PlayerData
 local Players, Entities, Models, Zones, PedFlags =  {}, {}, {}, {}, {}
 local playerPed, currentFlag, targetActive, hasFocus, success, AllowTarget, sendData = PlayerPedId(), 30, false, false, false, true, nil
+
+local targettedPlayer = nil
 
 AddEventHandler("onResourceStart", function(resourceName)
     if resourceName ~= GetCurrentResourceName() then return end
@@ -129,6 +132,10 @@ function EnableTarget()
         while targetActive do
 			local playerCoords = GetEntityCoords(playerPed)
 			local hit, coords, entity, entityType = RaycastCamera(SwitchFlag())
+            
+            if entityType ~= 1 then
+                targettedPlayer = nil
+            end 
 
 			if entityType > 0 then
 				if NetworkGetEntityIsNetworked(entity) then
@@ -140,9 +147,25 @@ function EnableTarget()
 
                 if entityType == 1 then
                     if IsPedAPlayer(entity) then
-                        local data = Players
-                        if data then
-                            CheckEntity(hit, data, entity, #(playerCoords - coords))
+                        if not targettedPlayer then
+                            Citizen.CreateThread(function()
+                                targettedPlayer = entity
+    
+                                local counter = 0
+                                while targettedPlayer and targettedPlayer == entity do
+                                    Citizen.Wait(100)
+                                    counter = counter + 1
+                                    if counter >= 20 then
+                                        local data = Players
+                                        if data then
+                                            CheckEntity(hit, data, entity, #(playerCoords - coords))
+                                        end
+                                        break
+                                    end
+                                end
+                                
+                                targettedPlayer = nil
+                            end)
                         end
                     else
                         local data = PedFlags[Entity(entity).state.flagName]
@@ -150,7 +173,7 @@ function EnableTarget()
                             CheckEntity(hit, data, entity, #(playerCoords - coords))
                         end 
                     end
-                elseif entityType >= 2 then
+                elseif entityType >= 2 then    
                     local data = Models[GetEntityModel(entity)]
                     if data then
                         CheckEntity(hit, data, entity, #(playerCoords - coords))
@@ -252,7 +275,9 @@ function CheckEntity(hit, datatable, entity, distance)
 			send_options[slot] = data
 			send_options[slot].entity = entity
 			send_distance[data.distance] = true
-		else send_distance[data.distance] = false end
+		else 
+            send_distance[data.distance] = false 
+        end
 	end
 
 	sendData = send_options
@@ -295,11 +320,13 @@ function CheckIfReleasedButtonOrLeftTarget()
 end
 
 function CheckOptions(data, entity, distance)
-    if (not data.distance or distance <= data.distance)
-    and (not data.job or data.job == PlayerData.job.name or (data.job[PlayerData.job.name] and data.job[PlayerData.job.name] <= PlayerData.job.grade.level))
-    and (not data.gang or data.gang == PlayerData.gang.name or (data.gang[PlayerData.gang.name] and data.gang[PlayerData.gang.name] <= PlayerData.gang.grade.level))
-    and (not data.item or data.item and HasItem(data.item))
-    and (not data.canInteract or data.canInteract(entity, distance, data)) then return true
+    if 
+    (not data.distance or distance <= data.distance) and 
+    (not data.job or data.job == PlayerData.job.name or (data.job[PlayerData.job.name] and data.job[PlayerData.job.name] <= PlayerData.job.grade.level)) and 
+    (not data.gang or data.gang == PlayerData.gang.name or (data.gang[PlayerData.gang.name] and data.gang[PlayerData.gang.name] <= PlayerData.gang.grade.level)) and 
+    (not data.item or data.item and HasItem(data.item)) and 
+    (not data.canInteract or data.canInteract(entity, distance, data)) then 
+        return true
     end
     return false
 end

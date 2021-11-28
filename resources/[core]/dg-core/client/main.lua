@@ -1,7 +1,7 @@
 DGCore = {}
 DGCore.PlayerData = {}
 DGCore.Config = QBConfig
-DGCore.Shared = QBShared
+DGCore.Shared = DGShared
 DGCore.ServerCallbacks = {}
 
 exports('GetCoreObject', function()

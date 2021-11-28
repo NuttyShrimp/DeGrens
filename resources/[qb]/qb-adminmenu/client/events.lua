@@ -122,12 +122,12 @@ RegisterNetEvent('qb-weapons:client:SetWeaponAmmoManual', function(weapon, ammo)
     if weapon ~= "current" then
         local weapon = weapon:upper()
         SetPedAmmo(ped, GetHashKey(weapon), ammo)
-        DGCore.Functions.Notify('+'..ammo..' Ammo for the '..DGCore.Shared.Weapons[GetHashKey(weapon)]["label"], 'success')
+        DGCore.Functions.Notify('+'..ammo..' Ammo for the '..exports["dg-inventory"]:GetItemData()[GetHashKey(weapon)]["label"], 'success')
     else
         local weapon = GetSelectedPedWeapon(ped)
         if weapon ~= nil then
             SetPedAmmo(ped, weapon, ammo)
-            DGCore.Functions.Notify('+'..ammo..' Ammo for the '..DGCore.Shared.Weapons[weapon]["label"], 'success')
+            DGCore.Functions.Notify('+'..ammo..' Ammo for the '..exports["dg-inventory"]:GetItemData()[weapon]["label"], 'success')
         else
             DGCore.Functions.Notify('You dont have a weapon in your hands..', 'error')
         end

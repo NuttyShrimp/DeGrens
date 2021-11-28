@@ -372,12 +372,12 @@ RegisterNUICallback('fail', function()
     if usingAdvanced then
         if math.random(1, 100) < 20 then
             TriggerServerEvent("DGCore:Server:RemoveItem", "advancedlockpick", 1)
-            TriggerEvent('inventory:client:ItemBox', DGCore.Shared.Items["advancedlockpick"], "remove")
+            TriggerEvent('inventory:client:ItemBox', exports["dg-inventory"]:GetItemData()["advancedlockpick"], "remove")
         end
     else
         if math.random(1, 100) < 40 then
             TriggerServerEvent("DGCore:Server:RemoveItem", "lockpick", 1)
-            TriggerEvent('inventory:client:ItemBox', DGCore.Shared.Items["lockpick"], "remove")
+            TriggerEvent('inventory:client:ItemBox', exports["dg-inventory"]:GetItemData()["lockpick"], "remove")
         end
     end
     if (IsWearingHandshoes() and math.random(1, 100) <= 25) then

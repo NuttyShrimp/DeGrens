@@ -326,35 +326,77 @@ function DGCore.Player.CreatePlayer(PlayerData)
         return false
     end
 
-    self.Functions.AddItem = function(item, amount, slot, info)
+    self.Functions.AddItem = function(item, amount, slot, info, quality, createtime)
         local totalWeight = DGCore.Player.GetTotalWeight(self.PlayerData.items)
-        local itemInfo = DGCore.Shared.Items[item:lower()]
+        local itemInfo = exports["dg-inventory"]:GetItemData()[item:lower()]
         if itemInfo == nil then
             TriggerClientEvent('DGCore:Notify', self.PlayerData.source, 'Item Does Not Exist', 'error')
             return
         end
+
         local amount = tonumber(amount)
         local slot = tonumber(slot) or DGCore.Player.GetFirstSlotByItem(self.PlayerData.items, item)
+        local quality = tonumber(quality) or 100
+
+        local createtime = tonumber(createtime) or os.time()
+
         if itemInfo['type'] == 'weapon' and info == nil then
             info = {
                 serie = tostring(DGCore.Shared.RandomInt(2) .. DGCore.Shared.RandomStr(3) .. DGCore.Shared.RandomInt(1) .. DGCore.Shared.RandomStr(2) .. DGCore.Shared.RandomInt(3) .. DGCore.Shared.RandomStr(4)),
             }
         end
+
         if (totalWeight + (itemInfo['weight'] * amount)) <= DGCore.Config.Player.MaxWeight then
-            if (slot and self.PlayerData.items[slot]) and (self.PlayerData.items[slot].name:lower() == item:lower()) and (itemInfo['type'] == 'item' and not itemInfo['unique']) then
+            if (slot and self.PlayerData.items[slot]) and (self.PlayerData.items[slot].name:lower() == item:lower()) and (itemInfo['type'] == 'item' and not itemInfo['stackable']) then
                 self.PlayerData.items[slot].amount = self.PlayerData.items[slot].amount + amount
                 self.Functions.UpdatePlayerData()
                 TriggerEvent('qb-log:server:CreateLog', 'playerinventory', 'AddItem', 'green', '**' .. GetPlayerName(self.PlayerData.source) .. ' (citizenid: ' .. self.PlayerData.citizenid .. ' | id: ' .. self.PlayerData.source .. ')** got item: [slot:' .. slot .. '], itemname: ' .. self.PlayerData.items[slot].name .. ', added amount: ' .. amount .. ', new total amount: ' .. self.PlayerData.items[slot].amount)
                 return true
-            elseif (not itemInfo['unique'] and slot or slot and self.PlayerData.items[slot] == nil) then
-                self.PlayerData.items[slot] = { name = itemInfo['name'], amount = amount, info = info or '', label = itemInfo['label'], description = itemInfo['description'] or '', weight = itemInfo['weight'], type = itemInfo['type'], unique = itemInfo['unique'], useable = itemInfo['useable'], image = itemInfo['image'], shouldClose = itemInfo['shouldClose'], slot = slot, combinable = itemInfo['combinable'] }
+            elseif (not itemInfo['stackable'] and slot or slot and self.PlayerData.items[slot] == nil) then
+                self.PlayerData.items[slot] = { 
+                    name = itemInfo['name'], 
+                    label = itemInfo['label'], 
+                    weight = itemInfo['weight'], 
+                    type = itemInfo['type'], 
+                    ammotype = itemInfo['ammotype'], 
+                    stackable = itemInfo['stackable'], 
+                    useable = itemInfo['useable'], 
+                    shouldClose = itemInfo['shouldClose'],
+                    combinable = itemInfo['combinable'], 
+                    decayrate = itemInfo["decayrate"], 
+                    image = itemInfo['image'], 
+                    description = itemInfo['description'] or '',
+                    slot = slot,  
+                    amount = amount, 
+                    info = info or '', 
+                    quality = quality,
+                    createtime = createtime,
+                }
                 self.Functions.UpdatePlayerData()
                 TriggerEvent('qb-log:server:CreateLog', 'playerinventory', 'AddItem', 'green', '**' .. GetPlayerName(self.PlayerData.source) .. ' (citizenid: ' .. self.PlayerData.citizenid .. ' | id: ' .. self.PlayerData.source .. ')** got item: [slot:' .. slot .. '], itemname: ' .. self.PlayerData.items[slot].name .. ', added amount: ' .. amount .. ', new total amount: ' .. self.PlayerData.items[slot].amount)
                 return true
-            elseif (itemInfo['unique']) or (not slot or slot == nil) or (itemInfo['type'] == 'weapon') then
+            elseif (itemInfo['stackable']) or (not slot or slot == nil) or (itemInfo['type'] == 'weapon') then
                 for i = 1, QBConfig.Player.MaxInvSlots, 1 do
                     if self.PlayerData.items[i] == nil then
-                        self.PlayerData.items[i] = { name = itemInfo['name'], amount = amount, info = info or '', label = itemInfo['label'], description = itemInfo['description'] or '', weight = itemInfo['weight'], type = itemInfo['type'], unique = itemInfo['unique'], useable = itemInfo['useable'], image = itemInfo['image'], shouldClose = itemInfo['shouldClose'], slot = i, combinable = itemInfo['combinable'] }
+                        self.PlayerData.items[i] = { 
+                            name = itemInfo['name'], 
+                            label = itemInfo['label'], 
+                            weight = itemInfo['weight'], 
+                            type = itemInfo['type'], 
+                            ammotype = itemInfo['ammotype'], 
+                            stackable = itemInfo['stackable'], 
+                            useable = itemInfo['useable'], 
+                            shouldClose = itemInfo['shouldClose'], 
+                            combinable = itemInfo['combinable'], 
+                            decayrate = itemInfo["decayrate"], 
+                            image = itemInfo['image'], 
+                            description = itemInfo['description'] or '', 
+                            slot = i, 
+                            amount = amount, 
+                            info = info or '', 
+                            quality = quality,
+                            createtime = createtime,
+                        }
                         self.Functions.UpdatePlayerData()
                         TriggerEvent('qb-log:server:CreateLog', 'playerinventory', 'AddItem', 'green', '**' .. GetPlayerName(self.PlayerData.source) .. ' (citizenid: ' .. self.PlayerData.citizenid .. ' | id: ' .. self.PlayerData.source .. ')** got item: [slot:' .. i .. '], itemname: ' .. self.PlayerData.items[i].name .. ', added amount: ' .. amount .. ', new total amount: ' .. self.PlayerData.items[i].amount)
                         --TriggerClientEvent('DGCore:Notify', self.PlayerData.source, itemInfo['label'].. ' toegevoegd!', 'success')
@@ -549,32 +591,39 @@ end
 
 DGCore.Player.LoadInventory = function(PlayerData)
     PlayerData.items = {}
-    local result = exports.oxmysql:executeSync('SELECT * FROM players WHERE citizenid = ?', { PlayerData.citizenid })
-    if result[1] then
-        if result[1].inventory then
-            plyInventory = json.decode(result[1].inventory)
-            if next(plyInventory) then
-                for _, item in pairs(plyInventory) do
-                    if item then
-                        local itemInfo = DGCore.Shared.Items[item.name:lower()]
-                        if itemInfo then
-                            PlayerData.items[item.slot] = {
-                                name = itemInfo['name'],
-                                amount = item.amount,
-                                info = item.info or '',
-                                label = itemInfo['label'],
-                                description = itemInfo['description'] or '',
-                                weight = itemInfo['weight'],
-                                type = itemInfo['type'],
-                                unique = itemInfo['unique'],
-                                useable = itemInfo['useable'],
-                                image = itemInfo['image'],
-                                shouldClose = itemInfo['shouldClose'],
-                                slot = item.slot,
-                                combinable = itemInfo['combinable']
-                            }
-                        end
-                    end
+	local items = exports.oxmysql:executeSync(
+        [[
+        SELECT slot, name, info, amount, quality
+        FROM inventoryitems 
+        WHERE inventorytype = :inventorytype AND inventoryid = :inventoryid
+        ]], {
+        ["inventorytype"] = "player",
+        ["inventoryid"] = PlayerData.citizenid,
+    })
+
+    if items then
+        for _, item in pairs(items) do
+            if item then
+                local itemInfo = exports["dg-inventory"]:GetItemData()[item.name:lower()]
+                if itemInfo then
+                    PlayerData.items[item.slot] = {
+                        name = itemInfo['name'],
+                        label = itemInfo['label'],
+                        weight = itemInfo['weight'],
+                        type = itemInfo['type'],
+                        ammotype = itemInfo['ammotype'],
+                        stackable = itemInfo['stackable'],
+                        useable = itemInfo['useable'],
+                        shouldClose = itemInfo['shouldClose'],
+                        combinable = itemInfo['combinable'],
+                        decayrate = itemInfo['decayrate'],
+                        image = itemInfo['image'],
+                        description = itemInfo['description'] or '',
+                        amount = tonumber(item.amount),
+                        slot = tonumber(item.slot),
+                        quality = tonumber(item.quality),
+                        createtime = tonumber(item.createtime),
+                    }
                 end
             end
         end
@@ -587,22 +636,34 @@ DGCore.Player.SaveInventory = function(source)
     if DGCore.Players[src] then
         local PlayerData = DGCore.Players[src].PlayerData
         local items = PlayerData.items
-        local ItemsJson = {}
-        if items and next(items) then
+        if items then
+            exports.oxmysql:executeSync(
+                [[
+                DELETE FROM inventoryitems
+                WHERE inventorytype = :inventorytype AND inventoryid = :inventoryid
+                ]], {
+                ["inventorytype"] = "player",
+                ["inventoryid"] = PlayerData.citizenid,
+            })  
+
             for slot, item in pairs(items) do
                 if items[slot] then
-                    table.insert(ItemsJson, {
-                        name = item.name,
-                        amount = item.amount,
-                        info = item.info,
-                        type = item.type,
-                        slot = slot,
+                    exports.oxmysql:execute(
+                        [[
+                        INSERT INTO inventoryitems (inventorytype, inventoryid, slot, name, info, amount, quality, createtime) 
+                        VALUES (:inventorytype, :inventoryid, :slot, :name, :info, :amount, :quality, :createtime) 
+                        ]], {
+                        ["inventorytype"] = "player",
+                        ["inventoryid"] = PlayerData.citizenid,
+                        ["slot"] = item.slot,
+                        ["name"] = item.name,
+                        ["info"] = json.encode(item.info),
+                        ["amount"] = item.amount,
+                        ["quality"] = item.quality,
+                        ["createtime"] = item.createtime,
                     })
                 end
-            end
-            exports.oxmysql:execute('UPDATE players SET inventory = ? WHERE citizenid = ?', { json.encode(ItemsJson), PlayerData.citizenid })
-        else
-            exports.oxmysql:execute('UPDATE players SET inventory = ? WHERE citizenid = ?', { '[]', PlayerData.citizenid })
+        	end
         end
     end
 end

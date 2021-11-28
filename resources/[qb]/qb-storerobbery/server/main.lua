@@ -41,7 +41,7 @@ AddEventHandler('qb-storerobbery:server:takeMoney', function(register, isDone)
 		worth = math.random(cashA, cashB)
 	}
 	Player.Functions.AddItem('markedbills', bags, false, info)
-	TriggerClientEvent('inventory:client:ItemBox', src, DGCore.Shared.Items['markedbills'], "add")
+	TriggerClientEvent('inventory:client:ItemBox', src, exports["dg-inventory"]:GetItemData()['markedbills'], "add")
         if math.random(1, 100) <= 10 then
             local code = SafeCodes[Config.Registers[register].safeKey]
             local info = {}
@@ -55,7 +55,7 @@ AddEventHandler('qb-storerobbery:server:takeMoney', function(register, isDone)
                 }
             end
             Player.Functions.AddItem("stickynote", 1, false, info)
-            TriggerClientEvent('inventory:client:ItemBox', src, DGCore.Shared.Items["stickynote"], "add")
+            TriggerClientEvent('inventory:client:ItemBox', src, exports["dg-inventory"]:GetItemData()["stickynote"], "add")
         end
     end
 end)
@@ -87,16 +87,16 @@ AddEventHandler('qb-storerobbery:server:SafeReward', function(safe)
 		worth = math.random(cashA, cashB)
 	}
 	Player.Functions.AddItem('markedbills', bags, false, info)
-	TriggerClientEvent('inventory:client:ItemBox', src, DGCore.Shared.Items['markedbills'], "add")
+	TriggerClientEvent('inventory:client:ItemBox', src, exports["dg-inventory"]:GetItemData()['markedbills'], "add")
     local luck = math.random(1, 100)
     local odd = math.random(1, 100)
     if luck <= 10 then
         Player.Functions.AddItem("rolex", math.random(3, 7))
-        TriggerClientEvent('inventory:client:ItemBox', src, DGCore.Shared.Items["rolex"], "add")
+        TriggerClientEvent('inventory:client:ItemBox', src, exports["dg-inventory"]:GetItemData()["rolex"], "add")
         if luck == odd then
             Citizen.Wait(500)
             Player.Functions.AddItem("goldbar", 1)
-            TriggerClientEvent('inventory:client:ItemBox', src, DGCore.Shared.Items["goldbar"], "add")
+            TriggerClientEvent('inventory:client:ItemBox', src, exports["dg-inventory"]:GetItemData()["goldbar"], "add")
         end
     end
 end)

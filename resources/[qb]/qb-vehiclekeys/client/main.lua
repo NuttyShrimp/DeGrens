@@ -256,12 +256,12 @@ function lockpickFinish(success)
     end
     if usingAdvanced then
         if chance <= Config.RemoveLockpickAdvanced then
-            TriggerEvent('inventory:client:ItemBox', DGCore.Shared.Items["advancedlockpick"], "remove")
+            TriggerEvent('inventory:client:ItemBox', exports["dg-inventory"]:GetItemData()["advancedlockpick"], "remove")
             TriggerServerEvent("DGCore:Server:RemoveItem", "advancedlockpick", 1)
         end
     else
         if chance <= Config.RemoveLockpickNormal then
-            TriggerEvent('inventory:client:ItemBox', DGCore.Shared.Items["lockpick"], "remove")
+            TriggerEvent('inventory:client:ItemBox', exports["dg-inventory"]:GetItemData()["lockpick"], "remove")
             TriggerServerEvent("DGCore:Server:RemoveItem", "lockpick", 1)
         end
     end
