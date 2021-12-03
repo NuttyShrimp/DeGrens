@@ -20,5 +20,5 @@ files {
 
 dependencies {
     'dg-core',
-    'qb-spawn'
+    'dg-spawn'
 }

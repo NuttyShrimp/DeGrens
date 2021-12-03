@@ -90,3 +90,10 @@ exports('removeZone', function(name)
 	local removedZone = comboZone:RemoveZone(name)
 	removedZone:destroy()
 end)
+
+if (GetConvar('is_production', "true") == "false") then
+	RegisterCommand('polyzone:debug:toggle', function()
+		DEBUG_ENABLED = not DEBUG_ENABLED
+		print('polyzone debug: ' .. tostring(DEBUG_ENABLED))
+	end)
+end
