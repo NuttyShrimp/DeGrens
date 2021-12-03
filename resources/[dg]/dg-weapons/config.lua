@@ -1,9 +1,6 @@
 Config = Config or {}
 
 Config.DurabilityBlockedWeapons = {
-    "weapon_stungun",
-    "weapon_nightstick",
-    "weapon_flashlight",
     "weapon_unarmed",
 }
 
@@ -132,15 +129,13 @@ Config.DurabilityMultiplier = {
 	['weapon_hazardcan'] 			= 0.15,
 }
 
-Config.WeaponRepairPoints = {
-    [1] = {
-        coords = vector3(964.02, -1267.41, 34.97),
-        IsRepairing = false,
-        RepairingData = {},
-    }
+Config.WeaponRepairPoint = {
+    coords = vector3(964.02, -1267.41, 34.97),
+    IsRepairing = false,
+    RepairingData = {},
 }
 
-Config.WeaponRepairCotsts = {
+Config.WeaponRepairCosts = {
     ["pistol"] = 1000,
     ["smg"] = 3000,
     ["rifle"] = 5000,
