@@ -21,7 +21,6 @@ create table if not exists players
   money        text                                  not null,
   job          text                                  not null,
   metadata     text                                  not null,
-  inventory    longtext                              null,
   last_updated timestamp default current_timestamp() not null on update current_timestamp(),
   PRIMARY KEY (citizenid),
   INDEX (license)
@@ -360,7 +359,7 @@ create table if not exists items
   type        varchar(10) DEFAULT NULL,
   ammotype    varchar(32) DEFAULT NULL,
   stackable   tinyint(1)  DEFAULT NULL,
-  usable      tinyint(1)  DEFAULT NULL,
+  useable     tinyint(1)  DEFAULT NULL,
   shouldClose tinyint(1)  DEFAULT NULL,
   combinable  text        DEFAULT NULL,
   decayrate   int(11)     DEFAULT NULL,
@@ -368,6 +367,6 @@ create table if not exists items
   description text        DEFAULT NULL,
   PRIMARY KEY (name),
   CHECK ( stackable < 2 ),
-  CHECK ( usable < 2 ),
+  CHECK ( useable < 2 ),
   CHECK ( shouldClose < 2 )
 );
