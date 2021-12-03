@@ -204,7 +204,7 @@ function CreateNewDrop(source, fromSlot, toSlot, itemAmount)
 	local coords = GetEntityCoords(GetPlayerPed(source))
 
 	if Player.Functions.RemoveItem(itemData.name, itemAmount, itemData.slot) then
-		TriggerClientEvent("inventory:client:CheckWeapon", source, itemData.name)
+		TriggerClientEvent("weapons:client:CheckWeapon", source, itemData.name)
 
 		local itemInfo = GetItemData()[itemData.name:lower()]
 		local id = CreateId("drop")
@@ -261,7 +261,7 @@ function MoveItemFromPlayer(src, Player, toInventory, fromSlot, toSlot, fromAmou
         end
         
         Player.Functions.RemoveItem(fromItemData.name, fromAmount, fromSlot)
-        TriggerClientEvent("inventory:client:CheckWeapon", src, fromItemData.name) -- remove weapon if u move ur weapon
+        TriggerClientEvent("weapons:client:CheckWeapon", src, fromItemData.name) -- remove weapon if u move ur weapon
     
         if toItemData then
             local itemInfo = GetItemData()[toItemData.name:lower()]
@@ -315,7 +315,7 @@ function MoveItemToPlayer(src, Player, fromInventory, toInventory, fromSlot, toS
 
         if toInventory == "player" then
             if targetPlayer then
-                TriggerClientEvent("inventory:client:CheckWeapon", targetPlayer.PlayerData.source, fromItemData.name)
+                TriggerClientEvent("weapons:client:CheckWeapon", targetPlayer.PlayerData.source, fromItemData.name)
                 targetPlayer.Functions.RemoveItem(itemInfo["name"], fromAmount, fromSlot)
             else
                 RemoveFrom(invType, id, fromSlot, itemInfo["name"], fromAmount)

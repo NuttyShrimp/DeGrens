@@ -3,8 +3,6 @@ DGCore = exports['dg-core']:GetCoreObject()
 ItemData = {}
 
 inInventory = false
-currentWeapon = nil
-CurrentWeaponData = {}
 currentOtherInventory = nil
 currentGivePlayer = nil
 

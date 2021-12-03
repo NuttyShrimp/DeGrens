@@ -1,4 +1,4 @@
-INSERT INTO `items` (`name`, `label`, `weight`, `type`, `ammotype`, `stackable`, `usable`, `shouldClose`, `combinable`, `decayrate`, `image`, `description`) VALUES
+INSERT INTO `items` (`name`, `label`, `weight`, `type`, `ammotype`, `stackable`, `useable`, `shouldClose`, `combinable`, `decayrate`, `image`, `description`) VALUES
 ('10kgoldchain', '10k Gold Chain', 2000, 'item', NULL, 0, 0, 1, NULL, NULL, '10kgoldchain.png', '10 carat golden chain'),
 ('acetone', 'Acetone', 200, 'item', NULL, 0, 1, 0, NULL, NULL, 'chemical2.png', 'Breathing moderate amounts for a short amount of time can irritate your nose, throat, lungs and eyes'),
 ('advancedlockpick', 'Advanced Lockpick', 500, 'item', NULL, 0, 1, 1, NULL, NULL, 'advancedlockpick.png', 'If you lose your keys a lot this is very useful... Also useful to open your beers'),
@@ -341,6 +341,6 @@ INSERT INTO `items` (`name`, `label`, `weight`, `type`, `ammotype`, `stackable`,
 ('weed_white-widow', 'White Widow 2g', 200, 'item', NULL, 0, 1, 0, NULL, NULL, 'weed-baggie.png', 'A weed bag with 2g White Widow'),
 ('weed_white-widow_seed', 'White Widow Seed', 0, 'item', NULL, 0, 1, 0, NULL, NULL, 'weed-plant-seed.png', 'A weed seed of White Widow'),
 ('whiskey', 'Whiskey', 500, 'item', NULL, 0, 1, 1, NULL, NULL, 'whiskey.png', 'For all the thirsty out there');
-INSERT INTO `items` (`name`, `label`, `weight`, `type`, `ammotype`, `stackable`, `usable`, `shouldClose`, `combinable`, `decayrate`, `image`, `description`) VALUES
+INSERT INTO `items` (`name`, `label`, `weight`, `type`, `ammotype`, `stackable`, `useable`, `shouldClose`, `combinable`, `decayrate`, `image`, `description`) VALUES
 ('wine', 'Wine', 300, 'item', NULL, 0, 1, 0, NULL, NULL, 'wine.png', 'Some good wine to drink on a fine evening'),
 ('xtcbaggy', 'Bag of XTC', 0, 'item', NULL, 0, 1, 1, NULL, NULL, 'xtc_baggy.png', 'Pop those pills baby');

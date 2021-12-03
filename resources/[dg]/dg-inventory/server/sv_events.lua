@@ -209,12 +209,12 @@ AddEventHandler("inventory:server:UseItemSlot", function(slot)
 		if itemInfo.type == "weapon" then
 			if itemData.quality then
 				if itemData.quality > 0 then
-					TriggerClientEvent("inventory:client:UseWeapon", src, itemData, true)
+					TriggerClientEvent("weapons:client:UseWeapon", src, itemData, true)
 				else
-					TriggerClientEvent("inventory:client:UseWeapon", src, itemData, false)
+					TriggerClientEvent("weapons:client:UseWeapon", src, itemData, false)
 				end
 			else
-				TriggerClientEvent("inventory:client:UseWeapon", src, itemData, true)
+				TriggerClientEvent("weapons:client:UseWeapon", src, itemData, true)
 			end
 			TriggerClientEvent("inventory:client:ItemBox", src, itemInfo, "use")
 		elseif itemInfo.useable then
