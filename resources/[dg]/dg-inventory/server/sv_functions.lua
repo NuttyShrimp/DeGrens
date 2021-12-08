@@ -142,7 +142,7 @@ function GetFrom(invType, id)
                         description = itemInfo["description"] and itemInfo["description"] or "",
                         slot = tonumber(item.slot),
                         amount = tonumber(item.amount),
-                        info = json.decode(item.info) or "",
+                        info = json.decode(item.info) or {},
                         quality = tonumber(item.quality),
                         createtime = tonumber(item.createtime),
                     }
@@ -391,9 +391,9 @@ function UpdateQualityOnTime(items)
     if items and next(items) then
         for slot, item in pairs(items) do
             if item.decayrate and item.createtime then
-                local timediff = os.difftime(os.time(), item.createtime)
-                item.quality = 100 - timediff * item.decayrate  
-                if item.quality <= 0 then
+                local timeDiff = os.difftime(os.time(), item.createtime)
+                item.quality = 100 - math.floor((timeDiff / item.decayrate) * 100)
+                if item.quality <= 0 then 
                     items[slot] = nil
                     TriggerEvent("qb-log:server:CreateLog", "itembroke", "Item broke", "orange", "Item broke: "..item.label)
                 end
