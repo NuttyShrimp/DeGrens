@@ -117,23 +117,6 @@ RegisterNetEvent('qb-admin:client:SetSpeed', function(speed)
     end
 end)
 
-RegisterNetEvent('qb-weapons:client:SetWeaponAmmoManual', function(weapon, ammo)
-    local ped = PlayerPedId()
-    if weapon ~= "current" then
-        local weapon = weapon:upper()
-        SetPedAmmo(ped, GetHashKey(weapon), ammo)
-        DGCore.Functions.Notify('+'..ammo..' Ammo for the '..exports["dg-inventory"]:GetItemData()[GetHashKey(weapon)]["label"], 'success')
-    else
-        local weapon = GetSelectedPedWeapon(ped)
-        if weapon ~= nil then
-            SetPedAmmo(ped, weapon, ammo)
-            DGCore.Functions.Notify('+'..ammo..' Ammo for the '..exports["dg-inventory"]:GetItemData()[weapon]["label"], 'success')
-        else
-            DGCore.Functions.Notify('You dont have a weapon in your hands..', 'error')
-        end
-    end
-end)
-
 RegisterNetEvent('qb-admin:client:GiveNuiFocus', function(focus, mouse)
     SetNuiFocus(focus, mouse)
 end)

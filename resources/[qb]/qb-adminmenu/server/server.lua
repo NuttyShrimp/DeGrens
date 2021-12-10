@@ -421,15 +421,3 @@ RegisterCommand('kickall', function(source, args, rawCommand)
         end
     end
 end, false)
-
-DGCore.Commands.Add('setammo', 'Set Your Ammo Amount (Admin Only)', {{name='amount', help='Amount of bullets, for example: 20'}, {name='weapon', help='Name of the weapen, for example: WEAPON_VINTAGEPISTOL'}}, false, function(source, args)
-    local src = source
-    local weapon = args[2]
-    local amount = tonumber(args[1])
-
-    if weapon ~= nil then
-        TriggerClientEvent('qb-weapons:client:SetWeaponAmmoManual', src, weapon, amount)
-    else
-        TriggerClientEvent('qb-weapons:client:SetWeaponAmmoManual', src, 'current', amount)
-    end
-end, 'admin')

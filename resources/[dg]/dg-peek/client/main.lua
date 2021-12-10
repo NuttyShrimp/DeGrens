@@ -136,7 +136,7 @@ function EnableTarget()
             if entityType ~= 1 then
                 targettedPlayer = nil
             end 
-
+            
 			if entityType > 0 then
 				if NetworkGetEntityIsNetworked(entity) then
 					local data = Entities[NetworkGetNetworkIdFromEntity(entity)]
