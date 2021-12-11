@@ -90,8 +90,8 @@ function startRound() {
         clearInterval(currentGameLoop);
     }
 
-    const size = Random(15, 30);
-    startDegrees = Random(40, 90 - size);
+    const size = Random(10, 20);
+    startDegrees = Random(40, 85 - size);
     endDegrees = startDegrees + size;
     currentDegrees = 0;
 
@@ -100,16 +100,16 @@ function startRound() {
     let time;
     switch (Minigame.Difficulty) {
         case "easy":
-            time = Random(30, 45);
+            time = Random(31, 45);
             break;
         case "medium":
-            time = Random(10, 29);
+            time = Random(11, 30);
             break;
         case "hard":
-            time = Random(5, 9);
+            time = Random(6, 10);
             break;
         case "extreme":
-            time = Random(2, 4);
+            time = Random(2, 5);
             break;
     }
 

@@ -23,15 +23,15 @@ end)
 
 exports("OpenGame", OpenGame)
 
-Citizen.CreateThread(function()
-    while true do
-        if IsControlJustPressed(0, 27) then
-            OpenGame(function(success)
-                print(success)
-            end, 3, "hard")
-        end
-
-        Citizen.Wait(2)
-    end
-end)
+-- test the game with uparrowkey
+-- Citizen.CreateThread(function()
+--     while true do
+--         if IsControlJustPressed(0, 27) then
+--             OpenGame(function(success)
+--                 print(success)
+--             end, 3, "hard")
+--         end
+--         Citizen.Wait(2)
+--     end
+-- end)
 
