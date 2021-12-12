@@ -141,6 +141,6 @@ function loadHTML() {
 }
 
 // for testing in browser
-Minigame.GridSize = 3;
-Minigame.Time = 12;
-Minigame.Functions.StartGame();
+// Minigame.GridSize = 3;
+// Minigame.Time = 12;
+// Minigame.Functions.StartGame();

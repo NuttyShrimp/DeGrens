@@ -29,9 +29,9 @@ exports("OpenGame", OpenGame)
 --         if IsControlJustPressed(0, 27) then
 --             OpenGame(function(success)
 --                 print(success)
---             end, 3, 6)
+--             end, 3, 8)
 --         end
-
+        
 --         Citizen.Wait(2)
 --     end
 -- end)
