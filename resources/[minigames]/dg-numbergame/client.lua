@@ -1,7 +1,7 @@
 local gameOpen = false
 local callback = {}
 
-function OpenGame(cb, gridsize, length, amount, showtime, inputtime)
+function OpenGame(cb, gridsize, time)
     if not gameOpen then
         gameOpen = true
         callback = cb
@@ -9,10 +9,7 @@ function OpenGame(cb, gridsize, length, amount, showtime, inputtime)
         SendNUIMessage({
             Action = "OpenGame",
             GridSize = gridsize,
-            SequenceLength = length,
-            AmountOfTimes = amount,
-            ShowTime = showtime,
-            InputTime = inputtime
+            Time = time
         })
         SetNuiFocus(true, true)
     end
@@ -32,8 +29,9 @@ exports("OpenGame", OpenGame)
 --         if IsControlJustPressed(0, 27) then
 --             OpenGame(function(success)
 --                 print(success)
---             end, 5, 6, 3, 1, 3)
+--             end, 3, 6)
 --         end
+
 --         Citizen.Wait(2)
 --     end
 -- end)
