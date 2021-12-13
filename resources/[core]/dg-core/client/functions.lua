@@ -1,5 +1,6 @@
 DGCore.Functions = {}
-DGCore.RequestId = 0
+DGCore.RequestId = 0 -- IDX of promises
+DGCore.Promises = {} -- Promises
 
 -- Player
 
@@ -94,8 +95,34 @@ function DGCore.Debug(resource, obj, depth)
 end
 
 function DGCore.Functions.TriggerCallback(name, cb, ...)
-    DGCore.ServerCallbacks[name] = cb
-    TriggerServerEvent('DGCore:Server:TriggerCallback', name, ...)
+	if (cb == nil) then
+		-- Promised based return
+		local callId, solved = DGCore.RequestId, false
+		DGCore.RequestId = DGCore.RequestId + 1
+
+		DGCore.Promises[callId] = promise:new()
+
+		TriggerServerEvent('DGCore:server:TriggerPromiseCallback', name, callId, ...)
+		-- Check if solved otherwise throw timeout
+		Citizen.SetTimeout(20000, function()
+			if not solved then
+				DGCore.Promises[callId]:resolve(nil)
+			end
+		end)
+
+		local response = Citizen.Await(DGCore.Promises[callId])
+		solved = true
+
+		-- Remove with timeout so data is not lost
+		Citizen.SetTimeout(5000, function()
+			DGCore.Promises[callId] = nil
+		end)
+
+		return response
+	else
+		DGCore.ServerCallbacks[name] = cb
+		TriggerServerEvent('DGCore:Server:TriggerCallback', name, ...)
+	end
 end
 
 function DGCore.Functions.Progressbar(name, label, duration, useWhileDead, canCancel, disableControls, animation, prop, propTwo, onFinish, onCancel)
