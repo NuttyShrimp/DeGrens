@@ -1,7 +1,7 @@
 fx_version 'cerulean'
 game 'gta5'
 
-description 'QB-Logs'
+description 'dg-logs'
 version '1.0.0'
 
 shared_script '@dg-core/import.lua'

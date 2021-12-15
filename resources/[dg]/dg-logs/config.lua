@@ -1,5 +1,6 @@
 Config = {}
 
+-- TODO: Add webhooks... 
 Config.Webhooks = {
     ["default"] = "",
     ["playermoney"] = "",
@@ -51,3 +52,5 @@ Config.Colors = {
     ["pink"] = 16711900,
     ["red"] = 16711680,
 }
+
+Config.GrayLog = "http://127.0.0.1:10011/gelf"

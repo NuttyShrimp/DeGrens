@@ -1,4 +1,4 @@
-# qb-logs
+# dg-logs
 Discord Logging System For dg-core
 
 # License

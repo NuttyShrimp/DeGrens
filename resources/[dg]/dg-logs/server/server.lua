@@ -1,5 +1,5 @@
-RegisterServerEvent('qb-log:server:CreateLog')
-AddEventHandler('qb-log:server:CreateLog', function(name, title, color, message, tagEveryone)
+RegisterServerEvent('dg-log:server:CreateLog')
+AddEventHandler('dg-log:server:CreateLog', function(name, title, color, message, tagEveryone)
     local tag = tagEveryone ~= nil and tagEveryone or false
     local webHook = Config.Webhooks[name] ~= nil and Config.Webhooks[name] or Config.Webhooks["default"]
     local embedData = {
@@ -24,5 +24,25 @@ AddEventHandler('qb-log:server:CreateLog', function(name, title, color, message,
 end)
 
 DGCore.Commands.Add("testwebhook", "Test Your Discord Webhook For Logs (God Only)", {}, false, function(source, args)
-    TriggerEvent("qb-log:server:CreateLog", "default", "TestWebhook", "default", "Triggered **a** test webhook :)")
+    TriggerEvent("dg-log:server:CreateLog", "default", "TestWebhook", "default", "Triggered **a** test webhook :)")
 end, "god")
+
+
+-- TriggerEvent(GetCurrentResourceName(), "command-ooc", {citizenID = PlayerData.citizenID, ...} )
+RegisterServerEvent('dg-log:server:PostGrayLog')
+AddEventHandler('dg-log:server:PostGrayLog', function(resource, logtype, data)
+	Citizen.CreateThread(function()
+		local dataString = ""
+		data = data ~= nil and data or {}
+		data = json.encode(data, { ident = true })
+
+		PerformHttpRequest(Config.GrayLog, function(err, text, header) end, 'POST', json.encode({
+			version = "2.1",
+			host = "dg2.degrensrp.be",
+			short_message = logtype,
+			_resource = resource,
+			_logtype = logtype,
+			full_message = data
+		}), {['Content-Type'] = 'application/json'})
+	end)
+end)
