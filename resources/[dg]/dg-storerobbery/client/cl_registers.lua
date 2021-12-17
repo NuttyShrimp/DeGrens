@@ -1,11 +1,11 @@
 openedRegisters = {}
-local currentStore = nil
 local lockpickAnimTime = 0
 
 local function LockpickAnimation()
     Citizen.CreateThread(function()
-        lockpickAnimTime = Config.RobTime - 1000 -- account for exit anim
+        lockpickAnimTime = Config.Registers.RobTime - 1000 -- account for exit anim
         local ped = PlayerPedId()
+        LoadAnimDict('oddjobs@shop_robbery@rob_till')
 
         while lockpickAnimTime > 0 do
             TaskPlayAnim(ped, "oddjobs@shop_robbery@rob_till", "loop", 2.0, 2.0, -1, 16, 0, false, false, false)
@@ -23,7 +23,7 @@ local function LootRegister(register)
     CreateEvidence()
 
     LockpickAnimation()
-    DGCore.Functions.Progressbar("search_register", "Emptying The Register..", Config.RobTime, false, true, {
+    DGCore.Functions.Progressbar("search_register", "Kassa leeghalen...", Config.Registers.RobTime, false, true, {
         disableMovement = true,
         disableCarMovement = true,
         disableMouse = false,
@@ -31,7 +31,6 @@ local function LootRegister(register)
     }, {}, {}, {}, function() -- Done
         ClearPedTasks(ped)
         lockpickAnimTime = 0
-        DGCore.Functions.Notify("Geopend...", "success")
         TriggerServerEvent("dg-storerobbery:server:OpenRegister", GetEntityCoords(register))
     end, function() -- Cancel
         ClearPedTasks(ped)
@@ -40,38 +39,33 @@ local function LootRegister(register)
     end)
 end
 
-RegisterNetEvent("dg-polyzone:enter", function(name, data, center)
-    if name == "registers" then
-        currentStore = data.id
-        exports["dg-peek"]:AddTargetModel(Config.RegisterModel, {
-            options = {
-                {
-                    icon = "fas fa-cash-register",
-                    label = "Lockpick",
-                    action = function(register)
-                        TriggerEvent("dg-storerobbery:client:LockpickRegister", register)
-                    end,
-                    canInteract = function(register)
-                        return exports['dg-storerobbery']:CanRobRegister(register)
-                    end,
-                }
-            },
-            distance = 0.8,
-        })
-    end
-end)
+function EnteredRegistersZone() 
+    exports["dg-peek"]:AddTargetModel(Config.Registers.Model, {
+        options = {
+            {
+                icon = "fas fa-cash-register",
+                label = "Lockpick",
+                action = function(register)
+                    TriggerEvent("dg-storerobbery:client:LockpickRegister", register)
+                end,
+                canInteract = function(register)
+                    return exports['dg-storerobbery']:CanRobRegister(register)
+                end,
+            }
+        },
+        distance = 0.8,
+    })
+end
 
-RegisterNetEvent("dg-polyzone:exit", function(name)
-    if name == "registers" then
-        currentStore = nil
-        exports["dg-peek"]:RemoveTargetModel(Config.RegisterModel, "Lockpick")
-    end
-end)
+function LeftRegistersZone()
+    exports["dg-peek"]:RemoveTargetModel(Config.Registers.Model, "Lockpick")
+end
 
 AddEventHandler("dg-storerobbery:client:LockpickRegister", function(register)
     if currentStore then
         DGCore.Functions.TriggerCallback('DGCore:HasItem', function(hasItem)
             CallCops(currentStore)
+            
             if HasObjectBeenBroken(register) then
                 LootRegister(register)
             elseif hasItem then
@@ -80,7 +74,7 @@ AddEventHandler("dg-storerobbery:client:LockpickRegister", function(register)
                         LootRegister(register)
                     else
                         local rng = math.random(1, 100)
-                        if rng <= Config.LockpickBreakChance then
+                        if rng <= Config.Lockpick.BreakChance then
                             TriggerServerEvent("DGCore:Server:RemoveItem", 'lockpick', 1)
                             TriggerEvent('inventory:client:ItemBox', exports["dg-inventory"]:GetItemData()["lockpick"], "remove")
                             DGCore.Functions.Notify('Je lockpick is gebroken...', 'error')
@@ -88,7 +82,7 @@ AddEventHandler("dg-storerobbery:client:LockpickRegister", function(register)
                             DGCore.Functions.Notify('Mislukt...', 'error')
                         end    
                     end
-                end, 5, "hard")
+                end, Config.Lockpick.Amount, Config.Lockpick.Difficulty)
             else
                 DGCore.Functions.Notify("Hoe ga je dit openen?", "error")
             end

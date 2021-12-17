@@ -1,14 +1,33 @@
 Config = Config or {}
 
-Config.RegisterModel = `prop_till_01`
-Config.RegisterTimeout = 15 * 60 * 1000
-Config.RequiredCops = 0
-Config.RobTime = 20 * 1000
+Config.RequiredCops = 0 -- aantal politie nodig om te starten
 
--- random chances
+-- kassa opties
+Config.Registers = {}
+Config.Registers.Model = `prop_till_01`
+Config.Registers.Timeout = 30 * 60 * 1000 -- tijd dat het neemt tegen dat kassa gereset is
+Config.Registers.RobTime = 20 * 1000 -- tijd dat het neemt om kassa leeg te halen
+Config.Registers.Reward = "moneyroll" -- item dat je krijgt van kassa
+Config.Registers.RewardAmount = 2 -- wordt gerandomized tussen 1 hoger en lager dus bv 2 wordt random van 1 tm 3
+
+-- lockpick opties
+Config.Lockpick = {}
+Config.Lockpick.Difficulty = "easy" -- easy, medium, hard of extreme
+Config.Lockpick.Amount = 3 -- aantal keer dat je keygame moet voltooien om te lockpicken
+Config.Lockpick.BreakChance = 10 -- kans dat lockpick kapot gaat bij falen
+
+-- safe options
+Config.Safe = {}
+Config.Safe.HackGridSize = 2
+Config.Safe.HackTime = 15
+Config.Safe.Reward = "moneyroll"
+Config.Safe.RewardAmount = 5
+Config.Safe.Timeout = 60 * 60 * 1000 -- tijd dat het neemt tegen dat kluis is gereset
+Config.Safe.LootDelay = 1 * 30 * 1000 -- tijd dat je moet wachten na mail voor kluis te looten
+
+-- random chances in percent
 Config.FingerdropChance = 50
 Config.GainStressChance = 50
-Config.LockpickBreakChance = 10
 
 Config.Stores = {
     ["little_seoul"] = {
@@ -37,6 +56,22 @@ Config.Stores = {
                 maxZ = 31.42,
             }
         },
+        storezone = {
+            vectors = {
+                vector2(-47.288570404053, -1761.001953125),
+                vector2(-58.139656066895, -1751.9344482422),
+                vector2(-53.071319580078, -1745.1441650391),
+                vector2(-45.989807128906, -1750.3532714844),
+                vector2(-43.615028381348, -1747.2941894531),
+                vector2(-38.783176422119, -1750.8874511719)
+            },
+            options = {
+                debugPoly = true,
+                minZ = 27.42,
+                maxZ = 31.42,
+            }
+        },
+        safe = vector3(-43.69, -1748.18, 28.87),
         cam = 4,
     },
     ["mirror_park"] = {
@@ -95,17 +130,16 @@ Config.Stores = {
         },
         cam = 6,
     },
-    ["grand_senora"] = { -- doesnt work
+    ["grand_senora"] = {
         name = "grand_senora",
         registerzone = {
             center = vector3(1165.94, 2710.78, 38.16),
             width = 1,
             length = 1,
             options = {
-                debugPoly = true,
                 heading = 178.48,
-                minZ = 40.16,
-                maxZ = 36.16,
+                minZ = 36.16,
+                maxZ = 40.16,
             }
         },
         cam = 17,
@@ -180,17 +214,16 @@ Config.Stores = {
         },
         cam = 15,
     },
-    ["senora_freeway"] = { -- werkt nie
+    ["senora_freeway"] = {
         name = "senora_freeway",
         registerzone = {
             center = vector3(2677.05, 3279.99, 55.24),
             width = 3.5,
             length = 1,
             options = {
-                debugPoly = true,
                 heading = 334.06,
-                minZ = 57.24,
-                maxZ = 53.24,
+                minZ = 53.24,
+                maxZ = 57.24,
             }
         },
         cam = 18,
