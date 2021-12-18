@@ -568,62 +568,62 @@ Config.Stores = {
         },
         cam = 0, -- make cam for this
     },
-    ["del_vecchio"] = { -- MLO nodig
+    ["del_vecchio"] = {
         name = "del_vecchio",
         registerzone = {
-            center = vector3(-161.53, 6320.64, 31.68),
+            center = vector3(-161.07, 6321.37, 31.59),
             width = 1,
             length = 1,
             options = {
                 debugPoly = true,
-                heading = 313.18,
-                minZ = 29.68,
-                maxZ = 33.68,
+                heading = 315.21,
+                minZ = 29.59,
+                maxZ = 33.59,
             }
         },
         storezone = {
-            center = vector3(166.03, 6641.33, 32.33),
-            width = 12,
-            length = 12,
+            center = vector3(-161.93, 6320.62, 31.59),
+            width = 9,
+            length = 16,
             options = {
                 debugPoly = true,
-                heading = 313.88,
-                minZ = 29.68,
-                maxZ = 33.68,
+                heading = 137.09,
+                minZ = 29.59,
+                maxZ = 33.59,
             }
         },
         safe = {
-            coords = vector3(166.03, 6641.33, 32.33),
+            coords = vector3(-168.46, 6318.8, 30.59),
             state = "closed",
         },
         cam = 27, 
     },
-    ["paleto_bay"] = { -- MLO nodig
+    ["paleto_bay"] = {
         name = "paleto_bay",
         registerzone = {
-            center = vector3(161.74, 6642.75, 31.27),
+            center = vector3(161.34, 6642.4, 31.7),
             width = 3.5,
             length = 1,
             options = {
                 debugPoly = true,
-                heading = 225.13,
-                minZ = 29.27,
-                maxZ = 35.27,
+                heading = 223.7,
+                minZ = 29.7,
+                maxZ = 33.7,
             }
         },
         storezone = {
-            center = vector3(-162.42, 6319.27, 31.55),
+            center = vector3(167.17, 6641.61, 31.7),
             width = 12,
             length = 12,
             options = {
                 debugPoly = true,
-                heading = 134.1,
-                minZ = 29.27,
-                maxZ = 35.27,
+                heading = 317.83,
+                minZ = 29.7,
+                maxZ = 33.7,
             }
         },
         safe = {
-            coords = vector3(-167.04, 6317.54, 30.8),
+            coords = vector3(168.97, 6644.72, 31.7),
             state = "closed",
         },
         cam = 28, 
