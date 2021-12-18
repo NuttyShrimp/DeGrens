@@ -36,7 +36,7 @@ function SaveItems(invType, id, items)
                     ["inventoryid"] = id,
                     ["slot"] = item.slot,
                     ["name"] = item.name,
-                    ["info"] = json.encode(item.info),
+                    ["info"] = json.encode(item.info) or {},
                     ["amount"] = item.amount,
                     ["quality"] = item.quality,
                     ["createtime"] = item.createtime,
@@ -72,7 +72,7 @@ function AddTo(invType, id, slot, otherslot, itemName, amount, data)
     local amount = tonumber(amount)
 	local itemInfo = GetItemData()[itemName:lower()]
 
-    if not itemInfo.stackable then
+    if itemInfo.stackable then
         if Inventories[invType][id].items[slot] and Inventories[invType][id].items[slot].name == itemName then
 			Inventories[invType][id].items[slot].amount = Inventories[invType][id].items[slot].amount + amount
 		else
@@ -103,9 +103,9 @@ function SetSlotItem(invType, id, slot, itemInfo, amount, info, quality, createt
         description = itemInfo["description"] and itemInfo["description"] or "",
         slot = tonumber(slot),
         amount = tonumber(amount),
-        info = info or "",
+        info = info or {},
         quality = tonumber(quality),
-        createtime = createtime,
+        createtime = tonumber(createtime),
         id = id,
     }
 end
