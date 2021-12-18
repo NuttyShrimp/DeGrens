@@ -30,6 +30,23 @@ Config.NPCS = {
 	    flag = {name = "isBanker", active = true},
         animation = nil,
 	    scenario = "PROP_HUMAN_SEAT_CHAIR_UPRIGHT"
+    },
+    {
+        id = "weapon_repair",
+	    model = "mp_m_exarmy_01",
+	    position = vector4(-172.69, -756.91, 44.23, 249.1),
+	    --appearance = "",
+	    networked = false,
+	    distance = 25.0,
+	    settings = {
+		    {setting = "invincible", active = true},
+		    {setting = "ignore", active = true},
+		    {setting = "freeze", active = true},
+		    {setting = "collision", active = true},
+	    },
+	    flag = {name = "isWeaponRepair", active = true},
+        animation = nil,
+	    scenario = "WORLD_HUMAN_GUARD_STAND_CASINO"
     }
 }
 

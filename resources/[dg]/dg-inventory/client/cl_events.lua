@@ -19,15 +19,6 @@ AddEventHandler("inventory:client:CheckOpenState", function(invType, id, label)
     end
 end)
 
-RegisterNetEvent("weapons:client:SetCurrentWeapon")
-AddEventHandler("weapons:client:SetCurrentWeapon", function(data, bool)
-    if data ~= false then
-        CurrentWeaponData = data
-    else
-        CurrentWeaponData = {}
-    end
-end)
-
 RegisterNetEvent("randPickupAnim")
 AddEventHandler("randPickupAnim", function()
     LoadAnimDict("pickup_object")
@@ -86,60 +77,6 @@ AddEventHandler("inventory:client:OpenInventory", function(PlayerAmmo, inventory
         })
         
         inInventory = true
-    end
-end)
-
-RegisterNetEvent("inventory:client:UseWeapon")
-AddEventHandler("inventory:client:UseWeapon", function(weaponData, shootbool)
-    local ped = PlayerPedId()
-    local weaponName = tostring(weaponData.name)
-    if currentWeapon == weaponName then
-        SetCurrentPedWeapon(ped, `WEAPON_UNARMED`, true)
-        RemoveAllPedWeapons(ped, true)
-        TriggerEvent("weapons:client:SetCurrentWeapon", nil, shootbool)
-        currentWeapon = nil
-    elseif weaponName == "weapon_stickybomb" then
-        GiveWeaponToPed(ped, GetHashKey(weaponName), 1, false, false)
-        SetPedAmmo(ped, GetHashKey(weaponName), 1)
-        SetCurrentPedWeapon(ped, GetHashKey(weaponName), true)
-        TriggerServerEvent("DGCore:Server:RemoveItem", weaponName, 1)
-        TriggerEvent("weapons:client:SetCurrentWeapon", weaponData, shootbool)
-        currentWeapon = weaponName
-    elseif weaponName == "weapon_snowball" then
-        GiveWeaponToPed(ped, GetHashKey(weaponName), 10, false, false)
-        SetPedAmmo(ped, GetHashKey(weaponName), 10)
-        SetCurrentPedWeapon(ped, GetHashKey(weaponName), true)
-        TriggerServerEvent("DGCore:Server:RemoveItem", weaponName, 1)
-        TriggerEvent("weapons:client:SetCurrentWeapon", weaponData, shootbool)
-        currentWeapon = weaponName
-    else
-        TriggerEvent("weapons:client:SetCurrentWeapon", weaponData, shootbool)
-        DGCore.Functions.TriggerCallback("weapon:server:GetWeaponAmmo", function(result)
-            local ammo = tonumber(result)
-            if weaponName == "weapon_petrolcan" or weaponName == "weapon_fireextinguisher" then
-                ammo = 4000
-            end
-            GiveWeaponToPed(ped, GetHashKey(weaponName), 0, false, false)
-            SetPedAmmo(ped, GetHashKey(weaponName), ammo)
-            SetCurrentPedWeapon(ped, GetHashKey(weaponName), true)
-            if weaponData.info.attachments then
-                for _, attachment in pairs(weaponData.info.attachments) do
-                    GiveWeaponComponentToPed(ped, GetHashKey(weaponName), GetHashKey(attachment.component))
-                end
-            end
-            currentWeapon = weaponName
-        end, CurrentWeaponData)
-    end
-end)
-
-RegisterNetEvent("inventory:client:CheckWeapon")
-AddEventHandler("inventory:client:CheckWeapon", function(weaponName)
-    local ped = PlayerPedId()
-    if currentWeapon == weaponName then
-        TriggerEvent("weapons:ResetHolster")
-        SetCurrentPedWeapon(ped, `WEAPON_UNARMED`, true)
-        RemoveAllPedWeapons(ped, true)
-        currentWeapon = nil
     end
 end)
 

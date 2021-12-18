@@ -98,6 +98,12 @@ RegisterNetEvent('DGCore:Client:TriggerCallback', function(name, ...)
     end
 end)
 
+RegisterNetEvent('DGCore:Client:TriggerPromiseCallback', function(callId, ...)
+	if DGCore.Promises[callId] then
+		DGCore.Promises[callId]:resolve(...)
+	end
+end)
+
 RegisterNetEvent('DGCore:Client:UseItem', function(item)
     TriggerServerEvent('DGCore:Server:UseItem', item)
 end)

@@ -5,7 +5,7 @@ description 'dg-inventory'
 
 shared_scripts { 
 	'config.lua',
-	'@qb-weapons/config.lua',
+	'@dg-weapons/config.lua',
 }
 
 server_scripts {

@@ -142,7 +142,7 @@ function GetFrom(invType, id)
                         description = itemInfo["description"] and itemInfo["description"] or "",
                         slot = tonumber(item.slot),
                         amount = tonumber(item.amount),
-                        info = json.decode(item.info) or "",
+                        info = json.decode(item.info) or {},
                         quality = tonumber(item.quality),
                         createtime = tonumber(item.createtime),
                     }
@@ -204,7 +204,7 @@ function CreateNewDrop(source, fromSlot, toSlot, itemAmount)
 	local coords = GetEntityCoords(GetPlayerPed(source))
 
 	if Player.Functions.RemoveItem(itemData.name, itemAmount, itemData.slot) then
-		TriggerClientEvent("inventory:client:CheckWeapon", source, itemData.name)
+		TriggerClientEvent("weapons:client:CheckWeapon", source, itemData.name)
 
 		local itemInfo = GetItemData()[itemData.name:lower()]
 		local id = CreateId("drop")
@@ -261,7 +261,7 @@ function MoveItemFromPlayer(src, Player, toInventory, fromSlot, toSlot, fromAmou
         end
         
         Player.Functions.RemoveItem(fromItemData.name, fromAmount, fromSlot)
-        TriggerClientEvent("inventory:client:CheckWeapon", src, fromItemData.name) -- remove weapon if u move ur weapon
+        TriggerClientEvent("weapons:client:CheckWeapon", src, fromItemData.name) -- remove weapon if u move ur weapon
     
         if toItemData then
             local itemInfo = GetItemData()[toItemData.name:lower()]
@@ -315,7 +315,7 @@ function MoveItemToPlayer(src, Player, fromInventory, toInventory, fromSlot, toS
 
         if toInventory == "player" then
             if targetPlayer then
-                TriggerClientEvent("inventory:client:CheckWeapon", targetPlayer.PlayerData.source, fromItemData.name)
+                TriggerClientEvent("weapons:client:CheckWeapon", targetPlayer.PlayerData.source, fromItemData.name)
                 targetPlayer.Functions.RemoveItem(itemInfo["name"], fromAmount, fromSlot)
             else
                 RemoveFrom(invType, id, fromSlot, itemInfo["name"], fromAmount)
@@ -391,9 +391,9 @@ function UpdateQualityOnTime(items)
     if items and next(items) then
         for slot, item in pairs(items) do
             if item.decayrate and item.createtime then
-                local timediff = os.difftime(os.time(), item.createtime)
-                item.quality = 100 - timediff * item.decayrate  
-                if item.quality <= 0 then
+                local timeDiff = os.difftime(os.time(), item.createtime)
+                item.quality = 100 - math.floor((timeDiff / item.decayrate) * 100)
+                if item.quality <= 0 then 
                     items[slot] = nil
                     TriggerEvent("qb-log:server:CreateLog", "itembroke", "Item broke", "orange", "Item broke: "..item.label)
                 end

@@ -118,6 +118,13 @@ RegisterNetEvent('DGCore:Server:TriggerCallback', function(name, ...)
     end, ...)
 end)
 
+RegisterNetEvent('DGCore:server:TriggerPromiseCallback', function(name, callId, ...)
+	local src = source
+	DGCore.Functions.TriggerCallback(name, src, function(...)
+		TriggerClientEvent('DGCore:Client:TriggerPromiseCallback', src, callId, ...)
+	end, ...)
+end)
+
 -- Player
 
 RegisterNetEvent('DGCore:UpdatePlayer', function()

@@ -1,0 +1,10 @@
+body {
+    display: none;
+    overflow: hidden;
+}
+
+#canvas {
+    display: block;
+    margin: 65vh auto;
+    width: 200px;
+}

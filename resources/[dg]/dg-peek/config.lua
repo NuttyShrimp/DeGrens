@@ -79,7 +79,51 @@ Config.PedFlags = {
                 -- params
                 string = "Test Banker",
             },
+        }
+    },
+    ["weapon_repair"] = {
+        flags = "isWeaponRepair",
+        options = {
+            {
+                type = "client",
+                event = "weapons:client:GiveWeaponToRepair",
+                icon = "fas fa-hammer",
+                label = "Repareer Wapen",
+                canInteract = function()
+                    if GetSelectedPedWeapon(PlayerPedId()) and GetSelectedPedWeapon(PlayerPedId()) ~= GetHashKey("WEAPON_UNARMED") then 
+                        if exports["dg-weapons"]:IsRepairAvailable() and not exports["dg-weapons"]:IsRepairFinished() then
+                            return true
+                        end
+                    end
+                    return false
+                end, 
+            },
+            {
+                type = "client",
+                event = "weapons:client:TakeWeaponFromRepair",
+                icon = "fas fa-hammer",
+                label = "Neem Wapen",
+                canInteract = function()
+                    if exports["dg-weapons"]:IsRepairFinished() then
+                        return true
+                    end
+                    return false
+                end, 
+            },
+            {
+                type = "client",
+                event = "weapons:client:SelectTint",
+                icon = "fas fa-spray-can",
+                label = "Tint Wapen",
+                canInteract = function()
+                    if GetSelectedPedWeapon(PlayerPedId()) and GetSelectedPedWeapon(PlayerPedId()) ~= GetHashKey("WEAPON_UNARMED") then 
+                        return true
+                    end
+                    return false
+                end, 
+            },
         },
+        distance = 1
     },
 }
 

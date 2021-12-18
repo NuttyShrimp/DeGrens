@@ -621,6 +621,7 @@ DGCore.Player.LoadInventory = function(PlayerData)
                         description = itemInfo['description'] or '',
                         amount = tonumber(item.amount),
                         slot = tonumber(item.slot),
+                        info = json.decode(item.info) or {},
                         quality = tonumber(item.quality),
                         createtime = tonumber(item.createtime),
                     }
