@@ -44,7 +44,7 @@ function EnteredRegistersZone()
         options = {
             {
                 icon = "fas fa-cash-register",
-                label = "Lockpick",
+                label = "Beroof",
                 action = function(register)
                     TriggerEvent("dg-storerobbery:client:LockpickRegister", register)
                 end,
@@ -90,7 +90,7 @@ AddEventHandler("dg-storerobbery:client:LockpickRegister", function(register)
     end
 end)
 
-RegisterNetEvent("dg-storerobbery:client:UpdateOpenedRegister", function(registers)
+RegisterNetEvent("dg-storerobbery:client:UpdateOpenedRegisters", function(registers)
     openedRegisters = registers
 end)
 

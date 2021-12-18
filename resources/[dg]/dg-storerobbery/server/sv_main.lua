@@ -1,11 +1,15 @@
 local DGCore = exports['dg-core']:GetCoreObject()
 local openedRegisters = {}
-local openedSafes = {}
 
 DGCore.Functions.CreateCallback("dg-storerobbery:server:GetConfig", function(source, cb) 
     local callback = {}
     callback.openedRegisters = openedRegisters
-    callback.openedSafes = openedSafes
+
+    local safes = {}
+    for k, v in pairs(Config.Stores) do
+        safes[k] = v.safe.state
+    end
+    callback.safes = safes
     cb(callback)
 end)
 
@@ -17,32 +21,54 @@ RegisterNetEvent("dg-storerobbery:server:OpenRegister", function(register)
     TriggerClientEvent('inventory:client:ItemBox', src, exports["dg-inventory"]:GetItemData()[Config.Registers.Reward], "add")
 
     openedRegisters[#openedRegisters + 1] = register
-    TriggerClientEvent("dg-storerobbery:client:UpdateOpenedRegister", -1, openedRegisters)
+    TriggerClientEvent("dg-storerobbery:client:UpdateOpenedRegisters", -1, openedRegisters)
 
     Citizen.SetTimeout(Config.Registers.Timeout, function()
         -- we always remove the first one because the timeout is same for every registr so the one at index 2 will always be removed later than the one at index 1
         table.remove(openedRegisters, 1)
-        TriggerClientEvent("dg-storerobbery:client:UpdateOpenedRegister", -1, openedRegisters)
+        TriggerClientEvent("dg-storerobbery:client:UpdateOpenedRegisters", -1, openedRegisters)
     end)
 end)
 
-RegisterNetEvent("dg-storerobbery:server:HackSafe", function(safe)
-    openedSafes[#openedSafes + 1] = safe
-    TriggerClientEvent("dg-storerobbery:client:UpdateOpenedSafe", -1, openedSafes)
+RegisterNetEvent("dg-storerobbery:server:HackSafe", function(store)
+    Config.Stores[store].safe.state = "decoding" 
+    TriggerClientEvent("dg-storerobbery:client:UpdateSafe", -1, store, "decoding")
 
-    Citizen.SetTimeout(Config.Safe.Timeout, function()
-        -- we always remove the first one because the timeout is same for every safe so the one at index 2 will always be removed later than the one at index 1
-        table.remove(openedSafes, 1)
-        TriggerClientEvent("dg-storerobbery:client:UpdateOpenedSafe", -1, openedSafes)
+    Citizen.SetTimeout(Config.Safe.LootDelay, function()
+        if Config.Stores[store].safe.state == "decoding" then
+            Config.Stores[store].safe.state = "opened" 
+            TriggerClientEvent("dg-storerobbery:client:UpdateSafe", -1, store, "opened")
+        end
     end)
 end)
 
-RegisterNetEvent("dg-storerobbery:server:LootSafe", function()
+RegisterNetEvent("dg-storerobbery:server:LootSafe", function(store)
     local src = source
     local Player = DGCore.Functions.GetPlayer(src)
     local amount = math.random(Config.Safe.RewardAmount - 1, Config.Safe.RewardAmount + 1)
     Player.Functions.AddItem(Config.Safe.Reward, amount)
     TriggerClientEvent('inventory:client:ItemBox', src, exports["dg-inventory"]:GetItemData()[Config.Safe.Reward], "add")
+
+    local rng = math.random(1, 100)
+    if rng >= Config.Safe.SpecialItemChance then
+        Player.Functions.AddItem(Config.Safe.SpecialItem, 1)
+        TriggerClientEvent('inventory:client:ItemBox', src, exports["dg-inventory"]:GetItemData()[Config.Safe.SpecialItem], "add")
+    end
+
+    Config.Stores[store].safe.state = "looted"
+    TriggerClientEvent("dg-storerobbery:client:UpdateSafe", -1, store, "looted")
+
+    Citizen.SetTimeout(Config.Safe.Timeout, function()
+        if Config.Stores[store].safe.state == "looted" then
+            Config.Stores[store].safe.state = "closed" 
+            TriggerClientEvent("dg-storerobbery:client:UpdateSafe", -1, store, "closed")
+        end
+    end)
+end)
+
+RegisterNetEvent("dg-storerobbery:server:LeftSafe", function(store)
+    Config.Stores[store].safe.state = "closed"
+    TriggerClientEvent("dg-storerobbery:client:UpdateSafe", -1, store, "closed")
 end)
 
 RegisterNetEvent("dg-storerobbery:server:CallCops", function(store, streetLabel, coords)

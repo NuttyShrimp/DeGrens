@@ -1,10 +1,8 @@
-openedSafes = {}
-local safeState = false
+local lastStore = nil
 
 function EnteredSafeZone()
-    exports['dg-peek']:AddCircleZone("current_safe", Config.Stores[currentStore].safe, 0.4, {
+    exports['dg-peek']:AddCircleZone("current_safe", Config.Stores[currentStore].safe.coords, 0.5, {
         name = "current_safe",
-        debugPoly = true,
     }, {
         options = {
             {
@@ -13,7 +11,7 @@ function EnteredSafeZone()
                 icon = "fas fa-hdd",
                 label = "Hack",
                 canInteract = function()
-                    return exports['dg-storerobbery']:CanRobSafe()
+                    return exports['dg-storerobbery']:CanHackSafe()
                 end,
             },
             {
@@ -22,84 +20,85 @@ function EnteredSafeZone()
                 icon = "fas fa-hand-holding-usd",
                 label = "Neem",
                 canInteract = function()
-                    return exports['dg-storerobbery']:IsSafeOpen()
+                    return exports['dg-storerobbery']:CanLootSafe()
                 end,
             }
         },
         distance = 1.2,
     })
+    lastStore = currentStore
 end
 
 function LeftSafeZone()
     exports['dg-peek']:RemoveZone("current_safe")
+
+    if Config.Stores[lastStore].safe.state == "decoding" then
+        TriggerServerEvent("dg-storerobbery:server:LeftSafe", lastStore)
+        DGCore.Functions.Notify("Verbinding verbroken", "error")
+    end
+end
+
+local function CanHackSafe()
+    return Config.Stores[currentStore].safe.state == "closed" 
+end
+
+local function CanLootSafe()
+    return Config.Stores[currentStore].safe.state == "opened" 
 end
 
 AddEventHandler("dg-storerobbery:client:HackSafe", function()
     if currentStore then
-        DGCore.Functions.TriggerCallback('DGCore:HasItem', function(hasItem)
-            CallCops(currentStore)
-
-            if hasItem then
-                exports["dg-numbergame"]:OpenGame(function(success)
-                    TriggerServerEvent("DGCore:Server:RemoveItem", 'trojan_usb', 1)
-                    TriggerEvent('inventory:client:ItemBox', exports["dg-inventory"]:GetItemData()["trojan_usb"], "remove")
-
-                    GainStress()
-                    CreateEvidence()
-
-                    if success then
-                        TriggerServerEvent("dg-storerobbery:server:HackSafe", currentStore)
-                        TriggerServerEvent('qb-phone:server:sendNewMail', {
-                            sender = "Hackerman",
-                            subject = "Decodering Kluis",
-                            message = "Het decoderen van de kluis zal even duren... <br><br> Geef me 5 minuten.",
-                            button = {}
-                        })
-
-                        Citizen.SetTimeout(Config.Safe.LootDelay, function()
-                            safeState = true
-                        end)
-                    else
-                        DGCore.Functions.Notify('Mislukt...', 'error')
-                    end
-                end, Config.Safe.HackGridSize, Config.Safe.HackTime)
-            else
-                DGCore.Functions.Notify("Hoe ga je dit openen?", "error")
-            end
-        end, 'trojan_usb')
+        if CanHackSafe() then
+            DGCore.Functions.TriggerCallback('DGCore:HasItem', function(hasItem)
+                CallCops(currentStore)
+    
+                if hasItem then
+                    exports["dg-numbergame"]:OpenGame(function(success)
+                        TriggerServerEvent("DGCore:Server:RemoveItem", Config.Safe.Item, 1)
+                        TriggerEvent('inventory:client:ItemBox', exports["dg-inventory"]:GetItemData()[Config.Safe.Item], "remove")
+    
+                        GainStress()
+                        CreateEvidence()
+    
+                        if success then
+                            TriggerServerEvent("dg-storerobbery:server:HackSafe", currentStore)
+    
+                            Citizen.Wait(1000)
+                            TriggerServerEvent('qb-phone:server:sendNewMail', {
+                                sender = "Hackerman",
+                                subject = "Decodering Kluis",
+                                message = "Het decoderen van de kluis zal even duren... <br><br> Geef me "..(math.floor(Config.Safe.LootDelay / (60 * 1000))).." minuten. <br><br> Ga niet te ver of de verbinding zal verbreken!",
+                            })
+                        else
+                            DGCore.Functions.Notify('Mislukt...', 'error')
+                        end
+                    end, Config.Hack.GridSize, Config.Hack.Time)
+                else
+                    DGCore.Functions.Notify("Hoe ga je dit openen?", "error")
+                end
+            end, Config.Safe.Item)
+        end
     end
 end)
 
 AddEventHandler("dg-storerobbery:client:LootSafe", function()
     if currentStore then
-        safeState = false
-        TriggerServerEvent("dg-storerobbery:server:LootSafe")
-    end
-end)
+        if CanLootSafe() then
+            TriggerServerEvent("dg-storerobbery:server:LootSafe", currentStore)
 
-RegisterNetEvent("dg-storerobbery:client:UpdateOpenedSafe", function(safes)
-    openedSafes = safes
-end)
-
--- export for peek
-exports('CanRobSafe', function()
-    local retval = true
-
-    if currentCops >= Config.RequiredCops then
-        for _, v in pairs(openedSafes) do
-            if currentStore == v then
-                retval = false
-                break
-            end
+            local ped = PlayerPedId()
+            LoadAnimDict('amb@prop_human_bum_bin@idle_b')
+            TaskPlayAnim(ped, "amb@prop_human_bum_bin@idle_b", "idle_d", 8.0, 8.0, -1, 50, 0, false, false, false)
+            Citizen.Wait(700)
+            TaskPlayAnim(ped, "amb@prop_human_bum_bin@idle_b", "exit", 8.0, 8.0, -1, 50, 0, false, false, false)
         end
-    else
-        retval = false
     end
-    
-    return retval
 end)
 
--- export for peek to check if you can loot
-exports('IsSafeOpen', function()
-    return safeState
+RegisterNetEvent("dg-storerobbery:client:UpdateSafe", function(store, state)
+    Config.Stores[store].safe.state = state
 end)
+
+-- exports for peek
+exports('CanHackSafe', CanHackSafe)
+exports('CanLootSafe', CanLootSafe)

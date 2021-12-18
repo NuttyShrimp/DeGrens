@@ -1,4 +1,4 @@
-Config = Config or {}
+Config = {}
 
 Config.RequiredCops = 0 -- aantal politie nodig om te starten
 
@@ -18,12 +18,18 @@ Config.Lockpick.BreakChance = 10 -- kans dat lockpick kapot gaat bij falen
 
 -- safe options
 Config.Safe = {}
-Config.Safe.HackGridSize = 2
-Config.Safe.HackTime = 15
-Config.Safe.Reward = "moneyroll"
-Config.Safe.RewardAmount = 5
+Config.Safe.Item = "decoding_tool" -- item dat nodig is om te hacken
 Config.Safe.Timeout = 60 * 60 * 1000 -- tijd dat het neemt tegen dat kluis is gereset
-Config.Safe.LootDelay = 1 * 30 * 1000 -- tijd dat je moet wachten na mail voor kluis te looten
+Config.Safe.LootDelay = 5 * 60 * 1000 -- tijd dat je moet wachten na mail voor kluis te looten
+Config.Safe.Reward = "moneyroll" -- item dat je krijgt uit de kluis
+Config.Safe.RewardAmount = 5 -- wordt gerandomized tussen 1 hoger en lager dus bv 5 wordt random van 4 tm 6
+Config.Safe.SpecialItem = "drive_v1" -- speciaal item dat verkregen kan worden
+Config.Safe.SpecialItemChance = 50 -- kans in percent om special item te krijgen
+
+-- hack options
+Config.Hack = {}
+Config.Hack.GridSize = 2
+Config.Hack.Time = 15
 
 -- random chances in percent
 Config.FingerdropChance = 50
@@ -42,6 +48,20 @@ Config.Stores = {
                 maxZ = 21.21,
             }
         },
+        storezone = {
+            center = vector3(-711.53, -909.74, 19.22),
+            width = 14,
+            length = 13,
+            options = {
+                heading = 0.69,
+                minZ = 17.21,
+                maxZ = 21.21,
+            }
+        },
+        safe = {
+            coords = vector3(-709.77, -904.12, 19.22),
+            state = "closed",
+        },
         cam = 7,
     },
     ["grove_street"] = {
@@ -54,24 +74,22 @@ Config.Stores = {
                 heading = 49.5,
                 minZ = 27.42,
                 maxZ = 31.42,
-            }
+            },
         },
         storezone = {
-            vectors = {
-                vector2(-47.288570404053, -1761.001953125),
-                vector2(-58.139656066895, -1751.9344482422),
-                vector2(-53.071319580078, -1745.1441650391),
-                vector2(-45.989807128906, -1750.3532714844),
-                vector2(-43.615028381348, -1747.2941894531),
-                vector2(-38.783176422119, -1750.8874511719)
-            },
+            center = vector3(-48.41, -1751.49, 29.42),
+            width = 14,
+            length = 13,
             options = {
-                debugPoly = true,
+                heading = 323.81,
                 minZ = 27.42,
                 maxZ = 31.42,
             }
         },
-        safe = vector3(-43.69, -1748.18, 28.87),
+        safe = {
+            coords = vector3(-43.43, -1748.3, 29.42),
+            state = "closed",
+        },
         cam = 4,
     },
     ["mirror_park"] = {
@@ -85,6 +103,20 @@ Config.Stores = {
                 minZ = 67.21,
                 maxZ = 71.21,
             }
+        },
+        storezone = {
+            center = vector3(1158.68, -319.84, 69.21),
+            width = 14,
+            length = 13,
+            options = {
+                heading = 7.34,
+                minZ = 67.21,
+                maxZ = 71.21,
+            }
+        },
+        safe = {
+            coords = vector3(1159.48, -314.0, 69.21),
+            state = "closed",
         },
         cam = 10,
     },
@@ -100,6 +132,20 @@ Config.Stores = {
                 maxZ = 140.21,
             }
         },
+        storezone = {
+            center = vector3(-1826.77, 793.43, 138.21),
+            width = 14,
+            length = 13,
+            options = {
+                heading = 44.46,
+                minZ = 136.21,
+                maxZ = 140.21,
+            }
+        },
+        safe = {
+            coords = vector3(-1829.22, 798.72, 138.19),
+            state = "closed",
+        },
         cam = 12,
     },
     ["grape_seed"] = {
@@ -113,6 +159,20 @@ Config.Stores = {
                 minZ = 40.06,
                 maxZ = 44.06,
             }
+        },
+        storezone = {
+            center = vector3(1704.34, 4925.1, 42.06),
+            width = 14,
+            length = 13,
+            options = {
+                heading = 237.94,
+                minZ = 40.06,
+                maxZ = 44.06,
+            }
+        },
+        safe = {
+            coords = vector3(1707.94, 4920.44, 42.06),
+            state = "closed",
         },
         cam = 0, -- make cam for this
     },
@@ -128,6 +188,20 @@ Config.Stores = {
                 maxZ = 14.33,
             }
         },
+        storezone = {
+            center = vector3(-1221.45, -909.31, 12.33),
+            width = 9,
+            length = 16,
+            options = {
+                heading = 214.32,
+                minZ = 10.33,
+                maxZ = 14.33,
+            }
+        },
+        safe = {
+            coords = vector3(-1220.87, -916.05, 11.33),
+            state = "closed",
+        },
         cam = 6,
     },
     ["grand_senora"] = {
@@ -141,6 +215,20 @@ Config.Stores = {
                 minZ = 36.16,
                 maxZ = 40.16,
             }
+        },
+        storezone = {
+            center = vector3(1166.05, 2711.9, 38.16),
+            width = 9,
+            length = 16,
+            options = {
+                heading = 358.63,
+                minZ = 36.16,
+                maxZ = 40.16,
+            }
+        },
+        safe = {
+            coords = vector3(1169.24, 2717.82, 37.16),
+            state = "closed",
         },
         cam = 17,
     },
@@ -156,6 +244,20 @@ Config.Stores = {
                 maxZ = 48.42,
             }
         },
+        storezone = {
+            center = vector3(1133.11, -982.53, 46.42),
+            width = 9,
+            length = 16,
+            options = {
+                heading = 95.88,
+                minZ = 44.42,
+                maxZ = 48.42,
+            }
+        },
+        safe = {
+            coords = vector3(1126.78, -980.15, 45.42),
+            state = "closed",
+        },
         cam = 9,
     },
     ["del_perro"] = {
@@ -169,6 +271,20 @@ Config.Stores = {
                 minZ = 38.16,
                 maxZ = 42.16,
             }
+        },
+        storezone = {
+            center = vector3(-1485.42, -377.31, 40.16),
+            width = 9,
+            length = 16,
+            options = {
+                heading = 313.66,
+                minZ = 38.16,
+                maxZ = 42.16,
+            }
+        },
+        safe = {
+            coords = vector3(-1478.91, -375.45, 39.16),
+            state = "closed",
         },
         cam = 5,
     },
@@ -184,6 +300,20 @@ Config.Stores = {
                 maxZ = 17.04,
             }
         },
+        storezone = {
+            center = vector3(-2965.32, 390.76, 15.04),
+            width = 9,
+            length = 16,
+            options = {
+                heading = 269.51,
+                minZ = 13.04,
+                maxZ = 17.04,
+            }
+        },
+        safe = {
+            coords = vector3(-2959.66, 387.09, 14.04),
+            state = "closed",
+        },
         cam = 13,
     },
     ["banham_canyon"] = {
@@ -197,6 +327,20 @@ Config.Stores = {
                 minZ = 5.91,
                 maxZ = 9.91,
             }
+        },
+        storezone = {
+            center = vector3(-3044.85, 587.65, 7.91),
+            width = 12,
+            length = 12,
+            options = {
+                heading = 107.3,
+                minZ = 5.91,
+                maxZ = 9.91,
+            }
+        },
+        safe = {
+            coords = vector3(-3047.89, 585.58, 7.91),
+            state = "closed",
         },
         cam = 14,
     },
@@ -212,6 +356,20 @@ Config.Stores = {
                 maxZ = 14.83,
             }
         },
+        storezone = {
+            center = vector3(-3246.58, 1005.06, 12.83),
+            width = 12,
+            length = 12,
+            options = {
+                heading = 87.67,
+                minZ = 10.83,
+                maxZ = 14.83,
+            }
+        },
+        safe = {
+            coords = vector3(-3250.1, 1004.43, 12.83),
+            state = "closed",
+        },
         cam = 15,
     },
     ["senora_freeway"] = {
@@ -225,6 +383,20 @@ Config.Stores = {
                 minZ = 53.24,
                 maxZ = 57.24,
             }
+        },
+        storezone = {
+            center = vector3(2676.18, 3285.83, 55.24),
+            width = 12,
+            length = 12,
+            options = {
+                heading = 60.89,
+                minZ = 53.24,
+                maxZ = 57.24,
+            }
+        },
+        safe = {
+            coords = vector3(2672.74, 3286.67, 55.24),
+            state = "closed",
         },
         cam = 18,
     },
@@ -240,6 +412,20 @@ Config.Stores = {
                 maxZ = 31.5,
             }
         },
+        storezone = {
+            center = vector3(29.2, -1342.56, 29.5),
+            width = 12,
+            length = 12,
+            options = {
+                heading = 1.3,
+                minZ = 27.5,
+                maxZ = 31.5,
+            }
+        },
+        safe = {
+            coords = vector3(28.23, -1339.15, 29.5),
+            state = "closed",
+        },
         cam = 8,
     },
     ["harmony"] = {
@@ -253,6 +439,20 @@ Config.Stores = {
                 minZ = 40.16,
                 maxZ = 44.16,
             }
+        },
+        storezone = {
+            center = vector3(545.0, 2666.02, 42.16),
+            width = 12,
+            length = 12,
+            options = {
+                heading = 184.09,
+                minZ = 40.16,
+                maxZ = 44.16,
+            }
+        },
+        safe = {
+            coords = vector3(546.43, 2662.74, 42.16),
+            state = "closed",
         },
         cam = 16,
     },
@@ -268,6 +468,20 @@ Config.Stores = {
                 maxZ = 105.57,
             }
         },
+        storezone = {
+            center = vector3(378.25, 329.88, 103.57),
+            width = 12,
+            length = 12,
+            options = {
+                heading = 347.16,
+                minZ = 101.57,
+                maxZ = 105.57,
+            }
+        },
+        safe = {
+            coords = vector3(378.18, 333.4, 103.57),
+            state = "closed",
+        },
         cam = 11,
     },
     ["mount_chiliad"] = {
@@ -281,6 +495,20 @@ Config.Stores = {
                 minZ = 33.04,
                 maxZ = 37.04,
             }
+        },
+        storezone = {
+            center = vector3(1734.17, 6417.37, 35.04),
+            width = 12,
+            length = 12,
+            options = {
+                heading = 333.28,
+                minZ = 33.04,
+                maxZ = 37.04,
+            }
+        },
+        safe = {
+            coords = vector3(1734.81, 6420.89, 35.04),
+            state = "closed",
         },
         cam = 20,
     },
@@ -296,6 +524,20 @@ Config.Stores = {
                 maxZ = 34.34,
             }
         },
+        storezone = {
+            center = vector3(1961.79, 3746.45, 32.34),
+            width = 12,
+            length = 12,
+            options = {
+                heading = 35.81,
+                minZ = 30.34,
+                maxZ = 34.34,
+            }
+        },
+        safe = {
+            coords = vector3(1959.25, 3748.97, 32.34),
+            state = "closed",
+        },
         cam = 19,
     },
     ["tataviam_mountains"] = {
@@ -309,6 +551,20 @@ Config.Stores = {
                 minZ = 106.62,
                 maxZ = 110.62,
             }
+        },
+        storezone = {
+            center = vector3(2552.75, 385.68, 108.62),
+            width = 12,
+            length = 12,
+            options = {
+                heading = 86.91,
+                minZ = 106.62,
+                maxZ = 110.62,
+            }
+        },
+        safe = {
+            coords = vector3(2549.24, 384.89, 108.62),
+            state = "closed",
         },
         cam = 0, -- make cam for this
     },
@@ -325,6 +581,21 @@ Config.Stores = {
                 maxZ = 33.68,
             }
         },
+        storezone = {
+            center = vector3(166.03, 6641.33, 32.33),
+            width = 12,
+            length = 12,
+            options = {
+                debugPoly = true,
+                heading = 313.88,
+                minZ = 29.68,
+                maxZ = 33.68,
+            }
+        },
+        safe = {
+            coords = vector3(166.03, 6641.33, 32.33),
+            state = "closed",
+        },
         cam = 27, 
     },
     ["paleto_bay"] = { -- MLO nodig
@@ -339,6 +610,21 @@ Config.Stores = {
                 minZ = 29.27,
                 maxZ = 35.27,
             }
+        },
+        storezone = {
+            center = vector3(-162.42, 6319.27, 31.55),
+            width = 12,
+            length = 12,
+            options = {
+                debugPoly = true,
+                heading = 134.1,
+                minZ = 29.27,
+                maxZ = 35.27,
+            }
+        },
+        safe = {
+            coords = vector3(-167.04, 6317.54, 30.8),
+            state = "closed",
         },
         cam = 28, 
     },

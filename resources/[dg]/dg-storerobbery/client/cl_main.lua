@@ -7,7 +7,10 @@ RegisterNetEvent('police:SetCopCount', function(amount) currentCops = amount end
 Citizen.CreateThread(function()
     DGCore.Functions.TriggerCallback("dg-storerobbery:server:GetConfig", function(data)
         openedRegisters = data.openedRegisters
-        openedSafes = data.openedSafes
+
+        for k, _ in pairs(Config.Stores) do
+            Config.Stores[k].safe.state = data.safes[k]
+        end
     end)
 end)
 
@@ -17,12 +20,12 @@ Citizen.CreateThread(function()
         registerzone.options.data = registerzone.options.data or {}
         registerzone.options.data.id = store.name
         exports["dg-lib"]:AddBoxZone("registers", registerzone.center, registerzone.length, registerzone.width, registerzone.options)
-    end
 
-    local storezone = Config.Stores["grove_street"].storezone
-    storezone.options.data = storezone.options.data or {}
-    storezone.options.data.id = Config.Stores["grove_street"].name
-    exports["dg-lib"]:AddPolyZone("store", storezone.vectors, storezone.options)
+        local storezone = store.storezone
+        storezone.options.data = storezone.options.data or {}
+        storezone.options.data.id = store.name
+        exports["dg-lib"]:AddBoxZone("store", storezone.center, storezone.length, storezone.width, storezone.options)
+    end
 end)
 
 function GainStress()
@@ -109,22 +112,3 @@ RegisterNetEvent("dg-storerobbery:client:PoliceAlert", function(store, streetLab
         end
     end
 end)
-
-
-
-
-
-
-
-
--- function takeAnim()
---     local ped = PlayerPedId()
---     while (not HasAnimDictLoaded("amb@prop_human_bum_bin@idle_b")) do
---         RequestAnimDict("amb@prop_human_bum_bin@idle_b")
---         Citizen.Wait(100)
---     end
---     TaskPlayAnim(ped, "amb@prop_human_bum_bin@idle_b", "idle_d", 8.0, 8.0, -1, 50, 0, false, false, false)
---     Citizen.Wait(2500)
---     TaskPlayAnim(ped, "amb@prop_human_bum_bin@idle_b", "exit", 8.0, 8.0, -1, 50, 0, false, false, false)
--- end
-
