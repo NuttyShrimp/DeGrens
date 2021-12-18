@@ -1,19 +1,13 @@
 fx_version "cerulean"
 game "gta5"
 
-description 'Jens-CarBoosting'
-version '1.0.0'
-
-shared_scripts {
-	'config.lua'
-}
-
 client_scripts {
-    'client/*'
+    'client/cl_*.lua',
 }
 
 server_scripts {
-    'server/*'
+    'server/sv_*.lua',
+    'config.lua',
 }
 
 exports {

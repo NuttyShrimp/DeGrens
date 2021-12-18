@@ -1,19 +1,4 @@
-Config = Config or {}
-
-local currentPedFlag = 1;
-
-Config.PrevPedFlag = function()
-    currentPedFlag = currentPedFlag * 2;
-	return currentPedFlag / 2;
-end
-
--- add flags here always same config.prevpedflag!
-Config.PEDFLAGS = {
-	["isBanker"] = Config.PrevPedFlag(),
-}
-
--- add npcs to the list here
-Config.NPCS = {
+NPCS = {
     {
         id = "paycheck_banker",
 	    model = "cs_bankman",
@@ -49,5 +34,3 @@ Config.NPCS = {
 	    scenario = "WORLD_HUMAN_GUARD_STAND_CASINO"
     }
 }
-
-
