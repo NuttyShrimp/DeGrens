@@ -58,7 +58,7 @@ function EnteredRegistersZone()
 end
 
 function LeftRegistersZone()
-    exports["dg-peek"]:RemoveTargetModel(Config.Registers.Model, "Lockpick")
+    exports["dg-peek"]:RemoveTargetModel(Config.Registers.Model, "Beroof")
 end
 
 AddEventHandler("dg-storerobbery:client:LockpickRegister", function(register)
