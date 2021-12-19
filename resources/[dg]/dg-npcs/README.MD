@@ -1,11 +1,5 @@
 ## Export functions
 
--SetPedFlags(npc entity, flag name, state of flag): Sets a flag on provided entity 
-
--HasPedFlags(npc entity, flag name): returns whether or not the provided entity has a flag and if so its state
-
--GetPedFlags(npc entity): returns list with all flag names
-
 -GetNpc(npc id): Returns the npc object with provided name
 
 -RemoveNpc(npc id): Removes the npc with provided name

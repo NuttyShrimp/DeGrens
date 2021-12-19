@@ -347,12 +347,12 @@ function DGCore.Player.CreatePlayer(PlayerData)
         end
 
         if (totalWeight + (itemInfo['weight'] * amount)) <= DGCore.Config.Player.MaxWeight then
-            if (slot and self.PlayerData.items[slot]) and (self.PlayerData.items[slot].name:lower() == item:lower()) and (itemInfo['type'] == 'item' and not itemInfo['stackable']) then
+            if (slot and self.PlayerData.items[slot]) and (self.PlayerData.items[slot].name:lower() == item:lower()) and (itemInfo['type'] == 'item' and itemInfo['stackable']) then
                 self.PlayerData.items[slot].amount = self.PlayerData.items[slot].amount + amount
                 self.Functions.UpdatePlayerData()
                 TriggerEvent('qb-log:server:CreateLog', 'playerinventory', 'AddItem', 'green', '**' .. GetPlayerName(self.PlayerData.source) .. ' (citizenid: ' .. self.PlayerData.citizenid .. ' | id: ' .. self.PlayerData.source .. ')** got item: [slot:' .. slot .. '], itemname: ' .. self.PlayerData.items[slot].name .. ', added amount: ' .. amount .. ', new total amount: ' .. self.PlayerData.items[slot].amount)
                 return true
-            elseif (not itemInfo['stackable'] and slot or slot and self.PlayerData.items[slot] == nil) then
+            elseif (itemInfo['stackable'] and slot or slot and self.PlayerData.items[slot] == nil) then
                 self.PlayerData.items[slot] = { 
                     name = itemInfo['name'], 
                     label = itemInfo['label'], 
@@ -368,14 +368,14 @@ function DGCore.Player.CreatePlayer(PlayerData)
                     description = itemInfo['description'] or '',
                     slot = slot,  
                     amount = amount, 
-                    info = info or '', 
+                    info = info or {}, 
                     quality = quality,
                     createtime = createtime,
                 }
                 self.Functions.UpdatePlayerData()
                 TriggerEvent('qb-log:server:CreateLog', 'playerinventory', 'AddItem', 'green', '**' .. GetPlayerName(self.PlayerData.source) .. ' (citizenid: ' .. self.PlayerData.citizenid .. ' | id: ' .. self.PlayerData.source .. ')** got item: [slot:' .. slot .. '], itemname: ' .. self.PlayerData.items[slot].name .. ', added amount: ' .. amount .. ', new total amount: ' .. self.PlayerData.items[slot].amount)
                 return true
-            elseif (itemInfo['stackable']) or (not slot or slot == nil) or (itemInfo['type'] == 'weapon') then
+            elseif (not itemInfo['stackable']) or (not slot or slot == nil) or (itemInfo['type'] == 'weapon') then
                 for i = 1, QBConfig.Player.MaxInvSlots, 1 do
                     if self.PlayerData.items[i] == nil then
                         self.PlayerData.items[i] = { 
@@ -393,7 +393,7 @@ function DGCore.Player.CreatePlayer(PlayerData)
                             description = itemInfo['description'] or '', 
                             slot = i, 
                             amount = amount, 
-                            info = info or '', 
+                            info = info or {}, 
                             quality = quality,
                             createtime = createtime,
                         }
@@ -593,7 +593,7 @@ DGCore.Player.LoadInventory = function(PlayerData)
     PlayerData.items = {}
 	local items = exports.oxmysql:executeSync(
         [[
-        SELECT slot, name, info, amount, quality
+        SELECT slot, name, info, amount, quality, createtime
         FROM inventoryitems 
         WHERE inventorytype = :inventorytype AND inventoryid = :inventoryid
         ]], {
@@ -658,7 +658,7 @@ DGCore.Player.SaveInventory = function(source)
                         ["inventoryid"] = PlayerData.citizenid,
                         ["slot"] = item.slot,
                         ["name"] = item.name,
-                        ["info"] = json.encode(item.info),
+                        ["info"] = json.encode(item.info) or {},
                         ["amount"] = item.amount,
                         ["quality"] = item.quality,
                         ["createtime"] = item.createtime,

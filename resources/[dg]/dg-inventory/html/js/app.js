@@ -670,7 +670,7 @@ function Swap($fromSlot, $toSlot, $fromInv, $toInv, $toAmount) {
     // }
 
     if (fromData !== undefined && fromData.amount >= $toAmount) {
-        if (fromData.stackable && $toAmount > 1) {
+        if (!fromData.stackable && $toAmount > 1) {
             InventoryError($fromInv, $fromSlot);
             return;
         }
@@ -687,7 +687,7 @@ function Swap($fromSlot, $toSlot, $fromInv, $toInv, $toAmount) {
             $toAmount = fromData.amount
         }
 
-        if ((toData != undefined || toData != null) && toData.name == fromData.name && !fromData.stackable) {
+        if ((toData != undefined || toData != null) && toData.name == fromData.name && fromData.stackable) {
             var newData = [];
             newData.name = toData.name;
             newData.label = toData.label;
