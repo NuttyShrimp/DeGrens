@@ -63,36 +63,6 @@ Config.BlacklistedPeds = {
     [`s_m_y_hwaycop_01`] = true,
 }
 
-Config.Teleports = {
-    --Elevator @ labs
-    [1] = {
-        [1] = {
-            coords = vector4(3540.74, 3675.59, 20.99, 167.5),
-            ["AllowVehicle"] = false,
-            drawText = '[E] Take Elevator Up'
-        },
-        [2] = {
-            coords = vector4(3540.74, 3675.59, 28.11, 172.5),
-            ["AllowVehicle"] = false,
-            drawText = '[E] Take Elevator Down'
-        },
-
-    },
-    --Coke Processing Enter/Exit
-    [2] = {
-        [1] = {
-            coords = vector4(909.49, -1589.22, 30.51, 92.24),
-            ["AllowVehicle"] = false, 
-            drawText = '[E] Enter Coke Processing'
-        },
-        [2] = {
-            coords = vector4(1088.81, -3187.57, -38.99, 181.7),
-            ["AllowVehicle"] = false,
-            drawText = '[E] Leave'
-        },
-    },
-}
-
 Config.Locations = { -- carwash
     [1] = {
         ["label"] = "Hands Free Carwash",
