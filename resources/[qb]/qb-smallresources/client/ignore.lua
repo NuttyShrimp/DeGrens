@@ -84,13 +84,11 @@ end)
 
 
 Citizen.CreateThread(function()
-	while true do
-        for i = 1, 15 do
-            EnableDispatchService(i, false)
-        end
-    
-        SetMaxWantedLevel(0)
-	end
+    for i = 1, 15 do
+        EnableDispatchService(i, false)
+    end
+
+    SetMaxWantedLevel(0)
 end)
 
 
