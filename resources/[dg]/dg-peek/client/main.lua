@@ -1,7 +1,7 @@
 DGCore = exports['dg-core']:GetCoreObject()
 
 local PlayerData
-local Players, Entities, Models, Zones, PedFlags =  {}, {}, {}, {}, {}
+local Players, Entities, Models, Zones, PedFlags, Bones =  {}, {}, {}, {}, {}, {}
 local playerPed, currentFlag, targetActive, hasFocus, success, AllowTarget, sendData = PlayerPedId(), 30, false, false, false, true, nil
 
 local targettedPlayer = nil
@@ -84,6 +84,15 @@ CreateThread(function()
     if next(Config.PedFlags) then
         for _, v in pairs(Config.PedFlags) do
             AddPedFlag(v.flags, {
+                options = v.options,
+                distance = v.distance
+            })
+        end
+    end
+
+    if next(Config.TargetBones) then
+        for k, v in pairs(Config.TargetBones) do
+            AddTargetBone(v.bones, {
                 options = v.options,
                 distance = v.distance
             })
@@ -173,7 +182,64 @@ function EnableTarget()
                             CheckEntity(hit, data, entity, #(playerCoords - coords))
                         end 
                     end
-                elseif entityType >= 2 then    
+                elseif entityType >= 2 then  
+                    if entityType == 2 then
+                        local selectedBone, selectedBoneName = FindSelectedBone(coords, entity)
+
+                        if selectedBone then
+                            local send_options, send_distance, slot = {}, {}, 0
+
+                            for _, data in pairs(Bones[selectedBoneName]) do
+                                if CheckOptions(data, entity, #(playerCoords - coords)) then
+                                    slot = #send_options + 1
+                                    send_options[slot] = data
+                                    send_options[slot].entity = entity
+                                    send_distance[data.distance] = true
+                                else 
+                                    send_distance[data.distance] = false 
+                                end
+                            end
+
+                            sendData = send_options
+
+                            if next(send_options) then
+                                success = true
+                                SendNUIMessage({response = "foundTarget", data = sendData[slot].targeticon})
+
+                                while targetActive and success do
+                                    local _, coords, entity2 = RaycastCamera(hit)
+
+                                    if entity == entity2 then
+                                        local playerCoords = GetEntityCoords(playerPed)
+                                        local selectedBone2 = FindSelectedBone(coords, entity)
+    
+                                        if selectedBone ~= selectedBone2 then
+                                            CheckIfReleasedButtonOrLeftTarget()
+                                            break
+                                        elseif not hasFocus and (IsControlPressed(0, Config.MenuControlKey) or IsDisabledControlPressed(0, Config.MenuControlKey)) then
+                                            EnableNUI(CloneTable(sendData))
+                                        else
+                                            local dist = #(playerCoords - coords)
+                                            for k, v in pairs(send_distance) do
+                                                if v and dist > k then
+                                                    CheckIfReleasedButtonOrLeftTarget()
+                                                    break
+                                                end
+                                            end
+                                        end
+                                    else
+                                        CheckIfReleasedButtonOrLeftTarget()
+                                        break
+                                    end
+
+                                    Citizen.Wait(0)
+                                end
+
+                                CheckIfReleasedButtonOrLeftTarget()
+                            end
+                        end
+                    end
+                    
                     local data = Models[GetEntityModel(entity)]
                     if data then
                         CheckEntity(hit, data, entity, #(playerCoords - coords))
@@ -194,6 +260,7 @@ function EnableTarget()
 			if not success then
 				for _, zone in pairs(Zones) do
 					local distance = #(playerCoords - zone.center)
+
 					if zone:isPointInside(coords) and distance <= zone.targetoptions.distance then
 						local send_options, slot = {}, 0
 
@@ -209,6 +276,7 @@ function EnableTarget()
 						if next(send_options) then
 							success = true
 							SendNUIMessage({response = "foundTarget", data = sendData[slot].targeticon})
+
 							while targetActive and success do
 								local playerCoords = GetEntityCoords(playerPed)
 								local _, endcoords, entity2 = RaycastCamera(hit)
@@ -311,6 +379,28 @@ function CheckEntity(hit, datatable, entity, distance)
 	end
 end
 
+function FindSelectedBone(coords, entity)
+	local closestBone, closestDistance, closestBoneName = -1, 20, nil
+
+	for k, v in pairs(Config.VehicleBones) do
+		if Bones[v] then
+			local boneId = GetEntityBoneIndexByName(entity, v)
+			local bonePos = GetWorldPositionOfEntityBone(entity, boneId)
+			local distance = #(coords - bonePos)
+
+			if closestBone == -1 or distance < closestDistance then
+				closestBone, closestDistance, closestBoneName = boneId, distance, v
+			end
+		end
+	end
+
+	if closestBone ~= -1 and closestDistance < 0.9 then 
+        return closestBone, closestBoneName
+	else 
+        return false 
+    end
+end
+
 function CheckIfReleasedButtonOrLeftTarget()
     if IsControlReleased(0, Config.OpenControlKey) or IsDisabledControlReleased(0, Config.OpenControlKey) then
         DisableTarget(true)
@@ -410,6 +500,12 @@ function AddComboZone(zones, options, targetoptions)
 	Zones[name].targetoptions = targetoptions
 end
 
+function AddEntityZone(name, entity, options, targetoptions)
+	Zones[name] = EntityZone:Create(entity, options)
+	targetoptions.distance = targetoptions.distance or Config.MaxDistance
+	Zones[name].targetoptions = targetoptions
+end
+
 function AddTargetEntity(entities, parameters)
 	local distance, options = parameters.distance or Config.MaxDistance, parameters.options
 	if type(entities) == "table" then
@@ -433,12 +529,6 @@ function AddTargetEntity(entities, parameters)
 			end
 		end
 	end
-end
-
-function AddEntityZone(name, entity, options, targetoptions)
-	Zones[name] = EntityZone:Create(entity, options)
-	targetoptions.distance = targetoptions.distance or Config.MaxDistance
-	Zones[name].targetoptions = targetoptions
 end
 
 function AddTargetModel(models, parameters)
@@ -481,6 +571,25 @@ function AddPedFlag(flags, parameters)
 	end
 end
 
+function AddTargetBone(bones, parameters)
+	local distance, options = parameters.distance or Config.MaxDistance, parameters.options
+	if type(bones) == 'table' then
+		for _, bone in pairs(bones) do
+			if not Bones[bone] then Bones[bone] = {} end
+			for k, v in pairs(options) do
+				if v.distance == nil or not v.distance or v.distance > distance then v.distance = distance end
+				Bones[bone][v.label] = v
+			end
+		end
+	elseif type(bones) == 'string' then
+		if not Bones[bones] then Bones[bones] = {} end
+		for k, v in pairs(options) do
+			if v.distance == nil or not v.distance or v.distance > distance then v.distance = distance end
+			Bones[bones][v.label] = v
+		end
+	end
+end
+
 function AddGlobalPed(parameters) AddGlobalType(1, parameters) end
 function AddGlobalVehicle(parameters) AddGlobalType(2, parameters) end
 function AddGlobalObject(parameters) AddGlobalType(3, parameters) end
@@ -512,6 +621,42 @@ function RemoveZone(name)
 		Zones[name]:destroy()
 	end
 	Zones[name] = nil
+end
+
+function RemoveTargetEntity(entities, labels)
+	if type(entities) == "table" then
+		for _, entity in pairs(entities) do
+			entity = NetworkGetEntityIsNetworked(entity) and NetworkGetNetworkIdFromEntity(entity) or false
+			if entity then
+				if type(labels) == "table" then
+					for _, v in pairs(labels) do
+						if Entities[entity] then
+							Entities[entity][v] = nil
+						end
+					end
+				elseif type(labels) == "string" then
+					if Entities[entity] then
+						Entities[entity][labels] = nil
+					end
+				end
+			end
+		end
+	elseif type(entities) == "string" then
+		local entity = NetworkGetEntityIsNetworked(entities) and NetworkGetNetworkIdFromEntity(entities) or false
+		if entity then
+			if type(labels) == "table" then
+				for _, v in pairs(labels) do
+					if Entities[entity] then
+						Entities[entity][v] = nil
+					end
+				end
+			elseif type(labels) == "string" then
+				if Entities[entity] then
+					Entities[entity][labels] = nil
+				end
+			end
+		end
+	end
 end
 
 function RemoveTargetModel(models, labels)
@@ -546,37 +691,45 @@ function RemoveTargetModel(models, labels)
 	end
 end
 
-function RemoveTargetEntity(entities, labels)
-	if type(entities) == "table" then
-		for _, entity in pairs(entities) do
-			entity = NetworkGetEntityIsNetworked(entity) and NetworkGetNetworkIdFromEntity(entity) or false
-			if entity then
-				if type(labels) == "table" then
-					for _, v in pairs(labels) do
-						if Entities[entity] then
-							Entities[entity][v] = nil
-						end
+function RemovePedFlag(flag, labels)
+    if type(labels) == "table" then
+        for _, v in pairs(labels) do
+            if PedFlags[flag] then
+                PedFlags[flags][v] = nil
+            end
+        end
+    elseif type(labels) == "string" then
+        if PedFlags[flag] then
+            PedFlags[flag][labels] = nil
+        end
+    end
+end
+
+function RemoveTargetBone(bones, labels)
+	if type(bones) == 'table' then
+		for _, bone in pairs(bones) do
+			if type(labels) == 'table' then
+				for k, v in pairs(labels) do
+					if Bones[bone] then
+						Bones[bone][v] = nil
 					end
-				elseif type(labels) == "string" then
-					if Entities[entity] then
-						Entities[entity][labels] = nil
-					end
+				end
+			elseif type(labels) == 'string' then
+				if Bones[bone] then
+					Bones[bone][labels] = nil
 				end
 			end
 		end
-	elseif type(entities) == "string" then
-		local entity = NetworkGetEntityIsNetworked(entities) and NetworkGetNetworkIdFromEntity(entities) or false
-		if entity then
-			if type(labels) == "table" then
-				for _, v in pairs(labels) do
-					if Entities[entity] then
-						Entities[entity][v] = nil
-					end
+	else
+		if type(labels) == 'table' then
+			for k, v in pairs(labels) do
+				if Bones[bones] then
+					Bones[bones][v] = nil
 				end
-			elseif type(labels) == "string" then
-				if Entities[entity] then
-					Entities[entity][labels] = nil
-				end
+			end
+		elseif type(labels) == 'string' then
+			if Bones[bones] then
+				Bones[bones][labels] = nil
 			end
 		end
 	end
@@ -658,9 +811,11 @@ end)
 exports("AddCircleZone", AddCircleZone)
 exports("AddBoxZone", AddBoxZone)
 exports("AddComboZone", AddComboZone)
-exports("AddTargetEntity", AddTargetEntity)
 exports("AddEntityZone", AddEntityZone)
+exports("AddTargetEntity", AddTargetEntity)
 exports("AddTargetModel", AddTargetModel)
+exports("AddPedFlag", AddPedFlag)
+exports("AddTargetBone", AddTargetBone)
 exports("AddGlobalType", AddGlobalType)
 exports("AddGlobalPed", AddGlobalPed)
 exports("AddGlobalVehicle", AddGlobalVehicle)
@@ -671,6 +826,8 @@ exports("AddGlobalPlayer", AddGlobalPlayer)
 exports("RemoveZone", RemoveZone)
 exports("RemoveTargetModel", RemoveTargetModel)
 exports("RemoveTargetEntity", RemoveTargetEntity)
+exports("RemovePedFlag", RemovePedFlag)
+exports("RemoveTargetBone", RemoveTargetBone)
 exports("RemoveGlobalType", RemoveGlobalType)
 exports("RemoveGlobalPed", RemoveGlobalPed)
 exports("RemoveGlobalVehicle", RemoveGlobalVehicle)
@@ -681,6 +838,8 @@ exports("RemoveGlobalPlayer", RemoveGlobalPlayer)
 exports("GetZoneData", function(name) return Zones[name] end)
 exports("GetTargetEntityData", function(entity, label) return Entities[entity][label] end)
 exports("GetTargetModelData", function(model, label) return Models[model][label] end)
+exports("GetPedFlagData", function(flag, label) return PedFlags[flag][label] end)
+exports("GetTargetBoneData", function(bone, label) return Bones[bone][label] end)
 exports("GetGlobalTypeData", function(type, label) return Types[type][label] end)
 exports("GetGlobalPedData", function(label) return Types[1][label] end)
 exports("GetGlobalVehicleData", function(label) return Types[2][label] end)
@@ -691,6 +850,8 @@ exports("GetGlobalPlayerData", function(label) return Players[label] end)
 exports("UpdateZoneData", function(name, data) Zones[name] = data end)
 exports("UpdateTargetEntityData", function(entity, label, data) Entities[entity][label] = data end)
 exports("UpdateTargetModelData", function(model, label, data) Models[model][label] = data end)
+exports("UpdatePedFlagData", function(flag, label, data) PedFlags[flag][label] = data end)
+exports("UpdateTargetBoneData", function(bone, label, data) Bones[bone][label] = data end)
 exports("UpdateGlobalTypeData", function(type, label, data) Types[type][label] = data end)
 exports("UpdateGlobalPedData", function(label, data) Types[1][label] = data end)
 exports("UpdateGlobalVehicleData", function(label, data) Types[2][label] = data end)
