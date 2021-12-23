@@ -6,14 +6,14 @@ local requiredItemsShowed4 = false
 Citizen.CreateThread(function()
     Citizen.Wait(2000)
     local requiredItems3 = {
-        [1] = {name = exports["dg-inventory"]:GetItemData()["thermite"]["name"], image = exports["dg-inventory"]:GetItemData()["thermite"]["image"]},
+        "thermite",
     }
     local requiredItems2 = {
-        [1] = {name = exports["dg-inventory"]:GetItemData()["electronickit"]["name"], image = exports["dg-inventory"]:GetItemData()["electronickit"]["image"]},
-        [2] = {name = exports["dg-inventory"]:GetItemData()["trojan_usb"]["name"], image = exports["dg-inventory"]:GetItemData()["trojan_usb"]["image"]},
+        "electronickit",
+        "trojan_usb",
     }
     local requiredItems = {
-        [1] = {name = exports["dg-inventory"]:GetItemData()["security_card_02"]["name"], image = exports["dg-inventory"]:GetItemData()["security_card_02"]["image"]},
+        "security_card_02",
     }
     while true do
         local ped = PlayerPedId()
@@ -108,7 +108,7 @@ end)
 Citizen.CreateThread(function()
     Citizen.Wait(2000)
     local requiredItems4 = {
-        [1] = {name = exports["dg-inventory"]:GetItemData()["thermite"]["name"], image = exports["dg-inventory"]:GetItemData()["thermite"]["image"]},
+        "thermite",
     }
     while true do 
         Citizen.Wait(1)
@@ -166,9 +166,9 @@ AddEventHandler('electronickit:UseElectronickit', function()
                                         flags = 16,
                                     }, {}, {}, function() -- Done
                                         TriggerServerEvent("DGCore:Server:RemoveItem", "electronickit", 1)
-                                        TriggerEvent('inventory:client:ItemBox', exports["dg-inventory"]:GetItemData()["electronickit"], "remove")
+                                        TriggerEvent('inventory:client:ItemBox', "electronickit", "remove")
                                         TriggerServerEvent("DGCore:Server:RemoveItem", "trojan_usb", 1)
-                                        TriggerEvent('inventory:client:ItemBox', exports["dg-inventory"]:GetItemData()["trojan_usb"], "remove")
+                                        TriggerEvent('inventory:client:ItemBox', "trojan_usb", "remove")
                                         StopAnimTask(PlayerPedId(), "anim@gangops@facility@servers@", "hotwire", 1.0)
                                         TriggerEvent("mhacking:show")
                                         TriggerEvent("mhacking:start", math.random(5, 9), math.random(10, 15), OnHackPacificDone)

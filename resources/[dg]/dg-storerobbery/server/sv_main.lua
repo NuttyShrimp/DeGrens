@@ -18,7 +18,7 @@ RegisterNetEvent("dg-storerobbery:server:OpenRegister", function(register)
     local Player = DGCore.Functions.GetPlayer(src)
     local amount = math.random(Config.Registers.RewardAmount - 1, Config.Registers.RewardAmount + 1)
     Player.Functions.AddItem(Config.Registers.Reward, amount)
-    TriggerClientEvent('inventory:client:ItemBox', src, exports["dg-inventory"]:GetItemData()[Config.Registers.Reward], "add")
+    TriggerClientEvent('inventory:client:ItemBox', src, Config.Registers.Reward, "add")
 
     openedRegisters[#openedRegisters + 1] = register
     TriggerClientEvent("dg-storerobbery:client:UpdateOpenedRegisters", -1, openedRegisters)
@@ -47,12 +47,12 @@ RegisterNetEvent("dg-storerobbery:server:LootSafe", function(store)
     local Player = DGCore.Functions.GetPlayer(src)
     local amount = math.random(Config.Safe.RewardAmount - 1, Config.Safe.RewardAmount + 1)
     Player.Functions.AddItem(Config.Safe.Reward, amount)
-    TriggerClientEvent('inventory:client:ItemBox', src, exports["dg-inventory"]:GetItemData()[Config.Safe.Reward], "add")
+    TriggerClientEvent('inventory:client:ItemBox', src, Config.Safe.Reward, "add")
 
     local rng = math.random(1, 100)
     if rng >= Config.Safe.SpecialItemChance then
         Player.Functions.AddItem(Config.Safe.SpecialItem, 1)
-        TriggerClientEvent('inventory:client:ItemBox', src, exports["dg-inventory"]:GetItemData()[Config.Safe.SpecialItem], "add")
+        TriggerClientEvent('inventory:client:ItemBox', src, Config.Safe.SpecialItem, "add")
     end
 
     Config.Stores[store].safe.state = "looted"

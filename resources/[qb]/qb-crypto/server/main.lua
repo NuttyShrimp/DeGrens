@@ -141,7 +141,7 @@ RegisterServerEvent('qb-crypto:server:ExchangeFail', function()
 
     if ItemData ~= nil then
         Player.Functions.RemoveItem("cryptostick", 1)
-        TriggerClientEvent('inventory:client:ItemBox', src, exports["dg-inventory"]:GetItemData()["cryptostick"], "remove")
+        TriggerClientEvent('inventory:client:ItemBox', src, "cryptostick", "remove")
         TriggerClientEvent('DGCore:Notify', src, "Cryptostick malfunctioned", 'error')
     end
 end)
@@ -176,7 +176,7 @@ RegisterServerEvent('qb-crypto:server:ExchangeSuccess', function(LuckChance)
         Player.Functions.RemoveItem("cryptostick", 1)
         Player.Functions.AddMoney('crypto', Amount)
         TriggerClientEvent('DGCore:Notify', src, "You have exchanged your Cryptostick for: "..Amount.." QBit(\'s)", "success", 3500)
-        TriggerClientEvent('inventory:client:ItemBox', src, exports["dg-inventory"]:GetItemData()["cryptostick"], "remove")
+        TriggerClientEvent('inventory:client:ItemBox', src, "cryptostick", "remove")
         TriggerClientEvent('qb-phone:client:AddTransaction', src, Player, {}, "There are "..Amount.." Qbit('s) credited!", "Credit")
     end
 end)

@@ -7,7 +7,6 @@ end)
 RegisterServerEvent('qb-houserobbery:server:enterHouse')
 AddEventHandler('qb-houserobbery:server:enterHouse', function(house)
     local src = source
-    local itemInfo = exports["dg-inventory"]:GetItemData()["lockpick"]
     local Player = DGCore.Functions.GetPlayer(src)
     
     if not Config.Houses[house]["opened"] then
@@ -57,19 +56,15 @@ AddEventHandler('qb-houserobbery:server:searchCabin', function(cabin, house)
 
         for i = 1, itemCount, 1 do
             local randomItem = Config.Rewards[Tier][Config.Houses[house]["furniture"][cabin]["type"]][math.random(1, #Config.Rewards[Tier][Config.Houses[house]["furniture"][cabin]["type"]])]
-            local itemInfo = exports["dg-inventory"]:GetItemData()[randomItem]
+            local itemInfo = exports["dg-inventory"]:GetItemData(randomItem)
             if math.random(1, 100) == 69 then
-                randomItem = "painkillers"
-                itemInfo = exports["dg-inventory"]:GetItemData()[randomItem]
-                Player.Functions.AddItem(randomItem, 2)
-                TriggerClientEvent('inventory:client:ItemBox', src, itemInfo, "add")
+                Player.Functions.AddItem("painkillers", 2)
+                TriggerClientEvent('inventory:client:ItemBox', src, "painkillers", "add")
             elseif math.random(1, 100) == 35 then
-                    randomItem = "weed_og-kush_seed"
-                    itemInfo = exports["dg-inventory"]:GetItemData()[randomItem]
-                    Player.Functions.AddItem(randomItem, 1)
-                    TriggerClientEvent('inventory:client:ItemBox', src, itemInfo, "add")
+                Player.Functions.AddItem("weed_og-kush_seed", 1)
+                TriggerClientEvent('inventory:client:ItemBox', src, "weed_og-kush_seed", "add")
             else
-                if not itemInfo["unqiue"] then
+                if not itemInfo["unique"] then
                     local itemAmount = math.random(1, 3)
                     if randomItem == "plastic" then
                         itemAmount = math.random(15, 30)
@@ -87,7 +82,7 @@ AddEventHandler('qb-houserobbery:server:searchCabin', function(cabin, house)
                 else
                     Player.Functions.AddItem(randomItem, 1)
                 end
-                TriggerClientEvent('inventory:client:ItemBox', src, itemInfo, "add")
+                TriggerClientEvent('inventory:client:ItemBox', src, randomItem, "add")
             end
             Citizen.Wait(500)
             -- local weaponChance = math.random(1, 100)

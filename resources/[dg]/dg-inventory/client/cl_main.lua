@@ -1,4 +1,4 @@
-DGCore = exports['dg-core']:GetCoreObject()
+local DGCore = exports['dg-core']:GetCoreObject()
 
 ItemData = {}
 
@@ -21,9 +21,8 @@ Current = {
 
 Citizen.CreateThread(function()
     DGCore.Functions.TriggerCallback("inventory:server:SetupData", function(callback)
-        ItemData = callback[1]
-        Dumpsters = callback[2]
-        Drops = callback[3]
+        Dumpsters = callback[1]
+        Drops = callback[2]
     end)
 end)
 
@@ -155,7 +154,7 @@ end, false)
 
 RegisterNUICallback("GetWeaponData", function(data, cb)
     local data = {
-        WeaponData = GetItemData()[data.weapon],
+        WeaponData = ItemData[data.weapon],
         AttachmentData = FormatWeaponAttachments(data.ItemData)
     }
     cb(data)
@@ -163,7 +162,7 @@ end)
 
 RegisterNUICallback("RemoveAttachment", function(data, cb)
     local ped = PlayerPedId()
-    local WeaponData = GetItemData()[data.WeaponData.name]
+    local WeaponData = ItemData[data.WeaponData.name]
     local Attachment = WeaponAttachments[WeaponData.name:upper()][data.AttachmentData.attachment]
 
     DGCore.Functions.TriggerCallback("weapons:server:RemoveAttachment", function(NewAttachments)
@@ -235,7 +234,7 @@ RegisterNUICallback("UseItem", function(data, cb)
 end)
 
 RegisterNUICallback("getCombineItem", function(data, cb)
-    cb(GetItemData()[data.item])
+    cb(ItemData[data.item])
 end)
 
 RegisterNUICallback("combineItem", function(data)
@@ -283,4 +282,47 @@ end)
 
 RegisterNUICallback("Notify", function(data, cb)
     DGCore.Functions.Notify(data.message, data.type)
+end)
+
+Citizen.CreateThread(function()
+    local result = json.decode(LoadResourceFile(GetCurrentResourceName(), "items.json"))
+
+    if result then
+        for _, item in pairs(result) do
+            if item then
+                ItemData[item.name] = {
+                    ["name"] = item.name,
+                    ["label"] = item.label,
+                    ["weight"] = tonumber(item.weight),
+                    ["type"] = item.type,
+                    ["ammotype"] = item.type == "weapon" and item.ammotype or nil,
+                    ["stackable"] = item.stackable or false,
+                    ["useable"] = item.useable or false,
+                    ["shouldClose"] = item.shouldClose or false,
+                    ["combinable"] = item.combinable and json.decode(item.combinable) or nil,
+                    ["decayrate"] = tonumber(item.decayrate),
+                    ["image"] = item.image,
+                    ["description"] = item.description,
+                } 
+
+                -- for weapons we also need to be able to get data from the hash because we cant convert the hash we get from certain natives to the weapon name
+                if item.type == "weapon" then
+                    ItemData[GetHashKey(item.name)] = {
+                        ["name"] = item.name,
+                        ["label"] = item.label,
+                        ["weight"] = tonumber(item.weight),
+                        ["type"] = item.type,
+                        ["ammotype"] = item.type == "weapon" and item.ammotype or nil,
+                        ["stackable"] = item.stackable or false,
+                        ["useable"] = item.useable or false,
+                        ["shouldClose"] = item.shouldClose or false,
+                        ["combinable"] = item.combinable and json.decode(item.combinable) or nil,
+                        ["decayrate"] = tonumber(item.decayrate),
+                        ["image"] = item.image,
+                        ["description"] = item.description,
+                    }
+                end
+            end
+        end
+    end
 end)

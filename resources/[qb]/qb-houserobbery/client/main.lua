@@ -35,8 +35,8 @@ end
 CreateThread(function()
     Citizen.Wait(500)
     requiredItems = {
-        [1] = {name = exports["dg-inventory"]:GetItemData()["lockpick"]["name"], image = exports["dg-inventory"]:GetItemData()["lockpick"]["image"]},
-        [2] = {name = exports["dg-inventory"]:GetItemData()["screwdriverset"]["name"], image = exports["dg-inventory"]:GetItemData()["screwdriverset"]["image"]},
+        "lockpick",
+        "screwdriverset",
     }
 
     while true do
@@ -282,16 +282,14 @@ function lockpickFinish(success)
         DGCore.Functions.Notify('It worked!', 'success', 2500)
     else
         if usingAdvanced then
-            local itemInfo = exports["dg-inventory"]:GetItemData()["advancedlockpick"]
             if math.random(1, 100) < 20 then
                 TriggerServerEvent("DGCore:Server:RemoveItem", "advancedlockpick", 1)
-                TriggerEvent('inventory:client:ItemBox', itemInfo, "remove")
+                TriggerEvent('inventory:client:ItemBox', "advancedlockpick", "remove")
             end
         else
-            local itemInfo = exports["dg-inventory"]:GetItemData()["lockpick"]
             if math.random(1, 100) < 40 then
                 TriggerServerEvent("DGCore:Server:RemoveItem", "lockpick", 1)
-                TriggerEvent('inventory:client:ItemBox', itemInfo, "remove")
+                TriggerEvent('inventory:client:ItemBox', "advancedlockpick", "remove")
             end
         end
         

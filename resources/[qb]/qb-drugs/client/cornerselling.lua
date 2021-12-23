@@ -279,7 +279,7 @@ CreateThread(function()
                         Wait(2000)
                         ClearPedTasks(ped)
                         TriggerServerEvent("DGCore:Server:AddItem", stealData.item, stealData.amount)
-                        TriggerEvent('inventory:client:ItemBox', exports["dg-inventory"]:GetItemData()[stealData.item], "add")
+                        TriggerEvent('inventory:client:ItemBox', stealData.item, "add")
                         stealingPed = nil
                         stealData = {}
                     end

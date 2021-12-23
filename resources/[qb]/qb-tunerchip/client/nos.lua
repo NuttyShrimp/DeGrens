@@ -28,7 +28,7 @@ AddEventHandler('smallresource:client:LoadNitrous', function()
                     disableMouse = false,
                     disableCombat = true,
                 }, {}, {}, {}, function() -- Done
-                    TriggerEvent("inventory:client:ItemBox", exports["dg-inventory"]:GetItemData()['nitrous'], "remove")
+                    TriggerEvent("inventory:client:ItemBox", 'nitrous', "remove")
                     TriggerServerEvent("DGCore:Server:RemoveItem", 'nitrous', 1)
                     local CurrentVehicle = GetVehiclePedIsIn(PlayerPedId())
                     local Plate = GetVehicleNumberPlateText(CurrentVehicle)

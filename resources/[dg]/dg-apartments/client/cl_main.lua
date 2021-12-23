@@ -97,7 +97,6 @@ RegisterNetEvent('dg-apartment:openStash', function()
 	DGCore.Functions.TriggerCallback('dg-apartments:server:getCurrentApartment', function(CurrentApartment)
 		TriggerServerEvent("inventory:server:OpenInventory", "stash", CurrentApartment)
 		TriggerServerEvent("InteractSound_SV:PlayOnSource", "StashOpen", 0.4)
-		TriggerEvent("inventory:client:SetCurrentStash", CurrentApartment)
 	end)
 end)
 

@@ -10,7 +10,7 @@ DGCore.Functions.CreateCallback('qb-drugs:server:cornerselling:getAvailableDrugs
             table.insert(AvailableDrugs, {
                 item = item.name,
                 amount = item.amount,
-                label = exports["dg-inventory"]:GetItemData()[item.name]["label"]
+                label = exports["dg-inventory"]:GetItemData(item.name)["label"]
             })
         end
     end
@@ -33,7 +33,7 @@ AddEventHandler('qb-drugs:server:sellCornerDrugs', function(item, amount, price)
         TriggerClientEvent('DGCore:Notify', src, 'Offer accepted!', 'success')
         Player.Functions.RemoveItem(item, amount)
         Player.Functions.AddMoney('cash', price, "sold-cornerdrugs")
-        TriggerClientEvent('inventory:client:ItemBox', src, exports["dg-inventory"]:GetItemData()[item], "remove")
+        TriggerClientEvent('inventory:client:ItemBox', src, item, "remove")
 
         for i = 1, #Config.CornerSellingDrugsList, 1 do
             local item = Player.Functions.GetItemByName(Config.CornerSellingDrugsList[i])
@@ -42,7 +42,7 @@ AddEventHandler('qb-drugs:server:sellCornerDrugs', function(item, amount, price)
                 table.insert(AvailableDrugs, {
                     item = item.name,
                     amount = item.amount,
-                    label = exports["dg-inventory"]:GetItemData()[item.name]["label"]
+                    label = exports["dg-inventory"]:GetItemData(item.name)["label"]
                 })
             end
         end
@@ -61,7 +61,7 @@ AddEventHandler('qb-drugs:server:robCornerDrugs', function(item, amount, price)
 
     Player.Functions.RemoveItem(item, amount)
 
-    TriggerClientEvent('inventory:client:ItemBox', src, exports["dg-inventory"]:GetItemData()[item], "remove")
+    TriggerClientEvent('inventory:client:ItemBox', src, item, "remove")
 
     for i = 1, #Config.CornerSellingDrugsList, 1 do
         local item = Player.Functions.GetItemByName(Config.CornerSellingDrugsList[i])
@@ -70,7 +70,7 @@ AddEventHandler('qb-drugs:server:robCornerDrugs', function(item, amount, price)
             table.insert(AvailableDrugs, {
                 item = item.name,
                 amount = item.amount,
-                label = exports["dg-inventory"]:GetItemData()[item.name]["label"]
+                label = exports["dg-inventory"]:GetItemData(item.name)["label"]
             })
         end
     end

@@ -8,15 +8,13 @@ shared_scripts {
 	'@dg-weapons/config.lua',
 }
 
-server_scripts {
-    'server/*.lua'
-}
-server_export "GetItemData"
-
 client_script {
     'client/*.lua'
 }
-export "GetItemData"
+
+server_scripts {
+    'server/*.lua'
+}
 
 ui_page {
 	'html/ui.html'
@@ -31,6 +29,7 @@ files {
 	'html/ammo_images/*.png',
 	'html/attachment_images/*.png',
 	'html/*.ttf',
+    'items.json',
 }
 
 provide 'qb-inventory'

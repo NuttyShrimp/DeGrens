@@ -196,18 +196,17 @@ AddEventHandler('qb-vehicletuning:server:CheckForItems', function(part)
             Player.Functions.RemoveItem(Config.RepairCostAmount[part].item, Config.RepairCostAmount[part].costs)
 
             for i = 1, Config.RepairCostAmount[part].costs, 1 do
-                TriggerClientEvent('inventory:client:ItemBox', src,
-                    exports["dg-inventory"]:GetItemData()[Config.RepairCostAmount[part].item], "remove")
+                TriggerClientEvent('inventory:client:ItemBox', src, Config.RepairCostAmount[part].item, "remove")
                 Citizen.Wait(500)
             end
         else
             TriggerClientEvent('DGCore:Notify', src,
-                "You Dont Have Enough " .. exports["dg-inventory"]:GetItemData()[Config.RepairCostAmount[part].item]["label"] .. " (min. " ..
+                "You Dont Have Enough " .. exports["dg-inventory"]:GetItemData(Config.RepairCostAmount[part].item)["label"] .. " (min. " ..
                     Config.RepairCostAmount[part].costs .. "x)", "error")
         end
     else
         TriggerClientEvent('DGCore:Notify', src, "You Do Not Have " ..
-            exports["dg-inventory"]:GetItemData()[Config.RepairCostAmount[part].item]["label"] .. " bij je!", "error")
+            exports["dg-inventory"]:GetItemData(Config.RepairCostAmount[part].item)["label"] .. " bij je!", "error")
     end
 end)
 

@@ -1,26 +1,72 @@
-## Installation
-- Import `dg-inventory.sql` in your database
+# Inventory
 
-## Shared
-- Use exports["dg-inventory"]:GetItemData()[itemname]
-- Can also get weapons using their hashkey instead of name
-- Do not call on resource start, needs to be pulled from db
+## Itemdata
 
-## Open inventory
-- Open a stash or shop using the "inventory:server:OpenInventory" event
-- Params: Inventorytype (shop, stash), inventoryid, data as object with label items
-- When opening stash also trigger "inventory:client:SetCurrentStash" with the stashname
+```lua 
+local itemName = "lockpick" -- can also be hash when dealing with weapons
+exports["dg-inventory"]:GetItemData(itemName) 
+```
 
-## Give inventory
-- Open temporary inventory to be used in other scripts
-- Open using event "inventory:server:OpenInventory" with params "give" and an ID that laters needs to be used to get the items in the tempinv
-- Add handler to event "inventory:client:ClosedGiveInventory", event gets triggered when tempinv gets closed, now u can get items inside with the id u used to open it
-- The close event provides all the tempinvs, use like: tempinvs[theidyouused].items[1]
+## Open Inventory
+### Shop
+``` lua
+local shopId = "hospital" -- unique name for saving stock
+local data =  {
+    label = "Winkel Displayname",
+    slots = 1,
+    items = {
+        [1] = {
+            name = "radio",
+            price = 0,
+            amount = 50,
+            info = {},
+            type = "item",
+            slot = 1,
+        },
+    }
+}
+TriggerServerEvent("inventory:server:OpenInventory", "shop", shopId, data)
+```
+
+### Stash
+``` lua
+local stashId = "mechanicstash"
+local data = {
+    maxweight = 10000,
+    slots = 10,
+}
+TriggerServerEvent("inventory:server:OpenInventory", "stash", stashId, data)
+```
+
+### Give
+``` lua
+local id = "saveThisToBeUsedLater" -- save this ;)
+TriggerServerEvent("inventory:server:OpenInventory", "give", id)
+
+RegisterNetEvent("inventory:client:ClosedGiveInventory", function(data)
+    local givenItem = data[id].items[1]
+end)
+```
+
+### Otherplayer
+``` lua
+TriggerServerEvent("inventory:server:OpenInventory", "otherplayer", playerId)
+```
 
 ## Required items
-- Show using event "inventory:client:requiredItems" with the items and a bool
-- Provide items as list with object which has name and image
+``` lua
+local items = {
+    "itemnamehere",
+    "otheritemnamehere",
+}
+local showRequiredItems = true
+
+TriggerClientEvent("inventory:client:requiredItems", items, showRequiredItems)
+```
 
 ## Itembox
-- Show using event "inventory:client:ItemBox" with the itemdata and "remove" or "add" 
-- Itemdata get from the export
+``` lua
+local itemName = "lockpick"
+local action = "add" -- "remove"
+TriggerClientEvent("inventory:client:ItemBox", itemName, action)
+```

@@ -14,7 +14,7 @@ DGCore.Commands.Add("setlawyer", "Register someone as a lawyer", {{name="id", he
             OtherPlayer.Functions.AddItem("lawyerpass", 1, false, lawyerInfo)
             TriggerClientEvent("DGCore:Notify", source, "You have " .. OtherPlayer.PlayerData.charinfo.firstname .. " " .. OtherPlayer.PlayerData.charinfo.lastname .. " hired as a lawyer")
             TriggerClientEvent("DGCore:Notify", OtherPlayer.PlayerData.source, "You are now a lawyer")
-            TriggerClientEvent('inventory:client:ItemBox', OtherPlayer.PlayerData.source, exports["dg-inventory"]:GetItemData()["lawyerpass"], "add")
+            TriggerClientEvent('inventory:client:ItemBox', OtherPlayer.PlayerData.source, "lawyerpass", "add")
         else
             TriggerClientEvent("DGCore:Notify", source, "Person is present", "error")
         end

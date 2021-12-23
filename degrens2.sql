@@ -350,23 +350,3 @@ create table if not exists inventoryitems
   createtime    int(11)     DEFAULT NULL,
   PRIMARY KEY (inventorytype, inventoryid, slot)
 );
-
-create table if not exists items
-(
-  name        varchar(50) NOT NULL,
-  label       varchar(50) DEFAULT NULL,
-  weight      int(11)     DEFAULT NULL,
-  type        varchar(10) DEFAULT NULL,
-  ammotype    varchar(32) DEFAULT NULL,
-  stackable   tinyint(1)  DEFAULT NULL,
-  useable     tinyint(1)  DEFAULT NULL,
-  shouldClose tinyint(1)  DEFAULT NULL,
-  combinable  text        DEFAULT NULL,
-  decayrate   int(11)     DEFAULT NULL,
-  image       varchar(50) DEFAULT NULL,
-  description text        DEFAULT NULL,
-  PRIMARY KEY (name),
-  CHECK ( stackable < 2 ),
-  CHECK ( useable < 2 ),
-  CHECK ( shouldClose < 2 )
-);

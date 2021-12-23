@@ -1,4 +1,4 @@
-DGCore = exports['dg-core']:GetCoreObject()
+local DGCore = exports['dg-core']:GetCoreObject()
 
 ItemData = {}
 DecayingItems = {}
@@ -38,7 +38,7 @@ end, "admin")
 DGCore.Commands.Add("giveitem", "Give An Item (Admin Only)", {{name="id", help="Player ID"},{name="item", help="Name of the item (not a label)"}, {name="amount", help="Amount of items"}}, true, function(source, args)
 	local Player = DGCore.Functions.GetPlayer(tonumber(args[1]))
 	local amount = tonumber(args[3])
-	local itemData = GetItemData()[tostring(args[2]):lower()]
+	local itemData = ItemData[tostring(args[2]):lower()]
 	if Player then
 		if amount > 0 then
 			if itemData then
@@ -149,10 +149,13 @@ Citizen.CreateThread(function()
     end
 end)
 
--- pull items from DB and put in the itemdata to be used in other resources using export
 CreateThread(function()
-    local result = exports.oxmysql:executeSync("SELECT * FROM items")
-    
+    -- if you want to save items in DB
+    --local result = exports.oxmysql:executeSync("SELECT * FROM items")
+
+    -- if you want to save items in json file
+    local result = json.decode(LoadResourceFile(GetCurrentResourceName(), "items.json"))
+
     if result then
         for _, item in pairs(result) do
             if item then
@@ -166,10 +169,10 @@ CreateThread(function()
                     ["useable"] = item.useable or false,
                     ["shouldClose"] = item.shouldClose or false,
                     ["combinable"] = item.combinable and json.decode(item.combinable) or nil,
-                    ["decayrate"] = item.decayrate,
+                    ["decayrate"] = tonumber(item.decayrate),
                     ["image"] = item.image,
                     ["description"] = item.description,
-                }
+                } 
 
                 -- for weapons we also need to be able to get data from the hash because we cant convert the hash we get from certain natives to the weapon name
                 if item.type == "weapon" then
@@ -183,7 +186,7 @@ CreateThread(function()
                         ["useable"] = item.useable or false,
                         ["shouldClose"] = item.shouldClose or false,
                         ["combinable"] = item.combinable and json.decode(item.combinable) or nil,
-                        ["decayrate"] = item.decayrate,
+                        ["decayrate"] = tonumber(item.decayrate),
                         ["image"] = item.image,
                         ["description"] = item.description,
                     }
@@ -194,7 +197,7 @@ CreateThread(function()
 end)
 
 DGCore.Functions.CreateCallback("inventory:server:SetupData", function(source, cb)
-    retval = {ItemData, Dumpsters, Drops}
+    retval = {Dumpsters, Drops}
     cb(retval)
 end)
 

@@ -1,4 +1,4 @@
-DGCore = exports['dg-core']:GetCoreObject()
+local DGCore = exports['dg-core']:GetCoreObject()
 
 RegisterNetEvent("DGCore:Client:OnPlayerLoaded")
 AddEventHandler("DGCore:Client:OnPlayerLoaded", function()
@@ -28,7 +28,8 @@ AddEventHandler("randPickupAnim", function()
 end)
 
 RegisterNetEvent("inventory:client:ItemBox")
-AddEventHandler("inventory:client:ItemBox", function(itemData, type)
+AddEventHandler("inventory:client:ItemBox", function(item, type)
+    local itemData = ItemData[item]
     SendNUIMessage({
         action = "itemBox",
         item = itemData,
@@ -43,9 +44,9 @@ AddEventHandler("inventory:client:requiredItems", function(items, bool)
     if bool then
         for k, v in pairs(items) do
             itemTable[#itemTable+1] = {
-                item = items[k].name,
-                label = GetItemData()[items[k].name]["label"],
-                image = items[k].image,
+                item = ItemData[v].name,
+                label = ItemData[v].label,
+                image = ItemData[v].image,
             }
         end
     end

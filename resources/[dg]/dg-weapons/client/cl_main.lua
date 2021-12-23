@@ -71,7 +71,7 @@ Citizen.CreateThread(function()
                         end
                     else
                         if weapon ~= GetHashKey("WEAPON_UNARMED") then
-                            TriggerEvent("weapons:client:CheckWeapon", exports["dg-inventory"]:GetItemData()[weapon].name)
+                            TriggerEvent("weapons:client:CheckWeapon", exports["dg-inventory"]:GetItemData(weapon).name)
                             DGCore.Functions.Notify("Dit wapen is kapot.", "error")
                             durabilityDecrease = 0
                         end
@@ -82,7 +82,7 @@ Citizen.CreateThread(function()
                 if IsControlJustReleased(0, 24) or IsDisabledControlJustReleased(0, 24) then
                     local removed = false
                     for _, itemName in pairs(Config.OneTimeWeapons) do
-                        if exports["dg-inventory"]:GetItemData()[weapon].name == itemName then
+                        if exports["dg-inventory"]:GetItemData(weapon).name == itemName then
                             TriggerServerEvent("DGCore:Server:RemoveItem", itemName, 1)
                             removed = true
                             break

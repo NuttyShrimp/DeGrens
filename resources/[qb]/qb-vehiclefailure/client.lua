@@ -86,7 +86,7 @@ function CleanVehicle(vehicle)
         SetVehicleUndriveable(vehicle, false)
 		WashDecalsFromVehicle(vehicle, 1.0)
 		TriggerServerEvent('qb-vehiclefailure:server:removewashingkit', vehicle)
-		TriggerEvent('inventory:client:ItemBox', exports["dg-inventory"]:GetItemData()["cleaningkit"], "remove")
+		TriggerEvent('inventory:client:ItemBox', "cleaningkit", "remove")
 		ClearAllPedProps(ped)
 		ClearPedTasks(ped)
 	end, function() -- Cancel
