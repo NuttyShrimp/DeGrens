@@ -1,0 +1,13 @@
+{
+	"name": "json-validator",
+	"version": "1.0.0",
+	"main": "index.js",
+	"license": "MIT",
+	"scripts": {
+		"start": "node index.js"
+	},
+	"dependencies": {
+		"findit": "^2.0.0",
+		"jsonlint": "^1.6.3"
+	}
+}

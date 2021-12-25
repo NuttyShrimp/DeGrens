@@ -1,0 +1,18 @@
+stages: 
+  - test
+
+validate json:
+  image: node:latest
+  stage: test
+  cache:
+    key: "$CI_JOB_NAME-$CI_PROJECT_NAME"
+    paths:
+      - node_modules/
+      - .yarn
+  script:
+    - cd ./tools/json-validator
+    - yarn --pure-lockfile
+    - yarn start
+  only:
+    changes:
+      - "*.json"
