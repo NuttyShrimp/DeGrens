@@ -73,7 +73,7 @@ local function OnPlayerConnecting(name, setKickReason, deferrals)
         deferrals.done('No Valid Rockstar License Found')
     elseif isBanned then
         deferrals.done(Reason)
-    elseif isLicenseAlreadyInUse then
+    elseif isLicenseAlreadyInUse and GetConvar('is_production', 'true') == "true" then
         deferrals.done('Duplicate Rockstar License Found')
     else
         deferrals.done()
