@@ -1,4 +1,4 @@
-DGCore = exports['dg-core']:GetCoreObject()
+local DGCore = exports['dg-core']:GetCoreObject()
 
 RegisterServerEvent("inventory:server:CombineItem")
 AddEventHandler("inventory:server:CombineItem", function(item, fromItem, toItem)
@@ -15,12 +15,12 @@ AddEventHandler("inventory:server:CombineItem", function(item, fromItem, toItem)
 	if fromItem == nil  then return end
 	if toItem == nil then return end
 
-	local recipe = GetItemData()[toItem.name].combinable
+	local recipe = ItemData[toItem.name].combinable
 
 	if recipe and recipe.reward ~= item then return end
 	if not RecipeContains(recipe, fromItem) then return end
 
-	TriggerClientEvent("inventory:client:ItemBox", src, GetItemData()[item], "add")
+	TriggerClientEvent("inventory:client:ItemBox", src, item, "add")
 	Player.Functions.AddItem(item, 1)
 	Player.Functions.RemoveItem(fromItem.name, 1)
 	Player.Functions.RemoveItem(toItem.name, 1)
@@ -49,6 +49,10 @@ AddEventHandler("inventory:server:OpenInventory", function(invType, id, other)
         local Player = DGCore.Functions.GetPlayer(src)
 
         Player.Functions.SetInventory(UpdateQualityOnTime(Player.PlayerData.items), false)
+
+        if invType == "stash" then
+            TriggerClientEvent("inventory:client:SetCurrentStash", src, id)
+        end
 
 		if invType and id then
 			local secondInv = {}
@@ -205,17 +209,17 @@ AddEventHandler("inventory:server:UseItemSlot", function(slot)
 	local itemData = Player.Functions.GetItemBySlot(slot)
 
 	if itemData then
-		local itemInfo = GetItemData()[itemData.name]
+		local itemInfo = ItemData[itemData.name]
 		if itemInfo.type == "weapon" then
 			if itemData.quality and itemData.quality == 0 then
 				TriggerClientEvent("weapons:client:UseWeapon", src, itemData, false)
 			else
 				TriggerClientEvent("weapons:client:UseWeapon", src, itemData, true)
 			end
-			TriggerClientEvent("inventory:client:ItemBox", src, itemInfo, "use")
+			TriggerClientEvent("inventory:client:ItemBox", src, itemInfo.name, "use")
 		elseif itemInfo.useable then
 			TriggerClientEvent("DGCore:Client:UseItem", src, itemData)
-			TriggerClientEvent("inventory:client:ItemBox", src, itemInfo, "use")
+			TriggerClientEvent("inventory:client:ItemBox", src, itemInfo.name, "use")
 		end
 	end
 end)
@@ -250,7 +254,7 @@ AddEventHandler("inventory:server:SetInventoryData", function(fromInventory, toI
 	elseif DGCore.Shared.SplitStr(fromInventory, "-")[1] == "itemshop" then
 		local shopType = DGCore.Shared.SplitStr(fromInventory, "-")[2]
 		local itemData = ShopItems[shopType].items[fromSlot]
-		local itemInfo = GetItemData()[itemData.name:lower()]
+		local itemInfo = ItemData[itemData.name:lower()]
 		local bankBalance = Player.PlayerData.money["bank"]
 		local price = tonumber(itemData.price * fromAmount)
 
@@ -285,5 +289,6 @@ AddEventHandler("inventory:server:ReceiveItem", function(playerId, item)
     if playerId and item then
         local Player = DGCore.Functions.GetPlayer(playerId)
         Player.Functions.AddItem(item.name, item.amount, false, item.info, item.quality)
+        TriggerClientEvent("DGCore:Notify", playerId, "Iemand heeft iets in je zak gestoken")
     end
 end)

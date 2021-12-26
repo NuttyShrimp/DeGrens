@@ -35,7 +35,7 @@ DGCore.Functions.CreateCallback("weapons:server:RemoveAttachment", function(sour
                 table.remove(Inventory[ItemData.slot].info.attachments, key)
                 Player.Functions.SetInventory(Player.PlayerData.items, true)
                 Player.Functions.AddItem(AttachmentComponent.item, 1)
-                TriggerClientEvent("inventory:client:ItemBox", src, exports["dg-inventory"]:GetItemData()[AttachmentComponent.item], "add")
+                TriggerClientEvent("inventory:client:ItemBox", src, AttachmentComponent.item, "add")
                 cb(Inventory[ItemData.slot].info.attachments)
             else
                 cb(false)
@@ -61,7 +61,7 @@ DGCore.Functions.CreateCallback("weapons:server:RepairWeapon", function(source, 
                     Config.RepairData.Weapon = Player.PlayerData.items[data.slot]
     
                     Player.Functions.RemoveItem(data.name, 1, data.slot)
-                    TriggerClientEvent("inventory:client:ItemBox", src, exports["dg-inventory"]:GetItemData()[data.name], "remove")
+                    TriggerClientEvent("inventory:client:ItemBox", src, data.name, "remove")
                     TriggerClientEvent("weapons:client:CheckWeapon", src, data.name)
                     TriggerClientEvent("weapons:client:SyncRepairData", -1, Config.RepairData)
     
@@ -73,7 +73,7 @@ DGCore.Functions.CreateCallback("weapons:server:RepairWeapon", function(source, 
                         TriggerEvent("qb-phone:server:sendNewMailToOffline", Player.PlayerData.citizenid, {
                             sender = "Tyrone",
                             subject = "Wapenreparatie",
-                            message = "Je "..exports["dg-inventory"]:GetItemData()[data.name].label.." is gerepareerd, je kan het komen ophalen."
+                            message = "Je "..exports["dg-inventory"]:GetItemData(data.name).label.." is gerepareerd, je kan het komen ophalen."
                         })
                     end)
     

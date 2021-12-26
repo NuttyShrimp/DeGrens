@@ -472,7 +472,7 @@ DGCore.Commands.Add("takedna", "Take a DNA sanple from a person (empty evidence 
                 dnalabel = DnaHash(OtherPlayer.PlayerData.citizenid)
             }
             if Player.Functions.AddItem("filled_evidence_bag", 1, false, info) then
-                TriggerClientEvent("inventory:client:ItemBox", src, exports["dg-inventory"]:GetItemData()["filled_evidence_bag"], "add")
+                TriggerClientEvent("inventory:client:ItemBox", src, "filled_evidence_bag", "add")
             end
         else
             TriggerClientEvent('DGCore:Notify', src, "You must have an empty evidence bag with you", "error")
@@ -557,7 +557,7 @@ end)
 
 DGCore.Functions.CreateCallback('police:IsSilencedWeapon', function(source, cb, weapon)
     local Player = DGCore.Functions.GetPlayer(source)
-    local itemInfo = Player.Functions.GetItemByName(exports["dg-inventory"]:GetItemData()[weapon]["name"])
+    local itemInfo = Player.Functions.GetItemByName(exports["dg-inventory"]:GetItemData(weapon)["name"])
     local retval = false
     if itemInfo then
         if itemInfo.info and itemInfo.info.attachments then
@@ -808,7 +808,7 @@ RegisterNetEvent('police:server:SeizeCash', function(playerId)
         local info = { cash = moneyAmount }
         SearchedPlayer.Functions.RemoveMoney("cash", moneyAmount, "police-cash-seized")
         Player.Functions.AddItem("moneybag", 1, false, info)
-        TriggerClientEvent('inventory:client:ItemBox', src, exports["dg-inventory"]:GetItemData()["moneybag"], "add")
+        TriggerClientEvent('inventory:client:ItemBox', src, "moneybag", "add")
         TriggerClientEvent('DGCore:Notify', SearchedPlayer.PlayerData.source, 'Your cash was confiscated')
     end
 end)
@@ -910,7 +910,7 @@ RegisterNetEvent('evidence:server:AddBlooddropToInventory', function(bloodId, bl
     local Player = DGCore.Functions.GetPlayer(src)
     if Player.Functions.RemoveItem("empty_evidence_bag", 1) then
         if Player.Functions.AddItem("filled_evidence_bag", 1, false, bloodInfo) then
-            TriggerClientEvent("inventory:client:ItemBox", src, exports["dg-inventory"]:GetItemData()["filled_evidence_bag"], "add")
+            TriggerClientEvent("inventory:client:ItemBox", src, "filled_evidence_bag", "add")
             TriggerClientEvent("evidence:client:RemoveBlooddrop", -1, bloodId)
             BloodDrops[bloodId] = nil
         end
@@ -924,7 +924,7 @@ RegisterNetEvent('evidence:server:AddFingerprintToInventory', function(fingerId,
     local Player = DGCore.Functions.GetPlayer(src)
     if Player.Functions.RemoveItem("empty_evidence_bag", 1) then
         if Player.Functions.AddItem("filled_evidence_bag", 1, false, fingerInfo) then
-            TriggerClientEvent("inventory:client:ItemBox", src, exports["dg-inventory"]:GetItemData()["filled_evidence_bag"], "add")
+            TriggerClientEvent("inventory:client:ItemBox", src, "filled_evidence_bag", "add")
             TriggerClientEvent("evidence:client:RemoveFingerprint", -1, fingerId)
             FingerDrops[fingerId] = nil
         end
@@ -937,7 +937,7 @@ RegisterNetEvent('evidence:server:CreateCasing', function(weapon, coords)
     local src = source
     local Player = DGCore.Functions.GetPlayer(src)
     local casingId = CreateCasingId()
-    local weaponInfo = exports["dg-inventory"]:GetItemData()[weapon]
+    local weaponInfo = exports["dg-inventory"]:GetItemData(weapon)
     local serieNumber = nil
     if weaponInfo then
         local weaponItem = Player.Functions.GetItemByName(weaponInfo["name"])
@@ -975,7 +975,7 @@ RegisterNetEvent('evidence:server:AddCasingToInventory', function(casingId, casi
     local Player = DGCore.Functions.GetPlayer(src)
     if Player.Functions.RemoveItem("empty_evidence_bag", 1) then
         if Player.Functions.AddItem("filled_evidence_bag", 1, false, casingInfo) then
-            TriggerClientEvent("inventory:client:ItemBox", src, exports["dg-inventory"]:GetItemData()["filled_evidence_bag"], "add")
+            TriggerClientEvent("inventory:client:ItemBox", src, "filled_evidence_bag", "add")
             TriggerClientEvent("evidence:client:RemoveCasing", -1, casingId)
             Casings[casingId] = nil
         end

@@ -9,12 +9,11 @@ end)
 RegisterNetEvent("weapons:server:UpdateWeaponQuality", function(data, durabilityDecrease)
     local src = source
     local Player = DGCore.Functions.GetPlayer(src)
-    local WeaponData = exports["dg-inventory"]:GetItemData()[GetHashKey(data.name)]
     local WeaponSlot = Player.PlayerData.items[data.slot]
     local decreaseAmount = Config.DurabilityMultiplier[data.name] and Config.DurabilityMultiplier[data.name] or 0.15
 
     if WeaponSlot then
-        if not IsWeaponBlocked(WeaponData.name) then
+        if not IsWeaponBlocked(data.name) then
             if not WeaponSlot.quality then
                 WeaponSlot.quality = 100
             end
@@ -71,7 +70,7 @@ RegisterNetEvent("weapons:server:EquipAttachment", function(ItemData, currentWea
         Player.Functions.RemoveItem(ItemData.name, 1)
     
         SetTimeout(1000, function()
-            TriggerClientEvent("inventory:client:ItemBox", src, ItemData, "remove")
+            TriggerClientEvent("inventory:client:ItemBox", src, ItemData.name, "remove")
         end)
     end
 end)
@@ -94,7 +93,7 @@ RegisterNetEvent("weapons:server:TakeBackWeapon", function(data)
     local itemData = Config.RepairData.Weapon
     itemData.quality = 100
     Player.Functions.AddItem(itemData.name, 1, false, itemData.info)
-    TriggerClientEvent("inventory:client:ItemBox", src, exports["dg-inventory"]:GetItemData()[itemData.name], "add")
+    TriggerClientEvent("inventory:client:ItemBox", src, itemData.name, "add")
     Config.RepairData.IsFinished = false
     Config.RepairData.Weapon = {}
     TriggerClientEvent("weapons:client:SyncRepairData", -1, Config.RepairData)

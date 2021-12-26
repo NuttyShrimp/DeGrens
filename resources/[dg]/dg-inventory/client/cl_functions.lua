@@ -1,8 +1,8 @@
-DGCore = exports['dg-core']:GetCoreObject()
+local DGCore = exports['dg-core']:GetCoreObject()
 
-function GetItemData()
-    return ItemData
-end
+exports("GetItemData", function(item)
+    return ItemData[item]
+end)
 
 function LoadAnimDict(dict)
     while not HasAnimDictLoaded(dict) do

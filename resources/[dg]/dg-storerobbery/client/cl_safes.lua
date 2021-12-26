@@ -55,7 +55,7 @@ AddEventHandler("dg-storerobbery:client:HackSafe", function()
                 if hasItem then
                     exports["dg-numbergame"]:OpenGame(function(success)
                         TriggerServerEvent("DGCore:Server:RemoveItem", Config.Safe.Item, 1)
-                        TriggerEvent('inventory:client:ItemBox', exports["dg-inventory"]:GetItemData()[Config.Safe.Item], "remove")
+                        TriggerEvent('inventory:client:ItemBox', Config.Safe.Item, "remove")
     
                         GainStress()
                         CreateEvidence()

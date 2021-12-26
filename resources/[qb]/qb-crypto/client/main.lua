@@ -63,7 +63,7 @@ end
 CreateThread(function()
     Citizen.Wait(500)
     requiredItems = {
-        [1] = {name = exports["dg-inventory"]:GetItemData()["cryptostick"]["name"], image = exports["dg-inventory"]:GetItemData()["cryptostick"]["image"]}
+        "cryptostick"
     }
 
 	while true do

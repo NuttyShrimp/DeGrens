@@ -110,7 +110,7 @@ end)
 RegisterNetEvent("weapons:client:AddAmmo", function(ammoType, amount, itemData)
     local ped = PlayerPedId()
     local weapon = GetSelectedPedWeapon(ped)
-    local weaponData = exports["dg-inventory"]:GetItemData()[weapon]
+    local weaponData = exports["dg-inventory"]:GetItemData(weapon)
 
     if currentWeaponData and next(currentWeaponData) then
         if weaponData.name ~= "weapon_unarmed" and weaponData.ammotype == ammoType then
@@ -130,7 +130,7 @@ RegisterNetEvent("weapons:client:AddAmmo", function(ammoType, amount, itemData)
 
                         TriggerServerEvent("weapons:server:SaveWeaponAmmo", currentWeaponData, tonumber(totalAmmo))
                         TriggerServerEvent("DGCore:Server:RemoveItem", itemData.name, 1, itemData.slot)
-                        TriggerEvent("inventory:client:ItemBox", exports["dg-inventory"]:GetItemData()[itemData.name], "remove")
+                        TriggerEvent("inventory:client:ItemBox", itemData.name, "remove")
                         DGCore.Functions.Notify("Kogels bijgeladen.", "success")
                     else
                         DGCore.Functions.Notify("Je hebt geen wapen vast.", "error")
@@ -157,7 +157,7 @@ RegisterNetEvent("weapons:client:SetAmmoManual", function(ammo)
         if weapon then
             SetPedAmmo(ped, weapon, ammo)
             TriggerServerEvent("weapons:server:SaveWeaponAmmo", currentWeaponData, ammo)
-            DGCore.Functions.Notify("+"..ammo.." Ammo voor "..exports["dg-inventory"]:GetItemData()[weapon]["label"], "success")
+            DGCore.Functions.Notify("+"..ammo.." Ammo voor "..exports["dg-inventory"]:GetItemData(weapon).label, "success")
         else
             DGCore.Functions.Notify("Je hebt geen wapen vast.", "error")
         end
@@ -169,7 +169,7 @@ RegisterNetEvent("weapons:client:EquipAttachment", function(itemData, attachment
     local weapon = GetSelectedPedWeapon(ped)
 
     if weapon ~= GetHashKey("WEAPON_UNARMED") then
-        local weaponData = exports["dg-inventory"]:GetItemData()[weapon]
+        local weaponData = exports["dg-inventory"]:GetItemData(weapon)
         weaponData.name = weaponData.name:upper()
 
         if WeaponAttachments[weaponData.name] then
@@ -187,7 +187,7 @@ end)
 RegisterNetEvent("weapons:client:AddAttachment", function(component)
     local ped = PlayerPedId()
     local weapon = GetSelectedPedWeapon(ped)
-    local weaponData = exports["dg-inventory"]:GetItemData()[weapon]
+    local weaponData = exports["dg-inventory"]:GetItemData(weapon)
     GiveWeaponComponentToPed(ped, GetHashKey(weaponData.name), GetHashKey(component))
 end)
 

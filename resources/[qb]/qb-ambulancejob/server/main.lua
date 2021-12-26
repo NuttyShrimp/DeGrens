@@ -106,7 +106,7 @@ RegisterNetEvent('hospital:server:TreatWounds', function(playerId)
 	if Patient then
 		if Player.PlayerData.job.name =="ambulance" then
 			Player.Functions.RemoveItem('bandage', 1)
-			TriggerClientEvent('inventory:client:ItemBox', src, exports["dg-inventory"]:GetItemData()['bandage'], "remove")
+			TriggerClientEvent('inventory:client:ItemBox', src, 'bandage', "remove")
 			TriggerClientEvent("hospital:client:HealInjuries", Patient.PlayerData.source, "full")
 		end
 	end
@@ -132,14 +132,14 @@ RegisterNetEvent('hospital:server:RevivePlayer', function(playerId, isOldMan)
 		if oldMan then
 			if Player.Functions.RemoveMoney("cash", 5000, "revived-player") then
 				Player.Functions.RemoveItem('firstaid', 1)
-				TriggerClientEvent('inventory:client:ItemBox', src, exports["dg-inventory"]:GetItemData()['firstaid'], "remove")
+				TriggerClientEvent('inventory:client:ItemBox', src, 'firstaid', "remove")
 				TriggerClientEvent('hospital:client:Revive', Patient.PlayerData.source)
 			else
 				TriggerClientEvent('DGCore:Notify', src, "You don\'t have enough money on you..", "error")
 			end
 		else
 			Player.Functions.RemoveItem('firstaid', 1)
-			TriggerClientEvent('inventory:client:ItemBox', src, exports["dg-inventory"]:GetItemData()['firstaid'], "remove")
+			TriggerClientEvent('inventory:client:ItemBox', src, 'firstaid', "remove")
 			TriggerClientEvent('hospital:client:Revive', Patient.PlayerData.source)
 		end
 	end

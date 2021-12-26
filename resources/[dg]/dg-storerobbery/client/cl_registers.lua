@@ -76,7 +76,7 @@ AddEventHandler("dg-storerobbery:client:LockpickRegister", function(register)
                         local rng = math.random(1, 100)
                         if rng <= Config.Lockpick.BreakChance then
                             TriggerServerEvent("DGCore:Server:RemoveItem", 'lockpick', 1)
-                            TriggerEvent('inventory:client:ItemBox', exports["dg-inventory"]:GetItemData()["lockpick"], "remove")
+                            TriggerEvent('inventory:client:ItemBox', "lockpick", "remove")
                             DGCore.Functions.Notify('Je lockpick is gebroken...', 'error')
                         else
                             DGCore.Functions.Notify('Mislukt...', 'error')

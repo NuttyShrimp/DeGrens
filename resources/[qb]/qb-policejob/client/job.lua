@@ -80,7 +80,7 @@ end
 local function SetCarItemsInfo()
 	local items = {}
 	for k, item in pairs(Config.CarItems) do
-		local itemInfo = exports["dg-inventory"]:GetItemData()[item.name:lower()]
+		local itemInfo = exports["dg-inventory"]:GetItemData(item.name:lower())
 		items[item.slot] = {
 			name = itemInfo["name"],
 			amount = tonumber(item.amount),
@@ -401,7 +401,6 @@ CreateThread(function()
                                     maxweight = 4000000,
                                     slots = 500,
                                 })
-                                TriggerEvent("inventory:client:SetCurrentStash", " 1 | Drawer "..drawer)
                             end
                         end
                     elseif #(pos - v) < 1.5 then
@@ -422,7 +421,6 @@ CreateThread(function()
                                     maxweight = 4000000,
                                     slots = 500,
                                 })
-                                TriggerEvent("inventory:client:SetCurrentStash", " 2 | Drawer "..drawer)
                             end
                         end
                     elseif #(pos - v) < 1.5 then
@@ -443,7 +441,6 @@ CreateThread(function()
                                     maxweight = 4000000,
                                     slots = 500,
                                 })
-                                TriggerEvent("inventory:client:SetCurrentStash", " 3 | Drawer "..drawer)
                             end
                         end
                     elseif #(pos - v) < 1.5 then
@@ -462,7 +459,6 @@ CreateThread(function()
                                 maxweight = 4000000,
                                 slots = 300,
                             })
-                            TriggerEvent("inventory:client:SetCurrentStash", "policetrash")
                         end
                     elseif #(pos - v) < 1.5 then
                         DrawText3D(v.x, v.y, v.z, "Bin")
@@ -596,7 +592,6 @@ CreateThread(function()
                             DrawText3D(v.x, v.y, v.z, "~g~E~w~ - Personal stash")
                             if IsControlJustReleased(0, 38) then
                                 TriggerServerEvent("inventory:server:OpenInventory", "stash", "policestash_"..DGCore.Functions.GetPlayerData().citizenid)
-                                TriggerEvent("inventory:client:SetCurrentStash", "policestash_"..DGCore.Functions.GetPlayerData().citizenid)
                             end
                         elseif #(pos - v) < 2.5 then
                             DrawText3D(v.x, v.y, v.z, "Personal stash")

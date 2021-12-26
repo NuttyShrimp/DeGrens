@@ -32,7 +32,7 @@ local requiredItems = {}
 Citizen.CreateThread(function()
     Citizen.Wait(2000)
     requiredItems = {
-        [1] = {name = exports["dg-inventory"]:GetItemData()["thermite"]["name"], image = exports["dg-inventory"]:GetItemData()["thermite"]["image"]},
+        "thermite",
     }
     while true do
         local ped = PlayerPedId()
@@ -150,7 +150,7 @@ end)
 RegisterNUICallback('thermitefailed', function()
     PlaySound(-1, "Place_Prop_Fail", "DLC_Dmod_Prop_Editor_Sounds", 0, 0, 1)
     TriggerServerEvent("DGCore:Server:RemoveItem", "thermite", 1)
-    TriggerEvent('inventory:client:ItemBox', exports["dg-inventory"]:GetItemData()["thermite"], "remove")
+    TriggerEvent('inventory:client:ItemBox', "thermite", "remove")
     ClearPedTasks(PlayerPedId())
     local coords = GetEntityCoords(PlayerPedId())
     local randTime = math.random(10000, 15000)

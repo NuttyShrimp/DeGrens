@@ -23,7 +23,7 @@ AddEventHandler('equip:harness', function(item)
     local src = source
     local Player = DGCore.Functions.GetPlayer(src)
     if Player.PlayerData.items[item.slot].info.uses - 1 == 0 then
-        TriggerClientEvent("inventory:client:ItemBox", source, exports["dg-inventory"]:GetItemData()['harness'], "remove")
+        TriggerClientEvent("inventory:client:ItemBox", source, 'harness', "remove")
         Player.Functions.RemoveItem('harness', 1)
     else
         Player.PlayerData.items[item.slot].info.uses = Player.PlayerData.items[item.slot].info.uses - 1

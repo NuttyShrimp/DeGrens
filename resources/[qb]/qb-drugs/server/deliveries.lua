@@ -20,7 +20,7 @@ AddEventHandler('qb-drugs:server:giveDeliveryItems', function(amount)
     local Player = DGCore.Functions.GetPlayer(src)
 
     Player.Functions.AddItem('weed_brick', amount)
-    TriggerClientEvent('inventory:client:ItemBox', src, exports["dg-inventory"]:GetItemData()["weed_brick"], "add")
+    TriggerClientEvent('inventory:client:ItemBox', src, "weed_brick", "add")
 end)
 
 DGCore.Functions.CreateCallback('qb-drugs:server:RequestConfig', function(source, cb)
@@ -58,7 +58,7 @@ AddEventHandler('qb-drugs:server:succesDelivery', function(deliveryData, inTime)
                 Player.Functions.AddMoney('cash', (deliveryData["amount"] * price / 100 * 18), "dilvery-drugs")
             end
 
-            TriggerClientEvent('inventory:client:ItemBox', src, exports["dg-inventory"]:GetItemData()["weed_brick"], "remove")
+            TriggerClientEvent('inventory:client:ItemBox', src, "weed_brick", "remove")
             TriggerClientEvent('DGCore:Notify', src, 'The order has been delivered completely', 'success')
 
             SetTimeout(math.random(5000, 10000), function()
@@ -75,7 +75,7 @@ AddEventHandler('qb-drugs:server:succesDelivery', function(deliveryData, inTime)
                     .AddMoney('cash', (Player.Functions.GetItemByName('weed_brick').amount * 6000 / 100 * 5))
             end
 
-            TriggerClientEvent('inventory:client:ItemBox', src, exports["dg-inventory"]:GetItemData()["weed_brick"], "remove")
+            TriggerClientEvent('inventory:client:ItemBox', src, "weed_brick", "remove")
 
             SetTimeout(math.random(5000, 10000), function()
                 TriggerClientEvent('qb-drugs:client:sendDeliveryMail', src, 'bad', deliveryData)
@@ -93,7 +93,7 @@ AddEventHandler('qb-drugs:server:succesDelivery', function(deliveryData, inTime)
         Player.Functions.RemoveItem('weed_brick', deliveryData["amount"])
         Player.Functions.AddMoney('cash', (deliveryData["amount"] * 6000 / 100 * 4), "dilvery-drugs-too-late")
 
-        TriggerClientEvent('inventory:client:ItemBox', src, exports["dg-inventory"]:GetItemData()["weed_brick"], "remove")
+        TriggerClientEvent('inventory:client:ItemBox', src, "weed_brick", "remove")
 
         SetTimeout(math.random(5000, 10000), function()
             TriggerClientEvent('qb-drugs:client:sendDeliveryMail', src, 'late', deliveryData)

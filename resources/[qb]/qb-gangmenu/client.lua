@@ -86,7 +86,6 @@ menu_button2:On("select", function()
         maxweight = 4000000,
         slots = 500,
     })
-    TriggerEvent("inventory:client:SetCurrentStash", "boss_" .. PlayerGang.name)
 end)
 
 -- Outfit

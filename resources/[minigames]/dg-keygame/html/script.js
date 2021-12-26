@@ -20,6 +20,7 @@ let currentKey;
 let currentDegrees;
 let startDegrees;
 let endDegrees;
+let changeDegrees;
 
 // add event to listen to lua event
 $(document).ready(() => {
@@ -93,27 +94,27 @@ function startRound() {
     const size = Random(10, 20);
     startDegrees = Random(40, 85 - size);
     endDegrees = startDegrees + size;
+
     currentDegrees = 0;
 
     currentKey = Minigame.ValidKeys[Math.floor(Math.random() * Minigame.ValidKeys.length)];
 
-    let time;
     switch (Minigame.Difficulty) {
         case "easy":
-            time = Random(31, 45);
+            changeDegrees = Random(2, 4) / 100;
             break;
         case "medium":
-            time = Random(11, 30);
+            changeDegrees = Random(7, 20) / 100;
             break;
         case "hard":
-            time = Random(6, 10);
+            changeDegrees = Random(25, 35) / 100;
             break;
         case "extreme":
-            time = Random(2, 5);
+            changeDegrees = Random(45, 50) / 100;
             break;
     }
 
-    currentGameLoop = setInterval(gameLoop, time);
+    currentGameLoop = setInterval(gameLoop, 1);
 }
 
 // functions gets called on interval according to speed 
@@ -121,7 +122,7 @@ function gameLoop() {
     if (currentDegrees >= 90) {
         Minigame.Functions.FinishGame(false);
     } else {
-        currentDegrees += 0.5;
+        currentDegrees += changeDegrees;
         draw();
     }
 }

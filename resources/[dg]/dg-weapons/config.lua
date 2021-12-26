@@ -10,6 +10,7 @@ Config.OneTimeWeapons = {
     "weapon_pipebomb",
     "weapon_molotov",
     "weapon_stickybomb",
+    "weapon_grenade",
 }
 
 -- Wapens die niet geholstered moeten worden

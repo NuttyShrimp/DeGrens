@@ -257,7 +257,7 @@ CreateThread(function()
                         label = 'Bullet sleeve',
                         type = 'casing',
                         street = streetLabel:gsub("%'", ""),
-                        ammolabel = Config.AmmoLabels[exports["dg-inventory"]:GetItemData()[Casings[CurrentCasing].type]['ammotype']],
+                        ammolabel = Config.AmmoLabels[exports["dg-inventory"]:GetItemData(Casings[CurrentCasing].type)['ammotype']],
                         ammotype = Casings[CurrentCasing].type,
                         serie = Casings[CurrentCasing].serie
                     }
@@ -399,7 +399,7 @@ end)
 --                 if IsPedShooting(PlayerPedId()) and not IsSilentWeapon(currentWeapon) and IsPedNearby() then
 --                     local coords = GetEntityCoords(PlayerPedId())
 --                     local automatic = false
---                     if exports["dg-inventory"]:GetItemData()[currentWeapon]['ammotype'] ~= 'AMMO_PISTOL' then
+--                     if exports["dg-inventory"]:GetItemData(currentWeapon)['ammotype'] ~= 'AMMO_PISTOL' then
 --                         automatic = true
 --                     end
 --                     local s1, s2 = GetStreetNameAtCoord(coords.x, coords.y, coords.z)

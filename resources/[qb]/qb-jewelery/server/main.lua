@@ -19,14 +19,14 @@ AddEventHandler('qb-jewellery:server:vitrineReward', function()
         local item = math.random(1, #Config.VitrineRewards)
         local amount = math.random(Config.VitrineRewards[item]["amount"]["min"], Config.VitrineRewards[item]["amount"]["max"])
         if Player.Functions.AddItem(Config.VitrineRewards[item]["item"], amount) then
-            TriggerClientEvent('inventory:client:ItemBox', src, exports["dg-inventory"]:GetItemData()[Config.VitrineRewards[item]["item"]], 'add')
+            TriggerClientEvent('inventory:client:ItemBox', src, Config.VitrineRewards[item]["item"], 'add')
         else
             TriggerClientEvent('DGCore:Notify', src, 'You have to much in your pocket', 'error')
         end
     else
         local amount = math.random(2, 4)
         if Player.Functions.AddItem("10kgoldchain", amount) then
-            TriggerClientEvent('inventory:client:ItemBox', src, exports["dg-inventory"]:GetItemData()["10kgoldchain"], 'add')
+            TriggerClientEvent('inventory:client:ItemBox', src, "10kgoldchain", 'add')
         else
             TriggerClientEvent('DGCore:Notify', src, 'You have to much in your pocket..', 'error')
         end

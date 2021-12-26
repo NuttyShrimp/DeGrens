@@ -1,8 +1,8 @@
-DGCore = exports["dg-core"]:GetCoreObject()
+local DGCore = exports["dg-core"]:GetCoreObject()
 
-function GetItemData()
-    return ItemData
-end
+exports("GetItemData", function(item)
+    return ItemData[item]
+end)
 
 function RecipeContains(recipe, fromItem)
 	for _, v in pairs(recipe.accept) do
@@ -70,7 +70,7 @@ end
 
 function AddTo(invType, id, slot, otherslot, itemName, amount, data)
     local amount = tonumber(amount)
-	local itemInfo = GetItemData()[itemName:lower()]
+	local itemInfo = ItemData[itemName:lower()]
 
     if itemInfo.stackable then
         if Inventories[invType][id].items[slot] and Inventories[invType][id].items[slot].name == itemName then
@@ -125,7 +125,7 @@ function GetFrom(invType, id)
     if items then
         for _, item in pairs(items) do
             if item then
-                local itemInfo = GetItemData()[item.name:lower()]
+                local itemInfo = ItemData[item.name:lower()]
                 if itemInfo then
                     retval[item.slot] = {
                         name = itemInfo["name"],
@@ -157,7 +157,7 @@ function SetupShopItems(shopItems)
 	local retval = {}
 	if shopItems and next(shopItems) then
 		for _, item in pairs(shopItems) do
-			local itemInfo = GetItemData()[item.name:lower()]
+			local itemInfo = ItemData[item.name:lower()]
 			if itemInfo then
 				retval[item.slot] = {
                     name = itemInfo["name"],
@@ -206,7 +206,7 @@ function CreateNewDrop(source, fromSlot, toSlot, itemAmount)
 	if Player.Functions.RemoveItem(itemData.name, itemAmount, itemData.slot) then
 		TriggerClientEvent("weapons:client:CheckWeapon", source, itemData.name)
 
-		local itemInfo = GetItemData()[itemData.name:lower()]
+		local itemInfo = ItemData[itemData.name:lower()]
 		local id = CreateId("drop")
 		Inventories["drop"][id] = {}
 		Inventories["drop"][id].items = {}
@@ -264,7 +264,7 @@ function MoveItemFromPlayer(src, Player, toInventory, fromSlot, toSlot, fromAmou
         TriggerClientEvent("weapons:client:CheckWeapon", src, fromItemData.name) -- remove weapon if u move ur weapon
     
         if toItemData then
-            local itemInfo = GetItemData()[toItemData.name:lower()]
+            local itemInfo = ItemData[toItemData.name:lower()]
             local toAmount = tonumber(toAmount)  and tonumber(toAmount) or toItemData.amount
     
             if toItemData.name ~= fromItemData.name then
@@ -278,11 +278,11 @@ function MoveItemFromPlayer(src, Player, toInventory, fromSlot, toSlot, fromAmou
                 TriggerEvent("qb-log:server:CreateLog", invType, "Swapped Item", "orange", "**"..GetPlayerName(src).."** (citizenid: *"..Player.PlayerData.citizenid.."* | id: *"..src.."*) swapped item; name: **"..itemInfo["name"].."**, amount: **"..toAmount.."** with name: **"..fromItemData.name.."**, amount: **"..fromAmount.."** - id: *"..toInventory.."*")
             end
         else
-            local itemInfo = GetItemData()[fromItemData.name:lower()]
+            local itemInfo = ItemData[fromItemData.name:lower()]
             TriggerEvent("qb-log:server:CreateLog", invType, "Moved Item", "red", "**"..GetPlayerName(src).."** (citizenid: *"..Player.PlayerData.citizenid.."* | id: *"..src.."*) moved item; name: **"..itemInfo["name"].."**, amount: **"..fromAmount.."** - id: *"..toInventory.."*")
         end
         
-        local itemInfo = GetItemData()[fromItemData.name:lower()]
+        local itemInfo = ItemData[fromItemData.name:lower()]
 
         if targetPlayer then
             targetPlayer.Functions.AddItem(itemInfo["name"], fromAmount, toSlot, fromItemData.info, fromItemData.quality, fromItemData.createtime)
@@ -311,7 +311,7 @@ function MoveItemToPlayer(src, Player, fromInventory, toInventory, fromSlot, toS
     end
 
     if fromItemData and fromItemData.amount >= fromAmount then
-        local itemInfo = GetItemData()[fromItemData.name:lower()]
+        local itemInfo = ItemData[fromItemData.name:lower()]
 
         if toInventory == "player" then
             if targetPlayer then
@@ -323,7 +323,7 @@ function MoveItemToPlayer(src, Player, fromInventory, toInventory, fromSlot, toS
 
             local toItemData = Player.Functions.GetItemBySlot(toSlot)
             if toItemData then
-                local itemInfo = GetItemData()[toItemData.name:lower()]
+                local itemInfo = ItemData[toItemData.name:lower()]
                 local toAmount = tonumber(toAmount) and tonumber(toAmount) or toItemData.amount
 
                 if toItemData.name ~= fromItemData.name then
@@ -359,7 +359,7 @@ function MoveItemToPlayer(src, Player, fromInventory, toInventory, fromSlot, toS
             end
 
             if toItemData then
-                local itemInfo = GetItemData()[toItemData.name:lower()]
+                local itemInfo = ItemData[toItemData.name:lower()]
                 local toAmount = tonumber(toAmount)  and tonumber(toAmount) or toItemData.amount
 
                 if toItemData.name ~= fromItemData.name then
@@ -373,7 +373,7 @@ function MoveItemToPlayer(src, Player, fromInventory, toInventory, fromSlot, toS
                 end
             end
 
-            local itemInfo = GetItemData()[fromItemData.name:lower()]
+            local itemInfo = ItemData[fromItemData.name:lower()]
 
             if targetPlayer then
                 targetPlayer.Functions.AddItem(itemInfo["name"], fromAmount, toSlot, fromItemData.info, fromItemData.quality, fromItemData.createtime)
@@ -392,7 +392,7 @@ function UpdateQualityOnTime(items)
         for slot, item in pairs(items) do
             if item.decayrate and item.createtime then
                 local timeDiff = os.difftime(os.time(), item.createtime)
-                item.quality = 100 - math.floor((timeDiff / item.decayrate) * 100)
+                item.quality = 100 - math.floor((timeDiff / (item.decayrate * 60)) * 100)
                 if item.quality <= 0 then 
                     items[slot] = nil
                     TriggerEvent("qb-log:server:CreateLog", "itembroke", "Item broke", "orange", "Item broke: "..item.label)

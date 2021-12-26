@@ -328,7 +328,7 @@ function DGCore.Player.CreatePlayer(PlayerData)
 
     self.Functions.AddItem = function(item, amount, slot, info, quality, createtime)
         local totalWeight = DGCore.Player.GetTotalWeight(self.PlayerData.items)
-        local itemInfo = exports["dg-inventory"]:GetItemData()[item:lower()]
+        local itemInfo = exports["dg-inventory"]:GetItemData(item:lower())
         if itemInfo == nil then
             TriggerClientEvent('DGCore:Notify', self.PlayerData.source, 'Item Does Not Exist', 'error')
             return
@@ -604,7 +604,7 @@ DGCore.Player.LoadInventory = function(PlayerData)
     if items then
         for _, item in pairs(items) do
             if item then
-                local itemInfo = exports["dg-inventory"]:GetItemData()[item.name:lower()]
+                local itemInfo = exports["dg-inventory"]:GetItemData(item.name:lower())
                 if itemInfo then
                     PlayerData.items[item.slot] = {
                         name = itemInfo['name'],
