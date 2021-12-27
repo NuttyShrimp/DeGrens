@@ -15,4 +15,4 @@ validate json:
     - yarn start
   only:
     changes:
-      - "*.json"
+      - "**/*.json"
