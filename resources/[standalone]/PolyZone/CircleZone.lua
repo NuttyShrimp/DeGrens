@@ -40,6 +40,7 @@ function CircleZone:new(center, radius, options)
     useZ = options.useZ or false,
     debugPoly = options.debugPoly or false,
     debugColor = options.debugColor or {0, 255, 0},
+    routingBucket = options.routingBucket or PolyZone.getPlayerBucket(),
     data = options.data or {},
     isCircleZone = true,
   }
@@ -62,6 +63,11 @@ function CircleZone:isPointInside(point)
     print("[PolyZone] Warning: Called isPointInside on destroyed zone {name=" .. self.name .. "}")
     return false
   end
+
+	-- Compare routingBuckets
+	if self.routingBucket ~= PolyZone.getPlayerBucket() then
+		return false
+	end
 
   local center = self.center
   local radius = self.radius

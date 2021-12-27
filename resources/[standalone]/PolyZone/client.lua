@@ -191,6 +191,11 @@ local function _pointInPoly(point, poly)
   local minY = min.y
   local max = poly.max
 
+	-- Check if routingBucket are the same
+	if poly.routingBucket ~= PolyZone.getPlayerBucket() then
+		return false
+	end
+
   -- Checks if point is within the polygon's bounding box
   if x < minX or
      x > max.x or
@@ -471,6 +476,7 @@ function PolyZone:new(points, options)
     debugColors = options.debugColors or {},
     debugPoly = options.debugPoly or false,
     debugGrid = options.debugGrid or false,
+    routingBucket = options.routingBucket or PolyZone.getPlayerBucket(),
     data = options.data or {},
     isPolyZone = true,
   }
@@ -506,6 +512,10 @@ end
 -- Helper functions
 function PolyZone.getPlayerPosition()
   return GetEntityCoords(PlayerPedId())
+end
+
+function PolyZone.getPlayerBucket()
+	return PolyZone.routingBucket or 0
 end
 
 HeadBone = 0x796e;
@@ -597,3 +607,7 @@ end
 function PolyZone:getBoundingBoxCenter()
   return self.center
 end
+
+RegisterNetEvent('dg-lib:instance:set', function(bucketId)
+	PolyZone.routingBucket = bucketId
+end)
