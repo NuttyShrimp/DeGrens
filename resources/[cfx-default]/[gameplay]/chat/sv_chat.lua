@@ -211,12 +211,11 @@ AddEventHandler('_chat:messageEntered', function(author, color, message, mode)
     routeMessage(source, author, message, mode)
 end)
 
+-- Command not found
 AddEventHandler('__cfx_internal:commandFallback', function(command)
     local name = GetPlayerName(source)
-
     -- route the message as if it were a /command
     routeMessage(source, name, '/' .. command, nil, true)
-
     CancelEvent()
 end)
 
@@ -225,16 +224,12 @@ AddEventHandler('playerJoining', function()
     if GetConvarInt('chat_showJoins', 1) == 0 then
         return
     end
-
-    TriggerClientEvent('chatMessage', -1, '', { 255, 255, 255 }, '^2* ' .. GetPlayerName(source) .. ' joined.')
 end)
 
 AddEventHandler('playerDropped', function(reason)
     if GetConvarInt('chat_showQuits', 1) == 0 then
         return
     end
-
-    TriggerClientEvent('chatMessage', -1, '', { 255, 255, 255 }, '^2* ' .. GetPlayerName(source) ..' left (' .. reason .. ')')
 end)
 
 RegisterCommand('say', function(source, args, rawCommand)

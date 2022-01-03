@@ -36,31 +36,43 @@ AddEventHandler('chatMessage', function(author, color, text)
 end)
 
 AddEventHandler('__cfx_internal:serverPrint', function(msg)
-  print(msg)
-
-  SendNUIMessage({
-    type = 'ON_MESSAGE',
-    message = {
-      templateId = 'print',
-      multiline = true,
-      args = { msg },
-      mode = '_global'
-    }
-  })
+	-- print(msg)
+	-- SendNUIMessage({
+	--   type = 'ON_MESSAGE',
+	--   message = {
+	--     templateId = 'print',
+	--     multiline = true,
+	--     args = { msg },
+	--     mode = '_global'
+	--   }
+	-- })
 end)
 
 -- addMessage
 local addMessage = function(message)
-  if type(message) == 'string' then
-    message = {
-      args = { message }
-    }
-  end
+	if type(message) == 'string' then
+		message = {
+			args = { message }
+		}
+	end
+	if (not message.args) then
+		message.args = {}
+	end
+	if (message.author) then
+		table.insert(message.args, 1, message.author)
+	end
+	if (message.message) then
+		table.insert(message.args, message.message)
+	end
+	if (not message.color and not message.template) then
+		message.color = "normal"
+	end
+	print(json.encode(message))
 
-  SendNUIMessage({
-    type = 'ON_MESSAGE',
-    message = message
-  })
+	SendNUIMessage({
+		type = 'ON_MESSAGE',
+		message = message
+	})
 end
 
 exports('addMessage', addMessage)
@@ -138,9 +150,9 @@ RegisterNUICallback('chatResult', function(data, cb)
     local r, g, b = 0, 0x99, 255
 
     if data.message:sub(1, 1) == '/' then
-      ExecuteCommand(data.message:sub(2))
-    else
-      TriggerServerEvent('_chat:messageEntered', GetPlayerName(id), { r, g, b }, data.message, data.mode)
+	    ExecuteCommand(data.message:sub(2))
+	    -- else
+	    --   TriggerServerEvent('_chat:messageEntered', GetPlayerName(id), { r, g, b }, data.message, data.mode)
     end
   end
 
