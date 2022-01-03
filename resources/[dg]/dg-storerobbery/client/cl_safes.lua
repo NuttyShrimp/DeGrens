@@ -64,11 +64,11 @@ AddEventHandler("dg-storerobbery:client:HackSafe", function()
                             TriggerServerEvent("dg-storerobbery:server:HackSafe", currentStore)
     
                             Citizen.Wait(1000)
-                            TriggerServerEvent('qb-phone:server:sendNewMail', {
-                                sender = "Hackerman",
-                                subject = "Decodering Kluis",
-                                message = "Het decoderen van de kluis zal even duren... <br><br> Geef me "..(math.floor(Config.Safe.LootDelay / (60 * 1000))).." minuten. <br><br> Ga niet te ver of de verbinding zal verbreken!",
-                            })
+														exports["dg-phone"]:sendMail(
+															"Decodering Kluis",
+															"Hackerman",
+															("Het decoderen van de kluis zal even duren... <br><br> Geef me %s minuten. <br><br> Ga niet te ver of de verbinding zal verbreken!"):format(math.floor(Config.Safe.LootDelay / (60 * 1000)))
+														)
                         else
                             DGCore.Functions.Notify('Mislukt...', 'error')
                         end

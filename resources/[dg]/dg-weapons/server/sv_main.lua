@@ -69,12 +69,13 @@ DGCore.Functions.CreateCallback("weapons:server:RepairWeapon", function(source, 
                         Config.RepairData.IsRepairing = false
                         Config.RepairData.IsFinished = true
                         TriggerClientEvent("weapons:client:SyncRepairData", -1, Config.RepairData)
-    
-                        TriggerEvent("qb-phone:server:sendNewMailToOffline", Player.PlayerData.citizenid, {
-                            sender = "Tyrone",
-                            subject = "Wapenreparatie",
-                            message = "Je "..exports["dg-inventory"]:GetItemData(data.name).label.." is gerepareerd, je kan het komen ophalen."
-                        })
+
+												exports["dg-phone"]:addOfflineMail(
+														Player.PlayerData.citizenid,
+														"Wapenreparatie",
+														"Tyrone",
+														("Je %s is gerepareerd, je kan het komen ophalen."):format(exports["dg-inventory"]:GetItemData(data.name).label)
+												)
                     end)
     
                     cb(true)

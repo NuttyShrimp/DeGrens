@@ -89,12 +89,7 @@ function CreateListEmail()
 		end
 		SetTimeout(math.random(15000, 20000), function()
 			emailSend = false
-			TriggerServerEvent('qb-phone:server:sendNewMail', {
-				sender = "Turner’s Auto Wrecking",
-				subject = "Vehicle List",
-				message = "You Can Only Demolish A Number Of Vehicles.<br />You Can Keep Everything You Demolish For Yourself As Long As You Dont Bother Me.<br /><br /><strong>Vehicle List:</strong><br />".. vehicleList,
-				button = {}
-			})
+			exports["dg-phone"]:sendMail("Vehicle List", "Turner’s Auto Wrecking", "You Can Only Demolish A Number Of Vehicles.<br />You Can Keep Everything You Demolish For Yourself As Long As You Dont Bother Me.<br /><br /><strong>Vehicle List:</strong><br />".. vehicleList)
 		end)
 	else
 		DGCore.Functions.Notify("You Are Not Allowed To Demolish Vehicles Now", "error")

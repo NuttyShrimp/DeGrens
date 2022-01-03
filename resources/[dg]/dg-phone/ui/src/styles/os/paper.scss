@@ -1,0 +1,76 @@
+@use 'src/styles/base' as *;
+
+.paper {
+	display: flex;
+	margin-bottom: 1vh;
+	background-color: $gray_dark;
+	border: 0.2vh solid $gray_normal;
+	border-radius: 0.7vh 0.7vh 0 0;
+	padding: 0.5vw;
+	color: $gray_lighter;
+	position: relative;
+	&--imgonly {
+		padding: 0.25vw;
+	}
+	& > .paper-actionlist {
+		width: 100%;
+		height: 100%;
+		position: absolute;
+		top: 0;
+		left: 0;
+		display: flex;
+		justify-content: space-evenly;
+		align-items: center;
+		border-radius: 0.7vh 0.7vh 0 0;
+		background-color: rgba(0, 0, 0, 0.75);
+		z-index: 1;
+		& .paper-action {
+			cursor: pointer;
+			color: $gray_lighter;
+			margin: 0.3vh 0.5vh 0;
+			font-size: 1.5em;
+		}
+	}
+	& > .paper-image {
+		margin-right: 0.4vw;
+		align-self: center;
+		font-size: 2.25rem;
+		&--ext {
+			margin-right: 0;
+			font-size: 0em;
+			width: 100%;
+		}
+		& img {
+			height: 100%;
+			width: 100%;
+			object-fit: contain;
+		}
+	}
+	&:hover {
+		background-color: $primary_darker;
+		border-color: $gray_lighter;
+		cursor: pointer;
+	}
+}
+
+.paper-details {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	align-content: space-between;
+	overflow: hidden;
+	position: relative;
+	flex: 1 1;
+
+	& > .paper-details-description,
+	& > .paper-details-title {
+		font-size: 1.1rem;
+		display: -webkit-box;
+		overflow: hidden;
+		-webkit-line-clamp: 1;
+		-webkit-box-orient: vertical;
+	}
+	& > .paper-details-description {
+		font-size: 0.9rem;
+	}
+}

@@ -1,0 +1,1 @@
+DGCore = exports["dg-core"]:GetSharedObject()

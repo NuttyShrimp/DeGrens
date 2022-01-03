@@ -120,11 +120,7 @@ AddEventHandler('qb-occasions:server:buyVehicle', function(vehicleData)
             exports.oxmysql:execute('DELETE FROM occasion_vehicles WHERE plate = ? AND occasionid = ?',
                 {result[1].plate, result[1].occasionid})
             -- Send selling mail to seller
-            TriggerEvent('qb-phone:server:sendNewMailToOffline', SellerCitizenId, {
-                sender = 'Larrys RV Sales',
-                subject = "You have sold a vehicle!",
-                message = 'You made $'..NewPrice..' from the sale of your '..DGCore.Shared.Vehicles[result[1].model].name..''
-            })
+						exports["dg-phone"]:addOfflineMail(SellerCitizenId, "You have sold a vehicle!", 'Larrys RV Sales',('You made $%d from the sale of your %s'):format(NewPrice, DGCore.Shared.Vehicles[result[1].model].name))
         else
             TriggerClientEvent('DGCore:Notify', src, 'You dont have enough money', 'error', 3500)
         end

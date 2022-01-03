@@ -1860,5 +1860,19 @@
         "decayrate": null,
         "image": "weapon_wrench.png",
         "description": "A tool used for gripping and turning nuts, bolts, pipes, etc"
+    },
+    {
+        "name": "vpn",
+        "label": "VPN",
+        "weight": 5000,
+        "type": "item",
+        "ammotype": null,
+        "stackable": true,
+        "useable": false,
+        "shouldClose": false,
+        "combinable": null,
+        "decayrate": 10080,
+        "image": "vpn.png",
+        "description": "A VPN that hides your information"
     }
 ]

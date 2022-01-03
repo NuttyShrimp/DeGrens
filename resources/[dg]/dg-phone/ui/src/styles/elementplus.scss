@@ -1,0 +1,67 @@
+@use 'base' as *;
+
+.el-input,
+.el-textarea {
+	& .el-input__inner,
+	& .el-textarea__inner {
+		&::-webkit-outer-spin-button,
+		&::-webkit-inner-spin-button {
+			-webkit-appearance: none;
+			margin: 0;
+		}
+
+		&[type='number'] {
+			-moz-appearance: textfield;
+		}
+
+		color: $gray_lighter;
+		background-color: transparent;
+		border-color: $primary_normal;
+		font-size: 0.8125rem;
+
+		&:focus {
+			border-color: $primary_lighter;
+		}
+	}
+
+	& .el-input__prefix,
+	& .el-textarea__inner {
+		align-items: center;
+	}
+}
+
+.el-button:not(.el-button--text, .el-button--danger, .el-button--success) {
+	background-color: transparent;
+	border-color: $primary_normal;
+	color: $gray_lighter;
+	&:hover,
+	&:focus {
+		background-color: $primary_normal !important;
+		border-color: transparent !important;
+	}
+}
+
+.el-dropdown__popper.el-popper[role='tooltip'] {
+	background-color: $primary_darker;
+	border-color: $primary_darker;
+
+	& .el-popper__arrow::before {
+		background-color: $primary_darker;
+		border-right-color: $primary_darker;
+		border-top-color: $primary_darker;
+	}
+
+	& .el-dropdown-menu {
+		background-color: $primary_darker;
+		color: $gray_lighter;
+
+		& .el-dropdown-menu__item {
+			color: $gray_lighter;
+			background: none;
+			&:not(.is-disabled):hover {
+				background: none;
+				color: $primary_light;
+			}
+		}
+	}
+}

@@ -89,7 +89,7 @@ RegisterNetEvent("dg-storerobbery:server:CallCops", function(store, streetLabel,
     }
 
     for _, id in pairs(cops) do
-        TriggerClientEvent("qb-phone:client:addPoliceAlert", id, alertData)
+				-- TODO Add dispatch BS
         TriggerClientEvent("dg-storerobbery:client:PoliceAlert", id, store, streetLabel, coords)
     end
 end)

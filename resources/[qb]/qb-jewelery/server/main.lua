@@ -68,12 +68,12 @@ AddEventHandler('qb-jewellery:server:PoliceAlertMessage', function(title, coords
             if (Player.PlayerData.job.name == "police" and Player.PlayerData.job.onduty) then
                 if blip then
                     if not alarmTriggered then
-                        TriggerClientEvent("qb-phone:client:addPoliceAlert", v, alertData)
+												-- TODO add dispatch hook
                         TriggerClientEvent("qb-jewellery:client:PoliceAlertMessage", v, title, coords, blip)
                         alarmTriggered = true
                     end
                 else
-                    TriggerClientEvent("qb-phone:client:addPoliceAlert", v, alertData)
+										-- TODO add dispatch hook
                     TriggerClientEvent("qb-jewellery:client:PoliceAlertMessage", v, title, coords, blip)
                 end
             end
