@@ -6,6 +6,7 @@ AddEventHandler('playerDropped', function()
         local Player = DGCore.Players[src]
         TriggerEvent('qb-log:server:CreateLog', 'joinleave', 'Dropped', 'red', '**' .. GetPlayerName(src) .. '** (' .. Player.PlayerData.license .. ') left..')
         Player.Functions.Save()
+	      TriggerEvent('DGCore:Server:OnPlayerUnload', src)
         DGCore.Players[src] = nil
     end
 end)

@@ -226,7 +226,7 @@ function DGCore.Functions.GetClosestPlayer(coords)
     return closestPlayer, closestDistance
 end
 
-function DGCore.Functions.GetPlayersFromCoords(coords, distance)
+function DGCore.Functions.GetPlayersFromCoords(coords, distance, serverIds)
     local players = DGCore.Functions.GetPlayers()
     local ped = PlayerPedId()
     if coords then
@@ -241,7 +241,7 @@ function DGCore.Functions.GetPlayersFromCoords(coords, distance)
         local targetCoords = GetEntityCoords(target)
         local targetdistance = #(targetCoords - coords)
         if targetdistance <= distance then
-            closePlayers[#closePlayers + 1] = player
+            closePlayers[#closePlayers + 1] = serverIds and GetPlayerServerId(player) or player
         end
     end
     return closePlayers

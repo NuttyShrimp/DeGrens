@@ -493,7 +493,7 @@ RegisterNetEvent('police:server:SendTrackerLocation', function(coords, requestId
         description = msg
     }
     TriggerClientEvent("police:client:TrackerMessage", requestId, msg, coords)
-    TriggerClientEvent("qb-phone:client:addPoliceAlert", requestId, alertData)
+		-- TODO add dispatch hook
 end)
 
 DGCore.Commands.Add('911p', 'Police Report', {{name='message', help='Message to be sent'}}, false, function(source, args)
@@ -505,7 +505,7 @@ DGCore.Commands.Add('911p', 'Police Report', {{name='message', help='Message to 
     for k,v in pairs(players) do
         if v.PlayerData.job.name == 'police' and v.PlayerData.job.onduty then
             local alertData = {title = 'New 911 Call', coords = {coords.x, coords.y, coords.z}, description = message}
-            TriggerClientEvent("qb-phone:client:addPoliceAlert", v.PlayerData.source, alertData)
+					-- TODO add dispatch hook
             TriggerClientEvent('police:client:policeAlert', v.PlayerData.source, coords, message)
         end
     end
@@ -642,7 +642,7 @@ RegisterNetEvent('police:server:policeAlert', function(text)
     for k,v in pairs(players) do
         if v.PlayerData.job.name == 'police' and v.PlayerData.job.onduty then
             local alertData = {title = 'New Call', coords = {coords.x, coords.y, coords.z}, description = text}
-            TriggerClientEvent("qb-phone:client:addPoliceAlert", v.PlayerData.source, alertData)
+					-- TODO add dispatch hook
             TriggerClientEvent('police:client:policeAlert', v.PlayerData.source, coords, text)
         end
     end
@@ -1028,7 +1028,7 @@ RegisterNetEvent('police:server:SendTrackerLocation', function(coords, requestId
         description = msg
     }
     TriggerClientEvent("police:client:TrackerMessage", requestId, msg, coords)
-    TriggerClientEvent("qb-phone:client:addPoliceAlert", requestId, alertData)
+		-- TODO add dispatch hook
 end)
 
 RegisterNetEvent('police:server:SyncSpikes', function(table)

@@ -97,12 +97,11 @@ AddEventHandler('qb-cityhall:client:sendDriverEmail', function(charinfo)
             gender = "Mrs"
         end
         local charinfo = DGCore.Functions.GetPlayerData().charinfo
-        TriggerServerEvent('qb-phone:server:sendNewMail', {
-            sender = "Township",
-            subject = "Driving lessons request",
-            message = "Hello " .. gender .. " " .. charinfo.lastname .. ",<br /><br />We have just received a message that someone wants to take driving lessons<br />If you are willing to teach, please contact us:<br />Naam: <strong>".. charinfo.firstname .. " " .. charinfo.lastname .. "</strong><br />Phone Number: <strong>"..charinfo.phone.."</strong><br/><br/>Kind regards,<br />Township Los Santos",
-            button = {}
-        })
+				exports["dg-phone"]:sendMail(
+						"Driving lessons request",
+						"Township",
+						("Hello %s %s,<br /><br />We have just received a message that someone wants to take driving lessons<br />If you are willing to teach, please contact us:<br />Naam: <strong>%s %s</strong><br />Phone Number: <strong>%s</strong><br/><br/>Kind regards,<br />Township Los Santos"):format(gender, charinfo.lastname, charinfo.firstname, charinfo.lastname, charinfo.phone)
+				)
     end)
 end)
 

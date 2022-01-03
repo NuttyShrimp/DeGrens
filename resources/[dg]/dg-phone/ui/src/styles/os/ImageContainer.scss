@@ -1,0 +1,39 @@
+@use '../base' as *;
+
+.image-container {
+	&--span {
+		text-decoration-line: underline;
+		cursor: pointer;
+	}
+	&--wrapper {
+		border: 1px solid;
+		width: 12vw;
+		height: 18vh;
+
+		& > div {
+			height: 100%;
+			width: 100%;
+			display: flex;
+			justify-content: center;
+		}
+		& img {
+			height: 100%;
+			width: 100%;
+			object-fit: contain;
+		}
+	}
+
+	&--hidden {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		height: inherit;
+		cursor: pointer;
+
+		& > i {
+			font-size: 2rem;
+			margin-bottom: 1vh;
+		}
+	}
+}

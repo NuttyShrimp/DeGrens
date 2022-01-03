@@ -1,0 +1,35 @@
+@use '../base' as *;
+
+.mail-app {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+.mail-entry {
+	width: 90%;
+	background-color: $primary_darker;
+	border-bottom: 0.2vh solid $gray_light;
+	& > div {
+		margin: 1vh 0.5vw;
+	}
+	&--wrapper {
+		display: flex;
+		flex-direction: column;
+		border-bottom: 0.1vh solid $gray_light;
+		& div {
+			margin-bottom: 1vh;
+		}
+	}
+	&--message {
+		font-size: 0.8rem;
+		&--small {
+			white-space: nowrap;
+			overflow: hidden;
+			text-overflow: ellipsis;
+		}
+	}
+	&--date {
+		text-align: center;
+	}
+}

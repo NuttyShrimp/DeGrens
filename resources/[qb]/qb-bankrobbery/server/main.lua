@@ -272,7 +272,7 @@ AddEventHandler('qb-bankrobbery:server:callCops', function(type, bank, streetLab
         description = msg,
     }
     TriggerClientEvent("qb-bankrobbery:client:robberyCall", -1, type, bank, streetLabel, coords)
-    TriggerClientEvent("qb-phone:client:addPoliceAlert", -1, alertData)
+		-- TODO add dispatch hook
 end)
 
 RegisterServerEvent('qb-bankrobbery:server:SetStationStatus')

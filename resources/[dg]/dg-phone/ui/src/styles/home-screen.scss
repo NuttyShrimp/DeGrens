@@ -1,0 +1,25 @@
+.home-screen {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-around;
+	& > div {
+		flex: 1 0 22%;
+	}
+}
+
+.home-screen-app {
+	min-width: 3vw;
+	max-width: 3vw;
+	min-height: 3vw;
+	max-height: 3vw;
+	margin-top: 0.75vh;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	border-radius: 1vh;
+	background: linear-gradient(transparent, rgba(0, 0, 0, 0.3));
+
+	& > i {
+		font-size: 2.25rem;
+	}
+}

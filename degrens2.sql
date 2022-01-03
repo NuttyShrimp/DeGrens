@@ -183,41 +183,6 @@ create table if not exists permissions
   FOREIGN KEY (license) REFERENCES players (license) on update cascade on delete cascade
 );
 
-create table if not exists phone_invoices
-(
-  id              int(10) auto_increment,
-  citizenid       varchar(50)   null,
-  amount          int default 0 not null,
-  society         tinytext      null,
-  sender          varchar(50)   null,
-  sendercitizenid varchar(50)   null,
-  PRIMARY KEY (id),
-  FOREIGN KEY (citizenid) REFERENCES players (citizenid) on update cascade on delete cascade,
-  FOREIGN KEY (sendercitizenid) REFERENCES players (citizenid) on update cascade on delete cascade,
-  CHECK ( phone_invoices.amount > 0)
-);
-
-create table if not exists phone_messages
-(
-  id        int auto_increment,
-  citizenid varchar(50) null,
-  number    varchar(50) null,
-  messages  text        null,
-  PRIMARY KEY (id),
-  FOREIGN KEY (citizenid) REFERENCES players (citizenid) on update cascade on delete cascade
-);
-
-create table if not exists phone_tweets
-(
-  id        int auto_increment,
-  citizenid varchar(50)                          null,
-  sender    varchar(50)                          null,
-  message   text                                 null,
-  date      datetime default current_timestamp() null,
-  PRIMARY KEY (id),
-  FOREIGN KEY (citizenid) REFERENCES players (citizenid) on update cascade on delete cascade
-);
-
 create table if not exists player_boats
 (
   id        int auto_increment,
@@ -227,17 +192,6 @@ create table if not exists player_boats
   boathouse varchar(50)     null,
   fuel      int default 100 not null,
   state     int default 0   not null,
-  PRIMARY KEY (id),
-  FOREIGN KEY (citizenid) REFERENCES players (citizenid) on update cascade on delete cascade
-);
-
-create table if not exists player_contacts
-(
-  id        int auto_increment,
-  citizenid varchar(50)             null,
-  name      varchar(50)             null,
-  number    varchar(50)             null,
-  iban      varchar(50) default '0' not null,
   PRIMARY KEY (id),
   FOREIGN KEY (citizenid) REFERENCES players (citizenid) on update cascade on delete cascade
 );
@@ -350,3 +304,86 @@ create table if not exists inventoryitems
   createtime    int(11)     DEFAULT NULL,
   PRIMARY KEY (inventorytype, inventoryid, slot)
 );
+
+CREATE TABLE IF NOT EXISTS phone_contacts
+(
+  id    int(11)      NOT NULL AUTO_INCREMENT,
+  cid   varchar(255) NOT NULL,
+  label varchar(255) NOT NULL,
+  phone varchar(255) NOT NULL,
+  PRIMARY KEY (id),
+  FOREIGN KEY (cid) REFERENCES players (citizenid) on update cascade on delete cascade
+);
+
+CREATE TABLE IF NOT EXISTS phone_tweets
+(
+  id    int(11)      NOT NULL AUTO_INCREMENT,
+  cid   varchar(255) NOT NULL,
+  tweet LONGTEXT     NOT NULL,
+  date  bigint       NOT NULL,
+  PRIMARY KEY (id),
+  FOREIGN KEY (cid) REFERENCES players (citizenid) on update cascade on delete cascade
+);
+
+CREATE TABLE IF NOT EXISTS phone_tweets_retweets
+(
+  tweetid int(11)      NOT NULL,
+  cid     varchar(255) NOT NULL,
+  PRIMARY KEY (tweetid, cid),
+  FOREIGN KEY (tweetid) REFERENCES phone_tweets (id) on update cascade on delete cascade,
+  FOREIGN KEY (cid) REFERENCES players (citizenid) on update cascade on delete cascade
+);
+
+CREATE TABLE IF NOT EXISTS phone_tweets_likes
+(
+  tweetid int(11)      NOT NULL,
+  cid     varchar(255) NOT NULL,
+  PRIMARY KEY (tweetid, cid),
+  FOREIGN KEY (tweetid) REFERENCES phone_tweets (id) on update cascade on delete cascade,
+  FOREIGN KEY (cid) REFERENCES players (citizenid) on update cascade on delete cascade
+);
+
+CREATE TABLE IF NOT EXISTS phone_messages
+(
+  id       int(11)      NOT NULL AUTO_INCREMENT,
+  sender   varchar(255) NOT NULL, -- phone number adds supports for possible burner phone numbers
+  receiver varchar(255) NOT NULL,
+  message  text         NOT NULL,
+  isread   tinyint(1)   NOT NULL,
+  date     bigint       NOT NULL,
+  PRIMARY KEY (id),
+  CHECK ( isread < 2 ),
+  CHECK ( date > 0 )
+);
+
+CREATE TABLE IF NOT EXISTS phone_notes
+(
+  id     int(11)      NOT NULL AUTO_INCREMENT,
+  cid    varchar(255) NOT NULL,
+  title  varchar(255) NOT NULL,
+  note   longtext     NOT NULL,
+  `date` bigint       NOT NULL,
+  PRIMARY KEY (id),
+  FOREIGN KEY (cid) REFERENCES players (citizenid) on update cascade on delete cascade,
+  CHECK ( `date` > 0 )
+);
+
+CREATE TABLE IF NOT EXISTS phone_images
+(
+  id    int(11)      NOT NULL AUTO_INCREMENT,
+  cid  varchar(255) NOT NULL,
+  link varchar(255) NOT NULL,
+  PRIMARY KEY (id),
+  FOREIGN KEY (cid) REFERENCES players (citizenid) on update cascade on delete cascade
+);
+
+CREATE TABLE IF NOT EXISTS phone_mails
+(
+  id   int(11)      NOT NULL AUTO_INCREMENT,
+  cid  varchar(255) NOT NULL,
+  sender varchar(255) NOT NULL,
+  subject varchar(255) NOT NULL,
+  message LONGTEXT NOT NULL,
+  PRIMARY KEY (id),
+  FOREIGN KEY (cid) REFERENCES players (citizenid) on update cascade on delete cascade
+)

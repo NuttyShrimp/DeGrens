@@ -71,6 +71,25 @@ function DGCore.Functions.GetPlayers()
     return sources
 end
 
+-- Returns player server ids in given radius
+function DGCore.Functions.GetPlayersInRadius(src, radius)
+	radius = radius or 5
+	local plyPed = GetPlayerPed(src)
+	local plyPos = GetEntityCoords(plyPed)
+	local closePlayers = {}
+	for _,id in ipairs(DGCore.Functions.GetPlayers()) do
+		if id == src then goto continue end
+		local targetPed = GetPlayerPed(id)
+		local targetPos = GetEntityCoords(targetPed)
+		local distance = #(targetPos - plyPos)
+		if distance <= radius then
+			closePlayers[#closePlayers + 1] = id
+		end
+		::continue::
+	end
+	return closePlayers
+end
+
 -- Will return an array of QB Player class instances
 -- unlike the GetPlayers() wrapper which only returns IDs
 function DGCore.Functions.GetQBPlayers()

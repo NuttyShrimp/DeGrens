@@ -423,7 +423,8 @@ end
 
 function HasItem(required)
     for _, item in pairs(PlayerData.items) do
-        if v.name == required then
+	    print(item.name)
+        if item.name == required then
             return true
         end
     end

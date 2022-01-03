@@ -131,7 +131,7 @@ AddEventHandler('qb-diving:server:CallCops', function(Coords)
                     },
                     description = msg
                 }
-                TriggerClientEvent("qb-phone:client:addPoliceAlert", -1, alertData)
+								-- TODO add dispatch hook
             end
         end
     end

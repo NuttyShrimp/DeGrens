@@ -151,6 +151,7 @@ end
 function DGCore.Player.Logout(source)
     local src = source
     TriggerClientEvent('DGCore:Client:OnPlayerUnload', src)
+		TriggerEvent('DGCore:Server:OnPlayerUnload', src)
     TriggerClientEvent('DGCore:Player:UpdatePlayerData', src)
     Citizen.Wait(200)
     DGCore.Players[src] = nil
@@ -166,6 +167,12 @@ function DGCore.Player.CreatePlayer(PlayerData)
     self.PlayerData = PlayerData
 
     self.Functions.UpdatePlayerData = function(dontUpdateChat)
+		    if self.PlayerData.oldItems and type(self.PlayerData.oldItems) == 'table' and self.PlayerData.items and type(self.PlayerData.items) == 'table' then
+	          local invDiff = DGCore.Shared.GetTableDiff(self.PlayerData.oldItems, self.PlayerData.items)
+						if invDiff and invDiff.removed and invDiff.added and (#invDiff.removed > 0 or #invDiff.added > 0) then
+					      TriggerEvent('DGCore:Server:OnInventoryUpdate', self.PlayerData.source, invDiff.removed, invDiff.added)
+				    end
+		    end
         TriggerClientEvent('DGCore:Player:SetPlayerData', self.PlayerData.source, self.PlayerData)
         if dontUpdateChat == nil then
             DGCore.Commands.Refresh(self.PlayerData.source)
@@ -294,9 +301,6 @@ function DGCore.Player.CreatePlayer(PlayerData)
                 TriggerEvent('qb-log:server:CreateLog', 'playermoney', 'RemoveMoney', 'red', '**' .. GetPlayerName(self.PlayerData.source) .. ' (citizenid: ' .. self.PlayerData.citizenid .. ' | id: ' .. self.PlayerData.source .. ')** $' .. amount .. ' (' .. moneytype .. ') removed, new ' .. moneytype .. ' balance: ' .. self.PlayerData.money[moneytype])
             end
             TriggerClientEvent('hud:client:OnMoneyChange', self.PlayerData.source, moneytype, amount, true)
-            if moneytype == 'bank' then
-                TriggerClientEvent('qb-phone:client:RemoveBankMoney', self.PlayerData.source, amount)
-            end
             return true
         end
         return false
@@ -448,15 +452,17 @@ function DGCore.Player.CreatePlayer(PlayerData)
     end
 
     self.Functions.SetInventory = function(items, dontUpdateChat)
+				self.PlayerData.oldItems = json.decode(json.encode(self.PlayerData.items))
         self.PlayerData.items = items
         self.Functions.UpdatePlayerData(dontUpdateChat)
         TriggerEvent('qb-log:server:CreateLog', 'playerinventory', 'SetInventory', 'blue', '**' .. GetPlayerName(self.PlayerData.source) .. ' (citizenid: ' .. self.PlayerData.citizenid .. ' | id: ' .. self.PlayerData.source .. ')** items set: ' .. json.encode(items))
     end
 
     self.Functions.ClearInventory = function()
-        self.PlayerData.items = {}
-        self.Functions.UpdatePlayerData()
-        TriggerEvent('qb-log:server:CreateLog', 'playerinventory', 'ClearInventory', 'red', '**' .. GetPlayerName(self.PlayerData.source) .. ' (citizenid: ' .. self.PlayerData.citizenid .. ' | id: ' .. self.PlayerData.source .. ')** inventory cleared')
+		    self.PlayerData.oldItems = json.decode(json.encode(self.PlayerData.items))
+				self.PlayerData.items = {}
+		    self.Functions.UpdatePlayerData()
+		    TriggerEvent('qb-log:server:CreateLog', 'playerinventory', 'ClearInventory', 'red', '**' .. GetPlayerName(self.PlayerData.source) .. ' (citizenid: ' .. self.PlayerData.citizenid .. ' | id: ' .. self.PlayerData.source .. ')** inventory cleared')
     end
 
     self.Functions.GetItemByName = function(item)
@@ -629,6 +635,7 @@ DGCore.Player.LoadInventory = function(PlayerData)
             end
         end
     end
+		PlayerData.oldItems = json.decode(json.encode(PlayerData.items))
     return PlayerData
 end
 
@@ -637,7 +644,10 @@ DGCore.Player.SaveInventory = function(source)
     if DGCore.Players[src] then
         local PlayerData = DGCore.Players[src].PlayerData
         local items = PlayerData.items
-        if items then
+				local oldItems = PlayerData.oldItems
+        if items and oldItems then
+		        local diff = DGCore.Shared.GetTableDiff(oldItems, items)
+	          if #diff.removed == 0 and #diff.added == 0 then return end
             exports.oxmysql:executeSync(
                 [[
                 DELETE FROM inventoryitems
@@ -666,6 +676,7 @@ DGCore.Player.SaveInventory = function(source)
                 end
         	end
         end
+	      DGCore.Players[src].PlayerData.oldItems = json.decode(json.encode(PlayerData.items))
     end
 end
 
