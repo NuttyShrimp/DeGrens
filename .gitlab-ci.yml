@@ -14,5 +14,9 @@ validate json:
     - yarn --pure-lockfile
     - yarn start
   only:
+    refs:
+      - main
+      - merge_requests
+      - tags
     changes:
       - "**/*.json"
