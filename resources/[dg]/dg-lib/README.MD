@@ -42,28 +42,14 @@ on('dg-lib:keyEvent', (name:string, isDown: boolean)=>{
 })
 ```
 
-## Polyzone (client)
-
-Dit script is een event base polyzone wrapper.
-Je kunt dus via exports je polyzone aanmaken en deze zal dan ge "watched" worden door onze combozone
-Voor meer info rondt het aanmaken van polyzone stuur ik u naar [hier](https://github.com/mkafrin/PolyZone/wiki).
-
-Volgende exports zijn beschikbaar vanuit deze module:
-- AddBoxZone
-- AddCircleZone
-- AddPolyZone
-
-Ik raad je aan om in het script zelf te kijken voor meer info ivm welke argumenten er mee gegeven moeten worden.
-Ik raad wel aan om in de options table een data table met een unique id per zone mee te geven. zo kun je meerdere zones aanmaken onder dezelfde naam maar ze toch elke identificeren.
-Deze id zal er ook voor zorgen dat een zone niet 2x zal aangemaakt worden mocht u bv. het script herstarten
-
 ## Instances (server)
 
-De instance module is een manager voor routingbuckets.
-Je kunt bijhouden welke spelers in welke routingbucket zit (als je ze via deze manager laat joinen toch).
-En je kunt een aparte bucket een specifieke naam geven om ze te kunnen identificeren mocht dat nodig zijn
+De instance module is een manager voor routingbuckets. Je kunt bijhouden welke spelers in welke routingbucket zit (als
+je ze via deze manager laat joinen toch). En je kunt een aparte bucket een specifieke naam geven om ze te kunnen
+identificeren mocht dat nodig zijn
 
 Volgende exports zijn beschikbaar voor deze module:
+
 - setInstance(source, instanceId)
 - setInstanceName(instanceId, name)
 - getInstanceName(instanceId) 

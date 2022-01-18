@@ -46,7 +46,6 @@ enterApartment = function(src, id)
     TriggerClientEvent('DGCore:Notify', src, "Het appartementsblok is momenteel onder lockdown", "error")
     return
   end
-	print(json.encode(id))
 	if (not id) then
     id = getPlayerApartment(src)
   end
@@ -203,7 +202,7 @@ end)
 
 DGCore.Functions.CreateCallback('dg-apartments:server:getCurrentApartment', function(src,cb)
 	local apartment = getCurrentApartment(src)
-  cb(apartment.id)
+  cb(apartment and apartment.id or nil)
 end)
 
 DGCore.Functions.CreateCallback('dg-apartments:server:getApartmentInvites', function(src, cb)

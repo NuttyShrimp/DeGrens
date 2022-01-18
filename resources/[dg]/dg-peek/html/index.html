@@ -4,7 +4,7 @@
     <!-- NUI jQuery Import -->
     <script src="nui://game/ui/jquery.js" type="text/javascript"></script>
     <!-- Font Awesome Icons Import -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link href="https://pro.fontawesome.com/releases/v5.15.3/css/all.css" rel="stylesheet">
     <!-- Material Icons Import -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <!-- Material Design Icons Import -->
@@ -31,7 +31,7 @@
 
 <body>
     <div id="target-wrapper">
-        <q-icon id="target-eye" :name="CurrentIcon" v-show="Show" :style="TargetEyeStyleObject"></q-icon>
+      <q-icon :style="TargetEyeStyleObject" id="target-eye" name="lar la-eye" v-show="Show"></q-icon>
         <div id="target-label-wrapper">
             <div id="target-label" v-html="TargetHTML"></div>
         </div>

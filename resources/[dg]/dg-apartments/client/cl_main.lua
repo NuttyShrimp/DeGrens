@@ -95,6 +95,9 @@ end)
 
 RegisterNetEvent('dg-apartment:openStash', function()
 	DGCore.Functions.TriggerCallback('dg-apartments:server:getCurrentApartment', function(CurrentApartment)
+		if not CurrentApartment then
+			return
+		end
 		TriggerServerEvent("inventory:server:OpenInventory", "stash", CurrentApartment)
 		TriggerServerEvent("InteractSound_SV:PlayOnSource", "StashOpen", 0.4)
 	end)
@@ -116,4 +119,7 @@ end
 
 exports('getEnterCoords', function()
 	return Config.Locations[1].enter.center
+end)
+exports('isInApartment', function()
+	return currentApartmentName ~= nil
 end)

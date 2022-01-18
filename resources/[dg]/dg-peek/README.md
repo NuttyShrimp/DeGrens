@@ -1,47 +1,300 @@
-# berkie-target
+# DG-Peek
 
-berkie-target is a targeting solution that allows interaction with any predefined entity, model, entity type or polyzone. While activated you can easily and safely replace markers and distance checking, instead relying on intuitive design to improve player experiences and optimize interaction.
+custom peek tool for the DeGrens
 
-## Credits
+Each entry adder has a table as second argument name `parameters`
+The structure of the table can be found in the [parameters](./PARAMETERS.md) docs The parameter is defined as a
+typescript interface to make it easy to read.
 
-* Lots of credits goes to [qtarget](https://github.com/QuantusRP/qtarget) for re-writing all of bt-target to make it more optimized and where this resource is based off of.
+Following exports are available:
 
-* All the credit goes to [bt-target](https://github.com/brentN5/bt-target) from brentN5 for making the target a thing!
+## Miscellaneous
 
-* Credit to [ms-peds](https://github.com/MiddleSkillz/ms-peds) for allowing me to use their awesome ped spawner inside the target!
+### setPeekEnabled
 
-## Dependencies
+Enable or disable the ability to open the peek menu
 
-* [PolyZone](https://github.com/mkafrin/PolyZone)
+```lua
+exports['dg-peek']:setPeekEnabled(true)
+```
 
-## Optional Dependencies
+## Adding a new entry
 
-* [QBCore](https://github.com/qbcore-framework/qb-core)
+All these exports return a table with the unique ids given to the options Thats 1 id per entry in the options table
 
-* [ES Extended Legacy](https://github.com/esx-framework/esx-legacy)
+### addModelEntry
 
-## Information
+Add a peek options for a model. This model can be the string or the hash of the model. The first argument can also be an
+array with the strings or hashes of the models.
 
-This repository was originally a fork and now it's own repository as it's basically qtarget but with lots of changes to it to make it better, most of the code comes from qtarget as I find their work awesome on this and what they've achieved with it.
+```lua
+exports['dg-peek']:addModelEntry('prop_test_bed_01', {
+  options = {
+    {
+      icon = 'fas fa-home',
+      label = 'Sleep',
+      items = 'phone',
+      canInteract = function(entity, distance, entry)
+        -- do something
+        return true
+      end,
+      job = 'police',
+      gang = 'ESB'
+    },
+    {
+      icon = 'fas fa-home',
+      label = 'Make bed',
+      items = 'phone',
+      canInteract = function(entity, distance, entry)
+        -- do something
+        return true
+      end,
+      job = { 'police', 'ambulance' },
+      gang = 'ESB'
+    },
+    {
+      icon = 'fas fa-home',
+      label = 'Slap pillow',
+      items = 'phone',
+      canInteract = function(entity, distance, entry)
+        -- do something
+        return true
+      end,
+      job = { police = 2, ambulance = 1 },
+      gang = 'ESB'
+    },
+  },
+  distance = 2.0
+})
+```
 
-This version is for QBCore but can be used by any framework if you make your own changes to it.
+### addEntityEntry
+```lua
+exports['dg-peek']:addEntityEntry({ 890, 2394 }, {
+  options = {
+    {
+      icon = 'fas fa-home',
+      label = 'Sleep',
+      items = 'phone',
+      canInteract = function(entity, distance, entry)
+        -- do something
+        return true
+      end,
+      job = 'police',
+      gang = 'ESB'
+    },
+    {
+      icon = 'fas fa-home',
+      label = 'Make bed',
+      items = 'phone',
+      canInteract = function(entity, distance, entry)
+        -- do something
+        return true
+      end,
+      job = { 'police', 'ambulance' },
+      gang = 'ESB'
+    },
+    {
+      icon = 'fas fa-home',
+      label = 'Slap pillow',
+      items = 'phone',
+      canInteract = function(entity, distance, entry)
+        -- do something
+        return true
+      end,
+      job = { police = 2, ambulance = 1 },
+      gang = 'ESB'
+    },
+  },
+  distance = 2.0
+})
+```
 
-You are free to help through Pull Requests and leave as much suggestions or issues, I love some help!
+### addBoneEntry
 
-The TEMPLATES.md and EXAMPLES.md are always being improved and new examples can be made on request, just let me know!
+```lua
+exports['dg-peek']:addBoneEntry('seat_dside_f', {
+  options = {
+    {
+      icon = 'fas fa-home',
+      label = 'Sleep',
+      items = 'phone',
+      canInteract = function(entity, distance, entry)
+        -- do something
+        return true
+      end,
+      job = 'police',
+      gang = 'ESB'
+    },
+    {
+      icon = 'fas fa-home',
+      label = 'Make bed',
+      items = 'phone',
+      canInteract = function(entity, distance, entry)
+        -- do something
+        return true
+      end,
+      job = { 'police', 'ambulance' },
+      gang = 'ESB'
+    },
+    {
+      icon = 'fas fa-home',
+      label = 'Slap pillow',
+      items = 'phone',
+      canInteract = function(entity, distance, entry)
+        -- do something
+        return true
+      end,
+      job = { police = 2, ambulance = 1 },
+      gang = 'ESB'
+    },
+  },
+  distance = 2.0
+})
+```
 
-## Features 
-- Maintains compatibility with bt-target while providing improved utility and performance
-- Optimised and improved raycasting function allows interaction with a wider range of entities
-- Add generic options to apply for all players, peds, vehicles, or objects
-- Trigger an event, function or command after clicking an option, with the ability to pass any data through
-- Define distance on a per-option or overall basis when triggering a target option
-- Ability to redefine or remove options, and add new options without replacing old ones
-- Update option list when moving towards or away from a target with variable distances on their options
-- Support for entity bones, with builtin tables for opening doors
-- Support checking for job, items, or specific entities
-- Utilise the `canInteract` function for advanced checks to show or hide an option based on any trigger
-- Ped spawner to spawn peds and assign target options to them all in one place
+### addFlagEntry
 
-## Issues and Suggestions
-Please use the GitHub issues system to report issues or make suggestions, when making suggestion, please keep `[Suggestion]` in the title to make it clear that it is a suggestion or join the [discord](https://discord.gg/qbcore).
+```lua
+exports['dg-peek']:addFlagEntry('isButcher', {
+  options = {
+    {
+      icon = 'fas fa-home',
+      label = 'Sleep',
+      items = 'phone',
+      canInteract = function(entity, distance, entry)
+        -- do something
+        return true
+      end,
+      job = 'police',
+      gang = 'ESB'
+    },
+    {
+      icon = 'fas fa-home',
+      label = 'Make bed',
+      items = 'phone',
+      canInteract = function(entity, distance, entry)
+        -- do something
+        return true
+      end,
+      job = { 'police', 'ambulance' },
+      gang = 'ESB'
+    },
+    {
+      icon = 'fas fa-home',
+      label = 'Slap pillow',
+      items = 'phone',
+      canInteract = function(entity, distance, entry)
+        -- do something
+        return true
+      end,
+      job = { police = 2, ambulance = 1 },
+      gang = 'ESB'
+    },
+  },
+  distance = 2.0
+})
+```
+
+### addZoneEntry
+
+```lua
+exports['dg-polytarget']:addBoxZone('my-target-zone', vector3(0,0,0), 1.0, 1.0, {
+  data = {
+    id = 'my-uniq-id',
+    -- Other data you may want to access when peek is used
+  }
+})
+exports['dg-peek']:addZoneEntry('my-target-zone', {
+  options = {
+    {
+      icon = 'fas fa-home',
+      label = 'Sleep',
+      items = 'phone',
+      canInteract = function(entity, distance, entry)
+        -- do something
+        -- entry.data has the data you set in addBoxZone
+        return true
+      end,
+      job = 'police',
+      gang = 'ESB'
+    },
+    {
+      icon = 'fas fa-home',
+      label = 'Make bed',
+      items = 'phone',
+      canInteract = function(entity, distance, entry)
+        -- do something
+        return true
+      end,
+      job = { 'police', 'ambulance' },
+      gang = 'ESB'
+    },
+    {
+      icon = 'fas fa-home',
+      label = 'Slap pillow',
+      items = 'phone',
+      canInteract = function(entity, distance, entry)
+        -- do something
+        return true
+      end,
+      job = { police = 2, ambulance = 1 },
+      gang = 'ESB'
+    },
+  },
+  distance = 2.0
+})
+```
+
+## Remove entries
+
+### removeModelEntry
+
+```lua
+exports['dg-peek']:removeModelEntry(112)
+-- or
+exports['dg-peek']:removeModelEntry({ 112, 8495 })
+```
+
+### removeEntityEntry
+
+```lua
+exports['dg-peek']:removeEntityEntry(112)
+-- or
+exports['dg-peek']:removeModelEntry({ 112, 8495 })
+```
+
+### removeBoneEntry
+
+```lua
+exports['dg-peek']:removeBoneEntry(112)
+-- or
+exports['dg-peek']:removeBoneEntry({ 112, 8495 })
+```
+
+### removeFlagEntry
+
+```lua
+exports['dg-peek']:removeFlagEntry(112)
+-- or
+exports['dg-peek']:removeFlagEntry({ 112, 8495 })
+```
+
+### removeZoneEntry
+
+```lua
+exports['dg-peek']:removeZoneEntry(112)
+-- or
+exports['dg-peek']:removeZoneEntry({ 112, 8495 })
+```
+
+## Icons
+
+We support following icon libraries:
+
+- [Font Awesome](https://fontawesome.com/icons?d=gallery)
+- [Material Design](https://material.io/resources/icons/?style=baseline)
+- [Ionicons](https://ionic.io/ionicons/v4)
+- [Eva Icons](https://akveo.github.io/eva-icons/#/)
+- [Line Awesome Icons](https://icons8.com/line-awesome)
+- [Boostrap](https://icons.getbootstrap.com/#icons)

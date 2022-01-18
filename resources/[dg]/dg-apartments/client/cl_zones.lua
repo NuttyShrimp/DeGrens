@@ -16,7 +16,7 @@ Citizen.CreateThread(function()
 		local zone = v.enter
 		zone.options.data = zone.options.data or {}
 		zone.options.data.id = v.name
-		exports["dg-lib"]:AddBoxZone("apartment", zone.center, zone.length, zone.width, zone.options)
+		exports["dg-polyzone"]:AddBoxZone("apartment", zone.center, zone.length, zone.width, zone.options)
 	end
 end)
 
@@ -132,17 +132,17 @@ enableInteractionZones = function(type)
 		name = "apartment_"..v.type
 		activeZones[name] = true
 		if (v.zone == "poly") then
-			exports["dg-lib"]:AddBoxZone(name, BASE_SHELL_COORDS+v.offset, v.dist, v.dist, {
+			exports["dg-polyzone"]:AddBoxZone(name, BASE_SHELL_COORDS + v.offset, v.dist, v.dist, {
 				data = {
 					info = v,
 					id = 1 -- So we know only 1 can be created
 				},
-				minZ = (BASE_SHELL_COORDS+v.offset).z - 2,
-				maxZ = (BASE_SHELL_COORDS+v.offset).z + 2,
+				minZ = (BASE_SHELL_COORDS + v.offset).z - 2,
+				maxZ = (BASE_SHELL_COORDS + v.offset).z + 2,
 			})
 		end
 		if ( v.zone == "peek" ) then
-			exports['dg-peek']:AddTargetModel(v.model, {
+			exports['dg-peek']:addModelEntry(v.model, {
 				options = v.options,
 				distance = v.dist
 			})
@@ -150,21 +150,22 @@ enableInteractionZones = function(type)
 	end
 end
 
-remomveInteractionZones = function(type)
+removeInteractionZones = function(type)
 	currentApartmentName = nil
 	local info = getInfoByType(type)
-	if (not info) then return end
-	for k,v in pairs(activeZones) do
+	if (not info) then
+		return
+	end
+	for k, v in pairs(activeZones) do
 		-- remove apartment_ from string
-		if (k == 'apartment') then ::skip_to_next:: end
+		if (k == 'apartment') then
+			:: skip_to_next ::
+		end
 		local name = k:gsub("apartment_", "")
-    if (v) then
-	    zoneType = getInterActionZone(info, name)
-	    if (zoneType == "poly") then
-	      exports["dg-lib"]:RemoveZone("apartment_"..k.."_1")
-	    elseif (zoneType == "peek") then
-      	local labels = getInteractionPeekLabels(info, k)
-		    exports['dg-peek']:RemoveTargetModel(v.model, labels)
+		if (v) then
+			zoneType = getInterActionZone(info, name)
+			if (zoneType == "poly") then
+				exports["dg-polyzone"]:RemoveZone("apartment_" .. k .. "_1")
 	    end
     end
   end

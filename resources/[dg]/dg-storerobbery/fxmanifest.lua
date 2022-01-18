@@ -6,7 +6,8 @@ shared_scripts {
 }
 
 client_script {
-    'client/cl_*.lua'
+	'@dg-logs/client/cl_log.lua',
+	'client/cl_*.lua'
 }
 
 server_scripts {
