@@ -117,8 +117,7 @@ function NPC:SetSetting(setting, active)
 end
 
 function NPC:SetFlag(flag, state)
-    Entity(self.entity).state:set("flagName", flag, self.networked)
-    Entity(self.entity).state:set("flagState", state, self.networked)
+    Entity(self.entity).state:set(flag, state, self.networked)
 end
 
 function NPC:SetScenario()

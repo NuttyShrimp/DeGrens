@@ -80,7 +80,7 @@ end)
 
 -- Anon calls
 Citizen.CreateThread(function()
-	exports['dg-peek']:AddTargetModel({
+	exports['dg-peek']:addModelEntry({
 		'p_phonebox_02_s',
 		'prop_phonebox_03',
 		'prop_phonebox_02',
