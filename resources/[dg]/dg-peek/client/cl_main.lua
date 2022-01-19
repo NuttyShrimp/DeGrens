@@ -289,9 +289,9 @@ updateEntityList = function()
 		activeEntries.model = {}
 		activeEntries.bones = {}
 		activeEntries.flags = {}
+		refreshList()
 		return
 	end
-	local context = getContext(current.entity, current.type)
 	generateCurrentEntries(false)
 end
 
