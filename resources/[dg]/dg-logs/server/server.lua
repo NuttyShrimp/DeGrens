@@ -27,20 +27,19 @@ createDiscordLog = function(name, title, color, message, tagEveryone)
 	end
 end
 
-createGraylogEntry = function(logtype, data)
-	if GetConvar('is_production', 'true') == 'false' then
+createGraylogEntry = function(logtype, data, message)
+	if GetConvar('is_production', 'true') == 'false' and GetConvar("overwrite_logs", false) == false then
 		return
 	end
 	Citizen.CreateThread(function()
-		local dataString = ""
 		data = data ~= nil and data or {}
-		data = json.encode(data, { ident = true })
+		data = json.encode(data, { indent = true })
 
 		PerformHttpRequest(Config.GrayLog, function(err, text, header)
 		end, 'POST', json.encode({
 			version = "2.1",
 			host = "dg2.degrensrp.be",
-			short_message = logtype,
+			short_message = message or logtype,
 			_resource = GetInvokingResource(),
 			_logtype = logtype,
 			full_message = data

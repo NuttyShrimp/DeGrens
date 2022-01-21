@@ -53,4 +53,4 @@ Config.Colors = {
     ["red"] = 16711680,
 }
 
-Config.GrayLog = "http://127.0.0.1:10011/gelf"
+Config.GrayLog = GetConvar('graylog_url', 'http://127.0.0.1:10011/gelf')
