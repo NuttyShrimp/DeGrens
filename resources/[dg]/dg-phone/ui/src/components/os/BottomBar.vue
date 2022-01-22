@@ -13,17 +13,21 @@
 
 <script lang="ts">
 	import { useStore } from '../../lib/state';
-	import { defineComponent } from 'vue';
+	import { computed, defineComponent, reactive, watch } from 'vue';
 	import { nuiAction } from '../../lib/nui';
 
 	export default defineComponent({
 		name: 'BottomBar',
 		setup() {
 			const store = useStore();
-			const entries: { name: string; icon: string; hoverIcon?: string; handler?: () => void }[] = [
+			const isSilenced = computed(() => store.getters.getAppState('isSilenced'));
+			const entries: { name: string; icon: string; hoverIcon?: string; handler?: () => void }[] = reactive([
 				{
 					name: 'silence',
-					icon: 'fas fa-bell',
+					icon: isSilenced.value ? 'fas fa-bell-slash' : 'fas fa-bell',
+					handler: () => {
+						store.commit('setSilenced', !isSilenced.value);
+					},
 				},
 				{
 					name: 'home',
@@ -41,7 +45,7 @@
 						nuiAction('camera/open');
 					},
 				},
-			];
+			]);
 			const setHoverIcon = (evt: MouseEvent, entryName: string) => {
 				const entry = entries.find(entry => entry.name === entryName);
 				if (!entry?.hoverIcon) return;
@@ -52,6 +56,14 @@
 				if (!entry?.hoverIcon) return;
 				(evt?.target as HTMLElement).classList.value = entry.icon;
 			};
+
+			watch(isSilenced, (newVal, oldVal) => {
+				if (newVal === oldVal) return;
+				const silenceEntry = entries.find(entry => entry.name === 'silence');
+				if (!silenceEntry) return;
+				silenceEntry.icon = newVal ? 'fas fa-bell-slash' : 'fas fa-bell';
+			});
+
 			return {
 				setHoverIcon,
 				resetIcon,

@@ -8,20 +8,22 @@
 	& .tweet {
 		display: flex;
 		flex-direction: column;
-		background-color: #1265bb;
-		width: 90%;
-		padding: 1vh 1vw;
+		background-color: #0b57a6;
+		width: 100%;
+		padding: 1vh 1.3vh;
 		margin-bottom: 1vh;
+
 		&--header {
 			display: flex;
 			flex-direction: column;
 			justify-content: space-between;
 			align-items: start;
 			font-size: 1.1rem;
+
 			& > p:last-child {
 				text-align: right;
 				align-self: flex-end;
-				color: $gray_lighter;
+				color: $gray-3;
 				font-size: 0.8rem;
 			}
 		}
@@ -32,13 +34,18 @@
 		&--btns {
 			display: flex;
 			flex-direction: row;
+			align-items: center;
+			margin-top: 0.5vh;
+
 			& > * {
-				margin-right: 0.5vw;
+				margin-right: 0.9vh;
 			}
+
 			& button {
 				color: white;
 				margin: 0;
 				padding: 0;
+
 				& > span {
 					font-size: 1rem;
 				}

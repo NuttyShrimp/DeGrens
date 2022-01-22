@@ -6,6 +6,7 @@ import {
 	Contact,
 	GalleryEntry,
 	infoAppEntry,
+	JusticePerson,
 	Mail,
 	Message,
 	Note,
@@ -33,13 +34,14 @@ export interface State {
 		checkmark: boolean;
 	};
 	bigPicture: string | undefined;
-	background: string;
+	background: Partial<CSSStyleDeclaration>;
 	notifications: PhoneNotification[];
 	character: {
 		server_id: number;
 		cid: string;
 		firstname: string;
 		lastname: string;
+		job: string;
 		phone: string;
 		permissionGroup: string;
 		background: string;
@@ -70,6 +72,7 @@ export interface State {
 		list: Note[];
 	};
 	gallery: GalleryEntry[];
+	justice: Record<string, JusticePerson[]>;
 }
 
 export const key: InjectionKey<Store<State>> = Symbol();
@@ -90,6 +93,7 @@ export const store = createStore<State>({
 			firstname: '',
 			lastname: '',
 			phone: '',
+			job: '',
 			permissionGroup: '',
 			background: '',
 			hasVPN: false,
@@ -103,7 +107,7 @@ export const store = createStore<State>({
 			checkmark: false,
 		},
 		bigPicture: undefined,
-		background: '',
+		background: {},
 		notifications: [],
 		info: [],
 		contacts: [],
@@ -129,6 +133,7 @@ export const store = createStore<State>({
 			list: [],
 		},
 		gallery: [],
+		justice: {},
 	},
 	getters: {
 		getAppState: state => (appName: keyof State) => state[appName],
@@ -167,22 +172,28 @@ export const store = createStore<State>({
 			app = app ?? state.activeApp;
 			const getStandardBackground = () => {
 				const charBG = state.character.background;
-				return (charBG && charBG.trim() !== '' ? state.character.background : backgroundURL) || backgroundURL;
+				return {
+					background: (charBG && charBG.trim() !== '' ? state.character.background : backgroundURL) || backgroundURL,
+				};
 			};
 			if (!phoneApps || !phoneApps[app]?.background) {
 				state.background = getStandardBackground();
 			}
 			state.background =
-				phoneApps[app].background === 'transparent' ? getStandardBackground() : (phoneApps[app].background as string);
+				phoneApps[app].background === 'transparent'
+					? getStandardBackground()
+					: typeof phoneApps[app].background === 'string'
+					? { background: phoneApps[app].background as string }
+					: (phoneApps[app].background as Required<State['background']>);
 		},
 		setEventsForApp(state: State, payload: { name: string; evts: Record<string, (data: any) => void> }) {
 			state.events[payload.name] = payload.evts;
 		},
 		addNotification(state: State, payload: PhoneNotification) {
-			if (!state.notifications) {
-				state.notifications = [];
-			}
-			state.notifications.unshift(payload);
+			const _notis = [...(state.notifications ?? [])];
+			_notis.unshift(payload);
+			state.notifications = _notis;
+			if (state.isSilenced) return;
 			state.hasNotification = true;
 		},
 		removeNotification(state: State, payload: string) {
@@ -220,7 +231,8 @@ export const store = createStore<State>({
 					history: [],
 				};
 			}
-			state.phone.history.push(payload);
+			const _history = [...(state.phone.history ?? []), payload];
+			state.phone.history = _history;
 		},
 		setCurrentView(state: State, payload: { appName: keyof State; view: string }) {
 			// @ts-ignore
@@ -313,6 +325,13 @@ export const store = createStore<State>({
 		},
 		setActiveYP(state: State, payload: YellowPageEntry) {
 			state.yellowpages.current = payload;
+		},
+		setSilenced(state: State, payload: boolean) {
+			console.log('set silenced', payload);
+			state.isSilenced = payload;
+			nuiAction('phone/silence', {
+				silenced: payload,
+			});
 		},
 	},
 	actions: {

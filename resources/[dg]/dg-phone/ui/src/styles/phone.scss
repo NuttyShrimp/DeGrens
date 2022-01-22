@@ -1,11 +1,11 @@
-@use 'base' as *;
+@import 'base';
 
 .phone {
 	position: absolute;
-	right: 0.5vw;
-	min-width: 18vw;
+	right: 0.9vh;
+	min-width: 32vh;
 	min-height: 65vh;
-	font-family: 'Nunito Sans', sans-serif;
+	font-family: 'Roboto', '-apple-system', 'Helvetica Neue', Helvetica, Arial, sans-serif;
 	color: white;
 
 	& > div {
@@ -17,12 +17,15 @@
 			z-index: 2;
 			position: absolute;
 			top: 1.8vh;
-			left: 1.15vw;
+			left: 2vh;
 			min-width: 87.3%;
 			min-height: 94.5%;
 			background-size: cover !important;
+			& *::-webkit-scrollbar {
+				display: none;
+			}
 
-			& > .active-app {
+			& .active-app {
 				position: absolute;
 				top: 2.2vh;
 				min-width: 100%;
@@ -30,13 +33,18 @@
 				min-height: calc(100% - 5vh);
 				max-height: calc(100% - 5vh);
 				display: flex;
+				&--inner {
+					position: relative;
+					width: 100%;
+					overflow: auto;
+				}
 			}
 		}
 
 		& > .phone-big-picture {
 			position: absolute;
-			width: 40vw;
-			right: 18vw;
+			width: 71vh;
+			right: 32vh;
 			height: 90%;
 			display: flex;
 			& > img {
@@ -51,7 +59,7 @@
 	z-index: 3;
 	pointer-events: none;
 	position: absolute;
-	width: 18vw;
+	width: 32vh;
 	height: 65vh;
 
 	& > img {
@@ -72,44 +80,29 @@
 	font-size: 0.7rem;
 
 	& > div > * {
-		margin: 0 0.1vw;
+		margin: 0 0.2vh;
 	}
 }
 
 .appcontainer {
 	//position: relative;
-	margin: 1vh 0.5vw;
+	margin: 1vh 0.9vh 0;
 	overflow-x: hidden;
 	overflow-y: auto;
-	width: 100%;
+	width: -webkit-fill-available;
 
 	& > .topbar-wrapper {
 		display: flex;
 		justify-content: space-between;
 		align-items: flex-start;
 		flex-direction: column;
-		/* padding: 0vh 0.5vw; */
+
 		& > .btn-wrapper {
 			display: flex;
 			flex-direction: row;
 			justify-content: space-between;
 			align-items: center;
 			width: 100%;
-			margin-bottom: 0.5vh;
-
-			& > .backbtnWrapper {
-				display: flex;
-				flex-direction: row;
-				justify-content: flex-start;
-				justify-self: flex-start;
-				margin-top: 0.3vh;
-				cursor: pointer;
-				font-size: 1.3rem;
-
-				&:hover {
-					color: $gray_light;
-				}
-			}
 
 			& > .actionsWrapper {
 				margin-left: auto;
@@ -121,14 +114,37 @@
 				//width: 100%;
 				& > * {
 					align-self: center;
-					margin-left: 0.5vw;
+					margin-left: 0.9vh;
+					font-size: 1.1rem;
 				}
 			}
 		}
 
-		& > .topbar-search-input {
+		& .topbar-search-input {
+			display: flex;
+			flex-direction: row;
 			margin-bottom: 1vh;
 			width: 100%;
+
+			&--list {
+				width: 100%;
+				display: flex;
+				flex-direction: column;
+			}
+		}
+
+		& .backbtnWrapper {
+			display: flex;
+			flex-direction: row;
+			justify-content: flex-start;
+			justify-self: flex-start;
+			align-items: center;
+			margin-top: 0.3vh;
+			cursor: pointer;
+
+			&:hover {
+				color: $gray_light;
+			}
 		}
 	}
 
@@ -162,30 +178,41 @@
 	cursor: pointer;
 
 	&.--dropdown {
-		display: flex;
-		flex-direction: row;
+		font-size: 1rem;
 	}
 }
 
 .bottom-bar {
 	width: 100%;
-	height: 3vh;
+	height: 2.9vh;
 	position: absolute;
 	bottom: 0;
 	display: flex;
 	flex-direction: row;
 	align-items: center;
-	justify-content: space-around;
+	justify-content: space-evenly;
+	border-top: 0.1vh solid #00000080;
+	background-color: rgba($gray-10, 0.3);
+	& > div {
+		width: 2vh;
+		text-align: center;
+	}
 }
 
 .phone-text {
 	&--wrapper {
 		display: flex;
 		flex-direction: column;
+		align-items: center;
+
+		& > span {
+			width: 100%;
+		}
 	}
 	&--attach {
 		display: flex;
 		flex-direction: column;
+		width: 100%;
 	}
 }
 
@@ -199,6 +226,13 @@
 	border-color: $primary_normal !important;
 }
 
-.v-popper--theme-tooltip .v-popper__inner {
-	font-size: 0.875rem;
+.v-popper--theme-tooltip {
+	& .v-popper__inner {
+		background: rgba($gray_dark, 0.9) !important;
+		font-size: 0.875rem;
+	}
+
+	& .v-popper__arrow {
+		border-color: rgba($gray_dark, 0.9) !important;
+	}
 }

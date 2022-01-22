@@ -2,11 +2,15 @@
 	<transition name="slide">
 		<div v-if="bottomMargin != '-65vh'" class="phone">
 			<div>
-				<div id="phone-screen" :style="{ background: phoneBackground }">
+				<div id="phone-screen" :style="phoneBackground">
 					<TopBar />
 					<div class="active-app">
 						<Notifications />
-						<component :is="activeApp"></component>
+						<div class="active-app--inner">
+							<transition name="q-transition--fade">
+								<component :is="activeApp"></component>
+							</transition>
+						</div>
 					</div>
 					<BottomBar />
 					<Modal />
@@ -14,7 +18,7 @@
 				<div class="phone-shell">
 					<img :src="shell" alt="Phone shell" />
 				</div>
-				<transition name="el-zoom-in-center">
+				<transition appear enter-active-class="animated fadeIn" leave-active-class="animated fadeOut">
 					<div v-if="bigPicture" class="phone-big-picture">
 						<img :src="bigPicture" alt="Big picture" />
 					</div>
@@ -28,7 +32,7 @@
 	import shell from '@/assets/shell.png';
 	import '@/styles/phone.scss';
 	import TopBar from './os/TopBar.vue';
-	import { getPhoneAppRenders, phoneApps } from '../lib/apps';
+	import { getPhoneAppRenders } from '../lib/apps';
 	import { store, useStore } from '../lib/state';
 	import { computed, defineComponent, onMounted, ref, watch } from 'vue';
 	import BottomBar from './os/BottomBar.vue';
@@ -66,7 +70,6 @@
 		setup() {
 			const store = useStore();
 			const activeApp = computed(() => store.state.activeApp);
-			const characterData = computed(() => store.getters.getAppState('character'));
 			const isOpen = computed(() => store.getters.getAppState('open'));
 			const hasNotification = computed(() => store.getters.getAppState('hasNotification'));
 			const bigPicture = computed(() => store.getters.getAppState('bigPicture'));

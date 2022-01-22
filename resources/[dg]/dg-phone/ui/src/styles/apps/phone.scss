@@ -1,24 +1,9 @@
 // This file is used for stylig the phone app and not the main component
-@use '../base' as *;
+@import '../base';
+@import '../quasar-variables';
 
 .phoneapp-tabs {
 	margin-bottom: 1vh;
-	& .el-menu {
-		background: none;
-		border-bottom: none;
-		justify-content: stretch;
-		--el-menu-text-color: #{$gray_lighter};
-		--el-menu-hover-text-color: #{$primary_light};
-		--el-menu-active-color: #{$primary_normal};
-	}
-	& .el-menu-item {
-		width: 50%;
-		height: 3vh !important;
-		background: none !important;
-		&:hover {
-			background: none !important;
-		}
-	}
 }
 
 .phoneapp-history-list {
@@ -80,12 +65,14 @@
 			background-color: #{$primary_normal};
 		}
 		&.success {
-			background-color: var(--el-color-success);
+			background-color: $positive;
+
 			&:hover {
 				background-color: #488c33;
 			}
+
 			&:active {
-				background-color: var(--el-color-success);
+				background-color: $positive;
 			}
 		}
 	}

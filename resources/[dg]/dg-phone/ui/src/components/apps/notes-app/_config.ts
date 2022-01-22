@@ -9,7 +9,8 @@ const config = (): ConfigObject => ({
 	icon: {
 		name: 'folders',
 		color: 'white',
-		background: '#FFD662',
+		background: '#ec1aa4',
+		backgroundGradient: '#9420c2',
 	},
 	position: 9,
 	render: mainComponent,

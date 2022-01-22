@@ -35,13 +35,13 @@ addNote = function(cid, title, note, date)
 	return insertId
 end
 
-updateNote = function(cid, id, note)
+updateNote = function(cid, id, note, title)
 	local query = [[
 		UPDATE phone_notes
-		SET note = ?
+		SET note = ?, title = ?
 		WHERE cid = ? AND id = ?
 	]]
-	local result = exports.oxmysql:executeSync(query, { note, cid, id })
+	local result = exports.oxmysql:executeSync(query, { note, title, cid, id })
 	return result
 end
 
@@ -71,7 +71,7 @@ end)
 DGCore.Functions.CreateCallback('dg-phone:server:notes:save', function(src, cb, data)
 	local Player = DGCore.Functions.GetPlayer(src)
 	if not Player then return end
-	updateNote(Player.PlayerData.citizenid, data.id, data.note)
+	updateNote(Player.PlayerData.citizenid, data.id, data.note, data.title)
 	cb('ok')
 end)
 

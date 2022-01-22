@@ -333,6 +333,28 @@ devdata.gallery = [
 	},
 ] as State['gallery'];
 
+devdata.justice = {
+	judge: [
+		{
+			name: 'John doe',
+			phone: '0467227521',
+			available: true,
+		},
+		{
+			name: 'David Achter',
+			phone: '0487809321',
+			available: true,
+		},
+	],
+	lawyer: [
+		{
+			name: 'Jane doe',
+			phone: '0467227522',
+			available: false,
+		},
+	],
+} as State['justice'];
+
 const emulatedEvents: Record<
 	string,
 	{
@@ -460,6 +482,8 @@ emulatedEvents.setCharacterData = {
 		lastname: 'Achter',
 		phone: '0487809321',
 		permissionGroup: 'god',
+		job: 'judge',
+		hasVPN: true,
 	},
 };
 emulatedEvents.setOpenState = {

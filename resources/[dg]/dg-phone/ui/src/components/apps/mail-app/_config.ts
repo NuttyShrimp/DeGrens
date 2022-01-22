@@ -9,7 +9,8 @@ const config = (): ConfigObject => ({
 	icon: {
 		name: 'mail-bulk',
 		color: 'white',
-		background: '#82DED5',
+		background: '#59b3a9',
+		backgroundGradient: '#82DED5',
 	},
 	position: 6,
 	render: mainComponent,

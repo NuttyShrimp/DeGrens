@@ -1,23 +1,11 @@
 <template>
-	<div class="phone-text--wrapper">
-		{{ strippedText }}
+	<div :style="photoLinks && photoLinks?.length > 0 ? { 'min-width': '21vh' } : {}" class="phone-text--wrapper">
+		<span>{{ strippedText }}</span>
 		<div v-if="photoLinks && photoLinks?.length > 0" class="phone-text--attach">
 			<div v-for="(link, idx) in photoLinks" :key="idx">
 				<image-container v-if="!link.loading" :image-url="link.url"></image-container>
 				<div v-else class="loading image-container--wrapper">
-					<div class="preloader-wrapper big active">
-						<div class="spinner-layer spinner-primary">
-							<div class="circle-clipper left">
-								<div class="circle"></div>
-							</div>
-							<div class="gap-patch">
-								<div class="circle"></div>
-							</div>
-							<div class="circle-clipper right">
-								<div class="circle"></div>
-							</div>
-						</div>
-					</div>
+					<q-spinner :thickness="2" color="grey-5" size="3em" />
 				</div>
 			</div>
 		</div>
@@ -25,7 +13,7 @@
 </template>
 
 <script lang="ts">
-	import { defineComponent, onMounted, ref, watch } from 'vue';
+	import { defineComponent, onMounted, ref } from 'vue';
 	import { checkImageValidity, extractLinks } from '../../lib/util';
 	import ImageContainer from './ImageContainer.vue';
 

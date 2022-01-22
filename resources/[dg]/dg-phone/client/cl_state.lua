@@ -2,6 +2,7 @@ local context = {
 	-- 0 = closed, 1 = open, 2 = camera
 	state = 0,
 	inCall = false,
+	isMuted = false,
 	isDead = false,
 	isDisabled = true,
 	characterLoaded = false,
@@ -10,6 +11,7 @@ local context = {
 oldContext = {
 	state = 0,
 	inCall = false,
+	isMuted = false,
 	isDead = false,
 	isDisabled = true,
 	characterLoaded = false,

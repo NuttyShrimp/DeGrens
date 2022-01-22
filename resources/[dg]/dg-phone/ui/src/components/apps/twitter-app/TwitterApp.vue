@@ -3,8 +3,8 @@
 		<div class="twitter-app">
 			<div v-for="tweet in appState.tweets" :key="tweet.id" class="tweet">
 				<div class="tweet--header">
-					<p>{{ tweet.sender_name }}</p>
-					<p>{{ formatRelativeTime(tweet.date) }}</p>
+					<p class="no-margin">{{ tweet.sender_name }}</p>
+					<p class="no-margin">{{ formatRelativeTime(tweet.date) }}</p>
 				</div>
 				<div class="tweet--body">
 					<Text>
@@ -13,28 +13,30 @@
 				</div>
 				<div class="tweet--btns">
 					<div class="tweet--btns--like">
-						<el-button
+						<q-btn
 							v-if="tweet.liked"
 							class="tweet--btns--liked"
-							type="text"
-							size="mini"
+							flat
+							size="xs"
 							@click="toggleLike(tweet.id, tweet.liked)"
-							><i class="fas fa-heart"></i> {{ tweet.like_count }}
-						</el-button>
-						<el-button v-else type="text" size="mini" @click="toggleLike(tweet.id, tweet.liked)"
-							><i class="far fa-heart"></i> {{ tweet.like_count }}
-						</el-button>
+							><i class="fas fa-heart"></i>&nbsp;{{ tweet.like_count }}
+						</q-btn>
+						<q-btn v-else flat size="xs" @click="toggleLike(tweet.id, tweet.liked)"
+							><i class="far fa-heart"></i>&nbsp;{{ tweet.like_count }}
+						</q-btn>
 					</div>
 					<div class="tweet--btns--retweet">
-						<el-button v-if="tweet.retweeted" class="tweet--btns--retweeted" type="text" size="mini"
-							><i class="fas fa-retweet"></i> {{ tweet.retweet_count }}
-						</el-button>
-						<el-button v-else type="text" size="mini" @click="doRetweet(tweet)"
-							><i class="fal fa-retweet"></i> {{ tweet.retweet_count }}
-						</el-button>
+						<q-btn v-if="tweet.retweeted" class="tweet--btns--retweeted" flat size="xs">
+							<q-icon name="fas fa-retweet" size="xs" />&nbsp;{{ tweet.retweet_count }}
+						</q-btn>
+						<q-btn v-else flat size="xs" @click="doRetweet(tweet)">
+							<q-icon name="fal fa-retweet" size="xs" />&nbsp;{{ tweet.retweet_count }}
+						</q-btn>
 					</div>
 					<div v-if="characterState.permissionGroup !== 'user'" class="tweet--btns--delete">
-						<el-button type="text" size="mini" @click="doDelete(tweet.id)"><i class="fal fa-trash-alt"></i> </el-button>
+						<q-btn flat size="xs" @click="doDelete(tweet.id)">
+							<q-icon name="fal fa-trash-alt" size="xs" />
+						</q-btn>
 					</div>
 				</div>
 			</div>

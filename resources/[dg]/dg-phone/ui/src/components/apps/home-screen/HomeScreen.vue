@@ -9,6 +9,7 @@
 					:style="
 						(!app?.empty && {
 							color: app?.icon?.color ?? 'white',
+							background: `linear-gradient(transparent, ${app?.icon?.backgroundGradient ?? 'rgba(0, 0, 0, 0.3)'})`,
 							'background-color': app?.icon?.background ?? '#000',
 						}) || {
 							background: 'none',

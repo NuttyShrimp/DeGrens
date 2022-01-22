@@ -1,22 +1,24 @@
-@use '../base' as *;
+@import '../base';
 
 .yp-app {
 	display: flex;
 	flex-direction: column;
 	align-items: center;
 	&--entry {
-		width: 95%;
+		width: 100%;
 		display: flex;
 		flex-direction: column;
 		background-color: #e2cf1c;
 		color: $gray_dark;
 		border: 0.1vh solid $gray_darker;
 		text-align: center;
+
 		&:not(:last-child) {
 			margin-bottom: 1vh;
 		}
+
 		& > div:not(:last-child) {
-			padding: 0.3vh 0.3vw;
+			padding: 0.3vh 0.5vh;
 			border-bottom: 0.1vh solid $gray_darker;
 		}
 		&--header {
@@ -35,12 +37,12 @@
 				display: flex;
 				align-items: center;
 				cursor: pointer;
-				padding: 0.3vh 0.3vw;
+				padding: 0.3vh 0.5vh;
 				&:not(:last-child) {
 					border-right: 0.1vh solid $gray_darker;
 				}
 				& > i {
-					margin-right: 0.3vw;
+					margin-right: 0.5vh;
 				}
 			}
 		}

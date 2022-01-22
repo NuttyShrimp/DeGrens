@@ -7,18 +7,18 @@
 					v-model="values[input.name].value"
 					:name="input.name"
 					:type="input.type ?? 'text'"
-					:autosize="{ minRows: 2 }"
-					:placeholder="input.placeholder"
+					:label="input.label"
+					autogrow
 				>
-					<template v-if="input.icon" #prefix>
-						<i :class="`fas fa-${input.icon}`"></i>
+					<template v-if="input.icon" #prepend>
+						<q-icon :name="`${input.iconPrefix ?? 'fas fa-'}${input.icon}`" size="xs" />
 					</template>
 				</Input>
 			</div>
 		</div>
 		<div class="phone-form-btnwrapper">
-			<el-button type="danger" @click="onRealCancel">Cancel</el-button>
-			<el-button type="success" @click="onAccept(getValues(values))">Accept</el-button>
+			<SecondaryButton label="Cancel" size="sm" @click="onRealCancel" />
+			<PrimaryButton label="Accept" size="sm" @click="onAccept(getValues(values))" />
 		</div>
 	</div>
 </template>
@@ -29,10 +29,11 @@
 	import '@/styles/os/simpleform.scss';
 	import { useStore } from '../../lib/state';
 	import Input from './Inputs.vue';
+	import { PrimaryButton, SecondaryButton } from './Buttons.vue';
 
 	export default defineComponent({
 		name: 'SimpleForm',
-		components: { Input },
+		components: { PrimaryButton, SecondaryButton, Input },
 		props: {
 			header: {
 				type: String,

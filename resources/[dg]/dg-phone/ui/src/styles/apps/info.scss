@@ -14,13 +14,14 @@
 	& > .info-app-icon {
 		display: flex;
 		justify-content: center;
-		min-width: 3vw;
-		margin-right: 0.1vw;
+		min-width: 5.3vh;
+		margin-right: 0.2vh;
 		& > i {
 			font-size: 2.5rem;
 		}
 	}
 	& > p {
 		font-size: 1.2rem;
+		margin: 0;
 	}
 }

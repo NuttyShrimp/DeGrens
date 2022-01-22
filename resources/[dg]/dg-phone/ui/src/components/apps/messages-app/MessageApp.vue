@@ -1,8 +1,6 @@
 <template>
-	<div class="message-app">
-		<MessageList v-if="state?.currentView === 'list'" />
-		<MessageConvo v-else />
-	</div>
+	<MessageList v-if="state?.currentView === 'list'" />
+	<MessageConvo v-else />
 </template>
 <script lang="ts">
 	import { useStore } from '../../../lib/state';

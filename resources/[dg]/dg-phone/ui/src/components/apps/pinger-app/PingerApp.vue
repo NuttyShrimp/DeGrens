@@ -1,13 +1,13 @@
 <template>
-	<div class="pinger-app" :style="{ 'background-image': `url(${map})`, 'background-position': `${xPerc}% ${yPerc}%` }">
+	<div :style="{ 'background-position': `${xPerc}% ${yPerc}%` }" class="pinger-app">
 		<div class="pinger-app--inner">
-			<Input v-model="plyId" type="number" placeholder="Speler Id" :min="1" @update:modelValue="checkInput">
-				<template #prefix>
-					<i class="fas fa-id-card-alt"></i>
+			<Input v-model="plyId" :min="1" label="Speler Id" type="number" @update:modelValue="checkInput">
+				<template #prepend>
+					<q-icon name="fas fa-id-card-alt" size="sm" />
 				</template>
 			</Input>
-			<el-button plain type="primary" @click="sendPingRequest()">Ping</el-button>
-			<el-button v-if="hasVPN" plain type="primary" @click="sendPingRequest(true)">Anon Ping</el-button>
+			<primary-button label="Ping" @click="sendPingRequest()" />
+			<primary-button v-if="hasVPN" label="Anon Ping" @click="sendPingRequest(true)" />
 		</div>
 	</div>
 </template>
@@ -16,13 +16,13 @@
 	import '@/styles/apps/pinger.scss';
 	import { computed, defineComponent, onMounted, ref } from 'vue';
 	import { nuiAction } from '../../../lib/nui';
-	import map from '@/assets/map.png';
 	import { useStore } from '../../../lib/state';
 	import Input from '../../os/Inputs.vue';
+	import { PrimaryButton } from '../../os/Buttons.vue';
 
 	export default defineComponent({
 		name: 'PingerApp',
-		components: { Input },
+		components: { PrimaryButton, Input },
 		setup() {
 			const store = useStore();
 			const hasVPN = computed(() => store.getters.getHasVPN());
@@ -53,7 +53,6 @@
 				sendPingRequest,
 				plyId,
 				checkInput,
-				map,
 				xPerc,
 				yPerc,
 				hasVPN,

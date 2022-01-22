@@ -9,7 +9,7 @@ const config = (): ConfigObject => ({
 	icon: {
 		name: 'info-circle',
 		color: 'white',
-		background: '#4a7384',
+		background: '#67a4bd',
 	},
 	render: InfoApp,
 	position: 1,

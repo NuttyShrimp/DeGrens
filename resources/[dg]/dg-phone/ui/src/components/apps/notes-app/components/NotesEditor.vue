@@ -3,6 +3,7 @@
 		backbutton
 		:primary-actions="primaryActions"
 		:aux-actions="readonly ? auxActions : []"
+		:input="input"
 		@back="openList"
 	>
 		<text-editor v-if="currentNote !== null" v-model="currentNote.note" :readonly="readonly" />
@@ -15,19 +16,32 @@
 	import TextEditor from '../../../os/TextEditor.vue';
 	import { useStore } from '../../../../lib/state';
 	import { Note } from '../../../../types/apps';
-	import { Action } from '../../../../types/appcontainer';
+	import { Action, Input } from '../../../../types/appcontainer';
 	import { nuiAction } from '../../../../lib/nui';
-	import { ElMessage } from 'element-plus';
+	import { useQuasar } from 'quasar';
 
 	export default defineComponent({
 		name: 'NotesEditor',
 		components: { TextEditor, AppContainer },
 		setup() {
 			const store = useStore();
+			const $q = useQuasar();
 			const currentNote = ref<Note | null>(store.getters.getAppState('notes').current);
 			let readonly = ref(true);
 			const primaryActions = ref<Action[]>([]);
 			const auxActions = ref<Action[]>([]);
+
+			const input: Input = {
+				name: 'title',
+				label: 'Title',
+				value: currentNote.value?.title || '',
+				disabled: readonly.value,
+				onChange: (value: string) => {
+					if (currentNote.value && !readonly.value) {
+						currentNote.value.title = value;
+					}
+				},
+			};
 
 			const resetActions = () => {
 				primaryActions.value = [
@@ -45,7 +59,10 @@
 						icon: 'share-alt',
 						handler: () => {
 							if (!currentNote.value) {
-								ElMessage.error("Couldn't find note to share, restart phone & try again.");
+								$q.notify({
+									type: 'negative',
+									message: "Couldn't find note to share, restart phone & try again.",
+								});
 								console.error("Couldn't find note to share, restart phone & try again");
 								return;
 							}
@@ -61,7 +78,10 @@
 						icon: 'share',
 						handler: () => {
 							if (!currentNote.value) {
-								ElMessage.error("Couldn't find note to share, restart phone & try again.");
+								$q.notify({
+									type: 'negative',
+									message: "Couldn't find note to share, restart phone & try again.",
+								});
 								console.error("Couldn't find note to share, restart phone & try again");
 								return;
 							}
@@ -99,6 +119,7 @@
 					nuiAction('notes/save', {
 						id: currentNote.value?.id,
 						note: currentNote.value?.note,
+						title: currentNote.value?.title,
 					});
 				}
 			});
@@ -124,6 +145,7 @@
 				readonly,
 				auxActions,
 				openList,
+				input,
 			};
 		},
 	});

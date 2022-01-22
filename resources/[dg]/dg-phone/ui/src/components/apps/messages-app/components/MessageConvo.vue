@@ -12,7 +12,7 @@
 			</div>
 			<div class="message-app-convo--list">
 				<div v-if="canLoadMore" class="message-app-convo--more">
-					<el-button size="small" plain @click="loadMore">Load More</el-button>
+					<PrimaryButton label="Load More" no-wrap size="sm" @click="loadMore" />
 				</div>
 				<div
 					v-for="message in messages"
@@ -30,8 +30,16 @@
 				</div>
 			</div>
 			<div class="message-app-convo--input">
-				<Input v-model="inputStr" size="small" placeholder="Type a message..." @keyup.enter="sendMessage" />
-				<el-button v-if="inputStr.trim() !== ''" circle :icon="Promotion" size="mini" @click="sendMessage"></el-button>
+				<Input v-model="inputStr" label="Type a message..." @keyup.enter="sendMessage" />
+				<q-btn
+					v-if="inputStr.trim() !== ''"
+					color="primary"
+					flat
+					icon="mdi-send"
+					round
+					size="sm"
+					@click="sendMessage"
+				/>
 			</div>
 		</div>
 	</app-container>
@@ -42,15 +50,15 @@
 	import { useStore } from '../../../../lib/state';
 	import { Contact, Message } from '../../../../types/apps';
 	import { getContact } from '../../contacts/lib';
-	import { Promotion } from '@element-plus/icons-vue';
 	import { nuiAction } from '../../../../lib/nui';
 	import { formatRelativeTime } from '../../../../lib/util';
 	import Text from '../../../os/Text.vue';
 	import Input from '../../../os/Inputs.vue';
+	import { PrimaryButton } from '../../../os/Buttons.vue';
 
 	export default defineComponent({
 		name: 'MessageConvo',
-		components: { Input, Text, AppContainer },
+		components: { PrimaryButton, Input, Text, AppContainer },
 		setup() {
 			const store = useStore();
 			let messages = computed<Message[]>(() => store.getters.getMessages());
@@ -104,13 +112,13 @@
 					}, 10);
 				}
 			});
+
 			return {
 				messages,
 				back,
 				contact,
 				convoNr,
 				inputStr,
-				Promotion,
 				sendMessage,
 				loadMore,
 				canLoadMore,

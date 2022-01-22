@@ -1,6 +1,6 @@
 <template>
 	<div
-		:class="`paper ${imageOnly ? 'paper--imgonly' : ''} ${paperClass}}`"
+		:class="`paper ${imageOnly ? 'paper--imgonly' : ''} ${paperClass}`"
 		@mouseenter="setShowActions(true)"
 		@mouseleave="setShowActions(false)"
 		@click="onClick"

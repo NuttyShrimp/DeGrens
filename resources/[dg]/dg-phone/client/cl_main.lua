@@ -54,6 +54,11 @@ RegisterNUICallback('phone:close', function(data, cb)
 	cb({data= {}, meta={ok=true, message="done"}})
 end)
 
+RegisterNUICallback('phone/silence', function(data, cb)
+	setState('isMuted', data.silenced)
+	cb({data= {}, meta={ok=true, message="done"}})
+end)
+
 RegisterNetEvent('dg-phone:client:setCharacterData', function(data)
 	SendNUIMessage({
 		app = "home-screen",
