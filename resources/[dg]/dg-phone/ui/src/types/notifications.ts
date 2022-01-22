@@ -2,6 +2,7 @@ export interface PhoneNotificationIcon {
 	name: string;
 	color: string;
 	background: string;
+	backgroundGradient?: string;
 	lib?: string;
 }
 

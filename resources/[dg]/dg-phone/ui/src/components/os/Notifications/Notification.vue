@@ -13,20 +13,20 @@
 				</div>
 				<div class="notification-text-box">
 					<div class="notification-title">
-						{{ noti.title.toUpperCase() }}
+						<span>{{ noti.title.toUpperCase() }}</span>
 					</div>
 					<div v-if="noti.description" class="notification-description">
-						{{ timer ? `${formatTime(timer)} - ${noti.description}` : noti.description }}
+						<span>{{ timer ? `${formatTime(timer)} - ${noti.description}` : noti.description }}</span>
 					</div>
 				</div>
 			</div>
 			<div class="notification-btns">
 				<div v-if="noti.onAccept">
-					<el-button size="mini" round @click="onAcceptCapture()">Accept</el-button>
+					<q-btn outline rounded size="xs" @click="onAcceptCapture()">Accept</q-btn>
 				</div>
 				<div v-if="noti.onAccept && noti.onDecline">|</div>
 				<div v-if="noti.onDecline">
-					<el-button size="mini" round @click="onDeclineCapture()">Decline</el-button>
+					<q-btn outline rounded size="xs" @click="onDeclineCapture()">Decline</q-btn>
 				</div>
 			</div>
 		</div>

@@ -9,7 +9,8 @@ const config = (): ConfigObject => ({
 	icon: {
 		name: 'newspaper',
 		color: '#000000',
-		background: '#FFC600',
+		background: '#eec41d',
+		backgroundGradient: '#eec41d',
 	},
 	position: 7,
 	render: mainComponent,

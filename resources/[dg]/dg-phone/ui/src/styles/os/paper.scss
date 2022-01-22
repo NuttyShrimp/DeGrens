@@ -1,17 +1,19 @@
-@use 'src/styles/base' as *;
+@import '../base';
 
 .paper {
 	display: flex;
 	margin-bottom: 1vh;
-	background-color: $gray_dark;
-	border: 0.2vh solid $gray_normal;
-	border-radius: 0.7vh 0.7vh 0 0;
-	padding: 0.5vw;
+	background-color: $gray_8;
+	border-bottom: 0.2vh solid $gray_normal;
+	border-radius: 0.3vh 0.3vh 0 0;
+	padding: 0.9vh;
 	color: $gray_lighter;
 	position: relative;
+
 	&--imgonly {
-		padding: 0.25vw;
+		padding: 0.4vh;
 	}
+
 	& > .paper-actionlist {
 		width: 100%;
 		height: 100%;
@@ -21,9 +23,10 @@
 		display: flex;
 		justify-content: space-evenly;
 		align-items: center;
-		border-radius: 0.7vh 0.7vh 0 0;
+		border-radius: 0.3vh 0.3vh 0 0;
 		background-color: rgba(0, 0, 0, 0.75);
 		z-index: 1;
+
 		& .paper-action {
 			cursor: pointer;
 			color: $gray_lighter;
@@ -32,14 +35,16 @@
 		}
 	}
 	& > .paper-image {
-		margin-right: 0.4vw;
+		margin-right: 0.9vh;
 		align-self: center;
 		font-size: 2.25rem;
+
 		&--ext {
 			margin-right: 0;
 			font-size: 0em;
 			width: 100%;
 		}
+
 		& img {
 			height: 100%;
 			width: 100%;

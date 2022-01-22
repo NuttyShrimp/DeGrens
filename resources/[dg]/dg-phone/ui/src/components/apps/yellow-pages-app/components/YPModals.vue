@@ -28,7 +28,7 @@
 					{
 						name: 'text',
 						type: 'textarea',
-						placeholder: 'Wat wil je adverteren?',
+						label: 'Wat wil je adverteren?',
 						defaultValue: props.text ?? '',
 					},
 				];

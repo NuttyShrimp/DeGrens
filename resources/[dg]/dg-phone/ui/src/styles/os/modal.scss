@@ -1,4 +1,4 @@
-@use 'src/styles/base' as *;
+@import '../base';
 
 .phone-modal {
 	width: 100%;
@@ -20,10 +20,10 @@
 		transform: translate(-50%, -50%);
 		min-width: 80%;
 		max-width: 80%;
-		padding: 0.5vh 0.5vw;
+		padding: 0.5vh 0.9vh;
 		color: $gray_lighter;
 		background-color: $gray_dark;
-		border: 0.2vh solid $gray_normal;
+		border-bottom: 0.3vh solid #7d7d7d;
 		border-radius: 1vh;
 	}
 

@@ -11,3 +11,11 @@ export interface Search {
 	filter: (string | filterFunction)[];
 	onChange: (list: any[]) => void;
 }
+
+export interface Input {
+	name: string;
+	label: string;
+	value?: string;
+	disabled?: boolean;
+	onChange: (value: string) => void;
+}

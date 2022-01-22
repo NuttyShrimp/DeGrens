@@ -10,6 +10,7 @@ local soundInfo = {
 }
 
 playSound = function(type, id)
+	if getState('isMuted') then return end
 	exports["nutty-sounds"]:playSoundOnEntity(('phone_call_%s_%s'):format(type, id), soundInfo[type].name, 'DLC_NUTTY_SOUNDS', PlayerPedId())
 	soundInfo[type].ids[id] = true
 end

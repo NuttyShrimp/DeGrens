@@ -34,10 +34,10 @@
 					label: 'Dialpad',
 				},
 			];
-			const changeTab = (key: number) => {
+			const changeTab = (name: string) => {
 				store.commit('setCurrentView', {
 					appName: 'phone',
-					view: tabs[key - 1].name,
+					view: name,
 				});
 			};
 			onMounted(() => {

@@ -1,7 +1,7 @@
-@use '../base' as *;
+@import '../base';
 
 .message-app {
-	flex: 0.93;
+	flex: 1;
 }
 
 .message-app-list {
@@ -38,7 +38,7 @@
 		font-size: 0.9rem;
 		&--text {
 			width: fit-content;
-			padding: 1vh 0.5vw;
+			padding: 1vh 0.9vh;
 			border-radius: 2vh;
 			color: black;
 			background-color: #6aaee0;
@@ -47,7 +47,7 @@
 		&--time {
 			color: $gray_light;
 			margin-top: 0.1vh;
-			margin-left: 0.5vw;
+			margin-left: 0.9vh;
 			text-align: end;
 		}
 		&.incoming {
@@ -78,7 +78,7 @@
 
 		& i {
 			font-size: 2.5rem;
-			margin: 0 0.5vw;
+			margin: 0 0.9vh;
 		}
 
 		& > .header-text {
@@ -101,8 +101,12 @@
 		flex-direction: row;
 		align-items: center;
 
-		& .el-button {
-			margin-left: 0.25vw;
+		& > label {
+			width: 100%;
+		}
+
+		& .q-btn {
+			margin-left: 0.4vh;
 		}
 	}
 }

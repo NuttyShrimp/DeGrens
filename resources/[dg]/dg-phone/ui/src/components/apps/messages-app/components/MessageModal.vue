@@ -16,13 +16,13 @@
 					{
 						name: 'number',
 						icon: 'hashtag',
-						placeholder: 'Phone number',
+						label: 'Phone number',
 						defaultValue: '',
 					},
 					{
 						name: 'message',
 						icon: 'comment',
-						placeholder: 'Message',
+						label: 'Message',
 						defaultValue: '',
 					},
 				];

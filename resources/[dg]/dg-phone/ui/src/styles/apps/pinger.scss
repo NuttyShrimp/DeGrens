@@ -1,10 +1,8 @@
-@use '../base' as *;
+@import '../base';
 
 .pinger-app {
 	height: inherit;
 	width: 100%;
-	background-position: 0 0;
-	background-size: cover;
 	transition: background-position 5s ease-in-out;
 	&--inner {
 		display: flex;
@@ -13,28 +11,6 @@
 		justify-content: flex-start;
 		padding-top: 50%;
 		text-align: center;
-		& > .el-button--primary {
-			color: white;
-			background-color: $primary_dark !important;
-			border-color: $primary_dark !important;
-			margin-left: 0 !important;
-			&:hover {
-				background-color: $primary_normal !important;
-				border-color: transparent !important;
-			}
-		}
-		& > .el-input {
-			width: 50%;
-			background-color: rgba($primary_dark, 0.9);
-			&:active,
-			&:focus-within,
-			&:hover {
-				background-color: $primary_dark;
-			}
-			& > input {
-				border: none !important;
-			}
-		}
 		& > * {
 			margin-bottom: 10% !important;
 		}

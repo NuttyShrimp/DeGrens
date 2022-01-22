@@ -30,14 +30,14 @@
 					name: 'label',
 					icon: 'tag',
 					type: 'text',
-					placeholder: 'Label',
+					label: 'Label',
 					defaultValue: props.label ?? '',
 				},
 				{
 					name: 'phone',
 					icon: 'hashtag',
 					type: 'text',
-					placeholder: 'Phone Nr.',
+					label: 'Phone Nr.',
 					defaultValue: props.phone ?? '',
 				},
 			];
@@ -69,14 +69,14 @@
 					name: 'label',
 					icon: 'tag',
 					type: 'text',
-					placeholder: 'Label',
+					label: 'Label',
 					defaultValue: props.contact.label,
 				},
 				{
 					name: 'phone',
 					icon: 'phone-alt',
 					type: 'text',
-					placeholder: 'Phone Nr.',
+					label: 'Phone Nr.',
 					defaultValue: props.contact.phone,
 				},
 			];

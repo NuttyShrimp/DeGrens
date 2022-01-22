@@ -1,16 +1,15 @@
 <template>
 	<div class="notification-wrapper">
 		<transition-group name="notilist" class="notilist" tag="div">
-			<notification v-for="noti in notifications" :key="noti.id" :noti="noti" />
+			<notification v-for="noti in notifications" :key="noti.id" :noti="noti" @click="declineCapture" />
 		</transition-group>
 	</div>
 </template>
 
 <script lang="ts">
-	import { computed, ComputedRef, defineComponent, onMounted, ref, watch } from 'vue';
+	import { computed, ComputedRef, defineComponent, ref } from 'vue';
 	import '@/styles/os/notifications.scss';
-	import { useStore } from '../../../lib/state';
-	import { devdata } from '../../../lib/devdata';
+	import { State, useStore } from '../../../lib/state';
 	import { PhoneNotification, PhoneNotificationIcon } from '../../../types/notifications';
 	import Notification from './Notification.vue';
 
@@ -19,15 +18,17 @@
 		components: { Notification },
 		setup() {
 			const store = useStore();
-			const wrapperTop = ref('-10vh');
-			const notifications = computed(() => store.getters.getAppState('notifications'), {});
-			watch(notifications, newNoti => {
-				wrapperTop.value = `${-((newNoti?.length ?? 1) * 10)}vh`;
-			});
+			const hiddenMargin = ref('-5.15vh');
+			const notifications = computed<State['notifications']>(() => store.getters.getAppState('notifications'), {});
+
+			const declineCapture = (e: MouseEvent) => {
+				hiddenMargin.value = `-${(e.target as HTMLDivElement).offsetHeight}px`;
+			};
 
 			return {
 				notifications: notifications as ComputedRef<(PhoneNotification & { icon: PhoneNotificationIcon })[]>,
-				wrapperTop,
+				hiddenMargin,
+				declineCapture,
 			};
 		},
 	});
@@ -37,6 +38,6 @@
 	.notilist-enter-from,
 	.notilist-leave-to {
 		opacity: 0;
-		margin-top: v-bind('wrapperTop');
+		margin-top: v-bind('hiddenMargin');
 	}
 </style>

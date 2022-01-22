@@ -29,8 +29,9 @@
 					{
 						name: 'tweet',
 						icon: 'twitter',
+						iconPrefix: 'fab fa-',
 						type: 'textarea',
-						placeholder: "Tell us what's happening",
+						label: "Tell us what's happening",
 						defaultValue: props.tweet ?? '',
 					},
 				];

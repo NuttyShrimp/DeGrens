@@ -1,15 +1,20 @@
 <template>
 	<div class="phoneapp-tabs">
-		<el-menu default-active="1" mode="horizontal" :ellipsis="false" @select="selectEvent">
-			<el-menu-item v-for="(tab, i) in tabs" :key="tab.name" v-tooltip.bottom="tab.label" :index="String(i + 1)">
-				<i :class="`fas fa-${tab.icon}`"></i>
-			</el-menu-item>
-		</el-menu>
+		<q-tabs v-model="tabRef" :stretch="true" :vertical="false" dense indicator-color="primary_light">
+			<q-tab
+				v-for="tab in tabs"
+				:key="tab.name"
+				v-tooltip.bottom="tab.label"
+				:icon="`fas fa-${tab.icon}`"
+				:name="tab.name"
+			>
+			</q-tab>
+		</q-tabs>
 	</div>
 </template>
 
 <script lang="ts">
-	import { defineComponent, PropType } from 'vue';
+	import { defineComponent, PropType, ref, watch } from 'vue';
 	import { TabEntry } from '../../../../types/apps';
 
 	export default defineComponent({
@@ -26,11 +31,12 @@
 		},
 		emits: ['changetab'],
 		setup(props, { emit }) {
-			const selectEvent = (key: number) => {
-				emit('changetab', key);
-			};
+			const tabRef = ref(props.activeTab);
+			watch(tabRef, val => {
+				emit('changetab', val);
+			});
 			return {
-				selectEvent,
+				tabRef,
 			};
 		},
 	});

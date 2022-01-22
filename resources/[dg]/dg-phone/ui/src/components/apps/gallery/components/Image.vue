@@ -7,19 +7,7 @@
 		@mouseleave.prevent="toggleBig(false)"
 	/>
 	<div v-if="!isLoaded" class="loading">
-		<div class="preloader-wrapper big active">
-			<div class="spinner-layer spinner-primary">
-				<div class="circle-clipper left">
-					<div class="circle"></div>
-				</div>
-				<div class="gap-patch">
-					<div class="circle"></div>
-				</div>
-				<div class="circle-clipper right">
-					<div class="circle"></div>
-				</div>
-			</div>
-		</div>
+		<q-spinner :thickness="2" color="grey-5" size="3em" />
 	</div>
 </template>
 

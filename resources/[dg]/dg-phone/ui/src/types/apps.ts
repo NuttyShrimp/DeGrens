@@ -84,3 +84,10 @@ export interface GalleryEntry {
 	link: string;
 	big?: boolean;
 }
+
+// The state
+export interface JusticePerson {
+	name: string;
+	phone: string;
+	available: boolean;
+}

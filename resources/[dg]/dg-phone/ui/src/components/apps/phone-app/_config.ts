@@ -9,7 +9,7 @@ const config = (): ConfigObject => ({
 	icon: {
 		name: 'phone-alt',
 		color: 'white',
-		background: '#41cf34',
+		background: '#34ad2b',
 	},
 	render: mainComponent,
 	position: 3,

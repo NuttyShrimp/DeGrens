@@ -4,7 +4,6 @@ local calls = {}
 startCall = function(source, targetPhone, isAnon)
 	local Player = DGCore.Functions.GetPlayer(source)
 	if (not targetPhone) then return end
-	-- Check if caller has a phone item, anon calls will be made phone cell so check is already done
 	if (not Player.Functions.GetItemByName('phone')) then
 		-- TODO add baninjection :)
 		print('[DG-Phone] ' .. Player.Name .. ' tried to call without a phone')
@@ -13,7 +12,7 @@ startCall = function(source, targetPhone, isAnon)
 	-- Check if the player is calling himself
 	if (targetPhone == Player.PlayerData.charinfo.phone) then
 		TriggerClientEvent("DGCore:Notify", source, "You can't call yourself", "error")
-		-- Send event to remove notification
+		TriggerClientEvent('dg-phone:client:endCurrentCall', source, 0)
 		return
 	end
 	-- Target identification
@@ -21,6 +20,10 @@ startCall = function(source, targetPhone, isAnon)
 	if (Target) then
 		-- If in call send a cancel event to the starter
 		Target = Target.PlayerData.source
+		if (getPlayerCallId(Target)) then
+			TriggerClientEvent('dg-phone:client:endCurrentCall', source, 0)
+			return
+		end
 	end
 	local call = {
 		id = callId,

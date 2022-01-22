@@ -6,7 +6,7 @@ export let appsLoaded = false;
 export interface ConfigObject {
 	name: string;
 	label: string;
-	background?: string;
+	background?: string | Partial<CSSStyleDeclaration>;
 	icon?: PhoneNotificationIcon;
 	position: number;
 	render: any;

@@ -1,59 +1,60 @@
 <template>
-	<el-input
+	<q-input
 		v-bind="$props"
-		:model-value="modelValue"
+		:ref="undefined"
+		dense
 		@focus.prevent="focusInput"
 		@blur.prevent="blurInput"
-		@input="changeInput"
+		@update:model-value="changeInput"
 	>
-		<template v-if="$slots.prefix" #prefix><slot name="prefix"></slot></template>
-	</el-input>
+		<template v-if="$slots.prepend" #prepend>
+			<slot name="prepend"></slot>
+		</template>
+	</q-input>
 </template>
 
-<script lang="tsx">
-	import { defineComponent } from 'vue';
+<script lang="ts">
+	import { defineComponent, PropType } from 'vue';
 	import { nuiAction } from '../../lib/nui';
+	import { QInputProps } from 'quasar';
 
 	export default defineComponent({
 		name: 'Input',
 		props: {
 			modelValue: {
-				type: String,
-				default: '',
+				type: String as PropType<string>,
+				required: true,
 			},
-			placeholder: {
-				type: String,
+			label: {
+				type: String as PropType<string>,
 				default: '',
 			},
 			type: {
-				type: String,
+				type: String as PropType<QInputProps['type']>,
 				default: 'text',
 			},
 			name: {
-				type: String,
+				type: String as PropType<string>,
 				default: '',
 			},
-			id: {
-				type: String,
+			inputClass: {
+				type: String as PropType<string>,
 				default: '',
 			},
-			class: {
-				type: String,
-				default: '',
-			},
-			size: {
-				type: String,
-				default: '',
+			disabled: {
+				type: Boolean as PropType<boolean>,
+				default: false,
 			},
 			min: {
-				type: Number,
+				type: Number as PropType<number>,
 				default: 0,
 			},
 		},
-		emits: ['update:modelValue', 'update:prefix'],
+		emits: ['update:model-value', 'update:prepend', 'input'],
 		setup(props, context) {
-			const changeInput = (value: string | number) => {
-				context.emit('update:modelValue', value);
+			const changeInput = (value: any) => {
+				context.emit('update:model-value', value);
+				context.emit('input', value);
 			};
 			const focusInput = () => {
 				nuiAction('controls/setFocus', {

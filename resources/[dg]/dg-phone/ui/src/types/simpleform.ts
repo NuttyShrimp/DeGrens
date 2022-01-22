@@ -1,7 +1,10 @@
+import { QInputProps } from 'quasar';
+
 export interface FormInput {
 	defaultValue?: string;
-	placeholder?: string;
-	type?: string;
+	label?: string;
+	type?: QInputProps['type'];
 	name: string;
 	icon?: string;
+	iconPrefix?: string;
 }
