@@ -88,6 +88,28 @@ DGShared.isDiff = function(v1, v2)
 	return v1 ~= v2
 end
 
+DGShared.copyTbl = function(tbl)
+	local newTbl = {}
+	for k, v in pairs(tbl) do
+		if type(v) == "table" then
+			newTbl[k] = DGShared.copyTbl(v)
+		else
+			newTbl[k] = v
+		end
+	end
+	return newTbl
+end
+
+DGShared.tableLen = function(tbl)
+	local count = 0
+	for _, v in pairs(tbl) do
+		if v ~= nil then
+			count = count + 1
+		end
+	end
+	return count
+end
+
 DGShared.StarterItems = {
     ['phone'] = { amount = 1, item = 'phone' },
     ['id_card'] = { amount = 1, item = 'id_card' },

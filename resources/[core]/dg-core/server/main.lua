@@ -33,3 +33,7 @@ CreateThread(function()
 	end
 end)
 
+RegisterCommand('forceSave', function(src,args, raw)
+	local player = DGCore.Functions.GetPlayer(src)
+	player.Functions.Save()
+end)

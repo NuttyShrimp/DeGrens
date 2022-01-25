@@ -169,7 +169,7 @@ function DGCore.Player.CreatePlayer(PlayerData)
     self.Functions.UpdatePlayerData = function(dontUpdateChat)
 		    if self.PlayerData.oldItems and type(self.PlayerData.oldItems) == 'table' and self.PlayerData.items and type(self.PlayerData.items) == 'table' then
 	          local invDiff = DGCore.Shared.GetTableDiff(self.PlayerData.oldItems, self.PlayerData.items)
-						if invDiff and invDiff.removed and invDiff.added and (#invDiff.removed > 0 or #invDiff.added > 0) then
+						if invDiff and invDiff.removed and invDiff.added and (DGCore.Shared.tableLen(invDiff.removed) > 0 or DGCore.Shared.tableLen(invDiff.added) > 0) then
 					      TriggerEvent('DGCore:Server:OnInventoryUpdate', self.PlayerData.source, invDiff.removed, invDiff.added)
 				    end
 		    end
@@ -341,6 +341,7 @@ function DGCore.Player.CreatePlayer(PlayerData)
         local amount = tonumber(amount)
         local slot = tonumber(slot) or DGCore.Player.GetFirstSlotByItem(self.PlayerData.items, item)
         local quality = tonumber(quality) or 100
+				self.PlayerData.oldItems = DGCore.Shared.copyTbl(self.PlayerData.items)
 
         local createtime = tonumber(createtime) or os.time()
 
@@ -417,6 +418,7 @@ function DGCore.Player.CreatePlayer(PlayerData)
     self.Functions.RemoveItem = function(item, amount, slot)
         local amount = tonumber(amount)
         local slot = tonumber(slot)
+				self.PlayerData.oldItems = DGCore.Shared.copyTbl(self.PlayerData.items)
         if slot then
             if self.PlayerData.items[slot].amount > amount then
                 self.PlayerData.items[slot].amount = self.PlayerData.items[slot].amount - amount
@@ -452,14 +454,14 @@ function DGCore.Player.CreatePlayer(PlayerData)
     end
 
     self.Functions.SetInventory = function(items, dontUpdateChat)
-				self.PlayerData.oldItems = json.decode(json.encode(self.PlayerData.items))
+				self.PlayerData.oldItems = DGCore.Shared.copyTbl(self.PlayerData.items)
         self.PlayerData.items = items
         self.Functions.UpdatePlayerData(dontUpdateChat)
         TriggerEvent('qb-log:server:CreateLog', 'playerinventory', 'SetInventory', 'blue', '**' .. GetPlayerName(self.PlayerData.source) .. ' (citizenid: ' .. self.PlayerData.citizenid .. ' | id: ' .. self.PlayerData.source .. ')** items set: ' .. json.encode(items))
     end
 
     self.Functions.ClearInventory = function()
-		    self.PlayerData.oldItems = json.decode(json.encode(self.PlayerData.items))
+		    self.PlayerData.oldItems = DGCore.Shared.copyTbl(self.PlayerData.items)
 				self.PlayerData.items = {}
 		    self.Functions.UpdatePlayerData()
 		    TriggerEvent('qb-log:server:CreateLog', 'playerinventory', 'ClearInventory', 'red', '**' .. GetPlayerName(self.PlayerData.source) .. ' (citizenid: ' .. self.PlayerData.citizenid .. ' | id: ' .. self.PlayerData.source .. ')** inventory cleared')
@@ -635,19 +637,18 @@ DGCore.Player.LoadInventory = function(PlayerData)
             end
         end
     end
-		PlayerData.oldItems = json.decode(json.encode(PlayerData.items))
+		PlayerData.oldItems = DGCore.Shared.copyTbl(PlayerData.items)
     return PlayerData
 end
 
-DGCore.Player.SaveInventory = function(source)
-    local src = source
+DGCore.Player.SaveInventory = function(src)
     if DGCore.Players[src] then
         local PlayerData = DGCore.Players[src].PlayerData
         local items = PlayerData.items
 				local oldItems = PlayerData.oldItems
         if items and oldItems then
 		        local diff = DGCore.Shared.GetTableDiff(oldItems, items)
-	          if #diff.removed == 0 and #diff.added == 0 then return end
+	          if DGCore.Shared.tableLen(diff.removed) == 0 and DGCore.Shared.tableLen(diff.added) == 0 then return end
             exports.oxmysql:executeSync(
                 [[
                 DELETE FROM inventoryitems
@@ -676,7 +677,7 @@ DGCore.Player.SaveInventory = function(source)
                 end
         	end
         end
-	      DGCore.Players[src].PlayerData.oldItems = json.decode(json.encode(PlayerData.items))
+	      DGCore.Players[src].PlayerData.oldItems = DGCore.Shared.copyTbl(PlayerData.items)
     end
 end
 
