@@ -42,15 +42,17 @@ const Targeting = Vue.createApp({
 		this.mouseListener = window.addEventListener("mousedown", (event) => {
 			let element = event.target;
 			let split = element.id.split("-");
-			if (split[0] === "target" && split[1] !== "eye") {
-				$.post(`https://dg-peek/selectTarget`, JSON.stringify({ id: split[1] }));
-				this.TargetHTML = "";
-				this.Show = false;
-			}
-
-			if (event.button == 2) {
-				this.CloseTarget();
-				$.post(`https://dg-peek/closeTarget`);
+			try {
+				if (split[0] === "target" && parseInt(split[1])) {
+					$.post(`https://dg-peek/selectTarget`, JSON.stringify({ id: split[1] }));
+					this.TargetHTML = "";
+					this.Show = false;
+				}
+			} finally {
+				if (event.button == 2) {
+					this.CloseTarget();
+					$.post(`https://dg-peek/closeTarget`);
+				}
 			}
 		});
 	},

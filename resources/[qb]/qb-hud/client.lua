@@ -221,25 +221,17 @@ AddEventHandler('hud:client:ShowAccounts', function(type, amount)
             type = 'cash',
             cash = amount
         })
-    else
-        SendNUIMessage({
-            action = 'show',
-            type = 'bank',
-            bank = amount
-        })
     end
 end)
 
 RegisterNetEvent('hud:client:OnMoneyChange')
 AddEventHandler('hud:client:OnMoneyChange', function(type, amount, isMinus)
     DGCore.Functions.GetPlayerData(function(PlayerData)
-        cashAmount = PlayerData.money['cash']
-        bankAmount = PlayerData.money['bank']
+        cashAmount = exports['dg-financials']:getCash()
     end)
     SendNUIMessage({
         action = 'update',
         cash = cashAmount,
-        bank = bankAmount,
         amount = amount,
         minus = isMinus,
         type = type

@@ -17,8 +17,8 @@
 	import { computed, defineComponent, onMounted, ref } from 'vue';
 	import { nuiAction } from '../../../lib/nui';
 	import { useStore } from '../../../lib/state';
-	import Input from '../../os/Inputs.vue';
-	import { PrimaryButton } from '../../os/Buttons.vue';
+	import Input from '../../os/Inputs';
+	import { PrimaryButton } from '../../os/Buttons';
 
 	export default defineComponent({
 		name: 'PingerApp',

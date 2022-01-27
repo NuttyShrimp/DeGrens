@@ -10,7 +10,7 @@ AddEventHandler('qb-taxi:server:NpcPay', function(Payment)
     local src = source
     local Player = DGCore.Functions.GetPlayer(src)
 
-    Player.Functions.AddMoney('cash', Payment)
+		exports['dg-financials']:addCash(srcm , Payment, "Taxi: NPC payout")
 
     local chance = math.random(1, 100)
     if chance < 26 then

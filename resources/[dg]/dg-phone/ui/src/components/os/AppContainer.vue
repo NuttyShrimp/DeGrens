@@ -73,7 +73,7 @@
 
 <script>
 	import { defineComponent, ref } from 'vue';
-	import Input from './Inputs.vue';
+	import Input from './Inputs';
 
 	export default defineComponent({
 		name: 'AppContainer',

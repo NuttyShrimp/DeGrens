@@ -110,6 +110,16 @@ DGShared.tableLen = function(tbl)
 	return count
 end
 
+DGShared.isFunction = function(f)
+	if type(f) == "function" then
+		return true
+	end
+	if type(f) == 'table' and rawget(f, '__cfx_functionReference') then
+		return true
+	end
+	return false
+end
+
 DGShared.StarterItems = {
     ['phone'] = { amount = 1, item = 'phone' },
     ['id_card'] = { amount = 1, item = 'id_card' },

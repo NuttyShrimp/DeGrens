@@ -355,6 +355,19 @@ devdata.justice = {
 	],
 } as State['justice'];
 
+devdata.crypto = [
+	{
+		crypto_name: 'Manera',
+		icon: 'mdi-alpha-m-circle-outline',
+		value: 200,
+		wallet: {
+			cid: 'MNK81964',
+			amount: 345,
+			cname: 'Manera',
+		},
+	},
+] as State['crypto'];
+
 const emulatedEvents: Record<
 	string,
 	{
@@ -490,6 +503,11 @@ emulatedEvents.setOpenState = {
 	app: 'home-screen',
 	action: 'setOpenState',
 	data: true,
+};
+emulatedEvents.doInit = {
+	app: 'home-screen',
+	action: 'doInit',
+	data: 'dg-phone',
 };
 
 export const devDataPlugin = (store: Store<State>) => {

@@ -6,8 +6,7 @@ QBConfig.UpdateInterval = 5 -- how often to update player data in minutes
 QBConfig.StatusInterval = 5000 -- how often to check hunger/thirst status in ms
 
 QBConfig.Money = {}
-QBConfig.Money.MoneyTypes = { ['cash'] = 500, ['bank'] = 5000, ['crypto'] = 0 } -- ['type']=startamount - Add or remove money types for your server (for ex. ['blackmoney']=0), remember once added it will not be removed from the database!
-QBConfig.Money.DontAllowMinus = { 'cash', 'crypto' } -- Money that is not allowed going in minus
+QBConfig.Money.defaultCash = 500 -- default cash on player join
 QBConfig.Money.PayCheckTimeOut = 10 -- The time in minutes that it will give the paycheck
 
 QBConfig.Player = {}
@@ -16,14 +15,19 @@ QBConfig.Player.MaxInvSlots = 40 -- Max inventory slots for a player
 QBConfig.Player.HungerRate = 4.2 -- Rate at which hunger goes down.
 QBConfig.Player.ThirstRate = 3.8 -- Rate at which thirst goes down.
 QBConfig.Player.Bloodtypes = {
-    "A+",
-    "A-",
-    "B+",
-    "B-",
-    "AB+",
-    "AB-",
-    "O+",
-    "O-",
+	"A+",
+	"A-",
+	"B+",
+	"B-",
+	"AB+",
+	"AB-",
+	"O+",
+	"O-",
+}
+QBConfig.Player.JSONData = {
+	'job',
+	'position',
+	'metadata',
 }
 
 QBConfig.Server = {} -- General server config

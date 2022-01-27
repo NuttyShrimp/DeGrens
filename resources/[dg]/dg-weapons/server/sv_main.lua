@@ -56,7 +56,7 @@ DGCore.Functions.CreateCallback("weapons:server:RepairWeapon", function(source, 
     
         if Player.PlayerData.items[data.slot] then
             if Player.PlayerData.items[data.slot].quality and Player.PlayerData.items[data.slot].quality ~= 100 then
-                if Player.Functions.RemoveMoney("cash", Config.RepairCost) then
+                if exports['dg-financials']:removeCash(src, Config.RepairCost, 'Weapon repair') then
                     Config.RepairData.IsRepairing = true
                     Config.RepairData.Weapon = Player.PlayerData.items[data.slot]
     

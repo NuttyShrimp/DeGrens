@@ -32,6 +32,8 @@ combineTables = function(t1, t2)
 	for k, v in pairs(t2) do
 		if type(v) == "table" then
 			t3[k] = combineTables(t3[k], v)
+		elseif type(v) == 'number' then
+			table.insert(t3, v)
 		else
 			t3[k] = v
 		end

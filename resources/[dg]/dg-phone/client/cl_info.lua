@@ -28,12 +28,12 @@ RegisterNetEvent('dg-phone:load',function()
     return plyData.charinfo.phone
   end, "hashtag", nil, nil)
   registerInfoEntry('cash', function()
-    local plyData = DGCore.Functions.GetPlayerData()
-    return plyData.money.cash
+    local cash = exports['dg-financials']:getCash()
+		return cash
   end, 'wallet', '#81c784', '€')
   registerInfoEntry('bank', function()
-    local plyData = DGCore.Functions.GetPlayerData() 
-    return plyData.money.bank
+		local account = DGCore.Functions.TriggerCallback('financials:getDefaultAccount')
+    return account.balance or 0
   end, 'piggy-bank', "#64b5f6", '€')
 end)
 

@@ -6,7 +6,7 @@ AddEventHandler('qb-streetraces:NewRace', function(RaceTable)
     local src = source
     local RaceId = math.random(1000, 9999)
     local xPlayer = DGCore.Functions.GetPlayer(src)
-    if xPlayer.Functions.RemoveMoney('cash', RaceTable.amount, "streetrace-created") then
+    if exports['dg-financials']:removeCash(src, RaceTable.amount, 'Streetrace created') then
         Races[RaceId] = RaceTable
         Races[RaceId].creator = DGCore.Functions.GetIdentifier(src, 'license')
         table.insert(Races[RaceId].joined, DGCore.Functions.GetIdentifier(src, 'license'))
@@ -20,7 +20,7 @@ RegisterServerEvent('qb-streetraces:RaceWon')
 AddEventHandler('qb-streetraces:RaceWon', function(RaceId)
     local src = source
     local xPlayer = DGCore.Functions.GetPlayer(src)
-    xPlayer.Functions.AddMoney('cash', Races[RaceId].pot, "race-won")
+		exports['dg-financials']:addCash(src, Races[RaceId].pot, 'Streetrace win')
     TriggerClientEvent('DGCore:Notify', src, "You won the race and €"..Races[RaceId].pot..",- recieved", 'success')
     TriggerClientEvent('qb-streetraces:SetRace', -1, Races)
     TriggerClientEvent('qb-streetraces:RaceDone', -1, RaceId, GetPlayerName(src))
@@ -32,10 +32,10 @@ AddEventHandler('qb-streetraces:JoinRace', function(RaceId)
     local xPlayer = DGCore.Functions.GetPlayer(src)
     local zPlayer = DGCore.Functions.GetPlayer(Races[RaceId].creator)
     if zPlayer ~= nil then
-        if xPlayer.PlayerData.money.cash >= Races[RaceId].amount then
+        if exports['dg-financials']:getCash(src) >= Races[RaceId].amount then
             Races[RaceId].pot = Races[RaceId].pot + Races[RaceId].amount
             table.insert(Races[RaceId].joined, DGCore.Functions.GetIdentifier(src, 'license'))
-            if xPlayer.Functions.RemoveMoney('cash', Races[RaceId].amount, "streetrace-joined") then
+            if exports['dg-financials']:removeCash(src, Races[RaceId].amount, "Streetrace joined") then
                 TriggerClientEvent('qb-streetraces:SetRace', -1, Races)
                 TriggerClientEvent('qb-streetraces:SetRaceId', src, RaceId)
                 TriggerClientEvent('DGCore:Notify', zPlayer.PlayerData.source, GetPlayerName(src).." Joined the race", 'primary')
@@ -104,7 +104,7 @@ function CancelRace(source)
                 if not Races[key].started then
                     for _, iden in pairs(Races[key].joined) do
                         local xdPlayer = DGCore.Functions.GetPlayer(iden)
-                            xdPlayer.Functions.AddMoney('cash', Races[key].amount, "race-cancelled")
+														exports['dg-financials']:addCash(iden, Races[key].amount, 'Streetrace cancelled')
                             TriggerClientEvent('DGCore:Notify', xdPlayer.PlayerData.source, "Race Has Stopped, You Got Back $"..Races[key].amount.."", 'error')
                             TriggerClientEvent('qb-streetraces:StopRace', xdPlayer.PlayerData.source)
                             RemoveFromRace(iden)

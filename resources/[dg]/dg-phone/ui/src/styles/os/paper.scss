@@ -1,81 +1,89 @@
 @import '../base';
 
 .paper {
-	display: flex;
-	margin-bottom: 1vh;
-	background-color: $gray_8;
-	border-bottom: 0.2vh solid $gray_normal;
-	border-radius: 0.3vh 0.3vh 0 0;
-	padding: 0.9vh;
-	color: $gray_lighter;
-	position: relative;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1vh;
+  background-color: $primary-darker-6;
+  border-bottom: 0.2vh solid $gray_4;
+  border-radius: 0.3vh 0.3vh 0 0;
+  padding: 0.9vh;
+  color: $gray_lighter;
+  position: relative;
 
-	&--imgonly {
-		padding: 0.4vh;
-	}
+  &--imgonly {
+    padding: 0.4vh;
+  }
 
-	& > .paper-actionlist {
-		width: 100%;
-		height: 100%;
-		position: absolute;
-		top: 0;
-		left: 0;
-		display: flex;
-		justify-content: space-evenly;
-		align-items: center;
-		border-radius: 0.3vh 0.3vh 0 0;
-		background-color: rgba(0, 0, 0, 0.75);
-		z-index: 1;
+  & > .paper-actionlist {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    border-radius: 0.3vh 0.3vh 0 0;
+    background-color: rgba(0, 0, 0, 0.75);
+    z-index: 1;
 
-		& .paper-action {
-			cursor: pointer;
-			color: $gray_lighter;
-			margin: 0.3vh 0.5vh 0;
-			font-size: 1.5em;
-		}
-	}
-	& > .paper-image {
-		margin-right: 0.9vh;
-		align-self: center;
-		font-size: 2.25rem;
+    & .paper-action {
+      cursor: pointer;
+      color: $gray_lighter;
+      margin: 0.3vh 0.5vh 0;
+      font-size: 1.5em;
+    }
+  }
 
-		&--ext {
-			margin-right: 0;
-			font-size: 0em;
-			width: 100%;
-		}
+  & > .row > .paper-image {
+    margin-right: 0.9vh;
+    align-self: center;
+    font-size: 2.25rem;
 
-		& img {
-			height: 100%;
-			width: 100%;
-			object-fit: contain;
-		}
-	}
+    &--ext {
+      margin-right: 0;
+      font-size: 0em;
+      width: 100%;
+    }
+
+    & img {
+      height: 100%;
+      width: 100%;
+      object-fit: contain;
+    }
+  }
 	&:hover {
-		background-color: $primary_darker;
-		border-color: $gray_lighter;
-		cursor: pointer;
-	}
+    background-color: $primary_darker-8;
+    border-color: $gray_lighter;
+    cursor: pointer;
+  }
 }
 
 .paper-details {
-	display: flex;
-	flex-direction: column;
-	justify-content: space-between;
-	align-content: space-between;
-	overflow: hidden;
-	position: relative;
-	flex: 1 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-content: space-between;
+  overflow: hidden;
+  position: relative;
+  flex: 1 1;
 
-	& > .paper-details-description,
-	& > .paper-details-title {
-		font-size: 1.1rem;
-		display: -webkit-box;
-		overflow: hidden;
-		-webkit-line-clamp: 1;
-		-webkit-box-orient: vertical;
-	}
-	& > .paper-details-description {
-		font-size: 0.9rem;
-	}
+  & > .paper-details-description,
+  & > .paper-details-title {
+    font-size: 1.1rem;
+    display: -webkit-box;
+    overflow: hidden;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+  }
+
+  & > .paper-details-description {
+    top: 0.5vh;
+
+    &,
+    .paper-details-description--ext {
+      font-size: 0.9rem;
+    }
+  }
 }

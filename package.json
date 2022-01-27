@@ -1,0 +1,13 @@
+{
+  "name": "root",
+  "private": true,
+  "devDependencies": {
+    "lerna": "^4.0.0"
+  },
+  "scripts": {
+    "build": "lerna run --parallel build",
+    "bootstrap": "lerna bootstrap",
+    "postinstall": "yarn bootstrap",
+    "test": "lerna run test"
+  }
+}

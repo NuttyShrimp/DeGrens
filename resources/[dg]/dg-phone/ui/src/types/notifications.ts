@@ -4,6 +4,7 @@ export interface PhoneNotificationIcon {
 	background: string;
 	backgroundGradient?: string;
 	lib?: string;
+	size?: number;
 }
 
 export interface PhoneNotification {

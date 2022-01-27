@@ -3,6 +3,7 @@ import { createStore, Store, useStore as baseUseStore } from 'vuex';
 import { DefineComponent, InjectionKey } from 'vue';
 import {
 	CallHistoryEntry,
+	CoinEntry,
 	Contact,
 	GalleryEntry,
 	infoAppEntry,
@@ -15,7 +16,7 @@ import {
 } from '../types/apps';
 import { PhoneNotification, PhoneNotificationIcon } from '../types/notifications';
 import { nuiAction } from './nui';
-import { devDataPlugin } from './devdata';
+import { devdata, devDataPlugin } from './devdata';
 import { phoneApps } from './apps';
 import backgroundImg from '@/assets/background.png';
 
@@ -73,6 +74,7 @@ export interface State {
 	};
 	gallery: GalleryEntry[];
 	justice: Record<string, JusticePerson[]>;
+	crypto: CoinEntry[];
 }
 
 export const key: InjectionKey<Store<State>> = Symbol();
@@ -134,6 +136,7 @@ export const store = createStore<State>({
 		},
 		gallery: [],
 		justice: {},
+		crypto: [],
 	},
 	getters: {
 		getAppState: state => (appName: keyof State) => state[appName],
@@ -479,6 +482,17 @@ export const store = createStore<State>({
 			});
 			context.state.notes.list = [newNote, ...context.state.notes.list];
 			context.state.notes.current = newNote;
+		},
+		async refreshCoins(context) {
+			context.commit('setAppState', {
+				appName: 'crypto',
+				data: [],
+			});
+			const coins: CoinEntry[] = await nuiAction('crypto/get', {}, devdata.crypto);
+			context.commit('setAppState', {
+				appName: 'crypto',
+				data: coins,
+			});
 		},
 	},
 	plugins: [devDataPlugin],

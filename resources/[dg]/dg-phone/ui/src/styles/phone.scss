@@ -58,6 +58,7 @@
 .phone-shell {
 	z-index: 3;
 	pointer-events: none;
+	user-select: none;
 	position: absolute;
 	width: 32vh;
 	height: 65vh;

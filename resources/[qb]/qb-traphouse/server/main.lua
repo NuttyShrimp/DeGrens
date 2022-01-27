@@ -5,7 +5,7 @@ AddEventHandler('qb-traphouse:server:TakeoverHouse', function(Traphouse)
     local CitizenId = Player.PlayerData.citizenid
 
     if not HasCitizenIdHasKey(CitizenId, Traphouse) then
-        if Player.Functions.RemoveMoney('cash', Config.TakeoverPrice) then
+        if exports['dg-financials']:removeCash(src, Config.TakeoverPrice, 'Traphouse: takover') then
             TriggerClientEvent('qb-traphouse:client:TakeoverHouse', src, Traphouse)
         else
             TriggerClientEvent('DGCore:Notify', src, 'You dont have enough cash..', 'error')
@@ -151,7 +151,7 @@ AddEventHandler('qb-traphouse:server:TakeMoney', function(TraphouseId)
     local src = source
     local Player = DGCore.Functions.GetPlayer(src)
     if Config.TrapHouses[TraphouseId].money ~= 0 then
-        Player.Functions.AddMoney('cash', Config.TrapHouses[TraphouseId].money)
+				exports['dg-financials']:addCash(src, Config.TrapHouses[TraphouseId].money, 'Traphouse: payment')
         Config.TrapHouses[TraphouseId].money = 0
         TriggerClientEvent('qb-traphouse:client:SyncData', -1, TraphouseId, Config.TrapHouses[TraphouseId])
     else
@@ -267,7 +267,7 @@ AddEventHandler('qb-traphouse:server:RobNpc', function(Traphouse)
         TriggerClientEvent('inventory:client:ItemBox', src, "stickynote", "add")
     else
         local amount = math.random(1, 80)
-        Player.Functions.AddMoney('cash', amount)
+				exports['dg-financials']:addCash(src, amount, 'NPC robbery payment')
     end
 end)
 

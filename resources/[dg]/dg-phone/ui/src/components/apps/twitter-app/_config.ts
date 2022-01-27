@@ -8,7 +8,7 @@ const config = (): ConfigObject => ({
 	label: 'Twitter',
 	icon: {
 		name: 'twitter',
-		lib: 'fab',
+		lib: 'fab fa-',
 		color: '#1DA1F2',
 		background: '#282828',
 	},

@@ -48,7 +48,7 @@ AddEventHandler('qb-bankrobbery:server:setBankState', function(bankId, state)
         if not robberyBusy then
             Config.SmallBanks[bankId]["isOpened"] = state
             TriggerClientEvent('qb-bankrobbery:client:setBankState', -1, bankId, state)
-            TriggerEvent('qb-banking:server:SetBankClosed', bankId, true)
+						TriggerClientEvent('financials:client:SetBankDisabled', -1, Config.SmallBanks[bankId].label, true)
             TriggerEvent('qb-scoreboard:server:SetActivityBusy', "bankrobbery", true)
             TriggerEvent('qb-bankrobbery:server:SetSmallbankTimeout', bankId)
         end
@@ -243,7 +243,7 @@ AddEventHandler('qb-bankrobbery:server:SetSmallbankTimeout', function(BankId)
                 timeOut = false
                 robberyBusy = false
             	TriggerClientEvent('qb-bankrobbery:client:ResetFleecaLockers', -1, BankId)
-            	TriggerEvent('qb-banking:server:SetBankClosed', BankId, false)
+							TriggerClientEvent('financials:client:SetBankDisabled', -1, Config.SmallBanks[BankId].label, false)
             end)
 	end
     end

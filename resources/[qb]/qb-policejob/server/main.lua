@@ -360,46 +360,6 @@ DGCore.Commands.Add("impound", "Impound A Vehicle (Police Only)", {}, false, fun
     end
 end)
 
-DGCore.Commands.Add("paytow", "Pay Tow Driver (Police Only)", {{name = "id",help = "ID of the player"}}, true, function(source, args)
-    local src = source
-    local Player = DGCore.Functions.GetPlayer(src)
-    if Player.PlayerData.job.name == "police" and Player.PlayerData.job.onduty then
-        local playerId = tonumber(args[1])
-        local OtherPlayer = DGCore.Functions.GetPlayer(playerId)
-        if OtherPlayer then
-            if OtherPlayer.PlayerData.job.name == "tow" then
-                OtherPlayer.Functions.AddMoney("bank", 500, "police-tow-paid")
-                TriggerClientEvent('DGCore:Notify', OtherPlayer.PlayerData.source, 'You were paid $500', 'success')
-                TriggerClientEvent('DGCore:Notify', src, 'You paid the tow truck driver')
-            else
-                TriggerClientEvent('DGCore:Notify', src, 'Not a tow truck driver', 'error')
-            end
-        end
-    else
-        TriggerClientEvent('DGCore:Notify', src, 'For on-duty police only', 'error')
-    end
-end)
-
-DGCore.Commands.Add("paylawyer", "Pay Lawyer (Police, Judge Only)", {{name = "id",help = "ID of the player"}}, true, function(source, args)
-    local src = source
-    local Player = DGCore.Functions.GetPlayer(src)
-    if Player.PlayerData.job.name == "police" or Player.PlayerData.job.name == "judge" then
-        local playerId = tonumber(args[1])
-        local OtherPlayer = DGCore.Functions.GetPlayer(playerId)
-        if OtherPlayer then
-            if OtherPlayer.PlayerData.job.name == "lawyer" then
-                OtherPlayer.Functions.AddMoney("bank", 500, "police-lawyer-paid")
-                TriggerClientEvent('DGCore:Notify', OtherPlayer.PlayerData.source, 'You were paid $500', 'success')
-                TriggerClientEvent('DGCore:Notify', src, 'You paid a lawyer')
-            else
-                TriggerClientEvent('DGCore:Notify', src, 'Person is not a lawyer', "error")
-            end
-        end
-    else
-        TriggerClientEvent('DGCore:Notify', src, 'For on-duty police only', 'error')
-    end
-end)
-
 DGCore.Commands.Add("anklet", "Attach Tracking Anklet (Police Only)", {}, false, function(source)
     local src = source
     local Player = DGCore.Functions.GetPlayer(src)
@@ -528,7 +488,7 @@ DGCore.Functions.CreateUseableItem("moneybag", function(source, item)
         if item.info and item.info ~= "" then
             if Player.PlayerData.job.name ~= "police" then
                 if Player.Functions.RemoveItem("moneybag", 1, item.slot) then
-                    Player.Functions.AddMoney("cash", tonumber(item.info.cash), "used-moneybag")
+										exports['dg-financials']:addCash(src, tonumber(item.info.cash), 'Money Bag')
                 end
             end
         end
@@ -718,19 +678,6 @@ RegisterNetEvent('police:server:PutPlayerInVehicle', function(playerId)
     end
 end)
 
-RegisterNetEvent('police:server:BillPlayer', function(playerId, price)
-    local src = source
-    local Player = DGCore.Functions.GetPlayer(src)
-    local OtherPlayer = DGCore.Functions.GetPlayer(playerId)
-    if Player.PlayerData.job.name == "police" then
-        if OtherPlayer then
-            OtherPlayer.Functions.RemoveMoney("bank", price, "paid-bills")
-            TriggerEvent('qb-bossmenu:server:addAccountMoney', "police", price)
-            TriggerClientEvent('DGCore:Notify', OtherPlayer.PlayerData.source, "You received a fine of $" .. price)
-        end
-    end
-end)
-
 RegisterNetEvent('police:server:JailPlayer', function(playerId, time)
     local src = source
     local Player = DGCore.Functions.GetPlayer(src)
@@ -794,7 +741,8 @@ RegisterNetEvent('police:server:SearchPlayer', function(playerId)
     local src = source
     local SearchedPlayer = DGCore.Functions.GetPlayer(playerId)
     if SearchedPlayer then
-        TriggerClientEvent('DGCore:Notify', src, 'Found $'..SearchedPlayer.PlayerData.money["cash"]..' on the civilian')
+				local cash = exports['dg-financials']:getCash(playerId)
+        TriggerClientEvent('DGCore:Notify', src, ('Found $%d on the civilian'):format(cash))
         TriggerClientEvent('DGCore:Notify', SearchedPlayer.PlayerData.source, "You are being searched")
     end
 end)
@@ -804,9 +752,9 @@ RegisterNetEvent('police:server:SeizeCash', function(playerId)
     local Player = DGCore.Functions.GetPlayer(src)
     local SearchedPlayer = DGCore.Functions.GetPlayer(playerId)
     if SearchedPlayer then
-        local moneyAmount = SearchedPlayer.PlayerData.money["cash"]
+        local moneyAmount = exports['dg-financials']:getCash(playerId)
         local info = { cash = moneyAmount }
-        SearchedPlayer.Functions.RemoveMoney("cash", moneyAmount, "police-cash-seized")
+				exports['dg-financials']:removeCash(playerId, moneyAmount, 'Police cash seized')
         Player.Functions.AddItem("moneybag", 1, false, info)
         TriggerClientEvent('inventory:client:ItemBox', src, "moneybag", "add")
         TriggerClientEvent('DGCore:Notify', SearchedPlayer.PlayerData.source, 'Your cash was confiscated')
@@ -833,9 +781,9 @@ RegisterNetEvent('police:server:RobPlayer', function(playerId)
     local Player = DGCore.Functions.GetPlayer(src)
     local SearchedPlayer = DGCore.Functions.GetPlayer(playerId)
     if SearchedPlayer then
-        local money = SearchedPlayer.PlayerData.money["cash"]
-        Player.Functions.AddMoney("cash", money, "police-player-robbed")
-        SearchedPlayer.Functions.RemoveMoney("cash", money, "police-player-robbed")
+				local money = exports['dg-financials']:getCash(playerId)
+				exprots['dg-financials']:addCash(src, money, ('Player %s robbed'):format(SearchedPlayer.PlayerData.name))
+				exports['dg-financials']:removeCash(playerId, money, ('Player robbed by %s'):format(Player.PlayerData.name))
         TriggerClientEvent('DGCore:Notify', SearchedPlayer.PlayerData.source, "You have been robbed of $" .. money)
         TriggerClientEvent('DGCore:Notify', Player.PlayerData.source, "You have stolen $" .. money)
     end

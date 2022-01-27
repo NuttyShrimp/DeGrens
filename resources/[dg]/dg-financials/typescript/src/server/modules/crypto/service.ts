@@ -1,0 +1,69 @@
+import { CryptoManager } from './classes/CryptoManager';
+import { cryptoLogger } from './util';
+import { CryptoWallet } from './classes/CryptoWallet';
+
+const CManager = CryptoManager.getInstance();
+
+export const loadPlayerWallet = (src: number) => {
+	const Player = DGCore.Functions.GetPlayer(src);
+	if (!Player) {
+		cryptoLogger.error(`loadPlayerWallet: No player found for serverId: ${src}`);
+		return;
+	}
+	CManager.loadPlayerWallet(Player.PlayerData.citizenid);
+};
+
+export const reloadPlayerWallets = () => {
+	DGCore.Functions.GetPlayers().forEach(ply => {
+		loadPlayerWallet(ply);
+	});
+};
+
+// Will get all the wallets in object form for this player
+export const getPlayerInfo = (src: number): NCrypto.Wallet[] => {
+	const Player = DGCore.Functions.GetPlayer(src);
+	const wallets = CManager.getWallet(Player.PlayerData.citizenid) as CryptoWallet[];
+	return wallets.map(wallet => {
+		return wallet.getClientVersion();
+	});
+};
+
+export const buyCrypto = async (src: number, coin: string, amount: number): Promise<boolean> => {
+	const Player = DGCore.Functions.GetPlayer(src);
+	if (!Player) {
+		cryptoLogger.error(`buyCrypto: No player found for serverId: ${src}`);
+		return;
+	}
+	const wallet = CManager.getWallet(Player.PlayerData.citizenid, coin) as CryptoWallet;
+	if (!wallet) {
+		cryptoLogger.warn(
+			`buyCrypto: No wallet found for player: ${Player.PlayerData.citizenid} and coin: ${coin}. Creating wallet...`
+		);
+		const isSuccess = await CManager.createWallet(Player.PlayerData.citizenid, coin);
+		if (!isSuccess) {
+			return false;
+		}
+		return buyCrypto(src, coin, amount);
+	}
+	return wallet.buy(amount);
+};
+
+export const addCrypto = async (src: number, coin: string, amount: number, comment: string): Promise<boolean> => {
+	const Player = DGCore.Functions.GetPlayer(src);
+	if (!Player) {
+		cryptoLogger.error(`addCrypto: No player found for serverId: ${src}`);
+		return;
+	}
+	const wallet = CManager.getWallet(Player.PlayerData.citizenid, coin) as CryptoWallet;
+	if (!wallet) {
+		cryptoLogger.warn(
+			`addCrypto: No wallet found for player: ${Player.PlayerData.citizenid} and coin: ${coin}. Creating wallet...`
+		);
+		const isSuccess = await CManager.createWallet(Player.PlayerData.citizenid, coin);
+		if (!isSuccess) {
+			return false;
+		}
+		return addCrypto(src, coin, amount, comment);
+	}
+	return wallet.add(amount, comment);
+};

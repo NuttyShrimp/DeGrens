@@ -3,19 +3,26 @@
 		:class="`paper ${imageOnly ? 'paper--imgonly' : ''} ${paperClass}`"
 		@mouseenter="setShowActions(true)"
 		@mouseleave="setShowActions(false)"
-		@click="onClick"
+		@click.prevent="onClick"
 	>
-		<div v-if="$slots.image !== undefined" :class="`paper-image${imageOnly ? ' paper-image--ext' : ''}`">
-			<slot name="image"></slot>
+		<div class="row">
+			<div v-if="$slots.image !== undefined" :class="`paper-image${imageOnly ? ' paper-image--ext' : ''}`">
+				<slot name="image"></slot>
+			</div>
+			<div class="paper-details">
+				<div v-if="$slots.title !== undefined" class="paper-details-title">
+					<slot name="title"></slot>
+				</div>
+				<div
+					v-if="((!showExtDescription && replaceDescription) || true) && $slots.description !== undefined"
+					class="paper-details-description"
+				>
+					<slot name="description"></slot>
+				</div>
+			</div>
 		</div>
-		<div class="paper-details">
-			<div v-if="$slots.title !== undefined" class="paper-details-title"><slot name="title"></slot></div>
-			<div v-if="$slots.description !== undefined" class="paper-details-description">
-				<slot name="description"></slot>
-			</div>
-			<div v-if="$slots.extdescription !== undefined" class="paper-details-description--ext">
-				<slot name="extdescription"></slot>
-			</div>
+		<div v-if="showExtDescription && $slots.extdescription !== undefined" class="paper-details-description--ext">
+			<slot name="extdescription"></slot>
 		</div>
 		<div v-if="showActions && actions.length > 0" class="paper-actionlist">
 			<div
@@ -51,15 +58,23 @@
 				type: String,
 				default: '',
 			},
+			replaceDescription: {
+				type: Boolean,
+				default: true,
+			},
 		},
 		emits: ['onClick'],
 		setup(_, { emit, slots }) {
 			const showActions = ref(false);
 			const imageOnly = ref(false);
+			const showExtDescription = ref(false);
 			const setShowActions = (value: boolean) => {
 				showActions.value = value;
 			};
 			const onClick = () => {
+				if (slots.extdescription) {
+					showExtDescription.value = !showExtDescription.value;
+				}
 				emit('onClick');
 			};
 			onMounted(() => {
@@ -72,6 +87,7 @@
 				onClick,
 				showActions,
 				setShowActions,
+				showExtDescription,
 			};
 		},
 	});

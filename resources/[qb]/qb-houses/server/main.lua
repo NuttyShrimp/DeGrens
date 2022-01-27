@@ -205,20 +205,21 @@ RegisterNetEvent('qb-houses:server:buyHouse', function(house)
     local pData = DGCore.Functions.GetPlayer(src)
     local price = Config.Houses[house].price
     local HousePrice = math.ceil(price * 1.21)
-    local bankBalance = pData.PlayerData.money["bank"]
+		local accountId = exports['dg-financials']:getDefaultAccountId(src)
+    local bankBalance = exports['dg-financials']:getAccountBalance(accountId)
 
     if (bankBalance >= HousePrice) then
-        houseowneridentifier[house] = pData.PlayerData.license
-        houseownercid[house] = pData.PlayerData.citizenid
-        housekeyholders[house] = {
-            [1] = pData.PlayerData.citizenid
-        }
-        exports.oxmysql:insert('INSERT INTO player_houses (house, identifier, citizenid, keyholders) VALUES (?, ?, ?, ?)',
-            {house, pData.PlayerData.license, pData.PlayerData.citizenid, json.encode(housekeyholders[house])})
-        exports.oxmysql:execute('UPDATE houselocations SET owned = ? WHERE name = ?', {1, house})
-        TriggerClientEvent('qb-houses:client:SetClosestHouse', src)
-        pData.Functions.RemoveMoney('bank', HousePrice, "bought-house") -- 21% Extra house costs
-        TriggerEvent('qb-bossmenu:server:addAccountMoney', "realestate", (HousePrice / 100) * math.random(18, 25))    
+	    houseowneridentifier[house] = pData.PlayerData.license
+	    houseownercid[house] = pData.PlayerData.citizenid
+	    housekeyholders[house] = {
+		    [1] = pData.PlayerData.citizenid
+	    }
+	    exports.oxmysql:insert('INSERT INTO player_houses (house, identifier, citizenid, keyholders) VALUES (?, ?, ?, ?)',
+		    { house, pData.PlayerData.license, pData.PlayerData.citizenid, json.encode(housekeyholders[house]) })
+	    exports.oxmysql:execute('UPDATE houselocations SET owned = ? WHERE name = ?', { 1, house })
+	    TriggerClientEvent('qb-houses:client:SetClosestHouse', src)
+	    exports['dg-financials']:purchase(accountId, pData.PlayerData.citizenid, HousePrice, ("Bought house at %s for %s"):format(house, HousePrice), 3)
+	    TriggerEvent('qb-bossmenu:server:addAccountMoney', "realestate", (HousePrice / 100) * math.random(18, 25))
     else
         TriggerClientEvent('DGCore:Notify', source, "You dont have enough money..", "error")
     end
@@ -351,11 +352,12 @@ end)
 DGCore.Functions.CreateCallback('qb-houses:server:buyFurniture', function(source, cb, price)
     local src = source
     local pData = DGCore.Functions.GetPlayer(src)
-    local bankBalance = pData.PlayerData.money["bank"]
+		local accountId = exports['dg-financials']:getDefaultAccountId(src)
+		local bankBalance = exports['dg-financials']:getAccountBalance(accountId)
 
     if bankBalance >= price then
-        pData.Functions.RemoveMoney('bank', price, "bought-furniture")
-        cb(true)
+	    exports['dg-financials']:purchase(accountId, price, pData.PlayerData.citizenid "Bought house furniture", 6)
+	    cb(true)
     else
         TriggerClientEvent('DGCore:Notify', src, "You dont have enough money..", "error")
         cb(false)

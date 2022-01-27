@@ -131,8 +131,9 @@ end)
 RegisterNetEvent('qb-vehicleshop:server:financePayment', function(paymentAmount, vehData)
     local src = source
     local player = DGCore.Functions.GetPlayer(src)
-    local cash = player.PlayerData.money['cash']
-    local bank = player.PlayerData.money['bank']
+    local cash = exports['dg-financials']:getCash(src)
+    local plyAccId = exports['dg-financials']:getDefaultAccountId(Player.PlayerData.citizenid)
+		local bank = exports['dg-financials']:GetAccountBalance(plyAccId)
     local plate = vehData.vehiclePlate
     local paymentAmount = tonumber(paymentAmount)
     local minPayment = tonumber(vehData.paymentAmount)
@@ -141,11 +142,11 @@ RegisterNetEvent('qb-vehicleshop:server:financePayment', function(paymentAmount,
     if newBalance > 0 then
         if player and paymentAmount >= minPayment then
             if cash >= paymentAmount then
-                player.Functions.RemoveMoney('cash', paymentAmount)
+								exports['dg-financials']:removeCash(src, paymentAmount, "Finance payment")
                 exports.oxmysql:execute('UPDATE player_vehicles SET balance = ?, paymentamount = ?, paymentsleft = ?, financetime = ? WHERE plate = ?', {newBalance, newPayment, newPaymentsLeft, timer, plate})
             elseif bank >= paymentAmount then
-                player.Functions.RemoveMoney('bank', paymentAmount)
-                exports.oxmysql:execute('UPDATE player_vehicles SET balance = ?, paymentamount = ?, paymentsleft = ?, financetime = ? WHERE plate = ?', {newBalance, newPayment, newPaymentsLeft, timer, plate})
+								exports['dg-financials']:purchase(plyAccId, Player.PlayerData.citizenid, paymentAmount, "Finance payment for " .. plate, 2)
+	            exports.oxmysql:execute('UPDATE player_vehicles SET balance = ?, paymentamount = ?, paymentsleft = ?, financetime = ? WHERE plate = ?', { newBalance, newPayment, newPaymentsLeft, timer, plate })
             else
                 TriggerClientEvent('DGCore:Notify', src, 'Not enough money', 'error')
             end
@@ -162,17 +163,18 @@ end)
 RegisterNetEvent('qb-vehicleshop:server:financePaymentFull', function(data)
     local src = source
     local player = DGCore.Functions.GetPlayer(src)
-    local cash = player.PlayerData.money['cash']
-    local bank = player.PlayerData.money['bank']
+		local cash = exports['dg-financials']:getCash(src)
+		local plyAccId = exports['dg-financials']:getDefaultAccountId(Player.PlayerData.citizenid)
+		local bank = exports['dg-financials']:GetAccountBalance(plyAccId)
     local vehBalance = data.vehBalance
     local vehPlate = data.vehPlate
     if player and vehBalance ~= 0 then
         if cash >= vehBalance then
-            player.Functions.RemoveMoney('cash', vehBalance)
+						exports['dg-financials']:removeCash(src, vehBalance, "Finance payment(last) for " .. vehPlate)
             exports.oxmysql:update('UPDATE player_vehicles SET balance = ?, paymentamount = ?, paymentsleft = ?, financetime = ? WHERE plate = ?', {0, 0, 0, 0, vehPlate})
         elseif bank >= vehBalance then
-            player.Functions.RemoveMoney('bank', vehBalance)
-            exports.oxmysql:update('UPDATE player_vehicles SET balance = ?, paymentamount = ?, paymentsleft = ?, financetime = ? WHERE plate = ?', {0, 0, 0, 0, vehPlate})
+	        exports['dg-financials']:purchase(plyAccId, Player.PlayerData.citizenid, vehBalance, "Finance payment(last) for " .. vehPlate, 2)
+	        exports.oxmysql:update('UPDATE player_vehicles SET balance = ?, paymentamount = ?, paymentsleft = ?, financetime = ? WHERE plate = ?', { 0, 0, 0, 0, vehPlate })
         else
             TriggerClientEvent('DGCore:Notify', src, 'Not enough money', 'error')
         end
@@ -187,8 +189,9 @@ RegisterNetEvent('qb-vehicleshop:server:buyShowroomVehicle', function(vehicle)
     local vehicle = vehicle.buyVehicle
     local pData = DGCore.Functions.GetPlayer(src)
     local cid = pData.PlayerData.citizenid
-    local cash = pData.PlayerData.money['cash']
-    local bank = pData.PlayerData.money['bank']
+		local cash = exports['dg-financials']:getCash(src)
+		local plyAccId = exports['dg-financials']:getDefaultAccountId(Player.PlayerData.citizenid)
+		local bank = exports['dg-financials']:GetAccountBalance(plyAccId)
     local vehiclePrice = DGCore.Shared.Vehicles[vehicle]['price']
     local plate = GeneratePlate()
     if cash > vehiclePrice then
@@ -203,7 +206,7 @@ RegisterNetEvent('qb-vehicleshop:server:buyShowroomVehicle', function(vehicle)
         })
         TriggerClientEvent('DGCore:Notify', src, 'Congratulations on your purchase!', 'success')
         TriggerClientEvent('qb-vehicleshop:client:buyShowroomVehicle', src, vehicle, plate)
-        pData.Functions.RemoveMoney('cash', vehiclePrice, 'vehicle-bought-in-showroom')
+				exports['dg-financials']:removeCash(src, vehiclePrice, "Showroom vehicle purchase for " .. plate)
     elseif bank > vehiclePrice then
         exports.oxmysql:insert('INSERT INTO player_vehicles (license, citizenid, vehicle, hash, mods, plate, state) VALUES (?, ?, ?, ?, ?, ?, ?)', {
             pData.PlayerData.license,
@@ -215,8 +218,8 @@ RegisterNetEvent('qb-vehicleshop:server:buyShowroomVehicle', function(vehicle)
             0
         })
         TriggerClientEvent('DGCore:Notify', src, 'Congratulations on your purchase!', 'success')
-        TriggerClientEvent('qb-vehicleshop:client:buyShowroomVehicle', src, vehicle, plate)
-        pData.Functions.RemoveMoney('bank', vehiclePrice, 'vehicle-bought-in-showroom')
+	    TriggerClientEvent('qb-vehicleshop:client:buyShowroomVehicle', src, vehicle, plate)
+	    exports['dg-financials']:purchase(plyAccId, Player.PlayerData.citizenid, vehiclePrice, "Showroom vehicle purchase for " .. plate, 2)
     else
         TriggerClientEvent('DGCore:Notify', src, 'Not enough money', 'error')
     end
@@ -229,8 +232,9 @@ RegisterNetEvent('qb-vehicleshop:server:financeVehicle', function(downPayment, p
     local paymentAmount = tonumber(paymentAmount)
     local pData = DGCore.Functions.GetPlayer(src)
     local cid = pData.PlayerData.citizenid
-    local cash = pData.PlayerData.money['cash']
-    local bank = pData.PlayerData.money['bank']
+		local cash = exports['dg-financials']:getCash(src)
+		local plyAccId = exports['dg-financials']:getDefaultAccountId(Player.PlayerData.citizenid)
+		local bank = exports['dg-financials']:GetAccountBalance(plyAccId)
     local vehiclePrice = DGCore.Shared.Vehicles[vehicle]['price']
     local timer = (Config.PaymentInterval * 60)
     local minDown = tonumber(round(vehiclePrice / Config.MinimumDown))
@@ -255,7 +259,7 @@ RegisterNetEvent('qb-vehicleshop:server:financeVehicle', function(downPayment, p
         })
         TriggerClientEvent('DGCore:Notify', src, 'Congratulations on your purchase!', 'success')
         TriggerClientEvent('qb-vehicleshop:client:buyShowroomVehicle', src, vehicle, plate)
-        pData.Functions.RemoveMoney('cash', downPayment, 'vehicle-bought-in-showroom')
+				exports['dg-financials']:removeCash(src, downPayment, "Showroom Vehicle finance for " .. plate)
     elseif bank > downPayment then
         exports.oxmysql:insert('INSERT INTO player_vehicles (license, citizenid, vehicle, hash, mods, plate, state, balance, paymentamount, paymentsleft, financetime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', {
             pData.PlayerData.license,
@@ -271,8 +275,8 @@ RegisterNetEvent('qb-vehicleshop:server:financeVehicle', function(downPayment, p
             timer
         })
         TriggerClientEvent('DGCore:Notify', src, 'Congratulations on your purchase!', 'success')
-        TriggerClientEvent('qb-vehicleshop:client:buyShowroomVehicle', src, vehicle, plate)
-        pData.Functions.RemoveMoney('bank', downPayment, 'vehicle-bought-in-showroom')
+	    TriggerClientEvent('qb-vehicleshop:client:buyShowroomVehicle', src, vehicle, plate)
+	    exports['dg-financials']:purchase(plyAccId, Player.PlayerData.citizenid, downPayment, "Showroom Vehicle finance for " .. plate, 2)
     else
         TriggerClientEvent('DGCore:Notify', src, 'Not enough money', 'error')
     end
@@ -456,7 +460,7 @@ DGCore.Commands.Add('transferVehicle', 'Gift or sell your vehicle', {{ name = 'a
     local target = DGCore.Functions.GetPlayer(targetid)
     if not target then return TriggerClientEvent('DGCore:Notify', src, 'Couldnt get passenger info', 'error') end
     if sellAmount then
-        if target.Functions.GetMoney('cash') > sellAmount then
+        if exports['dg-financials']:getCash(target.Functions.source) > sellAmount then
             local targetcid = target.PlayerData.citizenid
             exports.oxmysql:update('UPDATE player_vehicles SET citizenid = ? WHERE plate = ?', {targetcid, plate})
             player.Functions.AddMoney('cash', sellAmount)

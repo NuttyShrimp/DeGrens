@@ -14,9 +14,11 @@ end)
 RegisterNetEvent('hospital:server:SendToBed', function(bedId, isRevive)
 	local src = source
 	local Player = DGCore.Functions.GetPlayer(src)
+	local citizenid = Player.PlayerData.citizenid
 	TriggerClientEvent('hospital:client:SendToBed', src, bedId, Config.Locations["beds"][bedId], isRevive)
 	TriggerClientEvent('hospital:client:SetBed', -1, bedId, true)
-	Player.Functions.RemoveMoney("bank", Config.BillCost , "respawned-at-hospital")
+	local accountId = exports['dg-financials']:getDefaultAccountId(citizenid)
+	exports['dg-financials']:transfer(accountId, 'BE3', citizenid, citizenid, price, 'AZDG: Hospitaalkosten')
 	TriggerEvent('qb-bossmenu:server:addAccountMoney', "ambulance", Config.BillCost)
 	TriggerClientEvent('hospital:client:SendBillEmail', src, Config.BillCost)
 end)
@@ -24,6 +26,7 @@ end)
 RegisterNetEvent('hospital:server:RespawnAtHospital', function()
 	local src = source
 	local Player = DGCore.Functions.GetPlayer(src)
+	local citizenid = Player.PlayerData.citizenid
 	for k, v in pairs(Config.Locations["beds"]) do
 		TriggerClientEvent('hospital:client:SendToBed', src, k, v, true)
 		TriggerClientEvent('hospital:client:SetBed', -1, k, true)
@@ -32,7 +35,8 @@ RegisterNetEvent('hospital:server:RespawnAtHospital', function()
 			exports.oxmysql:execute('UPDATE players SET inventory = ? WHERE citizenid = ?', { json.encode({}), Player.PlayerData.citizenid })
 			TriggerClientEvent('DGCore:Notify', src, 'All your possessions have been taken..', 'error')
 		end
-		Player.Functions.RemoveMoney("bank", Config.BillCost, "respawned-at-hospital")
+		local accountId = exports['dg-financials']:getDefaultAccountId(citizenid)
+		exports['dg-financials']:transfer(accountId, 'BE3', citizenid, citizenid, price, 'AZDG: Hospitaalkosten')
 		TriggerEvent('qb-bossmenu:server:addAccountMoney', "ambulance", Config.BillCost)
 		TriggerClientEvent('hospital:client:SendBillEmail', src, Config.BillCost)
 		return
@@ -130,7 +134,7 @@ RegisterNetEvent('hospital:server:RevivePlayer', function(playerId, isOldMan)
 	local oldMan = isOldMan or false
 	if Patient then
 		if oldMan then
-			if Player.Functions.RemoveMoney("cash", 5000, "revived-player") then
+			if exports['dg-financials']:removeCash(src, 5000, 'Revived player at old man') then
 				Player.Functions.RemoveItem('firstaid', 1)
 				TriggerClientEvent('inventory:client:ItemBox', src, 'firstaid', "remove")
 				TriggerClientEvent('hospital:client:Revive', Patient.PlayerData.source)

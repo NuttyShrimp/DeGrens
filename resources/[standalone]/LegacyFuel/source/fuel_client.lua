@@ -72,7 +72,7 @@ Citizen.CreateThread(function()
 
 		if pumpDistance < 2.5 then
 			isNearPump = pumpObject
-			currentCash = DGCore.Functions.GetPlayerData().money['cash']
+			currentCash = exports['dg-financials']:getCash()
 		else
 			isNearPump = false
 

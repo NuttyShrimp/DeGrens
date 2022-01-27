@@ -14,11 +14,9 @@ create table if not exists players
   backstory    text                                  not null,
   nationality  text                                  not null,
   phone        varchar(255)                          not null,
-  account      varchar(255)                          not null,
+  cash         bigint    default 0,
   gang         text                                  null,
-  charinfo     text                                  null,
   position     text                                  not null,
-  money        text                                  not null,
   job          text                                  not null,
   metadata     text                                  not null,
   last_updated timestamp default current_timestamp() not null on update current_timestamp(),
@@ -41,36 +39,6 @@ create table if not exists api_tokens
   PRIMARY KEY (token)
 );
 
-create table if not exists bank_accounts
-(
-  record_id    bigint(255) auto_increment,
-  citizenid    varchar(250)                                                      null unique,
-  buisness     varchar(50)                                                       null,
-  buisnessid   int                                                               null,
-  gangid       varchar(50)                                                       null,
-  amount       bigint(255)                                     default 0         not null,
-  account_type enum ('Current', 'Savings', 'Buisness', 'Gang') default 'Current' not null,
-  PRIMARY KEY (record_id),
-  FOREIGN KEY (citizenid) REFERENCES players (citizenid) on update cascade on delete cascade
-);
-
-create table if not exists bank_statements
-(
-  record_id  bigint(255) auto_increment,
-  citizenid  varchar(50)  null,
-  account    varchar(50)  null,
-  buisness   varchar(50)  null,
-  buisnessid int          null,
-  gangid     varchar(50)  null,
-  deposited  int          null,
-  withdraw   int          null,
-  balance    int          null,
-  date       varchar(50)  null,
-  type       varchar(255) null,
-  PRIMARY KEY (record_id),
-  FOREIGN KEY (citizenid) REFERENCES players (citizenid) on update cascade on delete cascade
-);
-
 create table if not exists bans
 (
   id       int auto_increment,
@@ -82,25 +50,6 @@ create table if not exists bans
   expire   int                                null,
   bannedby varchar(255) default 'LeBanhammer' not null,
   PRIMARY KEY (id)
-);
-
-create table if not exists crypto
-(
-  crypto  varchar(50) default 'qbit' not null,
-  worth   int         default 0      not null,
-  history longtext                   null,
-  PRIMARY KEY (crypto)
-);
-
-create table if not exists crypto_transactions
-(
-  id        int auto_increment,
-  citizenid varchar(50)                           null,
-  title     varchar(50)                           null,
-  message   varchar(50)                           null,
-  date      timestamp default current_timestamp() null,
-  PRIMARY KEY (id),
-  FOREIGN KEY (citizenid) REFERENCES players (citizenid) on update cascade on delete cascade
 );
 
 create table if not exists dealers
@@ -370,7 +319,7 @@ CREATE TABLE IF NOT EXISTS phone_notes
 
 CREATE TABLE IF NOT EXISTS phone_images
 (
-  id    int(11)      NOT NULL AUTO_INCREMENT,
+  id   int(11)      NOT NULL AUTO_INCREMENT,
   cid  varchar(255) NOT NULL,
   link varchar(255) NOT NULL,
   PRIMARY KEY (id),
@@ -379,11 +328,105 @@ CREATE TABLE IF NOT EXISTS phone_images
 
 CREATE TABLE IF NOT EXISTS phone_mails
 (
-  id   int(11)      NOT NULL AUTO_INCREMENT,
-  cid  varchar(255) NOT NULL,
-  sender varchar(255) NOT NULL,
+  id      int(11)      NOT NULL AUTO_INCREMENT,
+  cid     varchar(255) NOT NULL,
+  sender  varchar(255) NOT NULL,
   subject varchar(255) NOT NULL,
-  message LONGTEXT NOT NULL,
+  message LONGTEXT     NOT NULL,
   PRIMARY KEY (id),
   FOREIGN KEY (cid) REFERENCES players (citizenid) on update cascade on delete cascade
-)
+);
+
+CREATE TABLE IF NOT EXISTS bank_accounts
+(
+  account_id varchar(255)                             NOT NULL,
+  name       varchar(255)                                      default 'Name',
+  type       ENUM ('standard', 'savings', 'business') NOT NULL,
+  balance    BIGINT                                   NOT NULL DEFAULT 0,
+  PRIMARY KEY (account_id)
+);
+
+CREATE TABLE IF NOT EXISTS bank_accounts_access
+(
+  account_id   varchar(255) NOT NULL,
+  cid          varchar(255) NOT NULL,
+  access_level int(11)      NOT NULL default 1,
+  PRIMARY KEY (account_id, cid),
+  FOREIGN KEY (account_id) REFERENCES bank_accounts (account_id) on update cascade on delete cascade,
+  FOREIGN KEY (cid) REFERENCES players (citizenid) on update cascade on delete cascade
+);
+
+CREATE TABLE IF NOT EXISTS transaction_log
+(
+  transaction_id    varchar(255)                                                     NOT NULL,
+  origin_account_id varchar(255)                                                     NOT NULL,
+  target_account_id varchar(255)                                                     NOT NULL,
+  `change`          BIGINT                                                           NOT NULL,
+  comment           LONGTEXT                                                         NOT NULL default '',
+  triggered_by      varchar(255)                                                     NOT NULL,
+  accepted_by       varchar(255)                                                     NOT NULL,
+  date              bigint                                                           NOT NULL,
+  type              ENUM ('transfer', 'deposit', 'withdraw', 'purchase', 'paycheck') NOT NULL,
+  PRIMARY KEY (transaction_id),
+  FOREIGN KEY (origin_account_id) REFERENCES bank_accounts (account_id) on update cascade on delete cascade,
+  FOREIGN KEY (target_account_id) REFERENCES bank_accounts (account_id) on update cascade on delete cascade,
+  FOREIGN KEY (triggered_by) REFERENCES players (citizenid) on update cascade on delete cascade,
+  FOREIGN KEY (accepted_by) REFERENCES players (citizenid) on update cascade on delete cascade
+);
+
+CREATE TABLE IF NOT EXISTS player_paycheck
+(
+  cid    varchar(255) NOT NULL,
+  amount BIGINT       NOT NULL,
+  PRIMARY KEY (cid),
+  FOREIGN KEY (cid) REFERENCES players (citizenid) on update cascade on delete cascade
+);
+
+CREATE TABLE IF NOT EXISTS crypto
+(
+  crypto_name varchar(255) NOT NULL,
+  value       INT          NOT NULL DEFAULT 100 comment 'How much 1 of this crypto is worth',
+  PRIMARY KEY (crypto_name)
+);
+
+CREATE TABLE IF NOT EXISTS crypto_wallets
+(
+  cid         varchar(255) NOT NULL,
+  crypto_name varchar(255) NOT NULL,
+  amount      INT          NOT NULL DEFAULT 0,
+  PRIMARY KEY (cid, crypto_name),
+  FOREIGN KEY (crypto_name) REFERENCES crypto (crypto_name) on update cascade on delete cascade,
+  FOREIGN KEY (cid) REFERENCES players (citizenid) on update cascade on delete cascade
+);
+
+CREATE TABLE IF NOT EXISTS taxes
+(
+  tax_id   INT          NOT NULL AUTO_INCREMENT,
+  tax_name varchar(255) NOT NULL,
+  tax_rate INT          NOT NULL DEFAULT 0,
+  set_date TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (tax_id)
+);
+
+CREATE TABLE IF NOT EXISTS debts
+(
+  id             INT                          NOT NULL AUTO_INCREMENT,
+  cid            varchar(255)                 NOT NULL,
+  target_account varchar(255)                 NOT NULL,
+  debt           BIGINT                       NOT NULL DEFAULT 0,
+  type           ENUM ('debt', 'maintenance') NOT NULL DEFAULT 'debt',
+  given_by       varchar(255)                 NOT NULL,
+  date           TIMESTAMP                    NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  reason         LONGTEXT                     NOT NULL,
+  PRIMARY KEY (id),
+  FOREIGN KEY (cid) REFERENCES players (citizenid) on update cascade on delete cascade,
+  FOREIGN KEY (given_by) REFERENCES players (citizenid) on update cascade on delete cascade,
+  FOREIGN KEY (target_account) REFERENCES bank_accounts (account_id) on update cascade on delete cascade
+);
+
+CREATE TABLE IF NOT EXISTS maintenance_fee_log
+(
+  id   INT       NOT NULL AUTO_INCREMENT,
+  date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (id)
+);

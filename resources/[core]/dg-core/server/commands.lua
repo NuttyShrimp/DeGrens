@@ -108,28 +108,6 @@ DGCore.Commands.Add('dv', 'Delete Vehicle (Admin Only)', {}, false, function(sou
 	TriggerClientEvent('DGCore:Command:DeleteVehicle', src)
 end, 'admin')
 
--- Money
-
-DGCore.Commands.Add('givemoney', 'Give A Player Money (Admin Only)', { { name = 'id', help = 'Player ID' }, { name = 'moneytype', help = 'Type of money (cash, bank, crypto)' }, { name = 'amount', help = 'Amount of money' } }, true, function(source, args)
-	local src = source
-	local Player = DGCore.Functions.GetPlayer(tonumber(args[1]))
-	if Player then
-		Player.Functions.AddMoney(tostring(args[2]), tonumber(args[3]))
-	else
-		TriggerClientEvent('DGCore:Notify', src, 'Player Not Online', 'error')
-	end
-end, 'admin')
-
-DGCore.Commands.Add('setmoney', 'Set Players Money Amount (Admin Only)', { { name = 'id', help = 'Player ID' }, { name = 'moneytype', help = 'Type of money (cash, bank, crypto)' }, { name = 'amount', help = 'Amount of money' } }, true, function(source, args)
-	local src = source
-	local Player = DGCore.Functions.GetPlayer(tonumber(args[1]))
-	if Player then
-		Player.Functions.SetMoney(tostring(args[2]), tonumber(args[3]))
-	else
-		TriggerClientEvent('DGCore:Notify', src, 'Player Not Online', 'error')
-	end
-end, 'admin')
-
 -- Job
 
 DGCore.Commands.Add('job', 'Check Your Job', {}, false, function(source)

@@ -34,7 +34,7 @@ AddEventHandler("qb-pawnshop:server:sellPawnItems", function()
                 end
             end
         end
-        Player.Functions.AddMoney("cash", price, "sold pawnable items")
+				exports['dg-financials']:addCash(src , price, "Pawnshop")
         TriggerClientEvent('DGCore:Notify', src, "You have sold your items")
     end
 end)
@@ -54,7 +54,7 @@ AddEventHandler("qb-pawnshop:server:sellHardwarePawnItems", function()
                 end
             end
         end
-        Player.Functions.AddMoney("cash", price, "sold pawnable items")
+			exports['dg-financials']:addCash(src , price, "Pawnshop")
         TriggerClientEvent('DGCore:Notify', src, "You have sold your items")
     end
 
@@ -93,7 +93,7 @@ AddEventHandler("qb-pawnshop:server:sellGold", function()
                 end
             end
         end
-        Player.Functions.AddMoney("cash", price, "sold-gold")
+				exports['dg-financials']:addCash(src , price, "Pawnshop gold sale")
         TriggerClientEvent('DGCore:Notify', src, "You have sold your items")
     end
 end)

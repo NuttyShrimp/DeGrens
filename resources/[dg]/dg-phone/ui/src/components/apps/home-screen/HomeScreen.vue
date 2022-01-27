@@ -4,7 +4,7 @@
 			<div v-for="app in apps" :key="app">
 				<div
 					v-if="!app.empty"
-					v-tooltip="app.label"
+					v-tooltip="isDev() ? `[${app.position}] ${app.name}` : app.label"
 					class="home-screen-app"
 					:style="
 						(!app?.empty && {
@@ -17,7 +17,10 @@
 					"
 					@click="!app?.empty && selectApp(app.name)"
 				>
-					<i :class="`${app?.icon?.lib ?? 'fas'} fa-${app?.icon?.name ?? 'house'}`"></i>
+					<q-icon
+						:name="`${app?.icon?.lib ?? 'fas fa-'}${app?.icon?.name ?? 'house'}`"
+						:size="`${app?.icon?.size}rem` ?? '2rem'"
+					></q-icon>
 				</div>
 			</div>
 		</div>
@@ -30,6 +33,7 @@
 	import AppContainer from '@/components/os/AppContainer.vue';
 	import { phoneApps } from '../../../lib/apps';
 	import { useStore } from '../../../lib/state';
+	import { isDev } from '../../../lib/util';
 
 	export default defineComponent({
 		name: 'HomeScreen',
@@ -49,6 +53,7 @@
 			return {
 				apps: filteredApps,
 				selectApp,
+				isDev,
 			};
 		},
 	});

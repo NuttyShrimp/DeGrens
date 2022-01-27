@@ -24,12 +24,16 @@ body {
 }
 
 #target-label {
-    list-style: none;
-    font-size: 1.4vh;
-    font-weight: bold;
-    font-family: sans-serif;
-    color: white;
-    user-select: none;
-    white-space: nowrap;
-    text-shadow: 0.2vh 0.2vh 0.2vh #000000;
+  list-style: none;
+  font-size: 1.4vh;
+  font-weight: bold;
+  font-family: sans-serif;
+  color: white;
+  user-select: none;
+  white-space: nowrap;
+  text-shadow: 0.2vh 0.2vh 0.2vh #000000;
+}
+
+#target-label > * > * {
+  pointer-events: none;
 }

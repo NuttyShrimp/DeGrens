@@ -38,7 +38,7 @@ AddEventHandler("qb-gangmenu:server:withdrawMoney", function(amount)
 
     if Accounts[gang] >= amount and amount > 0 then
         Accounts[gang] = Accounts[gang] - amount
-        Player.Functions.AddMoney("cash", amount)
+				exports['dg-financials']:addCash(src, amount, ("Withdraw from %s gang account"):format(gang))
     else
         TriggerClientEvent('DGCore:Notify', src, 'Not Enough Money', 'error')
         return
@@ -59,7 +59,7 @@ AddEventHandler("qb-gangmenu:server:depositMoney", function(amount)
         Accounts[gang] = 0
     end
 
-    if Player.Functions.RemoveMoney("cash", amount) then
+    if exports['dg-financials']:removeCash(src, amount, ('Deposit in %s gang account'):format(gang)) then
         Accounts[gang] = Accounts[gang] + amount
     else
         TriggerClientEvent('DGCore:Notify', src, 'Not Enough Money', "error")

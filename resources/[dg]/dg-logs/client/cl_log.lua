@@ -41,7 +41,7 @@ debug = function(msg, ...)
 
 	for _, param in ipairs({ ... }) do
 		if type(param) == "table" then
-			param = json.encode(param)
+			param = json.encode(param, { indent = true })
 		end
 
 		params[#params + 1] = param

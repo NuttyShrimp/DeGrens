@@ -91,3 +91,15 @@ export interface JusticePerson {
 	phone: string;
 	available: boolean;
 }
+
+// Crypto
+export interface CoinEntry {
+	icon: string;
+	crypto_name: string;
+	value: number;
+	wallet: {
+		cname: string;
+		amount: number;
+		cid: string;
+	};
+}

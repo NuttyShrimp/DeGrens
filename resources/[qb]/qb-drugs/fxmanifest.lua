@@ -16,8 +16,9 @@ client_scripts {
 }
 
 server_scripts {
+		'sv_config.lua',
     'server/deliveries.lua',
-    'server/cornerselling.lua'
+    'server/cornerselling.lua',
 }
 
 server_exports {

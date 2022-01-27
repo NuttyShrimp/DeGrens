@@ -16,7 +16,7 @@ export interface ConfigObject {
 }
 
 export const defaultConfigObject = {
-	background: '#404040',
+	background: '#1B1E23',
 	position: 75,
 	hidden: () => false,
 };

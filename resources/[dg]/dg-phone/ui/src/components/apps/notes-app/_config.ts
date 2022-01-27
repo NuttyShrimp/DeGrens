@@ -11,6 +11,7 @@ const config = (): ConfigObject => ({
 		color: 'white',
 		background: '#ec1aa4',
 		backgroundGradient: '#9420c2',
+		size: 1.9,
 	},
 	position: 9,
 	render: mainComponent,

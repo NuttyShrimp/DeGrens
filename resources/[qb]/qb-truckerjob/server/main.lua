@@ -5,28 +5,28 @@ RegisterServerEvent('qb-trucker:server:DoBail')
 AddEventHandler('qb-trucker:server:DoBail', function(bool, vehInfo)
     local src = source
     local Player = DGCore.Functions.GetPlayer(src)
-
-    if bool then
-        if Player.PlayerData.money.cash >= Config.BailPrice then
-            Bail[Player.PlayerData.citizenid] = Config.BailPrice
-            Player.Functions.RemoveMoney('cash', Config.BailPrice, "tow-received-bail")
-            TriggerClientEvent('DGCore:Notify', src, '$250 Deposit Paid With Cash', 'success')
-            TriggerClientEvent('qb-trucker:client:SpawnVehicle', src, vehInfo)
-        elseif Player.PlayerData.money.bank >= Config.BailPrice then
-            Bail[Player.PlayerData.citizenid] = Config.BailPrice
-            Player.Functions.RemoveMoney('bank', Config.BailPrice, "tow-received-bail")
-            TriggerClientEvent('DGCore:Notify', src, '$250 Deposit Paid From Bank', 'success')
-            TriggerClientEvent('qb-trucker:client:SpawnVehicle', src, vehInfo)
-        else
-            TriggerClientEvent('DGCore:Notify', src, '$250 Deposit Required', 'error')
-        end
-    else
-        if Bail[Player.PlayerData.citizenid] ~= nil then
-            Player.Functions.AddMoney('cash', Bail[Player.PlayerData.citizenid], "trucker-bail-paid")
-            Bail[Player.PlayerData.citizenid] = nil
-            TriggerClientEvent('DGCore:Notify', src, '$250 Deposit Refunded To Cash', 'success')
-        end
-    end
+		-- TODO: Replace with % of of payment based on vehicle damage
+		--if bool then
+    --    if Player.PlayerData.money.cash >= Config.BailPrice then
+    --        Bail[Player.PlayerData.citizenid] = Config.BailPrice
+    --        Player.Functions.RemoveMoney('cash', Config.BailPrice, "tow-received-bail")
+    --        TriggerClientEvent('DGCore:Notify', src, '$250 Deposit Paid With Cash', 'success')
+    --        TriggerClientEvent('qb-trucker:client:SpawnVehicle', src, vehInfo)
+    --    elseif Player.PlayerData.money.bank >= Config.BailPrice then
+    --        Bail[Player.PlayerData.citizenid] = Config.BailPrice
+    --        Player.Functions.RemoveMoney('bank', Config.BailPrice, "tow-received-bail")
+    --        TriggerClientEvent('DGCore:Notify', src, '$250 Deposit Paid From Bank', 'success')
+    --        TriggerClientEvent('qb-trucker:client:SpawnVehicle', src, vehInfo)
+    --    else
+    --        TriggerClientEvent('DGCore:Notify', src, '$250 Deposit Required', 'error')
+    --    end
+    --else
+    --    if Bail[Player.PlayerData.citizenid] ~= nil then
+    --        Player.Functions.AddMoney('cash', Bail[Player.PlayerData.citizenid], "trucker-bail-paid")
+    --        Bail[Player.PlayerData.citizenid] = nil
+    --        TriggerClientEvent('DGCore:Notify', src, '$250 Deposit Refunded To Cash', 'success')
+    --    end
+    --end
 end)
 
 RegisterNetEvent('qb-trucker:server:01101110')
@@ -49,7 +49,7 @@ AddEventHandler('qb-trucker:server:01101110', function(drops)
     local taxAmount = math.ceil((price / 100) * PaymentTax)
     local payment = price - taxAmount
     Player.Functions.AddJobReputation(drops)
-    Player.Functions.AddMoney("bank", payment, "trucker-salary")
+		-- TODO: Add exports for paycheck
     TriggerClientEvent('DGCore:Notify', src, 'You Earned $'..payment, 'success')
 end)
 

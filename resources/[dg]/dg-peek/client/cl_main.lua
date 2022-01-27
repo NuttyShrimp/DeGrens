@@ -20,7 +20,7 @@ local current = {
 	coords = nil,
 }
 local activeZones = {}
-local canPeek, isPeeking, isFocused, generatedIds = true, false, false, 1
+local canPeek, isPeeking, isFocused, generatedId = true, false, false, 1
 
 --region Functions
 setPeekEnabled = function(isEnabled)
@@ -39,16 +39,14 @@ enablePeek = function()
 	startControlThread()
 end
 
-disablePeek = function(onlyNui)
+disablePeek = function()
 	if isFocused then
 		return
 	end
 	SendNUIMessage({ response = "closeTarget" })
 	SetNuiFocusKeepInput(false)
 	SetNuiFocus(false, false)
-	if onlyNui then
-		return
-	end
+
 	isPeeking = false
 	isFocused = false
 	activeEntries = {
@@ -225,7 +223,7 @@ generateCurrentEntries = function(doZone)
 		activeEntries.flags = {}
 		if peekEntries.model[context.model] then
 			for _, entry in ipairs(peekEntries.model[context.model]) do
-				if #(plyCoords - current.coords) <= entry.distance and (entry.canInteract and entry.canInteract(current.entity, entry.distance, entry) or false) then
+				if #(plyCoords - current.coords) <= entry.distance and (entry.canInteract and entry.canInteract(current.entity, entry.distance, entry) or true) then
 					addNewEntry('model', entry)
 				end
 			end
@@ -234,7 +232,7 @@ generateCurrentEntries = function(doZone)
 			local netId = NetworkGetNetworkIdFromEntity(current.entity)
 			if peekEntries.entity[netId] then
 				for _, entry in ipairs(peekEntries.entity[netId]) do
-					if #(plyCoords - current.coords) <= entry.distance and (entry.canInteract and entry.canInteract(netId, entry.distance, entry) or false) then
+					if #(plyCoords - current.coords) <= entry.distance and (entry.canInteract and entry.canInteract(netId, entry.distance, entry) or true) then
 						addNewEntry('entity', entry)
 					end
 				end
@@ -243,7 +241,7 @@ generateCurrentEntries = function(doZone)
 		for flag, active in pairs(context.flags) do
 			if peekEntries.flags[flag] and active then
 				for _, entry in ipairs(peekEntries.flags[flag]) do
-					if #(plyCoords - current.coords) <= entry.distance and (entry.canInteract and entry.canInteract(current.entity, entry.distance, entry) or false) then
+					if #(plyCoords - current.coords) <= entry.distance and (entry.canInteract and entry.canInteract(current.entity, entry.distance, entry) or true) then
 						addNewEntry('flags', entry)
 					end
 				end
@@ -254,7 +252,7 @@ generateCurrentEntries = function(doZone)
 			if boneId ~= -1 then
 				local bonePos = GetWorldPositionOfEntityBone(current.entity, boneId)
 				for idx, entry in ipairs(entries) do
-					if #(plyCoords - bonePos) <= entry.distance and (entry.canInteract and entry.canInteract(current.entity, entry.distance, entry) or false) then
+					if #(plyCoords - bonePos) <= entry.distance and (entry.canInteract and entry.canInteract(current.entity, entry.distance, entry) or true) then
 						entry.disabled = true
 						addNewEntry('bones', entry)
 					end
@@ -338,7 +336,7 @@ addEntry = function(entryType, key, parameters, checker)
 	if type(key) == 'table' then
 		local newIds = {}
 		for _, v in pairs(key) do
-			combineTables(newIds, addEntry(entryType, v, parameters))
+			newIds = combineTables(newIds, addEntry(entryType, v, parameters))
 		end
 		return newIds
 	end
@@ -359,10 +357,11 @@ addEntry = function(entryType, key, parameters, checker)
 	local newIds = {}
 	for _, option in pairs(parameters.options) do
 		option.distance = option.distance or parameters.distance
-		option.id = generatedIds
-		table.insert(newIds, option.id)
-		generatedIds = generatedIds + 1
+		-- copy generatedId so its not a reference
+		option.id = json.decode(json.encode(generatedId))
 		table.insert(peekEntries[entryType][key], option)
+		table.insert(newIds, option.id)
+		generatedId = generatedId + 1
 	end
 	return newIds
 end
@@ -370,7 +369,7 @@ addModelEntry = function(model, parameters)
 	if type(model) == 'table' then
 		local ids = {}
 		for _, v in pairs(model) do
-			combineTables(addModelEntry(v, parameters), ids)
+			ids = combineTables(addModelEntry(v, parameters), ids)
 		end
 		return ids
 	end
@@ -402,21 +401,22 @@ addZoneEntry = function(zoneName, parameters)
 end
 --endregion
 --region Removers
-removeEntryById = function(type, id)
-	if not peekEntries[type] then
-		print(('[DG-Peek] Invalid entry type | type: %s | id: %s '):format(type, id))
+removeEntryById = function(entryType, id)
+	debug('[DG-Peek] Removing entry | type: %s | id: %s', entryType, id)
+	if not peekEntries[entryType] then
+		print(('[DG-Peek] Invalid entry type | type: %s | id: %s '):format(entryType, id))
 		return
 	end
 	if type(id) == 'table' then
 		for _, _id in pairs(id) do
-			removeEntryById(type, _id)
+			removeEntryById(entryType, _id)
 		end
 		return
 	end
-	for cat, entries in pairs(peekEntries[type]) do
+	for cat, entries in pairs(peekEntries[entryType]) do
 		for idx, entry in pairs(entries) do
 			if entry.id == id then
-				peekEntries[type][cat][idx] = nil
+				peekEntries[entryType][cat][idx] = nil
 				return
 			end
 		end
@@ -482,12 +482,11 @@ end)
 
 RegisterNUICallback('selectTarget', function(data, cb)
 	-- We make a copy to prevent data loss when closing the UI & resetting the vars
-	disablePeek(true)
 	local entry = getEntryById(data.id)
 	isFocused = false
+	disablePeek()
 	if not entry then
 		print(('[DG-PEEK] Invalid entry | id: %s'):format(data.id))
-		disablePeek(false)
 		cb('ok')
 		return
 	end
@@ -501,7 +500,6 @@ RegisterNUICallback('selectTarget', function(data, cb)
 			TriggerEvent(entry.event, entry, current.entity)
 		end
 	end
-	disablePeek(false)
 	cb('ok')
 end)
 

@@ -5,10 +5,10 @@
 			<div v-for="input in inputs" :key="input.name" class="phone-form-input">
 				<Input
 					v-model="values[input.name].value"
-					:name="input.name"
+					v-bind="input"
+					:autogrow="input.type === 'textarea'"
 					:type="input.type ?? 'text'"
 					:label="input.label"
-					autogrow
 				>
 					<template v-if="input.icon" #prepend>
 						<q-icon :name="`${input.iconPrefix ?? 'fas fa-'}${input.icon}`" size="xs" />
@@ -28,8 +28,8 @@
 	import { FormInput } from '../../types/simpleform';
 	import '@/styles/os/simpleform.scss';
 	import { useStore } from '../../lib/state';
-	import Input from './Inputs.vue';
-	import { PrimaryButton, SecondaryButton } from './Buttons.vue';
+	import Input from './Inputs';
+	import { PrimaryButton, SecondaryButton } from './Buttons';
 
 	export default defineComponent({
 		name: 'SimpleForm',

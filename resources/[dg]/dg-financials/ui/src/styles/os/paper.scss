@@ -1,0 +1,84 @@
+@use '../colors';
+
+.paper {
+	display: flex;
+	margin-bottom: 0.225rem;
+	background-color: colors.$gray-9;
+	border: 0.2vh solid colors.$gray-5;
+	border-radius: 0.7vh 0.7vh 0 0;
+	padding: 0.9vh;
+	color: colors.$gray-1;
+	position: relative;
+
+	&--imgonly {
+		padding: 0.5vh;
+	}
+
+	& > .paper-actionlist {
+		width: 100%;
+		height: 100%;
+		position: absolute;
+		top: 0;
+		left: 0;
+		display: flex;
+		flex-direction: row;
+		justify-content: space-evenly;
+		align-items: center;
+		border-radius: 0.7vh 0.7vh 0 0;
+		background-color: rgba(0, 0, 0, 0.75);
+		z-index: 1;
+
+		& .paper-action {
+			cursor: pointer;
+			color: colors.$gray-1;
+			margin: 0.3vh 0.5vh 0;
+			font-size: 1.5em;
+		}
+	}
+
+	& > .paper-image {
+		margin-right: 0.75vh;
+		align-self: center;
+		font-size: 2.25rem;
+
+		&--ext {
+			margin-right: 0;
+			font-size: 0em;
+			width: 100%;
+		}
+
+		& img {
+			height: 100%;
+			width: 100%;
+			object-fit: contain;
+		}
+	}
+
+	&:hover {
+		border-color: colors.$primary-2;
+		cursor: pointer;
+	}
+}
+
+.paper-details {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	align-content: space-between;
+	overflow: hidden;
+	position: relative;
+	flex: 1 1;
+
+	& > .paper-details-description,
+	& > .paper-details-title {
+		font-size: 1.1rem;
+		display: -webkit-box;
+		overflow: hidden;
+		-webkit-line-clamp: 1;
+		-webkit-box-orient: vertical;
+	}
+
+	& > .paper-details-description {
+		font-size: 0.9rem;
+	}
+}

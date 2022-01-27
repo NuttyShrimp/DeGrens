@@ -7,9 +7,10 @@ const config = (): ConfigObject => ({
 	label: 'De staat',
 	icon: {
 		name: 'balance-scale-right',
-		lib: 'far',
+		lib: 'far fa-',
 		color: '#dc2222',
 		background: '#282828',
+		size: 1.5,
 	},
 	position: 13,
 	render: mainComponent,

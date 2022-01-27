@@ -38,7 +38,7 @@ AddEventHandler("qb-bossmenu:server:withdrawMoney", function(amount)
 
     if Accounts[job] >= amount and amount > 0 then
         Accounts[job] = Accounts[job] - amount
-        Player.Functions.AddMoney("cash", amount)
+				exports['dg-financials']:addCash(src, amount, ("Withdraw via bossmenu from %s account"):format(job))
     else
         TriggerClientEvent('DGCore:Notify', src, 'Not Enough Money', 'error')
         return
@@ -58,7 +58,7 @@ AddEventHandler("qb-bossmenu:server:depositMoney", function(amount)
         Accounts[job] = 0
     end
 
-    if Player.Functions.RemoveMoney("cash", amount) then
+    if exports['dg-financials']:removeCash(src, amount, ("Deposit via bossmenu in %s"):format(job)) then
         Accounts[job] = Accounts[job] + amount
     else
         TriggerClientEvent('DGCore:Notify', src, 'Not Enough Money', "error")

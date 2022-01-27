@@ -53,8 +53,8 @@
 	import { nuiAction } from '../../../../lib/nui';
 	import { formatRelativeTime } from '../../../../lib/util';
 	import Text from '../../../os/Text.vue';
-	import Input from '../../../os/Inputs.vue';
-	import { PrimaryButton } from '../../../os/Buttons.vue';
+	import Input from '../../../os/Inputs';
+	import { PrimaryButton } from '../../../os/Buttons';
 
 	export default defineComponent({
 		name: 'MessageConvo',

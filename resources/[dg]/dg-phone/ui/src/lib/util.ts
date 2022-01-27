@@ -3,6 +3,10 @@ import relativeTime from 'dayjs/plugin/relativeTime';
 import URI from 'urijs';
 import 'dayjs/locale/nl-be';
 
+export const isDev = () => {
+	return process.env.NODE_ENV === 'development' ?? false;
+};
+
 export const formatRelativeTime = (time: number) => {
 	dayjs.extend(relativeTime).locale('nl-be');
 	return dayjs(time).fromNow();

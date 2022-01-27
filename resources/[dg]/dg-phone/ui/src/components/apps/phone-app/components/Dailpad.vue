@@ -29,7 +29,7 @@
 <script lang="ts">
 	import { defineComponent, ref } from 'vue';
 	import { startPhoneCall } from '../../../../lib/call';
-	import Input from '../../../os/Inputs.vue';
+	import Input from '../../../os/Inputs';
 
 	export default defineComponent({
 		name: 'Dailpad',

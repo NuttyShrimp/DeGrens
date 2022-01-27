@@ -8,7 +8,7 @@ AddEventHandler('qb-drugs:server:updateDealerItems', function(itemData, amount, 
         TriggerClientEvent('qb-drugs:client:setDealerItems', -1, itemData, amount, dealer)
     else
         Player.Functions.RemoveItem(itemData.name, amount)
-        Player.Functions.AddMoney('cash', amount * Config.Dealers[dealer]["products"][itemData.slot].price)
+				exports['dg-financials']:addCash(src, amount * Config.Dealers[dealer]["products"][itemData.slot].price, 'Dealer refund')
 
         TriggerClientEvent("DGCore:Notify", src, "This item is not available.. You've got an refund.", "error")
     end
@@ -46,17 +46,12 @@ AddEventHandler('qb-drugs:server:succesDelivery', function(deliveryData, inTime)
             elseif cops >= 3 then
                 price = 6000
             end
-            if curRep < 10 then
-                Player.Functions.AddMoney('cash', (deliveryData["amount"] * price / 100 * 8), "dilvery-drugs")
-            elseif curRep >= 10 then
-                Player.Functions.AddMoney('cash', (deliveryData["amount"] * price / 100 * 10), "dilvery-drugs")
-            elseif curRep >= 20 then
-                Player.Functions.AddMoney('cash', (deliveryData["amount"] * price / 100 * 12), "dilvery-drugs")
-            elseif curRep >= 30 then
-                Player.Functions.AddMoney('cash', (deliveryData["amount"] * price / 100 * 15), "dilvery-drugs")
-            elseif curRep >= 40 then
-                Player.Functions.AddMoney('cash', (deliveryData["amount"] * price / 100 * 18), "dilvery-drugs")
-            end
+						for rep, amount in pairs(Config.repPriceModifier) do
+							if rep == 'max' or curRep < rep then
+								exports['dg-financials']:addCash(src, (deliveryData["amount"] * price / 100 * amount), ('Dealer delivery with %drep'):fornat(curRep))
+								break
+							end
+						end
 
             TriggerClientEvent('inventory:client:ItemBox', src, "weed_brick", "remove")
             TriggerClientEvent('DGCore:Notify', src, 'The order has been delivered completely', 'success')
@@ -68,12 +63,11 @@ AddEventHandler('qb-drugs:server:succesDelivery', function(deliveryData, inTime)
             end)
         else
             TriggerClientEvent('DGCore:Notify', src, 'This doesn\'t meet the order...', 'error')
-
-            if Player.Functions.GetItemByName('weed_brick').amount ~= nil then
-                Player.Functions.RemoveItem('weed_brick', Player.Functions.GetItemByName('weed_brick').amount)
-                Player.Functions
-                    .AddMoney('cash', (Player.Functions.GetItemByName('weed_brick').amount * 6000 / 100 * 5))
-            end
+						local amount = Player.Functions.GetItemByName('weed_brick').amount
+            if amount ~= nil then
+                Player.Functions.RemoveItem('weed_brick', amount)
+								exports['dg-financials']:addCash(src,(amount * 6000 / 100 * 5), "Partial dealer delivery")
+						end
 
             TriggerClientEvent('inventory:client:ItemBox', src, "weed_brick", "remove")
 
@@ -91,7 +85,7 @@ AddEventHandler('qb-drugs:server:succesDelivery', function(deliveryData, inTime)
         TriggerClientEvent('DGCore:Notify', src, 'You\'re too late...', 'error')
 
         Player.Functions.RemoveItem('weed_brick', deliveryData["amount"])
-        Player.Functions.AddMoney('cash', (deliveryData["amount"] * 6000 / 100 * 4), "dilvery-drugs-too-late")
+				exports['dg-financials']:addCash(src,(amount * 6000 / 100 * 4), "Late dealer delivery")
 
         TriggerClientEvent('inventory:client:ItemBox', src, "weed_brick", "remove")
 
