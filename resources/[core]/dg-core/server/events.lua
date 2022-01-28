@@ -73,7 +73,7 @@ local function OnPlayerConnecting(name, setKickReason, deferrals)
 		end
 	end
 
-	if not license then
+	if not steamId then
 		deferrals.done('No Valid Steam Account Found')
 		return false
 	end
