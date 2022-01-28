@@ -16,7 +16,7 @@ export class CryptoManager {
 
 	private coins: NCrypto.Coin[];
 	private coinsLoaded: boolean;
-	private coinWallets: Map<string, CryptoWallet[]>;
+	private coinWallets: Map<number, CryptoWallet[]>;
 	private logger: winston.Logger;
 
 	constructor() {
@@ -40,16 +40,7 @@ export class CryptoManager {
 		this.logger.info('Reloaded manager');
 	}
 
-	private addWallet(cid: string, wallet: CryptoWallet) {
-		if (!this.coinWallets.has(cid)) {
-			this.coinWallets.set(cid, []);
-		}
-		this.coinWallets.get(cid).push(wallet);
-	}
-
-	// endregion
-
-	public getWallet(cid: string, coin?: string): CryptoWallet | CryptoWallet[] {
+	public getWallet(cid: number, coin?: string): CryptoWallet | CryptoWallet[] {
 		const wallets = this.coinWallets.get(cid);
 		if (!wallets) {
 			this.logger.debug(`No wallet found for ${cid}, creating`);
@@ -64,6 +55,19 @@ export class CryptoManager {
 			return;
 		}
 		return wallet;
+	}
+
+	// endregion
+
+	// region Wallet
+	public async loadPlayerWallet(cid: number) {
+		await this.waitForCoinsLoaded();
+		const Player = DGCore.Functions.GetPlayerByCitizenId(cid);
+		if (!Player) {
+			this.logger.warn(`No player found for ${cid}`);
+			return;
+		}
+		await this.fetchWalletDB(cid);
 	}
 
 	// region Generic
@@ -133,18 +137,8 @@ export class CryptoManager {
 	}
 
 	// endregion
-	// region Wallet
-	public async loadPlayerWallet(cid: string) {
-		await this.waitForCoinsLoaded();
-		const Player = DGCore.Functions.GetPlayerByCitizenId(cid);
-		if (!Player) {
-			this.logger.warn(`No player found for ${cid}`);
-			return;
-		}
-		await this.fetchWalletDB(cid);
-	}
 
-	public async createWallet(cid: string, coin: string): Promise<boolean> {
+	public async createWallet(cid: number, coin: string): Promise<boolean> {
 		await this.waitForCoinsLoaded();
 		const Player = DGCore.Functions.GetPlayerByCitizenId(cid);
 		if (!Player) {
@@ -163,7 +157,14 @@ export class CryptoManager {
 		return true;
 	}
 
-	private async fetchWalletDB(cid: string): Promise<void> {
+	private addWallet(cid: number, wallet: CryptoWallet) {
+		if (!this.coinWallets.has(cid)) {
+			this.coinWallets.set(cid, []);
+		}
+		this.coinWallets.get(cid).push(wallet);
+	}
+
+	private async fetchWalletDB(cid: number): Promise<void> {
 		const query = `SELECT *
 									 FROM crypto_wallets
 									 WHERE cid = ?`;

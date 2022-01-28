@@ -56,7 +56,7 @@ export class ServerFunctions {
 	 * @param citizenid: Player's citizenid
 	 * @returns Player object
 	 */
-	GetPlayerByCitizenId(citizenid: string): Player;
+	GetPlayerByCitizenId(citizenid: number): Player;
 
 	/**
 	 * @param number: Character's Phone Number
@@ -87,7 +87,7 @@ export class ServerFunctions {
 	 * If a player is online it does use the existing player object.
 	 * @param citizenid: Player's citizenid
 	 */
-	GetOfflinePlayerByCitizenId(citizenid: string): Pick<Player, "PlayerData">;
+	GetOfflinePlayerByCitizenId(citizenid: number): Pick<Player, "PlayerData">;
 
 	/**
 	 *  @param {string} job: Job name to fetch on duty players for
@@ -191,7 +191,7 @@ export class PlayerFunctions {
 	/**
 	 * Deletes a player's character from the database
 	 */
-	DeleteCharacter(source: number, citizenid: string): void;
+	DeleteCharacter(source: number, citizenid: number): void;
 
 	/**
 	 * Internal function, fetches from database and parses saved inventory data during character loading
@@ -217,11 +217,6 @@ export class PlayerFunctions {
 	 * Returns the first slot that holds a specified item
 	 */
 	GetFirstSlotByItem(items: Item[], itemName: string): number;
-
-	/**
-	 * Internal function, generates a new unique citizenid for a new character
-	 */
-	CreateCitizenId(): string;
 
 	/**
 	 * Internal function, generates a new unique fingerprint for a new character

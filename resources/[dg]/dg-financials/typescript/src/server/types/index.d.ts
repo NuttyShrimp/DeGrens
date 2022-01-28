@@ -3,7 +3,7 @@ declare type TaxesCategory = 'No Tax' | 'Vehicles' | 'Real estate' | 'Income tax
 declare type LoggerCategory = 'bank' | 'cash' | 'crypto' | 'debts' | 'paycheck' | 'taxes';
 
 declare interface IAccountMember {
-	cid: string;
+	cid: number;
 	access_level: number;
 }
 
@@ -20,7 +20,7 @@ declare namespace ActionData {
 }
 
 declare interface paycheckEntry {
-	cid: string;
+	cid: number;
 	amount: number;
 }
 
@@ -57,11 +57,11 @@ declare namespace Debts {
 	type Type = 'debt' | 'maintenance';
 	interface Debt {
 		id: number;
-		cid: string;
+		cid: number;
 		target_account: string;
 		debt: number;
 		type: Type;
-		given_by: string;
+		given_by: number;
 		date?: number;
 		reason?: string;
 	}

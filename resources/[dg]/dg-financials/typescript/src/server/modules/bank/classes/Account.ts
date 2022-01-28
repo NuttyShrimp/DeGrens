@@ -36,7 +36,7 @@ export class Account {
 		});
 	}
 
-	public static async create(cid: string, name: string, accType: AccountType): Promise<Account> {
+	public static async create(cid: number, name: string, accType: AccountType): Promise<Account> {
 		const accId = generateAccountId();
 		const query = `
 			INSERT INTO bank_accounts (account_id, name, type)
@@ -66,7 +66,7 @@ export class Account {
 		return this.balance;
 	}
 
-	public getClientVersion(cid: string): IAccount {
+	public getClientVersion(cid: number): IAccount {
 		const perm = this.members.find(member => member.cid === cid);
 		this.logger.silly(`getClientVersion | cid: ${cid} | perm: ${perm.access_level}`);
 		return {
@@ -110,14 +110,11 @@ export class Account {
 		});
 	}
 
-	private async updatePermission(cid: string, access_level: number): Promise<void> {
-		const query = `
-			INSERT INTO bank_accounts_access
-				(account_id, cid, access_level)
-			VALUES (?, ?, ?)
-			ON DUPLICATE KEY UPDATE access_level = ?
-		`;
-		await global.exports.oxmysql.executeSync(query, [this.account_id, cid, access_level, access_level]);
+	// region Permissions
+	public hasAccess(cid: number): boolean {
+		const inArray = this.members.some(member => member.cid === cid);
+		this.logger.debug(`hasAccess | cid: ${cid} | inArray: ${inArray}`);
+		return inArray;
 	}
 
 	private async updateBalance(): Promise<void> {
@@ -153,24 +150,15 @@ export class Account {
 		this.updateBalance();
 	}
 
-	private async getDBTransactions(offset: number, limit = config.accounts.transactionLimit): Promise<ITransaction[]> {
-		const query = `
-			SELECT *
-			FROM transaction_log
-			WHERE origin_account_id = ?
-				 OR target_account_id = ?
-			ORDER BY date DESC
-			LIMIT ?, ?
-		`;
-		const transactions: ITransaction[] = await global.exports.oxmysql.executeSync(query, [
-			this.account_id,
-			this.account_id,
-			offset,
-			limit,
-		]);
-		this.transactions.push(...transactions);
-		this.sortTransactions();
-		return transactions;
+	public hasPermission(cid: number, permission: AccountPermission): boolean {
+		const member = this.members.find(member => member.cid === cid);
+		if (!member) {
+			this.logger.debug(`hasPermission: not in members array | cid: ${cid}`);
+			return false;
+		}
+		const perms = this.buildPermissions(member.access_level);
+		this.logger.info(`hasPermission | cid: ${cid} | ${permission}: ${perms[permission]}`);
+		return perms[permission];
 	}
 
 	private async getDBTransactionsIds(): Promise<string[]> {
@@ -186,25 +174,8 @@ export class Account {
 	}
 
 	// endregion
-	// region Permissions
-	public hasAccess(cid: string): boolean {
-		const inArray = this.members.some(member => member.cid === cid);
-		this.logger.debug(`hasAccess | cid: ${cid} | inArray: ${inArray}`);
-		return inArray;
-	}
 
-	public hasPermission(cid: string, permission: AccountPermission): boolean {
-		const member = this.members.find(member => member.cid === cid);
-		if (!member) {
-			this.logger.debug(`hasPermission: not in members array | cid: ${cid}`);
-			return false;
-		}
-		const perms = this.buildPermissions(member.access_level);
-		this.logger.info(`hasPermission | cid: ${cid} | ${permission}: ${perms[permission]}`);
-		return perms[permission];
-	}
-
-	public addPermissions(cid: string, permissions: IAccountPermission | number): void {
+	public addPermissions(cid: number, permissions: IAccountPermission | number): void {
 		let accessLevel = 0;
 		if (typeof permissions === 'number') {
 			accessLevel = permissions;
@@ -229,29 +200,8 @@ export class Account {
 		});
 	}
 
-	public buildPermissions(level: number): IAccountPermission {
-		const permissions: IAccountPermission = {
-			deposit: false,
-			withdraw: false,
-			transfer: false,
-			transactions: false,
-		};
-		try {
-			Object.keys(AccountPermissionValue).forEach(key => {
-				if (level & AccountPermissionValue[key as keyof IAccountPermission]) {
-					permissions[key as keyof IAccountPermission] = true;
-				}
-			});
-		} catch (e) {
-			this.logger.error(`Error building permissions for account ${this.account_id}`, e);
-		}
-		this.logger.debug(`buildPermissions | level: ${level} | permissions: ${JSON.stringify(permissions)}`);
-		return permissions;
-	}
-
-	//endregion
 	// region Actions
-	public async deposit(triggerCid: string, amount: number, comment?: string) {
+	public async deposit(triggerCid: number, amount: number, comment?: string) {
 		const triggerPlayer = DGCore.Functions.GetPlayerByCitizenId(triggerCid);
 		amount = parseInt(String(amount));
 		if (!triggerPlayer) {
@@ -329,7 +279,7 @@ export class Account {
 		);
 	}
 
-	public async withdraw(triggerCid: string, amount: number, comment?: string) {
+	public async withdraw(triggerCid: number, amount: number, comment?: string) {
 		const triggerPlayer = DGCore.Functions.GetPlayerByCitizenId(triggerCid);
 		amount = parseInt(String(amount));
 		if (!triggerPlayer) {
@@ -407,10 +357,32 @@ export class Account {
 		);
 	}
 
+	public buildPermissions(level: number): IAccountPermission {
+		const permissions: IAccountPermission = {
+			deposit: false,
+			withdraw: false,
+			transfer: false,
+			transactions: false,
+		};
+		try {
+			Object.keys(AccountPermissionValue).forEach(key => {
+				if (level & AccountPermissionValue[key as keyof IAccountPermission]) {
+					permissions[key as keyof IAccountPermission] = true;
+				}
+			});
+		} catch (e) {
+			this.logger.error(`Error building permissions for account ${this.account_id}`, e);
+		}
+		this.logger.debug(`buildPermissions | level: ${level} | permissions: ${JSON.stringify(permissions)}`);
+		return permissions;
+	}
+
+	//endregion
+
 	public async transfer(
 		targetAccountId: string,
-		triggerCid: string,
-		acceptorCid: string,
+		triggerCid: number,
+		acceptorCid: number,
 		amount: number,
 		comment?: string,
 		canBeNegative = false
@@ -528,7 +500,7 @@ export class Account {
 		return true;
 	}
 
-	public async purchase(triggerCid: string, amount: number, comment?: string): Promise<boolean> {
+	public async purchase(triggerCid: number, amount: number, comment?: string): Promise<boolean> {
 		const triggerPlayer = DGCore.Functions.GetPlayerByCitizenId(triggerCid);
 		amount = parseInt(String(amount));
 		if (!triggerPlayer) {
@@ -617,7 +589,7 @@ export class Account {
 		return true;
 	}
 
-	public async paycheck(triggerCid: string, amount: number): Promise<boolean> {
+	public async paycheck(triggerCid: number, amount: number): Promise<boolean> {
 		const triggerPlayer = DGCore.Functions.GetPlayerByCitizenId(triggerCid);
 		amount = parseInt(String(amount));
 		if (!triggerPlayer) {
@@ -708,6 +680,39 @@ export class Account {
 		return true;
 	}
 
+	private async updatePermission(cid: number, access_level: number): Promise<void> {
+		const query = `
+			INSERT INTO bank_accounts_access
+				(account_id, cid, access_level)
+			VALUES (?, ?, ?)
+			ON DUPLICATE KEY UPDATE access_level = ?
+		`;
+		await global.exports.oxmysql.executeSync(query, [this.account_id, cid, access_level, access_level]);
+	}
+
+	private async getDBTransactions(
+		offset: number,
+		limit = config.accounts.transactionLimit
+	): Promise<DB.ITransaction[]> {
+		const query = `
+			SELECT *
+			FROM transaction_log
+			WHERE origin_account_id = ?
+				 OR target_account_id = ?
+			ORDER BY date DESC
+			LIMIT ?, ?
+		`;
+		const transactions: DB.ITransaction[] = await global.exports.oxmysql.executeSync(query, [
+			this.account_id,
+			this.account_id,
+			offset,
+			limit,
+		]);
+		this.transactions.push(...transactions);
+		this.sortTransactions();
+		return transactions;
+	}
+
 	// endregion
 	// region Transactions
 	private sortTransactions(trans: DB.ITransaction[] = this.transactions, custom = false): any {
@@ -796,11 +801,11 @@ export class Account {
 		};
 		try {
 			// region User info
-			const triggerInfo = DGCore.Functions.GetOfflinePlayerByCitizenId(_t.triggered_by);
+			const triggerInfo = DGCore.Functions.GetOfflinePlayerByCitizenId(Number(_t.triggered_by));
 			_t.triggered_by = `${triggerInfo.PlayerData.charinfo.firstname} ${triggerInfo.PlayerData.charinfo.lastname}`;
 			_t.accepted_by = _t.triggered_by;
 			if (_t.triggered_by !== _t.accepted_by) {
-				const acceptInfo = DGCore.Functions.GetOfflinePlayerByCitizenId(_t.accepted_by);
+				const acceptInfo = DGCore.Functions.GetOfflinePlayerByCitizenId(Number(_t.accepted_by));
 				_t.accepted_by = `${acceptInfo.PlayerData.charinfo.firstname} ${acceptInfo.PlayerData.charinfo.lastname}`;
 			}
 			// endregion
@@ -822,11 +827,11 @@ export class Account {
 	private async addTransaction(
 		originAccountId: string,
 		targetAccountId: string,
-		trigger_cid: string,
+		trigger_cid: number,
 		amount: number,
 		type: TransactionType,
 		comment = '',
-		acceptor_cid?: string
+		acceptor_cid?: number
 	): Promise<DB.ITransaction> {
 		const _transaction: DB.ITransaction = {
 			transaction_id: generateTransactionId(),

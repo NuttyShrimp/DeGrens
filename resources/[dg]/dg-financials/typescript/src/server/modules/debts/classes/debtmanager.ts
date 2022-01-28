@@ -31,11 +31,11 @@ class DebtManager {
 	}
 
 	public async addDebt(
-		cid: string,
+		cid: number,
 		target_account: string,
 		fine: number,
 		reason: string,
-		given_by?: string,
+		given_by?: number,
 		type: Debts.Type = 'debt'
 	) {
 		const debt: Debts.Debt = {
@@ -87,7 +87,7 @@ class DebtManager {
 		scheduleDebt(debt.id);
 	}
 
-	public getDebtsByCid(cid: string): Debts.Debt[] {
+	public getDebtsByCid(cid: number): Debts.Debt[] {
 		return this.debts.filter(debt => debt.cid === cid);
 	}
 

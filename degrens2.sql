@@ -3,9 +3,11 @@ use degrens2;
 
 create table if not exists players
 (
-  citizenid    varchar(255)                          not null,
+  citizenid    int                                   not null auto_increment,
   cid          int                                   null,
+  steamid      varchar(255)                          not null,
   license      varchar(255)                          not null,
+  discord      varchar(255)                          not null,
   name         varchar(255)                          not null,
   firstname    text                                  not null,
   lastname     text                                  not null,
@@ -21,13 +23,14 @@ create table if not exists players
   metadata     text                                  not null,
   last_updated timestamp default current_timestamp() not null on update current_timestamp(),
   PRIMARY KEY (citizenid),
+  INDEX (steamid),
   INDEX (license)
-);
+) AUTO_INCREMENT = 1000;
 
 create table if not exists apartments
 (
   id        int auto_increment,
-  citizenid varchar(255) not null,
+  citizenid int not null,
   PRIMARY KEY (id),
   FOREIGN KEY (citizenid) REFERENCES players (citizenid) on update cascade on delete cascade
 );
@@ -43,6 +46,7 @@ create table if not exists bans
 (
   id       int auto_increment,
   name     varchar(50)                        null,
+  steamid  varchar(50)                        null,
   license  varchar(50)                        null,
   discord  varchar(50)                        null,
   ip       varchar(50)                        null,
@@ -111,7 +115,7 @@ create table if not exists lapraces
 create table if not exists occasion_vehicles
 (
   id          int auto_increment,
-  seller      varchar(50) null,
+  seller      int         null,
   price       int         null,
   description longtext    null,
   plate       varchar(50) null,
@@ -126,16 +130,16 @@ create table if not exists permissions
 (
   id         int auto_increment,
   name       varchar(255) not null,
-  license    varchar(255) not null,
+  steamid    varchar(255) not null,
   permission varchar(255) not null,
   PRIMARY KEY (id),
-  FOREIGN KEY (license) REFERENCES players (license) on update cascade on delete cascade
+  FOREIGN KEY (steamid) REFERENCES players (steamid) on update cascade on delete cascade
 );
 
 create table if not exists player_boats
 (
   id        int auto_increment,
-  citizenid varchar(50)     null,
+  citizenid int             null,
   model     varchar(50)     null,
   plate     varchar(50)     null,
   boathouse varchar(50)     null,
@@ -150,7 +154,7 @@ create table if not exists player_houses
   id          int(255) auto_increment,
   house       varchar(50) not null,
   identifier  varchar(50) null,
-  citizenid   varchar(50) null,
+  citizenid   int         null,
   keyholders  text        null,
   decorations text        null,
   stash       text        null,
@@ -163,7 +167,7 @@ create table if not exists player_houses
 create table if not exists player_mails
 (
   id        int auto_increment,
-  citizenid varchar(50)                           null,
+  citizenid int                                   null,
   sender    varchar(50)                           null,
   subject   varchar(50)                           null,
   message   text                                  null,
@@ -178,7 +182,7 @@ create table if not exists player_mails
 create table if not exists player_outfits
 (
   id         int auto_increment,
-  citizenid  varchar(50) null,
+  citizenid  int         null,
   outfitname varchar(50) not null,
   model      varchar(50) null,
   skin       text        null,
@@ -191,7 +195,7 @@ create table if not exists player_vehicles
 (
   id              int auto_increment,
   license         varchar(50)                  null,
-  citizenid       varchar(50)                  null,
+  citizenid       int                          null,
   vehicle         varchar(50)                  null,
   hash            varchar(50)                  null,
   mods            longtext collate utf8mb4_bin null,
@@ -232,7 +236,7 @@ create table if not exists player_warns
 create table if not exists playerskins
 (
   id        int auto_increment,
-  citizenid varchar(255)      not null,
+  citizenid int               not null,
   model     varchar(255)      not null,
   skin      text              not null,
   active    tinyint default 1 not null,
@@ -257,7 +261,7 @@ create table if not exists inventoryitems
 CREATE TABLE IF NOT EXISTS phone_contacts
 (
   id    int(11)      NOT NULL AUTO_INCREMENT,
-  cid   varchar(255) NOT NULL,
+  cid   int          NOT NULL,
   label varchar(255) NOT NULL,
   phone varchar(255) NOT NULL,
   PRIMARY KEY (id),
@@ -266,18 +270,18 @@ CREATE TABLE IF NOT EXISTS phone_contacts
 
 CREATE TABLE IF NOT EXISTS phone_tweets
 (
-  id    int(11)      NOT NULL AUTO_INCREMENT,
-  cid   varchar(255) NOT NULL,
-  tweet LONGTEXT     NOT NULL,
-  date  bigint       NOT NULL,
+  id    int(11)  NOT NULL AUTO_INCREMENT,
+  cid   int      NOT NULL,
+  tweet LONGTEXT NOT NULL,
+  date  bigint   NOT NULL,
   PRIMARY KEY (id),
   FOREIGN KEY (cid) REFERENCES players (citizenid) on update cascade on delete cascade
 );
 
 CREATE TABLE IF NOT EXISTS phone_tweets_retweets
 (
-  tweetid int(11)      NOT NULL,
-  cid     varchar(255) NOT NULL,
+  tweetid int(11) NOT NULL,
+  cid     int     NOT NULL,
   PRIMARY KEY (tweetid, cid),
   FOREIGN KEY (tweetid) REFERENCES phone_tweets (id) on update cascade on delete cascade,
   FOREIGN KEY (cid) REFERENCES players (citizenid) on update cascade on delete cascade
@@ -285,8 +289,8 @@ CREATE TABLE IF NOT EXISTS phone_tweets_retweets
 
 CREATE TABLE IF NOT EXISTS phone_tweets_likes
 (
-  tweetid int(11)      NOT NULL,
-  cid     varchar(255) NOT NULL,
+  tweetid int(11) NOT NULL,
+  cid     int     NOT NULL,
   PRIMARY KEY (tweetid, cid),
   FOREIGN KEY (tweetid) REFERENCES phone_tweets (id) on update cascade on delete cascade,
   FOREIGN KEY (cid) REFERENCES players (citizenid) on update cascade on delete cascade
@@ -308,7 +312,7 @@ CREATE TABLE IF NOT EXISTS phone_messages
 CREATE TABLE IF NOT EXISTS phone_notes
 (
   id     int(11)      NOT NULL AUTO_INCREMENT,
-  cid    varchar(255) NOT NULL,
+  cid    int          NOT NULL,
   title  varchar(255) NOT NULL,
   note   longtext     NOT NULL,
   `date` bigint       NOT NULL,
@@ -320,7 +324,7 @@ CREATE TABLE IF NOT EXISTS phone_notes
 CREATE TABLE IF NOT EXISTS phone_images
 (
   id   int(11)      NOT NULL AUTO_INCREMENT,
-  cid  varchar(255) NOT NULL,
+  cid  int          NOT NULL,
   link varchar(255) NOT NULL,
   PRIMARY KEY (id),
   FOREIGN KEY (cid) REFERENCES players (citizenid) on update cascade on delete cascade
@@ -329,7 +333,7 @@ CREATE TABLE IF NOT EXISTS phone_images
 CREATE TABLE IF NOT EXISTS phone_mails
 (
   id      int(11)      NOT NULL AUTO_INCREMENT,
-  cid     varchar(255) NOT NULL,
+  cid     int          NOT NULL,
   sender  varchar(255) NOT NULL,
   subject varchar(255) NOT NULL,
   message LONGTEXT     NOT NULL,
@@ -349,7 +353,7 @@ CREATE TABLE IF NOT EXISTS bank_accounts
 CREATE TABLE IF NOT EXISTS bank_accounts_access
 (
   account_id   varchar(255) NOT NULL,
-  cid          varchar(255) NOT NULL,
+  cid          int          NOT NULL,
   access_level int(11)      NOT NULL default 1,
   PRIMARY KEY (account_id, cid),
   FOREIGN KEY (account_id) REFERENCES bank_accounts (account_id) on update cascade on delete cascade,
@@ -363,8 +367,8 @@ CREATE TABLE IF NOT EXISTS transaction_log
   target_account_id varchar(255)                                                     NOT NULL,
   `change`          BIGINT                                                           NOT NULL,
   comment           LONGTEXT                                                         NOT NULL default '',
-  triggered_by      varchar(255)                                                     NOT NULL,
-  accepted_by       varchar(255)                                                     NOT NULL,
+  triggered_by      int                                                              NOT NULL,
+  accepted_by       int                                                              NOT NULL,
   date              bigint                                                           NOT NULL,
   type              ENUM ('transfer', 'deposit', 'withdraw', 'purchase', 'paycheck') NOT NULL,
   PRIMARY KEY (transaction_id),
@@ -376,8 +380,8 @@ CREATE TABLE IF NOT EXISTS transaction_log
 
 CREATE TABLE IF NOT EXISTS player_paycheck
 (
-  cid    varchar(255) NOT NULL,
-  amount BIGINT       NOT NULL,
+  cid    int    NOT NULL,
+  amount BIGINT NOT NULL,
   PRIMARY KEY (cid),
   FOREIGN KEY (cid) REFERENCES players (citizenid) on update cascade on delete cascade
 );
@@ -391,7 +395,7 @@ CREATE TABLE IF NOT EXISTS crypto
 
 CREATE TABLE IF NOT EXISTS crypto_wallets
 (
-  cid         varchar(255) NOT NULL,
+  cid         int          NOT NULL,
   crypto_name varchar(255) NOT NULL,
   amount      INT          NOT NULL DEFAULT 0,
   PRIMARY KEY (cid, crypto_name),
@@ -411,11 +415,11 @@ CREATE TABLE IF NOT EXISTS taxes
 CREATE TABLE IF NOT EXISTS debts
 (
   id             INT                          NOT NULL AUTO_INCREMENT,
-  cid            varchar(255)                 NOT NULL,
+  cid            int                          NOT NULL,
   target_account varchar(255)                 NOT NULL,
   debt           BIGINT                       NOT NULL DEFAULT 0,
   type           ENUM ('debt', 'maintenance') NOT NULL DEFAULT 'debt',
-  given_by       varchar(255)                 NOT NULL,
+  given_by       int                          NOT NULL,
   date           TIMESTAMP                    NOT NULL DEFAULT CURRENT_TIMESTAMP,
   reason         LONGTEXT                     NOT NULL,
   PRIMARY KEY (id),

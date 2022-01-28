@@ -1,7 +1,7 @@
 import { debtLogger } from '../helpers/debts';
 import debtManager from '../classes/debtmanager';
 
-global.exports('giveFine', (cid: string, target_account: string, fine: number, reason: string, given_by?: string) => {
+global.exports('giveFine', (cid: number, target_account: string, fine: number, reason: string, given_by?: number) => {
 	debtManager.addDebt(cid, target_account, fine, reason, given_by);
 });
 

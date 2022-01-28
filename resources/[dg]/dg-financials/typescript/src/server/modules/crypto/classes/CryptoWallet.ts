@@ -6,14 +6,14 @@ import { CryptoManager } from './CryptoManager';
 import { Notify } from '@ts-shared/server/funtions';
 
 export class CryptoWallet {
-	private cid: string;
+	private cid: number;
 	private cname: string;
 	private amount: number;
 	private config: NCrypto.Config;
 	private logger: winston.Logger;
 	private manager: CryptoManager;
 
-	constructor(cid: string, cname: string, amount: number) {
+	constructor(cid: number, cname: string, amount: number) {
 		this.cid = cid;
 		this.cname = cname;
 		this.amount = amount;
@@ -112,7 +112,7 @@ export class CryptoWallet {
 		return true;
 	}
 
-	public async transfer(src: number, target: string, amount: number): Promise<boolean> {
+	public async transfer(src: number, target: number, amount: number): Promise<boolean> {
 		const Target = DGCore.Functions.GetPlayerByCitizenId(target);
 		if (!Target) {
 			this.logger.debug(`Transfer: Target not found | cid: ${this.cid}`);

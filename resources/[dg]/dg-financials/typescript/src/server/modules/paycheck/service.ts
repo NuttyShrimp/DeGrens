@@ -4,10 +4,10 @@ import { cashLogger } from '../cash/util';
 import { getDefaultAccountId } from '../bank/helpers/accounts';
 import { paycheck } from '../bank/helpers/actions';
 
-const paycheckCache: Map<string, number> = new Map();
-const paycheckIntervals: Map<string, { job: string; interval: NodeJS.Timer; amount: number }> = new Map();
+const paycheckCache: Map<number, number> = new Map();
+const paycheckIntervals: Map<number, { job: string; interval: NodeJS.Timer; amount: number }> = new Map();
 
-const saveToDb = async (cid: string) => {
+const saveToDb = async (cid: number) => {
 	const amount = paycheckCache.get(cid);
 	const query = `
 		INSERT INTO player_paycheck
@@ -124,7 +124,7 @@ export const givePaycheck = async (src: number) => {
 	saveToDb(cid);
 };
 
-export const checkInterval = (cid: string, job: string, onDuty: boolean) => {
+export const checkInterval = (cid: number, job: string, onDuty: boolean) => {
 	if (paycheckIntervals.has(cid)) {
 		const intervalInfo = paycheckIntervals.get(cid);
 		// Went offduty or changed jobs

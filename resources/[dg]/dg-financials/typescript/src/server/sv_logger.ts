@@ -1,6 +1,8 @@
 import winston from 'winston';
 import winstonSentry from 'winston-sentry-log';
 import * as Sentry from '@sentry/node';
+// noinspection ES6UnusedImports
+import * as Tracing from '@sentry/tracing';
 import { config } from './config';
 import { name, sentry_dsn, version } from './../../package.json';
 import { RewriteFrames } from '@sentry/integrations';

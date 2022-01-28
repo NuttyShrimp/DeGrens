@@ -29,7 +29,7 @@ export class AccountManager {
 	}
 
 	//region DB
-	public async getAccountIds(cid: string): Promise<string[]> {
+	public async getAccountIds(cid: number): Promise<string[]> {
 		const query = `
 			SELECT ba.account_id
 			FROM bank_accounts ba
@@ -91,11 +91,12 @@ export class AccountManager {
 	}
 	//endregion
 	//region Actions
-	public async createAccount(cid: string, name: string, accType: AccountType): Promise<string> {
+	public async createAccount(cid: number, name: string, accType: AccountType): Promise<string> {
 		const _account = await Account.create(cid, name, accType);
 		this.accounts.push(_account);
 		return _account.getAccountId();
 	}
+
 	private async seedAccounts(): Promise<void> {
 		for (const a of config.accounts.toSeed) {
 			const i = config.accounts.toSeed.indexOf(a);
@@ -115,7 +116,7 @@ export class AccountManager {
 	}
 	//endregion
 	// region Getters
-	public async getAccounts(cid: string, type?: AccountType): Promise<Account[]> {
+	public async getAccounts(cid: number, type?: AccountType): Promise<Account[]> {
 		const _accounts = this.accounts.filter(account => (!type || account.getType() === type) && account.hasAccess(cid));
 		const ids = await this.getAccountIds(cid);
 		const filteredIds = ids.filter(id => _accounts.findIndex(account => account.getAccountId() === id) !== -1);
@@ -131,11 +132,14 @@ export class AccountManager {
 		return sortAccounts(_accounts);
 	}
 
-	public async getDefaultAccount(cid: string): Promise<Account> {
+	public async getDefaultAccount(cid: number, suppressErr = false): Promise<Account> {
 		const accounts = await this.getAccounts(cid, 'standard');
 		const defaultAccount = accounts[0];
 		if (!defaultAccount) {
-			this.logger.error(`[AccountManager] Could not find default account for cid: ${cid}`);
+			if (!suppressErr) {
+				this.logger.error(`[AccountManager] Could not find default account for cid: ${cid}`);
+			}
+			return null;
 		}
 		this.logger.silly(`Fetched default account for cid: ${cid} | id: ${defaultAccount.getAccountId()}`);
 		return defaultAccount;
@@ -178,7 +182,11 @@ export class AccountManager {
 			this.logger.silly(`Found account by accountId | id: ${account.getAccountId()}`);
 			return account;
 		}
-		const defaultAccount = await this.getDefaultAccount(input);
+		const numInput = Number(input);
+		if (isNaN(numInput)) {
+			return null;
+		}
+		const defaultAccount = await this.getDefaultAccount(numInput);
 		if (defaultAccount) {
 			this.logger.silly(`Found account by CID | id: ${defaultAccount.getAccountId()}`);
 			return defaultAccount;

@@ -64,8 +64,10 @@ function DGCore.Player.CheckPlayerData(source, PlayerData)
 	local src = source
 	PlayerData = PlayerData or {}
 	PlayerData.source = src
-	PlayerData.citizenid = PlayerData.citizenid or DGCore.Player.CreateCitizenId()
-	PlayerData.license = PlayerData.license or DGCore.Functions.GetIdentifier(src, 'license')
+	PlayerData.citizenid = PlayerData.citizenid or nil
+	PlayerData.steamid = PlayerData.steamid or DGCore.Functions.GetIdentifier(src, 'steam')
+	PlayerData.license = PlayerData.license ~= '' and PlayerData.license or DGCore.Functions.GetIdentifier(src, 'license')
+	PlayerData.discord = PlayerData.discord or DGCore.Functions.GetIdentifier(source, "discord")
 	PlayerData.name = GetPlayerName(src)
 	PlayerData.cid = PlayerData.cid or 1
 	-- Charinfo
@@ -283,7 +285,7 @@ function DGCore.Player.CreatePlayer(PlayerData)
 		local amount = tonumber(amount)
 		local slot = tonumber(slot) or DGCore.Player.GetFirstSlotByItem(self.PlayerData.items, item)
 		local quality = tonumber(quality) or 100
-				self.PlayerData.oldItems = DGCore.Shared.copyTbl(self.PlayerData.items)
+		self.PlayerData.oldItems = DGCore.Shared.copyTbl(self.PlayerData.items)
 
 		local createtime = tonumber(createtime) or os.time()
 
@@ -396,14 +398,14 @@ function DGCore.Player.CreatePlayer(PlayerData)
 	end
 
 	self.Functions.SetInventory = function(items, dontUpdateChat)
-	self.PlayerData.oldItems = DGCore.Shared.copyTbl(self.PlayerData.items)
+		self.PlayerData.oldItems = DGCore.Shared.copyTbl(self.PlayerData.items)
 		self.PlayerData.items = items
 		self.Functions.UpdatePlayerData(dontUpdateChat)
 		TriggerEvent('qb-log:server:CreateLog', 'playerinventory', 'SetInventory', 'blue', '**' .. GetPlayerName(self.PlayerData.source) .. ' (citizenid: ' .. self.PlayerData.citizenid .. ' | id: ' .. self.PlayerData.source .. ')** items set: ' .. json.encode(items))
 	end
 
 	self.Functions.ClearInventory = function()
-	self.PlayerData.oldItems = DGCore.Shared.copyTbl(self.PlayerData.items)
+		self.PlayerData.oldItems = DGCore.Shared.copyTbl(self.PlayerData.items)
 		self.PlayerData.items = {}
 		self.Functions.UpdatePlayerData()
 		TriggerEvent('qb-log:server:CreateLog', 'playerinventory', 'ClearInventory', 'red', '**' .. GetPlayerName(self.PlayerData.source) .. ' (citizenid: ' .. self.PlayerData.citizenid .. ' | id: ' .. self.PlayerData.source .. ')** inventory cleared')
@@ -476,10 +478,35 @@ function DGCore.Player.Save(source)
 	local pcoords = GetEntityCoords(ped)
 	local PlayerData = DGCore.Players[src].PlayerData
 	if PlayerData then
-		exports.oxmysql:insert('INSERT INTO players (citizenid, cid, license, name, firstname, lastname, birthdate, gender, backstory, nationality, phone, cash, job, gang, position, metadata) VALUES (:citizenid, :cid, :license, :name, :firstname, :lastname, :birthdate, :gender, :backstory, :nationality, :phone, :cash, :job, :gang, :position, :metadata) ON DUPLICATE KEY UPDATE cid = :cid, name = :name, firstname = :firstname, lastname = :lastname, birthdate = :birthdate, gender = :gender, backstory = :backstory, nationality = :nationality, phone = :phone, cash = :cash, job = :job, gang = :gang, position = :position, metadata = :metadata', {
-			citizenid = PlayerData.citizenid,
+		local result = exports.oxmysql:executeSync([[
+			INSERT INTO players (citizenid, cid, steamid, license, discord, name, firstname, lastname, birthdate, gender, backstory,
+                     nationality, phone, cash, job, gang, position, metadata)
+			VALUES (:citizenid, :cid, :steamid, license, discord, :name, :firstname, :lastname, :birthdate, :gender, :backstory,
+			        :nationality, :phone, :cash, :job, :gang, :position, :metadata)
+			ON DUPLICATE KEY UPDATE cid         = :cid,
+			                        citizenid   = :citizenid,
+			                        name        = :name,
+			                        steamid     = :steamid,
+			                        discord     = :discord,
+			                        firstname   = :firstname,
+			                        lastname    = :lastname,
+			                        birthdate   = :birthdate,
+			                        gender      = :gender,
+			                        backstory   = :backstory,
+			                        nationality = :nationality,
+			                        phone       = :phone,
+			                        cash        = :cash,
+			                        job         = :job,
+			                        gang        = :gang,
+			                        position    = :position,
+			                        metadata    = :metadata
+      RETURNING citizenid
+		]], {
 			cid = tonumber(PlayerData.cid),
+			citizenid = PlayerData.citizenid,
+			steamid = PlayerData.steamid,
 			license = PlayerData.license,
+			discord = PlayerData.discord,
 			name = PlayerData.name,
 			charinfo = json.encode(PlayerData.charinfo),
 			job = json.encode(PlayerData.job),
@@ -496,6 +523,16 @@ function DGCore.Player.Save(source)
 			phone = PlayerData.charinfo.phone,
 			cash = PlayerData.charinfo.cash
 		})
+
+		if result[1].citizenid == nil and PlayerData.citizenid then
+			DGCore.ShowError(GetCurrentResourceName(), 'ERROR DGCore.PLAYER.SAVE - Couldn\'t assign a valid citizenid!')
+		end
+
+		if PlayerData.citizenid == nil then
+			PlayerData.citizenid = result[1].citizenid
+			DGCore.Player.CheckPlayerData(source, PlayerData)
+		end
+
 		DGCore.Player.SaveInventory(src)
 		DGCore.ShowSuccess(GetCurrentResourceName(), PlayerData.name .. ' PLAYER SAVED!')
 	else
@@ -577,7 +614,7 @@ DGCore.Player.LoadInventory = function(PlayerData)
 			end
 		end
 	end
-		PlayerData.oldItems = DGCore.Shared.copyTbl(PlayerData.items)
+	PlayerData.oldItems = DGCore.Shared.copyTbl(PlayerData.items)
 	return PlayerData
 end
 
@@ -588,7 +625,9 @@ DGCore.Player.SaveInventory = function(src)
 		local oldItems = PlayerData.oldItems
 		if items and oldItems then
 			local diff = DGCore.Shared.GetTableDiff(oldItems, items)
-			if DGCore.Shared.tableLen(diff.removed) == 0 and DGCore.Shared.tableLen(diff.added) == 0 then return end
+			if DGCore.Shared.tableLen(diff.removed) == 0 and DGCore.Shared.tableLen(diff.added) == 0 then
+				return
+			end
 			exports.oxmysql:executeSync(
 				[[
 				DELETE FROM inventoryitems
@@ -617,7 +656,7 @@ DGCore.Player.SaveInventory = function(src)
 				end
 			end
 		end
-	      DGCore.Players[src].PlayerData.oldItems = DGCore.Shared.copyTbl(PlayerData.items)
+		DGCore.Players[src].PlayerData.oldItems = DGCore.Shared.copyTbl(PlayerData.items)
 	end
 end
 
@@ -654,19 +693,6 @@ function DGCore.Player.GetFirstSlotByItem(items, itemName)
 		end
 	end
 	return nil
-end
-
-function DGCore.Player.CreateCitizenId()
-	local UniqueFound = false
-	local CitizenId = nil
-	while not UniqueFound do
-		CitizenId = tostring(DGCore.Shared.RandomStr(3) .. DGCore.Shared.RandomInt(5)):upper()
-		local result = exports.oxmysql:executeSync('SELECT COUNT(*) as count FROM players WHERE citizenid = ?', { CitizenId })
-		if result[1].count == 0 then
-			UniqueFound = true
-		end
-	end
-	return CitizenId
 end
 
 function DGCore.Player.CreateFingerId()
