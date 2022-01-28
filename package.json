@@ -6,6 +6,7 @@
   },
   "scripts": {
     "build": "lerna run --parallel build",
+    "lint": "lerna run --parallel lint",
     "bootstrap": "lerna bootstrap",
     "postinstall": "yarn bootstrap",
     "test": "lerna run test"

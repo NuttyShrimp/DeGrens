@@ -6,13 +6,13 @@
 	"license": "MIT",
 	"sentry_dsn": "https://ca666003b9db4baeb7bf5b1aab7bc6d1@sentry.nuttyshrimp.me/9",
 	"scripts": {
-		"build": "yarn webpack:config --color --progress ",
-		"build:dev": "yarn build --mode development",
-		"watch": "yarn webpack:config --mode development --watch",
-		"lint": "eslint --fix -c .eslintrc ./src/**/*.{js,ts}",
-		"format": "prettier --write --config .prettierrc src/**/*.{js,ts,json,css,scss,md}",
-		"webpack:config": "webpack --config ./config/webpack.server.js --config ./config/webpack.client.js"
-	},
+    "build": "yarn webpack:config --color --progress ",
+    "build:dev": "yarn build --mode development",
+    "watch": "yarn webpack:config --mode development --watch",
+    "lint": "eslint --fix --no-eslintrc -c .eslintrc --resolve-plugins-relative-to ./ --ext .js,.ts ./src",
+    "format": "prettier --write --config .prettierrc src/**/*.{js,ts,json,css,scss,md}",
+    "webpack:config": "webpack --config ./config/webpack.server.js --config ./config/webpack.client.js"
+  },
 	"dependencies": {
 		"@citizenfx/client": "^2.0.5156-1",
 		"@citizenfx/server": "^2.0.5156-1",
@@ -32,7 +32,6 @@
 		"@typescript-eslint/eslint-plugin": "^5.9.0",
 		"@typescript-eslint/parser": "^5.9.0",
 		"eslint": "^8.6.0",
-		"eslint-config-prettier": "^8.3.0",
 		"eslint-plugin-prettier": "4.0.0",
 		"eslint-webpack-plugin": "^3.1.1",
 		"prettier": "^2.5.1",

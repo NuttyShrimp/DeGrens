@@ -5,12 +5,15 @@
     "es2021": true,
     "node": true
   },
+  "plugins": [
+    "@typescript-eslint",
+    "prettier"
+  ],
   "extends": [
     "eslint:recommended",
     "plugin:vue/vue3-recommended",
     "plugin:prettier/recommended",
-    "@vue/typescript/recommended",
-    "@vue/prettier"
+    "@vue/typescript/recommended"
   ],
   "parserOptions": {
     "ecmaVersion": 2021
