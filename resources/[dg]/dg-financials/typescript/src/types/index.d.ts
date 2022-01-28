@@ -32,8 +32,8 @@ declare interface ITransaction {
 	change: number;
 	comment: string;
 	// represents CID of user on server, client its full name
-	triggered_by: string;
-	accepted_by: string;
+	triggered_by: number | string;
+	accepted_by: number | string;
 	// UNIX timestamp
 	date: number;
 	type: TransactionType;

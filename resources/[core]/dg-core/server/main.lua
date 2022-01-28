@@ -18,8 +18,8 @@ CreateThread(function()
 	local result = exports.oxmysql:executeSync('SELECT * FROM permissions', {})
 	if result[1] then
 		for k, v in pairs(result) do
-			DGCore.Config.Server.PermissionList[v.license] = {
-				license = v.license,
+			DGCore.Config.Server.PermissionList[v.steamid] = {
+				steamid = v.steamid,
 				permission = v.permission,
 				optin = true,
 			}

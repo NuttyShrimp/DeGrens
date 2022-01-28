@@ -206,17 +206,17 @@ end
 function DGCore.Functions.AddPermission(source, permission)
 	local src = source
 	local Player = DGCore.Functions.GetPlayer(src)
-	local plicense = Player.PlayerData.license
+	local pSteamid = Player.PlayerData.steamid
 	if Player then
-		DGCore.Config.Server.PermissionList[plicense] = {
-			license = plicense,
+		DGCore.Config.Server.PermissionList[pSteamid] = {
+			steamid = pSteamid,
 			permission = permission:lower(),
 		}
-		exports.oxmysql:execute('DELETE FROM permissions WHERE license = ?', { plicense })
+		exports.oxmysql:execute('DELETE FROM permissions WHERE steamid = ?', { pSteamid })
 
-		exports.oxmysql:insert('INSERT INTO permissions (name, license, permission) VALUES (?, ?, ?)', {
+		exports.oxmysql:insert('INSERT INTO permissions (name, steamid, permission) VALUES (?, ?, ?)', {
 			GetPlayerName(src),
-			plicense,
+			pSteamid,
 			permission:lower()
 		})
 
@@ -228,10 +228,10 @@ end
 function DGCore.Functions.RemovePermission(source)
 	local src = source
 	local Player = DGCore.Functions.GetPlayer(src)
-	local license = Player.PlayerData.license
+	local steamId = Player.PlayerData.steamid
 	if Player then
-		DGCore.Config.Server.PermissionList[license] = nil
-		exports.oxmysql:execute('DELETE FROM permissions WHERE license = ?', { license })
+		DGCore.Config.Server.PermissionList[steamId] = nil
+		exports.oxmysql:execute('DELETE FROM permissions WHERE steamid = ?', { steamId })
 		Player.Functions.UpdatePlayerData()
 	end
 end
@@ -240,14 +240,14 @@ end
 
 function DGCore.Functions.HasPermission(source, permission)
 	local src = source
-	local license = DGCore.Functions.GetIdentifier(src, 'license')
+	local pSteamId = DGCore.Functions.GetIdentifier(src, 'steam')
 	local permission = tostring(permission:lower())
 	if permission == 'user' then
 		return true
 	else
-		if DGCore.Config.Server.PermissionList[license] then
-			if DGCore.Config.Server.PermissionList[license].license == license then
-				if DGCore.Config.Server.PermissionList[license].permission == permission or DGCore.Config.Server.PermissionList[license].permission == 'god' then
+		if DGCore.Config.Server.PermissionList[pSteamId] then
+			if DGCore.Config.Server.PermissionList[pSteamId].steamid == pSteamId then
+				if DGCore.Config.Server.PermissionList[pSteamId].permission == permission or DGCore.Config.Server.PermissionList[pSteamId].permission == 'god' then
 					return true
 				end
 			end
@@ -258,11 +258,11 @@ end
 
 function DGCore.Functions.GetPermission(source)
 	local src = source
-	local license = DGCore.Functions.GetIdentifier(src, 'license')
-	if license then
-		if DGCore.Config.Server.PermissionList[license] then
-			if DGCore.Config.Server.PermissionList[license].license == license then
-				return DGCore.Config.Server.PermissionList[license].permission
+	local pSteamId = DGCore.Functions.GetIdentifier(src, 'steam')
+	if pSteamId then
+		if DGCore.Config.Server.PermissionList[pSteamId] then
+			if DGCore.Config.Server.PermissionList[pSteamId].steamid == pSteamId then
+				return DGCore.Config.Server.PermissionList[pSteamId].permission
 			end
 		end
 	end
@@ -273,9 +273,9 @@ end
 
 function DGCore.Functions.IsOptin(source)
 	local src = source
-	local license = DGCore.Functions.GetIdentifier(src, 'license')
+	local pSteamId = DGCore.Functions.GetIdentifier(src, 'steam')
 	if DGCore.Functions.HasPermission(src, 'admin') then
-		retval = DGCore.Config.Server.PermissionList[license].optin
+		retval = DGCore.Config.Server.PermissionList[pSteamId].optin
 		return retval
 	end
 	return false
@@ -283,9 +283,9 @@ end
 
 function DGCore.Functions.ToggleOptin(source)
 	local src = source
-	local license = DGCore.Functions.GetIdentifier(src, 'license')
+	local pSteamId = DGCore.Functions.GetIdentifier(src, 'steam')
 	if DGCore.Functions.HasPermission(src, 'admin') then
-		DGCore.Config.Server.PermissionList[license].optin = not DGCore.Config.Server.PermissionList[license].optin
+		DGCore.Config.Server.PermissionList[pSteamId].optin = not DGCore.Config.Server.PermissionList[pSteamId].optin
 	end
 end
 
@@ -295,8 +295,9 @@ function DGCore.Functions.IsPlayerBanned(source)
 	local src = source
 	local retval = false
 	local message = ''
-	local plicense = DGCore.Functions.GetIdentifier(src, 'license')
-	local result = exports.oxmysql:executeSync('SELECT * FROM bans WHERE license = ?', { plicense })
+	local pSteamId = DGCore.Functions.GetIdentifier(src, 'steam')
+	local pLicense = DGCore.Functions.GetIdentifier(src, 'license')
+	local result = exports.oxmysql:executeSync('SELECT * FROM bans WHERE steamid = ? OR license = ?', { pSteamId, pLicense })
 	if result[1] then
 		if os.time() < result[1].expire then
 			retval = true

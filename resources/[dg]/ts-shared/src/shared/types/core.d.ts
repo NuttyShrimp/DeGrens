@@ -179,13 +179,14 @@ declare interface PlayerData {
 	position: Vector;
 	source: number;
 	cid: number;
+	license: string;
+	steamid: string;
 	charinfo: CharacterInfo;
 	job: Job;
 	gang: Gang;
 	name: string;
-	citizenid: string;
+	citizenid: number;
 	LoggedIn: boolean;
-	license: string;
 	items: Item[];
 	inventory: string; // Appears to be JSON serialised version of items
 	metadata: MetaData;

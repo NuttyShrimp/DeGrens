@@ -1,7 +1,7 @@
 import { cashLogger } from './util';
 import { Player } from '@ts-shared/server/types/core';
 
-const cashCache: Map<string, number> = new Map();
+const cashCache: Map<number, number> = new Map();
 
 const updateMetadata = (ply: Player) => {
 	const cid = ply.PlayerData.citizenid;

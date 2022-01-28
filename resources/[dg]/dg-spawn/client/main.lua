@@ -39,17 +39,17 @@ RegisterNetEvent('qb-houses:client:setHouseConfig', function(houseConfig)
     Config.Houses = houseConfig
 end)
 
-RegisterNetEvent('dg-spawn:client:setupSpawns', function(cData, new, apps)
-    if not new then
-        DGCore.Functions.TriggerCallback('dg-spawn:server:getOwnedHouses', function(houses)
-            local playerJob = DGCore.Functions.GetPlayerData().job.name
-            local myHouses = {}
-            local allSpawns = Config.Spawns
-            if playerJob == "police" then
-                allSpawns["policedp"] = {
-                        coords = vector4(428.23, -984.28, 29.76, 3.5),
-                        location = "policedp",
-                        label = "PZ De Grens - Hoofd Bureau",
+RegisterNetEvent('dg-spawn:client:setupSpawns', function(citizenid, new, apps)
+	if not new then
+		DGCore.Functions.TriggerCallback('dg-spawn:server:getOwnedHouses', function(houses)
+			local playerJob = DGCore.Functions.GetPlayerData().job.name
+			local myHouses = {}
+			local allSpawns = Config.Spawns
+			if playerJob == "police" then
+				allSpawns["policedp"] = {
+					coords = vector4(428.23, -984.28, 29.76, 3.5),
+					location = "policedp",
+					label = "PZ De Grens - Hoofd Bureau",
                     }
             end
 
@@ -78,18 +78,18 @@ RegisterNetEvent('dg-spawn:client:setupSpawns', function(cData, new, apps)
             if houses ~= nil then
                 for i = 1, (#houses), 1 do
                     table.insert(myHouses, {
-                        house = houses[i].house,
-                        label = Config.Houses[houses[i].house].adress,
+	                    house = houses[i].house,
+	                    label = Config.Houses[houses[i].house].adress,
                     })
                 end
             end
-            Citizen.Wait(500)
-            SendNUIMessage({
-                action = "setupLocations",
-                locations = allSpawns ,
-                houses = myHouses,
-            })
-        end, cData.citizenid)
+			Citizen.Wait(500)
+			SendNUIMessage({
+				action = "setupLocations",
+				locations = allSpawns,
+				houses = myHouses,
+			})
+		end, citizenid)
     elseif new then
 			SetDisplay(false)
 			DoScreenFadeOut(500)

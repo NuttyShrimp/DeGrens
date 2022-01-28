@@ -100,8 +100,9 @@ RegisterNetEvent('qb-admin:server:ban', function(player, time, reason)
 			banTime = 2147483647
 		end
 		local timeTable = os.date('*t', banTime)
-		exports.oxmysql:insert('INSERT INTO bans (name, license, discord, ip, reason, expire, bannedby) VALUES (?, ?, ?, ?, ?, ?, ?)', {
+		exports.oxmysql:insert('INSERT INTO bans (name, steamid, license, discord, ip, reason, expire, bannedby) VALUES (?, ?, ?, ?, ?, ?, ?, ?)', {
 			GetPlayerName(player.id),
+			DGCore.Functions.GetIdentifier(player.id, 'steam'),
 			DGCore.Functions.GetIdentifier(player.id, 'license'),
 			DGCore.Functions.GetIdentifier(player.id, 'discord'),
 			DGCore.Functions.GetIdentifier(player.id, 'ip'),

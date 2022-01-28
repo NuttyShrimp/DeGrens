@@ -4,7 +4,7 @@ import { getTaxedPrice } from '../../taxes/service';
 
 const AManager = AccountManager.getInstance();
 
-export const deposit = async (accountId: string, triggerCid: string, amount: number, comment?: string) => {
+export const deposit = async (accountId: string, triggerCid: number, amount: number, comment?: string) => {
 	const account = await AManager.getAccountById(accountId);
 	if (!account) {
 		const Player = DGCore.Functions.GetPlayerByCitizenId(triggerCid);
@@ -14,7 +14,7 @@ export const deposit = async (accountId: string, triggerCid: string, amount: num
 	await account.deposit(triggerCid, amount, comment);
 };
 
-export const withdraw = async (accountId: string, triggerCid: string, amount: number, comment?: string) => {
+export const withdraw = async (accountId: string, triggerCid: number, amount: number, comment?: string) => {
 	const account = await AManager.getAccountById(accountId);
 	if (!account) {
 		const Player = DGCore.Functions.GetPlayerByCitizenId(triggerCid);
@@ -27,8 +27,8 @@ export const withdraw = async (accountId: string, triggerCid: string, amount: nu
 export const transfer = async (
 	accountId: string,
 	targetAccountId: string,
-	triggerCid: string,
-	acceptorCid: string,
+	triggerCid: number,
+	acceptorCid: number,
 	amount: number,
 	comment?: string,
 	taxId?: number
@@ -49,7 +49,7 @@ export const transfer = async (
 
 export const purchase = async (
 	accountId: string,
-	triggerCid: string,
+	triggerCid: number,
 	amount: number,
 	comment?: string,
 	taxId?: number
@@ -65,7 +65,7 @@ export const purchase = async (
 	return account.purchase(triggerCid, taxPrice, comment);
 };
 
-export const paycheck = async (accountId: string, triggerCid: string, amount: number) => {
+export const paycheck = async (accountId: string, triggerCid: number, amount: number) => {
 	const account = await AManager.getAccountById(accountId);
 	if (!account) {
 		const Player = DGCore.Functions.GetPlayerByCitizenId(triggerCid);

@@ -41,7 +41,7 @@ DGCore.Functions.CreateCallback(
 		cb,
 		data: {
 			coin: string;
-			target: string;
+			target: number;
 			amount: number;
 		}
 	) => {

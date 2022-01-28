@@ -5,7 +5,7 @@ import { config } from '../../../config';
 import { paycheck } from './actions';
 
 const AManager = AccountManager.getInstance(); // When lua this would return the class without functions and all properties would be public
-export const createAccount = async (cid: string, name: string, accType: AccountType = 'standard') => {
+export const createAccount = async (cid: number, name: string, accType: AccountType = 'standard') => {
 	const accId = await AManager.createAccount(cid, name, accType);
 	global.exports['dg-logs'].createGraylogEntry('financials:accountCreated', {
 		accountId: accId,
@@ -19,19 +19,19 @@ export const createAccount = async (cid: string, name: string, accType: AccountT
 export const createDefaultAccount = async (src: number) => {
 	const Player = DGCore.Functions.GetPlayer(src);
 	const cid = Player.PlayerData.citizenid;
-	const account = await getDefaultAccount(cid);
+	const account = await AManager.getDefaultAccount(cid, true);
 	if (!account) {
 		const accId = await createAccount(cid, 'Persoonlijk account', 'standard');
 		paycheck(accId, cid, config.accounts.defaultBalance);
 	}
 };
-export const fetchAccounts = async (cid: string): Promise<Account[]> => {
+export const fetchAccounts = async (cid: number): Promise<Account[]> => {
 	return AManager.getAccounts(cid);
 };
-export const getDefaultAccount = async (cid: string): Promise<Account> => {
+export const getDefaultAccount = async (cid: number): Promise<Account> => {
 	return AManager.getDefaultAccount(cid);
 };
-export const getDefaultAccountId = async (cid: string): Promise<string> => {
+export const getDefaultAccountId = async (cid: number): Promise<string> => {
 	const Account = await getDefaultAccount(cid);
 	return Account.getAccountId();
 };
