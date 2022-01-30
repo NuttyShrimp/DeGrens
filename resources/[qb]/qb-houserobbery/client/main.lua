@@ -127,17 +127,18 @@ function enterRobberyHouse(house)
     TriggerServerEvent("InteractSound_SV:PlayOnSource", "houses_door_open", 0.25)
     openHouseAnim()
     Wait(250)
-    local coords = { x = Config.Houses[house]["coords"]["x"], y = Config.Houses[house]["coords"]["y"], z= Config.Houses[house]["coords"]["z"] - Config.MinZOffset}
-    if Config.Houses[house]["tier"] == 1 then
-        data = exports['qb-interior']:CreateHouseRobbery(coords)
-    end
-    Wait(100)
-    houseObj = data[1]
-    POIOffsets = data[2]
-    inside = true
-    currentHouse = house
-    Wait(500)
-    TriggerEvent('dg-weathersync:client:DisableSync')
+	local coords = { x = Config.Houses[house]["coords"]["x"], y = Config.Houses[house]["coords"]["y"], z = Config.Houses[house]["coords"]["z"] - Config.MinZOffset }
+	if Config.Houses[house]["tier"] == 1 then
+		data = exports['qb-interior']:CreateHouseRobbery(coords)
+	end
+	Wait(100)
+	houseObj = data[1]
+	POIOffsets = data[2]
+	inside = true
+	currentHouse = house
+	Wait(500)
+	TriggerEvent('exports['
+	dg - weathersync ']:FreezeTime(true, 750)')
 end
 
 function leaveRobberyHouse(house)
@@ -148,13 +149,14 @@ function leaveRobberyHouse(house)
     DoScreenFadeOut(250)
     Wait(500)
     exports['qb-interior']:DespawnInterior(houseObj, function()
-        TriggerEvent('dg-weathersync:client:EnableSync')
-        Wait(250)
-        DoScreenFadeIn(250)
-        SetEntityCoords(ped, Config.Houses[house]["coords"]["x"], Config.Houses[house]["coords"]["y"], Config.Houses[house]["coords"]["z"] + 0.5)
-        SetEntityHeading(ped, Config.Houses[house]["coords"]["h"])
-        inside = false
-        currentHouse = nil
+	    TriggerEvent('exports['
+	    dg - weathersync ']:FreezeTime(false)')
+	    Wait(250)
+	    DoScreenFadeIn(250)
+	    SetEntityCoords(ped, Config.Houses[house]["coords"]["x"], Config.Houses[house]["coords"]["y"], Config.Houses[house]["coords"]["z"] + 0.5)
+	    SetEntityHeading(ped, Config.Houses[house]["coords"]["h"])
+	    inside = false
+	    currentHouse = nil
     end)
 end
 

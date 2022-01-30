@@ -294,9 +294,10 @@ menu_button11:On("select",function()
     }
     for k,v in ipairs(elements) do
         local menu_button14 = menu6:AddButton({icon = v.icon,label = v.label,value = v,description = v.description,select = function(btn)
-            local selection = btn.Value
-            TriggerServerEvent('dg-weathersync:server:setWeather', selection.value)
-            DGCore.Functions.Notify('Weather Changed To: '..selection.label)
+	        local selection = btn.Value
+	        -- TODO replace with new weather sync, should be fixed after rework
+	        --TriggerServerEvent('dg-weathersync:server:setWeather', selection.value)
+	        DGCore.Functions.Notify('Weather Changed To: ' .. selection.label)
         end})
     end
 end)
@@ -942,8 +943,9 @@ menu_button2:On('select', function(item)
 end)
 
 menu_button13:On("select", function(item, value)
-    TriggerServerEvent("dg-weathersync:server:setTime", value, value)
-    DGCore.Functions.Notify("Time changed to " .. value .. " hs 00 min")
+	-- TODO replace with new weather sync, should be fixed after rework
+	-- TriggerServerEvent("dg-weathersync:server:setTime", value, value)
+	DGCore.Functions.Notify("Time changed to " .. value .. " hs 00 min")
 
 end)
 

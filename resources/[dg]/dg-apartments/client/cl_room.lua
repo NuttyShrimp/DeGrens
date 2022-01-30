@@ -69,6 +69,7 @@ RegisterNetEvent('dg-apartments:client:generateRoom', function(type)
 	FreezeEntityPosition(ped, false);
 
 	enableInteractionZones(type)
+	exports['dg-weathersync']:FreezeTime(true, 700)
 end)
 
 RegisterNetEvent('dg-apartments:client:removeRoom', function()
@@ -80,4 +81,5 @@ RegisterNetEvent('dg-apartments:client:removeRoom', function()
 		cachedObj = {}
     apartmentObj = nil
   end
+	exports['dg-weathersync']:FreezeTime(false)
 end)

@@ -58,8 +58,6 @@ enterApartment = function(src, id)
 	SetPlayerRoutingBucket(src, apartment.bucket)
 	-- Generate room
 	TriggerClientEvent('dg-apartments:client:generateRoom', src, apartment.type)
-	-- disable weathersynv
-	TriggerClientEvent('dg-weathersync:client:DisableSync', src)
 	-- Set insidemeta
 	setInsideMeta(src, id)
 	TriggerClientEvent('dg-apartments:client:fadeScreen', src, false)
@@ -85,7 +83,6 @@ leaveApartment = function(src)
 	SetEntityHeading(ped, info.exit.w)
 
 	TriggerClientEvent('dg-apartments:client:removeRoom', src)
-	TriggerClientEvent('dg-weathersync:client:EnableSync', src)
 	setInsideMeta(src, 0)
 
 	TriggerClientEvent('dg-apartments:client:fadeScreen', src, false)

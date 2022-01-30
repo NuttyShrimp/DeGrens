@@ -308,15 +308,16 @@ Citizen.CreateThread(function()
 end)
 
 function EnterTraphouse(data)
-    local coords = { x = data.coords["enter"].x, y = data.coords["enter"].y, z= data.coords["enter"].z - Config.MinZOffset}
-    TriggerServerEvent("InteractSound_SV:PlayOnSource", "houses_door_open", 0.25)
-    data = exports['qb-interior']:CreateTrevorsShell(coords)
-    TraphouseObj = data[1]
-    POIOffsets = data[2]
-    CurrentTraphouse = ClosestTraphouse
-    InsideTraphouse = true
-    TriggerEvent('dg-weathersync:client:DisableSync')
-    FreezeEntityPosition(TraphouseObj, true)
+	local coords = { x = data.coords["enter"].x, y = data.coords["enter"].y, z = data.coords["enter"].z - Config.MinZOffset }
+	TriggerServerEvent("InteractSound_SV:PlayOnSource", "houses_door_open", 0.25)
+	data = exports['qb-interior']:CreateTrevorsShell(coords)
+	TraphouseObj = data[1]
+	POIOffsets = data[2]
+	CurrentTraphouse = ClosestTraphouse
+	InsideTraphouse = true
+	TriggerEvent('exports['
+	dg - weathersync ']:FreezeTime(true, 750)')
+	FreezeEntityPosition(TraphouseObj, true)
 end
 
 function LeaveTraphouse(data)
@@ -325,14 +326,15 @@ function LeaveTraphouse(data)
     DoScreenFadeOut(250)
     Citizen.Wait(250)
     exports['qb-interior']:DespawnInterior(TraphouseObj, function()
-        TriggerEvent('dg-weathersync:client:EnableSync')
-        DoScreenFadeIn(250)
-        SetEntityCoords(ped, data.coords["enter"].x, data.coords["enter"].y, data.coords["enter"].z + 0.5)
-        SetEntityHeading(ped, 107.71)
-        TraphouseObj = nil
-        POIOffsets = nil
-        CurrentTraphouse = nil
-        InsideTraphouse = false
+	    TriggerEvent('exports['
+	    dg - weathersync ']:FreezeTime(false)')
+	    DoScreenFadeIn(250)
+	    SetEntityCoords(ped, data.coords["enter"].x, data.coords["enter"].y, data.coords["enter"].z + 0.5)
+	    SetEntityHeading(ped, 107.71)
+	    TraphouseObj = nil
+	    POIOffsets = nil
+	    CurrentTraphouse = nil
+	    InsideTraphouse = false
     end)
 end
 

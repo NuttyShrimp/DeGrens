@@ -1,22 +1,8 @@
-fx_version 'bodacious'
+fx_version 'cerulean'
 game 'gta5'
 
-description 'vSyncRevamped'
-version '1.0.2'
+name 'template'
 
-shared_scripts { 
-	'@dg-core/import.lua',
-	'config.lua',
-}
-
-server_scripts {
-	'locale.lua',
-	'locales/en.lua',
-	'server/server.lua'
-}
-
-client_scripts {
-	'locale.lua',
-	'locales/en.lua',
-	'client/client.lua'
-}
+shared_script '@dg-core/import.js'
+client_script 'dist/client/client.js'
+server_script 'dist/server/server.js'

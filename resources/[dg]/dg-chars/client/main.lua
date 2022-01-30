@@ -19,17 +19,18 @@ end)
 -- Functions
 
 local function skyCam(bool)
-    TriggerEvent('dg-weathersync:client:DisableSync')
-    if bool then
-        DoScreenFadeIn(1000)
-        SetTimecycleModifier('hud_def_blur')
-        SetTimecycleModifierStrength(1.0)
-        FreezeEntityPosition(PlayerPedId(), false)
+	TriggerEvent('exports['
+	dg - weathersync ']:FreezeTime(true, 750)')
+	if bool then
+	DoScreenFadeIn(1000)
+	SetTimecycleModifier('hud_def_blur')
+	SetTimecycleModifierStrength(1.0)
+	FreezeEntityPosition(PlayerPedId(), false)
 
-        cam =  CreateCam('DEFAULT_SCRIPTED_CAMERA', 1)
-        SetCamCoord(cam, Config.CamCoords.x, Config.CamCoords.y, Config.CamCoords.z)
-        SetCamActive(cam, true)
-        SetCamRot(cam, -20.0,0,Config.CamCoords.h)
+	cam = CreateCam('DEFAULT_SCRIPTED_CAMERA', 1)
+	SetCamCoord(cam, Config.CamCoords.x, Config.CamCoords.y, Config.CamCoords.z)
+	SetCamActive(cam, true)
+	SetCamRot(cam, -20.0, 0, Config.CamCoords.h)
         StopCamShaking(cam, true)
         SetCamFov(cam, 50.0)
         SetCamActive(cam, true)
