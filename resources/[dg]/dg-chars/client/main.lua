@@ -19,8 +19,7 @@ end)
 -- Functions
 
 local function skyCam(bool)
-	TriggerEvent('exports['
-	dg - weathersync ']:FreezeTime(true, 750)')
+	exports['dg-weathersync']:FreezeTime(true, 750)
 	if bool then
 	DoScreenFadeIn(1000)
 	SetTimecycleModifier('hud_def_blur')

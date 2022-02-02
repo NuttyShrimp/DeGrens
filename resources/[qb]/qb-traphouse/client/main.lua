@@ -315,8 +315,7 @@ function EnterTraphouse(data)
 	POIOffsets = data[2]
 	CurrentTraphouse = ClosestTraphouse
 	InsideTraphouse = true
-	TriggerEvent('exports['
-	dg - weathersync ']:FreezeTime(true, 750)')
+	TriggerEvent(exports['dg-weathersync']:FreezeTime(true, 750)
 	FreezeEntityPosition(TraphouseObj, true)
 end
 
@@ -326,8 +325,7 @@ function LeaveTraphouse(data)
     DoScreenFadeOut(250)
     Citizen.Wait(250)
     exports['qb-interior']:DespawnInterior(TraphouseObj, function()
-	    TriggerEvent('exports['
-	    dg - weathersync ']:FreezeTime(false)')
+	    exports['dg-weathersync']:FreezeTime(false)
 	    DoScreenFadeIn(250)
 	    SetEntityCoords(ped, data.coords["enter"].x, data.coords["enter"].y, data.coords["enter"].z + 0.5)
 	    SetEntityHeading(ped, 107.71)

@@ -536,8 +536,7 @@ local function enterOwnedHouse(house)
 	entering = true
 	Citizen.Wait(500)
 	TriggerServerEvent('qb-houses:server:SetInsideMeta', house, true)
-	TriggerEvent('exports['
-	dg - weathersync ']:FreezeTime(true, 750)')
+	TriggerEvent(exports['dg-weathersync']:FreezeTime(true, 750)
 	TriggerEvent('qb-weed:client:getHousePlants', house)
 	entering = false
 	setHouseLocations()
@@ -553,8 +552,7 @@ local function leaveOwnedHouse(house)
         Citizen.Wait(500)
         exports['qb-interior']:DespawnInterior(houseObj, function()
 	        UnloadDecorations()
-	        TriggerEvent('exports['
-	        dg - weathersync ']:FreezeTime(false)')
+	        TriggerEvent(exports['dg-weathersync']:FreezeTime(false)
 	        Citizen.Wait(250)
 	        DoScreenFadeIn(250)
 	        SetEntityCoords(PlayerPedId(), Config.Houses[CurrentHouse].coords.enter.x, Config.Houses[CurrentHouse].coords.enter.y, Config.Houses[CurrentHouse].coords.enter.z + 0.2)
@@ -580,8 +578,7 @@ local function enterNonOwnedHouse(house)
 	entering = true
 	Citizen.Wait(500)
 	TriggerServerEvent('qb-houses:server:SetInsideMeta', house, true)
-	TriggerEvent('exports['
-	dg - weathersync ']:FreezeTime(true, 750)')
+	exports['dg-weathersync']:FreezeTime(true, 750)
 	TriggerEvent('qb-weed:client:getHousePlants', house)
 	entering = false
 	inOwned = true
@@ -598,8 +595,9 @@ local function leaveNonOwnedHouse(house)
         Citizen.Wait(500)
         exports['qb-interior']:DespawnInterior(houseObj, function()
 	        UnloadDecorations()
-	        TriggerEvent('exports['
-	        dg - weathersync ']:FreezeTime(false)')
+	        exports['dg-weathersync']
+	        :: FreezeTime
+	        (false)
 	        Citizen.Wait(250)
 	        DoScreenFadeIn(250)
 	        SetEntityCoords(PlayerPedId(), Config.Houses[CurrentHouse].coords.enter.x, Config.Houses[CurrentHouse].coords.enter.y, Config.Houses[CurrentHouse].coords.enter.z + 0.2)
@@ -1158,8 +1156,7 @@ Citizen.CreateThread(function()
                                         Citizen.Wait(10)
                                     end
                                     exports['qb-interior']:DespawnInterior(houseObj, function()
-	                                    TriggerEvent('exports['
-	                                    dg - weathersync ']:FreezeTime(false)')
+	                                    exports['dg-weathersync']:FreezeTime(false)
 	                                    SetEntityCoords(PlayerPedId(), Config.Houses[CurrentHouse].coords.enter.x, Config.Houses[CurrentHouse].coords.enter.y, Config.Houses[CurrentHouse].coords.enter.z + 0.5)
 	                                    SetEntityHeading(PlayerPedId(), Config.Houses[CurrentHouse].coords.enter.h)
 	                                    inOwned = false
