@@ -15,7 +15,7 @@ end
 
 function getEntityPlayerLookingAt(pDistance, pRadius, pFlag, pIgnore)
 	pDistance = pDistance or 3.0
-	originCoords = GetPedBoneCoords(PlayerPedId(), 31086)
+	originCoords = GetGameplayCamCoord()
 	local forwardVector = getForwardVector(GetGameplayCamRot(2))
 	forwardCoords = originCoords + forwardVector * (isInVehicle and pDistance + 1.5 or pDistance)
 
@@ -78,7 +78,7 @@ if GetConvar('is_production', 'true') == 'false' then
 		debugEnabled = true
 		CreateThread(function()
 			while debugEnabled do
-				DrawLine(originCoords.x, originCoords.y, originCoords.z, forwardCoords.x, forwardCoords.y, forwardCoords.z, 255, 0, 0, 255)
+				DrawLine(originCoords, forwardCoords, 255, 0, 0, 255)
 				Wait(0)
 			end
 		end)
