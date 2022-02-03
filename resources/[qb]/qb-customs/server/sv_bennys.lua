@@ -5,18 +5,19 @@ local chicken = vehicleBaseRepairCost
 RegisterNetEvent('qb-customs:attemptPurchase', function(type, upgradeLevel)
     local source = source
     local Player = DGCore.Functions.GetPlayer(source)
+		local bankAccId = exports['dg-financials']:getDefaultAccountId(source)
     local balance = nil
     if Player.PlayerData.job.name == "mechanic" then
         balance = exports['qb-bossmenu']:GetAccount(Player.PlayerData.job.name)
     else
-        balance = Player.Functions.GetMoney(moneyType)
+        balance = exports['dg-financials']:getAccountBalance(bankAccId)
     end
     if type == "repair" then
         if balance >= chicken then
             if Player.PlayerData.job.name == "mechanic" then
                 TriggerEvent('qb-bossmenu:server:removeAccountMoney', Player.PlayerData.job.name, chicken)
             else
-                Player.Functions.RemoveMoney(moneyType, chicken, "bennys")
+								exports['dg-financials']:purchase(bankAccId, Player.PlayerData.citizenid, chicken, 'Vehicle repair at benny\'s', 5)
             end
             TriggerClientEvent('qb-customs:purchaseSuccessful', source)
         else
@@ -29,7 +30,7 @@ RegisterNetEvent('qb-customs:attemptPurchase', function(type, upgradeLevel)
                 TriggerEvent('qb-bossmenu:server:removeAccountMoney', Player.PlayerData.job.name,
                     vehicleCustomisationPrices[type].prices[upgradeLevel])
             else
-                Player.Functions.RemoveMoney(moneyType, vehicleCustomisationPrices[type].prices[upgradeLevel], "bennys")
+	            exports['dg-financials']:purchase(bankAccId, Player.PlayerData.citizenid, vehicleCustomisationPrices[type].prices[upgradeLevel], 'Vehicle upgrade at benny\'s', 5)
             end
         else
             TriggerClientEvent('qb-customs:purchaseFailed', source)
@@ -41,7 +42,7 @@ RegisterNetEvent('qb-customs:attemptPurchase', function(type, upgradeLevel)
                 TriggerEvent('qb-bossmenu:server:removeAccountMoney', Player.PlayerData.job.name,
                     vehicleCustomisationPrices[type].price)
             else
-                Player.Functions.RemoveMoney(moneyType, vehicleCustomisationPrices[type].price, "bennys")
+	            exports['dg-financials']:purchase(bankAccId, Player.PlayerData.citizenid, vehicleCustomisationPrices[type].price, 'Vehicle upgrade at benny\'s', 5)
             end
         else
             TriggerClientEvent('qb-customs:purchaseFailed', source)

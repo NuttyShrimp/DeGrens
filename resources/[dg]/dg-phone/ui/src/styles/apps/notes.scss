@@ -1,0 +1,17 @@
+.notes-app {
+	display: flex;
+	width: 100%;
+}
+
+.notes-list {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+}
+
+.ql-container {
+	&::-webkit-scrollbar,
+	& *::-webkit-scrollbar {
+		display: none;
+	}
+}

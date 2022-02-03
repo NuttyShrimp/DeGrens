@@ -17,11 +17,3 @@ exports('hideInteraction', function()
 		data = {}
 	})
 end)
-
-RegisterCommand('testInter', function()
-	exports["dg-lib"]:showInteraction('E - Test', "error")
-end)
-
-RegisterCommand('testInter2', function()
-	exports["dg-lib"]:hideInteraction()
-end)

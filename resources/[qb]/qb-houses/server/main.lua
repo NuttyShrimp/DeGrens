@@ -205,20 +205,21 @@ RegisterNetEvent('qb-houses:server:buyHouse', function(house)
     local pData = DGCore.Functions.GetPlayer(src)
     local price = Config.Houses[house].price
     local HousePrice = math.ceil(price * 1.21)
-    local bankBalance = pData.PlayerData.money["bank"]
+		local accountId = exports['dg-financials']:getDefaultAccountId(src)
+    local bankBalance = exports['dg-financials']:getAccountBalance(accountId)
 
     if (bankBalance >= HousePrice) then
-        houseowneridentifier[house] = pData.PlayerData.license
-        houseownercid[house] = pData.PlayerData.citizenid
-        housekeyholders[house] = {
-            [1] = pData.PlayerData.citizenid
-        }
-        exports.oxmysql:insert('INSERT INTO player_houses (house, identifier, citizenid, keyholders) VALUES (?, ?, ?, ?)',
-            {house, pData.PlayerData.license, pData.PlayerData.citizenid, json.encode(housekeyholders[house])})
-        exports.oxmysql:execute('UPDATE houselocations SET owned = ? WHERE name = ?', {1, house})
-        TriggerClientEvent('qb-houses:client:SetClosestHouse', src)
-        pData.Functions.RemoveMoney('bank', HousePrice, "bought-house") -- 21% Extra house costs
-        TriggerEvent('qb-bossmenu:server:addAccountMoney', "realestate", (HousePrice / 100) * math.random(18, 25))    
+	    houseowneridentifier[house] = pData.PlayerData.license
+	    houseownercid[house] = pData.PlayerData.citizenid
+	    housekeyholders[house] = {
+		    [1] = pData.PlayerData.citizenid
+	    }
+	    exports.oxmysql:insert('INSERT INTO player_houses (house, identifier, citizenid, keyholders) VALUES (?, ?, ?, ?)',
+		    { house, pData.PlayerData.license, pData.PlayerData.citizenid, json.encode(housekeyholders[house]) })
+	    exports.oxmysql:execute('UPDATE houselocations SET owned = ? WHERE name = ?', { 1, house })
+	    TriggerClientEvent('qb-houses:client:SetClosestHouse', src)
+	    exports['dg-financials']:purchase(accountId, pData.PlayerData.citizenid, HousePrice, ("Bought house at %s for %s"):format(house, HousePrice), 3)
+	    TriggerEvent('qb-bossmenu:server:addAccountMoney', "realestate", (HousePrice / 100) * math.random(18, 25))
     else
         TriggerClientEvent('DGCore:Notify', source, "You dont have enough money..", "error")
     end
@@ -351,11 +352,12 @@ end)
 DGCore.Functions.CreateCallback('qb-houses:server:buyFurniture', function(source, cb, price)
     local src = source
     local pData = DGCore.Functions.GetPlayer(src)
-    local bankBalance = pData.PlayerData.money["bank"]
+		local accountId = exports['dg-financials']:getDefaultAccountId(src)
+		local bankBalance = exports['dg-financials']:getAccountBalance(accountId)
 
     if bankBalance >= price then
-        pData.Functions.RemoveMoney('bank', price, "bought-furniture")
-        cb(true)
+	    exports['dg-financials']:purchase(accountId, price, pData.PlayerData.citizenid "Bought house furniture", 6)
+	    cb(true)
     else
         TriggerClientEvent('DGCore:Notify', src, "You dont have enough money..", "error")
         cb(false)
@@ -445,23 +447,6 @@ DGCore.Functions.CreateCallback('qb-houses:server:getHouseKeyHolders', function(
     end
 end)
 
-DGCore.Functions.CreateCallback('qb-phone:server:TransferCid', function(source, cb, NewCid, house)
-    local result = exports.oxmysql:executeSync('SELECT * FROM players WHERE citizenid = ?', {NewCid})
-    if result[1] then
-        local HouseName = house.name
-        housekeyholders[HouseName] = {}
-        housekeyholders[HouseName][1] = NewCid
-        houseownercid[HouseName] = NewCid
-        houseowneridentifier[HouseName] = result[1].license
-        exports.oxmysql:execute(
-            'UPDATE player_houses SET citizenid = ?, keyholders = ?, identifier = ? WHERE house = ?',
-            {NewCid, json.encode(housekeyholders[HouseName]), result[1].license, HouseName})
-        cb(true)
-    else
-        cb(false)
-    end
-end)
-
 DGCore.Functions.CreateCallback('qb-houses:server:getHouseDecorations', function(source, cb, house)
     local retval = nil
     local result = exports.oxmysql:executeSync('SELECT * FROM player_houses WHERE house = ?', {house})
@@ -519,140 +504,5 @@ DGCore.Functions.CreateCallback('qb-houses:server:getSavedOutfits', function(sou
                     cb(nil)
                 end
             end)
-    end
-end)
-
-DGCore.Functions.CreateCallback('qb-phone:server:GetPlayerHouses', function(source, cb)
-    local src = source
-    local Player = DGCore.Functions.GetPlayer(src)
-    local MyHouses = {}
-    local result = exports.oxmysql:executeSync('SELECT * FROM player_houses WHERE citizenid = ?',
-        {Player.PlayerData.citizenid})
-    if result and result[1] then
-        for k, v in pairs(result) do
-            table.insert(MyHouses, {
-                name = v.house,
-                keyholders = {},
-                owner = Player.PlayerData.citizenid,
-                price = Config.Houses[v.house].price,
-                label = Config.Houses[v.house].adress,
-                tier = Config.Houses[v.house].tier,
-                garage = Config.Houses[v.house].garage
-            })
-
-            if v.keyholders ~= "null" then
-                v.keyholders = json.decode(v.keyholders)
-                if v.keyholders then
-                    for f, data in pairs(v.keyholders) do
-                        local keyholderdata = exports.oxmysql:executeSync('SELECT * FROM players WHERE citizenid = ?',
-                            {data})
-                        if keyholderdata[1] then
-                            keyholderdata[1].charinfo = json.decode(keyholderdata[1].charinfo)
-
-                            local userKeyHolderData = {
-                                charinfo = {
-                                    firstname = keyholderdata[1].charinfo.firstname,
-                                    lastname = keyholderdata[1].charinfo.lastname
-                                },
-                                citizenid = keyholderdata[1].citizenid,
-                                name = keyholderdata[1].name
-                            }
-
-                            table.insert(MyHouses[k].keyholders, userKeyHolderData)
-                        end
-                    end
-                else
-                    MyHouses[k].keyholders[1] = {
-                        charinfo = {
-                            firstname = Player.PlayerData.charinfo.firstname,
-                            lastname = Player.PlayerData.charinfo.lastname
-                        },
-                        citizenid = Player.PlayerData.citizenid,
-                        name = Player.PlayerData.name
-                    }
-                end
-            else
-                MyHouses[k].keyholders[1] = {
-                    charinfo = {
-                        firstname = Player.PlayerData.charinfo.firstname,
-                        lastname = Player.PlayerData.charinfo.lastname
-                    },
-                    citizenid = Player.PlayerData.citizenid,
-                    name = Player.PlayerData.name
-                }
-            end
-        end
-
-        SetTimeout(100, function()
-            cb(MyHouses)
-        end)
-    else
-        cb({})
-    end
-end)
-
-DGCore.Functions.CreateCallback('qb-phone:server:GetHouseKeys', function(source, cb)
-    local src = source
-    local Player = DGCore.Functions.GetPlayer(src)
-    local MyKeys = {}
-
-    local result = exports.oxmysql:executeSync('SELECT * FROM player_houses', {})
-    for k, v in pairs(result) do
-        if v.keyholders ~= "null" then
-            v.keyholders = json.decode(v.keyholders)
-            for s, p in pairs(v.keyholders) do
-                if p == Player.PlayerData.citizenid and (v.citizenid ~= Player.PlayerData.citizenid) then
-                    table.insert(MyKeys, {
-                        HouseData = Config.Houses[v.house]
-                    })
-                end
-            end
-        end
-
-        if v.citizenid == Player.PlayerData.citizenid then
-            table.insert(MyKeys, {
-                HouseData = Config.Houses[v.house]
-            })
-        end
-    end
-    cb(MyKeys)
-end)
-
-DGCore.Functions.CreateCallback('qb-phone:server:MeosGetPlayerHouses', function(source, cb, input)
-    local src = source
-    if input then
-        local search = escape_sqli(input)
-        local searchData = {}
-        local query = '%' .. search .. '%'
-        local result = exports.oxmysql:executeSync('SELECT * FROM players WHERE citizenid = ? OR charinfo LIKE ?',
-            {search, query})
-        if result[1] then
-            local houses = exports.oxmysql:executeSync('SELECT * FROM player_houses WHERE citizenid = ?',
-                {result[1].citizenid})
-            if houses[1] then
-                for k, v in pairs(houses) do
-                    table.insert(searchData, {
-                        name = v.house,
-                        keyholders = keyholders,
-                        owner = v.citizenid,
-                        price = Config.Houses[v.house].price,
-                        label = Config.Houses[v.house].adress,
-                        tier = Config.Houses[v.house].tier,
-                        garage = Config.Houses[v.house].garage,
-                        charinfo = json.decode(result[1].charinfo),
-                        coords = {
-                            x = Config.Houses[v.house].coords.enter.x,
-                            y = Config.Houses[v.house].coords.enter.y,
-                            z = Config.Houses[v.house].coords.enter.z
-                        }
-                    })
-                end
-                cb(searchData)
-            end
-        else
-            cb(nil)
-        end
-    else
-        cb(nil)
     end
 end)

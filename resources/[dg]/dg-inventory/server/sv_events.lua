@@ -255,14 +255,17 @@ AddEventHandler("inventory:server:SetInventoryData", function(fromInventory, toI
 		local shopType = DGCore.Shared.SplitStr(fromInventory, "-")[2]
 		local itemData = ShopItems[shopType].items[fromSlot]
 		local itemInfo = ItemData[itemData.name:lower()]
-		local bankBalance = Player.PlayerData.money["bank"]
+		local bankAccount = exports['dg-financials']:getDefaultAccount(src)
+		local bankBalance = bankAccount and bankAccount.balance or 0
 		local price = tonumber(itemData.price * fromAmount)
 
         local enoughMoney = false
-        if Player.Functions.RemoveMoney("cash", price, "shop-bought-item") then
+
+        if exports['dg-financials']:removeCash(src, price, ('Bought %dx %s in shop'):format(fromAmount, itemData.name)) then
             enoughMoney = true
         elseif bankBalance >= price then
-            Player.Functions.RemoveMoney("bank", price, "shop-bought-item")
+						local citizenid = Player.PlayerData.citizenid
+						exports['dg-financials']:transfer(bankAccount.account_id, 'BE1', citizenid, citizenid, price, ('Aankoop van %dx %s in winkel'):format(fromAmount, itemData.name))
             enoughMoney = true
         end
         

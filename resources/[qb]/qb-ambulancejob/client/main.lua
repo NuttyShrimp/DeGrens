@@ -739,12 +739,11 @@ RegisterNetEvent('hospital:client:SendBillEmail', function(amount)
             gender = "Mrs."
         end
         local charinfo = DGCore.Functions.GetPlayerData().charinfo
-        TriggerServerEvent('qb-phone:server:sendNewMail', {
-            sender = "Pillbox",
-            subject = "Hospital Costs",
-            message = "Dear " .. gender .. " " .. charinfo.lastname .. ",<br /><br />Hereby you received an email with the costs of the last hospital visit.<br />The final costs have become: <strong>$"..amount.."</strong><br /><br />We wish you a quick recovery!",
-            button = {}
-        })
+				exports["dg-phone"]:sendMail(
+					"Hospital Costs",
+					"Pillbox",
+					("Dear %s %s,<br /><br />Hereby you received an email with the costs of the last hospital visit.<br />The final costs have become: <strong>$%d</strong><br /><br />We wish you a quick recovery!"):format(gender, charinfo.lastname, amount)
+				)
     end)
 end)
 

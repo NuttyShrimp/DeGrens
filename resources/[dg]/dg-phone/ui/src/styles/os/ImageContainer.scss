@@ -1,0 +1,42 @@
+@import '../base';
+
+.image-container {
+	display: flex;
+	flex-direction: column;
+
+	&--span {
+		text-decoration-line: underline;
+		cursor: pointer;
+		text-align: left;
+	}
+	&--wrapper {
+		border: 1px solid;
+		height: 18vh;
+
+		& > div {
+			height: 100%;
+			width: 100%;
+			display: flex;
+			justify-content: center;
+		}
+		& img {
+			height: 100%;
+			width: 100%;
+			object-fit: contain;
+		}
+	}
+
+	&--hidden {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		height: inherit;
+		cursor: pointer;
+
+		& > i {
+			font-size: 2rem;
+			margin-bottom: 1vh;
+		}
+	}
+}

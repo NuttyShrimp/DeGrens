@@ -10,6 +10,9 @@ local namedInstances = {}
 function setInstance(source, instanceId)
 	-- Reset bucket
 	currentInstanceId = GetPlayerRoutingBucket(source)
+	if instances[currentInstanceId] == nil then
+		instances[currentInstanceId] = {}
+	end
 	for i,plySrc in ipairs(instances[currentInstanceId]) do
 		if (plySrc == source) then
 			instances[currentInstanceId][i] = nil
@@ -23,6 +26,7 @@ function setInstance(source, instanceId)
 		instances[instanceId] = {source}
 	end
 	SetPlayerRoutingBucket(source, instanceId)
+	TriggerClientEvent('dg-lib:instance:set', source, instanceId)
 end
 
 exports('setInstance', setInstance)

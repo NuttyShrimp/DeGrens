@@ -1,0 +1,20 @@
+.state-list {
+	&--header {
+		font-size: 1.4rem;
+		font-weight: 600;
+	}
+	&--body {
+		display: flex;
+		flex-direction: column;
+	}
+	&--entry {
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		justify-content: space-between;
+		width: 100%;
+		&--phone {
+			justify-self: end;
+		}
+	}
+}

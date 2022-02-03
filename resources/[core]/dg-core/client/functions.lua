@@ -95,14 +95,18 @@ function DGCore.Debug(resource, obj, depth)
 end
 
 function DGCore.Functions.TriggerCallback(name, cb, ...)
-	if (cb == nil) then
+	if (cb == nil or not DGCore.Shared.isFunction(cb)) then
 		-- Promised based return
 		local callId, solved = DGCore.RequestId, false
 		DGCore.RequestId = DGCore.RequestId + 1
 
 		DGCore.Promises[callId] = promise:new()
 
-		TriggerServerEvent('DGCore:server:TriggerPromiseCallback', name, callId, ...)
+		if cb then
+			TriggerServerEvent('DGCore:server:TriggerPromiseCallback', name, callId, cb, ...)
+		else
+			TriggerServerEvent('DGCore:server:TriggerPromiseCallback', name, callId, ...)
+		end
 		-- Check if solved otherwise throw timeout
 		Citizen.SetTimeout(20000, function()
 			if not solved then
@@ -226,7 +230,7 @@ function DGCore.Functions.GetClosestPlayer(coords)
     return closestPlayer, closestDistance
 end
 
-function DGCore.Functions.GetPlayersFromCoords(coords, distance)
+function DGCore.Functions.GetPlayersFromCoords(coords, distance, serverIds)
     local players = DGCore.Functions.GetPlayers()
     local ped = PlayerPedId()
     if coords then
@@ -241,7 +245,7 @@ function DGCore.Functions.GetPlayersFromCoords(coords, distance)
         local targetCoords = GetEntityCoords(target)
         local targetdistance = #(targetCoords - coords)
         if targetdistance <= distance then
-            closePlayers[#closePlayers + 1] = player
+            closePlayers[#closePlayers + 1] = serverIds and GetPlayerServerId(player) or player
         end
     end
     return closePlayers

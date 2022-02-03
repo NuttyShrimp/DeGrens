@@ -9,7 +9,7 @@ DGCore.Functions.CreateCallback('qb-hotdogjob:server:HasMoney', function(source,
     --     cb(true)
     -- else
     if Player.PlayerData.money.bank >= Config.Bail then
-        Player.Functions.RemoveMoney('bank', Config.Bail)
+				-- TODO: Remove BS and replace with damage based percentage remover on total payout
         Bail[Player.PlayerData.citizenid] = true
         cb(true)
     else
@@ -22,7 +22,6 @@ DGCore.Functions.CreateCallback('qb-hotdogjob:server:BringBack', function(source
     local Player = DGCore.Functions.GetPlayer(source)
 
     if Bail[Player.PlayerData.citizenid] then
-        Player.Functions.AddMoney('bank', Config.Bail)
         cb(true)
     else
         cb(false)
@@ -32,9 +31,8 @@ end)
 RegisterServerEvent('qb-hotdogjob:server:Sell')
 AddEventHandler('qb-hotdogjob:server:Sell', function(Amount, Price)
     local src = source
-    local Player = DGCore.Functions.GetPlayer(src)
-
-    Player.Functions.AddMoney('cash', tonumber(Amount * Price))
+    exports ['dg-financials']:addCash(src, Amount * Price, ('Hotdog sale for %d hotdogs'):format(Amount))
+		local Player = DGCore.Functions.GetPlayer(src)
 end)
 
 local Reset = false

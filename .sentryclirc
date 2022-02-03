@@ -1,0 +1,7 @@
+[auth]
+token=efc3ddd95fb6413c9aac316b855ab5cf74008205ec6f40cb9cb6fea043b30711
+dsn=https://ca666003b9db4baeb7bf5b1aab7bc6d1@sentry.nuttyshrimp.me/9
+[defaults]
+url=https://sentry.nuttyshrimp.me/
+org=nutty
+project=dg-2-ts-errors

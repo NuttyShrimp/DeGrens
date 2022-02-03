@@ -9,11 +9,12 @@ server_scripts {
 }
 
 client_scripts {
+	'@dg-logs/client/cl_log.lua',
 	"@PolyZone/client.lua",
-  "@PolyZone/BoxZone.lua",
-  "@PolyZone/CircleZone.lua",
-  "@PolyZone/ComboZone.lua",
-  "@PolyZone/EntityZone.lua",
+	"@PolyZone/BoxZone.lua",
+	"@PolyZone/CircleZone.lua",
+	"@PolyZone/ComboZone.lua",
+	"@PolyZone/EntityZone.lua",
 	"client/cl_*.lua",
 	"client/cl_*.js",
 	"client/**/*.lua",

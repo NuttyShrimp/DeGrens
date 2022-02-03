@@ -32,8 +32,7 @@ AddEventHandler('qb-drugs:server:sellCornerDrugs', function(item, amount, price)
         
         TriggerClientEvent('DGCore:Notify', src, 'Offer accepted!', 'success')
         Player.Functions.RemoveItem(item, amount)
-        Player.Functions.AddMoney('cash', price, "sold-cornerdrugs")
-        TriggerClientEvent('inventory:client:ItemBox', src, item, "remove")
+				exports['dg-financials']:addCash(src, price, ("Corner Selling: sold %dx %s"):format(amount, item))
 
         for i = 1, #Config.CornerSellingDrugsList, 1 do
             local item = Player.Functions.GetItemByName(Config.CornerSellingDrugsList[i])

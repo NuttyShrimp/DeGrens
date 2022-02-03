@@ -110,7 +110,7 @@ Config.PowerStations = {
 
 Config.SmallBanks = {
     [1] = {
-        ["label"] = "Lol",
+        ["label"] = "Pinkcage hotel",
         ["coords"] = vector3(311.15, -284.49, 54.16),
         ["alarm"] = true,
         ["object"] = GetHashKey("v_ilev_gb_vauldr"),

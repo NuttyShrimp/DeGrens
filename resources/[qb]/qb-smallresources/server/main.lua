@@ -47,14 +47,15 @@ end)
 RegisterServerEvent('qb-carwash:server:washCar')
 AddEventHandler('qb-carwash:server:washCar', function()
     local src = source
-    local Player = DGCore.Functions.GetPlayer(src)
+		local Player = DGCore.Functions.GetPlayer(src)
+		local accountId = exports['dg-financials']:getDefaultAccountId(src)
 
-    if Player.Functions.RemoveMoney('cash', Config.DefaultPrice, "car-washed") then
-        TriggerClientEvent('qb-carwash:client:washCar', src)
-    elseif Player.Functions.RemoveMoney('bank', Config.DefaultPrice, "car-washed") then
-        TriggerClientEvent('qb-carwash:client:washCar', src)
+    if exports['dg-financials']:removeCash(src, Config.DefaultPrice, 'carwash') then
+	    TriggerClientEvent('qb-carwash:client:washCar', src)
+    elseif exports['dg-financials']:purchase(accountId, Player.PlayerData.citizenid, Config.DefaultPrice, "Carwash", 5) then
+	    TriggerClientEvent('qb-carwash:client:washCar', src)
     else
-        TriggerClientEvent('DGCore:Notify', src, 'You dont have enough money..', 'error')
+	    TriggerClientEvent('DGCore:Notify', src, 'You dont have enough money..', 'error')
     end
 end)
 

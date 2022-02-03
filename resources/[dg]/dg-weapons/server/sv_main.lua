@@ -56,7 +56,7 @@ DGCore.Functions.CreateCallback("weapons:server:RepairWeapon", function(source, 
     
         if Player.PlayerData.items[data.slot] then
             if Player.PlayerData.items[data.slot].quality and Player.PlayerData.items[data.slot].quality ~= 100 then
-                if Player.Functions.RemoveMoney("cash", Config.RepairCost) then
+                if exports['dg-financials']:removeCash(src, Config.RepairCost, 'Weapon repair') then
                     Config.RepairData.IsRepairing = true
                     Config.RepairData.Weapon = Player.PlayerData.items[data.slot]
     
@@ -69,12 +69,13 @@ DGCore.Functions.CreateCallback("weapons:server:RepairWeapon", function(source, 
                         Config.RepairData.IsRepairing = false
                         Config.RepairData.IsFinished = true
                         TriggerClientEvent("weapons:client:SyncRepairData", -1, Config.RepairData)
-    
-                        TriggerEvent("qb-phone:server:sendNewMailToOffline", Player.PlayerData.citizenid, {
-                            sender = "Tyrone",
-                            subject = "Wapenreparatie",
-                            message = "Je "..exports["dg-inventory"]:GetItemData(data.name).label.." is gerepareerd, je kan het komen ophalen."
-                        })
+
+												exports["dg-phone"]:addOfflineMail(
+														Player.PlayerData.citizenid,
+														"Wapenreparatie",
+														"Tyrone",
+														("Je %s is gerepareerd, je kan het komen ophalen."):format(exports["dg-inventory"]:GetItemData(data.name).label)
+												)
                     end)
     
                     cb(true)

@@ -1,0 +1,29 @@
+.home-screen {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-around;
+	& > div {
+		flex: 1 0 22%;
+	}
+}
+
+.home-screen-app {
+  min-width: 5.3vh;
+  max-width: 5.3vh;
+  min-height: 5.3vh;
+  max-height: 5.3vh;
+	margin-top: 0.75vh;
+	margin-left: calc((100% - 5.3vh) / 2);
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	border-radius: 1vh;
+
+	& > i {
+		font-size: 2rem;
+	}
+
+	& > span {
+		font-size: 3rem !important;
+	}
+}

@@ -526,20 +526,20 @@ local function enterOwnedHouse(house)
     TriggerServerEvent("InteractSound_SV:PlayOnSource", "houses_door_open", 0.25)
     openHouseAnim()
     inside = true
-    Citizen.Wait(250)
-    local coords = { x = Config.Houses[house].coords.enter.x, y = Config.Houses[house].coords.enter.y, z= Config.Houses[house].coords.enter.z - Config.MinZOffset}
-    LoadDecorations(house)
-    data = getDataForHouseTier(house, coords)
-    Citizen.Wait(100)
-    houseObj = data[1]
-    POIOffsets = data[2]
-    entering = true
-    Citizen.Wait(500)
-    TriggerServerEvent('qb-houses:server:SetInsideMeta', house, true)
-    TriggerEvent('dg-weathersync:client:DisableSync')
-    TriggerEvent('qb-weed:client:getHousePlants', house)
-    entering = false
-    setHouseLocations()
+	Citizen.Wait(250)
+	local coords = { x = Config.Houses[house].coords.enter.x, y = Config.Houses[house].coords.enter.y, z = Config.Houses[house].coords.enter.z - Config.MinZOffset }
+	LoadDecorations(house)
+	data = getDataForHouseTier(house, coords)
+	Citizen.Wait(100)
+	houseObj = data[1]
+	POIOffsets = data[2]
+	entering = true
+	Citizen.Wait(500)
+	TriggerServerEvent('qb-houses:server:SetInsideMeta', house, true)
+	TriggerEvent(exports['dg-weathersync']:FreezeTime(true, 750)
+	TriggerEvent('qb-weed:client:getHousePlants', house)
+	entering = false
+	setHouseLocations()
 end
 
 local function leaveOwnedHouse(house)
@@ -551,15 +551,15 @@ local function leaveOwnedHouse(house)
         DoScreenFadeOut(250)
         Citizen.Wait(500)
         exports['qb-interior']:DespawnInterior(houseObj, function()
-            UnloadDecorations()
-            TriggerEvent('dg-weathersync:client:EnableSync')
-            Citizen.Wait(250)
-            DoScreenFadeIn(250)
-            SetEntityCoords(PlayerPedId(), Config.Houses[CurrentHouse].coords.enter.x, Config.Houses[CurrentHouse].coords.enter.y, Config.Houses[CurrentHouse].coords.enter.z + 0.2)
-            SetEntityHeading(PlayerPedId(), Config.Houses[CurrentHouse].coords.enter.h)
-            TriggerEvent('qb-weed:client:leaveHouse')
-            TriggerServerEvent('qb-houses:server:SetInsideMeta', house, false)
-            CurrentHouse = nil
+	        UnloadDecorations()
+	        TriggerEvent(exports['dg-weathersync']:FreezeTime(false)
+	        Citizen.Wait(250)
+	        DoScreenFadeIn(250)
+	        SetEntityCoords(PlayerPedId(), Config.Houses[CurrentHouse].coords.enter.x, Config.Houses[CurrentHouse].coords.enter.y, Config.Houses[CurrentHouse].coords.enter.z + 0.2)
+	        SetEntityHeading(PlayerPedId(), Config.Houses[CurrentHouse].coords.enter.h)
+	        TriggerEvent('qb-weed:client:leaveHouse')
+	        TriggerServerEvent('qb-houses:server:SetInsideMeta', house, false)
+	        CurrentHouse = nil
         end)
     end
 end
@@ -568,21 +568,21 @@ local function enterNonOwnedHouse(house)
     CurrentHouse = house
     TriggerServerEvent("InteractSound_SV:PlayOnSource", "houses_door_open", 0.25)
     openHouseAnim()
-    inside = true
-    Citizen.Wait(250)
-    local coords = { x = Config.Houses[closesthouse].coords.enter.x, y = Config.Houses[closesthouse].coords.enter.y, z= Config.Houses[closesthouse].coords.enter.z - Config.MinZOffset}
-    LoadDecorations(house)
-    data = getDataForHouseTier(house, coords)
-    houseObj = data[1]
-    POIOffsets = data[2]
-    entering = true
-    Citizen.Wait(500)
-    TriggerServerEvent('qb-houses:server:SetInsideMeta', house, true)
-    TriggerEvent('dg-weathersync:client:DisableSync')
-    TriggerEvent('qb-weed:client:getHousePlants', house)
-    entering = false
-    inOwned = true
-    setHouseLocations()
+	inside = true
+	Citizen.Wait(250)
+	local coords = { x = Config.Houses[closesthouse].coords.enter.x, y = Config.Houses[closesthouse].coords.enter.y, z = Config.Houses[closesthouse].coords.enter.z - Config.MinZOffset }
+	LoadDecorations(house)
+	data = getDataForHouseTier(house, coords)
+	houseObj = data[1]
+	POIOffsets = data[2]
+	entering = true
+	Citizen.Wait(500)
+	TriggerServerEvent('qb-houses:server:SetInsideMeta', house, true)
+	exports['dg-weathersync']:FreezeTime(true, 750)
+	TriggerEvent('qb-weed:client:getHousePlants', house)
+	entering = false
+	inOwned = true
+	setHouseLocations()
 end
 
 local function leaveNonOwnedHouse(house)
@@ -594,16 +594,18 @@ local function leaveNonOwnedHouse(house)
         DoScreenFadeOut(250)
         Citizen.Wait(500)
         exports['qb-interior']:DespawnInterior(houseObj, function()
-            UnloadDecorations()
-            TriggerEvent('dg-weathersync:client:EnableSync')
-            Citizen.Wait(250)
-            DoScreenFadeIn(250)
-            SetEntityCoords(PlayerPedId(), Config.Houses[CurrentHouse].coords.enter.x, Config.Houses[CurrentHouse].coords.enter.y, Config.Houses[CurrentHouse].coords.enter.z + 0.2)
-            SetEntityHeading(PlayerPedId(), Config.Houses[CurrentHouse].coords.enter.h)
-            inOwned = false
-            TriggerEvent('qb-weed:client:leaveHouse')
-            TriggerServerEvent('qb-houses:server:SetInsideMeta', house, false)
-            CurrentHouse = nil
+	        UnloadDecorations()
+	        exports['dg-weathersync']
+	        :: FreezeTime
+	        (false)
+	        Citizen.Wait(250)
+	        DoScreenFadeIn(250)
+	        SetEntityCoords(PlayerPedId(), Config.Houses[CurrentHouse].coords.enter.x, Config.Houses[CurrentHouse].coords.enter.y, Config.Houses[CurrentHouse].coords.enter.z + 0.2)
+	        SetEntityHeading(PlayerPedId(), Config.Houses[CurrentHouse].coords.enter.h)
+	        inOwned = false
+	        TriggerEvent('qb-weed:client:leaveHouse')
+	        TriggerServerEvent('qb-houses:server:SetInsideMeta', house, false)
+	        CurrentHouse = nil
         end)
     end
 end
@@ -1154,12 +1156,12 @@ Citizen.CreateThread(function()
                                         Citizen.Wait(10)
                                     end
                                     exports['qb-interior']:DespawnInterior(houseObj, function()
-                                        TriggerEvent('dg-weathersync:client:EnableSync')
-                                        SetEntityCoords(PlayerPedId(), Config.Houses[CurrentHouse].coords.enter.x, Config.Houses[CurrentHouse].coords.enter.y, Config.Houses[CurrentHouse].coords.enter.z + 0.5)
-                                        SetEntityHeading(PlayerPedId(), Config.Houses[CurrentHouse].coords.enter.h)
-                                        inOwned = false
-                                        inside = false
-                                        TriggerServerEvent('qb-houses:server:LogoutLocation')
+	                                    exports['dg-weathersync']:FreezeTime(false)
+	                                    SetEntityCoords(PlayerPedId(), Config.Houses[CurrentHouse].coords.enter.x, Config.Houses[CurrentHouse].coords.enter.y, Config.Houses[CurrentHouse].coords.enter.z + 0.5)
+	                                    SetEntityHeading(PlayerPedId(), Config.Houses[CurrentHouse].coords.enter.h)
+	                                    inOwned = false
+	                                    inside = false
+	                                    TriggerServerEvent('qb-houses:server:LogoutLocation')
                                     end)
                                 end
                             elseif #(pos - vector3(logoutLocation.x, logoutLocation.y, logoutLocation.z)) < 3 then

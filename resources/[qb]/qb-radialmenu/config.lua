@@ -10,8 +10,8 @@ Config.MenuItems = {
                 id = 'givenum',
                 title = 'Give Contact Details',
                 icon = 'address-book',
-                type = 'client',
-                event = 'qb-phone:client:GiveContactDetails',
+                type = 'server',
+                event = 'dg-phone:server:contacts:shareNumber',
                 shouldClose = true
             }, {
                 id = 'getintrunk',

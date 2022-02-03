@@ -130,6 +130,11 @@ function BoxZone:isPointInside(point)
     return false 
   end
 
+	-- Compare routingbuckets
+	if self.routingBucket ~= PolyZone.getPlayerBucket() then
+		return false
+	end
+
   local startPos = self.startPos
   local actualPos = point.xy - self.offsetPos
   if #(actualPos - startPos) > self.boundingRadius then

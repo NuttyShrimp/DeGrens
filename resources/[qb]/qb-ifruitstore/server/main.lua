@@ -31,7 +31,7 @@ RegisterServerEvent('qb-ifruitstore:server:SafeReward')
 AddEventHandler('qb-ifruitstore:server:SafeReward', function()
     local src = source
     local Player = DGCore.Functions.GetPlayer(src)
-    Player.Functions.AddMoney('cash', math.random(1500, 2000), "robbery-ifruit")
+		exports['dg-financials']:addcash(src, math.random(1500, 2000), "Ifruitstore robbery")
     Player.Functions.AddItem("certificate", certificateAmount)
     TriggerClientEvent('inventory:client:ItemBox', src, "certificate", "add")
     Citizen.Wait(500)

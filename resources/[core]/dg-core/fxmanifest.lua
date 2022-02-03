@@ -6,6 +6,7 @@ version '1.0.0'
 
 shared_scripts {
 	'import.lua',
+	"import.js",
 	'config.lua',
 	'shared.lua'
 }

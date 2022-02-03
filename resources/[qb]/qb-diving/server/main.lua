@@ -27,21 +27,22 @@ AddEventHandler('qb-diving:server:BuyBoat', function(boatModel, BerthId)
     local BoatPrice = QBBoatshop.ShopBoats[boatModel]["price"]
     local src = source
     local Player = DGCore.Functions.GetPlayer(src)
+		local bankAccId = exports['dg-financials']:getDefaultAccountId(Player.PlayerData.citizenid)
     local PlayerMoney = {
-        cash = Player.PlayerData.money.cash,
-        bank = Player.PlayerData.money.bank
+        cash = exports['dg-financials']:getCash(src),
+        bank = exports['dg-financials']:getAccountBalance('bankAccId')
     }
     local missingMoney = 0
     local plate = "QB" .. math.random(1000, 9999)
 
     if PlayerMoney.cash >= BoatPrice then
-        Player.Functions.RemoveMoney('cash', BoatPrice, "bought-boat")
+				exports['dg-financials']:removeCash(src, BoatPrice, ("Bought boat: %s"):format(boatModel))
         TriggerClientEvent('qb-diving:client:BuyBoat', src, boatModel, plate)
         InsertBoat(boatModel, Player, plate)
     elseif PlayerMoney.bank >= BoatPrice then
-        Player.Functions.RemoveMoney('bank', BoatPrice, "bought-boat")
-        TriggerClientEvent('qb-diving:client:BuyBoat', src, boatModel, plate)
-        InsertBoat(boatModel, Player, plate)
+	    exports['dg-financials']:purchase(bankAccId, Player.PlayerData.citizenid, BoatPrice, ("Aankoop boot: %s"):format(QBBoatshop.ShopBoats[boatModel].label), 2)
+	    TriggerClientEvent('qb-diving:client:BuyBoat', src, boatModel, plate)
+	    InsertBoat(boatModel, Player, plate)
     else
         if PlayerMoney.bank > PlayerMoney.cash then
             missingMoney = (BoatPrice - PlayerMoney.bank)
@@ -131,7 +132,7 @@ AddEventHandler('qb-diving:server:CallCops', function(Coords)
                     },
                     description = msg
                 }
-                TriggerClientEvent("qb-phone:client:addPoliceAlert", -1, alertData)
+								-- TODO add dispatch hook
             end
         end
     end
@@ -159,12 +160,12 @@ AddEventHandler('qb-diving:server:SellCoral', function()
                 for i = 1, Item.amount, 1 do
                     Player.Functions.RemoveItem(Item.name, 1)
                     TriggerClientEvent('inventory:client:ItemBox', src, Item.name, "remove")
-                    Player.Functions.AddMoney('cash', math.ceil((Reward / Item.amount)), "sold-coral")
+										exports['dg-financials']:addCash(src, math.ceil(Reward / Item.amount), ("Sold %d coral"):format(Item.amount))
                     Citizen.Wait(250)
                 end
             else
                 Player.Functions.RemoveItem(Item.name, 1)
-                Player.Functions.AddMoney('cash', Reward, "sold-coral")
+								exports['dg-financials']:addCash(src, Reward, "Sold 1 coral")
                 TriggerClientEvent('inventory:client:ItemBox', src, Item.name, "remove")
             end
         end

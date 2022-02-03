@@ -13,16 +13,17 @@ end)
 RegisterServerEvent('qb-garage:server:PayDepotPrice', function(vehicle, garage)
     local src = source
     local Player = DGCore.Functions.GetPlayer(src)
-    local cashBalance = Player.PlayerData.money["cash"]
-    local bankBalance = Player.PlayerData.money["bank"]
+    local cashBalance = exports['dg-financials']:getCash(src)
+		local bankAccountId = exports['dg-financials']:getDefaultAccountId(src)
+    local bankBalance = exports['dg-financials']:getAccountBalance(bankAccountId)
     exports.oxmysql:execute('SELECT * FROM player_vehicles WHERE plate = ?', {vehicle.plate}, function(result)
         if result[1] then
             if cashBalance >= result[1].depotprice then
-                Player.Functions.RemoveMoney("cash", result[1].depotprice, "paid-depot")
+								exports['dg-financials']:removeCash(src, result[1].depotprice, 'Paid depot price for ' .. vehicle.plate)
                 TriggerClientEvent("qb-garages:client:takeOutDepot", src, vehicle, garage)
             elseif bankBalance >= result[1].depotprice then
-                Player.Functions.RemoveMoney("bank", result[1].depotprice, "paid-depot")
-                TriggerClientEvent("qb-garages:client:takeOutDepot", src, vehicle, garage)
+	            exports['dg-financials']:purchase(bankAccountId, Player.PlayerData.citizenid, result[1].depotprice, 'Depot prijs betaald voor ' .. vehicle.plate, 5)
+	            TriggerClientEvent("qb-garages:client:takeOutDepot", src, vehicle, garage)
             else
                 TriggerClientEvent('DGCore:Notify', src, 'Not enough money', 'error')
             end

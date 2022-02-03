@@ -1,0 +1,27 @@
+.info-app {
+	display: flex;
+	height: max-content;
+	flex-direction: column;
+	justify-content: center;
+	margin-top: 3vh;
+}
+
+.info-app-entry {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	margin-bottom: 1rem;
+	& > .info-app-icon {
+		display: flex;
+		justify-content: center;
+		min-width: 5.3vh;
+		margin-right: 0.2vh;
+		& > i {
+			font-size: 2.5rem;
+		}
+	}
+	& > p {
+		font-size: 1.2rem;
+		margin: 0;
+	}
+}

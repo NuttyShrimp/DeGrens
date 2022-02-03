@@ -1,0 +1,112 @@
+@import '../base';
+
+.message-app {
+	flex: 1;
+}
+
+.message-app-list {
+	display: flex;
+	flex-direction: column;
+
+	&--outer {
+		margin-bottom: 0;
+		height: calc(100% - 1.5vh);
+	}
+}
+
+.message-app-convo {
+	display: flex;
+	flex-direction: column;
+	height: calc(100% - 3vh);
+
+	&--list {
+		display: flex;
+		flex-direction: column;
+		overflow-y: auto;
+		flex: 1;
+		&::-webkit-scrollbar {
+			display: none;
+		}
+	}
+
+	&--mes {
+		display: flex;
+		flex-direction: column;
+		max-width: 75%;
+		align-self: flex-end;
+		margin: 0.5vh 0;
+		font-size: 0.9rem;
+		&--text {
+			width: fit-content;
+			padding: 1vh 0.9vh;
+			border-radius: 2vh;
+			color: black;
+			background-color: #6aaee0;
+			align-self: flex-end;
+		}
+		&--time {
+			color: $gray_light;
+			margin-top: 0.1vh;
+			margin-left: 0.9vh;
+			text-align: end;
+		}
+		&.incoming {
+			align-self: flex-start;
+			& > .message-app-convo--mes--text {
+				align-self: flex-start;
+				color: white;
+				background-color: $gray_normal;
+			}
+			& > .message-app-convo--mes--time {
+				text-align: start;
+			}
+		}
+	}
+
+	&--more {
+		width: 30%;
+		align-self: center;
+		margin: 0.5vh 0;
+	}
+
+	&--header {
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		color: white;
+		position: sticky;
+
+		& i {
+			font-size: 2.5rem;
+			margin: 0 0.9vh;
+		}
+
+		& > .header-text {
+			display: flex;
+			flex-direction: column;
+
+			& > .title {
+				font-size: 1.1rem;
+			}
+
+			& > .subheader {
+				font-size: 0.9rem;
+			}
+		}
+	}
+
+	&--input {
+		justify-self: end;
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+
+		& > label {
+			width: 100%;
+		}
+
+		& .q-btn {
+			margin-left: 0.4vh;
+		}
+	}
+}

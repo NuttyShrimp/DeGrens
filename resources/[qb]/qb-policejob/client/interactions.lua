@@ -147,10 +147,6 @@ RegisterNetEvent('police:client:JailCommand', function(playerId, time)
     TriggerServerEvent("police:server:JailPlayer", playerId, tonumber(time))
 end)
 
-RegisterNetEvent('police:client:BillCommand', function(playerId, price)
-    TriggerServerEvent("police:server:BillPlayer", playerId, tonumber(price))
-end)
-
 RegisterNetEvent('police:client:JailPlayer', function()
     local player, distance = DGCore.Functions.GetClosestPlayer()
     if player ~= -1 and distance < 2.5 then
@@ -162,25 +158,6 @@ RegisterNetEvent('police:client:JailPlayer', function()
         local time = GetOnscreenKeyboardResult()
         if tonumber(time) > 0 then
             TriggerServerEvent("police:server:JailPlayer", playerId, tonumber(time))
-        else
-            DGCore.Functions.Notify("Time must be higher than 0..", "error")
-        end
-    else
-        DGCore.Functions.Notify("No one nearby!", "error")
-    end
-end)
-
-RegisterNetEvent('police:client:BillPlayer', function()
-    local player, distance = DGCore.Functions.GetClosestPlayer()
-    if player ~= -1 and distance < 2.5 then
-        local playerId = GetPlayerServerId(player)
-        DisplayOnscreenKeyboard(1, "", "", "", "", "", "", 20)
-        while UpdateOnscreenKeyboard() ~= 1 and UpdateOnscreenKeyboard() ~= 2 do
-            Wait(7)
-        end
-        local price = GetOnscreenKeyboardResult()
-        if tonumber(price) > 0 then
-            TriggerServerEvent("police:server:BillPlayer", playerId, tonumber(price))
         else
             DGCore.Functions.Notify("Time must be higher than 0..", "error")
         end

@@ -14,12 +14,12 @@ end
 
 getPlayerApartment = function(src)
 	local Player = DGCore.Functions.GetPlayer(src);
-	local result = exports.oxmysql:executeSync('SELECT id,citizenid FROM apartments WHERE citizenid = ?', {Player.PlayerData.citizenid})
-	if (result == nil or result[1] == nil) then
+	local result = exports.oxmysql:executeSync('SELECT id FROM apartments WHERE citizenid = ?', {Player.PlayerData.citizenid})
+	if (result == nil or result[1] == nil or result[1].id == nil) then
 		createPlayerApartment(src)
 		return getPlayerApartment(src)
 	end
-	return result[1]
+	return result[1].id
 end
 
 createPlayerApartment = function(src)
@@ -58,8 +58,6 @@ enterApartment = function(src, id)
 	SetPlayerRoutingBucket(src, apartment.bucket)
 	-- Generate room
 	TriggerClientEvent('dg-apartments:client:generateRoom', src, apartment.type)
-	-- disable weathersynv
-	TriggerClientEvent('dg-weathersync:client:DisableSync', src)
 	-- Set insidemeta
 	setInsideMeta(src, id)
 	TriggerClientEvent('dg-apartments:client:fadeScreen', src, false)
@@ -85,7 +83,6 @@ leaveApartment = function(src)
 	SetEntityHeading(ped, info.exit.w)
 
 	TriggerClientEvent('dg-apartments:client:removeRoom', src)
-	TriggerClientEvent('dg-weathersync:client:EnableSync', src)
 	setInsideMeta(src, 0)
 
 	TriggerClientEvent('dg-apartments:client:fadeScreen', src, false)
@@ -124,7 +121,7 @@ end)
 -- Callbacks
 DGCore.Functions.CreateCallback('dg-apartments:server:getApartmentMenu', function(src, cb)
 	local Player = DGCore.Functions.GetPlayer(src)
-	local ownedApartment = getPlayerApartment(src)
+	local ownedApartId = getPlayerApartment(src)
 	local invApart = getInvitedApartments(src)
 	local openApart = getOpenApartments()
 	local apartList = {
@@ -174,11 +171,11 @@ DGCore.Functions.CreateCallback('dg-apartments:server:getApartmentMenu', functio
 
 	local menu = {
 		{
-			title = ("Enter apartment %s"):format(ownedApartment.id),
+			title = ("Enter apartment %s"):format(ownedApartId),
 			description = "Enter your private apartment",
 			action = "dg-apartments:client:enterApartment",
 			data = {
-				id = ownedApartment.id,
+				id = ownedApartId,
       },
 		},
 		{
@@ -202,7 +199,7 @@ end)
 
 DGCore.Functions.CreateCallback('dg-apartments:server:getCurrentApartment', function(src,cb)
 	local apartment = getCurrentApartment(src)
-  cb(apartment.id)
+  cb(apartment and apartment.id or nil)
 end)
 
 DGCore.Functions.CreateCallback('dg-apartments:server:getApartmentInvites', function(src, cb)

@@ -6,13 +6,9 @@ description "DG-Peek"
 ui_page "html/index.html"
 
 client_scripts {
-	"@PolyZone/client.lua",
-	"@PolyZone/BoxZone.lua",
-	"@PolyZone/EntityZone.lua",
-	"@PolyZone/CircleZone.lua",
-	"@PolyZone/ComboZone.lua",
+	'@dg-logs/client/cl_log.lua',
 	"config.lua",
-	"client/*.lua",
+	"client/cl_*.lua",
 }
 
 files {

@@ -1,24 +1,29 @@
-game {'gta5'}
+game 'common'
+version '6.2.7'
 
 fx_version 'cerulean'
 author 'AvarianKnight'
 description 'VOIP built using FiveM\'s built in mumble.'
 
--- TODO: When Meta-dependencies are added to recommended (4404+) re-add this
---dependencies {
---    '/onesync',
---}
+dependencies {
+   '/onesync',
+}
 
 lua54 'yes'
 
 shared_script 'shared.lua'
 
 client_scripts {
-    'client/**/*.lua',
+	'client/init/proximity.lua',
+	'client/init/init.lua',
+	'client/init/main.lua',
+	'client/module/*.lua',
+    'client/*.lua',
 }
 
 server_scripts {
-    'server/**/*.lua'
+    'server/**/*.lua',
+	'server/**/*.js'
 }
 
 files {
@@ -53,9 +58,7 @@ convar_category 'PMA-Voice' {
 	{ "Enable sublix", "$voice_enableSubmix", "CV_INT", "0" },
         { "Enable radio animation", "$voice_enableRadioAnim", "CV_INT", "0" },
 	{ "Radio key", "$voice_defaultRadio", "CV_STRING", "LALT" },
-	{ "Zone radius", "$voice_zoneRadius", "CV_INT", "256" },
-	{ "Zone refresh rate", "$voice_zoneRefreshRate", "CV_INT", "200" },
-	{ "Enable voice sync (state bags)", "$voice_syncData", "CV_INT", "0" },
+	{ "UI refresh rate", "$voice_uiRefreshRate", "CV_INT", "200" },
 	{ "Allow players to set audio intent", "$voice_allowSetIntent", "CV_INT", "1" },
 	{ "External mumble server address", "$voice_externalAddress", "CV_STRING", "" },
 	{ "External mumble server port", "$voice_externalPort", "CV_INT", "0" },

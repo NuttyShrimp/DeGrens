@@ -3,15 +3,12 @@ local Bail = {}
 DGCore.Functions.CreateCallback('qb-garbagejob:server:HasMoney', function(source, cb)
     local Player = DGCore.Functions.GetPlayer(source)
     local CitizenId = Player.PlayerData.citizenid
+		local bankAccId = exports[ 'dg-financials']:getDefaultAccountId(source)
+		local bankBalance = exports[ 'dg-financials']:getAccountBalance(bankAccId)
 
-    -- if Player.PlayerData.money.cash >= Config.BailPrice then
-    --     Bail[CitizenId] = "cash"
-    --     Player.Functions.RemoveMoney('cash', Config.BailPrice)
-    --     cb(true)
-    -- else
-        if Player.PlayerData.money.bank >= Config.BailPrice then
+		if bankBalance >= Config.BailPrice then
         Bail[CitizenId] = "bank"
-        Player.Functions.RemoveMoney('bank', Config.BailPrice)
+				-- TODO Remove bail BS and replace with damage based percentage
         cb(true)
     else
         cb(false)
@@ -23,7 +20,6 @@ DGCore.Functions.CreateCallback('qb-garbagejob:server:CheckBail', function(sourc
     local CitizenId = Player.PlayerData.citizenid
 
     if Bail[CitizenId] ~= nil then
-        Player.Functions.AddMoney(Bail[CitizenId], Config.BailPrice)
         Bail[CitizenId] = nil
         cb(true)
     else
@@ -55,7 +51,7 @@ AddEventHandler('qb-garbagejob:server:PayShit', function(amount, location)
     local Player = DGCore.Functions.GetPlayer(src)
 
     if amount > 0 then
-        Player.Functions.AddMoney('bank', amount)
+				-- TODO add trigger to add 'amount' to players paycheck
 
         if location == #Config.Locations["trashcan"] then
             for i = 1, math.random(3, 5), 1 do

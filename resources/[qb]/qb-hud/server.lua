@@ -3,15 +3,8 @@ local DGCore = exports['dg-core']:GetCoreObject()
 local ResetStress = false
 
 DGCore.Commands.Add('cash', 'Check Cash Balance', {}, false, function(source, args)
-    local Player = DGCore.Functions.GetPlayer(source)
-    local cashamount = Player.PlayerData.money.cash
-	TriggerClientEvent('hud:client:ShowAccounts', source, 'cash', cashamount)
-end)
-
-DGCore.Commands.Add('bank', 'Check Bank Balance', {}, false, function(source, args)
-    local Player = DGCore.Functions.GetPlayer(source)
-    local bankamount = Player.PlayerData.money.bank
-	TriggerClientEvent('hud:client:ShowAccounts', source, 'bank', bankamount)
+    local cashamount = exports['dg-financials']:getCash(source)
+		TriggerClientEvent('hud:client:ShowAccounts', source, 'cash', cashamount)
 end)
 
 RegisterServerEvent('hud:server:GainStress')

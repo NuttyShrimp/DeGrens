@@ -143,14 +143,11 @@ RegisterNetEvent('police:client:sendBillingMail', function(amount)
             gender = "Mrs."
         end
         local charinfo = DGCore.Functions.GetPlayerData().charinfo
-        TriggerServerEvent('qb-phone:server:sendNewMail', {
-            sender = "Central Judicial Collection Agency",
-            subject = "Debt collection",
-            message = "Dear " .. gender .. " " .. charinfo.lastname ..
-                ",<br /><br />The Central Judicial Collection Agency (CJCA) charged the fines you received from the police.<br />There is <strong>$" ..
-                amount .. "</strong> withdrawn from your account.<br /><br />Kind regards,<br />Mr. I.K. Graai",
-            button = {}
-        })
+				exports["dg-phone"]:sendMail("Debt collection", "Central Judicial Collection Agency", ([[
+					Dear %s %s,
+					<br /><br />The Central Judicial Collection Agency (CJCA) charged the fines you received from the police.
+					<br />There is <strong>$%d</strong> withdrawn from your account.<br /><br />Kind regards,<br />Mr. I.K. Graai
+				]]):format(gender, charinfo.lastname, amount))
     end)
 end)
 

@@ -49,10 +49,13 @@ Config.Locations = {
 				model = `gabz_pinkcage_bed`,
 				options = {
 					{
-						type = "server",
-						event = "qb-houses:server:LogoutLocation",
-						icon = "fas fa-sign-out-alt",
-						label = "Logout",
+					type = "server",
+					event = "qb-houses:server:LogoutLocation",
+					icon = "fas fa-sign-out-alt",
+					label = "Logout",
+					canInteract = function ()
+					return exports['dg-apartments']:isInApartment()
+					end
 					},
 				}
 			},
@@ -62,12 +65,15 @@ Config.Locations = {
 				zone = "peek",
 				model = `v_res_tre_storagebox`,
 				options = {
-					{
-						type = "client",
-						event = "dg-apartment:openStash",
-						icon = "fas fa-box",
-						label = "Open stash",
-					},
+			{
+			type = "client",
+			event = "dg-apartment:openStash",
+			icon = "fas fa-box",
+			label = "Open stash",
+			canInteract = function ()
+			return exports['dg-apartments']:isInApartment()
+			end
+			},
 				}
 			},
 		}

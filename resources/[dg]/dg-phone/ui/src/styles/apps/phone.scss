@@ -1,0 +1,79 @@
+// This file is used for stylig the phone app and not the main component
+@import '../base';
+@import '../quasar-variables';
+
+.phoneapp-tabs {
+	margin-bottom: 1vh;
+}
+
+.phoneapp-history-list {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+}
+
+.phoneapp-dialpad {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	margin-bottom: 1vh;
+}
+
+.phoneapp-dialpad-rows {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	margin-bottom: 1vh;
+	& > div {
+		display: flex;
+		flex-direction: row;
+	}
+}
+
+.phoneapp-dialpad {
+	margin-top: 10vh;
+	width: 80%;
+	margin-left: 10%;
+	&-input {
+		margin-bottom: 3vh;
+		& > div {
+			width: 100%;
+			font-size: 1.1rem;
+		}
+	}
+	&-btn {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		border: none;
+		padding: 1vh;
+		width: 3vh;
+		height: 3vh;
+		background-color: #{$gray_normal};
+		border-radius: 100%;
+		font-size: 1.5rem;
+		font-weight: bold;
+		transition: all 0.2s ease-in-out;
+		margin: 0.75vh;
+		user-select: none;
+		&:hover {
+			background-color: #{$primary_light};
+		}
+		&:active {
+			background-color: #{$primary_normal};
+		}
+		&.success {
+			background-color: $positive;
+
+			&:hover {
+				background-color: #488c33;
+			}
+
+			&:active {
+				background-color: $positive;
+			}
+		}
+	}
+}

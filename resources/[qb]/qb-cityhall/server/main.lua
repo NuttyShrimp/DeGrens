@@ -47,13 +47,12 @@ AddEventHandler('qb-cityhall:server:sendDriverTest', function()
         if SchoolPlayer ~= nil then 
             TriggerClientEvent("qb-cityhall:client:sendDriverEmail", SchoolPlayer.PlayerData.source, Player.PlayerData.charinfo)
         else
-            local mailData = {
-                sender = "Township",
-                subject = "Driving lessons request",
-                message = "Hello,<br /><br />We have just received a message that someone wants to take driving lessons.<br />If you are willing to teach, please contact us:<br />Naam: <strong>".. Player.PlayerData.charinfo.firstname .. " " .. Player.PlayerData.charinfo.lastname .. "<br />Telephone number: <strong>"..Player.PlayerData.charinfo.phone.."</strong><br/><br/>Kind regards,<br />City of Los Santos",
-                button = {}
-            }
-            TriggerEvent("qb-phone:server:sendNewEventMail", v, mailData)
+						exports["dg-phone"]:addOfflineMail(
+								Player.PlayerData.citizenid
+								"Driving lessons request",
+								"Township",
+								("Hello,<br /><br />We have just received a message that someone wants to take driving lessons.<br />If you are willing to teach, please contact us:<br />Naam: <strong>%s %s<br />Telephone number: <strong>%s</strong><br/><br/>Kind regards,<br />City of Los Santos"):format(Player.PlayerData.charinfo.firstname, Player.PlayerData.charinfo.lastname, Player.PlayerData.charinfo.phone)
+						)
         end
     end
     TriggerClientEvent('DGCore:Notify', src, 'An email has been sent to driving schools, and you will be contacted automatically', "success", 5000)
