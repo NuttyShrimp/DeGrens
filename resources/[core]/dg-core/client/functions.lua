@@ -19,13 +19,7 @@ function DGCore.Functions.GetCoords(entity)
 end
 
 function DGCore.Functions.HasItem(item)
-    DGCore.Functions.TriggerCallback('DGCore:HasItem', function(result)
-        if result then
-            return true
-        end
-        return false
-    end, item)
-    return false
+    return DGCore.Functions.TriggerCallback('DGCore:HasItem', nil, item)
 end
 
 -- Utility
