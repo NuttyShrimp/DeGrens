@@ -85,60 +85,58 @@ hasActiveEntries = function()
 	return hasActiveEntries
 end
 addNewEntry = function(cat, entry)
-    if not isItemInArray(activeEntries[cat], entry) then 
-        if entry.job then
-            if type(entry.job) == 'string' then
-                if not PlayerData.job.name == entry.job then
-                    return
-                end
-            end
-            if type(entry.job) == 'table' then
-                if entry.job[1] then
-                    if not isItemInArray(entry.job, PlayerData.job.name) then
-                        return
-                    end
-                else
-                    local reqGrade = getValueFromTable(entry.job, PlayerData.job.name)
-                    if not reqGrade or reqGrade > PlayerData.job.grade.level then
-                        return
-                    end
-                end
-            end
-        end
-        if entry.gang then
-            if type(entry.gang) == 'string' then
-                if not PlayerData.gang.name == entry.gang then
-                    return
-                end
-            end
-            if type(entry.gang) == 'table' then
-                if not isItemInArray(entry.gang, PlayerData.gang.name) then
-                    return
-                end
-            end
-        end
-        if entry.items then
-            if type(entry.items) == 'string' then
-                if not DGCore.Functions.HasItem(entry.items) then
-                    return
-                end
-            end
-            if type(entry.items) == 'table' then
-                local hasItem = true
-                for _, item in ipairs(entry.items) do
-                    if not DGCore.Functions.HasItem(item) then
-                        hasItem = false
-                        break
-                    end
-                end
-                if not hasItem then
-                    return
-                end
-            end
-        end
-        table.insert(activeEntries[cat], entry)
-        refreshList()
-    end
+	if entry.job then
+		if type(entry.job) == 'string' then
+			if not PlayerData.job.name == entry.job then
+				return
+			end
+		end
+		if type(entry.job) == 'table' then
+			if entry.job[0] then
+				if not isItemInArray(entry.job, PlayerData.job.name) then
+					return
+				end
+			else
+				local reqGrade = getValueFromTable(entry.job, PlayerData.job.grade)
+				if not reqGrade or reqGrade > PlayerData.job.grade then
+					return
+				end
+			end
+		end
+	end
+	if entry.gang then
+		if type(entry.gang) == 'string' then
+			if not PlayerData.gang.name == entry.gang then
+				return
+			end
+		end
+		if type(entry.gang) == 'table' then
+			if not isItemInArray(entry.gang, PlayerData.gang.name) then
+				return
+			end
+		end
+	end
+	if entry.items then
+		if type(entry.items) == 'string' then
+			if not DGCore.Functions.HasItem(entry.items) then
+				return
+			end
+		end
+		if type(entry.items) == 'table' then
+			local hasItem = true
+			for _, item in ipairs(entry.items) do
+				if not DGCore.Functions.HasItem(item) then
+					hasItem = false
+					break
+				end
+			end
+			if not hasItem then
+				return
+			end
+		end
+	end
+	table.insert(activeEntries[cat], entry)
+	refreshList()
 end
 refreshList = function()
 	-- Send refreshedList to UI
