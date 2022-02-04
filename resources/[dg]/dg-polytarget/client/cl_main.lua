@@ -23,7 +23,7 @@ local function addToTargetZone(zone)
 			end
 			if enteredZones ~= nil then
 				for i = 1, #enteredZones do
-					TriggerEvent("dg-polytarget:enter", enteredZones[i].name, enteredZones[i].data, enteredZones[i].center)
+					TriggerEvent("dg-polytarget:enter", enteredZones[i].name, enteredZones[i].data, point)
 					if DEBUG_ENABLED then
 						debug('[dg-polytarget] Entered zone | name: %s | data: %s | center: %s', enteredZones[i].name, enteredZones[i].data, enteredZones[i].center)
 					end
