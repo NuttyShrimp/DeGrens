@@ -1,38 +1,26 @@
-function getForwardVector(rotation)
-	local rot = (math.pi / 180) * rotation
+function GetForwardVector(rotation)
+	local rot = (math.pi / 180.0) * rotation
 	return vector3(-math.sin(rot.z) * math.abs(math.cos(rot.x)), math.cos(rot.z) * math.abs(math.cos(rot.x)), math.sin(rot.x))
 end
 
-function rayCast(origin, target)
-    local rayHandle = StartShapeTestLosProbe(origin, target, -1, PlayerPedId(), 0)
-	while true do
-		Citizen.Wait(0)
-		local _, hit, endCoords, _, entityHit = GetShapeTestResult(rayHandle)
-		if result ~= 1 then
-			return hit, endCoords, entityHit
-		end
-	end
+function RayCast(origin, target, options, ignoreEntity, radius)
+	local handle = StartShapeTestRay(origin.x, origin.y, origin.z, target.x, target.y, target.z, options, ignoreEntity, 4)
+	return GetShapeTestResult(handle)
 end
 
 function GetTargetCoords()
-	local originCoords = GetGameplayCamCoord()
-	local forwardVector = getForwardVector(GetGameplayCamRot())
-	local forwardCoords = originCoords + forwardVector * 30
+	local CameraCoords = GetGameplayCamCoord()
+	local ForwardVectors = GetForwardVector(GetGameplayCamRot(2))
+	local ForwardCoords = CameraCoords + (ForwardVectors * (IsInVehicle and 6.5 or 5.0))
 	local TargetCoords = vector3(0.0, 0.0, 0.0)
 
-    if not forwardVector then
-		return
+	if ForwardVectors then
+		local _, hit, targetCoords, _, _ = RayCast(CameraCoords, ForwardCoords, 17, nil, 0.1)
+
+		TargetCoords = targetCoords
+		if DEBUG_ENABLED then
+			DrawMarker(28, targetCoords.x, targetCoords.y, targetCoords.z, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.01, 0.01, 0.01, 255, 0, 0, 255, false, false, 2, nil, nil, false)
+		end
 	end
-
-    local hit, coords, entity = rayCast(originCoords, forwardCoords)
-
-    if not hit and entity == 0 then
-        return
-    end
-
-    if DEBUG_ENABLED then
-        DrawMarker(28, coords.x, coords.y, coords.z, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.01, 0.01, 0.01, 255, 0, 0, 255, false, false, 2, nil, nil, false)
-    end
-
-	return coords
+	return TargetCoords
 end
