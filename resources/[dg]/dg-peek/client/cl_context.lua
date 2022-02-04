@@ -44,6 +44,7 @@ RegisterNetEvent('DGCore:Player:SetPlayerData', function(_data)
 	PlayerData = _data
 end)
 
+-- Get playerdata on resource start, useful during development when restarting script
 RegisterNetEvent('onResourceStart', function(resourceName)
     if GetCurrentResourceName() ~= resourceName then return end
     while not DGCore do Wait(0) end
