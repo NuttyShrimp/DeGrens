@@ -184,15 +184,12 @@ end
 generateCurrentEntries = function()
 	local ped = PlayerPedId()
 	local plyCoords = GetEntityCoords(ped)
-
-    activeEntries.model = {}
-    activeEntries.entity = {}
-    activeEntries.bones = {}
-    activeEntries.flags = {}
-    activeEntries.zones = {}
-
     -- entity stuff
 	if current.entity then
+        activeEntries.model = {}
+		activeEntries.entity = {}
+		activeEntries.bones = {}
+		activeEntries.flags = {}
 		local context = getContext(current.entity, current.type)
 		if peekEntries.model[context.model] then
 			for _, entry in ipairs(peekEntries.model[context.model]) do
@@ -218,17 +215,14 @@ generateCurrentEntries = function()
 			local boneId = GetEntityBoneIndexByName(current.entity, bone)
 			if boneId ~= -1 then
 				local bonePos = GetWorldPositionOfEntityBone(current.entity, boneId)
-                local intersectPos = exports["dg-lib"]:GetIntersectCoords()
-                if #(bonePos - intersectPos) < Config.MaxBoneDistance then
-                    for _, entry in ipairs(entries) do
-                        addNewEntry('model', entry, #(plyCoords - bonePos))
-                    end
-                end
+				for _, entry in ipairs(entries) do
+                    addNewEntry('model', entry, #(plyCoords - bonePos))
+				end
 			end
 		end
 	end
-    
     -- zone stuff
+    activeEntries.zones = {}
     for zoneName, zoneInfo in pairs(activeZones) do
         if zoneInfo.point and peekEntries.zones[zoneName] then
             for index, entry in ipairs(peekEntries.zones[zoneName]) do
