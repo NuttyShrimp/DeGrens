@@ -28,17 +28,21 @@ setPeekEnabled = function(isEnabled)
 end
 
 enablePeek = function()
-	if not canPeek or isPeeking then return end
-
+	local ped = PlayerPedId()
+	if not canPeek or isPeeking then
+		return
+	end
 	SendNUIMessage({ response = "openTarget" })
 	isPeeking = true
+	generateCurrentEntries(true)
 	startCheckThread()
 	startControlThread()
 end
 
 disablePeek = function()
-	if isFocused then return end
-
+	if isFocused then
+		return
+	end
 	SendNUIMessage({ response = "closeTarget" })
 	SetNuiFocusKeepInput(false)
 	SetNuiFocus(false, false)
@@ -55,9 +59,12 @@ disablePeek = function()
 end
 
 focusUI = function()
-	if isFocused then return end
-	if not hasActiveEntries(activeEntries) then return end
-
+	if isFocused then
+		return
+	end
+	if not hasActiveEntries() then
+		return
+	end
 	isFocused = true
 	SetCursorLocation(0.5, 0.5)
 	SetNuiFocus(true, true)
@@ -67,78 +74,75 @@ end
 
 -- Entry logic
 --region Helpers
-addNewEntry = function(cat, entry, distance)
-    -- Job
-    if entry.job then
-        if type(entry.job) == 'string' then
-            if not PlayerData.job.name == entry.job then
-                return
-            end
-        end
-        if type(entry.job) == 'table' then
-            if entry.job[1] then
-                if not isItemInArray(entry.job, PlayerData.job.name) then
-                    return
-                end
-            else
-                local reqGrade = getValueFromTable(entry.job, PlayerData.job.name)
-                if not reqGrade or reqGrade > PlayerData.job.grade.level then
-                    return
-                end
-            end
-        end
-    end
-    -- Gang
-    if entry.gang then
-        if type(entry.gang) == 'string' then
-            if not PlayerData.gang.name == entry.gang then
-                return
-            end
-        end
-        if type(entry.gang) == 'table' then
-            if not isItemInArray(entry.gang, PlayerData.gang.name) then
-                return
-            end
-        end
-    end
-    -- Items
-    if entry.items then
-        if type(entry.items) == 'string' then
-            if not DGCore.Functions.HasItem(entry.items) then
-                return
-            end
-        end
-        if type(entry.items) == 'table' then
-            local hasItem = true
-            for _, item in ipairs(entry.items) do
-                if not DGCore.Functions.HasItem(item) then
-                    hasItem = false
-                    break
-                end
-            end
-            if not hasItem then
-                return
-            end
-        end
-    end
-    -- Can Interact
-    if entry.canInteract then
-        if not entry.canInteract(current.entity, entry.distance, entry) then
-            return
-        end
-    end
-    -- Distance check
-    if distance > entry.distance then
-        return
-    end
-    -- If it complies with everything then add it
-    table.insert(activeEntries[cat], entry)
-    refreshList()
+hasActiveEntries = function()
+	local hasActiveEntries = false
+	for _, entry in pairs(activeEntries) do
+		if #entry > 0 then
+			hasActiveEntries = true
+			break
+		end
+	end
+	return hasActiveEntries
 end
-
+addNewEntry = function(cat, entry)
+    if not isItemInArray(activeEntries[cat], entry) then 
+        if entry.job then
+            if type(entry.job) == 'string' then
+                if not PlayerData.job.name == entry.job then
+                    return
+                end
+            end
+            if type(entry.job) == 'table' then
+                if entry.job[1] then
+                    if not isItemInArray(entry.job, PlayerData.job.name) then
+                        return
+                    end
+                else
+                    local reqGrade = getValueFromTable(entry.job, PlayerData.job.name)
+                    if not reqGrade or reqGrade > PlayerData.job.grade.level then
+                        return
+                    end
+                end
+            end
+        end
+        if entry.gang then
+            if type(entry.gang) == 'string' then
+                if not PlayerData.gang.name == entry.gang then
+                    return
+                end
+            end
+            if type(entry.gang) == 'table' then
+                if not isItemInArray(entry.gang, PlayerData.gang.name) then
+                    return
+                end
+            end
+        end
+        if entry.items then
+            if type(entry.items) == 'string' then
+                if not DGCore.Functions.HasItem(entry.items) then
+                    return
+                end
+            end
+            if type(entry.items) == 'table' then
+                local hasItem = true
+                for _, item in ipairs(entry.items) do
+                    if not DGCore.Functions.HasItem(item) then
+                        hasItem = false
+                        break
+                    end
+                end
+                if not hasItem then
+                    return
+                end
+            end
+        end
+        table.insert(activeEntries[cat], entry)
+        refreshList()
+    end
+end
 refreshList = function()
 	-- Send refreshedList to UI
-	if not hasActiveEntries(activeEntries) then
+	if not hasActiveEntries() then
 		SendNUIMessage({ response = "leftTarget" })
 		return
 	end
@@ -150,14 +154,43 @@ refreshList = function()
 	end
 	SendNUIMessage({ response = "foundTarget", data = _list })
 end
+getEntryById = function(id)
+	for sub, entries in pairs(activeEntries) do
+		for _, entry in ipairs(entries) do
+			if tonumber(entry.id) == tonumber(id) then
+				return entry
+			end
+		end
+	end
+end
 --endregion
-
 --region Thread creators
 startCheckThread = function()
 	CreateThread(function()
-		while isPeeking and not isFocused do
-            generateCurrentEntries()
-			Wait(100)
+		local ped = PlayerPedId()
+		while isPeeking and not isFocused and current.entity do
+			local coords = GetEntityCoords(current.entity)
+			-- Check for bones
+			for bone, entries in pairs(activeEntries.bones) do
+				local boneId = GetEntityBoneIndexByName(current.entity, bone)
+				local bonePos = GetWorldPositionOfEntityBone(entity, boneId)
+				for _, entry in ipairs(entries) do
+					activeEntries.bones[bone].disabled = false
+					local dist = #(current.coords - bonePos)
+					if boneId == -1 or dist > entry.distance then
+						activeEntries.bones[bone].disabled = true
+					end
+				end
+			end
+			-- Check canInteract
+			for cat, options in pairs(activeEntries) do
+				for idx, entry in ipairs(options) do
+					if entry.canInteract then
+						activeEntries[cat][idx].disabled = not entry.canInteract(current.entity, entry.distance, entry)
+					end
+				end
+			end
+			Wait(150)
 		end
 	end)
 end
@@ -181,33 +214,38 @@ startControlThread = function()
 end
 --endregion
 
-generateCurrentEntries = function()
+generateCurrentEntries = function(doZone)
 	local ped = PlayerPedId()
 	local plyCoords = GetEntityCoords(ped)
-    -- entity stuff
 	if current.entity then
-        activeEntries.model = {}
+		local context = getContext(current.entity, current.type)
+		activeEntries.model = {}
 		activeEntries.entity = {}
 		activeEntries.bones = {}
 		activeEntries.flags = {}
-		local context = getContext(current.entity, current.type)
 		if peekEntries.model[context.model] then
 			for _, entry in ipairs(peekEntries.model[context.model]) do
-                addNewEntry('model', entry, #(plyCoords - current.coords))
+				if #(plyCoords - current.coords) <= entry.distance and (entry.canInteract and entry.canInteract(current.entity, entry.distance, entry) or true) then
+					addNewEntry('model', entry)
+				end
 			end
 		end
 		if NetworkGetNetworkIdFromEntity(current.entity) then
 			local netId = NetworkGetNetworkIdFromEntity(current.entity)
 			if peekEntries.entity[netId] then
 				for _, entry in ipairs(peekEntries.entity[netId]) do
-                    addNewEntry('model', entry, #(plyCoords - current.coords))
+					if #(plyCoords - current.coords) <= entry.distance and (entry.canInteract and entry.canInteract(netId, entry.distance, entry) or true) then
+						addNewEntry('entity', entry)
+					end
 				end
 			end
 		end
 		for flag, active in pairs(context.flags) do
 			if peekEntries.flags[flag] and active then
 				for _, entry in ipairs(peekEntries.flags[flag]) do
-                    addNewEntry('model', entry, #(plyCoords - current.coords))
+					if #(plyCoords - current.coords) <= entry.distance and (entry.canInteract and entry.canInteract(current.entity, entry.distance, entry) or true) then
+						addNewEntry('flags', entry)
+					end
 				end
 			end
 		end
@@ -215,22 +253,78 @@ generateCurrentEntries = function()
 			local boneId = GetEntityBoneIndexByName(current.entity, bone)
 			if boneId ~= -1 then
 				local bonePos = GetWorldPositionOfEntityBone(current.entity, boneId)
-				for _, entry in ipairs(entries) do
-                    addNewEntry('model', entry, #(plyCoords - bonePos))
+				for idx, entry in ipairs(entries) do
+					if #(plyCoords - bonePos) <= entry.distance and (entry.canInteract and entry.canInteract(current.entity, entry.distance, entry) or true) then
+						entry.disabled = true
+						addNewEntry('bones', entry)
+					end
 				end
 			end
 		end
 	end
-    -- zone stuff
-    activeEntries.zones = {}
-    for zoneName, zoneInfo in pairs(activeZones) do
-        if zoneInfo.point and peekEntries.zones[zoneName] then
-            for index, entry in ipairs(peekEntries.zones[zoneName]) do
-                entry.data = entry.data and combineTables(entry.data, zoneInfo.data) or zoneInfo.data
-                addNewEntry("zones", entry, #(plyCoords - zoneInfo.point))
-            end
-        end
-    end
+	if doZone then
+		activeEntries.zones = {}
+		for zone, active in pairs(activeZones) do
+			if active and peekEntries.zones[zone] then
+				for index, entry in ipairs(peekEntries.zones[zone]) do
+					metadata = {
+						name = zone,
+						index = index,
+					}
+					entry._metadata = metadata
+					addNewEntry("zones", entry)
+				end
+			end
+		end
+	end
+	refreshList()
+end
+
+updateEntityList = function()
+	if not isPeeking or isFocused then
+		return
+	end
+	if current.entity == nil then
+		activeEntries.entity = {}
+		activeEntries.model = {}
+		activeEntries.bones = {}
+		activeEntries.flags = {}
+		refreshList()
+		return
+	end
+	generateCurrentEntries(false)
+end
+
+updateZoneList = function(zoneName, data)
+	if not isPeeking or isFocused then
+		return
+	end
+	if not peekEntries.zones[zoneName] then
+		return
+	end
+
+	if data then
+		for index, entry in ipairs(peekEntries.zones[zoneName]) do
+			metadata = {
+				name = zoneName,
+				index = index,
+			}
+			if isEntryInList(activeEntries.zones, metadata) then
+				return
+			end
+			entry._metadata = metadata
+			entry.data = entry.data and combineTables(entry.data, data) or data
+			addNewEntry("zones", entry)
+		end
+		return
+	end
+
+	for idx, entry in ipairs(activeEntries.zones) do
+		if entry._metadata.name == zoneName then
+			print("removing zone entry", zoneName)
+			table.remove(activeEntries.zones, idx)
+		end
+	end
 	refreshList()
 end
 
@@ -273,7 +367,6 @@ addEntry = function(entryType, key, parameters, checker)
 	end
 	return newIds
 end
-
 addModelEntry = function(model, parameters)
 	if type(model) == 'table' then
 		local ids = {}
@@ -287,11 +380,9 @@ addModelEntry = function(model, parameters)
 	end
 	return addEntry('model', model, parameters)
 end
-
 addEntityEntry = function(entity, parameters)
 	return addEntry('entity', entity, parameters)
 end
-
 addBoneEntry = function(bone, parameters)
 	local checker = function(bone)
 		if (not isItemInArray(BONES, bone)) then
@@ -302,18 +393,15 @@ addBoneEntry = function(bone, parameters)
 	end
 	return addEntry('bones', bone, parameters, checker)
 end
-
 addFlagEntry = function(flag, parameters)
 	addFlag(flag)
 	return addEntry('flags', flag, parameters)
 end
-
 -- Name w/e data.id
 addZoneEntry = function(zoneName, parameters)
 	return addEntry('zones', zoneName, parameters)
 end
 --endregion
-
 --region Removers
 removeEntryById = function(entryType, id)
 	debug('[DG-Peek] Removing entry | type: %s | id: %s', entryType, id)
@@ -336,34 +424,34 @@ removeEntryById = function(entryType, id)
 		end
 	end
 end
-
 removeModelEntry = function(ids)
 	removeEntryById('model', ids)
+	generateCurrentEntries()
 end
-
 removeEntityEntry = function(ids)
 	removeEntryById('entity', ids)
+	generateCurrentEntries()
 end
-
 removeBoneEntry = function(ids)
 	removeEntryById('bones', ids)
+	generateCurrentEntries()
 end
-
 removeFlagEntry = function(ids)
 	removeEntryById('flags', ids)
+	generateCurrentEntries()
 end
-
 removeZoneEntry = function(ids)
 	removeEntryById('zones', ids)
+	generateCurrentEntries(true)
 end
 --endregion
 --endregion
 --endregion
-
 --region Events
--- Events from other scripts
 RegisterNetEvent('dg-lib:keyEvent', function(name, isDown)
-	if name ~= 'playerPeek' then return end
+	if name ~= 'playerPeek' then
+		return
+	end
 	if isDown then
 		enablePeek()
 	else
@@ -375,20 +463,19 @@ RegisterNetEvent('dg-lib:targetinfo:changed', function(entity, type, coords)
 	current.entity = entity
 	current.type = type
 	current.coords = coords
+	updateEntityList()
 end)
 
-RegisterNetEvent('dg-polytarget:enter', function(name, data, point)
-	activeZones[name] = {
-        point = point,
-        data = data,
-    }
+RegisterNetEvent('dg-polytarget:enter', function(name, data)
+	activeZones[name] = true
+	updateZoneList(name, data)
 end)
 
 RegisterNetEvent('dg-polytarget:exit', function(name)
 	activeZones[name] = nil
+	updateZoneList(name, false)
 end)
 
--- NUI callbacks
 RegisterNUICallback('closeTarget', function(_, cb)
 	isFocused = false
 	disablePeek()
@@ -397,7 +484,7 @@ end)
 
 RegisterNUICallback('selectTarget', function(data, cb)
 	-- We make a copy to prevent data loss when closing the UI & resetting the vars
-	local entry = getEntryById(activeEntries, data.id)
+	local entry = getEntryById(data.id)
 	isFocused = false
 	disablePeek()
 	if not entry then
@@ -417,8 +504,8 @@ RegisterNUICallback('selectTarget', function(data, cb)
 	end
 	cb('ok')
 end)
---endregion
 
+--endregion
 --region Exports
 -- Calling
 exports['dg-lib']:registerKeyMapping('playerPeek', 'Open peek eye', '+playerPeek', '-playerPeek', Config.OpenKey, true)
