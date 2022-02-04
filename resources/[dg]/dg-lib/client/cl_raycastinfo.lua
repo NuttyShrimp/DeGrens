@@ -3,6 +3,8 @@ local debugEnabled = false
 originCoords = nil
 forwardCoords = nil
 
+local IntersectCoords = vector3(0, 0, 0)
+
 function getForwardVector(rotation)
 	local rot = (math.pi / 180) * rotation
 	return vector3(-math.sin(rot.z) * math.abs(math.cos(rot.x)), math.cos(rot.z) * math.abs(math.cos(rot.x)), math.sin(rot.x))
@@ -43,6 +45,7 @@ Citizen.CreateThread(function()
 	while true do
 		local ped = PlayerPedId()
 		local entity, entityType, entityCoords = getEntityPlayerLookingAt()
+        IntersectCoords = entityCoords
 
 		if entity and entityType ~= 0 then
 			if entity ~= CurrentTarget then
@@ -68,6 +71,10 @@ exports('GetCurrentEntity', function(distance)
 		return CurrentTarget
 	end
 	return 0
+end)
+
+exports("GetIntersectCoords", function()
+    return IntersectCoords
 end)
 
 AddEventHandler('baseevents:enteredVehicle', function()
