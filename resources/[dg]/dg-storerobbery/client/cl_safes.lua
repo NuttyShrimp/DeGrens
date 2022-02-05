@@ -6,6 +6,7 @@ function EnteredSafeZone()
 		return
 	end
 	exports['dg-polytarget']:AddCircleZone("store_safe", store.safe.coords, 0.5, {
+        useZ = true,
 		data = {
 			id = store.name
 		},
@@ -23,14 +24,14 @@ end
 
 local function CanHackSafe()
 	if not currentStore then
-		return
+		return false
 	end
 	return Config.Stores[currentStore].safe.state == "closed"
 end
 
 local function CanLootSafe()
 	if not currentStore then
-		return
+		return false
 	end
 	return Config.Stores[currentStore].safe.state == "opened"
 end
