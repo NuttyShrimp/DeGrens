@@ -11,7 +11,7 @@ end
 function GetTargetCoords()
 	local CameraCoords = GetGameplayCamCoord()
 	local ForwardVectors = GetForwardVector(GetGameplayCamRot(2))
-	local ForwardCoords = CameraCoords + (ForwardVectors * (IsInVehicle and 6.5 or 5.0))
+	local ForwardCoords = CameraCoords + (ForwardVectors * (IsInVehicle and 11.5 or 10.0))
 	local TargetCoords = vector3(0.0, 0.0, 0.0)
 
 	if ForwardVectors then

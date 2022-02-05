@@ -40,3 +40,18 @@ combineTables = function(t1, t2)
 	end
 	return t3
 end
+
+--- Takes a table and checks if all values are true.
+isEntryDisabled = function(entry)
+	if entry.disabled then
+		return true
+	end
+	if entry._metadata and entry._metadata.state then
+		for _, v in pairs(entry._metadata.state) do
+			if not v then
+				return true
+			end
+		end
+	end
+	return false
+end

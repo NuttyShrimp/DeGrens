@@ -9,14 +9,14 @@ function getForwardVector(rotation)
 end
 
 function rayCast(origin, target, radius, flags, ignore)
-	local handle = StartShapeTestSweptSphere(origin.x, origin.y, origin.z, target.x, target.y, target.z, radius, flags, ignore, 0)
+	local handle = StartShapeTestSweptSphere(origin, target, radius, flags, ignore, 0)
 	return GetShapeTestResult(handle)
 end
 
 function getEntityPlayerLookingAt(pDistance, pRadius, pFlag, pIgnore)
-	pDistance = pDistance or 3.0
+	pDistance = pDistance or 10.0
 	originCoords = GetGameplayCamCoord()
-	local forwardVector = getForwardVector(GetGameplayCamRot(2))
+	local forwardVector = getForwardVector(GetGameplayCamRot())
 	forwardCoords = originCoords + forwardVector * (isInVehicle and pDistance + 1.5 or pDistance)
 
 	if not forwardVector then
@@ -37,7 +37,7 @@ end
 Citizen.CreateThread(function()
 	while true do
 		local ped = PlayerPedId()
-		local entity, entityType, entityCoords = getEntityPlayerLookingAt(3.0, 0.2, 286, ped)
+		local entity, entityType, entityCoords = getEntityPlayerLookingAt(10.0, 0.2, 286, ped)
 
 		if entity and entityType ~= 0 then
 			if entity ~= CurrentTarget then

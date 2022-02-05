@@ -1,7 +1,7 @@
 -- This is very lookalike to polyzone but is specific for dg-peek targets
 local DEBUG_ENABLED = false
 local DEBUG_MAX_DISTANCE = 300.0
-local IsInVehicle = false
+IsInVehicle = false
 targetZone = nil
 local createdTargetZones = {}
 
