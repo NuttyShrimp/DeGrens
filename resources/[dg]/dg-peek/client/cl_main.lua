@@ -20,7 +20,7 @@ local current = {
 	coords = nil,
 }
 local activeZones = {}
-local canPeek, isPeeking, isFocused, generatedId = true, false, false, 1
+local canPeek, isPeeking, isFocused, threadRunning, generatedId = true, false, false, false, 1
 
 --region Functions
 setPeekEnabled = function(isEnabled)
@@ -76,67 +76,83 @@ end
 --region Helpers
 hasActiveEntries = function()
 	local hasActiveEntries = false
-	for _, entry in pairs(activeEntries) do
-		if #entry > 0 then
-			hasActiveEntries = true
+	for _, entries in pairs(activeEntries) do
+		for _, entry in pairs(entries) do
+			if not isEntryDisabled(entry) then
+				hasActiveEntries = true
+			end
 			break
 		end
 	end
 	return hasActiveEntries
 end
 addNewEntry = function(cat, entry)
-	if entry.job then
-		if type(entry.job) == 'string' then
-			if not PlayerData.job.name == entry.job then
-				return
-			end
-		end
-		if type(entry.job) == 'table' then
-			if entry.job[0] then
-				if not isItemInArray(entry.job, PlayerData.job.name) then
-					return
-				end
-			else
-				local reqGrade = getValueFromTable(entry.job, PlayerData.job.grade)
-				if not reqGrade or reqGrade > PlayerData.job.grade then
+	if not isItemInArray(activeEntries[cat], entry) then
+		if entry.job then
+			if type(entry.job) == 'string' then
+				if not PlayerData.job.name == entry.job then
 					return
 				end
 			end
-		end
-	end
-	if entry.gang then
-		if type(entry.gang) == 'string' then
-			if not PlayerData.gang.name == entry.gang then
-				return
-			end
-		end
-		if type(entry.gang) == 'table' then
-			if not isItemInArray(entry.gang, PlayerData.gang.name) then
-				return
-			end
-		end
-	end
-	if entry.items then
-		if type(entry.items) == 'string' then
-			if not DGCore.Functions.HasItem(entry.items) then
-				return
-			end
-		end
-		if type(entry.items) == 'table' then
-			local hasItem = true
-			for _, item in ipairs(entry.items) do
-				if not DGCore.Functions.HasItem(item) then
-					hasItem = false
-					break
+			if type(entry.job) == 'table' then
+				if entry.job[1] then
+					if not isItemInArray(entry.job, PlayerData.job.name) then
+						return
+					end
+				else
+					local reqGrade = getValueFromTable(entry.job, PlayerData.job.name)
+					if not reqGrade or reqGrade > PlayerData.job.grade.level then
+						return
+					end
 				end
 			end
-			if not hasItem then
-				return
+		end
+		if entry.gang then
+			if type(entry.gang) == 'string' then
+				if not PlayerData.gang.name == entry.gang then
+					return
+				end
+			end
+			if type(entry.gang) == 'table' then
+				if not isItemInArray(entry.gang, PlayerData.gang.name) then
+					return
+				end
 			end
 		end
+		if entry.items then
+			if type(entry.items) == 'string' then
+				if not DGCore.Functions.HasItem(entry.items) then
+					return
+				end
+			end
+			if type(entry.items) == 'table' then
+				local hasItem = true
+				for _, item in ipairs(entry.items) do
+					if not DGCore.Functions.HasItem(item) then
+						hasItem = false
+						break
+					end
+				end
+				if not hasItem then
+					return
+				end
+			end
+		end
+		if not entry._metadata then
+			entry._metadata = {}
+		end
+		if not entry._metadata.state then
+			entry._metadata.state = {}
+		end
+		if entry.canInteract ~= nil then
+			entry._metadata.state.canInteract = entry.canInteract(current.entity, entry.distance, entry)
+		end
+		if entry.distance ~= nil then
+			entry._metadata.state.distance = false
+		end
+		table.insert(activeEntries[cat], entry)
+		refreshList()
 	end
-	table.insert(activeEntries[cat], entry)
-	refreshList()
 end
 refreshList = function()
 	-- Send refreshedList to UI
@@ -147,7 +163,9 @@ refreshList = function()
 	local _list = {}
 	for sub, entries in pairs(activeEntries) do
 		for _, entry in ipairs(entries) do
-			table.insert(_list, entry)
+			if not isEntryDisabled(entry) then
+				table.insert(_list, entry)
+			end
 		end
 	end
 	SendNUIMessage({ response = "foundTarget", data = _list })
@@ -164,19 +182,28 @@ end
 --endregion
 --region Thread creators
 startCheckThread = function()
+	if threadRunning then
+		return
+	end
 	CreateThread(function()
 		local ped = PlayerPedId()
-		while isPeeking and not isFocused and current.entity do
-			local coords = GetEntityCoords(current.entity)
+		threadRunning = true
+		while isPeeking and not isFocused and (current.entity or DGCore.Shared.tableLen(activeZones) > 0) do
+			local plyCoords = GetEntityCoords(ped)
+			local isDirty = false
 			-- Check for bones
 			for bone, entries in pairs(activeEntries.bones) do
 				local boneId = GetEntityBoneIndexByName(current.entity, bone)
 				local bonePos = GetWorldPositionOfEntityBone(entity, boneId)
 				for _, entry in ipairs(entries) do
-					activeEntries.bones[bone].disabled = false
+					local oldState = activeEntries.bones[bone]._metadata.state.distance
+					activeEntries.bones[bone]._metadata.state.distance = false
 					local dist = #(current.coords - bonePos)
 					if boneId == -1 or dist > entry.distance then
-						activeEntries.bones[bone].disabled = true
+						activeEntries.bones[bone]._metadata.state.distance = true
+					end
+					if oldState ~= activeEntries.bones[bone]._metadata.state.distance then
+						isDirty = true
 					end
 				end
 			end
@@ -184,12 +211,45 @@ startCheckThread = function()
 			for cat, options in pairs(activeEntries) do
 				for idx, entry in ipairs(options) do
 					if entry.canInteract then
-						activeEntries[cat][idx].disabled = not entry.canInteract(current.entity, entry.distance, entry)
+						local oldState = entry._metadata.state.canInteract
+						activeEntries[cat][idx]._metadata.state.canInteract = entry.canInteract(current.entity, entry.distance, entry)
+						if oldState ~= activeEntries[cat][idx]._metadata.state.canInteract then
+							isDirty = true
+						end
 					end
 				end
 			end
+			-- Check for distance
+			for cat, options in pairs(activeEntries) do
+				if cat == 'bones' then
+					goto continue
+				end
+				for idx, entry in ipairs(options) do
+					if entry.distance then
+						local oldState = entry._metadata.state.distance
+						local targetCoords = current.coords
+						if cat == 'zones' then
+							targetCoords = activeZones[entry._metadata.name]
+						end
+						if targetCoords == nil then
+							activeEntries[cat][idx]._metadata.state.distance = false
+						else
+							activeEntries[cat][idx]._metadata.state.distance = #(plyCoords - targetCoords) <= entry.distance
+							end
+						if oldState ~= activeEntries[cat][idx]._metadata.state.distance then
+							isDirty = true
+						end
+					end
+				end
+				:: continue ::
+			end
+			if isDirty then
+				debug('Refreshing list, entries changed')
+				refreshList()
+			end
 			Wait(150)
 		end
+		threadRunning = false
 	end)
 end
 
@@ -223,27 +283,21 @@ generateCurrentEntries = function(doZone)
 		activeEntries.flags = {}
 		if peekEntries.model[context.model] then
 			for _, entry in ipairs(peekEntries.model[context.model]) do
-				if #(plyCoords - current.coords) <= entry.distance and (entry.canInteract and entry.canInteract(current.entity, entry.distance, entry) or true) then
-					addNewEntry('model', entry)
-				end
+				addNewEntry('model', entry)
 			end
 		end
 		if NetworkGetNetworkIdFromEntity(current.entity) then
 			local netId = NetworkGetNetworkIdFromEntity(current.entity)
 			if peekEntries.entity[netId] then
 				for _, entry in ipairs(peekEntries.entity[netId]) do
-					if #(plyCoords - current.coords) <= entry.distance and (entry.canInteract and entry.canInteract(netId, entry.distance, entry) or true) then
-						addNewEntry('entity', entry)
-					end
+					addNewEntry('entity', entry)
 				end
 			end
 		end
 		for flag, active in pairs(context.flags) do
 			if peekEntries.flags[flag] and active then
 				for _, entry in ipairs(peekEntries.flags[flag]) do
-					if #(plyCoords - current.coords) <= entry.distance and (entry.canInteract and entry.canInteract(current.entity, entry.distance, entry) or true) then
-						addNewEntry('flags', entry)
-					end
+					addNewEntry('flags', entry)
 				end
 			end
 		end
@@ -252,10 +306,12 @@ generateCurrentEntries = function(doZone)
 			if boneId ~= -1 then
 				local bonePos = GetWorldPositionOfEntityBone(current.entity, boneId)
 				for idx, entry in ipairs(entries) do
-					if #(plyCoords - bonePos) <= entry.distance and (entry.canInteract and entry.canInteract(current.entity, entry.distance, entry) or true) then
-						entry.disabled = true
-						addNewEntry('bones', entry)
-					end
+					entry._metadata = {
+						state = {
+							distance = false,
+						}
+					}
+					addNewEntry('bones', entry)
 				end
 			end
 		end
@@ -319,7 +375,6 @@ updateZoneList = function(zoneName, data)
 
 	for idx, entry in ipairs(activeEntries.zones) do
 		if entry._metadata.name == zoneName then
-			print("removing zone entry", zoneName)
 			table.remove(activeEntries.zones, idx)
 		end
 	end
@@ -461,12 +516,14 @@ RegisterNetEvent('dg-lib:targetinfo:changed', function(entity, type, coords)
 	current.entity = entity
 	current.type = type
 	current.coords = coords
+	startCheckThread()
 	updateEntityList()
 end)
 
-RegisterNetEvent('dg-polytarget:enter', function(name, data)
-	activeZones[name] = true
+RegisterNetEvent('dg-polytarget:enter', function(name, data, center)
+	activeZones[name] = center
 	updateZoneList(name, data)
+	startCheckThread()
 end)
 
 RegisterNetEvent('dg-polytarget:exit', function(name)

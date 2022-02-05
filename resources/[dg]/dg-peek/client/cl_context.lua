@@ -43,3 +43,9 @@ end
 RegisterNetEvent('DGCore:Player:SetPlayerData', function(_data)
 	PlayerData = _data
 end)
+
+RegisterNetEvent('onResourceStart', function(resourceName)
+    if GetCurrentResourceName() ~= resourceName then return end
+    while not DGCore do Wait(0) end
+    PlayerData = DGCore.Functions.GetPlayerData()
+end)
