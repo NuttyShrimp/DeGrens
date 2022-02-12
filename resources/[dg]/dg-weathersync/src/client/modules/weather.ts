@@ -28,19 +28,6 @@ const setWeather = async (weather: WeatherProgression, skipFreeze = false): Prom
 	if (weatherFrozen && !skipFreeze) {
 		return;
 	}
-	emit('chat:addMessage', {
-		template:
-			'<div class="chat-message"><b>WEATHER REPORT</b><br> {0} at {1}°F <br>{2}mph {3} {4}</div>',
-		args: [
-			weather.weather,
-			weather.temperature,
-			(weather.windSpeed * 2.236936).toFixed(2),
-			windDirections[Math.round(weather.windDir)].long,
-			includesRain.includes(currentWeather.weather)
-				? `with Rain at ${Math.round(weather.rainLevel * 100)}%`
-				: '',
-		],
-	});
 	if (currentWeather.weather !== weather.weather) {
 		SetWeatherTypeOvertimePersist(weather.weather, overrideTime);
 		await wait(overrideTime * 1000);
