@@ -15,7 +15,7 @@ function GetTargetCoords()
 	local TargetCoords = vector3(0.0, 0.0, 0.0)
 
 	if ForwardVectors then
-		local _, hit, targetCoords, _, _ = RayCast(CameraCoords, ForwardCoords, 17, nil, 0.1)
+		local _, hit, targetCoords, _, _ = RayCast(CameraCoords, ForwardCoords, -1, nil, 0.1)
 
 		TargetCoords = targetCoords
 		if DEBUG_ENABLED then

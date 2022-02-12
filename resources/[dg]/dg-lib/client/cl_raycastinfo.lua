@@ -37,7 +37,7 @@ end
 Citizen.CreateThread(function()
 	while true do
 		local ped = PlayerPedId()
-		local entity, entityType, entityCoords = getEntityPlayerLookingAt(10.0, 0.2, 286, ped)
+		local entity, entityType, entityCoords = getEntityPlayerLookingAt(10.0, 0.2, -1, ped)
 
 		if entity and entityType ~= 0 then
 			if entity ~= CurrentTarget then
