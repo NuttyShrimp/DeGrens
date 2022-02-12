@@ -17,6 +17,18 @@ Citizen.CreateThread(function()
 		zone.options.data = zone.options.data or {}
 		zone.options.data.id = v.name
 		exports["dg-polyzone"]:AddBoxZone("apartment", zone.center, zone.length, zone.width, zone.options)
+
+		locBlip = AddBlipForCoord(zone.center)
+
+		SetBlipSprite (locBlip, 475)
+		SetBlipDisplay(locBlip, 4)
+		SetBlipScale  (locBlip, 0.7)
+		SetBlipAsShortRange(locBlip, true)
+		SetBlipColour(locBlip, 6)
+
+		BeginTextCommandSetBlipName("STRING")
+		AddTextComponentSubstringPlayerName(("Appartement (%s)"):format(v.label))
+		EndTextCommandSetBlipName(locBlip)
 	end
 end)
 
