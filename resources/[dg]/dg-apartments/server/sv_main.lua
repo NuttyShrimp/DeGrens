@@ -41,7 +41,6 @@ end)
 
 -- id is an optional parameter
 enterApartment = function(src, id)
-	local Player = DGCore.Functions.GetPlayer(src)
 	if (state.isInLockdown) then
     TriggerClientEvent('DGCore:Notify', src, "Het appartementsblok is momenteel onder lockdown", "error")
     return
@@ -49,6 +48,10 @@ enterApartment = function(src, id)
 	if (not id) then
     id = getPlayerApartment(src)
   end
+	if (not doesApartmentExist(id)) then
+		TriggerClientEvent('DGCore:Notify', src, "Dit appartement heeft geen eigenaar", "error")
+		return
+	end
 	local apartment = joinApartment(id, src)
 	TriggerEvent("InteractSound_SV:PlayOnOne", src, "houses_door_open", 0.1)
 	TriggerClientEvent('dg-apartments:client:doKeyAnim', src)

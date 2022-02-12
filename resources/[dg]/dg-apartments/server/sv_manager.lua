@@ -113,3 +113,11 @@ getInvitedApartments = function(src)
   end
   return invitedApartments
 end
+
+doesApartmentExist = function(id)
+	if (activeApartments[id]) then
+		return true
+	end
+	local result = exports.oxmysql:executeSync('SELECT id FROM apartments WHERE id = ?', {id})
+	return result and result[1] or false
+end
