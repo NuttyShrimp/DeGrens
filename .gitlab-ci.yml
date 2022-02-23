@@ -37,5 +37,4 @@ sonarqube-check:
     - sonar-scanner
   allow_failure: true
   only:
-    - merge_requests
     - main
