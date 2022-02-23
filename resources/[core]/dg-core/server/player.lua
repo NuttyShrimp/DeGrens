@@ -322,6 +322,7 @@ function DGCore.Player.CreatePlayer(PlayerData)
 					createtime = createtime,
 				}
 				self.Functions.UpdatePlayerData()
+				TriggerClientEvent("inventory:client:CheckHoldable", self.PlayerData.source, item, true)
 				TriggerEvent('qb-log:server:CreateLog', 'playerinventory', 'AddItem', 'green', '**' .. GetPlayerName(self.PlayerData.source) .. ' (citizenid: ' .. self.PlayerData.citizenid .. ' | id: ' .. self.PlayerData.source .. ')** got item: [slot:' .. slot .. '], itemname: ' .. self.PlayerData.items[slot].name .. ', added amount: ' .. amount .. ', new total amount: ' .. self.PlayerData.items[slot].amount)
 				return true
 			elseif (not itemInfo['stackable']) or (not slot or slot == nil) or (itemInfo['type'] == 'weapon') then
@@ -347,6 +348,7 @@ function DGCore.Player.CreatePlayer(PlayerData)
 							createtime = createtime,
 						}
 						self.Functions.UpdatePlayerData()
+						TriggerClientEvent("inventory:client:CheckHoldable", self.PlayerData.source, item, true)
 						TriggerEvent('qb-log:server:CreateLog', 'playerinventory', 'AddItem', 'green', '**' .. GetPlayerName(self.PlayerData.source) .. ' (citizenid: ' .. self.PlayerData.citizenid .. ' | id: ' .. self.PlayerData.source .. ')** got item: [slot:' .. i .. '], itemname: ' .. self.PlayerData.items[i].name .. ', added amount: ' .. amount .. ', new total amount: ' .. self.PlayerData.items[i].amount)
 						--TriggerClientEvent('DGCore:Notify', self.PlayerData.source, itemInfo['label'].. ' toegevoegd!', 'success')
 						return true
@@ -372,6 +374,7 @@ function DGCore.Player.CreatePlayer(PlayerData)
 			else
 				self.PlayerData.items[slot] = nil
 				self.Functions.UpdatePlayerData()
+				TriggerClientEvent("inventory:client:CheckHoldable", self.PlayerData.source, item, false)
 				TriggerEvent('qb-log:server:CreateLog', 'playerinventory', 'RemoveItem', 'red', '**' .. GetPlayerName(self.PlayerData.source) .. ' (citizenid: ' .. self.PlayerData.citizenid .. ' | id: ' .. self.PlayerData.source .. ')** lost item: [slot:' .. slot .. '], itemname: ' .. item .. ', removed amount: ' .. amount .. ', item removed')
 				return true
 			end
@@ -388,6 +391,7 @@ function DGCore.Player.CreatePlayer(PlayerData)
 					elseif self.PlayerData.items[slot].amount == amountToRemove then
 						self.PlayerData.items[slot] = nil
 						self.Functions.UpdatePlayerData()
+						TriggerClientEvent("inventory:client:CheckHoldable", self.PlayerData.source, item, false)
 						TriggerEvent('qb-log:server:CreateLog', 'playerinventory', 'RemoveItem', 'red', '**' .. GetPlayerName(self.PlayerData.source) .. ' (citizenid: ' .. self.PlayerData.citizenid .. ' | id: ' .. self.PlayerData.source .. ')** lost item: [slot:' .. slot .. '], itemname: ' .. item .. ', removed amount: ' .. amount .. ', item removed')
 						return true
 					end

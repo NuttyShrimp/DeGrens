@@ -1,6 +1,5 @@
-DGCore = exports['dg-core']:GetCoreObject()
+local DGCore = exports['dg-core']:GetCoreObject()
 
-RegisterServerEvent("dg-npc:server:FetchNpcs")
-AddEventHandler("dg-npc:server:FetchNpcs", function()
-    TriggerClientEvent("dg-npc:client:SetPed", source, NPCS)
+DGCore.Functions.CreateCallback("dg-npcs:server:FetchNPCs", function(source, cb)
+    cb(NPCS)
 end)

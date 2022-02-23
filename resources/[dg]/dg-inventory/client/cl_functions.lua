@@ -74,3 +74,15 @@ function PlayInvAnim()
         ClearPedSecondaryTask(PlayerPedId())
     end)
 end
+
+holdObject = function()
+    LoadAnimDict("anim@heists@box_carry@")
+    Citizen.CreateThread(function()
+        while holdingObject do
+            if not IsEntityPlayingAnim(ped, "anim@heists@box_carry@", "idle", 3) then
+                TaskPlayAnim(ped, "anim@heists@box_carry@", "idle", 2.0, 2.0, -1, 51, 0, false, false, false)
+            end
+            Citizen.Wait(500)
+        end
+    end)
+end

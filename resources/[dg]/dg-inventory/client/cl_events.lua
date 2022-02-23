@@ -142,11 +142,7 @@ end)
 AddEventHandler("inventory:server:GiveItemToPlayer", function(player)
     currentGivePlayer = player
 
-    DGCore.Functions.TriggerCallback("inventory:server:CreateId", function(callback)
-        Current["give"] = callback
-    end, "give")
-
-    Citizen.Wait(200) -- wait for callback
+    Current["give"] = DGCore.Functions.TriggerCallback("inventory:server:CreateId", nil, "give")
 
     TriggerServerEvent("inventory:server:OpenInventory", "give", Current["give"])
 end)
@@ -156,5 +152,42 @@ AddEventHandler("inventory:client:ClosedGiveInventory", function(inventories)
     if Current["give"] then
         TriggerServerEvent("inventory:server:ReceiveItem", currentGivePlayer, inventories[Current["give"]].items[1])
         Current["give"] = nil
+    end
+end)
+
+holdingObject = false
+RegisterNetEvent('inventory:client:CheckHoldable')
+AddEventHandler('inventory:client:CheckHoldable', function(itemName, hold)
+    if ItemData[itemName:lower()].hold then
+        local ped = PlayerPedId()
+
+        if hold and not holdingObject then
+            TriggerEvent("weapons:client:CheckWeapon", exports['dg-weapons']:GetCurrentWeaponData().name)
+            exports['dg-propattach']:attachInventoryHoldable(itemName)
+            holdingObject = true
+
+            LoadAnimDict("anim@heists@box_carry@")
+            Citizen.CreateThread(function()
+                while holdingObject do
+                    if not IsEntityPlayingAnim(ped, "anim@heists@box_carry@", "idle", 3) then
+                        TaskPlayAnim(ped, "anim@heists@box_carry@", "idle", 2.0, 2.0, -1, 51, 0, false, false, false)
+                    end
+                    Citizen.Wait(500)
+                end
+            end)
+        elseif not hold and holdingObject then
+            local anotherHoldable = false
+            for _, item in pairs(DGCore.Functions.GetPlayerData().items) do
+                if ItemData[item.name].hold then
+                    anotherHoldable = true
+                    break
+                end
+            end
+
+            if not anotherHoldable then
+                exports['dg-propattach']:removeInventoryHoldable()
+                holdingObject = false
+            end
+        end
     end
 end)

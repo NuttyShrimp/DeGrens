@@ -50,7 +50,7 @@ RegisterNetEvent("dg-storerobbery:server:LootSafe", function(store)
     TriggerClientEvent('inventory:client:ItemBox', src, Config.Safe.Reward, "add")
 
     local rng = math.random(1, 100)
-    if rng >= Config.Safe.SpecialItemChance then
+    if rng <= Config.Safe.SpecialItemChance then
         Player.Functions.AddItem(Config.Safe.SpecialItem, 1)
         TriggerClientEvent('inventory:client:ItemBox', src, Config.Safe.SpecialItem, "add")
     end

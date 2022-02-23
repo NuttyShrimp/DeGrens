@@ -952,3 +952,15 @@ CreateThread(function()
         Wait(sleep)
     end
 end)
+
+export('SendToBed', function()
+    sleep = 7
+    if IsControlJustReleased(0, 38) then
+        if GetAvailableBed(closestBed) then
+            TriggerServerEvent("hospital:server:SendToBed", closestBed, false)
+        else
+            DGCore.Functions.Notify("Beds are occupied..", "error")
+        end
+    end
+end)
+
