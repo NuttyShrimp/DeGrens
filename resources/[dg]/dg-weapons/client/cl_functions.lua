@@ -25,7 +25,7 @@ exports("IsRepairAvailable", function()
     return not Config.RepairData.IsRepairing
 end)
 
-function UnholsterWeapon(weaponName)
+function UnholsterWeapon(weaponData)
     local ped = PlayerPedId()
 
     holstering = true
@@ -33,14 +33,14 @@ function UnholsterWeapon(weaponName)
         LoadAnimDict("rcmjosh4")
         TaskPlayAnimAdvanced(ped, "rcmjosh4", "josh_leadout_cop2", GetEntityCoords(ped, true), 0, 0, GetEntityHeading(ped), 3.0, 3.0, -1, 50, 0, 0, 0)
         Citizen.Wait(300)
-        SetCurrentPedWeapon(ped, GetHashKey(weaponName), true)
+        SetPedWeapon(weaponData)
         Citizen.Wait(300)
         StopAnimTask(ped, "rcmjosh4",  "josh_leadout_cop2", 1.0)
     else
         LoadAnimDict("reaction@intimidation@1h")
         TaskPlayAnimAdvanced(ped, "reaction@intimidation@1h", "intro", GetEntityCoords(ped, true), 0, 0, GetEntityHeading(ped), 8.0, 3.0, -1, 50, 0, 0, 0)
         Citizen.Wait(1000)
-        SetCurrentPedWeapon(ped, GetHashKey(weaponName), true)
+        SetPedWeapon(weaponData)
         Citizen.Wait(1400)
         StopAnimTask(ped, "reaction@intimidation@1h",  "intro", 1.0)
     end
@@ -62,7 +62,7 @@ function HolsterWeapon()
         Citizen.Wait(1400)
         StopAnimTask(ped, "reaction@intimidation@1h",  "outro", 1.0)
     end
-    SetCurrentPedWeapon(ped, GetHashKey("WEAPON_UNARMED"), true)
+    SetCurrentPedWeapon(ped, `WEAPON_UNARMED`, true)
     holstering = false
 end
 
@@ -77,4 +77,27 @@ function ShouldHolster(weaponName)
     end
 
     return retval
+end
+
+function DisableAttack()
+    DisableControlAction(1, 140, true)
+    DisableControlAction(1, 141, true)
+    DisableControlAction(1, 142, true)
+end
+
+function SetPedWeapon(weaponData)
+    local ped = PlayerPedId()
+    local hash = GetHashKey(weaponData.name)
+
+    SetCurrentPedWeapon(ped, hash, true)
+
+    if weaponData.info.attachments and next(weaponData.info.attachments) then
+        for _, attachment in pairs(weaponData.info.attachments) do
+            GiveWeaponComponentToPed(ped, hash, GetHashKey(attachment.component))
+        end
+    end
+
+    if weaponData.info.tint then
+        SetPedWeaponTintIndex(ped, hash, weaponData.info.tint)
+    end
 end

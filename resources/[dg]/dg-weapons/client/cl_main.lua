@@ -1,4 +1,5 @@
 DGCore = exports["dg-core"]:GetCoreObject()
+isLoggedIn = false
 playerJobName = nil
 currentWeaponData = {}
 canShoot = true
@@ -18,7 +19,8 @@ Citizen.CreateThread(function()
 				icon = "fas fa-hammer",
 				label = "Repareer Wapen",
 				canInteract = function()
-					if GetSelectedPedWeapon(PlayerPedId()) and GetSelectedPedWeapon(PlayerPedId()) ~= GetHashKey("WEAPON_UNARMED") then
+                    local ped = PlayerPedId()
+					if GetSelectedPedWeapon(ped) and GetSelectedPedWeapon(ped) ~= `WEAPON_UNARMED` then
 						if exports["dg-weapons"]:IsRepairAvailable() and not exports["dg-weapons"]:IsRepairFinished() then
 							return true
 						end
@@ -41,7 +43,8 @@ Citizen.CreateThread(function()
 				icon = "fas fa-spray-can",
 				label = "Tint Wapen",
 				canInteract = function()
-					if GetSelectedPedWeapon(PlayerPedId()) and GetSelectedPedWeapon(PlayerPedId()) ~= GetHashKey("WEAPON_UNARMED") then
+                    local ped = PlayerPedId()
+					if GetSelectedPedWeapon(ped) and GetSelectedPedWeapon(ped) ~= `WEAPON_UNARMED` then
 						return true
 					end
 					return false
@@ -55,9 +58,8 @@ end)
 -- all logic to be applied every frame
 Citizen.CreateThread(function()
 	Citizen.Wait(500)
-
 	while true do
-		if LocalPlayer.state["isLoggedIn"] then
+		if isLoggedIn then
 			if currentWeaponData and next(currentWeaponData) then
 				local ped = PlayerPedId()
 				local weapon = GetSelectedPedWeapon(ped)
@@ -119,35 +121,49 @@ Citizen.CreateThread(function()
 				end
 
 				-- applies recoil while shooting
-				if IsPedShooting(ped) and not IsPedDoingDriveby(ped) then
-					if Config.Recoils[weapon] and Config.Recoils[weapon] ~= 0 then
-						tv = 0
+				if IsPedShooting(ped) and Config.Recoil[weapon] then
+                    local recoil = Config.Recoil[weapon]
 
-						if GetFollowPedCamViewMode() ~= 4 then
-							repeat
-								Citizen.Wait(0)
-								pitch = GetGameplayCamRelativePitch()
+                    -- vertical recoil
+                    if recoil.vertical ~= 0 then
+                        if GetFollowPedCamViewMode() ~= 4 then
+                            local tv = 0
+                            repeat
+                                Citizen.Wait(0)
+                                pitch = GetGameplayCamRelativePitch()
+    
+                                SetGameplayCamRelativePitch(pitch + 0.1, 0.2)
+                                tv = tv + 0.1
+                            until tv >= recoil.vertical
+                        else
+                            local tv = 0
+                            repeat
+                                Citizen.Wait(0)
+                                pitch = GetGameplayCamRelativePitch()
+    
+                                if recoil.vertical > 0.1 then
+                                    SetGameplayCamRelativePitch(pitch + 0.6, 1.2)
+                                    tv = tv + 0.6
+                                else
+                                    SetGameplayCamRelativePitch(pitch + 0.016, 0.333)
+                                    tv = tv + 0.1
+                                end
+                            until tv >= recoil.vertical
+                        end
+                    end
 
-								SetGameplayCamRelativePitch(pitch + 0.1, 0.2)
-								tv = tv + 0.1
-							until tv >= Config.Recoils[weapon]
-						else
-							repeat
-								Citizen.Wait(0)
-								pitch = GetGameplayCamRelativePitch()
-
-								if Config.Recoils[weapon] > 0.1 then
-									SetGameplayCamRelativePitch(pitch + 0.6, 1.2)
-									tv = tv + 0.6
-								else
-									SetGameplayCamRelativePitch(pitch + 0.016, 0.333)
-									tv = tv + 0.1
-								end
-							until tv >= Config.Recoils[weapon]
-						end
-					end
+                    -- explosion effect
+                    if recoil.explosion ~= 0 then
+                        ShakeGameplayCam('SMALL_EXPLOSION_SHAKE', recoil.explosion)
+                    end
 				end
+
+                DisableAttack()
 			else
+                if IsPlayerFreeAiming(PlayerId()) then
+                    DisableAttack()
+                end
+
 				if reticleEnabled then
 					reticleEnabled = false
 					SendNUIMessage({
