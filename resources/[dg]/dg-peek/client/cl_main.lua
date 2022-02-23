@@ -80,8 +80,8 @@ hasActiveEntries = function()
 		for _, entry in pairs(entries) do
 			if not isEntryDisabled(entry) then
 				hasActiveEntries = true
+                break
 			end
-			break
 		end
 	end
 	return hasActiveEntries
@@ -366,7 +366,7 @@ updateZoneList = function(zoneName, data)
 				return
 			end
 			entry._metadata = metadata
-			entry.data = entry.data and combineTables(entry.data, data) or data
+			entry.data = entry.data and combineTables(data, entry.data) or data
 			addNewEntry("zones", entry)
 		end
 		return

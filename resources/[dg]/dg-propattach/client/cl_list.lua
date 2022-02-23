@@ -1,6 +1,6 @@
 props = {
 	phone = {
-		model = "prop_player_phone_01",
+		model = `prop_player_phone_01`,
 		boneId = 28422,
 		--x = 0.14,
 		--y = 0.01,
@@ -14,5 +14,35 @@ props = {
 		rx = 0.0,
 		ry = 0.0,
 		rz = -0.0,
+	},
+	crttv = {
+		model = `prop_tv_06`,
+		boneId = 24818,
+		x = 0.0,
+		y = 0.4,
+		z = 0.0,
+		rx = -7.25,
+		ry = 89.9,
+		rz = 8.5,
+	},
+	tv = {
+		model = `prop_tv_flat_02`,
+		boneId = 24818,
+		x = 0.0,
+		y = 0.4,
+		z = 0.0,
+		rx = -6.05,
+		ry = 91.9,
+		rz = 6.05,
+	}, 
+	vaas = {
+		model = `v_med_p_vaseround`,
+		boneId = 24818,
+		x = -0.20,
+		y = 0.45,
+		z = 0.25,
+		rx = 0.35,
+		ry = 163.65,
+		rz = 0.0,
 	}
 }

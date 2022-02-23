@@ -135,6 +135,17 @@ DGCore.Functions.CreateCallback("inventory:server:CreateId", function(source, cb
 	cb(CreateId(invType))
 end)
 
+DGCore.Functions.CreateCallback('inventory:server:GetGiveItem', function(source, cb, id)
+    local itemData = nil
+    if id and Inventories["give"][id] then -- check if ID actually exists
+        if Inventories["give"][id].items[1] then
+            itemData = Inventories["give"][id].items[1]
+        end
+    end
+
+    cb(itemData)
+end)
+
 -- remove drops when they older than certain time
 Citizen.CreateThread(function()
 	while true do

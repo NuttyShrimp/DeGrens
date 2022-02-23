@@ -1,18 +1,16 @@
 DGCore = exports['dg-core']:GetCoreObject()
+
 Citizen.CreateThread(function()
-    TriggerServerEvent("dg-npc:server:FetchNpcs")
+    local NPCS = DGCore.Functions.TriggerCallback("dg-npcs:server:FetchNPCs")
+    for _, npc in pairs(NPCS) do
+        AddNpc(npc)
+        EnableNpc(npc.id)
+    end 
+
     Handler.StartThread()
 end)
 
 -- events
-
-RegisterNetEvent("dg-npc:client:SetPed")
-AddEventHandler("dg-npc:client:SetPed", function(pNpcs)
-    for _, pNpc in pairs(pNpcs) do
-        AddNpc(pNpc)
-        EnableNpc(pNpc.id)
-    end 
-end)
 
 AddEventHandler("onResourceStop", function(resourceName)
 	if resourceName ~= GetCurrentResourceName() then

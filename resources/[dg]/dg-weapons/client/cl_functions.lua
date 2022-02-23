@@ -79,6 +79,10 @@ function ShouldHolster(weaponName)
     return retval
 end
 
+exports('GetCurrentWeaponData', function()
+    return currentWeaponData
+end)
+
 function DisableAttack()
     DisableControlAction(1, 140, true)
     DisableControlAction(1, 141, true)

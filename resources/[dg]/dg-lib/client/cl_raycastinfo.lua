@@ -9,12 +9,13 @@ function getForwardVector(rotation)
 end
 
 function rayCast(origin, target, radius, flags, ignore)
-	local handle = StartShapeTestSweptSphere(origin, target, radius, flags, ignore, 0)
+	--local handle = StartShapeTestRay(origin, target, flags, ignore, 0)
+	local handle = StartShapeTestCapsule(origin.x, origin.y, origin.z, target.x, target.y, target.z, radius, flags, ignore, 0)
 	return GetShapeTestResult(handle)
 end
 
 function getEntityPlayerLookingAt(pDistance, pRadius, pFlag, pIgnore)
-	pDistance = pDistance or 10.0
+	pDistance = pDistance or 25.0
 	originCoords = GetGameplayCamCoord()
 	local forwardVector = getForwardVector(GetGameplayCamRot())
 	forwardCoords = originCoords + forwardVector * (isInVehicle and pDistance + 1.5 or pDistance)
@@ -37,18 +38,22 @@ end
 Citizen.CreateThread(function()
 	while true do
 		local ped = PlayerPedId()
-		local entity, entityType, entityCoords = getEntityPlayerLookingAt(10.0, 0.2, -1, ped)
+		local entity, entityType, entityCoords = getEntityPlayerLookingAt(25.0, 0.1, -1, ped)
 
 		if entity and entityType ~= 0 then
 			if entity ~= CurrentTarget then
 				CurrentTarget = entity
 				TriggerEvent('dg-lib:targetinfo:changed', CurrentTarget, entityType, entityCoords)
-				debug('[raycastinfo] Target changed to ' .. tostring(entity) .. ' (' .. tostring(entityType) .. ')')
+				if debugEnabled then 
+					debug('[raycastinfo] Target changed to ' .. tostring(entity) .. ' (' .. tostring(entityType) .. ')')
+				end
 			end
 		elseif CurrentTarget then
 			CurrentTarget = nil
 			TriggerEvent('dg-lib:targetinfo:changed', CurrentTarget)
-			debug('[raycastinfo] Target changed to nothing')
+			if debugEnabled then
+				debug('[raycastinfo] Target changed to nothing')
+			end
 		end
 
 		Citizen.Wait(250)

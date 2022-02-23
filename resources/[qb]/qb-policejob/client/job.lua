@@ -379,8 +379,8 @@ CreateThread(function()
                         end
                         if IsControlJustReleased(0, 38) then
                             onDuty = not onDuty
-                            TriggerServerEvent("police:server:UpdateCurrentCops")
                             TriggerServerEvent("DGCore:ToggleDuty")
+                            TriggerServerEvent("police:server:UpdateCurrentCops")
                             TriggerServerEvent("police:server:UpdateBlips")
                         end
                     elseif #(pos - v) < 2.5 then

@@ -303,6 +303,7 @@ Citizen.CreateThread(function()
                     ["decayrate"] = tonumber(item.decayrate),
                     ["image"] = item.image,
                     ["description"] = item.description,
+                    ["hold"] = item.hold or false,
                 } 
 
                 -- for weapons we also need to be able to get data from the hash because we cant convert the hash we get from certain natives to the weapon name
@@ -320,6 +321,7 @@ Citizen.CreateThread(function()
                         ["decayrate"] = tonumber(item.decayrate),
                         ["image"] = item.image,
                         ["description"] = item.description,
+                        ["hold"] = item.hold or false,
                     }
                 end
             end
