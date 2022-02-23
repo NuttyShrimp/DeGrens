@@ -192,20 +192,18 @@ startCheckThread = function()
 			local plyCoords = GetEntityCoords(ped)
 			local isDirty = false
 			-- Check for bones
-			for bone, entries in pairs(activeEntries.bones) do
-				local boneId = GetEntityBoneIndexByName(current.entity, bone)
-				local bonePos = GetWorldPositionOfEntityBone(entity, boneId)
-				for _, entry in ipairs(entries) do
-					local oldState = activeEntries.bones[bone]._metadata.state.distance
-					activeEntries.bones[bone]._metadata.state.distance = false
-					local dist = #(current.coords - bonePos)
-					if boneId == -1 or dist > entry.distance then
-						activeEntries.bones[bone]._metadata.state.distance = true
-					end
-					if oldState ~= activeEntries.bones[bone]._metadata.state.distance then
-						isDirty = true
-					end
-				end
+			for id, entry in pairs(activeEntries.bones) do
+				local boneId = GetEntityBoneIndexByName(current.entity, entry._metadata.boneName)
+				local bonePos = GetWorldPositionOfEntityBone(current.entity, boneId)
+                local oldState = activeEntries.bones[id]._metadata.state.distance
+                activeEntries.bones[id]._metadata.state.distance = false
+                local dist = #(plyCoords - bonePos)
+                if boneId == -1 or dist < entry.distance then
+                    activeEntries.bones[id]._metadata.state.distance = true
+                end
+                if oldState ~= activeEntries.bones[id]._metadata.state.distance then
+                    isDirty = true
+                end
 			end
 			-- Check canInteract
 			for cat, options in pairs(activeEntries) do
@@ -235,7 +233,7 @@ startCheckThread = function()
 							activeEntries[cat][idx]._metadata.state.distance = false
 						else
 							activeEntries[cat][idx]._metadata.state.distance = #(plyCoords - targetCoords) <= entry.distance
-							end
+						end
 						if oldState ~= activeEntries[cat][idx]._metadata.state.distance then
 							isDirty = true
 						end
@@ -244,7 +242,6 @@ startCheckThread = function()
 				:: continue ::
 			end
 			if isDirty then
-				debug('Refreshing list, entries changed')
 				refreshList()
 			end
 			Wait(150)
@@ -301,20 +298,22 @@ generateCurrentEntries = function(doZone)
 				end
 			end
 		end
-		for bone, entries in pairs(peekEntries.bones) do
-			local boneId = GetEntityBoneIndexByName(current.entity, bone)
-			if boneId ~= -1 then
-				local bonePos = GetWorldPositionOfEntityBone(current.entity, boneId)
-				for idx, entry in ipairs(entries) do
-					entry._metadata = {
-						state = {
-							distance = false,
-						}
-					}
-					addNewEntry('bones', entry)
-				end
-			end
-		end
+        if IsEntityAVehicle(current.entity) or IsEntityAPed(current.entity) then
+            for bone, entries in pairs(peekEntries.bones) do
+                local boneId = GetEntityBoneIndexByName(current.entity, bone)
+                if boneId ~= -1 then
+                	for idx, entry in ipairs(entries) do
+                		entry._metadata = {
+                            boneName = bone,
+                			state = {
+                				distance = false,
+                			}
+                		}
+                		addNewEntry('bones', entry)
+                	end
+                end
+            end
+        end
 	end
 	if doZone then
 		activeEntries.zones = {}

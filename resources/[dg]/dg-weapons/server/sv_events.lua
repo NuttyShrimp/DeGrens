@@ -78,10 +78,11 @@ end)
 RegisterNetEvent("weapons:server:ApplyTint", function(currentWeaponData, tint)
     local src = source
     local Player = DGCore.Functions.GetPlayer(src)
+    local Inventory = Player.PlayerData.items
 
     if currentWeaponData then
-        if Player.PlayerData.items[currentWeaponData.slot] then
-            Player.PlayerData.items[currentWeaponData.slot].info.tint = tint
+        if Inventory[currentWeaponData.slot] then
+            Inventory[currentWeaponData.slot].info.tint = tint
         end
         Player.Functions.SetInventory(Player.PlayerData.items, true)
     end

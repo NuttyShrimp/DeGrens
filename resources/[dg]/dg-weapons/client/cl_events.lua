@@ -1,9 +1,22 @@
+AddStateBagChangeHandler('isLoggedIn', nil, function(bagName, key, value)
+    isLoggedIn = value
+end)
+
+AddEventHandler("onResourceStart", function(resourceName)
+    if resourceName ~= GetCurrentResourceName() then return end
+    isLoggedIn = LocalPlayer.state["isLoggedIn"]
+end)
+
+AddEventHandler('onResourceStop', function(resourceName)
+    if resourceName ~= GetCurrentResourceName() then return end
+    local ped = PlayerPedId()
+    RemoveAllPedWeapons(ped, true)
+end)
+
 AddEventHandler("DGCore:Client:OnPlayerLoaded", function()
     playerJobName = DGCore.Functions.GetPlayerData().job.name
-    DGCore.Functions.TriggerCallback("weapons:server:GetConfig", function(repairPoint)
-        Config.RepairData.IsRepairing = repairPoint.IsRepairing
-        Config.RepairData.IsFinished = repairPoint.IsFinished
-        Config.RepairData.RepairingData = repairPoint.RepairingData
+    DGCore.Functions.TriggerCallback("weapons:server:GetConfig", function(data)
+        Config.RepairData = data
     end)
 end)
 
@@ -42,10 +55,11 @@ RegisterNetEvent("weapons:client:UseWeapon", function(weaponData, shootbool)
     local weaponName = tostring(weaponData.name)
     canShoot = shootbool
 
+    RemoveAllPedWeapons(ped, true)
+
     if currentWeaponData.name == weaponName then
         currentWeaponData = {}
         if ShouldHolster(weaponName) then HolsterWeapon() end
-        RemoveAllPedWeapons(ped, true)
     else
         if currentWeaponData and next(currentWeaponData) then
             if ShouldHolster(currentWeaponData.name) then HolsterWeapon() end
@@ -82,19 +96,9 @@ RegisterNetEvent("weapons:client:UseWeapon", function(weaponData, shootbool)
         end
 
         if ShouldHolster(weaponName) then
-            UnholsterWeapon(weaponName)
+            UnholsterWeapon(currentWeaponData)
         else
-            SetCurrentPedWeapon(ped, GetHashKey(weaponName), true)
-        end    
-
-        if currentWeaponData.info.attachments and next(currentWeaponData.info.attachments) then
-            for _, attachment in pairs(weaponData.info.attachments) do
-                GiveWeaponComponentToPed(ped, GetHashKey(weaponName), GetHashKey(attachment.component))
-            end
-        end
-
-        if currentWeaponData.info.tint then
-            SetPedWeaponTintIndex(ped, GetHashKey(weaponName), currentWeaponData.info.tint)
+            SetPedWeapon(currentWeaponData)
         end
     end
 end)

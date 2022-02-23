@@ -6,7 +6,6 @@ function EnteredSafeZone()
 		return
 	end
 	exports['dg-polytarget']:AddCircleZone("store_safe", store.safe.coords, 0.5, {
-        useZ = true,
 		data = {
 			id = store.name
 		},
