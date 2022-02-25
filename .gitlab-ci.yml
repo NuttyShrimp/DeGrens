@@ -1,5 +1,6 @@
 stages: 
   - test
+  - housekeeping
 
 validate json:
   image: node:latest
@@ -36,5 +37,28 @@ sonarqube-check:
   script:
     - sonar-scanner
   allow_failure: true
+  only:
+    - main
+
+rebase UPD:
+  stage: housekeeping
+  image: node:lts
+  script:
+    # setting up git
+    - url_host=`git remote get-url origin | sed -e "s/https:\/\/gitlab-ci-token:.*@//g"`
+    - git remote set-url origin "https://gitlab-ci-token:${ACCESS_TOKEN_PARAM}@${url_host}"
+    - git config http.sslverify false
+    - git config --global user.email "ci@gitlab.pieter557.dscloud.me"
+    - git config --global user.name "CI"
+    - git fetch # Just in case branch is not fetch
+    - git checkout -t origin/main
+    - git pull
+    - git checkout -t origin/UPD
+    - git pull
+    # Rebase
+    - git rebase main UPD
+    # Push
+    - git push -u origin UPD
+
   only:
     - main
