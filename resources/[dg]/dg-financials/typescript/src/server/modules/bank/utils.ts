@@ -36,3 +36,18 @@ export const sortAccounts = (acc: Account[]): Account[] => {
 			}
 		});
 };
+
+export const generateSplittedInfo = (info: Record<string, any>) => {
+	let str = '';
+	Object.entries(info).map(([k, v]) => (str += `${k}: ${v}`));
+	return str.trim();
+};
+
+export const ActionPermission: Record<TransactionType, AccountPermission> = {
+	deposit: 'deposit',
+	withdraw: 'withdraw',
+	transfer: 'transfer',
+	mobile_transaction: 'transfer',
+	paycheck: 'deposit',
+	purchase: 'withdraw',
+};

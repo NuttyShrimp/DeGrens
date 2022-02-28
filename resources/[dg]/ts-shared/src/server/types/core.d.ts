@@ -62,7 +62,7 @@ export class ServerFunctions {
 	 * @param number: Character's Phone Number
 	 * @returns Player object
 	 */
-	GetPlayerByPhone(number: number): Player;
+	GetPlayerByPhone(number: string): Player;
 
 	/**
 	 * @returns Array of all logged in players, ignores players with 'logged-out' state
