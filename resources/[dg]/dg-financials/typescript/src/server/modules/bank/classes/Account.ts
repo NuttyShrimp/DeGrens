@@ -12,7 +12,14 @@ export class Account {
 	private readonly accType: AccountType;
 	private permsManager: PermissionsManager;
 	private balance: number;
-	private transactions: DB.ITransaction[] = [];
+	private transactions: Record<TransactionType, DB.ITransaction[]> = {
+		deposit: [],
+		withdraw: [],
+		transfer: [],
+		purchase: [],
+		paycheck: [],
+		mobile_transaction: [],
+	};
 	private transactionsIds: string[];
 	private manager: AccountManager;
 	private logger: winston.Logger;
@@ -118,8 +125,7 @@ export class Account {
 			transaction.type,
 		]);
 		// Add transaction to front of array
-		this.transactions.unshift(transaction);
-		this.sortTransactions();
+		this.transactions[transaction.type].unshift(transaction);
 		this.transactionsIds.push(transaction.transaction_id);
 		this.updateBalance();
 	}
@@ -132,30 +138,36 @@ export class Account {
 				 OR target_account_id = ?
 			ORDER BY date DESC
 		`;
-		const transactions: string[] = await global.exports.oxmysql.executeSync(query, [this.account_id, this.account_id]);
-		return transactions;
+		const transactionsIds: string[] = await global.exports.oxmysql.executeSync(query, [
+			this.account_id,
+			this.account_id,
+		]);
+		return transactionsIds;
 	}
 
 	private async getDBTransactions(
 		offset: number,
-		limit = config.accounts.transactionLimit
+		limit = config.accounts.transactionLimit,
+		type?: TransactionType
 	): Promise<DB.ITransaction[]> {
 		const query = `
 			SELECT *
 			FROM transaction_log
-			WHERE origin_account_id = ?
-				 OR target_account_id = ?
-			ORDER BY date DESC
-			LIMIT ?, ?
+			WHERE (origin_account_id = ?
+				OR target_account_id = ?)
+				${type ? 'AND type = ?' : ''}
+			ORDER BY date
+			DESC
+				LIMIT ?, ?
 		`;
-		const transactions: DB.ITransaction[] = await global.exports.oxmysql.executeSync(query, [
-			this.account_id,
-			this.account_id,
-			offset,
-			limit,
-		]);
-		this.transactions.push(...transactions);
-		this.sortTransactions();
+		let params = [this.account_id, this.account_id, offset, limit];
+		if (type) {
+			params = [...params.slice(0, 2), type, ...params.slice(2, 4)];
+		}
+		const transactions: DB.ITransaction[] = await global.exports.oxmysql.executeSync(query, params);
+		Object.keys(this.transactions).forEach((tType: TransactionType) => {
+			this.transactions[tType].push(...transactions.filter(t => t.type === tType));
+		});
 		return transactions;
 	}
 
@@ -529,7 +541,15 @@ export class Account {
 		amount = parseInt(String(amount));
 		this.balance -= amount;
 		targetAccount.changeBalance(-amount);
-		await this.addTransaction(this.account_id, targetAccountId, triggerCid, amount, 'mobile_transaction', comment, acceptorCid);
+		await this.addTransaction(
+			this.account_id,
+			targetAccountId,
+			triggerCid,
+			amount,
+			'mobile_transaction',
+			comment,
+			acceptorCid
+		);
 		global.exports['dg-logs'].createGraylogEntry(
 			'financials:mobile_transaction:success',
 			{
@@ -551,7 +571,7 @@ export class Account {
 
 	// endregion
 	// region Transactions
-	private sortTransactions(trans: DB.ITransaction[] = this.transactions, custom = false): any {
+	private sortTransactions(trans: DB.ITransaction[], custom = false): any {
 		const duplicatedIds: Record<string, number> = {};
 		trans = trans
 			.filter(t => {
@@ -571,10 +591,25 @@ export class Account {
 		if (custom) {
 			return trans;
 		}
-		this.transactions = trans;
 	}
 
-	public async getTransactions(source: number | string, offset: number): Promise<ITransaction[]> {
+	private getTransactionsArray(type?: TransactionType): DB.ITransaction[] {
+		let _transactions: DB.ITransaction[] = [];
+		Object.keys(this.transactions).forEach((tType: TransactionType) => {
+			if (!type) {
+				_transactions = _transactions.concat(this.transactions[tType]);
+			}
+			if (tType !== type) return;
+			_transactions = _transactions.concat(this.transactions[tType]);
+		});
+		return _transactions;
+	}
+
+	public async getTransactions(
+		source: number | string,
+		offset: number,
+		type: TransactionType
+	): Promise<ITransaction[]> {
 		try {
 			const Player = DGCore.Functions.GetPlayer(source);
 			if (!Player) {
@@ -605,11 +640,12 @@ export class Account {
 				// TODO add some anti-cheat measures
 				return [];
 			}
-			let dbTransactions = this.transactions.slice(offset, offset + config.accounts.transactionLimit);
+			let dbTransactions = this.getTransactionsArray(type).slice(offset, offset + config.accounts.transactionLimit);
 			if (dbTransactions.length < config.accounts.transactionLimit) {
 				const _trans = await this.getDBTransactions(
 					offset + dbTransactions.length,
-					config.accounts.transactionLimit - dbTransactions.length
+					config.accounts.transactionLimit - dbTransactions.length,
+					type
 				);
 				dbTransactions = this.sortTransactions(dbTransactions.concat(_trans), true);
 			}

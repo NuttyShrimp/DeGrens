@@ -103,6 +103,7 @@
 - `financials:server:transactions:get`: Haalt de transacties van het gespecifieerde account op van de meegegeven offset, in de callback geef je 1 object met volgende waardes mee:
   - accountId
   - offset, De offset vanwaar de transacties opgehaald worden
+  - type: Niet verplicht, specifieer welke type transacties opgehaald moeten worden
 
 ### Cash
 #### Exports
