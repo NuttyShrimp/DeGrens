@@ -1,15 +1,19 @@
-stages: 
+stages:
   - test
+  - linting
+  - build
   - housekeeping
 
+image: node:lts
+
+.lerna_installation:
+  before_script:
+    - yarn config set network-timeout 600000 -g
+    - yarn --pure-lockfile
+    - yarn postinstall:lerna
+
 validate json:
-  image: node:latest
   stage: test
-  cache:
-    key: "$CI_JOB_NAME-$CI_PROJECT_NAME"
-    paths:
-      - node_modules/
-      - .yarn
   script:
     - cd ./tools/json-validator
     - yarn --pure-lockfile
@@ -17,6 +21,7 @@ validate json:
   only:
     refs:
       - main
+      - UPD
       - merge_requests
       - tags
     changes:
@@ -24,14 +29,16 @@ validate json:
 
 sonarqube-check:
   stage: test
+  tags:
+    - amd64
   image:
     name: sonarsource/sonar-scanner-cli:latest
-    entrypoint: [""]
+    entrypoint: [ "" ]
   variables:
     SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar"  # Defines the location of the analysis task cache
     GIT_DEPTH: "0"  # Tells git to fetch all the branches of the project, required by the analysis task
   cache:
-    key: "${CI_JOB_NAME}"
+    key: "$CI_COMMIT_REF_NAME-sonar"
     paths:
       - .sonar/cache
   script:
@@ -39,6 +46,52 @@ sonarqube-check:
   allow_failure: true
   only:
     - main
+    - UPD
+
+JS linting:
+  extends:
+    - .lerna_installation
+  stage: linting
+  cache:
+    key: "$CI_COMMIT_REF_NAME-node_modules"
+    paths:
+      - node_modules/
+  script:
+    - yarn lint
+  only:
+    refs:
+      - main
+      - UPD
+      - merge_requests
+      - tags
+    changes:
+      - "**/*.js"
+      - "**/*.ts"
+      - "**/*.jsx"
+      - "**/*.tsx"
+      - "**/*.scss"
+
+JS building:
+  extends:
+    - .lerna_installation
+  stage: build
+  cache:
+    key: "$CI_COMMIT_REF_NAME-node_modules"
+    paths:
+      - node_modules/
+  script:
+    - yarn build
+  only:
+    refs:
+      - main
+      - UPD
+      - merge_requests
+      - tags
+    changes:
+      - "**/*.(js|ts|jsx|tsx|css|scss|less|html)"
+      - "**/package.json"
+      - "**/yarn.lock"
+
 
 rebase UPD:
   stage: housekeeping

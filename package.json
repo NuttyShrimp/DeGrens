@@ -9,6 +9,7 @@
     "lint": "lerna run --parallel lint",
     "bootstrap": "lerna bootstrap",
     "postinstall": "yarn bootstrap",
+    "postinstall:lerna": "lerna run --stream postinstall",
     "test": "lerna run test"
   }
 }
