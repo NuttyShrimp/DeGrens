@@ -1,5 +1,5 @@
 declare type AccountType = 'standard' | 'savings' | 'business';
-declare type TransactionType = 'deposit' | 'withdraw' | 'transfer' | 'purchase' | 'paycheck';
+declare type TransactionType = 'deposit' | 'withdraw' | 'transfer' | 'purchase' | 'paycheck' | 'mobile_transaction';
 
 declare interface BaseState {
 	open: boolean;

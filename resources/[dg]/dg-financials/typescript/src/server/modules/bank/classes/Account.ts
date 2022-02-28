@@ -509,6 +509,46 @@ export class Account {
 		return true;
 	}
 
+	public async mobileTransfer(
+		targetPhone: string,
+		triggerCid: number,
+		amount: number,
+		comment?: string
+	): Promise<boolean> {
+		if (
+			!(await this.actionValidation('mobile_transaction', triggerCid, amount, {
+				targetPhone,
+			}))
+		)
+			return false;
+		const targetPlayer = DGCore.Functions.GetPlayerByPhone(targetPhone);
+		const acceptorCid = targetPlayer.PlayerData.citizenid;
+		const triggerPlayer = DGCore.Functions.GetPlayerByCitizenId(triggerCid);
+		const targetAccount = await this.manager.getDefaultAccount(acceptorCid);
+		const targetAccountId = targetAccount.account_id;
+		amount = parseInt(String(amount));
+		this.balance -= amount;
+		targetAccount.changeBalance(-amount);
+		await this.addTransaction(this.account_id, targetAccountId, triggerCid, amount, 'mobile_transaction', comment, acceptorCid);
+		global.exports['dg-logs'].createGraylogEntry(
+			'financials:mobile_transaction:success',
+			{
+				cid: triggerCid,
+				acceptor_cid: acceptorCid,
+				account: this.account_id,
+				targetAccountId,
+				amount,
+				action: 'mobile_transaction',
+				comment,
+			},
+			`${triggerPlayer.PlayerData.name} mobile_transaction ${amount} from ${this.name} (${this.account_id}) to ${targetAccount.name} (accountId: ${targetAccount.account_id} | accepted_by: ${acceptorCid})`
+		);
+		this.logger.info(
+			`mobile_transaction: success | cid: ${triggerCid} | acceptor_cid: ${acceptorCid} | account: ${this.account_id} | targetAccount: ${targetAccountId} | amount: ${amount}`
+		);
+		return true;
+	}
+
 	// endregion
 	// region Transactions
 	private sortTransactions(trans: DB.ITransaction[] = this.transactions, custom = false): any {

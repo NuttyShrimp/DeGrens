@@ -76,3 +76,20 @@ export const paycheck = async (accountId: string, triggerCid: number, amount: nu
 	const { taxPrice } = getTaxedPrice(amount, 4, true);
 	await account.paycheck(triggerCid, taxPrice);
 };
+
+export const mobile_transaction = async (
+	accountId: string,
+	triggerCid: number,
+	targetPhone: string,
+	amount: number,
+	comment?: string,
+): Promise<boolean> => {
+	const account = await AManager.getAccountById(accountId);
+	if (!account) {
+		const Player = DGCore.Functions.GetPlayerByCitizenId(triggerCid);
+		emitNet('DGCore:Notify', Player.PlayerData.source, `Geen account gevonden voor ${accountId}`, 'error');
+		bankLogger.error(`Account ${accountId} not found | src: ${Player.PlayerData.source} | cid: ${triggerCid}`);
+		return false;
+	}
+	return account.mobileTransfer(targetPhone, triggerCid, amount, comment);
+};
