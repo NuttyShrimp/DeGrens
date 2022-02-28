@@ -179,6 +179,7 @@ Fines moeten binnen 7 dagen betaald worden, deze waarde is niet aanpasbaar voor 
 - `getTaxedPrice`: Returned een object met volgende keys: `taxPrice`, `taxRate`
   - price
   - taxId
+  - shouldRemove: Standaard true, als false wordt de taxed amount van base price gehaald ipv eraan toegevoegd
 
 #### Callbacks
 - `financials:server:taxes:calc`: Returned zelfde object al bovenstaande export en neemt 1 object met volgende waardes als params:

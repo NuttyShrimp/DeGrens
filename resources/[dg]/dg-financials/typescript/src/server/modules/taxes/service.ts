@@ -35,11 +35,17 @@ export const seedTaxes = async () => {
 	}
 };
 
-export const getTaxedPrice = (price: number, taxId: number): Taxes.TaxedPrice => {
+/**
+ * Get price with taxes on top
+ * @param price
+ * @param taxId
+ * @param shouldRemove Default false, Takes the taxed part of the base price instead of adding it
+ */
+export const getTaxedPrice = (price: number, taxId: number, shouldRemove = false): Taxes.TaxedPrice => {
 	if (!taxes.has(taxId)) {
 		taxLogger.warn(`Tax with id: ${taxId} not found, returning original price`);
 		return { taxPrice: price, taxRate: 0 };
 	}
 	const taxInfo = taxes.get(taxId);
-	return { taxPrice: price + price * taxInfo.rate, taxRate: taxInfo.rate };
+	return { taxPrice: price + price * taxInfo.rate * (shouldRemove ? -1 : 1), taxRate: taxInfo.rate };
 };

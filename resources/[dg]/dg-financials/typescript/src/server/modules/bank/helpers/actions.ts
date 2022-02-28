@@ -73,6 +73,6 @@ export const paycheck = async (accountId: string, triggerCid: number, amount: nu
 		bankLogger.error(`Account ${accountId} not found | src: ${Player.PlayerData.source} | cid: ${triggerCid}`);
 		return false;
 	}
-	const { taxPrice } = getTaxedPrice(amount, 4);
+	const { taxPrice } = getTaxedPrice(amount, 4, true);
 	await account.paycheck(triggerCid, taxPrice);
 };
