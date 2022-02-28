@@ -6,7 +6,7 @@
 	"license": "MIT",
 	"sentry_dsn": "https://ca666003b9db4baeb7bf5b1aab7bc6d1@sentry.nuttyshrimp.me/9",
 	"scripts": {
-    "build": "yarn webpack:config --color --progress ",
+    "build": "yarn webpack:config --color",
     "build:dev": "yarn build --mode development",
     "watch": "yarn webpack:config --mode development --watch",
     "lint": "eslint --fix --no-eslintrc -c .eslintrc --resolve-plugins-relative-to ./ --ext .js,.ts ./src",
