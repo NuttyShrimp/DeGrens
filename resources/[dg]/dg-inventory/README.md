@@ -70,3 +70,36 @@ local itemName = "lockpick"
 local action = "add" -- "remove"
 TriggerClientEvent("inventory:client:ItemBox", itemName, action)
 ```
+
+## Adding items
+
+```typescript
+interface Data {
+    // Internal name
+    name: string; 
+    // Show name
+    label: string; 
+    // Weight in grams
+    weight: number; 
+    // Type
+    type: 'item' | 'weapon';
+    // Provide ammotype when type is 'weapon'
+    ammotype?: string; 
+    // Can stack item
+    stackable: boolean;
+    // Can use item
+    useable: boolean;
+    // Determines if inventory should close on use, only when useable is true
+    shouldClose?: boolean; 
+    // JSON representation of combining recipe when wanted
+    combinable?: string; 
+    // If item needs to expire, provide amount of minutes item lasts
+    decayrate?: number; 
+    // Image name
+    image: string; 
+    // Description
+    description: string; 
+    // True if you need to visually hold item, more info in dg-propattach
+    hold?: boolean 
+}
+```
