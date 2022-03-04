@@ -42,6 +42,9 @@ Config.Lockpick.Difficulty = "medium" -- easy, medium, hard of extreme
 Config.Lockpick.Amount = 1 -- aantal keer dat je keygame moet voltooien om te lockpicken
 Config.Lockpick.BreakChance = 15 -- kans dat lockpick kapot gaat bij falen
 
+Config.GainStressChance = 50 -- kans dat je stress krijgt bij zoeken
+Config.FingerdropChance = 50 -- kans dat je vingerafdrukken achterlaat bij openbreken van deur
+
 Config.Houses = {
     {
         coords = vector3(-273.23, -934.74, 31.22),

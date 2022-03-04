@@ -16,6 +16,8 @@ exports("UnlockDoor", function(houseId)
 
     if hasLockpick or hasCrowbar then
         exports["dg-keygame"]:OpenGame(function(success)
+            CreateEvidence()
+            
             if success then
                 DGCore.Functions.Notify('De deur is los!', 'success')
                 TriggerServerEvent('dg-houserobbery:server:UpdateDoor', houseId, true)
@@ -167,6 +169,7 @@ exports('SearchLocation', function(lootId)
     }, {}, {}, function() -- Done
         StopAnimTask(PlayerPedId(), "anim@gangops@facility@servers@bodysearch@", "player_search", 1.0)
         TriggerServerEvent('dg-houserobbery:server:GiveLoot')
+        GainStress()
     end, function() -- Cancel
         StopAnimTask(PlayerPedId(), "anim@gangops@facility@servers@bodysearch@", "player_search", 1.0)
         DGCore.Functions.Notify("Geannuleerd...", "error")
@@ -248,4 +251,19 @@ function CallCops(houseId)
         local streetLabel = s2 and GetStreetNameFromHashKey(s1)..' '..GetStreetNameFromHashKey(s2) or GetStreetNameFromHashKey(s1)
         TriggerServerEvent("dg-houserobbery:server:CallCops", streetLabel, pos)
     end
+end
+
+function GainStress()
+	local rng = math.random(100)
+	if rng <= Config.GainStressChance then
+		TriggerServerEvent('hud:server:GainStress', math.random(3, 5))
+	end
+end
+
+function CreateEvidence()
+	local rng = math.random(100)
+	if rng <= Config.FingerdropChance and not true then
+		-- HANDSHOES
+		TriggerServerEvent("evidence:server:CreateFingerDrop", GetEntityCoords(PlayerPedId()))
+	end
 end
