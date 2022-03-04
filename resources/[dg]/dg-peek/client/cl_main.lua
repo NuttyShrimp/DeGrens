@@ -410,11 +410,12 @@ addEntry = function(entryType, key, parameters, checker)
 
 	local newIds = {}
 	for _, option in pairs(parameters.options) do
-		option.distance = option.distance or parameters.distance
+		local entry = DGShared.copyTbl(option)
+		entry.distance = entry.distance or parameters.distance
 		-- copy generatedId so its not a reference
-		option.id = json.decode(json.encode(generatedId))
-		table.insert(peekEntries[entryType][key], option)
-		table.insert(newIds, option.id)
+		entry.id = json.decode(json.encode(generatedId))
+		table.insert(peekEntries[entryType][key], entry)
+		table.insert(newIds, entry.id)
 		generatedId = generatedId + 1
 	end
 	return newIds
@@ -423,7 +424,7 @@ addModelEntry = function(model, parameters)
 	if type(model) == 'table' then
 		local ids = {}
 		for _, v in pairs(model) do
-			ids = combineTables(addModelEntry(v, parameters), ids)
+			ids = combineTables(ids, addModelEntry(v, parameters))
 		end
 		return ids
 	end

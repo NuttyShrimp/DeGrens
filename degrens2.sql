@@ -78,27 +78,6 @@ create table if not exists houselocations
   PRIMARY KEY (name)
 );
 
-create table if not exists house_plants
-(
-  plantid  varchar(50)                   null,
-  building varchar(255)                  null,
-  stage    varchar(50) default 'stage-a' null,
-  sort     varchar(50)                   null,
-  gender   varchar(50)                   null,
-  food     int         default 100       null,
-  health   int         default 100       null,
-  progress int         default 0         null,
-  coords   text                          null,
-  PRIMARY KEY (plantid),
-  FOREIGN KEY (building) REFERENCES houselocations (name) on update cascade on delete cascade,
-  CHECK (house_plants.food <= 100),
-  CHECK (house_plants.food > 0),
-  CHECK (house_plants.health <= 100),
-  CHECK (house_plants.health > 0),
-  CHECK (house_plants.progress <= 100),
-  CHECK (house_plants.progress > 0)
-);
-
 create table if not exists lapraces
 (
   id          int auto_increment,
@@ -433,4 +412,17 @@ CREATE TABLE IF NOT EXISTS maintenance_fee_log
   id   INT       NOT NULL AUTO_INCREMENT,
   date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (id)
+);
+
+CREATE TABLE IF NOT EXISTS `weedplants` 
+(
+	`id` INT NOT NULL AUTO_INCREMENTS,
+	`stage` SMALLINT DEFAULT 1,
+	`coords` TEXT DEFAULT NULL,
+	`gender` VARCHAR(1) DEFAULT NULL,
+	`food` INT DEFAULT 100,
+  `food` int(11) DEFAULT 100,
+  `growtime` bigint(20) DEFAULT NULL,
+  `cuttime` bigint(20) DEFAULT NULL,
+	PRIMARY KEY (`id`)
 );
