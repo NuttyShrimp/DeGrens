@@ -11,7 +11,7 @@ Open & closing goes via exports:
 exports["dg-lib"]:openInteraction(yourText, type)
 
 -- closing the interaction
-exports["dg-lib"]:closeInteraction()
+exports["dg-lib"]:hideInteraction()
 ```
 
 ## Keybinds (client)
