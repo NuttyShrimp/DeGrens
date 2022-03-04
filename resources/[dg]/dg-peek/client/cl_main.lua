@@ -410,7 +410,7 @@ addEntry = function(entryType, key, parameters, checker)
 
 	local newIds = {}
 	for _, option in pairs(parameters.options) do
-		local entry = DGShared.copyTbl(option)
+		local entry = DGCore.Shared.copyTbl(option)
 		entry.distance = entry.distance or parameters.distance
 		-- copy generatedId so its not a reference
 		entry.id = json.decode(json.encode(generatedId))
