@@ -9,8 +9,8 @@ function getForwardVector(rotation)
 end
 
 function rayCast(origin, target, radius, flags, ignore)
-	--local handle = StartShapeTestRay(origin, target, flags, ignore, 0)
-	local handle = StartShapeTestCapsule(origin.x, origin.y, origin.z, target.x, target.y, target.z, radius, flags, ignore, 0)
+	local handle = StartShapeTestRay(origin, target, flags, ignore, 0)
+	--local handle = StartShapeTestCapsule(origin.x, origin.y, origin.z, target.x, target.y, target.z, radius, flags, ignore, 0)
 	return GetShapeTestResult(handle)
 end
 

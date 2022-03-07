@@ -1686,5 +1686,17 @@
         "decayrate": 10080,
         "image": "weed_bag.png",
         "description": "Zakje weed van 1 gram"
+    },
+    {
+        "name": "thermite",
+        "label": "Thermite",
+        "weight": 10000,
+        "type": "item",
+        "stackable": true,
+        "useable": true,
+        "shouldClose": true,
+        "decayrate": 10080,
+        "image": "thermite.png",
+        "description": "Pas op voor je vingers"
     }
 ]

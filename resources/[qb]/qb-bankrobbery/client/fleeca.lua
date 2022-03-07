@@ -78,7 +78,7 @@ end)
 
 Citizen.CreateThread(function()
     Citizen.Wait(2000)
-    local requiredItems = {"electronickit", "trojan_usb"),}
+    local requiredItems = {"electronickit", "trojan_usb"}
     local requiredItems2 = {"thermite"}
     while true do
         local ped = PlayerPedId()

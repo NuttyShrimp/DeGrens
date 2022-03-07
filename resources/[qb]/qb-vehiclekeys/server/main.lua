@@ -81,13 +81,3 @@ function CheckOwner(plate, identifier)
 
     return retval
 end
-
-DGCore.Functions.CreateUseableItem("lockpick", function(source, item)
-    local Player = DGCore.Functions.GetPlayer(source)
-    TriggerClientEvent("lockpicks:UseLockpick", source, false)
-end)
-
-DGCore.Functions.CreateUseableItem("advancedlockpick", function(source, item)
-    local Player = DGCore.Functions.GetPlayer(source)
-    TriggerClientEvent("lockpicks:UseLockpick", source, true)
-end)

@@ -367,15 +367,6 @@ function AllStationsHit()
     return retval
 end
 
-DGCore.Functions.CreateUseableItem("thermite", function(source, item)
-    local Player = DGCore.Functions.GetPlayer(source)
-	if Player.Functions.GetItemByName('lighter') ~= nil then
-        TriggerClientEvent("thermite:UseThermite", source)
-    else
-        TriggerClientEvent('DGCore:Notify', source, "You're missing ignition source ", "error")
-    end
-end)
-
 DGCore.Functions.CreateUseableItem("security_card_01", function(source, item)
     local Player = DGCore.Functions.GetPlayer(source)
 	if Player.Functions.GetItemByName('security_card_01') ~= nil then

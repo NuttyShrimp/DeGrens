@@ -215,14 +215,11 @@ end
 
 -- Lockpicking
 
-local usingAdvanced
-
-RegisterNetEvent('lockpicks:UseLockpick')
-AddEventHandler('lockpicks:UseLockpick', function(isAdvanced)
-    LockpickDoor(isAdvanced)
+RegisterNetEvent('lockpick:UseLockpick', function()
+    LockpickDoor()
 end)
 
-function LockpickDoor(isAdvanced)
+function LockpickDoor()
     local ped = PlayerPedId()
     local pos = GetEntityCoords(ped)
     local vehicle = DGCore.Functions.GetClosestVehicle(pos)
@@ -231,7 +228,6 @@ function LockpickDoor(isAdvanced)
         if #(pos - vehpos) < 2.5 then
             local vehLockStatus = GetVehicleDoorLockStatus(vehicle)
             if (vehLockStatus > 0) then
-                usingAdvanced = isAdvanced
                 TriggerEvent('qb-lockpick:client:openLockpick', lockpickFinish)
             end
         end
@@ -254,16 +250,9 @@ function lockpickFinish(success)
         TriggerServerEvent('hud:server:GainStress', math.random(1, 4))
         DGCore.Functions.Notify('Someone Called The Police!', 'error')
     end
-    if usingAdvanced then
-        if chance <= Config.RemoveLockpickAdvanced then
-            TriggerEvent('inventory:client:ItemBox', "advancedlockpick", "remove")
-            TriggerServerEvent("DGCore:Server:RemoveItem", "advancedlockpick", 1)
-        end
-    else
-        if chance <= Config.RemoveLockpickNormal then
-            TriggerEvent('inventory:client:ItemBox', "lockpick", "remove")
-            TriggerServerEvent("DGCore:Server:RemoveItem", "lockpick", 1)
-        end
+    if chance <= Config.RemoveLockpickNormal then
+        TriggerEvent('inventory:client:ItemBox', "lockpick", "remove")
+        TriggerServerEvent("DGCore:Server:RemoveItem", "lockpick", 1)
     end
 end
 
