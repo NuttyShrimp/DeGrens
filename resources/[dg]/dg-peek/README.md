@@ -246,6 +246,28 @@ exports['dg-peek']:addZoneEntry('my-target-zone', {
 })
 ```
 
+### addGlobalEntry
+
+```lua
+exports['dg-peek']:addGlobalEntry('ped', { -- available globaltypes are ped, player and vehicle
+  options = {
+    {
+      icon = 'fas fa-home',
+      label = 'Sleep',
+      items = 'phone',
+      canInteract = function(entity, distance, entry)
+        -- do something
+        -- entry.data has the data you set in addBoxZone
+        return true
+      end,
+      job = 'police',
+      gang = 'ESB'
+    },
+  },
+  distance = 2.0
+})
+```
+
 ## Remove entries
 
 ### removeModelEntry
@@ -286,6 +308,14 @@ exports['dg-peek']:removeFlagEntry({ 112, 8495 })
 exports['dg-peek']:removeZoneEntry(112)
 -- or
 exports['dg-peek']:removeZoneEntry({ 112, 8495 })
+```
+
+### removeGlobalEntry
+
+```lua
+exports['dg-peek']:removeGlobalEntry(112)
+-- or
+exports['dg-peek']:removeGlobalEntry({ 112, 8495 })
 ```
 
 ## Icons

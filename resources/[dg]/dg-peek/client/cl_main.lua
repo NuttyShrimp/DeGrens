@@ -6,6 +6,7 @@ local peekEntries = {
 	bones = {},
 	flags = {},
 	zones = {},
+	global = {},
 }
 local activeEntries = {
 	model = {},
@@ -13,6 +14,7 @@ local activeEntries = {
 	bones = {},
 	flags = {},
 	zones = {},
+	global = {},
 }
 local current = {
 	entity = nil,
@@ -278,6 +280,7 @@ generateCurrentEntries = function(doZone)
 		activeEntries.entity = {}
 		activeEntries.bones = {}
 		activeEntries.flags = {}
+		activeEntries.global = {}
 		if peekEntries.model[context.model] then
 			for _, entry in ipairs(peekEntries.model[context.model]) do
 				addNewEntry('model', entry)
@@ -314,6 +317,13 @@ generateCurrentEntries = function(doZone)
                 end
             end
         end
+		if context.globalType then
+			if peekEntries.global[context.globalType] then
+				for _, entry in ipairs(peekEntries.global[context.globalType]) do
+					addNewEntry('global', entry)
+				end
+			end
+		end
 	end
 	if doZone then
 		activeEntries.zones = {}
@@ -342,6 +352,7 @@ updateEntityList = function()
 		activeEntries.model = {}
 		activeEntries.bones = {}
 		activeEntries.flags = {}
+		activeEntries.global = {}
 		refreshList()
 		return
 	end
@@ -454,6 +465,9 @@ end
 addZoneEntry = function(zoneName, parameters)
 	return addEntry('zones', zoneName, parameters)
 end
+addGlobalEntry = function(type, parameters)
+	return addEntry('global', type, parameters)
+end
 --endregion
 --region Removers
 removeEntryById = function(entryType, id)
@@ -496,6 +510,10 @@ end
 removeZoneEntry = function(ids)
 	removeEntryById('zones', ids)
 	generateCurrentEntries(true)
+end
+removeGlobalEntry = function(ids)
+	removeEntryById('global', ids)
+	generateCurrentEntries()
 end
 --endregion
 --endregion
@@ -571,10 +589,12 @@ exports('addEntityEntry', addEntityEntry)
 exports('addBoneEntry', addBoneEntry)
 exports('addFlagEntry', addFlagEntry)
 exports('addZoneEntry', addZoneEntry)
+exports('addGlobalEntry', addGlobalEntry)
 -- Removing
 exports('removeModelEntry', removeModelEntry)
 exports('removeEntityEntry', removeEntityEntry)
 exports('removeBoneEntry', removeBoneEntry)
 exports('removeFlagEntry', removeFlagEntry)
 exports('removeZoneEntry', removeZoneEntry)
+exports('removeGlobalEntry', removeGlobalEntry)
 --endregion

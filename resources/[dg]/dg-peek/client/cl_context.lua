@@ -6,7 +6,8 @@ getContext = function(entity, eType)
 		entity = entity,
 		type = eType,
 		model = GetEntityModel(entity),
-		flags = {}
+		flags = {},
+		globalType = nil,
 	}
 
 	if NetworkGetEntityIsNetworked(entity) then
@@ -29,6 +30,16 @@ getContext = function(entity, eType)
 		if cfxEntity.state[flag] then
 			context.flags[flag] = cfxEntity.state[flag]
 		end
+	end
+
+	if eType == 1 then
+		if IsPedAPlayer(entity) then	
+			context.globalType = "player"
+		else
+			context.globalType = "ped"
+		end
+	elseif eType == 2 then
+		context.globalType = "vehicle"
 	end
 
 	return context

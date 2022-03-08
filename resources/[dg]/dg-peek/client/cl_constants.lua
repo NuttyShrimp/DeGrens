@@ -556,6 +556,7 @@ ENTRY_TYPES = {
 	bones = 'string',
 	flags = 'string',
 	zones = 'string',
+	global = 'string',
 }
 
 DISABLED_KEYS = {
