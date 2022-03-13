@@ -91,7 +91,9 @@ end
 DGShared.copyTbl = function(tbl)
 	local newTbl = {}
 	for k, v in pairs(tbl) do
-		if type(v) == "table" then
+        if DGShared.isFunction(v) then
+            newTbl[k] = v
+		elseif type(v) == "table" then
 			newTbl[k] = DGShared.copyTbl(v)
 		else
 			newTbl[k] = v
