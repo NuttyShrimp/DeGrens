@@ -426,3 +426,11 @@ CREATE TABLE IF NOT EXISTS `weedplants`
   `cuttime` bigint(20) DEFAULT NULL,
 	PRIMARY KEY (`id`)
 );
+
+CREATE TABLE IF NOT EXISTS `cornerselling_sales` 
+(
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `coords` TEXT DEFAULT NULL,
+  `date` DATETIME NOT NULL,
+  PRIMARY KEY (`id`)
+)
