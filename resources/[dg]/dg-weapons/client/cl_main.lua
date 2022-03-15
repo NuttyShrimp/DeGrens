@@ -8,6 +8,9 @@ local reticleEnabled = false
 
 local durabilityDecrease = 0
 
+local previousViewMode = 1
+local freeaimReset = false
+
 -- stops swapping to different weapon when ran out of ammo and add peekoption for repairnpc
 Citizen.CreateThread(function()
 	SetWeaponsNoAutoswap(true)
@@ -157,6 +160,21 @@ Citizen.CreateThread(function()
                         ShakeGameplayCam('SMALL_EXPLOSION_SHAKE', recoil.explosion)
                     end
 				end
+
+                -- force first person in vehicle while aiming weapon
+                if IsPedInAnyVehicle(ped) then
+                    if IsPlayerFreeAiming(PlayerId()) then
+                        local currentViewMode = GetFollowVehicleCamViewMode()
+                        if currentViewMode ~= 4 and not freeaimReset then
+                            previousViewMode = currentViewMode
+                            SetFollowVehicleCamViewMode(4)
+                            freeaimReset = true
+                        end
+                    elseif freeaimReset then
+                        SetFollowVehicleCamViewMode(previousViewMode)
+                        freeaimReset = false
+                    end
+                end
 
                 DisableAttack()
 			else
