@@ -20,3 +20,8 @@ Of
 ```
 git submodule update
 ```
+
+Last van dirty Submodules?
+```
+git submodule foreach --recursive git reset --hard
+```
