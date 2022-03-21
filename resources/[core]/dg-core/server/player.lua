@@ -189,6 +189,11 @@ function DGCore.Player.CreatePlayer(PlayerData)
 		end
 	end
 
+	-- DONT EVERY USE THIS FUNCTIONS OUTSIDE CORE or I will personally beat you up - regards Nutty
+	self.Functions.setCitizenid = function(cid)
+		self.PlayerData.citizenid = cid
+	end
+
 	self.Functions.SetJob = function(job, grade)
 		local job = job:lower()
 		local grade = tostring(grade) or '0'
@@ -534,7 +539,7 @@ function DGCore.Player.Save(source)
 
 		if PlayerData.citizenid == nil then
 			PlayerData.citizenid = result[1].citizenid
-			DGCore.Player.CheckPlayerData(source, PlayerData)
+			DGCore.Players[src].Functions.setCitizenid(PlayerData.citizenid)
 		end
 
 		DGCore.Player.SaveInventory(src)
