@@ -88,7 +88,12 @@ JS building:
       - merge_requests
       - tags
     changes:
-      - "**/*.(js|ts|jsx|tsx|css|scss|less|html)"
+      - "**/*.js"
+      - "**/*.ts"
+      - "**/*.jsx"
+      - "**/*.tsx"
+      - "**/*.scss"
+      - "**/*.html"
       - "**/package.json"
       - "**/yarn.lock"
 
