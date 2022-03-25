@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 26.0.1, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" x="0px"
+     y="0px"
+     viewBox="0 0 2500 2500" style="enable-background:new 0 0 2500 2500;" xml:space="preserve">
+<style type="text/css">
+	.st0{fill:none;}
+	.st1{fill:#3AAA35;stroke:#3AAA35;stroke-miterlimit:10;}
+	.st2{fill:#E30613;stroke:#E30613;stroke-miterlimit:10;}
+</style>
+  <rect x="250" y="250" class="st0" width="2000" height="2000"/>
+  <path class="st1"
+        d="M503.89,1020.38V865.69h-61.88v154.69H310.45v721.24h131.56v142.2h61.88v-142.2h131.56v-721.24H503.89z"/>
+  <path class="st2"
+        d="M1028.58,1298.19V1143.5H966.7v154.69H835.14V1896H966.7v142.19h61.87V1896h131.56v-597.82H1028.58z"/>
+  <path class="st1"
+        d="M1522.33,619.12V464.44h-61.56v154.69h-131.88v1030h131.88v142.19h61.56v-142.19h131.56v-1030H1522.33z"/>
+  <path class="st2"
+        d="M2047.01,866.32v-155h-61.56v155h-131.88v875.31h131.88v142.2h61.56v-142.2h131.56V866.32H2047.01z"/>
+</svg>
