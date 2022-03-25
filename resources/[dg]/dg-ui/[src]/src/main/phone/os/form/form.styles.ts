@@ -1,0 +1,61 @@
+import { makeStyles } from '@mui/styles';
+
+import { baseStyle } from '../../../../base.styles';
+
+export const styles = makeStyles({
+  forms: {
+    width: '100%',
+    height: 'calc( 100% - 1.1vh)',
+    display: 'flex',
+    justifyContent: 'center',
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    pointerEvents: 'none',
+    zIndex: 3,
+    borderRadius: '1rem',
+    '& > div': {
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      minWidth: '80%',
+      maxWidth: '80%',
+      minHeight: '40%',
+      padding: '.5vh .5vw',
+      position: 'absolute',
+      top: '50%',
+      left: '50%',
+      transform: 'translate(-50%, -50%)',
+      color: baseStyle.gray.lighter,
+      backgroundColor: baseStyle.primaryDarker.dark,
+      borderBottom: `.5vh solid ${baseStyle.gray.lighter}`,
+      boxShadow: '0px 3px 5px 0px black',
+      borderRadius: '1vh',
+      pointerEvents: 'all',
+    },
+  },
+  checkmarkWrapper: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  checkmark: {
+    width: '56px',
+    height: '56px',
+    borderRadius: '50%',
+    display: 'block',
+    strokeWidth: '2',
+    strokeMiterlimit: '10',
+    margin: '10% auto',
+    boxShadow: 'inset 0px 0px 0px #7ac142',
+    animation: 'checkmark-fill 0.4s ease-in-out 0.4s forwards, checkmark-scale 0.3s ease-in-out 0.9s both',
+    '& > .checkmark__check': {
+      transformOrigin: '50% 50%',
+      strokeDasharray: '48',
+      strokeDashoffset: '48',
+      stroke: '#fff',
+      animation: 'checkmark-stroke 0.3s cubic-bezier(0.65, 0, 0.45, 1) 0.8s forwards',
+    },
+  },
+});

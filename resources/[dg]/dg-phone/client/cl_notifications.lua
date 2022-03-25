@@ -1,12 +1,13 @@
-RegisterNUICallback('notifications/event', function(data, cb)
+RegisterUICallback('phone/notifications/event', function(data, cb)
 	local event = data.event
+	local isAccept = data.isAccept
 	local eventData = data.data
 	-- check if events starts with server:
 	if string.match(event, '^server:') ~= nil then
 		event = event:sub(8)
-		TriggerServerEvent(event, eventData)
+		TriggerServerEvent(event, eventData, isAccept)
 	else
-		TriggerEvent(event, eventData)
+		TriggerEvent(event, eventData, isAccept)
 	end
 
 	cb({data={}, meta={ok=true, message='done'}})
@@ -15,22 +16,9 @@ end)
 --- function addNotification
 --- Adds notification to phone (normally stays for 8 seconds
 --- if action is needed time will be extended to 30 seconds)
---- @param notification table
---- Notification table structure: {
----   title: string,
----   description: string,
----   sticky: boolean or nil
----   icon: string or {
----     name: string,
----   	color: string,
----    	background: string,
----   }
----   onAccept: string or nil,
----   onDecline: string or nil,
---- }
 addNotification = function(notification)
-	SendNUIMessage({
-		app = "home-screen",
+	SendAppEvent('phone', {
+		appName = "home-screen",
 		action = "addNotification",
 		data = notification
 	})
@@ -39,8 +27,8 @@ exports('addNotification', addNotification)
 RegisterNetEvent('dg-phone:client:notification:add', addNotification)
 
 removeNotification = function(id)
-	SendNUIMessage({
-		app = "home-screen",
+	SendAppEvent('phone', {
+		appName = "home-screen",
 		action = "removeNotification",
 		data = id
 	})
@@ -54,8 +42,8 @@ RegisterNetEvent('dg-phone:client:notification:remove', removeNotification)
 --- notification is same structure as above
 --- The diff between them is that this each element of this table is optional
 updateNotification = function(id, noti)
-	SendNUIMessage({
-		app = "home-screen",
+	SendAppEvent('phone', {
+		appName = "home-screen",
 		action = "updateNotification",
 		data = {
 			id = id,

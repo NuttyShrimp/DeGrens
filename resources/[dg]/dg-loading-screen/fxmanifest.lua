@@ -5,7 +5,7 @@ game 'gta5'
 loadscreen 'html/index.html'
 loadscreen_manual_shutdown 'yes'
 
-client_script '@dg-logs/client/cl_error.lua'
+client_script '@dg-logs/client/cl_log.lua'
 client_script 'client/cl_main.lua'
 
 files {

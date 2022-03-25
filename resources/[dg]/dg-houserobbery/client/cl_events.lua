@@ -34,14 +34,14 @@ RegisterNetEvent("dg-polyzone:enter", function(name, data)
     if name == "houserobbery_exit" then
         inExit = true
         local generalUseKey = exports["dg-lib"]:GetCurrentKeyMap("+GeneralUse")
-        exports['dg-lib']:showInteraction(generalUseKey..' - Ga buiten', 'info')
+        exports['dg-ui']:showInteraction(generalUseKey..' - Ga buiten', 'info')
     end
 end)
 
 RegisterNetEvent("dg-polyzone:exit", function(name)
     if name == "houserobbery_exit" then
         inExit = false
-        exports['dg-lib']:hideInteraction()
+        exports['dg-ui']:hideInteraction()
     end
 end)
 

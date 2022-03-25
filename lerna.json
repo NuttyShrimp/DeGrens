@@ -1,7 +1,5 @@
 {
-  "packages": [
-    "resources/**"
-  ],
+  "packages": ["resources/**"],
   "npmClient": "yarn",
   "version": "0.0.0"
 }

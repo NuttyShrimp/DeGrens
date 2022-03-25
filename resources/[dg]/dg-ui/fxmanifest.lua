@@ -1,22 +1,23 @@
 fx_version 'cerulean'
 game 'gta5'
+name 'dg-ui'
 
-ui_page 'html/index.html'
+shared_script '@dg-core/import.lua'
 
-files {
-    'html/index.html',
-    'html/css/*.css',
-    'html/js/ui.js',
-}
-
-shared_scripts { 
-	'config.lua'
+server_scripts {
+	'server/sv_*.lua',
 }
 
 client_scripts {
-    'client/main.lua',
+	'@dg-logs/client/cl_log.lua',
+	'client/cl_*.lua',
+	'client/components/cl_*.lua',
 }
 
-server_script {
-	'server/main.lua'
+ui_page "html/index.html"
+
+files {
+	"html/index.html",
+	"html/favicon.ico",
+	'html/assets/*',
 }

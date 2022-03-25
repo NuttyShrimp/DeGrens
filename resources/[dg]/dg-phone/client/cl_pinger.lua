@@ -1,20 +1,20 @@
-RegisterNUICallback('pinger/request', function(data, cb)
+RegisterUICallback('phone/pinger/request', function(data, cb)
 	TriggerServerEvent('dg-phone:pinger:request', data)
 	cb({data = {}, meta={ok = true, message = 'done'}})
 end)
 
-RegisterNUICallback('pinger/accept', function(data, cb)
+RegisterUICallback('phone/pinger/accept', function(data, cb)
 	TriggerServerEvent('dg-phone:pinger:accept', data)
 	cb({data = {}, meta={ok = true, message = 'done'}})
 end)
-RegisterNUICallback('pinger/decline', function(data, cb)
+RegisterUICallback('phone/pinger/decline', function(data, cb)
 	TriggerServerEvent('dg-phone:pinger:decline', data)
 	cb({data = {}, meta={ok = true, message = 'done'}})
 end)
 
 RegisterNetEvent('dg-phone:pinger:sendRequest', function(pingId, origin)
-	SendNUIMessage({
-		app = "pinger",
+	SendAppEvent('phone', {
+    appName = "pinger",
 		action = "doRequest",
 		data = {
 			id = pingId,

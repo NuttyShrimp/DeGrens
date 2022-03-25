@@ -15,8 +15,8 @@ AddEventHandler("dg-lib:keyEvent", function(keyname, isDown)
     if not isDown then return end
 
     if not activeLaser then
-        SetNuiFocus(true, true)
-        SendNUIMessage({action = "open"}) 
+        SetUIFocus(true, true)
+        openApplication('scenes')
     else
         if laserCoords then
             if activeLaser == "create" then
@@ -30,21 +30,27 @@ AddEventHandler("dg-lib:keyEvent", function(keyname, isDown)
         end
 
         toggleLaser()
-        exports['dg-lib']:hideInteraction()
+        exports['dg-ui']:hideInteraction()
     end
 end)
 
-RegisterNUICallback('Create', function(data)
+RegisterUICallback('Create', function(data, cb)
     Citizen.Wait(100)
     currentCreationData = data
     toggleLaser("create")
+    closeApplication('scenes')
+    cb({data={}, meta={ok=true, message='done'}})
 end)
 
-RegisterNUICallback('Delete', function(data)
+RegisterUICallback('Delete', function(_, cb)
     Citizen.Wait(100)
     toggleLaser("delete")
+    closeApplication('scenes')
+    cb({data={}, meta={ok=true, message='done'}})
 end)
 
-RegisterNUICallback('Close', function()
-    SetNuiFocus(false, false)
+RegisterUICallback('Close', function(_, cb)
+    SetUIFocus(false, false)
+    closeApplication('scenes')
+    cb({data={}, meta={ok=true, message='done'}})
 end)

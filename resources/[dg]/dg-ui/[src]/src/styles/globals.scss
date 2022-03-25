@@ -1,0 +1,15 @@
+.emptylist {
+  text-align: center;
+  & > i {
+    padding: 2vh 0;
+    font-size: 3em;
+  }
+}
+
+.btnWrapper {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-top: .5vh;
+  width: 100%;
+}

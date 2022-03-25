@@ -1,26 +1,26 @@
 {
-	"compilerOptions": {
-		"outDir": "./",
-		"noImplicitAny": true,
-		"module": "commonjs",
-		"target": "es6",
-		"allowJs": true,
-		"lib": ["es2017"],
-		"types": ["@citizenfx/client", "@types/node"],
-		"moduleResolution": "node",
-		"experimentalDecorators": true,
-		"resolveJsonModule": true,
-		"esModuleInterop": true,
-		"baseUrl": "./",
-		"paths": {
-			"@ts-shared/*": ["../../../../ts-shared/src/*"]
-		}
-	},
-	"include": [
-		"./**/*",
-		"../types",
-		"../../../../ts-shared/src/shared/types/*.d.ts",
-		"../../../../ts-shared/src/client/types/*.d.ts"
-	],
-	"exclude": ["**/node_modules", "**/__tests__/*"]
+  "compilerOptions": {
+    "outDir": "./",
+    "noImplicitAny": true,
+    "module": "commonjs",
+    "target": "es6",
+    "allowJs": true,
+    "lib": ["es2017"],
+    "types": ["@citizenfx/client", "@types/node"],
+    "moduleResolution": "node",
+    "experimentalDecorators": true,
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "baseUrl": "./",
+    "paths": {
+      "@ts-shared/*": ["../../../../ts-shared/src/*"]
+    }
+  },
+  "include": [
+    "./**/*",
+    "../types",
+    "../../../../ts-shared/src/shared/types/*.d.ts",
+    "../../../../ts-shared/src/client/types/*.d.ts"
+  ],
+  "exclude": ["**/node_modules", "**/__tests__/*"]
 }

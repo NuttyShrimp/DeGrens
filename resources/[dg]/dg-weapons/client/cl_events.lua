@@ -196,56 +196,56 @@ RegisterNetEvent("weapons:client:AddAttachment", function(component)
 end)
 
 AddEventHandler("weapons:client:SelectTint", function()
-    exports["dg-contextmenu"]:openMenu({ 
+    exports["dg-ui"]:openApplication('contextmenu',{
         {
             title = "Wapen tinten",
             description = "Selecteer een kleur voor je wapen.",
         },
         {
             title = "Origineel",
-            action = "weapons:client:ApplyTint",
+            callbackURL = "weapons:client:ApplyTint",
             data = {tint = 0},
         },
         {
             title = "Groen",
-            action = "weapons:client:ApplyTint",
+            callbackURL = "weapons:client:ApplyTint",
             data = {tint = 1},
         },
         {
             title = "Goud",
-            action = "weapons:client:ApplyTint",
+            callbackURL = "weapons:client:ApplyTint",
             data = {tint = 2},
         },
         {
             title = "Roos",
-            action = "weapons:client:ApplyTint",
+            callbackURL = "weapons:client:ApplyTint",
             data = {tint = 3},
         },
         {
             title = "Leger",
-            action = "weapons:client:ApplyTint",
+            callbackURL = "weapons:client:ApplyTint",
             data = {tint = 4},
         },
         {
             title = "Politie",
-            action = "weapons:client:ApplyTint",
+            callbackURL = "weapons:client:ApplyTint",
             data = {tint = 5},
         },
         {
             title = "Oranje",
-            action = "weapons:client:ApplyTint",
+            callbackURL = "weapons:client:ApplyTint",
             data = {tint = 6},
         },
         {
             title = "Platinum",
-            action = "weapons:client:ApplyTint",
+            callbackURL = "weapons:client:ApplyTint",
             data = {tint = 7},
         },
-    }, false)
+    })
 end)
 
-AddEventHandler("weapons:client:ApplyTint", function(data)
-    exports["dg-contextmenu"]:closeMenu()
+RegisterUICallback("weapons:client:ApplyTint", function(data)
+    exports["dg-ui"]:closeApplication('contextmenu')
 
     local ped = PlayerPedId()
     local weapon = GetSelectedPedWeapon(ped)

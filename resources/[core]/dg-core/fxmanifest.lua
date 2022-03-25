@@ -12,6 +12,8 @@ shared_scripts {
 }
 
 client_scripts {
+	'@dg-logs/client/cl_log.lua',
+	'@dg-lib/client/cl_ui.lua',
 	'client/main.lua',
 	'client/functions.lua',
 	'client/loops.lua',
@@ -25,14 +27,6 @@ server_scripts {
 	'server/events.lua',
 	'server/commands.lua',
 	'server/debug.lua'
-}
-
-ui_page 'html/index.html'
-
-files {
-	'html/index.html',
-	'html/style.css',
-	'html/*.js'
 }
 
 dependencies {

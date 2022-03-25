@@ -482,21 +482,18 @@ RegisterNetEvent('qb-vehicleshop:client:openVehCats', function(data)
 end)
 
 RegisterNetEvent('qb-vehicleshop:client:openFinance', function(data)
-    local dialog = exports['qb-input']:ShowInput({
+    local dialog = exports['dg-ui']:openInput({
         header = getVehBrand():upper().. ' ' ..data.buyVehicle:upper().. ' - $' ..data.price,
-        submitText = "Submit",
         inputs = {
             {
                 type = 'number',
-                isRequired = true,
                 name = 'downPayment',
-                text = 'Down Payment Amount - Min ' ..Config.MinimumDown..'%'
+                label = 'Down Payment Amount - Min ' ..Config.MinimumDown..'%'
             },
             {
                 type = 'number',
-                isRequired = true,
                 name = 'paymentAmount',
-                text = 'Total Payments - Min '..Config.MaximumPayments
+                label = 'Total Payments - Min '..Config.MaximumPayments
             }
         }
     })
@@ -508,21 +505,18 @@ end)
 
 RegisterNetEvent('qb-vehicleshop:client:openCustomFinance', function(data)
     TriggerEvent('animations:client:EmoteCommandStart', {"tablet2"})
-    local dialog = exports['qb-input']:ShowInput({
+    local dialog = exports['dg-ui']:openInput({
         header = getVehBrand():upper().. ' ' ..data.buyVehicle:upper().. ' - $' ..data.price,
-        submitText = "Submit",
         inputs = {
             {
                 type = 'number',
-                isRequired = true,
                 name = 'downPayment',
-                text = 'Down Payment Amount - Min 10%'
+                label = 'Down Payment Amount - Min 10%'
             },
             {
                 type = 'number',
-                isRequired = true,
                 name = 'paymentAmount',
-                text = 'Total Payments - Min 24'
+                label = 'Total Payments - Min 24'
             }
         }
     })
@@ -635,15 +629,13 @@ RegisterNetEvent('qb-vehicleshop:client:getVehicleFinance', function(data)
 end)
 
 RegisterNetEvent('qb-vehicleshop:client:financePayment', function(data)
-    local dialog = exports['qb-input']:ShowInput({
+    local dialog = exports['dg-ui']:openInput({
         header = 'Vehicle Payment',
-        submitText = "Make Payment",
         inputs = {
             {
                 type = 'number',
-                isRequired = true,
                 name = 'paymentAmount',
-                text = 'Payment Amount ($)'
+                label = 'Payment Amount ($)'
             }
         }
     })

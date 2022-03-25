@@ -9,8 +9,8 @@
     "build": "yarn webpack:config --color",
     "build:dev": "yarn build --mode development",
     "watch": "yarn webpack:config --mode development --watch",
-    "lint": "eslint --fix --no-eslintrc -c .eslintrc --resolve-plugins-relative-to ./ --ext .js,.ts ./src",
-    "format": "prettier --write --config .prettierrc src/**/*.{js,ts,json,css,scss,md}",
+    "lint": "eslint --fix --ext .js,.ts ./src",
+    "format": "prettier --write src/**/*.{js,ts,json,md}",
     "webpack:config": "webpack --config ./config/webpack.server.js --config ./config/webpack.client.js"
   },
 	"dependencies": {
@@ -29,12 +29,6 @@
 		"@sentry/node": "^6.16.1",
 		"@sentry/tracing": "^6.16.1",
 		"@sentry/webpack-plugin": "^1.18.3",
-		"@typescript-eslint/eslint-plugin": "^5.9.0",
-		"@typescript-eslint/parser": "^5.9.0",
-		"eslint": "^8.6.0",
-		"eslint-plugin-prettier": "4.0.0",
-		"eslint-webpack-plugin": "^3.1.1",
-		"prettier": "^2.5.1",
 		"ts-loader": "^9.2.6",
 		"tsconfig-paths-webpack-plugin": "^3.5.2",
 		"typescript": "^4.5.4",

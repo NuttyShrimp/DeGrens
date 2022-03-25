@@ -12,12 +12,3 @@ server_scripts {
 client_scripts {
 	"client/*.js",
 }
-
-ui_page "./ui/dist/index.html"
-
-files {
-	"./ui/dist/index.html",
-	"./ui/dist/assets/*.js",
-	"./ui/dist/assets/*.js.map",
-	"./ui/dist/assets/*.css",
-}

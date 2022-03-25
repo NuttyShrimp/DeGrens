@@ -1,0 +1,36 @@
+@use 'src/styles/variables';
+
+.inputmenu {
+  &__wrapper {
+    width: 45vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: variables.$primary_darker_darker;
+    border-radius: .25rem;
+    padding: .5rem;
+  }
+
+  &__header {
+    color: white;
+    text-align: center;
+  }
+
+  &__collection {
+    width: 60%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: .5rem;
+  }
+
+  &__btns {
+    display: flex;
+    margin-top: 1rem;
+    width: 100%;
+    justify-content: space-evenly;
+  }
+
+}

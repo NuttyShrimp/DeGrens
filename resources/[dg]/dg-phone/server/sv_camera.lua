@@ -33,7 +33,7 @@ end)
 
 DGCore.Functions.CreateCallback('dg-phone:server:photo:take', function(src, cb)
 	local Player = DGCore.Functions.GetPlayer(src)
-	if not Player then cb({}) return end
+	if not Player then cb() return end
 	local link = exports['screenshot-basic']:requestClientImgurScreenshot(src)
 	cb()
 	if not link then

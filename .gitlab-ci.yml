@@ -12,6 +12,13 @@ image: node:lts
     - yarn --pure-lockfile
     - yarn postinstall:lerna
 
+.cache_modules:
+  cache:
+    key: "$CI_COMMIT_REF_NAME-node_modules"
+    paths:
+      - node_modules/
+      - '**/node_modules/'
+
 validate json:
   stage: test
   script:
@@ -51,11 +58,8 @@ sonarqube-check:
 JS linting:
   extends:
     - .lerna_installation
+    - .cache_modules
   stage: linting
-  cache:
-    key: "$CI_COMMIT_REF_NAME-node_modules"
-    paths:
-      - node_modules/
   script:
     - yarn lint
   only:
@@ -74,12 +78,10 @@ JS linting:
 JS building:
   extends:
     - .lerna_installation
+    - .cache_modules
   stage: build
-  cache:
-    key: "$CI_COMMIT_REF_NAME-node_modules"
-    paths:
-      - node_modules/
   script:
+    - yarn format -- -- --loglevel error
     - yarn build
   only:
     refs:
@@ -88,12 +90,7 @@ JS building:
       - merge_requests
       - tags
     changes:
-      - "**/*.js"
-      - "**/*.ts"
-      - "**/*.jsx"
-      - "**/*.tsx"
-      - "**/*.scss"
-      - "**/*.html"
+      - "**/*.(js|ts|jsx|tsx|css|scss|less|html)"
       - "**/package.json"
       - "**/yarn.lock"
 

@@ -1,70 +1,50 @@
 DGCore = exports["dg-core"]:GetSharedObject()
-canRetrieve = false
 
 openPhone = function()
-	if not canRetrieve or not canOpen() then
+	if not canOpen() then
 		return
 	end
-	SendNUIMessage({
-		app = 'home-screen',
-		action = 'setOpenState',
-		data = true
-	})
-	SetNuiFocus(true, true)
-	SetNuiFocusKeepInput(true)
+	openApplication('phone')
+	SetUIFocusCustom(true, true)
 	setState('state', 1)
 end
 
 closePhone = function(state)
-	if getState('state') == '2' then
+	if getState('state') == 2 then
 		closeCamera()
 	end
-	SendNUIMessage({
-		app = 'home-screen',
-		action = 'setOpenState',
-		data = false
-	})
+	closeApplication('phone')
 	disablePauseMenu()
-	SetNuiFocus(false, false)
-	SetNuiFocusKeepInput(false)
+	SetUIFocusCustom(false, false)
 	setState('state', state or 0)
 end
 
 initPhone = function()
-	while (not canRetrieve) do
-		Citizen.Wait(10)
-	end
 	setState('isDisabled', false)
 	TriggerEvent('dg-phone:load')
 	TriggerServerEvent('dg-phone:load')
-	SendNUIMessage({
-		app = 'home-screen',
-		action = 'doInit',
+	SendAppEvent('phone', {
+		action = 'init',
 		data = GetCurrentResourceName()
 	})
 end
 
-RegisterNUICallback('phone:ready', function(data, cb)
-	canRetrieve = true
-	cb({data= {}, meta={ok=true, message="done"}})
-end)
+unloadPhone = function()
+  closeCamera()
+  closePhone()
+  StopAllAnimation()
+  stopSounds()
+end
 
-RegisterNUICallback('phone:close', function(data, cb)
+RegisterUICallback('phone/close', function(data, cb)
+  if data.inCamera then return end
 	closePhone()
 	cb({data= {}, meta={ok=true, message="done"}})
 end)
 
-RegisterNUICallback('phone/silence', function(data, cb)
+RegisterUICallback('phone/silence', function(data, cb)
 	setState('isMuted', data.silenced)
 	cb({data= {}, meta={ok=true, message="done"}})
-end)
-
-RegisterNetEvent('dg-phone:client:setCharacterData', function(data)
-	SendNUIMessage({
-		app = "home-screen",
-		action = "setCharacterData",
-		data = data
-	})
 end)
 
 RegisterNetEvent('dg-phone:client:togglePhone', function(toggle)
@@ -76,8 +56,6 @@ RegisterNetEvent('dg-phone:client:togglePhone', function(toggle)
 end)
 
 RegisterNetEvent('DGCore:Client:OnPlayerLoaded', function()
-	while(not canRetrieve) do Wait(10) end
-	initPhone()
 	setState('characterLoaded', true)
 end)
 
@@ -91,6 +69,7 @@ RegisterNetEvent('onResourceStart', function(res)
 	if res == GetCurrentResourceName() then
 		while (not DGCore) do Wait(10) end
 		if DGCore.Functions.GetPlayerData() ~= nil then
+      initPhone()
 			setState('characterLoaded', true)
 		end
 	end
@@ -98,23 +77,17 @@ end)
 
 RegisterNetEvent('onResourceStop', function(res)
 	if res == GetCurrentResourceName() then
-		closePhone()
-		stopSounds()
+    unloadPhone()
 	end
 end)
 
-RegisterCommand('phone:restart', function()
-	if not getState('characterLoaded') then return	end
-	closePhone()
-	StopAllAnimation()
-	SendNUIMessage({
-		app = 'home-screen',
-		action = 'doReload'
-	})
-	canRetrieve = false
-	stopSounds()
-	while(not canRetrieve) do Wait(10) end
-	initPhone()
+RegisterNetEvent('dg-ui:loadData', function()
+  initPhone()
+end)
+
+RegisterNetEvent('dg-ui:reload', function()
+  if not getState('characterLoaded') then return	end
+  unloadPhone()
 end)
 
 --region Keybindings
@@ -126,13 +99,13 @@ AddEventHandler('dg-lib:keyEvent', function(name, isDown)
 	end
 	if name == 'acceptNotification' then
 		SendNUIMessage({
-			app = 'home-screen',
+      appName = 'home-screen',
 			action = 'acceptNotification'
 		})
 	end
 	if name == "declineNotification" then
 		SendNUIMessage({
-			app = 'home-screen',
+      appName = 'home-screen',
 			action = 'declineNotification'
 		})
 	end

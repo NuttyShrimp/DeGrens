@@ -1,0 +1,74 @@
+@use 'src/styles/variables';
+
+.contextmenu {
+  &__wrapper {
+    position: absolute;
+    top: 30vh;
+    left: calc(100% - 70vh);
+    min-width: 20vh;
+    display: flex;
+    flex-direction: column;
+    color: white;
+    background-color: rgba(variables.$primary_darker_darker, .1);
+
+    & .entry {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      padding: 1vh;
+      cursor: pointer;
+
+      &:not(:last-child) {
+        border-bottom: .1vh solid rgba(variables.$gray_normal, .1);
+      }
+
+      &:hover {
+        background-color: variables.$primary_darker_darker;
+      }
+
+      &:first-child {
+        border-radius: 0.3rem 0.3rem 0 0;
+      }
+
+      &:last-child {
+        border-radius: 0 0 0.3rem 0.3rem;
+      }
+
+      &.disabled {
+        background-color: variables.$gray_light;
+        color: variables.$primary_darker_darker;
+        cursor: default;
+
+        &:hover {
+          background-color: variables.$gray_light;
+        }
+      }
+
+      & .icon {
+        margin: 0.5vh;
+        width: 2vh;
+        height: 2vh;
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+    }
+
+    & .textWrapper {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+    }
+
+    & .title {
+      font-size: 1rem;
+    }
+
+    & .description {
+      padding-top: 0.5vh;
+      font-size: .75rem;
+    }
+  }
+}
+

@@ -1,15 +1,16 @@
 DGCore.Functions = {}
 DGCore.RequestId = 0 -- IDX of promises
+DGCore.NotiId = 1 -- Ids of persistent notifications
 DGCore.Promises = {} -- Promises
 
 -- Player
 
 function DGCore.Functions.GetPlayerData(cb)
-    if cb then
-        cb(DGCore.PlayerData)
-    else
-        return DGCore.PlayerData
-    end
+	if cb then
+		cb(DGCore.PlayerData)
+	else
+		return DGCore.PlayerData
+	end
 end
 
 function DGCore.Functions.GetCoords(entity)
@@ -59,29 +60,22 @@ RegisterNUICallback('getNotifyConfig', function(_, cb)
     cb(DGCore.Config.Notify)
 end)
 
-function DGCore.Functions.Notify(text, textype, length)
-    if type(text) == "table" then
-        local ttext = text.text or 'Placeholder'
-        local caption = text.caption or 'Placeholder'
-        local ttype = textype or 'primary'
-        local length = length or 5000
-        SendNUIMessage({
-            action = 'notify',
-            type = ttype,
-            length = length,
-            text = ttext,
-            caption = caption
-        })
-    else
-        local ttype = textype or 'primary'
-        local length = length or 5000
-        SendNUIMessage({
-            action = 'notify',
-            type = ttype,
-            length = length,
-            text = text
-        })
-    end
+function DGCore.Functions.Notify(text, textype, length, persistent)
+	if persistent then
+		local id = DGCore.NotiId
+		DGCore.NotiId = DGCore.NotiId + 1
+	end
+	SendAppEvent('notifications', {
+		action = 'add',
+		notification = {
+			message = text,
+			type = textype,
+			timeout = length,
+			persistent = persistent,
+			id = id
+		}
+	})
+	return id
 end
 
 function DGCore.Debug(resource, obj, depth)

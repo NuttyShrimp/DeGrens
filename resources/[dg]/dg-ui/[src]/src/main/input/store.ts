@@ -1,0 +1,11 @@
+import { StoreObject } from '@lib/redux';
+
+const store: StoreObject<InputMenu.State> = {
+  key: 'input',
+  initialState: {
+    visible: false,
+    inputs: [],
+    callbackURL: '',
+  },
+};
+export default store;

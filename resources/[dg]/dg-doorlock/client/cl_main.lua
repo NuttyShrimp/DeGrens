@@ -41,7 +41,7 @@ Citizen.CreateThread(function()
 			else
 				if interactionVisible then
 					interactionVisible = false
-					exports["dg-lib"]:hideInteraction()
+					exports["dg-ui"]:hideInteraction()
 				end
 			end
 		end

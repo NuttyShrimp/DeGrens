@@ -1,24 +1,22 @@
 fx_version 'cerulean'
 game 'gta5'
 
-description 'QB-Multicharacter'
-version '1.0.0'
+description 'DG Chars'
 
+shared_script '@dg-core/import.lua'
+client_script '@dg-logs/client/cl_log.lua'
 shared_script 'config.lua'
-client_script 'client/main.lua'
-server_script 'server/main.lua'
-
-ui_page 'html/index.html'
-
-files {
-    'html/index.html',
-    'html/style.css',
-    'html/materialize.css',
-    'html/reset.css',
-    'html/script.js'
+client_scripts {
+	'client/cl_*.lua'
+}
+server_script {
+	'sv_config.lua',
+	'server/sv_*.lua'
 }
 
-dependencies {
-    'dg-core',
-    'dg-spawn'
+ui_page 'ui/dist/index.html'
+
+files {
+	'ui/dist/index.html',
+	'ui/dist/assets/*'
 }

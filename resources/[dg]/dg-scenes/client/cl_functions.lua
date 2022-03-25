@@ -5,7 +5,7 @@ toggleLaser = function(type)
     -- draw laser 
     Citizen.CreateThread(function()
         local hintText = activeLaser == "create" and "Plaats" or "Verwijder"
-        exports['dg-lib']:showInteraction(("%s - %s"):format(exports["dg-lib"]:GetCurrentKeyMap("+scenes-openmenu"), hintText))
+        exports['dg-ui']:showInteraction(("%s - %s"):format(exports["dg-lib"]:GetCurrentKeyMap("+scenes-openmenu"), hintText))
 
         local ped = PlayerPedId()
         while activeLaser do

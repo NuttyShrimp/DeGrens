@@ -1,9 +1,0 @@
-.menu-box {
-  position: absolute;
-  padding: 1.5vw;
-  width: 20%;
-  min-width: 20%;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-}

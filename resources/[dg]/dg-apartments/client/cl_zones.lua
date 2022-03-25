@@ -43,7 +43,7 @@ AddEventHandler('dg-polyzone:enter', function(name, data, center)
 	local generalUseKey = exports["dg-lib"]:GetCurrentKeyMap("+GeneralUse")
 	local housingMainKey = exports["dg-lib"]:GetCurrentKeyMap("+housingMain")
 	if (name == "apartment") then
-		exports['dg-lib']:showInteraction(('%s - Apartment'):format(generalUseKey), 'info')
+		exports['dg-ui']:showInteraction(('%s - Apartment'):format(generalUseKey), 'info')
 		return
 	end
 	local info = getInterActionByType(getInfoByType(currentApartmentName), name:gsub('apartment_', ''))
@@ -55,7 +55,7 @@ AddEventHandler('dg-polyzone:enter', function(name, data, center)
     end
 	end
 	str = str:gsub(', $', '')
-	exports['dg-lib']:showInteraction(str)
+	exports['dg-ui']:showInteraction(str)
 end)
 
 RegisterNetEvent('dg-polyzone:exit')
@@ -64,8 +64,8 @@ AddEventHandler('dg-polyzone:exit', function(name)
 	inZone = false
 	local info = (currentApartmentName ~= nil and getInterActionByType(getInfoByType(currentApartmentName), name:gsub('apartment_', ''))) or nil
 	if (name == "apartment" or (info ~= nil and info.zone)) then
-		exports['dg-lib']:hideInteraction()
-		exports["dg-contextmenu"]:closeMenu()
+		exports['dg-ui']:hideInteraction()
+		exports["dg-ui"]:closeApplication('contextmenu')
   end
 end)
 
@@ -76,7 +76,7 @@ AddEventHandler('dg-lib:keyEvent', function(name, isDown)
 	if name == "GeneralUse" then
 		if (inZone == "apartment") then
 			DGCore.Functions.TriggerCallback('dg-apartments:server:getApartmentMenu', function(menu)
-				exports["dg-contextmenu"]:openMenu(menu);
+				exports["dg-ui"]:openApplication('contextmenu',menu);
 			end)
 		end
 		if (info ~= nil and info.GeneralUse) then

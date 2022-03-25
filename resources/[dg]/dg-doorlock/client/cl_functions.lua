@@ -58,15 +58,15 @@ showInteraction = function()
         interactionVisible = true
         if isAuthorized(currentDoorId) then
             if doors[currentDoorId].locked then
-                exports['dg-lib']:showInteraction(('%s - Locked'):format(exports["dg-lib"]:GetCurrentKeyMap("+toggleDoor")), 'error')
+                exports['dg-ui']:showInteraction(('%s - Locked'):format(exports["dg-lib"]:GetCurrentKeyMap("+toggleDoor")), 'error')
             else
-                exports['dg-lib']:showInteraction(('%s - Unlocked'):format(exports["dg-lib"]:GetCurrentKeyMap("+toggleDoor")), 'success')
+                exports['dg-ui']:showInteraction(('%s - Unlocked'):format(exports["dg-lib"]:GetCurrentKeyMap("+toggleDoor")), 'success')
             end
         else
             if doors[currentDoorId].locked then
-                exports['dg-lib']:showInteraction('Locked', 'error')
+                exports['dg-ui']:showInteraction('Locked', 'error')
             else
-                exports['dg-lib']:showInteraction('Unlocked', 'success')
+                exports['dg-ui']:showInteraction('Unlocked', 'success')
             end
         end
     end

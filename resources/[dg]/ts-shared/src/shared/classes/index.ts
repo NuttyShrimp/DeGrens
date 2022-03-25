@@ -1,1 +1,1 @@
-export {Vector4} from './vector4'
+export { Vector4 } from './vector4';

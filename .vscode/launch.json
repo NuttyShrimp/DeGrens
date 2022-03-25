@@ -1,0 +1,61 @@
+{
+	"version": "1.0.0",
+	"configurations": [
+		{
+			"type": "node-terminal",
+			"name": "dg-chars:ui:dev",
+			"request": "launch",
+			"command": "yarn run dev",
+			"cwd": "${workspaceFolder}/resources/[dg]/dg-chars/ui"
+		},
+		{
+			"type": "node-terminal",
+			"name": "dg-chars:ui:build",
+			"request": "launch",
+			"command": "yarn run build",
+			"cwd": "${workspaceFolder}/resources/[dg]/dg-chars/ui"
+		},
+		{
+			"type": "node-terminal",
+			"name": "dg-financials:build dev",
+			"request": "launch",
+			"command": "yarn run build:dev",
+			"cwd": "${workspaceFolder}/resources/[dg]/dg-financials/typescript"
+		},
+		{
+			"type": "node-terminal",
+			"name": "dg-financials:build prod",
+			"request": "launch",
+			"command": "yarn run build",
+			"cwd": "${workspaceFolder}/resources/[dg]/dg-financials/typescript"
+		},
+		{
+			"type": "node-terminal",
+			"name": "dg-financials:dev",
+			"request": "launch",
+			"command": "yarn run watch",
+			"cwd": "${workspaceFolder}/resources/[dg]/dg-financials/typescript"
+		},
+		{
+			"type": "node-terminal",
+			"name": "dg-ui:build dev",
+			"request": "launch",
+			"command": "yarn run build:debug",
+			"cwd": "${workspaceFolder}/resources/[dg]/dg-ui/[src]"
+		},
+		{
+			"type": "node-terminal",
+			"name": "dg-ui:build prod",
+			"request": "launch",
+			"command": "yarn run build",
+			"cwd": "${workspaceFolder}/resources/[dg]/dg-ui/[src]"
+		},
+		{
+			"type": "node-terminal",
+			"name": "dg-ui:dev",
+			"request": "launch",
+			"command": "yarn run start",
+			"cwd": "${workspaceFolder}/resources/[dg]/dg-ui/[src]"
+		}
+	]
+}

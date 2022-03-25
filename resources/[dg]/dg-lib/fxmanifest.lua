@@ -20,10 +20,3 @@ client_scripts {
 	"client/**/*.lua",
 	"client/**/*.ytyp.xml"
 }
-
-ui_page "ui/index.html"
-files {
-	"ui/index.html",
-	'ui/**/*.js',
-	'ui/**/*.css',
-}

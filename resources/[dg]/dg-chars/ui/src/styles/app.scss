@@ -1,0 +1,79 @@
+@import './colors';
+
+#selector-body {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.selector-info {
+  position: absolute;
+  background-color: $primary_darker-8;
+  border-bottom: 0.2vh solid $gray_8;
+  border-radius: 0.2vh;
+  padding: 0.25vh 0.5vw;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  & > * {
+    user-select: none;
+  }
+
+  &--title {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: $gray_2;
+    margin-bottom: 0.5vh;
+  }
+}
+
+.spawn {
+  &-wrapper {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+  }
+
+  &-body {
+    width: 100%;
+    margin-top: 1vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+
+    & > *:not(.spawn-label) {
+      margin: 0 1rem;
+    }
+  }
+
+  &-label {
+    width: 30vh;
+    text-align: center;
+    font-size: 1.2rem;
+    font-weight: bold;
+    padding: 1rem;
+    border-radius: 0.25rem;
+    color: $gray_2;
+    background: $primary-darker-9;
+    cursor: pointer;
+    user-select: none;
+  }
+
+  &-list {
+    width: 100vw;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    & .spawn-label {
+      margin-top: 0.5vh;
+    }
+  }
+}

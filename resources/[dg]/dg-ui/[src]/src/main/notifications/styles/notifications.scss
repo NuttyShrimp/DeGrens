@@ -1,0 +1,64 @@
+@use 'src/styles/variables';
+
+$color_success: #47c93a;
+$color_error: #ff4757;
+$color_info: #299fff;
+
+.notification {
+  border-radius: .75rem;
+  background-color: #1e2023;
+  color: white;
+  border-right: .2vh solid variables.$primary_darker_darker;
+  padding: 1.25em;
+  margin: .5em 0;
+
+  &.success {
+    color: $color_success;
+  }
+
+  &.error {
+    color: $color_error;
+  }
+
+  &.info {
+    color: $color_info;
+  }
+
+  &__outer {
+    height: 100%;
+    width: 100%;
+    position: relative;
+  }
+
+  &__filter {
+    position: absolute;
+    height: inherit;
+    width: inherit;
+    border-radius: .75rem;
+    top: 0;
+
+    &.successBg {
+      background-color: rgba($color_success, .1);
+    }
+
+    &.errorBg {
+      background-color: rgba($color_error, .1);
+    }
+
+    &.infoBg {
+      background-color: rgba($color_info, .1);
+    }
+  }
+
+  &__list {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+
+    & > * {
+      width: fit-content;
+      max-width: 35vh;
+    }
+  }
+}

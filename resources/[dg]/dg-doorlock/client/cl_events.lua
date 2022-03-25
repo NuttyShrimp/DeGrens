@@ -6,7 +6,7 @@ end)
 RegisterNetEvent("onResourceStop", function(resourceName)
     if GetCurrentResourceName() ~= resourceName then return end
     if interactionVisible then 
-        exports["dg-lib"]:hideInteraction()
+        exports["dg-ui"]:hideInteraction()
     end
 end)
 
@@ -70,7 +70,7 @@ RegisterNetEvent("dg-lib:targetinfo:changed", function(entity, entityType, entit
 
     if interactionVisible then
         interactionVisible = false
-        exports["dg-lib"]:hideInteraction()
+        exports["dg-ui"]:hideInteraction()
     end
 end)
 
@@ -97,7 +97,7 @@ RegisterNetEvent("dg-polyzone:exit", function(name)
 
     if interactionVisible then
         interactionVisible = false
-        exports["dg-lib"]:hideInteraction()
+        exports["dg-ui"]:hideInteraction()
     end
 end)
 

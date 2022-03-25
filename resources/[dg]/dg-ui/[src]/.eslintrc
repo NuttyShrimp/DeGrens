@@ -1,0 +1,29 @@
+{
+  "env": {
+    "browser": true,
+    "es6": true
+  },
+  "plugins": [
+    "react",
+    "react-hooks"
+  ],
+  "extends": [
+    "plugin:react/recommended",
+  ],
+  "rules": {
+    "react/jsx-uses-react": 2,
+    "react/jsx-uses-vars": "error",
+    "react/prop-types": [
+      "off"
+    ],
+    "react/display-name": [
+      "off"
+    ],
+    "react-hooks/rules-of-hooks": "error"
+  },
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
+  }
+}

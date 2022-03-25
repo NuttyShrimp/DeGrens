@@ -1,0 +1,7 @@
+package.json
+tsconfig.json
+config
+node_modules
+.DS_Store
+dist
+*.local

@@ -1,0 +1,31 @@
+@use 'src/styles/variables';
+
+
+.log {
+  &__list {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    padding: 0.5rem;
+    width: 30vh;
+    overflow: auto;
+  }
+
+  &__entry {
+    width: 100%;
+    background-color: variables.$gray_light;
+    color: variables.$gray_darker;
+    border: .3vh solid variables.$gray_dark;
+    border-radius: 0.5rem;
+    padding: 0.5rem;
+    margin-bottom: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    transition: all 0.5s ease-in-out;
+
+    &.red {
+      background-color: #B71C1C;
+    }
+
+  }
+}

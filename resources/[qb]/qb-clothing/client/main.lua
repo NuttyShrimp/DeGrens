@@ -1545,7 +1545,7 @@ end)
 
 RegisterNUICallback('saveClothing', function(data)
     if FromChars == true then
-        TriggerServerEvent('dg-chars:server:readyToSpawn')
+        TriggerEvent('dg-chars:client:finishSpawn', true)
     end
     FromChars = false
     SaveSkin()

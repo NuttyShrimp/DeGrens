@@ -145,6 +145,19 @@ local function escape_sqli(source)
     return source:gsub("['\"]", replacements)
 end
 
+function getOwnedHouses(src)
+	local pData = DGCore.Functions.GetPlayer(src)
+	if pData then
+		local houses = exports.oxmysql:executeSync('SELECT ph.*, hl.label, hl.coords FROM player_houses ph INNER JOIN houselocations hl ON hl.name=ph.house WHERE identifier = ? AND citizenid = ?', {pData.PlayerData.license, pData.PlayerData.citizenid})
+		local ownedHouses = {}
+		for _,v in pairs(houses) do
+			ownedHouses[#ownedHouses+1] = v
+		end
+		return ownedHouses
+	end
+end
+exports('getOwnedHouses', getOwnedHouses)
+
 -- Events
 
 RegisterNetEvent('qb-houses:server:setHouses', function()

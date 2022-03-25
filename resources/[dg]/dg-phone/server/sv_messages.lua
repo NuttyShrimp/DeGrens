@@ -5,7 +5,7 @@ fetchMessages = function(phone, offset, target)
 		WHERE sender = ? OR receiver = ?
 		ORDER BY id DESC LIMIT ? OFFSET ?;
 	]]
-	local params={
+	local params = {
 		phone,
 		phone,
 		20,
@@ -18,7 +18,7 @@ fetchMessages = function(phone, offset, target)
 			WHERE (sender = ? AND receiver = ?) OR (sender = ? AND receiver = ?)
 			ORDER BY id DESC LIMIT ? OFFSET ?;
 		]]
-		params={
+		params = {
 			phone, target,
 			target, phone,
 			20,
@@ -28,7 +28,7 @@ fetchMessages = function(phone, offset, target)
 	local result = exports.oxmysql:executeSync(query, params)
 	-- reverse the order
 	local messages = {}
-	for i=1, #result do
+	for i = 1, #result do
 		table.insert(messages, 1, result[i])
 	end
 	return messages
@@ -39,13 +39,28 @@ addMessage = function(phone, target, msg, date)
 		INSERT INTO phone_messages (sender, receiver, message, date, isread)
 		VALUES (?, ?, ?, ?, 0);
 	]]
-	local params={
+	local params = {
 		phone,
 		target,
 		msg,
 		date
 	}
 	return exports.oxmysql:insertSync(query, params)
+end
+
+setRead = function(phone, target)
+	local query = [[
+		UPDATE phone_messages
+		SET isread = 1
+		WHERE (sender = ? AND receiver = ?) OR (sender = ? AND receiver = ?);
+	]]
+	local params = {
+		phone,
+		target,
+		target,
+		phone
+	}
+	return exports.oxmysql:executeSync(query, params)
 end
 
 DGCore.Functions.CreateCallback('dg-phone:server:getMessages', function(src, cb, data)
@@ -85,4 +100,11 @@ DGCore.Functions.CreateCallback('dg-phone:server:message:send', function(src, cb
 		msg.isreceiver = true
 		TriggerClientEvent('dg-phone:client:message:receive', Target.PlayerData.source, msg, Player.PlayerData.charinfo.phone)
 	end
+	cb()
+end)
+
+DGCore.Functions.CreateCallback('dg-phone:server:message:setRead', function(src, cb, data)
+	local Player = DGCore.Functions.GetPlayer(src)
+	setRead(Player.PlayerData.charinfo.phone, data.target)
+	cb()
 end)

@@ -122,6 +122,16 @@ DGShared.isFunction = function(f)
 	return false
 end
 
+DGShared.isStringEmpty = function(str)
+  if str == nil then
+    return true
+  end
+  if str:match( "^%s*(.-)%s*$" ) == '' then
+    return true
+  end
+  return false
+end
+
 DGShared.StarterItems = {
     ['phone'] = { amount = 1, item = 'phone' },
     ['id_card'] = { amount = 1, item = 'id_card' },

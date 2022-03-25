@@ -39,6 +39,11 @@ RegisterNetEvent('dg-apartments:server:setInsideMeta', function(aId)
 	setInsideMeta(source, aId)
 end)
 
+isInLockdown = function()
+	return state.isInLockdown
+end
+exports('isInLockdown', isInLockdown)
+
 -- id is an optional parameter
 enterApartment = function(src, id)
 	if (state.isInLockdown) then
@@ -127,12 +132,7 @@ DGCore.Functions.CreateCallback('dg-apartments:server:getApartmentMenu', functio
 	local ownedApartId = getPlayerApartment(src)
 	local invApart = getInvitedApartments(src)
 	local openApart = getOpenApartments()
-	local apartList = {
-		{
-			title = "Go back",
-			back = true
-		}
-	}
+	local apartList = {}
 	-- merge invApart and openApart into openApart & skip duplicates
 	for i,v in ipairs(invApart) do
     local found = false
@@ -150,7 +150,7 @@ DGCore.Functions.CreateCallback('dg-apartments:server:getApartmentMenu', functio
 	if (Player.PlayerData.job.name == "police" and Player.PlayerData.job.onduty) then
 		table.insert(apartList, {
       title = "Raid apartment",
-			action = "dg-apartments:client:openRaidMenu"
+			callbackURL = "dg-apartments:client:openRaidMenu"
     })
 	end
 
@@ -159,14 +159,14 @@ DGCore.Functions.CreateCallback('dg-apartments:server:getApartmentMenu', functio
 		apartList[#apartList+1] = {
 			title = ('Apartment #%s'):format(k),
 			description = "Enter this apartment",
-			action = "dg-apartments:client:enterApartment",
+			callbackURL = "dg-apartments:client:enterApartment",
 			data = {
 				id = k
 			}
 		}
 	end
 
-	if (#apartList < 2) then
+	if (#apartList < 1) then
     apartList[#apartList+1] = {
       title = "No apartments are open",
     }
@@ -176,7 +176,7 @@ DGCore.Functions.CreateCallback('dg-apartments:server:getApartmentMenu', functio
 		{
 			title = ("Enter apartment %s"):format(ownedApartId),
 			description = "Enter your private apartment",
-			action = "dg-apartments:client:enterApartment",
+			callbackURL = "dg-apartments:client:enterApartment",
 			data = {
 				id = ownedApartId,
       },
@@ -184,7 +184,7 @@ DGCore.Functions.CreateCallback('dg-apartments:server:getApartmentMenu', functio
 		{
 			title = "Apartment list",
 			description = "Invited/Open apartment list",
-			submenus = apartList,
+			submenu = apartList,
 		},
 	}
 
@@ -192,7 +192,7 @@ DGCore.Functions.CreateCallback('dg-apartments:server:getApartmentMenu', functio
 		menu[#menu+1] = {
 			title = ("%s"):format(state.isInLockdown and "Remove lockdown" or "Lockdown apartment"),
 			description = "Prevent citizens to enter their apartment",
-			action = "dg-apartments:client:toggleLockDown",
+			callbackURL = "dg-apartments:client:toggleLockDown",
 			data = {}
 		}
 	end
@@ -208,23 +208,18 @@ end)
 DGCore.Functions.CreateCallback('dg-apartments:server:getApartmentInvites', function(src, cb)
 	local apartment = getCurrentApartment(src)
 	local invites = getApartmentInvites(apartment.id, src)
-	local menu = {
-    {
-      title = "Go back",
-      back = true
-    }
-  }
+	local menu = {}
 	for k,v in pairs(invites) do
 		menu[#menu+1] = {
 			title = ('%s(%s)'):format(GetPlayerName(v), v),
 			description = "Remove invite",
-			action = "dg-apartments:client:removeInvite",
+			callbackURL = "dg-apartments:client:removeInvite",
 			data  = {
 				id = v
 			}
 		}
 	end
-	if (#menu < 2) then
+	if (#menu < 1) then
     menu[#menu+1] = {
       title = "No invites",
     }

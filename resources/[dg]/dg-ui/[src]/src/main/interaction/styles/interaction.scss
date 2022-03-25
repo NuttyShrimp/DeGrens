@@ -1,0 +1,37 @@
+
+.interaction {
+  width: fit-content;
+  margin-left: -20vh;
+  padding: 1vh 1.5vh;
+  color: white;
+  font-size: 1.1rem;
+  font-weight: bold;
+  border-radius: 0.25rem;
+
+  &__wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: fit-content;
+    height: 100%;
+  }
+
+  & .shadow {
+    text-shadow: 0rem 0.05rem 0.1rem rgb(0 0 0),
+    0.05rem 0rem 0.1rem rgb(0 0 0),
+    0rem -0.05rem 0.1rem rgb(0 0 0),
+    -0.05 rem 0rem 0.1rem rgb(0 0 0);
+  }
+  &.info {
+    background-color: #2596ef;
+  }
+
+  &.success {
+    background-color: #4eae50;
+  }
+
+  &.error {
+    background-color: #ef4438;
+  }
+}
+

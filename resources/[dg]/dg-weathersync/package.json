@@ -1,5 +1,5 @@
 {
-  "name": "template",
+  "name": "dg-weathersync",
   "version": "1.0.0",
   "description": "fivem ts template",
   "main": "index.js",
@@ -7,7 +7,7 @@
   "scripts": {
     "build": "webpack --mode production",
     "format": "prettier --write \"src/**/*.ts\"",
-    "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
+    "lint": "eslint src/ --ext .js,.jsx,.ts,.tsx",
     "watch": "webpack --mode development --watch true"
   },
   "license": "MIT",

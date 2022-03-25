@@ -48,7 +48,10 @@ function DGCore.Player.Login(source, citizenid, newData)
 		if citizenid then
 			local result = exports.oxmysql:executeSync('SELECT * FROM players WHERE citizenid = ?', { citizenid })
 			local PlayerData = DGCore.Player.buildPlayerData(result[1])
-
+      if PlayerData == nil then
+        DGCore.Functions.Notify('Kon karakter niet laden, probeer opnieuw', 'error')
+        return false
+      end
 			DGCore.Player.CheckPlayerData(src, PlayerData)
 		else
 			DGCore.Player.CheckPlayerData(src, newData)
@@ -65,9 +68,9 @@ function DGCore.Player.CheckPlayerData(source, PlayerData)
 	PlayerData = PlayerData or {}
 	PlayerData.source = src
 	PlayerData.citizenid = PlayerData.citizenid or nil
-	PlayerData.steamid = PlayerData.steamid or DGCore.Functions.GetIdentifier(src, 'steam')
-	PlayerData.license = PlayerData.license ~= '' and PlayerData.license or DGCore.Functions.GetIdentifier(src, 'license')
-	PlayerData.discord = PlayerData.discord or DGCore.Functions.GetIdentifier(source, "discord")
+	PlayerData.steamid = not DGCore.Shared.isStringEmpty(PlayerData.steamid) and PlayerData.steamid or DGCore.Functions.GetIdentifier(src, 'steam')
+	PlayerData.license = not DGCore.Shared.isStringEmpty(PlayerData.license) and PlayerData.license or DGCore.Functions.GetIdentifier(src, 'license')
+	PlayerData.discord = not DGCore.Shared.isStringEmpty(PlayerData.discord) and PlayerData.discord or DGCore.Functions.GetIdentifier(source, "discord")
 	PlayerData.name = GetPlayerName(src)
 	PlayerData.cid = PlayerData.cid or 1
 	-- Charinfo
@@ -496,6 +499,7 @@ function DGCore.Player.Save(source)
 			                        citizenid   = :citizenid,
 			                        name        = :name,
 			                        steamid     = :steamid,
+			                        license     = :license,
 			                        discord     = :discord,
 			                        firstname   = :firstname,
 			                        lastname    = :lastname,

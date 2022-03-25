@@ -3,33 +3,13 @@ local isRevivedProm = nil
 RegisterNetEvent('dg-phone:load', function()
 	local src = source
 	local Player = DGCore.Functions.GetPlayer(src)
-	PlyData = {
-		server_id = tonumber(src),
-		cid = Player.PlayerData.citizenid,
-		firstname = Player.PlayerData.charinfo.firstname,
-		lastname =  Player.PlayerData.charinfo.lastname,
-		phone = Player.PlayerData.charinfo.phone,
-		job = Player.PlayerData.job.name,
-		permissionGroup = DGCore.Functions.GetPermission(src),
-		hasVPN = Player.Functions.GetItemByName('vpn') ~= nil,
-	}
-	TriggerClientEvent('dg-phone:client:setCharacterData', src, PlyData)
 	TriggerClientEvent('dg-phone:client:setState', src, 'hasPhone', Player.Functions.GetItemByName('phone') ~= nil)
 end)
 
 RegisterNetEvent('DGCore:Server:OnInventoryUpdate', function(src, removed, added)
 	-- Set hasVPN
 	local Player = DGCore.Functions.GetPlayer(src)
-	TriggerClientEvent('dg-phone:client:setCharacterData', src, {
-		hasVPN = Player.Functions.GetItemByName('vpn') ~= nil,
-	})
 	TriggerClientEvent('dg-phone:client:setState', src, 'hasPhone', Player.Functions.GetItemByName('phone') ~= nil)
-end)
-
-RegisterNetEvent('DGCore:Server:OnJobUpdate', function(src, job)
-	TriggerClientEvent('dg-phone:client:setCharacterData', src, {
-		job = job.name,
-	})
 end)
 
 brickPhone = function(src, event, toggle)

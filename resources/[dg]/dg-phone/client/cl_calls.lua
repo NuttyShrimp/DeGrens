@@ -24,7 +24,7 @@ stopSounds = function(id)
 	end
 end
 
-RegisterNUICallback('phone:startCall', function(data, cb)
+RegisterUICallback('phone/startCall', function(data, cb)
 	local soundId = DGCore.Functions.TriggerCallback('dg-phone:server:startCall', nil, data)
 	if soundId then
 		playSound('dial', soundId)
@@ -32,30 +32,30 @@ RegisterNUICallback('phone:startCall', function(data, cb)
 	cb({ data = {}, meta = { ok = true, message = "done" } })
 end)
 
-RegisterNUICallback('phone:dispatchEndCall', function(data, cb)
+RegisterUICallback('phone/dispatchEndCall', function(data, cb)
 	DGCore.Functions.TriggerCallback('dg-phone:server:endCall', nil, data)
 	cb({ data = {}, meta = { ok = true, message = "done" } })
 end)
 
-RegisterNUICallback('phone:acceptCall', function(data, cb)
+RegisterUICallback('phone/acceptCall', function(data, cb)
 	DGCore.Functions.TriggerCallback('dg-phone:server:initiateCall', nil, data)
 	cb({ data = {}, meta = { ok = true, message = "done" } })
 end)
 
-RegisterNUICallback('phone:declineCall', function(data, cb)
+RegisterUICallback('phone/declineCall', function(data, cb)
 	DGCore.Functions.TriggerCallback('dg-phone:server:endCall', nil, data)
 	cb({ data = {}, meta = { ok = true, message = "done" } })
 end)
 
-RegisterNUICallback('phone:endcall', function(data, cb)
+RegisterUICallback('phone/endcall', function(data, cb)
 	cb({ data = {}, meta = { ok = true, message = "done" } })
 end)
 
 RegisterNetEvent('dg-phone:client:incomingCall')
 AddEventHandler('dg-phone:client:incomingCall', function(data)
 	playSound('ring', data.soundId)
-	SendNUIMessage({
-		app = "dialer",
+	SendAppEvent('phone',{
+		appName = "phone",
 		action = 'incomingCall',
 		data = data
 	})
@@ -63,8 +63,8 @@ end)
 
 RegisterNetEvent('dg-phone:client:endCurrentCall', function(soundId)
 	stopSounds(soundId)
-	SendNUIMessage({
-		app = "dialer",
+	SendAppEvent('phone',{
+		appName = "phone",
 		action = 'endCurrentCall',
 		data = {}
 	})
@@ -72,8 +72,8 @@ end)
 
 RegisterNetEvent('dg-phone:client:initiateCall', function(soundId)
 	stopSounds(soundId)
-	SendNUIMessage({
-		app = "dialer",
+	SendAppEvent('phone',{
+		appName = "phone",
 		action = "setCallActive",
 		data = {}
 	})
@@ -97,23 +97,21 @@ Citizen.CreateThread(function()
 				label = 'Use Payphone',
 				item = 'phone',
 				action = function(entity)
-					local dialog = exports['qb-input']:ShowInput({
+					local dialog = exports['dg-ui']:openInput({
 						header = "Make a call",
-						submitText = "",
 						inputs = {
 							{
-								text = "Phone Number",
+								label = "Phone Number",
 								name = "phoneNumber",
 								type = "number",
-								isRequired = true
 							},
 						},
 					})
 
 					if dialog ~= nil then
 						if (dialog.phoneNumber) then
-							SendNUIMessage({
-								app = "dialer",
+							SendAppEvent('phone',{
+                appName = "phone",
 								action = 'startAnonCall',
 								data = dialog.phoneNumber
 							})

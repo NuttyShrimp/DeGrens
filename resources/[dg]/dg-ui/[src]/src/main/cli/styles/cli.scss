@@ -1,0 +1,10 @@
+@use "src/styles/variables";
+
+.cli_bar {
+  min-width: 60%;
+  background-color: variables.$gray_dark;
+  padding: 0.5rem;
+  border: .3vh solid variables.$gray_normal;
+  border-radius: 1vh;
+  margin-top: 1vh;
+}

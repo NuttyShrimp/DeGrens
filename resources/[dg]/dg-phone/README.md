@@ -33,10 +33,12 @@ exports["dg-phone"]:sendMail(subject, sender, mail)
 
 -- Server sided
 TriggerClientEvent('dg-phone:client:addNewMail', target, subject, sender, mail)
-```lua
+```
 Sending an email to a player to save if they are not online
+```lua 
 -- Server Sided
 exports["dg-phone"]:sendOfflineMail(cid, subject, sender, mail)
+```
 
 ## Notifications
 Sendout a new notifications
@@ -68,6 +70,8 @@ local notification = {
   },
   -- (OPTIONAL) A timer, if set to 0, it will count down otherwise it will count down and dispatch the decline event of given
   timer = 20,
+  -- (OPTIONAL) To open a specific app when the notification is clicked set the name here
+  app = 'contacts'
 }
 exports["dg-phone"]:addNotification(notification)
 

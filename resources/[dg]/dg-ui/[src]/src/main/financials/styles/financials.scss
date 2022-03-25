@@ -1,0 +1,215 @@
+@use "src/styles/variables";
+
+.financials {
+  &__backdrop {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 2;
+  }
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 3vh;
+    padding: 0 1vh;
+    border-bottom: .1vh solid variables.$primary_normal;
+  }
+
+  &__wrapper {
+    width: 130vh;
+    height: 100%;
+    border-radius: .5vh;
+    background-color: variables.$primary_darker_darker;
+    display: flex;
+    flex-direction: row;
+    position: relative;
+    & > div:first-child {
+      flex: 1 0 30%;
+      border-right: .1vh solid variables.$primary_normal;
+    };
+    & > div:nth-child(2) {
+      flex: 1 0 70%;
+    }
+    & .account {
+      margin: .5vh 0;
+      border-radius: 0.25rem;
+      border: 0.2vh solid #fff;
+      padding: 1vh;
+      background-color: variables.$primary_darker_dark;
+      cursor: pointer;
+
+      & > div {
+        display: flex;
+        align-items: center;
+      }
+
+      &:hover {
+        color: variables.$primary_normal;
+        .account__icon {
+          background-color: variables.$primary_normal;
+          color: variables.$primary_darker;
+        }
+      }
+      &.selected {
+        color: variables.$primary_light;
+        border-color: variables.$primary_light;
+        .account__icon {
+          background-color: variables.$primary_light;
+          color: variables.$primary_darker;
+        }
+      }
+
+      &__list {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        padding: 0 1vh;
+      }
+
+      &__icon {
+        font-size: 3rem;
+        width: 8vh;
+        height: 8vh;
+        border-radius: .25vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: variables.$primary_lighter;
+        margin-right: 1vh;
+      }
+
+      &__info {
+        display: flex;
+        flex-direction: column;
+        line-height: 1.25;
+        & > #name {
+
+        }
+        & > #id {
+          font-size: .9rem;
+        }
+        & > #balance {
+          font-size: 1.1rem;
+        }
+      }
+
+      &__btns {
+        display: flex;
+        justify-content: space-between;
+        margin-top: .5vh;
+        padding-top: .5vh;
+        color: variables.$primary_normal;
+        border-top: .1vh solid variables.$primary_lighter;
+      }
+    }
+
+    & .transaction {
+      &__list {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 1vh;
+				overflow: auto;
+      }
+
+      &__no_perms {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        & > i {
+          font-size: 3rem;
+          padding: 2vh;
+        }
+      }
+
+      padding: 2vh;
+      width: 100%;
+      margin-bottom: 1vh;
+      border-radius: 0.5vh;
+      border: 0.1vh solid variables.$primary_normal;
+      background-color: variables.$primary_darker_dark;
+      &__top {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      &__title {
+        font-size: 1.2rem;
+        color: variables.$gray_lighter;
+      }
+      &__metadata {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        font-size: .8rem;
+        color: variables.$gray_light;
+      }
+      &__body {
+        display: flex;
+        align-items: center;
+        margin-top: .5vh;
+      }
+      &__amount {
+        color: variables.$gray_light;
+        background-color: variables.$primary_dark;
+        border-radius: .5vh;
+        padding: .75vh;
+        font-size: 1rem;
+        margin-right: 1vh;
+        &.negative {
+          background-color: variables.$gray_light;
+        color: variables.$gray_dark;
+        }
+      }
+      &__info {
+        border-left: .1vh solid variables.$gray_lighter;
+        padding-left: 1vh;
+        width: 100%;
+        &__persons {
+          font-size: .9rem;
+          & > * {
+            margin-right: 1vh;
+          }
+        }
+        &__comment {
+          margin-top: .75vh;
+          font-size: .7rem;
+          color: variables.$gray_light;
+          & > div:last-child {
+            margin-top: .25vh;
+            border-bottom: .1vh solid variables.$gray_light;
+          }
+        }
+      }
+    }
+
+    & .modal {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      left: 0;
+      right: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 3;
+      & > div {
+        background-color: variables.$primary_darker_dark;
+        width: 35%;
+        height: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        & > div {
+          width: 50%;
+        }
+      }
+    }
+  }
+}
+

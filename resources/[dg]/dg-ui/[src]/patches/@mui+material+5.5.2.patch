@@ -1,0 +1,87 @@
+diff --git a/node_modules/@mui/material/CircularProgress/CircularProgress.d.ts b/node_modules/@mui/material/CircularProgress/CircularProgress.d.ts
+index 2a2eabf..80c475b 100644
+--- a/node_modules/@mui/material/CircularProgress/CircularProgress.d.ts
++++ b/node_modules/@mui/material/CircularProgress/CircularProgress.d.ts
+@@ -17,7 +17,7 @@ export interface CircularProgressProps
+    * @default 'primary'
+    */
+   color?: OverridableStringUnion<
+-    'primary' | 'secondary' | 'error' | 'info' | 'success' | 'warning' | 'inherit',
++    'primary' | 'secondary' | 'error' | 'info' | 'success' | 'warning' | 'inherit' | string,
+     CircularProgressPropsColorOverrides
+   >;
+   /**
+@@ -54,6 +54,9 @@ export interface CircularProgressProps
+    * @default 'indeterminate'
+    */
+   variant?: 'determinate' | 'indeterminate';
++	viewBox?: string;
++	cx?: number;
++	cy?: number;
+ }
+ 
+ /**
+diff --git a/node_modules/@mui/material/CircularProgress/CircularProgress.js b/node_modules/@mui/material/CircularProgress/CircularProgress.js
+index 7b66217..f84c8e4 100644
+--- a/node_modules/@mui/material/CircularProgress/CircularProgress.js
++++ b/node_modules/@mui/material/CircularProgress/CircularProgress.js
+@@ -1,6 +1,6 @@
+ import _objectWithoutPropertiesLoose from "@babel/runtime/helpers/esm/objectWithoutPropertiesLoose";
+ import _extends from "@babel/runtime/helpers/esm/extends";
+-const _excluded = ["className", "color", "disableShrink", "size", "style", "thickness", "value", "variant"];
++const _excluded = ["className", "color", "disableShrink", "size", "style", "thickness", "value", "variant", "viewBox", "cx", "cy"];
+ 
+ let _ = t => t,
+     _t,
+@@ -140,7 +140,10 @@ const CircularProgress = /*#__PURE__*/React.forwardRef(function CircularProgress
+     style,
+     thickness = 3.6,
+     value = 0,
+-    variant = 'indeterminate'
++    variant = 'indeterminate',
++		viewBox = `${SIZE / 2} ${SIZE / 2} ${SIZE} ${SIZE}`,
++		cx = SIZE,
++		cy = SIZE,
+   } = props,
+         other = _objectWithoutPropertiesLoose(props, _excluded);
+ 
+@@ -150,8 +153,8 @@ const CircularProgress = /*#__PURE__*/React.forwardRef(function CircularProgress
+     size,
+     thickness,
+     value,
+-    variant
+-  });
++    variant,
++	});
+ 
+   const classes = useUtilityClasses(ownerState);
+   const circleStyle = {};
+@@ -179,13 +182,13 @@ const CircularProgress = /*#__PURE__*/React.forwardRef(function CircularProgress
+     children: /*#__PURE__*/_jsx(CircularProgressSVG, {
+       className: classes.svg,
+       ownerState: ownerState,
+-      viewBox: `${SIZE / 2} ${SIZE / 2} ${SIZE} ${SIZE}`,
++			viewBox,
+       children: /*#__PURE__*/_jsx(CircularProgressCircle, {
+         className: classes.circle,
+         style: circleStyle,
+         ownerState: ownerState,
+-        cx: SIZE,
+-        cy: SIZE,
++				cx,
++				cy,
+         r: (SIZE - thickness) / 2,
+         fill: "none",
+         strokeWidth: thickness
+@@ -268,6 +271,9 @@ process.env.NODE_ENV !== "production" ? CircularProgress.propTypes
+    * Use indeterminate when there is no progress value.
+    * @default 'indeterminate'
+    */
+-  variant: PropTypes.oneOf(['determinate', 'indeterminate'])
++  variant: PropTypes.oneOf(['determinate', 'indeterminate']),
++	viewBox: PropTypes.string,
++	cx: PropTypes.number,
++	cy: PropTypes.number,
+ } : void 0;
+ export default CircularProgress;
+\ No newline at end of file

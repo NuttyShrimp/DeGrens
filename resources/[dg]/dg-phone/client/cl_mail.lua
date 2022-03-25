@@ -1,6 +1,6 @@
 sendMail = function(subject, sender, mail)
-	SendNUIMessage({
-		app="mail",
+	SendAppEvent('phone', {
+		appName="mail",
 		action="newMail",
 		data={
 			subject=subject,

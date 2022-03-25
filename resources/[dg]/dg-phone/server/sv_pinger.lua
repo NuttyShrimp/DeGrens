@@ -5,7 +5,7 @@ RegisterNetEvent('dg-phone:pinger:request', function(data)
 	local src = source
 	local Player = DGCore.Functions.GetPlayer(src)
 	local Target = DGCore.Functions.GetPlayer(tonumber(data.target))
-	if (data.isAnon and Player.Functions.GetItemByName('vpn')) then
+	if (data.isAnon and not Player.Functions.GetItemByName('vpn')) then
 		-- TODO ban injection
 		return
 	end

@@ -8,10 +8,12 @@ registerInfoEntry = function(name, getter, icon, color, prefix)
       color = color,
       prefix = prefix
   }
-	SendNUIMessage({
-		app="info",
+	SendAppEvent('phone',{
+		appName="info",
 		action="registerInfoEntry",
-		data=entry
+		data = {
+			entry = entry
+		}
   })
 	entry.getter = getter
   entries[#entries+1] = entry
@@ -37,7 +39,7 @@ RegisterNetEvent('dg-phone:load',function()
   end, 'piggy-bank', "#64b5f6", '€')
 end)
 
-RegisterNUICallback("fetchInfo", function(data, cb)
+RegisterUICallback("phone/info/fetchInfo", function(data, cb)
 	local info = {}
 	for k,v in ipairs(entries) do
 		local value = v.getter()

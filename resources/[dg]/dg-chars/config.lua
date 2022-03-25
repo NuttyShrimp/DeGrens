@@ -1,16 +1,35 @@
 Config = {}
-Config.StartingApartment = true -- Enable/disable starting apartments (make sure to set default spawn coords)
-Config.Interior = vector3(-814.89, 181.95, 76.85) -- Interior to load where characters are previewed
-Config.DefaultSpawn = vector3(-1035.71, -2731.87, 12.86) -- Default spawn coords if you have start apartments disabled
-Config.PedCoords = vector4(186.11, -679.31, 42.14, 350.0) -- Create preview ped at these coordinates
-Config.HiddenCoords = vector4(187.28, -673.35, 44.48, 156.5) -- Hides your actual ped while you are in selection
-Config.CamCoords = {x = 187.28, y = -673.35, z = 44.48, h = 166.5}
-Config.standardCamCoords = vector4(187.28, -673.35, 44.48, 166.5)-- Camera coordinates for character preview screen
 
-Config.PedLocations = {
-	vector4(188.99, -679.03, 42.14, 35.5),
-	vector4(187.46, -679.44, 42.14, 23.5),
-	vector4(185.90, -679.38, 42.14, 350.0),-- Middle
-	vector4(184.30, -678.64, 42.14, 329.5),
-	vector4(183.20, -677.68, 42.14, 301.5),
-} -- Coords where peds get spawned
+Config.charCreationLoc = vector4(1104.432, 200.5039, -50.42637, -48.0)
+Config.WaitLoc = vector3(1099.901, 220.2295, -49.7033)
+Config.SeatLoc = {
+	{
+		coords = vector3(1115.48, 207.6716, -50.44047),
+		rot = vector3(0.0, 0.0, 83.42),
+		spawn = false
+	},
+	{
+		coords = vector3(1115.312, 206.8738, -50.44047),
+		rot = vector3(0.0, 0.0, 72.71),
+		spawn = true,
+	},
+	{
+		coords = vector3(1114.964, 206.1601, -50.44047),
+		rot = vector3(0.0, 0.0, 57.71),
+		spawn = false
+	},
+	{
+		coords = vector3(1114.459, 205.5381, -50.44047),
+		rot = vector3(0.0, 0.0, 47.0),
+		spawn = true,
+	},
+	{
+		coords = vector3(1113.843, 205.0411, -50.44047),
+		rot = vector3(0.0, 0.0, 32.0),
+		spawn = false
+	},
+}
+Config.Cam = {
+	coords = vector3(1112.71, 207.63, -48.35),
+	rot = vector3(-15.0, 0.0, -120.0),
+}

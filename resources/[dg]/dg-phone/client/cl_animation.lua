@@ -172,8 +172,8 @@ exports["dg-lib"]:registerKeyMapping('takePhoneCameraPicture', 'Neem photo (phon
 AddEventHandler('dg-lib:keyEvent', function(name, isDown)
 	if getState('state') ~= 2 or not isDown  then return	end
 	if name == "takePhoneCameraPicture" then
-		local event = DGCore.Functions.TriggerCallback('dg-phone:server:photo:take', nil)
 		setState('state', 1)
+		local event = DGCore.Functions.TriggerCallback('dg-phone:server:photo:take', nil)
 	elseif name == "switchPhoneCamera" then
 		isFrontCam = not isFrontCam
 		CellFrontCamActivate(isFrontCam)
@@ -198,10 +198,6 @@ closeCamera = function()
 	DestroyMobilePhone()
 	CellCamActivate(false, false)
 	CellFrontCamActivate(false)
-	SendNUIMessage({
-		app = "home-screen",
-		action = "closeCam",
-	})
 end
 
 --endregion
