@@ -14,7 +14,7 @@ seed.sql
 positions.txt
 
 # Emacs
-.~undo-tree~
+*.~undo-tree~
 
 # Created by https://www.toptal.com/developers/gitignore/api/node,visualstudiocode,jetbrains+all
 # Edit at https://www.toptal.com/developers/gitignore?templates=node,visualstudiocode,jetbrains+all
