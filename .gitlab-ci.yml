@@ -19,6 +19,21 @@ image: node:lts
       - node_modules/
       - '**/node_modules/'
 
+.js_changes:
+  only:
+    refs:
+      - main
+      - UPD
+      - merge_requests
+      - tags
+    changes:
+      - "**/*.js"
+      - "**/*.ts"
+      - "**/*.jsx"
+      - "**/*.tsx"
+      - "**/*.css"
+      - "**/*.scss"
+
 validate json:
   stage: test
   script:
@@ -59,38 +74,23 @@ JS linting:
   extends:
     - .lerna_installation
     - .cache_modules
+    - .js_changes
   stage: linting
   script:
     - yarn lint
-  only:
-    refs:
-      - main
-      - UPD
-      - merge_requests
-      - tags
-    changes:
-      - "**/*.js"
-      - "**/*.ts"
-      - "**/*.jsx"
-      - "**/*.tsx"
-      - "**/*.scss"
 
 JS building:
   extends:
     - .lerna_installation
     - .cache_modules
+    - .js_changes
   stage: build
   script:
     - yarn format -- -- --loglevel error
     - yarn build
   only:
-    refs:
-      - main
-      - UPD
-      - merge_requests
-      - tags
     changes:
-      - "**/*.(js|ts|jsx|tsx|css|scss|less|html)"
+      - "**/*.html"
       - "**/package.json"
       - "**/yarn.lock"
 
