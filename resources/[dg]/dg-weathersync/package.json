@@ -6,6 +6,7 @@
   "author": "nns",
   "scripts": {
     "build": "webpack --mode production",
+    "build:dev": "yarn build",
     "format": "prettier --write \"src/**/*.ts\"",
     "lint": "eslint src/ --ext .js,.jsx,.ts,.tsx",
     "watch": "webpack --mode development --watch true"

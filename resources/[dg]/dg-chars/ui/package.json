@@ -5,6 +5,7 @@
 	"scripts": {
 		"dev": "vite",
 		"build": "vue-tsc && vite build",
+		"build:dev": "yarn build",
 		"watch": "vue-tsc && vite build --watch",
 		"serve": "vite preview",
 		"format": "prettier src  --write",

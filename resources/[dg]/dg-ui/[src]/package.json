@@ -5,7 +5,7 @@
   "scripts": {
     "start": "vite --mode development",
     "build": "tsc --noEmit && vite build --mode production",
-    "build:debug": "tsc --noEmit && vite build --mode gamedev",
+    "build:dev": "tsc --noEmit && vite build --mode gamedev",
     "format": "prettier --write \"./**/*.{js,jsx,ts,tsx,css,md,json}\" --ignore-path ./.prettierignore ",
     "lint": "eslint ./src --ext .jsx,.js,.ts,.tsx --quiet --fix --ignore-path ./.eslintignore -c ./.eslintrc",
     "postinstall": "patch-package"

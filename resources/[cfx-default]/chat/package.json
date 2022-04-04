@@ -23,6 +23,7 @@
   },
   "scripts": {
     "build": "webpack --mode production",
+    "build:dev": "yarn build",
     "dev": "webpack-dev-server --mode development",
     "watch": "webpack --watch --mode development"
   }

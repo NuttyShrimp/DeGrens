@@ -3,6 +3,7 @@
   "private": true,
   "scripts": {
     "build": "lerna run --stream build ",
+    "build:dev": "lerna run --stream build:dev ",
     "lint:lerna": "lerna run --stream lint",
     "lint:root": "eslint --fix --resolve-plugins-relative-to ./ --ext .js,.ts,.tsx,.jsx,.json ./resources/[dg]/",
     "lint": "yarn run lint:root --quiet",
