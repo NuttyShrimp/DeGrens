@@ -90,6 +90,7 @@ end)
 DGCore.Functions.CreateCallback('dg-chars:server:createCharacter', function(src, cb, data)
 	local newData = {}
 	newData.charinfo = data
+  newData.cid = data.cid
 	if DGCore.Player.Login(src, false, newData) then
 		DGCore.Commands.Refresh(src)
 		exports['dg-logs']:createGraylogEntry('chars:created', { src, data }, "Created a new character")
