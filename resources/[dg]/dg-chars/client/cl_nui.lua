@@ -39,7 +39,8 @@ end)
 
 RegisterNUICallback('selectChar', function(_, cb)
 	if entCid == 0 or entCid == nil then return end
-  local plyCid = number(entCid) -- Coypy of value if player moves mouse between unfreeze and losing nui focus
+  debug('Selected char: %s', entCid)
+  local plyCid = tonumber(entCid) -- Coypy of value if player moves mouse between unfreeze and losing nui focus
 	DoScreenFadeOut(250)
 	Wait(250)
 	closeCharMenu()
