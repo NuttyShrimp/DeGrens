@@ -416,12 +416,11 @@ CREATE TABLE IF NOT EXISTS maintenance_fee_log
 
 CREATE TABLE IF NOT EXISTS `weedplants` 
 (
-	`id` INT NOT NULL AUTO_INCREMENTS,
+	`id` INT NOT NULL AUTO_INCREMENT,
 	`stage` SMALLINT DEFAULT 1,
 	`coords` TEXT DEFAULT NULL,
 	`gender` VARCHAR(1) DEFAULT NULL,
 	`food` INT DEFAULT 100,
-  `food` int(11) DEFAULT 100,
   `growtime` bigint(20) DEFAULT NULL,
   `cuttime` bigint(20) DEFAULT NULL,
 	PRIMARY KEY (`id`)
