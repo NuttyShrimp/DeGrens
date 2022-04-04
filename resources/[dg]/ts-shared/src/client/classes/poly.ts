@@ -1,4 +1,4 @@
-import { Vector3 } from "fivem-js";
+import { Vector3 } from "../../shared/classes/vector3";
 
 export class PolyTarget {
 	static addBoxZone(

@@ -1,6 +1,5 @@
-// TODO: replace with custom implementation to remove fivem-js dependency
 import UI from '@ts-shared/client/classes/ui';
-import { Vec3 } from 'fivem-js/lib/utils/Vector3';
+import { Vec3 } from '@ts-shared/shared/classes/vector3';
 
 import { doAnimation } from '../modules/bank/service';
 

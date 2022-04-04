@@ -1,4 +1,6 @@
-import { Vector3 } from 'fivem-js';
+import { Vector3 } from './classes/vector3';
+
+export { v4 as uuidv4 } from 'uuid';
 
 export const Delay = (ms: number): Promise<any> => new Promise(res => setTimeout(res, ms));
 

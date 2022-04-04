@@ -1,5 +1,4 @@
-import { getRndInteger } from '@ts-shared/shared/functions';
-import { uuidv4 } from 'fivem-js';
+import { getRndInteger, uuidv4 } from '@ts-shared/shared/functions';
 
 import { AccountManager } from './modules/bank/classes/AccountManager';
 
