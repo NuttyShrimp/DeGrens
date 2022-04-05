@@ -1,46 +1,19 @@
-import { GetInitialState, store, type } from './redux';
-
-const events: { [appName: string]: { [eventName: string]: (data: any) => void } } = {
-  main: {
-    restart: () => {
-      store.dispatch({
-        type,
-        cb: state => ({
-          ...state,
-          main: {
-            mounted: false,
-            ...state.main,
-          },
-        }),
-      });
-      setTimeout(() => {
-        store.dispatch({
-          type,
-          cb: () => GetInitialState(),
-        });
-      }, 2000);
-    },
-  },
-};
-const auxStates: string[] = [];
+import { events } from './events';
+import { getAuxStates, store } from './redux';
 
 export const registerRelayEvent = (app: string, eventName: string, handler: (data: any) => void): void => {
   events[app] = events[app] || {};
   events[app][eventName] = handler;
 };
 
-export const addAuxState = (stateName: string): void => {
-  auxStates.push(stateName);
-};
-
 export const handleIncomingEvent = (e: MessageEvent) => {
   if (!e.data.app || !e.data.data) {
     return;
   }
-  if (auxStates.includes(e.data.app)) {
+  if (getAuxStates().includes(e.data.app)) {
     // Dispatch setter for state
     store.dispatch({
-      type,
+      type: 'dg-ui-action',
       cb: state => ({
         ...state,
         [e.data.app]: {
