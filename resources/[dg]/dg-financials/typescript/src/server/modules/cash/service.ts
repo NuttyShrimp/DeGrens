@@ -1,5 +1,3 @@
-import { Player } from '@ts-shared/server/types/core';
-
 import { cashLogger } from './util';
 
 const cashCache: Map<number, number> = new Map();

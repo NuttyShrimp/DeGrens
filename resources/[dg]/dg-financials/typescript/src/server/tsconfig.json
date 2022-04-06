@@ -15,14 +15,14 @@
     "allowSyntheticDefaultImports": true,
     "baseUrl": ".",
     "paths": {
-      "@ts-shared/*": ["../../../../ts-shared/src/*"]
+      "@ts-shared/*": ["../../../../ts-shared/typescript/src/*"]
     }
   },
   "include": [
     "./**/*",
     "../types",
-    "../../../../ts-shared/src/shared/types/*.d.ts",
-    "../../../../ts-shared/src/server/types/*.d.ts"
+    "../../../../ts-shared/typescript/src/shared/types/*.d.ts",
+    "../../../../ts-shared/typescript/src/server/types/*.d.ts"
   ],
   "exclude": ["**/node_modules", "**/__tests__/*"]
 }

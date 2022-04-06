@@ -1,4 +1,3 @@
-import { Notify } from '@ts-shared/server/funtions';
 import winston from 'winston';
 
 import { config } from '../../../config';
@@ -128,7 +127,7 @@ export class CryptoWallet {
     }
     if (this.amount < amount) {
       this.logger.debug(`Transfer: Not enough money | cid: ${this.cid}`);
-      Notify(src, `Je hebt niet genoeg ${this.cname} om ${amount}x over te maken!`, 'error');
+      DGX.Util.Notify(src, `Je hebt niet genoeg ${this.cname} om ${amount}x over te maken!`, 'error');
       return false;
     }
     this.amount -= amount;

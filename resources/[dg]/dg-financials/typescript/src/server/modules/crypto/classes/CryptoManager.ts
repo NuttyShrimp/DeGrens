@@ -1,4 +1,3 @@
-import { Delay } from '@ts-shared/shared/functions';
 import winston from 'winston';
 
 import { config } from '../../../config';
@@ -75,7 +74,7 @@ export class CryptoManager {
   // region Generic
   private async waitForCoinsLoaded(): Promise<void> {
     while (!this.coinsLoaded) {
-      await Delay(100);
+      await DGX.Util.Delay(100);
     }
   }
 

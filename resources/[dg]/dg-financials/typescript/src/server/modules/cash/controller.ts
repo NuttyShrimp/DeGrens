@@ -1,5 +1,3 @@
-import { ArrayToVector3 } from '@ts-shared/shared/functions';
-
 import { addCash, getCash, removeCash, seedCache, seedPlyInCache } from './service';
 import { cashLogger } from './util';
 
@@ -54,12 +52,12 @@ DGCore.Commands.Add(
         throw new Error(`Je kan je eigen geen cash geven!`);
       }
       const plyPed = GetPlayerPed(String(src));
-      const plyPos = ArrayToVector3(GetEntityCoords(plyPed));
+      const plyPos = DGX.Util.ArrayToVector3(GetEntityCoords(plyPed));
       const trgPed = GetPlayerPed(String(target));
       if (!trgPed) {
         throw new Error(`Kon actie niet uitvoeren!`);
       }
-      const trgPos = ArrayToVector3(GetEntityCoords(trgPed));
+      const trgPos = DGX.Util.ArrayToVector3(GetEntityCoords(trgPed));
       if (plyPos.distance(trgPos) > 4) {
         throw new Error(`Kon actie niet uitvoeren!`);
       }

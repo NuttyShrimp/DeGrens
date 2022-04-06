@@ -1,5 +1,3 @@
-import { Player as IPlayer } from '@ts-shared/server/types/core';
-
 import { getCash } from '../../cash/service';
 import {
   createAccount,
@@ -22,7 +20,7 @@ export const checkPlayerAccounts = () => {
 
 // region Events
 on('financials:server:account:create', createAccount);
-on('DGCore:Server:PlayerLoaded', async (ply: IPlayer) => {
+on('DGCore:Server:PlayerLoaded', async (ply: Player) => {
   createDefaultAccount(ply.PlayerData.source);
 });
 // endregion

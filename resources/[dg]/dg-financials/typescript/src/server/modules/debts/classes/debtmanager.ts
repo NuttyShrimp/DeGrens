@@ -1,5 +1,3 @@
-import { Notify } from '@ts-shared/server/funtions';
-
 import { config } from '../../../config';
 import { getDefaultAccount, getDefaultAccountId } from '../../bank/helpers/accounts';
 import { transfer } from '../../bank/helpers/actions';
@@ -140,7 +138,7 @@ class DebtManager {
         `Successfully paid debt of ${debt.debt} | id: ${id} | cid: ${cid}`
       );
     } else {
-      Notify(src, 'Je hebt te weinig geld op je rekening om dit te doen');
+      DGX.Util.Notify(src, 'Je hebt te weinig geld op je rekening om dit te doen');
     }
     return success;
   }

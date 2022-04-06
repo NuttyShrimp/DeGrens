@@ -47,10 +47,10 @@ export class Account {
   public static async create(cid: number, name: string, accType: AccountType): Promise<Account> {
     const accId = generateAccountId();
     const query = `
-			INSERT INTO bank_accounts (account_id, name, type)
-			VALUES (?, ?, ?)
-			RETURNING *
-		`;
+      INSERT INTO bank_accounts (account_id, name, type)
+      VALUES (?, ?, ?)
+      RETURNING *
+    `;
     await global.exports.oxmysql.executeSync(query, [accId, name, accType]);
     const _account = new Account(accId, name, accType);
     _account.permsManager.addPermissions(cid, 15);
@@ -102,19 +102,20 @@ export class Account {
 
   private async updateBalance(): Promise<void> {
     const query = `
-			UPDATE bank_accounts
-			SET balance = ?
-			WHERE account_id = ?
-		`;
+      UPDATE bank_accounts
+      SET balance = ?
+      WHERE account_id = ?
+    `;
     await global.exports.oxmysql.executeSync(query, [this.balance, this.account_id]);
   }
 
   private async AddDBTransaction(transaction: DB.ITransaction): Promise<void> {
     const query = `
-			INSERT INTO transaction_log
-			(transaction_id, origin_account_id, target_account_id, \`change\`, comment, triggered_by, accepted_by, date, type)
-			VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-		`;
+      INSERT INTO transaction_log
+      (transaction_id, origin_account_id, target_account_id, \` change \`, comment, triggered_by, accepted_by, date,
+       type)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+    `;
     await global.exports.oxmysql.executeSync(query, [
       transaction.transaction_id,
       transaction.origin_account_id,
@@ -134,12 +135,12 @@ export class Account {
 
   private async getDBTransactionsIds(): Promise<string[]> {
     const query = `
-			SELECT DISTINCT transaction_id
-			FROM transaction_log
-			WHERE origin_account_id = ?
-				 OR target_account_id = ?
-			ORDER BY date DESC
-		`;
+      SELECT DISTINCT transaction_id
+      FROM transaction_log
+      WHERE origin_account_id = ?
+         OR target_account_id = ?
+      ORDER BY date DESC
+    `;
     const transactionsIds: string[] = await global.exports.oxmysql.executeSync(query, [
       this.account_id,
       this.account_id,
@@ -147,21 +148,21 @@ export class Account {
     return transactionsIds;
   }
 
-	private async getDBTransactions(
-		offset: number,
-		limit = config.accounts.transactionLimit,
-		type?: TransactionType
-	): Promise<DB.ITransaction[]> {
-		const query = `
-			SELECT *
-			FROM transaction_log
-			WHERE (origin_account_id = ?
-				OR target_account_id = ?)
-				${type ? 'AND type = ?' : ''}
-			ORDER BY date
-			DESC
-				LIMIT ?, ?
-		`;
+  private async getDBTransactions(
+    offset: number,
+    limit = config.accounts.transactionLimit,
+    type?: TransactionType
+  ): Promise<DB.ITransaction[]> {
+    const query = `
+      SELECT *
+      FROM transaction_log
+      WHERE (origin_account_id = ?
+        OR target_account_id = ?)
+        ${type ? 'AND type = ?' : ''}
+      ORDER BY date
+        DESC
+      LIMIT ?, ?
+    `;
     let params = [this.account_id, this.account_id, offset, limit];
     if (type) {
       params = [...params.slice(0, 2), type, ...params.slice(2, 4)];

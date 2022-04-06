@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "baseUrl": "./",
+    "noImplicitAny": true,
+    "module": "commonjs",
+    "target": "es2017",
+    "allowJs": true,
+    "lib": ["es2017"],
+    "types": ["@citizenfx/server", "@types/node", "@types/webpack-env"],
+    "moduleResolution": "node",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "paths": {
+      "@shared/*": ["../shared/*"], 
+    }
+  },
+  "include": ["./**/*", "../shared"],
+  "exclude": ["**/node_modules", "**/__tests__/*"]
+}

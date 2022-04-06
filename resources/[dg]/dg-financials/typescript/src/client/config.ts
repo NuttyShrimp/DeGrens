@@ -1,5 +1,3 @@
-import { Vec3 } from '@ts-shared/shared/classes/vector3';
-
 interface IConfigLocation {
   id: string;
   name: string;

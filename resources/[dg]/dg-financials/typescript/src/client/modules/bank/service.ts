@@ -1,7 +1,3 @@
-import { Peek } from '@ts-shared/client/classes/peek';
-import UI from '@ts-shared/client/classes/ui';
-import { ProgressbarAnimation } from '@ts-shared/client/types/core';
-
 import { LocationManager } from '../../classes/LocationManager';
 import { config } from '../../config';
 
@@ -9,7 +5,7 @@ const peekIds: Record<string, number[]> = {};
 
 export const registerPeekZones = () => {
   const LManager = LocationManager.getInstance();
-  peekIds.paycheck = Peek.addFlagEntry('isBanker', {
+  peekIds.paycheck = DGX.Peek.addFlagEntry('isBanker', {
     options: [
       {
         label: 'paycheck',
@@ -20,7 +16,7 @@ export const registerPeekZones = () => {
     ],
     distance: 2.5,
   });
-  peekIds.atm = Peek.addModelEntry(config.ATMModels, {
+  peekIds.atm = DGX.Peek.addModelEntry(config.ATMModels, {
     options: [
       {
         label: 'ATM',
@@ -30,7 +26,7 @@ export const registerPeekZones = () => {
           LManager.setAtATM(true);
           const base = await DGCore.Functions.TriggerCallback<BaseState>('financials:accounts:open', 'ATM');
           base.isAtm = true;
-          UI.openApplication('financials', base);
+          DGX.UI.openApplication('financials', base);
           SetNuiFocus(true, true);
         },
       },
@@ -41,8 +37,8 @@ export const registerPeekZones = () => {
 
 export const unregisterPeekZones = () => {
   console.log('unregistering peek zones', peekIds);
-  Peek.removeFlagEntry(peekIds.paycheck);
-  Peek.removeModelEntry(peekIds.atm);
+  DGX.Peek.removeFlagEntry(peekIds.paycheck);
+  DGX.Peek.removeModelEntry(peekIds.atm);
 };
 
 export const doAnimation = async (isAtm: boolean, isOpen: boolean) => {

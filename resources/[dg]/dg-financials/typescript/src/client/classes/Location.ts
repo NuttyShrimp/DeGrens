@@ -1,6 +1,3 @@
-import UI from '@ts-shared/client/classes/ui';
-import { Vec3 } from '@ts-shared/shared/classes/vector3';
-
 import { doAnimation } from '../modules/bank/service';
 
 export class Location {
@@ -25,8 +22,8 @@ export class Location {
     await doAnimation(false, true);
     const base = await DGCore.Functions.TriggerCallback<BaseState>('financials:accounts:open', this.id);
     base.isAtm = false;
-    UI.openApplication('financials', base);
-    UI.SetUIFocus(true, true);
+    DGX.UI.openApplication('financials', base);
+    DGX.UI.SetUIFocus(true, true);
   }
 
   //region Getters
