@@ -9,6 +9,9 @@ declare global {
     Vector4: typeof Vector4Class;
     PolyTarget: typeof Classes.PolyTarget;
     Peek: typeof Classes.Peek;
+    RayCast: typeof Classes.RayCast;
+    PolyZone: typeof Classes.PolyZone;
+    Keys: typeof Classes.Keys;
     Util: typeof Classes.Util;
     Events: typeof Classes.Events;
     RPC: typeof Classes.RPC;
