@@ -1,5 +1,5 @@
 import { Vector3 as Vector3Class, Vector4 as Vector4Class } from '../../shared';
-import { Classes } from '../classes';
+import * as Classes from '../classes';
 
 declare global {
   let DGCore: Client;

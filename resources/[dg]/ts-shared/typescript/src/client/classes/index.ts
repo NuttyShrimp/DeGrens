@@ -3,14 +3,7 @@ import interaction from './interaction';
 import util from './util';
 import ui from './ui';
 
-export const Classes = {
-  Events: events.Events,
-  RPC: events.RPC,
-  Peek: interaction.Peek,
-  RayCast: interaction.RayCast,
-  PolyZone: interaction.PolyZone,
-  Keys: interaction.Keys,
-  PolyTarget: interaction.PolyTarget,
-  UI: ui.UI,
-  Util: util.Util,
-};
+export const { Events, RPC } = events;
+export const { Peek, RayCast, PolyZone, Keys, PolyTarget } = interaction;
+export const { Util } = util;
+export const { UI } = ui;

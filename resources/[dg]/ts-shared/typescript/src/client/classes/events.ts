@@ -64,5 +64,4 @@ class RPC {
   }
 }
 
-const classes = { Events: new Events(), RPC: new RPC() };
-export default classes;
+export default { Events: new Events(), RPC: new RPC() };

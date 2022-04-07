@@ -16,12 +16,7 @@
     "moduleResolution": "node",
     "experimentalDecorators": true,
     "resolveJsonModule": true,
-    "esModuleInterop": true,
-    "paths": {
-      "@shared/*": [
-        "../shared/*"
-      ]
-    }
+    "esModuleInterop": true
   },
   "include": [
     "./**/*",
