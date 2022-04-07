@@ -40,19 +40,9 @@ const Targeting = Vue.createApp({
     });
 
     this.mouseListener = window.addEventListener('mousedown', event => {
-      let element = event.target;
-      let split = element.id.split('-');
-      try {
-        if (split[0] === 'target' && parseInt(split[1])) {
-          $.post(`https://dg-peek/selectTarget`, JSON.stringify({ id: split[1] }));
-          this.TargetHTML = '';
-          this.Show = false;
-        }
-      } finally {
-        if (event.button == 2) {
-          this.CloseTarget();
-          $.post(`https://dg-peek/closeTarget`);
-        }
+      if (event.button == 2) {
+        this.CloseTarget();
+        $.post(`https://dg-peek/closeTarget`);
       }
     });
   },
@@ -85,17 +75,17 @@ const Targeting = Vue.createApp({
         const iconId = `target-icon-${item.id}`;
         if (AlsoChangeTextIconColor) {
           TargetLabel += `
-						<div id='${id}' style='margin-bottom: 1vh;'>
-							<span id='${iconId}' style='color: ${ResetColor}'>
-							<i class='${item.icon}'></i>
+						<div id="${id}" style="margin-bottom: 1vh;">
+							<span id="${iconId}" style="color: ${ResetColor}">
+							<i class="${item.icon}"></i>
 							</span>&nbsp${item.label}
 						</div>
 					`;
         } else {
           TargetLabel += `
-						<div id='${id}' style='margin-bottom: 1vh;'>
-							<span id='${iconId}' style='color: ${FoundColor}'>
-							<i class='${item.icon}'></i>
+						<div id="${id}" style="margin-bottom: 1vh;">
+							<span id="${iconId}" style="color: ${FoundColor}">
+							<i class="${item.icon}"></i>
 							</span>&nbsp${item.label}
 						</div>
 					`;
@@ -114,6 +104,20 @@ const Targeting = Vue.createApp({
             event.target.style.color = ResetColor;
             if (AlsoChangeTextIconColor) {
               document.getElementById(iconId).style.color = ResetColor;
+            }
+          });
+
+          hoverelem.addEventListener('mousedown', event => {
+            let split = id.split('-');
+            try {
+              $.post(`https://dg-peek/selectTarget`, JSON.stringify({ id: item.id }));
+              this.TargetHTML = '';
+              this.Show = false;
+            } finally {
+              if (event.button === 2) {
+                this.CloseTarget();
+                $.post(`https://dg-peek/closeTarget`);
+              }
             }
           });
         }, 10);
