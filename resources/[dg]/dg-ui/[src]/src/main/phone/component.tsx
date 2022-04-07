@@ -59,6 +59,7 @@ class Component extends React.Component<Phone.Props, any> {
         onHide={hidePhone}
         onEscape={hidePhone}
         full
+        hideOverflow
       >
         <Phone {...this.props} config={this.config} />
       </AppWrapper>

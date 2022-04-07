@@ -1,0 +1,26 @@
+{
+  "compilerOptions": {
+    "outDir": "./",
+    "noImplicitAny": true,
+    "module": "commonjs",
+    "target": "es6",
+    "allowJs": true,
+    "lib": ["es2017"],
+    "types": ["@citizenfx/client", "@types/node"],
+    "moduleResolution": "node",
+    "experimentalDecorators": true,
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "baseUrl": "./",
+    "paths": {
+      "@dgx/*": ["../../../../ts-shared/typescript/src/*"]
+    }
+  },
+  "include": [
+    "./**/*",
+    "../types/*.d.ts",
+    "../../../../ts-shared/typescript/src/shared/types/*.d.ts",
+    "../../../../ts-shared/typescript/src/client/**/*.ts"
+  ],
+  "exclude": ["**/node_modules", "**/__tests__/*"]
+}

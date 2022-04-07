@@ -61,5 +61,10 @@ export const styles = makeStyles({
     overflow: 'auto',
     overflowX: 'hidden',
     position: 'relative',
+    '& > .MuiTabs-root': {
+      '& + div': {
+        height: 'calc(100% - 48px)',
+      },
+    },
   },
 });

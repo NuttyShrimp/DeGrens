@@ -1,0 +1,37 @@
+declare namespace Jobs {
+  interface Job {
+    name: string;
+    title: string;
+    /**
+     * A Font Awesome icon name. (minus the `fa-` prefix)
+     */
+    icon: string;
+    size: number;
+    /**
+     * Determines if someone can set the location to this job.
+     */
+    legal: boolean;
+    /**
+     * This will be used to set the location where you can sign in to the job.
+     */
+    location?: {
+      x: number;
+      y: number;
+    }
+    payout: {
+      max: number;
+      min: number;
+      /**
+       * 1/6 of the value between min and max
+       */
+      diff: number;
+      /**
+       * This is the percent that the total payout will do down by based on the group size
+       * eg. 5 means if a player is alone the payout will be 100%, if it are 2 players: it will be 95%. 3 90%,...
+       * This will be done so people get more money while doing a job in a group but not the double for the same amount of work
+       */
+      groupPercent: number;
+    }
+    payoutLevel: number;
+  }
+}

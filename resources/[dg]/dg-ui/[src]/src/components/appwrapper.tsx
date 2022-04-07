@@ -20,6 +20,7 @@ declare interface AppWrapperProps {
   center?: boolean;
   column?: boolean;
   full?: boolean;
+  hideOverflow?: boolean;
   style?: Object;
   unSelectable?: boolean;
 }
@@ -30,7 +31,7 @@ const useStyles = makeStyles({
     position: 'absolute',
     visibility: 'visible',
     pointerEvents: 'none',
-    overflow: 'scroll',
+    overflow: props.hideOverflow ? 'hidden' : 'scroll',
     opacity: 1,
     display: 'block',
     ...(props.full && {

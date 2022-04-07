@@ -424,6 +424,85 @@ devData.financialsTransactions = [
   },
 ];
 
+devData.jobGroups = [
+  {
+    id: 'abc123',
+    name: 'Jef klak',
+    size: 1,
+    limit: 3,
+  },
+  {
+    id: 'abc321',
+    name: 'David Achter',
+    size: 5,
+    limit: 6,
+  },
+];
+
+devData.currentGroup = {
+  id: 'abc123',
+  name: 'Jef klak',
+  size: 1,
+  limit: 3,
+};
+
+devData.groupMembers = [
+  {
+    name: 'Jef Klak',
+    ready: true,
+    isOwner: true,
+  },
+  {
+    name: 'Jan Janssens',
+    ready: true,
+    isOwner: false,
+  },
+  {
+    name: 'Karen Kooper',
+    ready: false,
+    isOwner: false,
+  },
+  {
+    name: 'Gangsta paradise',
+    ready: false,
+    isOwner: false,
+  },
+  {
+    name: 'Aluminium',
+    ready: false,
+    isOwner: false,
+  },
+  {
+    name: 'Christof rain',
+    ready: false,
+    isOwner: false,
+  },
+];
+
+devData.jobs = [
+  {
+    name: 'sanitization',
+    title: 'Vuilnis ophalen',
+    level: 2,
+    legal: true,
+    icon: 'dumpster',
+  },
+  {
+    name: 'fishing',
+    title: 'Vissen',
+    level: 6,
+    legal: true,
+    icon: 'fish',
+  },
+  {
+    name: 'chopshop',
+    title: 'ChopShop',
+    level: 4,
+    legal: false,
+    icon: 'car-crash',
+  },
+];
+
 const emulatedData: Record<
   string,
   {

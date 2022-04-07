@@ -27,7 +27,12 @@ export const Paper: FC<Paper.Props> = props => {
 
   return (
     <div
-      className={[classes.root, imgOnly ? 'imgonly' : '', showExtDescription ? 'extended' : ''].join(' ')}
+      className={[
+        classes.root,
+        imgOnly ? 'imgonly' : '',
+        showExtDescription ? 'extended' : '',
+        props.actions ? 'keepBackground' : '',
+      ].join(' ')}
       ref={rootRef}
       onMouseEnter={() => setShowActions(true)}
       onMouseLeave={() => setShowActions(false)}

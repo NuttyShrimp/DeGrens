@@ -321,5 +321,35 @@ declare namespace Phone {
       character: Character;
     }
   }
+  namespace JobCenter {
+    interface Group {
+      id: string;
+      name: string;
+      size: number;
+      limit: number;
+    }
+    interface Member {
+      name: string;
+      ready: boolean;
+      isOwner: boolean;
+    }
+    interface Job {
+      name: string;
+      title: string;
+      level: number;
+      legal: boolean;
+      icon: string;
+    }
+    interface State {
+      jobs: Job[];
+      groups: Group[];
+      currentGroup: Group | null;
+      groupMembers: Member[];
+      isOwner: boolean;
+      isReady: boolean;
+    }
+
+    interface Props extends State, State.BaseProps<State> {}
+  }
   // endregion
 }

@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, MouseEventHandler } from 'react';
 import MUIIcon from '@mui/material/Icon';
 import { SxProps } from '@mui/system';
 
@@ -8,13 +8,19 @@ declare interface IconProps {
   size?: string;
   color?: string;
   style?: SxProps;
+  onClick?: MouseEventHandler<HTMLElement>;
 }
 
 export const Icon: FC<IconProps> = props => {
   if (props.lib == 'img') {
     return (
       <div style={{ width: props.size }}>
-        <img src={props.name} alt={'Icon img'} style={{ width: '100%' }} />
+        <img
+          src={props.name}
+          alt={'Icon img'}
+          style={{ width: '100%', cursor: props.onClick ? 'poiner' : 'auto' }}
+          onClick={props.onClick}
+        />
       </div>
     );
   }
@@ -24,7 +30,9 @@ export const Icon: FC<IconProps> = props => {
         sx={{
           textAlign: 'center',
           height: props.size,
+          cursor: props.onClick ? 'poiner' : 'auto',
         }}
+        onClick={props.onClick}
       >
         <img
           src={props.name}
@@ -45,7 +53,9 @@ export const Icon: FC<IconProps> = props => {
           ...(props?.style ?? {}),
           color: props.color ?? 'inherit',
           fontSize: props.size ?? '1.5rem',
+          cursor: props.onClick ? 'poiner' : 'auto',
         }}
+        onClick={props.onClick}
       />
     );
   }
@@ -56,7 +66,9 @@ export const Icon: FC<IconProps> = props => {
           ...(props?.style ?? {}),
           color: props.color ?? 'inherit',
           fontSize: props.size ?? '1.5rem',
+          cursor: props.onClick ? 'poiner' : 'auto',
         }}
+        onClick={props.onClick}
       >
         {props.name.startsWith('mi-') ? props.name.replace(/^mi-/, '') : props.name}
       </MUIIcon>
@@ -70,7 +82,9 @@ export const Icon: FC<IconProps> = props => {
         ...(props?.style ?? {}),
         color: props.color ?? 'inherit',
         fontSize: props.size ?? '1.5rem',
+        cursor: props.onClick ? 'poiner' : 'auto',
       }}
+      onClick={props.onClick}
     />
   );
 };
