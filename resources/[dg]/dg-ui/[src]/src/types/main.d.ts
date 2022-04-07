@@ -84,4 +84,5 @@ declare interface RootState {
   'phone.apps.pinger': {};
   'phone.apps.twitter': Phone.Twitter.State;
   'phone.apps.yellowpages': Phone.YellowPages.State;
+  'phone.apps.jobcenter': Phone.JobCenter.State;
 }

@@ -1,0 +1,94 @@
+@use 'src/styles/variables';
+
+.jobcenter {
+  &__groups {
+    &__list {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+
+      & > button {
+        margin: 1vh 0;
+      }
+    }
+
+    &__actions {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 1rem;
+
+      &__sizes {
+        display: flex;
+        flex-direction: row;
+
+        & > div {
+          margin-right: .5vh;
+
+          & > span {
+            margin-right: .5vh;
+          }
+        }
+      }
+    }
+  }
+
+  &__currentgroup {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    position: relative;
+    overflow: auto;
+
+    &__owner, &__members {
+      padding: 1.5vh 1vh;
+    }
+
+    &__owner {
+      padding: 1.5vh 1vh;
+      background-color: variables.$primary-darker_normal;
+      border-radius: 0 0 .3rem .3rem;
+
+      & > * {
+        margin: 0 !important;
+      }
+    }
+
+    &__buttons {
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+
+      & > * {
+        width: fit-content;
+        margin-top: .5vh;
+      }
+    }
+  }
+
+  &__jobList {
+    display: flex;
+    flex-direction: column;
+
+    & > * {
+      margin-top: 1vh;
+    }
+
+    &__title {
+      &__icon {
+        margin-right: .5vh;
+      }
+    }
+
+    &__level {
+      width: 80%;
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 1rem;
+    }
+  }
+}

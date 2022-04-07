@@ -5,14 +5,14 @@ import { isDevel } from '../../lib/env';
 const store: StoreObject<Phone.State, Phone.AuxState> = {
   key: 'phone',
   initialState: {
-    visible: false,
-    animating: false,
+    visible: isDevel(),
+    animating: isDevel(),
     isSilent: false,
     inCamera: false,
     callActive: false,
     hasNotifications: false,
     bigPhoto: null,
-    activeApp: isDevel() ? 'home-screen' : 'home-screen',
+    activeApp: isDevel() ? 'jobcenter' : 'home-screen',
     callMeta: {},
     background: {},
   },

@@ -22,7 +22,7 @@ export const styles = makeStyles({
         width: '100%!important',
       },
     },
-    '&:not(.extended):hover': {
+    '&:not(.extended):not(.keepBackground):hover': {
       backgroundColor: baseStyle.primary.dark,
     },
   },
