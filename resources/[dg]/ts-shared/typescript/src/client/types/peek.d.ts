@@ -17,11 +17,11 @@ interface Option {
     | string
     | string[]
     | {
-    /*
-     * The number is the minimum grade the player needs to have
-     */
-    [jobName: string]: number;
-  };
+        /*
+         * The number is the minimum grade the player needs to have
+         */
+        [jobName: string]: number;
+      };
   gang?: string | string[];
   /*
    * If the dist for this option is diff fron the parameters one

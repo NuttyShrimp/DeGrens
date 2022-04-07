@@ -5,24 +5,14 @@
     "module": "commonjs",
     "target": "es2017",
     "allowJs": true,
-    "lib": [
-      "es2017"
-    ],
-    "types": [
-      "@citizenfx/server",
-      "@types/node"
-    ],
+    "lib": ["es2017"],
+    "types": ["@citizenfx/server", "@types/node"],
     "moduleResolution": "node",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "resolveJsonModule": true,
     "esModuleInterop": true
   },
-  "include": [
-    "./**/*"
-  ],
-  "exclude": [
-    "**/node_modules",
-    "**/__tests__/*"
-  ]
+  "include": ["./**/*"],
+  "exclude": ["**/node_modules", "**/__tests__/*"]
 }

@@ -4,4 +4,4 @@ class Util extends UtilShared {}
 
 export default {
   Util: new Util(),
-}
+};

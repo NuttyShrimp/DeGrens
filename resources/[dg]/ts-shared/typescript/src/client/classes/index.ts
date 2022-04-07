@@ -1,7 +1,7 @@
 import events from './events';
 import interaction from './interaction';
-import util from './util';
 import ui from './ui';
+import util from './util';
 
 export const { Events, RPC } = events;
 export const { Peek, RayCast, PolyZone, Keys, PolyTarget } = interaction;

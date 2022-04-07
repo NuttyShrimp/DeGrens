@@ -1,5 +1,7 @@
 import { Vector3 } from '../../shared/classes/vector3';
 
+import { Util } from './index';
+
 class Peek {
   // Adders
   addModelEntry(model: string | number | (string | number)[], PeekParams: PeekParams): number[] {
@@ -45,28 +47,60 @@ class Peek {
 }
 
 class RayCast {
-  onChange(handler: (entity: number, type: 1 | 2 | 3, coords: Vec3) => void) {
-    on('dg-lib:targetinfo:changed', handler);
+  private handlers: RayCast.Handler[] = [];
+
+  constructor() {
+    on('dg-lib:targetinfo:changed', (entity: number, type: 1 | 2 | 3, coords: number[]) => {
+      this.handlers.forEach(handler => handler(entity, type, Util.ArrayToVector3(coords)));
+    });
+  }
+
+  onChange(handler: RayCast.Handler) {
+    this.handlers.push(handler);
   }
 }
 
 class PolyZone {
-  onEnter<T = any>(handler: (name: string, data: T, center: Vec3) => void) {
-    on('dg-polyzone:enter', handler);
+  private enterHandlers: PolyZone.EnterHandler[] = [];
+  private exitHandlers: PolyZone.ExitHandler[] = [];
+
+  constructor() {
+    on('dg-polyzone:enter', (name: string, data: any, center: number[]) => {
+      this.enterHandlers.forEach(handler => handler(name, data, Util.ArrayToVector3(center)));
+    });
+    on('dg-polyzone:exit', (name: string) => {
+      this.exitHandlers.forEach(handler => handler(name));
+    });
   }
 
-  onLeave(handler: (name: string) => void) {
-    on('dg-polyzone:exit', handler);
+  onEnter<T = any>(handler: PolyZone.EnterHandler<T>) {
+    this.enterHandlers.push(handler);
+  }
+
+  onLeave(handler: PolyZone.ExitHandler) {
+    this.exitHandlers.push(handler);
   }
 }
 
 class PolyTarget {
-  onEnter<T = any>(handler: (name: string, data: T, center: Vec3) => void) {
-    on('dg-polytarget:enter', handler);
+  private enterHandlers: PolyZone.EnterHandler[] = [];
+  private exitHandlers: PolyZone.ExitHandler[] = [];
+
+  constructor() {
+    on('dg-polytarget:enter', (name: string, data: any, center: number[]) => {
+      this.enterHandlers.forEach(handler => handler(name, data, Util.ArrayToVector3(center)));
+    });
+    on('dg-polytarget:exit', (name: string) => {
+      this.exitHandlers.forEach(handler => handler(name));
+    });
   }
 
-  onLeave(handler: (name: string) => void) {
-    on('dg-polytarget:exit', handler);
+  onEnter<T = any>(handler: PolyZone.EnterHandler<T>) {
+    this.enterHandlers.push(handler);
+  }
+
+  onLeave(handler: PolyZone.ExitHandler) {
+    this.exitHandlers.push(handler);
   }
 
   addBoxZone(
