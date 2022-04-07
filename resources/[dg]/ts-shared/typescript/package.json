@@ -13,7 +13,8 @@
   "dependencies": {
     "@citizenfx/client": "^2.0.5159-1",
     "@citizenfx/server": "^2.0.5159-1",
-    "jsonwebtoken": "^8.5.1"
+    "jsonwebtoken": "^8.5.1",
+    "reflect-metadata": "^0.1.13"
   },
   "devDependencies": {
     "@sentry/webpack-plugin": "^1.18.8",
