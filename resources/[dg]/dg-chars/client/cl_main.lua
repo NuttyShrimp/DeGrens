@@ -29,6 +29,7 @@ setupCharMenu = function()
 	end
 	ShutdownLoadingScreen()
 	ShutdownLoadingScreenNui()
+  DoScreenFadeIn(1)
 	openCharUI()
 end
 
