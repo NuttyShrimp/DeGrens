@@ -51,7 +51,7 @@ class RayCast {
 
   constructor() {
     on('dg-lib:targetinfo:changed', (entity: number, type: 1 | 2 | 3, coords: number[]) => {
-      this.handlers.forEach(handler => handler(entity, type, Util.ArrayToVector3(coords)));
+      this.handlers.forEach(handler => handler(entity, type, coords ? Util.ArrayToVector3(coords) : null));
     });
   }
 
@@ -66,7 +66,7 @@ class PolyZone {
 
   constructor() {
     on('dg-polyzone:enter', (name: string, data: any, center: number[]) => {
-      this.enterHandlers.forEach(handler => handler(name, data, Util.ArrayToVector3(center)));
+      this.enterHandlers.forEach(handler => handler(name, data, center ? Util.ArrayToVector3(center) : null));
     });
     on('dg-polyzone:exit', (name: string) => {
       this.exitHandlers.forEach(handler => handler(name));
@@ -88,7 +88,7 @@ class PolyTarget {
 
   constructor() {
     on('dg-polytarget:enter', (name: string, data: any, center: number[]) => {
-      this.enterHandlers.forEach(handler => handler(name, data, Util.ArrayToVector3(center)));
+      this.enterHandlers.forEach(handler => handler(name, data, center ? Util.ArrayToVector3(center) : null));
     });
     on('dg-polytarget:exit', (name: string) => {
       this.exitHandlers.forEach(handler => handler(name));
