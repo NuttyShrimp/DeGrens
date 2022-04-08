@@ -24,7 +24,7 @@ setInterval(() => {
 RegisterCommand(
   'time',
   (source: string, args: string[]) => {
-    if (!DGCore.Functions.HasPermission(Number(source), 'admin')) {
+    if (Number(source) > 1 && !DGCore.Functions.HasPermission(Number(source), 'admin')) {
       return emitNet('DGCore:Notify', source, 'You do not have permissions to use this command.', 'error');
     }
 
