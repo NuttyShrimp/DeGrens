@@ -45,12 +45,13 @@ class RPC {
     });
     // Receiver
     onNet('__dg_shared:rpc:execute', async ({ id, name, args, resource }: RPC.EventData) => {
+      const src = source;
       let result = null;
       if (this.registerdHandlers.has(name)) {
         const handler = this.registerdHandlers.get(name);
-        result = await handler(source, ...args);
+        result = await handler(src, ...args);
       }
-      emitNet('__dg_shared:rpc:resolve', source, { id, result, resource });
+      emitNet('__dg_shared:rpc:resolve', src, { id, result, resource });
     });
   }
 
