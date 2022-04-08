@@ -34,8 +34,8 @@ class RPC {
       if (this.registerdHandlers.has(name)) {
         const handler = this.registerdHandlers.get(name);
         result = await handler(...args);
+        emitNet('__dg_shared:rpc:resolve', { id, result, resource });
       }
-      emitNet('__dg_shared:rpc:resolve', { id, result, resource });
     });
   }
 
