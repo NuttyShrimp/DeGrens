@@ -26,7 +26,7 @@ class Events {
 class RPC {
   // Executor
   private resourceName: string;
-  private awaitingEvents: Map<number, { res: Function }>;
+  private awaitingEvents: Map<number, { res: Function }> = new Map();
   // Receiver
   private registerdHandlers: Map<string, Function> = new Map();
 
@@ -48,7 +48,7 @@ class RPC {
       let result = null;
       if (this.registerdHandlers.has(name)) {
         const handler = this.registerdHandlers.get(name);
-        result = await handler(...args);
+        result = await handler(source, ...args);
       }
       emitNet('__dg_shared:rpc:resolve', source, { id, result, resource });
     });
@@ -75,6 +75,7 @@ class RPC {
   }
 
   register(name: string, handler: Function) {
+    console.log(this);
     this.registerdHandlers.set(name, handler);
   }
 }

@@ -1,5 +1,4 @@
 import { Vector3 as Vector3Class, Vector4 as Vector4Class } from '../../shared/index';
-
 import * as Classes from '../classes';
 
 declare global {

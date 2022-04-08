@@ -6,29 +6,28 @@ class Phone {
   async notificationRequest(target: number, notification: Phone.Notification): Promise<boolean> {
     return new Promise(res => {
       // Handle the incoming events
-      const acceptEvt = `__dg_shared_accept_${notification.id}`
+      const acceptEvt = `__dg_shared_accept_${notification.id}`;
       onNet(acceptEvt, () => {
-        res(true)
+        res(true);
       });
-      const declineEvt = `__dg_shared_accept_${notification.id}`
+      const declineEvt = `__dg_shared_accept_${notification.id}`;
       onNet(declineEvt, () => {
-        res(false)
+        res(false);
       });
       emitNet('dg-phone:client:notification:add', target, {
         ...notification,
         onAccept: `server:${acceptEvt}`,
-        onDecline: `server:${declineEvt}`
-      })
-    })
+        onDecline: `server:${declineEvt}`,
+      });
+    });
   }
   /**
    * Show a notification on the phone
    */
   showNotification(target: number, notification: Phone.Notification) {
-    emitNet('dg-phone:client:notification:add', target, notification)
+    emitNet('dg-phone:client:notification:add', target, notification);
   }
 }
-
 
 export default {
   Phone: new Phone(),

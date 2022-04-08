@@ -11,7 +11,7 @@ class Events {
 class RPC {
   // Executor
   private resourceName: string;
-  private awaitingEvents: Map<number, { res: Function }>;
+  private awaitingEvents: Map<number, { res: Function }> = new Map();
   // Receiver
   private registerdHandlers: Map<string, Function> = new Map();
 
