@@ -20,10 +20,10 @@ export const canEntryBeEnabled = async (entry: PeekOption, entity: number): Prom
     } else return;
   }
   if (entry.items) {
-    if (typeof entry.items === 'string' && !DGCore.Functions.HasItem(entry.items)) return;
+    if (typeof entry.items === 'string' && !(await DGCore.Functions.HasItem(entry.items))) return;
     else if (Array.isArray(entry.items)) {
       if (!entry.items.every(item => DGCore.Functions.HasItem(item))) return;
-    } else return;
+    }
   }
   if (!entry?._metadata?.state) {
     if (!entry._metadata) entry._metadata = {};
