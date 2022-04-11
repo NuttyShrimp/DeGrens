@@ -52,12 +52,11 @@ class EntryManager {
     return this.managers.get(type);
   }
 
-  addEntry(entryType: PeekEntryType, id: PeekValueType | PeekValueType[], peekInfo: EntryAddParameter) {
+  addEntry(entryType: PeekEntryType, id: PeekValueType | PeekValueType[], peekInfo: EntryAddParameter): string[] {
     if (Array.isArray(id)) {
-      id.forEach(value => {
-        this.addEntry(entryType, value, peekInfo);
-      });
-      return;
+      return id.reduce((acc, value) => {
+        return [...acc, ...this.addEntry(entryType, value, peekInfo)];
+      }, []);
     }
     if (!ENTRY_TYPES[entryType].includes(typeof id)) {
       throw new Error(`[PEEK] ${id}(${typeof id}) is not valid as key for ${entryType}`);

@@ -1,12 +1,12 @@
 import { LocationManager } from '../../classes/LocationManager';
 import { config } from '../../config';
-import { RPC } from '@dgx/client';
+import { Peek, UI, RPC } from '@dgx/client';
 
 const peekIds: Record<string, number[]> = {};
 
 export const registerPeekZones = () => {
   const LManager = LocationManager.getInstance();
-  peekIds.paycheck = DGX.Peek.addFlagEntry('isBanker', {
+  peekIds.paycheck = Peek.addFlagEntry('isBanker', {
     options: [
       {
         label: 'paycheck',
@@ -17,7 +17,7 @@ export const registerPeekZones = () => {
     ],
     distance: 2.5,
   });
-  peekIds.atm = DGX.Peek.addModelEntry(config.ATMModels, {
+  peekIds.atm = Peek.addModelEntry(config.ATMModels, {
     options: [
       {
         label: 'ATM',
@@ -27,18 +27,13 @@ export const registerPeekZones = () => {
           LManager.setAtATM(true);
           const base = await RPC.execute<BaseState>('financials:accounts:open', 'ATM');
           base.isAtm = true;
-          DGX.UI.openApplication('financials', base);
+          UI.openApplication('financials', base);
           SetNuiFocus(true, true);
         },
       },
     ],
     distance: 2.0,
   });
-};
-
-export const unregisterPeekZones = () => {
-  DGX.Peek.removeFlagEntry(peekIds.paycheck);
-  DGX.Peek.removeModelEntry(peekIds.atm);
 };
 
 export const doAnimation = async (isAtm: boolean, isOpen: boolean) => {
