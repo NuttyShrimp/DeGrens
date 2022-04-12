@@ -1,4 +1,3 @@
-local DGCore = exports['dg-core']:GetCoreObject()
 local openedRegisters = {}
 
 DGCore.Functions.CreateCallback("dg-storerobbery:server:GetConfig", function(source, cb) 

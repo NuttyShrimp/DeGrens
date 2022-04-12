@@ -1,5 +1,3 @@
-DGCore = exports["dg-core"]:GetSharedObject()
-
 openPhone = function()
 	if not canOpen() then
 		return

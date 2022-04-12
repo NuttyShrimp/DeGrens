@@ -1,5 +1,5 @@
 local isInVehicle = false
-local debugEnabled = false
+debugEnabled = false
 originCoords = nil
 forwardCoords = nil
 
@@ -89,17 +89,22 @@ end)
 
 if GetConvar('is_production', 'true') == 'false' then
 	RegisterCommand('lib:raycast', function()
-		debugEnabled = true
-		CreateThread(function()
-			while debugEnabled do
-				if prevTarget and prevTarget ~= CurrentTarget then
-					SetEntityDrawOutline(prevTarget, false)
-				end
-				prevTarget = CurrentTarget
-				DrawLine(originCoords, forwardCoords, 255, 0, 0, 255)
-				SetEntityDrawOutline(CurrentTarget, true)
-				Wait(0)
-			end
-		end)
+        if debugEnabled then 
+            debugEnabled = false
+            SetEntityDrawOutline(CurrentTarget, false)
+        else
+            debugEnabled = true
+            CreateThread(function()
+                while debugEnabled do
+                    if prevTarget and prevTarget ~= CurrentTarget then
+                        SetEntityDrawOutline(prevTarget, false)
+                    end
+                    prevTarget = CurrentTarget
+                    DrawLine(originCoords, forwardCoords, 255, 0, 0, 255)
+                    SetEntityDrawOutline(CurrentTarget, true)
+                    Wait(0)
+                end
+            end)
+        end
 	end)
 end

@@ -44,5 +44,20 @@ props = {
 		rx = 0.35,
 		ry = 163.65,
 		rz = 0.0,
-	}
+	},
+    cardbox = {
+        model = `prop_cs_cardbox_01`,
+        boneId = 24818,
+		x = -0.1,
+		y = 0.4,
+		z = 0.02,
+		rx = -7.25,
+		ry = 89.9,
+		rz = 8.5,
+    }
+}
+
+-- these groups define items that cannot coexist
+uniqueItems = {
+    [1] = {"crttv", "tv", "vaas"},
 }

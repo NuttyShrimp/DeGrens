@@ -1,5 +1,3 @@
-DGCore = exports['dg-core']:GetCoreObject()
-
 Citizen.CreateThread(function()
     local NPCS = DGCore.Functions.TriggerCallback("dg-npcs:server:FetchNPCs")
     for _, npc in pairs(NPCS) do

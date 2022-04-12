@@ -1,5 +1,3 @@
-local DGCore = exports["dg-core"]:GetCoreObject()
-
 local doors = {}
 local registeredTokens = {}
 local initializing = true

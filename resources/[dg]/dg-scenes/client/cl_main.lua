@@ -1,5 +1,3 @@
-DGCore = exports['dg-core']:GetCoreObject()
-
 allScenes = {}
 local closeScenes = {}
 activeLaser = nil

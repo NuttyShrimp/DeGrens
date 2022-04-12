@@ -1,59 +1,78 @@
-local currentEntities = {
-	phoneProp = 0,
-	inventoryHoldableProp = 0,
-}
+local attachedEntities = {}
 
-RegisterNetEvent('onResourceStop', function(res)
-	if res == GetCurrentResourceName() then
-		for _, v in pairs(currentEntities) do
-			if DoesEntityExist(v) then
-				DeleteEntity(v)
-			end
-		end
-	end
+RegisterNetEvent('onResourceStop', function(resourceName)
+    if GetCurrentResourceName() ~= resourceName then return end
+    for _, v in pairs(attachedEntities) do
+        if DoesEntityExist(v) then
+            DeleteEntity(v)
+        end
+    end
 end)
 
-removePhoneItem = function()
-	DeleteEntity(currentEntities.phoneProp)
-	currentEntities.phoneProp = 0
-end
-exports('removePhoneItem', removePhoneItem)
-
-attachPhoneItem = function(item)
-	if item == nil then item = "phone" end
-	removePhoneItem()
+addItem = function(item)
+	if not item then 
+        print(("[%s] Tried to attach item without providing itemname."):format(GetCurrentResourceName()))
+        return 
+    end
 
 	local listEntry = props[item]
-	if listEntry == nil then return end
+	if not listEntry then 
+        print(("[%s] Tried to attach unregistered item with name: %s."):format(GetCurrentResourceName(), item))
+        return 
+    end
+
+    -- we remove the item to avoid duplicate entities
+    if attachedEntities[item] then
+        removeItem(item) 
+    end
+    
+    removeUniqueItems(item) -- remove items that cant coexist
+    TriggerEvent("weapons:client:RemoveWeapon") -- we dont allow holding a weapon while having a prop attached to you
 
 	local ped = PlayerPedId()
-	-- SetCurrentPedWeapon(ped, `weapon_unarmed`)
+    local pos = GetEntityCoords(ped)
 	local bone = GetPedBoneIndex(ped, listEntry.boneId)
-	RequestModel(listEntry.model)
-	while not HasModelLoaded(listEntry.model) do Wait(0) end
-	removePhoneItem()
-	currentEntities.phoneProp = CreateObject(listEntry.model, GetEntityCoords(ped), 1, 1, 0)
-	AttachEntityToEntity(currentEntities.phoneProp, ped, bone, listEntry.x, listEntry.y, listEntry.z, listEntry.rx, listEntry.ry, listEntry.rz, 1, 1, 0, 1, 1.0, 1)
+    loadModel(listEntry.model)
+	attachedEntities[item] = CreateObject(listEntry.model, pos, 1, 1, 0)
+	AttachEntityToEntity(attachedEntities[item], ped, bone, listEntry.x, listEntry.y, listEntry.z, listEntry.rx, listEntry.ry, listEntry.rz, 1, 1, 0, 0, 2, 1)
+    SetModelAsNoLongerNeeded(listEntry.Model)
 end
-exports('attachPhoneItem', attachPhoneItem)
+exports('addItem', addItem)
 
-removeInventoryHoldable = function()
-	DeleteEntity(currentEntities.inventoryHoldableProp)
-	currentEntities.inventoryHoldableProp = 0
+removeItem = function(item)
+    if not item then 
+        print(("[%s] Tried to remove item without providing itemname."):format(GetCurrentResourceName()))
+        return 
+    end
+
+	if not attachedEntities[item] then 
+        debug(("[%s] Tried to remove unattached item with name: %s."):format(GetCurrentResourceName(), item))
+        return 
+    end
+
+	DeleteEntity(attachedEntities[item])
+	attachedEntities[item] = nil
 end
-exports('removeInventoryHoldable', removeInventoryHoldable)
+exports('removeItem', removeItem)
 
-attachInventoryHoldable = function(item)
-	if not item then return end
+removeUniqueItems = function(item)
+    for _, itemGroup in pairs(uniqueItems) do
+        local checkUniques = false
+        for _, v in pairs(itemGroup) do
+            if v == item then
+                checkUniques = true
+                break
+            end
+        end
 
-	local listEntry = props[item]
-	if not listEntry then return end
-
-	local ped = PlayerPedId()
-	local bone = GetPedBoneIndex(ped, listEntry.boneId)
-	loadModel(listEntry.model)
-	currentEntities.inventoryHoldableProp = CreateObject(listEntry.model, GetEntityCoords(ped), true, true, true)
-	AttachEntityToEntity(currentEntities.inventoryHoldableProp, ped, bone, listEntry.x, listEntry.y, listEntry.z, listEntry.rx, listEntry.ry, listEntry.rz, true, true, false, true, 1, true)
-	SetModelAsNoLongerNeeded(model)
+        if checkUniques then
+            for _, v in pairs(itemGroup) do
+                if v ~= item then
+                    removeItem(v)
+                end
+            end
+        end
+    end
 end
-exports('attachInventoryHoldable', attachInventoryHoldable)
+
+

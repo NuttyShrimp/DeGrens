@@ -1,4 +1,3 @@
-DGCore = exports['dg-core']:GetCoreObject()
 currentCops = 0
 currentStore = nil
 _cache = {

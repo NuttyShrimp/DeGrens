@@ -1,5 +1,3 @@
-local DGCore = exports['dg-core']:GetCoreObject()
-
 RegisterServerEvent("inventory:server:CombineItem")
 AddEventHandler("inventory:server:CombineItem", function(item, fromItem, toItem)
 	local src = source

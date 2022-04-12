@@ -1,4 +1,3 @@
-local DGCore = exports['dg-core']:GetCoreObject()
 local allScenes = {}
 
 DGCore.Functions.CreateCallback('dg-scenes:server:GetAllScenes', function(source, cb)

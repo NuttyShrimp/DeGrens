@@ -3,6 +3,10 @@ games {"gta5"}
 
 description "DeGrens Lib"
 
+shared_script {
+    '@dg-core/import.lua', 
+}
+
 server_scripts {
 	"server/sv_*.lua",
 	"server/sv_*.js",

@@ -4,6 +4,7 @@ game 'gta5'
 description 'dg-inventory'
 
 shared_scripts { 
+    '@dg-core/import.lua', 
 	'config.lua',
 	'@dg-weapons/config.lua',
 }

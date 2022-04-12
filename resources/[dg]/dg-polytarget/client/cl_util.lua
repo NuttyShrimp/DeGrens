@@ -3,19 +3,19 @@ function GetForwardVector(rotation)
 	return vector3(-math.sin(rot.z) * math.abs(math.cos(rot.x)), math.cos(rot.z) * math.abs(math.cos(rot.x)), math.sin(rot.x))
 end
 
-function RayCast(origin, target, options, ignoreEntity, radius)
-	local handle = StartShapeTestRay(origin.x, origin.y, origin.z, target.x, target.y, target.z, options, ignoreEntity, 4)
+function RayCast(origin, target, flags, ignore, radius)
+	local handle = StartShapeTestRay(origin, target, flags, ignore, 0)
 	return GetShapeTestResult(handle)
 end
 
 function GetTargetCoords()
 	local CameraCoords = GetGameplayCamCoord()
-	local ForwardVectors = GetForwardVector(GetGameplayCamRot(2))
+	local ForwardVectors = GetForwardVector(GetGameplayCamRot())
 	local ForwardCoords = CameraCoords + (ForwardVectors * (IsInVehicle and 11.5 or 10.0))
 	local TargetCoords = vector3(0.0, 0.0, 0.0)
 
 	if ForwardVectors then
-		local _, hit, targetCoords, _, _ = RayCast(CameraCoords, ForwardCoords, -1, nil, 0.1)
+		local _, hit, targetCoords, _, _ = RayCast(CameraCoords, ForwardCoords, -1, PlayerPedId(), 0.1)
 
 		TargetCoords = targetCoords
 		if DEBUG_ENABLED then

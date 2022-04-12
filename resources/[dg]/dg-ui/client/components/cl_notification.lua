@@ -18,6 +18,7 @@ addNotification = function(text, textype, length, persistent)
 	return id
 end
 exports('addNotification', addNotification)
+RegisterNetEvent('dg-ui:client:addNotification', addNotification)
 
 removeNotification = function(id)
 	SendAppEvent('notifications', {

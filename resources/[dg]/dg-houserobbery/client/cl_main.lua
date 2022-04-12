@@ -1,5 +1,3 @@
-DGCore = exports['dg-core']:GetCoreObject()
-
 insideHouse = nil
 inExit = false
 houseObjects = nil

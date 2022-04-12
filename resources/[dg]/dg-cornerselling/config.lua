@@ -14,4 +14,8 @@ Config.SellableItems = {
         min = 10, 
         max = 20,
     },
+    ["meth_bag"] = {
+        min = 60, 
+        max = 70,
+    },
 }

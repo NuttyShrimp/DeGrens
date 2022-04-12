@@ -1,5 +1,3 @@
-local DGCore = exports['dg-core']:GetCoreObject()
-
 local cacheIds = {}
 local currentCops = 0
 

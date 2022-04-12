@@ -40,7 +40,7 @@ export const Scenes: FC<Scenes.Props> = () => {
 
   const handleCreate = (e: MouseEvent<HTMLElement>) => {
     e.stopPropagation();
-    nuiAction('Create', {
+    nuiAction('scenes:create', {
       text,
       style: Number(style),
       size,
@@ -51,7 +51,7 @@ export const Scenes: FC<Scenes.Props> = () => {
 
   const handleDelete = (e: MouseEvent<HTMLElement>) => {
     e.stopPropagation();
-    nuiAction('Delete');
+    nuiAction('scenes:delete');
   };
 
   const handleReset = (e: MouseEvent<HTMLElement>) => {
@@ -84,13 +84,8 @@ export const Scenes: FC<Scenes.Props> = () => {
             icon={'tags'}
           />
         </Grid>
-        <Grid container spacing={1} item direction={'column'}>
-          <Grid item>
-            <HexColorPicker color={color} onChange={setColor} />
-          </Grid>
-          <Grid item>
-            <Input.TextField value={color} onChange={setColor} />
-          </Grid>
+        <Grid item>
+          <HexColorPicker color={color} onChange={setColor} />
         </Grid>
         <Grid container item spacing={3} alignItems='center'>
           <Grid item>

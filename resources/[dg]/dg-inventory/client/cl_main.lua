@@ -1,5 +1,3 @@
-local DGCore = exports['dg-core']:GetCoreObject()
-
 ItemData = {}
 
 inInventory = false

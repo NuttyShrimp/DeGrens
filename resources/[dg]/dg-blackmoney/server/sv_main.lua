@@ -1,5 +1,3 @@
-local DGCore = exports['dg-core']:GetCoreObject()
-
 randomSellBlackMoney = function(source)
     local src = source
     local Player = DGCore.Functions.GetPlayer(src)

@@ -1,5 +1,3 @@
-local DGCore = exports['dg-core']:GetCoreObject()
-
 RegisterNetEvent("DGCore:Client:OnPlayerLoaded")
 AddEventHandler("DGCore:Client:OnPlayerLoaded", function()
     LocalPlayer.state:set("inv_busy", false, true)
@@ -155,38 +153,45 @@ AddEventHandler("inventory:client:ClosedGiveInventory", function(inventories)
     end
 end)
 
-holdingObject = false
-RegisterNetEvent('inventory:client:CheckHoldable')
-AddEventHandler('inventory:client:CheckHoldable', function(itemName, hold)
-    if ItemData[itemName:lower()].hold then
-        local ped = PlayerPedId()
+local holdablesQueue = {}
+RegisterNetEvent('inventory:client:CheckHoldable', function(itemName, hold)
+    if not ItemData[itemName:lower()].hold then return end
 
-        if hold and not holdingObject then
-            TriggerEvent("weapons:client:CheckWeapon", exports['dg-weapons']:GetCurrentWeaponData().name)
-            exports['dg-propattach']:attachInventoryHoldable(itemName)
-            holdingObject = true
+    if hold then
+        if not next(holdablesQueue) then
+            exports['dg-propattach']:addItem(itemName)
 
             LoadAnimDict("anim@heists@box_carry@")
             Citizen.CreateThread(function()
-                while holdingObject do
+                local ped = PlayerPedId()
+                while next(holdablesQueue) do
                     if not IsEntityPlayingAnim(ped, "anim@heists@box_carry@", "idle", 3) then
                         TaskPlayAnim(ped, "anim@heists@box_carry@", "idle", 2.0, 2.0, -1, 51, 0, false, false, false)
                     end
                     Citizen.Wait(500)
                 end
-            end)
-        elseif not hold and holdingObject then
-            local anotherHoldable = false
-            for _, item in pairs(DGCore.Functions.GetPlayerData().items) do
-                if ItemData[item.name].hold then
-                    anotherHoldable = true
-                    break
-                end
-            end
 
-            if not anotherHoldable then
-                exports['dg-propattach']:removeInventoryHoldable()
-                holdingObject = false
+                StopAnimTask(ped, "anim@heists@box_carry@", "idle", 1.0)
+            end)
+        end
+        holdablesQueue[#holdablesQueue+1] = itemName
+    else
+        local holdableIndexInQueue = nil
+        for k, v in pairs(holdablesQueue) do
+            if itemName == v then
+                holdableIndexInQueue = k
+                break
+            end
+        end
+
+        if not holdableIndexInQueue then return end
+
+        table.remove(holdablesQueue, holdableIndexInQueue)
+        if holdableIndexInQueue == 1 then
+            exports['dg-propattach']:removeItem(itemName)
+            Citizen.Wait(500)
+            if next(holdablesQueue) then
+                exports['dg-propattach']:addItem(holdablesQueue[1])
             end
         end
     end

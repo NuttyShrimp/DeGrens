@@ -1,5 +1,3 @@
-local DGCore = exports['dg-core']:GetCoreObject()
-
 ItemData = {}
 DecayingItems = {}
 
@@ -63,6 +61,8 @@ DGCore.Commands.Add("giveitem", "Give An Item (Admin Only)", { { name = "id", he
 					info.uses = 20
 				elseif itemData["name"] == "markedbills" then
 					info.worth = math.random(5000, 10000)
+                elseif itemData["name"] == "meth_brick" then
+                    info.purity = math.random(0, 100)
 				end
 
 				if Player.Functions.AddItem(itemData["name"], amount, false, info) then

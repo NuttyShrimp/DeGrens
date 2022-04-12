@@ -35,11 +35,11 @@ RegisterNetEvent("weapons:client:SyncRepairData", function(data)
     Config.RepairData = data
 end)
 
-RegisterNetEvent("weapons:client:CheckWeapon", function(weaponName)
+RegisterNetEvent("weapons:client:RemoveWeapon", function(weaponName)
     local ped = PlayerPedId()
 
     if currentWeaponData and next(currentWeaponData) then
-        if currentWeaponData.name == weaponName then
+        if weaponName and currentWeaponData.name == weaponName or true then
             holstered = true
             canFire = true
             currWeapon = GetHashKey('WEAPON_UNARMED')

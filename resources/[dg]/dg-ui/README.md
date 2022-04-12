@@ -17,6 +17,7 @@ Spring snel naar een App
     - [Interaction](#interaction)
     - [Notifications](#notifications)
       - [Exports](#exports-1)
+      - [Server Events](#server-events)
     - [Context Menu](#context-menu)
       - [Example](#example)
       - [Entry interface](#entry-interface)
@@ -144,6 +145,11 @@ global.exports['dg-ui'].hideInteraction()
 | addNotification    | text: string, texttype: 'info, success, error', durationInMs:number                      | Toont een notificatie voor standaard 5sec of durationInMs                                                                           |
 | addNotification    | text: string, texttype: 'info, success, error', durationInMs:number, persistent: boolean | Toont een notificatie en retourneert de id van de notification zodat deze gebruikt kan worden om de notificatie weer te verwijderen |
 | removeNotification | id: string                                                                               | Verwijdert een notificatie                                                                                                          |
+
+#### Server Events
+```lua
+TriggerClientEvent('dg-ui:client:addNotifaction', source, ...)
+```
 
 ### Context Menu
 

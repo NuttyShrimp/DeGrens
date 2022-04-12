@@ -1,5 +1,3 @@
-DGCore = exports['dg-core']:GetCoreObject()
-
 local state = {
 	isInLockdown = false,
 }

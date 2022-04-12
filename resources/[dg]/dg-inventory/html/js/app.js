@@ -399,6 +399,8 @@ function FormatItemInfo(itemData) {
       );
     } else if (itemData.name == 'harness') {
       $('.item-info-description').html('<p>' + itemData.info.uses + ' uses left.</p>');
+    } else if (itemData.name == 'meth_brick') {
+      $('.item-info-description').html('<p> Meth Puurheid: ' + itemData.info.purity + '</p>');
     } else if (itemData.type == 'weapon') {
       if (itemData.info.ammo == undefined) {
         itemData.info.ammo = 0;
@@ -497,10 +499,6 @@ function FormatItemInfo(itemData) {
       $('.item-info-description').html(
         '<p><strong>Amount of cash: </strong><span>$' + itemData.info.cash + '</span></p>'
       );
-    } else if (itemData.name == 'markedbills') {
-      $('.item-info-description').html('<p><strong>Worth: </strong><span>$' + itemData.info.worth + '</span></p>');
-    } else if (itemData.name == 'labkey') {
-      $('.item-info-description').html('<p>Lab: ' + itemData.info.lab + '</p>');
     } else if (itemData.name == 'phone') {
       $('.item-info-description').html('<p><strong>Phone Number: </strong><span>' + itemData.info.phone);
     } else if (itemData.name == 'visa' || itemData.name == 'mastercard') {

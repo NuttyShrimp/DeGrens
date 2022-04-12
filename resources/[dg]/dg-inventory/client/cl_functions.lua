@@ -1,5 +1,3 @@
-local DGCore = exports['dg-core']:GetCoreObject()
-
 exports("GetItemData", function(item)
     return ItemData[item]
 end)

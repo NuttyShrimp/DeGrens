@@ -1,4 +1,3 @@
-local DGCore = exports['dg-core']:GetCoreObject()
 local cachedObjects = {}
 
 function parse (name, saveToCache)

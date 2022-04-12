@@ -34,7 +34,7 @@ AddEventHandler("dg-lib:keyEvent", function(keyname, isDown)
     end
 end)
 
-RegisterUICallback('Create', function(data, cb)
+RegisterUICallback('scenes:create', function(data, cb)
     Citizen.Wait(100)
     currentCreationData = data
     toggleLaser("create")
@@ -42,15 +42,9 @@ RegisterUICallback('Create', function(data, cb)
     cb({data={}, meta={ok=true, message='done'}})
 end)
 
-RegisterUICallback('Delete', function(_, cb)
+RegisterUICallback('scenes:delete', function(_, cb)
     Citizen.Wait(100)
     toggleLaser("delete")
-    closeApplication('scenes')
-    cb({data={}, meta={ok=true, message='done'}})
-end)
-
-RegisterUICallback('Close', function(_, cb)
-    SetUIFocus(false, false)
     closeApplication('scenes')
     cb({data={}, meta={ok=true, message='done'}})
 end)

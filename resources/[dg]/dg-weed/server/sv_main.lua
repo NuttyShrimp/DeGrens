@@ -1,5 +1,3 @@
-DGCore = exports['dg-core']:GetCoreObject()
-
 activePlants = {}
 
 for gender, itemName in pairs(Config.Seeds) do

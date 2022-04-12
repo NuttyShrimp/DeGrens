@@ -1,5 +1,3 @@
-DGCore = exports['dg-core']:GetCoreObject()
-
 currentApartmentName = nil
 
 RegisterNetEvent('dg-apartments:client:doKeyAnim')

@@ -1,5 +1,3 @@
-DGCore = exports["dg-core"]:GetCoreObject()
-
 DGCore.Functions.CreateCallback("weapons:server:GetConfig", function(source, cb)
     cb(Config.RepairData)
 end)
@@ -62,7 +60,6 @@ DGCore.Functions.CreateCallback("weapons:server:RepairWeapon", function(source, 
     
                     Player.Functions.RemoveItem(data.name, 1, data.slot)
                     TriggerClientEvent("inventory:client:ItemBox", src, data.name, "remove")
-                    TriggerClientEvent("weapons:client:CheckWeapon", src, data.name)
                     TriggerClientEvent("weapons:client:SyncRepairData", -1, Config.RepairData)
     
                     Citizen.SetTimeout(7 * 1 * 1000, function()

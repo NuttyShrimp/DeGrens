@@ -14,7 +14,7 @@ setPhoneState = function(state)
 				handleOpenAnimation(ped)
 			end
 			if not isPropCreated then
-				exports["dg-propattach"]:attachPhoneItem()
+				exports["dg-propattach"]:addItem("phone")
 				isPropCreated = true
 			end
 			Wait(250)
@@ -42,7 +42,7 @@ StopAllAnimation = function()
 	handleCallEndAnimation(ped)
 	handleCloseAnimation(ped)
 	if isPropCreated then
-		exports['dg-propattach']:removePhoneItem();
+		exports['dg-propattach']:removeItem("phone");
 	end
 end
 
@@ -115,7 +115,7 @@ handleCloseVehicleAnim = function(ped)
 	local dict = 'anim@cellphone@in_car@ps';
 	StopAnimTask(ped, dict, 'cellphone_text_in', 1.0);
 	StopAnimTask(ped, dict, 'cellphone_call_to_text', 1.0);
-	exports['dg-propattach']:removePhoneItem();
+	exports['dg-propattach']:removeItem("phone");
 	isPropCreated = false
 end
 
@@ -127,7 +127,7 @@ handleCloseNormalAnim = function(ped)
 	doAnimation(ped, dict, anim, 7.0)
 	Citizen.Wait(200)
 	StopAnimTask(ped, dict, anim, 1.0);
-	exports['dg-propattach']:removePhoneItem();
+	exports['dg-propattach']:removeItem("phone");
 	isPropCreated = false
 end
 

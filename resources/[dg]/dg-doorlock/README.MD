@@ -64,5 +64,5 @@ Copied and refactored from original 1.0 doorlock script
 ## Toggle doors from other scripts
 
 ``` lua
-TriggerServerEvent("dg-doorlock:server:changeDoorLockState", id, state)
+TriggerServerEvent("dg-doorlock:server:changeDoorLockState", id, locked)
 ```

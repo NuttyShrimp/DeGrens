@@ -1,4 +1,3 @@
-DGCore = exports["dg-core"]:GetCoreObject()
 PlayerData = {}
 
 doors = {}

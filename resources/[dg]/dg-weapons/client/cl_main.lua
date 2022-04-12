@@ -1,4 +1,3 @@
-DGCore = exports["dg-core"]:GetCoreObject()
 isLoggedIn = false
 playerJobName = nil
 currentWeaponData = {}
@@ -75,7 +74,7 @@ Citizen.CreateThread(function()
 						end
 					else
 						if weapon ~= GetHashKey("WEAPON_UNARMED") then
-							TriggerEvent("weapons:client:CheckWeapon", exports["dg-inventory"]:GetItemData(weapon).name)
+							TriggerEvent("weapons:client:RemoveWeapon")
 							DGCore.Functions.Notify("Dit wapen is kapot.", "error")
 							durabilityDecrease = 0
 						end

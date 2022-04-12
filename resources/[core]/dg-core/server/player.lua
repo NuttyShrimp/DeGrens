@@ -383,6 +383,7 @@ function DGCore.Player.CreatePlayer(PlayerData)
 				self.PlayerData.items[slot] = nil
 				self.Functions.UpdatePlayerData()
 				TriggerClientEvent("inventory:client:CheckHoldable", self.PlayerData.source, item, false)
+                TriggerClientEvent("weapons:client:RemoveWeapon", self.PlayerData.source, item)
 				TriggerEvent('qb-log:server:CreateLog', 'playerinventory', 'RemoveItem', 'red', '**' .. GetPlayerName(self.PlayerData.source) .. ' (citizenid: ' .. self.PlayerData.citizenid .. ' | id: ' .. self.PlayerData.source .. ')** lost item: [slot:' .. slot .. '], itemname: ' .. item .. ', removed amount: ' .. amount .. ', item removed')
 				return true
 			end
@@ -400,6 +401,7 @@ function DGCore.Player.CreatePlayer(PlayerData)
 						self.PlayerData.items[slot] = nil
 						self.Functions.UpdatePlayerData()
 						TriggerClientEvent("inventory:client:CheckHoldable", self.PlayerData.source, item, false)
+                        TriggerClientEvent("weapons:client:RemoveWeapon", self.PlayerData.source, item)
 						TriggerEvent('qb-log:server:CreateLog', 'playerinventory', 'RemoveItem', 'red', '**' .. GetPlayerName(self.PlayerData.source) .. ' (citizenid: ' .. self.PlayerData.citizenid .. ' | id: ' .. self.PlayerData.source .. ')** lost item: [slot:' .. slot .. '], itemname: ' .. item .. ', removed amount: ' .. amount .. ', item removed')
 						return true
 					end

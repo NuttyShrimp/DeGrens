@@ -1,5 +1,3 @@
-local DGCore = exports['dg-core']:GetCoreObject()
-
 RegisterServerEvent("onResourceStart", function(resourceName)
     if GetCurrentResourceName() ~= resourceName then return end
 

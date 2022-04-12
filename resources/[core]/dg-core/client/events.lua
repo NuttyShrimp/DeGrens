@@ -88,6 +88,7 @@ RegisterNetEvent('DGCore:Player:UpdatePlayerData', function()
 end)
 
 RegisterNetEvent('DGCore:Notify', function(text, type, length)
+    print('This is deprecated and should be replaced with dg-ui:client:addNotifaction')
     DGCore.Functions.Notify(text, type, length)
 end)
 

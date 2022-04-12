@@ -1,5 +1,3 @@
-local DGCore = exports['dg-core']:GetCoreObject()
-
 Citizen.CreateThread(function()
     while true do
         Citizen.Wait(Config.MailTime) 

@@ -1,4 +1,3 @@
-local DGCore = exports['dg-core']:GetCoreObject()
 local _cache = {
 	elevatorIds = {},
 }

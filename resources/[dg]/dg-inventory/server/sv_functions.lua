@@ -1,5 +1,3 @@
-local DGCore = exports["dg-core"]:GetCoreObject()
-
 exports("GetItemData", function(item)
     return ItemData[item]
 end)
@@ -204,8 +202,6 @@ function CreateNewDrop(source, fromSlot, toSlot, itemAmount)
 	local coords = GetEntityCoords(GetPlayerPed(source))
 
 	if Player.Functions.RemoveItem(itemData.name, itemAmount, itemData.slot) then
-		TriggerClientEvent("weapons:client:CheckWeapon", source, itemData.name)
-
 		local itemInfo = ItemData[itemData.name:lower()]
 		local id = CreateId("drop")
 		Inventories["drop"][id] = {}
@@ -261,7 +257,6 @@ function MoveItemFromPlayer(src, Player, toInventory, fromSlot, toSlot, fromAmou
         end
         
         Player.Functions.RemoveItem(fromItemData.name, fromAmount, fromSlot)
-        TriggerClientEvent("weapons:client:CheckWeapon", src, fromItemData.name) -- remove weapon if u move ur weapon
     
         if toItemData then
             local itemInfo = ItemData[toItemData.name:lower()]
@@ -315,7 +310,6 @@ function MoveItemToPlayer(src, Player, fromInventory, toInventory, fromSlot, toS
 
         if toInventory == "player" then
             if targetPlayer then
-                TriggerClientEvent("weapons:client:CheckWeapon", targetPlayer.PlayerData.source, fromItemData.name)
                 targetPlayer.Functions.RemoveItem(itemInfo["name"], fromAmount, fromSlot)
             else
                 RemoveFrom(invType, id, fromSlot, itemInfo["name"], fromAmount)

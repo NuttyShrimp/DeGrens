@@ -1116,5 +1116,277 @@
                 "maxZ": 32.43
             }
         }
+    },
+    "000054": {
+        "description": "Druglab 1",
+        "locked": true,
+        "authorized": [],
+        "distance": 10.0,
+        "noInteraction": true,
+        "doors": [
+            {
+                "object": "prop_stock_door_01",
+                "coords": {
+                    "x": -323.8176,
+                    "y": -1356.841,
+                    "z": 31.65890
+                }
+            }
+        ]
+    },
+    "000055": {
+        "description": "Druglab 2",
+        "locked": true,
+        "authorized": [],
+        "distance": 10.0,
+        "noInteraction": true,
+        "doors": [
+            {
+                "object": "prop_stock_door_01",
+                "coords": {
+                    "x": 147.73710,
+                    "y": -1703.024,
+                    "z": 29.53036
+                }
+            }
+        ]
+    },
+    "000056": {
+        "description": "Druglab 3",
+        "locked": true,
+        "authorized": [],
+        "distance": 10.0,
+        "noInteraction": true,
+        "doors": [
+            {
+                "object": "prop_stock_door_01",
+                "coords": {
+                    "x": -1261.402,
+                    "y": -1124.170,
+                    "z": 8.138565
+                }
+            }
+        ]
+    },
+    "000057": {
+        "description": "Druglab 4",
+        "locked": true,
+        "authorized": [],
+        "distance": 10.0,
+        "noInteraction": true,
+        "doors": [
+            {
+                "object": "prop_stock_door_01",
+                "coords": {
+                    "x": 580.83440,
+                    "y": -424.1805,
+                    "z": 25.04554
+                }
+            }
+        ]
+    },
+    "000058": {
+        "description": "Druglab 5",
+        "locked": true,
+        "authorized": [],
+        "distance": 10.0,
+        "noInteraction": true,
+        "doors": [
+            {
+                "object": "prop_stock_door_01",
+                "coords": {
+                    "x": 940.24010,
+                    "y": -1489.713,
+                    "z": 30.39634
+                }
+            }
+        ]
+    },
+    "000059": {
+        "description": "Druglab 6",
+        "locked": true,
+        "authorized": [],
+        "distance": 10.0,
+        "noInteraction": true,
+        "doors": [
+            {
+                "object": "prop_stock_door_01",
+                "coords": {
+                    "x": -1981.128,
+                    "y": -241.5837,
+                    "z": 35.21357
+                }
+            }
+        ]
+    },
+    "000060": {
+        "description": "Druglab 7",
+        "locked": true,
+        "authorized": [],
+        "distance": 10.0,
+        "noInteraction": true,
+        "doors": [
+            {
+                "object": "prop_stock_door_01",
+                "coords": {
+                    "x": -51.17780,
+                    "y": -1289.401,
+                    "z": 31.14127
+                }
+            }
+        ]
+    },
+    "000061": {
+        "description": "Druglab 8",
+        "locked": true,
+        "authorized": [],
+        "distance": 10.0,
+        "noInteraction": true,
+        "doors": [
+            {
+                "object": "prop_stock_door_01",
+                "coords": {
+                    "x": 795.17270,
+                    "y": -102.5835,
+                    "z": 82.26920
+                }
+            }
+        ]
+    },
+    "000062": {
+        "description": "Druglab 9",
+        "locked": true,
+        "authorized": [],
+        "distance": 10.0,
+        "noInteraction": true,
+        "doors": [
+            {
+                "object": "prop_stock_door_01",
+                "coords": {
+                    "x": -155.5519,
+                    "y": 6292.5570,
+                    "z": 31.92047
+                }
+            }
+        ]
+    },
+    "000063": {
+        "description": "Druglab 10",
+        "locked": true,
+        "authorized": [],
+        "distance": 10.0,
+        "noInteraction": true,
+        "doors": [
+            {
+                "object": "prop_stock_door_01",
+                "coords": {
+                    "x": -29.5171,
+                    "y": 6468.4960,
+                    "z": 31.68517
+                }
+            }
+        ]
+    },
+    "000064": {
+        "description": "Druglab 11",
+        "locked": true,
+        "authorized": [],
+        "distance": 10.0,
+        "noInteraction": true,
+        "doors": [
+            {
+                "object": "prop_stock_door_01",
+                "coords": {
+                    "x": 1384.355,
+                    "y": -2080.837,
+                    "z": 52.84856
+                }
+            }
+        ]
+    },
+    "000065": {
+        "description": "Druglab 12",
+        "locked": true,
+        "authorized": [],
+        "distance": 10.0,
+        "noInteraction": true,
+        "doors": [
+            {
+                "object": "prop_stock_door_01",
+                "coords": {
+                    "x": 2849.458,
+                    "y": 4449.8840,
+                    "z": 48.66911
+                }
+            }
+        ]
+    },
+    "000066": {
+        "description": "Druglab 13",
+        "locked": true,
+        "authorized": [],
+        "distance": 10.0,
+        "noInteraction": true,
+        "doors": [
+            {
+                "object": "prop_stock_door_01",
+                "coords": {
+                    "x": 558.0279,
+                    "y": 2666.4540,
+                    "z": 42.39426
+                }
+            }
+        ]
+    },
+    "000067": {
+        "description": "Druglab 14",
+        "locked": true,
+        "authorized": [],
+        "distance": 10.0,
+        "noInteraction": true,
+        "doors": [
+            {
+                "object": "prop_stock_door_01",
+                "coords": {
+                    "x": 965.7836,
+                    "y": 3614.3320,
+                    "z": 33.10951
+                }
+            }
+        ]
+    },
+    "000068": {
+        "description": "Druglab 15",
+        "locked": true,
+        "authorized": [],
+        "distance": 10.0,
+        "noInteraction": true,
+        "doors": [
+            {
+                "object": "prop_stock_door_01",
+                "coords": {
+                    "x": 2521.866,
+                    "y": 4123.4640,
+                    "z": 38.81657
+                }
+            }
+        ]
+    },
+    "000069": {
+        "description": "Druglab 16",
+        "locked": true,
+        "authorized": [],
+        "distance": 10.0,
+        "noInteraction": true,
+        "doors": [
+            {
+                "object": "prop_stock_door_01",
+                "coords": {
+                    "x": 450.3066,
+                    "y": -1980.605,
+                    "z": 24.63416
+                }
+            }
+        ]
     }
 }

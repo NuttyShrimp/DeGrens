@@ -4,7 +4,8 @@ game 'gta5'
 description 'dg-weapons'
 version '1.0.0'
 
-shared_scripts { 
+shared_scripts {
+    '@dg-core/import.lua', 
 	'config.lua'
 }
 

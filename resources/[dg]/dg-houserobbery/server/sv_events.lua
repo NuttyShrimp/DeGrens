@@ -1,5 +1,3 @@
-local DGCore = exports['dg-core']:GetCoreObject()
-
 DGCore.Functions.CreateCallback('dg-houserobbery:server:GetAllHouseData', function(source, cb)
     local data = {}
 
