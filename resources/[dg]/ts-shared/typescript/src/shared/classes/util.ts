@@ -38,4 +38,37 @@ export class Util {
   Vector3ToArray = (vector: Vector3): number[] => {
     return [vector.x, vector.y, vector.z];
   };
+
+  Singleton = <T>() => {
+    return class {
+      private static instance: T;
+
+      public static getInstance(): T {
+        if (!this.instance) {
+          this.instance = new this() as T;
+        }
+        return this.instance;
+      }
+    };
+  };
+
+  getEntityCoords(_: number) {
+    return new Vector3(0, 0, 0);
+  }
+
+  getDistanceBetweenEntities(entity1: number, entity2: number) {
+    const entity1Coords = this.getEntityCoords(entity1);
+    const entity2Coords = this.getEntityCoords(entity2);
+    return entity1Coords.subtract(entity2Coords).Length;
+  }
+
+  generateRndChar = (length: number, caseSensitive = true): string => {
+    let result = "";
+    const characters = `${caseSensitive ? 'ABCDEFGHIJKLMNOPQRSTUVWXYZ' : ''}abcdefghijklmnopqrstuvwxyz0123456789`;
+    const charactersLength = characters.length;
+    for (let i = 0; i < length; i++) {
+      result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+    return result;
+  };
 }
