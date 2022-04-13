@@ -1,11 +1,6 @@
-AddStateBagChangeHandler('isLoggedIn', nil, function(bagName, key, value)
-    isLoggedIn = value
-end)
-
 AddEventHandler("onResourceStart", function(resourceName)
     if GetCurrentResourceName() ~= resourceName then return end
 
-    isLoggedIn = LocalPlayer.state["isLoggedIn"]
     activePlants = DGCore.Functions.TriggerCallback("dg-weed:server:GetPlants")
 end)
 

@@ -1,4 +1,3 @@
-isLoggedIn = false
 activePlants = {}
 cacheIds = {}
 
