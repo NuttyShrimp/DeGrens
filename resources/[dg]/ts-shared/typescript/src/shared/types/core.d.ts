@@ -115,18 +115,22 @@ declare interface MoneyConfig {
 declare type BloodTypes = 'A+' | 'B+' | 'B-' | 'AB+' | 'AB-' | 'O+' | 'O-';
 
 declare interface Item {
-  name: string;
-  label: string;
-  weight: number;
   type: 'weapon' | 'item';
+  name: string;
+  weight: number;
+  label: string;
   image: string;
-  unique: boolean;
-  usable: boolean;
   shouldClose: boolean;
   combinable?: ItemCombinable;
   description: string;
   info?: any;
   amount?: any;
+  createtime: number;
+  decayrate: number;
+  slot: number;
+  usable: boolean;
+  stackable: boolean;
+  quality: number;
 }
 
 declare interface ItemCombinableAnim {
