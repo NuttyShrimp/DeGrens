@@ -10,14 +10,29 @@ Param(
 $origPath = $( Get-Location )
 $artifactsInfo = 'https://changelogs-live.fivem.net/api/changelog/versions/win32/server'
 
-$artifactsJson = Invoke-WebRequest -Uri $artifactsInfo
-$artifactsJson = $artifactsJson | ConvertFrom-Json
-if ($response.connectionTestStatus -match "FAIL")
+try
 {
-  return $response.connectionTestStatus
+  $artifactsJson = Invoke-WebRequest -Uri $artifactsInfo
+  if ($artifactsJson.connectionTestStatus -match "FAIL")
+  {
+    Write-Host "Could fetch updates for artifacts" -ForegroundColor Red
+    return $response.connectionTestStatus
+  }
+  $artifactsJson = $artifactsJson | ConvertFrom-Json
+}
+catch
+{
+  Write-Host "Could fetch updates for artifacts" -ForegroundColor Red
+  return
 }
 
 $version = $artifactsJson.$type
+
+if ($version -eq "" -or $null -eq $version)
+{
+  Write-Host "Could fetch updates for artifacts" -ForegroundColor Red
+  return
+}
 
 Write-Host "=====================" -ForegroundColor Magenta
 Write-Host "Updating artifacts..." -ForegroundColor Magenta
