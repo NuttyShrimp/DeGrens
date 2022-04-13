@@ -34,6 +34,9 @@ export const canEntryBeEnabled = (
   }
   if (entry.canInteract) {
     entry._metadata.state.canInteract = entry.canInteract(entity, entry.distance, entry);
+    if (entry._metadata.state.canInteract instanceof Promise) {
+      entry._metadata.state.canInteract = await entry._metadata.state.canInteract;
+    }
   }
   if (entry.distance) {
     entry._metadata.state.distance = false;

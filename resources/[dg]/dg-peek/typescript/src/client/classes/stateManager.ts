@@ -82,7 +82,7 @@ class StateManager {
       return;
     }
     const ped = PlayerPedId();
-    this.checkInterval = setInterval(() => {
+    this.checkInterval = setInterval(async() => {
       const currentEntity = getCurrentEntity();
       const activeZones = getActiveZones();
       if (!this.isPeeking || this.isUIFocused || (currentEntity.entity === null && activeZones.size === 0)) {
@@ -109,7 +109,7 @@ class StateManager {
         activeEntries[index] = entry;
       }
       // CanInteract check
-      PEEK_TYPES.forEach(type => {
+      for (const type of PEEK_TYPES) {
         const manager = entryManager.getManagerForType(type);
         const activeEntries = manager.getActiveEntries();
         for (const index in activeEntries) {
@@ -119,11 +119,14 @@ class StateManager {
           }
           const oldCanInteract = Boolean(entry._metadata.state.canInteract);
           entry._metadata.state.canInteract = entry.canInteract(currentEntity.entity, entry.distance, entry);
+          if (entry._metadata.state.canInteract instanceof Promise) {
+            entry._metadata.state.canInteract = await entry._metadata.state.canInteract;
+          }
           if (oldCanInteract !== entry._metadata.state.canInteract) {
             isDirty = true;
           }
         }
-      });
+      }
       // distance Check
       // TODO: Merge loops
       PEEK_TYPES.filter(t => t !== 'bones').forEach(type => {
