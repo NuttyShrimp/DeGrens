@@ -27,7 +27,7 @@ AddEventHandler('qb-occasions:server:ReturnVehicle', function(vehicleData)
 		{ vehicleData['plate'], vehicleData["oid"] })
 	if result[1] ~= nil then
 		if result[1].seller == Player.PlayerData.citizenid then
-			exports['dg-sync']:insert(
+			exports['dg-sql']:insert(
 				'INSERT INTO player_vehicles (license, citizenid, vehicle, hash, mods, plate, state) VALUES (?, ?, ?, ?, ?, ?, ?)',
 				{ Player.PlayerData.license, Player.PlayerData.citizenid, vehicleData["model"],
 					GetHashKey(vehicleData["model"]), vehicleData["mods"], vehicleData["plate"], 0 })
@@ -49,7 +49,7 @@ AddEventHandler('qb-occasions:server:sellVehicle', function(vehiclePrice, vehicl
 	local Player = DGCore.Functions.GetPlayer(src)
 	exports['dg-sql']:query('DELETE FROM player_vehicles WHERE plate = ? AND vehicle = ?',
 		{ vehicleData.plate, vehicleData.model })
-	exports['dg-sync']:insert(
+	exports['dg-sql']:insert(
 		'INSERT INTO occasion_vehicles (seller, price, description, plate, model, mods, occasionid) VALUES (?, ?, ?, ?, ?, ?, ?)',
 		{ Player.PlayerData.citizenid, vehiclePrice, escapeSqli(vehicleData.desc), vehicleData.plate, vehicleData.model,
 			json.encode(vehicleData.mods), generateOID() })
@@ -93,7 +93,7 @@ AddEventHandler('qb-occasions:server:buyVehicle', function(vehicleData)
 			-- New price calculation minus tax
 			local NewPrice = math.ceil((result[1].price / 100) * 77)
 			-- Insert vehicle for buyer
-			exports['dg-sync']:insert(
+			exports['dg-sql']:insert(
 				'INSERT INTO player_vehicles (license, citizenid, vehicle, hash, mods, plate, state) VALUES (?, ?, ?, ?, ?, ?, ?)', {
 					Player.PlayerData.license,
 					Player.PlayerData.citizenid, result[1]["model"],
@@ -119,7 +119,7 @@ end)
 
 DGCore.Functions.CreateCallback("qb-vehiclesales:server:CheckModelName", function(source, cb, plate)
 	if plate then
-		local ReturnData = exports['dg-sync']:scalar("SELECT vehicle FROM player_vehicles WHERE plate = ?", { plate })
+		local ReturnData = exports['dg-sql']:scalar("SELECT vehicle FROM player_vehicles WHERE plate = ?", { plate })
 		cb(ReturnData)
 	end
 end)

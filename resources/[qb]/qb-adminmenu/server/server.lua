@@ -100,7 +100,7 @@ RegisterNetEvent('qb-admin:server:ban', function(player, time, reason)
 			banTime = 2147483647
 		end
 		local timeTable = os.date('*t', banTime)
-		exports['dg-sync']:insert('INSERT INTO bans (name, steamid, license, discord, ip, reason, expire, bannedby) VALUES (?, ?, ?, ?, ?, ?, ?, ?)', {
+		exports['dg-sql']:insert('INSERT INTO bans (name, steamid, license, discord, ip, reason, expire, bannedby) VALUES (?, ?, ?, ?, ?, ?, ?, ?)', {
 			GetPlayerName(player.id),
 			DGCore.Functions.GetIdentifier(player.id, 'steam'),
 			DGCore.Functions.GetIdentifier(player.id, 'license'),
@@ -230,7 +230,7 @@ RegisterNetEvent('qb-admin:server:SaveCar', function(mods, vehicle, hash, plate)
 	local Player = DGCore.Functions.GetPlayer(src)
 	local result = exports['dg-sql']:query('SELECT plate FROM player_vehicles WHERE plate = ?', { plate })
 	if result[1] == nil then
-		exports['dg-sync']:insert('INSERT INTO player_vehicles (license, citizenid, vehicle, hash, mods, plate, state) VALUES (?, ?, ?, ?, ?, ?, ?)', {
+		exports['dg-sql']:insert('INSERT INTO player_vehicles (license, citizenid, vehicle, hash, mods, plate, state) VALUES (?, ?, ?, ?, ?, ?, ?)', {
 			Player.PlayerData.license,
 			Player.PlayerData.citizenid,
 			vehicle.model,
@@ -321,7 +321,7 @@ DGCore.Commands.Add('warn', 'Warn A Player (Admin Only)', { { name = 'ID', help 
 			message = ('You have warned %s | Reason: %s'):format(GetPlayerName(targetPlayer.PlayerData.source), msg),
 			type = 'error'
 		})
-		exports['dg-sync']:insert('INSERT INTO player_warns (senderIdentifier, targetIdentifier, reason, warnId) VALUES (?, ?, ?, ?)', {
+		exports['dg-sql']:insert('INSERT INTO player_warns (senderIdentifier, targetIdentifier, reason, warnId) VALUES (?, ?, ?, ?)', {
 			senderPlayer.PlayerData.license,
 			targetPlayer.PlayerData.license,
 			msg,

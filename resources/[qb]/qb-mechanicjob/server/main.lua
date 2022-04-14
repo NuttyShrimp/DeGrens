@@ -65,7 +65,7 @@ end)
 
 DGCore.Functions.CreateCallback('qb-vehicletuning:server:IsVehicleOwned', function(source, cb, plate)
     local retval = false
-    local result = exports['dg-sync']:scalar('SELECT 1 from player_vehicles WHERE plate = ?', {plate})
+    local result = exports['dg-sql']:scalar('SELECT 1 from player_vehicles WHERE plate = ?', {plate})
     if result then
         retval = true
     end
@@ -127,7 +127,7 @@ AddEventHandler("vehiclemod:server:saveStatus", function(plate)
 end)
 
 function IsVehicleOwned(plate)
-    local result = exports['dg-sync']:scalar('SELECT 1 from player_vehicles WHERE plate = ?', {plate})
+    local result = exports['dg-sql']:scalar('SELECT 1 from player_vehicles WHERE plate = ?', {plate})
     if result then
         return true
     else

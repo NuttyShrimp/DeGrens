@@ -494,7 +494,7 @@ AddEventHandler('qb-lapraces:server:SaveRace', function(RaceData)
         Racers = {},
         LastLeaderboard = {}
     }
-    exports['dg-sync']:insert('INSERT INTO lapraces (name, checkpoints, creator, distance, raceid) VALUES (?, ?, ?, ?, ?)',
+    exports['dg-sql']:insert('INSERT INTO lapraces (name, checkpoints, creator, distance, raceid) VALUES (?, ?, ?, ?, ?)',
         {RaceData.RaceName, json.encode(Checkpoints), Player.PlayerData.citizenid, RaceData.RaceDistance,
          GenerateRaceId()})
 end)

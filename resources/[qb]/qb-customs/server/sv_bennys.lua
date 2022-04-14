@@ -63,7 +63,7 @@ end)
 
 function IsVehicleOwned(plate)
     local retval = false
-    local result = exports['dg-sync']:scalar('SELECT plate FROM player_vehicles WHERE plate = ?', {plate})
+    local result = exports['dg-sql']:scalar('SELECT plate FROM player_vehicles WHERE plate = ?', {plate})
     if result then
         retval = true
     end

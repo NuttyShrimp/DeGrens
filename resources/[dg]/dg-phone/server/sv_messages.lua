@@ -45,7 +45,7 @@ addMessage = function(phone, target, msg, date)
 		msg,
 		date
 	}
-	return exports['dg-sync']:insert(query, params)
+	return exports['dg-sql']:insert(query, params)
 end
 
 setRead = function(phone, target)

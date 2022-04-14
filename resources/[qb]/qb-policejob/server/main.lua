@@ -86,7 +86,7 @@ local function CreateObjectId()
 end
 
 local function IsVehicleOwned(plate)
-    local result = exports['dg-sync']:scalar('SELECT plate FROM player_vehicles WHERE plate = ?', {plate})
+    local result = exports['dg-sql']:scalar('SELECT plate FROM player_vehicles WHERE plate = ?', {plate})
     return result
 end
 

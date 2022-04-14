@@ -579,7 +579,7 @@ local playertables = { -- Add tables as needed
 function DGCore.Player.DeleteCharacter(source, citizenid)
 	local src = source
 	local license = DGCore.Functions.GetIdentifier(src, 'license')
-	local result = exports['dg-sync']:scalar('SELECT license FROM players where citizenid = ?', { citizenid })
+	local result = exports['dg-sql']:scalar('SELECT license FROM players where citizenid = ?', { citizenid })
 	if license == result then
 		for k, v in pairs(playertables) do
 			exports['dg-sql']:query('DELETE FROM ' .. v.table .. ' WHERE citizenid = ?', { citizenid })

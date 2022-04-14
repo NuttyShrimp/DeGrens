@@ -54,7 +54,7 @@ AddEventHandler('qb-diving:server:BuyBoat', function(boatModel, BerthId)
 end)
 
 function InsertBoat(boatModel, Player, plate)
-    exports['dg-sync']:insert('INSERT INTO player_boats (citizenid, model, plate) VALUES (?, ?, ?)',
+    exports['dg-sql']:insert('INSERT INTO player_boats (citizenid, model, plate) VALUES (?, ?, ?)',
         {Player.PlayerData.citizenid, boatModel, plate})
 end
 
@@ -106,7 +106,7 @@ RegisterServerEvent('qb-diving:server:SetBoatState')
 AddEventHandler('qb-diving:server:SetBoatState', function(plate, state, boathouse, fuel)
     local src = source
     local Player = DGCore.Functions.GetPlayer(src)
-    local result = exports['dg-sync']:scalar('SELECT 1 FROM player_boats WHERE plate = ?', {plate})
+    local result = exports['dg-sql']:scalar('SELECT 1 FROM player_boats WHERE plate = ?', {plate})
     if result ~= nil then
         exports['dg-sql']:query(
             'UPDATE player_boats SET state = ?, boathouse = ?, fuel = ? WHERE plate = ? AND citizenid = ?',

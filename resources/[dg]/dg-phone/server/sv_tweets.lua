@@ -84,7 +84,7 @@ addTweet = function(src, tweet, date)
 		INSERT INTO phone_tweets (cid, tweet, date)
 		VALUES (?, ?, ?);
 	]]
-	local id = exports['dg-sync']:insert(query, { Player.PlayerData.citizenid, tweet, date})
+	local id = exports['dg-sql']:insert(query, { Player.PlayerData.citizenid, tweet, date})
 	tweetCache[id] = {
 		id = id,
 		cid = cid,

@@ -8,7 +8,7 @@ addImage = function(cid, link)
 		INSERT INTO phone_images (cid, link)
 		VALUES (?, ?)
 	]]
-	return exports['dg-sync']:insert(query, { cid, link })
+	return exports['dg-sql']:insert(query, { cid, link })
 end
 
 deleteImage = function(cid, id)

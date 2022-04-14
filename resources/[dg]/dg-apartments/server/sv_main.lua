@@ -22,7 +22,7 @@ end
 
 createPlayerApartment = function(src)
 	local Player = DGCore.Functions.GetPlayer(src);
-	return exports['dg-sync']:insert('INSERT INTO apartments (citizenid) VALUES (?) ', {Player.PlayerData.citizenid})
+	return exports['dg-sql']:insert('INSERT INTO apartments (citizenid) VALUES (?) ', {Player.PlayerData.citizenid})
 end
 
 setInsideMeta = function(src, aId)

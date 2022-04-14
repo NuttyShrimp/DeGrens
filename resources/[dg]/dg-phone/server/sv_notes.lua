@@ -31,7 +31,7 @@ addNote = function(cid, title, note, date)
 			VALUES (?, ?, ?, ?)
 		]]
 	end
-	local insertId = exports['dg-sync']:insert(query, { cid, title, note, date })
+	local insertId = exports['dg-sql']:insert(query, { cid, title, note, date })
 	return insertId
 end
 

@@ -154,7 +154,7 @@ AddEventHandler('qb-cityhall:server:banPlayer', function()
       message = ('%s has been banned for sending POST Request\'s'):format(GetPlayerName(src)),
       type = 'error'
     })
-    exports['dg-sync']:insert('INSERT INTO bans (name, license, discord, ip, reason, expire, bannedby) VALUES (?, ?, ?, ?, ?, ?, ?)', {
+    exports['dg-sql']:insert('INSERT INTO bans (name, license, discord, ip, reason, expire, bannedby) VALUES (?, ?, ?, ?, ?, ?, ?)', {
         GetPlayerName(src),
         DGCore.Functions.GetIdentifier(src, 'license'),
         DGCore.Functions.GetIdentifier(src, 'discord'),

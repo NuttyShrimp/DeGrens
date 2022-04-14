@@ -228,7 +228,7 @@ function CreateNewDrop(source, fromSlot, toSlot, itemAmount)
 end
 
 function IsVehicleOwned(plate)
-    local result = exports['dg-sync']:scalar("SELECT 1 from player_vehicles WHERE plate = ?", {plate})
+    local result = exports['dg-sql']:scalar("SELECT 1 from player_vehicles WHERE plate = ?", {plate})
     if result then 
         return true 
     else 

@@ -214,7 +214,7 @@ function DGCore.Functions.AddPermission(source, permission)
 		}
 		exports['dg-sql']:query('DELETE FROM permissions WHERE steamid = ?', { pSteamid })
 
-		exports['dg-sync']:insert('INSERT INTO permissions (name, steamid, permission) VALUES (?, ?, ?)', {
+		exports['dg-sql']:insert('INSERT INTO permissions (name, steamid, permission) VALUES (?, ?, ?)', {
 			GetPlayerName(src),
 			pSteamid,
 			permission:lower()

@@ -70,7 +70,7 @@ end
 
 local function GeneratePlate()
     local plate = DGCore.Shared.RandomInt(1) .. DGCore.Shared.RandomStr(2) .. DGCore.Shared.RandomInt(3) .. DGCore.Shared.RandomStr(2)
-    local result = exports['dg-sync']:scalar('SELECT plate FROM player_vehicles WHERE plate = ?', {plate})
+    local result = exports['dg-sql']:scalar('SELECT plate FROM player_vehicles WHERE plate = ?', {plate})
     if result then
         return GeneratePlate()
     else
@@ -195,7 +195,7 @@ RegisterNetEvent('qb-vehicleshop:server:buyShowroomVehicle', function(vehicle)
     local vehiclePrice = DGCore.Shared.Vehicles[vehicle]['price']
     local plate = GeneratePlate()
     if cash > vehiclePrice then
-        exports['dg-sync']:insert('INSERT INTO player_vehicles (license, citizenid, vehicle, hash, mods, plate, state) VALUES (?, ?, ?, ?, ?, ?, ?)', {
+        exports['dg-sql']:insert('INSERT INTO player_vehicles (license, citizenid, vehicle, hash, mods, plate, state) VALUES (?, ?, ?, ?, ?, ?, ?)', {
             pData.PlayerData.license,
             cid,
             vehicle,
@@ -208,7 +208,7 @@ RegisterNetEvent('qb-vehicleshop:server:buyShowroomVehicle', function(vehicle)
         TriggerClientEvent('qb-vehicleshop:client:buyShowroomVehicle', src, vehicle, plate)
 				exports['dg-financials']:removeCash(src, vehiclePrice, "Showroom vehicle purchase for " .. plate)
     elseif bank > vehiclePrice then
-        exports['dg-sync']:insert('INSERT INTO player_vehicles (license, citizenid, vehicle, hash, mods, plate, state) VALUES (?, ?, ?, ?, ?, ?, ?)', {
+        exports['dg-sql']:insert('INSERT INTO player_vehicles (license, citizenid, vehicle, hash, mods, plate, state) VALUES (?, ?, ?, ?, ?, ?, ?)', {
             pData.PlayerData.license,
             cid,
             vehicle,
@@ -244,7 +244,7 @@ RegisterNetEvent('qb-vehicleshop:server:financeVehicle', function(downPayment, p
     local plate = GeneratePlate()
     local balance, vehPaymentAmount = calculateFinance(vehiclePrice, downPayment, paymentAmount)
     if cash > downPayment then
-        exports['dg-sync']:insert('INSERT INTO player_vehicles (license, citizenid, vehicle, hash, mods, plate, state, balance, paymentamount, paymentsleft, financetime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', {
+        exports['dg-sql']:insert('INSERT INTO player_vehicles (license, citizenid, vehicle, hash, mods, plate, state, balance, paymentamount, paymentsleft, financetime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', {
             pData.PlayerData.license,
             cid,
             vehicle,
@@ -261,7 +261,7 @@ RegisterNetEvent('qb-vehicleshop:server:financeVehicle', function(downPayment, p
         TriggerClientEvent('qb-vehicleshop:client:buyShowroomVehicle', src, vehicle, plate)
 				exports['dg-financials']:removeCash(src, downPayment, "Showroom Vehicle finance for " .. plate)
     elseif bank > downPayment then
-        exports['dg-sync']:insert('INSERT INTO player_vehicles (license, citizenid, vehicle, hash, mods, plate, state, balance, paymentamount, paymentsleft, financetime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', {
+        exports['dg-sql']:insert('INSERT INTO player_vehicles (license, citizenid, vehicle, hash, mods, plate, state, balance, paymentamount, paymentsleft, financetime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', {
             pData.PlayerData.license,
             cid,
             vehicle,
@@ -305,7 +305,7 @@ RegisterNetEvent('qb-vehicleshop:server:sellShowroomVehicle', function(data)
     local plate = GeneratePlate()
     local commission = round(vehiclePrice * Config.Commission)
     if cash > vehiclePrice then
-        exports['dg-sync']:insert('INSERT INTO player_vehicles (license, citizenid, vehicle, hash, mods, plate, state) VALUES (?, ?, ?, ?, ?, ?, ?)', {
+        exports['dg-sql']:insert('INSERT INTO player_vehicles (license, citizenid, vehicle, hash, mods, plate, state) VALUES (?, ?, ?, ?, ?, ?, ?)', {
             targetPlayer.PlayerData.license,
             cid,
             vehicle,
@@ -321,7 +321,7 @@ RegisterNetEvent('qb-vehicleshop:server:sellShowroomVehicle', function(data)
         TriggerClientEvent('DGCore:Notify', targetPlayer.PlayerData.source, 'Congratulations on your purchase!', 'success')
         TriggerClientEvent('DGCore:Notify', src, 'You earned $'..comma_value(commission)..' in commission', 'success')
     elseif bank > vehiclePrice then
-        exports['dg-sync']:insert('INSERT INTO player_vehicles (license, citizenid, vehicle, hash, mods, plate, state) VALUES (?, ?, ?, ?, ?, ?, ?)', {
+        exports['dg-sql']:insert('INSERT INTO player_vehicles (license, citizenid, vehicle, hash, mods, plate, state) VALUES (?, ?, ?, ?, ?, ?, ?)', {
             targetPlayer.PlayerData.license,
             cid,
             vehicle,
@@ -371,7 +371,7 @@ RegisterNetEvent('qb-vehicleshop:server:sellfinanceVehicle', function(downPaymen
     local plate = GeneratePlate()
     local balance, vehPaymentAmount = calculateFinance(vehiclePrice, downPayment, paymentAmount)
     if cash > downPayment then
-        exports['dg-sync']:insert('INSERT INTO player_vehicles (license, citizenid, vehicle, hash, mods, plate, state, balance, paymentamount, paymentsleft, financetime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', {
+        exports['dg-sql']:insert('INSERT INTO player_vehicles (license, citizenid, vehicle, hash, mods, plate, state, balance, paymentamount, paymentsleft, financetime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', {
             targetplayer.PlayerData.license,
             cid,
             vehicle,
@@ -391,7 +391,7 @@ RegisterNetEvent('qb-vehicleshop:server:sellfinanceVehicle', function(downPaymen
         TriggerClientEvent('DGCore:Notify', targetplayer.PlayerData.source, 'Congratulations on your purchase!', 'success')
         TriggerClientEvent('DGCore:Notify', src, 'You earned $'..comma_value(commission)..' in commission', 'success')
     elseif bank > downPayment then
-        exports['dg-sync']:insert('INSERT INTO player_vehicles (license, citizenid, vehicle, hash, mods, plate, state, balance, paymentamount, paymentsleft, financetime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', {
+        exports['dg-sql']:insert('INSERT INTO player_vehicles (license, citizenid, vehicle, hash, mods, plate, state, balance, paymentamount, paymentsleft, financetime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', {
             targetplayer.PlayerData.license,
             cid,
             vehicle,
@@ -452,7 +452,7 @@ DGCore.Commands.Add('transferVehicle', 'Gift or sell your vehicle', {{ name = 'a
     local driver = GetPedInVehicleSeat(vehicle, -1)
     local passenger = GetPedInVehicleSeat(vehicle, 0)
     local plate = GetVehicleNumberPlateText(vehicle)
-    local isOwned = exports['dg-sync']:scalar('SELECT citizenid FROM player_vehicles WHERE plate = ?', {plate})
+    local isOwned = exports['dg-sql']:scalar('SELECT citizenid FROM player_vehicles WHERE plate = ?', {plate})
     if isOwned ~= citizenid then return TriggerClientEvent('DGCore:Notify', src, 'You dont own this vehicle', 'error') end
     if ped ~= driver then return TriggerClientEvent('DGCore:Notify', src, 'Must be driver', 'error') end
     if passenger == 0 then return TriggerClientEvent('DGCore:Notify', src, 'No passenger', 'error') end
