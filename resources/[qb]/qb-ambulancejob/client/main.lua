@@ -399,6 +399,7 @@ local function CheckWeaponDamage(ped)
         if HasPedBeenDamagedByWeapon(ped, GetHashKey(k), 0) then
             detected = true
             if not IsInDamageList(k) then
+                -- TODO: replace with dg-chat exports on server
                 TriggerEvent('chat:addMessage', {
                     color = { 255, 0, 0},
                     multiline = false,

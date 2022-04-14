@@ -14,10 +14,10 @@ end)
 RegisterNetEvent('qb-vehicleshop:server:removePlayer', function(citizenid)
     if financetimer[citizenid] then
         local playTime = financetimer[citizenid]
-        local financetime = exports.oxmysql:executeSync('SELECT * FROM player_vehicles WHERE citizenid = ?', {citizenid})
+        local financetime = exports['dg-sql']:query('SELECT * FROM player_vehicles WHERE citizenid = ?', {citizenid})
         for k,v in pairs(financetime) do
             if v.balance >= 1 then
-                exports.oxmysql:update('UPDATE player_vehicles SET financetime = ? WHERE plate = ?', {math.floor(v.financetime - (((GetGameTimer() - playTime) / 1000) / 60)), v.plate})
+                exports['dg-sql']:query('UPDATE player_vehicles SET financetime = ? WHERE plate = ?', {math.floor(v.financetime - (((GetGameTimer() - playTime) / 1000) / 60)), v.plate})
             end
         end
     end
@@ -33,13 +33,13 @@ AddEventHandler('playerDropped', function()
         end
     end
     if license then
-        local vehicles = exports.oxmysql:executeSync('SELECT * FROM player_vehicles WHERE license = ?', {license})
+        local vehicles = exports['dg-sql']:query('SELECT * FROM player_vehicles WHERE license = ?', {license})
         if vehicles then
             for k,v in pairs(vehicles) do
                 if financetimer[v.citizenid] then
                     local playTime = financetimer[v.citizenid]
                     if v.balance >= 1 then
-                        exports.oxmysql:update('UPDATE player_vehicles SET financetime = ? WHERE plate = ?', {math.floor(v.financetime - (((GetGameTimer() - playTime) / 1000) / 60)), v.plate})
+                        exports['dg-sql']:query('UPDATE player_vehicles SET financetime = ? WHERE plate = ?', {math.floor(v.financetime - (((GetGameTimer() - playTime) / 1000) / 60)), v.plate})
                         financetimer[v.citizenid] = {}
                     end
                 end
@@ -70,7 +70,7 @@ end
 
 local function GeneratePlate()
     local plate = DGCore.Shared.RandomInt(1) .. DGCore.Shared.RandomStr(2) .. DGCore.Shared.RandomInt(3) .. DGCore.Shared.RandomStr(2)
-    local result = exports.oxmysql:scalarSync('SELECT plate FROM player_vehicles WHERE plate = ?', {plate})
+    local result = exports['dg-sync']:scalar('SELECT plate FROM player_vehicles WHERE plate = ?', {plate})
     if result then
         return GeneratePlate()
     else
@@ -95,7 +95,7 @@ DGCore.Functions.CreateCallback('qb-vehicleshop:server:getVehicles', function(so
     local src = source
     local player = DGCore.Functions.GetPlayer(src)
     if player then
-        local vehicles = exports.oxmysql:executeSync('SELECT * FROM player_vehicles WHERE citizenid = ?', {player.PlayerData.citizenid})
+        local vehicles = exports['dg-sql']:query('SELECT * FROM player_vehicles WHERE citizenid = ?', {player.PlayerData.citizenid})
         if vehicles[1] then
             cb(vehicles)
         end
@@ -143,10 +143,10 @@ RegisterNetEvent('qb-vehicleshop:server:financePayment', function(paymentAmount,
         if player and paymentAmount >= minPayment then
             if cash >= paymentAmount then
 								exports['dg-financials']:removeCash(src, paymentAmount, "Finance payment")
-                exports.oxmysql:execute('UPDATE player_vehicles SET balance = ?, paymentamount = ?, paymentsleft = ?, financetime = ? WHERE plate = ?', {newBalance, newPayment, newPaymentsLeft, timer, plate})
+                exports['dg-sql']:query('UPDATE player_vehicles SET balance = ?, paymentamount = ?, paymentsleft = ?, financetime = ? WHERE plate = ?', {newBalance, newPayment, newPaymentsLeft, timer, plate})
             elseif bank >= paymentAmount then
 								exports['dg-financials']:purchase(plyAccId, Player.PlayerData.citizenid, paymentAmount, "Finance payment for " .. plate, 2)
-	            exports.oxmysql:execute('UPDATE player_vehicles SET balance = ?, paymentamount = ?, paymentsleft = ?, financetime = ? WHERE plate = ?', { newBalance, newPayment, newPaymentsLeft, timer, plate })
+	            exports['dg-sql']:query('UPDATE player_vehicles SET balance = ?, paymentamount = ?, paymentsleft = ?, financetime = ? WHERE plate = ?', { newBalance, newPayment, newPaymentsLeft, timer, plate })
             else
                 TriggerClientEvent('DGCore:Notify', src, 'Not enough money', 'error')
             end
@@ -171,10 +171,10 @@ RegisterNetEvent('qb-vehicleshop:server:financePaymentFull', function(data)
     if player and vehBalance ~= 0 then
         if cash >= vehBalance then
 						exports['dg-financials']:removeCash(src, vehBalance, "Finance payment(last) for " .. vehPlate)
-            exports.oxmysql:update('UPDATE player_vehicles SET balance = ?, paymentamount = ?, paymentsleft = ?, financetime = ? WHERE plate = ?', {0, 0, 0, 0, vehPlate})
+            exports['dg-sql']:query('UPDATE player_vehicles SET balance = ?, paymentamount = ?, paymentsleft = ?, financetime = ? WHERE plate = ?', {0, 0, 0, 0, vehPlate})
         elseif bank >= vehBalance then
 	        exports['dg-financials']:purchase(plyAccId, Player.PlayerData.citizenid, vehBalance, "Finance payment(last) for " .. vehPlate, 2)
-	        exports.oxmysql:update('UPDATE player_vehicles SET balance = ?, paymentamount = ?, paymentsleft = ?, financetime = ? WHERE plate = ?', { 0, 0, 0, 0, vehPlate })
+	        exports['dg-sql']:query('UPDATE player_vehicles SET balance = ?, paymentamount = ?, paymentsleft = ?, financetime = ? WHERE plate = ?', { 0, 0, 0, 0, vehPlate })
         else
             TriggerClientEvent('DGCore:Notify', src, 'Not enough money', 'error')
         end
@@ -195,7 +195,7 @@ RegisterNetEvent('qb-vehicleshop:server:buyShowroomVehicle', function(vehicle)
     local vehiclePrice = DGCore.Shared.Vehicles[vehicle]['price']
     local plate = GeneratePlate()
     if cash > vehiclePrice then
-        exports.oxmysql:insert('INSERT INTO player_vehicles (license, citizenid, vehicle, hash, mods, plate, state) VALUES (?, ?, ?, ?, ?, ?, ?)', {
+        exports['dg-sync']:insert('INSERT INTO player_vehicles (license, citizenid, vehicle, hash, mods, plate, state) VALUES (?, ?, ?, ?, ?, ?, ?)', {
             pData.PlayerData.license,
             cid,
             vehicle,
@@ -208,7 +208,7 @@ RegisterNetEvent('qb-vehicleshop:server:buyShowroomVehicle', function(vehicle)
         TriggerClientEvent('qb-vehicleshop:client:buyShowroomVehicle', src, vehicle, plate)
 				exports['dg-financials']:removeCash(src, vehiclePrice, "Showroom vehicle purchase for " .. plate)
     elseif bank > vehiclePrice then
-        exports.oxmysql:insert('INSERT INTO player_vehicles (license, citizenid, vehicle, hash, mods, plate, state) VALUES (?, ?, ?, ?, ?, ?, ?)', {
+        exports['dg-sync']:insert('INSERT INTO player_vehicles (license, citizenid, vehicle, hash, mods, plate, state) VALUES (?, ?, ?, ?, ?, ?, ?)', {
             pData.PlayerData.license,
             cid,
             vehicle,
@@ -244,7 +244,7 @@ RegisterNetEvent('qb-vehicleshop:server:financeVehicle', function(downPayment, p
     local plate = GeneratePlate()
     local balance, vehPaymentAmount = calculateFinance(vehiclePrice, downPayment, paymentAmount)
     if cash > downPayment then
-        exports.oxmysql:insert('INSERT INTO player_vehicles (license, citizenid, vehicle, hash, mods, plate, state, balance, paymentamount, paymentsleft, financetime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', {
+        exports['dg-sync']:insert('INSERT INTO player_vehicles (license, citizenid, vehicle, hash, mods, plate, state, balance, paymentamount, paymentsleft, financetime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', {
             pData.PlayerData.license,
             cid,
             vehicle,
@@ -261,7 +261,7 @@ RegisterNetEvent('qb-vehicleshop:server:financeVehicle', function(downPayment, p
         TriggerClientEvent('qb-vehicleshop:client:buyShowroomVehicle', src, vehicle, plate)
 				exports['dg-financials']:removeCash(src, downPayment, "Showroom Vehicle finance for " .. plate)
     elseif bank > downPayment then
-        exports.oxmysql:insert('INSERT INTO player_vehicles (license, citizenid, vehicle, hash, mods, plate, state, balance, paymentamount, paymentsleft, financetime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', {
+        exports['dg-sync']:insert('INSERT INTO player_vehicles (license, citizenid, vehicle, hash, mods, plate, state, balance, paymentamount, paymentsleft, financetime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', {
             pData.PlayerData.license,
             cid,
             vehicle,
@@ -305,7 +305,7 @@ RegisterNetEvent('qb-vehicleshop:server:sellShowroomVehicle', function(data)
     local plate = GeneratePlate()
     local commission = round(vehiclePrice * Config.Commission)
     if cash > vehiclePrice then
-        exports.oxmysql:insert('INSERT INTO player_vehicles (license, citizenid, vehicle, hash, mods, plate, state) VALUES (?, ?, ?, ?, ?, ?, ?)', {
+        exports['dg-sync']:insert('INSERT INTO player_vehicles (license, citizenid, vehicle, hash, mods, plate, state) VALUES (?, ?, ?, ?, ?, ?, ?)', {
             targetPlayer.PlayerData.license,
             cid,
             vehicle,
@@ -321,7 +321,7 @@ RegisterNetEvent('qb-vehicleshop:server:sellShowroomVehicle', function(data)
         TriggerClientEvent('DGCore:Notify', targetPlayer.PlayerData.source, 'Congratulations on your purchase!', 'success')
         TriggerClientEvent('DGCore:Notify', src, 'You earned $'..comma_value(commission)..' in commission', 'success')
     elseif bank > vehiclePrice then
-        exports.oxmysql:insert('INSERT INTO player_vehicles (license, citizenid, vehicle, hash, mods, plate, state) VALUES (?, ?, ?, ?, ?, ?, ?)', {
+        exports['dg-sync']:insert('INSERT INTO player_vehicles (license, citizenid, vehicle, hash, mods, plate, state) VALUES (?, ?, ?, ?, ?, ?, ?)', {
             targetPlayer.PlayerData.license,
             cid,
             vehicle,
@@ -371,7 +371,7 @@ RegisterNetEvent('qb-vehicleshop:server:sellfinanceVehicle', function(downPaymen
     local plate = GeneratePlate()
     local balance, vehPaymentAmount = calculateFinance(vehiclePrice, downPayment, paymentAmount)
     if cash > downPayment then
-        exports.oxmysql:insert('INSERT INTO player_vehicles (license, citizenid, vehicle, hash, mods, plate, state, balance, paymentamount, paymentsleft, financetime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', {
+        exports['dg-sync']:insert('INSERT INTO player_vehicles (license, citizenid, vehicle, hash, mods, plate, state, balance, paymentamount, paymentsleft, financetime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', {
             targetplayer.PlayerData.license,
             cid,
             vehicle,
@@ -391,7 +391,7 @@ RegisterNetEvent('qb-vehicleshop:server:sellfinanceVehicle', function(downPaymen
         TriggerClientEvent('DGCore:Notify', targetplayer.PlayerData.source, 'Congratulations on your purchase!', 'success')
         TriggerClientEvent('DGCore:Notify', src, 'You earned $'..comma_value(commission)..' in commission', 'success')
     elseif bank > downPayment then
-        exports.oxmysql:insert('INSERT INTO player_vehicles (license, citizenid, vehicle, hash, mods, plate, state, balance, paymentamount, paymentsleft, financetime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', {
+        exports['dg-sync']:insert('INSERT INTO player_vehicles (license, citizenid, vehicle, hash, mods, plate, state, balance, paymentamount, paymentsleft, financetime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', {
             targetplayer.PlayerData.license,
             cid,
             vehicle,
@@ -419,7 +419,7 @@ end)
 RegisterNetEvent('qb-vehicleshop:server:checkFinance', function()
     local src = source
     local player = DGCore.Functions.GetPlayer(src)
-    local result = exports.oxmysql:executeSync('SELECT * FROM player_vehicles WHERE citizenid = ?', {player.PlayerData.citizenid})
+    local result = exports['dg-sql']:query('SELECT * FROM player_vehicles WHERE citizenid = ?', {player.PlayerData.citizenid})
     for k,v in pairs(result) do
         if v.balance >= 1 and v.financetime < 1 then
             paymentDue = true
@@ -428,11 +428,11 @@ RegisterNetEvent('qb-vehicleshop:server:checkFinance', function()
     if paymentDue then
         TriggerClientEvent('DGCore:Notify', src, 'Your vehicle payment is due within '..Config.PaymentWarning..' minutes')
         Wait(Config.PaymentWarning * 60000)
-        exports.oxmysql:execute('SELECT * FROM player_vehicles WHERE citizenid = ?', {player.PlayerData.citizenid}, function(vehicles)
+        exports['dg-sql']:query('SELECT * FROM player_vehicles WHERE citizenid = ?', {player.PlayerData.citizenid}, function(vehicles)
             for k,v in pairs(vehicles) do
                 if v.balance >= 1 and v.financetime < 1 then
                     local plate = v.plate
-                    exports.oxmysql:execute('DELETE FROM player_vehicles WHERE plate = @plate', {['@plate'] = plate})
+                    exports['dg-sql']:query('DELETE FROM player_vehicles WHERE plate = @plate', {['@plate'] = plate})
                     TriggerClientEvent('DGCore:Notify', src, 'Your vehicle with plate '..plate..' has been repossessed', 'error')
                 end
             end
@@ -452,7 +452,7 @@ DGCore.Commands.Add('transferVehicle', 'Gift or sell your vehicle', {{ name = 'a
     local driver = GetPedInVehicleSeat(vehicle, -1)
     local passenger = GetPedInVehicleSeat(vehicle, 0)
     local plate = GetVehicleNumberPlateText(vehicle)
-    local isOwned = exports.oxmysql:scalarSync('SELECT citizenid FROM player_vehicles WHERE plate = ?', {plate})
+    local isOwned = exports['dg-sync']:scalar('SELECT citizenid FROM player_vehicles WHERE plate = ?', {plate})
     if isOwned ~= citizenid then return TriggerClientEvent('DGCore:Notify', src, 'You dont own this vehicle', 'error') end
     if ped ~= driver then return TriggerClientEvent('DGCore:Notify', src, 'Must be driver', 'error') end
     if passenger == 0 then return TriggerClientEvent('DGCore:Notify', src, 'No passenger', 'error') end
@@ -462,7 +462,7 @@ DGCore.Commands.Add('transferVehicle', 'Gift or sell your vehicle', {{ name = 'a
     if sellAmount then
         if exports['dg-financials']:getCash(target.Functions.source) > sellAmount then
             local targetcid = target.PlayerData.citizenid
-            exports.oxmysql:update('UPDATE player_vehicles SET citizenid = ? WHERE plate = ?', {targetcid, plate})
+            exports['dg-sql']:query('UPDATE player_vehicles SET citizenid = ? WHERE plate = ?', {targetcid, plate})
             player.Functions.AddMoney('cash', sellAmount)
             TriggerClientEvent('DGCore:Notify', src, 'You sold your vehicle for $'..comma_value(sellAmount), 'success')
             target.Functions.RemoveMoney('cash', sellAmount)
@@ -473,7 +473,7 @@ DGCore.Commands.Add('transferVehicle', 'Gift or sell your vehicle', {{ name = 'a
         end
     else
         local targetcid = target.PlayerData.citizenid
-        exports.oxmysql:update('UPDATE player_vehicles SET citizenid = ? WHERE plate = ?', {targetcid, plate})
+        exports['dg-sql']:query('UPDATE player_vehicles SET citizenid = ? WHERE plate = ?', {targetcid, plate})
         TriggerClientEvent('DGCore:Notify', src, 'You gifted your vehicle', 'success')
         TriggerClientEvent('vehiclekeys:client:SetOwner', target.PlayerData.source, plate)
         TriggerClientEvent('DGCore:Notify', target.PlayerData.source, 'You were gifted a vehicle', 'success')

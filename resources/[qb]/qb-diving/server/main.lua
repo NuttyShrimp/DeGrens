@@ -54,7 +54,7 @@ AddEventHandler('qb-diving:server:BuyBoat', function(boatModel, BerthId)
 end)
 
 function InsertBoat(boatModel, Player, plate)
-    exports.oxmysql:insert('INSERT INTO player_boats (citizenid, model, plate) VALUES (?, ?, ?)',
+    exports['dg-sync']:insert('INSERT INTO player_boats (citizenid, model, plate) VALUES (?, ?, ?)',
         {Player.PlayerData.citizenid, boatModel, plate})
 end
 
@@ -81,7 +81,7 @@ end)
 DGCore.Functions.CreateCallback('qb-diving:server:GetMyBoats', function(source, cb, dock)
     local src = source
     local Player = DGCore.Functions.GetPlayer(src)
-    local result = exports.oxmysql:executeSync('SELECT * FROM player_boats WHERE citizenid = ? AND boathouse = ?',
+    local result = exports['dg-sql']:query('SELECT * FROM player_boats WHERE citizenid = ? AND boathouse = ?',
         {Player.PlayerData.citizenid, dock})
     if result[1] ~= nil then
         cb(result)
@@ -93,7 +93,7 @@ end)
 DGCore.Functions.CreateCallback('qb-diving:server:GetDepotBoats', function(source, cb, dock)
     local src = source
     local Player = DGCore.Functions.GetPlayer(src)
-    local result = exports.oxmysql:executeSync('SELECT * FROM player_boats WHERE citizenid = ? AND state = ?',
+    local result = exports['dg-sql']:query('SELECT * FROM player_boats WHERE citizenid = ? AND state = ?',
         {Player.PlayerData.citizenid, 0})
     if result[1] ~= nil then
         cb(result)
@@ -106,9 +106,9 @@ RegisterServerEvent('qb-diving:server:SetBoatState')
 AddEventHandler('qb-diving:server:SetBoatState', function(plate, state, boathouse, fuel)
     local src = source
     local Player = DGCore.Functions.GetPlayer(src)
-    local result = exports.oxmysql:scalarSync('SELECT 1 FROM player_boats WHERE plate = ?', {plate})
+    local result = exports['dg-sync']:scalar('SELECT 1 FROM player_boats WHERE plate = ?', {plate})
     if result ~= nil then
-        exports.oxmysql:execute(
+        exports['dg-sql']:query(
             'UPDATE player_boats SET state = ?, boathouse = ?, fuel = ? WHERE plate = ? AND citizenid = ?',
             {state, boathouse, fuel, plate, Player.PlayerData.citizenid})
     end

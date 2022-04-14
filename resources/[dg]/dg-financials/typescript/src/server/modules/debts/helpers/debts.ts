@@ -2,6 +2,7 @@ import dayjs from 'dayjs';
 import timezone from 'dayjs/plugin/timezone'; // dependent on utc plugin
 import toObject from 'dayjs/plugin/toObject';
 import utc from 'dayjs/plugin/utc';
+import {SQL} from '@ts-shared/server';
 
 import 'dayjs/locale/nl-be';
 
@@ -32,7 +33,7 @@ export const scheduleMaintenanceFees = async () => {
     calculateMaintenceFees();
   }, schedule.diff(now));
   // Check for missed ones
-  const logs = await global.exports.oxmysql.executeSync(`
+  const logs = await SQL.query(`
 		SELECT *
 		FROM maintenance_fee_log
 		ORDER BY id DESC
@@ -76,7 +77,7 @@ export const scheduleDebt = (debtId: number) => {
 export const calculateMaintenceFees = (multiplier = 1) => {
   // TODO - implement	when vehicles and housing are implemented
   console.log(multiplier);
-  global.exports.oxmysql.executeSync(`
+  SQL.query(`
 		INSERT INTO maintenance_fee_log (date)
 		VALUES (NOW());
 	`);

@@ -198,6 +198,10 @@ Input.AutoComplete = ({ options, freeSolo, inputValue, ...props }) => {
     <Autocomplete
       options={options.map(option => option.label)}
       onInputChange={(e, inputval) => {
+        if (freeSolo) {
+          props.onChange(inputval, props.name, e);
+          return;
+        }
         const inputValue = options.find(option => option.label === inputval)?.value;
         props.onChange(inputValue, props.name, e);
       }}

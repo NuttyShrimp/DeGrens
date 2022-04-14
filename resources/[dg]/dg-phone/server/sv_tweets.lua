@@ -46,7 +46,7 @@ fetchTweets = function(batchReceived)
 		ORDER BY id DESC
 		LIMIT ? OFFSET ?;
 	]]
-	local tweets = exports.oxmysql:executeSync(query, {TWEET_BATCH_SIZE, batchReceived * TWEET_BATCH_SIZE})
+	local tweets = exports['dg-sql']:query(query, {TWEET_BATCH_SIZE, batchReceived * TWEET_BATCH_SIZE})
 	if tweets then
 		for i, tweet in ipairs(tweets) do
 			tweets[i].sender_name = "@"..tweet.sender_name:gsub(" ", "_")
@@ -71,7 +71,7 @@ fetchActionStatus = function(cid, tweetid)
 				WHERE tweetid = ? AND cid = ?
 			)                                    AS retweeted
 	]]
-	local result = exports.oxmysql:executeSync(query, {tweetid, cid, tweetid, cid})
+	local result = exports['dg-sql']:query(query, {tweetid, cid, tweetid, cid})
 	if result then
 		return result[1]
 	end
@@ -84,7 +84,7 @@ addTweet = function(src, tweet, date)
 		INSERT INTO phone_tweets (cid, tweet, date)
 		VALUES (?, ?, ?);
 	]]
-	local id = exports.oxmysql:insertSync(query, { Player.PlayerData.citizenid, tweet, date})
+	local id = exports['dg-sync']:insert(query, { Player.PlayerData.citizenid, tweet, date})
 	tweetCache[id] = {
 		id = id,
 		cid = cid,
@@ -104,7 +104,7 @@ likeTweet = function(cid, tweetId)
 		INSERT INTO phone_tweets_likes (cid, tweetid)
 		VALUES (?, ?);
 	]]
-	exports.oxmysql:executeSync(query, {cid, tweetId})
+	exports['dg-sql']:query(query, {cid, tweetId})
 end
 
 DGCore.Functions.CreateCallback('dg-phone:server:getTweets', function(src, cb, data)
@@ -131,7 +131,7 @@ DGCore.Functions.CreateCallback('dg-phone:server:twitter:removeLike', function(s
 		DELETE FROM phone_tweets_likes
 		WHERE cid = ? AND tweetid = ?;
 	]]
-	exports.oxmysql:executeSync(query, {Player.PlayerData.citizenid, data.tweetId})
+	exports['dg-sql']:query(query, {Player.PlayerData.citizenid, data.tweetId})
 	TriggerClientEvent('dg-phone:client:twitter:removeLike', -1, data.tweetId)
 	cb()
 end)
@@ -144,7 +144,7 @@ DGCore.Functions.CreateCallback('dg-phone:server:twitter:addRetweet', function(s
 		INSERT INTO phone_tweets_retweets (cid, tweetid)
 		VALUES (?, ?);
 	]]
-	exports.oxmysql:executeSync(query, {Player.PlayerData.citizenid, data.tweetId})
+	exports['dg-sql']:query(query, {Player.PlayerData.citizenid, data.tweetId})
 	TriggerClientEvent('dg-phone:client:twitter:addRetweet', -1, data.tweetId)
 	cb()
 end)
@@ -159,7 +159,7 @@ DGCore.Functions.CreateCallback('dg-phone:server:twitter:deleteTweet', function(
 		DELETE FROM phone_tweets
 		WHERE id = ?;
 	]]
-	exports.oxmysql:executeSync(query, {data.tweetId})
+	exports['dg-sql']:query(query, {data.tweetId})
 	TriggerClientEvent('dg-phone:client:twitter:deleteTweet', -1, data.tweetId)
 	cb()
 end)

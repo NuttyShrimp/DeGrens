@@ -1,9 +1,6 @@
 import { getCtxPlayerData } from './context';
 
-export const canEntryBeEnabled = (
-  entry: PeekOption,
-  entity: number
-): PeekOption | undefined => {
+export const canEntryBeEnabled = async (entry: PeekOption, entity: number): Promise<PeekOption | undefined> => {
   const PlayerData = getCtxPlayerData();
   if (entry.job) {
     if (typeof entry.job === 'string') {
@@ -11,7 +8,7 @@ export const canEntryBeEnabled = (
     } else if (Array.isArray(entry.job)) {
       if (!entry.job.includes(PlayerData.job.name)) return;
     } else if (typeof entry.job === 'object') {
-      if (!entry.job.hasOwnProperty(PlayerData.job.name)) return;
+      if (!entry.job?.[PlayerData.job.name]) return;
       if (entry.job[PlayerData.job.name] > PlayerData.job.grade.level) return;
     } else return;
   }
@@ -49,4 +46,4 @@ export const isEntryDisabled = (entry: PeekOption) => {
   for (const key in entry._metadata.state) {
     if (entry._metadata.state[key] === false) return true;
   }
-}
+};

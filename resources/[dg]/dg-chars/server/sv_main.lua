@@ -2,7 +2,7 @@
 local function loadHouseData()
 	local HouseGarages = {}
 	local Houses = {}
-	local result = exports.oxmysql:executeSync('SELECT * FROM houselocations', {})
+	local result = exports['dg-sql']:query('SELECT * FROM houselocations', {})
 	if result[1] ~= nil then
 		for k, v in pairs(result) do
 			local owned = false
@@ -60,7 +60,7 @@ end)
 
 DGCore.Functions.CreateCallback('dg-chars:server:getChars', function(src, cb)
 	local chars = {}
-	local result = exports.oxmysql:executeSync([[
+	local result = exports['dg-sql']:query([[
 		SELECT p.citizenid, p.cid, p.firstname, p.lastname, ps.model, ps.skin
 		FROM players p
 			INNER JOIN playerskins ps on p.citizenid = ps.citizenid AND ps.active = 1
@@ -80,7 +80,7 @@ end)
 DGCore.Functions.CreateCallback('dg-chars:server:loadPly', function(src, cb, cid)
 	if DGCore.Player.Login(src, cid) then
 		DGCore.ShowSuccess(GetCurrentResourceName(), ('%s (Citizen ID: %s) has successfully been loaded!'):format(GetPlayerName(src), cid))
-		DGCore.Commands.Refresh(src)
+    exports['dg-chat']:refreshCommands(src)
 		loadHouseData()
 		exports['dg-logs']:createGraylogEntry('join', { src, cid }, ("%s (%s | %d) loaded.."):format(GetPlayerName(src), cid, src))
 	end
@@ -92,7 +92,7 @@ DGCore.Functions.CreateCallback('dg-chars:server:createCharacter', function(src,
 	newData.charinfo = data
   newData.cid = data.cid
 	if DGCore.Player.Login(src, false, newData) then
-		DGCore.Commands.Refresh(src)
+    exports['dg-chat']:refreshCommands(src)
 		exports['dg-logs']:createGraylogEntry('chars:created', { src, data }, "Created a new character")
 		TriggerClientEvent('qb-clothes:client:CreateFirstCharacter', src)
 	end

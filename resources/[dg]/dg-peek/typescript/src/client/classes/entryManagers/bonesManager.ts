@@ -1,4 +1,5 @@
 import { BONES } from '../../cl_constant';
+
 import { BaseManager } from './baseManager';
 
 export class BonesManager extends BaseManager implements IEntryManager {
@@ -29,7 +30,10 @@ export class BonesManager extends BaseManager implements IEntryManager {
 
   removeEntry(id: string) {
     this.entries.forEach((entries, key) => {
-      this.entries.set(key, entries.filter(entry => entry.id !== id));
+      this.entries.set(
+        key,
+        entries.filter(entry => entry.id !== id)
+      );
     });
   }
 

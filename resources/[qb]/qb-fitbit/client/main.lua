@@ -54,20 +54,25 @@ Citizen.CreateThread(function()
 
         Citizen.Wait(5 * 60 * 1000)
         
+        --TODO: Move garbage to server when hunger and thirst is updated
         if isLoggedIn then
             DGCore.Functions.TriggerCallback('qb-fitbit:server:HasFitbit', function(hasItem)
                 if hasItem then
                     local PlayerData = DGCore.Functions.GetPlayerData()
                     if PlayerData.metadata["fitbit"].food ~= nil then
                         if PlayerData.metadata["hunger"] < PlayerData.metadata["fitbit"].food then
-                            TriggerEvent("chatMessage", "FITBIT ", "warning", "Your hunger is "..round(PlayerData.metadata["hunger"], 2).."%")
+                            TriggerEvent('chat:addMessage', {
+                              args: {'FITBIT', "Your hunger is "..round(PlayerData.metadata["hunger"], 2).."%"}
+                            })
                             PlaySound(-1, "Event_Start_Text", "GTAO_FM_Events_Soundset", 0, 0, 1)
                         end
                     end
         
                     if PlayerData.metadata["fitbit"].thirst ~= nil then
                         if PlayerData.metadata["thirst"] < PlayerData.metadata["fitbit"].thirst  then
-                            TriggerEvent("chatMessage", "FITBIT ", "warning", "Your thirst is "..round(PlayerData.metadata["thirst"], 2).."%")
+                            TriggerEvent('chat:addMessage', {
+                              args: {'FITBIT', "Your thirst is "..round(PlayerData.metadata["thirst"], 2).."%"}
+                            })
                             PlaySound(-1, "Event_Start_Text", "GTAO_FM_Events_Soundset", 0, 0, 1)
                         end
                     end

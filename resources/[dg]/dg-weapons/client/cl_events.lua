@@ -123,25 +123,28 @@ RegisterNetEvent("weapons:client:AddAmmo", function(ammoType, amount, itemData)
             if totalAmmo > 250 then totalAmmo = 250 end
 
             if currentAmmo < 250 then
-                DGCore.Functions.Progressbar("loading_bullets", "Kogels bijladen...", Config.ReloadTime, false, true, {
-                    disableMovement = false,
-                    disableCarMovement = false,
-                    disableMouse = false,
-                    disableCombat = true,
-                }, {}, {}, {}, function() -- Done
-                    if currentWeaponData and next(currentWeaponData) then
-                        AddAmmoToPed(ped, weapon, amount)
+                local wasCancelled, _ = exports['dg-misc']:Taskbar('Kogels bijladen...', Config.ReloadTime, {
+                    canCancel = true,
+                    cancelOnDeath = true,
+                    controlDisables = {
+                      movement = true,
+                      carMovement = true,
+                      combat = true,
+                    },
+                  })
+                if wasCancelled then
+                  DGCore.Functions.Notify("Geannuleerd...", "error")
+                end
+                if currentWeaponData and next(currentWeaponData) then
+                    AddAmmoToPed(ped, weapon, amount)
 
-                        TriggerServerEvent("weapons:server:SaveWeaponAmmo", currentWeaponData, tonumber(totalAmmo))
-                        TriggerServerEvent("DGCore:Server:RemoveItem", itemData.name, 1, itemData.slot)
-                        TriggerEvent("inventory:client:ItemBox", itemData.name, "remove")
-                        DGCore.Functions.Notify("Kogels bijgeladen.", "success")
-                    else
-                        DGCore.Functions.Notify("Je hebt geen wapen vast.", "error")
-                    end
-                end, function()
-                    DGCore.Functions.Notify("Geannuleerd...", "error")
-                end)
+                    TriggerServerEvent("weapons:server:SaveWeaponAmmo", currentWeaponData, tonumber(totalAmmo))
+                    TriggerServerEvent("DGCore:Server:RemoveItem", itemData.name, 1, itemData.slot)
+                    TriggerEvent("inventory:client:ItemBox", itemData.name, "remove")
+                    DGCore.Functions.Notify("Kogels bijgeladen.", "success")
+                else
+                    DGCore.Functions.Notify("Je hebt geen wapen vast.", "error")
+                end
             else
                 DGCore.Functions.Notify("Je wapen zit vol.", "error")
             end

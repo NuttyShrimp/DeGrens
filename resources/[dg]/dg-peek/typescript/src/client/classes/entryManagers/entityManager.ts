@@ -1,4 +1,3 @@
-import { canEntryBeEnabled } from '../../helpers/entries';
 import { BaseManager } from './baseManager';
 
 export class EntityManager extends BaseManager implements IEntryManager {

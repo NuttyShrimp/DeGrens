@@ -2,6 +2,7 @@ import { config } from '../../../config';
 import { getDefaultAccount, getDefaultAccountId } from '../../bank/helpers/accounts';
 import { transfer } from '../../bank/helpers/actions';
 import { debtLogger, scheduleDebt } from '../helpers/debts';
+import {SQL} from '@ts-shared/server';
 
 class DebtManager {
   private static _instance: DebtManager;
@@ -26,7 +27,7 @@ class DebtManager {
 						 UNIX_TIMESTAMP(date) AS date
 			FROM debts d
 		`;
-    this.debts = await global.exports.oxmysql.executeSync(query);
+    this.debts = await SQL.query(query);
   }
 
   public async addDebt(
@@ -52,7 +53,7 @@ class DebtManager {
 			VALUES (?, ?, ?, ?, ?, ?, FROM_UNIXTIME(?))
 			RETURNING id
 		`;
-    const result = await global.exports.oxmysql.executeSync(query, [
+    const result = await SQL.query(query, [
       debt.cid,
       debt.debt,
       debt.target_account,

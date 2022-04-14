@@ -12,7 +12,7 @@ end
 
 getPlayerApartment = function(src)
 	local Player = DGCore.Functions.GetPlayer(src);
-	local result = exports.oxmysql:executeSync('SELECT id FROM apartments WHERE citizenid = ?', {Player.PlayerData.citizenid})
+	local result = exports['dg-sql']:query('SELECT id FROM apartments WHERE citizenid = ?', {Player.PlayerData.citizenid})
 	if (result == nil or result[1] == nil or result[1].id == nil) then
 		createPlayerApartment(src)
 		return getPlayerApartment(src)
@@ -22,7 +22,7 @@ end
 
 createPlayerApartment = function(src)
 	local Player = DGCore.Functions.GetPlayer(src);
-	return exports.oxmysql:insertSync('INSERT INTO apartments (citizenid) VALUES (?) ', {Player.PlayerData.citizenid})
+	return exports['dg-sync']:insert('INSERT INTO apartments (citizenid) VALUES (?) ', {Player.PlayerData.citizenid})
 end
 
 setInsideMeta = function(src, aId)

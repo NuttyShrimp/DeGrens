@@ -110,21 +110,23 @@ exports("feedPlant", function(entity)
 	if activePlants[id].data.food >= 100 then 
 		DGCore.Functions.Notify("Deze plant is al gevoed.", "error")
 	else
-		DGCore.Functions.Progressbar("feed_weed_plant", "Voederen...", 7500, false, true, {
-			disableMovement = true,
-			disableCarMovement = true,
-			disableMouse = false,
-			disableCombat = true,
-		}, {
-			animDict = "timetable@gardener@filling_can",
-			anim = "gar_ig_5_filling_can",
-			flags = 16,
-		}, {}, {}, function() -- Done
-			ClearPedTasks(PlayerPedId())
-			TriggerServerEvent("dg-weed:server:FeedPlant", id)
-		end, function() -- Cancel
-			ClearPedTasks(PlayerPedId())
-		end)
+    local wasCancelled, _ = exports['dg-misc']:Taskbar('Voederen...', 7500, {
+      canCancel = true,
+      cancelOnDeath = true,
+      controlDisables = {
+        movement = true,
+        carMovement = true,
+        combat = true,
+      },
+      animation = {
+        animDict = "timetable@gardener@filling_can",
+        anim = "gar_ig_5_filling_can",
+        flags = 16,
+      }
+    })
+    ClearPedTasks(PlayerPedId())
+    if wasCancelled then return end
+    TriggerServerEvent("dg-weed:server:FeedPlant", id)
 	end
 end)
 
@@ -138,42 +140,46 @@ exports("cutPlant", function(entity)
 		return
 	end
 
-	DGCore.Functions.Progressbar("cut_weed_plant", "Knippen...", 7500, false, true, {
-		disableMovement = true,
-		disableCarMovement = true,
-		disableMouse = false,
-		disableCombat = true,
-	}, {
-		animDict = "anim@amb@clubhouse@tutorial@bkr_tut_ig3@",
-		anim = "machinic_loop_mechandplayer",
-		flags = 0,
-	}, {}, {}, function() -- Done
-		ClearPedTasks(PlayerPedId())
-		TriggerServerEvent("dg-weed:server:CutPlant", id)
-	end, function() -- Cancel
-		ClearPedTasks(PlayerPedId())
-	end)
+  local wasCancelled, _ = exports['dg-misc']:Taskbar('Knippen...', 7500, {
+    canCancel = true,
+    cancelOnDeath = true,
+    controlDisables = {
+      movement = true,
+      carMovement = true,
+      combat = true,
+    },
+    animation = {
+      animDict = "anim@amb@clubhouse@tutorial@bkr_tut_ig3@",
+      anim = "machinic_loop_mechandplayer",
+      flags = 0,
+    }
+  })
+  ClearPedTasks(PlayerPedId())
+  if wasCancelled then return end
+  TriggerServerEvent("dg-weed:server:CutPlant", id)
 end)
 
 exports("destroyPlant", function(entity)
 	lookAtPlant(entity)
 	local id = getPlantIdFromEntity(entity)
 
-	DGCore.Functions.Progressbar("destroy_weed_plant", "Kapot maken...", 7500, false, true, {
-		disableMovement = true,
-		disableCarMovement = true,
-		disableMouse = false,
-		disableCombat = true,
-	}, {
-		animDict = "anim@amb@clubhouse@tutorial@bkr_tut_ig3@",
-		anim = "machinic_loop_mechandplayer",
-		flags = 0,
-	}, {}, {}, function() -- Done
-		ClearPedTasks(PlayerPedId())
-		TriggerServerEvent("dg-weed:server:DestroyPlant", id)
-	end, function() -- Cancel
-		ClearPedTasks(PlayerPedId())
-	end)
+  local wasCancelled, _ = exports['dg-misc']:Taskbar('Kapot maken...', 7500, {
+    canCancel = true,
+    cancelOnDeath = true,
+    controlDisables = {
+      movement = true,
+      carMovement = true,
+      combat = true,
+    },
+    animation = {
+      animDict = "anim@amb@clubhouse@tutorial@bkr_tut_ig3@",
+      anim = "machinic_loop_mechandplayer",
+      flags = 0,
+    }
+  })
+  ClearPedTasks(PlayerPedId())
+  if wasCancelled then return end
+  TriggerServerEvent("dg-weed:server:DestroyPlant", id)
 end)
 
 lookAtPlant = function(entity)

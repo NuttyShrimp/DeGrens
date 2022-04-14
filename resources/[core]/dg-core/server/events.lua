@@ -11,33 +11,6 @@ AddEventHandler('playerDropped', function()
 	end
 end)
 
-AddEventHandler('chatMessage', function(source, n, message)
-	local src = source
-	if string.sub(message, 1, 1) == '/' then
-		local args = DGCore.Shared.SplitStr(message, ' ')
-		local command = string.gsub(args[1]:lower(), '/', '')
-		CancelEvent()
-		if DGCore.Commands.List[command] then
-			local Player = DGCore.Functions.GetPlayer(src)
-			if Player then
-				local isGod = DGCore.Functions.HasPermission(src, 'god')
-				local hasPerm = DGCore.Functions.HasPermission(src, DGCore.Commands.List[command].permission)
-				local isPrincipal = IsPlayerAceAllowed(src, 'command')
-				table.remove(args, 1)
-				if isGod or hasPerm or isPrincipal then
-					if (DGCore.Commands.List[command].argsrequired and #DGCore.Commands.List[command].arguments ~= 0 and args[#DGCore.Commands.List[command].arguments] == nil) then
-						TriggerClientEvent('DGCore:Notify', src, 'All arguments must be filled out!', 'error')
-					else
-						DGCore.Commands.List[command].callback(src, args)
-					end
-				else
-					TriggerClientEvent('DGCore:Notify', src, 'No Access To This Command', 'error')
-				end
-			end
-		end
-	end
-end)
-
 -- Player Connecting
 
 local function OnPlayerConnecting(name, setKickReason, deferrals)

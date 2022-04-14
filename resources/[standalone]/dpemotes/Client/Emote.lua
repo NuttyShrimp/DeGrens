@@ -213,11 +213,14 @@ function EmoteCancel()
 end
 
 function EmoteChatMessage(args)
-  if args == display then
-    TriggerEvent("chatMessage", "^5Help^0", {0,0,0}, string.format(""))
-  else
-    TriggerEvent("chatMessage", "^5Help^0", {0,0,0}, string.format(""..args..""))
-  end
+  if args == display then return end
+  TriggerEvent('chat:addMessage', {
+    color = { 255, 0, 0 },
+    multiline = true,
+    args = {
+      args
+    }
+  })
 end
 
 function DebugPrint(args)

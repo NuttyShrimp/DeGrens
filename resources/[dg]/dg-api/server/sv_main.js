@@ -44,10 +44,10 @@ const handleRoute = (req, res) => {
 
 const verifyToken = async (req) => {
 	if (!req.body || !req.body.token) return false;
-	const result = await global.exports.oxmysql.scalarSync('SELECT token, UNIX_TIMESTAMP(timestamp) as timestamp FROM api_tokens WHERE token=?', [req.body.token])
+	const result = await global.exports['dg-sql'].scalar('SELECT token, UNIX_TIMESTAMP(timestamp) as timestamp FROM api_tokens WHERE token=?', [req.body.token])
 	if (!result) return false;
 	if (Date.now() - result.timestamp > 3600 * 6) return false; // Not accepting any tokens that are older than 6 hours
-	global.exports.oxmysql.execute('DELETE FROM api_tokens WHERE token=?', [req.body.token]); // Delete the token :)
+  global.exports['dg-sql'].query('DELETE FROM api_tokens WHERE token=?', [req.body.token]); // Delete the token :)
 	return true;
 }
 

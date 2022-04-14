@@ -99,7 +99,7 @@ DGCore.Functions.CreateCallback('qb-bossmenu:server:GetEmployees', function(sour
     if not Accounts[jobname] then
         Accounts[jobname] = 0
     end
-    local players = exports.oxmysql:executeSync("SELECT * FROM `players` WHERE `job` LIKE '%".. jobname .."%'")
+    local players = exports['dg-sql']:query("SELECT * FROM `players` WHERE `job` LIKE '%".. jobname .."%'")
     if players[1] ~= nil then
         for key, value in pairs(players) do
             local isOnline = DGCore.Functions.GetPlayerByCitizenId(value.citizenid)
@@ -138,13 +138,13 @@ AddEventHandler('qb-bossmenu:server:updateGrade', function(target, grade)
             TriggerClientEvent('DGCore:Notify', src, "Grade Does Not Exist", "error")
         end
     else
-        local player = exports.oxmysql:executeSync('SELECT * FROM players WHERE citizenid = ? LIMIT 1', { target })
+        local player = exports['dg-sql']:query('SELECT * FROM players WHERE citizenid = ? LIMIT 1', { target })
         if player[1] ~= nil then
             Employee = player[1]
             local job = DGCore.Shared.Jobs[Player.PlayerData.job.name]
             local employeejob = json.decode(Employee.job)
             employeejob.grade = job.grades[data.grade]
-            exports.oxmysql:execute('UPDATE players SET job = ? WHERE citizenid = ?', { json.encode(employeejob), target })
+            exports['dg-sql']:query('UPDATE players SET job = ? WHERE citizenid = ?', { json.encode(employeejob), target })
             TriggerClientEvent('DGCore:Notify', src, "Grade Changed Successfully!", "success")
         else
             TriggerClientEvent('DGCore:Notify', src, "Player Does Not Exist", "error")
@@ -167,7 +167,7 @@ AddEventHandler('qb-bossmenu:server:fireEmployee', function(target)
             TriggerClientEvent('DGCore:Notify', src, "Contact Server Developer", "error")
         end
     else
-        local player = exports.oxmysql:executeSync('SELECT * FROM players WHERE citizenid = ? LIMIT 1', { target })
+        local player = exports['dg-sql']:query('SELECT * FROM players WHERE citizenid = ? LIMIT 1', { target })
         if player[1] ~= nil then
             Employee = player[1]
             local job = {}
@@ -179,7 +179,7 @@ AddEventHandler('qb-bossmenu:server:fireEmployee', function(target)
             job.grade = {}
             job.grade.name = nil
             job.grade.level = 0
-            exports.oxmysql:execute('UPDATE players SET job = ? WHERE citizenid = ?', { json.encode(job), target })
+            exports['dg-sql']:query('UPDATE players SET job = ? WHERE citizenid = ?', { json.encode(job), target })
             TriggerClientEvent('DGCore:Notify', src, "Fired successfully!", "success")
             TriggerEvent('qb-log:server:CreateLog', 'bossmenu', 'Fire', "Successfully fired " .. data.source .. ' (' .. Player.PlayerData.job.name .. ')', src)
         else

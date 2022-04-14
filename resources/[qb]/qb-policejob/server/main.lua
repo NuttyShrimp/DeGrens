@@ -86,7 +86,7 @@ local function CreateObjectId()
 end
 
 local function IsVehicleOwned(plate)
-    local result = exports.oxmysql:scalarSync('SELECT plate FROM player_vehicles WHERE plate = ?', {plate})
+    local result = exports['dg-sync']:scalar('SELECT plate FROM player_vehicles WHERE plate = ?', {plate})
     return result
 end
 
@@ -551,7 +551,7 @@ end)
 
 DGCore.Functions.CreateCallback('police:GetImpoundedVehicles', function(source, cb)
     local vehicles = {}
-    exports.oxmysql:execute('SELECT * FROM player_vehicles WHERE state = ?', {2}, function(result)
+    exports['dg-sql']:query('SELECT * FROM player_vehicles WHERE state = ?', {2}, function(result)
         if result[1] then
             vehicles = result
         end
@@ -610,7 +610,7 @@ end)
 
 RegisterNetEvent('police:server:TakeOutImpound', function(plate)
     local src = source
-    exports.oxmysql:execute('UPDATE player_vehicles SET state = ? WHERE plate  = ?', {0, plate})
+    exports['dg-sql']:query('UPDATE player_vehicles SET state = ? WHERE plate  = ?', {0, plate})
     TriggerClientEvent('DGCore:Notify', src, "Vehicle unimpounded!", 'success')
 end)
 
@@ -809,12 +809,12 @@ RegisterNetEvent('police:server:Impound', function(plate, fullImpound, price, bo
     local price = price and price or 0
     if IsVehicleOwned(plate) then
         if not fullImpound then
-            exports.oxmysql:execute(
+            exports['dg-sql']:query(
                 'UPDATE player_vehicles SET state = ?, depotprice = ?, body = ?, engine = ?, fuel = ? WHERE plate = ?',
                 {0, price, body, engine, fuel, plate})
             TriggerClientEvent('DGCore:Notify', src, "Vehicle taken into depot for $" .. price .. "!")
         else
-            exports.oxmysql:execute(
+            exports['dg-sql']:query(
                 'UPDATE player_vehicles SET state = ?, body = ?, engine = ?, fuel = ? WHERE plate = ?',
                 {2, body, engine, fuel, plate})
             TriggerClientEvent('DGCore:Notify', src, "Vehicle seized")

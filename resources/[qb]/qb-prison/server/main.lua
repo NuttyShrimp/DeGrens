@@ -23,6 +23,11 @@ AddEventHandler('prison:server:SaveJailItems', function(jailTime)
         Citizen.Wait(2000)
         Player.Functions.ClearInventory()
     end
+    exports['dg-chat']:addMessage(src, {
+      prefix = 'SYSTEM: ',
+      message = 'Je eigendommen zijn zijn in beslag genomen, deze kan je terugvinden aan de balie.',
+      type = 'warning'
+    })
 end)
 
 RegisterServerEvent('prison:server:GiveJailItems')
@@ -33,8 +38,14 @@ AddEventHandler('prison:server:GiveJailItems', function()
     for k, v in pairs(Player.PlayerData.metadata["jailitems"]) do
         Player.Functions.AddItem(v.name, v.amount, false, v.info)
     end
+    exports['dg-chat']:addMessage(src, {
+      prefix = 'SYSTEM: ',
+      message = 'Je hebt je inbeslaggenome eigendommen zijn teruggegeven.',
+      type = 'warning'
+    })
     Citizen.Wait(1000)
     Player.Functions.SetMetaData("jailitems", {})
+    
 end)
 
 RegisterServerEvent('prison:server:SecurityLockdown')
@@ -46,6 +57,13 @@ AddEventHandler('prison:server:SecurityLockdown', function()
         if Player ~= nil then 
             if (Player.PlayerData.job.name == "police" and Player.PlayerData.job.onduty) then
                 TriggerClientEvent("prison:client:PrisonBreakAlert", v)
+            end
+            if (Player.PlayerData.metadata.injail) then
+                exports['dg-chat']:addMessage(v, {
+                  prefix = 'SYSTEM: ',
+                  message = 'De gevangenis is in lockdown, gelieve op de binnekoer te blijven.',
+                  type = 'warning'
+                })
             end
         end
 	end

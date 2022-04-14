@@ -2,6 +2,7 @@ import { config } from '../../config';
 import { getDefaultAccountId } from '../bank/helpers/accounts';
 import { paycheck } from '../bank/helpers/actions';
 import { cashLogger } from '../cash/util';
+import {SQL} from '@ts-shared/server';
 
 import { paycheckLogger } from './util';
 
@@ -16,7 +17,7 @@ const saveToDb = async (cid: number) => {
 		VALUES (?, ?)
 		ON DUPLICATE KEY UPDATE amount = ?
 	`;
-  await global.exports.oxmysql.executeSync(query, [cid, amount, amount]);
+  await SQL.query(query, [cid, amount, amount]);
 };
 
 export const seedPlyInCache = async (src: number) => {
@@ -27,7 +28,7 @@ export const seedPlyInCache = async (src: number) => {
 		FROM player_paycheck
 		WHERE cid = ?
 	`;
-  const result = await global.exports.oxmysql.executeSync(query, [cid]);
+  const result = await SQL.query(query, [cid]);
   if (result == undefined || result.length == 0) {
     paycheckLogger.info(`No paycheck data found for ${cid}`);
     return;

@@ -6,7 +6,7 @@ DGCore.Functions.CreateCallback('dg-phone:server:getContacts', function(src, cb)
 			message = 'Player not found'
 		})
 	end
-	local result = exports.oxmysql:executeSync('SELECT id, label, phone FROM phone_contacts WHERE cid = ?', { Player.PlayerData.citizenid })
+	local result = exports['dg-sql']:query('SELECT id, label, phone FROM phone_contacts WHERE cid = ?', { Player.PlayerData.citizenid })
 	cb(result ~= nil and result or {})
 end)
 
@@ -19,7 +19,7 @@ DGCore.Functions.CreateCallback('dg-phone:server:updateContact', function(src, c
 			message = 'Player not found'
 		})
 	end
-	exports.oxmysql:executeSync('UPDATE phone_contacts SET label = ?, phone = ? WHERE id = ? AND cid = ?', { contact.label, contact.phone, contact.id, Player.PlayerData.citizenid })
+	exports['dg-sql']:query('UPDATE phone_contacts SET label = ?, phone = ? WHERE id = ? AND cid = ?', { contact.label, contact.phone, contact.id, Player.PlayerData.citizenid })
 	cb()
 end)
 
@@ -31,7 +31,7 @@ DGCore.Functions.CreateCallback('dg-phone:server:addContact', function(src, cb, 
 			message = 'Player not found'
 		})
 	end
-	exports.oxmysql:executeSync('INSERT INTO phone_contacts (cid, label, phone) VALUES (?, ?, ?)', { Player.PlayerData.citizenid, contact.label, contact.phone })
+	exports['dg-sql']:query('INSERT INTO phone_contacts (cid, label, phone) VALUES (?, ?, ?)', { Player.PlayerData.citizenid, contact.label, contact.phone })
 	cb()
 end)
 
@@ -43,7 +43,7 @@ DGCore.Functions.CreateCallback('dg-phone:server:deleteContact', function(src, c
 			message = 'Player not found'
 		})
 	end
-	exports.oxmysql:executeSync('DELETE FROM phone_contacts WHERE id = ? AND cid = ?', { data.id, Player.PlayerData.citizenid })
+	exports['dg-sql']:query('DELETE FROM phone_contacts WHERE id = ? AND cid = ?', { data.id, Player.PlayerData.citizenid })
 	cb()
 end)
 

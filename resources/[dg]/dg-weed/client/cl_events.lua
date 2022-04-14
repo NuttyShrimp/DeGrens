@@ -34,22 +34,26 @@ RegisterNetEvent("dg-weed:client:Plant", function(gender)
 
     if closestPlantDistance > 2 then
         if isAcceptedLocation(plantCoords) then
-            DGCore.Functions.Progressbar("plant_weed_plant", "Planten...", 1000, false, true, {
-                disableMovement = true,
-                disableCarMovement = true,
-                disableMouse = false,
-                disableCombat = true,
-            }, {
+            local wasCancelled, _ = exports['dg-misc']:Taskbar('Planten...', 1000, {
+              canCancel = true,
+              cancelOnDeath = true,
+              controlDisables = {
+                movement = true,
+                carMovement = true,
+                combat = true,
+              },
+              animation = {
                 animDict = "amb@world_human_gardener_plant@male@base",
                 anim = "base",
                 flags = 16,
-            }, {}, {}, function() -- Done
-                ClearPedTasks(ped) 
-                TriggerServerEvent("dg-weed:server:PlacePlant", plantCoords, gender)
-            end, function() -- Cancel
-                ClearPedTasks(ped)
-                DGCore.Functions.Notify("Canceled...", "error")
-            end)
+              }
+            })
+            ClearPedTasks(ped) 
+            if wasCancelled then
+              DGCore.Functions.Notify("Canceled...", "error")
+              return
+            end
+            TriggerServerEvent("dg-weed:server:PlacePlant", plantCoords, gender)
         else
             DGCore.Functions.Notify("Geen goede ondergrond", "error")
         end

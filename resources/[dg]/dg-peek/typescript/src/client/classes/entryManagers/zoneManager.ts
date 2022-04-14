@@ -1,4 +1,5 @@
 import { getActiveZones } from '../../helpers/actives';
+
 import { BaseManager } from './baseManager';
 
 export class ZoneManager extends BaseManager implements IEntryManager {
@@ -26,7 +27,10 @@ export class ZoneManager extends BaseManager implements IEntryManager {
 
   removeEntry(id: string) {
     this.entries.forEach((entries, key) => {
-      this.entries.set(key, entries.filter(entry => entry.id !== id));
+      this.entries.set(
+        key,
+        entries.filter(entry => entry.id !== id)
+      );
     });
   }
 

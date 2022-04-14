@@ -15,7 +15,7 @@ end
 function SaveItems(invType, id, items)
     if Inventories[invType][id].label ~= invType.."-None" then
         if items then
-            exports.oxmysql:executeSync(
+            exports['dg-sql']:query(
                 [[
                 DELETE FROM inventoryitems
                 WHERE inventorytype = :inventorytype AND inventoryid = :inventoryid
@@ -25,7 +25,7 @@ function SaveItems(invType, id, items)
             })  
 
             for _, item in pairs(items) do
-                exports.oxmysql:execute(
+                exports['dg-sql']:query(
                     [[
                     INSERT INTO inventoryitems (inventorytype, inventoryid, slot, name, info, amount, quality, createtime) 
                     VALUES (:inventorytype, :inventoryid, :slot, :name, :info, :amount, :quality, :createtime) 
@@ -109,7 +109,7 @@ function SetSlotItem(invType, id, slot, itemInfo, amount, info, quality, createt
 end
 
 function GetFrom(invType, id)
-	local items = exports.oxmysql:executeSync(
+	local items = exports['dg-sql']:query(
         [[
         SELECT slot, name, info, amount, quality, createtime
         FROM inventoryitems 
@@ -228,7 +228,7 @@ function CreateNewDrop(source, fromSlot, toSlot, itemAmount)
 end
 
 function IsVehicleOwned(plate)
-    local result = exports.oxmysql:scalarSync("SELECT 1 from player_vehicles WHERE plate = ?", {plate})
+    local result = exports['dg-sync']:scalar("SELECT 1 from player_vehicles WHERE plate = ?", {plate})
     if result then 
         return true 
     else 

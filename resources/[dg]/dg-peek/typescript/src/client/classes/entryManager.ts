@@ -1,13 +1,14 @@
 import { ENTRY_TYPES } from '../cl_constant';
-import { ModelManager } from './entryManagers/modelManager';
+import { getCurrentEntity } from '../helpers/actives';
+import { getEntityCtx } from '../helpers/context';
+import { isEntryDisabled } from '../helpers/entries';
+
 import { BonesManager } from './entryManagers/bonesManager';
 import { EntityManager } from './entryManagers/entityManager';
 import { FlagManager } from './entryManagers/flagManager';
 import { GlobalManager } from './entryManagers/globalManager';
+import { ModelManager } from './entryManagers/modelManager';
 import { ZoneManager } from './entryManagers/zoneManager';
-import { getEntityCtx } from '../helpers/context';
-import { getCurrentEntity } from '../helpers/actives';
-import { isEntryDisabled } from '../helpers/entries';
 
 class EntryManager {
   private static instance: EntryManager;
@@ -69,7 +70,7 @@ class EntryManager {
     return ids;
   }
 
-  removeEntry(entryType: PeekEntryType, id: string | string[], blockRefresh: boolean = false) {
+  removeEntry(entryType: PeekEntryType, id: string | string[], blockRefresh = false) {
     if (Array.isArray(id)) {
       id.forEach(value => {
         this.removeEntry(entryType, value, true);
@@ -92,7 +93,7 @@ class EntryManager {
     }, undefined) as PeekOption;
   }
 
-  loadActiveEntries(includeZones: boolean = true) {
+  loadActiveEntries(includeZones = true) {
     const { entity, type } = getCurrentEntity();
     if (!entity) return;
     const entityCtx = getEntityCtx(entity, type);
@@ -103,7 +104,7 @@ class EntryManager {
     this.refreshNUIList();
   }
 
-  clearActiveEntries(includeZones: boolean = true) {
+  clearActiveEntries(includeZones = true) {
     const managers = includeZones ? this.managers : this.getManagersWithoutZone();
     managers.forEach(manager => {
       manager.clearActiveEntries();

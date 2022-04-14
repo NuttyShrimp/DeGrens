@@ -99,7 +99,6 @@ end)
 RegisterNetEvent('prison:client:Enter')
 AddEventHandler('prison:client:Enter', function(time)
 	DGCore.Functions.Notify("You're in jail for "..time.." months..", "error")
-	TriggerEvent("chatMessage", "SYSTEM", "warning", "Your property has been seized, you'll get everything back when your time is up..")
 	DoScreenFadeOut(500)
 	while not IsScreenFadedOut() do
 		Citizen.Wait(10)
@@ -134,7 +133,6 @@ AddEventHandler('prison:client:Leave', function()
 		jailTime = 0
 		TriggerServerEvent("prison:server:SetJailStatus", 0)
 		TriggerServerEvent("prison:server:GiveJailItems")
-		TriggerEvent("chatMessage", "SYSTEM", "warning", "you've received your property back..")
 		inJail = false
 		RemoveBlip(currentBlip)
 		RemoveBlip(CellsBlip)
@@ -162,7 +160,6 @@ AddEventHandler('prison:client:UnjailPerson', function()
 	if jailTime > 0 then
 		TriggerServerEvent("prison:server:SetJailStatus", 0)
 		TriggerServerEvent("prison:server:GiveJailItems")
-		TriggerEvent("chatMessage", "SYSTEM", "warning", "You got your property back..")
 		inJail = false
 		RemoveBlip(currentBlip)
 		RemoveBlip(CellsBlip)

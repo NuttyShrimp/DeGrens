@@ -25,7 +25,7 @@ fetchMessages = function(phone, offset, target)
 			offset
 		}
 	end
-	local result = exports.oxmysql:executeSync(query, params)
+	local result = exports['dg-sql']:query(query, params)
 	-- reverse the order
 	local messages = {}
 	for i = 1, #result do
@@ -45,7 +45,7 @@ addMessage = function(phone, target, msg, date)
 		msg,
 		date
 	}
-	return exports.oxmysql:insertSync(query, params)
+	return exports['dg-sync']:insert(query, params)
 end
 
 setRead = function(phone, target)
@@ -60,7 +60,7 @@ setRead = function(phone, target)
 		target,
 		phone
 	}
-	return exports.oxmysql:executeSync(query, params)
+	return exports['dg-sql']:query(query, params)
 end
 
 DGCore.Functions.CreateCallback('dg-phone:server:getMessages', function(src, cb, data)

@@ -4,7 +4,7 @@ local LastRaces = {}
 local NotFinished = {}
 
 Citizen.CreateThread(function()
-    local races = exports.oxmysql:executeSync('SELECT * FROM lapraces', {})
+    local races = exports['dg-sql']:query('SELECT * FROM lapraces', {})
     if races[1] ~= nil then
         for k, v in pairs(races) do
             local Records = {}
@@ -93,7 +93,7 @@ AddEventHandler('qb-lapraces:server:FinishPlayer', function(RaceData, TotalTime,
                     [2] = Player.PlayerData.charinfo.lastname
                 }
             }
-            exports.oxmysql:execute('UPDATE lapraces SET records = ? WHERE raceid = ?',
+            exports['dg-sql']:query('UPDATE lapraces SET records = ? WHERE raceid = ?',
                 {json.encode(Races[RaceData.RaceId].Records), RaceData.RaceId})
             TriggerClientEvent('qb-phone:client:RaceNotify', src, 'You have won the WR from ' .. RaceData.RaceName ..
                 ' disconnected with a time of: ' .. SecondsToClock(BLap) .. '!')
@@ -106,7 +106,7 @@ AddEventHandler('qb-lapraces:server:FinishPlayer', function(RaceData, TotalTime,
                 [2] = Player.PlayerData.charinfo.lastname
             }
         }
-        exports.oxmysql:execute('UPDATE lapraces SET records = ? WHERE raceid = ?',
+        exports['dg-sql']:query('UPDATE lapraces SET records = ? WHERE raceid = ?',
             {json.encode(Races[RaceData.RaceId].Records), RaceData.RaceId})
         TriggerClientEvent('qb-phone:client:RaceNotify', src, 'You have won the WR from ' .. RaceData.RaceName ..
             ' put down with a time of: ' .. SecondsToClock(BLap) .. '!')
@@ -212,7 +212,7 @@ function HasOpenedRace(CitizenId)
 end
 
 DGCore.Functions.CreateCallback('qb-lapraces:server:GetTrackData', function(source, cb, RaceId)
-    local result = exports.oxmysql:executeSync('SELECT * FROM players WHERE citizenid = ?', {Races[RaceId].Creator})
+    local result = exports['dg-sql']:query('SELECT * FROM players WHERE citizenid = ?', {Races[RaceId].Creator})
     if result[1] ~= nil then
         result[1].charinfo = json.decode(result[1].charinfo)
         cb(Races[RaceId], result[1])
@@ -494,7 +494,7 @@ AddEventHandler('qb-lapraces:server:SaveRace', function(RaceData)
         Racers = {},
         LastLeaderboard = {}
     }
-    exports.oxmysql:insert('INSERT INTO lapraces (name, checkpoints, creator, distance, raceid) VALUES (?, ?, ?, ?, ?)',
+    exports['dg-sync']:insert('INSERT INTO lapraces (name, checkpoints, creator, distance, raceid) VALUES (?, ?, ?, ?, ?)',
         {RaceData.RaceName, json.encode(Checkpoints), Player.PlayerData.citizenid, RaceData.RaceDistance,
          GenerateRaceId()})
 end)

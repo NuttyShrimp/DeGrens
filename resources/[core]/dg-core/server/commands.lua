@@ -2,46 +2,39 @@ DGCore.Commands = {}
 DGCore.Commands.List = {}
 
 -- Register & Refresh Commands
+local canImport = false
+local awaitingCmds = {}
+
+RegisterNetEvent("chat:startedChat", function(channel)
+  canImport = true
+  for _,cmd in pairs(awaitingCmds) do
+    DGCore.Commands.Add(cmd.name, cmd.help, cmd.arguments, cmd.argsrequired, cmd.callback, cmd.permission)
+  end
+end)
 
 function DGCore.Commands.Add(name, help, arguments, argsrequired, callback, permission)
+	-- TODO: remove this deprecated function
 	if type(permission) == 'string' then
 		permission = permission:lower()
 	else
 		permission = 'user'
 	end
-	DGCore.Commands.List[name:lower()] = {
-		name = name:lower(),
-		permission = permission,
-		help = help,
-		arguments = arguments,
-		argsrequired = argsrequired,
-		callback = callback
-	}
-end
-
-function DGCore.Commands.Refresh(source)
-	local src = source
-	local Player = DGCore.Functions.GetPlayer(src)
-	local suggestions = {}
-	if Player then
-		for command, info in pairs(DGCore.Commands.List) do
-			local isGod = DGCore.Functions.HasPermission(src, 'god')
-			local hasPerm = DGCore.Functions.HasPermission(src, DGCore.Commands.List[command].permission)
-			local isPrincipal = IsPlayerAceAllowed(src, 'command')
-			if isGod or hasPerm or isPrincipal then
-				suggestions[#suggestions + 1] = {
-					name = '/' .. command,
-					help = info.help,
-					params = info.arguments
-				}
-			end
-		end
-		TriggerClientEvent('chat:addSuggestions', tonumber(source), suggestions)
+	for k,v in pairs(arguments) do
+	  v.description = v.help
+	  v.help = nil
+	  v.required = argsrequired
 	end
+	if canImport then
+	  print(("[DGCore] DGCore.Commands.Add is deprecated | name: %s"):format(name))
+    exports['dg-chat']:registerCommand(name, help, arguments, permission, function(src, cmd, args)
+      callback(src, args)
+    end)
+   else
+      awaitingCmds[#awaitingCmds+1] = {name = name, help = help, arguments = arguments, argsrequired = argsrequired, callback = callback, permission = permission}
+   end
 end
 
 -- Teleport
-
 DGCore.Commands.Add('tp', 'TP To Player or Coords (Admin Only)', { { name = 'id/x', help = 'ID of player or X position' }, { name = 'y', help = 'Y position' }, { name = 'z', help = 'Z position' } }, false, function(source, args)
 	local src = source
 	if args[1] and not args[2] and not args[3] then
@@ -156,52 +149,3 @@ DGCore.Commands.Add('clearinv', 'Clear Players Inventory (Admin Only)', { { name
 		TriggerClientEvent('DGCore:Notify', src, 'Player Not Online', 'error')
 	end
 end, 'admin')
-
--- Out of Character Chat
-
-DGCore.Commands.Add('ooc', 'OOC Chat Message', {}, false, function(source, args)
-	local src = source
-	local message = table.concat(args, ' ')
-	local Players = DGCore.Functions.GetPlayers()
-	local Player = DGCore.Functions.GetPlayer(src)
-	local charName = Player.PlayerData.charinfo.firstname .. ' ' .. Player.PlayerData.charinfo.lastname
-	for k, v in pairs(Players) do
-		if v == src or #(GetEntityCoords(GetPlayerPed(src)) - GetEntityCoords(GetPlayerPed(v))) < 20.0 then
-			TriggerClientEvent('chat:addMessage', v, {
-				author = ('OOC %s(%d)'):format(charName, src),
-				message = message,
-				color = 'normal'
-			})
-		elseif DGCore.Functions.HasPermission(v, 'admin') then
-			if DGCore.Functions.IsOptin(v) then
-				TriggerClientEvent('chat:addMessage', v, {
-					author = ('OOC %s(%d)'):format(charName, src),
-					message = message,
-					multiline = true
-				})
-				TriggerEvent('qb-log:server:CreateLog', 'ooc', 'OOC', 'white', '**' .. GetPlayerName(src) .. '** (CitizenID: ' .. Player.PlayerData.citizenid .. ' | ID: ' .. src .. ') **Message:** ' .. message, false)
-			end
-		end
-	end
-end, 'user')
-
-DGCore.Commands.Add('test', 'Testing Command', {}, false, function(source, args)
-	local src = source
-	local PLayer = DGCore.Functions.GetPlayer(src)
-
-	print(PLayer.PlayerData.charinfo.firstname)
-	print(PLayer.PlayerData.charinfo.lastname)
-	print(PLayer.PlayerData.charinfo.gender)
-	print(PLayer.PlayerData.charinfo.nationality)
-
-
-	--[[ for index, data in ipairs(result) do
-			print(index)
-
-			for key, value in pairs(data) do
-					print('\t', key, value)
-			end
-	end ]]
-
-
-end, 'god')

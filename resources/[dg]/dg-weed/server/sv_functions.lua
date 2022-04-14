@@ -1,5 +1,5 @@
 fetchPlants = function()
-    local result = exports.oxmysql:executeSync("SELECT * FROM weedplants")
+    local result = exports['dg-sql']:query("SELECT * FROM weedplants")
     if not result or not next(result) then return end 
 
     for k, v in pairs(result) do
@@ -29,7 +29,7 @@ end
 
 savePlants = function()
     for k, v in pairs(activePlants) do
-        exports.oxmysql:execute(
+        exports['dg-sql']:query(
             [[
                 UPDATE weedplants
                 SET stage = :stage, food = :food, growtime = :growtime, cuttime = :cuttime
@@ -46,7 +46,7 @@ end
 
 removePlant = function(index)
     activePlants[index] = nil
-    exports.oxmysql:execute(
+    exports['dg-sql']:query(
         [[
             DELETE FROM weedplants
             WHERE id = :id

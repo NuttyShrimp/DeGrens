@@ -15,5 +15,6 @@ declare global {
     Util: typeof Classes.Util;
     Events: typeof Classes.Events;
     RPC: typeof Classes.RPC;
+    Taskbar: typeof Classes.Taskbar;
   };
 }

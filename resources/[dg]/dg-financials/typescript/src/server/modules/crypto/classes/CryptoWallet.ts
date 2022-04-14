@@ -1,4 +1,5 @@
 import winston from 'winston';
+import {SQL} from '@ts-shared/server';
 
 import { config } from '../../../config';
 import { getDefaultAccount } from '../../bank/helpers/accounts';
@@ -49,7 +50,7 @@ export class CryptoWallet {
 			ON DUPLICATE KEY UPDATE amount = ?
 		`;
     const params = [this.cid, this.cname, this.amount, this.amount];
-    await global.exports.oxmysql.executeSync(query, params);
+    await SQL.query(query, params);
   }
 
   public async buy(amount: number): Promise<boolean> {

@@ -1,4 +1,5 @@
 import { config } from '../../config';
+import {SQL} from '@ts-shared/server';
 
 import { taxLogger } from './util';
 
@@ -9,7 +10,7 @@ export const seedTaxes = async () => {
 		SELECT tax_id, tax_name, tax_rate
 		FROM taxes
 	`;
-  const result = await global.exports.oxmysql.executeSync(query);
+  const result = await SQL.query(query);
   if (result) {
     result.forEach((row: any) => {
       taxLogger.debug(`Loading tax ${row.tax_name} with rate ${row.tax_rate}`);
@@ -30,7 +31,7 @@ export const seedTaxes = async () => {
 			INSERT INTO taxes (tax_id, tax_name, tax_rate)
 			VALUES (?, ?, ?)
 		`;
-    await global.exports.oxmysql.executeSync(query, [taxId, tax.category, tax.rate]);
+    await SQL.query(query, [taxId, tax.category, tax.rate]);
     taxLogger.silly(`Seeded tax ${tax.category}(${taxId}) with rate ${tax.rate}`);
     taxes.set(taxId, { category: tax.category, rate: tax.rate / 100 });
   }

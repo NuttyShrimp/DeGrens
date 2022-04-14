@@ -81,24 +81,23 @@ DGCore.Commands.Add("giveitem", "Give An Item (Admin Only)", { { name = "id", he
 	end
 end, "admin")
 
+-- TODO replace with pictures
 DGCore.Functions.CreateUseableItem("driver_license", function(source, item)
 	for _, v in pairs(DGCore.Functions.GetPlayers()) do
 		local PlayerPed = GetPlayerPed(source)
 		local TargetPed = GetPlayerPed(v)
 		local dist = #(GetEntityCoords(PlayerPed) - GetEntityCoords(TargetPed))
 		if dist < 3.0 then
-			TriggerClientEvent("chat:addMessage", v, {
-				template = "<strong>{0}:</strong><br><br> <strong>First Name:</strong> {1} <br><strong>Last Name:</strong> {2} <br><strong>Birth Date:</strong> {3} <br><strong>Licenses:</strong> {4}",
-				color = "advert",
-				args = {
-					"Drivers License",
+		  exports['dg-chat']:addMessage(v, {
+		    prefix = 'Drivers License: ',
+		    message = ('<br><br> <strong>First Name:</strong> %s <br><strong>Last Name:</strong> %s <br><strong>Birth Date:</strong> %s <br><strong>Licenses:</strong> %s'):format(
 					item.info.firstname,
 					item.info.lastname,
 					item.info.birthdate,
 					item.info.type
-				}
-			}
-			)
+        ),
+        type = 'warning'
+		  })
 		end
 	end
 end)
@@ -113,20 +112,18 @@ DGCore.Functions.CreateUseableItem("id_card", function(source, item)
 			if item.info.gender == 1 then
 				gender = "Woman"
 			end
-			TriggerClientEvent("chat:addMessage", v, {
-				template = "<strong>{0}:</strong><br><br> <strong>Civ ID:</strong> {1} <br><strong>First Name:</strong> {2} <br><strong>Last Name:</strong> {3} <br><strong>Birthdate:</strong> {4} <br><strong>Gender:</strong> {5} <br><strong>Nationality:</strong> {6}",
-				color = "advert",
-				args = {
-					"ID Card",
+			exports['dg-chat']:addMessage(v, {
+			  prefix = "ID Card: ",
+				template = ("<br><br> <strong>Civ ID:</strong> %s <br><strong>First Name:</strong> %s <br><strong>Last Name:</strong> %s <br><strong>Birthdate:</strong> %s <br><strong>Gender:</strong> %s <br><strong>Nationality:</strong> %s"):format(
 					item.info.citizenid,
 					item.info.firstname,
 					item.info.lastname,
 					item.info.birthdate,
 					gender,
 					item.info.nationality
-				}
-			}
-			)
+				),
+				type = "warning",
+			})
 		end
 	end
 end)
@@ -164,7 +161,7 @@ end)
 
 CreateThread(function()
 	-- if you want to save items in DB
-	--local result = exports.oxmysql:executeSync("SELECT * FROM items")
+	--local result = exports['dg-sql']:query("SELECT * FROM items")
 
 	-- if you want to save items in json file
 	local result = json.decode(LoadResourceFile(GetCurrentResourceName(), "items.json"))

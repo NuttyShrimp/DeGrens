@@ -64,7 +64,6 @@ export const Bar: React.FC = () => {
       console.log(`no cmd found for ${value}`);
       return;
     }
-    console.debug(`cmdInfo: ${cmdInfo.name}`);
     const args = value.replace(cmdInfo.name, '').trim();
     if (!cmdInfo.cmd.data) {
       cmdInfo.cmd.data = {};
@@ -100,6 +99,7 @@ export const Bar: React.FC = () => {
         name='cmd'
         label='Command'
         value={value}
+        freeSolo
         onChange={onChange}
         onKeyDown={keyPress}
         options={autocompleteOpt}

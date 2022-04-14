@@ -57,7 +57,11 @@ AddEventHandler('qb-tow:server:11101110', function(drops)
 
     Player.Functions.AddJobReputation(1)
 		-- TODO: Add exports to add to paycheck
-    TriggerClientEvent('chatMessage', source, "JOB", "warning", "You Received Your Salary From: $"..payment..", Gross: $"..price.." (From What $"..bonus.." Bonus) In $"..taxAmount.." Tax ("..PaymentTax.."%)")
+		exports['dg-chat']:addMessage(source, {
+		  prefix = 'JOB: ',
+		  message = "You Received Your Salary From: $"..payment..", Gross: $"..price.." (From What $"..bonus.." Bonus) In $"..taxAmount.." Tax ("..PaymentTax.."%)",
+      color = 'warning',
+		})
 end)
 
 DGCore.Commands.Add("npc", "Toggle Npc Job", {}, false, function(source, args)

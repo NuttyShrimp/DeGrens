@@ -248,22 +248,26 @@ RegisterNUICallback("combineWithAnim", function(data)
     local animText = combineData.anim.text
     local animTimeout = combineData.anim.timeOut
 
-    DGCore.Functions.Progressbar("combine_anim", animText, animTimeout, false, true, {
-        disableMovement = false,
-        disableCarMovement = true,
-        disableMouse = false,
-        disableCombat = true,
-    }, {
+    local wasCancelled, _ = exports['dg-misc']:Taskbar(animText, animTimeout, {
+      canCancel = true,
+      cancelOnDeath = true,
+      disableInventory = true,
+      controlDisables = {
+        movement = true,
+        carMovement = true,
+        combat = true,
+      },
+      animation = {
         animDict = aDict,
         anim = aLib,
         flags = 16,
-    }, {}, {}, function() -- Done
-        StopAnimTask(ped, aDict, aLib, 1.0)
-        TriggerServerEvent("inventory:server:CombineItem", combineData.reward, data.requiredItem, data.usedItem)
-    end, function() -- Cancel
-        StopAnimTask(ped, aDict, aLib, 1.0)
-        DGCore.Functions.Notify("Failed!", "error")
-    end)
+      }
+    })
+    StopAnimTask(ped, aDict, aLib, 1.0)
+    if wasCancelled then
+      DGCore.Functions.Notify("Combineren gefaald!", "error")
+  end
+  TriggerServerEvent("inventory:server:CombineItem", combineData.reward, data.requiredItem, data.usedItem)
 end)
 
 RegisterNUICallback("SetInventoryData", function(data, cb)

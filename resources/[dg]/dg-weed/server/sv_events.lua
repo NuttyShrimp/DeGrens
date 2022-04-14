@@ -8,7 +8,7 @@ RegisterServerEvent("dg-weed:server:PlacePlant", function(coords, gender)
     if Player.Functions.RemoveItem(Config.Seeds[gender], 1) then
         TriggerClientEvent("inventory:client:ItemBox", source, Config.Seeds[gender], "remove")
 
-        local result = exports.oxmysql:executeSync(
+        local result = exports['dg-sql']:query(
             [[
                 INSERT INTO weedplants (coords, gender, growtime, cuttime)
                 VALUES (:coords, :gender, :growtime, :cuttime)

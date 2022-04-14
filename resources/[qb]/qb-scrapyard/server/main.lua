@@ -14,7 +14,7 @@ end)
 
 
 DGCore.Functions.CreateCallback('qb-scrapyard:checkOwnerVehicle', function(source, cb, plate)
-    local result = exports.oxmysql:scalarSync("SELECT `plate` FROM `player_vehicles` WHERE `plate` = ?",{plate})
+    local result = exports['dg-sync']:scalar("SELECT `plate` FROM `player_vehicles` WHERE `plate` = ?",{plate})
     if result then
         cb(false)
     else 

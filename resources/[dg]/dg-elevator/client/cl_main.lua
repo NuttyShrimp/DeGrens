@@ -44,6 +44,7 @@ AddEventHandler("dg-elevator:UseElevator", function(entry)
 
 	local menu = {
 		{
+		  id = 'title',
 			title = Config.Elevators[currentElevator].name,
 			description = "Selecteer een verdieping.",
 		},
@@ -54,29 +55,38 @@ AddEventHandler("dg-elevator:UseElevator", function(entry)
             if not level.job or level.job == playerJob then
                 menu[#menu + 1] = {
 	                title = level.name,
-	                action = "dg-elevator:GoToLevel",
-	                data = entry.data
+	                icon = {
+                    name = 'chevron-right',
+                    position = 'right',
+                  },
+	                callbackURL = "dg-elevator:GoToLevel",
+	                data = entry.data,
                 }
             end
         end
     end
 
-    exports["dg-contextmenu"]:openMenu(menu)
+    openApplication('contextmenu', menu)
 end)
 
-AddEventHandler("dg-elevator:GoToLevel", function(data)
+RegisterUICallback("dg-elevator:GoToLevel", function(data, cb)
+    cb({data={}, meta={ok=true}})
     local ped = PlayerPedId()
     local spawn = Config.Elevators[data.elevator].levels[data.level].spawn
 
-    DGCore.Functions.Progressbar("use_elevator", "Lift roepen...", 3000, false, true, {
-        disableMovement = true,
-        disableCarMovement = true,
-        disableMouse = false,
-        disableCombat = true,
-    }, {}, {}, {}, function() -- Done
-        SetEntityCoords(ped, spawn.x, spawn.y, spawn.z)
-        SetEntityHeading(ped, spawn.w)
-    end, function() -- Cancel
-        DGCore.Functions.Notify("Geannuleerd...", "error")
-    end)
+    wasCanceled = exports['dg-misc']:Taskbar("Lift roepen...", 3000, {
+      canCancel = true,
+      cancelOnDeath = true,
+      controlDisables = {
+        movement = true;
+        carMovement = true;
+        combat = true;
+      }
+    })
+    if wasCanceled then
+      DGCore.Functions.Notify("Geannuleerd...", "error")
+    else
+      SetEntityCoords(ped, spawn.x, spawn.y, spawn.z)
+      SetEntityHeading(ped, spawn.w)
+    end
 end)

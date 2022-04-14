@@ -1,4 +1,5 @@
 import winston from 'winston';
+import {SQL} from '@ts-shared/server';
 
 import { AccountPermissionValue } from '../../../sv_constant';
 import { bankLogger } from '../utils';
@@ -24,7 +25,7 @@ export class PermissionsManager {
 			VALUES (?, ?, ?)
 			ON DUPLICATE KEY UPDATE access_level = ?
 		`;
-    await global.exports.oxmysql.executeSync(query, [this.account_id, cid, access_level, access_level]);
+    await SQL.query(query, [this.account_id, cid, access_level, access_level]);
   }
 
   // endregion
@@ -36,7 +37,7 @@ export class PermissionsManager {
 			FROM bank_accounts_access
 			WHERE account_id = ?
 		`;
-    const result: IAccountMember[] = await global.exports.oxmysql.executeSync(query, [this.account_id]);
+    const result: IAccountMember[] = await SQL.query(query, [this.account_id]);
     if (!result || !result.length) return;
     result.forEach(row => {
       // Check if the member is already in the members array

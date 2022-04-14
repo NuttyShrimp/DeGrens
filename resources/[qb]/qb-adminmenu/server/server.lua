@@ -100,7 +100,7 @@ RegisterNetEvent('qb-admin:server:ban', function(player, time, reason)
 			banTime = 2147483647
 		end
 		local timeTable = os.date('*t', banTime)
-		exports.oxmysql:insert('INSERT INTO bans (name, steamid, license, discord, ip, reason, expire, bannedby) VALUES (?, ?, ?, ?, ?, ?, ?, ?)', {
+		exports['dg-sync']:insert('INSERT INTO bans (name, steamid, license, discord, ip, reason, expire, bannedby) VALUES (?, ?, ?, ?, ?, ?, ?, ?)', {
 			GetPlayerName(player.id),
 			DGCore.Functions.GetIdentifier(player.id, 'steam'),
 			DGCore.Functions.GetIdentifier(player.id, 'license'),
@@ -110,10 +110,10 @@ RegisterNetEvent('qb-admin:server:ban', function(player, time, reason)
 			banTime,
 			GetPlayerName(src)
 		})
-		TriggerClientEvent('chat:addMessage', -1, {
-			template = "<strong>ANNOUNCEMENT | {0} has been banned:</strong> {1}",
-			color = "emergency",
-			args = { GetPlayerName(player.id), reason }
+		exports['dg-chat']:addMessage('admin', {
+		  prefix = 'ANNOUNCEMENT:',
+		  message = ('%s has been banned for %s'):format(GetPlayerName(player.id), reason),
+		  type = 'system'
 		})
 		TriggerEvent('qb-log:server:CreateLog', 'bans', 'Player Banned', 'red', string.format('%s was banned by %s for %s', GetPlayerName(player.id), GetPlayerName(src), reason), true)
 		if banTime >= 2147483647 then
@@ -203,9 +203,9 @@ RegisterNetEvent('qb-admin:server:SendReport', function(name, targetSrc, msg)
 	local src = source
 	if DGCore.Functions.HasPermission(src, 'admin') or IsPlayerAceAllowed(src, 'command') then
 		if DGCore.Functions.IsOptin(src) then
-			TriggerClientEvent('chat:addMessage', src, {
-				author = 'REPORT - ' .. name .. ' (' .. targetSrc .. ')',
-				color = 'report',
+			exports['dg-chat']:addMessage(src, {
+				prefix = ('REPORT - %s(%s)'):format(name, targetSrc),
+				type = 'success',
 				message = msg
 			})
 		end
@@ -216,9 +216,9 @@ RegisterNetEvent('qb-admin:server:StaffChatMessage', function(name, msg)
 	local src = source
 	if DGCore.Functions.HasPermission(src, 'admin') or IsPlayerAceAllowed(src, 'command') then
 		if DGCore.Functions.IsOptin(src) then
-			TriggerClientEvent('chat:addMessage', src, {
-				author = 'STAFFCHAT - ' .. name,
-				color = 'error',
+			exports['dg-chat']:addMessage(src, {
+				prefix = 'STAFFCHAT - ' .. name,
+				type = 'error',
 				message = msg
 			})
 		end
@@ -228,9 +228,9 @@ end)
 RegisterNetEvent('qb-admin:server:SaveCar', function(mods, vehicle, hash, plate)
 	local src = source
 	local Player = DGCore.Functions.GetPlayer(src)
-	local result = exports.oxmysql:executeSync('SELECT plate FROM player_vehicles WHERE plate = ?', { plate })
+	local result = exports['dg-sql']:query('SELECT plate FROM player_vehicles WHERE plate = ?', { plate })
 	if result[1] == nil then
-		exports.oxmysql:insert('INSERT INTO player_vehicles (license, citizenid, vehicle, hash, mods, plate, state) VALUES (?, ?, ?, ?, ?, ?, ?)', {
+		exports['dg-sync']:insert('INSERT INTO player_vehicles (license, citizenid, vehicle, hash, mods, plate, state) VALUES (?, ?, ?, ?, ?, ?, ?)', {
 			Player.PlayerData.license,
 			Player.PlayerData.citizenid,
 			vehicle.model,
@@ -267,9 +267,9 @@ end, 'admin')
 DGCore.Commands.Add('announce', 'Make An Announcement (Admin Only)', {}, false, function(source, args)
 	local msg = table.concat(args, ' ')
 	for i = 1, 3, 1 do
-		TriggerClientEvent('chat:addMessage', -1, {
-			author = 'SYSTEM',
-			color = 'error',
+		exports['dg-chat']:addMessage(-1, {
+			prefix = 'SYSTEM: ',
+			type = 'system',
 			message = msg
 		})
 	end
@@ -283,10 +283,10 @@ DGCore.Commands.Add('report', 'Admin Report', { { name = 'message', help = 'Mess
 	local msg = table.concat(args, ' ')
 	local Player = DGCore.Functions.GetPlayer(source)
 	TriggerClientEvent('qb-admin:client:SendReport', -1, GetPlayerName(source), source, msg)
-	TriggerClientEvent('chat:addMessage', source, {
-		author = 'REPORT Send',
+	exports['dg-chat']:addMessage(source, {
+		prefix = 'REPORT Send: ',
 		message = msg,
-		color = 'normal'
+		type = 'normal'
 	})
 	TriggerEvent('qb-log:server:CreateLog', 'report', 'Report', 'green', '**' .. GetPlayerName(source) .. '** (CitizenID: ' .. Player.PlayerData.citizenid .. ' | ID: ' .. source .. ') **Report:** ' .. msg, false)
 end)
@@ -311,17 +311,17 @@ DGCore.Commands.Add('warn', 'Warn A Player (Admin Only)', { { name = 'ID', help 
 	local myName = senderPlayer.PlayerData.name
 	local warnId = 'WARN-' .. math.random(1111, 9999)
 	if targetPlayer ~= nil then
-		TriggerClientEvent('chat:addMessage', targetPlayer.PlayerData.source, {
-			author = 'SYSTEM',
-			message = 'You have been warned by: ' .. GetPlayerName(source) .. 'Reason: ' .. msg,
-			color = 'error'
+		exports['dg-chat']:addMessage(targetPlayer.PlayerData.source, {
+			prefix = 'SYSTEM: ',
+			message = 'You have been warned for ' .. msg,
+			type = 'error'
 		})
-		TriggerClientEvent('chat:addMessage', source, {
-			author = 'SYSTEM',
-			message = 'You have warned ' .. GetPlayerName(targetPlayer.PlayerData.source) .. ' for: ' .. msg,
-			color = 'error'
+		exports['dg-chat']:addMessage(source, {
+			prefix = 'SYSTEM: ',
+			message = ('You have warned %s | Reason: %s'):format(GetPlayerName(targetPlayer.PlayerData.source), msg),
+			type = 'error'
 		})
-		exports.oxmysql:insert('INSERT INTO player_warns (senderIdentifier, targetIdentifier, reason, warnId) VALUES (?, ?, ?, ?)', {
+		exports['dg-sync']:insert('INSERT INTO player_warns (senderIdentifier, targetIdentifier, reason, warnId) VALUES (?, ?, ?, ?)', {
 			senderPlayer.PlayerData.license,
 			targetPlayer.PlayerData.license,
 			msg,
@@ -335,22 +335,22 @@ end, 'admin')
 DGCore.Commands.Add('checkwarns', 'Check Player Warnings (Admin Only)', { { name = 'ID', help = 'Player' }, { name = 'Warning', help = 'Number of warning, (1, 2 or 3 etc..)' } }, false, function(source, args)
 	if args[2] == nil then
 		local targetPlayer = DGCore.Functions.GetPlayer(tonumber(args[1]))
-		local result = exports.oxmysql:executeSync('SELECT * FROM player_warns WHERE targetIdentifier = ?', { targetPlayer.PlayerData.license })
-		TriggerClientEvent('chat:addMessage', source, {
-			author = 'SYSTEM',
-			message = targetPlayer.PlayerData.name .. ' has ' .. tablelength(result) .. ' warnings!',
-			color = 'warning'
+		local result = exports['dg-sql']:query('SELECT * FROM player_warns WHERE targetIdentifier = ?', { targetPlayer.PlayerData.license })
+		exports['dg-chat']:addMessage(source, {
+			prefix = 'SYSTEM: ',
+			message = ('%s has %s warnings'):format(targetPlayer.PlayerData.name, tablelength(result)),
+			type = 'warning'
 		})
 	else
 		local targetPlayer = DGCore.Functions.GetPlayer(tonumber(args[1]))
-		local warnings = exports.oxmysql:executeSync('SELECT * FROM player_warns WHERE targetIdentifier = ?', { targetPlayer.PlayerData.license })
+		local warnings = exports['dg-sql']:query('SELECT * FROM player_warns WHERE targetIdentifier = ?', { targetPlayer.PlayerData.license })
 		local selectedWarning = tonumber(args[2])
 		if warnings[selectedWarning] ~= nil then
 			local sender = DGCore.Functions.GetPlayer(warnings[selectedWarning].senderIdentifier)
-			TriggerClientEvent('chat:addMessage', source, {
-				author = "SYSTEM",
-				message = targetPlayer.PlayerData.name .. ' has been warned by ' .. sender.PlayerData.name .. 'Reason: ' .. warnings[selectedWarning].reason,
-				color = 'warning',
+			exports['dg-chat']:addMessage(source, {
+				type = "SYSTEM: ",
+				message = ('%s has been warned by %s | Reason: %s'):format(targetPlayer.PlayerData.name, sender.PlayerData.name, warnings[selectedWarning].reason),
+				type = 'warning',
 			})
 		end
 	end
@@ -358,16 +358,16 @@ end, 'admin')
 
 DGCore.Commands.Add('delwarn', 'Delete Players Warnings (Admin Only)', { { name = 'ID', help = 'Player' }, { name = 'Warning', help = 'Number of warning, (1, 2 or 3 etc..)' } }, true, function(source, args)
 	local targetPlayer = DGCore.Functions.GetPlayer(tonumber(args[1]))
-	local warnings = exports.oxmysql:executeSync('SELECT * FROM player_warns WHERE targetIdentifier = ?', { targetPlayer.PlayerData.license })
+	local warnings = exports['dg-sql']:query('SELECT * FROM player_warns WHERE targetIdentifier = ?', { targetPlayer.PlayerData.license })
 	local selectedWarning = tonumber(args[2])
 	if warnings[selectedWarning] ~= nil then
 		local sender = DGCore.Functions.GetPlayer(warnings[selectedWarning].senderIdentifier)
-		TriggerClientEvent('chat:addMessage', source, {
-			author = 'SYSTEM',
-			message = 'You have deleted warning(' .. selectedWarning .. ')Reason: ' .. warnings[selectedWarning].reason,
-			color = 'warning'
+		exports['dg-chat']:addMessage(source, {
+			prefix = 'SYSTEM: ',
+			message = 'You have deleted warning(' .. selectedWarning .. ') which had Reason: ' .. warnings[selectedWarning].reason,
+			type = 'warning'
 		})
-		exports.oxmysql:execute('DELETE FROM player_warns WHERE warnId = ?', { warnings[selectedWarning].warnId })
+		exports['dg-sql']:query('DELETE FROM player_warns WHERE warnId = ?', { warnings[selectedWarning].warnId })
 	end
 end, 'admin')
 
@@ -378,19 +378,19 @@ DGCore.Commands.Add('reportr', 'Reply To A Report (Admin Only)', {}, false, func
 	local OtherPlayer = DGCore.Functions.GetPlayer(playerId)
 	local Player = DGCore.Functions.GetPlayer(source)
 	if OtherPlayer ~= nil then
-		TriggerClientEvent('chat:addMessage', playerId, {
-			author = 'ADMIN - ' .. GetPlayerName(source),
+		exports['dg-chat']:addMessage(playerId, {
+			prefix = 'ADMIN - ' .. GetPlayerName(source),
 			message = msg,
-			color = 'warning'
+		  type = 'warning'
 		})
 		TriggerClientEvent('DGCore:Notify', source, 'Sent reply')
 		for k, v in pairs(DGCore.Functions.GetPlayers()) do
 			if DGCore.Functions.HasPermission(v, 'admin') or IsPlayerAceAllowed(src, 'command') then
 				if DGCore.Functions.IsOptin(v) then
-					TriggerClientEvent('chat:addMessage', v, {
-						author = 'REPORT REPLY (' .. source .. ') - ' .. GetPlayerName(source),
+					exports['dg-chat']:addMessage(v, {
+						prefix = ('REPORT REPLY (%s) - %s '):format(source, GetPlayerName(source)),
 						message = msg,
-						color = 'warning'
+						type = 'warning'
 					})
 					TriggerEvent('qb-log:server:CreateLog', 'report', 'Report Reply', 'red', '**' .. GetPlayerName(source) .. '** replied on: **' .. OtherPlayer.PlayerData.name .. ' **(ID: ' .. OtherPlayer.PlayerData.source .. ') **Message:** ' .. msg, false)
 				end
@@ -453,17 +453,17 @@ RegisterCommand('kickall', function(source, args, rawCommand)
 					end
 				end
 			else
-				TriggerClientEvent('chat:addMessage', src, {
-					author = 'SYSTEM',
+				exports['dg-chat']:addMessage(src, {
+					prefix = 'SYSTEM: ',
 					message = 'Mention a reason..',
-					color = 'error'
+					type = 'error'
 				})
 			end
 		else
-			TriggerClientEvent('chat:addMessage', src, {
-				author = 'SYSTEM',
+			exports['dg-chat']:addMessage(src, {
+				prefix = 'SYSTEM: ',
 				message = 'You can\'t do this..',
-				color = 'error'
+				type = 'error'
 			})
 		end
 	else

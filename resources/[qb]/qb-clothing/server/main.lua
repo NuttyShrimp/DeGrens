@@ -4,8 +4,8 @@ AddEventHandler('qb-clothing:saveSkin', function(model, skin)
     local Player = DGCore.Functions.GetPlayer(src)
     if model ~= nil and skin ~= nil then
         -- TODO: Update primary key to be citizenid so this can be an insert on duplicate update query
-        exports.oxmysql:execute('DELETE FROM playerskins WHERE citizenid = ?', { Player.PlayerData.citizenid }, function()
-            exports.oxmysql:insert('INSERT INTO playerskins (citizenid, model, skin, active) VALUES (?, ?, ?, ?)', {
+        exports['dg-sql']:query('DELETE FROM playerskins WHERE citizenid = ?', { Player.PlayerData.citizenid }, function()
+            exports['dg-sync']:insert('INSERT INTO playerskins (citizenid, model, skin, active) VALUES (?, ?, ?, ?)', {
                 Player.PlayerData.citizenid,
                 model,
                 skin,
@@ -19,7 +19,7 @@ RegisterServerEvent("qb-clothes:loadPlayerSkin")
 AddEventHandler('qb-clothes:loadPlayerSkin', function()
     local src = source
     local Player = DGCore.Functions.GetPlayer(src)
-    local result = exports.oxmysql:executeSync('SELECT * FROM playerskins WHERE citizenid = ? AND active = ?', { Player.PlayerData.citizenid, 1 })
+    local result = exports['dg-sql']:query('SELECT * FROM playerskins WHERE citizenid = ? AND active = ?', { Player.PlayerData.citizenid, 1 })
     if result[1] ~= nil then
         TriggerClientEvent("qb-clothes:loadSkin", src, false, result[1].model, result[1].skin)
     else
@@ -33,14 +33,14 @@ AddEventHandler("qb-clothes:saveOutfit", function(outfitName, model, skinData)
     local Player = DGCore.Functions.GetPlayer(src)
     if model ~= nil and skinData ~= nil then
         local outfitId = "outfit-"..math.random(1, 10).."-"..math.random(1111, 9999)
-        exports.oxmysql:insert('INSERT INTO player_outfits (citizenid, outfitname, model, skin, outfitId) VALUES (?, ?, ?, ?, ?)', {
+        exports['dg-sync']:insert('INSERT INTO player_outfits (citizenid, outfitname, model, skin, outfitId) VALUES (?, ?, ?, ?, ?)', {
             Player.PlayerData.citizenid,
             outfitName,
             model,
             json.encode(skinData),
             outfitId
         }, function()
-            local result = exports.oxmysql:executeSync('SELECT * FROM player_outfits WHERE citizenid = ?', { Player.PlayerData.citizenid })
+            local result = exports['dg-sql']:query('SELECT * FROM player_outfits WHERE citizenid = ?', { Player.PlayerData.citizenid })
             if result[1] ~= nil then
                 TriggerClientEvent('qb-clothing:client:reloadOutfits', src, result)
             else
@@ -54,12 +54,12 @@ RegisterServerEvent("qb-clothing:server:removeOutfit")
 AddEventHandler("qb-clothing:server:removeOutfit", function(outfitName, outfitId)
     local src = source
     local Player = DGCore.Functions.GetPlayer(src)
-    exports.oxmysql:execute('DELETE FROM player_outfits WHERE citizenid = ? AND outfitname = ? AND outfitId = ?', {
+    exports['dg-sql']:query('DELETE FROM player_outfits WHERE citizenid = ? AND outfitname = ? AND outfitId = ?', {
         Player.PlayerData.citizenid,
         outfitName,
         outfitId
     }, function()
-        local result = exports.oxmysql:executeSync('SELECT * FROM player_outfits WHERE citizenid = ?', { Player.PlayerData.citizenid })
+        local result = exports['dg-sql']:query('SELECT * FROM player_outfits WHERE citizenid = ?', { Player.PlayerData.citizenid })
         if result[1] ~= nil then
             TriggerClientEvent('qb-clothing:client:reloadOutfits', src, result)
         else
@@ -73,7 +73,7 @@ DGCore.Functions.CreateCallback('qb-clothing:server:getOutfits', function(source
     local Player = DGCore.Functions.GetPlayer(src)
     local anusVal = {}
 
-    local result = exports.oxmysql:executeSync('SELECT * FROM player_outfits WHERE citizenid = ?', { Player.PlayerData.citizenid })
+    local result = exports['dg-sql']:query('SELECT * FROM player_outfits WHERE citizenid = ?', { Player.PlayerData.citizenid })
     if result[1] ~= nil then
         for k, v in pairs(result) do
             result[k].skin = json.decode(result[k].skin)
