@@ -9,6 +9,7 @@ declare global {
     RPC: typeof Classes.RPC;
     Phone: typeof Classes.Phone;
     SQL: typeof Classes.SQL;
+    Chat: typeof Classes.Chat;
     Vector3: typeof Vector3Class;
     Vector4: typeof Vector4Class;
   };
