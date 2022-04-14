@@ -61,46 +61,102 @@ class RayCast {
 }
 
 class PolyZone {
-  private enterHandlers: PolyZone.EnterHandler[] = [];
-  private exitHandlers: PolyZone.ExitHandler[] = [];
+  private enterHandlers: Map<string, PolyZone.EnterHandler[]> = new Map();
+  private exitHandlers: Map<string, PolyZone.ExitHandler[]> = new Map();
+  private zonesNamesToDelete: Set<string> = new Set();
 
   constructor() {
     on('dg-polyzone:enter', (name: string, data: any, center: number[]) => {
-      this.enterHandlers.forEach(handler => handler(name, data, center ? Util.ArrayToVector3(center) : null));
+      if (!this.enterHandlers.has(name)) return;
+      this.enterHandlers.get(name).forEach(handler => handler(name, data, center ? Util.ArrayToVector3(center) : null));
     });
     on('dg-polyzone:exit', (name: string) => {
-      this.exitHandlers.forEach(handler => handler(name));
+      if (!this.exitHandlers.has(name)) return;
+      this.exitHandlers.get(name).forEach(handler => handler(name));
     });
+    on('OnResourceStop', (res: string) => {
+      if (res !== GetCurrentResourceName()) return;
+      this.zonesNamesToDelete.forEach(name => global.exports['dg-polyzone'].removeZone(name));
+    })
   }
 
-  onEnter<T = any>(handler: PolyZone.EnterHandler<T>) {
-    this.enterHandlers.push(handler);
+  onEnter<T = any>(name: string, handler: PolyZone.EnterHandler<T>) {
+    const oldHandlers = this.enterHandlers.has(name) ? this.enterHandlers.get(name) : [];
+    oldHandlers.push(handler);
+    this.enterHandlers.set(name, oldHandlers);
   }
 
-  onLeave(handler: PolyZone.ExitHandler) {
-    this.exitHandlers.push(handler);
+  onLeave(name: string, handler: PolyZone.ExitHandler) {
+    const oldHandlers = this.exitHandlers.has(name) ? this.exitHandlers.get(name) : [];
+    oldHandlers.push(handler);
+    this.exitHandlers.set(name, oldHandlers);
+  }
+
+  addBoxZone(
+    name: string,
+    pCenter: Vector3 | Vec3,
+    pWidth: number,
+    pLength: number,
+    options: {
+      heading?: number;
+      data: Object;
+      minZ?: number;
+      maxZ?: number;
+    },
+    removeOnRestart = false
+  ) {
+    if (pCenter instanceof Vector3) {
+      pCenter = pCenter.add(0);
+    }
+    if (removeOnRestart) {
+      this.zonesNamesToDelete.add(name);
+    }
+    global.exports['dg-polyzone'].AddBoxZone(name, pCenter, pWidth, pLength, options);
+  }
+  
+  addPolyZone(
+    name: string,
+    pVectors: Vec2[],
+    options: {
+      heading?: number;
+      data: Object;
+      minZ?: number;
+      maxZ?: number;
+    },
+    removeOnRestart = false
+  ) {
+    if (removeOnRestart) {
+      this.zonesNamesToDelete.add(name);
+    }
+    global.exports['dg-polyzone'].AddPolyZone(name, pVectors, options);
   }
 }
 
 class PolyTarget {
-  private enterHandlers: PolyZone.EnterHandler[] = [];
-  private exitHandlers: PolyZone.ExitHandler[] = [];
+  private enterHandlers: Map<string, PolyZone.EnterHandler[]> = new Map();
+  private exitHandlers: Map<string, PolyZone.ExitHandler[]> = new Map();
 
   constructor() {
     on('dg-polytarget:enter', (name: string, data: any, center: number[]) => {
-      this.enterHandlers.forEach(handler => handler(name, data, center ? Util.ArrayToVector3(center) : null));
+      if (!this.enterHandlers.has(name)) return;
+      this.enterHandlers.get(name).forEach(handler => handler(name, data, center ? Util.ArrayToVector3(center) : null));
     });
     on('dg-polytarget:exit', (name: string) => {
-      this.exitHandlers.forEach(handler => handler(name));
+      if (!this.exitHandlers.has(name)) return;
+      this.exitHandlers.get(name).forEach(handler => handler(name));
     });
   }
 
-  onEnter<T = any>(handler: PolyZone.EnterHandler<T>) {
-    this.enterHandlers.push(handler);
+  onEnter<T = any>(name: string, handler: PolyZone.EnterHandler<T>) {
+    const oldHandlers = this.enterHandlers.has(name) ? this.enterHandlers.get(name) : [];
+    oldHandlers.push(handler);
+    this.enterHandlers.set(name, oldHandlers);
   }
 
-  onLeave(handler: PolyZone.ExitHandler) {
-    this.exitHandlers.push(handler);
+  onLeave(name: string, handler: PolyZone.ExitHandler) {
+    const oldHandlers = this.exitHandlers.has(name) ? this.exitHandlers.get(name) : [];
+    oldHandlers.push(handler);
+    this.exitHandlers.set(name, oldHandlers);
   }
 
   addBoxZone(
@@ -118,7 +174,7 @@ class PolyTarget {
     if (pCenter instanceof Vector3) {
       pCenter = pCenter.add(0);
     }
-    exports['dg-polytarget'].AddBoxZone(name, pCenter, pWidth, pLength, options);
+    global.exports['dg-polytarget'].AddBoxZone(name, pCenter, pWidth, pLength, options);
   }
 }
 
