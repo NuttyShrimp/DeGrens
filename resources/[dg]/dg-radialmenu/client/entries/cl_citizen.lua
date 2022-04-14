@@ -25,6 +25,7 @@ entries.citizen = {
 		id = 'cornerselling',
 		title = 'Corner Selling',
 		icon = 'cannabis',
+        type = 'client',
 		event = 'dg-cornerselling:client:ToggleSelling',
 		shouldClose = true,
 		isEnabled = function()
