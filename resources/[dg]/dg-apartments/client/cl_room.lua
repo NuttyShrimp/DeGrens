@@ -79,6 +79,7 @@ RegisterNetEvent('dg-apartments:client:generateRoom', function(type)
 	-- Reset ped because change of it being changed duration previous process
 	ped = PlayerPedId()
 	FreezeEntityPosition(ped, false);
+    SetEntityInvincible(ped, false)
 
 	enableInteractionZones(type)
 	exports['dg-weathersync']:FreezeTime(true, 700)
