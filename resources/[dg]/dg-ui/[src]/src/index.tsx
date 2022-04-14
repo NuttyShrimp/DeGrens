@@ -11,6 +11,7 @@ import { getAllComponents } from './base-app.config';
 import { IndexProvider } from './index.provider';
 
 import './styles/main.scss';
+import '@degrens-21/fa-6/css/all.css';
 
 if (!isDevel()) {
   Sentry.init({
