@@ -20,6 +20,9 @@
 
   onMounted(() => {
     nuiAction('loaded');
+    if (import.meta.env.PROD) return;
+    store.commit('setIsInputVisible', true);
+    store.commit('setIsMsgVisible', true);
   });
 </script>
 <style lang="scss">

@@ -57,6 +57,14 @@ const baseCommands: Server.Command[] = [
       emitNet('chat:clear', src);
     },
   },
+  {
+    name: 'chat:restart',
+    description: 'herstart je chat',
+    parameters: [],
+    handler: src => {
+      emitNet('chat:restart', src)
+    }
+  }
 ];
 
 setImmediate(() => {
@@ -64,3 +72,18 @@ setImmediate(() => {
     commandManager.registerCommand(name, description, parameters, permissionLevel, handler);
   });
 });
+
+export const handleCommandExecution = (source: number, cmd: string, args: string[]) => {
+  const cmdInfo = commandManager.getCommandInfo(cmd);
+  if (!cmdInfo) {
+    emitNet('executeLocalCmd', source, [cmd,args].join(' '));
+    return;
+  };
+  if (!DGCore.Functions.HasPermission(source, cmdInfo.permissionLevel)) return;
+  const amountReqParams = cmdInfo.parameters.filter(param => param.required ?? true).length;
+  if (amountReqParams > args.length) {
+    Util.Notify(source, 'Niet alle parameters waren ingevuld!', 'error');
+    return;
+  }
+  cmdInfo.handler(source, cmd, args);
+}

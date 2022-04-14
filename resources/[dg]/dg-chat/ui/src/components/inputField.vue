@@ -1,7 +1,15 @@
 <template>
   <div class="input__wrapper">
     <div class="input__field">
-      <input id="message" name="message" :value="curValue" @input="handleChange" @keydown="handleKeyEvent" />
+      <input
+        id="message"
+        name="message"
+        :value="curValue"
+        autofocus
+        @blur="handleBlur"
+        @input="handleChange"
+        @keydown="handleKeyEvent"
+      />
     </div>
     <div class="input__suggestions">
       <div class="input__suggestion" v-for="(suggestion, sugIdx) in suggestions" :key="suggestion.name">
@@ -44,7 +52,7 @@
       const curHistory = ref<number>(store.state.history.length);
 
       const changeMsgScrollTop = (change: number) => {
-        const box = document.getElementById('message-box') as HTMLDivElement;
+        const box = document.getElementById('messageBox') as HTMLDivElement;
         box.scrollTop += change;
       };
 
@@ -128,6 +136,8 @@
         curValue.value = input.value;
       };
 
+      const handleBlur = (evt: Event) => (evt.target as HTMLInputElement).focus();
+
       onMounted(() => {
         const input = document.getElementById('message') as HTMLInputElement;
         input.focus();
@@ -137,6 +147,7 @@
       return {
         handleChange,
         handleKeyEvent,
+        handleBlur,
         suggestions,
         activeArg,
         curValue,
