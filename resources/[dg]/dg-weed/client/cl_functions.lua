@@ -89,16 +89,12 @@ end)
 
 exports("checkStatus", function(entity)
 	local id = getPlantIdFromEntity(entity)
-	exports["dg-contextmenu"]:openMenu({
+	openApplication('contextmenu', {
 		{
 			title = ("Gender: %s"):format(activePlants[id].gender == "F" and "Vrouwelijk" or "Mannelijk")
 		},
 		{
 			title = ("Voedsel: %s percent"):format(activePlants[id].data.food)
-		},
-		{
-			title = "Sluit",
-			back = true
 		}
 	})
 end)
