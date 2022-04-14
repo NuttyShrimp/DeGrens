@@ -148,7 +148,7 @@ local function cleanUp()
   if taskSettings.animation ~= nil then
     if taskSettings.animation.task ~= nil or (taskSettings.animation.animDict ~= nil and taskSettings.animation.anim ~= nil) then
       ClearPedSecondaryTask(ped)
-      StopAnimTask(ped, taskSettings.animDict, taskSettings.anim, 1.0)
+      StopAnimTask(ped, taskSettings.animation.animDict, taskSettings.animation.anim, 1.0)
     else
       ClearPedTasks(ped)
     end
@@ -158,7 +158,7 @@ local function cleanUp()
     DeleteEntity(NetToObj(prop))
   end
   propInfo = { }
-  taskSettings = DGCore.Functions.copyTbl(baseTaskSettings)
+  taskSettings = DGCore.Shared.copyTbl(baseTaskSettings)
 end
 
 function Taskbar(label, duration, settings, id)
