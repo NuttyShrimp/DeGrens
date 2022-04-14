@@ -269,3 +269,9 @@ DGCore.Functions.CreateCallback('DGCore:HasItem', function(source, cb, items, am
 	end
 	cb(retval)
 end)
+
+DGCore.Functions.CreateCallback('DGCore:RemoveItem', function(source, cb, pItemName, pAmount, pSlot)
+    local Player = DGCore.Functions.GetPlayer(source)
+    local removed = Player.Functions.RemoveItem(pItemName, pAmount, pSlot)
+	cb(removed)
+end)
