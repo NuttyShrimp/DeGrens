@@ -46,7 +46,7 @@ class CommandManager {
     permissionLevel = 'user',
     handler: Server.CommandHandler
   ) {
-    const _ = parameters.reduce((wasReq, val) => {
+    parameters.reduce((wasReq, val) => {
       if (!wasReq && val.required) {
         throw new Error(
           `Could not register ${name} command because there are requirede parameters after optional ones`

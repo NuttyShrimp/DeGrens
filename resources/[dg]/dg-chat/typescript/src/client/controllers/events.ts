@@ -6,7 +6,7 @@ import { addOldMessage, addOldSuggestion, getOldSuggestions } from '../helpers/b
 onNet('chat:registerCommands', (cmds: Shared.Command[]) => {
   SendNUIMessage({
     action: 'setSuggestions',
-    data: [cmds, ...getOldSuggestions()],
+    data: cmds.concat(getOldSuggestions()),
   });
 });
 
