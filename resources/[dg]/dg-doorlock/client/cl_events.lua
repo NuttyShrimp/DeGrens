@@ -45,16 +45,16 @@ RegisterNetEvent("dg-lib:targetinfo:changed", function(entity, entityType, entit
         local doorId = getDoorId(entity)
         if doorId then
             currentDoorId = doorId
-            currentDoorCoords = entityCoords
+            currentDoorCoords = exports['dg-lib']:tableToVector(entityCoords)
             currentDoorLockState = DoorSystemGetDoorState(doorId) ~= 0 and true or false
 
             if doors[doorId] then
                 local ped = PlayerPedId()
-                while #(GetEntityCoords(ped) - entityCoords) > doors[doorId].distance and currentDoorId == doorId do
+                while #(GetEntityCoords(ped) - currentDoorCoords) > doors[doorId].distance and currentDoorId == doorId do
                     Citizen.Wait(50)
                 end
 
-                if #(GetEntityCoords(ped) - entityCoords) <= doors[doorId].distance then
+                if #(GetEntityCoords(ped) - currentDoorCoords) <= doors[doorId].distance then
                     if not interactionVisible then
                         showInteraction()
                     end
