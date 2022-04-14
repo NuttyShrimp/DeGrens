@@ -121,17 +121,8 @@ AddEventHandler('electronickit:UseElectronickit', function()
     end
 end)
 
-RegisterNetEvent('prison:client:SetLockDown')
-AddEventHandler('prison:client:SetLockDown', function(isLockdown)
-    securityLockdown = isLockdown
-    if securityLockDown and inJail then
-        TriggerEvent("chatMessage", "HOSTAGE", "error", "Highest security level is active, stay with the cell blocks!")
-    end
-end)
-
 RegisterNetEvent('prison:client:PrisonBreakAlert')
 AddEventHandler('prison:client:PrisonBreakAlert', function()
-    -- TriggerEvent("chatMessage", "ALERT", "error", "Attentie alle eenheden! Poging tot uitbraak in de gevangenis!")
     TriggerEvent('qb-policealerts:client:AddPoliceAlert', {
         timeOut = 10000,
         alertTitle = "Prison outbreak",

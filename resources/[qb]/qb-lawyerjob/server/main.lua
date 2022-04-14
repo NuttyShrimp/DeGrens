@@ -43,6 +43,12 @@ end)
 DGCore.Functions.CreateUseableItem("lawyerpass", function(source, item)
     local Player = DGCore.Functions.GetPlayer(source)
 	if Player.Functions.GetItemBySlot(item.slot) ~= nil then
-        TriggerClientEvent("qb-justice:client:showLawyerLicense", -1, source, item.info)
+	      for k,v in pairs(DGCore.Functions.GetPlayersInRadius(source, 2)) do
+	          exports['dg-chat']:addMessage(v, {
+	            prefix = 'Lawyer License: ',
+	            message = ('<br><br> <strong>Pass-ID:</strong> %s <br><strong>First Name:</strong> %s <br><strong>Last Name:</strong> %s <br><strong>BSN:</strong> %s'):format(data.id, data.firstname, data.lastname, data.citizenid),
+	            type = 'warning'
+	          })
+	      end
     end
 end)

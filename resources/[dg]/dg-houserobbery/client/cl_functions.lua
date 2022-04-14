@@ -157,23 +157,29 @@ end)
 exports('SearchLocation', function(lootId)
     TriggerServerEvent('dg-houserobbery:server:SearchLocation', insideHouse, lootId)
 
-    DGCore.Functions.Progressbar("search_location", "Plek doorzoeken...", Config.Search.Duration, false, true, {
-        disableMovement = true,
-        disableCarMovement = true,
-        disableMouse = false,
-        disableCombat = true,
-    }, {
+    local wasCancelled, _ = exports['dg-misc']:Taskbar('Plek doorzoeken...', Config.Search.Duration, {
+      canCancel = true,
+      cancelOnDeath = true,
+      disarm = true,
+      disableInventory = true,
+      controlDisables = {
+        movement = true,
+        carMovement = true,
+        combat = true,
+      },
+      animation = {
         animDict = "anim@gangops@facility@servers@bodysearch@",
         anim = "player_search",
         flags = 16,
-    }, {}, {}, function() -- Done
-        StopAnimTask(PlayerPedId(), "anim@gangops@facility@servers@bodysearch@", "player_search", 1.0)
-        TriggerServerEvent('dg-houserobbery:server:GiveLoot')
-        GainStress()
-    end, function() -- Cancel
-        StopAnimTask(PlayerPedId(), "anim@gangops@facility@servers@bodysearch@", "player_search", 1.0)
+      }
+    })
+    StopAnimTask(PlayerPedId(), "anim@gangops@facility@servers@bodysearch@", "player_search", 1.0)
+    if (wasCancelled) then
         DGCore.Functions.Notify("Geannuleerd...", "error")
-    end)
+        return
+    end
+    TriggerServerEvent('dg-houserobbery:server:GiveLoot')
+    GainStress()
 end)
 
 exports("TakeItem", function(entity)
@@ -214,19 +220,24 @@ exports("SellItem", function()
 
     if itemData then
         if Config.Sell.Price[itemData.name] then
-            DGCore.Functions.Progressbar("sell_houserob_item", "Waarde schatten...", Config.Sell.Time, false, true, {
-                disableMovement = true,
-                disableCarMovement = true,
-                disableMouse = false,
-                disableCombat = true,
-            }, {}, {}, {}, function() -- Done
-                ClearPedTasks(ped)
-                TriggerServerEvent('dg-houserobbery:server:SellItem', itemData)
-                DGCore.Functions.Notify("Goed zaken met je te doen.", "success")
-            end, function() -- Cancel
-                ClearPedTasks(ped)
-                DGCore.Functions.Notify("Geannuleerd...", "error")
-            end)
+            local wasCancelled, _ =  exports['dg-misc']:Taskbar("Waarde schatten...", Config.Sell.Time, {
+              canCancel = true,
+                cancelOnDeath = true,
+                disarm = true,
+                disableInventory = true,
+                controlDisables = {
+                    movement = true,
+                    carMovement = true,
+                    combat = true,
+                },
+            })
+            ClearPedTasks(ped)
+            if (wasCancelled) then
+              DGCore.Functions.Notify("Geannuleerd...", "error")
+              return
+            end
+            TriggerServerEvent('dg-houserobbery:server:SellItem', itemData)
+            DGCore.Functions.Notify("Goed zaken met je te doen.", "success")
         else
             DGCore.Functions.Notify('Je kan dit niet verkopen', 'error')
             TriggerServerEvent('DGCore:Server:AddItem', itemData.name, itemData.amount, nil, itemData.info, itemData.quality)

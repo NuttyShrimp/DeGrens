@@ -9,7 +9,7 @@ RegisterServerEvent('qb-vehicletuning:server:SaveVehicleProps')
 AddEventHandler('qb-vehicletuning:server:SaveVehicleProps', function(vehicleProps)
     local src = source
     if IsVehicleOwned(vehicleProps.plate) then
-        exports.oxmysql:execute('UPDATE player_vehicles SET mods = ? WHERE plate = ?',
+        exports['dg-sql']:query('UPDATE player_vehicles SET mods = ? WHERE plate = ?',
             {json.encode(vehicleProps), vehicleProps.plate})
     end
 end)
@@ -57,15 +57,15 @@ RegisterServerEvent('qb-vehicletuning:server:UpdateDrivingDistance')
 AddEventHandler('qb-vehicletuning:server:UpdateDrivingDistance', function(amount, plate)
     VehicleDrivingDistance[plate] = amount
     TriggerClientEvent('qb-vehicletuning:client:UpdateDrivingDistance', -1, VehicleDrivingDistance[plate], plate)
-    local result = exports.oxmysql:executeSync('SELECT plate FROM player_vehicles WHERE plate = ?', {plate})
+    local result = exports['dg-sql']:query('SELECT plate FROM player_vehicles WHERE plate = ?', {plate})
     if result[1] ~= nil then
-        exports.oxmysql:execute('UPDATE player_vehicles SET drivingdistance = ? WHERE plate = ?', {amount, plate})
+        exports['dg-sql']:query('UPDATE player_vehicles SET drivingdistance = ? WHERE plate = ?', {amount, plate})
     end
 end)
 
 DGCore.Functions.CreateCallback('qb-vehicletuning:server:IsVehicleOwned', function(source, cb, plate)
     local retval = false
-    local result = exports.oxmysql:scalarSync('SELECT 1 from player_vehicles WHERE plate = ?', {plate})
+    local result = exports['dg-sync']:scalar('SELECT 1 from player_vehicles WHERE plate = ?', {plate})
     if result then
         retval = true
     end
@@ -121,13 +121,13 @@ end)
 RegisterServerEvent("vehiclemod:server:saveStatus")
 AddEventHandler("vehiclemod:server:saveStatus", function(plate)
     if VehicleStatus[plate] ~= nil then
-        exports.oxmysql:execute('UPDATE player_vehicles SET status = ? WHERE plate = ?',
+        exports['dg-sql']:query('UPDATE player_vehicles SET status = ? WHERE plate = ?',
             {json.encode(VehicleStatus[plate]), plate})
     end
 end)
 
 function IsVehicleOwned(plate)
-    local result = exports.oxmysql:scalarSync('SELECT 1 from player_vehicles WHERE plate = ?', {plate})
+    local result = exports['dg-sync']:scalar('SELECT 1 from player_vehicles WHERE plate = ?', {plate})
     if result then
         return true
     else
@@ -137,7 +137,7 @@ end
 
 function GetVehicleStatus(plate)
     local retval = nil
-    local result = exports.oxmysql:executeSync('SELECT status FROM player_vehicles WHERE plate = ?', {plate})
+    local result = exports['dg-sql']:query('SELECT status FROM player_vehicles WHERE plate = ?', {plate})
     if result[1] ~= nil then
         retval = result[1].status ~= nil and json.decode(result[1].status) or nil
     end

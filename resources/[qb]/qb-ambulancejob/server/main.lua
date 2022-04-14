@@ -32,7 +32,7 @@ RegisterNetEvent('hospital:server:RespawnAtHospital', function()
 		TriggerClientEvent('hospital:client:SetBed', -1, k, true)
 		if Config.WipeInventoryOnRespawn then
 			Player.Functions.ClearInventory()
-			exports.oxmysql:execute('UPDATE players SET inventory = ? WHERE citizenid = ?', { json.encode({}), Player.PlayerData.citizenid })
+			exports['dg-sql']:query('UPDATE players SET inventory = ? WHERE citizenid = ?', { json.encode({}), Player.PlayerData.citizenid })
 			TriggerClientEvent('DGCore:Notify', src, 'All your possessions have been taken..', 'error')
 		end
 		local accountId = exports['dg-financials']:getDefaultAccountId(citizenid)

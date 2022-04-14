@@ -140,6 +140,7 @@ RegisterNetEvent('hospital:client:CheckStatus', function()
                         statusChecks[#statusChecks+1] = {bone = Config.BoneIndexes[k], label = v.label .." (".. Config.WoundStates[v.severity] ..")"}
                     elseif result["WEAPONWOUNDS"] then
                         for k, v in pairs(result["WEAPONWOUNDS"]) do
+                            -- TODO: replace with dg-chat exports on server
                             TriggerEvent('chat:addMessage', {
                                 color = { 255, 0, 0},
                                 multiline = false,
@@ -147,6 +148,7 @@ RegisterNetEvent('hospital:client:CheckStatus', function()
                             })
                         end
                     elseif result["BLEED"] > 0 then
+                        -- TODO: replace with dg-chat exports on server
                         TriggerEvent('chat:addMessage', {
                             color = { 255, 0, 0},
                             multiline = false,

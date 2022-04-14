@@ -1,4 +1,5 @@
 import winston from 'winston';
+import {SQL} from '@ts-shared/server';
 
 import { config } from '../../../config';
 import { cryptoLogger } from '../util';
@@ -82,7 +83,7 @@ export class CryptoManager {
   private async loadCoins(): Promise<void> {
     const query = `SELECT *
 									 FROM crypto`;
-    const result = await global.exports.oxmysql.executeSync(query);
+    const result = await SQL.query(query);
     if (!result || result.length === 0) {
       this.logger.warn(`Could not load coins from DB`);
       await this.addMissingCoins();
@@ -118,7 +119,7 @@ export class CryptoManager {
     for (const coin of missingCoins) {
       const query = `INSERT INTO crypto (crypto_name, value)
 										 VALUES (?, ?)`;
-      const result = await global.exports.oxmysql.executeSync(query, [coin.name, coin.value ?? 0]);
+      const result = await SQL.query(query, [coin.name, coin.value ?? 0]);
       if (!result) {
         this.logger.warn(`Could not add missing coin ${coin.name} to DB`);
         continue;
@@ -169,7 +170,7 @@ export class CryptoManager {
     const query = `SELECT *
 									 FROM crypto_wallets
 									 WHERE cid = ?`;
-    let result: DB.ICryptoWallet[] = await global.exports.oxmysql.executeSync(query, [cid]);
+    let result: DB.ICryptoWallet[] = await SQL.query(query, [cid]);
     if (!result) {
       result = [];
     }

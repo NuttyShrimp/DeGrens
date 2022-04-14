@@ -1,6 +1,6 @@
 getImages = function(cid)
 	local query = "SELECT id, link FROM phone_images WHERE cid = ? ORDER BY id DESC"
-	return exports.oxmysql:executeSync(query, {cid})
+	return exports['dg-sql']:query(query, {cid})
 end
 
 addImage = function(cid, link)
@@ -8,14 +8,14 @@ addImage = function(cid, link)
 		INSERT INTO phone_images (cid, link)
 		VALUES (?, ?)
 	]]
-	return exports.oxmysql:insertSync(query, { cid, link })
+	return exports['dg-sync']:insert(query, { cid, link })
 end
 
 deleteImage = function(cid, id)
 	local query = [[
 		DELETE FROM phone_images WHERE cid = ? AND id = ?
 	]]
-	return exports.oxmysql:executeSync(query, { cid, id })
+	return exports['dg-sql']:query(query, { cid, id })
 end
 
 DGCore.Functions.CreateCallback('dg-phone:server:photo:get', function(src, cb)

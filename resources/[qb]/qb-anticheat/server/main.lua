@@ -13,7 +13,7 @@ RegisterServerEvent('qb-anticheat:server:banPlayer')
 AddEventHandler('qb-anticheat:server:banPlayer', function(reason)
     local src = source
     TriggerEvent("qb-log:server:CreateLog", "anticheat", "Anti-Cheat", "white", GetPlayerName(src).." has been banned for "..reason, false)
-    exports.oxmysql:insert('INSERT INTO bans (name, license, discord, ip, reason, expire, bannedby) VALUES (?, ?, ?, ?, ?, ?, ?)', {
+    exports['dg-sync']:insert('INSERT INTO bans (name, license, discord, ip, reason, expire, bannedby) VALUES (?, ?, ?, ?, ?, ?, ?)', {
         GetPlayerName(src),
         DGCore.Functions.GetIdentifier(src, 'license'),
         DGCore.Functions.GetIdentifier(src, 'discord'),

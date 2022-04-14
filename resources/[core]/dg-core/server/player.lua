@@ -46,7 +46,7 @@ function DGCore.Player.Login(source, citizenid, newData)
 	local src = source
 	if src then
 		if citizenid then
-			local result = exports.oxmysql:executeSync('SELECT * FROM players WHERE citizenid = ?', { citizenid })
+			local result = exports['dg-sql']:query('SELECT * FROM players WHERE citizenid = ?', { citizenid })
 			local PlayerData = DGCore.Player.buildPlayerData(result[1])
       if PlayerData == nil then
         DGCore.Functions.Notify('Kon karakter niet laden, probeer opnieuw', 'error')
@@ -166,6 +166,7 @@ function DGCore.Player.Logout(source)
 	TriggerClientEvent('DGCore:Client:OnPlayerUnload', src)
 	TriggerEvent('DGCore:Server:OnPlayerUnload', src)
 	TriggerClientEvent('DGCore:Player:UpdatePlayerData', src)
+  Player(self.PlayerData.source).state.set('loggedIn', false)
 	Citizen.Wait(200)
 	DGCore.Players[src] = nil
 end
@@ -188,7 +189,7 @@ function DGCore.Player.CreatePlayer(PlayerData)
 		end
 		TriggerClientEvent('DGCore:Player:SetPlayerData', self.PlayerData.source, self.PlayerData)
 		if dontUpdateChat == nil then
-			DGCore.Commands.Refresh(self.PlayerData.source)
+		  exports['dg-chat']:refreshCommands(self.PlayerData.source)
 		end
 	end
 
@@ -479,6 +480,9 @@ function DGCore.Player.CreatePlayer(PlayerData)
 	DGCore.Players[self.PlayerData.source] = self
 	DGCore.Player.Save(self.PlayerData.source)
 
+  -- Make the player state aware that we are loggedin
+  Player(self.PlayerData.source).state.set('loggedIn', true)
+
 	-- At this point we are safe to emit new instance to third party resource for load handling
 	TriggerEvent('DGCore:Server:PlayerLoaded', self)
 	self.Functions.UpdatePlayerData()
@@ -492,7 +496,7 @@ function DGCore.Player.Save(source)
 	local pcoords = GetEntityCoords(ped)
 	local PlayerData = DGCore.Players[src].PlayerData
 	if PlayerData then
-		local result = exports.oxmysql:executeSync([[
+		local result = exports['dg-sql']:query([[
 			INSERT INTO players (citizenid, cid, steamid, license, discord, name, firstname, lastname, birthdate, gender, backstory,
                      nationality, phone, cash, job, gang, position, metadata)
 			VALUES (:citizenid, :cid, :steamid, license, discord, :name, :firstname, :lastname, :birthdate, :gender, :backstory,
@@ -575,10 +579,10 @@ local playertables = { -- Add tables as needed
 function DGCore.Player.DeleteCharacter(source, citizenid)
 	local src = source
 	local license = DGCore.Functions.GetIdentifier(src, 'license')
-	local result = exports.oxmysql:scalarSync('SELECT license FROM players where citizenid = ?', { citizenid })
+	local result = exports['dg-sync']:scalar('SELECT license FROM players where citizenid = ?', { citizenid })
 	if license == result then
 		for k, v in pairs(playertables) do
-			exports.oxmysql:execute('DELETE FROM ' .. v.table .. ' WHERE citizenid = ?', { citizenid })
+			exports['dg-sql']:query('DELETE FROM ' .. v.table .. ' WHERE citizenid = ?', { citizenid })
 		end
 		TriggerEvent('qb-log:server:CreateLog', 'joinleave', 'Character Deleted', 'red', '**' .. GetPlayerName(src) .. '** ' .. license .. ' deleted **' .. citizenid .. '**..')
 	else
@@ -591,7 +595,7 @@ end
 
 DGCore.Player.LoadInventory = function(PlayerData)
 	PlayerData.items = {}
-	local items = exports.oxmysql:executeSync(
+	local items = exports['dg-sql']:query(
 		[[
 		SELECT slot, name, info, amount, quality, createtime
 		FROM inventoryitems
@@ -643,7 +647,7 @@ DGCore.Player.SaveInventory = function(src)
 			if DGCore.Shared.tableLen(diff.removed) == 0 and DGCore.Shared.tableLen(diff.added) == 0 then
 				return
 			end
-			exports.oxmysql:executeSync(
+			exports['dg-sql']:query(
 				[[
 				DELETE FROM inventoryitems
 				WHERE inventorytype = :inventorytype AND inventoryid = :inventoryid
@@ -654,7 +658,7 @@ DGCore.Player.SaveInventory = function(src)
 
 			for slot, item in pairs(items) do
 				if items[slot] then
-					exports.oxmysql:execute(
+					exports['dg-sql']:query(
 						[[
 						INSERT INTO inventoryitems (inventorytype, inventoryid, slot, name, info, amount, quality, createtime)
 						VALUES (:inventorytype, :inventoryid, :slot, :name, :info, :amount, :quality, :createtime)
@@ -716,7 +720,7 @@ function DGCore.Player.CreateFingerId()
 	while not UniqueFound do
 		FingerId = tostring(DGCore.Shared.RandomStr(2) .. DGCore.Shared.RandomInt(3) .. DGCore.Shared.RandomStr(1) .. DGCore.Shared.RandomInt(2) .. DGCore.Shared.RandomStr(3) .. DGCore.Shared.RandomInt(4))
 		local query = '%' .. FingerId .. '%'
-		local result = exports.oxmysql:executeSync('SELECT COUNT(*) as count FROM `players` WHERE `metadata` LIKE ?', { query })
+		local result = exports['dg-sql']:query('SELECT COUNT(*) as count FROM `players` WHERE `metadata` LIKE ?', { query })
 		if result[1].count == 0 then
 			UniqueFound = true
 		end
@@ -730,7 +734,7 @@ function DGCore.Player.CreateWalletId()
 	while not UniqueFound do
 		WalletId = 'DG-' .. math.random(11111111, 99999999)
 		local query = '%' .. WalletId .. '%'
-		local result = exports.oxmysql:executeSync('SELECT COUNT(*) as count FROM players WHERE metadata LIKE ?', { query })
+		local result = exports['dg-sql']:query('SELECT COUNT(*) as count FROM players WHERE metadata LIKE ?', { query })
 		if result[1].count == 0 then
 			UniqueFound = true
 		end
@@ -744,7 +748,7 @@ function DGCore.Player.CreateSerialNumber()
 	while not UniqueFound do
 		SerialNumber = math.random(11111111, 99999999)
 		local query = '%' .. SerialNumber .. '%'
-		local result = exports.oxmysql:executeSync('SELECT COUNT(*) as count FROM players WHERE metadata LIKE ?', { query })
+		local result = exports['dg-sql']:query('SELECT COUNT(*) as count FROM players WHERE metadata LIKE ?', { query })
 		if result[1].count == 0 then
 			UniqueFound = true
 		end

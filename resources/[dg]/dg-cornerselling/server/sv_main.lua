@@ -8,7 +8,7 @@ RegisterServerEvent("onResourceStart", function(resourceName)
 end)
 
 dropOldSales = function()
-    exports.oxmysql:executeSync(
+    exports['dg-sql']:query(
         [[
         DELETE FROM cornerselling_sales
         WHERE date < NOW() - INTERVAL :decaytime DAY
@@ -18,7 +18,7 @@ dropOldSales = function()
 end
 
 fetchSellLocations = function()
-    local result = exports.oxmysql:executeSync(
+    local result = exports['dg-sql']:query(
         [[
         SELECT coords
         FROM cornerselling_sales
@@ -79,7 +79,7 @@ RegisterServerEvent("dg-cornerselling:server:SellDrugs", function(sellLocation)
 
         addToHeatmap(sellLocation)
         
-        exports.oxmysql:execute(
+        exports['dg-sql']:query(
             [[
             INSERT INTO `cornerselling_sales` (coords, date) 
             VALUES (:coords, NOW()) 

@@ -6,7 +6,7 @@ getNotes = function(cid)
 		FROM phone_notes
 		WHERE cid = ?
 	]]
-	local result = exports.oxmysql:executeSync(query, { cid })
+	local result = exports['dg-sql']:query(query, { cid })
 	return result or {}
 end
 
@@ -16,7 +16,7 @@ getNote = function(cid, id)
 		FROM phone_notes
 		WHERE cid = ? AND id = ?
 	]]
-	local result = exports.oxmysql:executeSync(query, { cid, id })
+	local result = exports['dg-sql']:query(query, { cid, id })
 	return result and result[1] or nil
 end
 
@@ -31,7 +31,7 @@ addNote = function(cid, title, note, date)
 			VALUES (?, ?, ?, ?)
 		]]
 	end
-	local insertId = exports.oxmysql:insertSync(query, { cid, title, note, date })
+	local insertId = exports['dg-sync']:insert(query, { cid, title, note, date })
 	return insertId
 end
 
@@ -41,7 +41,7 @@ updateNote = function(cid, id, note, title)
 		SET note = ?, title = ?
 		WHERE cid = ? AND id = ?
 	]]
-	local result = exports.oxmysql:executeSync(query, { note, title, cid, id })
+	local result = exports['dg-sql']:query(query, { note, title, cid, id })
 	return result
 end
 
@@ -50,7 +50,7 @@ deleteNote = function(cid, id)
 		DELETE FROM phone_notes
 		WHERE cid = ? AND id = ?
 	]]
-	exports.oxmysql:executeSync(query, { cid, id })
+	exports['dg-sql']:query(query, { cid, id })
 end
 
 DGCore.Functions.CreateCallback('dg-phone:server:notes:get', function(src, cb)

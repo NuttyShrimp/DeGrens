@@ -1,10 +1,12 @@
-import { entryManager } from './entryManager';
-import { getActiveZones, getCurrentEntity } from '../helpers/actives';
-import { DISABLED_KEYS, PEEK_TYPES } from '../cl_constant';
 import { Util } from '@dgx/client';
 import { Vector3 } from '@dgx/shared';
+
+import { DISABLED_KEYS, PEEK_TYPES } from '../cl_constant';
+import { getActiveZones, getCurrentEntity } from '../helpers/actives';
 import { isEntryDisabled } from '../helpers/entries';
+
 import { ZoneManager } from './entryManagers/zoneManager';
+import { entryManager } from './entryManager';
 
 // @ExportManager
 class StateManager {
@@ -82,7 +84,7 @@ class StateManager {
       return;
     }
     const ped = PlayerPedId();
-    this.checkInterval = setInterval(async() => {
+    this.checkInterval = setInterval(async () => {
       const currentEntity = getCurrentEntity();
       const activeZones = getActiveZones();
       if (!this.isPeeking || this.isUIFocused || (currentEntity.entity === null && activeZones.size === 0)) {
@@ -141,11 +143,11 @@ class StateManager {
           let targetVector = null;
           if (type === 'zones') {
             if (activeZones.has(entry._metadata.name)) {
-              let { x, y, z } = activeZones.get(entry._metadata.name).center;
+              const { x, y, z } = activeZones.get(entry._metadata.name).center;
               targetVector = new Vector3(x, y, z);
             }
           } else {
-            let { x, y, z } = currentEntity.coords;
+            const { x, y, z } = currentEntity.coords;
             targetVector = new Vector3(x, y, z);
           }
           entry._metadata.state.distance = targetVector

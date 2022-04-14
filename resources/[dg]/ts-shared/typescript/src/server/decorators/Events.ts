@@ -2,6 +2,7 @@ import 'reflect-metadata';
 
 /**
  * Decorator to register a event in a class. Must be used in combination with EventListeren decorator
+ * This will register a event that can be triggered from S + C
  */
 export const Event = (evtName: string) => {
   return function (target: unknown, key: string) {
@@ -41,7 +42,7 @@ export const EventListener = () => {
             });
           } else {
             onNet(e.name, (...args: any[]) => {
-              this[e.key](...args);
+              this[e.key](source, ...args);
             });
           }
         });

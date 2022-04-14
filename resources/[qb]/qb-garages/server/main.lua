@@ -16,7 +16,7 @@ RegisterServerEvent('qb-garage:server:PayDepotPrice', function(vehicle, garage)
     local cashBalance = exports['dg-financials']:getCash(src)
 		local bankAccountId = exports['dg-financials']:getDefaultAccountId(src)
     local bankBalance = exports['dg-financials']:getAccountBalance(bankAccountId)
-    exports.oxmysql:execute('SELECT * FROM player_vehicles WHERE plate = ?', {vehicle.plate}, function(result)
+    exports['dg-sql']:query('SELECT * FROM player_vehicles WHERE plate = ?', {vehicle.plate}, function(result)
         if result[1] then
             if cashBalance >= result[1].depotprice then
 								exports['dg-financials']:removeCash(src, result[1].depotprice, 'Paid depot price for ' .. vehicle.plate)
@@ -32,7 +32,7 @@ RegisterServerEvent('qb-garage:server:PayDepotPrice', function(vehicle, garage)
 end)
 
 RegisterServerEvent('qb-garage:server:updateVehicleState', function(state, plate, garage)
-    exports.oxmysql:execute('UPDATE player_vehicles SET state = ?, garage = ?, depotprice = ? WHERE plate = ?',{state, garage, 0, plate})
+    exports['dg-sql']:query('UPDATE player_vehicles SET state = ?, garage = ?, depotprice = ? WHERE plate = ?',{state, garage, 0, plate})
 end)
 
 RegisterServerEvent('qb-garage:server:updateVehicleStatus', function(fuel, engine, body, plate, garage)
@@ -47,7 +47,7 @@ RegisterServerEvent('qb-garage:server:updateVehicleStatus', function(fuel, engin
         body = body / 1000
     end
 
-    exports.oxmysql:execute('UPDATE player_vehicles SET fuel = ?, engine = ?, body = ? WHERE plate = ? AND citizenid = ? AND garage = ?',{fuel, engine, body, plate, pData.PlayerData.citizenid, garage})
+    exports['dg-sql']:query('UPDATE player_vehicles SET fuel = ?, engine = ?, body = ? WHERE plate = ? AND citizenid = ? AND garage = ?',{fuel, engine, body, plate, pData.PlayerData.citizenid, garage})
 end)
 
 -- Callbacks
@@ -55,7 +55,7 @@ end)
 DGCore.Functions.CreateCallback("qb-garage:server:checkVehicleOwner", function(source, cb, plate)
     local src = source
     local pData = DGCore.Functions.GetPlayer(src)
-    exports.oxmysql:execute('SELECT * FROM player_vehicles WHERE plate = ? AND citizenid = ?',{plate, pData.PlayerData.citizenid}, function(result)
+    exports['dg-sql']:query('SELECT * FROM player_vehicles WHERE plate = ? AND citizenid = ?',{plate, pData.PlayerData.citizenid}, function(result)
         if result[1] then
             cb(true)
         else
@@ -77,7 +77,7 @@ end)
 DGCore.Functions.CreateCallback("qb-garage:server:GetUserVehicles", function(source, cb, garage)
     local src = source
     local pData = DGCore.Functions.GetPlayer(src)
-    exports.oxmysql:execute('SELECT * FROM player_vehicles WHERE citizenid = ? AND garage = ?', {pData.PlayerData.citizenid, garage}, function(result)
+    exports['dg-sql']:query('SELECT * FROM player_vehicles WHERE citizenid = ? AND garage = ?', {pData.PlayerData.citizenid, garage}, function(result)
         if result[1] then
             cb(result)
         else
@@ -89,7 +89,7 @@ end)
 DGCore.Functions.CreateCallback("qb-garage:server:GetVehicleProperties", function(source, cb, plate)
     local src = source
     local properties = {}
-    local result = exports.oxmysql:executeSync('SELECT mods FROM player_vehicles WHERE plate = ?', {plate})
+    local result = exports['dg-sql']:query('SELECT mods FROM player_vehicles WHERE plate = ?', {plate})
     if result[1] then
         properties = json.decode(result[1].mods)
     end
@@ -99,7 +99,7 @@ end)
 DGCore.Functions.CreateCallback("qb-garage:server:GetDepotVehicles", function(source, cb)
     local src = source
     local pData = DGCore.Functions.GetPlayer(src)
-    exports.oxmysql:execute('SELECT * FROM player_vehicles WHERE citizenid = ? AND state = ?',{pData.PlayerData.citizenid, 0}, function(result)
+    exports['dg-sql']:query('SELECT * FROM player_vehicles WHERE citizenid = ? AND state = ?',{pData.PlayerData.citizenid, 0}, function(result)
         if result[1] then
             cb(result)
         else
@@ -111,7 +111,7 @@ end)
 DGCore.Functions.CreateCallback("qb-garage:server:GetHouseVehicles", function(source, cb, house)
     local src = source
     local pData = DGCore.Functions.GetPlayer(src)
-    exports.oxmysql:execute('SELECT * FROM player_vehicles WHERE garage = ?', {house}, function(result)
+    exports['dg-sql']:query('SELECT * FROM player_vehicles WHERE garage = ?', {house}, function(result)
         if result[1] then
             cb(result)
         else
@@ -123,7 +123,7 @@ end)
 DGCore.Functions.CreateCallback("qb-garage:server:checkVehicleHouseOwner", function(source, cb, plate, house)
     local src = source
     local pData = DGCore.Functions.GetPlayer(src)
-    exports.oxmysql:execute('SELECT * FROM player_vehicles WHERE plate = ?', {plate}, function(result)
+    exports['dg-sql']:query('SELECT * FROM player_vehicles WHERE plate = ?', {plate}, function(result)
         if result[1] then
             local hasHouseKey = exports['qb-houses']:hasKey(result[1].license, result[1].citizenid, house)
             if hasHouseKey then

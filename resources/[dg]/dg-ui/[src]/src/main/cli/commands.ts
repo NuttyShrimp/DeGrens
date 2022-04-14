@@ -145,4 +145,19 @@ export const cmds: {
     app: 'scenes',
     show: false,
   },
+  {
+    cmd: 'show taskbar $1 $2',
+    app: 'taskbar',
+    show: true,
+    data: {
+      label: '$1',
+      duration: '$2',
+      id: 'cmd-dev',
+    },
+  },
+  {
+    cmd: 'hide taskbar',
+    app: 'taskbar',
+    show: false,
+  },
 ];

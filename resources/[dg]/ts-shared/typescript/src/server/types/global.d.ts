@@ -8,6 +8,7 @@ declare global {
     Events: typeof Classes.Events;
     RPC: typeof Classes.RPC;
     Phone: typeof Classes.Phone;
+    SQL: typeof Classes.SQL;
     Vector3: typeof Vector3Class;
     Vector4: typeof Vector4Class;
   };

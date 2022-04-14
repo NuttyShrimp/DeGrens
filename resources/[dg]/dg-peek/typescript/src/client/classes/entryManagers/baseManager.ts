@@ -1,12 +1,12 @@
 import { canEntryBeEnabled } from '../../helpers/entries';
 
 export class BaseManager {
-  protected currentGenId: number = 0;
+  protected currentGenId = 0;
   protected activeEntries: PeekOption[] = [];
 
-  protected addActiveEntry(entry: PeekOption, entity: number): void {
+  protected async addActiveEntry(entry: PeekOption, entity: number): Promise<void> {
     if (this.activeEntries.includes(entry)) return;
-    entry = canEntryBeEnabled(entry, entity);
+    entry = await canEntryBeEnabled(entry, entity);
     if (!entry) return;
     this.activeEntries.push(entry);
   }

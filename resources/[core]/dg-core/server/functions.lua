@@ -81,7 +81,7 @@ function DGCore.Functions.GetOfflinePlayerByCitizenId(citizenid)
 	local query = [[
 		SELECT * FROM players WHERE citizenid = ?
 	]]
-	local result = oxmysql.executeSync(query, { citizenid })
+	local result = exports['dg-sql']:query(query, { citizenid })
 	if result and result[1] then
 		return {
 			PlayerData = DGCore.Player.buildPlayerData(result[1])
@@ -187,7 +187,7 @@ function DGCore.Functions.IsWhitelisted(source)
 	local plicense = DGCore.Functions.GetIdentifier(src, 'license')
 	local identifiers = GetPlayerIdentifiers(src)
 	if DGCore.Config.Server.whitelist then
-		local result = exports.oxmysql:executeSync('SELECT * FROM whitelist WHERE license = ?', { plicense })
+		local result = exports['dg-sql']:query('SELECT * FROM whitelist WHERE license = ?', { plicense })
 		if result[1] then
 			for _, id in pairs(identifiers) do
 				if result[1].license == id then
@@ -212,9 +212,9 @@ function DGCore.Functions.AddPermission(source, permission)
 			steamid = pSteamid,
 			permission = permission:lower(),
 		}
-		exports.oxmysql:execute('DELETE FROM permissions WHERE steamid = ?', { pSteamid })
+		exports['dg-sql']:query('DELETE FROM permissions WHERE steamid = ?', { pSteamid })
 
-		exports.oxmysql:insert('INSERT INTO permissions (name, steamid, permission) VALUES (?, ?, ?)', {
+		exports['dg-sync']:insert('INSERT INTO permissions (name, steamid, permission) VALUES (?, ?, ?)', {
 			GetPlayerName(src),
 			pSteamid,
 			permission:lower()
@@ -231,7 +231,7 @@ function DGCore.Functions.RemovePermission(source)
 	local steamId = Player.PlayerData.steamid
 	if Player then
 		DGCore.Config.Server.PermissionList[steamId] = nil
-		exports.oxmysql:execute('DELETE FROM permissions WHERE steamid = ?', { steamId })
+		exports['dg-sql']:query('DELETE FROM permissions WHERE steamid = ?', { steamId })
 		Player.Functions.UpdatePlayerData()
 	end
 end
@@ -297,14 +297,14 @@ function DGCore.Functions.IsPlayerBanned(source)
 	local message = ''
 	local pSteamId = DGCore.Functions.GetIdentifier(src, 'steam')
 	local pLicense = DGCore.Functions.GetIdentifier(src, 'license')
-	local result = exports.oxmysql:executeSync('SELECT * FROM bans WHERE steamid = ? OR license = ?', { pSteamId, pLicense })
+	local result = exports['dg-sql']:query('SELECT * FROM bans WHERE steamid = ? OR license = ?', { pSteamId, pLicense })
 	if result[1] then
 		if os.time() < result[1].expire then
 			retval = true
 			local timeTable = os.date('*t', tonumber(result.expire))
 			message = 'You have been banned from the server:\n' .. result[1].reason .. '\nYour ban expires ' .. timeTable.day .. '/' .. timeTable.month .. '/' .. timeTable.year .. ' ' .. timeTable.hour .. ':' .. timeTable.min .. '\n'
 		else
-			exports.oxmysql:execute('DELETE FROM bans WHERE id = ?', { result[1].id })
+			exports['dg-sql']:query('DELETE FROM bans WHERE id = ?', { result[1].id })
 		end
 	end
 	return retval, message

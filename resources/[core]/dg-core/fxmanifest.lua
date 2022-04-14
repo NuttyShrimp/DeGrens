@@ -30,8 +30,7 @@ server_scripts {
 }
 
 dependencies {
-	'oxmysql',
-	'progressbar',
+	'dg-sql',
 	'connectqueue'
 }
 

@@ -67,4 +67,13 @@ class Ui {
   }
 }
 
-export default { UI: Ui.getInstance() };
+class Taskbar {
+  /**
+   * Creates a taskbar and returns if it was cancelled and how much percent was done
+   */
+  async create(label: string, duration: number, settings: TaskBar.TaskBarSettings): Promise<[boolean, number]> {
+    return global.exports['dg-misc'].Taskbar(label, duration, settings);
+  }
+}
+
+export default { UI: Ui.getInstance(), Taskbar: new Taskbar() };

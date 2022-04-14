@@ -1,7 +1,7 @@
-import { setCtxPlayerData } from '../helpers/context';
-import { activateZone, deactivateZone, getCurrentEntity, updateCurrentEntity } from '../helpers/actives';
-import { stateManager } from '../classes/stateManager';
 import { entryManager } from '../classes/entryManager';
+import { stateManager } from '../classes/stateManager';
+import { activateZone, deactivateZone, getCurrentEntity, updateCurrentEntity } from '../helpers/actives';
+import { setCtxPlayerData } from '../helpers/context';
 
 on('onResourceStart', (resName: string) => {
   if (resName !== GetCurrentResourceName()) return;

@@ -55,10 +55,15 @@ interface EntryAddParameter {
 
 interface IEntryManager {
   getEntry(key: PeekValueType): PeekOption;
+
   addEntry(key: PeekValueType, info: EntryAddParameter): string[];
+
   removeEntry(id: string): void;
+
   loadActiveEntries(ctx: Context): void;
+
   getActiveEntries(): PeekOption[];
+
   clearActiveEntries(): void;
 }
 

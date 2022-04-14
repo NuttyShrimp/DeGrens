@@ -24,22 +24,24 @@ local function LootRegister(register)
 	CreateEvidence()
 
 	LockpickAnimation()
-	DGCore.Functions.Progressbar("search_register", "Kassa leeghalen...", Config.Registers.RobTime, false, true, {
-		disableMovement = true,
-		disableCarMovement = true,
-		disableMouse = false,
-		disableCombat = true,
-	}, {}, {}, {}, function()
-		-- Done
-		ClearPedTasks(ped)
-		lockpickAnimTime = 0
-		TriggerServerEvent("dg-storerobbery:server:OpenRegister", GetEntityCoords(register))
-	end, function()
-		-- Cancel
-		ClearPedTasks(ped)
-		lockpickAnimTime = 0
+	local wasCancelled, _ = exports['dg-misc']:Taskbar('Kassa leeghalen...', Config.Registers.RobTime, {
+	  canCancel = true,
+	  cancelOnDeath = true,
+	  disarm = true,
+	  disableInventory = true,
+	  controlDisables = {
+      movement = true,
+      carMovement = true,
+      combat = true,
+    },
+	})
+  ClearPedTasks(ped)
+  lockpickAnimTime = 0
+  if wasCancelled then
 		DGCore.Functions.Notify("Geannuleerd...", "error")
-	end)
+		return
+  end
+  TriggerServerEvent("dg-storerobbery:server:OpenRegister", GetEntityCoords(register))
 end
 
 function buildRegisterZone()

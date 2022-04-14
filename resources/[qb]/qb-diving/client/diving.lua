@@ -142,6 +142,7 @@ end
 RegisterNetEvent('qb-diving:server:CallCops')
 AddEventHandler('qb-diving:server:CallCops', function(Coords, msg)
     PlaySound(-1, "Lose_1st", "GTAO_FM_Events_Soundset", 0, 0, 1)
+    -- TODO: replace when dispatch system is created
     TriggerEvent("chatMessage", "911 MESSAGE", "error", msg)
     local transG = 100
     local blip = AddBlipForRadius(Coords.x, Coords.y, Coords.z, 100.0)
@@ -217,7 +218,8 @@ AddEventHandler('qb-diving:client:UseGear', function(bool)
             currentGear.enabled = true
             TriggerServerEvent('qb-diving:server:RemoveGear')
             ClearPedTasks(PlayerPedId())
-            TriggerEvent('chatMessage', "SYSTEM", "error", "/divingsuit to take off your diving suit")
+            -- TODO: replace when dispatch system is created
+            DGCore.Functions.Notify("/divingsuit to take off your diving suit", "error")
         end)
     else
         if currentGear.enabled then

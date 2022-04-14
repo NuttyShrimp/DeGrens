@@ -9,3 +9,5 @@ client_scripts {
   "@dg-logs/client/cl_error.lua",
   "client/*.js",
 }
+
+shared_script "shared/lib.lua"

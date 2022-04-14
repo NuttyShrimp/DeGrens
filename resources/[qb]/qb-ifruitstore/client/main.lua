@@ -272,6 +272,7 @@ RegisterNetEvent('qb-ifruitstore:client:PoliceAlertMessage')
 AddEventHandler('qb-ifruitstore:client:PoliceAlertMessage', function(msg, coords, blip)
     if blip then
         PlaySound(-1, "Lose_1st", "GTAO_FM_Events_Soundset", 0, 0, 1)
+        -- TODO: remove when dispatch is written
         TriggerEvent("chatMessage", "911-Report", "error", msg)
         local transG = 100
         local blip = AddBlipForRadius(coords.x, coords.y, coords.z, 100.0)
@@ -295,6 +296,7 @@ AddEventHandler('qb-ifruitstore:client:PoliceAlertMessage', function(msg, coords
     else
         if not robberyAlert then
             PlaySound(-1, "Lose_1st", "GTAO_FM_Events_Soundset", 0, 0, 1)
+            -- TODO: remove when dispatch is written
             TriggerEvent("chatMessage", "911-Report", "error", msg)
             robberyAlert = true
         end

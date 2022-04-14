@@ -1,4 +1,3 @@
-import { canEntryBeEnabled } from '../../helpers/entries';
 import { BaseManager } from './baseManager';
 
 export class FlagManager extends BaseManager implements IEntryManager {
@@ -26,7 +25,10 @@ export class FlagManager extends BaseManager implements IEntryManager {
 
   removeEntry(id: string) {
     this.entries.forEach((entries, key) => {
-      this.entries.set(key, entries.filter(entry => entry.id !== id));
+      this.entries.set(
+        key,
+        entries.filter(entry => entry.id !== id)
+      );
     });
   }
 

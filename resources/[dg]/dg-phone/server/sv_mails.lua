@@ -1,6 +1,6 @@
 fetchEmails = function(cid)
   local query = "SELECT * FROM phone_mails WHERE cid=? ORDER BY id DESC"
-  return exports["oxmysql"]:executeSync(query, { cid })
+  return exports['dg-sync']:query(query, { cid })
 end
 
 addOfflineMail = function(cid, subject, sender, message)
@@ -10,7 +10,7 @@ addOfflineMail = function(cid, subject, sender, message)
     return
   end
   local query = "INSERT INTO phone_mails (cid, sender, subject, message) VALUES (?, ?, ?, ?)"
-  exports["oxmysql"]:executeSync(query, { cid, sender, subject, message })
+  exports['dg-sync']:query(query, { cid, sender, subject, message })
 end
 exports('addOfflineMail', addOfflineMail)
 

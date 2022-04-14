@@ -57,13 +57,13 @@ end)
 RegisterNetEvent("updateVehicle", function(myCar)
     local src = source
     if IsVehicleOwned(myCar.plate) then
-        exports.oxmysql:execute('UPDATE player_vehicles SET mods = ? WHERE plate = ?', {json.encode(myCar), myCar.plate})
+        exports['dg-sql']:query('UPDATE player_vehicles SET mods = ? WHERE plate = ?', {json.encode(myCar), myCar.plate})
     end
 end)
 
 function IsVehicleOwned(plate)
     local retval = false
-    local result = exports.oxmysql:scalarSync('SELECT plate FROM player_vehicles WHERE plate = ?', {plate})
+    local result = exports['dg-sync']:scalar('SELECT plate FROM player_vehicles WHERE plate = ?', {plate})
     if result then
         retval = true
     end

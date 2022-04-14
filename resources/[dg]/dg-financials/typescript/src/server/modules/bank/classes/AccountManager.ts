@@ -1,4 +1,5 @@
 import winston from 'winston';
+import {SQL} from '@ts-shared/server';
 
 import { config } from '../../../config';
 import { checkPlayerAccounts } from '../controllers/accounts';
@@ -38,7 +39,7 @@ export class AccountManager {
 						 INNER JOIN bank_accounts_access baa on ba.account_id = baa.account_id
 			WHERE baa.cid = ?
 		`;
-    const result: string[] = await global.exports.oxmysql.executeSync(query, [cid]);
+    const result: string[] = await SQL.query(query, [cid]);
     return result;
   }
 
@@ -53,7 +54,7 @@ export class AccountManager {
 			FROM bank_accounts ba
 			WHERE ba.account_id = ?
 		`;
-    const result: DB.IAccount[] = await global.exports.oxmysql.executeSync(query, [id]);
+    const result: DB.IAccount[] = await SQL.query(query, [id]);
     if (result.length === 0) {
       return null;
     }
@@ -78,7 +79,7 @@ export class AccountManager {
 						 (SELECT JSON_ARRAYAGG(JSON_OBJECT('cid', cid, 'access_level', access_level)) FROM bank_accounts_access WHERE account_id = ba.account_id) as members
 			FROM bank_accounts ba
 		`;
-    const result: DB.IAccount[] = await global.exports.oxmysql.executeSync(query);
+    const result: DB.IAccount[] = await SQL.query(query);
     if (!result) return;
     for (const account of result) {
       const newAccount = new Account(
@@ -111,7 +112,7 @@ export class AccountManager {
 				VALUES (?, ?, ?, 0)
 			`;
       // We use the index here to make it easier to target a seeded account via code
-      await global.exports.oxmysql.executeSync(query, [`BE${i + 1}`, a.name, 'business']);
+      await SQL.query(query, [`BE${i + 1}`, a.name, 'business']);
       const account = new Account(`BE${i + 1}`, a.name, 'business', 0, []);
       this.accounts.push(account);
     }

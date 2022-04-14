@@ -47347,27 +47347,6 @@
 		"scope": "lua",
 		"prefix": "WouldEntityBeOccluded"
 	},
-	"DGCore.Commands.Add": {
-		"scope": "lua",
-		"prefix": "DGCore.Commands.Add",
-		"body": [
-			"DGCore.Commands.Add(${1:name}, ${2:help}, ${3:arguments}, ${4:argsrequired}, ${5:callback}, ${6:permission})"
-		]
-	},
-	"DGCore.Commands.Refresh": {
-		"scope": "lua",
-		"prefix": "DGCore.Commands.Refresh",
-		"body": [
-			"DGCore.Commands.Refresh(${1:source})"
-		]
-	},
-	"DGCore.Functions.ExecuteSql": {
-		"scope": "lua",
-		"prefix": "DGCore.Functions.ExecuteSql",
-		"body": [
-			"DGCore.Functions.ExecuteSql(${1:wait}, ${2:query}, ${3:cb})"
-		]
-	},
 	"DGCore.Functions.GetIdentifier": {
 		"scope": "lua",
 		"prefix": "DGCore.Functions.GetIdentifier",
@@ -47688,13 +47667,6 @@
 		"prefix": "DGCore.Functions.HasItem",
 		"body": [
 			"DGCore.Functions.HasItem(${1:source}, ${2:cb}, ${3:item})"
-		]
-	},
-	"DGCore.Functions.Progressbar": {
-		"scope": "lua",
-		"prefix": "DGCore.Functions.Progressbar",
-		"body": [
-			"DGCore.Functions.Progressbar(${1:name}, ${2:label}, ${3:duration}, ${4:useWhileDead}, ${5:canCancel}, ${6:disableControls}, ${7:animation}, ${8:prop}, ${9:propTwo}, ${10:onFinish}, ${11:onCancel})"
 		]
 	},
 	"DGCore.Functions.GetVehicleProperties": {

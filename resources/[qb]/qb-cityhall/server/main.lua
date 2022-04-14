@@ -149,8 +149,12 @@ end
 RegisterServerEvent('qb-cityhall:server:banPlayer')
 AddEventHandler('qb-cityhall:server:banPlayer', function()
     local src = source
-    TriggerClientEvent('chatMessage', -1, "QB Anti-Cheat", "error", GetPlayerName(src).." has been banned for sending POST Request's ")
-    exports.oxmysql:insert('INSERT INTO bans (name, license, discord, ip, reason, expire, bannedby) VALUES (?, ?, ?, ?, ?, ?, ?)', {
+    exports['dg-chat']:addMessage('admin', {
+      prefix = 'Anti-cheat: ',
+      message = ('%s has been banned for sending POST Request\'s'):format(GetPlayerName(src)),
+      type = 'error'
+    })
+    exports['dg-sync']:insert('INSERT INTO bans (name, license, discord, ip, reason, expire, bannedby) VALUES (?, ?, ?, ?, ?, ?, ?)', {
         GetPlayerName(src),
         DGCore.Functions.GetIdentifier(src, 'license'),
         DGCore.Functions.GetIdentifier(src, 'discord'),

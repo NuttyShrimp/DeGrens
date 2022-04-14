@@ -81,7 +81,26 @@ class RPC {
   }
 }
 
+class SQL {
+  async query(query: string, params: any[] = [], cb?: (result: any) => void) {
+    return global.exports['dg-sql'].query(query, params, cb);
+  }
+
+  async scalar(query: string, params: any[] = [], cb?: (result: any) => void) {
+    return global.exports['dg-sql'].scalar(query, params, cb);
+  }
+
+  async insert(query: string, params: any[] = [], cb?: (result: any) => void) {
+    return global.exports['dg-sql'].insert(query, params, cb);
+  }
+
+  async insertValues(table: string, values: { [k: string]: any }[] = [], cb?: (result: any) => void) {
+    return global.exports['dg-sql'].insertValues(table, values, cb);
+  }
+}
+
 export default {
   Events: new Events(),
   RPC: new RPC(),
+  SQL: new SQL(),
 };

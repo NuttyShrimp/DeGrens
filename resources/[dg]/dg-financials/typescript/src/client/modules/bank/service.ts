@@ -36,51 +36,36 @@ export const registerPeekZones = () => {
 };
 
 export const unregisterPeekZones = () => {
-  console.log('unregistering peek zones', peekIds);
   DGX.Peek.removeFlagEntry(peekIds.paycheck);
   DGX.Peek.removeModelEntry(peekIds.atm);
 };
 
 export const doAnimation = async (isAtm: boolean, isOpen: boolean) => {
-  await new Promise<void>((res, rej) => {
-    const anim: ProgressbarAnimation = isAtm
-      ? isOpen
-        ? {
-            anim: 'idle_b',
-            flags: 49,
-            animDict: 'amb@prop_human_atm@male@idle_a',
-          }
-        : {
-            anim: 'exit',
-            flags: 49,
-            animDict: 'amb@prop_human_atm@male@exit',
-          }
-      : {
-          anim: 'givetake1_a',
-          flags: 49,
-          animDict: 'mp_common',
-        };
-    DGCore.Functions.Progressbar(
-      'open_atm',
-      config.animText[isOpen ? 'open' : 'close'],
-      1000,
-      false,
-      false,
-      {
-        disableCarMovement: true,
-        disableCombat: true,
-        disableMouse: false,
-        disableMovement: true,
-      },
-      anim,
-      {},
-      {},
-      () => {
-        res();
-      },
-      () => {
-        rej();
+  const anim: TaskBar.Animation = isAtm
+    ? isOpen
+      ? {
+        anim: 'idle_b',
+        flags: 49,
+        animDict: 'amb@prop_human_atm@male@idle_a',
       }
-    );
+      : {
+        anim: 'exit',
+        flags: 49,
+        animDict: 'amb@prop_human_atm@male@exit',
+      }
+    : {
+      anim: 'givetake1_a',
+      flags: 49,
+      animDict: 'mp_common',
+    };
+  return DGX.Taskbar.create(config.animText[isOpen ? 'open' : 'close'], 1000, {
+    canCancel: false,
+    cancelOnDeath: true,
+    controlDisables: {
+      carMovement: true,
+      combat: true,
+      movement: true,
+    },
+    animation: anim,
   });
 };

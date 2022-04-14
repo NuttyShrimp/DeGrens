@@ -123,6 +123,10 @@ class PolyTarget {
 }
 
 class Keys {
+  register(name: string, description: string, defaultKey = '') {
+    global.exports['dg-lib'].registerKeyMapping(name, description, `+${name}`, `-${name}`, defaultKey, true)
+  }
+
   onPress(keyName: string, handler: (isDown: boolean) => void) {
     on('dg-lib:keyEvent', (name: string, isDown: boolean) => {
       if (name === keyName) {
