@@ -10,6 +10,7 @@ declare global {
     Phone: typeof Classes.Phone;
     SQL: typeof Classes.SQL;
     Chat: typeof Classes.Chat;
+    Taskbar: typeof Classes.Taskbar;
     Vector3: typeof Vector3Class;
     Vector4: typeof Vector4Class;
   };
