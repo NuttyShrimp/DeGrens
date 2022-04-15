@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { ErrorBoundary } from 'react-error-boundary';
 import { useSelector } from 'react-redux';
 import { nuiAction } from '@lib/nui-comms';
 import { store, type } from '@lib/redux';
@@ -16,7 +17,7 @@ declare interface AppWrapperProps {
   onHide: (data?: any) => void;
   onEvent?: (data: any) => void;
   onEscape?: () => void | boolean;
-  onError?: (e?: ErrorEvent) => void;
+  onError?: (e?: Error) => void;
   center?: boolean;
   column?: boolean;
   full?: boolean;
@@ -156,8 +157,7 @@ export default function AppWrapper(props: AppWrapperProps) {
         break;
     }
   };
-  const handleError: any = (e: ErrorEvent) => {
-    // store.dispatch(NotificationHandler.newNotification(e.message, 'error'));
+  const handleError: any = (e: Error) => {
     if (props.onError) {
       props.onError(e);
     }
@@ -173,7 +173,6 @@ export default function AppWrapper(props: AppWrapperProps) {
         },
       }),
     });
-    nuiAction('reload');
   };
   const handleActiveApp: any = () => {
     setActive(true);
@@ -183,14 +182,12 @@ export default function AppWrapper(props: AppWrapperProps) {
   useEffect(() => {
     window.addEventListener('message', eventHandler);
     window.addEventListener('keydown', handlePress);
-    window.addEventListener('error', handleError);
     if (appRef && appRef.current) {
       appRef.current.addEventListener('click', handleActiveApp);
     }
     return () => {
       window.removeEventListener('message', eventHandler);
       window.removeEventListener('keydown', handlePress);
-      window.removeEventListener('error', handleError);
       if (appRef && appRef.current) {
         appRef.current.removeEventListener('click', handleActiveApp);
       }
@@ -235,14 +232,16 @@ export default function AppWrapper(props: AppWrapperProps) {
   }, [appInfo]);
 
   return (
-    <div
-      className={`${styles.wrapper}${visible ? '' : ' hidden'}`}
-      style={{ zIndex: active ? 10 : 1, ...(props.style || {}) }}
-      data-appwrapper={props.appName}
-      ref={appRef}
-    >
-      {visible && props.children}
-    </div>
+    <ErrorBoundary onError={handleError} fallback={<div></div>}>
+      <div
+        className={`${styles.wrapper}${visible ? '' : ' hidden'}`}
+        style={{ zIndex: active ? 10 : 1, ...(props.style || {}) }}
+        data-appwrapper={props.appName}
+        ref={appRef}
+      >
+        {visible && props.children}
+      </div>
+    </ErrorBoundary>
   );
 }
 

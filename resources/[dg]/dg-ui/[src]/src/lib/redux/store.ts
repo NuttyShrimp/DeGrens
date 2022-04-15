@@ -12,8 +12,6 @@ const sentryReduxEnhancer = Sentry.createReduxEnhancer({
 
 const composeEnhancers = isDevel() ? (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ ?? compose : compose;
 
-console.log(setReducers());
-
 export const store = createStore(
   combineReducers({
     ...setReducers(),

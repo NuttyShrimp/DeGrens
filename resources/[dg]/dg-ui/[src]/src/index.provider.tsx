@@ -1,43 +1,48 @@
-import React, { useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Alert, Snackbar } from '@mui/material';
 import CssBaseline from '@mui/material/CssBaseline';
 import { StyledEngineProvider, ThemeProvider } from '@mui/material/styles';
 
 import { nuiAction } from './lib/nui-comms';
-import { store, type } from './lib/redux';
+import { GetInitialState, type } from './lib/redux';
 import { theme } from './base.styles';
 
 export const IndexProvider = ({ children }) => {
-  const { error, mounted } = useSelector<RootState, State.Main.State>(state => state.main);
+  const mainState = useSelector<RootState, State.Main.State>(state => state.main);
+  const dispatch = useDispatch();
 
   const handleClose = () => {
     nuiAction('reload');
-  };
-
-  useEffect(() => {
-    store.dispatch({
+    dispatch({
       type,
-      cb: state => ({
-        ...state,
-        main: {
-          ...state.main,
-          mounted: error === null,
-        },
-      }),
+      cb: () => GetInitialState(),
     });
-  }, [error]);
+  };
 
   return (
     <StyledEngineProvider injectFirst>
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        <Snackbar open={error !== null} autoHideDuration={5000} onClose={handleClose}>
-          <Alert onClose={handleClose} severity='error' sx={{ width: '100%' }}>
-            An error occurred in ${error}. Reloading the UI...
-          </Alert>
-        </Snackbar>
-        {mounted && children}
+        {mainState.mounted ? (
+          children
+        ) : (
+          <Snackbar
+            open={true}
+            autoHideDuration={3000}
+            anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+            onClose={handleClose}
+          >
+            <Alert
+              onClose={handleClose}
+              variant='filled'
+              severity={mainState.error ? 'error' : 'info'}
+              sx={{ width: '100%' }}
+            >
+              {mainState.error ? `An error occurred in ${mainState.error}.` : ''} Reloading the UI...
+            </Alert>
+          </Snackbar>
+        )}
       </ThemeProvider>
     </StyledEngineProvider>
   );

@@ -6,6 +6,7 @@
     "start": "vite --mode development",
     "build": "tsc --noEmit && vite build --mode production",
     "build:dev": "tsc --noEmit && vite build --mode gamedev",
+    "watch": "vite build --mode gamedev --watch",
     "format": "prettier --write \"./**/*.{js,jsx,ts,tsx,css,md,json}\" --ignore-path ./.prettierignore ",
     "lint": "eslint ./src --ext .jsx,.js,.ts,.tsx --quiet --fix --ignore-path ./.eslintignore -c ./.eslintrc",
     "postinstall": "patch-package"
@@ -28,6 +29,7 @@
     "react": "^17.0.2",
     "react-colorful": "^5.5.1",
     "react-dom": "^17.0.2",
+    "react-error-boundary": "^3.1.4",
     "react-number-format": "^4.9.1",
     "react-redux": "^7.2.6",
     "react-scripts": "^5.0.0",

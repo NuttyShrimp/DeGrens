@@ -44,16 +44,13 @@ function App() {
     if (devMode || gameDevMode) {
       if (devMode) {
         console.log('[DG-UI] Running in development mode');
+        devDataEmulator();
       }
       if (gameDevMode) {
         console.log('[DG-UI] Running in game development mode');
       }
     }
     window.addEventListener('message', handleIncomingEvent);
-    if (devMode) {
-      console.log('[DG-UI] Running in development mode');
-      devDataEmulator();
-    }
     return () => {
       window.removeEventListener('message', handleIncomingEvent);
     };
