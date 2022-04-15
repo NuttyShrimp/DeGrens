@@ -35,7 +35,7 @@ export class Account {
     this.manager = AccountManager.getInstance();
     this.logger = bankLogger.child({ module: account_id });
     this.logger.silly(
-      `Account ${this.account_id} created | name: ${this.name} | accountType: ${this.accType} | balance: ${this.balance}`,
+      `Account ${this.account_id} created | name: ${this.name} | accountType: ${this.accType} | balance: ${this.balance}`
     );
     this.permsManager = new PermissionsManager(account_id, members);
     // fetch all transactionids for this account
@@ -141,17 +141,14 @@ export class Account {
          OR target_account_id = ?
       ORDER BY date DESC
     `;
-    const transactionsIds: string[] = await SQL.query(query, [
-      this.account_id,
-      this.account_id,
-    ]);
+    const transactionsIds: string[] = await SQL.query(query, [this.account_id, this.account_id]);
     return transactionsIds;
   }
 
   private async getDBTransactions(
     offset: number,
     limit = config.accounts.transactionLimit,
-    type?: TransactionType,
+    type?: TransactionType
   ): Promise<DB.ITransaction[]> {
     const query = `
       SELECT *
@@ -196,7 +193,7 @@ export class Account {
        */
       canBeNegative?: boolean;
       targetPhone?: string;
-    } = {},
+    } = {}
   ): Promise<boolean> {
     const triggerPlayer = DGCore.Functions.GetPlayerByCitizenId(triggerCid);
     const infoStr = generateSplittedInfo({
@@ -219,7 +216,7 @@ export class Account {
             ...extra,
           },
           `${triggerPlayer.PlayerData.name} tried to ${type} ${amount} to ${this.name} (${this.account_id}) but was not found in the core as a valid player`,
-          true,
+          true
         );
         this.logger.warn(
           `${type}: invalid player | ${generateSplittedInfo({
@@ -227,7 +224,7 @@ export class Account {
             account: this.account_id,
             amount,
             ...extra,
-          })}`,
+          })}`
         );
         return false;
       }
@@ -245,7 +242,7 @@ export class Account {
               ...extra,
             },
             `${triggerPlayer.PlayerData.name} tried to ${type} ${amount} to ${this.name} (${this.account_id}) but targeted an invalid player`,
-            true,
+            true
           );
           this.logger.warn(`${type}: invalid player | ${infoStr}`);
           return false;
@@ -266,7 +263,7 @@ export class Account {
               ...extra,
             },
             `${triggerPlayer.PlayerData.name} tried to ${type} ${amount} to ${this.name} (${this.account_id}) but was not found in the core as a valid player`,
-            true,
+            true
           );
           this.logger.warn(`${type}: invalid player | ${infoStr}`);
           return false;
@@ -275,7 +272,7 @@ export class Account {
       // endregion
       // region Permissions Check
       if (!this.permsManager.hasPermission(triggerCid, ActionPermission[type])) {
-        emitNet('DGCore:Notify', triggerPlayer.PlayerData.source, 'You don\'t have the permissions for this', 'error');
+        emitNet('DGCore:Notify', triggerPlayer.PlayerData.source, "You don't have the permissions for this", 'error');
         global.exports['dg-logs'].createGraylogEntry(
           'financials:missingPermissions',
           {
@@ -284,7 +281,7 @@ export class Account {
             account: this.account_id,
             ...extra,
           },
-          `${triggerPlayer.PlayerData.name} tried to ${type} ${amount} of ${this.name} (${this.account_id}) but did not have the permissions`,
+          `${triggerPlayer.PlayerData.name} tried to ${type} ${amount} of ${this.name} (${this.account_id}) but did not have the permissions`
         );
         this.logger.info(`${type}: missing permissions | ${infoStr}`);
         // TODO add some anti-cheat measures
@@ -293,7 +290,7 @@ export class Account {
       if (type === 'transfer') {
         const targetAccount = this.manager.getAccountById(extra.targetAccountId);
         if (!targetAccount.permsManager.hasPermission(extra.acceptorCid, 'transfer')) {
-          emitNet('DGCore:Notify', triggerPlayer.PlayerData.source, 'You don\'t have the permissions for this', 'error');
+          emitNet('DGCore:Notify', triggerPlayer.PlayerData.source, "You don't have the permissions for this", 'error');
           global.exports['dg-logs'].createGraylogEntry(
             'financials:missingPermissions',
             {
@@ -302,7 +299,7 @@ export class Account {
               origin_account: this.account_id,
               ...extra,
             },
-            `${triggerPlayer.PlayerData.name} tried to transfer ${amount} from ${this.name} (${this.account_id}) to ${targetAccount.name} (accountId: ${targetAccount.account_id} | accepted_by: ${extra.acceptorCid}) but did not have the permissions`,
+            `${triggerPlayer.PlayerData.name} tried to transfer ${amount} from ${this.name} (${this.account_id}) to ${targetAccount.name} (accountId: ${targetAccount.account_id} | accepted_by: ${extra.acceptorCid}) but did not have the permissions`
           );
           this.logger.info(`transfer: missing permissions ${infoStr}`);
           // TODO add some anti-cheat measures
@@ -322,7 +319,7 @@ export class Account {
             amount,
             ...extra,
           },
-          `${triggerPlayer.PlayerData.name} tried to ${type} ${amount} from ${this.name} (${this.account_id}) but gave an invalid amount(negative)`,
+          `${triggerPlayer.PlayerData.name} tried to ${type} ${amount} from ${this.name} (${this.account_id}) but gave an invalid amount(negative)`
         );
         this.logger.info(`${type}: invalid amount | ${infoStr}`);
         return false;
@@ -347,7 +344,7 @@ export class Account {
           ...extra,
         },
         `${triggerPlayer.PlayerData.name} tried to ${type} ${amount} to ${this.name} (${this.account_id}) but the amount could not be parsed to a valid value`,
-        true,
+        true
       );
       this.logger.warn(
         `${type}: failed to parse amount to valid number | ${generateSplittedInfo({
@@ -355,7 +352,7 @@ export class Account {
           account: this.account_id,
           amount,
           ...extra,
-        })}`,
+        })}`
       );
       return false;
     }
@@ -369,7 +366,7 @@ export class Account {
     if (!success) {
       emitNet('DGCore:Notify', triggerPlayer.PlayerData.source, `Not enough money to do this!`, 'error');
       this.logger.debug(
-        `deposit: not enough money | cid: ${triggerCid} | account: ${this.account_id} | accountBalance: ${this.balance} | amount: ${amount}`,
+        `deposit: not enough money | cid: ${triggerCid} | account: ${this.account_id} | accountBalance: ${this.balance} | amount: ${amount}`
       );
       return;
     }
@@ -384,10 +381,10 @@ export class Account {
         action: 'deposit',
         comment,
       },
-      `${triggerPlayer.PlayerData.name} deposited ${amount} to ${this.name} (${this.account_id})`,
+      `${triggerPlayer.PlayerData.name} deposited ${amount} to ${this.name} (${this.account_id})`
     );
     this.logger.info(
-      `deposit: success | cid: ${triggerCid} | account: ${this.account_id} | accountBalance: ${this.balance} | amount: ${amount}`,
+      `deposit: success | cid: ${triggerCid} | account: ${this.account_id} | accountBalance: ${this.balance} | amount: ${amount}`
     );
   }
 
@@ -407,10 +404,10 @@ export class Account {
         action: 'withdraw',
         comment,
       },
-      `${triggerPlayer.PlayerData.name} withdrew ${amount} from ${this.name} (${this.account_id})`,
+      `${triggerPlayer.PlayerData.name} withdrew ${amount} from ${this.name} (${this.account_id})`
     );
     this.logger.info(
-      `withdraw: success | cid: ${triggerCid} | account: ${this.account_id} | accountBalance: ${this.balance} | amount: ${amount}`,
+      `withdraw: success | cid: ${triggerCid} | account: ${this.account_id} | accountBalance: ${this.balance} | amount: ${amount}`
     );
   }
 
@@ -420,7 +417,7 @@ export class Account {
     acceptorCid: number,
     amount: number,
     comment?: string,
-    canBeNegative = false,
+    canBeNegative = false
   ): Promise<boolean> {
     if (
       !(await this.actionValidation('transfer', triggerCid, amount, {
@@ -448,10 +445,10 @@ export class Account {
         comment,
         canBeNegative,
       },
-      `${triggerPlayer.PlayerData.name} transfer ${amount} from ${this.name} (${this.account_id}) to ${targetAccount.name} (accountId: ${targetAccount.account_id} | accepted_by: ${acceptorCid})`,
+      `${triggerPlayer.PlayerData.name} transfer ${amount} from ${this.name} (${this.account_id}) to ${targetAccount.name} (accountId: ${targetAccount.account_id} | accepted_by: ${acceptorCid})`
     );
     this.logger.info(
-      `transfer: success | cid: ${triggerCid} | acceptor_cid: ${acceptorCid} | account: ${this.account_id} | targetAccount: ${targetAccountId} | amount: ${amount}`,
+      `transfer: success | cid: ${triggerCid} | acceptor_cid: ${acceptorCid} | account: ${this.account_id} | targetAccount: ${targetAccountId} | amount: ${amount}`
     );
     return true;
   }
@@ -472,7 +469,7 @@ export class Account {
         action: 'purchase',
         comment,
       },
-      `${triggerPlayer.PlayerData.name} made a purchase of ${amount} from ${this.name} (${this.account_id})`,
+      `${triggerPlayer.PlayerData.name} made a purchase of ${amount} from ${this.name} (${this.account_id})`
     );
     return true;
   }
@@ -491,7 +488,7 @@ export class Account {
         'DGCore:Notify',
         triggerPlayer.PlayerData.source,
         'This account accType does not support purchases',
-        'error',
+        'error'
       );
       global.exports['dg-logs'].createGraylogEntry(
         'financials:invalidAccountType',
@@ -501,10 +498,10 @@ export class Account {
           amount,
           action: 'paycheck',
         },
-        `${triggerPlayer.PlayerData.name} tried to takeout his paycheck of €${amount} in ${this.name} (${this.account_id}) but the account type is not standard`,
+        `${triggerPlayer.PlayerData.name} tried to takeout his paycheck of €${amount} in ${this.name} (${this.account_id}) but the account type is not standard`
       );
       this.logger.debug(
-        `paycheck: invalid account type | cid: ${triggerCid} | account: ${this.account_id} | accountType: ${this.accType} | amount: ${amount}`,
+        `paycheck: invalid account type | cid: ${triggerCid} | account: ${this.account_id} | accountType: ${this.accType} | amount: ${amount}`
       );
       return false;
     }
@@ -518,7 +515,7 @@ export class Account {
         amount,
         action: 'paycheck',
       },
-      `${triggerPlayer.PlayerData.name} took out his paycheck of €${amount} into ${this.name} (${this.account_id})`,
+      `${triggerPlayer.PlayerData.name} took out his paycheck of €${amount} into ${this.name} (${this.account_id})`
     );
     this.logger.info(`paycheck: success | cid: ${triggerCid} | account: ${this.account_id} | amount: ${amount}`);
     return true;
@@ -528,7 +525,7 @@ export class Account {
     targetPhone: string,
     triggerCid: number,
     amount: number,
-    comment?: string,
+    comment?: string
   ): Promise<boolean> {
     if (
       !(await this.actionValidation('mobile_transaction', triggerCid, amount, {
@@ -551,7 +548,7 @@ export class Account {
       amount,
       'mobile_transaction',
       comment,
-      acceptorCid,
+      acceptorCid
     );
     global.exports['dg-logs'].createGraylogEntry(
       'financials:mobile_transaction:success',
@@ -564,10 +561,10 @@ export class Account {
         action: 'mobile_transaction',
         comment,
       },
-      `${triggerPlayer.PlayerData.name} mobile_transaction ${amount} from ${this.name} (${this.account_id}) to ${targetAccount.name} (accountId: ${targetAccount.account_id} | accepted_by: ${acceptorCid})`,
+      `${triggerPlayer.PlayerData.name} mobile_transaction ${amount} from ${this.name} (${this.account_id}) to ${targetAccount.name} (accountId: ${targetAccount.account_id} | accepted_by: ${acceptorCid})`
     );
     this.logger.info(
-      `mobile_transaction: success | cid: ${triggerCid} | acceptor_cid: ${acceptorCid} | account: ${this.account_id} | targetAccount: ${targetAccountId} | amount: ${amount}`,
+      `mobile_transaction: success | cid: ${triggerCid} | acceptor_cid: ${acceptorCid} | account: ${this.account_id} | targetAccount: ${targetAccountId} | amount: ${amount}`
     );
     return true;
   }
@@ -611,7 +608,7 @@ export class Account {
   public async getTransactions(
     source: number | string,
     offset: number,
-    type: TransactionType,
+    type: TransactionType
   ): Promise<ITransaction[]> {
     try {
       const Player = DGCore.Functions.GetPlayer(source);
@@ -623,13 +620,13 @@ export class Account {
             action: 'getTransactions',
             account: this.account_id,
           },
-          `${Player.PlayerData.name} tried to fetch transactions of ${this.name} (${this.account_id}) but was not found in the core as a valid player`,
+          `${Player.PlayerData.name} tried to fetch transactions of ${this.name} (${this.account_id}) but was not found in the core as a valid player`
         );
         this.logger.warn(`getTransactions: invalid player | src: ${source} | account: ${this.account_id}`);
         return [];
       }
       if (!this.permsManager.hasPermission(Player.PlayerData.citizenid, 'transactions')) {
-        emitNet('DGCore:Notify', Player.PlayerData.source, 'You don\'t have the permissions for this', 'error');
+        emitNet('DGCore:Notify', Player.PlayerData.source, "You don't have the permissions for this", 'error');
         global.exports['dg-logs'].createGraylogEntry(
           'financials:missingPermissions',
           {
@@ -637,7 +634,7 @@ export class Account {
             action: 'getTransactions',
             account: this.account_id,
           },
-          `${Player.PlayerData.name} tried to fetch transactions for ${this.name} (${this.account_id}) but did not have the permissions`,
+          `${Player.PlayerData.name} tried to fetch transactions for ${this.name} (${this.account_id}) but did not have the permissions`
         );
         this.logger.info(`getTransactions: missing permissions | src: ${source} | account: ${this.account_id}`);
         // TODO add some anti-cheat measures
@@ -648,12 +645,12 @@ export class Account {
         const _trans = await this.getDBTransactions(
           offset + dbTransactions.length,
           config.accounts.transactionLimit - dbTransactions.length,
-          type,
+          type
         );
         dbTransactions = this.sortTransactions(dbTransactions.concat(_trans), true);
       }
       this.logger.debug(
-        `getTransactions: success | src: ${source} | account: ${this.account_id} | amount: ${dbTransactions.length}`,
+        `getTransactions: success | src: ${source} | account: ${this.account_id} | amount: ${dbTransactions.length}`
       );
       return dbTransactions.map<ITransaction>(t => {
         return this.buildTransaction(t);
@@ -706,7 +703,7 @@ export class Account {
     amount: number,
     type: TransactionType,
     comment = '',
-    acceptor_cid?: number,
+    acceptor_cid?: number
   ): Promise<DB.ITransaction> {
     const _transaction: DB.ITransaction = {
       transaction_id: generateTransactionId(),
@@ -720,7 +717,7 @@ export class Account {
       date: Date.now(),
     };
     this.logger.silly(
-      `Adding transaction ${_transaction.transaction_id} | ${_transaction.origin_account_id} -> ${_transaction.target_account_id} | change: ${_transaction.change} | type: ${_transaction.type} | comment: ${_transaction.comment}`,
+      `Adding transaction ${_transaction.transaction_id} | ${_transaction.origin_account_id} -> ${_transaction.target_account_id} | change: ${_transaction.change} | type: ${_transaction.type} | comment: ${_transaction.comment}`
     );
     await this.AddDBTransaction(_transaction);
     return _transaction;

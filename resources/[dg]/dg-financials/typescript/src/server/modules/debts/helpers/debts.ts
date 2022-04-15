@@ -2,7 +2,7 @@ import dayjs from 'dayjs';
 import timezone from 'dayjs/plugin/timezone'; // dependent on utc plugin
 import toObject from 'dayjs/plugin/toObject';
 import utc from 'dayjs/plugin/utc';
-import {SQL} from '@ts-shared/server';
+import { SQL } from '@ts-shared/server';
 
 import 'dayjs/locale/nl-be';
 

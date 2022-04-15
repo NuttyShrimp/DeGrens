@@ -77,7 +77,7 @@ class PolyZone {
     on('OnResourceStop', (res: string) => {
       if (res !== GetCurrentResourceName()) return;
       this.zonesNamesToDelete.forEach(name => global.exports['dg-polyzone'].removeZone(name));
-    })
+    });
   }
 
   onEnter<T = any>(name: string, handler: PolyZone.EnterHandler<T>) {
@@ -113,7 +113,7 @@ class PolyZone {
     }
     global.exports['dg-polyzone'].AddBoxZone(name, pCenter, pWidth, pLength, options);
   }
-  
+
   addPolyZone(
     name: string,
     pVectors: Vec2[],
@@ -180,7 +180,7 @@ class PolyTarget {
 
 class Keys {
   register(name: string, description: string, defaultKey = '') {
-    global.exports['dg-lib'].registerKeyMapping(name, description, `+${name}`, `-${name}`, defaultKey, true)
+    global.exports['dg-lib'].registerKeyMapping(name, description, `+${name}`, `-${name}`, defaultKey, true);
   }
 
   onPress(keyName: string, handler: (isDown: boolean) => void) {

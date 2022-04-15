@@ -31,8 +31,8 @@ onNet('chat:clear', () => {
 
 onNet('chat:restart', () => {
   closeChat();
-  setTimeout(()=>peekChat(), 500)
-})
+  setTimeout(() => peekChat(), 500);
+});
 
 // This is for backwards compatibility
 // I will crucify you if you use this

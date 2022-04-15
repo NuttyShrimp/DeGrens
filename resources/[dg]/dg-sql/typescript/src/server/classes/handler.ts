@@ -15,8 +15,8 @@ class Handler {
       const resName = GetCurrentResourceName();
       const id = setInterval(() => {
         if (GetResourceState(resName) == 'started') res(id);
-      }, 100)
-    })
+      }, 100);
+    });
     clearInterval(id);
     this.isResourceReady = true;
   }
@@ -40,7 +40,9 @@ class Handler {
       );
       return result;
     } catch (e) {
-      mainLogger.error(`[${resource}] ^1Error^7 while excuting query!\n${e.message}\n${e.message || query}${JSON.stringify(params)}`);
+      mainLogger.error(
+        `[${resource}] ^1Error^7 while excuting query!\n${e.message}\n${e.message || query}${JSON.stringify(params)}`
+      );
     }
   };
 }

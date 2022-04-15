@@ -2,7 +2,7 @@ import { config } from '../../config';
 import { getDefaultAccountId } from '../bank/helpers/accounts';
 import { paycheck } from '../bank/helpers/actions';
 import { cashLogger } from '../cash/util';
-import {SQL} from '@ts-shared/server';
+import { SQL } from '@ts-shared/server';
 
 import { paycheckLogger } from './util';
 

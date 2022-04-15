@@ -8,9 +8,9 @@ import nameManager from './classes/NameManager';
 export const getGroupList = (): JobGroup[] => {
   const groups = groupManager.getGroups();
   return groups.map(g => ({
-      id: g.getId(),
-      name: nameManager.getName(g.getOwner().cid),
-      size: g.getMembers().length,
-      limit: g.getLimit(),
-   }));
+    id: g.getId(),
+    name: nameManager.getName(g.getOwner().cid),
+    size: g.getMembers().length,
+    limit: g.getLimit(),
+  }));
 };

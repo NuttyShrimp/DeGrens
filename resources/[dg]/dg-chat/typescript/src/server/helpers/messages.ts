@@ -24,7 +24,7 @@ onNet('chat:incomingMessage', (msg: string) => {
   msg = msg.replace(/^\//, '');
   const args = msg.split(' ');
   const cmd = args.shift();
-  handleCommandExecution(source, cmd , args)
+  handleCommandExecution(source, cmd, args);
 });
 
 global.exports('addMessage', sendMessage);

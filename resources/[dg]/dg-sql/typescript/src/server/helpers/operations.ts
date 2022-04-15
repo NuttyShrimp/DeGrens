@@ -1,5 +1,5 @@
 import handler from '../classes/handler';
-import {OkPacket} from "mysql2";
+import { OkPacket } from 'mysql2';
 
 const prepareInsertStatement = (table: string, values: any[]) => {
   if (values.length < 1) {
@@ -61,14 +61,14 @@ export const doInsertValues = async (table: string, values: any[] = [], cb?: (re
     return;
   }
   const query = prepareInsertStatement(table, values);
-  const result = await doQuery(
+  const result = (await doQuery(
     query,
     values.reduce((acc, valObj) => Object.values(valObj).forEach(val => acc.push(val))),
     cb,
     GetInvokingResource()
-  ) as OkPacket;
+  )) as OkPacket;
   if (cb) {
-    cb( result.affectedRows == 1 ? result.insertId : result.affectedRows ?? null);
+    cb(result.affectedRows == 1 ? result.insertId : result.affectedRows ?? null);
     return;
   }
   return result.affectedRows == 1 ? result.insertId : result.affectedRows ?? null;

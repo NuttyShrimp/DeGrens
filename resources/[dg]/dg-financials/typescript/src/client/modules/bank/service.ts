@@ -44,20 +44,20 @@ export const doAnimation = async (isAtm: boolean, isOpen: boolean) => {
   const anim: TaskBar.Animation = isAtm
     ? isOpen
       ? {
-        anim: 'idle_b',
-        flags: 49,
-        animDict: 'amb@prop_human_atm@male@idle_a',
-      }
+          anim: 'idle_b',
+          flags: 49,
+          animDict: 'amb@prop_human_atm@male@idle_a',
+        }
       : {
-        anim: 'exit',
-        flags: 49,
-        animDict: 'amb@prop_human_atm@male@exit',
-      }
+          anim: 'exit',
+          flags: 49,
+          animDict: 'amb@prop_human_atm@male@exit',
+        }
     : {
-      anim: 'givetake1_a',
-      flags: 49,
-      animDict: 'mp_common',
-    };
+        anim: 'givetake1_a',
+        flags: 49,
+        animDict: 'mp_common',
+      };
   return DGX.Taskbar.create(config.animText[isOpen ? 'open' : 'close'], 1000, {
     canCancel: false,
     cancelOnDeath: true,

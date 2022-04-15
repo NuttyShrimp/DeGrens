@@ -21,10 +21,10 @@ UI.RegisterUICallback('phone/jobs/groups/members', async (_, cb) => {
   const members = await DGCore.Functions.TriggerCallback('dg-jobs:server:groups:getMembers');
   cb({ data: members, meta: { ok: true, message: 'done' } });
 });
-UI.RegisterUICallback('phone/jobs/groups/kick', async (data: {name: string}, cb) => {
+UI.RegisterUICallback('phone/jobs/groups/kick', async (data: { name: string }, cb) => {
   await DGCore.Functions.TriggerCallback('dg-jobs:server:groups:kick', data);
-  cb({ data: {}, meta: {ok: true, message: 'done' }})
-})
+  cb({ data: {}, meta: { ok: true, message: 'done' } });
+});
 UI.RegisterUICallback('phone/jobs/group/setReady', async (data: { ready: boolean }, cb) => {
   const isSuccess = await DGCore.Functions.TriggerCallback<boolean>('dg-jobs:server:groups:setReady', data);
   cb({ data: {}, meta: { ok: isSuccess, message: isSuccess ? 'done' : 'Failed to set ready' } });

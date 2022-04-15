@@ -63,7 +63,7 @@ export class Util {
   }
 
   generateRndChar = (length: number, caseSensitive = true): string => {
-    let result = "";
+    let result = '';
     const characters = `${caseSensitive ? 'ABCDEFGHIJKLMNOPQRSTUVWXYZ' : ''}abcdefghijklmnopqrstuvwxyz0123456789`;
     const charactersLength = characters.length;
     for (let i = 0; i < length; i++) {

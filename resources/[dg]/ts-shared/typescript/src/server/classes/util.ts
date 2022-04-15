@@ -24,17 +24,17 @@ class Util extends UtilShared {
         ...data,
         cid: ply.PlayerData.citizenid,
         serverId: ply.PlayerData.source,
-        name: ply.PlayerData.name
+        name: ply.PlayerData.name,
       };
     }
-    global.exports["dg-logs"].createGraylogEntry(type, data, message, isDevImportant);
+    global.exports['dg-logs'].createGraylogEntry(type, data, message, isDevImportant);
   }
 
   getPlyCoords(src = -1) {
     const plyPed = GetPlayerPed(String(src));
     return this.getEntityCoords(plyPed);
   }
-  
+
   getEntityCoords(entity: number) {
     const entityCoords = GetEntityCoords(entity);
     return this.ArrayToVector3(entityCoords);

@@ -111,7 +111,7 @@ class JobManager {
       return null;
     }
     const job = this.jobs.get(jobName);
-    return job.payout.min * (job.payout.diff * job.payoutLevel) * (1 - ((job.payoutLevel * (groupSize - 1)) / 100));
+    return job.payout.min * (job.payout.diff * job.payoutLevel) * (1 - (job.payoutLevel * (groupSize - 1)) / 100);
   }
 
   @Export('getJobPayoutLevel')

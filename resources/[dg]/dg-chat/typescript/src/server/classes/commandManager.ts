@@ -56,9 +56,13 @@ class CommandManager {
       return val.required ?? true;
     }, true);
     name = name.replace(/^\//, '');
-    RegisterCommand(name, (src:number, args:string[])=>{
-      handleCommandExecution(src, name, args)
-    }, false)
+    RegisterCommand(
+      name,
+      (src: number, args: string[]) => {
+        handleCommandExecution(src, name, args);
+      },
+      false
+    );
     this.commands.set(name, {
       name: name,
       description,

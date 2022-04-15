@@ -1,5 +1,5 @@
 import './modules/groups/controller';
 
-setImmediate(()=>{
+setImmediate(() => {
   // Do something
-})
+});

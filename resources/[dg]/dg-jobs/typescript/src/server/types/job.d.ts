@@ -17,7 +17,7 @@ declare namespace Jobs {
     location?: {
       x: number;
       y: number;
-    }
+    };
     payout: {
       max: number;
       min: number;
@@ -31,7 +31,7 @@ declare namespace Jobs {
        * This will be done so people get more money while doing a job in a group but not the double for the same amount of work
        */
       groupPercent: number;
-    }
+    };
     payoutLevel: number;
   }
 }

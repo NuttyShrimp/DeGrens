@@ -1,5 +1,5 @@
 import winston from 'winston';
-import {SQL} from '@ts-shared/server';
+import { SQL } from '@ts-shared/server';
 
 import { config } from '../../../config';
 import { cryptoLogger } from '../util';
