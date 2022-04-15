@@ -1,3 +1,5 @@
+import { Util } from '@dgx/client';
+
 import { entryManager } from '../classes/entryManager';
 import { stateManager } from '../classes/stateManager';
 import { activateZone, deactivateZone, getCurrentEntity, updateCurrentEntity } from '../helpers/actives';
@@ -50,13 +52,13 @@ DGX.RayCast.onChange((entity, type, coords) => {
   stateManager.forceRefreshList();
 });
 
-DGX.PolyTarget.onEnter((name, data, center) => {
-  activateZone(name, data, center);
+on('dg-polytarget:enter', (name: string, data: any, center: number[]) => {
+  activateZone(name, data, Util.ArrayToVector3(center));
   stateManager.forceRefreshZones(name, data);
   stateManager.createCheckThread();
 });
 
-DGX.PolyTarget.onLeave(name => {
+on('dg-polytarget:exit', (name: string) => {
   deactivateZone(name);
   stateManager.forceRefreshZones(name, null);
 });
