@@ -1,5 +1,6 @@
 // Components to make life easier with TS
 import React, { FC } from 'react';
+import BounceLoader from 'react-spinners/BounceLoader';
 
 import { SimpleForm } from './simpleform';
 
@@ -15,3 +16,5 @@ export const ConfirmationModal: FC<{
     onAccept={props.onAccept}
   />
 );
+
+export const Loader: FC = () => <BounceLoader size={60} color={'white'} />;

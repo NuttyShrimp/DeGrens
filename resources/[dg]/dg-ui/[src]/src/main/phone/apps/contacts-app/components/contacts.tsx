@@ -4,7 +4,7 @@ import { Paper } from '../../../../../components/paper';
 import { ConfirmationModal } from '../../../../../components/util';
 import { nuiAction } from '../../../../../lib/nui-comms';
 import { copyToClipboard } from '../../../../../lib/util';
-import { showCheckmarkModal, showFormModal } from '../../../lib';
+import { showCheckmarkModal, showFormModal, showLoadModal } from '../../../lib';
 import { openConversation } from '../../message-app/lib';
 import { startPhoneCall } from '../../phone-app/lib';
 import { fetchContacts } from '../lib';
@@ -31,6 +31,7 @@ export const Contacts: FC<{ contacts: Phone.Contacts.Contact[] }> = props => {
           <ConfirmationModal
             header={'Weet je zeker dat je dit contact wilt verwijderen?'}
             onAccept={async () => {
+              showLoadModal();
               await nuiAction('phone/contacts/delete', {
                 id: c.id,
               });

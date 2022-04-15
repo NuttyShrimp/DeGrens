@@ -1,8 +1,8 @@
 import React, { FC, useEffect, useState } from 'react';
 import { Button } from '@src/components/button';
 import { Paper } from '@src/components/paper';
+import { Loader } from '@src/components/util';
 import { nuiAction } from '@src/lib/nui-comms';
-import { Loader } from '@src/main/phone/os/loader/loader';
 
 export const CurrentGroup: FC<Omit<Phone.JobCenter.Props, 'groups' | 'jobs'>> = props => {
   const [owner, setOwner] = useState<Phone.JobCenter.Member | undefined>(undefined);

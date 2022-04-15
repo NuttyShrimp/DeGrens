@@ -3,7 +3,7 @@ import React from 'react';
 import { Input } from '../../../../../components/inputs';
 import { SimpleForm } from '../../../../../components/simpleform';
 import { nuiAction } from '../../../../../lib/nui-comms';
-import { genericAction, showCheckmarkModal } from '../../../lib';
+import { genericAction, showCheckmarkModal, showLoadModal } from '../../../lib';
 
 export const TransactionModal = () => (
   <SimpleForm
@@ -22,6 +22,7 @@ export const TransactionModal = () => (
       },
     ]}
     onAccept={vals => {
+      showLoadModal();
       // TODO: move endpoint to financials script after financials UI has been moved to this
       nuiAction('phone/payconiq/makeTransaction', vals);
       showCheckmarkModal(() => {

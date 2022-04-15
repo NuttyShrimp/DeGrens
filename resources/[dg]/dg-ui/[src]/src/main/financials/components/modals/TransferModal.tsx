@@ -3,7 +3,7 @@ import React, { FC } from 'react';
 import { Input } from '../../../../components/inputs';
 import { SimpleForm } from '../../../../components/simpleform';
 import { nuiAction } from '../../../../lib/nui-comms';
-import { closeModal } from '../../lib';
+import { closeModal, openLoadModal } from '../../lib';
 
 export const TransferModal: FC<Financials.ModalProps> = props => {
   return (
@@ -26,6 +26,7 @@ export const TransferModal: FC<Financials.ModalProps> = props => {
         },
       ]}
       onAccept={async vals => {
+        openLoadModal();
         await nuiAction('financials/account/transfer', {
           accountId: props.selected.account_id,
           ...vals,

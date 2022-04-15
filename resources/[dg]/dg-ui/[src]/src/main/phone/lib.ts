@@ -1,5 +1,6 @@
 import baseBackground from '@assets/phone/background.png';
 
+import { Loader } from '../../components/util';
 import { nuiAction } from '../../lib/nui-comms';
 import { store, type } from '../../lib/redux';
 
@@ -106,6 +107,10 @@ export const hideFormModal = () => {
     checkmark: false,
     element: null,
   });
+};
+
+export const showLoadModal = () => {
+  showFormModal(Loader);
 };
 
 export const showCheckmarkModal = (payload?: Function) => {

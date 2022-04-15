@@ -3,7 +3,7 @@ import React, { FC } from 'react';
 import { Input } from '../../../../../components/inputs';
 import { SimpleForm } from '../../../../../components/simpleform';
 import { nuiAction } from '../../../../../lib/nui-comms';
-import { showCheckmarkModal } from '../../../lib';
+import { showCheckmarkModal, showLoadModal } from '../../../lib';
 import { fetchContacts } from '../lib';
 
 enum ModalHeader {
@@ -32,6 +32,7 @@ export const ContactModal: FC<{ contact: Partial<Phone.Contacts.Contact>; type: 
       },
     ]}
     onAccept={async contact => {
+      showLoadModal();
       await nuiAction(`phone/contacts/${ModalAction[props.type]}`, contact);
       showCheckmarkModal(() => fetchContacts());
     }}

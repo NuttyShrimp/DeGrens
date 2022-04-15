@@ -1,3 +1,6 @@
+import React from 'react';
+
+import { Loader } from '../../components/util';
 import { store, type } from '../../lib/redux';
 
 export const setModal = (modal: React.FC) => {
@@ -12,6 +15,10 @@ export const setModal = (modal: React.FC) => {
       },
     }),
   });
+};
+
+export const openLoadModal = () => {
+  setModal(Loader);
 };
 
 export const closeModal = () => {

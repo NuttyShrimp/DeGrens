@@ -6,6 +6,7 @@ import { devData } from '../../lib/devdata';
 import { nuiAction } from '../../lib/nui-comms';
 
 import { Financials } from './components/financials';
+import { openLoadModal } from './lib';
 import store from './store';
 
 import './styles/financials.scss';
@@ -52,6 +53,7 @@ class Component extends React.Component<Financials.Props, any> {
 
   fetchTransactions = async () => {
     if (!this.props.selected?.account_id) return;
+    openLoadModal();
     const list = await nuiAction<Financials.Transaction[]>(
       'financials/transactions/get',
       {
@@ -63,6 +65,8 @@ class Component extends React.Component<Financials.Props, any> {
     this.props.updateState({
       canLoadMore: list.length > 0,
       transactions: [...this.props.transactions, ...list],
+      backdrop: false,
+      modalComponent: null,
     });
   };
 
