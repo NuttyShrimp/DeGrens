@@ -8,6 +8,9 @@ image: node:lts
 
 .lerna_installation:
   before_script:
+    - npm config set @degrens-21:registry https://gitlab.pieter557.dscloud.me/api/v4/packages/npm/
+    - npm config set -- '//gitlab.pieter557.dscloud.me/api/v4/packages/npm/:_authToken' "${CI_JOB_TOKEN}"
+    - npm config set always-auth true
     - yarn config set network-timeout 600000 -g
     - yarn --pure-lockfile
     - yarn postinstall:lerna
