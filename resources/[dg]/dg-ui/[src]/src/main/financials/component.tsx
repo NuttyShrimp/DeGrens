@@ -1,5 +1,5 @@
 import React from 'react';
-import AppWrapper, { closeApplication } from '@components/appwrapper';
+import AppWrapper from '@components/appwrapper';
 import { compose, connect } from '@lib/redux';
 
 import { devData } from '../../lib/devdata';
@@ -89,7 +89,7 @@ class Component extends React.Component<Financials.Props, any> {
         appName={store.key}
         onShow={this.handleShow}
         onHide={this.handleHide}
-        onEscape={() => closeApplication(store.key)}
+        onEscape={this.handleHide}
         center
         full
       >
