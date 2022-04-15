@@ -14,6 +14,7 @@ end)
 setupCharMenu = function()
 	local ped = PlayerPedId()
 	setPlayerToWaitLoc()
+  DGCore.Functions.TriggerCallback('dg-chars:server:setupClient')
 	while not HasCollisionLoadedAroundEntity(ped) do
 		Wait(10)
 		ped = PlayerPedId()

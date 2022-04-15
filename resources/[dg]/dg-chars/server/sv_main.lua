@@ -1,3 +1,18 @@
+local activeInstances = {}
+
+-- Get a newInstanceID close to 1000 as possible\
+local function getFreeInstance()
+  local isFree = false
+  local currentId = 1000
+  while not isFree do
+    if not activeInstances[currentId] then
+      isFree = true
+      break
+    end
+    currentId = currentId + 1
+  end
+end
+
 -- TODO: Remove this garbage from char selection and implement in resource self
 local function loadHouseData()
 	local HouseGarages = {}
@@ -56,6 +71,13 @@ RegisterNetEvent('dg-chars:server:newCharSpawn', function()
 	local src = source
 	GiveStarterItems(src)
 	exports['dg-apartments']:enterApartment(src)
+end)
+
+DGCore.Functions.CreateCallback('dg-chars:server:setupClient', function(src, cb)
+  local instanceId = getFreeInstance()
+  exports['dg-lib']:setInstance(src, instanceId)
+  exports['dg-lib']:setInstanceName(instanceId, 'char-selection-'..GetPlayerName(src))
+  cb()
 end)
 
 DGCore.Functions.CreateCallback('dg-chars:server:getChars', function(src, cb)

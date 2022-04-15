@@ -76,6 +76,7 @@ DGCore.Functions.CreateCallback('dg-chars:server:spawn', function(src, cb, idx)
 		})
 		exports['dg-apartments']:enterApartment(src)
 	end
+  exports['dg-lib']:setInstance(src, 0)
 	cb({})
 	TriggerClientEvent('dg-chars:client:finishSpawn', src)
 end)
