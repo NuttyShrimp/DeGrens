@@ -7,6 +7,9 @@ import { store, type } from '../../lib/redux';
 import { getPhoneApp, getPhoneApps, phoneApps } from './config';
 
 const baseBgURL = `url(${baseBackground})`;
+
+let hideTimeout: NodeJS.Timeout | null = null;
+
 export const getState: <T = Phone.State>(key?: string) => T = (key = 'phone') => store.getState()[key];
 
 export const genericAction = (storeKey: string, data: any) => {
@@ -27,16 +30,23 @@ export const hidePhone = () => {
   genericAction('phone', {
     animating: false,
   });
-  setTimeout(() => {
+  hideTimeout = setTimeout(() => {
     if (state.hasNotifications) return;
     genericAction('phone', {
       visible: false,
     });
+    hideTimeout = null;
   }, 300);
   nuiAction('phone/close', { inCamera: state.inCamera });
   genericAction('phone', {
     inCamera: false,
   });
+};
+
+export const clearHideTimeout = () => {
+  if (!hideTimeout) return;
+  clearTimeout(hideTimeout);
+  hideTimeout = null;
 };
 
 export const phoneInit = async () => {
