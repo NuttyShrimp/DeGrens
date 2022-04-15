@@ -57,6 +57,7 @@ export class Location {
     SetBlipColour(this.blip, 2);
     SetBlipDisplay(this.blip, 2);
     SetBlipScale(this.blip, 0.8);
+    SetBlipAsShortRange(this.blip, true)
   }
 
   //endregion
