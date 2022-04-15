@@ -66,7 +66,7 @@ export class CryptoWallet {
     const cid = Player.PlayerData.citizenid;
     const playerAccount = await getDefaultAccount(cid);
     const price = amount * this.config.value;
-    const isSuccess = playerAccount.purchase(cid, price, `Aankoop crypto: ${amount}x ${this.cname}`);
+    const isSuccess = await playerAccount.purchase(cid, price, `Aankoop crypto: ${amount}x ${this.cname}`);
     this.logger.debug(`Buy: ${isSuccess ? 'success' : 'fail'} | amount: ${amount} | price: ${price}`);
     if (isSuccess) {
       this.amount += amount;
