@@ -22,7 +22,7 @@ declare type TextFieldProps = Partial<Omit<TextFieldPropsMUI, 'onChange'>> & {
   icon?: string | JSX.Element;
   iconLib?: 'fas' | 'far' | 'fal' | 'fab';
   onChange: changeFunction;
-  onEnter?: changeFunction;
+  handleEnter?: changeFunction;
 };
 declare type NumberInputProps = TextFieldProps & {
   min?: number;
@@ -111,8 +111,8 @@ Input.TextField = props => {
     switch (e.key) {
       case 'Enter':
         e.preventDefault();
-        if (props.onEnter) {
-          props.onEnter((e.target as any).value, (e.target as any).name, e);
+        if (props.handleEnter) {
+          props.handleEnter((e.target as any).value, (e.target as any).name, e);
         }
         break;
       default:

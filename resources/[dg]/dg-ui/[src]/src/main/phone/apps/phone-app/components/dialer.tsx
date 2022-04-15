@@ -28,7 +28,7 @@ export const Dialer: FC = () => {
 
   return (
     <div className={classes.dialerRoot}>
-      <Input.Number onChange={setValue} value={value} label={'TelefoonNr'} onEnter={handleStartCall} />
+      <Input.Number onChange={setValue} value={value} label={'TelefoonNr'} handleEnter={handleStartCall} />
       <div className={classes.dialerBtns}>
         {btns.map((row, i) => (
           <div key={i} className={classes.dialerRow}>

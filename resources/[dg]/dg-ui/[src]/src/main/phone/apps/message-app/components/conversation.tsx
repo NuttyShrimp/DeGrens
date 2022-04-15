@@ -113,7 +113,7 @@ export const Conversation: FC<Phone.Messages.Props> = props => {
               <div className={classes.inputWrapper}>
                 <Input.TextField
                   onChange={val => setMessage(val)}
-                  onEnter={sendMessage}
+                  handleEnter={sendMessage}
                   value={message}
                   label={'Bericht'}
                   fullWidth

@@ -1,4 +1,5 @@
 import React, { FC, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { IconButton } from '@mui/material';
 
 import { Button } from '../../../../../components/button';
@@ -65,6 +66,7 @@ export const Twitter: FC<
 > = props => {
   const classes = styles();
   const [disableLoad, setDisableLoad] = useState(false);
+  const tweets = useSelector<RootState, Phone.Twitter.Tweet[]>(state => state['phone.apps.twitter'].tweets);
 
   const loadMore = async () => {
     if (disableLoad) return;
@@ -75,7 +77,7 @@ export const Twitter: FC<
 
   return (
     <div className={classes.root}>
-      {props.tweets.map(tweet => (
+      {tweets.map(tweet => (
         <Tweet
           key={`phone-twt-${tweet.id}`}
           tweet={tweet}
