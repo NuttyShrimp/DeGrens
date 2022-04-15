@@ -1,3 +1,5 @@
+shouldExecute = true
+
 exports('registerKeyMapping', function(name, description, onKeyDownCommand, onKeyUpCommand, default, event, type)
 	if not default then default = "" end
 	if not type then type = "keyboard" end
@@ -15,14 +17,24 @@ exports('registerKeyMapping', function(name, description, onKeyDownCommand, onKe
 	cmdStringUp = string.format("-keybind_wrapper__%s",onKeyDownCommand)
 
 	RegisterCommand(cmdStringDown, function()
-		if event then TriggerEvent("dg-lib:keyEvent", name, true) end
+    if not shouldExecute then
+      return
+    end
+    if event then TriggerEvent("dg-lib:keyEvent", name, true) end
 		ExecuteCommand(onKeyDownCommand)
 	end, false)
 	RegisterCommand(cmdStringUp, function()
+    if not shouldExecute then
+      return
+    end
 		if event then TriggerEvent("dg-lib:keyEvent", name, false) end
 		ExecuteCommand(onKeyUpCommand)
 	end, false)
 	RegisterKeyMapping(cmdStringDown, description, type, default)
+end)
+
+exports('shouldExecuteKeyMaps', function(toggle)
+  shouldExecute = toggle
 end)
 
 exports('GetCurrentKeyMap', function(keycommand, keycontroller)

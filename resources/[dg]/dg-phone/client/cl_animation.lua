@@ -4,7 +4,7 @@ local isPropCreated = false
 setPhoneState = function(state)
 	isLoopRunning = state ~= 0
 	if (isLoopRunning) then
-		while isLoopRunning do
+		while getState('state') ~= 0 do
 			local ped = PlayerPedId()
 			if getState('state') == 2 then
 				openCamera()

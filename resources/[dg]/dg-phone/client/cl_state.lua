@@ -48,3 +48,7 @@ canOpen = function()
 end
 
 RegisterNetEvent('dg-phone:client:setState', setState)
+
+exports('isOpen', function()
+  return context.state ~= 0
+end)

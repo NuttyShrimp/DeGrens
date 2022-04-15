@@ -4,6 +4,7 @@ openPhone = function()
 	end
 	openApplication('phone')
 	SetUIFocusCustom(true, true)
+  exports['dg-lib']:shouldExecuteKeyMaps(false)
 	setState('state', 1)
 end
 
@@ -15,6 +16,7 @@ closePhone = function(state)
 	disablePauseMenu()
 	SetUIFocusCustom(false, false)
 	setState('state', state or 0)
+  exports['dg-lib']:shouldExecuteKeyMaps(state and state == 0 or true)
 end
 
 initPhone = function()
