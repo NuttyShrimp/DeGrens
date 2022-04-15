@@ -1,0 +1,12 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="ui:dev" type="js.build_tools.npm" folderName="ui">
+    <package-json value="$PROJECT_DIR$/resources/[dg]/dg-ui/[src]/package.json" />
+    <command value="run" />
+    <scripts>
+      <script value="start" />
+    </scripts>
+    <node-interpreter value="project" />
+    <envs />
+    <method v="2" />
+  </configuration>
+</component>
