@@ -27,4 +27,4 @@ onNet('chat:incomingMessage', (msg: string) => {
   handleCommandExecution(source, cmd, args);
 });
 
-global.exports('addMessage', sendMessage);
+global.exports('sendMessage', sendMessage);
