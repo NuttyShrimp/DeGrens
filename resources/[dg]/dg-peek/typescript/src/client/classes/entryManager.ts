@@ -97,7 +97,7 @@ class EntryManager {
     const { entity, type } = getCurrentEntity();
     if (!entity) return;
     const entityCtx = getEntityCtx(entity, type);
-    const managers = includeZones ? this.getManagersWithoutZone() : this.managers;
+    const managers = includeZones ? this.managers : this.getManagersWithoutZone();
     managers.forEach(manager => {
       manager.loadActiveEntries(entityCtx);
     });

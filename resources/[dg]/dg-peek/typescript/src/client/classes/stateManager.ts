@@ -22,6 +22,7 @@ class StateManager {
   private canPeek: boolean;
   private isPeeking: boolean;
   private isUIFocused: boolean;
+  private isInDebounce: boolean;
   private checkInterval: NodeJS.Timer;
   private controlInterval: NodeJS.Timer;
 
@@ -29,6 +30,7 @@ class StateManager {
     this.canPeek = true;
     this.isPeeking = false;
     this.isUIFocused = false;
+    this.isInDebounce = false;
   }
 
   // @Export('setPeekEnabled')
@@ -63,7 +65,10 @@ class StateManager {
   }
 
   focusUI() {
-    if (this.isUIFocused) return;
+    if (this.isUIFocused || this.isInDebounce) return;
+    setTimeout(() => {
+      this.isInDebounce = false;
+    }, 500);
     const activeEntries = entryManager.getAllActiveEntries();
     if (activeEntries.every(entry => isEntryDisabled(entry))) {
       return;
