@@ -3,7 +3,7 @@
 ## Itemdata
 
 ```lua 
-local itemName = "lockpick" -- can also be hash when dealing with weapons
+local itemName = "lockpick"
 exports["dg-inventory"]:GetItemData(itemName) 
 ```
 
@@ -83,8 +83,6 @@ interface Data {
     weight: number; 
     // Type
     type: 'item' | 'weapon';
-    // Provide ammotype when type is 'weapon'
-    ammotype?: string; 
     // Can stack item
     stackable: boolean;
     // Can use item

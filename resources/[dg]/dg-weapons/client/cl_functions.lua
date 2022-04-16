@@ -1,107 +1,236 @@
-local function LoadAnimDict(dict)
+exports('getCurrentWeaponData', function()
+    return currentWeaponData
+end)
+
+loadAnimDict = function(dict)
+    RequestAnimDict(dict)
 	while not HasAnimDictLoaded(dict) do
-		RequestAnimDict(dict)
 		Citizen.Wait(5)
 	end
 end
 
-local pickupList = {`PICKUP_AMMO_BULLET_MP`,`PICKUP_AMMO_FIREWORK`,`PICKUP_AMMO_FLAREGUN`,`PICKUP_AMMO_GRENADELAUNCHER`,`PICKUP_AMMO_GRENADELAUNCHER_MP`,`PICKUP_AMMO_HOMINGLAUNCHER`,`PICKUP_AMMO_MG`,`PICKUP_AMMO_MINIGUN`,`PICKUP_AMMO_MISSILE_MP`,`PICKUP_AMMO_PISTOL`,`PICKUP_AMMO_RIFLE`,`PICKUP_AMMO_RPG`,`PICKUP_AMMO_SHOTGUN`,`PICKUP_AMMO_SMG`,`PICKUP_AMMO_SNIPER`,`PICKUP_ARMOUR_STANDARD`,`PICKUP_CAMERA`,`PICKUP_CUSTOM_SCRIPT`,`PICKUP_GANG_ATTACK_MONEY`,`PICKUP_HEALTH_SNACK`,`PICKUP_HEALTH_STANDARD`,`PICKUP_MONEY_CASE`,`PICKUP_MONEY_DEP_BAG`,`PICKUP_MONEY_MED_BAG`,`PICKUP_MONEY_PAPER_BAG`,`PICKUP_MONEY_PURSE`,`PICKUP_MONEY_SECURITY_CASE`,`PICKUP_MONEY_VARIABLE`,`PICKUP_MONEY_WALLET`,`PICKUP_PARACHUTE`,`PICKUP_PORTABLE_CRATE_FIXED_INCAR`,`PICKUP_PORTABLE_CRATE_UNFIXED`,`PICKUP_PORTABLE_CRATE_UNFIXED_INCAR`,`PICKUP_PORTABLE_CRATE_UNFIXED_INCAR_SMALL`,`PICKUP_PORTABLE_CRATE_UNFIXED_LOW_GLOW`,`PICKUP_PORTABLE_DLC_VEHICLE_PACKAGE`,`PICKUP_PORTABLE_PACKAGE`,`PICKUP_SUBMARINE`,`PICKUP_VEHICLE_ARMOUR_STANDARD`,`PICKUP_VEHICLE_CUSTOM_SCRIPT`,`PICKUP_VEHICLE_CUSTOM_SCRIPT_LOW_GLOW`,`PICKUP_VEHICLE_HEALTH_STANDARD`,`PICKUP_VEHICLE_HEALTH_STANDARD_LOW_GLOW`,`PICKUP_VEHICLE_MONEY_VARIABLE`,`PICKUP_VEHICLE_WEAPON_APPISTOL`,`PICKUP_VEHICLE_WEAPON_ASSAULTSMG`,`PICKUP_VEHICLE_WEAPON_COMBATPISTOL`,`PICKUP_VEHICLE_WEAPON_GRENADE`,`PICKUP_VEHICLE_WEAPON_MICROSMG`,`PICKUP_VEHICLE_WEAPON_MOLOTOV`,`PICKUP_VEHICLE_WEAPON_PISTOL`,`PICKUP_VEHICLE_WEAPON_PISTOL50`,`PICKUP_VEHICLE_WEAPON_SAWNOFF`,`PICKUP_VEHICLE_WEAPON_SMG`,`PICKUP_VEHICLE_WEAPON_SMOKEGRENADE`,`PICKUP_VEHICLE_WEAPON_STICKYBOMB`,`PICKUP_WEAPON_ADVANCEDRIFLE`,`PICKUP_WEAPON_APPISTOL`,`PICKUP_WEAPON_ASSAULTRIFLE`,`PICKUP_WEAPON_ASSAULTSHOTGUN`,`PICKUP_WEAPON_ASSAULTSMG`,`PICKUP_WEAPON_AUTOSHOTGUN`,`PICKUP_WEAPON_BAT`,`PICKUP_WEAPON_BATTLEAXE`,`PICKUP_WEAPON_BOTTLE`,`PICKUP_WEAPON_BULLPUPRIFLE`,`PICKUP_WEAPON_BULLPUPSHOTGUN`,`PICKUP_WEAPON_CARBINERIFLE`,`PICKUP_WEAPON_COMBATMG`,`PICKUP_WEAPON_COMBATPDW`,`PICKUP_WEAPON_COMBATPISTOL`,`PICKUP_WEAPON_COMPACTLAUNCHER`,`PICKUP_WEAPON_COMPACTRIFLE`,`PICKUP_WEAPON_CROWBAR`,`PICKUP_WEAPON_DAGGER`,`PICKUP_WEAPON_DBSHOTGUN`,`PICKUP_WEAPON_FIREWORK`,`PICKUP_WEAPON_FLAREGUN`,`PICKUP_WEAPON_FLASHLIGHT`,`PICKUP_WEAPON_GRENADE`,`PICKUP_WEAPON_GRENADELAUNCHER`,`PICKUP_WEAPON_GUSENBERG`,`PICKUP_WEAPON_GOLFCLUB`,`PICKUP_WEAPON_HAMMER`,`PICKUP_WEAPON_HATCHET`,`PICKUP_WEAPON_HEAVYPISTOL`,`PICKUP_WEAPON_HEAVYSHOTGUN`,`PICKUP_WEAPON_HEAVYSNIPER`,`PICKUP_WEAPON_HOMINGLAUNCHER`,`PICKUP_WEAPON_KNIFE`,`PICKUP_WEAPON_KNUCKLE`,`PICKUP_WEAPON_MACHETE`,`PICKUP_WEAPON_MACHINEPISTOL`,`PICKUP_WEAPON_MARKSMANPISTOL`,`PICKUP_WEAPON_MARKSMANRIFLE`,`PICKUP_WEAPON_MG`,`PICKUP_WEAPON_MICROSMG`,`PICKUP_WEAPON_MINIGUN`,`PICKUP_WEAPON_MINISMG`,`PICKUP_WEAPON_MOLOTOV`,`PICKUP_WEAPON_MUSKET`,`PICKUP_WEAPON_NIGHTSTICK`,`PICKUP_WEAPON_PETROLCAN`,`PICKUP_WEAPON_PIPEBOMB`,`PICKUP_WEAPON_PISTOL`,`PICKUP_WEAPON_PISTOL50`,`PICKUP_WEAPON_POOLCUE`,`PICKUP_WEAPON_PROXMINE`,`PICKUP_WEAPON_PUMPSHOTGUN`,`PICKUP_WEAPON_RAILGUN`,`PICKUP_WEAPON_REVOLVER`,`PICKUP_WEAPON_RPG`,`PICKUP_WEAPON_SAWNOFFSHOTGUN`,`PICKUP_WEAPON_SMG`,`PICKUP_WEAPON_SMOKEGRENADE`,`PICKUP_WEAPON_SNIPERRIFLE`,`PICKUP_WEAPON_SNSPISTOL`,`PICKUP_WEAPON_SPECIALCARBINE`,`PICKUP_WEAPON_STICKYBOMB`,`PICKUP_WEAPON_STUNGUN`,`PICKUP_WEAPON_SWITCHBLADE`,`PICKUP_WEAPON_VINTAGEPISTOL`,`PICKUP_WEAPON_WRENCH`}
-function RemoveWeaponDrops()
-	local ped = PlayerPedId()
-	local pos = GetEntityCoords(ped)
-
-	for _, pickup in pairs(pickupList) do
-		if IsPickupWithinRadius(pickup, pos.x, pos.y, pos.z, 200.0) then
-			RemoveAllPickupsOfType(pickup)
-		end
-	end
-end
-
-exports("IsRepairFinished", function()
-    return Config.RepairData.IsFinished
-end)
-
-exports("IsRepairAvailable", function()
-    return not Config.RepairData.IsRepairing
-end)
-
-function UnholsterWeapon(weaponData)
+holsterWeapon = function(pWeaponData)
     local ped = PlayerPedId()
 
-    holstering = true
-    if playerJobName == "police" then
-        LoadAnimDict("rcmjosh4")
-        TaskPlayAnimAdvanced(ped, "rcmjosh4", "josh_leadout_cop2", GetEntityCoords(ped, true), 0, 0, GetEntityHeading(ped), 3.0, 3.0, -1, 50, 0, 0, 0)
-        Citizen.Wait(300)
-        SetPedWeapon(weaponData)
-        Citizen.Wait(300)
-        StopAnimTask(ped, "rcmjosh4",  "josh_leadout_cop2", 1.0)
-    else
-        LoadAnimDict("reaction@intimidation@1h")
-        TaskPlayAnimAdvanced(ped, "reaction@intimidation@1h", "intro", GetEntityCoords(ped, true), 0, 0, GetEntityHeading(ped), 8.0, 3.0, -1, 50, 0, 0, 0)
-        Citizen.Wait(1000)
-        SetPedWeapon(weaponData)
-        Citizen.Wait(1400)
-        StopAnimTask(ped, "reaction@intimidation@1h",  "intro", 1.0)
+    if not DGCore.Functions.TriggerCallback('weapons:server:shouldHolster', pWeaponData.hash) then 
+        SetCurrentPedWeapon(ped, `WEAPON_UNARMED`, true)
+        return 
     end
-    holstering = false
-end
 
-function HolsterWeapon()
-    local ped = PlayerPedId()
+    local blockShootingWhileHolstering = true
+    Citizen.CreateThread(function()
+        while blockShootingWhileHolstering do
+			DisableControlAction(0, 25, true)
+            DisableControlAction(0, 68, true)
+            DisableControlAction(0, 91, true)
+			DisablePlayerFiring(PlayerPedId(), true)
+            Citizen.Wait(0)
+        end
+    end)
 
-    holstering = true
-    if playerJobName == "police" then
-        LoadAnimDict("reaction@intimidation@cop@unarmed")
-        TaskPlayAnimAdvanced(ped, "reaction@intimidation@cop@unarmed", "intro", GetEntityCoords(ped, true), 0, 0, GetEntityHeading(ped), 3.0, 3.0, -1, 50, 0, 0, 0)
+    if DGCore.Functions.GetPlayerData().job.name == 'police' then
+        loadAnimDict('reaction@intimidation@cop@unarmed')
+        TaskPlayAnimAdvanced(ped, 'reaction@intimidation@cop@unarmed', 'intro', GetEntityCoords(ped, true), 0, 0, GetEntityHeading(ped), 3.0, 3.0, -1, 50, 0, 0, 0)
         Citizen.Wait(500)
-        StopAnimTask(ped, "reaction@intimidation@cop@unarmed",  "intro", 1.0)
+        StopAnimTask(ped, 'reaction@intimidation@cop@unarmed',  'intro', 1.0)
     else
-        LoadAnimDict("reaction@intimidation@1h")
-        TaskPlayAnimAdvanced(ped, "reaction@intimidation@1h", "outro", GetEntityCoords(ped, true), 0, 0, GetEntityHeading(ped), 8.0, 3.0, -1, 50, 0, 0, 0)
+        loadAnimDict('reaction@intimidation@1h')
+        TaskPlayAnimAdvanced(ped, 'reaction@intimidation@1h', 'outro', GetEntityCoords(ped, true), 0, 0, GetEntityHeading(ped), 8.0, 3.0, -1, 50, 0, 0, 0)
         Citizen.Wait(1400)
-        StopAnimTask(ped, "reaction@intimidation@1h",  "outro", 1.0)
+        StopAnimTask(ped, 'reaction@intimidation@1h',  'outro', 1.0)
     end
+
     SetCurrentPedWeapon(ped, `WEAPON_UNARMED`, true)
-    holstering = false
+    blockShootingWhileHolstering = false
 end
 
-function ShouldHolster(weaponName)
-    local retval = true
+unholsterWeapon = function(pWeaponData)
+    local ped = PlayerPedId()
 
-    for k, v in pairs(Config.NoHolsterWeapons) do
-        if weaponName == v then
-            retval = false
-            break
+    if not DGCore.Functions.TriggerCallback('weapons:server:shouldHolster', pWeaponData.hash) then 
+        setWeapon(pWeaponData)
+        return 
+    end
+
+    local blockShootingWhileHolstering = true
+    Citizen.CreateThread(function()
+        while blockShootingWhileHolstering do
+			DisableControlAction(0, 25, true)
+            DisableControlAction(0, 68, true)
+            DisableControlAction(0, 91, true)
+			DisablePlayerFiring(PlayerPedId(), true)
+            Citizen.Wait(0)
+        end
+    end)
+
+    if DGCore.Functions.GetPlayerData().job.name == 'police' then
+        loadAnimDict('rcmjosh4')
+        TaskPlayAnimAdvanced(ped, 'rcmjosh4', 'josh_leadout_cop2', GetEntityCoords(ped, true), 0, 0, GetEntityHeading(ped), 3.0, 3.0, -1, 50, 0, 0, 0)
+        Citizen.Wait(300)
+        setWeapon(pWeaponData)
+        Citizen.Wait(300)
+        StopAnimTask(ped, 'rcmjosh4',  'josh_leadout_cop2', 1.0)
+    else
+        loadAnimDict('reaction@intimidation@1h')
+        TaskPlayAnimAdvanced(ped, 'reaction@intimidation@1h', 'intro', GetEntityCoords(ped, true), 0, 0, GetEntityHeading(ped), 8.0, 3.0, -1, 50, 0, 0, 0)
+        Citizen.Wait(1000)
+        setWeapon(pWeaponData)
+        Citizen.Wait(1400)
+        StopAnimTask(ped, 'reaction@intimidation@1h',  'intro', 1.0)
+    end
+    blockShootingWhileHolstering = false
+end
+
+setWeapon = function(pWeaponData)
+    local ped = PlayerPedId()
+    SetCurrentPedWeapon(ped, pWeaponData.hash, true)
+
+    if pWeaponData.info.components then
+        for _, component in pairs(pWeaponData.info.components) do
+            GiveWeaponComponentToPed(ped, pWeaponData.hash, component)
         end
     end
 
-    return retval
+    if pWeaponData.info.tint then
+        SetPedWeaponTintIndex(ped, pWeaponData.hash, pWeaponData.info.tint)
+    end
 end
 
-exports('GetCurrentWeaponData', function()
-    return currentWeaponData
+startWeaponLoop = function(isBrokenWeapon)
+    Citizen.CreateThread(function()
+        if not currentWeaponData then return end
+        local playerId = PlayerId()
+        local ped = PlayerPedId()
+        local weapon = GetSelectedPedWeapon(ped)
+        local qualityDecrease = 0
+        local reticleEnabled = false
+        local previousViewMode = 1
+        local viewModeReset = false
+
+        -- When equiping a different weapon while already having one, its possible for this loop to not exit
+        -- because of setting currentweapondata to nil and instantly setting it to the new weapon
+        -- thats why we also check if the weapon is the same as the weapon this loop started with
+        -- this is to prevent this loop from running multiple instances
+        while currentWeaponData and currentWeaponData.hash == weapon do
+            -- quality decrease when shooting and brokenweapon check
+            if IsPedShooting(ped) then
+                if isBrokenWeapon then
+                    forceRemoveWeapon()
+                    break
+                end
+
+                if GetAmmoInPedWeapon(ped, currentWeaponData.hash) > 0 then
+                    qualityDecrease = qualityDecrease + 1
+                end
+            end
+
+            -- save weapondata after shooting
+            if IsControlJustReleased(0, 24) or IsDisabledControlJustReleased(0, 24) then
+                local ammo = GetAmmoInPedWeapon(ped, currentWeaponData.hash)
+                TriggerServerEvent('weapons:server:StoppedShooting', currentWeaponData, tonumber(ammo), qualityDecrease)
+                qualityDecrease = 0
+                SetPedUsingActionMode(ped, false, -1, 0)
+            end
+
+            -- reticle and forced fps in veh
+            if IsPlayerFreeAiming(playerId) then
+                if not viewModeReset and IsPedInAnyVehicle(ped, false) then
+                    local currentViewMode = GetFollowVehicleCamViewMode()
+                    if currentViewMode ~= 4 then
+                        previousViewMode = currentViewMode
+                        SetFollowVehicleCamViewMode(4)
+                        viewModeReset = true
+                    end
+                end
+
+                if not reticleEnabled then
+                    reticleEnabled = true
+                    SendNUIMessage({
+                        action = 'showReticle',
+                        show = true,
+                    })
+                end
+            else
+                if viewModeReset and IsPedInAnyVehicle(ped, false) then
+                    SetFollowVehicleCamViewMode(previousViewMode)
+                    viewModeReset = false
+                end
+
+                if reticleEnabled then
+                    reticleEnabled = false
+                    SendNUIMessage({
+                        action = 'showReticle',
+                        how = false,
+                    })
+                end
+            end
+
+            Citizen.Wait(0)
+        end
+
+        SendNUIMessage({
+            action = 'showReticle',
+            show = false,
+        })
+    end)
+end
+
+exports("openTintMenu", function()
+    if not currentWeaponData then return end
+    openApplication('contextmenu', {
+        {
+            title = 'Wapen tinten',
+            description = 'Selecteer een kleur voor je wapen.',
+            disabled = true,
+        },
+        {
+            title = 'Origineel',
+            callbackURL = 'weapons:client:SetTint',
+            data = {tint = 0},
+        },
+        {
+            title = 'Groen',
+            callbackURL = 'weapons:client:SetTint',
+            data = {tint = 1},
+        },
+        {
+            title = 'Goud',
+            callbackURL = 'weapons:client:SetTint',
+            data = {tint = 2},
+        },
+        {
+            title = 'Roos',
+            callbackURL = 'weapons:client:SetTint',
+            data = {tint = 3},
+        },
+        {
+            title = 'Leger',
+            callbackURL = 'weapons:client:SetTint',
+            data = {tint = 4},
+        },
+        {
+            title = 'Politie',
+            callbackURL = 'weapons:client:SetTint',
+            data = {tint = 5},
+        },
+        {
+            title = 'Oranje',
+            callbackURL = 'weapons:client:SetTint',
+            data = {tint = 6},
+        },
+        {
+            title = 'Platinum',
+            callbackURL = 'weapons:client:SetTint',
+            data = {tint = 7},
+        },
+    })
 end)
 
-function DisableAttack()
-    DisableControlAction(1, 140, true)
-    DisableControlAction(1, 141, true)
-    DisableControlAction(1, 142, true)
-end
-
-function SetPedWeapon(weaponData)
-    local ped = PlayerPedId()
-    local hash = GetHashKey(weaponData.name)
-
-    SetCurrentPedWeapon(ped, hash, true)
-
-    if weaponData.info.attachments and next(weaponData.info.attachments) then
-        for _, attachment in pairs(weaponData.info.attachments) do
-            GiveWeaponComponentToPed(ped, hash, GetHashKey(attachment.component))
-        end
-    end
-
-    if weaponData.info.tint then
-        SetPedWeaponTintIndex(ped, hash, weaponData.info.tint)
+forceRemoveWeapon = function(pWeaponName)
+    if not currentWeaponData then return end
+    if not pWeaponName or currentWeaponData.name == pWeaponName then
+        holsterWeapon(currentWeaponData)
+        currentWeaponData = nil
     end
 end
+exports('removeWeapon', forceRemoveWeapon)

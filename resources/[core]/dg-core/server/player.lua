@@ -298,10 +298,9 @@ function DGCore.Player.CreatePlayer(PlayerData)
 
 		local createtime = tonumber(createtime) or os.time()
 
-		if itemInfo['type'] == 'weapon' and info == nil then
-			info = {
-				serie = tostring(DGCore.Shared.RandomInt(2) .. DGCore.Shared.RandomStr(3) .. DGCore.Shared.RandomInt(1) .. DGCore.Shared.RandomStr(2) .. DGCore.Shared.RandomInt(3) .. DGCore.Shared.RandomStr(4)),
-			}
+        if not info then info = {} end
+		if itemInfo['type'] == 'weapon' and not info.serie then
+			info.serie = tostring(DGCore.Shared.RandomInt(2) .. DGCore.Shared.RandomStr(3) .. DGCore.Shared.RandomInt(1) .. DGCore.Shared.RandomStr(2) .. DGCore.Shared.RandomInt(3) .. DGCore.Shared.RandomStr(4))
 		end
 
 		if (totalWeight + (itemInfo['weight'] * amount)) <= DGCore.Config.Player.MaxWeight then
@@ -316,7 +315,6 @@ function DGCore.Player.CreatePlayer(PlayerData)
 					label = itemInfo['label'],
 					weight = itemInfo['weight'],
 					type = itemInfo['type'],
-					ammotype = itemInfo['ammotype'],
 					stackable = itemInfo['stackable'],
 					useable = itemInfo['useable'],
 					shouldClose = itemInfo['shouldClose'],
@@ -342,7 +340,6 @@ function DGCore.Player.CreatePlayer(PlayerData)
 							label = itemInfo['label'],
 							weight = itemInfo['weight'],
 							type = itemInfo['type'],
-							ammotype = itemInfo['ammotype'],
 							stackable = itemInfo['stackable'],
 							useable = itemInfo['useable'],
 							shouldClose = itemInfo['shouldClose'],
@@ -615,7 +612,6 @@ DGCore.Player.LoadInventory = function(PlayerData)
 						label = itemInfo['label'],
 						weight = itemInfo['weight'],
 						type = itemInfo['type'],
-						ammotype = itemInfo['ammotype'],
 						stackable = itemInfo['stackable'],
 						useable = itemInfo['useable'],
 						shouldClose = itemInfo['shouldClose'],

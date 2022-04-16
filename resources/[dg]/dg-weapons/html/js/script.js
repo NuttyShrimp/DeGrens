@@ -1,15 +1,11 @@
-window.addEventListener('message', function (event) {
-  switch (event.data.action) {
-    case 'toggle':
-      ToggleDot(event.data);
+window.addEventListener('message', (e) => {
+  switch (e.data.action) {
+    case 'showReticle':
+      if (e.data.show) {
+        $('.container').show();
+      } else {
+        $('.container').hide();
+      }
       break;
   }
 });
-
-ToggleDot = function (data) {
-  if (data.show) {
-    $('.Dot-Container').css('display', 'block');
-  } else {
-    $('.Dot-Container').css('display', 'none');
-  }
-};
