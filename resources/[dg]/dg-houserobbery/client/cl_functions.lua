@@ -1,5 +1,5 @@
 exports("UnlockDoor", function(houseId)
-    local hasCrowbar = exports['dg-weapons']:GetCurrentWeaponData().name == "weapon_crowbar"
+    local hasCrowbar = exports['dg-weapons']:getCurrentWeaponData().name == "weapon_crowbar"
     local hasLockpick
     if not hasCrowbar then
         hasCrowbar = DGCore.Functions.TriggerCallback('DGCore:HasItem', nil, 'lockpick')

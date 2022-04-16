@@ -288,3 +288,5 @@ resources/position/client.lua
 resources/position/fxmanifest.lua
 
 resources/position/server.lua
+
+resources/\[dg\]/dg-labs/labs.json

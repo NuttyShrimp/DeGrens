@@ -10,8 +10,6 @@ var otherLabel = '';
 
 var ClickedItemData = {};
 
-var SelectedAttachment = null;
-var AttachmentScreenActive = false;
 var ControlPressed = false;
 var selectedItem = null;
 
@@ -102,243 +100,6 @@ function GetFirstFreeSlot($toInv, $fromSlot) {
   return retval;
 }
 
-$(document).on('click', '.item-slot', function (e) {
-  e.preventDefault();
-  var ItemData = $(this).data('item');
-
-  if (ItemData !== null && ItemData !== undefined) {
-    if (ItemData.name !== undefined) {
-      if (ItemData.name.split('_')[0] == 'weapon') {
-        if (!$('#weapon-attachments').length) {
-          $('.inv-options-list').append(
-            '<center><div style="background-color: #059669;" class="inv-option-item" id="weapon-attachments"><p>ATTACHMENTS</p></div></center>'
-          );
-          $('#weapon-attachments').hide().fadeIn(250);
-          ClickedItemData = ItemData;
-        } else if (ClickedItemData == ItemData) {
-          $('#weapon-attachments').fadeOut(250, function () {
-            $('#weapon-attachments').remove();
-          });
-          ClickedItemData = {};
-        } else {
-          ClickedItemData = ItemData;
-        }
-      } else {
-        ClickedItemData = {};
-        if ($('#weapon-attachments').length) {
-          $('#weapon-attachments').fadeOut(250, function () {
-            $('#weapon-attachments').remove();
-          });
-        }
-      }
-    } else {
-      ClickedItemData = {};
-      if ($('#weapon-attachments').length) {
-        $('#weapon-attachments').fadeOut(250, function () {
-          $('#weapon-attachments').remove();
-        });
-      }
-    }
-  } else {
-    ClickedItemData = {};
-    if ($('#weapon-attachments').length) {
-      $('#weapon-attachments').fadeOut(250, function () {
-        $('#weapon-attachments').remove();
-      });
-    }
-  }
-  $('#item-amount').focus();
-});
-
-$(document).on('click', '.weapon-attachments-back', function (e) {
-  e.preventDefault();
-  $('#dg-inventory').css({ display: 'block' });
-  $('#dg-inventory').animate(
-    {
-      left: 0 + 'vw',
-    },
-    200
-  );
-  $('.weapon-attachments-container').animate(
-    {
-      left: -100 + 'vw',
-    },
-    200,
-    function () {
-      $('.weapon-attachments-container').css({ display: 'none' });
-    }
-  );
-  AttachmentScreenActive = false;
-});
-
-function FormatAttachmentInfo(data) {
-  $.post(
-    'https://dg-inventory/GetWeaponData',
-    JSON.stringify({
-      weapon: data.name,
-      ItemData: ClickedItemData,
-    }),
-    function (data) {
-      var AmmoLabel = '9mm';
-      var Durability = 100;
-      if (data.WeaponData.ammotype == 'AMMO_RIFLE') {
-        AmmoLabel = '7.62';
-      } else if (data.WeaponData.ammotype == 'AMMO_SHOTGUN') {
-        AmmoLabel = '12 Gauge';
-      }
-      if (ClickedItemData.quality !== undefined) {
-        Durability = ClickedItemData.quality;
-      }
-
-      $('.weapon-attachments-container-title').html(data.WeaponData.label + ' | ' + AmmoLabel);
-      $('.weapon-attachments-container-description').html(data.WeaponData.description);
-      $('.weapon-attachments-container-details').html(
-        '<span style="font-weight: bold; letter-spacing: .1vh;">Serial Number</span><br> ' +
-          ClickedItemData.info.serie +
-          '<br><br><span style="font-weight: bold; letter-spacing: .1vh;">Durability - ' +
-          Durability.toFixed() +
-          '% </span> <div class="weapon-attachments-container-detail-durability"><div class="weapon-attachments-container-detail-durability-total"></div></div>'
-      );
-      $('.weapon-attachments-container-detail-durability-total').css({
-        width: Durability + '%',
-      });
-      $('.weapon-attachments-container-image').attr('src', './attachment_images/' + data.WeaponData.name + '.png');
-      $('.weapon-attachments').html('');
-
-      if (data.AttachmentData !== null && data.AttachmentData !== undefined) {
-        if (data.AttachmentData.length > 0) {
-          $('.weapon-attachments-title').html(
-            '<span style="font-weight: bold; letter-spacing: .1vh;">Attachments</span>'
-          );
-          $.each(data.AttachmentData, function (i, attachment) {
-            var WeaponType = data.WeaponData.ammotype.split('_')[1].toLowerCase();
-            $('.weapon-attachments').append(
-              '<div class="weapon-attachment" id="weapon-attachment-' +
-                i +
-                '"> <div class="weapon-attachment-label"><p>' +
-                attachment.label +
-                '</p></div> <div class="weapon-attachment-img"><img src="./images/' +
-                WeaponType +
-                '_' +
-                attachment.attachment +
-                '.png"></div> </div>'
-            );
-            attachment.id = i;
-            $('#weapon-attachment-' + i).data('AttachmentData', attachment);
-          });
-        } else {
-          $('.weapon-attachments-title').html(
-            '<span style="font-weight: bold; letter-spacing: .1vh;">This gun doesn\'t contain attachments</span>'
-          );
-        }
-      } else {
-        $('.weapon-attachments-title').html(
-          '<span style="font-weight: bold; letter-spacing: .1vh;">This gun doesn\'t contain attachments</span>'
-        );
-      }
-
-      handleAttachmentDrag();
-    }
-  );
-}
-
-var AttachmentDraggingData = {};
-
-function handleAttachmentDrag() {
-  $('.weapon-attachment').draggable({
-    helper: 'clone',
-    appendTo: 'body',
-    scroll: true,
-    revertDuration: 0,
-    revert: 'invalid',
-    start: function (event, ui) {
-      var ItemData = $(this).data('AttachmentData');
-      $(this).addClass('weapon-dragging-class');
-      AttachmentDraggingData = ItemData;
-    },
-    stop: function () {
-      $(this).removeClass('weapon-dragging-class');
-    },
-  });
-  $('.weapon-attachments-remove').droppable({
-    accept: '.weapon-attachment',
-    hoverClass: 'weapon-attachments-remove-hover',
-    drop: function (event, ui) {
-      $.post(
-        'https://dg-inventory/RemoveAttachment',
-        JSON.stringify({
-          AttachmentData: AttachmentDraggingData,
-          WeaponData: ClickedItemData,
-        }),
-        function (data) {
-          if (data.Attachments !== null && data.Attachments !== undefined) {
-            if (data.Attachments.length > 0) {
-              $('#weapon-attachment-' + AttachmentDraggingData.id).fadeOut(150, function () {
-                $('#weapon-attachment-' + AttachmentDraggingData.id).remove();
-                AttachmentDraggingData = null;
-              });
-            } else {
-              $('#weapon-attachment-' + AttachmentDraggingData.id).fadeOut(150, function () {
-                $('#weapon-attachment-' + AttachmentDraggingData.id).remove();
-                AttachmentDraggingData = null;
-                $('.weapon-attachments').html('');
-              });
-              $('.weapon-attachments-title').html(
-                '<span style="font-weight: bold; letter-spacing: .1vh;">This gun doesn\'t contain attachments</span>'
-              );
-            }
-          } else {
-            $('#weapon-attachment-' + AttachmentDraggingData.id).fadeOut(150, function () {
-              $('#weapon-attachment-' + AttachmentDraggingData.id).remove();
-              AttachmentDraggingData = null;
-              $('.weapon-attachments').html('');
-            });
-            $('.weapon-attachments-title').html(
-              '<span style="font-weight: bold; letter-spacing: .1vh;">This gun doesn\'t contain attachments</span>'
-            );
-          }
-        }
-      );
-    },
-  });
-}
-
-$(document).on('click', '#weapon-attachments', function (e) {
-  e.preventDefault();
-
-  if (!Inventory.IsWeaponBlocked(ClickedItemData.name)) {
-    $('.weapon-attachments-container').css({ display: 'block' });
-
-    $('#dg-inventory').animate(
-      {
-        left: 100 + 'vw',
-      },
-      200,
-      function () {
-        $('#dg-inventory').css({ display: 'none' });
-      }
-    );
-
-    $('.weapon-attachments-container').animate(
-      {
-        left: 0 + 'vw',
-      },
-      200
-    );
-
-    AttachmentScreenActive = true;
-    FormatAttachmentInfo(ClickedItemData);
-  } else {
-    $.post(
-      'https://dg-inventory/Notify',
-      JSON.stringify({
-        message: 'Attachments are unavailable for this gun.',
-        type: 'error',
-      })
-    );
-  }
-});
-
 function FormatItemInfo(itemData) {
   $('.item-info-title').html('<p>' + itemData.label + '</p>');
 
@@ -408,35 +169,15 @@ function FormatItemInfo(itemData) {
         itemData.info.ammo != null ? itemData.info.ammo : 0;
       }
 
-      if (itemData.info.attachments != null) {
-        var attachmentString = '';
-        $.each(itemData.info.attachments, function (i, attachment) {
-          if (i == itemData.info.attachments.length - 1) {
-            attachmentString += attachment.label;
-          } else {
-            attachmentString += attachment.label + ', ';
-          }
-        });
-        $('.item-info-description').html(
-          '<p><strong>Serial Number: </strong><span>' +
-            itemData.info.serie +
-            '</span></p><p><strong>Munition: </strong><span>' +
-            itemData.info.ammo +
-            '</span></p><p><strong>Attachments: </strong><span>' +
-            attachmentString +
-            '</span></p>'
-        );
-      } else {
-        $('.item-info-description').html(
-          '<p><strong>Serial Number: </strong><span>' +
-            itemData.info.serie +
-            '</span></p><p><strong>Munition: </strong><span>' +
-            itemData.info.ammo +
-            '</span></p><p>' +
-            itemData.description +
-            '</p>'
-        );
-      }
+      $('.item-info-description').html(
+        '<p><strong>Serie Nummer: </strong><span>' +
+          itemData.info.serie +
+          '</span></p><p><strong>Ammo: </strong><span>' +
+          itemData.info.ammo +
+          '</span></p><p>' +
+          itemData.description +
+          '</p>'
+      );
     } else if (itemData.name == 'filled_evidence_bag') {
       if (itemData.info.type == 'casing') {
         $('.item-info-description').html(
@@ -977,38 +718,36 @@ function optionSwitch($fromSlot, $toSlot, $fromInv, $toInv, $toAmount, toData, f
 }
 
 function SetQualityBar(item, $inv, $slot) {
-  if (!Inventory.IsWeaponBlocked(item.name)) {
-    if (item.quality == undefined) {
-      item.quality = 100.0;
-    }
-    var qualityColor = 'rgb(39, 174, 96)';
-
-    if (item.quality <= 25) {
-      qualityColor = 'rgb(192, 57, 43)';
-    } else if (item.quality > 25 && item.quality < 50) {
-      qualityColor = 'rgb(230, 126, 34)';
-    } else if (item.quality >= 50) {
-      qualityColor = 'rgb(39, 174, 96)';
-    }
-
-    if (item.quality !== undefined) {
-      qualityLabel = item.quality.toFixed();
-    } else {
-      qualityLabel = item.quality;
-    }
-
-    if (item.quality == 0) {
-      qualityLabel = 100;
-    }
-
-    $inv
-      .find('[data-slot=' + $slot + ']')
-      .find('.item-slot-quality-bar')
-      .css({
-        width: qualityLabel + '%',
-        'background-color': qualityColor,
-      });
+  if (item.quality == undefined) {
+    item.quality = 100.0;
   }
+  var qualityColor = 'rgb(39, 174, 96)';
+
+  if (item.quality <= 25) {
+    qualityColor = 'rgb(192, 57, 43)';
+  } else if (item.quality > 25 && item.quality < 50) {
+    qualityColor = 'rgb(230, 126, 34)';
+  } else if (item.quality >= 50) {
+    qualityColor = 'rgb(39, 174, 96)';
+  }
+
+  if (item.quality !== undefined) {
+    qualityLabel = item.quality.toFixed();
+  } else {
+    qualityLabel = item.quality;
+  }
+
+  if (item.quality == 0) {
+    qualityLabel = 100;
+  }
+
+  $inv
+    .find('[data-slot=' + $slot + ']')
+    .find('.item-slot-quality-bar')
+    .css({
+      width: qualityLabel + '%',
+      'background-color': qualityColor,
+    });
 }
 
 function Swap($fromSlot, $toSlot, $fromInv, $toInv, $toAmount) {
@@ -1048,7 +787,6 @@ function Swap($fromSlot, $toSlot, $fromInv, $toInv, $toAmount) {
       newData.label = toData.label;
       newData.weight = toData.weight;
       newData.type = toData.type;
-      newData.ammotype = toData.ammotype;
       newData.stackable = toData.stackable;
       newData.useable = toData.useable;
       newData.shouldClose = toData.shouldClose;
@@ -1067,13 +805,10 @@ function Swap($fromSlot, $toSlot, $fromInv, $toInv, $toAmount) {
         $toInv.find('[data-slot=' + $toSlot + ']').addClass('item-drag');
         $toInv.find('[data-slot=' + $toSlot + ']').removeClass('item-nodrag');
 
-        var ItemLabel = '<div class="item-slot-label"><p>' + newData.label + '</p></div>';
-        if (!Inventory.IsWeaponBlocked(newData.name)) {
-          ItemLabel =
-            '<div class="item-slot-quality"><div class="item-slot-quality-bar"><p>100</p></div></div><div class="item-slot-label"><p>' +
-            newData.label +
-            '</p></div>';
-        }
+        var ItemLabel =
+        '<div class="item-slot-quality"><div class="item-slot-quality-bar"><p>100</p></div></div><div class="item-slot-label"><p>' +
+        newData.label +
+        '</p></div>';
 
         if ($toSlot < 6 && $toInv.attr('data-inventory') == 'player') {
           $toInv
@@ -1139,7 +874,6 @@ function Swap($fromSlot, $toSlot, $fromInv, $toInv, $toAmount) {
         newDataFrom.label = fromData.label;
         newDataFrom.weight = fromData.weight;
         newDataFrom.type = fromData.type;
-        newDataFrom.ammotype = fromData.ammotype;
         newDataFrom.stackable = fromData.stackable;
         newDataFrom.useable = fromData.useable;
         newDataFrom.shouldClose = fromData.shouldClose;
@@ -1157,13 +891,10 @@ function Swap($fromSlot, $toSlot, $fromInv, $toInv, $toAmount) {
         $toInv.find('[data-slot=' + $toSlot + ']').addClass('item-drag');
         $toInv.find('[data-slot=' + $toSlot + ']').removeClass('item-nodrag');
 
-        var ItemLabel = '<div class="item-slot-label"><p>' + newData.label + '</p></div>';
-        if (!Inventory.IsWeaponBlocked(newData.name)) {
-          ItemLabel =
-            '<div class="item-slot-quality"><div class="item-slot-quality-bar"><p>100</p></div></div><div class="item-slot-label"><p>' +
-            newData.label +
-            '</p></div>';
-        }
+        var ItemLabel =
+        '<div class="item-slot-quality"><div class="item-slot-quality-bar"><p>100</p></div></div><div class="item-slot-label"><p>' +
+        newData.label +
+        '</p></div>';
 
         if ($toSlot < 6 && $toInv.attr('data-inventory') == 'player') {
           $toInv
@@ -1239,13 +970,10 @@ function Swap($fromSlot, $toSlot, $fromInv, $toInv, $toAmount) {
                 '</p></div>'
             );
         } else {
-          var ItemLabel = '<div class="item-slot-label"><p>' + newDataFrom.label + '</p></div>';
-          if (!Inventory.IsWeaponBlocked(newDataFrom.name)) {
-            ItemLabel =
-              '<div class="item-slot-quality"><div class="item-slot-quality-bar"><p>100</p></div></div><div class="item-slot-label"><p>' +
-              newDataFrom.label +
-              '</p></div>';
-          }
+          var ItemLabel =
+          '<div class="item-slot-quality"><div class="item-slot-quality-bar"><p>100</p></div></div><div class="item-slot-label"><p>' +
+          newDataFrom.label +
+          '</p></div>';
 
           if ($fromSlot < 6 && $fromInv.attr('data-inventory') == 'player') {
             $fromInv
@@ -1343,13 +1071,10 @@ function Swap($fromSlot, $toSlot, $fromInv, $toInv, $toAmount) {
         $toInv.find('[data-slot=' + $toSlot + ']').addClass('item-drag');
         $toInv.find('[data-slot=' + $toSlot + ']').removeClass('item-nodrag');
 
-        var ItemLabel = '<div class="item-slot-label"><p>' + fromData.label + '</p></div>';
-        if (!Inventory.IsWeaponBlocked(fromData.name)) {
-          ItemLabel =
-            '<div class="item-slot-quality"><div class="item-slot-quality-bar"><p>100</p></div></div><div class="item-slot-label"><p>' +
-            fromData.label +
-            '</p></div>';
-        }
+        var ItemLabel =
+        '<div class="item-slot-quality"><div class="item-slot-quality-bar"><p>100</p></div></div><div class="item-slot-label"><p>' +
+        fromData.label +
+        '</p></div>';
 
         if ($toSlot < 6 && $toInv.attr('data-inventory') == 'player') {
           $toInv
@@ -1410,13 +1135,10 @@ function Swap($fromSlot, $toSlot, $fromInv, $toInv, $toAmount) {
 
           $fromInv.find('[data-slot=' + $fromSlot + ']').data('item', toData);
 
-          var ItemLabel = '<div class="item-slot-label"><p>' + toData.label + '</p></div>';
-          if (!Inventory.IsWeaponBlocked(toData.name)) {
-            ItemLabel =
-              '<div class="item-slot-quality"><div class="item-slot-quality-bar"><p>100</p></div></div><div class="item-slot-label"><p>' +
-              toData.label +
-              '</p></div>';
-          }
+          var ItemLabel =
+          '<div class="item-slot-quality"><div class="item-slot-quality-bar"><p>100</p></div></div><div class="item-slot-label"><p>' +
+          toData.label +
+          '</p></div>';
 
           if ($fromSlot < 6 && $fromInv.attr('data-inventory') == 'player') {
             $fromInv
@@ -1524,7 +1246,6 @@ function Swap($fromSlot, $toSlot, $fromInv, $toInv, $toAmount) {
         newDataTo.label = fromData.label;
         newDataTo.weight = fromData.weight;
         newDataTo.type = fromData.type;
-        newDataTo.ammotype = fromData.ammotype;
         newDataTo.stackable = fromData.stackable;
         newDataTo.useable = fromData.useable;
         newDataTo.shouldClose = fromData.shouldClose;
@@ -1542,13 +1263,10 @@ function Swap($fromSlot, $toSlot, $fromInv, $toInv, $toAmount) {
         $toInv.find('[data-slot=' + $toSlot + ']').addClass('item-drag');
         $toInv.find('[data-slot=' + $toSlot + ']').removeClass('item-nodrag');
 
-        var ItemLabel = '<div class="item-slot-label"><p>' + newDataTo.label + '</p></div>';
-        if (!Inventory.IsWeaponBlocked(newDataTo.name)) {
-          ItemLabel =
-            '<div class="item-slot-quality"><div class="item-slot-quality-bar"><p>100</p></div></div><div class="item-slot-label"><p>' +
-            newDataTo.label +
-            '</p></div>';
-        }
+        var ItemLabel =
+        '<div class="item-slot-quality"><div class="item-slot-quality-bar"><p>100</p></div></div><div class="item-slot-label"><p>' +
+        newDataTo.label +
+        '</p></div>';
 
         if ($toSlot < 6 && $toInv.attr('data-inventory') == 'player') {
           $toInv
@@ -1606,7 +1324,6 @@ function Swap($fromSlot, $toSlot, $fromInv, $toInv, $toAmount) {
         newDataFrom.label = fromData.label;
         newDataFrom.weight = fromData.weight;
         newDataFrom.type = fromData.type;
-        newDataFrom.ammotype = fromData.ammotype;
         newDataFrom.stackable = fromData.stackable;
         newDataFrom.useable = fromData.useable;
         newDataFrom.shouldClose = fromData.shouldClose;
@@ -1641,13 +1358,10 @@ function Swap($fromSlot, $toSlot, $fromInv, $toInv, $toAmount) {
                 '</p></div>'
             );
         } else {
-          var ItemLabel = '<div class="item-slot-label"><p>' + newDataFrom.label + '</p></div>';
-          if (!Inventory.IsWeaponBlocked(newDataFrom.name)) {
-            ItemLabel =
-              '<div class="item-slot-quality"><div class="item-slot-quality-bar"><p>100</p></div></div><div class="item-slot-label"><p>' +
-              newDataFrom.label +
-              '</p></div>';
-          }
+          var ItemLabel =
+          '<div class="item-slot-quality"><div class="item-slot-quality-bar"><p>100</p></div></div><div class="item-slot-label"><p>' +
+          newDataFrom.label +
+          '</p></div>';
 
           if ($fromSlot < 6 && $fromInv.attr('data-inventory') == 'player') {
             $fromInv
@@ -1753,17 +1467,6 @@ var requiredItemOpen = false;
     $.post('https://dg-inventory/PlayDropFail', JSON.stringify({}));
   };
 
-  Inventory.IsWeaponBlocked = function (WeaponName) {
-    var DurabilityBlockedWeapons = ['weapon_unarmed'];
-
-    $.each(DurabilityBlockedWeapons, function (i, name) {
-      if (name == WeaponName) {
-        return true;
-      }
-    });
-    return false;
-  };
-
   Inventory.Open = function (data) {
     totalWeight = 0;
     totalWeightOther = 0;
@@ -1828,14 +1531,10 @@ var requiredItemOpen = false;
       $.each(data.inventory, function (i, item) {
         if (item != null) {
           totalWeight += item.weight * item.amount;
-          var ItemLabel = '<div class="item-slot-label"><p>' + item.label + '</p></div>';
-
-          if (!Inventory.IsWeaponBlocked(item.name)) {
-            ItemLabel =
-              '<div class="item-slot-quality"><div class="item-slot-quality-bar"><p>100</p></div></div><div class="item-slot-label"><p>' +
-              item.label +
-              '</p></div>';
-          }
+          var ItemLabel =
+          '<div class="item-slot-quality"><div class="item-slot-quality-bar"><p>100</p></div></div><div class="item-slot-label"><p>' +
+          item.label +
+          '</p></div>';
 
           if (item.slot < 6) {
             $('.player-inventory')
@@ -1892,14 +1591,10 @@ var requiredItemOpen = false;
       $.each(data.other.inventory, function (i, item) {
         if (item != null) {
           totalWeightOther += item.weight * item.amount;
-          var ItemLabel = '<div class="item-slot-label"><p>' + item.label + '</p></div>';
-
-          if (!Inventory.IsWeaponBlocked(item.name)) {
-            ItemLabel =
-              '<div class="item-slot-quality"><div class="item-slot-quality-bar"><p>100</p></div></div><div class="item-slot-label"><p>' +
-              item.label +
-              '</p></div>';
-          }
+          var ItemLabel =
+          '<div class="item-slot-quality"><div class="item-slot-quality-bar"><p>100</p></div></div><div class="item-slot-label"><p>' +
+          item.label +
+          '</p></div>';
 
           $('.other-inventory')
             .find('[data-slot=' + item.slot + ']')
@@ -2009,68 +1704,66 @@ var requiredItemOpen = false;
   };
 
   Inventory.QualityCheck = function (item, IsOtherInventory) {
-    if (!Inventory.IsWeaponBlocked(item.name)) {
-      if (item.quality == undefined) {
-        item.quality = 100;
-      }
-      var QualityColor = 'rgb(39, 174, 96)';
-      if (item.quality < 25) {
-        QualityColor = 'rgb(192, 57, 43)';
-      } else if (item.quality > 25 && item.quality < 50) {
-        QualityColor = 'rgb(230, 126, 34)';
-      } else if (item.quality >= 50) {
-        QualityColor = 'rgb(39, 174, 96)';
-      }
-      if (item.quality !== undefined) {
-        qualityLabel = item.quality.toFixed();
+    if (item.quality == undefined) {
+      item.quality = 100;
+    }
+    var QualityColor = 'rgb(39, 174, 96)';
+    if (item.quality < 25) {
+      QualityColor = 'rgb(192, 57, 43)';
+    } else if (item.quality > 25 && item.quality < 50) {
+      QualityColor = 'rgb(230, 126, 34)';
+    } else if (item.quality >= 50) {
+      QualityColor = 'rgb(39, 174, 96)';
+    }
+    if (item.quality !== undefined) {
+      qualityLabel = item.quality.toFixed();
+    } else {
+      qualityLabel = item.quality;
+    }
+    if (item.quality == 0) {
+      qualityLabel = 'BROKEN';
+      if (!IsOtherInventory) {
+        $('.player-inventory')
+          .find('[data-slot=' + item.slot + ']')
+          .find('.item-slot-quality-bar')
+          .css({
+            width: '100%',
+            'background-color': QualityColor,
+          })
+          .find('p')
+          .html(qualityLabel);
       } else {
-        qualityLabel = item.quality;
+        $('.other-inventory')
+          .find('[data-slot=' + item.slot + ']')
+          .find('.item-slot-quality-bar')
+          .css({
+            width: '100%',
+            'background-color': QualityColor,
+          })
+          .find('p')
+          .html(qualityLabel);
       }
-      if (item.quality == 0) {
-        qualityLabel = 'BROKEN';
-        if (!IsOtherInventory) {
-          $('.player-inventory')
-            .find('[data-slot=' + item.slot + ']')
-            .find('.item-slot-quality-bar')
-            .css({
-              width: '100%',
-              'background-color': QualityColor,
-            })
-            .find('p')
-            .html(qualityLabel);
-        } else {
-          $('.other-inventory')
-            .find('[data-slot=' + item.slot + ']')
-            .find('.item-slot-quality-bar')
-            .css({
-              width: '100%',
-              'background-color': QualityColor,
-            })
-            .find('p')
-            .html(qualityLabel);
-        }
+    } else {
+      if (!IsOtherInventory) {
+        $('.player-inventory')
+          .find('[data-slot=' + item.slot + ']')
+          .find('.item-slot-quality-bar')
+          .css({
+            width: qualityLabel + '%',
+            'background-color': QualityColor,
+          })
+          .find('p')
+          .html(qualityLabel);
       } else {
-        if (!IsOtherInventory) {
-          $('.player-inventory')
-            .find('[data-slot=' + item.slot + ']')
-            .find('.item-slot-quality-bar')
-            .css({
-              width: qualityLabel + '%',
-              'background-color': QualityColor,
-            })
-            .find('p')
-            .html(qualityLabel);
-        } else {
-          $('.other-inventory')
-            .find('[data-slot=' + item.slot + ']')
-            .find('.item-slot-quality-bar')
-            .css({
-              width: qualityLabel + '%',
-              'background-color': QualityColor,
-            })
-            .find('p')
-            .html(qualityLabel);
-        }
+        $('.other-inventory')
+          .find('[data-slot=' + item.slot + ']')
+          .find('.item-slot-quality-bar')
+          .css({
+            width: qualityLabel + '%',
+            'background-color': QualityColor,
+          })
+          .find('p')
+          .html(qualityLabel);
       }
     }
   };
@@ -2082,19 +1775,6 @@ var requiredItemOpen = false;
     $('.combine-option-container').hide();
     $('.item-slot').remove();
     $.post('https://dg-inventory/CloseInventory', JSON.stringify({}));
-
-    if (AttachmentScreenActive) {
-      $('#dg-inventory').css({ left: '0vw' });
-      $('.weapon-attachments-container').css({ left: '-100vw' });
-      AttachmentScreenActive = false;
-    }
-
-    if (ClickedItemData !== null) {
-      $('#weapon-attachments').fadeOut(250, function () {
-        $('#weapon-attachments').remove();
-        ClickedItemData = {};
-      });
-    }
   };
 
   Inventory.Update = function (data) {
@@ -2227,9 +1907,13 @@ var requiredItemOpen = false;
     var type = 'Used';
 
     if (data.type == 'add') {
-      type = 'Received';
+      type = 'Ontvangen';
+    } else if (data.type == 'holster') {
+      type = 'Weggestoken';
+    } else if (data.type == 'unholster') {
+      type = 'Genomen';
     } else if (data.type == 'remove') {
-      type = 'Deleted';
+      type = 'Verwijderd';
     }
 
     var $itembox = $('.itembox-container.template').clone();

@@ -175,7 +175,7 @@ function Taskbar(label, duration, settings, id)
   end
   
   if taskSettings.disarm then
-    exports['dg-weapons']:holsterCurrentWeapon()
+    exports['dg-weapons']:forceRemoveWeapon()
   end
   
   if taskSettings.disableInventory then

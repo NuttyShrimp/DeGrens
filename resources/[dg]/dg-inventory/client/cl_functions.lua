@@ -54,7 +54,8 @@ function FormatWeaponAttachments(itemdata)
                     if value.component == v.component then
                         attachments[#attachments+1] = {
                             attachment = key,
-                            label = value.label
+                            label = value.label,
+                            item = value.item,
                         }
                     end
                 end

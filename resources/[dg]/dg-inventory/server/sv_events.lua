@@ -209,12 +209,7 @@ AddEventHandler("inventory:server:UseItemSlot", function(slot)
 	if itemData then
 		local itemInfo = ItemData[itemData.name]
 		if itemInfo.type == "weapon" then
-			if itemData.quality and itemData.quality == 0 then
-				TriggerClientEvent("weapons:client:UseWeapon", src, itemData, false)
-			else
-				TriggerClientEvent("weapons:client:UseWeapon", src, itemData, true)
-			end
-			TriggerClientEvent("inventory:client:ItemBox", src, itemInfo.name, "use")
+            TriggerClientEvent('weapons:client:UseWeapon', src, itemData)
 		elseif itemInfo.useable then
 			TriggerClientEvent("DGCore:Client:UseItem", src, itemData)
 			TriggerClientEvent("inventory:client:ItemBox", src, itemInfo.name, "use")

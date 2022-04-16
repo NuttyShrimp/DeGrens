@@ -151,7 +151,6 @@ declare interface Weapon {
   label: string;
   weight: number;
   type: 'weapon' | 'item';
-  ammotype?: string;
   image: string;
   unique: boolean;
   usable: boolean;

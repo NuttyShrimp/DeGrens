@@ -150,45 +150,6 @@ RegisterCommand("closeinv", function()
     closeInventory()
 end, false)
 
-RegisterNUICallback("GetWeaponData", function(data, cb)
-    local data = {
-        WeaponData = ItemData[data.weapon],
-        AttachmentData = FormatWeaponAttachments(data.ItemData)
-    }
-    cb(data)
-end)
-
-RegisterNUICallback("RemoveAttachment", function(data, cb)
-    local ped = PlayerPedId()
-    local WeaponData = ItemData[data.WeaponData.name]
-    local Attachment = WeaponAttachments[WeaponData.name:upper()][data.AttachmentData.attachment]
-
-    DGCore.Functions.TriggerCallback("weapons:server:RemoveAttachment", function(NewAttachments)
-        if NewAttachments ~= false then
-            local Attachies = {}
-            RemoveWeaponComponentFromPed(ped, GetHashKey(data.WeaponData.name), GetHashKey(Attachment.component))
-            for k, v in pairs(NewAttachments) do
-                for wep, pew in pairs(WeaponAttachments[WeaponData.name:upper()]) do
-                    if v.component == pew.component then
-                        Attachies[#Attachies + 1] = {
-                            attachment = pew.item,
-                            label = pew.label,
-                        }
-                    end
-                end
-            end
-            local DJATA = {
-                Attachments = Attachies,
-                WeaponData = WeaponData,
-            }
-            cb(DJATA)
-        else
-            RemoveWeaponComponentFromPed(ped, GetHashKey(data.WeaponData.name), GetHashKey(Attachment.component))
-            cb({})
-        end
-    end, data.AttachmentData, data.WeaponData)
-end)
-
 RegisterNUICallback("CloseInventory", function(data, cb)
     if currentOtherInventory == "none-inv" then
         Current["drop"] = nil
@@ -297,7 +258,6 @@ Citizen.CreateThread(function()
                     ["label"] = item.label,
                     ["weight"] = tonumber(item.weight),
                     ["type"] = item.type,
-                    ["ammotype"] = item.type == "weapon" and item.ammotype or nil,
                     ["stackable"] = item.stackable or false,
                     ["useable"] = item.useable or false,
                     ["shouldClose"] = item.shouldClose or false,
@@ -315,7 +275,6 @@ Citizen.CreateThread(function()
                         ["label"] = item.label,
                         ["weight"] = tonumber(item.weight),
                         ["type"] = item.type,
-                        ["ammotype"] = item.type == "weapon" and item.ammotype or nil,
                         ["stackable"] = item.stackable or false,
                         ["useable"] = item.useable or false,
                         ["shouldClose"] = item.shouldClose or false,
