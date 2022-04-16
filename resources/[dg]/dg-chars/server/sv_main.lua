@@ -7,7 +7,7 @@ local function getFreeInstance()
   while not isFree do
     if not activeInstances[currentId] then
       isFree = true
-      break
+      return currentId
     end
     currentId = currentId + 1
   end
