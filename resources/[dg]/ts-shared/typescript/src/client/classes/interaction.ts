@@ -74,7 +74,7 @@ class PolyZone {
       if (!this.exitHandlers.has(name)) return;
       this.exitHandlers.get(name).forEach(handler => handler(name));
     });
-    on('OnResourceStop', (res: string) => {
+    on('onResourceStop', (res: string) => {
       if (res !== GetCurrentResourceName()) return;
       this.zonesNamesToDelete.forEach(name => global.exports['dg-polyzone'].removeZone(name));
     });
@@ -118,7 +118,6 @@ class PolyZone {
     name: string,
     pVectors: Vec2[],
     options: {
-      heading?: number;
       data: Object;
       minZ?: number;
       maxZ?: number;
