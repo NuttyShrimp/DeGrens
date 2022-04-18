@@ -7,10 +7,11 @@ local function getFreeInstance()
   while not isFree do
     if not activeInstances[currentId] then
       isFree = true
-      return currentId
+      break
     end
     currentId = currentId + 1
   end
+  return currentId
 end
 
 -- TODO: Remove this garbage from char selection and implement in resource self
