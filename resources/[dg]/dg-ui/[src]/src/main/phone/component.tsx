@@ -4,7 +4,7 @@ import { compose, connect } from '@lib/redux';
 
 import { Phone } from './os/phone/phone';
 import { ConfigObject, getPhoneApps, phoneApps, phoneEvents } from './config';
-import { clearHideTimeout, hidePhone, phoneInit, setBackground } from './lib';
+import { hidePhone, phoneInit, setBackground } from './lib';
 import store from './store';
 
 const { mapStateToProps, mapDispatchToProps } = compose(store, {
@@ -24,7 +24,6 @@ class Component extends React.Component<Phone.Props, any> {
   }
 
   handleShow = (data: Omit<typeof store.initialState, 'visible'>) => {
-    clearHideTimeout();
     this.props.updateState({
       ...data,
       visible: true,

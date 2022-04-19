@@ -5,7 +5,6 @@ import shell from '@assets/phone/shell.png';
 import { useVhToPixel } from '@lib/hooks/useVhToPixel';
 
 import { ConfigObject } from '../../config';
-import { hidePhone } from '../../lib';
 import { BottomBar } from '../bottombar/bottombar';
 import { Form } from '../form/form';
 import { NotificationWrapper } from '../notifications/notifications';
@@ -19,20 +18,13 @@ export const Phone: FC<Phone.Props & { config: ConfigObject[] }> = props => {
   const basedOffset = useVhToPixel(60 - 5.5);
   const notificationState = useSelector<RootState, Phone.Notifications.State>(state => state['phone.notifications']);
   const [bottomOffset, setBottomOffset] = useState(basedOffset);
-  const [isOpen, setIsOpen] = useState(false);
-  const [isInTransition, setIsInTransition] = useState(false);
-  const [rootAnimStyle, api] = useSpring(() => ({
+  const rootAnimStyle = useSpring({
     // notification w actions has height of ~7.5vh
     // notification w/o actions has height of ~4.3vh
     // 47vh is proper bottom for notification w actions
     // spacing is ~2.75vh
-    from: {
-      bottom: `-${closedVh}px`,
-    },
-    to: {
-      bottom: props.hasNotifications ? `-${bottomOffset}px` : '0px',
-    },
-  }));
+    bottom: props.animating ? '0px' : props.hasNotifications ? `-${bottomOffset}px` : `-${closedVh}px`,
+  });
 
   useEffect(() => {
     let offset = 0;
@@ -41,42 +33,6 @@ export const Phone: FC<Phone.Props & { config: ConfigObject[] }> = props => {
     offset += (notificationState.list.length - notiWithActions.length) * 4.3;
     setBottomOffset(basedOffset - offset);
   }, [notificationState, basedOffset]);
-
-  useEffect(() => {
-    if (!props.visible && !props.animating) {
-      return;
-    }
-    if (isInTransition) {
-      setIsInTransition(false);
-      return;
-    }
-    if (!props.animating && isOpen) {
-      api.start({
-        reverse: true,
-      });
-      setIsOpen(false);
-      setIsInTransition(true);
-      return;
-    }
-    if ((props.visible || props.hasNotifications) && props.animating && !isOpen) {
-      api.start({
-        from: {
-          bottom: props.visible ? `-${bottomOffset}px` : `-${closedVh}px`,
-        },
-        to: {
-          bottom: props.visible ? '0px' : `-${bottomOffset}px`,
-        },
-        reverse: false,
-      });
-      setIsOpen(true);
-      setIsInTransition(true);
-      return;
-    }
-    if (props.visible && !(props.animating && props.hasNotifications && isOpen)) {
-      hidePhone();
-      return;
-    }
-  }, [props.visible, props.animating, props.hasNotifications, isOpen, bottomOffset, api]);
 
   return (
     <animated.div className={classes.root} style={rootAnimStyle}>
