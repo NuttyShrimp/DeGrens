@@ -27,7 +27,7 @@ class Component extends React.Component<Phone.Props, any> {
     this.props.updateState({
       ...data,
       visible: true,
-      animating: true,
+      animating: 'open',
     });
   };
 

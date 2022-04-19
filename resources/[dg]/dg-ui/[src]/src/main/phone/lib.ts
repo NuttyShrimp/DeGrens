@@ -25,14 +25,14 @@ export const genericAction = (storeKey: string, data: any) => {
 export const hidePhone = () => {
   const state = getState();
   genericAction('phone', {
-    animating: false,
+    animating: state.hasNotifications ? 'peek' : 'closed',
   });
   setTimeout(() => {
     if (state.hasNotifications) return;
     genericAction('phone', {
       visible: false,
     });
-  }, 300);
+  }, 500);
   nuiAction('phone/close', { inCamera: state.inCamera });
   genericAction('phone', {
     inCamera: false,
@@ -198,6 +198,7 @@ export const removeNotification = (id: string) => {
   });
   if (notiState.list.length === 0) {
     genericAction('phone', {
+      state: 'closed',
       hasNotifications: false,
     });
   }

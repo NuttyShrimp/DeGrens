@@ -18,13 +18,18 @@ export const Phone: FC<Phone.Props & { config: ConfigObject[] }> = props => {
   const basedOffset = useVhToPixel(60 - 5.5);
   const notificationState = useSelector<RootState, Phone.Notifications.State>(state => state['phone.notifications']);
   const [bottomOffset, setBottomOffset] = useState(basedOffset);
-  const rootAnimStyle = useSpring({
+  const [rootAnimStyle, api] = useSpring(() => ({
     // notification w actions has height of ~7.5vh
     // notification w/o actions has height of ~4.3vh
     // 47vh is proper bottom for notification w actions
     // spacing is ~2.75vh
-    bottom: props.animating ? '0px' : props.hasNotifications ? `-${bottomOffset}px` : `-${closedVh}px`,
-  });
+    // from: {
+    //   bottom: !props.visible && props.hasNotifications ? `-${bottomOffset}px` : `-${closedVh}px`,
+    // },
+    // to: {
+    //   bottom: props.hasNotifications && !props.visible ? `-${bottomOffset}px` : '0px',
+    // },
+  }));
 
   useEffect(() => {
     let offset = 0;
@@ -33,6 +38,28 @@ export const Phone: FC<Phone.Props & { config: ConfigObject[] }> = props => {
     offset += (notificationState.list.length - notiWithActions.length) * 4.3;
     setBottomOffset(basedOffset - offset);
   }, [notificationState, basedOffset]);
+
+  useEffect(() => {
+    let target = '0px';
+    switch (props.animating) {
+      case 'closed': {
+        target = `-${closedVh}px`;
+        break;
+      }
+      case 'peek': {
+        target = `-${bottomOffset}px`;
+        break;
+      }
+      case 'open': {
+        target = '0px';
+        break;
+      }
+    }
+    api.start({
+      bottom: target,
+    });
+    console.log(`visible: ${props.visible} animating: ${props.animating} hasNoti: ${props.hasNotifications}`);
+  }, [props.visible, props.animating, props.hasNotifications, api]);
 
   return (
     <animated.div className={classes.root} style={rootAnimStyle}>

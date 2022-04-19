@@ -1,6 +1,6 @@
 declare namespace Phone {
   interface State extends State.Base {
-    animating: boolean;
+    animating: 'closed' | 'peek' | 'open';
     hasNotifications: boolean;
     callActive: boolean;
     isSilent: boolean;

@@ -6,7 +6,7 @@ const store: StoreObject<Phone.State, Phone.AuxState> = {
   key: 'phone',
   initialState: {
     visible: isDevel(),
-    animating: isDevel(),
+    animating: isDevel() ? 'open' : 'closed',
     isSilent: false,
     inCamera: false,
     callActive: false,
