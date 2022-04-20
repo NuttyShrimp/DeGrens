@@ -2,7 +2,7 @@ NPCS = {
     {
         id = "paycheck_banker",
 	    model = "cs_bankman",
-	    position = vector4(242.02, 227.11, 106.0, 155.5),
+	    position = vector4(269.31, 217.3, 106.28, 70.76),
 	    --appearance = "",
 	    networked = false,
 	    distance = 25.0,
@@ -13,8 +13,6 @@ NPCS = {
 		    {setting = "collision", active = true},
 	    },
 	    flag = {name = "isBanker", active = true},
-        animation = nil,
-	    scenario = "PROP_HUMAN_SEAT_CHAIR_UPRIGHT"
     },
     {
         id = "weapon_customizer",
@@ -30,7 +28,6 @@ NPCS = {
 		    {setting = "collision", active = true},
 	    },
 	    flag = {name = "isWeaponCustomizer", active = true},
-        animation = nil,
 	    scenario = "WORLD_HUMAN_GUARD_STAND_CASINO"
     },
     {
@@ -47,7 +44,6 @@ NPCS = {
 		    {setting = "collision", active = true},
 	    },
 	    flag = {name = "isHouseRobSignin", active = true},
-        animation = nil,
 	    scenario = "WORLD_HUMAN_STAND_IMPATIENT"
     },
     {
@@ -64,7 +60,6 @@ NPCS = {
 		    {setting = "collision", active = true},
 	    },
 	    flag = {name = "isHouseRobSell", active = true},
-        animation = nil,
 	    scenario = "WORLD_HUMAN_STAND_IMPATIENT"
     }
 }

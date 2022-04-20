@@ -62,14 +62,20 @@ export const config: IConfig = {
       {
         id: 'paleto',
         name: 'Blaine County Savings Bank',
-        center: { x: -112.88, y: 6469.37, z: 31.63 },
+        center: { x: -107.94, y: 6470.59, z: 31.63 },
         heading: 45,
       },
       {
         id: 'pacific',
         name: 'Pacific Standard',
-        center: { x: 242.07, y: 224.51, z: 106.29 },
-        heading: 70,
+        center: { x: 267.68, y: 217.69, z: 106.28 },
+        heading: 250,
+      },
+      {
+        id: 'maze',
+        name: 'Maze Bank',
+        center: { x: -1308.5, y: -823.89, z: 17.15 },
+        heading: 40,
       },
     ],
   },
