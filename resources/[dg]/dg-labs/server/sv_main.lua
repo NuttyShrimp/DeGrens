@@ -26,7 +26,8 @@ Citizen.CreateThread(function()
 
     -- new labs
     local currentTime = os.time()
-    if currentTime - (60 * 60 * 24 * 7) > labData.lastRefresh then
+    if not labData or currentTime - (60 * 60 * 24 * 7) > labData.lastRefresh then
+        if not labData then labData = {} end
         labData.lastRefresh = currentTime
         labData.activeLabs = {}
         local generatedNumbers = {}
