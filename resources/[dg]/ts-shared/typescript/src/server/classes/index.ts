@@ -8,4 +8,4 @@ export const { Events, RPC, SQL } = events;
 export const { Util } = util;
 export const { Phone } = phone;
 export const { Chat } = interaction;
-export const { Taskbar } = ui;
+export const { Taskbar, Notifications } = ui;

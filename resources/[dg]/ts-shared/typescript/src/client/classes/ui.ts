@@ -76,4 +76,18 @@ class Taskbar {
   }
 }
 
-export default { UI: Ui.getInstance(), Taskbar: new Taskbar() };
+class Notifications {
+  add(text: string, type: 'info' | 'error' | 'success' = 'info', durationInMs = 5000, persistent?: boolean) {
+    return global.exports['dg-ui'].addNotification(text, type, durationInMs, persistent);
+  }
+
+  remove(id: string) {
+    return global.exports['dg-ui'].removeNotification(id);
+  }
+}
+
+export default { 
+  UI: Ui.getInstance(), 
+  Taskbar: new Taskbar(), 
+  Notifications: new Notifications(),
+};

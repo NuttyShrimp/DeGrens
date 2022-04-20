@@ -6,4 +6,4 @@ import util from './util';
 export const { Events, RPC } = events;
 export const { Peek, RayCast, PolyZone, Keys, PolyTarget } = interaction;
 export const { Util } = util;
-export const { UI, Taskbar } = ui;
+export const { UI, Taskbar, Notifications } = ui;

@@ -1,5 +1,5 @@
 import winston from 'winston';
-import { SQL } from '@ts-shared/server';
+import { Notifications, SQL } from '@ts-shared/server';
 
 import { config } from '../../../config';
 import { getDefaultAccount } from '../../bank/helpers/accounts';
@@ -128,7 +128,7 @@ export class CryptoWallet {
     }
     if (this.amount < amount) {
       this.logger.debug(`Transfer: Not enough money | cid: ${this.cid}`);
-      DGX.Util.Notify(src, `Je hebt niet genoeg ${this.cname} om ${amount}x over te maken!`, 'error');
+      Notifications.add(src, `Je hebt niet genoeg ${this.cname} om ${amount}x over te maken!`, 'error');
       return false;
     }
     this.amount -= amount;

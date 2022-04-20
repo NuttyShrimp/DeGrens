@@ -1,4 +1,4 @@
-import { Util } from '@dgx/server';
+import { Notifications, Util } from '@dgx/server';
 
 import commandManager from '../classes/commandManager';
 
@@ -82,7 +82,7 @@ export const handleCommandExecution = (source: number, cmd: string, args: string
   if (!DGCore.Functions.HasPermission(source, cmdInfo.permissionLevel)) return;
   const amountReqParams = cmdInfo.parameters.filter(param => param.required ?? true).length;
   if (amountReqParams > args.length) {
-    Util.Notify(source, 'Niet alle parameters waren ingevuld!', 'error');
+    Notifications.add(source, 'Niet alle parameters waren ingevuld!', 'error');
     return;
   }
   cmdInfo.handler(source, cmd, args);

@@ -9,6 +9,8 @@ server_scripts {
 }
 
 client_scripts {
+    '@ts-shared/client/client.js',
+    '@ts-shared/shared/lib.lua',
 	'@dg-logs/client/cl_log.lua',
 	'client/cl_*.lua',
 	'client/components/cl_*.lua',
