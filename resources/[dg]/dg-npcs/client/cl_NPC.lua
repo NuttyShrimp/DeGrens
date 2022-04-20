@@ -111,8 +111,8 @@ function NPC:SetSetting(setting, active)
     elseif setting == "ignore" then
         SetBlockingOfNonTemporaryEvents(self.entity, active) 
     elseif setting == "collision" then
-        SetEntityCompletelyDisableCollision(self.entity, not active, not active) 
-		SetEntityCoordsNoOffset(self.entity, self.position.x, self.position.y, self.position.z, not active, not active, not active)
+        SetEntityCompletelyDisableCollision(self.entity, active, active) 
+		SetEntityCoordsNoOffset(self.entity, self.position.x, self.position.y, self.position.z, false, false, false)
     end
 end
 
