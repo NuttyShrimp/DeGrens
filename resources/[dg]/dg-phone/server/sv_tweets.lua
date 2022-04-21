@@ -5,18 +5,22 @@ getTweets = function(cid, recBatches, force)
 	-- Get 20 tweets from cache skipping the first recBatches * 20 tweets
 	local tweets = {}
 	local skippedTweets = 0
-	for k,t in pairs(tweetCache) do
-		if skippedTweets < recBatches * TWEET_BATCH_SIZE then
-			skippedTweets = skippedTweets + 1
-		else
-			tweets[#tweets+1] = t
-		end
-	end
+	for i = #tweetCache, 1, -1 do
+    if skippedTweets < recBatches * TWEET_BATCH_SIZE then
+      skippedTweets = skippedTweets + 1
+    else
+      tweets[#tweets+1] = tweetCache[i]
+    end
+  end
 	-- Check if tweets has TWEET_BATCH_SIZE tweets
 	if #tweets < TWEET_BATCH_SIZE and not force then
 		fetchTweets(recBatches)
 		return getTweets(cid, recBatches, true)
 	end
+	-- Reverse tweets table
+  for i = 1, #tweets / 2 do
+    tweets[i], tweets[#tweets - i + 1] = tweets[#tweets - i + 1], tweets[i]
+  end
 	for k,t in pairs(tweets) do
 		statusInfo = fetchActionStatus(cid, t.id)
 		t.liked = statusInfo.liked or false
