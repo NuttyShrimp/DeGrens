@@ -1,4 +1,4 @@
-import { includesRain, windDirections } from './../../common/weather';
+import { includesRain, windDirections } from '../../common/weather';
 import { randomArrElement, weightedElement } from '../helpers';
 import {
   activeWeathers,
@@ -11,12 +11,13 @@ import {
   windSpeeds,
 } from '../../common/weather';
 import { Weather, WeatherProgression } from '../../common/types';
+import { Chat, Notifications } from '@dgx/server';
 
 let weatherProgression: WeatherProgression[] = [];
 
 setImmediate(async () => {
   for (let i = 0; i < preproducedTransitions; i++) {
-    await setNextProgression();
+    setNextProgression();
   }
 });
 
@@ -42,26 +43,28 @@ onNet('dg-weathersync:client:weather:request', () => {
   emitNet('dg-weathersync:client:weather', global.source, weatherProgression[0]);
 });
 
-RegisterCommand(
+Chat.registerCommand(
   'weather',
-  (source: string, args: string[]) => {
+  'Set the weather type',
+  [{ name: 'type', description: '' }],
+  'admin',
+  (source, _, args) => {
     if (Number(source) > 1 && !DGCore.Functions.HasPermission(Number(source), 'admin')) {
-      return emitNet('DGCore:Notify', source, 'You do not have permissions to use this command.', 'error');
+      return Notifications.add(source, 'You do not have permissions to use this command.', 'error');
     }
 
     if (args.length === 0) {
-      return emitNet('DGCore:Notify', source, 'Format: /weather [type]', 'error');
+      return Notifications.add(source, 'Format: /weather [type]', 'error');
     }
 
     const weather = args[0] as Weather;
     setWeather(weather);
-  },
-  false
+  }
 );
 
 const setWeather = (weather: Weather) => {
   if (!activeWeathers.includes(weather)) {
-    return emitNet('DGCore:Notify', source, 'Format: /weather [type]', 'error');
+    return Notifications.add(source, 'Format: /weather [type]', 'error');
   }
 
   const temperature = temperatureRanges[weather] ?? [80, 100];

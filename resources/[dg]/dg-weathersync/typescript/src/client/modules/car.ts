@@ -1,4 +1,4 @@
-import { WeatherProgression } from './../../common/types';
+import { WeatherProgression } from '../../common/types';
 import { VEHICLE_CLEANING_ENABLED, VEHICLE_TEMP_ENABLED } from '../../common/config';
 import { includesRain } from '../../common/weather';
 

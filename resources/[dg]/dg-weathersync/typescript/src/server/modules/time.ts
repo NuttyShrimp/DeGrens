@@ -1,4 +1,5 @@
 import { secondsPerDay, secondsPerMinute } from '../../common/time';
+import { Chat, Notifications } from '@dgx/server';
 
 let time = 0;
 
@@ -21,28 +22,30 @@ setInterval(() => {
   }
 }, secondsPerMinute * 1000);
 
-RegisterCommand(
+Chat.registerCommand(
   'time',
-  (source: string, args: string[]) => {
-    if (Number(source) > 1 && !DGCore.Functions.HasPermission(Number(source), 'admin')) {
-      return emitNet('DGCore:Notify', source, 'You do not have permissions to use this command.', 'error');
+  'Change the time of day.',
+  [{ name: 'time', description: 'number between 0 and 1440' }],
+  'admin',
+  (source, _, args) => {
+    if (source > 1 && !DGCore.Functions.HasPermission(source, 'admin')) {
+      return Notifications.add(source, 'You do not have permissions to use this command.', 'error');
     }
 
     if (args.length === 0) {
-      return emitNet('DGCore:Notify', source, 'Format: /time [0-1440]', 'error');
+      return Notifications.add(source, 'Format: /time [0-1440]', 'error');
     }
 
     const _time = parseInt(args[0]);
 
     if (_time < 0 || _time > 1440) {
-      return emitNet('DGCore:Notify', source, 'Format: /time [0-1440]', 'error');
+      return Notifications.add(source, 'Format: /time [0-1440]', 'error');
     }
 
     time = _time;
     emitNet('dg-weathersync:client:time', -1, time);
-    emitNet('DGCore:Notify', source, 'Time changed', 'success');
-  },
-  false
+    return Notifications.add(source, 'Time changed', 'success');
+  }
 );
 
 onNet('dg-weathersync:client:time:request', () => {

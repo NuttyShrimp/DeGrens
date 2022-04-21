@@ -1,11 +1,5 @@
 {
   "compilerOptions": {
-    "baseUrl": ".",
-    "paths": {
-      "*": [
-        "types/*"
-      ]
-    },
     "outDir": "./",
     "noImplicitAny": false,
     "module": "commonjs",
@@ -22,12 +16,16 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "resolveJsonModule": true,
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "baseUrl": "./",
+    "paths": {
+      "@dgx/*": ["../../../../ts-shared/typescript/src/*"]
+    }
   },
   "include": [
     "./**/*",
-    "../../../ts-shared/typescript/src/shared/types/*.d.ts",
-    "../../../ts-shared/typescript/src/server/types/*.d.ts"
+    "../../../../ts-shared/typescript/src/shared/types/*.d.ts",
+    "../../../../ts-shared/typescript/src/server/types/*.d.ts"
   ],
   "exclude": [
     "**/node_modules",
