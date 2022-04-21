@@ -63,7 +63,7 @@ class RayCast {
 class PolyZone {
   private enterHandlers: Map<string, PolyZone.EnterHandler[]> = new Map();
   private exitHandlers: Map<string, PolyZone.ExitHandler[]> = new Map();
-  private zonesNamesToDelete: Set<string> = new Set();
+  private zonesNamesToDelete: Set<{ name: string; id: string | number }> = new Set();
 
   constructor() {
     on('dg-polyzone:enter', (name: string, data: any, center: number[]) => {
@@ -76,7 +76,7 @@ class PolyZone {
     });
     on('onResourceStop', (res: string) => {
       if (res !== GetCurrentResourceName()) return;
-      this.zonesNamesToDelete.forEach(name => global.exports['dg-polyzone'].removeZone(name));
+      this.zonesNamesToDelete.forEach(zoneInfo => global.exports['dg-polyzone'].removeZone(zoneInfo.name, zoneInfo.id));
     });
   }
 
@@ -99,7 +99,7 @@ class PolyZone {
     pLength: number,
     options: {
       heading?: number;
-      data: Object;
+      data: { [key: string]: any };
       minZ?: number;
       maxZ?: number;
     },
@@ -109,7 +109,7 @@ class PolyZone {
       pCenter = pCenter.add(0);
     }
     if (removeOnRestart) {
-      this.zonesNamesToDelete.add(name);
+      this.zonesNamesToDelete.add({ name, id: options.data.id });
     }
     global.exports['dg-polyzone'].AddBoxZone(name, pCenter, pWidth, pLength, options);
   }
@@ -118,14 +118,14 @@ class PolyZone {
     name: string,
     pVectors: Vec2[],
     options: {
-      data: Object;
+      data: { [key: string]: any };
       minZ?: number;
       maxZ?: number;
     },
     removeOnRestart = false
   ) {
     if (removeOnRestart) {
-      this.zonesNamesToDelete.add(name);
+      this.zonesNamesToDelete.add({ name, id: options.data.id });
     }
     global.exports['dg-polyzone'].AddPolyZone(name, pVectors, options);
   }

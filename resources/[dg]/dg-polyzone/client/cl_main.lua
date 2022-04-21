@@ -108,11 +108,20 @@ exports('getComboZones', function()
 end)
 
 -- IMPORTANT: This removes all zones under this name
-exports('removeZone', function(name)
-	local removedZone = targetZone:RemoveZone(name)
-	local id = ('%s_%s'):format(name, removedZone.data.id)
-	createdZones[id] = nil
-	removedZone:destroy()
+exports('removeZone', function(name, id)
+  -- Copy zones table
+  local zones = {}
+  for i, zone in pairs(targetZone.zones) do
+    zones[#zones + 1] = zone
+  end
+  for i, zone in pairs(zones) do
+    if zone.name == name and (id == nil or zone.data.id == id) then
+      targetZone:RemoveZone(zone)
+      local id = ('%s_%s'):format(name, zone.data.id)
+      createdZones[id] = nil
+      zone:destroy()
+    end
+  end
 end)
 
 local function toggleDebug()
