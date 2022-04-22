@@ -1,6 +1,27 @@
 {
 	"version": "1.0.0",
 	"configurations": [
+    {
+			"type": "node-terminal",
+			"name": "dg-blackout:build dev",
+			"request": "launch",
+			"command": "yarn run build:dev",
+			"cwd": "${workspaceFolder}/resources/[dg]/dg-blackout/typescript"
+		},
+    {
+			"type": "node-terminal",
+			"name": "dg-blackout:build prod",
+			"request": "launch",
+			"command": "yarn run build",
+			"cwd": "${workspaceFolder}/resources/[dg]/dg-blackout/typescript"
+		},
+    {
+			"type": "node-terminal",
+			"name": "dg-blackout:dev",
+			"request": "launch",
+			"command": "yarn watch",
+			"cwd": "${workspaceFolder}/resources/[dg]/dg-blackout/typescript"
+		},
 		{
 			"type": "node-terminal",
 			"name": "dg-chars:ui:dev",

@@ -1655,5 +1655,17 @@
     "decayrate": 10080,
     "image": "meth_brick.png",
     "description": "Meth Brick van 1 kilogram, best nog even wachten voor open te maken"
+  },
+  {
+    "name": "big_explosive",
+    "label": "Zwaar Explosief",
+    "weight": 40000,
+    "type": "item",
+    "stackable": false,
+    "useable": true,
+    "shouldClose": true,
+    "decayrate": 10080,
+    "image": "big_explosive.png",
+    "description": "Zwaar explosief. Pas op of het zal je laatste dag kunnen zijn."
   }
 ]
