@@ -101,8 +101,12 @@ buildPeekZones = function(labId)
     local labType = getLabTypeFromId(labId)
     if not labType then return end 
 
+    local heading = Config.Labs[labId].heading * (math.pi / 180)
     for k, v in pairs(Config.Types[labType].peekZones) do
-        local coords = v + Config.Labs[labId].coords
+        local xOffset = v.x * math.cos(heading) - v.y * math.sin(heading)
+        local yOffset = v.x * math.sin(heading) + v.y * math.cos(heading)
+        local coords = Config.Labs[labId].coords + vector3(xOffset, yOffset, v.z)
+
         exports['dg-polytarget']:AddCircleZone("drugslab_action", coords, 0.5, {
             useZ = true,
             debugPoly = false,
