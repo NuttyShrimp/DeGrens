@@ -36,8 +36,8 @@ export class EntityManager extends BaseManager implements IEntryManager {
   loadActiveEntries(ctx: Context) {
     this.activeEntries = [];
     if (!NetworkGetEntityIsNetworked(ctx.entity)) return;
-    const netId = NetworkGetNetworkIdFromEntity(ctx.entity);
-    const entries = this.entries.get(netId);
+    if (!ctx.netId) return;
+    const entries = this.entries.get(ctx.netId);
     if (!entries) return;
     entries.forEach(entry => this.addActiveEntry(entry, ctx.entity));
   }

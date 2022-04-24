@@ -2,6 +2,7 @@ type EntityType = null | 'ped' | 'player' | 'vehicle';
 
 interface Context {
   entity: number;
+  netId: number;
   type: number;
   model: number;
   flags: Set<string>;

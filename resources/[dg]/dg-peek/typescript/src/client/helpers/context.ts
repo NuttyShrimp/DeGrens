@@ -4,6 +4,7 @@ const registeredFlags: Set<string> = new Set();
 export const getEntityCtx = (entity: number, entityType: number): Context => {
   const ctx: Context = {
     entity,
+    netId: null,
     type: entityType,
     globalType: null,
     model: GetEntityModel(entity),
@@ -11,7 +12,7 @@ export const getEntityCtx = (entity: number, entityType: number): Context => {
   };
 
   if (NetworkGetEntityIsNetworked(entity)) {
-    ctx.entity = NetworkGetNetworkIdFromEntity(entity);
+    ctx.netId = NetworkGetNetworkIdFromEntity(entity);
   }
 
   if (entityType === 1) {

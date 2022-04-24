@@ -1,3 +1,4 @@
+import { addCtxFlag } from 'helpers/context';
 import { BaseManager } from './baseManager';
 
 export class FlagManager extends BaseManager implements IEntryManager {
@@ -7,6 +8,7 @@ export class FlagManager extends BaseManager implements IEntryManager {
     if (!this.entries.has(String(key))) {
       this.entries.set(String(key), []);
     }
+    addCtxFlag(key as string);
     return info.options.map(option => {
       option.distance = option.distance ?? info.distance;
       option.id = `flag-${++this.currentGenId}`;

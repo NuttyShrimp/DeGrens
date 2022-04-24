@@ -8,20 +8,20 @@ class Peek {
     return global.exports['dg-peek'].addModelEntry(model, PeekParams);
   }
 
-  addEntityEntry(model: number | number[], PeekParams: PeekParams): number[] {
-    return global.exports['dg-peek'].addEntityEntry(model, PeekParams);
+  addEntityEntry(entity: number | number[], PeekParams: PeekParams): number[] {
+    return global.exports['dg-peek'].addEntityEntry(entity, PeekParams);
   }
 
-  addBoneEntry(model: string | string[], PeekParams: PeekParams): number[] {
-    return global.exports['dg-peek'].addBoneEntry(model, PeekParams);
+  addBoneEntry(bone: string | string[], PeekParams: PeekParams): number[] {
+    return global.exports['dg-peek'].addBoneEntry(bone, PeekParams);
   }
 
-  addFlagEntry(model: string | string[], PeekParams: PeekParams): number[] {
-    return global.exports['dg-peek'].addFlagEntry(model, PeekParams);
+  addFlagEntry(flag: string | string[], PeekParams: PeekParams): number[] {
+    return global.exports['dg-peek'].addFlagEntry(flag, PeekParams);
   }
 
-  addZoneEntry(model: string | string[], PeekParams: PeekParams): number[] {
-    return global.exports['dg-peek'].addZoneEntry(model, PeekParams);
+  addZoneEntry(zone: string | string[], PeekParams: PeekParams): number[] {
+    return global.exports['dg-peek'].addZoneEntry(zone, PeekParams);
   }
 
   // Removers
