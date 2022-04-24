@@ -11,6 +11,7 @@ declare global {
     SQL: typeof Classes.SQL;
     Chat: typeof Classes.Chat;
     Taskbar: typeof Classes.Taskbar;
+    Notifications: typeof Classes.Notifications;
     Vector3: typeof Vector3Class;
     Vector4: typeof Vector4Class;
   };
