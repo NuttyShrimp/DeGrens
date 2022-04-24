@@ -116,7 +116,7 @@ exports('removeZone', function(name, id)
   end
   for i, zone in pairs(zones) do
     if zone.name == name and (id == nil or zone.data.id == id) then
-      targetZone:RemoveZone(zone)
+      targetZone:RemoveZone(name)
       local id = ('%s_%s'):format(name, zone.data.id)
       createdZones[id] = nil
       zone:destroy()
