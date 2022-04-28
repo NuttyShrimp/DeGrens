@@ -1,4 +1,5 @@
-import { Event, EventListener, Export, ExportRegister } from '@dgx/server/decorators';
+import { Events } from '@dgx/server';
+import { DGXEvent, Event, EventListener, Export, ExportRegister } from '@dgx/server/decorators';
 import { handleCommandExecution } from 'helpers/commands';
 
 @ExportRegister()
@@ -25,14 +26,14 @@ class CommandManager {
       .map(cmdInfo => {
         return cmdInfo;
       });
-    emitNet('chat:registerCommands', src, cmds);
+    Events.emitNet('chat:registerCommands', src, cmds);
   }
 
   private globalRefresh() {
     DGCore.Functions.GetPlayers().forEach(ply => this.specificRefresh(ply));
   }
 
-  @Event('chat:requestRefresh')
+  @DGXEvent('chat:requestRefresh')
   @Event('DGCore:Server:OnPlayerLoaded')
   @Export('refreshCommands')
   public refreshCommands(src = -1) {

@@ -1,5 +1,6 @@
 import { addCash, getCash, removeCash, seedCache, seedPlyInCache } from './service';
 import { cashLogger } from './util';
+import { RPC } from '@dgx/server';
 
 global.exports('getCash', getCash);
 global.exports('removeCash', removeCash);
@@ -18,7 +19,7 @@ onNet('DGCore:Server:OnPlayerLoaded', () => {
   seedPlyInCache(source);
 });
 
-DGCore.Functions.CreateCallback('financials:server:cash:get', (src, cb) => {
+RPC.register('financials:server:cash:get', (src, cb) => {
   cb(getCash(src));
 });
 

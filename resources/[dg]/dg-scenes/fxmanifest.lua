@@ -14,3 +14,5 @@ shared_scripts {
     '@dg-core/import.lua', 
 	'config.lua'
 }
+
+client_script "@dg-logs/client/cl_log.lua"

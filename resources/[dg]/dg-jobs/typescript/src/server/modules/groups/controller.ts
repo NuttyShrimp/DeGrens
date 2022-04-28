@@ -2,6 +2,7 @@ import groupManager from './classes/GroupManager';
 import nameManager from './classes/NameManager';
 import { getGroupList } from './service';
 import { groupLogger } from './logger';
+import { RPC } from '@dgx/server';
 
 onNet('DGCore:Server:onPlayerLoaded', () => {
   const player = DGCore.Functions.GetPlayer(source);
@@ -27,15 +28,15 @@ on('onResourceStart', (res: string) => {
   });
 });
 
-DGCore.Functions.CreateCallback('dg-jobs:server:groups:create', (src, cb) => {
+RPC.register('dg-jobs:server:groups:create', src => {
   groupLogger.silly(`[groups:create] ${GetPlayerName(String(src))}(${src}) is trying to create a group`);
   groupManager.createGroup(src);
   // Check if the user is actually the owner of a group
   const group = groupManager.getGroupByServerId(src);
-  cb(group !== undefined);
+  return group !== undefined;
 });
 
-DGCore.Functions.CreateCallback('dg-jobs:server:groups:joinRequest', (src, cb, data: { id: string }) => {
+RPC.register('dg-jobs:server:groups:joinRequest', (src, data: { id: string }) => {
   groupLogger.silly(
     `[groups:joinRequest] ${GetPlayerName(String(src))}(${src}) tries to join group with id ${data.id}`
   );
@@ -43,14 +44,14 @@ DGCore.Functions.CreateCallback('dg-jobs:server:groups:joinRequest', (src, cb, d
   if (!group) {
     groupLogger.warn(`${GetPlayerName(String(src))}(${src}) tried to join an invalid group | id: ${data.id}`);
     // TODO: log warn with all clients
-    cb(false);
+    return false;
   }
   group.requestToJoin(src);
-  cb(true);
+  return true;
 });
 
 // CB to send the members of the current player group to the requestor
-DGCore.Functions.CreateCallback('dg-jobs:server:groups:getMembers', (src, cb) => {
+RPC.register('dg-jobs:server:groups:getMembers', src => {
   groupLogger.silly(`[groups:joinRequest] ${GetPlayerName(String(src))}(${src}) has request the members of his group`);
   const group = groupManager.getGroupByServerId(src);
   if (!group) {
@@ -58,19 +59,18 @@ DGCore.Functions.CreateCallback('dg-jobs:server:groups:getMembers', (src, cb) =>
       `${GetPlayerName(String(src))}(${src}) tried to get the members of a group while not being in a group`
     );
     // TODO: log warn with all clients
-    cb(false);
+    return false;
   }
   const members = group.getMembers();
   const groupOwner = group.getOwner();
-  const UIMembers = members.map(m => ({
+  return members.map(m => ({
     name: nameManager.getName(m.cid),
     ready: m.isReady,
     isOwner: m.serverId == groupOwner.serverId,
   }));
-  cb(UIMembers);
 });
 
-DGCore.Functions.CreateCallback('dg-jobs:server:groups:setReady', (src, cb, data: { ready: boolean }) => {
+RPC.register('dg-jobs:server:groups:setReady', (src, data: { ready: boolean }) => {
   groupLogger.silly(
     `[groups:setReady] ${GetPlayerName(String(src))}(${src}) has set himself ${
       data.ready ? 'ready' : 'unready'
@@ -81,10 +81,10 @@ DGCore.Functions.CreateCallback('dg-jobs:server:groups:setReady', (src, cb, data
     groupLogger.warn(`${GetPlayerName(String(src))}(${src}) tried to set himself ready while not being in a group`);
   }
   group.setReady(src, data.ready);
-  cb(true);
+  return true;
 });
 
-DGCore.Functions.CreateCallback('dg-jobs:server:groups:leave', (src, cb) => {
+RPC.register('dg-jobs:server:groups:leave', src => {
   groupLogger.silly(`[groups:leave] ${GetPlayerName(String(src))}(${src}) has left his group`);
   const group = groupManager.getGroupByServerId(src);
   if (!group) {
@@ -94,13 +94,12 @@ DGCore.Functions.CreateCallback('dg-jobs:server:groups:leave', (src, cb) => {
   if (group.getMemberByServerId(src)) {
     groupLogger.error(`${GetPlayerName(String(src))}(${src}) left a group but is still in it`);
     // TODO: log error with all clients
-    cb(false);
-    return;
+    return false;
   }
-  cb(true);
+  return true;
 });
 
-DGCore.Functions.CreateCallback('dg-jobs:server:groups:get', (src, cb) => {
+RPC.register('dg-jobs:server:groups:get', src => {
   groupLogger.silly(`[groups:get] ${GetPlayerName(String(src))}(${src}) has requested the list of groups`);
-  cb(getGroupList());
+  return getGroupList();
 });

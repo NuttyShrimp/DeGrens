@@ -1,5 +1,5 @@
 import winston from 'winston';
-import { SQL } from '@ts-shared/server';
+import { SQL } from '@dgx/server';
 
 import { config } from '../../../config';
 import { generateAccountId, generateTransactionId } from '../../../sv_util';

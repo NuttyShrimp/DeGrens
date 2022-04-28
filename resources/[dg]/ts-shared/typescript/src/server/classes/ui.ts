@@ -22,11 +22,11 @@ class Notifications {
     durationInMs = 5000,
     persistent?: boolean
   ) {
-    return RPC.execute<string>(source, 'dg-ui:client:addNotification', text, type, durationInMs, persistent);
+    return RPC.execute<string>('dg-ui:client:addNotification', source, text, type, durationInMs, persistent);
   }
 
   remove(source: number, id: string) {
-    RPC.execute(source, 'dg-ui:client:removeNotification', id);
+    RPC.execute('dg-ui:client:removeNotification', source, id);
   }
 }
 

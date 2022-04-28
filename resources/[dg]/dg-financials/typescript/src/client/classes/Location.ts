@@ -1,4 +1,5 @@
 import { doAnimation } from '../modules/bank/service';
+import { RPC } from '@dgx/client';
 
 export class Location {
   private type: 'bank';
@@ -20,7 +21,7 @@ export class Location {
     if (this.is_disabled) return;
     if (!this.is_active) return;
     await doAnimation(false, true);
-    const base = await DGCore.Functions.TriggerCallback<BaseState>('financials:accounts:open', this.id);
+    const base = await RPC.execute<BaseState>('financials:accounts:open', this.id);
     base.isAtm = false;
     DGX.UI.openApplication('financials', base);
     DGX.UI.SetUIFocus(true, true);
@@ -57,7 +58,7 @@ export class Location {
     SetBlipColour(this.blip, 2);
     SetBlipDisplay(this.blip, 2);
     SetBlipScale(this.blip, 0.8);
-    SetBlipAsShortRange(this.blip, true)
+    SetBlipAsShortRange(this.blip, true);
   }
 
   //endregion

@@ -1,16 +1,16 @@
-import { Keys } from '@dgx/client';
+import { Events, Keys } from '@dgx/client';
 import { closeChat, forceClose, openChat, peekChat } from 'helpers/chat';
 
 import { addOldMessage, addOldSuggestion, getOldSuggestions } from '../helpers/backwards';
 
-onNet('chat:registerCommands', (cmds: Shared.Command[]) => {
+Events.onNet('chat:registerCommands', (cmds: Shared.Command[]) => {
   SendNUIMessage({
     action: 'setSuggestions',
     data: cmds.concat(getOldSuggestions()),
   });
 });
 
-onNet('chat:addNuiMessage', (msg: Shared.Message) => {
+Events.onNet('chat:addNuiMessage', (msg: Shared.Message) => {
   peekChat();
   msg.type = msg.type ?? 'normal';
   SendNUIMessage({
@@ -19,17 +19,17 @@ onNet('chat:addNuiMessage', (msg: Shared.Message) => {
   });
 });
 
-onNet('executeLocalCmd', (cmdStr: string) => {
+Events.onNet('executeLocalCmd', (cmdStr: string) => {
   ExecuteCommand(cmdStr);
 });
 
-onNet('chat:clear', () => {
+Events.onNet('chat:clear', () => {
   SendNUIMessage({
     action: 'clearChat',
   });
 });
 
-onNet('chat:restart', () => {
+Events.onNet('chat:restart', () => {
   closeChat();
   setTimeout(() => peekChat(), 500);
 });
@@ -59,13 +59,13 @@ on(`__cfx_nui:loaded`, (data: null, cb: Function) => {
     action: 'lockVisibility',
     data: LocalPlayer.state?.loggedIn ?? false,
   });
-  emitNet('chat:requestRefresh');
+  Events.emitNet('chat:requestRefresh');
   cb({ data: {}, meta: { ok: true, message: 'done' } });
 });
 
 RegisterNuiCallbackType('sendMessage');
 on(`__cfx_nui:sendMessage`, (data: { message: string }, cb: Function) => {
-  emitNet('chat:incomingMessage', data.message);
+  Events.emitNet('chat:incomingMessage', data.message);
   closeChat();
   cb({ data: {}, meta: { ok: true, message: 'done' } });
 });

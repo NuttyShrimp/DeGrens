@@ -1,5 +1,6 @@
 import { AccountManager } from '../classes/AccountManager';
 import { bankLogger } from '../utils';
+import { RPC } from '@dgx/server';
 
 // region Transactions
 const fetchTransactions = async (
@@ -16,9 +17,9 @@ const fetchTransactions = async (
   return account.getTransactions(source, offset, type);
 };
 
-DGCore.Functions.CreateCallback(
+RPC.register(
   'financials:server:transactions:get',
-  async (src, cb, data: { accountId: string; loaded: number; type?: TransactionType }) => {
+  async (src, data: { accountId: string; loaded: number; type?: TransactionType }) => {
     bankLogger.silly(
       `Fetching transactions: src: ${src} | account ${data.accountId} | offset ${data.loaded} | type: ${
         data.type ?? 'all'
@@ -26,7 +27,7 @@ DGCore.Functions.CreateCallback(
     );
     const transactions = await fetchTransactions(src, data.accountId, data.loaded, data.type);
     bankLogger.silly(`Transactions fetched: ${transactions.length}`);
-    cb(transactions);
+    return transactions;
   }
 );
 // endregion

@@ -1,3 +1,4 @@
+import { RPC } from '@dgx/server';
 import debtManager from '../classes/debtmanager';
 import { debtLogger } from '../helpers/debts';
 
@@ -5,7 +6,7 @@ global.exports('giveFine', (cid: number, target_account: string, fine: number, r
   debtManager.addDebt(cid, target_account, fine, reason, given_by);
 });
 
-DGCore.Functions.CreateCallback('financials:server:debts:get', (src, cb) => {
+RPC.register('financials:server:debts:get', (src, cb) => {
   debtLogger.silly(`getDebts | src: ${src}`);
   const Player = DGCore.Functions.GetPlayer(src);
   if (!Player) {
@@ -21,7 +22,7 @@ DGCore.Functions.CreateCallback('financials:server:debts:get', (src, cb) => {
   cb(returnDebts);
 });
 
-DGCore.Functions.CreateCallback('financials:server:debts:pay', async (src, cb, debtId: number) => {
+RPC.register('financials:server:debts:pay', async (src, cb, debtId: number) => {
   debtLogger.silly(`payDebt: ${debtId} | src: ${src}`);
   const Player = DGCore.Functions.GetPlayer(src);
   if (!Player) {

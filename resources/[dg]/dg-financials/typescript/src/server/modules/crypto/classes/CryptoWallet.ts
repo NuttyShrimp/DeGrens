@@ -1,5 +1,5 @@
 import winston from 'winston';
-import { Notifications, SQL } from '@ts-shared/server';
+import { Notifications, SQL } from '@dgx/server';
 
 import { config } from '../../../config';
 import { getDefaultAccount } from '../../bank/helpers/accounts';

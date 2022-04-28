@@ -1,3 +1,5 @@
 export * from './Callbacks';
 export * from './Events';
-export * from './Exports';
+export * from './RPC';
+// This is to prevent breaking changes
+export * from './../../shared/decorators';

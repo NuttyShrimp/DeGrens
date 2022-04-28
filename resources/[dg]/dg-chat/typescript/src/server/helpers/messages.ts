@@ -1,5 +1,4 @@
-import { Util } from '@dgx/server';
-import commandManager from 'classes/commandManager';
+import { Events } from '@dgx/server';
 import { handleCommandExecution } from './commands';
 
 const specialTarget: { [k: string]: (PlayerData: PlayerData) => boolean } = {
@@ -12,14 +11,14 @@ export const sendMessage = (target: number | keyof typeof specialTarget, data: S
   if (typeof target === 'string') {
     Object.values(DGCore.Functions.GetQBPlayers).forEach((plyObj: Player) => {
       if (!specialTarget?.[target]?.(plyObj.PlayerData)) return;
-      emitNet('chat:addNuiMessage', plyObj.PlayerData.source, data);
+      Events.emitNet('chat:addNuiMessage', plyObj.PlayerData.source, data);
     });
     return;
   }
-  emitNet('chat:addNuiMessage', target, data);
+  Events.emitNet('chat:addNuiMessage', target, data);
 };
 
-onNet('chat:incomingMessage', (msg: string) => {
+Events.onNet('chat:incomingMessage', (source: number, msg: string) => {
   emit('chatMessage', source, GetPlayerName(String(source)), msg);
   msg = msg.replace(/^\//, '');
   const args = msg.split(' ');

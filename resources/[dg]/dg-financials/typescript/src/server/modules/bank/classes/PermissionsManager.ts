@@ -1,5 +1,5 @@
 import winston from 'winston';
-import { SQL } from '@ts-shared/server';
+import { SQL } from '@dgx/server';
 
 import { AccountPermissionValue } from '../../../sv_constant';
 import { bankLogger } from '../utils';

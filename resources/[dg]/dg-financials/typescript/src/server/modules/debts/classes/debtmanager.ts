@@ -2,7 +2,7 @@ import { config } from '../../../config';
 import { getDefaultAccount, getDefaultAccountId } from '../../bank/helpers/accounts';
 import { transfer } from '../../bank/helpers/actions';
 import { debtLogger, scheduleDebt } from '../helpers/debts';
-import { Notifications, SQL } from '@ts-shared/server';
+import { Notifications, SQL } from '@dgx/server';
 
 class DebtManager {
   private static _instance: DebtManager;

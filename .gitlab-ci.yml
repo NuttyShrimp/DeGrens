@@ -52,6 +52,19 @@ validate json:
     changes:
       - "**/*.json"
 
+Validate Errorlogger:
+  image: python:3-slim
+  stage: test
+  script:
+    - python ./tools/manifest-check.py
+    - exit "${?}"
+  only:
+    refs:
+      - main
+      - UPD
+      - merge_requests
+      - tags
+
 sonarqube-check:
   stage: test
   tags:
@@ -96,7 +109,6 @@ JS building:
       - "**/*.html"
       - "**/package.json"
       - "**/yarn.lock"
-
 
 rebase UPD:
   stage: housekeeping

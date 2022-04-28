@@ -28,3 +28,5 @@ files {
     'html/js/main.js',
     'html/js/RadialMenu.js',
 }
+
+client_script "@dg-logs/client/cl_log.lua"

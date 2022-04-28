@@ -21,3 +21,4 @@ exports {
     'EnableNpc',
     'UpdateNpc',
 }
+client_script "@dg-logs/client/cl_log.lua"

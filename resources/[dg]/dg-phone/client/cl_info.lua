@@ -34,7 +34,7 @@ RegisterNetEvent('dg-phone:load',function()
 		return cash
   end, 'wallet', '#81c784', '€')
   registerInfoEntry('bank', function()
-		local account = DGCore.Functions.TriggerCallback('financials:getDefaultAccount')
+		local account = DGX.RPC.execute('financials:getDefaultAccount')
     return account.balance or 0
   end, 'piggy-bank', "#64b5f6", '€')
 end)
