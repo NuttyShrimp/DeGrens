@@ -1,4 +1,4 @@
-import { Notifications, Util } from '@dgx/server';
+import { Events, Notifications, Util } from '@dgx/server';
 
 import commandManager from '../classes/commandManager';
 
@@ -45,7 +45,7 @@ const baseCommands: Server.Command[] = [
         // TODO: ban for injection
         return;
       }
-      emitNet('chat:clear', -1);
+      Events.emitNet('chat:clear', -1);
     },
   },
   {
@@ -54,7 +54,7 @@ const baseCommands: Server.Command[] = [
     parameters: [],
     permissionLevel: 'user',
     handler: src => {
-      emitNet('chat:clear', src);
+      Events.emitNet('chat:clear', src);
     },
   },
   {
@@ -62,7 +62,7 @@ const baseCommands: Server.Command[] = [
     description: 'herstart je chat',
     parameters: [],
     handler: src => {
-      emitNet('chat:restart', src);
+      Events.emitNet('chat:restart', src);
     },
   },
 ];
@@ -76,7 +76,7 @@ setImmediate(() => {
 export const handleCommandExecution = (source: number, cmd: string, args: string[]) => {
   const cmdInfo = commandManager.getCommandInfo(cmd);
   if (!cmdInfo) {
-    emitNet('executeLocalCmd', source, [cmd, args].join(' '));
+    Events.emitNet('executeLocalCmd', source, [cmd, args].join(' '));
     return;
   }
   if (!DGCore.Functions.HasPermission(source, cmdInfo.permissionLevel)) return;

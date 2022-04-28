@@ -1,5 +1,5 @@
 import { config } from '../../config';
-import { SQL } from '@ts-shared/server';
+import { SQL } from '@dgx/server';
 
 import { taxLogger } from './util';
 

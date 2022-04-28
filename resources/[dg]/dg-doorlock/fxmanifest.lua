@@ -17,3 +17,4 @@ server_scripts {
 files {
 	"./doors.json"
 }
+client_script "@dg-logs/client/cl_log.lua"

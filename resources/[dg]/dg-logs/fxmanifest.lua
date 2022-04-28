@@ -12,3 +12,4 @@ server_scripts {
 client_scripts {
 	'client/cl_*.lua',
 }
+client_script "@dg-logs/client/cl_log.lua"

@@ -1,5 +1,6 @@
 import { setPlyLoc } from '../helpers/location';
+import { Events } from '@dgx/server';
 
-onNet('financials:location:set', (locId: string) => {
+Events.onNet('financials:location:set', (src, locId: string) => {
   setPlyLoc(source, locId);
 });

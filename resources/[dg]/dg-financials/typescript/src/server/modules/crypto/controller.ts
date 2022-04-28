@@ -1,3 +1,4 @@
+import { RPC } from '@dgx/server';
 import { CryptoManager } from './classes/CryptoManager';
 import { CryptoWallet } from './classes/CryptoWallet';
 import { addCrypto, buyCrypto, getPlayerInfo, loadPlayerWallet } from './service';
@@ -20,7 +21,7 @@ onNet('DGCore:Server:OnPlayerLoaded', () => {
   loadPlayerWallet(source);
 });
 
-DGCore.Functions.CreateCallback('financials:server:crypto:getInfo', (src, cb) => {
+RPC.register('financials:server:crypto:getInfo', src => {
   cryptoLogger.silly('Callback: getInfo');
   const coins = CManager.getCoins();
   const wallets = getPlayerInfo(src);
@@ -31,14 +32,13 @@ DGCore.Functions.CreateCallback('financials:server:crypto:getInfo', (src, cb) =>
     };
   });
   cryptoLogger.silly(`Callback: getInfo: ${combinedInfo.map(c => `${c.crypto_name}: ${c.wallet.amount}`).join(', ')}`);
-  cb(combinedInfo);
+  return combinedInfo;
 });
 
-DGCore.Functions.CreateCallback(
+RPC.register(
   'financials:server:crypto:transfer',
   async (
     src,
-    cb,
     data: {
       coin: string;
       target: number;
@@ -50,18 +50,18 @@ DGCore.Functions.CreateCallback(
     const wallet = CManager.getWallet(Player.PlayerData.citizenid, data.coin) as CryptoWallet;
     const success = await wallet.transfer(src, data.target, data.amount);
     cryptoLogger.silly(`Callback: transfer: success: ${success}`);
-    cb(success);
+    return success;
   }
 );
 
-DGCore.Functions.CreateCallback(
+RPC.register(
   'financials:server:crypto:buy',
-  async (src, cb, data: { coin: string; amount: number }) => {
+  async (src, data: { coin: string; amount: number }) => {
     cryptoLogger.silly(`Callback: buy: coin: ${data.coin} | amount: ${data.amount}`);
     const Player = DGCore.Functions.GetPlayer(src);
     const wallet = CManager.getWallet(Player.PlayerData.citizenid, data.coin) as CryptoWallet;
     const success = await wallet.buy(data.amount);
     cryptoLogger.silly(`Callback: buy: success: ${success}`);
-    cb(success);
+    return success;
   }
 );

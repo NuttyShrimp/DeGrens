@@ -1,10 +1,11 @@
-import { Util } from '@dgx/server';
-import { Export, ExportRegister, Callback, CallbackRegister } from '@dgx/server/decorators';
+import { Events, RPC, Util } from '@dgx/server';
+import { Export, ExportRegister, Callback, CallbackRegister, RPCRegister, RPCEvent } from '@dgx/server/decorators';
 import { mainLogger } from 'sv_logger';
 import winston from 'winston';
 
 @ExportRegister()
 @CallbackRegister()
+@RPCRegister()
 class JobManager {
   private static instance: JobManager;
 
@@ -76,7 +77,7 @@ class JobManager {
     return this.jobs.get(job);
   }
 
-  @Callback('dg-jobs:server:jobs:get')
+  @RPCEvent('dg-jobs:server:jobs:get')
   public getJobsForClients() {
     return Array.from(this.jobs.values()).map(j => ({
       name: j.name,
@@ -87,7 +88,7 @@ class JobManager {
     }));
   }
 
-  @Callback('dg-jobs:server:jobs:waypoint')
+  @RPCEvent('dg-jobs:server:jobs:waypoint')
   public setJobWaypoint(src: number, jobName: string) {
     if (!this.jobs.has(jobName)) {
       this.logger.warn(`${GetPlayerName(String(src))}(${src}) tried to set waypoint for non-existing job ${jobName}`);
@@ -102,7 +103,8 @@ class JobManager {
       // TODO: ban mfker from server
       return;
     }
-    emitNet('dg-jobs:client:jobs:waypoint', src, jobObj.location);
+    Events.emitNet('dg-jobs:client:jobs:waypoint', src, jobObj.location);
+    return true;
   }
 
   @Export('getJobPayout')

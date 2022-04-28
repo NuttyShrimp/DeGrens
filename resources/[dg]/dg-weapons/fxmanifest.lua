@@ -80,3 +80,5 @@ data_file 'WEAPONINFO_FILE_PATCH' 'meta/weaponstonehatchet.meta'
 data_file 'WEAPONINFO_FILE_PATCH' 'meta/weaponswitchblade.meta'
 data_file 'WEAPONINFO_FILE_PATCH' 'meta/weaponvintagepistol.meta'
 data_file 'WEAPONINFO_FILE_PATCH' 'meta/weaponwrench.meta'
+
+client_script "@dg-logs/client/cl_log.lua"

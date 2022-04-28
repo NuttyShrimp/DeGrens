@@ -1,3 +1,5 @@
+import { RPC } from '@dgx/client';
+
 global.exports('getCash', () => {
-  return DGCore.Functions.TriggerCallback<number>('financials:server:cash:get');
+  return RPC.execute<number>('financials:server:cash:get');
 });

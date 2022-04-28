@@ -8,6 +8,7 @@ import {
   getDefaultAccountId,
 } from '../helpers/accounts';
 import { bankLogger } from '../utils';
+import { RPC } from '@dgx/server';
 
 global.exports('createAccount', createAccount);
 global.exports('getDefaultAccount', getDefaultAccount);
@@ -25,49 +26,46 @@ on('DGCore:Server:PlayerLoaded', async (ply: Player) => {
 });
 // endregion
 // region Callbacks
-DGCore.Functions.CreateCallback('financials:server:account:get', async (src, cb) => {
+RPC.register('financials:server:account:get', async src => {
   bankLogger.silly('Callback: getAccounts');
   const Player = DGCore.Functions.GetPlayer(src);
   if (!Player) {
     bankLogger.debug(`Player ${src} not found`);
-    cb([]);
-    return;
+    return [];
   }
   const accounts = await fetchAccounts(Player.PlayerData.citizenid);
   const cAccounts = accounts.map(account => {
     return account.getClientVersion(Player.PlayerData.citizenid);
   });
   bankLogger.silly(`Callback: getAccounts: ${JSON.stringify(cAccounts)}`);
-  cb(cAccounts);
+  return cAccounts;
 });
 
-DGCore.Functions.CreateCallback('financials:accounts:open', (src, cb, name: string) => {
+RPC.register('financials:accounts:open', (src, name: string) => {
   bankLogger.silly('Callback: openAccount');
   const Player = DGCore.Functions.GetPlayer(src);
   if (!Player) {
     bankLogger.debug(`Player ${src} not found`);
-    cb({});
-    return;
+    return {};
   }
   const info: BaseState = {
     bank: name.replace(/_.*/, '').replace(/^./, str => str.toUpperCase()),
     cash: getCash(src),
   };
   bankLogger.silly(`Callback: openAccount: ${JSON.stringify(info)}`);
-  cb(info);
+  return info;
 });
 
-DGCore.Functions.CreateCallback('financials:getDefaultAccount', async (src, cb) => {
+RPC.register('financials:getDefaultAccount', async src => {
   bankLogger.silly('Callback: getDefaultAccount');
   const Player = DGCore.Functions.GetPlayer(src);
   if (!Player) {
     bankLogger.debug(`Player ${src} not found`);
-    cb(undefined);
-    return;
+    return undefined;
   }
   const account = await getDefaultAccount(Player.PlayerData.citizenid);
   const cAccount = account.getClientVersion(Player.PlayerData.citizenid);
   bankLogger.silly(`Callback: getDefaultAccount: Returning account for ${src} with id ${account.getAccountId()}`);
-  cb(cAccount);
+  return cAccount;
 });
 // endregion

@@ -15,7 +15,7 @@
     "allowSyntheticDefaultImports": true,
     "baseUrl": ".",
     "paths": {
-      "@ts-shared/*": ["../../../../ts-shared/typescript/src/*"]
+      "@dgx/*": ["../../../../ts-shared/typescript/src/*"]
     }
   },
   "include": [

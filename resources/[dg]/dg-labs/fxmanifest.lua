@@ -18,3 +18,4 @@ server_scripts {
 files {
 	"./labs.json"
 }
+client_script "@dg-logs/client/cl_log.lua"

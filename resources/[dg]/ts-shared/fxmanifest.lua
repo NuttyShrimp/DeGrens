@@ -6,7 +6,7 @@ server_scripts {
 }
 
 client_scripts {
-  "@dg-logs/client/cl_error.lua",
+  "@dg-logs/client/cl_log.lua",
   "client/*.js",
 }
 

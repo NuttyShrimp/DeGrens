@@ -1,5 +1,6 @@
 import { LocationManager } from '../../classes/LocationManager';
 import { config } from '../../config';
+import { RPC } from '@dgx/client';
 
 const peekIds: Record<string, number[]> = {};
 
@@ -24,7 +25,7 @@ export const registerPeekZones = () => {
         async action() {
           await doAnimation(true, true);
           LManager.setAtATM(true);
-          const base = await DGCore.Functions.TriggerCallback<BaseState>('financials:accounts:open', 'ATM');
+          const base = await RPC.execute<BaseState>('financials:accounts:open', 'ATM');
           base.isAtm = true;
           DGX.UI.openApplication('financials', base);
           SetNuiFocus(true, true);

@@ -1,4 +1,4 @@
-import { Phone } from '@dgx/server';
+import { Events, Phone } from '@dgx/server';
 import jobManager from 'classes/jobManager';
 import winston from 'winston';
 import { groupLogger } from '../logger';
@@ -57,8 +57,8 @@ export class Group {
   private pushMembersUpdate() {
     const clientMembers: JobGroupMember[] = this.getMemberForClient();
     this.members.forEach(m => {
-      emitNet('dg-jobs:client:groups:setMembers', m.serverId, clientMembers);
-      emitNet(
+      Events.emitNet('dg-jobs:client:groups:setMembers', m.serverId, clientMembers);
+      Events.emitNet(
         'dg-jobs:client:groups:setGroupOwner',
         m.serverId,
         this.owner ? this.owner.serverId === m.serverId : true
@@ -94,7 +94,7 @@ export class Group {
       }) job group | size: ${this.members.size}`
     );
     // Make the new member part of the group in is UI store
-    emitNet('dg-jobs:client:groups:set', src, {
+    Events.emitNet('dg-jobs:client:groups:set', src, {
       id: this.id,
       name: nameManager.getName(this.owner?.cid ?? member.cid),
       size: this.members.size,
@@ -132,9 +132,9 @@ export class Group {
       `${GetPlayerName(String(src))}(${src}) left ${this.owner.name}(${this.owner.serverId}) job group successfully`
     );
     emit('dg-jobs:server:groups:playerLeft', src);
-    emitNet('dg-jobs:client:groups:set', src, null);
-    emitNet('dg-jobs:client:groups:setMembers', src, []);
-    emitNet('dg-jobs:client:groups:setGroupOwner', src, false);
+    Events.emitNet('dg-jobs:client:groups:set', src, null);
+    Events.emitNet('dg-jobs:client:groups:setMembers', src, []);
+    Events.emitNet('dg-jobs:client:groups:setGroupOwner', src, false);
     Phone.showNotification(src, {
       id: 'jobcenter-groups-join',
       title: 'jobcenter',
@@ -162,14 +162,14 @@ export class Group {
     }
     const member = this.members.get(src);
     const clientMembers: JobGroupMember[] = this.getMemberForClient();
-    emitNet('dg-jobs:client:groups:set', src, {
+    Events.emitNet('dg-jobs:client:groups:set', src, {
       id: this.id,
       name: nameManager.getName(this.owner?.cid ?? member.cid),
       size: this.members.size,
       limit: this.maxSize,
     });
-    emitNet('dg-jobs:client:groups:setMembers', src, clientMembers);
-    emitNet('dg-jobs:client:groups:setGroupOwner', src, this.owner ? this.owner.serverId === src : true);
+    Events.emitNet('dg-jobs:client:groups:setMembers', src, clientMembers);
+    Events.emitNet('dg-jobs:client:groups:setGroupOwner', src, this.owner ? this.owner.serverId === src : true);
   }
 
   // endregion
@@ -213,7 +213,7 @@ export class Group {
       return;
     }
     if (this.members.size == this.maxSize) {
-      emitNet('dg-jobs:client:groups:isFull', src);
+      Events.emitNet('dg-jobs:client:groups:isFull', src);
       return;
     }
     if (this.activeRequests.includes(src)) {

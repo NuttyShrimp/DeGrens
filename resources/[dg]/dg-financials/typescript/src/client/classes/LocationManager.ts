@@ -1,6 +1,7 @@
 import { config } from '../config';
 
 import { Location } from './Location';
+import { Events } from '@dgx/client';
 
 export class LocationManager {
   // region Instance management
@@ -36,14 +37,14 @@ export class LocationManager {
       this.currentLocation.setActive(false);
       this.currentLocation = null;
       global.exports['dg-ui'].hideInteraction();
-      emitNet('financials:location:set', null);
+      Events.emitNet('financials:location:set', null);
       return;
     }
     this.currentLocation = this.locations.find(l => l.getId() === locName && !l.isDisabled());
     if (this.currentLocation) {
       this.currentLocation.setActive(true);
       global.exports['dg-ui'].showInteraction(`[E] - bank`);
-      emitNet('financials:location:set', this.currentLocation.getId());
+      Events.emitNet('financials:location:set', this.currentLocation.getId());
     }
   }
 

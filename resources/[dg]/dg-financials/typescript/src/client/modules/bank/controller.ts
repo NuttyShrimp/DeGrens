@@ -2,6 +2,8 @@ import { LocationManager } from '../../classes/LocationManager';
 
 import { doAnimation } from './service';
 
+import { RPC } from '@dgx/client';
+
 const LManager = LocationManager.getInstance();
 
 onNet('dg-polyzone:enter', (name: string, data: any) => {
@@ -32,7 +34,7 @@ on('dg-ui:application-closed', (app: string) => {
 
 DGX.UI.RegisterUICallback('financials/accounts/get', async (_: null, cb) => {
   if (!LManager.isInALocation()) return;
-  const accounts = await DGCore.Functions.TriggerCallback<IAccount[]>('financials:server:account:get');
+  const accounts = await RPC.execute<IAccount[]>('financials:server:account:get');
   cb({
     data: accounts,
     meta: {
@@ -45,7 +47,7 @@ DGX.UI.RegisterUICallback('financials/accounts/get', async (_: null, cb) => {
 DGX.UI.RegisterUICallback('financials/transactions/get', async (data: any, cb) => {
   if (!LManager.isInALocation()) return;
   cb({
-    data: await DGCore.Functions.TriggerCallback<ITransaction[]>('financials:server:transactions:get', data),
+    data: await RPC.execute<ITransaction[]>('financials:server:transactions:get', data),
     meta: {
       ok: true,
       message: 'done',
@@ -56,7 +58,7 @@ DGX.UI.RegisterUICallback('financials/transactions/get', async (data: any, cb) =
 // Actions
 DGX.UI.RegisterUICallback('financials/account/deposit', (data: any, cb) => {
   if (!LManager.isInALocation()) return;
-  DGCore.Functions.TriggerCallback<void>('financials:server:action:deposit', data);
+  RPC.execute<void>('financials:server:action:deposit', data);
   cb({
     data: {},
     meta: {
@@ -68,7 +70,7 @@ DGX.UI.RegisterUICallback('financials/account/deposit', (data: any, cb) => {
 
 DGX.UI.RegisterUICallback('financials/account/withdraw', (data: any, cb) => {
   if (!LManager.isInALocation()) return;
-  DGCore.Functions.TriggerCallback<void>('financials:server:action:withdraw', data);
+  RPC.execute<void>('financials:server:action:withdraw', data);
   cb({
     data: {},
     meta: {
@@ -80,7 +82,7 @@ DGX.UI.RegisterUICallback('financials/account/withdraw', (data: any, cb) => {
 
 DGX.UI.RegisterUICallback('financials/account/transfer', async (data: any, cb) => {
   if (!LManager.isInALocation()) return;
-  const isSuccess = await DGCore.Functions.TriggerCallback<boolean>('financials:server:action:transfer', data);
+  const isSuccess = await RPC.execute<boolean>('financials:server:action:transfer', data);
   cb({
     data: isSuccess,
     meta: {
@@ -92,7 +94,7 @@ DGX.UI.RegisterUICallback('financials/account/transfer', async (data: any, cb) =
 
 DGX.UI.RegisterUICallback('financials/cash/get', async (_, cb) => {
   if (!LManager.isInALocation()) return 0;
-  const cash = await DGCore.Functions.TriggerCallback<number>('financials:server:cash:get');
+  const cash = await RPC.execute<number>('financials:server:cash:get');
   cb({
     data: cash,
     meta: {

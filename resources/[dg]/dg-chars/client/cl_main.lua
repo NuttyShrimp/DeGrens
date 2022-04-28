@@ -1,16 +1,6 @@
 plyChars = {}
 nuiMounted = false
 
-Citizen.CreateThread(function()
-	while true do
-		Citizen.Wait(0)
-		if NetworkIsSessionStarted() then
-			setupCharMenu()
-			return
-		end
-	end
-end)
-
 setupCharMenu = function()
 	local ped = PlayerPedId()
 	setPlayerToWaitLoc()
@@ -42,6 +32,11 @@ closeCharMenu = function()
 	local ped = PlayerPedId()
 	FreezeEntityPosition(ped, false)
 end
+
+RegisterNetEvent('dg-chars:client:startSession', function()
+  setupCharMenu()
+end)
+
 
 RegisterNetEvent('onResourceStop', function(res)
 	if res ~= GetCurrentResourceName() then return end

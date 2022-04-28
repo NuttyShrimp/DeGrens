@@ -76,8 +76,8 @@ end)
 
 DGCore.Functions.CreateCallback('dg-chars:server:setupClient', function(src, cb)
   local instanceId = getFreeInstance()
-  exports['dg-lib']:setInstance(src, instanceId)
-  exports['dg-lib']:setInstanceName(instanceId, 'char-selection-'..GetPlayerName(src))
+  exports['dg-lib']:setInstance(source, instanceId)
+  exports['dg-lib']:setInstanceName(instanceId, 'char-selection-'..GetPlayerName(source))
   cb()
 end)
 

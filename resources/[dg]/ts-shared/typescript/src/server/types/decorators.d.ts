@@ -5,7 +5,8 @@ declare namespace Decorators {
     key: string;
   }
   interface Event extends Base {
-    net: false;
+    net: boolean;
     target?: string;
+    dgx?: boolean;
   }
 }
