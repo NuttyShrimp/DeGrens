@@ -24,6 +24,10 @@ class Peek {
     return global.exports['dg-peek'].addZoneEntry(zone, PeekParams);
   }
 
+  addGlobalEntry(type: string | string[], PeekParams: PeekParams): number[] {
+    return global.exports['dg-peek'].addGlobalEntry(type, PeekParams);
+  }
+
   // Removers
   removeModelEntry(ids: number | number[]) {
     return global.exports['dg-peek'].removeModelEntry(ids);
@@ -43,6 +47,10 @@ class Peek {
 
   removeZoneEntry(ids: number | number[]) {
     return global.exports['dg-peek'].removeZoneEntry(ids);
+  }
+
+  removeGlobalEntry(ids: number | number[]) {
+    return global.exports['dg-peek'].removeGlobalEntry(ids);
   }
 }
 
@@ -128,6 +136,25 @@ class PolyZone {
       this.zonesNamesToDelete.add({ name, id: options.data.id });
     }
     global.exports['dg-polyzone'].AddPolyZone(name, pVectors, options);
+  }
+
+  addCircleZone(
+    name: string,
+    pCenter: Vector3 | Vec3,
+    pRadius: number,
+    options: {
+      useZ?: number;
+      data: { [key: string]: any };
+    },
+    removeOnRestart = false
+  ) {
+    if (pCenter instanceof Vector3) {
+      pCenter = pCenter.add(0);
+    }
+    if (removeOnRestart) {
+      this.zonesNamesToDelete.add({ name, id: options.data.id });
+    }
+    global.exports['dg-polyzone'].AddCircleZone(name, pCenter, pRadius, options);
   }
 }
 
