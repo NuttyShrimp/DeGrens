@@ -23,7 +23,7 @@ Spawn.setupSpawnMenu = function()
 	end)
 end
 
-	Spawn.choose = function(idx)
+Spawn.choose = function(idx)
 	local spawn = Spawn.list[idx]
 	if not spawn then
 		print(("[DG-Chars] Spawn for index: %d not found"):format(idx))
