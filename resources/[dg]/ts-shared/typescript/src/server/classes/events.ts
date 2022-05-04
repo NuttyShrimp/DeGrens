@@ -56,18 +56,25 @@ class Events extends Util.Singleton<Events>() {
     doAuthExport('registerEvent', this.resName, evtName);
   }
 
-  async emitNet(evtName: string, target: number, ...args: any[]) {
+  emitNet(evtName: string, target: number, ...args: any[]) {
     const evtData: ClientHandlingEvent = {
       eventName: evtName,
       args,
       token: '',
     };
-    if (target === -1) {
-      evtData.token = 'all';
-    } else {
-      evtData.token = await doAuthExport('getPlayerToken', target);
+    try {
+      setImmediate(async () => {
+        if (target === -1) {
+          evtData.token = 'all';
+        } else {
+          evtData.token = await doAuthExport('getPlayerToken', target);
+        }
+        emitNet('__dg_evt_s_c_emitNet', Number(target), evtData);
+      })
+    } catch (e) {
+      Sentry.captureException(e);
+      console.error("[DGX] Error emitting net event", evtName, target, e);
     }
-    emitNet('__dg_evt_s_c_emitNet', target, evtData);
   }
 
   emit(evtName: string, ...args: any[]) {

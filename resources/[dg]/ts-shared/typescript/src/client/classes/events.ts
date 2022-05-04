@@ -76,29 +76,31 @@ class Events extends Util.Singleton<Events>() {
     return null;
   }
 
-  async emitNet(event: string, ...args: any[]) {
-    await this.tokenStorage.awaitPlayerAuthentication();
-    if (!this.getTargetResourceForId(event)) {
+  emitNet(event: string, ...args: any[]) {
+    setImmediate(async () => {
+      await this.tokenStorage.awaitPlayerAuthentication();
+      if (!this.getTargetResourceForId(event)) {
+        emitNet('__dg_evt_c_s_emitNet', {
+          token: this.tokenStorage.getToken(),
+          origin: this.resName,
+          eventId: 'error',
+          errorId: Util.uuidv4(),
+        });
+        console.log(`[DG] Event ${event} not found in any resource.`);
+        return;
+      }
+      const [target, eventId] = this.getTargetResourceForId(event);
+      if (Util.isDevEnv()) {
+        console.log(`[DGX] [${this.resName}] Event: ${event} | ID: ${eventId}`);
+      }
       emitNet('__dg_evt_c_s_emitNet', {
         token: this.tokenStorage.getToken(),
         origin: this.resName,
-        eventId: 'error',
-        errorId: Util.uuidv4(),
+        target,
+        eventId,
+        args,
       });
-      console.log(`[DG] Event ${event} not found in any resource.`);
-      return;
-    }
-    const [target, eventId] = this.getTargetResourceForId(event);
-    if (Util.isDevEnv()) {
-      console.log(`[DGX] [${this.resName}] Event: ${event} | ID: ${eventId}`);
-    }
-    emitNet('__dg_evt_c_s_emitNet', {
-      token: this.tokenStorage.getToken(),
-      origin: this.resName,
-      target,
-      eventId,
-      args,
-    });
+    })
   }
 
   onNet(evtName: string, handler: LocalEventHandler) {

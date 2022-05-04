@@ -34,8 +34,8 @@ export const ExportRegister = () => {
 
         const exports = Reflect.getMetadata('exports', this) as Array<Decorators.Base>;
         exports.forEach(e => {
-          global.exports(e.name, (...args: any[]) => {
-            return this[e.key](...args);
+          global.exports(e.name, (...exportArgs: any[]) => {
+            return this[e.key](...exportArgs);
           });
         });
       }
