@@ -15,6 +15,7 @@ class CommandManager {
   }
 
   private commands: Map<string, Server.Command>;
+  private refreshTimeout: NodeJS.Timeout;
 
   constructor() {
     this.commands = new Map();
@@ -48,6 +49,9 @@ class CommandManager {
     permissionLevel = 'user',
     handler: Server.CommandHandler
   ) {
+    if (this.refreshTimeout) {
+      clearTimeout(this.refreshTimeout);
+    }
     parameters.reduce((wasReq, val) => {
       if (!wasReq && val.required) {
         throw new Error(
@@ -71,7 +75,7 @@ class CommandManager {
       permissionLevel,
       handler,
     });
-    this.refreshCommands();
+    this.refreshTimeout = setTimeout(() => this.refreshCommands(), 1000);
   }
 
   public getCommandInfo(name: string) {
