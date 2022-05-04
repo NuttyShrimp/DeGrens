@@ -6,12 +6,11 @@ global.exports('giveFine', (cid: number, target_account: string, fine: number, r
   debtManager.addDebt(cid, target_account, fine, reason, given_by);
 });
 
-RPC.register('financials:server:debts:get', (src, cb) => {
+RPC.register('financials:server:debts:get', src => {
   debtLogger.silly(`getDebts | src: ${src}`);
   const Player = DGCore.Functions.GetPlayer(src);
   if (!Player) {
-    cb([]);
-    return;
+    return [];
   }
   const debts = debtManager.getDebtsByCid(Player.PlayerData.citizenid);
   const returnDebts = {
@@ -19,17 +18,16 @@ RPC.register('financials:server:debts:get', (src, cb) => {
     maintenance: debts.filter(debt => debt.type === 'maintenance'),
   };
   debtLogger.silly(`getDebts: ${debts.length}`);
-  cb(returnDebts);
+  return returnDebts;
 });
 
-RPC.register('financials:server:debts:pay', async (src, cb, debtId: number) => {
+RPC.register('financials:server:debts:pay', async (src, debtId: number) => {
   debtLogger.silly(`payDebt: ${debtId} | src: ${src}`);
   const Player = DGCore.Functions.GetPlayer(src);
   if (!Player) {
     debtLogger.warn(`payDebt: Player not found | src: ${src}`);
-    cb(false);
-    return;
+    return false;
   }
   const isSuccess = await debtManager.payDebt(src, debtId);
-  cb(isSuccess);
+  return isSuccess;
 });

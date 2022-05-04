@@ -19,8 +19,8 @@ onNet('DGCore:Server:OnPlayerLoaded', () => {
   seedPlyInCache(source);
 });
 
-RPC.register('financials:server:cash:get', (src, cb) => {
-  cb(getCash(src));
+RPC.register('financials:server:cash:get', src => {
+  return getCash(src);
 });
 
 DGCore.Commands.Add(
