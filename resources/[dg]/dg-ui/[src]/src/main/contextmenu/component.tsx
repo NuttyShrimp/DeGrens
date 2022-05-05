@@ -36,8 +36,7 @@ class Component extends React.Component<ContextMenu.Props, any> {
       ids.push(entry.id);
     });
     return entries.map(entry => {
-      if (entry.id) return entry;
-      entry.id = getId();
+      entry.id = entry.id ?? getId();
       if (entry.submenu) {
         entry.submenu = this.generateIds(entry.submenu);
       }
