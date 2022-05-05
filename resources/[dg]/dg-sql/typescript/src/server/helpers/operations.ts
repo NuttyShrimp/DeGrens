@@ -63,7 +63,10 @@ export const doInsertValues = async (table: string, values: any[] = [], cb?: (re
   const query = prepareInsertStatement(table, values);
   const result = (await doQuery(
     query,
-    values.reduce((acc, valObj) => Object.values(valObj).forEach(val => acc.push(val))),
+    values.reduce((acc, valObj) => {
+      Object.values(valObj).forEach(val => acc.push(val));
+      return acc;
+    }, []),
     cb,
     GetInvokingResource()
   )) as OkPacket;
