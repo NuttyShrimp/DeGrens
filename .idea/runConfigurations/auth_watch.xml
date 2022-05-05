@@ -1,0 +1,12 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="auth:watch" type="js.build_tools.npm" folderName="auth">
+    <package-json value="$PROJECT_DIR$/resources/[dg]/dg-auth/typescript/package.json" />
+    <command value="run" />
+    <scripts>
+      <script value="watch" />
+    </scripts>
+    <node-interpreter value="project" />
+    <envs />
+    <method v="2" />
+  </configuration>
+</component>

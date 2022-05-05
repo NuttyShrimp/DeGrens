@@ -99,8 +99,8 @@ fabric.properties
 # Ignores the whole .idea folder and all .iml files
 # See https://github.com/joeblau/gitignore.io/issues/186 and https://github.com/joeblau/gitignore.io/issues/360
 
-.idea/
-!.idea/runConfigurations/*.xml
+.idea/*
+!.idea/runConfigurations
 
 # Reason: https://github.com/joeblau/gitignore.io/issues/186#issuecomment-249601023
 
@@ -269,22 +269,3 @@ polyzone_created_zones.txt
 # Mac thing
 .DS_Store
 
-resources/dg-policealerts/client.lua
-
-resources/dg-policealerts/config.lua
-
-resources/dg-policealerts/fxmanifest.lua
-
-resources/dg-policealerts/html/index.html
-
-resources/dg-policealerts/html/script.js
-
-resources/dg-policealerts/html/style.css
-
-resources/dg-policealerts/server.lua
-
-resources/position/client.lua
-
-resources/position/fxmanifest.lua
-
-resources/position/server.lua
