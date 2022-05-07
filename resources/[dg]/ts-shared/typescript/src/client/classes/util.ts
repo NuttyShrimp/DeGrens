@@ -12,6 +12,11 @@ class Util extends UtilShared {
     return this.ArrayToVector3(entityCoords);
   }
 
+  getEntityRotation(entity: number) {
+    const entityRotation = GetEntityRotation(entity, 0);
+    return this.ArrayToVector3(entityRotation);
+  }
+
   getBoneDistance(entity: number, boneId: string | number) {
     const entityType = GetEntityType(entity);
     if (!entityType) {
@@ -22,6 +27,27 @@ class Util extends UtilShared {
     const boneCoords = this.ArrayToVector3(GetWorldPositionOfEntityBone(entity, bone));
     return boneCoords.subtract(this.getPlyCoords()).Length;
   }
+
+  loadModel = async (model: string | number) => {
+    RequestModel(model);
+    while (!HasModelLoaded(model)) {
+      await this.Delay(10);
+    }
+  };
+
+  loadAnimDict = async (dict: string) => {
+    RequestAnimDict(dict);
+    while (!HasAnimDictLoaded(dict)) {
+      await this.Delay(10);
+    }
+  };
+
+  requestEntityControl = async (entity: number) => {
+    NetworkRequestControlOfEntity(entity);
+    while (!NetworkHasControlOfEntity(entity)) {
+      await this.Delay(10);
+    }
+  };
 }
 
 export default {
