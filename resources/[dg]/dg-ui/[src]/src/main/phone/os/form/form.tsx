@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 
 import { styles } from './form.styles';
 
-export const Form: FC = () => {
+export const Form: FC<React.PropsWithChildren<unknown>> = () => {
   const classes = styles();
   const phoneFormState = useSelector<RootState, Phone.FormState>(state => state['phone.form']);
 

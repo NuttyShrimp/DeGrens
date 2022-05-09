@@ -7,9 +7,11 @@ import { startPhoneCall } from '../../phone-app/lib';
 
 import { styles } from './yellowpages.styles';
 
-export const YPAd: FC<{
-  ad: Phone.YellowPages.Ad;
-}> = ({ ad }) => {
+export const YPAd: FC<
+  React.PropsWithChildren<{
+    ad: Phone.YellowPages.Ad;
+  }>
+> = ({ ad }) => {
   const classes = styles();
   const replaceSpan = (e: MouseEvent, rplStr: String) => {
     const span = (e.target as any).querySelector('span.replaceSpan');
@@ -47,7 +49,7 @@ export const YPAd: FC<{
   );
 };
 
-export const YellowPages: FC<Phone.YellowPages.Props> = props => {
+export const YellowPages: FC<React.PropsWithChildren<Phone.YellowPages.Props>> = props => {
   const classes = styles();
   return (
     <div className={classes.list}>

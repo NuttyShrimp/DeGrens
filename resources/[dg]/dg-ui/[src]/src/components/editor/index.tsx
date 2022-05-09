@@ -9,7 +9,7 @@ import { getExtensions } from './extensions';
 import '@remirror/styles/all.css';
 import '../../styles/components/editor.scss';
 
-const Editor: FC<Editor.Props> = props => {
+const Editor: FC<React.PropsWithChildren<Editor.Props>> = props => {
   const extensions = useCallback(
     () => [new PlaceholderExtension({ placeholder: props.placeholder }), ...getExtensions()],
     [props.placeholder]

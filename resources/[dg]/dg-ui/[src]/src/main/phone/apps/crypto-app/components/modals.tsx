@@ -11,7 +11,7 @@ const setDirty = () => {
   });
 };
 
-export const ExchangeModal: FC<{ coin: Phone.Crypto.Coin }> = ({ coin }) => (
+export const ExchangeModal: FC<React.PropsWithChildren<{ coin: Phone.Crypto.Coin }>> = ({ coin }) => (
   <SimpleForm
     elements={[
       {
@@ -33,7 +33,7 @@ export const ExchangeModal: FC<{ coin: Phone.Crypto.Coin }> = ({ coin }) => (
   />
 );
 
-export const PurchaseModal: FC<{ coin: Phone.Crypto.Coin }> = ({ coin }) => (
+export const PurchaseModal: FC<React.PropsWithChildren<{ coin: Phone.Crypto.Coin }>> = ({ coin }) => (
   <SimpleForm
     elements={[
       {

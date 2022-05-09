@@ -9,7 +9,7 @@ import { AppContainer } from '../../../os/appcontainer/appcontainer';
 import { TransactionModal } from './modals';
 import { styles } from './payconiq.styles';
 
-export const Payconiq: FC<Phone.PayConiq.Props> = props => {
+export const Payconiq: FC<React.PropsWithChildren<Phone.PayConiq.Props>> = props => {
   const characterState = useSelector<RootState, Character>(s => s.character);
   const classes = styles();
   return (

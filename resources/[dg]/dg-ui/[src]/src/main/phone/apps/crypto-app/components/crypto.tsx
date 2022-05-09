@@ -8,7 +8,7 @@ import { showFormModal } from '../../../lib';
 import { styles } from './crypto.styles';
 import { ExchangeModal, PurchaseModal } from './modals';
 
-export const Crypto: FC<Phone.Crypto.Props> = props => {
+export const Crypto: FC<React.PropsWithChildren<Phone.Crypto.Props>> = props => {
   const classes = styles();
   const getCoinInfo = (coin: Phone.Crypto.Coin): ListItem[] => [
     {

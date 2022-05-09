@@ -5,7 +5,7 @@ import { AppContainer } from '../../../os/appcontainer/appcontainer';
 
 import { styles } from './mail,styles';
 
-export const MailEntry: FC<{ mail: Phone.Mail.Mail }> = ({ mail }) => {
+export const MailEntry: FC<React.PropsWithChildren<{ mail: Phone.Mail.Mail }>> = ({ mail }) => {
   const [isExtended, setIsExtended] = useState(false);
   const classes = styles();
 
@@ -25,7 +25,7 @@ export const MailEntry: FC<{ mail: Phone.Mail.Mail }> = ({ mail }) => {
   );
 };
 
-export const Mail: FC<Phone.Mail.Props> = props => {
+export const Mail: FC<React.PropsWithChildren<Phone.Mail.Props>> = props => {
   const classes = styles();
   return (
     <AppContainer>

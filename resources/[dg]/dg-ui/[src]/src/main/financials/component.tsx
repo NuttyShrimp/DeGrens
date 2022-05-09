@@ -80,7 +80,7 @@ class Component extends React.Component<Financials.Props, any> {
     }, 10);
   };
 
-  setModal(component: React.FC) {
+  setModal(component: React.FC<React.PropsWithChildren<unknown>>) {
     this.props.updateState({
       modalComponent: component,
       backdrop: true,

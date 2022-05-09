@@ -5,7 +5,7 @@ import { SimpleForm } from '../../../../../components/simpleform';
 import { nuiAction } from '../../../../../lib/nui-comms';
 import { showCheckmarkModal, showLoadModal } from '../../../lib';
 
-export const TweetModal: FC<{ text?: string; onAccept?: (data: any) => void }> = props => (
+export const TweetModal: FC<React.PropsWithChildren<{ text?: string; onAccept?: (data: any) => void }>> = props => (
   <SimpleForm
     header='Tweet'
     elements={[

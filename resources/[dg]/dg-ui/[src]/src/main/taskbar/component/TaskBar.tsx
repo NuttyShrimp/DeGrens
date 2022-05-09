@@ -4,7 +4,7 @@ import { animated, easings, useSpring } from 'react-spring';
 import { useVhToPixel } from '../../../lib/hooks/useVhToPixel';
 import { nuiAction } from '../../../lib/nui-comms';
 
-export const TaskBar: FC<TaskBar.Props> = props => {
+export const TaskBar: FC<React.PropsWithChildren<TaskBar.Props>> = props => {
   const targetWidth = useVhToPixel(35);
   const [animProps, api] = useSpring(() => ({
     from: {

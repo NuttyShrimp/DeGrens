@@ -5,7 +5,7 @@ import { SimpleForm } from '../../../../components/simpleform';
 import { nuiAction } from '../../../../lib/nui-comms';
 import { closeModal, openLoadModal } from '../../lib';
 
-export const DepositModal: FC<Financials.ModalProps> = props => {
+export const DepositModal: FC<React.PropsWithChildren<Financials.ModalProps>> = props => {
   return (
     <SimpleForm
       header='Geld storten'

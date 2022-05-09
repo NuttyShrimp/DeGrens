@@ -56,15 +56,15 @@ declare type MoneyAmountProps = TextFieldProps & {
 };
 
 declare interface OSInput {
-  TextField: FC<TextFieldProps>;
-  Password: FC<TextFieldProps>;
-  Number: FC<NumberInputProps>;
-  AutoComplete: FC<AutoCompleteProps>;
-  Checkbox: FC<ICheckboxProps>;
-  MoneyAmount: FC<MoneyAmountProps>;
-  PhoneNumber: FC<TextFieldProps>;
-  Search: FC<TextFieldProps>;
-  Contact: FC<Omit<AutoCompleteProps, 'freeSolo' | 'options' | 'label'> & { label?: string }>;
+  TextField: FC<React.PropsWithChildren<TextFieldProps>>;
+  Password: FC<React.PropsWithChildren<TextFieldProps>>;
+  Number: FC<React.PropsWithChildren<NumberInputProps>>;
+  AutoComplete: FC<React.PropsWithChildren<AutoCompleteProps>>;
+  Checkbox: FC<React.PropsWithChildren<ICheckboxProps>>;
+  MoneyAmount: FC<React.PropsWithChildren<MoneyAmountProps>>;
+  PhoneNumber: FC<React.PropsWithChildren<TextFieldProps>>;
+  Search: FC<React.PropsWithChildren<TextFieldProps>>;
+  Contact: FC<React.PropsWithChildren<Omit<AutoCompleteProps, 'freeSolo' | 'options' | 'label'> & { label?: string }>>;
 }
 
 // endregion

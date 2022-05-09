@@ -8,11 +8,13 @@ import { Infoheader } from './infoheader';
 import { TransactionList } from './transactionList';
 
 export const Financials: FC<
-  Financials.Props & {
-    setActiveAccount: (acc: Financials.Account) => void;
-    fetchTransactions: () => Promise<void>;
-    fetchAccounts: () => Promise<void>;
-  }
+  React.PropsWithChildren<
+    Financials.Props & {
+      setActiveAccount: (acc: Financials.Account) => void;
+      fetchTransactions: () => Promise<void>;
+      fetchAccounts: () => Promise<void>;
+    }
+  >
 > = props => {
   const openHeight = useVhToPixel(70);
   const rootStyles = useSpring({

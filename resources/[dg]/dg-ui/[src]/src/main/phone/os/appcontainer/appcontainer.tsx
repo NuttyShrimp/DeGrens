@@ -15,7 +15,7 @@ declare interface AppContainerProps extends Phone.AppContainer.Props {
   containerStyle?: React.CSSProperties;
 }
 
-export const AppContainer: FC<AppContainerProps> = props => {
+export const AppContainer: FC<React.PropsWithChildren<AppContainerProps>> = props => {
   const classes = styles();
   const wrapperTop = useVhToPixel(1);
   const activeApp = useSelector<RootState, string>(state => state.phone.activeApp);

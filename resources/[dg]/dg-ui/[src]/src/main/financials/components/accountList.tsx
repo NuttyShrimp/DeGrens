@@ -9,12 +9,14 @@ import { DepositModal } from './modals/DepositModal';
 import { TransferModal } from './modals/TransferModal';
 import { WithdrawModal } from './modals/WithdrawModal';
 
-const Account: FC<{
-  account: Financials.Account;
-  setActiveAccount: (acc: Financials.Account) => void;
-  selected: boolean;
-}> = ({ account, setActiveAccount, selected }) => {
-  const btnClick = (e: MouseEvent, component: React.FC<any>) => {
+const Account: FC<
+  React.PropsWithChildren<{
+    account: Financials.Account;
+    setActiveAccount: (acc: Financials.Account) => void;
+    selected: boolean;
+  }>
+> = ({ account, setActiveAccount, selected }) => {
+  const btnClick = (e: MouseEvent, component: React.FC<React.PropsWithChildren<any>>) => {
     e.stopPropagation();
     setModal(component);
   };
@@ -50,11 +52,13 @@ const Account: FC<{
   );
 };
 
-export const AccountList: FC<{
-  accounts: Financials.Account[];
-  selected: Financials.Account | null;
-  setActiveAccount: (acc: Financials.Account) => void;
-}> = props => {
+export const AccountList: FC<
+  React.PropsWithChildren<{
+    accounts: Financials.Account[];
+    selected: Financials.Account | null;
+    setActiveAccount: (acc: Financials.Account) => void;
+  }>
+> = props => {
   return (
     <div className={'account__list'}>
       {props.accounts.map(account => (

@@ -6,7 +6,7 @@ import { styles } from '../styles/components/simpleform.styles';
 
 import { Button } from './button';
 
-export const SimpleForm: FC<SimpleForm.Form> = props => {
+export const SimpleForm: FC<React.PropsWithChildren<SimpleForm.Form>> = props => {
   const classes = styles();
   const [values, setValues] = useState({});
   const [errors, setErrors] = useState({});

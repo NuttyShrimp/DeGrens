@@ -17,7 +17,7 @@ const DialerBtn = styled(Button)({
 
 const btns = [[1, 2, 3], [4, 5, 6], [7, 8, 9], [0]];
 
-export const Dialer: FC = () => {
+export const Dialer: FC<React.PropsWithChildren<unknown>> = () => {
   const classes = styles();
   const [value, setValue] = useState('');
 

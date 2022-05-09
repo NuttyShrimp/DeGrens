@@ -6,10 +6,12 @@ import { SimpleForm } from './simpleform';
 
 export const EmptyDiv = () => <div />;
 
-export const ConfirmationModal: FC<{
-  onAccept: (data: any) => void;
-  header?: string;
-}> = props => (
+export const ConfirmationModal: FC<
+  React.PropsWithChildren<{
+    onAccept: (data: any) => void;
+    header?: string;
+  }>
+> = props => (
   <SimpleForm
     header={props.header ?? 'Weet je zeker dat je deze actie wilt doen'}
     elements={[]}
@@ -17,4 +19,4 @@ export const ConfirmationModal: FC<{
   />
 );
 
-export const Loader: FC = () => <BounceLoader size={60} color={'white'} />;
+export const Loader: FC<React.PropsWithChildren<unknown>> = () => <BounceLoader size={60} color={'white'} />;

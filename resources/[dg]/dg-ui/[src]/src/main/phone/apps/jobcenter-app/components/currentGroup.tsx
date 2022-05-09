@@ -4,7 +4,7 @@ import { Paper } from '@src/components/paper';
 import { Loader } from '@src/components/util';
 import { nuiAction } from '@src/lib/nui-comms';
 
-export const CurrentGroup: FC<Omit<Phone.JobCenter.Props, 'groups' | 'jobs'>> = props => {
+export const CurrentGroup: FC<React.PropsWithChildren<Omit<Phone.JobCenter.Props, 'groups' | 'jobs'>>> = props => {
   const [owner, setOwner] = useState<Phone.JobCenter.Member | undefined>(undefined);
 
   useEffect(() => {

@@ -4,7 +4,7 @@ import { styles } from '../styles/components/list.styles';
 
 import { Icon } from './icon';
 
-export const List: FC<{ items: ListItem[] }> = props => {
+export const List: FC<React.PropsWithChildren<{ items: ListItem[] }>> = props => {
   const classes = styles();
   return (
     <div className={classes.list}>

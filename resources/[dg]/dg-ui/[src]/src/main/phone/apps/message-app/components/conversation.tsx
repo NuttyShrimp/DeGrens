@@ -14,7 +14,7 @@ import { addMessage } from '../lib';
 
 import { styles } from './messages.styles';
 
-export const Conversation: FC<Phone.Messages.Props> = props => {
+export const Conversation: FC<React.PropsWithChildren<Phone.Messages.Props>> = props => {
   // We use the selector state bcs the props state is to inconsistent
   const messageState = useSelector<RootState, Phone.Messages.State>(state => state['phone.apps.messages']);
   const [messages, setMessages] = useState<Phone.Messages.Message[]>([]);

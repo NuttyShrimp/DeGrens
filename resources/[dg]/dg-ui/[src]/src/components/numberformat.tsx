@@ -4,8 +4,8 @@ import ReactNumberFormat, { NumberFormatProps as ReactNumberFormatProps } from '
 import { EmptyDiv } from './util';
 
 export const NumberFormat: {
-  Phone: FC<NumberFormatProps>;
-  Bank: FC<NumberFormatProps>;
+  Phone: FC<React.PropsWithChildren<NumberFormatProps>>;
+  Bank: FC<React.PropsWithChildren<NumberFormatProps>>;
 } = {
   Phone: EmptyDiv,
   Bank: EmptyDiv,

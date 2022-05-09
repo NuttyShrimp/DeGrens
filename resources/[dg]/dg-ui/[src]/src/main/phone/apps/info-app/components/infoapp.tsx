@@ -3,7 +3,7 @@ import { Typography } from '@mui/material';
 
 import { styles } from './infoapp.styles';
 
-export const InfoApp: FC<{ entries: Phone.Info.InfoAppEntry[] }> = props => {
+export const InfoApp: FC<React.PropsWithChildren<{ entries: Phone.Info.InfoAppEntry[] }>> = props => {
   const classes = styles();
   return (
     <div className={classes.wrapper}>

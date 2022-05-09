@@ -7,7 +7,7 @@ import { startPhoneCall } from '../../phone-app/lib';
 
 import { styles } from './justice.styles';
 
-export const Justice: FC<Phone.Justice.Props> = props => {
+export const Justice: FC<React.PropsWithChildren<Phone.Justice.Props>> = props => {
   const classes = styles();
   return (
     <div>

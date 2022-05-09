@@ -6,7 +6,7 @@ import { CurrentGroup } from './currentGroup';
 import { Jobs } from './jobs';
 import { List } from './list';
 
-export const JobCenter: FC<Phone.JobCenter.Props> = props => {
+export const JobCenter: FC<React.PropsWithChildren<Phone.JobCenter.Props>> = props => {
   const [tab, setTab] = useState(0);
   return (
     <AppContainer>

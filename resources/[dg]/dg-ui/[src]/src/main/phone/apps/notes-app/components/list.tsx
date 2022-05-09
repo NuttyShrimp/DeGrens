@@ -7,9 +7,11 @@ import { addNewNote, setCurrentNote } from '../lib';
 import { styles } from './notes.styles';
 
 export const List: FC<
-  State.BaseProps & {
-    list: Phone.Notes.Note[];
-  }
+  React.PropsWithChildren<
+    State.BaseProps & {
+      list: Phone.Notes.Note[];
+    }
+  >
 > = props => {
   const classes = styles();
 

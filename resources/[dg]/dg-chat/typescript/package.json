@@ -13,22 +13,22 @@
 		"webpack:config": "webpack --config ./config/webpack.server.js --config ./config/webpack.client.js"
 	},
 	"dependencies": {
-		"@citizenfx/client": "^2.0.5429-1",
-		"@citizenfx/server": "^2.0.5429-1",
-		"@types/node": "^17.0.23",
+		"@citizenfx/client": "^2.0.5560-1",
+		"@citizenfx/server": "^2.0.5560-1",
+		"@types/node": "^17.0.31",
 		"webpack-merge": "^5.8.0",
-		"winston": "^3.6.0",
-		"winston-sentry-log": "^1.0.24"
+		"winston": "^3.7.2",
+		"winston-sentry-log": "^1.0.26"
 	},
 	"devDependencies": {
-		"@sentry/integrations": "^6.19.2",
-		"@sentry/node": "^6.19.2",
-		"@sentry/tracing": "^6.19.2",
-		"@sentry/webpack-plugin": "^1.18.8",
-		"ts-loader": "^9.2.8",
+		"@sentry/integrations": "^6.19.7",
+		"@sentry/node": "^6.19.7",
+		"@sentry/tracing": "^6.19.7",
+		"@sentry/webpack-plugin": "^1.18.9",
+		"ts-loader": "^9.3.0",
 		"tsconfig-paths-webpack-plugin": "^3.5.2",
-		"typescript": "^4.6.3",
-		"webpack": "^5.70.0",
+		"typescript": "^4.6.4",
+		"webpack": "^5.72.0",
 		"webpack-cli": "^4.9.2"
 	}
 }

@@ -12,7 +12,7 @@ import { TopContent } from '../top-content/topcontent';
 
 import { styles } from './phone.styles';
 
-export const Phone: FC<Phone.Props & { config: ConfigObject[] }> = props => {
+export const Phone: FC<React.PropsWithChildren<Phone.Props & { config: ConfigObject[] }>> = props => {
   const classes = styles();
   const closedVh = useVhToPixel(60);
   const basedOffset = useVhToPixel(60 - 5.5);

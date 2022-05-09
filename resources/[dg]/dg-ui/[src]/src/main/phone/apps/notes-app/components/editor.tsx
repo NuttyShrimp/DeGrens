@@ -5,7 +5,7 @@ import { nuiAction } from '../../../../../lib/nui-comms';
 import { AppContainer } from '../../../os/appcontainer/appcontainer';
 import { removeCurrentNote, setCurrentNote, updateNote } from '../lib';
 
-export const Document: FC<{ note: Phone.Notes.Note }> = ({ note }) => {
+export const Document: FC<React.PropsWithChildren<{ note: Phone.Notes.Note }>> = ({ note }) => {
   const [title, setTitle] = useState(note.title ?? '');
   const [noteText, setNoteText] = useState(note.note ?? '');
   const [inEditMode, setEditMode] = useState(false);

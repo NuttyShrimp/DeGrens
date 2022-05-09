@@ -56,7 +56,7 @@ declare namespace Financials {
     isAtm: boolean;
     canLoadMore: boolean;
     backdrop: boolean;
-    modalComponent: React.FC<ModalProps> | null;
+    modalComponent: React.FC<React.PropsWithChildren<ModalProps>> | null;
   }
 
   interface Props extends State, State.BaseProps<State> {}

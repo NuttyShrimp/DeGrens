@@ -1,4 +1,4 @@
-type EventHandler = (evtName: string, src: number, args: any[]) => any
+type EventHandler = (evtName: string, src: number, args: any[]) => any;
 
 interface PlyData {
   timeStamp: number;

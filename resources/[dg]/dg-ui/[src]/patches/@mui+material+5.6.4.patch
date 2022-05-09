@@ -1,8 +1,8 @@
 diff --git a/node_modules/@mui/material/CircularProgress/CircularProgress.d.ts b/node_modules/@mui/material/CircularProgress/CircularProgress.d.ts
-index 2a2eabf..80c475b 100644
+index d48f65e..2b7002d 100644
 --- a/node_modules/@mui/material/CircularProgress/CircularProgress.d.ts
 +++ b/node_modules/@mui/material/CircularProgress/CircularProgress.d.ts
-@@ -17,7 +17,7 @@ export interface CircularProgressProps
+@@ -19,7 +19,7 @@ export interface CircularProgressProps
     * @default 'primary'
     */
    color?: OverridableStringUnion<
@@ -11,7 +11,7 @@ index 2a2eabf..80c475b 100644
      CircularProgressPropsColorOverrides
    >;
    /**
-@@ -54,6 +54,9 @@ export interface CircularProgressProps
+@@ -56,6 +56,9 @@ export interface CircularProgressProps
     * @default 'indeterminate'
     */
    variant?: 'determinate' | 'indeterminate';
@@ -22,7 +22,7 @@ index 2a2eabf..80c475b 100644
  
  /**
 diff --git a/node_modules/@mui/material/CircularProgress/CircularProgress.js b/node_modules/@mui/material/CircularProgress/CircularProgress.js
-index 7b66217..f84c8e4 100644
+index 788a597..b21fc22 100644
 --- a/node_modules/@mui/material/CircularProgress/CircularProgress.js
 +++ b/node_modules/@mui/material/CircularProgress/CircularProgress.js
 @@ -1,6 +1,6 @@
@@ -73,7 +73,7 @@ index 7b66217..f84c8e4 100644
          r: (SIZE - thickness) / 2,
          fill: "none",
          strokeWidth: thickness
-@@ -268,6 +271,9 @@ process.env.NODE_ENV !== "production" ? CircularProgress.propTypes
+@@ -270,6 +273,9 @@ process.env.NODE_ENV !== "production" ? CircularProgress.propTypes
     * Use indeterminate when there is no progress value.
     * @default 'indeterminate'
     */

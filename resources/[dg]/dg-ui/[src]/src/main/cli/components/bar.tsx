@@ -4,7 +4,7 @@ import { Input } from '../../../components/inputs';
 import { mockEvent } from '../../../lib/nui-comms';
 import { cmds } from '../commands';
 
-export const Bar: React.FC = () => {
+export const Bar: React.FC<React.PropsWithChildren<unknown>> = () => {
   const [value, setValue] = React.useState('');
   const realCmds = cmds.map(cmd => {
     // remove all $x and leading/trailing spaces

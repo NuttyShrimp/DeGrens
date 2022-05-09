@@ -4,10 +4,9 @@ import { Button } from '@src/components/button';
 import Numberformat from '../../../components/numberformat';
 import { formatRelativeTime } from '../../../lib/util';
 
-const Transaction: FC<{ transaction: Financials.Transaction; selected: Financials.Account }> = ({
-  transaction,
-  selected,
-}) => {
+const Transaction: FC<
+  React.PropsWithChildren<{ transaction: Financials.Transaction; selected: Financials.Account }>
+> = ({ transaction, selected }) => {
   return (
     <div className={'transaction'}>
       <div className={'transaction__top'}>
@@ -48,12 +47,14 @@ const Transaction: FC<{ transaction: Financials.Transaction; selected: Financial
   );
 };
 
-export const TransactionList: FC<{
-  selected: Financials.Account | null;
-  transactions: Financials.Transaction[];
-  fetchTransactions: () => Promise<void>;
-  canLoadMore: boolean;
-}> = props => {
+export const TransactionList: FC<
+  React.PropsWithChildren<{
+    selected: Financials.Account | null;
+    transactions: Financials.Transaction[];
+    fetchTransactions: () => Promise<void>;
+    canLoadMore: boolean;
+  }>
+> = props => {
   const [loadBtnDisabled, setLoadBtnDisabled] = useState(false);
   const loadMoreTrans = async () => {
     setLoadBtnDisabled(true);

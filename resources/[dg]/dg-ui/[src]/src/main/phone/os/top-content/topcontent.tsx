@@ -5,10 +5,12 @@ import { WeatherIcons } from '../../enum';
 
 import { styles } from './topcontent.styles';
 
-export const TopContent: FC<{
-  character: Character;
-  game: State.Main.Game;
-}> = props => {
+export const TopContent: FC<
+  React.PropsWithChildren<{
+    character: Character;
+    game: State.Main.Game;
+  }>
+> = props => {
   const classes = styles();
   return (
     <div className={classes.root}>

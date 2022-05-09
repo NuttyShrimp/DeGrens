@@ -1,7 +1,7 @@
 import React from 'react';
 import { TextareaAutosize, Typography } from '@mui/material';
 
-export const Log: React.FC<{ log: DebugLogs.log }> = props => {
+export const Log: React.FC<React.PropsWithChildren<{ log: DebugLogs.log }>> = props => {
   return (
     <div className={`log__entry ${props.log.isOk ? '' : 'red'}`}>
       <Typography variant='body1' sx={{ fontWeight: 'bold' }}>

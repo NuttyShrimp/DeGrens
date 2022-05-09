@@ -38,6 +38,6 @@ const actions: MenuActionItemUnion[] = [
   },
 ];
 
-export const ExtendedOptions: FC<{ readonly: boolean }> = ({ readonly }) => {
+export const ExtendedOptions: FC<React.PropsWithChildren<{ readonly: boolean }>> = ({ readonly }) => {
   return <FloatingActionsMenu placement={'right'} enabled={!readonly} renderOutsideEditor actions={actions} />;
 };

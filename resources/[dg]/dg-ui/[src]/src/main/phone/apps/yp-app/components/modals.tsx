@@ -5,7 +5,7 @@ import { SimpleForm } from '../../../../../components/simpleform';
 import { nuiAction } from '../../../../../lib/nui-comms';
 import { showCheckmarkModal, showLoadModal } from '../../../lib';
 
-export const NewAd: FC<{ onAccept: Function; ad: Phone.YellowPages.Ad | null }> = props => (
+export const NewAd: FC<React.PropsWithChildren<{ onAccept: Function; ad: Phone.YellowPages.Ad | null }>> = props => (
   <SimpleForm
     header='Nieuwe advertentie'
     elements={[

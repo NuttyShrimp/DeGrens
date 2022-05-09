@@ -8,7 +8,7 @@ import { addNotification, changeApp, genericAction } from '../../lib';
 
 import { styles } from './bottombar.styles';
 
-export const BottomBar: FC = () => {
+export const BottomBar: FC<React.PropsWithChildren<unknown>> = () => {
   const classes = styles();
   const phoneState = useSelector<RootState, Phone.State>(state => state.phone);
   const [isHovering, setHovering] = React.useState(false);

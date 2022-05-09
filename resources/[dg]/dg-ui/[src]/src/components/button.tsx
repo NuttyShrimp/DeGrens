@@ -1,7 +1,7 @@
 import React from 'react';
 import MuiButton, { ButtonProps } from '@mui/material/Button';
 
-export const Button: Record<string, React.FC<ButtonProps>> = {};
+export const Button: Record<string, React.FC<React.PropsWithChildren<ButtonProps>>> = {};
 
 Button.Primary = (props: ButtonProps) => {
   return (

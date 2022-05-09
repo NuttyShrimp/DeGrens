@@ -16,7 +16,9 @@ enum ModalAction {
   'edit' = 'update',
 }
 
-export const ContactModal: FC<{ contact: Partial<Phone.Contacts.Contact>; type: 'edit' | 'new' }> = props => (
+export const ContactModal: FC<
+  React.PropsWithChildren<{ contact: Partial<Phone.Contacts.Contact>; type: 'edit' | 'new' }>
+> = props => (
   <SimpleForm
     header={ModalHeader[props.type]}
     elements={[

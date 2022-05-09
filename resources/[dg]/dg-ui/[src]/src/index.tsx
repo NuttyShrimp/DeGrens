@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import * as Sentry from '@sentry/react';
 import { BrowserTracing } from '@sentry/tracing';
 
@@ -58,13 +58,14 @@ function App() {
   return <div className='ui-wrapper'>{components.map((component, i) => component.render({ key: i }))}</div>;
 }
 
-ReactDOM.render(
+const rootElem = document.getElementById('root');
+const root = createRoot(rootElem as HTMLElement);
+root.render(
   <React.StrictMode>
     <Provider store={store}>
       <IndexProvider>
         <App />
       </IndexProvider>
     </Provider>
-  </React.StrictMode>,
-  document.getElementById('root')
+  </React.StrictMode>
 );

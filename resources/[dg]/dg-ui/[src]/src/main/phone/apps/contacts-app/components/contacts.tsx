@@ -12,7 +12,7 @@ import { fetchContacts } from '../lib';
 import { styles } from './contacts.styles';
 import { ContactModal } from './modals';
 
-export const Contacts: FC<{ contacts: Phone.Contacts.Contact[] }> = props => {
+export const Contacts: FC<React.PropsWithChildren<{ contacts: Phone.Contacts.Contact[] }>> = props => {
   const classes = styles();
 
   const actions: Action[] = [

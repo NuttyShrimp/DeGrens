@@ -15,7 +15,7 @@ const actionBarItems: ToolbarItemUnion[] = [
   },
 ];
 
-export const FloatingActionBar: FC<{ readonly: boolean }> = ({ readonly }) => (
+export const FloatingActionBar: FC<React.PropsWithChildren<{ readonly: boolean }>> = ({ readonly }) => (
   <FloatingToolbar
     items={actionBarItems}
     positioner='selection'

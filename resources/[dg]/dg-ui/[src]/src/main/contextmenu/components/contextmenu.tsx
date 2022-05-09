@@ -5,7 +5,7 @@ import { closeApplication } from '../../../components/appwrapper';
 import { nuiAction } from '../../../lib/nui-comms';
 import store from '../store';
 
-const MenuEntry: FC<ContextMenu.Entry & State.BaseProps & { onClick?: Function }> = props => {
+const MenuEntry: FC<React.PropsWithChildren<ContextMenu.Entry & State.BaseProps & { onClick?: Function }>> = props => {
   const parentEntry = useSelector<RootState, string | null>(state => state.contextmenu.parentEntry);
 
   const handleClick = () => {
@@ -63,7 +63,7 @@ const MenuEntry: FC<ContextMenu.Entry & State.BaseProps & { onClick?: Function }
   );
 };
 
-export const ContextMenu: FC<ContextMenu.Props> = props => {
+export const ContextMenu: FC<React.PropsWithChildren<ContextMenu.Props>> = props => {
   const goMenuBack = () => {
     const keys = (props.parentEntry ?? '').split('.');
     const searchForEntries = (entries: ContextMenu.Entry[], key = 0): ContextMenu.Entry[] | boolean => {

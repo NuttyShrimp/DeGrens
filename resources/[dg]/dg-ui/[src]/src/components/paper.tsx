@@ -7,7 +7,7 @@ import { styles } from '../styles/components/paper.styles';
 
 import { Icon } from './icon';
 
-export const Paper: FC<Paper.Props> = props => {
+export const Paper: FC<React.PropsWithChildren<Paper.Props>> = props => {
   const [showActions, setShowActions] = useState(false);
   const [imgOnly, setImgOnly] = useState(false);
   const [showExtDescription, setShowExtDescription] = useState(false);

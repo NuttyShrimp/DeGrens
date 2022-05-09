@@ -6,7 +6,7 @@ import { nuiAction } from '@src/lib/nui-comms';
 
 import Slider from './slider';
 
-export const Sliders: FC<Sliders.Props> = props => {
+export const Sliders: FC<React.PropsWithChildren<Sliders.Props>> = props => {
   const [power, setPower] = useState<number[]>(props.power);
   const [amount, setAmount] = useState<number[]>(props.amount);
 

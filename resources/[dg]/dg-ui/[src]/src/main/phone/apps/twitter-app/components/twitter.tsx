@@ -9,11 +9,13 @@ import { formatRelativeTime } from '../../../../../lib/util';
 import { styles } from './twitter.styles';
 
 export const Tweet: FC<
-  { tweet: Phone.Twitter.Tweet } & {
-    toggleLike: (tweetId: number, isLiked: boolean) => void;
-    doRetweet: (tweet: Phone.Twitter.Tweet) => void;
-    doDelete: (tweetId: number) => void;
-  }
+  React.PropsWithChildren<
+    { tweet: Phone.Twitter.Tweet } & {
+      toggleLike: (tweetId: number, isLiked: boolean) => void;
+      doRetweet: (tweet: Phone.Twitter.Tweet) => void;
+      doDelete: (tweetId: number) => void;
+    }
+  >
 > = ({ tweet, ...props }) => {
   const classes = styles();
 
@@ -57,12 +59,14 @@ export const Tweet: FC<
 };
 
 export const Twitter: FC<
-  Phone.Twitter.Props & {
-    toggleLike: (tweetId: number, isLiked: boolean) => void;
-    doRetweet: (tweet: Phone.Twitter.Tweet) => void;
-    doDelete: (tweetId: number) => void;
-    fetchTweets: () => Promise<void>;
-  }
+  React.PropsWithChildren<
+    Phone.Twitter.Props & {
+      toggleLike: (tweetId: number, isLiked: boolean) => void;
+      doRetweet: (tweet: Phone.Twitter.Tweet) => void;
+      doDelete: (tweetId: number) => void;
+      fetchTweets: () => Promise<void>;
+    }
+  >
 > = props => {
   const classes = styles();
   const [disableLoad, setDisableLoad] = useState(false);

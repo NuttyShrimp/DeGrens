@@ -9,7 +9,7 @@ import { AppContainer } from '../../../os/appcontainer/appcontainer';
 
 import { styles } from './homescreen.styles';
 
-const AppIcon: FC<ConfigObject> = props => {
+const AppIcon: FC<React.PropsWithChildren<ConfigObject>> = props => {
   const classes = styles();
   return (
     <Tooltip

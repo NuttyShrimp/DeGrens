@@ -16,7 +16,9 @@ const NotificationButton = styled(Button)({
   padding: '.25vh .75vh',
 });
 
-export const Notification: FC<{ notification: Phone.Notifications.Notification }> = ({ notification }) => {
+export const Notification: FC<React.PropsWithChildren<{ notification: Phone.Notifications.Notification }>> = ({
+  notification,
+}) => {
   const classes = styles();
   const [timer, setTimer] = useState<undefined | number>(notification.timer);
 
@@ -96,7 +98,7 @@ export const Notification: FC<{ notification: Phone.Notifications.Notification }
   );
 };
 
-export const NotificationWrapper: FC = () => {
+export const NotificationWrapper: FC<React.PropsWithChildren<unknown>> = () => {
   const classes = styles();
   const notifications = useSelector<RootState, Phone.Notifications.State>(state => state['phone.notifications']);
 

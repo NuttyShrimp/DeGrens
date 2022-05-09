@@ -19,9 +19,11 @@ declare interface ListEntry {
 }
 
 export const List: FC<
-  {
-    list: Record<string, Phone.Messages.Message[]>;
-  } & State.BaseProps
+  React.PropsWithChildren<
+    {
+      list: Record<string, Phone.Messages.Message[]>;
+    } & State.BaseProps
+  >
 > = props => {
   const classes = styles();
   const [list, setList] = useState<ListEntry[]>([]);

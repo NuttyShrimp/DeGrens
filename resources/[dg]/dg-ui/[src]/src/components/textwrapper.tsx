@@ -10,7 +10,7 @@ declare interface ExtractedImage {
   src: string;
 }
 
-export const Textwrapper: FC<{ children: string }> = props => {
+export const Textwrapper: FC<React.PropsWithChildren<{ children: string }>> = props => {
   const classes = styles();
   const [images, setImages] = useState<ExtractedImage[]>([]);
   const [strippedText, setStrippedText] = useState('');

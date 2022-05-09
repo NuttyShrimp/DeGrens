@@ -5,10 +5,12 @@ import { copyToClipboard } from '../lib/util';
 import { setBigPhoto } from '../main/phone/lib';
 import { styles } from '../styles/components/imagecontainer.styles';
 
-export const Imagecontainer: FC<{
-  url: string;
-  loading: boolean;
-}> = props => {
+export const Imagecontainer: FC<
+  React.PropsWithChildren<{
+    url: string;
+    loading: boolean;
+  }>
+> = props => {
   const [isClicked, setIsClicked] = useState(false);
   const classes = styles();
 

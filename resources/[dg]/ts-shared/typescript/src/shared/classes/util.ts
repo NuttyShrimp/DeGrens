@@ -71,7 +71,7 @@ export class Util {
     }
     return result;
   };
-  
+
   isDevEnv() {
     return GetConvar('is_production', 'true') === 'false';
   }

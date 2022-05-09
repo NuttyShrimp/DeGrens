@@ -1,6 +1,6 @@
 import React from 'react';
 
-export const Notification: React.FC<Notifications.Notification> = props => {
+export const Notification: React.FC<React.PropsWithChildren<Notifications.Notification>> = props => {
   return (
     <div className={'notification__outer'}>
       <div className={`notification ${props.type}`}>

@@ -11,7 +11,7 @@ declare interface IconProps {
   onClick?: MouseEventHandler<HTMLElement>;
 }
 
-export const Icon: FC<IconProps> = props => {
+export const Icon: FC<React.PropsWithChildren<IconProps>> = props => {
   if (props.lib == 'img') {
     return (
       <div style={{ width: props.size }}>
