@@ -146,6 +146,17 @@ export const cmds: {
     show: false,
   },
   {
+    cmd: 'show sliders',
+    app: 'sliders',
+    show: true,
+    data: {},
+  },
+  {
+    cmd: 'hide sliders',
+    app: 'sliders',
+    show: false,
+  },
+  {
     cmd: 'show taskbar $1 $2',
     app: 'taskbar',
     show: true,

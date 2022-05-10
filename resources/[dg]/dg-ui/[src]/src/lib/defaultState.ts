@@ -80,6 +80,20 @@ defaultState.contextmenu = [
       },
     ],
   },
+  {
+    id: '5',
+    title: 'Context Menu Item 5',
+    icon: 'cog',
+    callbackURL: 'test-url',
+    submenu: [
+      {
+        id: '5.1',
+        title: 'Context Menu Item 5.1',
+        icon: 'cog',
+        submenu: [],
+      },
+    ],
+  },
 ] as ContextMenu.Entry[];
 
 defaultState.financials = {

@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { ErrorBoundary } from 'react-error-boundary';
 import { useSelector } from 'react-redux';
 import { nuiAction } from '@lib/nui-comms';
 import { store, type } from '@lib/redux';
@@ -83,11 +82,11 @@ const setCurrentApp = (app: string) => {
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export default function AppWrapper(props: AppWrapperProps) {
-  const mainState = useSelector<RootState, State.Main.State>(state => state.main);
+  const mainStateApp = useSelector<RootState, string>(state => state.main.currentApp);
   const styles = useStyles(props);
   const appRef = useRef<HTMLDivElement>(null);
   const appInfo = getApp(props.appName);
-  const appState = useSelector<RootState, { visible: boolean }>(state => state[props.appName]);
+  const appStateVisible = useSelector<RootState, boolean>(state => state[props.appName].visible);
 
   const [visible, setVisible] = useState(false);
   const [active, setActive] = useState(false);
@@ -185,16 +184,6 @@ export default function AppWrapper(props: AppWrapperProps) {
     if (appRef && appRef.current) {
       appRef.current.addEventListener('click', handleActiveApp);
     }
-    return () => {
-      window.removeEventListener('message', eventHandler);
-      window.removeEventListener('keydown', handlePress);
-      if (appRef && appRef.current) {
-        appRef.current.removeEventListener('click', handleActiveApp);
-      }
-    };
-  }, [visible]);
-
-  useEffect(() => {
     registeredApps[props.appName] = {
       onHide: () => {
         if (active) {
@@ -206,24 +195,29 @@ export default function AppWrapper(props: AppWrapperProps) {
       onShow: props.onShow,
     };
     return () => {
+      window.removeEventListener('message', eventHandler);
+      window.removeEventListener('keydown', handlePress);
+      if (appRef && appRef.current) {
+        appRef.current.removeEventListener('click', handleActiveApp);
+      }
       delete registeredApps[props.appName];
     };
   }, []);
 
   useEffect(() => {
-    if (appState.visible === visible) return;
-    setActive(appState.visible);
-    setVisible(appState.visible);
-    if (appState.visible) {
+    if (appStateVisible === visible) return;
+    setActive(appStateVisible);
+    setVisible(appStateVisible);
+    if (appStateVisible) {
       setCurrentApp(props.appName);
     }
-  }, [appState]);
+  }, [appStateVisible]);
 
   useEffect(() => {
-    const isActiveApp = mainState.currentApp === props.appName;
+    const isActiveApp = mainStateApp === props.appName;
     if (isActiveApp === active) return;
     setActive(isActiveApp);
-  }, [mainState]);
+  }, [mainStateApp]);
 
   useEffect(() => {
     if (!appInfo) {
@@ -232,7 +226,7 @@ export default function AppWrapper(props: AppWrapperProps) {
   }, [appInfo]);
 
   return (
-    <ErrorBoundary onError={handleError} fallback={<div></div>}>
+    <Sentry.ErrorBoundary onError={handleError} fallback={<div>{props.appName} has crashed, restart your ui</div>}>
       <div
         className={`${styles.wrapper}${visible ? '' : ' hidden'}`}
         style={{ zIndex: active ? 10 : 1, ...(props.style || {}) }}
@@ -241,7 +235,7 @@ export default function AppWrapper(props: AppWrapperProps) {
       >
         {visible && props.children}
       </div>
-    </ErrorBoundary>
+    </Sentry.ErrorBoundary>
   );
 }
 

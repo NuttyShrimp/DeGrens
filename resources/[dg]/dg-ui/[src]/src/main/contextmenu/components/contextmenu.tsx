@@ -6,14 +6,14 @@ import { nuiAction } from '../../../lib/nui-comms';
 import store from '../store';
 
 const MenuEntry: FC<React.PropsWithChildren<ContextMenu.Entry & State.BaseProps & { onClick?: Function }>> = props => {
-  const parentEntry = useSelector<RootState, string | null>(state => state.contextmenu.parentEntry);
+  const parentEntry = useSelector<RootState, string[]>(state => state.contextmenu.parentEntry);
 
   const handleClick = () => {
     let hasSub = false;
     if (props.submenu) {
       props.updateState({
         entries: props.submenu,
-        parentEntry: parentEntry ? `${parentEntry}.${props.id}` : props.id,
+        parentEntry: parentEntry ? parentEntry.concat([props.id]) : [props.id],
       });
       hasSub = true;
     }
@@ -63,29 +63,31 @@ const MenuEntry: FC<React.PropsWithChildren<ContextMenu.Entry & State.BaseProps 
   );
 };
 
+const searchForEntries = (entries: ContextMenu.Entry[], keys: string[]): ContextMenu.Entry[] | boolean => {
+  const keyToSearch = keys.shift();
+  if (!keyToSearch) {
+    return entries;
+  }
+  const entry = entries.find(entry => entry.id === keyToSearch);
+  if (!entry) {
+    return false;
+  }
+  if (keys.length === 0) {
+    return entries;
+  }
+  if (entry?.submenu) {
+    return searchForEntries(entry.submenu, keys);
+  }
+  return false;
+};
+
 export const ContextMenu: FC<React.PropsWithChildren<ContextMenu.Props>> = props => {
   const goMenuBack = () => {
-    const keys = (props.parentEntry ?? '').split('.');
-    const searchForEntries = (entries: ContextMenu.Entry[], key = 0): ContextMenu.Entry[] | boolean => {
-      if (entries.length === 0) {
-        return false;
-      }
-      if (key === keys.length) {
-        return true;
-      }
-      const entry = entries.find(entry => entry.id === keys[key]);
-      if (entry?.submenu) {
-        const hasFound = searchForEntries(entry.submenu, key + 1);
-        return hasFound ? entries : false;
-      }
-      return [];
-    };
-    const newEntries = searchForEntries(props.allEntries);
+    const newEntries = searchForEntries(props.allEntries, [...props.parentEntry]);
     if (newEntries) {
-      keys.pop();
       props.updateState({
         entries: newEntries,
-        parentEntry: newEntries ? keys.join('.') : null,
+        parentEntry: props.parentEntry.slice(0, -1),
       });
     }
   };

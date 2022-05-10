@@ -10,7 +10,7 @@ declare namespace ContextMenu {
     /**
      * Unique identifier, can be reused in subentries
      */
-    id?: string;
+    id: string;
     title: string;
     description?: string;
     /**
@@ -32,7 +32,7 @@ declare namespace ContextMenu {
     /**
      * Index in entries list
      */
-    parentEntry: string | null;
+    parentEntry: string[];
   }
 
   interface Props extends State.BaseProps, State {}

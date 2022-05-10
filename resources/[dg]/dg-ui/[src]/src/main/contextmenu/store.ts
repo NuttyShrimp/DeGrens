@@ -6,7 +6,7 @@ const store: StoreObject<ContextMenu.State> = {
     visible: true,
     entries: [],
     allEntries: [],
-    parentEntry: null,
+    parentEntry: [],
   },
 };
 export default store;
