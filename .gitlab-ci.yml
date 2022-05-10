@@ -36,6 +36,9 @@ image: node:lts
       - "**/*.tsx"
       - "**/*.css"
       - "**/*.scss"
+      - "**/*.html"
+      - "**/package.json"
+      - "**/yarn.lock"
 
 validate json:
   stage: test
@@ -64,6 +67,8 @@ Validate Errorlogger:
       - UPD
       - merge_requests
       - tags
+    changes:
+      - '**/fxmanifest.lua'
 
 sonarqube-check:
   stage: test
@@ -99,18 +104,11 @@ JS building:
   extends:
     - .lerna_installation
     - .cache_modules
+    - .js_changes
   stage: build
   script:
     - yarn format -- -- --loglevel error
     - yarn build
-  only:
-    refs:
-      - !reference[.js_changes, only, refs]
-    changes:
-      - !reference[.js_changes, only, changes]
-      - "**/*.html"
-      - "**/package.json"
-      - "**/yarn.lock"
 
 rebase UPD:
   stage: housekeeping
