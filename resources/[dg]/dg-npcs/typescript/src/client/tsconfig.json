@@ -11,7 +11,7 @@
     "experimentalDecorators": true,
     "resolveJsonModule": true,
     "esModuleInterop": true,
-    "baseUrl": ".",
+    "baseUrl": "./",
     "paths": {
       "@dgx/*": ["../../../../ts-shared/typescript/src/*"]
     }

@@ -1,24 +1,15 @@
 fx_version "cerulean"
-game "gta5"
+games {"gta5"}
 
-shared_scripts {
-    '@dg-core/import.lua', 
+shared_script '@dg-core/import.js'
+
+server_scripts {
+  '@ts-shared/server/server.js',
+  "server/*.js",
 }
 
 client_scripts {
-    'client/cl_*.lua',
+  "@dg-logs/client/cl_log.lua",
+  '@ts-shared/client/client.js',
+  "client/*.js",
 }
-
-server_scripts {
-    'server/sv_*.lua',
-    'config.lua',
-}
-
-exports {
-    'GetNpc',
-    'RemoveNpc',
-    'DisableNpc',
-    'EnableNpc',
-    'UpdateNpc',
-}
-client_script "@dg-logs/client/cl_log.lua"

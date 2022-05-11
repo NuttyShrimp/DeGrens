@@ -48,6 +48,10 @@ class Util extends UtilShared {
       await this.Delay(10);
     }
   };
+
+  doesEntityExist = async (entity: number) => {
+    while (!DoesEntityExist(entity)) await this.Delay(10);
+  }
 }
 
 export default {

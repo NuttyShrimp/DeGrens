@@ -1,48 +1,48 @@
 {
-	"version": "1.0.0",
-	"configurations": [
+  "version": "1.0.0",
+  "configurations": [
     {
-			"type": "node-terminal",
-			"name": "auth:build prod",
-			"request": "launch",
-			"command": "yarn run build",
-			"cwd": "${workspaceFolder}/resources/[dg]/dg-auth/typescript"
-		},
+      "type": "node-terminal",
+      "name": "auth:build prod",
+      "request": "launch",
+      "command": "yarn run build",
+      "cwd": "${workspaceFolder}/resources/[dg]/dg-auth/typescript"
+    },
     {
-			"type": "node-terminal",
-			"name": "auth:build dev",
-			"request": "launch",
-			"command": "yarn run build:dev",
-			"cwd": "${workspaceFolder}/resources/[dg]/dg-auth/typescript"
-		},
+      "type": "node-terminal",
+      "name": "auth:build dev",
+      "request": "launch",
+      "command": "yarn run build:dev",
+      "cwd": "${workspaceFolder}/resources/[dg]/dg-auth/typescript"
+    },
     {
-			"type": "node-terminal",
-			"name": "auth:watch",
-			"request": "launch",
-			"command": "yarn run watch",
-			"cwd": "${workspaceFolder}/resources/[dg]/dg-auth/typescript"
-		},
+      "type": "node-terminal",
+      "name": "auth:watch",
+      "request": "launch",
+      "command": "yarn run watch",
+      "cwd": "${workspaceFolder}/resources/[dg]/dg-auth/typescript"
+    },
     {
-			"type": "node-terminal",
-			"name": "blackout:build dev",
-			"request": "launch",
-			"command": "yarn run build:dev",
-			"cwd": "${workspaceFolder}/resources/[dg]/dg-blackout/typescript"
-		},
+      "type": "node-terminal",
+      "name": "blackout:build dev",
+      "request": "launch",
+      "command": "yarn run build:dev",
+      "cwd": "${workspaceFolder}/resources/[dg]/dg-blackout/typescript"
+    },
     {
-			"type": "node-terminal",
-			"name": "blackout:build prod",
-			"request": "launch",
-			"command": "yarn run build",
-			"cwd": "${workspaceFolder}/resources/[dg]/dg-blackout/typescript"
-		},
+      "type": "node-terminal",
+      "name": "blackout:build prod",
+      "request": "launch",
+      "command": "yarn run build",
+      "cwd": "${workspaceFolder}/resources/[dg]/dg-blackout/typescript"
+    },
     {
-			"type": "node-terminal",
-			"name": "blackout:dev",
-			"request": "launch",
-			"command": "yarn watch",
-			"cwd": "${workspaceFolder}/resources/[dg]/dg-blackout/typescript"
-		},
+      "type": "node-terminal",
+      "name": "blackout:dev",
+      "request": "launch",
+      "command": "yarn watch",
+      "cwd": "${workspaceFolder}/resources/[dg]/dg-blackout/typescript"
+    },
     {
       "type": "node-terminal",
       "name": "chars:res:build prod",
@@ -64,20 +64,20 @@
       "command": "yarn run watch",
       "cwd": "${workspaceFolder}/resources/[dg]/dg-chars/typescript"
     },
-		{
-			"type": "node-terminal",
-			"name": "chars:ui:dev",
-			"request": "launch",
-			"command": "yarn run dev",
-			"cwd": "${workspaceFolder}/resources/[dg]/dg-chars/ui"
-		},
-		{
-			"type": "node-terminal",
-			"name": "chars:ui:build",
-			"request": "launch",
-			"command": "yarn run build",
-			"cwd": "${workspaceFolder}/resources/[dg]/dg-chars/ui"
-		},
+    {
+      "type": "node-terminal",
+      "name": "chars:ui:dev",
+      "request": "launch",
+      "command": "yarn run dev",
+      "cwd": "${workspaceFolder}/resources/[dg]/dg-chars/ui"
+    },
+    {
+      "type": "node-terminal",
+      "name": "chars:ui:build",
+      "request": "launch",
+      "command": "yarn run build",
+      "cwd": "${workspaceFolder}/resources/[dg]/dg-chars/ui"
+    },
     {
       "type": "node-terminal",
       "name": "chat:build prod",
@@ -127,20 +127,20 @@
       "command": "yarn run build",
       "cwd": "${workspaceFolder}/resources/[dg]/dg-financials/typescript"
     },
-		{
-			"type": "node-terminal",
-			"name": "financials:build dev",
-			"request": "launch",
-			"command": "yarn run build:dev",
-			"cwd": "${workspaceFolder}/resources/[dg]/dg-financials/typescript"
-		},
-		{
-			"type": "node-terminal",
-			"name": "financials:dev",
-			"request": "launch",
-			"command": "yarn run watch",
-			"cwd": "${workspaceFolder}/resources/[dg]/dg-financials/typescript"
-		},
+    {
+      "type": "node-terminal",
+      "name": "financials:build dev",
+      "request": "launch",
+      "command": "yarn run build:dev",
+      "cwd": "${workspaceFolder}/resources/[dg]/dg-financials/typescript"
+    },
+    {
+      "type": "node-terminal",
+      "name": "financials:dev",
+      "request": "launch",
+      "command": "yarn run watch",
+      "cwd": "${workspaceFolder}/resources/[dg]/dg-financials/typescript"
+    },
     {
       "type": "node-terminal",
       "name": "jobs:build prod",
@@ -204,26 +204,40 @@
       "command": "yarn run watch",
       "cwd": "${workspaceFolder}/resources/[dg]/dg-sql/typescript"
     },
-		{
-			"type": "node-terminal",
-			"name": "ui:build dev",
-			"request": "launch",
-			"command": "yarn run build:debug",
-			"cwd": "${workspaceFolder}/resources/[dg]/dg-ui/[src]"
-		},
-		{
-			"type": "node-terminal",
-			"name": "ui:build prod",
-			"request": "launch",
-			"command": "yarn run build",
-			"cwd": "${workspaceFolder}/resources/[dg]/dg-ui/[src]"
-		},
-		{
-			"type": "node-terminal",
-			"name": "ui:dev",
-			"request": "launch",
-			"command": "yarn run start",
-			"cwd": "${workspaceFolder}/resources/[dg]/dg-ui/[src]"
-		}
-	]
+    {
+      "type": "node-terminal",
+      "name": "ui:build dev",
+      "request": "launch",
+      "command": "yarn run build:debug",
+      "cwd": "${workspaceFolder}/resources/[dg]/dg-ui/[src]"
+    },
+    {
+      "type": "node-terminal",
+      "name": "ui:build prod",
+      "request": "launch",
+      "command": "yarn run build",
+      "cwd": "${workspaceFolder}/resources/[dg]/dg-ui/[src]"
+    },
+    {
+      "type": "node-terminal",
+      "name": "ui:dev",
+      "request": "launch",
+      "command": "yarn run start",
+      "cwd": "${workspaceFolder}/resources/[dg]/dg-ui/[src]"
+    },
+    {
+      "type": "node-terminal",
+      "name": "npcs:build dev",
+      "request": "launch",
+      "command": "yarn build:dev",
+      "cwd": "${workspaceFolder}/resources/[dg]/dg-npcs/typescript"
+    },
+    {
+      "type": "node-terminal",
+      "name": "npcs:watch",
+      "request": "launch",
+      "command": "yarn watch",
+      "cwd": "${workspaceFolder}/resources/[dg]/dg-npcs/typescript"
+    }
+  ]
 }

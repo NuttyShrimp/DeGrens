@@ -13,13 +13,9 @@ end)
 
 RegisterNetEvent('police:SetCopCount', function(amount)
     if amount >= Config.RequiredPolice then
-        if exports['dg-npcs']:GetNpc('houserobbery_signin').disabled then
-            exports['dg-npcs']:EnableNpc("houserobbery_signin")
-        end
+        exports['dg-npcs']:setNpcState('houserobbery_signin', true)
     else
-        if not exports['dg-npcs']:GetNpc('houserobbery_signin').disabled then
-            exports['dg-npcs']:DisableNpc("houserobbery_signin")
-        end
+        exports['dg-npcs']:setNpcState('houserobbery_signin', false)
         if LocalPlayer.state.houseRobSignedIn then
             LocalPlayer.state:set("houseRobSignedIn", false, true)
         end

@@ -1,11 +1,40 @@
-## Export functions
+# NPC Manager
 
--GetNpc(npc id): Returns the npc object with provided name
+## Client sided exports
+- addNpc: add a new NPC, provide object with needed data
+  ```ts
+  const npcData: NpcData;
+  global.exports['dg-npcs'].addNpc(npcData);
 
--RemoveNpc(npc id): Removes the npc with provided name
+  interface NpcData {
+    id: string;
+    model: number;
+    position: Vec3;
+    heading: number;
+    distance: number;
+    settings: Settings.Setting[];
+    flags: Flag[];
+    clothing?: string;
+    scenario?: string;
+  }
+  declare namespace Settings {
+    type Type = 'invincible' | 'ignore' | 'freeze' | 'collision';
 
--DisableNpc(npc id): Disables the npc with provided name
-
--EnableNpc(npc id): Enables the npc with provided name
-
--UpdateNpc(npc id, key, value): adds key and value to npc object provided
+    type Setting = {
+      type: Type;
+      active: boolean;
+    };
+  }
+  type Flag = {
+    name: string;
+    active: boolean;
+  };
+  ```
+- removeNpc: remove a registered NPC and deletes entity if exists, provide string id of npc
+  ```ts
+  global.exports['dg-npcs'].removeNpc('npc_id');
+  ```
+- setNpcState: enable/disable npc, provide string id of npc
+  ```ts
+  global.exports['dg-npcs'].setNpcState('npc_id');
+  ```
