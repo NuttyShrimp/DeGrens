@@ -94,7 +94,7 @@ export const ContextMenu: FC<React.PropsWithChildren<ContextMenu.Props>> = props
 
   return (
     <div className={'contextmenu__wrapper'}>
-      {props.parentEntry && (
+      {props.parentEntry.length > 0 && (
         <MenuEntry
           id={`back-${props.parentEntry}`}
           title={'Back'}

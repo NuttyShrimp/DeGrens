@@ -50,7 +50,7 @@ class Component extends React.Component<ContextMenu.Props, any> {
       visible: true,
       entries: data,
       allEntries: data,
-      parentEntry: null,
+      parentEntry: [],
     });
   };
 
@@ -59,7 +59,7 @@ class Component extends React.Component<ContextMenu.Props, any> {
       visible: false,
       entries: [],
       allEntries: [],
-      parentEntry: null,
+      parentEntry: [],
     });
     return true;
   };
