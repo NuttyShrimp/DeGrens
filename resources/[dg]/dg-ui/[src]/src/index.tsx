@@ -37,7 +37,7 @@ if (!isDevel()) {
 }
 
 function App() {
-  const components = getAllComponents();
+  const components = useMemo(() => getAllComponents(), []);
   useMemo(() => {
     const devMode = isDevel();
     const gameDevMode = isGameDevel();

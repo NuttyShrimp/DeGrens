@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { nuiAction } from '@lib/nui-comms';
 import { store, type } from '@lib/redux';
@@ -84,14 +84,13 @@ const setCurrentApp = (app: string) => {
 export default function AppWrapper(props: AppWrapperProps) {
   const mainStateApp = useSelector<RootState, string>(state => state.main.currentApp);
   const styles = useStyles(props);
-  const appRef = useRef<HTMLDivElement>(null);
   const appInfo = getApp(props.appName);
-  const appStateVisible = useSelector<RootState, boolean>(state => state[props.appName].visible);
+  const appState = useSelector<RootState, { visible: boolean }>(state => state[props.appName]);
 
-  const [visible, setVisible] = useState(false);
   const [active, setActive] = useState(false);
 
   const eventHandler = async (e: any) => {
+    e.preventDefault();
     if (e.data.app === props.appName) {
       const transaction = Sentry.startTransaction({
         name: `incomingAppEvent`,
@@ -118,8 +117,8 @@ export default function AppWrapper(props: AppWrapperProps) {
           }
           return;
         } else if (e.data.show === false) {
-          if (visible) {
-            if (active) {
+          if (appState.visible) {
+            if (active || mainStateApp === 'cli') {
               setCurrentApp('');
             }
             props.onHide();
@@ -139,10 +138,11 @@ export default function AppWrapper(props: AppWrapperProps) {
       }
     }
   };
+
   const handlePress: any = (e: React.KeyboardEvent<HTMLDivElement>) => {
     switch (e.key) {
       case 'Escape':
-        if (visible) {
+        if (appState.visible && active) {
           const shouldEvent = props.onEscape ? props.onEscape() ?? true : null;
           if (shouldEvent === true) {
             nuiAction('dg-ui:applicationClosed', {
@@ -156,6 +156,7 @@ export default function AppWrapper(props: AppWrapperProps) {
         break;
     }
   };
+
   const handleError: any = (e: Error) => {
     if (props.onError) {
       props.onError(e);
@@ -181,15 +182,11 @@ export default function AppWrapper(props: AppWrapperProps) {
   useEffect(() => {
     window.addEventListener('message', eventHandler);
     window.addEventListener('keydown', handlePress);
-    if (appRef && appRef.current) {
-      appRef.current.addEventListener('click', handleActiveApp);
-    }
     registeredApps[props.appName] = {
       onHide: () => {
         if (active) {
           setCurrentApp('');
         }
-        setVisible(false);
         props.onHide();
       },
       onShow: props.onShow,
@@ -197,21 +194,16 @@ export default function AppWrapper(props: AppWrapperProps) {
     return () => {
       window.removeEventListener('message', eventHandler);
       window.removeEventListener('keydown', handlePress);
-      if (appRef && appRef.current) {
-        appRef.current.removeEventListener('click', handleActiveApp);
-      }
       delete registeredApps[props.appName];
     };
-  }, []);
+  }, [active, props.appName, props.onHide, props.onShow]);
 
   useEffect(() => {
-    if (appStateVisible === visible) return;
-    setActive(appStateVisible);
-    setVisible(appStateVisible);
-    if (appStateVisible) {
+    setActive(appState.visible);
+    if (appState.visible) {
       setCurrentApp(props.appName);
     }
-  }, [appStateVisible]);
+  }, [appState.visible]);
 
   useEffect(() => {
     const isActiveApp = mainStateApp === props.appName;
@@ -228,12 +220,12 @@ export default function AppWrapper(props: AppWrapperProps) {
   return (
     <Sentry.ErrorBoundary onError={handleError} fallback={<div>{props.appName} has crashed, restart your ui</div>}>
       <div
-        className={`${styles.wrapper}${visible ? '' : ' hidden'}`}
+        className={`${styles.wrapper}${appState.visible ? '' : ' hidden'}`}
         style={{ zIndex: active ? 10 : 1, ...(props.style || {}) }}
         data-appwrapper={props.appName}
-        ref={appRef}
+        onClick={handleActiveApp}
       >
-        {visible && props.children}
+        {appState.visible && props.children}
       </div>
     </Sentry.ErrorBoundary>
   );
