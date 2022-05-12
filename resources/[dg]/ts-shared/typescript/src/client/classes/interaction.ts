@@ -3,7 +3,7 @@ import { Vector3 } from '../../shared/classes/vector3';
 import { Util } from './index';
 
 class Peek {
-  private peekIdsToRemove: Record<Peek.Type, Set<number>> = {
+  private peekIdsToRemove: Record<Peek.Type, Set<string>> = {
     model: new Set(),
     entity: new Set(),
     bone: new Set(),
@@ -25,48 +25,48 @@ class Peek {
   }
   
   // Adders
-  addModelEntry(model: string | number | (string | number)[], PeekParams: PeekParams, removeOnRestart = false): number[] {
-    const ids: number[] = global.exports['dg-peek'].addModelEntry(model, PeekParams);
+  addModelEntry(model: string | number | (string | number)[], PeekParams: PeekParams, removeOnRestart = false): string[] {
+    const ids: string[] = global.exports['dg-peek'].addModelEntry(model, PeekParams);
     if (removeOnRestart) {
       ids.forEach(id => this.peekIdsToRemove.model.add(id));
     }
     return ids;
   }
 
-  addEntityEntry(entity: number | number[], PeekParams: PeekParams, removeOnRestart = false): number[] {
-    const ids: number[] = global.exports['dg-peek'].addEntityEntry(entity, PeekParams);
+  addEntityEntry(entity: number | number[], PeekParams: PeekParams, removeOnRestart = false): string[] {
+    const ids: string[] = global.exports['dg-peek'].addEntityEntry(entity, PeekParams);
     if (removeOnRestart) {
       ids.forEach(id => this.peekIdsToRemove.entity.add(id));
     }
     return ids;
   }
 
-  addBoneEntry(bone: string | string[], PeekParams: PeekParams, removeOnRestart = false): number[] {
-    const ids: number[] = global.exports['dg-peek'].addBoneEntry(bone, PeekParams);
+  addBoneEntry(bone: string | string[], PeekParams: PeekParams, removeOnRestart = false): string[] {
+    const ids: string[] = global.exports['dg-peek'].addBoneEntry(bone, PeekParams);
     if (removeOnRestart) {
       ids.forEach(id => this.peekIdsToRemove.bone.add(id));
     }
     return ids;
   }
 
-  addFlagEntry(flag: string | string[], PeekParams: PeekParams, removeOnRestart = false): number[] {
-    const ids: number[] = global.exports['dg-peek'].addFlagEntry(flag, PeekParams);
+  addFlagEntry(flag: string | string[], PeekParams: PeekParams, removeOnRestart = false): string[] {
+    const ids: string[] = global.exports['dg-peek'].addFlagEntry(flag, PeekParams);
     if (removeOnRestart) {
       ids.forEach(id => this.peekIdsToRemove.flag.add(id));
     }
     return ids;
   }
 
-  addZoneEntry(zone: string | string[], PeekParams: PeekParams, removeOnRestart = false): number[] {
-    const ids: number[] = global.exports['dg-peek'].addZoneEntry(zone, PeekParams);
+  addZoneEntry(zone: string | string[], PeekParams: PeekParams, removeOnRestart = false): string[] {
+    const ids: string[] = global.exports['dg-peek'].addZoneEntry(zone, PeekParams);
     if (removeOnRestart) {
       ids.forEach(id => this.peekIdsToRemove.zone.add(id));
     }
     return ids;
   }
 
-  addGlobalEntry(type: string | string[], PeekParams: PeekParams, removeOnRestart = false): number[] {
-    const ids: number[] = global.exports['dg-peek'].addGlobalEntry(type, PeekParams);
+  addGlobalEntry(type: string | string[], PeekParams: PeekParams, removeOnRestart = false): string[] {
+    const ids: string[] = global.exports['dg-peek'].addGlobalEntry(type, PeekParams);
     if (removeOnRestart) {
       ids.forEach(id => this.peekIdsToRemove.global.add(id));
     }
@@ -74,28 +74,58 @@ class Peek {
   }
 
   // Removers
-  removeModelEntry(ids: number | number[]) {
-    return global.exports['dg-peek'].removeModelEntry(ids);
+  removeModelEntry(ids: string | string[]) {
+    if (Array.isArray(ids)) {
+      ids.forEach(id => this.removeModelEntry(id));
+      return;
+    }
+    global.exports['dg-peek'].removeModelEntry(ids);
+    this.peekIdsToRemove.model.delete(ids);
   }
 
-  removeEntityEntry(ids: number | number[]) {
-    return global.exports['dg-peek'].removeEntityEntry(ids);
+  removeEntityEntry(ids: string | string[]) {
+    if (Array.isArray(ids)) {
+      ids.forEach(id => this.removeEntityEntry(id));
+      return;
+    }
+    global.exports['dg-peek'].removeEntityEntry(ids);
+    this.peekIdsToRemove.entity.delete(ids);
   }
 
-  removeBoneEntry(ids: number | number[]) {
-    return global.exports['dg-peek'].removeBoneEntry(ids);
+  removeBoneEntry(ids: string | string[]) {
+    if (Array.isArray(ids)) {
+      ids.forEach(id => this.removeBoneEntry(id));
+      return;
+    }
+    global.exports['dg-peek'].removeBoneEntry(ids);
+    this.peekIdsToRemove.bone.delete(ids);
   }
 
-  removeFlagEntry(ids: number | number[]) {
-    return global.exports['dg-peek'].removeFlagEntry(ids);
+  removeFlagEntry(ids: string | string[]) {
+    if (Array.isArray(ids)) {
+      ids.forEach(id => this.removeFlagEntry(id));
+      return;
+    }
+    global.exports['dg-peek'].removeFlagEntry(ids);
+    this.peekIdsToRemove.flag.delete(ids);
   }
 
-  removeZoneEntry(ids: number | number[]) {
-    return global.exports['dg-peek'].removeZoneEntry(ids);
+  removeZoneEntry(ids: string | string[]) {
+    if (Array.isArray(ids)) {
+      ids.forEach(id => this.removeZoneEntry(id));
+      return;
+    }
+    global.exports['dg-peek'].removeZoneEntry(ids);
+    this.peekIdsToRemove.zone.delete(ids);
   }
 
-  removeGlobalEntry(ids: number | number[]) {
-    return global.exports['dg-peek'].removeGlobalEntry(ids);
+  removeGlobalEntry(ids: string | string[]) {
+    if (Array.isArray(ids)) {
+      ids.forEach(id => this.removeGlobalEntry(id));
+      return;
+    }
+    global.exports['dg-peek'].removeGlobalEntry(ids);
+    this.peekIdsToRemove.global.delete(ids);
   }
 }
 

@@ -4,6 +4,7 @@ interface Client {
   PlayerData: PlayerData;
   RequestId: number;
   Config: Config;
+  Blips: Blips;
   ServerCallbacks: {
     [key: string]: (...args: any[]) => void;
   };
@@ -192,6 +193,23 @@ declare interface ClientFunctions {
    *  @param properties: vehicle properties object
    */
   SetVehicleProperties(vehicle: number, props: VehicleProperties): void;
+}
+
+declare interface Blips {
+  Add: (category: string, blip: Blip) => void;
+  enableCategory: (category: string) => void;
+  disableCategory: (category: string) => void;
+}
+
+declare interface Blip {
+  id: string,
+  text: string,
+  sprite: number,
+  coords: Vec3,
+  range?: boolean,
+  color?: number,
+  display?: number,
+  scale?: number,
 }
 
 declare interface VehicleProperties {
