@@ -2,7 +2,7 @@ import { LocationManager } from '../../classes/LocationManager';
 import { config } from '../../config';
 import { Peek, UI, RPC } from '@dgx/client';
 
-const peekIds: Record<string, number[]> = {};
+const peekIds: Record<string, string[]> = {};
 
 export const registerPeekZones = () => {
   const LManager = LocationManager.getInstance();
