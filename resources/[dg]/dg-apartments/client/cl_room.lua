@@ -27,7 +27,7 @@ local floatTillSafe = function()
 	return timeout <= -2
 end
 
-RegisterNetEvent('dg-apartments:client:generateRoom', function(type)
+DGX.RPC.register('dg-apartments:client:generateRoom', function(type)
 	local ped = PlayerPedId()
 	local objects = exports["dg-lib"]:parse('gabz_apartments_room', true)
 	-- Preload model
@@ -46,10 +46,6 @@ RegisterNetEvent('dg-apartments:client:generateRoom', function(type)
 	while not HasModelLoaded(SHELL_HASH) do
 		Citizen.Wait(0)
 	end
-
-	local _spawnOffset = BASE_SHELL_COORDS + SPAWN_OFFSET
-	SetEntityCoords(ped, _spawnOffset.x, _spawnOffset.y, _spawnOffset.z, true, false, false, false)
-	SetEntityHeading(ped, SPAWN_HEADING)
 
 	local buildingPos = BASE_SHELL_COORDS + mainPos
 	apartmentObj = CreateObject(
@@ -78,11 +74,16 @@ RegisterNetEvent('dg-apartments:client:generateRoom', function(type)
 	floatTillSafe()
 	-- Reset ped because change of it being changed duration previous process
 	ped = PlayerPedId()
-	FreezeEntityPosition(ped, false);
-    SetEntityInvincible(ped, false)
+	FreezeEntityPosition(ped, false)
+  SetEntityInvincible(ped, false)
+
+  local _spawnOffset = BASE_SHELL_COORDS + SPAWN_OFFSET
+	SetEntityCoords(ped, _spawnOffset.x, _spawnOffset.y, _spawnOffset.z, true, false, false, false)
+	SetEntityHeading(ped, SPAWN_HEADING)
 
 	enableInteractionZones(type)
 	exports['dg-weathersync']:FreezeTime(true, 700)
+  return;
 end)
 
 RegisterNetEvent('dg-apartments:client:removeRoom', function()

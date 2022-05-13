@@ -63,7 +63,7 @@ enterApartment = function(src, id)
 	-- Set player routingbucket
 	SetPlayerRoutingBucket(src, apartment.bucket)
 	-- Generate room
-	TriggerClientEvent('dg-apartments:client:generateRoom', src, apartment.type)
+	DGX.RPC.execute('dg-apartments:client:generateRoom', src, apartment.type)
 	-- Set insidemeta
 	setInsideMeta(src, id)
 	TriggerClientEvent('dg-apartments:client:fadeScreen', src, false)
