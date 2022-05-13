@@ -100,7 +100,7 @@ class Events extends Util.Singleton<Events>() {
         eventId,
         args,
       });
-    })
+    });
   }
 
   onNet(evtName: string, handler: LocalEventHandler) {
@@ -163,7 +163,7 @@ class RPCManager {
   }
 }
 
-class RPC {
+class RPC extends Util.Singleton<RPC>() {
   private readonly eventInstance: Events;
   // Executor
   private readonly resourceName: string;
@@ -172,6 +172,7 @@ class RPC {
   private registeredHandlers: Map<string, LocalEventHandler> = new Map();
 
   constructor() {
+    super();
     this.eventInstance = Events.getInstance();
     // Executor
     this.resourceName = GetCurrentResourceName();
@@ -214,11 +215,29 @@ class RPC {
   }
 }
 
+export const registerDGXEvent = (evtName: string, handler: LocalEventHandler) => {
+  if (GetCurrentResourceName() === 'ts-shared') {
+    Events.getInstance().on(evtName, handler);
+  }
+};
+
+export const registerDGXEventNet = (evtName: string, handler: LocalEventHandler) => {
+  if (GetCurrentResourceName() === 'ts-shared') {
+    Events.getInstance().onNet(evtName, handler);
+  }
+};
+
+export const registerDGXRPC = (evtName: string, handler: LocalEventHandler) => {
+  if (GetCurrentResourceName() === 'ts-shared') {
+    RPC.getInstance().register(evtName, handler);
+  }
+};
+
 const instances: {
   Events: Events;
   RPC: RPC;
   RPCManager?: RPCManager;
-} = { Events: Events.getInstance(), RPC: new RPC() };
+} = { Events: Events.getInstance(), RPC: RPC.getInstance() };
 
 if (GetCurrentResourceName() === 'ts-shared') {
   instances.RPCManager = new RPCManager();

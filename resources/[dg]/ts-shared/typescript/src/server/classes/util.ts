@@ -1,5 +1,6 @@
 import { Util as UtilShared } from '../../shared/classes/util';
 import { firstNames, lastNames } from '../data/names';
+import { Events, RPC } from './index';
 
 class Util extends UtilShared {
   generateName = (): string => {
@@ -29,6 +30,11 @@ class Util extends UtilShared {
   getEntityCoords(entity: number) {
     const entityCoords = GetEntityCoords(entity);
     return this.ArrayToVector3(entityCoords);
+  }
+
+  isEntityDead(entity: number): Promise<boolean> {
+    const entityNetId = NetworkGetEntityFromNetworkId(entity);
+    return RPC.execute<boolean>('dgx:util:isEntityDead', entityNetId);
   }
 }
 

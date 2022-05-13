@@ -1,6 +1,16 @@
 import { Util as UtilShared } from '../../shared/classes/util';
+import { registerDGXRPC } from './events';
 
 class Util extends UtilShared {
+  constructor() {
+    super();
+    registerDGXRPC('dgx:util:isEntityDead', (entityNetId: number) => {
+      const entity = NetworkGetEntityFromNetworkId(entityNetId);
+      if (!entity) return false;
+      return IsEntityDead(entity);
+    });
+  }
+
   getPlyCoords() {
     const plyPed = PlayerPedId();
     const plyCoords = GetEntityCoords(plyPed, true);
@@ -51,7 +61,7 @@ class Util extends UtilShared {
 
   doesEntityExist = async (entity: number) => {
     while (!DoesEntityExist(entity)) await this.Delay(10);
-  }
+  };
 }
 
 export default {
