@@ -4,7 +4,7 @@ import util from './util';
 import interaction from './interaction';
 import ui from './ui';
 
-export const { Events, RPC, SQL } = events;
+export const { Events, RPC, SQL, API } = events;
 export const { Util } = util;
 export const { Phone } = phone;
 export const { Chat } = interaction;

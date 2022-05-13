@@ -207,15 +207,23 @@ class SQL {
   }
 }
 
+class API {
+  registerRoute(method: IAPI.Method, path: string, handler: (request: any, res: IAPI.Responser) => void) {
+    global.exports['dg-api'].registerRoute(method, path, handler)
+  }
+}
+
 const instances: {
   Events: Events;
   RPC: RPC;
   SQL: SQL;
   RPCManager?: RPCManager;
+  API: API;
 } = {
   Events: Events.getInstance(),
   RPC: new RPC(),
   SQL: new SQL(),
+  API: new API(),
 };
 
 if (GetCurrentResourceName() === 'ts-shared') {
