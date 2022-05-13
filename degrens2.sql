@@ -37,9 +37,17 @@ create table if not exists apartments
 
 create table if not exists api_tokens
 (
-  token     varchar(255) default ''                  not null,
-  timestamp timestamp    default current_timestamp() not null,
+  token      varchar(255) default '' not null,
+  comment    LONGTEXT                NOT NULL,
+  created_at TIMESTAMP    DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (token)
+);
+
+CREATE TABLE IF NOT EXISTS api_bans
+(
+  id INT  NOT NULL AUTO_INCREMENT,
+  ip TEXT NOT NULL,
+  PRIMARY KEY (id)
 );
 
 create table if not exists bans

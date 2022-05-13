@@ -12,6 +12,7 @@ declare global {
     Chat: typeof Classes.Chat;
     Taskbar: typeof Classes.Taskbar;
     Notifications: typeof Classes.Notifications;
+    API: typeof Classes.API;
     Vector3: typeof Vector3Class;
     Vector4: typeof Vector4Class;
   };

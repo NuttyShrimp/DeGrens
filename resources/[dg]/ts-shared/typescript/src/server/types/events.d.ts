@@ -36,3 +36,8 @@ declare namespace RPC {
     resource: string;
   }
 }
+
+declare namespace IAPI {
+  type Method = 'GET' | 'POST' | 'PUT' | 'DELETE';
+  type Responser = (code: number, data: any, headers?: Record<string, string>) => void;
+}
