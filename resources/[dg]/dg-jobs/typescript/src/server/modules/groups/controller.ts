@@ -13,7 +13,13 @@ onNet('dg-jobs:client:groups:loadStore', () => {
   groupManager.seedPlayerStore(source);
 });
 
-on('DGCore:Server:OnInventoryUpdate', (src: number) => {
+on('DGCore:Server:OnInventoryUpdate', (src: number, remove: { [k: string]: Item }, added: { [k: string]: Item }) => {
+  if (
+    Object.values(remove).every(item => item.name !== 'vpn') &&
+    Object.values(added).every(item => item.name !== 'vpn')
+  ) {
+    return;
+  }
   const player = DGCore.Functions.GetPlayer(src);
   nameManager.updatePlayerName(player.PlayerData.citizenid);
 });
