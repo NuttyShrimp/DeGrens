@@ -35,6 +35,7 @@
     "react-scripts": "^5.0.1",
     "react-spinners": "^0.11.0",
     "react-spring": "^9.4.5",
+    "react-use-measure": "^2.1.1",
     "redux": "^4.2.0",
     "remirror": "^1.0.79",
     "sass": "^1.51.0",

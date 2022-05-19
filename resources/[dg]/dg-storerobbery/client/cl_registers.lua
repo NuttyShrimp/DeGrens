@@ -24,7 +24,7 @@ local function LootRegister(register)
 	CreateEvidence()
 
 	LockpickAnimation()
-	local wasCancelled, _ = exports['dg-misc']:Taskbar('Kassa leeghalen...', Config.Registers.RobTime, {
+	local wasCancelled, _ = exports['dg-misc']: Taskbar("cash-register", 'Kassa leeghalen...', Config.Registers.RobTime, {
 	  canCancel = true,
 	  cancelOnDeath = true,
 	  disarm = true,

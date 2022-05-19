@@ -1,17 +1,23 @@
 import React, { FC, useEffect } from 'react';
 import { animated, easings, useSpring } from 'react-spring';
+import useMeasure from 'react-use-measure';
 
 import { useVhToPixel } from '../../../lib/hooks/useVhToPixel';
 import { nuiAction } from '../../../lib/nui-comms';
 
 export const TaskBar: FC<React.PropsWithChildren<TaskBar.Props>> = props => {
-  const targetWidth = useVhToPixel(35);
+  const targetHeight = useVhToPixel(7);
+  const [ref, { width }] = useMeasure();
   const [animProps, api] = useSpring(() => ({
     from: {
-      width: 0,
+      marginTop: targetHeight,
+      top: -1 * targetHeight,
+      height: 0,
     },
     to: {
-      width: targetWidth,
+      marginTop: 0,
+      top: 0,
+      height: targetHeight,
     },
     immediate: false,
     reset: true,
@@ -28,10 +34,14 @@ export const TaskBar: FC<React.PropsWithChildren<TaskBar.Props>> = props => {
   useEffect(() => {
     api.start({
       from: {
-        width: 0,
+        marginTop: targetHeight,
+        top: -1 * targetHeight,
+        height: 0,
       },
       to: {
-        width: targetWidth,
+        marginTop: 0,
+        top: 0,
+        height: targetHeight,
       },
       config: {
         duration: props.duration,
@@ -41,8 +51,24 @@ export const TaskBar: FC<React.PropsWithChildren<TaskBar.Props>> = props => {
   return (
     <div className={'taskbar__wrapper'}>
       <div className={'taskbar__innerwrapper'}>
-        <animated.div style={animProps} className={'taskbar__filler'}></animated.div>
-        <div className={'taskbar__label'}>{props.label}</div>
+        <div className={'taskbar__icon'}>
+          <div ref={ref} className={'taskbar__icon_overlay'}>
+            <i className={`fas fa-${props.icon}`} />
+          </div>
+          <animated.div
+            className={'taskbar__icon_filler'}
+            style={{
+              marginTop: animProps.marginTop,
+              height: animProps.height,
+              width,
+            }}
+          >
+            <animated.i className={`fas fa-${props.icon}`} style={{ top: animProps.top }} />
+          </animated.div>
+        </div>
+        <div>
+          <div className={'taskbar__label'}>{props.label}</div>
+        </div>
       </div>
     </div>
   );

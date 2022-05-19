@@ -157,7 +157,7 @@ end)
 exports('SearchLocation', function(lootId)
     TriggerServerEvent('dg-houserobbery:server:SearchLocation', insideHouse, lootId)
 
-    local wasCancelled, _ = exports['dg-misc']:Taskbar('Plek doorzoeken...', Config.Search.Duration, {
+    local wasCancelled, _ = exports['dg-misc']:Taskbar("magnifying-glass", 'Plek doorzoeken...', Config.Search.Duration, {
       canCancel = true,
       cancelOnDeath = true,
       disarm = true,
@@ -220,7 +220,7 @@ exports("SellItem", function()
 
     if itemData then
         if Config.Sell.Price[itemData.name] then
-            local wasCancelled, _ =  exports['dg-misc']:Taskbar("Waarde schatten...", Config.Sell.Time, {
+            local wasCancelled, _ =  exports['dg-misc']:Taskbar("magnifying-glass-dollar", "Waarde schatten...", Config.Sell.Time, {
               canCancel = true,
                 cancelOnDeath = true,
                 disarm = true,

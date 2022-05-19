@@ -106,7 +106,7 @@ exports("feedPlant", function(entity)
 	if activePlants[id].data.food >= 100 then 
 		DGCore.Functions.Notify("Deze plant is al gevoed.", "error")
 	else
-    local wasCancelled, _ = exports['dg-misc']:Taskbar('Voederen...', 7500, {
+    local wasCancelled, _ = exports['dg-misc']:Taskbar("hand-holding-seedling", 'Voederen...', 7500, {
       canCancel = true,
       cancelOnDeath = true,
       controlDisables = {
@@ -136,7 +136,7 @@ exports("cutPlant", function(entity)
 		return
 	end
 
-  local wasCancelled, _ = exports['dg-misc']:Taskbar('Knippen...', 7500, {
+  local wasCancelled, _ = exports['dg-misc']:Taskbar("scissors", 'Knippen...', 7500, {
     canCancel = true,
     cancelOnDeath = true,
     controlDisables = {
@@ -159,7 +159,7 @@ exports("destroyPlant", function(entity)
 	lookAtPlant(entity)
 	local id = getPlantIdFromEntity(entity)
 
-  local wasCancelled, _ = exports['dg-misc']:Taskbar('Kapot maken...', 7500, {
+  local wasCancelled, _ = exports['dg-misc']:Taskbar("hammer-crash", 'Kapot maken...', 7500, {
     canCancel = true,
     cancelOnDeath = true,
     controlDisables = {

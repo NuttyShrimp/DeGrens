@@ -6,6 +6,7 @@ const store: StoreObject<TaskBar.State> = {
     visible: false,
     duration: 0,
     label: '',
+    icon: '',
     id: '',
   },
 };

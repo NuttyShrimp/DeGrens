@@ -157,12 +157,13 @@ export const cmds: {
     show: false,
   },
   {
-    cmd: 'show taskbar $1 $2',
+    cmd: 'show taskbar $1 $2 $3',
     app: 'taskbar',
     show: true,
     data: {
-      label: '$1',
-      duration: '$2',
+      icon: '$1',
+      label: '$2',
+      duration: '$3',
       id: 'cmd-dev',
     },
   },

@@ -71,8 +71,13 @@ class Taskbar {
   /**
    * Creates a taskbar and returns if it was cancelled and how much percent was done
    */
-  async create(label: string, duration: number, settings: TaskBar.TaskBarSettings): Promise<[boolean, number]> {
-    return global.exports['dg-misc'].Taskbar(label, duration, settings);
+  async create(
+    icon: string,
+    label: string,
+    duration: number,
+    settings: TaskBar.TaskBarSettings
+  ): Promise<[boolean, number]> {
+    return global.exports['dg-misc'].Taskbar(icon, label, duration, settings);
   }
 }
 
@@ -86,8 +91,8 @@ class Notifications {
   }
 }
 
-export default { 
-  UI: Ui.getInstance(), 
-  Taskbar: new Taskbar(), 
+export default {
+  UI: Ui.getInstance(),
+  Taskbar: new Taskbar(),
   Notifications: new Notifications(),
 };

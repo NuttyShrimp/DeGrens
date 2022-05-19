@@ -209,7 +209,7 @@ RegisterNUICallback("combineWithAnim", function(data)
     local animText = combineData.anim.text
     local animTimeout = combineData.anim.timeOut
 
-    local wasCancelled, _ = exports['dg-misc']:Taskbar(animText, animTimeout, {
+    local wasCancelled, _ = exports['dg-misc']:Taskbar("merge", animText, animTimeout, {
       canCancel = true,
       cancelOnDeath = true,
       disableInventory = true,

@@ -36,7 +36,7 @@ const plantExplosive = async (stationId: number) => {
   if (placingExplosive) return;
   placingExplosive = true;
 
-  const [wasCanceled, _percentage] = await Taskbar.create('Explosief plaatsen...', 5000, {
+  const [wasCanceled, _percentage] = await Taskbar.create('bomb', 'Explosief plaatsen...', 5000, {
     canCancel: true,
     cancelOnDeath: true,
     disarm: true,
@@ -54,7 +54,7 @@ const plantExplosive = async (stationId: number) => {
 
   const removedItem = await DGCore.Functions.TriggerCallback<boolean>('DGCore:RemoveItem', 'big_explosive', 1);
   if (wasCanceled || !removedItem) {
-    placingExplosive = false
+    placingExplosive = false;
     return;
   }
 
@@ -65,9 +65,27 @@ const plantExplosive = async (stationId: number) => {
   removeExplosiveObject();
 
   await Util.Delay(900);
-  AddExplosion(coords.x + Util.getRndInteger(0, 5), coords.y + Util.getRndInteger(0, 5), coords.z, 82, 1.0, true, false, 1.0);
+  AddExplosion(
+    coords.x + Util.getRndInteger(0, 5),
+    coords.y + Util.getRndInteger(0, 5),
+    coords.z,
+    82,
+    1.0,
+    true,
+    false,
+    1.0
+  );
   await Util.Delay(1200);
-  AddExplosion(coords.x + Util.getRndInteger(0, 8), coords.y + Util.getRndInteger(0, 8), coords.z, 82, 1.0, true, false, 1.0);
+  AddExplosion(
+    coords.x + Util.getRndInteger(0, 8),
+    coords.y + Util.getRndInteger(0, 8),
+    coords.z,
+    82,
+    1.0,
+    true,
+    false,
+    1.0
+  );
 
   emitNet('dg-blackout:server:SetStationHit', stationId);
   placingExplosive = false;
@@ -80,7 +98,7 @@ const placeExplosiveObject = async () => {
     await Util.Delay(10);
   }
 
-  const objCoords = Util.ArrayToVector3(GetOffsetFromEntityInWorldCoords(PlayerPedId(), 0, 0.65, 0))
+  const objCoords = Util.ArrayToVector3(GetOffsetFromEntityInWorldCoords(PlayerPedId(), 0, 0.65, 0));
   explosiveObject = CreateObject(modelHash, objCoords.x, objCoords.y, objCoords.z, true, true, false);
   while (!DoesEntityExist) {
     await Util.Delay(10);
@@ -93,12 +111,17 @@ const placeExplosiveObject = async () => {
   SetEntityCoords(explosiveObject, coords.x, coords.y, coords.z - 0.1, false, false, false, false);
   FreezeEntityPosition(explosiveObject, true);
 
-  global.exports['nutty-sounds'].playSoundOnEntity('explosionBeep', 'Explosion_Countdown', 'GTAO_FM_Events_Soundset', explosiveObject)
+  global.exports['nutty-sounds'].playSoundOnEntity(
+    'explosionBeep',
+    'Explosion_Countdown',
+    'GTAO_FM_Events_Soundset',
+    explosiveObject
+  );
 };
 
 const removeExplosiveObject = () => {
   if (explosiveObject === null) return;
-  global.exports['nutty-sounds'].stopSoundOnEntity('explosionBeep')
+  global.exports['nutty-sounds'].stopSoundOnEntity('explosionBeep');
   DeleteEntity(explosiveObject);
-	explosiveObject = null;
+  explosiveObject = null;
 };

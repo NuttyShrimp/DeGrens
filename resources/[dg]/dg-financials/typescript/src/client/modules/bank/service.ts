@@ -54,7 +54,7 @@ export const doAnimation = async (isAtm: boolean, isOpen: boolean) => {
         flags: 49,
         animDict: 'mp_common',
       };
-  return DGX.Taskbar.create(config.animText[isOpen ? 'open' : 'close'], 1000, {
+  return DGX.Taskbar.create('credit-card', config.animText[isOpen ? 'open' : 'close'], 1000, {
     canCancel: false,
     cancelOnDeath: true,
     controlDisables: {

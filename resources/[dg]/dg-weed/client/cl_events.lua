@@ -34,7 +34,7 @@ RegisterNetEvent("dg-weed:client:Plant", function(gender)
 
     if closestPlantDistance > 2 then
         if isAcceptedLocation(plantCoords) then
-            local wasCancelled, _ = exports['dg-misc']:Taskbar('Planten...', 1000, {
+            local wasCancelled, _ = exports['dg-misc']:Taskbar("shovel", 'Planten...', 1000, {
               canCancel = true,
               cancelOnDeath = true,
               controlDisables = {

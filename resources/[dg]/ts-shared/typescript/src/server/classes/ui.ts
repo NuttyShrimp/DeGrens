@@ -1,7 +1,14 @@
 import { RPC } from './index';
 
 class Taskbar {
-  async create(src: number, id: string, label: string, duration: number, settings: TaskBar.TaskBarSettings) {
+  async create(
+    src: number,
+    id: string,
+    icon: string,
+    label: string,
+    duration: number,
+    settings: TaskBar.TaskBarSettings
+  ) {
     const prom = new Promise<[boolean, number]>(res => {
       onNet(`dg-misc:taskbar:finished`, (evtId: string, wasCompleted: boolean, percCompleted: number) => {
         if (id === evtId) {
@@ -9,7 +16,7 @@ class Taskbar {
         }
       });
     });
-    emitNet('dg-misc:taskbar:new', src, id, label, duration, settings);
+    emitNet('dg-misc:taskbar:new', src, id, icon, label, duration, settings);
     return prom;
   }
 }

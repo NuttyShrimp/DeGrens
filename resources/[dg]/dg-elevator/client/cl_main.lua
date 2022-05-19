@@ -74,7 +74,7 @@ RegisterUICallback("dg-elevator:GoToLevel", function(data, cb)
     local ped = PlayerPedId()
     local spawn = Config.Elevators[data.elevator].levels[data.level].spawn
 
-    wasCanceled = exports['dg-misc']:Taskbar("Lift roepen...", 3000, {
+    wasCanceled = exports['dg-misc']:Taskbar("elevator", "Lift roepen...", 3000, {
       canCancel = true,
       cancelOnDeath = true,
       controlDisables = {

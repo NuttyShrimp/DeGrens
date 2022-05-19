@@ -83,7 +83,7 @@ RegisterNetEvent('weapons:client:UseAmmo', function(pItemData)
         return
     end
 
-    local wasCancelled, _ = exports['dg-misc']:Taskbar('Wapen laden...',  Config.ReloadTime, {
+    local wasCancelled, _ = exports['dg-misc']:Taskbar("gun",'Wapen laden...',  Config.ReloadTime, {
         canCancel = true,
         cancelOnDeath = true,
         controlDisables = {
