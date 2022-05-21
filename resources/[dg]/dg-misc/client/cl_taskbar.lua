@@ -224,15 +224,21 @@ function Taskbar(icon, label, duration, settings, id)
     })
     Wait(1000)
   end
+
+  local canceled = state == 2
+  local atPercentage = math.ceil(100 - (((endTime - curTime) / duration) * 100))
   closeBar()
   cleanUp()
-  return state == 2, math.ceil(100 - (((endTime - curTime) / duration) * 100))
+
+  return canceled, atPercentage
 end
 
 exports('Taskbar', Taskbar)
 
 RegisterUICallback('taskbar/finished', function(data, cb)
-  state = 3
+  if state == 1 then
+    state = 3
+  end
   cb({ data = {}, meta = { ok = true } })
 end)
 
