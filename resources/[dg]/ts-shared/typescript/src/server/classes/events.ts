@@ -1,6 +1,7 @@
 import { Util } from '../../shared';
 import { Export, ExportRegister } from '../../shared/decorators';
 import { Sentry } from '../helpers/logger';
+import Table from 'cli-table3';
 
 const awaitAuthStart = async () => {
   while (GetResourceState('dg-auth') !== 'started') {
@@ -48,6 +49,21 @@ class Events extends Util.Singleton<Events>() {
     on('__dg_evt_s_s_emit', (data: { eventName: string; args: any[] }) => {
       this.localEventHandlers.has(data.eventName) && this.localEventHandlers.get(data.eventName)(...data.args);
     });
+    on('dgx:events:showEventsTable', (target: string) =>{
+      if ( target !== this.resName) return;
+      const eventTable = new Table({
+        head: ['type', 'event','handler']
+      });
+      [...this.localEventHandlers.entries()].forEach(([evt, handler]) => {
+        if (evt.match(/^__dg_/)) return;
+        eventTable.push(['local', evt, handler.toString()]);
+      });
+      [...this.clientEventHandlers.entries()].forEach(([evt, handler]) => {
+        eventTable.push(['net', evt, handler.toString()]);
+      })
+
+      console.log(eventTable.toString())
+    })
   }
 
   // TODO: add sentry transactions to this functions
@@ -152,6 +168,17 @@ class RPC {
     this.resourceName = GetCurrentResourceName();
     // Receiver
     this.eventInstance.on('__dg_RPC_handleRequest', (src, data: RPC.EventData) => this.handleRequest(src, data));
+    on('dgx:events:showRPCTable', (target: string) =>{
+      if ( target !== this.resourceName) return;
+      const eventTable = new Table({
+        head: ['RPC','handler']
+      });
+      [...this.registeredHandlers.entries()].forEach(([evt, handler]) => {
+        eventTable.push([evt, handler.toString()]);
+      })
+      console.log(eventTable.toString())
+    })
+
   }
 
   private getPromiseId(): number {

@@ -1,4 +1,5 @@
 import { returnClassRefs } from '../shared/helpers/library';
+import './helpers/cmds';
 // Following code is for DGX.xxx.yyy access
 import * as Shared from '../shared/index';
 
