@@ -69,7 +69,7 @@ export const config: IConfig = {
         id: 'pacific',
         name: 'Pacific Standard',
         center: { x: 267.68, y: 217.69, z: 106.28 },
-        heading: 250,
+        heading: 70,
       },
       {
         id: 'maze',
