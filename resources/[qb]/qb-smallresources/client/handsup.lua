@@ -2,9 +2,12 @@ local animDict = "missminuteman_1ig_2"
 local anim = "handsup_enter"
 local handsup = false
 
-RegisterKeyMapping('hu', 'Put your hands up', 'KEYBOARD', 'X')
+exports['dg-lib']:registerKeyMapping('handsup', 'Handen omhoog doen', '+toggleHandsup', '-toggleHandsup', 'X', true)
 
-RegisterCommand('hu', function()
+AddEventHandler('dg-lib:keyEvent', function(name, isDown)
+    if not isDown then return end
+	if name ~= 'toggleHandsup' then return end
+
     local ped = PlayerPedId()
 	RequestAnimDict(animDict)
 	while not HasAnimDictLoaded(animDict) do
@@ -27,4 +30,4 @@ RegisterCommand('hu', function()
     else
         ClearPedTasks(ped)
     end
-end, false)
+end)
