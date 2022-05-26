@@ -1,16 +1,15 @@
-fx_version 'cerulean'
-game 'gta5'
+fx_version "cerulean"
+games {"gta5"}
 
-shared_scripts { 
-    '@dg-core/import.lua', 
-	'config.lua',
-}
-
-client_script {
-	'@dg-logs/client/cl_log.lua',
-	'client/cl_*.lua'
-}
+shared_script '@dg-core/import.js'
 
 server_scripts {
-    'server/sv_*.lua'
+  '@ts-shared/server/server.js',
+  "server/*.js",
+}
+
+client_scripts {
+  "@dg-logs/client/cl_log.lua",
+  '@ts-shared/client/client.js',
+  "client/*.js",
 }
