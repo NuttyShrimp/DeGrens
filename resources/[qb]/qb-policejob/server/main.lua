@@ -985,6 +985,15 @@ end)
 
 -- Threads
 
+
+Citizen.CreateThread(function()
+    while true do
+        Citizen.Wait(5000)
+        UpdateBlips()
+    end
+end)
+
+-- this NEEDS to be included when this script gets reworked, this is used in all other scripts to get current amount of cops on duty
 Citizen.CreateThread(function()
     while true do
         Citizen.Wait(1000 * 60 * 10)
@@ -993,9 +1002,7 @@ Citizen.CreateThread(function()
     end
 end)
 
-Citizen.CreateThread(function()
-    while true do
-        Citizen.Wait(5000)
-        UpdateBlips()
-    end
+DGCore.Functions.CreateCallback('police:server:GetAmountOfCops', function()
+    local amountOfCops = GetCurrentCops()
+    cb(amountOfCops)
 end)

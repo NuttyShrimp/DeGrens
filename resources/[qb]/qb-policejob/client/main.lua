@@ -233,3 +233,19 @@ Citizen.CreateThread(function()
         EndTextCommandSetBlipName(blip)
     end
 end)
+
+-- this NEEDS to be included when this script gets reworked, this is used in all other scripts to get current amount of cops on duty
+local amountOfCops = 0
+
+Citizen.CreateThread(function()
+    amountOfCops = DGCore.Functions.TriggerCallback('police:server:GetAmountOfCops')
+end)
+
+RegisterNetEvent('police:SetCopCount', function(amount)
+    if not amount then return end
+    amountOfCops = amount
+end)
+
+exports('getAmountOfCops', function()
+    return amountOfCops
+end)
