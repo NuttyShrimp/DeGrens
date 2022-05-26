@@ -112,14 +112,19 @@ exports('getTargetZones', function()
 end)
 
 -- IMPORTANT: This removes all zones under this name
-exports('removeZone', function(name)
-  local removedZone = targetZone:RemoveZone(name)
-  if not removedZone then
-    return
+exports('removeZone', function(name, id)
+  local zones = {}
+  for i, zone in pairs(targetZone.zones) do
+    zones[#zones + 1] = zone
   end
-  local id = ('%s_%s'):format(name, removedZone.data.id)
-  createdTargetZones[id] = false
-  removedZone:destroy()
+  for i, zone in pairs(zones) do
+    if zone.name == name and (id == nil or zone.data.id == id) then
+      targetZone:RemoveZone(name)
+      local id = ('%s_%s'):format(name, zone.data.id)
+      createdTargetZones[id] = nil
+      zone:destroy()
+    end
+  end
 end)
 
 AddEventHandler('baseevents:enteredVehicle', function()
