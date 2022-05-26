@@ -10,22 +10,26 @@ class Peek {
     flag: new Set(),
     zone: new Set(),
     global: new Set(),
-  }
+  };
 
   constructor() {
     on('onResourceStop', (res: string) => {
       if (res !== GetCurrentResourceName()) return;
-      this.removeModelEntry([...this.peekIdsToRemove.model])
-      this.removeEntityEntry([...this.peekIdsToRemove.entity])
-      this.removeBoneEntry([...this.peekIdsToRemove.bone])
-      this.removeFlagEntry([...this.peekIdsToRemove.flag])
-      this.removeZoneEntry([...this.peekIdsToRemove.zone])
-      this.removeGlobalEntry([...this.peekIdsToRemove.global])
+      this.removeModelEntry([...this.peekIdsToRemove.model]);
+      this.removeEntityEntry([...this.peekIdsToRemove.entity]);
+      this.removeBoneEntry([...this.peekIdsToRemove.bone]);
+      this.removeFlagEntry([...this.peekIdsToRemove.flag]);
+      this.removeZoneEntry([...this.peekIdsToRemove.zone]);
+      this.removeGlobalEntry([...this.peekIdsToRemove.global]);
     });
   }
-  
+
   // Adders
-  addModelEntry(model: string | number | (string | number)[], PeekParams: PeekParams, removeOnRestart = false): string[] {
+  addModelEntry(
+    model: string | number | (string | number)[],
+    PeekParams: PeekParams,
+    removeOnRestart = false
+  ): string[] {
     const ids: string[] = global.exports['dg-peek'].addModelEntry(model, PeekParams);
     if (removeOnRestart) {
       ids.forEach(id => this.peekIdsToRemove.model.add(id));
@@ -231,11 +235,16 @@ class PolyZone {
     }
     global.exports['dg-polyzone'].AddCircleZone(name, pCenter, pRadius, options);
   }
+
+  removeZone(pName: string, pId?: string) {
+    global.exports['dg-polyzone'].removeZone(pName, pId);
+  }
 }
 
 class PolyTarget {
   private enterHandlers: Map<string, PolyZone.EnterHandler[]> = new Map();
   private exitHandlers: Map<string, PolyZone.ExitHandler[]> = new Map();
+  private zonesNamesToDelete: Set<{ name: string; id: string | number }> = new Set();
 
   constructor() {
     on('dg-polytarget:enter', (name: string, data: any, center: number[]) => {
@@ -245,6 +254,10 @@ class PolyTarget {
     on('dg-polytarget:exit', (name: string) => {
       if (!this.exitHandlers.has(name)) return;
       this.exitHandlers.get(name).forEach(handler => handler(name));
+    });
+    on('onResourceStop', (res: string) => {
+      if (res !== GetCurrentResourceName()) return;
+      this.zonesNamesToDelete.forEach(zoneInfo => global.exports['dg-polytarget'].removeZone(zoneInfo.name, zoneInfo.id));
     });
   }
 
@@ -267,15 +280,42 @@ class PolyTarget {
     pLength: number,
     options: {
       heading?: number;
-      data: Object;
+      data: { [key: string]: any };
       minZ?: number;
       maxZ?: number;
-    }
+    },
+    removeOnRestart = false
   ) {
     if (pCenter instanceof Vector3) {
       pCenter = pCenter.add(0);
     }
+    if (removeOnRestart) {
+      this.zonesNamesToDelete.add({ name, id: options.data.id });
+    }
     global.exports['dg-polytarget'].AddBoxZone(name, pCenter, pWidth, pLength, options);
+  }
+
+  addCircleZone(
+    name: string,
+    pCenter: Vector3 | Vec3,
+    pRadius: number,
+    options: {
+      useZ?: number;
+      data: { [key: string]: any };
+    },
+    removeOnRestart = false
+  ) {
+    if (pCenter instanceof Vector3) {
+      pCenter = pCenter.add(0);
+    }
+    if (removeOnRestart) {
+      this.zonesNamesToDelete.add({ name, id: options.data.id });
+    }
+    global.exports['dg-polytarget'].AddCircleZone(name, pCenter, pRadius, options);
+  }
+
+  removeZone(pName: string, pId?: string) {
+    global.exports['dg-polytarget'].removeZone(pName, pId);
   }
 }
 
