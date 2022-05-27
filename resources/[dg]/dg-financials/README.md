@@ -133,6 +133,13 @@
   - coin, De naam van de crypto die toegevoegd moet worden
   - amount
   - comment
+- `cryptoRemove`: Gebruikt in scripts om te betalen met crypto
+  - src
+  - coin, De naam van de crypto die verwijderd moet worden
+  - amount
+- `cryptoGet`: Gebruikt in scripts om crypto info te krijgen van een persoon
+  - src
+  - coin, De naam van de crypto waarvan het aantal verkregen moet worden
 
 #### Callbacks
 - `financials:server:crypto:getInfo`: Returned array met info over alle coins plus de bijhorende wallet voor de speler

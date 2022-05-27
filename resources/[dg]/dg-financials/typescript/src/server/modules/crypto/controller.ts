@@ -1,13 +1,15 @@
 import { RPC } from '@dgx/server';
 import { CryptoManager } from './classes/CryptoManager';
 import { CryptoWallet } from './classes/CryptoWallet';
-import { addCrypto, buyCrypto, getPlayerInfo, loadPlayerWallet } from './service';
+import { addCrypto, buyCrypto, getCryptoAmount, getPlayerInfo, loadPlayerWallet, removeCrypto } from './service';
 import { cryptoLogger } from './util';
 
 const CManager = CryptoManager.getInstance();
 
 global.exports('cryptoBuy', buyCrypto);
 global.exports('cryptoAdd', addCrypto);
+global.exports('cryptoRemove', removeCrypto);
+global.exports('cryptoGet', getCryptoAmount);
 
 RegisterCommand(
   'financials:crypto:seed',

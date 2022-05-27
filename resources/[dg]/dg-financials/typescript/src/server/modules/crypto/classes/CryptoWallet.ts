@@ -147,5 +147,32 @@ export class CryptoWallet {
     return true;
   }
 
+  public async remove(amount: number): Promise<boolean> {
+    const Player = DGCore.Functions.GetPlayerByCitizenId(this.cid);
+    if (!Player) {
+      this.logger.debug(`Remove: Player not found | cid: ${this.cid}`);
+      return false;
+    }
+    if (this.amount < amount) {
+      this.logger.debug(`Remove: Not enough crypto | cid: ${this.cid}`);
+      return false;
+    }
+    const cid = Player.PlayerData.citizenid;
+    this.amount -= amount;
+    await this.saveWallet();
+    this.logger.debug(`Remove: ${amount}`);
+    global.exports['dg-logs'].createGraylogEntry(
+      'financials:crypto:remove',
+      {
+        cid,
+        coin: this.cname,
+        amount,
+        newTotal: this.amount,
+      },
+      `Removed crypto: ${amount}x ${this.cname} | cid: ${this.cid}`
+    );
+    return true;
+  }
+
   // endregion
 }

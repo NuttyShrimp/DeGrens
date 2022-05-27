@@ -262,24 +262,59 @@
     },
     {
       "type": "node-terminal",
-      "name": "storerobbery:build prod",
+      "name": "ui:build dev",
+      "request": "launch",
+      "command": "yarn run build:debug",
+      "cwd": "${workspaceFolder}/resources/[dg]/dg-ui/[src]"
+    },
+    {
+      "type": "node-terminal",
+      "name": "ui:build prod",
       "request": "launch",
       "command": "yarn run build",
-      "cwd": "${workspaceFolder}/resources/[dg]/dg-storerobbery/typescript"
+      "cwd": "${workspaceFolder}/resources/[dg]/dg-ui/[src]"
     },
     {
       "type": "node-terminal",
-      "name": "storerobbery:build dev",
+      "name": "ui:dev",
       "request": "launch",
-      "command": "yarn run build:dev",
-      "cwd": "${workspaceFolder}/resources/[dg]/dg-storerobbery/typescript"
+      "command": "yarn run start",
+      "cwd": "${workspaceFolder}/resources/[dg]/dg-ui/[src]"
     },
     {
       "type": "node-terminal",
-      "name": "storerobbery:watch",
+      "name": "ui:build dev",
       "request": "launch",
-      "command": "yarn run watch",
-      "cwd": "${workspaceFolder}/resources/[dg]/dg-storerobbery/typescript"
+      "command": "yarn run build:debug",
+      "cwd": "${workspaceFolder}/resources/[dg]/dg-ui/[src]"
     },
+    {
+      "type": "node-terminal",
+      "name": "ui:build prod",
+      "request": "launch",
+      "command": "yarn run build",
+      "cwd": "${workspaceFolder}/resources/[dg]/dg-ui/[src]"
+    },
+    {
+      "type": "node-terminal",
+      "name": "ui:dev",
+      "request": "launch",
+      "command": "yarn run start",
+      "cwd": "${workspaceFolder}/resources/[dg]/dg-ui/[src]"
+    },
+    {
+      "type": "node-terminal",
+      "name": "dg-heists:build dev",
+      "request": "launch",
+      "command": "yarn build:dev",
+      "cwd": "${workspaceFolder}/resources/[dg]/dg-heists/typescript"
+    },
+    {
+      "type": "node-terminal",
+      "name": "dg-heists:dev",
+      "request": "launch",
+      "command": "yarn watch",
+      "cwd": "${workspaceFolder}/resources/[dg]/dg-heists/typescript"
+    }
   ]
 }
