@@ -8,6 +8,7 @@ updates:
       timezone: "Europe/Brussels"
     target-branch: "UPD"
     open-pull-requests-limit: 0
+    auto-merge: true
     directory: "/"
   - package-ecosystem: "npm"
     schedule:
@@ -16,13 +17,6 @@ updates:
       timezone: "Europe/Brussels"
     target-branch: "UPD"
     open-pull-requests-limit: 0
-    directory: "/resources/[dg]/dg-financials/typescript"
-  - package-ecosystem: "npm"
-    schedule:
-      interval: "daily"
-      time: "00:00"
-      timezone: "Europe/Brussels"
-    target-branch: "UPD"
-    open-pull-requests-limit: 0
+    auto-merge: true
     directory: "/resources/[dg]/dg-ui/[src]"
    
