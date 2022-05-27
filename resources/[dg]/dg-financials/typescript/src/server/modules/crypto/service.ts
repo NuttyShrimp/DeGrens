@@ -67,3 +67,43 @@ export const addCrypto = async (src: number, coin: string, amount: number, comme
   }
   return wallet.add(amount, comment);
 };
+
+export const removeCrypto = async (src: number, coin: string, amount: number): Promise<boolean> => {
+  const Player = DGCore.Functions.GetPlayer(src);
+  if (!Player) {
+    cryptoLogger.error(`removeCrypto: No player found for serverId: ${src}`);
+    return;
+  }
+  const wallet = CManager.getWallet(Player.PlayerData.citizenid, coin) as CryptoWallet;
+  if (!wallet) {
+    cryptoLogger.warn(
+      `removeCrypto: No wallet found for player: ${Player.PlayerData.citizenid} and coin: ${coin}. Creating wallet...`
+    );
+    const isSuccess = await CManager.createWallet(Player.PlayerData.citizenid, coin);
+    if (!isSuccess) {
+      return false;
+    }
+    return removeCrypto(src, coin, amount);
+  }
+  return wallet.remove(amount);
+};
+
+export const getCryptoAmount = async (src: number, coin: string): Promise<number> => {
+  const Player = DGCore.Functions.GetPlayer(src);
+  if (!Player) {
+    cryptoLogger.error(`getCryptoAmount: No player found for serverId: ${src}`);
+    return;
+  }
+  const wallet = CManager.getWallet(Player.PlayerData.citizenid, coin) as CryptoWallet;
+  if (!wallet) {
+    cryptoLogger.warn(
+      `getCryptoAmount: No wallet found for player: ${Player.PlayerData.citizenid} and coin: ${coin}. Creating wallet...`
+    );
+    const isSuccess = await CManager.createWallet(Player.PlayerData.citizenid, coin);
+    if (!isSuccess) {
+      return;
+    }
+    return getCryptoAmount(src, coin);
+  }
+  return wallet.getClientVersion().amount;
+}

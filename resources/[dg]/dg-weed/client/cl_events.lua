@@ -79,6 +79,7 @@ RegisterNetEvent("dg-weed:client:UpdatePlantData", function(data)
 end)
 
 RegisterNetEvent("dg-weed:client:RemovePlant", function(index)
+    if not activePlants[index] then return end
     if activePlants[index].object then
         despawnPlantObject(index)
     end

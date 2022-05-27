@@ -1667,5 +1667,100 @@
     "decayrate": 10080,
     "image": "big_explosive.png",
     "description": "Zwaar explosief. Pas op of het zal je laatste dag kunnen zijn."
+  },
+  {
+    "name": "laptop_v1",
+    "label": "v1.0 Laptop",
+    "weight": 5000,
+    "type": "item",
+    "stackable": false,
+    "useable": true,
+    "shouldClose": true,
+    "decayrate": 240,
+    "image": "laptop_v1.png",
+    "description": "Laptop met V1.0 software op op geinstalleerd."
+  },
+  {
+    "name": "laptop_v2",
+    "label": "v2.0 Laptop",
+    "weight": 5000,
+    "type": "item",
+    "stackable": false,
+    "useable": true,
+    "shouldClose": true,
+    "decayrate": 240,
+    "image": "laptop_v2.png",
+    "description": "Laptop met V2.0 software op op geinstalleerd."
+  },
+  {
+    "name": "laptop_v3",
+    "label": "v3.0 Laptop",
+    "weight": 5000,
+    "type": "item",
+    "stackable": false,
+    "useable": true,
+    "shouldClose": true,
+    "decayrate": 240,
+    "image": "laptop_v3.png",
+    "description": "Laptop met V3.0 software op geinstalleerd."
+  },
+  {
+    "name": "laptop_v5",
+    "label": "v5.0 Laptop",
+    "weight": 5000,
+    "type": "item",
+    "stackable": false,
+    "useable": true,
+    "shouldClose": true,
+    "decayrate": 240,
+    "image": "laptop_v5.png",
+    "description": "Laptop met V5.0 software op op geinstalleerd."
+  },
+  {
+    "name": "laptop_v10",
+    "label": "v10.0 Laptop",
+    "weight": 5000,
+    "type": "item",
+    "stackable": false,
+    "useable": true,
+    "shouldClose": true,
+    "decayrate": 240,
+    "image": "laptop_v10.png",
+    "description": "Laptop met V10.0 software op op geinstalleerd."
+  },
+  {
+    "name": "mini_emp",
+    "label": "Mini EMP",
+    "weight": 10000,
+    "type": "item",
+    "stackable": false,
+    "useable": true,
+    "shouldClose": true,
+    "decayrate": 4320,
+    "image": "mini_emp.png",
+    "description": "Kleine EMP."
+  },
+  {
+    "name": "volt_meter",
+    "label": "Multimeter",
+    "weight": 5000,
+    "type": "item",
+    "stackable": false,
+    "useable": true,
+    "shouldClose": true,
+    "decayrate": 8640,
+    "image": "volt_meter.png",
+    "description": "Meter waar je spanning met kan meten."
+  },
+  {
+    "name": "gold_bar",
+    "label": "Goudstaaf",
+    "weight": 10000,
+    "type": "item",
+    "stackable": true,
+    "useable": false,
+    "decayrate": 20160,
+    "image": "gold_bar.png",
+    "description": "Zware gouden staaf."
   }
 ]
