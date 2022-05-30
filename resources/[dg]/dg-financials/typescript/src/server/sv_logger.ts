@@ -78,4 +78,3 @@ if (getCurrentEnv() === 'production') {
     })
   );
 }
-

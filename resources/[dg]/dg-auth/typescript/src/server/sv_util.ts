@@ -1,5 +1,5 @@
 export const getCurrentEnv = () =>
-	GetConvar('is_production', 'true') === 'false' ? 'development' : process.env.NODE_ENV ?? 'development';
+  GetConvar('is_production', 'true') === 'false' ? 'development' : process.env.NODE_ENV ?? 'development';
 
 export const getPlySteamId = (src: number) => {
   const source = String(src);
@@ -11,7 +11,7 @@ export const getPlySteamId = (src: number) => {
     }
   }
   return null;
-}
+};
 
 export const getPlyServerId = (steamId: string) => {
   for (let i = 0; i < GetNumPlayerIndices(); i++) {
@@ -21,4 +21,4 @@ export const getPlyServerId = (steamId: string) => {
       return serverId;
     }
   }
-}
+};

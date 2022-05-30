@@ -8,7 +8,7 @@
   "useTabs": false,
   "semi": true,
   "arrowParens": "avoid",
-  "endOfLine": "crlf",
+  "endOfLine": "auto",
   "bracketSpacing": true,
   "printWidth": 120,
   "vueIndentScriptAndStyle": true

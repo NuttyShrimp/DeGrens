@@ -257,7 +257,9 @@ class PolyTarget {
     });
     on('onResourceStop', (res: string) => {
       if (res !== GetCurrentResourceName()) return;
-      this.zonesNamesToDelete.forEach(zoneInfo => global.exports['dg-polytarget'].removeZone(zoneInfo.name, zoneInfo.id));
+      this.zonesNamesToDelete.forEach(zoneInfo =>
+        global.exports['dg-polytarget'].removeZone(zoneInfo.name, zoneInfo.id)
+      );
     });
   }
 

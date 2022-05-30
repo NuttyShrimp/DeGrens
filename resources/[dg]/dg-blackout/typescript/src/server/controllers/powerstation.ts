@@ -19,4 +19,4 @@ RPC.register('dg-blackout:server:IsStationHit', (_source: number, stationId: num
 
 onNet('dg-blackout:server:SetStationHit', (stationId: number) => {
   powerstationManager.setStationHit(stationId);
-})
+});

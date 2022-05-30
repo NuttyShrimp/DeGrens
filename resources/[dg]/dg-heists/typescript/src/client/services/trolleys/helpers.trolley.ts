@@ -158,7 +158,7 @@ export const lootTrolley = async (trolleyObject: number) => {
   setTimeout(async () => {
     await Util.requestEntityControl(trolleyObject);
     DeleteEntity(trolleyObject);
-  }, 5000)
+  }, 5000);
 
   Events.emitNet('heists:server:lootTrolley', getCurrentLocation(), type);
 };

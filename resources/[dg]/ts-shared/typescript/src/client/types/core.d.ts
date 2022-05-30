@@ -202,14 +202,14 @@ declare interface Blips {
 }
 
 declare interface Blip {
-  id: string,
-  text: string,
-  sprite: number,
-  coords: Vec3,
-  range?: boolean,
-  color?: number,
-  display?: number,
-  scale?: number,
+  id: string;
+  text: string;
+  sprite: number;
+  coords: Vec3;
+  range?: boolean;
+  color?: number;
+  display?: number;
+  scale?: number;
 }
 
 declare interface VehicleProperties {

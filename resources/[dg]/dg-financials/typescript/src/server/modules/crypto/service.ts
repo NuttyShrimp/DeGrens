@@ -106,4 +106,4 @@ export const getCryptoAmount = async (src: number, coin: string): Promise<number
     return getCryptoAmount(src, coin);
   }
   return wallet.getClientVersion().amount;
-}
+};

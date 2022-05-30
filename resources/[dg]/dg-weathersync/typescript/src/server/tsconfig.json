@@ -5,13 +5,8 @@
     "module": "commonjs",
     "target": "es6",
     "allowJs": false,
-    "lib": [
-      "es2017"
-    ],
-    "types": [
-      "@citizenfx/server",
-      "@types/node"
-    ],
+    "lib": ["es2017"],
+    "types": ["@citizenfx/server", "@types/node"],
     "moduleResolution": "node",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
@@ -27,8 +22,5 @@
     "../../../../ts-shared/typescript/src/shared/types/*.d.ts",
     "../../../../ts-shared/typescript/src/server/types/*.d.ts"
   ],
-  "exclude": [
-    "**/node_modules",
-    "**/__tests__/*"
-  ]
+  "exclude": ["**/node_modules", "**/__tests__/*"]
 }

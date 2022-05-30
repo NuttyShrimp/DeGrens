@@ -29,15 +29,12 @@ export class EventIdManager {
     this.playerResourceMap = new Map();
     if (isServerStarted()) {
       for (let i = 0; i < GetNumPlayerIndices(); i++) {
-        this.playerResourceMap.set(
-          getPlySteamId(Number(GetPlayerFromIndex(i))),
-          new Map()
-        );
+        this.playerResourceMap.set(getPlySteamId(Number(GetPlayerFromIndex(i))), new Map());
       }
     }
   }
-  
-  // TODO: following 2 methods should start in a saved thread that can be killed if one of the methods is called  
+
+  // TODO: following 2 methods should start in a saved thread that can be killed if one of the methods is called
 
   // Resource in parameters has started and wants to send events
   // We create a map for each player for this resource
@@ -59,13 +56,13 @@ export class EventIdManager {
       const serverId = getPlyServerId(plySteamId);
       emitNet('__dg_shared_events', serverId, resName, this.resource, evtObj);
       resourceMap.set(resName, eventMap);
-    })
+    });
   }
-  
+
   generateMapForPlayer(src: number, steamId: string) {
     this.playerResourceMap.set(steamId, new Map());
     const resourceMap: Map<string, Map<string, string>> = new Map();
-    getRegisteredResources().forEach((resource) => {
+    getRegisteredResources().forEach(resource => {
       const eventMap: Map<string, string> = new Map();
       this.eventSet.forEach(evtName => {
         let eventId = Util.uuidv4();
@@ -123,16 +120,18 @@ export class EventIdManager {
       return;
     }
     if (Util.isDevEnv()) {
-      console.log(`[DGX] [${this.resource}] Event: ${eventName} | ID: ${data.eventId} | From: ${data.origin} | Ply: ${tokenData.source}`);
+      console.log(
+        `[DGX] [${this.resource}] Event: ${eventName} | ID: ${data.eventId} | From: ${data.origin} | Ply: ${tokenData.source}`
+      );
     }
     this.handlers.forEach(handler => handler(eventName, src, data.args));
   }
-  
+
   registerEvent(evtName: string) {
     // TODO: Update eventId table with new event
     this.eventSet.add(evtName);
   }
-  
+
   addHook(handler: EventHandler) {
     this.handlers.add(handler);
   }

@@ -1,5 +1,5 @@
 // This script will register all resources that use the DGX middleware for events and register it into a set
-// This set will be used to generate the maps 
+// This set will be used to generate the maps
 import { mainLogger } from '../sv_logger';
 import { getPlyToken } from './tokens';
 import { handleResourceStart, handleResourceStop } from './events';
@@ -16,7 +16,7 @@ const isResourceKnown = (resName: string) => {
     }
   }
   return false;
-}
+};
 
 setImmediate(async () => {
   const resName = GetCurrentResourceName();
@@ -24,16 +24,16 @@ setImmediate(async () => {
     await new Promise(res => setTimeout(res, 100));
   }
   resourceLoaded = true;
-})
+});
 
 export const registerResource = (resName: string) => {
   if (registeredResources.has(resName)) return;
   if (!isResourceKnown(resName)) {
-    mainLogger.debug(`${resName} is not known to the server`)
+    mainLogger.debug(`${resName} is not known to the server`);
     // TODO: add ban for fuckface
     return;
   }
-  mainLogger.debug(`${resName} is now registered`)
+  mainLogger.debug(`${resName} is now registered`);
   registeredResources.add(resName);
   // Generate maps specifically for this
   // TODO: Find way to only trigger this after the first big batch of maps is generated;
@@ -48,11 +48,11 @@ export const registerResource = (resName: string) => {
     if (!plyToken) DropPlayer(ply, `[DGX] Token not found for ${ply}`);
     emitNet('__dg_auth_authenticated', ply, resName, plyToken);
   }
-}
+};
 
 export const getRegisteredResources = () => {
   return [...registeredResources];
-}
+};
 
 on('onResourceStop', (resName: string) => {
   if (!resourceLoaded || !registeredResources.has(resName)) return;

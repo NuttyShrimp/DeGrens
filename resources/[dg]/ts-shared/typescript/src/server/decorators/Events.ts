@@ -38,13 +38,13 @@ export const DGXEvent = (evtName: string) => {
     });
     Reflect.defineMetadata('events', netEvents, target);
   };
-}
+};
 
 /**
  * Register a event that is emitted to only the current side of the resource (client or server)
  */
 export const LocalEvent = (evtName: string) => {
-  return function(target: unknown, key:string) {
+  return function (target: unknown, key: string) {
     if (!Reflect.hasMetadata('events', target)) {
       Reflect.defineMetadata('events', [], target);
     }
@@ -57,8 +57,8 @@ export const LocalEvent = (evtName: string) => {
       key,
     });
     Reflect.defineMetadata('events', netEvents, target);
-  }
-}
+  };
+};
 
 /**
  * Add listeners for events on class creation
@@ -76,7 +76,7 @@ export const EventListener = () => {
         const events = Reflect.getMetadata('events', this) as Array<Decorators.Event>;
         events.forEach(e => {
           if (e.dgx) {
-            if (e.net){
+            if (e.net) {
               Events.onNet(e.name, (...args: any[]) => {
                 this[e.key](...args);
               });

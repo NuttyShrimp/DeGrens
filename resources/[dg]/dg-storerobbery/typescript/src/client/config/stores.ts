@@ -1,5 +1,6 @@
 export const STORE_DATA: Record<Store.Id, Store.Data> = {
-  little_seoul: { // DONE
+  little_seoul: {
+    // DONE
     registerzone: {
       center: { x: -706.17, y: -914.59, z: 19.22 },
       width: 4,
@@ -23,7 +24,8 @@ export const STORE_DATA: Record<Store.Id, Store.Data> = {
     safecoords: { x: -709.77, y: -904.12, z: 19.22 },
     cam: 1,
   },
-  grove_street: { // DONE
+  grove_street: {
+    // DONE
     registerzone: {
       center: { x: -47.38, y: -1758.61, z: 29.42 },
       width: 4,
@@ -47,7 +49,8 @@ export const STORE_DATA: Record<Store.Id, Store.Data> = {
     safecoords: { x: -43.43, y: -1748.3, z: 29.42 },
     cam: 2,
   },
-  mirror_park: { // DONE
+  mirror_park: {
+    // DONE
     registerzone: {
       center: { x: 1164.84, y: -323.66, z: 69.21 },
       width: 4,
@@ -71,7 +74,8 @@ export const STORE_DATA: Record<Store.Id, Store.Data> = {
     safecoords: { x: 1159.48, y: -314.0, z: 69.21 },
     cam: 3,
   },
-  richman_glen: { // DONE
+  richman_glen: {
+    // DONE
     registerzone: {
       center: { x: -1819.53, y: 793.5, z: 138.09 },
       width: 4,
@@ -95,7 +99,8 @@ export const STORE_DATA: Record<Store.Id, Store.Data> = {
     safecoords: { x: -1829.22, y: 798.72, z: 138.19 },
     cam: 4,
   },
-  grape_seed: { // DONE
+  grape_seed: {
+    // DONE
     registerzone: {
       center: { x: 1697.29, y: 4923.5, z: 42.06 },
       width: 4,
@@ -111,7 +116,7 @@ export const STORE_DATA: Record<Store.Id, Store.Data> = {
       width: 14,
       length: 13,
       options: {
-        heading:  -125.0,
+        heading: -125.0,
         minZ: 40.06,
         maxZ: 44.06,
       },
@@ -119,7 +124,8 @@ export const STORE_DATA: Record<Store.Id, Store.Data> = {
     safecoords: { x: 1707.94, y: 4920.44, z: 42.06 },
     cam: 5,
   },
-  vespucci_canals: { // DONE
+  vespucci_canals: {
+    // DONE
     registerzone: {
       center: { x: -1222.01, y: -908.3, z: 12.33 },
       width: 1,
@@ -143,7 +149,8 @@ export const STORE_DATA: Record<Store.Id, Store.Data> = {
     safecoords: { x: -1220.87, y: -916.05, z: 11.33 },
     cam: 6,
   },
-  grand_senora: { // DONE
+  grand_senora: {
+    // DONE
     registerzone: {
       center: { x: 1165.94, y: 2710.78, z: 38.16 },
       width: 1,
@@ -167,7 +174,8 @@ export const STORE_DATA: Record<Store.Id, Store.Data> = {
     safecoords: { x: 1169.24, y: 2717.82, z: 37.16 },
     cam: 7,
   },
-  murrieta_heights: { // DONE
+  murrieta_heights: {
+    // DONE
     registerzone: {
       center: { x: 1134.23, y: -982.48, z: 46.42 },
       width: 1,
@@ -183,7 +191,7 @@ export const STORE_DATA: Record<Store.Id, Store.Data> = {
       width: 9,
       length: 16,
       options: {
-        heading:  97.84,
+        heading: 97.84,
         minZ: 44.42,
         maxZ: 48.42,
       },
@@ -191,7 +199,8 @@ export const STORE_DATA: Record<Store.Id, Store.Data> = {
     safecoords: { x: 1126.78, y: -980.15, z: 45.42 },
     cam: 8,
   },
-  del_perro: { // DONE
+  del_perro: {
+    // DONE
     registerzone: {
       center: { x: -1486.27, y: -378.01, z: 40.16 },
       width: 1,
@@ -215,13 +224,14 @@ export const STORE_DATA: Record<Store.Id, Store.Data> = {
     safecoords: { x: -1478.91, y: -375.45, z: 39.16 },
     cam: 9,
   },
-  great_ocean: { // DONE
+  great_ocean: {
+    // DONE
     registerzone: {
       center: { x: -2966.45, y: 390.89, z: 15.04 },
       width: 1,
       length: 1.5,
       options: {
-        heading: -93.60,
+        heading: -93.6,
         minZ: 13.04,
         maxZ: 17.04,
       },
@@ -231,7 +241,7 @@ export const STORE_DATA: Record<Store.Id, Store.Data> = {
       width: 9,
       length: 16,
       options: {
-        heading: -93.60,
+        heading: -93.6,
         minZ: 13.04,
         maxZ: 17.04,
       },
@@ -239,7 +249,8 @@ export const STORE_DATA: Record<Store.Id, Store.Data> = {
     safecoords: { x: -2959.66, y: 387.09, z: 14.04 },
     cam: 10,
   },
-  banham_canyon: { // DONE
+  banham_canyon: {
+    // DONE
     registerzone: {
       center: { x: -3040.09, y: 584.18, z: 7.91 },
       width: 4.5,
@@ -263,7 +274,8 @@ export const STORE_DATA: Record<Store.Id, Store.Data> = {
     safecoords: { x: -3048.68, y: 588.57, z: 7.91 },
     cam: 11,
   },
-  chumash: { // DONE
+  chumash: {
+    // DONE
     registerzone: {
       center: { x: -3243.4, y: 1000.1, z: 12.83 },
       width: 4.5,
@@ -287,7 +299,8 @@ export const STORE_DATA: Record<Store.Id, Store.Data> = {
     safecoords: { x: -3249.7, y: 1007.37, z: 12.83 },
     cam: 12,
   },
-  senora_freeway: { // DONE
+  senora_freeway: {
+    // DONE
     registerzone: {
       center: { x: 2677.05, y: 3279.99, z: 55.24 },
       width: 4.5,
@@ -311,7 +324,8 @@ export const STORE_DATA: Record<Store.Id, Store.Data> = {
     safecoords: { x: 2674.35, y: 3289.16, z: 55.24 },
     cam: 13,
   },
-  strawberry: { // DONE
+  strawberry: {
+    // DONE
     registerzone: {
       center: { x: 24.5, y: -1346.1, z: 29.5 },
       width: 4.5,
@@ -335,7 +349,8 @@ export const STORE_DATA: Record<Store.Id, Store.Data> = {
     safecoords: { x: 31.24, y: -1339.32, z: 29.5 },
     cam: 14,
   },
-  harmony: { // DONE
+  harmony: {
+    // DONE
     registerzone: {
       center: { x: 549.19, y: 2670.15, z: 42.16 },
       width: 4.5,
@@ -359,7 +374,8 @@ export const STORE_DATA: Record<Store.Id, Store.Data> = {
     safecoords: { x: 543.33, y: 2662.52, z: 42.15 },
     cam: 15,
   },
-  vinewood: { // DONE
+  vinewood: {
+    // DONE
     registerzone: {
       center: { x: 372.88, y: 327.55, z: 103.57 },
       width: 4.5,
@@ -383,7 +399,8 @@ export const STORE_DATA: Record<Store.Id, Store.Data> = {
     safecoords: { x: 381.11, y: 332.55, z: 103.57 },
     cam: 16,
   },
-  mount_chiliad: { // DONE
+  mount_chiliad: {
+    // DONE
     registerzone: {
       center: { x: 1728.38, y: 6416.24, z: 35.04 },
       width: 4.5,
@@ -407,7 +424,8 @@ export const STORE_DATA: Record<Store.Id, Store.Data> = {
     safecoords: { x: 1737.44, y: 6419.43, z: 35.04 },
     cam: 17,
   },
-  sandy_shores: { // DONE
+  sandy_shores: {
+    // DONE
     registerzone: {
       center: { x: 1959.55, y: 3741.01, z: 32.34 },
       width: 4.5,
@@ -431,7 +449,8 @@ export const STORE_DATA: Record<Store.Id, Store.Data> = {
     safecoords: { x: 1962.13, y: 3750.43, z: 32.34 },
     cam: 18,
   },
-  tataviam_mountains: { // DONE
+  tataviam_mountains: {
+    // DONE
     registerzone: {
       center: { x: 2556.02, y: 380.9, z: 108.62 },
       width: 4.5,
@@ -455,7 +474,8 @@ export const STORE_DATA: Record<Store.Id, Store.Data> = {
     safecoords: { x: 2549.47, y: 387.95, z: 108.62 },
     cam: 19,
   },
-  del_vecchio: { // DONE
+  del_vecchio: {
+    // DONE
     registerzone: {
       center: { x: -161.07, y: 6321.37, z: 31.59 },
       width: 1,
@@ -479,7 +499,8 @@ export const STORE_DATA: Record<Store.Id, Store.Data> = {
     safecoords: { x: -168.46, y: 6318.8, z: 30.59 },
     cam: 20,
   },
-  paleto_bay: { // DONE
+  paleto_bay: {
+    // DONE
     registerzone: {
       center: { x: 161.34, y: 6642.4, z: 31.7 },
       width: 4.5,

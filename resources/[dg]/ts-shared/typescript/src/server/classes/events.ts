@@ -49,10 +49,10 @@ class Events extends Util.Singleton<Events>() {
     on('__dg_evt_s_s_emit', (data: { eventName: string; args: any[] }) => {
       this.localEventHandlers.has(data.eventName) && this.localEventHandlers.get(data.eventName)(...data.args);
     });
-    on('dgx:events:showEventsTable', (target: string) =>{
-      if ( target !== this.resName) return;
+    on('dgx:events:showEventsTable', (target: string) => {
+      if (target !== this.resName) return;
       const eventTable = new Table({
-        head: ['type', 'event','handler']
+        head: ['type', 'event', 'handler'],
       });
       [...this.localEventHandlers.entries()].forEach(([evt, handler]) => {
         if (evt.match(/^__dg_/)) return;
@@ -60,10 +60,10 @@ class Events extends Util.Singleton<Events>() {
       });
       [...this.clientEventHandlers.entries()].forEach(([evt, handler]) => {
         eventTable.push(['net', evt, handler.toString()]);
-      })
+      });
 
-      console.log(eventTable.toString())
-    })
+      console.log(eventTable.toString());
+    });
   }
 
   // TODO: add sentry transactions to this functions
@@ -86,10 +86,10 @@ class Events extends Util.Singleton<Events>() {
           evtData.token = await doAuthExport('getPlayerToken', target);
         }
         emitNet('__dg_evt_s_c_emitNet', Number(target), evtData);
-      })
+      });
     } catch (e) {
       Sentry.captureException(e);
-      console.error("[DGX] Error emitting net event", evtName, target, e);
+      console.error('[DGX] Error emitting net event', evtName, target, e);
     }
   }
 
@@ -168,17 +168,16 @@ class RPC {
     this.resourceName = GetCurrentResourceName();
     // Receiver
     this.eventInstance.on('__dg_RPC_handleRequest', (src, data: RPC.EventData) => this.handleRequest(src, data));
-    on('dgx:events:showRPCTable', (target: string) =>{
-      if ( target !== this.resourceName) return;
+    on('dgx:events:showRPCTable', (target: string) => {
+      if (target !== this.resourceName) return;
       const eventTable = new Table({
-        head: ['RPC','handler']
+        head: ['RPC', 'handler'],
       });
       [...this.registeredHandlers.entries()].forEach(([evt, handler]) => {
         eventTable.push([evt, handler.toString()]);
-      })
-      console.log(eventTable.toString())
-    })
-
+      });
+      console.log(eventTable.toString());
+    });
   }
 
   private getPromiseId(): number {
@@ -236,7 +235,7 @@ class SQL {
 
 class API {
   registerRoute(method: IAPI.Method, path: string, handler: (request: any, res: IAPI.Responser) => void) {
-    global.exports['dg-api'].registerRoute(method, path, handler)
+    global.exports['dg-api'].registerRoute(method, path, handler);
   }
 }
 

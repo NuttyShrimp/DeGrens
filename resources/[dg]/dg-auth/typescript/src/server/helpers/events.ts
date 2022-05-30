@@ -20,7 +20,7 @@ export const handleResourceStart = (resName: string) => {
 export const handleResourceStop = (resName: string) => {
   if (!managers.has(resName)) return;
   managers.delete(resName);
-}
+};
 
 export const handlePlayerJoin = (playerId: number, steamId: string) => {
   managers.forEach(manager => {
@@ -41,7 +41,7 @@ export const registerEventForManager = (resName: string, eventName: string) => {
   }
 };
 
-export const registerHandlerForManager = (resName:string, handler: EventHandler) => {
+export const registerHandlerForManager = (resName: string, handler: EventHandler) => {
   const manager = managers.get(resName);
   if (manager) {
     manager.addHook(handler);
@@ -57,4 +57,4 @@ export const handleIncomingEvent = (src: number, evtData: EventData) => {
   }
   const manager = managers.get(evtData.target);
   return manager.handleIncomingEvent(src, evtData);
-}
+};

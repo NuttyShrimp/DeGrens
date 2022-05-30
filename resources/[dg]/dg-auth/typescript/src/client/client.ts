@@ -1,4 +1,4 @@
-setImmediate( async () => {
+setImmediate(async () => {
   while (!NetworkIsSessionStarted()) {
     await new Promise(res => setTimeout(res, 100));
   }
