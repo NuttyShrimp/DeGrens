@@ -90,10 +90,12 @@
             break;
           }
           case 'PageUp': {
+            evt.preventDefault();
             changeMsgScrollTop(-100);
             break;
           }
           case 'PageDown': {
+            evt.preventDefault();
             changeMsgScrollTop(100);
             break;
           }
