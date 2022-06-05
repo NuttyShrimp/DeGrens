@@ -155,15 +155,15 @@
         margin-top: .5vh;
       }
       &__amount {
-        color: variables.$gray_light;
-        background-color: variables.$primary_dark;
+        color: variables.$gray_darker;
+        background-color: variables.$primary_normal;
         border-radius: .5vh;
         padding: .75vh;
         font-size: 1rem;
         margin-right: 1vh;
         &.negative {
           background-color: variables.$gray_light;
-        color: variables.$gray_dark;
+          color: variables.$gray_dark;
         }
       }
       &__info {
@@ -212,4 +212,3 @@
     }
   }
 }
-
