@@ -29,7 +29,12 @@ export const store = createStore<State>({
     getHistory: state => (input: string) => {
       // Only get suggestions that start with the input and create set to prevent duplicates
       const revHistory = state.history.slice().reverse();
-      return new Set(revHistory.filter(history => history?.startsWith(input.replace(/^\//, '')))?.reverse() ?? []);
+      return new Set(
+        revHistory
+          .filter(history => history?.startsWith(input.replace(/^\//, '')))
+          ?.reverse()
+          .filter(m => m.trim() !== '') ?? []
+      );
     },
   },
   mutations: {
@@ -47,6 +52,7 @@ export const store = createStore<State>({
       state.suggestions = [...state.suggestions, suggestion];
     },
     addHistory(state, history: string) {
+      if (history.trim() === '') return;
       state.history = [...state.history, history];
     },
     setIsMsgVisible(state, isVisible: boolean) {

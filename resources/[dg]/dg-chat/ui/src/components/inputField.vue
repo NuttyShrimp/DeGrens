@@ -78,6 +78,7 @@
         const input = evt.target as HTMLInputElement;
         switch (evt.key) {
           case 'Enter': {
+            if (input.value.trim() === '') return;
             store.dispatch('sendMessage', input.value);
             valueHistory.value.push(input.value);
             curHistory.value = valueHistory.value.length;
@@ -100,7 +101,7 @@
             break;
           }
           case 'ArrowUp': {
-            if (curHistory.value === valueHistory.value.length) {
+            if (curHistory.value === valueHistory.value.length && input.value !== '') {
               valueHistory.value.push(input.value);
             }
             if (curHistory.value > 0) {
