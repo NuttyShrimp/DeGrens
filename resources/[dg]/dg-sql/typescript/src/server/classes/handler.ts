@@ -21,8 +21,26 @@ class Handler {
     this.isResourceReady = true;
   }
 
-  query = async (query: string, params: any[] = [], resource: string = GetCurrentResourceName()): Promise<any> => {
+  query = async (
+    query: string,
+    params: any[] | Record<string, any> = [],
+    resource: string = GetCurrentResourceName()
+  ): Promise<any> => {
     try {
+      if (Array.isArray(params)) {
+        params = params.map(p => {
+          if (p === undefined) return null;
+          if (p === 'undefined') return null;
+          return p;
+        });
+      } else {
+        Object.keys(params).forEach((k: string) => {
+          // @ts-ignore
+          if (params[k] === undefined) params[k] = null;
+          // @ts-ignore
+          if (params[k] === 'undefined') params[k] = null;
+        });
+      }
       if (!this.isResourceReady) await this.resStartup();
       const startTime = process.hrtime.bigint();
 
@@ -41,7 +59,9 @@ class Handler {
       return result;
     } catch (e) {
       mainLogger.error(
-        `[${resource}] ^1Error^7 while excuting query!\n${e.message}\n${e.message || query}${JSON.stringify(params)}`
+        `[${resource}] ^1Error^7 while excuting query!\n${e.message}\nquery: ${query}\nvalues: ${JSON.stringify(
+          params
+        )}`
       );
     }
   };

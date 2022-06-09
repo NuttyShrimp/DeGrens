@@ -524,7 +524,7 @@ function DGCore.Player.Save(source)
       RETURNING citizenid
 		]] , {
       cid = tonumber(PlayerData.cid),
-      citizenid = PlayerData.citizenid,
+      citizenid = PlayerData.citizenid or 'undefined',
       steamid = PlayerData.steamid,
       license = PlayerData.license,
       discord = PlayerData.discord,
