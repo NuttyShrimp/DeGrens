@@ -155,7 +155,12 @@ function DGCore.Player.CheckPlayerData(source, PlayerData)
   -- Other
   PlayerData.position = PlayerData.position or QBConfig.DefaultSpawn
   PlayerData.LoggedIn = true
-  PlayerData = DGCore.Player.LoadInventory(PlayerData)
+  if PlayerData.citizenid ~= nil then
+    PlayerData = DGCore.Player.LoadInventory(PlayerData)
+  else
+    PlayerData.items = {}
+    PlayerData.oldItems = {}
+  end
   DGCore.Player.CreatePlayer(PlayerData)
 end
 
