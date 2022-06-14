@@ -8,9 +8,7 @@ declare namespace Notifications {
     id?: string | number;
   }
 
-  interface State extends State.Base {
+  interface State extends Base.State {
     notifications: Notification[];
   }
-
-  interface Props extends State, State.BaseProps {}
 }

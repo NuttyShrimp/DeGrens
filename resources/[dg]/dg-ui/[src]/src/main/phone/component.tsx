@@ -1,37 +1,30 @@
-import React from 'react';
+import React, { useEffect, useMemo } from 'react';
+import { useSelector } from 'react-redux';
 import AppWrapper from '@components/appwrapper';
-import { compose, connect } from '@lib/redux';
 
 import { Phone } from './os/phone/phone';
-import { ConfigObject, getPhoneApps, phoneApps, phoneEvents } from './config';
+import { getPhoneApps, phoneEvents } from './config';
 import { hidePhone, phoneInit, setBackground } from './lib';
 import store from './store';
 
-const { mapStateToProps, mapDispatchToProps } = compose(store, {
-  mapStateToProps: s => ({
-    character: s.character,
-    game: s.game,
-  }),
-  mapDispatchToProps: {},
-});
+const Component: AppFunction<Phone.State> = props => {
+  const config = useMemo(() => getPhoneApps(), []);
+  const character = useSelector<RootState, Character>(state => state.character);
+  const game = useSelector<RootState, Main.Game>(state => state.game);
 
-class Component extends React.Component<Phone.Props, any> {
-  config: ConfigObject[];
+  useEffect(() => {
+    setBackground();
+  }, []);
 
-  constructor(props) {
-    super(props);
-    this.config = getPhoneApps();
-  }
-
-  handleShow = (data: Omit<typeof store.initialState, 'visible'>) => {
-    this.props.updateState({
+  const handleShow = (data: Omit<typeof store.initialState, 'visible'>) => {
+    props.updateState({
       ...data,
       visible: true,
       animating: 'open',
     });
   };
 
-  handleEvent = (pData: any) => {
+  const handleEvent = (pData: any) => {
     if (pData.action === 'init') {
       phoneInit();
       return;
@@ -43,28 +36,19 @@ class Component extends React.Component<Phone.Props, any> {
     phoneEvents[appName][action](data);
   };
 
-  componentDidMount() {
-    if (phoneApps.length === 0) {
-      this.config = getPhoneApps();
-    }
-    setBackground();
-  }
+  return (
+    <AppWrapper
+      appName={store.key}
+      onShow={handleShow}
+      onEvent={handleEvent}
+      onHide={hidePhone}
+      onEscape={hidePhone}
+      full
+      hideOverflow
+    >
+      <Phone {...props} game={game} character={character} config={config} />
+    </AppWrapper>
+  );
+};
 
-  render() {
-    return (
-      <AppWrapper
-        appName={store.key}
-        onShow={this.handleShow}
-        onEvent={this.handleEvent}
-        onHide={hidePhone}
-        onEscape={hidePhone}
-        full
-        hideOverflow
-      >
-        <Phone {...this.props} config={this.config} />
-      </AppWrapper>
-    );
-  }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(Component);
+export default Component;

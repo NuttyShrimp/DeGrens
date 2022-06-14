@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
+import { AppContainer } from '@src/main/phone/os/appcontainer/appcontainer';
 
 import { Button } from '../../../../../components/button';
 import { Input } from '../../../../../components/inputs';
@@ -17,14 +18,16 @@ export const Pinger = () => {
   };
 
   return (
-    <div className={classes.root}>
-      <Input.Number onChange={setTarget} value={target} min={1} label={'Speler id'} icon={'id-card-alt'} />
-      <Button.Primary onClick={() => sendPingRequest()}>Ping</Button.Primary>
-      {hasVpn && (
-        <Button.Primary onClick={() => sendPingRequest(true)} startIcon={<i className={'fas fa-user-secret'} />}>
-          Anon Ping
-        </Button.Primary>
-      )}
-    </div>
+    <AppContainer>
+      <div className={classes.root}>
+        <Input.Number onChange={setTarget} value={target} min={1} label={'Speler id'} icon={'id-card-alt'} />
+        <Button.Primary onClick={() => sendPingRequest()}>Ping</Button.Primary>
+        {hasVpn && (
+          <Button.Primary onClick={() => sendPingRequest(true)} startIcon={<i className={'fas fa-user-secret'} />}>
+            Anon Ping
+          </Button.Primary>
+        )}
+      </div>
+    </AppContainer>
   );
 };

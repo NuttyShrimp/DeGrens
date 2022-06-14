@@ -25,10 +25,10 @@ export const MailEntry: FC<React.PropsWithChildren<{ mail: Phone.Mail.Mail }>> =
   );
 };
 
-export const Mail: FC<React.PropsWithChildren<Phone.Mail.Props>> = props => {
+export const Mail: AppFunction<Phone.Mail.State> = props => {
   const classes = styles();
   return (
-    <AppContainer>
+    <AppContainer emptyList={props.mails.length === 0}>
       <div className={classes.list}>
         {props.mails.map(mail => (
           <MailEntry key={mail.id} mail={mail} />

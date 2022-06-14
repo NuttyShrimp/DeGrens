@@ -1,5 +1,11 @@
 declare type InteractionType = 'info' | 'success' | 'error';
 
+declare type AppFunction<T = {}> = React.FC<
+  T & {
+    updateState: (data: Partial<T>) => void;
+  }
+>;
+
 declare interface Character {
   cid: number;
   firstname: string;
@@ -24,39 +30,37 @@ interface ListItem {
   label: string;
 }
 
-declare namespace State {
-  interface Base {
+declare namespace Base {
+  interface State {
     visible: boolean;
   }
+  interface Props<T = {}> extends T {
+    updateState: (data: Partial<T>) => void;
+  }
+}
 
-  interface BaseProps<T = any> {
-    updateState: (data: Partial<T>) => { type: string; cb: Function };
+declare namespace Main {
+  interface State {
+    currentApp: string;
+    error: string | null;
+    mounted: boolean;
   }
 
-  namespace Main {
-    interface State {
-      currentApp: string;
-      error: string | null;
-      mounted: boolean;
-    }
+  interface Game {
+    location: string;
+    time: string;
+    weather: string;
+  }
 
-    interface Game {
-      location: string;
-      time: string;
-      weather: string;
-    }
-
-    interface Aux {
-      character: Character;
-      game: Game;
-    }
+  interface Aux {
+    character: Character;
+    game: Game;
   }
 }
 
 // State
-// TODO: add all state types
 declare interface RootState {
-  main: State.Main.State;
+  main: Main.State;
   character: Character;
   game: Game;
   contextmenu: ContextMenu.State;
@@ -66,8 +70,13 @@ declare interface RootState {
   input: InputMenu.State;
   interaction: Interaction.State;
   notifications: Notifications.State;
+  cli: Base.State;
+  taskbar: TaskBar.State;
+  sliders: Sliders.State;
+  scenes: Scenes.State;
   phone: Phone.State;
   'phone.notifications': Phone.Notifications.State;
+  'phone.apps.example': {};
   'phone.apps.contacts': Phone.Contacts.State;
   'phone.apps.crypto': Phone.Crypto.State;
   'phone.apps.gallery': Phone.Gallery.State;

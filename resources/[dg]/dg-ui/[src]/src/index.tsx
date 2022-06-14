@@ -3,6 +3,7 @@ import { createRoot } from 'react-dom/client';
 import * as Sentry from '@sentry/react';
 import { BrowserTracing } from '@sentry/tracing';
 
+import { AppContainer } from './components/appcontainer';
 import { devDataEmulator } from './lib/devdata';
 import { isDevel, isGameDevel } from './lib/env';
 import { handleIncomingEvent } from './lib/event-relay';
@@ -55,7 +56,13 @@ function App() {
       window.removeEventListener('message', handleIncomingEvent);
     };
   }, []);
-  return <div className='ui-wrapper'>{components.map((component, i) => component.render({ key: i }))}</div>;
+  return (
+    <div className='ui-wrapper'>
+      {components.map((component, i) => (
+        <AppContainer config={component} key={`${component.name}-${i}`} />
+      ))}
+    </div>
+  );
 }
 
 const rootElem = document.getElementById('root');

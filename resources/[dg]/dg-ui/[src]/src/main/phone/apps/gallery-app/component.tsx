@@ -1,37 +1,27 @@
-import React from 'react';
-import { compose, connect } from '@lib/redux';
+import React, { useEffect } from 'react';
 
 import { devData } from '../../../../lib/devdata';
 import { nuiAction } from '../../../../lib/nui-comms';
 import { AppContainer } from '../../os/appcontainer/appcontainer';
 
 import { Gallery } from './components/gallery';
-import store from './store';
-
-const { mapStateToProps, mapDispatchToProps } = compose(store, {
-  mapStateToProps: () => ({}),
-  mapDispatchToProps: {},
-});
-
-class Component extends React.Component<Phone.Gallery.Props, any> {
-  fetchImages = async () => {
+const Component: AppFunction<Phone.Gallery.State> = props => {
+  const fetchImages = async () => {
     const imgs = await nuiAction('phone/gallery/get', {}, devData.images);
-    this.props.updateState({
+    props.updateState({
       list: imgs,
     });
   };
 
-  componentDidMount() {
-    this.fetchImages();
-  }
+  useEffect(() => {
+    fetchImages();
+  }, []);
 
-  render() {
-    return (
-      <AppContainer>
-        <Gallery {...this.props} fetchImages={this.fetchImages} />
-      </AppContainer>
-    );
-  }
-}
+  return (
+    <AppContainer>
+      <Gallery {...props} fetchImages={fetchImages} />
+    </AppContainer>
+  );
+};
 
-export default connect(mapStateToProps, mapDispatchToProps)(Component);
+export default Component;

@@ -8,7 +8,7 @@ import { styles } from './topcontent.styles';
 export const TopContent: FC<
   React.PropsWithChildren<{
     character: Character;
-    game: State.Main.Game;
+    game: Main.Game;
   }>
 > = props => {
   const classes = styles();

@@ -1,19 +1,13 @@
 import React from 'react';
 import AppWrapper from '@components/appwrapper';
-import { compose, connect } from '@lib/redux';
 
 import { InputMenu } from './component/inputMenu';
 import store from './store';
 
 import './styles/inputs.scss';
 
-const { mapStateToProps, mapDispatchToProps } = compose(store, {
-  mapStateToProps: () => ({}),
-  mapDispatchToProps: {},
-});
-
-class Component extends React.Component<InputMenu.Props, any> {
-  showInput = (data: Partial<InputMenu.State>) => {
+const Component: AppFunction<InputMenu.State> = props => {
+  const showInput = (data: Partial<InputMenu.State>) => {
     if (!data.inputs) {
       console.error('No inputs found');
       return null;
@@ -46,27 +40,25 @@ class Component extends React.Component<InputMenu.Props, any> {
       return input;
     });
 
-    this.props.updateState({
+    props.updateState({
       visible: true,
       ...data,
     });
   };
 
-  hideInput = () => {
-    this.props.updateState({
+  const hideInput = () => {
+    props.updateState({
       visible: false,
       inputs: [],
-      acceptCb: '',
+      callbackURL: '',
     });
   };
 
-  render() {
-    return (
-      <AppWrapper appName={store.key} onShow={this.showInput} onHide={this.hideInput} full center>
-        <InputMenu {...this.props} />
-      </AppWrapper>
-    );
-  }
-}
+  return (
+    <AppWrapper appName={store.key} onShow={showInput} onHide={hideInput} full center>
+      <InputMenu {...props} />
+    </AppWrapper>
+  );
+};
 
-export default connect(mapStateToProps, mapDispatchToProps)(Component);
+export default Component;

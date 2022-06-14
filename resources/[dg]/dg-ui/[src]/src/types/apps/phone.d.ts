@@ -1,5 +1,5 @@
 declare namespace Phone {
-  interface State extends State.Base {
+  interface State extends Base.State {
     animating: 'closed' | 'peek' | 'open';
     hasNotifications: boolean;
     callActive: boolean;
@@ -16,9 +16,9 @@ declare namespace Phone {
     'phone.notifications': Notifications.State;
   }
 
-  interface Props extends State, State.BaseProps {
+  interface Props extends State {
     character: Character;
-    game: State.Main.Game;
+    game: Main.Game;
   }
 
   // region Config
@@ -42,7 +42,7 @@ declare namespace Phone {
 
   // endregion
   //region OS
-  interface TopContent extends State.BaseProps {
+  interface TopContent extends Base.Props {
     weather: string;
   }
 
@@ -137,7 +137,7 @@ declare namespace Phone {
       prefix?: string;
     }
 
-    interface Props extends State.BaseProps {
+    interface Props {
       entries: InfoAppEntry[];
     }
   }
@@ -151,8 +151,6 @@ declare namespace Phone {
     interface State {
       contacts: Contact[];
     }
-
-    interface Props extends State, State.BaseProps {}
   }
   namespace Messages {
     interface Message {
@@ -167,8 +165,6 @@ declare namespace Phone {
       messages: Record<string, Message[]>;
       currentNumber: string | null;
     }
-
-    interface Props extends State, State.BaseProps<State> {}
   }
   namespace Phone {
     interface Call {
@@ -200,8 +196,6 @@ declare namespace Phone {
     interface State {
       mails: Mail[];
     }
-
-    interface Props extends State, State.BaseProps {}
   }
   namespace YellowPages {
     interface Ad {
@@ -215,8 +209,6 @@ declare namespace Phone {
       list: Ad[];
       current: Ad | null;
     }
-
-    interface Props extends State, State.BaseProps {}
   }
   namespace Twitter {
     interface Tweet {
@@ -237,8 +229,6 @@ declare namespace Phone {
        */
       requestAmount: number;
     }
-
-    interface Props extends State, State.BaseProps {}
   }
   namespace Notes {
     interface Note {
@@ -253,8 +243,6 @@ declare namespace Phone {
       list: Note[];
       current: Note | null;
     }
-
-    interface Props extends State, State.BaseProps {}
   }
   namespace Crypto {
     interface Coin {
@@ -272,8 +260,6 @@ declare namespace Phone {
       list: Coin[];
       shouldRenew: boolean;
     }
-
-    interface Props extends State, State.BaseProps {}
   }
   namespace PayConiq {
     interface Transasction {
@@ -291,8 +277,6 @@ declare namespace Phone {
       list: Transasction[];
       dirty: false;
     }
-
-    interface Props extends State, State.BaseProps {}
   }
   namespace Gallery {
     interface Img {
@@ -303,8 +287,6 @@ declare namespace Phone {
     interface State {
       list: Img[];
     }
-
-    interface Props extends State, State.BaseProps {}
   }
   namespace Justice {
     interface Person {
@@ -317,7 +299,7 @@ declare namespace Phone {
       list: Record<string, Person[]>;
     }
 
-    interface Props extends State, State.BaseProps {
+    interface Props extends State {
       character: Character;
     }
   }
@@ -348,8 +330,6 @@ declare namespace Phone {
       isOwner: boolean;
       isReady: boolean;
     }
-
-    interface Props extends State, State.BaseProps<State> {}
   }
   // endregion
 }

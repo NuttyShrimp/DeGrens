@@ -7,7 +7,7 @@ import { closeApplication } from '../../../components/appwrapper';
 import { nuiAction } from '../../../lib/nui-comms';
 import store from '../store';
 
-export const InputMenu: React.FC<React.PropsWithChildren<InputMenu.Props>> = props => {
+export const InputMenu: AppFunction<InputMenu.State> = props => {
   const [values, setValues] = useState({});
 
   useEffect(() => {

@@ -1,20 +1,13 @@
-import React from 'react';
-import { compose, connect } from '@lib/redux';
+import React, { useEffect } from 'react';
 
 import { nuiAction } from '../../../../lib/nui-comms';
 import { genericAction, getState } from '../../lib';
 import { AppContainer } from '../../os/appcontainer/appcontainer';
 
 import { InfoApp } from './components/infoapp';
-import store from './store';
 
-const { mapStateToProps, mapDispatchToProps } = compose(store, {
-  mapStateToProps: () => ({}),
-  mapDispatchToProps: {},
-});
-
-class Component extends React.Component<Phone.Info.Props, any> {
-  async refreshValues() {
+const Component: AppFunction<Phone.Info.Props> = props => {
+  const refreshValues = async () => {
     const info = await nuiAction('phone/info/fetchInfo');
     const newEntries: Phone.Info.InfoAppEntry[] = getState<Phone.Info.Props>('phone.apps.info').entries.map(
       (entry: Phone.Info.InfoAppEntry) => {
@@ -25,27 +18,25 @@ class Component extends React.Component<Phone.Info.Props, any> {
       }
     );
     genericAction('phone.apps.info', { entries: newEntries });
-  }
+  };
 
-  componentDidMount() {
-    this.refreshValues();
-  }
+  useEffect(() => {
+    refreshValues();
+  }, []);
 
-  render() {
-    return (
-      <AppContainer
-        primaryActions={[
-          {
-            title: 'Refresh',
-            onClick: () => this.refreshValues(),
-            icon: 'sync-alt',
-          },
-        ]}
-      >
-        <InfoApp entries={this.props.entries} />
-      </AppContainer>
-    );
-  }
-}
+  return (
+    <AppContainer
+      primaryActions={[
+        {
+          title: 'Refresh',
+          onClick: () => refreshValues(),
+          icon: 'sync-alt',
+        },
+      ]}
+    >
+      <InfoApp entries={props.entries} />
+    </AppContainer>
+  );
+};
 
-export default connect(mapStateToProps, mapDispatchToProps)(Component);
+export default Component;

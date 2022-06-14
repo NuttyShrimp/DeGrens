@@ -22,7 +22,6 @@
     "prettier"
   ],
   "rules": {
-    "quotes": ["warn", "single"],
     "no-use-before-define": "off",
     "no-unused-vars": "off",
     "spaced-comment": "off",

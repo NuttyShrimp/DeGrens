@@ -1,5 +1,4 @@
-import React from 'react';
-import { compose, connect } from '@lib/redux';
+import React, { useEffect, useState } from 'react';
 
 import { devData } from '../../../../lib/devdata';
 import { nuiAction } from '../../../../lib/nui-comms';
@@ -8,62 +7,45 @@ import { AppContainer } from '../../os/appcontainer/appcontainer';
 
 import { NewAd } from './components/modals';
 import { YellowPages } from './components/yellowpages';
-import store from './store';
 
-const { mapStateToProps, mapDispatchToProps } = compose(store, {
-  mapStateToProps: () => ({}),
-  mapDispatchToProps: {},
-});
+const Component: AppFunction<Phone.YellowPages.State> = props => {
+  const [list, setList] = useState(props.list);
 
-class Component extends React.Component<Phone.YellowPages.Props, any> {
-  constructor(props) {
-    super(props);
-    this.state = {
-      list: this.props.list,
-    };
-  }
-
-  fetchListings = async () => {
+  const fetchListings = async () => {
     const listings = await nuiAction('phone/yellowpages/getList', {}, devData.YPListings);
-    this.props.updateState({
+    props.updateState({
       list: listings,
     });
-    this.setState({
-      list: listings,
-    });
+    setList(listings);
   };
 
-  componentDidMount() {
-    this.fetchListings();
-  }
+  useEffect(() => {
+    fetchListings();
+  }, []);
 
-  render() {
-    return (
-      <AppContainer
-        primaryActions={[
-          {
-            title: 'Nieuw',
-            icon: 'ad',
-            onClick: () => {
-              showFormModal(<NewAd ad={this.props.current} onAccept={this.fetchListings} />);
-            },
+  return (
+    <AppContainer
+      primaryActions={[
+        {
+          title: 'Nieuw',
+          icon: 'ad',
+          onClick: () => {
+            showFormModal(<NewAd ad={props.current} onAccept={fetchListings} />);
           },
-        ]}
-        search={{
-          list: this.props.list,
-          filter: ['phone', 'text', 'name'],
-          onChange: value => {
-            this.setState({
-              list: value,
-            });
-          },
-        }}
-        emptyList={this.props.list.length === 0}
-      >
-        <YellowPages {...this.props} list={this.state.list} />
-      </AppContainer>
-    );
-  }
-}
+        },
+      ]}
+      search={{
+        list: props.list,
+        filter: ['phone', 'text', 'name'],
+        onChange: value => {
+          setList(value);
+        },
+      }}
+      emptyList={props.list.length === 0}
+    >
+      <YellowPages {...props} list={list} />
+    </AppContainer>
+  );
+};
 
-export default connect(mapStateToProps, mapDispatchToProps)(Component);
+export default Component;

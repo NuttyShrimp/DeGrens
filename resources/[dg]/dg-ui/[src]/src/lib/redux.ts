@@ -1,11 +1,11 @@
-import { connect, Provider } from 'react-redux';
+import { connect, Provider, useDispatch } from 'react-redux';
 
 import { store } from './redux/store';
 export { getAuxStates, GetInitialState } from './redux/state';
 export { connect, Provider, store };
 
-export type StoreObject<I = Object, A = Object> = {
-  key: string;
+export type StoreObject<I = Object, A = Partial<Record<keyof RootState, any>>> = {
+  key: keyof RootState;
   initialState: I;
   auxiliaryState?: A;
 };
@@ -44,4 +44,19 @@ export const compose = (
     mapStateToProps,
     mapDispatchToProps,
   };
+};
+
+export const useUpdateState = <T extends keyof RootState>(storeName: T) => {
+  const dispatch = useDispatch();
+  const updateState = (data: Partial<RootState[T]>) => {
+    const cb = (state: RootState) => ({
+      ...state,
+      [storeName]: {
+        ...state[storeName],
+        ...data,
+      },
+    });
+    dispatch({ cb, type });
+  };
+  return updateState;
 };

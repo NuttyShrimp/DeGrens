@@ -1,33 +1,28 @@
-import React from 'react';
-import { compose, connect } from '@lib/redux';
+import React, { useEffect } from 'react';
 
 import { devData } from '../../../../lib/devdata';
 import { nuiAction } from '../../../../lib/nui-comms';
 
-import { Notes } from './components/notes';
-import store from './store';
+import { Document } from './components/editor';
+import { List } from './components/list';
 
-const { mapStateToProps, mapDispatchToProps } = compose(store, {
-  mapStateToProps: () => ({}),
-  mapDispatchToProps: {},
-});
-
-class Component extends React.Component<Phone.Notes.Props, any> {
-  async fetchNotes() {
+const Component: AppFunction<Phone.Notes.State> = props => {
+  const fetchNotes = async () => {
     const _notes = await nuiAction<Phone.Notes.Note[]>('phone/notes/get', {}, devData.notes);
     const sortedNotes = _notes.sort((n1, n2) => n1.date - n2.date);
-    this.props.updateState({
+    props.updateState({
       list: sortedNotes,
     });
-  }
+  };
 
-  componentDidMount() {
-    this.fetchNotes();
-  }
+  useEffect(() => {
+    fetchNotes();
+  }, []);
+  return props.current === null ? (
+    <List list={props.list} updateState={props.updateState} />
+  ) : (
+    <Document note={props.current} />
+  );
+};
 
-  render() {
-    return <Notes {...this.props} />;
-  }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(Component);
+export default Component;

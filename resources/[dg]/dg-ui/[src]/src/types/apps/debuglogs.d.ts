@@ -1,5 +1,5 @@
 declare namespace DebugLogs {
-  interface State extends State.Base {
+  interface State extends Base.State {
     logs: Log[];
   }
 

@@ -3,7 +3,7 @@ import map from '@assets/phone/map.png';
 
 import { ConfigObject, defaultConfigObject } from '../../config';
 
-import Container from './component';
+import { Pinger } from './components/pinger';
 import { events } from './events';
 
 // Must be a function because otherwise it whines about undeclared defaultConfigObject
@@ -23,7 +23,7 @@ const config = (): ConfigObject => ({
     transition: 'background-position 5s ease-in-out',
   },
   position: 5,
-  render: p => <Container {...p} />,
+  render: p => <Pinger {...p} />,
   events,
 });
 

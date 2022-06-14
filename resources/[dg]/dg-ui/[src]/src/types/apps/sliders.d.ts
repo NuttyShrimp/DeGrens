@@ -1,8 +1,6 @@
 declare namespace Sliders {
-  interface State extends State.Base {
+  interface State extends Base.State {
     power: number[];
     amount: number[];
   }
-
-  interface Props extends State, State.BaseProps<State> {}
 }

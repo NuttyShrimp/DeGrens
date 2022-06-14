@@ -2,7 +2,7 @@ import { ReactElement } from 'react';
 import { store } from '@lib/redux';
 
 export interface ConfigObject {
-  name: string;
+  name: keyof RootState;
   render: (p: any) => ReactElement<any, any>;
   type: 'passive' | 'interactive';
 }

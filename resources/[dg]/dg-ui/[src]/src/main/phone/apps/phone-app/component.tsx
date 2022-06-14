@@ -1,24 +1,27 @@
-import React from 'react';
-import { compose, connect } from '@lib/redux';
+import React, { useState } from 'react';
+import DialpadIcon from '@mui/icons-material/Dialpad';
+import PhoneIcon from '@mui/icons-material/Phone';
+import { Tab, Tabs } from '@mui/material';
 
-import { Phone } from './components/phone';
-import store from './store';
+import { AppContainer } from '../../os/appcontainer/appcontainer';
 
-const { mapStateToProps, mapDispatchToProps } = compose(store, {
-  mapStateToProps: () => ({}),
-  mapDispatchToProps: {},
-});
+import { Dialer } from './components/dialer';
+import { PhoneList } from './components/list';
 
-class Component extends React.Component<Phone.Messages.Props, any> {
-  componentWillUnmount() {
-    this.props.updateState({
-      currentNumber: null,
-    });
-  }
+const Component: AppFunction<Phone.Phone.State> = props => {
+  const [tab, setTab] = useState(0);
 
-  render() {
-    return <Phone />;
-  }
-}
+  // TODO: add slide transition
+  return (
+    <AppContainer>
+      <Tabs value={tab} onChange={(e, v) => setTab(v)} variant='fullWidth'>
+        <Tab icon={<PhoneIcon />} />
+        <Tab icon={<DialpadIcon />} />
+      </Tabs>
+      {tab === 0 && <PhoneList calls={props.calls} />}
+      {tab === 1 && <Dialer />}
+    </AppContainer>
+  );
+};
 
-export default connect(mapStateToProps, mapDispatchToProps)(Component);
+export default Component;

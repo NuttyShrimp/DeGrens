@@ -31,7 +31,7 @@ const fontOptions = [
   },
 ];
 
-export const Scenes: FC<React.PropsWithChildren<Scenes.Props>> = () => {
+export const Scenes: FC<React.PropsWithChildren<Scenes.State>> = () => {
   const [text, setText] = useState<string>('');
   const [style, setStyle] = useState<string>('0');
   const [size, setSize] = useState<number>(1);

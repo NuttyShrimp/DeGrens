@@ -10,7 +10,7 @@ import { GetInitialState, type } from './lib/redux';
 import { theme } from './base.styles';
 
 export const IndexProvider = ({ children }) => {
-  const mainState = useSelector<RootState, State.Main.State>(state => state.main);
+  const mainState = useSelector<RootState, Main.State>(state => state.main);
   const dispatch = useDispatch();
 
   const handleClose = () => {

@@ -2,7 +2,7 @@ import React from 'react';
 
 import { ConfigObject, defaultConfigObject } from '../../config';
 
-import Container from './component';
+import { Mail } from './components/mail';
 import { events } from './events';
 
 // Must be a function because otherwise it whines about undeclared defaultConfigObject
@@ -17,7 +17,7 @@ const config = (): ConfigObject => ({
     backgroundGradient: '#82DED5',
   },
   position: 6,
-  render: p => <Container {...p} />,
+  render: p => <Mail {...p} />,
   events,
 });
 

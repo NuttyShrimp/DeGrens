@@ -1,6 +1,5 @@
 import React from 'react';
 import AppWrapper from '@components/appwrapper';
-import { compose, connect } from '@lib/redux';
 
 import { devData } from '../../lib/devdata';
 import { nuiAction } from '../../lib/nui-comms';
@@ -11,101 +10,80 @@ import store from './store';
 
 import './styles/financials.scss';
 
-const { mapStateToProps, mapDispatchToProps } = compose(store, {
-  mapStateToProps: () => ({}),
-  mapDispatchToProps: {},
-});
-
-class Component extends React.Component<Financials.Props, any> {
-  handleShow = (data: Financials.BaseInfo) => {
-    this.props.updateState({
+const Component: AppFunction<Financials.State> = props => {
+  const handleShow = (data: Financials.BaseInfo) => {
+    props.updateState({
       visible: true,
       openPane: true,
       ...data,
     });
   };
 
-  handleHide = () => {
-    this.props.updateState({
+  const handleHide = () => {
+    props.updateState({
       openPane: false,
       // Clear these otherwise we got a strange effect with those list not closing
       accounts: [],
       transactions: [],
     });
     setTimeout(() => {
-      this.props.updateState(store.initialState);
+      props.updateState(store.initialState);
     }, 500);
   };
 
-  fetchAccounts = async () => {
+  const fetchAccounts = async () => {
     const newAccounts = await nuiAction<Financials.Account[]>(
       'financials/accounts/get',
       {},
       devData.financialsAccounts
     );
     const cash = await nuiAction<number>('financials/cash/get', {}, 500);
-    this.props.updateState({
+    props.updateState({
       accounts: newAccounts,
       transactions: [],
       cash,
     });
   };
 
-  fetchTransactions = async () => {
-    if (!this.props.selected?.account_id) return;
+  const fetchTransactions = async () => {
+    if (!props.selected?.account_id) return;
     openLoadModal();
     const list = await nuiAction<Financials.Transaction[]>(
       'financials/transactions/get',
       {
-        accountId: this.props.selected.account_id,
-        loaded: this.props.transactions.length,
+        accountId: props.selected.account_id,
+        loaded: props.transactions.length,
       },
       devData.financialsTransactions
     );
-    this.props.updateState({
+    props.updateState({
       canLoadMore: list.length > 0,
-      transactions: [...this.props.transactions, ...list],
+      transactions: [...props.transactions, ...list],
       backdrop: false,
       modalComponent: null,
     });
   };
 
-  setActiveAccount = (acc: Financials.Account) => {
-    this.props.updateState({
+  const setActiveAccount = (acc: Financials.Account) => {
+    props.updateState({
       selected: acc,
       transactions: [],
     });
     setTimeout(() => {
-      this.fetchTransactions();
+      fetchTransactions();
     }, 10);
   };
 
-  setModal(component: React.FC<React.PropsWithChildren<unknown>>) {
-    this.props.updateState({
-      modalComponent: component,
-      backdrop: true,
-    });
-  }
+  return (
+    <AppWrapper appName={store.key} onShow={handleShow} onHide={handleHide} onEscape={handleHide} center full>
+      <Financials
+        {...props}
+        setActiveAccount={setActiveAccount}
+        fetchTransactions={fetchTransactions}
+        fetchAccounts={fetchAccounts}
+      />
+    </AppWrapper>
+  );
+};
 
-  render() {
-    return (
-      <AppWrapper
-        appName={store.key}
-        onShow={this.handleShow}
-        onHide={this.handleHide}
-        onEscape={this.handleHide}
-        center
-        full
-      >
-        <Financials
-          {...this.props}
-          setActiveAccount={this.setActiveAccount}
-          fetchTransactions={this.fetchTransactions}
-          fetchAccounts={this.fetchAccounts}
-        />
-      </AppWrapper>
-    );
-  }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(Component);
+export default Component;
