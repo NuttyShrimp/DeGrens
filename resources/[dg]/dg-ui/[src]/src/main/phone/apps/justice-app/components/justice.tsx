@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React from 'react';
 import { Badge, Divider, IconButton, Tooltip } from '@mui/material';
 
 import { Icon } from '../../../../../components/icon';
@@ -7,7 +7,7 @@ import { startPhoneCall } from '../../phone-app/lib';
 
 import { styles } from './justice.styles';
 
-export const Justice: FC<React.PropsWithChildren<Phone.Justice.Props>> = props => {
+export const Justice: AppFunction<Phone.Justice.Props> = props => {
   const classes = styles();
   return (
     <div>

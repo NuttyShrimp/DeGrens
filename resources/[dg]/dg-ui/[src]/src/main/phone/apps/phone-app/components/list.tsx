@@ -1,5 +1,4 @@
-import React from 'react';
-import { useSelector } from 'react-redux';
+import React, { FC } from 'react';
 
 import { Paper } from '../../../../../components/paper';
 import { formatRelativeTime } from '../../../../../lib/util';
@@ -10,8 +9,7 @@ import { startPhoneCall } from '../lib';
 
 import { styles } from './phone.styles';
 
-export const PhoneList = () => {
-  const calls = useSelector<RootState, Phone.Phone.Call[]>(state => state['phone.apps.phone'].calls);
+export const PhoneList: FC<Phone.Phone.State> = ({ calls }) => {
   const classes = styles();
   const actions: Action[] = [
     {
@@ -61,7 +59,7 @@ export const PhoneList = () => {
       {calls.length === 0 && (
         <div className={'emptylist'}>
           <i className='fas fa-frown' />
-          <p>Geen gesprekken</p>
+          <p>Geen recente gesprekken</p>
         </div>
       )}
     </div>

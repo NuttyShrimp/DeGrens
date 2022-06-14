@@ -1,5 +1,4 @@
 import React, { FC, useState } from 'react';
-import { useSelector } from 'react-redux';
 import { IconButton } from '@mui/material';
 
 import { Button } from '../../../../../components/button';
@@ -60,7 +59,7 @@ export const Tweet: FC<
 
 export const Twitter: FC<
   React.PropsWithChildren<
-    Phone.Twitter.Props & {
+    Phone.Twitter.State & {
       toggleLike: (tweetId: number, isLiked: boolean) => void;
       doRetweet: (tweet: Phone.Twitter.Tweet) => void;
       doDelete: (tweetId: number) => void;
@@ -70,7 +69,6 @@ export const Twitter: FC<
 > = props => {
   const classes = styles();
   const [disableLoad, setDisableLoad] = useState(false);
-  const tweets = useSelector<RootState, Phone.Twitter.Tweet[]>(state => state['phone.apps.twitter'].tweets);
 
   const loadMore = async () => {
     if (disableLoad) return;
@@ -81,7 +79,7 @@ export const Twitter: FC<
 
   return (
     <div className={classes.root}>
-      {tweets.map(tweet => (
+      {props.tweets.map(tweet => (
         <Tweet
           key={`phone-twt-${tweet.id}`}
           tweet={tweet}

@@ -1,49 +1,40 @@
-import React from 'react';
-import { compose, connect } from '@lib/redux';
+import React, { useEffect } from 'react';
 
 import { devData } from '../../../../lib/devdata';
 import { nuiAction } from '../../../../lib/nui-comms';
 import { AppContainer } from '../../os/appcontainer/appcontainer';
 
 import { Crypto } from './components/crypto';
-import store from './store';
 
-const { mapStateToProps, mapDispatchToProps } = compose(store, {
-  mapStateToProps: () => ({}),
-  mapDispatchToProps: {},
-});
-
-class Component extends React.Component<Phone.Crypto.Props, any> {
-  async loadCoins() {
-    this.props.updateState({
+const Component: AppFunction<Phone.Crypto.State> = props => {
+  const loadCoins = async () => {
+    props.updateState({
       list: [],
     });
     const coins: Phone.Crypto.Coin[] = await nuiAction('phone/crypto/get', {}, devData.crypto);
-    this.props.updateState({
+    props.updateState({
       list: coins,
     });
-  }
+  };
 
-  componentDidMount() {
-    this.loadCoins();
-  }
+  useEffect(() => {
+    loadCoins();
+  }, []);
 
-  componentDidUpdate() {
-    if (this.props.shouldRenew) {
-      this.loadCoins();
-      this.props.updateState({
+  useEffect(() => {
+    if (props.shouldRenew) {
+      loadCoins();
+      props.updateState({
         shouldRenew: false,
       });
     }
-  }
+  }, [props.shouldRenew]);
 
-  render() {
-    return (
-      <AppContainer emptyList={this.props.list.length === 0}>
-        <Crypto {...this.props} />
-      </AppContainer>
-    );
-  }
-}
+  return (
+    <AppContainer emptyList={props.list.length === 0}>
+      <Crypto {...props} />
+    </AppContainer>
+  );
+};
 
-export default connect(mapStateToProps, mapDispatchToProps)(Component);
+export default Component;

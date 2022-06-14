@@ -7,7 +7,7 @@ import { nuiAction } from '@src/lib/nui-comms';
 import { addNotification } from '@src/main/phone/lib';
 
 export const List: FC<
-  React.PropsWithChildren<State.BaseProps<Phone.JobCenter.State> & { groups: Phone.JobCenter.Group[] }>
+  React.PropsWithChildren<Base.Props<Phone.JobCenter.State> & { groups: Phone.JobCenter.Group[] }>
 > = props => {
   const fetchGroups = async () => {
     const groups = await nuiAction('phone/jobs/groups/get', {}, devData.jobGroups);

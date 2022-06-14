@@ -8,7 +8,7 @@ import { styles } from './notes.styles';
 
 export const List: FC<
   React.PropsWithChildren<
-    State.BaseProps & {
+    Base.Props & {
       list: Phone.Notes.Note[];
     }
   >

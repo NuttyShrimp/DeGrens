@@ -12,11 +12,9 @@ declare namespace InputMenu {
     }[];
   }
 
-  interface State extends State.Base {
+  interface State extends Base.State {
     inputs: Input[];
     callbackURL: string;
     header?: string;
   }
-
-  interface Props extends State, State.BaseProps {}
 }

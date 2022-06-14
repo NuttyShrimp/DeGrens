@@ -7,11 +7,9 @@ import { copyToClipboard } from '../../../../../lib/util';
 import { AppContainer } from '../../../os/appcontainer/appcontainer';
 
 export const Gallery: FC<
-  React.PropsWithChildren<
-    Phone.Gallery.Props & {
-      fetchImages: () => Promise<void>;
-    }
-  >
+  Phone.Gallery.State & {
+    fetchImages: () => Promise<void>;
+  }
 > = props => {
   return (
     <AppContainer>

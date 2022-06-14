@@ -1,5 +1,4 @@
-import React, { FC, useEffect, useRef, useState } from 'react';
-import { useSelector } from 'react-redux';
+import React, { useEffect, useRef, useState } from 'react';
 import { animated, Spring } from 'react-spring';
 import { formatRelativeTime } from '@lib/util';
 import SendIcon from '@mui/icons-material/Send';
@@ -14,9 +13,8 @@ import { addMessage } from '../lib';
 
 import { styles } from './messages.styles';
 
-export const Conversation: FC<React.PropsWithChildren<Phone.Messages.Props>> = props => {
+export const Conversation: AppFunction<Phone.Messages.State> = props => {
   // We use the selector state bcs the props state is to inconsistent
-  const messageState = useSelector<RootState, Phone.Messages.State>(state => state['phone.apps.messages']);
   const [messages, setMessages] = useState<Phone.Messages.Message[]>([]);
   const [canLoadMore, setCanLoadMore] = useState(true);
   const [message, setMessage] = useState('');
@@ -30,23 +28,23 @@ export const Conversation: FC<React.PropsWithChildren<Phone.Messages.Props>> = p
   };
 
   const loadMore = async () => {
-    if (!messageState.currentNumber) return;
+    if (!props.currentNumber) return;
     const newMes = await nuiAction<Record<string, Phone.Messages.Message[]>>('phone/messages/get', {
-      target: messageState.currentNumber,
+      target: props.currentNumber,
       offset: messages.length,
     });
-    if (typeof newMes !== 'object' || Array.isArray(newMes) || newMes[messageState.currentNumber].length === 0) {
+    if (typeof newMes !== 'object' || Array.isArray(newMes) || newMes[props.currentNumber].length === 0) {
       console.log('could not load more messages');
       setCanLoadMore(false);
       return;
     }
-    addMessage(messageState.currentNumber, newMes[messageState.currentNumber], 'prepend');
+    addMessage(props.currentNumber, newMes[props.currentNumber], 'prepend');
   };
 
   const sendMessage = () => {
     nuiAction('phone/messages/send', {
       msg: message,
-      target: messageState.currentNumber,
+      target: props.currentNumber,
       date: Date.now(),
     });
     setMessage('');
@@ -57,29 +55,29 @@ export const Conversation: FC<React.PropsWithChildren<Phone.Messages.Props>> = p
       if (!messageListRef.current) return;
       messageListRef.current.scrollTop = messageListRef.current.scrollHeight;
     }, 10);
-  }, [messageState.messages]);
+  }, [props.messages]);
 
   useEffect(() => {
-    if (!messageState.currentNumber) {
+    if (!props.currentNumber) {
       setMessages([]);
       setCanLoadMore(true);
       return;
     }
-    if (!messageState.messages[messageState.currentNumber]) {
+    if (!props.messages[props.currentNumber]) {
       setCanLoadMore(false);
       return;
     }
-    if (messageState.messages[messageState.currentNumber] === messages) {
+    if (props.messages[props.currentNumber] === messages) {
       return;
     }
-    if (messageState.messages[messageState.currentNumber].length - messages.length === 1) {
+    if (props.messages[props.currentNumber].length - messages.length === 1) {
       setTimeout(() => {
         if (!messageListRef.current) return;
         messageListRef.current.scrollTop = messageListRef.current.scrollHeight;
       }, 10);
     }
-    setMessages(messageState.messages[messageState.currentNumber]);
-  }, [messageState]);
+    setMessages(props.messages[props.currentNumber]);
+  }, [props]);
 
   return (
     <AppContainer onClickBack={showList}>

@@ -1,4 +1,4 @@
-import React, { FC, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { animated, useSpring } from 'react-spring';
 
 import { useVhToPixel } from '../../../lib/hooks/useVhToPixel';
@@ -7,14 +7,12 @@ import { AccountList } from './accountList';
 import { Infoheader } from './infoheader';
 import { TransactionList } from './transactionList';
 
-export const Financials: FC<
-  React.PropsWithChildren<
-    Financials.Props & {
-      setActiveAccount: (acc: Financials.Account) => void;
-      fetchTransactions: () => Promise<void>;
-      fetchAccounts: () => Promise<void>;
-    }
-  >
+export const Financials: AppFunction<
+  Financials.State & {
+    setActiveAccount: (acc: Financials.Account) => void;
+    fetchTransactions: () => Promise<void>;
+    fetchAccounts: () => Promise<void>;
+  }
 > = props => {
   const openHeight = useVhToPixel(70);
   const rootStyles = useSpring({

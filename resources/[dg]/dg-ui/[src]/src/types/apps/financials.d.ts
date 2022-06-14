@@ -46,7 +46,7 @@ declare namespace Financials {
     fetchAccounts: () => Promise<void>;
   }
 
-  interface State extends State.Base {
+  interface State extends Base.State {
     transactions: Transaction[];
     accounts: Account[];
     selected: Account | null;
@@ -58,6 +58,4 @@ declare namespace Financials {
     backdrop: boolean;
     modalComponent: React.FC<React.PropsWithChildren<ModalProps>> | null;
   }
-
-  interface Props extends State, State.BaseProps<State> {}
 }

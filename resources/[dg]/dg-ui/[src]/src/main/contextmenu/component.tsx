@@ -1,6 +1,5 @@
 import React from 'react';
 import AppWrapper from '@components/appwrapper';
-import { compose, connect } from '@lib/redux';
 
 import { uuidv4 } from '../../lib/util';
 
@@ -9,20 +8,8 @@ import store from './store';
 
 import './styles/contextmenu.scss';
 
-const { mapStateToProps, mapDispatchToProps } = compose(store, {
-  mapStateToProps: () => ({}),
-  mapDispatchToProps: {},
-});
-
-class Component extends React.Component<ContextMenu.Props, any> {
-  constructor(props) {
-    super(props);
-    this.state = {
-      id: 0,
-    };
-  }
-
-  generateIds = (entries: ContextMenu.Entry[]): ContextMenu.Entry[] => {
+const Component: AppFunction<ContextMenu.State> = props => {
+  const generateIds = (entries: ContextMenu.Entry[]): ContextMenu.Entry[] => {
     const ids: string[] = [];
     const getId = (): string => {
       let id = uuidv4();
@@ -38,15 +25,15 @@ class Component extends React.Component<ContextMenu.Props, any> {
     return entries.map(entry => {
       entry.id = entry.id ?? getId();
       if (entry.submenu) {
-        entry.submenu = this.generateIds(entry.submenu);
+        entry.submenu = generateIds(entry.submenu);
       }
       return entry;
     });
   };
 
-  onShow = (data: ContextMenu.Entry[]) => {
-    data = this.generateIds(data);
-    this.props.updateState({
+  const onShow = (data: ContextMenu.Entry[]) => {
+    data = generateIds(data);
+    props.updateState({
       visible: true,
       entries: data,
       allEntries: data,
@@ -54,8 +41,8 @@ class Component extends React.Component<ContextMenu.Props, any> {
     });
   };
 
-  onHide = () => {
-    this.props.updateState({
+  const onHide = () => {
+    props.updateState({
       visible: false,
       entries: [],
       allEntries: [],
@@ -63,14 +50,11 @@ class Component extends React.Component<ContextMenu.Props, any> {
     });
     return true;
   };
+  return (
+    <AppWrapper appName={store.key} onShow={onShow} onHide={onHide} onEscape={onHide} full>
+      <ContextMenu {...props} />
+    </AppWrapper>
+  );
+};
 
-  render() {
-    return (
-      <AppWrapper appName={store.key} onShow={this.onShow} onHide={this.onHide} onEscape={this.onHide} full>
-        <ContextMenu {...this.props} />
-      </AppWrapper>
-    );
-  }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(Component);
+export default Component;

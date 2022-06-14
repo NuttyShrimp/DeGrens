@@ -3,7 +3,7 @@ import { StoreObject } from '@lib/redux';
 import { defaultState } from '../lib/defaultState';
 import { isDevel } from '../lib/env';
 
-const store: StoreObject<State.Main.State, State.Main.Aux> = {
+const store: StoreObject<Main.State, Main.Aux> = {
   key: 'main',
   initialState: {
     currentApp: '',
@@ -11,7 +11,6 @@ const store: StoreObject<State.Main.State, State.Main.Aux> = {
     mounted: true,
   },
   auxiliaryState: {
-    // @ts-ignore
     character: isDevel() ? defaultState.character : {},
     game: {
       location: 'world',

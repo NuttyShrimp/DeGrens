@@ -1,41 +1,31 @@
-import React from 'react';
-import { compose, connect } from '@lib/redux';
+import React, { useEffect } from 'react';
 
 import { devData } from '../../../../lib/devdata';
 import { nuiAction } from '../../../../lib/nui-comms';
 
 import { Payconiq } from './components/payconiq';
-import store from './store';
 
-const { mapStateToProps, mapDispatchToProps } = compose(store, {
-  mapStateToProps: () => ({}),
-  mapDispatchToProps: {},
-});
-
-class Component extends React.Component<Phone.PayConiq.Props, any> {
-  async fetchList() {
+const Component: AppFunction<Phone.PayConiq.State> = props => {
+  const fetchList = async () => {
     const trans = await nuiAction('phone/payconiq/get', {}, devData.bankTrans);
-    this.props.updateState({
+    props.updateState({
       list: trans,
     });
-  }
+  };
 
-  componentDidUpdate() {
-    if (this.props.dirty) {
-      this.fetchList();
-      this.props.updateState({
-        dirty: false,
-      });
-    }
-  }
+  useEffect(() => {
+    fetchList();
+  }, []);
 
-  componentDidMount() {
-    this.fetchList();
-  }
+  useEffect(() => {
+    if (!props.dirty) return;
+    fetchList();
+    props.updateState({
+      dirty: false,
+    });
+  }, [props.dirty]);
 
-  render() {
-    return <Payconiq {...this.props} />;
-  }
-}
+  return <Payconiq {...props} />;
+};
 
-export default connect(mapStateToProps, mapDispatchToProps)(Component);
+export default Component;

@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { useState } from 'react';
 import { Tab, Tabs } from '@mui/material';
 import { AppContainer } from '@src/main/phone/os/appcontainer/appcontainer';
 
@@ -6,7 +6,7 @@ import { CurrentGroup } from './currentGroup';
 import { Jobs } from './jobs';
 import { List } from './list';
 
-export const JobCenter: FC<React.PropsWithChildren<Phone.JobCenter.Props>> = props => {
+export const JobCenter: AppFunction<Phone.JobCenter.State> = props => {
   const [tab, setTab] = useState(0);
   return (
     <AppContainer>

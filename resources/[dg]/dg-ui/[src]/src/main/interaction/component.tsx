@@ -1,6 +1,5 @@
 import React from 'react';
 import AppWrapper from '@components/appwrapper';
-import { compose, connect } from '@lib/redux';
 
 import { sanitizeText } from '../../lib/util';
 
@@ -9,14 +8,9 @@ import store from './store';
 
 import './styles/interaction.scss';
 
-const { mapStateToProps, mapDispatchToProps } = compose(store, {
-  mapStateToProps: () => ({}),
-  mapDispatchToProps: {},
-});
-
-class Component extends React.Component<Interaction.Props, any> {
-  showInteraction = (data: { text: string; type: InteractionType }) => {
-    this.props.updateState({
+const Component: AppFunction<Interaction.State> = props => {
+  const showInteraction = (data: { text: string; type: InteractionType }) => {
+    props.updateState({
       visible: true,
       show: true,
       text: sanitizeText(
@@ -26,13 +20,13 @@ class Component extends React.Component<Interaction.Props, any> {
     });
   };
 
-  hideInteraction = () => {
-    this.props.updateState({
+  const hideInteraction = () => {
+    props.updateState({
       show: false,
     });
     // Animate out
     setTimeout(() => {
-      this.props.updateState({
+      props.updateState({
         visible: false,
         text: '',
         type: 'info',
@@ -40,13 +34,11 @@ class Component extends React.Component<Interaction.Props, any> {
     }, 500);
   };
 
-  render() {
-    return (
-      <AppWrapper appName={store.key} onShow={this.showInteraction} onHide={this.hideInteraction} full unSelectable>
-        <Interaction {...this.props} />
-      </AppWrapper>
-    );
-  }
-}
+  return (
+    <AppWrapper appName={store.key} onShow={showInteraction} onHide={hideInteraction} full unSelectable>
+      <Interaction {...props} />
+    </AppWrapper>
+  );
+};
 
-export default connect(mapStateToProps, mapDispatchToProps)(Component);
+export default Component;

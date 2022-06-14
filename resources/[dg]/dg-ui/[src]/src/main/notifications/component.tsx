@@ -1,6 +1,5 @@
-import React from 'react';
+import React, { useState } from 'react';
 import AppWrapper from '@components/appwrapper';
-import { compose, connect } from '@lib/redux';
 
 import { sanitizeText } from '../../lib/util';
 
@@ -9,29 +8,19 @@ import store from './store';
 
 import './styles/notifications.scss';
 
-const { mapStateToProps, mapDispatchToProps } = compose(store, {
-  mapStateToProps: () => ({}),
-  mapDispatchToProps: {},
-});
+const types = ['success', 'info', 'error', 'primary'];
 
-class Component extends React.Component<Notifications.Props, any> {
-  constructor(props) {
-    super(props);
-    this.state = {
-      id: 0,
-    };
-  }
+const Component: AppFunction<Notifications.State> = props => {
+  const [id, setId] = useState(0);
 
-  types = ['success', 'info', 'error', 'primary'];
-
-  handleVisibility = (visible: boolean) => {
-    this.setState({ visible });
+  const handleVisibility = (visible: boolean) => {
+    props.updateState({ visible });
   };
 
-  eventHandler = (data: any) => {
+  const eventHandler = (data: any) => {
     switch (data.action) {
       case 'add': {
-        if (!this.validateType(data.notification?.type || 'info')) {
+        if (!validateType(data.notification?.type || 'info')) {
           console.error('Invalid notification type', data.notification);
           return;
         }
@@ -41,29 +30,29 @@ class Component extends React.Component<Notifications.Props, any> {
           data.notification.type = 'info';
         }
 
-        const id = data.notification?.id ?? this.state.id;
-        this.setState({ id: id + 1 });
+        const nId = data.notification?.id ?? id;
+        setId(id + 1);
         const notification: Notifications.Notification = {
-          id,
+          id: nId,
           message: sanitizeText(data.notification.message),
           type: data.notification?.type ?? 'info',
           timeout: data.notification?.timeout ?? 5000,
           persistent: data.notification.persistent ?? false,
         };
-        this.props.updateState({
-          notifications: [...this.props.notifications, notification],
+        props.updateState({
+          notifications: [...props.notifications, notification],
         });
-        if (notification.persistent) return id;
+        if (notification.persistent) return nId;
         setTimeout(() => {
-          this.props.updateState({
-            notifications: this.props.notifications.filter(n => n.id !== id),
+          props.updateState({
+            notifications: props.notifications.filter(n => n.id !== nId),
           });
         }, notification.timeout);
         break;
       }
       case 'remove': {
-        this.props.updateState({
-          notifications: this.props.notifications.filter(n => n.id !== data.id),
+        props.updateState({
+          notifications: props.notifications.filter(n => n.id !== data.id),
         });
         break;
       }
@@ -73,24 +62,22 @@ class Component extends React.Component<Notifications.Props, any> {
     }
   };
 
-  validateType = (notiType: string) => {
-    return this.types.includes(notiType);
+  const validateType = (notiType: string) => {
+    return types.includes(notiType);
   };
 
-  render() {
-    return (
-      <AppWrapper
-        appName={store.key}
-        onShow={() => this.handleVisibility(true)}
-        onHide={() => this.handleVisibility(false)}
-        onEvent={this.eventHandler}
-        center
-        unSelectable
-      >
-        <NotificationList {...this.props} />
-      </AppWrapper>
-    );
-  }
-}
+  return (
+    <AppWrapper
+      appName={store.key}
+      onShow={() => handleVisibility(true)}
+      onHide={() => handleVisibility(false)}
+      onEvent={eventHandler}
+      center
+      unSelectable
+    >
+      <NotificationList {...props} />
+    </AppWrapper>
+  );
+};
 
-export default connect(mapStateToProps, mapDispatchToProps)(Component);
+export default Component;

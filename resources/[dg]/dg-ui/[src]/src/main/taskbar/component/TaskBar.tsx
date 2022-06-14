@@ -5,7 +5,7 @@ import useMeasure from 'react-use-measure';
 import { useVhToPixel } from '../../../lib/hooks/useVhToPixel';
 import { nuiAction } from '../../../lib/nui-comms';
 
-export const TaskBar: FC<React.PropsWithChildren<TaskBar.Props>> = props => {
+export const TaskBar: FC<TaskBar.State> = props => {
   const targetHeight = useVhToPixel(7);
   const [ref, { width }] = useMeasure();
   const [animProps, api] = useSpring(() => ({

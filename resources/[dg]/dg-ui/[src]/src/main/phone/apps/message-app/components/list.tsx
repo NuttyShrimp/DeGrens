@@ -22,7 +22,7 @@ export const List: FC<
   React.PropsWithChildren<
     {
       list: Record<string, Phone.Messages.Message[]>;
-    } & State.BaseProps
+    } & Base.Props
   >
 > = props => {
   const classes = styles();

@@ -27,7 +27,7 @@ declare namespace Hud {
     lib?: string;
   }
 
-  interface State extends State.Base {
+  interface State extends Base.State {
     compass: Compass;
     values: Record<HudType, HudValue>;
     voice: Voice;
@@ -36,6 +36,4 @@ declare namespace Hud {
      */
     iconIdx: number;
   }
-
-  interface Props extends State, State.BaseProps {}
 }

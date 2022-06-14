@@ -4,7 +4,7 @@ import { useVhToPixel } from '@lib/hooks/useVhToPixel';
 
 import { Notification } from './notification';
 
-export const NotificationList: React.FC<React.PropsWithChildren<Notifications.Props>> = props => {
+export const NotificationList: AppFunction<Notifications.State> = props => {
   const hiddenMargin = useVhToPixel(-37);
   const showMargin = useVhToPixel(1);
   return (

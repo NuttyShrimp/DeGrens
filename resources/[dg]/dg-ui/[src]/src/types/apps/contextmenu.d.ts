@@ -26,7 +26,7 @@ declare namespace ContextMenu {
     data?: any;
   }
 
-  interface State extends State.Base {
+  interface State extends Base.State {
     entries: Entry[];
     allEntries: Entry[];
     /**
@@ -34,6 +34,4 @@ declare namespace ContextMenu {
      */
     parentEntry: string[];
   }
-
-  interface Props extends State.BaseProps, State {}
 }

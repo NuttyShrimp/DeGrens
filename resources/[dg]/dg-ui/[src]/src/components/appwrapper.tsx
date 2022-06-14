@@ -93,7 +93,7 @@ export default function AppWrapper(props: AppWrapperProps) {
     e.preventDefault();
     if (e.data.app === props.appName) {
       const transaction = Sentry.startTransaction({
-        name: `incomingAppEvent`,
+        name: 'fincomingAppEvent',
         tags: {
           app: props.appName,
         },

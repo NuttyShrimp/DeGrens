@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux';
 import { animated, useSpring } from 'react-spring';
 import shell from '@assets/phone/shell.png';
 import { useVhToPixel } from '@lib/hooks/useVhToPixel';
+import { AppContainer } from '@src/components/appcontainer';
 
 import { ConfigObject } from '../../config';
 import { BottomBar } from '../bottombar/bottombar';
@@ -18,6 +19,7 @@ export const Phone: FC<React.PropsWithChildren<Phone.Props & { config: ConfigObj
   const basedOffset = useVhToPixel(60 - 5.5);
   const notificationState = useSelector<RootState, Phone.Notifications.State>(state => state['phone.notifications']);
   const [bottomOffset, setBottomOffset] = useState(basedOffset);
+  const [activeAppCfg, setActiveAppCfg] = useState<ConfigObject | undefined>(undefined);
   const [rootAnimStyle, api] = useSpring(() => ({
     // notification w actions has height of ~7.5vh
     // notification w/o actions has height of ~4.3vh
@@ -61,6 +63,10 @@ export const Phone: FC<React.PropsWithChildren<Phone.Props & { config: ConfigObj
     console.log(`visible: ${props.visible} animating: ${props.animating} hasNoti: ${props.hasNotifications}`);
   }, [props.visible, props.animating, props.hasNotifications, api]);
 
+  useEffect(() => {
+    setActiveAppCfg(props.config.find(c => c.name === props.activeApp));
+  }, [props.activeApp]);
+
   return (
     <animated.div className={classes.root} style={rootAnimStyle}>
       {props.bigPhoto && (
@@ -78,7 +84,10 @@ export const Phone: FC<React.PropsWithChildren<Phone.Props & { config: ConfigObj
         <TopContent character={props.character} game={props.game} />
         <div className={classes.activeApp}>
           <NotificationWrapper />
-          {props.config.find(c => c.name === props.activeApp)?.render?.({}) ?? `${props.activeApp} is not registered`}
+          {(activeAppCfg && (
+            <AppContainer config={{ ...activeAppCfg, name: `phone.apps.${activeAppCfg.name}` as keyof RootState }} />
+          )) ??
+            `${props.activeApp} is not registered`}
         </div>
         <BottomBar />
       </div>

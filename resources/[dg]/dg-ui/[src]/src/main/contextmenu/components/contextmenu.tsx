@@ -5,7 +5,9 @@ import { closeApplication } from '../../../components/appwrapper';
 import { nuiAction } from '../../../lib/nui-comms';
 import store from '../store';
 
-const MenuEntry: FC<React.PropsWithChildren<ContextMenu.Entry & State.BaseProps & { onClick?: Function }>> = props => {
+const MenuEntry: FC<
+  React.PropsWithChildren<ContextMenu.Entry & Base.Props<ContextMenu.State> & { onClick?: Function }>
+> = props => {
   const parentEntry = useSelector<RootState, string[]>(state => state.contextmenu.parentEntry);
 
   const handleClick = () => {
@@ -56,7 +58,7 @@ const MenuEntry: FC<React.PropsWithChildren<ContextMenu.Entry & State.BaseProps 
       )}
       {props.submenu && (
         <div className={'icon'}>
-          <i className={`fas fa-chevron-right`} />
+          <i className={'fas fa-chevron-right'} />
         </div>
       )}
     </div>
@@ -81,10 +83,10 @@ const searchForEntries = (entries: ContextMenu.Entry[], keys: string[]): Context
   return false;
 };
 
-export const ContextMenu: FC<React.PropsWithChildren<ContextMenu.Props>> = props => {
+export const ContextMenu: AppFunction<ContextMenu.State> = props => {
   const goMenuBack = () => {
     const newEntries = searchForEntries(props.allEntries, [...props.parentEntry]);
-    if (newEntries) {
+    if (newEntries && typeof newEntries !== 'boolean') {
       props.updateState({
         entries: newEntries,
         parentEntry: props.parentEntry.slice(0, -1),
