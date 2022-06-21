@@ -5,8 +5,8 @@ end)
 
 RegisterServerEvent("dg-weed:server:PlacePlant", function(coords, gender)
     local Player = DGCore.Functions.GetPlayer(source)
-    if Player.Functions.RemoveItem(Config.Seeds[gender], 1) then
-        TriggerClientEvent("inventory:client:ItemBox", source, Config.Seeds[gender], "remove")
+    if Player.Functions.RemoveItem(config.seeds[gender], 1) then
+        TriggerClientEvent("inventory:client:ItemBox", source, config.seeds[gender], "remove")
 
         local result = exports['dg-sql']:query(
             [[
@@ -42,9 +42,9 @@ end)
 
 RegisterServerEvent("dg-weed:server:FeedPlant", function(index)
     local Player = DGCore.Functions.GetPlayer(source)
-    if Player.Functions.RemoveItem(Config.Food.Item, 1) then
-        TriggerClientEvent("inventory:client:ItemBox", source, Config.Food.Item, "remove")
-        activePlants[index].data.food = activePlants[index].data.food + math.random(Config.Food.Amount.min, Config.Food.Amount.max)
+    if Player.Functions.RemoveItem("plant_fertilizer", 1) then
+        TriggerClientEvent("inventory:client:ItemBox", source, "plant_fertilizer", "remove")
+        activePlants[index].data.food = activePlants[index].data.food + math.random(config.food.amount.min, config.food.amount.max)
         if activePlants[index].data.food > 100 then activePlants[index].data.food = 100 end
         updatePlantData()
         TriggerClientEvent("DGCore:Notify", source, "Je hebt de plant gevoed", "success")
@@ -58,10 +58,10 @@ RegisterServerEvent("dg-weed:server:CutPlant", function(index)
         local Player = DGCore.Functions.GetPlayer(source)
         local item = ""
         if activePlants[index].gender == "F" then
-            item = Config.Cut.Item
+            item = "weed_bud"
         elseif activePlants[index].gender == "M" then
             local items = {}
-            for k, v in pairs(Config.Seeds) do
+            for k, v in pairs(config.seeds) do
                 items[#items+1] = v
             end
             item = items[math.random(1, #items)]
@@ -76,7 +76,7 @@ RegisterServerEvent("dg-weed:server:CutPlant", function(index)
     
         Citizen.Wait(100)
         local chance = math.random(100)
-        if chance <= Config.Cut.BreakChance then
+        if chance <= config.cut.breakChance then
             removePlant(index)
             TriggerClientEvent("DGCore:Notify", source, "De plant is dood")
         end

@@ -1,5 +1,6 @@
 import { Util, Vector3 } from '@dgx/shared';
 import { RPCEvent, RPCRegister } from '@dgx/server/decorators';
+import { getConfig } from 'helpers/config';
 
 @RPCRegister()
 class StateManager extends Util.Singleton<StateManager>() {
@@ -14,11 +15,12 @@ class StateManager extends Util.Singleton<StateManager>() {
     return isRobbed !== undefined;
   };
 
-  setRegisterAsRobbed = (register: Vec3) => {
+  setRegisterAsRobbed = async (register: Vec3) => {
     this.robbedRegisters.push(register);
+    const timeout = (await getConfig()).register.refillTime * 60 * 1000
     setTimeout(() => {
       this.robbedRegisters.shift(); // because we always have the same timeout, the first one will always be the oldest
-    }, 30 * 60 * 1000);
+    }, timeout);
   };
 
   @RPCEvent('storerobbery:server:getSafeState')

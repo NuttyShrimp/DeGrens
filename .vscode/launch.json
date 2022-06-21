@@ -315,6 +315,27 @@
       "request": "launch",
       "command": "yarn watch",
       "cwd": "${workspaceFolder}/resources/[dg]/dg-heists/typescript"
-    }
+    },
+    {
+      "type": "node-terminal",
+      "name": "storerobbery:build dev",
+      "request": "launch",
+      "command": "yarn run build:dev",
+      "cwd": "${workspaceFolder}/resources/[dg]/dg-storerobbery/typescript"
+    },
+    {
+      "type": "node-terminal",
+      "name": "storerobbery:build prod",
+      "request": "launch",
+      "command": "yarn run build",
+      "cwd": "${workspaceFolder}/resources/[dg]/dg-storerobbery/typescript"
+    },
+    {
+      "type": "node-terminal",
+      "name": "storerobbery:dev",
+      "request": "launch",
+      "command": "yarn watch",
+      "cwd": "${workspaceFolder}/resources/[dg]/dg-storerobbery/typescript"
+    },
   ]
 }

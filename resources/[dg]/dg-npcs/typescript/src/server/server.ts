@@ -1,6 +1,7 @@
-import { RPC } from '@dgx/server/classes';
-import { NPC_DATA } from 'constants/npcs';
+import { Config, RPC } from '@dgx/server/classes';
 
-RPC.register('npcs:server:fetch', (_src: number) => {
+RPC.register('npcs:server:fetch', async (): Promise<NpcData[]> => {
+  await Config.awaitConfigLoad();
+  const NPC_DATA: NpcData[] = Config.getModuleConfig('npcs');
   return NPC_DATA;
 });

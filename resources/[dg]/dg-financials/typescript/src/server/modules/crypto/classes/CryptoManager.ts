@@ -1,10 +1,10 @@
 import winston from 'winston';
 import { SQL } from '@dgx/server';
 
-import { config } from '../../../config';
 import { cryptoLogger } from '../util';
 
 import { CryptoWallet } from './CryptoWallet';
+import { getConfigModule } from 'helpers/config';
 
 export class CryptoManager {
   private static _instance: CryptoManager;
@@ -16,16 +16,17 @@ export class CryptoManager {
     return CryptoManager._instance;
   }
 
+  private config: Record<string, NCrypto.Config>
   private coins: NCrypto.Coin[];
   private coinsLoaded: boolean;
   private coinWallets: Map<number, CryptoWallet[]>;
   private logger: winston.Logger;
 
   constructor() {
+    this.config = {};
     this.coins = [];
     this.coinWallets = new Map();
     this.logger = cryptoLogger.child({ module: 'CryptoManager' });
-    this.loadCoins();
     this.logger.info('CryptoManager initialized');
   }
 
@@ -80,7 +81,10 @@ export class CryptoManager {
   }
 
   // region DB
-  private async loadCoins(): Promise<void> {
+  public async loadCoins(): Promise<void> {
+    (await getConfigModule('cryptoCoins')).forEach(c => {
+      this.config[c.name] = c
+    })
     const query = `SELECT *
 									 FROM crypto`;
     const result = await SQL.query(query);
@@ -91,11 +95,11 @@ export class CryptoManager {
       return;
     }
     result.forEach((c: DB.ICrypto) => {
-      if (!config.crypto.coins.find(coin => coin.name === c.crypto_name)) {
+      if (!this.config[c.crypto_name]) {
         this.logger.warn(`Coin ${c.crypto_name} is not in the config`);
         return;
       }
-      const coinConfig = config.crypto.coins.find(cc => cc.name === c.crypto_name);
+      const coinConfig = this.config[c.crypto_name];
       const newCoin: NCrypto.Coin = {
         ...c,
         icon: coinConfig.icon,
@@ -111,8 +115,7 @@ export class CryptoManager {
   // endregion
 
   private async addMissingCoins(): Promise<void> {
-    const configCoins = config.crypto.coins;
-    const missingCoins = configCoins.filter(coin => !this.coins.find(c => c.crypto_name === coin.name));
+    const missingCoins = Object.values(this.config).filter(coin => !this.coins.find(c => c.crypto_name === coin.name));
     if (missingCoins.length === 0) {
       return;
     }
@@ -152,7 +155,7 @@ export class CryptoManager {
       this.logger.warn(`No coin found for ${coin}`);
       return false;
     }
-    const wallet = new CryptoWallet(cid, coin, 0);
+    const wallet = new CryptoWallet(cid, coin, 0, this.config[coin]);
     await wallet.saveWallet();
     this.logger.debug(`Created wallet for ${cid} | coin: ${coin}`);
     this.addWallet(cid, wallet);
@@ -175,7 +178,7 @@ export class CryptoManager {
       result = [];
     }
     result.forEach(row => {
-      this.addWallet(cid, new CryptoWallet(cid, row.crypto_name, row.amount));
+      this.addWallet(cid, new CryptoWallet(cid, row.crypto_name, row.amount, this.config[row.crypto_name]));
       this.logger.silly(`Loaded wallet ${row.crypto_name} for ${cid}`);
     });
     const missingCoins = this.coins.filter(coin => result.findIndex(r => r.crypto_name === coin.crypto_name) === -1);
@@ -184,7 +187,7 @@ export class CryptoManager {
     }
     this.logger.debug(`Missing coins for ${cid}: ${missingCoins.map(c => c.crypto_name).join(', ')}`);
     missingCoins.forEach(coin => {
-      this.addWallet(cid, new CryptoWallet(cid, coin.crypto_name, 0));
+      this.addWallet(cid, new CryptoWallet(cid, coin.crypto_name, 0, this.config[coin.crypto_name]));
       // Save the wallet
       this.coinWallets
         .get(cid)

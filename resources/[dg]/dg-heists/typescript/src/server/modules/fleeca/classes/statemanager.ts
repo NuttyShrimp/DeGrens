@@ -1,7 +1,6 @@
 import { DGXEvent, EventListener, RPCEvent, RPCRegister } from '@dgx/server/decorators';
 import { Util } from '@dgx/shared';
 import doorStateManager from 'controllers/classes/doorstatemanager';
-import { FLEECA_IDS, POWER_LOCATIONS } from '../constants.fleeca';
 
 @RPCRegister()
 @EventListener()
@@ -9,12 +8,16 @@ class StateManager extends Util.Singleton<StateManager>() {
   private powerLocation: Vec3;
   private powerDisabled = false;
   private robbedBanks: Set<Fleeca.Id> = new Set();
+  private allPowerLocations: Vec3[];
 
-  constructor() {
-    super();
-    this.powerLocation = POWER_LOCATIONS[Math.floor(Math.random() * POWER_LOCATIONS.length)];
-    console.log(this.powerLocation);
-    doorStateManager.registerDoors(...FLEECA_IDS);
+  setConfig = (powerLocations: Vec3[], ids: Fleeca.Id[]) => {
+    this.allPowerLocations = powerLocations;
+    this.chooseNewPowerLocation()
+    doorStateManager.registerDoors(...ids);
+  }
+
+  private chooseNewPowerLocation = () => {
+    this.powerLocation = this.allPowerLocations[Math.floor(Math.random() * this.allPowerLocations.length)];
   }
 
   @RPCEvent('heists:server:fleeca:getPowerLocation')
@@ -37,9 +40,7 @@ class StateManager extends Util.Singleton<StateManager>() {
     if (!this.robbedBanks.has(fleecaId)) {
       this.robbedBanks.add(fleecaId);
     }
-    setTimeout(() => {
-      this.powerLocation = POWER_LOCATIONS[Math.floor(Math.random() * POWER_LOCATIONS.length)];
-    }, 40 * 60 * 1000);
+    setTimeout(this.chooseNewPowerLocation, 45 * 60 * 1000);
   };
 }
 

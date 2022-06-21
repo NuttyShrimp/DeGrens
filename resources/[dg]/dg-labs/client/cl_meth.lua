@@ -78,9 +78,9 @@ exports("startMeth", function()
         return
     end
 
-    local playerCount = DGCore.Functions.TriggerCallback("dg-labs:server:GetPlayerCount")
-    if playerCount < Config.Meth.RequiredPeople then 
-        exports['dg-ui']:addNotification("Werkt momenteel niet...", "error")
+    local enoughPlayers = DGCore.Functions.TriggerCallback("dg-labs:server:enoughPlayers", "meth")
+    if not enoughPlayers then 
+        exports['dg-ui']:addNotification("Dit werkt momenteel niet...", "error")
         return
     end
 
@@ -95,6 +95,7 @@ exports("startMeth", function()
         flags = 16
     }, {}, {}, function() -- Done
         StopAnimTask(PlayerPedId(), "anim@heists@prison_heiststation@cop_reactions", "cop_b_idle", 1.0)
+        local config = DGCore.Functions.TriggerCallback('dg-labs:server:getConfig')
         exports["dg-numbergame"]:OpenGame(function(success)
             if success then
                 TriggerServerEvent("dg-labs:server:meth:SetStartState", currentLabId)
@@ -102,7 +103,7 @@ exports("startMeth", function()
             else
                 exports['dg-ui']:addNotification("Aanzetten mislukt...", "error")
             end
-        end, Config.Meth.HackSize, Config.Meth.HackTime)
+        end, config.meth.hack.size, config.meth.hack.time)
         TriggerServerEvent('hud:server:GainStress', math.random(2, 5))
     end, function() -- Cancel
         StopAnimTask(PlayerPedId(), "anim@heists@prison_heiststation@cop_reactions", "cop_b_idle", 1.0)
@@ -187,8 +188,8 @@ exports("removeMethPackage", function()
 end)
 
 exports("increaseMethStatus", function(statusId)
-    local status = DGCore.Functions.TriggerCallback("dg-labs:server:meth:GetStatus", currentLabId, statusId)
-    if status >= Config.Meth.FillAmount then
+    local filled = DGCore.Functions.TriggerCallback("dg-labs:server:meth:GetStatus", currentLabId, statusId)
+    if filled then
         exports['dg-ui']:addNotification("Dit zit al vol...", "error")
         return
     end

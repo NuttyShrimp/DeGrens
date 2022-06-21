@@ -66,3 +66,29 @@ declare namespace Debts {
     reason?: string;
   }
 }
+
+declare interface Config {
+  accounts: {
+    toSeed: {
+      name: string;
+      canTransfer: boolean;
+    }[];
+    defaultBalance: number;
+  };
+  paycheck: Record<string, number>;
+  cryptoCoins: NCrypto.Config[];
+  taxes: {
+    cats: Taxes.Tax[];
+    inflation: number;
+  };
+  debts: {
+    maintenance: {
+      hour: number;
+      minute: number;
+    };
+    // Amount of days to pay the debt
+    finePayTerm: number;
+    // % of interest on fine over pay term
+    fineInterest: number;
+  };
+}

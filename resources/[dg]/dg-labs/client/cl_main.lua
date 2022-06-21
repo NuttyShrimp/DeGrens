@@ -7,59 +7,47 @@ local boxAttached = false
 AddEventHandler('onClientResourceStart', function(resourceName)
 	if resourceName ~= GetCurrentResourceName() then return end
 
-    DGCore.Functions.TriggerCallback("dg-labs:server:GetLabCoords", function(coords)
-        for k, v in pairs(coords) do
-            Config.Labs[k].coords = v
-        end
-    end)
-
+    -- TODO: Replace with periodic call to export if doors is initialized
     Citizen.Wait(3 * 1000) -- wait for doors to load etc bullshit OIIFKJHJFHJF
 
-    DGCore.Functions.TriggerCallback("dg-labs:server:GetActiveLabs", function(active)
-        activeLabs = active
-        for labType, labId in pairs(activeLabs) do
-            local lab = Config.Labs[labId]
+    local activeLabs = DGCore.Functions.TriggerCallback("dg-labs:server:GetActiveLabs")
+    local config = DGCore.Functions.TriggerCallback('dg-labs:server:getConfig')
+    for labType, labId in pairs(activeLabs) do
+        local lab = config.labs[labId-1]
 
-            -- Load interior
-            local hash = GetInteriorAtCoords(lab.coords)
-            RefreshInterior(hash)
-            for _, prop in ipairs(Config.Types[labType].interiorProps) do
-                ActivateInteriorEntitySet(hash, prop)
-            end
-
-            -- Unlock door
-            TriggerServerEvent("dg-doorlock:server:changeDoorLockState", lab.doorId, false)
-
-            -- Create polyzone
-            exports['dg-polyzone']:AddBoxZone("drugslab", lab.coords, 19.0, 28.0, {
-                heading = lab.heading,
-                minZ = lab.coords.z - 3,
-                maxZ = lab.coords.z + 6,
-                debugPoly = false,
-                data = {
-                    id = labId,
-                }
-            })
-
-            -- Set default data
+        -- Load interior
+        local hash = GetInteriorAtCoords(lab.coords.x, lab.coords.y, lab.coords.z)
+        RefreshInterior(hash)
+        for _, prop in ipairs(config.types[labType].interiorProps) do
+            ActivateInteriorEntitySet(hash, prop)
         end
 
-        print("LABS LOADED")
-    end)
+        -- Create polyzone
+        exports['dg-polyzone']:AddBoxZone("drugslab", lab.coords, 19.0, 28.0, {
+            heading = lab.heading,
+            minZ = lab.coords.z - 3,
+            maxZ = lab.coords.z + 6,
+            debugPoly = false,
+            data = {
+                id = labId,
+            }
+        })
+    end
+
+    print("LABS LOADED")
 end)
 
 AddEventHandler('onResourceStop', function(resourceName)
     if GetCurrentResourceName() ~= resourceName then return end
 
+    local config = DGCore.Functions.TriggerCallback('dg-labs:server:getConfig')
     for labType, labId in pairs(activeLabs) do
-        local data = Config.Labs[labId]
+        local data = config.labs[labId-1]
         local hash = GetInteriorAtCoords(data.coords)
         RefreshInterior(hash)
-        for _, prop in ipairs(Config.Types[labType].interiorProps) do
+        for _, prop in ipairs(config.types[labType].interiorProps) do
             DeactivateInteriorEntitySet(hash, prop)
         end
-
-        TriggerServerEvent("dg-doorlock:server:changeDoorLockState", data.doorId, true)
 
         exports["dg-polyzone"]:removeZone("drugslab")
     end
@@ -101,11 +89,12 @@ buildPeekZones = function(labId)
     local labType = getLabTypeFromId(labId)
     if not labType then return end 
 
-    local heading = Config.Labs[labId].heading * (math.pi / 180)
-    for k, v in pairs(Config.Types[labType].peekZones) do
+    local config = DGCore.Functions.TriggerCallback('dg-labs:server:getConfig')
+    local heading = config.labs[labId-1].heading * (math.pi / 180)
+    for k, v in pairs(config.types[labType].peekZones) do
         local xOffset = v.x * math.cos(heading) - v.y * math.sin(heading)
         local yOffset = v.x * math.sin(heading) + v.y * math.cos(heading)
-        local coords = Config.Labs[labId].coords + vector3(xOffset, yOffset, v.z)
+        local coords = config.labs[labId-1].coords + vector3(xOffset, yOffset, v.z)
 
         exports['dg-polytarget']:AddCircleZone("drugslab_action", coords, 0.5, {
             useZ = true,
@@ -128,9 +117,7 @@ end
 destroyPeekZones = function(labId)
     local labType = getLabTypeFromId(labId)
     if not labType then return end
-    for _, _ in pairs(Config.Types[labType].peekZones) do
-        exports['dg-polytarget']:removeZone("drugslab_action")
-    end
+    exports['dg-polytarget']:removeZone("drugslab_action")
     exports['dg-peek']:removeZoneEntry(cacheIds)
 end
 

@@ -1,10 +1,10 @@
 import { Events, Notifications, PolyTarget, RPC } from '@dgx/client';
-import { STORE_DATA } from 'config/stores';
 
-export const buildSafeZone = (storeId: Store.Id) => {
+export const buildSafeZone = async (storeId: Store.Id) => {
+  const safeCoords = await RPC.execute<Vec3>('storerobbery:server:getSafeCoords', storeId);
   PolyTarget.addCircleZone(
     'store_safe',
-    STORE_DATA[storeId].safecoords,
+    safeCoords,
     0.5,
     {
       data: {},

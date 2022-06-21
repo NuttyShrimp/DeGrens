@@ -6,9 +6,9 @@ import { SQL } from '@dgx/server';
 
 import 'dayjs/locale/nl-be';
 
-import { config } from '../../../config';
 import { mainLogger } from '../../../sv_logger';
 import debtManager from '../classes/debtmanager';
+import { getConfigModule } from 'helpers/config';
 
 dayjs.extend(toObject);
 dayjs.extend(utc);
@@ -22,7 +22,7 @@ export const debtLogger = mainLogger.child({
 });
 
 export const scheduleMaintenanceFees = async () => {
-  const maintenceConfig = config.debts.maintenance;
+  const maintenceConfig = (await getConfigModule('debts')).maintenance;
   const now = dayjs();
   const schedule = dayjs().add(1, 'day').set('hour', maintenceConfig.hour).set('minute', maintenceConfig.minute);
   debtLogger.info(
@@ -56,7 +56,7 @@ export const scheduleDebt = (debtId: number) => {
     debtLogger.error(`Debt with id ${debtId} not found`);
     return;
   }
-  const extDate = dayjs(debt.date).add(config.debts.finePayTerm, 'day');
+  const extDate = dayjs(debt.date).add(debtManager.getConfig().finePayTerm, 'day');
   const secDiff = dayjs().diff(extDate, 'millisecond');
   if (secDiff < 0) {
     debtLogger.debug(`Debt ${debtId} is overdue`);

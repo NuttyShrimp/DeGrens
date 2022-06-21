@@ -1,27 +1,26 @@
 import { getCurrentLocation } from './locations';
-import heistData from '../config/heistdata';
-import { Events, Util } from '@dgx/client';
+import { Events, RPC, Util } from '@dgx/client';
 
 // TODO: smooth opening
 export const setDoorState = async (heistId: Heist.Id, open: boolean) => {
   await Util.Delay(500);
-  if (!('door' in heistData[heistId])) return;
-  const data = heistData[heistId].door;
-  if (data.portalId) {
-    loadVaultRoom(data);
+  const door = await RPC.execute<Heist.Door>('heists:server:getDoorData', heistId);
+  if (!door) return;
+  if (door.portalId) {
+    loadVaultRoom(door);
     await Util.Delay(250);
   }
   const obj = GetClosestObjectOfType(
-    data.coords.x,
-    data.coords.y,
-    data.coords.z,
+    door.coords.x,
+    door.coords.y,
+    door.coords.z,
     10.0,
-    data.model,
+    door.model,
     false,
     false,
     false
   );
-  const heading = open ? data.heading.open : data.heading.closed;
+  const heading = open ? door.heading.open : door.heading.closed;
   SetEntityHeading(obj, heading);
   FreezeEntityPosition(obj, true);
 };

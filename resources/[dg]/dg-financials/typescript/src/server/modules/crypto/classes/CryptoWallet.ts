@@ -1,11 +1,11 @@
 import winston from 'winston';
 import { Notifications, SQL } from '@dgx/server';
 
-import { config } from '../../../config';
 import { getDefaultAccount } from '../../bank/helpers/accounts';
 import { cryptoLogger } from '../util';
 
 import { CryptoManager } from './CryptoManager';
+import { getConfigModule } from 'helpers/config';
 
 export class CryptoWallet {
   private cid: number;
@@ -15,11 +15,11 @@ export class CryptoWallet {
   private logger: winston.Logger;
   private manager: CryptoManager;
 
-  constructor(cid: number, cname: string, amount: number) {
+  constructor(cid: number, cname: string, amount: number, config: NCrypto.Config) {
     this.cid = cid;
     this.cname = cname;
     this.amount = amount;
-    this.config = config.crypto.coins.find(coin => coin.name === this.cname);
+    this.config = config;
     this.logger = cryptoLogger.child({ module: `CW-${this.cid}-${this.cname}` });
     this.manager = CryptoManager.getInstance();
   }

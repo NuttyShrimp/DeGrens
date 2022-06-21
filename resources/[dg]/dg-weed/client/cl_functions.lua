@@ -28,17 +28,34 @@ drawText3Ds = function(x, y, z, text)
 end
 
 isAcceptedLocation = function(coords)
+    -- https://pastebin.com/PBE6wQSG list of materialhashes
+    local groundMaterials = {
+        [1333033863] = true, -- Grass
+        [-1286696947] = true, -- GrassShort
+        [-461750719] = true, -- GrassLong
+        [951832588] = true, -- GravelSmall
+        [2128369009] = true, -- GravelLarge
+        [-356706482] = true, -- GravelDeep
+        [-1885547121] = true, -- DirtTrack
+        [1913209870] = true, -- SandstoneBrittle
+        [510490462] = true, -- SandCompact
+        [909950165] = true, -- SandWet
+        [-1595148316] = true, -- SandLoose
+        [-1942898710] = true, -- MudHard
+        [1635937914] = true, -- MudSoft
+    }
+
 	local handle = StartShapeTestCapsule(coords.x, coords.y, coords.z + 4, coords.x, coords.y, coords.z - 2, 2, 1, PlayerPedId(), 7)
 	local _, _, _, _, materialHash, _ = GetShapeTestResultIncludingMaterial(handle)
 	if materialHash then
-		return Config.GroundMaterials[materialHash] ~= nil and not IsEntityInWater(PlayerPedId())
+		return groundMaterials[materialHash] ~= nil and not IsEntityInWater(PlayerPedId())
 	end
 	return false
 end
 
 spawnPlantObject = function(index)
 	local plant = activePlants[index]
-	local model = Config.Stages[plant.data.stage]
+	local model = GetHashKey(config.stages[plant.data.stage-1] or "bkr_prop_weed_01_small_01b")
 	loadModel(model)
 
 	local object = CreateObject(model, plant.coords.x, plant.coords.y, plant.coords.z, false, false, false)

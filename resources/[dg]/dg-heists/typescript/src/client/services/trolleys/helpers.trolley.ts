@@ -1,10 +1,11 @@
-import { Events, Util } from '@dgx/client';
+import { Events, Util, RPC } from '@dgx/client';
 import { getCurrentLocation } from 'controllers/locations';
-import { TROLLEY_LOCATIONS, TROLLEY_OBJECTS } from './constants.trolleys';
+import { TROLLEY_OBJECTS } from './constants.trolleys';
 
 export const spawnTrolleys = async (heistId: Heist.Id) => {
-  if (!TROLLEY_LOCATIONS[heistId]) return;
-  TROLLEY_LOCATIONS[heistId].forEach(async trolley => {
+  const locations = await RPC.execute<Trolley.Data[]>('heists:server:getTrolleyLocations', heistId);
+  if (!locations) return;
+  locations.forEach(async trolley => {
     if (Util.getRndInteger(0, 100) > trolley.spawnChance) return;
     const trolleyHash = TROLLEY_OBJECTS[trolley.type].trolley;
     await Util.loadModel(trolleyHash);

@@ -1,0 +1,55 @@
+{
+  "accounts": {
+    "defaultBalance": 4500,
+    "toSeed": [
+      {
+        "name": "De Staat",
+        "canTransfer": false
+      },
+      {
+        "name": "Politie DeGrens",
+        "canTransfer": true
+      },
+      {
+        "name": "AZDG",
+        "canTransfer": true
+      }
+    ]
+  },
+  "paycheck": {
+    "police": 5,
+    "ambulance": 5,
+    "realestate": 5
+  },
+  "cryptoCoins": [
+    {
+      "name": "Manera",
+      "icon": "mdi-alpha-m-circle-outline",
+      "value": 200
+    },
+    {
+      "name": "Suliro",
+      "icon": "mdi-alpha-s"
+    }
+  ],
+  "taxes": {
+    "cats": [
+      { "category": "No Tax", "rate": 0 },
+      { "category": "Vehicles", "rate": 11 },
+      { "category": "Real estate", "rate": 10 },
+      { "category": "Income tax", "rate": 9 },
+      { "category": "Services", "rate": 7 },
+      { "category": "Goederen", "rate": 7 },
+      { "category": "Gas", "rate": 6 }
+    ],
+    "inflation": 1
+  },
+  "debts": {
+    "maintenance": {
+      "hour": 5,
+      "minute": 0
+    },
+    "finePayTerm": 7,
+    "fineInterest": 10
+  }
+}

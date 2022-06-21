@@ -1,4 +1,4 @@
-import { Chat, RPC, Util } from '@dgx/server/classes';
+import { Config, Chat, RPC, Util } from '@dgx/server/classes';
 import blackoutManager from '../classes/BlackoutManager';
 
 onNet('dg-blackout:server:SetBlackout', (state: boolean) => {
@@ -22,3 +22,8 @@ Chat.registerCommand('toggleblackout', 'Zet de huidige status van blackout', [],
 RPC.register('dg-blackout:server:GetBlackoutState', () => {
   return blackoutManager.state;
 });
+
+RPC.register('dg-blackout:server:getSafeZones', async () => {
+  await Config.awaitConfigLoad();
+  return Config.getConfigValue<ZoneData[]>('blackout.safezones')
+})

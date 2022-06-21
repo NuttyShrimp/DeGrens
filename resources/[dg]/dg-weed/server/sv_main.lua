@@ -1,14 +1,28 @@
 activePlants = {}
 
-for gender, itemName in pairs(Config.Seeds) do
-    DGCore.Functions.CreateUseableItem(itemName, function(source, item)
-        local Player = DGCore.Functions.GetPlayer(source)
-        if not Player.Functions.GetItemByName(item.name) then return end
-        TriggerClientEvent("dg-weed:client:Plant", source, gender)
-    end)
-end
+config = {}
+configLoaded = false
 
-DGCore.Functions.CreateUseableItem(Config.Cut.Item, function(source, item)
+Citizen.CreateThread(function()
+    while not exports['dg-config']:areConfigsReady() do Wait(10) end
+    config = exports['dg-config']:getModuleConfig('weed')
+    configLoaded = true
+
+    for gender, itemName in pairs(config.seeds) do
+        DGCore.Functions.CreateUseableItem(itemName, function(source, item)
+            local Player = DGCore.Functions.GetPlayer(source)
+            if not Player.Functions.GetItemByName(item.name) then return end
+            TriggerClientEvent("dg-weed:client:Plant", source, gender)
+        end)
+    end
+end)
+
+DGCore.Functions.CreateCallback('dg-weed:server:getConfig', function(src, cb)
+    while not configLoaded do Wait(10) end
+    cb(config)
+end)
+
+DGCore.Functions.CreateUseableItem("weed_bud", function(source, item)
     local Player = DGCore.Functions.GetPlayer(source)
     if not Player.Functions.GetItemByName(item.name) then return end
     
@@ -18,8 +32,8 @@ DGCore.Functions.CreateUseableItem(Config.Cut.Item, function(source, item)
         return
     end
 
-    if os.time() >= item.createtime + Config.Dry.Time then
-        local amount = math.random(Config.Dry.Amount.min, Config.Dry.Amount.max)
+    if os.time() >= item.createtime + config.dry.timeout then
+        local amount = math.random(config.dry.amount.min, config.dry.amount.max)
         if amount > bagInfo.amount then
             amount = bagInfo.amount
         end
@@ -29,8 +43,8 @@ DGCore.Functions.CreateUseableItem(Config.Cut.Item, function(source, item)
         Player.Functions.RemoveItem(item.name, 1)
         TriggerClientEvent("inventory:client:ItemBox", source, item.name, "remove")
 
-        Player.Functions.AddItem(Config.Dry.Item, amount)
-        TriggerClientEvent("inventory:client:ItemBox", source, Config.Dry.Item, "add")
+        Player.Functions.AddItem("weed_bag", amount)
+        TriggerClientEvent("inventory:client:ItemBox", source, "weed_bag", "add")
     else
         TriggerClientEvent("DGCore:Notify", source, "Dit is nog niet droog", "error")
     end
@@ -42,10 +56,12 @@ end)
 
 -- growth cycle
 Citizen.CreateThread(function()
+    while not configLoaded do Wait(10) end
+
     while true do
         for index, plant in pairs(activePlants) do
             local currentTime = os.time()
-            if plant.data.stage < #Config.Stages and currentTime >= plant.data.growtime + Config.GrowTime then -- if not endstage and enough time has passed
+            if plant.data.stage < #config.stages and currentTime >= plant.data.growtime + (config.growTime * 60 * 60) then -- if not endstage and enough time has passed
                 activePlants[index].data.stage = plant.data.stage + 1
                 activePlants[index].data.growtime = currentTime
             end
@@ -58,6 +74,8 @@ end)
 
 -- food cycle
 Citizen.CreateThread(function()
+    while not configLoaded do Wait(10) end
+
     while true do 
         for index, plant in pairs(activePlants) do
             activePlants[index].data.food = plant.data.food - 1
@@ -68,7 +86,7 @@ Citizen.CreateThread(function()
         end
 
         updatePlantData()
-        Citizen.Wait(Config.Food.DecayTime)
+        Citizen.Wait(config.food.decayTime)
     end
 end)
 

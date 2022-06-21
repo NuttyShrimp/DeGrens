@@ -4,12 +4,15 @@ import { mainLogger } from '../sv_logger';
 import { getPlySteamId } from '../sv_util';
 import { handlePlayerJoin } from './events';
 
-const PRIV_KEY =
-  '5bf75100c991840f10b155d6b53806f6553887eee94845a3338a6b11e082cf629cb89983e0d019e9ba8dd70e27f54c5a4b6f3943210b2369bb699181771baa0f';
 const tokenMap: Map<string, PlyData> = new Map();
 
-// TODO: Use the timestamp to detect invalid keys from restarted resources
+let PRIV_KEY = 'BOZO-1';
 
+export const setPrivateToken = (token: string) => {
+  PRIV_KEY = token;
+};
+
+// TODO: Use the timestamp to detect invalid keys from restarted resources
 export const getPlyToken = (src: number): string => {
   for (const plyToken of tokenMap.keys()) {
     const plyData = tokenMap.get(plyToken);
@@ -44,6 +47,9 @@ export const generateToken = (src: number) => {
   // TODO: await on all returns of the map generation, max span of 10 seconds to generate all maps --> Drop player if it takes too long
   handlePlayerJoin(src, steamId);
   emitNet('__dg_auth_authenticated', src, -1, token);
+  setTimeout(() => {
+    emit('dg-auth:server:authenticated', src);
+  }, 200);
 };
 
 export const getPlayerInfo = (src: number, token: string) => {

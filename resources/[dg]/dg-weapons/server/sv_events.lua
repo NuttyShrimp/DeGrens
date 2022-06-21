@@ -1,3 +1,8 @@
+DGCore.Functions.TriggerCallback('dg-weapons:server:getAmmoConfig', function(src, cb)
+    while not config do Wait(10) end
+    cb(config.ammo)
+end)
+
 DGCore.Functions.CreateCallback('weapons:server:shouldHolster', function(source, cb, pWeaponHash)
   if not pWeaponHash then return end
   local shouldHolster = not Weapons[pWeaponHash].noHolstering

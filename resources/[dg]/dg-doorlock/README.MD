@@ -65,4 +65,5 @@ Copied and refactored from original 1.0 doorlock script
 
 ``` lua
 TriggerServerEvent("dg-doorlock:server:changeDoorLockState", id, locked)
+exports['dg-doorlock']:changeDoorLockState(id, locked)
 ```

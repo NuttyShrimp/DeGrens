@@ -1,12 +1,13 @@
-import { PolyZone, Notifications, Util, RPC, Taskbar } from '@dgx/client';
-import { clientConfig as config } from '../../config';
+import { PolyZone, Notifications, Util, RPC, Taskbar, Events } from '@dgx/client';
 
+let powerStations: PowerstationData[] = [];
 let currentStation: number = null;
 let explosiveObject: number;
 let placingExplosive = false;
 
-setImmediate(() => {
-  config.powerstations.forEach((zone, id) => {
+setImmediate(async () => {
+  powerStations = await RPC.execute<PowerstationData[]>('dg-blackout:server:getPowerStations');
+  powerStations.forEach((zone, id) => {
     const options = { ...zone.options, data: { id: id } };
     PolyZone.addBoxZone('blackout_powerstation', zone.center, zone.width, zone.length, options, true);
   });
@@ -30,6 +31,14 @@ onNet('dg-blackout:client:UseExplosive', async () => {
     return;
   }
   plantExplosive(currentStation);
+});
+
+Events.onNet('dg-blackout:server:getPowerStations', (data: PowerstationData[]) => {
+  powerStations = data;
+  powerStations.forEach((zone, id) => {
+    const options = { ...zone.options, data: { id: id } };
+    PolyZone.addBoxZone('blackout_powerstation', zone.center, zone.width, zone.length, options, true);
+  });
 });
 
 const plantExplosive = async (stationId: number) => {
@@ -60,7 +69,7 @@ const plantExplosive = async (stationId: number) => {
 
   placeExplosiveObject();
   await Util.Delay(10000);
-  const coords = config.powerstations[stationId].center;
+  const coords = powerStations[stationId].center;
   AddExplosion(coords.x, coords.y, coords.z, 82, 1.0, true, false, 1.0);
   removeExplosiveObject();
 

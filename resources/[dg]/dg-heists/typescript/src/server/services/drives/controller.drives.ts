@@ -1,9 +1,14 @@
-import { Chat, Events, RPC } from '@dgx/server';
-import { DRIVE_DATA } from './constants.drives';
+import { Config, Events, RPC } from '@dgx/server';
 
 let activePickups: Record<number, Drives.Name> = {};
 
-RPC.register('heists:server:getLaptopShopEntries', (source: number): ContextMenuEntry[] => {
+let driveConfig: Drives.Config;
+setImmediate(async () => {
+  await Config.awaitConfigLoad();
+  driveConfig = Config.getConfigValue<Drives.Config>('heists.drives')
+})
+
+RPC.register('heists:server:getLaptopShopEntries', async (source: number): Promise<ContextMenuEntry[]> => {
   const Player = DGCore.Functions.GetPlayer(source);
   const menuData: ContextMenuEntry[] = [
     {
@@ -11,7 +16,7 @@ RPC.register('heists:server:getLaptopShopEntries', (source: number): ContextMenu
       icon: 'laptop',
     },
   ];
-  Object.entries(DRIVE_DATA).forEach(([driveName, { text }]) => {
+  Object.entries(driveConfig ?? []).forEach(([driveName, { text }]) => {
     if (!Player.Functions.GetItemByName(driveName)) return;
     menuData.push({
       title: text,
@@ -22,10 +27,9 @@ RPC.register('heists:server:getLaptopShopEntries', (source: number): ContextMenu
   return menuData;
 });
 
-// TODO: Crypto payment
 RPC.register('heists:server:buyLaptop', async (source: number, drive: Drives.Name) => {
   const Player = DGCore.Functions.GetPlayer(source);
-  const cryptoCost = DRIVE_DATA[drive].cost;
+  const cryptoCost = driveConfig[drive]?.cost ?? 100;
   const hasEnoughCrypto = (await global.exports['dg-financials'].cryptoGet(source, 'Manera')) >= cryptoCost;
   const hasItem = Player.Functions.GetItemByName(drive) ? true : false;
   if (!hasEnoughCrypto || !hasItem) return false;
@@ -37,11 +41,11 @@ RPC.register('heists:server:buyLaptop', async (source: number, drive: Drives.Nam
   return true;
 });
 
-Events.onNet('heists:server:pickupLaptop', (src: number) => {
+Events.onNet('heists:server:pickupLaptop', async (src: number) => {
   const Player = DGCore.Functions.GetPlayer(src);
   const citizenid = Player.PlayerData.citizenid;
   if (!activePickups[citizenid]) return;
-  const laptop = DRIVE_DATA[activePickups[citizenid]].laptop;
+  const laptop = driveConfig[activePickups[citizenid]]?.laptop ?? 'laptop_v1';
   activePickups[citizenid] = null;
   Player.Functions.AddItem(laptop, 1);
   emitNet('inventory:client:ItemBox', src, laptop, 'add');

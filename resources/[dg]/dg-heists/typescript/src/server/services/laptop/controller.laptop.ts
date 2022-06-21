@@ -1,5 +1,4 @@
-import { Events, Notifications, RPC, Util } from '@dgx/server';
-import { HACK_LOCATIONS, OPENING_DELAY } from './constants.laptops';
+import { Events, Notifications, RPC, Util, Config } from '@dgx/server';
 import fleecaStateManager from './../../modules/fleeca/classes/statemanager';
 import doorStateManager from './../../controllers/classes/doorstatemanager';
 
@@ -10,26 +9,32 @@ const heistStateManagers: Record<Laptop.Name, any> = {
   laptop_v5: null,
 };
 
-// TODO: Quality decrease on laptop use
-Object.keys(HACK_LOCATIONS).forEach(laptopName => {
-  DGCore.Functions.CreateUseableItem(laptopName, async (src: number, item: Item) => {
-    const laptopName = item.name as Laptop.Name;
-    const Player = DGCore.Functions.GetPlayer(src);
-    if (!Player.Functions.GetItemByName(laptopName)) return;
+let laptopConfig: Laptop.Config;
+setImmediate(async () => {
+  await Config.awaitConfigLoad();
+  laptopConfig = Config.getConfigValue<Laptop.Config>('heists.laptops');
 
-    const plyCoords = Util.getPlyCoords(src);
-    const hackLocation = HACK_LOCATIONS[laptopName].find(coord => plyCoords.distance(coord) <= 1.0);
-    if (!hackLocation) return;
+  // TODO: Quality decrease on laptop use
+  Object.keys(laptopConfig.interactCoords).forEach(laptopName => {
+    DGCore.Functions.CreateUseableItem(laptopName, async (src: number, item: Item) => {
+      const laptopName = item.name as Laptop.Name;
+      const Player = DGCore.Functions.GetPlayer(src);
+      if (!Player.Functions.GetItemByName(laptopName)) return;
 
-    const heistId = RPC.execute<Heist.Id>('heists:client:getCurrentLocation', src);
-    if (!heistId) return;
+      const plyCoords = Util.getPlyCoords(src);
+      const hackLocation = laptopConfig.interactCoords[laptopName].find(coord => plyCoords.distance(coord) <= 1.0);
+      if (!hackLocation) return;
 
-    if (!heistStateManagers[laptopName]?.canHack(heistId)) {
-      Notifications.add(src, 'Je kan dit momenteel niet hacken', 'error');
-      return;
-    }
+      const heistId = RPC.execute<Heist.Id>('heists:client:getCurrentLocation', src);
+      if (!heistId) return;
 
-    Events.emitNet('heists:client:startHack', src, laptopName, hackLocation);
+      if (!heistStateManagers[laptopName]?.canHack(heistId)) {
+        Notifications.add(src, 'Je kan dit momenteel niet hacken', 'error');
+        return;
+      }
+
+      Events.emitNet('heists:client:startHack', src, laptopName, hackLocation);
+    });
   });
 });
 
@@ -40,7 +45,7 @@ RPC.register('heists:server:finishHack', (src: number, laptopName: Laptop.Name, 
 
   setTimeout(() => {
     doorStateManager.setDoorState(heistId, true);
-  }, OPENING_DELAY[heistId]);
+  }, (laptopConfig.hackDelay ?? 5) * 60 * 1000);
 
   heistStateManagers[laptopName]?.finishedHack(heistId);
 });

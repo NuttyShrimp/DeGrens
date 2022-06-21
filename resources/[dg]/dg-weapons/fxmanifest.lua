@@ -3,7 +3,6 @@ game 'gta5'
 
 shared_scripts {
     '@dg-core/import.lua', 
-	'config.lua'
 }
 
 client_script {

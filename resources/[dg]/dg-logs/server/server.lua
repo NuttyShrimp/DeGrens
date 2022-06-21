@@ -1,44 +1,44 @@
+local config
+
+Citizen.CreateThread(function() 
+  while not exports['dg-config']:areConfigsReady() do
+    Wait(100)
+  end
+  config = exports['dg-config']:getModuleConfig('main')
+  setCorrectServer()
+end)
+
+RegisterNetEvent('dg-config:moduleLoaded', function (modId, modConfig)
+  if modId ~= 'main' then
+    return
+  end
+  config = modConfig
+  setCorrectServer()
+end)
+
+setCorrectServer = function()
+  if not config then return end
+  if not config.production then
+    config.logServer = config.devLogServer
+  end
+end
+
 createDiscordLog = function(name, title, color, message, tagEveryone)
-	if GetConvar('is_production', 'true') == 'false' then
-		return
-	end
-	local tag = tagEveryone ~= nil and tagEveryone or false
-	local webHook = Config.Webhooks[name] ~= nil and Config.Webhooks[name] or Config.Webhooks["default"]
-	local embedData = {
-		{
-			["title"] = title,
-			["color"] = Config.Colors[color] ~= nil and Config.Colors[color] or Config.Colors["default"],
-			["footer"] = {
-				["text"] = os.date("%c"),
-			},
-			["description"] = message,
-			["author"] = {
-				["name"] = 'DGCore Logs',
-				["icon_url"] = "https://cdn.discordapp.com/attachments/870094209783308299/870104723338973224/Logotype_-_Display_Picture_-_Stylized_-_Red.png",
-			},
-		}
-	}
-	PerformHttpRequest(webHook, function(err, text, headers)
-	end, 'POST', json.encode({ username = "QB Logs", embeds = embedData }), { ['Content-Type'] = 'application/json' })
-	Citizen.Wait(100)
-	if tag then
-		PerformHttpRequest(webHook, function(err, text, headers)
-		end, 'POST', json.encode({ username = "QB Logs", content = "@everyone" }), { ['Content-Type'] = 'application/json' })
-	end
+	return
 end
 
 createGraylogEntry = function(logtype, data, message, isImportant)
-	if GetConvar('is_production', 'true') == 'false' and GetConvar("overwrite_logs", 'false') == 'false' then
-		return
-	end
 	Citizen.CreateThread(function()
+    while not exports['dg-config']:areConfigsReady() do
+      Wait(100)
+    end
 		data = data ~= nil and data or {}
 		if isImportant then
 			data.important = true
 		end
 		data = json.encode(data, { indent = true })
 
-		PerformHttpRequest(Config.GrayLog, function(err, text, header)
+		PerformHttpRequest(config.logServer, function(err, text, header)
 		end, 'POST', json.encode({
 			version = "2.1",
 			host = "dg2.degrensrp.be",
