@@ -1,9 +1,8 @@
+import { Config } from '@dgx/server';
 import { RewriteFrames } from '@sentry/integrations';
 import * as Sentry from '@sentry/node';
 import winston from 'winston';
 import winstonSentry from 'winston-sentry-log';
-
-import { serverConfig } from '../config';
 
 import { name, sentry_dsn, version } from './../../package.json';
 import { getCurrentEnv } from './sv_util';
@@ -30,7 +29,7 @@ Sentry.init({
 });
 
 export const mainLogger = winston.createLogger({
-  level: serverConfig.logger.level as string,
+  level: Config.getConfigValue('main.loglevel'),
   transports: [
     new winston.transports.Console({
       format: winston.format.combine(

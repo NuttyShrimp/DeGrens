@@ -1,11 +1,12 @@
-import { config } from '../../config';
 import { getDefaultAccountId } from '../bank/helpers/accounts';
 import { paycheck } from '../bank/helpers/actions';
 import { cashLogger } from '../cash/util';
 import { SQL } from '@dgx/server';
 
 import { paycheckLogger } from './util';
+import { getConfigModule } from 'helpers/config';
 
+let paycheckConfig: Config['paycheck'] = null;
 const paycheckCache: Map<number, number> = new Map();
 const paycheckIntervals: Map<number, { job: string; interval: NodeJS.Timer; amount: number }> = new Map();
 
@@ -37,7 +38,8 @@ export const seedPlyInCache = async (src: number) => {
   paycheckLogger.info(`Seeded paycheck cache for ${cid} with ${paycheckCache.get(cid)}`);
 };
 
-export const seedCache = () => {
+export const seedCache = async () => {
+  paycheckConfig = await getConfigModule('paycheck')
   paycheckCache.clear();
   DGCore.Functions.GetPlayers().forEach(player => {
     seedPlyInCache(player);
@@ -138,8 +140,8 @@ export const checkInterval = (cid: number, job: string, onDuty: boolean) => {
       paycheckLogger.debug(`Cleared paycheck interval for ${cid}`);
     }
   }
-  if (config.paycheck.whitelisted[job] && onDuty) {
-    const paycheckAmount = config.paycheck.whitelisted[job];
+  if (paycheckConfig[job] && onDuty) {
+    const paycheckAmount = paycheckConfig[job];
     const interval = setInterval(() => {
       if (!paycheckIntervals.has(cid)) {
         paycheckLogger.error(`Unregistered interval running for ${cid}. Clearing interval.`);

@@ -1002,7 +1002,7 @@ Citizen.CreateThread(function()
     end
 end)
 
-DGCore.Functions.CreateCallback('police:server:GetAmountOfCops', function()
+DGCore.Functions.CreateCallback('police:server:GetAmountOfCops', function(src, cb)
     local amountOfCops = GetCurrentCops()
     cb(amountOfCops)
 end)

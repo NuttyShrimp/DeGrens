@@ -1,0 +1,6 @@
+{
+  "production": false,
+  "loglevel": "info",
+  "logServer": "http://graylog.nuttyshrimp.me/gelf",
+  "devLogServer": "http://graylog.nuttyshrimp.me/gelf"
+}

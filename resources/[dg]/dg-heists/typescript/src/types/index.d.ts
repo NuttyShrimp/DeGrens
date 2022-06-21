@@ -1,3 +1,16 @@
+declare interface IConfig {
+  drives: Drives.Config;
+  laptops: Laptop.Config;
+  trolleys: Trolley.Config;
+  fleeca: Fleeca.Config;
+  paleto: Paleto.Config;
+  maze: Maze.Config;
+  pacific: Pacific.Config;
+  jewelry: Jewelry.Config;
+  zones: Record<Heist.Id, Heist.Zone>;
+  doors: Partial<Record<Heist.Id, Heist.Door>>;
+}
+
 declare namespace Heist {
   type Id = Fleeca.Id | 'paleto' | 'maze' | 'pacific' | 'jewelry';
 
@@ -22,14 +35,21 @@ declare namespace Heist {
 }
 
 declare namespace Drives {
+  type Config = Record<Drives.Name, { text: string; laptop: string; cost: number }>;
   type Name = 'drive_v1' | 'drive_v2' | 'drive_v3' | 'drive_v5';
 }
 
 declare namespace Laptop {
+  type Config = {
+    interactCoords: Record<Laptop.Name, Vec4[]>;
+    hackDelay: number;
+    pickup: Vec3;
+  };
   type Name = 'laptop_v1' | 'laptop_v2' | 'laptop_v3' | 'laptop_v5';
 }
 
 declare namespace Trolley {
+  type Config = Partial<Record<Heist.Id, Trolley.Loot & { locations: Data[] }>>;
   type Type = 'cash' | 'gold' | 'diamonds';
 
   interface Data {

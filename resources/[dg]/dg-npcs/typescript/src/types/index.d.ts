@@ -1,6 +1,6 @@
 interface NpcData {
   id: string;
-  model: number;
+  model: string | number;
   position: Vec3;
   heading: number;
   distance: number;

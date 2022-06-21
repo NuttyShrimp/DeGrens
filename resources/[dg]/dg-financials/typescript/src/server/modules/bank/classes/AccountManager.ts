@@ -1,11 +1,11 @@
 import winston from 'winston';
 import { SQL } from '@dgx/server';
 
-import { config } from '../../../config';
 import { checkPlayerAccounts } from '../controllers/accounts';
 import { bankLogger, sortAccounts } from '../utils';
 
 import { Account } from './Account';
+import { getConfig, getConfigModule } from 'helpers/config';
 
 export class AccountManager {
   private static _instance: AccountManager;
@@ -17,13 +17,19 @@ export class AccountManager {
     return AccountManager._instance;
   }
 
+  private config: Config["accounts"];
   private accounts: Account[] = [];
   private logger: winston.Logger;
 
   constructor() {
+    this.config = null;
     this.logger = bankLogger.child({ module: 'AccountManager' });
     // fetch accounts from database
     this.logger = bankLogger.child({ module: 'AccountManager' });
+  }
+
+  public setConfig(config: Config['accounts']){
+    this.config = config;
     this.getAccountsDB().then(() => {
       this.seedAccounts();
       this.logger.info(`AccountManager: loaded ${this.accounts.length} accounts from database`);
@@ -101,8 +107,8 @@ export class AccountManager {
   }
 
   private async seedAccounts(): Promise<void> {
-    for (const a of config.accounts.toSeed) {
-      const i = config.accounts.toSeed.indexOf(a);
+    for (const a of this.config.toSeed) {
+      const i = this.config.toSeed.indexOf(a);
       // Check if account with id exists
       if (this.accounts.find(acc => acc.getAccountId() === `BE${i + 1}`)) {
         continue;
@@ -166,7 +172,7 @@ export class AccountManager {
       if (isTrans) {
         return true;
       }
-      const seedAcc = config.accounts.toSeed.find(acc => acc.name === account.getName());
+      const seedAcc = this.config.toSeed.find(acc => acc.name === account.getName());
       if (!seedAcc) {
         return true;
       }

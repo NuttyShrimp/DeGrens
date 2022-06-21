@@ -1,25 +1,26 @@
-import { config } from '../../../config';
 import { getDefaultAccount, getDefaultAccountId } from '../../bank/helpers/accounts';
 import { transfer } from '../../bank/helpers/actions';
 import { debtLogger, scheduleDebt } from '../helpers/debts';
-import { Notifications, SQL } from '@dgx/server';
+import { Notifications, SQL, Util } from '@dgx/server';
+import { getConfigModule } from 'helpers/config';
 
-class DebtManager {
-  private static _instance: DebtManager;
-
-  public static getInstance(): DebtManager {
-    if (!DebtManager._instance) {
-      DebtManager._instance = new DebtManager();
-    }
-    return DebtManager._instance;
-  }
-
+class DebtManager extends Util.Singleton<DebtManager>() {
   private debts: Debts.Debt[];
+  private config: Config['debts'];
 
   constructor() {
+    super();
     this.debts = [];
     this.seedDebts();
   }
+
+  public setConfig(config: Config['debts']) {
+    this.config = config;
+  }
+
+  public getConfig() {
+    return this.config
+  };
 
   private async seedDebts() {
     const query = `
@@ -165,7 +166,7 @@ class DebtManager {
       );
       return;
     }
-    const newDebt = debt.debt * (1 + config.debts.fineInterest / 100);
+    const newDebt = debt.debt * (1 + this.config.fineInterest / 100);
     const success = await account.transfer(
       debt.target_account,
       debt.given_by ?? debt.cid,

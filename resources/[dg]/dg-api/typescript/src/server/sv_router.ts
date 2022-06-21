@@ -1,16 +1,17 @@
-import { Util } from '@dgx/server/classes';
+import { Util, Config } from '@dgx/server';
 import { tokenManager } from 'classes/tokenManager';
 import { mainLogger } from 'sv_logger';
 import { handleRoute } from 'sv_routes';
 import { banManager } from './classes/banManager';
-import { serverConfig } from '../config';
+
+const apiConfig = Config.getModuleConfig('api')
 
 SetHttpHandler((req: any, res: any) => {
   req.path = req.path.slice(1);
   // Preflight check
   if (req.method === 'OPTIONS')
     return doRequestResponse(res, '', 200, {
-      'Access-Control-Allow-Origin': serverConfig.allowDomains,
+      'Access-Control-Allow-Origin': apiConfig.allowedDomains,
       'Access-Control-Allow-Methods': 'GET, POST, OPTIONS, PUT, DELETE',
       'Access-Control-Allow-Headers': 'Content-Type, Authorization',
     });
@@ -95,7 +96,7 @@ const checkBan = (req: any, res: any): boolean => {
 const checkDomain = (req: any, res: any): boolean => {
   // Remove port from domain
   const domain = req.headers.host.replace(/:\d+$/, '');
-  if (!serverConfig.allowDomains.includes(domain)) {
+  if (!apiConfig.allowedDomains.includes(domain)) {
     doRequestResponse(res, { error: 'Your domain is not allowed to access this API' }, 403);
     return false;
   }

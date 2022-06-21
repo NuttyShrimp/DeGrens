@@ -66,8 +66,8 @@ exports('hasWeedFertilizer', function()
 end) 
 
 exports("takeWeedFertilizer", function()
-    local playerCount = DGCore.Functions.TriggerCallback("dg-labs:server:GetPlayerCount")
-    if playerCount < Config.Weed.RequiredPeople then
+    local enoughPlayers = DGCore.Functions.TriggerCallback("dg-labs:server:enoughPlayers", "weed")
+    if not enoughPlayers then
         exports['dg-ui']:addNotification("De voeding is momenteel op...", "error")
         return
     end

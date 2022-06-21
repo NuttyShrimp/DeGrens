@@ -1,8 +1,7 @@
-import { STORE_DATA } from 'config/stores';
-import { PolyZone } from '@dgx/client';
+import { PolyZone, RPC } from '@dgx/client';
 
-export const buildRegisterZone = (storeId: Store.Id) => {
-  const zone = STORE_DATA[storeId].registerzone;
+export const buildRegisterZone = async (storeId: Store.Id) => {
+  const zone = await RPC.execute<IBoxZone>('storerobbery:server:getRegisterZone', storeId);
   PolyZone.addBoxZone('store_registers', zone.center, zone.length, zone.width, { ...zone.options, data: {} }, true);
 };
 

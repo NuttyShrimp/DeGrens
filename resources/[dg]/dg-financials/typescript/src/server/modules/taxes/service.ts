@@ -1,11 +1,13 @@
-import { config } from '../../config';
 import { SQL } from '@dgx/server';
 
 import { taxLogger } from './util';
+import { getConfigModule } from 'helpers/config';
 
 const taxes: Map<number, Taxes.Tax> = new Map();
+let taxConfig: Config['taxes'] = null;
 
 export const seedTaxes = async () => {
+  taxConfig = await getConfigModule('taxes')
   const query = `
 		SELECT tax_id, tax_name, tax_rate
 		FROM taxes
@@ -17,8 +19,8 @@ export const seedTaxes = async () => {
       taxes.set(row.tax_id, { category: row.tax_name, rate: row.tax_rate / 100 });
     });
   }
-  for (let i = 0; i < config.taxes.cats.length; i++) {
-    const tax = config.taxes.cats[i];
+  for (let i = 0; i < taxConfig.cats.length; i++) {
+    const tax = taxConfig.cats[i];
     const taxId = i + 1;
     let isTaxRegistered = false;
     taxes.forEach(t => {

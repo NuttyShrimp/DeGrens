@@ -1,3 +1,5 @@
+local activeMethLabData = {}
+
 DGCore.Functions.CreateUseableItem("meth_brick", function(source, item)
     local Player = DGCore.Functions.GetPlayer(source)
     if not Player.Functions.GetItemByName(item.name) then return end
@@ -8,7 +10,7 @@ DGCore.Functions.CreateUseableItem("meth_brick", function(source, item)
         return
     end
     
-    if os.time() >= item.createtime + Config.Meth.DryTime then
+    if os.time() >= item.createtime + (getConfig().meth.dryTime * 60 * 60) then
         local amount = math.floor((3 * item.info.purity^2) / 100) -- calculate amount
         print(("Amount: %s, Purity: %s"):format(amount, item.info.purity))
 
@@ -44,9 +46,10 @@ local generateRecipe = function(seed)
 end
 
 local getRecipeQuality = function(labId)
-    local recipe = Config.Labs[labId].data.recipe
-    local settings = Config.Labs[labId].data.settings
+    local recipe = states[labId].recipe
+    local settings = states[labId].settings
     local quality = 100
+
 
     for i = 1, 5 do
         for k, v in pairs(recipe[i]) do
@@ -65,8 +68,8 @@ end
 
 local getAllStationsFilled = function(labId)
     local retval = true
-    for _, status in pairs(Config.Labs[labId].data.status) do
-        if status < Config.Meth.FillAmount then
+    for _, status in pairs(states[labId].status) do
+        if status < getConfig().meth.fillAmount then
             retval = false
             break
         end
@@ -77,23 +80,24 @@ end
 -- Callbacks
 DGCore.Functions.CreateCallback("dg-labs:server:meth:GetStartState", function(source, cb, labId)
     if not labId or getLabTypeFromId(labId) ~= "meth" then return end
-    cb(Config.Labs[labId].data.started)
+    cb(states[labId].started)
 end)
 
 DGCore.Functions.CreateCallback("dg-labs:server:meth:GetSettings", function(source, cb, labId, settingsId)
     if not labId or getLabTypeFromId(labId) ~= "meth" then return end
-    cb(Config.Labs[labId].data.settings[settingsId])
+    cb(states[labId].settings[settingsId])
 end)
 
 DGCore.Functions.CreateCallback("dg-labs:server:meth:GetStatus", function(source, cb, labId, statusId)
     if not labId or getLabTypeFromId(labId) ~= "meth" then return end
-    cb(Config.Labs[labId].data.status[statusId])
+    local filled = states[labId].status[statusId] >= getConfig().meth.fillAmount
+    cb(filled)
 end)
 
 DGCore.Functions.CreateCallback("dg-labs:server:meth:CanCollect", function(source, cb, labId)
     if not labId or getLabTypeFromId(labId) ~= "meth" then return end
 
-    if not Config.Labs[labId].data.started then
+    if not states[labId].started then
         TriggerClientEvent("dg-ui:client:addNotification", source, "Er staat nog niks aan...", "error")
         cb(false)
         return
@@ -112,45 +116,39 @@ end)
 RegisterServerEvent("dg-labs:server:meth:SetStartState", function(labId)
     if not labId or getLabTypeFromId(labId) ~= "meth" then return end
 
-    if Config.Labs[labId].data.started then 
+    if states[labId].started then 
         TriggerClientEvent("dg-ui:client:addNotification", source, "Dit staat al aan...", "error")
         return
     end
 
-    Config.Labs[labId].data.started = true
+    states[labId].started = true
     local seed = DGCore.Functions.GetPlayer(source).PlayerData.citizenid
-    Config.Labs[labId].data.recipe = generateRecipe(seed)
-    print(Config.Labs[labId].data.recipe[1].power, Config.Labs[labId].data.recipe[1].amount)
+    states[labId].recipe = generateRecipe(seed)
 end)
 
 RegisterServerEvent("dg-labs:server:meth:SetSettings", function(labId, settingsId, data)
     if not labId or getLabTypeFromId(labId) ~= "meth" then return end
 
-    Config.Labs[labId].data.settings[settingsId] = data
+    states[labId].settings[settingsId] = data
 end)
 
 RegisterServerEvent("dg-labs:server:meth:IncreaseStatus", function(labId, statusId)
     if not labId or getLabTypeFromId(labId) ~= "meth" then return end
-
-    if Config.Labs[labId].data.status[statusId] >= Config.Meth.FillAmount then 
-        TriggerClientEvent("dg-ui:client:addNotification", source, "Dit zit al vol...", "error")
-        return
-    end
-
-    Config.Labs[labId].data.status[statusId] = Config.Labs[labId].data.status[statusId] + 1
+    states[labId].status[statusId] = states[labId].status[statusId] + 1
 end)
 
 RegisterServerEvent("dg-labs:server:meth:Collect", function(labId)
     if not labId or getLabTypeFromId(labId) ~= "meth" then return end -- TODO: Possible log/flag on triggering this event without providing correct labId to prevent injector
 
-    if not Config.Labs[labId].data.started or not getAllStationsFilled(labId) then return end
+    if not states[labId].started or not getAllStationsFilled(labId) then return end
 
     local Player = DGCore.Functions.GetPlayer(source)
     local quality = getRecipeQuality(labId)
     local info = {purity = quality}
     Player.Functions.AddItem("meth_brick", 1, nil, info)
 
-    Citizen.SetTimeout(Config.Meth.Timeout, function()
-        Config.Labs[labId].data = json.decode(json.encode(Config.Types["meth"].defaultData))
+    local resetTime = getConfig().meth.resetTime * 60 * 1000
+    Citizen.SetTimeout(resetTime, function()
+        states[labId] = json.decode(json.encode(getConfig().types["meth"].defaultState))
     end)
 end)

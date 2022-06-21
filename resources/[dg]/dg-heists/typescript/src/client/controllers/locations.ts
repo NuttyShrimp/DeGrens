@@ -1,23 +1,21 @@
 import { PolyZone, RPC } from '@dgx/client';
-import heistData from '../config/heistdata';
 import { setDoorState } from './doors';
 
 let currentLocation: Heist.Id;
 
-export const getCurrentLocation = (): Heist.Id => {
-  return currentLocation;
-};
+export const getCurrentLocation = () => currentLocation;
 
 // build zones on start
-setImmediate(() => {
-  Object.entries(heistData).forEach(([id, data]) => {
+setImmediate(async () => {
+  const zones = await RPC.execute<Record<Heist.Id, Heist.Zone>>('heists:server:getHeistZones');
+  Object.entries(zones).forEach(([id, data]) => {
     const options = {
-      ...data.zone.options,
+      ...data.options,
       data: {
         id: id,
       },
     };
-    PolyZone.addPolyZone('heist_location', data.zone.vectors, options, true);
+    PolyZone.addPolyZone('heist_location', data.vectors, options, true);
   });
 });
 

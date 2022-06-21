@@ -1,3 +1,16 @@
+interface IConfig {
+  register: {
+    refillTime: number;
+    rollAmount: [number, number];
+  };
+  safe: {
+    crackDelay: number;
+    refillTime: number;
+    specialItemChance: number;
+  };
+  stores: Record<Store.Id, Store.Data>;
+}
+
 declare namespace Store {
   interface Data {
     registerzone: IBoxZone;

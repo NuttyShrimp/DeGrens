@@ -81,19 +81,25 @@ generateToken = function()
 	return token
 end
 
-RegisterNetEvent("dg-doorlock:server:changeDoorLockState", function(doorId, doorState)
-    doors[doorId].locked = doorState
-    TriggerClientEvent("dg-doorlock:client:changeDoorLockState", -1, doorId, doorState)
+setDoorState = function(id, state)
+    doors[id].locked = state
+    TriggerClientEvent("dg-doorlock:client:changeDoorLockState", -1, id, state)
+end
+
+changeDoorLockState = function(doorId, doorState)
+    while initializing do Citizen.Wait(100) end
+    setDoorState(doorId, doorState)
 
 	-- if it has linked doors also change those
-    if doors[doorId].linkedDoor then
-        for id, door in pairs(doors) do
-            if door.linkedDoor == doors[doorId].linkedDoor and doorId ~= id then
-                doors[id].locked = doorState
-                TriggerClientEvent("dg-doorlock:client:changeDoorLockState", -1, id, doorState)
-            end
+    if not doors[doorId].linkedDoor then return end
+    for id, door in pairs(doors) do
+        if door.linkedDoor == doors[doorId].linkedDoor and doorId ~= id then
+            setDoorState(id, doorState)
         end
     end
-end)
+end
+
+RegisterNetEvent("dg-doorlock:server:changeDoorLockState", changeDoorLockState)
+exports('changeDoorLockState', changeDoorLockState)
 
 

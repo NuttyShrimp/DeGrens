@@ -72,7 +72,7 @@ RegisterNetEvent('weapons:client:UseAmmo', function(pItemData)
     end
 
     local ammoType = GetPedAmmoTypeFromWeapon_2(ped, weapon) -- _2 always gives basetype even in the rare case of using for example explosive ammo for some reason
-    if ammoType ~= Config.Ammo[pItemData.name].ammoType then 
+    if ammoType ~= GetHashKey(ammoConfig[pItemData.name].ammoType) then 
         exports['dg-ui']:addNotification('Dit past niet in je wapen...', 'error')
         return
     end
@@ -83,7 +83,7 @@ RegisterNetEvent('weapons:client:UseAmmo', function(pItemData)
         return
     end
 
-    local wasCancelled, _ = exports['dg-misc']:Taskbar("gun",'Wapen laden...',  Config.ReloadTime, {
+    local wasCancelled, _ = exports['dg-misc']:Taskbar("gun",'Wapen laden...',  7000, {
         canCancel = true,
         cancelOnDeath = true,
         controlDisables = {
@@ -110,7 +110,7 @@ RegisterNetEvent('weapons:client:UseAmmo', function(pItemData)
     end
 
     local amount = DGCore.Functions.TriggerCallback('weapons:server:GetAmmo', currentWeaponData)
-    amount = amount + Config.Ammo[pItemData.name].amount
+    amount = amount + ammoConfig[pItemData.name].amount
     if amount > 250 then amount = 250 end
     SetPedAmmo(ped, weapon, amount)
     TriggerServerEvent('weapons:server:SetAmmo', currentWeaponData, amount)

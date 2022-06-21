@@ -1,3 +1,4 @@
+import { Config } from '@dgx/server';
 import { RewriteFrames } from '@sentry/integrations';
 import * as Sentry from '@sentry/node';
 import winston from 'winston';
@@ -34,7 +35,7 @@ Sentry.init({
 });
 
 export const mainLogger = winston.createLogger({
-  level: config.logger.level as string,
+  level: Config.getConfigValue('main.loglevel'),
   transports: [
     new winston.transports.Console({
       format: winston.format.combine(

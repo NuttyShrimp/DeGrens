@@ -1,6 +1,7 @@
-import { RPC } from '@dgx/server';
+import { Config, Events, RPC } from '@dgx/server';
 import powerstationManager from '../classes/PowerstationManager';
-import { clientConfig as config } from '../../config';
+
+let powerStations: PowerstationData[];
 
 DGCore.Functions.CreateUseableItem('big_explosive', async (source: number, item: Item) => {
   const Player = DGCore.Functions.GetPlayer(source);
@@ -8,9 +9,11 @@ DGCore.Functions.CreateUseableItem('big_explosive', async (source: number, item:
   emitNet('dg-blackout:client:UseExplosive', source);
 });
 
-setImmediate(() => {
-  const amountOfStations = config.powerstations.length;
-  powerstationManager.setupStations(amountOfStations);
+setImmediate(async () => {
+  await Config.awaitConfigLoad();
+  powerStations = Config.getConfigValue('blackout.powerstations');
+  powerstationManager.setupStations(powerStations.length);
+  Events.emitNet('dg-blackout:server:getPowerStations', -1, powerStations);
 });
 
 RPC.register('dg-blackout:server:IsStationHit', (_source: number, stationId: number) => {
@@ -19,4 +22,8 @@ RPC.register('dg-blackout:server:IsStationHit', (_source: number, stationId: num
 
 onNet('dg-blackout:server:SetStationHit', (stationId: number) => {
   powerstationManager.setStationHit(stationId);
+});
+
+on('dg-auth:server:authenticated', (src: number) => {
+  Events.emitNet('dg-blackout:server:getPowerStations', src, powerStations);
 });

@@ -1,0 +1,25 @@
+{
+  "growTime": 12,
+  "cut": {
+    "timeout": 24,
+    "breakChance": 10
+  },
+  "dry": {
+    "timeout": 72,
+    "amount": { "min": 10, "max": 20 }
+  },
+  "food": {
+    "decayTime": 20,
+    "amount": { "min": 40, "max": 60 }
+  },
+  "seeds": {
+    "M": "weed_seed_male",
+    "F": "weed_seed_female"
+  },
+  "stages": [
+    "bkr_prop_weed_01_small_01b",
+    "bkr_prop_weed_med_01b",
+    "bkr_prop_weed_lrg_01a",
+    "bkr_prop_weed_lrg_01b"
+  ]
+}

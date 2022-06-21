@@ -1,2 +1,2 @@
 import './modules';
-import './controllers';
+import './controllers/locations';
