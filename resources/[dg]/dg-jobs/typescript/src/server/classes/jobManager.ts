@@ -2,6 +2,7 @@ import { Events, RPC, Util } from '@dgx/server';
 import { Export, ExportRegister, Callback, CallbackRegister, RPCRegister, RPCEvent } from '@dgx/server/decorators';
 import { mainLogger } from 'sv_logger';
 import winston from 'winston';
+import groupManager from '../modules/groups/classes/GroupManager';
 
 @ExportRegister()
 @CallbackRegister()
@@ -20,20 +21,30 @@ class JobManager {
    * Map of jobs on job name
    */
   private jobs: Map<string, Jobs.Job>;
-  /**
-   *
-   */
+  private jobsToResource: Map<string, string>;
   private jobsWith6: number;
   private logger: winston.Logger;
 
   constructor() {
     this.jobs = new Map();
+    this.jobsToResource = new Map();
     this.logger = mainLogger.child({ module: 'JobManager' });
     if (JobManager.instance) {
       this.logger.error('Mulitple jobmanager created');
       throw new Error(`You can't create multiple instances of this class`);
     }
     this.jobsWith6 = 0;
+    on('onResourceStop', (resource: string) => {
+      const jobs = [...this.jobsToResource.entries()].filter(([, res]) => res === resource);
+      if (jobs.length === 0) return;
+      jobs.forEach(([job, _]) => {
+        groupManager.getGroups().forEach(g => {
+          if (g.getCurrentJob() === job) {
+            g.setActiveJob(null);
+          }
+        });
+      });
+    });
   }
 
   private genJobPayoutLvl() {
@@ -78,14 +89,19 @@ class JobManager {
   }
 
   @RPCEvent('dg-jobs:server:jobs:get')
-  public getJobsForClients() {
-    return Array.from(this.jobs.values()).map(j => ({
-      name: j.name,
-      title: j.title,
-      level: j.payoutLevel,
-      legal: j.legal,
-      icon: j.icon,
-    }));
+  public getJobsForClients(src: number) {
+    const Player = DGCore.Functions.GetPlayer(src);
+    if (!Player) return [];
+    const hasVPN = Player.Functions.GetItemByName('vpn');
+    return Array.from(this.jobs.values())
+      .filter(j => j.legal || hasVPN)
+      .map(j => ({
+        name: j.name,
+        title: j.title,
+        level: j.payoutLevel,
+        legal: j.legal,
+        icon: j.icon,
+      }));
   }
 
   @RPCEvent('dg-jobs:server:jobs:waypoint')
@@ -113,7 +129,11 @@ class JobManager {
       return null;
     }
     const job = this.jobs.get(jobName);
-    return job.payout.min * (job.payout.diff * job.payoutLevel) * (1 - (job.payoutLevel * (groupSize - 1)) / 100);
+    return (
+      job.payout.min *
+      (((job.payout.max - job.payout.min) / 6) * job.payoutLevel) *
+      (1 - (job.payoutLevel * (groupSize - 1)) / 100)
+    );
   }
 
   @Export('getJobPayoutLevel')
@@ -136,6 +156,7 @@ class JobManager {
       name,
       payoutLevel: this.genJobPayoutLvl(),
     });
+    this.jobsToResource.set(name, GetInvokingResource());
   }
 }
 

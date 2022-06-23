@@ -337,5 +337,26 @@
       "command": "yarn watch",
       "cwd": "${workspaceFolder}/resources/[dg]/dg-storerobbery/typescript"
     },
+    {
+      "type": "node-terminal",
+      "name": "houserobbery:build prod",
+      "request": "launch",
+      "command": "yarn run build",
+      "cwd": "${workspaceFolder}/resources/[dg]/dg-houserobbery/typescript"
+    },
+    {
+      "type": "node-terminal",
+      "name": "houserobbery:build dev",
+      "request": "launch",
+      "command": "yarn run build:dev",
+      "cwd": "${workspaceFolder}/resources/[dg]/dg-houserobbery/typescript"
+    },
+    {
+      "type": "node-terminal",
+      "name": "houserobbery:watch",
+      "request": "launch",
+      "command": "yarn run watch",
+      "cwd": "${workspaceFolder}/resources/[dg]/dg-houserobbery/typescript"
+    },
   ]
 }

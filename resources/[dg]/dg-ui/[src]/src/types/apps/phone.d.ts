@@ -309,6 +309,7 @@ declare namespace Phone {
       name: string;
       size: number;
       limit: number;
+      idle: boolean;
     }
     interface Member {
       name: string;

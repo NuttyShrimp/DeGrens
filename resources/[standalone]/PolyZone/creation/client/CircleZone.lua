@@ -46,6 +46,10 @@ function circleStart(name, radius, useZ)
 end
 
 function circleFinish()
+  houseOffset = exports['dg-build']:currentBuildingVector()
+  if houseOffset ~= nil then
+    houseOffset = vector3(houseOffset.x, houseOffset.y, houseOffset.z)
+  end
   TriggerServerEvent("polyzone:printCircle",
-    {name=createdZone.name, center=createdZone.center, radius=createdZone.radius, useZ=createdZone.useZ})
+    {name=createdZone.name, center=createdZone.center, radius=createdZone.radius, useZ=createdZone.useZ, houseOffset=houseOffset})
 end

@@ -58,11 +58,13 @@ DGCore.Functions.CreateCallback('dg-chars:server:spawn', function(src, cb, idx)
 		SetEntityCoords(ped, pos)
 		SetEntityHeading(ped, pos.w)
 	end
+  exports['dg-lib']:setInstance(src, 0)
 	if spawn.spawnType == 'world' then
 		setPosition(spawn.position)
 		cb({
 			resetPed = true,
 			resetInside = true,
+      fade = true,
 		})
 	elseif spawn.spawnType == 'house' then
 		cb({
@@ -76,7 +78,6 @@ DGCore.Functions.CreateCallback('dg-chars:server:spawn', function(src, cb, idx)
 		})
 		exports['dg-apartments']:enterApartment(src)
 	end
-  exports['dg-lib']:setInstance(src, 0)
 	cb({})
 	TriggerClientEvent('dg-chars:client:finishSpawn', src)
 end)

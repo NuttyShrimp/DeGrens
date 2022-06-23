@@ -322,20 +322,39 @@ class PolyTarget {
 }
 
 class Keys {
-  register(name: string, description: string, defaultKey = '') {
-    global.exports['dg-lib'].registerKeyMapping(name, description, `+${name}`, `-${name}`, defaultKey, true);
-  }
+  private listeners: Map<string, Map<number, (isDown: boolean) => void>>;
+  private handlerId: number;
 
-  onPress(keyName: string, handler: (isDown: boolean) => void) {
+  constructor() {
+    this.handlerId = 0;
+    this.listeners = new Map();
     on('dg-lib:keyEvent', (name: string, isDown: boolean) => {
-      if (name === keyName) {
-        handler(isDown);
+      if (this.listeners.has(name)) {
+        this.listeners.get(name).forEach(handler => {
+          handler(isDown);
+        });
       }
     });
   }
 
+  register(name: string, description: string, defaultKey = '') {
+    global.exports['dg-lib'].registerKeyMapping(name, description, `+${name}`, `-${name}`, defaultKey, true);
+  }
+
+  getBindedKey(keycommand: string, keycontroller = 2) {
+    return global.exports['dg-lib'].GetCurrentKeyMap(keycommand, keycontroller);
+  }
+
+  onPress(keyName: string, handler: (isDown: boolean) => void) {
+    if (!this.listeners.has(keyName)) {
+      this.listeners.set(keyName, new Map());
+    }
+    this.listeners.get(keyName).set(this.handlerId, handler);
+    return this.handlerId++;
+  }
+
   onPressUp(keyName: string, handler: () => void) {
-    this.onPress(keyName, (isDown: boolean) => {
+    return this.onPress(keyName, (isDown: boolean) => {
       if (!isDown) {
         handler();
       }
@@ -343,11 +362,16 @@ class Keys {
   }
 
   onPressDown(keyName: string, handler: () => void) {
-    this.onPress(keyName, (isDown: boolean) => {
+    return this.onPress(keyName, (isDown: boolean) => {
       if (isDown) {
         handler();
       }
     });
+  }
+
+  removeHandler(keyName: string, handlerId: number) {
+    if (!this.listeners.has(keyName)) return;
+    this.listeners.get(keyName).delete(handlerId);
   }
 }
 

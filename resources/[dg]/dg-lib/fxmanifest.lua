@@ -22,5 +22,5 @@ client_scripts {
 	"client/cl_*.lua",
 	"client/cl_*.js",
 	"client/**/*.lua",
-	"client/**/*.ytyp.xml"
+	"client/**/*.ymap.xml"
 }

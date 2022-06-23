@@ -75,6 +75,8 @@ RegisterNetEvent('dg-chars:server:newCharSpawn', function()
 end)
 
 DGCore.Functions.CreateCallback('dg-chars:server:setupClient', function(source, cb)
+  -- Give the client time to create all polyzones
+  Wait(1000)
   local instanceId = getFreeInstance()
   exports['dg-lib']:setInstance(source, instanceId)
   exports['dg-lib']:setInstanceName(instanceId, 'char-selection-'..GetPlayerName(source))

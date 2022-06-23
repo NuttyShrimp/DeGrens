@@ -1,4 +1,4 @@
-currentApartmentName = nil
+currentApartment = nil
 
 RegisterNetEvent('dg-apartments:client:doKeyAnim')
 AddEventHandler('dg-apartments:client:doKeyAnim', function()
@@ -113,5 +113,5 @@ exports('getEnterCoords', function()
 	return Config.Locations[1].enter.center
 end)
 exports('isInApartment', function()
-	return currentApartmentName ~= nil
+	return currentApartment ~= nil
 end)

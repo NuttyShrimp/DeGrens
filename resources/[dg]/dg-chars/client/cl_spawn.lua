@@ -47,14 +47,15 @@ Spawn.choose = function(idx)
 		SetEntityInvincible(ped, false) --client
 		SetEntityVisible(ped, true) --client
 		SetEntityCollision(ped, true) --client
-		SetEntityCoords(ped, pos) --server
 		DestroyAllCams(true) --client
 	end
 	if (result.resetInside) then
 		TriggerServerEvent('qb-houses:server:SetInsideMeta', 0, false)
 		TriggerServerEvent('dg-apartments:server:setInsideMeta', 0)
 	end
-	DoScreenFadeIn(250)
+  if result.fade then
+	  DoScreenFadeIn(250)
+  end
 	return
 end
 

@@ -255,10 +255,6 @@ DGCore.Commands.Add('names', 'Show player name overhead (Admin Only)', {}, false
 	TriggerClientEvent('qb-admin:client:toggleNames', source)
 end, 'admin')
 
-DGCore.Commands.Add('coords', 'Enable coord display for development stuff (Admin Only)', {}, false, function(source, args)
-	TriggerClientEvent('qb-admin:client:ToggleCoords', source)
-end, 'admin')
-
 DGCore.Commands.Add('admincar', 'Save Vehicle To Your Garage (Admin Only)', {}, false, function(source, args)
 	local ply = DGCore.Functions.GetPlayer(source)
 	TriggerClientEvent('qb-admin:client:SaveCar', source)

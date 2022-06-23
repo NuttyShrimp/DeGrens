@@ -64,6 +64,22 @@ class Util extends UtilShared {
   };
 }
 
+export class Interiors {
+  /**
+   * @return array with shell center and ids of created objects or if failed nothing
+   */
+  createRoom(planName: string, initPos: number | Vec3): Promise<[Vec3, number[]] | null> {
+    return global.exports['dg-build'].createRoom(planName, initPos);
+  }
+  exitRoom(overrideExitPos?: number[] | Vec3) {
+    global.exports['dg-build'].exitRoom(overrideExitPos);
+  }
+  isInBuilding(): boolean {
+    return global.exports['dg-build'].isInBuilding();
+  }
+}
+
 export default {
   Util: new Util(),
+  Interiors: new Interiors(),
 };

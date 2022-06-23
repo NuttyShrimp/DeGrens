@@ -106,6 +106,10 @@ function boxStart(name, heading, length, width, minHeight, maxHeight)
 end
 
 function boxFinish()
+  houseOffset = exports['dg-build']:currentBuildingVector()
+  if houseOffset ~= nil then
+    houseOffset = vector3(houseOffset.x, houseOffset.y, houseOffset.z)
+  end
   TriggerServerEvent("polyzone:printBox",
-    {name=createdZone.name, center=createdZone.center, length=createdZone.length, width=createdZone.width, heading=createdZone.offsetRot, minZ=createdZone.minZ, maxZ=createdZone.maxZ})
+    {name=createdZone.name, center=createdZone.center, length=createdZone.length, width=createdZone.width, heading=createdZone.offsetRot, minZ=createdZone.minZ, maxZ=createdZone.maxZ, houseOffset=houseOffset})
 end

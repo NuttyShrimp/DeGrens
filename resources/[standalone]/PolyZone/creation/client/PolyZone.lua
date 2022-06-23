@@ -24,8 +24,12 @@ function polyStart(name)
 end
 
 function polyFinish()
+  houseOffset = exports['dg-build']:currentBuildingVector()
+  if houseOffset ~= nil then
+    houseOffset = vector3(houseOffset.x, houseOffset.y, houseOffset.z)
+  end
   TriggerServerEvent("polyzone:printPoly",
-    {name=createdZone.name, points=createdZone.points, minZ=minZ, maxZ=maxZ})
+    {name=createdZone.name, points=createdZone.points, minZ=minZ, maxZ=maxZ, houseOffset=houseOffset})
 end
 
 RegisterNetEvent("polyzone:pzadd")

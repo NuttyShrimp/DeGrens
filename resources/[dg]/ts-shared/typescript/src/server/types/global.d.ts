@@ -13,6 +13,7 @@ declare global {
     Taskbar: typeof Classes.Taskbar;
     Notifications: typeof Classes.Notifications;
     API: typeof Classes.API;
+    Jobs: typeof Classes.Jobs;
     Config: typeof Classes.Config;
     Vector3: typeof Vector3Class;
     Vector4: typeof Vector4Class;
