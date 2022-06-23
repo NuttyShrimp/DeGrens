@@ -66,9 +66,9 @@ function setCallChannel(channel)
 	TriggerServerEvent('pma-voice:setPlayerCall', channel)
 	callChannel = channel
 	if GetConvarInt('voice_enableUi', 1) == 1 then
-		SendNUIMessage({
-			callInfo = channel
-		})
+-- 		SendNUIMessage({
+-- 			callInfo = channel
+-- 		})
 	end
 	createPhoneThread()
 end

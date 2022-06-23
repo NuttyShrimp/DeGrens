@@ -26,10 +26,10 @@ AddEventHandler('onClientResourceStart', function(resource)
 	end
 	Wait(1000)
 	if GetConvarInt('voice_enableUi', 1) == 1 then
-		SendNUIMessage({
-			voiceModes = json.encode(Cfg.voiceModes),
-			voiceMode = mode - 1
-		})
+-- 		SendNUIMessage({
+-- 			voiceModes = json.encode(Cfg.voiceModes),
+-- 			voiceMode = mode - 1
+-- 		})
 	end
 	print('Script initialization finished.')
 end)

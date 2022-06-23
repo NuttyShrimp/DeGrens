@@ -84,10 +84,10 @@ function setRadioChannel(channel)
 	TriggerServerEvent('pma-voice:setPlayerRadio', channel)
 	radioChannel = channel
 	if GetConvarInt('voice_enableUi', 1) == 1 then
-		SendNUIMessage({
-			radioChannel = channel,
-			radioEnabled = radioEnabled
-		})
+-- 		SendNUIMessage({
+-- 			radioChannel = channel,
+-- 			radioEnabled = radioEnabled
+-- 		})
 	end
 end
 

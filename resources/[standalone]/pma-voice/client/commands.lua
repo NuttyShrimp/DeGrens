@@ -32,9 +32,9 @@ RegisterCommand('cycleproximity', function()
 		mode = voiceModeData[2],
 	}, true)
 	-- make sure we update the UI to the latest voice mode
-	SendNUIMessage({
-		voiceMode = voiceMode - 1
-	})
+-- 	SendNUIMessage({
+-- 		voiceMode = voiceMode - 1
+-- 	})
 	TriggerEvent('pma-voice:setTalkingMode', voiceMode)
 end, false)
 if gameVersion == 'fivem' then

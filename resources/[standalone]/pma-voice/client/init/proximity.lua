@@ -84,10 +84,10 @@ Citizen.CreateThread(function()
 			if lastRadioStatus ~= radioPressed or lastTalkingStatus ~= (MumbleIsPlayerTalking(PlayerId()) == 1) then
 				lastRadioStatus = radioPressed
 				lastTalkingStatus = MumbleIsPlayerTalking(PlayerId()) == 1
-				SendNUIMessage({
-					usingRadio = lastRadioStatus,
-					talking = lastTalkingStatus
-				})
+-- 				SendNUIMessage({
+-- 					usingRadio = lastRadioStatus,
+-- 					talking = lastTalkingStatus
+-- 				})
 			end
 		end
 		addNearbyPlayers()

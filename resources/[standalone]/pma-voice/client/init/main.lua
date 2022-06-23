@@ -150,10 +150,10 @@ end
 ---@param clickType boolean whether to play the 'on' or 'off' click. 
 function playMicClicks(clickType)
 	if micClicks ~= 'true' then return end
-	SendNUIMessage({
-		sound = (clickType and "audio_on" or "audio_off"),
-		volume = (clickType and (volumes["radio"]) or 0.05)
-	})
+-- 	SendNUIMessage({
+-- 		sound = (clickType and "audio_on" or "audio_off"),
+-- 		volume = (clickType and (volumes["radio"]) or 0.05)
+-- 	})
 end
 
 --- toggles the targeted player muted
@@ -176,9 +176,9 @@ exports('toggleMutePlayer', toggleMutePlayer)
 function setVoiceProperty(type, value)
 	if type == "radioEnabled" then
 		radioEnabled = value
-		SendNUIMessage({
-			radioEnabled = value
-		})
+-- 		SendNUIMessage({
+-- 			radioEnabled = value
+-- 		})
 	elseif type == "micClicks" then
 		local val = tostring(value)
 		micClicks = val
