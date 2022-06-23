@@ -1,10 +1,50 @@
 import React, { FC, useEffect } from 'react';
 import { Button } from '@components/button';
+import { Divider, Typography } from '@mui/material';
 import { Icon } from '@src/components/icon';
 import { Paper } from '@src/components/paper';
 import { devData } from '@src/lib/devdata';
 import { nuiAction } from '@src/lib/nui-comms';
 import { addNotification } from '@src/main/phone/lib';
+
+const GroupElement: FC<{ group: Phone.JobCenter.Group; canEnter?: boolean }> = ({ group, canEnter }) => {
+  const handleRequestToJoin = () => {
+    if (!canEnter) return;
+    nuiAction('phone/jobs/groups/join', {
+      id: group.id,
+    });
+    addNotification({
+      id: 'phone-jobs-groups-join',
+      title: 'jobcenter',
+      description: 'wachten op toegang...',
+      sticky: true,
+      icon: 'jobcenter',
+    });
+  };
+  return (
+    <Paper
+      title={group.name}
+      description={
+        <div className='jobcenter__groups__actions'>
+          <div>
+            <Icon name='sign-in-alt' size='1rem' onClick={() => handleRequestToJoin()} />
+          </div>
+          <div className='jobcenter__groups__actions__sizes'>
+            <div>
+              <Icon name='users' size='1rem' />
+              <span>{group.limit}</span>
+            </div>
+            <div>
+              <Icon name='user' size='1rem' />
+              <span>{group.size}</span>
+            </div>
+          </div>
+        </div>
+      }
+      image={'users'}
+    />
+  );
+};
 
 export const List: FC<
   React.PropsWithChildren<Base.Props<Phone.JobCenter.State> & { groups: Phone.JobCenter.Group[] }>
@@ -13,19 +53,6 @@ export const List: FC<
     const groups = await nuiAction('phone/jobs/groups/get', {}, devData.jobGroups);
     props.updateState({
       groups,
-    });
-  };
-
-  const handleRequestToJoin = (groupId: string) => {
-    nuiAction('phone/jobs/groups/join', {
-      id: groupId,
-    });
-    addNotification({
-      id: 'phone-jobs-groups-join',
-      title: 'jobcenter',
-      description: 'wachten op toegang...',
-      sticky: true,
-      icon: 'jobcenter',
     });
   };
 
@@ -39,30 +66,19 @@ export const List: FC<
   return (
     <div className='jobcenter__groups__list'>
       <Button.Primary onClick={handleGroupCreation}>Create Group</Button.Primary>
-      {props.groups.map(g => (
-        <Paper
-          title={g.name}
-          description={
-            <div className='jobcenter__groups__actions'>
-              <div>
-                <Icon name='sign-in-alt' size='1rem' onClick={() => handleRequestToJoin(g.id)} />
-              </div>
-              <div className='jobcenter__groups__actions__sizes'>
-                <div>
-                  <Icon name='users' size='1rem' />
-                  <span>{g.limit}</span>
-                </div>
-                <div>
-                  <Icon name='user' size='1rem' />
-                  <span>{g.size}</span>
-                </div>
-              </div>
-            </div>
-          }
-          key={g.id}
-          image={'users'}
-        />
-      ))}
+      <Typography variant={'subtitle1'}>Inactieve</Typography>
+      {props.groups
+        .filter(g => g.idle)
+        .map(g => (
+          <GroupElement key={g.id} group={g} canEnter />
+        ))}
+      <Divider />
+      <Typography variant={'subtitle1'}>Actieve</Typography>
+      {props.groups
+        .filter(g => !g.idle)
+        .map(g => (
+          <GroupElement key={g.id} group={g} />
+        ))}
     </div>
   );
 };

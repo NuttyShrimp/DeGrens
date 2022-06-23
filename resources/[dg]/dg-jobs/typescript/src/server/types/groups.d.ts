@@ -7,4 +7,7 @@ declare namespace Groups {
     job: string;
     isReady: boolean;
   }
+  interface Group extends JobGroup {
+    members: Member[];
+  }
 }

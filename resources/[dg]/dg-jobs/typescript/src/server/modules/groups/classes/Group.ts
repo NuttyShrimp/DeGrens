@@ -15,6 +15,8 @@ export class Group {
   // Based on the job this size is see
   private maxSize: number;
   private logger: winston.Logger;
+  // Will be set to true if the group has an active job
+  private currentJob: string;
 
   constructor(owner: number, id: string) {
     this.id = id;
@@ -24,6 +26,7 @@ export class Group {
     this.logger = groupLogger.child({ module: `GROUP - ${owner}` });
     this.owner = this.addMember(owner);
     this.activeRequests = [];
+    this.currentJob = null;
     // TODO: add log that this person created a job group
   }
 
@@ -42,6 +45,32 @@ export class Group {
 
   public getLimit(): number {
     return this.maxSize;
+  }
+
+  public getClientInfo(): JobGroup {
+    return {
+      id: this.id,
+      name: nameManager.getName(this.owner.cid),
+      size: this.members.size,
+      limit: this.maxSize,
+      idle: this.currentJob === null,
+    };
+  }
+
+  public getInfo(): JobGroup & { members: Groups.Member[]; owner: Groups.Member } {
+    return {
+      ...this.getClientInfo(),
+      members: this.getMembers(),
+      owner: this.getOwner(),
+    };
+  }
+
+  public getCurrentJob(): string {
+    return this.currentJob;
+  }
+
+  public isBusy(): boolean {
+    return this.currentJob !== null;
   }
 
   // endregion
@@ -175,7 +204,10 @@ export class Group {
   // endregion
 
   public async setActiveJob(jobName: string) {
-    // TODO: check if all members are ready
+    if (!jobName) {
+      this.currentJob = null;
+      return true;
+    }
     // Get max size from enum
     const job = jobManager.getJobByName(jobName);
     if (!job) {
@@ -183,27 +215,21 @@ export class Group {
         `Group(${this.id}) tried to change it job to an invalid job(${job.name}) | owner: ${this.owner.name}`
       );
       // TODO: log in graylog
-      return;
+      return false;
     }
     this.logger.info(`Changing job to ${job.name}`);
-    this.members.forEach(async m => {
-      if (m.serverId == this.owner.serverId) {
-        m.job = job.name;
-        this.members.set(m.serverId, m);
-        return;
-      }
-      const accepted = await Phone.notificationRequest(m.serverId, {
-        id: `jobcenter-groups-jobChange-${job.name}`,
+    if (!this.getMembers().every(m => m.isReady)) {
+      Phone.showNotification(this.owner.serverId, {
+        id: `jobcenter-groups-not-ready`,
         title: 'Jobcenter',
-        // TODO: replace name with title of job
-        description: `Verander job naar ${job.title}`,
-        timer: 15,
+        description: 'Nog niet iedereen is klaar',
         icon: 'jobcenter',
       });
-      if (!accepted) return;
-      m.job = job.name;
-      this.members.set(m.serverId, m);
-    });
+      this.logger.debug(`Group(${this.id}) tried to change it job to ${job.name} but not all members are ready`);
+      return false;
+    }
+    this.currentJob = jobName;
+    return true;
   }
 
   public async requestToJoin(src: number) {

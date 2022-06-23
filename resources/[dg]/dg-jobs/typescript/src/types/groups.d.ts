@@ -9,4 +9,5 @@ declare interface JobGroup {
   name: string;
   size: number;
   limit: number;
+  idle: boolean;
 }

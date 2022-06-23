@@ -430,12 +430,14 @@ devData.jobGroups = [
     name: 'Jef klak',
     size: 1,
     limit: 3,
+    idle: false,
   },
   {
     id: 'abc321',
     name: 'David Achter',
     size: 5,
     limit: 6,
+    idle: true,
   },
 ];
 

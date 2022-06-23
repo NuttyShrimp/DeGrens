@@ -1006,3 +1006,7 @@ DGCore.Functions.CreateCallback('police:server:GetAmountOfCops', function(src, c
     local amountOfCops = GetCurrentCops()
     cb(amountOfCops)
 end)
+
+exports('getAmountOfCops', function()
+    return GetCurrentCops()
+end)

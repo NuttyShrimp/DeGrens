@@ -1,8 +1,13 @@
 import groupManager from './classes/GroupManager';
 import nameManager from './classes/NameManager';
-import { getGroupList } from './service';
+import { changeJob, createGroup, getGroupByCid, getGroupByServerId, getGroupList } from './service';
 import { groupLogger } from './logger';
 import { RPC } from '@dgx/server';
+
+global.exports('createGroup', createGroup);
+global.exports('getGroupByCid', getGroupByCid);
+global.exports('getGroupByServerId', getGroupByServerId);
+global.exports('changeJob', changeJob);
 
 onNet('DGCore:Server:onPlayerLoaded', () => {
   const player = DGCore.Functions.GetPlayer(source);
@@ -34,13 +39,7 @@ on('onResourceStart', (res: string) => {
   });
 });
 
-RPC.register('dg-jobs:server:groups:create', src => {
-  groupLogger.silly(`[groups:create] ${GetPlayerName(String(src))}(${src}) is trying to create a group`);
-  groupManager.createGroup(src);
-  // Check if the user is actually the owner of a group
-  const group = groupManager.getGroupByServerId(src);
-  return group !== undefined;
-});
+RPC.register('dg-jobs:server:groups:create', createGroup);
 
 RPC.register('dg-jobs:server:groups:joinRequest', (src, data: { id: string }) => {
   groupLogger.silly(

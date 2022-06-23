@@ -1493,6 +1493,18 @@
     "hold": true
   },
   {
+    "name": "microwave",
+    "label": "Microgolfoven",
+    "weight": 30000,
+    "type": "item",
+    "stackable": false,
+    "useable": false,
+    "decayrate": 120,
+    "image": "microwave.png",
+    "description": "Een microgolfoven om u eten in op te warmen",
+    "hold": true
+  },
+  {
     "name": "weed_seed_male",
     "label": "Mannelijk Weed Zaadje",
     "weight": 200,

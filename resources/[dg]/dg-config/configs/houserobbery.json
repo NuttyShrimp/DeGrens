@@ -1,0 +1,60 @@
+{
+  "lootTables": [
+    [
+      "moneyroll",
+      "camera",
+      "gameboy",
+      "hifi",
+      "nintendoswitch",
+      "nokia",
+      "psp"
+    ],
+    [
+      "tv"
+    ],
+    [
+      "vaas"
+    ],
+    [
+      "microwave"
+    ]
+  ],
+  "playerCooldown": 5,
+  "timeToRob": 15,
+  "timeToFind": 15,
+  "shellType": {
+    "small": "standardmotel_shell",
+    "medium": "furnitured_midapart"
+  },
+  "locations": [
+    {
+      "coords": {
+        "x": -273.23,
+        "y": -934.74,
+        "z": 31.22
+      },
+      "heading": 162,
+      "size": "small"
+    },
+    {
+      "coords": {
+        "x": -278.34,
+        "y": -940.49,
+        "z": 31.22
+      },
+      "heading": 207.54,
+      "size": "medium"
+    }
+  ],
+  "shopPrices": {
+    "camera": 400,
+    "gameboy": 150,
+    "hifi": 250,
+    "nintendoswitch": 250,
+    "nokia": 800,
+    "psp": 150,
+    "crttv": 750,
+    "tv": 1500,
+    "vaas": 2000
+  }
+}

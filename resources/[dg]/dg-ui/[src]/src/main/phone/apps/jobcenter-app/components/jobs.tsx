@@ -28,7 +28,7 @@ export const Jobs: FC<
 > = props => {
   return (
     <div className={'jobcenter__jobList'}>
-      {props.jobs.map(j => (
+      {(props.jobs ?? []).map(j => (
         <Paper
           key={j.title}
           title={

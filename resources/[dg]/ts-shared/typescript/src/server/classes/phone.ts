@@ -27,6 +27,10 @@ class Phone {
   showNotification(target: number, notification: Phone.Notification) {
     emitNet('dg-phone:client:notification:add', target, notification);
   }
+
+  sendMail(target: number, subject: string, sender: string, mail: string) {
+    emitNet('dg-phone:client:addNewMail', target, subject, sender, mail);
+  }
 }
 
 export default {

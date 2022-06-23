@@ -13,6 +13,9 @@ for (const [key, value] of Object.entries(addExports)) {
     return entryManager.addEntry(value as PeekEntryType, id, peekInfo);
   });
 }
+global.exports('addEntry', (type: PeekEntryType, id: PeekValueType | PeekValueType[], peekInfo: EntryAddParameter) => {
+  return entryManager.addEntry(type, id, peekInfo);
+});
 
 const removeExports = {
   removeModelEntry: 'model',
@@ -28,5 +31,8 @@ for (const [key, value] of Object.entries(removeExports)) {
     entryManager.removeEntry(value as PeekEntryType, id);
   });
 }
+global.exports('removeEntry', (type: PeekEntryType, id: string | string[]) => {
+  return entryManager.removeEntry(type, id);
+});
 
 global.exports['dg-lib'].registerKeyMapping('playerPeek', 'Open peek eye', '+playerPeek', '-playerPeek', 'LMENU', true);

@@ -2,8 +2,8 @@
 local activeApartments = {}
 
 local isValueInArray = function(value, array)
-  for k, v in ipairs(array) do
-    if v == value then
+  for k, v in pairs(array) do
+    if tostring(v) == tostring(value) then
       return k
     end
   end
@@ -13,7 +13,7 @@ end
 local getEmptyBucket = function()
 	local isBucketFree = function()
 		for k,v in pairs(activeApartments) do
-			if v.routingBucket == bucketId then
+			if v.bucket == bucketId then
 				return false
 			end
 		end
@@ -23,6 +23,7 @@ local getEmptyBucket = function()
 	while (not isBucketFree()) do
     bucketId = bucketId + 1
 	end
+	return bucketId
 end
 local createApartment = function(id, ply)
 	activeApartments[id] = {
@@ -44,10 +45,13 @@ getCurrentApartment = function(src)
 end
 
 joinApartment = function(id, ply)
-	if (not activeApartments[id]) then
+	if activeApartments[id] == nil then
 		createApartment(id, ply)
 	end
 	activeApartments[id].inside[#activeApartments[id].inside + 1] = ply
+  if #activeApartments[id].inside == 1 then
+    exports['dg-lib']:setInstanceName(activeApartments[id].bucket, "Apartment #" .. id)
+  end
 
 	return activeApartments[id]
 end
