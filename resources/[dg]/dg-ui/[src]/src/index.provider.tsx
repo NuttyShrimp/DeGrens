@@ -8,6 +8,7 @@ import * as Sentry from '@sentry/react';
 import { nuiAction } from './lib/nui-comms';
 import { GetInitialState, type } from './lib/redux';
 import { theme } from './base.styles';
+import { AppsProvider } from './base-app.config';
 
 export const IndexProvider = ({ children }) => {
   const mainState = useSelector<RootState, Main.State>(state => state.main);
@@ -25,26 +26,28 @@ export const IndexProvider = ({ children }) => {
     <Sentry.ErrorBoundary fallback={<div>An error happenend in the root of UI, Restart the ui</div>} showDialog>
       <StyledEngineProvider injectFirst>
         <ThemeProvider theme={theme}>
-          <CssBaseline />
-          {mainState.mounted ? (
-            children
-          ) : (
-            <Snackbar
-              open={true}
-              autoHideDuration={3000}
-              anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
-              onClose={handleClose}
-            >
-              <Alert
+          <AppsProvider>
+            <CssBaseline />
+            {mainState.mounted ? (
+              children
+            ) : (
+              <Snackbar
+                open={true}
+                autoHideDuration={3000}
+                anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
                 onClose={handleClose}
-                variant='filled'
-                severity={mainState.error ? 'error' : 'info'}
-                sx={{ width: '100%' }}
               >
-                {mainState.error ? `An error occurred in ${mainState.error}.` : ''} Reloading the UI...
-              </Alert>
-            </Snackbar>
-          )}
+                <Alert
+                  onClose={handleClose}
+                  variant='filled'
+                  severity={mainState.error ? 'error' : 'info'}
+                  sx={{ width: '100%' }}
+                >
+                  {mainState.error ? `An error occurred in ${mainState.error}.` : ''} Reloading the UI...
+                </Alert>
+              </Snackbar>
+            )}
+          </AppsProvider>
         </ThemeProvider>
       </StyledEngineProvider>
     </Sentry.ErrorBoundary>

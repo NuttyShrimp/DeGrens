@@ -8,11 +8,42 @@ import { devDataEmulator } from './lib/devdata';
 import { isDevel, isGameDevel } from './lib/env';
 import { handleIncomingEvent } from './lib/event-relay';
 import { Provider, store } from './lib/redux';
-import { getAllComponents } from './base-app.config';
+import { useApps } from './base-app.config';
 import { IndexProvider } from './index.provider';
 
 import './styles/main.scss';
 import '@degrens-21/fa-6/css/all.css';
+
+function App() {
+  const { getAllApps } = useApps();
+  useMemo(() => {
+    const devMode = isDevel();
+    const gameDevMode = isGameDevel();
+    if (devMode || gameDevMode) {
+      if (devMode) {
+        console.log('[DG-UI] Running in development mode');
+        console.log('started render of all app components, Total:', getAllApps().length);
+        setTimeout(() => {
+          devDataEmulator();
+        }, 1000);
+      }
+      if (gameDevMode) {
+        console.log('[DG-UI] Running in game development mode');
+      }
+    }
+    window.addEventListener('message', handleIncomingEvent);
+    return () => {
+      window.removeEventListener('message', handleIncomingEvent);
+    };
+  }, []);
+  return (
+    <div className='ui-wrapper'>
+      {getAllApps().map((component, i) => (
+        <AppContainer config={component} key={`${component.name}-${i}`} />
+      ))}
+    </div>
+  );
+}
 
 if (!isDevel()) {
   Sentry.init({
@@ -35,34 +66,6 @@ if (!isDevel()) {
     // We recommend adjusting this value in production
     tracesSampleRate: 1.0,
   });
-}
-
-function App() {
-  const components = useMemo(() => getAllComponents(), []);
-  useMemo(() => {
-    const devMode = isDevel();
-    const gameDevMode = isGameDevel();
-    if (devMode || gameDevMode) {
-      if (devMode) {
-        console.log('[DG-UI] Running in development mode');
-        devDataEmulator();
-      }
-      if (gameDevMode) {
-        console.log('[DG-UI] Running in game development mode');
-      }
-    }
-    window.addEventListener('message', handleIncomingEvent);
-    return () => {
-      window.removeEventListener('message', handleIncomingEvent);
-    };
-  }, []);
-  return (
-    <div className='ui-wrapper'>
-      {components.map((component, i) => (
-        <AppContainer config={component} key={`${component.name}-${i}`} />
-      ))}
-    </div>
-  );
 }
 
 const rootElem = document.getElementById('root');

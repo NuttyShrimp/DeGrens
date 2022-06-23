@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { nuiAction } from '@lib/nui-comms';
 import { store, type } from '@lib/redux';
@@ -7,10 +7,10 @@ import makeStyles from '@mui/styles/makeStyles';
 import * as Sentry from '@sentry/react';
 import { SpanStatus } from '@sentry/tracing/dist/spanstatus';
 
-import { getApp } from '../base-app.config';
+import { useApps } from '../base-app.config';
 
 declare interface AppWrapperProps {
-  appName: string;
+  appName: keyof RootState;
   children: any;
   onShow: (data?: any) => void;
   onHide: (data?: any) => void;
@@ -84,78 +84,85 @@ const setCurrentApp = (app: string) => {
 export default function AppWrapper(props: AppWrapperProps) {
   const mainStateApp = useSelector<RootState, string>(state => state.main.currentApp);
   const styles = useStyles(props);
+  const { getApp } = useApps();
   const appInfo = getApp(props.appName);
   const appState = useSelector<RootState, { visible: boolean }>(state => state[props.appName]);
 
   const [active, setActive] = useState(false);
 
-  const eventHandler = async (e: any) => {
-    e.preventDefault();
-    if (e.data.app === props.appName) {
-      const transaction = Sentry.startTransaction({
-        name: 'fincomingAppEvent',
-        tags: {
-          app: props.appName,
-        },
-      });
-      Sentry.getCurrentHub().configureScope(scope => {
-        scope.setSpan(transaction);
-      });
-      const span = transaction.startChild({
-        op: 'AppWrapper.eventHandler',
-        description: `Incoming event for ${props.appName} handled by AppWrapper`,
-        data: {
-          eventData: e.data,
-        },
-      });
-      try {
-        addLog({ name: `AppWrapper:${props.appName}`, body: {}, response: e.data, isOk: true });
-        if (e.data.show) {
-          props.onShow(e.data.data);
-          if (appInfo?.type === 'interactive' && e.data.shouldFocus) {
-            nuiAction('__appwrapper:setfocus');
-          }
-          return;
-        } else if (e.data.show === false) {
-          if (appState.visible) {
-            if (active || mainStateApp === 'cli') {
-              setCurrentApp('');
+  const eventHandler = useCallback(
+    async (e: any) => {
+      e.preventDefault();
+      if (e.data.app === props.appName) {
+        const transaction = Sentry.startTransaction({
+          name: 'incomingAppEvent',
+          tags: {
+            app: props.appName,
+          },
+        });
+        Sentry.getCurrentHub().configureScope(scope => {
+          scope.setSpan(transaction);
+        });
+        const span = transaction.startChild({
+          op: 'AppWrapper.eventHandler',
+          description: `Incoming event for ${props.appName} handled by AppWrapper`,
+          data: {
+            eventData: e.data,
+          },
+        });
+        try {
+          addLog({ name: `AppWrapper:${props.appName}`, body: {}, response: e.data, isOk: true });
+          if (e.data.show) {
+            props.onShow(e.data.data);
+            if (appInfo?.type === 'interactive' && e.data.shouldFocus) {
+              nuiAction('__appwrapper:setfocus');
             }
-            props.onHide();
+            return;
+          } else if (e.data.show === false) {
+            if (appState.visible) {
+              if (active || mainStateApp === 'cli') {
+                setCurrentApp('');
+              }
+              props.onHide();
+            }
+            return;
           }
-          return;
+          if (props.onEvent) {
+            props.onEvent(e.data.data);
+          }
+          span.setStatus(SpanStatus.Ok);
+        } catch (e) {
+          span.setStatus(SpanStatus.UnknownError);
+          throw e;
+        } finally {
+          span.finish();
+          transaction.finish();
         }
-        if (props.onEvent) {
-          props.onEvent(e.data.data);
-        }
-        span.setStatus(SpanStatus.Ok);
-      } catch (e) {
-        span.setStatus(SpanStatus.UnknownError);
-        throw e;
-      } finally {
-        span.finish();
-        transaction.finish();
       }
-    }
-  };
+    },
+    [props.appName, props.onEvent, props.onHide, props.onShow, appInfo, appState, active, mainStateApp]
+  );
 
-  const handlePress: any = (e: React.KeyboardEvent<HTMLDivElement>) => {
-    switch (e.key) {
-      case 'Escape':
-        if (appState.visible && active) {
-          const shouldEvent = props.onEscape ? props.onEscape() ?? true : null;
-          if (shouldEvent === true) {
-            nuiAction('dg-ui:applicationClosed', {
-              app: props.appName,
-              fromEscape: true,
-            });
+  const handlePress: any = useCallback(
+    (e: React.KeyboardEvent<HTMLDivElement>) => {
+      switch (e.key) {
+        case 'Escape':
+          if (appState.visible && active) {
+            const shouldEvent = props.onEscape ? props.onEscape() ?? true : null;
+            if (shouldEvent === true) {
+              nuiAction('dg-ui:applicationClosed', {
+                app: props.appName,
+                fromEscape: true,
+              });
+            }
           }
-        }
-        break;
-      default:
-        break;
-    }
-  };
+          break;
+        default:
+          break;
+      }
+    },
+    [appState, active, props.onEscape, props.appName]
+  );
 
   const handleError: any = (e: Error) => {
     if (props.onError) {
@@ -182,6 +189,13 @@ export default function AppWrapper(props: AppWrapperProps) {
   useEffect(() => {
     window.addEventListener('message', eventHandler);
     window.addEventListener('keydown', handlePress);
+    return () => {
+      window.removeEventListener('message', eventHandler);
+      window.removeEventListener('keydown', handlePress);
+    };
+  }, [eventHandler, handlePress]);
+
+  useEffect(() => {
     registeredApps[props.appName] = {
       onHide: () => {
         if (active) {
@@ -192,8 +206,6 @@ export default function AppWrapper(props: AppWrapperProps) {
       onShow: props.onShow,
     };
     return () => {
-      window.removeEventListener('message', eventHandler);
-      window.removeEventListener('keydown', handlePress);
       delete registeredApps[props.appName];
     };
   }, [active, props.appName, props.onHide, props.onShow]);
