@@ -1,5 +1,5 @@
 import react from '@vitejs/plugin-react';
-import { defineConfig } from 'vite';
+import { defineConfig, splitVendorChunkPlugin } from 'vite';
 import Checker from 'vite-plugin-checker';
 import viteSentry from 'vite-plugin-sentry';
 import svgrPlugin from 'vite-plugin-svgr';
@@ -22,8 +22,10 @@ export default defineConfig(({ mode }) => ({
     react(),
     svgrPlugin(),
     tsconfigPaths(),
+    splitVendorChunkPlugin(),
     Checker({
       typescript: true,
+      enableBuild: false,
       overlay: {
         initialIsOpen: false,
         position: 'tl',

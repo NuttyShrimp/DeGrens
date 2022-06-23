@@ -5,8 +5,8 @@
   "scripts": {
     "start": "vite --mode development",
     "viteMem": "node --max_old_space_size=8192 ./node_modules/vite/bin/vite.js",
-    "build": "tsc --noEmit && yarn viteMem build --mode production",
-    "build:dev": "tsc --noEmit && yarn viteMem build --mode gamedev",
+    "build": "tsc && yarn viteMem build --mode production",
+    "build:dev": "tsc && yarn viteMem build --mode gamedev",
     "watch": "vite build --mode gamedev --watch",
     "format": "prettier --write \"./**/*.{js,jsx,ts,tsx,css,md,json}\" --ignore-path ./.prettierignore ",
     "lint": "eslint ./src --ext .jsx,.js,.ts,.tsx --quiet --fix --ignore-path ./.eslintignore -c ./.eslintrc",
@@ -42,6 +42,7 @@
     "urijs": "^1.19.11"
   },
   "devDependencies": {
+    "@surma/rollup-plugin-off-main-thread": "^2.2.3",
     "@types/react": "^18.0.9",
     "@types/react-dom": "^18.0.3",
     "@typescript-eslint/eslint-plugin": "^5.23.0",
