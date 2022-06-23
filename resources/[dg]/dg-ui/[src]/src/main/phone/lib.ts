@@ -172,6 +172,7 @@ export const addNotification = (
   if (!phoneState.isSilent) {
     genericAction('phone', {
       visible: true,
+      animating: phoneState.animating === 'closed' ? 'peek' : 'open',
       hasNotifications: true,
     });
   }
@@ -196,9 +197,10 @@ export const removeNotification = (id: string) => {
   genericAction('phone.notifications', {
     list: notiState.list,
   });
+  console.log(notiState.list.length);
   if (notiState.list.length === 0) {
     genericAction('phone', {
-      state: 'closed',
+      animating: 'closed',
       hasNotifications: false,
     });
   }

@@ -5,8 +5,8 @@ import { isDevel } from '../../lib/env';
 const store: StoreObject<Phone.State, Phone.AuxState> = {
   key: 'phone',
   initialState: {
-    visible: isDevel(),
-    animating: isDevel() ? 'closed' : 'closed',
+    visible: false,
+    animating: 'closed',
     isSilent: false,
     inCamera: false,
     callActive: false,

@@ -16,7 +16,7 @@ import { styles } from './phone.styles';
 export const Phone: FC<React.PropsWithChildren<Phone.Props & { config: ConfigObject[] }>> = props => {
   const classes = styles();
   const closedVh = useVhToPixel(60);
-  const basedOffset = useVhToPixel(60 - 5.5);
+  const basedOffset = useVhToPixel(60 - 8.7);
   const notificationState = useSelector<RootState, Phone.Notifications.State>(state => state['phone.notifications']);
   const [bottomOffset, setBottomOffset] = useState(basedOffset);
   const [activeAppCfg, setActiveAppCfg] = useState<ConfigObject | undefined>(undefined);
@@ -59,6 +59,9 @@ export const Phone: FC<React.PropsWithChildren<Phone.Props & { config: ConfigObj
     }
     api.start({
       bottom: target,
+      config: {
+        duration: 300,
+      },
     });
     console.log(`visible: ${props.visible} animating: ${props.animating} hasNoti: ${props.hasNotifications}`);
   }, [props.visible, props.animating, props.hasNotifications, api]);

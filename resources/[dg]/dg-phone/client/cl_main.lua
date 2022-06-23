@@ -12,7 +12,7 @@ closePhone = function(state)
 	if getState('state') == 2 then
 		closeCamera()
 	end
-	closeApplication('phone')
+-- 	closeApplication('phone')
 	disablePauseMenu()
 	SetUIFocusCustom(false, false)
 	setState('state', state or 0)
