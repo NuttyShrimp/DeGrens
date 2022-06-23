@@ -45,13 +45,6 @@
     },
     {
       "type": "node-terminal",
-      "name": "blackout:build dev",
-      "request": "launch",
-      "command": "yarn run build:dev",
-      "cwd": "${workspaceFolder}/resources/[dg]/dg-blackout/typescript"
-    },
-    {
-      "type": "node-terminal",
       "name": "blackout:build prod",
       "request": "launch",
       "command": "yarn run build",
@@ -59,16 +52,58 @@
     },
     {
       "type": "node-terminal",
-      "name": "blackout:dev",
+      "name": "blackout:build dev",
       "request": "launch",
-      "command": "yarn watch",
+      "command": "yarn run build:dev",
       "cwd": "${workspaceFolder}/resources/[dg]/dg-blackout/typescript"
     },
     {
       "type": "node-terminal",
-      "name": "chars:res:build prod",
+      "name": "blackout:watch",
+      "request": "launch",
+      "command": "yarn run watch",
+      "cwd": "${workspaceFolder}/resources/[dg]/dg-blackout/typescript"
+    },
+    {
+      "type": "node-terminal",
+      "name": "build:build prod",
       "request": "launch",
       "command": "yarn run build",
+      "cwd": "${workspaceFolder}/resources/[dg]/dg-build/typescript"
+    },
+    {
+      "type": "node-terminal",
+      "name": "build:build dev",
+      "request": "launch",
+      "command": "yarn run build:dev",
+      "cwd": "${workspaceFolder}/resources/[dg]/dg-build/typescript"
+    },
+    {
+      "type": "node-terminal",
+      "name": "build:watch",
+      "request": "launch",
+      "command": "yarn run watch",
+      "cwd": "${workspaceFolder}/resources/[dg]/dg-build/typescript"
+    },
+    {
+      "type": "node-terminal",
+      "name": "chars:ui:build",
+      "request": "launch",
+      "command": "yarn run build",
+      "cwd": "${workspaceFolder}/resources/[dg]/dg-chars/ui"
+    },
+    {
+      "type": "node-terminal",
+      "name": "chars:ui:dev",
+      "request": "launch",
+      "command": "yarn run dev",
+      "cwd": "${workspaceFolder}/resources/[dg]/dg-chars/ui"
+    },
+    {
+      "type": "node-terminal",
+      "name": "chars:res:watch",
+      "request": "launch",
+      "command": "yarn run watch",
       "cwd": "${workspaceFolder}/resources/[dg]/dg-chars/typescript"
     },
     {
@@ -80,24 +115,10 @@
     },
     {
       "type": "node-terminal",
-      "name": "chars:res:watch",
-      "request": "launch",
-      "command": "yarn run watch",
-      "cwd": "${workspaceFolder}/resources/[dg]/dg-chars/typescript"
-    },
-    {
-      "type": "node-terminal",
-      "name": "chars:ui:dev",
-      "request": "launch",
-      "command": "yarn run dev",
-      "cwd": "${workspaceFolder}/resources/[dg]/dg-chars/ui"
-    },
-    {
-      "type": "node-terminal",
-      "name": "chars:ui:build",
+      "name": "chars:res:build prod",
       "request": "launch",
       "command": "yarn run build",
-      "cwd": "${workspaceFolder}/resources/[dg]/dg-chars/ui"
+      "cwd": "${workspaceFolder}/resources/[dg]/dg-chars/typescript"
     },
     {
       "type": "node-terminal",
@@ -119,6 +140,27 @@
       "request": "launch",
       "command": "yarn run watch",
       "cwd": "${workspaceFolder}/resources/[dg]/dg-chat/typescript"
+    },
+    {
+      "type": "node-terminal",
+      "name": "config:build prod",
+      "request": "launch",
+      "command": "yarn run build",
+      "cwd": "${workspaceFolder}/resources/[dg]/dg-config/typescript"
+    },
+    {
+      "type": "node-terminal",
+      "name": "config:build dev",
+      "request": "launch",
+      "command": "yarn run build:dev",
+      "cwd": "${workspaceFolder}/resources/[dg]/dg-config/typescript"
+    },
+    {
+      "type": "node-terminal",
+      "name": "config:watch",
+      "request": "launch",
+      "command": "yarn run watch",
+      "cwd": "${workspaceFolder}/resources/[dg]/dg-config/typescript"
     },
     {
       "type": "node-terminal",
@@ -164,6 +206,55 @@
     },
     {
       "type": "node-terminal",
+      "name": "financials:watch",
+      "request": "launch",
+      "command": "yarn run watch",
+      "cwd": "${workspaceFolder}/resources/[dg]/dg-financials/typescript"
+    },
+    {
+      "type": "node-terminal",
+      "name": "heists:build prod",
+      "request": "launch",
+      "command": "yarn run build",
+      "cwd": "${workspaceFolder}/resources/[dg]/dg-heists/typescript"
+    },
+    {
+      "type": "node-terminal",
+      "name": "heists:build dev",
+      "request": "launch",
+      "command": "yarn run build:dev",
+      "cwd": "${workspaceFolder}/resources/[dg]/dg-heists/typescript"
+    },
+    {
+      "type": "node-terminal",
+      "name": "heists:watch",
+      "request": "launch",
+      "command": "yarn run watch",
+      "cwd": "${workspaceFolder}/resources/[dg]/dg-heists/typescript"
+    },
+    {
+      "type": "node-terminal",
+      "name": "houserobbery:build prod",
+      "request": "launch",
+      "command": "yarn run build",
+      "cwd": "${workspaceFolder}/resources/[dg]/dg-houserobbery/typescript"
+    },
+    {
+      "type": "node-terminal",
+      "name": "houserobbery:build dev",
+      "request": "launch",
+      "command": "yarn run build:dev",
+      "cwd": "${workspaceFolder}/resources/[dg]/dg-houserobbery/typescript"
+    },
+    {
+      "type": "node-terminal",
+      "name": "houserobbery:watch",
+      "request": "launch",
+      "command": "yarn run watch",
+      "cwd": "${workspaceFolder}/resources/[dg]/dg-houserobbery/typescript"
+    },
+    {
+      "type": "node-terminal",
       "name": "jobs:build prod",
       "request": "launch",
       "command": "yarn run build",
@@ -182,6 +273,27 @@
       "request": "launch",
       "command": "yarn run watch",
       "cwd": "${workspaceFolder}/resources/[dg]/dg-jobs/typescript"
+    },
+    {
+      "type": "node-terminal",
+      "name": "npcs:build prod",
+      "request": "launch",
+      "command": "yarn run build",
+      "cwd": "${workspaceFolder}/resources/[dg]/dg-npcs/typescript"
+    },
+    {
+      "type": "node-terminal",
+      "name": "npcs:build dev",
+      "request": "launch",
+      "command": "yarn build:dev",
+      "cwd": "${workspaceFolder}/resources/[dg]/dg-npcs/typescript"
+    },
+    {
+      "type": "node-terminal",
+      "name": "npcs:watch",
+      "request": "launch",
+      "command": "yarn watch",
+      "cwd": "${workspaceFolder}/resources/[dg]/dg-npcs/typescript"
     },
     {
       "type": "node-terminal",
@@ -227,107 +339,16 @@
     },
     {
       "type": "node-terminal",
-      "name": "ui:build dev",
-      "request": "launch",
-      "command": "yarn run build:debug",
-      "cwd": "${workspaceFolder}/resources/[dg]/dg-ui/[src]"
-    },
-    {
-      "type": "node-terminal",
-      "name": "ui:build prod",
+      "name": "storerobbery:build prod",
       "request": "launch",
       "command": "yarn run build",
-      "cwd": "${workspaceFolder}/resources/[dg]/dg-ui/[src]"
-    },
-    {
-      "type": "node-terminal",
-      "name": "ui:dev",
-      "request": "launch",
-      "command": "yarn run start",
-      "cwd": "${workspaceFolder}/resources/[dg]/dg-ui/[src]"
-    },
-    {
-      "type": "node-terminal",
-      "name": "npcs:build dev",
-      "request": "launch",
-      "command": "yarn build:dev",
-      "cwd": "${workspaceFolder}/resources/[dg]/dg-npcs/typescript"
-    },
-    {
-      "type": "node-terminal",
-      "name": "npcs:watch",
-      "request": "launch",
-      "command": "yarn watch",
-      "cwd": "${workspaceFolder}/resources/[dg]/dg-npcs/typescript"
-    },
-    {
-      "type": "node-terminal",
-      "name": "ui:build dev",
-      "request": "launch",
-      "command": "yarn run build:debug",
-      "cwd": "${workspaceFolder}/resources/[dg]/dg-ui/[src]"
-    },
-    {
-      "type": "node-terminal",
-      "name": "ui:build prod",
-      "request": "launch",
-      "command": "yarn run build",
-      "cwd": "${workspaceFolder}/resources/[dg]/dg-ui/[src]"
-    },
-    {
-      "type": "node-terminal",
-      "name": "ui:dev",
-      "request": "launch",
-      "command": "yarn run start",
-      "cwd": "${workspaceFolder}/resources/[dg]/dg-ui/[src]"
-    },
-    {
-      "type": "node-terminal",
-      "name": "ui:build dev",
-      "request": "launch",
-      "command": "yarn run build:debug",
-      "cwd": "${workspaceFolder}/resources/[dg]/dg-ui/[src]"
-    },
-    {
-      "type": "node-terminal",
-      "name": "ui:build prod",
-      "request": "launch",
-      "command": "yarn run build",
-      "cwd": "${workspaceFolder}/resources/[dg]/dg-ui/[src]"
-    },
-    {
-      "type": "node-terminal",
-      "name": "ui:dev",
-      "request": "launch",
-      "command": "yarn run start",
-      "cwd": "${workspaceFolder}/resources/[dg]/dg-ui/[src]"
-    },
-    {
-      "type": "node-terminal",
-      "name": "dg-heists:build dev",
-      "request": "launch",
-      "command": "yarn build:dev",
-      "cwd": "${workspaceFolder}/resources/[dg]/dg-heists/typescript"
-    },
-    {
-      "type": "node-terminal",
-      "name": "dg-heists:dev",
-      "request": "launch",
-      "command": "yarn watch",
-      "cwd": "${workspaceFolder}/resources/[dg]/dg-heists/typescript"
+      "cwd": "${workspaceFolder}/resources/[dg]/dg-storerobbery/typescript"
     },
     {
       "type": "node-terminal",
       "name": "storerobbery:build dev",
       "request": "launch",
       "command": "yarn run build:dev",
-      "cwd": "${workspaceFolder}/resources/[dg]/dg-storerobbery/typescript"
-    },
-    {
-      "type": "node-terminal",
-      "name": "storerobbery:build prod",
-      "request": "launch",
-      "command": "yarn run build",
       "cwd": "${workspaceFolder}/resources/[dg]/dg-storerobbery/typescript"
     },
     {
@@ -339,24 +360,52 @@
     },
     {
       "type": "node-terminal",
-      "name": "houserobbery:build prod",
-      "request": "launch",
-      "command": "yarn run build",
-      "cwd": "${workspaceFolder}/resources/[dg]/dg-houserobbery/typescript"
-    },
-    {
-      "type": "node-terminal",
-      "name": "houserobbery:build dev",
-      "request": "launch",
-      "command": "yarn run build:dev",
-      "cwd": "${workspaceFolder}/resources/[dg]/dg-houserobbery/typescript"
-    },
-    {
-      "type": "node-terminal",
-      "name": "houserobbery:watch",
+      "name": "storerobbery:watch",
       "request": "launch",
       "command": "yarn run watch",
-      "cwd": "${workspaceFolder}/resources/[dg]/dg-houserobbery/typescript"
+      "cwd": "${workspaceFolder}/resources/[dg]/dg-storerobbery/typescript"
     },
+    {
+      "type": "node-terminal",
+      "name": "ui:build prod",
+      "request": "launch",
+      "command": "yarn run build",
+      "cwd": "${workspaceFolder}/resources/[dg]/dg-ui/[src]"
+    },
+    {
+      "type": "node-terminal",
+      "name": "ui:build dev",
+      "request": "launch",
+      "command": "yarn run build:debug",
+      "cwd": "${workspaceFolder}/resources/[dg]/dg-ui/[src]"
+    },
+    {
+      "type": "node-terminal",
+      "name": "ui:dev",
+      "request": "launch",
+      "command": "yarn run start",
+      "cwd": "${workspaceFolder}/resources/[dg]/dg-ui/[src]"
+    },
+    {
+      "type": "node-terminal",
+      "name": "weathersync:build prod",
+      "request": "launch",
+      "command": "yarn run build",
+      "cwd": "${workspaceFolder}/resources/[dg]/dg-weathersync/typescript"
+    },
+    {
+      "type": "node-terminal",
+      "name": "weathersync:build dev",
+      "request": "launch",
+      "command": "yarn run build:dev",
+      "cwd": "${workspaceFolder}/resources/[dg]/dg-weathersync/typescript"
+    },
+    {
+      "type": "node-terminal",
+      "name": "weathersync:watch",
+      "request": "launch",
+      "command": "yarn run watch",
+      "cwd": "${workspaceFolder}/resources/[dg]/dg-weathersync/typescript"
+    }
   ]
 }
