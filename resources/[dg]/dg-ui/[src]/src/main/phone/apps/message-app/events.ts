@@ -1,4 +1,4 @@
-import { addNotification } from '../../lib';
+import { addNotification, genericAction, isAppActive } from '../../lib';
 import { getContact } from '../contacts-app/lib';
 
 import { addMessage } from './lib';
@@ -18,4 +18,8 @@ events.addNew = (data: { message: Phone.Messages.Message; otherPhone: string }) 
       app: 'messages',
     });
   }
+  if (isAppActive('messages')) return;
+  genericAction('phone.apps.messages', {
+    hasNotification: true,
+  });
 };

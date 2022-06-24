@@ -5,6 +5,7 @@ export const styles = makeStyles({
     display: 'flex',
     flexWrap: 'wrap',
     justifyContent: 'space-around',
+    marginTop: '.75vh',
     '& > *': {
       flex: '1 0 22%',
     },

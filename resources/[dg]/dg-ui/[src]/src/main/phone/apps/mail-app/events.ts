@@ -1,4 +1,4 @@
-import { addNotification, genericAction, getState } from '../../lib';
+import { addNotification, genericAction, getState, isAppActive } from '../../lib';
 
 export const events: Phone.Events = {};
 
@@ -9,6 +9,9 @@ events.newMail = (mail: Partial<Phone.Mail.Mail>) => {
   mail.id = `mail-${mailId++}`;
   mail.date = Date.now();
   mailState.mails.push(mail as Phone.Mail.Mail);
+  if (!isAppActive('mail')) {
+    mailState.hasNotification = true;
+  }
   genericAction('phone.apps.mail', mailState);
   addNotification({
     id: `mail_${mail.id}`,

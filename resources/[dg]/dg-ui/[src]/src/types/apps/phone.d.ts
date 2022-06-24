@@ -162,6 +162,7 @@ declare namespace Phone {
     }
 
     interface State {
+      hasNotification: boolean;
       messages: Record<string, Message[]>;
       currentNumber: string | null;
     }
@@ -194,6 +195,7 @@ declare namespace Phone {
     }
 
     interface State {
+      hasNotification: boolean;
       mails: Mail[];
     }
   }

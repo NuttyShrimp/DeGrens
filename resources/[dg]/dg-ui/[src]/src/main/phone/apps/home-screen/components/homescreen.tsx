@@ -1,5 +1,6 @@
 import React, { FC, useMemo, useState } from 'react';
-import { Tooltip } from '@mui/material';
+import { useSelector } from 'react-redux';
+import { Badge, Tooltip } from '@mui/material';
 
 import { Icon } from '../../../../../components/icon';
 import { isDevel } from '../../../../../lib/env';
@@ -10,6 +11,9 @@ import { AppContainer } from '../../../os/appcontainer/appcontainer';
 import { styles } from './homescreen.styles';
 
 const AppIcon: FC<React.PropsWithChildren<ConfigObject>> = props => {
+  const hasNotification = useSelector<RootState, boolean>(
+    state => state[`phone.apps.${props.name}`]?.hasNotification ?? false
+  );
   const classes = styles();
   return (
     <Tooltip
@@ -17,23 +21,31 @@ const AppIcon: FC<React.PropsWithChildren<ConfigObject>> = props => {
       arrow
       title={isDevel() ? `${props.name} | ${props.label} (${props.position})` : props.label}
     >
-      <div
-        className={classes.app}
-        onClick={() => changeApp(props.name)}
-        style={{
-          color: props.icon?.color ?? 'white',
-          background: `linear-gradient(transparent, ${props.icon.backgroundGradient ?? 'rgba(0, 0, 0, 0)'})`,
-          backgroundColor: props.icon.background ?? '#000',
-        }}
-      >
-        <Icon lib={props.icon.lib} name={props.icon.name} size={props.icon.size ?? '1.5rem'} />
+      <div>
+        <Badge color={'error'} invisible={!hasNotification} variant={'dot'}>
+          <div
+            className={classes.app}
+            onClick={() => changeApp(props.name)}
+            style={{
+              color: props.icon?.color ?? 'white',
+              background: `linear-gradient(transparent, ${props.icon.backgroundGradient ?? 'rgba(0, 0, 0, 0)'})`,
+              backgroundColor: props.icon.background ?? '#000',
+            }}
+          >
+            <Icon lib={props.icon.lib} name={props.icon.name} size={props.icon.size ?? '1.5rem'} />
+          </div>
+        </Badge>
       </div>
     </Tooltip>
   );
 };
 const EmptyIcon = () => {
   const classes = styles();
-  return <div className={classes.app} style={{ background: 'none', boxShadow: 'none' }} />;
+  return (
+    <Badge invisible>
+      <div className={classes.app} style={{ background: 'none', boxShadow: 'none' }} />
+    </Badge>
+  );
 };
 
 export const HomeScreen = () => {

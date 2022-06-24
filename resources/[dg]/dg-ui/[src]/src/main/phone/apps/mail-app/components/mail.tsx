@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 
 import { formatRelativeTime, getFirstLine, sanitizeText } from '../../../../../lib/util';
 import { AppContainer } from '../../../os/appcontainer/appcontainer';
@@ -27,6 +27,13 @@ export const MailEntry: FC<React.PropsWithChildren<{ mail: Phone.Mail.Mail }>> =
 
 export const Mail: AppFunction<Phone.Mail.State> = props => {
   const classes = styles();
+  useEffect(() => {
+    if (props.hasNotification) {
+      props.updateState({
+        hasNotification: false,
+      });
+    }
+  }, []);
   return (
     <AppContainer emptyList={props.mails.length === 0}>
       <div className={classes.list}>

@@ -93,6 +93,8 @@ export const changeApp = (app: string) => {
   setBackground();
 };
 
+export const isAppActive = (app: string) => getState().activeApp === app;
+
 export const showFormModal = (Form: any) => {
   genericAction('phone.form', {
     visible: true,
