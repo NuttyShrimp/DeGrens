@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux';
 import { Button } from '@mui/material';
 import { styled } from '@mui/material/styles';
 
+import { Icon } from '../../../../components/icon';
 import { formatTime } from '../../../../lib/util';
 import { acceptNotification, declineNotification } from '../../lib';
 
@@ -65,7 +66,11 @@ export const Notification: FC<React.PropsWithChildren<{ notification: Phone.Noti
               color: notification.icon.color,
             }}
           >
-            <i className={`${notification.icon.lib ?? 'fas fa-'}${notification.icon.name}`}></i>
+            <Icon
+              lib={notification.icon.lib}
+              name={notification.icon.name}
+              size={notification.icon.lib === 'svg' ? '1.2rem' : '.9rem'}
+            />
           </div>
           <div className={classes.textWrapper}>
             <div className={[classes.text, classes.title].join(' ')}>{notification.title.toUpperCase()}</div>
