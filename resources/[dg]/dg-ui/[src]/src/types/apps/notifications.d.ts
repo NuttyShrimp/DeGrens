@@ -10,5 +10,6 @@ declare namespace Notifications {
 
   interface State extends Base.State {
     notifications: Notification[];
+    lastId: number;
   }
 }

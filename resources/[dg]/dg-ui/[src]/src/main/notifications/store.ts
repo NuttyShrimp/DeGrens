@@ -5,6 +5,7 @@ const store: StoreObject<Notifications.State> = {
   initialState: {
     visible: true,
     notifications: [],
+    lastId: 0,
   },
 };
 export default store;
