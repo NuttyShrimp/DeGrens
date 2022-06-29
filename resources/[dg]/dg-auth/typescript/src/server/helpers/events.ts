@@ -3,13 +3,9 @@ import { mainLogger } from '../sv_logger';
 
 const managers: Map<string, EventIdManager> = new Map();
 // Changes on first connection
-let serverStarted = false;
+let playerJoined = false;
 
-export const setServerStarted = () => {
-  serverStarted = true;
-};
-
-export const isServerStarted = () => serverStarted;
+export const hasAPlayerJoined = () => playerJoined;
 
 export const handleResourceStart = (resName: string) => {
   managers.forEach(manager => {
@@ -23,6 +19,9 @@ export const handleResourceStop = (resName: string) => {
 };
 
 export const handlePlayerJoin = (playerId: number, steamId: string) => {
+  if (!playerJoined) {
+    playerJoined = true;
+  }
   managers.forEach(manager => {
     manager.generateMapForPlayer(playerId, steamId);
   });

@@ -43,7 +43,6 @@ export const generateToken = (src: number) => {
   const token = jwt.sign(plyKey, PRIV_KEY, {
     algorithm: 'HS512',
   });
-  // TODO: Check if this needs a timeout to prevent useless regeneration of maps for the first player
   // TODO: await on all returns of the map generation, max span of 10 seconds to generate all maps --> Drop player if it takes too long
   handlePlayerJoin(src, steamId);
   emitNet('__dg_auth_authenticated', src, -1, token);

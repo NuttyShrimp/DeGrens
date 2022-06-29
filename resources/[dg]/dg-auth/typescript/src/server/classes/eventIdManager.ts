@@ -3,7 +3,6 @@
 import { getRegisteredResources } from '../helpers/resourceSet';
 import { Util } from '@dgx/server';
 import { getPlyServerId, getPlySteamId } from '../sv_util';
-import { isServerStarted } from '../helpers/events';
 
 /**
  * The structure of the maps are as following:
@@ -27,32 +26,33 @@ export class EventIdManager {
     this.handlers = new Set();
     this.eventSet = new Set();
     this.playerResourceMap = new Map();
-    if (isServerStarted()) {
-      for (let i = 0; i < GetNumPlayerIndices(); i++) {
-        this.playerResourceMap.set(getPlySteamId(Number(GetPlayerFromIndex(i))), new Map());
-      }
+    for (let i = 0; i < GetNumPlayerIndices(); i++) {
+      this.playerResourceMap.set(getPlySteamId(Number(GetPlayerFromIndex(i))), new Map());
     }
   }
 
-  // TODO: following 2 methods should start in a saved thread that can be killed if one of the methods is called
+  private generateMapForEvents(): [Map<string, string>, Record<string, string>] {
+    const eventMap: Map<string, string> = new Map();
+    this.eventSet.forEach(evtName => {
+      let eventId = Util.uuidv4();
+      while (eventMap.has(eventId)) {
+        eventId = Util.uuidv4();
+      }
+      eventMap.set(eventId, evtName);
+    });
+    // EventMap to object
+    const evtObj: Record<string, string> = {};
+    eventMap.forEach((evtName, eventId) => {
+      evtObj[evtName] = eventId;
+    });
+    return [eventMap, evtObj];
+  }
 
   // Resource in parameters has started and wants to send events
   // We create a map for each player for this resource
   generateResourceMap(resName: string) {
     this.playerResourceMap.forEach((resourceMap, plySteamId) => {
-      const eventMap: Map<string, string> = new Map();
-      this.eventSet.forEach(evtName => {
-        let eventId = Util.uuidv4();
-        while (eventMap.has(eventId)) {
-          eventId = Util.uuidv4();
-        }
-        eventMap.set(eventId, evtName);
-      });
-      // EventMap to object
-      const evtObj: Record<string, string> = {};
-      eventMap.forEach((evtName, eventId) => {
-        evtObj[evtName] = eventId;
-      });
+      const [eventMap, evtObj] = this.generateMapForEvents();
       const serverId = getPlyServerId(plySteamId);
       emitNet('__dg_shared_events', serverId, resName, this.resource, evtObj);
       resourceMap.set(resName, eventMap);
@@ -60,22 +60,9 @@ export class EventIdManager {
   }
 
   generateMapForPlayer(src: number, steamId: string) {
-    this.playerResourceMap.set(steamId, new Map());
     const resourceMap: Map<string, Map<string, string>> = new Map();
     getRegisteredResources().forEach(resource => {
-      const eventMap: Map<string, string> = new Map();
-      this.eventSet.forEach(evtName => {
-        let eventId = Util.uuidv4();
-        while (eventMap.has(eventId)) {
-          eventId = Util.uuidv4();
-        }
-        eventMap.set(eventId, evtName);
-      });
-      // EventMap to object
-      const evtObj: Record<string, string> = {};
-      eventMap.forEach((evtName, eventId) => {
-        evtObj[evtName] = eventId;
-      });
+      const [eventMap, evtObj] = this.generateMapForEvents();
       emitNet('__dg_shared_events', src, resource, this.resource, evtObj);
       resourceMap.set(resource, eventMap);
     });

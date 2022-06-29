@@ -2,7 +2,7 @@
 // This set will be used to generate the maps
 import { mainLogger } from '../sv_logger';
 import { getPlyToken } from './tokens';
-import { handleResourceStart, handleResourceStop } from './events';
+import { handleResourceStart, handleResourceStop, hasAPlayerJoined } from './events';
 
 let resourceLoaded = false;
 const registeredResources: Set<string> = new Set();
@@ -26,7 +26,9 @@ setImmediate(async () => {
   resourceLoaded = true;
 });
 
-export const registerResource = (resName: string) => {
+// registeringPly is so we can await the assignement of the token for this specific player
+export const registerResource = async (resName: string, registeringPly: number) => {
+  console.log(`Registering resource ${resName} by player ${registeringPly}`);
   if (registeredResources.has(resName)) return;
   if (!isResourceKnown(resName)) {
     mainLogger.debug(`${resName} is not known to the server`);
@@ -36,7 +38,14 @@ export const registerResource = (resName: string) => {
   mainLogger.debug(`${resName} is now registered`);
   registeredResources.add(resName);
   // Generate maps specifically for this
-  // TODO: Find way to only trigger this after the first big batch of maps is generated;
+  if (!hasAPlayerJoined()) return;
+  await new Promise<void>(res => {
+    on('dg-auth:server:authenticated', (src: number) => {
+      if (src === registeringPly) {
+        res();
+      }
+    });
+  });
   handleResourceStart(resName);
   // If the resource was restarted, we resend the token to the specific resource
   if (!resourceLoaded || !unRegisteredResources.has(resName)) return;
