@@ -75,11 +75,11 @@ setImmediate(() => {
 
 export const handleCommandExecution = (source: number, cmd: string, args: string[]) => {
   const cmdInfo = commandManager.getCommandInfo(cmd);
-  if (!cmdInfo) {
+  if (!cmdInfo && source > 0) {
     Events.emitNet('executeLocalCmd', source, [cmd, args].join(' '));
     return;
   }
-  if (!DGCore.Functions.HasPermission(source, cmdInfo.permissionLevel)) return;
+  if (source > 0 && !DGCore.Functions.HasPermission(source, cmdInfo.permissionLevel)) return;
   const amountReqParams = cmdInfo.parameters.filter(param => param.required ?? true).length;
   if (amountReqParams > args.length) {
     Notifications.add(source, 'Niet alle parameters waren ingevuld!', 'error');
