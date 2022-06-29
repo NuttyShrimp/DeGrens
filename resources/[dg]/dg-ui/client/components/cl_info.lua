@@ -21,7 +21,6 @@ seedCharData = function()
 			server_id = GetPlayerServerId(PlayerId()),
 			hasVPN = DGCore.Functions.TriggerCallback('DGCore:HasItem', 'vpn')
 		}
-		if not DGCore.Shared.isDiff(characterInfo, newCharacterInfo) then return end
 		characterInfo = newCharacterInfo
 		SendAppEvent('character', characterInfo)
     Wait(1000)
