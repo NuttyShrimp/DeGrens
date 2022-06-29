@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import AppWrapper from '@components/appwrapper';
 
 import { NotificationList } from './components/list';
@@ -14,28 +14,31 @@ const Component: AppFunction<Notifications.State> = props => {
     props.updateState({ visible });
   };
 
-  const eventHandler = (data: any) => {
-    switch (data.action) {
-      case 'add': {
-        addNotification(data.notification as Notifications.Notification);
-        break;
+  const eventHandler = useCallback(
+    (data: any) => {
+      switch (data.action) {
+        case 'add': {
+          addNotification(data.notification as Notifications.Notification);
+          break;
+        }
+        case 'remove': {
+          removeNotification(data.id);
+          break;
+        }
+        default: {
+          throw new Error(`Unknown event for notification: ${data.action} | data: ${JSON.stringify(data)}`);
+        }
       }
-      case 'remove': {
-        removeNotification(data.id);
-        break;
-      }
-      default: {
-        throw new Error(`Unknown event for notification: ${data.action} | data: ${JSON.stringify(data)}`);
-      }
-    }
-  };
+    },
+    [removeNotification, addNotification]
+  );
 
   return (
     <AppWrapper
       appName={store.key}
       onShow={() => handleVisibility(true)}
       onHide={() => handleVisibility(false)}
-      onEvent={eventHandler}
+      onEvent={d => eventHandler(d)}
       center
       unSelectable
     >
