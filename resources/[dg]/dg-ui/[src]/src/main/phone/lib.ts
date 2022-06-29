@@ -199,10 +199,10 @@ export const removeNotification = (id: string) => {
   genericAction('phone.notifications', {
     list: notiState.list,
   });
-  console.log(notiState.list.length);
+  const phoneState = getState();
   if (notiState.list.length === 0) {
     genericAction('phone', {
-      animating: 'closed',
+      animating: phoneState.animating === 'peek' ? 'closed' : 'open',
       hasNotifications: false,
     });
   }
