@@ -5,14 +5,6 @@ let currentStation: number = null;
 let explosiveObject: number;
 let placingExplosive = false;
 
-setImmediate(async () => {
-  powerStations = await RPC.execute<PowerstationData[]>('dg-blackout:server:getPowerStations');
-  powerStations.forEach((zone, id) => {
-    const options = { ...zone.options, data: { id: id } };
-    PolyZone.addBoxZone('blackout_powerstation', zone.center, zone.width, zone.length, options, true);
-  });
-});
-
 PolyZone.onEnter<{ id: number }>('blackout_powerstation', (name: string, data: { id: number }) => {
   currentStation = data.id;
 });
