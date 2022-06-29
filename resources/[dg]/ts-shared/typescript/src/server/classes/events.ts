@@ -216,11 +216,11 @@ class RPC {
 }
 
 class SQL {
-  async query(query: string, params: any[] = [], cb?: (result: any) => void) {
+  async query<T = any>(query: string, params: any[] = [], cb?: (result: T) => void): Promise<T> {
     return global.exports['dg-sql'].query(query, params, cb);
   }
 
-  async scalar(query: string, params: any[] = [], cb?: (result: any) => void) {
+  async scalar<T = any>(query: string, params: any[] = [], cb?: (result: T) => void): Promise<T> {
     return global.exports['dg-sql'].scalar(query, params, cb);
   }
 

@@ -35,7 +35,7 @@ export class Util {
     return new Vector3(array[0], array[1], array[2]);
   };
 
-  Vector3ToArray = (vector: Vector3): number[] => {
+  Vector3ToArray = (vector: Vec3): [number, number, number] => {
     return [vector.x, vector.y, vector.z];
   };
 
@@ -75,4 +75,14 @@ export class Util {
   isDevEnv() {
     return GetConvar('is_production', 'true') === 'false';
   }
+
+  awaitCondition = async (condition: () => boolean, timeout = 5000) => {
+    let timedOut = false;
+    setTimeout(() => {
+      timedOut = true;
+    }, timeout);
+    while (!condition() && !timedOut) {
+      await this.Delay(100);
+    }
+  };
 }
