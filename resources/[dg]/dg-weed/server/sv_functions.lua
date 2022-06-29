@@ -57,5 +57,5 @@ removePlant = function(index)
 end
 
 canCut = function(index)
-    return os.time() >= activePlants[index].data.cuttime + config.cut.timeout
+    return os.time() >= activePlants[index].data.cuttime + (config.cut.timeout * 60 * 60)
 end

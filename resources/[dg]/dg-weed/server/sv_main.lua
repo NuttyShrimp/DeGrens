@@ -32,7 +32,7 @@ DGCore.Functions.CreateUseableItem("weed_bud", function(source, item)
         return
     end
 
-    if os.time() >= item.createtime + config.dry.timeout then
+    if os.time() >= item.createtime + (config.dry.timeout * 60 * 60) then
         local amount = math.random(config.dry.amount.min, config.dry.amount.max)
         if amount > bagInfo.amount then
             amount = bagInfo.amount
@@ -68,7 +68,7 @@ Citizen.CreateThread(function()
         end
 
         updatePlantData()
-        Citizen.Wait(1000 * 60 * 10) -- check every 10 min
+        Citizen.Wait(10 * 60 * 1000) -- check every 10 min
     end
 end)
 
@@ -86,7 +86,7 @@ Citizen.CreateThread(function()
         end
 
         updatePlantData()
-        Citizen.Wait(config.food.decayTime)
+        Citizen.Wait(config.food.decayTime * 60 * 1000)
     end
 end)
 
