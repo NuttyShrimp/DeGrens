@@ -292,6 +292,7 @@ class StateManager extends Util.Singleton<StateManager>() {
 
   cleanupPlayer(src: number) {
     const Player = DGCore.Functions.GetPlayer(src);
+    if (!Player) return;
     const cid = Player.PlayerData.citizenid;
     this.playerStates.delete(cid);
     emitNet('houserobbery:client:cleanup', src);
