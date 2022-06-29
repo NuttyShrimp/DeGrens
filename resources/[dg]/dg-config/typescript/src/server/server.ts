@@ -1,5 +1,5 @@
-import { loadConfigs } from "services/configs"
+import { loadConfigs } from 'services/configs';
 
-import './controllers/exports'
+import './controllers/exports';
 
 loadConfigs();
