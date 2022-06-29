@@ -14,9 +14,12 @@ class Util extends UtilShared {
       const ply = DGCore.Functions.GetPlayer(src);
       data = {
         ...data,
-        cid: ply.PlayerData.citizenid,
-        serverId: ply.PlayerData.source,
-        name: ply.PlayerData.name,
+        plyInfo: {
+          cid: ply.PlayerData.citizenid,
+          serverId: ply.PlayerData.source,
+          name: ply.PlayerData.name,
+          steamId: ply.PlayerData.steamid,
+        },
       };
     }
     global.exports['dg-logs'].createGraylogEntry(type, data, message, isDevImportant);
