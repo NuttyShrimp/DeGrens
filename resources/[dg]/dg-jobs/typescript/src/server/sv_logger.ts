@@ -1,10 +1,11 @@
+import { Config } from '@dgx/server';
+import { RewriteFrames } from '@sentry/integrations';
+import * as Sentry from '@sentry/node';
 import winston from 'winston';
 import winstonSentry from 'winston-sentry-log';
-import * as Sentry from '@sentry/node';
+
 import { name, sentry_dsn, version } from './../../package.json';
-import { RewriteFrames } from '@sentry/integrations';
 import { getCurrentEnv } from './sv_util';
-import { Config } from '@dgx/server';
 
 // Needed to manually apply a color to componenent property of log
 const manualColorize = (strToColor: string): string => `[\x1b[35m${strToColor}\x1b[0m]`;

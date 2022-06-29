@@ -1,7 +1,9 @@
 import { Events, Phone } from '@dgx/server';
 import jobManager from 'classes/jobManager';
 import winston from 'winston';
+
 import { groupLogger } from '../logger';
+
 import groupManager from './GroupManager';
 import nameManager from './NameManager';
 
@@ -189,14 +191,8 @@ export class Group {
       // TODO: add graylog
       return;
     }
-    const member = this.members.get(src);
     const clientMembers: JobGroupMember[] = this.getMemberForClient();
-    Events.emitNet('dg-jobs:client:groups:set', src, {
-      id: this.id,
-      name: nameManager.getName(this.owner?.cid ?? member.cid),
-      size: this.members.size,
-      limit: this.maxSize,
-    });
+    Events.emitNet('dg-jobs:client:groups:set', src, this.getClientInfo());
     Events.emitNet('dg-jobs:client:groups:setMembers', src, clientMembers);
     Events.emitNet('dg-jobs:client:groups:setGroupOwner', src, this.owner ? this.owner.serverId === src : true);
   }
@@ -269,7 +265,7 @@ export class Group {
     const member = this.getMemberByServerId(src);
     if (!member) {
       this.logger.warn(
-        `${GetPlayerName(String(src))}(${src}) tried to set his ready state in a group he isn\'t a member of`
+        `${GetPlayerName(String(src))}(${src}) tried to set his ready state in a group he isn't a member of`
       );
       // TODO: log in graylog
     }

@@ -1,5 +1,6 @@
 import { Util } from '@dgx/server';
 import winston from 'winston';
+
 import { groupLogger } from '../logger';
 
 // Manages the name that is used in the groups for the current player

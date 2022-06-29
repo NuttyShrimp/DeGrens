@@ -40,7 +40,9 @@ UI.RegisterUICallback('phone/jobs/waypoint', async (data: { job: string }, cb) =
 });
 // endregion
 // region events
-on('dg-ui:loadData', () => [emitNet('dg-jobs:client:groups:loadStore')]);
+on('dg-ui:loadData', () => {
+  emitNet('dg-jobs:client:groups:loadStore');
+});
 
 Events.onNet('dg-jobs:client:groups:isFull', () => {
   UI.SendAppEvent('phone', {

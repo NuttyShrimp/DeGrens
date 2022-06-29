@@ -1,11 +1,11 @@
-import { Events, RPC, Util } from '@dgx/server';
-import { Export, ExportRegister, Callback, CallbackRegister, RPCRegister, RPCEvent } from '@dgx/server/decorators';
+import { Events, Util } from '@dgx/server';
+import { Export, ExportRegister, RPCEvent, RPCRegister } from '@dgx/server/decorators';
 import { mainLogger } from 'sv_logger';
 import winston from 'winston';
+
 import groupManager from '../modules/groups/classes/GroupManager';
 
 @ExportRegister()
-@CallbackRegister()
 @RPCRegister()
 class JobManager {
   private static instance: JobManager;
@@ -52,7 +52,7 @@ class JobManager {
     let newToken = Util.getRndInteger(1, 7);
     if (newToken == 6) {
       if (limit == this.jobsWith6) {
-        while ((newToken = 6)) {
+        while (newToken === 6) {
           newToken = Util.getRndInteger(1, 7);
         }
       } else {

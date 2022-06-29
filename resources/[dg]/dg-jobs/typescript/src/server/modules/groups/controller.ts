@@ -1,8 +1,9 @@
+import { RPC } from '@dgx/server';
+
 import groupManager from './classes/GroupManager';
 import nameManager from './classes/NameManager';
-import { changeJob, createGroup, getGroupByCid, getGroupByServerId, getGroupList } from './service';
 import { groupLogger } from './logger';
-import { RPC } from '@dgx/server';
+import { changeJob, createGroup, getGroupByCid, getGroupByServerId, getGroupList } from './service';
 
 global.exports('createGroup', createGroup);
 global.exports('getGroupByCid', getGroupByCid);
