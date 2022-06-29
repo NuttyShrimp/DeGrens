@@ -28,7 +28,6 @@ setImmediate(async () => {
 
 // registeringPly is so we can await the assignement of the token for this specific player
 export const registerResource = async (resName: string, registeringPly: number) => {
-  console.log(`Registering resource ${resName} by player ${registeringPly}`);
   if (registeredResources.has(resName)) return;
   if (!isResourceKnown(resName)) {
     mainLogger.debug(`${resName} is not known to the server`);
@@ -37,15 +36,18 @@ export const registerResource = async (resName: string, registeringPly: number) 
   }
   mainLogger.debug(`${resName} is now registered`);
   registeredResources.add(resName);
+  console.log(`hasPlayerJoined: ${hasAPlayerJoined()}`);
   // Generate maps specifically for this
   if (!hasAPlayerJoined()) return;
-  await new Promise<void>(res => {
-    on('dg-auth:server:authenticated', (src: number) => {
-      if (src === registeringPly) {
-        res();
-      }
+  if (!getPlyToken(registeringPly)) {
+    await new Promise<void>(res => {
+      on('dg-auth:server:authenticated', (src: number) => {
+        if (src === registeringPly) {
+          res();
+        }
+      });
     });
-  });
+  }
   handleResourceStart(resName);
   // If the resource was restarted, we resend the token to the specific resource
   if (!resourceLoaded || !unRegisteredResources.has(resName)) return;

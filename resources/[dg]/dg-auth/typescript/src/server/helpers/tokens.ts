@@ -22,6 +22,7 @@ export const getPlyToken = (src: number): string => {
       });
     }
   }
+  return null;
 };
 
 export const generateToken = (src: number) => {
@@ -46,9 +47,6 @@ export const generateToken = (src: number) => {
   // TODO: await on all returns of the map generation, max span of 10 seconds to generate all maps --> Drop player if it takes too long
   handlePlayerJoin(src, steamId);
   emitNet('__dg_auth_authenticated', src, -1, token);
-  setTimeout(() => {
-    emit('dg-auth:server:authenticated', src);
-  }, 200);
 };
 
 export const getPlayerInfo = (src: number, token: string) => {
