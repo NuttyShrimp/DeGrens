@@ -483,7 +483,7 @@ function DGCore.Player.CreatePlayer(PlayerData)
   DGCore.Player.Save(self.PlayerData.source)
 
   -- Make the player state aware that we are loggedin
-  Player(self.PlayerData.source).state.set('loggedIn', true)
+  Player(self.PlayerData.source).state:set('loggedIn', true, true)
 
   -- At this point we are safe to emit new instance to third party resource for load handling
   TriggerEvent('DGCore:Server:PlayerLoaded', self)
