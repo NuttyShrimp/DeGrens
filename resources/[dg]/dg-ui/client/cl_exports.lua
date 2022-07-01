@@ -57,7 +57,7 @@ function closeApplication (app, data)
 		show = false,
 		data = data or {},
 	})
-	SetUIFocus(false, false)
+	SetUIFocusCustom(false, false)
 	TriggerEvent("dg-ui:application-closed", app, { fromEscape = false })
 end
 
