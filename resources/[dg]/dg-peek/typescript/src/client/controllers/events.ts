@@ -1,4 +1,4 @@
-import { Util } from '@dgx/client';
+import { UI, Util } from '@dgx/client';
 
 import { entryManager } from '../classes/entryManager';
 import { stateManager } from '../classes/stateManager';
@@ -11,16 +11,26 @@ on('onResourceStart', (resName: string) => {
   setCtxPlayerData(DGCore.Functions.GetPlayerData());
 });
 
-RegisterNuiCallbackType('closeTarget');
-on('__cfx_nui:closeTarget', (_: null, cb: Function) => {
+UI.RegisterUICallback('peek:hide', (_, cb) => {
   stateManager.removeFocus();
   stateManager.stopPeeking();
-  cb('ok');
+  cb({
+    meta: {
+      message: 'done',
+      ok: true,
+    },
+    data: {},
+  });
 });
 
-RegisterNuiCallbackType('selectTarget');
-on('__cfx_nui:selectTarget', (data: { id: string }, cb: Function) => {
-  cb('ok');
+UI.RegisterUICallback('peek:select', (data: { id: string }, cb) => {
+  cb({
+    meta: {
+      message: 'done',
+      ok: true,
+    },
+    data: {},
+  });
   let entry = entryManager.getEntry(data.id);
   stateManager.removeFocus();
   stateManager.stopPeeking();
@@ -64,5 +74,6 @@ on('dg-polytarget:exit', (name: string) => {
 });
 
 DGX.Keys.onPress('playerPeek', isDown => {
+  if (!LocalPlayer.state?.loggedIn) return;
   isDown ? stateManager.startPeeking() : stateManager.stopPeeking();
 });

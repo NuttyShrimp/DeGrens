@@ -2,6 +2,7 @@ import { ENTRY_TYPES } from '../cl_constant';
 import { getCurrentEntity } from '../helpers/actives';
 import { getEntityCtx } from '../helpers/context';
 import { isEntryDisabled } from '../helpers/entries';
+import { UI } from '@dgx/client';
 
 import { BonesManager } from './entryManagers/bonesManager';
 import { EntityManager } from './entryManagers/entityManager';
@@ -113,11 +114,17 @@ class EntryManager {
   refreshNUIList() {
     const activeEntries = this.getAllActiveEntries();
     if (activeEntries.every(entry => isEntryDisabled(entry))) {
-      SendNUIMessage({ response: 'leftTarget' });
+      UI.SendAppEvent('peek', { action: 'leftTarget' });
       return;
     }
-    const visibleEntries = activeEntries.filter(entry => !isEntryDisabled(entry));
-    SendNUIMessage({ response: 'foundTarget', data: visibleEntries });
+    const visibleEntries = activeEntries
+      .filter(entry => !isEntryDisabled(entry))
+      .map(entry => ({
+        id: entry.id,
+        label: entry.label,
+        icon: entry.icon,
+      }));
+    UI.SendAppEvent('peek', { action: 'foundTarget', entries: visibleEntries });
   }
 }
 

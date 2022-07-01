@@ -1,4 +1,4 @@
-import { Util } from '@dgx/client';
+import { UI, Util } from '@dgx/client';
 import { Vector3 } from '@dgx/shared';
 
 import { DISABLED_KEYS, PEEK_TYPES } from '../cl_constant';
@@ -43,7 +43,7 @@ class StateManager {
     if (!this.canPeek || this.isPeeking) {
       return;
     }
-    SendNUIMessage({ response: 'openTarget' });
+    UI.openApplication('peek', {}, true);
     this.isPeeking = true;
     entryManager.loadActiveEntries();
     this.createCheckThread();
@@ -55,9 +55,7 @@ class StateManager {
     if (this.isUIFocused) {
       return;
     }
-    SendNUIMessage({ response: 'closeTarget' });
-    SetNuiFocusKeepInput(false);
-    SetNuiFocus(false, false);
+    UI.closeApplication('peek');
 
     this.isPeeking = false;
     this.isUIFocused = false;
@@ -74,10 +72,10 @@ class StateManager {
       return;
     }
     this.isUIFocused = true;
-    SetCursorLocation(0.5, 0.5);
-    SetNuiFocus(true, true);
-    SetNuiFocusKeepInput(true);
-    SendNUIMessage({ response: 'showOptions' });
+    UI.SendAppEvent('peek', {
+      action: 'showOptions',
+    });
+    UI.SetUIFocusCustom(true, true);
   }
 
   removeFocus() {

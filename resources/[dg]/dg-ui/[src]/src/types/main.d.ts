@@ -74,6 +74,7 @@ declare interface RootState {
   taskbar: TaskBar.State;
   sliders: Sliders.State;
   scenes: Scenes.State;
+  peek: Peek.State;
   phone: Phone.State;
   'phone.notifications': Phone.Notifications.State;
   'phone.apps.example': {};

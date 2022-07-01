@@ -172,4 +172,15 @@ export const cmds: {
     app: 'taskbar',
     show: false,
   },
+  {
+    cmd: 'show peek',
+    app: 'peek',
+    show: true,
+    data: {},
+  },
+  {
+    cmd: 'hide peek',
+    app: 'peek',
+    show: false,
+  },
 ];

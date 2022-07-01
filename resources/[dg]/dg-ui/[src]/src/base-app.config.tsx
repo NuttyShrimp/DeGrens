@@ -43,13 +43,18 @@ export const AppsProvider: FC<PropsWithChildren<{}>> = ({ children }) => {
 
 export const useApps = () => {
   const apps = useContext(appsContext);
+  const mainState = useSelector<RootState, Main.State>(state => state.main);
   const getAllApps = useCallback(() => apps, [apps]);
   const getApp = useCallback(
     (name: keyof RootState): ConfigObject | undefined => apps.find(a => a.name === name),
     [apps]
   );
+  const getCurrentAppType = useCallback(() => {
+    return apps.find(a => a.name === mainState.currentApp)?.type;
+  }, [mainState, apps]);
   return {
     getAllApps,
     getApp,
+    getCurrentAppType,
   };
 };

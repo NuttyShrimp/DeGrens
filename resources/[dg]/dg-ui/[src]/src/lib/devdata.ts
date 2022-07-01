@@ -505,6 +505,19 @@ devData.jobs = [
   },
 ];
 
+devData.peekEntries = [
+  {
+    label: 'Open stash',
+    icon: 'box-archive',
+    id: '1',
+  },
+  {
+    label: 'Repair vehicle',
+    icon: 'car-wrench',
+    id: '2',
+  },
+];
+
 const emulatedData: Record<
   string,
   {

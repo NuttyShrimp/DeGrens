@@ -1,0 +1,42 @@
+@use 'src/styles/variables.scss';
+
+.peek {
+  &-wrapper {
+    display: flex;
+    margin-left: 50vw;
+    margin-top: 50vh;
+    
+  }
+  &-eye {
+    color: white;
+    width: 3vh;
+    height: 3vh;
+  }
+  &-list {
+    display: flex;
+    flex-direction: column;
+    margin-left: 1vh;
+    margin-top: 1vh;
+    &-entry {
+      display: flex;
+      align-items: center;
+      margin: .25vh 0;
+      
+      font-size: 1.4vh;
+      font-weight: bold;
+      font-family: sans-serif;
+      
+      color: white;
+      white-space: nowrap;
+      text-shadow: 0.2vh 0.2vh 0.2vh #000;
+
+      user-select: none;
+      &:hover {
+        color: variables.$primary_normal;
+      }
+      & > *:first-child {
+        margin-right: .5vh;
+      }
+    }
+  }
+}
