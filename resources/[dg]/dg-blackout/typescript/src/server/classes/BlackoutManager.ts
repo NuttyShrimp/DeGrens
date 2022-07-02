@@ -1,4 +1,4 @@
-import { Chat, Util } from '@dgx/server/classes';
+import { Chat, Util, Events } from '@dgx/server';
 
 class BlackoutManager extends Util.Singleton<BlackoutManager>() {
   private _state = false;
@@ -19,11 +19,10 @@ class BlackoutManager extends Util.Singleton<BlackoutManager>() {
         : 'De stroompanne is opgelost. Excuses voor het ongemak.',
       type: 'system',
     });
-    emitNet('dg-blackout:client:SetBlackout', -1, this.state);
+    Events.emitNet('blackout:client:setBlackout', -1, this.state);
     if (this.state) this.startFlickeringThread();
   }
 
-  // 5% chance of lights flickering
   private startFlickeringThread = () => {
     clearTimeout(this.flickeringTimeout);
     this.flickeringTimeout = setTimeout(() => {
@@ -33,7 +32,7 @@ class BlackoutManager extends Util.Singleton<BlackoutManager>() {
           this.flickeringThread = null;
           return;
         }
-        if (Util.getRndInteger(1, 100) <= 20) emitNet('dg-blackout:client:Flicker', -1);
+        if (Util.getRndInteger(1, 100) <= 20) Events.emitNet('blackout:client:flicker', -1);
       }, 1000);
     }, 5000);
   };

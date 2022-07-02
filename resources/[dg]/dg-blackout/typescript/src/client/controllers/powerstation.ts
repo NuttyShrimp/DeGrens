@@ -12,8 +12,8 @@ PolyZone.onLeave('blackout_powerstation', () => {
   currentStation = null;
 });
 
-onNet('dg-blackout:client:UseExplosive', async () => {
-  const isHit = await RPC.execute('dg-blackout:server:IsStationHit', currentStation);
+Events.onNet('blackout:client:useExplosive', async () => {
+  const isHit = await RPC.execute<boolean>('blackout:server:isStationHit', currentStation);
   if (currentStation === null || isHit) {
     Notifications.add('Je kan hier niks exploderen.', 'error');
     return;
@@ -25,7 +25,7 @@ onNet('dg-blackout:client:UseExplosive', async () => {
   plantExplosive(currentStation);
 });
 
-Events.onNet('dg-blackout:server:getPowerStations', (data: PowerstationData[]) => {
+Events.onNet('blackout:server:getPowerStations', (data: PowerstationData[]) => {
   powerStations = data;
   powerStations.forEach((zone, id) => {
     const options = { ...zone.options, data: { id: id } };
@@ -88,7 +88,7 @@ const plantExplosive = async (stationId: number) => {
     1.0
   );
 
-  emitNet('dg-blackout:server:SetStationHit', stationId);
+  Events.emitNet('blackout:server:setStationHit', stationId);
   placingExplosive = false;
 };
 
