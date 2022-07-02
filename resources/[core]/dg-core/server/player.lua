@@ -171,7 +171,7 @@ function DGCore.Player.Logout(source)
   TriggerClientEvent('DGCore:Client:OnPlayerUnload', src)
   TriggerEvent('DGCore:Server:OnPlayerUnload', src)
   TriggerClientEvent('DGCore:Player:UpdatePlayerData', src)
-  Player(self.PlayerData.source).state.set('loggedIn', false)
+  Player(self.PlayerData.source).state:set('loggedIn', false)
   Citizen.Wait(200)
   DGCore.Players[src] = nil
 end
