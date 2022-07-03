@@ -1,8 +1,9 @@
 // This script will register all resources that use the DGX middleware for events and register it into a set
 // This set will be used to generate the maps
 import { mainLogger } from '../sv_logger';
-import { getPlyToken } from './tokens';
+
 import { handleResourceStart, handleResourceStop, hasAPlayerJoined } from './events';
+import { getPlyToken } from './tokens';
 
 let resourceLoaded = false;
 const registeredResources: Set<string> = new Set();
@@ -36,7 +37,6 @@ export const registerResource = async (resName: string, registeringPly: number) 
   }
   mainLogger.debug(`${resName} is now registered`);
   registeredResources.add(resName);
-  console.log(`hasPlayerJoined: ${hasAPlayerJoined()}`);
   // Generate maps specifically for this
   if (!hasAPlayerJoined()) return;
   if (!getPlyToken(registeringPly)) {

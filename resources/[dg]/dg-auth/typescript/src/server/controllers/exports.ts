@@ -1,4 +1,5 @@
 import { getPlayerInfo, getPlyToken } from 'helpers/tokens';
+
 import { registerEventForManager, registerHandlerForManager, registerServerEventHandler } from '../helpers/events';
 
 global.exports('validateToken', getPlayerInfo);

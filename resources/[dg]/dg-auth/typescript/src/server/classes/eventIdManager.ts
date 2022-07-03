@@ -1,7 +1,8 @@
 // We want to create a manager for each resource, this will remove the
 // problem where a resource could have 2 maps because the lib is transpiled + imported via manifest
-import { getRegisteredResources } from '../helpers/resourceSet';
 import { Util } from '@dgx/server';
+
+import { getRegisteredResources } from '../helpers/resourceSet';
 import { getPlyServerId, getPlySteamId } from '../sv_util';
 
 /**

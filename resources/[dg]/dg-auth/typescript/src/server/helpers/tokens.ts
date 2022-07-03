@@ -1,7 +1,9 @@
 import { Util } from '@dgx/server/classes';
 import jwt from 'jsonwebtoken';
+
 import { mainLogger } from '../sv_logger';
 import { getPlySteamId } from '../sv_util';
+
 import { handlePlayerJoin } from './events';
 
 const tokenMap: Map<string, PlyData> = new Map();
@@ -47,6 +49,9 @@ export const generateToken = (src: number) => {
   // TODO: await on all returns of the map generation, max span of 10 seconds to generate all maps --> Drop player if it takes too long
   handlePlayerJoin(src, steamId);
   emitNet('__dg_auth_authenticated', src, -1, token);
+  setTimeout(() => {
+    emit('dg-auth:server:authenticated', src);
+  }, 400);
 };
 
 export const getPlayerInfo = (src: number, token: string) => {

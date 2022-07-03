@@ -1,5 +1,6 @@
 import { registerResource } from 'helpers/resourceSet';
 import { generateToken, setPrivateToken } from 'helpers/tokens';
+
 import { handleIncomingEvent } from '../helpers/events';
 
 onNet('__dg_auth_register', (resName: string) => {
