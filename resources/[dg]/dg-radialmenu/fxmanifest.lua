@@ -24,9 +24,8 @@ server_scripts {
 
 files {
     'html/index.html',
-    'html/css/main.css',
-    'html/js/main.js',
-    'html/js/RadialMenu.js',
+    'html/css/*.css',
+    'html/js/*.js',
 }
 
 client_script "@dg-logs/client/cl_log.lua"
