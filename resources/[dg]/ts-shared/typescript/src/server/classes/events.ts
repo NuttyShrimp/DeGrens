@@ -285,7 +285,6 @@ class RPCManager {
   }
 
   traceHandlerStart(src: number, data: RPC.EventData) {
-    console.log('[DGX] RPC trace handler start', data);
     sentryHandler.startTransaction(
       {
         name: 'ClientRPC.handler',
