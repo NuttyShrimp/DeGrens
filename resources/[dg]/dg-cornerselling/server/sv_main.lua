@@ -89,7 +89,7 @@ RegisterServerEvent("dg-cornerselling:server:SellDrugs", function(sellLocation)
 
         local rng = math.random(100)
         if rng < Config.CleanChance then
-            exports['dg-blackmoney']:randomSellBlackMoney(src)
+            exports['dg-misc']:randomSellBlackMoney(src)
         end
     end
 end)
