@@ -5,7 +5,6 @@ import { store, type } from '@lib/redux';
 import { addLog } from '@main/debuglogs/lib';
 import makeStyles from '@mui/styles/makeStyles';
 import * as Sentry from '@sentry/react';
-import { SpanStatus } from '@sentry/tracing/dist/spanstatus';
 
 import { useApps } from '../base-app.config';
 
@@ -130,9 +129,9 @@ export default function AppWrapper(props: AppWrapperProps) {
           if (props.onEvent) {
             props.onEvent(e.data.data);
           }
-          span.setStatus(SpanStatus.Ok);
+          span.setStatus('ok');
         } catch (e) {
-          span.setStatus(SpanStatus.UnknownError);
+          span.setStatus('unknown_error');
           throw e;
         } finally {
           span.finish();
