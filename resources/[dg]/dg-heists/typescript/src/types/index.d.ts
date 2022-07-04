@@ -32,6 +32,11 @@ declare namespace Heist {
       maxZ: number;
     };
   }
+
+  interface StateManager {
+    canHack(heistId: Heist.Id): boolean;
+    finishedHack(heistId: Heist.Id): void;
+  }
 }
 
 declare namespace Drives {

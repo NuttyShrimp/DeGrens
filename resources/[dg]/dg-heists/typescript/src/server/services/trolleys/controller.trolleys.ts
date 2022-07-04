@@ -9,11 +9,32 @@ Events.onNet('heists:server:lootTrolley', async (src: number, heistId: Heist.Id,
   const loot = possibleLoot[Math.floor(Math.random() * possibleLoot.length)];
   Player.Functions.AddItem(loot.name, Util.getRndInteger(loot.min, loot.max));
   emitNet('inventory:client:ItemBox', src, loot.name, 'add');
+  Util.Log(
+    'heists:trolley:loot',
+    {
+      heistId,
+      type,
+      loot,
+    },
+    `${Player.PlayerData.name} received loot from a ${type} trolley`,
+    src
+  );
 
-  if (Util.getRndInteger(0, 100) < config[heistId].specialChance) {
+  const chance = Util.getRndInteger(0, 100);
+  if (chance < config[heistId].specialChance) {
     const specialItems = config[heistId].specialItems;
     const specialItem = specialItems[Math.floor(Math.random() * specialItems.length)];
     Player.Functions.AddItem(specialItem, 1);
+    Util.Log(
+      'heists:trolley:specialLoot',
+      {
+        heistId,
+        specialItem,
+        chance,
+      },
+      `${Player.PlayerData.name} received a special item`,
+      src
+    );
     emitNet('inventory:client:ItemBox', src, specialItem, 'add');
   }
 });

@@ -1,10 +1,10 @@
 import { DGXEvent, EventListener, RPCEvent, RPCRegister } from '@dgx/server/decorators';
-import { Util } from '@dgx/shared';
+import { Util } from '@dgx/server';
 import doorStateManager from 'controllers/classes/doorstatemanager';
 
 @RPCRegister()
 @EventListener()
-class StateManager extends Util.Singleton<StateManager>() {
+class StateManager extends Util.Singleton<StateManager>() implements Heist.StateManager {
   private powerLocation: Vec3;
   private powerDisabled = false;
   private robbedBanks: Set<Fleeca.Id> = new Set();
@@ -12,13 +12,13 @@ class StateManager extends Util.Singleton<StateManager>() {
 
   setConfig = (powerLocations: Vec3[], ids: Fleeca.Id[]) => {
     this.allPowerLocations = powerLocations;
-    this.chooseNewPowerLocation()
+    this.chooseNewPowerLocation();
     doorStateManager.registerDoors(...ids);
-  }
+  };
 
   private chooseNewPowerLocation = () => {
     this.powerLocation = this.allPowerLocations[Math.floor(Math.random() * this.allPowerLocations.length)];
-  }
+  };
 
   @RPCEvent('heists:server:fleeca:getPowerLocation')
   getPowerLocation = () => {
@@ -26,8 +26,16 @@ class StateManager extends Util.Singleton<StateManager>() {
   };
 
   @DGXEvent('heists:server:fleeca:disablePower')
-  private _disablePower = () => {
+  private _disablePower = (src: number) => {
     this.powerDisabled = true;
+    Util.Log(
+      'heists:fleeca:power',
+      {
+        location: this.powerLocation,
+      },
+      `${GetPlayerName(String(src))} disabled the power`,
+      src
+    );
     this.powerLocation = null;
   };
 

@@ -1,12 +1,12 @@
-import { Config, Events, RPC } from '@dgx/server';
+import { Config, Events, RPC, Util } from '@dgx/server';
 
 let activePickups: Record<number, Drives.Name> = {};
 
 let driveConfig: Drives.Config;
 setImmediate(async () => {
   await Config.awaitConfigLoad();
-  driveConfig = Config.getConfigValue<Drives.Config>('heists.drives')
-})
+  driveConfig = Config.getConfigValue<Drives.Config>('heists.drives');
+});
 
 RPC.register('heists:server:getLaptopShopEntries', async (source: number): Promise<ContextMenuEntry[]> => {
   const Player = DGCore.Functions.GetPlayer(source);
@@ -31,11 +31,31 @@ RPC.register('heists:server:buyLaptop', async (source: number, drive: Drives.Nam
   const Player = DGCore.Functions.GetPlayer(source);
   const cryptoCost = driveConfig[drive]?.cost ?? 100;
   const hasEnoughCrypto = (await global.exports['dg-financials'].cryptoGet(source, 'Manera')) >= cryptoCost;
-  const hasItem = Player.Functions.GetItemByName(drive) ? true : false;
-  if (!hasEnoughCrypto || !hasItem) return false;
+  const hasItem = !!Player.Functions.GetItemByName(drive);
+  if (!hasEnoughCrypto || !hasItem) {
+    Util.Log(
+      'heists:laptop:buy',
+      {
+        drive,
+        hasEnoughCrypto,
+        hasDrive: hasItem,
+      },
+      `${Player.PlayerData.name} attempted to buy a ${drive} laptop`,
+      source
+    );
+    return false;
+  }
 
   Player.Functions.RemoveItem(drive, 1);
   await global.exports['dg-financials'].cryptoRemove(source, 'Manera', cryptoCost);
+  Util.Log(
+    'heists:laptop:buy',
+    {
+      drive,
+    },
+    `${Player.PlayerData.name} bought a ${drive} laptop`,
+    source
+  );
   const citizenid = Player.PlayerData.citizenid;
   activePickups[citizenid] = drive;
   return true;
@@ -46,6 +66,15 @@ Events.onNet('heists:server:pickupLaptop', async (src: number) => {
   const citizenid = Player.PlayerData.citizenid;
   if (!activePickups[citizenid]) return;
   const laptop = driveConfig[activePickups[citizenid]]?.laptop ?? 'laptop_v1';
+  Util.Log(
+    'heists:laptop:pickup',
+    {
+      laptop,
+      origin: activePickups[citizenid],
+    },
+    `${Player.PlayerData.name} picked up a ${laptop} laptop`,
+    source
+  );
   activePickups[citizenid] = null;
   Player.Functions.AddItem(laptop, 1);
   emitNet('inventory:client:ItemBox', src, laptop, 'add');
@@ -53,5 +82,5 @@ Events.onNet('heists:server:pickupLaptop', async (src: number) => {
 
 RPC.register('heists:server:hasActivePickup', (src: number): boolean => {
   const citizenid = DGCore.Functions.GetPlayer(src).PlayerData.citizenid;
-  return activePickups[citizenid] ? true : false;
+  return !!activePickups[citizenid];
 });

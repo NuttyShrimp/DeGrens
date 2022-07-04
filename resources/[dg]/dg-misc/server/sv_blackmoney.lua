@@ -30,6 +30,11 @@ randomSellBlackMoney = function(source)
         local itemPrices = blackMoneyConfig.Worth[itemData.name]
         local price = math.random(itemPrices.min, itemPrices.max) * amount
         exports['dg-financials']:addCash(src, price, 'randomsell-blackmoney')
+        DGX.Util.Log('blackmoney:sellRandom', {
+            item = itemData.name,
+            amount = amount,
+            price = price,
+        }, "%s has made sale of %dx %s":format(GetPlayerName(src), amount, exports['dg-inventory']:GetItemData(itemData.name).label), src)
     end
 end
 exports("randomSellBlackMoney", randomSellBlackMoney)

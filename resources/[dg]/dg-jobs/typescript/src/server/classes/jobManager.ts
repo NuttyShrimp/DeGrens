@@ -81,6 +81,16 @@ class JobManager {
       job.payoutLevel = this.genJobPayoutLvl();
       this.jobs.set(jobName, job);
     }
+    Util.Log(
+      'jobs:jobmanager:payout:update',
+      {
+        levels: [...this.jobs.values()].map(j => ({
+          name: j.name,
+          level: j.payoutLevel,
+        })),
+      },
+      'Updated payout levels'
+    );
     this.schedulePayoutUpdate();
   }
 
@@ -108,14 +118,28 @@ class JobManager {
   public setJobWaypoint(src: number, jobName: string) {
     if (!this.jobs.has(jobName)) {
       this.logger.warn(`${GetPlayerName(String(src))}(${src}) tried to set waypoint for non-existing job ${jobName}`);
-      // TODO: log to graylog
+      Util.Log(
+        'jobs:jobmanager:waypoint:set:invalid',
+        {
+          jobName,
+        },
+        `${GetPlayerName(String(src))}(${src}) tried to set waypoint for non-existing job ${jobName}`,
+        src
+      );
       // TODO: ban mfker from server
       return;
     }
     const jobObj = this.jobs.get(jobName);
     if (!jobObj.legal) {
       this.logger.warn(`${GetPlayerName(String(src))}(${src}) tried to set waypoint for an illegal job ${jobName}`);
-      // TODO: log to graylog
+      Util.Log(
+        'jobs:jobmanager:waypoint:set:illegal',
+        {
+          jobName,
+        },
+        `${GetPlayerName(String(src))}(${src}) tried to set waypoint for a illegal job ${jobName}`,
+        src
+      );
       // TODO: ban mfker from server
       return;
     }

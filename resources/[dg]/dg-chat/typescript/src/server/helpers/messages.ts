@@ -1,4 +1,4 @@
-import { Events } from '@dgx/server';
+import { Events, Util } from '@dgx/server';
 import { handleCommandExecution } from './commands';
 
 const specialTarget: { [k: string]: (PlayerData: PlayerData) => boolean } = {
@@ -23,6 +23,15 @@ Events.onNet('chat:incomingMessage', (source: number, msg: string) => {
   msg = msg.replace(/^\//, '');
   const args = msg.split(' ');
   const cmd = args.shift();
+  Util.Log(
+    'chat:message',
+    {
+      command: cmd,
+      args,
+    },
+    `${GetPlayerName(String(source))} tried to execute command ${cmd}`,
+    source
+  );
   handleCommandExecution(source, cmd, args);
 });
 

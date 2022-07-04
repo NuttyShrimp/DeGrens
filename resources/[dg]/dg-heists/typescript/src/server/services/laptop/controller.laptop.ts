@@ -2,7 +2,7 @@ import { Events, Notifications, RPC, Util, Config } from '@dgx/server';
 import fleecaStateManager from './../../modules/fleeca/classes/statemanager';
 import doorStateManager from './../../controllers/classes/doorstatemanager';
 
-const heistStateManagers: Record<Laptop.Name, any> = {
+const heistStateManagers: Record<Laptop.Name, Heist.StateManager> = {
   laptop_v1: fleecaStateManager,
   laptop_v2: null,
   laptop_v3: null,
@@ -25,7 +25,7 @@ setImmediate(async () => {
       const hackLocation = laptopConfig.interactCoords[laptopName].find(coord => plyCoords.distance(coord) <= 1.0);
       if (!hackLocation) return;
 
-      const heistId = RPC.execute<Heist.Id>('heists:client:getCurrentLocation', src);
+      const heistId = await RPC.execute<Heist.Id>('heists:client:getCurrentLocation', src);
       if (!heistId) return;
 
       if (!heistStateManagers[laptopName]?.canHack(heistId)) {
@@ -41,11 +41,31 @@ setImmediate(async () => {
 RPC.register('heists:server:finishHack', (src: number, laptopName: Laptop.Name, heistId: Heist.Id) => {
   if (!heistId) return false;
   const Player = DGCore.Functions.GetPlayer(src);
-  if (!Player.Functions.RemoveItem(laptopName, 1)) return false;
+  if (!Player.Functions.RemoveItem(laptopName, 1)) {
+    Util.Log(
+      'heists:laptop:error',
+      {
+        heist: heistId,
+        laptopItem: laptopName,
+      },
+      `${Player.PlayerData.name} used ${laptopName} to hack ${heistId} but didn't have the item`,
+      src
+    );
+    return false;
+  }
 
   setTimeout(() => {
     doorStateManager.setDoorState(heistId, true);
   }, (laptopConfig.hackDelay ?? 5) * 60 * 1000);
 
+  Util.Log(
+    'heists:laptop:success',
+    {
+      heist: heistId,
+      laptopItem: laptopName,
+    },
+    `${Player.PlayerData.name} successfully hacked the ${heistId} heist door with a  ${laptopName}`,
+    src
+  );
   heistStateManagers[laptopName]?.finishedHack(heistId);
 });

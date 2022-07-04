@@ -1,4 +1,4 @@
-import { Config, Events, RPC } from '@dgx/server';
+import { Config, Events, RPC, Util } from '@dgx/server';
 
 let prices: Record<string, number>;
 
@@ -12,6 +12,15 @@ RPC.register('houserobbery:server:canSellItem', (_src: number, itemName: string)
 });
 
 Events.onNet('houserobbery:server:sellItem', (src: number, itemData: { name: string; amount: number }) => {
-  const amount = prices[itemData.name] * itemData.amount;
-  global.exports['dg-financials'].addCash(src, amount, 'houserobbery-sell');
+  const price = prices[itemData.name] * itemData.amount;
+  Util.Log(
+    'houserobbery:sellItem',
+    {
+      ...itemData,
+      price,
+    },
+    `${src} sold ${itemData.amount} ${itemData.name} for ${price}`,
+    src
+  );
+  global.exports['dg-financials'].addCash(src, price, 'houserobbery-sell');
 });

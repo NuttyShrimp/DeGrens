@@ -1,12 +1,13 @@
 import { Config, Chat, RPC, Util, Events } from '@dgx/server';
 import blackoutManager from '../classes/BlackoutManager';
 
-Events.onNet('blackout:server:setBlackout', (_src: number, state: boolean) => {
+Events.onNet('blackout:server:setBlackout', (src: number, state: boolean) => {
   blackoutManager.state = state;
   Util.Log(
     'blackout:toggle',
     { blackout: blackoutManager.state, source: source },
-    `Blackout has been ${blackoutManager.state ? 'enabled' : 'disabled'} by an event.`
+    `Blackout has been ${blackoutManager.state ? 'enabled' : 'disabled'} by an event.`,
+    src
   );
 });
 

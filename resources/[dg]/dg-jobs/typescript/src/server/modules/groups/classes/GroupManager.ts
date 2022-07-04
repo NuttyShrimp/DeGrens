@@ -1,3 +1,4 @@
+import { Util } from '@dgx/server';
 import { v4 } from 'uuid';
 
 import { Group } from './Group';
@@ -31,6 +32,14 @@ class GroupManager {
   public createGroup(src: number) {
     const groupId = this.genGroupId();
     const group = new Group(src, groupId);
+    Util.Log(
+      'jobs:groupmanger:create',
+      {
+        groupId,
+      },
+      `${GetPlayerName(String(src))}(${src}) created a job group`,
+      src
+    );
     this.groups.set(groupId, group);
   }
   public getGroups() {
@@ -43,6 +52,15 @@ class GroupManager {
     members.forEach(m => {
       group.removeMember(m.serverId);
     });
+    Util.Log(
+      'jobs:groupmanger:disband',
+      {
+        groupId,
+        members,
+      },
+      `${group.getOwner().name}'s job group was disbanded`,
+      group.getOwner().serverId
+    );
     this.groups.delete(groupId);
   }
 

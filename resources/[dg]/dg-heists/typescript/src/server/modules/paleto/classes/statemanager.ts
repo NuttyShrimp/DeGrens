@@ -3,7 +3,7 @@ import { Util } from '@dgx/shared';
 
 @RPCRegister()
 @EventListener()
-class StateManager extends Util.Singleton<StateManager>() {
+class StateManager extends Util.Singleton<StateManager>() implements Heist.StateManager {
   constructor() {
     super();
   }

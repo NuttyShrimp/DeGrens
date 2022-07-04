@@ -44,11 +44,18 @@ class StateManager extends Util.Singleton<StateManager>() {
     const Player = DGCore.Functions.GetPlayer(src);
     if (Player.PlayerData.job.name === 'police') {
       Notifications.add(src, 'Bert B: "Ik kan niks voor u betekenen"');
+      Util.Log(
+        'houserobbery:signin:failed',
+        {},
+        `${Player.PlayerData.name} tried to signin for houserobberies but is has the police job`,
+        src
+      );
       return;
     }
     const cid = Player.PlayerData.citizenid;
     if (this.playerStates.has(cid) && this.playerStates.get(cid) !== PlayerState.WAITING) {
       this.cleanupPlayer(src);
+      Util.Log('houserobbery:signin:logout', {}, `${Player.PlayerData.name} left the queue for houserobberies`, src);
       return false;
     }
     this.playerStates.set(cid, PlayerState.WAITING);
@@ -56,6 +63,7 @@ class StateManager extends Util.Singleton<StateManager>() {
     if (!plyJobGroup) {
       Jobs.createGroup(src);
     }
+    Util.Log('houserobbery:signin:login', {}, `${Player.PlayerData.name} joined the queue for houserobberies`, src);
     return true;
   };
 
@@ -109,6 +117,14 @@ class StateManager extends Util.Singleton<StateManager>() {
   @DGXEvent('houserobbery:server:unlockDoor')
   unlockDoor = (src: number, houseId: string) => {
     if (!this.checkUserIsDoingJob(src, houseId)) return;
+    Util.Log(
+      'houserobbery:door:unlock',
+      {
+        houseId,
+      },
+      `${GetPlayerName(String(src))} unlocked a house robbery door`,
+      src
+    );
     this.houseStates.get(houseId).state = HouseState.UNLOCKED;
   };
 
@@ -118,6 +134,14 @@ class StateManager extends Util.Singleton<StateManager>() {
     const Player = DGCore.Functions.GetPlayer(src);
     if (!Player) return;
     if (Player.PlayerData.job.name !== 'police' || !Player.PlayerData.job.onduty) return;
+    Util.Log(
+      'houserobbery:door:lock',
+      {
+        houseId,
+      },
+      `${GetPlayerName(String(src))} locked a house robbery door`,
+      src
+    );
     this.houseStates.get(houseId).state = HouseState.LOCKED;
   };
 
@@ -126,6 +150,16 @@ class StateManager extends Util.Singleton<StateManager>() {
     if (!this.checkUserIsDoingJob(src, houseId)) return false;
     const Player = DGCore.Functions.GetPlayer(src);
     this.houseStates.get(houseId).players.add(Player.PlayerData.citizenid);
+    Util.Log(
+      'houserobbery:house:enter',
+      {
+        houseId,
+        players: this.houseStates.get(houseId).players,
+        searchedLocations: this.houseStates.get(houseId).searched,
+      },
+      `${GetPlayerName(String(src))} entered a house for a robbery`,
+      src
+    );
   };
 
   @DGXEvent('houserobbery:server:leaveHouse')
@@ -133,6 +167,16 @@ class StateManager extends Util.Singleton<StateManager>() {
     if (!this.checkUserIsDoingJob(src, houseId)) return;
     const Player = DGCore.Functions.GetPlayer(src);
     this.houseStates.get(houseId).players.delete(Player.PlayerData.citizenid);
+    Util.Log(
+      'houserobbery:house:leave',
+      {
+        houseId,
+        players: this.houseStates.get(houseId).players,
+        searchedLocations: this.houseStates.get(houseId).searched,
+      },
+      `${GetPlayerName(String(src))} left a house for a robbery`,
+      src
+    );
   };
 
   @RPCEvent('houserobbery:server:canLootZone')
@@ -191,10 +235,32 @@ class StateManager extends Util.Singleton<StateManager>() {
     const item = lootTable[Util.getRndInteger(0, lootTable.length)];
     Player.Functions.AddItem(item, 1);
     emitNet('inventory:client:ItemBox', src, item, 'add');
+    Util.Log(
+      'houserobbery:house:loot',
+      {
+        houseId,
+        item,
+        zoneName,
+      },
+      `${GetPlayerName(String(src))} got ${item} from a house robbery`,
+      src
+    );
 
-    if (Util.getRndInteger(0, 5) < 1) {
+    const chance = Util.getRndInteger(0, 5);
+    if (chance < 1) {
       Player.Functions.AddItem('drive_v1', 1);
       emitNet('inventory:client:ItemBox', src, 'drive_v1', 'add');
+      Util.Log(
+        'houserobbery:house:specialLoot',
+        {
+          houseId,
+          item,
+          zoneName,
+          chance,
+        },
+        `${GetPlayerName(String(src))} got ${item} from a house robbery`,
+        src
+      );
     }
   };
 
@@ -235,8 +301,26 @@ class StateManager extends Util.Singleton<StateManager>() {
       jobGroup.id,
       setTimeout(() => {
         if (!this.groupIdToFindTimeout.has(jobGroup.id)) return;
+        Util.Log(
+          'houserobbery:job:findtimeout',
+          {
+            houseId,
+            others: jobGroup.members,
+          },
+          `${GetPlayerName(String(plyId))} timed out finding a house`,
+          plyId
+        );
         this.failJob(plyId);
       }, this.config.timeToFind * 60000)
+    );
+    Util.Log(
+      'houserobbery:job:start',
+      {
+        houseId,
+        others: jobGroup.members,
+      },
+      `${GetPlayerName(String(plyId))} started a house robbery job`,
+      plyId
     );
     mainLogger.debug(`Started job for player ${plyCID} in house ${JSON.stringify(houseInfo.coords)}`);
     return true;
@@ -286,6 +370,14 @@ class StateManager extends Util.Singleton<StateManager>() {
       'Taak voltooid',
       'Bert B.',
       'Je hebt je taak volbracht, maak nu dat we daar weggaat voordat iemand je ontdekt'
+    );
+    Util.Log(
+      'houserobbery:job:finish',
+      {
+        houseId,
+        members: jobGroup.members,
+      },
+      `${jobGroup.owner.name} finished his house robbery job`
     );
     jobGroup.members.forEach(m => this.finishJobForPly(m.serverId, m.cid));
   }

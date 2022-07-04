@@ -76,6 +76,12 @@ RegisterServerEvent("dg-cornerselling:server:SellDrugs", function(sellLocation)
 
         local price = calculatePrice(itemData.name, amount, sellLocation)
         exports['dg-financials']:addCash(src, price, 'corner-sell')
+        DGX.Util.Log('cornerselling:sale', {
+            item = itemData.name,
+            amount = amount,
+            price = price,
+            location = sellLocation,
+        }, string.format("%s has made sale of %dx %s via cornerselling", GetPlayerName(src), amount, exports['dg-inventory']:GetItemData(itemData.name).label), src)
 
         addToHeatmap(sellLocation)
         

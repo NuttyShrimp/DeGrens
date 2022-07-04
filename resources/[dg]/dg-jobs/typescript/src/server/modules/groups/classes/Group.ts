@@ -1,4 +1,4 @@
-import { Events, Phone } from '@dgx/server';
+import { Events, Phone, Util } from '@dgx/server';
 import jobManager from 'classes/jobManager';
 import winston from 'winston';
 
@@ -85,6 +85,7 @@ export class Group {
       ready: m.isReady,
     }));
   }
+
   private pushMembersUpdate() {
     const clientMembers: JobGroupMember[] = this.getMemberForClient();
     this.members.forEach(m => {
@@ -137,6 +138,7 @@ export class Group {
       description: 'Joined group',
       icon: 'jobcenter',
     });
+    Util.Log('jobs:group:addMember', this.getInfo(), `${member.name} joined group ${this.id}`, member.serverId);
     if (this.owner) {
       Phone.showNotification(this.owner.serverId, {
         id: `jobcenter-groups-joined-${src}`,
@@ -172,6 +174,7 @@ export class Group {
       description: 'Group verlaten',
       icon: 'jobcenter',
     });
+    Util.Log('jobs:group:removeMember', this.getInfo(), `${GetPlayerName(String(src))} left group ${this.id}`, src);
     if (this.owner.serverId == src) {
       groupManager.disbandGroup(this.id);
     }
@@ -224,6 +227,14 @@ export class Group {
       this.logger.debug(`Group(${this.id}) tried to change it job to ${job.name} but not all members are ready`);
       return false;
     }
+    Util.Log(
+      'jobs:group:changeJob',
+      {
+        ...this.getInfo(),
+        job: job.name,
+      },
+      `Changing job to ${job.name}`
+    );
     this.currentJob = jobName;
     return true;
   }

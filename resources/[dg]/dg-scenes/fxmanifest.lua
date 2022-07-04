@@ -8,10 +8,12 @@ client_scripts {
 
 server_scripts {
     'server/sv_*.lua',
+    '@ts-shared/server/server.js',
 }
 
 shared_scripts {
-    '@dg-core/import.lua', 
+    '@dg-core/import.lua',
+    '@ts-shared/shared/lib.lua',
 	'config.lua'
 }
 
