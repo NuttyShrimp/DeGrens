@@ -2,6 +2,7 @@ import { Util as UtilShared } from '../../shared/classes/util';
 import { registerDGXRPC } from './events';
 
 class Util extends UtilShared {
+  private prodEnv: boolean;
   constructor() {
     super();
     registerDGXRPC('dgx:util:isEntityDead', (entityNetId: number) => {
@@ -9,6 +10,10 @@ class Util extends UtilShared {
       if (!entity) return false;
       return IsEntityDead(entity);
     });
+    onNet('dgx:isProduction', (isProd: boolean) => {
+      this.prodEnv = isProd;
+    });
+    emitNet('dgx:requestEnv');
   }
 
   getPlyCoords() {
@@ -62,6 +67,10 @@ class Util extends UtilShared {
   doesEntityExist = async (entity: number) => {
     while (!DoesEntityExist(entity)) await this.Delay(10);
   };
+
+  isDevEnv() {
+    return this.prodEnv !== undefined && this.prodEnv === false;
+  }
 }
 
 export class Interiors {

@@ -1,5 +1,5 @@
-import { Util } from '../../shared';
 import { Export, ExportRegister } from '../../shared/decorators';
+import { Util } from './index';
 
 class TokenStorage {
   private static instance: TokenStorage;
@@ -37,7 +37,14 @@ class TokenStorage {
   }
 }
 
-class Events extends Util.Singleton<Events>() {
+class Events {
+  private static instance: Events;
+  static getInstance() {
+    if (!this.instance) {
+      this.instance = new Events();
+    }
+    return this.instance;
+  }
   private readonly resName: string;
   private resourceEventsMap: Map<string, Map<string, string>> = new Map();
   private tokenStorage: TokenStorage;
@@ -45,7 +52,6 @@ class Events extends Util.Singleton<Events>() {
   private localEventHandlers: Map<string, LocalEventHandler> = new Map();
 
   constructor() {
-    super();
     this.tokenStorage = TokenStorage.getInstance();
     this.resName = GetCurrentResourceName();
     onNet('__dg_shared_events', (target: string, origin: string, eventIdObject: Record<string, string>) => {
@@ -57,10 +63,17 @@ class Events extends Util.Singleton<Events>() {
       }
       this.resourceEventsMap.set(origin, eventIdMap);
     });
-    onNet('__dg_evt_s_c_emitNet', (data: ClientHandlingEvent) => {
+    onNet('__dg_evt_s_c_emitNet', async (data: ClientHandlingEvent) => {
       if (!this.serverEventHandlers.has(data.eventName)) return;
       if (data.token !== 'all' && this.tokenStorage.getToken() !== data.token) return;
-      this.serverEventHandlers.get(data.eventName)(...data.args);
+      emitNet('__dg_evt_trace_start', data.traceId);
+      const handler = this.serverEventHandlers.get(data.eventName);
+      if (handler.constructor.name === 'AsyncFunction') {
+        await handler(...data.args);
+      } else {
+        handler(...data.args);
+      }
+      emitNet('__dg_evt_trace_finish', data.traceId);
     });
     on('__dg_evt_c_c_emit', (data: { eventName: string; args: any[] }) => {
       this.localEventHandlers.has(data.eventName) && this.localEventHandlers.get(data.eventName)(...data.args);
@@ -128,7 +141,9 @@ class RPCManager {
   constructor() {
     this.eventInstance = Events.getInstance();
     // Receiver
-    this.eventInstance.onNet('__dg_RPC_s_c_request', (data: RPC.EventData) => this.handleIncomingRequest(data));
+    this.eventInstance.onNet('__dg_RPC_s_c_request', (data: RPC.EventData) => {
+      this.handleIncomingRequest(data);
+    });
     // Emitter
     this.eventInstance.onNet(`__dg_RPC_c_s_response`, (data: RPC.ResolveData) => this.handleIncomingResponse(data));
   }
@@ -145,11 +160,24 @@ class RPCManager {
   }
 
   @Export('doRPCSrvRequest')
-  async doRPCSrvRequest<T>(data: RPC.EventData): Promise<T | null> {
+  async doRPCSrvRequest<T>(data: RPC.EventData, skipTrace = false): Promise<T | null> {
     if (!this.awaitingEvents.has(data.resource)) {
       this.awaitingEvents.set(data.resource, new Map());
     }
-    const promise = new Promise<T>(res => {
+    if (!skipTrace) {
+      data.traceId = await RPC.getInstance().execute<string>(
+        { event: '__dg_RPC_trace_start', skipTrace: true },
+        data.name,
+        data.resource
+      );
+    }
+    const promise = new Promise<T>(resolve => {
+      const res = (result: T) => {
+        resolve(result);
+        if (!skipTrace && data.traceId) {
+          emitNet('__dg_RPC_trace_finish', data.traceId);
+        }
+      };
       this.awaitingEvents.get(data.resource).set(data.id, { res });
       setTimeout(() => {
         if (this.awaitingEvents.get(data.resource).has(data.id)) {
@@ -163,7 +191,14 @@ class RPCManager {
   }
 }
 
-class RPC extends Util.Singleton<RPC>() {
+class RPC {
+  private static instance: RPC;
+  static getInstance() {
+    if (!this.instance) {
+      this.instance = new RPC();
+    }
+    return this.instance;
+  }
   private readonly eventInstance: Events;
   // Executor
   private readonly resourceName: string;
@@ -172,7 +207,6 @@ class RPC extends Util.Singleton<RPC>() {
   private registeredHandlers: Map<string, LocalEventHandler> = new Map();
 
   constructor() {
-    super();
     this.eventInstance = Events.getInstance();
     // Executor
     this.resourceName = GetCurrentResourceName();
@@ -191,23 +225,28 @@ class RPC extends Util.Singleton<RPC>() {
 
   private async handleRequest(data: RPC.EventData) {
     if (this.registeredHandlers.has(data.name)) {
+      emitNet('__dg_RPC_start_handle_trace', data);
       const result = await this.registeredHandlers.get(data.name)(...data.args);
       this.eventInstance.emitNet('__dg_RPC_s_c_response', {
         id: data.id,
         result,
         resource: data.resource,
+        traceId: data.traceId,
       });
     }
   }
 
-  async execute<T = any>(evtName: string, ...args: any[]): Promise<T | null> {
+  async execute<T = any>(metadata: string | { event: string; skipTrace: boolean }, ...args: any[]): Promise<T | null> {
     const promId = this.getPromiseId();
-    return global.exports['ts-shared'].doRPCSrvRequest({
-      id: promId,
-      name: evtName,
-      args,
-      resource: this.resourceName,
-    });
+    return global.exports['ts-shared'].doRPCSrvRequest(
+      {
+        id: promId,
+        name: typeof metadata === 'string' ? metadata : metadata.event,
+        args,
+        resource: this.resourceName,
+      },
+      typeof metadata === 'object' ? metadata.skipTrace : false
+    );
   }
 
   register(name: string, handler: LocalEventHandler) {

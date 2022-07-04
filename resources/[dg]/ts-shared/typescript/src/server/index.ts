@@ -1,5 +1,6 @@
 import { returnClassRefs } from '../shared/helpers/library';
 import './helpers/cmds';
+import './controllers/events';
 // Following code is for DGX.xxx.yyy access
 import * as Shared from '../shared/index';
 

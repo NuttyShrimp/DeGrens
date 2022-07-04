@@ -8,6 +8,11 @@ declare namespace Auth {
 
 declare namespace IEvents {
   type EventHandler = (src: number, ...args: any[]) => void;
+  interface Metadata {
+    source: number;
+    traceId: string;
+  }
+
   interface NetEventData {
     token: string;
     /**
@@ -29,11 +34,13 @@ declare namespace RPC {
     name: string;
     args: any[];
     resource: string;
+    traceId?: string;
   }
   interface ResolveData {
     id: number;
     result: any;
     resource: string;
+    traceId?: string;
   }
 }
 

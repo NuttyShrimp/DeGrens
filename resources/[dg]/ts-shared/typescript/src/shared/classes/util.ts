@@ -72,10 +72,6 @@ export class Util {
     return result;
   };
 
-  isDevEnv() {
-    return GetConvar('is_production', 'true') === 'false';
-  }
-
   awaitCondition = async (condition: () => boolean, timeout = 5000) => {
     let timedOut = false;
     setTimeout(() => {

@@ -7,8 +7,9 @@ import winstonSentry from 'winston-sentry-log';
 import { name, sentry_dsn, version } from './../../package.json';
 import { config } from './config';
 
-const getCurrentEnv = () =>
-  GetConvar('is_production', 'true') === 'false' ? 'development' : process.env.NODE_ENV ?? 'development';
+import { Util } from '@dgx/server';
+
+const getCurrentEnv = () => (Util.isDevEnv() ? 'development' : process.env.NODE_ENV ?? 'development');
 
 // Needed to manually apply a color to componenent property of log
 const manualColorize = (strToColor: string): string => `[\x1b[35m${strToColor}\x1b[0m]`;

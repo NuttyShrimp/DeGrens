@@ -32,6 +32,7 @@ export const generateToken = (src: number) => {
   if (!steamId) {
     DropPlayer(String(src), "Couldn't get steamid for server authentication, please start steam");
   }
+  Player(src).state.set('steamId', steamId, true);
   // The id where the data is hidden behind, if the player finds our key it will be almost wortheless :)
   let plyKey = Util.uuidv4();
   while (tokenMap.has(plyKey)) {

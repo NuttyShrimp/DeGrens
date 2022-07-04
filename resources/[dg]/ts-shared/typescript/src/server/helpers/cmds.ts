@@ -1,6 +1,6 @@
-import { Util } from '../../shared';
-
 // Cmds to print a table with all registered events and there handlers for a resource
+import { Util } from '../classes';
+
 if (Util.isDevEnv() && GetCurrentResourceName() === 'ts-shared') {
   RegisterCommand(
     'showDGXEvents',

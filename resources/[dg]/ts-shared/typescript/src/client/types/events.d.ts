@@ -4,6 +4,7 @@ declare namespace RPC {
     name: string;
     args: any[];
     resource: string;
+    traceId?: string;
   }
   interface ResolveData {
     id: number;

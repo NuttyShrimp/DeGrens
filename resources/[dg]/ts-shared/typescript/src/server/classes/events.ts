@@ -1,7 +1,9 @@
 import { Util } from '../../shared';
 import { Export, ExportRegister } from '../../shared/decorators';
-import { Sentry } from '../helpers/logger';
+import { Sentry } from '../helpers/sentry';
+import { sentryHandler } from './sentry';
 import Table from 'cli-table3';
+import { TransactionContext } from '@sentry/types';
 
 const awaitAuthStart = async () => {
   while (GetResourceState('dg-auth') !== 'started') {
@@ -24,13 +26,14 @@ class Events extends Util.Singleton<Events>() {
     this.resName = GetCurrentResourceName();
     // Tell auth we are a resources that has events
     doAuthExport('registerEventResource', this.resName);
+    // Handler for C->S events
     doAuthExport('registerHandler', this.resName, (eventName: string, src: number, args: any[]) => {
+      if (!this.clientEventHandlers.has(eventName)) return;
       const transaction = Sentry.startTransaction({
-        name: `netEvent`,
-        op: 'Events.netEventHandler',
+        name: 'ServerEvents.net.handler',
+        op: eventName,
         description: `Incoming network event ${eventName} on server`,
         data: {
-          eventName,
           args,
           origin: src,
         },
@@ -39,7 +42,7 @@ class Events extends Util.Singleton<Events>() {
         scope.setSpan(transaction);
       });
       try {
-        this.clientEventHandlers.has(eventName) && this.clientEventHandlers.get(eventName)(src, ...args);
+        this.clientEventHandlers.get(eventName)(src, ...args);
       } catch (e) {
         Sentry.captureException(e);
       } finally {
@@ -47,7 +50,29 @@ class Events extends Util.Singleton<Events>() {
       }
     });
     on('__dg_evt_s_s_emit', (data: { eventName: string; args: any[] }) => {
-      this.localEventHandlers.has(data.eventName) && this.localEventHandlers.get(data.eventName)(...data.args);
+      if (!this.localEventHandlers.has(data.eventName)) return;
+      if (data.eventName.startsWith('__dg_RPC_')) {
+        this.localEventHandlers.get(data.eventName)(...data.args);
+        return;
+      }
+      const transaction = Sentry.startTransaction({
+        name: 'ServerEvents.local.handler',
+        op: data.eventName,
+        description: `Incoming local event ${data.eventName} on server`,
+        data: {
+          args: data.args,
+        },
+      });
+      Sentry.configureScope(scope => {
+        scope.setSpan(transaction);
+      });
+      try {
+        this.localEventHandlers.get(data.eventName)(...data.args);
+      } catch (e) {
+        Sentry.captureException(e);
+      } finally {
+        transaction.finish();
+      }
     });
     on('dgx:events:showEventsTable', (target: string) => {
       if (target !== this.resName) return;
@@ -64,33 +89,65 @@ class Events extends Util.Singleton<Events>() {
 
       console.log(eventTable.toString());
     });
+    if (this.resName === 'ts-shared') {
+      onNet('__dg_evt_trace_start', this.startSpan);
+      onNet('__dg_evt_trace_finish', this.finishSpan);
+    }
   }
 
-  // TODO: add sentry transactions to this functions
   onNet(evtName: string, handler: IEvents.EventHandler) {
     this.clientEventHandlers.set(evtName, handler);
     doAuthExport('registerEvent', this.resName, evtName);
   }
 
-  emitNet(evtName: string, target: number, ...args: any[]) {
-    const evtData: ClientHandlingEvent = {
-      eventName: evtName,
-      args,
-      token: '',
-    };
-    try {
-      setImmediate(async () => {
+  emitNet(evtName: string, target: number | IEvents.Metadata, ...args: any[]) {
+    setImmediate(async () => {
+      const evtData: ClientHandlingEvent = {
+        eventName: evtName,
+        args,
+        token: '',
+        traceId: '',
+      };
+      const transactionContext: TransactionContext = {
+        name: 'ServerEvents.net.emit',
+        op: evtName,
+        description: `Outgoing network event ${evtName} on server`,
+        data: {
+          args,
+        },
+        tags: {
+          handler: 'Events',
+          target: 'Client',
+        },
+      };
+      if (typeof target === 'number') {
+        transactionContext.data.target = target;
+        if (target !== -1) {
+          transactionContext.data.targetSteamId = Player(target).state.steamId;
+        }
+      } else {
+        transactionContext.data.target = target.source;
+        if (target.source !== -1) {
+          transactionContext.data.targetSteamId = Player(target.source).state.steamId;
+        }
+        transactionContext.traceId = target.traceId;
+      }
+      const transaction = sentryHandler.startTransaction(transactionContext, 20000, 1);
+      Sentry.configureScope(scope => {
+        scope.setSpan(transaction);
+      });
+      try {
         if (target === -1) {
           evtData.token = 'all';
         } else {
           evtData.token = await doAuthExport('getPlayerToken', target);
         }
         emitNet('__dg_evt_s_c_emitNet', Number(target), evtData);
-      });
-    } catch (e) {
-      Sentry.captureException(e);
-      console.error('[DGX] Error emitting net event', evtName, target, e);
-    }
+      } catch (e) {
+        Sentry.captureException(e);
+        console.error('[DGX] Error emitting net event', evtName, target, e);
+      }
+    });
   }
 
   emit(evtName: string, ...args: any[]) {
@@ -103,6 +160,26 @@ class Events extends Util.Singleton<Events>() {
   on(evtName: string, handler: LocalEventHandler) {
     this.localEventHandlers.set(evtName, handler);
   }
+
+  startSpan(traceId: string) {
+    const src = source;
+    const steamId = Player(src).state.steamId;
+    if (!steamId) return;
+    sentryHandler.addSpan(steamId, traceId, {
+      op: `ClientEvents.net.handler`,
+      data: {
+        origin: src,
+        originSteamId: Player(src).state.steamId,
+      },
+    });
+  }
+
+  finishSpan(traceId: string) {
+    const src = source;
+    const steamId = Player(src).state.steamId;
+    if (!steamId) return;
+    sentryHandler.finishSpan(steamId, traceId);
+  }
 }
 
 @ExportRegister()
@@ -112,25 +189,55 @@ class RPCManager {
 
   constructor() {
     this.eventInstance = Events.getInstance();
-    this.eventInstance.onNet('__dg_RPC_c_s_request', (src, data: RPC.EventData) =>
-      this.handleIncomingRequest(src, data)
-    );
+    this.eventInstance.onNet('__dg_RPC_c_s_request', (src, data: RPC.EventData) => {
+      const transaction = Sentry.startTransaction({
+        name: 'ServerRPC.collector',
+        op: data.name,
+        description: `Incoming RPC on server`,
+        data: {
+          ...data,
+          origin: Player(src).state.steamId,
+        },
+        tags: {
+          origin: Player(src).state.steamId,
+          handler: 'RPC',
+        },
+        traceId: data.traceId,
+      });
+      Sentry.configureScope(scope => {
+        scope.setSpan(transaction);
+      });
+      try {
+        this.handleIncomingRequest(src, data, transaction.traceId);
+      } catch (e) {
+        Sentry.captureException(e);
+      } finally {
+        transaction.finish();
+      }
+    });
     // Emitter
     this.eventInstance.onNet(`__dg_RPC_s_c_response`, (src, data: RPC.ResolveData) =>
       this.handleIncomingResponse(src, data)
     );
+    // Sentry
+    registerDGXRPC('__dg_RPC_trace_start', (RPCName: string, originResource: string) =>
+      this.traceStart(source, RPCName, originResource)
+    );
+    onNet('__dg_RPC_trace_finish', this.traceFinish);
+    onNet('__dg_RPC_start_handle_trace', (data: RPC.EventData) => this.traceHandlerStart(source, data));
   }
 
-  private handleIncomingRequest(src: number, data: RPC.EventData) {
+  private handleIncomingRequest(src: number, data: RPC.EventData, traceId: string) {
     // We make the RPC classes aware there is a potential RPC call for them,
     // They can send there response because emitting to client is not limited to
     // be originated from 1 resource
-    this.eventInstance.emit('__dg_RPC_handleRequest', src, data);
+    this.eventInstance.emit('__dg_RPC_handleRequest', src, data, traceId);
   }
 
   private handleIncomingResponse(src: number, data: RPC.ResolveData) {
     if (!this.awaitingEvents.has(data.resource)) return;
     if (!this.awaitingEvents.get(data.resource).has(data.id)) return;
+    sentryHandler.finishTransaction(data.traceId);
     this.awaitingEvents.get(data.resource).get(data.id).res(data.result);
     this.awaitingEvents.get(data.resource).delete(data.id);
   }
@@ -152,9 +259,56 @@ class RPCManager {
     this.eventInstance.emitNet('__dg_RPC_s_c_request', target, data);
     return promise;
   }
+
+  traceStart(src: number, RPCName: string, originResource: string) {
+    return sentryHandler.startTransaction(
+      {
+        op: RPCName,
+        name: 'ClientRPC.emit',
+        description: `Outgoing RPC request to ${RPCName} coming from client(${originResource})`,
+        data: {
+          origin: Player(src).state.steamId,
+        },
+        tags: {
+          handler: 'RPC',
+          target: 'Server',
+          resource: originResource,
+        },
+      },
+      10000,
+      1
+    ).traceId;
+  }
+
+  traceFinish(traceId: string) {
+    sentryHandler.finishTransaction(traceId);
+  }
+
+  traceHandlerStart(src: number, data: RPC.EventData) {
+    console.log('[DGX] RPC trace handler start', data);
+    sentryHandler.startTransaction(
+      {
+        name: 'ClientRPC.handler',
+        op: data.name,
+        description: `Handling a incoming RPC on client`,
+        data: {
+          ...data,
+          target: Player(src).state.steamId,
+        },
+        tags: {
+          orgin: Player(src).state.steamId,
+          handler: 'RPC',
+          target: 'Client',
+        },
+        traceId: data.traceId,
+      },
+      20000,
+      1
+    );
+  }
 }
 
-class RPC {
+class RPC extends Util.Singleton<RPC>() {
   private readonly eventInstance: Events;
   // Receiver
   private registeredHandlers: Map<string, IEvents.EventHandler> = new Map();
@@ -163,11 +317,14 @@ class RPC {
   private idsInUse: Set<number> = new Set();
 
   constructor() {
+    super();
     this.eventInstance = Events.getInstance();
     // Executor
     this.resourceName = GetCurrentResourceName();
     // Receiver
-    this.eventInstance.on('__dg_RPC_handleRequest', (src, data: RPC.EventData) => this.handleRequest(src, data));
+    this.eventInstance.on('__dg_RPC_handleRequest', (src, data: RPC.EventData, traceId: string) =>
+      this.handleRequest(src, data, traceId)
+    );
     on('dgx:events:showRPCTable', (target: string) => {
       if (target !== this.resourceName) return;
       const eventTable = new Table({
@@ -189,25 +346,65 @@ class RPC {
     return id;
   }
 
-  private async handleRequest(src: number, data: RPC.EventData) {
+  private async handleRequest(src: number, data: RPC.EventData, traceId: string) {
     if (this.registeredHandlers.has(data.name)) {
-      const result = await this.registeredHandlers.get(data.name)(src, ...data.args);
-      this.eventInstance.emitNet('__dg_RPC_c_s_response', src, {
-        id: data.id,
-        result,
-        resource: data.resource,
+      const transaction = Sentry.startTransaction({
+        name: 'ServerRPC.handler',
+        op: data.name,
+        description: `Handling a incoming RPC on server`,
+        data: {
+          ...data,
+          origin: Player(src).state.steamId,
+        },
+        tags: {
+          origin: Player(src).state.steamId,
+          handler: 'RPC',
+          target: 'Server',
+        },
+        traceId: traceId,
       });
+      try {
+        const result = await this.registeredHandlers.get(data.name)(src, ...data.args);
+        this.eventInstance.emitNet('__dg_RPC_c_s_response', src, {
+          id: data.id,
+          result,
+          resource: data.resource,
+        });
+      } catch (e) {
+        Sentry.captureException(e);
+      } finally {
+        transaction.finish();
+      }
     }
   }
 
   async execute<T = any>(evtName: string, target: number, ...args: any[]): Promise<T | null> {
     const promId = this.getPromiseId();
-    return global.exports['ts-shared'].doRPCClRequest(target, {
+    const transaction = Sentry.startTransaction({
+      op: evtName,
+      name: 'ServerRPC.emit',
+      description: `Outgoing RPC request to ${evtName} to ${target}`,
+      data: {
+        target: Player(target).state.steamId,
+      },
+      tags: {
+        handler: 'RPC',
+        target: 'Client',
+        resource: this.resourceName,
+      },
+    });
+    Sentry.configureScope(scope => {
+      scope.setSpan(transaction);
+    });
+    const result = await global.exports['ts-shared'].doRPCClRequest(target, {
       id: promId,
       name: evtName,
       args,
       resource: this.resourceName,
+      traceId: transaction.traceId,
     });
+    transaction.finish();
+    return result;
   }
 
   register(name: string, handler: IEvents.EventHandler) {
@@ -239,6 +436,12 @@ class API {
   }
 }
 
+export const registerDGXRPC = (evtName: string, handler: LocalEventHandler) => {
+  if (GetCurrentResourceName() === 'ts-shared') {
+    RPC.getInstance().register(evtName, handler);
+  }
+};
+
 const instances: {
   Events: Events;
   RPC: RPC;
@@ -247,7 +450,7 @@ const instances: {
   API: API;
 } = {
   Events: Events.getInstance(),
-  RPC: new RPC(),
+  RPC: RPC.getInstance(),
   SQL: new SQL(),
   API: new API(),
 };

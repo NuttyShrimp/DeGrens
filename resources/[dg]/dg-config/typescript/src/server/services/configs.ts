@@ -82,7 +82,7 @@ export const getConfigValue = (path: string): any => {
   let currentValue = configs.get(moduleId);
   while (steps.length !== 0) {
     const key = steps.shift();
-    if (!currentValue?.[key]) {
+    if (currentValue?.[key] === undefined) {
       mainLogger.error(`${key} is an invalid key in the ${moduleId} module, path: ${path}`);
       break;
     }

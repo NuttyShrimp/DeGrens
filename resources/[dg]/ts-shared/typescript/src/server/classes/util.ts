@@ -1,8 +1,15 @@
 import { Util as UtilShared } from '../../shared/classes/util';
 import { firstNames, lastNames } from '../data/names';
-import { Events, RPC } from './index';
+import { Config, RPC } from './index';
+import { registerDGXRPC } from './events';
 
 class Util extends UtilShared {
+  constructor() {
+    super();
+    registerDGXRPC('dgx:isProdEnv', () => {
+      return Config.getConfigValue<boolean>('main.production');
+    });
+  }
   generateName = (): string => {
     const firstName = firstNames[this.getRndInteger(0, firstNames.length - 1)];
     const lastName = lastNames[this.getRndInteger(0, lastNames.length - 1)];
@@ -38,6 +45,10 @@ class Util extends UtilShared {
   isEntityDead(entity: number): Promise<boolean> {
     const entityNetId = NetworkGetEntityFromNetworkId(entity);
     return RPC.execute<boolean>('dgx:util:isEntityDead', entityNetId);
+  }
+
+  isDevEnv() {
+    return Config.getConfigValue<boolean>('main.production') === false;
   }
 }
 
