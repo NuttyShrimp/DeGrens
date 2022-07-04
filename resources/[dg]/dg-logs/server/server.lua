@@ -1,4 +1,4 @@
-local config
+config = nil
 
 Citizen.CreateThread(function() 
   while not exports['dg-config']:areConfigsReady() do
@@ -21,10 +21,6 @@ setCorrectServer = function()
   if not config.production then
     config.logServer = config.devLogServer
   end
-end
-
-createDiscordLog = function(name, title, color, message, tagEveryone)
-	return
 end
 
 createGraylogEntry = function(logtype, data, message, isImportant)
@@ -50,10 +46,5 @@ createGraylogEntry = function(logtype, data, message, isImportant)
 	end)
 end
 
-exports('createDiscordLog', createDiscordLog)
 exports('createGraylogEntry', createGraylogEntry)
 
-RegisterServerEvent('dg-log:server:CreateLog', createDiscordLog)
-
--- TriggerEvent(GetCurrentResourceName(), "command-ooc", {citizenID = PlayerData.citizenID, ...} )
-RegisterServerEvent('dg-log:server:PostGrayLog', createGraylogEntry)

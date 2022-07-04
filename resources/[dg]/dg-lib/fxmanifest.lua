@@ -24,3 +24,4 @@ client_scripts {
 	"client/**/*.lua",
 	"client/**/*.ymap.xml"
 }
+server_script "@dg-logs/server/sv_log.lua"

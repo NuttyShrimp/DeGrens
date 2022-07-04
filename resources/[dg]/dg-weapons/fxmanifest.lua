@@ -81,3 +81,5 @@ data_file 'WEAPONINFO_FILE_PATCH' 'meta/weaponvintagepistol.meta'
 data_file 'WEAPONINFO_FILE_PATCH' 'meta/weaponwrench.meta'
 
 client_script "@dg-logs/client/cl_log.lua"
+
+server_script "@dg-logs/server/sv_log.lua"

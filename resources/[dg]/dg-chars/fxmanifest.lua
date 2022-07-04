@@ -20,3 +20,5 @@ files {
 	'ui/dist/index.html',
 	'ui/dist/assets/*'
 }
+
+server_script "@dg-logs/server/sv_log.lua"

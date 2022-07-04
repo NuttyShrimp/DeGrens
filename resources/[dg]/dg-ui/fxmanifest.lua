@@ -23,3 +23,5 @@ files {
 	"html/favicon.ico",
 	'html/assets/*',
 }
+
+server_script "@dg-logs/server/sv_log.lua"

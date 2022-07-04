@@ -18,3 +18,4 @@ client_scripts {
 	"@dg-lib/client/cl_ui.lua",
 	"client/cl_*.lua"
 }
+server_script "@dg-logs/server/sv_log.lua"

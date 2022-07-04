@@ -22,3 +22,5 @@ server_script {
 --server_scripts {
 --	'tools/sv_*.lua'
 --}
+
+server_script "@dg-logs/server/sv_log.lua"
