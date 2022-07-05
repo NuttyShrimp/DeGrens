@@ -25,7 +25,7 @@ end
 
 function polyFinish()
   houseOffset = exports['dg-build']:currentBuildingVector()
-  if houseOffset ~= nil then
+  if houseOffset then
     houseOffset = vector3(houseOffset.x, houseOffset.y, houseOffset.z)
   end
   TriggerServerEvent("polyzone:printPoly",
