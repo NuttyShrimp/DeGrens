@@ -34,7 +34,7 @@ randomSellBlackMoney = function(source)
             item = itemData.name,
             amount = amount,
             price = price,
-        }, "%s has made sale of %dx %s":format(GetPlayerName(src), amount, exports['dg-inventory']:GetItemData(itemData.name).label), src)
+        }, string.format("%s has made sale of %dx %s", GetPlayerName(src), amount, exports['dg-inventory']:GetItemData(itemData.name).label), src)
     end
 end
 exports("randomSellBlackMoney", randomSellBlackMoney)
