@@ -1,4 +1,5 @@
 import { Util as UtilShared } from '../../shared/classes/util';
+
 import { registerDGXRPC } from './events';
 
 class Util extends UtilShared {

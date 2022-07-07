@@ -1,11 +1,12 @@
 // Classes are for internal usage only
 // Will be used to use Sentry from client
-import { Transaction, TransactionContext, SpanContext, Span } from '@sentry/types';
-import { Sentry } from '../helpers/sentry';
+import { Span, SpanContext, Transaction, TransactionContext } from '@sentry/types';
+
 import { Util } from '../../shared';
+import { Sentry } from '../helpers/sentry';
 
 interface SentryClass {
-  startTransaction(ctx: TransactionContext, timeout: number, expectedHits: number): Transaction;
+  startTransaction(ctx: TransactionContext, timeout: number, expectedHits: number): TransactionContext;
 
   finishTransaction(traceId: string): void;
 
@@ -25,9 +26,9 @@ class SentryHandler extends Util.Singleton<SentryClass>() implements SentryClass
 
   constructor() {
     super();
-    global.exports('sentryStartTransaction', (ctx: TransactionContext, timeout: number, expectedHits: number) => {
-      this.startTransaction(ctx, timeout, expectedHits);
-    });
+    global.exports('sentryStartTransaction', (ctx: TransactionContext, timeout: number, expectedHits: number) =>
+      this.startTransaction(ctx, timeout, expectedHits)
+    );
     global.exports('sentryFinishTransaction', (traceId: string) => this.finishTransaction(traceId));
     global.exports(
       'sentryAddSpan',
@@ -47,9 +48,10 @@ class SentryHandler extends Util.Singleton<SentryClass>() implements SentryClass
     setTimeout(() => {
       this.transactionAvailableHits.delete(transaction.traceId);
       this.transactions.delete(transaction.traceId);
+      transaction.setStatus('deadline_exceeded');
       transaction.finish();
     }, timeout);
-    return transaction;
+    return transaction.toContext();
   }
 
   finishTransaction(traceId: string) {
@@ -119,7 +121,7 @@ class SentrySender extends Util.Singleton<SentryClass>() implements SentryClass 
     return global.exports['ts-shared'].sentryAddSpan(steamId, traceId, ctx);
   }
 
-  startTransaction(ctx: TransactionContext, timeout: number, expectedHits: number): Transaction {
+  startTransaction(ctx: TransactionContext, timeout: number, expectedHits: number): TransactionContext {
     return global.exports['ts-shared'].sentryStartTransaction(ctx, timeout, expectedHits);
   }
 

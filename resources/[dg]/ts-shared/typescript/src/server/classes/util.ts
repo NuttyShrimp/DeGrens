@@ -1,7 +1,8 @@
 import { Util as UtilShared } from '../../shared/classes/util';
 import { firstNames, lastNames } from '../data/names';
-import { Config, RPC } from './index';
+
 import { registerDGXRPC } from './events';
+import { Config, RPC } from './index';
 
 class Util extends UtilShared {
   constructor() {

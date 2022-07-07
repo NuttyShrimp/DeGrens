@@ -1,9 +1,11 @@
+import { TransactionContext } from '@sentry/types';
+import Table from 'cli-table3';
+
 import { Util } from '../../shared';
 import { Export, ExportRegister } from '../../shared/decorators';
 import { Sentry } from '../helpers/sentry';
+
 import { sentryHandler } from './sentry';
-import Table from 'cli-table3';
-import { TransactionContext } from '@sentry/types';
 
 const awaitAuthStart = async () => {
   while (GetResourceState('dg-auth') !== 'started') {
@@ -120,22 +122,20 @@ class Events extends Util.Singleton<Events>() {
           target: 'Client',
         },
       };
-      if (typeof target === 'number') {
-        transactionContext.data.target = target;
-        if (target !== -1) {
-          transactionContext.data.targetSteamId = Player(target).state.steamId;
-        }
-      } else {
+      if (typeof target === 'object') {
         transactionContext.data.target = target.source;
         if (target.source !== -1) {
           transactionContext.data.targetSteamId = Player(target.source).state.steamId;
         }
         transactionContext.traceId = target.traceId;
+      } else {
+        transactionContext.data.target = target;
+        if (target !== -1) {
+          transactionContext.data.targetSteamId = Player(target).state.steamId;
+        }
       }
       const transaction = sentryHandler.startTransaction(transactionContext, 20000, 1);
-      Sentry.configureScope(scope => {
-        scope.setSpan(transaction);
-      });
+      evtData.traceId = transaction.traceId;
       try {
         if (target === -1) {
           evtData.token = 'all';
@@ -220,8 +220,8 @@ class RPCManager {
       this.handleIncomingResponse(src, data)
     );
     // Sentry
-    registerDGXRPC('__dg_RPC_trace_start', (RPCName: string, originResource: string) =>
-      this.traceStart(source, RPCName, originResource)
+    registerDGXRPC('__dg_RPC_trace_start', (src, RPCName: string, originResource: string) =>
+      this.traceStart(src, RPCName, originResource)
     );
     onNet('__dg_RPC_trace_finish', this.traceFinish);
     onNet('__dg_RPC_start_handle_trace', (data: RPC.EventData) => this.traceHandlerStart(source, data));

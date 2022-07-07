@@ -1,4 +1,5 @@
 import 'reflect-metadata';
+
 import { RPC } from '../classes';
 
 /**

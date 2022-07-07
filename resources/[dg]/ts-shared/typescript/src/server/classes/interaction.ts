@@ -3,7 +3,7 @@ class Chat {
     name: string,
     description: string,
     parameters: Chat.Parameter[] = [],
-    permissionLevel: string = 'user',
+    permissionLevel = 'user',
     handler: Chat.CommandHandler
   ) {
     global.exports['dg-chat'].registerCommand(name, description, parameters, permissionLevel, handler);

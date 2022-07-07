@@ -1,4 +1,5 @@
 import { Export, ExportRegister } from '../../shared/decorators';
+
 import { Util } from './index';
 
 class TokenStorage {
