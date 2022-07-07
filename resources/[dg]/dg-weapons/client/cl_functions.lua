@@ -165,6 +165,14 @@ startWeaponLoop = function(isBrokenWeapon)
                 end
             end
 
+            SetWeaponsNoAutoswap(true)
+            SetWeaponsNoAutoreload(true)
+            DisplayAmmoThisFrame(true)
+
+            if GetAmmoInPedWeapon(ped, currentWeaponData.hash) == 1 then
+                DisablePlayerFiring(ped, true)
+            end
+
             Citizen.Wait(0)
         end
 

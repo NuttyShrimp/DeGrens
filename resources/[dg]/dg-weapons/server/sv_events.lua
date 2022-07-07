@@ -1,4 +1,4 @@
-DGCore.Functions.TriggerCallback('dg-weapons:server:getAmmoConfig', function(src, cb)
+DGCore.Functions.CreateCallback('dg-weapons:server:getAmmoConfig', function(src, cb)
     while not config do Wait(10) end
     cb(config.ammo)
 end)

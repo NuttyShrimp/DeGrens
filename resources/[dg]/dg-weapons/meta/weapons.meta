@@ -828,13 +828,13 @@
           <Model />
           <Audio />
           <Slot />
-          <AmmoMax value="250" />
+          <AmmoMax value="3" />
           <AmmoMax50 value="1000" />
           <AmmoMax100 value="9999" />
-          <AmmoMaxMP value="250" />
+          <AmmoMaxMP value="3" />
           <AmmoMax50MP value="1000" />
           <AmmoMax100MP value="9999" />
-          <AmmoFlags>InfiniteAmmo</AmmoFlags>
+          <AmmoFlags />
         </Item>
         <Item type="CAmmoInfo">
           <Name>AMMO_SNIPER</Name>
@@ -8580,7 +8580,7 @@
           <Group>GROUP_STUNGUN</Group>
           <AmmoInfo ref="AMMO_STUNGUN" />
           <AimingInfo ref="PISTOL_2H_BASE_STRAFE" />
-          <ClipSize value="2104529083" />
+          <ClipSize value="1" />
           <AccuracySpread value="1.000000" />
           <AccurateModeAccuracyModifier value="0.500000" />
           <RunAndGunAccuracyModifier value="2.000000" />
@@ -8625,7 +8625,7 @@
           <VehicleReloadTime value="2.000000" />
           <AnimReloadRate value="1.000000" />
           <BulletsPerAnimLoop value="1" />
-          <TimeBetweenShots value="2.800000" />
+          <TimeBetweenShots value="3.000000" />
           <TimeLeftBetweenShotsWhereShouldFireIsCached value="-1.000000" />
           <SpinUpTime value="0.000000" />
           <SpinTime value="0.000000" />
@@ -8762,11 +8762,11 @@
           <AttachPoints />
           <GunFeedBone />
           <TargetSequenceGroup />
-          <WeaponFlags>CarriedInHand Gun CanFreeAim AnimCrouchFire UsableOnFoot UsableClimbing UsableInCover AllowEarlyExitFromFireAnimAfterBulletFired DoesRevivableDamage DisplayRechargeTimeHUD OnlyFireOneShot NonLethal DisablePlayerBlockingInMP CanPerformArrest HasLowCoverSwaps DontBreakRopes QuitTransitionToIdleIntroOnWeaponChange DisableLeftHandIkWhenOnFoot TorsoIKForWeaponBlock UseFPSAimIK UseFPSSecondaryMotion</WeaponFlags>
+          <WeaponFlags>CarriedInHand Gun CanFreeAim AnimReload AnimCrouchFire UsableOnFoot UsableClimbing UsableInCover HasLowCoverReloads DoesRevivableDamage OnlyFireOneShot NonLethal DisablePlayerBlockingInMP CanPerformArrest HasLowCoverSwaps DontBreakRopes QuitTransitionToIdleIntroOnWeaponChange DisableLeftHandIkWhenOnFoot TorsoIKForWeaponBlock UseFPSAimIK UseFPSSecondaryMotion</WeaponFlags>
           <TintSpecValues ref="TINT_DEFAULT" />
           <FiringPatternAliases ref="NULL" />
           <ReloadUpperBodyFixupExpressionData ref="default" />
-          <AmmoDiminishingRate value="0" />
+          <AmmoDiminishingRate value="3" />
           <AimingBreathingAdditiveWeight value="1.000000" />
           <FiringBreathingAdditiveWeight value="1.000000" />
           <StealthAimingBreathingAdditiveWeight value="1.000000" />

@@ -45,6 +45,10 @@
     "sniper_ammo": {
       "ammoType": "AMMO_SNIPER",
       "amount": 50
+    },
+    "taser_cartridge": {
+      "ammoType": "AMMO_STUNGUN",
+      "amount": 3
     }
   }
 }

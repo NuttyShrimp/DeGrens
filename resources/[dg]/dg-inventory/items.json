@@ -1589,6 +1589,18 @@
     "description": "Kogels voor elke soort shotgun"
   },
   {
+    "name": "taser_cartridge",
+    "label": "Taser Cartridge",
+    "weight": 500,
+    "type": "item",
+    "stackable": true,
+    "useable": true,
+    "shouldClose": true,
+    "decayrate": 10080,
+    "image": "shotgun_ammo.png",
+    "description": "Cartridge voor taser"
+  },
+  {
     "name": "plant_fertilizer",
     "label": "Plantenvoeding",
     "weight": 2000,

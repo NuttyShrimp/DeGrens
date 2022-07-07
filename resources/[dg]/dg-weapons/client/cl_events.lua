@@ -1,9 +1,7 @@
 AddEventHandler('onResourceStart', function(resourceName)
     if resourceName ~= GetCurrentResourceName() then return end
 
-    -- TODO: test these if needed in loop
-    SetWeaponsNoAutoswap(true)
-    SetWeaponsNoAutoreload(true)
+    -- TODO: test this if needed in loop
     SetPickupAmmoAmountScaler(0.0)
 
 	cachedIds[#cachedIds+1] = exports['dg-peek']:addFlagEntry('isWeaponCustomizer', {
@@ -87,8 +85,6 @@ RegisterNetEvent('weapons:client:UseAmmo', function(pItemData)
         canCancel = true,
         cancelOnDeath = true,
         controlDisables = {
-            movement = true,
-            carMovement = true,
             combat = true,
         },
     })
