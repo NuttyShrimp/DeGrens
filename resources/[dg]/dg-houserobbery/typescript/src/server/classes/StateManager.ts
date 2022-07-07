@@ -278,7 +278,7 @@ class StateManager extends Util.Singleton<StateManager>() {
       return false;
     }
     const plyId = DGCore.Functions.GetPlayerByCitizenId(plyCID).PlayerData.source;
-    const couldChange = await Jobs.changeJob(plyId, 'houserobbery');
+    const couldChange = await Jobs.changeGroupJob(plyId, 'houserobbery');
     if (!couldChange) {
       mainLogger.debug(`Could not change job for player ${plyCID} - ${plyId}`);
       return false;
@@ -344,7 +344,7 @@ class StateManager extends Util.Singleton<StateManager>() {
       'Je deed er te lang over! Ik zal je taak overhandige aan een echte professional'
     );
     mainLogger.debug(`${src} failed his houserobbery job`);
-    Jobs.changeJob(src, null);
+    Jobs.changeGroupJob(src, null);
     jobGroup.members.forEach(m => {
       this.cleanupPlayer(m.serverId);
     });
@@ -364,7 +364,7 @@ class StateManager extends Util.Singleton<StateManager>() {
   finishJob(src: number, houseId: string) {
     if (!this.checkUserIsDoingJob(src, houseId)) return;
     const jobGroup = Jobs.getGroupByServerId(src);
-    Jobs.changeJob(src, null);
+    Jobs.changeGroupJob(src, null);
     Phone.sendMail(
       src,
       'Taak voltooid',

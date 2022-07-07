@@ -8,8 +8,8 @@ class Jobs {
   getGroupByCid(cid: number): Jobs.Groups.Group | undefined {
     return global.exports['dg-jobs'].getGroupByCid(cid);
   }
-  changeJob(src: number, job: string): Promise<boolean> {
-    return global.exports['dg-jobs'].changeJob(src, job);
+  changeGroupJob(src: number, job: string): Promise<boolean> {
+    return global.exports['dg-jobs'].changeGroupJob(src, job);
   }
 }
 

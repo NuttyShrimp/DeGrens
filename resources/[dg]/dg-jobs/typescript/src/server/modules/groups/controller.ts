@@ -8,7 +8,7 @@ import { changeJob, createGroup, getGroupByCid, getGroupByServerId, getGroupList
 global.exports('createGroup', createGroup);
 global.exports('getGroupByCid', getGroupByCid);
 global.exports('getGroupByServerId', getGroupByServerId);
-global.exports('changeJob', changeJob);
+global.exports('changeGroupJob', changeJob);
 
 onNet('DGCore:Server:onPlayerLoaded', () => {
   const player = DGCore.Functions.GetPlayer(source);
