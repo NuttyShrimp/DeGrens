@@ -4,6 +4,7 @@ local errorWords = { "failure", "error", "not", "failed", "not safe", "invalid",
 
 function Citizen.Trace(...)
 	local isError = false
+	oldTrace(...)
 	if type(...) == "string" then
 		args = string.lower(...)
 
@@ -18,5 +19,4 @@ function Citizen.Trace(...)
 	if not isError then
 		return
 	end
-	oldTrace(...)
 end
