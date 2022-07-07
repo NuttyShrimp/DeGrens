@@ -10,6 +10,8 @@ client_scripts {
 	'client/cl_*.lua'
 }
 server_script {
+  '@ts-shared/server/server.js',
+  '@ts-shared/shared/lib.lua',
 	'sv_config.lua',
 	'server/sv_*.lua'
 }

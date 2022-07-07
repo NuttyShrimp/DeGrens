@@ -1,4 +1,5 @@
 let PlayerData: PlayerData | null = null;
+let plyJob: { name: string | null; grade: number } = null;
 const registeredFlags: Set<string> = new Set();
 
 export const getEntityCtx = (entity: number, entityType: number): Context => {
@@ -50,6 +51,13 @@ export const setCtxPlayerData = (data: PlayerData) => {
   PlayerData = data;
 };
 
-export const getCtxPlayerData = (): PlayerData => {
-  return PlayerData;
+export const setCtxJob = (job: { name: string | null; grade: number } | null) => {
+  plyJob = job;
+};
+
+export const getCtxPlayerData = (): { data: PlayerData; job: { name: string | null; grade: number } } => {
+  return {
+    data: PlayerData,
+    job: plyJob,
+  };
 };

@@ -185,7 +185,6 @@ declare interface PlayerData {
   license: string;
   steamid: string;
   charinfo: CharacterInfo;
-  job: Job;
   gang: Gang;
   name: string;
   citizenid: number;
@@ -218,13 +217,4 @@ declare interface Gang {
   name: string;
   label: string;
   grade: Grade;
-}
-
-declare interface Job {
-  isboss?: boolean;
-  name: string;
-  label: string;
-  grade: Grade;
-  onduty: boolean;
-  payment: number;
 }

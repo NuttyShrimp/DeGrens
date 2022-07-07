@@ -132,18 +132,6 @@ function DGCore.Player.CheckPlayerData(source, PlayerData)
     SerialNumber = DGCore.Player.CreateSerialNumber(),
     InstalledApps = {},
   }
-  -- Job
-  PlayerData.job = PlayerData.job or {}
-  PlayerData.job.name = PlayerData.job.name or 'unemployed'
-  PlayerData.job.label = PlayerData.job.label or 'Civilian'
-  PlayerData.job.payment = PlayerData.job.payment or 10
-  if DGCore.Shared.ForceJobDefaultDutyAtLogin or PlayerData.job.onduty == nil then
-    PlayerData.job.onduty = DGCore.Shared.Jobs[PlayerData.job.name].defaultDuty
-  end
-  PlayerData.job.isboss = PlayerData.job.isboss or false
-  PlayerData.job.grade = PlayerData.job.grade or {}
-  PlayerData.job.grade.name = PlayerData.job.grade.name or 'Freelancer'
-  PlayerData.job.grade.level = PlayerData.job.grade.level or 0
   -- Gang
   PlayerData.gang = PlayerData.gang or {}
   PlayerData.gang.name = PlayerData.gang.name or 'none'
@@ -203,39 +191,6 @@ function DGCore.Player.CreatePlayer(PlayerData)
     self.PlayerData.citizenid = cid
   end
 
-  self.Functions.SetJob = function(job, grade)
-    local job = job:lower()
-    local grade = tostring(grade) or '0'
-
-    if DGCore.Shared.Jobs[job] then
-      self.PlayerData.job.name = job
-      self.PlayerData.job.label = DGCore.Shared.Jobs[job].label
-      self.PlayerData.job.onduty = DGCore.Shared.Jobs[job].defaultDuty
-
-      if DGCore.Shared.Jobs[job].grades[grade] then
-        local jobgrade = DGCore.Shared.Jobs[job].grades[grade]
-        self.PlayerData.job.grade = {}
-        self.PlayerData.job.grade.name = jobgrade.name
-        self.PlayerData.job.grade.level = tonumber(grade)
-        self.PlayerData.job.payment = jobgrade.payment or 30
-        self.PlayerData.job.isboss = jobgrade.isboss or false
-      else
-        self.PlayerData.job.grade = {}
-        self.PlayerData.job.grade.name = 'No Grades'
-        self.PlayerData.job.grade.level = 0
-        self.PlayerData.job.payment = 30
-        self.PlayerData.job.isboss = false
-      end
-
-      self.Functions.UpdatePlayerData()
-      TriggerClientEvent('DGCore:Client:OnJobUpdate', self.PlayerData.source, self.PlayerData.job)
-      TriggerEvent('DGCore:Server:OnJobUpdate', self.PlayerData.source, self.PlayerData.job)
-      return true
-    end
-
-    return false
-  end
-
   self.Functions.SetGang = function(gang, grade)
     local gang = gang:lower()
     local grade = tostring(grade) or '0'
@@ -263,12 +218,6 @@ function DGCore.Player.CreatePlayer(PlayerData)
     return false
   end
 
-  self.Functions.SetJobDuty = function(onDuty)
-    self.PlayerData.job.onduty = onDuty
-    TriggerEvent('DGCore:Server:OnJobDutyUpdate', self.PlayerData.source, onDuty)
-    self.Functions.UpdatePlayerData()
-  end
-
   self.Functions.setCash = function(cash)
     self.PlayerData.charinfo.cash = cash
     self.Functions.UpdatePlayerData()
@@ -280,12 +229,6 @@ function DGCore.Player.CreatePlayer(PlayerData)
       self.PlayerData.metadata[meta] = val
       self.Functions.UpdatePlayerData()
     end
-  end
-
-  self.Functions.AddJobReputation = function(amount)
-    local amount = tonumber(amount)
-    self.PlayerData.metadata['jobrep'][self.PlayerData.job.name] = self.PlayerData.metadata['jobrep'][self.PlayerData.job.name] + amount
-    self.Functions.UpdatePlayerData()
   end
 
   self.Functions.AddItem = function(item, amount, slot, info, quality, createtime)
@@ -500,9 +443,9 @@ function DGCore.Player.Save(source)
   if PlayerData then
     local result = exports['dg-sql']:query([[
 			INSERT INTO players (citizenid, cid, steamid, license, discord, name, firstname, lastname, birthdate, gender, backstory,
-                     nationality, phone, cash, job, gang, position, metadata)
+                     nationality, phone, cash, gang, position, metadata)
 			VALUES (:citizenid, :cid, :steamid, license, discord, :name, :firstname, :lastname, :birthdate, :gender, :backstory,
-			        :nationality, :phone, :cash, :job, :gang, :position, :metadata)
+			        :nationality, :phone, :cash, :gang, :position, :metadata)
 			ON DUPLICATE KEY UPDATE cid         = :cid,
 			                        citizenid   = :citizenid,
 			                        name        = :name,
@@ -517,7 +460,6 @@ function DGCore.Player.Save(source)
 			                        nationality = :nationality,
 			                        phone       = :phone,
 			                        cash        = :cash,
-			                        job         = :job,
 			                        gang        = :gang,
 			                        position    = :position,
 			                        metadata    = :metadata
@@ -530,7 +472,6 @@ function DGCore.Player.Save(source)
       discord = PlayerData.discord,
       name = PlayerData.name,
       charinfo = json.encode(PlayerData.charinfo),
-      job = json.encode(PlayerData.job),
       gang = json.encode(PlayerData.gang),
       position = json.encode(pcoords),
       metadata = json.encode(PlayerData.metadata),

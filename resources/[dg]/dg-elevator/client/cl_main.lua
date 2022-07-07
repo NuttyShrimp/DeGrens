@@ -37,7 +37,7 @@ AddEventHandler("onResourceStart", function(resourceName)
                         },
                     }
 
-                    local playerJob = DGCore.Functions.GetPlayerData().job.name
+                    local playerJob = DGX.RPC.execute('jobs:server:getCurrentJob')
                     for levelId, level in pairs(elevators[data.elevator].levels) do
                         if levelId ~= data.level then
                             if not level.job or level.job == playerJob then

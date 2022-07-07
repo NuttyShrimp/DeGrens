@@ -42,7 +42,7 @@ class StateManager extends Util.Singleton<StateManager>() {
   @RPCEvent('houserobbery:server:toggleSignedIn')
   toggleSignedIn = (src: number) => {
     const Player = DGCore.Functions.GetPlayer(src);
-    if (Player.PlayerData.job.name === 'police') {
+    if (Jobs.isWhitelisted(src, 'police')) {
       Notifications.add(src, 'Bert B: "Ik kan niks voor u betekenen"');
       Util.Log(
         'houserobbery:signin:failed',
@@ -74,7 +74,7 @@ class StateManager extends Util.Singleton<StateManager>() {
     }
     const Player = DGCore.Functions.GetPlayer(src);
     if (!Player) return;
-    if (Player.PlayerData.job.name === 'police') return true;
+    if (Jobs.getCurrentJob(src) === 'police') return true;
     const jobGroup = Jobs.getGroupByServerId(src);
     if (!jobGroup) {
       mainLogger.debug(`Could not find job group for player ${src}`);
@@ -110,7 +110,7 @@ class StateManager extends Util.Singleton<StateManager>() {
     if (!this.checkUserIsDoingJob(src, houseId)) return false;
     const Player = DGCore.Functions.GetPlayer(src);
     const state = this.houseStates.get(houseId).state;
-    if (Player.PlayerData.job.name === 'police' && state === HouseState.LOCKED) return true;
+    if (Jobs.getCurrentJob(src) === 'police' && state === HouseState.LOCKED) return true;
     return state === HouseState.UNLOCKED;
   };
 
@@ -133,7 +133,7 @@ class StateManager extends Util.Singleton<StateManager>() {
     if (!this.checkUserIsDoingJob(src, houseId)) return;
     const Player = DGCore.Functions.GetPlayer(src);
     if (!Player) return;
-    if (Player.PlayerData.job.name !== 'police' || !Player.PlayerData.job.onduty) return;
+    if (Jobs.getCurrentJob(src) === 'police') return;
     Util.Log(
       'houserobbery:door:lock',
       {
@@ -197,7 +197,7 @@ class StateManager extends Util.Singleton<StateManager>() {
     }
     const Player = DGCore.Functions.GetPlayer(src);
     if (!Player) return;
-    if (Player.PlayerData.job.name === 'police') {
+    if (Jobs.isWhitelisted(src, 'police')) {
       Notifications.add(src, 'Dit is niet de bedoeling he...');
       return;
     }

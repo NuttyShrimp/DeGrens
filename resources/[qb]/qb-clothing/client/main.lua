@@ -294,11 +294,6 @@ AddEventHandler('DGCore:Client:OnPlayerUnload', function()
     isLoggedIn = false
 end)
 
-RegisterNetEvent('DGCore:Client:OnJobUpdate')
-AddEventHandler('DGCore:Client:OnJobUpdate', function(JobInfo)
-    PlayerData.job = JobInfo
-end)
-
 function DrawText3Ds(x, y, z, text)
 	SetTextScale(0.35, 0.35)
     SetTextFont(4)
@@ -408,6 +403,7 @@ Citizen.CreateThread(function()
 end)
 
 Citizen.CreateThread(function()
+    local plyJob = nil
     while true do
         if isLoggedIn then
             local ped = PlayerPedId()
@@ -419,7 +415,10 @@ Citizen.CreateThread(function()
                     if not creatingCharacter then
                         DrawMarker(2, Config.ClothingRooms[k].coords, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.4, 0.4, 0.2, 255, 255, 255, 255, 0, 0, 0, 1, 0, 0, 0)
                         if dist < 2 then
-                            if PlayerData.job.name == Config.ClothingRooms[k].requiredJob then
+                            if plyJob == nil then
+                                plyJob = DGX.RPC.execute('jobs:server:getCurrentJob')
+                            end
+                            if plyJob == Config.ClothingRooms[k].requiredJob then
                                 DrawText3Ds(Config.ClothingRooms[k].coords.x, Config.ClothingRooms[k].coords.y, Config.ClothingRooms[k].coords.z + 0.3, '~g~E~w~ - View Clothing')
                                 if IsControlJustPressed(0, 38) then -- E
                                     customCamLocation = Config.ClothingRooms[k].cameraLocation
@@ -427,7 +426,7 @@ Citizen.CreateThread(function()
                                     if DGCore.Functions.GetPlayerData().charinfo.gender == 1 then gender = "female" end
                                     DGCore.Functions.TriggerCallback('qb-clothing:server:getOutfits', function(result)
                                         openMenu({
-                                            {menu = "roomOutfits", label = "Presets", selected = true, outfits = Config.Outfits[PlayerData.job.name][gender]},
+                                            {menu = "roomOutfits", label = "Presets", selected = true, outfits = Config.Outfits[plyJob][gender]},
                                             {menu = "myOutfits", label = "My Outfits", selected = false, outfits = result},
                                             {menu = "character", label = "Clothing", selected = false},
                                             {menu = "accessoires", label = "Accessories", selected = false}
@@ -455,6 +454,9 @@ Citizen.CreateThread(function()
                         end
                         inRange = true
                     end
+                end
+                if plyJob ~= nil then
+                    plyJob = nil
                 end
             end
             if not inRange then

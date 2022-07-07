@@ -1,9 +1,9 @@
-import { Events, Util } from '@dgx/server';
+import { Events, Jobs, Util } from '@dgx/server';
 import { handleCommandExecution } from './commands';
 
 const specialTarget: { [k: string]: (PlayerData: PlayerData) => boolean } = {
-  police: data => data.job.name === 'police' && data.job.onduty,
-  ambulance: data => data.job.name === 'ambulance' && data.job.onduty,
+  police: data => Jobs.getCurrentJob(data.source) === 'police',
+  ambulance: data => Jobs.getCurrentJob(data.source) === 'ambulance',
   admin: data => DGCore.Functions.HasPermission(data.source, 'admin'),
 };
 

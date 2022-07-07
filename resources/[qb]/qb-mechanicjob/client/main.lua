@@ -150,22 +150,6 @@ Citizen.CreateThread(function()
                     end
                 end
 
-                if OnDutyDistance < 20 then
-                    inRange = true
-                    DrawMarker(2, Config.Locations["duty"].x, Config.Locations["duty"].y, Config.Locations["duty"].z, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.3, 0.3, 0.2, 210, 50, 9, 255, false, false, false, true, false, false, false)
-
-                    if OnDutyDistance < 1 then
-                        if onDuty then
-                            DrawText3Ds(Config.Locations["duty"].x, Config.Locations["duty"].y, Config.Locations["duty"].z, "[E] Off Duty")
-                        else
-                            DrawText3Ds(Config.Locations["duty"].x, Config.Locations["duty"].y, Config.Locations["duty"].z, "[E] On Duty")
-                        end
-                        if IsControlJustReleased(0, 38) then
-                            TriggerServerEvent("DGCore:ToggleDuty")
-                        end
-                    end
-                end
-
                 if onDuty then
                     for k, v in pairs(Config.Plates) do
                         if v.AttachedVehicle == nil then

@@ -3,7 +3,7 @@ import { UI, Util } from '@dgx/client';
 import { entryManager } from '../classes/entryManager';
 import { stateManager } from '../classes/stateManager';
 import { activateZone, deactivateZone, getCurrentEntity, updateCurrentEntity } from '../helpers/actives';
-import { setCtxPlayerData } from '../helpers/context';
+import { setCtxJob, setCtxPlayerData } from '../helpers/context';
 
 on('onResourceStart', (resName: string) => {
   if (resName !== GetCurrentResourceName()) return;
@@ -66,6 +66,10 @@ UI.RegisterUICallback('peek:select', (data: { id: string }, cb) => {
 
 onNet('DGCore:Player:SetPlayerData', (data: PlayerData) => {
   setCtxPlayerData(data);
+});
+
+onNet('dg-jobs:signin:update', (job: string, grade: number) => {
+  setCtxJob(job ? { name: job, grade } : null);
 });
 
 DGX.RayCast.onChange((entity, type, coords) => {

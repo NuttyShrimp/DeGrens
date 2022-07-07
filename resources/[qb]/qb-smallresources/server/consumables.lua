@@ -145,12 +145,3 @@ DGCore.Functions.CreateUseableItem("firework4", function(source, item)
     local Player = DGCore.Functions.GetPlayer(source)
     TriggerClientEvent("fireworks:client:UseFirework", source, item.name, "scr_indep_fireworks")
 end)
-
-DGCore.Commands.Add("resetarmor", "Resets Vest (Police Only)", {}, false, function(source, args)
-    local Player = DGCore.Functions.GetPlayer(source)
-    if Player.PlayerData.job.name == "police" then
-        TriggerClientEvent("consumables:client:ResetArmor", source)
-    else
-        TriggerClientEvent('DGCore:Notify', source,  "For Emergency Service Only", "error")
-    end
-end)

@@ -39,7 +39,8 @@ entries.citizen = {
 		event = 'qb-hotdogjob:client:ToggleSell',
 		shouldClose = true,
 		isEnabled = function(playerData)
-			return playerData.job.name == 'hotdog'
+		  -- TODO: replace when job is updated/removed
+			return false
 		end
 	},
 	{

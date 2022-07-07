@@ -7,6 +7,8 @@ shared_scripts {
 
 client_script {
     '@dg-lib/client/cl_ui.lua',
+    '@ts-shared/shared/lib.lua',
+    '@ts-shared/client/client.js',
     'client/cl_*.lua',
 }
 

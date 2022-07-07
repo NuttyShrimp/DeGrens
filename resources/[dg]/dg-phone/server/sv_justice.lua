@@ -9,7 +9,8 @@ end)
 
 seedJob = function(job)
 	for plySrvId,player in pairs(DGCore.Functions.GetQBPlayers()) do
-		if player.PlayerData.job.name == job then
+	  local plyJob = DGX.Jobs.getCurrentJob(plySrvId)
+		if plyJob == job then
 			table.insert(registered[job], {
 				srvId = plySrvId,
 				name = player.PlayerData.charinfo.firstname .. " " .. player.PlayerData.charinfo.lastname,

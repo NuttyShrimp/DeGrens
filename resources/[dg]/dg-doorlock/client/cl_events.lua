@@ -3,6 +3,10 @@ RegisterNetEvent('DGCore:Player:SetPlayerData', function(_data)
 	PlayerData = _data
 end)
 
+RegisterNetEvent('dg-jobs:signin:update', function(job)
+  plyJob = job
+end)
+
 RegisterNetEvent("onResourceStop", function(resourceName)
     if GetCurrentResourceName() ~= resourceName then return end
     if interactionVisible then 

@@ -16,7 +16,7 @@ seedCharData = function()
 			cid = PlyData.citizenid,
 			firstname = PlyData.charinfo.firstname,
 			lastname = PlyData.charinfo.lastname,
-			job = PlyData.job.name,
+			job = DGX.RPC.execute('jobs:server:getCurrentJob'),
 			phone = PlyData.charinfo.phone,
 			server_id = GetPlayerServerId(PlayerId()),
 			hasVPN = DGCore.Functions.TriggerCallback('DGCore:HasItem', 'vpn')
@@ -47,6 +47,11 @@ end)
 RegisterNetEvent('DGCore:Player:SetPlayerData', function()
 	-- Some fresh playerData
 	seedCharData()
+end)
+
+RegisterNetEvent('dg-jobs:signin:update', function(job)
+  characterInfo.job = job
+  SendAppEvent('character', characterInfo)
 end)
 
 RegisterNetEvent('onResourceStart', function(resource)

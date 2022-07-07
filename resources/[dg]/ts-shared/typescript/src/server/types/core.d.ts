@@ -73,23 +73,11 @@ interface ServerFunctions {
   GetQBPlayers(): PlayersObject | Player[];
 
   /**
-   *  @param {string} job: Job name to fetch on duty players for
-   *  @returns tuple of player id array and the number of players on duty with the specified job
-   */
-  GetPlayersOnDuty(job: string): [number[], number];
-
-  /**
    * Get the playerobject tied to the given citizenid from the database without the functions.
    * If a player is online it does use the existing player object.
    * @param citizenid: Player's citizenid
    */
   GetOfflinePlayerByCitizenId(citizenid: number): Pick<Player, 'PlayerData'>;
-
-  /**
-   *  @param {string} job: Job name to fetch on duty players for
-   *  @returns count of players on duty for the specified job
-   */
-  GetDutyCount(job: string): number;
 
   /**
    * Registers a new server callback, use QBCore.Functions.TriggerCallback on the client side to trigger the callback
@@ -247,21 +235,10 @@ interface SelfFunctions {
   UpdatePlayerData(dontUpdateChat: boolean): void;
 
   /**
-   * Sets the job of a player at the specified grade
-   * @returns true if the job was set, false otherwise
-   */
-  SetJob(job: string, grade: string | number): boolean;
-
-  /**
    * Sets the gang of a player at the specified grade
    * @returns true if the gang was set, false otherwise
    */
   SetGang(gang: string, grade: string | number): boolean;
-
-  /**
-   * Sets the duty state of a player to the specified boolean
-   */
-  SetJobDuty(onDuty: boolean): void;
 
   /**
    * Sets the specified metadata key to the specified value
@@ -272,11 +249,6 @@ interface SelfFunctions {
    * Sets the cash in the charinfo object
    */
   setCash(cash: number): void;
-
-  /**
-   * Increase the player's job reputation by given amount
-   */
-  AddJobReputation(amount: number): void;
 
   /**
    *  Adds a specified amount of a specified item to the player's inventory

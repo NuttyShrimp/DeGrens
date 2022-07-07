@@ -1,7 +1,7 @@
 import { getDefaultAccountId } from '../bank/helpers/accounts';
 import { paycheck } from '../bank/helpers/actions';
 import { cashLogger } from '../cash/util';
-import { SQL } from '@dgx/server';
+import { Jobs, SQL } from '@dgx/server';
 
 import { paycheckLogger } from './util';
 import { getConfigModule } from 'helpers/config';
@@ -39,12 +39,13 @@ export const seedPlyInCache = async (src: number) => {
 };
 
 export const seedCache = async () => {
-  paycheckConfig = await getConfigModule('paycheck')
+  paycheckConfig = await getConfigModule('paycheck');
   paycheckCache.clear();
   DGCore.Functions.GetPlayers().forEach(player => {
     seedPlyInCache(player);
     const Player = DGCore.Functions.GetPlayer(player);
-    checkInterval(Player.PlayerData.citizenid, Player.PlayerData.job.name, Player.PlayerData.job.onduty);
+    const plyJob = Jobs.getCurrentJob(player);
+    checkInterval(Player.PlayerData.citizenid, plyJob);
   });
 };
 
@@ -128,11 +129,11 @@ export const givePaycheck = async (src: number) => {
   saveToDb(cid);
 };
 
-export const checkInterval = (cid: number, job: string, onDuty: boolean) => {
+export const checkInterval = (cid: number, job: string) => {
   if (paycheckIntervals.has(cid)) {
     const intervalInfo = paycheckIntervals.get(cid);
     // Went offduty or changed jobs
-    if (intervalInfo.job != job || !onDuty) {
+    if (intervalInfo.job != job) {
       const Player = DGCore.Functions.GetPlayerByCitizenId(cid);
       registerPaycheck(Player.PlayerData.source, intervalInfo.amount, job, 'Whitelisted paycheck');
       clearInterval(intervalInfo.interval);
@@ -140,7 +141,7 @@ export const checkInterval = (cid: number, job: string, onDuty: boolean) => {
       paycheckLogger.debug(`Cleared paycheck interval for ${cid}`);
     }
   }
-  if (paycheckConfig[job] && onDuty) {
+  if (job && paycheckConfig[job]) {
     const paycheckAmount = paycheckConfig[job];
     const interval = setInterval(() => {
       if (!paycheckIntervals.has(cid)) {

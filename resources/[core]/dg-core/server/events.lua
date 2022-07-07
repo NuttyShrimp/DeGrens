@@ -148,19 +148,6 @@ RegisterNetEvent('DGCore:Server:SetMetaData', function(meta, data)
 	TriggerClientEvent('hud:client:UpdateNeeds', src, Player.PlayerData.metadata['hunger'], Player.PlayerData.metadata['thirst'])
 end)
 
-RegisterNetEvent('DGCore:ToggleDuty', function()
-	local src = source
-	local Player = DGCore.Functions.GetPlayer(src)
-	if Player.PlayerData.job.onduty then
-		Player.Functions.SetJobDuty(false)
-		TriggerClientEvent('DGCore:Notify', src, 'You are now off duty!')
-	else
-		Player.Functions.SetJobDuty(true)
-		TriggerClientEvent('DGCore:Notify', src, 'You are now on duty!')
-	end
-	TriggerClientEvent('DGCore:Client:SetDuty', src, Player.PlayerData.job.onduty)
-end)
-
 -- Items
 
 RegisterNetEvent('DGCore:Server:UseItem', function(item)
@@ -194,7 +181,7 @@ RegisterNetEvent('DGCore:CallCommand', function(command, args)
 			local isGod = DGCore.Functions.HasPermission(src, 'god')
 			local hasPerm = DGCore.Functions.HasPermission(src, DGCore.Commands.List[command].permission)
 			local isPrincipal = IsPlayerAceAllowed(src, 'command')
-			if (DGCore.Commands.List[command].permission == Player.PlayerData.job.name) or isGod or hasPerm or isPrincipal then
+			if isGod or hasPerm or isPrincipal then
 				if (DGCore.Commands.List[command].argsrequired and #DGCore.Commands.List[command].arguments ~= 0 and args[#DGCore.Commands.List[command].arguments] == nil) then
 					TriggerClientEvent('DGCore:Notify', src, 'All arguments must be filled out!', 'error')
 				else

@@ -1,7 +1,7 @@
 isAuthorized = function(doorId)
-	if not doors[doorId] or not PlayerData or not PlayerData.job then return false end
+	if not doors[doorId] or not PlayerData or plyJob then return false end
     for _, job in pairs(doors[doorId].authorized) do
-        if job == PlayerData.job.name then
+        if job == plyJob then
             return true
         end
     end

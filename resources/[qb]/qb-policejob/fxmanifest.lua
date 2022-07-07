@@ -19,7 +19,11 @@ client_scripts {
 	'client/tracker.lua'
 }
 
-server_script 'server/main.lua'
+server_scripts {
+  '@ts-shared/server/server.js',
+  '@ts-shared/shared/lib.lua',
+  'server/main.lua',
+}
 
 ui_page 'html/index.html'
 

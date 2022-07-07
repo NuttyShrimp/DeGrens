@@ -1,5 +1,4 @@
 getPlySpawns = function(src)
-	local Player = DGCore.Functions.GetPlayer(src)
 	local Spawns = {}
 	for _, v in pairs(Config.Server.spawns.base) do
 		if (v.isEnabled and not v.isEnabled()) then
@@ -12,19 +11,21 @@ getPlySpawns = function(src)
 		})
 		::continue::
 	end
-	if Config.Server.spawns.job[Player.PlayerData.job.name] then
-		for _, v in pairs(Config.Server.spawns.job[Player.PlayerData.job.name]) do
-			if (v.isEnabled and not v.isEnabled()) then
-				goto continue
-			end
-			table.insert(Spawns, {
-				label = v.label,
-				spawnType = v.spawnType,
-				position = v.position,
-			})
-			::continue::
-		end
-	end
+	for job, spawns in pairs(Config.Server.spawns.job) do
+    if DGX.Jobs.isWhitelisted(src, job) then
+      for _, v in pairs(spawns) do
+        if (v.isEnabled and not v.isEnabled()) then
+          goto continue
+        end
+        table.insert(Spawns, {
+          label = v.label,
+          spawnType = v.spawnType,
+          position = v.position,
+        })
+        ::continue::
+      end
+    end
+  end
 	local houses = exports['qb-houses']:getOwnedHouses(src)
 	for _, v in pairs(houses) do
 		table.insert(Spawns, {

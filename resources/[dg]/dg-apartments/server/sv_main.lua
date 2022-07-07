@@ -106,8 +106,8 @@ RegisterNetEvent('dg-apartments:server:leaveApartment', function()
 end)
 
 RegisterNetEvent('dg-apartments:server:toggleLockDown', function()
-  local Player = DGCore.Functions.GetPlayer(source)
-  if (Player.PlayerData.job.name ~= "police" or not Player.PlayerData.job.onduty) then
+  local plyJob = DGX.Jobs.getCurrentJob(source)
+  if (plyJob ~= "police") then
     -- TODO add ban for injection
   end
   state.isInLockdown = not state.isInLockdown
@@ -135,7 +135,7 @@ end)
 
 -- Callbacks
 DGCore.Functions.CreateCallback('dg-apartments:server:getApartmentMenu', function(src, cb)
-  local Player = DGCore.Functions.GetPlayer(src)
+  local plyJob = DGX.Jobs.getCurrentJob(source)
   local ownedApartId = getPlayerApartment(src)
   local invApart = getInvitedApartments(src)
   local openApart = getOpenApartments()
@@ -154,7 +154,7 @@ DGCore.Functions.CreateCallback('dg-apartments:server:getApartmentMenu', functio
     end
   end
 
-  if (Player.PlayerData.job.name == "police" and Player.PlayerData.job.onduty) then
+  if (plyJob == "police") then
     table.insert(apartList, {
       title = "Raid apartment",
       callbackURL = "dg-apartments:client:openRaidMenu"
@@ -195,7 +195,7 @@ DGCore.Functions.CreateCallback('dg-apartments:server:getApartmentMenu', functio
     },
   }
 
-  if (Player.PlayerData.job.name == "police" and Player.PlayerData.job.onduty) then
+  if (plyJob == "police") then
     menu[#menu + 1] = {
       title = ("%s"):format(state.isInLockdown and "Remove lockdown" or "Lockdown apartment"),
       description = "Prevent citizens to enter their apartment",

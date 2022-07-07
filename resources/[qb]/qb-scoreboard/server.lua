@@ -12,6 +12,7 @@ DGCore.Functions.CreateCallback('qb-scoreboard:server:GetActivity', function(sou
     
     for k, v in pairs(DGCore.Functions.GetPlayers()) do
         local Player = DGCore.Functions.GetPlayer(v)
+        -- TODO: move to new whitelisted job system
         if Player ~= nil then
             if (Player.PlayerData.job.name == "police" and Player.PlayerData.job.onduty) then
                 PoliceCount = PoliceCount + 1

@@ -265,27 +265,6 @@ CreateThread(function()
             local ped = PlayerPedId()
             local pos = GetEntityCoords(ped)
             if PlayerJob.name =="ambulance" then
-                for k, v in pairs(Config.Locations["duty"]) do
-                    local dist = #(pos - v)
-                    if dist < 5 then
-                        sleep = 0
-                        if dist < 1.5 then
-                            if onDuty then
-                                DrawText3D(v.x, v.y, v.z, "~r~E~w~ - Go Off Duty")
-                            else
-                                DrawText3D(v.x, v.y, v.z, "~g~E~w~ - Go On Duty")
-                            end
-                            if IsControlJustReleased(0, 38) then
-                                onDuty = not onDuty
-                                TriggerServerEvent("DGCore:ToggleDuty")
-                                TriggerServerEvent("police:server:UpdateBlips")
-                            end
-                        elseif dist < 4.5 then
-                            DrawText3D(v.x, v.y, v.z, "On/Off Duty")
-                        end
-                    end
-                end
-
                 for k, v in pairs(Config.Locations["armory"]) do
                     local dist = #(pos - v)
                     if dist < 4.5 then

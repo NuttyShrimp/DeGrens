@@ -12,7 +12,11 @@ shared_scripts {
 }
 
 server_script 'server/main.lua'
-client_script 'client/main.lua'
+client_scripts {
+  '@ts-shared/shared/lib.lua',
+  '@ts-shared/client/client.js',
+  'client/main.lua',
+}
 
 files {
 	'html/index.html',

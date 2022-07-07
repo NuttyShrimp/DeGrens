@@ -1,4 +1,5 @@
 PlayerData = {}
+plyJob = nil
 
 doors = {}
 

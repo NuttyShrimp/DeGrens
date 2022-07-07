@@ -1,4 +1,8 @@
 entries = {}
+local plyJob = {
+  name = nil,
+  rank = nil 
+}
 
 -- TODO: Write tool to generate list/path of submenus
 
@@ -15,6 +19,7 @@ RegisterKeyMapping('radialmenu', 'Open Radial Menu', 'keyboard', 'F1')
 
 function getEnabledItems(items, context)
 	local _items = {}
+	context.plyData.job = plyJob
 	for _, item in pairs(items) do
 		if (item.isEnabled == nil) then
 			print(('[RADIAL] [ERROR] %s(%s) has no isEnabled function'):format(item.id, item.title))
@@ -212,6 +217,13 @@ AddEventHandler('qb-radialmenu:client:ChangeSeat', function(data)
 	else
 		DGCore.Functions.Notify('You have a race harness on you cant switch..', 'error')
 	end
+end)
+
+RegisterNetEvent('dg-jobs:signin:update', function(job, rank)
+  plyJob = {
+    name = job,
+    rank = rank
+  }
 end)
 
 function DrawText3Ds(x, y, z, text)

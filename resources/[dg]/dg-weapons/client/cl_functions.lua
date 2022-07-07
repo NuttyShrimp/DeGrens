@@ -28,7 +28,7 @@ holsterWeapon = function(pWeaponData)
         end
     end)
 
-    if DGCore.Functions.GetPlayerData().job.name == 'police' then
+    if exports['dg-jobs']:getCurrentJob().name == 'police' then
         loadAnimDict('reaction@intimidation@cop@unarmed')
         TaskPlayAnimAdvanced(ped, 'reaction@intimidation@cop@unarmed', 'intro', GetEntityCoords(ped, true), 0, 0, GetEntityHeading(ped), 3.0, 3.0, -1, 50, 0, 0, 0)
         Citizen.Wait(500)
@@ -63,7 +63,7 @@ unholsterWeapon = function(pWeaponData)
         end
     end)
 
-    if DGCore.Functions.GetPlayerData().job.name == 'police' then
+    if exports['dg-jobs']:getCurrentJob().name == 'police' then
         loadAnimDict('rcmjosh4')
         TaskPlayAnimAdvanced(ped, 'rcmjosh4', 'josh_leadout_cop2', GetEntityCoords(ped, true), 0, 0, GetEntityHeading(ped), 3.0, 3.0, -1, 50, 0, 0, 0)
         Citizen.Wait(300)
