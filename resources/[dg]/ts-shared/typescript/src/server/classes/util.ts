@@ -50,6 +50,11 @@ class Util extends UtilShared {
   isDevEnv() {
     return Config.getConfigValue<boolean>('main.production') === false;
   }
+
+  getCID(src: number) {
+    const Player = DGCore.Functions.GetPlayer(src);
+    return Player?.PlayerData?.citizenid;
+  }
 }
 
 export default {

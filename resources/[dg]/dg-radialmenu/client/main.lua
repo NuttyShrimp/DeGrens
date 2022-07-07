@@ -77,11 +77,13 @@ end)
 RegisterNUICallback('selectItem', function(data)
 	local itemData = data.itemData
 
-	if itemData.type == 'client' then
-		TriggerEvent(itemData.event, itemData)
-	elseif itemData.type == 'server' then
-		TriggerServerEvent(itemData.event, itemData)
-	end
+  if (itemData.event) then
+    if itemData.type == 'server' then
+      TriggerServerEvent(itemData.event, itemData)
+    else
+      TriggerEvent(itemData.event, itemData)
+    end
+  end
 end)
 
 RegisterNetEvent('qb-radialmenu:client:noPlayers')

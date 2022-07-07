@@ -8,18 +8,21 @@ ui_page 'html/index.html'
 
 shared_scripts { 
 	'@dg-core/import.lua',
+	"@ts-shared/shared/lib.lua",
 	'config.lua'
 }
 
 client_scripts {
 	'client/*.lua',
 	'client/entries/cl_*.lua',
+	'@ts-shared/client/client.js'
 }
 
 server_scripts {
     'server/main.lua',
     'server/trunk.lua',
-    'server/stretcher.lua'
+    'server/stretcher.lua',
+	'@ts-shared/server/server.js'
 }
 
 files {

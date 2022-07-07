@@ -17,5 +17,6 @@ declare global {
     RPC: typeof Classes.RPC;
     Taskbar: typeof Classes.Taskbar;
     Interiors: typeof Classes.Interiors;
+    Jobs: typeof Classes.Jobs;
   };
 }

@@ -19,6 +19,16 @@ entries.job = {
 			return playerData.job.name == 'ambulance' or playerData.job.name == 'police'
 		end
 	},
+	{
+		id = 'whitelistCheck',
+		title = 'Job Allowlist',
+		icon = 'users-gear',
+		event = 'jobs:client:openJobAllowlist',
+		shouldClose = true,
+		isEnabled = function(playerData)
+			return DGX.RPC.execute('jobs:whitelist:hasWhitelistAccess')
+		end
+	},
 	--region Ambulance
 	{
 		id = 'statuscheck',

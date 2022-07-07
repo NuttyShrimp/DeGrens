@@ -19,7 +19,6 @@ create table if not exists players
   cash         bigint    default 0,
   gang         text                                  null,
   position     text                                  not null,
-  job          text                                  not null,
   metadata     text                                  not null,
   last_updated timestamp default current_timestamp() not null on update current_timestamp(),
   PRIMARY KEY (citizenid),
@@ -440,4 +439,14 @@ CREATE TABLE IF NOT EXISTS `cornerselling_sales`
   `coords` TEXT DEFAULT NULL,
   `date` DATETIME NOT NULL,
   PRIMARY KEY (`id`)
-)
+);
+
+CREATE TABLE IF NOT EXISTS `whitelist_jobs`
+(
+  cid int NOT NULL,
+  job varchar(255) NOT NULL,
+  `rank` int NOT NULL DEFAULT 0,
+  specialty int NOT NULL DEFAULT 0,
+  PRIMARY KEY (cid, job),
+  FOREIGN KEY (cid) REFERENCES players (citizenid) on update cascade on delete cascade
+);

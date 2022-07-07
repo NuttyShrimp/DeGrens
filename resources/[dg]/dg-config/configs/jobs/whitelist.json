@@ -1,0 +1,40 @@
+{
+  "police": {
+    "grades": [
+      "Aspirant",
+      "Inspecteur",
+      "Eerste Inspecteur",
+      "Hoofd-Inspecteur",
+      "Eerst Hoofd-Inspecteur",
+      "Commissaris",
+      "Hoofd-Commissaris"
+    ],
+    "specialties": [
+      "SRT",
+      "Detective",
+      "HC"
+    ],
+    "name": "Politie"
+  },
+  "ambulance": {
+    "grades": [
+      "Ambulancier",
+      "Verpleegkundige",
+      "Arts",
+      "Hoofd-Arts"
+    ],
+    "specialties": [
+      "HC"
+    ],
+    "name": "Ambulance"
+  },
+  "lawyer": {
+    "grades": [
+      "Lawyer"
+    ],
+    "specialties": [
+      "HC"
+    ],
+    "name": "lawyer"
+  }
+}

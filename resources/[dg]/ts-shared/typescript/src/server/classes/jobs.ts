@@ -11,6 +11,19 @@ class Jobs {
   changeGroupJob(src: number, job: string): Promise<boolean> {
     return global.exports['dg-jobs'].changeGroupJob(src, job);
   }
+  // Get current whitelisted job where player is on duty for
+  getCurrentJob(src: number): string | null {
+    return global.exports['dg-jobs'].getCurrentJob(src);
+  }
+  getCurrentGrade(src: number): number {
+    return global.exports['dg-jobs'].getCurrentGrade(src);
+  }
+  hasSpeciality(src: number, specialty: number): boolean {
+    return global.exports['dg-jobs'].hasSpeciality(src, specialty);
+  }
+  isWhitelisted(src: number, job: string): boolean {
+    return global.exports['dg-jobs'].isWhitelisted(src, job);
+  }
 }
 
 export default {

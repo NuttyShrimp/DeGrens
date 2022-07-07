@@ -1,5 +1,3 @@
 import './modules/groups/controller';
-
-setImmediate(() => {
-  // Do something
-});
+import './services/signin';
+import './controllers';
