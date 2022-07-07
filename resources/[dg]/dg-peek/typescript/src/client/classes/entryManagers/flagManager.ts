@@ -1,4 +1,5 @@
 import { addCtxFlag } from 'helpers/context';
+
 import { BaseManager } from './baseManager';
 
 export class FlagManager extends BaseManager implements IEntryManager {

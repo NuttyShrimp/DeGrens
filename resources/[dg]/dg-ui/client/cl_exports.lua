@@ -52,6 +52,7 @@ end
 exports('openApplication', openApplication)
 
 function closeApplication (app, data)
+  debug('closing %s', app)
 	SendUIMessage({
 		app = app,
 		show = false,

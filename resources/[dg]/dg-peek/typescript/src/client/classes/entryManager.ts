@@ -1,8 +1,9 @@
+import { UI } from '@dgx/client';
+
 import { ENTRY_TYPES } from '../cl_constant';
 import { getCurrentEntity } from '../helpers/actives';
 import { getEntityCtx } from '../helpers/context';
 import { isEntryDisabled } from '../helpers/entries';
-import { UI } from '@dgx/client';
 
 import { BonesManager } from './entryManagers/bonesManager';
 import { EntityManager } from './entryManagers/entityManager';

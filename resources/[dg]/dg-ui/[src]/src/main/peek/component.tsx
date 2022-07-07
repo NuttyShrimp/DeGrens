@@ -16,7 +16,10 @@ const Component: AppFunction<Peek.State> = props => {
   const { getCurrentAppType } = useApps();
 
   const showPeek = useCallback(() => {
-    if (getCurrentAppType() === 'interactive') return;
+    if (getCurrentAppType() === 'interactive') {
+      nuiAction('peek:preventShow');
+      return;
+    }
 
     props.updateState({
       visible: true,

@@ -23,6 +23,18 @@ UI.RegisterUICallback('peek:hide', (_, cb) => {
   });
 });
 
+UI.RegisterUICallback('peek:preventShow', (_, cb) => {
+  stateManager.removeFocus();
+  stateManager.stopPeeking(false);
+  cb({
+    meta: {
+      message: 'done',
+      ok: true,
+    },
+    data: {},
+  });
+});
+
 UI.RegisterUICallback('peek:select', (data: { id: string }, cb) => {
   cb({
     meta: {

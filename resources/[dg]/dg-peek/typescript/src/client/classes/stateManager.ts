@@ -51,11 +51,13 @@ class StateManager {
   }
 
   // Handler when button is released
-  stopPeeking() {
-    if (this.isUIFocused) {
+  stopPeeking(shouldClose = true) {
+    if (this.isUIFocused || !this.isPeeking) {
       return;
     }
-    UI.closeApplication('peek');
+    if (shouldClose) {
+      UI.closeApplication('peek');
+    }
 
     this.isPeeking = false;
     this.isUIFocused = false;
