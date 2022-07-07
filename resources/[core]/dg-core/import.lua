@@ -6,4 +6,6 @@ if GetCurrentResourceName() == 'dg-core' then
     exports('GetSharedObject', GetSharedObject)
 end
 
-DGCore = exports['dg-core']:GetSharedObject()
+if GetResourceState('dg-core') == 'started' then
+  DGCore = exports['dg-core']:GetSharedObject()
+end
