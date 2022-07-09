@@ -310,6 +310,7 @@ end)
 function EnterTraphouse(data)
 	local coords = { x = data.coords["enter"].x, y = data.coords["enter"].y, z = data.coords["enter"].z - Config.MinZOffset }
 	TriggerServerEvent("InteractSound_SV:PlayOnSource", "houses_door_open", 0.25)
+  -- TODO: Add dg-build exports
 	data = exports['qb-interior']:CreateTrevorsShell(coords)
 	TraphouseObj = data[1]
 	POIOffsets = data[2]

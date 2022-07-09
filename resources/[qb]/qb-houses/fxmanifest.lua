@@ -23,10 +23,3 @@ files {
 	'html/script.js',
 	'html/img/dynasty8-logo.png'
 }
-
-dependencies {
-	'dg-core',
-	'qb-interior',
-	'qb-clothing',
-	'dg-weathersync'
-}

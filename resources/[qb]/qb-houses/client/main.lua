@@ -380,21 +380,22 @@ end
 -- Shell Configuration
 
 local function getDataForHouseTier(house, coords)
-    if Config.Houses[house].tier == 1 then
-        return exports['qb-interior']:CreateApartmentShell(coords)
-    elseif Config.Houses[house].tier == 2 then
-        return exports['qb-interior']:CreateTier1House(coords)
-    elseif Config.Houses[house].tier == 3 then
-        return exports['qb-interior']:CreateTrevorsShell(coords)
-    elseif Config.Houses[house].tier == 4 then
-        return exports['qb-interior']:CreateCaravanShell(coords)
-    elseif Config.Houses[house].tier == 5 then
-        return exports['qb-interior']:CreateLesterShell(coords)
-    elseif Config.Houses[house].tier == 6 then
-        return exports['qb-interior']:CreateRanchShell(coords)
-    else
+    -- TODO: add dg-build buildings
+    --if Config.Houses[house].tier == 1 then
+    --    return exports['qb-interior']:CreateApartmentShell(coords)
+    --elseif Config.Houses[house].tier == 2 then
+    --    return exports['qb-interior']:CreateTier1House(coords)
+    --elseif Config.Houses[house].tier == 3 then
+    --    return exports['qb-interior']:CreateTrevorsShell(coords)
+    --elseif Config.Houses[house].tier == 4 then
+    --    return exports['qb-interior']:CreateCaravanShell(coords)
+    --elseif Config.Houses[house].tier == 5 then
+    --    return exports['qb-interior']:CreateLesterShell(coords)
+    --elseif Config.Houses[house].tier == 6 then
+    --    return exports['qb-interior']:CreateRanchShell(coords)
+    --else
         DGCore.Functions.Notify('Invalid House Tier', 'error')
-    end
+    --end
 end
 
 -- If you are using paid shells the comment function above and uncomment this or grab the ones you need
