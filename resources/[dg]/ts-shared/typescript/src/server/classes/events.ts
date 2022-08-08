@@ -123,16 +123,10 @@ class Events extends Util.Singleton<Events>() {
         },
       };
       if (typeof target === 'object') {
-        transactionContext.data.target = target.source;
-        if (target.source !== -1) {
-          transactionContext.data.targetSteamId = Player(target.source).state.steamId;
-        }
+        transactionContext.data.target = target.source !== -1 ? target.source !== -1 : target.source;
         transactionContext.traceId = target.traceId;
       } else {
-        transactionContext.data.target = target;
-        if (target !== -1) {
-          transactionContext.data.targetSteamId = Player(target).state.steamId;
-        }
+        transactionContext.data.target = target !== -1 ? Player(target).state.steamId : target;
       }
       const transaction = sentryHandler.startTransaction(transactionContext, 20000, 1);
       evtData.traceId = transaction.traceId;
@@ -384,7 +378,7 @@ class RPC extends Util.Singleton<RPC>() {
       name: 'ServerRPC.emit',
       description: `Outgoing RPC request to ${evtName} to ${target}`,
       data: {
-        target: Player(target).state.steamId,
+        target: target > 0 ? Player(target).state.steamId : target,
       },
       tags: {
         handler: 'RPC',
