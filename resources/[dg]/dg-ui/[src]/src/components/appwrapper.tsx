@@ -180,7 +180,10 @@ export default function AppWrapper(props: AppWrapperProps) {
       }),
     });
   };
+
   const handleActiveApp: any = () => {
+    if (appInfo?.type === 'passive') return;
+    if (mainStateApp === appInfo?.name) return;
     setActive(true);
     setCurrentApp(props.appName);
   };
