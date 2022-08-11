@@ -79,8 +79,8 @@ function DGCore.Functions.GetOfflinePlayerByCitizenId(citizenid)
 		return Player
 	end
 	local query = [[
-		SELECT * FROM players WHERE citizenid = ?
-	]]
+    SELECT * FROM all_character_data WHERE citizenid = ?
+  ]]
 	local result = exports['dg-sql']:query(query, { citizenid })
 	if result and result[1] then
 		return {

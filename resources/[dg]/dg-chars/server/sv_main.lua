@@ -87,7 +87,7 @@ DGCore.Functions.CreateCallback('dg-chars:server:getChars', function(src, cb)
 	local chars = {}
 	local result = exports['dg-sql']:query([[
 		SELECT p.citizenid, p.cid, p.firstname, p.lastname, ps.model, ps.skin
-		FROM players p
+		FROM all_character_data p
 			INNER JOIN playerskins ps on p.citizenid = ps.citizenid AND ps.active = 1
 	]])
 	for _, v in ipairs(result) do

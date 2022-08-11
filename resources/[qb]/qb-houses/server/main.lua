@@ -290,8 +290,7 @@ RegisterNetEvent('qb-houses:server:LogoutLocation', function()
     local src = source
     local Player = DGCore.Functions.GetPlayer(src)
     local MyItems = Player.PlayerData.items
-    exports['dg-sql']:query('UPDATE players SET inventory = ? WHERE citizenid = ?',
-        {json.encode(MyItems), Player.PlayerData.citizenid})
+    -- TODO: Save inventory to DB
     DGCore.Player.Logout(src)
     TriggerClientEvent('qb-multicharacter:client:chooseChar', src)
 end)
