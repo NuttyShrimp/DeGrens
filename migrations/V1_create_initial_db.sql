@@ -1,37 +1,61 @@
-create database if not exists degrens2;
-use degrens2;
-
-create table if not exists players
+create table if not exists users
 (
-  citizenid    int                                   not null auto_increment,
-  cid          int                                   null,
-  steamid      varchar(255)                          not null,
-  license      varchar(255)                          not null,
-  discord      varchar(255)                          not null,
-  name         varchar(255)                          not null,
-  firstname    text                                  not null,
-  lastname     text                                  not null,
-  birthdate    varchar(11)                           not null,
-  gender       int(1)                                not null,
-  backstory    text                                  not null,
-  nationality  text                                  not null,
-  phone        varchar(255)                          not null,
-  cash         bigint    default 0,
-  gang         text                                  null,
-  position     text                                  not null,
-  metadata     text                                  not null,
-  last_updated timestamp default current_timestamp() not null on update current_timestamp(),
-  PRIMARY KEY (citizenid),
-  INDEX (steamid),
-  INDEX (license)
+    name         varchar(255)                          not null,
+    steamid      varchar(255)                          not null,
+    license      varchar(255)                          not null,
+    discord      varchar(255)                          not null,
+    last_updated timestamp default current_timestamp() not null on update current_timestamp(),
+    created_at   timestamp default current_timestamp() not null,
+    PRIMARY KEY (steamid),
+    INDEX (license)
+);
+
+create table if not exists characters
+(
+    citizenid    int                                   not null auto_increment,
+    cid          int                                   null,
+    steamid      varchar(255)                          not null,
+    last_updated timestamp default current_timestamp() not null on update current_timestamp(),
+    created_at   timestamp default current_timestamp() not null,
+    PRIMARY KEY (citizenid),
+    FOREIGN KEY (steamid) REFERENCES users (steamid) on update cascade on delete cascade
 ) AUTO_INCREMENT = 1000;
+
+create table if not exists character_info
+(
+    cid          int                                   not null,
+    firstname    text                                  not null,
+    lastname     text                                  not null,
+    birthdate    varchar(11)                           not null,
+    gender       int(1)                                not null,
+    backstory    text                                  not null,
+    nationality  text                                  not null,
+    phone        varchar(255)                          not null,
+    cash         bigint    default 0,
+    last_updated timestamp default current_timestamp() not null on update current_timestamp(),
+    created_at   timestamp default current_timestamp() not null,
+    PRIMARY KEY (cid),
+    FOREIGN KEY (cid) REFERENCES characters (citizenid) on update cascade on delete cascade
+);
+
+create table if not exists character_data
+(
+    cid          int                                   not null,
+    gang         text                                  null,
+    position     text                                  not null,
+    metadata     text                                  not null,
+    last_updated timestamp default current_timestamp() not null on update current_timestamp(),
+    created_at   timestamp default current_timestamp() not null,
+    PRIMARY KEY (cid),
+    FOREIGN KEY (cid) REFERENCES characters (citizenid) on update cascade on delete cascade
+);
 
 create table if not exists apartments
 (
   id        int auto_increment,
   citizenid int not null,
   PRIMARY KEY (id),
-  FOREIGN KEY (citizenid) REFERENCES players (citizenid) on update cascade on delete cascade
+  FOREIGN KEY fk_apartments_cid (citizenid) REFERENCES characters(citizenid) on update cascade on delete cascade
 );
 
 create table if not exists api_tokens
@@ -95,7 +119,7 @@ create table if not exists lapraces
   distance    int         null,
   raceid      varchar(50) null,
   PRIMARY KEY (id),
-  FOREIGN KEY (creator) REFERENCES players (license) on update cascade on delete cascade
+  FOREIGN KEY fk_lapraces_license (creator) REFERENCES users (license) on update cascade on delete cascade
 );
 
 create table if not exists occasion_vehicles
@@ -109,7 +133,7 @@ create table if not exists occasion_vehicles
   mods        text        null,
   occasionid  varchar(50) null,
   PRIMARY KEY (id),
-  FOREIGN KEY (seller) REFERENCES players (citizenid) on update cascade on delete cascade
+  FOREIGN KEY fk_occasion_vehicles_cid (seller) REFERENCES characters(citizenid) on update cascade on delete cascade
 );
 
 create table if not exists permissions
@@ -119,7 +143,7 @@ create table if not exists permissions
   steamid    varchar(255) not null,
   permission varchar(255) not null,
   PRIMARY KEY (id),
-  FOREIGN KEY (steamid) REFERENCES players (steamid) on update cascade on delete cascade
+  FOREIGN KEY fk_permissions_steamid (steamid) REFERENCES users (steamid) on update cascade on delete cascade
 );
 
 create table if not exists player_boats
@@ -132,7 +156,7 @@ create table if not exists player_boats
   fuel      int default 100 not null,
   state     int default 0   not null,
   PRIMARY KEY (id),
-  FOREIGN KEY (citizenid) REFERENCES players (citizenid) on update cascade on delete cascade
+  FOREIGN KEY fk_player_boats_cid (citizenid) REFERENCES characters(citizenid) on update cascade on delete cascade
 );
 
 create table if not exists player_houses
@@ -147,7 +171,7 @@ create table if not exists player_houses
   outfit      text        null,
   logout      text        null,
   PRIMARY KEY (id),
-  FOREIGN KEY (citizenid) REFERENCES players (citizenid) on update cascade on delete cascade
+  FOREIGN KEY fk_player_houses_cid (citizenid) REFERENCES characters(citizenid) on update cascade on delete cascade
 );
 
 create table if not exists player_mails
@@ -162,7 +186,7 @@ create table if not exists player_mails
   date      timestamp default current_timestamp() null,
   button    text                                  null,
   PRIMARY KEY (id),
-  FOREIGN KEY (citizenid) REFERENCES players (citizenid) on update cascade on delete cascade
+  FOREIGN KEY fk_player_mails_cid (citizenid) REFERENCES characters(citizenid) on update cascade on delete cascade
 );
 
 create table if not exists player_outfits
@@ -174,7 +198,7 @@ create table if not exists player_outfits
   skin       text        null,
   outfitId   varchar(50) not null,
   PRIMARY KEY (id),
-  FOREIGN KEY (citizenid) REFERENCES players (citizenid) on update cascade on delete cascade
+  FOREIGN KEY fk_player_outfits_cid (citizenid) REFERENCES characters(citizenid) on update cascade on delete cascade
 );
 
 create table if not exists player_vehicles
@@ -200,7 +224,7 @@ create table if not exists player_vehicles
   paymentsleft    int   default 0              not null,
   financetime     int   default 0              not null,
   PRIMARY KEY (id),
-  FOREIGN KEY (citizenid) REFERENCES players (citizenid) on update cascade on delete cascade,
+  FOREIGN KEY fk_player_vehicles_cid (citizenid) REFERENCES characters(citizenid) on update cascade on delete cascade,
   CHECK ( fuel > 0),
   CHECK ( fuel <= 100),
   CHECK ( engine > 0),
@@ -227,7 +251,7 @@ create table if not exists playerskins
   skin      text              not null,
   active    tinyint default 1 not null,
   PRIMARY KEY (id),
-  FOREIGN KEY (citizenid) REFERENCES players (citizenid) on update cascade on delete cascade,
+  FOREIGN KEY fk_playerskins_cid (citizenid) REFERENCES characters(citizenid) on update cascade on delete cascade,
   CHECK ( active < 2)
 );
 
@@ -251,7 +275,7 @@ CREATE TABLE IF NOT EXISTS phone_contacts
   label varchar(255) NOT NULL,
   phone varchar(255) NOT NULL,
   PRIMARY KEY (id),
-  FOREIGN KEY (cid) REFERENCES players (citizenid) on update cascade on delete cascade
+  FOREIGN KEY fk_phone_contacts_cid (cid) REFERENCES characters(citizenid) on update cascade on delete cascade
 );
 
 CREATE TABLE IF NOT EXISTS phone_tweets
@@ -261,7 +285,7 @@ CREATE TABLE IF NOT EXISTS phone_tweets
   tweet LONGTEXT NOT NULL,
   date  bigint   NOT NULL,
   PRIMARY KEY (id),
-  FOREIGN KEY (cid) REFERENCES players (citizenid) on update cascade on delete cascade
+  FOREIGN KEY fk_phone_tweets_cid (cid) REFERENCES characters(citizenid) on update cascade on delete cascade
 );
 
 CREATE TABLE IF NOT EXISTS phone_tweets_retweets
@@ -269,8 +293,8 @@ CREATE TABLE IF NOT EXISTS phone_tweets_retweets
   tweetid int(11) NOT NULL,
   cid     int     NOT NULL,
   PRIMARY KEY (tweetid, cid),
-  FOREIGN KEY (tweetid) REFERENCES phone_tweets (id) on update cascade on delete cascade,
-  FOREIGN KEY (cid) REFERENCES players (citizenid) on update cascade on delete cascade
+  FOREIGN KEY fk_phone_tweets_retweets_tweetid (tweetid) REFERENCES phone_tweets (id) on update cascade on delete cascade,
+  FOREIGN KEY fk_phone_tweets_retweets_cid (cid) REFERENCES characters(citizenid) on update cascade on delete cascade
 );
 
 CREATE TABLE IF NOT EXISTS phone_tweets_likes
@@ -278,8 +302,8 @@ CREATE TABLE IF NOT EXISTS phone_tweets_likes
   tweetid int(11) NOT NULL,
   cid     int     NOT NULL,
   PRIMARY KEY (tweetid, cid),
-  FOREIGN KEY (tweetid) REFERENCES phone_tweets (id) on update cascade on delete cascade,
-  FOREIGN KEY (cid) REFERENCES players (citizenid) on update cascade on delete cascade
+  FOREIGN KEY fk_phone_tweets_likes_tweetid (tweetid) REFERENCES phone_tweets (id) on update cascade on delete cascade,
+  FOREIGN KEY fk_phone_tweets_likes_cid (cid) REFERENCES characters(citizenid) on update cascade on delete cascade
 );
 
 CREATE TABLE IF NOT EXISTS phone_messages
@@ -303,7 +327,7 @@ CREATE TABLE IF NOT EXISTS phone_notes
   note   longtext     NOT NULL,
   `date` bigint       NOT NULL,
   PRIMARY KEY (id),
-  FOREIGN KEY (cid) REFERENCES players (citizenid) on update cascade on delete cascade,
+  FOREIGN KEY fk_phone_notes_cid (cid) REFERENCES characters(citizenid) on update cascade on delete cascade,
   CHECK ( `date` > 0 )
 );
 
@@ -313,7 +337,7 @@ CREATE TABLE IF NOT EXISTS phone_images
   cid  int          NOT NULL,
   link varchar(255) NOT NULL,
   PRIMARY KEY (id),
-  FOREIGN KEY (cid) REFERENCES players (citizenid) on update cascade on delete cascade
+  FOREIGN KEY fk_phone_images_cid (cid) REFERENCES characters(citizenid) on update cascade on delete cascade
 );
 
 CREATE TABLE IF NOT EXISTS phone_mails
@@ -324,7 +348,7 @@ CREATE TABLE IF NOT EXISTS phone_mails
   subject varchar(255) NOT NULL,
   message LONGTEXT     NOT NULL,
   PRIMARY KEY (id),
-  FOREIGN KEY (cid) REFERENCES players (citizenid) on update cascade on delete cascade
+  FOREIGN KEY fk_phone_mails_cid (cid) REFERENCES characters(citizenid) on update cascade on delete cascade
 );
 
 CREATE TABLE IF NOT EXISTS bank_accounts
@@ -342,8 +366,8 @@ CREATE TABLE IF NOT EXISTS bank_accounts_access
   cid          int          NOT NULL,
   access_level int(11)      NOT NULL default 1,
   PRIMARY KEY (account_id, cid),
-  FOREIGN KEY (account_id) REFERENCES bank_accounts (account_id) on update cascade on delete cascade,
-  FOREIGN KEY (cid) REFERENCES players (citizenid) on update cascade on delete cascade
+  FOREIGN KEY fk_bank_accounts_access_account_id (account_id) REFERENCES bank_accounts (account_id) on update cascade on delete cascade,
+  FOREIGN KEY fk_bank_accounts_access_cid (cid) REFERENCES characters(citizenid) on update cascade on delete cascade
 );
 
 CREATE TABLE IF NOT EXISTS transaction_log
@@ -358,10 +382,10 @@ CREATE TABLE IF NOT EXISTS transaction_log
   date              bigint                                                                                 NOT NULL,
   type              ENUM ('transfer', 'deposit', 'withdraw', 'purchase', 'paycheck', 'mobile_transaction') NOT NULL,
   PRIMARY KEY (transaction_id),
-  FOREIGN KEY (origin_account_id) REFERENCES bank_accounts (account_id) on update cascade on delete cascade,
-  FOREIGN KEY (target_account_id) REFERENCES bank_accounts (account_id) on update cascade on delete cascade,
-  FOREIGN KEY (triggered_by) REFERENCES players (citizenid) on update cascade on delete cascade,
-  FOREIGN KEY (accepted_by) REFERENCES players (citizenid) on update cascade on delete cascade
+  FOREIGN KEY fk_transaction_log_origin_account (origin_account_id) REFERENCES bank_accounts (account_id) on update cascade on delete cascade,
+  FOREIGN KEY fk_transaction_log_trigger_account (target_account_id) REFERENCES bank_accounts (account_id) on update cascade on delete cascade,
+  FOREIGN KEY fk_transaction_log_trigger_cid (triggered_by) REFERENCES characters(citizenid) on update cascade on delete cascade,
+  FOREIGN KEY fk_transaction_log_acceptor_cid (accepted_by) REFERENCES characters(citizenid) on update cascade on delete cascade
 );
 
 CREATE TABLE IF NOT EXISTS player_paycheck
@@ -369,7 +393,7 @@ CREATE TABLE IF NOT EXISTS player_paycheck
   cid    int    NOT NULL,
   amount BIGINT NOT NULL,
   PRIMARY KEY (cid),
-  FOREIGN KEY (cid) REFERENCES players (citizenid) on update cascade on delete cascade
+  FOREIGN KEY fk_player_paycheck_cid (cid) REFERENCES characters(citizenid) on update cascade on delete cascade
 );
 
 CREATE TABLE IF NOT EXISTS crypto
@@ -385,8 +409,8 @@ CREATE TABLE IF NOT EXISTS crypto_wallets
   crypto_name varchar(255) NOT NULL,
   amount      INT          NOT NULL DEFAULT 0,
   PRIMARY KEY (cid, crypto_name),
-  FOREIGN KEY (crypto_name) REFERENCES crypto (crypto_name) on update cascade on delete cascade,
-  FOREIGN KEY (cid) REFERENCES players (citizenid) on update cascade on delete cascade
+  FOREIGN KEY fk_crypto_wallets_name (crypto_name) REFERENCES crypto (crypto_name) on update cascade on delete cascade,
+  FOREIGN KEY fk_crypto_wallets_cid (cid) REFERENCES characters(citizenid) on update cascade on delete cascade
 );
 
 CREATE TABLE IF NOT EXISTS taxes
@@ -409,9 +433,9 @@ CREATE TABLE IF NOT EXISTS debts
   date           TIMESTAMP                    NOT NULL DEFAULT CURRENT_TIMESTAMP,
   reason         LONGTEXT                     NOT NULL,
   PRIMARY KEY (id),
-  FOREIGN KEY (cid) REFERENCES players (citizenid) on update cascade on delete cascade,
-  FOREIGN KEY (given_by) REFERENCES players (citizenid) on update cascade on delete cascade,
-  FOREIGN KEY (target_account) REFERENCES bank_accounts (account_id) on update cascade on delete cascade
+  FOREIGN KEY fk_debts_cid (cid) REFERENCES characters(citizenid) on update cascade on delete cascade,
+  FOREIGN KEY fk_debts_origin_cid (given_by) REFERENCES characters(citizenid) on update cascade on delete cascade,
+  FOREIGN KEY fk_debts_acc_id (target_account) REFERENCES bank_accounts (account_id) on update cascade on delete cascade
 );
 
 CREATE TABLE IF NOT EXISTS maintenance_fee_log
@@ -421,7 +445,7 @@ CREATE TABLE IF NOT EXISTS maintenance_fee_log
   PRIMARY KEY (id)
 );
 
-CREATE TABLE IF NOT EXISTS `weedplants` 
+CREATE TABLE IF NOT EXISTS `weedplants`
 (
 	`id` INT NOT NULL AUTO_INCREMENT,
 	`stage` SMALLINT DEFAULT 1,
@@ -433,7 +457,7 @@ CREATE TABLE IF NOT EXISTS `weedplants`
 	PRIMARY KEY (`id`)
 );
 
-CREATE TABLE IF NOT EXISTS `cornerselling_sales` 
+CREATE TABLE IF NOT EXISTS `cornerselling_sales`
 (
   `id` INT NOT NULL AUTO_INCREMENT,
   `coords` TEXT DEFAULT NULL,
@@ -448,5 +472,10 @@ CREATE TABLE IF NOT EXISTS `whitelist_jobs`
   `rank` int NOT NULL DEFAULT 0,
   specialty int NOT NULL DEFAULT 0,
   PRIMARY KEY (cid, job),
-  FOREIGN KEY (cid) REFERENCES players (citizenid) on update cascade on delete cascade
+  FOREIGN KEY fk_whitelist_jobs_cid (cid) REFERENCES characters(citizenid) on update cascade on delete cascade
 );
+
+CREATE TABLE IF NOT EXISTS migrations_tracker (
+    version int NOT NULL DEFAULT 1
+)
+INSERT INTO migrations_tracker (version) VALUES (1);

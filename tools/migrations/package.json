@@ -1,0 +1,14 @@
+{
+	"name": "dg-migrations-tool",
+	"version": "1.0.0",
+	"main": "index.js",
+	"license": "MIT",
+	"type": "module",
+	"scripts": {
+		"start": "node index.js"
+	},
+	"dependencies": {
+		"mysql2": "^2.3.3",
+		"node-sql-parser": "^4.4.0"
+	}
+}

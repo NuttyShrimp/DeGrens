@@ -9,6 +9,7 @@ vehiclesmodels.json
 !sv.template.bat
 seed.sql
 *-Coords.txt
+!migrate.bat
 
 
 positions.txt
