@@ -119,7 +119,7 @@ export default function AppWrapper(props: AppWrapperProps) {
             return;
           } else if (e.data.show === false) {
             if (appState.visible) {
-              if (active || mainStateApp === 'cli') {
+              if (mainStateApp === 'cli') {
                 setCurrentApp('');
               }
               props.onHide();
@@ -183,8 +183,7 @@ export default function AppWrapper(props: AppWrapperProps) {
 
   const handleActiveApp: any = () => {
     if (appInfo?.type === 'passive') return;
-    if (mainStateApp === appInfo?.name) return;
-    setActive(true);
+    if (active) return;
     setCurrentApp(props.appName);
   };
 
@@ -199,12 +198,7 @@ export default function AppWrapper(props: AppWrapperProps) {
 
   useEffect(() => {
     registeredApps[props.appName] = {
-      onHide: () => {
-        if (active) {
-          setCurrentApp('');
-        }
-        props.onHide();
-      },
+      onHide: props.onHide,
       onShow: props.onShow,
     };
     return () => {
@@ -213,9 +207,12 @@ export default function AppWrapper(props: AppWrapperProps) {
   }, [active, props.appName, props.onHide, props.onShow]);
 
   useEffect(() => {
-    setActive(appState.visible);
     if (appState.visible) {
       setCurrentApp(props.appName);
+    } else {
+      if (active) {
+        setCurrentApp('');
+      }
     }
   }, [appState.visible]);
 
