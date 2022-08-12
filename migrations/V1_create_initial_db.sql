@@ -4,8 +4,8 @@ create table if not exists users
     steamid      varchar(255)                          not null,
     license      varchar(255)                          not null,
     discord      varchar(255)                          not null,
-    last_updated timestamp default current_timestamp() not null on update current_timestamp(),
-    created_at   timestamp default current_timestamp() not null,
+    last_updated timestamp default CURRENT_TIMESTAMP not null on update CURRENT_TIMESTAMP,
+    created_at   timestamp default CURRENT_TIMESTAMP not null,
     PRIMARY KEY (steamid),
     INDEX (license)
 );
@@ -15,8 +15,8 @@ create table if not exists characters
     citizenid    int                                   not null auto_increment,
     cid          int                                   null,
     steamid      varchar(255)                          not null,
-    last_updated timestamp default current_timestamp() not null on update current_timestamp(),
-    created_at   timestamp default current_timestamp() not null,
+    last_updated timestamp default CURRENT_TIMESTAMP not null on update CURRENT_TIMESTAMP,
+    created_at   timestamp default CURRENT_TIMESTAMP not null,
     PRIMARY KEY (citizenid),
     FOREIGN KEY (steamid) REFERENCES users (steamid) on update cascade on delete cascade
 ) AUTO_INCREMENT = 1000;
@@ -32,8 +32,8 @@ create table if not exists character_info
     nationality  text                                  not null,
     phone        varchar(255)                          not null,
     cash         bigint    default 0,
-    last_updated timestamp default current_timestamp() not null on update current_timestamp(),
-    created_at   timestamp default current_timestamp() not null,
+    last_updated timestamp default CURRENT_TIMESTAMP not null on update CURRENT_TIMESTAMP,
+    created_at   timestamp default CURRENT_TIMESTAMP not null,
     PRIMARY KEY (cid),
     FOREIGN KEY (cid) REFERENCES characters (citizenid) on update cascade on delete cascade
 );
@@ -44,8 +44,8 @@ create table if not exists character_data
     gang         text                                  null,
     position     text                                  not null,
     metadata     text                                  not null,
-    last_updated timestamp default current_timestamp() not null on update current_timestamp(),
-    created_at   timestamp default current_timestamp() not null,
+    last_updated timestamp default CURRENT_TIMESTAMP not null on update CURRENT_TIMESTAMP,
+    created_at   timestamp default CURRENT_TIMESTAMP not null,
     PRIMARY KEY (cid),
     FOREIGN KEY (cid) REFERENCES characters (citizenid) on update cascade on delete cascade
 );
@@ -183,7 +183,7 @@ create table if not exists player_mails
   message   text                                  null,
   `read`    tinyint   default 0                   null,
   mailid    int                                   null,
-  date      timestamp default current_timestamp() null,
+  date      timestamp default CURRENT_TIMESTAMP null,
   button    text                                  null,
   PRIMARY KEY (id),
   FOREIGN KEY fk_player_mails_cid (citizenid) REFERENCES characters(citizenid) on update cascade on delete cascade
@@ -477,5 +477,6 @@ CREATE TABLE IF NOT EXISTS `whitelist_jobs`
 
 CREATE TABLE IF NOT EXISTS migrations_tracker (
     version int NOT NULL DEFAULT 1
-)
+);
+
 INSERT INTO migrations_tracker (version) VALUES (1);

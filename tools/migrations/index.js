@@ -5,66 +5,26 @@ import path, { dirname } from 'path';
 import { exit } from 'process';
 import { fileURLToPath } from 'url';
 
-let connectionOptions = null;
+import { getMigrVersionFromFile, validateFiles } from './fileHelpers.js';
+import { getConnectionOptions } from './getConnectionOptions.js';
+
+const shouldInitDB = process.argv.slice(2).includes('--init-db');
+
 // Gotta love ES6 modules
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const parser = new nst.Parser();
 
-const getMigrVersionFromFile = file => {
-  const vStr = file.split('_')[0];
-  if (!vStr.match(/[vV]\d*/)) {
-    throw new Error(`Could not determine migration version for ${file}`);
-  }
-  return parseInt(vStr.slice(1));
-};
+let connectionOptions = getConnectionOptions();
 
-// Search for connection Str
-const configDirPath = path.join(__dirname, '../../config');
-let configFiles = fs.readdirSync(configDirPath);
-if (configFiles.length < 1) {
-  throw new Error(`Failed to find configs in ${configDirPath}`);
-}
-configFiles = configFiles.filter(f => !f.includes('-template'));
-for (let file of configFiles) {
-  const fileContent = fs.readFileSync(path.join(configDirPath, file)).toString().split(/\r?\n/);
-  let connStr = fileContent.find(line => line.match(/^set\w? mysql_connection_string/));
-  if (connStr) {
-    connStr = connStr.replace(/set\w? mysql_connection_string "/, '').replace(/"$/, '');
-    if (connStr.includes('mysql://')) {
-      connectionOptions = {
-        uri: connStr,
-        multipleStatements: true,
-      };
-    } else {
-      connectionOptions = connStr
-        .replace(/(?:host(?:name)|ip|server|data\s?source|addr(?:ess)?)=/gi, 'host=')
-        .replace(/(?:user\s?(?:id|name)?|uid)=/gi, 'user=')
-        .replace(/(?:pwd|pass)=/gi, 'password=')
-        .replace(/(?:db)=/gi, 'database=')
-        .split(';')
-        .reduce(
-          (connectionInfo, parameter) => {
-            const [key, value] = parameter.split('=');
-            connectionInfo[key] = value;
-            return connectionInfo;
-          },
-          {
-            multipleStatements: true,
-          }
-        );
-    }
-    break;
-  }
-}
-if (connectionOptions === null) {
-  throw new Error(`Failed to find mysql_connection_string in files in ${configDirPath}`);
-}
+validateFiles();
 
 const conn = await mysql.createConnection(connectionOptions);
 
-const [result] = await conn.query('SELECT version FROM migrations_tracker LIMIT 1');
-const migrVersion = result?.[0]?.version ?? 1;
-
+let migrVersion = shouldInitDB ? 0 : 1;
+if (!shouldInitDB) {
+  const [result] = await conn.query('SELECT version FROM migrations_tracker LIMIT 1');
+  migrVersion = result?.[0]?.version ?? 1;
+}
 // Searching in migrations directory for files greater than db version
 const migrationDir = path.join(__dirname, '../../migrations');
 let migrationFiles = fs.readdirSync(migrationDir);
@@ -76,7 +36,7 @@ migrationFiles = migrationFiles.filter(file => {
 
 if (migrationFiles.length < 1) {
   console.log('Migrations are already up-to-date');
-  exit(0)
+  exit(0);
 }
 
 let nextMigrVersion = migrVersion;
@@ -116,5 +76,7 @@ try {
 } finally {
   conn.query('UPDATE migrations_tracker SET version = ?', [nextMigrVersion]);
 }
+
+console.log(`Finished migrations: V${migrVersion} -> V${nextMigrVersion}`);
 
 conn.end();

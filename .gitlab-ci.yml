@@ -70,6 +70,30 @@ Validate Errorlogger:
     changes:
       - '**/fxmanifest.lua'
 
+validate db migrations:
+  stage: test
+  services:
+    - name: mariadb:latest
+      alias: mariadb
+  variables:
+    MYSQL_ROOT_PASSWORD: root
+    MYSQL_DATABASE: degrens2
+    MYSQL_USER: dguser
+    MYSQL_PASSWORD: dgpw
+  script:
+    - echo 'set mysql_connection_string "mysql://dguser:dgpw@mariadb/degrens2?charset=utf8mb4"' > ./config/mysql.cfg
+    - cd ./tools/migrations
+    - yarn --pure-lockfile
+    - yarn start --init-db
+  only:
+    refs:
+      - main
+      - UPD
+      - merge_requests
+      - tags
+    changes:
+      - 'migrations/*'
+
 sonarqube-check:
   stage: test
   tags:
