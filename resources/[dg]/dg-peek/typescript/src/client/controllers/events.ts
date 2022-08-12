@@ -12,7 +12,6 @@ on('onResourceStart', (resName: string) => {
 });
 
 UI.RegisterUICallback('peek:hide', (_, cb) => {
-  stateManager.removeFocus();
   stateManager.stopPeeking();
   cb({
     meta: {
@@ -24,7 +23,6 @@ UI.RegisterUICallback('peek:hide', (_, cb) => {
 });
 
 UI.RegisterUICallback('peek:preventShow', (_, cb) => {
-  stateManager.removeFocus();
   stateManager.stopPeeking(false);
   cb({
     meta: {
@@ -44,7 +42,6 @@ UI.RegisterUICallback('peek:select', (data: { id: string }, cb) => {
     data: {},
   });
   let entry = entryManager.getEntry(data.id);
-  stateManager.removeFocus();
   stateManager.stopPeeking();
   if (!entry) {
     throw new Error(`[PEEK] Invalid entry | id: ${data.id}`);

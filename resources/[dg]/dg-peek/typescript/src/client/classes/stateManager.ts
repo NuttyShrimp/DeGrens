@@ -52,7 +52,7 @@ class StateManager {
 
   // Handler when button is released
   stopPeeking(shouldClose = true) {
-    if (this.isUIFocused || !this.isPeeking) {
+    if (!this.isPeeking) {
       return;
     }
     if (shouldClose) {
@@ -74,14 +74,11 @@ class StateManager {
       return;
     }
     this.isUIFocused = true;
+    SetCursorLocation(0.5, 0.5);
     UI.SendAppEvent('peek', {
       action: 'showOptions',
     });
     UI.SetUIFocusCustom(true, true);
-  }
-
-  removeFocus() {
-    this.isUIFocused = false;
   }
 
   createCheckThread() {
