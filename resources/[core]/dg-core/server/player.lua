@@ -562,6 +562,17 @@ function DGCore.Player.Save(source)
       cid = tonumber(PlayerData.cid),
       citizenid = PlayerData.citizenid or 'undefined',
     })
+
+    if charResult[1].citizenid == nil and PlayerData.citizenid then
+      DGCore.ShowError(GetCurrentResourceName(), 'ERROR DGCore.PLAYER.SAVE - Couldn\'t assign a valid citizenid!')
+      return
+    end
+
+    if PlayerData.citizenid == nil then
+      PlayerData.citizenid = result[1].citizenid
+      DGCore.Players[src].Functions.setCitizenid(PlayerData.citizenid)
+    end
+
     local charDataResult = exports['dg-sql']:query([[
       INSERT INTO character_data (cid, gang, position, metadata)
       VALUES (:citizenid, :gang, :position, :metadata)
@@ -569,7 +580,7 @@ function DGCore.Player.Save(source)
                               position = :position,
                               metadata = :metadata;
     ]], {
-      citizenid = PlayerData.citizenid or 'undefined',
+      citizenid = PlayerData.citizenid,
       gang = json.encode(PlayerData.gang),
       position = json.encode(pcoords),
       metadata = json.encode(PlayerData.metadata),
@@ -586,7 +597,7 @@ function DGCore.Player.Save(source)
                               phone = :phone,
                               cash = :cash;
     ]], {
-      citizenid = PlayerData.citizenid or 'undefined',
+      citizenid = PlayerData.citizenid,
       firstname = PlayerData.charinfo.firstname,
       lastname = PlayerData.charinfo.lastname,
       birthdate = PlayerData.charinfo.birthdate,
@@ -596,14 +607,6 @@ function DGCore.Player.Save(source)
       phone = PlayerData.charinfo.phone,
       cash = PlayerData.charinfo.cash
     })
-    if charResult[1].citizenid == nil and PlayerData.citizenid then
-      DGCore.ShowError(GetCurrentResourceName(), 'ERROR DGCore.PLAYER.SAVE - Couldn\'t assign a valid citizenid!')
-    end
-
-    if PlayerData.citizenid == nil then
-      PlayerData.citizenid = result[1].citizenid
-      DGCore.Players[src].Functions.setCitizenid(PlayerData.citizenid)
-    end
 
     if userResult.affectedRows < 1 then
       DGCore.ShowError(GetCurrentResourceName(), 'ERROR DGCore.PLAYER.SAVE - Failed to save user info in DB!')
