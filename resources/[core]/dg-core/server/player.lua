@@ -569,7 +569,7 @@ function DGCore.Player.Save(source)
     end
 
     if PlayerData.citizenid == nil then
-      PlayerData.citizenid = result[1].citizenid
+      PlayerData.citizenid = charResult[1].citizenid
       DGCore.Players[src].Functions.setCitizenid(PlayerData.citizenid)
     end
 
