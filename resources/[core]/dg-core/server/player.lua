@@ -24,7 +24,6 @@ function DGCore.Player.buildPlayerData(playerData)
     lastname = '',
     birthdate = '',
     gender = '',
-    backstory = '',
     nationality = '',
     phone = '',
     cash = '',
@@ -45,33 +44,39 @@ end
 
 function DGCore.Player.Login(source, citizenid, newData)
   local src = source
-  if src then
-    if citizenid then
-      local result = exports['dg-sql']:query([[
-        SELECT *
-        FROM users AS u
-        JOIN all_character_data as cd ON cd.steamid = u.steamid
-        WHERE cd.citizenid = ?
-      ]], { citizenid })
-      local PlayerData = DGCore.Player.buildPlayerData(result[1])
-      if PlayerData == nil then
-        DGCore.Functions.Notify('Kon karakter niet laden, probeer opnieuw', 'error')
-        return false
-      end
-      DGCore.Player.CheckPlayerData(src, PlayerData)
-    else
-      DGCore.Player.CheckPlayerData(src, newData)
-    end
-    return true
-  else
+  if not src then
     DGCore.ShowError(GetCurrentResourceName(), 'ERROR DGCORE.PLAYER.LOGIN - NO SOURCE GIVEN!')
     return false
   end
+
+  if not citizenid then
+    DGCore.Player.CheckPlayerData(src, newData)
+    return true
+  end
+
+  local result = exports['dg-sql']:query([[
+    SELECT *
+    FROM users AS u
+    JOIN all_character_data as cd ON cd.steamid = u.steamid
+    WHERE cd.citizenid = ?
+  ]], { citizenid })
+  local PlayerData = DGCore.Player.buildPlayerData(result[1])
+  if not PlayerData then
+    DGCore.Functions.Notify('Kon karakter niet laden, probeer opnieuw', 'error')
+    return false
+  end
+
+  DGCore.Player.CheckPlayerData(src, PlayerData)
+  return true
 end
 
-function DGCore.Player.CheckPlayerData(source, PlayerData)
-  local src = source
-  PlayerData = PlayerData or {}
+function DGCore.Player.CheckPlayerData(src, PlayerData)
+  if not PlayerData or not next(PlayerData) then
+    DGCore.ShowError(GetCurrentResourceName(), 'ERROR DGCore.Player.CheckPlayerData - NO PLAYERDATA PROVIDED!')
+    return
+  end
+
+  -- Character identifiers
   PlayerData.source = src
   PlayerData.citizenid = PlayerData.citizenid or nil
   PlayerData.steamid = not DGCore.Shared.isStringEmpty(PlayerData.steamid) and PlayerData.steamid or
@@ -79,21 +84,29 @@ function DGCore.Player.CheckPlayerData(source, PlayerData)
   PlayerData.license = not DGCore.Shared.isStringEmpty(PlayerData.license) and PlayerData.license or
       DGCore.Functions.GetIdentifier(src, 'license')
   PlayerData.discord = not DGCore.Shared.isStringEmpty(PlayerData.discord) and PlayerData.discord or
-      DGCore.Functions.GetIdentifier(source, "discord")
+      DGCore.Functions.GetIdentifier(src, "discord")
   PlayerData.name = GetPlayerName(src)
-  PlayerData.cid = PlayerData.cid or 1
-  -- Charinfo
+
+  -- Character info
   PlayerData.charinfo = PlayerData.charinfo or {}
   PlayerData.charinfo.firstname = PlayerData.charinfo.firstname or 'Firstname'
   PlayerData.charinfo.lastname = PlayerData.charinfo.lastname or 'Lastname'
   PlayerData.charinfo.birthdate = PlayerData.charinfo.birthdate or '01-01-2000'
   PlayerData.charinfo.gender = PlayerData.charinfo.gender or 0
-  PlayerData.charinfo.backstory = PlayerData.charinfo.backstory or 'Nietsnut in het leven'
   PlayerData.charinfo.nationality = PlayerData.charinfo.nationality or 'BELG'
-  PlayerData.charinfo.phone = PlayerData.charinfo.phone ~= nil and PlayerData.charinfo.phone or
-      '04' .. math.random(70, 99) .. math.random(11, 99) .. math.random(11, 99) .. math.random(11, 99)
-  PlayerData.charinfo.cash = PlayerData.charinfo.cash ~= nil and PlayerData.charinfo.cash or
-      DGCore.Config.Money.defaultCash
+  PlayerData.charinfo.phone = PlayerData.charinfo.phone or DGCore.Player.GeneratePhoneNumber()
+  PlayerData.charinfo.cash = PlayerData.charinfo.cash or DGCore.Config.Money.defaultCash
+
+  -- Character data
+  PlayerData.position = PlayerData.position or QBConfig.DefaultSpawn
+  PlayerData.gang = PlayerData.gang or {}
+  PlayerData.gang.name = PlayerData.gang.name or 'none'
+  PlayerData.gang.label = PlayerData.gang.label or 'No Gang Affiliaton'
+  PlayerData.gang.isboss = PlayerData.gang.isboss or false
+  PlayerData.gang.grade = PlayerData.gang.grade or {}
+  PlayerData.gang.grade.name = PlayerData.gang.grade.name or 'none'
+  PlayerData.gang.grade.level = PlayerData.gang.grade.level or 0
+
   -- Metadata
   PlayerData.metadata = PlayerData.metadata or {}
   PlayerData.metadata['hunger'] = PlayerData.metadata['hunger'] or 100
@@ -107,15 +120,12 @@ function DGCore.Player.CheckPlayerData(source, PlayerData)
   PlayerData.metadata['injail'] = PlayerData.metadata['injail'] or 0
   PlayerData.metadata['jailitems'] = PlayerData.metadata['jailitems'] or {}
   PlayerData.metadata['status'] = PlayerData.metadata['status'] or {}
-  PlayerData.metadata['phone'] = PlayerData.metadata['phone'] or {}
   PlayerData.metadata['fitbit'] = PlayerData.metadata['fitbit'] or {}
   PlayerData.metadata['commandbinds'] = PlayerData.metadata['commandbinds'] or {}
   PlayerData.metadata['bloodtype'] = PlayerData.metadata['bloodtype'] or
       DGCore.Config.Player.Bloodtypes[math.random(1, #DGCore.Config.Player.Bloodtypes)]
-  PlayerData.metadata['dealerrep'] = PlayerData.metadata['dealerrep'] or 0
   PlayerData.metadata['craftingrep'] = PlayerData.metadata['craftingrep'] or 0
   PlayerData.metadata['attachmentcraftingrep'] = PlayerData.metadata['attachmentcraftingrep'] or 0
-  PlayerData.metadata['currentapartment'] = PlayerData.metadata['currentapartment'] or nil
   PlayerData.metadata['jobrep'] = PlayerData.metadata['jobrep'] or {
     ['tow'] = 0,
     ['trucker'] = 0,
@@ -124,7 +134,6 @@ function DGCore.Player.CheckPlayerData(source, PlayerData)
   }
   PlayerData.metadata['callsign'] = PlayerData.metadata['callsign'] or 'NO CALLSIGN'
   PlayerData.metadata['fingerprint'] = PlayerData.metadata['fingerprint'] or DGCore.Player.CreateFingerId()
-  PlayerData.metadata['walletid'] = PlayerData.metadata['walletid'] or DGCore.Player.CreateWalletId()
   PlayerData.metadata['criminalrecord'] = PlayerData.metadata['criminalrecord'] or {
     ['hasRecord'] = false,
     ['date'] = nil
@@ -140,20 +149,8 @@ function DGCore.Player.CheckPlayerData(source, PlayerData)
       id = nil,
     }
   }
-  PlayerData.metadata['phonedata'] = PlayerData.metadata['phonedata'] or {
-    SerialNumber = DGCore.Player.CreateSerialNumber(),
-    InstalledApps = {},
-  }
-  -- Gang
-  PlayerData.gang = PlayerData.gang or {}
-  PlayerData.gang.name = PlayerData.gang.name or 'none'
-  PlayerData.gang.label = PlayerData.gang.label or 'No Gang Affiliaton'
-  PlayerData.gang.isboss = PlayerData.gang.isboss or false
-  PlayerData.gang.grade = PlayerData.gang.grade or {}
-  PlayerData.gang.grade.name = PlayerData.gang.grade.name or 'none'
-  PlayerData.gang.grade.level = PlayerData.gang.grade.level or 0
+
   -- Other
-  PlayerData.position = PlayerData.position or QBConfig.DefaultSpawn
   PlayerData.LoggedIn = true
   if PlayerData.citizenid ~= nil then
     PlayerData = DGCore.Player.LoadInventory(PlayerData)
@@ -530,110 +527,111 @@ function DGCore.Player.CreatePlayer(PlayerData)
 end
 
 -- Save player info to database (make sure citizenid is the primary key in your database)
-
-function DGCore.Player.Save(source)
-  local src = source
-  local ped = GetPlayerPed(src)
-  local pcoords = GetEntityCoords(ped)
+function DGCore.Player.Save(src)
   local PlayerData = DGCore.Players[src].PlayerData
-  if PlayerData then
-    local userResult = exports['dg-sql']:query([[
-      INSERT INTO users (name, steamid, license, discord)
-      VALUES (:name, :steamid, :license, :discord)
-      ON DUPLICATE KEY UPDATE name    = :name,
-                              steamid = :steamid,
-                              license = :license,
-                              discord = :discord;
-    ]], {
-      steamid = PlayerData.steamid,
-      license = PlayerData.license,
-      discord = PlayerData.discord,
-      name = PlayerData.name,
-    })
-    local charResult = exports['dg-sql']:query([[
-      INSERT INTO characters (citizenid, cid, steamid)
-      VALUES (:citizenid, :cid, :steamid)
-      ON DUPLICATE KEY UPDATE citizenid = :citizenid,
-                              cid       = :cid,
-                              steamid   = :steamid
-      RETURNING citizenid
-    ]], {
-      steamid = PlayerData.steamid,
-      cid = tonumber(PlayerData.cid),
-      citizenid = PlayerData.citizenid or 'undefined',
-    })
 
-    if charResult[1].citizenid == nil and PlayerData.citizenid then
-      DGCore.ShowError(GetCurrentResourceName(), 'ERROR DGCore.PLAYER.SAVE - Couldn\'t assign a valid citizenid!')
-      return
-    end
-
-    if PlayerData.citizenid == nil then
-      PlayerData.citizenid = charResult[1].citizenid
-      DGCore.Players[src].Functions.setCitizenid(PlayerData.citizenid)
-    end
-
-    local charDataResult = exports['dg-sql']:query([[
-      INSERT INTO character_data (cid, gang, position, metadata)
-      VALUES (:citizenid, :gang, :position, :metadata)
-      ON DUPLICATE KEY UPDATE gang = :gang,
-                              position = :position,
-                              metadata = :metadata;
-    ]], {
-      citizenid = PlayerData.citizenid,
-      gang = json.encode(PlayerData.gang),
-      position = json.encode(pcoords),
-      metadata = json.encode(PlayerData.metadata),
-    })
-    local charInfoResult = exports['dg-sql']:query([[
-      INSERT INTO character_info (cid, firstname, lastname, birthdate, gender, backstory, nationality, phone, cash)
-      VALUES (:citizenid, :firstname, :lastname, :birthdate, :gender, :backstory, :nationality, :phone, :cash)
-      ON DUPLICATE KEY UPDATE firstname = :firstname,
-                              lastname = :lastname,
-                              birthdate = :birthdate,
-                              gender = :gender,
-                              backstory = :backstory,
-                              nationality = :nationality,
-                              phone = :phone,
-                              cash = :cash;
-    ]], {
-      citizenid = PlayerData.citizenid,
-      firstname = PlayerData.charinfo.firstname,
-      lastname = PlayerData.charinfo.lastname,
-      birthdate = PlayerData.charinfo.birthdate,
-      gender = PlayerData.charinfo.gender,
-      backstory = PlayerData.charinfo.backstory,
-      nationality = PlayerData.charinfo.nationality,
-      phone = PlayerData.charinfo.phone,
-      cash = PlayerData.charinfo.cash
-    })
-
-    if userResult.affectedRows < 1 then
-      DGCore.ShowError(GetCurrentResourceName(), 'ERROR DGCore.PLAYER.SAVE - Failed to save user info in DB!')
-      return
-    end
-
-    if charDataResult.affectedRows < 1 then
-      DGCore.ShowError(GetCurrentResourceName(), 'ERROR DGCore.PLAYER.SAVE - Failed to save character data in DB!')
-      return
-    end
-
-    if charInfoResult.affectedRows < 1 then
-      DGCore.ShowError(GetCurrentResourceName(), 'ERROR DGCore.PLAYER.SAVE - Failed to save character info in DB!')
-      return
-    end
-
-    DGCore.Player.SaveInventory(src)
-    DGCore.ShowSuccess(GetCurrentResourceName(), PlayerData.name .. ' PLAYER SAVED!')
-  else
+  if not PlayerData then
     DGCore.ShowError(GetCurrentResourceName(), 'ERROR DGCore.PLAYER.SAVE - PLAYERDATA IS EMPTY!')
+    return
   end
+
+  -- Save user
+  local userResult = exports['dg-sql']:query([[
+    INSERT INTO users (name, steamid, license, discord)
+    VALUES (:name, :steamid, :license, :discord)
+    ON DUPLICATE KEY UPDATE name    = :name,
+                            steamid = :steamid,
+                            license = :license,
+                            discord = :discord;
+  ]], {
+    steamid = PlayerData.steamid,
+    license = PlayerData.license,
+    discord = PlayerData.discord,
+    name = PlayerData.name,
+  })
+
+  if userResult.affectedRows < 1 then
+    DGCore.ShowError(GetCurrentResourceName(), 'ERROR DGCore.PLAYER.SAVE - Failed to save user info in DB!')
+    return
+  end
+
+  -- Save character
+  local charResult = exports['dg-sql']:query([[
+    INSERT INTO characters (citizenid, steamid)
+    VALUES (:citizenid, :steamid)
+    ON DUPLICATE KEY UPDATE citizenid = :citizenid, steamid = :steamid
+    RETURNING citizenid
+  ]], {
+    steamid = PlayerData.steamid,
+    citizenid = PlayerData.citizenid or 'undefined',
+  })
+
+  if charResult[1].citizenid == nil then
+    DGCore.ShowError(GetCurrentResourceName(), 'ERROR DGCore.PLAYER.SAVE - Couldn\'t assign a valid citizenid!')
+    return
+  end
+
+  if PlayerData.citizenid == nil then
+    PlayerData.citizenid = charResult[1].citizenid
+    DGCore.Players[src].Functions.setCitizenid(PlayerData.citizenid)
+  end
+
+  -- Save character data
+  local charDataResult = exports['dg-sql']:query([[
+    INSERT INTO character_data (citizenid, gang, position, metadata)
+    VALUES (:citizenid, :gang, :position, :metadata)
+    ON DUPLICATE KEY UPDATE gang = :gang,
+                            position = :position,
+                            metadata = :metadata;
+  ]], {
+    citizenid = PlayerData.citizenid,
+    gang = json.encode(PlayerData.gang),
+    position = json.encode(GetEntityCoords(GetPlayerPed(src))),
+    metadata = json.encode(PlayerData.metadata),
+  })
+
+  if charDataResult.affectedRows < 1 then
+    DGCore.ShowError(GetCurrentResourceName(), 'ERROR DGCore.PLAYER.SAVE - Failed to save character data in DB!')
+    return
+  end
+
+  -- Save character info
+  local charInfoResult = exports['dg-sql']:query([[
+    INSERT INTO character_info (citizenid, firstname, lastname, birthdate, gender, nationality, phone, cash)
+    VALUES (:citizenid, :firstname, :lastname, :birthdate, :gender, :nationality, :phone, :cash)
+    ON DUPLICATE KEY UPDATE firstname = :firstname,
+                            lastname = :lastname,
+                            birthdate = :birthdate,
+                            gender = :gender,
+                            nationality = :nationality,
+                            phone = :phone,
+                            cash = :cash;
+  ]], {
+    citizenid = PlayerData.citizenid,
+    firstname = PlayerData.charinfo.firstname,
+    lastname = PlayerData.charinfo.lastname,
+    birthdate = PlayerData.charinfo.birthdate,
+    gender = PlayerData.charinfo.gender,
+    nationality = PlayerData.charinfo.nationality,
+    phone = PlayerData.charinfo.phone,
+    cash = PlayerData.charinfo.cash
+  })
+
+  if charInfoResult.affectedRows < 1 then
+    DGCore.ShowError(GetCurrentResourceName(), 'ERROR DGCore.PLAYER.SAVE - Failed to save character info in DB!')
+    return
+  end
+
+  DGCore.Player.SaveInventory(src)
+  DGCore.ShowSuccess(GetCurrentResourceName(), PlayerData.name .. ' PLAYER SAVED!')
 end
 
 -- Delete character
 
 local playertables = { -- Add tables as needed
-  { table = 'players' },
+  { table = 'characters' },
+  { table = 'character_data' },
+  { table = 'character_info' },
   { table = 'apartments' },
   { table = 'crypto_transactions' },
   { table = 'phone_invoices' },
@@ -803,30 +801,13 @@ function DGCore.Player.CreateFingerId()
   return FingerId
 end
 
-function DGCore.Player.CreateWalletId()
-  local UniqueFound = false
-  local WalletId = nil
-  while not UniqueFound do
-    WalletId = 'DG-' .. math.random(11111111, 99999999)
-    local query = '%' .. WalletId .. '%'
-    local result = exports['dg-sql']:query('SELECT COUNT(*) as count FROM character_data WHERE metadata LIKE ?', { query })
-    if result[1].count == 0 then
-      UniqueFound = true
+function DGCore.Player.GeneratePhoneNumber()
+  while true do
+    local phone = '04' .. math.random(70, 99) .. math.random(11, 99) .. math.random(11, 99) .. math.random(11, 99)
+    local result = exports['dg-sql']:query('SELECT COUNT(*) as count FROM character_info WHERE phone = ?', { phone })
+    if result[1].count == 0 then 
+      return phone 
     end
+    Citizen.Wait(100)
   end
-  return WalletId
-end
-
-function DGCore.Player.CreateSerialNumber()
-  local UniqueFound = false
-  local SerialNumber = nil
-  while not UniqueFound do
-    SerialNumber = math.random(11111111, 99999999)
-    local query = '%' .. SerialNumber .. '%'
-    local result = exports['dg-sql']:query('SELECT COUNT(*) as count FROM character_data WHERE metadata LIKE ?', { query })
-    if result[1].count == 0 then
-      UniqueFound = true
-    end
-  end
-  return SerialNumber
 end

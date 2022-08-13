@@ -50,12 +50,10 @@ end
 spawnCharPeds = function()
   local chars = DGCore.Shared.copyTbl(plyChars)
   if #chars ~= 5 then
-    local newIdx = #chars + 1
-    chars[newIdx] = {
+    chars[#chars + 1] = {
       model = `mp_m_freemode_01`,
       skin = {},
       citizenid = 1,
-      cid = newIdx,
       extra = true,
     }
   end
@@ -80,8 +78,8 @@ spawnCharPeds = function()
       else
         TriggerEvent('qb-clothing:client:loadPlayerClothing', json.decode(tostring(v.skin)), _ped)
       end
-      Entity(_ped).state:set('citizenid', v.citizenid)
-      entityCache.peds[v.cid] = _ped
+      Entity(_ped).state.citizenid = v.citizenid
+      entityCache.peds[v.citizenid] = _ped
       p:resolve()
     end)
   end
@@ -123,7 +121,7 @@ stripChars = function(chars)
       name = 'Nieuw char'
     }
   }
-  for k, v in pairs(chars) do
+  for _, v in pairs(chars) do
     _chars[#_chars + 1] = {
       citizenid = v.citizenid,
       name = v.firstname .. ' ' .. v.lastname,
@@ -196,7 +194,6 @@ CapturePed = function(plycoords, trgcoords)
   local ped = PlayerPedId()
   local raycast = StartExpensiveSynchronousShapeTestLosProbe(plycoords.x, plycoords.y, plycoords.z, trgcoords.x, trgcoords.y, trgcoords.z, 8, ped, 0)
   local retval, hit, endCoords, surfaceNormal, entity = GetShapeTestResult(raycast)
-  local timeout = GetGameTimer()
   return hit, endCoords, entity
 end
 

@@ -60,11 +60,10 @@ end)
 
 RegisterNUICallback('createChar', function(data, cb)
 	if entCid == 0 then return end
+  
 	local model = nil
-
 	if tonumber(data.gender) == 0 then
 		model = `mp_m_freemode_01`
-
 	else
 		model = `mp_f_freemode_01`
 	end
@@ -73,8 +72,6 @@ RegisterNUICallback('createChar', function(data, cb)
 	while not HasModelLoaded(model) do
 		Wait(0)
 	end
-
-	data.cid = DGCore.Shared.tableLen(plyChars) + 1	
 
 	SetPlayerModel(PlayerId(), model)
 	local ped = PlayerPedId()

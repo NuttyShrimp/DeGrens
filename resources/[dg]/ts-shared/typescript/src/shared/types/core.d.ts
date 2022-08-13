@@ -203,7 +203,6 @@ declare interface CharacterInfo {
   nationality: string;
   gender: number;
   cid: string;
-  backstory: string; // Unused but is part of the interface
   card?: string | number;
 }
 

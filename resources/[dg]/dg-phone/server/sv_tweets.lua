@@ -46,7 +46,7 @@ fetchTweets = function(batchReceived)
 		           WHERE tweetid = pt.id
 		       )                                    AS retweet_count
 		FROM phone_tweets AS pt
-        JOIN character_info p USING("cid")
+        JOIN character_info AS p ON p.citizenid = pt.cid
 		ORDER BY id DESC
 		LIMIT ? OFFSET ?;
 	]]

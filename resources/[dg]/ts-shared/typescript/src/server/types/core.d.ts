@@ -208,14 +208,9 @@ interface PlayerFunctions {
   CreateFingerId(): string;
 
   /**
-   * Internal function, generates a new unique crypto-wallet id for a new character
+   * Internal function, generates a new unique phonenumber for a new character
    */
-  CreateWalletId(): string;
-
-  /**
-   * Internal function, generates a new unique phone id for a new character
-   */
-  CreateSerialNumber(): string;
+  CreatePhoneNumber(): string;
 }
 
 interface Player {

@@ -45,8 +45,7 @@ end
 
 function DGCore.Functions.GetPlayerByCitizenId(citizenid)
 	for src, player in pairs(DGCore.Players) do
-		local cid = citizenid
-		if DGCore.Players[src].PlayerData.citizenid == cid then
+		if DGCore.Players[src].PlayerData.citizenid == citizenid then
 			return DGCore.Players[src]
 		end
 	end
@@ -55,7 +54,6 @@ end
 
 function DGCore.Functions.GetPlayerByPhone(number)
 	for src, player in pairs(DGCore.Players) do
-		local cid = citizenid
 		if DGCore.Players[src].PlayerData.charinfo.phone == number then
 			return DGCore.Players[src]
 		end

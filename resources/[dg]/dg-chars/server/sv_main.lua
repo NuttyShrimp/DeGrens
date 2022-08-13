@@ -84,15 +84,17 @@ DGCore.Functions.CreateCallback('dg-chars:server:setupClient', function(source, 
 end)
 
 DGCore.Functions.CreateCallback('dg-chars:server:getChars', function(src, cb)
+  local steamid = DGCore.Functions.GetIdentifier(src, 'steam')
 	local chars = {}
 	local result = exports['dg-sql']:query([[
-		SELECT p.citizenid, p.cid, p.firstname, p.lastname, ps.model, ps.skin
+		SELECT p.citizenid, p.firstname, p.lastname, ps.model, ps.skin
 		FROM all_character_data p
 			INNER JOIN playerskins ps on p.citizenid = ps.citizenid AND ps.active = 1
-	]])
-	for _, v in ipairs(result) do
+    WHERE steamid = ?
+	]], { steamid })
+	for k, v in ipairs(result) do
 		v.model = tonumber(v.model)
-		chars[v.cid] = v
+		chars[k] = v
 	end
 	cb(chars)
 end)
@@ -115,7 +117,6 @@ end)
 DGCore.Functions.CreateCallback('dg-chars:server:createCharacter', function(src, cb, data)
 	local newData = {}
 	newData.charinfo = data
-  newData.cid = data.cid
 	if DGCore.Player.Login(src, false, newData) then
     exports['dg-chat']:refreshCommands(src)
 		exports['dg-logs']:createGraylogEntry('chars:created', { src, data }, "Created a new character")
