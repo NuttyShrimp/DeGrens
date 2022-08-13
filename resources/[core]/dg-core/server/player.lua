@@ -792,7 +792,7 @@ function DGCore.Player.CreateFingerId()
       DGCore.Shared.RandomStr(1) ..
       DGCore.Shared.RandomInt(2) .. DGCore.Shared.RandomStr(3) .. DGCore.Shared.RandomInt(4))
     local query = '%' .. FingerId .. '%'
-    local result = exports['dg-sql']:query('SELECT COUNT(*) as count FROM `players` WHERE `metadata` LIKE ?', { query })
+    local result = exports['dg-sql']:query('SELECT COUNT(*) as count FROM character_data WHERE `metadata` LIKE ?', { query })
     if result[1].count == 0 then
       UniqueFound = true
     end
@@ -806,7 +806,7 @@ function DGCore.Player.CreateWalletId()
   while not UniqueFound do
     WalletId = 'DG-' .. math.random(11111111, 99999999)
     local query = '%' .. WalletId .. '%'
-    local result = exports['dg-sql']:query('SELECT COUNT(*) as count FROM players WHERE metadata LIKE ?', { query })
+    local result = exports['dg-sql']:query('SELECT COUNT(*) as count FROM character_data WHERE metadata LIKE ?', { query })
     if result[1].count == 0 then
       UniqueFound = true
     end
@@ -820,7 +820,7 @@ function DGCore.Player.CreateSerialNumber()
   while not UniqueFound do
     SerialNumber = math.random(11111111, 99999999)
     local query = '%' .. SerialNumber .. '%'
-    local result = exports['dg-sql']:query('SELECT COUNT(*) as count FROM players WHERE metadata LIKE ?', { query })
+    local result = exports['dg-sql']:query('SELECT COUNT(*) as count FROM character_data WHERE metadata LIKE ?', { query })
     if result[1].count == 0 then
       UniqueFound = true
     end
