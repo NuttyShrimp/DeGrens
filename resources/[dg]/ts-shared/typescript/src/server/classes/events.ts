@@ -44,7 +44,7 @@ class Events extends Util.Singleton<Events>() {
         scope.setSpan(transaction);
       });
       try {
-        this.clientEventHandlers.get(eventName)(src, ...args);
+        this.clientEventHandlers.get(eventName)!(src, ...args);
       } catch (e) {
         Sentry.captureException(e);
       } finally {
@@ -54,7 +54,7 @@ class Events extends Util.Singleton<Events>() {
     on('__dg_evt_s_s_emit', (data: { eventName: string; args: any[] }) => {
       if (!this.localEventHandlers.has(data.eventName)) return;
       if (data.eventName.startsWith('__dg_RPC_')) {
-        this.localEventHandlers.get(data.eventName)(...data.args);
+        this.localEventHandlers.get(data.eventName)!(...data.args);
         return;
       }
       const transaction = Sentry.startTransaction({
@@ -69,7 +69,7 @@ class Events extends Util.Singleton<Events>() {
         scope.setSpan(transaction);
       });
       try {
-        this.localEventHandlers.get(data.eventName)(...data.args);
+        this.localEventHandlers.get(data.eventName)!(...data.args);
       } catch (e) {
         Sentry.captureException(e);
       } finally {
@@ -123,13 +123,13 @@ class Events extends Util.Singleton<Events>() {
         },
       };
       if (typeof target === 'object') {
-        transactionContext.data.target = target.source !== -1 ? target.source !== -1 : target.source;
+        transactionContext.data!.target = target.source !== -1 ? target.source !== -1 : target.source;
         transactionContext.traceId = target.traceId;
       } else {
-        transactionContext.data.target = target !== -1 ? Player(target).state.steamId : target;
+        transactionContext.data!.target = target !== -1 ? Player(target).state.steamId : target;
       }
       const transaction = sentryHandler.startTransaction(transactionContext, 20000, 1);
-      evtData.traceId = transaction.traceId;
+      evtData.traceId = transaction.traceId ?? null;
       try {
         if (target === -1) {
           evtData.token = 'all';
@@ -230,10 +230,10 @@ class RPCManager {
 
   private handleIncomingResponse(src: number, data: RPC.ResolveData) {
     if (!this.awaitingEvents.has(data.resource)) return;
-    if (!this.awaitingEvents.get(data.resource).has(data.id)) return;
-    sentryHandler.finishTransaction(data.traceId);
-    this.awaitingEvents.get(data.resource).get(data.id).res(data.result);
-    this.awaitingEvents.get(data.resource).delete(data.id);
+    if (!this.awaitingEvents.get(data.resource)!.has(data.id)) return;
+    if (data.traceId) sentryHandler.finishTransaction(data.traceId);
+    this.awaitingEvents.get(data.resource)!.get(data.id)!.res(data.result);
+    this.awaitingEvents.get(data.resource)!.delete(data.id);
   }
 
   @Export('doRPCClRequest')
@@ -241,12 +241,12 @@ class RPCManager {
     if (!this.awaitingEvents.has(data.resource)) {
       this.awaitingEvents.set(data.resource, new Map());
     }
-    const promise = new Promise<T>(res => {
-      this.awaitingEvents.get(data.resource).set(data.id, { res });
+    const promise = new Promise<T | null>(res => {
+      this.awaitingEvents.get(data.resource)!.set(data.id, { res });
       setTimeout(() => {
-        if (this.awaitingEvents.get(data.resource).has(data.id)) {
+        if (this.awaitingEvents.get(data.resource)!.has(data.id)) {
           res(null);
-          this.awaitingEvents.get(data.resource).delete(data.id);
+          this.awaitingEvents.get(data.resource)!.delete(data.id);
         }
       }, 10000);
     });
@@ -357,7 +357,7 @@ class RPC extends Util.Singleton<RPC>() {
         traceId: traceId,
       });
       try {
-        const result = await this.registeredHandlers.get(data.name)(src, ...data.args);
+        const result = await this.registeredHandlers.get(data.name)!(src, ...data.args);
         this.eventInstance.emitNet('__dg_RPC_c_s_response', src, {
           id: data.id,
           result,

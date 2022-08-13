@@ -58,7 +58,7 @@ class SentryHandler extends Util.Singleton<SentryClass>() implements SentryClass
     if (!this.transactions.has(traceId)) {
       return;
     }
-    this.transactions.get(traceId).finish();
+    this.transactions.get(traceId)!.finish();
   }
 
   addSpan(
@@ -69,7 +69,7 @@ class SentryHandler extends Util.Singleton<SentryClass>() implements SentryClass
     if (!this.transactions.has(traceId)) {
       return;
     }
-    const transaction = this.transactions.get(traceId);
+    const transaction = this.transactions.get(traceId)!;
     const availableHits = this.transactionAvailableHits.get(traceId);
     if (!availableHits) {
       transaction.finish();

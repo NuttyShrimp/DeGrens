@@ -12,7 +12,7 @@ class TokenStorage {
     return this.instance;
   }
 
-  private token: string;
+  private token!: string;
 
   constructor() {
     emitNet('__dg_auth_register', GetCurrentResourceName());
@@ -68,7 +68,7 @@ class Events {
       if (!this.serverEventHandlers.has(data.eventName)) return;
       if (data.token !== 'all' && this.tokenStorage.getToken() !== data.token) return;
       emitNet('__dg_evt_trace_start', data.traceId);
-      const handler = this.serverEventHandlers.get(data.eventName);
+      const handler = this.serverEventHandlers.get(data.eventName)!;
       if (handler.constructor.name === 'AsyncFunction') {
         await handler(...data.args);
       } else {
@@ -77,14 +77,14 @@ class Events {
       emitNet('__dg_evt_trace_finish', data.traceId);
     });
     on('__dg_evt_c_c_emit', (data: { eventName: string; args: any[] }) => {
-      this.localEventHandlers.has(data.eventName) && this.localEventHandlers.get(data.eventName)(...data.args);
+      this.localEventHandlers.has(data.eventName) && this.localEventHandlers.get(data.eventName)!(...data.args);
     });
   }
 
-  private getTargetResourceForId(eventName: string) {
+  private getTargetResourceForId(eventName: string): [string, string] | null {
     for (const [resource, eventIdMap] of this.resourceEventsMap) {
       if (eventIdMap.has(eventName)) {
-        return [resource, eventIdMap.get(eventName)];
+        return [resource, eventIdMap.get(eventName)!];
       }
     }
     return null;
@@ -93,7 +93,8 @@ class Events {
   emitNet(event: string, ...args: any[]) {
     setImmediate(async () => {
       await this.tokenStorage.awaitPlayerAuthentication();
-      if (!this.getTargetResourceForId(event)) {
+      const targetResourceForId = this.getTargetResourceForId(event);
+      if (!targetResourceForId) {
         emitNet('__dg_evt_c_s_emitNet', {
           token: this.tokenStorage.getToken(),
           origin: this.resName,
@@ -103,7 +104,7 @@ class Events {
         console.log(`[DG] Event ${event} not found in any resource.`);
         return;
       }
-      const [target, eventId] = this.getTargetResourceForId(event);
+      const [target, eventId] = targetResourceForId;
       if (Util.isDevEnv()) {
         console.log(`[DGX] [${this.resName}] Event: ${event} | ID: ${eventId}`);
       }
@@ -155,9 +156,9 @@ class RPCManager {
 
   private handleIncomingResponse(data: RPC.ResolveData) {
     if (!this.awaitingEvents.has(data.resource)) return;
-    if (!this.awaitingEvents.get(data.resource).has(data.id)) return;
-    this.awaitingEvents.get(data.resource).get(data.id).res(data.result);
-    this.awaitingEvents.get(data.resource).delete(data.id);
+    if (!this.awaitingEvents.get(data.resource)!.has(data.id)) return;
+    this.awaitingEvents.get(data.resource)!.get(data.id)!.res(data.result);
+    this.awaitingEvents.get(data.resource)!.delete(data.id);
   }
 
   @Export('doRPCSrvRequest')
@@ -172,18 +173,18 @@ class RPCManager {
         data.resource
       );
     }
-    const promise = new Promise<T>(resolve => {
-      const res = (result: T) => {
+    const promise = new Promise<T | null>(resolve => {
+      const res = (result: T | null) => {
         resolve(result);
         if (!skipTrace && data.traceId) {
           emitNet('__dg_RPC_trace_finish', data.traceId);
         }
       };
-      this.awaitingEvents.get(data.resource).set(data.id, { res });
+      this.awaitingEvents.get(data.resource)!.set(data.id, { res });
       setTimeout(() => {
-        if (this.awaitingEvents.get(data.resource).has(data.id)) {
+        if (this.awaitingEvents.get(data.resource)!.has(data.id)) {
           res(null);
-          this.awaitingEvents.get(data.resource).delete(data.id);
+          this.awaitingEvents.get(data.resource)!.delete(data.id);
         }
       }, 10000);
     });
@@ -227,7 +228,7 @@ class RPC {
   private async handleRequest(data: RPC.EventData) {
     if (this.registeredHandlers.has(data.name)) {
       emitNet('__dg_RPC_start_handle_trace', data);
-      const result = await this.registeredHandlers.get(data.name)(...data.args);
+      const result = await this.registeredHandlers.get(data.name)!(...data.args);
       this.eventInstance.emitNet('__dg_RPC_s_c_response', {
         id: data.id,
         result,

@@ -2,6 +2,6 @@ declare interface ClientHandlingEvent {
   token: string;
   eventName: string;
   args: any[];
-  traceId: string;
+  traceId: string | null;
 }
 declare type LocalEventHandler = (...args: any[]) => void;

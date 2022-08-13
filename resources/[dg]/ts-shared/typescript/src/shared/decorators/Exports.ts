@@ -4,7 +4,7 @@ import 'reflect-metadata';
  * Register the function as a 5M export
  */
 export const Export = (exportName: string) => {
-  return function (target: unknown, key: string) {
+  return function (target: any, key: string) {
     if (!Reflect.hasMetadata('exports', target)) {
       Reflect.defineMetadata('exports', [], target);
     }

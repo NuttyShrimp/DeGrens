@@ -7,7 +7,7 @@ import { Events } from '../classes';
  * This will register a event that can be triggered from S + C
  */
 export const Event = (evtName: string) => {
-  return function (target: unknown, key: string) {
+  return function (target: any, key: string) {
     if (!Reflect.hasMetadata('events', target)) {
       Reflect.defineMetadata('events', [], target);
     }
@@ -24,7 +24,7 @@ export const Event = (evtName: string) => {
 };
 
 export const DGXEvent = (evtName: string) => {
-  return function (target: unknown, key: string) {
+  return function (target: any, key: string) {
     if (!Reflect.hasMetadata('events', target)) {
       Reflect.defineMetadata('events', [], target);
     }
@@ -45,7 +45,7 @@ export const DGXEvent = (evtName: string) => {
  * Register a event that is emitted to only the current side of the resource (client or server)
  */
 export const LocalEvent = (evtName: string) => {
-  return function (target: unknown, key: string) {
+  return function (target: any, key: string) {
     if (!Reflect.hasMetadata('events', target)) {
       Reflect.defineMetadata('events', [], target);
     }

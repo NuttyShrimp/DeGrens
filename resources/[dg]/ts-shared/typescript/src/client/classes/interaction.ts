@@ -137,8 +137,8 @@ class RayCast {
   private handlers: RayCast.Handler[] = [];
 
   constructor() {
-    on('dg-lib:targetinfo:changed', (entity: number, type: 1 | 2 | 3, coords: number[]) => {
-      this.handlers.forEach(handler => handler(entity, type, coords ? Util.ArrayToVector3(coords) : null));
+    on('dg-lib:targetinfo:changed', (entity: number, type?: 1 | 2 | 3, coords?: number[]) => {
+      this.handlers.forEach(handler => handler(entity, type, coords ? Util.ArrayToVector3(coords) : undefined));
     });
   }
 
@@ -155,11 +155,11 @@ class PolyZone {
   constructor() {
     on('dg-polyzone:enter', (name: string, data: any, center: number[]) => {
       if (!this.enterHandlers.has(name)) return;
-      this.enterHandlers.get(name).forEach(handler => handler(name, data, center ? Util.ArrayToVector3(center) : null));
+      this.enterHandlers.get(name)!.forEach(handler => handler(name, data, Util.ArrayToVector3(center)));
     });
     on('dg-polyzone:exit', (name: string) => {
       if (!this.exitHandlers.has(name)) return;
-      this.exitHandlers.get(name).forEach(handler => handler(name));
+      this.exitHandlers.get(name)!.forEach(handler => handler(name));
     });
     on('onResourceStop', (res: string) => {
       if (res !== GetCurrentResourceName()) return;
@@ -168,13 +168,13 @@ class PolyZone {
   }
 
   onEnter<T = any>(name: string, handler: PolyZone.EnterHandler<T>) {
-    const oldHandlers = this.enterHandlers.has(name) ? this.enterHandlers.get(name) : [];
+    const oldHandlers = this.enterHandlers.get(name) ?? [];
     oldHandlers.push(handler);
     this.enterHandlers.set(name, oldHandlers);
   }
 
   onLeave(name: string, handler: PolyZone.ExitHandler) {
-    const oldHandlers = this.exitHandlers.has(name) ? this.exitHandlers.get(name) : [];
+    const oldHandlers = this.exitHandlers.get(name) ?? [];
     oldHandlers.push(handler);
     this.exitHandlers.set(name, oldHandlers);
   }
@@ -249,11 +249,11 @@ class PolyTarget {
   constructor() {
     on('dg-polytarget:enter', (name: string, data: any, center: number[]) => {
       if (!this.enterHandlers.has(name)) return;
-      this.enterHandlers.get(name).forEach(handler => handler(name, data, center ? Util.ArrayToVector3(center) : null));
+      this.enterHandlers.get(name)!.forEach(handler => handler(name, data, Util.ArrayToVector3(center)));
     });
     on('dg-polytarget:exit', (name: string) => {
       if (!this.exitHandlers.has(name)) return;
-      this.exitHandlers.get(name).forEach(handler => handler(name));
+      this.exitHandlers.get(name)!.forEach(handler => handler(name));
     });
     on('onResourceStop', (res: string) => {
       if (res !== GetCurrentResourceName()) return;
@@ -264,13 +264,13 @@ class PolyTarget {
   }
 
   onEnter<T = any>(name: string, handler: PolyZone.EnterHandler<T>) {
-    const oldHandlers = this.enterHandlers.has(name) ? this.enterHandlers.get(name) : [];
+    const oldHandlers = this.enterHandlers.get(name) ?? [];
     oldHandlers.push(handler);
     this.enterHandlers.set(name, oldHandlers);
   }
 
   onLeave(name: string, handler: PolyZone.ExitHandler) {
-    const oldHandlers = this.exitHandlers.has(name) ? this.exitHandlers.get(name) : [];
+    const oldHandlers = this.exitHandlers.get(name) ?? [];
     oldHandlers.push(handler);
     this.exitHandlers.set(name, oldHandlers);
   }
@@ -330,7 +330,7 @@ class Keys {
     this.listeners = new Map();
     on('dg-lib:keyEvent', (name: string, isDown: boolean) => {
       if (this.listeners.has(name)) {
-        this.listeners.get(name).forEach(handler => {
+        this.listeners.get(name)!.forEach(handler => {
           handler(isDown);
         });
       }
@@ -349,7 +349,7 @@ class Keys {
     if (!this.listeners.has(keyName)) {
       this.listeners.set(keyName, new Map());
     }
-    this.listeners.get(keyName).set(this.handlerId, handler);
+    this.listeners.get(keyName)!.set(this.handlerId, handler);
     return this.handlerId++;
   }
 
@@ -371,7 +371,7 @@ class Keys {
 
   removeHandler(keyName: string, handlerId: number) {
     if (!this.listeners.has(keyName)) return;
-    this.listeners.get(keyName).delete(handlerId);
+    this.listeners.get(keyName)!.delete(handlerId);
   }
 }
 

@@ -45,7 +45,7 @@ class Util extends UtilShared {
 
   isEntityDead(entity: number): Promise<boolean> {
     const entityNetId = NetworkGetEntityFromNetworkId(entity);
-    return RPC.execute<boolean>('dgx:util:isEntityDead', entityNetId);
+    return RPC.execute<boolean>('dgx:util:isEntityDead', entityNetId) as Promise<boolean>;
   }
 
   isDevEnv() {

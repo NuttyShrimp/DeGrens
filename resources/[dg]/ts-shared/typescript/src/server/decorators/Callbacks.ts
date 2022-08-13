@@ -4,7 +4,7 @@ import 'reflect-metadata';
  * Register a Core callback
  */
 export const Callback = (callbackName: string) => {
-  return function (target: unknown, key: string) {
+  return function (target: any, key: string) {
     if (!Reflect.hasMetadata('callbacks', target)) {
       Reflect.defineMetadata('callbacks', [], target);
     }

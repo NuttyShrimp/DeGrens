@@ -6,7 +6,7 @@ import { RPC } from '../classes';
  * Register a Core callback
  */
 export const RPCEvent = (RPCName: string) => {
-  return function (target: unknown, key: string) {
+  return function (target: any, key: string) {
     if (!Reflect.hasMetadata('RPCs', target)) {
       Reflect.defineMetadata('RPCs', [], target);
     }
