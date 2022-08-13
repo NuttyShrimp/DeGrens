@@ -86,8 +86,7 @@ function pushStoredIssues()
   end)
 end
 
-RegisterServerEvent('dg-log:server:ErrorLog')
-AddEventHandler('dg-log:reportClientError', function(resource, errorstr)
+RegisterServerEvent('dg-log:reportClientError', function(resource, errorstr)
   trySendingSentryIssue(resource, errorstr, true)
 end)
 
