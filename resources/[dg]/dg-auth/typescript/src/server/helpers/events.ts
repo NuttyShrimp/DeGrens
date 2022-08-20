@@ -18,12 +18,12 @@ export const handleResourceStop = (resName: string) => {
   managers.delete(resName);
 };
 
-export const handlePlayerJoin = (playerId: number, steamId: string) => {
+export const handlePlayerJoin = (playerId: number) => {
   if (!playerJoined) {
     playerJoined = true;
   }
   managers.forEach(manager => {
-    manager.generateMapForPlayer(playerId, steamId);
+    manager.generateMapForPlayer(playerId);
   });
 };
 
@@ -48,6 +48,10 @@ export const registerHandlerForManager = (resName: string, handler: EventHandler
 };
 
 export const handleIncomingEvent = (src: number, evtData: EventData) => {
+  if (evtData.target === 'error') {
+    mainLogger.warn(`${GetPlayerName(String(src))}(${src}) has tried to emit a non-existing event`)
+    return
+  }
   if (!evtData.target || !managers.has(evtData.target)) {
     mainLogger.warn(`Event ${evtData.eventId} has no target`);
     console.log(evtData);

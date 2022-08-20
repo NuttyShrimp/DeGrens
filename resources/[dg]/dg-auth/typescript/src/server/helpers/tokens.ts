@@ -12,6 +12,7 @@ let PRIV_KEY = 'BOZO-1';
 
 export const setPrivateToken = (token: string) => {
   PRIV_KEY = token;
+  refreshAllPlayers();
 };
 
 // TODO: Use the timestamp to detect invalid keys from restarted resources
@@ -48,7 +49,7 @@ export const generateToken = (src: number) => {
     algorithm: 'HS512',
   });
   // TODO: await on all returns of the map generation, max span of 10 seconds to generate all maps --> Drop player if it takes too long
-  handlePlayerJoin(src, steamId);
+  handlePlayerJoin(src);
   emitNet('__dg_auth_authenticated', src, -1, token);
   setTimeout(() => {
     emit('dg-auth:server:authenticated', src);
@@ -68,10 +69,17 @@ export const getPlayerInfo = (src: number, token: string) => {
   } catch (e) {
     // TODO: Add ban
     mainLogger.warn(
-      `[${GetInvokingResource()}] ${GetPlayerName(String(src))}(${src}) has tried to use an invalid token (${
-        e.message
+      `[${GetInvokingResource()}] ${GetPlayerName(String(src))}(${src}) has tried to use an invalid token (${e.message
       })`
     );
     return;
   }
 };
+
+export const refreshAllPlayers = () => {
+  const plyCount = GetNumPlayerIndices();
+  for (let i = 0; i < plyCount; i++) {
+    const src = Number(GetPlayerFromIndex(i))
+    generateToken(src);
+  }
+}

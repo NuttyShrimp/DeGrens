@@ -28,7 +28,7 @@ export class EventIdManager {
     this.eventSet = new Set();
     this.playerResourceMap = new Map();
     for (let i = 0; i < GetNumPlayerIndices(); i++) {
-      this.playerResourceMap.set(getPlySteamId(Number(GetPlayerFromIndex(i))), new Map());
+      this.playerResourceMap.set(GetPlayerFromIndex(i), new Map());
     }
   }
 
@@ -52,22 +52,21 @@ export class EventIdManager {
   // Resource in parameters has started and wants to send events
   // We create a map for each player for this resource
   generateResourceMap(resName: string) {
-    this.playerResourceMap.forEach((resourceMap, plySteamId) => {
+    this.playerResourceMap.forEach((resourceMap, plySrvId) => {
       const [eventMap, evtObj] = this.generateMapForEvents();
-      const serverId = getPlyServerId(plySteamId);
-      emitNet('__dg_shared_events', serverId, resName, this.resource, evtObj);
+      emitNet('__dg_shared_events', plySrvId, resName, this.resource, evtObj);
       resourceMap.set(resName, eventMap);
     });
   }
 
-  generateMapForPlayer(src: number, steamId: string) {
+  generateMapForPlayer(src: number) {
     const resourceMap: Map<string, Map<string, string>> = new Map();
     getRegisteredResources().forEach(resource => {
       const [eventMap, evtObj] = this.generateMapForEvents();
       emitNet('__dg_shared_events', src, resource, this.resource, evtObj);
       resourceMap.set(resource, eventMap);
     });
-    this.playerResourceMap.set(steamId, resourceMap);
+    this.playerResourceMap.set(String(src), resourceMap);
   }
 
   // This will process the event data and return the real event name if it exists
@@ -89,7 +88,7 @@ export class EventIdManager {
       console.log(`[Events] [${data.target}] ${data.eventId} had an invalid token attached`);
       return;
     }
-    const resourceMap = this.playerResourceMap.get(tokenData.steamId);
+    const resourceMap = this.playerResourceMap.get(String(src));
     if (!resourceMap) {
       // TODO: add Ban shit
       console.log(`[Events] [${data.target}] ${src} is not registered for client events`);
@@ -108,6 +107,7 @@ export class EventIdManager {
       return;
     }
     if (Util.isDevEnv()) {
+      // TODO: Make logging not shit
       console.log(
         `[DGX] [${this.resource}] Event: ${eventName} | ID: ${data.eventId} | From: ${data.origin} | Ply: ${tokenData.source}`
       );

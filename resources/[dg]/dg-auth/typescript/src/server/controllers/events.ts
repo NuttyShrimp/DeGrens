@@ -1,7 +1,11 @@
 import { registerResource } from 'helpers/resourceSet';
-import { generateToken, setPrivateToken } from 'helpers/tokens';
+import { generateToken, refreshAllPlayers, setPrivateToken } from 'helpers/tokens';
 
 import { handleIncomingEvent } from '../helpers/events';
+
+setImmediate(() => {
+  refreshAllPlayers();
+})
 
 onNet('__dg_auth_register', (resName: string) => {
   registerResource(resName, source);
