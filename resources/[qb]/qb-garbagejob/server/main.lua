@@ -41,8 +41,7 @@ RegisterNetEvent('qb-garbagejob:server:nano')
 AddEventHandler('qb-garbagejob:server:nano', function()
     local xPlayer = DGCore.Functions.GetPlayer(tonumber(source))
 
-	xPlayer.Functions.AddItem("cryptostick", 1, false)
-	TriggerClientEvent('inventory:client:ItemBox', source, "cryptostick", "add")
+	-- xPlayer.Functions.AddItem("cryptostick", 1, false)
 end)
 
 RegisterServerEvent('qb-garbagejob:server:PayShit')
@@ -56,8 +55,7 @@ AddEventHandler('qb-garbagejob:server:PayShit', function(amount, location)
         if location == #Config.Locations["trashcan"] then
             for i = 1, math.random(3, 5), 1 do
                 local item = Materials[math.random(1, #Materials)]
-                Player.Functions.AddItem(item, math.random(4, 7))
-                TriggerClientEvent('inventory:client:ItemBox', src, item, 'add')
+                -- Player.Functions.AddItem(item, math.random(4, 7))
                 Citizen.Wait(500)
             end
         end

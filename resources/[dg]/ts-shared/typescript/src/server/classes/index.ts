@@ -1,6 +1,7 @@
 import config from './config';
 import events from './events';
 import interaction from './interaction';
+import inventory from './inventory';
 import jobs from './jobs';
 import phone from './phone';
 import ui from './ui';
@@ -13,3 +14,4 @@ export const { Chat } = interaction;
 export const { Taskbar, Notifications } = ui;
 export const { Config } = config;
 export const { Jobs } = jobs;
+export const { Inventory } = inventory;

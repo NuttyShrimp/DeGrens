@@ -94,13 +94,12 @@ DGCore.Commands.Add("ring", "Ring The Doorbell", {}, false, function(source)
 end)
 
 -- Item
-
-DGCore.Functions.CreateUseableItem("police_stormram", function(source, item)
-    local Player = DGCore.Functions.GetPlayer(source)
+DGX.Inventory.registerUseable("police_stormram", function(src)
+    local Player = DGCore.Functions.GetPlayer(src)
     if (Player.PlayerData.job.name == "police" and Player.PlayerData.job.onduty) then
-        TriggerClientEvent("qb-houses:client:HomeInvasion", source)
+        TriggerClientEvent("qb-houses:client:HomeInvasion", src)
     else
-        TriggerClientEvent('DGCore:Notify', source, "This is only possible for emergency services!", "error")
+        TriggerClientEvent('DGCore:Notify', src, "This is only possible for emergency services!", "error")
     end
 end)
 

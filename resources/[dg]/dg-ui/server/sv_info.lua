@@ -1,8 +1,9 @@
-RegisterNetEvent('DGCore:Server:OnInventoryUpdate', function(src, removed, added)
-	-- Set hasVPN
-	local Player = DGCore.Functions.GetPlayer(src)
-	TriggerClientEvent('dg-ui:SendAppEvent', src, 'character', {
-		hasVPN = Player.Functions.GetItemByName('vpn') ~= nil,
+AddEventHandler('inventory:playerInventoryUpdated', function(cid, action, state)
+  if state.name ~= 'vpn' then return end
+	local Player = DGCore.Functions.GetPlayerByCitizenId(cid)
+  local hasVPN = DGX.Inventory.doesPlayerHaveItems(Player.PlayerData.source, 'vpn')
+	TriggerClientEvent('dg-ui:SendAppEvent', Player.PlayerData.source, 'character', {
+		hasVPN = hasVPN,
 	})
 end)
 

@@ -4,7 +4,7 @@ local calls = {}
 startCall = function(source, targetPhone, isAnon)
 	local Player = DGCore.Functions.GetPlayer(source)
 	if (not targetPhone) then return end
-	if (not Player.Functions.GetItemByName('phone')) then
+	if (not DGX.Inventory.doesPlayerHaveItems(source, 'phone')) then
 		-- TODO add baninjection :)
 		print('[DG-Phone] ' .. Player.Name .. ' tried to call without a phone')
 		return

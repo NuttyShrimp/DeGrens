@@ -79,8 +79,7 @@ function CreateJobBlip()
         local Chance = math.random(100)
         local Odd = math.random(100)
         if Chance == Odd then
-            TriggerServerEvent('DGCore:Server:AddItem', 'phone', 1)
-            TriggerEvent('inventory:client:ItemBox', "phone", "add")
+            -- TriggerServerEvent('DGCore:Server:AddItem', 'phone', 1)
             DGCore.Functions.Notify("You found a phone..", "success")
         end
     end

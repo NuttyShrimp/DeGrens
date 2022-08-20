@@ -18,5 +18,7 @@ declare global {
     Taskbar: typeof Classes.Taskbar;
     Interiors: typeof Classes.Interiors;
     Jobs: typeof Classes.Jobs;
+    Inventory: typeof Classes.Inventory;
+    PropAttach: typeof Classes.PropAttach;
   };
 }

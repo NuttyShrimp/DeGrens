@@ -44,7 +44,7 @@ Citizen.CreateThread(function()
     -- set default data
     for labType, labId in pairs(labData.activeLabs) do
         states[labId] = json.decode(json.encode(getConfig().types[labType].defaultState))
-        exports['dg-doorlock']:changeDoorLockState(getConfig().labs[labId-1].doorId, false)
+        exports['dg-doorlock']:changeDoorLockState(getConfig().labs[labId].doorId, false)
     end
 end)
 

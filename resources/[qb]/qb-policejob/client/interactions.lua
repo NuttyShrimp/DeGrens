@@ -79,7 +79,7 @@ RegisterNetEvent('police:client:SearchPlayer', function()
     local player, distance = DGCore.Functions.GetClosestPlayer()
     if player ~= -1 and distance < 2.5 then
         local playerId = GetPlayerServerId(player)
-        TriggerServerEvent("inventory:server:OpenInventory", "otherplayer", playerId)
+        print('Deprecated inventory opening method. Please update to new export')
         TriggerServerEvent("police:server:SearchPlayer", playerId)
     else
         DGCore.Functions.Notify("No one nearby!", "error")
@@ -128,7 +128,7 @@ RegisterNetEvent('police:client:RobPlayer', function()
                 local pos = GetEntityCoords(ped)
                 if #(pos - plyCoords) < 2.5 then
                     StopAnimTask(ped, "random@shop_robbery", "robbery_action_b", 1.0)
-                    TriggerServerEvent("inventory:server:OpenInventory", "otherplayer", playerId)
+                    print('Deprecated inventory opening method. Please update to new export')
                     TriggerEvent("inventory:server:RobPlayer", playerId)
                 else
                     DGCore.Functions.Notify("No one nearby!", "error")
@@ -239,19 +239,19 @@ RegisterNetEvent('police:client:CuffPlayer', function()
     if not IsPedRagdoll(PlayerPedId()) then
         local player, distance = DGCore.Functions.GetClosestPlayer()
         if player ~= -1 and distance < 1.5 then
-            DGCore.Functions.TriggerCallback('DGCore:HasItem', function(result)
-                if result then 
-                    local playerId = GetPlayerServerId(player)
-                    if not IsPedInAnyVehicle(GetPlayerPed(player)) and not IsPedInAnyVehicle(GetPlayerPed(PlayerPedId())) then
-                        TriggerServerEvent("police:server:CuffPlayer", playerId, false)
-                        HandCuffAnimation()
-                    else
-                        DGCore.Functions.Notify("You can\'t cuff someone in a vehicle", "error")
-                    end
-                else
-                    DGCore.Functions.Notify("You don\'t have handcuffs on you", "error")
-                end
-            end, "handcuffs")
+            -- DGCore.Functions.TriggerCallback('DGCore:HasItem', function(result)
+            --     if result then 
+            --         local playerId = GetPlayerServerId(player)
+            --         if not IsPedInAnyVehicle(GetPlayerPed(player)) and not IsPedInAnyVehicle(GetPlayerPed(PlayerPedId())) then
+            --             TriggerServerEvent("police:server:CuffPlayer", playerId, false)
+            --             HandCuffAnimation()
+            --         else
+            --             DGCore.Functions.Notify("You can\'t cuff someone in a vehicle", "error")
+            --         end
+            --     else
+            --         DGCore.Functions.Notify("You don\'t have handcuffs on you", "error")
+            --     end
+            -- end, "handcuffs")
         else
             DGCore.Functions.Notify("No one nearby!", "error")
         end

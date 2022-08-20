@@ -8,6 +8,11 @@ interface NpcData {
   flags: Flag[];
   clothing?: string;
   scenario?: string;
+  blip?: {
+    title: string;
+    sprite: number;
+    color: number;
+  };
 }
 
 declare namespace Settings {

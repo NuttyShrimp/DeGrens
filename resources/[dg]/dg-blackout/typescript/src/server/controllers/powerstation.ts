@@ -1,11 +1,9 @@
-import { Config, Events, RPC } from '@dgx/server';
+import { Config, Events, Inventory, RPC } from '@dgx/server';
 import powerstationManager from '../classes/PowerstationManager';
 
 let powerStations: PowerstationData[];
 
-DGCore.Functions.CreateUseableItem('big_explosive', async (src: number, item: Item) => {
-  const Player = DGCore.Functions.GetPlayer(src);
-  if (!Player.Functions.GetItemByName(item.name)) return;
+Inventory.registerUseable('big_explosive', src => {
   Events.emitNet('blackout:client:useExplosive', src);
 });
 

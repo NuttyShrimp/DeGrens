@@ -94,30 +94,30 @@ end)
 RegisterNetEvent('electronickit:UseElectronickit')
 AddEventHandler('electronickit:UseElectronickit', function()
     if currentGate ~= 0 and not securityLockdown and not Gates[currentGate].hit then 
-        DGCore.Functions.TriggerCallback('DGCore:HasItem', function(result)
-            if result then 
-                TriggerEvent('inventory:client:requiredItems', requiredItems, false)
-                DGCore.Functions.Progressbar("hack_gate", "Electronic kit plug in..", math.random(5000, 10000), false, true, {
-                    disableMovement = true,
-                    disableCarMovement = true,
-                    disableMouse = false,
-                    disableCombat = true,
-                }, {
-                    animDict = "anim@gangops@facility@servers@",
-                    anim = "hotwire",
-                    flags = 16,
-                }, {}, {}, function() -- Done
-                    StopAnimTask(PlayerPedId(), "anim@gangops@facility@servers@", "hotwire", 1.0)
-                    TriggerEvent("mhacking:show")
-                    TriggerEvent("mhacking:start", math.random(5, 9), math.random(10, 18), OnHackDone)
-                end, function() -- Cancel
-                    StopAnimTask(PlayerPedId(), "anim@gangops@facility@servers@", "hotwire", 1.0)
-                    DGCore.Functions.Notify("Cancelled..", "error")
-                end)
-            else
-                DGCore.Functions.Notify("You're missing an item..", "error")
-            end
-        end, "gatecrack")
+        -- DGCore.Functions.TriggerCallback('DGCore:HasItem', function(result)
+        --     if result then 
+        --         TriggerEvent('inventory:client:requiredItems', requiredItems, false)
+        --         DGCore.Functions.Progressbar("hack_gate", "Electronic kit plug in..", math.random(5000, 10000), false, true, {
+        --             disableMovement = true,
+        --             disableCarMovement = true,
+        --             disableMouse = false,
+        --             disableCombat = true,
+        --         }, {
+        --             animDict = "anim@gangops@facility@servers@",
+        --             anim = "hotwire",
+        --             flags = 16,
+        --         }, {}, {}, function() -- Done
+        --             StopAnimTask(PlayerPedId(), "anim@gangops@facility@servers@", "hotwire", 1.0)
+        --             TriggerEvent("mhacking:show")
+        --             TriggerEvent("mhacking:start", math.random(5, 9), math.random(10, 18), OnHackDone)
+        --         end, function() -- Cancel
+        --             StopAnimTask(PlayerPedId(), "anim@gangops@facility@servers@", "hotwire", 1.0)
+        --             DGCore.Functions.Notify("Cancelled..", "error")
+        --         end)
+        --     else
+        --         DGCore.Functions.Notify("You're missing an item..", "error")
+        --     end
+        -- end, "gatecrack")
     end
 end)
 

@@ -1,103 +1,61 @@
 # Inventory
 
-## Itemdata
+- All exports can be used with Inventory module of DGX
 
-```lua 
-local itemName = "lockpick"
-exports["dg-inventory"]:GetItemData(itemName) 
-```
+## Items
+- Itemdata can be found in dg-config/configs/inventory/items.json
+- Use this template to add new items:
+  ```json
+  {
+    "name": "item_name", // Unique itemname - (pls seperate every word with _ for uniformity)
+    "label": "Item Name", // Display name of item - (pls keep relevant to item name)
+    "image": "item_image.png", // File to use for item (place images in dg-ui/[src]/src/assets/inventory) - (pls keep itemname same or relevant to item name)
+    "size": {"x": 1, "y": 1}, // Itemsize in inventory
+    "decayRate": 60, // Amount of minutes before item breaks - OPTIONAL
+    "description": "item-description", // Item description - OPTIONAL
+    "useable": true, // Whether or not item can be used - OPTIONAL default: false
+    "closeOnUse": false, // Whether or not inventory should close when used - OPTIONAL default: true
+    "markedForSeizure": true, // Whether or not item is marked for seizure - OPTIONAL default: false
+  }
+  ```
+- OnCreate metadata can be found in typescript/src/server/modules/items/helpers.items.ts
+- Item objects and container whitelist can be found in dg-config/configs/inventory/config.json
 
-## Open Inventory
-### Shop
-``` lua
-local shopId = "hospital" -- unique name for saving stock
-local data =  {
-    label = "Winkel Displayname",
-    slots = 1,
-    items = {
-        [1] = {
-            name = "radio",
-            price = 0,
-            amount = 50,
-            info = {},
-            type = "item",
-            slot = 1,
-        },
-    }
-}
-TriggerServerEvent("inventory:server:OpenInventory", "shop", shopId, data)
-```
 
-### Stash
-``` lua
-local stashId = "mechanicstash"
-local data = {
-    maxweight = 10000,
-    slots = 10,
-}
-TriggerServerEvent("inventory:server:OpenInventory", "stash", stashId, data)
-```
+## Client
+### Exports
+| Name                 | Parameters                                            | Returns                                            |
+| -------------------- | ----------------------------------------------------- | -------------------------------------------------- |
+| getItemData          | `itemName: string`                                    | ItemData object                                    |
+| getAllItemData       | /                                                     | ItemData object array                              |
+| hasObject            | /                                                     | boolean whether player has primary holdable object |
+| openStash            | `stashId: string`                                     | /                                                  |
+| openOtherPlayer      | `plyId: number`                                       | /                                                  |
+| openShop             | `shopId: string`                                      | /                                                  |
+| addItemToPlayer      | `name: string`, `amount: number`, `metadata?: object` | /                                                  |
+| doesPlayerHaveItems  | `itemNames: string or string[]`                       | boolean                                            |
+| removeItemFromPlayer | `itemName: string`                                    | /                                                  |
+| toggleObject         | `itemId: string`, `toggle: boolean`                   | /                                                  |
+| isOpen               | /                                                     | boolean                                            |
 
-### Give
-``` lua
-local id = "saveThisToBeUsedLater" -- save this ;)
-TriggerServerEvent("inventory:server:OpenInventory", "give", id)
-
-RegisterNetEvent("inventory:client:ClosedGiveInventory", function(data)
-    local givenItem = data[id].items[1]
-end)
-```
-
-### Otherplayer
-``` lua
-TriggerServerEvent("inventory:server:OpenInventory", "otherplayer", playerId)
-```
-
-## Required items
-``` lua
-local items = {
-    "itemnamehere",
-    "otheritemnamehere",
-}
-local showRequiredItems = true
-
-TriggerClientEvent("inventory:client:requiredItems", items, showRequiredItems)
-```
-
-## Itembox
-``` lua
-local itemName = "lockpick"
-local action = "add" -- "remove"
-TriggerClientEvent("inventory:client:ItemBox", itemName, action)
-```
-
-## Adding items
-
-```typescript
-interface Data {
-    // Internal name
-    name: string; 
-    // Show name
-    label: string; 
-    // Weight in grams
-    weight: number; 
-    // Type
-    type: 'item' | 'weapon';
-    // Can stack item
-    stackable: boolean;
-    // Can use item
-    useable: boolean;
-    // Determines if inventory should close on use, only when useable is true
-    shouldClose?: boolean; 
-    // JSON representation of combining recipe when wanted
-    combinable?: string; 
-    // If item needs to expire, provide amount of minutes item lasts
-    decayrate?: number; 
-    // Image name
-    image: string; 
-    // Description
-    description: string; 
-    // True if you need to visually hold item, more info in dg-propattach
-    hold?: boolean 
-}
-```
+## Server
+### Exports
+| Name                 | Parameters                                                                 | Returns                                                  |
+| -------------------- | -------------------------------------------------------------------------- | -------------------------------------------------------- |
+| registerUseable      | `items: string or string[]`, `handler: Inventory.UsageHandler`             | /                                                        |
+| getAllItemData       | /                                                                          | Promise<Record<string, Inventory.ItemData>>              |
+| getItemData          | `itemName: string`                                                         | Inventory.ItemData                          or undefined |
+| hasObject            | `plyId: number`                                                            | boolean, whether player has holdable obj                 |
+| giveStarterItems     | `plyId: number`                                                            | /                                                        |
+| clearPlayerInventory | `plyId: number`                                                            | /                                                        |
+| addItemToPlayer      | `plyId: number`, `itemName: string`, `amount: number`, `metadata?: object` | /                                                        |
+| doesPlayerHaveItems  | `plyId: number`, `itemName: string or string[]`                            | Promise<boolean>                                         |
+| removeItemFromPlayer | `plyId: number`, `itemName: string `                                       | Promise<boolean>, boolean shows succes                   |
+| getAmountPlayerHas   | `plyId: number`, `itemName: string`                                        | Promise<number>, amount of item                          |
+| getItemById          | `itemId: string`                                                           | Inventory.ItemData or undefined                          |
+| setMetadataOfItem    | `itemId: string`, `cb: (old) => new`                                       | /                                                        |
+| setQualityOfitem     | `itemId: string`, `cb: (old) => new`                                       | /                                                        |
+| moveItemToInventory  | `itemId: string`, `type: Inventory.Type`, `identifier: string`             | /                                                        |
+| getItemsInInventory  | `type: Inventory.Type`, `identifier: string`                               | Promise<Inventory.ItemState[]>                           |
+| getFirstIdOfName     | `type: Inventory.Type`, `identifier: string`, `itemName: string`           | Promise<Inventory.ItemState or undefined>                |
+| destroyItem          | `itemId: string`                                                           | /                                                        |

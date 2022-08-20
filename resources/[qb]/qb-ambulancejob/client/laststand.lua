@@ -88,8 +88,8 @@ function SetLaststand(bool, spawn)
 
                     local killerId = NetworkGetPlayerIndexFromPed(killer)
                     local killerName = killerId ~= -1 and GetPlayerName(killerId) .. " " .. "("..GetPlayerServerId(killerId)..")" or "Himself or a NPC"
-                    local weaponLabel = exports["dg-inventory"]:GetItemData(killerWeapon)?["label"] or "Unknown"
-                    local weaponName = exports["dg-inventory"]:GetItemData(killerWeapon)?["name"] or "Unknown_Weapon"
+                    local weaponLabel = DGX.Inventory.getItemData(killerWeapon)?["label"] or "Unknown"
+                    local weaponName = DGX.Inventory.getItemData(killerWeapon)?["name"] or "Unknown_Weapon"
                     TriggerServerEvent("qb-log:server:CreateLog", "death", GetPlayerName(player) .. " ("..GetPlayerServerId(player)..") is dead", "red", "**".. killerName .. "** has killed  ".. GetPlayerName(player) .." with a **".. weaponLabel .. "** (" .. weaponName .. ")")
                     deathTime = 0
                     OnDeath()

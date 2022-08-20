@@ -14,8 +14,7 @@ AddEventHandler('qb-taxi:server:NpcPay', function(Payment)
 
     local chance = math.random(1, 100)
     if chance < 26 then
-        Player.Functions.AddItem("cryptostick", 1, false)
-        TriggerClientEvent('inventory:client:ItemBox', source, "cryptostick", "add")
+        -- Player.Functions.AddItem("cryptostick", 1, false)
     end
 end)
 

@@ -87,5 +87,445 @@
     ],
     "flags": [{ "name": "isHeistsDriveTrade", "active": true }],
     "scenario": "WORLD_HUMAN_CLIPBOARD"
+  },
+  {
+    "id": "shop_little_seoul",
+    "model": "mp_m_shopkeep_01",
+    "position": { "x": -705.2, "y": -914.87, "z": 19.22 },
+    "heading": 80.51,
+    "distance": 50.0,
+    "settings": [
+      { "type": "invincible", "active": true },
+      { "type": "ignore", "active": true },
+      { "type": "freeze", "active": true },
+      { "type": "collision", "active": true }
+    ],
+    "flags": [{ "name": "isShopKeeper", "active": true }],
+    "scenario": "WORLD_HUMAN_HANG_OUT_STREET",
+    "blip": {
+      "title": "24/7 Winkel",
+      "sprite": 52,
+      "color": 15
+    }
+  },
+  {
+    "id": "shop_grove_street",
+    "model": "mp_m_shopkeep_01",
+    "position": { "x": -46.98, "y": -1759.5, "z": 29.43 },
+    "heading": 33.91,
+    "distance": 50.0,
+    "settings": [
+      { "type": "invincible", "active": true },
+      { "type": "ignore", "active": true },
+      { "type": "freeze", "active": true },
+      { "type": "collision", "active": true }
+    ],
+    "flags": [{ "name": "isShopKeeper", "active": true }],
+    "scenario": "WORLD_HUMAN_HANG_OUT_STREET",
+    "blip": {
+      "title": "24/7 Winkel",
+      "sprite": 52,
+      "color": 15
+    }
+  },
+  {
+    "id": "shop_mirror_park",
+    "model": "mp_m_shopkeep_01",
+    "position": { "x": 1165.79, "y": -323.96, "z": 69.21 },
+    "heading": 89.8,
+    "distance": 50.0,
+    "settings": [
+      { "type": "invincible", "active": true },
+      { "type": "ignore", "active": true },
+      { "type": "freeze", "active": true },
+      { "type": "collision", "active": true }
+    ],
+    "flags": [{ "name": "isShopKeeper", "active": true }],
+    "scenario": "WORLD_HUMAN_HANG_OUT_STREET",
+    "blip": {
+      "title": "24/7 Winkel",
+      "sprite": 52,
+      "color": 15
+    }
+  },
+  {
+    "id": "shop_richman_glen",
+    "model": "mp_m_shopkeep_01",
+    "position": { "x": -1818.54, "y": 793.85, "z": 138.07 },
+    "heading": 110.08,
+    "distance": 50.0,
+    "settings": [
+      { "type": "invincible", "active": true },
+      { "type": "ignore", "active": true },
+      { "type": "freeze", "active": true },
+      { "type": "collision", "active": true }
+    ],
+    "flags": [{ "name": "isShopKeeper", "active": true }],
+    "scenario": "WORLD_HUMAN_HANG_OUT_STREET",
+    "blip": {
+      "title": "24/7 Winkel",
+      "sprite": 52,
+      "color": 15
+    }
+  },
+  {
+    "id": "shop_grape_seed",
+    "model": "mp_m_shopkeep_01",
+    "position": { "x": 1696.46, "y": 4922.87, "z": 42.07 },
+    "heading": 309.41,
+    "distance": 50.0,
+    "settings": [
+      { "type": "invincible", "active": true },
+      { "type": "ignore", "active": true },
+      { "type": "freeze", "active": true },
+      { "type": "collision", "active": true }
+    ],
+    "flags": [{ "name": "isShopKeeper", "active": true }],
+    "scenario": "WORLD_HUMAN_HANG_OUT_STREET",
+    "blip": {
+      "title": "24/7 Winkel",
+      "sprite": 52,
+      "color": 15
+    }
+  },
+  {
+    "id": "shop_vespucci_canals",
+    "model": "mp_m_shopkeep_01",
+    "position": { "x": -1220.24, "y": -908.08, "z": 12.33 },
+    "heading": 66.14,
+    "distance": 50.0,
+    "settings": [
+      { "type": "invincible", "active": true },
+      { "type": "ignore", "active": true },
+      { "type": "freeze", "active": true },
+      { "type": "collision", "active": true }
+    ],
+    "flags": [{ "name": "isShopKeeper", "active": true }],
+    "scenario": "WORLD_HUMAN_HANG_OUT_STREET",
+    "blip": {
+      "title": "24/7 Winkel",
+      "sprite": 52,
+      "color": 15
+    }
+  },
+  {
+    "id": "shop_grand_senora",
+    "model": "mp_m_shopkeep_01",
+    "position": { "x": 1164.3, "y": 2711.46, "z": 38.16 },
+    "heading": 210.8,
+    "distance": 50.0,
+    "settings": [
+      { "type": "invincible", "active": true },
+      { "type": "ignore", "active": true },
+      { "type": "freeze", "active": true },
+      { "type": "collision", "active": true }
+    ],
+    "flags": [{ "name": "isShopKeeper", "active": true }],
+    "scenario": "WORLD_HUMAN_HANG_OUT_STREET",
+    "blip": {
+      "title": "24/7 Winkel",
+      "sprite": 52,
+      "color": 15
+    }
+  },
+  {
+    "id": "shop_murrieta_heights",
+    "model": "mp_m_shopkeep_01",
+    "position": { "x": 1133.57, "y": -984.21, "z": 46.42 },
+    "heading": 303.17,
+    "distance": 50.0,
+    "settings": [
+      { "type": "invincible", "active": true },
+      { "type": "ignore", "active": true },
+      { "type": "freeze", "active": true },
+      { "type": "collision", "active": true }
+    ],
+    "flags": [{ "name": "isShopKeeper", "active": true }],
+    "scenario": "WORLD_HUMAN_HANG_OUT_STREET",
+    "blip": {
+      "title": "24/7 Winkel",
+      "sprite": 52,
+      "color": 15
+    }
+  },
+  {
+    "id": "shop_del_perro",
+    "model": "mp_m_shopkeep_01",
+    "position": { "x": -1486.82, "y": -376.23, "z": 40.17 },
+    "heading": 157.9,
+    "distance": 50.0,
+    "settings": [
+      { "type": "invincible", "active": true },
+      { "type": "ignore", "active": true },
+      { "type": "freeze", "active": true },
+      { "type": "collision", "active": true }
+    ],
+    "flags": [{ "name": "isShopKeeper", "active": true }],
+    "scenario": "WORLD_HUMAN_HANG_OUT_STREET",
+    "blip": {
+      "title": "24/7 Winkel",
+      "sprite": 52,
+      "color": 15
+    }
+  },
+  {
+    "id": "shop_great_ocean",
+    "model": "mp_m_shopkeep_01",
+    "position": { "x": -2965.58, "y": 392.5, "z": 15.05 },
+    "heading": 112.1,
+    "distance": 50.0,
+    "settings": [
+      { "type": "invincible", "active": true },
+      { "type": "ignore", "active": true },
+      { "type": "freeze", "active": true },
+      { "type": "collision", "active": true }
+    ],
+    "flags": [{ "name": "isShopKeeper", "active": true }],
+    "scenario": "WORLD_HUMAN_HANG_OUT_STREET",
+    "blip": {
+      "title": "24/7 Winkel",
+      "sprite": 52,
+      "color": 15
+    }
+  },
+  {
+    "id": "shop_banham_canyon",
+    "model": "mp_m_shopkeep_01",
+    "position": { "x": -3037.61, "y": 584.96, "z": 7.91 },
+    "heading": 56.22,
+    "distance": 50.0,
+    "settings": [
+      { "type": "invincible", "active": true },
+      { "type": "ignore", "active": true },
+      { "type": "freeze", "active": true },
+      { "type": "collision", "active": true }
+    ],
+    "flags": [{ "name": "isShopKeeper", "active": true }],
+    "scenario": "WORLD_HUMAN_HANG_OUT_STREET",
+    "blip": {
+      "title": "24/7 Winkel",
+      "sprite": 52,
+      "color": 15
+    }
+  },
+  {
+    "id": "shop_chumash",
+    "model": "mp_m_shopkeep_01",
+    "position": { "x": -3241.01, "y": 999.94, "z": 12.84 },
+    "heading": 23.18,
+    "distance": 50.0,
+    "settings": [
+      { "type": "invincible", "active": true },
+      { "type": "ignore", "active": true },
+      { "type": "freeze", "active": true },
+      { "type": "collision", "active": true }
+    ],
+    "flags": [{ "name": "isShopKeeper", "active": true }],
+    "scenario": "WORLD_HUMAN_HANG_OUT_STREET",
+    "blip": {
+      "title": "24/7 Winkel",
+      "sprite": 52,
+      "color": 15
+    }
+  },
+  {
+    "id": "shop_senora_freeway",
+    "model": "mp_m_shopkeep_01",
+    "position": { "x": 2679.18, "y": 3278.75, "z": 55.25 },
+    "heading": 4.78,
+    "distance": 50.0,
+    "settings": [
+      { "type": "invincible", "active": true },
+      { "type": "ignore", "active": true },
+      { "type": "freeze", "active": true },
+      { "type": "collision", "active": true }
+    ],
+    "flags": [{ "name": "isShopKeeper", "active": true }],
+    "scenario": "WORLD_HUMAN_HANG_OUT_STREET",
+    "blip": {
+      "title": "24/7 Winkel",
+      "sprite": 52,
+      "color": 15
+    }
+  },
+  {
+    "id": "shop_strawberry",
+    "model": "mp_m_shopkeep_01",
+    "position": { "x": 24.52, "y": -1348.67, "z": 29.5 },
+    "heading": 302.63,
+    "distance": 50.0,
+    "settings": [
+      { "type": "invincible", "active": true },
+      { "type": "ignore", "active": true },
+      { "type": "freeze", "active": true },
+      { "type": "collision", "active": true }
+    ],
+    "flags": [{ "name": "isShopKeeper", "active": true }],
+    "scenario": "WORLD_HUMAN_HANG_OUT_STREET",
+    "blip": {
+      "title": "24/7 Winkel",
+      "sprite": 52,
+      "color": 15
+    }
+  },
+  {
+    "id": "shop_harmony",
+    "model": "mp_m_shopkeep_01",
+    "position": { "x": 549.06, "y": 2672.4, "z": 42.16 },
+    "heading": 100.69,
+    "distance": 50.0,
+    "settings": [
+      { "type": "invincible", "active": true },
+      { "type": "ignore", "active": true },
+      { "type": "freeze", "active": true },
+      { "type": "collision", "active": true }
+    ],
+    "flags": [{ "name": "isShopKeeper", "active": true }],
+    "scenario": "WORLD_HUMAN_HANG_OUT_STREET",
+    "blip": {
+      "title": "24/7 Winkel",
+      "sprite": 52,
+      "color": 15
+    }
+  },
+  {
+    "id": "shop_vinewood",
+    "model": "mp_m_shopkeep_01",
+    "position": { "x": 372.19, "y": 325.15, "z": 103.57 },
+    "heading": 285.05,
+    "distance": 50.0,
+    "settings": [
+      { "type": "invincible", "active": true },
+      { "type": "ignore", "active": true },
+      { "type": "freeze", "active": true },
+      { "type": "collision", "active": true }
+    ],
+    "flags": [{ "name": "isShopKeeper", "active": true }],
+    "scenario": "WORLD_HUMAN_HANG_OUT_STREET",
+    "blip": {
+      "title": "24/7 Winkel",
+      "sprite": 52,
+      "color": 15
+    }
+  },
+  {
+    "id": "shop_mount_chiliad",
+    "model": "mp_m_shopkeep_01",
+    "position": { "x": 1727.24, "y": 6414.02, "z": 35.04 },
+    "heading": 247.0,
+    "distance": 50.0,
+    "settings": [
+      { "type": "invincible", "active": true },
+      { "type": "ignore", "active": true },
+      { "type": "freeze", "active": true },
+      { "type": "collision", "active": true }
+    ],
+    "flags": [{ "name": "isShopKeeper", "active": true }],
+    "scenario": "WORLD_HUMAN_HANG_OUT_STREET",
+    "blip": {
+      "title": "24/7 Winkel",
+      "sprite": 52,
+      "color": 15
+    }
+  },
+  {
+    "id": "shop_sandy_shores",
+    "model": "mp_m_shopkeep_01",
+    "position": { "x": 1960.72, "y": 3738.91, "z": 32.35 },
+    "heading": 321.33,
+    "distance": 50.0,
+    "settings": [
+      { "type": "invincible", "active": true },
+      { "type": "ignore", "active": true },
+      { "type": "freeze", "active": true },
+      { "type": "collision", "active": true }
+    ],
+    "flags": [{ "name": "isShopKeeper", "active": true }],
+    "scenario": "WORLD_HUMAN_HANG_OUT_STREET",
+    "blip": {
+      "title": "24/7 Winkel",
+      "sprite": 52,
+      "color": 15
+    }
+  },
+  {
+    "id": "shop_tataviam_mountains",
+    "model": "mp_m_shopkeep_01",
+    "position": { "x": 2558.46, "y": 380.75, "z": 108.63 },
+    "heading": 15.71,
+    "distance": 50.0,
+    "settings": [
+      { "type": "invincible", "active": true },
+      { "type": "ignore", "active": true },
+      { "type": "freeze", "active": true },
+      { "type": "collision", "active": true }
+    ],
+    "flags": [{ "name": "isShopKeeper", "active": true }],
+    "scenario": "WORLD_HUMAN_HANG_OUT_STREET",
+    "blip": {
+      "title": "24/7 Winkel",
+      "sprite": 52,
+      "color": 15
+    }
+  },
+  {
+    "id": "shop_del_vecchio",
+    "model": "mp_m_shopkeep_01",
+    "position": { "x": -160.34, "y": 6319.56, "z": 31.59 },
+    "heading": 351.96,
+    "distance": 50.0,
+    "settings": [
+      { "type": "invincible", "active": true },
+      { "type": "ignore", "active": true },
+      { "type": "freeze", "active": true },
+      { "type": "collision", "active": true }
+    ],
+    "flags": [{ "name": "isShopKeeper", "active": true }],
+    "scenario": "WORLD_HUMAN_HANG_OUT_STREET",
+    "blip": {
+      "title": "24/7 Winkel",
+      "sprite": 52,
+      "color": 15
+    }
+  },
+  {
+    "id": "shop_paleto_bay",
+    "model": "mp_m_shopkeep_01",
+    "position": { "x": 159.47, "y": 6640.67, "z": 31.7 },
+    "heading": 251.15,
+    "distance": 50.0,
+    "settings": [
+      { "type": "invincible", "active": true },
+      { "type": "ignore", "active": true },
+      { "type": "freeze", "active": true },
+      { "type": "collision", "active": true }
+    ],
+    "flags": [{ "name": "isShopKeeper", "active": true }],
+    "scenario": "WORLD_HUMAN_HANG_OUT_STREET",
+    "blip": {
+      "title": "24/7 Winkel",
+      "sprite": 52,
+      "color": 15
+    }
+  },
+  {
+    "id": "shop_hardware_city",
+    "model": "s_m_m_gaffer_01",
+    "position": { "x": 63.81, "y": -1728.92, "z": 29.65 },
+    "heading": 43.81,
+    "distance": 50.0,
+    "settings": [
+      { "type": "invincible", "active": true },
+      { "type": "ignore", "active": true },
+      { "type": "freeze", "active": true },
+      { "type": "collision", "active": true }
+    ],
+    "flags": [{ "name": "isShopKeeper", "active": true }],
+    "scenario": "WORLD_HUMAN_CLIPBOARD",
+    "blip": {
+      "title": "Hardware Winkel",
+      "sprite": 402,
+      "color": 15
+    }
   }
 ]

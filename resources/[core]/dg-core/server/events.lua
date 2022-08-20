@@ -6,7 +6,7 @@ AddEventHandler('playerDropped', function()
 		local Player = DGCore.Players[src]
 		TriggerEvent('qb-log:server:CreateLog', 'joinleave', 'Dropped', 'red', '**' .. GetPlayerName(src) .. '** (' .. Player.PlayerData.license .. ') left..')
 		Player.Functions.Save()
-		TriggerEvent('DGCore:Server:OnPlayerUnload', src)
+		TriggerEvent('DGCore:Server:OnPlayerUnload', src, Player.PlayerData.citizenid)
 		DGCore.Players[src] = nil
 	end
 end)
@@ -148,29 +148,6 @@ RegisterNetEvent('DGCore:Server:SetMetaData', function(meta, data)
 	TriggerClientEvent('hud:client:UpdateNeeds', src, Player.PlayerData.metadata['hunger'], Player.PlayerData.metadata['thirst'])
 end)
 
--- Items
-
-RegisterNetEvent('DGCore:Server:UseItem', function(item)
-	local src = source
-	if item and item.amount > 0 then
-		if DGCore.Functions.CanUseItem(item.name) then
-			DGCore.Functions.UseItem(src, item)
-		end
-	end
-end)
-
-RegisterNetEvent('DGCore:Server:RemoveItem', function(itemName, amount, slot)
-	local src = source
-	local Player = DGCore.Functions.GetPlayer(src)
-	Player.Functions.RemoveItem(itemName, amount, slot)
-end)
-
-RegisterNetEvent('DGCore:Server:AddItem', function(itemName, amount, slot, info, quality)
-	local src = source
-	local Player = DGCore.Functions.GetPlayer(src)
-	Player.Functions.AddItem(itemName, amount, slot, info, quality)
-end)
-
 -- Non-Chat Command Calling (ex: qb-adminmenu)
 
 RegisterNetEvent('DGCore:CallCommand', function(command, args)
@@ -192,73 +169,4 @@ RegisterNetEvent('DGCore:CallCommand', function(command, args)
 			end
 		end
 	end
-end)
-
--- Has Item Callback (can also use client function - DGCore.Functions.HasItem(item))
-
-DGCore.Functions.CreateCallback('DGCore:HasItem', function(source, cb, items, amount)
-	local src = source
-	local retval = false
-	local Player = DGCore.Functions.GetPlayer(src)
-	if Player then
-		if type(items) == 'table' then
-			local count = 0
-			local finalcount = 0
-			for k, v in pairs(items) do
-				if type(k) == 'string' then
-					finalcount = 0
-					for i, _ in pairs(items) do
-						if i then
-							finalcount = finalcount + 1
-						end
-					end
-					local item = Player.Functions.GetItemByName(k)
-					if item then
-						if item.amount >= v then
-							count = count + 1
-							if count == finalcount then
-								retval = true
-							end
-						end
-					end
-				else
-					finalcount = #items
-					local item = Player.Functions.GetItemByName(v)
-					if item then
-						if amount then
-							if item.amount >= amount then
-								count = count + 1
-								if count == finalcount then
-									retval = true
-								end
-							end
-						else
-							count = count + 1
-							if count == finalcount then
-								retval = true
-							end
-						end
-					end
-				end
-			end
-		else
-			local item = Player.Functions.GetItemByName(items)
-			if item then
-				if amount then
-					if item.amount >= amount then
-						retval = true
-					end
-				else
-					retval = true
-				end
-			end
-		end
-	end
-	cb(retval)
-end)
-
-DGCore.Functions.CreateCallback('DGCore:RemoveItem', function(source, cb, pItemName, pAmount, pSlot)
-    local Player = DGCore.Functions.GetPlayer(source)
-    local removed = Player.Functions.RemoveItem(pItemName, pAmount, pSlot)
-	cb(removed)
 end)

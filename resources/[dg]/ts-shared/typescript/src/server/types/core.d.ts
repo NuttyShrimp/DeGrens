@@ -188,21 +188,6 @@ interface PlayerFunctions {
   SaveInventory(source: number): void;
 
   /**
-   * Calculates the total weight of a list of items
-   */
-  GetTotalWeight(items: Item[]): number;
-
-  /**
-   * Returns an array of all of the inventory slots that currently hold a specified item
-   */
-  GetSlotsByItem(items: Item[], itemName: string): number[];
-
-  /**
-   * Returns the first slot that holds a specified item
-   */
-  GetFirstSlotByItem(items: Item[], itemName: string): number;
-
-  /**
    * Internal function, generates a new unique fingerprint for a new character
    */
   CreateFingerId(): string;
@@ -244,63 +229,6 @@ interface SelfFunctions {
    * Sets the cash in the charinfo object
    */
   setCash(cash: number): void;
-
-  /**
-   *  Adds a specified amount of a specified item to the player's inventory
-   *  Optional slot param to specify a specific inventory slot to add to
-   *  Optional info param to add metadata to the item
-   *  @returns true if the item was added, false otherwise
-   */
-  AddItem(item: string, amount: number, slot?: number, info?: any): boolean;
-
-  /**
-   * Removes a specified amount of a specified item from the player's inventory
-   * Optional slot param to specify a specific inventory slot to remove from
-   * @returns true if the item was removed, false otherwise
-   */
-  RemoveItem(item: string, amount: number, slot?: number): boolean;
-
-  /**
-   * Overwrites the player's inventory with the specified contents
-   * Refreshes the player's commands if second argument is true
-   */
-  SetInventory(items: Item[], dontUpdateChat: boolean): void;
-
-  /**
-   * Wipes the player's inventory
-   */
-  ClearInventory(): void;
-
-  /**
-   * Fetches the specified item in the player's inventory at the first matching slot
-   * @returns the item if the player has it, null otherwise
-   */
-  GetItemByName(item: string): Item | null;
-
-  /**
-   *  Fetches the specified item in the player's inventory across all slots
-   *  @returns all matching items if the player has them, null otherwise
-   */
-  GetItemsByName(item: string): Item[] | null;
-
-  /**
-   * Sets the player's card number charinfo data to the specified value
-   */
-  SetCreditCard(cardNumber: string): void;
-
-  /**
-   * Fetches the player's card and checks if the item has the metadata matching the card number
-   * @param cardNumber: The number of the card
-   * @param type: Name of the card item to find
-   * @returns inventory slot that the item is in
-   */
-  GetCardSlot(cardNumber: string, type: string): number | null;
-
-  /**
-   * Fetches the item in a specified slot
-   * @returns Item in the specified slot or null if the slot is empty
-   */
-  GetItemBySlot(slot: number): Item | null;
 
   /**
    * Saves the player to the database, shorthand for QBCore.Player.Save(self.PlayerData.source)

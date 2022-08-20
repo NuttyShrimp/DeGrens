@@ -152,12 +152,7 @@ function DGCore.Player.CheckPlayerData(src, PlayerData)
 
   -- Other
   PlayerData.LoggedIn = true
-  if PlayerData.citizenid ~= nil then
-    PlayerData = DGCore.Player.LoadInventory(PlayerData)
-  else
-    PlayerData.items = {}
-    PlayerData.oldItems = {}
-  end
+
   DGCore.Player.CreatePlayer(PlayerData)
 end
 
@@ -165,10 +160,11 @@ end
 
 function DGCore.Player.Logout(source)
   local src = source
+  local citizenid = DGCore.Functions.GetPlayer(src).PlayerData.citizenid
   TriggerClientEvent('DGCore:Client:OnPlayerUnload', src)
-  TriggerEvent('DGCore:Server:OnPlayerUnload', src)
+  TriggerEvent('DGCore:Server:OnPlayerUnload', src, citizenid)
   TriggerClientEvent('DGCore:Player:UpdatePlayerData', src)
-  Player(self.PlayerData.source).state:set('loggedIn', false)
+  Player(self.PlayerData.source).state:set('loggedIn', false, true)
   Citizen.Wait(200)
   DGCore.Players[src] = nil
 end
@@ -183,14 +179,6 @@ function DGCore.Player.CreatePlayer(PlayerData)
   self.PlayerData = PlayerData
 
   self.Functions.UpdatePlayerData = function(reSeedCmds)
-    if self.PlayerData.oldItems and type(self.PlayerData.oldItems) == 'table' and self.PlayerData.items and
-        type(self.PlayerData.items) == 'table' then
-      local invDiff = DGCore.Shared.GetTableDiff(self.PlayerData.oldItems, self.PlayerData.items)
-      if invDiff and invDiff.removed and invDiff.added and
-          (DGCore.Shared.tableLen(invDiff.removed) > 0 or DGCore.Shared.tableLen(invDiff.added) > 0) then
-        TriggerEvent('DGCore:Server:OnInventoryUpdate', self.PlayerData.source, invDiff.removed, invDiff.added)
-      end
-    end
     TriggerClientEvent('DGCore:Player:SetPlayerData', self.PlayerData.source, self.PlayerData)
     if dontUpdateChat then
       exports['dg-chat']:refreshCommands(self.PlayerData.source)
@@ -240,275 +228,6 @@ function DGCore.Player.CreatePlayer(PlayerData)
       self.PlayerData.metadata[meta] = val
       self.Functions.UpdatePlayerData()
     end
-  end
-
-  self.Functions.AddItem = function(item, amount, slot, info, quality, createtime)
-    local totalWeight = DGCore.Player.GetTotalWeight(self.PlayerData.items)
-    local itemInfo = exports["dg-inventory"]:GetItemData(item:lower())
-    if itemInfo == nil then
-      TriggerClientEvent('DGCore:Notify', self.PlayerData.source, 'Item Does Not Exist', 'error')
-      return
-    end
-
-    local amount = tonumber(amount)
-    local slot = tonumber(slot) or DGCore.Player.GetFirstSlotByItem(self.PlayerData.items, item)
-    local quality = tonumber(quality) or 100
-    self.PlayerData.oldItems = DGCore.Shared.copyTbl(self.PlayerData.items)
-
-    local createtime = tonumber(createtime) or os.time()
-
-    if not info then info = {} end
-    if itemInfo['type'] == 'weapon' and not info.serie then
-      info.serie = tostring(DGCore.Shared.RandomInt(2) ..
-        DGCore.Shared.RandomStr(3) ..
-        DGCore.Shared.RandomInt(1) ..
-        DGCore.Shared.RandomStr(2) .. DGCore.Shared.RandomInt(3) .. DGCore.Shared.RandomStr(4))
-    end
-
-    if (totalWeight + (itemInfo['weight'] * amount)) <= DGCore.Config.Player.MaxWeight then
-      if (slot and self.PlayerData.items[slot]) and (self.PlayerData.items[slot].name:lower() == item:lower()) and
-          (itemInfo['type'] == 'item' and itemInfo['stackable']) then
-        self.PlayerData.items[slot].amount = self.PlayerData.items[slot].amount + amount
-        self.Functions.UpdatePlayerData()
-        TriggerEvent('qb-log:server:CreateLog', 'playerinventory', 'AddItem', 'green',
-          '**' ..
-          GetPlayerName(self.PlayerData.source) ..
-          ' (citizenid: ' ..
-          self.PlayerData.citizenid ..
-          ' | id: ' ..
-          self.PlayerData.source ..
-          ')** got item: [slot:' ..
-          slot ..
-          '], itemname: ' ..
-          self.PlayerData.items[slot].name ..
-          ', added amount: ' .. amount .. ', new total amount: ' .. self.PlayerData.items[slot].amount)
-        return true
-      elseif (itemInfo['stackable'] and slot or slot and self.PlayerData.items[slot] == nil) then
-        self.PlayerData.items[slot] = {
-          name = itemInfo['name'],
-          label = itemInfo['label'],
-          weight = itemInfo['weight'],
-          type = itemInfo['type'],
-          stackable = itemInfo['stackable'],
-          useable = itemInfo['useable'],
-          shouldClose = itemInfo['shouldClose'],
-          combinable = itemInfo['combinable'],
-          decayrate = itemInfo["decayrate"],
-          image = itemInfo['image'],
-          description = itemInfo['description'] or '',
-          slot = slot,
-          amount = amount,
-          info = info or {},
-          quality = quality,
-          createtime = createtime,
-        }
-        self.Functions.UpdatePlayerData()
-        TriggerClientEvent("inventory:client:CheckHoldable", self.PlayerData.source, item, true)
-        TriggerEvent('qb-log:server:CreateLog', 'playerinventory', 'AddItem', 'green',
-          '**' ..
-          GetPlayerName(self.PlayerData.source) ..
-          ' (citizenid: ' ..
-          self.PlayerData.citizenid ..
-          ' | id: ' ..
-          self.PlayerData.source ..
-          ')** got item: [slot:' ..
-          slot ..
-          '], itemname: ' ..
-          self.PlayerData.items[slot].name ..
-          ', added amount: ' .. amount .. ', new total amount: ' .. self.PlayerData.items[slot].amount)
-        return true
-      elseif (not itemInfo['stackable']) or (not slot or slot == nil) or (itemInfo['type'] == 'weapon') then
-        for i = 1, QBConfig.Player.MaxInvSlots, 1 do
-          if self.PlayerData.items[i] == nil then
-            self.PlayerData.items[i] = {
-              name = itemInfo['name'],
-              label = itemInfo['label'],
-              weight = itemInfo['weight'],
-              type = itemInfo['type'],
-              stackable = itemInfo['stackable'],
-              useable = itemInfo['useable'],
-              shouldClose = itemInfo['shouldClose'],
-              combinable = itemInfo['combinable'],
-              decayrate = itemInfo["decayrate"],
-              image = itemInfo['image'],
-              description = itemInfo['description'] or '',
-              slot = i,
-              amount = amount,
-              info = info or {},
-              quality = quality,
-              createtime = createtime,
-            }
-            self.Functions.UpdatePlayerData()
-            TriggerClientEvent("inventory:client:CheckHoldable", self.PlayerData.source, item, true)
-            TriggerEvent('qb-log:server:CreateLog', 'playerinventory', 'AddItem', 'green',
-              '**' ..
-              GetPlayerName(self.PlayerData.source) ..
-              ' (citizenid: ' ..
-              self.PlayerData.citizenid ..
-              ' | id: ' ..
-              self.PlayerData.source ..
-              ')** got item: [slot:' ..
-              i ..
-              '], itemname: ' ..
-              self.PlayerData.items[i].name ..
-              ', added amount: ' .. amount .. ', new total amount: ' .. self.PlayerData.items[i].amount)
-            --TriggerClientEvent('DGCore:Notify', self.PlayerData.source, itemInfo['label'].. ' toegevoegd!', 'success')
-            return true
-          end
-        end
-      end
-    else
-      TriggerClientEvent('DGCore:Notify', self.PlayerData.source, 'Your inventory is too heavy!', 'error')
-    end
-    return false
-  end
-
-  self.Functions.RemoveItem = function(item, amount, slot)
-    local amount = tonumber(amount)
-    local slot = tonumber(slot)
-    self.PlayerData.oldItems = DGCore.Shared.copyTbl(self.PlayerData.items)
-    if slot then
-      if self.PlayerData.items[slot].amount > amount then
-        self.PlayerData.items[slot].amount = self.PlayerData.items[slot].amount - amount
-        self.Functions.UpdatePlayerData()
-        TriggerEvent('qb-log:server:CreateLog', 'playerinventory', 'RemoveItem', 'red',
-          '**' ..
-          GetPlayerName(self.PlayerData.source) ..
-          ' (citizenid: ' ..
-          self.PlayerData.citizenid ..
-          ' | id: ' ..
-          self.PlayerData.source ..
-          ')** lost item: [slot:' ..
-          slot ..
-          '], itemname: ' ..
-          self.PlayerData.items[slot].name ..
-          ', removed amount: ' .. amount .. ', new total amount: ' .. self.PlayerData.items[slot].amount)
-        return true
-      else
-        self.PlayerData.items[slot] = nil
-        self.Functions.UpdatePlayerData()
-        TriggerClientEvent("inventory:client:CheckHoldable", self.PlayerData.source, item, false)
-        TriggerClientEvent("weapons:client:RemoveWeapon", self.PlayerData.source, item)
-        TriggerEvent('qb-log:server:CreateLog', 'playerinventory', 'RemoveItem', 'red',
-          '**' ..
-          GetPlayerName(self.PlayerData.source) ..
-          ' (citizenid: ' ..
-          self.PlayerData.citizenid ..
-          ' | id: ' ..
-          self.PlayerData.source ..
-          ')** lost item: [slot:' ..
-          slot .. '], itemname: ' .. item .. ', removed amount: ' .. amount .. ', item removed')
-        return true
-      end
-    else
-      local slots = DGCore.Player.GetSlotsByItem(self.PlayerData.items, item)
-      local amountToRemove = amount
-      if slots then
-        for _, slot in pairs(slots) do
-          if self.PlayerData.items[slot].amount > amountToRemove then
-            self.PlayerData.items[slot].amount = self.PlayerData.items[slot].amount - amountToRemove
-            self.Functions.UpdatePlayerData()
-            TriggerEvent('qb-log:server:CreateLog', 'playerinventory', 'RemoveItem', 'red',
-              '**' ..
-              GetPlayerName(self.PlayerData.source) ..
-              ' (citizenid: ' ..
-              self.PlayerData.citizenid ..
-              ' | id: ' ..
-              self.PlayerData.source ..
-              ')** lost item: [slot:' ..
-              slot ..
-              '], itemname: ' ..
-              self.PlayerData.items[slot].name ..
-              ', removed amount: ' .. amount .. ', new total amount: ' .. self.PlayerData.items[slot].amount)
-            return true
-          elseif self.PlayerData.items[slot].amount == amountToRemove then
-            self.PlayerData.items[slot] = nil
-            self.Functions.UpdatePlayerData()
-            TriggerClientEvent("inventory:client:CheckHoldable", self.PlayerData.source, item, false)
-            TriggerClientEvent("weapons:client:RemoveWeapon", self.PlayerData.source, item)
-            TriggerEvent('qb-log:server:CreateLog', 'playerinventory', 'RemoveItem', 'red',
-              '**' ..
-              GetPlayerName(self.PlayerData.source) ..
-              ' (citizenid: ' ..
-              self.PlayerData.citizenid ..
-              ' | id: ' ..
-              self.PlayerData.source ..
-              ')** lost item: [slot:' ..
-              slot .. '], itemname: ' .. item .. ', removed amount: ' .. amount .. ', item removed')
-            return true
-          end
-        end
-      end
-    end
-    return false
-  end
-
-  self.Functions.SetInventory = function(items, reSeedCmds)
-    self.PlayerData.oldItems = DGCore.Shared.copyTbl(self.PlayerData.items)
-    self.PlayerData.items = items
-    self.Functions.UpdatePlayerData(reSeedCmds)
-    TriggerEvent('qb-log:server:CreateLog', 'playerinventory', 'SetInventory', 'blue',
-      '**' ..
-      GetPlayerName(self.PlayerData.source) ..
-      ' (citizenid: ' ..
-      self.PlayerData.citizenid .. ' | id: ' .. self.PlayerData.source .. ')** items set: ' .. json.encode(items))
-  end
-
-  self.Functions.ClearInventory = function()
-    self.PlayerData.oldItems = DGCore.Shared.copyTbl(self.PlayerData.items)
-    self.PlayerData.items = {}
-    self.Functions.UpdatePlayerData()
-    TriggerEvent('qb-log:server:CreateLog', 'playerinventory', 'ClearInventory', 'red',
-      '**' ..
-      GetPlayerName(self.PlayerData.source) ..
-      ' (citizenid: ' .. self.PlayerData.citizenid .. ' | id: ' .. self.PlayerData.source .. ')** inventory cleared')
-  end
-
-  self.Functions.GetItemByName = function(item)
-    local item = tostring(item):lower()
-    local slot = DGCore.Player.GetFirstSlotByItem(self.PlayerData.items, item)
-    if slot then
-      return self.PlayerData.items[slot]
-    end
-    return nil
-  end
-
-  self.Functions.GetItemsByName = function(item)
-    local item = tostring(item):lower()
-    local items = {}
-    local slots = DGCore.Player.GetSlotsByItem(self.PlayerData.items, item)
-    for _, slot in pairs(slots) do
-      if slot then
-        table.insert(items, self.PlayerData.items[slot])
-      end
-    end
-    return items
-  end
-
-  self.Functions.SetCreditCard = function(cardNumber)
-    self.PlayerData.charinfo.card = cardNumber
-    self.Functions.UpdatePlayerData()
-  end
-
-  self.Functions.GetCardSlot = function(cardNumber, cardType)
-    local item = tostring(cardType):lower()
-    local slots = DGCore.Player.GetSlotsByItem(self.PlayerData.items, item)
-    for _, slot in pairs(slots) do
-      if slot then
-        if self.PlayerData.items[slot].info.cardNumber == cardNumber then
-          return slot
-        end
-      end
-    end
-    return nil
-  end
-
-  self.Functions.GetItemBySlot = function(slot)
-    local slot = tonumber(slot)
-    if self.PlayerData.items[slot] then
-      return self.PlayerData.items[slot]
-    end
-    return nil
   end
 
   self.Functions.Save = function()
@@ -622,7 +341,6 @@ function DGCore.Player.Save(src)
     return
   end
 
-  DGCore.Player.SaveInventory(src)
   DGCore.ShowSuccess(GetCurrentResourceName(), PlayerData.name .. ' PLAYER SAVED!')
 end
 
@@ -662,127 +380,7 @@ function DGCore.Player.DeleteCharacter(source, citizenid)
   end
 end
 
--- Inventory
-
-DGCore.Player.LoadInventory = function(PlayerData)
-  PlayerData.items = {}
-  local items = exports['dg-sql']:query(
-    [[
-		SELECT slot, name, info, amount, quality, createtime
-		FROM inventoryitems
-		WHERE inventorytype = :inventorytype AND inventoryid = :inventoryid
-		]] , {
-    ["inventorytype"] = "player",
-    ["inventoryid"] = PlayerData.citizenid,
-  })
-
-  if items then
-    for _, item in pairs(items) do
-      if item then
-        local itemInfo = exports["dg-inventory"]:GetItemData(item.name:lower())
-        if itemInfo then
-          PlayerData.items[item.slot] = {
-            name = itemInfo['name'],
-            label = itemInfo['label'],
-            weight = itemInfo['weight'],
-            type = itemInfo['type'],
-            stackable = itemInfo['stackable'],
-            useable = itemInfo['useable'],
-            shouldClose = itemInfo['shouldClose'],
-            combinable = itemInfo['combinable'],
-            decayrate = itemInfo['decayrate'],
-            image = itemInfo['image'],
-            description = itemInfo['description'] or '',
-            amount = tonumber(item.amount),
-            slot = tonumber(item.slot),
-            info = json.decode(item.info) or {},
-            quality = tonumber(item.quality),
-            createtime = tonumber(item.createtime),
-          }
-        end
-      end
-    end
-  end
-  PlayerData.oldItems = DGCore.Shared.copyTbl(PlayerData.items)
-  return PlayerData
-end
-
-DGCore.Player.SaveInventory = function(src)
-  if DGCore.Players[src] then
-    local PlayerData = DGCore.Players[src].PlayerData
-    local items = PlayerData.items
-    local oldItems = PlayerData.oldItems
-    if items and oldItems then
-      local diff = DGCore.Shared.GetTableDiff(oldItems, items)
-      if DGCore.Shared.tableLen(diff.removed) == 0 and DGCore.Shared.tableLen(diff.added) == 0 then
-        return
-      end
-      exports['dg-sql']:query(
-        [[
-				DELETE FROM inventoryitems
-				WHERE inventorytype = :inventorytype AND inventoryid = :inventoryid
-				]]   , {
-        ["inventorytype"] = "player",
-        ["inventoryid"] = PlayerData.citizenid,
-      })
-
-      for slot, item in pairs(items) do
-        if items[slot] then
-          exports['dg-sql']:query(
-            [[
-						INSERT INTO inventoryitems (inventorytype, inventoryid, slot, name, info, amount, quality, createtime)
-						VALUES (:inventorytype, :inventoryid, :slot, :name, :info, :amount, :quality, :createtime)
-						]]     , {
-            ["inventorytype"] = "player",
-            ["inventoryid"] = PlayerData.citizenid,
-            ["slot"] = item.slot,
-            ["name"] = item.name,
-            ["info"] = json.encode(item.info) or {},
-            ["amount"] = item.amount,
-            ["quality"] = item.quality,
-            ["createtime"] = item.createtime,
-          })
-        end
-      end
-    end
-    DGCore.Players[src].PlayerData.oldItems = DGCore.Shared.copyTbl(PlayerData.items)
-  end
-end
-
 -- Util Functions
-
-function DGCore.Player.GetTotalWeight(items)
-  local weight = 0
-  if items then
-    for slot, item in pairs(items) do
-      weight = weight + (item.weight * item.amount)
-    end
-  end
-  return tonumber(weight)
-end
-
-function DGCore.Player.GetSlotsByItem(items, itemName)
-  local slotsFound = {}
-  if items then
-    for slot, item in pairs(items) do
-      if item.name:lower() == itemName:lower() then
-        table.insert(slotsFound, slot)
-      end
-    end
-  end
-  return slotsFound
-end
-
-function DGCore.Player.GetFirstSlotByItem(items, itemName)
-  if items then
-    for slot, item in pairs(items) do
-      if item.name:lower() == itemName:lower() then
-        return tonumber(slot)
-      end
-    end
-  end
-  return nil
-end
 
 function DGCore.Player.CreateFingerId()
   local UniqueFound = false

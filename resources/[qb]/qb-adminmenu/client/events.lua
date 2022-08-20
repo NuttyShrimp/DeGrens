@@ -20,7 +20,7 @@ local isSpectating = false
 -- Events
 
 RegisterNetEvent('qb-admin:client:inventory', function(targetPed)
-    TriggerServerEvent("inventory:server:OpenInventory", "otherplayer", targetPed)
+  print('Deprecated inventory opening method. Please update to new export')
 end)
 
 RegisterNetEvent('qb-admin:client:spectate', function(targetPed, coords)

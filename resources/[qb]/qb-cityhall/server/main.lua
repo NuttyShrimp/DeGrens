@@ -25,18 +25,9 @@ AddEventHandler('qb-cityhall:server:requestId', function(identityData)
         info.birthdate = Player.PlayerData.charinfo.birthdate
     end
 
-    Player.Functions.AddItem(identityData.item, 1, nil, info)
+    -- Player.Functions.AddItem(identityData.item, 1, nil, info)
 
-    TriggerClientEvent('inventory:client:ItemBox', src, identityData.item, 'add')
 end)
-
-
-RegisterServerEvent('qb-cityhall:server:getIDs')
-AddEventHandler('qb-cityhall:server:getIDs', function()
-    local src = source
-    GiveStarterItems(src)
-end)
-
 
 RegisterServerEvent('qb-cityhall:server:sendDriverTest')
 AddEventHandler('qb-cityhall:server:sendDriverTest', function()
@@ -112,29 +103,6 @@ end)
 --         end
 
 -- end)
-
-function GiveStarterItems(source)
-    local src = source
-    local Player = DGCore.Functions.GetPlayer(src)
-
-    for k, v in pairs(DGCore.Shared.StarterItems) do
-        local info = {}
-        if v.item == "id_card" then
-            info.citizenid = Player.PlayerData.citizenid
-            info.firstname = Player.PlayerData.charinfo.firstname
-            info.lastname = Player.PlayerData.charinfo.lastname
-            info.birthdate = Player.PlayerData.charinfo.birthdate
-            info.gender = Player.PlayerData.charinfo.gender
-            info.nationality = Player.PlayerData.charinfo.nationality
-        elseif v.item == "driver_license" then
-            info.firstname = Player.PlayerData.charinfo.firstname
-            info.lastname = Player.PlayerData.charinfo.lastname
-            info.birthdate = Player.PlayerData.charinfo.birthdate
-            info.type = "Class C Driver License"
-        end
-        Player.Functions.AddItem(v.item, 1, false, info)
-    end
-end
 
 function IsWhitelistedSchool(citizenid)
     local retval = false

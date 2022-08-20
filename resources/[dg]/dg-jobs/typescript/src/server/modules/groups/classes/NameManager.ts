@@ -1,4 +1,4 @@
-import { Util } from '@dgx/server';
+import { Inventory, Util } from '@dgx/server';
 import winston from 'winston';
 
 import { groupLogger } from '../logger';
@@ -20,9 +20,9 @@ class NameManager {
     this.logger = groupLogger.child({ module: 'NameManager' });
   }
 
-  public updatePlayerName(cid: number) {
+  public async updatePlayerName(cid: number) {
     const player = DGCore.Functions.GetPlayerByCitizenId(cid);
-    const hasVPN = player.Functions.GetItemByName('vpn');
+    const hasVPN = await Inventory.doesPlayerHaveItems(player.PlayerData.source, 'vpn');
     const name = hasVPN
       ? Util.generateName()
       : `${player.PlayerData.charinfo.firstname} ${player.PlayerData.charinfo.lastname}`;

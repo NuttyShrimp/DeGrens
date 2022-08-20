@@ -57,7 +57,6 @@ RegisterNetEvent('qb-trucker:server:nano')
 AddEventHandler('qb-trucker:server:nano', function()
     local xPlayer = DGCore.Functions.GetPlayer(tonumber(source))
 
-	xPlayer.Functions.AddItem("cryptostick", 1, false)
-	TriggerClientEvent('inventory:client:ItemBox', source, "cryptostick", "add")
+	-- xPlayer.Functions.AddItem("cryptostick", 1, false)
 end)
 

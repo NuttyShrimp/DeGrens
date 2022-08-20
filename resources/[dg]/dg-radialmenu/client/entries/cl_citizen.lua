@@ -7,7 +7,7 @@ entries.citizen = {
 		event = 'dg-phone:server:contacts:shareNumber',
 		shouldClose = true,
 		isEnabled = function()
-			return DGCore.Functions.TriggerCallback('DGCore:HasItem', 'phone')
+			return DGX.Inventory.doesPlayerHaveItem('phone')
 		end
 	},
 	{

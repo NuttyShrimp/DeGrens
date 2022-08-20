@@ -1,0 +1,118 @@
+@use 'src/styles/variables';
+
+.inventory {
+  &__wrapper {
+    height: 85vh;
+    background-color: rgba(variables.$primary_darker_darker, 0.9);
+    border-radius: 1%;
+    display: grid;
+    grid-template-columns: repeat(2, auto);
+    padding: 1.5vh;
+    gap: 2vh;
+
+    & .side {
+      position: relative;
+
+      & > div {
+        position: absolute;
+      }
+
+      & .title {
+        font-size: 2.4vh;
+      }
+
+      & .grid {
+        height: calc(100% - 3.5vh);
+        margin-top: 3.5vh;
+        overflow: auto;
+
+        & .background {
+          display: flex;
+          flex-wrap: wrap;
+
+          & > div {
+            background-color: rgba(variables.$primary_darker_dark, 0.9);
+            border: 1px solid rgba(variables.$primary_darker_normal, 0.5);
+            border-style: solid;
+            border-width: 1px;
+            aspect-ratio: 1;
+          }
+        }
+      }
+    }
+  }
+
+  &__item {
+    position: absolute;
+    border-style: solid;
+    border-width: 1px;
+
+    & .label {
+      font-size: 1.65vh;
+      margin-left: 0.4vh;
+      white-space: nowrap;
+      overflow: hidden;
+    }
+
+    & .hotkey {
+      & > div {
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        width: 0;
+        height: 0;
+        border-bottom: 3vh solid variables.$secondary_normal;
+        border-right: 3vh solid transparent;
+      }
+
+      & > p {
+        position: absolute;
+        bottom: -0.5vh;
+        left: 0.3vh;
+        font-size: 1.8vh;
+        color: variables.$primary_darker_darker;
+      }
+    }
+
+    & .image {
+      position: absolute;
+      width: inherit;
+      height: inherit;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      & > img {
+        width: inherit;
+        height: inherit;
+        object-fit: cover;
+      }
+    }
+  }
+
+  &__tooltip {
+    background-color: variables.$primary_darker;
+    max-width: 35vh;
+
+    & .label {
+      font-size: 2vh;
+    }
+
+    & .description {
+      font-size: 1.4vh;
+    }
+
+    & .data {
+      font-size: 1.2vh;
+    }
+  }
+}
+
+.text {
+  color: variables.$gray_lighter;
+  user-select: none;
+}
+
+[tabindex] {
+  outline: none !important;
+}

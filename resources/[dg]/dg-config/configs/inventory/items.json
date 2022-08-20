@@ -1,0 +1,2041 @@
+[
+  {
+    "name": "pistol_extendedclip",
+    "label": "Pistol Extended Clip",
+    "useable": true,
+    "decayrate": 1440,
+    "image": "pistol_extendedclip.png",
+    "size": {
+      "x": 2,
+      "y": 2
+    },
+    "markedForSeizure": true
+  },
+  {
+    "name": "smg_extendedclip",
+    "label": "SMG Extended Clip",
+    "useable": true,
+    "decayrate": 1440,
+    "image": "pistol_extendedclip.png",
+    "size": {
+      "x": 2,
+      "y": 2
+    },
+    "markedForSeizure": true
+  },
+  {
+    "name": "shotgun_extendedclip",
+    "label": "Shotgun Extended Clip",
+    "useable": true,
+    "decayrate": 1440,
+    "image": "pistol_extendedclip.png",
+    "size": {
+      "x": 2,
+      "y": 2
+    },
+    "markedForSeizure": true
+  },
+  {
+    "name": "rifle_extendedclip",
+    "label": "Rifle Extended Clip",
+    "useable": true,
+    "decayrate": 1440,
+    "image": "pistol_extendedclip.png",
+    "size": {
+      "x": 2,
+      "y": 2
+    },
+    "markedForSeizure": true
+  },
+  {
+    "name": "mg_extendedclip",
+    "label": "Machinegun Extended Clip",
+    "useable": true,
+    "decayrate": 1440,
+    "image": "pistol_extendedclip.png",
+    "size": {
+      "x": 2,
+      "y": 2
+    },
+    "markedForSeizure": true
+  },
+  {
+    "name": "sniper_extendedclip",
+    "label": "Sniper Extended Clip",
+    "useable": true,
+    "decayrate": 1440,
+    "image": "pistol_extendedclip.png",
+    "size": {
+      "x": 2,
+      "y": 2
+    },
+    "markedForSeizure": true
+  },
+  {
+    "name": "luxuryfinish",
+    "label": "Luxury Finish",
+    "useable": true,
+    "decayrate": 1440,
+    "image": "pistol_extendedclip.png",
+    "size": {
+      "x": 2,
+      "y": 2
+    },
+    "markedForSeizure": true
+  },
+  {
+    "name": "flashlight",
+    "label": "Wapen Flashlight",
+    "useable": true,
+    "decayrate": 1440,
+    "image": "pistol_flashlight.png",
+    "size": {
+      "x": 2,
+      "y": 2
+    },
+    "markedForSeizure": true
+  },
+  {
+    "name": "pistol_suppressor",
+    "label": "Pistol Suppressor",
+    "useable": true,
+    "decayrate": 1440,
+    "image": "pistol_suppressor.png",
+    "size": {
+      "x": 2,
+      "y": 2
+    },
+    "markedForSeizure": true
+  },
+  {
+    "name": "smg_suppressor",
+    "label": "SMG Suppressor",
+    "useable": true,
+    "decayrate": 1440,
+    "image": "pistol_suppressor.png",
+    "size": {
+      "x": 2,
+      "y": 2
+    },
+    "markedForSeizure": true
+  },
+  {
+    "name": "shotgun_suppressor",
+    "label": "Shotgun Suppressor",
+    "useable": true,
+    "decayrate": 1440,
+    "image": "pistol_suppressor.png",
+    "size": {
+      "x": 2,
+      "y": 2
+    },
+    "markedForSeizure": true
+  },
+  {
+    "name": "rifle_suppressor",
+    "label": "Rifle Suppressor",
+    "useable": true,
+    "decayrate": 1440,
+    "image": "pistol_suppressor.png",
+    "size": {
+      "x": 2,
+      "y": 2
+    },
+    "markedForSeizure": true
+  },
+  {
+    "name": "sniper_suppressor",
+    "label": "Sniper Suppressor",
+    "useable": true,
+    "decayrate": 1440,
+    "image": "pistol_suppressor.png",
+    "size": {
+      "x": 2,
+      "y": 2
+    },
+    "markedForSeizure": true
+  },
+  {
+    "name": "pistol_scope",
+    "label": "Pistool Scope",
+    "useable": true,
+    "decayrate": 1440,
+    "image": "smg_scope.png",
+    "size": {
+      "x": 2,
+      "y": 2
+    },
+    "markedForSeizure": true
+  },
+  {
+    "name": "smg_scope",
+    "label": "SMG Scope",
+    "useable": true,
+    "decayrate": 1440,
+    "image": "smg_scope.png",
+    "size": {
+      "x": 2,
+      "y": 2
+    },
+    "markedForSeizure": true
+  },
+  {
+    "name": "rifle_scope",
+    "label": "Rifle Scope",
+    "useable": true,
+    "decayrate": 1440,
+    "image": "smg_scope.png",
+    "size": {
+      "x": 2,
+      "y": 2
+    },
+    "markedForSeizure": true
+  },
+  {
+    "name": "sniper_scope",
+    "label": "Sniper Scope",
+    "useable": true,
+    "decayrate": 1440,
+    "image": "smg_scope.png",
+    "size": {
+      "x": 2,
+      "y": 2
+    },
+    "markedForSeizure": true
+  },
+  {
+    "name": "smg_drum",
+    "label": "SMG Drummag",
+    "useable": true,
+    "decayrate": 1440,
+    "image": "rifle_drummag.png",
+    "size": {
+      "x": 2,
+      "y": 2
+    },
+    "markedForSeizure": true
+  },
+  {
+    "name": "shotgun_drum",
+    "label": "Shotgun Drummag",
+    "useable": true,
+    "decayrate": 1440,
+    "image": "rifle_drummag.png",
+    "size": {
+      "x": 2,
+      "y": 2
+    },
+    "markedForSeizure": true
+  },
+  {
+    "name": "rifle_drum",
+    "label": "Rifle Drummag",
+    "useable": true,
+    "decayrate": 1440,
+    "image": "rifle_drummag.png",
+    "size": {
+      "x": 2,
+      "y": 2
+    },
+    "markedForSeizure": true
+  },
+  {
+    "name": "money_roll",
+    "label": "Geldrolletje",
+    "image": "money_roll.png",
+    "description": "Een rolletje met briefjes",
+    "size": {
+      "x": 2,
+      "y": 2
+    },
+    "markedForSeizure": true
+  },
+  {
+    "name": "markedbills",
+    "label": "Zak geld",
+    "image": "markedbills.png",
+    "description": "Een zak vol briefjes",
+    "size": {
+      "x": 2,
+      "y": 2
+    },
+    "markedForSeizure": true
+  },
+  {
+    "name": "inkedbills",
+    "label": "Zak geinkt geld",
+    "image": "markedbills.png",
+    "description": "Een zak vol geinkte briefjes",
+    "size": {
+      "x": 2,
+      "y": 2
+    },
+    "markedForSeizure": true
+  },
+  {
+    "name": "lockpick",
+    "label": "Lockpick",
+    "useable": true,
+    "image": "lockpick.png",
+    "description": "Voor als je de sleutels kwijt bent",
+    "size": {
+      "x": 2,
+      "y": 2
+    },
+    "markedForSeizure": true
+  },
+  {
+    "name": "decoding_tool",
+    "label": "Decoding Tool",
+    "useable": true,
+    "decayrate": 4320,
+    "image": "decoding_tool.png",
+    "description": "Hiermee kan je geavanceerde sloten decoderen",
+    "size": {
+      "x": 2,
+      "y": 2
+    },
+    "markedForSeizure": true
+  },
+  {
+    "name": "drive_v1",
+    "label": "v1.0 Drive",
+    "decayrate": 4320,
+    "image": "drive_v1.png",
+    "description": "Drive met V1.0 software op",
+    "size": {
+      "x": 2,
+      "y": 2
+    },
+    "markedForSeizure": true
+  },
+  {
+    "name": "drive_v2",
+    "label": "v2.0 Drive",
+    "decayrate": 4320,
+    "image": "drive_v2.png",
+    "description": "Drive met V2.0 software op",
+    "size": {
+      "x": 2,
+      "y": 2
+    },
+    "markedForSeizure": true
+  },
+  {
+    "name": "drive_v3",
+    "label": "v3.0 Drive",
+    "decayrate": 4320,
+    "image": "drive_v3.png",
+    "description": "Drive met V3.0 software op",
+    "size": {
+      "x": 2,
+      "y": 2
+    },
+    "markedForSeizure": true
+  },
+  {
+    "name": "drive_v5",
+    "label": "v5.0 Drive",
+    "decayrate": 4320,
+    "image": "drive_v5.png",
+    "description": "Drive met V5.0 software op",
+    "size": {
+      "x": 2,
+      "y": 2
+    },
+    "markedForSeizure": true
+  },
+  {
+    "name": "drive_v10",
+    "label": "v10.0 Drive",
+    "decayrate": 4320,
+    "image": "drive_v10.png",
+    "description": "Drive met V10.0 software op",
+    "size": {
+      "x": 2,
+      "y": 2
+    },
+    "markedForSeizure": true
+  },
+  {
+    "name": "phone",
+    "label": "Phone",
+    "image": "phone.png",
+    "size": {
+      "x": 2,
+      "y": 2
+    }
+  },
+  {
+    "markedForSeizure": true,
+    "useable": true,
+    "name": "weapon_advancedrifle",
+    "label": "Advanced Rifle",
+    "image": "weapon_advancedrifle.png",
+    "description": "An assault version of a rapid-fire, magazine-fed automatic rifle designed for infantry use",
+    "size": {
+      "x": 3,
+      "y": 3
+    }
+  },
+  {
+    "markedForSeizure": true,
+    "useable": true,
+    "name": "weapon_appistol",
+    "label": "AP Pistol",
+    "image": "weapon_appistol.png",
+    "description": "A small firearm designed to be held in one hand that is automatic",
+    "size": {
+      "x": 3,
+      "y": 3
+    }
+  },
+  {
+    "markedForSeizure": true,
+    "useable": true,
+    "name": "weapon_assaultrifle",
+    "label": "Assault Rifle",
+    "image": "weapon_assaultrifle.png",
+    "description": "A rapid-fire, magazine-fed automatic rifle designed for infantry use",
+    "size": {
+      "x": 3,
+      "y": 3
+    }
+  },
+  {
+    "markedForSeizure": true,
+    "useable": true,
+    "name": "weapon_assaultrifle_mk2",
+    "label": "AK-47 MK2",
+    "image": "assaultriflemk2.png",
+    "description": "Assault Rifle MK2",
+    "size": {
+      "x": 3,
+      "y": 3
+    }
+  },
+  {
+    "markedForSeizure": true,
+    "useable": true,
+    "name": "weapon_assaultshotgun",
+    "label": "Assault Shotgun",
+    "image": "weapon_assaultshotgun.png",
+    "description": "An assault version of asmoothbore gun for firing small shot at short range",
+    "size": {
+      "x": 3,
+      "y": 3
+    }
+  },
+  {
+    "markedForSeizure": true,
+    "useable": true,
+    "name": "weapon_assaultsmg",
+    "label": "Assault SMG",
+    "image": "weapon_assaultsmg.png",
+    "description": "An assault version of a handheld lightweight machine gun",
+    "size": {
+      "x": 3,
+      "y": 3
+    }
+  },
+  {
+    "markedForSeizure": true,
+    "useable": true,
+    "name": "weapon_autoshotgun",
+    "label": "Auto Shotgun",
+    "image": "weapon_autoshotgun.png",
+    "description": "A shotgun capable of rapid continous fire",
+    "size": {
+      "x": 3,
+      "y": 3
+    }
+  },
+  {
+    "useable": true,
+    "name": "weapon_ball",
+    "label": "Ball",
+    "image": "weapon_ball.png",
+    "description": "A solid or hollow spherical or egg-shaped object that is kicked, thrown, or hit in a game",
+    "size": {
+      "x": 3,
+      "y": 3
+    }
+  },
+  {
+    "useable": true,
+    "name": "weapon_bat",
+    "label": "Bat",
+    "image": "weapon_bat.png",
+    "description": "Used for hitting a ball in sports (or other things)",
+    "size": {
+      "x": 3,
+      "y": 3
+    }
+  },
+  {
+    "markedForSeizure": true,
+    "useable": true,
+    "name": "weapon_battleaxe",
+    "label": "Battle Axe",
+    "image": "weapon_battleaxe.png",
+    "description": "A large broad-bladed axe used in ancient warfare",
+    "size": {
+      "x": 3,
+      "y": 3
+    }
+  },
+  {
+    "useable": true,
+    "name": "weapon_bottle",
+    "label": "Broken Bottle",
+    "image": "weapon_bottle.png",
+    "description": "A broken bottle",
+    "size": {
+      "x": 3,
+      "y": 3
+    }
+  },
+  {
+    "useable": true,
+    "name": "weapon_bread",
+    "label": "Baquette",
+    "image": "baquette.png",
+    "description": "Bread...?",
+    "size": {
+      "x": 3,
+      "y": 3
+    }
+  },
+  {
+    "useable": true,
+    "name": "weapon_briefcase",
+    "label": "Briefcase",
+    "image": "weapon_briefcase.png",
+    "description": "A briefcase for storing important documents",
+    "size": {
+      "x": 3,
+      "y": 3
+    }
+  },
+  {
+    "useable": true,
+    "name": "weapon_briefcase_02",
+    "label": "Suitcase",
+    "image": "weapon_briefcase2.png",
+    "description": "Wonderfull for nice vacation to Liberty City",
+    "size": {
+      "x": 3,
+      "y": 3
+    }
+  },
+  {
+    "markedForSeizure": true,
+    "useable": true,
+    "name": "weapon_bullpuprifle",
+    "label": "Bullpup Rifle",
+    "image": "weapon_bullpuprifle.png",
+    "description": "A compact automatic assault rifle",
+    "size": {
+      "x": 3,
+      "y": 3
+    }
+  },
+  {
+    "markedForSeizure": true,
+    "useable": true,
+    "name": "weapon_bullpuprifle_mk2",
+    "label": "Bull Puprifle MK2",
+    "image": "bullpuprifle_mk2.png",
+    "description": "Bull Puprifle MK2",
+    "size": {
+      "x": 3,
+      "y": 3
+    }
+  },
+  {
+    "markedForSeizure": true,
+    "useable": true,
+    "name": "weapon_bullpupshotgun",
+    "label": "Bullpup Shotgun",
+    "image": "weapon_bullpupshotgun.png",
+    "description": "A compact smoothbore gun for firing small shot at short range",
+    "size": {
+      "x": 3,
+      "y": 3
+    }
+  },
+  {
+    "markedForSeizure": true,
+    "useable": true,
+    "name": "weapon_bzgas",
+    "label": "BZ Gas",
+    "image": "weapon_bzgas.png",
+    "description": "A cannister of gas that causes extreme pain",
+    "size": {
+      "x": 3,
+      "y": 3
+    }
+  },
+  {
+    "markedForSeizure": true,
+    "useable": true,
+    "name": "weapon_carbinerifle",
+    "label": "Carbine Rifle",
+    "image": "weapon_carbinerifle.png",
+    "description": "A lightweight automatic rifle",
+    "size": {
+      "x": 3,
+      "y": 3
+    }
+  },
+  {
+    "markedForSeizure": true,
+    "useable": true,
+    "name": "weapon_carbinerifle_mk2",
+    "label": "PD 762",
+    "image": "carbineriflemk2.png",
+    "description": "Carbine Rifle MK2",
+    "size": {
+      "x": 3,
+      "y": 3
+    }
+  },
+  {
+    "markedForSeizure": true,
+    "useable": true,
+    "name": "weapon_ceramicpistol",
+    "label": "Weapon Ceramicpistol",
+    "image": "weapon_ceramicpistol.png",
+    "description": "Weapon Ceramicpistol",
+    "size": {
+      "x": 3,
+      "y": 3
+    }
+  },
+  {
+    "markedForSeizure": true,
+    "useable": true,
+    "name": "weapon_combatmg",
+    "label": "Combat MG",
+    "image": "weapon_combatmg.png",
+    "description": "A combat version of an automatic gun that fires bullets in rapid succession for as long as the trigger is pressed",
+    "size": {
+      "x": 3,
+      "y": 3
+    }
+  },
+  {
+    "markedForSeizure": true,
+    "useable": true,
+    "name": "weapon_combatmg_mk2",
+    "label": "Weapon Combatmg MK2",
+    "image": "combatmg_mk2.png",
+    "description": "Weapon Combatmg MK2",
+    "size": {
+      "x": 3,
+      "y": 3
+    }
+  },
+  {
+    "markedForSeizure": true,
+    "useable": true,
+    "name": "weapon_combatpdw",
+    "label": "Combat PDW",
+    "image": "weapon_combatpdw.png",
+    "description": "A combat version of a handheld lightweight machine gun",
+    "size": {
+      "x": 3,
+      "y": 3
+    }
+  },
+  {
+    "markedForSeizure": true,
+    "useable": true,
+    "name": "weapon_combatpistol",
+    "label": "Combat Pistol",
+    "image": "weapon_combatpistol.png",
+    "description": "A combat version small firearm designed to be held in one hand",
+    "size": {
+      "x": 3,
+      "y": 3
+    }
+  },
+  {
+    "markedForSeizure": true,
+    "useable": true,
+    "name": "weapon_combatshotgun",
+    "label": "Weapon Combatshotgun",
+    "image": "combatshotgun.png",
+    "description": "Weapon Combatshotgun",
+    "size": {
+      "x": 3,
+      "y": 3
+    }
+  },
+  {
+    "markedForSeizure": true,
+    "useable": true,
+    "name": "weapon_compactlauncher",
+    "label": "Compact Launcher",
+    "image": "weapon_compactlauncher.png",
+    "description": "A compact grenade launcher",
+    "size": {
+      "x": 3,
+      "y": 3
+    }
+  },
+  {
+    "markedForSeizure": true,
+    "useable": true,
+    "name": "weapon_compactrifle",
+    "label": "Compact Rifle",
+    "image": "weapon_compactrifle.png",
+    "description": "A compact version of an assault rifle",
+    "size": {
+      "x": 3,
+      "y": 3
+    }
+  },
+  {
+    "markedForSeizure": true,
+    "useable": true,
+    "name": "weapon_crowbar",
+    "label": "Crowbar",
+    "image": "weapon_crowbar.png",
+    "description": "An iron bar with a flattened end, used as a lever",
+    "size": {
+      "x": 3,
+      "y": 3
+    }
+  },
+  {
+    "markedForSeizure": true,
+    "useable": true,
+    "name": "weapon_dagger",
+    "label": "Dagger",
+    "image": "weapon_dagger.png",
+    "description": "A short knife with a pointed and edged blade, used as a weapon",
+    "size": {
+      "x": 3,
+      "y": 3
+    }
+  },
+  {
+    "markedForSeizure": true,
+    "useable": true,
+    "name": "weapon_dbshotgun",
+    "label": "Double-barrel Shotgun",
+    "image": "weapon_dbshotgun.png",
+    "description": "A shotgun with two parallel barrels, allowing two single shots to be fired in quick succession",
+    "size": {
+      "x": 3,
+      "y": 3
+    }
+  },
+  {
+    "markedForSeizure": true,
+    "useable": true,
+    "name": "weapon_doubleaction",
+    "label": "Double Action Revolver",
+    "image": "doubleaction.png",
+    "description": "Double Action Revolver",
+    "size": {
+      "x": 3,
+      "y": 3
+    }
+  },
+  {
+    "useable": true,
+    "name": "weapon_fireextinguisher",
+    "label": "Fire Extinguisher",
+    "image": "weapon_fireextinguisher.png",
+    "description": "A portable device that discharges a jet of water, foam, gas, or other material to extinguish a fire",
+    "size": {
+      "x": 3,
+      "y": 3
+    }
+  },
+  {
+    "markedForSeizure": true,
+    "useable": true,
+    "name": "weapon_firework",
+    "label": "Firework Launcher",
+    "image": "weapon_firework.png",
+    "description": "A device containing gunpowder and other combustible chemicals that causes a spectacular explosion when ignited",
+    "size": {
+      "x": 3,
+      "y": 3
+    }
+  },
+  {
+    "markedForSeizure": true,
+    "useable": true,
+    "name": "weapon_flare",
+    "label": "Flare",
+    "image": "weapon_flare.png",
+    "description": "A small pyrotechnic devices used for illumination and signalling",
+    "size": {
+      "x": 3,
+      "y": 3
+    }
+  },
+  {
+    "markedForSeizure": true,
+    "useable": true,
+    "name": "weapon_flaregun",
+    "label": "Flare Gun",
+    "image": "weapon_flaregun.png",
+    "description": "A handgun for firing signal rockets",
+    "size": {
+      "x": 3,
+      "y": 3
+    }
+  },
+  {
+    "markedForSeizure": true,
+    "useable": true,
+    "name": "weapon_flashlight",
+    "label": "Flashlight",
+    "image": "weapon_flashlight.png",
+    "description": "A battery-operated portable light",
+    "size": {
+      "x": 3,
+      "y": 3
+    }
+  },
+  {
+    "markedForSeizure": true,
+    "useable": true,
+    "name": "weapon_golfclub",
+    "label": "Golfclub",
+    "image": "weapon_golfclub.png",
+    "description": "A club used to hit the ball in golf",
+    "size": {
+      "x": 3,
+      "y": 3
+    }
+  },
+  {
+    "markedForSeizure": true,
+    "useable": true,
+    "name": "weapon_grenade",
+    "label": "Grenade",
+    "image": "weapon_grenade.png",
+    "description": "A handheld throwable bomb",
+    "size": {
+      "x": 3,
+      "y": 3
+    }
+  },
+  {
+    "markedForSeizure": true,
+    "useable": true,
+    "name": "weapon_grenadelauncher",
+    "label": "Grenade Launcher",
+    "image": "weapon_grenadelauncher.png",
+    "description": "A weapon that fires a specially-designed large-caliber projectile, often with an explosive, smoke or gas warhead",
+    "size": {
+      "x": 3,
+      "y": 3
+    }
+  },
+  {
+    "markedForSeizure": true,
+    "useable": true,
+    "name": "weapon_grenadelauncher_smoke",
+    "label": "Smoke Grenade Launcher",
+    "image": "weapon_smokegrenade.png",
+    "description": "A bomb that produces a lot of smoke when it explodes",
+    "size": {
+      "x": 3,
+      "y": 3
+    }
+  },
+  {
+    "markedForSeizure": true,
+    "useable": true,
+    "name": "weapon_gusenberg",
+    "label": "Thompson SMG",
+    "image": "weapon_gusenberg.png",
+    "description": "An automatic rifle commonly referred to as a tommy gun",
+    "size": {
+      "x": 3,
+      "y": 3
+    }
+  },
+  {
+    "useable": true,
+    "name": "weapon_hammer",
+    "label": "Hammer",
+    "image": "weapon_hammer.png",
+    "description": "Used for jobs such as breaking things (legs) and driving in nails",
+    "size": {
+      "x": 3,
+      "y": 3
+    }
+  },
+  {
+    "markedForSeizure": true,
+    "useable": true,
+    "name": "weapon_hatchet",
+    "label": "Hatchet",
+    "image": "weapon_hatchet.png",
+    "description": "A small axe with a short handle for use in one hand",
+    "size": {
+      "x": 3,
+      "y": 3
+    }
+  },
+  {
+    "markedForSeizure": true,
+    "useable": true,
+    "name": "weapon_hazardcan",
+    "label": "Weapon Hazardcan",
+    "image": "weapon_hazardcan.png",
+    "description": "Weapon Hazardcan",
+    "size": {
+      "x": 3,
+      "y": 3
+    }
+  },
+  {
+    "markedForSeizure": true,
+    "useable": true,
+    "name": "weapon_heavypistol",
+    "label": "Heavy Pistol",
+    "image": "weapon_heavypistol.png",
+    "description": "A hefty firearm designed to be held in one hand (or attempted)",
+    "size": {
+      "x": 3,
+      "y": 3
+    }
+  },
+  {
+    "markedForSeizure": true,
+    "useable": true,
+    "name": "weapon_heavyshotgun",
+    "label": "Heavy Shotgun",
+    "image": "weapon_heavyshotgun.png",
+    "description": "A large smoothbore gun for firing small shot at short range",
+    "size": {
+      "x": 3,
+      "y": 3
+    }
+  },
+  {
+    "markedForSeizure": true,
+    "useable": true,
+    "name": "weapon_heavysniper",
+    "label": "Heavy Sniper",
+    "image": "weapon_heavysniper.png",
+    "description": "An upgraded high-precision, long-range rifle",
+    "size": {
+      "x": 3,
+      "y": 3
+    }
+  },
+  {
+    "markedForSeizure": true,
+    "useable": true,
+    "name": "weapon_heavysniper_mk2",
+    "label": "Weapon Heavysniper MK2",
+    "image": "heavysniper_mk2.png",
+    "description": "Weapon Heavysniper MK2",
+    "size": {
+      "x": 3,
+      "y": 3
+    }
+  },
+  {
+    "markedForSeizure": true,
+    "useable": true,
+    "name": "weapon_hominglauncher",
+    "label": "Homing Launcher",
+    "image": "weapon_hominglauncher.png",
+    "description": "A weapon fitted with an electronic device that enables it to find and hit a target",
+    "size": {
+      "x": 3,
+      "y": 3
+    }
+  },
+  {
+    "markedForSeizure": true,
+    "useable": true,
+    "name": "weapon_knife",
+    "label": "Knife",
+    "image": "weapon_knife.png",
+    "description": "An instrument composed of a blade fixed into a handle, used for cutting or as a weapon",
+    "size": {
+      "x": 3,
+      "y": 3
+    }
+  },
+  {
+    "markedForSeizure": true,
+    "useable": true,
+    "name": "weapon_knuckle",
+    "label": "Knuckle",
+    "image": "weapon_knuckle.png",
+    "description": "A metal guard worn over the knuckles in fighting, especially to increase the effect of the blows",
+    "size": {
+      "x": 3,
+      "y": 3
+    }
+  },
+  {
+    "markedForSeizure": true,
+    "useable": true,
+    "name": "weapon_machete",
+    "label": "Machete",
+    "image": "weapon_machete.png",
+    "description": "A broad, heavy knife used as a weapon",
+    "size": {
+      "x": 3,
+      "y": 3
+    }
+  },
+  {
+    "markedForSeizure": true,
+    "useable": true,
+    "name": "weapon_machinepistol",
+    "label": "Tec-9",
+    "image": "weapon_machinepistol.png",
+    "description": "A self-loading pistol capable of burst or fully automatic fire",
+    "size": {
+      "x": 3,
+      "y": 3
+    }
+  },
+  {
+    "markedForSeizure": true,
+    "useable": true,
+    "name": "weapon_marksmanrifle",
+    "label": "Marksman Rifle",
+    "image": "weapon_marksmanrifle.png",
+    "description": "A very accurate single-fire rifle",
+    "size": {
+      "x": 3,
+      "y": 3
+    }
+  },
+  {
+    "markedForSeizure": true,
+    "useable": true,
+    "name": "weapon_marksmanrifle_mk2",
+    "label": "Weapon Marksmanrifle MK2",
+    "image": "marksmanrifle_mk2.png",
+    "description": "Weapon Marksmanrifle MK2",
+    "size": {
+      "x": 3,
+      "y": 3
+    }
+  },
+  {
+    "markedForSeizure": true,
+    "useable": true,
+    "name": "weapon_mg",
+    "label": "Machinegun",
+    "image": "weapon_mg.png",
+    "description": "An automatic gun that fires bullets in rapid succession for as long as the trigger is pressed",
+    "size": {
+      "x": 3,
+      "y": 3
+    }
+  },
+  {
+    "markedForSeizure": true,
+    "useable": true,
+    "name": "weapon_microsmg",
+    "label": "Micro SMG",
+    "image": "weapon_microsmg.png",
+    "description": "A handheld lightweight machine gun",
+    "size": {
+      "x": 3,
+      "y": 3
+    }
+  },
+  {
+    "markedForSeizure": true,
+    "useable": true,
+    "name": "weapon_militaryrifle",
+    "label": "Weapon Militaryrifle",
+    "image": "militaryrifle.png",
+    "description": "Weapon Militaryrifle",
+    "size": {
+      "x": 3,
+      "y": 3
+    }
+  },
+  {
+    "markedForSeizure": true,
+    "useable": true,
+    "name": "weapon_minigun",
+    "label": "Minigun",
+    "image": "weapon_minigun.png",
+    "description": "A portable machine gun consisting of a rotating cluster of six barrels and capable of variable rates of fire of up to 6,000 rounds per minute",
+    "size": {
+      "x": 3,
+      "y": 3
+    }
+  },
+  {
+    "markedForSeizure": true,
+    "useable": true,
+    "name": "weapon_minismg",
+    "label": "Mini SMG",
+    "image": "weapon_minismg.png",
+    "description": "A mini handheld lightweight machine gun",
+    "size": {
+      "x": 3,
+      "y": 3
+    }
+  },
+  {
+    "markedForSeizure": true,
+    "useable": true,
+    "name": "weapon_molotov",
+    "label": "Molotov",
+    "image": "weapon_molotov.png",
+    "description": "A crude bomb made of a bottle filled with a flammable liquid and fitted with a wick for lighting",
+    "size": {
+      "x": 3,
+      "y": 3
+    }
+  },
+  {
+    "markedForSeizure": true,
+    "useable": true,
+    "name": "weapon_musket",
+    "label": "Musket",
+    "image": "weapon_musket.png",
+    "description": "An infantryman\"s light gun with a long barrel, typically smooth-bored, muzzleloading, and fired from the shoulder",
+    "size": {
+      "x": 3,
+      "y": 3
+    }
+  },
+  {
+    "markedForSeizure": true,
+    "useable": true,
+    "name": "weapon_navyrevolver",
+    "label": "Weapon Navyrevolver",
+    "image": "weapon_navyrevolver.png",
+    "description": "Weapon Navyrevolver",
+    "size": {
+      "x": 3,
+      "y": 3
+    }
+  },
+  {
+    "useable": true,
+    "name": "weapon_nightstick",
+    "label": "Nightstick",
+    "image": "weapon_nightstick.png",
+    "description": "A police officer\"s club or billy",
+    "size": {
+      "x": 3,
+      "y": 3
+    }
+  },
+  {
+    "useable": true,
+    "name": "weapon_petrolcan",
+    "label": "Petrol Can",
+    "image": "weapon_petrolcan.png",
+    "description": "A robust liquid container made from pressed steel",
+    "size": {
+      "x": 3,
+      "y": 3
+    }
+  },
+  {
+    "markedForSeizure": true,
+    "useable": true,
+    "name": "weapon_pipebomb",
+    "label": "Pipe Bomb",
+    "image": "weapon_pipebomb.png",
+    "description": "A homemade bomb, the components of which are contained in a pipe",
+    "size": {
+      "x": 3,
+      "y": 3
+    }
+  },
+  {
+    "markedForSeizure": true,
+    "useable": true,
+    "name": "weapon_pistol",
+    "label": "Walther P99",
+    "image": "weapon_pistol.png",
+    "description": "A small firearm designed to be held in one hand",
+    "size": {
+      "x": 3,
+      "y": 3
+    }
+  },
+  {
+    "markedForSeizure": true,
+    "useable": true,
+    "name": "weapon_pistol50",
+    "label": "Pistol .50 Cal",
+    "image": "weapon_pistol50.png",
+    "description": "A .50 caliber firearm designed to be held with both hands",
+    "size": {
+      "x": 3,
+      "y": 3
+    }
+  },
+  {
+    "markedForSeizure": true,
+    "useable": true,
+    "name": "weapon_pistol_mk2",
+    "label": "Pistol Mk II",
+    "image": "weapon_pistol_mk2.png",
+    "description": "An upgraded small firearm designed to be held in one hand",
+    "size": {
+      "x": 3,
+      "y": 3
+    }
+  },
+  {
+    "useable": true,
+    "name": "weapon_poolcue",
+    "label": "Poolcue",
+    "image": "weapon_poolcue.png",
+    "description": "A stick used to strike a ball, usually the cue ball (or other things)",
+    "size": {
+      "x": 3,
+      "y": 3
+    }
+  },
+  {
+    "markedForSeizure": true,
+    "useable": true,
+    "name": "weapon_proxmine",
+    "label": "Proxmine Grenade",
+    "image": "weapon_proximitymine.png",
+    "description": "A bomb placed on the ground that detonates when going within its proximity",
+    "size": {
+      "x": 3,
+      "y": 3
+    }
+  },
+  {
+    "markedForSeizure": true,
+    "useable": true,
+    "name": "weapon_pumpshotgun",
+    "label": "Pump Shotgun",
+    "image": "weapon_pumpshotgun.png",
+    "description": "A pump-action smoothbore gun for firing small shot at short range",
+    "size": {
+      "x": 3,
+      "y": 3
+    }
+  },
+  {
+    "markedForSeizure": true,
+    "useable": true,
+    "name": "weapon_pumpshotgun_mk2",
+    "label": "Pumpshotgun MK2",
+    "image": "pumpshotgun_mk2.png",
+    "description": "Pumpshotgun MK2",
+    "size": {
+      "x": 3,
+      "y": 3
+    }
+  },
+  {
+    "markedForSeizure": true,
+    "useable": true,
+    "name": "weapon_railgun",
+    "label": "Railgun",
+    "image": "weapon_railgun.png",
+    "description": "A weapon that uses electromagnetic force to launch high velocity projectiles",
+    "size": {
+      "x": 3,
+      "y": 3
+    }
+  },
+  {
+    "markedForSeizure": true,
+    "useable": true,
+    "name": "weapon_raycarbine",
+    "label": "Weapon Raycarbine",
+    "image": "weapon_raycarbine.png",
+    "description": "Weapon Raycarbine",
+    "size": {
+      "x": 3,
+      "y": 3
+    }
+  },
+  {
+    "markedForSeizure": true,
+    "useable": true,
+    "name": "weapon_rayminigun",
+    "label": "Weapon Rayminigun",
+    "image": "weapon_rayminigun.png",
+    "description": "Weapon Rayminigun",
+    "size": {
+      "x": 3,
+      "y": 3
+    }
+  },
+  {
+    "markedForSeizure": true,
+    "useable": true,
+    "name": "weapon_raypistol",
+    "label": "Weapon Raypistol",
+    "image": "weapon_raypistol.png",
+    "description": "Weapon Raypistol",
+    "size": {
+      "x": 3,
+      "y": 3
+    }
+  },
+  {
+    "markedForSeizure": true,
+    "useable": true,
+    "name": "weapon_remotesniper",
+    "label": "Remote Sniper",
+    "image": "weapon_remotesniper.png",
+    "description": "A portable high-precision, long-range rifle",
+    "size": {
+      "x": 3,
+      "y": 3
+    }
+  },
+  {
+    "markedForSeizure": true,
+    "useable": true,
+    "name": "weapon_revolver",
+    "label": "Revolver",
+    "image": "weapon_revolver.png",
+    "description": "A pistol with revolving chambers enabling several shots to be fired without reloading",
+    "size": {
+      "x": 3,
+      "y": 3
+    }
+  },
+  {
+    "markedForSeizure": true,
+    "useable": true,
+    "name": "weapon_revolver_mk2",
+    "label": "Violence",
+    "image": "revolvermk2.png",
+    "description": "da Violence",
+    "size": {
+      "x": 3,
+      "y": 3
+    }
+  },
+  {
+    "markedForSeizure": true,
+    "useable": true,
+    "name": "weapon_rpg",
+    "label": "RPG",
+    "image": "weapon_rpg.png",
+    "description": "A rocket-propelled grenade launcher",
+    "size": {
+      "x": 3,
+      "y": 3
+    }
+  },
+  {
+    "markedForSeizure": true,
+    "useable": true,
+    "name": "weapon_sawnoffshotgun",
+    "label": "Sawn-off Shotgun",
+    "image": "weapon_sawnoffshotgun.png",
+    "description": "A sawn-off smoothbore gun for firing small shot at short range",
+    "size": {
+      "x": 3,
+      "y": 3
+    }
+  },
+  {
+    "markedForSeizure": true,
+    "useable": true,
+    "name": "weapon_smg",
+    "label": "SMG",
+    "image": "weapon_smg.png",
+    "description": "A handheld lightweight machine gun",
+    "size": {
+      "x": 3,
+      "y": 3
+    }
+  },
+  {
+    "markedForSeizure": true,
+    "useable": true,
+    "name": "weapon_smg_mk2",
+    "label": "PD MP5 2",
+    "image": "smg.png",
+    "description": "SMG MK2",
+    "size": {
+      "x": 3,
+      "y": 3
+    }
+  },
+  {
+    "markedForSeizure": true,
+    "useable": true,
+    "name": "weapon_smokegrenade",
+    "label": "Smoke Grenade",
+    "image": "weapon_c4.png",
+    "description": "An explosive charge that can be remotely detonated",
+    "size": {
+      "x": 3,
+      "y": 3
+    }
+  },
+  {
+    "markedForSeizure": true,
+    "useable": true,
+    "name": "weapon_sniperrifle",
+    "label": "Sniper Rifle",
+    "image": "weapon_sniperrifle.png",
+    "description": "A high-precision, long-range rifle",
+    "size": {
+      "x": 3,
+      "y": 3
+    }
+  },
+  {
+    "useable": true,
+    "name": "weapon_snowball",
+    "label": "Snowball",
+    "image": "weapon_snowball.png",
+    "description": "A ball of packed snow, especially one made for throwing at other people for fun",
+    "size": {
+      "x": 3,
+      "y": 3
+    }
+  },
+  {
+    "markedForSeizure": true,
+    "useable": true,
+    "name": "weapon_snspistol",
+    "label": "SNS Pistol",
+    "image": "weapon_snspistol.png",
+    "description": "A very small firearm designed to be easily concealed",
+    "size": {
+      "x": 3,
+      "y": 3
+    }
+  },
+  {
+    "markedForSeizure": true,
+    "useable": true,
+    "name": "weapon_snspistol_mk2",
+    "label": "SNS Pistol MK2",
+    "image": "snspistol_mk2.png",
+    "description": "SNS Pistol MK2",
+    "size": {
+      "x": 3,
+      "y": 3
+    }
+  },
+  {
+    "markedForSeizure": true,
+    "useable": true,
+    "name": "weapon_specialcarbine",
+    "label": "Special Carbine",
+    "image": "weapon_specialcarbine.png",
+    "description": "An extremely versatile assault rifle for any combat situation",
+    "size": {
+      "x": 3,
+      "y": 3
+    }
+  },
+  {
+    "markedForSeizure": true,
+    "useable": true,
+    "name": "weapon_specialcarbine_mk2",
+    "label": "Weapon Wpecialcarbine MK2",
+    "image": "specialcarbine_mk2.png",
+    "description": "Weapon Wpecialcarbine MK2",
+    "size": {
+      "x": 3,
+      "y": 3
+    }
+  },
+  {
+    "markedForSeizure": true,
+    "useable": true,
+    "name": "weapon_stickybomb",
+    "label": "C4",
+    "image": "weapon_stickybomb.png",
+    "description": "An explosive charge covered with an adhesive that when thrown against an object sticks until it explodes",
+    "size": {
+      "x": 3,
+      "y": 3
+    }
+  },
+  {
+    "markedForSeizure": true,
+    "useable": true,
+    "name": "weapon_stone_hatchet",
+    "label": "Weapon Stone Hatchet",
+    "image": "stone_hatchet.png",
+    "description": "Stone ax",
+    "size": {
+      "x": 3,
+      "y": 3
+    }
+  },
+  {
+    "useable": true,
+    "name": "weapon_stungun",
+    "label": "Taser",
+    "image": "weapon_stungun.png",
+    "description": "A weapon firing barbs attached by wires to batteries, causing temporary paralysis",
+    "size": {
+      "x": 3,
+      "y": 3
+    }
+  },
+  {
+    "markedForSeizure": true,
+    "useable": true,
+    "name": "weapon_switchblade",
+    "label": "Switchblade",
+    "image": "weapon_switchblade.png",
+    "description": "A knife with a blade that springs out from the handle when a button is pressed",
+    "size": {
+      "x": 3,
+      "y": 3
+    }
+  },
+  {
+    "markedForSeizure": true,
+    "useable": true,
+    "name": "weapon_vintagepistol",
+    "label": "Vintage Pistol",
+    "image": "weapon_vintagepistol.png",
+    "description": "An antique firearm designed to be held in one hand",
+    "size": {
+      "x": 3,
+      "y": 3
+    }
+  },
+  {
+    "useable": true,
+    "name": "weapon_wrench",
+    "label": "Wrench",
+    "image": "weapon_wrench.png",
+    "description": "A tool used for gripping and turning nuts, bolts, pipes, etc",
+    "size": {
+      "x": 3,
+      "y": 3
+    }
+  },
+  {
+    "markedForSeizure": true,
+    "name": "vpn",
+    "label": "VPN",
+    "decayrate": 10080,
+    "image": "vpn.png",
+    "description": "A VPN that hides your information",
+    "size": {
+      "x": 2,
+      "y": 2
+    }
+  },
+  {
+    "name": "tv",
+    "label": "Televisie",
+    "decayrate": 120,
+    "image": "tv.png",
+    "description": "Een grote televisie",
+    "size": {
+      "x": 2,
+      "y": 2
+    }
+  },
+  {
+    "name": "crt_tv",
+    "label": "CRT Televisie",
+    "decayrate": 120,
+    "image": "crt_tv.png",
+    "description": "Een oude CRT televisie",
+    "size": {
+      "x": 2,
+      "y": 2
+    }
+  },
+  {
+    "name": "camera",
+    "label": "Camera",
+    "decayrate": 120,
+    "image": "camera.png",
+    "description": "Een DSLR Camera",
+    "size": {
+      "x": 2,
+      "y": 2
+    }
+  },
+  {
+    "name": "gameboy",
+    "label": "Gameboy",
+    "decayrate": 120,
+    "image": "gameboy.png",
+    "description": "Een oude Nintento Gameboy",
+    "size": {
+      "x": 2,
+      "y": 2
+    }
+  },
+  {
+    "name": "hifi",
+    "label": "Speakers",
+    "decayrate": 120,
+    "image": "hifi.png",
+    "description": "Een speaker installatie",
+    "size": {
+      "x": 2,
+      "y": 2
+    }
+  },
+  {
+    "name": "nintendo_switch",
+    "label": "Switch",
+    "decayrate": 120,
+    "image": "nintendo_switch.png",
+    "description": "Een nieuwe Nintendo Switch",
+    "size": {
+      "x": 2,
+      "y": 2
+    }
+  },
+  {
+    "name": "nokia",
+    "label": "Nokia",
+    "decayrate": 1440,
+    "image": "nokia.png",
+    "description": "Een oude telefoon van je oma",
+    "size": {
+      "x": 2,
+      "y": 2
+    }
+  },
+  {
+    "name": "psp",
+    "label": "PSP",
+    "decayrate": 120,
+    "image": "psp.png",
+    "description": "Een oude Sony PSP",
+    "size": {
+      "x": 2,
+      "y": 2
+    }
+  },
+  {
+    "name": "vaas",
+    "label": "Gestolen Vaas",
+    "decayrate": 120,
+    "image": "vaas.png",
+    "description": "Een gestolen waardevolle antieke vaas",
+    "size": {
+      "x": 2,
+      "y": 2
+    }
+  },
+  {
+    "name": "microwave",
+    "label": "Microgolfoven",
+    "decayrate": 120,
+    "image": "microwave.png",
+    "description": "Een microgolfoven om u eten in op te warmen",
+    "size": {
+      "x": 2,
+      "y": 2
+    }
+  },
+  {
+    "name": "weed_seed_male",
+    "label": "Mannelijk Weed Zaadje",
+    "useable": true,
+    "decayrate": 1440,
+    "image": "weed_seed.png",
+    "description": "Probeer het eens te planten in de grond, wie weet groeit het!",
+    "size": {
+      "x": 1,
+      "y": 1
+    }
+  },
+  {
+    "name": "weed_seed_female",
+    "label": "Vrouwelijk Weed Zaadje",
+    "useable": true,
+    "decayrate": 1440,
+    "image": "weed_seed.png",
+    "description": "Probeer het eens te planten in de grond, wie weet groeit het",
+    "size": {
+      "x": 1,
+      "y": 1
+    }
+  },
+  {
+    "markedForSeizure": true,
+    "name": "pistol_ammo",
+    "label": "Pistool Ammo",
+    "useable": true,
+    "decayrate": 10080,
+    "image": "pistol_ammo.png",
+    "size": {
+      "x": 1,
+      "y": 1
+    }
+  },
+  {
+    "markedForSeizure": true,
+    "name": "smg_ammo",
+    "label": "SMG Ammo",
+    "useable": true,
+    "decayrate": 10080,
+    "image": "smg_ammo.png",
+    "size": {
+      "x": 1,
+      "y": 1
+    }
+  },
+  {
+    "markedForSeizure": true,
+    "name": "rifle_ammo",
+    "label": "Rifle Ammo",
+    "useable": true,
+    "decayrate": 10080,
+    "image": "rifle_ammo.png",
+    "size": {
+      "x": 1,
+      "y": 1
+    }
+  },
+  {
+    "markedForSeizure": true,
+    "name": "mg_ammo",
+    "label": "Machinegun Ammo",
+    "useable": true,
+    "decayrate": 10080,
+    "image": "mg_ammo.png",
+    "size": {
+      "x": 1,
+      "y": 1
+    }
+  },
+  {
+    "markedForSeizure": true,
+    "name": "shotgun_ammo",
+    "label": "Shotgun Ammo",
+    "useable": true,
+    "decayrate": 10080,
+    "image": "shotgun_ammo.png",
+    "size": {
+      "x": 1,
+      "y": 1
+    }
+  },
+  {
+    "name": "taser_ammo",
+    "label": "Taser Ammo",
+    "useable": true,
+    "decayrate": 10080,
+    "image": "taser_ammo.png",
+    "size": {
+      "x": 1,
+      "y": 1
+    }
+  },
+  {
+    "name": "plant_fertilizer",
+    "label": "Plantenvoeding",
+    "decayrate": 10080,
+    "image": "plant_fertilizer.png",
+    "description": "Voeding om je zelf geplante plantjes te voeden",
+    "size": {
+      "x": 2,
+      "y": 2
+    }
+  },
+  {
+    "markedForSeizure": true,
+    "name": "weed_bud",
+    "label": "Weed Bud",
+    "useable": true,
+    "decayrate": 10080,
+    "image": "weed_bud.png",
+    "description": "Geknipte weed die nog een beetje nat is. Geduld is de boodschap",
+    "size": {
+      "x": 2,
+      "y": 2
+    }
+  },
+  {
+    "name": "empty_bags",
+    "label": "Lege Plastic Zakjes",
+    "image": "empty_bags.png",
+    "size": {
+      "x": 2,
+      "y": 2
+    }
+  },
+  {
+    "markedForSeizure": true,
+    "name": "weed_bag",
+    "label": "Zakje Weed 1g",
+    "decayrate": 10080,
+    "image": "weed_bag.png",
+    "size": {
+      "x": 2,
+      "y": 2
+    }
+  },
+  {
+    "markedForSeizure": true,
+    "name": "thermite",
+    "label": "Thermite",
+    "useable": true,
+    "decayrate": 10080,
+    "image": "thermite.png",
+    "description": "Pas op voor je vingers, kan warm worden",
+    "size": {
+      "x": 2,
+      "y": 2
+    }
+  },
+  {
+    "markedForSeizure": true,
+    "name": "meth_bag",
+    "label": "Zakje Meth",
+    "useable": true,
+    "decayrate": 10080,
+    "image": "meth_bag.png",
+    "description": "Zakje Meth van 1 gram",
+    "size": {
+      "x": 2,
+      "y": 2
+    }
+  },
+  {
+    "markedForSeizure": true,
+    "name": "meth_brick",
+    "label": "Meth Brick",
+    "useable": true,
+    "decayrate": 10080,
+    "image": "meth_brick.png",
+    "description": "Meth Brick van 1 kilogram, best nog even wachten voor open te maken",
+    "size": {
+      "x": 2,
+      "y": 2
+    }
+  },
+  {
+    "markedForSeizure": true,
+    "name": "big_explosive",
+    "label": "Zwaar Explosief",
+    "useable": true,
+    "decayrate": 10080,
+    "image": "big_explosive.png",
+    "description": "Zwaar explosief. Pas op of het zal je laatste dag kunnen zijn.",
+    "size": {
+      "x": 2,
+      "y": 2
+    }
+  },
+  {
+    "markedForSeizure": true,
+    "name": "laptop_v1",
+    "label": "v1.0 Laptop",
+    "useable": true,
+    "decayrate": 240,
+    "image": "laptop_v1.png",
+    "description": "Laptop met V1.0 software op op geinstalleerd.",
+    "size": {
+      "x": 2,
+      "y": 2
+    }
+  },
+  {
+    "markedForSeizure": true,
+    "name": "laptop_v2",
+    "label": "v2.0 Laptop",
+    "useable": true,
+    "decayrate": 240,
+    "image": "laptop_v2.png",
+    "description": "Laptop met V2.0 software op op geinstalleerd.",
+    "size": {
+      "x": 2,
+      "y": 2
+    }
+  },
+  {
+    "markedForSeizure": true,
+    "name": "laptop_v3",
+    "label": "v3.0 Laptop",
+    "useable": true,
+    "decayrate": 240,
+    "image": "laptop_v3.png",
+    "description": "Laptop met V3.0 software op geinstalleerd.",
+    "size": {
+      "x": 2,
+      "y": 2
+    }
+  },
+  {
+    "markedForSeizure": true,
+    "name": "laptop_v5",
+    "label": "v5.0 Laptop",
+    "useable": true,
+    "decayrate": 240,
+    "image": "laptop_v5.png",
+    "description": "Laptop met V5.0 software op op geinstalleerd.",
+    "size": {
+      "x": 2,
+      "y": 2
+    }
+  },
+  {
+    "markedForSeizure": true,
+    "name": "laptop_v10",
+    "label": "v10.0 Laptop",
+    "useable": true,
+    "decayrate": 240,
+    "image": "laptop_v10.png",
+    "description": "Laptop met V10.0 software op op geinstalleerd.",
+    "size": {
+      "x": 2,
+      "y": 2
+    }
+  },
+  {
+    "markedForSeizure": true,
+    "name": "mini_emp",
+    "label": "Mini EMP",
+    "useable": true,
+    "decayrate": 4320,
+    "image": "mini_emp.png",
+    "description": "Kleine EMP.",
+    "size": {
+      "x": 2,
+      "y": 2
+    }
+  },
+  {
+    "name": "volt_meter",
+    "label": "Multimeter",
+    "useable": true,
+    "decayrate": 8640,
+    "image": "volt_meter.png",
+    "description": "Meter waar je spanning met kan meten.",
+    "size": {
+      "x": 2,
+      "y": 2
+    }
+  },
+  {
+    "name": "gold_bar",
+    "label": "Goudstaaf",
+    "decayrate": 20160,
+    "image": "gold_bar.png",
+    "description": "Zware gouden staaf.",
+    "size": {
+      "x": 2,
+      "y": 2
+    }
+  },
+  {
+    "name": "test_item",
+    "label": "TEST Item",
+    "size": {
+      "x": 3,
+      "y": 4
+    },
+    "image": "burger.png",
+    "decayRate": 10,
+    "description": "Hele mooie item beschrijving. Wil je weten wat dit doet? Dan heb je echt wel pech want het is gewoonweg een item om de zeer mooie unieke inventory te testen e!",
+    "useable": true,
+    "closeOnUse": false,
+    "markedForSeizure": true
+  },
+  {
+    "name": "id_card",
+    "label": "ID Kaart",
+    "image": "id_card.png",
+    "size": {
+      "x": 2,
+      "y": 1
+    },
+    "useable": true
+  },
+  {
+    "name": "drivers_license",
+    "label": "Rijbewijs",
+    "image": "drivers_license.png",
+    "size": {
+      "x": 2,
+      "y": 1
+    },
+    "useable": true
+  },
+  {
+    "name": "container_weapons",
+    "label": "Wapen Container",
+    "image": "container_weapons.png",
+    "size": {
+      "x": 7,
+      "y": 7
+    },
+    "useable": true
+  },
+  {
+    "name": "container_attachments",
+    "label": "Attachments Container",
+    "image": "container_attachments.png",
+    "size": {
+      "x": 6,
+      "y": 6
+    },
+    "useable": true
+  },
+  {
+    "name": "container_ammo",
+    "label": "Ammodoos",
+    "image": "container_ammo.png",
+    "size": {
+      "x": 5,
+      "y": 5
+    },
+    "useable": true
+  },
+  {
+    "name": "container_materials",
+    "label": "Materialen Container",
+    "image": "container_materials.png",
+    "size": {
+      "x": 6,
+      "y": 6
+    },
+    "useable": true
+  },
+  {
+    "name": "container_food",
+    "label": "Koelbox",
+    "image": "container_food.png",
+    "size": {
+      "x": 4,
+      "y": 4
+    },
+    "useable": true
+  },
+  {
+    "markedForSeizure": true,
+    "name": "rocket",
+    "label": "RPG Raket",
+    "useable": true,
+    "decayrate": 10080,
+    "image": "rocket.png",
+    "size": {
+      "x": 2,
+      "y": 4
+    }
+  }
+]

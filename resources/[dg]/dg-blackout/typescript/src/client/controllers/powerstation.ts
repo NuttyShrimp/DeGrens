@@ -1,4 +1,4 @@
-import { PolyZone, Notifications, Util, RPC, Taskbar, Events } from '@dgx/client';
+import { PolyZone, Notifications, Util, RPC, Taskbar, Events, Inventory } from '@dgx/client';
 
 let powerStations: PowerstationData[] = [];
 let currentStation: number = null;
@@ -53,7 +53,7 @@ const plantExplosive = async (stationId: number) => {
     },
   });
 
-  const removedItem = await DGCore.Functions.TriggerCallback<boolean>('DGCore:RemoveItem', 'big_explosive', 1);
+  const removedItem = await Inventory.removeItemFromPlayer('big_explosive');
   if (wasCanceled || !removedItem) {
     placingExplosive = false;
     return;

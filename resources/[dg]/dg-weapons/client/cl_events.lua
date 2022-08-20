@@ -1,17 +1,17 @@
-AddEventHandler('onResourceStart', function(resourceName)
-    if resourceName ~= GetCurrentResourceName() then return end
+AddEventHandler('onClientResourceStart', function(resourceName)
+  if resourceName ~= GetCurrentResourceName() then return end
 
-    -- TODO: test this if needed in loop
-    SetPickupAmmoAmountScaler(0.0)
+  -- TODO: test this if needed in loop
+  SetPickupAmmoAmountScaler(0.0)
 
 	cachedIds[#cachedIds+1] = exports['dg-peek']:addFlagEntry('isWeaponCustomizer', {
 		options = {
 			{
 				icon = 'fas fa-spray-can',
 				label = 'Tint Wapen',
-                action = function()
-                    exports['dg-weapons']:openTintMenu()
-                end,
+          action = function()
+            exports['dg-weapons']:openTintMenu()
+          end,
 				canInteract = function()
 					return exports['dg-weapons']:getCurrentWeaponData() and true or false
 				end,
@@ -23,6 +23,9 @@ end)
 
 AddEventHandler('onResourceStop', function(resourceName)
     if resourceName ~= GetCurrentResourceName() then return end
+    if currentWeaponData then
+      DGX.Inventory.toggleObject(currentWeaponData.id, true)
+    end
     RemoveAllPedWeapons(PlayerPedId(), true)
     exports['dg-peek']:removeFlagEntry(cachedIds)
 end)
@@ -32,36 +35,21 @@ RegisterNetEvent('weapons:client:UseWeapon', function(pWeaponData)
     RemoveAllPedWeapons(ped, true)
 
     if currentWeaponData then
-        local lastWeaponName = currentWeaponData.name
-        TriggerEvent('inventory:client:ItemBox', currentWeaponData.name, 'holster')
-        holsterWeapon(currentWeaponData)
-        currentWeaponData = nil
-        if lastWeaponName == pWeaponData.name then return end -- No need to go any further when holstering current weapon
-    end
-
-    -- we need to allow them to take broken weapons to be able to use the repair command
-    local isBrokenWeapon = false
-    if pWeaponData.quality <= 0 then
-        exports['dg-ui']:addNotification("Je wapen is kapot...", "error")
-        isBrokenWeapon = true
+      local lastWeaponId = currentWeaponData.id
+      holsterWeapon(currentWeaponData)
+      currentWeaponData = nil
+      if lastWeaponId == pWeaponData.id then return end -- No need to go any further when holstering current weapon
     end
 
     currentWeaponData = pWeaponData
-    currentWeaponData.hash = GetHashKey(currentWeaponData.name)
-
     local ammoCount = DGCore.Functions.TriggerCallback('weapons:server:GetAmmo', currentWeaponData)
     
     GiveWeaponToPed(ped, currentWeaponData.hash, ammoCount, false, false)
-    TriggerEvent('inventory:client:ItemBox', currentWeaponData.name, 'unholster')
     unholsterWeapon(currentWeaponData)
-    startWeaponLoop(isBrokenWeapon)
+    startWeaponLoop()
 end)
 
-RegisterNetEvent('weapons:client:RemoveWeapon', function(pWeaponName)
-    forceRemoveWeapon(pWeaponName)
-end)
-
-RegisterNetEvent('weapons:client:UseAmmo', function(pItemData)
+RegisterNetEvent('weapons:client:UseAmmo', function(pItemName)
     local ped = PlayerPedId()
     local weapon = GetSelectedPedWeapon(ped)
     if not currentWeaponData or not weapon then 
@@ -70,7 +58,7 @@ RegisterNetEvent('weapons:client:UseAmmo', function(pItemData)
     end
 
     local ammoType = GetPedAmmoTypeFromWeapon_2(ped, weapon) -- _2 always gives basetype even in the rare case of using for example explosive ammo for some reason
-    if ammoType ~= GetHashKey(ammoConfig[pItemData.name].ammoType) then 
+    if ammoType ~= GetHashKey(ammoConfig[pItemName].ammoType) then 
         exports['dg-ui']:addNotification('Dit past niet in je wapen...', 'error')
         return
     end
@@ -99,14 +87,14 @@ RegisterNetEvent('weapons:client:UseAmmo', function(pItemData)
         return
     end
 
-    local removedAmmoItem = DGCore.Functions.TriggerCallback('DGCore:RemoveItem', pItemData.name, 1)
+    local removedAmmoItem = DGX.Inventory.removeItemFromPlayer(pItemName)
     if not removedAmmoItem then
         exports['dg-ui']:addNotification('Je hebt geen ammo bij...', 'error') -- prevent bugabuse by moving item during taskbar
         return
     end
 
     local amount = DGCore.Functions.TriggerCallback('weapons:server:GetAmmo', currentWeaponData)
-    amount = amount + ammoConfig[pItemData.name].amount
+    amount = amount + ammoConfig[pItemName].amount
     if amount > 250 then amount = 250 end
     SetPedAmmo(ped, weapon, amount)
     TriggerServerEvent('weapons:server:SetAmmo', currentWeaponData, amount)
@@ -133,12 +121,12 @@ RegisterNetEvent('weapons:client:ForceSetQuality', function(pQuality)
     TriggerServerEvent('weapons:server:ForceSetQuality', currentWeaponData, pQuality)
 end)
 
-RegisterNetEvent('weapons:client:UseAttachment', function(pAttachmentName)
+RegisterNetEvent('weapons:client:UseAttachment', function(pAttachmentId)
     if not currentWeaponData then 
         exports['dg-ui']:addNotification('Je hebt geen wapen vast...', 'error')
         return
     end
-    TriggerServerEvent('weapons:server:AddAttachment', currentWeaponData, pAttachmentName)
+    TriggerServerEvent('weapons:server:AddAttachment', currentWeaponData, pAttachmentId)
 end)
 
 RegisterNetEvent('weapons:client:UpdateAttachments', function(pAllAttachmentsForWeapon, pComponentsOnWeapon)
@@ -163,7 +151,6 @@ RegisterNetEvent('weapons:client:OpenAttachmentMenu', function()
         exports['dg-ui']:addNotification('Je hebt geen wapen vast...', 'error')
         return
     end
-
     local entries = DGCore.Functions.TriggerCallback('weapons:server:GetAttachmentsMenuEntries', currentWeaponData)
     openApplication('contextmenu', entries)
 end)
@@ -182,11 +169,15 @@ end)
 RegisterUICallback('weapons:client:SetTint', function(data, cb)
     if currentWeaponData then
         SetPedWeaponTintIndex(PlayerPedId(), currentWeaponData.hash, data.tint)
-        TriggerServerEvent('weapons:server:SetTint', currentWeaponData, data.tint)
+        TriggerServerEvent('weapons:server:SetTint', currentWeaponData, tintColorNames[data.tint])
     else
         exports['dg-ui']:addNotification('Je hebt geen wapen vast...', 'error')
     end
     
     closeApplication('contextmenu')
     cb({data = {}, meta = {ok = true, message = 'done'}})
+end)
+
+RegisterNetEvent('weapons:client:removedWeaponItem', function(weaponId)
+  forceRemoveWeapon(weaponId, true)
 end)

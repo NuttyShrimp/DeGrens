@@ -45,14 +45,11 @@ end)
 
 RegisterServerEvent('dg-labs:server:weed:Search', function(labId)
     if not labId or getLabTypeFromId(labId) ~= "weed" then return end
-
     if math.random(1, 100) <= getConfig().weed.rewardChance then
-        local Player = DGCore.Functions.GetPlayer(source)
         local item = getConfig().weed.rewards[math.random(1, #getConfig().weed.rewards)]
-        Player.Functions.AddItem(item, 1)
-        TriggerClientEvent("inventory:client:ItemBox", source, item, "add")
-        TriggerClientEvent('dg-ui:client:addNotification', source, "Je hebt iets nuttig gevonden!", "success")
+        DGX.Inventory.addItemToPlayer(source, item, 1)
+        DGX.RPC.execute('dg-ui:client:addNotification', source, "Je hebt iets nuttig gevonden!", "success")
     else
-        TriggerClientEvent('dg-ui:client:addNotification', source, "Er zat niks nuttig tussen...", "error")
+        DGX.RPC.execute('dg-ui:client:addNotification', source, "Er zat niks nuttig tussen...", "error")
     end
 end)

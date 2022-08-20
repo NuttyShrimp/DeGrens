@@ -2,8 +2,7 @@ RegisterNetEvent('qb-vineyard:server:getGrapes')
 AddEventHandler('qb-vineyard:server:getGrapes', function()
     local Player = DGCore.Functions.GetPlayer(source)
 
-    Player.Functions.AddItem("grape", Config.GrapeAmount)
-    TriggerClientEvent('inventory:client:ItemBox', source, 'grape', "add")
+    -- Player.Functions.AddItem("grape", Config.GrapeAmount)
 end)
 
 RegisterServerEvent('qb-vineyard:server:loadIngredients') 
@@ -16,7 +15,6 @@ AddEventHandler('qb-vineyard:server:loadIngredients', function()
             if grape.amount >= 23 then 
 
                 xPlayer.Functions.RemoveItem("grape", 23, false)
-                TriggerClientEvent('inventory:client:ItemBox', source, 'grape', "remove")
                 
                 TriggerClientEvent("qb-vineyard:client:loadIngredients", source)
 
@@ -42,7 +40,6 @@ AddEventHandler('qb-vineyard:server:grapeJuice', function()
             if grape.amount >= 16 then 
 
                 xPlayer.Functions.RemoveItem("grape", 16, false)
-                TriggerClientEvent('inventory:client:ItemBox', source, 'grape', "remove")
                 
                 TriggerClientEvent("qb-vineyard:client:grapeJuice", source)
 
@@ -62,16 +59,14 @@ RegisterServerEvent('qb-vineyard:server:receiveWine')
 AddEventHandler('qb-vineyard:server:receiveWine', function()
 	local xPlayer = DGCore.Functions.GetPlayer(tonumber(source))
 
-	xPlayer.Functions.AddItem("wine", Config.WineAmount, false)
-	TriggerClientEvent('inventory:client:ItemBox', source, 'wine', "add")
+	-- xPlayer.Functions.AddItem("wine", Config.WineAmount, false)
 end)
 
 RegisterServerEvent('qb-vineyard:server:receiveGrapeJuice')
 AddEventHandler('qb-vineyard:server:receiveGrapeJuice', function()
 	local xPlayer = DGCore.Functions.GetPlayer(tonumber(source))
 
-	xPlayer.Functions.AddItem("grapejuice", Config.GrapeJuiceAmount, false)
-	TriggerClientEvent('inventory:client:ItemBox', source, 'grapejuice', "add")
+	-- xPlayer.Functions.AddItem("grapejuice", Config.GrapeJuiceAmount, false)
 end)
 
 

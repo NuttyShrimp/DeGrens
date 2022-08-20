@@ -4,10 +4,8 @@ RegisterServerEvent("onResourceStart", function(resourceName)
 end)
 
 RegisterServerEvent("dg-weed:server:PlacePlant", function(coords, gender)
-    local Player = DGCore.Functions.GetPlayer(source)
-    if Player.Functions.RemoveItem(config.seeds[gender], 1) then
-        TriggerClientEvent("inventory:client:ItemBox", source, config.seeds[gender], "remove")
-
+    local removed = DGX.Inventory.removeItemFromPlayer(source, config.seeds[gender])
+    if removed then
         local result = exports['dg-sql']:query(
             [[
                 INSERT INTO weedplants (coords, gender, growtime, cuttime)
@@ -41,9 +39,8 @@ RegisterServerEvent("dg-weed:server:PlacePlant", function(coords, gender)
 end)
 
 RegisterServerEvent("dg-weed:server:FeedPlant", function(index)
-    local Player = DGCore.Functions.GetPlayer(source)
-    if Player.Functions.RemoveItem("plant_fertilizer", 1) then
-        TriggerClientEvent("inventory:client:ItemBox", source, "plant_fertilizer", "remove")
+    local removed = DGX.Inventory.removeItemFromPlayer(source, "plant_fertilizer")
+    if removed then
         activePlants[index].data.food = activePlants[index].data.food + math.random(config.food.amount.min, config.food.amount.max)
         if activePlants[index].data.food > 100 then activePlants[index].data.food = 100 end
         updatePlantData()
@@ -55,7 +52,6 @@ end)
 
 RegisterServerEvent("dg-weed:server:CutPlant", function(index)
     if canCut(index) then
-        local Player = DGCore.Functions.GetPlayer(source)
         local item = ""
         if activePlants[index].gender == "F" then
             item = "weed_bud"
@@ -67,8 +63,7 @@ RegisterServerEvent("dg-weed:server:CutPlant", function(index)
             item = items[math.random(1, #items)]
         end
     
-        Player.Functions.AddItem(item, 1)
-        TriggerClientEvent("inventory:client:ItemBox", source, item, "add")
+        DGX.Inventory.addItemToPlayer(source, item, 1)
         activePlants[index].data.cuttime = os.time()
     
         updatePlantData()

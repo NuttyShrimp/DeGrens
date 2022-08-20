@@ -118,16 +118,3 @@ DGCore.Commands.Add('setgang', 'Set A Players Gang (Admin Only)', { { name = 'id
 		TriggerClientEvent('DGCore:Notify', src, 'Player Not Online', 'error')
 	end
 end, 'admin')
-
--- Inventory (should be in qb-inventory?)
-
-DGCore.Commands.Add('clearinv', 'Clear Players Inventory (Admin Only)', { { name = 'id', help = 'Player ID' } }, false, function(source, args)
-	local src = source
-	local playerId = args[1] or src
-	local Player = DGCore.Functions.GetPlayer(tonumber(playerId))
-	if Player then
-		Player.Functions.ClearInventory()
-	else
-		TriggerClientEvent('DGCore:Notify', src, 'Player Not Online', 'error')
-	end
-end, 'admin')

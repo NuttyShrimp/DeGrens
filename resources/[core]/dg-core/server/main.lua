@@ -2,7 +2,6 @@ DGCore = {}
 DGCore.Config = QBConfig
 DGCore.Shared = DGShared
 DGCore.ServerCallbacks = {}
-DGCore.UseableItems = {}
 
 exports('GetCoreObject', function()
     return DGCore

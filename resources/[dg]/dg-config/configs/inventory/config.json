@@ -1,0 +1,276 @@
+{
+  "cellsPerRow": 9,
+  "amountOfSlots": {
+    "player": 50,
+    "glovebox": 3,
+    "drop": 20,
+    "dumpster": 20
+  },
+  "trunkSlots": {
+    "0": 30,
+    "1": 40,
+    "2": 60,
+    "3": 40,
+    "4": 30,
+    "5": 30,
+    "6": 30,
+    "7": 20,
+    "8": 5,
+    "9": 40,
+    "10": 30,
+    "11": 20,
+    "12": 70,
+    "13": 1,
+    "14": 10,
+    "15": 10,
+    "16": 10,
+    "17": 20,
+    "18": 30,
+    "19": 20,
+    "20": 40,
+    "21": 0
+  },
+  "persistentTypes": ["player", "glovebox", "trunk", "stash", "container"],
+  "locationInvRange": {
+    "drop": 1,
+    "dumpster": 1
+  },
+  "dropRemoveTime": 10,
+  "itemObjects": {
+    "crt_tv": {
+      "name": "item_crt_tv",
+      "type": "primary",
+      "animData": {
+        "animDict": "anim@heists@box_carry@",
+        "anim": "idle"
+      }
+    },
+    "tv": {
+      "name": "item_tv",
+      "type": "primary",
+      "animData": {
+        "animDict": "anim@heists@box_carry@",
+        "anim": "idle"
+      }
+    },
+    "vaas": {
+      "name": "item_vaas",
+      "type": "primary",
+      "animData": {
+        "animDict": "anim@heists@box_carry@",
+        "anim": "idle"
+      }
+    },
+    "cardbox": {
+      "name": "item_cardbox",
+      "type": "primary",
+      "animData": {
+        "animDict": "anim@heists@box_carry@",
+        "anim": "idle"
+      }
+    },
+    "microwave": {
+      "name": "item_microwave",
+      "type": "primary",
+      "animData": {
+        "animDict": "anim@heists@box_carry@",
+        "anim": "idle"
+      }
+    },
+    "container_weapons": {
+      "name": "item_container_weapons",
+      "type": "primary",
+      "animData": {
+        "animDict": "anim@heists@box_carry@",
+        "anim": "idle"
+      }
+    },
+    "container_ammo": {
+      "name": "item_container_ammo",
+      "type": "primary",
+      "animData": {
+        "animDict": "anim@heists@box_carry@",
+        "anim": "idle"
+      }
+    },
+    "container_attachments": {
+      "name": "item_container_attachments",
+      "type": "primary",
+      "animData": {
+        "animDict": "anim@heists@box_carry@",
+        "anim": "idle"
+      }
+    },
+    "container_materials": {
+      "name": "item_container_materials",
+      "type": "primary",
+      "animData": {
+        "animDict": "anim@heists@box_carry@",
+        "anim": "idle"
+      }
+    },
+    "weapon_microsmg": {
+      "name": "item_weapon_microsmg",
+      "type": "secondary"
+    },
+    "weapon_compactrifle": {
+      "name": "item_weapon_compactrifle",
+      "type": "secondary"
+    },
+    "weapon_assaultrifle": {
+      "name": "item_weapon_assaultrifle",
+      "type": "secondary"
+    },
+    "weapon_smg": {
+      "name": "item_weapon_smg",
+      "type": "secondary"
+    },
+    "weapon_assaultsmg": {
+      "name": "item_weapon_assaultsmg",
+      "type": "secondary"
+    },
+    "weapon_pumpshotgun": {
+      "name": "item_weapon_pumpshotgun",
+      "type": "secondary"
+    },
+    "weapon_carbinerifle": {
+      "name": "item_weapon_carbinerifle",
+      "type": "secondary"
+    },
+    "weapon_specialcarbine": {
+      "name": "item_weapon_specialcarbine",
+      "type": "secondary"
+    },
+    "weapon_advancedrifle": {
+      "name": "item_weapon_advancedrifle",
+      "type": "secondary"
+    },
+    "weapon_sniperrifle": {
+      "name": "item_weapon_sniperrifle",
+      "type": "secondary"
+    },
+    "weapon_rpg": {
+      "name": "item_weapon_rpg",
+      "type": "secondary"
+    },
+    "rocket": {
+      "name": "item_rocket",
+      "type": "secondary"
+    }
+  },
+  "starterItems": ["phone", "id_card", "drivers_license"],
+  "containers": {
+    "container_weapons": {
+      "size": 10,
+      "allowedItems": [
+        "weapon_advancedrifle",
+        "weapon_appistol",
+        "weapon_assaultrifle",
+        "weapon_assaultrifle_mk2",
+        "weapon_assaultshotgun",
+        "weapon_assaultsmg",
+        "weapon_autoshotgun",
+        "weapon_bullpuprifle",
+        "weapon_bullpuprifle_mk2",
+        "weapon_bullpupshotgun",
+        "weapon_carbinerifle",
+        "weapon_carbinerifle_mk2",
+        "weapon_ceramicpistol",
+        "weapon_combatmg",
+        "weapon_combatmg_mk2",
+        "weapon_combatpdw",
+        "weapon_combatpistol",
+        "weapon_combatshotgun",
+        "weapon_compactlauncher",
+        "weapon_compactrifle",
+        "weapon_dbshotgun",
+        "weapon_doubleaction",
+        "weapon_firework",
+        "weapon_flaregun",
+        "weapon_grenade",
+        "weapon_grenadelauncher",
+        "weapon_grenadelauncher_smoke",
+        "weapon_gusenberg",
+        "weapon_heavypistol",
+        "weapon_heavyshotgun",
+        "weapon_heavysniper",
+        "weapon_heavysniper_mk2",
+        "weapon_hominglauncher",
+        "weapon_machinepistol",
+        "weapon_marksmanrifle",
+        "weapon_marksmanrifle_mk2",
+        "weapon_mg",
+        "weapon_microsmg",
+        "weapon_militaryrifle",
+        "weapon_minigun",
+        "weapon_minismg",
+        "weapon_musket",
+        "weapon_navyrevolver",
+        "weapon_pipebomb",
+        "weapon_pistol",
+        "weapon_pistol50",
+        "weapon_pistol_mk2",
+        "weapon_proxmine",
+        "weapon_pumpshotgun",
+        "weapon_pumpshotgun_mk2",
+        "weapon_railgun",
+        "weapon_raycarbine",
+        "weapon_rayminigun",
+        "weapon_raypistol",
+        "weapon_remotesniper",
+        "weapon_revolver",
+        "weapon_revolver_mk2",
+        "weapon_rpg",
+        "weapon_sawnoffshotgun",
+        "weapon_smg",
+        "weapon_smg_mk2",
+        "weapon_smokegrenade",
+        "weapon_sniperrifle",
+        "weapon_snspistol",
+        "weapon_snspistol_mk2",
+        "weapon_specialcarbine",
+        "weapon_specialcarbine_mk2",
+        "weapon_stickybomb",
+        "weapon_stungun",
+        "weapon_vintagepistol"
+      ]
+    },
+    "container_attachments": {
+      "size": 10,
+      "allowedItems": [
+        "pistol_extendedclip",
+        "smg_extendedclip",
+        "shotgun_extendedclip",
+        "rifle_extendedclip",
+        "mg_extendedclip",
+        "sniper_extendedclip",
+        "luxuryfinish",
+        "flashlight",
+        "pistol_suppressor",
+        "smg_suppressor",
+        "shotgun_suppressor",
+        "rifle_suppressor",
+        "sniper_suppressor",
+        "pistol_scope",
+        "smg_scope",
+        "rifle_scope",
+        "sniper_scope",
+        "smg_drum",
+        "shotgun_drum",
+        "rifle_drum"
+      ]
+    },
+    "container_ammo": {
+      "size": 10,
+      "allowedItems": ["pistol_ammo", "smg_ammo", "rifle_ammo", "mg_ammo", "shotgun_ammo", "taser_ammo"]
+    },
+    "container_materials": {
+      "size": 15,
+      "allowedItems": []
+    },
+    "container_food": {
+      "size": 5,
+      "allowedItems": []
+    }
+  }
+}

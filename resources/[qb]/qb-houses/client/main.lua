@@ -537,7 +537,7 @@ local function enterOwnedHouse(house)
 	entering = true
 	Citizen.Wait(500)
 	TriggerServerEvent('qb-houses:server:SetInsideMeta', house, true)
-	TriggerEvent(exports['dg-weathersync']:FreezeTime(true, 750)
+	exports['dg-weathersync']:FreezeTime(true, 750)
 	TriggerEvent('qb-weed:client:getHousePlants', house)
 	entering = false
 	setHouseLocations()
@@ -1124,7 +1124,7 @@ Citizen.CreateThread(function()
                             if #(pos - vector3(stashLocation.x, stashLocation.y, stashLocation.z)) < 1.5 then
                                 DrawText3Ds(stashLocation.x, stashLocation.y, stashLocation.z, '~g~E~w~ - Stash')
                                 if IsControlJustPressed(0, 38) then -- E
-                                    TriggerServerEvent("inventory:server:OpenInventory", "stash", CurrentHouse)
+                                  print('Deprecated inventory opening method. Please update to new export')
                                 end
                             elseif #(pos - vector3(stashLocation.x, stashLocation.y, stashLocation.z)) < 3 then
                                 DrawText3Ds(stashLocation.x, stashLocation.y, stashLocation.z, 'Stash')

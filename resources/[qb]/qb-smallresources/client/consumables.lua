@@ -20,7 +20,6 @@ AddEventHandler("consumables:client:UseJoint", function()
 		disableMouse = false,
 		disableCombat = true,
     }, {}, {}, {}, function() -- Done
-        TriggerEvent("inventory:client:ItemBox", "joint", "remove")
         if IsPedInAnyVehicle(PlayerPedId(), false) then
             TriggerEvent('animations:client:EmoteCommandStart', {"smoke3"})
         else
@@ -55,7 +54,6 @@ AddEventHandler("consumables:client:UseParachute", function()
 		disableCombat = true,
     }, {}, {}, {}, function() -- Done
         local ped = PlayerPedId()
-        TriggerEvent("inventory:client:ItemBox", "parachute", "remove")
         GiveWeaponToPed(ped, GetHashKey("GADGET_PARACHUTE"), 1, false)
         local ParachuteData = {
             outfitData = {
@@ -79,7 +77,6 @@ AddEventHandler("consumables:client:ResetParachute", function()
             disableCombat = true,
         }, {}, {}, {}, function() -- Done
             local ped = PlayerPedId()
-            TriggerEvent("inventory:client:ItemBox", "parachute", "add")
             local ParachuteRemoveData = { 
                 outfitData = { 
                     ["bag"] = { item = 0, texture = 0} -- Nek / Das
@@ -101,7 +98,6 @@ end)
 --         local ped = PlayerPedId()
 --         SetPlayerParachuteSmokeTrailColor(ped, 255, 0, 0)
 --         SetPlayerCanLeaveParachuteSmokeTrail(ped, true)
---         TriggerEvent("inventory:client:Itembox", exports["dg-inventory"]:GetItemData("smoketrailred"), "remove")
 --     else
 --         DGCore.Functions.Notify("You need to have a paracute to activate smoke!", "error")    
 --     end
@@ -116,7 +112,6 @@ AddEventHandler("consumables:client:UseArmor", function()
 		disableMouse = false,
 		disableCombat = true,
     }, {}, {}, {}, function() -- Done
-        TriggerEvent("inventory:client:ItemBox", "armor", "remove")
         TriggerServerEvent('hospital:server:SetArmor', 75)
         TriggerServerEvent("DGCore:Server:RemoveItem", "armor", 1)
         SetPedArmour(PlayerPedId(), 75)
@@ -148,7 +143,6 @@ AddEventHandler("consumables:client:UseHeavyArmor", function()
             currentVestTexture = GetPedTextureVariation(ped, 30)
             SetPedComponentVariation(ped, 9, 30, 0, 2)
         end
-        TriggerEvent("inventory:client:ItemBox", "heavyarmor", "remove")
         TriggerServerEvent("DGCore:Server:RemoveItem", "heavyarmor", 1)
         SetPedArmour(ped, 100)
     end)
@@ -166,8 +160,7 @@ AddEventHandler("consumables:client:ResetArmor", function()
         }, {}, {}, {}, function() -- Done
             SetPedComponentVariation(ped, 9, currentVest, currentVestTexture, 2)
             SetPedArmour(ped, 0)
-            TriggerEvent("inventory:client:ItemBox", "heavyarmor", "add")
-            TriggerServerEvent("DGCore:Server:AddItem", "heavyarmor", 1)
+            -- TriggerServerEvent("DGCore:Server:AddItem", "heavyarmor", 1)
         end)
     else
         DGCore.Functions.Notify("You\'re not wearing a vest..", "error")
@@ -184,7 +177,6 @@ AddEventHandler("consumables:client:DrinkAlcohol", function(itemName)
         disableCombat = true,
     }, {}, {}, {}, function() -- Done
         TriggerEvent('animations:client:EmoteCommandStart', {"c"})
-        TriggerEvent("inventory:client:ItemBox", itemName, "remove")
         TriggerServerEvent("DGCore:Server:RemoveItem", itemName, 1)
         TriggerServerEvent("DGCore:Server:SetMetaData", "thirst", DGCore.Functions.GetPlayerData().metadata["thirst"] + Consumeables[itemName])
         alcoholCount = alcoholCount + 1
@@ -215,7 +207,6 @@ AddEventHandler("consumables:client:Cokebaggy", function()
     }, {}, {}, function() -- Done
         StopAnimTask(ped, "switch@trevor@trev_smoking_meth", "trev_smoking_meth_loop", 1.0)
         TriggerServerEvent("DGCore:Server:RemoveItem", "cokebaggy", 1)
-        TriggerEvent("inventory:client:ItemBox", "cokebaggy", "remove")
         TriggerEvent("evidence:client:SetStatus", "widepupils", 200)
         CokeBaggyEffect()
     end, function() -- Cancel
@@ -239,7 +230,6 @@ AddEventHandler("consumables:client:Crackbaggy", function()
     }, {}, {}, function() -- Done
         StopAnimTask(ped, "switch@trevor@trev_smoking_meth", "trev_smoking_meth_loop", 1.0)
         TriggerServerEvent("DGCore:Server:RemoveItem", "crack_baggy", 1)
-        TriggerEvent("inventory:client:ItemBox", "crack_baggy", "remove")
         TriggerEvent("evidence:client:SetStatus", "widepupils", 300)
         CrackBaggyEffect()
     end, function() -- Cancel
@@ -262,7 +252,6 @@ AddEventHandler('consumables:client:EcstasyBaggy', function()
     }, {}, {}, function() -- Done
         StopAnimTask(PlayerPedId(), "mp_suicide", "pill", 1.0)
         TriggerServerEvent("DGCore:Server:RemoveItem", "xtcbaggy", 1)
-        TriggerEvent("inventory:client:ItemBox", "xtcbaggy", "remove")
         EcstasyEffect()
     end, function() -- Cancel
         StopAnimTask(PlayerPedId(), "mp_suicide", "pill", 1.0)
@@ -279,7 +268,6 @@ AddEventHandler("consumables:client:Eat", function(itemName)
 		disableMouse = false,
 		disableCombat = true,
     }, {}, {}, {}, function() -- Done
-        TriggerEvent("inventory:client:ItemBox", itemName, "remove")
         TriggerEvent('animations:client:EmoteCommandStart', {"c"})
         TriggerServerEvent("DGCore:Server:SetMetaData", "hunger", DGCore.Functions.GetPlayerData().metadata["hunger"] + Consumeables[itemName])
         TriggerServerEvent('hud:server:RelieveStress', math.random(2, 4))
@@ -295,7 +283,6 @@ AddEventHandler("consumables:client:Drink", function(itemName)
 		disableMouse = false,
 		disableCombat = true,
     }, {}, {}, {}, function() -- Done
-        TriggerEvent("inventory:client:ItemBox", itemName, "remove")
         TriggerEvent('animations:client:EmoteCommandStart', {"c"})
         TriggerServerEvent("DGCore:Server:SetMetaData", "thirst", DGCore.Functions.GetPlayerData().metadata["thirst"] + Consumeables[itemName])
     end)

@@ -132,7 +132,7 @@ RegisterNetEvent("thermite:UseThermite", function()
     if not nearThermiteableDoor then return end
 
     local data = doors[nearThermiteableDoor].thermiteable
-    TriggerServerEvent("DGCore:Server:RemoveItem", "thermite", 1)
+    DGX.Inventory.removeItemFromPlayer('thermite')
 
     loadModel(`hei_p_m_bag_var22_arm_s`)
     loadModel(`hei_prop_heist_thermite`)

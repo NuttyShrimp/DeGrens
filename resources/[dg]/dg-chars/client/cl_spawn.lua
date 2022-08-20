@@ -6,6 +6,7 @@ Spawn = {
 		currentDegree = -90,
 	}
 }
+isSpawned = false
 
 Spawn.setupSpawnMenu = function()
 	CreateThread(function()
@@ -56,6 +57,10 @@ Spawn.choose = function(idx)
   if result.fade then
 	  DoScreenFadeIn(250)
   end
+  Citizen.SetTimeout(5000, function()
+    TriggerEvent('propattach:playerLoaded')
+    isSpawned = true
+  end)
 	return
 end
 
@@ -151,3 +156,7 @@ RegisterNetEvent('dg-chars:client:finishSpawn', function(isNew)
 	end
 end)
 --endregion
+
+exports('isSpawned', function()
+  return isSpawned;
+end)

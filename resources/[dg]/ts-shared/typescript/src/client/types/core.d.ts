@@ -138,12 +138,6 @@ declare interface ClientFunctions {
    */
   GetPlayersFromCoords(coords: Vector, distance: number): number[];
 
-  /** QBCore.Functions.HasItem
-   *  @param item: Name of item to check for
-   *  @returns true if the player has the item, false otherwise
-   */
-  HasItem(tem: string): boolean;
-
   /** QBCore.Functions.ProgressBar: Displays a progress bar on screen
    *  @param name: Name of the progress bar
    *  @param label: Label to be displayed on the progressbar

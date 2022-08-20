@@ -2,15 +2,18 @@ fx_version 'cerulean'
 game 'gta5'
 name 'dg-ui'
 
-shared_script '@dg-core/import.lua'
+shared_scripts {
+  '@dg-core/import.lua',
+  '@ts-shared/shared/lib.lua',
+}
 
 server_scripts {
+  '@ts-shared/server/server.js',
 	'server/sv_*.lua',
 }
 
 client_scripts {
-    '@ts-shared/client/client.js',
-    '@ts-shared/shared/lib.lua',
+  '@ts-shared/client/client.js',
 	'@dg-logs/client/cl_log.lua',
 	'client/cl_*.lua',
 	'client/components/cl_*.lua',

@@ -1,9 +1,7 @@
 local tunedVehicles = {}
 local VehicleNitrous = {}
 
-DGCore.Functions.CreateUseableItem("tunerlaptop", function(source, item)
-    local src = source
-
+DGX.Inventory.registerUseable("tunerlaptop", function(src)
     TriggerClientEvent('qb-tunerchip:client:openChip', src)
 end)
 
@@ -33,10 +31,8 @@ DGCore.Functions.CreateCallback('qb-tunerchip:server:GetStatus', function(source
     cb(tunedVehicles[plate])
 end)
 
-DGCore.Functions.CreateUseableItem("nitrous", function(source, item)
-    local Player = DGCore.Functions.GetPlayer(source)
-
-    TriggerClientEvent('smallresource:client:LoadNitrous', source)
+DGX.Inventory.registerUseable("nitrous", function(src)
+    TriggerClientEvent('smallresource:client:LoadNitrous', src)
 end)
 
 RegisterServerEvent('nitrous:server:LoadNitrous')

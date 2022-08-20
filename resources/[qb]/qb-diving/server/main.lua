@@ -58,16 +58,12 @@ function InsertBoat(boatModel, Player, plate)
         {Player.PlayerData.citizenid, boatModel, plate})
 end
 
-DGCore.Functions.CreateUseableItem("jerry_can", function(source, item)
-    local Player = DGCore.Functions.GetPlayer(source)
-
-    TriggerClientEvent("qb-diving:client:UseJerrycan", source)
+DGX.Inventory.registerUseable("jerry_can", function(src)
+    TriggerClientEvent("qb-diving:client:UseJerrycan", src)
 end)
 
-DGCore.Functions.CreateUseableItem("diving_gear", function(source, item)
-    local Player = DGCore.Functions.GetPlayer(source)
-
-    TriggerClientEvent("qb-diving:client:UseGear", source, true)
+DGX.Inventory.registerUseable("diving_gear", function(src)
+    TriggerClientEvent("qb-diving:client:UseGear", src, true)
 end)
 
 RegisterServerEvent('qb-diving:server:RemoveItem')
@@ -159,14 +155,12 @@ AddEventHandler('qb-diving:server:SellCoral', function()
             if Item.amount > 1 then
                 for i = 1, Item.amount, 1 do
                     Player.Functions.RemoveItem(Item.name, 1)
-                    TriggerClientEvent('inventory:client:ItemBox', src, Item.name, "remove")
 										exports['dg-financials']:addCash(src, math.ceil(Reward / Item.amount), ("Sold %d coral"):format(Item.amount))
                     Citizen.Wait(250)
                 end
             else
                 Player.Functions.RemoveItem(Item.name, 1)
 								exports['dg-financials']:addCash(src, Reward, "Sold 1 coral")
-                TriggerClientEvent('inventory:client:ItemBox', src, Item.name, "remove")
             end
         end
     else

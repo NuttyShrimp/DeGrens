@@ -13,9 +13,8 @@ DGCore.Commands.Add("id", "Check Your ID #", {}, false, function(source, args)
   TriggerClientEvent('DGCore:Notify', source, "ID: " .. source)
 end)
 
-DGCore.Functions.CreateUseableItem("harness", function(source, item)
-  local Player = DGCore.Functions.GetPlayer(source)
-  TriggerClientEvent('seatbelt:client:UseHarness', source, item)
+DGX.Inventory.registerUseable("harness", function(src, item)
+  TriggerClientEvent('seatbelt:client:UseHarness', src, item)
 end)
 
 RegisterServerEvent('equip:harness')
@@ -23,11 +22,10 @@ AddEventHandler('equip:harness', function(item)
   local src = source
   local Player = DGCore.Functions.GetPlayer(src)
   if Player.PlayerData.items[item.slot].info.uses - 1 == 0 then
-    TriggerClientEvent("inventory:client:ItemBox", source, 'harness', "remove")
     Player.Functions.RemoveItem('harness', 1)
   else
     Player.PlayerData.items[item.slot].info.uses = Player.PlayerData.items[item.slot].info.uses - 1
-    Player.Functions.SetInventory(Player.PlayerData.items, false)
+    -- Player.Functions.SetInventory(Player.PlayerData.items, false)
   end
 end)
 
@@ -40,7 +38,7 @@ AddEventHandler('seatbelt:DoHarnessDamage', function(hp, data)
     Player.Functions.RemoveItem('harness', 1, data.slot)
   else
     Player.PlayerData.items[data.slot].info.uses = Player.PlayerData.items[data.slot].info.uses - 1
-    Player.Functions.SetInventory(Player.PlayerData.items, false)
+    -- Player.Functions.SetInventory(Player.PlayerData.items, false)
   end
 end)
 

@@ -218,8 +218,7 @@ Citizen.CreateThread(function()
 							DrawText3Ds(stringCoords.x, stringCoords.y, stringCoords.z + 1.2, Config.Strings.PurchaseJerryCan)
 
 							if IsControlJustReleased(0, 38) then
-								TriggerServerEvent('DGCore:Server:AddItem', "weapon_petrolcan", 1)
-								TriggerEvent("inventory:client:ItemBox", "weapon_petrolcan", "add")
+								-- TriggerServerEvent('DGCore:Server:AddItem', "weapon_petrolcan", 1)
 								TriggerServerEvent('fuel:pay', Config.JerryCanCost, GetPlayerServerId(PlayerId()))
 							end
 						else

@@ -48,7 +48,11 @@
     },
     "taser_cartridge": {
       "ammoType": "AMMO_STUNGUN",
-      "amount": 3
+      "amount": 2
+    },
+    "rocket": {
+      "ammoType": "AMMO_RPG",
+      "amount": 1
     }
   }
 }

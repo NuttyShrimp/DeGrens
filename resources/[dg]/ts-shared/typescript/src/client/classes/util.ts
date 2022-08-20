@@ -90,7 +90,14 @@ export class Interiors {
   }
 }
 
+export class PropAttach {
+  add = (objName: string, offset?: Vec3): Promise<number> => global.exports['dg-propattach'].add(objName, offset);
+  remove = (objId: number) => global.exports['dg-propattach'].remove(objId);
+  move = (objId: number, offset?: Vec3): Promise<number> => global.exports['dg-propattach'].move(objId, offset);
+}
+
 export default {
   Util: new Util(),
   Interiors: new Interiors(),
+  PropAttach: new PropAttach(),
 };

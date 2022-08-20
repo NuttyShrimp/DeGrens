@@ -1,28 +1,24 @@
 local activeMethLabData = {}
 
-DGCore.Functions.CreateUseableItem("meth_brick", function(source, item)
-    local Player = DGCore.Functions.GetPlayer(source)
-    if not Player.Functions.GetItemByName(item.name) then return end
-    
-    local bagInfo = Player.Functions.GetItemByName("empty_bag")
-    if not bagInfo then
-        TriggerClientEvent("dg-ui:client:addNotification", source, "Waar ga je dit insteken?", "error")
+DGX.Inventory.registerUseable("meth_brick", function(src, item)
+    local Player = DGCore.Functions.GetPlayer(src)
+    local hasEmptyBags = DGX.Inventory.doesPlayerHaveItems(src, 'empty_bags')
+    if not hasEmptyBags then
+        DGX.RPC.execute("dg-ui:client:addNotification", src, "Waar ga je dit insteken?", "error")
         return
     end
     
+    -- TODO: Update to metadata
     if os.time() >= item.createtime + (getConfig().meth.dryTime * 60 * 60) then
         local amount = math.floor((3 * item.info.purity^2) / 100) -- calculate amount
         print(("Amount: %s, Purity: %s"):format(amount, item.info.purity))
 
-        Player.Functions.RemoveItem("empty_bag", amount)
-        TriggerClientEvent("inventory:client:ItemBox", source, "empty_bag", "remove")
-        Player.Functions.RemoveItem(item.name, 1)
-        TriggerClientEvent("inventory:client:ItemBox", source, item.name, "remove")
-
-        Player.Functions.AddItem("meth_bag", amount)
-        TriggerClientEvent("inventory:client:ItemBox", source, "meth_bag", "add")
+        DGX.Inventory.removeItemFromPlayer(src, 'empty_bags')
+        DGX.Inventory.removeItemFromPlayer(src, item.name)
+        
+        DGX.Inventory.addItemToPlayer(src, 'meth_bag', amount)
     else
-        TriggerClientEvent("dg-ui:client:addNotification", source, "Dit is nog niet droog", "error")
+        DGX.RPC.execute('dg-ui:client:addNotification', src, "Dit is nog niet droog", "error")
     end
 end)
 
@@ -98,13 +94,13 @@ DGCore.Functions.CreateCallback("dg-labs:server:meth:CanCollect", function(sourc
     if not labId or getLabTypeFromId(labId) ~= "meth" then return end
 
     if not states[labId].started then
-        TriggerClientEvent("dg-ui:client:addNotification", source, "Er staat nog niks aan...", "error")
+        DGX.RPC.execute("dg-ui:client:addNotification", source, "Er staat nog niks aan...", "error")
         cb(false)
         return
     end
 
     if not getAllStationsFilled(labId) then
-        TriggerClientEvent("dg-ui:client:addNotification", source, "Nog niet alles is gevuld...", "error")
+        DGX.RPC.execute("dg-ui:client:addNotification", source, "Nog niet alles is gevuld...", "error")
         cb(false)
         return
     end
@@ -117,7 +113,7 @@ RegisterServerEvent("dg-labs:server:meth:SetStartState", function(labId)
     if not labId or getLabTypeFromId(labId) ~= "meth" then return end
 
     if states[labId].started then 
-        TriggerClientEvent("dg-ui:client:addNotification", source, "Dit staat al aan...", "error")
+        DGX.RPC.execute("dg-ui:client:addNotification", source, "Dit staat al aan...", "error")
         return
     end
 
@@ -144,8 +140,7 @@ RegisterServerEvent("dg-labs:server:meth:Collect", function(labId)
 
     local Player = DGCore.Functions.GetPlayer(source)
     local quality = getRecipeQuality(labId)
-    local info = {purity = quality}
-    Player.Functions.AddItem("meth_brick", 1, nil, info)
+    DGX.Inventory.addItemToPlayer(source, 'meth_brick', 1, {purity = quality})
 
     local resetTime = getConfig().meth.resetTime * 60 * 1000
     Citizen.SetTimeout(resetTime, function()

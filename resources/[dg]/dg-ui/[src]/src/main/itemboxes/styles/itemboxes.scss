@@ -1,0 +1,47 @@
+@use 'src/styles/variables';
+
+.itemboxes {
+  &__list {
+    width: 100%;
+    height: auto;
+    margin-left: 47vw;
+    margin-top: 70vh;
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+
+    & .itembox {
+      height: 6vw;
+      aspect-ratio: 1;
+      margin-right: 2vh;
+      background-color: rgba(variables.$primary_normal, 0.5);
+      border: 2px solid rgba(variables.$primary_darker_dark, 0.9);
+
+      & > * {
+        position: absolute;
+      }
+
+      & > p {
+        font-size: 1.5vh;
+        margin-left: 0.3vh;
+        white-space: nowrap;
+        overflow: hidden;
+        color: variables.$gray_lighter;
+      }
+
+      & .image {
+        width: inherit;
+        height: inherit;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        & > img {
+          width: inherit;
+          height: inherit;
+          object-fit: cover;
+        }
+      }
+    }
+  }
+}

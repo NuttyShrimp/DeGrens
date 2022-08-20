@@ -431,9 +431,8 @@ DGCore.Commands.Add("takedna", "Take a DNA sanple from a person (empty evidence 
                 type = "dna",
                 dnalabel = DnaHash(OtherPlayer.PlayerData.citizenid)
             }
-            if Player.Functions.AddItem("filled_evidence_bag", 1, false, info) then
-                TriggerClientEvent("inventory:client:ItemBox", src, "filled_evidence_bag", "add")
-            end
+            -- if Player.Functions.AddItem("filled_evidence_bag", 1, false, info) then
+            -- end
         else
             TriggerClientEvent('DGCore:Notify', src, "You must have an empty evidence bag with you", "error")
         end
@@ -473,23 +472,15 @@ end)
 
 -- Items
 
-DGCore.Functions.CreateUseableItem("handcuffs", function(source, item)
-    local src = source
-    local Player = DGCore.Functions.GetPlayer(src)
-    if Player.Functions.GetItemByName(item.name) then
-        TriggerClientEvent("police:client:CuffPlayerSoft", src)
-    end
+DGX.Inventory.registerUseable("handcuffs", function(src)
+    TriggerClientEvent("police:client:CuffPlayerSoft", src)
 end)
 
-DGCore.Functions.CreateUseableItem("moneybag", function(source, item)
-    local src = source
-    local Player = DGCore.Functions.GetPlayer(src)
-    if Player.Functions.GetItemByName(item.name) then
-        if item.info and item.info ~= "" then
-            if Player.PlayerData.job.name ~= "police" then
-                if Player.Functions.RemoveItem("moneybag", 1, item.slot) then
-										exports['dg-financials']:addCash(src, tonumber(item.info.cash), 'Money Bag')
-                end
+DGX.Inventory.registerUseable("moneybag", function(src, item)
+    if item.info and item.info ~= "" then
+        if Player.PlayerData.job.name ~= "police" then
+            if Player.Functions.RemoveItem("moneybag", 1, item.slot) then
+                exports['dg-financials']:addCash(src, tonumber(item.info.cash), 'Money Bag')
             end
         end
     end
@@ -517,7 +508,7 @@ end)
 
 DGCore.Functions.CreateCallback('police:IsSilencedWeapon', function(source, cb, weapon)
     local Player = DGCore.Functions.GetPlayer(source)
-    local itemInfo = Player.Functions.GetItemByName(exports["dg-inventory"]:GetItemData(weapon)["name"])
+    local itemInfo = Player.Functions.GetItemByName(DGX.Inventory.getItemData(weapon)["name"])
     local retval = false
     if itemInfo then
         if itemInfo.info and itemInfo.info.attachments then
@@ -755,8 +746,7 @@ RegisterNetEvent('police:server:SeizeCash', function(playerId)
         local moneyAmount = exports['dg-financials']:getCash(playerId)
         local info = { cash = moneyAmount }
 				exports['dg-financials']:removeCash(playerId, moneyAmount, 'Police cash seized')
-        Player.Functions.AddItem("moneybag", 1, false, info)
-        TriggerClientEvent('inventory:client:ItemBox', src, "moneybag", "add")
+        -- Player.Functions.AddItem("moneybag", 1, false, info)
         TriggerClientEvent('DGCore:Notify', SearchedPlayer.PlayerData.source, 'Your cash was confiscated')
     end
 end)
@@ -856,36 +846,34 @@ end)
 RegisterNetEvent('evidence:server:AddBlooddropToInventory', function(bloodId, bloodInfo)
     local src = source
     local Player = DGCore.Functions.GetPlayer(src)
-    if Player.Functions.RemoveItem("empty_evidence_bag", 1) then
-        if Player.Functions.AddItem("filled_evidence_bag", 1, false, bloodInfo) then
-            TriggerClientEvent("inventory:client:ItemBox", src, "filled_evidence_bag", "add")
-            TriggerClientEvent("evidence:client:RemoveBlooddrop", -1, bloodId)
-            BloodDrops[bloodId] = nil
-        end
-    else
-        TriggerClientEvent('DGCore:Notify', src, "You must have an empty evidence bag with you", "error")
-    end
+    -- if Player.Functions.RemoveItem("empty_evidence_bag", 1) then
+    --     if Player.Functions.AddItem("filled_evidence_bag", 1, false, bloodInfo) then
+    --         TriggerClientEvent("evidence:client:RemoveBlooddrop", -1, bloodId)
+    --         BloodDrops[bloodId] = nil
+    --     end
+    -- else
+    --     TriggerClientEvent('DGCore:Notify', src, "You must have an empty evidence bag with you", "error")
+    -- end
 end)
 
 RegisterNetEvent('evidence:server:AddFingerprintToInventory', function(fingerId, fingerInfo)
     local src = source
     local Player = DGCore.Functions.GetPlayer(src)
-    if Player.Functions.RemoveItem("empty_evidence_bag", 1) then
-        if Player.Functions.AddItem("filled_evidence_bag", 1, false, fingerInfo) then
-            TriggerClientEvent("inventory:client:ItemBox", src, "filled_evidence_bag", "add")
-            TriggerClientEvent("evidence:client:RemoveFingerprint", -1, fingerId)
-            FingerDrops[fingerId] = nil
-        end
-    else
-        TriggerClientEvent('DGCore:Notify', src, "You must have an empty evidence bag with you", "error")
-    end
+    -- if Player.Functions.RemoveItem("empty_evidence_bag", 1) then
+    --     if Player.Functions.AddItem("filled_evidence_bag", 1, false, fingerInfo) then
+    --         TriggerClientEvent("evidence:client:RemoveFingerprint", -1, fingerId)
+    --         FingerDrops[fingerId] = nil
+    --     end
+    -- else
+    --     TriggerClientEvent('DGCore:Notify', src, "You must have an empty evidence bag with you", "error")
+    -- end
 end)
 
 RegisterNetEvent('evidence:server:CreateCasing', function(weapon, coords)
     local src = source
     local Player = DGCore.Functions.GetPlayer(src)
     local casingId = CreateCasingId()
-    local weaponInfo = exports["dg-inventory"]:GetItemData(weapon)
+    local weaponInfo = DGX.Inventory.getItemData(weapon)
     local serieNumber = nil
     if weaponInfo then
         local weaponItem = Player.Functions.GetItemByName(weaponInfo["name"])
@@ -921,15 +909,14 @@ end)
 RegisterNetEvent('evidence:server:AddCasingToInventory', function(casingId, casingInfo)
     local src = source
     local Player = DGCore.Functions.GetPlayer(src)
-    if Player.Functions.RemoveItem("empty_evidence_bag", 1) then
-        if Player.Functions.AddItem("filled_evidence_bag", 1, false, casingInfo) then
-            TriggerClientEvent("inventory:client:ItemBox", src, "filled_evidence_bag", "add")
-            TriggerClientEvent("evidence:client:RemoveCasing", -1, casingId)
-            Casings[casingId] = nil
-        end
-    else
-        TriggerClientEvent('DGCore:Notify', src, "You must have an empty evidence bag with you", "error")
-    end
+    -- if Player.Functions.RemoveItem("empty_evidence_bag", 1) then
+    --     if Player.Functions.AddItem("filled_evidence_bag", 1, false, casingInfo) then
+    --         TriggerClientEvent("evidence:client:RemoveCasing", -1, casingId)
+    --         Casings[casingId] = nil
+    --     end
+    -- else
+    --     TriggerClientEvent('DGCore:Notify', src, "You must have an empty evidence bag with you", "error")
+    -- end
 end)
 
 RegisterNetEvent('police:server:showFingerprint', function(playerId)

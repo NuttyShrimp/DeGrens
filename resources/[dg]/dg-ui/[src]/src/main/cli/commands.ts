@@ -183,4 +183,27 @@ export const cmds: {
     app: 'peek',
     show: false,
   },
+  {
+    cmd: 'show inventory',
+    app: 'inventory',
+    show: true,
+  },
+  {
+    cmd: 'hide inventory',
+    app: 'inventory',
+    show: false,
+  },
+  {
+    cmd: 'inventory update',
+    app: 'inventory',
+    data: {},
+  },
+  {
+    cmd: 'itembox $1 $2',
+    app: 'itemboxes',
+    data: {
+      action: '$1',
+      image: '$2',
+    },
+  },
 ];

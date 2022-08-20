@@ -73,12 +73,6 @@ declare interface Shared {
       };
     };
   };
-  StarterItems: {
-    [key: string]: {
-      amount: number;
-      name: string;
-    };
-  };
 }
 
 declare interface Config {
@@ -90,9 +84,7 @@ declare interface Config {
 }
 
 declare interface PlayerConfig {
-  MaxWeight: number;
   BloodTypes: BloodTypes;
-  MaxInvSlots: number;
   HungerRate: number;
   ThirstRate: number;
   JSONData: string[];
@@ -113,49 +105,6 @@ declare interface MoneyConfig {
 }
 
 declare type BloodTypes = 'A+' | 'B+' | 'B-' | 'AB+' | 'AB-' | 'O+' | 'O-';
-
-declare interface Item {
-  type: 'weapon' | 'item';
-  name: string;
-  weight: number;
-  label: string;
-  image: string;
-  shouldClose: boolean;
-  combinable?: ItemCombinable;
-  description: string;
-  info?: any;
-  amount?: any;
-  createtime: number;
-  decayrate: number;
-  slot: number;
-  usable: boolean;
-  stackable: boolean;
-  quality: number;
-}
-
-declare interface ItemCombinableAnim {
-  dict: string;
-  lib: string;
-  text: string;
-  timeOut: number;
-}
-
-declare interface ItemCombinable {
-  accept: string[];
-  reward: string;
-  anim: ItemCombinableAnim;
-}
-
-declare interface Weapon {
-  name: string;
-  label: string;
-  weight: number;
-  type: 'weapon' | 'item';
-  image: string;
-  unique: boolean;
-  usable: boolean;
-  description: string;
-}
 
 declare interface Vehicle {
   name: string;
@@ -181,7 +130,6 @@ declare interface MetaData {
 declare interface PlayerData {
   position: Vector;
   source: number;
-  cid: number;
   license: string;
   steamid: string;
   charinfo: CharacterInfo;
@@ -189,7 +137,6 @@ declare interface PlayerData {
   name: string;
   citizenid: number;
   LoggedIn: boolean;
-  items: Item[];
   inventory: string; // Appears to be JSON serialised version of items
   metadata: MetaData;
 }

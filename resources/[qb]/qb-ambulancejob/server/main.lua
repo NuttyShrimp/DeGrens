@@ -31,7 +31,6 @@ RegisterNetEvent('hospital:server:RespawnAtHospital', function()
 		TriggerClientEvent('hospital:client:SendToBed', src, k, v, true)
 		TriggerClientEvent('hospital:client:SetBed', -1, k, true)
 		if Config.WipeInventoryOnRespawn then
-			Player.Functions.ClearInventory()
       -- TODO: clear inventory
 			TriggerClientEvent('DGCore:Notify', src, 'All your possessions have been taken..', 'error')
 		end
@@ -110,7 +109,6 @@ RegisterNetEvent('hospital:server:TreatWounds', function(playerId)
 	if Patient then
 		if Player.PlayerData.job.name =="ambulance" then
 			Player.Functions.RemoveItem('bandage', 1)
-			TriggerClientEvent('inventory:client:ItemBox', src, 'bandage', "remove")
 			TriggerClientEvent("hospital:client:HealInjuries", Patient.PlayerData.source, "full")
 		end
 	end
@@ -136,14 +134,12 @@ RegisterNetEvent('hospital:server:RevivePlayer', function(playerId, isOldMan)
 		if oldMan then
 			if exports['dg-financials']:removeCash(src, 5000, 'Revived player at old man') then
 				Player.Functions.RemoveItem('firstaid', 1)
-				TriggerClientEvent('inventory:client:ItemBox', src, 'firstaid', "remove")
 				TriggerClientEvent('hospital:client:Revive', Patient.PlayerData.source)
 			else
 				TriggerClientEvent('DGCore:Notify', src, "You don\'t have enough money on you..", "error")
 			end
 		else
 			Player.Functions.RemoveItem('firstaid', 1)
-			TriggerClientEvent('inventory:client:ItemBox', src, 'firstaid', "remove")
 			TriggerClientEvent('hospital:client:Revive', Patient.PlayerData.source)
 		end
 	end
@@ -338,26 +334,14 @@ end, 'admin')
 
 -- Items
 
-DGCore.Functions.CreateUseableItem("bandage", function(source, item)
-	local src = source
-	local Player = DGCore.Functions.GetPlayer(src)
-	if Player.Functions.GetItemByName(item.name) ~= nil then
-		TriggerClientEvent("hospital:client:UseBandage", src)
-	end
+DGX.Inventory.registerUseable("bandage", function(src)
+    TriggerClientEvent("hospital:client:UseBandage", src)
 end)
 
-DGCore.Functions.CreateUseableItem("painkillers", function(source, item)
-	local src = source
-	local Player = DGCore.Functions.GetPlayer(src)
-	if Player.Functions.GetItemByName(item.name) ~= nil then
-		TriggerClientEvent("hospital:client:UsePainkillers", src)
-	end
+DGX.Inventory.registerUseable("painkillers", function(src)
+    TriggerClientEvent("hospital:client:UsePainkillers", src)
 end)
 
-DGCore.Functions.CreateUseableItem("firstaid", function(source, item)
-	local src = source
-	local Player = DGCore.Functions.GetPlayer(src)
-	if Player.Functions.GetItemByName(item.name) ~= nil then
-		TriggerClientEvent("hospital:client:UseFirstAid", src)
-	end
+DGX.Inventory.registerUseable("firstaid", function(src)
+    TriggerClientEvent("hospital:client:UseFirstAid", src)
 end)

@@ -2,13 +2,14 @@ fx_version 'cerulean'
 game 'gta5'
 
 client_scripts {
+    '@ts-shared/client/client.js',
     '@dg-lib/client/cl_ui.lua',
     'client/cl_*.lua'
 }
 
 server_scripts {
-    'server/sv_*.lua',
     '@ts-shared/server/server.js',
+    'server/sv_*.lua',
 }
 
 shared_scripts {

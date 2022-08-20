@@ -13,13 +13,11 @@ AddEventHandler('qb-diving:server:TakeCoral', function(Area, Coral, Bool)
 
     if Amount > 1 then
         for i = 1, Amount, 1 do
-            Player.Functions.AddItem(QBDiving.CoralTypes[CoralType].item, 1)
-            TriggerClientEvent('inventory:client:ItemBox', src, QBDiving.CoralTypes[CoralType].item, "add")
+            -- Player.Functions.AddItem(QBDiving.CoralTypes[CoralType].item, 1)
             Citizen.Wait(250)
         end
     else
-        Player.Functions.AddItem(QBDiving.CoralTypes[CoralType].item, Amount)
-        TriggerClientEvent('inventory:client:ItemBox', src, QBDiving.CoralTypes[CoralType].item, "add")
+        -- Player.Functions.AddItem(QBDiving.CoralTypes[CoralType].item, Amount)
     end
 
     if (QBDiving.Locations[Area].TotalCoral - 1) == 0 then
@@ -50,7 +48,6 @@ AddEventHandler('qb-diving:server:RemoveGear', function()
     local Player = DGCore.Functions.GetPlayer(src)
 
     Player.Functions.RemoveItem("diving_gear", 1)
-    TriggerClientEvent('inventory:client:ItemBox', src, "diving_gear", "remove")
 end)
 
 RegisterServerEvent('qb-diving:server:GiveBackGear')
@@ -58,6 +55,5 @@ AddEventHandler('qb-diving:server:GiveBackGear', function()
     local src = source
     local Player = DGCore.Functions.GetPlayer(src)
     
-    Player.Functions.AddItem("diving_gear", 1)
-    TriggerClientEvent('inventory:client:ItemBox', src, "diving_gear", "add")
+    -- Player.Functions.AddItem("diving_gear", 1)
 end)

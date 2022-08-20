@@ -80,7 +80,7 @@ end
 local function SetCarItemsInfo()
 	local items = {}
 	for k, item in pairs(Config.CarItems) do
-		local itemInfo = exports["dg-inventory"]:GetItemData(item.name:lower())
+		local itemInfo = DGX.Inventory.getItemData(item.name:lower())
 		items[item.slot] = {
 			name = itemInfo["name"],
 			amount = tonumber(item.amount),
@@ -376,10 +376,7 @@ CreateThread(function()
                         if IsControlJustReleased(0, 38) then
                             local drawer = Input("Which drawer do you want to look at?", "", 2)
                             if drawer then
-                                TriggerServerEvent("inventory:server:OpenInventory", "stash", " 1 | Drawer "..drawer, {
-                                    maxweight = 4000000,
-                                    slots = 500,
-                                })
+                              print('Deprecated inventory opening method. Please update to new export')
                             end
                         end
                     elseif #(pos - v) < 1.5 then
@@ -396,10 +393,7 @@ CreateThread(function()
                         if IsControlJustReleased(0, 38) then
                             local drawer = Input("Which drawer do you want to look at?", "", 2)
                             if drawer then
-                                TriggerServerEvent("inventory:server:OpenInventory", "stash", " 2 | Drawer "..drawer, {
-                                    maxweight = 4000000,
-                                    slots = 500,
-                                })
+                              print('Deprecated inventory opening method. Please update to new export')
                             end
                         end
                     elseif #(pos - v) < 1.5 then
@@ -416,10 +410,7 @@ CreateThread(function()
                         if IsControlJustReleased(0, 38) then
                             local drawer = Input("Which drawer do you want to look at?", "", 2)
                             if drawer then
-                                TriggerServerEvent("inventory:server:OpenInventory", "stash", " 3 | Drawer "..drawer, {
-                                    maxweight = 4000000,
-                                    slots = 500,
-                                })
+                              print('Deprecated inventory opening method. Please update to new export')
                             end
                         end
                     elseif #(pos - v) < 1.5 then
@@ -434,10 +425,7 @@ CreateThread(function()
                     if #(pos - v) < 1.0 then
                         DrawText3D(v.x, v.y, v.z, "~r~E~w~ - Bin")
                         if IsControlJustReleased(0, 38) then
-                            TriggerServerEvent("inventory:server:OpenInventory", "stash", "policetrash", {
-                                maxweight = 4000000,
-                                slots = 300,
-                            })
+                          print('Deprecated inventory opening method. Please update to new export')
                         end
                     elseif #(pos - v) < 1.5 then
                         DrawText3D(v.x, v.y, v.z, "Bin")
@@ -570,7 +558,7 @@ CreateThread(function()
                         if #(pos - v) < 1.5 then
                             DrawText3D(v.x, v.y, v.z, "~g~E~w~ - Personal stash")
                             if IsControlJustReleased(0, 38) then
-                                TriggerServerEvent("inventory:server:OpenInventory", "stash", "policestash_"..DGCore.Functions.GetPlayerData().citizenid)
+                              print('Deprecated inventory opening method. Please update to new export')citizenid)
                             end
                         elseif #(pos - v) < 2.5 then
                             DrawText3D(v.x, v.y, v.z, "Personal stash")

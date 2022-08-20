@@ -1,3 +1,4 @@
+import { Inventory } from '@dgx/client';
 import { getCtxPlayerData } from './context';
 
 export const canEntryBeEnabled = async (entry: PeekOption, entity: number): Promise<PeekOption | undefined> => {
@@ -20,9 +21,8 @@ export const canEntryBeEnabled = async (entry: PeekOption, entity: number): Prom
     } else return;
   }
   if (entry.items) {
-    if (typeof entry.items === 'string' && !(await DGCore.Functions.HasItem(entry.items))) return;
-    else if (Array.isArray(entry.items)) {
-      if (!entry.items.every(item => DGCore.Functions.HasItem(item))) return;
+    if (!(await Inventory.doesPlayerHaveItems(entry.items))) {
+      return;
     }
   }
   if (!entry?._metadata?.state) {

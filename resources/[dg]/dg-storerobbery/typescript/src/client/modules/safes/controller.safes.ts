@@ -1,4 +1,4 @@
-import { Events, Notifications, Peek, RPC, Util } from '@dgx/client';
+import { Events, Inventory, Notifications, Peek, RPC, Util } from '@dgx/client';
 import locationManager from 'controllers/classes/LocationManager';
 
 Peek.addZoneEntry(
@@ -41,12 +41,11 @@ const hackSafe = async () => {
     return;
   }
 
-  if (await DGCore.Functions.HasItem('decoding_tool')) {
+  if (await Inventory.doesPlayerHaveItems('decoding_tool')) {
     global.exports['dg-numbergame'].OpenGame(
       async (success: boolean) => {
-        const removedItem = await DGCore.Functions.TriggerCallback<boolean>('DGCore:RemoveItem', 'decoding_tool', 1);
+        const removedItem = await Inventory.removeItemFromPlayer('decoding_tool');
         if (!removedItem) return;
-        emit('inventory:client:ItemBox', 'decoding_tool', 1);
         if (success) {
           Events.emitNet('storerobbery:server:hackSafe', locationManager.currentStore);
           global.exports['dg-phone'].sendMail(
