@@ -2,7 +2,7 @@ cacheIds = {}
 
 local activeLabs = {}
 currentLabId = nil
-local boxAttached = false
+local attachedBox = nil
 
 AddEventHandler('onClientResourceStart', function(resourceName)
 	if resourceName ~= GetCurrentResourceName() then return end
@@ -13,7 +13,7 @@ AddEventHandler('onClientResourceStart', function(resourceName)
     local activeLabs = DGCore.Functions.TriggerCallback("dg-labs:server:GetActiveLabs")
     local config = DGCore.Functions.TriggerCallback('dg-labs:server:getConfig')
     for labType, labId in pairs(activeLabs) do
-        local lab = config.labs[labId-1]
+        local lab = config.labs[labId]
 
         -- Load interior
         local hash = GetInteriorAtCoords(lab.coords.x, lab.coords.y, lab.coords.z)
@@ -129,13 +129,12 @@ loadAnimDict = function(dict)
 end
 
 attachBox = function()
-    if boxAttached then return end
-    exports['dg-propattach']:addItem('cardbox')
-    boxAttached = true
+    if attachedBox then return end
+    attachedBox = exports['dg-propattach']:add('cardbox')
     Citizen.CreateThread(function()
         local ped = PlayerPedId()
         loadAnimDict("anim@heists@box_carry@")
-        while boxAttached do
+        while attachedBox do
             if not IsEntityPlayingAnim(ped, "anim@heists@box_carry@", "idle", 3) then
                 TaskPlayAnim(ped, "anim@heists@box_carry@", "idle", 2.0, 2.0, -1, 51, 0, false, false, false)
             end
@@ -146,7 +145,7 @@ attachBox = function()
 end
 
 removeBox = function()
-    if not boxAttached then return end
-    exports['dg-propattach']:removeItem('cardbox')
-    boxAttached = false
+    if not attachedBox then return end
+    exports['dg-propattach']:remove(attachedBox)
+    attachedBox = false
 end

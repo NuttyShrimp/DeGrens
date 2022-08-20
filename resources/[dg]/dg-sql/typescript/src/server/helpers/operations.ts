@@ -34,7 +34,7 @@ export const doQuery = async (
   return resultPromise;
 };
 
-export const doSscalar = async (query: string, params: any[] = [], cb?: (result: any) => void) => {
+export const doScalar = async (query: string, params: any[] = [], cb?: (result: any) => void) => {
   const result = await doQuery(query, params, cb, GetInvokingResource());
   let scalarInfo = result ? (Array.isArray(result) ? result[0] ?? {} : Object.values(result)[0]) : null;
   if (cb) {

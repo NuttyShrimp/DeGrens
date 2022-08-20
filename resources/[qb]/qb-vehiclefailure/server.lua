@@ -3,25 +3,16 @@ DGCore.Commands.Add("fix", "Repair your vehicle (Admin Only)", {}, false, functi
     TriggerClientEvent('vehiclemod:client:fixEverything', source)
 end, "admin")
 
-DGCore.Functions.CreateUseableItem("repairkit", function(source, item)
-    local Player = DGCore.Functions.GetPlayer(source)
-	if Player.Functions.GetItemBySlot(item.slot) ~= nil then
-        TriggerClientEvent("qb-vehiclefailure:client:RepairVehicle", source)
-    end
+DGX.Inventory.registerUseable("repairkit", function(src)
+    TriggerClientEvent("qb-vehiclefailure:client:RepairVehicle", src)
 end)
 
-DGCore.Functions.CreateUseableItem("cleaningkit", function(source, item)
-    local Player = DGCore.Functions.GetPlayer(source)
-	if Player.Functions.GetItemBySlot(item.slot) ~= nil then
-        TriggerClientEvent("qb-vehiclefailure:client:CleanVehicle", source)
-    end
+DGX.Inventory.registerUseable("cleaningkit", function(src)
+    TriggerClientEvent("qb-vehiclefailure:client:CleanVehicle", src)
 end)
 
-DGCore.Functions.CreateUseableItem("advancedrepairkit", function(source, item)
-    local Player = DGCore.Functions.GetPlayer(source)
-	if Player.Functions.GetItemBySlot(item.slot) ~= nil then
-        TriggerClientEvent("qb-vehiclefailure:client:RepairVehicleFull", source)
-    end
+DGX.Inventory.registerUseable("advancedrepairkit", function(src)
+    TriggerClientEvent("qb-vehiclefailure:client:RepairVehicleFull", src)
 end)
 
 RegisterServerEvent('qb-vehiclefailure:removeItem')

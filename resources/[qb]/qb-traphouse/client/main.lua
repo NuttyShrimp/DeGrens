@@ -261,7 +261,7 @@ Citizen.CreateThread(function()
                                 TraphouseInventory.label = "traphouse_"..CurrentTraphouse
                                 TraphouseInventory.items = data.inventory
                                 TraphouseInventory.slots = 2
-                                TriggerServerEvent("inventory:server:OpenInventory", "traphouse", CurrentTraphouse, TraphouseInventory)
+                                print('Deprecated inventory opening method. Please update to new export')
                             end
                         else
                             DrawText3Ds(data.coords["interaction"].x, data.coords["interaction"].y, data.coords["interaction"].z + 0.2, '~b~H~w~ - View Inventory')
@@ -278,7 +278,7 @@ Citizen.CreateThread(function()
                                 TraphouseInventory.label = "traphouse_"..CurrentTraphouse
                                 TraphouseInventory.items = data.inventory
                                 TraphouseInventory.slots = 2
-                                TriggerServerEvent("inventory:server:OpenInventory", "traphouse", CurrentTraphouse, TraphouseInventory)
+                                print('Deprecated inventory opening method. Please update to new export')
                             end
                             if IsControlJustPressed(0, 38) then
                                 TriggerServerEvent("qb-traphouse:server:TakeMoney", CurrentTraphouse)

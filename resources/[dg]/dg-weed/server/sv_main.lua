@@ -8,11 +8,10 @@ Citizen.CreateThread(function()
     config = exports['dg-config']:getModuleConfig('weed')
     configLoaded = true
 
+    -- TODO: Put gender in item metadata
     for gender, itemName in pairs(config.seeds) do
-        DGCore.Functions.CreateUseableItem(itemName, function(source, item)
-            local Player = DGCore.Functions.GetPlayer(source)
-            if not Player.Functions.GetItemByName(item.name) then return end
-            TriggerClientEvent("dg-weed:client:Plant", source, gender)
+        DGX.Inventory.registerUseable(itemName, function(src)
+            TriggerClientEvent("dg-weed:client:Plant", src, gender)
         end)
     end
 end)
@@ -22,35 +21,30 @@ DGCore.Functions.CreateCallback('dg-weed:server:getConfig', function(src, cb)
     cb(config)
 end)
 
-DGCore.Functions.CreateUseableItem("weed_bud", function(source, item)
-    local Player = DGCore.Functions.GetPlayer(source)
-    if not Player.Functions.GetItemByName(item.name) then return end
-    
-    local bagInfo = Player.Functions.GetItemByName("empty_bag")
+DGX.Inventory.registerUseable("weed_bud", function(src, item)
+    local hasBags = DGX.Inventory.doesPlayerHaveItems(src, "empty_bags")
     if not bagInfo then
-        TriggerClientEvent("DGCore:Notify", source, "Waar ga je dit insteken?", "error")
+        TriggerClientEvent("DGCore:Notify", src, "Waar ga je dit insteken?", "error")
         return
     end
 
+    -- TODO: Update to metadata
     if os.time() >= item.createtime + (config.dry.timeout * 60 * 60) then
         local amount = math.random(config.dry.amount.min, config.dry.amount.max)
         if amount > bagInfo.amount then
             amount = bagInfo.amount
         end
 
-        Player.Functions.RemoveItem("empty_bag", amount)
-        TriggerClientEvent("inventory:client:ItemBox", source, "empty_bag", "remove")
-        Player.Functions.RemoveItem(item.name, 1)
-        TriggerClientEvent("inventory:client:ItemBox", source, item.name, "remove")
+        DGX.Inventory.removeItemFromPlayer(src, "empty_bags")
+        DGX.Inventory.removeItemFromPlayer(src, item.name)
 
-        Player.Functions.AddItem("weed_bag", amount)
-        TriggerClientEvent("inventory:client:ItemBox", source, "weed_bag", "add")
+        DGX.Inventory.addItemToPlayer(src, 'weed_bag', amount)
     else
-        TriggerClientEvent("DGCore:Notify", source, "Dit is nog niet droog", "error")
+        TriggerClientEvent("DGCore:Notify", src, "Dit is nog niet droog", "error")
     end
 end)
 
-DGCore.Functions.CreateCallback("dg-weed:server:GetPlants", function(source, cb)
+DGCore.Functions.CreateCallback("dg-weed:server:GetPlants", function(src, cb)
     cb(activePlants)
 end)
 

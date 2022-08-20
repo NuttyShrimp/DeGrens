@@ -2,14 +2,15 @@ local isRevivedProm = nil
 
 RegisterNetEvent('dg-phone:load', function()
 	local src = source
-	local Player = DGCore.Functions.GetPlayer(src)
-	TriggerClientEvent('dg-phone:client:setState', src, 'hasPhone', Player.Functions.GetItemByName('phone') ~= nil)
+  local hasPhone = DGX.Inventory.doesPlayerHaveItems(src, 'phone')
+	TriggerClientEvent('dg-phone:client:setState', src, 'hasPhone', hasPhone)
 end)
 
-RegisterNetEvent('DGCore:Server:OnInventoryUpdate', function(src, removed, added)
-	-- Set hasVPN
-	local Player = DGCore.Functions.GetPlayer(src)
-	TriggerClientEvent('dg-phone:client:setState', src, 'hasPhone', Player.Functions.GetItemByName('phone') ~= nil)
+AddEventHandler('inventory:playerInventoryUpdated', function(cid, action, state)
+  if state.name ~= 'phone' then return end
+	local Player = DGCore.Functions.GetPlayerByCitizenId(cid)
+  local hasPhone = DGX.Inventory.doesPlayerHaveItems(Player.PlayerData.source, 'phone')
+	TriggerClientEvent('dg-phone:client:setState', Player.PlayerData.source, 'hasPhone', hasPhone)
 end)
 
 brickPhone = function(src, event, toggle)

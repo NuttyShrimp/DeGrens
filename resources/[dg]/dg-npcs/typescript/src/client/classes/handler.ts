@@ -61,6 +61,13 @@ class Handler extends Util.Singleton<Handler>() {
     delete this.npcs[id];
   };
 
+  @Export('findPedData')
+  getNpcData = (ped: number) => {
+    const npc = Object.values(this.npcs).find(npc => npc.entity === ped);
+    if (!npc) return;
+    return npc.data;
+  };
+
   @Export('setNpcState')
   setNpcState = (id: string, state: boolean) => {
     const npc = this.getNpc(id);

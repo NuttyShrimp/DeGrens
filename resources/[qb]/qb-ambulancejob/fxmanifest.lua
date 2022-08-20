@@ -4,9 +4,13 @@ game 'gta5'
 description 'QB-AmbulanceJob'
 version '1.0.0'
 
-shared_script 'config.lua'
+shared_scripts {
+    'config.lua',
+    '@ts-shared/shared/lib.lua'
+}
 
 client_scripts {
+    "@ts-shared/client/client.js",
 	'client/main.lua',
 	'client/wounding.lua',
 	'client/laststand.lua',
@@ -15,6 +19,9 @@ client_scripts {
 	'client/gui.lua',
 }
 
-server_script 'server/main.lua'
+server_scripts {
+    "@ts-shared/server/server.js",
+    'server/main.lua'
+}
 
 lua54 'yes'

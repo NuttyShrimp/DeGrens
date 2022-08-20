@@ -15,3 +15,13 @@ getAttachmentNameFromWeaponComponent = function(pWeaponHash, pComponent)
     end
     return nil
 end
+
+getEquipedWeaponComponents = function(hash, stashId)
+  local allPossibleAttachments = Weapons[hash].attachments
+  local attachmentsOnWeapon = DGX.Inventory.getItemsInInventory('stash', stashId)
+  local components = {}
+  for _, attachment in pairs(attachmentsOnWeapon) do
+    components[#components+1] = allPossibleAttachments[attachment.name]
+  end
+  return components
+end

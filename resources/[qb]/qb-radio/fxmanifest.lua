@@ -6,15 +6,20 @@ version '1.0.0'
 
 shared_scripts {
   'config.lua',
-  '@dg-core/import.lua'
+  '@dg-core/import.lua',
+  '@ts-shared/shared/lib.lua'
 }
 
 client_scripts {
+    "@ts-shared/client/client.js",
   'client.lua',
   'animation.lua'
 }
 
-server_script 'server.lua'
+server_script {
+    "@ts-shared/server/server.js",
+    'server.lua'
+}
 
 ui_page('html/ui.html')
 

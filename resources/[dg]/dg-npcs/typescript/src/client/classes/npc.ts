@@ -5,37 +5,47 @@ export class Npc {
   private _entity: number;
   private _enabled: boolean;
 
+  // #region Getters/Setters
   get data() {
     return this._data;
   }
-
   private set data(value: NpcData) {
     this._data = value;
   }
-
   get entity() {
     return this._entity;
   }
-
   private set entity(value: number) {
     this._entity = value;
   }
-
   get enabled() {
     return this._enabled;
   }
-
   set enabled(value: boolean) {
     this._enabled = value;
   }
+  // #endregion
 
   constructor(npcData: NpcData) {
     this.data = npcData;
     if (typeof this.data.model === 'string') {
       this.data.model = GetHashKey(this.data.model);
     }
+
     this.entity = null;
     this.enabled = true;
+
+    if (this.data.blip) {
+      const blip = AddBlipForCoord(this.data.position.x, this.data.position.y, this.data.position.z);
+      SetBlipSprite(blip, this.data.blip.sprite);
+      SetBlipColour(blip, this.data.blip.color);
+      SetBlipDisplay(blip, 2);
+      SetBlipScale(blip, 0.8);
+      SetBlipAsShortRange(blip, true);
+      BeginTextCommandScaleformString('string');
+      AddTextComponentString(this.data.blip.title);
+      EndTextCommandScaleformString();
+    }
   }
 
   async spawn() {

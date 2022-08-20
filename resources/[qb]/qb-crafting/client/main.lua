@@ -31,7 +31,7 @@ Citizen.CreateThread(function()
 					local crafting = {}
 					crafting.label = "Crafting"
 					crafting.items = GetThresholdItems()
-					TriggerServerEvent("inventory:server:OpenInventory", "crafting", math.random(1, 99), crafting)
+          print('Deprecated inventory opening method. Please update to new export')
 				end
 			end
 		end
@@ -56,7 +56,7 @@ Citizen.CreateThread(function()
 					local crafting = {}
 					crafting.label = "Attachment Crafting"
 					crafting.items = GetAttachmentThresholdItems()
-					TriggerServerEvent("inventory:server:OpenInventory", "attachment_crafting", math.random(1, 99), crafting)
+          print('Deprecated inventory opening method. Please update to new export')
 				end
 			end
 		end
@@ -82,19 +82,19 @@ end
 
 function SetupAttachmentItemsInfo()
 	itemInfos = {
-		[1] = {costs = exports["dg-inventory"]:GetItemData("metalscrap")["label"] .. ": 140x, " .. exports["dg-inventory"]:GetItemData("steel")["label"] .. ": 250x, " .. exports["dg-inventory"]:GetItemData("rubber")["label"] .. ": 60x"},
-		[2] = {costs = exports["dg-inventory"]:GetItemData("metalscrap")["label"] .. ": 165x, " .. exports["dg-inventory"]:GetItemData("steel")["label"] .. ": 285x, " .. exports["dg-inventory"]:GetItemData("rubber")["label"] .. ": 75x"},
-		[3] = {costs = exports["dg-inventory"]:GetItemData("metalscrap")["label"] .. ": 190x, " .. exports["dg-inventory"]:GetItemData("steel")["label"] .. ": 305x, " .. exports["dg-inventory"]:GetItemData("rubber")["label"] .. ": 85x, " .. exports["dg-inventory"]:GetItemData("smg_extendedclip")["label"] .. ": 1x"},
-		[4] = {costs = exports["dg-inventory"]:GetItemData("metalscrap")["label"] .. ": 205x, " .. exports["dg-inventory"]:GetItemData("steel")["label"] .. ": 340x, " .. exports["dg-inventory"]:GetItemData("rubber")["label"] .. ": 110x, " .. exports["dg-inventory"]:GetItemData("smg_extendedclip")["label"] .. ": 2x"},
-		[5] = {costs = exports["dg-inventory"]:GetItemData("metalscrap")["label"] .. ": 230x, " .. exports["dg-inventory"]:GetItemData("steel")["label"] .. ": 365x, " .. exports["dg-inventory"]:GetItemData("rubber")["label"] .. ": 130x"},
-		[6] = {costs = exports["dg-inventory"]:GetItemData("metalscrap")["label"] .. ": 255x, " .. exports["dg-inventory"]:GetItemData("steel")["label"] .. ": 390x, " .. exports["dg-inventory"]:GetItemData("rubber")["label"] .. ": 145x"},
-		[7] = {costs = exports["dg-inventory"]:GetItemData("metalscrap")["label"] .. ": 270x, " .. exports["dg-inventory"]:GetItemData("steel")["label"] .. ": 435x, " .. exports["dg-inventory"]:GetItemData("rubber")["label"] .. ": 155x"},
-		[8] = {costs = exports["dg-inventory"]:GetItemData("metalscrap")["label"] .. ": 300x, " .. exports["dg-inventory"]:GetItemData("steel")["label"] .. ": 469x, " .. exports["dg-inventory"]:GetItemData("rubber")["label"] .. ": 170x"},
+		[1] = {costs = DGX.Inventory.getItemData("metalscrap")["label"] .. ": 140x, " .. DGX.Inventory.getItemData("steel")["label"] .. ": 250x, " .. DGX.Inventory.getItemData("rubber")["label"] .. ": 60x"},
+		[2] = {costs = DGX.Inventory.getItemData("metalscrap")["label"] .. ": 165x, " .. DGX.Inventory.getItemData("steel")["label"] .. ": 285x, " .. DGX.Inventory.getItemData("rubber")["label"] .. ": 75x"},
+		[3] = {costs = DGX.Inventory.getItemData("metalscrap")["label"] .. ": 190x, " .. DGX.Inventory.getItemData("steel")["label"] .. ": 305x, " .. DGX.Inventory.getItemData("rubber")["label"] .. ": 85x, " .. DGX.Inventory.getItemData("smg_extendedclip")["label"] .. ": 1x"},
+		[4] = {costs = DGX.Inventory.getItemData("metalscrap")["label"] .. ": 205x, " .. DGX.Inventory.getItemData("steel")["label"] .. ": 340x, " .. DGX.Inventory.getItemData("rubber")["label"] .. ": 110x, " .. DGX.Inventory.getItemData("smg_extendedclip")["label"] .. ": 2x"},
+		[5] = {costs = DGX.Inventory.getItemData("metalscrap")["label"] .. ": 230x, " .. DGX.Inventory.getItemData("steel")["label"] .. ": 365x, " .. DGX.Inventory.getItemData("rubber")["label"] .. ": 130x"},
+		[6] = {costs = DGX.Inventory.getItemData("metalscrap")["label"] .. ": 255x, " .. DGX.Inventory.getItemData("steel")["label"] .. ": 390x, " .. DGX.Inventory.getItemData("rubber")["label"] .. ": 145x"},
+		[7] = {costs = DGX.Inventory.getItemData("metalscrap")["label"] .. ": 270x, " .. DGX.Inventory.getItemData("steel")["label"] .. ": 435x, " .. DGX.Inventory.getItemData("rubber")["label"] .. ": 155x"},
+		[8] = {costs = DGX.Inventory.getItemData("metalscrap")["label"] .. ": 300x, " .. DGX.Inventory.getItemData("steel")["label"] .. ": 469x, " .. DGX.Inventory.getItemData("rubber")["label"] .. ": 170x"},
 	}
 
 	local items = {}
 	for k, item in pairs(Config.AttachmentCrafting["items"]) do
-		local itemInfo = exports["dg-inventory"]:GetItemData(item.name:lower())
+		local itemInfo = DGX.Inventory.getItemData(item.name:lower())
 		items[item.slot] = {
 			name = itemInfo["name"],
 			amount = tonumber(item.amount),
@@ -128,23 +128,23 @@ end
 
 function ItemsToItemInfo()
 	itemInfos = {
-		[1] = {costs = exports["dg-inventory"]:GetItemData("metalscrap")["label"] .. ": 22x, " ..exports["dg-inventory"]:GetItemData("plastic")["label"] .. ": 32x."},
-		[2] = {costs = exports["dg-inventory"]:GetItemData("metalscrap")["label"] .. ": 30x, " ..exports["dg-inventory"]:GetItemData("plastic")["label"] .. ": 42x."},
-		[3] = {costs = exports["dg-inventory"]:GetItemData("metalscrap")["label"] .. ": 30x, " ..exports["dg-inventory"]:GetItemData("plastic")["label"] .. ": 45x, "..exports["dg-inventory"]:GetItemData("aluminum")["label"] .. ": 28x."},
-		[4] = {costs = exports["dg-inventory"]:GetItemData("electronickit")["label"] .. ": 2x, " ..exports["dg-inventory"]:GetItemData("plastic")["label"] .. ": 52x, "..exports["dg-inventory"]:GetItemData("steel")["label"] .. ": 40x."},
-		[5] = {costs = exports["dg-inventory"]:GetItemData("metalscrap")["label"] .. ": 10x, " ..exports["dg-inventory"]:GetItemData("plastic")["label"] .. ": 50x, "..exports["dg-inventory"]:GetItemData("aluminum")["label"] .. ": 30x, "..exports["dg-inventory"]:GetItemData("iron")["label"] .. ": 17x, "..exports["dg-inventory"]:GetItemData("electronickit")["label"] .. ": 1x."},
-		[6] = {costs = exports["dg-inventory"]:GetItemData("metalscrap")["label"] .. ": 36x, " ..exports["dg-inventory"]:GetItemData("steel")["label"] .. ": 24x, "..exports["dg-inventory"]:GetItemData("aluminum")["label"] .. ": 28x."},
-		[7] = {costs = exports["dg-inventory"]:GetItemData("metalscrap")["label"] .. ": 32x, " ..exports["dg-inventory"]:GetItemData("steel")["label"] .. ": 43x, "..exports["dg-inventory"]:GetItemData("plastic")["label"] .. ": 61x."},
-		[8] = {costs = exports["dg-inventory"]:GetItemData("metalscrap")["label"] .. ": 50x, " ..exports["dg-inventory"]:GetItemData("steel")["label"] .. ": 37x, "..exports["dg-inventory"]:GetItemData("copper")["label"] .. ": 26x."},
-		[9] = {costs = exports["dg-inventory"]:GetItemData("iron")["label"] .. ": 60x, " ..exports["dg-inventory"]:GetItemData("glass")["label"] .. ": 30x."},
-		[10] = {costs = exports["dg-inventory"]:GetItemData("aluminum")["label"] .. ": 60x, " ..exports["dg-inventory"]:GetItemData("glass")["label"] .. ": 30x."},
-		[11] = {costs = exports["dg-inventory"]:GetItemData("iron")["label"] .. ": 33x, " ..exports["dg-inventory"]:GetItemData("steel")["label"] .. ": 44x, "..exports["dg-inventory"]:GetItemData("plastic")["label"] .. ": 55x, "..exports["dg-inventory"]:GetItemData("aluminum")["label"] .. ": 22x."},
-		[12] = {costs = exports["dg-inventory"]:GetItemData("iron")["label"] .. ": 50x, " ..exports["dg-inventory"]:GetItemData("steel")["label"] .. ": 50x, "..exports["dg-inventory"]:GetItemData("screwdriverset")["label"] .. ": 3x, "..exports["dg-inventory"]:GetItemData("advancedlockpick")["label"] .. ": 2x."},
+		[1] = {costs = DGX.Inventory.getItemData("metalscrap")["label"] .. ": 22x, " ..DGX.Inventory.getItemData("plastic")["label"] .. ": 32x."},
+		[2] = {costs = DGX.Inventory.getItemData("metalscrap")["label"] .. ": 30x, " ..DGX.Inventory.getItemData("plastic")["label"] .. ": 42x."},
+		[3] = {costs = DGX.Inventory.getItemData("metalscrap")["label"] .. ": 30x, " ..DGX.Inventory.getItemData("plastic")["label"] .. ": 45x, "..DGX.Inventory.getItemData("aluminum")["label"] .. ": 28x."},
+		[4] = {costs = DGX.Inventory.getItemData("electronickit")["label"] .. ": 2x, " ..DGX.Inventory.getItemData("plastic")["label"] .. ": 52x, "..DGX.Inventory.getItemData("steel")["label"] .. ": 40x."},
+		[5] = {costs = DGX.Inventory.getItemData("metalscrap")["label"] .. ": 10x, " ..DGX.Inventory.getItemData("plastic")["label"] .. ": 50x, "..DGX.Inventory.getItemData("aluminum")["label"] .. ": 30x, "..DGX.Inventory.getItemData("iron")["label"] .. ": 17x, "..DGX.Inventory.getItemData("electronickit")["label"] .. ": 1x."},
+		[6] = {costs = DGX.Inventory.getItemData("metalscrap")["label"] .. ": 36x, " ..DGX.Inventory.getItemData("steel")["label"] .. ": 24x, "..DGX.Inventory.getItemData("aluminum")["label"] .. ": 28x."},
+		[7] = {costs = DGX.Inventory.getItemData("metalscrap")["label"] .. ": 32x, " ..DGX.Inventory.getItemData("steel")["label"] .. ": 43x, "..DGX.Inventory.getItemData("plastic")["label"] .. ": 61x."},
+		[8] = {costs = DGX.Inventory.getItemData("metalscrap")["label"] .. ": 50x, " ..DGX.Inventory.getItemData("steel")["label"] .. ": 37x, "..DGX.Inventory.getItemData("copper")["label"] .. ": 26x."},
+		[9] = {costs = DGX.Inventory.getItemData("iron")["label"] .. ": 60x, " ..DGX.Inventory.getItemData("glass")["label"] .. ": 30x."},
+		[10] = {costs = DGX.Inventory.getItemData("aluminum")["label"] .. ": 60x, " ..DGX.Inventory.getItemData("glass")["label"] .. ": 30x."},
+		[11] = {costs = DGX.Inventory.getItemData("iron")["label"] .. ": 33x, " ..DGX.Inventory.getItemData("steel")["label"] .. ": 44x, "..DGX.Inventory.getItemData("plastic")["label"] .. ": 55x, "..DGX.Inventory.getItemData("aluminum")["label"] .. ": 22x."},
+		[12] = {costs = DGX.Inventory.getItemData("iron")["label"] .. ": 50x, " ..DGX.Inventory.getItemData("steel")["label"] .. ": 50x, "..DGX.Inventory.getItemData("screwdriverset")["label"] .. ": 3x, "..DGX.Inventory.getItemData("advancedlockpick")["label"] .. ": 2x."},
 	}
 
 	local items = {}
 	for k, item in pairs(Config.CraftingItems) do
-		local itemInfo = exports["dg-inventory"]:GetItemData(item.name:lower())
+		local itemInfo = DGX.Inventory.getItemData(item.name:lower())
 		items[item.slot] = {
 			name = itemInfo["name"],
 			amount = tonumber(item.amount),

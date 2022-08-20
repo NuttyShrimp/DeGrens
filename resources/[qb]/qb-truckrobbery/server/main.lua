@@ -70,15 +70,13 @@ AddEventHandler('AttackTransport:graczZrobilnapad', function(moneyCalc)
 	local info = {
 		worth = math.random(cashA, cashB)
 	}
-	xPlayer.Functions.AddItem('markedbills', bags, false, info)
-	TriggerClientEvent('inventory:client:ItemBox', _source, 'markedbills', "add")
+	-- xPlayer.Functions.AddItem('markedbills', bags, false, info)
 
 	local chance = math.random(1, 100)
 	TriggerClientEvent('DGCore:Notify', _source, 'You took ' .. bags .. ' bags of cash from the van')
 
 	if chance >= 95 then
-		xPlayer.Functions.AddItem('security_card_01', 1)
-		TriggerClientEvent('inventory:client:ItemBox', _source, 'security_card_01', "add")
+		-- xPlayer.Functions.AddItem('security_card_01', 1)
 	end
 
 	Wait(2500)

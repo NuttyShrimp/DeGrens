@@ -449,15 +449,6 @@ Config.Locations = {
         ["products"] = Config.Products["normal"],
         ["showblip"] = true,
     },
-    ["robsliquor6"] = {
-        ["label"] = "Casino Bar",
-        ["type"] = "normal",
-        ["coords"] = {
-            [1] = vector3(936.1185, 28.61719, 71.833)
-        },
-        ["products"] = Config.Products["normal"],
-        ["showblip"] = true,
-    },
     ["robsliquor"] = {
         ["label"] = "Rob's Liqour",
         ["type"] = "normal",

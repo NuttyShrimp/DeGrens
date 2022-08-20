@@ -251,7 +251,6 @@ function lockpickFinish(success)
         DGCore.Functions.Notify('Someone Called The Police!', 'error')
     end
     if chance <= Config.RemoveLockpickNormal then
-        TriggerEvent('inventory:client:ItemBox', "lockpick", "remove")
         TriggerServerEvent("DGCore:Server:RemoveItem", "lockpick", 1)
     end
 end

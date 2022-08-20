@@ -18,11 +18,9 @@ DGCore.Functions.CreateCallback('weapons:server:GetAmmo', function(source, cb, p
   elseif Weapons[pWeaponData.hash].unlimitedAmmo then
     ammoCount = 9999
   else
-    local Player = DGCore.Functions.GetPlayer(source)
-    local itemData = Player.Functions.GetItemBySlot(pWeaponData.slot)
+    local itemData = DGX.Inventory.getItemById(pWeaponData.id)
     if itemData then
-      ammoCount = itemData.info.ammo or 0
-      ammoCount = tonumber(ammoCount)
+      ammoCount = tonumber(itemData.metadata.ammo or 1)
     end
   end
 
@@ -32,23 +30,18 @@ end)
 RegisterServerEvent('weapons:server:SetAmmo', function(pWeaponData, pAmmoCount)
   if not pWeaponData or not pAmmoCount then return end
 
-  local Player = DGCore.Functions.GetPlayer(source)
-  local itemData = Player.Functions.GetItemBySlot(pWeaponData.slot)
-  if not itemData then return end
-
-  Player.PlayerData.items[pWeaponData.slot].info.ammo = pAmmoCount
-  Player.Functions.SetInventory(Player.PlayerData.items, false)
+  DGX.Inventory.setMetadataOfItem(pWeaponData.id, function(metadata)
+    metadata.ammo = pAmmoCount
+    return metadata
+  end)
 end)
 
 RegisterServerEvent('weapons:server:ForceSetQuality', function(pWeaponData, pQuality)
   if not pWeaponData or not pQuality then return end
 
-  local Player = DGCore.Functions.GetPlayer(source)
-  local itemData = Player.Functions.GetItemBySlot(pWeaponData.slot)
-  if not itemData then return end
-
-  Player.PlayerData.items[pWeaponData.slot].quality = pQuality
-  Player.Functions.SetInventory(Player.PlayerData.items, false)
+  DGX.Inventory.setQualityOfItem(pWeaponData.id, function()
+    return pQuality
+  end)
 end)
 
 RegisterServerEvent('weapons:server:StoppedShooting', function(pWeaponData, pAmmoCount, pQualityDecrease)
@@ -57,119 +50,111 @@ RegisterServerEvent('weapons:server:StoppedShooting', function(pWeaponData, pAmm
   local Player = DGCore.Functions.GetPlayer(source)
 
   if Weapons[pWeaponData.hash].oneTimeUse then
-    --Citizen.Wait(1000) -- TODO test if needed
-    Player.Functions.RemoveItem(pWeaponData.name, 1)
-    TriggerClientEvent('weapons:client:RemoveWeapon', source)
+    DGX.Inventory.destroyItem(pWeaponData.id)
     return
   end
 
-  local itemData = Player.Functions.GetItemBySlot(pWeaponData.slot)
-  if not itemData then return end
+  local qualityDecrease = Weapons[pWeaponData.hash].durabilityMultiplier * pQualityDecrease
+  DGX.Inventory.setQualityOfItem(pWeaponData.id, function(oldQuality)
+    return oldQuality - qualityDecrease
+  end)
 
-  local newQuality = itemData.quality - Weapons[pWeaponData.hash].durabilityMultiplier * pQualityDecrease
-
-  if newQuality <= 0 then
-    newQuality = 0
-    TriggerClientEvent('weapons:client:RemoveWeapon', source)
-    TriggerClientEvent('dg-ui:client:addNotification', source, "Je wapen is kapot...", "error")
-  end
-
-  Player.PlayerData.items[pWeaponData.slot].quality = newQuality
-  Player.PlayerData.items[pWeaponData.slot].info.ammo = pAmmoCount
-  Player.Functions.SetInventory(Player.PlayerData.items, false)
+  DGX.Inventory.setMetadataOfItem(pWeaponData.id, function(oldMetadata)
+    oldMetadata.ammo = pAmmoCount
+    return oldMetadata
+  end)
 end)
 
-RegisterServerEvent('weapons:server:AddAttachment', function(pWeaponData, pAttachmentName)
-  if not pWeaponData or not pAttachmentName then return end
+-- Attachments
+RegisterServerEvent('weapons:server:AddAttachment', function(pWeaponData, pAttachmentId)
+  if not pWeaponData or not pAttachmentId then return end
 
-  if not Weapons[pWeaponData.hash].attachments or not Weapons[pWeaponData.hash].attachments[pAttachmentName] then
-    TriggerClientEvent('dg-ui:client:addNotification', source, "Dit past niet op je wapen...", "error")
+  local itemData = DGX.Inventory.getItemById(pAttachmentId)
+  if not Weapons[pWeaponData.hash].attachments or not Weapons[pWeaponData.hash].attachments[itemData.name] then
+    DGX.RPC.execute('dg-ui:client:addNotification', source, "Dit past niet op je wapen...", "error")
     return
   end
 
-  local Player = DGCore.Functions.GetPlayer(source)
-  if not Player.PlayerData.items[pWeaponData.slot] then return end
+  local stashId = ('weapon_%s'):format(pWeaponData.metadata.serialnumber)
+  local components = getEquipedWeaponComponents(pWeaponData.hash, stashId)
+  local component = Weapons[pWeaponData.hash].attachments[itemData.name]
 
-  if not Player.PlayerData.items[pWeaponData.slot].info.components then
-    Player.PlayerData.items[pWeaponData.slot].info.components = {}
-  end
-
-  local component = Weapons[pWeaponData.hash].attachments[pAttachmentName]
-  local components = Player.PlayerData.items[pWeaponData.slot].info.components
   if hasComponent(components, component) then
-    TriggerClientEvent('dg-ui:client:addNotification', source, "Je hebt dit al op je wapen...", "error")
+
+    DGX.RPC.execute('dg-ui:client:addNotification', source, "Je hebt dit al op je wapen...", "error")
     return
   end
 
-  if Player.Functions.GetItemByName(pAttachmentName) then
-    Player.PlayerData.items[pWeaponData.slot].info.components[#components + 1] = component
-    Player.Functions.SetInventory(Player.PlayerData.items, false)
-    Player.Functions.RemoveItem(pAttachmentName, 1)
-    TriggerClientEvent('inventory:client:ItemBox', source, pAttachmentName, 'remove')
+  DGX.Inventory.moveItemToInventory(itemData.id, 'stash', stashId)
+  components[#components+1] = component
 
-    local allAttachmentsForWeapon = Weapons[pWeaponData.hash].attachments
-    local componentsOnWeapon = Player.PlayerData.items[pWeaponData.slot].info.components
-    TriggerClientEvent('weapons:client:UpdateAttachments', source, allAttachmentsForWeapon, componentsOnWeapon)
-  end
+  local allAttachmentsForWeapon = Weapons[pWeaponData.hash].attachments
+  TriggerClientEvent('weapons:client:UpdateAttachments', source, allAttachmentsForWeapon, components)
+end)
+
+DGCore.Functions.CreateCallback('weapons:server:getAttachmentsOnWeapon', function(source, cb, pWeaponData)
+  local stashId = ('weapon_%s'):format(pWeaponData.metadata.serialnumber)
+  local components = getEquipedWeaponComponents(pWeaponData.hash, stashId)
+  cb(components)
 end)
 
 DGCore.Functions.CreateCallback('weapons:server:GetAttachmentsMenuEntries', function(source, cb, pWeaponData)
-  local entries = {
+  if not pWeaponData then return end
+
+  local menu = {
     {
       title = 'Attachments',
       description = 'Selecteer een attachment om deze te verwijderen.',
     },
   }
 
-  if pWeaponData then
-    local components = {}
-    local Player = DGCore.Functions.GetPlayer(source)
-    if Player.PlayerData.items[pWeaponData.slot] then
-      components = Player.PlayerData.items[pWeaponData.slot].info.components or {}
-    end
+  local stashId = ('weapon_%s'):format(pWeaponData.metadata.serialnumber)
+  local components = getEquipedWeaponComponents(pWeaponData.hash, stashId)
 
-    for _, component in pairs(components) do
-      local attachmentName = getAttachmentNameFromWeaponComponent(pWeaponData.hash, component)
-      entries[#entries + 1] = {
-        title = exports['dg-inventory']:GetItemData(attachmentName).label,
-        icon = 'trash',
-        callbackURL = 'weapons:client:RemoveAttachment',
-        data = {
-          name = attachmentName,
-        }
+  for _, component in pairs(components) do
+    local attachmentName = getAttachmentNameFromWeaponComponent(pWeaponData.hash, component)
+    menu[#menu + 1] = {
+      title = DGX.Inventory.getItemData(attachmentName).label,
+      icon = 'trash',
+      callbackURL = 'weapons:client:RemoveAttachment',
+      data = {
+        name = attachmentName,
       }
-    end
+    }
   end
-  cb(entries)
+  cb(menu)
 end)
 
 RegisterServerEvent('weapons:server:RemoveAttachment', function(pWeaponData, pAttachmentName)
   if not pWeaponData or not pAttachmentName then return end
 
-  local Player = DGCore.Functions.GetPlayer(source)
-  if not Player.PlayerData.items[pWeaponData.slot] then return end
+  local stashId = ('weapon_%s'):format(pWeaponData.metadata.serialnumber)
 
-  local component = Weapons[pWeaponData.hash].attachments[pAttachmentName]
-  local components = Player.PlayerData.items[pWeaponData.slot].info.components
-  local index = hasComponent(components, component)
-  if not index then return end
-
-  table.remove(Player.PlayerData.items[pWeaponData.slot].info.components, index)
-  Player.Functions.SetInventory(Player.PlayerData.items, false)
-  Player.Functions.AddItem(pAttachmentName, 1)
-  TriggerClientEvent('inventory:client:ItemBox', source, pAttachmentName, 'add')
+  local itemData = DGX.Inventory.getFirstIdOfName('stash', stashId, pAttachmentName)
+  local cid = DGCore.Functions.GetPlayer(source).PlayerData.citizenid
+  DGX.Inventory.moveItemToInventory(itemData.id, 'player', cid)
 
   local allAttachmentsForWeapon = Weapons[pWeaponData.hash].attachments
-  local componentsOnWeapon = Player.PlayerData.items[pWeaponData.slot].info.components
-  TriggerClientEvent('weapons:client:UpdateAttachments', source, allAttachmentsForWeapon, componentsOnWeapon)
+  local components = getEquipedWeaponComponents(pWeaponData.hash, stashId)
+  TriggerClientEvent('weapons:client:UpdateAttachments', source, allAttachmentsForWeapon, components)
 end)
 
+-- Tints
 RegisterServerEvent('weapons:server:SetTint', function(pWeaponData, pTint)
   if not pWeaponData or not pTint then return end
 
-  local Player = DGCore.Functions.GetPlayer(source)
-  if not Player.PlayerData.items[pWeaponData.slot] then return end
+  DGX.Inventory.setMetadataOfItem(pWeaponData.id, function(metadata)
+    metadata.tint = pTint
+    return metadata
+  end)
+end)
 
-  Player.PlayerData.items[pWeaponData.slot].info.tint = pTint
-  Player.Functions.SetInventory(Player.PlayerData.items, false)
+AddEventHandler('inventory:playerInventoryUpdated', function(cid, action, state)
+  if action ~= 'remove' then return end
+  local weaponData = Weapons[GetHashKey(state.name)]
+  if not weaponData then return end
+  if weaponData.oneTimeUse then return end -- One time use items get removed by themself because ammo is 0
+
+	local plyId = DGCore.Functions.GetPlayerByCitizenId(cid).PlayerData.source
+  TriggerClientEvent('weapons:client:removedWeaponItem', plyId, state.id)
 end)

@@ -3,18 +3,12 @@ local registeredTokens = {}
 local initializing = true
 local currentLinkedId = 1
 
-DGCore.Functions.CreateUseableItem("lockpick", function(source, item)
-    local Player = DGCore.Functions.GetPlayer(source)
-	if Player.Functions.GetItemByName(item.name) then
-		TriggerClientEvent("lockpick:UseLockpick", source)
-	end
+DGX.Inventory.registerUseable('lockpick', function(src)
+    TriggerClientEvent('lockpick:UseLockpick', src)
 end)
 
-DGCore.Functions.CreateUseableItem("thermite", function(source, item)
-    local Player = DGCore.Functions.GetPlayer(source)
-	if Player.Functions.GetItemByName(item.name) then
-		TriggerClientEvent("thermite:UseThermite", source)
-	end
+DGX.Inventory.registerUseable('thermite', function(src)
+    TriggerClientEvent('thermite:UseThermite', src)
 end)
 
 Citizen.CreateThread(function()

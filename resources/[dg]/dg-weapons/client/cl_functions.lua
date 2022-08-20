@@ -13,17 +13,17 @@ holsterWeapon = function(pWeaponData)
     local ped = PlayerPedId()
 
     if not DGCore.Functions.TriggerCallback('weapons:server:shouldHolster', pWeaponData.hash) then 
-        SetCurrentPedWeapon(ped, `WEAPON_UNARMED`, true)
+        removeWeapon(pWeaponData)
         return 
     end
 
     local blockShootingWhileHolstering = true
     Citizen.CreateThread(function()
         while blockShootingWhileHolstering do
-			DisableControlAction(0, 25, true)
+			      DisableControlAction(0, 25, true)
             DisableControlAction(0, 68, true)
             DisableControlAction(0, 91, true)
-			DisablePlayerFiring(PlayerPedId(), true)
+			      DisablePlayerFiring(PlayerPedId(), true)
             Citizen.Wait(0)
         end
     end)
@@ -40,7 +40,7 @@ holsterWeapon = function(pWeaponData)
         StopAnimTask(ped, 'reaction@intimidation@1h',  'outro', 1.0)
     end
 
-    SetCurrentPedWeapon(ped, `WEAPON_UNARMED`, true)
+    removeWeapon(pWeaponData)
     blockShootingWhileHolstering = false
 end
 
@@ -55,10 +55,10 @@ unholsterWeapon = function(pWeaponData)
     local blockShootingWhileHolstering = true
     Citizen.CreateThread(function()
         while blockShootingWhileHolstering do
-			DisableControlAction(0, 25, true)
+			      DisableControlAction(0, 25, true)
             DisableControlAction(0, 68, true)
             DisableControlAction(0, 91, true)
-			DisablePlayerFiring(PlayerPedId(), true)
+			      DisablePlayerFiring(PlayerPedId(), true)
             Citizen.Wait(0)
         end
     end)
@@ -82,21 +82,28 @@ unholsterWeapon = function(pWeaponData)
 end
 
 setWeapon = function(pWeaponData)
+    DGX.Inventory.toggleObject(pWeaponData.id, false)
     local ped = PlayerPedId()
     SetCurrentPedWeapon(ped, pWeaponData.hash, true)
 
-    if pWeaponData.info.components then
-        for _, component in pairs(pWeaponData.info.components) do
-            GiveWeaponComponentToPed(ped, pWeaponData.hash, component)
-        end
-    end
+    local components = DGCore.Functions.TriggerCallback('weapons:server:getAttachmentsOnWeapon', pWeaponData)
+    for _, component in pairs(components) do
+      GiveWeaponComponentToPed(ped, pWeaponData.hash, component)
+  end
 
-    if pWeaponData.info.tint then
-        SetPedWeaponTintIndex(ped, pWeaponData.hash, pWeaponData.info.tint)
+    if pWeaponData.metadata.tint then
+        local tintId = getTintIdOfName(pWeaponData.metadata.tint)
+        SetPedWeaponTintIndex(ped, pWeaponData.hash, tintId)
     end
 end
 
-startWeaponLoop = function(isBrokenWeapon)
+removeWeapon = function(pWeaponData)
+  DGX.Inventory.toggleObject(pWeaponData.id, true)
+  local ped = PlayerPedId()
+  SetCurrentPedWeapon(ped, `WEAPON_UNARMED`, true)
+end
+
+startWeaponLoop = function()
     Citizen.CreateThread(function()
         if not currentWeaponData then return end
         local playerId = PlayerId()
@@ -112,16 +119,9 @@ startWeaponLoop = function(isBrokenWeapon)
         -- thats why we also check if the weapon is the same as the weapon this loop started with
         -- this is to prevent this loop from running multiple instances
         while currentWeaponData and currentWeaponData.hash == weapon do
-            -- quality decrease when shooting and brokenweapon check
-            if IsPedShooting(ped) then
-                if isBrokenWeapon then
-                    forceRemoveWeapon()
-                    break
-                end
-
-                if GetAmmoInPedWeapon(ped, currentWeaponData.hash) > 0 then
-                    qualityDecrease = qualityDecrease + 1
-                end
+            -- quality decrease when shooting with ammo
+            if IsPedShooting(ped) and GetAmmoInPedWeapon(ped, currentWeaponData.hash) > 0 then
+              qualityDecrease = qualityDecrease + 1
             end
 
             -- save weapondata after shooting
@@ -169,7 +169,7 @@ startWeaponLoop = function(isBrokenWeapon)
             SetWeaponsNoAutoreload(true)
             DisplayAmmoThisFrame(true)
 
-            if GetAmmoInPedWeapon(ped, currentWeaponData.hash) == 1 then
+            if GetAmmoInPedWeapon(ped, currentWeaponData.hash) == 1 and not currentWeaponData.isOneTimeUse then
                 DisablePlayerFiring(ped, true)
             end
 
@@ -185,60 +185,52 @@ end
 
 exports("openTintMenu", function()
     if not currentWeaponData then return end
-    openApplication('contextmenu', {
-        {
-            title = 'Wapen tinten',
-            description = 'Selecteer een kleur voor je wapen.',
-            disabled = true,
-        },
-        {
-            title = 'Origineel',
-            callbackURL = 'weapons:client:SetTint',
-            data = {tint = 0},
-        },
-        {
-            title = 'Groen',
-            callbackURL = 'weapons:client:SetTint',
-            data = {tint = 1},
-        },
-        {
-            title = 'Goud',
-            callbackURL = 'weapons:client:SetTint',
-            data = {tint = 2},
-        },
-        {
-            title = 'Roos',
-            callbackURL = 'weapons:client:SetTint',
-            data = {tint = 3},
-        },
-        {
-            title = 'Leger',
-            callbackURL = 'weapons:client:SetTint',
-            data = {tint = 4},
-        },
-        {
-            title = 'Politie',
-            callbackURL = 'weapons:client:SetTint',
-            data = {tint = 5},
-        },
-        {
-            title = 'Oranje',
-            callbackURL = 'weapons:client:SetTint',
-            data = {tint = 6},
-        },
-        {
-            title = 'Platinum',
-            callbackURL = 'weapons:client:SetTint',
-            data = {tint = 7},
-        },
-    })
+    local menu = {
+      {
+          title = 'Wapen tinten',
+          description = 'Selecteer een kleur voor je wapen.',
+          disabled = true,
+      },
+    }
+    for id, name in pairs(tintColorNames) do
+      menu[#menu+1] = {
+        title = name,
+        callbackURL = 'weapons:client:SetTint',
+        data = {tint = id},
+      }
+    end
+
+    openApplication('contextmenu', menu)
 end)
 
-forceRemoveWeapon = function(pWeaponName)
-    if not currentWeaponData then return end
-    if not pWeaponName or currentWeaponData.name == pWeaponName then
-        holsterWeapon(currentWeaponData)
-        currentWeaponData = nil
+tintColorNames = {
+  [0] = 'Origineel',
+  [1] = 'Groen',
+  [2] = 'Goud',
+  [3] = 'Roos',
+  [4] = 'Leger',
+  [5] = 'Politie',
+  [6] = 'Oranje',
+  [7] = 'Platinum',
+}
+
+getTintIdOfName = function(tintName)
+  for id, name in pairs(tintColorNames) do
+    if name == tintName then return id end
+  end
+end
+
+forceRemoveWeapon = function(weaponId, noAnimation)
+  if not currentWeaponData then return end
+  if not weaponId or currentWeaponData.id == weaponId then
+    local ped = PlayerPedId()
+    RemoveAllPedWeapons(ped, true)
+    if noAnimation then
+      removeWeapon(currentWeaponData)
+    else  
+      holsterWeapon(currentWeaponData)
     end
+    currentWeaponData = nil
+  end
 end
 exports('removeWeapon', forceRemoveWeapon)

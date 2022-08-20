@@ -15,26 +15,18 @@ end)
 
 randomSellBlackMoney = function(source)
     local src = source
-    local Player = DGCore.Functions.GetPlayer(src)
 
     local itemToSell = blackMoneyConfig.Items[math.random(1, #blackMoneyConfig.Items)]
-    local itemData = Player.Functions.GetItemByName(itemToSell)
-    if not itemData then return end
+    local hasItem = DGX.Inventory.doesPlayerHaveItems(src, itemToSell)
+    if not hasItem then return end
 
-    local amount = math.random(blackMoneyConfig.RandomSellAmount.min, blackMoneyConfig.RandomSellAmount.max)
-    amount = amount > itemData.amount and itemData.amount or amount
-
-    if Player.Functions.RemoveItem(itemData.name, amount) then
-        TriggerClientEvent('inventory:client:ItemBox', src, itemData.name, "remove")
-
-        local itemPrices = blackMoneyConfig.Worth[itemData.name]
-        local price = math.random(itemPrices.min, itemPrices.max) * amount
-        exports['dg-financials']:addCash(src, price, 'randomsell-blackmoney')
-        DGX.Util.Log('blackmoney:sellRandom', {
-            item = itemData.name,
-            amount = amount,
-            price = price,
-        }, string.format("%s has made sale of %dx %s", GetPlayerName(src), amount, exports['dg-inventory']:GetItemData(itemData.name).label), src)
-    end
+    DGX.Inventory.removeItemFromPlayer(source, itemToSell)
+    local itemPrices = blackMoneyConfig.Worth[itemData.name]
+    local price = math.random(itemPrices.min, itemPrices.max)
+    exports['dg-financials']:addCash(src, price, 'randomsell-blackmoney')
+    DGX.Util.Log('blackmoney:sellRandom', {
+        item = itemData.name,
+        price = price,
+    }, string.format("%s has made sale of %s", GetPlayerName(src), DGX.Inventory.getItemData(itemData.name).label), src)
 end
 exports("randomSellBlackMoney", randomSellBlackMoney)

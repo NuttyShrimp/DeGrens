@@ -57,12 +57,12 @@ end)
 
 RegisterNUICallback('checkItem', function(data, cb)
     local retval = false
-    DGCore.Functions.TriggerCallback('DGCore:HasItem', function(result)
-        if result then
-            retval = true
-        end
-        cb(retval)
-    end, data.item)
+    -- DGCore.Functions.TriggerCallback('DGCore:HasItem', function(result)
+    --     if result then
+    --         retval = true
+    --     end
+    --     cb(retval)
+    -- end, data.item)
 end)
 
 RegisterNUICallback('reset', function(data)

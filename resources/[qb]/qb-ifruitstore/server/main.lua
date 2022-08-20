@@ -32,13 +32,11 @@ AddEventHandler('qb-ifruitstore:server:SafeReward', function()
     local src = source
     local Player = DGCore.Functions.GetPlayer(src)
 		exports['dg-financials']:addcash(src, math.random(1500, 2000), "Ifruitstore robbery")
-    Player.Functions.AddItem("certificate", certificateAmount)
-    TriggerClientEvent('inventory:client:ItemBox', src, "certificate", "add")
+    -- Player.Functions.AddItem("certificate", certificateAmount)
     Citizen.Wait(500)
     local luck = math.random(1, 100)
     if luck <= 10 then
-        Player.Functions.AddItem("goldbar", math.random(1, 2))
-        TriggerClientEvent('inventory:client:ItemBox', src, "goldbar", "add")
+        -- Player.Functions.AddItem("goldbar", math.random(1, 2))
     end
 end)
 
@@ -58,11 +56,10 @@ AddEventHandler('qb-ifruitstore:server:itemReward', function(spot)
     local Player = DGCore.Functions.GetPlayer(src)
     local item = Config.Locations["takeables"][spot].reward
 
-    if Player.Functions.AddItem(item.name, item.amount) then
-        TriggerClientEvent('inventory:client:ItemBox', src, item.name, 'add')
-    else
-        TriggerClientEvent('DGCore:Notify', src, 'You have to much in your pocket ..', 'error')
-    end    
+    -- if Player.Functions.AddItem(item.name, item.amount) then
+    -- else
+    --     TriggerClientEvent('DGCore:Notify', src, 'You have to much in your pocket ..', 'error')
+    -- end    
 end)
 
 RegisterServerEvent('qb-ifruitstore:server:PoliceAlertMessage')

@@ -90,6 +90,6 @@ else
 	print("[dp] ^3Sql Keybinding^7 is turned ^1off^7, if you want to enable /emotebind, import dpkeybinding.sql and set ^3SqlKeybinding = ^2true^7 in config.lua.")
 end
 
-DGCore.Functions.CreateUseableItem("walkstick", function(source, item)
-    TriggerClientEvent("dp:Client:UseWalkingStick", source)
+DGX.Inventory.registerUseable("walkstick", function(src)
+    TriggerClientEvent("dp:Client:UseWalkingStick", src)
 end)

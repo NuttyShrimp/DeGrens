@@ -1,0 +1,47 @@
+{
+  "types": {
+    "grocery": [
+      {
+        "name": "test_item",
+        "amount": 10,
+        "requirements": {
+          "cash": 100,
+          "items": ["lockpick"]
+        }
+      }
+    ],
+    "hardware": [
+      {
+        "name": "volt_meter",
+        "amount": 10,
+        "requirements": {
+          "cash": 200
+        }
+      }
+    ]
+  },
+  "shops": {
+    "little_seoul": { "type": "grocery" },
+    "grove_street": { "type": "grocery" },
+    "mirror_park": { "type": "grocery" },
+    "richman_glen": { "type": "grocery" },
+    "grape_seed": { "type": "grocery" },
+    "vespucci_canals": { "type": "grocery" },
+    "grand_senora": { "type": "grocery" },
+    "murrieta_heights": { "type": "grocery" },
+    "del_perro": { "type": "grocery" },
+    "great_ocean": { "type": "grocery" },
+    "banham_canyon": { "type": "grocery" },
+    "chumash": { "type": "grocery" },
+    "senora_freeway": { "type": "grocery" },
+    "strawberry": { "type": "grocery" },
+    "harmony": { "type": "grocery" },
+    "vinewood": { "type": "grocery" },
+    "mount_chiliad": { "type": "grocery" },
+    "sandy_shores": { "type": "grocery" },
+    "tataviam_mountains": { "type": "grocery" },
+    "del_vecchio": { "type": "grocery" },
+    "paleto_bay": { "type": "grocery" },
+    "hardware_city": { "type": "hardware" }
+  }
+}

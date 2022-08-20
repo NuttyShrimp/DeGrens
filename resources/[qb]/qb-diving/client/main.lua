@@ -73,7 +73,6 @@ AddEventHandler('qb-diving:client:UseJerrycan', function()
             exports['LegacyFuel']:SetFuel(curVeh, 100)
             DGCore.Functions.Notify('The boat has been refueled', 'success')
             TriggerServerEvent('qb-diving:server:RemoveItem', 'jerry_can', 1)
-            TriggerEvent('inventory:client:ItemBox', 'jerry_can', "remove")
         end, function() -- Cancel
             DGCore.Functions.Notify('Refueling has been canceled!', 'error')
         end)

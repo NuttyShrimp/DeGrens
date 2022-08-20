@@ -1,6 +1,5 @@
-DGCore.Functions.CreateUseableItem("fitbit", function(source, item)
-    local Player = DGCore.Functions.GetPlayer(source)
-    TriggerClientEvent('qb-fitbit:use', source)
+DGX.Inventory.registerUseable("fitbit", function(src)
+    TriggerClientEvent('qb-fitbit:use', src)
 end)
 
 RegisterServerEvent('qb-fitbit:server:setValue')

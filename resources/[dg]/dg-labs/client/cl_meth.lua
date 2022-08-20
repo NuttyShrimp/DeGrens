@@ -200,7 +200,7 @@ exports("increaseMethStatus", function(statusId)
     end
 
     hasPackage = false
-    exports['dg-propattach']:removeItem('cardbox')
+    removeBox()
     exports["dg-keygame"]:OpenGame(function(success)
         if success then
             DGCore.Functions.Progressbar("meth_fill_station", "Vullen...", 8000, false, true, {

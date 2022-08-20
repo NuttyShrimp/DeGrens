@@ -87,23 +87,9 @@
     },
     {
       "type": "node-terminal",
-      "name": "chars:ui:build",
+      "name": "chars:res:build prod",
       "request": "launch",
       "command": "yarn run build",
-      "cwd": "${workspaceFolder}/resources/[dg]/dg-chars/ui"
-    },
-    {
-      "type": "node-terminal",
-      "name": "chars:ui:dev",
-      "request": "launch",
-      "command": "yarn run dev",
-      "cwd": "${workspaceFolder}/resources/[dg]/dg-chars/ui"
-    },
-    {
-      "type": "node-terminal",
-      "name": "chars:res:watch",
-      "request": "launch",
-      "command": "yarn run watch",
       "cwd": "${workspaceFolder}/resources/[dg]/dg-chars/typescript"
     },
     {
@@ -115,10 +101,24 @@
     },
     {
       "type": "node-terminal",
-      "name": "chars:res:build prod",
+      "name": "chars:res:watch",
+      "request": "launch",
+      "command": "yarn run watch",
+      "cwd": "${workspaceFolder}/resources/[dg]/dg-chars/typescript"
+    },
+    {
+      "type": "node-terminal",
+      "name": "chars:ui:dev",
+      "request": "launch",
+      "command": "yarn run dev",
+      "cwd": "${workspaceFolder}/resources/[dg]/dg-chars/ui"
+    },
+    {
+      "type": "node-terminal",
+      "name": "chars:ui:build",
       "request": "launch",
       "command": "yarn run build",
-      "cwd": "${workspaceFolder}/resources/[dg]/dg-chars/typescript"
+      "cwd": "${workspaceFolder}/resources/[dg]/dg-chars/ui"
     },
     {
       "type": "node-terminal",
@@ -252,6 +252,27 @@
       "request": "launch",
       "command": "yarn run watch",
       "cwd": "${workspaceFolder}/resources/[dg]/dg-houserobbery/typescript"
+    },
+    {
+      "type": "node-terminal",
+      "name": "inventory:build prod",
+      "request": "launch",
+      "command": "yarn run build",
+      "cwd": "${workspaceFolder}/resources/[dg]/dg-inventory/typescript"
+    },
+    {
+      "type": "node-terminal",
+      "name": "inventory:build dev",
+      "request": "launch",
+      "command": "yarn run build:dev",
+      "cwd": "${workspaceFolder}/resources/[dg]/dg-inventory/typescript"
+    },
+    {
+      "type": "node-terminal",
+      "name": "inventory:watch",
+      "request": "launch",
+      "command": "yarn run watch",
+      "cwd": "${workspaceFolder}/resources/[dg]/dg-inventory/typescript"
     },
     {
       "type": "node-terminal",

@@ -90,7 +90,8 @@ RegisterNetEvent('dg-apartment:openStash', function()
 		if not CurrentApartment then
 			return
 		end
-		TriggerServerEvent("inventory:server:OpenInventory", "stash", CurrentApartment)
+    local apartmentStashId = ('apartment_%s'):format(CurrentApartment)
+    DGX.Inventory.openStash(apartmentStashId)
 		TriggerServerEvent("InteractSound_SV:PlayOnSource", "StashOpen", 0.4)
 	end)
 end)

@@ -37,15 +37,15 @@ fetchSellLocations = function()
     return coordsList
 end
 
-getSellableItems = function(Player)
+getSellableItems = function(src)
     local sellableItems = {}
 
     for k, _ in pairs(Config.SellableItems) do
-        local itemData = Player.Functions.GetItemByName(k)
-        if itemData then
+        local amount = DGX.Inventory.getAmountPlayerHas(src, k)
+        if amount ~= 0 then
             sellableItems[#sellableItems+1] = {
-                name = itemData.name,
-                amount = itemData.amount,
+                name = k,
+                amount = amount,
             }
         end
     end
@@ -56,7 +56,7 @@ end
 DGCore.Functions.CreateCallback("dg-cornerselling:server:HasSellableItems", function(source, cb)
     local src = source
     local Player = DGCore.Functions.GetPlayer(src)
-    local hasSellableItems = next(getSellableItems(Player)) ~= nil
+    local hasSellableItems = next(getSellableItems(src)) ~= nil
     cb(hasSellableItems)
 end)
 
@@ -64,24 +64,19 @@ RegisterServerEvent("dg-cornerselling:server:SellDrugs", function(sellLocation)
     if not sellLocation then return end
     
     local src = source
-    local Player = DGCore.Functions.GetPlayer(src)
-    local sellableItems = getSellableItems(Player)
+    local sellableItems = getSellableItems(src)
     local itemData = sellableItems[math.random(1, #sellableItems)]
-    local amount = math.random(Config.SellAmount.min, Config.SellAmount.max)
-    amount = amount > itemData.amount and itemData.amount or amount
 
-    if Player.Functions.RemoveItem(itemData.name, amount) then
-        TriggerClientEvent('inventory:client:ItemBox', src, itemData.name, "remove")
-        TriggerClientEvent('DGCore:Notify', src, ("Je hebt %s %s verkocht"):format(amount, exports['dg-inventory']:GetItemData(itemData.name).label))
+    if DGX.Inventory.removeItemFromPlayer(src, itemData.name) then
+        TriggerClientEvent('DGCore:Notify', src, ("Je hebt %s verkocht"):format(DGX.Inventory.getItemData(itemData.name).label))
 
-        local price = calculatePrice(itemData.name, amount, sellLocation)
+        local price = calculatePrice(itemData.name, sellLocation)
         exports['dg-financials']:addCash(src, price, 'corner-sell')
         DGX.Util.Log('cornerselling:sale', {
             item = itemData.name,
-            amount = amount,
             price = price,
             location = sellLocation,
-        }, string.format("%s has made sale of %dx %s via cornerselling", GetPlayerName(src), amount, exports['dg-inventory']:GetItemData(itemData.name).label), src)
+        }, string.format("%s has made sale of %s via cornerselling", GetPlayerName(src), DGX.Inventory.getItemData(itemData.name).label), src)
 
         addToHeatmap(sellLocation)
         
@@ -100,11 +95,10 @@ RegisterServerEvent("dg-cornerselling:server:SellDrugs", function(sellLocation)
     end
 end)
 
-calculatePrice = function(item, amount, coords)
+calculatePrice = function(item, coords)
     local itemPrices = Config.SellableItems[item]
     local itemPrice = math.random(itemPrices.min, itemPrices.max)
     local multiplier = getIntensityFromHeatmap(coords)
-    print(multiplier)
-    local cash = math.floor(itemPrice * amount * multiplier)
+    local cash = math.floor(itemPrice * multiplier)
     return cash
 end

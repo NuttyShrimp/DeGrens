@@ -73,14 +73,14 @@ Citizen.CreateThread(function()
                             if IsControlJustPressed(0, 38) then
                                 if CurrentCops >= 0 then
                                     if Config.Locations["thermite"].isDone then 
-                                        DGCore.Functions.TriggerCallback('DGCore:HasItem', function(hasItem)
-                                            if hasItem then
-                                                currentSpot = spot
-                                                GrabItem(currentSpot)
-                                            else
-                                                DGCore.Functions.Notify("You are missing an advanced lockpick", "error")
-                                            end
-                                        end, "advancedlockpick")
+                                        -- DGCore.Functions.TriggerCallback('DGCore:HasItem', function(hasItem)
+                                        --     if hasItem then
+                                        --         currentSpot = spot
+                                        --         GrabItem(currentSpot)
+                                        --     else
+                                        --         DGCore.Functions.Notify("You are missing an advanced lockpick", "error")
+                                        --     end
+                                        -- end, "advancedlockpick")
                                     else
                                         DGCore.Functions.Notify("Security is still active..", "error")
                                     end
@@ -129,7 +129,6 @@ function lockpickDone(success)
         end
         if math.random(1, 100) <= 10 then
             TriggerServerEvent("DGCore:Server:RemoveItem", "advancedlockpick", 1)
-            TriggerEvent('inventory:client:ItemBox', "advancedlockpick", "remove")
         end
     end
 end
@@ -311,7 +310,6 @@ RegisterNUICallback('thermitefailed', function()
     PlaySound(-1, "Place_Prop_Fail", "DLC_Dmod_Prop_Editor_Sounds", 0, 0, 1)
     TriggerServerEvent("qb-ifruitstore:server:SetThermiteStatus", "isBusy", false)
     TriggerServerEvent("DGCore:Server:RemoveItem", "thermite", 1)
-    TriggerEvent('inventory:client:ItemBox', "thermite", "remove")
     local coords = GetEntityCoords(PlayerPedId())
     local randTime = math.random(10000, 15000)
     CreateFire(coords, randTime)

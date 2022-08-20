@@ -19,7 +19,7 @@ seedCharData = function()
 			job = DGX.RPC.execute('jobs:server:getCurrentJob'),
 			phone = PlyData.charinfo.phone,
 			server_id = GetPlayerServerId(PlayerId()),
-			hasVPN = DGCore.Functions.TriggerCallback('DGCore:HasItem', 'vpn')
+			hasVPN = DGX.Inventory.doesPlayerHaveItems('vpn')
 		}
 		characterInfo = newCharacterInfo
 		SendAppEvent('character', characterInfo)

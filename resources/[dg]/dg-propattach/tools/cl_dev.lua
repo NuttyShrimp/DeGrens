@@ -105,8 +105,8 @@ object = nil;
 editMode = false;
 
 x = 0.0;
-y = 0.0;
-z = 0.0;
+y = -0.18;
+z = 0.08;
 px = 0.0;
 py = 0.0;
 pz = 0.0;
@@ -116,38 +116,40 @@ bone = nil;
 tol = 0.05;
 
 RegisterCommand("co", function(source, args, rawCommand)
+  if not args then return end
+  local splitArgs = {}
+  for match in string.gmatch(args[1], "([^, ]+)") do
+    table.insert(splitArgs, match);
+  end
+  local objectName = splitArgs[1];
+  bone = bones[splitArgs[2]];
 
-	local objectName = args[1];
-	bone = args[2];
+  local ped = PlayerPedId();
+  local hash = GetHashKey(objectName)
 
-	local ped = PlayerPedId();
+  RequestModel(hash)
+  while not HasModelLoaded(hash) do
+      Citizen.Wait(100)
+  end
 
-	local on = GetHashKey(objectName)
-	RequestModel(on)
-	while not HasModelLoaded(on) do
-		Wait(100)
-	end
+  object = CreateObject(hash, 1.0, 1.0, 1.0, true, true, false)
+  AttachEntityToEntity(object, ped, GetPedBoneIndex(ped, bone), x, y, z, px, py, pz, 1, 1, 0, 0, 2, 1);
 
-	object = CreateObject(on, 1.0, 1.0, 1.0, true, true, false)
-
-	AttachEntityToEntity(object, ped, GetPedBoneIndex(ped, bones[bone]), x, y, z, px, py, pz, 1, 1, 0, 0, 2, 1);
-
-	editMode = true;
-
+  editMode = true;
 end, false)
 
 RegisterCommand("cb", function(source, args, rawCommand)
-	bone = args[1];
+	bone = bones[args[1]];
 
 	DetachEntity(object, true, false);
-	AttachEntityToEntity(object, ped, GetPedBoneIndex(ped, bones[bone]), x, y, z, px, py, pz, 1, 1, 0, 0, 2, 1);
+	AttachEntityToEntity(object, ped, GetPedBoneIndex(ped, bone), x, y, z, px, py, pz, 1, 1, 0, 0, 2, 1);
 end)
 
 RegisterCommand("cout", function(source, args, rawCommand)
 	print("--------------------------------------------------------");
 	print("X: " .. x .. " Y: " .. y .. " Z: " .. z);
 	print("PX: " .. px .. " PY: " .. py .. " PZ: " .. pz);
-	print("Bone: " .. bone .. " Bone final: " .. bones[bone]);
+	print("Bone: " .. bone);
 	print("--------------------------------------------------------");
 	TriggerServerEvent('dg-propattach:tools:writeJson', {
 		x = x,
@@ -157,15 +159,14 @@ RegisterCommand("cout", function(source, args, rawCommand)
 		ry = py,
 		rz = pz,
 		bone = bone,
-		boneId = bones[bone]
 	})
 end)
 
 RegisterCommand("cd", function(source, args, rawCommand)
 
 	x = 0.0;
-	y = 0.0;
-	z = 0.0;
+	y = -0.18;
+	z = 0.8;
 	px = 0.0;
 	py = 0.0;
 	pz = 0.0;
@@ -177,103 +178,95 @@ RegisterCommand("cst", function(source, args, rawCommand)
 	tol = tonumber(args[1]);
 end)
 
+-- position
 RegisterCommand("plusz", function(source, args, rawCommand)
 	z = z + tol;
 	changeCoords();
 end, false)
-RegisterKeyMapping('plusz', '+ Z', 'keyboard', 'numpad8')
+RegisterKeyMapping('plusz', '+ Z', 'keyboard', 'up')
 
 RegisterCommand("minusz", function(source, args, rawCommand)
 	z = z - tol;
 	changeCoords();
 end, false)
-RegisterKeyMapping('minusz', '- Z', 'keyboard', 'numpad5')
+RegisterKeyMapping('minusz', '- Z', 'keyboard', 'down')
 
 RegisterCommand("plusy", function(source, args, rawCommand)
 	y = y + tol;
 	changeCoords();
 end, false)
-RegisterKeyMapping('plusy', '+ Y', 'keyboard', 'up')
+RegisterKeyMapping('plusy', '+ Y', 'keyboard', 'left')
 
 RegisterCommand("minusy", function(source, args, rawCommand)
 	y = y - tol;
 	changeCoords();
 end, false)
-RegisterKeyMapping('minusy', '- Y', 'keyboard', 'down')
+RegisterKeyMapping('minusy', '- Y', 'keyboard', 'right')
 
 RegisterCommand("plusx", function(source, args, rawCommand)
 	x = x + tol;
 	changeCoords();
 end, false)
-RegisterKeyMapping('plusx', '+ X', 'keyboard', 'right')
+RegisterKeyMapping('plusx', '+ X', 'keyboard', 'numpad5')
 
 RegisterCommand("minusx", function(source, args, rawCommand)
 	x = x - tol;
 	changeCoords();
 end, false)
-RegisterKeyMapping('minusx', '- X', 'keyboard', 'left')
+RegisterKeyMapping('minusx', '- X', 'keyboard', 'numpad8')
 
---- Rotation
-
+-- Rotation
 RegisterCommand("pluspz", function(source, args, rawCommand)
-	pz = pz + tol;
+	pz = pz + tol * 10;
 	changeCoords();
 end, false)
 RegisterKeyMapping('pluspz', '+ PZ', 'keyboard', 'numpad9')
 
 RegisterCommand("minuspz", function(source, args, rawCommand)
-	pz = pz - tol;
+	pz = pz - tol * 10;
 	changeCoords();
 end, false)
 RegisterKeyMapping('minuspz', '- PZ', 'keyboard', 'numpad7')
 
 RegisterCommand("pluspy", function(source, args, rawCommand)
-	py = py + tol;
+	py = py + tol * 10;
 	changeCoords();
 end, false)
 RegisterKeyMapping('pluspy', '+ PY', 'keyboard', 'numpad6')
 
 RegisterCommand("minuspy", function(source, args, rawCommand)
-	py = py - tol;
+	py = py - tol * 10;
 	changeCoords();
 end, false)
 RegisterKeyMapping('minuspy', '- PY', 'keyboard', 'numpad4')
 
 RegisterCommand("pluspx", function(source, args, rawCommand)
-	px = px + tol;
+	px = px + tol * 10;
 	changeCoords();
 end, false)
 RegisterKeyMapping('pluspx', '+ PX', 'keyboard', 'numpad3')
 
 RegisterCommand("minuspx", function(source, args, rawCommand)
-	px = px - tol;
+	px = px - tol * 10;
 	changeCoords();
 end, false)
 RegisterKeyMapping('minuspx', '- PX', 'keyboard', 'numpad1')
 
+-- amount
 RegisterCommand("plustol", function(source, args, rawCommand)
-	tol = tol + 0.05;
-	exports['t-notify']:Alert({
-		style = 'error',
-		message = "Tol is now: " .. tostring(tol)
-	})
+	tol = tol + 0.02;
+  if tol < 0 then tol = 0 end
 end, false)
 RegisterKeyMapping('plustol', '+ TOL', 'keyboard', 'add')
 
 RegisterCommand("minustol", function(source, args, rawCommand)
-	tol = tol - 0.05;
-	exports['t-notify']:Alert({
-		style = 'error',
-		message = "Tol is now: " .. tostring(tol)
-	})
+	tol = tol - 0.02;
+  if tol < 0 then tol = 0 end
 end, false)
 RegisterKeyMapping('minustol', '- TOL', 'keyboard', 'subtract')
 
 function changeCoords()
-
 	DetachEntity(object, true, false);
 	local playerPed = PlayerPedId();
-	AttachEntityToEntity(object, playerPed, GetPedBoneIndex(playerPed, bones[bone]), x, y, z, px, py, pz, 1, 1, 0, 0, 2, 1);
-
+	AttachEntityToEntity(object, playerPed, GetPedBoneIndex(playerPed, bone), x, y, z, px, py, pz, 1, 1, 0, 0, 2, 1);
 end
-

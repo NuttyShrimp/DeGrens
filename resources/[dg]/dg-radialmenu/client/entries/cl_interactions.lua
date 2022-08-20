@@ -6,7 +6,7 @@ entries.interactions = {
 		event = 'police:client:CuffPlayerSoft',
 		shouldClose = true,
 		isEnabled = function()
-			return DGCore.Functions.TriggerCallback('DGCore:HasItem', 'handcuffs')
+			return DGX.Inventory.doesPlayerHaveItems('handcuffs')
 		end
 	}, {
 		id = 'playerinvehicle',

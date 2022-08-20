@@ -10,8 +10,6 @@ QBConfig.Money.defaultCash = 500 -- default cash on player join
 QBConfig.Money.PayCheckTimeOut = 10 -- The time in minutes that it will give the paycheck
 
 QBConfig.Player = {}
-QBConfig.Player.MaxWeight = 120000 -- Max weight a player can carry (currently 120kg, written in grams)
-QBConfig.Player.MaxInvSlots = 40 -- Max inventory slots for a player
 QBConfig.Player.HungerRate = 4.2 -- Rate at which hunger goes down.
 QBConfig.Player.ThirstRate = 3.8 -- Rate at which thirst goes down.
 QBConfig.Player.Bloodtypes = {

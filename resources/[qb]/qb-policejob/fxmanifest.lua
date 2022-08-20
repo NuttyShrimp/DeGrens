@@ -4,9 +4,13 @@ game 'gta5'
 description 'QB-PoliceJob'
 version '1.0.0'
 
-shared_script 'config.lua'
+shared_scripts {
+    'config.lua',
+    '@ts-shared/shared/lib.lua'
+}
 
 client_scripts {
+    '@ts-shared/client/client.js',
 	'client/main.lua',
 	'client/camera.lua',
 	'client/interactions.lua',
@@ -21,7 +25,6 @@ client_scripts {
 
 server_scripts {
   '@ts-shared/server/server.js',
-  '@ts-shared/shared/lib.lua',
   'server/main.lua',
 }
 

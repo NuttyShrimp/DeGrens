@@ -1,4 +1,4 @@
-import { Events, Util } from '@dgx/server';
+import { Events, Inventory, Util } from '@dgx/server';
 import { Export, ExportRegister, RPCEvent, RPCRegister } from '@dgx/server/decorators';
 import { mainLogger } from 'sv_logger';
 import winston from 'winston';
@@ -99,10 +99,10 @@ class JobManager {
   }
 
   @RPCEvent('dg-jobs:server:jobs:get')
-  public getJobsForClients(src: number) {
+  public async getJobsForClients(src: number) {
     const Player = DGCore.Functions.GetPlayer(src);
     if (!Player) return [];
-    const hasVPN = Player.Functions.GetItemByName('vpn');
+    const hasVPN = await Inventory.doesPlayerHaveItems(src, 'vpn');
     return Array.from(this.jobs.values())
       .filter(j => j.legal || hasVPN)
       .map(j => ({

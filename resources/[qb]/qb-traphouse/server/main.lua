@@ -193,7 +193,7 @@ function AddHouseItem(traphouseId, slot, itemName, amount, info, source)
     if Config.TrapHouses[traphouseId].inventory[slot] ~= nil and Config.TrapHouses[traphouseId].inventory[slot].name == itemName then
         Config.TrapHouses[traphouseId].inventory[slot].amount = Config.TrapHouses[traphouseId].inventory[slot].amount + amount
     else
-        local itemInfo = exports["dg-inventory"]:GetItemData(itemName:lower())
+        local itemInfo = DGX.Inventory.getItemData(itemName:lower())
         Config.TrapHouses[traphouseId].inventory[slot] = {
             name = itemInfo["name"],
             amount = amount,
@@ -263,8 +263,7 @@ AddEventHandler('qb-traphouse:server:RobNpc', function(Traphouse)
         local info = {
             label = "Traphouse Pincode: "..Config.TrapHouses[Traphouse].pincode
         }
-        Player.Functions.AddItem("stickynote", 1, false, info)
-        TriggerClientEvent('inventory:client:ItemBox', src, "stickynote", "add")
+        -- Player.Functions.AddItem("stickynote", 1, false, info)
     else
         local amount = math.random(1, 80)
 				exports['dg-financials']:addCash(src, amount, 'NPC robbery payment')

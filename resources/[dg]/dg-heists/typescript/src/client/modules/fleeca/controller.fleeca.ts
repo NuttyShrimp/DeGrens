@@ -1,4 +1,4 @@
-import { Events, Notifications, Peek, UI, Taskbar } from '@dgx/client';
+import { Events, Notifications, Peek, UI, Taskbar, Inventory } from '@dgx/client';
 import { getPercentageOfPowerBox, placePlayerAtPowerBox } from './helpers.fleeca';
 
 Peek.addModelEntry(
@@ -49,7 +49,7 @@ Peek.addModelEntry(
             return;
           }
           placePlayerAtPowerBox(powerEntity);
-          DGCore.Functions.TriggerCallback('DGCore:RemoveItem', 'mini_emp', 1);
+          Inventory.removeItemFromPlayer('mini_emp');
           global.exports['dg-sequencegame'].OpenGame(
             async (success: boolean) => {
               if (!success) return Notifications.add('Mislukt', 'error');

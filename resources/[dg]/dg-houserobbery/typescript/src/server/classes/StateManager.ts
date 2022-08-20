@@ -1,4 +1,4 @@
-import { Config, Events, Jobs, Notifications, Phone, Taskbar, Util } from '@dgx/server';
+import { Config, Events, Jobs, Notifications, Phone, Taskbar, Util, Inventory } from '@dgx/server';
 import { DGXEvent, EventListener, RPCEvent, RPCRegister } from '@dgx/server/decorators';
 
 import { mainLogger } from '../sv_logger';
@@ -182,7 +182,7 @@ class StateManager extends Util.Singleton<StateManager>() {
   @RPCEvent('houserobbery:server:canLootZone')
   canLootZone = (src: number, houseId: string, zoneName: string) => {
     if (!this.checkUserIsDoingJob(src, houseId)) return false;
-    // TODO: add check if player has holdable item
+    if (Inventory.hasObject(src)) return false;
     const houseState = this.houseStates.get(houseId);
     return !houseState?.searched.has(zoneName);
   };
@@ -195,8 +195,6 @@ class StateManager extends Util.Singleton<StateManager>() {
       Notifications.add(src, 'Deze plek is al eens doorzocht...', 'error');
       return;
     }
-    const Player = DGCore.Functions.GetPlayer(src);
-    if (!Player) return;
     if (Jobs.isWhitelisted(src, 'police')) {
       Notifications.add(src, 'Dit is niet de bedoeling he...');
       return;
@@ -233,8 +231,7 @@ class StateManager extends Util.Singleton<StateManager>() {
 
     const lootTable = this.config.lootTables[lootTableId];
     const item = lootTable[Util.getRndInteger(0, lootTable.length)];
-    Player.Functions.AddItem(item, 1);
-    emitNet('inventory:client:ItemBox', src, item, 'add');
+    Inventory.addItemToPlayer(src, item, 1);
     Util.Log(
       'houserobbery:house:loot',
       {
@@ -248,8 +245,7 @@ class StateManager extends Util.Singleton<StateManager>() {
 
     const chance = Util.getRndInteger(0, 5);
     if (chance < 1) {
-      Player.Functions.AddItem('drive_v1', 1);
-      emitNet('inventory:client:ItemBox', src, 'drive_v1', 'add');
+      Inventory.addItemToPlayer(src, 'drive_v1', 1);
       Util.Log(
         'houserobbery:house:specialLoot',
         {

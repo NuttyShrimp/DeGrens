@@ -19,10 +19,6 @@ function DGCore.Functions.GetCoords(entity)
     return vector4(coords.x, coords.y, coords.z, heading)
 end
 
-function DGCore.Functions.HasItem(item)
-    return DGCore.Functions.TriggerCallback('DGCore:HasItem', nil, item)
-end
-
 -- Utility
 
 function DGCore.Functions.DrawText(x, y, width, height, scale, r, g, b, a, text)

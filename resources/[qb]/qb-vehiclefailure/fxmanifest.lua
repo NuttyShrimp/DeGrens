@@ -6,8 +6,15 @@ version '1.0.0'
 
 shared_scripts { 
 	'@dg-core/import.lua',
-	'config.lua'
+	'config.lua',
+    '@ts-shared/shared/lib.lua'
 }
 
-client_script 'client.lua'
-server_script 'server.lua'
+server_script {
+    "@ts-shared/server/server.js",
+    'server.lua'
+}
+client_script {
+    "@ts-shared/client/client.js",
+    'client.lua',
+}

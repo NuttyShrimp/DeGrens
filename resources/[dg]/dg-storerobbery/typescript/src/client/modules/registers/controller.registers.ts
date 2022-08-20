@@ -1,4 +1,4 @@
-import { Peek, PolyZone, Util, RPC, Notifications, Taskbar, Events } from '@dgx/client';
+import { Peek, PolyZone, Util, RPC, Notifications, Taskbar, Events, Inventory } from '@dgx/client';
 import { Vector3 } from '@dgx/shared';
 import locationManager from 'controllers/classes/LocationManager';
 
@@ -56,15 +56,14 @@ const lockpickRegister = async (registerObject: number) => {
     return;
   }
 
-  if (await DGCore.Functions.HasItem('lockpick')) {
+  if (await Inventory.doesPlayerHaveItems('lockpick')) {
     global.exports['dg-keygame'].OpenGame(
       (success: boolean) => {
         if (success) {
           lootRegister(registerCoords);
         } else {
           if (Util.getRndInteger(0, 100) < 10) {
-            emitNet('DGCore:Server:RemoveItem', 'lockpick');
-            emit('inventory:client:ItemBox', 'lockpick', 'remove');
+            Inventory.removeItemFromPlayer('lockpick');
             Notifications.add('Je lockpick is gebroken...', 'error');
           } else {
             Notifications.add('Mislukt...', 'error');

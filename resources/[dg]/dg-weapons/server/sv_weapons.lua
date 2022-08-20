@@ -581,7 +581,6 @@ Weapons = {
         name = 'weapon_grenade',
         durabilityMultiplier = 0.05,
         oneTimeUse = true,
-        
     },
     [`weapon_bzgas`] = {
         name = 'weapon_bzgas',

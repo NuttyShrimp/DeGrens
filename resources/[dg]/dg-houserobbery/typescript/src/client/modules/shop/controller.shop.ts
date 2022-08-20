@@ -49,7 +49,7 @@ const sellItem = async () => {
   const canSellItem = await RPC.execute<boolean>('houserobbery:server:canSellItem', itemData.name);
   if (!canSellItem) {
     Notifications.add('Je kan dit niet verkopen...', 'error');
-    emitNet('DGCore:Server:AddItem', itemData.name, itemData.amount, null, itemData.info, itemData.quality);
+    //emitNet('DGCore:Server:AddItem', itemData.name, itemData.amount, null, itemData.info, itemData.quality);
     currentSellInventory = null;
     return;
   }

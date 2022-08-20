@@ -1,5 +1,5 @@
-DGCore.Functions.CreateUseableItem("radio", function(source, item)
-    TriggerClientEvent('qb-radio:use', source)
+DGX.Inventory.registerUseable("radio", function(src)
+    TriggerClientEvent('qb-radio:use', src)
 end)
 
 DGCore.Functions.CreateCallback('qb-radio:server:GetItem', function(source, cb, item)

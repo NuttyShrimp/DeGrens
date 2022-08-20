@@ -15,6 +15,7 @@ declare global {
     API: typeof Classes.API;
     Jobs: typeof Classes.Jobs;
     Config: typeof Classes.Config;
+    Inventory: typeof Classes.Inventory;
     Vector3: typeof Vector3Class;
     Vector4: typeof Vector4Class;
   };

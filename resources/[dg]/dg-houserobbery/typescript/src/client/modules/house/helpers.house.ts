@@ -1,4 +1,4 @@
-import { Events, Notifications, PolyZone, RPC, Util } from '@dgx/client';
+import { Events, Inventory, Notifications, PolyZone, RPC, Util } from '@dgx/client';
 import { enterInterior, leaveInterior } from 'services/interiors';
 
 export const unlockHouse = async (houseId: string) => {
@@ -11,7 +11,7 @@ export const unlockHouse = async (houseId: string) => {
   }
 
   const hasCrowbar = global.exports['dg-weapons'].getCurrentWeaponData()?.name == 'weapon_crowbar' ?? false;
-  const hasLockpick = hasCrowbar ? false : await DGCore.Functions.HasItem('lockpick');
+  const hasLockpick = hasCrowbar ? false : await Inventory.doesPlayerHaveItems('lockpick');
   if (!hasCrowbar && !hasLockpick) {
     Notifications.add('Hoe ga je dit openen?', 'error');
     return;
@@ -24,8 +24,7 @@ export const unlockHouse = async (houseId: string) => {
         Events.emitNet('houserobbery:server:unlockDoor', houseId);
       } else {
         if (Util.getRndInteger(0, 100) < 10) {
-          emitNet('DGCore:Server:RemoveItem', 'lockpick', 1);
-          emit('inventory:client:ItemBox', 'lockpick', 'remove');
+          DGX.Inventory.removeItemFromPlayer('lockpick');
           Notifications.add('Je lockpick is gebroken...', 'error');
         } else {
           Notifications.add('Mislukt...', 'error');

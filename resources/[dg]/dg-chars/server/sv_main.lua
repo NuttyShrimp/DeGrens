@@ -46,31 +46,9 @@ local function loadHouseData()
 	TriggerClientEvent("qb-houses:client:setHouseConfig", -1, Houses)
 end
 
-local function GiveStarterItems(src)
-	local Player = DGCore.Functions.GetPlayer(src)
-
-	for k, v in pairs(DGCore.Shared.StarterItems) do
-		local info = {}
-		if v.item == "id_card" then
-			info.citizenid = Player.PlayerData.citizenid
-			info.firstname = Player.PlayerData.charinfo.firstname
-			info.lastname = Player.PlayerData.charinfo.lastname
-			info.birthdate = Player.PlayerData.charinfo.birthdate
-			info.gender = Player.PlayerData.charinfo.gender
-			info.nationality = Player.PlayerData.charinfo.nationality
-		elseif v.item == "driver_license" then
-			info.firstname = Player.PlayerData.charinfo.firstname
-			info.lastname = Player.PlayerData.charinfo.lastname
-			info.birthdate = Player.PlayerData.charinfo.birthdate
-			info.type = "Categorie: B"
-		end
-		Player.Functions.AddItem(v.item, v.amount, false, info)
-	end
-end
-
 RegisterNetEvent('dg-chars:server:newCharSpawn', function()
 	local src = source
-	GiveStarterItems(src)
+  DGX.Inventory.giveStarterItems(src)
 	exports['dg-apartments']:enterApartment(src)
 end)
 

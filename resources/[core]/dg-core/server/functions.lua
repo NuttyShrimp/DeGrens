@@ -128,21 +128,6 @@ function DGCore.Functions.TriggerCallback(name, source, cb, ...)
 	end
 end
 
--- Items
-
-function DGCore.Functions.CreateUseableItem(item, cb)
-	DGCore.UseableItems[item] = cb
-end
-
-function DGCore.Functions.CanUseItem(item)
-	return DGCore.UseableItems[item]
-end
-
-function DGCore.Functions.UseItem(source, item)
-	local src = source
-	DGCore.UseableItems[item.name](src, item)
-end
-
 -- Kick Player
 
 function DGCore.Functions.Kick(source, reason, setKickReason, deferrals)

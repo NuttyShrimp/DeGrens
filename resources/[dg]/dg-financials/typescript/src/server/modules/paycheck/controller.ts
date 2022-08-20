@@ -20,10 +20,9 @@ onNet('DGCore:Server:OnPlayerLoaded', () => {
   checkInterval(Player.PlayerData.citizenid, job);
 });
 
-on('DGCore:Server:OnPlayerUnload', (src: number) => {
-  const Player = DGCore.Functions.GetPlayer(src);
+on('DGCore:Server:OnPlayerUnload', (src: number, citizenid: number) => {
   const job = Jobs.getCurrentJob(source);
-  checkInterval(Player.PlayerData.citizenid, job);
+  checkInterval(citizenid, job);
 });
 
 on('dg-jobs:signin:update', (src: number, job: string) => {

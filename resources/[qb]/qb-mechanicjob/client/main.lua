@@ -115,10 +115,7 @@ Citizen.CreateThread(function()
                         if StashDistance < 1 then
                             DrawText3Ds(Config.Locations["stash"].x, Config.Locations["stash"].y, Config.Locations["stash"].z, "[E] Open Stash")
                             if IsControlJustReleased(0, 38) then
-                                TriggerServerEvent("inventory:server:OpenInventory", "stash", "mechanicstash", {
-                                    maxweight = 4000000,
-                                    slots = 500,
-                                })
+                              print('Deprecated inventory opening method. Please update to new export')
                             end
                         end
                     end
@@ -288,7 +285,7 @@ end
 
 function PartMenu(part)
     ClearMenu()
-    Menu.addButton("Repair ("..exports["dg-inventory"]:GetItemData(Config.RepairCostAmount[part].item)["label"].." "..Config.RepairCostAmount[part].costs.."x)", "RepairPart", part)
+    Menu.addButton("Repair ("..DGX.Inventory.getItemData(Config.RepairCostAmount[part].item)["label"].." "..Config.RepairCostAmount[part].costs.."x)", "RepairPart", part)
     Menu.addButton("Back", "VehicleOptions", nil)
     Menu.addButton("Close Menu", "CloseMenu", nil) 
 end
@@ -614,11 +611,9 @@ AddEventHandler('vehiclemod:client:repairPart', function(part, level, needAmount
                                     SetVehicleEngineHealth(veh, enhealth)
                                     TriggerServerEvent("vehiclemod:server:updatePart", plate, part, GetVehicleBodyHealth(veh))
                                     TriggerServerEvent("DGCore:Server:RemoveItem", Config.RepairCost[part], needAmount)
-                                    TriggerEvent("inventory:client:ItemBox", Config.RepairCost[part], "remove")
                                 elseif part ~= "engine" then
                                     TriggerServerEvent("vehiclemod:server:updatePart", plate, part, GetVehicleStatus(plate, part) + level)
                                     TriggerServerEvent("DGCore:Server:RemoveItem", Config.RepairCost[part], level)
-                                    TriggerEvent("inventory:client:ItemBox", Config.RepairCost[part], "remove")
                                 end
                             end, function() -- Cancel
                                 openingDoor = false
@@ -861,7 +856,7 @@ function SendStatusMessage(statusList)
         -- TODO: replace with dg-chat when rewritten
         TriggerEvent('chat:addMessage', {
             template = '<div class="chat-message normal"><div class="chat-message-body"><strong>{0}:</strong><br><br> <strong>'.. Config.ValuesLabels["engine"] ..' (engine):</strong> {1} <br><strong>'.. Config.ValuesLabels["body"] ..' (body):</strong> {2} <br><strong>'.. Config.ValuesLabels["radiator"] ..' (radiator):</strong> {3} <br><strong>'.. Config.ValuesLabels["axle"] ..' (axle):</strong> {4}<br><strong>'.. Config.ValuesLabels["brakes"] ..' (brakes):</strong> {5}<br><strong>'.. Config.ValuesLabels["clutch"] ..' (clutch):</strong> {6}<br><strong>'.. Config.ValuesLabels["fuel"] ..' (fuel):</strong> {7}</div></div>',
-            args = {'Vehicle Status', round(statusList["engine"]) .. "/" .. Config.MaxStatusValues["engine"] .. " ("..exports["dg-inventory"]:GetItemData("advancedrepairkit")["label"]..")", round(statusList["body"]) .. "/" .. Config.MaxStatusValues["body"] .. " ("..exports["dg-inventory"]:GetItemData(Config.RepairCost["body"])["label"]..")", round(statusList["radiator"]) .. "/" .. Config.MaxStatusValues["radiator"] .. ".0 ("..exports["dg-inventory"]:GetItemData(Config.RepairCost["radiator"])["label"]..")", round(statusList["axle"]) .. "/" .. Config.MaxStatusValues["axle"] .. ".0 ("..exports["dg-inventory"]:GetItemData(Config.RepairCost["axle"])["label"]..")", round(statusList["brakes"]) .. "/" .. Config.MaxStatusValues["brakes"] .. ".0 ("..exports["dg-inventory"]:GetItemData(Config.RepairCost["brakes"])["label"]..")", round(statusList["clutch"]) .. "/" .. Config.MaxStatusValues["clutch"] .. ".0 ("..exports["dg-inventory"]:GetItemData(Config.RepairCost["clutch"])["label"]..")", round(statusList["fuel"]) .. "/" .. Config.MaxStatusValues["fuel"] .. ".0 ("..exports["dg-inventory"]:GetItemData(Config.RepairCost["fuel"])["label"]..")"}
+            args = {'Vehicle Status', round(statusList["engine"]) .. "/" .. Config.MaxStatusValues["engine"] .. " ("..DGX.Inventory.getItemData("advancedrepairkit")["label"]..")", round(statusList["body"]) .. "/" .. Config.MaxStatusValues["body"] .. " ("..DGX.Inventory.getItemData(Config.RepairCost["body"])["label"]..")", round(statusList["radiator"]) .. "/" .. Config.MaxStatusValues["radiator"] .. ".0 ("..DGX.Inventory.getItemData(Config.RepairCost["radiator"])["label"]..")", round(statusList["axle"]) .. "/" .. Config.MaxStatusValues["axle"] .. ".0 ("..DGX.Inventory.getItemData(Config.RepairCost["axle"])["label"]..")", round(statusList["brakes"]) .. "/" .. Config.MaxStatusValues["brakes"] .. ".0 ("..DGX.Inventory.getItemData(Config.RepairCost["brakes"])["label"]..")", round(statusList["clutch"]) .. "/" .. Config.MaxStatusValues["clutch"] .. ".0 ("..DGX.Inventory.getItemData(Config.RepairCost["clutch"])["label"]..")", round(statusList["fuel"]) .. "/" .. Config.MaxStatusValues["fuel"] .. ".0 ("..DGX.Inventory.getItemData(Config.RepairCost["fuel"])["label"]..")"}
         })
     end
 end

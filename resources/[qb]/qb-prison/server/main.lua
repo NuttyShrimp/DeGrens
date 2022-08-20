@@ -21,7 +21,6 @@ AddEventHandler('prison:server:SaveJailItems', function(jailTime)
     if Player.PlayerData.metadata["jailitems"] == nil or next(Player.PlayerData.metadata["jailitems"]) == nil then 
         Player.Functions.SetMetaData("jailitems", Player.PlayerData.items)
         Citizen.Wait(2000)
-        Player.Functions.ClearInventory()
     end
     exports['dg-chat']:addMessage(src, {
       prefix = 'SYSTEM: ',
@@ -36,7 +35,7 @@ AddEventHandler('prison:server:GiveJailItems', function()
     local Player = DGCore.Functions.GetPlayer(src)
     Citizen.Wait(1000)
     for k, v in pairs(Player.PlayerData.metadata["jailitems"]) do
-        Player.Functions.AddItem(v.name, v.amount, false, v.info)
+        -- Player.Functions.AddItem(v.name, v.amount, false, v.info)
     end
     exports['dg-chat']:addMessage(src, {
       prefix = 'SYSTEM: ',
