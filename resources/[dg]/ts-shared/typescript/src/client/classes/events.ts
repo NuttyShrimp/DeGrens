@@ -120,6 +120,7 @@ class Events {
 
   onNet(evtName: string, handler: LocalEventHandler) {
     this.serverEventHandlers.set(evtName, handler);
+    this.localEventHandlers.set(evtName, handler);
   }
 
   emit(evtName: string, ...args: any[]) {

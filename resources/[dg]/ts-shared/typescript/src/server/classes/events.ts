@@ -98,6 +98,7 @@ class Events extends Util.Singleton<Events>() {
   }
 
   onNet(evtName: string, handler: IEvents.EventHandler) {
+    this.localEventHandlers.set(evtName, handler);
     this.clientEventHandlers.set(evtName, handler);
     doAuthExport('registerEvent', this.resName, evtName);
   }
