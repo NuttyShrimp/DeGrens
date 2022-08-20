@@ -1,56 +1,53 @@
 @use 'src/styles/variables';
 
-$color_success: #47c93a;
-$color_error: #ff4757;
-$color_info: #299fff;
+$color_success: #9AE6B4;
+$color_error: #feb2b2;
+$color_info: #90cdf4;
 
 .notification {
+  display: flex;
+  align-items: center;
+  border-bottom: .5vh solid #000;
   border-radius: .5rem;
+  margin: .25em 0;
+  padding: .5em .75em;
   background-color: #1e2023;
   color: white;
-  border-bottom: .3vh solid #000;
-  padding: .75em;
-  margin: .5em 0;
 
   &.success {
-    color: $color_success;
     border-bottom-color: $color_success;
+    background-color: rgba($color_success, .16);
+
+    & .MuiSvgIcon-root {
+      fill: $color_success;
+    }
   }
 
   &.error {
-    color: $color_error;
     border-bottom-color: $color_error;
+    background-color: rgba($color_error, .16);
+
+    & .MuiSvgIcon-root {
+      fill: $color_error;
+    }
   }
 
   &.info {
-    color: $color_info;
     border-bottom-color: $color_info;
+    background-color: rgba($color_info, .16);
+
+    & .MuiSvgIcon-root {
+      fill: $color_info;
+    }
+  }
+
+  & .MuiSvgIcon-root {
+    margin-right: 1vh;
   }
 
   &__outer {
-    height: 100%;
-    width: 100%;
-    position: relative;
-  }
-
-  &__filter {
-    position: absolute;
-    height: inherit;
-    width: inherit;
     border-radius: .5rem;
-    top: 0;
-
-    &.successBg {
-      background-color: rgba($color_success, .1);
-    }
-
-    &.errorBg {
-      background-color: rgba($color_error, .1);
-    }
-
-    &.infoBg {
-      background-color: rgba($color_info, .05);
-    }
+    background-color: rgba(0,0,0,.8);
   }
 
   &__list {
@@ -58,6 +55,7 @@ $color_info: #299fff;
     display: flex;
     flex-direction: column;
     align-items: flex-end;
+    margin-right: 45vh;
 
     & > * {
       width: fit-content;
