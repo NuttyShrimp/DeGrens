@@ -163,27 +163,6 @@ function DGCore.Functions.Kick(source, reason, setKickReason, deferrals)
 	end)
 end
 
--- Check if player is whitelisted (not used anywhere)
-
-function DGCore.Functions.IsWhitelisted(source)
-	local src = source
-	local plicense = DGCore.Functions.GetIdentifier(src, 'license')
-	local identifiers = GetPlayerIdentifiers(src)
-	if DGCore.Config.Server.whitelist then
-		local result = exports['dg-sql']:query('SELECT * FROM whitelist WHERE license = ?', { plicense })
-		if result[1] then
-			for _, id in pairs(identifiers) do
-				if result[1].license == id then
-					return true
-				end
-			end
-		end
-	else
-		return true
-	end
-	return false
-end
-
 -- Setting & Removing Permissions
 
 function DGCore.Functions.AddPermission(source, permission)
@@ -222,34 +201,11 @@ end
 -- Checking for Permission Level
 
 function DGCore.Functions.HasPermission(source, permission)
-	local src = source
-	local pSteamId = DGCore.Functions.GetIdentifier(src, 'steam')
-	local permission = tostring(permission:lower())
-	if permission == 'user' then
-		return true
-	else
-		if DGCore.Config.Server.PermissionList[pSteamId] then
-			if DGCore.Config.Server.PermissionList[pSteamId].steamid == pSteamId then
-				if DGCore.Config.Server.PermissionList[pSteamId].permission == permission or DGCore.Config.Server.PermissionList[pSteamId].permission == 'god' then
-					return true
-				end
-			end
-		end
-	end
-	return false
+	return true
 end
 
 function DGCore.Functions.GetPermission(source)
-	local src = source
-	local pSteamId = DGCore.Functions.GetIdentifier(src, 'steam')
-	if pSteamId then
-		if DGCore.Config.Server.PermissionList[pSteamId] then
-			if DGCore.Config.Server.PermissionList[pSteamId].steamid == pSteamId then
-				return DGCore.Config.Server.PermissionList[pSteamId].permission
-			end
-		end
-	end
-	return 'user'
+	return 'god'
 end
 
 -- Opt in or out of admin reports
@@ -270,27 +226,6 @@ function DGCore.Functions.ToggleOptin(source)
 	if DGCore.Functions.HasPermission(src, 'admin') then
 		DGCore.Config.Server.PermissionList[pSteamId].optin = not DGCore.Config.Server.PermissionList[pSteamId].optin
 	end
-end
-
--- Check if player is banned
-
-function DGCore.Functions.IsPlayerBanned(source)
-	local src = source
-	local retval = false
-	local message = ''
-	local pSteamId = DGCore.Functions.GetIdentifier(src, 'steam')
-	local pLicense = DGCore.Functions.GetIdentifier(src, 'license')
-	local result = exports['dg-sql']:query('SELECT * FROM bans WHERE steamid = ? OR license = ?', { pSteamId, pLicense })
-	if result[1] then
-		if os.time() < result[1].expire then
-			retval = true
-			local timeTable = os.date('*t', tonumber(result.expire))
-			message = 'You have been banned from the server:\n' .. result[1].reason .. '\nYour ban expires ' .. timeTable.day .. '/' .. timeTable.month .. '/' .. timeTable.year .. ' ' .. timeTable.hour .. ':' .. timeTable.min .. '\n'
-		else
-			exports['dg-sql']:query('DELETE FROM bans WHERE id = ?', { result[1].id })
-		end
-	end
-	return retval, message
 end
 
 -- Check for duplicate license

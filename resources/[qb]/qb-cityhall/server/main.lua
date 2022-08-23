@@ -117,7 +117,7 @@ end
 RegisterServerEvent('qb-cityhall:server:banPlayer')
 AddEventHandler('qb-cityhall:server:banPlayer', function()
     local src = source
-    exports['dg-chat']:addMessage('admin', {
+    exports['dg-chat']:addMessage('staff', {
       prefix = 'Anti-cheat: ',
       message = ('%s has been banned for sending POST Request\'s'):format(GetPlayerName(src)),
       type = 'error'

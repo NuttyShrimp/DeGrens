@@ -1,4 +1,4 @@
-import { Events } from '@dgx/server';
+import { Admin, Events } from '@dgx/server';
 import { DGXEvent, Event, EventListener, Export, ExportRegister } from '@dgx/server/decorators';
 import { handleCommandExecution } from 'helpers/commands';
 
@@ -23,7 +23,7 @@ class CommandManager {
 
   private specificRefresh(src: number) {
     const cmds: Shared.Command[] = [...this.commands.values()]
-      .filter(cmd => DGCore.Functions.HasPermission(src, cmd.permissionLevel))
+      .filter(cmd => Admin.hasPermission(src, cmd.permissionLevel))
       .map(cmdInfo => {
         return cmdInfo;
       });

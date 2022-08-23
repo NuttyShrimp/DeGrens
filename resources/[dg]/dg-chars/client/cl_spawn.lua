@@ -25,6 +25,7 @@ Spawn.setupSpawnMenu = function()
 end
 
 Spawn.choose = function(idx)
+  Spawn.spinner.shouldSpin = false
 	local spawn = Spawn.list[idx]
 	if not spawn then
 		print(("[DG-Chars] Spawn for index: %d not found"):format(idx))
@@ -35,13 +36,13 @@ Spawn.choose = function(idx)
 	while IsScreenFadingOut() do
 		Wait(0)
 	end
-	Cam.destroyCamera()
 	local ped = PlayerPedId()
 	local result = DGCore.Functions.TriggerCallback('dg-chars:server:spawn', idx)
 	if (type(result) == 'string') then
 		DGCore.Functions.Notify(result, 'error', 10000)
 		return
 	end
+  Cam.destroyCamera()
 
 	if (result.resetPed) then
 		FreezeEntityPosition(ped, false)

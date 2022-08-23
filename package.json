@@ -5,7 +5,7 @@
     "build": "lerna run --stream build ",
     "build:dev": "lerna run --stream build:dev ",
     "lint:lerna": "lerna run --stream lint",
-    "lint:root": "eslint --fix --resolve-plugins-relative-to ./ --ext .js,.ts,.tsx,.jsx,.json ./resources/[dg]/",
+    "lint:root": "eslint --fix --resolve-plugins-relative-to ./ --ext .js,.ts,.tsx,.jsx,.json,.vue ./resources/[dg]/",
     "lint": "yarn run lint:root --quiet",
     "format": "lerna run --stream format",
     "bootstrap": "lerna bootstrap",
@@ -53,7 +53,7 @@
     "webpack-cli": "^4.10.0"
   },
   "lint-staged": {
-    "*.{js,ts,tsx,scss,css,md,vue}": "yarn run lint:root --cache"
+    "*.{js,ts,tsx,scss,css,md,vue}": "eslint --fix --resolve-plugins-relative-to ./ --ext .js,.ts,.tsx,.jsx,.json,.vue ./resources/[dg]/ --cache"
   },
   "husky": {
     "hooks": {

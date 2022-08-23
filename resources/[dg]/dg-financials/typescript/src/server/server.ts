@@ -1,3 +1,9 @@
+import { Config } from '@dgx/server';
+import { setConfig } from 'helpers/config';
+import { CryptoManager } from 'modules/crypto/classes/CryptoManager';
+import debtManager from 'modules/debts/classes/debtmanager';
+import { scheduleMaintenanceFees } from 'modules/debts/helpers/debts';
+
 import './sv_logger';
 import './modules/bank/controllers';
 import './modules/cash';
@@ -11,11 +17,6 @@ import { seedCache as seedCashCache } from './modules/cash/service';
 import { reloadPlayerWallets } from './modules/crypto/service';
 import { seedCache as seedPaycheckCache } from './modules/paycheck/service';
 import { seedTaxes } from './modules/taxes/service';
-import { Config } from '@dgx/server';
-import { setConfig } from 'helpers/config';
-import { scheduleMaintenanceFees } from 'modules/debts/helpers/debts';
-import debtManager from 'modules/debts/classes/debtmanager';
-import { CryptoManager } from 'modules/crypto/classes/CryptoManager';
 
 setImmediate(async () => {
   await Config.awaitConfigLoad();
@@ -25,7 +26,7 @@ setImmediate(async () => {
   seedPaycheckCache();
   seedCashCache();
   CryptoManager.getInstance().loadCoins();
-  debtManager.setConfig(config.debts)
+  debtManager.setConfig(config.debts);
   reloadPlayerWallets();
   scheduleMaintenanceFees();
   seedTaxes();

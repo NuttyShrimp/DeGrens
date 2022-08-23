@@ -94,4 +94,4 @@ end)
 
 DGCore.Commands.Add("removestand", "Delete Stand (Admin Only)", {}, false, function(source, args)
     TriggerClientEvent('qb-hotdogjob:staff:DeletStand', source)
-end, 'admin')
+end, 'staff')

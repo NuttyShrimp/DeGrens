@@ -1,11 +1,10 @@
-import winston from 'winston';
 import { Notifications, SQL } from '@dgx/server';
+import winston from 'winston';
 
 import { getDefaultAccount } from '../../bank/helpers/accounts';
 import { cryptoLogger } from '../util';
 
 import { CryptoManager } from './CryptoManager';
-import { getConfigModule } from 'helpers/config';
 
 export class CryptoWallet {
   private cid: number;

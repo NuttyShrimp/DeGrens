@@ -13,5 +13,5 @@ export const config: SrvConfig = {
   },
   accounts: {
     transactionLimit: 30,
-  }
+  },
 };

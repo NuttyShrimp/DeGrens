@@ -276,20 +276,6 @@ DGCore.Commands.Add("revivep", "Revive A Player", {}, false, function(source, ar
 	end
 end)
 
-DGCore.Commands.Add("revive", "Revive A Player or Yourself (Admin Only)", {{name="id", help="Player ID (may be empty)"}}, false, function(source, args)
-	local src = source
-	if args[1] then
-		local Player = DGCore.Functions.GetPlayer(tonumber(args[1]))
-		if Player then
-			TriggerClientEvent('hospital:client:Revive', Player.PlayerData.source)
-		else
-			TriggerClientEvent('DGCore:Notify', src, "Player Not Online", "error")
-		end
-	else
-		TriggerClientEvent('hospital:client:Revive', src)
-	end
-end, "admin")
-
 DGCore.Commands.Add("setpain", "Set Yours or A Players Pain Level (Admin Only)", {{name="id", help="Player ID (may be empty)"}}, false, function(source, args)
 	local src = source
 	if args[1] then
@@ -302,21 +288,7 @@ DGCore.Commands.Add("setpain", "Set Yours or A Players Pain Level (Admin Only)",
 	else
 		TriggerClientEvent('hospital:client:SetPain', src)
 	end
-end, "admin")
-
-DGCore.Commands.Add("kill", "Kill A Player or Yourself (Admin Only)", {{name="id", help="Player ID (may be empty)"}}, false, function(source, args)
-	local src = source
-	if args[1] then
-		local Player = DGCore.Functions.GetPlayer(tonumber(args[1]))
-		if Player then
-			TriggerClientEvent('hospital:client:KillPlayer', Player.PlayerData.source)
-		else
-			TriggerClientEvent('DGCore:Notify', src, "Player Not Online", "error")
-		end
-	else
-		TriggerClientEvent('hospital:client:KillPlayer', src)
-	end
-end, "admin")
+end, "staff")
 
 DGCore.Commands.Add('aheal', 'Heal A Player or Yourself (Admin Only)', {{name='id', help='Player ID (may be empty)'}}, false, function(source, args)
 	local src = source
@@ -330,7 +302,7 @@ DGCore.Commands.Add('aheal', 'Heal A Player or Yourself (Admin Only)', {{name='i
 	else
 		TriggerClientEvent('hospital:client:adminHeal', src)
 	end
-end, 'admin')
+end, 'staff')
 
 -- Items
 

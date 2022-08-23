@@ -1,5 +1,5 @@
-import winston from 'winston';
 import { SQL } from '@dgx/server';
+import winston from 'winston';
 
 import { config } from '../../../config';
 import { generateAccountId, generateTransactionId } from '../../../sv_util';
@@ -53,7 +53,7 @@ export class Account {
     `;
     await SQL.query(query, [accId, name, accType]);
     const _account = new Account(accId, name, accType);
-    _account.permsManager.addPermissions(cid, 15);
+    _account.permsManager.addPermissions(cid, 31);
     return _account;
   }
 
@@ -88,6 +88,16 @@ export class Account {
 
   public hasAccess(cid: number): boolean {
     return this.permsManager.hasAccess(cid);
+  }
+
+  public getContext() {
+    return {
+      account_id: this.account_id,
+      name: this.name,
+      type: this.accType,
+      balance: this.balance,
+      members: this.permsManager.getMembers(),
+    };
   }
 
   // endregion

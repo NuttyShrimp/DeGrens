@@ -1,11 +1,10 @@
-import winston from 'winston';
 import { SQL } from '@dgx/server';
+import winston from 'winston';
 
 import { checkPlayerAccounts } from '../controllers/accounts';
 import { bankLogger, sortAccounts } from '../utils';
 
 import { Account } from './Account';
-import { getConfig, getConfigModule } from 'helpers/config';
 
 export class AccountManager {
   private static _instance: AccountManager;
@@ -17,7 +16,7 @@ export class AccountManager {
     return AccountManager._instance;
   }
 
-  private config: Config["accounts"];
+  private config: Config['accounts'];
   private accounts: Account[] = [];
   private logger: winston.Logger;
 
@@ -28,7 +27,7 @@ export class AccountManager {
     this.logger = bankLogger.child({ module: 'AccountManager' });
   }
 
-  public setConfig(config: Config['accounts']){
+  public setConfig(config: Config['accounts']) {
     this.config = config;
     this.getAccountsDB().then(() => {
       this.seedAccounts();
@@ -47,33 +46,6 @@ export class AccountManager {
 		`;
     const result: string[] = await SQL.query(query, [cid]);
     return result;
-  }
-
-  /**
-   * Get account by accountId. Automatically creates account adds it to the list of accounts.
-   * @param id
-   */
-  public async getAccountDB(id: string): Promise<Account> {
-    const query = `
-			SELECT ba.*,
-						 (SELECT JSON_ARRAYAGG(JSON_OBJECT('cid', cid, 'access_level', access_level)) FROM bank_accounts_access WHERE account_id = ba.account_id) as members
-			FROM bank_accounts ba
-			WHERE ba.account_id = ?
-		`;
-    const result: DB.IAccount[] = await SQL.query(query, [id]);
-    if (result.length === 0) {
-      return null;
-    }
-
-    const account = new Account(
-      result[0].account_id,
-      result[0].name,
-      result[0].type,
-      result[0].balance,
-      JSON.parse(result[0].members)
-    );
-    this.addAccount(account);
-    return account;
   }
 
   /*
@@ -125,18 +97,14 @@ export class AccountManager {
   }
   //endregion
   // region Getters
-  public async getAccounts(cid: number, type?: AccountType): Promise<Account[]> {
+  /**
+   * Get all registerd accounts (Do not regularly use this, contains alot of data)
+   */
+  public getAllAcounts() {
+    return this.accounts;
+  }
+  public getAccounts(cid: number, type?: AccountType): Account[] {
     const _accounts = this.accounts.filter(account => (!type || account.getType() === type) && account.hasAccess(cid));
-    const ids = await this.getAccountIds(cid);
-    const filteredIds = ids.filter(id => _accounts.findIndex(account => account.getAccountId() === id) !== -1);
-    // Fetch missing accounts
-    for (const id of filteredIds) {
-      const account = await this.getAccountDB(id);
-      if (!account) {
-        this.logger.error(`[AccountManager] Could not fetch account | id: ${id} | cid: ${cid}`);
-      }
-      _accounts.push(account);
-    }
     this.logger.silly(`Fetched ${_accounts.length} accounts for cid: ${cid} | type: ${type}`);
     return sortAccounts(_accounts);
   }

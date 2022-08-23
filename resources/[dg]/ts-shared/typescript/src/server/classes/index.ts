@@ -1,3 +1,4 @@
+import admin from './admin';
 import config from './config';
 import events from './events';
 import interaction from './interaction';
@@ -14,4 +15,5 @@ export const { Chat } = interaction;
 export const { Taskbar, Notifications } = ui;
 export const { Config } = config;
 export const { Jobs } = jobs;
+export const { Admin } = admin;
 export const { Inventory } = inventory;

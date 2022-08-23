@@ -1,6 +1,7 @@
+import { RPC } from '@dgx/server';
+
 import { AccountManager } from '../classes/AccountManager';
 import { bankLogger } from '../utils';
-import { RPC } from '@dgx/server';
 
 // region Transactions
 const fetchTransactions = async (

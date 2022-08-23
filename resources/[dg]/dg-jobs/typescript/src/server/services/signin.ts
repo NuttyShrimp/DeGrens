@@ -73,7 +73,7 @@ export const signIn = (src: number, job: string) => {
   }
   const cid = Util.getCID(src);
   if (!cid) return;
-  const plyEntry = getPlayerInfoForJob(src, job);
+  const plyEntry = getPlayerInfoForJob(cid, job);
   if (!plyEntry) {
     Util.Log(
       'jobs:whitelist:signin:notWhitelisted',

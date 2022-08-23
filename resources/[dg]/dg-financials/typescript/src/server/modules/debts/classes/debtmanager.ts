@@ -1,8 +1,8 @@
+import { Notifications, SQL, Util } from '@dgx/server';
+
 import { getDefaultAccount, getDefaultAccountId } from '../../bank/helpers/accounts';
 import { transfer } from '../../bank/helpers/actions';
-import { debtLogger, scheduleDebt } from '../helpers/debts';
-import { Notifications, SQL, Util } from '@dgx/server';
-import { getConfigModule } from 'helpers/config';
+import { debtLogger, scheduleDebt, unscheduleDebt } from '../helpers/debts';
 
 class DebtManager extends Util.Singleton<DebtManager>() {
   private debts: Debts.Debt[];
@@ -19,8 +19,8 @@ class DebtManager extends Util.Singleton<DebtManager>() {
   }
 
   public getConfig() {
-    return this.config
-  };
+    return this.config;
+  }
 
   private async seedDebts() {
     const query = `
@@ -96,6 +96,30 @@ class DebtManager extends Util.Singleton<DebtManager>() {
     return this.debts.find(debt => debt.id === id);
   }
 
+  public async removeDebts(ids: number[]): Promise<void> {
+    if (!ids.every(id => this.getDebtById(id) !== undefined)) {
+      debtLogger.error('removeDebts called with invalid debt ids', ids)
+      return;
+    }
+    const query = 'DELETE FROM debts WHERE id IN ?';
+    const result = await SQL.query(query, [ids]);
+    if (!result.affectedRows) {
+      debtLogger.error(`Failed to remove debt with ids ${ids}`, ids);
+      Util.Log("financials:debt:remove:failed", { ids, deleted: result.affectedRows }, `Removed no debts but should have deleted ${ids.length} from the database`)
+      this.seedDebts();
+      return;
+    }
+    if (result.affectedRows !== ids.length) {
+      debtLogger.error('Failed to remove all debts', ids)
+      Util.Log("financials:debt:remove:failed", { ids, deleted: result.affectedRows }, `Removed ${result.affectedRows} debts but should have deleted ${ids.length} from the database`)
+      this.seedDebts();
+      return;
+    }
+    Util.Log("financials:debt:remove", { ids, deleted: result.affectedRows }, `Removed ${result.affectedRows} debts from the database`)
+    this.debts = this.debts.filter(d => !ids.includes(d.id));
+    ids.forEach(id => unscheduleDebt(id));
+  }
+
   public async payDebt(src: number, id: number): Promise<boolean> {
     const Player = DGCore.Functions.GetPlayer(src);
     if (!Player) {
@@ -139,6 +163,7 @@ class DebtManager extends Util.Singleton<DebtManager>() {
         { id, cid, debt },
         `Successfully paid debt of ${debt.debt} | id: ${id} | cid: ${cid}`
       );
+      this.removeDebts([id])
     } else {
       Notifications.add(src, 'Je hebt te weinig geld op je rekening om dit te doen');
     }
@@ -181,6 +206,7 @@ class DebtManager extends Util.Singleton<DebtManager>() {
         { id, cid: debt.cid, debt },
         `Successfully paid debt of ${debt.debt} | id: ${id} | cid: ${debt.cid}`
       );
+      this.removeDebts([id])
     } else {
       global.exports['dg-logs'].createGraylogEntry(
         'financials:debt:overduePay:failed',

@@ -26,9 +26,6 @@ function Citizen.Trace(...)
 			end
 		end
 	end
-	if not isError then
-		return
-	end
 	oldTrace(...)
 end
 

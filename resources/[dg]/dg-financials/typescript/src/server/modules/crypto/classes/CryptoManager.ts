@@ -1,10 +1,10 @@
-import winston from 'winston';
 import { SQL } from '@dgx/server';
+import { getConfigModule } from 'helpers/config';
+import winston from 'winston';
 
 import { cryptoLogger } from '../util';
 
 import { CryptoWallet } from './CryptoWallet';
-import { getConfigModule } from 'helpers/config';
 
 export class CryptoManager {
   private static _instance: CryptoManager;
@@ -16,7 +16,7 @@ export class CryptoManager {
     return CryptoManager._instance;
   }
 
-  private config: Record<string, NCrypto.Config>
+  private config: Record<string, NCrypto.Config>;
   private coins: NCrypto.Coin[];
   private coinsLoaded: boolean;
   private coinWallets: Map<number, CryptoWallet[]>;
@@ -83,8 +83,8 @@ export class CryptoManager {
   // region DB
   public async loadCoins(): Promise<void> {
     (await getConfigModule('cryptoCoins')).forEach(c => {
-      this.config[c.name] = c
-    })
+      this.config[c.name] = c;
+    });
     const query = `SELECT *
 									 FROM crypto`;
     const result = await SQL.query(query);

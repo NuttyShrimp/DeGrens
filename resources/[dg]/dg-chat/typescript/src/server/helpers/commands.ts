@@ -1,4 +1,4 @@
-import { Events, Notifications, Util } from '@dgx/server';
+import { Admin, Events, Notifications, Util } from '@dgx/server';
 
 import commandManager from '../classes/commandManager';
 
@@ -24,7 +24,7 @@ const baseCommands: Server.Command[] = [
         message: args.join(' '),
       };
       DGCore.Functions.GetPlayers().forEach(player => {
-        let shouldShow = DGCore.Functions.HasPermission(player, 'admin') && DGCore.Functions.IsOptin(player);
+        let shouldShow = Admin.hasPermission(player, 'staff') && DGCore.Functions.IsOptin(player);
         if (!shouldShow) {
           // Some more expensive shit so we hide it behind an extra check
           const plyCoords = Util.ArrayToVector3(GetEntityCoords(GetPlayerPed(String(player))));
@@ -39,9 +39,9 @@ const baseCommands: Server.Command[] = [
     name: 'clearAll',
     description: "clear everyone's chat",
     parameters: [],
-    permissionLevel: 'admin',
+    permissionLevel: 'staff',
     handler: src => {
-      if (!DGCore.Functions.HasPermission(src, 'admin')) {
+      if (!Admin.hasPermission(src, 'staff')) {
         // TODO: ban for injection
         return;
       }

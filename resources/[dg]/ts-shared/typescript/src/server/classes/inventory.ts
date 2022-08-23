@@ -51,7 +51,7 @@ class Inventory {
   };
 
   public addItemToPlayer = (plyId: number, name: string, amount: number, metadata?: { [key: string]: any }) => {
-    global.exports['dg-inventory'].addItemToPlayer(name, plyId, amount, metadata);
+    global.exports['dg-inventory'].addItemToPlayer(plyId, name, amount, metadata);
   };
 
   public doesPlayerHaveItems = (plyId: number, name: string | string[]): Promise<boolean> => {

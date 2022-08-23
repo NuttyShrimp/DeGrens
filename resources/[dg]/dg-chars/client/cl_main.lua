@@ -39,6 +39,16 @@ RegisterNetEvent('dg-chars:client:startSession', function()
   setupCharMenu()
 end)
 
+RegisterNetEvent('dg-chars:client:reshowMenu', function()
+  exports['dg-ui']:addNotification("Hang tight, we're logging you out...", "info")
+  TriggerServerEvent('qb-houses:server:LogoutLocation')
+  DoScreenFadeOut(250)
+  while not IsScreenFadedOut() do
+    Wait(10)
+  end
+  setupCharMenu()
+end)
+
 
 RegisterNetEvent('onResourceStop', function(res)
 	if res ~= GetCurrentResourceName() then return end
@@ -50,10 +60,4 @@ RegisterNetEvent('onResourceStop', function(res)
 	if Spawn.faded or Cam.faded then
 		DoScreenFadeIn(1)
 	end
-end)
-
-RegisterCommand("char", function()
-  exports['dg-ui']:addNotification("Hang tight, we're logging you out...", "info")
-  TriggerServerEvent('qb-houses:server:LogoutLocation')
-  setupCharMenu()
 end)

@@ -1,6 +1,7 @@
+import { RPC } from '@dgx/server';
+
 import { deposit, mobile_transaction, paycheck, purchase, transfer, withdraw } from '../helpers/actions';
 import { bankLogger } from '../utils';
-import { RPC } from '@dgx/server';
 
 global.exports('deposit', deposit);
 global.exports('withdraw', withdraw);
