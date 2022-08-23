@@ -239,7 +239,7 @@ function DGCore.Player.CreatePlayer(PlayerData)
   DGCore.Player.Save(self.PlayerData.source)
 
   -- Make the player state aware that we are loggedin
-  Player(self.PlayerData.source).state:set('loggedIn', true)
+  Player(self.PlayerData.source).state:set('loggedIn', true, true)
   Player(self.PlayerData.source).state:set('steamId', self.PlayerData.steamid)
   if (self.PlayerData.citizenid) then
     Player(self.PlayerData.source).state:set('cid', self.PlayerData.citizenid)
