@@ -14,15 +14,16 @@ interface SentryClass {
     steamId: string,
     traceId: string,
     ctx: Pick<SpanContext, Exclude<keyof SpanContext, 'spanId' | 'sampled' | 'traceId' | 'parentSpanId'>>
-  ): void;
+  ): string | undefined;
 
-  finishSpan(steamId: string, traceId: string): void;
+  finishSpan(steamId: string, traceId: string, spanId: string, end?: number): void;
 }
 
 class SentryHandler extends Util.Singleton<SentryClass>() implements SentryClass {
   private transactions: Map<string, Transaction> = new Map();
   private transactionAvailableHits: Map<string, number> = new Map();
-  private userSpans: Map<string, Map<string, Span>> = new Map();
+  // <steamId, <traceid, <SpanId, Span>>>
+  private userSpans: Map<string, Map<string, Map<string, Span>>> = new Map();
 
   constructor() {
     super();
@@ -38,7 +39,9 @@ class SentryHandler extends Util.Singleton<SentryClass>() implements SentryClass
         ctx: Pick<SpanContext, Exclude<keyof SpanContext, 'spanId' | 'sampled' | 'traceId' | 'parentSpanId'>>
       ) => this.addSpan(steamId, traceId, ctx)
     );
-    global.exports('sentryFinishSpan', (steamId: string, traceId: string) => this.finishSpan(steamId, traceId));
+    global.exports('sentryFinishSpan', (steamId: string, traceId: string, spanId: string) =>
+      this.finishSpan(steamId, traceId, spanId)
+    );
   }
 
   startTransaction(ctx: TransactionContext, timeout: number, expectedHits: number) {
@@ -65,7 +68,7 @@ class SentryHandler extends Util.Singleton<SentryClass>() implements SentryClass
     steamId: string,
     traceId: string,
     ctx: Pick<SpanContext, Exclude<keyof SpanContext, 'spanId' | 'sampled' | 'traceId' | 'parentSpanId'>>
-  ) {
+  ): string | undefined {
     if (!this.transactions.has(traceId)) {
       return;
     }
@@ -84,20 +87,29 @@ class SentryHandler extends Util.Singleton<SentryClass>() implements SentryClass
       userSpans = new Map();
       this.userSpans.set(steamId, userSpans);
     }
-    userSpans.set(traceId, span);
+    let traceSpans = userSpans.get(traceId);
+    if (!traceSpans) {
+      traceSpans = new Map();
+      userSpans.set(traceId, traceSpans);
+    }
+    traceSpans.set(span.spanId, span);
+    return span.spanId;
   }
 
-  finishSpan(steamId: string, traceId: string) {
+  finishSpan(steamId: string, traceId: string, spanId: string, end?: number) {
     const userSpans = this.userSpans.get(steamId);
     if (!userSpans) {
       return;
     }
-    const span = userSpans.get(traceId);
+    const traceSpans = userSpans.get(traceId);
+    if (!traceSpans) {
+      return;
+    }
+    const span = traceSpans.get(spanId);
     if (!span) {
       return;
     }
-    userSpans.delete(traceId);
-    span.finish();
+    span.finish(end);
     // Last span so finish transaction
     const transaction = this.transactions.get(traceId);
     if (transaction) {
@@ -117,7 +129,7 @@ class SentrySender extends Util.Singleton<SentryClass>() implements SentryClass 
     steamId: string,
     traceId: string,
     ctx: Pick<SpanContext, Exclude<keyof SpanContext, 'spanId' | 'sampled' | 'traceId' | 'parentSpanId'>>
-  ): Span {
+  ): string | undefined {
     return global.exports['ts-shared'].sentryAddSpan(steamId, traceId, ctx);
   }
 
@@ -129,8 +141,8 @@ class SentrySender extends Util.Singleton<SentryClass>() implements SentryClass 
     global.exports['ts-shared'].sentryFinishTransaction(traceId);
   }
 
-  finishSpan(steamId: string, traceId: string): void {
-    global.exports['ts-shared'].sentryFinishSpan(steamId, traceId);
+  finishSpan(steamId: string, traceId: string, spanId: string, end?: number): void {
+    global.exports['ts-shared'].sentryFinishSpan(steamId, traceId, spanId, end);
   }
 }
 

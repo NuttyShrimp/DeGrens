@@ -65,16 +65,20 @@ class Events {
       this.resourceEventsMap.set(origin, eventIdMap);
     });
     onNet('__dg_evt_s_c_emitNet', async (data: ClientHandlingEvent) => {
+      data.metadata.receiver.receivedAt = new Date().toString();
+      data.metadata.handler.createdAt = new Date().toString();
       if (!this.serverEventHandlers.has(data.eventName)) return;
       if (data.token !== 'all' && this.tokenStorage.getToken() !== data.token) return;
-      emitNet('__dg_evt_trace_start', data.traceId);
       const handler = this.serverEventHandlers.get(data.eventName)!;
       if (handler.constructor.name === 'AsyncFunction') {
         await handler(...data.args);
       } else {
         handler(...data.args);
       }
-      emitNet('__dg_evt_trace_finish', data.traceId);
+      data.metadata.handler.receivedAt = new Date().toString();
+      if (data.traceId && data.traceId.trim() !== '') {
+        emitNet('__dg_evt_create_trace', data.traceId, data.metadata);
+      }
     });
     on('__dg_evt_c_c_emit', (data: { eventName: string; args: any[] }) => {
       this.localEventHandlers.has(data.eventName) && this.localEventHandlers.get(data.eventName)!(...data.args);
@@ -108,6 +112,9 @@ class Events {
       if (Util.isDevEnv()) {
         console.log(`[DGX] [${this.resName}] Event: ${event} | ID: ${eventId}`);
       }
+      args.push({
+        createdAt: new Date().toString(),
+      });
       emitNet('__dg_evt_c_s_emitNet', {
         token: this.tokenStorage.getToken(),
         origin: this.resName,
@@ -145,6 +152,13 @@ class RPCManager {
     this.eventInstance = Events.getInstance();
     // Receiver
     this.eventInstance.onNet('__dg_RPC_s_c_request', (data: RPC.EventData) => {
+      if (!data.metadata) {
+        data.metadata = {};
+      }
+      if (!data.metadata.handler) {
+        data.metadata.handler = {};
+      }
+      data.metadata.handler.createdAt = new Date().toString();
       this.handleIncomingRequest(data);
     });
     // Emitter
@@ -158,28 +172,29 @@ class RPCManager {
   private handleIncomingResponse(data: RPC.ResolveData) {
     if (!this.awaitingEvents.has(data.resource)) return;
     if (!this.awaitingEvents.get(data.resource)!.has(data.id)) return;
-    this.awaitingEvents.get(data.resource)!.get(data.id)!.res(data.result);
+    this.awaitingEvents.get(data.resource)!.get(data.id)!.res(data.result, data.traceId);
     this.awaitingEvents.get(data.resource)!.delete(data.id);
   }
 
   @Export('doRPCSrvRequest')
-  async doRPCSrvRequest<T>(data: RPC.EventData, skipTrace = false): Promise<T | null> {
+  async doRPCSrvRequest<T>(data: RPC.EventData): Promise<T | null> {
     if (!this.awaitingEvents.has(data.resource)) {
       this.awaitingEvents.set(data.resource, new Map());
     }
-    if (!skipTrace) {
-      data.traceId = await RPC.getInstance().execute<string>(
-        { event: '__dg_RPC_trace_start', skipTrace: true },
-        data.name,
-        data.resource
-      );
+    if (!data.metadata) {
+      data.metadata = {};
     }
+    if (!data.metadata.request) {
+      data.metadata.request = {};
+    }
+    data.metadata.request.createdAt = new Date().toString();
     const promise = new Promise<T | null>(resolve => {
-      const res = (result: T | null) => {
-        resolve(result);
-        if (!skipTrace && data.traceId) {
-          emitNet('__dg_RPC_trace_finish', data.traceId);
+      const res = (result: T | null, traceId?: string) => {
+        if (traceId) {
+          data.metadata.request.finishedAt = new Date().toString();
+          this.eventInstance.emitNet('__dg_RPC_c_s_trace', traceId, data.metadata.request);
         }
+        resolve(result);
       };
       this.awaitingEvents.get(data.resource)!.set(data.id, { res });
       setTimeout(() => {
@@ -228,28 +243,31 @@ class RPC {
 
   private async handleRequest(data: RPC.EventData) {
     if (this.registeredHandlers.has(data.name)) {
-      emitNet('__dg_RPC_start_handle_trace', data);
       const result = await this.registeredHandlers.get(data.name)!(...data.args);
+      if (!data.metadata) {
+        data.metadata = {};
+      }
+      if (!data.metadata.handler) {
+        data.metadata.handler = {};
+      }
+      data.metadata.handler.finishedAt = new Date().toString();
       this.eventInstance.emitNet('__dg_RPC_s_c_response', {
         id: data.id,
         result,
         resource: data.resource,
-        traceId: data.traceId,
+        metadata: data.metadata,
       });
     }
   }
 
-  async execute<T = any>(metadata: string | { event: string; skipTrace: boolean }, ...args: any[]): Promise<T | null> {
+  async execute<T = any>(metadata: string, ...args: any[]): Promise<T | null> {
     const promId = this.getPromiseId();
-    return global.exports['ts-shared'].doRPCSrvRequest(
-      {
-        id: promId,
-        name: typeof metadata === 'string' ? metadata : metadata.event,
-        args,
-        resource: this.resourceName,
-      },
-      typeof metadata === 'object' ? metadata.skipTrace : false
-    );
+    return global.exports['ts-shared'].doRPCSrvRequest({
+      id: promId,
+      name: metadata,
+      args,
+      resource: this.resourceName,
+    });
   }
 
   register(name: string, handler: LocalEventHandler) {

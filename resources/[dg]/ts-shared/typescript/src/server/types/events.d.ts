@@ -34,13 +34,13 @@ declare namespace RPC {
     name: string;
     args: any[];
     resource: string;
-    traceId?: string;
+    metadata: Record<string, any>
   }
-  interface ResolveData {
+  interface ResolveData<T = any> {
     id: number;
-    result: any;
+    result: T;
     resource: string;
-    traceId?: string;
+    metadata: Record<string, any>
   }
 }
 
