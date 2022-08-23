@@ -1,6 +1,7 @@
+import { RPC } from '@dgx/server';
+
 import { addCash, getCash, removeCash, seedCache, seedPlyInCache } from './service';
 import { cashLogger } from './util';
-import { RPC } from '@dgx/server';
 
 global.exports('getCash', getCash);
 global.exports('removeCash', removeCash);

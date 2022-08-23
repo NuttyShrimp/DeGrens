@@ -1,4 +1,5 @@
 import { RPC } from '@dgx/server';
+
 import { CryptoManager } from './classes/CryptoManager';
 import { CryptoWallet } from './classes/CryptoWallet';
 import { addCrypto, buyCrypto, getCryptoAmount, getPlayerInfo, loadPlayerWallet, removeCrypto } from './service';

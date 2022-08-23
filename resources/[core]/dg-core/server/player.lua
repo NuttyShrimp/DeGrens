@@ -165,6 +165,7 @@ function DGCore.Player.Logout(source)
   TriggerEvent('DGCore:Server:OnPlayerUnload', src, citizenid)
   TriggerClientEvent('DGCore:Player:UpdatePlayerData', src)
   Player(self.PlayerData.source).state:set('loggedIn', false, true)
+  Player(self.PlayerData.source).state:set('cid', nil, true)
   Citizen.Wait(200)
   DGCore.Players[src] = nil
 end
@@ -238,7 +239,11 @@ function DGCore.Player.CreatePlayer(PlayerData)
   DGCore.Player.Save(self.PlayerData.source)
 
   -- Make the player state aware that we are loggedin
-  Player(self.PlayerData.source).state:set('loggedIn', true, true)
+  Player(self.PlayerData.source).state:set('loggedIn', true)
+  Player(self.PlayerData.source).state:set('steamId', self.PlayerData.steamid)
+  if (self.PlayerData.citizenid) then
+    Player(self.PlayerData.source).state:set('cid', self.PlayerData.citizenid)
+  end
 
   -- At this point we are safe to emit new instance to third party resource for load handling
   TriggerEvent('DGCore:Server:PlayerLoaded', self)
@@ -403,8 +408,8 @@ function DGCore.Player.GeneratePhoneNumber()
   while true do
     local phone = '04' .. math.random(70, 99) .. math.random(11, 99) .. math.random(11, 99) .. math.random(11, 99)
     local result = exports['dg-sql']:query('SELECT COUNT(*) as count FROM character_info WHERE phone = ?', { phone })
-    if result[1].count == 0 then 
-      return phone 
+    if result[1].count == 0 then
+      return phone
     end
     Citizen.Wait(100)
   end

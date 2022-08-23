@@ -1,0 +1,37 @@
+{
+  "classes": {
+    "A": {
+      "length": 1,
+      "points": 10
+    },
+    "B": {
+      "length": 3,
+      "points": 10
+    },
+    "C": {
+      "length": 7,
+      "points": 15
+    },
+    "D": {
+      "length": -1,
+      "points": 30
+    }
+  },
+  "reasons": {
+    "Onnodig OOC gaan": "A",
+    "Misbruik van het /OOC systeem": "B",
+    "Meta gaming": "D",
+    "Power gaming": "A",
+    "Fail RP": "A",
+    "RDM/VDM": "B",
+    "Geen waarde geven aan eigen leven": "B",
+    "Niet naleven van New Life Rule": "B",
+    "Greenzone abuse": "B",
+    "Loot boxing": "C",
+    "Police in de val lokken (TO BE CHANGED)": "B",
+    "Corruptie bij een whitelisted job": "A",
+    "Overheidjob gerelateerd materiaal/voertuig gebruiken zonder toestemming": "C",
+    "Afspraken rond criminele activiteiten overschreden": "A",
+    "Onnodige rondhangen in greenzones om RP te vermijden": "A"
+  }
+}

@@ -1,4 +1,5 @@
 import { Jobs } from '@dgx/server';
+
 import { isPlyInLoc } from '../bank/helpers/location';
 
 import { checkInterval, givePaycheck, registerPaycheck, seedCache, seedPlyInCache } from './service';

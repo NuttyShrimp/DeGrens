@@ -1,0 +1,27 @@
+[
+  {
+    "name": "founder",
+    "power": 100,
+    "allowAFK": true
+  },
+  {
+    "name": "developer",
+    "power": 100,
+    "allowAFK": true
+  },
+  {
+    "name": "staffHead",
+    "power": 55,
+    "allowAFK": false
+  },
+  {
+    "name": "staff",
+    "power": 50,
+    "allowAFK": false
+  },
+  {
+    "name": "user",
+    "power": 1,
+    "allowAFK": false
+  }
+]

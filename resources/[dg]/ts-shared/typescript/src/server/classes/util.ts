@@ -56,6 +56,10 @@ class Util extends UtilShared {
     const Player = DGCore.Functions.GetPlayer(src);
     return Player?.PlayerData?.citizenid;
   }
+
+  getName(src: number | string) {
+    return GetPlayerName(String(src));
+  }
 }
 
 export default {

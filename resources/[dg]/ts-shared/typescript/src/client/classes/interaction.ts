@@ -145,6 +145,16 @@ class RayCast {
   onChange(handler: RayCast.Handler) {
     this.handlers.push(handler);
   }
+
+  getEntityPlayerLookingAt(
+    distance: number,
+    radius: number,
+    flag: number,
+    ignore: number
+  ): [number, 0 | 1 | 2 | 3, Vec3 | undefined] {
+    const [ent, type, coordsArr] = global.exports['dg-lib'].getEntityPlayerLookingAt(distance, radius, flag, ignore);
+    return type === 0 ? [0, 0, undefined] : [ent, type, Util.ArrayToVector3(coordsArr)];
+  }
 }
 
 class PolyZone {
@@ -337,8 +347,8 @@ class Keys {
     });
   }
 
-  register(name: string, description: string, defaultKey = '') {
-    global.exports['dg-lib'].registerKeyMapping(name, description, `+${name}`, `-${name}`, defaultKey, true);
+  register(name: string, description: string, defaultKey = '', type?: string) {
+    global.exports['dg-lib'].registerKeyMapping(name, description, `+${name}`, `-${name}`, defaultKey, true, type);
   }
 
   getBindedKey(keycommand: string, keycontroller = 2) {

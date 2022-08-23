@@ -1,5 +1,5 @@
-import winston from 'winston';
 import { SQL } from '@dgx/server';
+import winston from 'winston';
 
 import { AccountPermissionValue } from '../../../sv_constant';
 import { bankLogger } from '../utils';
@@ -97,6 +97,10 @@ export class PermissionsManager {
     const perms = this.buildPermissions(member.access_level);
     this.logger.info(`hasPermission | cid: ${cid} | ${permission}: ${perms[permission]}`);
     return perms[permission];
+  }
+
+  getMembers(): IAccountMember[] {
+    return this.members;
   }
 
   // endregion

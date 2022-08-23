@@ -5,11 +5,11 @@ Cam = {
 
 Cam.createCam = function(coords, rot, fov)
 	currentCam = CreateCam("DEFAULT_SCRIPTED_CAMERA", true)
-	SetCamActive(currentCam, true)
 	SetCamCoord(currentCam, coords.x, coords.y, coords.z)
 	StopCamShaking(currentCam, true)
 	SetCamRot(currentCam, rot.x, rot.y, rot.z, 2)
 	SetCamFov(currentCam, fov or 90.0)
+  SetCamActive(currentCam, true)
 	RenderScriptCams(true, false, 1, true, true)
 end
 

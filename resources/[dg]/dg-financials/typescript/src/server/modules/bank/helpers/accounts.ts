@@ -1,4 +1,5 @@
 import { getConfigModule } from 'helpers/config';
+
 import { Account } from '../classes/Account';
 import { AccountManager } from '../classes/AccountManager';
 import { bankLogger } from '../utils';
@@ -23,7 +24,7 @@ export const createDefaultAccount = async (src: number) => {
   const account = await AManager.getDefaultAccount(cid, true);
   if (!account) {
     const accId = await createAccount(cid, 'Persoonlijk account', 'standard');
-    paycheck(accId, cid, (await getConfigModule("accounts")).defaultBalance);
+    paycheck(accId, cid, (await getConfigModule('accounts')).defaultBalance);
   }
 };
 export const fetchAccounts = async (cid: number): Promise<Account[]> => {
@@ -40,3 +41,4 @@ export const getAccountBalance = (accountId: string): number => {
   const Account = AManager.getAccountById(accountId);
   return Account.getBalance();
 };
+export const getAllAccounts = () => AManager.getAllAcounts().map(a => a.getContext());

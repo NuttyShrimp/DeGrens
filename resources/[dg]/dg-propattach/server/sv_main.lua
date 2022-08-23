@@ -1,5 +1,14 @@
 local idsPerPlayer = {} -- Key: src, Value: {netid: boolean}
 
+function clearProps(source)
+  for netId, _ in pairs(idsPerPlayer[source]) do
+    removeObject(netId)
+  end
+  idsPerPlayer[source] = {}
+end
+
+exports('clearProps', clearProps)
+
 RegisterServerEvent('propattach:server:registerId', function(netId, instanceId)
   if not idsPerPlayer[source] then idsPerPlayer[source] = {} end
   idsPerPlayer[source][netId] = true
@@ -11,10 +20,7 @@ RegisterServerEvent('propattach:server:unregisterId', function(netId)
 end)
 
 AddEventHandler('playerDropped', function()
-  for netId, _ in pairs(idsPerPlayer[source]) do
-    removeObject(netId)
-  end
-  idsPerPlayer[source] = {}
+  clearProps(source)
 end)
 
 AddEventHandler('onResourceStop', function(resourceName)

@@ -40,3 +40,8 @@ function getInstanceName(instanceId)
 	return namedInstances[instanceId]
 end
 exports('getInstanceName', getInstanceName)
+
+function getTrackedInstances()
+  return namedInstances
+end
+exports('getTrackedInstances', getTrackedInstances)

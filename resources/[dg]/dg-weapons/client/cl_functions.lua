@@ -145,10 +145,7 @@ startWeaponLoop = function()
 
                 if not reticleEnabled then
                     reticleEnabled = true
-                    SendNUIMessage({
-                        action = 'showReticle',
-                        show = true,
-                    })
+                    showReticle(true)
                 end
             else
                 if viewModeReset and IsPedInAnyVehicle(ped, false) then
@@ -157,11 +154,8 @@ startWeaponLoop = function()
                 end
 
                 if reticleEnabled then
+                    showReticle(false)
                     reticleEnabled = false
-                    SendNUIMessage({
-                        action = 'showReticle',
-                        how = false,
-                    })
                 end
             end
 
@@ -176,10 +170,7 @@ startWeaponLoop = function()
             Citizen.Wait(0)
         end
 
-        SendNUIMessage({
-            action = 'showReticle',
-            show = false,
-        })
+        showReticle(false)
     end)
 end
 
@@ -234,3 +225,11 @@ forceRemoveWeapon = function(weaponId, noAnimation)
   end
 end
 exports('removeWeapon', forceRemoveWeapon)
+
+showReticle = function(show)
+  SendNUIMessage({
+    action = 'showReticle',
+    show = show,
+  })
+end
+exports('showReticle', showReticle)

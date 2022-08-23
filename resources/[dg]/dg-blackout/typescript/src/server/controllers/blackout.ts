@@ -11,7 +11,7 @@ Events.onNet('blackout:server:setBlackout', (src: number, state: boolean) => {
   );
 });
 
-Chat.registerCommand('toggleblackout', 'Zet de huidige status van blackout', [], 'admin', (source: number) => {
+Chat.registerCommand('toggleblackout', 'Zet de huidige status van blackout', [], 'staff', (source: number) => {
   blackoutManager.state = !blackoutManager.state;
   Util.Log(
     'blackout:toggle',

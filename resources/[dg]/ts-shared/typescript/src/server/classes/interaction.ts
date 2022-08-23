@@ -1,3 +1,5 @@
+import { Util } from './index';
+
 class Chat {
   registerCommand(
     name: string,
@@ -6,7 +8,10 @@ class Chat {
     permissionLevel = 'user',
     handler: Chat.CommandHandler
   ) {
-    global.exports['dg-chat'].registerCommand(name, description, parameters, permissionLevel, handler);
+    setImmediate(async () => {
+      await Util.awaitCondition(() => GetResourceState('dg-chat') === 'started');
+      global.exports['dg-chat'].registerCommand(name, description, parameters, permissionLevel, handler);
+    });
   }
   sendMessage(target: string | number, data: Chat.Message) {
     global.exports['dg-chat'].sendMessage(target, data);

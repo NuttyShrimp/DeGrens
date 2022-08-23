@@ -1,20 +1,22 @@
+import { Notifications, SQL, Util } from '@dgx/server';
 import dayjs from 'dayjs';
 import timezone from 'dayjs/plugin/timezone'; // dependent on utc plugin
 import toObject from 'dayjs/plugin/toObject';
 import utc from 'dayjs/plugin/utc';
-import { SQL } from '@dgx/server';
+import { getConfigModule } from 'helpers/config';
 
 import 'dayjs/locale/nl-be';
 
 import { mainLogger } from '../../../sv_logger';
 import debtManager from '../classes/debtmanager';
-import { getConfigModule } from 'helpers/config';
 
 dayjs.extend(toObject);
 dayjs.extend(utc);
 dayjs.extend(timezone);
 dayjs.locale('nl-be');
 dayjs.utc();
+
+const scheduledDebts = new Map<number, NodeJS.Timeout>();
 
 export const debtLogger = mainLogger.child({
   module: 'debts',
@@ -64,14 +66,29 @@ export const scheduleDebt = (debtId: number) => {
     return;
   }
   debtLogger.silly(`Schedule debt ${debtId} at ${extDate.format('DD/MM/YYYY HH:mm')} for ${secDiff} milliseconds`);
-  setTimeout(() => {
+  if (scheduledDebts.has(debtId)) {
+    clearTimeout(scheduledDebts.get(debtId));
+    scheduledDebts.delete(debtId);
+  }
+  const timeout = setTimeout(() => {
     const debt = debtManager.getDebtById(debtId);
     // is already paid
     if (!debt) return;
     debtLogger.debug(`Debt ${debtId} is overdue`);
     debtManager.payOverdueDebt(debtId);
+    if (scheduledDebts.has(debtId)) {
+      scheduledDebts.delete(debtId);
+    }
   }, secDiff);
+  scheduledDebts.set(debtId, timeout);
 };
+
+export const unscheduleDebt = (debtId: number) => {
+  if (scheduledDebts.has(debtId)) {
+    scheduledDebts.delete(debtId);
+  }
+  debtLogger.silly(`Schedule for debt ${debtId} has been removed`)
+}
 
 // Calculate the maintenance fees for all assets, multiplier is used in case of a calc for mulitple days is needed
 export const calculateMaintenceFees = (multiplier = 1) => {
@@ -82,3 +99,13 @@ export const calculateMaintenceFees = (multiplier = 1) => {
 		VALUES (NOW());
 	`);
 };
+
+export const removeMaintenanceFees = async (src: number) => {
+  const cid = Util.getCID(src);
+  const debts = debtManager.getDebtsByCid(cid);
+  const mainFees = debts.filter(d => d.type === 'maintenance').map(f => f.id)
+  await debtManager.removeDebts(mainFees)
+  Notifications.add(src, "Succesfully removed maintenance fees", 'success');
+  debtLogger.info(`Removed all maintenance fees for ${GetPlayerName(String(src))} (${src}|${cid})`);
+  Util.Log('financials:debts:removeMaintenanceFees', {}, `Tried to removed maintenance for ${src}`, src);
+}

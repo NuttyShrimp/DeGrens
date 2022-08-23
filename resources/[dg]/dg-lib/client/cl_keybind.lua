@@ -34,6 +34,7 @@ exports('registerKeyMapping', function(name, description, onKeyDownCommand, onKe
 end)
 
 exports('shouldExecuteKeyMaps', function(toggle)
+  debug("shouldExecuteKeyMaps: " .. tostring(toggle))
   shouldExecute = toggle
 end)
 

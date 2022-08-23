@@ -1,13 +1,13 @@
 import { SQL } from '@dgx/server';
+import { getConfigModule } from 'helpers/config';
 
 import { taxLogger } from './util';
-import { getConfigModule } from 'helpers/config';
 
 const taxes: Map<number, Taxes.Tax> = new Map();
 let taxConfig: Config['taxes'] = null;
 
 export const seedTaxes = async () => {
-  taxConfig = await getConfigModule('taxes')
+  taxConfig = await getConfigModule('taxes');
   const query = `
 		SELECT tax_id, tax_name, tax_rate
 		FROM taxes

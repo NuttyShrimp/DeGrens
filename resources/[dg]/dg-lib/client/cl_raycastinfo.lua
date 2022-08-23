@@ -34,6 +34,7 @@ function getEntityPlayerLookingAt(pDistance, pRadius, pFlag, pIgnore)
 
 	return entity, entityType, exports['dg-lib']:vectorToTable(coords)
 end
+exports('getEntityPlayerLookingAt', getEntityPlayerLookingAt)
 
 Citizen.CreateThread(function()
 	while true do

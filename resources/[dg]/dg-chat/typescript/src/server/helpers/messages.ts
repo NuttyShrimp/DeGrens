@@ -4,7 +4,7 @@ import { handleCommandExecution } from './commands';
 const specialTarget: { [k: string]: (PlayerData: PlayerData) => boolean } = {
   police: data => Jobs.getCurrentJob(data.source) === 'police',
   ambulance: data => Jobs.getCurrentJob(data.source) === 'ambulance',
-  admin: data => DGCore.Functions.HasPermission(data.source, 'admin'),
+  admin: data => DGCore.Functions.HasPermission(data.source, 'staff'),
 };
 
 export const sendMessage = (target: number | keyof typeof specialTarget, data: Shared.Message) => {

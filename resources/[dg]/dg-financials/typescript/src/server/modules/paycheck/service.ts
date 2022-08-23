@@ -1,10 +1,11 @@
+import { Jobs, SQL } from '@dgx/server';
+import { getConfigModule } from 'helpers/config';
+
 import { getDefaultAccountId } from '../bank/helpers/accounts';
 import { paycheck } from '../bank/helpers/actions';
 import { cashLogger } from '../cash/util';
-import { Jobs, SQL } from '@dgx/server';
 
 import { paycheckLogger } from './util';
-import { getConfigModule } from 'helpers/config';
 
 let paycheckConfig: Config['paycheck'] = null;
 const paycheckCache: Map<number, number> = new Map();

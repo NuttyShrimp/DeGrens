@@ -1,7 +1,8 @@
+import { Events } from '@dgx/client';
+
 import { config } from '../config';
 
 import { Location } from './Location';
-import { Events } from '@dgx/client';
 
 export class LocationManager {
   // region Instance management

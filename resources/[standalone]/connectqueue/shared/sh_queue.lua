@@ -441,7 +441,7 @@ exports("GetQueueExports", function()
     return Queue
 end)
 
-local function playerConnect(name, setKickReason, deferrals)
+local function playerConnect(source, name, setKickReason, deferrals)
     local src = source
     local ids = Queue:GetIds(src)
     local name = GetPlayerName(src)
@@ -650,7 +650,7 @@ local function playerConnect(name, setKickReason, deferrals)
         update(msg, data.deferrals)
     end
 end
-AddEventHandler("playerConnecting", playerConnect)
+AddEventHandler("connectqueue:playerConnect", playerConnect)
 
 Citizen.CreateThread(function()
     local function remove(data, pos, msg)

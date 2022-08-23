@@ -20,5 +20,6 @@ declare global {
     Jobs: typeof Classes.Jobs;
     Inventory: typeof Classes.Inventory;
     PropAttach: typeof Classes.PropAttach;
+    Storage: typeof Classes.Storage;
   };
 }

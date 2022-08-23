@@ -1,0 +1,34 @@
+import { Events } from '@dgx/server';
+
+import { getUICommands } from '../commands/service.commands';
+import { ACBan } from '../penalties/service.penalties';
+import { hasPlayerPermission } from '../permissions/service.permissions';
+
+const plysInDevMode = new Set<number>();
+
+export const setDevMode = (src: number, toggle: boolean) => {
+  if (!hasPlayerPermission(src, 'staff')) {
+    ACBan(src, 'Event injection: toggle dev mode');
+    return;
+  }
+  if (toggle) {
+    plysInDevMode.add(src);
+  } else {
+    if (!plysInDevMode.has(src)) {
+      return;
+    }
+    plysInDevMode.delete(src);
+  }
+  Events.emitNet('admin:toggle:devmode', src, toggle);
+};
+
+export const checkBinds = async (src: number, binds: Record<Binds.bindNames, string | null>) => {
+  const cmds = getUICommands(src);
+  for (const bind in binds) {
+    const cmd = cmds.find(c => c.name === binds[bind as Binds.bindNames]);
+    if (!cmd) {
+      binds[bind as Binds.bindNames] = null;
+    }
+  }
+  Events.emitNet('admin:bind:check:response', src, binds);
+};

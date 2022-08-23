@@ -1,4 +1,5 @@
 import { Config } from '@dgx/server';
+import { Util } from '@dgx/server';
 import { RewriteFrames } from '@sentry/integrations';
 import * as Sentry from '@sentry/node';
 import winston from 'winston';
@@ -6,8 +7,6 @@ import winstonSentry from 'winston-sentry-log';
 
 import { name, sentry_dsn, version } from './../../package.json';
 import { config } from './config';
-
-import { Util } from '@dgx/server';
 
 const getCurrentEnv = () => (Util.isDevEnv() ? 'development' : process.env.NODE_ENV ?? 'development');
 

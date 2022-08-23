@@ -1,7 +1,7 @@
 DGCore.Commands.Add("fix", "Repair your vehicle (Admin Only)", {}, false, function(source, args)
     TriggerClientEvent('iens:repaira', source)
     TriggerClientEvent('vehiclemod:client:fixEverything', source)
-end, "admin")
+end, "staff")
 
 DGX.Inventory.registerUseable("repairkit", function(src)
     TriggerClientEvent("qb-vehiclefailure:client:RepairVehicle", src)

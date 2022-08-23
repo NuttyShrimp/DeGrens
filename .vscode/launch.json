@@ -3,6 +3,27 @@
   "configurations": [
     {
       "type": "node-terminal",
+      "name": "admin:build prod",
+      "request": "launch",
+      "command": "yarn run build",
+      "cwd": "${workspaceFolder}/resources/[dg]/dg-admin/typescript"
+    },
+    {
+      "type": "node-terminal",
+      "name": "admin:build dev",
+      "request": "launch",
+      "command": "yarn run build:dev",
+      "cwd": "${workspaceFolder}/resources/[dg]/dg-admin/typescript"
+    },
+    {
+      "type": "node-terminal",
+      "name": "admin:watch",
+      "request": "launch",
+      "command": "yarn run watch",
+      "cwd": "${workspaceFolder}/resources/[dg]/dg-admin/typescript"
+    },
+    {
+      "type": "node-terminal",
       "name": "api:build prod",
       "request": "launch",
       "command": "yarn run build",

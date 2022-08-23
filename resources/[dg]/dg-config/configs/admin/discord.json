@@ -1,0 +1,11 @@
+{
+  "whitelist": {
+    "enabled": true,
+    "roles": {
+      "developer": "706903572058603541",
+      "founder": "706894236276097085"
+    }
+  },
+  "guildId": "706892662271246366",
+  "token": "NzQ4ODYyNDgxNzA2OTA5NzA2.X0jmiA.aJAABUQwKI-TSAkunq79TFAeKyc"
+}

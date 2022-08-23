@@ -1,27 +1,32 @@
+import { RPC } from '@dgx/server';
+
 import { getCash } from '../../cash/service';
 import {
   createAccount,
   createDefaultAccount,
   fetchAccounts,
   getAccountBalance,
+  getAllAccounts,
   getDefaultAccount,
   getDefaultAccountId,
 } from '../helpers/accounts';
 import { bankLogger } from '../utils';
-import { RPC } from '@dgx/server';
 
 global.exports('createAccount', createAccount);
 global.exports('getDefaultAccount', getDefaultAccount);
 global.exports('getDefaultAccountId', getDefaultAccountId);
 global.exports('getAccountBalance', getAccountBalance);
+global.exports('getAllAccounts', getAllAccounts);
 
 export const checkPlayerAccounts = () => {
   DGCore.Functions.GetPlayers().forEach(ply => createDefaultAccount(ply));
 };
 
 // region Events
-on('financials:server:account:create', createAccount);
-on('DGCore:Server:PlayerLoaded', async (ply: Player) => {
+on('financials:server:account:create', (cid: number, name: string, accType?: AccountType) =>
+  createAccount(cid, name, accType)
+);
+on('DGCore:Server:PlayerLoaded', (ply: Player) => {
   createDefaultAccount(ply.PlayerData.source);
 });
 // endregion

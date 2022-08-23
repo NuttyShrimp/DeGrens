@@ -1,8 +1,8 @@
+import { RPC } from '@dgx/client';
+
 import { LocationManager } from '../../classes/LocationManager';
 
 import { doAnimation } from './service';
-
-import { RPC } from '@dgx/client';
 
 const LManager = LocationManager.getInstance();
 

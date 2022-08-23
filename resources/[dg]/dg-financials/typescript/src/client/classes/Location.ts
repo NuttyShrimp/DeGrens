@@ -1,5 +1,6 @@
-import { doAnimation } from '../modules/bank/service';
 import { RPC } from '@dgx/client';
+
+import { doAnimation } from '../modules/bank/service';
 
 export class Location {
   private type: 'bank';
@@ -59,8 +60,8 @@ export class Location {
     SetBlipDisplay(this.blip, 2);
     SetBlipScale(this.blip, 0.8);
     SetBlipAsShortRange(this.blip, true);
-    BeginTextCommandScaleformString("string");
-    AddTextComponentString("Bank");
+    BeginTextCommandScaleformString('string');
+    AddTextComponentString('Bank');
     EndTextCommandScaleformString();
   }
 

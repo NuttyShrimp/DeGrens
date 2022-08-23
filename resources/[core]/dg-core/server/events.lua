@@ -13,6 +13,11 @@ end)
 
 -- Player Connecting
 
+function deferralMessage(message)
+  return message .. '\n🔸 Check our Discord for further information: ' .. DGCore.Config.Server.discord
+end
+
+-- TODO: Move everything to queue system
 local function OnPlayerConnecting(name, setKickReason, deferrals)
 	local player = source
 	local license
@@ -53,9 +58,9 @@ local function OnPlayerConnecting(name, setKickReason, deferrals)
 
 	deferrals.update(string.format('Hello %s. We are checking if you are banned.', name))
 
-	local isBanned, Reason = DGCore.Functions.IsPlayerBanned(player)
-	if isBanned then
-		deferrals.done(Reason)
+	local banInfo = exports['dg-admin']:isPlayerBanned(steamId)
+	if banInfo.isBanned then
+		deferrals.done(banInfo.reason)
 		return false
 	end
 
@@ -64,11 +69,18 @@ local function OnPlayerConnecting(name, setKickReason, deferrals)
 		deferrals.done('Duplicate Rockstar License Found')
 		return false
 	end
+	
+  deferrals.update(string.format('Hallo %s. We zijn aan het controleren of je geallowlist bent.', name))
+  local isWhitelisted = exports['dg-admin']:isPlayerWhitelisted(player)
+  if not isWhitelisted then
+    deferrals.done(deferralMessage('Je bent niet geallowlist. Join onze discord om intake gesprek te voeren!'))
+    return false
+  end
 
 	deferrals.update(string.format('Welcome %s to DeGrens.', name))
 
 	deferrals.done()
-	TriggerEvent('connectqueue:playerConnect', name, setKickReason, deferrals)
+	TriggerEvent('connectqueue:playerConnect', player, name, setKickReason, deferrals)
 end
 
 AddEventHandler('playerConnecting', OnPlayerConnecting)
