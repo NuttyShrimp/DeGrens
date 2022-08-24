@@ -4,7 +4,9 @@ import { isPlyInLoc } from '../bank/helpers/location';
 
 import { checkInterval, givePaycheck, registerPaycheck, seedCache, seedPlyInCache } from './service';
 
-global.exports('registerPaycheck', registerPaycheck);
+global.exports('registerPaycheck', (src: number, amount: number, job: string, comment?: string) =>
+  registerPaycheck(src, amount, job, comment)
+);
 
 RegisterCommand(
   'financials:cash:seed',

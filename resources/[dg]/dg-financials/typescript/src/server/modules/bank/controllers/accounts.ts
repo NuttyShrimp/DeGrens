@@ -12,11 +12,13 @@ import {
 } from '../helpers/accounts';
 import { bankLogger } from '../utils';
 
-global.exports('createAccount', createAccount);
-global.exports('getDefaultAccount', getDefaultAccount);
-global.exports('getDefaultAccountId', getDefaultAccountId);
-global.exports('getAccountBalance', getAccountBalance);
-global.exports('getAllAccounts', getAllAccounts);
+global.exports('createAccount', (cid: number, name: string, accType: AccountType = 'standard') =>
+  createAccount(cid, name, accType)
+);
+global.exports('getDefaultAccount', (cid: number) => getDefaultAccount(cid));
+global.exports('getDefaultAccountId', (cid: number) => getDefaultAccountId(cid));
+global.exports('getAccountBalance', (accId: string) => getAccountBalance(accId));
+global.exports('getAllAccounts', () => getAllAccounts());
 
 export const checkPlayerAccounts = () => {
   DGCore.Functions.GetPlayers().forEach(ply => createDefaultAccount(ply));

@@ -18,7 +18,7 @@ import { reloadPlayerWallets } from './modules/crypto/service';
 import { seedCache as seedPaycheckCache } from './modules/paycheck/service';
 import { seedTaxes } from './modules/taxes/service';
 
-setImmediate(async () => {
+const startResource = async () => {
   await Config.awaitConfigLoad();
   const config = Config.getModuleConfig<Config>('financials');
   setConfig(config);
@@ -30,4 +30,8 @@ setImmediate(async () => {
   reloadPlayerWallets();
   scheduleMaintenanceFees();
   seedTaxes();
+};
+
+setImmediate(() => {
+  startResource();
 });

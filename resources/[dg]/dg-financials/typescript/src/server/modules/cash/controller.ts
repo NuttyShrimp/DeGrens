@@ -3,9 +3,9 @@ import { RPC } from '@dgx/server';
 import { addCash, getCash, removeCash, seedCache, seedPlyInCache } from './service';
 import { cashLogger } from './util';
 
-global.exports('getCash', getCash);
-global.exports('removeCash', removeCash);
-global.exports('addCash', addCash);
+global.exports('getCash', (src: number | string) => getCash(src));
+global.exports('removeCash', (src: number | string, amount: number, reason: string) => removeCash(src, amount, reason));
+global.exports('addCash', (src: number | string, amount: number, reason: string) => addCash(src, amount, reason));
 
 RegisterCommand(
   'financials:cash:seed',

@@ -3,12 +3,35 @@ import { RPC } from '@dgx/server';
 import { deposit, mobile_transaction, paycheck, purchase, transfer, withdraw } from '../helpers/actions';
 import { bankLogger } from '../utils';
 
-global.exports('deposit', deposit);
-global.exports('withdraw', withdraw);
-global.exports('transfer', transfer);
-global.exports('purchase', purchase);
-global.exports('paycheck', paycheck);
-global.exports('mobile_transaction', mobile_transaction);
+global.exports('deposit', (accountId: string, triggerCid: number, amount: number, comment?: string) =>
+  deposit(accountId, triggerCid, amount, comment)
+);
+global.exports('withdraw', (accountId: string, triggerCid: number, amount: number, comment?: string) =>
+  withdraw(accountId, triggerCid, amount, comment)
+);
+global.exports(
+  'transfer',
+  (
+    accountId: string,
+    targetAccountId: string,
+    triggerCid: number,
+    acceptorCid: number,
+    amount: number,
+    comment?: string,
+    taxId?: number
+  ) => transfer(accountId, targetAccountId, triggerCid, acceptorCid, amount, comment, taxId)
+);
+global.exports('purchase', (accountId: string, triggerCid: number, amount: number, comment?: string, taxId?: number) =>
+  purchase(accountId, triggerCid, amount, comment, taxId)
+);
+global.exports('paycheck', (accountId: string, triggerCid: number, amount: number) =>
+  paycheck(accountId, triggerCid, amount)
+);
+global.exports(
+  'mobile_transaction',
+  (accountId: string, triggerCid: number, targetPhone: string, amount: number, comment?: string) =>
+    mobile_transaction(accountId, triggerCid, targetPhone, amount, comment)
+);
 
 RPC.register('financials:server:action:deposit', async (src, data: ActionData.Standard) => {
   bankLogger.silly(

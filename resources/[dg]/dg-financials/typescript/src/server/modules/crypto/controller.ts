@@ -7,10 +7,12 @@ import { cryptoLogger } from './util';
 
 const CManager = CryptoManager.getInstance();
 
-global.exports('cryptoBuy', buyCrypto);
-global.exports('cryptoAdd', addCrypto);
-global.exports('cryptoRemove', removeCrypto);
-global.exports('cryptoGet', getCryptoAmount);
+global.exports('cryptoBuy', (src: number, coin: string, amount: number) => buyCrypto(src, coin, amount));
+global.exports('cryptoAdd', (src: number, coin: string, amount: number, comment: string) =>
+  addCrypto(src, coin, amount, comment)
+);
+global.exports('cryptoRemove', (src: number, coin: string, amount: number) => removeCrypto(src, coin, amount));
+global.exports('cryptoGet', (src: number, coin: string) => getCryptoAmount(src, coin));
 
 RegisterCommand(
   'financials:crypto:seed',

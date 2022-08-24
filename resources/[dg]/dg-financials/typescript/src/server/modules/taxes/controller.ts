@@ -1,7 +1,9 @@
 import { getTaxedPrice, seedTaxes } from './service';
 import { taxLogger } from './util';
 
-global.exports('getTaxedPrice', getTaxedPrice);
+global.exports('getTaxedPrice', (price: number, taxId: number, shouldRemove: boolean) =>
+  getTaxedPrice(price, taxId, shouldRemove)
+);
 
 RegisterCommand('financials:seed:taxes', () => seedTaxes(), true);
 
