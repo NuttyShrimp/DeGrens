@@ -1,10 +1,11 @@
-import { Events, Jobs, Util } from '@dgx/server';
+import { Admin, Events, Jobs, Util } from '@dgx/server';
+
 import { handleCommandExecution } from './commands';
 
 const specialTarget: { [k: string]: (PlayerData: PlayerData) => boolean } = {
   police: data => Jobs.getCurrentJob(data.source) === 'police',
   ambulance: data => Jobs.getCurrentJob(data.source) === 'ambulance',
-  admin: data => DGCore.Functions.HasPermission(data.source, 'staff'),
+  admin: data => Admin.hasPermission(data.source, 'staff'),
 };
 
 export const sendMessage = (target: number | keyof typeof specialTarget, data: Shared.Message) => {

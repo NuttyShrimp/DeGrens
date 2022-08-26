@@ -89,7 +89,7 @@ AddEventHandler('playerConnecting', OnPlayerConnecting)
 
 RegisterNetEvent('DGCore:server:CloseServer', function(reason)
 	local src = source
-	if DGCore.Functions.HasPermission(src, 'admin') or DGCore.Functions.HasPermission(src, 'god') then
+	if exports['dg-admin']:hasPlayerPermission(src, 'staff') then
 		local reason = reason or 'No reason specified'
 		DGCore.Config.Server.closed = true
 		DGCore.Config.Server.closedReason = reason
@@ -101,7 +101,7 @@ end)
 
 RegisterNetEvent('DGCore:server:OpenServer', function()
 	local src = source
-	if DGCore.Functions.HasPermission(src, 'admin') or DGCore.Functions.HasPermission(src, 'god') then
+	if exports['dg-admin']:hasPlayerPermission(src, 'staff') then
 		DGCore.Config.Server.closed = false
 		TriggerClientEvent('qbadmin:client:SetServerStatus', -1, false)
 	else
@@ -167,8 +167,8 @@ RegisterNetEvent('DGCore:CallCommand', function(command, args)
 	if DGCore.Commands.List[command] then
 		local Player = DGCore.Functions.GetPlayer(src)
 		if Player then
-			local isGod = DGCore.Functions.HasPermission(src, 'god')
-			local hasPerm = DGCore.Functions.HasPermission(src, DGCore.Commands.List[command].permission)
+			local isGod = exports['dg-admin']:hasPlayerPermission(src, 'developer')
+			local hasPerm = exports['dg-admin']:hasPlayerPermission(src, DGCore.Commands.List[command].permission)
 			local isPrincipal = IsPlayerAceAllowed(src, 'command')
 			if isGod or hasPerm or isPrincipal then
 				if (DGCore.Commands.List[command].argsrequired and #DGCore.Commands.List[command].arguments ~= 0 and args[#DGCore.Commands.List[command].arguments] == nil) then

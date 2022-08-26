@@ -156,7 +156,7 @@ end)
 DGCore.Functions.CreateCallback('dg-phone:server:twitter:deleteTweet', function(src, cb, data)
 	if not data.tweetId or not tweetCache[data.tweetId] then cb() end
 	local Player = DGCore.Functions.GetPlayer(src)
-	if not DGCore.Functions.HasPermission(src, 'admin') then
+	if not DGX.Admin.hasPermission(src, 'staff') then
 		-- TODO add ban for injection
 	end
 	local query = [[

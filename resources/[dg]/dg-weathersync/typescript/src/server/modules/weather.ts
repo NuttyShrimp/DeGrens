@@ -11,7 +11,7 @@ import {
   windSpeeds,
 } from '../../common/weather';
 import { Weather, WeatherProgression } from '../../common/types';
-import { Chat, Notifications } from '@dgx/server';
+import { Admin, Chat, Notifications } from '@dgx/server';
 
 let weatherProgression: WeatherProgression[] = [];
 
@@ -49,7 +49,7 @@ Chat.registerCommand(
   [{ name: 'type', description: '' }],
   'admin',
   (source, _, args) => {
-    if (Number(source) > 1 && !DGCore.Functions.HasPermission(Number(source), 'admin')) {
+    if (Number(source) > 1 && !Admin.hasPermission(Number(source), 'staff')) {
       return Notifications.add(source, 'You do not have permissions to use this command.', 'error');
     }
 

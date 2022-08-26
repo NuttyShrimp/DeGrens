@@ -79,7 +79,7 @@ export const handleCommandExecution = (source: number, cmd: string, args: string
     Events.emitNet('executeLocalCmd', source, [cmd, args].join(' '));
     return;
   }
-  if (source > 0 && !DGCore.Functions.HasPermission(source, cmdInfo.permissionLevel)) return;
+  if (source > 0 && !Admin.hasPermission(source, cmdInfo.permissionLevel)) return;
   const amountReqParams = cmdInfo.parameters.filter(param => param.required ?? true).length;
   if (amountReqParams > args.length) {
     Notifications.add(source, 'Niet alle parameters waren ingevuld!', 'error');

@@ -200,10 +200,6 @@ end
 
 -- Checking for Permission Level
 
-function DGCore.Functions.HasPermission(source, permission)
-	return true
-end
-
 function DGCore.Functions.GetPermission(source)
 	return 'god'
 end
@@ -213,7 +209,7 @@ end
 function DGCore.Functions.IsOptin(source)
 	local src = source
 	local pSteamId = DGCore.Functions.GetIdentifier(src, 'steam')
-	if DGCore.Functions.HasPermission(src, 'admin') then
+	if exports['dg-admin']:hasPlayerPermission(src, 'staff') then
 		retval = DGCore.Config.Server.PermissionList[pSteamId].optin
 		return retval
 	end
@@ -223,7 +219,7 @@ end
 function DGCore.Functions.ToggleOptin(source)
 	local src = source
 	local pSteamId = DGCore.Functions.GetIdentifier(src, 'steam')
-	if DGCore.Functions.HasPermission(src, 'admin') then
+	if exports['dg-admin']:hasPlayerPermission(src, 'staff') then
 		DGCore.Config.Server.PermissionList[pSteamId].optin = not DGCore.Config.Server.PermissionList[pSteamId].optin
 	end
 end
