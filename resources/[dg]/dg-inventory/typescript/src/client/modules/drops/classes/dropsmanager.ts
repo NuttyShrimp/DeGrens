@@ -66,8 +66,10 @@ class DropsManager extends Util.Singleton<DropsManager>() {
           false,
           0,
           true,
-          '',
-          '',
+          // @ts-ignore
+          undefined,
+          // @ts-ignore
+          undefined,
           false
         )
       );
