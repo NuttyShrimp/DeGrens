@@ -27,18 +27,10 @@ export const runBind = (bind: Binds.bindNames) => {
   Events.emitNet('admin:bind:run', cmdName);
 };
 
-Keys.register('admin-bind-1', '(zAdmin) Bind 1');
-Keys.register('admin-bind-2', '(zAdmin) Bind 2');
-Keys.register('admin-bind-3', '(zAdmin) Bind 3');
+[1, 2, 3].forEach(bind => {
+  Keys.register(`admin-bind-${bind}`, `(zAdmin) Bind ${bind}`);
 
-Keys.onPressDown('admin-bind-1', () => {
-  runBind('bind-1');
-});
-
-Keys.onPressDown('admin-bind-2', () => {
-  runBind('bind-2');
-});
-
-Keys.onPressDown('admin-bind-3', () => {
-  runBind('bind-3');
+  Keys.onPressDown(`admin-bind-${bind}`, () => {
+    runBind(`bind-${bind}` as Binds.bindNames);
+  });
 });

@@ -37,13 +37,6 @@ export const loadCommands = () => {
     });
   };
   importAll(require.context('./data', false, /\.ts$/));
-  commands
-    .filter(c => c.isClientCommand)
-    .forEach(c => {
-      Chat.registerCommand(c.name, 'Admin command', [], c.role, (src, cmd) => {
-        getCommandHandler(src, cmd);
-      });
-    });
 };
 
 export const getUICommands = (src: number): CommandData[] => {
