@@ -7,6 +7,8 @@ shared_script '@dg-core/import.lua'
 client_script '@dg-logs/client/cl_log.lua'
 shared_script 'config.lua'
 client_scripts {
+  '@ts-shared/client/client.js',
+  '@ts-shared/shared/lib.lua',
 	'client/cl_*.lua'
 }
 server_script {

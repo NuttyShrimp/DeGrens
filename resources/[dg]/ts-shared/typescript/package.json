@@ -12,9 +12,11 @@
   },
   "dependencies": {
     "cli-table3": "^0.6.2",
+    "core-js": "^3.25.0",
     "reflect-metadata": "^0.1.13"
   },
   "devDependencies": {
+    "@types/core-js": "^2.5.5",
     "@types/webpack-env": "^1.16.4",
     "webpack": "^5.73.0"
   }

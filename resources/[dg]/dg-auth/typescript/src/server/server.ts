@@ -1,2 +1,2 @@
-import './controllers/exports';
-import './controllers/events';
+import './modules/authTokens/controller';
+import './services/resourceTokens';

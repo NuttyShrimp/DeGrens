@@ -1,6 +1,5 @@
-import { Export, ExportRegister } from '../../shared/decorators';
-
 import { Util } from './index';
+import 'core-js';
 
 class TokenStorage {
   private static instance: TokenStorage;
@@ -13,223 +12,200 @@ class TokenStorage {
   }
 
   private token!: string;
+  private readonly resourceName: string;
 
   constructor() {
-    emitNet('__dg_auth_register', GetCurrentResourceName());
-    onNet('__dg_auth_authenticated', (target: number | string, token: string) => {
-      if (target === -1 || target === GetCurrentResourceName()) {
+    this.resourceName = GetCurrentResourceName();
+    onNet('dg-auth:token:reset', () => {
+      this.getResourceToken();
+    });
+    onNet('dg-auth:token:set', (target: string, token: string) => {
+      if (target === this.resourceName) {
         this.token = token;
       }
     });
+    this.getResourceToken();
   }
 
-  public getToken() {
-    return this.token;
+  private async getResourceToken() {
+    emitNet('dg-auth:token:requestResource', GetCurrentResourceName());
   }
 
-  public isClientAuthenticated() {
-    return !!this.token;
-  }
-
-  public async awaitPlayerAuthentication() {
-    while (!this.isClientAuthenticated()) {
-      await Util.Delay(1);
+  async getToken() {
+    while (!this.token) {
+      await new Promise(res => setTimeout(res, 100));
     }
+    return this.token;
   }
 }
 
 class Events {
   private static instance: Events;
+
   static getInstance() {
     if (!this.instance) {
       this.instance = new Events();
     }
     return this.instance;
   }
+
   private readonly resName: string;
-  private resourceEventsMap: Map<string, Map<string, string>> = new Map();
   private tokenStorage: TokenStorage;
-  private serverEventHandlers: Map<string, LocalEventHandler> = new Map();
-  private localEventHandlers: Map<string, LocalEventHandler> = new Map();
+  private serverEventHandlers: Map<string, DGXEvents.LocalEventHandler[]> = new Map();
+  private localEventHandlers: Map<string, DGXEvents.LocalEventHandler[]> = new Map();
 
   constructor() {
     this.tokenStorage = TokenStorage.getInstance();
     this.resName = GetCurrentResourceName();
-    onNet('__dg_shared_events', (target: string, origin: string, eventIdObject: Record<string, string>) => {
-      if (target !== this.resName) return;
-      const eventIdMap = new Map<string, string>();
-      // Object to map
-      for (const key in eventIdObject) {
-        eventIdMap.set(key, eventIdObject[key]);
-      }
-      this.resourceEventsMap.set(origin, eventIdMap);
-    });
-    onNet('__dg_evt_s_c_emitNet', async (data: ClientHandlingEvent) => {
-      data.metadata.receiver.receivedAt = new Date().toString();
-      data.metadata.handler.createdAt = new Date().toString();
-      if (!this.serverEventHandlers.has(data.eventName)) return;
-      if (data.token !== 'all' && this.tokenStorage.getToken() !== data.token) return;
-      const handler = this.serverEventHandlers.get(data.eventName)!;
-      if (handler.constructor.name === 'AsyncFunction') {
-        await handler(...data.args);
-      } else {
-        handler(...data.args);
-      }
-      data.metadata.handler.receivedAt = new Date().toString();
-      if (data.traceId && data.traceId.trim() !== '') {
-        emitNet('__dg_evt_create_trace', data.traceId, data.metadata);
-      }
-    });
-    on('__dg_evt_c_c_emit', (data: { eventName: string; args: any[] }) => {
-      this.localEventHandlers.has(data.eventName) && this.localEventHandlers.get(data.eventName)!(...data.args);
+    onNet('__dgx_event:ClientNetEvent', (data: DGXEvents.ClientNetEvtData) => this.netEventHandler(data));
+    on('__dg_event:ClientLocalEvent', (data: { eventName: string; args: any[] }) => {
+      this.localEventHandler(data);
     });
   }
 
-  private getTargetResourceForId(eventName: string): [string, string] | null {
-    for (const [resource, eventIdMap] of this.resourceEventsMap) {
-      if (eventIdMap.has(eventName)) {
-        return [resource, eventIdMap.get(eventName)!];
-      }
+  private async localEventHandler(data: { eventName: string; args: any[] }) {
+    const handlers = this.localEventHandlers.get(data.eventName);
+    if (!handlers) return;
+    handlers.forEach(handler => {
+      handler(...data.args);
+    });
+    if (Util.isDevEnv()) {
+      console.log(`[DGX] [S -> C] Event: ${data.eventName}`);
     }
-    return null;
+  }
+
+  // onNet collector
+  private async netEventHandler(data: DGXEvents.ClientNetEvtData) {
+    data.metadata.receiver.finishedAt = new Date().toString();
+    data.metadata.handler.createdAt = new Date().toString();
+    if (!this.serverEventHandlers.has(data.eventName)) return;
+    const handlers = this.serverEventHandlers.get(data.eventName)!;
+    await Promise.all(handlers.map(handler => handler(...data.args)));
+    if (Util.isDevEnv()) {
+      console.log(`[DGX] [S -> C] Event: ${data.eventName}`);
+    }
+    data.metadata.handler.finishedAt = new Date().toString();
+    if (data.traceId && data.traceId.trim() !== '') {
+      emitNet('__dg_evt:createTrace', data.traceId, data.metadata);
+    }
+  }
+
+  async awaitSession(): Promise<void> {
+    await this.tokenStorage.getToken();
   }
 
   emitNet(event: string, ...args: any[]) {
     setImmediate(async () => {
-      await this.tokenStorage.awaitPlayerAuthentication();
-      const targetResourceForId = this.getTargetResourceForId(event);
-      if (!targetResourceForId) {
-        emitNet('__dg_evt_c_s_emitNet', {
-          token: this.tokenStorage.getToken(),
-          origin: this.resName,
-          eventId: 'error',
-          errorId: Util.uuidv4(),
-        });
-        console.log(`[DG] Event ${event} not found in any resource.`);
-        return;
-      }
-      const [target, eventId] = targetResourceForId;
-      if (Util.isDevEnv()) {
-        console.log(`[DGX] [${this.resName}] Event: ${event} | ID: ${eventId}`);
-      }
-      args.push({
+      const metadata = {
         createdAt: new Date().toString(),
-      });
-      emitNet('__dg_evt_c_s_emitNet', {
-        token: this.tokenStorage.getToken(),
+      };
+      const token = await this.tokenStorage.getToken();
+      // Just base64 but enough for stupid people
+      const eventHash = btoa(event);
+      if (Util.isDevEnv()) {
+        console.log(`[DGX] [${this.resName}] [C-S] Event: ${event}`);
+      }
+      const evtData: DGXEvents.ServerNetEvtData = {
+        token,
         origin: this.resName,
-        target,
-        eventId,
+        eventId: eventHash,
+        metadata,
         args,
-      });
+      };
+      emitNet('__dg_evt:ServerNetEvent', evtData);
     });
   }
 
-  onNet(evtName: string, handler: LocalEventHandler) {
-    this.serverEventHandlers.set(evtName, handler);
-    this.localEventHandlers.set(evtName, handler);
-  }
-
   emit(evtName: string, ...args: any[]) {
-    emit(`__dg_evt_c_c_emit`, {
+    emit(`__dg_event:ClientLocalEvent`, {
       eventName: evtName,
       args,
     });
   }
 
-  on(evtName: string, handler: LocalEventHandler) {
-    this.localEventHandlers.set(evtName, handler);
-  }
-}
-
-@ExportRegister()
-class RPCManager {
-  private readonly eventInstance: Events;
-  // Map of resourceNames onto PromiseIds
-  private awaitingEvents: Map<string, Map<number, { res: Function }>> = new Map();
-
-  constructor() {
-    this.eventInstance = Events.getInstance();
-    // Receiver
-    this.eventInstance.onNet('__dg_RPC_s_c_request', (data: RPC.EventData) => {
-      if (!data.metadata) {
-        data.metadata = {};
-      }
-      if (!data.metadata.handler) {
-        data.metadata.handler = {};
-      }
-      data.metadata.handler.createdAt = new Date().toString();
-      this.handleIncomingRequest(data);
-    });
-    // Emitter
-    this.eventInstance.onNet(`__dg_RPC_c_s_response`, (data: RPC.ResolveData) => this.handleIncomingResponse(data));
-  }
-
-  private handleIncomingRequest(data: RPC.EventData) {
-    this.eventInstance.emit('__dg_RPC_handleRequest', data);
-  }
-
-  private handleIncomingResponse(data: RPC.ResolveData) {
-    if (!this.awaitingEvents.has(data.resource)) return;
-    if (!this.awaitingEvents.get(data.resource)!.has(data.id)) return;
-    this.awaitingEvents.get(data.resource)!.get(data.id)!.res(data.result, data.traceId);
-    this.awaitingEvents.get(data.resource)!.delete(data.id);
-  }
-
-  @Export('doRPCSrvRequest')
-  async doRPCSrvRequest<T>(data: RPC.EventData): Promise<T | null> {
-    if (!this.awaitingEvents.has(data.resource)) {
-      this.awaitingEvents.set(data.resource, new Map());
+  onNet(evtName: string, handler: DGXEvents.LocalEventHandler) {
+    let srvHandlers = this.serverEventHandlers.get(evtName);
+    if (!srvHandlers) {
+      srvHandlers = [];
     }
-    if (!data.metadata) {
-      data.metadata = {};
+    srvHandlers.push(handler);
+    this.on(evtName, handler);
+  }
+
+  on(evtName: string, handler: DGXEvents.LocalEventHandler) {
+    let clientHandlers = this.localEventHandlers.get(evtName);
+    if (!clientHandlers) {
+      clientHandlers = [];
     }
-    if (!data.metadata.request) {
-      data.metadata.request = {};
+    clientHandlers.push(handler);
+  }
+
+  // TODO: test if can be deleted by function, otherwise turn set into map
+  removeEventHandler(evtName: string, handler: DGXEvents.LocalEventHandler) {
+    let srvHandlers = this.serverEventHandlers.get(evtName);
+    if (srvHandlers) {
+      this.serverEventHandlers.set(
+        evtName,
+        srvHandlers.filter(h => h !== handler)
+      );
     }
-    data.metadata.request.createdAt = new Date().toString();
-    const promise = new Promise<T | null>(resolve => {
-      const res = (result: T | null, traceId?: string) => {
-        if (traceId) {
-          data.metadata.request.finishedAt = new Date().toString();
-          this.eventInstance.emitNet('__dg_RPC_c_s_trace', traceId, data.metadata.request);
-        }
-        resolve(result);
-      };
-      this.awaitingEvents.get(data.resource)!.set(data.id, { res });
-      setTimeout(() => {
-        if (this.awaitingEvents.get(data.resource)!.has(data.id)) {
-          res(null);
-          this.awaitingEvents.get(data.resource)!.delete(data.id);
-        }
-      }, 10000);
-    });
-    this.eventInstance.emitNet('__dg_RPC_c_s_request', data);
-    return promise;
+    let clientHandlers = this.localEventHandlers.get(evtName);
+    if (clientHandlers) {
+      this.localEventHandlers.set(
+        evtName,
+        clientHandlers.filter(h => h !== handler)
+      );
+    }
   }
 }
 
 class RPC {
   private static instance: RPC;
+
   static getInstance() {
     if (!this.instance) {
       this.instance = new RPC();
     }
     return this.instance;
   }
-  private readonly eventInstance: Events;
-  // Executor
+
+  private tokenStorage: TokenStorage;
+
+  private registeredHandlers: Map<string, DGXEvents.LocalEventHandler> = new Map();
+  private idsInUse: Set<number>;
   private readonly resourceName: string;
-  private idsInUse: Set<number> = new Set();
-  // Receiver
-  private registeredHandlers: Map<string, LocalEventHandler> = new Map();
 
   constructor() {
-    this.eventInstance = Events.getInstance();
-    // Executor
+    this.tokenStorage = TokenStorage.getInstance();
     this.resourceName = GetCurrentResourceName();
-    // Receiver
-    this.eventInstance.on('__dg_RPC_handleRequest', (data: RPC.EventData) => this.handleRequest(data));
+    this.idsInUse = new Set();
+
+    onNet('__dgx_rpc:emitClient', (data: DGXRPC.ServerRequestData) => this.handleIncomingRequest(data));
+  }
+
+  private async handleIncomingRequest(data: DGXRPC.ServerRequestData) {
+    const handler = this.registeredHandlers.get(data.name);
+    if (!handler) return;
+    const metadata = {
+      createdAt: new Date().toString(),
+      finishedAt: new Date().toString(),
+    };
+    const result = await handler(...data.args);
+    const token = await this.tokenStorage.getToken();
+    metadata.finishedAt = new Date().toString();
+    const responseData: DGXRPC.ClientResponseData = {
+      result,
+      resource: data.resource,
+      originToken: data.originToken,
+      token,
+      metadata: {
+        handler: metadata,
+        response: {
+          createdAt: new Date().toString(),
+        },
+      },
+    };
+    emitNet(`__dgx_rpc:responseClient:${data.id}`, responseData);
   }
 
   private getPromiseId(): number {
@@ -241,66 +217,78 @@ class RPC {
     return id;
   }
 
-  private async handleRequest(data: RPC.EventData) {
-    if (this.registeredHandlers.has(data.name)) {
-      const result = await this.registeredHandlers.get(data.name)!(...data.args);
-      if (!data.metadata) {
-        data.metadata = {};
-      }
-      if (!data.metadata.handler) {
-        data.metadata.handler = {};
-      }
-      data.metadata.handler.finishedAt = new Date().toString();
-      this.eventInstance.emitNet('__dg_RPC_s_c_response', {
-        id: data.id,
-        result,
-        resource: data.resource,
-        metadata: data.metadata,
-      });
-    }
-  }
-
-  async execute<T = any>(metadata: string, ...args: any[]): Promise<T | null> {
+  async execute<T = any>(evtName: string, ...args: any[]): Promise<T | null> {
     const promId = this.getPromiseId();
-    return global.exports['ts-shared'].doRPCSrvRequest({
+    const token = await this.tokenStorage.getToken();
+    const data: DGXRPC.ClientRequestData = {
       id: promId,
-      name: metadata,
+      name: evtName,
       args,
+      token,
       resource: this.resourceName,
+      metadata: {
+        request: {
+          createdAt: new Date().toString(),
+        },
+        handler: {},
+        response: {},
+      },
+    };
+    let evtHandler: ((data: DGXRPC.ServerResponseData<T>) => void) | null = null;
+    const result = await new Promise<T | null>(res => {
+      evtHandler = (data: DGXRPC.ServerResponseData<T>) => {
+        if (!this.idsInUse.has(data.id)) if (data.token !== token) return;
+        this.idsInUse.delete(data.id);
+
+        data.metadata.response.finishedAt = new Date().toString();
+        res(data.result);
+        if (data.traceId) {
+          emitNet('__dgx_rpc:traceServer', data.traceId, data.metadata);
+        }
+      };
+      onNet(`__dgx_rpc:responseServer:${promId}`, (data: DGXRPC.ServerResponseData<T>) => {
+        if (evtHandler) {
+          evtHandler(data);
+        }
+      });
+      emitNet('__dgx_rpc:emitServer', data);
+
+      setTimeout(() => {
+        if (!this.idsInUse.has(promId)) return;
+        this.idsInUse.delete(promId);
+        res(null);
+      }, 20000);
     });
+    if (evtHandler) {
+      removeEventListener(`__dgx_rpc:responseServer:${promId}`, evtHandler);
+    }
+    if (Util.isDevEnv()) {
+      console.log(`[DGX] [C -> S -> C] RPC: ${evtName} | Timed-out: ${result === null}`);
+    }
+    return result;
   }
 
-  register(name: string, handler: LocalEventHandler) {
+  register(name: string, handler: DGXEvents.LocalEventHandler<any>) {
     this.registeredHandlers.set(name, handler);
   }
 }
 
-export const registerDGXEvent = (evtName: string, handler: LocalEventHandler) => {
+export const registerDGXEvent = (evtName: string, handler: DGXEvents.LocalEventHandler) => {
   if (GetCurrentResourceName() === 'ts-shared') {
     Events.getInstance().on(evtName, handler);
   }
 };
 
-export const registerDGXEventNet = (evtName: string, handler: LocalEventHandler) => {
+export const registerDGXEventNet = (evtName: string, handler: DGXEvents.LocalEventHandler) => {
   if (GetCurrentResourceName() === 'ts-shared') {
     Events.getInstance().onNet(evtName, handler);
   }
 };
 
-export const registerDGXRPC = (evtName: string, handler: LocalEventHandler) => {
+export const registerDGXRPC = (evtName: string, handler: DGXEvents.LocalEventHandler<any>) => {
   if (GetCurrentResourceName() === 'ts-shared') {
     RPC.getInstance().register(evtName, handler);
   }
 };
 
-const instances: {
-  Events: Events;
-  RPC: RPC;
-  RPCManager?: RPCManager;
-} = { Events: Events.getInstance(), RPC: RPC.getInstance() };
-
-if (GetCurrentResourceName() === 'ts-shared') {
-  instances.RPCManager = new RPCManager();
-}
-
-export default instances;
+export default { Events: Events.getInstance(), RPC: RPC.getInstance() };

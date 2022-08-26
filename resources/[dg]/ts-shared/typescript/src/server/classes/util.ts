@@ -7,9 +7,6 @@ import { Config, RPC } from './index';
 class Util extends UtilShared {
   constructor() {
     super();
-    registerDGXRPC('dgx:isProdEnv', () => {
-      return Config.getConfigValue<boolean>('main.production');
-    });
   }
   generateName = (): string => {
     const firstName = firstNames[this.getRndInteger(0, firstNames.length - 1)];

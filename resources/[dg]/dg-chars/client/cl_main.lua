@@ -3,6 +3,12 @@ nuiMounted = false
 
 setupCharMenu = function()
   Citizen.CreateThread(function()
+    while (not NetworkIsSessionStarted()) do
+      Wait(100)
+      print('Awaiting Network sessiosn')
+    end
+    DGX.Events.awaitSession()
+    print('DGX session started')
     local ped = PlayerPedId()
     setPlayerToWaitLoc()
     DGCore.Functions.TriggerCallback('dg-chars:server:setupClient')
@@ -27,17 +33,13 @@ setupCharMenu = function()
 end
 
 closeCharMenu = function()
-	closeCharUI()
-	removeEntities()
-	Cam.destroyCamera()
-	plyChars = {}
-	local ped = PlayerPedId()
-	FreezeEntityPosition(ped, false)
+  closeCharUI()
+  removeEntities()
+  Cam.destroyCamera()
+  plyChars = {}
+  local ped = PlayerPedId()
+  FreezeEntityPosition(ped, false)
 end
-
-RegisterNetEvent('dg-chars:client:startSession', function()
-  setupCharMenu()
-end)
 
 RegisterNetEvent('dg-chars:client:reshowMenu', function()
   exports['dg-ui']:addNotification("Hang tight, we're logging you out...", "info")
@@ -49,15 +51,28 @@ RegisterNetEvent('dg-chars:client:reshowMenu', function()
   setupCharMenu()
 end)
 
+RegisterNetEvent('onResourceStart', function(res)
+  if res ~= GetCurrentResourceName() then
+    return
+  end
+  if LocalPlayer.state.isLoggedIn then
+    return
+  end
+  setupCharMenu()
+end)
 
 RegisterNetEvent('onResourceStop', function(res)
-	if res ~= GetCurrentResourceName() then return end
-	removeEntities()
-	Cam.destroyCamera()
-	plyChars = {}
-	local ped = PlayerPedId()
-	FreezeEntityPosition(ped, false)
-	if Spawn.faded or Cam.faded then
-		DoScreenFadeIn(1)
-	end
+  if res ~= GetCurrentResourceName() then
+    return
+  end
+  removeEntities()
+  Cam.destroyCamera()
+  plyChars = {}
+  local ped = PlayerPedId()
+  FreezeEntityPosition(ped, false)
+  if Spawn.faded or Cam.faded then
+    DoScreenFadeIn(1)
+  end
 end)
+
+setupCharMenu()

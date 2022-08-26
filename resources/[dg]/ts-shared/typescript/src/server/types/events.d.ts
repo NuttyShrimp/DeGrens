@@ -6,44 +6,6 @@ declare namespace Auth {
   }
 }
 
-declare namespace IEvents {
-  type EventHandler = (src: number, ...args: any[]) => void;
-  interface Metadata {
-    source: number;
-    traceId: string;
-  }
-
-  interface NetEventData {
-    token: string;
-    /**
-     * The resource that sent the event
-     */
-    origin: string;
-    /**
-     * The resource that should handle the event
-     */
-    target: string;
-    eventId: string;
-    args: any[];
-  }
-}
-
-declare namespace RPC {
-  interface EventData {
-    id: number;
-    name: string;
-    args: any[];
-    resource: string;
-    metadata: Record<string, any>
-  }
-  interface ResolveData<T = any> {
-    id: number;
-    result: T;
-    resource: string;
-    metadata: Record<string, any>
-  }
-}
-
 declare namespace IAPI {
   type Method = 'GET' | 'POST' | 'PUT' | 'DELETE';
   type Responser = (code: number, data: any, headers?: Record<string, string>) => void;
