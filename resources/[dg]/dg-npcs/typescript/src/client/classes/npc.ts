@@ -42,9 +42,9 @@ export class Npc {
       SetBlipDisplay(blip, 2);
       SetBlipScale(blip, 0.8);
       SetBlipAsShortRange(blip, true);
-      BeginTextCommandScaleformString('string');
+      BeginTextCommandSetBlipName('STRING');
       AddTextComponentString(this.data.blip.title);
-      EndTextCommandScaleformString();
+      EndTextCommandSetBlipName(blip);
     }
   }
 

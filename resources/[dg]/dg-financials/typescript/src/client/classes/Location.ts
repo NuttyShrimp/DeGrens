@@ -60,9 +60,9 @@ export class Location {
     SetBlipDisplay(this.blip, 2);
     SetBlipScale(this.blip, 0.8);
     SetBlipAsShortRange(this.blip, true);
-    BeginTextCommandScaleformString('string');
+    BeginTextCommandSetBlipName('STRING');
     AddTextComponentString('Bank');
-    EndTextCommandScaleformString();
+    EndTextCommandSetBlipName(this.blip);
   }
 
   //endregion
