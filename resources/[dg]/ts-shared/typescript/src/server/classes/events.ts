@@ -23,10 +23,10 @@ class Events {
 
   constructor() {
     this.resName = GetCurrentResourceName();
-    onNet('__dg_evt:ServerNetEvent', (data: DGXEvents.ServerNetEvtData) => this.netEventHandler(source, data));
-    on('__dg_evt:ServerLocalEvent', async (data: DGXEvents.ServerLocalEvtData) => this.localEventHandler(data));
+    onNet('__dgx_event:ServerNetEvent', (data: DGXEvents.ServerNetEvtData) => this.netEventHandler(source, data));
+    on('__dgx_event:ServerLocalEvent', async (data: DGXEvents.ServerLocalEvtData) => this.localEventHandler(data));
     if (this.resName === 'ts-shared') {
-      onNet('__dg_evt:createTrace', this.createClientEvtTransaction);
+      onNet('__dgx_event:createTrace', this.createClientEvtTransaction);
     }
   }
 
@@ -185,7 +185,7 @@ class Events {
       const metadata = {
         createdAt: new Date().getTime() / 1000,
       };
-      emit(`__dg_evt:ServerLocalEvent`, {
+      emit(`__dgx_event:ServerLocalEvent`, {
         eventName: evtName,
         metadata,
         args,
@@ -199,6 +199,7 @@ class Events {
       netHandlers = [];
     }
     netHandlers.push(handler);
+    this.netEventHandlers.set(evtName, netHandlers);
     this.on(evtName, handler);
   }
 
@@ -208,6 +209,7 @@ class Events {
       clientHandlers = [];
     }
     clientHandlers.push(handler);
+    this.localEventHandlers.set(evtName, clientHandlers);
   }
 
   createClientEvtTransaction(traceId: string, metadata: DGXEvents.EventMetadata) {

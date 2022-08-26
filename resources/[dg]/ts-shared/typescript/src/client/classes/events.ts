@@ -57,8 +57,10 @@ class Events {
   constructor() {
     this.tokenStorage = TokenStorage.getInstance();
     this.resName = GetCurrentResourceName();
-    onNet('__dgx_event:ClientNetEvent', (data: DGXEvents.ClientNetEvtData) => this.netEventHandler(data));
-    on('__dg_event:ClientLocalEvent', (data: { eventName: string; args: any[] }) => {
+    onNet('__dgx_event:ClientNetEvent', (data: DGXEvents.ClientNetEvtData) => {
+      this.netEventHandler(data);
+    });
+    on('__dgx_event:ClientLocalEvent', (data: { eventName: string; args: any[] }) => {
       this.localEventHandler(data);
     });
   }
@@ -86,7 +88,7 @@ class Events {
     }
     data.metadata.handler.finishedAt = new Date().toString();
     if (data.traceId && data.traceId.trim() !== '') {
-      emitNet('__dg_evt:createTrace', data.traceId, data.metadata);
+      emitNet('__dgx_event:createTrace', data.traceId, data.metadata);
     }
   }
 
@@ -112,12 +114,12 @@ class Events {
         metadata,
         args,
       };
-      emitNet('__dg_evt:ServerNetEvent', evtData);
+      emitNet('__dgx_event:ServerNetEvent', evtData);
     });
   }
 
   emit(evtName: string, ...args: any[]) {
-    emit(`__dg_event:ClientLocalEvent`, {
+    emit(`__dgx_event:ClientLocalEvent`, {
       eventName: evtName,
       args,
     });
@@ -129,6 +131,7 @@ class Events {
       srvHandlers = [];
     }
     srvHandlers.push(handler);
+    this.serverEventHandlers.set(evtName, srvHandlers);
     this.on(evtName, handler);
   }
 
@@ -138,6 +141,7 @@ class Events {
       clientHandlers = [];
     }
     clientHandlers.push(handler);
+    this.localEventHandlers.set(evtName, clientHandlers);
   }
 
   // TODO: test if can be deleted by function, otherwise turn set into map
