@@ -78,6 +78,7 @@ class Events {
       }
     } catch (e) {
       Sentry.captureException(e);
+      console.error(e);
       if (span) {
         span.setStatus('internal_error');
       }
@@ -126,6 +127,7 @@ class Events {
       span.setStatus(handlers ? 'ok' : 'not_found');
     } catch (e) {
       Sentry.captureException(e);
+      console.error(e);
       span.setStatus('internal_error');
     } finally {
       span.finish();
@@ -315,6 +317,7 @@ class RPC {
       emitNet(`__dgx_rpc:responseServer:${data.id}`, src, responseData);
     } catch (e) {
       Sentry.captureException(e);
+      console.error(e);
     } finally {
       if (spanId && traceId) {
         sentryHandler.finishSpan(steamId, traceId, spanId);
