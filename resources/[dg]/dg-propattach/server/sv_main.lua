@@ -1,6 +1,7 @@
 local idsPerPlayer = {} -- Key: src, Value: {netid: boolean}
 
 function clearProps(source)
+  if not idsPerPlayer[source] then return end
   for netId, _ in pairs(idsPerPlayer[source]) do
     removeObject(netId)
   end
