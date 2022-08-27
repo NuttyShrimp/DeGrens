@@ -1,23 +1,9 @@
 {
   "lootTables": [
-    [
-      "moneyroll",
-      "camera",
-      "gameboy",
-      "hifi",
-      "nintendoswitch",
-      "nokia",
-      "psp"
-    ],
-    [
-      "tv"
-    ],
-    [
-      "vaas"
-    ],
-    [
-      "microwave"
-    ]
+    ["moneyroll", "camera", "gameboy", "hifi", "nintendoswitch", "nokia", "psp"],
+    ["tv"],
+    ["vaas"],
+    ["microwave"]
   ],
   "playerCooldown": 5,
   "timeToRob": 15,

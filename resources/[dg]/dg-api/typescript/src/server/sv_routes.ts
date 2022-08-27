@@ -1,6 +1,6 @@
+import { Util } from '@dgx/server';
 import { mainLogger } from 'sv_logger';
 import { doRequestResponse } from 'sv_router';
-import { Util } from '@dgx/server';
 
 // Map resources on routes
 const routeMap: Map<string, API.Route[]> = new Map();

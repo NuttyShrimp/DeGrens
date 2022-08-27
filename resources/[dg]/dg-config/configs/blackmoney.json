@@ -1,8 +1,5 @@
 {
-  "Items": [
-    "moneyroll",
-    "markedbills"
-  ],
+  "Items": ["moneyroll", "markedbills"],
   "Worth": {
     "moneyroll": {
       "min": 75,

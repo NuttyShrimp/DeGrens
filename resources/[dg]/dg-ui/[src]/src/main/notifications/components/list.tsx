@@ -19,7 +19,7 @@ export const NotificationList: AppFunction<Notifications.State> = props => {
       >
         {(style, item) => (
           <animated.div style={style}>
-            <div className="notification__outer">
+            <div className='notification__outer'>
               <div className={`notification ${item.type}`}>
                 {item.type === 'info' && <InfoIcon />}
                 {item.type === 'error' && <ErrorIcon />}

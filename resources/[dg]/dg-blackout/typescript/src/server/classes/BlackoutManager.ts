@@ -1,4 +1,4 @@
-import { Chat, Util, Events } from '@dgx/server';
+import { Chat, Events, Util } from '@dgx/server';
 
 class BlackoutManager extends Util.Singleton<BlackoutManager>() {
   private _state = false;

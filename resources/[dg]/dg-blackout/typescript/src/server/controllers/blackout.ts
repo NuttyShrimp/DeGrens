@@ -1,4 +1,5 @@
-import { Config, Chat, RPC, Util, Events } from '@dgx/server';
+import { Chat, Config, Events, RPC, Util } from '@dgx/server';
+
 import blackoutManager from '../classes/BlackoutManager';
 
 Events.onNet('blackout:server:setBlackout', (src: number, state: boolean) => {

@@ -1,7 +1,8 @@
-import { getPlySteamId } from '../../sv_util';
 import jwt from 'jsonwebtoken';
+
 import { PRIVATE_TOKEN } from '../../helpers/privateToken';
 import { mainLogger } from '../../sv_logger';
+import { getPlySteamId } from '../../sv_util';
 
 // Player session tokens made with JWT
 // Tokens are unique for each player and each resource

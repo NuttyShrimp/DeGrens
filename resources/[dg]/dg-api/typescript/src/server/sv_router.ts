@@ -1,10 +1,11 @@
-import { Util, Config } from '@dgx/server';
+import { Config, Util } from '@dgx/server';
 import { tokenManager } from 'classes/tokenManager';
 import { mainLogger } from 'sv_logger';
 import { handleRoute } from 'sv_routes';
+
 import { banManager } from './classes/banManager';
 
-const apiConfig = Config.getModuleConfig('api')
+const apiConfig = Config.getModuleConfig('api');
 
 SetHttpHandler((req: any, res: any) => {
   req.path = req.path.slice(1);

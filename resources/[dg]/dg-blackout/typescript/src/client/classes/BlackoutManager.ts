@@ -1,4 +1,4 @@
-import { Util, PolyZone } from '@dgx/client';
+import { PolyZone, Util } from '@dgx/client';
 
 class BlackoutManager extends Util.Singleton<BlackoutManager>() {
   private _state = false;

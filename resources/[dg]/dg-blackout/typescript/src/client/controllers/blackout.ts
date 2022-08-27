@@ -1,5 +1,5 @@
+import { Events, PolyZone, RPC } from '@dgx/client';
 import blackoutManager from 'classes/BlackoutManager';
-import { RPC, PolyZone, Events } from '@dgx/client';
 
 on('onResourceStop', (resourceName: string) => {
   if (GetCurrentResourceName() != resourceName) return;

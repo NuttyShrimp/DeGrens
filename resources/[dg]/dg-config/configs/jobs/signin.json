@@ -1,8 +1,6 @@
 [
   {
-    "jobs": [
-      "police"
-    ],
+    "jobs": ["police"],
     "zone": {
       "vector": {
         "x": 441.82,
@@ -19,9 +17,7 @@
     }
   },
   {
-    "jobs": [
-      "ambulance"
-    ],
+    "jobs": ["ambulance"],
     "zone": {
       "vector": {
         "x": 311.85,

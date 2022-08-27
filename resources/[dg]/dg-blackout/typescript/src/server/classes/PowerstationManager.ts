@@ -1,4 +1,5 @@
 import { Util } from '@dgx/server';
+
 import blackoutManager from './BlackoutManager';
 
 class PowerstationManager extends Util.Singleton<PowerstationManager>() {

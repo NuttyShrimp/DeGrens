@@ -1,4 +1,4 @@
-import { PolyZone, Notifications, Util, RPC, Taskbar, Events, Inventory } from '@dgx/client';
+import { Events, Inventory, Notifications, PolyZone, RPC, Taskbar, Util } from '@dgx/client';
 
 let powerStations: PowerstationData[] = [];
 let currentStation: number = null;

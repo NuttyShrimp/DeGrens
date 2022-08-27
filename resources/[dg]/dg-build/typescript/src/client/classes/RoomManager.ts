@@ -1,7 +1,8 @@
 import { Util } from '@dgx/client';
 
-import { Room } from './Room';
 import { Plans } from '../data/plans';
+
+import { Room } from './Room';
 
 export class RoomManager extends Util.Singleton<RoomManager>() {
   private currentRoom: Room | null;

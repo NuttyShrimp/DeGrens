@@ -1,4 +1,5 @@
 import { Config, Events, Inventory, RPC } from '@dgx/server';
+
 import powerstationManager from '../classes/PowerstationManager';
 
 let powerStations: PowerstationData[];
