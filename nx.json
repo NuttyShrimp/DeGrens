@@ -1,4 +1,9 @@
 {
+  "namedInputs": {
+    "dgx": [
+      "{projectRoot}/resources/[dg]/ts-shared"
+    ]
+  },
   "tasksRunnerOptions": {
     "default": {
       "runner": "nx/tasks-runners/default",

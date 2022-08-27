@@ -34,6 +34,7 @@ function useLinkShortcut() {
 }
 
 function useFloatingLinkState() {
+  // @ts-ignore
   const chain = useChainedCommands();
   const { isEditing, linkShortcut, setIsEditing } = useLinkShortcut();
   const { to, empty } = useCurrentSelection();

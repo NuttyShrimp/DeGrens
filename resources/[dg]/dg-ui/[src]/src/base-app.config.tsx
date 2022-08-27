@@ -34,7 +34,7 @@ export const AppsProvider: FC<PropsWithChildren<{}>> = ({ children }) => {
         components.push(config);
       });
     };
-    importAll(import.meta.globEager('./main/*/_config.tsx'));
+    importAll(import.meta.glob('./main/*/_config.tsx', { eager: true }));
     setApps(components);
   }, [mainState.mounted]);
 

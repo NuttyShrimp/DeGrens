@@ -19,6 +19,6 @@ export const setInitialState = () => {
       };
     });
   };
-  importAll(import.meta.globEager('../../main/**/store.ts'));
+  importAll(import.meta.glob('../../main/**/store.ts', { eager: true }));
   return initialState;
 };

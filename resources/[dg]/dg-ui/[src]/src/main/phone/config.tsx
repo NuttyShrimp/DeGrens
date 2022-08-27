@@ -46,6 +46,6 @@ export const getPhoneApps = () => {
     });
     phoneApps.sort((a, b) => a.position - b.position);
   };
-  importAll(import.meta.globEager('./apps/**/_config.tsx'));
+  importAll(import.meta.glob('./apps/**/_config.tsx', { eager: true }));
   return phoneApps;
 };
