@@ -8,6 +8,7 @@ import {
   PlayerData,
   RoutingBucket,
   Vehicle,
+  WeatherType,
   WhitelistedJob,
 } from './common';
 import { ClassInfo } from './penalty';
@@ -19,6 +20,7 @@ export interface DataStore {
   whitelistedJobs: WhitelistedJob[];
   playerData: PlayerData;
   items: Item[];
+  weatherTypes: WeatherType[];
 }
 
 export interface PenaltyStore {

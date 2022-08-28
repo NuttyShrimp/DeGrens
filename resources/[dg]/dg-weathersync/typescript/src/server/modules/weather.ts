@@ -43,28 +43,9 @@ onNet('dg-weathersync:client:weather:request', () => {
   emitNet('dg-weathersync:client:weather', global.source, weatherProgression[0]);
 });
 
-Chat.registerCommand(
-  'weather',
-  'Set the weather type',
-  [{ name: 'type', description: '' }],
-  'staff',
-  (source, _, args) => {
-    if (Number(source) > 1 && !Admin.hasPermission(Number(source), 'staff')) {
-      return Notifications.add(source, 'You do not have permissions to use this command.', 'error');
-    }
-
-    if (args.length === 0) {
-      return Notifications.add(source, 'Format: /weather [type]', 'error');
-    }
-
-    const weather = args[0] as Weather;
-    setWeather(weather);
-  }
-);
-
 const setWeather = (weather: Weather) => {
   if (!activeWeathers.includes(weather)) {
-    return Notifications.add(source, 'Format: /weather [type]', 'error');
+    return Notifications.add(source, 'Type is not a weathertype', 'error');
   }
 
   const temperature = temperatureRanges[weather] ?? [80, 100];
@@ -123,3 +104,5 @@ const getNextTransition = (weather: Weather): Weather => {
 
 global.exports('currentWeather', () => weatherProgression[0]);
 global.exports('getProgression', () => weatherProgression);
+global.exports('setWeather', setWeather);
+global.exports('getWeatherTypes', () => activeWeathers);

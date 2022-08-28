@@ -4,7 +4,6 @@ import commandManager from '../classes/commandManager';
 
 import { sendMessage } from './messages';
 
-// TODO: admin related shit to admin menu when rewritten
 const baseCommands: Server.Command[] = [
   {
     name: 'ooc',
@@ -33,19 +32,6 @@ const baseCommands: Server.Command[] = [
         if (!shouldShow) return;
         sendMessage(src, msg);
       });
-    },
-  },
-  {
-    name: 'clearAll',
-    description: "clear everyone's chat",
-    parameters: [],
-    permissionLevel: 'staff',
-    handler: src => {
-      if (!Admin.hasPermission(src, 'staff')) {
-        // TODO: ban for injection
-        return;
-      }
-      Events.emitNet('chat:clear', -1);
     },
   },
   {

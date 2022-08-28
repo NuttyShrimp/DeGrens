@@ -5,4 +5,5 @@ export enum Inputs {
   RoutingBucket = 'Instance',
   BankAccount = 'BankAccount',
   Jobs = 'WhitelistedJobs',
+  Weather = 'WeatherType',
 }

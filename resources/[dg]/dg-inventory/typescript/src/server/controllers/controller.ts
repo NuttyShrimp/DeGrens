@@ -136,39 +136,3 @@ global.exports('getFirstIdOfName', getFirstIdOfName);
 Events.onNet('inventory:server:addItemToPlayer', addItemToPlayer);
 RPC.register('inventory:server:doesPlayerHaveItems', doesPlayerHaveItems);
 RPC.register('inventory:server:removeItemFromPlayer', removeItemFromPlayer);
-
-// Commands
-Chat.registerCommand(
-  'giveitem',
-  'Geef een item aan een speler',
-  [
-    { name: 'id', description: 'ID van ontvanger' },
-    { name: 'item', description: 'Item dat je wil geven' },
-    { name: 'amount', description: 'Aantal dat je wil geven', required: false },
-  ],
-  'admin',
-  (src, _cmd, args) => {
-    const targetId = Number(args[0]);
-    const cid = Util.getCID(targetId);
-    if (!cid) return Notifications.add(src, `Speler met id ${targetId} is niet online`, 'error');
-
-    const name = args[1];
-    if (!itemDataManager.get(name)) return Notifications.add(src, `Item met naam ${name} bestaat niet`, 'error');
-
-    const amount = Number(args[2] ?? 1);
-    addItemToPlayer(targetId, name, amount);
-  }
-);
-
-Chat.registerCommand(
-  'clearinventory',
-  'Maak inventory van speler leeg',
-  [{ name: 'id', description: 'ID van speler', required: false }],
-  'admin',
-  (src, _cmd, args) => {
-    const targetId = Number(args[0] ?? src);
-    const cid = Util.getCID(targetId);
-    if (!cid) return Notifications.add(src, `Speler met id ${targetId} is niet online`, 'error');
-    clearInventory('player', String(cid));
-  }
-);

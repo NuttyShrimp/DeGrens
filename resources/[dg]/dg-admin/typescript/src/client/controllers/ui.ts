@@ -51,6 +51,11 @@ RegisterUICallback('getItems', async (_, cb) => {
   cb({ meta: { ok: true, message: 'done' }, data: items ?? [] });
 });
 
+RegisterUICallback('getWeatherTypes', async (_, cb) => {
+  const weatherTypes = await RPC.execute('admin:menu:getWeatherTypes');
+  cb({ meta: { ok: true, message: 'done' }, data: weatherTypes ?? [] });
+});
+
 RegisterUICallback('getAvailableActions', async (_, cb) => {
   let actions = await RPC.execute<UI.Entry[]>('admin:menu:getAvailableActions');
   const favorites = Storage.getValue('admin:favoriteActions');

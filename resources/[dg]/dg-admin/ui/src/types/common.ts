@@ -59,3 +59,7 @@ export interface Item {
     y: number;
   };
 }
+
+export interface WeatherType {
+  name: string;
+}

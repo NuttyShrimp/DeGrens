@@ -1,6 +1,6 @@
 import { Module } from 'vuex';
 
-import { BankAccount, Item, PlayerData, RoutingBucket, Vehicle, WhitelistedJob } from '../../types/common';
+import { BankAccount, Item, PlayerData, RoutingBucket, Vehicle, WeatherType, WhitelistedJob } from '../../types/common';
 import { DataStore, State } from '../../types/state';
 import { nuiAction } from '../nui/action';
 
@@ -12,6 +12,7 @@ export const dataStore: Module<DataStore, State> = {
     bankAccounts: [],
     whitelistedJobs: [],
     items: [],
+    weatherTypes: [],
     playerData: {
       bucketId: 0,
     },
@@ -37,6 +38,9 @@ export const dataStore: Module<DataStore, State> = {
     setItems(state, items: Item[]) {
       state.items = items;
     },
+    setWeatherTypes(state, weatherTypes: WeatherType[]) {
+      state.weatherTypes = weatherTypes;
+    },
   },
   actions: {
     async loadPlayerData({ commit }) {
@@ -54,6 +58,8 @@ export const dataStore: Module<DataStore, State> = {
       commit('setwhitelistedJobs', jobs);
       const items = await nuiAction('getItems');
       commit('setItems', items);
+      const weatherTypes = await nuiAction('getWeatherTypes');
+      commit('setWeatherTypes', weatherTypes);
     },
   },
 };

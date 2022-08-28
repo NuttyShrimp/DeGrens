@@ -1,4 +1,4 @@
-import { Chat, Config, Events, RPC, Util } from '@dgx/server';
+import { Config, Events, RPC, Util } from '@dgx/server';
 
 import blackoutManager from '../classes/BlackoutManager';
 
@@ -12,15 +12,6 @@ Events.onNet('blackout:server:setBlackout', (src: number, state: boolean) => {
   );
 });
 
-Chat.registerCommand('toggleblackout', 'Zet de huidige status van blackout', [], 'staff', (source: number) => {
-  blackoutManager.state = !blackoutManager.state;
-  Util.Log(
-    'blackout:toggle',
-    { blackout: blackoutManager.state, source: source },
-    `Blackout has been ${blackoutManager.state ? 'enabled' : 'disabled'} by the command.`
-  );
-});
-
 RPC.register('blackout:server:getBlackoutState', () => {
   return blackoutManager.state;
 });
@@ -28,4 +19,8 @@ RPC.register('blackout:server:getBlackoutState', () => {
 RPC.register('blackout:server:getSafeZones', async () => {
   await Config.awaitConfigLoad();
   return Config.getConfigValue<ZoneData[]>('blackout.safezones');
+});
+
+global.exports('toggleBlackout', () => {
+  blackoutManager.state = !blackoutManager.state;
 });

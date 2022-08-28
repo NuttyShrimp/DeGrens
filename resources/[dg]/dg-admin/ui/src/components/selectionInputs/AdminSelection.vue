@@ -4,6 +4,7 @@
   <Vehicle :modelValue="props.modelValue" @update:modelValue="updateValue" v-if="props.type === 'Vehicle'" />
   <Instance :modelValue="props.modelValue" @update:modelValue="updateValue" v-if="props.type === 'Instance'" />
   <BankAccounts :modelValue="props.modelValue" @update:modelValue="updateValue" v-if="props.type === 'BankAccount'" />
+  <WeatherType :modelValue="props.modelValue" @update:modelValue="updateValue" v-if="props.type === 'WeatherType'" />
   <WhitelistedJobs
     :modelValue="props.modelValue"
     @update:modelValue="updateValue"
@@ -17,6 +18,7 @@
   import Target from './Target.vue';
   import Vehicle from './Vehicle.vue';
   import WhitelistedJobs from './WhitelistedJobs.vue';
+  import WeatherType from './WeatherType.vue';
   const props = defineProps<{
     modelValue: any;
     type: string;

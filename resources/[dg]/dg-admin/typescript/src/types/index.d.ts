@@ -16,6 +16,8 @@ declare namespace UI {
       overrideFields?: string[];
       checkBoxes?: string[];
     };
+    // If command is just button, used for toggleBlackout or clearChat
+    oneTime?: boolean;
   }
   interface Player {
     name: string;
@@ -45,6 +47,9 @@ declare namespace UI {
     name: string;
     label: string;
     size: Vec2;
+  }
+  interface Weather {
+    name: string;
   }
 }
 

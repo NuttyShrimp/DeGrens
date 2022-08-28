@@ -137,9 +137,8 @@ RPC.register('admin:menu:getPlayers', async () => {
   }));
 });
 
-RPC.register(
-  'admin:menu:getAvailableActions',
-  async (src): Promise<UI.Entry[]> => getUICommands(src).map(c => ({ ...c.UI, name: c.name }))
+RPC.register('admin:menu:getAvailableActions', (src): UI.Entry[] =>
+  getUICommands(src).map(c => ({ ...c.UI, name: c.name }))
 );
 
 RPC.register('admin:menu:getRoutingBuckets', () => {
@@ -172,4 +171,9 @@ RPC.register('admin:menu:getPlayerData', async (src): Promise<UI.PlayerData> => 
 RPC.register('admin:menu:getItems', async () => {
   const items = await Inventory.getAllItemData();
   return Object.values(items).map(item => ({ name: item.name, label: item.label, size: item.size }));
+});
+
+RPC.register('admin:menu:getWeatherTypes', (): { name: string }[] => {
+  const types: string[] = global.exports['dg-weathersync'].getWeatherTypes();
+  return types.map(t => ({ name: t }));
 });
