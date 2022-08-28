@@ -47,7 +47,7 @@ Chat.registerCommand(
   'weather',
   'Set the weather type',
   [{ name: 'type', description: '' }],
-  'admin',
+  'staff',
   (source, _, args) => {
     if (Number(source) > 1 && !Admin.hasPermission(Number(source), 'staff')) {
       return Notifications.add(source, 'You do not have permissions to use this command.', 'error');

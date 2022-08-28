@@ -26,7 +26,7 @@ Chat.registerCommand(
   'time',
   'Change the time of day.',
   [{ name: 'time', description: 'number between 0 and 1440' }],
-  'admin',
+  'staff',
   (source, _, args) => {
     if (source > 1 && !Admin.hasPermission(source, 'staff')) {
       return Notifications.add(source, 'You do not have permissions to use this command.', 'error');

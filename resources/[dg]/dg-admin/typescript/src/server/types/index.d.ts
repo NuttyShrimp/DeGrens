@@ -5,7 +5,7 @@ declare namespace Permissions {
     allowAFK: boolean;
   }
   interface PlayerRole {
-    steamId: string;
+    steamid: string;
     role: string;
     name: string;
   }

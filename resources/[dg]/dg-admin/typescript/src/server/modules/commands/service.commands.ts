@@ -1,4 +1,4 @@
-import { Chat, Util } from '@dgx/server';
+import { Util } from '@dgx/server';
 
 import { getPlayerRole, hasRoleAccess } from '../permissions/service.permissions';
 

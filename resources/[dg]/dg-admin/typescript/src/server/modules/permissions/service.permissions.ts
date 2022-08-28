@@ -20,7 +20,7 @@ export const loadPlayerRoles = async () => {
   const results = await SQL.query<Permissions.PlayerRole[]>('SELECT * FROM permissions');
   if (!results) return;
   results.forEach(result => {
-    playerRoles.set(result.steamId, result.role);
+    playerRoles.set(result.steamid, result.role);
   });
   permissionLogger.debug(`Loaded ${playerRoles.size} player roles`);
 };
@@ -28,9 +28,11 @@ export const loadPlayerRoles = async () => {
 
 export const hasRoleAccess = (sourceRole: string, targetRole: string): boolean => {
   if (!sourceRole || !targetRole) return false;
-  const sourceRolePower = roles.find(role => role.name === sourceRole)?.power ?? 0;
-  const targetRolePower = roles.find(role => role.name === targetRole)?.power ?? 0;
-  return sourceRolePower <= targetRolePower;
+  const sourceRolePower = roles.find(role => role.name === sourceRole)?.power;
+  if (!sourceRolePower) permissionLogger.warn(`Tried to get role power of non existent role: ${sourceRole}`);
+  const targetRolePower = roles.find(role => role.name === targetRole)?.power;
+  if (!targetRolePower) permissionLogger.warn(`Tried to get role power of non existent role: ${targetRole}`);
+  return (sourceRolePower ?? 0) >= (targetRolePower ?? 0);
 };
 
 // permissions is the name of a role. We work with inheritance
