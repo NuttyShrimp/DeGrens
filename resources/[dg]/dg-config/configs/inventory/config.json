@@ -171,7 +171,8 @@
         "weapon_smg",
         "weapon_sniperrifle",
         "weapon_specialcarbine",
-        "weapon_stungun"
+        "weapon_stungun",
+        "weapon_pistol_mk2"
       ]
     },
     "container_ammo": {

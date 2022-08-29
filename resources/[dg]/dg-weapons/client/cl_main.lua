@@ -20,7 +20,6 @@ Citizen.CreateThread(function()
             end
         end
 
-        SetPedSuffersCriticalHits(ped, false)
         SetPedCanSwitchWeapon(ped, false)
 		Citizen.Wait(1000)
 	end
