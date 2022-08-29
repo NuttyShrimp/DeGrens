@@ -139,7 +139,7 @@ end
 Spawn.calcTriangle = function()
 	Spawn.triangle = {
 		a = 0, -- Will be used to calc x and y
-		b = 30,
+		b = 35,
 		c = 0, -- Z coord equiv
 	}
 
