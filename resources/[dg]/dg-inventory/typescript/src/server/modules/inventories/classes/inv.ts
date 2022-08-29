@@ -79,7 +79,7 @@ export class Inv {
   public get allowedItems() {
     return this._allowedItems;
   }
-  private set size(value: typeof this._size) {
+  public set size(value: typeof this._size) {
     this._size = value;
   }
   private set allowedItems(value: typeof this._allowedItems) {
@@ -159,11 +159,6 @@ export class Inv {
       }
     }
     return;
-  };
-
-  public setTrunkSize = (vehicleClass: string) => {
-    const truckSlots = getConfig().trunkSlots;
-    this.size = truckSlots[vehicleClass] ?? 10;
   };
 
   public save = () => {

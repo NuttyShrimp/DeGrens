@@ -1,6 +1,7 @@
 import { RPC, Util } from '@dgx/server';
 import contextManager from 'classes/contextmanager';
 import locationManager from 'modules/locations/manager.locations';
+import { getConfig } from 'services/config';
 import { concatId } from '../../util';
 import inventoryManager from './manager.inventories';
 
@@ -18,8 +19,12 @@ RPC.register('inventory:server:open', async (src: number, secondary: IdBuildData
   const primaryInv = await inventoryManager.get(primaryId);
   const secondaryInv = await inventoryManager.get(secondaryId);
 
+  // Dynamic sizes for trunk or stash based on secondary parameter data
   if (secondaryInv.type === 'trunk') {
-    secondaryInv.setTrunkSize(secondary.data as string);
+    const truckSlots = getConfig().trunkSlots;
+    secondaryInv.size = truckSlots[secondary.data as string] ?? 10;
+  } else if (secondaryInv.type === 'stash') {
+    secondaryInv.size = (secondary.data as number) ?? 10;
   }
 
   contextManager.playerOpened(src, [primaryInv.id, secondaryInv.id]);

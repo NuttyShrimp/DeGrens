@@ -27,6 +27,7 @@ class ContextManager extends Util.Singleton<ContextManager>() {
     this.forceSecondary = sec ?? null;
     UI.openApplication('inventory');
     this.isInventoryOpen = true;
+    TriggerScreenblurFadeIn(0);
   };
 
   public preventedShow = () => {
@@ -35,6 +36,7 @@ class ContextManager extends Util.Singleton<ContextManager>() {
   };
 
   public close = () => {
+    TriggerScreenblurFadeOut(0);
     if (!this.isInventoryOpen) return;
 
     if (this.closingData) {

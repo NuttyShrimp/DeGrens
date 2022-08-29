@@ -112,7 +112,7 @@ export const Item: FC<{ itemId: string; cellSize: number }> = ({ itemId, cellSiz
           top: coordToPx(itemState.position, cellSize).y,
           width: coordToPx(itemState.size, cellSize).x,
           height: coordToPx(itemState.size, cellSize).y,
-          backgroundColor: alpha(itemState.quality > 10 ? baseStyle.primary.normal : baseStyle.tertiary.normal, 0.5),
+          backgroundColor: alpha(itemState.quality > 10 ? baseStyle.primary.normal : baseStyle.tertiary.normal, 0.4),
           borderColor: alpha(itemState.quality > 10 ? baseStyle.primaryDarker.dark : baseStyle.tertiary.dark, 0.9),
           display: isDragging ? 'none' : 'initial',
         }}

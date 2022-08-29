@@ -1,15 +1,6 @@
 {
   "types": {
-    "grocery": [
-      {
-        "name": "test_item",
-        "amount": 10,
-        "requirements": {
-          "cash": 100,
-          "items": ["lockpick"]
-        }
-      }
-    ],
+    "grocery": [],
     "hardware": [
       {
         "name": "volt_meter",

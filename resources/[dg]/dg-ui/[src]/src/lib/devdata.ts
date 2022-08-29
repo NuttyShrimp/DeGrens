@@ -829,15 +829,15 @@ emulatedData.newMail = {
 
 devData.inventory = {
   items: {
-    vpn_000001: {
-      id: 'vpn_000001',
+    microwave_000001: {
+      id: 'microwave_000001',
       inventory: 'player_1001',
       position: { x: 0, y: 0 },
-      size: { x: 2, y: 2 },
-      name: 'vpn',
-      label: 'VPN',
+      size: { x: 4, y: 1 },
+      name: 'microwave',
+      label: 'Microwave',
       quality: 69,
-      image: 'vpn.png',
+      image: 'weapon_nightstick.png',
       description: 'Een apparaat om je identiteit geheim te houden terwijl je verbonden bent met een netwerk!',
       useable: true,
       closeOnUse: false,

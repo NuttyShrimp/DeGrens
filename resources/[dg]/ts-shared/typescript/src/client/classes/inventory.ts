@@ -8,12 +8,13 @@ class Inventory {
 
   public hasObject = (): boolean => global.exports['dg-inventory'].hasObject();
 
-  public openStash = (stashId: string): void => global.exports['dg-inventory'].open({ type: 'stash', data: stashId });
+  public openStash = (stashId: string, size?: number): void =>
+    global.exports['dg-inventory'].open({ type: 'stash', identifier: stashId, data: size });
 
   public openOtherPlayer = (plyId: number): void =>
     global.exports['dg-inventory'].open({ type: 'player', data: plyId });
 
-  public openShop = (shopId: string): void => global.exports['dg-inventory'].open({ type: 'shop', data: shopId });
+  public openShop = (shopId: string): void => global.exports['dg-inventory'].open({ type: 'shop', identifier: shopId });
 
   public addItemToPlayer = (name: string, amount: number, metadata?: { [key: string]: any }) => {
     Events.emitNet('inventory:server:addItemToPlayer', name, amount, metadata);

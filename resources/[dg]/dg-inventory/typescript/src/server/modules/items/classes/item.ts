@@ -1,4 +1,4 @@
-import { Events, Util } from '@dgx/server';
+import { Events, Notifications, Util } from '@dgx/server';
 import { mainLogger } from 'sv_logger';
 import winston from 'winston';
 import inventoryManager from '../../inventories/manager.inventories';
@@ -7,7 +7,7 @@ import { Inv } from 'modules/inventories/classes/inv';
 import itemDataManager from 'modules/itemdata/classes/itemdatamanager';
 import itemManager from '../manager.items';
 import locationManager from 'modules/locations/manager.locations';
-import { concatId } from '../../../util';
+import { concatId, splitId } from '../../../util';
 import contextManager from 'classes/contextmanager';
 
 export class Item {
@@ -43,7 +43,7 @@ export class Item {
         if (this.inventory.type !== 'player')
           throw new Error('Tried to add overflowing item to drop but overflowing inventory is not a player');
 
-        const cid = this.inventory.id.split('_')[1];
+        const cid = splitId(this.inventory.id).identifier;
         const source = DGCore.Functions.GetPlayerByCitizenId(Number(cid)).PlayerData.source;
         const coords = Util.getPlyCoords(source);
 
@@ -56,6 +56,7 @@ export class Item {
           this.inventory = await inventoryManager.get(dropId);
           newPosition = { x: 0, y: 0 };
         }
+        Notifications.add(source, 'Voorwerp ligt op de grond, je zakken zitten vol', 'error');
       }
       this.position = newPosition;
 

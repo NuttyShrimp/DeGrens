@@ -15,7 +15,6 @@ end)
 add = function(name, offset)
   while not isPlayerSpawned do
     Citizen.Wait(100)
-    print('Player not spawned yet')
   end
 
 	if not name then 

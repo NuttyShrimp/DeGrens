@@ -91,7 +91,7 @@ RegisterNetEvent('dg-apartment:openStash', function()
 			return
 		end
     local apartmentStashId = ('apartment_%s'):format(CurrentApartment)
-    DGX.Inventory.openStash(apartmentStashId)
+    DGX.Inventory.openStash(apartmentStashId, Config.StashSize)
 		TriggerServerEvent("InteractSound_SV:PlayOnSource", "StashOpen", 0.4)
 	end)
 end)

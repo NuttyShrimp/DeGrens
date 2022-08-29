@@ -17,17 +17,24 @@ class ObjectsManager extends Util.Singleton<ObjectsManager>() {
 
   private toggledObj: Objects.Obj | null;
 
+  private primaryActive: boolean;
+
   constructor() {
     super();
     this.activeObjects = new Map();
     this.queue = { primary: [], secondary: [] };
     this.toggledObj = null;
+    this.primaryActive = false;
   }
 
   public addedItem = async (itemId: string, info: Objects.Info) => {
     if (this.canAddItem(info.type)) {
       this.queue[info.type].push({ itemId, info });
       return;
+    }
+
+    if (info.type === 'primary') {
+      this.primaryActive = true;
     }
 
     let offset = { x: 0, y: 0, z: 0 };
@@ -53,6 +60,11 @@ class ObjectsManager extends Util.Singleton<ObjectsManager>() {
 
     this.activeObjects.delete(itemId);
     PropAttach.remove(obj.propId);
+
+    // Set to false if this was primary
+    if (obj.info.type === 'primary') {
+      this.primaryActive = false;
+    }
 
     // move all other objs if secondary
     if (obj.info.type === 'secondary') {
@@ -90,7 +102,7 @@ class ObjectsManager extends Util.Singleton<ObjectsManager>() {
 
   @Export('hasObject')
   private isAPrimaryActive = () => {
-    return [...this.activeObjects.values()].some(obj => obj.info.type === 'primary');
+    return this.primaryActive;
   };
 
   private getSecondaries = () => {

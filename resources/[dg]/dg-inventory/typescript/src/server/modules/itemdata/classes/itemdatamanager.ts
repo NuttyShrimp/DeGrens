@@ -33,7 +33,14 @@ class ItemDataManager extends Util.Singleton<ItemDataManager>() {
   };
 
   @Export('getItemData')
-  public get = (name: string) => this.itemData[name];
+  public get = (name: string) => {
+    const item = this.itemData[name];
+    if (!item) {
+      this.logger.error(`Tried to get itemdata of unregistered item ${name}`);
+      throw new Error();
+    }
+    return item;
+  };
 
   @Export('getAllItemData')
   @RPCEvent('inventory:server:getAllItemData')

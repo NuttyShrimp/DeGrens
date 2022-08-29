@@ -18,3 +18,5 @@ Config.Locations = {
 		exit = vector4(-268.83, -962.34, 31.23, 295.95),
 	}
 }
+
+Config.StashSize = 20

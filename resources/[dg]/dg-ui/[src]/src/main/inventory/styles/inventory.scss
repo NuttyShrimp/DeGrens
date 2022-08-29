@@ -3,7 +3,7 @@
 .inventory {
   &__wrapper {
     height: 85vh;
-    background-color: rgba(variables.$primary_darker_darker, 0.9);
+    background-color: rgba(variables.$primary_darker_darker, 0.85);
     border-radius: 1%;
     display: grid;
     grid-template-columns: repeat(2, auto);
@@ -31,7 +31,7 @@
           flex-wrap: wrap;
 
           & > div {
-            background-color: rgba(variables.$primary_darker_dark, 0.9);
+            background-color: rgba(variables.$primary_darker_dark, 0.6);
             border: 1px solid rgba(variables.$primary_darker_normal, 0.5);
             border-style: solid;
             border-width: 1px;
@@ -48,13 +48,17 @@
     border-width: 1px;
 
     & .label {
+      position: relative;
       font-size: 1.65vh;
       margin-left: 0.4vh;
       white-space: nowrap;
       overflow: hidden;
+      z-index: 1;
     }
 
     & .hotkey {
+      z-index: 1;
+
       & > div {
         position: absolute;
         left: 0;

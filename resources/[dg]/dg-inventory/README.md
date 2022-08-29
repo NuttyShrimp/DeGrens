@@ -29,7 +29,7 @@
 | getItemData          | `itemName: string`                                    | ItemData object                                    |
 | getAllItemData       | /                                                     | ItemData object array                              |
 | hasObject            | /                                                     | boolean whether player has primary holdable object |
-| openStash            | `stashId: string`                                     | /                                                  |
+| openStash            | `stashId: string`, `size?: number`                    | /                                                  |
 | openOtherPlayer      | `plyId: number`                                       | /                                                  |
 | openShop             | `shopId: string`                                      | /                                                  |
 | addItemToPlayer      | `name: string`, `amount: number`, `metadata?: object` | /                                                  |
