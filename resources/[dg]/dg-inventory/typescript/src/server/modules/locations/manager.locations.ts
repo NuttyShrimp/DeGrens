@@ -51,11 +51,13 @@ class LocationManager extends Util.Singleton<LocationManager>() {
       if (drop.timeout) {
         clearTimeout(drop.timeout);
       }
+      if (drop.activated) {
+        Events.emitNet('inventory:client:updateDrop', -1, 'remove', drop.pos);
+      }
     }
 
     this.locations[type].delete(id);
     inventoryManager.remove(id);
-    Events.emitNet('inventory:client:updateDrop', -1, 'remove', location.pos);
   };
 
   public activateDrop = (id: string) => {

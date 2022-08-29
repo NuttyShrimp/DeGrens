@@ -27,6 +27,7 @@ class DropsManager extends Util.Singleton<DropsManager>() {
 
   public remove = (drop: Vec3) => {
     const index = this.drops.findIndex(d => d.x === drop.x && d.y === drop.y && d.z === drop.z);
+    if (index === -1) return;
     this.drops.splice(index, 1);
   };
 
