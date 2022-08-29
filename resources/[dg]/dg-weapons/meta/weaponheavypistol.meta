@@ -57,8 +57,8 @@
           <AmmoInfo ref="AMMO_PISTOL" />
           <AimingInfo ref="PISTOL_2H_BASE_STRAFE" />
           <ClipSize value="18" />
-          <AccuracySpread value="2.400000" />
-          <AccurateModeAccuracyModifier value="0.500000" />
+          <AccuracySpread value="0.000000" /> <!-- 2.400000 -->
+          <AccurateModeAccuracyModifier value="0.400000" />
           <RunAndGunAccuracyModifier value="2.000000" />
           <RunAndGunAccuracyMaxModifier value="1.000000" />
           <RecoilAccuracyMax value="1.000000" />
@@ -156,7 +156,7 @@
             <MuzzleSmokeFxIncPerShot value="0.000000" />
             <MuzzleSmokeFxDecPerSec value="0.000000" />
             <ShellFx>eject_pistol</ShellFx>
-			<ShellFxFP>eject_pistol_fp</ShellFxFP>
+            <ShellFxFP>eject_pistol_fp</ShellFxFP>
             <TracerFx>bullet_tracer</TracerFx>
             <PedDamageHash>BulletSmall</PedDamageHash>
             <TracerFxChanceSP value="0.200000" />
@@ -195,8 +195,8 @@
           <NetworkPlayerDamageModifier value="1.000000" />
           <NetworkPedDamageModifier value="1.000000" />
           <NetworkHeadShotPlayerDamageModifier value="2.000000" />
-          <LockOnRange value="55.000000" />
-          <WeaponRange value="240.000000" />
+          <LockOnRange value="0.000000" />
+          <WeaponRange value="1000.000000" />
           <BulletDirectionOffsetInDegrees value="0.000000" />
           <AiSoundRange value="-1.000000" />
           <AiPotentialBlastEventRange value="-1.000000" />
@@ -221,9 +221,9 @@
           <FirstPersonRNGRotationOffset x="0.000000" y="0.000000" z="0.000000" />
           <FirstPersonLTOffset x="0.000000" y="0.000000" z="0.000000" />
           <FirstPersonLTRotationOffset x="0.000000" y="0.000000" z="0.000000" />
-          <FirstPersonScopeOffset x="0.000000" y="0.000000" z="-0.002000" />
+          <FirstPersonScopeOffset x="0.000000" y="0.000000" z="0.000500" />
           <FirstPersonScopeAttachmentOffset x="0.000000" y="0.000000" z="0.000000" />
-          <FirstPersonScopeRotationOffset x="-0.500000" y="0.000000" z="0.000000" />
+          <FirstPersonScopeRotationOffset x="1.000000" y="0.000000" z="0.000000" />
           <FirstPersonScopeAttachmentRotationOffset x="0.000000" y="0.000000" z="0.000000" />
           <FirstPersonAsThirdPersonIdleOffset x="0.075000" y="0.000000" z="0.000000" />
           <FirstPersonAsThirdPersonRNGOffset x="-0.030000" y="-0.000000" z="0.010000" />
@@ -238,7 +238,7 @@
           <RecoilShakeHashFirstPerson>FPS_PISTOL_RECOIL_SHAKE</RecoilShakeHashFirstPerson>
           <AccuracyOffsetShakeHash />
           <MinTimeBetweenRecoilShakes value="150" />
-          <RecoilShakeAmplitude value="3.000000" />
+          <RecoilShakeAmplitude value="0.000000" /> <!-- 3.000000 -->
           <ExplosionShakeAmplitude value="-1.000000" />
           <IkRecoilDisplacement value="0.000000" />
           <IkRecoilDisplacementScope value="0.004000" />
@@ -317,7 +317,7 @@
                 </Item>
               </Components>
             </Item>
-			<Item>
+            <Item>
               <AttachBone>gun_root</AttachBone>
               <Components>
                 <Item>

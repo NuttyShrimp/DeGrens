@@ -1,4 +1,4 @@
-import { Events, Util } from '@dgx/server';
+import { Util } from '@dgx/server';
 import { DGXEvent, EventListener, Export, ExportRegister } from '@dgx/server/decorators';
 import { mainLogger } from 'sv_logger';
 import { concatId } from '../../util';

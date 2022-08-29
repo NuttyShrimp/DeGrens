@@ -57,8 +57,8 @@
           <AmmoInfo ref="AMMO_PISTOL" />
           <AimingInfo ref="PISTOL_2H_BASE_STRAFE" />
           <ClipSize value="12" />
-          <AccuracySpread value="1.500000" />
-          <AccurateModeAccuracyModifier value="0.500000" />
+          <AccuracySpread value="0.000000" /> <!-- 1.500000 -->
+          <AccurateModeAccuracyModifier value="0.400000" />
           <RunAndGunAccuracyModifier value="2.000000" />
           <RunAndGunAccuracyMinOverride value="-1.000000" />
           <RecoilAccuracyMax value="1.000000" />
@@ -197,8 +197,8 @@
           <NetworkPlayerDamageModifier value="1.000000" />
           <NetworkPedDamageModifier value="1.000000" />
           <NetworkHeadShotPlayerDamageModifier value="2.000000" />
-          <LockOnRange value="55.000000" />
-          <WeaponRange value="120.000000" />
+          <LockOnRange value="0.000000" />
+          <WeaponRange value="1000.000000" />
           <BulletDirectionOffsetInDegrees value="0.000000" />
           <BulletDirectionPitchOffset value="0.000000" />
           <BulletDirectionPitchHomingOffset value="0.000000" />
@@ -247,7 +247,7 @@
           <RecoilShakeHashFirstPerson>FPS_PISTOL_RECOIL_SHAKE</RecoilShakeHashFirstPerson>
           <AccuracyOffsetShakeHash />
           <MinTimeBetweenRecoilShakes value="150" />
-          <RecoilShakeAmplitude value="1.000000" />
+          <RecoilShakeAmplitude value="0.000000" /> <!-- 1.000000 -->
           <ExplosionShakeAmplitude value="-1.000000" />
           <IkRecoilDisplacement value="0.010000" />
           <IkRecoilDisplacementScope value="0.005000" />
@@ -356,49 +356,50 @@
                 </Item>
               </Components>
             </Item>
-			<Item>
+            <Item>
               <AttachBone>WAPScop_2</AttachBone>
               <Components>
                 <Item>
                   <Name>COMPONENT_PISTOL_MK2_CAMO_SLIDE</Name>
                   <Default value="false" />
                 </Item>
-				<Item>
+                <Item>
                   <Name>COMPONENT_PISTOL_MK2_CAMO_02_SLIDE</Name>
                   <Default value="false" />
                 </Item>
-				<Item>
+                <Item>
                   <Name>COMPONENT_PISTOL_MK2_CAMO_03_SLIDE</Name>
                   <Default value="false" />
                 </Item>
-				<Item>
+                <Item>
                   <Name>COMPONENT_PISTOL_MK2_CAMO_04_SLIDE</Name>
                   <Default value="false" />
                 </Item>
-				<Item>
+                <Item>
                   <Name>COMPONENT_PISTOL_MK2_CAMO_05_SLIDE</Name>
                   <Default value="false" />
-                </Item><Item>
+                </Item>
+                <Item>
                   <Name>COMPONENT_PISTOL_MK2_CAMO_06_SLIDE</Name>
                   <Default value="false" />
                 </Item>
-				<Item>
+                <Item>
                   <Name>COMPONENT_PISTOL_MK2_CAMO_07_SLIDE</Name>
                   <Default value="false" />
                 </Item>
-				<Item>
+                <Item>
                   <Name>COMPONENT_PISTOL_MK2_CAMO_08_SLIDE</Name>
                   <Default value="false" />
                 </Item>
-				<Item>
+                <Item>
                   <Name>COMPONENT_PISTOL_MK2_CAMO_09_SLIDE</Name>
                   <Default value="false" />
                 </Item>
-				<Item>
+                <Item>
                   <Name>COMPONENT_PISTOL_MK2_CAMO_10_SLIDE</Name>
                   <Default value="false" />
                 </Item>
-				<Item>
+                <Item>
                   <Name>COMPONENT_PISTOL_MK2_CAMO_IND_01_SLIDE</Name>
                   <Default value="false" />
                 </Item>

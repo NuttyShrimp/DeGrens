@@ -161,7 +161,7 @@ end)
 
 function SellTimeout(traphouseId, slot, itemName, amount, info)
     Citizen.CreateThread(function()
-        if itemName == "markedbills" then
+        if itemName == "marked_bills" then
             SetTimeout(math.random(1000, 5000), function()
                 if Config.TrapHouses[traphouseId].inventory[slot] ~= nil then
                     RemoveHouseItem(traphouseId, slot, itemName, 1)
@@ -246,7 +246,7 @@ function CanItemBeSaled(item)
     local retval = false
     if Config.AllowedItems[item] ~= nil then
         retval = true
-    elseif item == "markedbills" then
+    elseif item == "marked_bills" then
         retval = true
     end
     return retval

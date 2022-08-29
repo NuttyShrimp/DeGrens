@@ -57,8 +57,8 @@
           <AmmoInfo ref="AMMO_SMG" />
           <AimingInfo ref="PISTOL_2H_BASE_STRAFE" />
           <ClipSize value="12" />
-          <AccuracySpread value="2.500000" />
-          <AccurateModeAccuracyModifier value="0.500000" />
+          <AccuracySpread value="0.000000" /> <!-- 2.500000 -->
+          <AccurateModeAccuracyModifier value="0.400000" />
           <RunAndGunAccuracyModifier value="2.000000" />
           <RunAndGunAccuracyMinOverride value="-1.000000" />
           <RecoilAccuracyMax value="1.000000" />
@@ -197,8 +197,8 @@
           <NetworkPlayerDamageModifier value="1.000000" />
           <NetworkPedDamageModifier value="1.000000" />
           <NetworkHeadShotPlayerDamageModifier value="2.000000" />
-          <LockOnRange value="55.000000" />
-          <WeaponRange value="120.000000" />
+          <LockOnRange value="0.000000" />
+          <WeaponRange value="1000.000000" />
           <BulletDirectionOffsetInDegrees value="0.000000" />
           <AiSoundRange value="-1.000000" />
           <AiPotentialBlastEventRange value="-1.000000" />
@@ -242,7 +242,7 @@
           <RecoilShakeHashFirstPerson>FPS_SMG_RECOIL_SHAKE</RecoilShakeHashFirstPerson>
           <AccuracyOffsetShakeHash />
           <MinTimeBetweenRecoilShakes value="80" />
-          <RecoilShakeAmplitude value="0.500000" />
+          <RecoilShakeAmplitude value="0.000000" /> <!-- 0.500000 -->
           <ExplosionShakeAmplitude value="-1.000000" />
           <IkRecoilDisplacement value="0.000000" />
           <IkRecoilDisplacementScope value="0.000000" />

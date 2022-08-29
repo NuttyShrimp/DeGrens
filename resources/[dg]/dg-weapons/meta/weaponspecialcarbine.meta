@@ -57,8 +57,8 @@
           <AmmoInfo ref="AMMO_RIFLE" />
           <AimingInfo ref="RIFLE_HI_BASE_STRAFE" />
           <ClipSize value="30" />
-          <AccuracySpread value="10.000000" />
-          <AccurateModeAccuracyModifier value="0.500000" />
+          <AccuracySpread value="0.000000" /> <!-- 10.000000 -->
+          <AccurateModeAccuracyModifier value="0.400000" />
           <RunAndGunAccuracyModifier value="2.000000" />
           <RunAndGunAccuracyMinOverride value="-1.000000" />
           <RecoilAccuracyMax value="0.500000" />
@@ -196,8 +196,8 @@
           <NetworkPlayerDamageModifier value="1.000000" />
           <NetworkPedDamageModifier value="1.000000" />
           <NetworkHeadShotPlayerDamageModifier value="1.700000" />
-          <LockOnRange value="65.000000" />
-          <WeaponRange value="240.000000" />
+          <LockOnRange value="0.000000" />
+          <WeaponRange value="1000.000000" />
           <BulletDirectionOffsetInDegrees value="0.000000" />
           <AiSoundRange value="-1.000000" />
           <AiPotentialBlastEventRange value="-1.000000" />
@@ -241,7 +241,7 @@
           <RecoilShakeHashFirstPerson>FPS_ASSAULT_RIFLE_RECOIL_SHAKE</RecoilShakeHashFirstPerson>
           <AccuracyOffsetShakeHash>DEFAULT_THIRD_PERSON_ACCURACY_OFFSET_SHAKE</AccuracyOffsetShakeHash>
           <MinTimeBetweenRecoilShakes value="150" />
-          <RecoilShakeAmplitude value="0.90000" />
+          <RecoilShakeAmplitude value="0.000000" /> <!-- 0.900000 -->
           <ExplosionShakeAmplitude value="-1.000000" />
           <IkRecoilDisplacement value="0.000000" />
           <IkRecoilDisplacementScope value="0.000000" />
@@ -351,7 +351,7 @@
                 </Item>
               </Components>
             </Item>
-			<Item>
+            <Item>
               <AttachBone>gun_gripr</AttachBone>
               <Components>
                 <Item>

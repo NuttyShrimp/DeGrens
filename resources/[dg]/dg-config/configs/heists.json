@@ -41,7 +41,7 @@
   "trolleys": {
     "fleeca_bp": {
       "types": {
-        "cash": [{ "name": "markedbills", "min": 75, "max": 125 }],
+        "cash": [{ "name": "marked_bills", "min": 75, "max": 125 }],
         "gold": [{ "name": "gold_bar", "min": 2, "max": 5 }]
       },
       "specialChance": 25,
@@ -61,7 +61,7 @@
     },
     "fleeca_motel": {
       "types": {
-        "cash": [{ "name": "markedbills", "min": 75, "max": 125 }],
+        "cash": [{ "name": "marked_bills", "min": 75, "max": 125 }],
         "gold": [{ "name": "gold_bar", "min": 2, "max": 5 }]
       },
       "specialChance": 25,
@@ -81,7 +81,7 @@
     },
     "fleeca_benny": {
       "types": {
-        "cash": [{ "name": "markedbills", "min": 75, "max": 125 }],
+        "cash": [{ "name": "marked_bills", "min": 75, "max": 125 }],
         "gold": [{ "name": "gold_bar", "min": 2, "max": 5 }]
       },
       "specialChance": 25,
@@ -101,7 +101,7 @@
     },
     "fleeca_lifeinvader": {
       "types": {
-        "cash": [{ "name": "markedbills", "min": 75, "max": 125 }],
+        "cash": [{ "name": "marked_bills", "min": 75, "max": 125 }],
         "gold": [{ "name": "gold_bar", "min": 2, "max": 5 }]
       },
       "specialChance": 25,
@@ -121,7 +121,7 @@
     },
     "fleeca_highway": {
       "types": {
-        "cash": [{ "name": "markedbills", "min": 75, "max": 125 }],
+        "cash": [{ "name": "marked_bills", "min": 75, "max": 125 }],
         "gold": [{ "name": "gold_bar", "min": 2, "max": 5 }]
       },
       "specialChance": 25,
@@ -141,7 +141,7 @@
     },
     "fleeca_sandy": {
       "types": {
-        "cash": [{ "name": "markedbills", "min": 75, "max": 125 }],
+        "cash": [{ "name": "marked_bills", "min": 75, "max": 125 }],
         "gold": [{ "name": "gold_bar", "min": 2, "max": 5 }]
       },
       "specialChance": 25,
@@ -161,7 +161,7 @@
     },
     "paleto": {
       "types": {
-        "cash": [{ "name": "markedbills", "min": 75, "max": 125 }],
+        "cash": [{ "name": "marked_bills", "min": 75, "max": 125 }],
         "gold": [{ "name": "gold_bar", "min": 2, "max": 5 }]
       },
       "specialChance": 20,
@@ -170,7 +170,7 @@
     },
     "maze": {
       "types": {
-        "cash": [{ "name": "markedbills", "min": 75, "max": 125 }],
+        "cash": [{ "name": "marked_bills", "min": 75, "max": 125 }],
         "gold": [{ "name": "gold_bar", "min": 2, "max": 5 }]
       },
       "specialChance": 20,
@@ -179,7 +179,7 @@
     },
     "pacific": {
       "types": {
-        "cash": [{ "name": "markedbills", "min": 75, "max": 125 }],
+        "cash": [{ "name": "marked_bills", "min": 75, "max": 125 }],
         "gold": [{ "name": "gold_bar", "min": 2, "max": 5 }]
       },
       "specialChance": 10,

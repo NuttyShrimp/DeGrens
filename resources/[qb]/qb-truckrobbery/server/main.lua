@@ -70,7 +70,7 @@ AddEventHandler('AttackTransport:graczZrobilnapad', function(moneyCalc)
 	local info = {
 		worth = math.random(cashA, cashB)
 	}
-	-- xPlayer.Functions.AddItem('markedbills', bags, false, info)
+	-- xPlayer.Functions.AddItem('marked_bills', bags, false, info)
 
 	local chance = math.random(1, 100)
 	TriggerClientEvent('DGCore:Notify', _source, 'You took ' .. bags .. ' bags of cash from the van')

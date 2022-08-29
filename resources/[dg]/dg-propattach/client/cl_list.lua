@@ -86,16 +86,6 @@ props = {
     ry = 6.5,
 		rz = -74.0,
   },
-  item_container_attachments = {
-    model = `gr_prop_gr_rsply_crate02a`,
-    boneId = 24818,
-		x = -0.06,
-		y = 0.49,
-		z = 0.00,
-		rx = -6.3,
-    ry = 90.6,
-		rz = 18.8,
-  },
   item_container_materials = {
     model = `prop_champ_box_01`,
     boneId = 24818,
