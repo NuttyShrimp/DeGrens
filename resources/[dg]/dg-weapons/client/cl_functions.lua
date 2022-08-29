@@ -160,7 +160,6 @@ startWeaponLoop = function()
             end
 
             SetWeaponsNoAutoswap(true)
-            SetWeaponsNoAutoreload(true)
             DisplayAmmoThisFrame(true)
 
             if GetAmmoInPedWeapon(ped, currentWeaponData.hash) == 1 and not currentWeaponData.isOneTimeUse then
