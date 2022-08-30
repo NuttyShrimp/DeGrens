@@ -405,7 +405,6 @@ class RPC {
           id: promId,
           name: evtName,
           args,
-          resource: this.resourceName,
           originToken: this.token,
         };
         emitNet('__dgx_rpc:emitClient', target, requestData);

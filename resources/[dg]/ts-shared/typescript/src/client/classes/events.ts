@@ -199,7 +199,7 @@ class RPC {
     metadata.finishedAt = new Date().toString();
     const responseData: DGXRPC.ClientResponseData = {
       result,
-      resource: data.resource,
+      resource: this.resourceName,
       originToken: data.originToken,
       token,
       metadata: {

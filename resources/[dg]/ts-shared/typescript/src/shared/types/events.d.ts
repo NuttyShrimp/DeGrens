@@ -38,7 +38,6 @@ declare namespace DGXRPC {
     id: number;
     name: string;
     args: any[];
-    resource: string;
     originToken: string;
   }
 
