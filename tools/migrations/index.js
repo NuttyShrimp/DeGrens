@@ -1,6 +1,5 @@
 import fs from 'fs';
 import mysql from 'mysql2/promise';
-import nst from 'node-sql-parser';
 import path, { dirname } from 'path';
 import { exit } from 'process';
 import { fileURLToPath } from 'url';
@@ -12,7 +11,6 @@ const shouldInitDB = process.argv.slice(2).includes('--init-db');
 
 // Gotta love ES6 modules
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const parser = new nst.Parser();
 
 let connectionOptions = getConnectionOptions();
 
@@ -47,20 +45,20 @@ try {
   for (migrFile of migrationFiles) {
     let queryPromises = [];
     const sqlOperations = fs.readFileSync(path.join(migrationDir, migrFile)).toString();
-    const { ast } = parser.parse(sqlOperations);
 
     await conn.beginTransaction();
     shouldRollBack = true;
-
+    const queries = sqlOperations
+      .split(';')
+      .map(op => op.replaceAll(/#.*\r?\n/g, ''))
+      .map(op => op.replaceAll(/\r?\n/g, ''))
+      .filter(op => op && op !== '');
+    
     // Add operations to transaction
-    if (Array.isArray(ast)) {
-      for (let op of ast) {
-        queryPromises.push(conn.query(parser.sqlify(op)));
-      }
-      await Promise.all(queryPromises);
-    } else {
-      await conn.query(parser.sqlify(ast));
+    for (let op of queries) {
+      queryPromises.push(conn.query(op));
     }
+    await Promise.all(queryPromises);
 
     await conn.commit();
     shouldRollBack = false;
