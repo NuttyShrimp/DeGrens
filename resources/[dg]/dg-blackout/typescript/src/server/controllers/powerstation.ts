@@ -1,4 +1,4 @@
-import { Config, Events, Inventory, RPC } from '@dgx/server';
+import { Auth, Config, Events, Inventory, RPC } from '@dgx/server';
 
 import powerstationManager from '../classes/PowerstationManager';
 
@@ -23,6 +23,6 @@ Events.onNet('blackout:server:setStationHit', (_src: number, stationId: number) 
   powerstationManager.setStationHit(stationId);
 });
 
-on('dg-auth:server:authenticated', (src: number) => {
+Auth.onAuth(src => {
   Events.emitNet('blackout:server:getPowerStations', src, powerStations);
-});
+})

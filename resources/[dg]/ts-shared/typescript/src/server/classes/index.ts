@@ -8,7 +8,7 @@ import phone from './phone';
 import ui from './ui';
 import util from './util';
 
-export const { Events, RPC, SQL, API } = events;
+export const { Events, RPC, SQL, API, Auth } = events;
 export const { Util } = util;
 export const { Phone } = phone;
 export const { Chat } = interaction;

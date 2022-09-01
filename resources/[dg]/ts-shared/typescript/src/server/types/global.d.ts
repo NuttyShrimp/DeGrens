@@ -17,6 +17,7 @@ declare global {
     Config: typeof Classes.Config;
     Admin: typeof Classes.Admin;
     Inventory: typeof Classes.Inventory;
+    Auth: typeof Classes.Auth;
     Vector3: typeof Vector3Class;
     Vector4: typeof Vector4Class;
   };

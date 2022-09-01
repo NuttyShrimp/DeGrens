@@ -461,6 +461,22 @@ class API {
   }
 }
 
+class Auth {
+  private resourceName;
+  private startHooks: Set<(src: number) => void>;
+  constructor() {
+    this.resourceName = GetCurrentResourceName();
+    this.startHooks = new Set();
+    onNet('dg-auth:token:resourceRegistered', (src: number, resource: string) =>{ 
+      if (resource !== this.resourceName) return;
+      this.startHooks.forEach(hook => hook(src))
+    })
+  }
+  onAuth(cb: (src: number) => void) {
+    this.startHooks.add(cb)
+  }
+}
+
 export const registerDGXRPC = (evtName: string, handler: DGXEvents.LocalEventHandler<any>) => {
   if (GetCurrentResourceName() === 'ts-shared') {
     RPC.getInstance().register(evtName, handler);
@@ -472,4 +488,5 @@ export default {
   RPC: RPC.getInstance(),
   SQL: new SQL(),
   API: new API(),
+  Auth: new Auth(),
 };

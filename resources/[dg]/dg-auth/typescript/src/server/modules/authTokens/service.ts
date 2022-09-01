@@ -23,6 +23,9 @@ export const createResourceToken = (src: number, resource: string) => {
     expiresIn: '12h',
   });
   emitNet('dg-auth:token:set', src, resource, token);
+  setTimeout(() => {
+    emit('dg-auth:token:resourceRegistered', src, resource)
+  }, 200)
 };
 
 export const validateToken = (src: number, resource: string, token: string) => {
