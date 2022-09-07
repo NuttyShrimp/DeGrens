@@ -42,6 +42,11 @@ let shouldRollBack = false;
 let migrFile = '';
 
 try {
+  if (shouldInitDB) {
+    await conn.query(`DROP SCHEMA IF EXISTS ${conn.config.database}`);
+    await conn.query(`CREATE SCHEMA IF NOT EXISTS ${conn.config.database} collate utf8mb4_general_ci`);
+    await conn.query(`USE ${conn.config.database}`);
+  }
   for (migrFile of migrationFiles) {
     let queryPromises = [];
     const sqlOperations = fs.readFileSync(path.join(migrationDir, migrFile)).toString();
@@ -49,10 +54,12 @@ try {
     await conn.beginTransaction();
     shouldRollBack = true;
     const queries = sqlOperations
+      .replace(/\/\*.*\*\//gs, '')
       .split(';')
       .map(op => op.replaceAll(/#.*\r?\n/g, ''))
-      .map(op => op.replaceAll(/\r?\n/g, ''))
-      .filter(op => op && op !== '');
+      .map(op => op.replaceAll(/\r?\n/g, ' '))
+      .filter(op => op && op.trim() !== '');
+    console.log(conn.config.database)
     
     // Add operations to transaction
     for (let op of queries) {

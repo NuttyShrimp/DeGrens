@@ -309,7 +309,7 @@ CREATE TABLE IF NOT EXISTS phone_tweets_likes
 CREATE TABLE IF NOT EXISTS phone_messages
 (
   id       int(11)      NOT NULL AUTO_INCREMENT,
-  sender   varchar(255) NOT NULL, -- phone number adds supports for possible burner phone numbers
+  sender   varchar(255) NOT NULL, # phone number adds supports for possible burner phone numbers
   receiver varchar(255) NOT NULL,
   message  text         NOT NULL,
   isread   tinyint(1)   NOT NULL,
