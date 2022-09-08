@@ -1,4 +1,4 @@
-import { RPC } from './index';
+import { RPC, Events } from './index';
 
 class Taskbar {
   async create(
@@ -10,13 +10,13 @@ class Taskbar {
     settings: TaskBar.TaskBarSettings
   ) {
     const prom = new Promise<[boolean, number]>(res => {
-      onNet(`dg-misc:taskbar:finished`, (evtId: string, wasCompleted: boolean, percCompleted: number) => {
+      Events.onNet(`misc:taskbar:finished`, (evtId: string, wasCanceled: boolean, atPercentage: number) => {
         if (id === evtId) {
-          res([wasCompleted, percCompleted]);
+          res([wasCanceled, atPercentage]);
         }
       });
     });
-    emitNet('dg-misc:taskbar:new', src, id, icon, label, duration, settings);
+    Events.emitNet('misc:taskbar:new', src, id, icon, label, duration, settings);
     return prom;
   }
 }

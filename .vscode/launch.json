@@ -318,6 +318,27 @@
     },
     {
       "type": "node-terminal",
+      "name": "misc:build prod",
+      "request": "launch",
+      "command": "yarn run build",
+      "cwd": "${workspaceFolder}/resources/[dg]/dg-misc/typescript"
+    },
+    {
+      "type": "node-terminal",
+      "name": "misc:build dev",
+      "request": "launch",
+      "command": "yarn run build:dev",
+      "cwd": "${workspaceFolder}/resources/[dg]/dg-misc/typescript"
+    },
+    {
+      "type": "node-terminal",
+      "name": "misc:watch",
+      "request": "launch",
+      "command": "yarn run watch",
+      "cwd": "${workspaceFolder}/resources/[dg]/dg-misc/typescript"
+    },
+    {
+      "type": "node-terminal",
       "name": "npcs:build prod",
       "request": "launch",
       "command": "yarn run build",

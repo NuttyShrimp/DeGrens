@@ -1,6 +1,6 @@
 {
-  "Items": ["money_roll", "marked_bills"],
-  "Worth": {
+  "items": ["money_roll", "marked_bills"],
+  "worth": {
     "money_roll": {
       "min": 75,
       "max": 150
@@ -9,9 +9,5 @@
       "min": 250,
       "max": 400
     }
-  },
-  "RandomSellAmount": {
-    "min": 1,
-    "max": 5
   }
 }

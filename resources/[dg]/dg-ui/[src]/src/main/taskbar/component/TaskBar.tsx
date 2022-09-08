@@ -3,7 +3,6 @@ import { animated, easings, useSpring } from 'react-spring';
 import useMeasure from 'react-use-measure';
 
 import { useVhToPixel } from '../../../lib/hooks/useVhToPixel';
-import { nuiAction } from '../../../lib/nui-comms';
 
 export const TaskBar: FC<TaskBar.State> = props => {
   const targetHeight = useVhToPixel(7);
@@ -24,11 +23,6 @@ export const TaskBar: FC<TaskBar.State> = props => {
     config: {
       duration: props.duration,
       easing: easings.easeInOutCubic,
-    },
-    onRest: () => {
-      nuiAction('taskbar/finished', {
-        id: props.id,
-      });
     },
   }));
   useEffect(() => {

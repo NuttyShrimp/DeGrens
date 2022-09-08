@@ -47,32 +47,31 @@ class Util extends UtilShared {
 
   loadModel = async (model: string | number) => {
     RequestModel(model);
-    while (!HasModelLoaded(model)) {
-      await this.Delay(10);
-    }
+    await this.awaitCondition(() => HasModelLoaded(model));
   };
 
   loadAnimDict = async (dict: string) => {
     RequestAnimDict(dict);
-    while (!HasAnimDictLoaded(dict)) {
-      await this.Delay(10);
-    }
+    await this.awaitCondition(() => HasAnimDictLoaded(dict));
   };
 
   requestEntityControl = async (entity: number) => {
     NetworkRequestControlOfEntity(entity);
-    while (!NetworkHasControlOfEntity(entity)) {
-      await this.Delay(10);
-    }
+    await this.awaitCondition(() => NetworkHasControlOfEntity(entity));
   };
 
   doesEntityExist = async (entity: number) => {
-    while (!DoesEntityExist(entity)) await this.Delay(10);
+    await this.awaitCondition(() => DoesEntityExist(entity));
   };
 
   isDevEnv() {
     return this.prodEnv !== undefined && this.prodEnv === false;
   }
+
+  loadAnimSet = async (set: string) => {
+    RequestAnimSet(set);
+    await this.awaitCondition(() => HasAnimSetLoaded(set));
+  };
 }
 
 export class Interiors {

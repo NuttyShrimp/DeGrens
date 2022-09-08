@@ -1,10 +1,13 @@
 declare namespace TaskBar {
-  interface Animation {
-    animDict?: string;
-    anim?: string;
-    flags?: number;
-    task?: number;
-  }
+  type Animation =
+    | {
+        animDict: string;
+        anim: string;
+        flags?: number;
+      }
+    | {
+        task: string;
+      };
 
   interface TaskBarSettings {
     canCancel?: boolean;
@@ -19,12 +22,7 @@ declare namespace TaskBar {
       combat?: boolean;
     };
     animation?: Animation;
-    prop?: {
-      model?: string;
-      bone?: string;
-      coords?: Vec3;
-      rotation?: Vec3;
-    };
+    prop?: string;
   }
 }
 

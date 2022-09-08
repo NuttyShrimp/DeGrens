@@ -1,20 +1,13 @@
 fx_version "cerulean"
 games {"gta5"}
 
-description "DeGrens Misc"
-
-shared_script '@dg-core/import.lua'
-shared_script '@ts-shared/shared/lib.lua'
-
-client_scripts {
-    '@ts-shared/client/client.js',
-	'@dg-logs/client/cl_log.lua',
-	'@dg-lib/client/cl_ui.lua',
-	"client/cl_*.lua",
-}
+shared_script '@dg-core/import.js'
 
 server_scripts {
-  '@dg-logs/server/sv_log.lua',
-  '@ts-shared/server/server.js',
-  'server/sv_*.lua',
+  "server/*.js",
+}
+
+client_scripts {
+  "@dg-logs/client/cl_log.lua",
+  "client/*.js",
 }
