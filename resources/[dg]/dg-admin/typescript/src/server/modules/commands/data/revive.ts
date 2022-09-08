@@ -15,9 +15,9 @@ export const revive: CommandData = {
   log: 'revived a player',
   handler: (caller, args: ReviveData) => {
     let ply = caller.source;
-    if (args.entity) {
+    if (args?.entity) {
       ply = NetworkGetEntityOwner(args.entity);
-    } else if (args.Target) {
+    } else if (args?.Target) {
       ply = args.Target.serverId;
     }
     emitNet('hospital:client:Revive', ply);
