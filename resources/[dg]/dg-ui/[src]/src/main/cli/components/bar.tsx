@@ -1,11 +1,12 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { Input } from '../../../components/inputs';
 import { mockEvent } from '../../../lib/nui-comms';
 import { cmds } from '../commands';
 
 export const Bar: React.FC = () => {
-  const [value, setValue] = React.useState('');
+  const [value, setValue] = useState('');
+  const [history, setHistory] = useState<string[]>([]);
   const realCmds = cmds.map(cmd => {
     // remove all $x and leading/trailing spaces
     return {
@@ -89,10 +90,18 @@ export const Bar: React.FC = () => {
   };
   const keyPress = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter') {
+      e.stopPropagation();
       doCmd();
-      setValue('');
+      const newHistory = [...history, value].slice(-5);
+      localStorage.setItem('cli-history', newHistory.join('|'));
+      setHistory(newHistory);
     }
   };
+
+  useEffect(() => {
+    setHistory(localStorage.getItem('cli-history')?.split('|') ?? []);
+  }, []);
+
   return (
     <div className={'cli_bar'}>
       <Input.AutoComplete
@@ -102,7 +111,7 @@ export const Bar: React.FC = () => {
         freeSolo
         onChange={onChange}
         onKeyDown={keyPress}
-        options={autocompleteOpt}
+        options={history.map(h => ({ label: h, value: h })).concat(autocompleteOpt)}
       />
     </div>
   );
