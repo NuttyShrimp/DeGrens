@@ -1,7 +1,7 @@
 <template>
   <div v-ripple :class="`menu-action-container ${props.active ? 'active' : ''}`" @click.stop="emit('click')">
     <FavoriteStar v-show="props.canFavorite" :favorite="props.action.favorite ?? false" :name="props.action.name" />
-    <div class="menu-action-title text-body1">
+    <div class="menu-action-title">
       {{ props.action.title }}
     </div>
     <slot />
@@ -43,6 +43,7 @@
     }
 
     &-title {
+      font-size: 1em;
       width: 100%;
       word-break: normal;
     }
