@@ -12,8 +12,8 @@ export const SimpleForm: FC<React.PropsWithChildren<SimpleForm.Form>> = props =>
   const [errors, setErrors] = useState({});
   useEffect(() => {
     const newValues = {};
-    props.elements.forEach(elememt => {
-      newValues[elememt.name] = elememt.defaultValue ?? '';
+    props.elements.forEach(element => {
+      newValues[element.name] = element.defaultValue ?? values?.[element.name] ?? '';
     });
     setValues(newValues);
   }, [props.elements]);
