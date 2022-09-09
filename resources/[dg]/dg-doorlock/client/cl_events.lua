@@ -164,10 +164,17 @@ RegisterNetEvent("thermite:UseThermite", function()
 
     exports["dg-sequencegame"]:OpenGame(function(success)
         if success then
-            SetPtfxAssetNextCall("scr_ornate_heist")
-            local effect = StartParticleFxLoopedOnEntity("scr_heist_ornate_thermal_burn", thermiteObject, 0.0, 0.65, 0.0, 0.0, 0.0, 0.0, 0.7, false, false, false)
+            local netId = NetworkGetNetworkIdFromEntity(thermiteObject)
+            local particleId = DGX.Particle.add({
+              dict = 'scr_ornate_heist', 
+              name = 'scr_heist_ornate_thermal_burn', 
+              looped = true, 
+              netId = netId, 
+              offset = {x = 0, y = 0.65, z = 0},
+              scale = 0.7
+            })
             Citizen.Wait(10000)
-            StopParticleFxLooped(effect, 0)
+            DGX.Particle.remove(particleId)
             TriggerServerEvent("dg-doorlock:server:changeDoorLockState", nearThermiteableDoor, false)
         end
 

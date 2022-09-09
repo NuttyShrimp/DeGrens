@@ -45,32 +45,32 @@ class Util extends UtilShared {
     return boneCoords.subtract(this.getPlyCoords()).Length;
   }
 
-  loadModel = async (model: string | number) => {
+  loadModel = (model: string | number) => {
     RequestModel(model);
-    await this.awaitCondition(() => HasModelLoaded(model));
+    return this.awaitCondition(() => HasModelLoaded(model));
   };
 
-  loadAnimDict = async (dict: string) => {
+  loadAnimDict = (dict: string) => {
     RequestAnimDict(dict);
-    await this.awaitCondition(() => HasAnimDictLoaded(dict));
+    return this.awaitCondition(() => HasAnimDictLoaded(dict));
   };
 
-  requestEntityControl = async (entity: number) => {
+  requestEntityControl = (entity: number) => {
     NetworkRequestControlOfEntity(entity);
-    await this.awaitCondition(() => NetworkHasControlOfEntity(entity));
+    return this.awaitCondition(() => NetworkHasControlOfEntity(entity));
   };
 
-  doesEntityExist = async (entity: number) => {
-    await this.awaitCondition(() => DoesEntityExist(entity));
+  doesEntityExist = (entity: number) => {
+    return this.awaitCondition(() => DoesEntityExist(entity));
   };
 
   isDevEnv() {
     return this.prodEnv !== undefined && this.prodEnv === false;
   }
 
-  loadAnimSet = async (set: string) => {
+  loadAnimSet = (set: string) => {
     RequestAnimSet(set);
-    await this.awaitCondition(() => HasAnimSetLoaded(set));
+    return this.awaitCondition(() => HasAnimSetLoaded(set));
   };
 }
 
@@ -95,8 +95,18 @@ export class PropAttach {
   move = (objId: number, offset?: Vec3): Promise<number> => global.exports['dg-propattach'].move(objId, offset);
 }
 
+export class Particle {
+  add = (data: Particles.Particle): string => {
+    return global.exports['dg-misc'].addParticle(data);
+  };
+  remove = (id: string) => {
+    global.exports['dg-misc'].removeParticle(id);
+  };
+}
+
 export default {
   Util: new Util(),
   Interiors: new Interiors(),
   PropAttach: new PropAttach(),
+  Particle: new Particle(),
 };

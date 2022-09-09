@@ -63,7 +63,7 @@ end
 
 function DGCore.Functions.GetPlayers()
 	local sources = {}
-	for k, v in pairs(DGCore.Players) do
+	for k, _ in pairs(DGCore.Players) do
 		table.insert(sources, k)
 	end
 	return sources

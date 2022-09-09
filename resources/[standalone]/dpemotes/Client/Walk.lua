@@ -2,7 +2,7 @@ function WalkMenuStart(name)
   RequestWalking(name)
   SetPedMovementClipset(PlayerPedId(), name, 0.2)
   RemoveAnimSet(name)
-  TriggerEvent('walkChanged', name)
+  DGX.Events.emit('walkChanged', name)
 end
 
 function RequestWalking(set)

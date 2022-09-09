@@ -44,3 +44,25 @@ exports['dg-misc']:randomSellBlackMoney(source)
 
 Use this serversided export to sell blackmoney from an other script.  
 For example in a legal delivery job, put a random chance on triggering the export to sometimes sell blackmoney 
+
+## Particles
+Using this wrapper you can create networked particle effects. Created particles can only be removed by the same player
+- Bone targets cannot be peds!
+
+```ts
+  type Target = { coords: Vec3 } | { netId: number } | { netId: number; boneName: string };
+
+  type Particle = {
+    dict: string;
+    name: string;
+    offset?: Vec3;
+    rotation?: Vec3;
+    scale?: number;
+    looped: boolean;
+  } & Target;
+```
+
+### Client Exports
+- addParticle: (particle: Particle) -> returns id: string
+- removeParticle: (id: string)
+
