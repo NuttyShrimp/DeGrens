@@ -22,5 +22,6 @@ declare global {
     PropAttach: typeof Classes.PropAttach;
     Storage: typeof Classes.Storage;
     Particle: typeof Classes.Particle;
+    Sounds: typeof Classes.Sounds;
   };
 }

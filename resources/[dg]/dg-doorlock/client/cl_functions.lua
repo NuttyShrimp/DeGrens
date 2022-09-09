@@ -46,11 +46,11 @@ openDoorAnim = function()
 	SetTimeout(400, function() StopAnimTask(ped, "anim@heists@keycard@", "exit", 1.0) end)
 end
 
--- TODO: Custom sounds
+-- TODO: Maybe custom sounds 
 playDoorSound = function(lock)
-    local door = doors[currentDoorId]
-    local soundName = lock and "Remote_Control_Close" or "Remote_Control_Open"
-    PlaySoundFromCoord(-1, soundName, door.coords.x, door.coords.y, door.coords.z, "PI_Menu_Sounds", 1, door.distance, 0)
+  local door = doors[currentDoorId]
+  local soundName = lock and "Remote_Control_Close" or "Remote_Control_Open"
+  DGX.Sounds.playFromCoord('door_lock_sound', soundName, 'PI_Menu_Sounds', door.coords, door.distance)
 end
 
 showInteraction = function()

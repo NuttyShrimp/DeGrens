@@ -49,5 +49,9 @@ Citizen.CreateThread(function()
 	end
 end)
 
+-- TODO: Change default keybind for doorlock, makes it easier
+-- to keep cache of latest door, if no current door then check cache.
+-- Allows locking door after opening it when moving aim away from the door.
+-- Useful for gates which are annoying with their hitboxes
 exports['dg-lib']:registerKeyMapping('toggleDoor', 'Deur slot togglen', '+toggleDoor', '-toggleDoor', Config.Key, true)
 
