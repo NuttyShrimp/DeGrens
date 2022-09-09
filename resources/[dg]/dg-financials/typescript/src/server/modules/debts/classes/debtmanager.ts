@@ -2,7 +2,7 @@ import { Notifications, SQL, Util } from '@dgx/server';
 
 import { getDefaultAccount, getDefaultAccountId } from '../../bank/helpers/accounts';
 import { transfer } from '../../bank/helpers/actions';
-import { debtLogger, scheduleDebt, unscheduleDebt } from '../helpers/debts';
+import { debtLogger, scheduleOverDueDebt, unscheduleDebt } from '../helpers/debts';
 
 class DebtManager extends Util.Singleton<DebtManager>() {
   private debts: Debts.Debt[];
@@ -11,7 +11,6 @@ class DebtManager extends Util.Singleton<DebtManager>() {
   constructor() {
     super();
     this.debts = [];
-    this.seedDebts();
   }
 
   public setConfig(config: Config['debts']) {
@@ -22,13 +21,26 @@ class DebtManager extends Util.Singleton<DebtManager>() {
     return this.config;
   }
 
-  private async seedDebts() {
+  async seedDebts() {
     const query = `
 			SELECT *,
 						 UNIX_TIMESTAMP(date) AS date
 			FROM debts d
 		`;
     this.debts = await SQL.query(query);
+    this.debts.forEach(debt => scheduleOverDueDebt(debt.id));
+  }
+
+  public getDebtsByCid(cid: number): Debts.Debt[] {
+    return this.debts.filter(debt => debt.cid === cid);
+  }
+
+  public getDebtById(id: number): Debts.Debt {
+    return this.debts.find(debt => debt.id === id);
+  }
+
+  private replaceDebt(debt: Debts.Debt) {
+    this.debts = this.debts.map(d => (d.id === debt.id ? debt : d));
   }
 
   public async addDebt(
@@ -36,6 +48,7 @@ class DebtManager extends Util.Singleton<DebtManager>() {
     target_account: string,
     fine: number,
     reason: string,
+    origin: string,
     given_by?: number,
     type: Debts.Type = 'debt'
   ) {
@@ -44,8 +57,10 @@ class DebtManager extends Util.Singleton<DebtManager>() {
       cid: cid,
       target_account,
       debt: fine,
+      payed: 0,
       type,
       given_by: given_by ?? null,
+      origin_name: origin,
       reason: reason,
       date: Math.floor(Date.now() / 1000),
     };
@@ -67,33 +82,16 @@ class DebtManager extends Util.Singleton<DebtManager>() {
       debtLogger.error(
         `Failed to add debt for ${cid} | cid: ${cid} | target: ${target_account} | fine: ${fine} | reason: ${reason} | given_by: ${given_by} | type: ${type}`
       );
-      global.exports['dg-logs'].createGraylogEntry(
-        'financials:debt:add:failed',
-        debt,
-        `Failed to add debt for ${cid} | target: ${target_account} | fine: ${fine} | given_by: ${given_by} | type: ${type}`,
-        true
-      );
+      Util.Log('financials:debt:add:failed', debt, `Failed to add debt for ${cid}`, undefined, true);
       return;
     }
     debt.id = result[0].id;
     debtLogger.info(
       `Added debt for ${cid} | cid: ${cid} | target: ${target_account} | fine: ${fine} | reason: ${reason} | given_by: ${given_by} | type: ${type}`
     );
-    global.exports['dg-logs'].createGraylogEntry(
-      'financials:debt:add',
-      debt,
-      `Added debt for ${cid} | target: ${target_account} | fine: ${fine} | given_by: ${given_by} | type: ${type}`
-    );
+    Util.Log('financials:debt:add', debt, `Added debt of ${fine} for ${cid}`);
     this.debts.push(debt);
-    scheduleDebt(debt.id);
-  }
-
-  public getDebtsByCid(cid: number): Debts.Debt[] {
-    return this.debts.filter(debt => debt.cid === cid);
-  }
-
-  public getDebtById(id: number): Debts.Debt {
-    return this.debts.find(debt => debt.id === id);
+    scheduleOverDueDebt(debt.id);
   }
 
   public async removeDebts(ids: number[]): Promise<void> {
@@ -101,8 +99,8 @@ class DebtManager extends Util.Singleton<DebtManager>() {
       debtLogger.error('removeDebts called with invalid debt ids', ids);
       return;
     }
-    const query = 'DELETE FROM debts WHERE id IN ?';
-    const result = await SQL.query(query, [ids]);
+    const query = 'DELETE FROM debts WHERE id IN (?)';
+    const result = await SQL.query(query, [ids.join(',')]);
     if (!result.affectedRows) {
       debtLogger.error(`Failed to remove debt with ids ${ids}`, ids);
       Util.Log(
@@ -132,7 +130,7 @@ class DebtManager extends Util.Singleton<DebtManager>() {
     ids.forEach(id => unscheduleDebt(id));
   }
 
-  public async payDebt(src: number, id: number): Promise<boolean> {
+  public async payDebt(src: number, id: number, percentage = 100): Promise<boolean> {
     const Player = DGCore.Functions.GetPlayer(src);
     if (!Player) {
       debtLogger.error(`payDebt called for unknown player ${src}`);
@@ -142,68 +140,62 @@ class DebtManager extends Util.Singleton<DebtManager>() {
     const debt = this.getDebtById(id);
     if (!debt) {
       debtLogger.warn(`Failed to pay debt | id: ${id} | cid: ${cid}`);
-      global.exports['dg-logs'].createGraylogEntry(
-        'financials:debt:pay:failed',
-        { id, cid },
-        `Failed to pay debt, non existing debt | id: ${id} | cid: ${cid}`
-      );
+      Util.Log('financials:debt:pay:failed', { id, cid }, `Failed to pay debt, non existing debt`);
       return;
     }
     if (debt.cid !== cid) {
       debtLogger.warn(`Failed to pay debt | id: ${id} | cid: ${cid}`);
-      global.exports['dg-logs'].createGraylogEntry(
-        'financials:debt:pay:failed',
-        { id, cid, debt },
-        `Failed to pay debt, cid didn't match | id: ${id} | cid: ${cid}`
-      );
+      Util.Log('financials:debt:pay:failed', { id, cid, debt }, `Failed to pay debt, cid didn't match`);
       return;
     }
     const accountId = await getDefaultAccountId(cid);
     if (!accountId) {
       debtLogger.warn(`Failed to pay debt | id: ${id} | cid: ${cid}`);
-      global.exports['dg-logs'].createGraylogEntry(
-        'financials:debt:pay:failed',
-        { id, cid, debt },
-        `Failed to pay debt, no default account found | id: ${id} | cid: ${cid}`
-      );
+      Util.Log('financials:debt:pay:failed', { id, cid, debt }, `Failed to pay debt, no default account found`);
       return;
     }
-    const success = await transfer(accountId, debt.target_account, debt.given_by ?? cid, cid, debt.debt, debt.reason);
+    const success = await transfer(
+      accountId,
+      debt.target_account,
+      debt.given_by ?? cid,
+      cid,
+      debt.debt * (percentage / 100),
+      debt.reason
+    );
     if (success) {
-      global.exports['dg-logs'].createGraylogEntry(
-        'financials:debt:pay',
-        { id, cid, debt },
-        `Successfully paid debt of ${debt.debt} | id: ${id} | cid: ${cid}`
-      );
-      this.removeDebts([id]);
+      Util.Log('financials:debt:pay', { id, cid, debt }, `Successfully paid debt of ${debt.debt}`);
+      if (percentage === 100) {
+        this.removeDebts([id]);
+      } else {
+        // Update payed value in DB and manager storage
+        debt.payed = Number((debt.payed + debt.debt * (percentage / 100)).toFixed(2));
+        await SQL.query('UPDATE debts SET payed = ? WHERE id = ?', [debt.payed, debt.id]);
+        this.replaceDebt(debt);
+      }
     } else {
       Notifications.add(src, 'Je hebt te weinig geld op je rekening om dit te doen');
     }
     return success;
   }
 
-  public async payOverdueDebt(id: number): Promise<boolean> {
+  public async payDefaultedDebt(id: number): Promise<boolean> {
     const debt = this.getDebtById(id);
     if (!debt) {
       debtLogger.warn(`Failed to pay debt | id: ${id}`);
-      global.exports['dg-logs'].createGraylogEntry(
-        'financials:debt:overduePay:failed',
-        { id },
-        `Failed to pay debt, non existing debt | id: ${id}`
-      );
+      Util.Log('financials:debt:overduePay:failed', { id }, `Failed to pay debt, non existing debt`);
       return;
     }
     const account = await getDefaultAccount(debt.cid);
     if (!account) {
       debtLogger.warn(`Failed to pay debt | id: ${id} | cid: ${debt.cid}`);
-      global.exports['dg-logs'].createGraylogEntry(
+      Util.Log(
         'financials:debt:overduePay:failed',
         { id, cid: debt.cid, debt },
-        `Failed to pay debt, no default account found | id: ${id} | debt.cid: ${debt.cid}`
+        `Failed to pay debt, no default account found`
       );
       return;
     }
-    const newDebt = debt.debt * (1 + this.config.fineInterest / 100);
+    const newDebt = debt.debt * (1 + this.config.fineDefaultInterest / 100);
     const success = await account.transfer(
       debt.target_account,
       debt.given_by ?? debt.cid,
@@ -213,21 +205,34 @@ class DebtManager extends Util.Singleton<DebtManager>() {
       true
     );
     if (success) {
-      global.exports['dg-logs'].createGraylogEntry(
-        'financials:debt:overduePay',
-        { id, cid: debt.cid, debt },
-        `Successfully paid debt of ${debt.debt} | id: ${id} | cid: ${debt.cid}`
-      );
+      Util.Log('financials:debt:overduePay', { id, cid: debt.cid, debt }, `Successfully paid debt of ${debt.debt}`);
       this.removeDebts([id]);
     } else {
-      global.exports['dg-logs'].createGraylogEntry(
+      Util.Log(
         'financials:debt:overduePay:failed',
         { id, cid: debt.cid, debt },
-        `Failed to pay overdue debt of ${debt.debt} | id: ${id} | cid: ${debt.cid}`,
+        `Failed to pay overdue debt of ${debt.debt}`,
+        undefined,
         true
       );
     }
     return success;
+  }
+
+  async penaliseOverDueDebt(id: number) {
+    const debt = this.getDebtById(id);
+    if (!debt) {
+      debtLogger.warn(`Failed to pay debt | id: ${id}`);
+      Util.Log('financials:debt:penaliseOverdue:failed', { id }, `Failed to pay debt, non existing debt`);
+      return;
+    }
+    const newDebt = debt.debt * (1 + this.config.fineOverDueInterest / 100);
+    await SQL.query('UPDATE debts SET debt = ? WHERE id = ?', [newDebt, id]);
+    Util.Log(
+      'financials:debt:penaliseOverdue',
+      { id, old: debt.debt, new: newDebt },
+      `Updated debt with penalty from ${debt.debt} to ${newDebt}`
+    );
   }
 }
 

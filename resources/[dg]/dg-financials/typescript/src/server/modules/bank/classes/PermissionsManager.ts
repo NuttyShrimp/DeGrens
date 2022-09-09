@@ -103,6 +103,10 @@ export class PermissionsManager {
     return this.members;
   }
 
+  getAccountOwner(): IAccountMember {
+    return this.members.find(m => m.access_level & AccountPermissionValue.owner);
+  }
+
   // endregion
 
   public addPermissions(cid: number, permissions: IAccountPermission | number): void {

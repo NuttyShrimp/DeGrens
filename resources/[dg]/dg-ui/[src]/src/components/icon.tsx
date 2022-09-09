@@ -83,6 +83,7 @@ export const Icon: FC<React.PropsWithChildren<IconProps>> = props => {
         color: props.color ?? 'inherit',
         fontSize: props.size ?? '1.5rem',
         cursor: props.onClick ? 'poiner' : 'auto',
+        '--fa-display': 'inline-flex',
       }}
       onClick={props.onClick}
     />

@@ -3,21 +3,22 @@ import React from 'react';
 import { ConfigObject, defaultConfigObject } from '../../config';
 
 import Container from './component';
+import { events } from './events';
 
 // Must be a function because otherwise it whines about undeclared defaultConfigObject
 const config = (): ConfigObject => ({
   ...defaultConfigObject,
-  name: 'payconiq',
-  label: 'Payconiq',
-  // TODO: Add icons
+  name: 'debt',
+  label: 'Schulden',
   icon: {
-    name: 'messages-dollar',
-    color: '#a84858',
-    background: 'white',
-    size: '1.3rem',
+    name: 'file-invoice-dollar',
+    color: 'white',
+    background: '#2695c9',
+    backgroundGradient: '#2644c9',
   },
-  position: 11,
+  position: 12,
   render: p => <Container {...p} />,
+  events,
 });
 
 export default config;

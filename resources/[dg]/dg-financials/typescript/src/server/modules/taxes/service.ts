@@ -1,13 +1,19 @@
 import { SQL } from '@dgx/server';
+import { Util } from '@dgx/shared';
+import dayjs from 'dayjs';
 import { getConfigModule } from 'helpers/config';
+import { accountManager } from 'modules/bank/classes/AccountManager';
 
 import { taxLogger } from './util';
 
 const taxes: Map<number, Taxes.Tax> = new Map();
 let taxConfig: Config['taxes'] = null;
+const seededAccs: string[] = [];
+let taxAccTimeout: NodeJS.Timeout;
 
 export const seedTaxes = async () => {
   taxConfig = await getConfigModule('taxes');
+  (await getConfigModule('accounts')).toSeed.forEach(acc => seededAccs.push(acc.id));
   const query = `
 		SELECT tax_id, tax_name, tax_rate
 		FROM taxes
@@ -51,5 +57,57 @@ export const getTaxedPrice = (price: number, taxId: number, shouldRemove = false
     return { taxPrice: price, taxRate: 0 };
   }
   const taxInfo = taxes.get(taxId);
-  return { taxPrice: price + price * taxInfo.rate * (shouldRemove ? -1 : 1), taxRate: taxInfo.rate };
+  return {
+    taxPrice: price + price * taxInfo.rate * taxConfig.inflation * (shouldRemove ? -1 : 1),
+    taxRate: taxInfo.rate,
+  };
+};
+
+/**
+ * @oaram lastLog Last time a acc's where taxed, unix timestamp in seconds
+ */
+const taxBankAccounts = async (lastLog: number) => {
+  await Util.awaitCondition(() => taxConfig !== null);
+  const sortedAccounts = accountManager.getAllAcounts().sort((a1, a2) => a1.getBalance() - a2.getBalance());
+  const prevLogDate = dayjs.unix(lastLog);
+  sortedAccounts.forEach(async (account, i) => {
+    const wealthPerc = i / sortedAccounts.length;
+    const bracket = taxConfig.brackets.find(b => Number(b.group) / 100 >= wealthPerc);
+    await Util.awaitCondition(() => account.permsManager.getMembers().length !== 0);
+    const taxAmount = account.getBalance() * (bracket.tax / 100);
+    // Do not inactive accounts
+    if (dayjs(account.lastOperation).isBefore(prevLogDate)) return;
+    if (seededAccs.includes(account.getAccountId())) return;
+
+    const accOwner = account.permsManager.getAccountOwner();
+    account.transfer('BE1', accOwner.cid, accOwner.cid, taxAmount, 'Account operation cost', true);
+  });
+  taxLogger.info('Applied taxes to bank accounts');
+  await SQL.query('INSERT INTO tax_logs (date) VALUES (CURRENT_TIME)');
+};
+
+export const scheduleBankTaxes = async () => {
+  if (taxAccTimeout) {
+    clearTimeout(taxAccTimeout);
+    taxAccTimeout = null;
+  }
+  const lastTerm = await SQL.query<{ date: number }[]>(
+    'SELECT UNIX_TIMESTAMP(date) AS date FROM tax_logs ORDER BY id desc LIMIT 1'
+  );
+  if (!lastTerm || lastTerm.length === 0) {
+    // Do taxes NOW
+    taxBankAccounts(0);
+  } else {
+    const taxDay = dayjs.unix(lastTerm[0].date).add(12, 'day');
+    const hoursTillTax = taxDay.diff(dayjs(), 'hours');
+    if (hoursTillTax < 0) {
+      taxBankAccounts(lastTerm[0].date);
+      return;
+    }
+    if (hoursTillTax <= 12) {
+      taxAccTimeout = setTimeout(() => {
+        taxBankAccounts(lastTerm[0].date);
+      }, taxDay.diff(dayjs(), 'ms'));
+    }
+  }
 };

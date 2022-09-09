@@ -161,11 +161,12 @@ Fines moeten binnen 7 dagen betaald worden, deze waarde is niet aanpasbaar voor 
   - target_account
   - fine
   - reason
+  - origin_name (Bussiness/person/instition where money came from (title in app))
   - given_by
 
 #### Callbacks
 
-- `financials:server:debts:get`: Returned een object met een lijst onder de keys: `debts` en `maintenance`
+- `financials:server:debts:get`: Returned een array met alle debts voor de caller
 - `financials:server:debts:pay`: Returned een boolean
   - DebtId
 

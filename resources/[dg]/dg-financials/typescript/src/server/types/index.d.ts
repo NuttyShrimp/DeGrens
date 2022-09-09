@@ -60,8 +60,10 @@ declare namespace Debts {
     cid: number;
     target_account: string;
     debt: number;
+    payed: number;
     type: Type;
     given_by: number;
+    origin_name: string;
     date?: number;
     reason?: string;
   }
@@ -72,6 +74,7 @@ declare interface Config {
     toSeed: {
       name: string;
       canTransfer: boolean;
+      id: string;
     }[];
     defaultBalance: number;
   };
@@ -80,15 +83,18 @@ declare interface Config {
   taxes: {
     cats: Taxes.Tax[];
     inflation: number;
+    brackets: { tax: number; group: number }[];
   };
   debts: {
     maintenance: {
       hour: number;
       minute: number;
     };
-    // Amount of days to pay the debt
-    finePayTerm: number;
-    // % of interest on fine over pay term
-    fineInterest: number;
+    // Record of minimum debt and their time to pay it off
+    debtTerms: Record<number, number>;
+    // % of interest added to fine because overDue
+    fineOverDueInterest: number;
+    // % of interest on fine when overDue term is over
+    fineDefaultInterest: number;
   };
 }

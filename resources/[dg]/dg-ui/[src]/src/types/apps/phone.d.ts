@@ -334,5 +334,23 @@ declare namespace Phone {
       isReady: boolean;
     }
   }
+  namespace Debt {
+    interface Debt {
+      id: number;
+      debt: number;
+      payed: number;
+      // unix timestamp IN SECONDS
+      date: number;
+      type: 'debt' | 'maintenance';
+      // Name of account where debt goes to
+      target_account: string;
+      origin_name: string;
+      reason: string;
+    }
+
+    interface State {
+      list: Debt[];
+    }
+  }
   // endregion
 }

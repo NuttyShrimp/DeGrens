@@ -27,7 +27,7 @@ interface Action {
 interface ListItem {
   icon?: string;
   size?: string;
-  label: string;
+  label: string | JSX.Element;
 }
 
 declare namespace Base {
@@ -95,6 +95,7 @@ declare interface RootState {
   'phone.apps.twitter': Phone.Twitter.State;
   'phone.apps.yellowpages': Phone.YellowPages.State;
   'phone.apps.jobcenter': Phone.JobCenter.State;
+  'phone.apps.debt': Phone.Debt.State;
   inventory: Inventory.State;
   itemboxes: Itemboxes.State;
 }

@@ -72,7 +72,7 @@ Validate Errorlogger:
 validate db migrations:
   stage: test
   services:
-    - name: mariadb:latest
+    - name: mariadb:10.7
       alias: mariadb
   variables:
     MYSQL_ROOT_PASSWORD: root

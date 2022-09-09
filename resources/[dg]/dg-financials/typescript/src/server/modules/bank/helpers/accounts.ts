@@ -20,7 +20,7 @@ export const createAccount = async (cid: number, name: string, accType: AccountT
 export const createDefaultAccount = async (src: number) => {
   const Player = DGCore.Functions.GetPlayer(src);
   const cid = Player.PlayerData.citizenid;
-  const account = await AccountManager.getInstance().getDefaultAccount(cid, true);
+  const account = AccountManager.getInstance().getDefaultAccount(cid, true);
   if (!account) {
     const accId = await createAccount(cid, 'Persoonlijk account', 'standard');
     paycheck(accId, cid, (await getConfigModule('accounts')).defaultBalance);

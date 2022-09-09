@@ -2,7 +2,7 @@ import { Config } from '@dgx/server';
 import { setConfig } from 'helpers/config';
 import { CryptoManager } from 'modules/crypto/classes/CryptoManager';
 import debtManager from 'modules/debts/classes/debtmanager';
-import { scheduleMaintenanceFees } from 'modules/debts/helpers/debts';
+import { scheduleMaintenanceFees } from 'modules/debts/helpers/maintenanceFees';
 
 import './sv_logger';
 import './modules/bank/controllers';
@@ -22,11 +22,12 @@ const startResource = async () => {
   await Config.awaitConfigLoad();
   const config = Config.getModuleConfig<Config>('financials');
   setConfig(config);
-  AccountManager.getInstance().setConfig(config.accounts);
+  await AccountManager.getInstance().setConfig(config.accounts);
   seedPaycheckCache();
   seedCashCache();
   CryptoManager.getInstance().loadCoins();
   debtManager.setConfig(config.debts);
+  debtManager.seedDebts();
   reloadPlayerWallets();
   scheduleMaintenanceFees();
   seedTaxes();
