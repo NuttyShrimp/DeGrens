@@ -1,8 +1,9 @@
 import { Config, Util } from '@dgx/server';
-import { mainLogger } from 'sv_logger';
-import { concatId } from '../../../util';
-import winston from 'winston';
 import itemDataManager from 'modules/itemdata/classes/itemdatamanager';
+import { mainLogger } from 'sv_logger';
+import winston from 'winston';
+
+import { concatId } from '../../../util';
 
 class ShopManager extends Util.Singleton<ShopManager>() {
   private readonly logger: winston.Logger;
@@ -26,6 +27,9 @@ class ShopManager extends Util.Singleton<ShopManager>() {
           item.requirements.items.forEach(reqItemName =>
             requiredItems.push({ name: reqItemName, label: itemDataManager.get(reqItemName).label })
           );
+        }
+        if (item.requirements.cash) {
+          item.requirements.cash = global.exports['dg-financials'].getTaxedPrice(item.requirements.cash, 6).taxPrice;
         }
         const requirements = {
           cash: item.requirements.cash,

@@ -518,6 +518,27 @@ devData.peekEntries = [
   },
 ];
 
+devData.phoneDebtEntry = [
+  {
+    id: 1,
+    debt: 892312,
+    payed: 0,
+    expiry: 1663875123,
+    type: 'debt',
+    origin_name: 'BOZO was arrested',
+    target: 'Unified Police Department',
+  },
+  {
+    id: 2,
+    debt: 4912,
+    payed: 2049,
+    expiry: 1662406323,
+    type: 'maintenance',
+    origin_name: 'Maintenance Fees',
+    target: 'De staat',
+  },
+];
+
 const emulatedData: Record<
   string,
   {

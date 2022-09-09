@@ -4,22 +4,25 @@
     "toSeed": [
       {
         "name": "De Staat",
-        "canTransfer": false
+        "canTransfer": false,
+        "id": "BE1"
       },
       {
         "name": "Politie DeGrens",
-        "canTransfer": true
+        "canTransfer": true,
+        "id": "BE2"
       },
       {
         "name": "AZDG",
-        "canTransfer": true
+        "canTransfer": true,
+        "id": "BE3"
       }
     ]
   },
   "paycheck": {
-    "police": 5,
-    "ambulance": 5,
-    "realestate": 5
+    "police": 15,
+    "ambulance": 15,
+    "realestate": 15
   },
   "cryptoCoins": [
     {
@@ -42,14 +45,40 @@
       { "category": "Goederen", "rate": 7 },
       { "category": "Gas", "rate": 6 }
     ],
-    "inflation": 1
+    "inflation": 1,
+    "brackets": [
+      {
+        "tax": 1.5,
+        "group": 5
+      },
+      {
+        "tax": 1.1,
+        "group": 15
+      },
+      {
+        "tax": 0.8,
+        "group": 50
+      },
+      {
+        "tax": 0.6,
+        "group": 100
+      }
+    ]
   },
   "debts": {
     "maintenance": {
       "hour": 5,
       "minute": 0
     },
-    "finePayTerm": 7,
-    "fineInterest": 10
+    "debtTerms": {
+      "0": 7,
+      "20000": 14,
+      "50000": 30,
+      "100000": 45,
+      "500000": 60,
+      "1000000": 90
+    },
+    "fineOverDueInterest": 2,
+    "fineDefaultInterest": 10
   }
 }

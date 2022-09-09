@@ -1,4 +1,5 @@
 import { SQL } from '@dgx/server';
+import { scheduleBankTaxes } from 'modules/taxes/service';
 import winston from 'winston';
 
 import { checkPlayerAccounts } from '../controllers/accounts';
@@ -23,17 +24,15 @@ export class AccountManager {
   constructor() {
     this.config = null;
     this.logger = bankLogger.child({ module: 'AccountManager' });
-    // fetch accounts from database
-    this.logger = bankLogger.child({ module: 'AccountManager' });
   }
 
-  public setConfig(config: Config['accounts']) {
+  public async setConfig(config: Config['accounts']) {
     this.config = config;
-    this.getAccountsDB().then(() => {
-      this.seedAccounts();
-      this.logger.info(`AccountManager: loaded ${this.accounts.length} accounts from database`);
-      checkPlayerAccounts();
-    });
+    await this.getAccountsDB();
+    this.seedAccounts();
+    this.logger.info(`AccountManager: loaded ${this.accounts.length} accounts from database`);
+    checkPlayerAccounts();
+    scheduleBankTaxes();
   }
 
   //region DB
@@ -54,7 +53,8 @@ export class AccountManager {
   private async getAccountsDB(): Promise<void> {
     const query = `
 			SELECT ba.*,
-						 (SELECT JSON_ARRAYAGG(JSON_OBJECT('cid', cid, 'access_level', access_level)) FROM bank_accounts_access WHERE account_id = ba.account_id) as members
+						 (SELECT JSON_ARRAYAGG(JSON_OBJECT('cid', cid, 'access_level', access_level)) FROM bank_accounts_access WHERE account_id = ba.account_id) as members,
+             UNIX_TIMESTAMP(ba.updated_at) * 1000 as updated_at
 			FROM bank_accounts ba
 		`;
     const result: DB.IAccount[] = await SQL.query(query);
@@ -65,7 +65,8 @@ export class AccountManager {
         account.name,
         account.type,
         account.balance,
-        account.members ? JSON.parse(account.members) : []
+        account.members ? JSON.parse(account.members) : [],
+        account.updated_at
       );
       this.addAccount(newAccount);
     }
@@ -80,9 +81,8 @@ export class AccountManager {
 
   private async seedAccounts(): Promise<void> {
     for (const a of this.config.toSeed) {
-      const i = this.config.toSeed.indexOf(a);
       // Check if account with id exists
-      if (this.accounts.find(acc => acc.getAccountId() === `BE${i + 1}`)) {
+      if (this.accounts.find(acc => acc.getAccountId() === a.id)) {
         continue;
       }
       const query = `
@@ -90,8 +90,8 @@ export class AccountManager {
 				VALUES (?, ?, ?, 0)
 			`;
       // We use the index here to make it easier to target a seeded account via code
-      await SQL.query(query, [`BE${i + 1}`, a.name, 'business']);
-      const account = new Account(`BE${i + 1}`, a.name, 'business', 0, []);
+      await SQL.query(query, [a.id, a.name, 'business']);
+      const account = new Account(a.id, a.name, 'business', 0, []);
       this.accounts.push(account);
     }
   }
@@ -109,8 +109,8 @@ export class AccountManager {
     return sortAccounts(_accounts);
   }
 
-  public async getDefaultAccount(cid: number, suppressErr = false): Promise<Account> {
-    const accounts = await this.getAccounts(cid, 'standard');
+  public getDefaultAccount(cid: number, suppressErr = false): Account {
+    const accounts = this.getAccounts(cid, 'standard');
     const defaultAccount = accounts[0];
     if (!defaultAccount) {
       if (!suppressErr) {
@@ -132,27 +132,15 @@ export class AccountManager {
     return false;
   }
 
-  public getAccountById(id: string, isTrans = false): Account {
-    return this.accounts.find(account => {
-      if (account.getAccountId() !== id) {
-        return false;
-      }
-      if (isTrans) {
-        return true;
-      }
-      const seedAcc = this.config.toSeed.find(acc => acc.name === account.getName());
-      if (!seedAcc) {
-        return true;
-      }
-      return seedAcc.canTransfer;
-    });
+  public getAccountById(id: string): Account {
+    return this.accounts.find(account => account.getAccountId() === id);
   }
 
   /**
    * Gets account via accountId, cid(standard account) or businessId(business account)
    * @param input
    */
-  public async getAccount(input: string): Promise<Account> {
+  public getAccount(input: string): Account {
     this.logger.silly(`Getting account | input: ${input}`);
     const account = this.getAccountById(input);
     if (account) {
@@ -163,7 +151,7 @@ export class AccountManager {
     if (isNaN(numInput)) {
       return null;
     }
-    const defaultAccount = await this.getDefaultAccount(numInput);
+    const defaultAccount = this.getDefaultAccount(numInput);
     if (defaultAccount) {
       this.logger.silly(`Found account by CID | id: ${defaultAccount.getAccountId()}`);
       return defaultAccount;
@@ -183,3 +171,5 @@ export class AccountManager {
 
   //endregion
 }
+
+export const accountManager = AccountManager.getInstance();

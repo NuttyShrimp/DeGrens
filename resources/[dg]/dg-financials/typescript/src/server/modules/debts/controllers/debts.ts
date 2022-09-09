@@ -1,11 +1,17 @@
 import { RPC } from '@dgx/server';
+import dayjs from 'dayjs';
+import { AccountManager } from 'modules/bank/classes/AccountManager';
 
 import debtManager from '../classes/debtmanager';
-import { debtLogger, removeMaintenanceFees } from '../helpers/debts';
+import { debtLogger, getDaysUntilDue } from '../helpers/debts';
+import { removeMaintenanceFees } from '../helpers/maintenanceFees';
 
-global.exports('giveFine', (cid: number, target_account: string, fine: number, reason: string, given_by?: number) => {
-  debtManager.addDebt(cid, target_account, fine, reason, given_by);
-});
+global.exports(
+  'giveFine',
+  (cid: number, target_account: string, fine: number, reason: string, origin_name: string, given_by?: number) => {
+    debtManager.addDebt(cid, target_account, fine, reason, origin_name, given_by);
+  }
+);
 global.exports('removeMaintenanceFees', (src: number) => removeMaintenanceFees(src));
 
 RPC.register('financials:server:debts:get', src => {
@@ -15,21 +21,23 @@ RPC.register('financials:server:debts:get', src => {
     return [];
   }
   const debts = debtManager.getDebtsByCid(Player.PlayerData.citizenid);
-  const returnDebts = {
-    debt: debts.filter(debt => debt.type === 'debt'),
-    maintenance: debts.filter(debt => debt.type === 'maintenance'),
-  };
   debtLogger.silly(`getDebts: ${debts.length}`);
-  return returnDebts;
+  return debts.map(d => {
+    const date = dayjs.unix(d.date).add(getDaysUntilDue(d.debt), 'day').unix();
+    return {
+      ...d,
+      target_account: AccountManager.getInstance().getAccountById(d.target_account).getName(),
+      date,
+    };
+  });
 });
 
-RPC.register('financials:server:debts:pay', async (src, debtId: number) => {
-  debtLogger.silly(`payDebt: ${debtId} | src: ${src}`);
+RPC.register('financials:server:debts:pay', async (src, debtId: number, percentage = 100) => {
+  debtLogger.silly(`payDebt: ${debtId} | perc: ${percentage}% | src: ${src}`);
   const Player = DGCore.Functions.GetPlayer(src);
   if (!Player) {
     debtLogger.warn(`payDebt: Player not found | src: ${src}`);
     return false;
   }
-  const isSuccess = await debtManager.payDebt(src, debtId);
-  return isSuccess;
+  return debtManager.payDebt(src, debtId, percentage);
 });

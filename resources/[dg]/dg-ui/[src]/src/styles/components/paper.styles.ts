@@ -67,7 +67,6 @@ export const styles = makeStyles({
   textWrapper: {
     display: 'flex',
     flexDirection: 'column',
-    justifyContent: 'space-between',
     alignItems: 'flex-start',
     width: '100%',
     '& > .paper-title, & > .paper-description': {

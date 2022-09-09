@@ -39,9 +39,10 @@ export const sortAccounts = (acc: Account[]): Account[] => {
 };
 
 export const generateSplittedInfo = (info: Record<string, any>) => {
-  let str = '';
-  Object.entries(info).map(([k, v]) => (str += `${k}: ${v}`));
-  return str.trim();
+  return Object.entries(info)
+    .map(([k, v]) => `${k}: ${v}`)
+    .join(' | ')
+    .trim();
 };
 
 export const ActionPermission: Record<TransactionType, AccountPermission> = {

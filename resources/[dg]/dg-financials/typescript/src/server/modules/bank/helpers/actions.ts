@@ -5,7 +5,7 @@ import { bankLogger } from '../utils';
 const AManager = AccountManager.getInstance();
 
 export const deposit = async (accountId: string, triggerCid: number, amount: number, comment?: string) => {
-  const account = await AManager.getAccountById(accountId);
+  const account = AManager.getAccountById(accountId);
   if (!account) {
     const Player = DGCore.Functions.GetPlayerByCitizenId(triggerCid);
     emitNet('DGCore:Notify', Player.PlayerData.source, `Geen account gevonden voor ${accountId}`, 'error');
@@ -15,7 +15,7 @@ export const deposit = async (accountId: string, triggerCid: number, amount: num
 };
 
 export const withdraw = async (accountId: string, triggerCid: number, amount: number, comment?: string) => {
-  const account = await AManager.getAccountById(accountId);
+  const account = AManager.getAccountById(accountId);
   if (!account) {
     const Player = DGCore.Functions.GetPlayerByCitizenId(triggerCid);
     emitNet('DGCore:Notify', Player.PlayerData.source, `Geen account gevonden voor ${accountId}`, 'error');
@@ -33,7 +33,7 @@ export const transfer = async (
   comment?: string,
   taxId?: number
 ): Promise<boolean> => {
-  const account = await AManager.getAccountById(accountId);
+  const account = AManager.getAccountById(accountId);
   if (!account) {
     const Player = DGCore.Functions.GetPlayerByCitizenId(triggerCid);
     emitNet('DGCore:Notify', Player.PlayerData.source, `Geen account gevonden voor ${accountId}`, 'error');
@@ -54,7 +54,7 @@ export const purchase = async (
   comment?: string,
   taxId?: number
 ): Promise<boolean> => {
-  const account = await AManager.getAccountById(accountId);
+  const account = AManager.getAccountById(accountId);
   if (!account) {
     const Player = DGCore.Functions.GetPlayerByCitizenId(triggerCid);
     emitNet('DGCore:Notify', Player.PlayerData.source, `Geen account gevonden voor ${accountId}`, 'error');
@@ -66,7 +66,7 @@ export const purchase = async (
 };
 
 export const paycheck = async (accountId: string, triggerCid: number, amount: number) => {
-  const account = await AManager.getAccountById(accountId);
+  const account = AManager.getAccountById(accountId);
   if (!account) {
     const Player = DGCore.Functions.GetPlayerByCitizenId(triggerCid);
     emitNet('DGCore:Notify', Player.PlayerData.source, `Kon paycheck niet uitbetalen`, 'error');
@@ -84,7 +84,7 @@ export const mobile_transaction = async (
   amount: number,
   comment?: string
 ): Promise<boolean> => {
-  const account = await AManager.getAccountById(accountId);
+  const account = AManager.getAccountById(accountId);
   if (!account) {
     const Player = DGCore.Functions.GetPlayerByCitizenId(triggerCid);
     emitNet('DGCore:Notify', Player.PlayerData.source, `Geen account gevonden voor ${accountId}`, 'error');

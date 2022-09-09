@@ -13,8 +13,8 @@ export class Account {
   private readonly account_id: string;
   private readonly name: string;
   private readonly accType: AccountType;
-  private permsManager: PermissionsManager;
   private balance: number;
+  lastOperation: number;
   private transactions: Record<TransactionType, DB.ITransaction[]> = {
     deposit: [],
     withdraw: [],
@@ -26,8 +26,16 @@ export class Account {
   private transactionsIds: string[];
   private manager: AccountManager;
   private logger: winston.Logger;
+  permsManager: PermissionsManager;
 
-  constructor(account_id: string, name: string, type: AccountType, balance = 0, members: IAccountMember[] = []) {
+  constructor(
+    account_id: string,
+    name: string,
+    type: AccountType,
+    balance = 0,
+    members: IAccountMember[] = [],
+    updatedAt: number = Date.now()
+  ) {
     this.account_id = account_id;
     this.name = name;
     this.accType = type;
@@ -38,6 +46,7 @@ export class Account {
       `Account ${this.account_id} created | name: ${this.name} | accountType: ${this.accType} | balance: ${this.balance}`
     );
     this.permsManager = new PermissionsManager(account_id, members);
+    this.lastOperation = updatedAt;
     // fetch all transactionids for this account
     // We only fetch ids so the cache is not overfilled with data which could slow down the resource
     this.getDBTransactionsIds().then(transactionIds => {
@@ -105,6 +114,8 @@ export class Account {
   public changeBalance(amount: number): void {
     this.logger.info(`changeBalance | amount: ${amount}`);
     this.balance += amount;
+    this.lastOperation = Date.now();
+    this.updateBalance();
   }
 
   // endregion
@@ -122,7 +133,7 @@ export class Account {
   private async AddDBTransaction(transaction: DB.ITransaction): Promise<void> {
     const query = `
       INSERT INTO transaction_log
-      (transaction_id, origin_account_id, target_account_id, \` change \`, comment, triggered_by, accepted_by, date,
+      (transaction_id, origin_account_id, target_account_id, \`change\`, comment, triggered_by, accepted_by, date,
        type)
       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
     `;
@@ -140,7 +151,6 @@ export class Account {
     // Add transaction to front of array
     this.transactions[transaction.type].unshift(transaction);
     this.transactionsIds.push(transaction.transaction_id);
-    this.updateBalance();
   }
 
   private async getDBTransactionsIds(): Promise<string[]> {
@@ -205,7 +215,7 @@ export class Account {
       targetPhone?: string;
     } = {}
   ): Promise<boolean> {
-    const triggerPlayer = DGCore.Functions.GetPlayerByCitizenId(triggerCid);
+    const triggerPlayer = await DGCore.Functions.GetOfflinePlayerByCitizenId(triggerCid);
     const infoStr = generateSplittedInfo({
       cid: triggerCid,
       account: this.account_id,
@@ -297,9 +307,10 @@ export class Account {
         // TODO add some anti-cheat measures
         return false;
       }
-      if (type === 'transfer') {
+      // Player should be able to transfer to any1 when not a 2 player interaction
+      if (type === 'transfer' && extra.acceptorCid !== triggerCid) {
         const targetAccount = this.manager.getAccountById(extra.targetAccountId);
-        if (!targetAccount.permsManager.hasPermission(extra.acceptorCid, 'transfer')) {
+        if (!targetAccount.permsManager.hasAccess(extra.acceptorCid)) {
           emitNet('DGCore:Notify', triggerPlayer.PlayerData.source, "You don't have the permissions for this", 'error');
           global.exports['dg-logs'].createGraylogEntry(
             'financials:missingPermissions',
@@ -342,6 +353,7 @@ export class Account {
       return true;
       // endregion
     } catch (e) {
+      console.error(e);
       global.exports['dg-logs'].createGraylogEntry(
         'financials:invalidAmount',
         {
@@ -380,8 +392,8 @@ export class Account {
       );
       return;
     }
+    this.changeBalance(amount);
     await this.addTransaction(this.account_id, this.account_id, triggerCid, amount, 'deposit', comment);
-    this.balance += amount;
     global.exports['dg-logs'].createGraylogEntry(
       'financials:deposit:success',
       {
@@ -402,7 +414,7 @@ export class Account {
     if (!(await this.actionValidation('deposit', triggerCid, amount, {}))) return;
     const triggerPlayer = DGCore.Functions.GetPlayerByCitizenId(triggerCid);
     amount = parseInt(String(amount));
-    this.balance -= amount;
+    this.changeBalance(-amount);
     addCash(triggerPlayer.PlayerData.source, amount, `Withdraw from ${this.name} (${this.account_id})`);
     await this.addTransaction(this.account_id, this.account_id, triggerCid, amount, 'withdraw', comment);
     global.exports['dg-logs'].createGraylogEntry(
@@ -437,11 +449,11 @@ export class Account {
       }))
     )
       return false;
-    const triggerPlayer = DGCore.Functions.GetPlayerByCitizenId(triggerCid);
+    const triggerPlayer = await DGCore.Functions.GetOfflinePlayerByCitizenId(triggerCid);
     const targetAccount = this.manager.getAccountById(targetAccountId);
     amount = parseInt(String(amount));
-    this.balance -= amount;
-    targetAccount.changeBalance(-amount);
+    this.changeBalance(-amount);
+    targetAccount.changeBalance(amount);
     await this.addTransaction(this.account_id, targetAccountId, triggerCid, amount, 'transfer', comment, acceptorCid);
     global.exports['dg-logs'].createGraylogEntry(
       'financials:transfer:success',
@@ -467,7 +479,7 @@ export class Account {
     if (!(await this.actionValidation('purchase', triggerCid, amount))) return false;
     const triggerPlayer = DGCore.Functions.GetPlayerByCitizenId(triggerCid);
     amount = parseInt(String(amount));
-    this.balance -= amount;
+    this.changeBalance(-amount);
     await this.addTransaction(this.account_id, 'BE1', triggerCid, amount, 'purchase', comment);
     this.logger.info(`purchase: success | cid: ${triggerCid} | account: ${this.account_id} | amount: ${amount}`);
     global.exports['dg-logs'].createGraylogEntry(
@@ -515,7 +527,7 @@ export class Account {
       );
       return false;
     }
-    this.balance += amount;
+    this.changeBalance(amount);
     await this.addTransaction('BE1', this.account_id, triggerCid, amount, 'paycheck', 'Paycheck');
     global.exports['dg-logs'].createGraylogEntry(
       'financials:paycheck:success',
@@ -549,8 +561,8 @@ export class Account {
     const targetAccount = await this.manager.getDefaultAccount(acceptorCid);
     const targetAccountId = targetAccount.account_id;
     amount = parseInt(String(amount));
-    this.balance -= amount;
-    targetAccount.changeBalance(-amount);
+    this.changeBalance(-amount);
+    targetAccount.changeBalance(amount);
     await this.addTransaction(
       this.account_id,
       targetAccountId,
@@ -662,9 +674,11 @@ export class Account {
       this.logger.debug(
         `getTransactions: success | src: ${source} | account: ${this.account_id} | amount: ${dbTransactions.length}`
       );
-      return dbTransactions.map<ITransaction>(t => {
-        return this.buildTransaction(t);
-      });
+      return Promise.all(
+        dbTransactions.map(async t => {
+          return this.buildTransaction(t);
+        })
+      );
     } catch (e) {
       this.logger.error('Error getting transactions', e);
     }
@@ -675,7 +689,7 @@ export class Account {
     return (this.transactionsIds ?? []).includes(id);
   }
 
-  private buildTransaction(transaction: DB.ITransaction): ITransaction {
+  private async buildTransaction(transaction: DB.ITransaction): Promise<ITransaction> {
     const _t: ITransaction = {
       ...transaction,
       origin_account_name: '',
@@ -683,20 +697,20 @@ export class Account {
     };
     try {
       // region User info
-      const triggerInfo = DGCore.Functions.GetOfflinePlayerByCitizenId(Number(_t.triggered_by));
+      const triggerInfo = await DGCore.Functions.GetOfflinePlayerByCitizenId(Number(_t.triggered_by));
       _t.triggered_by = `${triggerInfo.PlayerData.charinfo.firstname} ${triggerInfo.PlayerData.charinfo.lastname}`;
       _t.accepted_by = _t.triggered_by;
       if (_t.triggered_by !== _t.accepted_by) {
-        const acceptInfo = DGCore.Functions.GetOfflinePlayerByCitizenId(Number(_t.accepted_by));
+        const acceptInfo = await DGCore.Functions.GetOfflinePlayerByCitizenId(Number(_t.accepted_by));
         _t.accepted_by = `${acceptInfo.PlayerData.charinfo.firstname} ${acceptInfo.PlayerData.charinfo.lastname}`;
       }
       // endregion
       // region Account info=
-      const originAccount = this.manager.getAccountById(_t.origin_account_id, true);
+      const originAccount = this.manager.getAccountById(_t.origin_account_id);
       _t.origin_account_name = originAccount ? originAccount.getName() : 'Unknown Account';
       _t.target_account_name = _t.target_account_id;
       if (_t.origin_account_id !== _t.target_account_id) {
-        const targetAccount = this.manager.getAccountById(_t.target_account_id, true);
+        const targetAccount = this.manager.getAccountById(_t.target_account_id);
         _t.target_account_name = targetAccount ? targetAccount.getName() : 'Unknown Account';
       }
       // endregion

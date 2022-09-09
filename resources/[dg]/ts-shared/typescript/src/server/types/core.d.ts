@@ -77,7 +77,7 @@ interface ServerFunctions {
    * If a player is online it does use the existing player object.
    * @param citizenid: Player's citizenid
    */
-  GetOfflinePlayerByCitizenId(citizenid: number): Pick<Player, 'PlayerData'>;
+  GetOfflinePlayerByCitizenId(citizenid: number): Promise<Pick<Player, 'PlayerData'>>;
 
   /**
    * Registers a new server callback, use QBCore.Functions.TriggerCallback on the client side to trigger the callback

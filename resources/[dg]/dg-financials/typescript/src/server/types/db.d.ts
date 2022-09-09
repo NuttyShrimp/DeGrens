@@ -5,6 +5,7 @@ declare namespace DB {
     type: AccountType;
     balance: number;
     members: string;
+    updated_at: number;
   }
 
   interface ITransaction {
