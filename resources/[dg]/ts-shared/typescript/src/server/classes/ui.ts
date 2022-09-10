@@ -10,11 +10,14 @@ class Taskbar {
     settings: TaskBar.TaskBarSettings
   ) {
     const prom = new Promise<[boolean, number]>(res => {
-      Events.onNet(`misc:taskbar:finished`, (evtId: string, wasCanceled: boolean, atPercentage: number) => {
-        if (id === evtId) {
-          res([wasCanceled, atPercentage]);
+      Events.onNet(
+        `misc:taskbar:finished`,
+        (src: number, evtId: string, wasCanceled: boolean, atPercentage: number) => {
+          if (id === evtId) {
+            res([wasCanceled, atPercentage]);
+          }
         }
-      });
+      );
     });
     Events.emitNet('misc:taskbar:new', src, id, icon, label, duration, settings);
     return prom;
