@@ -90,9 +90,38 @@ export default function AppWrapper(props: AppWrapperProps) {
   const [active, setActive] = useState(false);
 
   const eventHandler = useCallback(
-    async (e: any) => {
+    (e: any) => {
+      addLog({ name: `AppWrapper:${props.appName}`, body: {}, response: e.data, isOk: true });
+      if (e.data.show) {
+        props.onShow(e.data.data);
+        if (appInfo?.type === 'interactive' && e.data.shouldFocus) {
+          nuiAction('__appwrapper:setfocus');
+        }
+        return;
+      } else if (e.data.show === false) {
+        if (appState.visible) {
+          if (mainStateApp === 'cli') {
+            setCurrentApp('');
+          }
+          props.onHide();
+        }
+        return;
+      }
+      if (props.onEvent) {
+        props.onEvent(e.data.data);
+      }
+    },
+    [props.onEvent, props.onHide, props.onShow, appInfo, appState, mainStateApp]
+  );
+
+  const evtMiddleware = useCallback(
+    (e: any) => {
       e.preventDefault();
       if (e.data.app === props.appName) {
+        if (e.data?.skipSentry) {
+          eventHandler(e);
+          return;
+        }
         const transaction = Sentry.startTransaction({
           name: 'incomingAppEvent',
           tags: {
@@ -110,25 +139,7 @@ export default function AppWrapper(props: AppWrapperProps) {
           },
         });
         try {
-          addLog({ name: `AppWrapper:${props.appName}`, body: {}, response: e.data, isOk: true });
-          if (e.data.show) {
-            props.onShow(e.data.data);
-            if (appInfo?.type === 'interactive' && e.data.shouldFocus) {
-              nuiAction('__appwrapper:setfocus');
-            }
-            return;
-          } else if (e.data.show === false) {
-            if (appState.visible) {
-              if (mainStateApp === 'cli') {
-                setCurrentApp('');
-              }
-              props.onHide();
-            }
-            return;
-          }
-          if (props.onEvent) {
-            props.onEvent(e.data.data);
-          }
+          eventHandler(e);
           span.setStatus('ok');
         } catch (e) {
           span.setStatus('unknown_error');
@@ -139,7 +150,7 @@ export default function AppWrapper(props: AppWrapperProps) {
         }
       }
     },
-    [props.appName, props.onEvent, props.onHide, props.onShow, appInfo, appState, active, mainStateApp]
+    [props.appName, eventHandler]
   );
 
   const handlePress: any = useCallback(
@@ -188,13 +199,13 @@ export default function AppWrapper(props: AppWrapperProps) {
   };
 
   useEffect(() => {
-    window.addEventListener('message', eventHandler);
+    window.addEventListener('message', evtMiddleware);
     window.addEventListener('keydown', handlePress);
     return () => {
-      window.removeEventListener('message', eventHandler);
+      window.removeEventListener('message', evtMiddleware);
       window.removeEventListener('keydown', handlePress);
     };
-  }, [eventHandler, handlePress]);
+  }, [evtMiddleware, handlePress]);
 
   useEffect(() => {
     registeredApps[props.appName] = {

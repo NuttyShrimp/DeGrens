@@ -1,39 +1,54 @@
 declare namespace Hud {
-  type HudType = 'health' | 'armor' | 'hunger' | 'thirst' | 'air';
-  type HudCircleType = 'right' | 'left' | 'top';
+  interface EntryUI {
+    // FA icon
+    name: string;
+    color: string;
+  }
+
+  interface Entry {
+    ui: EntryUI;
+    name: string;
+    enabled: boolean;
+    steps: number;
+    order: number;
+  }
+
+  interface Car {
+    visible: boolean;
+    speed: number;
+    fuel: number;
+    indicator: {
+      belt: boolean;
+      engine: boolean;
+      service: boolean;
+    };
+  }
 
   interface Compass {
     visible: boolean;
     heading: number;
-    zone: string;
-    street: string;
+    street1: string;
+    street2: string;
+    area: string;
   }
 
-  interface Voice {
-    normal: boolean;
-    onRadio: boolean;
-  }
-
-  interface HudValue {
-    enabled: boolean;
-    value: number;
-  }
-
-  interface HudIcon {
-    name: string;
-    /**
-     * Defaults to fas
-     */
-    lib?: string;
+  interface Cash {
+    current: number;
+    history: number[];
   }
 
   interface State extends Base.State {
+    entries: Entry[];
+    values: Record<string, number>;
+    voice: {
+      range: number;
+      channel: number;
+      active: boolean;
+      // Talking on radio
+      onRadio: boolean;
+    };
+    car: Car;
     compass: Compass;
-    values: Record<HudType, HudValue>;
-    voice: Voice;
-    /**
-     * Indent of icons shown (0 == first extra circle)
-     */
-    iconIdx: number;
+    cash: Cash;
   }
 }

@@ -2,7 +2,7 @@ declare type InteractionType = 'info' | 'success' | 'error';
 
 declare type AppFunction<T = {}> = React.FC<
   T & {
-    updateState: (data: Partial<T>) => void;
+    updateState: (data: Partial<T> | ((state: RootState) => Partial<RootState[T]>)) => void;
   }
 >;
 

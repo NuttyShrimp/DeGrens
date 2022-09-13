@@ -23,5 +23,6 @@ declare global {
     Storage: typeof Classes.Storage;
     Particle: typeof Classes.Particle;
     Sounds: typeof Classes.Sounds;
+    HUD: typeof Classes.HUD;
   };
 }

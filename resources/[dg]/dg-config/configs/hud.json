@@ -1,0 +1,16 @@
+{
+  "shootingChance": 25,
+  "speed": {
+    "minimum": 100,
+    "unbuckled": 65
+  },
+  "shake": {
+    "minimum": 10,
+    "maxLength": 3000,
+    "maxAmount": 6,
+    "interval": {
+      "min": 60000,
+      "max": 15000
+    }
+  }
+}

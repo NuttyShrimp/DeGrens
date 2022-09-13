@@ -102,6 +102,52 @@ export const cmds: {
     data: defaultState.hud,
   },
   {
+    cmd: 'hide hud',
+    app: 'hud',
+    show: false,
+    data: {},
+  },
+  {
+    cmd: 'show speedometer',
+    app: 'hud',
+    data: {
+      action: 'setCarValues',
+      data: {
+        visible: true,
+        speed: 100,
+        fuel: 75,
+        indicator: {
+          belt: true,
+          engine: true,
+          service: true,
+        },
+      },
+    },
+  },
+  {
+    cmd: 'show compass',
+    app: 'hud',
+    data: {
+      action: 'setCompassValues',
+      data: {
+        visible: true,
+        heading: 100,
+        street1: 'ON GOD STREET',
+        street2: 'HIGH WAY TO HELL',
+        area: 'BOZO AREA',
+      },
+    },
+  },
+  {
+    cmd: 'show cash-hud',
+    app: 'hud',
+    data: {
+      action: 'addCashHistory',
+      data: 34745,
+      amount: -100,
+    },
+  },
+  {
     cmd: 'show contextmenu',
     app: 'contextmenu',
     show: true,

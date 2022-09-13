@@ -24,6 +24,7 @@ seedCharData = function()
 		characterInfo = newCharacterInfo
 		SendAppEvent('character', characterInfo)
     Wait(1000)
+    toggleHud()
     TriggerEvent('dg-ui:loadData')
 	end)
 end

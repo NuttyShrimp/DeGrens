@@ -91,8 +91,29 @@ class Notifications {
   }
 }
 
+class HUD {
+  addEntry(
+    name: string,
+    iconName: string,
+    color: string,
+    getter: (ped: number, id: number) => number,
+    order: number,
+    steps?: number,
+    enabled = true
+  ) {
+    global.exports['dg-ui'].registerHudEntry(name, iconName, color, getter, order, steps, enabled);
+  }
+  removeEntry(name: string) {
+    global.exports['dg-ui'].removeHudEntry(name);
+  }
+  toggleEntry(name: string, isEnabled: boolean) {
+    global.exports['dg-ui'].toggleHudEntry(name, isEnabled);
+  }
+}
+
 export default {
   UI: Ui.getInstance(),
   Taskbar: new Taskbar(),
   Notifications: new Notifications(),
+  HUD: new HUD(),
 };

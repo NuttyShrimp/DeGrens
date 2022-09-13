@@ -18,5 +18,9 @@ export const useVhToPixel = (vh: number): number => {
     };
   }, [handleResize]);
 
+  useEffect(() => {
+    setCalcPx(vhToPixel(vh));
+  }, [vh]);
+
   return calcPx;
 };

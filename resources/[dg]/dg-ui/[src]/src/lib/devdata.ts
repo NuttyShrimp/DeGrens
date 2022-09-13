@@ -539,6 +539,27 @@ devData.phoneDebtEntry = [
   },
 ];
 
+devData.hudEntries = [
+  {
+    ui: {
+      name: 'microchip',
+      color: '#4ECB71',
+    },
+    name: 'hack',
+    enabled: true,
+    steps: 15,
+    order: 1,
+  },
+];
+
+devData.hudValues = {
+  health: 15,
+  armor: 85,
+  hunger: 60,
+  thirst: 100,
+  hack: 9,
+};
+
 const emulatedData: Record<
   string,
   {
