@@ -10,8 +10,8 @@ QBConfig.Money.defaultCash = 500 -- default cash on player join
 QBConfig.Money.PayCheckTimeOut = 10 -- The time in minutes that it will give the paycheck
 
 QBConfig.Player = {}
-QBConfig.Player.HungerRate = 4.2 -- Rate at which hunger goes down.
-QBConfig.Player.ThirstRate = 3.8 -- Rate at which thirst goes down.
+QBConfig.Player.HungerRate = 5.5 -- Rate at which hunger goes down.
+QBConfig.Player.ThirstRate = 5.5 -- Rate at which thirst goes down.
 QBConfig.Player.Bloodtypes = {
 	"A+",
 	"A-",

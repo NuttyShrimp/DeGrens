@@ -7,7 +7,7 @@ local volumes = {
 	['phone'] = tonumber(GetConvar('voice_defaultVolume', '0.3')) + 0.0,
 }
 
-radioEnabled, radioPressed, mode = false, false, 2
+radioEnabled, radioPressed, mode = true, false, 2
 radioData = {}
 callData = {}
 

@@ -1,0 +1,199 @@
+@use 'src/styles/variables.scss';
+@import url('https://fonts.cdnfonts.com/css/pricedown');
+
+.hud {
+  &-entries {
+    display: flex;
+    position: absolute;
+    bottom: .2vh;
+    left: 1vh;
+
+    transition: all .25s ease-in-out;
+
+    &>* {
+      margin-right: 1vh;
+    }
+  }
+
+  &-doubles {
+    position: relative;
+
+    &>div:last-child {
+      position: absolute;
+      bottom: 0;
+      left: 3vh;
+      z-index: 2;
+    }
+  }
+
+  &-voice {
+    font-family: 'Roboto Mono', monospace;
+    white-space: nowrap;
+    height: 5vh;
+  }
+
+  &-health-armor {
+    width: 8vh;
+  }
+
+  &-needs {
+    width: 8vh;
+  }
+
+  &-speedometer {
+    display: flex;
+    justify-content: end;
+    position: absolute;
+    right: 1vh;
+    bottom: 0.2vh;
+    transition: right .25s ease-in-out;
+
+    &-gauge {
+      width: 25vh;
+
+      &-fuel {
+        stroke: variables.$secondary_normal;
+        stroke-width: 4;
+        stroke-dasharray: 135;
+        stroke-dashoffset: 0;
+        transition: stroke-dashoffset .2s;
+
+        &-bg {
+          stroke: #5a5a5a95;
+          stroke-width: 4;
+        }
+      }
+
+      &-bg {
+        stroke: #5a5a5a95;
+        stroke-width: 8;
+      }
+
+      &-fill {
+        stroke: #d6d6d695;
+        stroke-width: 8;
+        stroke-dasharray: 345;
+        stroke-dashoffset: 0;
+        transition: stroke-dashoffset .2s;
+      }
+    }
+
+    &-info {
+      position: absolute;
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      bottom: 5vh;
+      width: 15.5vh;
+      font-size: 2.2rem;
+      font-weight: 600;
+      text-align: center;
+
+      &-small {
+        font-size: 1rem;
+      }
+
+      & > * {
+        flex: 1;
+      }
+    }
+    &-indicator {
+      margin: 0 3vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-evenly;
+      align-items: center;
+      & > div {
+        height: 1.4rem;
+      }
+      &.left {
+        margin-right: 1vh;
+      }
+      &.right {
+        margin-left: 1vh;
+      }
+    }
+  }
+
+  &-compass {
+    &-wrapper {
+      display: flex;
+      justify-content: center;
+      flex-direction: row;
+      pointer-events: none !important;
+      margin: 0 auto;
+      top: -0.8vh;
+      font-size: 2.3vh;
+      font-family: 'Work Sans', sans-serif;
+      font-variant: small-caps;
+      text-transform: none;
+      text-shadow: 0 0 .1vh rgba(0, 0, 0, 0.6), 0 0 .1vh rgba(0, 0, 0, 0.6), 0 0 .1vh rgba(0, 0, 0, 0.6), 0 0 .1vh rgba(0, 0, 0, 0.6);
+    }
+
+    &-time {
+      text-align: center;
+      margin-top: -4.5vh;
+      font-size: 1.5vh;
+    }
+
+    &-plate {
+      position: relative;
+      width: 20vh;
+      height: auto;
+      top: -1vh;
+    }
+
+    &-pointer {
+      position: absolute;
+      margin: 0 auto;
+      top: -0.5vh;
+      left: 0;
+      right: 0;
+      color: rgb(255, 255, 255);
+      text-align: center;
+      z-index: 9999;
+    }
+
+    &-bezel {
+      position: relative;
+      width: 100%;
+      height: 4vh;
+      font-size: 0.35vh;
+      font-weight: 700;
+      z-index: 1;
+    }
+
+    &-bearing {
+      position: relative;
+      width: 100%;
+      top: -2.5vh;
+      height: 4.5vh;
+      font-weight: 600;
+      fill: white;
+      z-index: 2;
+
+      &-small {
+        font-size: 1.3vh;
+        font-weight: 600;
+      }
+    }
+
+    &-area, &-street {
+      font-size: 1.7vh;
+      margin: 0 1vh;
+      width:40%;
+    }
+    &-area {
+      text-align: end;
+    }
+  }
+  &-cash {
+    position: absolute;
+    top: 1vh;
+    right: 1vh;
+    font-family: 'Pricedown Bl', sans-serif;
+    font-size: 1.6rem;
+    text-shadow: -1px -1px 0 rgba(0,0,0, 0.7), 1px -1px 0 rgba(0,0,0, 0.7), -1px 1px 0 rgba(0,0,0, 0.7), 1px 1px 0 rgba(0,0,0, 0.7);
+    text-align: right;
+  }
+}

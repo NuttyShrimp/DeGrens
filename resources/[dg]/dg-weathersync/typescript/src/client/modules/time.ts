@@ -29,7 +29,7 @@ const setIngameTime = (): void => {
   const hour = Math.floor(currentTime / 60);
   const minute = currentTime % 60;
 
-  emitNet('dg-weathersync:client:SyncTime', hour, minute);
+  emit('dg-weathersync:client:SyncTime', hour, minute);
   NetworkOverrideClockTime(hour, minute, 0);
 };
 

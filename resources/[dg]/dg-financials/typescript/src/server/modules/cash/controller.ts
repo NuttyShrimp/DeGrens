@@ -1,4 +1,4 @@
-import { RPC } from '@dgx/server';
+import { RPC, Chat } from '@dgx/server';
 
 import { addCash, getCash, removeCash, seedCache, seedPlyInCache } from './service';
 import { cashLogger } from './util';
@@ -77,3 +77,8 @@ DGCore.Commands.Add(
   },
   'user'
 );
+
+Chat.registerCommand('cash', 'Flash cash', [], 'user', src => {
+  const plyCash = getCash(src);
+  TriggerClientEvent('hud:client:ShowAccounts', source, plyCash);
+});

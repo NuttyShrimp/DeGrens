@@ -1,6 +1,7 @@
 import { connect, Provider, useDispatch } from 'react-redux';
 
 import { store } from './redux/store';
+
 export { getAuxStates, GetInitialState } from './redux/state';
 export { connect, Provider, store };
 
@@ -48,12 +49,12 @@ export const compose = (
 
 export const useUpdateState = <T extends keyof RootState>(storeName: T) => {
   const dispatch = useDispatch();
-  const updateState = (data: Partial<RootState[T]>) => {
+  const updateState = (data: Partial<RootState[T]> | ((state: RootState) => Partial<RootState[T]>)) => {
     const cb = (state: RootState) => ({
       ...state,
       [storeName]: {
         ...state[storeName],
-        ...data,
+        ...(typeof data === 'function' ? data(state) : data),
       },
     });
     dispatch({ cb, type });

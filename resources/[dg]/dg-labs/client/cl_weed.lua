@@ -151,7 +151,7 @@ exports('harvestWeedPlant', function(plantId)
         TriggerServerEvent('dg-labs:server:weed:Harvest', currentLabId, plantId)
         attachBox()
         hasJustHarvested = true
-        TriggerServerEvent('hud:server:GainStress', math.random(2, 5))
+        DGX.Events.emitNet('hud:server:GainStress', math.random(2, 5))
     end, function() -- Cancel
         StopAnimTask(PlayerPedId(), "anim@amb@business@weed@weed_inspecting_lo_med_hi@", "weed_crouch_checkingleaves_idle_01_inspector", 1.0)
         exports['dg-ui']:addNotification("Geannuleerd...", "error")

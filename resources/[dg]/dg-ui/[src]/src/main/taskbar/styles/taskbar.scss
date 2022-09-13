@@ -14,38 +14,6 @@
     overflow: hidden;
   }
 
-  &__icon {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    font-size: 7vh;
-
-    &_overlay {
-      z-index: 1;
-      margin-top: .5vh;
-      //margin-left: .4vh;
-      text-shadow: .2vh .2vh black, -.2vh -.2vh black, .2vh -.2vh black, -.2vh .2vh black, .2vh 0 0 black, 0 .2vh 0 black, 0 -.2vh 0 black, -.2vh 0 0 black;
-      & > i {
-        font-size: 7.1vh;
-        color: variables.$gray_normal;
-      }
-    }
-    
-    &_filler {
-      z-index: 2;
-      color: variables.$primary_light;
-      height: 7vh;
-      position: absolute;
-      overflow: hidden;
-      
-      & > i {
-        position: absolute;
-      }
-
-    }
-  }
-
   &__label {
     display: flex;
     align-items: center;

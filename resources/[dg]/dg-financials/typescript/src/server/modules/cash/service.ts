@@ -72,7 +72,7 @@ export const removeCash = (src: number | string, amount: number, reason: string)
     reason,
   });
   updateMetadata(Player);
-  emitNet('hud:client:OnMoneyChange', src, 'cash', amount, true);
+  emitNet('hud:client:OnMoneyChange', src, amount);
   return true;
 };
 
@@ -98,5 +98,5 @@ export const addCash = (src: number | string, amount: number, reason: string) =>
     reason,
   });
   updateMetadata(Player);
-  emitNet('hud:client:OnMoneyChange', src, 'cash', amount, false);
+  emitNet('hud:client:OnMoneyChange', src, amount);
 };

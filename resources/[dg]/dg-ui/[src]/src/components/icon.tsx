@@ -1,6 +1,11 @@
-import React, { FC, MouseEventHandler } from 'react';
+import React, { FC, MouseEventHandler, useEffect, useState } from 'react';
+import { animated, easings, useSpring } from 'react-spring';
+import useMeasure from 'react-use-measure';
 import MUIIcon from '@mui/material/Icon';
 import { SxProps } from '@mui/system';
+import { useVhToPixel } from '@src/lib/hooks/useVhToPixel';
+
+import '@styles/components/icons.scss';
 
 declare interface IconProps {
   name: string;
@@ -24,6 +29,7 @@ export const Icon: FC<React.PropsWithChildren<IconProps>> = props => {
       </div>
     );
   }
+
   if (props.lib == 'svg') {
     return (
       <MUIIcon
@@ -44,6 +50,7 @@ export const Icon: FC<React.PropsWithChildren<IconProps>> = props => {
       </MUIIcon>
     );
   }
+
   if (props.lib == 'mdi' || props.name.startsWith('mdi-')) {
     return (
       <MUIIcon
@@ -59,6 +66,7 @@ export const Icon: FC<React.PropsWithChildren<IconProps>> = props => {
       />
     );
   }
+
   if ((props.lib && ['mi', 'material-icons'].includes(props.lib)) || props.name.startsWith('mi-')) {
     return (
       <MUIIcon
@@ -74,6 +82,7 @@ export const Icon: FC<React.PropsWithChildren<IconProps>> = props => {
       </MUIIcon>
     );
   }
+
   return (
     <MUIIcon
       baseClassName={props?.lib ?? 'fas'}
@@ -87,5 +96,95 @@ export const Icon: FC<React.PropsWithChildren<IconProps>> = props => {
       }}
       onClick={props.onClick}
     />
+  );
+};
+
+declare interface FillableIconProps {
+  name: string;
+  // Percentage the icon is filled
+  value: number;
+  height: number;
+  // Default to primary Light
+  color?: string;
+  // Time it takes to change from old to new value
+  duration?: number;
+  onFinish?: () => void;
+}
+
+export const FillableIcon: FC<FillableIconProps> = props => {
+  const [prevVal, setPrevVal] = useState(0);
+  const targetHeight = useVhToPixel(props.height * ((100 - props.value) / 100));
+  const previousHeight = useVhToPixel(props.height * ((100 - prevVal) / 100));
+  const margin = useVhToPixel(0.7);
+  const [ref, { width, height }] = useMeasure();
+  // TODO, move to transition to make it usable to go from old values
+  const [animProps, api] = useSpring(() => ({
+    from: {
+      top: previousHeight,
+    },
+    to: {
+      top: targetHeight,
+    },
+    immediate: false,
+    config: {
+      duration: props.duration,
+      easing: easings.easeInOutCubic,
+    },
+    onRest: () => {
+      props?.onFinish?.();
+    },
+  }));
+  useEffect(() => {
+    api.start({
+      from: {
+        top: previousHeight,
+      },
+      to: {
+        top: targetHeight,
+      },
+      reset: false,
+      config: {
+        duration: props.duration,
+      },
+    });
+  }, [targetHeight]);
+
+  useEffect(() => {
+    setPrevVal(props.value);
+  }, [props.value]);
+
+  return (
+    <div
+      className={'fillable-icon__wrapper'}
+      style={{
+        height: height + margin,
+        width: width + margin,
+      }}
+    >
+      <div className={'fillable-icon__icon'}>
+        <div className={'fillable-icon__icon_overlay'}>
+          <i
+            className={`fas fa-${props.name}`}
+            ref={ref}
+            style={{
+              fontSize: `${props.height}vh`,
+            }}
+          />
+        </div>
+        <animated.div
+          className={'fillable-icon__icon_filler'}
+          style={{
+            width,
+            color: props.color,
+            top: animProps.top,
+          }}
+        >
+          <animated.i
+            className={`fas fa-${props.name}`}
+            style={{ top: animProps.top.to(x => x * -1), fontSize: `${props.height}vh` }}
+          />
+        </animated.div>
+      </div>
+    </div>
   );
 };
