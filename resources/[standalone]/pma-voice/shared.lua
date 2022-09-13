@@ -1,8 +1,6 @@
 Cfg = {}
 
 voiceTarget = 1
-radioTarget = 2
-callTarget = 3
 
 gameVersion = GetGameName()
 
@@ -30,21 +28,21 @@ else
 end
 
 logger = {
-	['log'] = function(message, ...)
+	log = function(message, ...)
 		print((message):format(...))
 	end,
-	['info'] = function(message, ...)
+	info = function(message, ...)
 		if GetConvarInt('voice_debugMode', 0) >= 1 then
 			print(('[info] ' .. message):format(...))
 		end
 	end,
-	['warn'] = function(message, ...)
+	warn = function(message, ...)
 		print(('[^1WARNING^7] ' .. message):format(...))
 	end,
-	['error'] = function(message, ...)
+	error = function(message, ...)
 		error((message):format(...))
 	end,
-	['verbose'] = function(message, ...)
+	verbose = function(message, ...)
 		if GetConvarInt('voice_debugMode', 0) >= 4 then
 			print(('[verbose] ' .. message):format(...))
 		end
@@ -82,6 +80,8 @@ local function types(args)
     return false, argType
 end
 
+--- does a type check and errors if an invalid type is sent
+---@param ... table a table with the variable being the first argument and the expected type being the second 
 function type_check(...)
     local vars = {...}
     for i = 1, #vars do

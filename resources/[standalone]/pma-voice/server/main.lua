@@ -14,15 +14,20 @@ end
 
 function handleStateBagInitilization(source)
 	local plyState = Player(source).state
-	plyState:set('radio', tonumber(GetConvar('voice_defaultVolume', '0.3')), true)
-	plyState:set('phone', tonumber(GetConvar('voice_defaultVolume', '0.3')), true)
-	plyState:set('proximity', {}, true)
-	plyState:set('callChannel', 0, true)
-	plyState:set('radioChannel', 0, true)
+	if not plyState.pmaVoiceInit then 
+		plyState:set('radio', GetConvarInt('voice_defaultRadioVolume', 30), true)
+		plyState:set('call', GetConvarInt('voice_defaultCallVolume', 60), true)
+		plyState:set('submix', nil, true)
+		plyState:set('proximity', {}, true)
+		plyState:set('callChannel', 0, true)
+		plyState:set('radioChannel', 0, true)
+		plyState:set('voiceIntent', 'speech', true)
+		-- We want to save voice inits because we'll automatically reinitalize calls and channels
+		plyState:set('pmaVoiceInit', true, false)
+	end
 end
 
--- temp fix before an actual fix is added
-Citizen.CreateThreadNow(function()
+CreateThread(function()
 
 	local plyTbl = GetPlayers()
 	for i = 1, #plyTbl do
@@ -68,6 +73,22 @@ Citizen.CreateThreadNow(function()
 			SetConvarReplicated('voice_use3dAudio', 'true')
 		end
 	end
+
+	local radioVolume = GetConvarInt("voice_defaultRadioVolume", 30)
+	local callVolume = GetConvarInt("voice_defaultCallVolume", 60)
+
+	-- When casted to an integer these get set to 0 or 1, so warn on these values that they don't work
+	if
+		radioVolume == 0 or radioVolume == 1 or
+		callVolume == 0 or callVolume == 1
+	then
+		SetConvarReplicated("voice_defaultRadioVolume", 30)
+		SetConvarReplicated("voice_defaultCallVolume", 60)
+		for i = 1, 5 do
+			Wait(5000)
+			logger.warn("`voice_defaultRadioVolume` or `voice_defaultCallVolume` have their value set as a float, this is going to automatically be fixed but please update your convars.")
+		end
+	end
 end)
 
 AddEventHandler('playerJoining', function()
@@ -92,6 +113,14 @@ AddEventHandler("playerDropped", function()
 		voiceData[source] = nil
 	end
 end)
+
+if GetConvarInt('voice_externalDisallowJoin', 0) == 1 then
+	AddEventHandler('playerConnecting', function(_, _, deferral)
+		deferral.defer()
+		Wait(0)
+		deferral.done('This server is not accepting connections.')
+	end)
+end
 
 -- only meant for internal use so no documentation
 function isValidPlayer(source)
