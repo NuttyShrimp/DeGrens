@@ -142,6 +142,12 @@ RegisterNetEvent('dg-ui:loadData', function()
   state.voice.channel = LocalPlayer.state.radioChannel
   state.voice.range = LocalPlayer.state.proximity.index
   isDirty = true
+  for _, entry in ipairs(state.entries) do
+    SendAppEvent('hud', {
+      action = 'addEntry',
+      data = entry
+    })
+  end
 end)
 --- endregion
 --- region Loops
