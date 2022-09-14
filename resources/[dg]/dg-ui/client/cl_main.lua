@@ -2,22 +2,21 @@ CreateThread(function()
 	TriggerEvent('__dg_ui:Ready')
 end)
 
-reloadUI = function(skipNUI)
+reloadUI = function()
   print('[UI] Restarting UI')
-  if skipNUI ~= false then
-    SendAppEvent('main', {
-      event = 'restart'
-    })
-  end
   SetUIFocus(false, false)
   TriggerEvent('dg-ui:reload')
 	seedCharData()
 end
 
-RegisterCommand('ui-r', reloadUI)
+RegisterCommand('ui-r', function()
+  SendAppEvent('main', {
+    event = 'restart'
+  })
+end)
 
 RegisterNUICallback('reload', function(data, cb)
-	reloadUI(false)
+	reloadUI()
 	cb({ data = {}, meta = { ok = true, message = 'UI reloaded' } })
 end)
 

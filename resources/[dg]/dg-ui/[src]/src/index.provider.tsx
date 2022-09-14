@@ -16,13 +16,12 @@ export const IndexProvider = ({ children }) => {
   const dispatch = useDispatch();
 
   const handleClose = () => {
-    if (mainState.error) {
-      nuiAction('reload');
-    }
+    nuiAction('reload');
     dispatch({
       type,
       cb: () => GetInitialState(),
     });
+    loadApps();
   };
 
   useEffect(() => {
@@ -38,7 +37,7 @@ export const IndexProvider = ({ children }) => {
             children
           ) : (
             <Snackbar
-              open={true}
+              open={!mainState.mounted}
               autoHideDuration={3000}
               anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
               onClose={handleClose}
