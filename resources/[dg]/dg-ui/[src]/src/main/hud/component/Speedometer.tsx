@@ -1,8 +1,9 @@
 import React, { FC } from 'react';
+import { useSelector } from 'react-redux';
 import useMeasure from 'react-use-measure';
 import { Stack } from '@mui/material';
 import { Icon } from '@src/components/icon';
-import { useSelector } from 'react-redux';
+
 import { useVhToPixel } from '../../../lib/hooks/useVhToPixel';
 
 export const SpeedoMeter: FC<{ car: Hud.Car }> = ({ car }) => {

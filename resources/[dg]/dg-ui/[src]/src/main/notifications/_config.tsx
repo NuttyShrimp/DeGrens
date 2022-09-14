@@ -1,5 +1,4 @@
 import React from 'react';
-import { ConfigObject } from '@src/base-app.config';
 
 import Container from './component';
 import store from './store';

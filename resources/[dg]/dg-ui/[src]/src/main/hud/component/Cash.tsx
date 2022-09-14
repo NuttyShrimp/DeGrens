@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
+import { animated, useSpring } from 'react-spring';
 import { NumberFormat } from '@src/components/numberformat';
-import { useSpring, animated } from 'react-spring';
 
 export const CashEntry: FC<{ amount: number; noPrefix?: boolean }> = ({ amount, noPrefix }) => {
   const animStyles = useSpring({

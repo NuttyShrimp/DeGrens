@@ -6,7 +6,7 @@ import { addLog } from '@main/debuglogs/lib';
 import makeStyles from '@mui/styles/makeStyles';
 import * as Sentry from '@sentry/react';
 
-import { useApps } from '../base-app.config';
+import { useApps } from '../lib/hooks/useApps';
 
 declare interface AppWrapperProps {
   appName: keyof RootState;

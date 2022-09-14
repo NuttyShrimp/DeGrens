@@ -7,6 +7,7 @@ const store: StoreObject<Main.State, Main.Aux> = {
   key: 'main',
   initialState: {
     currentApp: '',
+    apps: [],
     error: null,
     mounted: true,
   },

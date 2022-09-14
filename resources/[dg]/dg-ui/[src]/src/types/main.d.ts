@@ -6,6 +6,12 @@ declare type AppFunction<T = {}> = React.FC<
   }
 >;
 
+declare interface ConfigObject {
+  name: keyof RootState;
+  render: (p: any) => React.ReactElement<any, any>;
+  type: 'passive' | 'interactive';
+}
+
 declare interface Character {
   cid: number;
   firstname: string;
@@ -34,6 +40,7 @@ declare namespace Base {
   interface State {
     visible: boolean;
   }
+
   interface Props<T = {}> extends T {
     updateState: (data: Partial<T>) => void;
   }
@@ -44,6 +51,7 @@ declare namespace Main {
     currentApp: string;
     error: string | null;
     mounted: boolean;
+    apps: ConfigObject[];
   }
 
   interface Game {

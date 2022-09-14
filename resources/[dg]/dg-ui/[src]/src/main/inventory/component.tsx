@@ -2,9 +2,10 @@ import React, { useState } from 'react';
 import { DndProvider } from 'react-dnd';
 import { TouchBackend } from 'react-dnd-touch-backend';
 import AppWrapper from '@components/appwrapper';
-import { useApps } from '@src/base-app.config';
 import { devData } from '@src/lib/devdata';
 import { nuiAction } from '@src/lib/nui-comms';
+
+import { useApps } from '../../lib/hooks/useApps';
 
 import { Inventory } from './components/inventory';
 import { syncItem } from './lib';

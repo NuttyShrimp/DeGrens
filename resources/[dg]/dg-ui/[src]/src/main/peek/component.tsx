@@ -1,9 +1,9 @@
 import React, { useCallback } from 'react';
 import AppWrapper from '@components/appwrapper';
 
-import { useApps } from '../../base-app.config';
 import { devData } from '../../lib/devdata';
 import { isDevel } from '../../lib/env';
+import { useApps } from '../../lib/hooks/useApps';
 import { nuiAction } from '../../lib/nui-comms';
 
 import { Eye } from './components/eye';
