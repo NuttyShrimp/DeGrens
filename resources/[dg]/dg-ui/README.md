@@ -236,3 +236,8 @@ SendAppEvent('phone', {
   data = {} -- This is where you can add additional data to the event
 }
 ```
+
+## Help my shit doesn't work
+
+Q: My object/array is getting changed but it doesn't trigger a rerender?
+A: Gotta mutate the data (copy arr/obj) to make the shit update properly

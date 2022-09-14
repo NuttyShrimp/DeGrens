@@ -1,4 +1,4 @@
-import { Admin, Events, RPC, Util } from '@dgx/server';
+import { Admin, Auth, Events, RPC, Util } from '@dgx/server';
 import { getLocations, getPlayerJob, openSignInMenu, signIn, signOut } from '../services/signin';
 import {
   assignRank,
@@ -7,8 +7,14 @@ import {
   openAllowListMenu,
   toggleSpecialty,
   whitelistLogger,
-  config
+  config,
+  getWhitelistedJobsForPlayer,
 } from '../services/whitelist';
+
+Auth.onAuth(src => {
+  const whitelistedJobs = getWhitelistedJobsForPlayer(src);
+  Events.emitNet('jobs:client:whitelistedJobs', src, whitelistedJobs);
+});
 
 Events.onNet('jobs:server:signIn:openDutyBoard', (src, locId: number) => {
   if ((locId ?? -1) < 0) return;
@@ -99,6 +105,6 @@ RPC.register('jobs:whitelist:isWhitelisted', (src: number, job: string) => {
 RPC.register('jobs:whitelist:getInfoList', (src: number) => {
   if (!Admin.hasPermission(src, 'staff')) return [];
   const jobs: { name: string; ranks: number }[] = [];
-  config.forEach((info, name) => jobs.push({ name, ranks: info.grades.length }))
+  config.forEach((info, name) => jobs.push({ name, ranks: info.grades.length }));
   return jobs;
-})
+});

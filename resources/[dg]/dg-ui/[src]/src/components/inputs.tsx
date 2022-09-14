@@ -11,7 +11,6 @@ import { makeStyles } from '@mui/styles';
 import { nuiAction } from '../lib/nui-comms';
 
 import NumberFormat from './numberformat';
-import { EmptyDiv } from './util';
 
 // region Types
 declare type changeFunction = (value: string, name: string, evt: SyntheticEvent) => void;
@@ -79,6 +78,7 @@ const inputNumberStyles = makeStyles({
   },
 });
 // endregion
+const EmptyDiv = () => <div />;
 export const Input: OSInput = {
   TextField: EmptyDiv,
   Password: EmptyDiv,

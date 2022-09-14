@@ -34,6 +34,7 @@ declare namespace Base {
   interface State {
     visible: boolean;
   }
+
   interface Props<T = {}> extends T {
     updateState: (data: Partial<T>) => void;
   }
@@ -55,6 +56,7 @@ declare namespace Main {
   interface Aux {
     character: Character;
     game: Game;
+    jobs: string[];
   }
 }
 
@@ -98,4 +100,6 @@ declare interface RootState {
   'phone.apps.debt': Phone.Debt.State;
   inventory: Inventory.State;
   itemboxes: Itemboxes.State;
+  laptop: Laptop.State;
+  'laptop.config': Laptop.Config.State;
 }

@@ -1,0 +1,93 @@
+.laptop {
+  &-shell {
+    position: relative;
+    background-color: black;
+    border: .5vh solid #101010;
+    border-radius: 0.25rem;
+    height: 80vh;
+    width: calc(100% - 30vh);
+    background-size: cover;
+    overflow: hidden;
+  }
+
+  &-icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: .75vh;
+    border-radius: 0.25rem;
+  }
+
+  &-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding: 1vh;
+    z-index: 1;
+
+    &-app-col {
+      display: flex;
+      flex-direction: column;
+
+      & > * {
+        cursor: pointer;
+        margin-bottom: 1vh;
+        width: 10vh;
+      }
+    }
+  }
+
+  &-content {
+    height: 100%;
+    z-index: 2;
+
+    & > div {
+      position: absolute;
+    }
+  }
+
+  &-taskbar {
+    &-wrapper {
+      position: absolute;;
+      bottom: 0;
+      left: 50%;
+      transform: translate(-50%, 0);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 6vh;
+      z-index: 10;
+    }
+
+    &-bar {
+      width: min-content;
+
+      border-radius: 0.5rem;
+      padding: 1vh;
+      margin: 0 auto;
+
+      background: rgba(100, 100, 100, 0.3);
+      backdrop-filter: blur(10px);
+    }
+
+    &-icon {
+      display: flex;
+      justify-content: center;
+      align-content: center;
+    }
+  }
+
+  &-topbar {
+    min-height: 3vh;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    color: white;
+    padding: 0 1vh;
+
+    & > div:last-child {
+      cursor: pointer;
+    }
+  }
+}

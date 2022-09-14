@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 
 import { Input } from '../../../components/inputs';
 import { mockEvent } from '../../../lib/nui-comms';
@@ -14,35 +14,41 @@ export const Bar: React.FC = () => {
       cmd: cmd,
     };
   });
-  const autocompleteOpt = cmds.map(c => {
-    const newCmd = c.cmd.replace(/\$\d+/g, (match: string) => {
-      if (!c.data) {
-        return '';
-      }
-      const loopEntries = (data: any) => {
-        let val = '';
-        Object.entries(data).forEach(([key, value]) => {
-          let loopVal = '';
-          if (typeof value === 'object') {
-            loopVal = loopEntries(value);
-          }
-          if (loopVal.trim() !== '') {
-            val = loopVal;
-            return val;
-          }
-          if (value === match) {
-            val = `$${key}`;
-          }
-        });
-        return val;
-      };
-      return loopEntries(c.data);
-    });
-    return {
-      value: newCmd,
-      label: newCmd,
-    };
-  });
+  const autocompleteOpt = useMemo(
+    () =>
+      cmds
+        .map(c => {
+          const newCmd = c.cmd.replace(/\$\d+/g, (match: string) => {
+            if (!c.data) {
+              return '';
+            }
+            const loopEntries = (data: any) => {
+              let val = '';
+              Object.entries(data).forEach(([key, value]) => {
+                let loopVal = '';
+                if (typeof value === 'object') {
+                  loopVal = loopEntries(value);
+                }
+                if (loopVal.trim() !== '') {
+                  val = loopVal;
+                  return val;
+                }
+                if (value === match) {
+                  val = `$${key}`;
+                }
+              });
+              return val;
+            };
+            return loopEntries(c.data);
+          });
+          return {
+            value: newCmd,
+            label: newCmd,
+          };
+        })
+        .concat(history.map(h => ({ label: h, value: h }))),
+    [history]
+  );
 
   const setReplacer = (data: any, arg: string, idx: number): any => {
     const _data = { ...data };
@@ -92,6 +98,7 @@ export const Bar: React.FC = () => {
     if (e.key === 'Enter') {
       e.stopPropagation();
       doCmd();
+      if (history.includes(value)) return;
       const newHistory = [...history, value].slice(-5);
       localStorage.setItem('cli-history', newHistory.join('|'));
       setHistory(newHistory);
@@ -111,7 +118,7 @@ export const Bar: React.FC = () => {
         freeSolo
         onChange={onChange}
         onKeyDown={keyPress}
-        options={history.map(h => ({ label: h, value: h })).concat(autocompleteOpt)}
+        options={autocompleteOpt}
       />
     </div>
   );
