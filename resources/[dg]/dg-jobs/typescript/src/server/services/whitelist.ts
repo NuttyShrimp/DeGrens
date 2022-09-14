@@ -1,5 +1,4 @@
-import { Config, Notifications, SQL, Util } from '@dgx/server';
-import { get } from 'https';
+import { Config, Events, Notifications, SQL, Util } from '@dgx/server';
 import { mainLogger } from '../sv_logger';
 import { getPlayerJob } from './signin';
 
@@ -54,6 +53,13 @@ export const getPlayerInfoForJob = (cid: number, job: string): Whitelist.Entry =
   const entries = jobs.get(job);
   if (!entries) return null;
   return entries.find(entry => entry.cid === cid);
+};
+
+export const getWhitelistedJobsForPlayer = (src: number): string[] => {
+  const allowedJobs: string[] = [];
+  const cid = Util.getCID(src);
+  if (!cid) return [];
+  jobs.forEach(plys => plys.find(p => (p.cid = cid)));
 };
 
 export const hasSpeciality = (src: number, speciality: string, job?: string): boolean => {
@@ -169,22 +175,20 @@ export const addWhitelist = async (src: number, jobName: string, rank = 1, cid?:
     Notifications.add(src, `rank ${rank} does not exist on job ${jobConfig.name}`, 'error');
     return;
   }
-  await SQL.insertValues('whitelist_jobs',[{
-    cid,
-    job: jobName,
-    rank,
-    specialty: 0
-  }]);
+  await SQL.insertValues('whitelist_jobs', [
+    {
+      cid,
+      job: jobName,
+      rank,
+      specialty: 0,
+    },
+  ]);
   // TODO: Replace with less expensive method to add only 1 entry instead of rebuilding everything
   loadJobs();
   whitelistLogger.debug(`Added whitelist entry for ${cid} as ${jobName} with rank: ${rank}`);
-  Util.Log(
-    'jobs:whitelist:add',
-    { rank, job: jobName, cid },
-    `Whitelisted ${cid} for ${job} with rank ${rank}`,
-    src
-  );
-}
+  Util.Log('jobs:whitelist:add', { rank, job: jobName, cid }, `Whitelisted ${cid} for ${job} with rank ${rank}`, src);
+  Events.emitNet('jobs:whitelist:add', src, jobName);
+};
 
 export const removeWhitelist = async (src: number, jobName: string, cid?: number) => {
   cid = cid ?? Util.getCID(src);
@@ -193,18 +197,18 @@ export const removeWhitelist = async (src: number, jobName: string, cid?: number
   if (!job) return;
   const result = await SQL.query('DELETE FROM whitelist_jobs WHERE cid = ? AND job = ?', [cid, jobName]);
   if (result.affectedRows < 1) {
-    Notifications.add(src, `Er is iets misgelopen bij het verwijderen van de whitelist voor ${cid} bij ${jobName}`, 'error');
+    Notifications.add(
+      src,
+      `Er is iets misgelopen bij het verwijderen van de whitelist voor ${cid} bij ${jobName}`,
+      'error'
+    );
     whitelistLogger.error(`Failed to remove whitelist entry for ${cid} at ${jobName}`, cid, jobName);
     return;
   }
   whitelistLogger.debug(`Removed whitelist entry for ${cid} as ${jobName}`);
-  Util.Log(
-    'jobs:whitelist:removed',
-    { job: jobName },
-    `Removed whiteliste for ${cid} at ${job}`,
-    src
-  );
-}
+  Util.Log('jobs:whitelist:removed', { job: jobName }, `Removed whiteliste for ${cid} at ${job}`, src);
+  Events.emitNet('jobs:whitelist:remove', src, jobName);
+};
 
 export const assignRank = async (src: number, target: number, rank: number) => {
   const job = getPlayerJob(src);

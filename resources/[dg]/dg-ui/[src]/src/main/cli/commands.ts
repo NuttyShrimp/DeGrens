@@ -252,4 +252,14 @@ export const cmds: {
       image: '$2',
     },
   },
+  {
+    cmd: 'show laptop',
+    app: 'laptop',
+    show: true,
+  },
+  {
+    cmd: 'hide laptop',
+    app: 'laptop',
+    show: false,
+  },
 ];

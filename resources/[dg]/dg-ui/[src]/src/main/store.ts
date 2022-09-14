@@ -18,6 +18,7 @@ const store: StoreObject<Main.State, Main.Aux> = {
       time: '12:00',
       weather: 'EXTRASUNNY',
     },
+    jobs: [],
   },
 };
 export default store;

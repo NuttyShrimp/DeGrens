@@ -985,5 +985,16 @@
       "x": 2,
       "y": 5
     }
+  },
+  {
+    "name": "laptop",
+    "label": "iFruit Laptop",
+    "image": "laptop.png",
+    "size": {
+      "x": 3,
+      "y": 3
+    },
+    "decayrate": 30240,
+    "useable": true
   }
 ]

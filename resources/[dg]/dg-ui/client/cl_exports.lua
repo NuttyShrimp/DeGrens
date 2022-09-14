@@ -46,7 +46,7 @@ function SendAppEventWESentry(app, data)
 end
 
 exports('SendAppEvent', SendAppEvent)
-RegisterNetEvent('dg-ui:SendAppEvent')
+RegisterNetEvent('dg-ui:SendAppEvent', SendAppEvent)
 
 function openApplication(app, data, preventFocus)
   SendUIMessage({
