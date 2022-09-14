@@ -3,6 +3,7 @@ CreateThread(function()
 end)
 
 reloadUI = function(skipNUI)
+  print('[UI] Restarting UI')
   if skipNUI ~= false then
     SendAppEvent('main', {
       event = 'restart'

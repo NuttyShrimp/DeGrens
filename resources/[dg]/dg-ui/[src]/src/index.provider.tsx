@@ -16,7 +16,9 @@ export const IndexProvider = ({ children }) => {
   const dispatch = useDispatch();
 
   const handleClose = () => {
-    nuiAction('reload');
+    if (mainState.error) {
+      nuiAction('reload');
+    }
     dispatch({
       type,
       cb: () => GetInitialState(),
