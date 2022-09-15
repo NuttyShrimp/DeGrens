@@ -23,7 +23,7 @@ export const HudBar: FC<{ voice: Hud.State['voice']; values: Record<string, numb
               name={entry.ui.name}
               color={entry.ui.color}
               height={5}
-              value={Math.ceil(100 / entry.steps) * values[entry.name] ?? 0}
+              value={Math.ceil(100 / (entry?.steps ?? 100)) * (values[entry.name] ?? 0)}
               duration={250}
             />
           )

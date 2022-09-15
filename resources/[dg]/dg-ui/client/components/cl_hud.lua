@@ -142,8 +142,11 @@ RegisterNetEvent('dg-ui:loadData', function()
   state.voice.channel = LocalPlayer.state.radioChannel
   state.voice.range = LocalPlayer.state.proximity.index
   isDirty = true
+end)
+
+RegisterNetEvent('dg-ui:reload', function()
   for _, entry in ipairs(state.entries) do
-    SendAppEvent('hud', {
+    SendAppEventWESentry('hud', {
       action = 'addEntry',
       data = entry
     })
@@ -351,7 +354,7 @@ function registerHudEntry(name, iconName, color, getter, order, steps, enabled)
   for _, entry in pairs(state.entries) do
     if entry.name == name then
       print(string.format("Hud entry with name %s already exists, overwriting", name))
-      return
+      removeHudEntry(name)
     end
   end
   entry = {
@@ -364,7 +367,7 @@ function registerHudEntry(name, iconName, color, getter, order, steps, enabled)
     steps = steps or 100,
     order = order,
   }
-  state.entries[#state.entries + 1] = state
+  state.entries[#state.entries + 1] = entry
   state.values[name] = getter(cache.ped, cache.id)
   entryHooks[name] = getter
   SendAppEvent('hud', {
@@ -392,7 +395,7 @@ end
 
 exports('removeHudEntry', removeHudEntry)
 function toggleHudEntry(name, isEnabled)
-  if not state.values[name] then
+  if state.values[name] == nil then
     return
   end
   for i, entry in pairs(state.entries) do
