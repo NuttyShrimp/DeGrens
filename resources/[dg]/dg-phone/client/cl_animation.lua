@@ -112,7 +112,7 @@ handleOpenNormalAnim = function(ped)
 end
 
 handleCloseVehicleAnim = function(ped)
-	local dict = 'anim@cellphone@in_car@ps';
+	local dict = 'cellphone@in_car@ps';
 	StopAnimTask(ped, dict, 'cellphone_text_in', 1.0);
 	StopAnimTask(ped, dict, 'cellphone_call_to_text', 1.0);
 	exports['dg-propattach']:remove(phoneProp);
@@ -144,7 +144,7 @@ handleOnCallNormalAnim = function(ped)
 end
 
 handleCallEndVehicleAnim = function(ped)
-	local dict = 'anim@cellphone@in_car@ps';
+	local dict = 'cellphone@in_car@ps';
 	local anim = 'cellphone_call_to_text';
 	StopAnimTask(ped, dict, 'cellphone_call_listen_base', 1.0);
 	doAnimation(ped, dict, anim, 1.3, 5.0)
