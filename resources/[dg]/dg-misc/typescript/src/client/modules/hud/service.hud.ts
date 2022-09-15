@@ -2,7 +2,7 @@ import { Events, HUD, RPC, Util } from '@dgx/client';
 
 let config: HUD.Config;
 let inWater = false;
-export let stressLevel = 0;
+let stressLevel = 0;
 let stressTimeout: NodeJS.Timeout | null;
 let stressSteps: number;
 
@@ -16,9 +16,10 @@ export const loadConfig = async (tries = 0) => {
     return;
   }
   config = newConfig;
-  stressLevel = DGCore.Functions.GetPlayerData().metadata.stress ?? 0;
   stressSteps = (config.shake.interval.max - config.shake.interval.min) / (100 - config.shake.minimum);
 };
+
+export const getStressLevel = () => stressLevel;
 
 export const getCapacity = (ped: number, id: number) => {
   if (IsEntityInWater(ped) !== inWater) {
@@ -66,7 +67,6 @@ export const scheduleBlurEffect = async () => {
   if (!config) {
     await Util.awaitCondition(() => config !== undefined);
   }
-  console.log(stressLevel, config.shake.minimum);
   if (stressLevel < config.shake.minimum) return;
   if (stressTimeout) return;
   const timeout = config.shake.interval.max - stressSteps * (stressLevel - config.shake.minimum);
@@ -82,7 +82,6 @@ export const scheduleBlurEffect = async () => {
 
 const doBlurEffect = async () => {
   const length = (config.shake.maxLength / 100) * stressLevel;
-  console.log('doing blur', length);
   TriggerScreenblurFadeIn(100);
   await Util.Delay(length + 100);
   TriggerScreenblurFadeOut(100);
