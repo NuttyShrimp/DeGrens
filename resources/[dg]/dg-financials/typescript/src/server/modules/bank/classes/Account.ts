@@ -381,7 +381,13 @@ export class Account {
   }
 
   public async deposit(triggerCid: number, amount: number, comment?: string) {
-    if (!(await this.actionValidation('deposit', triggerCid, amount, {}))) return;
+    if (
+      !(await this.actionValidation('deposit', triggerCid, amount, {
+        // Use this option to kinda skip the balance check
+        canBeNegative: true,
+      }))
+    )
+      return;
     const triggerPlayer = DGCore.Functions.GetPlayerByCitizenId(triggerCid);
     amount = parseInt(String(amount));
     const success = removeCash(triggerPlayer.PlayerData.source, amount, `deposit to ${this.name} (${this.account_id})`);
