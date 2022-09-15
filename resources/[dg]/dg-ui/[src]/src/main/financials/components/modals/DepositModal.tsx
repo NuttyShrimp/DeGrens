@@ -26,7 +26,7 @@ export const DepositModal: FC<React.PropsWithChildren<Financials.ModalProps>> = 
           ...vals,
         });
         await props.fetchAccounts();
-        await props.fetchTransactions();
+        await props.fetchTransactions(undefined, true);
         closeModal();
       }}
       onDecline={closeModal}

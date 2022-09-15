@@ -45,33 +45,35 @@ const Component: AppFunction<Financials.State> = props => {
     });
   };
 
-  const fetchTransactions = async () => {
-    if (!props.selected?.account_id) return;
+  const fetchTransactions = async (accountId?: string, reset?: boolean) => {
+    if (!accountId) {
+      accountId = props.selected?.account_id;
+    }
+    if (!accountId) return;
     openLoadModal();
     const list = await nuiAction<Financials.Transaction[]>(
       'financials/transactions/get',
       {
-        accountId: props.selected.account_id,
-        loaded: props.transactions.length,
+        accountId: accountId,
+        loaded: reset ? 0 : props.transactions.length,
       },
       devData.financialsTransactions
     );
     props.updateState({
       canLoadMore: list.length > 0,
-      transactions: [...props.transactions, ...list],
+      transactions: reset ? list : [...props.transactions, ...list],
       backdrop: false,
       modalComponent: null,
     });
   };
 
   const setActiveAccount = (acc: Financials.Account) => {
+    if (props.selected?.account_id === acc.account_id) return;
     props.updateState({
       selected: acc,
       transactions: [],
     });
-    setTimeout(() => {
-      fetchTransactions();
-    }, 10);
+    fetchTransactions(acc.account_id);
   };
 
   return (

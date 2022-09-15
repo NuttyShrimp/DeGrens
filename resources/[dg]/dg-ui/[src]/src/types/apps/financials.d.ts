@@ -42,7 +42,7 @@ declare namespace Financials {
 
   interface ModalProps {
     selected: Account;
-    fetchTransactions: () => Promise<void>;
+    fetchTransactions: (accountId?: string, reset?: boolean) => Promise<void>;
     fetchAccounts: () => Promise<void>;
   }
 
