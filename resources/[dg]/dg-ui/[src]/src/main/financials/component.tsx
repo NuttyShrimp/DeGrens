@@ -31,6 +31,17 @@ const Component: AppFunction<Financials.State> = props => {
     }, 500);
   };
 
+  const handleEscape = () => {
+    if (props.modalComponent) {
+      props.updateState({
+        modalComponent: null,
+        backdrop: false,
+      })
+      return false
+    }
+    return handleHide();
+  }
+
   const fetchAccounts = async () => {
     const newAccounts = await nuiAction<Financials.Account[]>(
       'financials/accounts/get',
@@ -77,7 +88,7 @@ const Component: AppFunction<Financials.State> = props => {
   };
 
   return (
-    <AppWrapper appName={store.key} onShow={handleShow} onHide={handleHide} onEscape={handleHide} center full>
+    <AppWrapper appName={store.key} onShow={handleShow} onHide={handleHide} onEscape={handleEscape} center full>
       <Financials
         {...props}
         setActiveAccount={setActiveAccount}
