@@ -90,6 +90,9 @@ RegisterUICallback('getSelectorActions', async (_, cb) => {
   const actions = await RPC.execute('admin:selector:getActions');
   cb({ data: actions, meta: { ok: true, message: 'done' } });
 });
+RegisterUICallback('isDevEnv', (_, cb) => {
+  cb({ data: Util.isDevEnv(), meta: { ok: true, message: 'done' } });
+});
 // endregion
 // region Setters
 RegisterUICallback('setActionFavorite', (data: { name: string; favorite: boolean }, cb) => {

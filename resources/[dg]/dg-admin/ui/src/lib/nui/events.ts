@@ -29,4 +29,10 @@ events.reloadActions = () => {
   store.dispatch('selector/fetchActions');
 };
 
+events.overwriteDevmode = async (enabled: boolean) => {
+  const isDevEnv = await nuiAction('isDevEnv')
+  if (!isDevEnv) return;
+  store.commit('setDevMode', enabled)
+}
+
 // TODO: add events for when a player joins or leaves
