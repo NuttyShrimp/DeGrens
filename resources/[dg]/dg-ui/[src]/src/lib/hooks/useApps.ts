@@ -9,15 +9,17 @@ export const useApps = () => {
 
   const loadApps = useCallback(async () => {
     const components: ConfigObject[] = [];
-    const importAll =  r => {
-      return Promise.all(Object.keys(r).map(async key => {
-        const config = (await r[key]()).default;
-        if (components.find(cmp => cmp.name == config.name)) {
-          console.error(`Double config key detected: ${config.name}`);
-          return;
-        }
-        components.push(config);
-      }));
+    const importAll = r => {
+      return Promise.all(
+        Object.keys(r).map(async key => {
+          const config = (await r[key]()).default;
+          if (components.find(cmp => cmp.name == config.name)) {
+            console.error(`Double config key detected: ${config.name}`);
+            return;
+          }
+          components.push(config);
+        })
+      );
     };
     await importAll(import.meta.glob('../../main/*/_config.tsx'));
     updateState({

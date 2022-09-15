@@ -162,6 +162,7 @@ export default function AppWrapper(props: AppWrapperProps) {
             if (shouldEvent === true) {
               nuiAction('dg-ui:applicationClosed', {
                 app: props.appName,
+                type: appInfo?.type,
                 fromEscape: true,
               });
             }
@@ -258,9 +259,11 @@ export const closeApplication = (app: string) => {
     new Error('No app with this name registered?');
     return;
   }
+  const type = (store.getState() as RootState).main.apps.find(a => a.name === app)?.type;
   registeredApps[app].onHide();
   nuiAction('dg-ui:applicationClosed', {
     app,
+    type,
     fromEscape: false,
   });
 };
