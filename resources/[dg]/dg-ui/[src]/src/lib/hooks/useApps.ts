@@ -7,19 +7,19 @@ export const useApps = () => {
   const mainState = useSelector<RootState, Main.State>(state => state.main);
   const updateState = useUpdateState('main');
 
-  const loadApps = useCallback(() => {
+  const loadApps = useCallback(async () => {
     const components: ConfigObject[] = [];
-    const importAll = r => {
-      Object.keys(r).forEach(key => {
-        const config = r[key].default;
+    const importAll =  r => {
+      return Promise.all(Object.keys(r).map(async key => {
+        const config = (await r[key]()).default;
         if (components.find(cmp => cmp.name == config.name)) {
           console.error(`Double config key detected: ${config.name}`);
           return;
         }
         components.push(config);
-      });
+      }));
     };
-    importAll(import.meta.glob('../../main/*/_config.tsx', { eager: true }));
+    await importAll(import.meta.glob('../../main/*/_config.tsx'));
     updateState({
       apps: components,
     });

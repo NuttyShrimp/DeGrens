@@ -571,9 +571,10 @@ const emulatedData: Record<
     iterateData?: boolean;
   }
 > = {};
-export const devDataEmulator = () => {
+export const devDataEmulator = (appName: string) => {
   Object.keys(emulatedData).forEach(eventName => {
     const event = emulatedData[eventName];
+    if (event.app !== appName) return;
     if (event.iterateData) {
       event.data.forEach((data: any) => {
         data.action = event.action;
