@@ -3,11 +3,9 @@ import { Peek, RPC, UI } from '@dgx/client';
 import { LocationManager } from '../../classes/LocationManager';
 import { config } from '../../config';
 
-const peekIds: Record<string, string[]> = {};
-
 export const registerPeekZones = () => {
   const LManager = LocationManager.getInstance();
-  peekIds.paycheck = Peek.addFlagEntry('isBanker', {
+  Peek.addFlagEntry('isBanker', {
     options: [
       {
         label: 'paycheck',
@@ -16,9 +14,9 @@ export const registerPeekZones = () => {
         event: 'financials:server:paycheck:give',
       },
     ],
-    distance: 2.5,
+    distance: 3,
   });
-  peekIds.atm = Peek.addModelEntry(config.ATMModels, {
+  Peek.addModelEntry(config.ATMModels, {
     options: [
       {
         label: 'ATM',
