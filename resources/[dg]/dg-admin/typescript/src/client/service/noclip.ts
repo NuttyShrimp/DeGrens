@@ -34,7 +34,7 @@ export const toggleNoclip = () => {
     noclipPed = null;
   }
 
-  const pos = Util.getPlyCoords();
+  const pos = Util.getEntityCoords(noclipEnt);
   const rot = Util.getEntityRotation(noclipEnt);
   noclipCam = CreateCamWithParams('DEFAULT_SCRIPTED_CAMERA', pos.x, pos.y, pos.z, 0, 0, rot.z, 75.0, true, 2);
   AttachCamToEntity(noclipCam, noclipEnt, 0.0, 0.0, 0.0, true);
@@ -44,14 +44,7 @@ export const toggleNoclip = () => {
   SetEntityCollision(noclipEnt, false, false);
   SetEntityAlpha(noclipEnt, 0, false);
   SetEntityVisible(noclipEnt, false, false);
-  ClearPedTasksImmediately(ped);
   SetPedCanRagdoll(ped, false);
-  if (veh) {
-    FreezeEntityPosition(ped, true);
-    SetEntityCollision(ped, false, false);
-    SetEntityAlpha(ped, 0, false);
-    SetEntityVisible(ped, false, false);
-  }
 
   const plyId = PlayerId();
   noclipTick = setTick(() => {
@@ -126,22 +119,16 @@ const getMultiplier = (): number => {
 const moveX = (dir = 1) => {
   const fv = GetCamMatrix(noclipCam)[1];
   const fVector = Util.ArrayToVector3(fv).multiply(dir * noclipSpeed * getMultiplier());
-  const pos = Util.getPlyCoords().add(fVector);
+  const pos = Util.getEntityCoords(noclipEnt).add(fVector);
   SetEntityCoordsNoOffset(noclipEnt, pos.x, pos.y, pos.z, true, true, true);
-  if (noclipPed) {
-    SetEntityCoordsNoOffset(noclipPed, pos.x, pos.y, pos.z, true, true, true);
-  }
 };
 
 const moveY = (dir = 1) => {
   const pos = Util.ArrayToVector3(
     GetOffsetFromEntityInWorldCoords(noclipEnt, dir * noclipSpeed * getMultiplier(), 0, 0)
   );
-  pos.z = Util.getPlyCoords().z;
+  pos.z = Util.getEntityCoords(noclipEnt).z;
   SetEntityCoordsNoOffset(noclipEnt, pos.x, pos.y, pos.z, true, true, true);
-  if (noclipPed) {
-    SetEntityCoordsNoOffset(noclipPed, pos.x, pos.y, pos.z, true, true, true);
-  }
 };
 
 const moveZ = (dir = 1) => {
@@ -149,9 +136,6 @@ const moveZ = (dir = 1) => {
     GetOffsetFromEntityInWorldCoords(noclipEnt, 0, 0, (dir * noclipSpeed * getMultiplier()) / 2)
   );
   SetEntityCoordsNoOffset(noclipEnt, pos.x, pos.y, pos.z, true, true, true);
-  if (noclipPed) {
-    SetEntityCoordsNoOffset(noclipPed, pos.x, pos.y, pos.z, true, true, true);
-  }
 };
 
 // region Speed
