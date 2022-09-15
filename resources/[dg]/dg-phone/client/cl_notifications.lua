@@ -17,6 +17,9 @@ end)
 --- Adds notification to phone (normally stays for 8 seconds
 --- if action is needed time will be extended to 30 seconds)
 addNotification = function(notification)
+  if notification.onAccept or notification.onDecline then
+    PlaySound(-1, "Click_Fail", "WEB_NAVIGATION_SOUNDS_PHONE", 0, 0, 1)
+  end
 	SendAppEvent('phone', {
 		appName = "home-screen",
 		action = "addNotification",

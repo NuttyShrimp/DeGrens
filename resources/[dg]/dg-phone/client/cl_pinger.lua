@@ -13,7 +13,9 @@ RegisterUICallback('phone/pinger/decline', function(data, cb)
 end)
 
 RegisterNetEvent('dg-phone:pinger:sendRequest', function(pingId, origin)
-	SendAppEvent('phone', {
+  PlaySound(-1, "Click_Fail", "WEB_NAVIGATION_SOUNDS_PHONE", 0, 0, 1)
+
+  SendAppEvent('phone', {
     appName = "pinger",
 		action = "doRequest",
 		data = {
