@@ -13,6 +13,8 @@ onNet('admin:commands:damageEntity', (ent: number) => {
       }
       case 2: {
         SetVehicleDamage(ent, 0.0, 0.0, 0.33, 200.0, 100.0, true);
+        SetVehicleEngineHealth(ent, Math.max(0, GetVehicleEngineHealth(ent) - 250));
+        SetVehicleBodyHealth(ent, Math.max(0, GetVehicleBodyHealth(ent) - 250));
         break;
       }
     }
