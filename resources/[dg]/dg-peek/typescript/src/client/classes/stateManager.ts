@@ -45,7 +45,7 @@ class StateManager {
     }
     UI.openApplication('peek', {}, true);
     this.isPeeking = true;
-    entryManager.loadActiveEntries();
+    entryManager.loadActiveEntries(true);
     this.createCheckThread();
     this.createControlThread();
   }

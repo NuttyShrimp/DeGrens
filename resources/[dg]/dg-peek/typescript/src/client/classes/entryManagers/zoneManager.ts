@@ -46,20 +46,7 @@ export class ZoneManager extends BaseManager implements IEntryManager {
     this.activeEntries = [];
     const activeZones = getActiveZones();
     activeZones.forEach((zoneData, zone) => {
-      const entries = this.entries.get(zone);
-      if (!entries) return;
-      entries.forEach((entry, i) => {
-        if (this.isZoneEntryActive(zone, i)) return;
-        entry._metadata = {
-          name: zone,
-          index: i,
-        };
-        entry.data = {
-          ...entry.data,
-          ...zoneData.data,
-        };
-        this.addActiveEntry(entry, ctx.entity);
-      });
+      this.handleZoneEnter(zone, zoneData.data);
     });
   }
 
