@@ -14,41 +14,38 @@ export const Bar: React.FC = () => {
       cmd: cmd,
     };
   });
-  const autocompleteOpt = useMemo(
-    () =>
-      cmds
-        .map(c => {
-          const newCmd = c.cmd.replace(/\$\d+/g, (match: string) => {
-            if (!c.data) {
-              return '';
+  const autocompleteOpt = useMemo(() => {
+    const newCmds = cmds.map(c => {
+      const newCmd = c.cmd.replace(/\$\d+/g, (match: string) => {
+        if (!c.data) {
+          return '';
+        }
+        const loopEntries = (data: any) => {
+          let val = '';
+          Object.entries(data).forEach(([key, value]) => {
+            let loopVal = '';
+            if (typeof value === 'object') {
+              loopVal = loopEntries(value);
             }
-            const loopEntries = (data: any) => {
-              let val = '';
-              Object.entries(data).forEach(([key, value]) => {
-                let loopVal = '';
-                if (typeof value === 'object') {
-                  loopVal = loopEntries(value);
-                }
-                if (loopVal.trim() !== '') {
-                  val = loopVal;
-                  return val;
-                }
-                if (value === match) {
-                  val = `$${key}`;
-                }
-              });
+            if (loopVal.trim() !== '') {
+              val = loopVal;
               return val;
-            };
-            return loopEntries(c.data);
+            }
+            if (value === match) {
+              val = `$${key}`;
+            }
           });
-          return {
-            value: newCmd,
-            label: newCmd,
-          };
-        })
-        .concat(history.map(h => ({ label: h, value: h }))),
-    [history]
-  );
+          return val;
+        };
+        return loopEntries(c.data);
+      });
+      return {
+        value: newCmd,
+        label: newCmd,
+      };
+    });
+    return newCmds.concat(history.filter(h => !newCmds.find(c => (c.value = h))).map(h => ({ label: h, value: h })));
+  }, [history]);
 
   const setReplacer = (data: any, arg: string, idx: number): any => {
     const _data = { ...data };
