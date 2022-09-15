@@ -1,12 +1,13 @@
-import { Events, RPC } from '@dgx/client';
+import { Events, HUD, RPC } from '@dgx/client';
 
 import { assignBind, getAllBinds } from '../helpers/binds';
-import { setDevModeEnabled } from '../helpers/devmode';
+import { isDevModeEnabled, setDevModeEnabled } from '../helpers/devmode';
 import { isNoclipEnabled, toggleNoclip } from '../service/noclip';
 import { togglePlayerBlips } from '../service/playerBlips';
 
 setImmediate(() => {
   Events.emitNet('admin:bind:check');
+  HUD.addEntry('dev-mode', 'terminal', '#111', () => (isDevModeEnabled() ? 1 : 0), 2, 1, isDevModeEnabled());
 });
 
 on('onResourceStop', () => {
@@ -14,6 +15,7 @@ on('onResourceStop', () => {
     toggleNoclip();
   }
   togglePlayerBlips(false);
+  HUD.removeEntry('dev-mode');
 });
 
 Events.onNet('admin:menu:open', () => {
