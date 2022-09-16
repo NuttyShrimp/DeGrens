@@ -4,7 +4,8 @@ import { usePreview } from 'react-dnd-preview';
 import { alpha } from '@mui/material';
 import { baseStyle } from '@src/base.styles';
 
-import { coordToPx, getImg } from '../util';
+import { getImg } from '../../../lib/util';
+import { coordToPx } from '../util';
 
 export const DragPreview: FC<{ cellSize: number }> = ({ cellSize }) => {
   const { display, item, style } = usePreview();

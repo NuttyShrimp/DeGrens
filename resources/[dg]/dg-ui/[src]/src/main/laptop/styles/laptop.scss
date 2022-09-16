@@ -10,6 +10,13 @@
     overflow: hidden;
   }
 
+  &-topbar {
+    font-size: 1.2vh;
+    & > div:last-child {
+      font-size: 1.5vh;
+    }
+  }
+
   &-icon {
     display: flex;
     justify-content: center;
@@ -28,6 +35,7 @@
     &-app-col {
       display: flex;
       flex-direction: column;
+      text-align: center;
 
       &>* {
         cursor: pointer;
@@ -75,6 +83,45 @@
       display: flex;
       justify-content: center;
       align-content: center;
+    }
+  }
+
+  &-notifications {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    &-entry {
+      min-height: 8vh;
+      width: 20vw;
+      padding: 1.5vh;
+      margin-bottom: 1vh;
+
+      display: flex;
+      text-wrap: normal;
+      border-radius: 1vh;
+
+      background-color: rgba(120, 120, 120, 0.6);
+
+      & > div:first-child {
+        flex-basis: 20%;
+        align-self: center;
+      }
+
+      & > div:last-child {
+        flex-basis: 80%;
+        & > p:first-child {
+          text-transform: uppercase;
+          font-weight: 700;
+          color: #dcdcdc
+        }
+        & > p:last-child {
+          font-size: 1.3vh;
+          color: #d3d3d3
+        }
+      }
+
     }
   }
 

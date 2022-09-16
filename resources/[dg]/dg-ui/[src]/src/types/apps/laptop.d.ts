@@ -2,10 +2,17 @@ declare namespace Laptop {
   interface State extends Base.State {
     activeApps: string[];
     focusedApp: string;
+    notifications: Notification[];
   }
 
   interface AuxState {
     'laptop.config': Config.State;
+  }
+
+  interface Notification {
+    id: string;
+    app: string;
+    message: string;
   }
 
   namespace Config {

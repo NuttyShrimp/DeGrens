@@ -238,3 +238,9 @@ body > .MuiPopover-root > .MuiPaper-root, body > .MuiPopperUnstyled-root > .MuiP
     font-size: 48px;
   }
 }
+
+.center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}

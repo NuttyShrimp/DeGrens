@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 
-import { getImg } from '../util';
+import { getImg } from '../../../lib/util';
 
 export const Itembox: FC<Itemboxes.Itembox> = props => {
   return (

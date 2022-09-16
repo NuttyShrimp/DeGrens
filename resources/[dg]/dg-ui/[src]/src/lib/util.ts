@@ -2,6 +2,8 @@ import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import URI from 'urijs';
 
+const images = import.meta.glob('../assets/inventory/*.png', { eager: true });
+
 import 'dayjs/locale/nl-be';
 
 export const emptyFn = () => {
@@ -126,4 +128,10 @@ export const hexToRGB = (hex: string, alpha = 1): string => {
   const g = parseInt(hex.slice(3, 5), 16);
   const b = parseInt(hex.slice(5, 7), 16);
   return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+};
+
+export const getImg = (name: string) => {
+  if (!name) name = 'noicon.png';
+  const path = `../assets/inventory/${name}`;
+  return (images[path] as any)?.default ?? getImg('noicon.png');
 };

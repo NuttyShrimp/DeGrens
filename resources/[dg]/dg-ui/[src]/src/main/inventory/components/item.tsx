@@ -7,6 +7,7 @@ import { closeApplication } from '@src/components/appwrapper';
 import { nuiAction } from '@src/lib/nui-comms';
 import { useNotifications } from '@src/main/notifications/hooks/useNotification';
 
+import { getImg } from '../../../lib/util';
 import {
   bindItemToKey,
   getFirstFreeSpace,
@@ -17,7 +18,7 @@ import {
   updateItemPosition,
 } from '../lib';
 import store from '../store';
-import { coordToPx, getImg } from '../util';
+import { coordToPx } from '../util';
 
 import { ItemTooltip } from './itemtooltip';
 
