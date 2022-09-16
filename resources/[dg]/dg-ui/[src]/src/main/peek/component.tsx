@@ -67,14 +67,7 @@ const Component: AppFunction<Peek.State> = props => {
   };
 
   return (
-    <AppWrapper
-      appName={store.key}
-      onShow={showPeek}
-      onHide={hidePeek}
-      onEvent={eventHandler}
-      onEscape={handleEscape}
-      full
-    >
+    <AppWrapper appName={store.key} onShow={showPeek} onHide={hidePeek} onEvent={eventHandler} full>
       <div className={'peek-wrapper'}>
         <Eye hasTarget={props.hasTarget} />
         <List entries={props.entries} show={props.showList} />

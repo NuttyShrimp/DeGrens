@@ -42,7 +42,7 @@ const Component: AppFunction<Phone.State> = props => {
       onShow={handleShow}
       onEvent={handleEvent}
       onHide={hidePhone}
-      onEscape={hidePhone}
+      hideOnEscape
       full
       hideOverflow
     >

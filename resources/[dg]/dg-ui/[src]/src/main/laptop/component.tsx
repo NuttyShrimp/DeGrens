@@ -55,7 +55,7 @@ const Component: AppFunction<Laptop.State> = props => {
   // endregion
 
   return (
-    <AppWrapper appName={store.key} onShow={showLaptop} onHide={hideLaptop} onEscape={hideLaptop} full center>
+    <AppWrapper appName={store.key} onShow={showLaptop} onHide={hideLaptop} hideOnEscape full center>
       <Laptop {...props} />
     </AppWrapper>
   );

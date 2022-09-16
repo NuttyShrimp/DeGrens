@@ -20,11 +20,12 @@ RegisterNUICallback('reload', function(data, cb)
 	cb({ data = {}, meta = { ok = true, message = 'UI reloaded' } })
 end)
 
+-- data: {app: string, type: 'interactive' | 'passive'}
 RegisterNUICallback('dg-ui:applicationClosed', function(data, cb)
   if data.type and data.type == 'interactive' then
     SetUIFocusCustom(false, false)
   end
-	TriggerEvent('dg-ui:application-closed', data.app, data)
+	TriggerEvent('dg-ui:application-closed', data.app)
 	cb({
 		data = {},
 		meta = {

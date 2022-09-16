@@ -60,14 +60,11 @@ end
 exports('openApplication', openApplication)
 
 function closeApplication(app, data)
-  debug('closing %s', app)
   SendUIMessage({
     app = app,
     show = false,
     data = data or {},
   })
-  SetUIFocusCustom(false, false)
-  TriggerEvent("dg-ui:application-closed", app, { fromEscape = false })
 end
 
 exports('closeApplication', closeApplication)

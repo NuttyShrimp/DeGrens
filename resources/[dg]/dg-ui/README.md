@@ -22,6 +22,7 @@ Spring snel naar een App
       - [Example](#example)
       - [Entry interface](#entry-interface)
     - [Phone](#phone)
+  - [Help my shit doesn't work](#help-my-shit-doesnt-work)
 
 ## Lib
 
@@ -54,8 +55,8 @@ To make life easier we have a lib for lua in cl_ui.lua. And for TS there are fun
 Events that are sent out to handle in other resources
 
 | Name                     | Parameter | Description                |
-|--------------------------|-----------|----------------------------|
-| dg-ui:application-closed | app, data | The application was closed |
+| ------------------------ | --------- | -------------------------- |
+| dg-ui:application-closed | app       | The application was closed |
 
 ## Apps
 

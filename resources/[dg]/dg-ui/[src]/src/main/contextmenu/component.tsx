@@ -48,10 +48,10 @@ const Component: AppFunction<ContextMenu.State> = props => {
       allEntries: [],
       parentEntry: [],
     });
-    return true;
   };
+
   return (
-    <AppWrapper appName={store.key} onShow={onShow} onHide={onHide} onEscape={onHide} full>
+    <AppWrapper appName={store.key} onShow={onShow} onHide={onHide} full hideOnEscape>
       <ContextMenu {...props} />
     </AppWrapper>
   );

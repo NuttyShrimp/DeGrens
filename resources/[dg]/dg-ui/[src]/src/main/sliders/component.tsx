@@ -22,7 +22,7 @@ const Component: AppFunction<Sliders.State> = props => {
   };
 
   return (
-    <AppWrapper appName={store.key} onShow={onShow} onHide={onHide} onEscape={onHide} full center>
+    <AppWrapper appName={store.key} onShow={onShow} onHide={onHide} hideOnEscape full center>
       <Sliders {...props} />
     </AppWrapper>
   );

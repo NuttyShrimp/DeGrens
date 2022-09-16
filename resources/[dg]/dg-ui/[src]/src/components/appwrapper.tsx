@@ -14,7 +14,8 @@ declare interface AppWrapperProps {
   onShow: (data?: any) => void;
   onHide: (data?: any) => void;
   onEvent?: (data: any) => void;
-  onEscape?: () => void | boolean;
+  hideOnEscape?: boolean;
+  onEscape?: () => void;
   onError?: (e?: Error) => void;
   center?: boolean;
   column?: boolean;
@@ -61,8 +62,8 @@ const useStyles = makeStyles({
 
 const registeredApps: {
   [appName: string]: {
-    onShow: (data?: any) => void;
-    onHide: (data?: any) => void;
+    showApp: (data?: { data?: any; shouldFocus?: boolean }) => void; // Not currently used
+    hideApp: (data?: any) => void;
   };
 } = {};
 
@@ -89,21 +90,40 @@ export default function AppWrapper(props: AppWrapperProps) {
 
   const [active, setActive] = useState(false);
 
+  const hideApp = useCallback<AppWrapperProps['onHide']>(
+    (data?: any) => {
+      props.onHide(data);
+      nuiAction('dg-ui:applicationClosed', {
+        app: appInfo?.name,
+        type: appInfo?.type,
+      });
+    },
+    [props.onHide, appInfo]
+  );
+
+  const showApp = useCallback<AppWrapperProps['onShow']>(
+    (data?: { data?: any; shouldFocus?: boolean }) => {
+      props.onShow(data?.data);
+      if (appInfo?.type === 'interactive' && data?.shouldFocus) {
+        nuiAction('__appwrapper:setfocus');
+      }
+    },
+    [props.onShow, appInfo]
+  );
+
   const eventHandler = useCallback(
     (e: any) => {
       addLog({ name: `AppWrapper:${props.appName}`, body: {}, response: e.data, isOk: true });
       if (e.data.show) {
-        props.onShow(e.data.data);
-        if (appInfo?.type === 'interactive' && e.data.shouldFocus) {
-          nuiAction('__appwrapper:setfocus');
-        }
+        showApp(e.data);
         return;
       } else if (e.data.show === false) {
+        // Handles hide by event
         if (appState.visible) {
           if (mainStateApp === 'cli') {
             setCurrentApp('');
           }
-          props.onHide();
+          hideApp();
         }
         return;
       }
@@ -111,7 +131,7 @@ export default function AppWrapper(props: AppWrapperProps) {
         props.onEvent(e.data.data);
       }
     },
-    [props.onEvent, props.onHide, props.onShow, appInfo, appState, mainStateApp]
+    [props.onEvent, hideApp, showApp, appInfo, appState, mainStateApp]
   );
 
   const evtMiddleware = useCallback(
@@ -153,18 +173,19 @@ export default function AppWrapper(props: AppWrapperProps) {
     [props.appName, eventHandler]
   );
 
+  // Handles escape
   const handlePress: any = useCallback(
     (e: React.KeyboardEvent<HTMLDivElement>) => {
       switch (e.key) {
         case 'Escape':
           if (appState.visible && active) {
-            const shouldEvent = props.onEscape ? props.onEscape() ?? true : null;
-            if (shouldEvent === true) {
-              nuiAction('dg-ui:applicationClosed', {
-                app: props.appName,
-                type: appInfo?.type,
-                fromEscape: true,
-              });
+            if (props.onEscape) {
+              props.onEscape();
+              return;
+            }
+            if (props.hideOnEscape) {
+              hideApp();
+              return;
             }
           }
           break;
@@ -208,15 +229,13 @@ export default function AppWrapper(props: AppWrapperProps) {
     };
   }, [evtMiddleware, handlePress]);
 
+  // Saved hide and show functions to use outside AppWrapper (closeApplication function)
   useEffect(() => {
-    registeredApps[props.appName] = {
-      onHide: props.onHide,
-      onShow: props.onShow,
-    };
+    registeredApps[props.appName] = { hideApp, showApp };
     return () => {
       delete registeredApps[props.appName];
     };
-  }, [active, props.appName, props.onHide, props.onShow]);
+  }, [active, props.appName, hideApp, showApp]);
 
   useEffect(() => {
     if (appState.visible) {
@@ -254,16 +273,11 @@ export default function AppWrapper(props: AppWrapperProps) {
   );
 }
 
+// Close application from within a component
 export const closeApplication = (app: string) => {
   if (!registeredApps[app]) {
     new Error('No app with this name registered?');
     return;
   }
-  const type = (store.getState() as RootState).main.apps.find(a => a.name === app)?.type;
-  registeredApps[app].onHide();
-  nuiAction('dg-ui:applicationClosed', {
-    app,
-    type,
-    fromEscape: false,
-  });
+  registeredApps[app].hideApp();
 };

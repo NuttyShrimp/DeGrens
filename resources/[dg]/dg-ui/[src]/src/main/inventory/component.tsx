@@ -57,7 +57,7 @@ const Component: AppFunction<Inventory.State> = props => {
       appName={store.key}
       onShow={handleShow}
       onHide={handleHide}
-      onEscape={handleHide}
+      hideOnEscape
       onEvent={item => updateItem(item)}
       full
       center
