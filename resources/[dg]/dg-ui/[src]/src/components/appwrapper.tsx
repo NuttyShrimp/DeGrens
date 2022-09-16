@@ -15,7 +15,7 @@ declare interface AppWrapperProps {
   onHide: (data?: any) => void;
   onEvent?: (data: any) => void;
   hideOnEscape?: boolean;
-  onEscape?: () => void;
+  onEscape?: () => void | boolean;
   onError?: (e?: Error) => void;
   center?: boolean;
   column?: boolean;
@@ -180,7 +180,10 @@ export default function AppWrapper(props: AppWrapperProps) {
         case 'Escape':
           if (appState.visible && active) {
             if (props.onEscape) {
-              props.onEscape();
+              const shouldClose = props.onEscape();
+              if (shouldClose === true) {
+                hideApp();
+              }
               return;
             }
             if (props.hideOnEscape) {

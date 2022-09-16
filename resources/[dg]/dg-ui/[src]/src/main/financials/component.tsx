@@ -1,5 +1,5 @@
 import React from 'react';
-import AppWrapper, { closeApplication } from '@components/appwrapper';
+import AppWrapper from '@components/appwrapper';
 
 import { devData } from '../../lib/devdata';
 import { nuiAction } from '../../lib/nui-comms';
@@ -37,9 +37,9 @@ const Component: AppFunction<Financials.State> = props => {
         modalComponent: null,
         backdrop: false,
       });
-      return;
+      return false;
     }
-    closeApplication('financials');
+    return true;
   };
 
   const fetchAccounts = async () => {
