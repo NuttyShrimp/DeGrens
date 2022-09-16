@@ -20,7 +20,7 @@ onNet('admin:commands:damageEntity', (ent: number) => {
     }
     return;
   }
-  emitNet('admin:commands:damageEntity', NetworkGetNetworkIdFromEntity(ent));
+  Events.emitNet('admin:commands:damageEntity', NetworkGetNetworkIdFromEntity(ent));
 });
 
 onNet('admin:commands:deleteEntity', async (ent: number) => {
@@ -31,7 +31,7 @@ onNet('admin:commands:deleteEntity', async (ent: number) => {
     DeleteEntity(ent);
     return;
   }
-  emitNet('admin:commands:deleteEntity', NetworkGetNetworkIdFromEntity(ent));
+  Events.emitNet('admin:commands:deleteEntity', NetworkGetNetworkIdFromEntity(ent));
 });
 
 Events.onNet('admin:commands:runCmd', (handler, args: any[]) => {
