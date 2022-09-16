@@ -11,17 +11,6 @@ on('onResourceStart', (resName: string) => {
   setCtxPlayerData(DGCore.Functions.GetPlayerData());
 });
 
-UI.RegisterUICallback('peek:hide', (_, cb) => {
-  stateManager.stopPeeking();
-  cb({
-    meta: {
-      message: 'done',
-      ok: true,
-    },
-    data: {},
-  });
-});
-
 UI.RegisterUICallback('peek:preventShow', (_, cb) => {
   stateManager.stopPeeking(false);
   cb({

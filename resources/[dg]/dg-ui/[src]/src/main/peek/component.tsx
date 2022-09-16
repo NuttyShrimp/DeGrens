@@ -38,11 +38,6 @@ const Component: AppFunction<Peek.State> = props => {
     });
   };
 
-  const handleEscape = () => {
-    if (!props.showList) return;
-    nuiAction('peek:hide');
-  };
-
   const eventHandler = (data: { action: string; entries?: Peek.Entry[] }) => {
     switch (data.action) {
       case 'foundTarget':
