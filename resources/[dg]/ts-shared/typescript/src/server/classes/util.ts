@@ -1,7 +1,6 @@
 import { Util as UtilShared } from '../../shared/classes/util';
 import { firstNames, lastNames } from '../data/names';
 
-import { registerDGXRPC } from './events';
 import { Config, RPC } from './index';
 
 class Util extends UtilShared {
@@ -49,8 +48,11 @@ class Util extends UtilShared {
     return Config.getConfigValue<boolean>('main.production') === false;
   }
 
-  getCID(src: number) {
-    const Player = DGCore.Functions.GetPlayer(src);
+  getCID(src: number): number {
+    // THIS FUCKIGN OPKJFGKJHKFGJ THING
+    // For some reason global DGCore obj is not defined, when using this function inside Inventory.onInventoryUpdate handler
+    const _DGCore = global.exports['dg-core'].GetSharedObject() as Server;
+    const Player = _DGCore.Functions.GetPlayer(src);
     return Player?.PlayerData?.citizenid;
   }
 

@@ -71,7 +71,7 @@ class LocationManager extends Util.Singleton<LocationManager>() {
     const timeout = setTimeout(
       async id => {
         Util.Log(
-          'inventory:dropRemoved',
+          'inventory:drop:remove',
           {
             id,
           },

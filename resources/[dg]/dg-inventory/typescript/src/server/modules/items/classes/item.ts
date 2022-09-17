@@ -63,11 +63,11 @@ export class Item {
       repository.createItem(this.state);
       this.logger.info(`New item has been created with id ${this.id}`);
       Util.Log(
-        'inventory:createItem',
+        'inventory:item:create',
         {
           itemId: this.id,
           position: this.position,
-          inventory: this.inventory,
+          invId: state.inventory,
         },
         `Item ${this.name} has been created`
       );
@@ -116,7 +116,7 @@ export class Item {
     const itemImage = itemDataManager.get(this.name).image;
     if (hotkey) Events.emitNet('inventory:client:addItemBox', src, 'Gebruikt', itemImage);
     Util.Log(
-      'inventory:useditem',
+      'inventory:item:used',
       {
         itemId: this.id,
       },
@@ -172,7 +172,7 @@ export class Item {
     repository.deleteItem(this.id); // remove from db
     this.logger.info(`${this.id} has been destroyed. Quality: ${this.quality}`);
     Util.Log(
-      'inventory:itemDestroyed',
+      'inventory:item:destroyed',
       {
         itemId: this.id,
         quality: this.quality,

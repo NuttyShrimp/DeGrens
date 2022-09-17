@@ -37,4 +37,10 @@ declare namespace Inventory {
   type Type = 'player' | 'trunk' | 'glovebox' | 'drop' | 'dumpster' | 'stash' | 'shop' | 'container';
 
   type UsageHandler = (src: number, state: Inventory.ItemState) => void;
+
+  type UpdateHandlerData = {
+    handler: (identifier: string, action: 'add' | 'remove', itemState: Inventory.ItemState) => void;
+    item?: string;
+    action?: 'add' | 'remove';
+  };
 }

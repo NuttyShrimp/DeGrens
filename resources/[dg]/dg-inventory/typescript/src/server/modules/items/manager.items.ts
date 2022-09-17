@@ -72,7 +72,7 @@ class ItemManager extends Util.Singleton<ItemManager>() {
       }
       item.clearRequirements();
       Util.Log(
-        'inventory:buyShopItem',
+        'inventory:item:bought',
         {
           shop: item.state.inventory,
           forCash: requirements.cash,
@@ -95,7 +95,7 @@ class ItemManager extends Util.Singleton<ItemManager>() {
     }
 
     Util.Log(
-      'inventory:movedItem',
+      'inventory:item:moved',
       {
         itemId: id,
         oldPosition: item.state.position,
@@ -139,10 +139,10 @@ class ItemManager extends Util.Singleton<ItemManager>() {
     item.unbind(src);
   };
 
-  public buildInitialMetadata = (src: number, itemName: string) => {
+  public buildInitialMetadata = (plyId: number | undefined, itemName: string) => {
     const onCreateFunc = ON_CREATE[itemName];
     if (!onCreateFunc) return {};
-    return onCreateFunc(src);
+    return onCreateFunc(plyId);
   };
 
   @Export('setMetadataOfItem')

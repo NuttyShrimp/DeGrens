@@ -53,7 +53,13 @@ class ObjectsManager extends Util.Singleton<ObjectsManager>() {
     const obj = this.activeObjects.get(itemId);
     if (!obj) {
       const data = this.getObjOfIdInQueue(itemId);
-      if (!data) throw new Error(`Tried to remove object for item ${itemId} but was not in queue or active`);
+      if (!data) {
+        if (this.toggledObj?.itemId == itemId) {
+          this.toggledObj = null;
+          return;
+        }
+        throw new Error(`Tried to remove object for item ${itemId} but was not in queue, active or toggled`);
+      }
       this.queue[data.type].splice(data.index, 1);
       return;
     }

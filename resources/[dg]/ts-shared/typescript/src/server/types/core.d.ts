@@ -90,21 +90,6 @@ interface ServerFunctions {
   TriggerCallback(name: string, source: number, cb: Function, ...args: any[]): void;
 
   /**
-   * registers a callback function that will be triggered when a player uses the specified item
-   */
-  CreateUseableItem(item: string, cb: (source: number, item: Item) => void): void;
-
-  /**
-   * @returns true if the specified item has a callback when used
-   */
-  CanUseItem(item: string): boolean;
-
-  /**
-   * Triggers the item callback for the specified item. Note: This does not remove the item from the player
-   */
-  UseItem(source: number, item: string): void;
-
-  /**
    * Used internally on connection, use DropPlayer instead
    */
   Kick(source: number, reason: string, setKickReason: Function, deferrals: any): void;

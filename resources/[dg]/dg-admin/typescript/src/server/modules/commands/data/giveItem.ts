@@ -1,4 +1,4 @@
-import { Inventory, Notifications } from '@dgx/server';
+import { Inventory, Notifications, Util } from '@dgx/server';
 
 import { Inputs } from '../../../enums/inputs';
 
@@ -24,7 +24,9 @@ export const giveItem: CommandData = {
     }
     try {
       const amount = parseInt(args.amount ?? '1');
-      Inventory.addItemToPlayer(args?.Target?.serverId ?? caller.source, args?.Item?.name ?? '', amount);
+      const cid = String(Util.getCID(args?.Target?.serverId ?? caller.source));
+      const item = args?.Item?.name ?? '';
+      Inventory.addItemToInventory('player', cid, item, amount);
     } catch (e) {
       console.error(e);
       Notifications.add(caller.source, 'Failed to give item, Is your amount a round number?', 'error');

@@ -1,4 +1,4 @@
-import { Events } from '@dgx/server';
+import { Events, Util } from '@dgx/server';
 import { Item } from 'modules/items/classes/item';
 import itemManager from 'modules/items/manager.items';
 import locationManager from 'modules/locations/manager.locations';
@@ -104,23 +104,21 @@ export class Inv {
     this.updatedInv('remove', itemState);
   };
 
-  // send out events when in playerinventory
   private updatedInv = async (action: 'add' | 'remove', itemState: Inventory.ItemState) => {
+    const { type, identifier } = splitId(this.id);
+    emit('inventory:inventoryUpdated', type, identifier, action, itemState);
+
     if (this.type !== 'player') return;
-
-    const cid = Number(splitId(this.id).identifier);
-
-    emit('inventory:playerInventoryUpdated', cid, action, itemState);
 
     const newInv = await inventoryManager.get(itemState.inventory);
     if (newInv.type === 'drop' && newInv.items.size === 0) {
-      const serverId = DGCore.Functions.GetPlayerByCitizenId(cid).PlayerData.source;
+      const serverId = DGCore.Functions.GetPlayerByCitizenId(Number(identifier)).PlayerData.source;
       Events.emitNet('inventory:client:doDropAnimation', serverId);
     }
 
     const objectInfo = getConfig().itemObjects[itemState.name];
     if (objectInfo) {
-      const serverId = DGCore.Functions.GetPlayerByCitizenId(cid).PlayerData.source;
+      const serverId = DGCore.Functions.GetPlayerByCitizenId(Number(identifier)).PlayerData.source;
       Events.emitNet('inventory:client:updateObject', serverId, action, itemState.id, objectInfo);
     }
   };

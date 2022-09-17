@@ -3,9 +3,9 @@ import inventoryManager from 'modules/inventories/manager.inventories';
 import itemDataManager from 'modules/itemdata/classes/itemdatamanager';
 import itemManager from 'modules/items/manager.items';
 import { getConfig } from 'services/config';
-import { concatId } from '../util';
+import { concatId, splitId } from '../util';
 
-const doesPlayerHaveObject = async (plyId: number) => {
+const hasObject = async (plyId: number) => {
   const cid = Util.getCID(plyId);
   const invId = concatId('player', cid);
   const inventory = await inventoryManager.get(invId);
@@ -19,6 +19,13 @@ const giveStarterItems = (plyId: number) => {
     const metadata = itemManager.buildInitialMetadata(plyId, name);
     itemManager.create({ inventory, name, metadata });
   });
+  Util.Log(
+    'inventory:inventory:starterItems',
+    {
+      cid,
+    },
+    `${cid} received startitems`
+  );
 };
 
 const clearInventory = async (type: Inventory.Type, identifier: string) => {
@@ -26,7 +33,7 @@ const clearInventory = async (type: Inventory.Type, identifier: string) => {
   const inventory = await inventoryManager.get(invId);
   inventory.destroyAllItems();
   Util.Log(
-    'inventory:clearInventory',
+    'inventory:inventory:clear',
     {
       invId,
     },
@@ -34,33 +41,42 @@ const clearInventory = async (type: Inventory.Type, identifier: string) => {
   );
 };
 
-const addItemToPlayer = (plyId: number, name: string, amount: number, metadata?: { [key: string]: any }) => {
+const addItemToInventory = (
+  type: Inventory.Type,
+  identifier: string,
+  name: string,
+  amount: number,
+  metadata?: { [key: string]: any }
+) => {
   const itemData = itemDataManager.get(name);
   if (!itemData) throw new Error(`Item with name ${name} does not exist`);
-  const cid = Util.getCID(plyId);
-  const inventory = concatId('player', cid);
-  if (!metadata) {
-    metadata = itemManager.buildInitialMetadata(plyId, name);
-  }
+  const invId = concatId(type, identifier);
+  // If item gets added to playerinv, get plyId to build metadata and send itembox event
+  const plyId =
+    type === 'player' ? DGCore.Functions.GetPlayerByCitizenId(Number(identifier))?.PlayerData?.source : undefined;
+  metadata = metadata ?? itemManager.buildInitialMetadata(plyId, name);
   for (let i = 0; i < amount; i++) {
-    itemManager.create({ inventory, name, metadata });
+    itemManager.create({ inventory: invId, name, metadata });
   }
-  Events.emitNet('inventory:client:addItemBox', plyId, `${amount} Ontvangen`, itemData.image);
+  if (plyId) {
+    Events.emitNet('inventory:client:addItemBox', plyId, `${amount}x Ontvangen`, itemData.image);
+  }
   Util.Log(
-    'inventory:receivedItem',
+    'inventory:item:added',
     {
-      cid,
+      type,
+      identifier,
+      invId,
       name,
       amount,
+      metadata,
     },
-    `${GetPlayerName(String(plyId))} received ${amount}x ${name} (CID: ${cid})`,
-    plyId
+    `${amount}x ${name} got added to inventory ${invId}`
   );
 };
 
-const doesPlayerHaveItems = async (plyId: number, names: string | string[]) => {
-  const cid = Util.getCID(plyId);
-  const invId = concatId('player', cid);
+const doesInventoryHaveItems = async (type: Inventory.Type, identifier: string, names: string | string[]) => {
+  const invId = concatId(type, identifier);
   const inventory = await inventoryManager.get(invId);
   const items = inventory.getItems();
   if (Array.isArray(names)) {
@@ -70,21 +86,22 @@ const doesPlayerHaveItems = async (plyId: number, names: string | string[]) => {
   }
 };
 
-const removeItemFromPlayer = async (plyId: number, name: string): Promise<boolean> => {
-  const cid = Util.getCID(plyId);
-  const invId = concatId('player', cid);
+const removeItemFromInventory = async (type: Inventory.Type, identifier: string, name: string): Promise<boolean> => {
+  const invId = concatId(type, identifier);
   const inventory = await inventoryManager.get(invId);
   const itemState = inventory.getItems().find(state => state.name === name);
   if (!itemState) return false;
   itemManager.get(itemState.id)?.destroy();
   const image = itemDataManager.get(itemState.name).image;
-  Events.emitNet('inventory:client:addItemBox', plyId, 'Verwijderd', image);
+  if (type === 'player') {
+    const plyId = DGCore.Functions.GetPlayerByCitizenId(Number(identifier))?.PlayerData?.source;
+    Events.emitNet('inventory:client:addItemBox', plyId, 'Verwijderd', image);
+  }
   return true;
 };
 
-const getAmountPlayerHas = async (plyId: number, name: string): Promise<number> => {
-  const cid = Util.getCID(plyId);
-  const invId = concatId('player', cid);
+const getAmountInInventory = async (type: Inventory.Type, identifier: string, name: string): Promise<number> => {
+  const invId = concatId(type, identifier);
   const inventory = await inventoryManager.get(invId);
   const items = inventory.getItems();
   const amount = items.reduce<number>((acc, cur) => {
@@ -94,11 +111,11 @@ const getAmountPlayerHas = async (plyId: number, name: string): Promise<number> 
   return amount;
 };
 
-const getItemById = (id: string): Inventory.ItemState | undefined => {
+const getItemStateById = (id: string): Inventory.ItemState | undefined => {
   return itemManager.get(id)?.state;
 };
 
-const moveItemToInventory = async (itemId: string, type: Inventory.Type, identifier: string) => {
+const moveItemToInventory = async (type: Inventory.Type, identifier: string, itemId: string) => {
   const invId = concatId(type, identifier);
   const inventory = await inventoryManager.get(invId);
   const item = itemManager.get(itemId);
@@ -114,25 +131,30 @@ const getItemsInInventory = async (type: Inventory.Type, identifier: string) => 
   return inventory.getItems();
 };
 
-const getFirstIdOfName = async (type: Inventory.Type, identifier: string, name: string) => {
+const getFirstItemOfName = async (type: Inventory.Type, identifier: string, name: string) => {
   const items = await getItemsInInventory(type, identifier);
   return items.find(item => item.name === name);
 };
 
 // Exports
-global.exports('doesPlayerHaveObject', doesPlayerHaveObject);
+global.exports('hasObject', hasObject);
 global.exports('giveStarterItems', giveStarterItems);
 global.exports('clearInventory', clearInventory);
-global.exports('addItemToPlayer', addItemToPlayer);
-global.exports('doesPlayerHaveItems', doesPlayerHaveItems);
-global.exports('removeItemFromPlayer', removeItemFromPlayer);
-global.exports('getAmountPlayerHas', getAmountPlayerHas);
-global.exports('getItemById', getItemById);
+global.exports('addItemToInventory', addItemToInventory);
+global.exports('doesInventoryHaveItems', doesInventoryHaveItems);
+global.exports('removeItemFromInventory', removeItemFromInventory);
+global.exports('getAmountInInventory', getAmountInInventory);
+global.exports('getItemStateById', getItemStateById);
 global.exports('moveItemToInventory', moveItemToInventory);
 global.exports('getItemsInInventory', getItemsInInventory);
-global.exports('getFirstIdOfName', getFirstIdOfName);
+global.exports('getFirstItemOfName', getFirstItemOfName);
 
-// Events
-Events.onNet('inventory:server:addItemToPlayer', addItemToPlayer);
-RPC.register('inventory:server:doesPlayerHaveItems', doesPlayerHaveItems);
-RPC.register('inventory:server:removeItemFromPlayer', removeItemFromPlayer);
+// Events for client
+RPC.register('inventory:server:doesPlayerHaveItems', (plyId, names: string | string[]) => {
+  const cid = String(Util.getCID(plyId));
+  return doesInventoryHaveItems('player', cid, names);
+});
+RPC.register('inventory:server:removeItemFromPlayer', (plyId, name: string) => {
+  const cid = String(Util.getCID(plyId));
+  return removeItemFromInventory('player', cid, name);
+});

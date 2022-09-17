@@ -1,4 +1,4 @@
-import { RPC, Events } from './index';
+import { RPC } from './index';
 
 class Inventory {
   public getItemData = (itemName: string): Inventory.ItemData | undefined =>
@@ -16,10 +16,6 @@ class Inventory {
 
   public openShop = (shopId: string): void => global.exports['dg-inventory'].open({ type: 'shop', identifier: shopId });
 
-  public addItemToPlayer = (name: string, amount: number, metadata?: { [key: string]: any }) => {
-    Events.emitNet('inventory:server:addItemToPlayer', name, amount, metadata);
-  };
-
   public doesPlayerHaveItems = async (name: string | string[]) => {
     return !!(await RPC.execute<boolean>('inventory:server:doesPlayerHaveItems', name));
   };
@@ -33,7 +29,7 @@ class Inventory {
   };
 
   public isOpen = () => {
-    global.exports['dg-inventory'].isOpen();
+    return global.exports['dg-inventory'].isOpen();
   };
 }
 

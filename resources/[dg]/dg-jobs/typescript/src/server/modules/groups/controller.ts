@@ -1,4 +1,4 @@
-import { RPC } from '@dgx/server';
+import { Inventory, RPC } from '@dgx/server';
 
 import groupManager from './classes/GroupManager';
 import nameManager from './classes/NameManager';
@@ -19,10 +19,14 @@ onNet('dg-jobs:client:groups:loadStore', () => {
   groupManager.seedPlayerStore(source);
 });
 
-on('inventory:playerInventoryUpdated', (cid: number, action: 'add' | 'remove', item: Inventory.ItemState) => {
-  if (item.name !== 'vpn') return;
-  nameManager.updatePlayerName(cid);
-});
+Inventory.onInventoryUpdate(
+  'player',
+  identifier => {
+    const cid = Number(identifier);
+    nameManager.updatePlayerName(cid);
+  },
+  'vpn'
+);
 
 on('onResourceStart', (res: string) => {
   if (res !== GetCurrentResourceName()) return;

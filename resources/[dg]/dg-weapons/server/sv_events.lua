@@ -18,7 +18,7 @@ DGCore.Functions.CreateCallback('weapons:server:GetAmmo', function(source, cb, p
   elseif Weapons[pWeaponData.hash].unlimitedAmmo then
     ammoCount = 9999
   else
-    local itemData = DGX.Inventory.getItemById(pWeaponData.id)
+    local itemData = DGX.Inventory.getItemStateById(pWeaponData.id)
     if itemData then
       ammoCount = tonumber(itemData.metadata.ammo or 1)
     end
@@ -69,7 +69,7 @@ end)
 RegisterServerEvent('weapons:server:AddAttachment', function(pWeaponData, pAttachmentId)
   if not pWeaponData or not pAttachmentId then return end
 
-  local itemData = DGX.Inventory.getItemById(pAttachmentId)
+  local itemData = DGX.Inventory.getItemStateById(pAttachmentId)
   if not Weapons[pWeaponData.hash].attachments or not Weapons[pWeaponData.hash].attachments[itemData.name] then
     DGX.RPC.execute('dg-ui:client:addNotification', source, "Dit past niet op je wapen...", "error")
     return
@@ -85,7 +85,7 @@ RegisterServerEvent('weapons:server:AddAttachment', function(pWeaponData, pAttac
     return
   end
 
-  DGX.Inventory.moveItemToInventory(itemData.id, 'stash', stashId)
+  DGX.Inventory.moveItemToInventory('stash', stashId, itemData.id)
   components[#components+1] = component
 
   local allAttachmentsForWeapon = Weapons[pWeaponData.hash].attachments
@@ -130,9 +130,9 @@ RegisterServerEvent('weapons:server:RemoveAttachment', function(pWeaponData, pAt
 
   local stashId = ('weapon_%s'):format(pWeaponData.metadata.serialnumber)
 
-  local itemData = DGX.Inventory.getFirstIdOfName('stash', stashId, pAttachmentName)
+  local itemData = DGX.Inventory.getFirstItemOfName('stash', stashId, pAttachmentName)
   local cid = DGCore.Functions.GetPlayer(source).PlayerData.citizenid
-  DGX.Inventory.moveItemToInventory(itemData.id, 'player', cid)
+  DGX.Inventory.moveItemToInventory('player', cid, itemData.id)
 
   local allAttachmentsForWeapon = Weapons[pWeaponData.hash].attachments
   local components = getEquipedWeaponComponents(pWeaponData.hash, stashId)
@@ -149,12 +149,11 @@ RegisterServerEvent('weapons:server:SetTint', function(pWeaponData, pTint)
   end)
 end)
 
-AddEventHandler('inventory:playerInventoryUpdated', function(cid, action, state)
-  if action ~= 'remove' then return end
-  local weaponData = Weapons[GetHashKey(state.name)]
+DGX.Inventory.onInventoryUpdate('player', function(identifier, action, itemState)
+  local weaponData = Weapons[GetHashKey(itemState.name)]
   if not weaponData then return end
   if weaponData.oneTimeUse then return end -- One time use items get removed by themself because ammo is 0
 
-	local plyId = DGCore.Functions.GetPlayerByCitizenId(cid).PlayerData.source
-  TriggerClientEvent('weapons:client:removedWeaponItem', plyId, state.id)
-end)
+	local src = DGCore.Functions.GetPlayerByCitizenId(tonumber(identifier)).PlayerData.source
+  TriggerClientEvent('weapons:client:removedWeaponItem', src, itemState.id)
+end, nil, 'remove')

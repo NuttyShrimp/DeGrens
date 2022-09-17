@@ -6,12 +6,11 @@ RegisterNetEvent('dg-phone:load', function()
 	TriggerClientEvent('dg-phone:client:setState', src, 'hasPhone', hasPhone)
 end)
 
-AddEventHandler('inventory:playerInventoryUpdated', function(cid, action, state)
-  if state.name ~= 'phone' then return end
-	local Player = DGCore.Functions.GetPlayerByCitizenId(cid)
+DGX.Inventory.onInventoryUpdate('player', function(identifier, action)
+	local Player = DGCore.Functions.GetPlayerByCitizenId(tonumber(identifier))
   local hasPhone = DGX.Inventory.doesPlayerHaveItems(Player.PlayerData.source, 'phone')
 	TriggerClientEvent('dg-phone:client:setState', Player.PlayerData.source, 'hasPhone', hasPhone)
-end)
+end, 'phone')
 
 brickPhone = function(src, event, toggle)
 	if toggle then

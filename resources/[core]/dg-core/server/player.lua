@@ -240,9 +240,9 @@ function DGCore.Player.CreatePlayer(PlayerData)
 
   -- Make the player state aware that we are loggedin
   Player(self.PlayerData.source).state:set('loggedIn', true, true)
-  Player(self.PlayerData.source).state:set('steamId', self.PlayerData.steamid)
+  Player(self.PlayerData.source).state:set('steamId', self.PlayerData.steamid, true)
   if (self.PlayerData.citizenid) then
-    Player(self.PlayerData.source).state:set('cid', self.PlayerData.citizenid)
+    Player(self.PlayerData.source).state:set('cid', self.PlayerData.citizenid, true)
   end
 
   -- At this point we are safe to emit new instance to third party resource for load handling

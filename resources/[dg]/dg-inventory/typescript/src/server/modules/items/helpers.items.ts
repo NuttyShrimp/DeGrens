@@ -12,7 +12,7 @@ const generateWeaponSerial = () => {
   );
 };
 
-export const ON_CREATE: Record<string, (src: number) => { [key: string]: any }> = {
+export const ON_CREATE: Record<string, (plyId?: number) => { [key: string]: any }> = {
   weapon_advancedrifle: () => ({ serialnumber: generateWeaponSerial() }),
   weapon_appistol: () => ({ serialnumber: generateWeaponSerial() }),
   weapon_assaultrifle: () => ({ serialnumber: generateWeaponSerial() }),
@@ -83,8 +83,9 @@ export const ON_CREATE: Record<string, (src: number) => { [key: string]: any }> 
   weapon_stickybomb: () => ({ serialnumber: generateWeaponSerial() }),
   weapon_stungun: () => ({ serialnumber: generateWeaponSerial() }),
   weapon_vintagepistol: () => ({ serialnumber: generateWeaponSerial() }),
-  id_card: (src: number) => {
-    const playerData = DGCore.Functions.GetPlayer(src).PlayerData;
+  id_card: (plyId?: number) => {
+    if (!plyId) return {};
+    const playerData = DGCore.Functions.GetPlayer(plyId).PlayerData;
     return {
       BSN: playerData.citizenid,
       voornaam: playerData.charinfo.firstname,
@@ -94,8 +95,9 @@ export const ON_CREATE: Record<string, (src: number) => { [key: string]: any }> 
       nationaliteit: playerData.charinfo.nationality,
     };
   },
-  drivers_license: (src: number) => {
-    const playerData = DGCore.Functions.GetPlayer(src).PlayerData;
+  drivers_license: (plyId?: number) => {
+    if (!plyId) return {};
+    const playerData = DGCore.Functions.GetPlayer(plyId).PlayerData;
     return {
       voornaam: playerData.charinfo.firstname,
       achternaam: playerData.charinfo.lastname,
