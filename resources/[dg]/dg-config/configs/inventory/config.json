@@ -30,7 +30,8 @@
     "20": 30,
     "21": 0
   },
-  "persistentTypes": ["player", "glovebox", "trunk", "stash", "container"],
+  "persistentTypes": ["player", "stash", "container"],
+  "vehicleTypes": ["glovebox", "trunk"],
   "locationInvRange": {
     "drop": 1,
     "dumpster": 1

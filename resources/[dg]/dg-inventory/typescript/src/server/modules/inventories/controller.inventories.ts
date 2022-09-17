@@ -36,6 +36,14 @@ RPC.register('inventory:server:open', async (src: number, secondary: IdBuildData
   };
 });
 
+export const preloadActivePlayerInventories = () => {
+  const ids = DGCore.Functions.GetPlayers();
+  ids.forEach(id => {
+    const player = DGCore.Functions.GetPlayer(id);
+    inventoryManager.get(concatId('player', player.PlayerData.citizenid));
+  });
+};
+
 on('DGCore:Server:PlayerLoaded', ({ PlayerData }: { PlayerData: PlayerData }) => {
   inventoryManager.get(concatId('player', PlayerData.citizenid));
 });

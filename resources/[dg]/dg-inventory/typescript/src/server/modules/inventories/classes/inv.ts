@@ -177,11 +177,12 @@ export class Inv {
 
   // TODO: Implement owned check after vehicle merge
   private isPersistent = () => {
-    const isPersistentType = getConfig().persistentTypes.includes(this.type);
-    if (!isPersistentType) return false;
-    if (this.type !== 'glovebox' && this.type !== 'trunk') return true;
-    // const vin = this.id.split('_')[1];
-    return true;
+    if (getConfig().persistentTypes.includes(this.type)) return true;
+    if (getConfig().vehicleTypes.includes(this.type)) {
+      const vin = splitId(this.id).identifier;
+      return vin === 'owned';
+    }
+    return false;
   };
 
   public hasObject = () => {

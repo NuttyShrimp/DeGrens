@@ -54,6 +54,7 @@ interface InventoryConfig {
     [key: string]: number;
   };
   persistentTypes: Inventory.Type[];
+  vehicleTypes: Inventory.Type[];
   locationInvRange: {
     [key in Location.Type]: number;
   };

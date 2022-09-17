@@ -1,4 +1,5 @@
 import { Events } from '@dgx/server';
+import { loadConfig } from 'services/config';
 
 onNet('hospital:server:SetLaststandStatus', (isLastStand: boolean) => {
   if (isLastStand === false) return;
@@ -13,4 +14,9 @@ onNet('hospital:server:SetDeathStatus', (isDead: boolean) => {
 onNet('police:server:SetHandcuffStatus', (isHandCuffed: boolean) => {
   if (isHandCuffed === false) return;
   Events.emitNet('inventory:client:closeInventory', source);
+});
+
+on('dg-config:moduleLoaded', (moduleId: string) => {
+  if (moduleId !== 'inventory.config') return;
+  loadConfig();
 });

@@ -1,6 +1,5 @@
 import { SQL } from '@dgx/server';
 import { Util } from '@dgx/shared';
-import { Inv } from 'modules/inventories/classes/inv';
 import { mainLogger } from 'sv_logger';
 import winston from 'winston';
 
