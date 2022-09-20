@@ -27,5 +27,5 @@ global.exports('isWhitelisted', (src: number, job: string) => {
   if (!cid) return false;
   return !!getPlayerInfoForJob(cid, job);
 });
-global.exports('addToWhitelist', addWhitelist);
-global.exports('removeFromWhitelist', removeWhitelist);
+global.asyncExports('addToWhitelist', addWhitelist);
+global.asyncExports('removeFromWhitelist', removeWhitelist);

@@ -8,7 +8,7 @@ setImmediate(() => {
   loadWhitelist();
 });
 
-global.exports('isPlayerWhitelisted', (player: number): Promise<boolean> => isPlayerWhitelisted(player));
+global.asyncExports('isPlayerWhitelisted', (player: number): Promise<boolean> => isPlayerWhitelisted(player));
 
 Chat.registerCommand('admin_whitelist_refresh', 'Reload the cached whitelist', [], 'developer', source => {
   if (source > 0) {

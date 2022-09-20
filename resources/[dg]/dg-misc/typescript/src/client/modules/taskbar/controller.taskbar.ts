@@ -1,7 +1,7 @@
 import { Keys, Events } from '@dgx/client';
 import { cancelTaskbar, taskbar } from './service.taskbar';
 
-global.exports('Taskbar', taskbar);
+global.asyncExports('Taskbar', taskbar);
 
 Keys.register('taskbar-cancel', 'Taskbar Annuleren', 'ESCAPE');
 Keys.onPressDown('taskbar-cancel', cancelTaskbar);

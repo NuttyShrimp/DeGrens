@@ -12,7 +12,7 @@ global.exports(
     debtManager.addDebt(cid, target_account, fine, reason, origin_name, given_by);
   }
 );
-global.exports('removeMaintenanceFees', (src: number) => removeMaintenanceFees(src));
+global.asyncExports('removeMaintenanceFees', (src: number) => removeMaintenanceFees(src));
 
 RPC.register('financials:server:debts:get', src => {
   debtLogger.silly(`getDebts | src: ${src}`);

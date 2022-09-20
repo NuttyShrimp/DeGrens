@@ -137,17 +137,17 @@ const getFirstItemOfName = async (type: Inventory.Type, identifier: string, name
 };
 
 // Exports
-global.exports('hasObject', hasObject);
+global.asyncExports('hasObject', hasObject);
 global.exports('giveStarterItems', giveStarterItems);
-global.exports('clearInventory', clearInventory);
+global.asyncExports('clearInventory', clearInventory);
 global.exports('addItemToInventory', addItemToInventory);
-global.exports('doesInventoryHaveItems', doesInventoryHaveItems);
-global.exports('removeItemFromInventory', removeItemFromInventory);
-global.exports('getAmountInInventory', getAmountInInventory);
+global.asyncExports('doesInventoryHaveItems', doesInventoryHaveItems);
+global.asyncExports('removeItemFromInventory', removeItemFromInventory);
+global.asyncExports('getAmountInInventory', getAmountInInventory);
 global.exports('getItemStateById', getItemStateById);
-global.exports('moveItemToInventory', moveItemToInventory);
-global.exports('getItemsInInventory', getItemsInInventory);
-global.exports('getFirstItemOfName', getFirstItemOfName);
+global.asyncExports('moveItemToInventory', moveItemToInventory);
+global.asyncExports('getItemsInInventory', getItemsInInventory);
+global.asyncExports('getFirstItemOfName', getFirstItemOfName);
 
 // Events for client
 RPC.register('inventory:server:doesPlayerHaveItems', (plyId, names: string | string[]) => {

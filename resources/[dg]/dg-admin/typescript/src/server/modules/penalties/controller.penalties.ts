@@ -5,11 +5,11 @@ import { getIdentifierForPlayer } from '../../helpers/identifiers';
 import penaltyInfoManager from './classes/penaltyInfoManager';
 import { ACBan, banPlayer, isPlayerBanned, kickPlayer, warnPlayer } from './service.penalties';
 
-global.exports('isPlayerBanned', isPlayerBanned);
-global.exports('ban', banPlayer);
-global.exports('kick', kickPlayer);
-global.exports('warn', warnPlayer);
-global.exports('ACBan', ACBan);
+global.asyncExports('isPlayerBanned', isPlayerBanned);
+global.asyncExports('ban', banPlayer);
+global.asyncExports('kick', kickPlayer);
+global.asyncExports('warn', warnPlayer);
+global.asyncExports('ACBan', ACBan);
 
 on('dg-config:moduleLoaded', (module: string, data: Penalty.Config) => {
   if (module !== 'admin.bans') return;

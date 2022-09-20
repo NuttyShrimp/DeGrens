@@ -12,11 +12,11 @@ import {
 } from '../helpers/accounts';
 import { bankLogger } from '../utils';
 
-global.exports('createAccount', (cid: number, name: string, accType: AccountType = 'standard') =>
+global.asyncExports('createAccount', (cid: number, name: string, accType: AccountType = 'standard') =>
   createAccount(cid, name, accType)
 );
-global.exports('getDefaultAccount', (cid: number) => getDefaultAccount(cid));
-global.exports('getDefaultAccountId', (cid: number) => getDefaultAccountId(cid));
+global.asyncExports('getDefaultAccount', (cid: number) => getDefaultAccount(cid));
+global.asyncExports('getDefaultAccountId', (cid: number) => getDefaultAccountId(cid));
 global.exports('getAccountBalance', (accId: string) => getAccountBalance(accId));
 global.exports('getAllAccounts', () => getAllAccounts());
 

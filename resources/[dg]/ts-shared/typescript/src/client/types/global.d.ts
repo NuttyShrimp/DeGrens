@@ -25,4 +25,5 @@ declare global {
     Sounds: typeof Classes.Sounds;
     HUD: typeof Classes.HUD;
   };
+  var asyncExports: any;
 }

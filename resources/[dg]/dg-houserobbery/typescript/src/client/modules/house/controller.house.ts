@@ -10,8 +10,10 @@ export let selectedHouseInfo: House.Data = null;
 let radiusBlip: any = null;
 let radiusBlipInterval: NodeJS.Timer = null;
 
-global.exports('canLootZone', (place: string) => canSearchLocation(selectedHouse, place));
-global.exports('lootZone', (place: string, lootTable?: number) => searchLootLocation(selectedHouse, place, lootTable));
+global.asyncExports('canLootZone', (place: string) => canSearchLocation(selectedHouse, place));
+global.asyncExports('lootZone', (place: string, lootTable?: number) =>
+  searchLootLocation(selectedHouse, place, lootTable)
+);
 
 on('__dg_auth_authenticated', async () => {
   shellTypes = await RPC.execute('houserobbery:server:getShellTypes');

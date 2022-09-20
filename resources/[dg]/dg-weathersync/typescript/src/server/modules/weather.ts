@@ -104,5 +104,5 @@ const getNextTransition = (weather: Weather): Weather => {
 
 global.exports('currentWeather', () => weatherProgression[0]);
 global.exports('getProgression', () => weatherProgression);
-global.exports('setWeather', setWeather);
+global.asyncExports('setWeather', setWeather);
 global.exports('getWeatherTypes', () => activeWeathers);

@@ -21,4 +21,5 @@ declare global {
     Vector3: typeof Vector3Class;
     Vector4: typeof Vector4Class;
   };
+  var asyncExports: any;
 }
