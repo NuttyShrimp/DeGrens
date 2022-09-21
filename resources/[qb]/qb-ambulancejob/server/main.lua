@@ -80,17 +80,19 @@ end)
 
 RegisterNetEvent('hospital:server:SetDeathStatus', function(isDead)
 	local src = source
-	local Player = DGCore.Functions.GetPlayer(src)
-	if Player then
-		Player.Functions.SetMetaData("isdead", isDead)
+	local player = DGCore.Functions.GetPlayer(src)
+	if player then
+		player.Functions.SetMetaData("isdead", isDead)
+    Player(src).state:set('isDead', isDead, true)
 	end
 end)
 
 RegisterNetEvent('hospital:server:SetLaststandStatus', function(bool)
 	local src = source
-	local Player = DGCore.Functions.GetPlayer(src)
-	if Player then
-		Player.Functions.SetMetaData("inlaststand", bool)
+	local player = DGCore.Functions.GetPlayer(src)
+	if player then
+		player.Functions.SetMetaData("inlaststand", bool)
+    Player(src).state:set('inLaststand', bool, true)
 	end
 end)
 

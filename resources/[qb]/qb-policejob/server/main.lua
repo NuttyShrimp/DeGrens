@@ -693,9 +693,10 @@ end)
 
 RegisterNetEvent('police:server:SetHandcuffStatus', function(isHandcuffed)
     local src = source
-    local Player = DGCore.Functions.GetPlayer(src)
-    if Player then
-        Player.Functions.SetMetaData("ishandcuffed", isHandcuffed)
+    local player = DGCore.Functions.GetPlayer(src)
+    if player then
+        player.Functions.SetMetaData("ishandcuffed", isHandcuffed)
+        Player(src).state:set('isHandcuffed', isHandcuffed, true)
     end
 end)
 

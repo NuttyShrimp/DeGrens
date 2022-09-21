@@ -1,0 +1,49 @@
+.radio {
+  &-wrapper {
+    position: absolute;
+    right: 2vh;
+    bottom: -1vh;
+    height: 50vh;
+  }
+  &-img {
+    height: 100%;
+    width: 100%;
+    user-select: none;
+    & > img {
+      height: 100%;
+      width: 100%;
+      object-fit: contain;
+    }
+  }
+  &-freq {
+    position: absolute;
+    top: 24vh;
+    left: 5vh;
+    width: 6vh;
+    text-align: center;
+    color: black;
+    font-size: 2.1vh;
+    & > input {
+      font-family: Roboto, sans-serif;
+      font-size: 2vh;
+      font-weight: 400;
+      text-align: center;
+      width: 6vh;
+      background-color: transparent;
+      outline: none;
+      border: none;
+    }
+    & > p {
+      user-select: none;
+    }
+  }
+  &-toggle {
+    position: absolute;
+    top: 11.75vh;
+    left: 2.5vh;
+    & .fill {
+      width: 5vh;
+      height: 2.5vh;
+    }
+  }
+}

@@ -109,4 +109,5 @@ declare interface RootState {
   itemboxes: Itemboxes.State;
   laptop: Laptop.State;
   'laptop.config': Laptop.Config.State;
+  radio: Radio.State;
 }

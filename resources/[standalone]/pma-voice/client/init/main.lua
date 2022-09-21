@@ -223,9 +223,10 @@ function playMicClicks(clickType)
 	-- TODO: Add customizable radio click volumes
 	sendUIMessage({
 		sound = (clickType and "audio_on" or "audio_off"),
-		volume = (clickType and 0.1 or 0.03)
+		volume = (clickType and 0.3 or 0.13)
 	})
 end
+exports('playMicClicks', playMicClicks)
 
 --- getter for mutedPlayers
 exports('getMutedPlayers', function()

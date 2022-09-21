@@ -262,4 +262,18 @@ export const cmds: {
     app: 'laptop',
     show: false,
   },
+  {
+    cmd: 'show radio',
+    app: 'radio',
+    show: true,
+    data: {
+      frequency: 49.52,
+      enabled: false,
+    },
+  },
+  {
+    cmd: 'hide radio',
+    app: 'radio',
+    show: false,
+  },
 ];

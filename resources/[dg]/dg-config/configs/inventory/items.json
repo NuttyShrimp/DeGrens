@@ -996,5 +996,27 @@
     },
     "decayrate": 30240,
     "useable": true
+  },
+  {
+    "name": "pd_radio",
+    "label": "PD Radio",
+    "image": "pd_radio.png",
+    "size": {
+      "x": 1,
+      "y": 2
+    },
+    "decayrate": 10080,
+    "useable": true
+  },
+  {
+    "name": "radio",
+    "label": "Radio",
+    "image": "radio.png",
+    "size": {
+      "x": 1,
+      "y": 2
+    },
+    "decayrate": 10080,
+    "useable": true
   }
 ]
