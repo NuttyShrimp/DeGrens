@@ -2,6 +2,7 @@ import { RPC } from '@dgx/server';
 
 import { getCash } from '../../cash/service';
 import {
+  awaitAccountsLoaded,
   createAccount,
   createDefaultAccount,
   fetchAccounts,
@@ -9,16 +10,26 @@ import {
   getAllAccounts,
   getDefaultAccount,
   getDefaultAccountId,
+  getPermissions,
+  removePermissions,
+  setPermissions,
 } from '../helpers/accounts';
 import { bankLogger } from '../utils';
 
 global.asyncExports('createAccount', (cid: number, name: string, accType: AccountType = 'standard') =>
   createAccount(cid, name, accType)
 );
-global.asyncExports('getDefaultAccount', (cid: number) => getDefaultAccount(cid));
+
+global.asyncExports('getDefaultAccount', async (cid: number) => (await getDefaultAccount(cid)).getContext());
 global.asyncExports('getDefaultAccountId', (cid: number) => getDefaultAccountId(cid));
 global.exports('getAccountBalance', (accId: string) => getAccountBalance(accId));
 global.exports('getAllAccounts', () => getAllAccounts());
+global.exports('setPermissions', (accountId: string, cid: number, permissions: IAccountPermission) =>
+  setPermissions(accountId, cid, permissions)
+);
+global.exports('removePermissions', (accountId: string, cid: number) => removePermissions(accountId, cid));
+global.exports('getPermissions', (accountId: string, cid: number) => getPermissions(accountId, cid));
+global.exports('awaitAccountsLoaded', () => awaitAccountsLoaded());
 
 export const checkPlayerAccounts = () => {
   DGCore.Functions.GetPlayers().forEach(ply => createDefaultAccount(ply));

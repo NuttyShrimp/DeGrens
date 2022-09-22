@@ -100,6 +100,7 @@ export const showFormModal = (Form: any) => {
     visible: true,
     element: Form,
     checkmark: false,
+    warning: false,
   });
 };
 
@@ -107,12 +108,13 @@ export const hideFormModal = () => {
   genericAction('phone.form', {
     visible: false,
     checkmark: false,
+    warning: false,
     element: null,
   });
 };
 
 export const showLoadModal = () => {
-  showFormModal(Loader);
+  showFormModal(Loader({}));
 };
 
 export const showCheckmarkModal = (payload?: Function) => {
@@ -120,6 +122,21 @@ export const showCheckmarkModal = (payload?: Function) => {
     visible: false,
     checkmark: true,
     element: null,
+    warning: false,
+  });
+  setTimeout(() => {
+    hideFormModal();
+    if (!payload) return;
+    payload();
+  }, 2000);
+};
+
+export const showWarningModal = (payload?: Function) => {
+  genericAction('phone.form', {
+    visible: false,
+    checkmark: false,
+    element: null,
+    warning: true,
   });
   setTimeout(() => {
     hideFormModal();

@@ -20,15 +20,18 @@ export class AccountManager {
   private config: Config['accounts'];
   private accounts: Account[] = [];
   private logger: winston.Logger;
+  loaded: boolean;
 
   constructor() {
     this.config = null;
+    this.loaded = false;
     this.logger = bankLogger.child({ module: 'AccountManager' });
   }
 
   public async setConfig(config: Config['accounts']) {
     this.config = config;
     await this.getAccountsDB();
+    this.loaded = true;
     this.seedAccounts();
     this.logger.info(`AccountManager: loaded ${this.accounts.length} accounts from database`);
     checkPlayerAccounts();

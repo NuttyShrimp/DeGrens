@@ -31,6 +31,15 @@ export const Form: FC<React.PropsWithChildren<unknown>> = () => {
           </svg>
         </div>
       )}
+      {phoneFormState.warning && (
+        <div className={classes.warningContainer}>
+          <div className={classes.warning}>
+            <span className={classes.warningBody}></span>
+            <span className={classes.warningDot}></span>
+          </div>
+          <div>Oops, er is iets misgegaan!</div>
+        </div>
+      )}
     </div>
   );
 };

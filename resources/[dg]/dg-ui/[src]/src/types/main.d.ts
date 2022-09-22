@@ -105,6 +105,7 @@ declare interface RootState {
   'phone.apps.yellowpages': Phone.YellowPages.State;
   'phone.apps.jobcenter': Phone.JobCenter.State;
   'phone.apps.debt': Phone.Debt.State;
+  'phone.apps.business': Phone.Business.State;
   inventory: Inventory.State;
   itemboxes: Itemboxes.State;
   laptop: Laptop.State;

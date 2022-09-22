@@ -82,6 +82,12 @@ export const styles = makeStyles({
     },
     '& > .paper-description': {
       fontSize: '.9em',
+      '&.wrap': {
+        display: 'block',
+        overflowWrap: 'break-word',
+        '-webkit-line-clamp': 'none',
+        '-webkit-box-orient': 'unset',
+      },
     },
   },
   extDescription: {

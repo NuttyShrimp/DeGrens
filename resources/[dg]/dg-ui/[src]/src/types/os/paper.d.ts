@@ -13,5 +13,10 @@ declare namespace Paper {
      * @description If true, the description will be replaced with the extended description otherwise it will be added under it.
      */
     replaceDescription?: boolean;
+    /**
+     * @default false
+     * @description Do not cutoff long descriptions but wrap the text
+     */
+    allowLongDescription?: boolean;
   }
 }

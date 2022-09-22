@@ -150,7 +150,7 @@ table {
   font-family: 'Roboto', sans-serif;
 }
 
-.ui-wrapper>div {
+.ui-wrapper > div {
   position: absolute;
   top: 0;
   left: 0;
@@ -207,6 +207,12 @@ body::-webkit-scrollbar {
 
 ::-webkit-scrollbar-thumb {
   display: none;
+}
+
+
+// Fix for popover having a transparent background
+body > .MuiPopover-root > .MuiPaper-root, body > .MuiPopperUnstyled-root > .MuiPaper-root {
+  background-color: rgb(18, 18, 18)!important;
 }
 
 @media screen and (max-height: 720px) {

@@ -108,24 +108,24 @@
     },
     {
       "type": "node-terminal",
-      "name": "chars:res:build prod",
+      "name": "business:build prod",
       "request": "launch",
       "command": "yarn run build",
-      "cwd": "${workspaceFolder}/resources/[dg]/dg-chars/typescript"
+      "cwd": "${workspaceFolder}/resources/[dg]/dg-business/typescript"
     },
     {
       "type": "node-terminal",
-      "name": "chars:res:build dev",
+      "name": "business:build dev",
       "request": "launch",
       "command": "yarn run build:dev",
-      "cwd": "${workspaceFolder}/resources/[dg]/dg-chars/typescript"
+      "cwd": "${workspaceFolder}/resources/[dg]/dg-business/typescript"
     },
     {
       "type": "node-terminal",
-      "name": "chars:res:watch",
+      "name": "business:watch",
       "request": "launch",
       "command": "yarn run watch",
-      "cwd": "${workspaceFolder}/resources/[dg]/dg-chars/typescript"
+      "cwd": "${workspaceFolder}/resources/[dg]/dg-business/typescript"
     },
     {
       "type": "node-terminal",

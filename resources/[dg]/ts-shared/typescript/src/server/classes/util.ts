@@ -7,6 +7,7 @@ class Util extends UtilShared {
   constructor() {
     super();
   }
+
   generateName = (): string => {
     const firstName = firstNames[this.getRndInteger(0, firstNames.length - 1)];
     const lastName = lastNames[this.getRndInteger(0, lastNames.length - 1)];
@@ -58,6 +59,12 @@ class Util extends UtilShared {
 
   getName(src: number | string) {
     return GetPlayerName(String(src));
+  }
+
+  async getCharName(cid: number) {
+    const _DGCore = global.exports['dg-core'].GetSharedObject() as Server;
+    const player = await _DGCore.Functions.GetOfflinePlayerByCitizenId(cid);
+    return `${player.PlayerData.charinfo.firstname} ${player.PlayerData.charinfo.lastname}`;
   }
 }
 

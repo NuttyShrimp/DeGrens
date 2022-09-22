@@ -20,11 +20,11 @@ export class PermissionsManager {
   // region DB
   private async updatePermission(cid: number, access_level: number): Promise<void> {
     const query = `
-			INSERT INTO bank_accounts_access
-				(account_id, cid, access_level)
-			VALUES (?, ?, ?)
-			ON DUPLICATE KEY UPDATE access_level = ?
-		`;
+      INSERT INTO bank_accounts_access
+        (account_id, cid, access_level)
+      VALUES (?, ?, ?)
+      ON DUPLICATE KEY UPDATE access_level = ?
+    `;
     await SQL.query(query, [this.account_id, cid, access_level, access_level]);
   }
 
@@ -32,11 +32,11 @@ export class PermissionsManager {
 
   public async init(): Promise<void> {
     const query = `
-			SELECT cid,
-						 access_level
-			FROM bank_accounts_access
-			WHERE account_id = ?
-		`;
+      SELECT cid,
+             access_level
+      FROM bank_accounts_access
+      WHERE account_id = ?
+    `;
     const result: IAccountMember[] = await SQL.query(query, [this.account_id]);
     if (!result || !result.length) return;
     result.forEach(row => {
@@ -88,6 +88,11 @@ export class PermissionsManager {
     return member ? member.access_level : 0;
   };
 
+  public getMemberPermissions = (cid: number) => {
+    const level = this.getMemberLevel(cid);
+    return this.buildPermissions(level);
+  };
+
   public hasPermission(cid: number, permission: AccountPermission): boolean {
     const member = this.members.find(member => member.cid === cid);
     if (!member) {
@@ -132,5 +137,18 @@ export class PermissionsManager {
       cid,
       access_level: accessLevel,
     });
+  }
+
+  public removePermissions(cid: number): void {
+    const member = this.members.find(member => member.cid === cid);
+    SQL.query(
+      `DELETE
+               FROM bank_accounts_access
+               WHERE account_id = ?
+                 AND cid = ?`,
+      [this.account_id, cid]
+    );
+    this.logger.info(`addPermissions: removing access | cid: ${cid}`);
+    this.members = this.members.filter(m => m.cid !== cid);
   }
 }

@@ -560,6 +560,49 @@ devData.hudValues = {
   hack: 9,
 };
 
+devData.phoneBusinesses = [
+  {
+    name: 'dff',
+    label: 'De FliereFluiters',
+    role: 'Mechanieker',
+    permissions: ['hire', 'property_access'],
+    allPermissions: [
+      'hire',
+      'fire',
+      'change_role',
+      'pay_employee',
+      'pay_external',
+      'charge_external',
+      'stash',
+      'property_access',
+    ],
+  },
+  {
+    name: 'tuna',
+    label: 'Tuna shop',
+    role: 'CEO',
+    permissions: ['hire', 'fire', 'change_role', 'pay_employee', 'pay_external', 'charge_external'],
+    allPermissions: ['hire', 'fire', 'change_role', 'pay_employee', 'pay_external', 'charge_external'],
+  },
+];
+
+devData.phoneBusinessEmployees = [
+  {
+    name: '123',
+    role: 'BOZO',
+    citizenid: 1000,
+    isOwner: true,
+  },
+  {
+    name: 'You a Bish',
+    role: 'Certified Karen',
+    citizenid: 1001,
+    isOwner: false,
+  },
+];
+
+devData.phoneBusinessRoles = ['BOZO', 'Certified Karen', 'Rookie', 'Guest'];
+
 const emulatedData: Record<
   string,
   {
