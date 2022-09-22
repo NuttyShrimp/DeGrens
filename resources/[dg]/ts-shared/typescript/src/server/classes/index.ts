@@ -7,6 +7,7 @@ import jobs from './jobs';
 import phone from './phone';
 import ui from './ui';
 import util from './util';
+import financials from './financials';
 
 export const { Events, RPC, SQL, API, Auth } = events;
 export const { Util } = util;
@@ -17,3 +18,4 @@ export const { Config } = config;
 export const { Jobs } = jobs;
 export const { Admin } = admin;
 export const { Inventory } = inventory;
+export const { Financials } = financials;

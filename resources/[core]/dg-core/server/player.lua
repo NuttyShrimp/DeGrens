@@ -189,6 +189,7 @@ function DGCore.Player.CreatePlayer(PlayerData)
   -- DONT EVERY USE THIS FUNCTIONS OUTSIDE CORE or I will personally beat you up - regards Nutty
   self.Functions.setCitizenid = function(cid)
     self.PlayerData.citizenid = cid
+    self.Functions.UpdatePlayerData()
   end
 
   self.Functions.SetGang = function(gang, grade)

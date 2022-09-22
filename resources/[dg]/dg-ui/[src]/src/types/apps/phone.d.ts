@@ -124,6 +124,7 @@ declare namespace Phone {
     visible: boolean;
     element: React.ReactElement<any> | null;
     checkmark: boolean;
+    warning: boolean;
   }
 
   //endregion
@@ -313,11 +314,13 @@ declare namespace Phone {
       limit: number;
       idle: boolean;
     }
+
     interface Member {
       name: string;
       ready: boolean;
       isOwner: boolean;
     }
+
     interface Job {
       name: string;
       title: string;
@@ -325,6 +328,7 @@ declare namespace Phone {
       legal: boolean;
       icon: string;
     }
+
     interface State {
       jobs: Job[];
       groups: Group[];
@@ -350,6 +354,44 @@ declare namespace Phone {
 
     interface State {
       list: Debt[];
+    }
+  }
+  namespace Business {
+    interface Business {
+      id: number;
+      label: string;
+      role: string;
+      // My permissions
+      permissions: string[];
+      allPermissions: string[];
+    }
+
+    interface Employee {
+      name: string;
+      role: string;
+      citizenid: number;
+      isOwner: boolean;
+      bank: Financials.AccountPermission;
+    }
+
+    interface Log {
+      id: number;
+      // Name behind citizenid from DB
+      name: string;
+      type: string;
+      // msg
+      action: string;
+    }
+
+    interface State {
+      list: Business[];
+      employees: Employee[];
+      currentBusiness: number | null;
+      activeApp: 'business' | 'employee' | 'log';
+      // Available roles for current selected business
+      roles: Record<strimg, string[]>;
+      permissionLabels: Record<string, string>;
+      logs: Log[];
     }
   }
   // endregion

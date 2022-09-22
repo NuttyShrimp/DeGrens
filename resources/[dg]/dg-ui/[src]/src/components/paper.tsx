@@ -53,7 +53,7 @@ export const Paper: FC<React.PropsWithChildren<Paper.Props>> = props => {
             <div className={classes.textWrapper}>
               {props.title && <div className={'paper-title'}>{props.title}</div>}
               {props.description && (!props.replaceDescription || !showExtDescription) && (
-                <div className={'paper-description'}>
+                <div className={`paper-description ${props.allowLongDescription ? 'wrap' : ''}`}>
                   {typeof props.description === 'string' ? <span>{props.description}</span> : props.description}
                 </div>
               )}

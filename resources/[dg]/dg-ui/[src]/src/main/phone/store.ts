@@ -21,6 +21,7 @@ const store: StoreObject<Phone.State, Phone.AuxState> = {
       visible: false,
       element: null,
       checkmark: false,
+      warning: false,
     },
     'phone.notifications': {
       list: [],

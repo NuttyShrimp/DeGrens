@@ -18,6 +18,7 @@ declare global {
     Admin: typeof Classes.Admin;
     Inventory: typeof Classes.Inventory;
     Auth: typeof Classes.Auth;
+    Financials: typeof Classes.Financials;
     Vector3: typeof Vector3Class;
     Vector4: typeof Vector4Class;
   };

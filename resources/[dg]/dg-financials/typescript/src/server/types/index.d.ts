@@ -7,6 +7,14 @@ declare interface IAccountMember {
   access_level: number;
 }
 
+declare interface AccountContext {
+  account_id: string;
+  name: string;
+  type: AccountType;
+  balance: number;
+  members: IAccountMember[];
+}
+
 declare namespace ActionData {
   interface Standard {
     accountId: string;

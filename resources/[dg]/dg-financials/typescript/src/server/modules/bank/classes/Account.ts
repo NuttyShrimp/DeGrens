@@ -58,7 +58,7 @@ export class Account {
     const accId = generateAccountId();
     const query = `
       INSERT INTO bank_accounts (account_id, name, type)
-      VALUES (?, ?, ?) RETURNING *
+      VALUES (?, ?, ?)
     `;
     await SQL.query(query, [accId, name, accType]);
     const _account = new Account(accId, name, accType);
@@ -99,7 +99,7 @@ export class Account {
     return this.permsManager.hasAccess(cid);
   }
 
-  public getContext() {
+  public getContext(): AccountContext {
     return {
       account_id: this.account_id,
       name: this.name,

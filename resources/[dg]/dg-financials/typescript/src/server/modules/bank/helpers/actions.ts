@@ -4,6 +4,7 @@ import { bankLogger } from '../utils';
 
 const AManager = AccountManager.getInstance();
 
+// TODO: make all action return booleans based on their outcome
 export const deposit = async (accountId: string, triggerCid: number, amount: number, comment?: string) => {
   const account = AManager.getAccountById(accountId);
   if (!account) {

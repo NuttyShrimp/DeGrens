@@ -1,3 +1,4 @@
+import { Util } from '@dgx/server';
 import { getConfigModule } from 'helpers/config';
 
 import { Account } from '../classes/Account';
@@ -5,6 +6,10 @@ import { AccountManager } from '../classes/AccountManager';
 import { bankLogger } from '../utils';
 
 import { paycheck } from './actions';
+
+export const awaitAccountsLoaded = () => {
+  return Util.awaitCondition(() => AccountManager.getInstance().loaded);
+};
 
 export const createAccount = async (cid: number, name: string, accType: AccountType = 'standard') => {
   const accId = await AccountManager.getInstance().createAccount(cid, name, accType);
@@ -44,3 +49,23 @@ export const getAllAccounts = () =>
   AccountManager.getInstance()
     .getAllAcounts()
     .map(a => a.getContext());
+
+export const setPermissions = (accountId: string, cid: number, permissions: IAccountPermission) => {
+  const account = AccountManager.getInstance().getAccountById(accountId);
+  if (!account) false;
+  account.permsManager.addPermissions(cid, permissions);
+  return true;
+};
+
+export const removePermissions = (accountId: string, cid: number) => {
+  const account = AccountManager.getInstance().getAccountById(accountId);
+  if (!account) false;
+  account.permsManager.removePermissions(cid);
+  return true;
+};
+
+export const getPermissions = (accountId: string, cid: number) => {
+  const account = AccountManager.getInstance().getAccountById(accountId);
+  if (!account) null;
+  return account.permsManager.getMemberPermissions(cid);
+};
