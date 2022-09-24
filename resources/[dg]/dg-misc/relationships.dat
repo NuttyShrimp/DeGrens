@@ -1,8 +1,10 @@
 #	Acquaintance options:
-#	- Hate
-#	- Dislike 
-#	- Like	
-#	- Respect
+#	- Hate    (More than likley will immediately attack)
+#	- Dislike (Will tease and talk bad about player but won't immediately attack)
+#	- Like	  (Will attempt to interact or greet. Good greetings)
+#	- Respect (Nuteral)
+
+# People Options
 PLAYER
 CIVMALE	
 CIVFEMALE	
@@ -48,11 +50,11 @@ CAT
 PLAYER
 	Like PLAYER
 CIVMALE	
-#   Respect CIVMALE
-#   Respect CIVFEMALE
+   Respect CIVMALE
+   Respect CIVFEMALE
 CIVFEMALE	
-#   Respect CIVFEMALE
-#   Respect CIVMALE
+   Respect CIVFEMALE
+   Respect CIVMALE
 COP 
     Respect MEDIC FIREMAN COP
     Respect ARMY

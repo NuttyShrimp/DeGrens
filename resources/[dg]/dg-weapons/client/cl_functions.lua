@@ -160,11 +160,16 @@ startWeaponLoop = function()
             end
 
             SetWeaponsNoAutoswap(true)
+            SetPedCanSwitchWeapon(ped, false)
             DisplayAmmoThisFrame(true)
 
             if GetAmmoInPedWeapon(ped, currentWeaponData.hash) == 1 and not currentWeaponData.isOneTimeUse then
                 DisablePlayerFiring(ped, true)
             end
+
+            DisableControlAction(1, 140, true)
+            DisableControlAction(1, 141, true)
+            DisableControlAction(1, 142, true)
 
             Citizen.Wait(0)
         end

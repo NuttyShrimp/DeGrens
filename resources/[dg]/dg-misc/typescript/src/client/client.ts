@@ -7,8 +7,11 @@ import './services/laptop';
 
 import { startCrouchThread } from 'modules/crouch/service.crouch';
 import { setDiscordRichPresence } from 'modules/discord/service.discord';
+import { setGTABehaviour } from 'modules/gtabehaviour/service.gtabehaviour';
 
 setImmediate(() => {
   startCrouchThread();
   setDiscordRichPresence();
+
+  setGTABehaviour();
 });

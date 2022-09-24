@@ -1,12 +1,5 @@
 Config = {}
-Config.MaxWidth = 5.0
-Config.MaxHeight = 5.0
-Config.MaxLength = 5.0
-Config.DamageNeeded = 100.0
-Config.EnableProne = true
 Config.JointEffectTime = 60
-Config.RemoveWeaponDrops = true
-Config.RemoveWeaponDropsTimer = 25
 Config.DefaultPrice = 20 -- carwash
 
 Consumeables = {
@@ -21,48 +14,6 @@ Consumeables = {
     ["beer"] = math.random(30, 40),
     ["vodka"] = math.random(20, 40),
 }
-
-Config.BlacklistedScenarios = {
-    ['TYPES'] = {
-        "WORLD_VEHICLE_MILITARY_PLANES_SMALL",
-        "WORLD_VEHICLE_MILITARY_PLANES_BIG",
-    },
-    ['GROUPS'] = {
-        2017590552,
-        2141866469,
-        1409640232,
-        `ng_planes`,
-    }
-}
-
-Config.BlacklistedVehs = {
-    [`SHAMAL`] = true,
-    [`LUXOR`] = true,
-    [`LUXOR2`] = true,
-    [`JET`] = true,
-    [`LAZER`] = true,
-    [`BUZZARD`] = true,
-    [`ANNIHILATOR`] = true,
-    [`SAVAGE`] = true,
-    [`TITAN`] = true,
-    [`RHINO`] = true,
-    [`FIRETRUK`] = true,
-    [`MULE`] = true,
-    [`MAVERICK`] = true,
-    [`BLIMP`] = true,
-    [`AIRTUG`] = true,
-    [`CAMPER`] = true,    
-}
-
-Config.BlacklistedPeds = {
-    [`s_m_y_ranger_01`] = true,
-    [`s_m_y_sheriff_01`] = true,
-    [`s_m_y_cop_01`] = true,
-    [`s_f_y_sheriff_01`] = true,
-    [`s_f_y_cop_01`] = true,
-    [`s_m_y_hwaycop_01`] = true,
-}
-
 Config.Locations = { -- carwash
     [1] = {
         ["label"] = "Hands Free Carwash",

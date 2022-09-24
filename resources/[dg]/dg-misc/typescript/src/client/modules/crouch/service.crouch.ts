@@ -10,7 +10,6 @@ export const changeWalk = (walk: string) => {
 // This method instead of libkeybind because we need to overwrite gta control action of crouch button
 export const startCrouchThread = () => {
   setInterval(() => {
-    DisableControlAction(0, 36, true);
     const ped = PlayerPedId();
     if (!ped) return;
 

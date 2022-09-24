@@ -11,3 +11,10 @@ client_scripts {
   "@dg-logs/client/cl_log.lua",
   "client/*.js",
 }
+
+files {
+	'popgroups.ymt',
+  'relationships.dat'
+}
+
+data_file 'FIVEM_LOVES_YOU_341B23A2F0E0F131' 'popgroups.ymt'
