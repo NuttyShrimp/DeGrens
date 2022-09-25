@@ -2,21 +2,24 @@ local entries = {}
 
 registerInfoEntry = function(name, getter, icon, color, prefix)
   local entry = {
-      name = name,
-			value = getter(),
-      icon = icon,
-      color = color,
-      prefix = prefix
+    name = name,
+		value = getter(),
+    icon = icon,
+    color = color,
+    prefix = prefix
   }
-	SendAppEvent('phone',{
-		appName="info",
-		action="registerInfoEntry",
-		data = {
-			entry = entry
-		}
-  })
+  if not entries[name] then
+    print(('[Phone] Registering new info entry: "%s"'):format(name))
+    SendAppEvent('phone',{
+      appName="info",
+      action="registerInfoEntry",
+      data = {
+        entry = entry
+      }
+    })
+  end
 	entry.getter = getter
-  entries[#entries+1] = entry
+  entries[name] = entry
 end
 
 exports('registerInfoEntry', registerInfoEntry)
@@ -41,7 +44,7 @@ end)
 
 RegisterUICallback("phone/info/fetchInfo", function(data, cb)
 	local info = {}
-	for k,v in ipairs(entries) do
+	for _, v in ipairs(entries) do
 		local value = v.getter()
     if value ~= nil then
       info[v.name] = value

@@ -139,7 +139,7 @@ declare namespace Phone {
     }
 
     interface Props {
-      entries: InfoAppEntry[];
+      entries: Record<string, InfoAppEntry>;
     }
   }
   namespace Contacts {
