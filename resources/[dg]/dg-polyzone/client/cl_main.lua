@@ -30,17 +30,18 @@ local function addToComboZone(zone)
 end
 
 local function doCreateZone(options)
+  local key = options.name
 	if options.data and options.data.id then
-		local key = options.name .. "_" .. tostring(options.data.id)
-		if not createdZones[key] then
-			createdZones[key] = true
-			return true
-		else
-			print('polyzone with name/id already added, skipping: ', key)
-			return false
-		end
+    key = ('%s_%s'):format(options.name, tostring(options.data.id))
 	end
-	return true
+  
+  if createdZones[key] then
+    print('polyzone with name/id already added, skipping: ', key)
+    return false
+  end
+
+  createdZones[key] = true
+  return true
 end
 
 exports("AddBoxZone", function(name, vectors, length, width, options)
@@ -117,7 +118,10 @@ exports('removeZone', function(name, id)
   for i, zone in pairs(zones) do
     if zone.name == name and (id == nil or zone.data.id == id) then
       targetZone:RemoveZone(name)
-      local id = ('%s_%s'):format(name, zone.data.id)
+      local id = name
+      if zone.data and zone.data.id then
+        id = ('%s_%s'):format(name, zone.data.id)
+      end
       createdZones[id] = nil
       zone:destroy()
     end

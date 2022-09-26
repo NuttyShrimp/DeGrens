@@ -661,6 +661,7 @@ RegisterNetEvent('hospital:client:Revive', function()
     TriggerServerEvent('hud:server:RelieveStress', 100)
     TriggerServerEvent("hospital:server:SetDeathStatus", false)
     TriggerServerEvent("hospital:server:SetLaststandStatus", false)
+    DGX.Events.emitNet('hud:server:RelieveStress', 100)
 
     DGCore.Functions.Notify("You are completely healthy again!")
 end)
@@ -954,7 +955,7 @@ CreateThread(function()
     end
 end)
 
-export('SendToBed', function()
+exports('SendToBed', function()
     sleep = 7
     if IsControlJustReleased(0, 38) then
         if GetAvailableBed(closestBed) then
