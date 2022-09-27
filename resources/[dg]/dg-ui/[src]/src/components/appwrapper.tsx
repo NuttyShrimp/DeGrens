@@ -2,11 +2,12 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { nuiAction } from '@lib/nui-comms';
 import { store, type } from '@lib/redux';
-import { addLog } from '@main/debuglogs/lib';
 import makeStyles from '@mui/styles/makeStyles';
 import * as Sentry from '@sentry/react';
 
 import { useApps } from '../lib/hooks/useApps';
+
+import { useEventHandler } from './context/eventHandlerCtx';
 
 declare interface AppWrapperProps {
   appName: keyof RootState;
@@ -85,8 +86,9 @@ export default function AppWrapper(props: AppWrapperProps) {
   const mainStateApp = useSelector<RootState, string>(state => state.main.currentApp);
   const styles = useStyles(props);
   const { getApp } = useApps();
+  const { addHandler, removeHandler } = useEventHandler();
   const appInfo = getApp(props.appName);
-  const appState = useSelector<RootState, { visible: boolean }>(state => state[props.appName]);
+  const appVisible = useSelector<RootState, boolean>(state => state[props.appName].visible);
 
   const [active, setActive] = useState(false);
 
@@ -98,7 +100,7 @@ export default function AppWrapper(props: AppWrapperProps) {
         type: appInfo?.type,
       });
     },
-    [props.onHide, appInfo]
+    [appInfo]
   );
 
   const showApp = useCallback<AppWrapperProps['onShow']>(
@@ -108,69 +110,23 @@ export default function AppWrapper(props: AppWrapperProps) {
         nuiAction('__appwrapper:setfocus');
       }
     },
-    [props.onShow, appInfo]
+    [appInfo]
   );
 
   const eventHandler = useCallback(
     (e: any) => {
-      addLog({ name: `AppWrapper:${props.appName}`, body: {}, response: e.data, isOk: true });
       if (e.data.show) {
         showApp(e.data);
         return;
       } else if (e.data.show === false) {
-        // Handles hide by event
-        if (appState.visible) {
-          if (mainStateApp === 'cli') {
-            setCurrentApp('');
-          }
-          hideApp();
-        }
+        hideApp();
         return;
       }
       if (props.onEvent) {
         props.onEvent(e.data.data);
       }
     },
-    [props.onEvent, hideApp, showApp, appInfo, appState, mainStateApp]
-  );
-
-  const evtMiddleware = useCallback(
-    (e: any) => {
-      e.preventDefault();
-      if (e.data.app === props.appName) {
-        if (e.data?.skipSentry) {
-          eventHandler(e);
-          return;
-        }
-        const transaction = Sentry.startTransaction({
-          name: 'incomingAppEvent',
-          tags: {
-            app: props.appName,
-          },
-        });
-        Sentry.getCurrentHub().configureScope(scope => {
-          scope.setSpan(transaction);
-        });
-        const span = transaction.startChild({
-          op: 'AppWrapper.eventHandler',
-          description: `Incoming event for ${props.appName} handled by AppWrapper`,
-          data: {
-            eventData: e.data,
-          },
-        });
-        try {
-          eventHandler(e);
-          span.setStatus('ok');
-        } catch (e) {
-          span.setStatus('unknown_error');
-          throw e;
-        } finally {
-          span.finish();
-          transaction.finish();
-        }
-      }
-    },
-    [props.appName, eventHandler]
+    [hideApp, showApp]
   );
 
   // Handles escape
@@ -178,7 +134,7 @@ export default function AppWrapper(props: AppWrapperProps) {
     (e: React.KeyboardEvent<HTMLDivElement>) => {
       switch (e.key) {
         case 'Escape':
-          if (appState.visible && active) {
+          if (appVisible && active) {
             if (props.onEscape) {
               const shouldClose = props.onEscape();
               if (shouldClose === true) {
@@ -196,7 +152,7 @@ export default function AppWrapper(props: AppWrapperProps) {
           break;
       }
     },
-    [appState, active, props.onEscape, props.appName]
+    [appVisible, active]
   );
 
   const handleError: any = (e: Error) => {
@@ -224,13 +180,11 @@ export default function AppWrapper(props: AppWrapperProps) {
   };
 
   useEffect(() => {
-    window.addEventListener('message', evtMiddleware);
     window.addEventListener('keydown', handlePress);
     return () => {
-      window.removeEventListener('message', evtMiddleware);
       window.removeEventListener('keydown', handlePress);
     };
-  }, [evtMiddleware, handlePress]);
+  }, [handlePress]);
 
   // Saved hide and show functions to use outside AppWrapper (closeApplication function)
   useEffect(() => {
@@ -238,17 +192,17 @@ export default function AppWrapper(props: AppWrapperProps) {
     return () => {
       delete registeredApps[props.appName];
     };
-  }, [active, props.appName, hideApp, showApp]);
+  }, [hideApp, showApp]);
 
   useEffect(() => {
-    if (appState.visible) {
+    if (appVisible) {
       setCurrentApp(props.appName);
     } else {
       if (active) {
         setCurrentApp('');
       }
     }
-  }, [appState.visible]);
+  }, [appVisible]);
 
   useEffect(() => {
     const isActiveApp = mainStateApp === props.appName;
@@ -262,15 +216,20 @@ export default function AppWrapper(props: AppWrapperProps) {
     }
   }, [appInfo]);
 
+  useEffect(() => {
+    addHandler(props.appName, eventHandler);
+    return () => removeHandler(props.appName);
+  }, [eventHandler]);
+
   return (
     <Sentry.ErrorBoundary onError={handleError} fallback={<div>{props.appName} has crashed, restart your ui</div>}>
       <div
-        className={`${styles.wrapper}${appState.visible ? '' : ' hidden'}`}
+        className={`${styles.wrapper}${appVisible ? '' : ' hidden'}`}
         style={{ zIndex: active ? 10 : 1, ...(props.style || {}) }}
         data-appwrapper={props.appName}
         onClick={handleActiveApp}
       >
-        {appState.visible && props.children}
+        {appVisible && props.children}
       </div>
     </Sentry.ErrorBoundary>
   );
