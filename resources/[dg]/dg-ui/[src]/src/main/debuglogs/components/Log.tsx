@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { TextareaAutosize, Typography } from '@mui/material';
 
 export const Log: React.FC<React.PropsWithChildren<{ log: DebugLogs.log }>> = props => {
@@ -32,9 +32,12 @@ export const Log: React.FC<React.PropsWithChildren<{ log: DebugLogs.log }>> = pr
 };
 
 export const LogList = props => {
+  const logs = useMemo(() => {
+    return props.logs.slice(0, 20);
+  }, [props.logs]);
   return (
     <div className={'log__list'}>
-      {props.logs.slice(0, 20).map(log => (
+      {logs.map(log => (
         <Log log={log} key={log.id} />
       ))}
     </div>

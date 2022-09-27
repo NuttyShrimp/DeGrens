@@ -29,12 +29,12 @@ export const useApps = () => {
 
   const getApp = useCallback(
     (name: keyof RootState): ConfigObject | undefined => mainState.apps.find(a => a.name === name),
-    [mainState]
+    [mainState.apps]
   );
 
   const getCurrentAppType = useCallback(() => {
     return mainState.apps.filter(a => a.name !== 'cli').find(a => a.name === mainState.currentApp)?.type;
-  }, [mainState]);
+  }, [mainState.apps]);
 
   return {
     loadApps,

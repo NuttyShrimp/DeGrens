@@ -8,8 +8,12 @@ const evtHandlerCtx = createContext<{
   addHandler: (app: string, handler: (data: any) => void) => void;
   removeHandler: (app: string) => void;
 }>({
-  addHandler: () => {},
-  removeHandler: () => {},
+  addHandler: () => {
+    // placeholder
+  },
+  removeHandler: () => {
+    // placeholder
+  },
 });
 
 export const EventHandlerProvider: FC<PropsWithChildren<{}>> = ({ children }) => {

@@ -1,4 +1,5 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { useSelector } from 'react-redux';
 import AppWrapper from '@components/appwrapper';
 import { devData } from '@src/lib/devdata';
 import { isDevel } from '@src/lib/env';
@@ -19,6 +20,68 @@ import './styles/hud.scss';
 const Component: AppFunction<Hud.State> = props => {
   const [cashVisible, setCashVisible] = useState(false);
   const cashFlashTimeout = useRef<NodeJS.Timeout | null>(null);
+  const phoneOpen = useSelector<RootState, boolean>(state => state.phone.animating !== 'closed');
+
+  const evtHandlers = useMemo(() => {
+    return {
+      setValues: (evt: any) => {
+        props.updateState({
+          values: evt.values,
+          voice: evt.voice,
+        });
+      },
+      addEntry: (evt: any) => {
+        props.updateState({
+          entries: [...props.entries, evt.data as Hud.Entry].sort((e1, e2) => e1.order - e2.order),
+        });
+      },
+      deleteEntry: (evt: any) => {
+        props.updateState({
+          entries: props.entries.filter(e => e.name !== evt.data.name),
+        });
+      },
+      toggleEntry: (evt: any) => {
+        props.updateState({
+          entries: props.entries.map(e => {
+            if (e.name === evt.data.name) {
+              e.enabled = evt.data.enabled;
+            }
+            return e;
+          }),
+        });
+      },
+      setCarValues: (evt: any) => {
+        props.updateState({
+          car: evt.data,
+        });
+      },
+      setCompassValues: (evt: any) => {
+        props.updateState({
+          compass: evt.data,
+        });
+      },
+      flashCash: (evt: any) => {
+        flashCash(evt.data as number);
+      },
+      addCashHistory: (evt: any) => {
+        props.updateState({
+          cash: {
+            ...props.cash,
+            history: [...props.cash.history, evt.data],
+          },
+        });
+        flashCash(evt.amount as number);
+        setTimeout(() => {
+          props.updateState(state => ({
+            cash: {
+              ...state.hud.cash,
+              history: state.hud.cash.history.slice(1),
+            },
+          }));
+        }, 5000);
+      },
+    };
+  }, [props.updateState]);
 
   const showHud = () => {
     props.updateState({
@@ -62,66 +125,8 @@ const Component: AppFunction<Hud.State> = props => {
   };
 
   const handleEvents = evt => {
-    switch (evt.action) {
-      case 'setValues':
-        props.updateState({
-          values: evt.values,
-          voice: evt.voice,
-        });
-        break;
-      case 'addEntry':
-        props.updateState({
-          entries: [...props.entries, evt.data as Hud.Entry].sort((e1, e2) => e1.order - e2.order),
-        });
-        break;
-      case 'deleteEntry':
-        props.updateState({
-          entries: props.entries.filter(e => e.name !== evt.data.name),
-        });
-        break;
-      case 'toggleEntry':
-        props.updateState({
-          entries: props.entries.map(e => {
-            if (e.name === evt.data.name) {
-              e.enabled = evt.data.enabled;
-            }
-            return e;
-          }),
-        });
-        break;
-      case 'setCarValues':
-        props.updateState({
-          car: evt.data,
-        });
-        break;
-      case 'setCompassValues':
-        props.updateState({
-          compass: evt.data,
-        });
-        break;
-      case 'flashCash':
-        flashCash(evt.data as number);
-        break;
-      case 'addCashHistory':
-        props.updateState({
-          cash: {
-            ...props.cash,
-            history: [...props.cash.history, evt.data],
-          },
-        });
-        flashCash(evt.amount as number);
-        setTimeout(() => {
-          props.updateState(state => ({
-            cash: {
-              ...state.hud.cash,
-              history: state.hud.cash.history.slice(1),
-            },
-          }));
-        }, 5000);
-        break;
-      default:
-        break;
-    }
+    if (!evtHandlers[evt.action]) return;
+    evtHandlers[evt.action](evt);
   };
 
   useEffect(() => {
@@ -131,7 +136,7 @@ const Component: AppFunction<Hud.State> = props => {
   return (
     <AppWrapper appName={store.key} onShow={showHud} onHide={hideHud} onEvent={handleEvents} full>
       <HudBar voice={props.voice} values={props.values} entries={props.entries} />
-      {props.car.visible && <SpeedoMeter car={props.car} />}
+      {props.car.visible && !phoneOpen && <SpeedoMeter />}
       <Compass {...props.compass} />
       {cashVisible && <Cash {...props.cash} />}
     </AppWrapper>

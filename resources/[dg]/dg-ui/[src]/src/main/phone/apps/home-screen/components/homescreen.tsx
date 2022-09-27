@@ -11,18 +11,15 @@ import { AppContainer } from '../../../os/appcontainer/appcontainer';
 import { styles } from './homescreen.styles';
 
 const AppIcon: FC<React.PropsWithChildren<ConfigObject>> = props => {
-  const hasNotification = useSelector<RootState, boolean>(
-    state => state[`phone.apps.${props.name}`]?.hasNotification ?? false
-  );
+  const hasNotification = useSelector<RootState, boolean>(state => state[`phone.apps.${props.name}`]?.hasNotification);
   const classes = styles();
+  const appName = useMemo(() => {
+    return isDevel() ? `${props.name} | ${props.label} (${props.position})` : props.label;
+  }, [props.name, props.label, props.position]);
   return (
-    <Tooltip
-      placement={'top'}
-      arrow
-      title={isDevel() ? `${props.name} | ${props.label} (${props.position})` : props.label}
-    >
-      <div>
-        <Badge color={'error'} invisible={!hasNotification} variant={'dot'}>
+    <div>
+      <Tooltip placement={'top'} arrow title={appName}>
+        <Badge color={'error'} invisible={!(hasNotification ?? false)} variant={'dot'}>
           <div
             className={classes.app}
             onClick={() => changeApp(props.name)}
@@ -35,8 +32,8 @@ const AppIcon: FC<React.PropsWithChildren<ConfigObject>> = props => {
             <Icon lib={props.icon.lib} name={props.icon.name} size={props.icon.size ?? '1.5rem'} />
           </div>
         </Badge>
-      </div>
-    </Tooltip>
+      </Tooltip>
+    </div>
   );
 };
 const EmptyIcon = () => {
