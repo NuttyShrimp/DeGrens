@@ -44,6 +44,8 @@ threads = {
 }
 entryHooks = {}
 isDirty = false
+isCarDirty = false
+isCompassDirty = false
 isLoggedIn = LocalPlayer.state.loggedIn
 
 hasCompass = false
@@ -225,6 +227,13 @@ startValueLoop = function()
         isDirty = true
         state.voice.active = isTalking
       end
+      if inVehicle then
+        engineHealth = GetVehicleEngineHealth(car) < 500
+        if engineHealth ~= state.car.indicator.engine then
+          state.car.indicator.engine = engineHealth
+          isCarDirty = true
+        end
+      end
       for name, getter in pairs(entryHooks) do
         newVal = getter(cache.ped, cache.id)
         if newVal ~= state.values[name] then
@@ -254,12 +263,18 @@ function startCarLoop()
     threads.vehicle = true
     while inVehicle do
       local car = GetVehiclePedIsIn(cache.ped, false)
-      state.car.speed = math.ceil(GetEntitySpeed(car) * 3.6)
-      state.car.indicator.engine = GetVehicleEngineHealth(car) < 500
-      SendAppEventWESentry('hud', {
-        action = 'setCarValues',
-        data = state.car,
-      })
+      newSpeed = math.ceil(GetEntitySpeed(car) * 3.6)
+      if (newSpeed ~= state.car.speed) then
+        state.car.speed = newSpeed;
+        isCarDirty = true
+      end
+      if (isCarDirty) then
+        SendAppEventWESentry('hud', {
+          action = 'setCarValues',
+          data = state.car,
+        })
+        isCarDirty = false
+      end
       Wait(50)
     end
     threads.vehicle = false
@@ -309,12 +324,20 @@ function startCompassLoop()
     state.compass.visible = true
     threads.compass = true
     while inVehicle or hasCompass do
-      state.compass.heading = math.floor(-GetFinalRenderedCamRot(0).z % 360)
-      SendAppEventWESentry('hud', {
-        action = 'setCompassValues',
-        data = state.compass
-      })
-      Wait(16)
+      newHeading = math.floor(-GetFinalRenderedCamRot(0).z % 360)
+      if (newHeading ~= state.compass.heading) then
+        state.compass.heading = newHeading
+        isCompassDirty = true
+      end
+      if isCompassDirty then
+        isCompassDirty = false
+        SendAppEventWESentry('hud', {
+          action = 'setCompassValues',
+          data = state.compass
+        })
+      end
+      -- ~30fps
+      Wait(35)
     end
     state.compass.visible = false
     SendAppEventWESentry('hud', {
