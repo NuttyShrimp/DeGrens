@@ -2,7 +2,7 @@ import { Inputs } from '../../../enums/inputs';
 
 interface SetJobData {
   Target?: UI.Player;
-  Job: UI.Job;
+  WhitelistedJobs: UI.Job;
   rank?: number;
   cid?: string;
 }
@@ -19,7 +19,7 @@ export const addjobwhitelist: CommandData = {
     }
     global.exports['dg-jobs'].addToWhitelist(
       caller.source,
-      args.Job,
+      args.WhitelistedJobs.name,
       Number(args.rank),
       args.cid ?? args?.Target.cid ?? caller.cid
     );

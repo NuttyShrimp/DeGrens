@@ -2,7 +2,7 @@ import { Inputs } from '../../../enums/inputs';
 
 interface SetJobData {
   Target?: UI.Player;
-  Job: UI.Job;
+  WhitelistedJobs: UI.Job;
   cid?: string;
 }
 
@@ -13,7 +13,11 @@ export const removejobwhitelist: CommandData = {
   target: false,
   isClientCommand: false,
   handler: (caller, args: SetJobData) => {
-    global.exports['dg-jobs'].removeFromWhitelist(caller.source, args.Job, args.cid ?? args?.Target.cid ?? caller.cid);
+    global.exports['dg-jobs'].removeFromWhitelist(
+      caller.source,
+      args.WhitelistedJobs.name,
+      args.cid ?? args?.Target.cid ?? caller.cid
+    );
   },
   UI: {
     title: 'Remove whitelist for job',

@@ -168,7 +168,10 @@ export const addWhitelist = async (src: number, jobName: string, rank = 1, cid?:
   cid = cid ?? Util.getCID(src);
   if (!cid) return;
   const job = getPlayerInfoForJob(cid, jobName);
-  if (job) return;
+  if (job) {
+    Notifications.add(src, `player ${cid} already has job ${jobName}`, 'error');
+    return;
+  }
   const jobConfig = getJobConfig(jobName);
   if (!jobConfig) return;
   if (rank > jobConfig.grades.length) {
