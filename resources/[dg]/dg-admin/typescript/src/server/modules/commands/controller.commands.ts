@@ -6,10 +6,14 @@ setImmediate(() => {
   loadCommands();
 });
 
-Events.onNet('admin:commands:damageEntity', (_, ent: number) => {
-  emitNet('admin:commands:damageEntity', NetworkGetEntityOwner(ent), ent);
+Events.onNet('admin:server:damageEntity', (_, netId: number) => {
+  const entity = NetworkGetEntityFromNetworkId(netId);
+  if (!entity || !DoesEntityExist(entity)) return;
+  Events.emitNet('admin:client:damageEntity', NetworkGetEntityOwner(entity), netId);
 });
 
-Events.onNet('admin:commands:deleteEntity', (_, ent: number) => {
-  emitNet('admin:commands:deleteEntity', NetworkGetEntityOwner(ent), ent);
+Events.onNet('admin:server:deleteEntity', (_, netId: number) => {
+  const entity = NetworkGetEntityFromNetworkId(netId);
+  if (!entity || !DoesEntityExist(entity)) return;
+  DeleteEntity(entity);
 });

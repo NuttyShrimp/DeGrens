@@ -2,36 +2,23 @@ import { Events, RPC, Util } from '@dgx/client';
 
 import { togglePlayerBlips } from '../../service/playerBlips';
 
-// TODO: replace with DGX events if same side emitting is added to cross side emitting
-onNet('admin:commands:damageEntity', (ent: number) => {
+// Functiontypes fuck up when putting this in command directly because that file is serversided but function gets executed on client
+on('admin:commands:damageEntity', (ent: number) => {
   ent = Number(ent);
   if (!NetworkGetEntityIsNetworked(ent) || NetworkGetEntityOwner(ent) === PlayerId()) {
-    switch (GetEntityType(ent)) {
-      case 1: {
-        ApplyDamageToPed(ent, 100, false);
-        break;
-      }
-      case 2: {
-        SetVehicleDamage(ent, 0.0, 0.0, 0.33, 200.0, 100.0, true);
-        SetVehicleEngineHealth(ent, Math.max(0, GetVehicleEngineHealth(ent) - 250));
-        SetVehicleBodyHealth(ent, Math.max(0, GetVehicleBodyHealth(ent) - 250));
-        break;
-      }
-    }
+    damageEntity(ent);
     return;
   }
-  Events.emitNet('admin:commands:damageEntity', NetworkGetNetworkIdFromEntity(ent));
+  Events.emitNet('admin:server:damageEntity', NetworkGetNetworkIdFromEntity(ent));
 });
-
-onNet('admin:commands:deleteEntity', async (ent: number) => {
+on('admin:commands:deleteEntity', (ent: number) => {
   ent = Number(ent);
-  if (!NetworkGetEntityIsNetworked(ent) || NetworkGetEntityOwner(ent) === PlayerId()) {
-    await Util.requestEntityControl(ent);
+  if (!NetworkGetEntityIsNetworked(ent)) {
     SetEntityAsMissionEntity(ent, true, true);
     DeleteEntity(ent);
     return;
   }
-  Events.emitNet('admin:commands:deleteEntity', NetworkGetNetworkIdFromEntity(ent));
+  Events.emitNet('admin:server:deleteEntity', NetworkGetNetworkIdFromEntity(ent));
 });
 
 Events.onNet('admin:commands:runCmd', (handler, args: any[]) => {
@@ -65,3 +52,24 @@ RPC.register('admin:cmd:getWaypointCoords', () => {
   const coords = GetBlipCoords(blip);
   return Util.ArrayToVector3(coords);
 });
+
+Events.onNet('admin:client:damageEntity', (netId: number) => {
+  const entity = NetworkGetEntityFromNetworkId(netId);
+  if (!entity || !DoesEntityExist(entity)) return;
+  damageEntity(entity);
+});
+
+const damageEntity = (entity: number) => {
+  switch (GetEntityType(entity)) {
+    case 1: {
+      ApplyDamageToPed(entity, 100, false);
+      break;
+    }
+    case 2: {
+      SetVehicleDamage(entity, 0.0, 0.0, 0.33, 200.0, 100.0, true);
+      SetVehicleEngineHealth(entity, Math.max(0, GetVehicleEngineHealth(entity) - 250));
+      SetVehicleBodyHealth(entity, Math.max(0, GetVehicleBodyHealth(entity) - 250));
+      break;
+    }
+  }
+};
