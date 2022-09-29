@@ -33,8 +33,8 @@ state = {
   }
 }
 cache = {
-  id = PlayerId(),
-  ped = PlayerPedId()
+  id = nil,
+  ped = nil
 }
 threads = {
   values = false,
@@ -170,14 +170,14 @@ CreateThread(function()
   end
 end)
 Citizen.CreateThread(function()
-  SetEntityProofs(cache.ped, false, false, false, false, false, true, false, false)
-  SetPlayerHealthRechargeMultiplier(cache.id, 0.0)
   setMinimapOffset()
   while true do
     if cache.ped ~= PlayerPedId() then
       cache.ped = PlayerPedId()
       SetPedMinGroundTimeForStungun(cache.ped, 5000)
       SetEntityProofs(cache.ped, false, false, false, false, false, true, false, false)
+      SetPedCanLosePropsOnDamage(cache.ped, false, 0)
+      SetPedConfigFlag(cache.ped, 438, true) -- Disable helmet armor
     end
     if cache.id ~= PlayerId() then
       cache.id = PlayerId()
