@@ -34,7 +34,7 @@ export const useApps = () => {
 
   const getCurrentAppType = useCallback(() => {
     return mainState.apps.filter(a => a.name !== 'cli').find(a => a.name === mainState.currentApp)?.type;
-  }, [mainState.apps]);
+  }, [mainState.apps, mainState.currentApp]);
 
   return {
     loadApps,
