@@ -8,8 +8,8 @@
     align-items: center;
     justify-content: center;
     background: variables.$primary_darker_darker;
-    border-radius: .25rem;
-    padding: .5rem;
+    border-radius: 0.25rem;
+    padding: 0.5rem;
   }
 
   &__header {
@@ -23,7 +23,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    margin: .5rem;
+    margin: 0.5rem;
   }
 
   &__btns {

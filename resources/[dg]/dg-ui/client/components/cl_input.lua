@@ -1,25 +1,18 @@
-local inputAmountId = 1
+local currentInputId = 1
 
-openInput = function(data)
-	local cbURLCache = data.callbackURL
-	local newCbURL = ('__input:%d'):format(inputAmountId)
-	data.callbackURL = newCbURL
-	inputAmountId = inputAmountId + 1
-	local InputProm = promise:new()
+openInput = function(openingData)
+	local callbackURL = ('__input:%d'):format(currentInputId)
+  currentInputId = currentInputId + 1
+	openingData.callbackURL = callbackURL
+	local inputPromise = promise:new()
 
-	RegisterNetEvent(('__dg_ui:%s'):format(newCbURL), function(data, cb)
-		InputProm:resolve(data)
+	AddEventHandler(('__dg_ui:%s'):format(callbackURL), function(data, cb)
+		inputPromise:resolve(data)
 		cb({data={}, meta={ok=true, message='done'}})
 	end)
-	RegisterUIEvent(newCbURL)
-	openApplication('input', data)
+	RegisterUIEvent(callbackURL)
+	openApplication('input', openingData)
 
-	local res = Citizen.Await(InputProm)
-
-	if cbURLCache then
-		TriggerEvent(('__dg_ui:%s'):format(cbURLCache), res)
-	end
-
-	return res.values
+	return Citizen.Await(inputPromise)
 end
 exports('openInput', openInput)

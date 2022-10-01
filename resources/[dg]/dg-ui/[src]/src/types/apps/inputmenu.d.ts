@@ -1,20 +1,27 @@
 declare namespace InputMenu {
-  type inputType = 'text' | 'number' | 'password' | 'select';
-
-  interface Input {
-    type: inputType;
-    name: string;
+  type Input = {
     label: string;
-    value: string;
-    options?: {
-      label: string;
-      value: string;
-    }[];
-  }
+    name: string;
+  } & (
+    | {
+        type: 'text' | 'number' | 'password';
+        value?: string;
+      }
+    | {
+        type: 'select';
+        value?: string;
+        options: {
+          label: string;
+          value: string;
+        }[];
+      }
+  );
 
-  interface State extends Base.State {
+  type Data = {
     inputs: Input[];
     callbackURL: string;
-    header?: string;
-  }
+    header: string;
+  };
+
+  type State = Base.State;
 }

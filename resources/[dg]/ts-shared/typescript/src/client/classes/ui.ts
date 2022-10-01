@@ -65,6 +65,11 @@ class Ui {
   closeApplication(app: string, data?: any) {
     global.exports['dg-ui'].closeApplication(app, data);
   }
+
+  openInput = async (data: UI.Input.Data): Promise<{ accepted: boolean; values: Record<string, string> }> => {
+    const result = await global.exports['dg-ui'].openInput(data);
+    return { accepted: result.accepted, values: result.values };
+  };
 }
 
 class Taskbar {

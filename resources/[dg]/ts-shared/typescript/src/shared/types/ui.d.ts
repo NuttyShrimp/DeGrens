@@ -26,6 +26,33 @@ declare namespace TaskBar {
   }
 }
 
+declare namespace UI {
+  namespace Input {
+    type Data = {
+      header: string;
+      inputs?: Input[];
+    };
+
+    type Input = {
+      label: string;
+      name: string;
+    } & (
+      | {
+          type: 'text' | 'number' | 'password';
+          value?: string;
+        }
+      | {
+          type: 'select';
+          value?: string;
+          options: {
+            label: string;
+            value: string;
+          }[];
+        }
+    );
+  }
+}
+
 declare namespace ContextMenu {
   interface Icon {
     name: string;
