@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { nuiAction } from '@lib/nui-comms';
 import { store, type } from '@lib/redux';
@@ -92,9 +92,37 @@ export default function AppWrapper(props: AppWrapperProps) {
 
   const [active, setActive] = useState(false);
 
+  // region Handler Refs
+  const onShow = useRef(props.onShow);
+  const onHide = useRef(props.onHide);
+  const onEvent = useRef(props.onEvent);
+  const onEscape = useRef(props.onEscape)
+  const onError = useRef(props.onError)
+
+  useEffect(() => {
+    onShow.current = props.onShow;
+  }, [props.onShow]);
+
+  useEffect(() => {
+    onHide.current = props.onHide;
+  }, [props.onHide]);
+
+  useEffect(() => {
+    onEvent.current = props.onEvent;
+  }, [props.onEvent]);
+
+  useEffect(() => {
+    onEscape.current = props.onEscape;
+  }, [props.onEscape]);
+
+  useEffect(() => {
+    onError.current = props.onError;
+  }, [props.onError]);
+  // endregion
+
   const hideApp = useCallback<AppWrapperProps['onHide']>(
     (data?: any) => {
-      props.onHide(data);
+      onHide.current(data);
       nuiAction('dg-ui:applicationClosed', {
         app: appInfo?.name,
         type: appInfo?.type,
@@ -105,7 +133,7 @@ export default function AppWrapper(props: AppWrapperProps) {
 
   const showApp = useCallback<AppWrapperProps['onShow']>(
     (data?: { data?: any; shouldFocus?: boolean }) => {
-      props.onShow(data?.data);
+      onShow.current(data?.data);
       if (appInfo?.type === 'interactive' && data?.shouldFocus) {
         nuiAction('__appwrapper:setfocus');
       }
@@ -122,8 +150,8 @@ export default function AppWrapper(props: AppWrapperProps) {
         hideApp();
         return;
       }
-      if (props.onEvent) {
-        props.onEvent(e.data.data);
+      if (onEvent.current) {
+        onEvent.current(e.data.data);
       }
     },
     [hideApp, showApp]
@@ -135,8 +163,8 @@ export default function AppWrapper(props: AppWrapperProps) {
       switch (e.key) {
         case 'Escape':
           if (appVisible && active) {
-            if (props.onEscape) {
-              const shouldClose = props.onEscape();
+            if (onEscape.current) {
+              const shouldClose = onEscape.current();
               if (shouldClose === true) {
                 hideApp();
               }
@@ -156,8 +184,8 @@ export default function AppWrapper(props: AppWrapperProps) {
   );
 
   const handleError: any = (e: Error) => {
-    if (props.onError) {
-      props.onError(e);
+    if (onError.current) {
+      onError.current(e);
     }
     console.error(e);
     store.dispatch({

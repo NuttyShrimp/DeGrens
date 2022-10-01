@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import AppWrapper from '@components/appwrapper';
 
@@ -13,18 +13,18 @@ import './styles/laptop.scss';
 const Component: AppFunction<Laptop.State> = props => {
   const { loadApps } = useActions();
 
-  const showLaptop = () => {
+  const showLaptop = useCallback(() => {
     props.updateState({
       visible: true,
     });
-  };
+  }, []);
 
-  const hideLaptop = () => {
+  const hideLaptop = useCallback(() => {
     props.updateState({
       visible: false,
     });
     return true;
-  };
+  }, []);
 
   useEffect(() => {
     loadApps();

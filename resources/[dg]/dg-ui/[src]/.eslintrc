@@ -8,7 +8,7 @@
     "react-hooks"
   ],
   "extends": [
-    "plugin:react/recommended",
+    "plugin:react/recommended"
   ],
   "rules": {
     "react/jsx-uses-react": 2,

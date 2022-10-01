@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import AppWrapper from '@components/appwrapper';
 import { devData } from '@src/lib/devdata';
@@ -83,7 +83,7 @@ const Component: AppFunction<Hud.State> = props => {
     };
   }, [props.updateState]);
 
-  const showHud = () => {
+  const showHud = useCallback(() => {
     props.updateState({
       visible: true,
     });
@@ -92,13 +92,13 @@ const Component: AppFunction<Hud.State> = props => {
         values: devData.hudValues,
       });
     }
-  };
+  }, []);
 
-  const hideHud = () => {
+  const hideHud = useCallback(() => {
     props.updateState({
       visible: false,
     });
-  };
+  }, []);
 
   const fetchEntries = async () => {
     const entries = await nuiAction('hud/entries/get', {}, devData.hudEntries);
@@ -124,10 +124,13 @@ const Component: AppFunction<Hud.State> = props => {
     }, 5000);
   };
 
-  const handleEvents = evt => {
-    if (!evtHandlers[evt.action]) return;
-    evtHandlers[evt.action](evt);
-  };
+  const handleEvents = useCallback(
+    evt => {
+      if (!evtHandlers[evt.action]) return;
+      evtHandlers[evt.action](evt);
+    },
+    [evtHandlers]
+  );
 
   useEffect(() => {
     fetchEntries();

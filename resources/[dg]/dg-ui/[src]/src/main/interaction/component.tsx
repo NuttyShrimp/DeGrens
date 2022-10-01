@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import AppWrapper from '@components/appwrapper';
 
 import { sanitizeText } from '../../lib/util';
@@ -9,7 +9,7 @@ import store from './store';
 import './styles/interaction.scss';
 
 const Component: AppFunction<Interaction.State> = props => {
-  const showInteraction = (data: { text: string; type: InteractionType }) => {
+  const showInteraction = useCallback((data: { text: string; type: InteractionType }) => {
     props.updateState({
       visible: true,
       show: true,
@@ -18,9 +18,9 @@ const Component: AppFunction<Interaction.State> = props => {
       ),
       type: data.type,
     });
-  };
+  }, []);
 
-  const hideInteraction = () => {
+  const hideInteraction = useCallback(() => {
     props.updateState({
       show: false,
     });
@@ -32,7 +32,7 @@ const Component: AppFunction<Interaction.State> = props => {
         type: 'info',
       });
     }, 500);
-  };
+  }, []);
 
   return (
     <AppWrapper appName={store.key} onShow={showInteraction} onHide={hideInteraction} full unSelectable>

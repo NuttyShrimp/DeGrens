@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useCallback, useEffect, useRef } from 'react';
 import AppWrapper from '@components/appwrapper';
 
 import { ItemboxList } from './components/itemboxlist';
@@ -7,33 +7,29 @@ import store from './store';
 import './styles/itemboxes.scss';
 
 const Component: AppFunction<Itemboxes.State> = props => {
-  const itemboxesRef = useRef(props.itemboxes);
-
-  useEffect(() => {
-    itemboxesRef.current = props.itemboxes;
-  }, [props.itemboxes]);
-
   const handleVisibility = (visible: boolean) => {
     props.updateState({ visible });
   };
 
-  const eventHandler = (data: any) => {
+  const eventHandler = useCallback((data: any) => {
     const itembox: Itemboxes.Itembox = {
       action: data.action ?? '',
       image: data.image ?? 'noicon.png',
     };
-    props.updateState({ itemboxes: [itembox, ...itemboxesRef.current] });
+    props.updateState({ itemboxes: [itembox, ...props.itemboxes] });
     setTimeout(() => {
-      props.updateState({ itemboxes: itemboxesRef.current.filter((_, i) => i !== itemboxesRef.current.length - 1) });
+      props.updateState({ itemboxes: props.itemboxes.filter((_, i) => i !== props.itemboxes.length - 1) });
     }, 3000);
-  };
+  }, [props.itemboxes])
 
+  const handleShow = useCallback(() => handleVisibility(true), []);
+  const handleHide = useCallback(() => handleVisibility(false), []);
   return (
     <AppWrapper
       appName={store.key}
-      onShow={() => handleVisibility(true)}
-      onHide={() => handleVisibility(false)}
-      onEvent={d => eventHandler(d)}
+      onShow={handleShow}
+      onHide={handleHide}
+      onEvent={eventHandler}
       center
       unSelectable
     >

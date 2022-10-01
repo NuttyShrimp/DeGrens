@@ -29,16 +29,16 @@ const Component: AppFunction<Peek.State> = props => {
     });
   }, [getCurrentAppType]);
 
-  const hidePeek = () => {
+  const hidePeek = useCallback(() => {
     props.updateState({
       visible: false,
       hasTarget: false,
       showList: false,
       entries: [],
     });
-  };
+  }, []);
 
-  const eventHandler = (data: { action: string; entries?: Peek.Entry[] }) => {
+  const eventHandler = useCallback((data: { action: string; entries?: Peek.Entry[] }) => {
     switch (data.action) {
       case 'foundTarget':
         props.updateState({
@@ -59,7 +59,7 @@ const Component: AppFunction<Peek.State> = props => {
       default:
         throw new Error(`Unknown action in peek app: ${data.action}`);
     }
-  };
+  }, [])
 
   return (
     <AppWrapper appName={store.key} onShow={showPeek} onHide={hidePeek} onEvent={eventHandler} full>

@@ -79,7 +79,8 @@
       "error",
       {},
       {
-        "usePrettierrc": true
+        "usePrettierrc": true,
+        "endOfLine": "auto"
       }
     ]
   },

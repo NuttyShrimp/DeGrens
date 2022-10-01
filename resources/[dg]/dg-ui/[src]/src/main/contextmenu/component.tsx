@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import AppWrapper from '@components/appwrapper';
 
 import { uuidv4 } from '../../lib/util';
@@ -31,7 +31,7 @@ const Component: AppFunction<ContextMenu.State> = props => {
     });
   };
 
-  const onShow = (data: ContextMenu.Entry[]) => {
+  const onShow = useCallback((data: ContextMenu.Entry[]) => {
     data = generateIds(data);
     props.updateState({
       visible: true,
@@ -39,16 +39,16 @@ const Component: AppFunction<ContextMenu.State> = props => {
       allEntries: data,
       parentEntry: [],
     });
-  };
+  }, [])
 
-  const onHide = () => {
+  const onHide = useCallback(() => {
     props.updateState({
       visible: false,
       entries: [],
       allEntries: [],
       parentEntry: [],
     });
-  };
+  }, []);
 
   return (
     <AppWrapper appName={store.key} onShow={onShow} onHide={onHide} full hideOnEscape>

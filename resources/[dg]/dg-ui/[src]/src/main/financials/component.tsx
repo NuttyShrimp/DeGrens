@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import AppWrapper from '@components/appwrapper';
 
 import { devData } from '../../lib/devdata';
@@ -11,15 +11,15 @@ import store from './store';
 import './styles/financials.scss';
 
 const Component: AppFunction<Financials.State> = props => {
-  const handleShow = (data: Financials.BaseInfo) => {
+  const handleShow = useCallback((data: Financials.BaseInfo) => {
     props.updateState({
       visible: true,
       openPane: true,
       ...data,
     });
-  };
+  }, []);
 
-  const handleHide = () => {
+  const handleHide = useCallback(() => {
     props.updateState({
       openPane: false,
       // Clear these otherwise we got a strange effect with those list not closing
@@ -29,9 +29,9 @@ const Component: AppFunction<Financials.State> = props => {
     setTimeout(() => {
       props.updateState(store.initialState);
     }, 500);
-  };
+  }, []);
 
-  const handleEscape = () => {
+  const handleEscape = useCallback(() => {
     if (props.modalComponent) {
       props.updateState({
         modalComponent: null,
@@ -40,7 +40,7 @@ const Component: AppFunction<Financials.State> = props => {
       return false;
     }
     return true;
-  };
+  }, [props.modalComponent]);
 
   const fetchAccounts = async () => {
     const newAccounts = await nuiAction<Financials.Account[]>(

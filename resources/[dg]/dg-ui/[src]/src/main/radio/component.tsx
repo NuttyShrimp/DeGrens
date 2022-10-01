@@ -27,17 +27,17 @@ const Component: AppFunction<Radio.State> = props => {
     }, [show]),
   });
 
-  const showRadio = (data: Radio.Info) => {
+  const showRadio = useCallback((data: Radio.Info) => {
     props.updateState({
       visible: true,
       ...data,
     });
     setShow(true);
-  };
+  }, []);
 
-  const hideRadio = () => {
+  const hideRadio = useCallback(() => {
     setShow(false);
-  };
+  }, []);
 
   return (
     <AppWrapper appName={store.key} onShow={showRadio} onHide={hideRadio} full center hideOnEscape>

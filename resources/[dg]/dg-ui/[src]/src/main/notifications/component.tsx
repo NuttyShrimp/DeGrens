@@ -13,6 +13,8 @@ const Component: AppFunction<Notifications.State> = props => {
   const handleVisibility = (visible: boolean) => {
     props.updateState({ visible });
   };
+  const handleShow = useCallback(() => handleVisibility(true), []);
+  const handleHide = useCallback(() => handleVisibility(false), []);
 
   const eventHandler = useCallback(
     (data: any) => {
@@ -36,9 +38,9 @@ const Component: AppFunction<Notifications.State> = props => {
   return (
     <AppWrapper
       appName={store.key}
-      onShow={() => handleVisibility(true)}
-      onHide={() => handleVisibility(false)}
-      onEvent={d => eventHandler(d)}
+      onShow={handleShow}
+      onHide={handleHide}
+      onEvent={eventHandler}
       center
       unSelectable
     >

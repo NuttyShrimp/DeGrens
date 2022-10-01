@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import AppWrapper from '@components/appwrapper';
 
 import { InputMenu } from './component/inputMenu';
@@ -7,7 +7,7 @@ import store from './store';
 import './styles/inputs.scss';
 
 const Component: AppFunction<InputMenu.State> = props => {
-  const showInput = (data: Partial<InputMenu.State>) => {
+  const showInput = useCallback((data: Partial<InputMenu.State>) => {
     if (!data.inputs) {
       console.error('No inputs found');
       return null;
@@ -44,15 +44,15 @@ const Component: AppFunction<InputMenu.State> = props => {
       visible: true,
       ...data,
     });
-  };
+  }, []);
 
-  const hideInput = () => {
+  const hideInput = useCallback(() => {
     props.updateState({
       visible: false,
       inputs: [],
       callbackURL: '',
     });
-  };
+  }, [])
 
   return (
     <AppWrapper appName={store.key} onShow={showInput} onHide={hideInput} full center>

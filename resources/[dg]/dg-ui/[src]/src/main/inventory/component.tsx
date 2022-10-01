@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { DndProvider } from 'react-dnd';
 import { TouchBackend } from 'react-dnd-touch-backend';
 import AppWrapper from '@components/appwrapper';
@@ -19,7 +19,7 @@ const Component: AppFunction<Inventory.State> = props => {
   // we need to refresh the childcomp when we want to cancel dragdrop from itemsync event
   const [refreshDrag, setRefreshDrag] = useState(0);
 
-  const handleShow = () => {
+  const handleShow = useCallback(() => {
     if (getCurrentAppType() === 'interactive') {
       nuiAction('inventory/preventShow');
       return;
@@ -29,15 +29,15 @@ const Component: AppFunction<Inventory.State> = props => {
       visible: true,
     });
     fetchInventoryData();
-  };
+  }, [getCurrentAppType]);
 
-  const handleHide = () => props.updateState(store.initialState);
+  const handleHide = useCallback(() => props.updateState(store.initialState), []);
 
-  const updateItem = (item: Inventory.Item) => {
+  const updateItem = useCallback((item: Inventory.Item) => {
     if (!props.visible) return;
     setRefreshDrag(refreshDrag + 1);
     syncItem(item);
-  };
+  }, [props.visible, syncItem]);
 
   const fetchInventoryData = async () => {
     const activeData: Inventory.OpeningData = await nuiAction('inventory/getData', {}, devData.inventory);
@@ -58,7 +58,7 @@ const Component: AppFunction<Inventory.State> = props => {
       onShow={handleShow}
       onHide={handleHide}
       hideOnEscape
-      onEvent={item => updateItem(item)}
+      onEvent={updateItem}
       full
       center
     >

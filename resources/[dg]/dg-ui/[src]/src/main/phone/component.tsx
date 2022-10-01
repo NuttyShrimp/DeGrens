@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useCallback, useEffect, useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import AppWrapper from '@components/appwrapper';
 
@@ -16,15 +16,19 @@ const Component: AppFunction<Phone.State> = props => {
     setBackground();
   }, []);
 
-  const handleShow = (data: Omit<typeof store.initialState, 'visible'>) => {
+  const handleShow = useCallback((data: Omit<typeof store.initialState, 'visible'>) => {
     props.updateState({
       ...data,
       visible: true,
       animating: 'open',
     });
-  };
+  }, []);
 
-  const handleEvent = (pData: any) => {
+  const handleHide = useCallback(() => {
+    hidePhone();
+  }, [])
+
+  const handleEvent = useCallback((pData: any) => {
     if (pData.action === 'init') {
       phoneInit();
       return;
@@ -34,14 +38,14 @@ const Component: AppFunction<Phone.State> = props => {
       throw new Error(`Unknown Phone event: ${appName}/${action}`);
     }
     phoneEvents[appName][action](data);
-  };
+  }, []);
 
   return (
     <AppWrapper
       appName={store.key}
       onShow={handleShow}
       onEvent={handleEvent}
-      onHide={hidePhone}
+      onHide={handleHide}
       hideOnEscape
       full
       hideOverflow

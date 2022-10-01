@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import AppWrapper from '@components/appwrapper';
 
 import { Bar } from './components/bar';
@@ -12,8 +12,10 @@ const Component: AppFunction = props => {
       visible: isVis,
     });
   };
+  const handleShow = useCallback(() => handleVisibility(true), []);
+  const handleHide = useCallback(() => handleVisibility(false), []);
   return (
-    <AppWrapper appName={store.key} onShow={() => handleVisibility(true)} onHide={() => handleVisibility(false)} center>
+    <AppWrapper appName={store.key} onShow={handleShow} onHide={handleHide} center>
       <Bar />
     </AppWrapper>
   );
