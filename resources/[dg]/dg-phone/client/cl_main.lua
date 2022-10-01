@@ -2,7 +2,7 @@ openPhone = function()
 	if not canOpen() then
 		return
 	end
-	openApplication('phone')
+	openApplication('phone', nil, true)
 	SetUIFocusCustom(true, true)
   exports['dg-lib']:shouldExecuteKeyMaps(false)
 	setState('state', 1)

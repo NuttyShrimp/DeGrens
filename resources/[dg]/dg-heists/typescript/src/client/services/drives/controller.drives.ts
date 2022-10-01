@@ -23,7 +23,7 @@ Peek.addFlagEntry(
             return;
           }
           const menuData = await RPC.execute<ContextMenuEntry[]>('heists:server:getLaptopShopEntries');
-          UI.openApplication('contextmenu', menuData, false);
+          UI.openApplication('contextmenu', menuData);
         },
       },
     ],

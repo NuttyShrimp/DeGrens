@@ -1,4 +1,4 @@
-import { RPC } from '@dgx/client';
+import { RPC, UI } from '@dgx/client';
 
 import { doAnimation } from '../modules/bank/service';
 
@@ -24,8 +24,7 @@ export class Location {
     await doAnimation(false, true);
     const base = await RPC.execute<BaseState>('financials:accounts:open', this.id);
     base.isAtm = false;
-    DGX.UI.openApplication('financials', base);
-    DGX.UI.SetUIFocus(true, true);
+    UI.openApplication('financials', base);
   }
 
   //region Getters

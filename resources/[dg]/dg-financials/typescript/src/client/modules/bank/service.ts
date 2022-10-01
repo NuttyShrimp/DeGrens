@@ -27,7 +27,6 @@ export const registerPeekZones = () => {
           const base = await RPC.execute<BaseState>('financials:accounts:open', 'ATM');
           base.isAtm = true;
           UI.openApplication('financials', base);
-          SetNuiFocus(true, true);
         },
       },
     ],

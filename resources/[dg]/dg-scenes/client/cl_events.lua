@@ -15,7 +15,6 @@ AddEventHandler("dg-lib:keyEvent", function(keyname, isDown)
     if not isDown then return end
 
     if not activeLaser then
-        SetUIFocus(true, true)
         openApplication('scenes')
     else
         if laserCoords then
