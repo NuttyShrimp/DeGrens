@@ -23,7 +23,6 @@ const Component: AppFunction<Laptop.State> = props => {
     props.updateState({
       visible: false,
     });
-    return true;
   }, []);
 
   useEffect(() => {
