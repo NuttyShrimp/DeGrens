@@ -52,7 +52,7 @@ const Component: AppFunction<InputMenu.State> = props => {
       inputs: [],
       callbackURL: '',
     });
-  }, [])
+  }, []);
 
   return (
     <AppWrapper appName={store.key} onShow={showInput} onHide={hideInput} full center>

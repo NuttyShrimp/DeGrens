@@ -39,7 +39,7 @@ const Component: AppFunction<ContextMenu.State> = props => {
       allEntries: data,
       parentEntry: [],
     });
-  }, [])
+  }, []);
 
   const onHide = useCallback(() => {
     props.updateState({

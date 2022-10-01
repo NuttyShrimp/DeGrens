@@ -33,11 +33,14 @@ const Component: AppFunction<Inventory.State> = props => {
 
   const handleHide = useCallback(() => props.updateState(store.initialState), []);
 
-  const updateItem = useCallback((item: Inventory.Item) => {
-    if (!props.visible) return;
-    setRefreshDrag(refreshDrag + 1);
-    syncItem(item);
-  }, [props.visible, syncItem]);
+  const updateItem = useCallback(
+    (item: Inventory.Item) => {
+      if (!props.visible) return;
+      setRefreshDrag(refreshDrag + 1);
+      syncItem(item);
+    },
+    [props.visible, syncItem]
+  );
 
   const fetchInventoryData = async () => {
     const activeData: Inventory.OpeningData = await nuiAction('inventory/getData', {}, devData.inventory);

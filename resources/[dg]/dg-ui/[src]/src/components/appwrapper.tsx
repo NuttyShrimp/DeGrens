@@ -96,8 +96,8 @@ export default function AppWrapper(props: AppWrapperProps) {
   const onShow = useRef(props.onShow);
   const onHide = useRef(props.onHide);
   const onEvent = useRef(props.onEvent);
-  const onEscape = useRef(props.onEscape)
-  const onError = useRef(props.onError)
+  const onEscape = useRef(props.onEscape);
+  const onError = useRef(props.onError);
 
   useEffect(() => {
     onShow.current = props.onShow;

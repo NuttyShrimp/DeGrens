@@ -26,7 +26,7 @@ const Component: AppFunction<Phone.State> = props => {
 
   const handleHide = useCallback(() => {
     hidePhone();
-  }, [])
+  }, []);
 
   const handleEvent = useCallback((pData: any) => {
     if (pData.action === 'init') {

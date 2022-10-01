@@ -59,7 +59,7 @@ const Component: AppFunction<Peek.State> = props => {
       default:
         throw new Error(`Unknown action in peek app: ${data.action}`);
     }
-  }, [])
+  }, []);
 
   return (
     <AppWrapper appName={store.key} onShow={showPeek} onHide={hidePeek} onEvent={eventHandler} full>

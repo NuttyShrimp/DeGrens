@@ -36,14 +36,7 @@ const Component: AppFunction<Notifications.State> = props => {
   );
 
   return (
-    <AppWrapper
-      appName={store.key}
-      onShow={handleShow}
-      onHide={handleHide}
-      onEvent={eventHandler}
-      center
-      unSelectable
-    >
+    <AppWrapper appName={store.key} onShow={handleShow} onHide={handleHide} onEvent={eventHandler} center unSelectable>
       <NotificationList {...props} />
     </AppWrapper>
   );
