@@ -169,24 +169,23 @@ CreateThread(function()
     Wait(250)
   end
 end)
+
 Citizen.CreateThread(function()
   setMinimapOffset()
   while true do
-    if cache.ped ~= PlayerPedId() then
-      cache.ped = PlayerPedId()
-      SetPedMinGroundTimeForStungun(cache.ped, 5000)
-      SetEntityProofs(cache.ped, false, false, false, false, false, true, false, false)
-      SetPedCanLosePropsOnDamage(cache.ped, false, 0)
-      SetPedConfigFlag(cache.ped, 438, true) -- Disable helmet armor
+    local newPed = PlayerPedId()
+    if cache.ped ~= newPed then
+      cache.ped = newPed
     end
-    if cache.id ~= PlayerId() then
-      cache.id = PlayerId()
-      SetPlayerHealthRechargeMultiplier(cache.id, 0.0)
+    local newId = PlayerId()
+    if cache.id ~= newId then
+      cache.id = newId
     end
     SetRadarBigmapEnabled(false, false)
     Wait(2000)
   end
 end)
+
 startValueLoop = function()
   local pedVeh = GetVehiclePedIsIn(cache.ped, false)
   inVehicle = pedVeh ~= nil and pedVeh ~= 0

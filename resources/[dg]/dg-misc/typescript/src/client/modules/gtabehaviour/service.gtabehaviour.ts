@@ -1,16 +1,17 @@
-import { Util } from '@dgx/shared';
 import {
   BLACKLISTED_SCENARIO_GROUPS,
   BLACKLISTED_SCENARIO_TYPES,
   DENSITY_SETTINGS,
   DISABLED_CONTROLS,
   HIDDEN_HUD_COMPONENT,
+  PED_CONFIG_FLAGS,
   RELATION_GROUPS,
 } from './constants.gtabehaviour';
 
-export const setGTABehaviour = async () => {
-  await Util.awaitCondition(() => NetworkIsSessionStarted());
+let cachedPed: number;
+let cachedId: number;
 
+export const setGTABehaviour = () => {
   // Disable automatic camera movement when afk'ing
   DisableIdleCamera(true);
 
@@ -49,17 +50,17 @@ export const setGTABehaviour = async () => {
   SetCreateRandomCops(false);
   SetCreateRandomCopsNotOnScenarios(false);
   SetCreateRandomCopsOnScenarios(false);
-  SetAllLowPriorityVehicleGeneratorsActive(false);
-  RemoveVehiclesFromGeneratorsInArea(35.2, -1132.4, -253.5, 635.2, -1132.4, 346.5, 0); // central los santos medical center
-  RemoveVehiclesFromGeneratorsInArea(-58.2, -1487.9, -469.4, 941.8, -487.9, 530.6, 0); // police station mission row
-  RemoveVehiclesFromGeneratorsInArea(16.7, -892.3, 343.2, 616.7, -292.3, 343.2, 0); // pillbox
-  RemoveVehiclesFromGeneratorsInArea(-2650.4, 2575.9, -450.0, -1650.4, -2575.9, 532.8, 0); // military
-  RemoveVehiclesFromGeneratorsInArea(-1408.3, 4620.6, -82.8, -808.3, 5220.6, 517.2, 0); // nudist
-  RemoveVehiclesFromGeneratorsInArea(-858.2, 5719.8, -268.7, -158.2, 6319.8, 331.3, 0); // police station paleto
-  RemoveVehiclesFromGeneratorsInArea(2154.8, 3379.4, -268.7, 2154.8, 3979.4, 333.8, 0); // police station sandy
-  RemoveVehiclesFromGeneratorsInArea(-1024.4, -1744.0, -268.7, -424.46, -1144.0, 305.0, 0); // REMOVE CHOPPERS WOW
-  RemoveVehiclesFromGeneratorsInArea(-1273.15, 5919.85, -290.0, -1273.15, 6519.85, 304.62, 0);
-  RemoveVehiclesFromGeneratorsInArea(2781.76, -4470.42, -290.0, 3381.76, -4470.42, 315.26, 0); // Vliegdek schip
+  // SetAllLowPriorityVehicleGeneratorsActive(false);
+  // RemoveVehiclesFromGeneratorsInArea(35.2, -1132.4, -253.5, 635.2, -1132.4, 346.5, 0); // central los santos medical center
+  // RemoveVehiclesFromGeneratorsInArea(-58.2, -1487.9, -469.4, 941.8, -487.9, 530.6, 0); // police station mission row
+  // RemoveVehiclesFromGeneratorsInArea(16.7, -892.3, 343.2, 616.7, -292.3, 343.2, 0); // pillbox
+  // RemoveVehiclesFromGeneratorsInArea(-2650.4, 2575.9, -450.0, -1650.4, -2575.9, 532.8, 0); // military
+  // RemoveVehiclesFromGeneratorsInArea(-1408.3, 4620.6, -82.8, -808.3, 5220.6, 517.2, 0); // nudist
+  // RemoveVehiclesFromGeneratorsInArea(-858.2, 5719.8, -268.7, -158.2, 6319.8, 331.3, 0); // police station paleto
+  // RemoveVehiclesFromGeneratorsInArea(2154.8, 3379.4, -268.7, 2154.8, 3979.4, 333.8, 0); // police station sandy
+  // RemoveVehiclesFromGeneratorsInArea(-1024.4, -1744.0, -268.7, -424.46, -1144.0, 305.0, 0); // REMOVE CHOPPERS WOW
+  // RemoveVehiclesFromGeneratorsInArea(-1273.15, 5919.85, -290.0, -1273.15, 6519.85, 304.62, 0);
+  // RemoveVehiclesFromGeneratorsInArea(2781.76, -4470.42, -290.0, 3381.76, -4470.42, 315.26, 0); // Vliegdek schip
 
   // EVERY FRAME LOOP
   setInterval(() => {
@@ -73,11 +74,36 @@ export const setGTABehaviour = async () => {
     SetVehicleDensityMultiplierThisFrame(DENSITY_SETTINGS.vehicle);
     SetRandomVehicleDensityMultiplierThisFrame(DENSITY_SETTINGS.multiplier);
     SetPedDensityMultiplierThisFrame(DENSITY_SETTINGS.peds);
-    SetScenarioPedDensityMultiplierThisFrame(DENSITY_SETTINGS.scenario, 0);
+    SetScenarioPedDensityMultiplierThisFrame(DENSITY_SETTINGS.scenario, DENSITY_SETTINGS.scenario);
 
     // Hide hud components
     HIDDEN_HUD_COMPONENT.forEach(comp => {
       HideHudComponentThisFrame(comp);
     });
-  }, 3);
+  }, 1);
+
+  // Ped & player config etc
+  setInterval(() => {
+    // Check if ped changed
+    const newPed = PlayerPedId();
+    if (cachedPed !== newPed) {
+      cachedPed = newPed;
+      SetEntityProofs(newPed, false, false, false, false, false, true, false, false);
+      SetPedMinGroundTimeForStungun(newPed, 5000);
+      SetPedCanLosePropsOnDamage(newPed, false, 0);
+      SetPedMaxHealth(newPed, 200);
+      SetPedDropsWeaponsWhenDead(newPed, false);
+      PED_CONFIG_FLAGS.forEach(([flag, val]) => {
+        SetPedConfigFlag(newPed, flag, val);
+      });
+    }
+
+    // Check if player id changed
+    const newId = PlayerId();
+    if (cachedId !== newId) {
+      cachedId = newId;
+      SetPlayerHealthRechargeMultiplier(newId, 0.0);
+      SetPlayerHealthRechargeLimit(newId, 0.0);
+    }
+  }, 3000);
 };
