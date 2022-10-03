@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useMemo, useState } from 'react';
 import { Button } from '@src/components/button';
 
 import Numberformat from '../../../components/numberformat';
@@ -7,6 +7,7 @@ import { formatRelativeTime } from '../../../lib/util';
 const Transaction: FC<
   React.PropsWithChildren<{ transaction: Financials.Transaction; selected: Financials.Account }>
 > = ({ transaction, selected }) => {
+  const isNegative = useMemo(() => transaction.type === 'withdraw' || transaction.target_account_id !== selected.account_id, [transaction]);
   return (
     <div className={'transaction'}>
       <div className={'transaction__top'}>
@@ -22,13 +23,9 @@ const Transaction: FC<
         </div>
       </div>
       <div className={'transaction__body'}>
-        <div
-          className={`transaction__amount ${
-            transaction.type === 'withdraw' || transaction.target_account_id !== selected.account_id ? 'negative' : ''
-          }`}
-        >
+        <div className={`transaction__amount ${isNegative ? 'negative' : ''}`}>
           <span>
-            €<Numberformat.Bank value={transaction.change} />
+            €<Numberformat.Bank value={(isNegative ? -1 : 1) * transaction.change} />
           </span>
         </div>
         <div className={'transaction__info'}>
