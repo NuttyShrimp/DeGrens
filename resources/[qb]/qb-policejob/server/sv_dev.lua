@@ -13,5 +13,5 @@ DGX.Chat.registerCommand('setCopAmount', 'Set the amount of cops on duty (DEV EN
 end)
 
 exports('getAmountOfCops', function()
-    return onDutyCops()
+    return onDutyCops
 end)
