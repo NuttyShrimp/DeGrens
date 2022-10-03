@@ -1,4 +1,4 @@
-import { SQL } from '@dgx/server';
+import { Business, SQL } from '@dgx/server';
 import { scheduleBankTaxes } from 'modules/taxes/service';
 import winston from 'winston';
 
@@ -159,7 +159,11 @@ export class AccountManager {
       this.logger.silly(`Found account by CID | id: ${defaultAccount.getAccountId()}`);
       return defaultAccount;
     }
-    // TODO add business logic when resource is written
+    const business = Business.getBusinessById(numInput);
+    if (business) {
+      const account = this.getAccountById(business.info.bank_account_id);
+      if (account) return account;
+    }
     return null;
   }
   //endregion
