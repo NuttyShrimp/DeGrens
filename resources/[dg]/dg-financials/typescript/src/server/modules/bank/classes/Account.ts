@@ -1,4 +1,5 @@
 import { SQL } from '@dgx/server';
+import { getTaxedPrice } from 'modules/taxes/service';
 import winston from 'winston';
 
 import { config } from '../../../config';
@@ -445,7 +446,8 @@ export class Account {
     acceptorCid: number,
     amount: number,
     comment?: string,
-    canBeNegative = false
+    canBeNegative = false,
+    taxId?: number,
   ): Promise<boolean> {
     if (
       !(await this.actionValidation('transfer', triggerCid, amount, {
@@ -458,8 +460,12 @@ export class Account {
     const triggerPlayer = await DGCore.Functions.GetOfflinePlayerByCitizenId(triggerCid);
     const targetAccount = this.manager.getAccountById(targetAccountId);
     amount = parseInt(String(amount));
-    this.changeBalance(-amount);
     targetAccount.changeBalance(amount);
+    if (taxId) {
+      const { taxPrice } = getTaxedPrice(amount, taxId);
+      amount = taxPrice;
+    }
+    this.changeBalance(-amount);
     await this.addTransaction(this.account_id, targetAccountId, triggerCid, amount, 'transfer', comment, acceptorCid);
     global.exports['dg-logs'].createGraylogEntry(
       'financials:transfer:success',

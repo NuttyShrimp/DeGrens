@@ -41,11 +41,7 @@ export const transfer = async (
     bankLogger.error(`Account ${accountId} not found | src: ${Player.PlayerData.source} | cid: ${triggerCid}`);
     return false;
   }
-  if (taxId) {
-    const { taxPrice } = getTaxedPrice(amount, taxId);
-    amount = taxPrice;
-  }
-  return account.transfer(targetAccountId, triggerCid, acceptorCid, amount, comment);
+  return account.transfer(targetAccountId, triggerCid, acceptorCid, amount, comment, false, taxId);
 };
 
 export const purchase = async (
