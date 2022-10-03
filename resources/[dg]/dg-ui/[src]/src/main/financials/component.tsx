@@ -82,9 +82,8 @@ const Component: AppFunction<Financials.State> = props => {
     if (props.selected?.account_id === acc.account_id) return;
     props.updateState({
       selected: acc,
-      transactions: [],
     });
-    fetchTransactions(acc.account_id);
+    fetchTransactions(acc.account_id, true);
   };
 
   return (
