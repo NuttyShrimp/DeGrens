@@ -1,0 +1,66 @@
+@use 'src/styles/variables';
+
+.configmenu {
+  width: 90vh;
+  height: 70vh;
+  background-color: variables.$primary_darker_dark;
+  border-radius: .75vh;
+
+  &-navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: variables.$primary_darker;
+    user-select: none;
+    border-radius: .75vh .75vh 0 0;
+    height: 5vh;
+    padding: 0 1vh;
+
+    &-center {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    &-btn {
+      padding: .75vh;
+      background-color: variables.$primary_darker_dark;
+      border-right: .2vh solid #c8c8c8;
+      cursor: pointer;
+
+      &.active {
+        background-color: variables.$primary_darker_normal;
+      }
+
+      &:hover {
+        background-color: variables.$primary_normal;
+      }
+
+      &:first-child {
+        border-radius: 1vh 0 0 1vh;
+      }
+
+      &:last-child {
+        border-radius: 0 1vh 1vh 0;
+        border-right: none;
+      }
+    }
+  }
+
+  &-wrapper {
+    overflow: auto;
+    max-height: 65vh;
+    padding: 1vh;
+  }
+
+  &-section {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 2vh;
+
+    &:not(:first-child) {
+      border-top: .3vh solid lightgray;
+      padding-top: 1vh;
+    }
+  }
+}

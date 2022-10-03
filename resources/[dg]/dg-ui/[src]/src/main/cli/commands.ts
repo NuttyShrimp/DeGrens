@@ -276,4 +276,14 @@ export const cmds: {
     app: 'radio',
     show: false,
   },
+  {
+    cmd: 'show configmenu',
+    app: 'configmenu',
+    show: true,
+  },
+  {
+    cmd: 'hide configmenu',
+    app: 'configmenu',
+    show: false,
+  },
 ];

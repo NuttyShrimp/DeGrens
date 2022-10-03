@@ -28,7 +28,7 @@ export const styles = makeStyles({
     left: '.4vh',
     height: 'calc(100% - 2.1vh)',
     width: 'calc(100% - .8vh)',
-    backgroundSize: 'cover!important',
+    backgroundSize: 'contain!important',
     zIndex: 1,
     borderRadius: '3%',
   },

@@ -5,6 +5,7 @@ import './modules/particles';
 import './modules/hud';
 import './modules/radio/controller.radio';
 import './services/laptop';
+import './services/config';
 import './controllers';
 
 setImmediate(() => {
