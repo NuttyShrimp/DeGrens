@@ -26,6 +26,26 @@ class Jobs {
   }
 }
 
+class Business {
+  getBusinessById(id: number): NBusiness.Business {
+    return JSON.parse(JSON.stringify(global.exports['dg-business'].getBusinessById(id)))
+  }
+  getBusinessEmployees(id: number): NBusiness.Employee[] {
+    return global.exports['dg-business'].getBusinessEmployees(id)
+  }
+  isPlyEmployed(id: number, cid: number): boolean {
+    return !!global.exports['dg-business'].isPlyEmployed(id, cid);
+  }
+  // List with available permissions can be found in dg-config/configs/business.json
+  hasPlyPermission(id: number, cid: number, permission: string): boolean {
+    return !!global.exports['dg-business'].hasPlyPermission(id, cid, permission);
+  }
+  getPermissionsFromMask(mask: number): string[] {
+    return global.exports['dg-business'].getPermissionsFromMask(mask)
+  }
+}
+
 export default {
   Jobs: new Jobs(),
+  Business: new Business()
 };
