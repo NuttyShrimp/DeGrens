@@ -2,7 +2,6 @@ declare namespace Laptop {
   interface State extends Base.State {
     activeApps: string[];
     focusedApp: string;
-    background: string;
   }
 
   interface AuxState {

@@ -6,7 +6,7 @@
     border-radius: 0.25rem;
     height: 80vh;
     width: calc(100% - 30vh);
-    background-size: cover;
+    background-size: contain;
     overflow: hidden;
   }
 
@@ -29,7 +29,7 @@
       display: flex;
       flex-direction: column;
 
-      & > * {
+      &>* {
         cursor: pointer;
         margin-bottom: 1vh;
         width: 10vh;
@@ -41,14 +41,15 @@
     height: 100%;
     z-index: 2;
 
-    & > div {
+    &>div {
       position: absolute;
     }
   }
 
   &-taskbar {
     &-wrapper {
-      position: absolute;;
+      position: absolute;
+      ;
       bottom: 0;
       left: 50%;
       transform: translate(-50%, 0);
@@ -86,7 +87,7 @@
     color: white;
     padding: 0 1vh;
 
-    & > div:last-child {
+    &>div:last-child {
       cursor: pointer;
     }
   }

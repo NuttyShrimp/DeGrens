@@ -49,7 +49,11 @@ isCompassDirty = false
 isLoggedIn = LocalPlayer.state.loggedIn
 
 hasCompass = false
+shouldShowCompassInVehicle = true
 inVehicle = false
+
+-- ~15fps
+compassWaitMS = 70
 
 -- TODO: Add fuel for vehicle
 
@@ -154,6 +158,11 @@ RegisterNetEvent('dg-ui:reload', function()
     })
   end
 end)
+DGX.Events.on('dg-misc:configChanged', function(data)
+  if not data then return end
+  compassWaitMS = 1000 / data.hud.compass.fps
+  shouldShowCompassInVehicle = data.hud.compass.show
+end)
 --- endregion
 --- region Loops
 CreateThread(function()
@@ -172,6 +181,13 @@ end)
 
 Citizen.CreateThread(function()
   setMinimapOffset()
+
+  -- Set Preferences from configmenu
+  local preferences = exports['dg-misc']:getPreferences()
+  if (preferences and preferences.hud) then
+    compassWaitMS = 1000 / preferences.hud.compass.fps
+    shouldShowCompassInVehicle = preferences.hud.compass.show
+  end
   while true do
     local newPed = PlayerPedId()
     if cache.ped ~= newPed then
@@ -297,7 +313,7 @@ function startRoadnameLoop()
   end
   Citizen.CreateThreadNow(function()
     threads.roadName = true
-    while inVehicle do
+    while (inVehicle and shouldShowCompassInVehicle) or hasCompass do
       local playerCoords = GetEntityCoords(cache.ped, true)
       zone = tostring(GetNameOfZone(playerCoords))
       state.compass.area = GetLabelText(zone)
@@ -322,7 +338,7 @@ function startCompassLoop()
   Citizen.CreateThreadNow(function()
     state.compass.visible = true
     threads.compass = true
-    while inVehicle or hasCompass do
+    while (inVehicle and shouldShowCompassInVehicle) or hasCompass do
       newHeading = math.floor(-GetFinalRenderedCamRot(0).z % 360)
       if (newHeading ~= state.compass.heading) then
         state.compass.heading = newHeading
@@ -336,7 +352,7 @@ function startCompassLoop()
         })
       end
       -- ~30fps
-      Wait(35)
+      Wait(compassWaitMS)
     end
     state.compass.visible = false
     SendAppEventWESentry('hud', {

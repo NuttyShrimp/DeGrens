@@ -1,22 +1,16 @@
 local wasProximityDisabledFromOverride = false
 disableProximityCycle = false
-RegisterCommand('setvoiceintent', function(source, args)
-	if GetConvarInt('voice_allowSetIntent', 1) == 1 then
-		local intent = args[1]
-		if intent == 'speech' then
-			MumbleSetAudioInputIntent(`speech`)
-		elseif intent == 'music' then
-			MumbleSetAudioInputIntent(`music`)
-		end
-		LocalPlayer.state:set('voiceIntent', intent, true)
-	end
-end)
-
--- TODO: Better implementation of this?
-RegisterCommand('vol', function(_, args)
-	if not args[1] then return end
-	setVolume(tonumber(args[1]))
-end)
+-- RegisterCommand('setvoiceintent', function(source, args)
+-- 	if GetConvarInt('voice_allowSetIntent', 1) == 1 then
+-- 		local intent = args[1]
+-- 		if intent == 'speech' then
+-- 			MumbleSetAudioInputIntent(`speech`)
+-- 		elseif intent == 'music' then
+-- 			MumbleSetAudioInputIntent(`music`)
+-- 		end
+-- 		LocalPlayer.state:set('voiceIntent', intent, true)
+-- 	end
+-- end)
 
 exports('setAllowProximityCycleState', function(state)
 	type_check({state, "boolean"})

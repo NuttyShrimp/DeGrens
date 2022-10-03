@@ -36,7 +36,7 @@ RegisterNetEvent('pma-voice:syncRadioData', syncRadioData)
 function setTalkingOnRadio(plySource, enabled)
   toggleVoice(plySource, enabled, 'radio')
   radioData[plySource] = enabled
-  playMicClicks(enabled)
+  playMicClicks(enabled, "other")
 end
 RegisterNetEvent('pma-voice:setTalkingOnRadio', setTalkingOnRadio)
 
@@ -171,7 +171,7 @@ RegisterCommand('+radiotalk', function()
       playerTargets(radioData, MumbleIsPlayerTalking(PlayerId()) and callData or {})
       TriggerServerEvent('pma-voice:setTalkingOnRadio', true)
       radioPressed = true
-      playMicClicks(true)
+      playMicClicks(true, "me")
       if GetConvarInt('voice_enableRadioAnim', 0) == 1 and not (GetConvarInt('voice_disableVehicleRadioAnim', 0) == 1 and IsPedInAnyVehicle(PlayerPedId(), false)) and not disableRadioAnim then
         RequestAnimDict('random@arrests')
         while not HasAnimDictLoaded('random@arrests') do
@@ -202,7 +202,7 @@ RegisterCommand('-radiotalk', function()
       StopAnimTask(PlayerPedId(), "random@arrests", "generic_radio_enter", -4.0)
     end
     if not isDead() then
-      playMicClicks(false)
+      playMicClicks(false,"me")
       TriggerServerEvent('pma-voice:setTalkingOnRadio', false)
     end
   end

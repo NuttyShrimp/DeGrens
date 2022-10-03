@@ -5,7 +5,6 @@ const store: StoreObject<Laptop.State, Laptop.AuxState> = {
   initialState: {
     visible: false,
     activeApps: [],
-    background: '',
     focusedApp: '',
   },
   auxiliaryState: {

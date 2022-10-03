@@ -10,6 +10,8 @@ events.newTweet = (tweet: Phone.Twitter.Tweet) => {
   genericAction('phone.apps.twitter', appState);
   const characterState = getState<Character>('character');
   if (`${characterState.firstname}_${characterState.lastname}`.replace(' ', '_') === tweet.sender_name) return;
+  const configMenu = getState<ConfigMenu.State>('configmenu');
+  if (!configMenu.phone.notifications.twitter) return;
   addNotification({
     id: `tweet_${tweet.id}`,
     icon: 'twitter',

@@ -111,4 +111,5 @@ declare interface RootState {
   laptop: Laptop.State;
   'laptop.config': Laptop.Config.State;
   radio: Radio.State;
+  configmenu: ConfigMenu.State;
 }

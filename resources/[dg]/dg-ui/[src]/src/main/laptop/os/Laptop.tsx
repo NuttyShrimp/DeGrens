@@ -11,6 +11,7 @@ import { TaskBar } from './Taskbar';
 export const Laptop: AppFunction<Laptop.State> = props => {
   const appConfigs = useSelector<RootState, Laptop.Config.Config[]>(state => state['laptop.config'].enabledApps);
   const { focusApp } = useActions();
+  const configBG = useSelector<RootState, string>(state => state.configmenu.phone.background.laptop);
 
   const activeAppConfigs = useMemo(() => {
     return appConfigs.filter(a => props.activeApps.includes(a.name));
@@ -20,7 +21,7 @@ export const Laptop: AppFunction<Laptop.State> = props => {
     <div
       className={'laptop-shell'}
       style={{
-        backgroundImage: `url(${props.background.trim() === '' ? defaultWallpaper : props.background})`,
+        backgroundImage: `url(${configBG.trim() === '' ? defaultWallpaper : configBG})`,
       }}
     >
       <Background />

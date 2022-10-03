@@ -6,7 +6,6 @@ import { store, type } from '../../lib/redux';
 
 import { getPhoneApp, getPhoneApps, phoneApps } from './config';
 
-const baseBgURL = `url(${baseBackground})`;
 export const getState: <T = Phone.State>(key?: string) => T = (key = 'phone') => store.getState()[key];
 
 export const genericAction = (storeKey: string, data: any) => {
@@ -56,14 +55,11 @@ export const phoneInit = async () => {
 
 export const setBackground = () => {
   const currentAppInfo = phoneApps.find(app => app.name === getState().activeApp);
+  const configMenuState = getState<ConfigMenu.State>('configmenu');
   const getStandardBackground = () => {
-    // TODO: Add getter for ply background from configmenu
-    // const charBG = state.character.background;
-    // return {
-    // 	background: (charBG && charBG.trim() !== '' ? state.character.background : baseBgURL) || baseBgURL,
-    // };
+    const charBG = configMenuState?.phone?.background?.phone;
     return {
-      background: baseBgURL,
+      backgroundImage: `url(${(charBG && charBG.trim() !== '' ? charBG : baseBackground) || baseBackground}`,
     };
   };
   if (!currentAppInfo || !currentAppInfo?.background) {
