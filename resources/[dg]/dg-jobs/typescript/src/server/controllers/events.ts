@@ -9,6 +9,8 @@ import {
   whitelistLogger,
   config,
   getWhitelistedJobsForPlayer,
+  addWhitelist,
+  removeWhitelist,
 } from '../services/whitelist';
 
 Auth.onAuth(src => {
@@ -79,6 +81,14 @@ Events.onNet(
     toggleSpecialty(src, cid, specialty, type);
   }
 );
+
+Events.onNet("jobs:whitelist:hire", (src, job: string, target: number) => {
+  addWhitelist(src, job, 0, target);
+})
+
+Events.onNet("jobs:whitelist:fire", (src, job: string, target: number) => {
+  removeWhitelist(src, job, target);
+})
 
 RPC.register('jobs:server:getSignInLocations', () => {
   return getLocations();

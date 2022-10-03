@@ -85,11 +85,25 @@ export const openAllowListMenu = (src: number, filter?: string) => {
   const job = getPlayerJob(src);
   if (!job) {
     Notifications.add(src, 'Je bent niet in dienst voor een whitelisted job', 'error');
+    return;
   }
   whitelistLogger.debug(`${src} requested whitelist menu for job ${job} (${filter})`);
   const allowListMenu: ContextMenu.Entry[] = [];
   const config = getJobConfig(job);
   const filters = (filter ?? '').split(';');
+
+  const openMenu = () => {
+    allowListMenu.push({
+      title: "Aannemen",
+      description: `Neem iemand aan voor deze ${job}`,
+      callbackURL: "jobs:whitelist:hire",
+      data: {
+        job,
+      }
+    })
+    emitNet('dg-ui:openApplication', src, 'contextmenu', allowListMenu);
+  }
+
   // add list where we can filter by rank or speciality
   allowListMenu.push({
     title: 'Filter',
@@ -105,10 +119,16 @@ export const openAllowListMenu = (src: number, filter?: string) => {
       callbackURL: 'jobs:whitelist:filter',
     })),
   });
-  // TODO: Add add cid to whitelist btn
   // add list of all players sorted by rank and alphabetically
   const entries = jobs.get(job);
-  if (!entries) return;
+  if (!entries || entries.length === 0) {
+    allowListMenu.push({
+      title: "Geen volk gevonden",
+      icon: "x"
+    })
+    openMenu();
+    return;
+  };
   const players = entries.filter(entry => {
     if (!filter) return true;
     return filters.some(filter => {
@@ -126,10 +146,10 @@ export const openAllowListMenu = (src: number, filter?: string) => {
   });
   players.forEach(entry => {
     allowListMenu.push({
-      title: entry.name,
-      description: `rank: ${config.grades[entry.rank]} | speciality: ${Object.keys(config.specialties).find(
+      title: `${entry.name}(${entry.cid})`,
+      description: `rank: ${config.grades[entry.rank]} | speciality: ${Object.keys(config.specialties).filter(
         spec => (entry.specialty & config.specialties[spec]) !== 0
-      )}`,
+      ).join(',')}`,
       submenu: [
         {
           title: 'Ranks',
@@ -158,10 +178,19 @@ export const openAllowListMenu = (src: number, filter?: string) => {
           icon: (entry.specialty & config.specialties[spec]) !== 0 ? 'circle-check' : undefined,
           callbackURL: 'jobs:whitelist:toggleSpecialty',
         })),
+        {
+          title: "Ontsla",
+          description: `Ontsla deze persoon`,
+          callbackURL: "jobs:whitelist:fire",
+          data:{
+            cid: entry.cid,
+            job,
+          }
+        }
       ],
     });
   });
-  emitNet('dg-ui:openApplication', src, 'contextmenu', allowListMenu);
+  openMenu();
 };
 
 export const addWhitelist = async (src: number, jobName: string, rank = 1, cid?: number) => {
