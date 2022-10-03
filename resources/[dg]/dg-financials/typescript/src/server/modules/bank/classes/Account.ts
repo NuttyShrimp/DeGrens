@@ -712,7 +712,7 @@ export class Account {
       const triggerInfo = await DGCore.Functions.GetOfflinePlayerByCitizenId(Number(_t.triggered_by));
       _t.triggered_by = `${triggerInfo.PlayerData.charinfo.firstname} ${triggerInfo.PlayerData.charinfo.lastname}`;
       _t.accepted_by = _t.triggered_by;
-      if (_t.triggered_by !== _t.accepted_by) {
+      if (transaction.triggered_by !== transaction.accepted_by) {
         const acceptInfo = await DGCore.Functions.GetOfflinePlayerByCitizenId(Number(_t.accepted_by));
         _t.accepted_by = `${acceptInfo.PlayerData.charinfo.firstname} ${acceptInfo.PlayerData.charinfo.lastname}`;
       }
@@ -721,7 +721,7 @@ export class Account {
       const originAccount = this.manager.getAccountById(_t.origin_account_id);
       _t.origin_account_name = originAccount ? originAccount.getName() : 'Unknown Account';
       _t.target_account_name = _t.target_account_id;
-      if (_t.origin_account_id !== _t.target_account_id) {
+      if (transaction.origin_account_id !== transaction.target_account_id) {
         const targetAccount = this.manager.getAccountById(_t.target_account_id);
         _t.target_account_name = targetAccount ? targetAccount.getName() : 'Unknown Account';
       }
