@@ -25,7 +25,8 @@ client_scripts {
 
 server_scripts {
   '@ts-shared/server/server.js',
-  'server/main.lua',
+  -- 'server/main.lua',
+  'server/sv_dev.lua'
 }
 
 ui_page 'html/index.html'
