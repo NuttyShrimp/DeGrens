@@ -8,6 +8,7 @@ import { getMigrVersionFromFile, validateFiles } from './fileHelpers.js';
 import { getConnectionOptions } from './getConnectionOptions.js';
 
 const shouldInitDB = process.argv.slice(2).includes('--init-db');
+const shouldSeedDB = process.argv.slice(2).includes('--seed');
 
 // Gotta love ES6 modules
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -29,6 +30,7 @@ let migrationFiles = fs.readdirSync(migrationDir);
 // Filter files to only include interesting ones
 migrationFiles = migrationFiles.filter(file => {
   const fileVersion = getMigrVersionFromFile(file);
+  if (file.match(/^[vV]\d+_seed.*/) && !shouldSeedDB) return false;
   return fileVersion > migrVersion;
 });
 
@@ -55,14 +57,15 @@ try {
     shouldRollBack = true;
     const queries = sqlOperations
       .replace(/\/\*.*\*\//gs, '')
+      .replaceAll(/--.*\n/g, '')
       .split(';')
       .map(op => op.replaceAll(/#.*\r?\n/g, ''))
       .map(op => op.replaceAll(/\r?\n/g, ' '))
       .filter(op => op && op.trim() !== '');
-    console.log(conn.config.database)
-    
+
     // Add operations to transaction
     for (let op of queries) {
+      // console.log(op)
       queryPromises.push(conn.query(op));
     }
     await Promise.all(queryPromises);
