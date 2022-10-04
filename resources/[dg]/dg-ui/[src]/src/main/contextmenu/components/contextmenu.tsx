@@ -95,19 +95,21 @@ export const ContextMenu: AppFunction<ContextMenu.State> = props => {
   };
 
   return (
-    <div className={'contextmenu__wrapper'}>
-      {props.parentEntry.length > 0 && (
-        <MenuEntry
-          id={`back-${props.parentEntry}`}
-          title={'Back'}
-          icon={'chevron-left'}
-          updateState={props.updateState}
-          onClick={goMenuBack}
-        />
-      )}
-      {props.entries.map(entry => (
-        <MenuEntry key={entry.id} {...entry} updateState={props.updateState} />
-      ))}
+    <div className='contextmenu_scroll'>
+      <div className={'contextmenu__wrapper'}>
+        {props.parentEntry.length > 0 && (
+          <MenuEntry
+            id={`back-${props.parentEntry}`}
+            title={'Back'}
+            icon={'chevron-left'}
+            updateState={props.updateState}
+            onClick={goMenuBack}
+          />
+        )}
+        {props.entries.map(entry => (
+          <MenuEntry key={entry.id} {...entry} updateState={props.updateState} />
+        ))}
+      </div>
     </div>
   );
 };
