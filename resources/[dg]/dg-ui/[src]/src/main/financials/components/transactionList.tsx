@@ -7,7 +7,10 @@ import { formatRelativeTime } from '../../../lib/util';
 const Transaction: FC<
   React.PropsWithChildren<{ transaction: Financials.Transaction; selected: Financials.Account }>
 > = ({ transaction, selected }) => {
-  const isNegative = useMemo(() => transaction.type === 'withdraw' || transaction.target_account_id !== selected.account_id, [transaction]);
+  const isNegative = useMemo(
+    () => transaction.type === 'withdraw' || transaction.target_account_id !== selected.account_id,
+    [transaction]
+  );
   return (
     <div className={'transaction'}>
       <div className={'transaction__top'}>
