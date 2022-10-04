@@ -1,9 +1,15 @@
+-- action is 'add' | 'remove' 
+-- If add we 100% sure players has one so no need to doublecheck
+-- If remove then check if there are still more of the item remaining
 DGX.Inventory.onInventoryUpdate('player', function(identifier, action)
-	local Player = DGCore.Functions.GetPlayerByCitizenId(tonumber(identifier))
-  local hasVPN = DGX.Inventory.doesPlayerHaveItems(Player.PlayerData.source, 'vpn')
-	TriggerClientEvent('dg-ui:SendAppEvent', Player.PlayerData.source, 'character', {
-		hasVPN = hasVPN,
-	})
+  local hasVPN = true
+  if action == 'remove' then
+    hasVPN = DGX.Inventory.doesInventoryHaveItems('player', identifier, 'vpn')
+  end
+  local plySource = DGCore.Functions.GetPlayerByCitizenId(tonumber(identifier)).PlayerData.source
+  TriggerClientEvent('dg-ui:SendAppEvent', plySource, 'character', {
+	  hasVPN = hasVPN,
+  })
 end, 'vpn')
 
 RegisterNetEvent('DGCore:Server:OnJobUpdate', function(src, job)

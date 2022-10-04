@@ -6,10 +6,16 @@ RegisterNetEvent('dg-phone:load', function()
 	TriggerClientEvent('dg-phone:client:setState', src, 'hasPhone', hasPhone)
 end)
 
+-- action is 'add' | 'remove' 
+-- If add we 100% sure players has one so no need to doublecheck
+-- If remove then check if there are still more of the item remaining
 DGX.Inventory.onInventoryUpdate('player', function(identifier, action)
-	local Player = DGCore.Functions.GetPlayerByCitizenId(tonumber(identifier))
-  local hasPhone = DGX.Inventory.doesPlayerHaveItems(Player.PlayerData.source, 'phone')
-	TriggerClientEvent('dg-phone:client:setState', Player.PlayerData.source, 'hasPhone', hasPhone)
+  local hasPhone = true
+  if action == 'remove' then
+    hasPhone = DGX.Inventory.doesInventoryHaveItems('player', identifier, 'phone')
+  end
+  local plySource = DGCore.Functions.GetPlayerByCitizenId(tonumber(identifier)).PlayerData.source
+	TriggerClientEvent('dg-phone:client:setState', plySource, 'hasPhone', hasPhone)
 end, 'phone')
 
 brickPhone = function(src, event, toggle)
