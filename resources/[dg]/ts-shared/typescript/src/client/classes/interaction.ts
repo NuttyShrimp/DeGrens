@@ -200,7 +200,7 @@ class PolyZone {
       minZ?: number;
       maxZ?: number;
     },
-    removeOnRestart = false
+    removeOnRestart = true
   ) {
     if (pCenter instanceof Vector3) {
       pCenter = pCenter.add(0);
@@ -235,7 +235,7 @@ class PolyZone {
       useZ?: number;
       data: { [key: string]: any };
     },
-    removeOnRestart = false
+    removeOnRestart = true
   ) {
     if (pCenter instanceof Vector3) {
       pCenter = pCenter.add(0);
