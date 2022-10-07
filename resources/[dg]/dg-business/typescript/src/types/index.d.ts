@@ -7,6 +7,7 @@ declare namespace Business {
 
   interface Info {
     id: number;
+    name: string;
     label: string;
     business_type: Type;
     bank_account_id: string;

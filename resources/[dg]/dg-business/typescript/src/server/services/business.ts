@@ -39,7 +39,7 @@ export const seedBusinessTypes = async () => {
 
 const seedBusinesses = async () => {
   const DBBusinesses = await SQL.query<(Business.Info & { business_type: number })[]>(
-    'SELECT id, label, business_type, bank_account_id FROM business'
+    'SELECT id, name, label, business_type, bank_account_id FROM business'
   );
   DBBusinesses.forEach(bInfo => {
     const business = new Business({
@@ -60,7 +60,7 @@ const findBusinessTypeByName = (pType: string) => {
   return null;
 };
 
-export const createBusiness = async (label: string, owner: number, bTypeName: string) => {
+export const createBusiness = async (name: string, label: string, owner: number, bTypeName: string) => {
   const bType = findBusinessTypeByName(bTypeName);
   if (!bType) {
     Util.Log(
@@ -85,6 +85,7 @@ export const createBusiness = async (label: string, owner: number, bTypeName: st
     Util.Log(
       'business:create:failed',
       {
+        name,
         label,
         owner,
         bTypeName,
@@ -99,9 +100,9 @@ export const createBusiness = async (label: string, owner: number, bTypeName: st
     return;
   }
   const businessId = await SQL.insert(
-    `INSERT INTO business (label, business_type, bank_account_id)
-     VALUES (?, ?, ?)`,
-    [label, bType.id, accountId]
+    `INSERT INTO business (name, label, business_type, bank_account_id)
+     VALUES (?, ?, ?, ?)`,
+    [name, label, bType.id, accountId]
   );
   if (!businessId) {
     Util.Log(
@@ -109,6 +110,7 @@ export const createBusiness = async (label: string, owner: number, bTypeName: st
       {
         label,
         owner,
+        name,
         bTypeName,
       },
       `Failed to save business ${label} in database`,
@@ -132,6 +134,7 @@ export const createBusiness = async (label: string, owner: number, bTypeName: st
   );
   const business = new Business({
     id: businessId,
+    name,
     business_type: bType,
     label,
     bank_account_id: accountId,
@@ -141,6 +144,16 @@ export const createBusiness = async (label: string, owner: number, bTypeName: st
 
 export const getBusinessById = (id: number) => {
   return businesses.get(id);
+};
+
+export const getBusinessByName = (name: string): Business | null => {
+  let business: Business | null = null;
+  businesses.forEach(b => {
+    if (b.getInfo().name === name) {
+      business = b;
+    }
+  });
+  return business;
 };
 
 export const getBusinessesForPlayer = (src: number) => {

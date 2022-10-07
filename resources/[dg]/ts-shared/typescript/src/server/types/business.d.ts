@@ -1,13 +1,13 @@
 declare namespace NBusiness {
   interface Business {
     info: Info;
-    roles:Role[];
-    employees: Employee[]
+    roles: Role[];
+    employees: Employee[];
   }
 
   interface Type {
     id: number;
-    name: string
+    name: string;
     permissions: string[];
   }
 
@@ -28,9 +28,10 @@ declare namespace NBusiness {
   }
 
   interface Info {
-    id: number,
+    id: number;
+    name: string;
     label: string;
-    business_type: Type,
+    business_type: Type;
     bank_account_id: string;
   }
 }

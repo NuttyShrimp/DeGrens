@@ -10,8 +10,13 @@ setImmediate(() => {
       'Create a new business',
       [
         {
-          name: 'label',
+          name: 'name',
           description: 'Name of business',
+          required: true,
+        },
+        {
+          name: 'label',
+          description: 'label of business',
           required: true,
         },
         {
@@ -30,7 +35,7 @@ setImmediate(() => {
         if (Number.isNaN(parseInt(params[1]))) {
           throw new Error('CitizenId should be a valid integer');
         }
-        createBusiness(params[0], Number(params[1]), params[2]);
+        createBusiness(params[0], params[1], Number(params[2]), params[3]);
       }
     );
   }
