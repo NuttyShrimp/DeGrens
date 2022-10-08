@@ -1,46 +1,36 @@
 import { SQL } from '@dgx/server';
-import { getConfigModule } from 'helpers/config';
+import { Util } from '@dgx/shared';
+import { getConfig } from 'helpers/config';
 import winston from 'winston';
 
 import { cryptoLogger } from '../util';
 
 import { CryptoWallet } from './CryptoWallet';
 
-export class CryptoManager {
-  private static _instance: CryptoManager;
-
-  public static getInstance(): CryptoManager {
-    if (!CryptoManager._instance) {
-      CryptoManager._instance = new CryptoManager();
-    }
-    return CryptoManager._instance;
-  }
-
-  private config: Record<string, NCrypto.Config>;
-  private coins: NCrypto.Coin[];
+class CryptoManager extends Util.Singleton<CryptoManager>() {
   private coinsLoaded: boolean;
-  private coinWallets: Map<number, CryptoWallet[]>;
-  private logger: winston.Logger;
+  private coins: NCrypto.Coin[];
+  private readonly coinWallets: Map<number, CryptoWallet[]>;
+  private readonly logger: winston.Logger;
 
   constructor() {
-    this.config = {};
+    super();
     this.coins = [];
+    this.coinsLoaded = false;
     this.coinWallets = new Map();
     this.logger = cryptoLogger.child({ module: 'CryptoManager' });
-    this.logger.info('CryptoManager initialized');
   }
 
-  // region Coins
-  public async reloadCoins(): Promise<void> {
-    this.logger.info('Reloading manager');
+  public async initiate(): Promise<void> {
     this.coins = [];
-    this.coinWallets = new Map();
+    this.coinWallets.clear();
     this.coinsLoaded = false;
+
     await this.loadCoins();
     Object.values(DGCore.Functions.GetQBPlayers()).forEach(p => {
       this.loadPlayerWallet(p.PlayerData.citizenid);
     });
-    this.logger.info('Reloaded manager');
+    this.logger.info('Initalisation succesful');
   }
 
   public getWallet(cid: number, coin?: string): CryptoWallet | CryptoWallet[] {
@@ -55,70 +45,48 @@ export class CryptoManager {
     const wallet = wallets.find(w => w.getCoin() === coin);
     if (!wallet) {
       this.logger.debug(`No wallet found for ${cid} | coin: ${coin}`);
-      return;
+      return [];
     }
     return wallet;
   }
 
-  // endregion
-
-  // region Wallet
   public async loadPlayerWallet(cid: number) {
-    await this.waitForCoinsLoaded();
-    const Player = DGCore.Functions.GetPlayerByCitizenId(cid);
-    if (!Player) {
-      this.logger.warn(`No player found for ${cid}`);
-      return;
-    }
+    await Util.awaitCondition(() => this.coinsLoaded);
     await this.fetchWalletDB(cid);
   }
 
-  // region Generic
-  private async waitForCoinsLoaded(): Promise<void> {
-    while (!this.coinsLoaded) {
-      await DGX.Util.Delay(100);
-    }
-  }
+  private async loadCoins(): Promise<void> {
+    const cryptoConfig = getConfig().cryptoCoins.reduce<Record<string, NCrypto.Config>>((acc, coin) => {
+      acc[coin.name] = coin;
+      return acc;
+    }, {});
 
-  // region DB
-  public async loadCoins(): Promise<void> {
-    (await getConfigModule('cryptoCoins')).forEach(c => {
-      this.config[c.name] = c;
-    });
-    const query = `SELECT *
-									 FROM crypto`;
-    const result = await SQL.query(query);
-    if (!result || result.length === 0) {
-      this.logger.warn(`Could not load coins from DB`);
-      await this.addMissingCoins();
-      this.coinsLoaded = true;
-      return;
+    const result = (await SQL.query('SELECT * FROM crypto')) as DB.ICrypto[] | undefined;
+    if (result != undefined && result.length !== 0) {
+      result.forEach(coin => {
+        if (!cryptoConfig[coin.crypto_name]) {
+          this.logger.warn(`Coin ${coin.crypto_name} is not in the config`);
+          return;
+        }
+        this.coins.push({
+          ...coin,
+          icon: cryptoConfig[coin.crypto_name].icon,
+        });
+        this.logger.debug(`Loaded coin ${coin.crypto_name}`);
+      });
+      this.logger.info(`Loaded ${this.coins.length} coins from database`);
+    } else {
+      this.logger.warn(`No coins fetched from database`);
     }
-    result.forEach((c: DB.ICrypto) => {
-      if (!this.config[c.crypto_name]) {
-        this.logger.warn(`Coin ${c.crypto_name} is not in the config`);
-        return;
-      }
-      const coinConfig = this.config[c.crypto_name];
-      const newCoin: NCrypto.Coin = {
-        ...c,
-        icon: coinConfig.icon,
-      };
-      this.coins.push(newCoin);
-      this.logger.debug(`Loaded coin ${c.crypto_name}`);
-    });
-    this.logger.info(`Loaded ${this.coins.length} coins`);
+
     await this.addMissingCoins();
     this.coinsLoaded = true;
   }
 
-  // endregion
+  private async addMissingCoins() {
+    const missingCoins = getConfig().cryptoCoins.filter(coin => !this.coins.find(c => c.crypto_name === coin.name));
+    if (missingCoins.length === 0) return;
 
-  private async addMissingCoins(): Promise<void> {
-    const missingCoins = Object.values(this.config).filter(coin => !this.coins.find(c => c.crypto_name === coin.name));
-    if (missingCoins.length === 0) {
-      return;
-    }
     for (const coin of missingCoins) {
       const query = `INSERT INTO crypto (crypto_name, value)
 										 VALUES (?, ?)`;
@@ -141,10 +109,8 @@ export class CryptoManager {
     return this.coins;
   }
 
-  // endregion
-
   public async createWallet(cid: number, coin: string): Promise<boolean> {
-    await this.waitForCoinsLoaded();
+    await Util.awaitCondition(() => this.coinsLoaded);
     const Player = DGCore.Functions.GetPlayerByCitizenId(cid);
     if (!Player) {
       this.logger.warn(`No player found for ${cid}`);
@@ -155,7 +121,12 @@ export class CryptoManager {
       this.logger.warn(`No coin found for ${coin}`);
       return false;
     }
-    const wallet = new CryptoWallet(cid, coin, 0, this.config[coin]);
+    const coinConfig = getConfig().cryptoCoins.find(c => c.name === coin);
+    if (!coinConfig) {
+      this.logger.warn(`No config found for ${coin}`);
+      return false;
+    }
+    const wallet = new CryptoWallet(cid, coin, 0, coinConfig);
     await wallet.saveWallet();
     this.logger.debug(`Created wallet for ${cid} | coin: ${coin}`);
     this.addWallet(cid, wallet);
@@ -166,7 +137,7 @@ export class CryptoManager {
     if (!this.coinWallets.has(cid)) {
       this.coinWallets.set(cid, []);
     }
-    this.coinWallets.get(cid).push(wallet);
+    this.coinWallets.get(cid)!.push(wallet);
   }
 
   private async fetchWalletDB(cid: number): Promise<void> {
@@ -174,27 +145,29 @@ export class CryptoManager {
 									 FROM crypto_wallets
 									 WHERE cid = ?`;
     let result: DB.ICryptoWallet[] = await SQL.query(query, [cid]);
-    if (!result) {
-      result = [];
-    }
-    result.forEach(row => {
-      this.addWallet(cid, new CryptoWallet(cid, row.crypto_name, row.amount, this.config[row.crypto_name]));
-      this.logger.silly(`Loaded wallet ${row.crypto_name} for ${cid}`);
+    result = result ?? [];
+
+    result.forEach(wallet => {
+      const coinConfig = getConfig().cryptoCoins.find(c => c.name === wallet.crypto_name);
+      if (!coinConfig) {
+        this.logger.silly(`Coin ${wallet.crypto_name} in wallet of player ${wallet.cid} does not exist in config`);
+        return;
+      }
+      this.addWallet(cid, new CryptoWallet(cid, wallet.crypto_name, wallet.amount, coinConfig));
+      this.logger.silly(`Loaded wallet ${wallet.crypto_name} for ${cid}`);
     });
+
     const missingCoins = this.coins.filter(coin => result.findIndex(r => r.crypto_name === coin.crypto_name) === -1);
-    if (missingCoins.length === 0) {
-      return;
-    }
+    if (missingCoins.length === 0) return;
+
     this.logger.debug(`Missing coins for ${cid}: ${missingCoins.map(c => c.crypto_name).join(', ')}`);
     missingCoins.forEach(coin => {
-      this.addWallet(cid, new CryptoWallet(cid, coin.crypto_name, 0, this.config[coin.crypto_name]));
-      // Save the wallet
-      this.coinWallets
-        .get(cid)
-        .find(w => w.getCoin() === coin.crypto_name)
-        .saveWallet();
+      const coinConfig = getConfig().cryptoCoins.find(c => c.name === coin.crypto_name);
+      if (!coinConfig) return;
+      this.createWallet(cid, coin.crypto_name);
     });
   }
-
-  // endregion
 }
+
+const cryptoManager = CryptoManager.getInstance();
+export default cryptoManager;

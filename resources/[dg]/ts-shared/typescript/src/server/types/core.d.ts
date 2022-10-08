@@ -80,6 +80,13 @@ interface ServerFunctions {
   GetOfflinePlayerByCitizenId(citizenid: number): Promise<Pick<Player, 'PlayerData'>>;
 
   /**
+   * Get the playerobject tied to the given phone from the database without the functions.
+   * If a player is online it does use the existing player object.
+   * @param phoneNumber: Player's phone number
+   */
+  GetOfflinePlayerByPhone(phoneNumber: number): Promise<Pick<Player, 'PlayerData'>>;
+
+  /**
    * Registers a new server callback, use QBCore.Functions.TriggerCallback on the client side to trigger the callback
    */
   CreateCallback(name: string, cb: (source: number, cb: Function, ...args: any[]) => void): void;

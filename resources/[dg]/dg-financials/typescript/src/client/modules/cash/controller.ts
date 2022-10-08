@@ -1,5 +1,5 @@
 import { RPC } from '@dgx/client';
 
-global.asyncExports('getCash', () => {
-  return RPC.execute<number>('financials:server:cash:get');
+global.asyncExports('getCash', async () => {
+  return (await RPC.execute<number>('financials:server:cash:get')) ?? 0;
 });

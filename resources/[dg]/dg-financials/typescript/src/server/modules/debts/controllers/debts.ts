@@ -1,6 +1,6 @@
 import { RPC } from '@dgx/server';
 import dayjs from 'dayjs';
-import { AccountManager } from 'modules/bank/classes/AccountManager';
+import accountManager from 'modules/bank/classes/AccountManager';
 
 import debtManager from '../classes/debtmanager';
 import { debtLogger, getDaysUntilDue } from '../helpers/debts';
@@ -12,7 +12,7 @@ global.exports(
     debtManager.addDebt(cid, target_account, fine, reason, origin_name, given_by);
   }
 );
-global.asyncExports('removeMaintenanceFees', (src: number) => removeMaintenanceFees(src));
+global.exports('removeMaintenanceFees', (src: number) => removeMaintenanceFees(src));
 
 RPC.register('financials:server:debts:get', src => {
   debtLogger.silly(`getDebts | src: ${src}`);
@@ -24,9 +24,10 @@ RPC.register('financials:server:debts:get', src => {
   debtLogger.silly(`getDebts: ${debts.length}`);
   return debts.map(d => {
     const date = dayjs.unix(d.date).add(getDaysUntilDue(d.debt), 'day').unix();
+    const accountName = accountManager.getAccountById(d.target_account)?.getName();
     return {
       ...d,
-      target_account: AccountManager.getInstance().getAccountById(d.target_account).getName(),
+      target_account: accountName ?? '',
       date,
     };
   });

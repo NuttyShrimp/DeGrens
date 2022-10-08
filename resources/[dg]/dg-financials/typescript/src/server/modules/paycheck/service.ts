@@ -1,15 +1,12 @@
-import { Jobs, SQL } from '@dgx/server';
-import { getConfigModule } from 'helpers/config';
-
-import { getDefaultAccountId } from '../bank/helpers/accounts';
-import { paycheck } from '../bank/helpers/actions';
+import { Jobs, Notifications, SQL, Util } from '@dgx/server';
+import { getConfig } from 'helpers/config';
+import accountManager from 'modules/bank/classes/AccountManager';
 import { cashLogger } from '../cash/util';
 
 import { paycheckLogger } from './util';
 
-let paycheckConfig: Config['paycheck'] = null;
 const paycheckCache: Map<number, number> = new Map();
-const paycheckIntervals: Map<number, { job: string; interval: NodeJS.Timer; amount: number }> = new Map();
+const paycheckIntervals: Map<number, { job: string; amount: number }> = new Map();
 
 const saveToDb = async (cid: number) => {
   const amount = paycheckCache.get(cid);
@@ -23,8 +20,7 @@ const saveToDb = async (cid: number) => {
 };
 
 export const seedPlyInCache = async (src: number) => {
-  const Player = DGCore.Functions.GetPlayer(src);
-  const cid = Player.PlayerData.citizenid;
+  const cid = Util.getCID(src);
   const query = `
 		SELECT amount
 		FROM player_paycheck
@@ -35,15 +31,15 @@ export const seedPlyInCache = async (src: number) => {
     paycheckLogger.info(`No paycheck data found for ${cid}`);
     return;
   }
-  paycheckCache.set(cid, result[0].amount);
-  paycheckLogger.info(`Seeded paycheck cache for ${cid} with ${paycheckCache.get(cid)}`);
+  const amount = result[0].amount;
+  paycheckCache.set(cid, amount);
+  paycheckLogger.info(`Seeded paycheck cache for ${cid} with ${amount}`);
 };
 
 export const seedCache = async () => {
-  paycheckConfig = await getConfigModule('paycheck');
   paycheckCache.clear();
-  DGCore.Functions.GetPlayers().forEach(player => {
-    seedPlyInCache(player);
+  DGCore.Functions.GetPlayers().forEach(async player => {
+    await seedPlyInCache(player);
     const Player = DGCore.Functions.GetPlayer(player);
     const plyJob = Jobs.getCurrentJob(player);
     checkInterval(Player.PlayerData.citizenid, plyJob);
@@ -51,14 +47,10 @@ export const seedCache = async () => {
 };
 
 export const registerPaycheck = (src: number, amount: number, job: string, comment?: string) => {
-  const Player = DGCore.Functions.GetPlayer(src);
-  const cid = Player.PlayerData.citizenid;
-  if (paycheckCache.has(cid)) {
-    paycheckCache.set(cid, paycheckCache.get(cid) + amount);
-  } else {
-    paycheckCache.set(cid, amount);
-  }
-  global.exports['dg-logs'].createGraylogEntry(
+  const cid = Util.getCID(src);
+  const newPaycheck = (paycheckCache.get(cid) ?? 0) + amount;
+  paycheckCache.set(cid, newPaycheck);
+  Util.Log(
     'financials:paycheckRegistered',
     {
       cid,
@@ -66,95 +58,103 @@ export const registerPaycheck = (src: number, amount: number, job: string, comme
       job,
       comment,
     },
-    `${Player.PlayerData.name} (${Player.PlayerData.citizenid}) registered a paycheck of ${amount} for ${job} (${comment})`
+    `${Util.getName(src)} (${cid}) registered a paycheck of ${amount} for ${job} (${comment})`,
+    src
   );
   saveToDb(cid);
 };
 
 export const givePaycheck = async (src: number) => {
-  const Player = DGCore.Functions.GetPlayer(src);
-  const cid = Player.PlayerData.citizenid;
-  if (!paycheckCache.has(cid)) {
-    emitNet('DGCore:Notify', src, 'Je hebt geen paycheck.', 'error');
-    paycheckLogger.debug(
-      `${Player.PlayerData.name} (${Player.PlayerData.citizenid}) tried to get his/her paycheck, but they don't have one`
-    );
-    return;
-  }
+  const cid = Util.getCID(src);
+
   const paycheckAmount = paycheckCache.get(cid);
-  if (paycheckAmount <= 0) {
-    emitNet('DGCore:Notify', src, 'Je hebt geen paycheck.', 'error');
-    paycheckLogger.debug(
-      `${Player.PlayerData.name} (${Player.PlayerData.citizenid}) tried to get his/her paycheck, but they value was negative`
-    );
+  if (paycheckAmount === undefined) {
+    Notifications.add(src, 'Je hebt geen paycheck', 'error');
+    paycheckLogger.debug(`${Util.getName(src)} (${cid}) tried to get his/her paycheck, but they don't have one`);
     return;
   }
-  const accountId = await getDefaultAccountId(cid);
-  if (accountId == undefined) {
-    emitNet('DGCore:Notify', src, 'Je hebt geen paycheck.', 'error');
-    global.exports['dg-logs'].createGraylogEntry(
+
+  if (paycheckAmount <= 0) {
+    Notifications.add(src, 'Je hebt geen paycheck', 'error');
+    paycheckLogger.debug(`${Util.getName(src)} (${cid}) tried to get his/her paycheck, but they value was negative`);
+    return;
+  }
+
+  const account = accountManager.getDefaultAccount(cid);
+  if (account === undefined) {
+    Notifications.add(src, 'Je hebt geen paycheck', 'error');
+    Util.Log(
       'financials:paycheckError',
       {
         cid,
         amount: paycheckAmount,
       },
-      `${Player.PlayerData.name} (${Player.PlayerData.citizenid}) attempted to give a paycheck of €${paycheckAmount} but no default account was found.`,
+      `${Util.getName(
+        src
+      )} (${cid}) attempted to give a paycheck of €${paycheckAmount} but no default account was found.`,
+      src,
       true
     );
     cashLogger.warn(
-      `${Player.PlayerData.name} (${Player.PlayerData.citizenid}) attempted to give a paycheck of €${paycheckAmount} but no default account was found.`
+      `${Util.getName(
+        src
+      )} (${cid}) attempted to give a paycheck of €${paycheckAmount} but no default account was found.`
     );
     return;
   }
-  const result = paycheck(accountId, cid, paycheckAmount);
+
+  const result = account.paycheck(cid, paycheckAmount);
   if (!result) {
-    emitNet('DGCore:Notify', src, 'Konden geen paycheck uitbetalen.', 'error');
-    global.exports['dg-logs'].createGraylogEntry(
+    Notifications.add(src, 'Konden geen paycheck uitbetalen', 'error');
+    Util.Log(
       'financials:paycheckError',
       {
         cid,
         amount: paycheckAmount,
       },
-      `${Player.PlayerData.name} (${Player.PlayerData.citizenid}) attempted to give a paycheck of €${paycheckAmount} but the paycheck failed.`
+      `${Util.getName(src)} (${cid}) attempted to give a paycheck of €${paycheckAmount} but the paycheck failed.`,
+      src
     );
     cashLogger.warn(
-      `${Player.PlayerData.name} (${Player.PlayerData.citizenid}) attempted to give a paycheck of €${paycheckAmount} but the paycheck failed.`
+      `${Util.getName(src)} (${cid}) attempted to give a paycheck of €${paycheckAmount} but the paycheck failed.`
     );
     return;
   }
-  emitNet('DGCore:Notify', src, `Paycheck van €${paycheckAmount} uitbetaald.`);
-  paycheckLogger.info(
-    `${Player.PlayerData.name} (${Player.PlayerData.citizenid}) received his/her paycheck of €${paycheckAmount}`
-  );
+  Notifications.add(src, `Paycheck van €${paycheckAmount} uitbetaald.`);
+  paycheckLogger.info(`${Util.getName(src)} (${cid}) received his/her paycheck of €${paycheckAmount}`);
   paycheckCache.set(cid, 0);
   saveToDb(cid);
 };
 
-export const checkInterval = (cid: number, job: string) => {
+export const checkInterval = (cid: number, job: string | null) => {
   if (paycheckIntervals.has(cid)) {
-    const intervalInfo = paycheckIntervals.get(cid);
     // Went offduty or changed jobs
-    if (intervalInfo.job != job) {
+    const intervalInfo = paycheckIntervals.get(cid)!;
+    if (intervalInfo.job !== job) {
       const Player = DGCore.Functions.GetPlayerByCitizenId(cid);
-      registerPaycheck(Player.PlayerData.source, intervalInfo.amount, job, 'Whitelisted paycheck');
-      clearInterval(intervalInfo.interval);
+      registerPaycheck(Player.PlayerData.source, intervalInfo.amount, intervalInfo.job, 'Whitelisted paycheck');
       paycheckIntervals.delete(cid);
       paycheckLogger.debug(`Cleared paycheck interval for ${cid}`);
     }
   }
-  if (job && paycheckConfig[job]) {
+
+  const paycheckConfig = getConfig().paycheck;
+  if (job !== null && paycheckConfig[job]) {
     const paycheckAmount = paycheckConfig[job];
+
+    paycheckIntervals.set(cid, { job, amount: 0 });
+    paycheckLogger.debug(`Registered paycheck interval for ${cid} | job: ${job}`);
+
     const interval = setInterval(() => {
-      if (!paycheckIntervals.has(cid)) {
+      const intervalInfo = paycheckIntervals.get(cid);
+      if (intervalInfo === undefined || intervalInfo.job !== job) {
         paycheckLogger.error(`Unregistered interval running for ${cid}. Clearing interval.`);
         clearInterval(interval);
+        return;
       }
-      const intervalInfo = paycheckIntervals.get(cid);
       intervalInfo.amount += paycheckAmount;
       paycheckIntervals.set(cid, intervalInfo);
       paycheckLogger.silly(`Scheduled paycheck for ${cid} of ${paycheckAmount} | job: ${job}`);
     }, 60000);
-    paycheckIntervals.set(cid, { job, interval, amount: 0 });
-    paycheckLogger.debug(`Registered paycheck interval for ${cid} | job: ${job}`);
   }
 };

@@ -38,6 +38,7 @@ RegisterNetEvent('dg-phone:load',function()
   end, 'wallet', '#81c784', '€')
   registerInfoEntry('bank', function()
 		local account = DGX.RPC.execute('financials:getDefaultAccount')
+    if not account then return 0 end
     return account.balance or 0
   end, 'piggy-bank', "#64b5f6", '€')
 end)

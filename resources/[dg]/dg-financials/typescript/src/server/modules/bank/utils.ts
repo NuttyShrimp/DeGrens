@@ -38,6 +38,25 @@ export const sortAccounts = (acc: Account[]): Account[] => {
     });
 };
 
+export const sortTransactions = (trans: DB.ITransaction[]) => {
+  const duplicatedIds: Record<string, number> = {};
+  return trans
+    .filter(t => {
+      const thisTransDupLength = trans.filter(t2 => t.transaction_id === t2.transaction_id).length;
+      if (thisTransDupLength === 1) {
+        return true;
+      }
+      if (!duplicatedIds[t.transaction_id]) duplicatedIds[t.transaction_id] = 0;
+      duplicatedIds[t.transaction_id]++;
+      return thisTransDupLength === duplicatedIds[t.transaction_id];
+    })
+    .sort((a, b) => {
+      if (a.date < b.date) return 1;
+      if (a.date > b.date) return -1;
+      return 0;
+    });
+};
+
 export const generateSplittedInfo = (info: Record<string, any>) => {
   return Object.entries(info)
     .map(([k, v]) => `${k}: ${v}`)

@@ -49,12 +49,18 @@ class Util extends UtilShared {
     return Config.getConfigValue<boolean>('main.production') === false;
   }
 
-  getCID(src: number): number {
-    // THIS FUCKIGN OPKJFGKJHKFGJ THING
+  /**
+   * @param ignoreUndefined if true an error will not get thrown whenever the citizenid was not found
+   * @returns citizenid of player associated with playerid
+   */
+  getCID(src: number, ignoreUndefined = false): number {
     // For some reason global DGCore obj is not defined, when using this function inside Inventory.onInventoryUpdate handler
     const _DGCore = global.exports['dg-core'].GetSharedObject() as Server;
     const Player = _DGCore.Functions.GetPlayer(src);
-    return Player?.PlayerData?.citizenid;
+    const cid = Player?.PlayerData?.citizenid;
+    if (!ignoreUndefined && cid === undefined)
+      throw new Error('Tried to get CID of player that is not known to server');
+    return cid;
   }
 
   getName(src: number | string) {

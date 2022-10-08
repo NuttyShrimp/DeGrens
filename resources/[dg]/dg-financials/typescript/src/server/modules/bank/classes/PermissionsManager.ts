@@ -10,25 +10,13 @@ export class PermissionsManager {
   private logger: winston.Logger;
 
   constructor(account_id: string, members: IAccountMember[]) {
-    this.members = members;
     this.account_id = account_id;
+    this.members = members;
+
     this.logger = bankLogger.child({
       module: `PermsManager - ${account_id}`,
     });
   }
-
-  // region DB
-  private async updatePermission(cid: number, access_level: number): Promise<void> {
-    const query = `
-      INSERT INTO bank_accounts_access
-        (account_id, cid, access_level)
-      VALUES (?, ?, ?)
-      ON DUPLICATE KEY UPDATE access_level = ?
-    `;
-    await SQL.query(query, [this.account_id, cid, access_level, access_level]);
-  }
-
-  // endregion
 
   public async init(): Promise<void> {
     const query = `
@@ -53,7 +41,16 @@ export class PermissionsManager {
     });
   }
 
-  // region Util
+  private async updatePermission(cid: number, access_level: number): Promise<void> {
+    const query = `
+      INSERT INTO bank_accounts_access
+        (account_id, cid, access_level)
+      VALUES (?, ?, ?)
+      ON DUPLICATE KEY UPDATE access_level = ?
+    `;
+    await SQL.query(query, [this.account_id, cid, access_level, access_level]);
+  }
+
   public buildPermissions(level: number): IAccountPermission {
     const permissions: IAccountPermission = {
       deposit: false,
@@ -74,9 +71,6 @@ export class PermissionsManager {
     return permissions;
   }
 
-  // endregion
-
-  // region Getters
   public hasAccess(cid: number): boolean {
     const inArray = this.members.some(member => member.cid === cid);
     this.logger.debug(`hasAccess | cid: ${cid} | inArray: ${inArray}`);
@@ -108,21 +102,16 @@ export class PermissionsManager {
     return this.members;
   }
 
-  getAccountOwner(): IAccountMember {
+  getAccountOwner() {
     return this.members.find(m => m.access_level & AccountPermissionValue.owner);
   }
-
-  // endregion
 
   public addPermissions(cid: number, permissions: IAccountPermission | number): void {
     let accessLevel = 0;
     if (typeof permissions === 'number') {
       accessLevel = permissions;
     } else {
-      for (const permission in permissions) {
-        if (!permissions[permission as keyof IAccountPermission]) continue;
-        accessLevel |= AccountPermissionValue[permission as keyof IAccountPermission];
-      }
+      accessLevel = this.buildAccessLevel(permissions);
     }
     // Check if the user already has access
     const member = this.members.find(member => member.cid === cid);
@@ -140,15 +129,23 @@ export class PermissionsManager {
   }
 
   public removePermissions(cid: number): void {
-    const member = this.members.find(member => member.cid === cid);
     SQL.query(
       `DELETE
-               FROM bank_accounts_access
-               WHERE account_id = ?
-                 AND cid = ?`,
+      FROM bank_accounts_access
+      WHERE account_id = ?
+      AND cid = ?`,
       [this.account_id, cid]
     );
     this.logger.info(`addPermissions: removing access | cid: ${cid}`);
     this.members = this.members.filter(m => m.cid !== cid);
   }
+
+  public buildAccessLevel = (perms: IAccountPermission): number => {
+    let level = 0;
+    for (const perm in perms) {
+      if (!perms[perm as keyof IAccountPermission]) continue;
+      level |= AccountPermissionValue[perm as keyof IAccountPermission];
+    }
+    return level;
+  };
 }

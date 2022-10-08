@@ -1,4 +1,4 @@
-import { RPC, Util } from '@dgx/server';
+import { Financials, RPC, Util } from '@dgx/server';
 import contextManager from 'classes/contextmanager';
 import locationManager from 'modules/locations/manager.locations';
 import { getConfig } from 'services/config';
@@ -28,7 +28,7 @@ RPC.register('inventory:server:open', async (src: number, secondary: IdBuildData
   }
 
   contextManager.playerOpened(src, [primaryInv.id, secondaryInv.id]);
-  const playerCash = await global.exports['dg-financials'].getCash(src);
+  const playerCash = Financials.getCash(src);
   return {
     items: [...primaryInv.getItems(), ...secondaryInv.getItems()],
     primary: { id: primaryInv.id, size: primaryInv.size, cash: playerCash },

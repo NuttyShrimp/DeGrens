@@ -3,11 +3,10 @@ import { RPC, UI } from '@dgx/client';
 import { doAnimation } from '../modules/bank/service';
 
 export class Location {
-  private type: 'bank';
-  private id: string;
-  private name: string;
-  private center: Vec3;
-  private blip: number;
+  private readonly id: string;
+  private readonly name: string;
+  private readonly center: Vec3;
+  private blip!: number;
   private is_active = false;
   private is_disabled = false;
 
@@ -23,6 +22,7 @@ export class Location {
     if (!this.is_active) return;
     await doAnimation(false, true);
     const base = await RPC.execute<BaseState>('financials:accounts:open', this.id);
+    if (!base) return;
     base.isAtm = false;
     UI.openApplication('financials', base);
   }

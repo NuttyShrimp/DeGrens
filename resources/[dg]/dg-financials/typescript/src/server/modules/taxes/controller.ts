@@ -1,15 +1,11 @@
-import { getTaxedPrice, seedTaxes } from './service';
-import { taxLogger } from './util';
+import { RPC } from '@dgx/server';
+import { getTaxedPrice, getTaxInfo, seedTaxes } from './service';
 
-global.exports('getTaxedPrice', (price: number, taxId: number, shouldRemove: boolean) =>
-  getTaxedPrice(price, taxId, shouldRemove)
-);
+global.exports('getTaxedPrice', getTaxedPrice);
+global.exports('getTaxInfo', getTaxInfo);
 
 RegisterCommand('financials:seed:taxes', () => seedTaxes(), true);
 
-DGCore.Functions.CreateCallback('financials:server:taxes:calc', (src, cb, data: Taxes.IncomingTax) => {
-  taxLogger.debug(`taxes:calc: ${JSON.stringify(data)}`);
-  const cbData = getTaxedPrice(data.price, data.taxId);
-  taxLogger.debug(`taxes:calc: ${JSON.stringify(cbData)}`);
-  cb(cbData);
-});
+RPC.register('financials:server:taxes:calc', (src, price: number, taxId: number, shouldRemove?: boolean) =>
+  getTaxedPrice(price, taxId, shouldRemove)
+);

@@ -1,12 +1,10 @@
-import { Config } from '@dgx/server';
+let config: Config | null = null;
 
-let config: Config = null;
-
-export const getConfig = () => config;
-
-export const getConfigModule = async <T extends keyof Config>(mod: T): Promise<Config[T]> => {
-  await Config.awaitConfigLoad();
-  return config?.[mod];
+export const getConfig = () => {
+  if (config === null) {
+    throw new Error('Could not get financials config');
+  }
+  return config;
 };
 
 export const setConfig = (cfg: Config) => {

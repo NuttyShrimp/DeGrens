@@ -393,6 +393,10 @@ devData.financialsAccounts = [
       transfer: false,
       transactions: true,
     },
+    members: [
+      { cid: 1005, name: 'Jan Janssens', deposit: true, withdraw: false, transfer: false, transactions: true },
+      { cid: 1006, name: 'Peter Peeters', deposit: false, withdraw: true, transfer: true, transactions: true },
+    ],
   },
   {
     account_id: 'BE01234568',
@@ -403,7 +407,7 @@ devData.financialsAccounts = [
       deposit: true,
       withdraw: true,
       transfer: true,
-      transactions: false,
+      transactions: true,
     },
   },
 ];
@@ -413,16 +417,31 @@ devData.financialsTransactions = [
     transaction_id: 'e418e011-54fc-49a6-968a-8e9197c2cb1b',
     origin_account_id: 'BE01234567',
     origin_account_name: 'Me Savings',
+    origin_change: 120,
     target_account_id: 'BE01234568',
     target_account_name: 'Bank of America',
-    change: 100,
+    target_change: 100,
     comment: 'Transfer to Bank of America',
     triggered_by: 'David Voor',
-    accepted_by: 'David Achter',
+    accepted_by: null,
+    date: 1641766054367,
+    type: 'transfer',
+  },
+  {
+    transaction_id: 'e418e011-54fc-49a6-968a-8e9197c2cb1X',
+    origin_account_id: 'BE01234568',
+    origin_account_name: 'Bank of America',
+    origin_change: 200,
+    target_account_id: 'BE01234567',
+    target_account_name: 'Me Savings',
+    target_change: 200,
+    comment: 'Transfer to back to savings',
+    triggered_by: 'De Staat',
+    accepted_by: 'David Voor',
     date: 1641766054368,
     type: 'transfer',
   },
-];
+] as Financials.Transaction[];
 
 devData.jobGroups = [
   {
@@ -562,7 +581,7 @@ devData.hudValues = {
 
 devData.phoneBusinesses = [
   {
-    name: 'dff',
+    id: 1,
     label: 'De FliereFluiters',
     role: 'Mechanieker',
     permissions: ['hire', 'property_access'],
@@ -578,7 +597,7 @@ devData.phoneBusinesses = [
     ],
   },
   {
-    name: 'tuna',
+    id: 2,
     label: 'Tuna shop',
     role: 'CEO',
     permissions: ['hire', 'fire', 'change_role', 'pay_employee', 'pay_external', 'charge_external'],

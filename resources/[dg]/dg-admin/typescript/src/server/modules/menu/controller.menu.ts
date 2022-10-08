@@ -1,4 +1,4 @@
-import { Events, Inventory, RPC, Util } from '@dgx/server';
+import { Events, Financials, Inventory, RPC, Util } from '@dgx/server';
 import { getUICommands } from 'modules/commands/service.commands';
 
 import { getUserData } from '../../helpers/identifiers';
@@ -152,8 +152,8 @@ RPC.register('admin:menu:getRoutingBuckets', () => {
   ];
 });
 
-RPC.register('admin:menu:getBankAccounts', async () => {
-  const accounts = await global.exports['dg-financials'].getAllAccounts();
+RPC.register('admin:menu:getBankAccounts', () => {
+  const accounts = Financials.getAllAccounts();
   return accounts.map((a: any) => ({
     id: a.account_id,
     name: a.name,

@@ -118,7 +118,7 @@ export const signOut = (src: number, job: string) => {
 };
 
 export const getPlayerJob = (src: number) => {
-  const cid = Util.getCID(src);
+  const cid = Util.getCID(src, true);
   if (!cid) return;
   for (const [job, signedInJob] of signedIn) {
     if (signedInJob.has(cid)) {

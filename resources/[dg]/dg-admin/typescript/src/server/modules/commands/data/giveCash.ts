@@ -1,4 +1,4 @@
-import { Notifications } from '@dgx/server';
+import { Financials, Notifications } from '@dgx/server';
 import { Inputs } from 'enums/inputs';
 
 declare interface GiveCashData {
@@ -19,11 +19,7 @@ export const giveCash: CommandData = {
         Notifications.add(caller.source, 'Amount cannot be empty and should be higher than 0', 'error');
         return;
       }
-      global.exports['dg-financials'].addCash(
-        data?.Target.serverId ?? caller.source,
-        amount,
-        `admin menu action by ${caller.name}`
-      );
+      Financials.addCash(data?.Target.serverId ?? caller.source, amount, `admin menu action by ${caller.name}`);
     } catch (e) {
       console.error(e);
       Notifications.add(caller.source, 'Amount should be a number', 'error');

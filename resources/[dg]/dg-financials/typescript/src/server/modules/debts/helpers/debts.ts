@@ -7,6 +7,7 @@ import 'dayjs/locale/nl-be';
 
 import { mainLogger } from '../../../sv_logger';
 import debtManager from '../classes/debtmanager';
+import { getConfig } from 'helpers/config';
 
 dayjs.extend(toObject);
 dayjs.extend(utc);
@@ -22,7 +23,7 @@ export const debtLogger = mainLogger.child({
 });
 
 export const getDaysUntilDue = (debtPrice: number) => {
-  const debtTerms = debtManager.getConfig().debtTerms;
+  const debtTerms = getConfig().debts.debtTerms;
   let currentTime = 3;
   for (const cap in debtTerms) {
     if (debtPrice < Number(cap)) break;
@@ -49,7 +50,7 @@ export const scheduleOverDueDebt = (debtId: number) => {
     clearTimeout(scheduledDebts.get(debtId));
     scheduledDebts.delete(debtId);
   }
-  let overDueDate;
+  let overDueDate: dayjs.Dayjs;
   let foundDate = false;
   for (let i = 0; i < daysUntilDefault * 0.5; i++) {
     // search current overDue date
@@ -65,7 +66,7 @@ export const scheduleOverDueDebt = (debtId: number) => {
     return;
   }
   // Not this server restart
-  if (!overDueDate.isBefore(dayjs().add(12, 'h'))) return;
+  if (!overDueDate!.isBefore(dayjs().add(12, 'h'))) return;
   // Payout term potentially ends this restart, setup overdue timer
   debtLogger.silly(
     `Schedule overdue debt ${debtId} at ${dueDate.format('DD/MM/YYYY HH:mm')} for ${secDiff} milliseconds`
@@ -79,7 +80,7 @@ export const scheduleOverDueDebt = (debtId: number) => {
     if (scheduledDebts.has(debtId)) {
       scheduledDebts.delete(debtId);
     }
-  }, dayjs().diff(overDueDate, 'ms'));
+  }, dayjs().diff(overDueDate!, 'ms'));
   scheduledDebts.set(debtId, timeout);
 };
 

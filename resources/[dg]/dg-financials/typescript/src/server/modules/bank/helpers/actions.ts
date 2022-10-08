@@ -1,28 +1,37 @@
-import { getTaxedPrice } from '../../taxes/service';
-import { AccountManager } from '../classes/AccountManager';
+import { Notifications } from '@dgx/server';
+import accountManager from '../classes/AccountManager';
 import { bankLogger } from '../utils';
 
-const AManager = AccountManager.getInstance();
-
-// TODO: make all action return booleans based on their outcome
-export const deposit = async (accountId: string, triggerCid: number, amount: number, comment?: string) => {
-  const account = AManager.getAccountById(accountId);
+export const deposit = async (
+  accountId: string,
+  triggerCid: number,
+  amount: number,
+  comment?: string
+): Promise<boolean> => {
+  const account = accountManager.getAccountById(accountId);
   if (!account) {
-    const Player = DGCore.Functions.GetPlayerByCitizenId(triggerCid);
-    emitNet('DGCore:Notify', Player.PlayerData.source, `Geen account gevonden voor ${accountId}`, 'error');
-    bankLogger.error(`Account ${accountId} not found | src: ${Player.PlayerData.source} | cid: ${triggerCid}`);
+    const plyId = DGCore.Functions.GetPlayerByCitizenId(triggerCid)?.PlayerData?.source;
+    Notifications.add(plyId, `Geen account gevonden voor ${accountId}`, 'error');
+    bankLogger.error(`Account ${accountId} not found | src: ${plyId} | cid: ${triggerCid}`);
+    return false;
   }
-  await account.deposit(triggerCid, amount, comment);
+  return account.deposit(triggerCid, amount, comment);
 };
 
-export const withdraw = async (accountId: string, triggerCid: number, amount: number, comment?: string) => {
-  const account = AManager.getAccountById(accountId);
+export const withdraw = async (
+  accountId: string,
+  triggerCid: number,
+  amount: number,
+  comment?: string
+): Promise<boolean> => {
+  const account = accountManager.getAccountById(accountId);
   if (!account) {
-    const Player = DGCore.Functions.GetPlayerByCitizenId(triggerCid);
-    emitNet('DGCore:Notify', Player.PlayerData.source, `Geen account gevonden voor ${accountId}`, 'error');
-    bankLogger.error(`Account ${accountId} not found | src: ${Player.PlayerData.source} | cid: ${triggerCid}`);
+    const plyId = DGCore.Functions.GetPlayerByCitizenId(triggerCid)?.PlayerData?.source;
+    Notifications.add(plyId, `Geen account gevonden voor ${accountId}`, 'error');
+    bankLogger.error(`Account ${accountId} not found | src: ${plyId} | cid: ${triggerCid}`);
+    return false;
   }
-  await account.withdraw(triggerCid, amount, comment);
+  return account.withdraw(triggerCid, amount, comment);
 };
 
 export const transfer = async (
@@ -34,11 +43,11 @@ export const transfer = async (
   comment?: string,
   taxId?: number
 ): Promise<boolean> => {
-  const account = AManager.getAccountById(accountId);
+  const account = accountManager.getAccountById(accountId);
   if (!account) {
-    const Player = DGCore.Functions.GetPlayerByCitizenId(triggerCid);
-    emitNet('DGCore:Notify', Player.PlayerData.source, `Geen account gevonden voor ${accountId}`, 'error');
-    bankLogger.error(`Account ${accountId} not found | src: ${Player.PlayerData.source} | cid: ${triggerCid}`);
+    const plyId = DGCore.Functions.GetPlayerByCitizenId(triggerCid)?.PlayerData?.source;
+    Notifications.add(plyId, `Geen account gevonden voor ${accountId}`, 'error');
+    bankLogger.error(`Account ${accountId} not found | src: ${plyId} | cid: ${triggerCid}`);
     return false;
   }
   return account.transfer(targetAccountId, triggerCid, acceptorCid, amount, comment, false, taxId);
@@ -51,27 +60,25 @@ export const purchase = async (
   comment?: string,
   taxId?: number
 ): Promise<boolean> => {
-  const account = AManager.getAccountById(accountId);
+  const account = accountManager.getAccountById(accountId);
   if (!account) {
-    const Player = DGCore.Functions.GetPlayerByCitizenId(triggerCid);
-    emitNet('DGCore:Notify', Player.PlayerData.source, `Geen account gevonden voor ${accountId}`, 'error');
-    bankLogger.error(`Account ${accountId} not found | src: ${Player.PlayerData.source} | cid: ${triggerCid}`);
+    const plyId = DGCore.Functions.GetPlayerByCitizenId(triggerCid)?.PlayerData?.source;
+    Notifications.add(plyId, `Geen account gevonden voor ${accountId}`, 'error');
+    bankLogger.error(`Account ${accountId} not found | src: ${plyId} | cid: ${triggerCid}`);
     return false;
   }
-  const { taxPrice } = getTaxedPrice(amount, taxId);
-  return account.purchase(triggerCid, taxPrice, comment);
+  return account.purchase(triggerCid, amount, comment, taxId);
 };
 
-export const paycheck = async (accountId: string, triggerCid: number, amount: number) => {
-  const account = AManager.getAccountById(accountId);
+export const paycheck = async (accountId: string, triggerCid: number, amount: number): Promise<boolean> => {
+  const account = accountManager.getAccountById(accountId);
   if (!account) {
-    const Player = DGCore.Functions.GetPlayerByCitizenId(triggerCid);
-    emitNet('DGCore:Notify', Player.PlayerData.source, `Kon paycheck niet uitbetalen`, 'error');
-    bankLogger.error(`Account ${accountId} not found | src: ${Player.PlayerData.source} | cid: ${triggerCid}`);
+    const plyId = DGCore.Functions.GetPlayerByCitizenId(triggerCid)?.PlayerData?.source;
+    Notifications.add(plyId, `Geen account gevonden voor ${accountId}`, 'error');
+    bankLogger.error(`Account ${accountId} not found | src: ${plyId} | cid: ${triggerCid}`);
     return false;
   }
-  const { taxPrice } = getTaxedPrice(amount, 4, true);
-  await account.paycheck(triggerCid, taxPrice);
+  return account.paycheck(triggerCid, amount);
 };
 
 export const mobile_transaction = async (
@@ -81,11 +88,11 @@ export const mobile_transaction = async (
   amount: number,
   comment?: string
 ): Promise<boolean> => {
-  const account = AManager.getAccountById(accountId);
+  const account = accountManager.getAccountById(accountId);
   if (!account) {
-    const Player = DGCore.Functions.GetPlayerByCitizenId(triggerCid);
-    emitNet('DGCore:Notify', Player.PlayerData.source, `Geen account gevonden voor ${accountId}`, 'error');
-    bankLogger.error(`Account ${accountId} not found | src: ${Player.PlayerData.source} | cid: ${triggerCid}`);
+    const plyId = DGCore.Functions.GetPlayerByCitizenId(triggerCid)?.PlayerData?.source;
+    Notifications.add(plyId, `Geen account gevonden voor ${accountId}`, 'error');
+    bankLogger.error(`Account ${accountId} not found | src: ${plyId} | cid: ${triggerCid}`);
     return false;
   }
   return account.mobileTransfer(targetPhone, triggerCid, amount, comment);

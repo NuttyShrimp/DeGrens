@@ -70,9 +70,18 @@ const Component: AppFunction<Financials.State> = props => {
       },
       devData.financialsTransactions
     );
+
+    // filter out double ids if they somehow slipped through (just added for browser dev env tho)
+    const registeredTransactionIds = new Set<string>();
+    const newTransactions = (reset ? list : [...props.transactions, ...list]).filter(t => {
+      if (registeredTransactionIds.has(t.transaction_id)) return false;
+      registeredTransactionIds.add(t.transaction_id);
+      return true;
+    });
+
     props.updateState({
       canLoadMore: list.length > 0,
-      transactions: reset ? list : [...props.transactions, ...list],
+      transactions: newTransactions,
       backdrop: false,
       modalComponent: null,
     });

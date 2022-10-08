@@ -1,9 +1,3 @@
-import { Config } from '@dgx/server';
-import { setConfig } from 'helpers/config';
-import { CryptoManager } from 'modules/crypto/classes/CryptoManager';
-import debtManager from 'modules/debts/classes/debtmanager';
-import { scheduleMaintenanceFees } from 'modules/debts/helpers/maintenanceFees';
-
 import './sv_logger';
 import './modules/bank/controllers';
 import './modules/cash';
@@ -12,27 +6,24 @@ import './modules/paycheck';
 import './modules/taxes';
 import './modules/debts';
 
-import { AccountManager } from './modules/bank/classes/AccountManager';
-import { seedCache as seedCashCache } from './modules/cash/service';
-import { reloadPlayerWallets } from './modules/crypto/service';
+import { Config } from '@dgx/server';
+import { setConfig } from 'helpers/config';
+import cryptoManager from 'modules/crypto/classes/CryptoManager';
+import debtManager from 'modules/debts/classes/debtmanager';
+import { scheduleMaintenanceFees } from 'modules/debts/helpers/maintenanceFees';
+import accountManager from './modules/bank/classes/AccountManager';
 import { seedCache as seedPaycheckCache } from './modules/paycheck/service';
 import { seedTaxes } from './modules/taxes/service';
 
-const startResource = async () => {
+setImmediate(async () => {
+  // First we load config
   await Config.awaitConfigLoad();
   const config = Config.getModuleConfig<Config>('financials');
   setConfig(config);
-  await AccountManager.getInstance().setConfig(config.accounts);
+  await accountManager.init();
   seedPaycheckCache();
-  seedCashCache();
-  CryptoManager.getInstance().loadCoins();
-  debtManager.setConfig(config.debts);
+  cryptoManager.initiate();
   debtManager.seedDebts();
-  reloadPlayerWallets();
   scheduleMaintenanceFees();
   seedTaxes();
-};
-
-setImmediate(() => {
-  startResource();
 });

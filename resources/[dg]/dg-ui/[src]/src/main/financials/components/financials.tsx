@@ -31,7 +31,13 @@ export const Financials: AppFunction<
       <div className={'financials__wrapper'}>
         <div>
           <Infoheader bank={props.bank} cash={props.cash} />
-          <AccountList accounts={props.accounts} selected={props.selected} setActiveAccount={props.setActiveAccount} />
+          <AccountList
+            accounts={props.accounts}
+            selected={props.selected}
+            setActiveAccount={props.setActiveAccount}
+            fetchAccounts={props.fetchAccounts}
+            fetchTransactions={props.fetchTransactions}
+          />
         </div>
         <TransactionList
           transactions={props.transactions}
@@ -41,13 +47,7 @@ export const Financials: AppFunction<
         />
         {props.modalComponent && (
           <div className={'modal'}>
-            <div>
-              {props.modalComponent({
-                selected: props.selected as Financials.Account,
-                fetchAccounts: props.fetchAccounts,
-                fetchTransactions: props.fetchTransactions,
-              })}
-            </div>
+            <div>{props.modalComponent}</div>
           </div>
         )}
         {props.backdrop && <div className={'financials__backdrop'} />}

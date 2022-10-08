@@ -1,13 +1,14 @@
-import { SQL } from '@dgx/server';
+import { Notifications, SQL, Util } from '@dgx/server';
+import { getConfig } from 'helpers/config';
 import { getTaxedPrice } from 'modules/taxes/service';
 import winston from 'winston';
 
 import { config } from '../../../config';
 import { generateAccountId, generateTransactionId } from '../../../sv_util';
 import { addCash, removeCash } from '../../cash/service';
-import { ActionPermission, bankLogger, generateSplittedInfo } from '../utils';
+import { ActionPermission, bankLogger, generateSplittedInfo, sortTransactions } from '../utils';
+import accountManager from './AccountManager';
 
-import { AccountManager } from './AccountManager';
 import { PermissionsManager } from './PermissionsManager';
 
 export class Account {
@@ -15,7 +16,7 @@ export class Account {
   private readonly name: string;
   private readonly accType: AccountType;
   private balance: number;
-  lastOperation: number;
+  public lastOperation: number;
   private transactions: Record<TransactionType, DB.ITransaction[]> = {
     deposit: [],
     withdraw: [],
@@ -24,10 +25,9 @@ export class Account {
     paycheck: [],
     mobile_transaction: [],
   };
-  private transactionsIds: string[];
-  private manager: AccountManager;
-  private logger: winston.Logger;
-  permsManager: PermissionsManager;
+  private transactionsIds!: string[];
+  private readonly logger: winston.Logger;
+  public readonly permsManager: PermissionsManager;
 
   constructor(
     account_id: string,
@@ -41,33 +41,34 @@ export class Account {
     this.name = name;
     this.accType = type;
     this.balance = balance;
-    this.manager = AccountManager.getInstance();
     this.logger = bankLogger.child({ module: account_id });
     this.logger.silly(
       `Account ${this.account_id} created | name: ${this.name} | accountType: ${this.accType} | balance: ${this.balance}`
     );
     this.permsManager = new PermissionsManager(account_id, members);
     this.lastOperation = updatedAt;
+
     // fetch all transactionids for this account
     // We only fetch ids so the cache is not overfilled with data which could slow down the resource
-    this.getDBTransactionsIds().then(transactionIds => {
+    // When getting transactions for client we fetch all data
+    this.getAllTransactionsFromDatabase().then(transactionIds => {
       this.transactionsIds = transactionIds ?? [];
     });
   }
 
+  // Create new account and insert into db
   public static async create(cid: number, name: string, accType: AccountType): Promise<Account> {
     const accId = generateAccountId();
     const query = `
-      INSERT INTO bank_accounts (account_id, name, type)
-      VALUES (?, ?, ?)
+      INSERT INTO bank_accounts (account_id, name, type, balance)
+      VALUES (?, ?, ?, 0)
     `;
     await SQL.query(query, [accId, name, accType]);
-    const _account = new Account(accId, name, accType);
-    _account.permsManager.addPermissions(cid, 31);
-    return _account;
+    const account = new Account(accId, name, accType);
+    account.permsManager.addPermissions(cid, 31); // Set as owner
+    return account;
   }
 
-  // region Getters
   public getType(): AccountType {
     return this.accType;
   }
@@ -84,18 +85,40 @@ export class Account {
     return this.balance;
   }
 
-  public getClientVersion(cid: number): IAccount {
+  public async getClientVersion(cid: number) {
     const access_level = this.permsManager.getMemberLevel(cid);
     this.logger.silly(`getClientVersion | cid: ${cid} | perm: ${access_level}`);
-    return {
+    const clientVersion: IAccount = {
       account_id: this.account_id,
       name: this.name,
       type: this.accType,
       balance: this.balance,
       permissions: this.permsManager.buildPermissions(access_level),
     };
+    if (this.accType === 'savings') {
+      const accountOwnerCid = this.permsManager.getAccountOwner()?.cid;
+      if (accountOwnerCid !== undefined) {
+        clientVersion.members = await Promise.all(
+          this.permsManager
+            .getMembers()
+            .filter(m => m.cid !== accountOwnerCid)
+            .map(async m => {
+              const player = await DGCore.Functions.GetOfflinePlayerByCitizenId(m.cid);
+              let name = 'Unknown Person';
+              if (player?.PlayerData?.charinfo != undefined) {
+                name = `${player.PlayerData.charinfo?.firstname} ${player.PlayerData.charinfo.lastname}`;
+              }
+              return {
+                cid: m.cid,
+                name,
+                ...this.permsManager.buildPermissions(m.access_level),
+              };
+            })
+        );
+      }
+    }
+    return clientVersion;
   }
-
   public hasAccess(cid: number): boolean {
     return this.permsManager.hasAccess(cid);
   }
@@ -110,17 +133,12 @@ export class Account {
     };
   }
 
-  // endregion
-  //region Setters
   public changeBalance(amount: number): void {
     this.logger.info(`changeBalance | amount: ${amount}`);
     this.balance += amount;
     this.lastOperation = Date.now();
     this.updateBalance();
   }
-
-  // endregion
-  //region DB
 
   private async updateBalance(): Promise<void> {
     const query = `
@@ -131,30 +149,31 @@ export class Account {
     await SQL.query(query, [this.balance, this.account_id]);
   }
 
-  private async AddDBTransaction(transaction: DB.ITransaction): Promise<void> {
+  private async insertTransactionInDatabase(transaction: DB.ITransaction): Promise<void> {
     const query = `
       INSERT INTO transaction_log
-      (transaction_id, origin_account_id, target_account_id, \`change\`, comment, triggered_by, accepted_by, date,
+      (transaction_id, origin_account_id, origin_account_name, origin_change, target_account_id, target_account_name, target_change, comment, triggered_by, accepted_by, date,
        type)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `;
     await SQL.query(query, [
       transaction.transaction_id,
       transaction.origin_account_id,
+      transaction.origin_account_name,
+      transaction.origin_change,
       transaction.target_account_id,
-      transaction.change,
+      transaction.target_account_name,
+      transaction.target_change,
       transaction.comment,
       transaction.triggered_by,
       transaction.accepted_by,
       transaction.date,
       transaction.type,
     ]);
-    // Add transaction to front of array
-    this.transactions[transaction.type].unshift(transaction);
-    this.transactionsIds.push(transaction.transaction_id);
   }
 
-  private async getDBTransactionsIds(): Promise<string[]> {
+  // Fetch all unique transaction ids where this account is referenced
+  private async getAllTransactionsFromDatabase(): Promise<string[]> {
     const query = `
       SELECT DISTINCT transaction_id
       FROM transaction_log
@@ -162,11 +181,10 @@ export class Account {
          OR target_account_id = ?
       ORDER BY date DESC
     `;
-    const transactionsIds: string[] = await SQL.query(query, [this.account_id, this.account_id]);
-    return transactionsIds;
+    return SQL.query(query, [this.account_id, this.account_id]);
   }
 
-  private async getDBTransactions(
+  private async getTransactionsFromDatabase(
     offset: number,
     limit = config.accounts.transactionLimit,
     type?: TransactionType
@@ -186,21 +204,18 @@ export class Account {
       params = [...params.slice(0, 2), type, ...params.slice(2, 4)];
     }
     const transactions: DB.ITransaction[] = await SQL.query(query, params);
-    Object.keys(this.transactions).forEach((tType: TransactionType) => {
+    (Object.keys(this.transactions) as TransactionType[]).forEach((tType: TransactionType) => {
       this.transactions[tType].push(...transactions.filter(t => t.type === tType));
     });
     return transactions;
   }
 
-  // endregion
-  // region Actions
   /**
    * Internal function to combine checks and prevent code-duplication
    * @param type
    * @param triggerCid
    * @param amount
    * @param extra Object with extra attributes needed for this action
-   * @private
    */
   private async actionValidation(
     type: TransactionType,
@@ -209,10 +224,8 @@ export class Account {
     extra: {
       targetAccountId?: string;
       acceptorCid?: number;
-      /**
-       * Overrides check if amount is smaller than acc balance
-       */
       canBeNegative?: boolean;
+      balanceDecrease?: boolean;
       targetPhone?: string;
     } = {}
   ): Promise<boolean> {
@@ -223,10 +236,11 @@ export class Account {
       amount,
       ...extra,
     });
+
     try {
-      // region Player Validation
+      // Check if trigger player exists
       if (!triggerPlayer) {
-        global.exports['dg-logs'].createGraylogEntry(
+        Util.Log(
           'financials:invalidPlayer',
           {
             cid: triggerCid,
@@ -236,23 +250,21 @@ export class Account {
             plyType: 'target',
             ...extra,
           },
-          `${triggerPlayer.PlayerData.name} tried to ${type} ${amount} to ${this.name} (${this.account_id}) but was not found in the core as a valid player`,
+          `${triggerCid} tried to ${type} ${amount} to ${this.name} (${this.account_id}) but was not found in the core as a valid player`,
+          undefined,
           true
         );
-        this.logger.warn(
-          `${type}: invalid player | ${generateSplittedInfo({
-            cid: triggerCid,
-            account: this.account_id,
-            amount,
-            ...extra,
-          })}`
-        );
+        this.logger.warn(`${type}: invalid player | ${infoStr}`);
         return false;
       }
+      const triggerPlyId = triggerPlayer.PlayerData.source;
+
+      // Check if target is phonenumber
       if (extra.targetPhone) {
-        const targetPlayer = DGCore.Functions.GetPlayerByPhone(extra.targetPhone);
+        const phoneNumber = Number(extra.targetPhone);
+        const targetPlayer = await DGCore.Functions.GetOfflinePlayerByPhone(phoneNumber);
         if (!targetPlayer) {
-          global.exports['dg-logs'].createGraylogEntry(
+          Util.Log(
             'financials:invalidPlayer',
             {
               cid: triggerCid,
@@ -262,18 +274,19 @@ export class Account {
               plyType: 'acceptor',
               ...extra,
             },
-            `${triggerPlayer.PlayerData.name} tried to ${type} ${amount} to ${this.name} (${this.account_id}) but targeted an invalid player`,
+            `${Util.getName(triggerPlyId)} tried to ${type} ${amount} to ${this.name} (${
+              this.account_id
+            }) but targeted invalid player`,
+            triggerPlyId,
             true
           );
           this.logger.warn(`${type}: invalid player | ${infoStr}`);
           return false;
         }
         extra.acceptorCid = targetPlayer.PlayerData.citizenid;
-        extra.targetAccountId = (await this.manager.getDefaultAccount(extra.acceptorCid)).account_id;
-      }
-      if (extra.acceptorCid) {
-        if (triggerCid != extra.acceptorCid && !DGCore.Functions.GetPlayerByCitizenId(extra.acceptorCid)) {
-          global.exports['dg-logs'].createGraylogEntry(
+        const acceptorAccount = accountManager.getDefaultAccount(extra.acceptorCid);
+        if (!acceptorAccount) {
+          Util.Log(
             'financials:invalidPlayer',
             {
               cid: triggerCid,
@@ -283,18 +296,47 @@ export class Account {
               plyType: 'acceptor',
               ...extra,
             },
-            `${triggerPlayer.PlayerData.name} tried to ${type} ${amount} to ${this.name} (${this.account_id}) but was not found in the core as a valid player`,
+            `${Util.getName(triggerPlyId)} tried to ${type} ${amount} to ${this.name} (${
+              this.account_id
+            }) but could not find default account for target`,
+            triggerPlyId,
+            true
+          );
+          this.logger.warn(`${type}: invalid player | ${infoStr}`);
+          return false;
+        }
+        extra.targetAccountId = acceptorAccount.account_id;
+      }
+
+      // Check if acceptorCid exists
+      if (extra.acceptorCid && extra.acceptorCid !== triggerCid) {
+        const acceptorPlayer = await DGCore.Functions.GetOfflinePlayerByCitizenId(extra.acceptorCid);
+        if (!acceptorPlayer) {
+          Util.Log(
+            'financials:invalidPlayer',
+            {
+              cid: triggerCid,
+              action: type,
+              account: this.account_id,
+              amount,
+              plyType: 'acceptor',
+              ...extra,
+            },
+            `${Util.getName(triggerPlyId)} tried to ${type} ${amount} to ${this.name} (${
+              this.account_id
+            }) but was invalid player`,
+            triggerPlyId,
             true
           );
           this.logger.warn(`${type}: invalid player | ${infoStr}`);
           return false;
         }
       }
-      // endregion
-      // region Permissions Check
+
+      // Check if trigger player has perms for this account
       if (!this.permsManager.hasPermission(triggerCid, ActionPermission[type])) {
-        emitNet('DGCore:Notify', triggerPlayer.PlayerData.source, "You don't have the permissions for this", 'error');
-        global.exports['dg-logs'].createGraylogEntry(
+        Notifications.add(triggerPlyId, 'Je hebt geen toegang tot deze account', 'error');
+        Util.Log(
           'financials:missingPermissions',
           {
             cid: triggerCid,
@@ -302,37 +344,19 @@ export class Account {
             account: this.account_id,
             ...extra,
           },
-          `${triggerPlayer.PlayerData.name} tried to ${type} ${amount} of ${this.name} (${this.account_id}) but did not have the permissions`
+          `${Util.getName(triggerPlyId)} tried to ${type} ${amount} of ${this.name} (${
+            this.account_id
+          }) but did not have the permissions`,
+          triggerPlyId
         );
         this.logger.info(`${type}: missing permissions | ${infoStr}`);
-        // TODO add some anti-cheat measures
         return false;
       }
-      // Player should be able to transfer to any1 when not a 2 player interaction
-      if (type === 'transfer' && extra.acceptorCid !== triggerCid) {
-        const targetAccount = this.manager.getAccountById(extra.targetAccountId);
-        if (!targetAccount.permsManager.hasAccess(extra.acceptorCid)) {
-          emitNet('DGCore:Notify', triggerPlayer.PlayerData.source, "You don't have the permissions for this", 'error');
-          global.exports['dg-logs'].createGraylogEntry(
-            'financials:missingPermissions',
-            {
-              cid: triggerCid,
-              action: 'transfer',
-              origin_account: this.account_id,
-              ...extra,
-            },
-            `${triggerPlayer.PlayerData.name} tried to transfer ${amount} from ${this.name} (${this.account_id}) to ${targetAccount.name} (accountId: ${targetAccount.account_id} | accepted_by: ${extra.acceptorCid}) but did not have the permissions`
-          );
-          this.logger.info(`transfer: missing permissions ${infoStr}`);
-          // TODO add some anti-cheat measures
-          return false;
-        }
-      }
-      // endregion
-      // region Amount validation
+
+      // Check if amount not negative
       amount = parseInt(String(amount));
       if (amount <= 0) {
-        global.exports['dg-logs'].createGraylogEntry(
+        Util.Log(
           'financials:invalidAmount',
           {
             cid: triggerCid,
@@ -341,21 +365,28 @@ export class Account {
             amount,
             ...extra,
           },
-          `${triggerPlayer.PlayerData.name} tried to ${type} ${amount} from ${this.name} (${this.account_id}) but gave an invalid amount(negative)`
+          `${Util.getName(triggerPlyId)} tried to ${type} ${amount} from ${this.name} (${
+            this.account_id
+          }) but gave an invalid amount (negative)`,
+          triggerPlyId
         );
         this.logger.info(`${type}: invalid amount | ${infoStr}`);
         return false;
       }
-      if (amount > this.balance && !extra?.canBeNegative) {
-        emitNet('DGCore:Notify', triggerPlayer.PlayerData.source, `Account balance is to low!`, 'error');
+
+      // If we are going to decrease balance, then check if not negative or if negative is allowed
+      const balanceDecrease = extra.balanceDecrease ?? false;
+      const canBeNegative = extra.canBeNegative ?? false;
+      if (balanceDecrease && !canBeNegative && this.balance - amount < 0) {
+        Notifications.add(triggerPlyId, 'Niet genoeg geld in bankaccount', 'error');
         this.logger.debug(`${type}: amount higher than account balance | ${infoStr}`);
         return false;
       }
+
       return true;
-      // endregion
     } catch (e) {
       console.error(e);
-      global.exports['dg-logs'].createGraylogEntry(
+      Util.Log(
         'financials:invalidAmount',
         {
           cid: triggerCid,
@@ -367,41 +398,34 @@ export class Account {
           ...extra,
         },
         `${triggerPlayer.PlayerData.name} tried to ${type} ${amount} to ${this.name} (${this.account_id}) but the amount could not be parsed to a valid value`,
+        undefined,
         true
       );
-      this.logger.warn(
-        `${type}: failed to parse amount to valid number | ${generateSplittedInfo({
-          cid: triggerCid,
-          account: this.account_id,
-          amount,
-          ...extra,
-        })}`
-      );
+      this.logger.warn(`${type}: failed to parse amount to valid number | ${infoStr}`);
       return false;
     }
   }
 
   public async deposit(triggerCid: number, amount: number, comment?: string) {
-    if (
-      !(await this.actionValidation('deposit', triggerCid, amount, {
-        // Use this option to kinda skip the balance check
-        canBeNegative: true,
-      }))
-    )
-      return;
-    const triggerPlayer = DGCore.Functions.GetPlayerByCitizenId(triggerCid);
+    const isValid = await this.actionValidation('deposit', triggerCid, amount);
+    if (!isValid) return false;
+
+    const triggerPlyId = DGCore.Functions.GetPlayerByCitizenId(triggerCid)?.PlayerData?.source;
+    if (!triggerPlyId) return false;
+
     amount = parseInt(String(amount));
-    const success = removeCash(triggerPlayer.PlayerData.source, amount, `deposit to ${this.name} (${this.account_id})`);
+    const success = removeCash(triggerPlyId, amount, `deposit to ${this.name} (${this.account_id})`);
     if (!success) {
-      emitNet('DGCore:Notify', triggerPlayer.PlayerData.source, `Not enough money to do this!`, 'error');
+      Notifications.add(triggerPlyId, 'Je hebt niet genoeg cash', 'error');
       this.logger.debug(
         `deposit: not enough money | cid: ${triggerCid} | account: ${this.account_id} | accountBalance: ${this.balance} | amount: ${amount}`
       );
-      return;
+      return false;
     }
     this.changeBalance(amount);
-    await this.addTransaction(this.account_id, this.account_id, triggerCid, amount, 'deposit', comment);
-    global.exports['dg-logs'].createGraylogEntry(
+
+    await this.addTransaction(this.account_id, this.account_id, triggerCid, amount, amount, 'deposit', comment);
+    Util.Log(
       'financials:deposit:success',
       {
         cid: triggerCid,
@@ -410,21 +434,28 @@ export class Account {
         action: 'deposit',
         comment,
       },
-      `${triggerPlayer.PlayerData.name} deposited ${amount} to ${this.name} (${this.account_id})`
+      `${Util.getName(triggerPlyId)} deposited ${amount} to ${this.name} (${this.account_id})`,
+      triggerPlyId
     );
     this.logger.info(
       `deposit: success | cid: ${triggerCid} | account: ${this.account_id} | accountBalance: ${this.balance} | amount: ${amount}`
     );
+    return true;
   }
 
   public async withdraw(triggerCid: number, amount: number, comment?: string) {
-    if (!(await this.actionValidation('deposit', triggerCid, amount, {}))) return;
-    const triggerPlayer = DGCore.Functions.GetPlayerByCitizenId(triggerCid);
+    const isValid = await this.actionValidation('withdraw', triggerCid, amount, { balanceDecrease: true });
+    if (!isValid) return false;
+
+    const triggerPlyId = DGCore.Functions.GetPlayerByCitizenId(triggerCid)?.PlayerData?.source;
+    if (!triggerPlyId) return false;
+
     amount = parseInt(String(amount));
     this.changeBalance(-amount);
-    addCash(triggerPlayer.PlayerData.source, amount, `Withdraw from ${this.name} (${this.account_id})`);
-    await this.addTransaction(this.account_id, this.account_id, triggerCid, amount, 'withdraw', comment);
-    global.exports['dg-logs'].createGraylogEntry(
+    addCash(triggerPlyId, amount, `Withdraw from ${this.name} (${this.account_id})`);
+
+    await this.addTransaction(this.account_id, this.account_id, triggerCid, amount, amount, 'withdraw', comment);
+    Util.Log(
       'financials:withdraw:success',
       {
         cid: triggerCid,
@@ -433,11 +464,13 @@ export class Account {
         action: 'withdraw',
         comment,
       },
-      `${triggerPlayer.PlayerData.name} withdrew ${amount} from ${this.name} (${this.account_id})`
+      `${Util.getName(triggerPlyId)} withdrew ${amount} from ${this.name} (${this.account_id})`,
+      triggerPlyId
     );
     this.logger.info(
       `withdraw: success | cid: ${triggerCid} | account: ${this.account_id} | accountBalance: ${this.balance} | amount: ${amount}`
     );
+    return true;
   }
 
   public async transfer(
@@ -447,27 +480,67 @@ export class Account {
     amount: number,
     comment?: string,
     canBeNegative = false,
-    taxId?: number,
+    taxId?: number
   ): Promise<boolean> {
-    if (
-      !(await this.actionValidation('transfer', triggerCid, amount, {
-        acceptorCid,
-        targetAccountId,
-        canBeNegative,
-      }))
-    )
-      return false;
-    const triggerPlayer = await DGCore.Functions.GetOfflinePlayerByCitizenId(triggerCid);
-    const targetAccount = this.manager.getAccountById(targetAccountId);
+    const isValid = await this.actionValidation('transfer', triggerCid, amount, {
+      acceptorCid,
+      targetAccountId,
+      balanceDecrease: true,
+      canBeNegative,
+    });
+    if (!isValid) return false;
+
+    const triggerPlyId = DGCore.Functions.GetPlayerByCitizenId(triggerCid)?.PlayerData?.source;
+    if (!triggerPlyId) return false;
+
+    const targetAccount = accountManager.getAccountById(targetAccountId);
+    if (!targetAccount) return false;
+
+    // Player should be able to transfer to any1 when not a 2 player interaction
+    // Check target cid permissions for target account if transfer and trigger and target not same
+    if (acceptorCid !== triggerCid) {
+      if (!targetAccount.permsManager.hasAccess(acceptorCid)) {
+        Util.Log(
+          'financials:missingPermissions',
+          {
+            cid: triggerCid,
+            action: 'transfer',
+            origin_account: this.account_id,
+            acceptorCid,
+            targetAccountId,
+          },
+          `${triggerCid} tried to transfer ${amount} from ${this.name} (${this.account_id}) to ${targetAccount.name} (accountId: ${targetAccount.account_id} | accepted_by: ${acceptorCid}) but did not have the permissions`
+        );
+        this.logger.info(`transfer: ${acceptorCid} missing permissions to ${targetAccountId} as acceptor`);
+        return false;
+      }
+    }
+
+    // Target gets price without tax
     amount = parseInt(String(amount));
     targetAccount.changeBalance(amount);
+
+    // Remove price with tax from trigger
+    let taxedAmount = amount;
     if (taxId) {
       const { taxPrice } = getTaxedPrice(amount, taxId);
-      amount = taxPrice;
+      taxedAmount = taxPrice;
     }
-    this.changeBalance(-amount);
-    await this.addTransaction(this.account_id, targetAccountId, triggerCid, amount, 'transfer', comment, acceptorCid);
-    global.exports['dg-logs'].createGraylogEntry(
+    this.changeBalance(-taxedAmount);
+
+    const transaction = await this.addTransaction(
+      this.account_id,
+      targetAccountId,
+      triggerCid,
+      taxedAmount,
+      amount,
+      'transfer',
+      comment,
+      acceptorCid !== triggerCid ? acceptorCid : undefined // Only provide acceptorCid if not same as triggercid
+    );
+    targetAccount.registerTransaction(transaction);
+
+    Util.Log(
       'financials:transfer:success',
       {
         cid: triggerCid,
@@ -475,11 +548,15 @@ export class Account {
         account: this.account_id,
         targetAccountId,
         amount,
+        taxedAmount,
         action: 'transfer',
         comment,
         canBeNegative,
       },
-      `${triggerPlayer.PlayerData.name} transfer ${amount} from ${this.name} (${this.account_id}) to ${targetAccount.name} (accountId: ${targetAccount.account_id} | accepted_by: ${acceptorCid})`
+      `${Util.getName(triggerPlyId)} transfer ${amount} from ${this.name} (${this.account_id}) to ${
+        targetAccount.name
+      } (accountId: ${targetAccount.account_id} | accepted_by: ${acceptorCid})`,
+      triggerPlyId
     );
     this.logger.info(
       `transfer: success | cid: ${triggerCid} | acceptor_cid: ${acceptorCid} | account: ${this.account_id} | targetAccount: ${targetAccountId} | amount: ${amount}`
@@ -487,44 +564,50 @@ export class Account {
     return true;
   }
 
-  public async purchase(triggerCid: number, amount: number, comment?: string): Promise<boolean> {
-    if (!(await this.actionValidation('purchase', triggerCid, amount))) return false;
-    const triggerPlayer = DGCore.Functions.GetPlayerByCitizenId(triggerCid);
+  public async purchase(triggerCid: number, amount: number, comment?: string, taxId?: number): Promise<boolean> {
+    const isValid = await this.actionValidation('purchase', triggerCid, amount, { balanceDecrease: true });
+    if (!isValid) return false;
+
+    const triggerPlyId = DGCore.Functions.GetPlayerByCitizenId(triggerCid)?.PlayerData?.source;
+    if (!triggerPlyId) return false;
+
     amount = parseInt(String(amount));
-    this.changeBalance(-amount);
-    await this.addTransaction(this.account_id, 'BE1', triggerCid, amount, 'purchase', comment);
+    let taxedAmount = amount;
+    if (taxId) {
+      const { taxPrice } = getTaxedPrice(amount, taxId);
+      taxedAmount = taxPrice;
+    }
+    this.changeBalance(-taxedAmount);
+
+    await this.addTransaction(this.account_id, 'BE1', triggerCid, taxedAmount, amount, 'purchase', comment);
     this.logger.info(`purchase: success | cid: ${triggerCid} | account: ${this.account_id} | amount: ${amount}`);
-    global.exports['dg-logs'].createGraylogEntry(
+    Util.Log(
       'financials:purchase:success',
       {
         cid: triggerCid,
         account: this.account_id,
         amount,
+        taxedAmount,
         action: 'purchase',
         comment,
       },
-      `${triggerPlayer.PlayerData.name} made a purchase of ${amount} from ${this.name} (${this.account_id})`
+      `${Util.getName(triggerPlyId)} made a purchase of ${amount} from ${this.name} (${this.account_id})`,
+      triggerPlyId
     );
     return true;
   }
 
   public async paycheck(triggerCid: number, amount: number): Promise<boolean> {
-    if (
-      !(await this.actionValidation('paycheck', triggerCid, amount, {
-        canBeNegative: true,
-      }))
-    )
-      return false;
-    const triggerPlayer = DGCore.Functions.GetPlayerByCitizenId(triggerCid);
-    amount = parseInt(String(amount));
+    const isValid = await this.actionValidation('paycheck', triggerCid, amount);
+    if (!isValid) return false;
+
+    const triggerPlyId = DGCore.Functions.GetPlayerByCitizenId(triggerCid)?.PlayerData?.source;
+    if (!triggerPlyId) return false;
+
+    // Check if standard account
     if (this.accType != 'standard') {
-      emitNet(
-        'DGCore:Notify',
-        triggerPlayer.PlayerData.source,
-        'This account accType does not support purchases',
-        'error'
-      );
-      global.exports['dg-logs'].createGraylogEntry(
+      Notifications.add(triggerPlyId, 'Je kan geen paycheck ontvangen op dit account', 'error');
+      Util.Log(
         'financials:invalidAccountType',
         {
           cid: triggerCid,
@@ -532,24 +615,36 @@ export class Account {
           amount,
           action: 'paycheck',
         },
-        `${triggerPlayer.PlayerData.name} tried to takeout his paycheck of €${amount} in ${this.name} (${this.account_id}) but the account type is not standard`
+        `${Util.getName(triggerPlyId)} tried to takeout his paycheck of €${amount} in ${this.name} (${
+          this.account_id
+        }) but the account type is not standard`,
+        triggerPlyId,
+        true
       );
       this.logger.debug(
         `paycheck: invalid account type | cid: ${triggerCid} | account: ${this.account_id} | accountType: ${this.accType} | amount: ${amount}`
       );
       return false;
     }
-    this.changeBalance(amount);
-    await this.addTransaction('BE1', this.account_id, triggerCid, amount, 'paycheck', 'Paycheck');
-    global.exports['dg-logs'].createGraylogEntry(
+
+    amount = parseInt(String(amount));
+    const { taxPrice } = getTaxedPrice(amount, 4, true);
+    this.changeBalance(taxPrice);
+
+    // Origin gets deducted full amount, target gets taxedamount
+    await this.addTransaction('BE1', this.account_id, triggerCid, amount, taxPrice, 'paycheck', 'Paycheck');
+
+    Util.Log(
       'financials:paycheck:success',
       {
         cid: triggerCid,
         account: this.account_id,
         amount,
+        taxPrice,
         action: 'paycheck',
       },
-      `${triggerPlayer.PlayerData.name} took out his paycheck of €${amount} into ${this.name} (${this.account_id})`
+      `${Util.getName(triggerPlyId)} took out his paycheck of €${amount} into ${this.name} (${this.account_id})`,
+      triggerPlyId
     );
     this.logger.info(`paycheck: success | cid: ${triggerCid} | account: ${this.account_id} | amount: ${amount}`);
     return true;
@@ -561,30 +656,40 @@ export class Account {
     amount: number,
     comment?: string
   ): Promise<boolean> {
-    if (
-      !(await this.actionValidation('mobile_transaction', triggerCid, amount, {
-        targetPhone,
-      }))
-    )
-      return false;
-    const targetPlayer = DGCore.Functions.GetPlayerByPhone(targetPhone);
-    const acceptorCid = targetPlayer.PlayerData.citizenid;
-    const triggerPlayer = DGCore.Functions.GetPlayerByCitizenId(triggerCid);
-    const targetAccount = await this.manager.getDefaultAccount(acceptorCid);
+    const isValid = await this.actionValidation('mobile_transaction', triggerCid, amount, {
+      targetPhone,
+      balanceDecrease: true,
+    });
+    if (!isValid) return false;
+
+    const triggerPlyId = DGCore.Functions.GetPlayerByCitizenId(triggerCid)?.PlayerData?.source;
+    if (!triggerPlyId) return false;
+
+    const acceptorCid = (await DGCore.Functions.GetOfflinePlayerByCitizenId(Number(targetPhone)))?.PlayerData
+      ?.citizenid;
+    if (!acceptorCid) return false;
+    const targetAccount = accountManager.getDefaultAccount(acceptorCid);
+    if (!targetAccount) return false;
+
     const targetAccountId = targetAccount.account_id;
     amount = parseInt(String(amount));
     this.changeBalance(-amount);
     targetAccount.changeBalance(amount);
-    await this.addTransaction(
+
+    // Both accounts get same amount
+    const transaction = await this.addTransaction(
       this.account_id,
       targetAccountId,
       triggerCid,
+      amount,
       amount,
       'mobile_transaction',
       comment,
       acceptorCid
     );
-    global.exports['dg-logs'].createGraylogEntry(
+    targetAccount.registerTransaction(transaction);
+
+    Util.Log(
       'financials:mobile_transaction:success',
       {
         cid: triggerCid,
@@ -595,7 +700,10 @@ export class Account {
         action: 'mobile_transaction',
         comment,
       },
-      `${triggerPlayer.PlayerData.name} mobile_transaction ${amount} from ${this.name} (${this.account_id}) to ${targetAccount.name} (accountId: ${targetAccount.account_id} | accepted_by: ${acceptorCid})`
+      `${Util.getName(triggerPlyId)} mobile_transaction ${amount} from ${this.name} (${this.account_id}) to ${
+        targetAccount.name
+      } (accountId: ${targetAccount.account_id} | accepted_by: ${acceptorCid})`,
+      triggerPlyId
     );
     this.logger.info(
       `mobile_transaction: success | cid: ${triggerCid} | acceptor_cid: ${acceptorCid} | account: ${this.account_id} | targetAccount: ${targetAccountId} | amount: ${amount}`
@@ -603,161 +711,184 @@ export class Account {
     return true;
   }
 
-  // endregion
-  // region Transactions
-  private sortTransactions(trans: DB.ITransaction[], custom = false): any {
-    const duplicatedIds: Record<string, number> = {};
-    trans = trans
-      .filter(t => {
-        const thisTransDupLength = trans.filter(t2 => t.transaction_id === t2.transaction_id).length;
-        if (thisTransDupLength === 1) {
-          return true;
-        }
-        if (!duplicatedIds[t.transaction_id]) duplicatedIds[t.transaction_id] = 0;
-        duplicatedIds[t.transaction_id]++;
-        return thisTransDupLength === duplicatedIds[t.transaction_id];
-      })
-      .sort((a, b) => {
-        if (a.date < b.date) return 1;
-        if (a.date > b.date) return -1;
-        return 0;
-      });
-    if (custom) {
-      return trans;
-    }
+  // TRANSACITON THINGS
+  private getTransactionsArray(type?: TransactionType) {
+    const transactionTypes = Object.keys(this.transactions) as TransactionType[];
+    const allowedTypes = transactionTypes.filter(t => type === undefined || t === type);
+    return allowedTypes.reduce<DB.ITransaction[]>(
+      (transactions, transactionType) => [...transactions, ...this.transactions[transactionType]],
+      []
+    );
   }
 
-  private getTransactionsArray(type?: TransactionType): DB.ITransaction[] {
-    let _transactions: DB.ITransaction[] = [];
-    Object.keys(this.transactions).forEach((tType: TransactionType) => {
-      if (!type) {
-        _transactions = _transactions.concat(this.transactions[tType]);
-      }
-      if (tType !== type) return;
-      _transactions = _transactions.concat(this.transactions[tType]);
-    });
-    return _transactions;
-  }
-
-  public async getTransactions(
-    source: number | string,
-    offset: number,
-    type: TransactionType
-  ): Promise<ITransaction[]> {
+  public async getTransactions(source: number, offset: number, type?: TransactionType): Promise<DB.ITransaction[]> {
     try {
-      const Player = DGCore.Functions.GetPlayer(source);
-      if (!Player) {
-        global.exports['dg-logs'].createGraylogEntry(
-          'financials:invalidPlayer',
-          {
-            cid: Player.PlayerData.citizenid,
-            action: 'getTransactions',
-            account: this.account_id,
-          },
-          `${Player.PlayerData.name} tried to fetch transactions of ${this.name} (${this.account_id}) but was not found in the core as a valid player`
-        );
-        this.logger.warn(`getTransactions: invalid player | src: ${source} | account: ${this.account_id}`);
-        return [];
-      }
-      if (!this.permsManager.hasPermission(Player.PlayerData.citizenid, 'transactions')) {
-        emitNet('DGCore:Notify', Player.PlayerData.source, "You don't have the permissions for this", 'error');
-        global.exports['dg-logs'].createGraylogEntry(
+      // Check if source player is a valid player
+      const cid = Util.getCID(source);
+
+      // Check if the player has permission to view transactions
+      if (!this.permsManager.hasPermission(cid, 'transactions')) {
+        Notifications.add(Number(source), 'Je hebt geen toegang tot dit', 'error');
+        Util.Log(
           'financials:missingPermissions',
           {
-            cid: Player.PlayerData.citizenid,
+            cid: cid,
             action: 'getTransactions',
             account: this.account_id,
           },
-          `${Player.PlayerData.name} tried to fetch transactions for ${this.name} (${this.account_id}) but did not have the permissions`
+          `${Util.getName(source)} tried to fetch transactions for ${this.name} (${
+            this.account_id
+          }) but did not have the permissions`
         );
         this.logger.info(`getTransactions: missing permissions | src: ${source} | account: ${this.account_id}`);
-        // TODO add some anti-cheat measures
         return [];
       }
-      let dbTransactions = this.getTransactionsArray(type).slice(offset, offset + config.accounts.transactionLimit);
-      if (dbTransactions.length < config.accounts.transactionLimit) {
-        const _trans = await this.getDBTransactions(
-          offset + dbTransactions.length,
-          config.accounts.transactionLimit - dbTransactions.length,
+
+      // Get transactions from already loaded transactions, if less than requested then load more from db
+      const allTransactions = this.getTransactionsArray(type);
+      let transactionsToShow = allTransactions.slice(offset, offset + config.accounts.transactionLimit);
+      if (transactionsToShow.length < config.accounts.transactionLimit) {
+        const newTransactions = await this.getTransactionsFromDatabase(
+          offset + transactionsToShow.length,
+          config.accounts.transactionLimit - transactionsToShow.length,
           type
         );
-        dbTransactions = this.sortTransactions(dbTransactions.concat(_trans), true);
+        transactionsToShow = sortTransactions([...transactionsToShow, ...newTransactions]);
       }
+
       this.logger.debug(
-        `getTransactions: success | src: ${source} | account: ${this.account_id} | amount: ${dbTransactions.length}`
+        `getTransactions: success | src: ${source} | account: ${this.account_id} | amount: ${transactionsToShow.length}`
       );
-      return Promise.all(
-        dbTransactions.map(async t => {
-          return this.buildTransaction(t);
-        })
-      );
+      return transactionsToShow;
     } catch (e) {
       this.logger.error('Error getting transactions', e);
     }
+    return [];
   }
 
   public doesTransactionExist(id: string): boolean {
-    // Check if transaction exists in ids array
     return (this.transactionsIds ?? []).includes(id);
-  }
-
-  private async buildTransaction(transaction: DB.ITransaction): Promise<ITransaction> {
-    const _t: ITransaction = {
-      ...transaction,
-      origin_account_name: '',
-      target_account_name: '',
-    };
-    try {
-      // region User info
-      const triggerInfo = await DGCore.Functions.GetOfflinePlayerByCitizenId(Number(_t.triggered_by));
-      _t.triggered_by = `${triggerInfo.PlayerData.charinfo.firstname} ${triggerInfo.PlayerData.charinfo.lastname}`;
-      _t.accepted_by = _t.triggered_by;
-      if (transaction.triggered_by !== transaction.accepted_by) {
-        const acceptInfo = await DGCore.Functions.GetOfflinePlayerByCitizenId(Number(_t.accepted_by));
-        _t.accepted_by = `${acceptInfo.PlayerData.charinfo.firstname} ${acceptInfo.PlayerData.charinfo.lastname}`;
-      }
-      // endregion
-      // region Account info=
-      const originAccount = this.manager.getAccountById(_t.origin_account_id);
-      _t.origin_account_name = originAccount ? originAccount.getName() : 'Unknown Account';
-      _t.target_account_name = _t.target_account_id;
-      if (transaction.origin_account_id !== transaction.target_account_id) {
-        const targetAccount = this.manager.getAccountById(_t.target_account_id);
-        _t.target_account_name = targetAccount ? targetAccount.getName() : 'Unknown Account';
-      }
-      // endregion
-      return _t;
-    } catch (e) {
-      this.logger.error(`Error building transaction for ${_t.transaction_id}`, e);
-    }
   }
 
   private async addTransaction(
     originAccountId: string,
     targetAccountId: string,
     trigger_cid: number,
-    amount: number,
+    originChange: number,
+    targetChange: number,
     type: TransactionType,
     comment = '',
     acceptor_cid?: number
   ): Promise<DB.ITransaction> {
-    const _transaction: DB.ITransaction = {
+    const originAccountName = accountManager.getAccountById(originAccountId)?.getName() ?? 'Unknown Account';
+    const targetAccountName = accountManager.getAccountById(targetAccountId)?.getName() ?? 'Unknown Account';
+
+    const triggerPlayerData = (await DGCore.Functions.GetOfflinePlayerByCitizenId(trigger_cid))?.PlayerData;
+    const triggerName =
+      triggerPlayerData !== undefined
+        ? `${triggerPlayerData.charinfo.firstname} ${triggerPlayerData.charinfo.lastname}`
+        : 'Unknown Person';
+
+    let acceptorName: string | null = null;
+    if (acceptor_cid !== undefined) {
+      const acceptorPlayerData = (await DGCore.Functions.GetOfflinePlayerByCitizenId(acceptor_cid))?.PlayerData;
+      acceptorName =
+        acceptorPlayerData !== undefined
+          ? `${acceptorPlayerData.charinfo.firstname} ${acceptorPlayerData.charinfo.lastname}`
+          : 'Unknown Person';
+    }
+
+    const transaction: DB.ITransaction = {
       transaction_id: generateTransactionId(),
       origin_account_id: originAccountId,
+      origin_account_name: originAccountName,
+      origin_change: originChange,
       target_account_id: targetAccountId,
-      triggered_by: trigger_cid,
-      accepted_by: acceptor_cid ?? trigger_cid,
-      change: amount,
-      type,
+      target_account_name: targetAccountName,
+      target_change: targetChange,
       comment,
+      triggered_by: triggerName,
+      accepted_by: acceptorName,
       date: Date.now(),
+      type,
     };
+
     this.logger.silly(
-      `Adding transaction ${_transaction.transaction_id} | ${_transaction.origin_account_id} -> ${_transaction.target_account_id} | change: ${_transaction.change} | type: ${_transaction.type} | comment: ${_transaction.comment}`
+      `Adding transaction ${transaction.transaction_id} | ${transaction.origin_account_id} -> ${transaction.target_account_id} | originChange: ${transaction.origin_change} | targetChange: ${transaction.target_change} | type: ${transaction.type} | comment: ${transaction.comment}`
     );
-    await this.AddDBTransaction(_transaction);
-    return _transaction;
+    await this.insertTransactionInDatabase(transaction);
+    this.registerTransaction(transaction);
+    return transaction;
   }
 
-  // endregion
+  // Register transaction to the account
+  public registerTransaction(transaction: DB.ITransaction) {
+    // Add transaction to front of array
+    this.transactions[transaction.type].unshift(transaction);
+    this.transactionsIds.push(transaction.transaction_id);
+  }
+
+  public setDefaultBalance = async (cid: number) => {
+    if (this.balance !== 0) {
+      Util.Log(
+        'financials:defaultbalance:notZero',
+        {
+          cid,
+          account: this.account_id,
+          balance: this.balance,
+        },
+        `Tried to set default balance for ${this.account_id} but balance was not 0`
+      );
+      this.logger.silly(`defaultbalance: balance is already at ${this.balance} | cid: ${cid}`);
+      return;
+    }
+
+    if (this.transactionsIds.length !== 0) {
+      Util.Log(
+        'financials:defaultbalance:existingTransactions',
+        {
+          cid,
+          account: this.account_id,
+          transactionIds: this.transactionsIds,
+        },
+        `Tried to set default balance for ${this.account_id} but transactions were already made using account`
+      );
+      this.logger.silly(`defaultbalance: ${this.transactionsIds.length} transactions already exist | cid: ${cid}`);
+      return;
+    }
+
+    if (this.accType != 'standard') {
+      Util.Log(
+        'financials:defaultbalance:notStandard',
+        {
+          cid,
+          account: this.account_id,
+          accType: this.accType,
+        },
+        `Tried to set default balance for ${this.account_id} but account was not a standard account but ${this.accType}`
+      );
+      this.logger.debug(`defaultbalance: invalid account type | accountType: ${this.accType} | cid: ${cid}`);
+      return false;
+    }
+
+    const defaultBalance = getConfig()?.accounts?.defaultBalance ?? 0;
+    if (defaultBalance <= 0) {
+      this.logger.silly(`defaultbalance: Setting default balance but setting to 0`);
+      return;
+    }
+
+    this.changeBalance(defaultBalance);
+    await this.addTransaction('BE1', this.account_id, cid, defaultBalance, defaultBalance, 'paycheck', 'Bonus');
+
+    Util.Log(
+      'financials:defaultbalance:success',
+      {
+        cid,
+        account: this.account_id,
+        defaultBalance,
+      },
+      `Default balance got set for ${this.account_id} to ${defaultBalance}`
+    );
+    this.logger.info(`paycheck: success | ${this.account_id} | amount: ${defaultBalance} | cid: ${cid}`);
+  };
 }

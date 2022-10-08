@@ -140,7 +140,8 @@ export class Business {
   }
 
   async hire(src: number, targetCID: number, roleName: string) {
-    if (!this.hasPermission(Util.getCID(src), 'hire')) {
+    const cid = Util.getCID(src);
+    if (!this.hasPermission(cid, 'hire')) {
       Util.Log(
         'business:hire:missingPermission',
         {
@@ -184,16 +185,13 @@ export class Business {
       `${Util.getName(src)} hired ${targetCID} for ${this.info.label} with role: ${roleName}`,
       src
     );
-    this.logAction(
-      Util.getCID(src),
-      'hire',
-      `${await Util.getCharName(targetCID)}(${targetCID}) aangenomen onder ${roleName}`
-    );
+    this.logAction(cid, 'hire', `${await Util.getCharName(targetCID)}(${targetCID}) aangenomen onder ${roleName}`);
     return employeeName;
   }
 
   async fire(src: number, targetCID: number) {
-    if (!this.hasPermission(Util.getCID(src), 'fire')) {
+    const cid = Util.getCID(src);
+    if (!this.hasPermission(cid, 'fire')) {
       Util.Log(
         'business:fire:missingPermission',
         {
@@ -218,11 +216,12 @@ export class Business {
       `${Util.getName(src)} fired ${targetCID} for ${this.info.label}`,
       src
     );
-    this.logAction(Util.getCID(src), 'fire', `${await Util.getCharName(targetCID)}(${targetCID}) ontslagen`);
+    this.logAction(cid, 'fire', `${await Util.getCharName(targetCID)}(${targetCID}) ontslagen`);
   }
 
   async changeBankPermission(src: number, targetCID: number, permissions: IFinancials.Permissions) {
-    if (!this.hasPermission(Util.getCID(src), 'change_role')) {
+    const cid = Util.getCID(src);
+    if (!this.hasPermission(cid, 'change_role')) {
       Util.Log(
         'business:changeBankPermission:missingPermission',
         {
@@ -250,14 +249,15 @@ export class Business {
       src
     );
     this.logAction(
-      Util.getCID(src),
+      cid,
       'bankPerms',
       `${await Util.getCharName(targetCID)}(${targetCID}) zijn bank permissies aangepast`
     );
   }
 
   async assignRole(src: number, targetCID: number, roleName: string) {
-    if (!this.hasPermission(Util.getCID(src), 'hire')) {
+    const cid = Util.getCID(src);
+    if (!this.hasPermission(cid, 'hire')) {
       Util.Log(
         'business:assignRole:missingPermission',
         {
@@ -296,14 +296,15 @@ export class Business {
       src
     );
     this.logAction(
-      Util.getCID(src),
+      cid,
       'role',
       `${await Util.getCharName(targetCID)}(${targetCID}) zijn rol aangepast naar ${roleName}`
     );
   }
 
   async createRole(src: number, name: string, permissions: string[]) {
-    if (!this.hasPermission(Util.getCID(src), 'change_role')) {
+    const cid = Util.getCID(src);
+    if (!this.hasPermission(cid, 'change_role')) {
       Util.Log(
         'business:createRole:missingPermission',
         {
@@ -353,12 +354,13 @@ export class Business {
       `${Util.getName(src)} created a new role for ${this.info.label} named ${name}`,
       src
     );
-    this.logAction(Util.getCID(src), 'role', `de ${name} rol aangemaakt`);
+    this.logAction(cid, 'role', `de ${name} rol aangemaakt`);
   }
 
   // TODO: add ability to change role name
   async updateRole(src: number, name: string, permissions: Record<string, boolean>) {
-    if (!this.hasPermission(Util.getCID(src), 'change_role')) {
+    const cid = Util.getCID(src);
+    if (!this.hasPermission(cid, 'change_role')) {
       Util.Log(
         'business:updateRole:missingPermission',
         {
@@ -410,12 +412,13 @@ export class Business {
       `${Util.getName(src)} update the ${name} role for ${this.info.label}`,
       src
     );
-    this.logAction(Util.getCID(src), 'role', `de ${name} rol aangepast`);
+    this.logAction(cid, 'role', `de ${name} rol aangepast`);
     return newPerms;
   }
 
   async deleteRole(src: number, name: string) {
-    if (!this.hasPermission(Util.getCID(src), 'change_role')) {
+    const cid = Util.getCID(src);
+    if (!this.hasPermission(cid, 'change_role')) {
       Util.Log(
         'business:deleteRole:missingPermission',
         {
@@ -442,11 +445,12 @@ export class Business {
       `${Util.getName(src)} deleted the ${name} role for ${this.info.label}`,
       src
     );
-    this.logAction(Util.getCID(src), 'role', `de ${name} rol verwijderd`);
+    this.logAction(cid, 'role', `de ${name} rol verwijderd`);
   }
 
   async payEmployee(src: number, targetCID: number, price: number, comment: string) {
-    if (!this.hasPermission(Util.getCID(src), 'pay_employee')) {
+    const cid = Util.getCID(src);
+    if (!this.hasPermission(cid, 'pay_employee')) {
       Util.Log(
         'business:payEmployee:missingPermission',
         {
@@ -461,11 +465,12 @@ export class Business {
     }
     const employee = this.employees.find(e => e.citizenid === targetCID);
     if (!employee) throw new Error(`${targetCID} is not hired`);
-    const employeeAccId = await Financials.getDefaultAccountId(employee.citizenid);
+    const employeeAccId = Financials.getDefaultAccountId(employee.citizenid);
+    if (!employeeAccId) throw new Error(`Could not get default id of ${targetCID}`);
     const success = await Financials.transfer(
       this.info.bank_account_id,
       employeeAccId,
-      Util.getCID(src),
+      cid,
       employee.citizenid,
       price,
       comment
@@ -484,7 +489,8 @@ export class Business {
   }
 
   async payExtern(src: number, targetCID: number, price: number, comment: string) {
-    if (!this.hasPermission(Util.getCID(src), 'pay_extern')) {
+    const cid = Util.getCID(src);
+    if (!this.hasPermission(cid, 'pay_extern')) {
       Util.Log(
         'business:payExtern:missingPermission',
         {
@@ -499,15 +505,9 @@ export class Business {
       );
       throw new Error('Missing permissions');
     }
-    const externAccId = await Financials.getDefaultAccountId(targetCID);
-    const success = await Financials.transfer(
-      this.info.bank_account_id,
-      externAccId,
-      Util.getCID(src),
-      targetCID,
-      price,
-      comment
-    );
+    const externAccId = Financials.getDefaultAccountId(targetCID);
+    if (!externAccId) throw new Error(`Could not get default account of ${targetCID}`);
+    const success = await Financials.transfer(this.info.bank_account_id, externAccId, cid, targetCID, price, comment);
     Util.Log(
       `business:payExtern:${success ? 'success' : 'failed'}`,
       {
@@ -528,6 +528,7 @@ export class Business {
     price: number,
     comment: string
   ) {
+    const cid = Util.getCID(src);
     const hasAccepted = await Phone.notificationRequest(targetSource, {
       icon: {
         name: 'euro-sign',
@@ -564,15 +565,9 @@ export class Business {
       return;
     }
 
-    const externAccId = await Financials.getDefaultAccountId(targetCID);
-    const success = await Financials.transfer(
-      externAccId,
-      this.info.bank_account_id,
-      Util.getCID(src),
-      targetCID,
-      price,
-      comment
-    );
+    const externAccId = Financials.getDefaultAccountId(targetCID);
+    if (!externAccId) throw new Error(`Could not get default account of ${targetCID}`);
+    const success = await Financials.transfer(externAccId, this.info.bank_account_id, cid, targetCID, price, comment);
     Util.Log(
       `business:payExtern:${success ? 'success' : 'failed'}`,
       {
@@ -604,7 +599,8 @@ export class Business {
   }
 
   async chargeExtern(src: number, targetCID: number, price: number, comment: string) {
-    if (!this.hasPermission(Util.getCID(src), 'charge_external')) {
+    const cid = Util.getCID(src);
+    if (!this.hasPermission(cid, 'charge_external')) {
       Util.Log(
         'business:chargeExtern:missingPermission',
         {

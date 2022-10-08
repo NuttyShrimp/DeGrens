@@ -71,7 +71,7 @@ RegisterServerEvent("dg-cornerselling:server:SellDrugs", function(sellLocation)
         TriggerClientEvent('DGCore:Notify', src, ("Je hebt %s verkocht"):format(DGX.Inventory.getItemData(itemData.name).label))
 
         local price = calculatePrice(itemData.name, sellLocation)
-        exports['dg-financials']:addCash(src, price, 'corner-sell')
+        DGX.Financials.addCash(src, price, 'corner-sell')
         DGX.Util.Log('cornerselling:sale', {
             item = itemData.name,
             price = price,

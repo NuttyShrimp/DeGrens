@@ -12,17 +12,17 @@ export const WithdrawModal: FC<React.PropsWithChildren<Financials.ModalProps>> =
       elements={[
         {
           name: 'amount',
-          render: props => <Input.MoneyAmount {...props} label={'Amount'} icon={'dollar-sign'} />,
+          render: p => <Input.MoneyAmount {...p} label={'Amount'} icon={'dollar-sign'} />,
         },
         {
           name: 'comment',
-          render: props => <Input.TextField {...props} label={'Comment'} icon={'comment-alt'} />,
+          render: p => <Input.TextField {...p} label={'Comment'} icon={'comment-alt'} />,
         },
       ]}
       onAccept={async vals => {
         openLoadModal();
         await nuiAction('financials/account/withdraw', {
-          accountId: props.selected.account_id,
+          accountId: props.account.account_id,
           ...vals,
         });
         await props.fetchAccounts();

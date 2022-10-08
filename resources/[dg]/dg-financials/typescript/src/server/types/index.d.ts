@@ -72,7 +72,7 @@ declare namespace Debts {
     type: Type;
     given_by: number;
     origin_name: string;
-    date?: number;
+    date: number;
     reason?: string;
   }
 }

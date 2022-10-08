@@ -5,13 +5,13 @@ declare namespace Financials {
     transaction_id: string;
     origin_account_id: string;
     origin_account_name: string;
+    origin_change: number;
     target_account_id: string;
     target_account_name: string;
-    change: number;
+    target_change: number;
     comment: string;
-    // here Names, serversided this will be the citizenid
     triggered_by: string;
-    accepted_by: string;
+    accepted_by: string | null;
     // UNIX timestamp
     date: number;
     type: TransactionType;
@@ -32,6 +32,7 @@ declare namespace Financials {
     type: AccountType;
     balance: number;
     permissions: AccountPermission;
+    members?: PermissionsMember[];
   }
 
   interface BaseInfo {
@@ -41,7 +42,7 @@ declare namespace Financials {
   }
 
   interface ModalProps {
-    selected: Account;
+    account: Account;
     fetchTransactions: (accountId?: string, reset?: boolean) => Promise<void>;
     fetchAccounts: () => Promise<void>;
   }
@@ -56,6 +57,8 @@ declare namespace Financials {
     isAtm: boolean;
     canLoadMore: boolean;
     backdrop: boolean;
-    modalComponent: React.FC<React.PropsWithChildren<ModalProps>> | null;
+    modalComponent: React.ReactElement<any, any> | null;
   }
+
+  type PermissionsMember = { cid: number; name: string } & AccountPermission;
 }

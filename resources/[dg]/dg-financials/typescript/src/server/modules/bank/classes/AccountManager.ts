@@ -1,59 +1,47 @@
-import { Business, SQL } from '@dgx/server';
+import { Business, Notifications, SQL, Util } from '@dgx/server';
+import { RPCEvent, RPCRegister } from '@dgx/server/decorators';
+import { getConfig } from 'helpers/config';
 import { scheduleBankTaxes } from 'modules/taxes/service';
 import winston from 'winston';
 
-import { checkPlayerAccounts } from '../controllers/accounts';
+import { createDefaultAccount } from '../helpers/accounts';
 import { bankLogger, sortAccounts } from '../utils';
 
 import { Account } from './Account';
 
-export class AccountManager {
-  private static _instance: AccountManager;
-
-  public static getInstance(): AccountManager {
-    if (!AccountManager._instance) {
-      AccountManager._instance = new AccountManager();
-    }
-    return AccountManager._instance;
-  }
-
-  private config: Config['accounts'];
-  private accounts: Account[] = [];
-  private logger: winston.Logger;
-  loaded: boolean;
+@RPCRegister()
+class AccountManager extends Util.Singleton<AccountManager>() {
+  private accounts: Account[];
+  private readonly logger: winston.Logger;
+  public loaded: boolean;
 
   constructor() {
-    this.config = null;
+    super();
+    this.accounts = [];
     this.loaded = false;
     this.logger = bankLogger.child({ module: 'AccountManager' });
   }
 
-  public async setConfig(config: Config['accounts']) {
-    this.config = config;
-    await this.getAccountsDB();
+  public async init() {
+    await this.registerAccountsFromDatabase();
+    await this.seedAccounts();
+    this.logger.info(`loaded ${this.accounts.length} accounts from database`);
     this.loaded = true;
-    this.seedAccounts();
-    this.logger.info(`AccountManager: loaded ${this.accounts.length} accounts from database`);
-    checkPlayerAccounts();
+
+    DGCore.Functions.GetPlayers().forEach(ply => createDefaultAccount(ply)); // Load accounts for players
     scheduleBankTaxes();
   }
 
-  //region DB
-  public async getAccountIds(cid: number): Promise<string[]> {
-    const query = `
-			SELECT ba.account_id
-			FROM bank_accounts ba
-						 INNER JOIN bank_accounts_access baa on ba.account_id = baa.account_id
-			WHERE baa.cid = ?
-		`;
-    const result: string[] = await SQL.query(query, [cid]);
-    return result;
+  private registerAccount(account: Account): void {
+    // Check if account already exists
+    if (this.accounts.find(a => a.getAccountId() === account.getAccountId())) {
+      this.logger.error(`Account already registered | accountId: ${account.getAccountId()}`);
+      return;
+    }
+    this.accounts.push(account);
   }
 
-  /*
-   * Get all accounts from the database.
-   */
-  private async getAccountsDB(): Promise<void> {
+  private async registerAccountsFromDatabase() {
     const query = `
 			SELECT ba.*,
 						 (SELECT JSON_ARRAYAGG(JSON_OBJECT('cid', cid, 'access_level', access_level)) FROM bank_accounts_access WHERE account_id = ba.account_id) as members,
@@ -61,7 +49,10 @@ export class AccountManager {
 			FROM bank_accounts ba
 		`;
     const result: DB.IAccount[] = await SQL.query(query);
-    if (!result) return;
+    if (!result) {
+      this.logger.error('Failed to fetch accounts from database');
+      return;
+    }
     for (const account of result) {
       const newAccount = new Account(
         account.account_id,
@@ -71,55 +62,82 @@ export class AccountManager {
         account.members ? JSON.parse(account.members) : [],
         account.updated_at
       );
-      this.addAccount(newAccount);
+      this.registerAccount(newAccount);
     }
-  }
-  //endregion
-  //region Actions
-  public async createAccount(cid: number, name: string, accType: AccountType): Promise<string> {
-    const _account = await Account.create(cid, name, accType);
-    this.accounts.push(_account);
-    return _account.getAccountId();
   }
 
-  private async seedAccounts(): Promise<void> {
-    for (const a of this.config.toSeed) {
-      // Check if account with id exists
-      if (this.accounts.find(acc => acc.getAccountId() === a.id)) {
-        continue;
-      }
+  private async seedAccounts() {
+    const accountsToSeed = getConfig().accounts.toSeed;
+    for (const a of accountsToSeed) {
+      if (this.accounts.find(acc => acc.getAccountId() === a.id)) continue;
+
       const query = `
-				INSERT INTO bank_accounts (account_id, name, type, balance)
-				VALUES (?, ?, ?, 0)
-			`;
-      // We use the index here to make it easier to target a seeded account via code
+        INSERT INTO bank_accounts (account_id, name, type, balance)
+        VALUES (?, ?, ?, 0)
+      `;
       await SQL.query(query, [a.id, a.name, 'business']);
-      const account = new Account(a.id, a.name, 'business', 0, []);
-      this.accounts.push(account);
+      const account = new Account(a.id, a.name, 'business');
+      this.registerAccount(account);
     }
   }
-  //endregion
-  // region Getters
-  /**
-   * Get all registerd accounts (Do not regularly use this, contains alot of data)
-   */
+
+  public async createAccount(cid: number, name: string, accType: AccountType) {
+    const account = await Account.create(cid, name, accType);
+    const accountId = account.getAccountId();
+    this.registerAccount(account);
+    Util.Log(
+      'financials:accountCreated',
+      {
+        accountId,
+        accountName: name,
+        accountType: accType,
+        owner: cid,
+      },
+      `A new ${accType} account (${accountId}) has been created`
+    );
+    this.logger.debug(`Account ${accountId} created for ${cid} with name ${name} and type ${accType}`);
+    return account;
+  }
+
   public getAllAcounts() {
     return this.accounts;
   }
-  public getAccounts(cid: number, type?: AccountType): Account[] {
-    const _accounts = this.accounts.filter(account => (!type || account.getType() === type) && account.hasAccess(cid));
-    this.logger.silly(`Fetched ${_accounts.length} accounts for cid: ${cid} | type: ${type}`);
-    return sortAccounts(_accounts);
+
+  // Get all accounts player has access to
+  public getAccountsForCid(cid: number, type?: AccountType): Account[] {
+    const accounts = this.accounts.filter(account => (!type || account.getType() === type) && account.hasAccess(cid));
+    this.logger.silly(`Fetched ${accounts.length} accounts for cid: ${cid} | type: ${type}`);
+    return sortAccounts(accounts);
   }
 
-  public getDefaultAccount(cid: number, suppressErr = false): Account {
-    const accounts = this.getAccounts(cid, 'standard');
+  public getDefaultAccount(cid: number, suppressErr = false) {
+    const accounts = this.getAccountsForCid(cid, 'standard');
+    if (accounts.length === 0) {
+      if (!suppressErr) this.logger.error(`Could not find default account for cid: ${cid}`);
+      return;
+    }
+    if (accounts.length > 1) {
+      this.logger.warn(`Player ${cid} has access to more than one standard account`);
+      Util.Log(
+        'financials:moreThanOneStandard',
+        { cid, accounts: accounts.map(a => a.getContext()) },
+        `Player ${cid} has access to more than one standard account`,
+        undefined,
+        true
+      );
+    }
     const defaultAccount = accounts[0];
-    if (!defaultAccount) {
-      if (!suppressErr) {
-        this.logger.error(`[AccountManager] Could not find default account for cid: ${cid}`);
-      }
-      return null;
+    const ownerCid = defaultAccount.permsManager.getAccountOwner()?.cid;
+    if (ownerCid !== cid) {
+      this.logger.error(`Player ${cid} is not owner of found default account ${defaultAccount.getAccountId()}`);
+      Util.Log(
+        'financials:moreThanOneStandard',
+        { cid, accounts: accounts.map(a => a.getContext()) },
+        `Player ${cid} is not owner of found default account ${defaultAccount.getAccountId()}`,
+        undefined,
+        true
+      );
+      return;
     }
     this.logger.silly(`Fetched default account for cid: ${cid} | id: ${defaultAccount.getAccountId()}`);
     return defaultAccount;
@@ -135,48 +153,128 @@ export class AccountManager {
     return false;
   }
 
-  public getAccountById(id: string): Account {
+  public getAccountById(id: string) {
     return this.accounts.find(account => account.getAccountId() === id);
   }
 
   /**
-   * Gets account via accountId, cid(standard account) or businessId(business account)
-   * @param input
+   * Get the account id associated with the input. Input can be string version of CID, business name or simply an account id (side effect to validate input)
    */
-  public getAccount(input: string): Account {
-    this.logger.silly(`Getting account | input: ${input}`);
-    const account = this.getAccountById(input);
-    if (account) {
-      this.logger.silly(`Found account by accountId | id: ${account.getAccountId()}`);
-      return account;
+  public getAccountIdByGeneralInput(input: string) {
+    // Check if is BE... number
+    const accountById = this.getAccountById(input);
+    if (accountById) {
+      this.logger.silly(`Found account by accountId | id: ${accountById.getAccountId()}`);
+      return accountById.getAccountId();
     }
-    const numInput = Number(input);
-    if (isNaN(numInput)) {
-      return null;
-    }
-    const defaultAccount = this.getDefaultAccount(numInput);
-    if (defaultAccount) {
-      this.logger.silly(`Found account by CID | id: ${defaultAccount.getAccountId()}`);
-      return defaultAccount;
-    }
-    const business = Business.getBusinessById(numInput);
+
+    // Check if its a business name
+    const business = Business.getBusinessByName(input);
     if (business) {
-      const account = this.getAccountById(business.info.bank_account_id);
-      if (account) return account;
+      const accountByBusinessName = this.getAccountById(business.info.bank_account_id);
+      if (accountByBusinessName) {
+        this.logger.silly(`Found account by businessId | id: ${accountByBusinessName.getAccountId()}`);
+        return accountByBusinessName.getAccountId();
+      }
     }
-    return null;
-  }
-  //endregion
-  //region Private Methods
-  private addAccount(account: Account): void {
-    // Check if account already exists
-    if (this.accounts.find(a => a.getAccountId() === account.getAccountId())) {
-      this.logger.error(`[AccountManager] Account already registered | accountId: ${account.getAccountId()}`);
+
+    // Check CID default account
+    const cid = Number(input);
+    if (!isNaN(cid)) {
+      const defaultAccount = this.getDefaultAccount(cid);
+      if (defaultAccount) {
+        this.logger.silly(`Found account by CID | id: ${defaultAccount.getAccountId()}`);
+        return defaultAccount.getAccountId();
+      }
     }
-    this.accounts.push(account);
+
+    this.logger.warn(`Could not find account | input: ${input}`);
   }
 
-  //endregion
+  //#region Savings accounts
+  /**
+   * Get savingsaccount that the provided player is owner of
+   */
+  public getSavingsAccount = (cid: number): Account | undefined => {
+    const accounts = this.getAccountsForCid(cid, 'savings') ?? [];
+    return accounts.find(a => a.permsManager.getAccountOwner()?.cid === cid);
+  };
+
+  @RPCEvent('financials:bank:savings:updatePermissions')
+  private _updateSavingsAccountPermission = async (
+    src: number,
+    accountId: string,
+    targetCid: number,
+    permissions: IAccountPermission
+  ) => {
+    const srcCid = Util.getCID(src);
+    const account = this.getAccountById(accountId);
+
+    if (account === undefined) {
+      this.logger.error(`Could not get account with id ${accountId} to update savingsaccount permissions`);
+      return;
+    }
+
+    // Check if src is owner
+    const ownerCid = account?.permsManager.getAccountOwner()?.cid;
+    if (ownerCid !== srcCid) {
+      this.logger.silly(
+        `Player ${srcCid} tried to update saving account (${accountId}) permissions for account he is not owner of`
+      );
+      Util.Log(
+        'financials:savings:notOwner',
+        { plyCid: srcCid, accountId },
+        `${Util.getName(
+          src
+        )} tried to update account permissions for savingsaccount ${accountId} but he is not account owner`,
+        src,
+        true
+      );
+      return;
+    }
+
+    if (ownerCid === targetCid) {
+      Notifications.add(src, 'Je hebt jezelf opgegeven', 'error');
+      return;
+    }
+
+    // Check if account is savingsacc
+    if (account.getType() !== 'savings') {
+      this.logger.silly(
+        `Player ${srcCid} tried to update account permissions for savingsaccount ${accountId} but account is not of type savings`
+      );
+      Util.Log(
+        'financials:savings:notOwner',
+        { plyCid: srcCid, accountId, type: account.getType() },
+        `${Util.getName(
+          src
+        )} tried to update account permissions for savingsaccount ${accountId} but account is not of type savings`,
+        src,
+        true
+      );
+      return;
+    }
+
+    // Check if targetCid exists
+    const targetPlayer = await DGCore.Functions.GetOfflinePlayerByCitizenId(targetCid);
+    if (targetPlayer == undefined) {
+      Notifications.add(src, 'Er is niemand met deze CID!', 'error');
+      return;
+    }
+
+    this.logger.silly(`Updating permissions for savings account ${accountId} for player ${targetCid}`);
+    const level = account.permsManager.buildAccessLevel(permissions);
+
+    // If cid has no perms, then remove perms
+    if (level === 0) {
+      account.permsManager.removePermissions(targetCid);
+      return;
+    }
+
+    account.permsManager.addPermissions(targetCid, level);
+  };
+  //#endregion
 }
 
-export const accountManager = AccountManager.getInstance();
+const accountManager = AccountManager.getInstance();
+export default accountManager;

@@ -1,8 +1,8 @@
 import { bankLogger } from '../utils';
 
-const locationMap = new Map<number, string>();
+const locationMap = new Map<number, string | null>();
 
-export const setPlyLoc = (src: number, loc: string) => {
+export const setPlyLoc = (src: number, loc: string | null) => {
   locationMap.set(src, loc);
   bankLogger.debug(`Set location for ${src} to ${loc}`);
 };

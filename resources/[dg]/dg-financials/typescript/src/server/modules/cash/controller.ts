@@ -1,45 +1,36 @@
-import { RPC, Chat } from '@dgx/server';
+import { RPC, Chat, Notifications } from '@dgx/server';
 
-import { addCash, getCash, removeCash, seedCache, seedPlyInCache } from './service';
+import { addCash, getCash, removeCash } from './service';
 import { cashLogger } from './util';
 
 global.exports('getCash', (src: number | string) => getCash(src));
 global.exports('removeCash', (src: number | string, amount: number, reason: string) => removeCash(src, amount, reason));
 global.exports('addCash', (src: number | string, amount: number, reason: string) => addCash(src, amount, reason));
 
-RegisterCommand(
-  'financials:cash:seed',
-  () => {
-    seedCache();
-  },
-  true
-);
-
-onNet('DGCore:Server:OnPlayerLoaded', () => {
-  cashLogger.info('Seeding cash cache...');
-  seedPlyInCache(source);
-});
-
 RPC.register('financials:server:cash:get', src => {
   return getCash(src);
 });
 
-DGCore.Commands.Add(
+Chat.registerCommand(
   'givecash',
   'Geef cash aan een persoon',
   [
     {
-      help: 'De spelerid van de persoon waaraan je cash wilt geven',
       name: 'speler-id',
+      description: 'De spelerid van de persoon waaraan je cash wilt geven',
     },
-    { help: 'Het bedrag dat je wilt geven', name: 'bedrag' },
+    {
+      name: 'bedrag',
+      description: 'Het bedrag dat je wilt geven',
+    },
   ],
-  true,
+  'user',
   (src, args) => {
     if (!args[0] || !args[1]) {
-      emitNet('DGCore:Notify', src, `Niet alle velden zijn ingevuld!`, 'error');
+      Notifications.add(src, `Niet alle velden zijn ingevuld!`, 'error');
       return;
     }
+
     try {
       cashLogger.silly(`givecash: from ${src} to ${args[0]} | amount: ${args[1]}`);
       const target = parseInt(args[0]);
@@ -71,14 +62,12 @@ DGCore.Commands.Add(
       addCash(target, amount, `Received cash van ${GetPlayerName(String(src))}(${src}) via cmd`);
       emitNet('animations:client:EmoteCommandStart', src, ['id']);
     } catch (e) {
-      emitNet('DGCore:Notify', src, e.toString(), 'error');
       cashLogger.debug(e);
     }
-  },
-  'user'
+  }
 );
 
 Chat.registerCommand('cash', 'Flash cash', [], 'user', src => {
   const plyCash = getCash(src);
-  TriggerClientEvent('hud:client:ShowAccounts', source, plyCash);
+  emitNet('hud:client:ShowAccounts', src, plyCash);
 });
