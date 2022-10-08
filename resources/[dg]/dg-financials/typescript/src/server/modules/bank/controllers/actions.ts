@@ -1,4 +1,5 @@
-import { RPC } from '@dgx/server';
+import { RPC, Util } from '@dgx/server';
+import accountManager from '../classes/AccountManager';
 
 import { deposit, mobile_transaction, paycheck, purchase, transfer, withdraw } from '../helpers/actions';
 import { bankLogger } from '../utils';
@@ -39,51 +40,36 @@ RPC.register('financials:server:action:deposit', async (src, data: ActionData.St
   bankLogger.silly(
     `Deposit by ${src}: accountId: ${data.accountId} | amount: ${data.amount} | comment: ${data.comment}`
   );
-  const Player = DGCore.Functions.GetPlayer(src);
-  if (!Player) {
-    bankLogger.error(`Mo Player found for ${src}`);
-    return;
-  }
-  await deposit(data.accountId, Player.PlayerData.citizenid, data.amount, data.comment);
+  const cid = Util.getCID(src);
+  await deposit(data.accountId, cid, data.amount, data.comment);
 });
 
 RPC.register('financials:server:action:withdraw', async (src, data: ActionData.Standard) => {
   bankLogger.silly(
     `Withdraw by ${src}: accountId: ${data.accountId} | amount: ${data.amount} | comment: ${data.comment}`
   );
-  const Player = DGCore.Functions.GetPlayer(src);
-  if (!Player) {
-    bankLogger.error(`Mo Player found for ${src}`);
-    return;
-  }
-  await withdraw(data.accountId, Player.PlayerData.citizenid, data.amount, data.comment);
+  const cid = Util.getCID(src);
+  await withdraw(data.accountId, cid, data.amount, data.comment);
 });
 
 RPC.register('financials:server:action:transfer', async (src, data: ActionData.Transfer) => {
   bankLogger.silly(
     `Transfer by ${src}; accountId: ${data.accountId} | TargetAccount: ${data.target} | amount: ${data.amount} | comment: ${data.comment}`
   );
-  const Player = DGCore.Functions.GetPlayer(src);
-  if (!Player) {
-    bankLogger.error(`Mo Player found for ${src}`);
-    return false;
-  }
-  const citizenid = Player.PlayerData.citizenid;
-  const isSuccess = await transfer(data.accountId, data.target, citizenid, citizenid, data.amount, data.comment);
+  const cid = Util.getCID(src);
+  const targetAccountId = accountManager.getAccountIdByGeneralInput(data.target);
+  if (!targetAccountId) return false;
+  const isSuccess = await transfer(data.accountId, targetAccountId, cid, cid, data.amount, data.comment);
   bankLogger.silly(`Transfer: ${isSuccess}`);
   return isSuccess;
 });
+
 RPC.register('financials:server:action:mobileTransaction', async (src, data: ActionData.Transfer) => {
   bankLogger.silly(
     `Mobile Transaction by ${src}; accountId: ${data.accountId} | TargetPhone: ${data.target} | amount: ${data.amount} | comment: ${data.comment}`
   );
-  const Player = DGCore.Functions.GetPlayer(src);
-  if (!Player) {
-    bankLogger.error(`Mo Player found for ${src}`);
-    return false;
-  }
-  const citizenid = Player.PlayerData.citizenid;
-  const isSuccess = await mobile_transaction(data.accountId, citizenid, data.target, data.amount, data.comment);
+  const cid = Util.getCID(src);
+  const isSuccess = await mobile_transaction(data.accountId, cid, data.target, data.amount, data.comment);
   bankLogger.silly(`Mobile Transaction: ${isSuccess}`);
   return isSuccess;
 });

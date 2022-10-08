@@ -62,8 +62,8 @@ try {
     await conn.beginTransaction();
     shouldRollBack = true;
     const queries = sqlOperations
-      .replace(/\/\*.*\*\//gs, '')
-      .replaceAll(/--.*\n/g, '')
+      .replaceAll(/\/\*.*\*\//gs, '')
+      .replaceAll(/--.*\r?\n/g, '')
       .split(';')
       .map(op => op.replaceAll(/#.*\r?\n/g, ''))
       .map(op => op.replaceAll(/\r?\n/g, ' '))
@@ -71,7 +71,6 @@ try {
 
     // Add operations to transaction
     for (let op of queries) {
-      // console.log(op)
       queryPromises.push(conn.query(op));
     }
     await Promise.all(queryPromises);

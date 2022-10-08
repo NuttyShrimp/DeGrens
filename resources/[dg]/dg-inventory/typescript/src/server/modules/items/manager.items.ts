@@ -1,4 +1,4 @@
-import { Util } from '@dgx/server';
+import { Financials, Util } from '@dgx/server';
 import { DGXEvent, EventListener, Export, ExportRegister } from '@dgx/server/decorators';
 import { mainLogger } from 'sv_logger';
 import { concatId } from '../../util';
@@ -53,11 +53,11 @@ class ItemManager extends Util.Singleton<ItemManager>() {
     const requirements = item.getRequirements();
     if (requirements) {
       if (requirements.cash) {
-        const playerCash = global.exports['dg-financials'].getCash(src);
+        const playerCash = Financials.getCash(src);
         if (playerCash < requirements.cash) {
           throw new Error(`Player tried to buy item for ${requirements.cash} but only had ${playerCash}`);
         }
-        global.exports['dg-financials'].removeCash(src, requirements.cash, 'shop-item-bought');
+        Financials.removeCash(src, requirements.cash, 'shop-item-bought');
       }
       if (requirements.items) {
         const plyInventory = await inventoryManager.get(invId);

@@ -1,4 +1,4 @@
-import { Config, Inventory, Util } from '@dgx/server';
+import { Config, Financials, Inventory, Util } from '@dgx/server';
 
 export const randomSellBlackMoney = async (plyId: number) => {
   await Config.awaitConfigLoad();
@@ -10,7 +10,7 @@ export const randomSellBlackMoney = async (plyId: number) => {
 
   const itemWorth = config.worth[selectedItem];
   const price = Util.getRndInteger(itemWorth.min, itemWorth.max);
-  global.exports['dg-financials'].addCash(plyId, price, 'randomsell-blackmoney');
+  Financials.addCash(plyId, price, 'randomsell-blackmoney');
   Util.Log(
     'blackmoney:randomSell',
     { plyId, item: selectedItem, price },

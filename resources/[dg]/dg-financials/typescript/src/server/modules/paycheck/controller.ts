@@ -9,23 +9,21 @@ global.exports('registerPaycheck', (src: number, amount: number, job: string, co
 );
 
 RegisterCommand(
-  'financials:cash:seed',
+  'financials:seed:paycheck',
   () => {
     seedCache();
   },
   true
 );
 
-onNet('DGCore:Server:OnPlayerLoaded', () => {
-  seedPlyInCache(source);
-  const Player = DGCore.Functions.GetPlayer(source);
-  const job = Jobs.getCurrentJob(source);
-  checkInterval(Player.PlayerData.citizenid, job);
+on('DGCore:Server:PlayerLoaded', async (player: Player) => {
+  await seedPlyInCache(player.PlayerData.source);
+  const job = Jobs.getCurrentJob(player.PlayerData.source);
+  checkInterval(player.PlayerData.citizenid, job);
 });
 
 on('DGCore:Server:OnPlayerUnload', (src: number, citizenid: number) => {
-  const job = Jobs.getCurrentJob(source);
-  checkInterval(citizenid, job);
+  checkInterval(citizenid, null);
 });
 
 on('dg-jobs:signin:update', (src: number, job: string) => {

@@ -3,7 +3,7 @@ import React from 'react';
 import { Loader } from '../../components/util';
 import { store, type } from '../../lib/redux';
 
-export const setModal = (modal: React.FC<React.PropsWithChildren<unknown>>) => {
+export const setModal = (modal: React.ReactElement<any, any> | null) => {
   store.dispatch({
     type,
     cb: state => ({
@@ -18,7 +18,7 @@ export const setModal = (modal: React.FC<React.PropsWithChildren<unknown>>) => {
 };
 
 export const openLoadModal = () => {
-  setModal(Loader);
+  setModal(Loader({}));
 };
 
 export const closeModal = () => {

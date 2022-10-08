@@ -110,21 +110,18 @@ RegisterNetEvent('baseevents:leftVehicle', function()
   state.compass.visible = hasCompass
 end)
 
-RegisterNetEvent('hud:client:ShowAccounts')
-AddEventHandler('hud:client:ShowAccounts', function(amount)
+RegisterNetEvent('hud:client:ShowAccounts', function(amount)
   SendAppEventWESentry('hud', {
     action = 'flashCash',
     data = amount,
   })
 end)
 
-RegisterNetEvent('hud:client:OnMoneyChange')
-AddEventHandler('hud:client:OnMoneyChange', function(amount)
-  cashAmount = exports['dg-financials']:getCash()
+RegisterNetEvent('hud:client:OnMoneyChange', function(total, amount)
   SendAppEventWESentry('hud', {
     action = 'addCashHistory',
     data = amount,
-    money = cashAmount
+    money = total
   })
 end)
 

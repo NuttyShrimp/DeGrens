@@ -1,4 +1,4 @@
-@use "src/styles/variables";
+@use 'src/styles/variables';
 
 .financials {
   &__backdrop {
@@ -17,35 +17,41 @@
     align-items: center;
     height: 3vh;
     padding: 0 1vh;
-    border-bottom: .1vh solid variables.$primary_normal;
+    border-bottom: 0.1vh solid variables.$primary_normal;
   }
 
   &__wrapper {
     width: 130vh;
     height: 100%;
-    border-radius: .5vh;
+    border-radius: 0.5vh;
     background-color: variables.$primary_darker_darker;
     display: flex;
     flex-direction: row;
     position: relative;
     & > div:first-child {
       flex: 1 0 30%;
-      border-right: .1vh solid variables.$primary_normal;
-    };
+      border-right: 0.1vh solid variables.$primary_normal;
+    }
     & > div:nth-child(2) {
       flex: 1 0 70%;
     }
     & .account {
-      margin: .5vh 0;
+      margin: 0.5vh 0;
       border-radius: 0.25rem;
       border: 0.2vh solid #fff;
       padding: 1vh;
       background-color: variables.$primary_darker_dark;
       cursor: pointer;
 
-      & > div {
+      &__body {
         display: flex;
         align-items: center;
+        justify-content: space-between;
+
+        & > div {
+          display: flex;
+          align-items: center;
+        }
       }
 
       &:hover {
@@ -55,7 +61,7 @@
           color: variables.$primary_darker;
         }
       }
-      &.selected {
+      & .selected {
         color: variables.$primary_light;
         border-color: variables.$primary_light;
         .account__icon {
@@ -75,7 +81,7 @@
         font-size: 3rem;
         width: 8vh;
         height: 8vh;
-        border-radius: .25vh;
+        border-radius: 0.25vh;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -88,23 +94,27 @@
         flex-direction: column;
         line-height: 1.25;
         & > #name {
-
+          font-size: 1rem;
         }
         & > #id {
-          font-size: .9rem;
+          font-size: 0.9rem;
         }
         & > #balance {
           font-size: 1.1rem;
         }
       }
 
+      &__options {
+        position: absolute;
+      }
+
       &__btns {
         display: flex;
         justify-content: space-between;
-        margin-top: .5vh;
-        padding-top: .5vh;
+        margin-top: 0.5vh;
+        padding-top: 0.5vh;
         color: variables.$primary_normal;
-        border-top: .1vh solid variables.$primary_lighter;
+        border-top: 0.1vh solid variables.$primary_lighter;
       }
     }
 
@@ -114,7 +124,7 @@
         flex-direction: column;
         align-items: center;
         padding: 1vh;
-				overflow: auto;
+        overflow: auto;
       }
 
       &__no_perms {
@@ -146,19 +156,19 @@
         display: flex;
         flex-direction: column;
         justify-content: space-between;
-        font-size: .8rem;
+        font-size: 0.8rem;
         color: variables.$gray_light;
       }
       &__body {
         display: flex;
         align-items: center;
-        margin-top: .5vh;
+        margin-top: 0.5vh;
       }
       &__amount {
         color: variables.$gray_darker;
         background-color: variables.$primary_normal;
-        border-radius: .5vh;
-        padding: .75vh;
+        border-radius: 0.5vh;
+        padding: 0.75vh;
         font-size: 1rem;
         margin-right: 1vh;
         &.negative {
@@ -167,22 +177,22 @@
         }
       }
       &__info {
-        border-left: .1vh solid variables.$gray_lighter;
+        border-left: 0.1vh solid variables.$gray_lighter;
         padding-left: 1vh;
         width: 100%;
         &__persons {
-          font-size: .9rem;
+          font-size: 0.9rem;
           & > * {
             margin-right: 1vh;
           }
         }
         &__comment {
-          margin-top: .75vh;
-          font-size: .7rem;
+          margin-top: 0.75vh;
+          font-size: 0.7rem;
           color: variables.$gray_light;
           & > div:last-child {
-            margin-top: .25vh;
-            border-bottom: .1vh solid variables.$gray_light;
+            margin-top: 0.25vh;
+            border-bottom: 0.1vh solid variables.$gray_light;
           }
         }
       }
@@ -200,13 +210,12 @@
       z-index: 3;
       & > div {
         background-color: variables.$primary_darker_dark;
-        width: 35%;
-        height: 50%;
+        width: 30%;
         display: flex;
         justify-content: center;
         align-items: center;
         & > div {
-          width: 50%;
+          padding: 10%;
         }
       }
     }

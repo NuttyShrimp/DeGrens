@@ -1,24 +1,15 @@
 import { Notifications, SQL, Util } from '@dgx/server';
+import { getConfig } from 'helpers/config';
+import accountManager from 'modules/bank/classes/AccountManager';
 
-import { getDefaultAccount, getDefaultAccountId } from '../../bank/helpers/accounts';
-import { transfer } from '../../bank/helpers/actions';
 import { debtLogger, scheduleOverDueDebt, unscheduleDebt } from '../helpers/debts';
 
 class DebtManager extends Util.Singleton<DebtManager>() {
   private debts: Debts.Debt[];
-  private config: Config['debts'];
 
   constructor() {
     super();
     this.debts = [];
-  }
-
-  public setConfig(config: Config['debts']) {
-    this.config = config;
-  }
-
-  public getConfig() {
-    return this.config;
   }
 
   async seedDebts() {
@@ -35,7 +26,7 @@ class DebtManager extends Util.Singleton<DebtManager>() {
     return this.debts.filter(debt => debt.cid === cid);
   }
 
-  public getDebtById(id: number): Debts.Debt {
+  public getDebtById(id: number): Debts.Debt | undefined {
     return this.debts.find(debt => debt.id === id);
   }
 
@@ -59,7 +50,7 @@ class DebtManager extends Util.Singleton<DebtManager>() {
       debt: fine,
       payed: 0,
       type,
-      given_by: given_by ?? null,
+      given_by: given_by ?? 0,
       origin_name: origin,
       reason: reason,
       date: Math.floor(Date.now() / 1000),
@@ -134,33 +125,33 @@ class DebtManager extends Util.Singleton<DebtManager>() {
     const Player = DGCore.Functions.GetPlayer(src);
     if (!Player) {
       debtLogger.error(`payDebt called for unknown player ${src}`);
-      return;
+      return false;
     }
     const cid = Player.PlayerData.citizenid;
     const debt = this.getDebtById(id);
     if (!debt) {
       debtLogger.warn(`Failed to pay debt | id: ${id} | cid: ${cid}`);
       Util.Log('financials:debt:pay:failed', { id, cid }, `Failed to pay debt, non existing debt`);
-      return;
+      return false;
     }
     if (debt.cid !== cid) {
       debtLogger.warn(`Failed to pay debt | id: ${id} | cid: ${cid}`);
       Util.Log('financials:debt:pay:failed', { id, cid, debt }, `Failed to pay debt, cid didn't match`);
-      return;
+      return false;
     }
-    const accountId = await getDefaultAccountId(cid);
-    if (!accountId) {
+    const account = accountManager.getDefaultAccount(cid);
+    if (!account) {
       debtLogger.warn(`Failed to pay debt | id: ${id} | cid: ${cid}`);
       Util.Log('financials:debt:pay:failed', { id, cid, debt }, `Failed to pay debt, no default account found`);
-      return;
+      return false;
     }
-    const success = await transfer(
-      accountId,
+    const success = await account.transfer(
       debt.target_account,
       debt.given_by ?? cid,
       cid,
       debt.debt * (percentage / 100),
-      debt.reason
+      debt.reason,
+      true
     );
     if (success) {
       Util.Log('financials:debt:pay', { id, cid, debt }, `Successfully paid debt of ${debt.debt}`);
@@ -183,9 +174,9 @@ class DebtManager extends Util.Singleton<DebtManager>() {
     if (!debt) {
       debtLogger.warn(`Failed to pay debt | id: ${id}`);
       Util.Log('financials:debt:overduePay:failed', { id }, `Failed to pay debt, non existing debt`);
-      return;
+      return false;
     }
-    const account = await getDefaultAccount(debt.cid);
+    const account = accountManager.getDefaultAccount(debt.cid);
     if (!account) {
       debtLogger.warn(`Failed to pay debt | id: ${id} | cid: ${debt.cid}`);
       Util.Log(
@@ -193,9 +184,9 @@ class DebtManager extends Util.Singleton<DebtManager>() {
         { id, cid: debt.cid, debt },
         `Failed to pay debt, no default account found`
       );
-      return;
+      return false;
     }
-    const newDebt = debt.debt * (1 + this.config.fineDefaultInterest / 100);
+    const newDebt = debt.debt * (1 + getConfig().debts.fineDefaultInterest / 100);
     const success = await account.transfer(
       debt.target_account,
       debt.given_by ?? debt.cid,
@@ -226,7 +217,7 @@ class DebtManager extends Util.Singleton<DebtManager>() {
       Util.Log('financials:debt:penaliseOverdue:failed', { id }, `Failed to pay debt, non existing debt`);
       return;
     }
-    const newDebt = debt.debt * (1 + this.config.fineOverDueInterest / 100);
+    const newDebt = debt.debt * (1 + getConfig().debts.fineOverDueInterest / 100);
     await SQL.query('UPDATE debts SET debt = ? WHERE id = ?', [newDebt, id]);
     Util.Log(
       'financials:debt:penaliseOverdue',

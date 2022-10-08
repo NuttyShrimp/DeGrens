@@ -1,4 +1,4 @@
-import { Config, Events, RPC, Util } from '@dgx/server';
+import { Config, Events, Financials, RPC, Util } from '@dgx/server';
 
 let prices: Record<string, number>;
 
@@ -22,5 +22,5 @@ Events.onNet('houserobbery:server:sellItem', (src: number, itemData: { name: str
     `${src} sold ${itemData.amount} ${itemData.name} for ${price}`,
     src
   );
-  global.exports['dg-financials'].addCash(src, price, 'houserobbery-sell');
+  Financials.addCash(src, price, 'houserobbery-sell');
 });

@@ -12,7 +12,7 @@ global.exports('getCurrentJob', (src: number) => {
 global.exports('getCurrentGrade', (src: number) => {
   const job = getPlayerJob(src);
   if (!job) return 0;
-  const cid = Util.getCID(src);
+  const cid = Util.getCID(src, true);
   if (!cid) return 0;
   const info = getPlayerInfoForJob(cid, job);
   if (!info) return 0;

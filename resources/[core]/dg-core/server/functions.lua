@@ -88,6 +88,22 @@ function DGCore.Functions.GetOfflinePlayerByCitizenId(citizenid)
 	return nil
 end
 
+function DGCore.Functions.GetOfflinePlayerByPhone(number)
+	-- Check if player is online
+	local player = DGCore.Functions.GetPlayerByPhone(number)
+	if player then return player end
+	local query = [[
+    SELECT * FROM all_character_data WHERE phone = ?
+  ]]
+	local result = exports['dg-sql']:query(query, { number })
+	if result and result[1] then
+		return {
+			PlayerData = DGCore.Player.buildPlayerData(result[1])
+		}
+	end
+	return nil
+end
+
 -- Returns player server ids in given radius
 function DGCore.Functions.GetPlayersInRadius(src, radius)
 	radius = radius or 5

@@ -8,15 +8,18 @@ declare namespace DB {
     updated_at: number;
   }
 
+  // Some can be null if the target got deleted in db
   interface ITransaction {
     transaction_id: string;
     origin_account_id: string;
+    origin_account_name: string;
+    origin_change: number;
     target_account_id: string;
-    change: number;
+    target_account_name: string;
+    target_change: number;
     comment: string;
-    // represents CID of user on server, client its full name
-    triggered_by: number;
-    accepted_by: number;
+    triggered_by: string;
+    accepted_by: string | null;
     // UNIX timestamp
     date: number;
     type: TransactionType;

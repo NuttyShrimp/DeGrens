@@ -1,47 +1,44 @@
-import { Events } from '@dgx/client';
+import { Events, PolyZone, Util } from '@dgx/client';
 
 import { config } from '../config';
 
 import { Location } from './Location';
 
-export class LocationManager {
-  // region Instance management
-  private static instance: LocationManager;
+class LocationManager extends Util.Singleton<LocationManager>() {
   locations: Location[] = [];
-  // endregion
-  currentLocation: Location = null;
+  currentLocation: Location | null = null;
   atATM = false;
-
-  public static getInstance(): LocationManager {
-    if (!LocationManager.instance) {
-      LocationManager.instance = new LocationManager();
-    }
-    return LocationManager.instance;
-  }
 
   public initLocation() {
     config.location.list.forEach(l => {
-      global.exports['dg-polyzone'].AddBoxZone('bank', l.center, config.location.length, config.location.width, {
-        data: {
-          id: l.id,
+      PolyZone.addBoxZone(
+        'bank',
+        l.center,
+        config.location.length,
+        config.location.width,
+        {
+          data: {
+            id: l.id,
+          },
+          heading: l.heading,
+          minZ: l.center.z - 1,
+          maxZ: l.center.z + 3,
         },
-        heading: l.heading,
-        minZ: l.center.z - 1,
-        maxZ: l.center.z + 3,
-      });
+        true
+      );
       this.locations.push(new Location(l.center, l.name, l.id));
     });
   }
 
-  public setLocation(locName: string) {
-    if (!locName) {
-      this.currentLocation.setActive(false);
+  public setLocation(locName: string | null) {
+    if (locName === null) {
+      this.currentLocation!.setActive(false);
       this.currentLocation = null;
       global.exports['dg-ui'].hideInteraction();
       Events.emitNet('financials:location:set', null);
       return;
     }
-    this.currentLocation = this.locations.find(l => l.getId() === locName && !l.isDisabled());
+    this.currentLocation = this.locations.find(l => l.getId() === locName && !l.isDisabled()) ?? null;
     if (this.currentLocation) {
       this.currentLocation.setActive(true);
       global.exports['dg-ui'].showInteraction(`[E] - bank`);
@@ -62,8 +59,10 @@ export class LocationManager {
   }
 
   public openMenu() {
-    if (this.currentLocation) {
-      this.currentLocation.openMenu();
-    }
+    if (!this.currentLocation) return;
+    this.currentLocation.openMenu();
   }
 }
+
+const locationManager = LocationManager.getInstance();
+export default locationManager;

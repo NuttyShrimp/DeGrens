@@ -1,18 +1,16 @@
-import { Notifications, SQL } from '@dgx/server';
+import { Notifications, SQL, Util } from '@dgx/server';
+import accountManager from 'modules/bank/classes/AccountManager';
 import winston from 'winston';
 
-import { getDefaultAccount } from '../../bank/helpers/accounts';
 import { cryptoLogger } from '../util';
-
-import { CryptoManager } from './CryptoManager';
+import cryptoManager from './CryptoManager';
 
 export class CryptoWallet {
-  private cid: number;
-  private cname: string;
+  private readonly cid: number;
+  private readonly cname: string;
   private amount: number;
   private config: NCrypto.Config;
-  private logger: winston.Logger;
-  private manager: CryptoManager;
+  private readonly logger: winston.Logger;
 
   constructor(cid: number, cname: string, amount: number, config: NCrypto.Config) {
     this.cid = cid;
@@ -20,10 +18,8 @@ export class CryptoWallet {
     this.amount = amount;
     this.config = config;
     this.logger = cryptoLogger.child({ module: `CW-${this.cid}-${this.cname}` });
-    this.manager = CryptoManager.getInstance();
   }
 
-  // region Getters
   public getCoin(): string {
     return this.cname;
   }
@@ -36,8 +32,6 @@ export class CryptoWallet {
     };
   }
 
-  // endregion
-  // region Actions
   private canBuyCoin() {
     return !!this.config?.value ?? false;
   }
@@ -57,24 +51,30 @@ export class CryptoWallet {
       this.logger.debug(`Buy: ${this.cname} can't be bought | cid: ${this.cid}`);
       return false;
     }
-    const Player = DGCore.Functions.GetPlayerByCitizenId(this.cid);
-    if (!Player) {
+    if (!DGCore.Functions.GetPlayerByCitizenId(this.cid)) {
       this.logger.debug(`Buy: Player not found | cid: ${this.cid}`);
       return false;
     }
-    const cid = Player.PlayerData.citizenid;
-    const playerAccount = await getDefaultAccount(cid);
+    const playerAccount = accountManager.getDefaultAccount(this.cid);
+    if (!playerAccount) {
+      this.logger.debug(`Buy: Player Bank Account not found | cid: ${this.cid}`);
+      return false;
+    }
+    if (this.config.value === undefined) {
+      this.logger.debug(`Buy: Can not buy coin that has no value | cid: ${this.cid}`);
+      return false;
+    }
     const price = amount * this.config.value;
-    const isSuccess = await playerAccount.purchase(cid, price, `Aankoop crypto: ${amount}x ${this.cname}`);
+    const isSuccess = await playerAccount.purchase(this.cid, price, `Aankoop crypto: ${amount}x ${this.cname}`);
     this.logger.debug(`Buy: ${isSuccess ? 'success' : 'fail'} | amount: ${amount} | price: ${price}`);
     if (isSuccess) {
       this.amount += amount;
       await this.saveWallet();
     }
-    global.exports['dg-logs'].createGraylogEntry(
+    Util.Log(
       'financials:crypto:buy',
       {
-        cid,
+        cid: this.cid,
         coin: this.cname,
         amount,
         newTotal: this.amount + amount,
@@ -99,7 +99,7 @@ export class CryptoWallet {
     this.amount += amount;
     await this.saveWallet();
     this.logger.debug(`Add: ${amount}`);
-    global.exports['dg-logs'].createGraylogEntry(
+    Util.Log(
       'financials:crypto:add',
       {
         cid,
@@ -119,7 +119,7 @@ export class CryptoWallet {
       this.logger.debug(`Transfer: Target not found | cid: ${this.cid}`);
       return false;
     }
-    const targetWallet: CryptoWallet = this.manager.getWallet(target, this.cname) as CryptoWallet;
+    const targetWallet = cryptoManager.getWallet(target, this.cname) as CryptoWallet;
     if (!targetWallet) {
       this.logger.debug(`Transfer: Target wallet not found | cid: ${this.cid}`);
       // Create one
@@ -132,7 +132,7 @@ export class CryptoWallet {
     }
     this.amount -= amount;
     await targetWallet.add(amount, `${src} transfer ${amount}x ${this.cname}`);
-    global.exports['dg-logs'].createGraylogEntry(
+    Util.Log(
       'financials:crypto:transfer',
       {
         cid: this.cid,
@@ -160,7 +160,7 @@ export class CryptoWallet {
     this.amount -= amount;
     await this.saveWallet();
     this.logger.debug(`Remove: ${amount}`);
-    global.exports['dg-logs'].createGraylogEntry(
+    Util.Log(
       'financials:crypto:remove',
       {
         cid,

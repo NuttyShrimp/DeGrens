@@ -1,8 +1,10 @@
+import { Util } from './index';
+
 const fexp = global.exports['dg-financials'];
 
 class Financials {
   awaitAccountsLoaded(): Promise<void> {
-    return fexp.awaitAccountsLoaded();
+    return Util.awaitCondition(() => fexp.areAccountsLoaded());
   }
 
   // Returns accountId after creation
@@ -10,15 +12,15 @@ class Financials {
     return fexp.createAccount(cid, name, accType);
   }
 
-  getDefaultAccount(cid: number): Promise<IFinancials.Account> {
+  getDefaultAccount(cid: number): IFinancials.Account | undefined {
     return fexp.getDefaultAccount(cid);
   }
 
-  getDefaultAccountId(cid: number): Promise<string> {
+  getDefaultAccountId(cid: number): string | undefined {
     return fexp.getDefaultAccountId(cid);
   }
 
-  getAccountBalance(accId: string): number {
+  getAccountBalance(accId: string): number | undefined {
     return fexp.getAccountBalance(accId);
   }
 
@@ -27,11 +29,11 @@ class Financials {
     return fexp.getAllAccounts();
   }
 
-  setPermissions(accountId: string, cid: number, permissions: IFinancials.Permissions): Promise<void> {
+  setPermissions(accountId: string, cid: number, permissions: IFinancials.Permissions): boolean {
     return fexp.setPermissions(accountId, cid, permissions);
   }
 
-  removePermissions(accountId: string, cid: number): Promise<boolean> {
+  removePermissions(accountId: string, cid: number): boolean {
     return fexp.removePermissions(accountId, cid);
   }
 
@@ -39,11 +41,11 @@ class Financials {
     return fexp.getPermissions(accountId, cid);
   }
 
-  deposit(accountId: string, triggerCid: number, amount: number, comment?: string): Promise<void> {
+  deposit(accountId: string, triggerCid: number, amount: number, comment?: string): Promise<boolean> {
     return fexp.deposit(accountId, triggerCid, amount, comment);
   }
 
-  withdraw(accountId: string, triggerCid: number, amount: number, comment?: string): Promise<void> {
+  withdraw(accountId: string, triggerCid: number, amount: number, comment?: string): Promise<boolean> {
     return fexp.withdraw(accountId, triggerCid, amount, comment);
   }
 
@@ -112,12 +114,12 @@ class Financials {
     reason: string,
     origin_name: string,
     given_by?: number
-  ): Promise<void> {
-    return fexp.giveFine(cid, target_account, fine, reason, origin_name, given_by);
+  ): void {
+    fexp.giveFine(cid, target_account, fine, reason, origin_name, given_by);
   }
 
-  removeMaintenanceFees(src: number): Promise<void> {
-    return fexp.removeMaintenanceFees(src);
+  removeMaintenanceFees(src: number) {
+    fexp.removeMaintenanceFees(src);
   }
 
   registerPaycheck(src: number, amount: number, job: string, comment?: string): void {
@@ -127,13 +129,22 @@ class Financials {
   getTaxedPrice(
     price: number,
     taxId: number,
-    shouldRemove: boolean
+    shouldRemove?: boolean
   ): {
     taxPrice: number;
     taxRate: number;
   } {
     return fexp.getTaxedPrice(price, taxId, shouldRemove);
   }
+
+  getTaxInfo = (taxId: number) => {
+    return (fexp.getTaxInfo(taxId) ?? undefined) as
+      | {
+          category: string;
+          rate: number;
+        }
+      | undefined;
+  };
 }
 
 export default {

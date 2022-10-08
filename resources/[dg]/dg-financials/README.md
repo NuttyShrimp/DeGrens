@@ -3,14 +3,14 @@
 ## Tax informatie
 
 | taxId | Naam        | StandaardWaarde |
-|-------|-------------|----------|
-| 1     | No Tax      | 0.00%    |
-| 2     | Vehicles    | 0.11%    |
-| 3     | Real estate | 0.10%    |
-| 4     | Income tax  | 0.09%    |
-| 5     | Services    | 0.07%    |
-| 6     | Goederen    | 0.07%    |
-| 7     | Gas         | 0.06%    |
+| ----- | ----------- | --------------- |
+| 1     | No Tax      | 0.00%           |
+| 2     | Vehicles    | 0.11%           |
+| 3     | Real estate | 0.10%           |
+| 4     | Income tax  | 0.09%           |
+| 5     | Services    | 0.07%           |
+| 6     | Goederen    | 0.07%           |
+| 7     | Gas         | 0.06%           |
 
 ## Client
 
@@ -34,7 +34,7 @@
 
 #### Exports
 
-- `createAccount`: Maak een bankrekening aan, return een Promise voor JS/TS returned
+- `createAccount`: Maak een bankrekening aan, returned een Promise voor JS/TS
   - cid
   - name, Naam van de rekening
   - accountType, En van volgende String: 'standard', 'savings', 'business'
@@ -73,12 +73,6 @@
   - accountId
   - triggerCid
   - amount
-#### Events
-
-- `financials:server:account:create`: (equivalent aan createAccount export)
-  - cid
-  - name, Naam van de rekening
-  - accountType, En van volgende String: 'standard', 'savings', 'business'
 
 #### Callbacks
 
@@ -191,6 +185,4 @@ Fines moeten binnen 7 dagen betaald worden, deze waarde is niet aanpasbaar voor 
   - shouldRemove: Standaard true, als false wordt de taxed amount van base price gehaald ipv eraan toegevoegd
 
 #### Callbacks
-- `financials:server:taxes:calc`: Returned zelfde object al bovenstaande export en neemt 1 object met volgende waardes als params:
-  - price
-  - taxId
+- `financials:server:taxes:calc`: Returned zelfde object al bovenstaande export en neemt zelfde params

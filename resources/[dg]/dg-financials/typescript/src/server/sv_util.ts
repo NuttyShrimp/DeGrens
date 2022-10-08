@@ -1,19 +1,18 @@
-import { AccountManager } from './modules/bank/classes/AccountManager';
+import { Util } from '@dgx/server';
+import accountManager from './modules/bank/classes/AccountManager';
 
 export const generateAccountId = (): string => {
-  const manager = AccountManager.getInstance();
-  let id = `BE${DGX.Util.getRndInteger(11111111, 99999999)}`;
-  while (manager.getAccountById(id)) {
+  let id = `BE${Util.getRndInteger(11111111, 99999999)}`;
+  if (accountManager.getAccountById(id)) {
     id = generateAccountId();
   }
   return id;
 };
 
 export const generateTransactionId = (): string => {
-  const manager = AccountManager.getInstance();
-  let transId = DGX.Util.uuidv4();
-  while (manager.doesTransactionExist(transId)) {
-    transId = DGX.Util.uuidv4();
+  let transId = Util.uuidv4();
+  while (accountManager.doesTransactionExist(transId)) {
+    transId = Util.uuidv4();
   }
   return transId;
 };

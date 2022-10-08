@@ -12,7 +12,7 @@ export const Infoheader: FC<
     <div className={'financials__header'}>
       <div>
         <i className={'fas fa-university'} />
-        <span>{props.bank.charAt(0).toUpperCase() + props.bank.slice(1)}</span>
+        <span>{` ${props.bank.charAt(0).toUpperCase()}${props.bank.slice(1)}`}</span>
       </div>
       <div>
         <span>

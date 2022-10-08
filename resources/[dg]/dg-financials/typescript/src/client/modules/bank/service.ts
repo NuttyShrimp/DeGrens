@@ -1,37 +1,57 @@
-import { Peek, RPC, UI } from '@dgx/client';
+import { Events, Peek, RPC, UI } from '@dgx/client';
+import locationManager from 'classes/LocationManager';
 
-import { LocationManager } from '../../classes/LocationManager';
 import { config } from '../../config';
 
 export const registerPeekZones = () => {
-  const LManager = LocationManager.getInstance();
-  Peek.addFlagEntry('isBanker', {
-    options: [
-      {
-        label: 'paycheck',
-        icon: 'fas fa-file-invoice-dollar',
-        type: 'server',
-        event: 'financials:server:paycheck:give',
-      },
-    ],
-    distance: 3,
-  });
-  Peek.addModelEntry(config.ATMModels, {
-    options: [
-      {
-        label: 'ATM',
-        icon: 'fas fa-university',
-        async action() {
-          await doAnimation(true, true);
-          LManager.setAtATM(true);
-          const base = await RPC.execute<BaseState>('financials:accounts:open', 'ATM');
-          base.isAtm = true;
-          UI.openApplication('financials', base);
+  Peek.addFlagEntry(
+    'isBanker',
+    {
+      options: [
+        {
+          label: 'Neem Paycheck',
+          icon: 'fas fa-file-invoice-dollar',
+          type: 'server',
+          event: 'financials:server:paycheck:give',
         },
-      },
-    ],
-    distance: 2.0,
-  });
+        {
+          label: 'Open Spaarrekening',
+          icon: 'fas fa-book-open',
+          action: async () => {
+            const result = await UI.openInput({
+              header: 'Open Spaarrekening',
+              inputs: [{ label: 'Account Naam', name: 'accountName', type: 'text' }],
+            });
+            if (!result.accepted) return;
+            Events.emitNet('financials:bank:savings:create', result.values.accountName);
+          },
+        },
+      ],
+      distance: 3,
+    },
+    true
+  );
+  Peek.addModelEntry(
+    config.ATMModels,
+    {
+      options: [
+        {
+          label: 'ATM',
+          icon: 'fas fa-university',
+          async action() {
+            await doAnimation(true, true);
+            locationManager.setAtATM(true);
+            const base = await RPC.execute<BaseState>('financials:accounts:open', 'ATM');
+            if (!base) return;
+            base.isAtm = true;
+            UI.openApplication('financials', base);
+          },
+        },
+      ],
+      distance: 2.0,
+    },
+    true
+  );
 };
 
 export const doAnimation = async (isAtm: boolean, isOpen: boolean) => {

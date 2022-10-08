@@ -1,4 +1,4 @@
-import { Config, Util } from '@dgx/server';
+import { Config, Financials, Util } from '@dgx/server';
 import itemDataManager from 'modules/itemdata/classes/itemdatamanager';
 import { mainLogger } from 'sv_logger';
 import winston from 'winston';
@@ -19,6 +19,11 @@ class ShopManager extends Util.Singleton<ShopManager>() {
     await Config.awaitConfigLoad();
     const config = Config.getConfigValue<Shops.Config>('inventory.shops');
     const types: { [key: string]: Shops.Item[] } = {};
+
+    // Resource gets started before financials so wait till taxes loaded before continuing
+    const taxId = 6;
+    await Util.awaitCondition(() => Financials.getTaxInfo(taxId) !== undefined);
+
     Object.entries(config.types).forEach(([type, items]) => {
       const allItems: Shops.Item[] = [];
       items.forEach(item => {
@@ -29,7 +34,7 @@ class ShopManager extends Util.Singleton<ShopManager>() {
           );
         }
         if (item.requirements.cash) {
-          item.requirements.cash = global.exports['dg-financials'].getTaxedPrice(item.requirements.cash, 6).taxPrice;
+          item.requirements.cash = Financials.getTaxedPrice(item.requirements.cash, taxId).taxPrice;
         }
         const requirements = {
           cash: item.requirements.cash,

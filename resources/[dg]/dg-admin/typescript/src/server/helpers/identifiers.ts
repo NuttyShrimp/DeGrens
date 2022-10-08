@@ -16,7 +16,7 @@ export const getUserData = (src: number): UserData => {
     steamId: getIdentifierForPlayer(src, 'steam'),
     source: src,
     name: GetPlayerName(String(src)),
-    cid: Util.getCID(src),
+    cid: Util.getCID(src, true),
   };
 };
 

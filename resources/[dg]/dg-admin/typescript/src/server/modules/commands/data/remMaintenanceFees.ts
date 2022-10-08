@@ -1,3 +1,4 @@
+import { Financials } from '@dgx/server';
 import { Inputs } from 'enums/inputs';
 
 interface RemMainFees {
@@ -15,7 +16,7 @@ export const remMaintenanceFees: CommandData = {
     if (args.Target) {
       target = args.Target.serverId;
     }
-    global.exports['dg-financials'].removeMaintenanceFees(target);
+    Financials.removeMaintenanceFees(target);
   },
   UI: {
     title: 'Remove maintenance fees',

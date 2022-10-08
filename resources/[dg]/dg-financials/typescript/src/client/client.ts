@@ -1,10 +1,11 @@
 import './modules/bank';
 import './modules/cash';
+import './modules/payconiq';
 
-import { LocationManager } from './classes/LocationManager';
 import { registerPeekZones } from './modules/bank/service';
+import locationManager from 'classes/LocationManager';
 
 setImmediate(() => {
-  LocationManager.getInstance().initLocation();
+  locationManager.initLocation();
   registerPeekZones();
 });

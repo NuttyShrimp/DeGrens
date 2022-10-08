@@ -1,0 +1,1 @@
+import './controller.payconiq';

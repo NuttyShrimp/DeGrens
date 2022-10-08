@@ -7,17 +7,23 @@ import { formatRelativeTime } from '../../../lib/util';
 const Transaction: FC<
   React.PropsWithChildren<{ transaction: Financials.Transaction; selected: Financials.Account }>
 > = ({ transaction, selected }) => {
-  const isNegative = useMemo(
-    () => transaction.type === 'withdraw' || transaction.target_account_id !== selected.account_id,
-    [transaction]
-  );
+  // We use isTarget and not isOrigin because target is higher prio
+  // For example with deposit, origin and target are same but its an increase so it should not be negative
+  const isTarget = useMemo(() => {
+    return selected.account_id === transaction.target_account_id;
+  }, [selected.account_id, transaction.target_account_id]);
+
+  const isNegative = useMemo(() => {
+    return transaction.type === 'withdraw' || !isTarget;
+  }, [transaction.type, isTarget]);
+
   return (
     <div className={'transaction'}>
       <div className={'transaction__top'}>
         <div className={'transaction__title'}>
-          {selected.account_id === transaction.origin_account_id
-            ? `${transaction.target_account_name} / ${transaction.target_account_id}`
-            : `${transaction.origin_account_name} / ${transaction.origin_account_id}`}
+          {isTarget
+            ? `${transaction.origin_account_name} / ${transaction.origin_account_id}`
+            : `${transaction.target_account_name} / ${transaction.target_account_id}`}
         </div>
         <div className={'transaction__metadata'}>
           <span>{transaction.transaction_id}</span>
@@ -28,14 +34,21 @@ const Transaction: FC<
       <div className={'transaction__body'}>
         <div className={`transaction__amount ${isNegative ? 'negative' : ''}`}>
           <span>
-            €<Numberformat.Bank value={(isNegative ? -1 : 1) * transaction.change} />
+            €
+            <Numberformat.Bank
+              value={(isNegative ? -1 : 1) * (isTarget ? transaction.target_change : transaction.origin_change)}
+            />
           </span>
         </div>
         <div className={'transaction__info'}>
           <div className={'transaction__info__persons'}>
             <span>{transaction.triggered_by}</span>
-            <i className={'fas fa-long-arrow-alt-right'} />
-            <span>{transaction.accepted_by}</span>
+            {transaction.accepted_by != null && (
+              <>
+                <i className={'fas fa-long-arrow-alt-right'} />
+                <span>{transaction.accepted_by}</span>
+              </>
+            )}
           </div>
           <div className={'transaction__info__comment'}>
             <div>Comment:</div>

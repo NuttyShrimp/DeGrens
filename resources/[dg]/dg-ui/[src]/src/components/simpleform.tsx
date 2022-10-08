@@ -8,8 +8,8 @@ import { Button } from './button';
 
 export const SimpleForm: FC<React.PropsWithChildren<SimpleForm.Form>> = props => {
   const classes = styles();
-  const [values, setValues] = useState({});
-  const [errors, setErrors] = useState({});
+  const [values, setValues] = useState<Record<string, string>>({});
+  const [errors, setErrors] = useState<Record<string, boolean>>({});
   useEffect(() => {
     const newValues = {};
     props.elements.forEach(element => {
@@ -24,11 +24,12 @@ export const SimpleForm: FC<React.PropsWithChildren<SimpleForm.Form>> = props =>
     }
     hideFormModal();
   };
+
   const handleAccept = () => {
     const newErrors = {};
     for (const element of props.elements) {
       if ((element.required ?? true) && (!values[element.name] || values[element.name].trim() === '')) {
-        newErrors[element.name] = 'Required';
+        newErrors[element.name] = true;
       }
     }
     setErrors(newErrors);
@@ -58,9 +59,9 @@ export const SimpleForm: FC<React.PropsWithChildren<SimpleForm.Form>> = props =>
           {e.render({
             name: e.name,
             value: values[e.name] ?? '',
-            onChange: (val: string) => handleChange(e.name, val),
+            onChange: (val: string) => handleChange(e.name, String(val)),
             required: e.required ?? true,
-            error: errors[e.name] ?? false,
+            error: errors[e.name],
           })}
         </div>
       ))}

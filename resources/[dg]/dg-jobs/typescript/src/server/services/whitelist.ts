@@ -57,7 +57,7 @@ export const getPlayerInfoForJob = (cid: number, job: string): Whitelist.Entry =
 
 export const getWhitelistedJobsForPlayer = (src: number): string[] => {
   const allowedJobs: string[] = [];
-  const cid = Util.getCID(src);
+  const cid = Util.getCID(src, true);
   if (!cid) return [];
   jobs.forEach(plys => plys.find(p => (p.cid = cid)));
 };
@@ -94,15 +94,15 @@ export const openAllowListMenu = (src: number, filter?: string) => {
 
   const openMenu = () => {
     allowListMenu.push({
-      title: "Aannemen",
+      title: 'Aannemen',
       description: `Neem iemand aan voor deze ${job}`,
-      callbackURL: "jobs:whitelist:hire",
+      callbackURL: 'jobs:whitelist:hire',
       data: {
         job,
-      }
-    })
+      },
+    });
     emitNet('dg-ui:openApplication', src, 'contextmenu', allowListMenu);
-  }
+  };
 
   // add list where we can filter by rank or speciality
   allowListMenu.push({
@@ -123,12 +123,12 @@ export const openAllowListMenu = (src: number, filter?: string) => {
   const entries = jobs.get(job);
   if (!entries || entries.length === 0) {
     allowListMenu.push({
-      title: "Geen volk gevonden",
-      icon: "x"
-    })
+      title: 'Geen volk gevonden',
+      icon: 'x',
+    });
     openMenu();
     return;
-  };
+  }
   const players = entries.filter(entry => {
     if (!filter) return true;
     return filters.some(filter => {
@@ -147,9 +147,9 @@ export const openAllowListMenu = (src: number, filter?: string) => {
   players.forEach(entry => {
     allowListMenu.push({
       title: `${entry.name}(${entry.cid})`,
-      description: `rank: ${config.grades[entry.rank]} | speciality: ${Object.keys(config.specialties).filter(
-        spec => (entry.specialty & config.specialties[spec]) !== 0
-      ).join(',')}`,
+      description: `rank: ${config.grades[entry.rank]} | speciality: ${Object.keys(config.specialties)
+        .filter(spec => (entry.specialty & config.specialties[spec]) !== 0)
+        .join(',')}`,
       submenu: [
         {
           title: 'Ranks',
@@ -179,14 +179,14 @@ export const openAllowListMenu = (src: number, filter?: string) => {
           callbackURL: 'jobs:whitelist:toggleSpecialty',
         })),
         {
-          title: "Ontsla",
+          title: 'Ontsla',
           description: `Ontsla deze persoon`,
-          callbackURL: "jobs:whitelist:fire",
-          data:{
+          callbackURL: 'jobs:whitelist:fire',
+          data: {
             cid: entry.cid,
             job,
-          }
-        }
+          },
+        },
       ],
     });
   });

@@ -39,6 +39,7 @@ declare type AutoCompleteProps = Partial<Omit<AutocompletePropsMUI<any, any, any
   freeSolo?: boolean;
   icon?: string;
   iconLib?: 'fas' | 'far' | 'fal' | 'fab';
+  error?: boolean;
 };
 
 declare interface ICheckboxProps extends CheckboxProps {

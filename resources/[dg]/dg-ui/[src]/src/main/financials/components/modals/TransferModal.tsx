@@ -12,23 +12,23 @@ export const TransferModal: FC<React.PropsWithChildren<Financials.ModalProps>> =
       elements={[
         {
           name: 'amount',
-          render: props => <Input.MoneyAmount {...props} label={'Amount'} icon={'dollar-sign'} />,
+          render: p => <Input.MoneyAmount {...p} label={'Amount'} icon={'dollar-sign'} />,
         },
         {
           name: 'target',
-          render: props => (
-            <Input.MoneyAmount {...props} label={'Target (citizenid, accountid or businessid)'} icon={'user-circle'} />
+          render: p => (
+            <Input.TextField {...p} label={'Target (CID, AccountID of Business Name)'} icon={'user-circle'} />
           ),
         },
         {
           name: 'comment',
-          render: props => <Input.TextField {...props} label={'Comment'} icon={'comment-alt'} />,
+          render: p => <Input.TextField {...p} label={'Comment'} icon={'comment-alt'} />,
         },
       ]}
       onAccept={async vals => {
         openLoadModal();
         await nuiAction('financials/account/transfer', {
-          accountId: props.selected.account_id,
+          accountId: props.account.account_id,
           ...vals,
         });
         await props.fetchAccounts();

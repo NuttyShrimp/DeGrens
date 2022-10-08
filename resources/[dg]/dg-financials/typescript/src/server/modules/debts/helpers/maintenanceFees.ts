@@ -3,13 +3,13 @@ import dayjs from 'dayjs';
 import timezone from 'dayjs/plugin/timezone'; // dependent on utc plugin
 import toObject from 'dayjs/plugin/toObject';
 import utc from 'dayjs/plugin/utc';
-import { getConfigModule } from 'helpers/config';
 
 import 'dayjs/locale/nl-be';
 
 import debtManager from '../classes/debtmanager';
 
 import { debtLogger } from './debts';
+import { getConfig } from 'helpers/config';
 
 dayjs.extend(toObject);
 dayjs.extend(utc);
@@ -18,7 +18,7 @@ dayjs.locale('nl-be');
 dayjs.utc();
 
 export const scheduleMaintenanceFees = async () => {
-  const maintenceConfig = (await getConfigModule('debts')).maintenance;
+  const maintenceConfig = getConfig().debts.maintenance;
   const now = dayjs();
   const schedule = dayjs().add(1, 'day').set('hour', maintenceConfig.hour).set('minute', maintenceConfig.minute);
   debtLogger.info(
