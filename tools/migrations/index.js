@@ -28,11 +28,17 @@ if (!shouldInitDB) {
 const migrationDir = path.join(__dirname, '../../migrations');
 let migrationFiles = fs.readdirSync(migrationDir);
 // Filter files to only include interesting ones
-migrationFiles = migrationFiles.filter(file => {
-  const fileVersion = getMigrVersionFromFile(file);
-  if (file.match(/^[vV]\d+_seed.*/) && !shouldSeedDB) return false;
-  return fileVersion > migrVersion;
-});
+migrationFiles = migrationFiles
+  .filter(file => {
+    const fileVersion = getMigrVersionFromFile(file);
+    if (file.match(/^[vV]\d+_seed.*/) && !shouldSeedDB) return false;
+    return fileVersion > migrVersion;
+  })
+  .sort((f1, f2) => {
+    const f1Version = getMigrVersionFromFile(f1);
+    const f2Version = getMigrVersionFromFile(f2);
+    return f1Version - f2Version;
+  });
 
 if (migrationFiles.length < 1) {
   console.log('Migrations are already up-to-date');
