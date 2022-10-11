@@ -77,10 +77,11 @@
     "simple-import-sort/exports": "error",
     "prettier/prettier": [
       "error",
-      {},
+      {
+        "endOfLine": "auto"
+      },
       {
         "usePrettierrc": true,
-        "endOfLine": "auto"
       }
     ]
   },
