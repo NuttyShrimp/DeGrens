@@ -1,12 +1,23 @@
 import { Util, Vector3 } from '@dgx/shared';
 import { RPCEvent, RPCRegister } from '@dgx/server/decorators';
 import { getConfig } from 'helpers/config';
+import winston from 'winston';
+import { mainLogger } from 'sv_logger';
 
 @RPCRegister()
 class StateManager extends Util.Singleton<StateManager>() {
-  private robbedRegisters: Vec3[] = [];
-  private safeStates: Partial<Record<Store.Id, Safe.State>> = {};
-  private safeHackers: Partial<Record<Store.Id, number>> = {};
+  private robbedRegisters: Vec3[];
+  private safeStates: Partial<Record<Store.Id, Safe.State>>;
+  private safeHackers: Partial<Record<Store.Id, number | null>>;
+  private logger: winston.Logger;
+
+  constructor() {
+    super();
+    this.robbedRegisters = [];
+    this.safeStates = {};
+    this.safeHackers = {};
+    this.logger = mainLogger.child({ module: 'StateManager' });
+  }
 
   @RPCEvent('storerobbery:server:isRegisterRobbed')
   private _isRegisterRobbed = (_src: number, register: Vector3) => {
@@ -17,9 +28,11 @@ class StateManager extends Util.Singleton<StateManager>() {
 
   setRegisterAsRobbed = async (register: Vec3) => {
     this.robbedRegisters.push(register);
-    const timeout = (await getConfig()).register.refillTime * 60 * 1000
+    const timeout = (await getConfig()).register.refillTime * 60 * 1000;
+    this.logger.silly(`Register at x: ${register.x} y: ${register.y} z: ${register.z} has been robbed`);
     setTimeout(() => {
       this.robbedRegisters.shift(); // because we always have the same timeout, the first one will always be the oldest
+      this.logger.silly(`Register at x: ${register.x} y: ${register.y} z: ${register.z} has been refilled`);
     }, timeout);
   };
 
@@ -34,10 +47,12 @@ class StateManager extends Util.Singleton<StateManager>() {
   };
 
   setSafeState = (storeId: Store.Id, state: Safe.State) => {
+    this.logger.silly(`Safe with id ${storeId} has been set to state: ${state}`);
     this.safeStates[storeId] = state;
   };
 
-  setSafeHacker = (storeId: Store.Id, src: number) => {
+  setSafeHacker = (storeId: Store.Id, src: number | null) => {
+    this.logger.silly(`Player ${src} has been registered as hacker for safe ${storeId}`);
     this.safeHackers[storeId] = src;
   };
 

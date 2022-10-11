@@ -3,6 +3,7 @@ import locationManager from './classes/LocationManager';
 
 setImmediate(async () => {
   const storeZones = await RPC.execute<Record<Store.Id, IBoxZone>>('storerobbery:server:getStoreZones');
+  if (!storeZones) return;
   Object.entries(storeZones).forEach(([id, data]) => {
     PolyZone.addBoxZone(
       'store_building',
@@ -16,11 +17,15 @@ setImmediate(async () => {
       true
     );
   });
-})
+});
 
 PolyZone.onEnter('store_building', (name: string, data: { id: Store.Id }) => {
   locationManager.enteredStore(data.id);
 });
 PolyZone.onLeave('store_building', () => {
   locationManager.leftStore();
+});
+
+RPC.register('storerobbery:client:isInStore', () => {
+  return locationManager.currentStore !== null;
 });

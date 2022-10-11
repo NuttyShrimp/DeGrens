@@ -2,6 +2,7 @@ import { Events, Notifications, PolyTarget, RPC } from '@dgx/client';
 
 export const buildSafeZone = async (storeId: Store.Id) => {
   const safeCoords = await RPC.execute<Vec3>('storerobbery:server:getSafeCoords', storeId);
+  if (!safeCoords) return;
   PolyTarget.addCircleZone(
     'store_safe',
     safeCoords,

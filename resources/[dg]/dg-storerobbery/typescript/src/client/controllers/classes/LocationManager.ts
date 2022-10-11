@@ -3,12 +3,12 @@ import { buildRegisterZone, destroyRegisterZone } from 'modules/registers/helper
 import { buildSafeZone, checkSafeState, destroySafeZone } from 'modules/safes/helpers.safe';
 
 class LocationManager extends Util.Singleton<LocationManager>() {
-  private _currentStore: Store.Id;
+  private _currentStore: Store.Id | null = null;
 
   get currentStore() {
     return this._currentStore;
   }
-  private set currentStore(value: Store.Id) {
+  private set currentStore(value: typeof this._currentStore) {
     this._currentStore = value;
   }
 
@@ -21,7 +21,9 @@ class LocationManager extends Util.Singleton<LocationManager>() {
   leftStore = () => {
     destroyRegisterZone();
     destroySafeZone();
-    checkSafeState(this.currentStore);
+    if (this.currentStore !== null) {
+      checkSafeState(this.currentStore);
+    }
     this.currentStore = null;
   };
 }
