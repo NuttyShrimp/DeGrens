@@ -1,5 +1,5 @@
-PlayerData = {}
-plyJob = nil
+plyJob = {name = nil, rank = nil}
+-- TODO: Split business and job in doors.json to implement minimum rank for job and permissions for business
 
 doors = {}
 
@@ -11,8 +11,8 @@ interactionVisible = false
 inPolyZone = false
 
 Citizen.CreateThread(function()
-	PlayerData = DGCore.Functions.GetPlayerData()
-    doors = DGCore.Functions.TriggerCallback("dg-doorlock:server:FetchDoors")
+  plyJob = DGX.Jobs.getCurrentJob()
+  doors = DGCore.Functions.TriggerCallback("dg-doorlock:server:FetchDoors")
 
 	for id, door in pairs(doors) do
         if not IsDoorRegisteredWithSystem(id) then

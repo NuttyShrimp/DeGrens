@@ -1,4 +1,5 @@
 import { Financials, Phone, SQL, Util } from '@dgx/server';
+import { dispatchBusinessPermissionsToClientCache } from 'services/business';
 import { getBitmaskForPermissions, permissions, permissionsFromBitmask } from 'services/config';
 import { mainLogger } from 'sv_logger';
 import winston from 'winston';
@@ -25,8 +26,8 @@ export class Business {
         return e2Role.permissions - e1Role.permissions;
       })
       .sort((e1, e2) => {
-        if (e1.name < e1.name) return -1;
-        if (e1.name > e1.name) return 1;
+        if (e1.name < e2.name) return -1;
+        if (e1.name > e2.name) return 1;
         return 0;
       });
     this.employees = employees;
@@ -59,6 +60,10 @@ export class Business {
         };
       })
     );
+
+    DBEmployees.forEach(e => {
+      dispatchBusinessPermissionsToClientCache(e.citizenid, 'add', this.info.name);
+    });
   }
 
   // Check if an array of perissions doesn't include
@@ -122,6 +127,7 @@ export class Business {
     if (!role) return;
     return {
       id: this.info.id,
+      name: this.info.name,
       label: this.info.label,
       role: employee.isOwner ? 'CEO' : role.name,
       permissions: employee.isOwner ? this.info.business_type.permissions : permissionsFromBitmask(role.permissions),
@@ -186,6 +192,7 @@ export class Business {
       src
     );
     this.logAction(cid, 'hire', `${await Util.getCharName(targetCID)}(${targetCID}) aangenomen onder ${roleName}`);
+    dispatchBusinessPermissionsToClientCache(targetCID, 'add', this.info.name);
     return employeeName;
   }
 
@@ -217,6 +224,7 @@ export class Business {
       src
     );
     this.logAction(cid, 'fire', `${await Util.getCharName(targetCID)}(${targetCID}) ontslagen`);
+    dispatchBusinessPermissionsToClientCache(targetCID, 'remove', this.info.name);
   }
 
   async changeBankPermission(src: number, targetCID: number, permissions: IFinancials.Permissions) {
@@ -300,6 +308,7 @@ export class Business {
       'role',
       `${await Util.getCharName(targetCID)}(${targetCID}) zijn rol aangepast naar ${roleName}`
     );
+    dispatchBusinessPermissionsToClientCache(targetCID, 'add', this.info.name);
   }
 
   async createRole(src: number, name: string, permissions: string[]) {
@@ -413,6 +422,9 @@ export class Business {
       src
     );
     this.logAction(cid, 'role', `de ${name} rol aangepast`);
+    this.employees.forEach(e => {
+      dispatchBusinessPermissionsToClientCache(e.citizenid, 'add', this.info.name);
+    });
     return newPerms;
   }
 
@@ -445,6 +457,9 @@ export class Business {
       `${Util.getName(src)} deleted the ${name} role for ${this.info.label}`,
       src
     );
+    this.employees.forEach(e => {
+      dispatchBusinessPermissionsToClientCache(e.citizenid, 'add', this.info.name);
+    });
     this.logAction(cid, 'role', `de ${name} rol verwijderd`);
   }
 

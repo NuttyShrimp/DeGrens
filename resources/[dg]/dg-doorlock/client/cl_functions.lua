@@ -1,10 +1,10 @@
 isAuthorized = function(doorId)
-	if not doors[doorId] or not PlayerData or plyJob then return false end
-    for _, job in pairs(doors[doorId].authorized) do
-        if job == plyJob then
-            return true
-        end
+	if not doors[doorId] or not plyJob then return false end
+  for _, job in pairs(doors[doorId].authorized) do
+    if job == plyJob.name or DGX.Business.isEmployee(job) then
+      return true
     end
+  end
 	return false 
 end
 

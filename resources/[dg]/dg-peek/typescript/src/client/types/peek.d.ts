@@ -32,6 +32,8 @@ interface Option {
         [jobName: string]: number;
       };
   gang?: string | string[];
+  // Array of whitelisted business options, when only businessname then every employee can do, else also check perms
+  business?: { name: string; permissions?: string[] }[];
   // If the dist for this option is diff fron the parameters one
   distance?: number;
   // Tie extract info to the option if needed

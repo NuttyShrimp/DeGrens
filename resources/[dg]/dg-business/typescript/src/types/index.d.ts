@@ -39,6 +39,7 @@ declare namespace Business {
   namespace UI {
     interface Business {
       id: number;
+      name: string;
       label: string;
       role: string;
       // My permissions

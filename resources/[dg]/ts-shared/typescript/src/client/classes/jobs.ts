@@ -4,6 +4,18 @@ class Jobs {
   }
 }
 
+class Business {
+  /**
+   * Returns wether or not player is employee for business and has the required perms
+   * @param businessName Business Name
+   * @param requiredPermissions Permissions to check, undefined if function should be true for every employee
+   */
+  isEmployee = (businessName: string, requiredPermissions?: string[]): boolean => {
+    return global.exports['dg-business'].isEmployee(businessName, requiredPermissions);
+  };
+}
+
 export default {
   Jobs: new Jobs(),
+  Business: new Business(),
 };

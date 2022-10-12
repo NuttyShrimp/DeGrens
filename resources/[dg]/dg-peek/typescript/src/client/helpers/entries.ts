@@ -1,4 +1,4 @@
-import { Inventory } from '@dgx/client';
+import { Business, Inventory } from '@dgx/client';
 import { getCtxPlayerData } from './context';
 
 export const canEntryBeEnabled = async (entry: PeekOption, entity: number): Promise<PeekOption | undefined> => {
@@ -19,6 +19,10 @@ export const canEntryBeEnabled = async (entry: PeekOption, entity: number): Prom
     } else if (Array.isArray(entry.gang)) {
       if (!entry.gang.includes(PlayerData.gang.name)) return;
     } else return;
+  }
+  if (entry.business) {
+    const isEmployed = entry.business.some(b => Business.isEmployee(b.name, b.permissions));
+    if (!isEmployed) return;
   }
   if (entry.items) {
     if (!(await Inventory.doesPlayerHaveItems(entry.items))) {

@@ -1,4 +1,4 @@
-import { Financials, SQL, Util } from '@dgx/server';
+import { Events, Financials, SQL, Util } from '@dgx/server';
 import { Business } from 'classes/Business';
 import { config, getBitmaskForPermissions } from './config';
 import { mainLogger } from '../sv_logger';
@@ -177,4 +177,31 @@ export const getBusinessEmployees = (id: number): Business.UI.Employee[] => {
     delete UIEmployee.id;
     return UIEmployee;
   });
+};
+
+/**
+ * Dispatch player permissions for specific business to client
+ * @param cid Player CID (gets checked if online)
+ * @param action Wether to add or remove permissions of this business to/from client
+ * @param name Business Name
+ */
+export const dispatchBusinessPermissionsToClientCache = (cid: number, action: 'add' | 'remove', name: string) => {
+  const plyId = DGCore.Functions.GetPlayerByCitizenId(cid)?.PlayerData?.source;
+  if (plyId === undefined) return;
+  const business = getBusinessByName(name);
+  if (!business) return;
+  const permissions = business.getClientInfo(cid)?.permissions;
+  if (!permissions) return;
+  Events.emitNet('business:client:updateCache', plyId, action, name, permissions);
+};
+
+/**
+ * Dispatch all permissions for the businesses player has access to to player
+ */
+export const dispatchAllBusinessPermissionsToClientCache = (plyId: number) => {
+  Events.emitNet(
+    'business:client:setCache',
+    plyId,
+    getBusinessesForPlayer(source).map(b => ({ name: b.name, permissions: b.permissions }))
+  );
 };

@@ -1,10 +1,5 @@
--- keep playerdata updated for checks on authorized jobs
-RegisterNetEvent('DGCore:Player:SetPlayerData', function(_data)
-	PlayerData = _data
-end)
-
-RegisterNetEvent('dg-jobs:signin:update', function(job)
-  plyJob = job
+RegisterNetEvent('dg-jobs:signin:update', function(name, rank)
+  plyJob = {name = name, rank = rank}
 end)
 
 RegisterNetEvent("onResourceStop", function(resourceName)

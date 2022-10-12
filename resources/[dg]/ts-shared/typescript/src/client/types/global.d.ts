@@ -24,6 +24,7 @@ declare global {
     Particle: typeof Classes.Particle;
     Sounds: typeof Classes.Sounds;
     HUD: typeof Classes.HUD;
+    Business: typeof Classes.Business;
   };
   var asyncExports: any;
 }
