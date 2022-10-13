@@ -1,20 +1,15 @@
-fx_version 'cerulean'
-game 'gta5'
+fx_version "cerulean"
+games {"gta5"}
 
-shared_scripts {
-    '@dg-core/import.lua', 
-    '@ts-shared/shared/lib.lua'
+shared_script '@dg-core/import.js'
+
+server_scripts {
+  "server/*.js",
 }
 
-client_script {
-    "@ts-shared/client/client.js",
-    "@dg-lib/client/cl_ui.lua",
-    'client/*.lua'
-}
-
-server_script {
-    "@ts-shared/server/server.js",
-    'server/*.lua'
+client_scripts {
+  "@dg-logs/client/cl_log.lua",
+  "client/*.js",
 }
 
 ui_page 'html/index.html'
@@ -82,7 +77,3 @@ data_file 'WEAPONINFO_FILE_PATCH' 'meta/weaponstonehatchet.meta'
 data_file 'WEAPONINFO_FILE_PATCH' 'meta/weaponswitchblade.meta'
 data_file 'WEAPONINFO_FILE_PATCH' 'meta/weaponvintagepistol.meta'
 data_file 'WEAPONINFO_FILE_PATCH' 'meta/weaponwrench.meta'
-
-client_script "@dg-logs/client/cl_log.lua"
-
-server_script "@dg-logs/server/sv_log.lua"

@@ -1,4 +1,4 @@
-import { Notifications } from '@dgx/server';
+import { Events, Notifications } from '@dgx/server';
 import { Inputs } from 'enums/inputs';
 
 declare interface SetAmmoData {
@@ -20,7 +20,7 @@ export const setAmmo: CommandData = {
         return;
       }
       const plyId = args.Target?.serverId ?? caller.source;
-      TriggerClientEvent('weapons:client:ForceSetAmmo', plyId, amount);
+      Events.emitNet('weapons:client:forceAmmo', plyId, amount);
     } catch (e) {
       console.error(e);
       Notifications.add(caller.source, 'Amount should be a number', 'error');

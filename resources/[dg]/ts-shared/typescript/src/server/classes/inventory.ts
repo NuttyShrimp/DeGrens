@@ -105,7 +105,7 @@ class Inventory {
     return this.getAmountInInventory('player', cid, name);
   };
 
-  public getItemStateById = (id: string): Inventory.ItemData | undefined => {
+  public getItemStateById = (id: string): Inventory.ItemState | undefined => {
     return global.exports['dg-inventory'].getItemStateById(id);
   };
 
