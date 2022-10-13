@@ -122,7 +122,7 @@ const moveItemToInventory = async (type: Inventory.Type, identifier: string, ite
   if (!item) return;
   const itemName = itemDataManager.get(item.state.name).name;
   const position = inventory.getFirstAvailablePosition(itemName) ?? { x: 0, y: 0 };
-  itemManager.move(0, itemId, position, inventory.id);
+  await itemManager.move(0, itemId, position, inventory.id);
 };
 
 const getItemsInInventory = async (type: Inventory.Type, identifier: string) => {

@@ -117,8 +117,8 @@ class Inventory {
     global.exports['dg-inventory'].setQualityOfItem(id, cb);
   };
 
-  public moveItemToInventory = (type: Inventory.Type, identifier: string, itemId: string) => {
-    global.exports['dg-inventory'].moveItemToInventory(type, identifier, itemId);
+  public moveItemToInventory = async (type: Inventory.Type, identifier: string, itemId: string) => {
+    await global.exports['dg-inventory'].moveItemToInventory(type, identifier, itemId);
   };
 
   public getItemsInInventory = (type: Inventory.Type, identifier: string): Promise<Inventory.ItemState[]> => {
