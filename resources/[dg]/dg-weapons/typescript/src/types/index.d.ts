@@ -1,7 +1,8 @@
 declare namespace Weapons {
   type Config = {
-    attachments: string[];
+    attachmentItems: string[];
     ammo: Record<string, { ammoType: string; amount: number }>;
+    weapons: Record<string, WeaponConfig>;
   };
 
   type WeaponConfig = {
@@ -14,5 +15,8 @@ declare namespace Weapons {
     attachments?: Record<string, string>;
   };
 
-  type WeaponItem = Inventory.ItemState & { hash: number; oneTimeUse: boolean; noHolstering: boolean };
+  type WeaponItem = Inventory.ItemState &
+    Required<Pick<WeaponConfig, 'noHolstering' | 'oneTimeUse' | 'canTint'>> & {
+      hash: number;
+    };
 }

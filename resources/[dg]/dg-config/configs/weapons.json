@@ -1,5 +1,5 @@
 {
-  "attachments": ["luxuryfinish", "smg_extendedclip", "pistol_suppressor"],
+  "attachmentItems": ["luxuryfinish", "smg_extendedclip", "pistol_suppressor"],
   "ammo": {
     "pistol_ammo": {
       "ammoType": "AMMO_PISTOL",

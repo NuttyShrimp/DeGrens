@@ -1,6 +1,24 @@
 import { Inventory, Jobs, RPC, Util } from '@dgx/client';
-import { getCurrentWeaponData, setCurrentWeaponData } from 'services/equipped';
-import { TINT_COLOR_NAMES } from '../constants';
+import { setCurrentWeaponTint } from 'services/tint';
+import { getCurrentWeaponData, setCurrentWeaponData } from './service.weapons';
+
+const setWeapon = async (itemId: string, weaponHash: number, tint?: string) => {
+  Inventory.toggleObject(itemId, false);
+  const ped = PlayerPedId();
+  SetCurrentPedWeapon(ped, weaponHash, true);
+
+  const components = await RPC.execute<string[]>('weapons:server:getWeaponAttachments', itemId);
+  (components ?? []).forEach(comp => GiveWeaponComponentToPed(ped, weaponHash, comp));
+
+  if (tint !== undefined) {
+    setCurrentWeaponTint(tint);
+  }
+};
+
+const removeWeapon = (itemId: string) => {
+  Inventory.toggleObject(itemId, true);
+  SetCurrentPedWeapon(PlayerPedId(), GetHashKey('WEAPON_UNARMED'), true);
+};
 
 export const holsterWeapon = async (weaponData: Weapons.WeaponItem) => {
   if (weaponData.noHolstering) {
@@ -123,34 +141,6 @@ export const unholsterWeapon = async (weaponData: Weapons.WeaponItem) => {
   }
 
   clearInterval(blockInterval);
-};
-
-const setWeapon = async (itemId: string, weaponHash: number, tint?: string) => {
-  Inventory.toggleObject(itemId, false);
-  const ped = PlayerPedId();
-  SetCurrentPedWeapon(ped, weaponHash, true);
-
-  const components = await RPC.execute<string[]>('weapons:server:getWeaponAttachments', itemId);
-  (components ?? []).forEach(comp => GiveWeaponComponentToPed(ped, weaponHash, comp));
-
-  if (tint !== undefined) {
-    const tintId = getTintIdOfName(tint);
-    if (tintId !== undefined) {
-      SetPedWeaponTintIndex(ped, weaponHash, tintId);
-    }
-  }
-};
-
-const removeWeapon = (itemId: string) => {
-  Inventory.toggleObject(itemId, true);
-  SetCurrentPedWeapon(PlayerPedId(), GetHashKey('WEAPON_UNARMED'), true);
-};
-
-const getTintIdOfName = (tintName: string) => {
-  for (const [id, name] of Object.entries(TINT_COLOR_NAMES)) {
-    if (name !== tintName) continue;
-    return Number(id);
-  }
 };
 
 const doFastAnimation = () => {

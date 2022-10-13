@@ -1,5 +1,4 @@
-// see bottom for reduce func
-const allWeapons: Weapons.WeaponConfig[] = [
+export const ALL_WEAPONS: Weapons.WeaponConfig[] = [
   // MELEE
   // {
   //     name: 'weapon_dagger',
@@ -651,8 +650,3 @@ const allWeapons: Weapons.WeaponConfig[] = [
   //     noHolstering: true,
   // },
 ];
-
-export const WEAPONS = allWeapons.reduce<Record<number, Weapons.WeaponConfig>>((acc, cur) => {
-  acc[GetHashKey(cur.name)] = cur;
-  return acc;
-}, {});

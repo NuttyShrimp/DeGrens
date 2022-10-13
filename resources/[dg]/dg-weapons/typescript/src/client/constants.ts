@@ -4,17 +4,6 @@ export const setAmmoConfig = (cfg: typeof AMMO_CONFIG) => {
   AMMO_CONFIG = cfg;
 };
 
-export const TINT_COLOR_NAMES: Record<number, string> = {
-  [0]: 'Origineel',
-  [1]: 'Groen',
-  [2]: 'Goud',
-  [3]: 'Roos',
-  [4]: 'Leger',
-  [5]: 'Politie',
-  [6]: 'Oranje',
-  [7]: 'Platinum',
-};
-
 export const PICKUP_HASHES = [
   `PICKUP_AMMO_BULLET_MP`,
   `PICKUP_AMMO_FIREWORK`,

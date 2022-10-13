@@ -20,7 +20,7 @@ export const setWeaponQuality: CommandData = {
         return;
       }
       const plyId = args.Target?.serverId ?? caller.source;
-      Events.emitNet('weapons:client:forceQuality', plyId, quality);
+      global.exports['dg-weapons'].forceSetQuality(plyId, quality);
     } catch (e) {
       console.error(e);
       Notifications.add(caller.source, 'Quality should be a number', 'error');

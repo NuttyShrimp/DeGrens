@@ -15,10 +15,10 @@ client_scripts {
 ui_page 'html/index.html'
 
 files {
-    'html/index.html',
-    'html/js/script.js',
-    'html/css/style.css',
-    'meta/*.meta',
+  'html/index.html',
+  'html/js/script.js',
+  'html/css/style.css',
+  'meta/*.meta',
 }
 
 data_file 'WEAPONINFO_FILE_PATCH' 'meta/weapons.meta'

@@ -129,16 +129,16 @@
     },
     {
       "type": "node-terminal",
-      "name": "chars:ui:dev",
+      "name": "chars:ui:build",
       "request": "launch",
-      "command": "yarn run dev",
+      "command": "yarn run build",
       "cwd": "${workspaceFolder}/resources/[dg]/dg-chars/ui"
     },
     {
       "type": "node-terminal",
-      "name": "chars:ui:build",
+      "name": "chars:ui:dev",
       "request": "launch",
-      "command": "yarn run build",
+      "command": "yarn run dev",
       "cwd": "${workspaceFolder}/resources/[dg]/dg-chars/ui"
     },
     {
@@ -448,6 +448,27 @@
       "request": "launch",
       "command": "yarn run start",
       "cwd": "${workspaceFolder}/resources/[dg]/dg-ui/[src]"
+    },
+    {
+      "type": "node-terminal",
+      "name": "weapons:build prod",
+      "request": "launch",
+      "command": "yarn run build",
+      "cwd": "${workspaceFolder}/resources/[dg]/dg-weapons/typescript"
+    },
+    {
+      "type": "node-terminal",
+      "name": "weapons:build dev",
+      "request": "launch",
+      "command": "yarn run build:dev",
+      "cwd": "${workspaceFolder}/resources/[dg]/dg-weapons/typescript"
+    },
+    {
+      "type": "node-terminal",
+      "name": "weapons:watch",
+      "request": "launch",
+      "command": "yarn run watch",
+      "cwd": "${workspaceFolder}/resources/[dg]/dg-weapons/typescript"
     },
     {
       "type": "node-terminal",

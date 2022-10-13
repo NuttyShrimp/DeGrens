@@ -1,5 +1,5 @@
-import { Events, RPC } from '@dgx/client';
-import { showReticle } from 'helpers/util';
+import { Events } from '@dgx/client';
+import { showReticle } from './helpers.weapons';
 
 let currentWeaponData: Weapons.WeaponItem | null = null;
 let weaponThread: NodeJS.Timer | null = null;
@@ -7,6 +7,7 @@ let weaponThread: NodeJS.Timer | null = null;
 export const getCurrentWeaponData = () => currentWeaponData;
 export const setCurrentWeaponData = (data: typeof currentWeaponData) => {
   currentWeaponData = data;
+
   if (weaponThread !== null) {
     clearInterval(weaponThread);
     weaponThread = null;
@@ -17,10 +18,6 @@ export const setCurrentWeaponData = (data: typeof currentWeaponData) => {
     startWeaponThread();
   }
 };
-
-RPC.register('weapons:client:getWeaponData', () => {
-  return currentWeaponData;
-});
 
 export const startWeaponThread = () => {
   const playerId = PlayerId();
@@ -34,15 +31,15 @@ export const startWeaponThread = () => {
 
     const ped = PlayerPedId();
     const weapon = currentWeaponData?.hash;
+    const ammoInWeapon = Number(GetAmmoInPedWeapon(ped, weapon));
 
     // Decrease quality while shooting
-    if (IsPedShooting(ped) && GetAmmoInPedWeapon(ped, weapon) > 0) {
+    if (IsPedShooting(ped) && ammoInWeapon > 0) {
       qualityDecrease++;
     }
 
     if (IsControlJustReleased(0, 24) || IsDisabledControlJustReleased(0, 24)) {
-      const newAmmoAmount = Number(GetAmmoInPedWeapon(ped, weapon));
-      Events.emitNet('weapons:server:stoppedShooting', currentWeaponData.id, newAmmoAmount, qualityDecrease);
+      Events.emitNet('weapons:server:stoppedShooting', currentWeaponData.id, ammoInWeapon, qualityDecrease);
       qualityDecrease = 0;
       SetPedUsingActionMode(ped, false, -1, 'DEFAULT_ACTION');
     }
@@ -77,7 +74,7 @@ export const startWeaponThread = () => {
     SetPedCanSwitchWeapon(ped, false);
     DisplayAmmoThisFrame(true);
 
-    if (GetAmmoInPedWeapon(ped, weapon) === 1 && !currentWeaponData.oneTimeUse) {
+    if (ammoInWeapon === 1 && !currentWeaponData.oneTimeUse) {
       DisablePlayerFiring(ped, true);
     }
 

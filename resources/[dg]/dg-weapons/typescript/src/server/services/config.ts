@@ -1,8 +1,6 @@
-import { Config, Events, Inventory, Notifications, RPC, Util } from '@dgx/server';
-import { WEAPONS } from 'contants';
-import { getAmmoInWeaponItem } from 'helpers/util';
+import { Config, Util } from '@dgx/server';
+import { ALL_WEAPONS } from 'contants';
 import { mainLogger } from 'sv_logger';
-import { addAttachment } from './attachments';
 
 let config: Weapons.Config | null = null;
 
@@ -11,48 +9,22 @@ export const getConfig = () => {
   return config;
 };
 
-export const loadConfig = () => {
-  config = Config.getModuleConfig<Weapons.Config>('weapons');
+export const loadConfig = async () => {
+  await Config.awaitConfigLoad();
+  const cfg = Config.getModuleConfig<Omit<Weapons.Config, 'weapons'>>('weapons');
+  const weapons = ALL_WEAPONS.reduce<Record<string, Weapons.WeaponConfig>>((acc, cur) => {
+    acc[cur.name] = cur;
+    return acc;
+  }, {});
+  config = { ...cfg, weapons };
+};
 
-  // Using ammo
-  Inventory.registerUseable(Object.keys(config.ammo), (src, item) => {
-    Events.emitNet('weapons:client:useAmmo', src, item.name);
-  });
-
-  // Using attachments
-  Inventory.registerUseable(config.attachments, async (src, item) => {
-    const weaponData = await RPC.execute<Weapons.WeaponItem | null>('weapons:client:getWeaponData', src);
-    if (!weaponData) {
-      Notifications.add(src, 'Je hebt geen wapen vast', 'error');
-      return;
-    }
-    addAttachment(src, weaponData, item);
-  });
-
-  // Using weapons
-  const weaponNames = Object.values(WEAPONS).map(w => w.name);
-  Inventory.registerUseable(weaponNames, (src, item) => {
-    const hash = GetHashKey(item.name);
-    const weaponConfig = WEAPONS[hash];
-    if (!weaponConfig) {
-      mainLogger.error(`Could not find weapon config of ${item.name}`);
-      Util.Log(
-        'weapons:noConfig',
-        { item },
-        `Could not get weapon config for weapon when trying to use weapon`,
-        src,
-        true
-      );
-      return;
-    }
-
-    const weaponData: Weapons.WeaponItem = {
-      ...item,
-      hash,
-      oneTimeUse: weaponConfig.oneTimeUse ?? false,
-      noHolstering: weaponConfig.noHolstering ?? false,
-    };
-    const ammoCount = getAmmoInWeaponItem(item.id);
-    Events.emitNet('weapons:client:useWeapon', src, weaponData, ammoCount);
-  });
+export const getWeaponConfig = (weapon: string, noLogs = false) => {
+  const weaponConfig = getConfig().weapons[weapon];
+  if (!weaponConfig && !noLogs) {
+    mainLogger.error(`Could not find weapon config of ${weapon}`);
+    Util.Log('weapons:noConfig', { weapon }, `Could not get weapon config for weapon`, undefined, true);
+    return;
+  }
+  return weaponConfig;
 };
