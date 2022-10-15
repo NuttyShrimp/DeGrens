@@ -38,7 +38,7 @@ setImmediate(() => {
       ],
       'developer',
       (src, _, params) => {
-        if (Number.isNaN(parseInt(params[1]))) {
+        if (Number.isNaN(parseInt(params[2]))) {
           throw new Error('CitizenId should be a valid integer');
         }
         createBusiness(params[0], params[1], Number(params[2]), params[3]);
