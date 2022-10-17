@@ -6,16 +6,16 @@ export const HealthArmor: FC<{
   armor: number;
 }> = props => {
   return (
-    <div className={'hud-health-armor hud-doubles'}>
+    <div className={'hud-doubles hud-health-armor'}>
       <FillableIcon
-        height={5}
+        height={4.5}
         value={props.health}
         name={'heart'}
         duration={250}
         color={props.health <= 30 ? '#CB4E4E' : '#4ECB71'}
       />
       <FillableIcon
-        height={5}
+        height={4.5}
         value={props.armor}
         name={'shield'}
         duration={250}

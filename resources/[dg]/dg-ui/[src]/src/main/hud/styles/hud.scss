@@ -5,39 +5,36 @@
   &-entries {
     display: flex;
     position: absolute;
-    bottom: .2vh;
-    left: 1vh;
+    align-items: center;
+    bottom: 0.2vh;
+    left: 0.8vh;
+    transition: all 0.25s ease-in-out;
 
-    transition: all .25s ease-in-out;
-
-    &>* {
-      margin-right: 1vh;
+    & > * {
+      margin-right: 0.8vh;
     }
   }
 
   &-doubles {
-    position: relative;
+    display: flex;
+    align-items: flex-end;
 
-    &>div:last-child {
-      position: absolute;
-      bottom: 0;
-      left: 3vh;
+    & > div:last-child {
       z-index: 2;
     }
+  }
+
+  &-health-armor > div:last-child {
+    margin-left: -2.2vh;
+  }
+
+  &-needs > div:last-child {
+    margin-left: -2vh;
   }
 
   &-voice {
     font-family: 'Roboto Mono', monospace;
     white-space: nowrap;
-    height: 5vh;
-  }
-
-  &-health-armor {
-    width: 8vh;
-  }
-
-  &-needs {
-    width: 8vh;
   }
 
   &-speedometer {
@@ -46,7 +43,7 @@
     position: absolute;
     right: 1vh;
     bottom: 0.2vh;
-    transition: right .25s ease-in-out;
+    transition: right 0.25s ease-in-out;
 
     &-gauge {
       width: 25vh;
@@ -74,7 +71,7 @@
         stroke-width: 8;
         stroke-dasharray: 345;
         stroke-dashoffset: 0;
-        transition: stroke-dashoffset .2s;
+        transition: stroke-dashoffset 0.2s;
       }
     }
 
@@ -127,7 +124,8 @@
       font-family: 'Work Sans', sans-serif;
       font-variant: small-caps;
       text-transform: none;
-      text-shadow: 0 0 .1vh rgba(0, 0, 0, 0.6), 0 0 .1vh rgba(0, 0, 0, 0.6), 0 0 .1vh rgba(0, 0, 0, 0.6), 0 0 .1vh rgba(0, 0, 0, 0.6);
+      text-shadow: 0 0 0.1vh rgba(0, 0, 0, 0.6), 0 0 0.1vh rgba(0, 0, 0, 0.6), 0 0 0.1vh rgba(0, 0, 0, 0.6),
+        0 0 0.1vh rgba(0, 0, 0, 0.6);
     }
 
     &-time {
@@ -178,10 +176,11 @@
       }
     }
 
-    &-area, &-street {
+    &-area,
+    &-street {
       font-size: 1.7vh;
       margin: 0 1vh;
-      width:40%;
+      width: 40%;
     }
     &-area {
       text-align: end;
@@ -193,7 +192,8 @@
     right: 1vh;
     font-family: 'Pricedown Bl', sans-serif;
     font-size: 1.6rem;
-    text-shadow: -1px -1px 0 rgba(0,0,0, 0.7), 1px -1px 0 rgba(0,0,0, 0.7), -1px 1px 0 rgba(0,0,0, 0.7), 1px 1px 0 rgba(0,0,0, 0.7);
+    text-shadow: -1px -1px 0 rgba(0, 0, 0, 0.7), 1px -1px 0 rgba(0, 0, 0, 0.7), -1px 1px 0 rgba(0, 0, 0, 0.7),
+      1px 1px 0 rgba(0, 0, 0, 0.7);
     text-align: right;
   }
 }

@@ -6,15 +6,14 @@ import { FillableIcon } from '@src/components/icon';
 import { useVhToPixel } from '@src/lib/hooks/useVhToPixel';
 
 export const Voice: FC<Hud.State['voice']> = ({ channel, range, active, onRadio }) => {
-  const smallBox = useVhToPixel(4);
   const extBox = useVhToPixel(9 + String(channel).length / 2);
-  const styles = useSpring({ width: channel > 0 ? extBox : smallBox });
+  const styles = useSpring({ width: channel > 0 ? extBox : 'auto' });
   return (
     <animated.div style={styles}>
       <Stack alignItems={'center'} direction='row' className='hud-voice' spacing={1}>
         <FillableIcon
           name={channel ? 'walkie-talkie' : 'microphone'}
-          height={4}
+          height={3.5}
           value={Math.ceil((100 / 3) * range)}
           color={active ? (onRadio ? baseStyle.tertiary.normal : baseStyle.secondary.normal) : 'white'}
           duration={250}
