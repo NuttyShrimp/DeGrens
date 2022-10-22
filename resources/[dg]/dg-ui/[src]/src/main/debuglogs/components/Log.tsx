@@ -37,8 +37,8 @@ export const LogList = props => {
   }, [props.logs]);
   return (
     <div className={'log__list'}>
-      {logs.map(log => (
-        <Log log={log} key={log.id} />
+      {logs.map((log, i) => (
+        <Log log={log} key={`debuglogs-${log.id}-${i}`} />
       ))}
     </div>
   );

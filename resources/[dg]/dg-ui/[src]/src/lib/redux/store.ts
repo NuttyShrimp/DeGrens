@@ -10,7 +10,7 @@ const sentryReduxEnhancer = Sentry.createReduxEnhancer({
   // Optionally pass options listed below
 });
 
-const composeEnhancers = isDevel() ? (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ ?? compose : compose;
+const composeEnhancers = isDevel() ? (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose : compose;
 
 export const store = createStore(
   combineReducers({
