@@ -61,6 +61,23 @@ declare namespace Laptop {
     }
   }
 
+  namespace Gang {
+    type State = {
+      name: string;
+      label: string;
+      members: Member[];
+    };
+
+    type Member = {
+      name: string;
+      cid: number;
+      hasPerms: boolean;
+      isOwner: boolean;
+    };
+
+    type Tab = 'home' | 'members';
+  }
+
   namespace Confirm {
     type State = { data: Data | null };
 

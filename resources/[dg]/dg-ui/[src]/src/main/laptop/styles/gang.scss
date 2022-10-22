@@ -1,7 +1,71 @@
+@use './colors';
+@use 'src/styles/variables';
+
 .laptop-gang {
-  &-shell {
-    background-color: rgba(1, 4, 14, 0.95);
-    height: 40vh;
-    width: 50vh;
+  height: 100%;
+
+  & .app {
+    background-color: colors.$primary;
+    height: 100%;
+    padding: 1vh;
+
+    & .tabs {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 1vh;
+      height: 3vh;
+      margin-bottom: 1vh;
+    }
+
+    & .content {
+      height: calc(100% - 4vh);
+      padding: 1vh;
+    }
+  }
+
+  & .notfound {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    & > p {
+      margin-top: 10vh;
+      font-size: 3vh;
+    }
+  }
+
+  &-members {
+    height: 100%;
+    overflow: hidden;
+
+    & .cidinput {
+      display: flex;
+      gap: 1vh;
+      padding: 1vh 0;
+    }
+
+    & .list {
+      height: 100%;
+      overflow: scroll;
+    }
+
+    & .card {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: colors.$secondary;
+      border-radius: 0.4vh;
+      padding: 1vh 2vh 1vh 2vh;
+      height: 5vh;
+    }
+  }
+
+  &-home {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    justify-content: space-between;
   }
 }

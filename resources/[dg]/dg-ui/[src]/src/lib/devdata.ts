@@ -1050,3 +1050,21 @@ devData.inventory = {
     allowedItems: [],
   },
 };
+
+devData.laptopGang = {
+  name: 'banggang',
+  label: 'BANGGANG 1122333',
+  members: [
+    { name: 'Jan Janssens', cid: 1000, hasPerms: true, isOwner: true },
+    { name: 'Peter Peeters', cid: 4242, hasPerms: false, isOwner: false },
+    { name: 'Ian Vermeersch', cid: 2, hasPerms: true, isOwner: false },
+    { name: 'Robbe Bobbe', cid: 3, hasPerms: true, isOwner: false },
+    { name: 'Dikke Mongool', cid: 4, hasPerms: false, isOwner: false },
+    { name: 'Lelijke Raren', cid: 5, hasPerms: false, isOwner: false },
+    { name: 'Monkey Monk', cid: 6, hasPerms: true, isOwner: false },
+    { name: 'Joheoe Naam', cid: 7, hasPerms: false, isOwner: false },
+    { name: 'Bedenken Hallo', cid: 8, hasPerms: true, isOwner: false },
+    { name: 'Moeilijk Help', cid: 9, hasPerms: true, isOwner: false },
+    { name: 'Inspiratie Loos', cid: 10, hasPerms: false, isOwner: false },
+  ],
+};
