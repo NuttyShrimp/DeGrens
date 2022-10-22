@@ -1,4 +1,6 @@
 import React, { useCallback, useEffect } from 'react';
+import { DndProvider } from 'react-dnd';
+import { TouchBackend } from 'react-dnd-touch-backend';
 import { useSelector } from 'react-redux';
 import AppWrapper from '@components/appwrapper';
 
@@ -36,15 +38,12 @@ const Component: AppFunction<Laptop.State> = props => {
   const setLaptopConfig = useUpdateState('laptop.config');
 
   useEffect(() => {
-    // @ts-ignore
-    const enabledApps: Laptop.Config[] = [];
+    const enabledApps: Laptop.Config.Config[] = [];
     laptopApps.forEach(app => {
-      if (app.requiresVPN && !hasVPN) {
-        return;
-      }
-      if (app.requiredJobs && activeJob && !app.requiredJobs.includes(activeJob)) {
-        return;
-      }
+      if (app.requiresVPN && !hasVPN) return;
+      if (app.requiredJobs && activeJob && !app.requiredJobs.includes(activeJob)) return;
+      // TODO: Check for all whitelisted jobs, not only on duty
+      if (app.blockedJobs && activeJob && app.blockedJobs.includes(activeJob)) return;
       enabledApps.push(app);
     });
     setLaptopConfig({
@@ -55,7 +54,9 @@ const Component: AppFunction<Laptop.State> = props => {
 
   return (
     <AppWrapper appName={store.key} onShow={showLaptop} onHide={hideLaptop} hideOnEscape full center>
-      <Laptop {...props} />
+      <DndProvider backend={TouchBackend} options={{ enableMouseEvents: true }}>
+        <Laptop {...props} />
+      </DndProvider>
     </AppWrapper>
   );
 };

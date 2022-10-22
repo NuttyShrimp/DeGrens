@@ -3,6 +3,7 @@ declare namespace Laptop {
     activeApps: string[];
     focusedApp: string;
     notifications: Notification[];
+    windowPositions: Record<string, { x: number; y: number }>;
   }
 
   interface AuxState {
@@ -42,22 +43,31 @@ declare namespace Laptop {
       label: string;
       icon: Icon;
       render: (p: any) => React.ReactElement<any, any>;
-      // padding to top in vh
-      top: number;
-      // padding to left in vh
-      left: number;
-      row: number;
-      column: number;
+      iconPosition?: {
+        row: number;
+        column: number;
+      };
       // Whitelisted for job and on-duty
       requiredJobs?: string[];
       // Blocked if whitelisted for job
       blockedJobs?: string[];
       requiresVPN?: boolean;
+      important?: boolean; // If true, every other action will be blocked while app is open
     }
 
     interface State {
       config: AppConfig[];
       enabledApps: AppConfig[];
     }
+  }
+
+  namespace Confirm {
+    type State = { data: Data | null };
+
+    type Data = {
+      label: string;
+      onAccept: () => void;
+      onDecline?: () => void;
+    };
   }
 }

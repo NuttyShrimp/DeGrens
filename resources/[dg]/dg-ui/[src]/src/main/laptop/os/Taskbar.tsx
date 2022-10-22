@@ -10,11 +10,7 @@ export const TaskBar: FC<{ activeApps: string[] }> = ({ activeApps }) => {
   const appConfig = useSelector<RootState, Laptop.Config.Config[]>(state => state['laptop.config'].config);
   const { focusApp } = useActions();
 
-  const activeAppsConfig = useMemo(() => {
-    const enabledApps = appConfig.filter(a => activeApps.includes(a.name));
-    enabledApps.sort((a1, a2) => a1.column + a1.row - (a2.column + a2.row));
-    return enabledApps;
-  }, [activeApps, appConfig]);
+  const activeAppsConfig = useMemo(() => appConfig.filter(a => activeApps.includes(a.name)), [activeApps, appConfig]);
 
   return (
     <div className={'laptop-taskbar-wrapper'}>
@@ -23,7 +19,7 @@ export const TaskBar: FC<{ activeApps: string[] }> = ({ activeApps }) => {
           <Icon name='grid' lib='fat' />
         </div>
         {activeAppsConfig.map(a => (
-          <div key={a.name} className={'laptop-taskbar-icon'} onClick={() => focusApp(a.name)}>
+          <div key={`laptop-taskbar-${a.name}`} className={'laptop-taskbar-icon'} onClick={() => focusApp(a.name)}>
             <LaptopIcon {...a.icon} dim={3} />
           </div>
         ))}

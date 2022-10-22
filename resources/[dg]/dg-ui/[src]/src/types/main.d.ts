@@ -110,6 +110,7 @@ declare interface RootState {
   itemboxes: Itemboxes.State;
   laptop: Laptop.State;
   'laptop.config': Laptop.Config.State;
+  'laptop.confirm': Laptop.Confirm.State;
   radio: Radio.State;
   configmenu: ConfigMenu.State;
 }

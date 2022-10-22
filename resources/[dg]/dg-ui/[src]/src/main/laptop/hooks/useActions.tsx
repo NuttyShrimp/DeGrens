@@ -7,6 +7,7 @@ import { uuidv4 } from '../../../lib/util';
 export const useActions = () => {
   const updateState = useUpdateState('laptop');
   const updateConfigState = useUpdateState('laptop.config');
+  const updateConfirmState = useUpdateState('laptop.confirm');
   const laptopState = useSelector<RootState, Laptop.State>(state => state.laptop);
 
   const loadApps = useCallback(() => {
@@ -25,11 +26,11 @@ export const useActions = () => {
 
   const openApp = useCallback(
     (name: string) => {
-      console.log('Opening', name);
       if (laptopState.activeApps.includes(name)) return;
-      updateState({
-        activeApps: [...laptopState.activeApps, name],
-      });
+      updateState(state => ({
+        activeApps: [...state.laptop.activeApps, name],
+      }));
+      focusApp(name);
     },
     [laptopState]
   );
@@ -37,9 +38,9 @@ export const useActions = () => {
   const closeApp = useCallback(
     (name: string) => {
       if (!laptopState.activeApps.includes(name)) return;
-      updateState({
-        activeApps: laptopState.activeApps.filter(a => a !== name),
-      });
+      updateState(state => ({
+        activeApps: state.laptop.activeApps.filter(a => a !== name),
+      }));
     },
     [laptopState]
   );
@@ -54,26 +55,31 @@ export const useActions = () => {
     [laptopState]
   );
 
-  const addNotification = useCallback(
-    (app: string, message: string) => {
-      const id = uuidv4();
-      updateState({
-        notifications: [
-          ...laptopState.notifications,
-          {
-            id,
-            app,
-            message,
-          },
-        ],
-      });
-      setTimeout(() => {
-        updateState(state => ({
-          notifications: state.laptop.notifications.filter(n => n.id !== id),
-        }));
-      }, 5000);
+  const addNotification = useCallback((app: string, message: string) => {
+    const id = uuidv4();
+    updateState(state => ({
+      notifications: [
+        ...state.laptop.notifications,
+        {
+          id,
+          app,
+          message,
+        },
+      ],
+    }));
+    setTimeout(() => {
+      updateState(state => ({
+        notifications: state.laptop.notifications.filter(n => n.id !== id),
+      }));
+    }, 5000);
+  }, []);
+
+  const openConfirm = useCallback(
+    (data: Laptop.Confirm.Data) => {
+      openApp('confirm');
+      updateConfirmState({ data });
     },
-    [laptopState]
+    [openApp]
   );
 
   return {
@@ -82,5 +88,6 @@ export const useActions = () => {
     focusApp,
     loadApps,
     addNotification,
+    openConfirm,
   };
 };

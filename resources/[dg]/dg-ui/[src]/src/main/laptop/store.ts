@@ -7,6 +7,7 @@ const store: StoreObject<Laptop.State, Laptop.AuxState> = {
     activeApps: [],
     notifications: [],
     focusedApp: '',
+    windowPositions: {},
   },
   auxiliaryState: {
     'laptop.config': {

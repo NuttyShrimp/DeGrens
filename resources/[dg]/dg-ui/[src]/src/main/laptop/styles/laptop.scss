@@ -1,8 +1,11 @@
+@use './colors';
+@use 'src/styles/variables';
+
 .laptop {
   &-shell {
     position: relative;
     background-color: black;
-    border: .5vh solid #101010;
+    border: 0.5vh solid #101010;
     border-radius: 0.25rem;
     height: 80vh;
     width: calc(100% - 30vh);
@@ -10,37 +13,31 @@
     overflow: hidden;
   }
 
-  &-topbar {
-    font-size: 1.2vh;
-    & > div:last-child {
-      font-size: 1.5vh;
-    }
-  }
-
   &-icon {
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: .75vh;
+    padding: 0.75vh;
     border-radius: 0.25rem;
   }
 
   &-background {
-    position: absolute;
-    top: 0;
-    left: 0;
     padding: 1vh;
     z-index: 1;
 
-    &-app-col {
+    & .icon {
+      position: absolute;
       display: flex;
       flex-direction: column;
-      text-align: center;
+      align-items: center;
+      justify-content: center;
+      width: 10vh;
+      aspect-ratio: 1;
+      cursor: pointer;
+      word-wrap: break-word;
 
-      &>* {
-        cursor: pointer;
-        margin-bottom: 1vh;
-        width: 10vh;
+      & :first-child {
+        margin-bottom: 0.3vh;
       }
     }
   }
@@ -49,15 +46,15 @@
     height: 100%;
     z-index: 2;
 
-    &>div {
+    & > div {
       position: absolute;
+      box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
     }
   }
 
   &-taskbar {
     &-wrapper {
       position: absolute;
-      ;
       bottom: 0;
       left: 50%;
       transform: translate(-50%, 0);
@@ -65,7 +62,7 @@
       justify-content: center;
       align-items: center;
       height: 6vh;
-      z-index: 10;
+      z-index: 1;
     }
 
     &-bar {
@@ -83,6 +80,10 @@
       display: flex;
       justify-content: center;
       align-content: center;
+
+      &:hover {
+        box-shadow: rgba(0, 0, 0, 0.25) 0px 4px 7px, rgba(0, 0, 0, 0.25) 0px 4px 7px;
+      }
     }
   }
 
@@ -97,9 +98,10 @@
       width: 20vw;
       padding: 1.5vh;
       margin-bottom: 1vh;
+      margin-right: 1vh;
 
       display: flex;
-      text-wrap: normal;
+      word-wrap: normal;
       border-radius: 1vh;
 
       background-color: rgba(120, 120, 120, 0.6);
@@ -114,28 +116,80 @@
         & > p:first-child {
           text-transform: uppercase;
           font-weight: 700;
-          color: #dcdcdc
+          color: #dcdcdc;
         }
         & > p:last-child {
           font-size: 1.3vh;
-          color: #d3d3d3
+          color: #d3d3d3;
         }
       }
-
     }
   }
 
-  &-topbar {
-    min-height: 3vh;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    color: white;
-    padding: 0 1vh;
+  &-appwindow {
+    background-color: colors.$secondary;
+    color: variables.$gray_light;
 
-    &>div:last-child {
-      cursor: pointer;
+    & .topbar {
+      height: 3vh;
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 1vh;
+      user-select: none;
+      font-size: 1.3vh;
+      cursor: move;
+
+      & > div {
+        cursor: auto;
+      }
+
+      & > div:last-child {
+        cursor: pointer;
+        font-size: 1.5vh;
+      }
     }
+
+    & .appcontainer {
+      height: calc(100% - 3vh);
+      width: 100%;
+      background-color: colors.$primary;
+    }
+  }
+
+  &-confirmmodal {
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background-color: colors.$primary;
+    padding: 2vh;
+
+    & > p {
+      text-align: center;
+      font-size: 1.8vh;
+      color: variables.$gray_light;
+      margin-bottom: 2vh;
+      word-wrap: break-word;
+    }
+
+    & .buttons {
+      width: 100%;
+      margin-top: auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+    }
+  }
+
+  // Make the div so big that whole laptop becomes unuseable to force an app to foreground ez
+  &-important {
+    position: absolute;
+    top: -100vh;
+    left: -100vw;
+    height: 200vh;
+    width: 200vw;
+    z-index: -1;
   }
 }
