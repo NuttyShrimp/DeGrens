@@ -17,7 +17,7 @@ export const AppWindow: FC<
   const [, dragRef, previewRef] = useDrag(
     () => ({
       type: 'APP',
-      item: { name: props.name ?? '' },
+      item: { name: props.name },
       collect: monitor => ({
         isDragging: monitor.isDragging(),
       }),
