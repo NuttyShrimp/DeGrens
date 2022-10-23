@@ -1,8 +1,14 @@
-import { Config, Events, Financials } from '@dgx/server';
+import { Events } from '@dgx/server';
 import { seedBusinessTypes } from './business';
 
 export let config: Config.Config;
 export let permissions: Record<string, number> = {};
+
+export const setConfig = async (data: Config.Config) => {
+  config = data;
+  await seedBusinessTypes();
+  validatePermissions();
+};
 
 const validatePermissions = () => {
   // Check labels
@@ -27,14 +33,6 @@ const validatePermissions = () => {
       permissions[perm] = config.permissions.base[perm];
     });
   Events.emitNet('business:client:setPermLabels', -1, config.permissions.labels);
-};
-
-export const loadConfig = async () => {
-  await Config.awaitConfigLoad();
-  await Financials.awaitAccountsLoaded();
-  config = Config.getModuleConfig('business');
-  await seedBusinessTypes();
-  validatePermissions();
 };
 
 export const getBitmaskForPermissions = (perms: string[]) => {

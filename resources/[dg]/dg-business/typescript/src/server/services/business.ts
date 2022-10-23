@@ -34,10 +34,9 @@ export const seedBusinessTypes = async () => {
     mainLogger.debug(`Loaded business type: ${bType.name}`);
     businessTypes.set(bt.id, bType);
   });
-  seedBusinesses();
 };
 
-const seedBusinesses = async () => {
+export const seedBusinesses = async () => {
   const DBBusinesses = await SQL.query<(Business.Info & { business_type: number })[]>(
     'SELECT id, name, label, business_type, bank_account_id FROM business'
   );

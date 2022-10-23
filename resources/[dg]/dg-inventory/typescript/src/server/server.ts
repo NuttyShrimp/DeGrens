@@ -7,12 +7,15 @@ import repository from './services/repository';
 import itemDataManager from 'modules/itemdata/classes/itemdatamanager';
 import { registerContainers } from 'modules/containers/controller.containers';
 import shopManager from 'modules/shops/classes/shopmanager';
-import { loadConfig } from 'services/config';
+import { setConfig } from 'services/config';
 import { preloadActivePlayerInventories } from 'modules/inventories/controller.inventories';
+import { Config } from '@dgx/server';
 
 setImmediate(async () => {
   // Load config before doing all other thingies!
-  await loadConfig();
+  await Config.awaitConfigLoad();
+  const config = Config.getConfigValue('inventory.config');
+  setConfig(config);
 
   repository.deleteNonPersistent();
   itemDataManager.seed();
