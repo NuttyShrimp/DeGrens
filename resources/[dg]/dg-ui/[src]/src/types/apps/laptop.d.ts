@@ -81,6 +81,7 @@ declare namespace Laptop {
       cid: number;
       hasPerms: boolean;
       isOwner: boolean;
+      isPlayer: boolean; // indicates if it is urself
     };
 
     type Tab = 'home' | 'members';

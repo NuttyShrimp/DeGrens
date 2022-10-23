@@ -7,11 +7,8 @@ const config: Laptop.Config.Config = {
   label: 'Confirm',
   render: p => <Component {...p} />,
   icon: {
-    lib: 'fas-fa',
-    name: 'circle-info',
-    color: '#bebebe',
-    size: '2vh',
-    background: '#1a1a1a',
+    element: <i className={'fas fa-triangle-exclamation'} style={{ color: 'yellow' }} />,
+    background: '#111',
   },
   important: true,
 };

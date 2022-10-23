@@ -12,14 +12,17 @@ export const Home: FC<{ label: string; gangName: string; isOwner: boolean; fetch
   const { addNotification, openConfirm } = useActions();
 
   const handleLeave = useCallback(async () => {
-    if (!isOwner) {
+    if (isOwner) {
       addNotification('gang', 'Je kan dit niet als eigenaar');
       return;
     }
     openConfirm({
       label: 'Ben je zeker dat je de gang wil verlaten?',
       onAccept: async () => {
-        await nuiAction('laptop/gang/leave', { gang: gangName });
+        const result = await nuiAction<{ success: boolean }>('laptop/gang/leave', { gang: gangName }, true);
+        if (!result.success) {
+          addNotification('gang', 'Er is iets misgelopen met deze actie');
+        }
         fetchGangData();
       },
     });

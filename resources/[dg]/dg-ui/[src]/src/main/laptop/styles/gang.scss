@@ -16,6 +16,21 @@
       gap: 1vh;
       height: 3vh;
       margin-bottom: 1vh;
+
+      & .refresh {
+        position: absolute;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        right: 1vh;
+        width: 4vh;
+        height: 4vh;
+
+        & :hover {
+          color: variables.$secondary_normal;
+          cursor: pointer;
+        }
+      }
     }
 
     & .content {
