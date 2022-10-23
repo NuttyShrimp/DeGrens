@@ -16,6 +16,14 @@ declare namespace Laptop {
     message: string;
   }
 
+  type BackgroundIcon = {
+    name: string;
+    x: number;
+    y: number;
+    icon: Config.Icon;
+    label: string;
+  };
+
   namespace Config {
     interface BaseIcon {
       background?: string;
