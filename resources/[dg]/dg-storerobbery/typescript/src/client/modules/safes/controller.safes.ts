@@ -1,4 +1,4 @@
-import { Events, Inventory, Notifications, Peek, RPC, Util } from '@dgx/client';
+import { Events, Inventory, Minigames, Notifications, Peek, RPC, Util } from '@dgx/client';
 import locationManager from 'controllers/classes/LocationManager';
 
 Peek.addZoneEntry(
@@ -41,29 +41,26 @@ const hackSafe = async () => {
     return;
   }
 
-  if (await Inventory.doesPlayerHaveItems('decoding_tool')) {
-    global.exports['dg-numbergame'].OpenGame(
-      async (success: boolean) => {
-        const removedItem = await Inventory.removeItemFromPlayer('decoding_tool');
-        if (!removedItem) return;
-        if (success) {
-          Events.emitNet('storerobbery:server:hackSafe', locationManager.currentStore);
-          global.exports['dg-phone'].sendMail(
-            'Decodering Kluis',
-            'Hackerman',
-            'Het decoderen van de kluis zal even duren. <br><br>Geef me 5 minuten. <br><br>Ga niet uit de winkel of de verbinding zal verbreken!'
-          );
-        } else {
-          Notifications.add('Mislukt...', 'error');
-        }
-      },
-      2,
-      15
-    );
+  const hasItem = await Inventory.doesPlayerHaveItems('decoding_tool');
+  if (!hasItem) {
+    Notifications.add('Hoe ga je dit openen?', 'error');
     return;
   }
 
-  Notifications.add('Hoe ga je dit openen?', 'error');
+  const gameSuccess = await Minigames.numbergame(2, 15);
+  const removedItem = await Inventory.removeItemFromPlayer('decoding_tool');
+  if (!removedItem) return;
+
+  if (gameSuccess) {
+    Events.emitNet('storerobbery:server:hackSafe', locationManager.currentStore);
+    global.exports['dg-phone'].sendMail(
+      'Decodering Kluis',
+      'Hackerman',
+      'Het decoderen van de kluis zal even duren. <br><br>Geef me 5 minuten. <br><br>Ga niet uit de winkel of de verbinding zal verbreken!'
+    );
+  } else {
+    Notifications.add('Mislukt...', 'error');
+  }
 };
 
 const lootSafe = async () => {

@@ -1,4 +1,4 @@
-import { Peek, PolyZone, Util, RPC, Notifications, Taskbar, Events, Inventory } from '@dgx/client';
+import { Peek, PolyZone, Util, RPC, Notifications, Taskbar, Events, Inventory, Minigames } from '@dgx/client';
 import { Vector3 } from '@dgx/shared';
 import locationManager from 'controllers/classes/LocationManager';
 
@@ -56,26 +56,23 @@ const lockpickRegister = async (registerObject: number) => {
     return;
   }
 
-  if (await Inventory.doesPlayerHaveItems('lockpick')) {
-    global.exports['dg-keygame'].OpenGame(
-      (success: boolean) => {
-        if (success) {
-          lootRegister(registerCoords);
-        } else {
-          if (Util.getRndInteger(0, 100) < 10) {
-            Inventory.removeItemFromPlayer('lockpick');
-            Notifications.add('Je lockpick is gebroken...', 'error');
-          } else {
-            Notifications.add('Mislukt...', 'error');
-          }
-        }
-      },
-      3,
-      'easy'
-    );
+  const hasLockpick = await Inventory.doesPlayerHaveItems('lockpick');
+  if (!hasLockpick) {
+    Notifications.add('Hoe ga je dit openen?', 'error');
+    return;
   }
 
-  Notifications.add('Hoe ga je dit openen?', 'error');
+  const keygameSuccess = await Minigames.keygame(4, 'easy');
+  if (keygameSuccess) {
+    lootRegister(registerCoords);
+  } else {
+    if (Util.getRndInteger(0, 100) < 10) {
+      Inventory.removeItemFromPlayer('lockpick');
+      Notifications.add('Je lockpick is gebroken...', 'error');
+    } else {
+      Notifications.add('Mislukt...', 'error');
+    }
+  }
 };
 
 const lootRegister = async (registerObject: Vector3) => {

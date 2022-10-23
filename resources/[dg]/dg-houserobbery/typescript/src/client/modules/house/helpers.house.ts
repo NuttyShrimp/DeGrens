@@ -1,4 +1,4 @@
-import { Events, Inventory, Notifications, PolyZone, RPC, Util } from '@dgx/client';
+import { Events, Inventory, Minigames, Notifications, PolyZone, RPC, Util } from '@dgx/client';
 import { enterInterior, leaveInterior } from 'services/interiors';
 
 export const unlockHouse = async (houseId: string) => {
@@ -17,23 +17,18 @@ export const unlockHouse = async (houseId: string) => {
     return;
   }
 
-  global.exports['dg-keygame'].OpenGame(
-    (success: boolean) => {
-      if (success) {
-        Notifications.add('De deur is opengebroken!', 'success');
-        Events.emitNet('houserobbery:server:unlockDoor', houseId);
-      } else {
-        if (Util.getRndInteger(0, 100) < 10) {
-          DGX.Inventory.removeItemFromPlayer('lockpick');
-          Notifications.add('Je lockpick is gebroken...', 'error');
-        } else {
-          Notifications.add('Mislukt...', 'error');
-        }
-      }
-    },
-    1,
-    'medium'
-  );
+  const keygameSuccess = await Minigames.keygame(3, 'medium');
+  if (keygameSuccess) {
+    Notifications.add('De deur is opengebroken!', 'success');
+    Events.emitNet('houserobbery:server:unlockDoor', houseId);
+  } else {
+    if (Util.getRndInteger(0, 100) < 10) {
+      DGX.Inventory.removeItemFromPlayer('lockpick');
+      Notifications.add('Je lockpick is gebroken...', 'error');
+    } else {
+      Notifications.add('Mislukt...', 'error');
+    }
+  }
 };
 
 export const enterHouse = async (houseId: number) => {

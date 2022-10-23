@@ -1,4 +1,4 @@
-import { Events, Notifications, Peek, UI, Taskbar, Inventory } from '@dgx/client';
+import { Events, Notifications, Peek, UI, Taskbar, Inventory, Minigames } from '@dgx/client';
 import { getPercentageOfPowerBox, placePlayerAtPowerBox } from './helpers.fleeca';
 
 Peek.addModelEntry(
@@ -50,14 +50,9 @@ Peek.addModelEntry(
           }
           placePlayerAtPowerBox(powerEntity);
           Inventory.removeItemFromPlayer('mini_emp');
-          global.exports['dg-sequencegame'].OpenGame(
-            async (success: boolean) => {
-              if (!success) return Notifications.add('Mislukt', 'error');
-              Events.emitNet('heists:server:fleeca:disablePower');
-            },
-            4,
-            6
-          );
+          const hackSuccess = await Minigames.sequencegame(4, 6);
+          if (!hackSuccess) return Notifications.add('Mislukt', 'error');
+          Events.emitNet('heists:server:fleeca:disablePower');
         },
       },
     ],

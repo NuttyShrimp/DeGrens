@@ -1,4 +1,4 @@
-import { Util, Events, RPC } from '@dgx/client';
+import { Util, Events, RPC, Minigames } from '@dgx/client';
 import { getCurrentLocation } from 'controllers/locations';
 import { spawnTrolleys } from 'services/trolleys/helpers.trolley';
 
@@ -50,7 +50,19 @@ Events.onNet('heists:client:startHack', async (laptopName: Laptop.Name, location
   NetworkAddEntityToSynchronisedScene(laptopObject, animScene, animDict, 'hack_loop_laptop', 4.0, -8.0, 1);
   NetworkStartSynchronisedScene(animScene);
   await Util.Delay(2000);
-  await openHack(laptopName); // Hacking
+
+  const hackSuccess = await Minigames.sequencegame(4, 5);
+  if (hackSuccess) {
+    const finishedHack = await RPC.execute<boolean>('heists:server:finishHack', laptopName, getCurrentLocation());
+    if (!finishedHack) return;
+    global.exports['dg-phone'].sendMail(
+      'Bankdeur',
+      'Hackermans',
+      'Ik doe er alles aan om zo snel mogelijk de deur te laten opengaan.'
+    );
+    spawnTrolleys(getCurrentLocation());
+  }
+
   await Util.Delay(750);
 
   // anim part 3
@@ -77,24 +89,3 @@ Events.onNet('heists:client:startHack', async (laptopName: Laptop.Name, location
   DeleteEntity(laptopObject);
   RemoveAnimDict(animDict);
 });
-
-const openHack = (laptopName: Laptop.Name) => {
-  return new Promise<void>(resolve => {
-    global.exports['dg-sequencegame'].OpenGame(
-      (success: boolean) => {
-        resolve();
-        if (!success) return;
-        const finishedHack = RPC.execute<boolean>('heists:server:finishHack', laptopName, getCurrentLocation());
-        if (!finishedHack) return;
-        global.exports['dg-phone'].sendMail(
-          'Bankdeur',
-          'Hackermans',
-          'Ik doe er alles aan om zo snel mogelijk de deur te laten opengaan.'
-        );
-        spawnTrolleys(getCurrentLocation());
-      },
-      4,
-      5
-    );
-  });
-};
