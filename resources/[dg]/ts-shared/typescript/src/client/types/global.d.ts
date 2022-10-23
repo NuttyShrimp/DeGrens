@@ -26,6 +26,7 @@ declare global {
     HUD: typeof Classes.HUD;
     Business: typeof Classes.Business;
     Gangs: typeof Classes.Gangs;
+    Minigames: typeof Classes.Minigames;
   };
   var asyncExports: any;
 }
