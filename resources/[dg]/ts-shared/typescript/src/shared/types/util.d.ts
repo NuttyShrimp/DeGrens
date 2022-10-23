@@ -13,3 +13,10 @@ declare namespace Particles {
   // only looped return ptfx handle
   type Data = Required<Particle> & { ptfx?: number };
 }
+
+declare type GangData = {
+  name: string;
+  label: string;
+  owner: number;
+  members: { name: string; cid: number; hasPerms: boolean }[];
+};

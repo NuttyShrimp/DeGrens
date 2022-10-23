@@ -33,12 +33,6 @@ function DGCore.Player.buildPlayerData(playerData)
     playerData[k] = nil
   end
   playerData.charinfo = charinfo
-  -- Handle gang
-  if playerData.gang then
-    playerData.gang = json.decode(playerData.gang)
-  else
-    playerData.gang = {}
-  end
   return playerData
 end
 
@@ -99,13 +93,6 @@ function DGCore.Player.CheckPlayerData(src, PlayerData)
 
   -- Character data
   PlayerData.position = PlayerData.position or QBConfig.DefaultSpawn
-  PlayerData.gang = PlayerData.gang or {}
-  PlayerData.gang.name = PlayerData.gang.name or 'none'
-  PlayerData.gang.label = PlayerData.gang.label or 'No Gang Affiliaton'
-  PlayerData.gang.isboss = PlayerData.gang.isboss or false
-  PlayerData.gang.grade = PlayerData.gang.grade or {}
-  PlayerData.gang.grade.name = PlayerData.gang.grade.name or 'none'
-  PlayerData.gang.grade.level = PlayerData.gang.grade.level or 0
 
   -- Metadata
   PlayerData.metadata = PlayerData.metadata or {}
@@ -192,33 +179,6 @@ function DGCore.Player.CreatePlayer(PlayerData)
     self.Functions.UpdatePlayerData()
   end
 
-  self.Functions.SetGang = function(gang, grade)
-    local gang = gang:lower()
-    local grade = tostring(grade) or '0'
-
-    if DGCore.Shared.Gangs[gang] then
-      self.PlayerData.gang.name = gang
-      self.PlayerData.gang.label = DGCore.Shared.Gangs[gang].label
-      if DGCore.Shared.Gangs[gang].grades[grade] then
-        local ganggrade = DGCore.Shared.Gangs[gang].grades[grade]
-        self.PlayerData.gang.grade = {}
-        self.PlayerData.gang.grade.name = ganggrade.name
-        self.PlayerData.gang.grade.level = tonumber(grade)
-        self.PlayerData.gang.isboss = ganggrade.isboss or false
-      else
-        self.PlayerData.gang.grade = {}
-        self.PlayerData.gang.grade.name = 'No Grades'
-        self.PlayerData.gang.grade.level = 0
-        self.PlayerData.gang.isboss = false
-      end
-
-      self.Functions.UpdatePlayerData()
-      TriggerClientEvent('DGCore:Client:OnGangUpdate', self.PlayerData.source, self.PlayerData.gang)
-      return true
-    end
-    return false
-  end
-
   self.Functions.setCash = function(cash)
     self.PlayerData.charinfo.cash = cash
     self.Functions.UpdatePlayerData()
@@ -303,14 +263,12 @@ function DGCore.Player.Save(src)
 
   -- Save character data
   local charDataResult = exports['dg-sql']:query([[
-    INSERT INTO character_data (citizenid, gang, position, metadata)
-    VALUES (:citizenid, :gang, :position, :metadata)
-    ON DUPLICATE KEY UPDATE gang = :gang,
-                            position = :position,
+    INSERT INTO character_data (citizenid, position, metadata)
+    VALUES (:citizenid, :position, :metadata)
+    ON DUPLICATE KEY UPDATE position = :position,
                             metadata = :metadata;
   ]], {
     citizenid = PlayerData.citizenid,
-    gang = json.encode(PlayerData.gang),
     position = json.encode(GetEntityCoords(GetPlayerPed(src))),
     metadata = json.encode(PlayerData.metadata),
   })

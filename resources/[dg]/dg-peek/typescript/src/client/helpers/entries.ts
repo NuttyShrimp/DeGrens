@@ -1,4 +1,4 @@
-import { Business, Inventory } from '@dgx/client';
+import { Business, Gangs, Inventory } from '@dgx/client';
 import { getCtxPlayerData } from './context';
 
 export const canEntryBeEnabled = async (entry: PeekOption, entity: number): Promise<PeekOption | undefined> => {
@@ -14,10 +14,12 @@ export const canEntryBeEnabled = async (entry: PeekOption, entity: number): Prom
     } else return;
   }
   if (entry.gang) {
+    const plyGang = Gangs.getCurrentGang();
+    if (plyGang === null) return;
     if (typeof entry.gang === 'string') {
-      if (entry.gang !== PlayerData.gang.name) return;
+      if (entry.gang !== plyGang) return;
     } else if (Array.isArray(entry.gang)) {
-      if (!entry.gang.includes(PlayerData.gang.name)) return;
+      if (!entry.gang.includes(plyGang)) return;
     } else return;
   }
   if (entry.business) {

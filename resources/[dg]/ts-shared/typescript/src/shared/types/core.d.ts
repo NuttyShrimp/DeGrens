@@ -42,37 +42,6 @@ declare interface Shared {
    * @param v2
    */
   isDiff(v1: any, v2: any): boolean;
-
-  Weapons: {
-    [key: number]: Weapon;
-  };
-  Vehicles: {
-    [key: string]: Vehicle;
-  };
-  Gangs: {
-    [key: string]: {
-      label: string;
-      grades: {
-        [key: string]: {
-          name: string;
-          isboss?: boolean;
-        };
-      };
-    };
-  };
-  Jobs: {
-    [key: string]: {
-      label: string;
-      defaultDuty: boolean;
-      grades: {
-        [key: string]: {
-          name: string;
-          payment: number;
-          isboss?: boolean;
-        };
-      };
-    };
-  };
 }
 
 declare interface Config {
@@ -133,11 +102,9 @@ declare interface PlayerData {
   license: string;
   steamid: string;
   charinfo: CharacterInfo;
-  gang: Gang;
   name: string;
   citizenid: number;
   LoggedIn: boolean;
-  inventory: string; // Appears to be JSON serialised version of items
   metadata: MetaData;
 }
 
@@ -156,11 +123,4 @@ declare interface CharacterInfo {
 declare interface Grade {
   name: string;
   level: number;
-}
-
-declare interface Gang {
-  isboss?: boolean;
-  name: string;
-  label: string;
-  grade: Grade;
 }

@@ -234,6 +234,27 @@
     },
     {
       "type": "node-terminal",
+      "name": "gangs:build prod",
+      "request": "launch",
+      "command": "yarn run build",
+      "cwd": "${workspaceFolder}/resources/[dg]/dg-gangs/typescript"
+    },
+    {
+      "type": "node-terminal",
+      "name": "gangs:build dev",
+      "request": "launch",
+      "command": "yarn run build:dev",
+      "cwd": "${workspaceFolder}/resources/[dg]/dg-gangs/typescript"
+    },
+    {
+      "type": "node-terminal",
+      "name": "gangs:watch",
+      "request": "launch",
+      "command": "yarn run watch",
+      "cwd": "${workspaceFolder}/resources/[dg]/dg-gangs/typescript"
+    },
+    {
+      "type": "node-terminal",
       "name": "heists:build prod",
       "request": "launch",
       "command": "yarn run build",

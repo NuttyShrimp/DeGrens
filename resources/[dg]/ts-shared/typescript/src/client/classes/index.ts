@@ -10,6 +10,6 @@ export const { Events, RPC } = events;
 export const { Peek, RayCast, PolyZone, Keys, PolyTarget } = interaction;
 export const { Util, Interiors, PropAttach, Particle, Sounds } = util;
 export const { UI, Taskbar, Notifications, HUD } = ui;
-export const { Jobs, Business } = jobs;
+export const { Jobs, Business, Gangs } = jobs;
 export const { Storage } = storage;
 export const { Inventory } = inventory;

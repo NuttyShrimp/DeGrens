@@ -15,7 +15,14 @@ class Business {
   };
 }
 
+class Gangs {
+  public getCurrentGang = (): string | null => {
+    return global.exports['dg-gangs'].getCurrentGang();
+  };
+}
+
 export default {
   Jobs: new Jobs(),
   Business: new Business(),
+  Gangs: new Gangs(),
 };

@@ -20,6 +20,7 @@ declare global {
     Auth: typeof Classes.Auth;
     Financials: typeof Classes.Financials;
     Business: typeof Classes.Business;
+    Gangs: typeof Classes.Gangs;
     Vector3: typeof Vector3Class;
     Vector4: typeof Vector4Class;
   };

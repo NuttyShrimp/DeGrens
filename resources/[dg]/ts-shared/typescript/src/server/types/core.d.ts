@@ -207,12 +207,6 @@ interface SelfFunctions {
   UpdatePlayerData(dontUpdateChat: boolean): void;
 
   /**
-   * Sets the gang of a player at the specified grade
-   * @returns true if the gang was set, false otherwise
-   */
-  SetGang(gang: string, grade: string | number): boolean;
-
-  /**
    * Sets the specified metadata key to the specified value
    */
   SetMetaData(meta: string, value: any): void;

@@ -60,7 +60,18 @@ class Business {
   }
 }
 
+class Gangs {
+  public getGangByName = (gangName: string): Promise<GangData | undefined> => {
+    return global.exports['dg-gangs'].getGangByName(gangName);
+  };
+
+  public getPlayerGang = (cid: number): Promise<GangData | undefined> => {
+    return global.exports['dg-gangs'].getPlayerGang(cid);
+  };
+}
+
 export default {
   Jobs: new Jobs(),
   Business: new Business(),
+  Gangs: new Gangs(),
 };
