@@ -25,7 +25,7 @@ export class Account {
     paycheck: [],
     mobile_transaction: [],
   };
-  private transactionsIds!: string[];
+  private transactionsIds: string[];
   private readonly logger: winston.Logger;
   public readonly permsManager: PermissionsManager;
 
@@ -47,6 +47,7 @@ export class Account {
     );
     this.permsManager = new PermissionsManager(account_id, members);
     this.lastOperation = updatedAt;
+    this.transactionsIds = [];
 
     // fetch all transactionids for this account
     // We only fetch ids so the cache is not overfilled with data which could slow down the resource
