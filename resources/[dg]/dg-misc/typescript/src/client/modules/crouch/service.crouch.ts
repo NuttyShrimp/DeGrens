@@ -13,7 +13,16 @@ export const startCrouchThread = () => {
     const ped = PlayerPedId();
     if (!ped) return;
 
+    const isFreeAiming = IsPlayerFreeAiming(PlayerId());
+
     if (crouching) {
+      if (isFreeAiming) {
+        crouching = false;
+        ClearPedTasks(ped);
+        resetToOriginalWalk();
+        return;
+      }
+
       const speed = GetEntitySpeed(ped);
       if (speed >= 1.0) {
         SetPedWeaponMovementClipset(ped, 'move_ped_crouched');
@@ -25,7 +34,7 @@ export const startCrouchThread = () => {
     }
 
     if (!IsDisabledControlJustPressed(0, 36)) return;
-    if (IsPedSittingInAnyVehicle(ped) || IsPedFalling(ped)) return;
+    if (IsPedSittingInAnyVehicle(ped) || IsPedFalling(ped) || isFreeAiming) return;
 
     crouching = !crouching;
     if (crouching) {
