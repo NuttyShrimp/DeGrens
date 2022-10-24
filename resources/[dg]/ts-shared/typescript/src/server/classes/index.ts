@@ -8,6 +8,7 @@ import phone from './phone';
 import ui from './ui';
 import util from './util';
 import financials from './financials';
+import screenshot from './screenshot';
 
 export const { Events, RPC, SQL, API, Auth } = events;
 export const { Util } = util;
@@ -19,3 +20,4 @@ export const { Jobs, Business, Gangs } = jobs;
 export const { Admin } = admin;
 export const { Inventory } = inventory;
 export const { Financials } = financials;
+export const { Screenshot } = screenshot;
