@@ -27,7 +27,7 @@ Events.onNet('business:client:updateCache', (action: 'add' | 'remove', name: str
 
 global.exports('isEmployee', (business: string, permissions?: string[]) => {
   if (!plyBusinesses.has(business)) return false;
-  if (permissions === undefined) return true;
+  if (permissions == undefined) return true;
   const plyPermissions = plyBusinesses.get(business)!;
   return permissions.some(p => plyPermissions.has(p));
 });

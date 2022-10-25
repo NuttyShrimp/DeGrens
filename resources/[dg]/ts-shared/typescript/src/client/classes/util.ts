@@ -1,17 +1,10 @@
 import { Util as UtilShared } from '../../shared/classes/util';
 
-import { registerDGXRPC } from './events';
-
 class Util extends UtilShared {
   private prodEnv!: boolean;
 
   constructor() {
     super();
-    registerDGXRPC('dgx:util:isEntityDead', (entityNetId: number) => {
-      const entity = NetworkGetEntityFromNetworkId(entityNetId);
-      if (!entity) return false;
-      return IsEntityDead(entity);
-    });
     onNet('dgx:isProduction', (isProd: boolean) => {
       this.prodEnv = isProd;
     });
@@ -42,7 +35,7 @@ class Util extends UtilShared {
     const bone =
       entityType === 1 ? GetPedBoneIndex(entity, Number(boneId)) : GetEntityBoneIndexByName(entity, String(boneId));
     const boneCoords = this.ArrayToVector3(GetWorldPositionOfEntityBone(entity, bone));
-    return boneCoords.subtract(this.getPlyCoords()).Length;
+    return boneCoords.distance(this.getPlyCoords());
   }
 
   loadModel = (model: string | number) => {
@@ -71,6 +64,22 @@ class Util extends UtilShared {
   loadAnimSet = (set: string) => {
     RequestAnimSet(set);
     return this.awaitCondition(() => HasAnimSetLoaded(set));
+  };
+
+  getVehicleVin = (vehicle?: number): Promise<string | null> => {
+    return global.exports['dg-vehicles'].getVehicleVin(vehicle);
+  };
+
+  getVehicleVinWithoutValidation = (vehicle?: number): string | null => {
+    return global.exports['dg-vehicles'].getVehicleVinWithoutValidation(vehicle);
+  };
+
+  setVehicleDoorOpen = (vehicle: number, doorId: number, open: boolean) => {
+    global.exports['dg-vehicles'].setVehicleDoorOpen(vehicle, doorId, open);
+  };
+
+  getVehicleSpeed = (veh: number) => {
+    return Math.ceil(GetEntitySpeed(veh) * 3.6);
   };
 }
 

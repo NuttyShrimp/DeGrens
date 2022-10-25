@@ -1,1 +1,0 @@
-type Coords = Vec3;

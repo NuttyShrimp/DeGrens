@@ -1,0 +1,97 @@
+{
+  "items": {
+    "cosmetic": [
+      {
+        "item": "xenon_lights",
+        "label": "Xenon lamp",
+        "price": "40"
+      },
+      {
+        "item": "neon_strip",
+        "label": "Neon Strip",
+        "price": "20"
+      },
+      {
+        "item": "rgb_controller",
+        "label": "RGB Controller",
+        "price": "10"
+      },
+      {
+        "item": "harness",
+        "label": "Harnas",
+        "price": "40"
+      },
+      {
+        "item": "cleaning_kit",
+        "label": "Schoonmaakset",
+        "price": "10"
+      },
+      {
+        "item": "vehicle_wax",
+        "label": "Voertuig Wax",
+        "price": "25"
+      }
+    ],
+    "illegal": [
+      {
+        "item": "fakeplate",
+        "label": "Fake Plate",
+        "price": "200"
+      },
+      {
+        "item": "window_tint",
+        "label": "Tint Folie",
+        "price": "60"
+      },
+      {
+        "item": "nos",
+        "label": "NOS",
+        "price": "50"
+      }
+    ]
+  },
+  "pickup": [
+    {
+      "coords": {
+        "x": -495.94,
+        "y": -2910.97,
+        "z": 6.0
+      },
+      "data": {
+        "heading": 315,
+        "minZ": 5,
+        "maxZ": 7.4
+      },
+      "width": 1.4,
+      "length": 1.8
+    },
+    {
+      "coords": {
+        "x": 1158.96,
+        "y": -1374.48,
+        "z": 34.71
+      },
+      "data": {
+        "heading": 0,
+        "minZ": 33.71,
+        "maxZ": 36.11
+      },
+      "width": 1.6,
+      "length": 3.4
+    },
+    {
+      "coords": {
+        "x": 185.56,
+        "y": 1214.0,
+        "z": 225.59
+      },
+      "data": {
+        "heading": 13,
+        "minZ": 224.59,
+        "maxZ": 227.19
+      },
+      "width": 1.8,
+      "length": 2.8
+    }
+  ]
+}

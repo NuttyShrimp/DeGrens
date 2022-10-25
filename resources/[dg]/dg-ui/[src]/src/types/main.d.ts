@@ -1,4 +1,5 @@
 declare type InteractionType = 'info' | 'success' | 'error';
+declare type UpdateState<T> = (state: Partial<T>) => void;
 
 declare type AppFunction<T = {}> = React.FC<
   T & {
@@ -84,6 +85,7 @@ declare interface RootState {
   sliders: Sliders.State;
   scenes: Scenes.State;
   peek: Peek.State;
+  bennys: Bennys.State;
   phone: Phone.State;
   'phone.notifications': Phone.Notifications.State;
   'phone.apps.example': {};
@@ -105,6 +107,7 @@ declare interface RootState {
   'phone.apps.yellowpages': Phone.YellowPages.State;
   'phone.apps.jobcenter': Phone.JobCenter.State;
   'phone.apps.debt': Phone.Debt.State;
+  'phone.apps.garage': Phone.Garage.State;
   'phone.apps.business': Phone.Business.State;
   inventory: Inventory.State;
   itemboxes: Itemboxes.State;
@@ -112,6 +115,7 @@ declare interface RootState {
   'laptop.config': Laptop.Config.State;
   'laptop.gang': Laptop.Gang.State;
   'laptop.confirm': Laptop.Confirm.State;
+  'laptop.bennys': Laptop.Bennys.State;
   radio: Radio.State;
   configmenu: ConfigMenu.State;
 }

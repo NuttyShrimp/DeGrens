@@ -1,0 +1,107 @@
+[
+  {
+    "vector": {
+      "x": 110.84,
+      "y": 6627.21,
+      "z": 31.79
+    },
+    "name": "bennys_paleto",
+    "length": 6.5,
+    "width": 8,
+    "heading": 225,
+    "data": {
+      "minZ": 30.79,
+      "maxZ": 35.19
+    }
+  },
+  {
+    "vector": {
+      "x": 1174.75,
+      "y": 2640.13,
+      "z": 37.75
+    },
+    "name": "sandy_bennys",
+    "length": 6.5,
+    "width": 8,
+    "heading": 0,
+    "data": {
+      "minZ": 36.75,
+      "maxZ": 40.75
+    }
+  },
+  {
+    "vector": {
+      "x": -212.42,
+      "y": -1327.25,
+      "z": 30.89
+    },
+    "name": "bennys_old_shop",
+    "length": 6.5,
+    "width": 8,
+    "heading": 315,
+    "data": {
+      "minZ": 29.89,
+      "maxZ": 33.89
+    }
+  },
+  {
+    "vector": {
+      "x": -33.72,
+      "y": -1053.86,
+      "z": 28.4
+    },
+    "name": "bennys_hub_shop",
+    "length": 6.5,
+    "width": 8,
+    "heading": 30,
+    "data": {
+      "minZ": 27.4,
+      "maxZ": 31.4
+    }
+  },
+  {
+    "vector": {
+      "x": -1155.46,
+      "y": -2005.48,
+      "z": 13.18
+    },
+    "name": "bennys_airport",
+    "length": 6.5,
+    "width": 8,
+    "heading": 315,
+    "data": {
+      "minZ": 12.17,
+      "maxZ": 16.17
+    }
+  },
+  {
+    "vector": {
+      "x": -338.74,
+      "y": -137.41,
+      "z": 39.01
+    },
+    "name": "bennys_rockford",
+    "length": 6.5,
+    "width": 8,
+    "heading": 80,
+    "data": {
+      "minZ": 38.01,
+      "maxZ": 44.01
+    }
+  },
+  {
+    "vector": {
+      "x": 731.45,
+      "y": -1088.83,
+      "z": 22.17
+    },
+    "name": "bennys_bridge",
+    "length": 6.5,
+    "width": 8,
+    "heading": 90,
+    "data": {
+      "minZ": 21.17,
+      "maxZ": 25.17
+    }
+  }
+]

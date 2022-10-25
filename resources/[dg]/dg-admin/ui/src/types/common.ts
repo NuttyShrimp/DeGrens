@@ -26,8 +26,10 @@ export interface Player {
 }
 
 export interface Vehicle {
-  model: string;
   name: string;
+  brand: string;
+  model: string;
+  class: string;
 }
 
 export interface RoutingBucket {

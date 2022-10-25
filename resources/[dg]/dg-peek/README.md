@@ -70,7 +70,8 @@ exports['dg-peek']:addModelEntry('prop_test_bed_01', {
 
 ### addEntityEntry
 ```lua
-exports['dg-peek']:addEntityEntry({ 890, 2394 }, {
+-- USE ENTITY ID NOT NETWORK ID
+exports['dg-peek']:addEntityEntry({ 54556565, 1123433 }, {
   options = {
     {
       icon = 'fas fa-home',

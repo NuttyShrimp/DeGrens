@@ -15,6 +15,9 @@ export const setGTABehaviour = () => {
   // Disable automatic camera movement when afk'ing
   DisableIdleCamera(true);
 
+  // Initial state of radar is invisible
+  DisplayRadar(false);
+
   // Relationships between groups
   const playerHash = GetHashKey('PLAYER');
   RELATION_GROUPS.forEach(group => {

@@ -28,7 +28,7 @@ class Peek {
   addModelEntry(
     model: string | number | (string | number)[],
     PeekParams: PeekParams,
-    removeOnRestart = false
+    removeOnRestart = true
   ): string[] {
     const ids: string[] = global.exports['dg-peek'].addModelEntry(model, PeekParams);
     if (removeOnRestart) {
@@ -37,7 +37,7 @@ class Peek {
     return ids;
   }
 
-  addEntityEntry(entity: number | number[], PeekParams: PeekParams, removeOnRestart = false): string[] {
+  addEntityEntry(entity: number | number[], PeekParams: PeekParams, removeOnRestart = true): string[] {
     const ids: string[] = global.exports['dg-peek'].addEntityEntry(entity, PeekParams);
     if (removeOnRestart) {
       ids.forEach(id => this.peekIdsToRemove.entity.add(id));
@@ -45,7 +45,7 @@ class Peek {
     return ids;
   }
 
-  addBoneEntry(bone: string | string[], PeekParams: PeekParams, removeOnRestart = false): string[] {
+  addBoneEntry(bone: string | string[], PeekParams: PeekParams, removeOnRestart = true): string[] {
     const ids: string[] = global.exports['dg-peek'].addBoneEntry(bone, PeekParams);
     if (removeOnRestart) {
       ids.forEach(id => this.peekIdsToRemove.bone.add(id));
@@ -53,7 +53,7 @@ class Peek {
     return ids;
   }
 
-  addFlagEntry(flag: string | string[], PeekParams: PeekParams, removeOnRestart = false): string[] {
+  addFlagEntry(flag: string | string[], PeekParams: PeekParams, removeOnRestart = true): string[] {
     const ids: string[] = global.exports['dg-peek'].addFlagEntry(flag, PeekParams);
     if (removeOnRestart) {
       ids.forEach(id => this.peekIdsToRemove.flag.add(id));
@@ -61,7 +61,7 @@ class Peek {
     return ids;
   }
 
-  addZoneEntry(zone: string | string[], PeekParams: PeekParams, removeOnRestart = false): string[] {
+  addZoneEntry(zone: string | string[], PeekParams: PeekParams, removeOnRestart = true): string[] {
     const ids: string[] = global.exports['dg-peek'].addZoneEntry(zone, PeekParams);
     if (removeOnRestart) {
       ids.forEach(id => this.peekIdsToRemove.zone.add(id));
@@ -69,7 +69,7 @@ class Peek {
     return ids;
   }
 
-  addGlobalEntry(type: string | string[], PeekParams: PeekParams, removeOnRestart = false): string[] {
+  addGlobalEntry(type: string | string[], PeekParams: PeekParams, removeOnRestart = true): string[] {
     const ids: string[] = global.exports['dg-peek'].addGlobalEntry(type, PeekParams);
     if (removeOnRestart) {
       ids.forEach(id => this.peekIdsToRemove.global.add(id));
@@ -137,8 +137,8 @@ class RayCast {
   private handlers: RayCast.Handler[] = [];
 
   constructor() {
-    on('dg-lib:targetinfo:changed', (entity: number, type?: 1 | 2 | 3, coords?: number[]) => {
-      this.handlers.forEach(handler => handler(entity, type, coords ? Util.ArrayToVector3(coords) : undefined));
+    on('dg-lib:targetinfo:changed', (entity?: number, type?: 1 | 2 | 3, coords?: number[]) => {
+      this.handlers.forEach(handler => handler(entity ?? 0, type ?? 0, Util.ArrayToVector3(coords ?? [0, 0, 0])));
     });
   }
 
@@ -146,20 +146,18 @@ class RayCast {
     this.handlers.push(handler);
   }
 
-  getEntityPlayerLookingAt(
-    distance: number,
-    radius: number,
-    flag: number,
-    ignore: number
-  ): [number, 0 | 1 | 2 | 3, Vec3 | undefined] {
-    const [ent, type, coordsArr] = global.exports['dg-lib'].getEntityPlayerLookingAt(distance, radius, flag, ignore);
-    return type === 0 ? [0, 0, undefined] : [ent, type, Util.ArrayToVector3(coordsArr)];
+  getEntityPlayerLookingAt(distance?: number, flag?: number, ignore?: number): [number, 0 | 1 | 2 | 3, Vec3] {
+    const [ent, type, coordsArr] = global.exports['dg-lib'].getEntityPlayerLookingAt(distance, flag, ignore);
+    if (ent === undefined || type === 0) {
+      return [0, 0, { x: 0, y: 0, z: 0 }];
+    }
+    return [ent, type, Util.ArrayToVector3(coordsArr)];
   }
 }
 
 class PolyZone {
-  private enterHandlers: Map<string, PolyZone.EnterHandler[]> = new Map();
-  private exitHandlers: Map<string, PolyZone.ExitHandler[]> = new Map();
+  private enterHandlers: Map<string, PolyZone.Handler[]> = new Map();
+  private exitHandlers: Map<string, PolyZone.Handler[]> = new Map();
   private zonesNamesToDelete: Set<{ name: string; id: string | number }> = new Set();
 
   constructor() {
@@ -167,9 +165,9 @@ class PolyZone {
       if (!this.enterHandlers.has(name)) return;
       this.enterHandlers.get(name)!.forEach(handler => handler(name, data, Util.ArrayToVector3(center)));
     });
-    on('dg-polyzone:exit', (name: string) => {
+    on('dg-polyzone:exit', (name: string, data: any, center: number[]) => {
       if (!this.exitHandlers.has(name)) return;
-      this.exitHandlers.get(name)!.forEach(handler => handler(name));
+      this.exitHandlers.get(name)!.forEach(handler => handler(name, data, Util.ArrayToVector3(center)));
     });
     on('onResourceStop', (res: string) => {
       if (res !== GetCurrentResourceName()) return;
@@ -177,13 +175,17 @@ class PolyZone {
     });
   }
 
-  onEnter<T = any>(name: string, handler: PolyZone.EnterHandler<T>) {
+  isPointInside(point: Vec3, zoneName: string): boolean {
+    return global.exports['dg-polyzone'].isPointInside(point, zoneName);
+  }
+
+  onEnter<T = any>(name: string, handler: PolyZone.Handler<T>) {
     const oldHandlers = this.enterHandlers.get(name) ?? [];
     oldHandlers.push(handler);
     this.enterHandlers.set(name, oldHandlers);
   }
 
-  onLeave(name: string, handler: PolyZone.ExitHandler) {
+  onLeave<T = any>(name: string, handler: PolyZone.Handler<T>) {
     const oldHandlers = this.exitHandlers.get(name) ?? [];
     oldHandlers.push(handler);
     this.exitHandlers.set(name, oldHandlers);
@@ -252,8 +254,8 @@ class PolyZone {
 }
 
 class PolyTarget {
-  private enterHandlers: Map<string, PolyZone.EnterHandler[]> = new Map();
-  private exitHandlers: Map<string, PolyZone.ExitHandler[]> = new Map();
+  private enterHandlers: Map<string, PolyZone.Handler[]> = new Map();
+  private exitHandlers: Map<string, PolyZone.Handler[]> = new Map();
   private zonesNamesToDelete: Set<{ name: string; id: string | number }> = new Set();
 
   constructor() {
@@ -261,9 +263,9 @@ class PolyTarget {
       if (!this.enterHandlers.has(name)) return;
       this.enterHandlers.get(name)!.forEach(handler => handler(name, data, Util.ArrayToVector3(center)));
     });
-    on('dg-polytarget:exit', (name: string) => {
+    on('dg-polytarget:exit', (name: string, data: any, center: number[]) => {
       if (!this.exitHandlers.has(name)) return;
-      this.exitHandlers.get(name)!.forEach(handler => handler(name));
+      this.exitHandlers.get(name)!.forEach(handler => handler(name, data, Util.ArrayToVector3(center)));
     });
     on('onResourceStop', (res: string) => {
       if (res !== GetCurrentResourceName()) return;
@@ -273,13 +275,13 @@ class PolyTarget {
     });
   }
 
-  onEnter<T = any>(name: string, handler: PolyZone.EnterHandler<T>) {
+  onEnter<T = any>(name: string, handler: PolyZone.Handler<T>) {
     const oldHandlers = this.enterHandlers.get(name) ?? [];
     oldHandlers.push(handler);
     this.enterHandlers.set(name, oldHandlers);
   }
 
-  onLeave(name: string, handler: PolyZone.ExitHandler) {
+  onLeave<T = any>(name: string, handler: PolyZone.Handler<T>) {
     const oldHandlers = this.exitHandlers.get(name) ?? [];
     oldHandlers.push(handler);
     this.exitHandlers.set(name, oldHandlers);

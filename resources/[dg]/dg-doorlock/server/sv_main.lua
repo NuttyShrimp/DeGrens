@@ -4,11 +4,12 @@ local initializing = true
 local currentLinkedId = 1
 
 DGX.Inventory.registerUseable('lockpick', function(src)
-    TriggerClientEvent('lockpick:UseLockpick', src)
+  TriggerEvent('dg-doorlock:server:usedLockpick', src)
+  TriggerClientEvent("lockpick:UseLockpick", src)
 end)
 
 DGX.Inventory.registerUseable('thermite', function(src)
-    TriggerClientEvent('thermite:UseThermite', src)
+  TriggerClientEvent('thermite:UseThermite', src)
 end)
 
 Citizen.CreateThread(function()

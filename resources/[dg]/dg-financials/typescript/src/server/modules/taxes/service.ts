@@ -60,8 +60,9 @@ export const getTaxedPrice = (price: number, taxId: number, shouldRemove = false
     taxLogger.warn(`Tax with id: ${taxId} not found, returning original price`);
     return { taxPrice: price, taxRate: 0 };
   }
+  const perc = 1 + taxInfo.rate * getConfig().taxes.inflation;
   return {
-    taxPrice: price + price * taxInfo.rate * getConfig().taxes.inflation * (shouldRemove ? -1 : 1),
+    taxPrice: Math.round((shouldRemove ? price / perc : price * perc) * 100) / 100,
     taxRate: taxInfo.rate,
   };
 };

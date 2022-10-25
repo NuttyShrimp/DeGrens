@@ -4,9 +4,16 @@
     "hardware": [
       {
         "name": "volt_meter",
-        "amount": 10,
+        "amount": 3,
         "requirements": {
           "cash": 200
+        }
+      },
+      {
+        "name": "cleaning_kit",
+        "amount": 15,
+        "requirements": {
+          "cash": 100
         }
       }
     ]

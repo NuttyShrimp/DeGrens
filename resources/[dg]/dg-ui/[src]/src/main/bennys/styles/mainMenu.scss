@@ -1,0 +1,57 @@
+@use 'src/styles/variables';
+
+.bennys-main-menu {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  margin-top: 5vh;
+  
+  &-entry {
+    height: 14vh;
+    width: 20vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    background-color: variables.$primary_darker_dark;
+    margin: 0 1vh;
+
+    & h6 {
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    &.img {
+      justify-content: center;
+      & > img {
+        height: 12vh;
+        width: 16vh;
+        object-fit: contain;
+      }
+    }
+    
+    &-disabled {
+      width: 20vh;
+      height: 14vh;
+      position: absolute;
+      background-color: rgba(0, 0, 0, 0.5);
+    }
+    
+    &-selected {
+      height: 0%;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: variables.$primary-darker-normal;
+    }
+  }
+}
+
+.bennys-selector {
+  &-selected {
+    box-shadow: inset 0vh 0vh 0.75rem 0 white;
+  }
+}

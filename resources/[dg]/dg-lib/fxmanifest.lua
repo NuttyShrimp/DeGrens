@@ -25,3 +25,7 @@ client_scripts {
 	"client/**/*.ymap.xml"
 }
 server_script "@dg-logs/server/sv_log.lua"
+
+client_script '@ts-shared/client/client.js'
+server_script '@ts-shared/server/server.js'
+shared_script '@ts-shared/shared/lib.lua'

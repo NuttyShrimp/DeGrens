@@ -1,7 +1,7 @@
 import { makeStyles } from '@mui/styles';
 
 import { baseStyle } from '../../../../base.styles';
-import { hexToRGB } from '../../../../lib/util';
+import { hexToRGBStr } from '../../../../lib/util';
 
 export const styles = makeStyles({
   list: {
@@ -23,7 +23,7 @@ export const styles = makeStyles({
     display: 'flex',
     flexDirection: 'column',
     marginBottom: '.5vh',
-    backgroundColor: hexToRGB(baseStyle.primary.darker, 0.7),
+    backgroundColor: hexToRGBStr(baseStyle.primary.darker, 0.7),
     borderRadius: '.5vh',
     transition: 'background-color .2s ease-in-out',
     pointerEvents: 'all',

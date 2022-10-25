@@ -1,15 +1,18 @@
 import { Business, Gangs, Inventory } from '@dgx/client';
+import { DEFAULT_DISTANCE } from 'cl_constant';
 import { getCtxPlayerData } from './context';
 
 export const canEntryBeEnabled = async (entry: PeekOption, entity: number): Promise<PeekOption | undefined> => {
   const { data: PlayerData, job } = getCtxPlayerData();
   if (entry.job) {
+    if (job.name === null) return;
     if (typeof entry.job === 'string') {
       if (entry.job !== job.name) return;
     } else if (Array.isArray(entry.job)) {
       if (!entry.job.includes(job.name)) return;
     } else if (typeof entry.job === 'object') {
-      if (!entry.job?.[job.name]) return;
+      if (!entry.job[job.name]) return;
+      if (job.grade === null) return;
       if (entry.job[job.name] > job.grade) return;
     } else return;
   }
@@ -27,28 +30,26 @@ export const canEntryBeEnabled = async (entry: PeekOption, entity: number): Prom
     if (!isEmployed) return;
   }
   if (entry.items) {
-    if (!(await Inventory.doesPlayerHaveItems(entry.items))) {
-      return;
-    }
+    const hasItems = await Inventory.doesPlayerHaveItems(entry.items);
+    if (!hasItems) return;
   }
   if (!entry?._metadata?.state) {
     if (!entry._metadata) entry._metadata = {};
     entry._metadata.state = {};
   }
   if (entry.canInteract) {
-    entry._metadata.state.canInteract = entry.canInteract(entity, entry.distance, entry);
+    entry._metadata.state.canInteract = entry.canInteract(entity, entry.distance ?? DEFAULT_DISTANCE, entry);
     if (entry._metadata.state.canInteract instanceof Promise) {
       entry._metadata.state.canInteract = await entry._metadata.state.canInteract;
     }
   }
-  if (entry.distance) {
-    entry._metadata.state.distance = false;
-  }
+  entry._metadata.state.distance = false;
   return entry;
 };
 
 export const isEntryDisabled = (entry: PeekOption) => {
   if (entry.disabled) return true;
+  if (!entry._metadata) return true;
   for (const key in entry._metadata.state) {
     if (entry._metadata.state[key] === false) return true;
   }

@@ -5,12 +5,6 @@ DGCore.Functions = {}
 -- ex: local player = DGCore.Functions.GetPlayer(source)
 -- ex: local example = player.Functions.functionname(parameter)
 
-function DGCore.Functions.GetCoords(entity)
-	local coords = GetEntityCoords(entity, false)
-	local heading = GetEntityHeading(entity)
-	return vector4(coords.x, coords.y, coords.z, heading)
-end
-
 function DGCore.Functions.GetIdentifier(source, idtype)
 	local src = source
 	local idtype = idtype or QBConfig.IdentifierType
@@ -125,6 +119,14 @@ function DGCore.Functions.GetPlayersInRadius(src, radius)
 	return closePlayers
 end
 
+function DGCore.Functions.GetClosestVehicle(src)
+  local vehNetId = DGX.RPC.execute('core:functions:getClosestVehicle', src)
+  if (not vehNetId or vehNetId < 0) then
+    return 0
+  end
+  return NetworkGetEntityFromNetworkId(vehNetId)
+end
+
 -- Will return an array of QB Player class instances
 -- unlike the GetPlayers() wrapper which only returns IDs
 function DGCore.Functions.GetQBPlayers()
@@ -177,41 +179,6 @@ function DGCore.Functions.Kick(source, reason, setKickReason, deferrals)
 			Wait(5000)
 		end
 	end)
-end
-
--- Setting & Removing Permissions
-
-function DGCore.Functions.AddPermission(source, permission)
-	local src = source
-	local Player = DGCore.Functions.GetPlayer(src)
-	local pSteamid = Player.PlayerData.steamid
-	if Player then
-		DGCore.Config.Server.PermissionList[pSteamid] = {
-			steamid = pSteamid,
-			permission = permission:lower(),
-		}
-		exports['dg-sql']:query('DELETE FROM permissions WHERE steamid = ?', { pSteamid })
-
-		exports['dg-sql']:insert('INSERT INTO permissions (name, steamid, permission) VALUES (?, ?, ?)', {
-			GetPlayerName(src),
-			pSteamid,
-			permission:lower()
-		})
-
-		Player.Functions.UpdatePlayerData()
-		TriggerClientEvent('DGCore:Client:OnPermissionUpdate', src, permission)
-	end
-end
-
-function DGCore.Functions.RemovePermission(source)
-	local src = source
-	local Player = DGCore.Functions.GetPlayer(src)
-	local steamId = Player.PlayerData.steamid
-	if Player then
-		DGCore.Config.Server.PermissionList[steamId] = nil
-		exports['dg-sql']:query('DELETE FROM permissions WHERE steamid = ?', { steamId })
-		Player.Functions.UpdatePlayerData()
-	end
 end
 
 -- Checking for Permission Level

@@ -2,7 +2,7 @@ type EntityType = null | 'ped' | 'player' | 'vehicle';
 
 interface Context {
   entity: number;
-  netId: number;
+  netId?: number;
   type: number;
   model: number;
   flags: Set<string>;
@@ -57,13 +57,13 @@ interface EntryAddParameter {
 }
 
 interface IEntryManager {
-  getEntry(key: PeekValueType): PeekOption;
+  getEntry(key: PeekValueType): PeekOption | undefined;
 
   addEntry(key: PeekValueType, info: EntryAddParameter): string[];
 
   removeEntry(id: string): void;
 
-  loadActiveEntries(ctx: Context): void;
+  loadActiveEntries(ctx?: Context): void;
 
   getActiveEntries(): PeekOption[];
 

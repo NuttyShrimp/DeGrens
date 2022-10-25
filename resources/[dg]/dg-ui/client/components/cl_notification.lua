@@ -28,8 +28,8 @@ end
 exports('removeNotification', removeNotification)
 
 DGX.RPC.register('dg-ui:client:addNotification', function(...)
-    return addNotification(...)
+  return addNotification(...)
 end)
-DGX.RPC.register('dg-ui:client:removeNotification', function(...)
-    return removeNotification(...)
+DGX.Events.onNet('dg-ui:client:removeNotification', function(...)
+  removeNotification(...)
 end)

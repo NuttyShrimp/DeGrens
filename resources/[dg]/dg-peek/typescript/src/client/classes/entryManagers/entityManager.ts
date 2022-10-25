@@ -3,8 +3,12 @@ import { BaseManager } from './baseManager';
 export class EntityManager extends BaseManager implements IEntryManager {
   private entries: Map<number, PeekOption[]> = new Map();
 
-  addEntry(key: PeekValueType, info: EntryAddParameter): string[] {
+  // Key is entity id, if networked gets replaced with network id
+  addEntry(key: PeekValueType, info: Required<EntryAddParameter>): string[] {
     key = Number(key);
+    if (NetworkGetEntityIsNetworked(key)) {
+      key = NetworkGetNetworkIdFromEntity(key);
+    }
     if (!this.entries.has(key)) {
       this.entries.set(key, []);
     }
@@ -35,9 +39,8 @@ export class EntityManager extends BaseManager implements IEntryManager {
 
   loadActiveEntries(ctx: Context) {
     this.activeEntries = [];
-    if (!NetworkGetEntityIsNetworked(ctx.entity)) return;
-    if (!ctx.netId) return;
-    const entries = this.entries.get(ctx.netId);
+    const key = ctx.netId ?? ctx.entity;
+    const entries = this.entries.get(key);
     if (!entries) return;
     entries.forEach(entry => this.addActiveEntry(entry, ctx.entity));
   }

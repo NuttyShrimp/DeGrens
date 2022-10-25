@@ -3,7 +3,7 @@
     "name": "pistol_suppressor",
     "label": "Pistol Suppressor",
     "useable": true,
-    "decayrate": 43200,
+    "decayRate": 43200,
     "image": "pistol_suppressor.png",
     "size": {
       "x": 4,
@@ -15,7 +15,7 @@
     "name": "smg_extendedclip",
     "label": "SMG Extended Clip",
     "useable": true,
-    "decayrate": 43200,
+    "decayRate": 43200,
     "image": "smg_extendedclip.png",
     "size": {
       "x": 2,
@@ -27,7 +27,7 @@
     "name": "luxuryfinish",
     "label": "Luxury Finish",
     "useable": true,
-    "decayrate": 43200,
+    "decayRate": 43200,
     "image": "luxury_finish.png",
     "size": {
       "x": 2,
@@ -39,7 +39,7 @@
     "name": "money_roll",
     "label": "Geldrolletje",
     "image": "money_roll.png",
-    "decayrate": 10080,
+    "decayRate": 10080,
     "size": {
       "x": 1,
       "y": 1
@@ -50,7 +50,7 @@
     "name": "marked_bills",
     "label": "Zak geld",
     "image": "marked_bills.png",
-    "decayrate": 10080,
+    "decayRate": 10080,
     "size": {
       "x": 2,
       "y": 2
@@ -62,7 +62,7 @@
     "label": "Lockpick",
     "useable": true,
     "image": "lockpick.png",
-    "decayrate": 43200,
+    "decayRate": 43200,
     "description": "Voor als je de sleutels kwijt bent.",
     "size": {
       "x": 3,
@@ -74,7 +74,7 @@
     "name": "decoding_tool",
     "label": "Decoding Tool",
     "useable": true,
-    "decayrate": 4320,
+    "decayRate": 4320,
     "image": "decoding_tool.png",
     "description": "Hiermee kan je geavanceerde sloten decoderen zoals kluizen.",
     "size": {
@@ -86,7 +86,7 @@
   {
     "name": "drive_v1",
     "label": "v1.0 Drive",
-    "decayrate": 4320,
+    "decayRate": 4320,
     "image": "drive_v1.png",
     "description": "Drive met V1.0 software op",
     "size": {
@@ -98,7 +98,7 @@
   {
     "name": "drive_v2",
     "label": "v2.0 Drive",
-    "decayrate": 4320,
+    "decayRate": 4320,
     "image": "drive_v2.png",
     "description": "Drive met V2.0 software op",
     "size": {
@@ -110,7 +110,7 @@
   {
     "name": "drive_v3",
     "label": "v3.0 Drive",
-    "decayrate": 4320,
+    "decayRate": 4320,
     "image": "drive_v3.png",
     "description": "Drive met V3.0 software op",
     "size": {
@@ -122,7 +122,7 @@
   {
     "name": "drive_v5",
     "label": "v5.0 Drive",
-    "decayrate": 4320,
+    "decayRate": 4320,
     "image": "drive_v5.png",
     "description": "Drive met V5.0 software op",
     "size": {
@@ -134,7 +134,7 @@
   {
     "name": "drive_v10",
     "label": "v10.0 Drive",
-    "decayrate": 4320,
+    "decayRate": 4320,
     "image": "drive_v10.png",
     "description": "Drive met V10.0 software op",
     "size": {
@@ -218,7 +218,6 @@
       "y": 3
     }
   },
-
   {
     "useable": true,
     "name": "weapon_carbinerifle",
@@ -516,7 +515,7 @@
     "markedForSeizure": true,
     "name": "vpn",
     "label": "VPN",
-    "decayrate": 10080,
+    "decayRate": 10080,
     "image": "vpn.png",
     "description": "A VPN that hides your information",
     "size": {
@@ -527,7 +526,7 @@
   {
     "name": "tv",
     "label": "Televisie",
-    "decayrate": 120,
+    "decayRate": 120,
     "image": "tv.png",
     "description": "Een grote televisie",
     "size": {
@@ -538,7 +537,7 @@
   {
     "name": "crt_tv",
     "label": "CRT Televisie",
-    "decayrate": 120,
+    "decayRate": 120,
     "image": "crt_tv.png",
     "description": "Een oude CRT televisie",
     "size": {
@@ -549,7 +548,7 @@
   {
     "name": "camera",
     "label": "Camera",
-    "decayrate": 120,
+    "decayRate": 120,
     "image": "camera.png",
     "description": "Een DSLR Camera",
     "size": {
@@ -560,7 +559,7 @@
   {
     "name": "gameboy",
     "label": "Gameboy",
-    "decayrate": 120,
+    "decayRate": 120,
     "image": "gameboy.png",
     "description": "Een oude Nintento Gameboy",
     "size": {
@@ -571,7 +570,7 @@
   {
     "name": "hifi",
     "label": "Speakers",
-    "decayrate": 120,
+    "decayRate": 120,
     "image": "hifi.png",
     "description": "Een speaker installatie",
     "size": {
@@ -582,7 +581,7 @@
   {
     "name": "nintendo_switch",
     "label": "Switch",
-    "decayrate": 120,
+    "decayRate": 120,
     "image": "nintendo_switch.png",
     "description": "Een nieuwe Nintendo Switch",
     "size": {
@@ -593,7 +592,7 @@
   {
     "name": "nokia",
     "label": "Nokia",
-    "decayrate": 1440,
+    "decayRate": 1440,
     "image": "nokia.png",
     "description": "Een oude telefoon van je oma",
     "size": {
@@ -604,7 +603,7 @@
   {
     "name": "psp",
     "label": "PSP",
-    "decayrate": 120,
+    "decayRate": 120,
     "image": "psp.png",
     "description": "Een oude Sony PSP",
     "size": {
@@ -615,7 +614,7 @@
   {
     "name": "vaas",
     "label": "Gestolen Vaas",
-    "decayrate": 120,
+    "decayRate": 120,
     "image": "vaas.png",
     "description": "Een gestolen waardevolle antieke vaas",
     "size": {
@@ -626,7 +625,7 @@
   {
     "name": "microwave",
     "label": "Microgolfoven",
-    "decayrate": 120,
+    "decayRate": 120,
     "image": "microwave.png",
     "description": "Een microgolfoven om u eten in op te warmen",
     "size": {
@@ -638,7 +637,7 @@
     "name": "weed_seed_male",
     "label": "Mannelijk Weed Zaadje",
     "useable": true,
-    "decayrate": 2880,
+    "decayRate": 2880,
     "image": "weed_seed.png",
     "description": "Probeer het eens te planten in de grond, wie weet groeit het!",
     "size": {
@@ -650,7 +649,7 @@
     "name": "weed_seed_female",
     "label": "Vrouwelijk Weed Zaadje",
     "useable": true,
-    "decayrate": 2880,
+    "decayRate": 2880,
     "image": "weed_seed.png",
     "description": "Probeer het eens te planten in de grond, wie weet groeit het",
     "size": {
@@ -663,7 +662,7 @@
     "name": "pistol_ammo",
     "label": "Pistool Ammo",
     "useable": true,
-    "decayrate": 43200,
+    "decayRate": 43200,
     "image": "pistol_ammo.png",
     "size": {
       "x": 2,
@@ -675,7 +674,7 @@
     "name": "smg_ammo",
     "label": "SMG Ammo",
     "useable": true,
-    "decayrate": 43200,
+    "decayRate": 43200,
     "image": "smg_ammo.png",
     "size": {
       "x": 2,
@@ -687,7 +686,7 @@
     "name": "rifle_ammo",
     "label": "Rifle Ammo",
     "useable": true,
-    "decayrate": 43200,
+    "decayRate": 43200,
     "image": "rifle_ammo.png",
     "size": {
       "x": 2,
@@ -699,7 +698,7 @@
     "name": "shotgun_ammo",
     "label": "Shotgun Ammo",
     "useable": true,
-    "decayrate": 43200,
+    "decayRate": 43200,
     "image": "shotgun_ammo.png",
     "size": {
       "x": 2,
@@ -711,7 +710,7 @@
     "name": "sniper_ammo",
     "label": "Sniper Ammo",
     "useable": true,
-    "decayrate": 43200,
+    "decayRate": 43200,
     "image": "sniper_ammo.png",
     "size": {
       "x": 2,
@@ -722,7 +721,7 @@
     "name": "taser_cartridge",
     "label": "Taser Cartridge",
     "useable": true,
-    "decayrate": 43200,
+    "decayRate": 43200,
     "image": "taser_cartridge.png",
     "size": {
       "x": 2,
@@ -732,7 +731,7 @@
   {
     "name": "plant_fertilizer",
     "label": "Plantenvoeding",
-    "decayrate": 10080,
+    "decayRate": 10080,
     "image": "plant_fertilizer.png",
     "description": "Voeding om je zelf geplante plantjes te voeden",
     "size": {
@@ -745,7 +744,7 @@
     "name": "weed_bud",
     "label": "Weed Bud",
     "useable": true,
-    "decayrate": 10080,
+    "decayRate": 10080,
     "image": "weed_bud.png",
     "description": "Geknipte weed die nog een beetje nat is. Geduld is de boodschap.",
     "size": {
@@ -766,7 +765,7 @@
     "markedForSeizure": true,
     "name": "weed_bag",
     "label": "Zakje Weed 1g",
-    "decayrate": 7200,
+    "decayRate": 7200,
     "image": "weed_bag.png",
     "size": {
       "x": 1,
@@ -778,7 +777,7 @@
     "name": "thermite",
     "label": "Thermite",
     "useable": true,
-    "decayrate": 10080,
+    "decayRate": 10080,
     "image": "thermite.png",
     "description": "Pas op voor je vingers, kan warm worden",
     "size": {
@@ -791,7 +790,7 @@
     "name": "meth_bag",
     "label": "Zakje Meth",
     "useable": true,
-    "decayrate": 7200,
+    "decayRate": 7200,
     "image": "meth_bag.png",
     "description": "Zakje Meth van 1 gram",
     "size": {
@@ -804,7 +803,7 @@
     "name": "meth_brick",
     "label": "Meth Brick",
     "useable": true,
-    "decayrate": 10080,
+    "decayRate": 10080,
     "image": "meth_brick.png",
     "description": "Meth Brick van 1 kilogram, best nog even wachten voor open te maken",
     "size": {
@@ -817,7 +816,7 @@
     "name": "big_explosive",
     "label": "Zwaar Explosief",
     "useable": true,
-    "decayrate": 10080,
+    "decayRate": 10080,
     "image": "big_explosive.png",
     "description": "Zwaar explosief. Pas op of het zal je laatste dag kunnen zijn.",
     "size": {
@@ -830,7 +829,7 @@
     "name": "laptop_v1",
     "label": "v1.0 Laptop",
     "useable": true,
-    "decayrate": 240,
+    "decayRate": 240,
     "image": "laptop_v.png",
     "description": "Laptop met V1.0 software op op geinstalleerd.",
     "size": {
@@ -843,7 +842,7 @@
     "name": "laptop_v2",
     "label": "v2.0 Laptop",
     "useable": true,
-    "decayrate": 240,
+    "decayRate": 240,
     "image": "laptop_v.png",
     "description": "Laptop met V2.0 software op op geinstalleerd.",
     "size": {
@@ -856,7 +855,7 @@
     "name": "laptop_v3",
     "label": "v3.0 Laptop",
     "useable": true,
-    "decayrate": 240,
+    "decayRate": 240,
     "image": "laptop_v.png",
     "description": "Laptop met V3.0 software op geinstalleerd.",
     "size": {
@@ -869,7 +868,7 @@
     "name": "laptop_v5",
     "label": "v5.0 Laptop",
     "useable": true,
-    "decayrate": 240,
+    "decayRate": 240,
     "image": "laptop_v.png",
     "description": "Laptop met V5.0 software op op geinstalleerd.",
     "size": {
@@ -882,7 +881,7 @@
     "name": "laptop_v10",
     "label": "v10.0 Laptop",
     "useable": true,
-    "decayrate": 240,
+    "decayRate": 240,
     "image": "laptop_v.png",
     "description": "Laptop met V10.0 software op op geinstalleerd.",
     "size": {
@@ -895,7 +894,7 @@
     "name": "mini_emp",
     "label": "Mini EMP",
     "useable": true,
-    "decayrate": 4320,
+    "decayRate": 4320,
     "image": "mini_emp.png",
     "description": "Kleine EMP voor elektronica uit te schakelen.",
     "size": {
@@ -907,7 +906,7 @@
     "name": "volt_meter",
     "label": "Multimeter",
     "useable": true,
-    "decayrate": 8640,
+    "decayRate": 8640,
     "image": "volt_meter.png",
     "size": {
       "x": 1,
@@ -917,7 +916,7 @@
   {
     "name": "gold_bar",
     "label": "Goudstaaf",
-    "decayrate": 20160,
+    "decayRate": 20160,
     "image": "gold_bar.png",
     "size": {
       "x": 3,
@@ -979,12 +978,99 @@
     "name": "rocket",
     "label": "RPG Raket",
     "useable": true,
-    "decayrate": 20160,
+    "decayRate": 20160,
     "image": "rocket.png",
     "size": {
       "x": 2,
       "y": 5
     }
+  },
+  {
+    "name": "fakeplate",
+    "label": "Nummerplaat",
+    "size": {
+      "x": 2,
+      "y": 2
+    },
+    "decayRate": 10080,
+    "image": "plate.png",
+    "markedForSeizure": true
+  },
+  {
+    "name": "harness",
+    "label": "Harness",
+    "size": {
+      "x": 3,
+      "y": 3
+    },
+    "decayRate": 2880,
+    "image": "harness.png",
+    "useable": true
+  },
+  {
+    "name": "cleaning_kit",
+    "label": "Schoonmaakset",
+    "size": {
+      "x": 2,
+      "y": 2
+    },
+    "decayRate": 7200,
+    "image": "cleaning_kit.png",
+    "useable": true
+  },
+  {
+    "name": "vehicle_wax",
+    "label": "Voertuig Wax",
+    "size": {
+      "x": 3,
+      "y": 4
+    },
+    "decayRate": 2880,
+    "image": "vehicle_wax.png",
+    "useable": true
+  },
+  {
+    "name": "xenon_lights",
+    "label": "Xenon Lampen",
+    "size": {
+      "x": 2,
+      "y": 3
+    },
+    "decayRate": 4320,
+    "image": "xenon_lights.png"
+  },
+  {
+    "name": "neon_strip",
+    "label": "Neon Strip",
+    "size": {
+      "x": 3,
+      "y": 2
+    },
+    "decayRate": 4320,
+    "image": "neon_strip.png"
+  },
+  {
+    "name": "rgb_controller",
+    "label": "RGB Controller",
+    "size": {
+      "x": 2,
+      "y": 2
+    },
+    "description": "Kan gebruikt worden in combinatie met de juiste tools om kleuren te regelen",
+    "decayRate": 43200,
+    "image": "rgb_controller.png",
+    "useable": true
+  },
+  {
+    "name": "window_tint",
+    "label": "Tint Folie",
+    "size": {
+      "x": 4,
+      "y": 2
+    },
+    "decayRate": 1440,
+    "image": "window_tint.png",
+    "useable": true
   },
   {
     "name": "laptop",
@@ -994,7 +1080,7 @@
       "x": 3,
       "y": 3
     },
-    "decayrate": 30240,
+    "decayRate": 30240,
     "useable": true
   },
   {
@@ -1005,7 +1091,7 @@
       "x": 1,
       "y": 2
     },
-    "decayrate": 10080,
+    "decayRate": 10080,
     "useable": true
   },
   {
@@ -1016,7 +1102,1387 @@
       "x": 1,
       "y": 2
     },
-    "decayrate": 10080,
+    "decayRate": 10080,
     "useable": true
+  },
+  {
+    "name": "engine_part_s",
+    "label": "Engine Part S",
+    "size": {
+      "x": 2,
+      "y": 2
+    },
+    "decayRate": 10080,
+    "image": "engine_part_s.png",
+    "useable": true
+  },
+  {
+    "name": "suspension_part_s",
+    "label": "Suspension Part S",
+    "size": {
+      "x": 2,
+      "y": 2
+    },
+    "decayRate": 10080,
+    "image": "susp_part_s.png",
+    "useable": true
+  },
+  {
+    "name": "brakes_part_s",
+    "label": "Brake Part S",
+    "size": {
+      "x": 2,
+      "y": 2
+    },
+    "decayRate": 10080,
+    "image": "brakes_part_s.png",
+    "useable": true
+  },
+  {
+    "name": "axle_part_s",
+    "label": "Axle Part S",
+    "size": {
+      "x": 2,
+      "y": 2
+    },
+    "decayRate": 10080,
+    "image": "axle_part_s.png",
+    "useable": true
+  },
+  {
+    "name": "engine_part_a",
+    "label": "Engine Part A",
+    "size": {
+      "x": 2,
+      "y": 2
+    },
+    "decayRate": 10080,
+    "image": "engine_part_a.png",
+    "useable": true
+  },
+  {
+    "name": "suspension_part_a",
+    "label": "Suspension Part A",
+    "size": {
+      "x": 2,
+      "y": 2
+    },
+    "decayRate": 10080,
+    "image": "susp_part_a.png",
+    "useable": true
+  },
+  {
+    "name": "brakes_part_a",
+    "label": "Brake Part A",
+    "size": {
+      "x": 2,
+      "y": 2
+    },
+    "decayRate": 10080,
+    "image": "brakes_part_a.png",
+    "useable": true
+  },
+  {
+    "name": "axle_part_a",
+    "label": "Axle Part A",
+    "size": {
+      "x": 2,
+      "y": 2
+    },
+    "decayRate": 10080,
+    "image": "axle_part_a.png",
+    "useable": true
+  },
+  {
+    "name": "engine_part_b",
+    "label": "Engine Part B",
+    "size": {
+      "x": 2,
+      "y": 2
+    },
+    "decayRate": 10080,
+    "image": "engine_part_b.png",
+    "useable": true
+  },
+  {
+    "name": "suspension_part_b",
+    "label": "Suspension Part B",
+    "size": {
+      "x": 2,
+      "y": 2
+    },
+    "decayRate": 10080,
+    "image": "susp_part_b.png",
+    "useable": true
+  },
+  {
+    "name": "brakes_part_b",
+    "label": "Brake Part B",
+    "size": {
+      "x": 2,
+      "y": 2
+    },
+    "decayRate": 10080,
+    "image": "brakes_part_b.png",
+    "useable": true
+  },
+  {
+    "name": "axle_part_b",
+    "label": "Axle Part B",
+    "size": {
+      "x": 2,
+      "y": 2
+    },
+    "decayRate": 10080,
+    "image": "axle_part_b.png",
+    "useable": true
+  },
+  {
+    "name": "engine_part_c",
+    "label": "Engine Part C",
+    "size": {
+      "x": 2,
+      "y": 2
+    },
+    "decayRate": 10080,
+    "image": "engine_part_c.png",
+    "useable": true
+  },
+  {
+    "name": "suspension_part_c",
+    "label": "Suspension Part C",
+    "size": {
+      "x": 2,
+      "y": 2
+    },
+    "decayRate": 10080,
+    "image": "susp_part_c.png",
+    "useable": true
+  },
+  {
+    "name": "brakes_part_c",
+    "label": "Brake Part C",
+    "size": {
+      "x": 2,
+      "y": 2
+    },
+    "decayRate": 10080,
+    "image": "brakes_part_c.png",
+    "useable": true
+  },
+  {
+    "name": "axle_part_c",
+    "label": "Axle Part C",
+    "size": {
+      "x": 2,
+      "y": 2
+    },
+    "decayRate": 10080,
+    "image": "axle_part_c.png",
+    "useable": true
+  },
+  {
+    "name": "engine_part_d",
+    "label": "Engine Part D",
+    "size": {
+      "x": 2,
+      "y": 2
+    },
+    "decayRate": 10080,
+    "image": "engine_part_d.png",
+    "useable": true
+  },
+  {
+    "name": "suspension_part_d",
+    "label": "Suspension Part D",
+    "size": {
+      "x": 2,
+      "y": 2
+    },
+    "decayRate": 10080,
+    "image": "susp_part_d.png",
+    "useable": true
+  },
+  {
+    "name": "brakes_part_d",
+    "label": "Brake Part D",
+    "size": {
+      "x": 2,
+      "y": 2
+    },
+    "decayRate": 10080,
+    "image": "brakes_part_d.png",
+    "useable": true
+  },
+  {
+    "name": "axle_part_d",
+    "label": "Axle Part D",
+    "size": {
+      "x": 2,
+      "y": 2
+    },
+    "decayRate": 10080,
+    "image": "axle_part_d.png",
+    "useable": true
+  },
+  {
+    "name": "engine_part_a+",
+    "label": "Engine Part A+",
+    "size": {
+      "x": 2,
+      "y": 2
+    },
+    "decayRate": 10080,
+    "image": "engine_part_a+.png",
+    "useable": true
+  },
+  {
+    "name": "suspension_part_a+",
+    "label": "Suspension Part A+",
+    "size": {
+      "x": 2,
+      "y": 2
+    },
+    "decayRate": 10080,
+    "image": "susp_part_a+.png",
+    "useable": true
+  },
+  {
+    "name": "brakes_part_a+",
+    "label": "Brake Part A+",
+    "size": {
+      "x": 2,
+      "y": 2
+    },
+    "decayRate": 10080,
+    "image": "brakes_part_a+.png",
+    "useable": true
+  },
+  {
+    "name": "axle_part_a+",
+    "label": "Axle Part A+",
+    "size": {
+      "x": 2,
+      "y": 2
+    },
+    "decayRate": 10080,
+    "image": "axle_part_a+.png",
+    "useable": true
+  },
+  {
+    "name": "engine_part_x",
+    "label": "Engine Part X",
+    "size": {
+      "x": 2,
+      "y": 2
+    },
+    "decayRate": 10080,
+    "image": "engine_part_x.png",
+    "useable": true
+  },
+  {
+    "name": "suspension_part_x",
+    "label": "Suspension Part X",
+    "size": {
+      "x": 2,
+      "y": 2
+    },
+    "decayRate": 10080,
+    "image": "susp_part_x.png",
+    "useable": true
+  },
+  {
+    "name": "brakes_part_x",
+    "label": "Brake Part X",
+    "size": {
+      "x": 2,
+      "y": 2
+    },
+    "decayRate": 10080,
+    "image": "brakes_part_x.png",
+    "useable": true
+  },
+  {
+    "name": "axle_part_x",
+    "label": "Axle Part X",
+    "size": {
+      "x": 2,
+      "y": 2
+    },
+    "decayRate": 10080,
+    "image": "axle_part_x.png",
+    "useable": true
+  },
+  {
+    "name": "nos",
+    "label": "NOS Fles",
+    "description": "Een fles gevult met lachgas, zorg wel dat je een turbo op je voertuig hebt.",
+    "size": {
+      "x": 2,
+      "y": 4
+    },
+    "useable": true,
+    "image": "nos.png",
+    "decayRate": 10080
+  },
+  {
+    "name": "tune_brakes_stage_1_X",
+    "label": "X Class Brakes Stage 1",
+    "size": {
+      "x": 3,
+      "y": 3
+    },
+    "image": "tune_part.png",
+    "decayRate": 86400
+  },
+  {
+    "name": "tune_brakes_stage_2_X",
+    "label": "X Class Brakes Stage 2",
+    "size": {
+      "x": 3,
+      "y": 3
+    },
+    "image": "tune_part.png",
+    "decayRate": 86400
+  },
+  {
+    "name": "tune_brakes_stage_3_X",
+    "label": "X Class Brakes Stage 3",
+    "size": {
+      "x": 3,
+      "y": 3
+    },
+    "image": "tune_part.png",
+    "decayRate": 86400
+  },
+  {
+    "name": "tune_brakes_stage_1_S",
+    "label": "S Class Brakes Stage 1",
+    "size": {
+      "x": 3,
+      "y": 3
+    },
+    "image": "tune_part.png",
+    "decayRate": 86400
+  },
+  {
+    "name": "tune_brakes_stage_2_S",
+    "label": "S Class Brakes Stage 2",
+    "size": {
+      "x": 3,
+      "y": 3
+    },
+    "image": "tune_part.png",
+    "decayRate": 86400
+  },
+  {
+    "name": "tune_brakes_stage_3_S",
+    "label": "S Class Brakes Stage 3",
+    "size": {
+      "x": 3,
+      "y": 3
+    },
+    "image": "tune_part.png",
+    "decayRate": 86400
+  },
+  {
+    "name": "tune_brakes_stage_1_A+",
+    "label": "A+ Class Brakes Stage 1",
+    "size": {
+      "x": 3,
+      "y": 3
+    },
+    "image": "tune_part.png",
+    "decayRate": 86400
+  },
+  {
+    "name": "tune_brakes_stage_2_A+",
+    "label": "A+ Class Brakes Stage 2",
+    "size": {
+      "x": 3,
+      "y": 3
+    },
+    "image": "tune_part.png",
+    "decayRate": 86400
+  },
+  {
+    "name": "tune_brakes_stage_3_A+",
+    "label": "A+ Class Brakes Stage 3",
+    "size": {
+      "x": 3,
+      "y": 3
+    },
+    "image": "tune_part.png",
+    "decayRate": 86400
+  },
+  {
+    "name": "tune_brakes_stage_1_A",
+    "label": "A Class Brakes Stage 1",
+    "size": {
+      "x": 3,
+      "y": 3
+    },
+    "image": "tune_part.png",
+    "decayRate": 86400
+  },
+  {
+    "name": "tune_brakes_stage_2_A",
+    "label": "A Class Brakes Stage 2",
+    "size": {
+      "x": 3,
+      "y": 3
+    },
+    "image": "tune_part.png",
+    "decayRate": 86400
+  },
+  {
+    "name": "tune_brakes_stage_3_A",
+    "label": "A Class Brakes Stage 3",
+    "size": {
+      "x": 3,
+      "y": 3
+    },
+    "image": "tune_part.png",
+    "decayRate": 86400
+  },
+  {
+    "name": "tune_brakes_stage_1_D",
+    "label": "D Class Brakes Stage 1",
+    "size": {
+      "x": 3,
+      "y": 3
+    },
+    "image": "tune_part.png",
+    "decayRate": 86400
+  },
+  {
+    "name": "tune_brakes_stage_2_D",
+    "label": "D Class Brakes Stage 2",
+    "size": {
+      "x": 3,
+      "y": 3
+    },
+    "image": "tune_part.png",
+    "decayRate": 86400
+  },
+  {
+    "name": "tune_brakes_stage_3_D",
+    "label": "D Class Brakes Stage 3",
+    "size": {
+      "x": 3,
+      "y": 3
+    },
+    "image": "tune_part.png",
+    "decayRate": 86400
+  },
+  {
+    "name": "tune_brakes_stage_1_C",
+    "label": "C Class Brakes Stage 1",
+    "size": {
+      "x": 3,
+      "y": 3
+    },
+    "image": "tune_part.png",
+    "decayRate": 86400
+  },
+  {
+    "name": "tune_brakes_stage_2_C",
+    "label": "C Class Brakes Stage 2",
+    "size": {
+      "x": 3,
+      "y": 3
+    },
+    "image": "tune_part.png",
+    "decayRate": 86400
+  },
+  {
+    "name": "tune_brakes_stage_3_C",
+    "label": "C Class Brakes Stage 3",
+    "size": {
+      "x": 3,
+      "y": 3
+    },
+    "image": "tune_part.png",
+    "decayRate": 86400
+  },
+  {
+    "name": "tune_brakes_stage_1_B",
+    "label": "B Class Brakes Stage 1",
+    "size": {
+      "x": 3,
+      "y": 3
+    },
+    "image": "tune_part.png",
+    "decayRate": 86400
+  },
+  {
+    "name": "tune_brakes_stage_2_B",
+    "label": "B Class Brakes Stage 2",
+    "size": {
+      "x": 3,
+      "y": 3
+    },
+    "image": "tune_part.png",
+    "decayRate": 86400
+  },
+  {
+    "name": "tune_brakes_stage_3_B",
+    "label": "B Class Brakes Stage 3",
+    "size": {
+      "x": 3,
+      "y": 3
+    },
+    "image": "tune_part.png",
+    "decayRate": 86400
+  },
+  {
+    "name": "tune_transmission_stage_1_X",
+    "label": "X Class Transmission Stage 1",
+    "size": {
+      "x": 3,
+      "y": 3
+    },
+    "image": "tune_part.png",
+    "decayRate": 86400
+  },
+  {
+    "name": "tune_transmission_stage_2_X",
+    "label": "X Class Transmission Stage 2",
+    "size": {
+      "x": 3,
+      "y": 3
+    },
+    "image": "tune_part.png",
+    "decayRate": 86400
+  },
+  {
+    "name": "tune_transmission_stage_3_X",
+    "label": "X Class Transmission Stage 3",
+    "size": {
+      "x": 3,
+      "y": 3
+    },
+    "image": "tune_part.png",
+    "decayRate": 86400
+  },
+  {
+    "name": "tune_transmission_stage_1_S",
+    "label": "S Class Transmission Stage 1",
+    "size": {
+      "x": 3,
+      "y": 3
+    },
+    "image": "tune_part.png",
+    "decayRate": 86400
+  },
+  {
+    "name": "tune_transmission_stage_2_S",
+    "label": "S Class Transmission Stage 2",
+    "size": {
+      "x": 3,
+      "y": 3
+    },
+    "image": "tune_part.png",
+    "decayRate": 86400
+  },
+  {
+    "name": "tune_transmission_stage_3_S",
+    "label": "S Class Transmission Stage 3",
+    "size": {
+      "x": 3,
+      "y": 3
+    },
+    "image": "tune_part.png",
+    "decayRate": 86400
+  },
+  {
+    "name": "tune_transmission_stage_1_A+",
+    "label": "A+ Class Transmission Stage 1",
+    "size": {
+      "x": 3,
+      "y": 3
+    },
+    "image": "tune_part.png",
+    "decayRate": 86400
+  },
+  {
+    "name": "tune_transmission_stage_2_A+",
+    "label": "A+ Class Transmission Stage 2",
+    "size": {
+      "x": 3,
+      "y": 3
+    },
+    "image": "tune_part.png",
+    "decayRate": 86400
+  },
+  {
+    "name": "tune_transmission_stage_3_A+",
+    "label": "A+ Class Transmission Stage 3",
+    "size": {
+      "x": 3,
+      "y": 3
+    },
+    "image": "tune_part.png",
+    "decayRate": 86400
+  },
+  {
+    "name": "tune_transmission_stage_1_A",
+    "label": "A Class Transmission Stage 1",
+    "size": {
+      "x": 3,
+      "y": 3
+    },
+    "image": "tune_part.png",
+    "decayRate": 86400
+  },
+  {
+    "name": "tune_transmission_stage_2_A",
+    "label": "A Class Transmission Stage 2",
+    "size": {
+      "x": 3,
+      "y": 3
+    },
+    "image": "tune_part.png",
+    "decayRate": 86400
+  },
+  {
+    "name": "tune_transmission_stage_3_A",
+    "label": "A Class Transmission Stage 3",
+    "size": {
+      "x": 3,
+      "y": 3
+    },
+    "image": "tune_part.png",
+    "decayRate": 86400
+  },
+  {
+    "name": "tune_transmission_stage_1_D",
+    "label": "D Class Transmission Stage 1",
+    "size": {
+      "x": 3,
+      "y": 3
+    },
+    "image": "tune_part.png",
+    "decayRate": 86400
+  },
+  {
+    "name": "tune_transmission_stage_2_D",
+    "label": "D Class Transmission Stage 2",
+    "size": {
+      "x": 3,
+      "y": 3
+    },
+    "image": "tune_part.png",
+    "decayRate": 86400
+  },
+  {
+    "name": "tune_transmission_stage_3_D",
+    "label": "D Class Transmission Stage 3",
+    "size": {
+      "x": 3,
+      "y": 3
+    },
+    "image": "tune_part.png",
+    "decayRate": 86400
+  },
+  {
+    "name": "tune_transmission_stage_1_C",
+    "label": "C Class Transmission Stage 1",
+    "size": {
+      "x": 3,
+      "y": 3
+    },
+    "image": "tune_part.png",
+    "decayRate": 86400
+  },
+  {
+    "name": "tune_transmission_stage_2_C",
+    "label": "C Class Transmission Stage 2",
+    "size": {
+      "x": 3,
+      "y": 3
+    },
+    "image": "tune_part.png",
+    "decayRate": 86400
+  },
+  {
+    "name": "tune_transmission_stage_3_C",
+    "label": "C Class Transmission Stage 3",
+    "size": {
+      "x": 3,
+      "y": 3
+    },
+    "image": "tune_part.png",
+    "decayRate": 86400
+  },
+  {
+    "name": "tune_transmission_stage_1_B",
+    "label": "B Class Transmission Stage 1",
+    "size": {
+      "x": 3,
+      "y": 3
+    },
+    "image": "tune_part.png",
+    "decayRate": 86400
+  },
+  {
+    "name": "tune_transmission_stage_2_B",
+    "label": "B Class Transmission Stage 2",
+    "size": {
+      "x": 3,
+      "y": 3
+    },
+    "image": "tune_part.png",
+    "decayRate": 86400
+  },
+  {
+    "name": "tune_transmission_stage_3_B",
+    "label": "B Class Transmission Stage 3",
+    "size": {
+      "x": 3,
+      "y": 3
+    },
+    "image": "tune_part.png",
+    "decayRate": 86400
+  },
+  {
+    "name": "tune_engine_stage_1_X",
+    "label": "X Class Engine Stage 1",
+    "size": {
+      "x": 3,
+      "y": 3
+    },
+    "image": "tune_part.png",
+    "decayRate": 86400
+  },
+  {
+    "name": "tune_engine_stage_2_X",
+    "label": "X Class Engine Stage 2",
+    "size": {
+      "x": 3,
+      "y": 3
+    },
+    "image": "tune_part.png",
+    "decayRate": 86400
+  },
+  {
+    "name": "tune_engine_stage_3_X",
+    "label": "X Class Engine Stage 3",
+    "size": {
+      "x": 3,
+      "y": 3
+    },
+    "image": "tune_part.png",
+    "decayRate": 86400
+  },
+  {
+    "name": "tune_engine_stage_4_X",
+    "label": "X Class Engine Stage 4",
+    "size": {
+      "x": 3,
+      "y": 3
+    },
+    "image": "tune_part.png",
+    "decayRate": 86400
+  },
+  {
+    "name": "tune_engine_stage_1_S",
+    "label": "S Class Engine Stage 1",
+    "size": {
+      "x": 3,
+      "y": 3
+    },
+    "image": "tune_part.png",
+    "decayRate": 86400
+  },
+  {
+    "name": "tune_engine_stage_2_S",
+    "label": "S Class Engine Stage 2",
+    "size": {
+      "x": 3,
+      "y": 3
+    },
+    "image": "tune_part.png",
+    "decayRate": 86400
+  },
+  {
+    "name": "tune_engine_stage_3_S",
+    "label": "S Class Engine Stage 3",
+    "size": {
+      "x": 3,
+      "y": 3
+    },
+    "image": "tune_part.png",
+    "decayRate": 86400
+  },
+  {
+    "name": "tune_engine_stage_4_S",
+    "label": "S Class Engine Stage 4",
+    "size": {
+      "x": 3,
+      "y": 3
+    },
+    "image": "tune_part.png",
+    "decayRate": 86400
+  },
+  {
+    "name": "tune_engine_stage_1_A+",
+    "label": "A+ Class Engine Stage 1",
+    "size": {
+      "x": 3,
+      "y": 3
+    },
+    "image": "tune_part.png",
+    "decayRate": 86400
+  },
+  {
+    "name": "tune_engine_stage_2_A+",
+    "label": "A+ Class Engine Stage 2",
+    "size": {
+      "x": 3,
+      "y": 3
+    },
+    "image": "tune_part.png",
+    "decayRate": 86400
+  },
+  {
+    "name": "tune_engine_stage_3_A+",
+    "label": "A+ Class Engine Stage 3",
+    "size": {
+      "x": 3,
+      "y": 3
+    },
+    "image": "tune_part.png",
+    "decayRate": 86400
+  },
+  {
+    "name": "tune_engine_stage_4_A+",
+    "label": "A+ Class Engine Stage 4",
+    "size": {
+      "x": 3,
+      "y": 3
+    },
+    "image": "tune_part.png",
+    "decayRate": 86400
+  },
+  {
+    "name": "tune_engine_stage_1_A",
+    "label": "A Class Engine Stage 1",
+    "size": {
+      "x": 3,
+      "y": 3
+    },
+    "image": "tune_part.png",
+    "decayRate": 86400
+  },
+  {
+    "name": "tune_engine_stage_2_A",
+    "label": "A Class Engine Stage 2",
+    "size": {
+      "x": 3,
+      "y": 3
+    },
+    "image": "tune_part.png",
+    "decayRate": 86400
+  },
+  {
+    "name": "tune_engine_stage_3_A",
+    "label": "A Class Engine Stage 3",
+    "size": {
+      "x": 3,
+      "y": 3
+    },
+    "image": "tune_part.png",
+    "decayRate": 86400
+  },
+  {
+    "name": "tune_engine_stage_4_A",
+    "label": "A Class Engine Stage 4",
+    "size": {
+      "x": 3,
+      "y": 3
+    },
+    "image": "tune_part.png",
+    "decayRate": 86400
+  },
+  {
+    "name": "tune_engine_stage_1_D",
+    "label": "D Class Engine Stage 1",
+    "size": {
+      "x": 3,
+      "y": 3
+    },
+    "image": "tune_part.png",
+    "decayRate": 86400
+  },
+  {
+    "name": "tune_engine_stage_2_D",
+    "label": "D Class Engine Stage 2",
+    "size": {
+      "x": 3,
+      "y": 3
+    },
+    "image": "tune_part.png",
+    "decayRate": 86400
+  },
+  {
+    "name": "tune_engine_stage_3_D",
+    "label": "D Class Engine Stage 3",
+    "size": {
+      "x": 3,
+      "y": 3
+    },
+    "image": "tune_part.png",
+    "decayRate": 86400
+  },
+  {
+    "name": "tune_engine_stage_4_D",
+    "label": "D Class Engine Stage 4",
+    "size": {
+      "x": 3,
+      "y": 3
+    },
+    "image": "tune_part.png",
+    "decayRate": 86400
+  },
+  {
+    "name": "tune_engine_stage_1_C",
+    "label": "C Class Engine Stage 1",
+    "size": {
+      "x": 3,
+      "y": 3
+    },
+    "image": "tune_part.png",
+    "decayRate": 86400
+  },
+  {
+    "name": "tune_engine_stage_2_C",
+    "label": "C Class Engine Stage 2",
+    "size": {
+      "x": 3,
+      "y": 3
+    },
+    "image": "tune_part.png",
+    "decayRate": 86400
+  },
+  {
+    "name": "tune_engine_stage_3_C",
+    "label": "C Class Engine Stage 3",
+    "size": {
+      "x": 3,
+      "y": 3
+    },
+    "image": "tune_part.png",
+    "decayRate": 86400
+  },
+  {
+    "name": "tune_engine_stage_4_C",
+    "label": "C Class Engine Stage 4",
+    "size": {
+      "x": 3,
+      "y": 3
+    },
+    "image": "tune_part.png",
+    "decayRate": 86400
+  },
+  {
+    "name": "tune_engine_stage_1_B",
+    "label": "B Class Engine Stage 1",
+    "size": {
+      "x": 3,
+      "y": 3
+    },
+    "image": "tune_part.png",
+    "decayRate": 86400
+  },
+  {
+    "name": "tune_engine_stage_2_B",
+    "label": "B Class Engine Stage 2",
+    "size": {
+      "x": 3,
+      "y": 3
+    },
+    "image": "tune_part.png",
+    "decayRate": 86400
+  },
+  {
+    "name": "tune_engine_stage_3_B",
+    "label": "B Class Engine Stage 3",
+    "size": {
+      "x": 3,
+      "y": 3
+    },
+    "image": "tune_part.png",
+    "decayRate": 86400
+  },
+  {
+    "name": "tune_engine_stage_4_B",
+    "label": "B Class Engine Stage 4",
+    "size": {
+      "x": 3,
+      "y": 3
+    },
+    "image": "tune_part.png",
+    "decayRate": 86400
+  },
+  {
+    "name": "tune_suspension_stage_1_X",
+    "label": "X Class Suspension Stage 1",
+    "size": {
+      "x": 3,
+      "y": 3
+    },
+    "image": "tune_part.png",
+    "decayRate": 86400
+  },
+  {
+    "name": "tune_suspension_stage_2_X",
+    "label": "X Class Suspension Stage 2",
+    "size": {
+      "x": 3,
+      "y": 3
+    },
+    "image": "tune_part.png",
+    "decayRate": 86400
+  },
+  {
+    "name": "tune_suspension_stage_3_X",
+    "label": "X Class Suspension Stage 3",
+    "size": {
+      "x": 3,
+      "y": 3
+    },
+    "image": "tune_part.png",
+    "decayRate": 86400
+  },
+  {
+    "name": "tune_suspension_stage_4_X",
+    "label": "X Class Suspension Stage 4",
+    "size": {
+      "x": 3,
+      "y": 3
+    },
+    "image": "tune_part.png",
+    "decayRate": 86400
+  },
+  {
+    "name": "tune_suspension_stage_1_S",
+    "label": "S Class Suspension Stage 1",
+    "size": {
+      "x": 3,
+      "y": 3
+    },
+    "image": "tune_part.png",
+    "decayRate": 86400
+  },
+  {
+    "name": "tune_suspension_stage_2_S",
+    "label": "S Class Suspension Stage 2",
+    "size": {
+      "x": 3,
+      "y": 3
+    },
+    "image": "tune_part.png",
+    "decayRate": 86400
+  },
+  {
+    "name": "tune_suspension_stage_3_S",
+    "label": "S Class Suspension Stage 3",
+    "size": {
+      "x": 3,
+      "y": 3
+    },
+    "image": "tune_part.png",
+    "decayRate": 86400
+  },
+  {
+    "name": "tune_suspension_stage_4_S",
+    "label": "S Class Suspension Stage 4",
+    "size": {
+      "x": 3,
+      "y": 3
+    },
+    "image": "tune_part.png",
+    "decayRate": 86400
+  },
+  {
+    "name": "tune_suspension_stage_1_A+",
+    "label": "A+ Class Suspension Stage 1",
+    "size": {
+      "x": 3,
+      "y": 3
+    },
+    "image": "tune_part.png",
+    "decayRate": 86400
+  },
+  {
+    "name": "tune_suspension_stage_2_A+",
+    "label": "A+ Class Suspension Stage 2",
+    "size": {
+      "x": 3,
+      "y": 3
+    },
+    "image": "tune_part.png",
+    "decayRate": 86400
+  },
+  {
+    "name": "tune_suspension_stage_3_A+",
+    "label": "A+ Class Suspension Stage 3",
+    "size": {
+      "x": 3,
+      "y": 3
+    },
+    "image": "tune_part.png",
+    "decayRate": 86400
+  },
+  {
+    "name": "tune_suspension_stage_4_A+",
+    "label": "A+ Class Suspension Stage 4",
+    "size": {
+      "x": 3,
+      "y": 3
+    },
+    "image": "tune_part+.png",
+    "decayRate": 86400
+  },
+  {
+    "name": "tune_suspension_stage_1_A",
+    "label": "A Class Suspension Stage 1",
+    "size": {
+      "x": 3,
+      "y": 3
+    },
+    "image": "tune_part.png",
+    "decayRate": 86400
+  },
+  {
+    "name": "tune_suspension_stage_2_A",
+    "label": "A Class Suspension Stage 2",
+    "size": {
+      "x": 3,
+      "y": 3
+    },
+    "image": "tune_part.png",
+    "decayRate": 86400
+  },
+  {
+    "name": "tune_suspension_stage_3_A",
+    "label": "A Class Suspension Stage 3",
+    "size": {
+      "x": 3,
+      "y": 3
+    },
+    "image": "tune_part.png",
+    "decayRate": 86400
+  },
+  {
+    "name": "tune_suspension_stage_4_A",
+    "label": "A Class Suspension Stage 4",
+    "size": {
+      "x": 3,
+      "y": 3
+    },
+    "image": "tune_part.png",
+    "decayRate": 86400
+  },
+  {
+    "name": "tune_suspension_stage_1_D",
+    "label": "D Class Suspension Stage 1",
+    "size": {
+      "x": 3,
+      "y": 3
+    },
+    "image": "tune_part.png",
+    "decayRate": 86400
+  },
+  {
+    "name": "tune_suspension_stage_2_D",
+    "label": "D Class Suspension Stage 2",
+    "size": {
+      "x": 3,
+      "y": 3
+    },
+    "image": "tune_part.png",
+    "decayRate": 86400
+  },
+  {
+    "name": "tune_suspension_stage_3_D",
+    "label": "D Class Suspension Stage 3",
+    "size": {
+      "x": 3,
+      "y": 3
+    },
+    "image": "tune_part.png",
+    "decayRate": 86400
+  },
+  {
+    "name": "tune_suspension_stage_4_D",
+    "label": "D Class Suspension Stage 4",
+    "size": {
+      "x": 3,
+      "y": 3
+    },
+    "image": "tune_part.png",
+    "decayRate": 86400
+  },
+  {
+    "name": "tune_suspension_stage_1_C",
+    "label": "C Class Suspension Stage 1",
+    "size": {
+      "x": 3,
+      "y": 3
+    },
+    "image": "tune_part.png",
+    "decayRate": 86400
+  },
+  {
+    "name": "tune_suspension_stage_2_C",
+    "label": "C Class Suspension Stage 2",
+    "size": {
+      "x": 3,
+      "y": 3
+    },
+    "image": "tune_part.png",
+    "decayRate": 86400
+  },
+  {
+    "name": "tune_suspension_stage_3_C",
+    "label": "C Class Suspension Stage 3",
+    "size": {
+      "x": 3,
+      "y": 3
+    },
+    "image": "tune_part.png",
+    "decayRate": 86400
+  },
+  {
+    "name": "tune_suspension_stage_4_C",
+    "label": "C Class Suspension Stage 4",
+    "size": {
+      "x": 3,
+      "y": 3
+    },
+    "image": "tune_part.png",
+    "decayRate": 86400
+  },
+  {
+    "name": "tune_suspension_stage_1_B",
+    "label": "B Class Suspension Stage 1",
+    "size": {
+      "x": 3,
+      "y": 3
+    },
+    "image": "tune_part.png",
+    "decayRate": 86400
+  },
+  {
+    "name": "tune_suspension_stage_2_B",
+    "label": "B Class Suspension Stage 2",
+    "size": {
+      "x": 3,
+      "y": 3
+    },
+    "image": "tune_part.png",
+    "decayRate": 86400
+  },
+  {
+    "name": "tune_suspension_stage_3_B",
+    "label": "B Class Suspension Stage 3",
+    "size": {
+      "x": 3,
+      "y": 3
+    },
+    "image": "tune_part.png",
+    "decayRate": 86400
+  },
+  {
+    "name": "tune_suspension_stage_4_B",
+    "label": "B Class Suspension Stage 4",
+    "size": {
+      "x": 3,
+      "y": 3
+    },
+    "image": "tune_part.png",
+    "decayRate": 86400
+  },
+  {
+    "name": "tune_turbo_X",
+    "label": "X Class Turbo",
+    "size": {
+      "x": 3,
+      "y": 3
+    },
+    "image": "tune_part.png",
+    "decayRate": 86400
+  },
+  {
+    "name": "tune_turbo_S",
+    "label": "S Class Turbo",
+    "size": {
+      "x": 3,
+      "y": 3
+    },
+    "image": "tune_part.png",
+    "decayRate": 86400
+  },
+  {
+    "name": "tune_turbo_A+",
+    "label": "A+ Class Turbo",
+    "size": {
+      "x": 3,
+      "y": 3
+    },
+    "image": "tune_part.png",
+    "decayRate": 86400
+  },
+  {
+    "name": "tune_turbo_A",
+    "label": "A Class Turbo",
+    "size": {
+      "x": 3,
+      "y": 3
+    },
+    "image": "tune_part.png",
+    "decayRate": 86400
+  },
+  {
+    "name": "tune_turbo_D",
+    "label": "D Class Turbo",
+    "size": {
+      "x": 3,
+      "y": 3
+    },
+    "image": "tune_part.png",
+    "decayRate": 86400
+  },
+  {
+    "name": "tune_turbo_C",
+    "label": "C Class Turbo",
+    "size": {
+      "x": 3,
+      "y": 3
+    },
+    "image": "tune_part.png",
+    "decayRate": 86400
+  },
+  {
+    "name": "tune_turbo_B",
+    "label": "B Class Turbo",
+    "size": {
+      "x": 3,
+      "y": 3
+    },
+    "image": "tune_part.png",
+    "decayRate": 86400
+  },
+  {
+    "name": "sales_ticket",
+    "label": "Sales ticket",
+    "size": {
+      "x": 1,
+      "y": 2
+    },
+    "image": "sales_ticket.png",
+    "decayRate": 10080
   }
 ]

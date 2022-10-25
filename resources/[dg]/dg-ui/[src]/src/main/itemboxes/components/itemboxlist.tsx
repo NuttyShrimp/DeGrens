@@ -4,7 +4,7 @@ import { useVhToPixel } from '@lib/hooks/useVhToPixel';
 
 import { Itembox } from './itembox';
 
-export const ItemboxList: FC<Itemboxes.State> = ({ itemboxes }) => {
+export const ItemboxList: FC<Pick<Itemboxes.State, 'itemboxes'>> = ({ itemboxes }) => {
   const hiddenMargin = useVhToPixel(40);
 
   return (

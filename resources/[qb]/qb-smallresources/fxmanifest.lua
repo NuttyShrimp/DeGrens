@@ -28,7 +28,3 @@ files {
 	'popgroups.ymt',
 	'relationships.dat'
 }
-
-exports {
-	'HasHarness'
-}

@@ -77,14 +77,20 @@ devData.players = [
 devData.vehModels = [
   {
     name: 'Adder',
+    brand: 'GTA',
+    class: 'S',
     model: 'adder',
   },
   {
     name: 'WRX STi',
+    brand: 'Subaru',
+    class: 'S',
     model: 'subwrx',
   },
   {
     name: 'DB11',
+    brand: 'Aston Martin',
+    class: 'X',
     model: 'db11',
   },
 ] as Vehicle[];

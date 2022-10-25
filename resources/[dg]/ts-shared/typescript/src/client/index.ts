@@ -6,6 +6,8 @@ import * as Classes from './classes';
 
 export * from './classes';
 
+import './controllers/events';
+
 const DGX = {
   ...Shared,
   ...Classes,

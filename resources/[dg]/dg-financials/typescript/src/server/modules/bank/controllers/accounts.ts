@@ -80,7 +80,3 @@ Events.onNet('financials:bank:savings:create', (src: number, accountName: string
   }
   accountManager.createAccount(cid, accountName, 'savings');
 });
-
-Chat.registerCommand('testPayment', '', [], 'developer', () => {
-  Financials.transfer('BE38807890', 'BE58084424', 1001, 1001, 200, 'Test Payment', 6);
-});

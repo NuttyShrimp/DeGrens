@@ -1,42 +1,44 @@
 entries.vehicleseats = {
 	{
-		id = -1,
-		title = 'Driver',
-		icon = 'caret-up',
-		event = 'qb-radialmenu:client:ChangeSeat',
-		shouldClose = false,
-		isEnabled = function()
-			return GetVehicleModelNumberOfSeats(GetEntityModel(Vehicle)) > 0
-		end
-	},
-	{
 		id = 0,
-		title = 'Passenger',
-		icon = 'caret-up',
-		event = 'qb-radialmenu:client:ChangeSeat',
+		title = 'Bijrijder',
+		icon = '2',
+		event = 'vehicles:radial:seat',
 		shouldClose = false,
-		isEnabled = function()
-			return GetVehicleModelNumberOfSeats(GetEntityModel(Vehicle)) > 1
+		isEnabled = function(_, vehicle)
+      if not vehicle then return false end
+			return GetVehicleModelNumberOfSeats(GetEntityModel(vehicle)) > 1
 		end
 	},
-	{
-		id = 1,
-		title = 'Rear Left',
-		icon = 'caret-down',
-		event = 'qb-radialmenu:client:ChangeSeat',
-		shouldClose = false,
-		isEnabled = function()
-			return GetVehicleModelNumberOfSeats(GetEntityModel(Vehicle)) > 2
-		end
-	},
-	{
+  {
 		id = 2,
-		title = 'Rear Right',
-		icon = 'caret-down',
-		event = 'qb-radialmenu:client:ChangeSeat',
+		title = 'Rechts Achter',
+		icon = '4',
+		event = 'vehicles:radial:seat',
+		isEnabled = function(_, vehicle)
+      if not vehicle then return false end
+			return GetVehicleModelNumberOfSeats(GetEntityModel(vehicle)) > 3
+		end
+	},
+  {
+		id = 1,
+		title = 'Links Achter',
+		icon = '3',
+		event = 'vehicles:radial:seat',
+		isEnabled = function(_, vehicle)
+      if not vehicle then return false end
+			return GetVehicleModelNumberOfSeats(GetEntityModel(vehicle)) > 2
+		end
+	},
+  {
+		id = -1,
+		title = 'Bestuurder',
+		icon = '1',
+		event = 'vehicles:radial:seat',
 		shouldClose = false,
-		isEnabled = function()
-			return GetVehicleModelNumberOfSeats(GetEntityModel(Vehicle)) > 3
+		isEnabled = function(_, vehicle)
+      if not vehicle then return false end
+			return GetVehicleModelNumberOfSeats(GetEntityModel(vehicle)) > 0
 		end
 	},
 }

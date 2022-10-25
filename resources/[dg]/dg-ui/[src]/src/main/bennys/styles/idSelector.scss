@@ -1,0 +1,44 @@
+@use 'src/styles/variables';
+
+.bennys-id-selector {
+  position: absolute;
+  top: 0;
+  width: 30vh;
+  height: 14vh;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  
+  &-container {
+    min-width: 30vh;
+    width: fit-content;
+    height: 14vh;
+    position: relative;
+    background-color: variables.$primary-darker;
+  }
+
+  &-text {
+    font-family: 'Hurme Geometric Sans 3', sans-serif;
+    font-weight: 800;
+    font-size: 3rem;
+    color: variables.$gray-normal;
+
+    &.current {
+      color: white;
+    }
+
+    &.middle {
+      flex: 0;
+    }
+  }
+
+  &-arrow {
+    flex: 0!important;
+  }
+
+  & > * {
+    flex: 1;
+    text-align: center;
+  }
+}

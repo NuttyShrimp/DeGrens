@@ -1,8 +1,8 @@
-import { UI, Util } from '@dgx/client';
+import { RayCast, UI, Util } from '@dgx/client';
 import { Vector3 } from '@dgx/shared';
 
-import { DISABLED_KEYS, PEEK_TYPES } from '../cl_constant';
-import { getActiveZones, getCurrentEntity } from '../helpers/actives';
+import { DEFAULT_DISTANCE, DISABLED_KEYS, PEEK_TYPES } from '../cl_constant';
+import { getActiveZones, getCurrentEntity, updateCurrentEntity } from '../helpers/actives';
 import { isEntryDisabled } from '../helpers/entries';
 
 import { ZoneManager } from './entryManagers/zoneManager';
@@ -23,8 +23,8 @@ class StateManager {
   private isPeeking: boolean;
   private isUIFocused: boolean;
   private isInDebounce: boolean;
-  private checkInterval: NodeJS.Timer;
-  private controlInterval: NodeJS.Timer;
+  private checkInterval: NodeJS.Timer | null = null;
+  private controlInterval: NodeJS.Timer | null = null;
 
   constructor() {
     this.canPeek = true;
@@ -40,9 +40,16 @@ class StateManager {
 
   // Handler when button is pressed down
   startPeeking() {
-    if (!this.canPeek || this.isPeeking) {
+    if (!this.canPeek || this.isPeeking || LocalPlayer.state?.peekDisabled) {
       return;
     }
+
+    // We refresh entity open
+    // When we look at for example a vehicle, then move around it while aiming on the vehicle, and then start peeking
+    // The old coords will get distance checken, which will most of the time not show entrys because distance limit
+    const [entity, type, coords] = RayCast.getEntityPlayerLookingAt();
+    updateCurrentEntity({ entity, type, coords });
+
     UI.openApplication('peek', {}, true);
     this.isPeeking = true;
     entryManager.loadActiveEntries(true);
@@ -82,84 +89,75 @@ class StateManager {
   }
 
   createCheckThread() {
-    if (this.checkInterval !== undefined) {
-      return;
-    }
-    const ped = PlayerPedId();
+    if (this.checkInterval !== null) return;
+
     this.checkInterval = setInterval(async () => {
       const currentEntity = getCurrentEntity();
       const activeZones = getActiveZones();
-      if (!this.isPeeking || this.isUIFocused || (currentEntity.entity === null && activeZones.size === 0)) {
-        clearInterval(this.checkInterval);
-        this.checkInterval = undefined;
+      if (!this.isPeeking || this.isUIFocused || (currentEntity.entity === 0 && activeZones.size === 0)) {
+        if (this.checkInterval !== null) {
+          clearInterval(this.checkInterval);
+          this.checkInterval = null;
+        }
         return;
       }
-      const plyCoords = Util.ArrayToVector3(GetEntityCoords(ped, true));
+
+      const plyCoords = Util.getPlyCoords();
       let isDirty = false;
-      // Check for bones
-      const bonesManager = entryManager.getManagerForType('bones');
-      const activeEntries = bonesManager.getActiveEntries();
-      for (const index in activeEntries) {
-        const entry = activeEntries[index];
-        const boneId = GetEntityBoneIndexByName(currentEntity.entity, entry._metadata.boneName);
-        const bonePos = GetWorldPositionOfEntityBone(currentEntity.entity, boneId);
-        const oldDistance = Boolean(entry._metadata.state.distance);
-        const dist = Vector3.subtract(plyCoords, Util.ArrayToVector3(bonePos)).Length;
-        entry._metadata.state.distance = boneId == -1 || dist < entry.distance;
-        if (oldDistance !== entry._metadata.state.distance) {
-          isDirty = true;
-        }
-        // TODO: Test if this actually needed
-        activeEntries[index] = entry;
-      }
-      // CanInteract check
-      for (const type of PEEK_TYPES) {
-        const manager = entryManager.getManagerForType(type);
+
+      for (const entryType of PEEK_TYPES) {
+        const manager = entryManager.getManagerForType(entryType);
         const activeEntries = manager.getActiveEntries();
-        for (const index in activeEntries) {
+
+        // Copy keys to properly be able to modify array while looping over
+        const activeEntriesIndices = [...activeEntries.keys()];
+        for (const index of activeEntriesIndices) {
           const entry = activeEntries[index];
-          if (!entry.canInteract) {
-            continue;
-          }
+          if (!entry._metadata) continue;
+          const maxDistance = entry.distance ?? DEFAULT_DISTANCE;
           const oldCanInteract = Boolean(entry._metadata.state.canInteract);
-          entry._metadata.state.canInteract = entry.canInteract(currentEntity.entity, entry.distance, entry);
-          if (entry._metadata.state.canInteract instanceof Promise) {
-            entry._metadata.state.canInteract = await entry._metadata.state.canInteract;
+          const oldDistance = Boolean(entry._metadata.state.distance);
+
+          // CanInteract Check
+          if (entry.canInteract) {
+            entry._metadata.state.canInteract = entry.canInteract(currentEntity.entity, maxDistance, entry);
+            if (entry._metadata.state.canInteract instanceof Promise) {
+              entry._metadata.state.canInteract = await entry._metadata.state.canInteract;
+            }
           }
-          if (oldCanInteract !== entry._metadata.state.canInteract) {
+
+          // Distance Check
+          let targetVector: Vec3 | null = null;
+          switch (entryType) {
+            case 'bones':
+              const boneId = GetEntityBoneIndexByName(currentEntity.entity, entry._metadata.boneName);
+              if (boneId !== -1) {
+                const bonePos = Util.ArrayToVector3(GetWorldPositionOfEntityBone(currentEntity.entity, boneId));
+                // Check if raycast intersect point is close to bone
+                if (bonePos.distance(currentEntity.coords) <= maxDistance) {
+                  targetVector = bonePos;
+                }
+              }
+              break;
+            case 'zones':
+              const activeZone = activeZones.get(entry._metadata.name);
+              if (activeZone) {
+                targetVector = activeZone.center;
+              }
+              break;
+            default:
+              targetVector = currentEntity.coords;
+              break;
+          }
+          entry._metadata.state.distance =
+            targetVector === null ? false : plyCoords.distance(targetVector) <= maxDistance;
+
+          if (oldCanInteract !== entry._metadata.state.canInteract || oldDistance !== entry._metadata.state.distance) {
             isDirty = true;
           }
         }
       }
-      // distance Check
-      // TODO: Merge loops
-      PEEK_TYPES.filter(t => t !== 'bones').forEach(type => {
-        const manager = entryManager.getManagerForType(type);
-        const activeEntries = manager.getActiveEntries();
-        for (const index in activeEntries) {
-          const entry = activeEntries[index];
-          if (!entry.distance) {
-            continue;
-          }
-          const oldState = Boolean(entry._metadata.state.distance);
-          let targetVector = null;
-          if (type === 'zones') {
-            if (activeZones.has(entry._metadata.name)) {
-              const { x, y, z } = activeZones.get(entry._metadata.name).center;
-              targetVector = new Vector3(x, y, z);
-            }
-          } else {
-            const { x, y, z } = currentEntity.coords;
-            targetVector = new Vector3(x, y, z);
-          }
-          entry._metadata.state.distance = targetVector
-            ? plyCoords.subtract(targetVector).Length <= entry.distance
-            : false;
-          if (oldState !== entry._metadata.state.distance) {
-            isDirty = true;
-          }
-        }
-      });
+
       if (isDirty) {
         entryManager.refreshNUIList();
       }
@@ -169,8 +167,10 @@ class StateManager {
   createControlThread() {
     this.controlInterval = setInterval(() => {
       if (!this.isPeeking) {
-        clearInterval(this.controlInterval);
-        this.controlInterval = undefined;
+        if (this.controlInterval !== null) {
+          clearInterval(this.controlInterval);
+          this.controlInterval = null;
+        }
         return;
       }
       SetPauseMenuActive(false);

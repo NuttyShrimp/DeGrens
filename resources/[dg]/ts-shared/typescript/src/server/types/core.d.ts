@@ -145,6 +145,11 @@ interface ServerFunctions {
    * @returns true if there is already a player online with this license
    */
   IsLicenseInUse(license: string): boolean;
+
+  /**
+   * @returns a vehicle entity or 0 of no networked vehicle was found
+   */
+  GetClosestVehicle(src: number): number;
 }
 
 // Global player functions

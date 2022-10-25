@@ -23,6 +23,7 @@ interface Option {
         [jobName: string]: number;
       };
   gang?: string | string[];
+  business?: { name: string; permissions?: string[] }[];
   /*
    * If the dist for this option is diff fron the parameters one
    */
@@ -32,6 +33,8 @@ interface Option {
    */
   data?: any;
 }
+
+type GlobalType = 'ped' | 'player' | 'vehicle';
 
 interface EventOption extends Option {
   type: 'client' | 'server';

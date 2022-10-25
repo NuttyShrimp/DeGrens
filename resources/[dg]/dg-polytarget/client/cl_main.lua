@@ -15,9 +15,9 @@ local function addToTargetZone(zone)
     end, function(isPointInside, point, insideZones, enteredZones, leftZones)
       if leftZones ~= nil then
         for i = 1, #leftZones do
-          TriggerEvent("dg-polytarget:exit", leftZones[i].name)
+          TriggerEvent("dg-polytarget:exit", leftZones[i].name, leftZones[i].data, exports['dg-lib']:vectorToTable(leftZones[i].center))
           if DEBUG_ENABLED then
-            debug('[dg-polytarget] left zone: %s', leftZones[i].name)
+						debug('[dg-polytarget] Left zone | name: %s | data: %s | center: %s', leftZones[i].name, leftZones[i].data, leftZones[i].center)
           end
         end
       end
@@ -114,6 +114,7 @@ end)
 -- IMPORTANT: This removes all zones under this name
 exports('removeZone', function(name, id)
   local zones = {}
+  if not targetZone then return end
   for i, zone in pairs(targetZone.zones) do
     zones[#zones + 1] = zone
   end

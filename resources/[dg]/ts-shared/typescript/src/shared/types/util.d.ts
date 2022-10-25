@@ -1,6 +1,16 @@
-declare namespace Particles {
-  type Target = { coords: Vec3 } | { netId: number } | { netId: number; boneName: string };
+type Coords = Vec3;
 
+interface RGB {
+  r: number;
+  g: number;
+  b: number;
+}
+
+declare type DeepPartial<T> = {
+  [P in keyof T]?: DeepPartial<T[P]>;
+};
+
+declare namespace Particles {
   type Particle = {
     dict: string;
     name: string;
@@ -8,7 +18,7 @@ declare namespace Particles {
     rotation?: Vec3;
     scale?: number;
     looped: boolean;
-  } & Target;
+  } & ({ coords: Vec3 } | { netId: number } | { netId: number; boneName: string; ignoreBoneRotation?: boolean });
 
   // only looped return ptfx handle
   type Data = Required<Particle> & { ptfx?: number };

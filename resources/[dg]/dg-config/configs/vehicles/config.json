@@ -1,0 +1,33 @@
+{
+  "harnessUses": 1000,
+  "carwashPrice": 100,
+  "waxTime": 7,
+  "itemUpgradesZone": {
+    "center": { "x": 1204.0, "y": -3116.9, "z": 5.54 },
+    "length": 10,
+    "width": 10,
+    "heading": 0
+  },
+  "nos": {
+    "refillAmount": 2000,
+    "maxPortion": 200,
+    "useTimeout": 3000,
+    "flowrates": [
+      {
+        "label": "Low",
+        "powerMultiplier": 1.4,
+        "depletionTick": 1.0
+      },
+      {
+        "label": "Medium",
+        "powerMultiplier": 1.7,
+        "depletionTick": 2.0
+      },
+      {
+        "label": "High",
+        "powerMultiplier": 2.0,
+        "depletionTick": 3
+      }
+    ]
+  }
+}

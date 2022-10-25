@@ -1715,5 +1715,37 @@
         }
       }
     ]
+  },
+  "000091": {
+    "description": "PDM Linkse deur",
+    "locked": true,
+    "authorized": ["pdm"],
+    "distance": 5.0,
+    "doors": [
+      {
+        "object": "v_ilev_fib_door1",
+        "coords": {
+          "x": -31.72,
+          "y": -1101.85,
+          "z": 26.57
+        }
+      }
+    ]
+  },
+  "000092": {
+    "description": "PDM Rechtse deur",
+    "locked": true,
+    "authorized": ["pdm"],
+    "distance": 5.0,
+    "doors": [
+      {
+        "object": "v_ilev_fib_door1",
+        "coords": {
+          "x": -33.81,
+          "y": -1107.58,
+          "z": 26.57
+        }
+      }
+    ]
   }
 }

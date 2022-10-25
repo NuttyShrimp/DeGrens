@@ -1,0 +1,56 @@
+{
+  "locations": {
+    "impound": {
+      "coords": {
+        "x": -237.61,
+        "y": -1184.09,
+        "z": 23.04,
+        "w": 0
+      },
+      "width": 4.8,
+      "length": 17.5
+    },
+    "retrieveSpot": {
+      "x": -204.42108154296875,
+      "y": -1166.2908935546875,
+      "z": 22.675518035888672,
+      "w": 179.3760986328125
+    }
+  },
+  "reasons": [
+    {
+      "title": "Scuff",
+      "description": "Een voertuig zit ergens gescuffed",
+      "strike": 0,
+      "time": 0,
+      "price": 0,
+      "allowBurger": true
+    },
+    {
+      "title": "Roekeloos rijden",
+      "description": "Persoon is gevaar op baan",
+      "strike": 1,
+      "time": 24,
+      "price": 1000,
+      "allowBurger": false
+    }
+  ],
+  "strikes": {
+    "minimum": 15,
+    "permImpound": 60,
+    "hoursPerStrike": 6,
+    "strikeFallOff": 30
+  },
+  "price": {
+    "earlyReleaseBase": 1,
+    "multipliers": {
+      "D": 1,
+      "C": 1,
+      "B": 1,
+      "A": 1.05,
+      "A+": 1.2,
+      "S": 1.55,
+      "X": 1.85
+    }
+  }
+}

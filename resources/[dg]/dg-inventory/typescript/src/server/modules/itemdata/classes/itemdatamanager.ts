@@ -10,12 +10,17 @@ import winston from 'winston';
 class ItemDataManager extends Util.Singleton<ItemDataManager>() {
   private logger: winston.Logger;
   private itemData: Record<string, Inventory.ItemData>;
+  private loaded: boolean;
 
   constructor() {
     super();
     this.logger = mainLogger.child({ module: 'ItemDataManager' });
     this.itemData = {};
+    this.loaded = false;
   }
+
+  @Export('isItemDataLoaded')
+  private _getIsLoaded = () => this.loaded;
 
   public seed = async () => {
     await Config.awaitConfigLoad();
@@ -30,16 +35,20 @@ class ItemDataManager extends Util.Singleton<ItemDataManager>() {
     });
     Events.emitNet('inventory:client:updateAllItemData', -1, this.itemData);
     this.logger.info('Itemdata has been (re)loaded');
+    this.loaded = true;
   };
 
   @Export('getItemData')
   public get = (name: string) => {
     const item = this.itemData[name];
     if (!item) {
-      this.logger.error(`Tried to get itemdata of unregistered item ${name}`);
-      throw new Error();
+      throw new Error(`Could not get itemdata with nonexistent name ${name}`);
     }
     return item;
+  };
+
+  public doesItemNameExist = (name: string) => {
+    return name in this.itemData;
   };
 
   @Export('getAllItemData')

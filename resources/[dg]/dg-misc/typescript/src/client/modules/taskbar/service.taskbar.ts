@@ -29,6 +29,9 @@ export const taskbar = async (
   if (settings.disableInventory) {
     LocalPlayer.state.set('inv_busy', true, true);
   }
+  if (settings.disablePeek) {
+    LocalPlayer.state.set('peekDisabled', true, true);
+  }
   if (settings.animation) {
     doAnimation(ped, settings.animation);
   }
@@ -56,7 +59,7 @@ export const taskbar = async (
   }
 
   UI.closeApplication('taskbar');
-  cleanUp();
+  cleanUp(settings);
 
   return [wasCanceled, atPercentage];
 };
@@ -136,7 +139,7 @@ const doTaskbarThread = async (endTime: number): Promise<[TaskbarState, number]>
   return [retval, currentTime];
 };
 
-const cleanUp = () => {
+const cleanUp = (settings: TaskBar.TaskBarSettings) => {
   const ped = PlayerPedId();
   if (runningTaskbar.settings.animation) {
     if ('task' in runningTaskbar.settings.animation) {
@@ -153,5 +156,8 @@ const cleanUp = () => {
   runningTaskbar.id = null;
   runningTaskbar.settings = {};
   LocalPlayer.state.set('inv_busy', false, true);
+  if (settings.disablePeek) {
+    LocalPlayer.state.set('peekDisabled', false, true);
+  }
   state = TaskbarState.Idle;
 };

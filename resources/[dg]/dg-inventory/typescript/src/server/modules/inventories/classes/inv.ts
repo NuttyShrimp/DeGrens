@@ -19,6 +19,7 @@ export class Inv {
   private logger: winston.Logger;
   private _id!: string;
   private _type!: Inventory.Type;
+  private _identifier!: string;
   private _size!: number;
   private items!: Set<string>;
   private _allowedItems?: string[];
@@ -29,14 +30,16 @@ export class Inv {
 
   public init = async (id: string) => {
     this._id = id;
-    this._type = splitId(id).type;
+    const { identifier, type } = splitId(id);
+    this._type = type;
+    this._identifier = identifier;
     this.items = new Set();
 
-    const fixedSizes = getConfig().amountOfSlots;
+    const fixedSizes = getConfig()?.amountOfSlots;
     this.size = fixedSizes[this.type] ?? 0;
 
     if (this.type === 'shop') {
-      this._allowedItems = [];
+      this.allowedItems = [];
       const items = shopManager.getItems(this.id);
       for (const entry of items) {
         const item = await itemManager.create({
@@ -44,16 +47,18 @@ export class Inv {
           inventory: this.id,
           metadata: {},
         });
+        if (!item) continue;
         item.setRequirements(entry.requirements);
       }
       // Shop size gets set set in getFirstAvailablePosition
     } else if (this.type === 'container') {
-      const identifier = splitId(id).identifier;
-      const name = itemManager.get(identifier)?.state.name;
+      const name = itemManager.get(this.identifier)?.state?.name;
       if (!name) return;
       const { allowedItems, size } = getContainerInfo(name);
-      this._allowedItems = allowedItems;
+      this.allowedItems = allowedItems;
       this.size = size;
+    } else if (this.type === 'tunes') {
+      this.allowedItems = (global.exports['dg-vehicles'].getAllowedTuneItems(this.identifier) as string[]) ?? [];
     }
 
     if (this.isPersistent()) {
@@ -72,6 +77,9 @@ export class Inv {
   }
   public get type() {
     return this._type;
+  }
+  public get identifier() {
+    return this._identifier;
   }
   public get size() {
     return this._size;
@@ -105,20 +113,19 @@ export class Inv {
   };
 
   private updatedInv = async (action: 'add' | 'remove', itemState: Inventory.ItemState) => {
-    const { type, identifier } = splitId(this.id);
-    emit('inventory:inventoryUpdated', type, identifier, action, itemState);
+    emit('inventory:inventoryUpdated', this.type, this.identifier, action, itemState);
 
     if (this.type !== 'player') return;
 
     const newInv = await inventoryManager.get(itemState.inventory);
     if (newInv.type === 'drop' && newInv.items.size === 0) {
-      const serverId = DGCore.Functions.GetPlayerByCitizenId(Number(identifier)).PlayerData.source;
+      const serverId = DGCore.Functions.GetPlayerByCitizenId(Number(this.identifier)).PlayerData.source;
       Events.emitNet('inventory:client:doDropAnimation', serverId);
     }
 
     const objectInfo = getConfig().itemObjects[itemState.name];
     if (objectInfo) {
-      const serverId = DGCore.Functions.GetPlayerByCitizenId(Number(identifier)).PlayerData.source;
+      const serverId = DGCore.Functions.GetPlayerByCitizenId(Number(this.identifier)).PlayerData.source;
       Events.emitNet('inventory:client:updateObject', serverId, action, itemState.id, objectInfo);
     }
   };
@@ -131,6 +138,16 @@ export class Inv {
       return items;
     }, []);
     return items.map(item => item.state);
+  };
+
+  public getItemsForName = (itemName: string) => {
+    const items: Inventory.ItemState[] = [];
+    this.items.forEach(id => {
+      const item = itemManager.get(id);
+      if (item?.state.name !== itemName) return;
+      items.push(item.state);
+    });
+    return items;
   };
 
   public getFirstAvailablePosition = (itemName: string) => {
@@ -175,12 +192,11 @@ export class Inv {
     this.logger.info(`Inventory ${this.id} has been saved`);
   };
 
-  // TODO: Implement owned check after vehicle merge
   private isPersistent = () => {
-    if (getConfig().persistentTypes.includes(this.type)) return true;
-    if (getConfig().vehicleTypes.includes(this.type)) {
-      const vin = splitId(this.id).identifier;
-      return vin === 'owned';
+    const cfg = getConfig();
+    if (cfg.persistentTypes.includes(this.type)) return true;
+    if (cfg.vehicleTypes.includes(this.type)) {
+      return global.exports['dg-vehicles'].isVinFromPlayerVeh(this.identifier);
     }
     return false;
   };

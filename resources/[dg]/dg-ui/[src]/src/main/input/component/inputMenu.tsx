@@ -19,12 +19,26 @@ export const InputMenu: FC<InputMenu.Data> = props => {
     );
   }, [props.inputs]);
 
+  const fetchDisplays = async () => {
+    const newValues: Record<string, string> = {};
+    for (const input of props.inputs) {
+      if (input.type != 'display') continue;
+      const newValue = await nuiAction(input.getEndpoint, values);
+      newValues[input.name] = newValue;
+    }
+    setValues(vals => ({
+      ...vals,
+      ...newValues,
+    }));
+  };
+
   const handleChange = useCallback(
     (val: string, name: string) => {
       setValues(vals => ({
         ...vals,
         [name]: val,
       }));
+      fetchDisplays();
     },
     [setValues]
   );
@@ -59,6 +73,13 @@ export const InputMenu: FC<InputMenu.Data> = props => {
                   value={values[i.name] ?? ''}
                   onChange={handleChange}
                 />
+              );
+            case 'display':
+              return (
+                <>
+                  <Typography variant='body1'>{i.label}</Typography>;
+                  <Typography variant='body2'>{values[i.name]}</Typography>;
+                </>
               );
             default:
               return null;

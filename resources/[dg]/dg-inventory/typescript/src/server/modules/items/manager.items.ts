@@ -7,6 +7,8 @@ import contextManager from '../../classes/contextmanager';
 import inventoryManager from '../inventories/manager.inventories';
 import { Item } from './classes/item';
 import { ON_CREATE } from './helpers.items';
+import itemDataManager from 'modules/itemdata/classes/itemdatamanager';
+import repository from 'services/repository';
 
 @EventListener()
 @ExportRegister()
@@ -25,10 +27,21 @@ class ItemManager extends Util.Singleton<ItemManager>() {
     const isNew = state.id == undefined;
     if (!isNew && this.items.has(state.id!))
       throw new Error(`Tried to create item with already existing id ${state.id}`);
+    // Check if name is a known item name, if not remove from db and return
+    if (!itemDataManager.doesItemNameExist(state.name)) {
+      if (isNew) {
+        this.logger.error(`Tried to create a new item with nonexistent name ${state.name}`);
+      } else {
+        this.logger.error(`Inventory has an item with nonexistent name ${state.name}, deleting from database`);
+        repository.deleteItem(state.id!);
+      }
+      return;
+    }
     const id = state.id ?? Util.uuidv4();
     const item = new Item();
     this.items.set(id, item);
     await item.init({ state: { ...state, id }, isNew });
+    if (item.checkDecay()) return;
     return item;
   };
 
@@ -47,7 +60,10 @@ class ItemManager extends Util.Singleton<ItemManager>() {
   @DGXEvent('inventory:server:moveItem')
   public move = async (src: number, id: string, position: Vec2, invId: string) => {
     const item = this.get(id);
-    if (!item) throw new Error(`Could not find item ${id} to move`);
+    if (!item) {
+      this.logger.warn(`Could not get item ${id}, broke while getting item to move`);
+      return;
+    }
 
     // Move requirements used in shops/crafting. Remove cash and items when moving item to ply
     const requirements = item.getRequirements();
@@ -112,7 +128,10 @@ class ItemManager extends Util.Singleton<ItemManager>() {
   @DGXEvent('inventory:server:useItem')
   private use = (src: number, id: string, hotkey = false) => {
     const item = this.get(id);
-    if (!item) throw new Error(`Could not find item ${id} to use`);
+    if (!item) {
+      this.logger.warn(`Could not get item ${id}, broke while getting item to use`);
+      return;
+    }
     item.use(src, hotkey);
   };
 
@@ -128,14 +147,20 @@ class ItemManager extends Util.Singleton<ItemManager>() {
   @DGXEvent('inventory:server:bindItem')
   private _bind = (src: number, id: string, key: Inventory.Hotkey) => {
     const item = this.get(id);
-    if (!item) throw new Error(`Could not find item ${id} to bind`);
+    if (!item) {
+      this.logger.warn(`Could not get item ${id}, broke while getting item to bind`);
+      return;
+    }
     item.bind(src, key);
   };
 
   @DGXEvent('inventory:server:unbindItem')
   private _unbind = (src: number, id: string) => {
     const item = this.get(id);
-    if (!item) throw new Error(`Could not find item ${id} to unbind`);
+    if (!item) {
+      this.logger.warn(`Could not get item ${id}, broke while getting item to unbind`);
+      return;
+    }
     item.unbind(src);
   };
 
@@ -148,21 +173,30 @@ class ItemManager extends Util.Singleton<ItemManager>() {
   @Export('setMetadataOfItem')
   private _setMetadata = (id: string, cb: (old: { [key: string]: any }) => { [key: string]: any }) => {
     const item = this.get(id);
-    if (!item) return;
+    if (!item) {
+      this.logger.warn(`Could not get item ${id}, broke while getting item to set metadata`);
+      return;
+    }
     item.setMetadata(cb);
   };
 
   @Export('setQualityOfItem')
   private _setQuality = (id: string, cb: (old: number) => number) => {
     const item = this.get(id);
-    if (!item) return;
+    if (!item) {
+      this.logger.warn(`Could not get item ${id}, broke while getting item to set quality`);
+      return;
+    }
     item.setQuality(cb);
   };
 
   @Export('destroyItem')
   private _destroy = (id: string) => {
     const item = this.get(id);
-    if (!item) return;
+    if (!item) {
+      this.logger.warn(`Could not get item ${id}, broke while getting item to set destroy`);
+      return;
+    }
     item.destroy();
   };
 

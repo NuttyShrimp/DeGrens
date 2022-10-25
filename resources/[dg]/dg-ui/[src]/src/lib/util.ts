@@ -123,15 +123,30 @@ export const formatTime = (time: number): string => {
   return `${min < 10 ? '0' + min : min}:${sec < 10 ? '0' + sec : sec}`;
 };
 
-export const hexToRGB = (hex: string, alpha = 1): string => {
-  const r = parseInt(hex.slice(1, 3), 16);
-  const g = parseInt(hex.slice(3, 5), 16);
-  const b = parseInt(hex.slice(5, 7), 16);
-  return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+export const hexToRGB = (hex: string): RGB => {
+  const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+  if (!result) {
+    throw new Error(`Invalid hex color: ${hex}`);
+  }
+  return {
+    r: parseInt(result[1], 16),
+    g: parseInt(result[2], 16),
+    b: parseInt(result[3], 16),
+  };
+};
+
+export const hexToRGBStr = (hex: string, alpha = 1): string => {
+  const rgb = hexToRGB(hex);
+  return `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${alpha})`;
 };
 
 export const getImg = (name: string) => {
   if (!name) name = 'noicon.png';
   const path = `../assets/inventory/${name}`;
   return (images[path] as any)?.default ?? getImg('noicon.png');
+};
+
+// This is a fix for JS broken builtin module operator on negative numbers
+export const modulo = (num: number, operator: number): number => {
+  return ((num % operator) + operator) % operator;
 };

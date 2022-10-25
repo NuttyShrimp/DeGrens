@@ -50,13 +50,10 @@ isLoggedIn = LocalPlayer.state.loggedIn
 
 hasCompass = false
 shouldShowCompassInVehicle = true
-inVehicle = false
+vehicleEngineRunning = false
 
 -- ~15fps
 compassWaitMS = 70
-
--- TODO: Add fuel for vehicle
-
 --- region Helpers
 function toggleHud()
   if isLoggedIn then
@@ -87,8 +84,13 @@ RegisterNetEvent('pma-voice:setTalkingMode', function(pRange)
   isDirty = true
 end)
 
-RegisterNetEvent('dg-vehicles:seatbelt:toggle', function(toggle)
+AddEventHandler('vehicles:seatbelt:toggle', function(toggle)
   state.car.indicator.belt = not toggle
+  isDirty = true
+end)
+
+AddEventHandler('vehicles:fuel:change', function(value)
+  state.car.fuel = value
   isDirty = true
 end)
 
@@ -98,16 +100,16 @@ RegisterNetEvent("pma-voice:radioActive", function(radioActive)
   isDirty = true
 end)
 
-RegisterNetEvent('baseevents:enteredVehicle', function()
-  inVehicle = true
-  startCarLoop()
-  startRoadnameLoop()
-  startCompassLoop()
-end)
-
-RegisterNetEvent('baseevents:leftVehicle', function()
-  inVehicle = false
-  state.compass.visible = hasCompass
+AddEventHandler('baseevents:engineStateChanged', function(vehicle, engineState)
+  if engineState then
+    vehicleEngineRunning = true
+    startCarLoop()
+    startRoadnameLoop()
+    startCompassLoop()
+  else
+    vehicleEngineRunning = false
+    state.compass.visible = hasCompass
+  end
 end)
 
 RegisterNetEvent('hud:client:ShowAccounts', function(amount)
@@ -201,8 +203,8 @@ end)
 
 startValueLoop = function()
   local pedVeh = GetVehiclePedIsIn(cache.ped, false)
-  inVehicle = pedVeh ~= nil and pedVeh ~= 0
-  if inVehicle then
+  vehicleEngineRunning = pedVeh ~= nil and pedVeh ~= 0 and GetIsVehicleEngineRunning(pedVeh) == 1
+  if vehicleEngineRunning then
     startCarLoop()
     startRoadnameLoop()
     startCompassLoop()
@@ -239,7 +241,7 @@ startValueLoop = function()
         isDirty = true
         state.voice.active = isTalking
       end
-      if inVehicle then
+      if vehicleEngineRunning then
         engineHealth = GetVehicleEngineHealth(car) < 500
         if engineHealth ~= state.car.indicator.engine then
           state.car.indicator.engine = engineHealth
@@ -260,7 +262,7 @@ startValueLoop = function()
 end
 
 function startCarLoop()
-  if not inVehicle then
+  if not vehicleEngineRunning then
     SendAppEventWESentry('hud', {
       action = 'setCarValues',
       data = state.car,
@@ -273,7 +275,7 @@ function startCarLoop()
   state.car.indicator.belt = true
   Citizen.CreateThread(function()
     threads.vehicle = true
-    while inVehicle do
+    while vehicleEngineRunning do
       local car = GetVehiclePedIsIn(cache.ped, false)
       newSpeed = math.ceil(GetEntitySpeed(car) * 3.6)
       if (newSpeed ~= state.car.speed) then
@@ -300,7 +302,7 @@ function startCarLoop()
 end
 
 function startRoadnameLoop()
-  if not inVehicle then
+  if not vehicleEngineRunning then
     state.compass.area = ""
     state.compass.street1 = ""
     state.compass.street2 = ""
@@ -310,7 +312,7 @@ function startRoadnameLoop()
   end
   Citizen.CreateThreadNow(function()
     threads.roadName = true
-    while (inVehicle and shouldShowCompassInVehicle) or hasCompass do
+    while (vehicleEngineRunning and shouldShowCompassInVehicle) or hasCompass do
       local playerCoords = GetEntityCoords(cache.ped, true)
       zone = tostring(GetNameOfZone(playerCoords))
       state.compass.area = GetLabelText(zone)
@@ -329,13 +331,13 @@ function startRoadnameLoop()
 end
 
 function startCompassLoop()
-  if threads.compass or not inVehicle then
+  if threads.compass or not vehicleEngineRunning then
     return
   end
   Citizen.CreateThreadNow(function()
     state.compass.visible = true
     threads.compass = true
-    while (inVehicle and shouldShowCompassInVehicle) or hasCompass do
+    while (vehicleEngineRunning and shouldShowCompassInVehicle) or hasCompass do
       newHeading = math.floor(-GetFinalRenderedCamRot(0).z % 360)
       if (newHeading ~= state.compass.heading) then
         state.compass.heading = newHeading

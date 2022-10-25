@@ -97,6 +97,14 @@ class Inventory {
     return this.removeItemFromInventory('player', cid, name);
   };
 
+  removeItemByIdFromInventory = (type: Inventory.Type, identifier: string, id: string): Promise<boolean> => {
+    return global.exports['dg-inventory'].removeItemByIdFromInventory(type, identifier, id);
+  };
+  removeItemByIdFromPlayer = (plyId: number, id: string): Promise<boolean> => {
+    const cid = String(Util.getCID(plyId));
+    return this.removeItemByIdFromInventory('player', cid, id);
+  };
+
   public getAmountInInventory = (type: Inventory.Type, identifier: string, name: string): Promise<number> => {
     return global.exports['dg-inventory'].getAmountInInventory(type, identifier, name);
   };
@@ -125,12 +133,24 @@ class Inventory {
     return global.exports['dg-inventory'].getItemsInInventory(type, identifier);
   };
 
+  public getItemsForNameInInventory = (
+    type: Inventory.Type,
+    identifier: string,
+    name: string
+  ): Promise<Inventory.ItemState[]> => {
+    return global.exports['dg-inventory'].getItemsForNameInInventory(type, identifier, name);
+  };
+
   public getFirstItemOfName = (
     type: Inventory.Type,
     identifier: string,
     name: string
   ): Promise<Inventory.ItemState | undefined> => {
     return global.exports['dg-inventory'].getFirstItemOfName(type, identifier, name);
+  };
+  public getFirstItemOfNameOfPlayer = (plyId: number, name: string): Promise<Inventory.ItemState | undefined> => {
+    const cid = String(Util.getCID(plyId));
+    return this.getFirstItemOfName('player', cid, name);
   };
 
   public destroyItem = (id: string) => {
@@ -146,6 +166,10 @@ class Inventory {
     const allHandlerData = this.updateHandlers.get(type) ?? [];
     allHandlerData.push({ handler, item, action });
     this.updateHandlers.set(type, allHandlerData);
+  };
+
+  public isItemDataLoaded = () => {
+    return global.exports['dg-inventory'].isItemDataLoaded();
   };
 }
 

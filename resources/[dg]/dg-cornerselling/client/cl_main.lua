@@ -63,9 +63,8 @@ buyerTargettingLoop = function()
                 hasTargetBuyer = true
 
                 TaskStartScenarioInPlace(targetPed, "WORLD_HUMAN_STAND_IMPATIENT_UPRIGHT", 0, false)
-
-                local targetId = NetworkGetNetworkIdFromEntity(targetPed)
-                cacheIds = exports['dg-peek']:addEntityEntry(targetId, {
+                
+                cacheIds = exports['dg-peek']:addEntityEntry(targetPed, {
                     options = {
                         {
                             icon = 'fas fa-handshake',

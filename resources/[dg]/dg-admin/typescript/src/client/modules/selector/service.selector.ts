@@ -74,8 +74,8 @@ export const activateSelector = async () => {
       clearInterval(selectorRayInterval);
       selectorRayInterval = undefined;
     }
-    const rayCastInfo = RayCast.getEntityPlayerLookingAt(100, 1, -1, PlayerPedId());
-    handleRayCastChange(rayCastInfo[0], rayCastInfo[1]);
+    const [entity, entityType] = RayCast.getEntityPlayerLookingAt(100);
+    handleRayCastChange(entity, entityType);
   }, 250);
 };
 
@@ -97,7 +97,7 @@ export const handleRayCastChange = (entity: number, type?: 0 | 1 | 2 | 3) => {
     clearTick(selectorTick);
     selectorTick = undefined;
   }
-  if (!entity) {
+  if (entity === 0) {
     selectedEntity = undefined;
     selectedEntityType = undefined;
     return;

@@ -1,17 +1,21 @@
 import { SQL } from '@dgx/server';
+import { getConfig } from 'helpers/config';
 import winston from 'winston';
 
 import { AccountPermissionValue } from '../../../sv_constant';
 import { bankLogger } from '../utils';
+import accountManager from './AccountManager';
 
 export class PermissionsManager {
   private account_id: string;
   private members: IAccountMember[];
   private logger: winston.Logger;
+  private readonly isSeededAccount: boolean;
 
   constructor(account_id: string, members: IAccountMember[]) {
     this.account_id = account_id;
     this.members = members;
+    this.isSeededAccount = accountManager.getSeededAccountIds().some(aId => aId === account_id);
 
     this.logger = bankLogger.child({
       module: `PermsManager - ${account_id}`,
@@ -88,6 +92,7 @@ export class PermissionsManager {
   };
 
   public hasPermission(cid: number, permission: AccountPermission): boolean {
+    if (this.isSeededAccount) return true;
     const member = this.members.find(member => member.cid === cid);
     if (!member) {
       this.logger.debug(`hasPermission: not in members array | cid: ${cid}`);

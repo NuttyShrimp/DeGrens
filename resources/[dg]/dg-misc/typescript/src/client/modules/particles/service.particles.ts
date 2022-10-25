@@ -46,11 +46,20 @@ export const addParticle = async (id: string, data: Required<Particles.Particle>
       );
     }
   } else if ('boneName' in data) {
-    // BONE
+    // // BONE
     const entity = NetworkGetEntityFromNetworkId(data.netId);
     const boneIndex = GetEntityBoneIndexByName(entity, data.boneName);
+    const bonePos = Util.ArrayToVector3(GetWorldPositionOfEntityBone(entity, boneIndex));
+    const boneOffset = Util.ArrayToVector3(
+      GetOffsetFromEntityGivenWorldCoords(entity, bonePos.x, bonePos.y, bonePos.z)
+    );
+    data.offset = boneOffset.add(data.offset);
+    if (data.ignoreBoneRotation !== true) {
+      const boneRot = Util.ArrayToVector3(GetEntityBoneRotationLocal(entity, boneIndex));
+      data.rotation = boneRot.add(data.rotation);
+    }
     if (data.looped) {
-      ptfx = StartParticleFxLoopedOnEntityBone(
+      ptfx = StartParticleFxLoopedOnEntity(
         data.name,
         entity,
         data.offset.x,
@@ -59,14 +68,13 @@ export const addParticle = async (id: string, data: Required<Particles.Particle>
         data.rotation.x,
         data.rotation.y,
         data.rotation.z,
-        boneIndex,
         data.scale,
         false,
         false,
         false
       );
     } else {
-      StartNetworkedParticleFxNonLoopedOnEntityBone(
+      StartNetworkedParticleFxNonLoopedOnEntity(
         data.name,
         entity,
         data.offset.x,
@@ -75,7 +83,6 @@ export const addParticle = async (id: string, data: Required<Particles.Particle>
         data.rotation.x,
         data.rotation.y,
         data.rotation.z,
-        boneIndex,
         data.scale,
         false,
         false,

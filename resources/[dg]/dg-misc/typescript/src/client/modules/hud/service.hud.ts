@@ -82,8 +82,8 @@ export const scheduleBlurEffect = async () => {
 
 const doBlurEffect = async () => {
   const length = (config.shake.maxLength / 100) * stressLevel;
-  TriggerScreenblurFadeIn(100);
+  TriggerScreenblurFadeIn(250);
   await Util.Delay(length + 100);
-  TriggerScreenblurFadeOut(100);
+  TriggerScreenblurFadeOut(250);
   await Util.Delay(500);
 };

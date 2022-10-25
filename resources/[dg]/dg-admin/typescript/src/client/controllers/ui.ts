@@ -26,9 +26,9 @@ RegisterUICallback('getPlayers', async (_, cb) => {
   cb({ meta: { ok: true, message: 'done' }, data: players ?? [] });
 });
 
-RegisterUICallback('getVehicleModels', (_, cb) => {
-  // TODO: Connect when dg-vehicles is finished
-  cb({ meta: { ok: true, message: 'done' }, data: [] });
+RegisterUICallback('getVehicleModels', async (_, cb) => {
+  const vehicleModels = await RPC.execute('admin:menu:getVehicleModels');
+  cb({ meta: { ok: true, message: 'done' }, data: vehicleModels ?? [] });
 });
 
 RegisterUICallback('getRoutingBuckets', async (_, cb) => {

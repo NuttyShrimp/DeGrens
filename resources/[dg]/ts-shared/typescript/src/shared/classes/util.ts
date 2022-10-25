@@ -1,6 +1,8 @@
 import { Vector3 } from './vector3';
 
 export class Util {
+  private debouncingIds: Set<string> = new Set();
+
   uuidv4 = () => {
     let uuid = '';
     for (let ii = 0; ii < 32; ii += 1) {
@@ -80,5 +82,37 @@ export class Util {
     while (!condition() && !timedOut) {
       await this.Delay(100);
     }
+  };
+
+  awaitEntityExistence = (entity: number, isNetId = false): Promise<boolean> => {
+    return new Promise<boolean>(resolve => {
+      let attempts = 0;
+      const interval = setInterval(() => {
+        const ent = isNetId ? NetworkGetEntityFromNetworkId(entity) : entity;
+        attempts++;
+        if (attempts > 50) {
+          clearInterval(interval);
+          resolve(false);
+        }
+        if (DoesEntityExist(ent)) {
+          clearInterval(interval);
+          resolve(true);
+        }
+      }, 100);
+    });
+  };
+
+  /**
+   * @param id ID to check debouncing
+   * @param timeout Timeout in ms
+   * @returns returns wether id is not debouncing
+   */
+  debounce = (id: string, timeout: number) => {
+    if (this.debouncingIds.has(id)) return false;
+    this.debouncingIds.add(id);
+    setTimeout(() => {
+      this.debouncingIds.delete(id);
+    }, timeout);
+    return true;
   };
 }

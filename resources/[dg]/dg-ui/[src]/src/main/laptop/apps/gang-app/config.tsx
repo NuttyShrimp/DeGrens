@@ -8,7 +8,7 @@ const config: Laptop.Config.Config = {
   label: 'Family Activity',
   render: p => <Component {...p} />,
   icon: {
-    element: <Icon fill={'white'} />,
+    element: <Icon fill={'white'} height='100%' />,
     background: '#111',
   },
   iconPosition: {

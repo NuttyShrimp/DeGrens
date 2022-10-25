@@ -63,4 +63,5 @@ export const PED_CONFIG_FLAGS: [number, boolean][] = [
   [241, true], // Disable engine auto stop when exiting driver
   [429, true], // Disable engine autostart
   [438, true], // Disable helmet armor
+  [35, false], // Disable motorcycle helmet equipping
 ];

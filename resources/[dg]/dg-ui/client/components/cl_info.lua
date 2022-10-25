@@ -10,6 +10,8 @@ setGameValue = function(k, v)
   gameValues[k] = v
 end
 
+-- Only use when restarting resource or player joins
+-- Fucks up every open ui app
 seedCharData = function()
   CreateThread(function()
     local PlyData = DGCore.Functions.GetPlayerData()
@@ -29,7 +31,6 @@ seedCharData = function()
     TriggerEvent('dg-ui:loadData')
   end)
 end
-RegisterNetEvent('dg-ui:sendCharacterData', seedCharData)
 
 CreateThread(function()
   while true do
@@ -43,11 +44,6 @@ end)
 
 RegisterNetEvent('DGCore:Client:OnPlayerLoaded')
 AddEventHandler('DGCore:Client:OnPlayerLoaded', function()
-  seedCharData()
-end)
-
-RegisterNetEvent('DGCore:Player:SetPlayerData', function()
-  -- Some fresh playerData
   seedCharData()
 end)
 

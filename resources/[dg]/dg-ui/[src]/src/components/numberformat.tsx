@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import ReactNumberFormat, { NumberFormatProps as ReactNumberFormatProps } from 'react-number-format';
 
-import { EmptyDiv } from './util';
+import { EmptyDiv } from './emptyDiv';
 
 export const NumberFormat: {
   Phone: FC<React.PropsWithChildren<NumberFormatProps>>;
@@ -23,10 +23,10 @@ type NumberFormatProps = ReactNumberFormatProps & {
 NumberFormat.Phone = ({ onChange, ...props }: NumberFormatProps) => {
   return (
     <ReactNumberFormat
-      {...props}
-      format={'#### ## ## ##'}
       displayType={props.displayType ?? 'text'}
       isNumericString
+      {...props}
+      format={'#### ## ## ##'}
       onValueChange={values => {
         if (!onChange) return;
         if (!props.name) throw new Error('NumberFormat missing name');
@@ -44,7 +44,6 @@ NumberFormat.Phone = ({ onChange, ...props }: NumberFormatProps) => {
 NumberFormat.Bank = ({ onChange, ...props }: NumberFormatProps) => {
   return (
     <ReactNumberFormat
-      {...props}
       displayType={props.displayType ?? 'text'}
       thousandsGroupStyle='thousand'
       thousandSeparator='.'
@@ -53,6 +52,7 @@ NumberFormat.Bank = ({ onChange, ...props }: NumberFormatProps) => {
       fixedDecimalScale
       decimalScale={2}
       isNumericString
+      {...props}
       onValueChange={values => {
         if (!onChange) return;
         if (!props.name) throw new Error('NumberFormat missing name');

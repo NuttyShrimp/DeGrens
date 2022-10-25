@@ -1,6 +1,7 @@
-import { Events, Notifications, UI, Util } from '@dgx/client';
+import { Events, Notifications, RayCast, RPC, UI, Util } from '@dgx/client';
 import { Vector3 } from '@dgx/shared';
 import { Export, ExportRegister } from '@dgx/shared/decorators';
+import { TYPES_WITH_OPEN_ANIMATION } from '../constants';
 import { canOpenInventory, doCloseAnimation, doLookAnimation, doOpenAnimation } from '../util';
 
 @ExportRegister()
@@ -40,14 +41,11 @@ class ContextManager extends Util.Singleton<ContextManager>() {
     if (!this.isInventoryOpen) return;
 
     if (this.closingData) {
-      switch (this.closingData.type) {
-        case 'trunk':
-          doCloseAnimation();
-          SetVehicleDoorShut(this.closingData.data as number, 5, false);
-          break;
-        case 'dumpster':
-          doCloseAnimation();
-          break;
+      if (this.closingData.type === 'trunk') {
+        Util.setVehicleDoorOpen(this.closingData.data as number, 5, false);
+      }
+      if (TYPES_WITH_OPEN_ANIMATION.includes(this.closingData.type)) {
+        doCloseAnimation();
       }
       this.closingData = null;
     }
@@ -56,10 +54,10 @@ class ContextManager extends Util.Singleton<ContextManager>() {
     Events.emitNet('inventory:server:closed');
   };
 
-  public getSecondary = (): IdBuildData => {
+  public getSecondary = async (): Promise<IdBuildData> => {
     if (this.forceSecondary != null) {
-      if (this.forceSecondary.type === 'dumpster') {
-        this.closingData = { type: 'dumpster' };
+      if (TYPES_WITH_OPEN_ANIMATION.includes(this.forceSecondary.type)) {
+        this.closingData = { type: this.forceSecondary.type };
         doOpenAnimation();
       } else {
         doLookAnimation();
@@ -69,35 +67,42 @@ class ContextManager extends Util.Singleton<ContextManager>() {
 
     const ped = PlayerPedId();
     if (IsPedInAnyVehicle(ped, false)) {
-      doLookAnimation();
-      const vehicle = GetVehiclePedIsIn(ped, false);
-      const plate = GetVehicleNumberPlateText(vehicle); // TODO: Move plates to VIN after vehicle merge
-      return { type: 'glovebox', identifier: plate };
+      const vin = await Util.getVehicleVin();
+      if (vin) {
+        doLookAnimation();
+        return { type: 'glovebox', identifier: vin };
+      }
     }
 
-    const entityAimingAt = global.exports['dg-lib'].GetCurrentEntity();
-    if (entityAimingAt && IsEntityAVehicle(entityAimingAt) && GetVehicleDoorLockStatus(entityAimingAt) < 2) {
-      let trunkPosition: Vector3;
+    const [entityAimingAt] = RayCast.getEntityPlayerLookingAt();
+    if (entityAimingAt !== 0 && IsEntityAVehicle(entityAimingAt) && NetworkGetEntityIsNetworked(entityAimingAt)) {
+      if (GetVehicleDoorLockStatus(entityAimingAt) < 2) {
+        let trunkPosition: Vector3;
 
-      // If a trunkBone was found we check on the position of that bone. Useful for determining frontengine cars.
-      // else we use the modeldimensions to check if players is at the back. Useful for motorcycles.
-      const boneIndex = GetEntityBoneIndexByName(entityAimingAt, 'boot');
-      if (boneIndex !== -1) {
-        trunkPosition = Util.ArrayToVector3(GetWorldPositionOfEntityBone(entityAimingAt, boneIndex));
+        // If a trunkBone was found we check on the position of that bone. Useful for determining frontengine cars.
+        // else we use the modeldimensions to check if players is at the back. Useful for motorcycles.
+        const boneIndex = GetEntityBoneIndexByName(entityAimingAt, 'boot');
+        if (boneIndex !== -1) {
+          trunkPosition = Util.ArrayToVector3(GetWorldPositionOfEntityBone(entityAimingAt, boneIndex));
+        } else {
+          const [min, max] = GetModelDimensions(GetEntityModel(entityAimingAt));
+          const carLength = max[1] - min[1];
+          trunkPosition = Util.ArrayToVector3(GetOffsetFromEntityInWorldCoords(entityAimingAt, 0, -carLength / 2, 0));
+        }
+
+        const distance = Util.getPlyCoords().distance(trunkPosition);
+        if (distance < 1.5) {
+          const vin = await Util.getVehicleVin(entityAimingAt);
+          if (vin) {
+            const vehicleClass = GetVehicleClass(entityAimingAt);
+            Util.setVehicleDoorOpen(entityAimingAt, 5, true);
+            doOpenAnimation();
+            this.closingData = { type: 'trunk', data: entityAimingAt };
+            return { type: 'trunk', identifier: vin, data: vehicleClass };
+          }
+        }
       } else {
-        const [min, max] = GetModelDimensions(GetEntityModel(entityAimingAt));
-        const carLength = max[1] - min[1];
-        trunkPosition = Util.ArrayToVector3(GetOffsetFromEntityInWorldCoords(entityAimingAt, 0, -carLength / 2, 0));
-      }
-
-      const distance = Util.getPlyCoords().distance(trunkPosition);
-      if (distance < 1.5) {
-        const plate = GetVehicleNumberPlateText(entityAimingAt); // TODO: Move plates to VIN after vehicle merge
-        const vehicleClass = GetVehicleClass(entityAimingAt);
-        SetVehicleDoorOpen(entityAimingAt, 5, false, false);
-        doOpenAnimation();
-        this.closingData = { type: 'trunk', data: entityAimingAt };
-        return { type: 'trunk', identifier: plate, data: vehicleClass };
+        Notifications.add('Voertuig staat op slot', 'error');
       }
     }
 

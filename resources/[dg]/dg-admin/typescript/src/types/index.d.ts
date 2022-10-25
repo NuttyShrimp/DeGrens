@@ -28,9 +28,11 @@ declare namespace UI {
     lastName: string;
   }
 
-  interface Vehicle {
-    model: string;
+  interface VehicleModel {
     name: string;
+    brand: string;
+    model: string;
+    class: string;
   }
   interface Job {
     name: string;

@@ -104,7 +104,7 @@ class Financials {
   }
 
   cryptoGet(src: number, coin: string): Promise<number> {
-    return fexp.cryptoRemove(src, coin);
+    return fexp.cryptoGet(src, coin);
   }
 
   giveFine(

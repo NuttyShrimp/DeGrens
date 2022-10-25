@@ -1,21 +1,22 @@
 local isInVehicle = false
-debugEnabled = false
-originCoords = nil
-forwardCoords = nil
+local debugEnabled = false
+local originCoords = nil
+local forwardCoords = nil
 
 function getForwardVector(rotation)
 	local rot = (math.pi / 180) * rotation
 	return vector3(-math.sin(rot.z) * math.abs(math.cos(rot.x)), math.cos(rot.z) * math.abs(math.cos(rot.x)), math.sin(rot.x))
 end
 
-function rayCast(origin, target, radius, flags, ignore)
+function rayCast(origin, target, flags, ignore)
 	local handle = StartShapeTestRay(origin, target, flags, ignore, 0)
-	--local handle = StartShapeTestCapsule(origin.x, origin.y, origin.z, target.x, target.y, target.z, radius, flags, ignore, 0)
 	return GetShapeTestResult(handle)
 end
 
-function getEntityPlayerLookingAt(pDistance, pRadius, pFlag, pIgnore)
+function getEntityPlayerLookingAt(pDistance, pFlag, pIgnore)
 	pDistance = pDistance or 25.0
+  pFlag = pFlag or -1
+  pIgnore = pIgnore or PlayerPedId()
 	originCoords = GetGameplayCamCoord()
 	local forwardVector = getForwardVector(GetGameplayCamRot())
 	forwardCoords = originCoords + forwardVector * (isInVehicle and pDistance + 1.5 or pDistance)
@@ -24,7 +25,7 @@ function getEntityPlayerLookingAt(pDistance, pRadius, pFlag, pIgnore)
 		return
 	end
 
-	local _, hit, coords, _, entity = rayCast(originCoords, forwardCoords, pRadius, pFlag, pIgnore)
+	local _, hit, coords, _, entity = rayCast(originCoords, forwardCoords, pFlag, pIgnore)
 
 	if not hit and entity == 0 then
 		return
@@ -36,10 +37,17 @@ function getEntityPlayerLookingAt(pDistance, pRadius, pFlag, pIgnore)
 end
 exports('getEntityPlayerLookingAt', getEntityPlayerLookingAt)
 
+DGX.RPC.register('lib:raycast:getEntityPlayerLookingAt', function(pDistance, pFlag, pIgnore)
+  local entity, entityType, pos = getEntityPlayerLookingAt(pDistance, pFlag, pIgnore)
+  if not NetworkGetEntityIsNetworked(entity) then return end
+  local netId = NetworkGetNetworkIdFromEntity(entity)
+  return netId, entityType, pos
+end)
+
 Citizen.CreateThread(function()
 	while true do
 		local ped = PlayerPedId()
-		local entity, entityType, entityCoords = getEntityPlayerLookingAt(25.0, 0.1, -1, ped)
+		local entity, entityType, entityCoords = getEntityPlayerLookingAt(25.0, -1, ped)
 
 		if entity and entityType ~= 0 then
 			if entity ~= CurrentTarget then
@@ -51,7 +59,7 @@ Citizen.CreateThread(function()
 			end
 		elseif CurrentTarget then
 			CurrentTarget = nil
-			TriggerEvent('dg-lib:targetinfo:changed', CurrentTarget)
+			TriggerEvent('dg-lib:targetinfo:changed', nil)
 			if debugEnabled then
 				debug('[raycastinfo] Target changed to nothing')
 			end
@@ -59,16 +67,6 @@ Citizen.CreateThread(function()
 
 		Citizen.Wait(250)
 	end
-end)
-
-exports('GetCurrentEntity', function(distance)
-	if distance == nil then
-		return CurrentTarget
-	end
-	if (#(GetEntityCoords(PlayerPedId()) - GetEntityCoords(CurrentTarget)) <= distance) then
-		return CurrentTarget
-	end
-	return 0
 end)
 
 AddEventHandler('baseevents:enteredVehicle', function()

@@ -1,4 +1,10 @@
-import { RPC, Events } from './index';
+import { Events, RPC } from './index';
+
+class UI {
+  openContextMenu(target: number, menu: ContextMenu.Entry[]) {
+    Events.emitNet('dgx:client:ui:openContextmenu', target, menu);
+  }
+}
 
 class Taskbar {
   async create(
@@ -36,11 +42,12 @@ class Notifications {
   }
 
   remove(source: number, id: string) {
-    RPC.execute('dg-ui:client:removeNotification', source, id);
+    Events.emitNet('dg-ui:client:removeNotification', source, id);
   }
 }
 
 export default {
+  UI: new UI(),
   Taskbar: new Taskbar(),
   Notifications: new Notifications(),
 };

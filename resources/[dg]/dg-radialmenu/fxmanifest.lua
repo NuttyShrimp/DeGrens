@@ -20,7 +20,6 @@ client_scripts {
 
 server_scripts {
     'server/main.lua',
-    'server/trunk.lua',
     'server/stretcher.lua',
 	'@ts-shared/server/server.js'
 }
