@@ -96,4 +96,22 @@ declare namespace Laptop {
       onDecline?: () => void;
     };
   }
+
+  namespace Bennys {
+    type Category = 'cosmetic' | 'illegal';
+
+    interface State {
+      activeTab: string;
+      items: Item[];
+      cart: Record<string, number>;
+    }
+
+    interface Item {
+      item: string;
+      label: string;
+      price: number;
+      category: Category;
+      image: string;
+    }
+  }
 }

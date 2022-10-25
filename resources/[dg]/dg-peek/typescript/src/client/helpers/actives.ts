@@ -1,11 +1,7 @@
 let currentEntity: PeekEntity = {
   entity: 0,
   type: 0,
-  coords: {
-    x: 0,
-    y: 0,
-    z: 0,
-  },
+  coords: { x: 0, y: 0, z: 0 },
 };
 const activeZones: Map<string, { center: Vec3; data: any }> = new Map();
 

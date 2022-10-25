@@ -1,0 +1,69 @@
+@use 'src/styles/variables';
+
+.bennys-rgb {
+  &-container {
+    width: 100%;
+    height: 14vh;
+    background-color: variables.$primary_darker;
+    display: flex;
+    & > * {
+      padding: .75vh;
+    }
+  }
+  &-current {
+    height: 100%;
+    width: 8vh;
+  }
+  &-sliders {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  &-slider {
+    border-radius: 1.5vh;
+    height: 2vh;
+    transition: border .2s ease-in-out;
+    &-active {
+      border: .4vh solid white;
+    }
+    &-container {
+      position: relative;
+      width: 20vh;
+      margin: 0 2vh;
+      height: min-content;
+    }
+    &-interactive {
+      position: absolute;
+      left: 0;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      border-radius: inherit;
+      outline: none;
+      touch-action: none; 
+    }
+    &-current {
+      position: absolute;
+      top: 50%;
+      z-index: 1;
+      box-sizing: border-box;
+      width: 3vh;
+      height: 3vh;
+      transform: translate(-50%, -50%);
+      background-color: #fff;
+      border: 2px solid #fff;
+      border-radius: 50%;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); 
+      &-inner {
+        border-radius: inherit;
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 0;
+        right: 0;
+        bottom: 0;
+      }
+    }
+  }
+}

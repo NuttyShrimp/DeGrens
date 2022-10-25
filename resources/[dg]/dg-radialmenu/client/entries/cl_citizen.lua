@@ -7,7 +7,7 @@ entries.citizen = {
 		event = 'dg-phone:server:contacts:shareNumber',
 		shouldClose = true,
 		isEnabled = function()
-			return DGX.Inventory.doesPlayerHaveItem('phone')
+			return DGX.Inventory.doesPlayerHaveItems('phone')
 		end
 	},
 	{

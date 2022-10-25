@@ -537,6 +537,226 @@ devData.peekEntries = [
   },
 ];
 
+devData.genericData = {
+  interior: [
+    { name: 'subwoofer', equipped: 0, componentNames: ['Subwoofer #1', 'Subwoofer #2'] },
+    { name: 'trimA', equipped: 2, componentNames: ['Trim A #1', 'Trim A #2', 'Trim A #3', 'Trim A #4'] },
+    {
+      name: 'ornaments',
+      equipped: 1,
+      componentNames: ['Ornaments #1', 'Ornaments #2', 'Ornaments #3', 'Ornaments #4'],
+    },
+  ],
+  exterior: [
+    {
+      name: 'spoiler',
+      equipped: -1,
+      componentNames: [
+        'Standard',
+        'Short Lip Spoiler',
+        'Extended Lip Spoiler',
+        'Bolt-On Ducktail',
+        'Drag Spoiler',
+        'Stock Car Spoiler',
+        'Mid Level Spoiler',
+        'Carbon Flap Spoiler',
+        'Low Spoiler',
+        'Low Carbon Spoiler',
+        'Classic RS Wing',
+        'Carbon Classic RS Wing',
+        'Tuner Wing',
+        'Carbon Wing Type II',
+        'Extreme Downforce BGW',
+        'Muscle Killer Wing',
+        'Drift Wing',
+        'GT Wing',
+        'Tarmac Attack Wing',
+        'Extreme Street Racer Wing',
+        'Extreme Time Attack Wing',
+      ],
+    },
+    {
+      name: 'frontBumper',
+      equipped: -1,
+      componentNames: [
+        'Standard',
+        'Stickerbomb Splitter',
+        'Carbon Front Splitter',
+        'Painted Extended Splitter',
+        'Black Extended Splitter',
+        'Extended Front Diffuser',
+        'Splitter With Canards',
+      ],
+    },
+    {
+      name: 'rearBumper',
+      equipped: -1,
+      componentNames: ['Standard', 'Carbon Rear Diffuser', 'Carbon Track Diffuser', 'Carbon Race Diffuser'],
+    },
+    {
+      name: 'sideSkirt',
+      equipped: -1,
+      componentNames: [
+        'Standard',
+        'Sideskirt Extensions',
+        'Secondary Skirt Extensions',
+        'Carbon Skirt Extensions',
+        'Drift Skirts',
+        'Secondary Drift Skirts',
+      ],
+    },
+    {
+      name: 'exhaust',
+      equipped: -1,
+      componentNames: [
+        'Standard',
+        'Chrome Tip Exhaust',
+        'Big Bore Exhaust',
+        'Race Exhaust',
+        'Oval Exhaust',
+        'Titanium Exhaust',
+        'Titanium Tuner Exhaust',
+        'Twin Chrome Tip Exhaust',
+        'Twin Titanium Exhaust',
+        'Twin Titanium Tuner Exhaust',
+      ],
+    },
+    {
+      name: 'frame',
+      equipped: -1,
+      componentNames: [
+        'Standard',
+        'Street Half Cage',
+        'Dash Dodger Cage',
+        'Padded Dash Dodger Cage',
+        'Full Roll Cage',
+        'Padded Full Roll Cage',
+      ],
+    },
+    {
+      name: 'grille',
+      equipped: -1,
+      componentNames: ['Standard', 'Secondary Grille Surround', 'Black Grille Surround', 'Carbon Grille Surround'],
+    },
+    {
+      name: 'livery',
+      equipped: -1,
+      componentNames: [
+        'Standard',
+        'White Stripes',
+        'Black Stripes',
+        'Not Tonight Pizzaboy',
+        'Midnight Racer',
+        'Battle Damaged',
+        'Drift Missile',
+        'Redwood Racing',
+        'LTD Gasoline',
+        'Meinmacht',
+      ],
+    },
+    {
+      name: 'plateColor',
+      equipped: 0,
+      componentNames: ['Blue/White', 'Yellow/black', 'Yellow/Blue', 'Blue/White2', 'Blue/White3', 'Yankton'],
+    },
+  ],
+  colors: [
+    { name: 'primaryColor', equipped: 0 },
+    { name: 'secondaryColor', equipped: { r: 255, g: 255, b: 255 } },
+    { name: 'pearlescentColor', equipped: 11 },
+    { name: 'interiorColor', equipped: 11 },
+    { name: 'dashboardColor', equipped: 11 },
+    { name: 'wheelColor', equipped: 11 },
+  ],
+};
+
+devData.wheelData = {
+  equipped: {
+    type: 6,
+    id: -1,
+  },
+  categories: [
+    {
+      id: 2,
+      label: 'Fietswiel',
+      componentNames: ['Fietswiel #1', 'Fietswiel #2', 'Fietswiel #3'],
+    },
+    {
+      id: 6,
+      label: 'Bike',
+      componentNames: ['Bike #1', 'Bike #2', 'Bike #3', 'Bike #4', 'Bike #5', 'Bike #6', 'Bike #7'],
+    },
+  ],
+};
+
+devData.extraData = [
+  {
+    id: 1,
+    enabled: true,
+  },
+  {
+    id: 2,
+    enabled: false,
+  },
+  {
+    id: 7,
+    enabled: false,
+  },
+  {
+    id: 8,
+    enabled: true,
+  },
+];
+
+devData.bennysPrices = {
+  spoiler: 1000,
+  frontBumper: 1000,
+  rearBumper: 1000,
+  sideSkirt: 1000,
+  exhaust: 800,
+  frame: 1000,
+  grille: 800,
+  hood: 1000,
+  leftFenders: 1000,
+  rightFenders: 1000,
+  roof: 1000,
+  horn: 250,
+  subwoofer: 750,
+  plateHolder: 750,
+  vanityPlate: 750,
+  trimA: 800,
+  ornaments: 550,
+  dashboard: 750,
+  dial: 500,
+  doorSpeakers: 750,
+  seats: 850,
+  steeringWheel: 750,
+  shiftLever: 750,
+  plaques: 750,
+  speakers: 800,
+  trunk: 1000,
+  trimB: 1000,
+  engineHydraulics: 1000,
+  engineBlock: 1000,
+  airFilter: 750,
+  struts: 800,
+  archCover: 1000,
+  aerials: 1000,
+  tank: 750,
+  door: 1000,
+  tyreSmokeColor: 1500,
+  wheels: 1000,
+  primaryColor: 1500,
+  secondaryColor: 1000,
+  pearlescentColor: 750,
+  interiorColor: 500,
+  dashboardColor: 500,
+  wheelColor: 750,
+  extras: 500,
+  livery: 1500,
+  plateColor: 500,
+};
+
 devData.phoneDebtEntry = [
   {
     id: 1,
@@ -621,6 +841,95 @@ devData.phoneBusinessEmployees = [
 ];
 
 devData.phoneBusinessRoles = ['BOZO', 'Certified Karen', 'Rookie', 'Guest'];
+
+devData.bennyLaptopItems = [
+  {
+    item: 'xenon_lights',
+    label: 'Xenon lamp',
+    image: 'xenon_lights.png',
+    price: 40,
+    category: 'cosmetic',
+  },
+  {
+    item: 'neon_strip',
+    label: 'Neon Strip',
+    image: 'neon_strip.png',
+    price: 20,
+    category: 'cosmetic',
+  },
+  {
+    item: 'rgb_controller',
+    image: 'rgb_controller.png',
+    label: 'RGB Controller',
+    price: 10,
+    category: 'cosmetic',
+  },
+  {
+    item: 'harness',
+    image: 'harness.png',
+    label: 'Harnas',
+    price: 40,
+    category: 'cosmetic',
+  },
+  {
+    item: 'cleaning_kit',
+    image: 'cleaning_kit.png',
+    label: 'Schoonmaakset',
+    price: 10,
+    category: 'cosmetic',
+  },
+  {
+    item: 'vehicle_wax',
+    image: 'vehicle_wax.png',
+    label: 'Voertuig Wax',
+    price: 25,
+    category: 'cosmetic',
+  },
+  {
+    item: 'fakeplate',
+    label: 'Fake Plate',
+    image: 'plate.png',
+    price: 200,
+    category: 'illegal',
+  },
+  {
+    item: 'window_tint',
+    label: 'Tint Folie',
+    image: 'window_tint.png',
+    price: 60,
+    category: 'illegal',
+  },
+  {
+    item: 'nos',
+    label: 'NOS',
+    image: 'nos.png',
+    price: 50,
+    category: 'illegal',
+  },
+];
+
+devData.phoneVehicles = [
+  {
+    name: 'GT63',
+    brand: 'Mercedes',
+    plate: 'ABC13494',
+    vin: '8908837jwqe2390fh90uedfhdfvs',
+    parking: 'Alta Street Apartments',
+    state: 'parked',
+    engine: 1000,
+    body: 1000,
+  },
+  {
+    name: 'GTR',
+    brand: 'Nissan',
+    plate: 'crzr',
+    vin: 'f9090df889u34rtu9rjjioop23',
+    parking: 'Bozo park',
+    state: 'out',
+    engine: 100,
+    body: 703,
+  },
+];
 
 const emulatedData: Record<
   string,

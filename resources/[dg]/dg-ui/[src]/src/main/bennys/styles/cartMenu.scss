@@ -1,0 +1,18 @@
+@use 'src/styles/variables';
+
+.bennys-cart-menu {
+  padding: 0 3vh;
+
+  & .header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 30vh;
+    height: 5vh;
+    background-color: variables.$primary-darker-dark;
+
+    & h6 {
+      font-size: 1.4rem;
+    }
+  }
+}

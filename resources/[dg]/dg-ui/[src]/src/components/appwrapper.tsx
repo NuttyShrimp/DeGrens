@@ -56,7 +56,7 @@ const useStyles = makeStyles({
       WebkitUserSelect: 'none',
     }),
     '& > *': {
-      pointerEvents: 'all',
+      pointerEvents: 'auto',
     },
   }),
 });

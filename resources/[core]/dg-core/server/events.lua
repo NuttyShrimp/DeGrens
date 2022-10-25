@@ -159,26 +159,3 @@ RegisterNetEvent('DGCore:Server:SetMetaData', function(meta, data)
 	end
 	TriggerClientEvent('hud:client:UpdateNeeds', src, Player.PlayerData.metadata['hunger'], Player.PlayerData.metadata['thirst'])
 end)
-
--- Non-Chat Command Calling (ex: qb-adminmenu)
-
-RegisterNetEvent('DGCore:CallCommand', function(command, args)
-	local src = source
-	if DGCore.Commands.List[command] then
-		local Player = DGCore.Functions.GetPlayer(src)
-		if Player then
-			local isGod = exports['dg-admin']:hasPlayerPermission(src, 'developer')
-			local hasPerm = exports['dg-admin']:hasPlayerPermission(src, DGCore.Commands.List[command].permission)
-			local isPrincipal = IsPlayerAceAllowed(src, 'command')
-			if isGod or hasPerm or isPrincipal then
-				if (DGCore.Commands.List[command].argsrequired and #DGCore.Commands.List[command].arguments ~= 0 and args[#DGCore.Commands.List[command].arguments] == nil) then
-					TriggerClientEvent('DGCore:Notify', src, 'All arguments must be filled out!', 'error')
-				else
-					DGCore.Commands.List[command].callback(src, args)
-				end
-			else
-				TriggerClientEvent('DGCore:Notify', src, 'No Access To This Command', 'error')
-			end
-		end
-	end
-end)

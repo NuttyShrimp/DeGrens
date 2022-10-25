@@ -193,6 +193,7 @@ declare interface Blips {
   Add: (category: string, blip: Blip) => void;
   enableCategory: (category: string) => void;
   disableCategory: (category: string) => void;
+  removeCategory: (category: string) => void;
 }
 
 declare interface Blip {

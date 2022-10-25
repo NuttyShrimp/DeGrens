@@ -28,6 +28,7 @@ export class Account {
   private transactionsIds: string[];
   private readonly logger: winston.Logger;
   public readonly permsManager: PermissionsManager;
+  private readonly isSeededAccount: boolean;
 
   constructor(
     account_id: string,
@@ -48,6 +49,7 @@ export class Account {
     this.permsManager = new PermissionsManager(account_id, members);
     this.lastOperation = updatedAt;
     this.transactionsIds = [];
+    this.isSeededAccount = accountManager.getSeededAccountIds().some(aId => aId === this.account_id);
 
     // fetch all transactionids for this account
     // We only fetch ids so the cache is not overfilled with data which could slow down the resource
@@ -377,7 +379,7 @@ export class Account {
 
       // If we are going to decrease balance, then check if not negative or if negative is allowed
       const balanceDecrease = extra.balanceDecrease ?? false;
-      const canBeNegative = extra.canBeNegative ?? false;
+      const canBeNegative = extra.canBeNegative ?? this.isSeededAccount;
       if (balanceDecrease && !canBeNegative && this.balance - amount < 0) {
         Notifications.add(triggerPlyId, 'Niet genoeg geld in bankaccount', 'error');
         this.logger.debug(`${type}: amount higher than account balance | ${infoStr}`);
@@ -480,7 +482,7 @@ export class Account {
     acceptorCid: number,
     amount: number,
     comment?: string,
-    canBeNegative = false,
+    canBeNegative?: boolean,
     taxId?: number
   ): Promise<boolean> {
     const isValid = await this.actionValidation('transfer', triggerCid, amount, {

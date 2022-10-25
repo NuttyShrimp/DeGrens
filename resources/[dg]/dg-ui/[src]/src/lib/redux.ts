@@ -1,9 +1,9 @@
-import { connect, Provider, useDispatch } from 'react-redux';
+import { Provider, useDispatch } from 'react-redux';
 
 import { store } from './redux/store';
 
 export { getAuxStates, GetInitialState } from './redux/state';
-export { connect, Provider, store };
+export { Provider, store };
 
 export type StoreObject<I = Object, A = Partial<Record<keyof RootState, any>>> = {
   key: keyof RootState;

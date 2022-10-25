@@ -1,3 +1,5 @@
+import { devData } from '@src/lib/devdata';
+
 import { defaultState } from '../../lib/defaultState';
 
 export const cmds: {
@@ -11,6 +13,11 @@ export const cmds: {
     cmd: 'show debuglogs',
     app: 'debuglogs',
     show: true,
+  },
+  {
+    cmd: 'hide debuglogs',
+    app: 'debuglogs',
+    show: false,
   },
   {
     cmd: 'interaction $1 $2',
@@ -250,6 +257,36 @@ export const cmds: {
     data: {
       action: '$1',
       image: '$2',
+    },
+  },
+  {
+    cmd: 'show bennys',
+    app: 'bennys',
+    show: true,
+    data: {
+      options: devData.bennysCategories,
+    },
+  },
+  {
+    cmd: 'show repair bennys',
+    app: 'bennys',
+    show: true,
+    data: {
+      repairCost: 1000,
+      options: devData.bennysCategories,
+    },
+  },
+  {
+    cmd: 'hide bennys',
+    app: 'bennys',
+    show: false,
+  },
+  {
+    cmd: 'bennys send dir key $1',
+    app: 'bennys',
+    data: {
+      action: 'sendDirection',
+      direction: '$1',
     },
   },
   {

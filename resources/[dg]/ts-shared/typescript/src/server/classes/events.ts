@@ -467,21 +467,15 @@ class Auth {
   constructor() {
     this.resourceName = GetCurrentResourceName();
     this.startHooks = new Set();
-    onNet('dg-auth:token:resourceRegistered', (src: number, resource: string) =>{ 
+    onNet('dg-auth:token:resourceRegistered', (src: number, resource: string) => {
       if (resource !== this.resourceName) return;
-      this.startHooks.forEach(hook => hook(src))
-    })
+      this.startHooks.forEach(hook => hook(src));
+    });
   }
   onAuth(cb: (src: number) => void) {
-    this.startHooks.add(cb)
+    this.startHooks.add(cb);
   }
 }
-
-export const registerDGXRPC = (evtName: string, handler: DGXEvents.LocalEventHandler<any>) => {
-  if (GetCurrentResourceName() === 'ts-shared') {
-    RPC.getInstance().register(evtName, handler);
-  }
-};
 
 export default {
   Events: Events.getInstance(),

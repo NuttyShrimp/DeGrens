@@ -50,7 +50,7 @@ export const transfer = async (
     bankLogger.error(`Account ${accountId} not found | src: ${plyId} | cid: ${triggerCid}`);
     return false;
   }
-  return account.transfer(targetAccountId, triggerCid, acceptorCid, amount, comment, false, taxId);
+  return account.transfer(targetAccountId, triggerCid, acceptorCid, amount, comment, undefined, taxId);
 };
 
 export const purchase = async (

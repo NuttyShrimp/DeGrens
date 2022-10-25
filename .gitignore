@@ -9,10 +9,12 @@ vehiclesmodels.json
 !sv.template.bat
 seed.sql
 *-Coords.txt
+node_modules/
 !migrate.bat
 
 
 positions.txt
+dev-save.txt
 
 # Emacs
 *.~undo-tree~

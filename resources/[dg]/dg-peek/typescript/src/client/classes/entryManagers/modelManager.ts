@@ -3,7 +3,7 @@ import { BaseManager } from './baseManager';
 export class ModelManager extends BaseManager implements IEntryManager {
   private entries: Map<number, PeekOption[]> = new Map();
 
-  addEntry(key: PeekValueType, info: EntryAddParameter): string[] {
+  addEntry(key: PeekValueType, info: Required<EntryAddParameter>): string[] {
     if (typeof key === 'string') {
       key = GetHashKey(key);
     }
@@ -13,7 +13,7 @@ export class ModelManager extends BaseManager implements IEntryManager {
     return info.options.map(option => {
       option.distance = option.distance ?? info.distance;
       option.id = `model-${++this.currentGenId}`;
-      this.entries.get(key as number).push(option);
+      this.entries.get(key as number)?.push(option);
       return option.id;
     });
   }

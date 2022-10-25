@@ -32,7 +32,7 @@ export const Component: FC = () => {
   }, [modalData]);
 
   return (
-    <AppWindow width={30} title='Confirm' name='confirm' onClose={handleDecline}>
+    <AppWindow width={30} title={config.label} name={config.name} onClose={handleDecline}>
       <div className='laptop-confirmmodal'>
         <p>{modalData?.label ?? 'Undefined'}</p>
         <div className='buttons'>

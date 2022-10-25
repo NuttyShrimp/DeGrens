@@ -394,5 +394,20 @@ declare namespace Phone {
       logs: Log[];
     }
   }
+  namespace Garage {
+    interface Vehicle {
+      name: string;
+      brand: string;
+      plate: string;
+      vin: string;
+      parking: string;
+      state: 'parked' | 'out' | 'impounded';
+      engine: number;
+      body: number;
+    }
+    interface State {
+      list: Vehicle[];
+    }
+  }
   // endregion
 }

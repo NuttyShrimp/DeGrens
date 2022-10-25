@@ -1,4 +1,4 @@
-import { UI, Util } from '@dgx/client';
+import { Keys, UI, Util, RayCast, Jobs } from '@dgx/client';
 
 import { entryManager } from '../classes/entryManager';
 import { stateManager } from '../classes/stateManager';
@@ -9,27 +9,17 @@ on('onResourceStart', (resName: string) => {
   if (resName !== GetCurrentResourceName()) return;
   if (!DGCore) return;
   setCtxPlayerData(DGCore.Functions.GetPlayerData());
+  const job = Jobs.getCurrentJob();
+  setCtxJob({ name: job.name, grade: job.rank });
 });
 
 UI.RegisterUICallback('peek:preventShow', (_, cb) => {
   stateManager.stopPeeking(false);
-  cb({
-    meta: {
-      message: 'done',
-      ok: true,
-    },
-    data: {},
-  });
+  cb({ meta: { message: 'done', ok: true }, data: {} });
 });
 
 UI.RegisterUICallback('peek:select', (data: { id: string }, cb) => {
-  cb({
-    meta: {
-      message: 'done',
-      ok: true,
-    },
-    data: {},
-  });
+  cb({ meta: { message: 'done', ok: true }, data: {} });
   let entry = entryManager.getEntry(data.id);
   stateManager.stopPeeking();
   if (!entry) {
@@ -54,11 +44,11 @@ onNet('DGCore:Player:SetPlayerData', (data: PlayerData) => {
   setCtxPlayerData(data);
 });
 
-onNet('dg-jobs:signin:update', (job: string, grade: number) => {
-  setCtxJob(job ? { name: job, grade } : null);
+onNet('dg-jobs:signin:update', (name: string | null, grade: number | null) => {
+  setCtxJob({ name, grade });
 });
 
-DGX.RayCast.onChange((entity, type, coords) => {
+RayCast.onChange((entity, type, coords) => {
   updateCurrentEntity({ entity, type, coords });
   stateManager.createCheckThread();
   stateManager.forceRefreshList();
@@ -75,7 +65,7 @@ on('dg-polytarget:exit', (name: string) => {
   stateManager.forceRefreshZones(name, null);
 });
 
-DGX.Keys.onPress('playerPeek', isDown => {
+Keys.onPress('playerPeek', isDown => {
   if (!LocalPlayer.state?.loggedIn) return;
   isDown ? stateManager.startPeeking() : stateManager.stopPeeking();
 });

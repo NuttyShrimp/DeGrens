@@ -187,7 +187,7 @@ export class Item {
    */
   public checkDecay = () => {
     const itemData = itemDataManager.get(this.name);
-    if (!itemData?.decayRate) return false;
+    if (!itemData.decayRate) return false;
     if (this.inventory.type === 'shop') return false;
     const decayPerSecond = 100 / (itemData.decayRate * 60);
     const currentSeconds = Math.floor(Date.now() / 1000);
@@ -217,7 +217,6 @@ export class Item {
       plyWithOpen
         .filter(ply => ply !== emitter)
         .forEach(ply => {
-          console.log(data);
           Events.emitNet('inventory:client:syncItem', ply, data);
         });
     });

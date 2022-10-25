@@ -1,0 +1,90 @@
+{
+  "businessName": "pdm",
+  "taxId": 2,
+  "shopZone": {
+    "vectors": [
+      { "x": -61.28, "y": -1096.37 },
+      { "x": -58.41, "y": -1101.23 },
+      { "x": -34.75, "y": -1109.95 },
+      { "x": -36.49, "y": -1114.97 },
+      { "x": -31.6, "y": -1116.25 },
+      { "x": -26.85, "y": -1103.18 },
+      { "x": -32.55, "y": -1100.8 },
+      { "x": -30.64, "y": -1094.89 },
+      { "x": -27.35, "y": -1096.07 },
+      { "x": -24.5, "y": -1088.21 },
+      { "x": -33.47, "y": -1085.07 },
+      { "x": -32.66, "y": -1083.28 },
+      { "x": -39.18, "y": -1081.32 },
+      { "x": -42.38, "y": -1090.59 },
+      { "x": -57.16, "y": -1085.37 }
+    ],
+    "minZ": 24.0,
+    "maxZ": 30.0
+  },
+  "carSpots": [
+    {
+      "position": { "x": -40.86, "y": -1103.09, "z": 25.77, "w": 249.81 },
+      "model": "f812"
+    },
+    {
+      "position": { "x": -39.13, "y": -1096.78, "z": 26.05, "w": 211.62 },
+      "model": "db11"
+    },
+    {
+      "position": { "x": -49.11, "y": -1099.86, "z": 26.15, "w": 29.34 },
+      "model": "pgt3"
+    },
+    {
+      "position": { "x": -47.47, "y": -1093.29, "z": 26.14, "w": 92.63 },
+      "model": "22g63"
+    }
+  ],
+  "vehicleSpawnLocation": { "x": -31.59, "y": -1090.68, "z": 26.15, "w": 328.77 },
+  "testDrive": {
+    "depositPercentage": 0.05,
+    "time": 300
+  },
+  "timeForSale": 180,
+  "classesThatNeedEmployee": ["X", "S", "A+"],
+  "quicksell": {
+    "percentage": 0.5,
+    "allowedUpgrades": [
+      "spoiler",
+      "frontBumper",
+      "rearBumper",
+      "sideSkirt",
+      "exhaust",
+      "frame",
+      "grille",
+      "hood",
+      "leftFenders",
+      "rightFenders",
+      "roof",
+      "horn",
+      "subwoofer",
+      "plateHolder",
+      "vanityPlate",
+      "trimA",
+      "trimB",
+      "ornaments",
+      "dashboard",
+      "dial",
+      "doorSpeakers",
+      "seats",
+      "steeringWheel",
+      "shiftLever",
+      "plaques",
+      "speakers",
+      "trunk",
+      "engineHydraulics",
+      "engineBlock",
+      "airFilter",
+      "struts",
+      "archCover",
+      "aerials",
+      "tank",
+      "door"
+    ]
+  }
+}

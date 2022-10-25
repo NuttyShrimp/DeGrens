@@ -24,6 +24,7 @@ declare namespace ContextMenu {
     disabled?: boolean;
     submenu?: Entry[];
     data?: any;
+    preventCloseOnClick?: boolean;
   }
 
   interface State extends Base.State {

@@ -21,7 +21,7 @@ const MenuEntry: FC<
     }
     if (props.callbackURL) {
       nuiAction(props.callbackURL, props.data);
-      if (!hasSub) {
+      if (!hasSub && !props.preventCloseOnClick) {
         closeApplication(store.key);
       }
     }

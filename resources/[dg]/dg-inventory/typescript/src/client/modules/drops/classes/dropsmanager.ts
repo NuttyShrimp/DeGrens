@@ -1,3 +1,5 @@
+// @ts-nocheck
+// Parameter type of DrawMarker from @citizenfx/client is wrong so otherwise it wont build properly in cicd pipeline
 import { RPC, Util } from '@dgx/client';
 
 class DropsManager extends Util.Singleton<DropsManager>() {
@@ -18,7 +20,7 @@ class DropsManager extends Util.Singleton<DropsManager>() {
     if (!range) return;
     range *= 8;
     this.checkCloseDrops(range);
-    this.showDropsLoop(range);
+    this.showDropsLoop();
   };
 
   public add = (drop: Vec3) => {
@@ -42,23 +44,23 @@ class DropsManager extends Util.Singleton<DropsManager>() {
     }, 500);
   };
 
-  private showDropsLoop = (range: number) => {
+  private showDropsLoop = () => {
     setInterval(() => {
       this.closeDrops.forEach(drop =>
         DrawMarker(
           2,
           drop.x,
           drop.y,
-          drop.z - 0.2,
+          drop.z - 0.3,
           0.0,
           0.0,
           0.0,
           0.0,
           0.0,
           0.0,
-          0.2,
-          0.2,
-          0.15,
+          0.3,
+          0.3,
+          0.25,
           118,
           127,
           207,

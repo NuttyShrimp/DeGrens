@@ -1,11 +1,10 @@
 let PlayerData: PlayerData | null = null;
-let plyJob: { name: string | null; grade: number } = null;
+let plyJob: { name: string | null; grade: number | null } = { name: null, grade: null };
 const registeredFlags: Set<string> = new Set();
 
 export const getEntityCtx = (entity: number, entityType: number): Context => {
   const ctx: Context = {
     entity,
-    netId: null,
     type: entityType,
     globalType: null,
     model: GetEntityModel(entity),
@@ -47,15 +46,15 @@ export const addCtxFlag = (flag: string) => {
   }
 };
 
-export const setCtxPlayerData = (data: PlayerData) => {
+export const setCtxPlayerData = (data: typeof PlayerData) => {
   PlayerData = data;
 };
 
-export const setCtxJob = (job: { name: string | null; grade: number } | null) => {
+export const setCtxJob = (job: typeof plyJob) => {
   plyJob = job;
 };
 
-export const getCtxPlayerData = (): { data: PlayerData; job: { name: string | null; grade: number } } => {
+export const getCtxPlayerData = (): { data: typeof PlayerData; job: typeof plyJob } => {
   return {
     data: PlayerData,
     job: plyJob,

@@ -6,9 +6,9 @@ export class BaseManager {
 
   protected async addActiveEntry(entry: PeekOption, entity: number): Promise<void> {
     if (this.activeEntries.includes(entry)) return;
-    entry = await canEntryBeEnabled(entry, entity);
-    if (!entry) return;
-    this.activeEntries.push(entry);
+    const newEntry = await canEntryBeEnabled(entry, entity);
+    if (!newEntry) return;
+    this.activeEntries.push(newEntry);
   }
 
   getActiveEntries() {

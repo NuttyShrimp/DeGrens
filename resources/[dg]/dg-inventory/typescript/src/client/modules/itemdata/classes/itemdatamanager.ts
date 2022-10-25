@@ -12,7 +12,13 @@ class ItemDataManager extends Util.Singleton<ItemDataManager>() {
   };
 
   @Export('getItemData')
-  public get = (name: string) => this.itemData[name];
+  public get = (name: string) => {
+    const item = this.itemData[name];
+    if (!item) {
+      throw new Error(`Could not get itemdata with nonexistent name ${name}`);
+    }
+    return item;
+  };
 
   @Export('getAllItemData')
   public getAll = () => this.itemData;

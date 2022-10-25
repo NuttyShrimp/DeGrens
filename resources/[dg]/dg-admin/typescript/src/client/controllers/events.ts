@@ -50,3 +50,9 @@ Events.onNet('admin:penalty:openModel', (target: string) => {
 RPC.register('admin:menu:getBinds', () => {
   return getAllBinds();
 });
+
+Events.onNet('admin:menu:forceClose', () => {
+  SendNUIMessage({
+    action: 'forceCloseMenu',
+  });
+});

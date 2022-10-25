@@ -1,0 +1,42 @@
+@use 'src/styles/variables';
+
+.bennys-colorpicker {
+  &-wrapper {
+    width: 100%;
+    height: 14vh;
+    background-color: variables.$primary-darker;
+    display: flex;
+    flex-direction: row;
+    & > * {
+      padding: .75vh;
+    }
+  }
+  &-current {
+    height: 100%;
+    width: 8vh;
+  }
+  &-palette {
+    display: flex;
+    flex-direction: row;
+    height: 100%;
+    width: 100%;
+    & > div {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      & > div {
+        flex: 1;
+        margin: 0 .375vh;
+        box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        -webkit-box-sizing: border-box;
+        transition: border-bottom .2s ease-in-out, margin .2s linear;
+      }
+    }
+  }
+  &-highlighted {
+    margin: 0 0 -.4vh!important;
+    z-index: 2;
+    border-bottom: .4vh solid variables.$secondary_normal;
+  }
+}

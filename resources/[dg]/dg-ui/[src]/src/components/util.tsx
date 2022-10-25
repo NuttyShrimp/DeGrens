@@ -4,8 +4,6 @@ import BounceLoader from 'react-spinners/BounceLoader';
 
 import { SimpleForm } from './simpleform';
 
-export const EmptyDiv = () => <div />;
-
 export const ConfirmationModal: FC<
   React.PropsWithChildren<{
     onAccept: (data: any) => void;

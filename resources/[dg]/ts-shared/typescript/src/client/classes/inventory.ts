@@ -16,6 +16,10 @@ class Inventory {
 
   public openShop = (shopId: string): void => global.exports['dg-inventory'].open({ type: 'shop', identifier: shopId });
 
+  public openTunes = (vin: string) => {
+    global.exports['dg-inventory'].open({ type: 'tunes', identifier: vin });
+  };
+
   public doesPlayerHaveItems = async (name: string | string[]) => {
     return !!(await RPC.execute<boolean>('inventory:server:doesPlayerHaveItems', name));
   };

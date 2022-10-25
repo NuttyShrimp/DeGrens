@@ -14,6 +14,7 @@ class AccountManager extends Util.Singleton<AccountManager>() {
   private accounts: Account[];
   private readonly logger: winston.Logger;
   public loaded: boolean;
+  private seededAccountIds: string[] = [];
 
   constructor() {
     super();
@@ -23,6 +24,7 @@ class AccountManager extends Util.Singleton<AccountManager>() {
   }
 
   public async init() {
+    this.seededAccountIds = getConfig().accounts.toSeed.map(s => s.id);
     await this.registerAccountsFromDatabase();
     await this.seedAccounts();
     this.logger.info(`loaded ${this.accounts.length} accounts from database`);
@@ -274,6 +276,8 @@ class AccountManager extends Util.Singleton<AccountManager>() {
     account.permsManager.addPermissions(targetCid, level);
   };
   //#endregion
+
+  public getSeededAccountIds = () => this.seededAccountIds;
 }
 
 const accountManager = AccountManager.getInstance();

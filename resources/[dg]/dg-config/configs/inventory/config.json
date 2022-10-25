@@ -4,7 +4,8 @@
     "player": 40,
     "glovebox": 3,
     "drop": 20,
-    "dumpster": 10
+    "dumpster": 10,
+    "tunes": 6
   },
   "trunkSlots": {
     "0": 20,
@@ -31,7 +32,7 @@
     "21": 0
   },
   "persistentTypes": ["player", "stash", "container"],
-  "vehicleTypes": ["glovebox", "trunk"],
+  "vehicleTypes": ["glovebox", "trunk", "tunes"],
   "locationInvRange": {
     "drop": 1,
     "dumpster": 1

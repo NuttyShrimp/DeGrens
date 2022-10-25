@@ -26,10 +26,7 @@ export default defineConfig(({ mode }) => ({
     Checker({
       typescript: true,
       enableBuild: false,
-      overlay: {
-        initialIsOpen: false,
-        position: 'tl',
-      },
+      overlay: false,
       eslint: {
         lintCommand: 'eslint --ext ts,tsx src',
       },

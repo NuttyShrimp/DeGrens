@@ -1,5 +1,4 @@
-class Ui {
-  private static instance: Ui;
+class UI {
   private registered: string[];
   private resourceStarted: boolean;
 
@@ -12,7 +11,6 @@ class Ui {
         global.exports['dg-ui'].RegisterUIEvent(evt);
       });
     });
-
     on('onClientResourceStart', (resource: string) => {
       if (resource !== 'dg-ui') return;
       this.resourceStarted = true;
@@ -20,26 +18,18 @@ class Ui {
 
     on('onClientResourceStop', (resource: string) => {
       if (resource !== 'dg-ui') return;
-      this.resourceStarted = true;
+      this.resourceStarted = false;
     });
   }
 
-  static getInstance(): Ui {
-    if (!Ui.instance) {
-      Ui.instance = new Ui();
-    }
-    return Ui.instance;
-  }
-
   RegisterUICallback(name: string, callback: (data: any, cb: UICallback) => void) {
-    if (this.registered.indexOf(name) === -1) {
+    if (!this.registered.includes(name)) {
       this.registered.push(name);
     }
     AddEventHandler(`__dg_ui:${name}`, callback);
     if (this.resourceStarted && GetResourceState('dg-ui') == 'started') {
       global.exports['dg-ui'].RegisterUIEvent(name);
     }
-    this.registered.push(name);
   }
 
   SendUIMessage(data: any) {
@@ -70,6 +60,13 @@ class Ui {
     const result = await global.exports['dg-ui'].openInput(data);
     return { accepted: result.accepted, values: result.values };
   };
+
+  showInteraction(text: string, type: UI.InteractionType = 'info') {
+    global.exports['dg-ui'].showInteraction(text, type);
+  }
+  hideInteraction() {
+    global.exports['dg-ui'].hideInteraction();
+  }
 }
 
 class Taskbar {
@@ -87,7 +84,7 @@ class Taskbar {
 }
 
 class Notifications {
-  add(text: string, type: 'info' | 'error' | 'success' = 'info', durationInMs = 5000, persistent?: boolean) {
+  add(text: string, type: 'info' | 'error' | 'success' = 'info', durationInMs = 5000, persistent?: boolean): string {
     return global.exports['dg-ui'].addNotification(text, type, durationInMs, persistent);
   }
 
@@ -117,7 +114,7 @@ class HUD {
 }
 
 export default {
-  UI: Ui.getInstance(),
+  UI: new UI(),
   Taskbar: new Taskbar(),
   Notifications: new Notifications(),
   HUD: new HUD(),

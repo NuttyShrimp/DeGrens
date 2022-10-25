@@ -3,7 +3,7 @@ import contextManager from 'classes/contextmanager';
 import itemDataManager from 'modules/itemdata/classes/itemdatamanager';
 
 UI.RegisterUICallback('inventory/getData', async (_, cb) => {
-  const secondary = contextManager.getSecondary();
+  const secondary = await contextManager.getSecondary();
   const openingData = await RPC.execute<OpeningData>('inventory:server:open', secondary);
   if (!openingData) throw new Error('Failed to get openingdata');
   console.log(`[INVENTORY] Opening - Secondary ID: '${openingData.secondary.id}'`);

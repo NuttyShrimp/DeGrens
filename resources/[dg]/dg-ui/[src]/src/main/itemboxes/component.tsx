@@ -8,7 +8,7 @@ import './styles/itemboxes.scss';
 
 const Component: AppFunction<Itemboxes.State> = props => {
   const handleVisibility = (visible: boolean) => {
-    props.updateState({ visible });
+    props.updateState(() => ({ visible }));
   };
 
   const eventHandler = useCallback((data: any) => {

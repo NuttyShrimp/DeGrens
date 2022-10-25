@@ -1,4 +1,4 @@
-import { Events, Particle, Util } from '@dgx/client';
+import { Events, Util } from '@dgx/client';
 import { addParticle, getIsLooped, removeParticle } from './service.particles';
 
 // Looped are NOT networked by 5M, nonlooped are networked by 5M

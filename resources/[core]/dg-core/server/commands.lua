@@ -1,5 +1,4 @@
 DGCore.Commands = {}
-DGCore.Commands.List = {}
 
 -- Register & Refresh Commands
 local canImport = false

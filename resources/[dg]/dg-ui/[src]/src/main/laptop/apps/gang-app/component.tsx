@@ -62,7 +62,7 @@ export const Component: FC = () => {
   if (active === null) return null;
 
   return (
-    <AppWindow width={70} height={55} name='gang' title={config.label}>
+    <AppWindow width={70} height={55} name={config.name} title={config.label}>
       <div className='laptop-gang'>
         {hasGang ? (
           <div className='app'>

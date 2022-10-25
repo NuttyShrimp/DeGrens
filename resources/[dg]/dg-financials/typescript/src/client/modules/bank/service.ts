@@ -26,6 +26,14 @@ export const registerPeekZones = () => {
             Events.emitNet('financials:bank:savings:create', result.values.accountName);
           },
         },
+        {
+          label: 'Tickets inbrengen',
+          icon: 'fas fa-ticket-simple',
+          type: 'server',
+          action: () => {
+            Events.emitNet('vehicles:mechanic:server:tradeTickets');
+          },
+        },
       ],
       distance: 3,
     },

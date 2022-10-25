@@ -1,62 +1,38 @@
 entries.vehicledoors = {
 	{
-		id = 'door0',
-		title = 'Drivers door',
-		icon = 'car-side',
-		event = 'qb-radialmenu:client:openDoor',
-		shouldClose = false,
-		isEnabled = function()
-			return true
-		end
+		id = 0,
+		title = 'Bestuurder',
+		icon = '1',
+		event = 'vehicles:radial:door',
 	},
 	{
-		id = 'door4',
-		title = 'Hood',
+		id = 4,
+		title = 'Motorkap',
 		icon = 'car',
-		event = 'qb-radialmenu:client:openDoor',
-		shouldClose = false,
-		isEnabled = function()
-			return true
-		end
+		event = 'vehicles:radial:door',
 	},
 {
-		id = 'door1',
-		title = 'Passengers door',
-		icon = 'car-side',
-		event = 'qb-radialmenu:client:openDoor',
-		shouldClose = false,
-		isEnabled = function()
-			return true
-		end
+		id = 1,
+		title = 'Bijrijder',
+		icon = '2',
+		event = 'vehicles:radial:door',
 	},
 	{
-		id = 'door3',
-		title = 'Right rear',
-		icon = 'car-side',
-		event = 'qb-radialmenu:client:openDoor',
-		shouldClose = false,
-		isEnabled = function()
-			return true
-		end
+		id = 3,
+		title = 'Rechts Achter',
+		icon = '4',
+		event = 'vehicles:radial:door',
 	},
 {
-		id = 'door5',
-		title = 'Trunk',
+		id = 5,
+		title = 'Kofferbak',
 		icon = 'car',
-		event = 'qb-radialmenu:client:openDoor',
-		shouldClose = false,
-		isEnabled = function()
-			return true
-		end
+		event = 'vehicles:radial:door',
 	},
 	{
-		id = 'door2',
-		title = 'Left rear',
-		icon = 'car-side',
-		event = 'qb-radialmenu:client:openDoor',
-		shouldClose = false,
-		isEnabled = function()
-			return true
-		end
+		id = 2,
+		title = 'Links Achter',
+		icon = '3',
+		event = 'vehicles:radial:door',
 	}
 }

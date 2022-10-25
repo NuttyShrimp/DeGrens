@@ -13,6 +13,7 @@ declare global {
     Taskbar: typeof Classes.Taskbar;
     Notifications: typeof Classes.Notifications;
     API: typeof Classes.API;
+    UI: typeof Classes.UI;
     Jobs: typeof Classes.Jobs;
     Config: typeof Classes.Config;
     Admin: typeof Classes.Admin;
@@ -20,6 +21,7 @@ declare global {
     Auth: typeof Classes.Auth;
     Financials: typeof Classes.Financials;
     Business: typeof Classes.Business;
+    RayCast: typeof Classes.RayCast;
     Gangs: typeof Classes.Gangs;
     Screenshot: typeof Classes.Screenshot;
     Vector3: typeof Vector3Class;

@@ -6,6 +6,10 @@ export class Vector4 implements Vec4 {
     return new Vector4(v1.x, v1.y, v1.z, v1.w);
   }
 
+  public static createFromVec3(v1: Vec3, w: number): Vector4 {
+    return new Vector4(v1.x, v1.y, v1.z, w);
+  }
+
   public static clone(v1: Vec4): Vector4 {
     return Vector4.create(v1);
   }

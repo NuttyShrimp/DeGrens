@@ -1,0 +1,44 @@
+@use 'src/styles/variables';
+
+.bennys-bar {
+  &-wrapper {
+    width: 100vw;
+    z-index: 1;
+    user-select: none;
+  }
+  &-bar {
+    position: fixed;
+    width: 100vw;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-direction: row;
+    background-color: variables.$primary-darker-darker;
+    height: 7.5vh;
+    &.header > * {
+      white-space: nowrap;
+      width: 100%;
+      font-family: 'Hurme Geometric Sans 3', sans-serif !important;
+    }
+  }
+  &-guides {
+    bottom: 0;
+    justify-content: center;
+    padding-top: 1vh;
+  }
+  &-guide {
+    padding: 0 2vh;
+    font-size: 1rem;
+    & kbd {
+      margin-right: 1vh;
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: variables.$gray-light;
+      background-color: variables.$gray-dark;
+      padding: 0.3vh 0.8vh;
+      border-radius: 0.5vh;
+      border: 0.1vh solid variables.$gray-darker;
+      border-bottom: 0.3vh solid variables.$gray-darker;
+    }
+  }
+}

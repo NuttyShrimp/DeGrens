@@ -1,0 +1,13 @@
+[
+  {
+    "model": "elegy",
+    "component": "spoiler",
+    "value": 1,
+    "stance": {
+      "frontLeft": 0.95,
+      "frontRight": 0.95,
+      "backLeft": 0.95,
+      "backRight": 0.95
+    }
+  }
+]

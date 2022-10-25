@@ -5,7 +5,7 @@ import { BaseManager } from './baseManager';
 export class BonesManager extends BaseManager implements IEntryManager {
   private entries: Map<string, PeekOption[]> = new Map();
 
-  addEntry(key: PeekValueType, info: EntryAddParameter): string[] {
+  addEntry(key: PeekValueType, info: Required<EntryAddParameter>): string[] {
     if (!BONES.includes(String(key))) {
       throw new Error(`[PEEK] ${key} is a invalid bone`);
     }

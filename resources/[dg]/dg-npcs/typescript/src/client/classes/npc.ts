@@ -40,7 +40,7 @@ export class Npc {
       SetBlipSprite(blip, this.data.blip.sprite);
       SetBlipColour(blip, this.data.blip.color);
       SetBlipDisplay(blip, 2);
-      SetBlipScale(blip, 0.8);
+      SetBlipScale(blip, this.data.blip.scale ?? 0.8);
       SetBlipAsShortRange(blip, true);
       BeginTextCommandSetBlipName('STRING');
       AddTextComponentString(this.data.blip.title);

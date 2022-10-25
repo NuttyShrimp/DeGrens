@@ -10,4 +10,5 @@ export const TITLE_OF_TYPE: Record<string, string> = {
   stash: 'Stash',
   shop: 'Winkel',
   container: 'Container',
+  tunes: 'Voertuig Tuning',
 };

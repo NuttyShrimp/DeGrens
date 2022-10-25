@@ -105,4 +105,5 @@ export const ON_CREATE: Record<string, (plyId?: number) => { [key: string]: any 
       categorie: 'AM | A | B',
     };
   },
+  fakeplate: () => ({ plate: global.exports['dg-vehicles'].generatePlate() }),
 };

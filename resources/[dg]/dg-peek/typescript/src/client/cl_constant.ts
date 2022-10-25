@@ -562,3 +562,5 @@ export const ENTRY_TYPES: Record<PeekEntryType, string[]> = {
 export const DISABLED_KEYS = [24, 25, 37, 47, 58, 140, 141, 142, 143, 257, 263, 264];
 
 export const PEEK_TYPES: PeekEntryType[] = ['model', 'entity', 'bones', 'flags', 'zones', 'global'];
+
+export const DEFAULT_DISTANCE = 3.0;

@@ -12,71 +12,6 @@ RegisterNetEvent('DGCore:Client:OnPlayerUnload', function()
     LocalPlayer.state:set('isLoggedIn', false, false)
 end)
 
--- Teleport Commands
-
-RegisterNetEvent('DGCore:Command:TeleportToPlayer', function(coords)
-    local ped = PlayerPedId()
-    SetPedCoordsKeepVehicle(ped, coords.x, coords.y, coords.z)
-end)
-
-RegisterNetEvent('DGCore:Command:TeleportToCoords', function(x, y, z)
-    local ped = PlayerPedId()
-    SetPedCoordsKeepVehicle(ped, x, y, z)
-end)
-
-RegisterNetEvent('DGCore:Command:GoToMarker', function()
-    local ped = PlayerPedId()
-    local blip = GetFirstBlipInfoId(8)
-    if DoesBlipExist(blip) then
-        local blipCoords = GetBlipCoords(blip)
-        for height = 1, 1000 do
-            SetPedCoordsKeepVehicle(ped, blipCoords.x, blipCoords.y, height + 0.0)
-            local foundGround, zPos = GetGroundZFor_3dCoord(blipCoords.x, blipCoords.y, height + 0.0)
-            if foundGround then
-                SetPedCoordsKeepVehicle(ped, blipCoords.x, blipCoords.y, height + 0.0)
-                break
-            end
-            Wait(0)
-        end
-    end
-end)
-
--- Vehicle Commands
-
-RegisterNetEvent('DGCore:Command:SpawnVehicle', function(vehName)
-    local ped = PlayerPedId()
-    local hash = GetHashKey(vehName)
-    if not IsModelInCdimage(hash) then
-        return
-    end
-    RequestModel(hash)
-    while not HasModelLoaded(hash) do
-        Wait(10)
-    end
-    local vehicle = CreateVehicle(hash, GetEntityCoords(ped), GetEntityHeading(ped), true, false)
-    TaskWarpPedIntoVehicle(ped, vehicle, -1)
-    SetModelAsNoLongerNeeded(vehicle)
-    TriggerEvent("vehiclekeys:client:SetOwner", GetVehicleNumberPlateText(vehicle))
-end)
-
-RegisterNetEvent('DGCore:Command:DeleteVehicle', function()
-    local ped = PlayerPedId()
-    local veh = GetVehiclePedIsUsing(ped)
-    if veh ~= 0 then
-        SetEntityAsMissionEntity(veh, true, true)
-        DeleteVehicle(veh)
-    else
-        local pcoords = GetEntityCoords(ped)
-        local vehicles = GetGamePool('CVehicle')
-        for k, v in pairs(vehicles) do
-            if #(pcoords - GetEntityCoords(v)) <= 5.0 then
-                SetEntityAsMissionEntity(v, true, true)
-                DeleteVehicle(v)
-            end
-        end
-    end
-end)
-
 -- Other stuff
 
 RegisterNetEvent('DGCore:Player:SetPlayerData', function(val)
@@ -103,4 +38,12 @@ RegisterNetEvent('DGCore:Client:TriggerPromiseCallback', function(callId, ...)
 	if DGCore.Promises[callId] then
 		DGCore.Promises[callId]:resolve(...)
 	end
+end)
+
+DGX.RPC.register('core:functions:getClosestVehicle', function()
+  local veh = DGCore.Functions.GetClosestVehicle()
+  if not NetworkGetEntityIsNetworked(veh) then
+    return -1
+  end
+  return NetworkGetNetworkIdFromEntity(veh)
 end)

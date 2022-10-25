@@ -3,15 +3,22 @@
     :modelValue="props.modelValue"
     @update:modelValue="updateValue"
     :options="models"
-    label="Vehicle model"
-    filter-key="name"
+    label="Vehicle Model"
+    filter-key="model"
   >
-    <template #selected>
-      {{ props.modelValue?.name ?? '' }}
+    <template v-if="props.modelValue?.model !== undefined" #selected>
+      <p>
+        {{ props.modelValue?.model ?? '' }} ({{ props.modelValue.brand ?? '' }} {{ props.modelValue.name ?? '' }} | {{ props.modelValue.class ?? '' }})
+      </p>
+    </template>
+    <template v-else #selected>
+      <p></p>
     </template>
     <template #option="scope">
       <q-item v-bind="scope.itemProps">
-        <q-item-section :no-wrap="false"> {{ scope.opt.name }} | {{ scope.opt.model }} </q-item-section>
+        <q-item-section :no-wrap="false">
+          {{ scope.opt.model }} ({{ scope.opt.brand }} {{ scope.opt.name }} | {{ scope.opt.class }})
+        </q-item-section>
       </q-item>
     </template>
   </BaseSelection>

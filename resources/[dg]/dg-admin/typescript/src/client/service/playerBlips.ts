@@ -8,7 +8,7 @@ let blipInterval: NodeJS.Timer;
 let plyBlips: Record<number, number> = {};
 
 export const togglePlayerBlips = (isEnabled: boolean) => {
-  isEnabled ? disableBlips() : enableBlips();
+  isEnabled ? enableBlips() : disableBlips();
 };
 
 const enableBlips = () => {
@@ -32,6 +32,7 @@ const enableBlips = () => {
       clearInterval(blipInterval);
       return;
     }
+    // TODO: Fetch froms server, players far away are invisible due to onesync
     const plys = GetActivePlayers();
     // Remove blips for players that are no longer active
     for (const ply in plyBlips) {
@@ -45,7 +46,7 @@ const enableBlips = () => {
       const ped = GetPlayerPed(ply);
       const blip = AddBlipForEntity(ped);
       SetBlipSprite(blip, 1);
-      SetBlipColour(blip, 1);
+      SetBlipColour(blip, 0);
       SetBlipAsShortRange(blip, true);
       BeginTextCommandSetBlipName('STRING');
       AddTextComponentString(`${GetPlayerName(ply)}(${GetPlayerServerId(ply)})`);

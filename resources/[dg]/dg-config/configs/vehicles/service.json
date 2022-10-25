@@ -1,0 +1,32 @@
+{
+  "degradationValues": {
+    "engine": [
+      {
+        "name": "fInitialDriveForce",
+        "percent": 0.4
+      }
+    ],
+    "axle": [
+      {
+        "name": "fTractionCurveLateral",
+        "percent": 0.65
+      },
+      {
+        "name": "fTractionSpringDeltaMax",
+        "percent": 0.7
+      }
+    ],
+    "brakes": [
+      {
+        "name": "fBrakeForce",
+        "percent": 0.6
+      }
+    ],
+    "suspension": [
+      {
+        "name": "fSteeringLock",
+        "percent": 0.55
+      }
+    ]
+  }
+}

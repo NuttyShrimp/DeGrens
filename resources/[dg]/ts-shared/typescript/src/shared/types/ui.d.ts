@@ -15,6 +15,7 @@ declare namespace TaskBar {
     cancelOnMove?: boolean;
     disarm?: boolean;
     disableInventory?: boolean;
+    disablePeek?: boolean;
     controlDisables?: {
       movement?: boolean;
       carMovement?: boolean;
@@ -33,24 +34,31 @@ declare namespace UI {
       inputs?: Input[];
     };
 
+    interface FreeInput {
+      type: 'text' | 'number' | 'password';
+      value?: string;
+    }
+    interface SelectInput {
+      type: 'select';
+      value?: string;
+      options: {
+        label: string;
+        value: string;
+      }[];
+    }
+    interface Text {
+      type: 'display';
+      value?: string;
+      getEndpoint: string;
+    }
+
     type Input = {
       label: string;
       name: string;
-    } & (
-      | {
-          type: 'text' | 'number' | 'password';
-          value?: string;
-        }
-      | {
-          type: 'select';
-          value?: string;
-          options: {
-            label: string;
-            value: string;
-          }[];
-        }
-    );
+    } & (FreeInput | SelectInput | Text);
   }
+
+  type InteractionType = 'info' | 'error' | 'success';
 }
 
 declare namespace ContextMenu {
@@ -79,5 +87,6 @@ declare namespace ContextMenu {
     disabled?: boolean;
     submenu?: Entry[];
     data?: any;
+    preventCloseOnClick?: boolean;
   }
 }

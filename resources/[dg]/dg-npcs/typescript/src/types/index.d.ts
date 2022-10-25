@@ -12,6 +12,7 @@ interface NpcData {
     title: string;
     sprite: number;
     color: number;
+    scale?: number;
   };
 }
 

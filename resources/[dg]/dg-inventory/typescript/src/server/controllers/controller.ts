@@ -49,7 +49,6 @@ const addItemToInventory = (
   metadata?: { [key: string]: any }
 ) => {
   const itemData = itemDataManager.get(name);
-  if (!itemData) throw new Error(`Item with name ${name} does not exist`);
   const invId = concatId(type, identifier);
   // If item gets added to playerinv, get plyId to build metadata and send itembox event
   const plyId =
@@ -100,6 +99,20 @@ const removeItemFromInventory = async (type: Inventory.Type, identifier: string,
   return true;
 };
 
+const removeItemByIdFromInventory = async (type: Inventory.Type, identifier: string, id: string): Promise<boolean> => {
+  const invId = concatId(type, identifier);
+  const inventory = await inventoryManager.get(invId);
+  const itemState = inventory.getItems().find(i => i.id === id);
+  if (!itemState) return false;
+  itemManager.get(id)?.destroy();
+  const image = itemDataManager.get(itemState.name).image;
+  if (type === 'player') {
+    const plyId = DGCore.Functions.GetPlayerByCitizenId(Number(identifier))?.PlayerData?.source;
+    Events.emitNet('inventory:client:addItemBox', plyId, 'Verwijderd', image);
+  }
+  return true;
+};
+
 const getAmountInInventory = async (type: Inventory.Type, identifier: string, name: string): Promise<number> => {
   const invId = concatId(type, identifier);
   const inventory = await inventoryManager.get(invId);
@@ -131,6 +144,12 @@ const getItemsInInventory = async (type: Inventory.Type, identifier: string) => 
   return inventory.getItems();
 };
 
+const getItemsForNameInInventory = async (type: Inventory.Type, identifier: string, name: string) => {
+  const invId = concatId(type, identifier);
+  const inventory = await inventoryManager.get(invId);
+  return inventory.getItemsForName(name);
+};
+
 const getFirstItemOfName = async (type: Inventory.Type, identifier: string, name: string) => {
   const items = await getItemsInInventory(type, identifier);
   return items.find(item => item.name === name);
@@ -143,10 +162,12 @@ global.asyncExports('clearInventory', clearInventory);
 global.exports('addItemToInventory', addItemToInventory);
 global.asyncExports('doesInventoryHaveItems', doesInventoryHaveItems);
 global.asyncExports('removeItemFromInventory', removeItemFromInventory);
+global.asyncExports('removeItemByIdFromInventory', removeItemByIdFromInventory);
 global.asyncExports('getAmountInInventory', getAmountInInventory);
 global.exports('getItemStateById', getItemStateById);
 global.asyncExports('moveItemToInventory', moveItemToInventory);
 global.asyncExports('getItemsInInventory', getItemsInInventory);
+global.asyncExports('getItemsForNameInInventory', getItemsForNameInInventory);
 global.asyncExports('getFirstItemOfName', getFirstItemOfName);
 
 // Events for client

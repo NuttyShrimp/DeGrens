@@ -2,105 +2,252 @@
   {
     "id": "paycheck_banker",
     "model": "cs_bankman",
-    "position": { "x": 269.31, "y": 217.3, "z": 106.28 },
+    "position": {
+      "x": 269.31,
+      "y": 217.3,
+      "z": 106.28
+    },
     "heading": 70.76,
     "distance": 50.0,
     "settings": [
-      { "type": "invincible", "active": true },
-      { "type": "ignore", "active": true },
-      { "type": "freeze", "active": true },
-      { "type": "collision", "active": true }
+      {
+        "type": "invincible",
+        "active": true
+      },
+      {
+        "type": "ignore",
+        "active": true
+      },
+      {
+        "type": "freeze",
+        "active": true
+      },
+      {
+        "type": "collision",
+        "active": true
+      }
     ],
-    "flags": [{ "name": "isBanker", "active": true }]
+    "flags": [
+      {
+        "name": "isBanker",
+        "active": true
+      }
+    ]
   },
   {
     "id": "weapon_customizer",
     "model": "mp_m_exarmy_01",
-    "position": { "x": -172.69, "y": -756.91, "z": 44.23 },
+    "position": {
+      "x": -172.69,
+      "y": -756.91,
+      "z": 44.23
+    },
     "heading": 249.1,
     "distance": 50.0,
     "settings": [
-      { "type": "invincible", "active": true },
-      { "type": "ignore", "active": true },
-      { "type": "freeze", "active": true },
-      { "type": "collision", "active": true }
+      {
+        "type": "invincible",
+        "active": true
+      },
+      {
+        "type": "ignore",
+        "active": true
+      },
+      {
+        "type": "freeze",
+        "active": true
+      },
+      {
+        "type": "collision",
+        "active": true
+      }
     ],
-    "flags": [{ "name": "isWeaponCustomizer", "active": true }],
+    "flags": [
+      {
+        "name": "isWeaponCustomizer",
+        "active": true
+      }
+    ],
     "scenario": "WORLD_HUMAN_GUARD_STAND_CASINO"
   },
   {
     "id": "houserobbery_signin",
     "model": "g_m_y_famfor_01",
-    "position": { "x": -897.35, "y": -1145.86, "z": 6.02 },
+    "position": {
+      "x": -897.35,
+      "y": -1145.86,
+      "z": 6.02
+    },
     "heading": 77.46,
     "distance": 50.0,
     "settings": [
-      { "type": "invincible", "active": true },
-      { "type": "ignore", "active": true },
-      { "type": "freeze", "active": true },
-      { "type": "collision", "active": true }
+      {
+        "type": "invincible",
+        "active": true
+      },
+      {
+        "type": "ignore",
+        "active": true
+      },
+      {
+        "type": "freeze",
+        "active": true
+      },
+      {
+        "type": "collision",
+        "active": true
+      }
     ],
-    "flags": [{ "name": "isHouseRobSignin", "active": true }],
+    "flags": [
+      {
+        "name": "isHouseRobSignin",
+        "active": true
+      }
+    ],
     "scenario": "WORLD_HUMAN_STAND_IMPATIENT"
   },
   {
     "id": "houserobbery_sell",
     "model": "mp_m_exarmy_01",
-    "position": { "x": 1538.55, "y": 1704.01, "z": 109.66 },
+    "position": {
+      "x": 1538.55,
+      "y": 1704.01,
+      "z": 109.66
+    },
     "heading": 104.21,
     "distance": 50.0,
     "settings": [
-      { "type": "invincible", "active": true },
-      { "type": "ignore", "active": true },
-      { "type": "freeze", "active": true },
-      { "type": "collision", "active": true }
+      {
+        "type": "invincible",
+        "active": true
+      },
+      {
+        "type": "ignore",
+        "active": true
+      },
+      {
+        "type": "freeze",
+        "active": true
+      },
+      {
+        "type": "collision",
+        "active": true
+      }
     ],
-    "flags": [{ "name": "isHouseRobSell", "active": true }],
+    "flags": [
+      {
+        "name": "isHouseRobSell",
+        "active": true
+      }
+    ],
     "scenario": "WORLD_HUMAN_STAND_IMPATIENT"
   },
   {
     "id": "heists_softwareshop",
     "model": "ig_car3guy1",
-    "position": { "x": 150.52, "y": 318.79, "z": 112.14 },
+    "position": {
+      "x": 150.52,
+      "y": 318.79,
+      "z": 112.14
+    },
     "heading": 78.24,
     "distance": 50.0,
     "settings": [
-      { "type": "invincible", "active": true },
-      { "type": "ignore", "active": true },
-      { "type": "freeze", "active": true },
-      { "type": "collision", "active": true }
+      {
+        "type": "invincible",
+        "active": true
+      },
+      {
+        "type": "ignore",
+        "active": true
+      },
+      {
+        "type": "freeze",
+        "active": true
+      },
+      {
+        "type": "collision",
+        "active": true
+      }
     ],
-    "flags": [{ "name": "isHeistsSoftwareShop", "active": true }],
+    "flags": [
+      {
+        "name": "isHeistsSoftwareShop",
+        "active": true
+      }
+    ],
     "scenario": "WORLD_HUMAN_CLIPBOARD"
   },
   {
     "id": "heists_drivetrade",
     "model": "ig_car3guy1",
-    "position": { "x": 165.93, "y": -998.14, "z": 29.35 },
+    "position": {
+      "x": 165.93,
+      "y": -998.14,
+      "z": 29.35
+    },
     "heading": 207.15,
     "distance": 50.0,
     "settings": [
-      { "type": "invincible", "active": true },
-      { "type": "ignore", "active": true },
-      { "type": "freeze", "active": true },
-      { "type": "collision", "active": true }
+      {
+        "type": "invincible",
+        "active": true
+      },
+      {
+        "type": "ignore",
+        "active": true
+      },
+      {
+        "type": "freeze",
+        "active": true
+      },
+      {
+        "type": "collision",
+        "active": true
+      }
     ],
-    "flags": [{ "name": "isHeistsDriveTrade", "active": true }],
+    "flags": [
+      {
+        "name": "isHeistsDriveTrade",
+        "active": true
+      }
+    ],
     "scenario": "WORLD_HUMAN_CLIPBOARD"
   },
   {
     "id": "shop_little_seoul",
     "model": "mp_m_shopkeep_01",
-    "position": { "x": -705.2, "y": -914.87, "z": 19.22 },
+    "position": {
+      "x": -705.2,
+      "y": -914.87,
+      "z": 19.22
+    },
     "heading": 80.51,
     "distance": 50.0,
     "settings": [
-      { "type": "invincible", "active": true },
-      { "type": "ignore", "active": true },
-      { "type": "freeze", "active": true },
-      { "type": "collision", "active": true }
+      {
+        "type": "invincible",
+        "active": true
+      },
+      {
+        "type": "ignore",
+        "active": true
+      },
+      {
+        "type": "freeze",
+        "active": true
+      },
+      {
+        "type": "collision",
+        "active": true
+      }
     ],
-    "flags": [{ "name": "isShopKeeper", "active": true }],
+    "flags": [
+      {
+        "name": "isShopKeeper",
+        "active": true
+      }
+    ],
     "scenario": "WORLD_HUMAN_HANG_OUT_STREET",
     "blip": {
       "title": "24/7 Winkel",
@@ -111,16 +258,37 @@
   {
     "id": "shop_grove_street",
     "model": "mp_m_shopkeep_01",
-    "position": { "x": -46.98, "y": -1759.5, "z": 29.43 },
+    "position": {
+      "x": -46.98,
+      "y": -1759.5,
+      "z": 29.43
+    },
     "heading": 33.91,
     "distance": 50.0,
     "settings": [
-      { "type": "invincible", "active": true },
-      { "type": "ignore", "active": true },
-      { "type": "freeze", "active": true },
-      { "type": "collision", "active": true }
+      {
+        "type": "invincible",
+        "active": true
+      },
+      {
+        "type": "ignore",
+        "active": true
+      },
+      {
+        "type": "freeze",
+        "active": true
+      },
+      {
+        "type": "collision",
+        "active": true
+      }
     ],
-    "flags": [{ "name": "isShopKeeper", "active": true }],
+    "flags": [
+      {
+        "name": "isShopKeeper",
+        "active": true
+      }
+    ],
     "scenario": "WORLD_HUMAN_HANG_OUT_STREET",
     "blip": {
       "title": "24/7 Winkel",
@@ -131,16 +299,37 @@
   {
     "id": "shop_mirror_park",
     "model": "mp_m_shopkeep_01",
-    "position": { "x": 1165.79, "y": -323.96, "z": 69.21 },
+    "position": {
+      "x": 1165.79,
+      "y": -323.96,
+      "z": 69.21
+    },
     "heading": 89.8,
     "distance": 50.0,
     "settings": [
-      { "type": "invincible", "active": true },
-      { "type": "ignore", "active": true },
-      { "type": "freeze", "active": true },
-      { "type": "collision", "active": true }
+      {
+        "type": "invincible",
+        "active": true
+      },
+      {
+        "type": "ignore",
+        "active": true
+      },
+      {
+        "type": "freeze",
+        "active": true
+      },
+      {
+        "type": "collision",
+        "active": true
+      }
     ],
-    "flags": [{ "name": "isShopKeeper", "active": true }],
+    "flags": [
+      {
+        "name": "isShopKeeper",
+        "active": true
+      }
+    ],
     "scenario": "WORLD_HUMAN_HANG_OUT_STREET",
     "blip": {
       "title": "24/7 Winkel",
@@ -151,16 +340,37 @@
   {
     "id": "shop_richman_glen",
     "model": "mp_m_shopkeep_01",
-    "position": { "x": -1818.54, "y": 793.85, "z": 138.07 },
+    "position": {
+      "x": -1818.54,
+      "y": 793.85,
+      "z": 138.07
+    },
     "heading": 110.08,
     "distance": 50.0,
     "settings": [
-      { "type": "invincible", "active": true },
-      { "type": "ignore", "active": true },
-      { "type": "freeze", "active": true },
-      { "type": "collision", "active": true }
+      {
+        "type": "invincible",
+        "active": true
+      },
+      {
+        "type": "ignore",
+        "active": true
+      },
+      {
+        "type": "freeze",
+        "active": true
+      },
+      {
+        "type": "collision",
+        "active": true
+      }
     ],
-    "flags": [{ "name": "isShopKeeper", "active": true }],
+    "flags": [
+      {
+        "name": "isShopKeeper",
+        "active": true
+      }
+    ],
     "scenario": "WORLD_HUMAN_HANG_OUT_STREET",
     "blip": {
       "title": "24/7 Winkel",
@@ -171,16 +381,37 @@
   {
     "id": "shop_grape_seed",
     "model": "mp_m_shopkeep_01",
-    "position": { "x": 1696.46, "y": 4922.87, "z": 42.07 },
+    "position": {
+      "x": 1696.46,
+      "y": 4922.87,
+      "z": 42.07
+    },
     "heading": 309.41,
     "distance": 50.0,
     "settings": [
-      { "type": "invincible", "active": true },
-      { "type": "ignore", "active": true },
-      { "type": "freeze", "active": true },
-      { "type": "collision", "active": true }
+      {
+        "type": "invincible",
+        "active": true
+      },
+      {
+        "type": "ignore",
+        "active": true
+      },
+      {
+        "type": "freeze",
+        "active": true
+      },
+      {
+        "type": "collision",
+        "active": true
+      }
     ],
-    "flags": [{ "name": "isShopKeeper", "active": true }],
+    "flags": [
+      {
+        "name": "isShopKeeper",
+        "active": true
+      }
+    ],
     "scenario": "WORLD_HUMAN_HANG_OUT_STREET",
     "blip": {
       "title": "24/7 Winkel",
@@ -191,16 +422,37 @@
   {
     "id": "shop_vespucci_canals",
     "model": "mp_m_shopkeep_01",
-    "position": { "x": -1220.24, "y": -908.08, "z": 12.33 },
+    "position": {
+      "x": -1220.24,
+      "y": -908.08,
+      "z": 12.33
+    },
     "heading": 66.14,
     "distance": 50.0,
     "settings": [
-      { "type": "invincible", "active": true },
-      { "type": "ignore", "active": true },
-      { "type": "freeze", "active": true },
-      { "type": "collision", "active": true }
+      {
+        "type": "invincible",
+        "active": true
+      },
+      {
+        "type": "ignore",
+        "active": true
+      },
+      {
+        "type": "freeze",
+        "active": true
+      },
+      {
+        "type": "collision",
+        "active": true
+      }
     ],
-    "flags": [{ "name": "isShopKeeper", "active": true }],
+    "flags": [
+      {
+        "name": "isShopKeeper",
+        "active": true
+      }
+    ],
     "scenario": "WORLD_HUMAN_HANG_OUT_STREET",
     "blip": {
       "title": "24/7 Winkel",
@@ -211,16 +463,37 @@
   {
     "id": "shop_grand_senora",
     "model": "mp_m_shopkeep_01",
-    "position": { "x": 1164.3, "y": 2711.46, "z": 38.16 },
+    "position": {
+      "x": 1164.3,
+      "y": 2711.46,
+      "z": 38.16
+    },
     "heading": 210.8,
     "distance": 50.0,
     "settings": [
-      { "type": "invincible", "active": true },
-      { "type": "ignore", "active": true },
-      { "type": "freeze", "active": true },
-      { "type": "collision", "active": true }
+      {
+        "type": "invincible",
+        "active": true
+      },
+      {
+        "type": "ignore",
+        "active": true
+      },
+      {
+        "type": "freeze",
+        "active": true
+      },
+      {
+        "type": "collision",
+        "active": true
+      }
     ],
-    "flags": [{ "name": "isShopKeeper", "active": true }],
+    "flags": [
+      {
+        "name": "isShopKeeper",
+        "active": true
+      }
+    ],
     "scenario": "WORLD_HUMAN_HANG_OUT_STREET",
     "blip": {
       "title": "24/7 Winkel",
@@ -231,16 +504,37 @@
   {
     "id": "shop_murrieta_heights",
     "model": "mp_m_shopkeep_01",
-    "position": { "x": 1133.57, "y": -984.21, "z": 46.42 },
+    "position": {
+      "x": 1133.57,
+      "y": -984.21,
+      "z": 46.42
+    },
     "heading": 303.17,
     "distance": 50.0,
     "settings": [
-      { "type": "invincible", "active": true },
-      { "type": "ignore", "active": true },
-      { "type": "freeze", "active": true },
-      { "type": "collision", "active": true }
+      {
+        "type": "invincible",
+        "active": true
+      },
+      {
+        "type": "ignore",
+        "active": true
+      },
+      {
+        "type": "freeze",
+        "active": true
+      },
+      {
+        "type": "collision",
+        "active": true
+      }
     ],
-    "flags": [{ "name": "isShopKeeper", "active": true }],
+    "flags": [
+      {
+        "name": "isShopKeeper",
+        "active": true
+      }
+    ],
     "scenario": "WORLD_HUMAN_HANG_OUT_STREET",
     "blip": {
       "title": "24/7 Winkel",
@@ -251,16 +545,37 @@
   {
     "id": "shop_del_perro",
     "model": "mp_m_shopkeep_01",
-    "position": { "x": -1486.82, "y": -376.23, "z": 40.17 },
+    "position": {
+      "x": -1486.82,
+      "y": -376.23,
+      "z": 40.17
+    },
     "heading": 157.9,
     "distance": 50.0,
     "settings": [
-      { "type": "invincible", "active": true },
-      { "type": "ignore", "active": true },
-      { "type": "freeze", "active": true },
-      { "type": "collision", "active": true }
+      {
+        "type": "invincible",
+        "active": true
+      },
+      {
+        "type": "ignore",
+        "active": true
+      },
+      {
+        "type": "freeze",
+        "active": true
+      },
+      {
+        "type": "collision",
+        "active": true
+      }
     ],
-    "flags": [{ "name": "isShopKeeper", "active": true }],
+    "flags": [
+      {
+        "name": "isShopKeeper",
+        "active": true
+      }
+    ],
     "scenario": "WORLD_HUMAN_HANG_OUT_STREET",
     "blip": {
       "title": "24/7 Winkel",
@@ -271,16 +586,37 @@
   {
     "id": "shop_great_ocean",
     "model": "mp_m_shopkeep_01",
-    "position": { "x": -2965.58, "y": 392.5, "z": 15.05 },
+    "position": {
+      "x": -2965.58,
+      "y": 392.5,
+      "z": 15.05
+    },
     "heading": 112.1,
     "distance": 50.0,
     "settings": [
-      { "type": "invincible", "active": true },
-      { "type": "ignore", "active": true },
-      { "type": "freeze", "active": true },
-      { "type": "collision", "active": true }
+      {
+        "type": "invincible",
+        "active": true
+      },
+      {
+        "type": "ignore",
+        "active": true
+      },
+      {
+        "type": "freeze",
+        "active": true
+      },
+      {
+        "type": "collision",
+        "active": true
+      }
     ],
-    "flags": [{ "name": "isShopKeeper", "active": true }],
+    "flags": [
+      {
+        "name": "isShopKeeper",
+        "active": true
+      }
+    ],
     "scenario": "WORLD_HUMAN_HANG_OUT_STREET",
     "blip": {
       "title": "24/7 Winkel",
@@ -291,16 +627,37 @@
   {
     "id": "shop_banham_canyon",
     "model": "mp_m_shopkeep_01",
-    "position": { "x": -3037.61, "y": 584.96, "z": 7.91 },
+    "position": {
+      "x": -3037.61,
+      "y": 584.96,
+      "z": 7.91
+    },
     "heading": 56.22,
     "distance": 50.0,
     "settings": [
-      { "type": "invincible", "active": true },
-      { "type": "ignore", "active": true },
-      { "type": "freeze", "active": true },
-      { "type": "collision", "active": true }
+      {
+        "type": "invincible",
+        "active": true
+      },
+      {
+        "type": "ignore",
+        "active": true
+      },
+      {
+        "type": "freeze",
+        "active": true
+      },
+      {
+        "type": "collision",
+        "active": true
+      }
     ],
-    "flags": [{ "name": "isShopKeeper", "active": true }],
+    "flags": [
+      {
+        "name": "isShopKeeper",
+        "active": true
+      }
+    ],
     "scenario": "WORLD_HUMAN_HANG_OUT_STREET",
     "blip": {
       "title": "24/7 Winkel",
@@ -311,16 +668,37 @@
   {
     "id": "shop_chumash",
     "model": "mp_m_shopkeep_01",
-    "position": { "x": -3241.01, "y": 999.94, "z": 12.84 },
+    "position": {
+      "x": -3241.01,
+      "y": 999.94,
+      "z": 12.84
+    },
     "heading": 23.18,
     "distance": 50.0,
     "settings": [
-      { "type": "invincible", "active": true },
-      { "type": "ignore", "active": true },
-      { "type": "freeze", "active": true },
-      { "type": "collision", "active": true }
+      {
+        "type": "invincible",
+        "active": true
+      },
+      {
+        "type": "ignore",
+        "active": true
+      },
+      {
+        "type": "freeze",
+        "active": true
+      },
+      {
+        "type": "collision",
+        "active": true
+      }
     ],
-    "flags": [{ "name": "isShopKeeper", "active": true }],
+    "flags": [
+      {
+        "name": "isShopKeeper",
+        "active": true
+      }
+    ],
     "scenario": "WORLD_HUMAN_HANG_OUT_STREET",
     "blip": {
       "title": "24/7 Winkel",
@@ -331,16 +709,37 @@
   {
     "id": "shop_senora_freeway",
     "model": "mp_m_shopkeep_01",
-    "position": { "x": 2679.18, "y": 3278.75, "z": 55.25 },
+    "position": {
+      "x": 2679.18,
+      "y": 3278.75,
+      "z": 55.25
+    },
     "heading": 4.78,
     "distance": 50.0,
     "settings": [
-      { "type": "invincible", "active": true },
-      { "type": "ignore", "active": true },
-      { "type": "freeze", "active": true },
-      { "type": "collision", "active": true }
+      {
+        "type": "invincible",
+        "active": true
+      },
+      {
+        "type": "ignore",
+        "active": true
+      },
+      {
+        "type": "freeze",
+        "active": true
+      },
+      {
+        "type": "collision",
+        "active": true
+      }
     ],
-    "flags": [{ "name": "isShopKeeper", "active": true }],
+    "flags": [
+      {
+        "name": "isShopKeeper",
+        "active": true
+      }
+    ],
     "scenario": "WORLD_HUMAN_HANG_OUT_STREET",
     "blip": {
       "title": "24/7 Winkel",
@@ -351,16 +750,37 @@
   {
     "id": "shop_strawberry",
     "model": "mp_m_shopkeep_01",
-    "position": { "x": 24.52, "y": -1348.67, "z": 29.5 },
+    "position": {
+      "x": 24.52,
+      "y": -1348.67,
+      "z": 29.5
+    },
     "heading": 302.63,
     "distance": 50.0,
     "settings": [
-      { "type": "invincible", "active": true },
-      { "type": "ignore", "active": true },
-      { "type": "freeze", "active": true },
-      { "type": "collision", "active": true }
+      {
+        "type": "invincible",
+        "active": true
+      },
+      {
+        "type": "ignore",
+        "active": true
+      },
+      {
+        "type": "freeze",
+        "active": true
+      },
+      {
+        "type": "collision",
+        "active": true
+      }
     ],
-    "flags": [{ "name": "isShopKeeper", "active": true }],
+    "flags": [
+      {
+        "name": "isShopKeeper",
+        "active": true
+      }
+    ],
     "scenario": "WORLD_HUMAN_HANG_OUT_STREET",
     "blip": {
       "title": "24/7 Winkel",
@@ -371,16 +791,37 @@
   {
     "id": "shop_harmony",
     "model": "mp_m_shopkeep_01",
-    "position": { "x": 549.06, "y": 2672.4, "z": 42.16 },
+    "position": {
+      "x": 549.06,
+      "y": 2672.4,
+      "z": 42.16
+    },
     "heading": 100.69,
     "distance": 50.0,
     "settings": [
-      { "type": "invincible", "active": true },
-      { "type": "ignore", "active": true },
-      { "type": "freeze", "active": true },
-      { "type": "collision", "active": true }
+      {
+        "type": "invincible",
+        "active": true
+      },
+      {
+        "type": "ignore",
+        "active": true
+      },
+      {
+        "type": "freeze",
+        "active": true
+      },
+      {
+        "type": "collision",
+        "active": true
+      }
     ],
-    "flags": [{ "name": "isShopKeeper", "active": true }],
+    "flags": [
+      {
+        "name": "isShopKeeper",
+        "active": true
+      }
+    ],
     "scenario": "WORLD_HUMAN_HANG_OUT_STREET",
     "blip": {
       "title": "24/7 Winkel",
@@ -391,16 +832,37 @@
   {
     "id": "shop_vinewood",
     "model": "mp_m_shopkeep_01",
-    "position": { "x": 372.19, "y": 325.15, "z": 103.57 },
+    "position": {
+      "x": 372.19,
+      "y": 325.15,
+      "z": 103.57
+    },
     "heading": 285.05,
     "distance": 50.0,
     "settings": [
-      { "type": "invincible", "active": true },
-      { "type": "ignore", "active": true },
-      { "type": "freeze", "active": true },
-      { "type": "collision", "active": true }
+      {
+        "type": "invincible",
+        "active": true
+      },
+      {
+        "type": "ignore",
+        "active": true
+      },
+      {
+        "type": "freeze",
+        "active": true
+      },
+      {
+        "type": "collision",
+        "active": true
+      }
     ],
-    "flags": [{ "name": "isShopKeeper", "active": true }],
+    "flags": [
+      {
+        "name": "isShopKeeper",
+        "active": true
+      }
+    ],
     "scenario": "WORLD_HUMAN_HANG_OUT_STREET",
     "blip": {
       "title": "24/7 Winkel",
@@ -411,16 +873,37 @@
   {
     "id": "shop_mount_chiliad",
     "model": "mp_m_shopkeep_01",
-    "position": { "x": 1727.24, "y": 6414.02, "z": 35.04 },
+    "position": {
+      "x": 1727.24,
+      "y": 6414.02,
+      "z": 35.04
+    },
     "heading": 247.0,
     "distance": 50.0,
     "settings": [
-      { "type": "invincible", "active": true },
-      { "type": "ignore", "active": true },
-      { "type": "freeze", "active": true },
-      { "type": "collision", "active": true }
+      {
+        "type": "invincible",
+        "active": true
+      },
+      {
+        "type": "ignore",
+        "active": true
+      },
+      {
+        "type": "freeze",
+        "active": true
+      },
+      {
+        "type": "collision",
+        "active": true
+      }
     ],
-    "flags": [{ "name": "isShopKeeper", "active": true }],
+    "flags": [
+      {
+        "name": "isShopKeeper",
+        "active": true
+      }
+    ],
     "scenario": "WORLD_HUMAN_HANG_OUT_STREET",
     "blip": {
       "title": "24/7 Winkel",
@@ -431,16 +914,37 @@
   {
     "id": "shop_sandy_shores",
     "model": "mp_m_shopkeep_01",
-    "position": { "x": 1960.72, "y": 3738.91, "z": 32.35 },
+    "position": {
+      "x": 1960.72,
+      "y": 3738.91,
+      "z": 32.35
+    },
     "heading": 321.33,
     "distance": 50.0,
     "settings": [
-      { "type": "invincible", "active": true },
-      { "type": "ignore", "active": true },
-      { "type": "freeze", "active": true },
-      { "type": "collision", "active": true }
+      {
+        "type": "invincible",
+        "active": true
+      },
+      {
+        "type": "ignore",
+        "active": true
+      },
+      {
+        "type": "freeze",
+        "active": true
+      },
+      {
+        "type": "collision",
+        "active": true
+      }
     ],
-    "flags": [{ "name": "isShopKeeper", "active": true }],
+    "flags": [
+      {
+        "name": "isShopKeeper",
+        "active": true
+      }
+    ],
     "scenario": "WORLD_HUMAN_HANG_OUT_STREET",
     "blip": {
       "title": "24/7 Winkel",
@@ -451,16 +955,37 @@
   {
     "id": "shop_tataviam_mountains",
     "model": "mp_m_shopkeep_01",
-    "position": { "x": 2558.46, "y": 380.75, "z": 108.63 },
+    "position": {
+      "x": 2558.46,
+      "y": 380.75,
+      "z": 108.63
+    },
     "heading": 15.71,
     "distance": 50.0,
     "settings": [
-      { "type": "invincible", "active": true },
-      { "type": "ignore", "active": true },
-      { "type": "freeze", "active": true },
-      { "type": "collision", "active": true }
+      {
+        "type": "invincible",
+        "active": true
+      },
+      {
+        "type": "ignore",
+        "active": true
+      },
+      {
+        "type": "freeze",
+        "active": true
+      },
+      {
+        "type": "collision",
+        "active": true
+      }
     ],
-    "flags": [{ "name": "isShopKeeper", "active": true }],
+    "flags": [
+      {
+        "name": "isShopKeeper",
+        "active": true
+      }
+    ],
     "scenario": "WORLD_HUMAN_HANG_OUT_STREET",
     "blip": {
       "title": "24/7 Winkel",
@@ -471,16 +996,37 @@
   {
     "id": "shop_del_vecchio",
     "model": "mp_m_shopkeep_01",
-    "position": { "x": -160.34, "y": 6319.56, "z": 31.59 },
+    "position": {
+      "x": -160.34,
+      "y": 6319.56,
+      "z": 31.59
+    },
     "heading": 351.96,
     "distance": 50.0,
     "settings": [
-      { "type": "invincible", "active": true },
-      { "type": "ignore", "active": true },
-      { "type": "freeze", "active": true },
-      { "type": "collision", "active": true }
+      {
+        "type": "invincible",
+        "active": true
+      },
+      {
+        "type": "ignore",
+        "active": true
+      },
+      {
+        "type": "freeze",
+        "active": true
+      },
+      {
+        "type": "collision",
+        "active": true
+      }
     ],
-    "flags": [{ "name": "isShopKeeper", "active": true }],
+    "flags": [
+      {
+        "name": "isShopKeeper",
+        "active": true
+      }
+    ],
     "scenario": "WORLD_HUMAN_HANG_OUT_STREET",
     "blip": {
       "title": "24/7 Winkel",
@@ -491,16 +1037,37 @@
   {
     "id": "shop_paleto_bay",
     "model": "mp_m_shopkeep_01",
-    "position": { "x": 159.47, "y": 6640.67, "z": 31.7 },
+    "position": {
+      "x": 159.47,
+      "y": 6640.67,
+      "z": 31.7
+    },
     "heading": 251.15,
     "distance": 50.0,
     "settings": [
-      { "type": "invincible", "active": true },
-      { "type": "ignore", "active": true },
-      { "type": "freeze", "active": true },
-      { "type": "collision", "active": true }
+      {
+        "type": "invincible",
+        "active": true
+      },
+      {
+        "type": "ignore",
+        "active": true
+      },
+      {
+        "type": "freeze",
+        "active": true
+      },
+      {
+        "type": "collision",
+        "active": true
+      }
     ],
-    "flags": [{ "name": "isShopKeeper", "active": true }],
+    "flags": [
+      {
+        "name": "isShopKeeper",
+        "active": true
+      }
+    ],
     "scenario": "WORLD_HUMAN_HANG_OUT_STREET",
     "blip": {
       "title": "24/7 Winkel",
@@ -511,21 +1078,83 @@
   {
     "id": "shop_hardware_city",
     "model": "s_m_m_gaffer_01",
-    "position": { "x": 63.81, "y": -1728.92, "z": 29.65 },
+    "position": {
+      "x": 63.81,
+      "y": -1728.92,
+      "z": 29.65
+    },
     "heading": 43.81,
     "distance": 50.0,
     "settings": [
-      { "type": "invincible", "active": true },
-      { "type": "ignore", "active": true },
-      { "type": "freeze", "active": true },
-      { "type": "collision", "active": true }
+      {
+        "type": "invincible",
+        "active": true
+      },
+      {
+        "type": "ignore",
+        "active": true
+      },
+      {
+        "type": "freeze",
+        "active": true
+      },
+      {
+        "type": "collision",
+        "active": true
+      }
     ],
-    "flags": [{ "name": "isShopKeeper", "active": true }],
+    "flags": [
+      {
+        "name": "isShopKeeper",
+        "active": true
+      }
+    ],
     "scenario": "WORLD_HUMAN_CLIPBOARD",
     "blip": {
       "title": "Hardware Winkel",
       "sprite": 402,
       "color": 15
+    }
+  },
+  {
+    "id": "impound_vehicle_info",
+    "model": "cs_joeminuteman",
+    "position": {
+      "x": -193.34,
+      "y": -1162.34,
+      "z": 23.68
+    },
+    "heading": 274.51,
+    "distance": 20.0,
+    "settings": [
+      {
+        "type": "invincible",
+        "active": true
+      },
+      {
+        "type": "ignore",
+        "active": true
+      },
+      {
+        "type": "freeze",
+        "active": true
+      },
+      {
+        "type": "collision",
+        "active": true
+      }
+    ],
+    "flags": [
+      {
+        "name": "isImpoundHandler",
+        "active": true
+      }
+    ],
+    "scenario": "WORLD_HUMAN_STAND_MOBILE_UPRIGHT",
+    "blip": {
+      "title": "Impound lot",
+      "sprite": 68,
+      "color": 5
     }
   }
 ]

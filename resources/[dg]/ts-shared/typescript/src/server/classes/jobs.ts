@@ -46,6 +46,11 @@ class Business {
     return global.exports['dg-business'].getBusinessEmployees(name);
   }
 
+  getBusinessOwner(name: string) {
+    const employees = this.getBusinessEmployees(name);
+    return employees.find(e => e.isOwner);
+  }
+
   isPlyEmployed(name: string, cid: number): boolean {
     return !!global.exports['dg-business'].isPlyEmployed(name, cid);
   }

@@ -27,7 +27,7 @@ class TokenStorage {
     this.getResourceToken();
   }
 
-  private async getResourceToken() {
+  private getResourceToken() {
     emitNet('dg-auth:token:requestResource', GetCurrentResourceName());
   }
 
@@ -39,7 +39,7 @@ class TokenStorage {
   }
 }
 
-class Events {
+export class Events {
   private static instance: Events;
 
   static getInstance() {
@@ -277,22 +277,7 @@ class RPC {
   }
 }
 
-export const registerDGXEvent = (evtName: string, handler: DGXEvents.LocalEventHandler) => {
-  if (GetCurrentResourceName() === 'ts-shared') {
-    Events.getInstance().on(evtName, handler);
-  }
+export default {
+  Events: Events.getInstance(),
+  RPC: RPC.getInstance(),
 };
-
-export const registerDGXEventNet = (evtName: string, handler: DGXEvents.LocalEventHandler) => {
-  if (GetCurrentResourceName() === 'ts-shared') {
-    Events.getInstance().onNet(evtName, handler);
-  }
-};
-
-export const registerDGXRPC = (evtName: string, handler: DGXEvents.LocalEventHandler<any>) => {
-  if (GetCurrentResourceName() === 'ts-shared') {
-    RPC.getInstance().register(evtName, handler);
-  }
-};
-
-export default { Events: Events.getInstance(), RPC: RPC.getInstance() };
