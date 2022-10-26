@@ -1,5 +1,37 @@
+local crashed = {}
+
+exports('addCrashedPlayer', function (steamId)
+  table.insert(crashed, steamId)
+end)
+
 getPlySpawns = function(src)
 	local Spawns = {}
+
+  local isDevEnv = DGX.Util.isDevEnv()
+  local isDev = exports['dg-admin']:hasPermission(src, "developer")
+  local hasCrashed = false
+  local plySteamId = Player(src).state.steamId
+  for _, crashedIds in pairs(crashed) do
+    if crashedIds == plySteamId then
+      hasCrashed = true
+      break
+    end
+  end
+  -- Only able to join at last location when one of following options is true
+  -- isDevEnv
+  -- is developer
+  -- has crashed
+  if isDevEnv or isDev or hasCrashed then
+    local ply = DGCore.Functions.GetPlayer(src)
+    if ply ~= nil then
+      table.insert(Spawns, {
+        label = "Laatste locatie",
+        spawnType = 'world',
+        position = ply.PlayerData.position,
+      })
+    end
+  end
+
 	for _, v in pairs(Config.Server.spawns.base) do
 		if (v.isEnabled and not v.isEnabled()) then
 			goto continue
