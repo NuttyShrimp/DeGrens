@@ -37,7 +37,7 @@ export const store = createStore<State>({
     },
     getActions: state => (filter: string) => {
       if (filter === '') return state.actions;
-      return state.actions.filter(a => a.title.includes(filter));
+      return state.actions.filter(a => a.title.toLowerCase().includes(filter));
     },
     getPlayers: state => (filter: string) => {
       if (filter === '') return state.players;

@@ -20,7 +20,7 @@
 
   const store = useStore();
   const searchValue = ref('');
-  const actions = computed(() => store.getters.getActions(searchValue.value));
+  const actions = computed(() => store.getters.getActions(searchValue.value.toLowerCase()));
 </script>
 
 <style lang="scss">
