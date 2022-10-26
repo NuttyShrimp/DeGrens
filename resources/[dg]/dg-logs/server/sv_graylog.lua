@@ -27,7 +27,7 @@ end
 createGraylogEntry = function(logtype, data, message, isImportant, timestamp)
   local p = promise:new()
   if not timestamp then
-    timestamp = os.time(os.date("!*t"))
+    timestamp = os.time(os.date("*t"))
   end
 	Citizen.CreateThread(function()
     while not exports['dg-config']:areConfigsReady() do
