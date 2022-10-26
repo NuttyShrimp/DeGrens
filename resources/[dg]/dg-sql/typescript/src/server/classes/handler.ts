@@ -1,6 +1,8 @@
-import mysql from 'mysql2/promise';
-import poolManager from './poolManager';
+import * as Sentry from '@sentry/node';
+
 import { mainLogger } from '../sv_logger';
+
+import poolManager from './poolManager';
 
 class Handler {
   private profileLimit: number;
@@ -42,6 +44,14 @@ class Handler {
         });
       }
       if (!this.isResourceReady) await this.resStartup();
+      const transaction = Sentry.startTransaction({
+        op: 'db',
+        name: query,
+        data: {
+          params,
+          resource,
+        },
+      });
       const startTime = process.hrtime.bigint();
 
       ScheduleResourceTick(GetCurrentResourceName());
@@ -49,6 +59,7 @@ class Handler {
 
       const endTime = process.hrtime.bigint();
       const timeMs = Number(endTime - startTime) / 1e6;
+      transaction.finish();
       mainLogger.log(
         this.profileLimit < timeMs ? 'warn' : 'debug',
         `[${resource}] Executed ${query
@@ -63,6 +74,7 @@ class Handler {
           params
         )}`
       );
+      Sentry.captureException(e);
     }
   };
 }
