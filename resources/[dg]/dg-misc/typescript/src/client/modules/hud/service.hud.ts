@@ -40,8 +40,7 @@ export const doSpeedStress = () => {
   if (!IsPedInAnyVehicle(ped, false)) return;
   const speed = GetEntitySpeed(GetVehiclePedIsIn(ped, false)) * 3.6;
   const stressSpeed = config.speed.minimum;
-  const isSeatbeltOn = global.exports['vehicles'].isSeatbeltOn();
-  // TODO: add check if ply has seatbelt on
+  const isSeatbeltOn = global.exports['dg-vehicles'].isSeatbeltOn();
   if (speed >= (stressSpeed * isSeatbeltOn ? 1.3 : 1)) {
     Events.emitNet('hud:server:GainStress', Util.getRndInteger(1, 6) / 10);
   }
@@ -59,7 +58,6 @@ export const doWeaponStress = () => {
     !SKIPPED_WEAPONS.includes(pedWeapon) &&
     Util.getRndInteger(0, 100) < config.shootingChance
   ) {
-    console.log('gaiing stress');
     Events.emitNet('hud:server:GainStress', Util.getRndInteger(3, 21) / 10);
   }
 };

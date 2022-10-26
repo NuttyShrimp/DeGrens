@@ -8,7 +8,7 @@ getPlySpawns = function(src)
 	local Spawns = {}
 
   local isDevEnv = DGX.Util.isDevEnv()
-  local isDev = exports['dg-admin']:hasPermission(src, "developer")
+  local isDev = DGX.Admin.hasPermission(src, "developer")
   local hasCrashed = false
   local plySteamId = Player(src).state.steamId
   for _, crashedIds in pairs(crashed) do
