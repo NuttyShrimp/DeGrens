@@ -4,7 +4,7 @@ stages:
   - build
   - housekeeping
 
-image: node:lts
+image: node:16
 
 .lerna_installation:
   before_script:
