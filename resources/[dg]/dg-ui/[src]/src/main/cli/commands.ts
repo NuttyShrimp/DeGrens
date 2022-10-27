@@ -323,4 +323,43 @@ export const cmds: {
     app: 'configmenu',
     show: false,
   },
+  {
+    cmd: 'keygame',
+    app: 'keygame',
+    show: true,
+    data: {
+      id: 1,
+      keys: {
+        W: 'up',
+        S: 'down',
+        A: 'left',
+        D: 'right',
+      },
+      cycles: [
+        {
+          speed: 4,
+          size: 30,
+        },
+        {
+          speed: 10,
+          size: 20,
+        },
+        {
+          speed: 10,
+          size: 40,
+        },
+      ],
+    },
+  },
+  {
+    cmd: 'show gridgame',
+    app: 'gridgame',
+    show: true,
+    data: defaultState.gridgame.sequence,
+  },
+  {
+    cmd: 'hide gridgame',
+    app: 'gridgame',
+    show: false,
+  },
 ];

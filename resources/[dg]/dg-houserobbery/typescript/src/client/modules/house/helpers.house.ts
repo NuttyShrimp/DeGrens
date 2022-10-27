@@ -17,7 +17,7 @@ export const unlockHouse = async (houseId: string) => {
     return;
   }
 
-  const keygameSuccess = await Minigames.keygame(3, 'medium');
+  const keygameSuccess = await Minigames.keygame(3, 7, 20);
   if (keygameSuccess) {
     Notifications.add('De deur is opengebroken!', 'success');
     Events.emitNet('houserobbery:server:unlockDoor', houseId);

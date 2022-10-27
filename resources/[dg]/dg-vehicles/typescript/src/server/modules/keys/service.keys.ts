@@ -5,14 +5,14 @@ import { getVinForNetId, getVinForVeh } from '../../helpers/vehicle';
 
 import { keyManager } from './classes/keymanager';
 
-const vehClassToDifficulty: Record<CarClass, string> = {
-  D: 'easy',
-  C: 'easy',
-  B: 'medium',
-  A: 'medium',
-  'A+': 'hard',
-  S: 'extreme',
-  X: 'extreme',
+const vehClassToDifficulty: Record<CarClass, { speed: number; size: number }> = {
+  D: { speed: 0.5, size: 40 },
+  C: { speed: 2, size: 30 },
+  B: { speed: 4, size: 20 },
+  A: { speed: 6, size: 15 },
+  'A+': { speed: 7, size: 10 },
+  S: { speed: 8, size: 8 },
+  X: { speed: 10, size: 5 },
 };
 // Map of number onto UUID's
 const activeLockPicker = new Map<number, string>();
@@ -71,8 +71,8 @@ export const startVehicleLockpick = async (src: number) => {
       src,
       'door',
       id,
-      Math.max(4, (vehInfo.price ?? 0) / 200000),
-      vehClassToDifficulty?.[vehInfo.class] ?? 'hard'
+      Math.max(4, Math.ceil((vehInfo.price ?? 0) / 200000)),
+      vehClassToDifficulty[vehInfo.class] ?? { speed: 1, size: 25 }
     );
   } else if (GetVehiclePedIsIn(ped, false) === veh) {
     Events.emitNet(
@@ -80,8 +80,8 @@ export const startVehicleLockpick = async (src: number) => {
       src,
       'hotwire',
       id,
-      Math.max(5, (vehInfo.price ?? 0) / 200000),
-      vehClassToDifficulty?.[vehInfo.class] ?? 'hard'
+      Math.max(5, Math.ceil((vehInfo.price ?? 0) / 200000)),
+      vehClassToDifficulty[vehInfo.class] ?? { speed: 1, size: 25 }
     );
   } else {
     activeLockPicker.delete(src);

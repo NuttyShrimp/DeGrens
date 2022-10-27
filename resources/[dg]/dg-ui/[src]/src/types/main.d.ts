@@ -118,4 +118,6 @@ declare interface RootState {
   'laptop.bennys': Laptop.Bennys.State;
   radio: Radio.State;
   configmenu: ConfigMenu.State;
+  keygame: Keygame.State;
+  gridgame: Gridgame.State;
 }

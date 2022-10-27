@@ -51,7 +51,7 @@ Events.onNet('heists:client:startHack', async (laptopName: Laptop.Name, location
   NetworkStartSynchronisedScene(animScene);
   await Util.Delay(2000);
 
-  const hackSuccess = await Minigames.sequencegame(4, 5);
+  const hackSuccess = await Minigames.sequencegame(4, 5, 10);
   if (hackSuccess) {
     const finishedHack = await RPC.execute<boolean>('heists:server:finishHack', laptopName, getCurrentLocation());
     if (!finishedHack) return;

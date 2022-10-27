@@ -339,6 +339,27 @@
     },
     {
       "type": "node-terminal",
+      "name": "minigames:build prod",
+      "request": "launch",
+      "command": "yarn run build",
+      "cwd": "${workspaceFolder}/resources/[dg]/dg-minigames/typescript"
+    },
+    {
+      "type": "node-terminal",
+      "name": "minigames:build dev",
+      "request": "launch",
+      "command": "yarn run build:dev",
+      "cwd": "${workspaceFolder}/resources/[dg]/dg-minigames/typescript"
+    },
+    {
+      "type": "node-terminal",
+      "name": "minigames:watch",
+      "request": "launch",
+      "command": "yarn run watch",
+      "cwd": "${workspaceFolder}/resources/[dg]/dg-minigames/typescript"
+    },
+    {
+      "type": "node-terminal",
       "name": "misc:build prod",
       "request": "launch",
       "command": "yarn run build",
