@@ -195,3 +195,28 @@ defaultState.financials = {
   bank: 'fleeca',
   cash: 343578,
 } as Financials.BaseInfo;
+
+defaultState.gridgame = {
+  order: {
+    id: 'testgame',
+    game: 'order',
+    gridSize: 6,
+    amount: 2,
+    length: 6,
+    displayTime: 5,
+    inputTime: 3,
+  },
+  sequence: {
+    id: 'testgame',
+    game: 'sequence',
+    gridSize: 4,
+    length: 4,
+    inputTime: 5,
+  },
+  vision: {
+    id: 'testgame',
+    game: 'vision',
+    gridSize: 5,
+    time: 60,
+  },
+};

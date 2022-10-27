@@ -81,6 +81,13 @@ class Util extends UtilShared {
   getVehicleSpeed = (veh: number) => {
     return Math.ceil(GetEntitySpeed(veh) * 3.6);
   };
+
+  /**
+   * Test before you use, works at least with nonspecial char keys like W, A, S, D, Z, Q
+   */
+  getButtonForControl = (control: number) => {
+    return GetControlInstructionalButton(0, control, true).replace('t_', '');
+  };
 }
 
 export class Interiors {

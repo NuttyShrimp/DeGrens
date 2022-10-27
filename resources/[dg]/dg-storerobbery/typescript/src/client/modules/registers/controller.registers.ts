@@ -62,7 +62,7 @@ const lockpickRegister = async (registerObject: number) => {
     return;
   }
 
-  const keygameSuccess = await Minigames.keygame(4, 'easy');
+  const keygameSuccess = await Minigames.keygame(5, 10, 15);
   if (keygameSuccess) {
     lootRegister(registerCoords);
   } else {

@@ -33,6 +33,10 @@ export class Util {
     return Math.floor(Math.random() * (maximum - minimum)) + minimum;
   };
 
+  getRndDecimal = (minimum: number, maximum: number): number => {
+    return Math.random() * (maximum - minimum) + minimum;
+  };
+
   ArrayToVector3 = (array: number[]): Vector3 => {
     return new Vector3(array[0], array[1], array[2]);
   };

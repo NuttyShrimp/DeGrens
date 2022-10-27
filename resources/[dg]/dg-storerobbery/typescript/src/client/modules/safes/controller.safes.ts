@@ -47,7 +47,7 @@ const hackSafe = async () => {
     return;
   }
 
-  const gameSuccess = await Minigames.numbergame(2, 15);
+  const gameSuccess = await Minigames.sequencegame(4, 5, 10);
   const removedItem = await Inventory.removeItemFromPlayer('decoding_tool');
   if (!removedItem) return;
 
