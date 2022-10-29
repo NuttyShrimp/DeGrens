@@ -30,7 +30,10 @@ export const openElevatorMenu = (elevatorId: string, currentLevelId: string) => 
   const menu: ContextMenu.Entry[] = [
     {
       title: elevator.name,
-      icon: 'elevator',
+      icon: {
+        name: 'elevator',
+        position: 'right',
+      },
       description: 'Selecteer een verdieping',
       disabled: true,
     },

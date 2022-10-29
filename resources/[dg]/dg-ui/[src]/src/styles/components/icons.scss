@@ -6,39 +6,37 @@
     display: flex;
     align-items: center;
     justify-content: center;
-
-    width: 100%;
   }
+
   &__icon {
     position: relative;
-    height: 100%;
 
-    &_overlay {
-      width: fit-content;
-      height: 100%;
-      margin-left: .1vh;
-      overflow: visible;
-      z-index: 1;
-      text-shadow: .2vh .2vh black, -.2vh -.2vh black, .2vh -.2vh black, -.2vh .2vh black, .2vh 0 0 black, 0 .2vh 0 black, 0 -.2vh 0 black, -.2vh 0 0 black;
-      & > i {
-        color: rgba($color: variables.$gray_normal, $alpha: 0.8);
-      }
+    // Icon with stroke, but goes both outside and inside
+    &_border {
+      z-index: -1;
+      position: absolute;
+      -webkit-text-stroke: 0.4vh black;
+      // text-shadow: 0.2vh 0.2vh black, -0.2vh -0.2vh black, 0.2vh -0.2vh black, -0.2vh 0.2vh black, 0.2vh 0 0 black,
+      //   0 0.2vh 0 black, 0 -0.2vh 0 black, -0.2vh 0 0 black;
+      color: black;
     }
-    
+
+    // Icon without border to hide inside part of borderstroke
+    &_overlay {
+      overflow: visible;
+      color: variables.$gray_normal;
+    }
+
+    // Icon to fill
     &_filler {
-      z-index: 2;
-      color: variables.$primary_light;
-      top: 0;
-      left: 0;
       position: absolute;
       overflow: hidden;
       height: 100%;
-      
+      color: variables.$primary_light;
+
       & > i {
         position: absolute;
-        margin-left: .1vh;
       }
-
     }
   }
 }

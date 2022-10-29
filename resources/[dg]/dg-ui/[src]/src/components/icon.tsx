@@ -162,6 +162,15 @@ export const FillableIcon: FC<FillableIconProps> = props => {
       }}
     >
       <div className={'fillable-icon__icon'}>
+        <div className={'fillable-icon__icon_border'}>
+          <i
+            className={`fas fa-${props.name}`}
+            ref={ref}
+            style={{
+              fontSize: `${props.height}vh`,
+            }}
+          />
+        </div>
         <div className={'fillable-icon__icon_overlay'}>
           <i
             className={`fas fa-${props.name}`}
