@@ -60,3 +60,4 @@
 | getItemsForNameInInventory | `type: Inventory.Type`, `identifier: string`, `name: string`                                                           | Promise<Inventory.ItemState[]>                           |
 | getFirstItemOfName         | `type: Inventory.Type`, `identifier: string`, `itemName: string`                                                       | Promise<Inventory.ItemState or undefined>                |
 | destroyItem                | `itemId: string`                                                                                                       | /                                                        |
+| createScriptedStash        | `identifier: string`, `size: number`, `allowedItems?: string[]`                                                        | /                                                        |

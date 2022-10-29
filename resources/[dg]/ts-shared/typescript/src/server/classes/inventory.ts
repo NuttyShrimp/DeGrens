@@ -171,6 +171,10 @@ class Inventory {
   public isItemDataLoaded = () => {
     return global.exports['dg-inventory'].isItemDataLoaded();
   };
+
+  public createScriptedStash = (identifier: string, size: number, allowedItems?: string[]) => {
+    global.exports['dg-inventory'].createScriptedStash(identifier, size, allowedItems);
+  };
 }
 
 export default {

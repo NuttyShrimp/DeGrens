@@ -48,7 +48,6 @@ const addItemToInventory = (
   amount: number,
   metadata?: { [key: string]: any }
 ) => {
-  const itemData = itemDataManager.get(name);
   const invId = concatId(type, identifier);
   // If item gets added to playerinv, get plyId to build metadata and send itembox event
   const plyId =
@@ -58,6 +57,7 @@ const addItemToInventory = (
     itemManager.create({ inventory: invId, name, metadata });
   }
   if (plyId) {
+    const itemData = itemDataManager.get(name);
     Events.emitNet('inventory:client:addItemBox', plyId, `${amount}x Ontvangen`, itemData.image);
   }
   Util.Log(
@@ -91,8 +91,8 @@ const removeItemFromInventory = async (type: Inventory.Type, identifier: string,
   const itemState = inventory.getItems().find(state => state.name === name);
   if (!itemState) return false;
   itemManager.get(itemState.id)?.destroy();
-  const image = itemDataManager.get(itemState.name).image;
   if (type === 'player') {
+    const image = itemDataManager.get(itemState.name).image;
     const plyId = DGCore.Functions.GetPlayerByCitizenId(Number(identifier))?.PlayerData?.source;
     Events.emitNet('inventory:client:addItemBox', plyId, 'Verwijderd', image);
   }
@@ -105,8 +105,8 @@ const removeItemByIdFromInventory = async (type: Inventory.Type, identifier: str
   const itemState = inventory.getItems().find(i => i.id === id);
   if (!itemState) return false;
   itemManager.get(id)?.destroy();
-  const image = itemDataManager.get(itemState.name).image;
   if (type === 'player') {
+    const image = itemDataManager.get(itemState.name).image;
     const plyId = DGCore.Functions.GetPlayerByCitizenId(Number(identifier))?.PlayerData?.source;
     Events.emitNet('inventory:client:addItemBox', plyId, 'Verwijderd', image);
   }
@@ -155,6 +155,16 @@ const getFirstItemOfName = async (type: Inventory.Type, identifier: string, name
   return items.find(item => item.name === name);
 };
 
+// You can use this to create a stash to be used in script with allowedItems (see houserob sell for example)
+const createScriptedStash = async (identifier: string, size: number, allowedItems?: string[]) => {
+  const invId = concatId('stash', identifier);
+  const inventory = await inventoryManager.get(invId);
+  inventory.size = size;
+  if (allowedItems) {
+    inventory.allowedItems = allowedItems;
+  }
+};
+
 // Exports
 global.asyncExports('hasObject', hasObject);
 global.exports('giveStarterItems', giveStarterItems);
@@ -169,6 +179,7 @@ global.asyncExports('moveItemToInventory', moveItemToInventory);
 global.asyncExports('getItemsInInventory', getItemsInInventory);
 global.asyncExports('getItemsForNameInInventory', getItemsForNameInInventory);
 global.asyncExports('getFirstItemOfName', getFirstItemOfName);
+global.exports('createScriptedStash', createScriptedStash);
 
 // Events for client
 RPC.register('inventory:server:doesPlayerHaveItems', (plyId, names: string | string[]) => {

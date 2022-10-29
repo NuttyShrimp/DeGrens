@@ -36,10 +36,10 @@
     "camera": 400,
     "gameboy": 150,
     "hifi": 250,
-    "nintendoswitch": 250,
+    "nintendo_switch": 250,
     "nokia": 800,
     "psp": 150,
-    "crttv": 750,
+    "crt_tv": 750,
     "tv": 1500,
     "vaas": 2000
   }

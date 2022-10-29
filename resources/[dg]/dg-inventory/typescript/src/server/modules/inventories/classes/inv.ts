@@ -90,7 +90,7 @@ export class Inv {
   public set size(value: typeof this._size) {
     this._size = value;
   }
-  private set allowedItems(value: typeof this._allowedItems) {
+  public set allowedItems(value: typeof this._allowedItems) {
     this._allowedItems = value;
   }
   // #endregion
