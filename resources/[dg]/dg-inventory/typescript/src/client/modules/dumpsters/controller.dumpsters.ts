@@ -9,7 +9,8 @@ Peek.addModelEntry(
       {
         icon: 'fas fa-dumpster',
         label: 'Open',
-        action: (_data, entity) => {
+        action: (_, entity) => {
+          if (!entity) return;
           const coords = Util.getEntityCoords(entity);
           contextManager.openInventory({ type: 'dumpster', data: coords });
         },

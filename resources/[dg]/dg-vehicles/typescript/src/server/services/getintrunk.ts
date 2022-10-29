@@ -28,8 +28,8 @@ Chat.registerCommand('putintrunk', 'Put closest person in trunk', [], 'user', as
     Notifications.add(src, 'Je kan dit niet van uit een voertuig', 'error');
     return;
   }
-  const [veh, entType] = await RayCast.getEntityPlayerLookingAt(src);
-  if (!veh || entType !== 2) {
+  const { entity: veh } = await RayCast.doRaycast(src);
+  if (!veh || GetEntityType(veh) !== 2) {
     Notifications.add(src, 'Er is geen voertuig in de buurt', 'error');
     return;
   }
@@ -64,8 +64,8 @@ Chat.registerCommand('putintrunk', 'Put closest person in trunk', [], 'user', as
 });
 
 Chat.registerCommand('takeouttrunk', 'Get person from trunk', [], 'user', async src => {
-  const [veh, entType] = await RayCast.getEntityPlayerLookingAt(src);
-  if (!veh || entType !== 2) {
+  const { entity: veh } = await RayCast.doRaycast(src);
+  if (!veh || GetEntityType(veh) !== 2) {
     Notifications.add(src, 'Er is geen voertuig in de buurt', 'error');
     return;
   }

@@ -74,8 +74,8 @@ export const activateSelector = async () => {
       clearInterval(selectorRayInterval);
       selectorRayInterval = undefined;
     }
-    const [entity, entityType] = RayCast.getEntityPlayerLookingAt(100);
-    handleRayCastChange(entity, entityType);
+    const { entity } = RayCast.doRaycast(100);
+    handleRayCastChange(entity);
   }, 250);
 };
 
@@ -88,7 +88,7 @@ export const stopSelector = () => {
   global.exports['dg-weapons'].showReticle(false);
 };
 
-export const handleRayCastChange = (entity: number, type?: 0 | 1 | 2 | 3) => {
+export const handleRayCastChange = (entity?: number) => {
   if (!isActive) return;
   if (selectedEntity && selectedEntityType !== 1) {
     SetEntityDrawOutline(selectedEntity, false);
@@ -97,17 +97,18 @@ export const handleRayCastChange = (entity: number, type?: 0 | 1 | 2 | 3) => {
     clearTick(selectorTick);
     selectorTick = undefined;
   }
-  if (entity === 0) {
+  if (!entity) {
     selectedEntity = undefined;
     selectedEntityType = undefined;
     return;
   }
-  if (type !== 1) {
+  const entityType = GetEntityType(entity);
+  if (entityType !== 1) {
     SetEntityDrawOutline(entity, true);
     SetEntityDrawOutlineColor(0, 255, 0, 255);
   }
   selectedEntity = entity;
-  selectedEntityType = type;
+  selectedEntityType = entityType;
   selectorTick = setTick(() => {
     if (!selectedEntity) {
       clearTick(selectorTick);

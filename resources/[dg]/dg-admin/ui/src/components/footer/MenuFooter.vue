@@ -11,6 +11,9 @@
     <q-btn unelevated icon="fas fa-clipboard-list" size="sm" padding="sm" color="grey-8" @click="copyCoords">
       <q-tooltip anchor="bottom middle" self="top middle"> Copy coords </q-tooltip>
     </q-btn>
+    <q-btn unelevated icon="fas fa-hand-pointer" size="sm" padding="sm" color="grey-8" @click="openCoordsSelector">
+      <q-tooltip anchor="bottom middle" self="top middle"> Open coord selector </q-tooltip>
+    </q-btn>
   </div>
 </template>
 <script setup lang="ts">
@@ -29,6 +32,10 @@
     const coords = await nuiAction('copyCoords');
     copyToClipboard(String(coords));
   };
+  const openCoordsSelector = async () => {
+    const coords = await nuiAction('openCoordsSelector');
+    copyToClipboard(String(coords));
+  }
 </script>
 <style lang="scss">
   .menu-footer {

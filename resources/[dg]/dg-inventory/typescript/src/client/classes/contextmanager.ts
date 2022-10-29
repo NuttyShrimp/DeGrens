@@ -74,8 +74,8 @@ class ContextManager extends Util.Singleton<ContextManager>() {
       }
     }
 
-    const [entityAimingAt] = RayCast.getEntityPlayerLookingAt();
-    if (entityAimingAt !== 0 && IsEntityAVehicle(entityAimingAt) && NetworkGetEntityIsNetworked(entityAimingAt)) {
+    const { entity: entityAimingAt } = RayCast.doRaycast();
+    if (entityAimingAt && IsEntityAVehicle(entityAimingAt) && NetworkGetEntityIsNetworked(entityAimingAt)) {
       if (GetVehicleDoorLockStatus(entityAimingAt) < 2) {
         let trunkPosition: Vector3;
 

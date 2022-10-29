@@ -7,8 +7,8 @@ onNet('vehicles:garages:load', (garages: Garage.Garage[]) => {
 });
 
 on('dg-vehicles:garages:park', () => {
-  const [targetVeh] = RayCast.getEntityPlayerLookingAt();
-  if (targetVeh === 0 || !IsEntityAVehicle(targetVeh) || !NetworkGetEntityIsNetworked(targetVeh)) return;
+  const { entity: targetVeh } = RayCast.doRaycast();
+  if (!targetVeh || !IsEntityAVehicle(targetVeh) || !NetworkGetEntityIsNetworked(targetVeh)) return;
   Events.emitNet('vehicles:garage:park', NetworkGetNetworkIdFromEntity(targetVeh));
 });
 

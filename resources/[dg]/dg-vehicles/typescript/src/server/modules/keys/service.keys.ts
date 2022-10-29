@@ -40,9 +40,8 @@ export const handleVehicleLock = async (plyId: number, vehicleNetId: number) => 
 export const startVehicleLockpick = async (src: number) => {
   if (activeLockPicker.has(src)) return;
 
-  const ped = GetPlayerPed(String(src));
-  const [veh, entType] = await RayCast.getEntityPlayerLookingAt(src);
-  if (!veh || entType !== 2) return;
+  const { entity: veh } = await RayCast.doRaycast(src);
+  if (!veh || GetEntityType(veh) !== 2) return;
 
   const vehNetId = NetworkGetNetworkIdFromEntity(veh);
   const closeToDoor = await RPC.execute<boolean>('vehicles:isNearDoor', src, vehNetId, 1.0);
@@ -60,6 +59,7 @@ export const startVehicleLockpick = async (src: number) => {
   idToVehicle.set(id, veh);
   SetVehicleAlarm(veh, true);
 
+  const ped = GetPlayerPed(String(src));
   if (
     GetVehiclePedIsIn(ped, false) !== veh &&
     GetVehicleDoorLockStatus(veh) !== 1 &&

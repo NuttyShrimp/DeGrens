@@ -1,67 +1,82 @@
 local isInVehicle = false
 local debugEnabled = false
-local originCoords = nil
-local forwardCoords = nil
+
+-- {entity?: number, coords?: Vec3}
+local lastHit = {}
 
 function getForwardVector(rotation)
 	local rot = (math.pi / 180) * rotation
 	return vector3(-math.sin(rot.z) * math.abs(math.cos(rot.x)), math.cos(rot.z) * math.abs(math.cos(rot.x)), math.sin(rot.x))
 end
 
-function rayCast(origin, target, flags, ignore)
-	local handle = StartShapeTestRay(origin, target, flags, ignore, 0)
-	return GetShapeTestResult(handle)
-end
+function doRaycast(pDistance, pFlag, pIgnore)
+	local distance = pDistance or 25.0
+  local flag = pFlag or -1
+  local ignore = pIgnore or PlayerPedId()
 
-function getEntityPlayerLookingAt(pDistance, pFlag, pIgnore)
-	pDistance = pDistance or 25.0
-  pFlag = pFlag or -1
-  pIgnore = pIgnore or PlayerPedId()
-	originCoords = GetGameplayCamCoord()
+	local originCoords = GetGameplayCamCoord()
 	local forwardVector = getForwardVector(GetGameplayCamRot())
-	forwardCoords = originCoords + forwardVector * (isInVehicle and pDistance + 1.5 or pDistance)
+	local forwardCoords = originCoords + forwardVector * (isInVehicle and distance + 1.5 or distance)
 
-	if not forwardVector then
-		return
-	end
+	if not forwardCoords then 
+    print('[Raycast] Could not calculate forward')
+    return {}
+  end
 
-	local _, hit, coords, _, entity = rayCast(originCoords, forwardCoords, pFlag, pIgnore)
+  local handle = StartShapeTestRay(originCoords, forwardCoords, flag, ignore, 0)
+	local _, hit, coords, _, entity = GetShapeTestResult(handle)
 
-	if not hit and entity == 0 then
-		return
-	end
+  if hit == 0 then 
+    return {}
+  end
 
-	local entityType = GetEntityType(entity)
-
-	return entity, entityType, exports['dg-lib']:vectorToTable(coords)
+  local hitData = {
+    coords = {
+      x = coords.x, 
+      y = coords.y, 
+      z = coords.z
+    }
+  }
+  if GetEntityType(entity) ~= 0 and DoesEntityExist(entity) then
+    hitData.entity = entity
+  end
+  return hitData
 end
-exports('getEntityPlayerLookingAt', getEntityPlayerLookingAt)
+exports('doRaycast', doRaycast)
 
-DGX.RPC.register('lib:raycast:getEntityPlayerLookingAt', function(pDistance, pFlag, pIgnore)
-  local entity, entityType, pos = getEntityPlayerLookingAt(pDistance, pFlag, pIgnore)
-  if not NetworkGetEntityIsNetworked(entity) then return end
-  local netId = NetworkGetNetworkIdFromEntity(entity)
-  return netId, entityType, pos
+DGX.RPC.register('lib:doRaycast', function(pDistance, pFlag, pIgnore)
+  local hit = doRaycast(pDistance, pFlag, pIgnore)
+  local retval = {
+    coords = hit.coords
+  }
+  if DoesEntityExist(hit.entity) and NetworkGetEntityIsNetworked(hit.entity) then
+    hitData.netId = NetworkGetNetworkIdFromEntity(hit.entity)
+  end
+  return retval
+end)
+
+exports('getLastRaycastHitCoord', function()
+  return lastHit.coords
 end)
 
 Citizen.CreateThread(function()
 	while true do
-		local ped = PlayerPedId()
-		local entity, entityType, entityCoords = getEntityPlayerLookingAt(25.0, -1, ped)
+		local hit = doRaycast()
+    lastHit.coords = hit.coords
 
-		if entity and entityType ~= 0 then
-			if entity ~= CurrentTarget then
-				CurrentTarget = entity
-				TriggerEvent('dg-lib:targetinfo:changed', CurrentTarget, entityType, entityCoords)
+		if hit.entity and hit.entityType ~= 0 then
+			if hit.entity ~= lastHit.entity then
+				lastHit.entity = hit.entity
+				TriggerEvent('lib:raycast:entityChanged', hit.entity, hit.coords)
 				if debugEnabled then 
-					debug('[raycastinfo] Target changed to ' .. tostring(entity) .. ' (' .. tostring(entityType) .. ')')
+					debug('[RayCast] Target changed to ' .. tostring(hit.entity))
 				end
 			end
-		elseif CurrentTarget then
-			CurrentTarget = nil
-			TriggerEvent('dg-lib:targetinfo:changed', nil)
+		elseif lastHit.entity then
+			lastHit.entity = nil
+			TriggerEvent('lib:raycast:entityChanged')
 			if debugEnabled then
-				debug('[raycastinfo] Target changed to nothing')
+				debug('[RayCast] Target changed to nothing')
 			end
 		end
 
@@ -78,32 +93,42 @@ AddEventHandler('baseevents:leftVehicle', function()
 end)
 
 AddEventHandler('onResourceStop', function(res)
-	if res ~= GetCurrentResourceName() then
-		return
-	end
-	if CurrentTarget then
-		SetEntityDrawOutline(CurrentTarget, false)
+	if res ~= GetCurrentResourceName() then return end
+	if currentEntity and GetEntityType(currentEntity) ~= 1 then
+		SetEntityDrawOutline(currentEntity, false)
 	end
 end)
 
 if GetConvar('is_production', 'true') == 'false' then
-	RegisterCommand('lib:raycast', function()
-        if debugEnabled then 
-            debugEnabled = false
-            SetEntityDrawOutline(CurrentTarget, false)
-        else
-            debugEnabled = true
-            CreateThread(function()
-                while debugEnabled do
-                    if prevTarget and prevTarget ~= CurrentTarget then
-                        SetEntityDrawOutline(prevTarget, false)
-                    end
-                    prevTarget = CurrentTarget
-                    DrawLine(originCoords, forwardCoords, 255, 0, 0, 255)
-                    SetEntityDrawOutline(CurrentTarget, true)
-                    Wait(0)
-                end
-            end)
+	RegisterCommand('raycast:debug:toggle', function()
+    if debugEnabled then 
+      debugEnabled = false
+      if GetEntityType(lastHit.entity) ~= 1 then
+        SetEntityDrawOutline(lastHit.entity, false)
+      end
+    else
+      debugEnabled = true
+      CreateThread(function()
+        local prevTarget = nil
+        while debugEnabled do
+          if prevTarget and prevTarget ~= lastHit.entity and GetEntityType(lastHit.entity) ~= 1 then
+            SetEntityDrawOutline(prevTarget, false)
+          end
+          prevTarget = lastHit.entity
+
+          if lastHit.coords then
+            local plyCoords = GetEntityCoords(PlayerPedId())
+            DrawLine(plyCoords.x, plyCoords.y, plyCoords.z, lastHit.coords.x, lastHit.coords.y, lastHit.coords.z, 255, 0, 0, 255)
+            DrawMarker(28, lastHit.coords.x, lastHit.coords.y, lastHit.coords.z, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.03, 0.03, 0.03, 255, 0, 0, 255, false, false, 2, nil, nil, false)
+          end
+
+          if GetEntityType(lastHit.entity) ~= 1 then
+            SetEntityDrawOutline(lastHit.entity, true)
+          end
+
+          Wait(0)
         end
+      end)
+    end
 	end)
 end

@@ -41,8 +41,8 @@ export const generateServiceStatus = (): Service.Status => ({
 });
 
 export const useRepairPart = async (src: number, type: keyof Service.Status, partClass: string, itemName: string) => {
-  const [veh, entType] = await RayCast.getEntityPlayerLookingAt(src);
-  if (!veh || entType !== 2) {
+  const { entity: veh } = await RayCast.doRaycast(src);
+  if (!veh || GetEntityType(veh) !== 2) {
     Notifications.add(src, 'Er is geen voertuig in de buurt', 'error');
     return;
   }

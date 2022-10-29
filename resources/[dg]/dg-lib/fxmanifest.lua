@@ -4,28 +4,26 @@ games {"gta5"}
 description "DeGrens Lib"
 
 shared_script {
-    '@dg-core/import.lua', 
+  '@dg-core/import.lua',
+  '@ts-shared/shared/lib.lua',
 }
 
 server_scripts {
+  '@ts-shared/server/server.js',
+  "@dg-logs/server/sv_log.lua",
 	"server/sv_*.lua",
 	"server/sv_*.js",
 }
 
 client_scripts {
+  '@ts-shared/client/client.js',
 	'@dg-logs/client/cl_log.lua',
 	"@PolyZone/client.lua",
 	"@PolyZone/BoxZone.lua",
 	"@PolyZone/CircleZone.lua",
 	"@PolyZone/ComboZone.lua",
 	"@PolyZone/EntityZone.lua",
-	"client/cl_*.lua",
+	"client/**/cl_*.lua", -- this loads cl_.lua files in all client folders (client root and subfolders)
 	"client/cl_*.js",
-	"client/**/*.lua",
-	"client/**/*.ymap.xml"
+	"client/**/*.ymap.xml",
 }
-server_script "@dg-logs/server/sv_log.lua"
-
-client_script '@ts-shared/client/client.js'
-server_script '@ts-shared/server/server.js'
-shared_script '@ts-shared/shared/lib.lua'

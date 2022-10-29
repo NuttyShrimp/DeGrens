@@ -94,9 +94,9 @@ class EntryManager {
   }
 
   loadActiveEntries(includeZones = true) {
-    const { entity, type } = getCurrentEntity();
-    if (entity) {
-      const entityCtx = getEntityCtx(entity, type);
+    const currentEntity = getCurrentEntity();
+    if (currentEntity !== null) {
+      const entityCtx = getEntityCtx(currentEntity.entity);
       const managers = this.getAllManagers(includeZones);
       managers.forEach(manager => {
         manager.loadActiveEntries(entityCtx);
@@ -105,7 +105,7 @@ class EntryManager {
       // Zone manager loadActives function does not take any arguments
       this.getManagerForType('zones').loadActiveEntries();
     }
-    if (entity || includeZones) {
+    if (currentEntity !== null || includeZones) {
       this.refreshNUIList();
     }
   }

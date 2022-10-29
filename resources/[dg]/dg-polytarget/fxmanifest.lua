@@ -11,4 +11,6 @@ client_scripts {
 	"@PolyZone/ComboZone.lua",
 	"@PolyZone/EntityZone.lua",
 	"client/cl_*.lua",
+  '@ts-shared/shared/lib.lua',
+  "@ts-shared/client/client.js",
 }

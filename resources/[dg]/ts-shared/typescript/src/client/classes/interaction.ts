@@ -137,22 +137,31 @@ class RayCast {
   private handlers: RayCast.Handler[] = [];
 
   constructor() {
-    on('dg-lib:targetinfo:changed', (entity?: number, type?: 1 | 2 | 3, coords?: number[]) => {
-      this.handlers.forEach(handler => handler(entity ?? 0, type ?? 0, Util.ArrayToVector3(coords ?? [0, 0, 0])));
+    on('lib:raycast:entityChanged', (entity?: number, coords?: Vec3) => {
+      this.handlers.forEach(handler => handler(entity, coords));
     });
   }
 
-  onChange(handler: RayCast.Handler) {
+  /**
+   * Handler gets called when raycast entity changes
+   */
+  onEntityChange(handler: RayCast.Handler) {
     this.handlers.push(handler);
   }
 
-  getEntityPlayerLookingAt(distance?: number, flag?: number, ignore?: number): [number, 0 | 1 | 2 | 3, Vec3] {
-    const [ent, type, coordsArr] = global.exports['dg-lib'].getEntityPlayerLookingAt(distance, flag, ignore);
-    if (ent === undefined || type === 0) {
-      return [0, 0, { x: 0, y: 0, z: 0 }];
-    }
-    return [ent, type, Util.ArrayToVector3(coordsArr)];
+  /**
+   * Do new raycast and return hitdata
+   */
+  doRaycast(distance?: number, flag?: number, ignore?: number): RayCastHit {
+    return global.exports['dg-lib'].doRaycast(distance, flag, ignore);
   }
+
+  /**
+   * Get last coord from internal loop
+   */
+  getLastHitCoord = (): Vec3 | undefined => {
+    return global.exports['dg-lib'].getLastRaycastHitCoord();
+  };
 }
 
 class PolyZone {

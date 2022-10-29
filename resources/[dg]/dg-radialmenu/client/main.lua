@@ -45,10 +45,10 @@ function generateItems()
   local ped = PlayerPedId()
 	local plyData = DGCore.Functions.GetPlayerData()
 	local vehicle = GetVehiclePedIsIn(ped)
-  local raycastResult = DGX.RayCast.getEntityPlayerLookingAt()
-  local entity = raycastResult[1]
-  local coords = raycastResult[3]
-  if entity == 0 or (coords and #(vector3(coords.x, coords.y, coords.z) - GetEntityCoords(ped)) > 5.0) then
+  local hit = DGX.RayCast.doRaycast()
+  local entity = hit.entity
+  local coords = hit.coords and vector3(hit.coords.x, hit.coords.y, hit.coords.z)
+  if not entity or not coords or #(coords - GetEntityCoords(ped)) > 5.0 then
     entity = nil
   end
 	-- Start at entries.main and let the recursion do it's thing

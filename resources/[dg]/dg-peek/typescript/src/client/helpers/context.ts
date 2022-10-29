@@ -2,7 +2,8 @@ let PlayerData: PlayerData | null = null;
 let plyJob: { name: string | null; grade: number | null } = { name: null, grade: null };
 const registeredFlags: Set<string> = new Set();
 
-export const getEntityCtx = (entity: number, entityType: number): Context => {
+export const getEntityCtx = (entity: number): Context => {
+  const entityType = GetEntityType(entity);
   const ctx: Context = {
     entity,
     type: entityType,

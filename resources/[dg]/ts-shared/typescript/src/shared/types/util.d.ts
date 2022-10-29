@@ -30,3 +30,8 @@ declare type GangData = {
   owner: number;
   members: { name: string; cid: number; hasPerms: boolean }[];
 };
+
+declare type RayCastHit = {
+  entity?: number;
+  coords?: Vec3;
+};

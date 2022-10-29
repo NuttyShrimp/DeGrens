@@ -1,5 +1,4 @@
 import { RayCast, UI, Util } from '@dgx/client';
-import { Vector3 } from '@dgx/shared';
 
 import { DEFAULT_DISTANCE, DISABLED_KEYS, PEEK_TYPES } from '../cl_constant';
 import { getActiveZones, getCurrentEntity, updateCurrentEntity } from '../helpers/actives';
@@ -46,9 +45,9 @@ class StateManager {
 
     // We refresh entity open
     // When we look at for example a vehicle, then move around it while aiming on the vehicle, and then start peeking
-    // The old coords will get distance checken, which will most of the time not show entrys because distance limit
-    const [entity, type, coords] = RayCast.getEntityPlayerLookingAt();
-    updateCurrentEntity({ entity, type, coords });
+    // The old coords will get distance checked, which will most of the time not show entrys because distance limit
+    const { entity, coords } = RayCast.doRaycast();
+    updateCurrentEntity(entity != undefined && coords != undefined ? { entity, coords } : null);
 
     UI.openApplication('peek', {}, true);
     this.isPeeking = true;
@@ -94,7 +93,7 @@ class StateManager {
     this.checkInterval = setInterval(async () => {
       const currentEntity = getCurrentEntity();
       const activeZones = getActiveZones();
-      if (!this.isPeeking || this.isUIFocused || (currentEntity.entity === 0 && activeZones.size === 0)) {
+      if (!this.isPeeking || this.isUIFocused || (currentEntity === null && activeZones.size === 0)) {
         if (this.checkInterval !== null) {
           clearInterval(this.checkInterval);
           this.checkInterval = null;
@@ -120,7 +119,7 @@ class StateManager {
 
           // CanInteract Check
           if (entry.canInteract) {
-            entry._metadata.state.canInteract = entry.canInteract(currentEntity.entity, maxDistance, entry);
+            entry._metadata.state.canInteract = entry.canInteract(currentEntity?.entity, maxDistance, entry);
             if (entry._metadata.state.canInteract instanceof Promise) {
               entry._metadata.state.canInteract = await entry._metadata.state.canInteract;
             }
@@ -130,12 +129,14 @@ class StateManager {
           let targetVector: Vec3 | null = null;
           switch (entryType) {
             case 'bones':
-              const boneId = GetEntityBoneIndexByName(currentEntity.entity, entry._metadata.boneName);
-              if (boneId !== -1) {
-                const bonePos = Util.ArrayToVector3(GetWorldPositionOfEntityBone(currentEntity.entity, boneId));
-                // Check if raycast intersect point is close to bone
-                if (bonePos.distance(currentEntity.coords) <= maxDistance) {
-                  targetVector = bonePos;
+              if (currentEntity !== null) {
+                const boneId = GetEntityBoneIndexByName(currentEntity.entity, entry._metadata.boneName);
+                if (boneId !== -1) {
+                  const bonePos = Util.ArrayToVector3(GetWorldPositionOfEntityBone(currentEntity.entity, boneId));
+                  // Check if raycast intersect point is close to bone
+                  if (bonePos.distance(currentEntity.coords) <= maxDistance) {
+                    targetVector = bonePos;
+                  }
                 }
               }
               break;
@@ -146,7 +147,7 @@ class StateManager {
               }
               break;
             default:
-              targetVector = currentEntity.coords;
+              targetVector = currentEntity?.coords ?? null;
               break;
           }
           entry._metadata.state.distance =
@@ -194,7 +195,7 @@ class StateManager {
       return;
     }
     const currentEntity = getCurrentEntity();
-    if (currentEntity.entity == null) {
+    if (currentEntity === null) {
       entryManager.clearActiveEntries(false);
       entryManager.refreshNUIList();
     }

@@ -1,4 +1,4 @@
-import { Events, RPC, Storage, Util } from '@dgx/client';
+import { Events, RPC, Storage, Util, RayCast, UI, Notifications } from '@dgx/client';
 
 import { assignBind, getAllBinds } from '../helpers/binds';
 import { RegisterUICallback } from '../helpers/ui';
@@ -141,7 +141,61 @@ RegisterUICallback('toggleDevMode', (data: { toggle: boolean }, cb) => {
 RegisterUICallback('copyCoords', (_, cb) => {
   const coords = Util.getPlyCoords();
   const heading = GetEntityHeading(PlayerPedId());
+  Notifications.add('Check clipboard for coordinate');
   cb({ meta: { ok: true, message: 'done' }, data: JSON.stringify({ ...coords.add(0), w: heading }) });
+});
+
+RegisterUICallback('openCoordsSelector', async (_, cb) => {
+  SendNUIMessage({
+    action: 'forceCloseMenu',
+  });
+
+  UI.showInteraction('Enter to select');
+  let selectedCoords: Vec3 | null = null;
+
+  const tick = setTick(() => {
+    const coords = RayCast.getLastHitCoord();
+    if (coords) {
+      const plyCoords = Util.getPlyCoords();
+      DrawLine(plyCoords.x, plyCoords.y, plyCoords.z, coords.x, coords.y, coords.z, 0, 0, 255, 255);
+      DrawMarker(
+        28,
+        coords.x,
+        coords.y,
+        coords.z,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0.05,
+        0.05,
+        0.05,
+        0,
+        0,
+        255,
+        255,
+        false,
+        true,
+        2,
+        false,
+        null,
+        null,
+        false
+      );
+      if (IsControlJustPressed(0, 18)) {
+        selectedCoords = coords;
+      }
+    }
+  });
+
+  await Util.awaitCondition(() => selectedCoords !== null);
+  clearTick(tick);
+
+  UI.hideInteraction();
+  Notifications.add('Check clipboard for coordinate');
+  cb({ meta: { ok: true, message: 'done' }, data: JSON.stringify(selectedCoords) });
 });
 
 RegisterUICallback('penalisePlayer', (data: any, cb) => {

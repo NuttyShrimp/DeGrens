@@ -3,7 +3,7 @@ local closeScenes = {}
 activeLaser = nil
 
 currentCreationData = {}
-laserCoords = nil
+laserCoords = vector3(0, 0, 0)
 
 -- Check if scenes are close enough to draw
 Citizen.CreateThread(function()

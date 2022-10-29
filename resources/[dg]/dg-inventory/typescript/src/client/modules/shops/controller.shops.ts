@@ -9,6 +9,7 @@ Peek.addFlagEntry(
         label: 'Open Winkel',
         icon: 'basket-shopping',
         action: (_, entity) => {
+          if (!entity) return;
           PlayPedAmbientSpeechNative(entity, 'SHOP_GREET', 'SPEECH_PARAMS_FORCE_SHOUTED');
           const npcId: string = global.exports['dg-npcs'].findPedData(entity)?.id;
           if (!npcId) return;

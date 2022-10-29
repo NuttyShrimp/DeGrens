@@ -9,13 +9,13 @@ toggleLaser = function(type)
 
         local ped = PlayerPedId()
         while activeLaser do
-            local hit, coords = rayCastCam()
+            local coords = DGX.RayCast.getLastHitCoord()
 
-            if hit then
+            if coords then
                 local position = GetEntityCoords(ped)
-                DrawLine(position.x, position.y, position.z, coords.x, coords.y, coords.z, 0, 240, 180, 200)
-                DrawMarker(28, coords.x, coords.y, coords.z, 0.0, 0.0, 0.0, 0.0, 180.0, 0.0, 0.1, 0.1, 0.1, 0, 240, 180, 200, false, true, 2, nil, nil, false) 
-                laserCoords = coords
+                laserCoords = vector3(coords.x, coords.y, coords.z)
+                DrawLine(position, laserCoords, 0, 240, 180, 200)
+                DrawMarker(28, laserCoords, 0.0, 0.0, 0.0, 0.0, 180.0, 0.0, 0.1, 0.1, 0.1, 0, 240, 180, 200, false, true, 2, nil, nil, false) 
             else
                 laserCoords = nil
             end
@@ -58,24 +58,6 @@ drawScene = function(data)
         AddTextComponentString(data.text)
         DrawText(screenX, screenY)
     end
-end
-
-rotationToDirection = function(degrees)
-	local rad = (math.pi / 180) * degrees
-    local direction = vector3(
-        -math.sin(rad.z) * math.abs(math.cos(rad.x)), 
-        math.cos(rad.z) * math.abs(math.cos(rad.x)), 
-        math.sin(rad.x)
-    )
-	return direction
-end
-
-rayCastCam = function()
-	local origin = GetGameplayCamCoord()
-	local direction = rotationToDirection(GetGameplayCamRot())
-	local target = origin + direction * 25.0
-	local _, hit, coords, _, _ = GetShapeTestResult(StartShapeTestRay(origin, target, -1, PlayerPedId(), 0))
-	return hit == 1, coords
 end
 
 hexToRGB = function(hex)

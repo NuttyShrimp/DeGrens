@@ -40,9 +40,9 @@ export const useCleaningKit = async () => {
     return;
   }
 
-  const [veh] = RayCast.getEntityPlayerLookingAt();
+  const { entity: veh } = RayCast.doRaycast();
   if (
-    veh === 0 ||
+    !veh ||
     !IsEntityAVehicle(veh) ||
     !NetworkGetEntityIsNetworked(veh) ||
     Util.getPlyCoords().distance(Util.getEntityCoords(veh)) > 2.0
@@ -82,9 +82,9 @@ export const useWax = async () => {
     return;
   }
 
-  const [veh] = RayCast.getEntityPlayerLookingAt();
+  const { entity: veh } = RayCast.doRaycast();
   if (
-    veh === 0 ||
+    !veh ||
     !IsEntityAVehicle(veh) ||
     !NetworkGetEntityIsNetworked(veh) ||
     Util.getPlyCoords().distance(Util.getEntityCoords(veh)) > 2.0

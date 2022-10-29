@@ -1,7 +1,7 @@
 import { Events, Peek, PolyZone, RayCast, UI, Util } from '@dgx/client';
 
 Events.on('vehicles:depot:client:openSelectionMenu', () => {
-  const [targetVeh] = RayCast.getEntityPlayerLookingAt();
+  const { entity: targetVeh } = RayCast.doRaycast();
   if (!targetVeh || !IsEntityAVehicle(targetVeh) || !NetworkGetEntityIsNetworked(targetVeh)) return;
   Events.emitNet('vehicles:depot:server:openSelectionMenu', NetworkGetNetworkIdFromEntity(targetVeh));
 });

@@ -23,7 +23,7 @@ interface Option {
   items?: string | string[];
   // This will be called each time the target is valid for this entry
   // This means no expensive operations should be done here
-  canInteract?: (entity: number, distance: number, data: Option) => boolean | Promise<boolean>;
+  canInteract?: (entity: number | undefined, distance: number, data: Option) => boolean | Promise<boolean>;
   job?:
     | string
     | string[]
@@ -46,7 +46,7 @@ interface EventOption extends Option {
 }
 
 interface FunctionOption extends Option {
-  action: (data: Option, entity: number) => void;
+  action: (data: Option, entity: number | undefined) => void;
 }
 
 type PeekOption = EventOption | FunctionOption;
@@ -72,6 +72,5 @@ interface IEntryManager {
 
 interface PeekEntity {
   entity: number;
-  type: number;
   coords: Vec3;
 }

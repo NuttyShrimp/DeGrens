@@ -19,23 +19,19 @@ class Chat {
 }
 
 class RayCast {
-  getEntityPlayerLookingAt = async (
-    plyId: number,
-    distance?: number,
-    flag?: number,
-    ignore?: number
-  ): Promise<[number, 0 | 1 | 2 | 3, Vec3]> => {
-    const res = await RPC.execute<[number, 0 | 1 | 2 | 3, Vec3]>(
-      'lib:raycast:getEntityPlayerLookingAt',
+  doRaycast = async (plyId: number, distance?: number, flag?: number, ignore?: number): Promise<RayCastHit> => {
+    const result = await RPC.execute<Omit<RayCastHit, 'entity'> & { netId: number }>(
+      'lib:doRaycast',
       plyId,
       distance,
       flag,
       ignore
     );
-    if (!res) return [0, 0, { x: 0, y: 0, z: 0 }];
-    const [netId, type, pos] = res;
-    const entity = NetworkGetEntityFromNetworkId(netId);
-    return [entity, type, pos];
+    if (!result) return {};
+    return {
+      entity: result.netId != undefined ? NetworkGetEntityFromNetworkId(result.netId) : undefined,
+      coords: result.coords,
+    };
   };
 }
 

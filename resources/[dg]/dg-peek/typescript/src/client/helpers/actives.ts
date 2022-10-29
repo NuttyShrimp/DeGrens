@@ -1,12 +1,8 @@
-let currentEntity: PeekEntity = {
-  entity: 0,
-  type: 0,
-  coords: { x: 0, y: 0, z: 0 },
-};
+let currentEntity: PeekEntity | null;
 const activeZones: Map<string, { center: Vec3; data: any }> = new Map();
 
-export const updateCurrentEntity = (entity: PeekEntity) => {
-  currentEntity = entity;
+export const updateCurrentEntity = (ent: PeekEntity | null) => {
+  currentEntity = ent;
 };
 
 export const getCurrentEntity = () => {

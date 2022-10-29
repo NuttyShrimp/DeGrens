@@ -1,6 +1,7 @@
 -- This is very lookalike to polyzone but is specific for dg-peek targets
 local DEBUG_ENABLED = false
 local DEBUG_MAX_DISTANCE = 300.0
+
 IsInVehicle = false
 targetZone = nil
 local createdTargetZones = {}
@@ -11,7 +12,11 @@ local function addToTargetZone(zone)
   else
     targetZone = ComboZone:Create({ zone }, { name = "dg-polytarget" })
     targetZone:onPointInOutExhaustive(function()
-      return GetTargetCoords()
+      local coords = DGX.RayCast.getLastHitCoord()
+      if not coords then
+        return vector3(0, 0, 0)
+      end
+      return vector3(coords.x, coords.y, coords.z)
     end, function(isPointInside, point, insideZones, enteredZones, leftZones)
       if leftZones ~= nil then
         for i = 1, #leftZones do

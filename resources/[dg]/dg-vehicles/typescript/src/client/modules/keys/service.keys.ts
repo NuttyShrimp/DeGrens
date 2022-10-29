@@ -3,8 +3,8 @@ import { Notifications, RayCast, Sounds, Util } from '@dgx/client';
 import { hasVehicleKeys } from './cache.keys';
 
 export const toggleVehicleLock = async () => {
-  const [veh] = RayCast.getEntityPlayerLookingAt(7.5, 2);
-  if (veh === 0 || !IsEntityAVehicle(veh) || !NetworkGetEntityIsNetworked(veh)) return;
+  const { entity: veh } = RayCast.doRaycast(7.5, 2);
+  if (!veh || !IsEntityAVehicle(veh) || !NetworkGetEntityIsNetworked(veh)) return;
   if (!hasVehicleKeys(veh)) return;
   const ped = PlayerPedId();
   await Util.loadAnimDict('anim@mp_player_intmenu@key_fob@');

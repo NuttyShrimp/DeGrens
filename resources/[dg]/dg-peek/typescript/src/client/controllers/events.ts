@@ -25,7 +25,7 @@ UI.RegisterUICallback('peek:select', (data: { id: string }, cb) => {
   if (!entry) {
     throw new Error(`[PEEK] Invalid entry | id: ${data.id}`);
   }
-  const { entity } = getCurrentEntity();
+  const entity = getCurrentEntity()?.entity;
   if ((entry as FunctionOption)?.action) {
     entry = entry as FunctionOption;
     entry.action(entry, entity);
@@ -48,8 +48,8 @@ onNet('dg-jobs:signin:update', (name: string | null, grade: number | null) => {
   setCtxJob({ name, grade });
 });
 
-RayCast.onChange((entity, type, coords) => {
-  updateCurrentEntity({ entity, type, coords });
+RayCast.onEntityChange((entity, coords) => {
+  updateCurrentEntity(entity != undefined && coords != undefined ? { entity, coords } : null);
   stateManager.createCheckThread();
   stateManager.forceRefreshList();
 });
