@@ -1,4 +1,4 @@
-let currentEntity: PeekEntity | null;
+let currentEntity: PeekEntity | null = null;
 const activeZones: Map<string, { center: Vec3; data: any }> = new Map();
 
 export const updateCurrentEntity = (ent: PeekEntity | null) => {

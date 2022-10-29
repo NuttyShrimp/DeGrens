@@ -64,7 +64,7 @@ Peek.addZoneEntry(
         action: entry => {
           unlockHouse(entry.data.id);
         },
-        canInteract: (_entity, _distance, entry) => {
+        canInteract: (_, __, entry) => {
           return selectedHouse == entry.data.id;
         },
       },
@@ -74,7 +74,7 @@ Peek.addZoneEntry(
         action: entry => {
           enterHouse(entry.data.id);
         },
-        canInteract: (_entity, _distance, entry) => {
+        canInteract: (_, __, entry) => {
           return selectedHouse == entry.data.id;
         },
       },

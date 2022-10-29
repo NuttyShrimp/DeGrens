@@ -10,6 +10,7 @@ Peek.addModelEntry(
         label: 'Signaal Meten',
         items: 'volt_meter',
         action: async (_, powerEntity) => {
+          if (!powerEntity) return;
           placePlayerAtPowerBox(powerEntity);
           const [canceled] = await Taskbar.create('bolt', 'Signaal meten', 5000, {
             canCancel: true,
@@ -43,6 +44,7 @@ Peek.addModelEntry(
         label: 'Plaats EMP',
         items: 'mini_emp',
         action: async (_, powerEntity) => {
+          if (!powerEntity) return;
           const amount = await getPercentageOfPowerBox(powerEntity);
           if (amount !== 100) {
             Notifications.add('Signaalsterkte te laag.');

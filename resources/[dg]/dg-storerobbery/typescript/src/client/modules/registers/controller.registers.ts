@@ -19,7 +19,8 @@ Peek.addModelEntry(
       {
         icon: 'fas fa-cash-register',
         label: 'Beroof',
-        action: (_: any, register: number) => {
+        action: (_, register) => {
+          if (!register) return;
           lockpickRegister(register);
         },
         canInteract: () => {

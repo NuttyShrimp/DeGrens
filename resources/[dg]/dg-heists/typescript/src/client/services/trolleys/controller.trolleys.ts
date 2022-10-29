@@ -11,6 +11,7 @@ Object.entries(TROLLEY_OBJECTS).forEach(([_, data]) => {
           icon: 'fas fa-sack',
           label: 'Nemen',
           action: (_, entity) => {
+            if (!entity) return;
             Entity(entity).state.set('canBeLooted', false, true);
             lootTrolley(entity);
           },

@@ -25,9 +25,11 @@ Peek.addGlobalEntry(
         icon: 'fas fa-screwdriver',
         items: 'fakeplate',
         action: (_, entity) => {
+          if (!entity) return;
           Events.emitNet('vehicles:plate:useFakePlate', NetworkGetNetworkIdFromEntity(entity));
         },
-        canInteract(veh: number) {
+        canInteract(veh) {
+          if (!veh || !NetworkGetEntityIsNetworked(veh)) return false;
           if (!hasVehicleKeys(veh)) return false;
           const vehState = Entity(veh).state;
           if (vehState.fakePlate) return false;
@@ -38,9 +40,11 @@ Peek.addGlobalEntry(
         label: 'Verwijder nummerplaat',
         icon: 'fas fa-screwdriver',
         action: (_, entity) => {
+          if (!entity) return;
           Events.emitNet('vehicles:plate:removeFakePlate', NetworkGetNetworkIdFromEntity(entity));
         },
-        canInteract(veh: number) {
+        canInteract(veh) {
+          if (!veh || !NetworkGetEntityIsNetworked(veh)) return false;
           if (!hasVehicleKeys(veh)) return false;
           const vehState = Entity(veh).state;
           if (!vehState?.fakePlate) return false;
@@ -52,47 +56,65 @@ Peek.addGlobalEntry(
         icon: 'fas fa-lightbulb',
         items: 'neon_strip',
         action: (_, entity) => {
+          if (!entity) return;
           Events.emitNet('vehicles:upgrades:installItem', NetworkGetNetworkIdFromEntity(entity), 'neon');
         },
-        canInteract: veh => hasVehicleKeys(veh),
+        canInteract: veh => {
+          if (!veh || !NetworkGetEntityIsNetworked(veh)) return false;
+          return hasVehicleKeys(veh);
+        },
       },
       {
         label: 'Installeer Xenon',
         icon: 'fas fa-lightbulb',
         items: 'xenon_lights',
         action: (_, entity) => {
+          if (!entity) return;
           Events.emitNet('vehicles:upgrades:installItem', NetworkGetNetworkIdFromEntity(entity), 'xenon');
         },
-        canInteract: ent => isCloseToHood(ent, 2) && hasVehicleKeys(ent),
+        canInteract: ent => {
+          if (!ent || !NetworkGetEntityIsNetworked(ent)) return false;
+          return isCloseToHood(ent, 2) && hasVehicleKeys(ent);
+        },
       },
       {
         label: 'Lees VIN',
         icon: 'fas fa-barcode',
         action: async (_, entity) => {
+          if (!entity) return;
           const vin = await getVehicleVin(entity);
           if (!vin) return;
           Notifications.add(`VIN: '${vin}'`, 'info');
         },
-        canInteract: ent => isCloseToHood(ent, 2, true) && NetworkGetEntityIsNetworked(ent),
+        canInteract: ent => {
+          if (!ent || !NetworkGetEntityIsNetworked(ent)) return false;
+          return isCloseToHood(ent, 2, true);
+        },
       },
       {
         label: 'Check Service Status',
         icon: 'fas fa-wrench',
         action: (_, entity) => {
+          if (!entity) return;
           openServiceStatusOverview(entity);
         },
-        canInteract: ent => isCloseToHood(ent, 2, true) && NetworkGetEntityIsNetworked(ent),
+        canInteract: ent => {
+          if (!ent || !NetworkGetEntityIsNetworked(ent)) return false;
+          return isCloseToHood(ent, 2, true);
+        },
       },
       {
         label: 'Tank',
         icon: 'fas fa-gas-pump',
         action: async (_, entity) => {
+          if (!entity) return;
           const vin = await getVehicleVin(entity);
           if (!vin) return;
           openRefuelMenu(vin);
         },
         canInteract(entity: number) {
-          return canRefuel(entity) && NetworkGetEntityIsNetworked(entity);
+          if (!entity || !NetworkGetEntityIsNetworked(entity)) return false;
+          return canRefuel(entity);
         },
       },
       {
@@ -100,16 +122,19 @@ Peek.addGlobalEntry(
         icon: 'fas fa-magnifying-glass',
         job: 'police',
         action: (_, entity) => {
+          if (!entity) return;
           checkIllegalTunes(entity);
         },
         canInteract: veh => {
-          return isCloseToHood(veh, 2, true) && NetworkGetEntityIsNetworked(veh);
+          if (!veh || !NetworkGetEntityIsNetworked(veh)) return false;
+          return isCloseToHood(veh, 2, true);
         },
       },
       {
         label: 'Open Tunes',
         icon: 'fas fa-engine',
         action: (_, entity) => {
+          if (!entity) return;
           // Validation not required because if it does not have a vin already neither would it have any upgrades
           const vin = getVehicleVinWithoutValidation(entity);
           if (!vin) {
@@ -119,59 +144,75 @@ Peek.addGlobalEntry(
           Inventory.openTunes(vin);
         },
         // TODO: add crim zones
-        canInteract: veh => isCloseToHood(veh, 2, true) && hasVehicleKeys(veh) && !!getCurrentWorkingShop(),
+        canInteract: veh => {
+          if (!veh || !NetworkGetEntityIsNetworked(veh)) return false;
+          return isCloseToHood(veh, 2, true) && hasVehicleKeys(veh) && !!getCurrentWorkingShop();
+        },
       },
       {
         label: 'Geef Sleutels',
         icon: 'fas fa-key',
         action: (_, entity) => {
+          if (!entity) return;
           Events.emitNet('vehicles:keys:shareToClosest', NetworkGetNetworkIdFromEntity(entity));
         },
-        canInteract: ent => NetworkGetEntityIsNetworked(ent) && hasVehicleKeys(ent),
+        canInteract: ent => {
+          if (!ent || !NetworkGetEntityIsNetworked(ent)) return false;
+          return hasVehicleKeys(ent);
+        },
       },
       {
         label: 'Flip Voertuig',
         icon: 'fas fa-hand',
         action: (_, entity) => {
+          if (!entity) return;
           flipVehicle(entity);
         },
-        canInteract: entity => NetworkGetEntityIsNetworked(entity) && isVehicleUpsideDown(entity),
+        canInteract: entity => {
+          if (!entity || !NetworkGetEntityIsNetworked(entity)) return false;
+          return isVehicleUpsideDown(entity);
+        },
       },
       {
         label: 'Attach hook',
         icon: 'truck-tow',
-        canInteract: ent => canTow(ent),
+        canInteract: ent => ent != undefined && canTow(ent),
         action: (_, ent) => {
+          if (!ent) return;
           attachHook(ent);
         },
       },
       {
-        label: "Do Impound",
-        icon: "garage-car",
-        canInteract: ent => isDoingAJob(ent) && PolyZone.isPointInside(Util.getEntityCoords(ent), 'vehicles_depot_impound'),
+        label: 'Do Impound',
+        icon: 'garage-car',
+        canInteract: ent =>
+          ent != undefined &&
+          isDoingAJob(ent) &&
+          PolyZone.isPointInside(Util.getEntityCoords(ent), 'vehicles_depot_impound'),
         action: async (_, ent) => {
-          const [cancelled] = await Taskbar.create("garage-car", "Voertuig inbeslagnemen", 15000, {
+          if (!ent) return;
+          const [cancelled] = await Taskbar.create('garage-car', 'Voertuig inbeslagnemen', 15000, {
             canCancel: true,
             cancelOnDeath: true,
             cancelOnMove: true,
             disablePeek: true,
             controlDisables: {
               combat: true,
-              movement: true
+              movement: true,
             },
             animation: {
-                animDict: 'missexile3',
-                anim: 'ex03_dingy_search_case_a_michael',
-                flags: 1,
-            }
-          })
+              animDict: 'missexile3',
+              anim: 'ex03_dingy_search_case_a_michael',
+              flags: 1,
+            },
+          });
           if (cancelled) {
-            Notifications.add("Geannuleerd");
+            Notifications.add('Geannuleerd');
             return;
           }
           Events.emitNet('vehicles:depot:server:doImpound', NetworkGetNetworkIdFromEntity(ent));
-        }
-      }
+        },
+      },
     ],
   },
   true

@@ -37,7 +37,7 @@ Peek.addBoneEntry(
           getInTrunk(vehicle);
         },
         canInteract: veh => {
-          return NetworkGetEntityIsNetworked(veh) && canEnterVehicleTrunk(veh);
+          return veh != undefined && NetworkGetEntityIsNetworked(veh) && canEnterVehicleTrunk(veh);
         },
       },
     ],

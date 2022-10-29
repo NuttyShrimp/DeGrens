@@ -69,31 +69,32 @@ Events.onNet('vehicles:mechanic:client:loadConfig', (zones: Mechanic.Shops, offs
   if (modelPeekIds) {
     Peek.removeModelEntry(modelPeekIds);
   }
-  modelPeekIds = Peek.addModelEntry(
-    Object.keys(offsets),
-    {
-      distance: 3,
-      options: [
-        {
-          label: 'Take Hook',
-          icon: 'truck-tow',
-          canInteract: () => isClockedIn(),
-          action: (_, ent) => {
-            takeHook(ent);
-          },
+  modelPeekIds = Peek.addModelEntry(Object.keys(offsets), {
+    distance: 3,
+    options: [
+      {
+        label: 'Take Hook',
+        icon: 'truck-tow',
+        canInteract: () => isClockedIn(),
+        action: (_, ent) => {
+          if (!ent) return;
+          takeHook(ent);
         },
-        {
-          label: 'Release vehicle',
-          icon: 'truck-tow',
-          canInteract: ent => hasVehicleAttached(ent),
-          action: (_, ent) => {
-            releaseVehicle(ent);
-          },
+      },
+      {
+        label: 'Release vehicle',
+        icon: 'truck-tow',
+        canInteract: ent => {
+          if (!ent) return false;
+          return hasVehicleAttached(ent);
         },
-      ],
-    },
-    true
-  );
+        action: (_, ent) => {
+          if (!ent) return;
+          releaseVehicle(ent);
+        },
+      },
+    ],
+  });
 });
 
 Events.onNet('vehicles:mechanic:assignJob', (vin: string, coords: Vec3) => {
