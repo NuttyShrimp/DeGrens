@@ -105,7 +105,7 @@ export class Room {
           label,
           name: i.name,
         },
-        useZ: 4,
+        useZ: true,
       });
       PolyZone.onEnter(`${this.planName}_interact_${i.name}`, (zone, data) => {
         global.exports['dg-ui'].showInteraction(data.label);

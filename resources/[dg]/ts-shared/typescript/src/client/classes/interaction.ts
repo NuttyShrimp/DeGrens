@@ -234,7 +234,7 @@ class PolyZone {
     pCenter: Vector3 | Vec3,
     pRadius: number,
     options: {
-      useZ?: number;
+      useZ?: boolean;
       data: { [key: string]: any };
     },
     removeOnRestart = true
@@ -314,7 +314,7 @@ class PolyTarget {
     pCenter: Vector3 | Vec3,
     pRadius: number,
     options: {
-      useZ?: number;
+      useZ?: boolean;
       data: { [key: string]: any };
     },
     removeOnRestart = true

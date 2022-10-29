@@ -48,7 +48,7 @@ declare namespace Peek {
     offset: Vec3;
     radius: number;
     options: {
-      useZ?: number;
+      useZ?: boolean;
       data: { [key: string]: any };
     };
   }
