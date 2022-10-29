@@ -173,7 +173,7 @@ export const areRequirementsFullfilled = (requirements: Inventory.ItemRequiremen
   if (!requirements) return true;
   const state = getState();
   if (requirements.cash) {
-    const playerCash = (state.inventories[state.primaryId] as Inventory.PrimarySide).cash;
+    const playerCash = (store.getState() as RootState).character.cash;
     if (playerCash < requirements.cash) return false;
   }
   if (requirements.items) {

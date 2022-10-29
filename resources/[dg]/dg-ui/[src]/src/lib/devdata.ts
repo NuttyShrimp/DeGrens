@@ -1351,7 +1351,6 @@ devData.inventory = {
   primary: {
     id: 'player_1001',
     size: 25,
-    cash: 169,
   },
   secondary: {
     id: 'shop_1abc123',

@@ -1,4 +1,4 @@
-import { Util } from '@dgx/server';
+import { Events, Util } from '@dgx/server';
 import { cashLogger } from './util';
 
 const cashCache: Map<number, number> = new Map();
@@ -58,7 +58,7 @@ export const removeCash = (src: number | string, amount: number, reason: string)
     `Cash has been removed from ${Util.getName(src)}`
   );
   updateMetadata(Player);
-  emitNet('hud:client:OnMoneyChange', src, cash, -amount);
+  Events.emitNet('financials:client:cashChange', Number(src), cash, -amount);
   return true;
 };
 
@@ -88,6 +88,6 @@ export const addCash = (src: number | string, amount: number, reason: string) =>
     `Cash has been added to ${Util.getName(src)}`
   );
   updateMetadata(Player);
-  emitNet('hud:client:OnMoneyChange', src, cash, amount);
+  Events.emitNet('financials:client:cashChange', Number(src), cash, amount);
   return true;
 };

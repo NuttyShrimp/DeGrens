@@ -22,7 +22,8 @@ seedCharData = function()
       job = DGX.RPC.execute('jobs:server:getCurrentJob'),
       phone = PlyData.charinfo.phone,
       server_id = GetPlayerServerId(PlayerId()),
-      hasVPN = DGX.Inventory.doesPlayerHaveItems('vpn')
+      hasVPN = DGX.Inventory.doesPlayerHaveItems('vpn'),
+      cash = PlyData.charinfo.cash,
     }
     characterInfo = newCharacterInfo
     SendAppEvent('character', characterInfo)
@@ -49,6 +50,11 @@ end)
 
 RegisterNetEvent('dg-jobs:signin:update', function(job)
   characterInfo.job = job
+  SendAppEvent('character', characterInfo)
+end)
+
+DGX.Events.onNet('financials:client:cashChange', function(cash)
+  characterInfo.cash = cash
   SendAppEvent('character', characterInfo)
 end)
 

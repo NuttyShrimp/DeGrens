@@ -9,6 +9,7 @@ defaultState.character = {
   job: 'judge',
   server_id: 1,
   hasVPN: true,
+  cash: 6969,
 } as Character;
 
 defaultState.hud = {

@@ -119,7 +119,7 @@ RegisterNetEvent('hud:client:ShowAccounts', function(amount)
   })
 end)
 
-RegisterNetEvent('hud:client:OnMoneyChange', function(total, amount)
+DGX.Events.onNet('financials:client:cashChange', function(total, amount)
   SendAppEventWESentry('hud', {
     action = 'addCashHistory',
     data = amount,

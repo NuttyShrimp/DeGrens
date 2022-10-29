@@ -14,7 +14,7 @@ declare namespace Inventory {
     secondary: Omit<SecondarySide, 'side'>;
   }
 
-  type PrimarySide = Omit<Grid, 'items'> & { cash: number };
+  type PrimarySide = Omit<Grid, 'items'>;
   type SecondarySide = Omit<Grid, 'items'> & { allowedItems?: string[] };
 
   interface Grid {
