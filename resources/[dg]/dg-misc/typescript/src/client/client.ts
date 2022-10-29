@@ -3,6 +3,7 @@ import './modules/taskbar';
 import './modules/particles';
 import './modules/hud';
 import './modules/radio/controller.radio';
+import './modules/elevators';
 import './services/laptop';
 import './services/config';
 

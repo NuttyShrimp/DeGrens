@@ -66,3 +66,32 @@ Using this wrapper you can create networked particle effects. Created particles 
 - addParticle: (particle: Particle) -> returns id: string
 - removeParticle: (id: string)
 
+## Elevators
+Using this module you can create ingame elevators with seperate business, gang and job whitelisting.
+- Config can be found in dg-config/configs/elevators.json
+```json
+  "arcadius-elevator": {
+    "name": "Arcadius Building Lift",
+    "levels": {
+      "tuning-shop": {
+        "name": "Tuning Shop",
+        "interact": { "x": -140.15, "y": -586.24, "z": 167.18 },
+        "spawn": { "x": -138.87, "y": -588.26, "z": 167.0, "w": 131.3 },
+        // These options are optional!
+        "job": [
+          {"name": "police", "rank": 2}, 
+          {"name": "ambulance"}
+        ],
+        "business": [
+          {"name": "dff", "permissions": ["property_access"]}
+          {"name": "pdm"}
+        ],
+        "gang": ["esb", "vagos"]
+      },
+      "other-level": {
+        // ...
+      }
+    }
+  }
+```
+
