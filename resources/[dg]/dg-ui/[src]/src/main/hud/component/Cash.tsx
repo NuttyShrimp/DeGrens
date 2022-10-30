@@ -17,7 +17,7 @@ export const CashEntry: FC<{ amount: number; noPrefix?: boolean }> = ({ amount, 
   return (
     <animated.div style={animStyles}>
       <span style={{ color: amount >= 0 ? '#00ac31' : '#ac0000' }}>€ </span>
-      <NumberFormat.Bank value={amount} prefix={noPrefix ? '' : amount >= 0 ? '+' : '-'} />
+      <NumberFormat.Bank value={amount} prefix={noPrefix ? '' : amount >= 0 ? '+' : ''} />
     </animated.div>
   );
 };

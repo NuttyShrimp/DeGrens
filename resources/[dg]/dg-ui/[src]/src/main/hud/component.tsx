@@ -31,24 +31,24 @@ const Component: AppFunction<Hud.State> = props => {
         });
       },
       addEntry: (evt: any) => {
-        props.updateState({
-          entries: [...props.entries, evt.data as Hud.Entry].sort((e1, e2) => e1.order - e2.order),
-        });
+        props.updateState(state => ({
+          entries: [...state.hud.entries, evt.data as Hud.Entry].sort((e1, e2) => e1.order - e2.order),
+        }));
       },
       deleteEntry: (evt: any) => {
-        props.updateState({
-          entries: props.entries.filter(e => e.name !== evt.data.name),
-        });
+        props.updateState(state => ({
+          entries: state.hud.entries.filter(e => e.name !== evt.data.name),
+        }));
       },
       toggleEntry: (evt: any) => {
-        props.updateState({
-          entries: props.entries.map(e => {
+        props.updateState(state => ({
+          entries: state.hud.entries.map(e => {
             if (e.name === evt.data.name) {
               e.enabled = evt.data.enabled;
             }
             return e;
           }),
-        });
+        }));
       },
       setCarValues: (evt: any) => {
         props.updateState({
@@ -64,13 +64,13 @@ const Component: AppFunction<Hud.State> = props => {
         flashCash(evt.data as number);
       },
       addCashHistory: (evt: any) => {
-        props.updateState({
+        props.updateState(state => ({
           cash: {
-            ...props.cash,
-            history: [...props.cash.history, evt.data],
+            ...state.hud.cash,
+            history: [evt.amount, ...state.hud.cash.history],
           },
-        });
-        flashCash(evt.amount as number);
+        }));
+        flashCash(evt.data as number);
         setTimeout(() => {
           props.updateState(state => ({
             cash: {
@@ -113,12 +113,12 @@ const Component: AppFunction<Hud.State> = props => {
       cashFlashTimeout.current = null;
     }
     setCashVisible(true);
-    props.updateState({
+    props.updateState(state => ({
       cash: {
-        ...props.cash,
+        ...state.hud.cash,
         current: cash,
       },
-    });
+    }));
     cashFlashTimeout.current = setTimeout(() => {
       setCashVisible(false);
     }, 5000);

@@ -122,8 +122,8 @@ end)
 DGX.Events.onNet('financials:client:cashChange', function(total, amount)
   SendAppEventWESentry('hud', {
     action = 'addCashHistory',
-    data = amount,
-    money = total
+    data = total,
+    amount = amount
   })
 end)
 
