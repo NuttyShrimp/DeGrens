@@ -180,8 +180,7 @@ class StateManager {
         DisableControlAction(0, key, true);
       });
       if (this.isUIFocused) {
-        DisableControlAction(0, 1, true);
-        DisableControlAction(0, 2, true);
+        DisableAllControlActions(0);
       }
       // LMB
       if (!this.isUIFocused && (IsControlJustPressed(0, 24) || IsDisabledControlJustPressed(0, 24))) {
