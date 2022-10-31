@@ -19,10 +19,15 @@ export const setGTABehaviour = () => {
   DisplayRadar(false);
 
   // Relationships between groups
-  const playerHash = GetHashKey('PLAYER');
+  const playerRelationshipHash = GetHashKey('PLAYER');
   RELATION_GROUPS.forEach(group => {
-    SetRelationshipBetweenGroups(1, group, playerHash);
+    SetRelationshipBetweenGroups(1, group, playerRelationshipHash);
   });
+
+  // Relationship for insta attack peds
+  const relationship = AddRelationshipGroup('ATTACK_ALL_PLAYERS')[1];
+  SetRelationshipBetweenGroups(5, relationship, playerRelationshipHash);
+  SetRelationshipBetweenGroups(5, playerRelationshipHash, relationship);
 
   // Disable dispatch services
   for (let id = 1; id <= 15; id++) {
@@ -99,6 +104,7 @@ export const setGTABehaviour = () => {
       PED_CONFIG_FLAGS.forEach(([flag, val]) => {
         SetPedConfigFlag(newPed, flag, val);
       });
+      SetPedRelationshipGroupHash(newPed, playerRelationshipHash);
     }
 
     // Check if player id changed
