@@ -1,6 +1,6 @@
 cache = {}
 
-DGX.Events.onNet('nutty-sounds:playSoundOnEntity', function(src, id, name, bank, netId)
+playSoundOnEntity = function(id, name, bank, netId)
 	local entity = NetworkGetEntityFromNetworkId(netId)
 	if not entity or not DoesEntityExist(entity) then
 		return
@@ -10,19 +10,34 @@ DGX.Events.onNet('nutty-sounds:playSoundOnEntity', function(src, id, name, bank,
 	end
 	DGX.Events.emitNet('nutty-sounds:playSoundOnEntity', -1, id, name, bank, netId)
 	cache[id] = true
+end
+exports('playSoundOnEntity', playSoundOnEntity)
+
+DGX.Events.onNet('nutty-sounds:playSoundOnEntity', function(src, id, name, bank, netId)
+  playSoundOnEntity(id, name, bank, netId)
 end)
 
-DGX.Events.onNet("nutty-sounds:playSoundFromCoord", function(src, id, name, bank, coords, range)
+playSoundFromCoord = function(id, name, bank, coords, range)
   if cache[id] then
     DGX.Events.emitNet('nutty-sounds:stopSound', -1, id)
   end
   DGX.Events.emitNet('nutty-sounds:playSoundFromCoord', -1, id, name, bank, coords, range)
   cache[id] = true
+end
+exports('playSoundFromCoord', playSoundFromCoord)
+
+DGX.Events.onNet("nutty-sounds:playSoundFromCoord", function(src, id, name, bank, coords, range)
+  playSoundFromCoord(id, name, bank, coords, range)
 end)
 
-DGX.Events.onNet('nutty-sounds:stopSound', function(src, id)
+stopSound = function(id)
   if cache[id] then
     DGX.Events.emitNet('nutty-sounds:stopSound', -1, id)
     cache[id] = nil
   end
+end
+exports('stopSound', stopSound)
+
+DGX.Events.onNet('nutty-sounds:stopSound', function(src, id)
+  stopSound(id)
 end)

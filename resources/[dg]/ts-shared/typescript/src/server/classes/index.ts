@@ -11,7 +11,7 @@ import financials from './financials';
 import screenshot from './screenshot';
 
 export const { Events, RPC, SQL, API, Auth } = events;
-export const { Util } = util;
+export const { Util, Sounds } = util;
 export const { Phone } = phone;
 export const { Chat, RayCast } = interaction;
 export const { Config } = config;

@@ -16,10 +16,11 @@ server_script "@ts-shared/server/server.js"
 
 client_scripts {
 	"client/cl_*.lua",
-	'tests/cl_*.lua'
+	-- 'tests/cl_*.lua'
 }
 
 server_scripts {
 	"server/sv_*.lua",
+  'tests/sv_*.lua'
 }
 

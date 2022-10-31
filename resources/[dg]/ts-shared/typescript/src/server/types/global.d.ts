@@ -24,6 +24,7 @@ declare global {
     RayCast: typeof Classes.RayCast;
     Gangs: typeof Classes.Gangs;
     Screenshot: typeof Classes.Screenshot;
+    Sounds: typeof Classes.Sounds;
     Vector3: typeof Vector3Class;
     Vector4: typeof Vector4Class;
   };
