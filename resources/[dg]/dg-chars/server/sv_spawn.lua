@@ -27,7 +27,7 @@ getPlySpawns = function(src)
       table.insert(Spawns, {
         label = "Laatste locatie",
         spawnType = 'world',
-        position = ply.PlayerData.position,
+        position = {x = ply.PlayerData.position.x, y = ply.PlayerData.position.y, z = ply.PlayerData.position.z, w = 0},
       })
     end
   end
@@ -88,8 +88,8 @@ DGCore.Functions.CreateCallback('dg-chars:server:spawn', function(src, cb, idx)
 	end
 	local ped = GetPlayerPed(src)
 	local setPosition = function(pos)
-		SetEntityCoords(ped, pos)
-		SetEntityHeading(ped, pos.w)
+		SetEntityCoords(ped, pos.x, pos.y, pos.z, false, false, false, false)
+    SetEntityHeading(ped, pos.w)
 	end
   exports['dg-lib']:setInstance(src, 0)
 	if spawn.spawnType == 'world' then

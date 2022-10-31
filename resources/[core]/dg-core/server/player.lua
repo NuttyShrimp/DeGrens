@@ -262,6 +262,7 @@ function DGCore.Player.Save(src)
   end
 
   -- Save character data
+  local position = Player(src).state.loggedIn and GetEntityCoords(GetPlayerPed(src)) or PlayerData.position
   local charDataResult = exports['dg-sql']:query([[
     INSERT INTO character_data (citizenid, position, metadata)
     VALUES (:citizenid, :position, :metadata)
@@ -269,7 +270,7 @@ function DGCore.Player.Save(src)
                             metadata = :metadata;
   ]], {
     citizenid = PlayerData.citizenid,
-    position = json.encode(GetEntityCoords(GetPlayerPed(src))),
+    position = json.encode(position),
     metadata = json.encode(PlayerData.metadata),
   })
 
