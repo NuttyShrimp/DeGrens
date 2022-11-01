@@ -1,4 +1,4 @@
-import { Notifications } from '@dgx/server';
+import { Notifications, Util } from '@dgx/server';
 
 import groupManager from './classes/GroupManager';
 import { groupLogger } from './logger';
@@ -44,4 +44,19 @@ export const createGroup = (src: number): boolean => {
   // Check if the user is actually in a group
   const group = groupManager.getGroupByServerId(src);
   return group !== undefined;
+};
+
+export const leaveGroup = (src: number): boolean => {
+  groupLogger.silly(`[groups:leave] ${Util.getName(src)} has been removed from group`);
+  const group = groupManager.getGroupByServerId(src);
+  if (!group) {
+    groupLogger.warn(`${Util.getName(src)} tried to leave a group while not being in a group`);
+    return true;
+  }
+  group.removeMember(src);
+  if (group.getMemberByServerId(src)) {
+    groupLogger.error(`${Util.getName(src)} left a group but is still in it`);
+    return false;
+  }
+  return true;
 };

@@ -3,12 +3,13 @@ import { Inventory, RPC } from '@dgx/server';
 import groupManager from './classes/GroupManager';
 import nameManager from './classes/NameManager';
 import { groupLogger } from './logger';
-import { changeJob, createGroup, getGroupByCid, getGroupByServerId, getGroupList } from './service';
+import { changeJob, createGroup, getGroupByCid, getGroupByServerId, getGroupList, leaveGroup } from './service';
 
 global.exports('createGroup', createGroup);
 global.exports('getGroupByCid', getGroupByCid);
 global.exports('getGroupByServerId', getGroupByServerId);
 global.asyncExports('changeGroupJob', changeJob);
+global.exports('leaveGroup', leaveGroup);
 
 onNet('DGCore:Server:onPlayerLoaded', () => {
   const player = DGCore.Functions.GetPlayer(source);
@@ -83,6 +84,7 @@ RPC.register('dg-jobs:server:groups:setReady', (src, data: { ready: boolean }) =
   const group = groupManager.getGroupByServerId(src);
   if (!group) {
     groupLogger.warn(`${GetPlayerName(String(src))}(${src}) tried to set himself ready while not being in a group`);
+    return false;
   }
   group.setReady(src, data.ready);
   return true;
@@ -93,6 +95,7 @@ RPC.register('dg-jobs:server:groups:leave', src => {
   const group = groupManager.getGroupByServerId(src);
   if (!group) {
     groupLogger.warn(`${GetPlayerName(String(src))}(${src}) tried to leave a group while not being in a group`);
+    return true;
   }
   group.removeMember(src);
   if (group.getMemberByServerId(src)) {

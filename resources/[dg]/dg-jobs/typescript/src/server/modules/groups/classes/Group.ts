@@ -26,10 +26,9 @@ export class Group {
     this.requestId = 0;
     this.maxSize = 4;
     this.logger = groupLogger.child({ module: `GROUP - ${owner}` });
-    this.owner = this.addMember(owner);
+    this.addMember(owner);
     this.activeRequests = [];
     this.currentJob = null;
-    // TODO: add log that this person created a job group
   }
 
   // region getters
@@ -119,6 +118,9 @@ export class Group {
       job: 'unemployed',
       isReady: false,
     };
+    if (!this.owner) {
+      this.owner = member;
+    }
     this.members.set(src, member);
     this.logger.info(
       `${member.name}(${member.serverId}) joined ${this.owner?.name ?? member.name}(${
@@ -214,6 +216,16 @@ export class Group {
         `Group(${this.id}) tried to change it job to an invalid job(${job.name}) | owner: ${this.owner.name}`
       );
       // TODO: log in graylog
+      return false;
+    }
+    if (this.members.size > job.size) {
+      Phone.showNotification(this.owner.serverId, {
+        id: `jobcenter-groups-too-many-members`,
+        title: 'Jobcenter',
+        description: 'Te veel groepsleden',
+        icon: 'jobcenter',
+      });
+      this.logger.debug(`Group(${this.id}) tried to change it job to ${job.name} but too many members for job`);
       return false;
     }
     this.logger.info(`Changing job to ${job.name}`);

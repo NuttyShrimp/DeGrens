@@ -31,6 +31,14 @@ class Jobs {
   isWhitelisted(src: number, job: string): boolean {
     return global.exports['dg-jobs'].isWhitelisted(src, job);
   }
+
+  registerJob(name: string, jobInfo: Jobs.Job) {
+    global.exports['dg-jobs'].registerJob(name, jobInfo);
+  }
+
+  leaveGroup(src: number) {
+    return global.exports['dg-jobs'].leaveGroup(src);
+  }
 }
 
 class Business {
