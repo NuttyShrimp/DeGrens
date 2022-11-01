@@ -25,6 +25,7 @@ declare global {
     Gangs: typeof Classes.Gangs;
     Screenshot: typeof Classes.Screenshot;
     Sounds: typeof Classes.Sounds;
+    Vehicles: typeof Classes.Vehicles;
     Vector3: typeof Vector3Class;
     Vector4: typeof Vector4Class;
   };

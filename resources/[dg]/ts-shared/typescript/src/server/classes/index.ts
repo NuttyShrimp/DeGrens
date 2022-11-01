@@ -9,6 +9,7 @@ import ui from './ui';
 import util from './util';
 import financials from './financials';
 import screenshot from './screenshot';
+import vehicles from './vehicles';
 
 export const { Events, RPC, SQL, API, Auth } = events;
 export const { Util, Sounds } = util;
@@ -21,3 +22,4 @@ export const { UI, Taskbar, Notifications } = ui;
 export const { Inventory } = inventory;
 export const { Financials } = financials;
 export const { Screenshot } = screenshot;
+export const { Vehicles } = vehicles;
