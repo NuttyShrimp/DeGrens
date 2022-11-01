@@ -22,6 +22,9 @@ export const CurrentGroup: AppFunction<Omit<Phone.JobCenter.State, 'groups' | 'j
 
   const handleGroupLeave = () => {
     nuiAction('phone/jobs/groups/leave');
+    props.updateState({
+      isReady: false,
+    });
   };
 
   if (!owner) return <Loader />;
