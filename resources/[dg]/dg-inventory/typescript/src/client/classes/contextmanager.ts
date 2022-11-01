@@ -31,11 +31,6 @@ class ContextManager extends Util.Singleton<ContextManager>() {
     TriggerScreenblurFadeIn(0);
   };
 
-  public preventedShow = () => {
-    Notifications.add('Je kan dit momenteel niet', 'error');
-    this.isInventoryOpen = false;
-  };
-
   public close = () => {
     TriggerScreenblurFadeOut(0);
     if (!this.isInventoryOpen) return;

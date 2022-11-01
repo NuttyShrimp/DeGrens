@@ -20,11 +20,6 @@ const Component: AppFunction<Inventory.State> = props => {
   const [refreshDrag, setRefreshDrag] = useState(0);
 
   const handleShow = useCallback(() => {
-    if (getCurrentAppType() === 'interactive') {
-      nuiAction('inventory/preventShow');
-      return;
-    }
-
     props.updateState({
       visible: true,
     });

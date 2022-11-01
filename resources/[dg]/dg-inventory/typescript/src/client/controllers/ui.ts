@@ -40,8 +40,3 @@ UI.RegisterUICallback('inventory/moveItem', (data: Inventory.ItemState, cb) => {
   cb({ data: {}, meta: { ok: true, message: 'done' } });
   Events.emitNet('inventory:server:moveItem', data.id, data.position, data.inventory);
 });
-
-UI.RegisterUICallback('inventory/preventShow', (_, cb) => {
-  cb({ data: {}, meta: { ok: true, message: 'done' } });
-  contextManager.preventedShow();
-});
