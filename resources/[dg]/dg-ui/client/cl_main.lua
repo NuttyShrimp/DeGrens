@@ -40,7 +40,7 @@ RegisterNUICallback('dg-ui:applicationClosed', function(data, cb)
 end)
 
 RegisterNUICallback('__appwrapper:setfocus', function(_, cb)
-	SetNuiFocus(true, true)
+	SetUIFocus(true, true)
 	cb({
 		data = {},
 		meta = {
