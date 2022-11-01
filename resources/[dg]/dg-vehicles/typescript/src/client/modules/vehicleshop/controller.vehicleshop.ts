@@ -21,7 +21,7 @@ Events.onNet('vehicles:shop:buildZone', (shopZone: VehicleShop.Config['shopZone'
     coords: vectorsAverage,
     sprite: 326,
     color: 2,
-    scale: 1.1,
+    scale: 0.9,
   });
   console.log(`[VehicleShop] Shopzone has been built`);
 });
