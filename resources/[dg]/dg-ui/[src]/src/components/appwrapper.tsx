@@ -134,7 +134,16 @@ export default function AppWrapper(props: AppWrapperProps) {
   const showApp = useCallback<AppWrapperProps['onShow']>(
     (data?: { data?: any; shouldFocus?: boolean }) => {
       onShow.current(data?.data);
-      if (appInfo?.type === 'interactive' && data?.shouldFocus) {
+
+      // Check apptype to set focus
+      if (!appInfo?.type || !data?.shouldFocus) return;
+      let appType: string;
+      if (appInfo?.type instanceof Function) {
+        appType = appInfo.type();
+      } else {
+        appType = appInfo.type;
+      }
+      if (appType === 'interactive') {
         nuiAction('__appwrapper:setfocus');
       }
     },

@@ -5,8 +5,6 @@ import AppWrapper from '@components/appwrapper';
 import { devData } from '@src/lib/devdata';
 import { nuiAction } from '@src/lib/nui-comms';
 
-import { useApps } from '../../lib/hooks/useApps';
-
 import { Inventory } from './components/inventory';
 import { syncItem } from './lib';
 import store from './store';
@@ -14,7 +12,6 @@ import store from './store';
 import './styles/inventory.scss';
 
 const Component: AppFunction<Inventory.State> = props => {
-  const { getCurrentAppType } = useApps();
   // useDragDropContext can only be used in childcomponents of DndProvidor.
   // we need to refresh the childcomp when we want to cancel dragdrop from itemsync event
   const [refreshDrag, setRefreshDrag] = useState(0);
@@ -24,7 +21,7 @@ const Component: AppFunction<Inventory.State> = props => {
       visible: true,
     });
     fetchInventoryData();
-  }, [getCurrentAppType]);
+  }, []);
 
   const handleHide = useCallback(() => props.updateState(store.initialState), []);
 

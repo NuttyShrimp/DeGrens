@@ -362,4 +362,13 @@ export const cmds: {
     app: 'gridgame',
     show: false,
   },
+  {
+    cmd: 'phone notification',
+    app: 'phone',
+    data: {
+      appName: 'pinger',
+      action: 'doRequest',
+      data: { id: 2, origin: 3 },
+    },
+  },
 ];

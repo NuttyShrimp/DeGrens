@@ -10,7 +10,7 @@ declare type AppFunction<T = {}> = React.FC<
 declare interface ConfigObject {
   name: keyof RootState;
   render: (p: any) => React.ReactElement<any, any>;
-  type: 'passive' | 'interactive';
+  type: 'passive' | 'interactive' | (() => 'passive' | 'interactive');
 }
 
 declare interface Character {
