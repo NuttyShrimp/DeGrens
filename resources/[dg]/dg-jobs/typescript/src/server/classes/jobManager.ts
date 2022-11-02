@@ -115,7 +115,7 @@ class JobManager {
   }
 
   @RPCEvent('dg-jobs:server:jobs:waypoint')
-  public setJobWaypoint(src: number, jobName: string) {
+  private setJobWaypoint(src: number, jobName: string) {
     if (!this.jobs.has(jobName)) {
       this.logger.warn(`${GetPlayerName(String(src))}(${src}) tried to set waypoint for non-existing job ${jobName}`);
       Util.Log(

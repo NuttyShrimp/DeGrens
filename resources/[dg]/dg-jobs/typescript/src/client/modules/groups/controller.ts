@@ -35,7 +35,7 @@ UI.RegisterUICallback('phone/jobs/get', async (_, cb) => {
   cb({ data: jobs, meta: { ok: true, message: 'done' } });
 });
 UI.RegisterUICallback('phone/jobs/waypoint', async (data: { job: string }, cb) => {
-  const isSuccess = await RPC.execute<boolean>('dg-jobs:server:jobs:waypoint', data);
+  const isSuccess = await RPC.execute<boolean>('dg-jobs:server:jobs:waypoint', data.job);
   cb({ data: {}, meta: { ok: isSuccess, message: isSuccess ? 'done' : 'Failed to set waypoint' } });
 });
 // endregion
