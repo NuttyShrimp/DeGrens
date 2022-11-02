@@ -1,4 +1,17 @@
 class Jobs {
+  private groupLeaveHandlers: Set<(plyId: number) => void>;
+
+  constructor() {
+    this.groupLeaveHandlers = new Set();
+    on('dg-jobs:server:groups:playerLeft', (plyId: number) => {
+      this.groupLeaveHandlers.forEach(handler => handler(plyId));
+    });
+  }
+
+  onGroupLeave = (handler: (plyId: number) => void) => {
+    this.groupLeaveHandlers.add(handler);
+  };
+
   createGroup(src: number): boolean {
     return global.exports['dg-jobs'].createGroup(src);
   }
