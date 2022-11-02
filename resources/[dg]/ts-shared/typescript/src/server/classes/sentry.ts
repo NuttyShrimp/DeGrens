@@ -46,6 +46,7 @@ class SentryHandler extends Util.Singleton<SentryClass>() implements SentryClass
 
   startTransaction(ctx: TransactionContext, timeout: number, expectedHits: number) {
     const transaction = Sentry.startTransaction(ctx);
+    // @ts-ignore
     this.transactions.set(transaction.traceId, transaction);
     this.transactionAvailableHits.set(transaction.traceId, expectedHits);
     setTimeout(() => {

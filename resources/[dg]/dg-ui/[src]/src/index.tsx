@@ -18,7 +18,6 @@ if (!isDevel()) {
       new BrowserTracing({
         // @ts-ignore
         tracingOrigins: [`https://${GetParentResourceName()}`],
-        maxTransactionDuration: 30000,
       }),
     ],
     release: '1.0.0',

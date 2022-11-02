@@ -1,10 +1,10 @@
 import { TransactionContext } from '@sentry/types';
+import { Transaction } from '@sentry/types';
 
-import { Util } from './index';
 import { Sentry } from '../helpers/sentry';
 
+import { Util } from './index';
 import { sentryHandler } from './sentry';
-import { Transaction } from '@sentry/types';
 
 // Idea for extra layer of security:
 class Events {
@@ -36,9 +36,7 @@ class Events {
     const eventName = atob(data.eventId);
     if (!this.netEventHandlers.has(eventName)) return;
     data.metadata.finishedAt = new Date().getTime() / 1000;
-    let transaction: Transaction | undefined;
-    let span;
-    transaction = Sentry.startTransaction({
+    const transaction = Sentry.startTransaction({
       name: eventName,
       op: 'client.events.net',
       description: `Incoming network event ${eventName} on server`,
@@ -48,7 +46,7 @@ class Events {
         originResource: data.origin,
       },
       startTimestamp: new Date(data.metadata.createdAt).getTime() / 1000,
-    });
+  });
     Sentry.configureScope(scope => {
       scope.setSpan(transaction);
     });
@@ -59,7 +57,7 @@ class Events {
         op: 'receive',
       })
       .finish();
-    span = transaction.startChild({
+    const span = transaction.startChild({
       endTimestamp: new Date(data.metadata.createdAt).getTime() / 1000,
       op: 'handler',
     });
@@ -219,7 +217,7 @@ class Events {
     const steamId = Player(src).state.steamId;
     if (!steamId) return;
     (['receiver', 'handler'] as (keyof DGXEvents.EventMetadata)[]).forEach(type => {
-      let spanId = sentryHandler.addSpan(steamId, traceId, {
+      const spanId = sentryHandler.addSpan(steamId, traceId, {
         op: type,
         data: {
           origin: src,

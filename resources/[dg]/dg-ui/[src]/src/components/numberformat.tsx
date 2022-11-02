@@ -1,10 +1,10 @@
 import React, { FC } from 'react';
-import ReactNumberFormat, { NumberFormatProps as ReactNumberFormatProps } from 'react-number-format';
+import { NumericFormat, NumericFormatProps, PatternFormat, PatternFormatProps } from 'react-number-format';
 
 import { EmptyDiv } from './emptyDiv';
 
 export const NumberFormat: {
-  Phone: FC<React.PropsWithChildren<NumberFormatProps>>;
+  Phone: FC<React.PropsWithChildren<PatternProps>>;
   Bank: FC<React.PropsWithChildren<NumberFormatProps>>;
 } = {
   Phone: EmptyDiv,
@@ -14,17 +14,23 @@ export default NumberFormat as Required<typeof NumberFormat>;
 
 type onChangeCapture = (e: { target: { name: string; value: string } }) => void;
 
-type NumberFormatProps = ReactNumberFormatProps & {
+type NumberFormatProps = NumericFormatProps & {
   name?: string;
   value: string | number;
   onChange?: onChangeCapture;
 };
 
-NumberFormat.Phone = ({ onChange, ...props }: NumberFormatProps) => {
+type PatternProps = PatternFormatProps & {
+  name?: string;
+  value: string | number;
+  onChange?: onChangeCapture;
+};
+
+NumberFormat.Phone = ({ onChange, ...props }: PatternProps) => {
   return (
-    <ReactNumberFormat
+    <PatternFormat
       displayType={props.displayType ?? 'text'}
-      isNumericString
+      valueIsNumericString
       {...props}
       format={'#### ## ## ##'}
       onValueChange={values => {
@@ -43,7 +49,7 @@ NumberFormat.Phone = ({ onChange, ...props }: NumberFormatProps) => {
 
 NumberFormat.Bank = ({ onChange, ...props }: NumberFormatProps) => {
   return (
-    <ReactNumberFormat
+    <NumericFormat
       displayType={props.displayType ?? 'text'}
       thousandsGroupStyle='thousand'
       thousandSeparator='.'
@@ -51,7 +57,7 @@ NumberFormat.Bank = ({ onChange, ...props }: NumberFormatProps) => {
       allowNegative
       fixedDecimalScale
       decimalScale={2}
-      isNumericString
+      valueIsNumericString
       {...props}
       onValueChange={values => {
         if (!onChange) return;

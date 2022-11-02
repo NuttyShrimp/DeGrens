@@ -78,10 +78,8 @@
     "prettier/prettier": [
       "error",
       {
-        "endOfLine": "auto"
-      },
-      {
-        "usePrettierrc": true,
+        "endOfLine": "auto",
+        "usePrettierrc": true
       }
     ]
   },

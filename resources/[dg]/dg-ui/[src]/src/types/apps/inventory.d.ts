@@ -41,6 +41,17 @@ declare namespace Inventory {
     requirements?: ItemRequirements;
   }
 
+  interface DragItem {
+    id: string;
+    size: XYCoord;
+    name: string;
+    label: string;
+    quality: number;
+    image: string;
+    hotkey?: number;
+    requirements?: ItemRequirements;
+  }
+
   interface ItemRequirements {
     cash?: number;
     items?: { name: string; label: string }[];

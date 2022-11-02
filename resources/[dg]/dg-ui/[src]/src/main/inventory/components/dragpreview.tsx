@@ -6,9 +6,13 @@ import { baseStyle } from '@src/base.styles';
 
 import { getImg } from '../../../lib/util';
 import { coordToPx } from '../util';
+import { usePreviewStateFull } from 'react-dnd-preview/dist/cjs/usePreview';
 
 export const DragPreview: FC<{ cellSize: number }> = ({ cellSize }) => {
-  const { display, item, style } = usePreview();
+  const { display, item, style } = usePreview<Inventory.DragItem, HTMLDivElement>() as usePreviewStateFull<
+    Inventory.DragItem,
+    HTMLDivElement
+  >;
 
   return (
     <>
