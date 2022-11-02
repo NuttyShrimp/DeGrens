@@ -50,7 +50,7 @@ DGX.RPC.register('lib:doRaycast', function(pDistance, pFlag, pIgnore)
     coords = hit.coords
   }
   if DoesEntityExist(hit.entity) and NetworkGetEntityIsNetworked(hit.entity) then
-    hitData.netId = NetworkGetNetworkIdFromEntity(hit.entity)
+    retval.netId = NetworkGetNetworkIdFromEntity(hit.entity)
   end
   return retval
 end)
