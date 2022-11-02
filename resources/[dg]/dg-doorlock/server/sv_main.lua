@@ -3,8 +3,8 @@ local registeredTokens = {}
 local initializing = true
 local currentLinkedId = 1
 
-DGX.Inventory.registerUseable('lockpick', function(src)
-  TriggerEvent('dg-doorlock:server:usedLockpick', src)
+DGX.Inventory.registerUseable('lockpick', function(src, item)
+  TriggerEvent('dg-doorlock:server:usedLockpick', src, item.id)
   TriggerClientEvent("lockpick:UseLockpick", src)
 end)
 

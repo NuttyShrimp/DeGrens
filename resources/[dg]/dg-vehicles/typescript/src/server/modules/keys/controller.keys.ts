@@ -3,28 +3,25 @@ import { Events, Notifications, RPC, Util } from '@dgx/server';
 import { getVinForNetId } from '../../helpers/vehicle';
 
 import { keyManager } from './classes/keymanager';
-import { handleFailedLP, handleSuccessDoorLP, handleSuccessHotwire, startVehicleLockpick } from './service.keys';
+import { handleDoorSuccess, handleFail, handleHotwireSuccess, startVehicleLockpick } from './service.keys';
 
-on('dg-doorlock:server:usedLockpick', (src: number) => {
-  startVehicleLockpick(src);
+on('dg-doorlock:server:usedLockpick', (src: number, itemId: string) => {
+  startVehicleLockpick(src, itemId);
 });
 
 Events.onNet('vehicles:keys:finishLockPick', (src, type: string, id: string, isSuccess: boolean) => {
+  if (!isSuccess) {
+    handleFail(src, id);
+    return;
+  }
+
   switch (type) {
     case 'door': {
-      if (isSuccess) {
-        handleSuccessDoorLP(src, id);
-      } else {
-        handleFailedLP(src, id);
-      }
+      handleDoorSuccess(src, id);
       break;
     }
     case 'hotwire': {
-      if (isSuccess) {
-        handleSuccessHotwire(src, id);
-      } else {
-        handleFailedLP(src, id);
-      }
+      handleHotwireSuccess(src, id);
       break;
     }
   }

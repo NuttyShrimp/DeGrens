@@ -1,4 +1,20 @@
+type LockpickEvtHandler = (plyId: number, vehicle: number, type: 'door' | 'hotwire') => void;
+
 class Vehicles {
+  private lockpickEvtHandlers: Set<LockpickEvtHandler>;
+
+  constructor() {
+    this.lockpickEvtHandlers = new Set();
+    const handler: LockpickEvtHandler = (plyId, vehicle, type) => {
+      this.lockpickEvtHandlers.forEach(handler => handler(plyId, vehicle, type));
+    };
+    on('vehicles:lockpick', handler);
+  }
+
+  onLockpick = (handler: LockpickEvtHandler) => {
+    this.lockpickEvtHandlers.add(handler);
+  };
+
   // See dg-vehicles types for upgrades type
   spawnVehicle = (
     model: string,

@@ -1,7 +1,7 @@
 import { Events, Inventory, Notifications, RayCast, RPC, Util } from '@dgx/server';
 import { getConfigByHash } from 'modules/info/service.info';
 
-import { getVinForNetId, getVinForVeh } from '../../helpers/vehicle';
+import { getVinForVeh } from '../../helpers/vehicle';
 
 import { keyManager } from './classes/keymanager';
 
@@ -14,9 +14,9 @@ const vehClassToDifficulty: Record<CarClass, { speed: number; size: number }> = 
   S: { speed: 8, size: 8 },
   X: { speed: 10, size: 5 },
 };
+
 // Map of number onto UUID's
-const activeLockPicker = new Map<number, string>();
-const idToVehicle = new Map<string, number>();
+const activeLockPickers = new Map<number, { id: string; vehicle: number; itemId: string }>();
 
 export const handleVehicleLock = async (plyId: number, vehicleNetId: number) => {
   const vehicle = NetworkGetEntityFromNetworkId(vehicleNetId);
@@ -37,99 +37,103 @@ export const handleVehicleLock = async (plyId: number, vehicleNetId: number) => 
 };
 
 // region Lockpicking
-export const startVehicleLockpick = async (src: number) => {
-  if (activeLockPicker.has(src)) return;
-
-  const { entity: veh } = await RayCast.doRaycast(src);
-  if (!veh || GetEntityType(veh) !== 2) return;
-
-  const vehNetId = NetworkGetNetworkIdFromEntity(veh);
-  const closeToDoor = await RPC.execute<boolean>('vehicles:isNearDoor', src, vehNetId, 1.0);
-  if (!closeToDoor) return;
-
-  const vehInfo = getConfigByHash(GetEntityModel(veh));
-  if (!vehInfo) return;
-
-  const vin = getVinForNetId(vehNetId);
-  if (!vin) return;
-  if (keyManager.hasKey(vin, src)) return;
-
-  const id = Util.uuidv4();
-  activeLockPicker.set(src, id);
-  idToVehicle.set(id, veh);
-  SetVehicleAlarm(veh, true);
+export const startVehicleLockpick = async (src: number, itemId: string) => {
+  if (activeLockPickers.has(src)) return;
 
   const ped = GetPlayerPed(String(src));
-  if (
-    GetVehiclePedIsIn(ped, false) !== veh &&
-    GetVehicleDoorLockStatus(veh) !== 1 &&
-    GetPedInVehicleSeat(veh, -1) === 0
-  ) {
-    // TODO: Add dispatch call
-    Events.emitNet(
-      'vehicles:keys:startLockpick',
-      src,
-      'door',
-      id,
-      Math.max(4, Math.ceil((vehInfo.price ?? 0) / 200000)),
-      vehClassToDifficulty[vehInfo.class] ?? { speed: 1, size: 25 }
-    );
-  } else if (GetVehiclePedIsIn(ped, false) === veh) {
-    Events.emitNet(
-      'vehicles:keys:startLockpick',
-      src,
-      'hotwire',
-      id,
-      Math.max(5, Math.ceil((vehInfo.price ?? 0) / 200000)),
-      vehClassToDifficulty[vehInfo.class] ?? { speed: 1, size: 25 }
-    );
+  const vehiclePedIsIn = GetVehiclePedIsIn(ped, false);
+
+  // If ped in vehicle, set target vehicle to that veh
+  // Else check the vehicle ped is aiming at
+  let targetVehicle: number;
+  let lockpickType: 'door' | 'hotwire';
+  if (vehiclePedIsIn !== 0) {
+    targetVehicle = vehiclePedIsIn;
+    lockpickType = 'hotwire';
   } else {
-    activeLockPicker.delete(src);
-    idToVehicle.delete(id);
+    const { entity } = await RayCast.doRaycast(src);
+    if (!entity || GetEntityType(entity) !== 2) return;
+    targetVehicle = entity;
+    lockpickType = 'door';
+
+    // Check if near door
+    const vehNetId = NetworkGetNetworkIdFromEntity(targetVehicle);
+    const closeToDoor = await RPC.execute<boolean>('vehicles:isNearDoor', src, vehNetId, 2.0);
+    if (!closeToDoor) {
+      Notifications.add(src, 'Je staat niet bij een deur', 'error');
+      return;
+    }
+
+    // Check if door is locked
+    const vehicleLockStatus = GetVehicleDoorLockStatus(targetVehicle);
+    const OPEN_LOCK_STATES = [0, 10];
+    if (OPEN_LOCK_STATES.includes(vehicleLockStatus)) {
+      Notifications.add(src, 'Voertuig staat niet op slot', 'error');
+      return;
+    }
   }
+
+  // Check if already has keys
+  const vin = getVinForVeh(targetVehicle);
+  if (!vin) return;
+  if (keyManager.hasKey(vin, src)) {
+    Notifications.add(src, 'Ga je je eigen voertuig lockpicken?', 'error');
+    return;
+  }
+
+  const id = Util.uuidv4();
+  activeLockPickers.set(src, { id, vehicle: targetVehicle, itemId });
+  SetVehicleAlarm(targetVehicle, true);
+
+  // Check info to determine difficulty
+  // Do not return if not found else we cant lockpick shit like a bus or towtruck etcetc
+  const vehInfo = getConfigByHash(GetEntityModel(targetVehicle));
+
+  // TODO: Add dispatch call
+  let keygameMinAmount = lockpickType === 'door' ? 4 : 5;
+  Events.emitNet(
+    'vehicles:keys:startLockpick',
+    src,
+    lockpickType,
+    id,
+    Math.max(keygameMinAmount, Math.ceil((vehInfo?.price ?? 0) / 200000)),
+    vehClassToDifficulty[vehInfo?.class ?? 'D']
+  );
+  emit('vehicles:lockpick', src, targetVehicle, lockpickType);
 };
 
-const validateId = async (src: number, id: string) => {
-  if (!id) return false;
-  if (!activeLockPicker.has(src)) return false;
-  if (activeLockPicker.get(src) !== id) return false;
-  activeLockPicker.delete(src);
-  const veh = idToVehicle.get(id);
-  if (!veh) return false;
-  SetVehicleAlarm(veh, false);
-  const lockpickItem = await Inventory.getFirstItemOfNameOfPlayer(src, 'lockpick');
-  if (!lockpickItem) return false;
-  // This should decrease the quality of the specific item
-  // average of ~7.5 cars per lockpick
-  Inventory.setQualityOfItem(lockpickItem.id, old => old - 13);
+const validateId = (src: number, id: string) => {
+  const active = activeLockPickers.get(src);
+  if (!active) return false;
+  if (active.id !== id) return false;
+  SetVehicleAlarm(active.vehicle, false);
+  Inventory.setQualityOfItem(active.itemId, old => old - 10);
   return true;
 };
 
-export const handleFailedLP = (src: number, id: string) => {
-  if (!validateId(src, id)) {
-    return;
+export const handleFail = (src: number, id: string) => {
+  if (validateId(src, id)) {
+    Notifications.add(src, 'Lockpicken van voertuig mislukt', 'error');
   }
-  Notifications.add(src, 'Het lockpicken van het voertuig is mislukt!', 'error');
+  activeLockPickers.delete(src);
 };
 
-export const handleSuccessDoorLP = (src: number, id: string) => {
-  if (!validateId(src, id)) {
-    return;
+export const handleDoorSuccess = (src: number, id: string) => {
+  if (validateId(src, id)) {
+    const vehicle = activeLockPickers.get(src)!.vehicle;
+    SetVehicleDoorsLocked(vehicle, 0);
+    Notifications.add(src, 'Lockpicken van voertuig gelukt!', 'success');
   }
-  const veh = idToVehicle.get(id);
-  if (!veh) return;
-  SetVehicleDoorsLocked(veh, 1);
-  Notifications.add(src, 'Lockpicken van voertuig gelukt!', 'success');
+  activeLockPickers.delete(src);
 };
 
-export const handleSuccessHotwire = (src: number, id: string) => {
-  if (!validateId(src, id)) {
-    return;
+export const handleHotwireSuccess = (src: number, id: string) => {
+  if (validateId(src, id)) {
+    const vehicle = activeLockPickers.get(src)!.vehicle;
+    const vin = getVinForVeh(vehicle);
+    if (!vin) return;
+    keyManager.addKey(vin, src);
   }
-  const veh = idToVehicle.get(id);
-  if (!veh) return;
-  const vin = getVinForVeh(veh);
-  if (!vin) return;
-  keyManager.addKey(vin, src);
+  activeLockPickers.delete(src);
 };
 // endregion
