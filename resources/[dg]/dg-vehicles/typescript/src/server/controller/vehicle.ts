@@ -1,6 +1,7 @@
 import { Chat, Events, Notifications, RPC, Util } from '@dgx/server';
 import { Vector4 } from '@dgx/shared';
 import { getPlayerVehicleInfo, insertNewVehicle } from 'db/repository';
+import { keyManager } from 'modules/keys/classes/keymanager';
 
 import { deleteVehicle, getVinForVeh, spawnOwnedVehicle, spawnVehicle, teleportInSeat } from '../helpers/vehicle';
 import vinManager from '../modules/identification/classes/vinmanager';
@@ -33,6 +34,9 @@ global.exports(
       }
       vehicle = ent;
     } else {
+      if (!vin) {
+        vin = vinManager.generateVin();
+      }
       if (!model) {
         Notifications.add(plyId, 'Geen voertuig geselecteerd', 'error');
         return;
@@ -42,6 +46,7 @@ global.exports(
         Notifications.add(plyId, 'Could not spawn new vehicle', 'error');
         return;
       }
+      keyManager.addKey(vin, plyId);
       vehicle = ent;
     }
     if (applyMods) {

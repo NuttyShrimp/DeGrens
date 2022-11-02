@@ -18,6 +18,10 @@ class Vehicles {
   getVinForVeh = (vehicle: number): string | null => {
     return global.exports['dg-vehicles'].deleteVehicle(vehicle);
   };
+
+  giveKeysToPlayer = (plyId: number, vehNetId: number) => {
+    global.exports['dg-vehicles'].giveKeysToPlayer(plyId, vehNetId);
+  };
 }
 
 export default {

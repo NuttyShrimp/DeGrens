@@ -19,7 +19,7 @@ import { mainLogger } from '../sv_logger';
  * Spawn a vehicle
  * @param model String version of vehicle model
  * @param position Vec4 of spawn position
- * @param owner Owner of vehicle (Will be given keys)
+ * @param owner Owner of vehicle (Used to check model)
  * @param vin
  * @param plate
  * @param upgrades
@@ -42,7 +42,7 @@ export const spawnVehicle = async (
       return;
     }
     modelCheckPlayer = firstPlayer;
-    mainLogger.warn(`No owner provided for 'spawnVehicle', using first found player to check model.`);
+    mainLogger.info(`No owner provided for 'spawnVehicle', using first found player to check model.`);
   }
   const modelInfo = await RPC.execute<modelInfo>('vehicle:checkModel', modelCheckPlayer, model);
   if (!modelInfo || !modelInfo.valid) {
@@ -86,9 +86,6 @@ export const spawnVehicle = async (
   const vehState = Entity(veh).state;
   vehState.set('vin', vin, true);
   fuelManager.registerVehicle(vin);
-  if (owner !== undefined) {
-    keyManager.addKey(vin, owner);
-  }
   plate = plate ?? plateManager.generatePlate();
   SetVehicleNumberPlateText(veh, plate);
   vehState.set('plate', plate, true);
@@ -108,6 +105,7 @@ export const spawnOwnedVehicle = async (src: number, vehicleInfo: Vehicle.Vehicl
     vehicleInfo.plate
   );
   if (!vehicle) return;
+  keyManager.addKey(vehicleInfo.vin, src);
 
   const vehNetId = NetworkGetNetworkIdFromEntity(vehicle);
   fuelManager.setFuelLevel(vehicleInfo.vin, vehicleInfo.status.fuel ?? 100);

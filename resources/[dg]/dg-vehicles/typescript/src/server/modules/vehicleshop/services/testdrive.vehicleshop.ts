@@ -1,5 +1,7 @@
 import { Events, Notifications, RPC, Util } from '@dgx/server';
-import { deleteVehicle, spawnVehicle } from 'helpers/vehicle';
+import { deleteVehicle, getVinForNetId, getVinForVeh, spawnVehicle } from 'helpers/vehicle';
+import vinManager from 'modules/identification/classes/vinmanager';
+import { keyManager } from 'modules/keys/classes/keymanager';
 
 import shopManager from '../classes/ShopManager';
 import { doVehicleShopTransaction, getTestDriveDeposit } from '../helpers.vehicleshop';
@@ -59,12 +61,14 @@ Events.onNet('vehicles:shop:testdrive:start', async (plyId: number, model: strin
     return;
   }
 
-  const vehEnt = await spawnVehicle(model, shopConfig.vehicleSpawnLocation, plyId, undefined, `XXJENSXX`);
+  const vehVin = vinManager.generateVin();
+  const vehEnt = await spawnVehicle(model, shopConfig.vehicleSpawnLocation, plyId, vehVin, `XXJENSXX`);
   if (!vehEnt) {
     Notifications.add(plyId, 'Kon voertuig niet testritten', 'error');
     await doVehicleShopTransaction({ customer: plyId, amount: depositAmount, comment: `Annulatie van testrit` }, true);
     return;
   }
+  keyManager.addKey(vehVin, plyId);
   const vehNetId = NetworkGetNetworkIdFromEntity(vehEnt);
 
   activeTestDrives.set(plyId, {
