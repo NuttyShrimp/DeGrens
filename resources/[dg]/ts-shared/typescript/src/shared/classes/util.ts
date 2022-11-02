@@ -37,6 +37,11 @@ export class Util {
     return Math.random() * (maximum - minimum) + minimum;
   };
 
+  round = (number: number, decimals: number) => {
+    const multiplier = Math.pow(10, decimals);
+    return Math.round(number * multiplier) / multiplier;
+  };
+
   ArrayToVector3 = (array: number[]): Vector3 => {
     return new Vector3(array[0], array[1], array[2]);
   };

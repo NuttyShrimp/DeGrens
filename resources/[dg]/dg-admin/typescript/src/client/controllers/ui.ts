@@ -141,8 +141,14 @@ RegisterUICallback('toggleDevMode', (data: { toggle: boolean }, cb) => {
 RegisterUICallback('copyCoords', (_, cb) => {
   const coords = Util.getPlyCoords();
   const heading = GetEntityHeading(PlayerPedId());
+  const data = {
+    x: Util.round(coords.x, 4),
+    y: Util.round(coords.y, 4),
+    z: Util.round(coords.z, 4),
+    w: Util.round(heading, 4),
+  };
   Notifications.add('Check clipboard for coordinate');
-  cb({ meta: { ok: true, message: 'done' }, data: JSON.stringify({ ...coords.add(0), w: heading }) });
+  cb({ meta: { ok: true, message: 'done' }, data: JSON.stringify(data) });
 });
 
 RegisterUICallback('openCoordsSelector', async (_, cb) => {
@@ -193,9 +199,14 @@ RegisterUICallback('openCoordsSelector', async (_, cb) => {
   await Util.awaitCondition(() => selectedCoords !== null);
   clearTick(tick);
 
+  const data = {
+    x: Util.round(selectedCoords.x, 4),
+    y: Util.round(selectedCoords.y, 4),
+    z: Util.round(selectedCoords.z, 4),
+  };
   UI.hideInteraction();
   Notifications.add('Check clipboard for coordinate');
-  cb({ meta: { ok: true, message: 'done' }, data: JSON.stringify(selectedCoords) });
+  cb({ meta: { ok: true, message: 'done' }, data: JSON.stringify(data) });
 });
 
 RegisterUICallback('penalisePlayer', (data: any, cb) => {
