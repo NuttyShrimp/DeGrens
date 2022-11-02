@@ -1,9 +1,6 @@
 :root {
-  --background-contrast: 95%;
+  --background-contrast: 98%;
   --background-blur: 3px;
-  --loadbar-color: #ffffff5b;
-  --loadbar-progress-color: #692635;
-  --loadbar-height: 10px;
 }
 
 @import url('https://fonts.googleapis.com/css?family=Roboto+Condensed|Lato');
@@ -16,7 +13,7 @@
 body {
   margin: 0px;
   padding: 0px;
-  background-color: #2f3640;
+  background-color: #000000;
   width: 100vw;
   height: 100vh;
 }
@@ -39,33 +36,6 @@ body {
   height: 111px;
 }
 
-.loadbar {
-  display: block;
-  position: absolute;
-  bottom: .25vh;
-  width: 99.5vw;
-  height: var(--loadbar-height);
-  margin-left: .25vw;
-  border-radius: 3px;
-  background-color: var(--loadbar-color);
-  overflow: hidden;
-  text-align: center;
-}
-
-.yeet {
-  position: absolute;
-  width: 0%;
-  left: 0%;
-  height: var(--loadbar-height);
-  border-radius: 3px;
-  transition: 500ms;
-  background-color: var(--loadbar-progress-color);
-  background-size: 30px 30px;
-  background-image: linear-gradient(135deg, rgba(255, 255, 255, .15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, .15) 50%, rgba(255, 255, 255, .15) 75%, transparent 75%, transparent);
-  -webkit-animation: animate-stripes 3s linear infinite;
-  animation: animate-stripes 3s linear infinite;
-}
-
 #container {
   text-shadow: 2px 2px 5px #424242;
   position: absolute;
@@ -77,29 +47,18 @@ body {
   text-align: center;
 }
 
-#bg {
-  position: relative;
-  width: 150%;
-  height: auto;
-  right: 0vw
+#bg > .video-overlay {
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+  background: rgb(0, 0, 0);
+  background: radial-gradient(circle, rgba(0, 0, 0, 0) 20%, rgba(232, 84, 118, 0.2) 100%)
 }
 
-#bg>img {
-  width: 100%;
-  height: 100%;
+#bg > video {
+  object-fit: cover;
 }
 
 ::-webkit-scrollbar {
   display: none;
-}
-
-@keyframes animate-stripes {
-  0% {
-    background-position: 0 0;
-  }
-
-  100% {
-    background-position: 60px 0;
-  }
-
 }

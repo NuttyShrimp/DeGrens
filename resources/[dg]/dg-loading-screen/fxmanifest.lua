@@ -14,7 +14,5 @@ files {
     'html/imgs/logo.png',
 		'html/imgs/bg.jpg',
     'html/js/app.js',
-		'html/js/progressbar-handler.js',
-		'html/js/progressbar-main.js',
-		'html/js/progressbar-renderer.js'
+    'html/assets/*.mp4'
 }
