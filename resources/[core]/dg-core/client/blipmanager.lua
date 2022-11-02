@@ -43,6 +43,9 @@ DGCore.Blips.Add = function(category, data)
     DGCore.Blips.blipStore[category] = {}
   end
 
+  -- Remove blip if one already exists with id
+  removeBlip(data.id, category)
+
   DGCore.Blips.infoStore[category][data.id] = {
     category = category,
     text = data.text,

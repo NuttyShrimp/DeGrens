@@ -21,9 +21,9 @@ export const buildQuicksellZone = () => {
     id: `vehicleshop-quicksell`,
     text: 'Quicksell',
     coords: quicksellPosition.position,
-    sprite: 326,
+    sprite: 227,
     color: 12,
-    scale: 1.0,
+    scale: 0.9,
   });
 };
 
