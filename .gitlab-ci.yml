@@ -93,27 +93,6 @@ validate db migrations:
     changes:
       - 'migrations/*'
 
-sonarqube-check:
-  stage: test
-  tags:
-    - amd64
-  image:
-    name: sonarsource/sonar-scanner-cli:latest
-    entrypoint: [ "" ]
-  variables:
-    SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar"  # Defines the location of the analysis task cache
-    GIT_DEPTH: "0"  # Tells git to fetch all the branches of the project, required by the analysis task
-  cache:
-    key: "$CI_COMMIT_REF_NAME-sonar"
-    paths:
-      - .sonar/cache
-  script:
-    - sonar-scanner
-  allow_failure: true
-  only:
-    - main
-    - UPD
-
 JS linting:
   extends:
     - .lerna_installation
