@@ -1,4 +1,4 @@
-import { Events, Financials, Inventory, RPC, Util } from '@dgx/server';
+import { Events, Inventory } from '@dgx/server';
 import { addItemToSell, takeSellCash } from './service.shop';
 
 Events.onNet('houserobbery:server:takeSellCash', (src: number) => {

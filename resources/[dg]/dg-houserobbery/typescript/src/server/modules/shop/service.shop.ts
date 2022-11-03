@@ -10,8 +10,8 @@ export const initializeShop = async () => {
 };
 
 export const addItemToSell = (sellItem: Inventory.ItemState) => {
-  setTimeout(() => {
-    const success = Inventory.removeItemByIdFromInventory('stash', 'houserobbery_sell', sellItem.id);
+  setTimeout(async () => {
+    const success = await Inventory.removeItemByIdFromInventory('stash', 'houserobbery_sell', sellItem.id);
     if (!success) return;
     currentMoney += prices[sellItem.name];
   }, 5000);
