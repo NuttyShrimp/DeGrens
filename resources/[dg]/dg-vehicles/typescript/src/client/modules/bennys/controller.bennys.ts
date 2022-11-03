@@ -30,15 +30,15 @@ Events.onNet('vehicles:bennys:load', (locations: Bennys.Location[]) => {
       },
       true
     );
-    const locBlip = AddBlipForCoord(l.vector.x, l.vector.y, l.vector.z);
-    SetBlipSprite(locBlip, 72);
-    SetBlipColour(locBlip, 0);
-    SetBlipDisplay(locBlip, 2);
-    SetBlipScale(locBlip, 0.8);
-    SetBlipAsShortRange(locBlip, true);
-    BeginTextCommandSetBlipName('STRING');
-    AddTextComponentString("Benny's Motorworks");
-    EndTextCommandSetBlipName(locBlip);
+    DGCore.Blips.Add('vehicleshop', {
+      id: `vehicleshop-${l.name}`,
+      text: `Benny's Motorworks`,
+      coords: l.vector,
+      sprite: 72,
+      color: 0,
+      scale: 0.8,
+      display: 2,
+    });
   });
   setLocations(locations);
   console.log(`[Bennys] Loaded ${locations.length} locations`);
