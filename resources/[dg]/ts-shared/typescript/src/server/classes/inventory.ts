@@ -175,6 +175,14 @@ class Inventory {
   public createScriptedStash = (identifier: string, size: number, allowedItems?: string[]) => {
     global.exports['dg-inventory'].createScriptedStash(identifier, size, allowedItems);
   };
+
+  public concatId = (type: Inventory.Type, identifier: string | number): string => {
+    return global.exports['dg-inventory'].concatId(type, identifier);
+  };
+
+  public splitId = (inventoryId: string): { type: Inventory.Type; identifier: string } => {
+    return global.exports['dg-inventory'].splitId(inventoryId);
+  };
 }
 
 export default {

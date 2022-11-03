@@ -3,7 +3,7 @@ import inventoryManager from 'modules/inventories/manager.inventories';
 import itemDataManager from 'modules/itemdata/classes/itemdatamanager';
 import itemManager from 'modules/items/manager.items';
 import { getConfig } from 'services/config';
-import { concatId } from '../util';
+import { concatId, splitId } from '../util';
 
 const hasObject = async (plyId: number) => {
   const cid = Util.getCID(plyId);
@@ -180,6 +180,8 @@ global.asyncExports('getItemsInInventory', getItemsInInventory);
 global.asyncExports('getItemsForNameInInventory', getItemsForNameInInventory);
 global.asyncExports('getFirstItemOfName', getFirstItemOfName);
 global.exports('createScriptedStash', createScriptedStash);
+global.exports('concatId', concatId);
+global.exports('splitId', splitId);
 
 // Events for client
 RPC.register('inventory:server:doesPlayerHaveItems', (plyId, names: string | string[]) => {
