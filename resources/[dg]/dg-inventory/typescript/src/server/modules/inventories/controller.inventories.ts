@@ -44,10 +44,11 @@ export const preloadActivePlayerInventories = () => {
   });
 };
 
-on('DGCore:Server:PlayerLoaded', ({ PlayerData }: { PlayerData: PlayerData }) => {
-  inventoryManager.get(concatId('player', PlayerData.citizenid));
+on('DGCore:server:playerLoaded', (playerData: PlayerData) => {
+  inventoryManager.get(concatId('player', playerData.citizenid));
 });
 
-on('DGCore:Server:OnPlayerUnload', (src: number, cid: number) => {
+on('DGCore:server:playerUnloaded', (src: number, cid: number) => {
   inventoryManager.unload(concatId('player', cid));
+  contextManager.playerClosed(src, true);
 });

@@ -1,23 +1,15 @@
-import { Admin, Events } from '@dgx/server';
-import { DGXEvent, Event, EventListener, Export, ExportRegister } from '@dgx/server/decorators';
+import { Admin, Events, Util } from '@dgx/server';
+import { DGXEvent, Event, EventListener, Export, ExportRegister, LocalEvent } from '@dgx/server/decorators';
 import { handleCommandExecution } from 'helpers/commands';
 
 @ExportRegister()
 @EventListener()
-class CommandManager {
-  private static instance: CommandManager;
-
-  static getInstance() {
-    if (!this.instance) {
-      this.instance = new CommandManager();
-    }
-    return this.instance;
-  }
-
+class CommandManager extends Util.Singleton<CommandManager>() {
   private commands: Map<string, Server.Command>;
   private refreshTimeout: NodeJS.Timeout;
 
   constructor() {
+    super();
     this.commands = new Map();
   }
 
@@ -35,11 +27,15 @@ class CommandManager {
   }
 
   @DGXEvent('chat:requestRefresh')
-  @Event('DGCore:Server:OnPlayerLoaded')
   @Export('refreshCommands')
   public refreshCommands(src = -1) {
     src === -1 ? this.globalRefresh() : this.specificRefresh(src);
   }
+
+  @LocalEvent('DGCore:server:playerLoaded')
+  private _playerLoaded = (playerData: PlayerData) => {
+    this.specificRefresh(playerData.source);
+  };
 
   @Export('registerCommand')
   public registerCommand(

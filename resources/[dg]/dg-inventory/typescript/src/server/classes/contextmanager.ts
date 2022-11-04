@@ -42,11 +42,12 @@ class ContextManager extends Util.Singleton<ContextManager>() {
   };
 
   @DGXEvent('inventory:server:closed')
-  @LocalEvent('DGCore:Server:OnPlayerUnload')
-  public playerClosed = (player: number) => {
+  public playerClosed = (player: number, playerUnloaded = false) => {
     const openIds = this.getIdsByPlayer(player);
     if (!openIds) {
-      this.logger.warn(`Player ${player} closed inventory without having any registered as open.`);
+      if (!playerUnloaded) {
+        this.logger.warn(`Player ${player} closed inventory without having any registered as open.`);
+      }
       return;
     }
 

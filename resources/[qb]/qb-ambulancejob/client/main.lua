@@ -760,7 +760,7 @@ RegisterNetEvent('hospital:client:adminHeal', function()
     TriggerServerEvent("DGCore:Server:SetMetaData", "thirst", 100)
 end)
 
-RegisterNetEvent('DGCore:Client:OnPlayerUnload', function()
+RegisterNetEvent('DGCore:client:playerUnloaded', function()
     local ped = PlayerPedId()
     TriggerServerEvent("hospital:server:SetDeathStatus", false)
     TriggerServerEvent('hospital:server:SetLaststandStatus', false)

@@ -10,7 +10,7 @@ AddEventHandler('playerDropped', function(reason)
 		local Player = DGCore.Players[src]
 		TriggerEvent('qb-log:server:CreateLog', 'joinleave', 'Dropped', 'red', '**' .. GetPlayerName(src) .. '** (' .. Player.PlayerData.license .. ') left..')
 		Player.Functions.Save()
-		TriggerEvent('DGCore:Server:OnPlayerUnload', src, Player.PlayerData.citizenid)
+		TriggerEvent('DGCore:server:playerUnloaded', src, Player.PlayerData.citizenid)
     for _, crashReason in ipairs(crashExitReasons) do
       if reason:match(crashReason) then
         exports['dg-chars']:addCrashedPlayer(Player.PlayerData.steamid)

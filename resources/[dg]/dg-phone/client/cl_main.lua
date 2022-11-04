@@ -55,11 +55,11 @@ RegisterNetEvent('dg-phone:client:togglePhone', function(toggle)
 	end
 end)
 
-RegisterNetEvent('DGCore:Client:OnPlayerLoaded', function()
+RegisterNetEvent('DGCore:client:playerLoaded', function()
 	setState('characterLoaded', true)
 end)
 
-RegisterNetEvent('DGCore:Client:OnPlayerUnload', function()
+RegisterNetEvent('DGCore:client:playerUnloaded', function()
 	closePhone()
 	setState('isDisabled', true)
 	setState('characterLoaded', false)

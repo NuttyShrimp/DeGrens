@@ -24,6 +24,6 @@ RPC.register('vehicles:laptop:benny:getItems', () => {
   return getStoreItems();
 });
 
-on('DGCore:Server:PlayerLoaded', (ply: Player) => {
-  restorePurchase(ply.PlayerData.source, ply.PlayerData.citizenid);
+on('DGCore:server:playerLoaded', (playerData: PlayerData) => {
+  restorePurchase(playerData.source, playerData.citizenid);
 });

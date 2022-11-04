@@ -1,4 +1,4 @@
-import { Chat, Events, RPC } from '@dgx/server';
+import { Chat, Events, RPC, Util } from '@dgx/server';
 import { config, setConfig } from '../services/config';
 import {
   createBusiness,
@@ -47,9 +47,9 @@ onNet('dg-config:moduleLoaded', (module: string, data: Config.Config) => {
   setConfig(data);
 });
 
-onNet('DGCore:Server:OnPlayerLoaded', () => {
-  Events.emitNet('business:client:setPermLabels', source, config.permissions.labels);
-  dispatchAllBusinessPermissionsToClientCache(source);
+on('DGCore:server:playerLoaded', (playerData: PlayerData) => {
+  Events.emitNet('business:client:setPermLabels', playerData.source, config.permissions.labels);
+  dispatchAllBusinessPermissionsToClientCache(playerData.source);
 });
 
 RPC.register('business:server:getAll', src => {

@@ -198,9 +198,6 @@ export const dispatchBusinessPermissionsToClientCache = (cid: number, action: 'a
  * Dispatch all permissions for the businesses player has access to to player
  */
 export const dispatchAllBusinessPermissionsToClientCache = (plyId: number) => {
-  Events.emitNet(
-    'business:client:setCache',
-    plyId,
-    getBusinessesForPlayer(source).map(b => ({ name: b.name, permissions: b.permissions }))
-  );
+  const businesses = getBusinessesForPlayer(plyId).map(b => ({ name: b.name, permissions: b.permissions }));
+  Events.emitNet('business:client:setCache', plyId, businesses);
 };

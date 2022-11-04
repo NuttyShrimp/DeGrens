@@ -282,15 +282,13 @@ local skinData = {
     },
 } 
 
-RegisterNetEvent('DGCore:Client:OnPlayerLoaded')
-AddEventHandler('DGCore:Client:OnPlayerLoaded', function()
+RegisterNetEvent('DGCore:client:playerLoaded', function()
     TriggerServerEvent("qb-clothes:loadPlayerSkin")
     PlayerData = DGCore.Functions.GetPlayerData()
     isLoggedIn = true
 end)
 
-RegisterNetEvent('DGCore:Client:OnPlayerUnload')
-AddEventHandler('DGCore:Client:OnPlayerUnload', function()
+RegisterNetEvent('DGCore:client:playerUnloaded', function()
     isLoggedIn = false
 end)
 

@@ -12,7 +12,10 @@ export const fetchCurrentGang = async () => {
   const gang = await RPC.execute<typeof currentGang>('gangs:server:getCurrentGang');
   setCurrentGang(gang);
 };
-on('DGCore:Client:OnPlayerLoaded', fetchCurrentGang);
+
+onNet('DGCore:client:playerLoaded', () => {
+  fetchCurrentGang();
+});
 
 Events.onNet('gangs:client:updateCurrentGang', (gang: typeof currentGang) => {
   setCurrentGang(gang);

@@ -91,7 +91,7 @@ RegisterNetEvent('DGCore:Client:OnJobUpdate', function(JobInfo)
     TriggerServerEvent("hospital:server:SetDoctor")
 end)
 
-RegisterNetEvent('DGCore:Client:OnPlayerLoaded', function()
+RegisterNetEvent('DGCore:client:playerLoaded', function()
     exports.spawnmanager:setAutoSpawn(false)
     local ped = PlayerPedId()
     local player = PlayerId()

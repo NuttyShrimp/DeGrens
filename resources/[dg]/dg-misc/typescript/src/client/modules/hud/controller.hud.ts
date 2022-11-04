@@ -27,9 +27,8 @@ setImmediate(async () => {
   scheduleBlurEffect();
 });
 
-onNet('DGCore:Client:OnPlayerLoaded', () => {
-  let stressLevel = DGCore.Functions.GetPlayerData()?.metadata?.stress ?? 0;
-  updateStress(stressLevel);
+onNet('DGCore:client:playerLoaded', (playerData: PlayerData) => {
+  updateStress(playerData?.metadata?.stress ?? 0);
 });
 
 onNet('onResourceStop', (res: string) => {

@@ -43,8 +43,7 @@ CreateThread(function()
   end
 end)
 
-RegisterNetEvent('DGCore:Client:OnPlayerLoaded')
-AddEventHandler('DGCore:Client:OnPlayerLoaded', function()
+RegisterNetEvent('DGCore:client:playerLoaded', function()
   seedCharData()
 end)
 

@@ -11,14 +11,12 @@
 local standardVolumeOutput = 0.3;
 local hasPlayerLoaded = false
 
-RegisterNetEvent('DGCore:Client:OnPlayerLoaded')
-AddEventHandler('DGCore:Client:OnPlayerLoaded', function()
-    hasPlayerLoaded = true
+RegisterNetEvent('DGCore:client:playerLoaded', function()
+  hasPlayerLoaded = true
 end)
 
-RegisterNetEvent('DGCore:Client:OnPlayerUnload')
-AddEventHandler('DGCore:Client:OnPlayerUnload', function()
-    hasPlayerLoaded = false
+RegisterNetEvent('DGCore:client:playerUnloaded', function()
+  hasPlayerLoaded = false
 end)
 
 ------

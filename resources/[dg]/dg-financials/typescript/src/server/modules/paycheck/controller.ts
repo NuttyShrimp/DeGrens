@@ -16,14 +16,14 @@ RegisterCommand(
   true
 );
 
-on('DGCore:Server:PlayerLoaded', async (player: Player) => {
-  await seedPlyInCache(player.PlayerData.source);
-  const job = Jobs.getCurrentJob(player.PlayerData.source);
-  checkInterval(player.PlayerData.citizenid, job);
+on('DGCore:server:playerLoaded', async (playerData: PlayerData) => {
+  await seedPlyInCache(playerData.source);
+  const job = Jobs.getCurrentJob(playerData.source);
+  checkInterval(playerData.citizenid, job);
 });
 
-on('DGCore:Server:OnPlayerUnload', (src: number, citizenid: number) => {
-  checkInterval(citizenid, null);
+on('DGCore:server:playerUnloaded', (src: number, cid: number) => {
+  checkInterval(cid, null);
 });
 
 on('dg-jobs:signin:update', (src: number, job: string) => {

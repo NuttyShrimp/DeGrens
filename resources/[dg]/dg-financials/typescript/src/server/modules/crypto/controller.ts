@@ -20,13 +20,8 @@ RegisterCommand(
   true
 );
 
-onNet('DGCore:Server:OnPlayerLoaded', () => {
-  const Player = DGCore.Functions.GetPlayer(source);
-  if (!Player) {
-    cryptoLogger.error(`loadPlayerWallet: No player found for serverId: ${source}`);
-    return;
-  }
-  cryptoManager.loadPlayerWallet(Player.PlayerData.citizenid);
+on('DGCore:server:playerLoaded', (playerData: PlayerData) => {
+  cryptoManager.loadPlayerWallet(playerData.citizenid);
 });
 
 RPC.register('financials:server:crypto:getInfo', src => {

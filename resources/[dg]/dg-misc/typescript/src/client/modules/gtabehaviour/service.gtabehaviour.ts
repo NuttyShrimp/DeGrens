@@ -1,3 +1,4 @@
+import { Util } from '@dgx/client';
 import {
   BLACKLISTED_SCENARIO_GROUPS,
   BLACKLISTED_SCENARIO_TYPES,
@@ -11,7 +12,9 @@ import {
 let cachedPed: number;
 let cachedId: number;
 
-export const setGTABehaviour = () => {
+export const setGTABehaviour = async () => {
+  await Util.awaitCondition(() => NetworkIsSessionStarted());
+
   // Disable automatic camera movement when afk'ing
   DisableIdleCamera(true);
 
@@ -105,6 +108,8 @@ export const setGTABehaviour = () => {
         SetPedConfigFlag(newPed, flag, val);
       });
       SetPedRelationshipGroupHash(newPed, playerRelationshipHash);
+      SetCanAttackFriendly(PlayerPedId(), true, false);
+      NetworkSetFriendlyFireOption(true);
     }
 
     // Check if player id changed

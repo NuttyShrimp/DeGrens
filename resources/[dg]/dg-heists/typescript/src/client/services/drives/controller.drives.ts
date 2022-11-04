@@ -49,7 +49,7 @@ Peek.addFlagEntry(
   true
 );
 
-onNet('DGCore:Client:OnPlayerLoaded', async () => {
+onNet('DGCore:client:playerLoaded', async () => {
   const hasActivePickup = await RPC.execute('heists:server:hasActivePickup');
   if (!hasActivePickup) return;
   createLaptopBlip();

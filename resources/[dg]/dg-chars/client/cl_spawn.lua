@@ -150,8 +150,6 @@ end
 
 --region Events
 RegisterNetEvent('dg-chars:client:finishSpawn', function(isNew)
-	TriggerServerEvent('DGCore:Server:OnPlayerLoaded')
-	TriggerEvent('DGCore:Client:OnPlayerLoaded')
 	if isNew then
 		TriggerServerEvent('dg-chars:server:newCharSpawn')
 	end

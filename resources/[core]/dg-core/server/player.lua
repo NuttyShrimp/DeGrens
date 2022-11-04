@@ -145,9 +145,9 @@ end
 function DGCore.Player.Logout(source)
   local src = source
   local citizenid = DGCore.Functions.GetPlayer(src).PlayerData.citizenid
-  TriggerClientEvent('DGCore:Client:OnPlayerUnload', src)
-  TriggerEvent('DGCore:Server:OnPlayerUnload', src, citizenid)
-  TriggerClientEvent('DGCore:Player:UpdatePlayerData', src)
+  TriggerClientEvent('DGCore:client:playerUnloaded', src, citizenid)
+  TriggerEvent('DGCore:server:playerUnloaded', src, citizenid)
+  DGCore.Player.Save(src)
   Player(self.PlayerData.source).state:set('isLoggedIn', false, true)
   Player(self.PlayerData.source).state:set('cid', nil, true)
   Citizen.Wait(200)
@@ -204,7 +204,9 @@ function DGCore.Player.CreatePlayer(PlayerData)
   end
 
   -- At this point we are safe to emit new instance to third party resource for load handling
-  TriggerEvent('DGCore:Server:PlayerLoaded', self)
+  TriggerEvent('DGCore:server:playerLoaded', self.PlayerData)
+  TriggerClientEvent('DGCore:client:playerLoaded', self.PlayerData.source, self.PlayerData)
+
   self.Functions.UpdatePlayerData()
 end
 

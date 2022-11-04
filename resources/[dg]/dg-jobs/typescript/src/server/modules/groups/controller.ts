@@ -38,10 +38,10 @@ on('onResourceStart', (res: string) => {
 });
 
 // Check if ply cid is in active group, if so update serverid
-on('DGCore:Server:PlayerLoaded', ({ PlayerData }: { PlayerData: PlayerData }) => {
-  const group = groupManager.getGroupByCID(PlayerData.citizenid);
+on('DGCore:server:playerLoaded', (playerData: PlayerData) => {
+  const group = groupManager.getGroupByCID(playerData.citizenid);
   if (!group) return;
-  group.updateMemberInfo(PlayerData.citizenid);
+  group.updateMemberInfo(playerData.citizenid);
 });
 
 RPC.register('dg-jobs:server:groups:create', createGroup);

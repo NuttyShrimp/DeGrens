@@ -6,16 +6,14 @@ menuPosition = {x = 0, y = 200}
 PlayerData = {}
 isLoggedIn = false
 
-RegisterNetEvent('DGCore:Client:OnPlayerLoaded')
-AddEventHandler('DGCore:Client:OnPlayerLoaded', function()
-    PlayerData = DGCore.Functions.GetPlayerData()
-    isLoggedIn = true
+RegisterNetEvent('DGCore:client:playerLoaded', function(playerData)
+  PlayerData = playerData
+  isLoggedIn = true
 end)
 
-RegisterNetEvent('DGCore:Client:OnPlayerUnload')
-AddEventHandler('DGCore:Client:OnPlayerUnload', function()
-    PlayerData = {}
-    isLoggedIn = false
+RegisterNetEvent('DGCore:client:playerUnloaded', function()
+  PlayerData = {}
+  isLoggedIn = false
 end)
 
 RegisterNetEvent('DGCore:Player:SetPlayerData')

@@ -28,8 +28,8 @@ global.exports('setPermissions', (accountId: string, cid: number, permissions: I
 global.exports('removePermissions', (accountId: string, cid: number) => removePermissions(accountId, cid));
 global.exports('getPermissions', (accountId: string, cid: number) => getPermissions(accountId, cid));
 
-on('DGCore:Server:PlayerLoaded', (ply: Player) => {
-  createDefaultAccount(ply.PlayerData.source);
+on('DGCore:server:playerLoaded', (playerData: PlayerData) => {
+  createDefaultAccount(playerData.source);
 });
 
 // endregion

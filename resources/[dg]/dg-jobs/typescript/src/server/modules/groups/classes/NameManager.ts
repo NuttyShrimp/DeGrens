@@ -53,9 +53,9 @@ class NameManager extends Util.Singleton<NameManager>() {
     });
   };
 
-  @LocalEvent('DGCore:Server:PlayerLoaded')
-  private _playerJoined = ({ PlayerData }: { PlayerData: PlayerData }) => {
-    nameManager.updatePlayerName(PlayerData.citizenid);
+  @LocalEvent('DGCore:server:playerLoaded')
+  private _playerJoined = (playerData: PlayerData) => {
+    nameManager.updatePlayerName(playerData.citizenid);
   };
 }
 

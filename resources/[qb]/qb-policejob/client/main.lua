@@ -57,7 +57,7 @@ end
 
 -- Events
 
-AddEventHandler('DGCore:Client:OnPlayerLoaded', function()
+AddEventHandler('DGCore:client:playerLoaded', function()
     local player = DGCore.Functions.GetPlayerData()
     PlayerJob = player.job
     onDuty = player.job.onduty
@@ -99,7 +99,7 @@ AddEventHandler('DGCore:Client:OnPlayerLoaded', function()
     end
 end)
 
-RegisterNetEvent('DGCore:Client:OnPlayerUnload', function()
+RegisterNetEvent('DGCore:client:playerUnloaded', function()
     TriggerServerEvent('police:server:UpdateBlips')
     TriggerServerEvent("police:server:SetHandcuffStatus", false)
     TriggerServerEvent("police:server:UpdateCurrentCops")
