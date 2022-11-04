@@ -17,7 +17,7 @@ class InventoryManager extends Util.Singleton<InventoryManager>() {
     this.inventories = new Map();
   }
 
-  public get = async (invId: string) => {
+  public get = async (invId: string, checkIfLoaded = true) => {
     let inventory = this.inventories.get(invId);
     if (!inventory) {
       inventory = new Inv();
@@ -28,8 +28,10 @@ class InventoryManager extends Util.Singleton<InventoryManager>() {
     // This is needed when simultaneously calling this func for same inventoryId
     // First call will load and instanlty register in this.inventories and then load the items.
     // The second simultaneous call will see the inv with id in this.inventories but items wont be loaded yet
-    while (!inventory.isLoaded) {
-      await Util.Delay(1);
+    if (checkIfLoaded) {
+      while (!inventory.isLoaded) {
+        await Util.Delay(1);
+      }
     }
 
     return inventory;

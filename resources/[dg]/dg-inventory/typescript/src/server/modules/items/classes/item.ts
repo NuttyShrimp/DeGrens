@@ -29,7 +29,8 @@ export class Item {
   public init = async ({ state, isNew }: { state: ItemBuildData & { id: string }; isNew: boolean }) => {
     this.id = state.id;
     this.name = state.name;
-    this.inventory = await inventoryManager.get(state.inventory);
+    // Do not check if loaded because this shit gets called inside inv loading func which causes infinite loop
+    this.inventory = await inventoryManager.get(state.inventory, false);
     this.quality = state.quality ?? 100;
     this.hotkey = state.hotkey ?? null;
     this.lastDecayTime = state.lastDecayTime ?? Math.floor(Date.now() / 1000); // Seconds
