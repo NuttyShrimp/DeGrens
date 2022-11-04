@@ -104,7 +104,6 @@ declare interface PlayerData {
   charinfo: CharacterInfo;
   name: string;
   citizenid: number;
-  LoggedIn: boolean;
   metadata: MetaData;
 }
 

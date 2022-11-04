@@ -137,9 +137,6 @@ function DGCore.Player.CheckPlayerData(src, PlayerData)
     }
   }
 
-  -- Other
-  PlayerData.LoggedIn = true
-
   DGCore.Player.CreatePlayer(PlayerData)
 end
 
@@ -151,7 +148,7 @@ function DGCore.Player.Logout(source)
   TriggerClientEvent('DGCore:Client:OnPlayerUnload', src)
   TriggerEvent('DGCore:Server:OnPlayerUnload', src, citizenid)
   TriggerClientEvent('DGCore:Player:UpdatePlayerData', src)
-  Player(self.PlayerData.source).state:set('loggedIn', false, true)
+  Player(self.PlayerData.source).state:set('isLoggedIn', false, true)
   Player(self.PlayerData.source).state:set('cid', nil, true)
   Citizen.Wait(200)
   DGCore.Players[src] = nil
@@ -200,7 +197,7 @@ function DGCore.Player.CreatePlayer(PlayerData)
   DGCore.Player.Save(self.PlayerData.source)
 
   -- Make the player state aware that we are loggedin
-  Player(self.PlayerData.source).state:set('loggedIn', true, true)
+  Player(self.PlayerData.source).state:set('isLoggedIn', true, true)
   Player(self.PlayerData.source).state:set('steamId', self.PlayerData.steamid, true)
   if (self.PlayerData.citizenid) then
     Player(self.PlayerData.source).state:set('cid', self.PlayerData.citizenid, true)
@@ -262,7 +259,8 @@ function DGCore.Player.Save(src)
   end
 
   -- Save character data
-  local position = Player(src).state.loggedIn and GetEntityCoords(GetPlayerPed(src)) or PlayerData.position
+  -- TODO: Move to dg-sync player locations cache
+  local position = Player(src).state.isLoggedIn and GetEntityCoords(GetPlayerPed(src)) or PlayerData.position
   local charDataResult = exports['dg-sql']:query([[
     INSERT INTO character_data (citizenid, position, metadata)
     VALUES (:citizenid, :position, :metadata)

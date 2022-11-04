@@ -17,11 +17,11 @@ setImmediate(async () => {
 
   // Loops
   setInterval(() => {
-    if (!LocalPlayer.state.loggedIn) return;
+    if (!LocalPlayer.state.isLoggedIn) return;
     doSpeedStress();
   }, 10000);
   setInterval(() => {
-    if (!LocalPlayer.state.loggedIn) return;
+    if (!LocalPlayer.state.isLoggedIn) return;
     doWeaponStress();
   }, 500);
   scheduleBlurEffect();

@@ -41,11 +41,11 @@ on('chat:addMessage', addOldMessage);
 on('chat:addSuggestion', addOldSuggestion);
 
 AddStateBagChangeHandler(
-  'loggedIn',
+  'isLoggedIn',
   `player:${GetPlayerServerId(PlayerId())}`,
   (_: string, key: string, val: boolean) => {
     console.log(`statebag: ${key} changed to ${val}`);
-    if (key !== 'loggedIn') return;
+    if (key !== 'isLoggedIn') return;
     SendNUIMessage({
       action: 'lockVisibility',
       data: !val,
@@ -57,7 +57,7 @@ RegisterNuiCallbackType('loaded');
 on(`__cfx_nui:loaded`, (data: null, cb: Function) => {
   SendNUIMessage({
     action: 'lockVisibility',
-    data: LocalPlayer.state?.loggedIn ?? false,
+    data: LocalPlayer.state?.isLoggedIn ?? false,
   });
   Events.emitNet('chat:requestRefresh');
   cb({ data: {}, meta: { ok: true, message: 'done' } });

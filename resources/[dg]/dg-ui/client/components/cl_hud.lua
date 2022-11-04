@@ -46,7 +46,7 @@ entryHooks = {}
 isDirty = false
 isCarDirty = false
 isCompassDirty = false
-isLoggedIn = LocalPlayer.state.loggedIn
+isLoggedIn = LocalPlayer.state.isLoggedIn
 
 hasCompass = false
 shouldShowCompassInVehicle = true
@@ -127,7 +127,7 @@ DGX.Events.onNet('financials:client:cashChange', function(total, amount)
   })
 end)
 
-AddStateBagChangeHandler('loggedIn', ('player:%s'):format(GetPlayerServerId(PlayerId())), function(bag, key, value)
+AddStateBagChangeHandler('isLoggedIn', ('player:%s'):format(GetPlayerServerId(PlayerId())), function(bag, key, value)
   isLoggedIn = value
   toggleHud()
 end)

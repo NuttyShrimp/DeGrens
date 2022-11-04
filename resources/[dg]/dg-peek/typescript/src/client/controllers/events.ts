@@ -72,7 +72,7 @@ on('dg-polytarget:exit', (name: string) => {
 });
 
 Keys.onPress('playerPeek', isDown => {
-  if (!LocalPlayer.state?.loggedIn) return;
+  if (!LocalPlayer.state?.isLoggedIn) return;
   isDown ? stateManager.startPeeking() : stateManager.stopPeeking();
 });
 
