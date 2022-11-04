@@ -53,10 +53,6 @@ class Util extends UtilShared {
     return this.awaitCondition(() => NetworkHasControlOfEntity(entity));
   };
 
-  doesEntityExist = (entity: number) => {
-    return this.awaitCondition(() => DoesEntityExist(entity));
-  };
-
   isDevEnv() {
     return this.prodEnv !== undefined && this.prodEnv === false;
   }
@@ -96,7 +92,7 @@ class Util extends UtilShared {
     const pedModel = GetHashKey(model);
     await this.loadModel(pedModel);
     const ped = CreatePed(0, pedModel, position.x, position.y, position.z, heading, true, true);
-    await this.doesEntityExist(ped);
+    await this.awaitEntityExistence(ped);
     SetPedRelationshipGroupHash(ped, GetHashKey('ATTACK_ALL_PLAYERS'));
     SetPedDropsWeaponsWhenDead(ped, false);
     StopPedWeaponFiringWhenDropped(ped);

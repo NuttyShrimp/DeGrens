@@ -75,7 +75,7 @@ export class Npc {
     );
     SetEntityAlpha(this.entity, 0, false);
     SetPedDefaultComponentVariation(this.entity);
-    await Util.doesEntityExist(this.entity);
+    await Util.awaitEntityExistence(this.entity);
 
     this.data.flags.forEach(flag => {
       Entity(this.entity).state[flag.name] = flag.active;
