@@ -4,6 +4,7 @@ const currentJob: { name: string | null; rank: number | null } = { name: null, r
 
 setImmediate(async () => {
   const locations = await RPC.execute<SignInLocation[]>('jobs:server:getSignInLocations');
+  if (!locations) return;
   locations.forEach(({ zone }) => {
     PolyTarget.addBoxZone('jobs:signin', zone.vector, zone.width, zone.length, zone.data, true);
   });
@@ -71,30 +72,30 @@ UI.RegisterUICallback('jobs:whitelist:filter', (data: { spec: string; filter: st
   cb({ meta: { ok: true, message: '' }, data: {} });
 });
 
-UI.RegisterUICallback('jobs:whitelist:hire', async (data: {job: string}, cb) => {
-  cb({data:{}, meta:{ok:true, message:""}})
+UI.RegisterUICallback('jobs:whitelist:hire', async (data: { job: string }, cb) => {
+  cb({ data: {}, meta: { ok: true, message: '' } });
   const inputData = await UI.openInput({
-    header:"Neem persoon aan",
+    header: 'Neem persoon aan',
     inputs: [
       {
-        label: "CID",
+        label: 'CID',
         name: 'cid',
         type: 'number',
-      }
-    ]
-  })
+      },
+    ],
+  });
   const cid = Number(inputData.values['cid']);
   if (!inputData.accepted || Number.isNaN(cid) || cid < 1000) {
-    return
+    return;
   }
-  Events.emitNet('jobs:whitelist:hire', data.job, cid)
-})
+  Events.emitNet('jobs:whitelist:hire', data.job, cid);
+});
 
-UI.RegisterUICallback('jobs:whitelist:fire', async (data: {job: string, cid: number}, cb) => {
-  cb({data:{}, meta:{ok:true, message:""}})
+UI.RegisterUICallback('jobs:whitelist:fire', async (data: { job: string; cid: number }, cb) => {
+  cb({ data: {}, meta: { ok: true, message: '' } });
   const inputData = await UI.openInput({
-    header:`Weet je zeker dat je persoon met CID ${data.cid} wilt ontslaan?`,
-  })
+    header: `Weet je zeker dat je persoon met CID ${data.cid} wilt ontslaan?`,
+  });
   if (!inputData.accepted) return;
-  Events.emitNet('jobs:whitelist:fire', data.job, data.cid)
-})
+  Events.emitNet('jobs:whitelist:fire', data.job, data.cid);
+});

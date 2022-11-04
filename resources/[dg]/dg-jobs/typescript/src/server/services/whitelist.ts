@@ -1,4 +1,4 @@
-import { Config, Events, Notifications, SQL, Util } from '@dgx/server';
+import { Config, Events, Notifications, SQL, UI, Util } from '@dgx/server';
 import { mainLogger } from '../sv_logger';
 import { getPlayerJob } from './signin';
 
@@ -44,22 +44,26 @@ export const setConfig = (data: Record<string, Whitelist.Config>) => {
   });
 };
 
-export const getJobConfig = (job: string): Whitelist.Info => {
+export const getJobConfig = (job: string) => {
   return config.get(job);
 };
 // endregion
 
-export const getPlayerInfoForJob = (cid: number, job: string): Whitelist.Entry => {
+export const getPlayerInfoForJob = (cid: number, job: string) => {
   const entries = jobs.get(job);
-  if (!entries) return null;
+  if (!entries) return;
   return entries.find(entry => entry.cid === cid);
 };
 
 export const getWhitelistedJobsForPlayer = (src: number): string[] => {
-  const allowedJobs: string[] = [];
+  const whitelistedJobs: string[] = [];
   const cid = Util.getCID(src, true);
   if (!cid) return [];
-  jobs.forEach(plys => plys.find(p => (p.cid = cid)));
+  for (const [jobName, players] of jobs) {
+    if (players.find(player => player.cid === cid) === undefined) continue;
+    whitelistedJobs.push(jobName);
+  }
+  return whitelistedJobs;
 };
 
 export const hasSpeciality = (src: number, speciality: string, job?: string): boolean => {
@@ -67,6 +71,7 @@ export const hasSpeciality = (src: number, speciality: string, job?: string): bo
     // Get job player is currently signed in to
     job = getPlayerJob(src);
   }
+  if (!job) return false;
   const config = getJobConfig(job);
   if (!config) return false;
   const cid = Util.getCID(src);
@@ -90,6 +95,7 @@ export const openAllowListMenu = (src: number, filter?: string) => {
   whitelistLogger.debug(`${src} requested whitelist menu for job ${job} (${filter})`);
   const allowListMenu: ContextMenu.Entry[] = [];
   const config = getJobConfig(job);
+  if (!config) return;
   const filters = (filter ?? '').split(';');
 
   const openMenu = () => {
@@ -101,7 +107,7 @@ export const openAllowListMenu = (src: number, filter?: string) => {
         job,
       },
     });
-    emitNet('dg-ui:openApplication', src, 'contextmenu', allowListMenu);
+    UI.openContextMenu(src, allowListMenu);
   };
 
   // add list where we can filter by rank or speciality
@@ -260,6 +266,7 @@ export const assignRank = async (src: number, target: number, rank: number) => {
     return;
   }
   const jobConfig = getJobConfig(job);
+  if (!jobConfig) return;
   const entry = entries.find(entry => entry.cid === target);
   if (!entry) return;
   const cid = Util.getCID(src);
@@ -317,6 +324,7 @@ export const toggleSpecialty = async (src: number, target: number, speciality: s
     return;
   }
   const jobConfig = getJobConfig(job);
+  if (!jobConfig) return;
   const entry = entries.find(entry => entry.cid === target);
   if (!entry) return;
   const cid = Util.getCID(src);

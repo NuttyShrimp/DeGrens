@@ -1,4 +1,4 @@
-import { Inventory, RPC } from '@dgx/server';
+import { Inventory, RPC, Util } from '@dgx/server';
 
 import groupManager from './classes/GroupManager';
 import nameManager from './classes/NameManager';
@@ -11,13 +11,10 @@ global.exports('getGroupByServerId', getGroupByServerId);
 global.asyncExports('changeGroupJob', changeJob);
 global.exports('leaveGroup', leaveGroup);
 
-onNet('DGCore:Server:onPlayerLoaded', () => {
-  const player = DGCore.Functions.GetPlayer(source);
-  nameManager.updatePlayerName(player.PlayerData.citizenid);
-});
-
 onNet('dg-jobs:client:groups:loadStore', () => {
-  groupManager.seedPlayerStore(source);
+  const cid = Util.getCID(source, true);
+  if (!cid) return;
+  groupManager.seedPlayerStore(cid);
 });
 
 Inventory.onInventoryUpdate(
@@ -31,12 +28,20 @@ Inventory.onInventoryUpdate(
 
 on('onResourceStart', (res: string) => {
   if (res !== GetCurrentResourceName()) return;
-  Object.values({
-    ...DGCore.Functions.GetQBPlayers(),
-  }).forEach((ply: Player) => {
-    nameManager.updatePlayerName(ply.PlayerData.citizenid);
-    groupManager.seedPlayerStore(ply.PlayerData.source);
+  (
+    Object.values({
+      ...DGCore.Functions.GetQBPlayers(),
+    }) as Player[]
+  ).forEach((ply: Player) => {
+    groupManager.seedPlayerStore(ply.PlayerData.citizenid);
   });
+});
+
+// Check if ply cid is in active group, if so update serverid
+on('DGCore:Server:PlayerLoaded', ({ PlayerData }: { PlayerData: PlayerData }) => {
+  const group = groupManager.getGroupByCID(PlayerData.citizenid);
+  if (!group) return;
+  group.updateMemberInfo(PlayerData.citizenid);
 });
 
 RPC.register('dg-jobs:server:groups:create', createGroup);
@@ -71,7 +76,7 @@ RPC.register('dg-jobs:server:groups:getMembers', src => {
   return members.map(m => ({
     name: nameManager.getName(m.cid),
     ready: m.isReady,
-    isOwner: m.serverId == groupOwner.serverId,
+    isOwner: m.cid == groupOwner!.cid,
   }));
 });
 
@@ -81,24 +86,26 @@ RPC.register('dg-jobs:server:groups:setReady', (src, data: { ready: boolean }) =
       data.ready ? 'ready' : 'unready'
     } for jobs`
   );
-  const group = groupManager.getGroupByServerId(src);
+  const cid = Util.getCID(src);
+  const group = groupManager.getGroupByCID(src);
   if (!group) {
     groupLogger.warn(`${GetPlayerName(String(src))}(${src}) tried to set himself ready while not being in a group`);
     return false;
   }
-  group.setReady(src, data.ready);
+  group.setReady(cid, data.ready);
   return true;
 });
 
 RPC.register('dg-jobs:server:groups:leave', src => {
   groupLogger.silly(`[groups:leave] ${GetPlayerName(String(src))}(${src}) has left his group`);
-  const group = groupManager.getGroupByServerId(src);
+  const cid = Util.getCID(src);
+  const group = groupManager.getGroupByCID(cid);
   if (!group) {
     groupLogger.warn(`${GetPlayerName(String(src))}(${src}) tried to leave a group while not being in a group`);
     return true;
   }
-  group.removeMember(src);
-  if (group.getMemberByServerId(src)) {
+  group.removeMember(cid);
+  if (group.getMemberByCID(cid)) {
     groupLogger.error(`${GetPlayerName(String(src))}(${src}) left a group but is still in it`);
     // TODO: log error with all clients
     return false;
@@ -110,3 +117,11 @@ RPC.register('dg-jobs:server:groups:get', src => {
   groupLogger.silly(`[groups:get] ${GetPlayerName(String(src))}(${src}) has requested the list of groups`);
   return getGroupList();
 });
+
+RegisterCommand(
+  'testgroups',
+  () => {
+    console.log(groupManager.getGroups().map(g => ({ ...g, members: g.getMembers() })));
+  },
+  false
+);

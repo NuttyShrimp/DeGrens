@@ -99,14 +99,13 @@ export const signIn = (src: number, job: string) => {
 };
 
 export const signOut = (src: number, job: string) => {
-  if (!signedIn.has(job)) {
-    return;
-  }
+  if (!signedIn.has(job)) return;
   const cid = Util.getCID(src);
   if (!cid) return;
   const signedInJob = signedIn.get(job);
   if (!signedInJob) return;
   const jobConfig = getJobConfig(job);
+  if (!jobConfig) return;
   if (!signedInJob.has(cid)) {
     Notifications.add(src, `Je bent niet in dienst bij ${jobConfig.name}`, 'error');
     return;
@@ -125,5 +124,5 @@ export const getPlayerJob = (src: number) => {
       return job;
     }
   }
-  return null;
+  return;
 };

@@ -3,15 +3,7 @@ import { v4 } from 'uuid';
 
 import { Group } from './Group';
 
-class GroupManager {
-  private static instance: GroupManager;
-  public static getInstance() {
-    if (!this.instance) {
-      this.instance = new GroupManager();
-    }
-    return this.instance;
-  }
-
+class GroupManager extends Util.Singleton<GroupManager>() {
   /**
    * Each group has a unique id to prevent a player from trying to join the wrong group
    * because one 1 deleted during the request to join procedure
@@ -19,6 +11,7 @@ class GroupManager {
   private groups: Map<string, Group>;
 
   constructor() {
+    super();
     this.groups = new Map();
   }
 
@@ -29,28 +22,33 @@ class GroupManager {
     }
     return id;
   }
+
   public createGroup(src: number) {
     const groupId = this.genGroupId();
-    const group = new Group(src, groupId);
+    const ownerCid = Util.getCID(src);
+    const group = new Group(ownerCid, groupId);
     Util.Log(
       'jobs:groupmanger:create',
       {
         groupId,
       },
-      `${GetPlayerName(String(src))}(${src}) created a job group`,
+      `${Util.getName(src)}(${src}) created a job group`,
       src
     );
     this.groups.set(groupId, group);
   }
+
   public getGroups() {
     return Array.from(this.groups.values());
   }
 
   public disbandGroup(groupId: string) {
     const group = this.getGroupById(groupId);
+    if (!group) return;
+    // By time this func is called, owner already got deleted from members so this wont cause infinite loop
     const members = group.getMembers();
     members.forEach(m => {
-      group.removeMember(m.serverId);
+      group.removeMember(m.cid);
     });
     Util.Log(
       'jobs:groupmanger:disband',
@@ -58,26 +56,26 @@ class GroupManager {
         groupId,
         members,
       },
-      `${group.getOwner().name}'s job group was disbanded`,
-      group.getOwner().serverId
+      `${group.owner}'s job group was disbanded`,
+      DGCore.Functions.GetPlayerByCitizenId(group.owner).PlayerData.source
     );
     this.groups.delete(groupId);
   }
 
-  public seedPlayerStore(src: number) {
-    const plyGroup = this.getGroupByServerId(src);
+  public seedPlayerStore(cid: number) {
+    const plyGroup = this.getGroupByCID(cid);
     if (!plyGroup) return;
-    plyGroup.refreshMember(src);
+    plyGroup.refreshMember(cid);
   }
 
   public getGroupsForLogs() {
-    const groups: { id: string; owner: { serverId: number; name: string } }[] = [];
+    const groups: { id: string; owner: { cid: number; name: string } }[] = [];
     this.groups.forEach(g => {
-      const gOwner = g.getOwner();
+      const gOwner = g.getOwner()!;
       groups.push({
         id: g.getId(),
         owner: {
-          serverId: gOwner.serverId,
+          cid: gOwner.cid,
           name: gOwner.name,
         },
       });
@@ -86,26 +84,15 @@ class GroupManager {
   public getGroupById(id: string) {
     return this.groups.get(id);
   }
+
   public getGroupByServerId(src: number) {
-    let group: Group;
-    this.groups.forEach(g => {
-      if (g.getMemberByServerId(src)) {
-        group = g;
-      }
-    });
-    return group;
+    return Array.from(this.groups.values()).find(group => group.getMemberByServerId(src) !== undefined);
   }
+
   public getGroupByCID(cid: number) {
-    let group: Group;
-    this.groups.forEach(g => {
-      if (g.getMemberByCID(cid)) {
-        group = g;
-      }
-    });
-    return group;
+    return Array.from(this.groups.values()).find(group => group.getMemberByCID(cid) !== undefined);
   }
 }
 
 const groupManager = GroupManager.getInstance();
-
 export default groupManager;

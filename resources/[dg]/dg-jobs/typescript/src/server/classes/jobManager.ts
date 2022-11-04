@@ -73,8 +73,7 @@ class JobManager {
 
   private updatePayoutLevels() {
     // We can only have a maximum of ceil divisioned jobs by 6 that have a payoutlevel of 6
-    for (const jobName of this.jobs.keys()) {
-      const job = this.jobs.get(jobName);
+    for (const [jobName, job] of this.jobs.entries()) {
       if (job.payoutLevel == 6) {
         this.jobsWith6--;
       }
@@ -115,8 +114,9 @@ class JobManager {
   }
 
   @RPCEvent('dg-jobs:server:jobs:waypoint')
-  private setJobWaypoint(src: number, jobName: string) {
-    if (!this.jobs.has(jobName)) {
+  private _setJobWaypoint(src: number, jobName: string) {
+    const jobObj = this.jobs.get(jobName);
+    if (!jobObj) {
       this.logger.warn(`${GetPlayerName(String(src))}(${src}) tried to set waypoint for non-existing job ${jobName}`);
       Util.Log(
         'jobs:jobmanager:waypoint:set:invalid',
@@ -129,7 +129,6 @@ class JobManager {
       // TODO: ban mfker from server
       return;
     }
-    const jobObj = this.jobs.get(jobName);
     if (!jobObj.legal) {
       this.logger.warn(`${GetPlayerName(String(src))}(${src}) tried to set waypoint for an illegal job ${jobName}`);
       Util.Log(
@@ -148,11 +147,9 @@ class JobManager {
   }
 
   @Export('getJobPayout')
-  public getJobPayout(jobName: string, groupSize: number) {
-    if (!this.jobs.has(jobName)) {
-      return null;
-    }
+  private _getJobPayout(jobName: string, groupSize: number) {
     const job = this.jobs.get(jobName);
+    if (!job) return null;
     return (
       job.payout.min *
       (((job.payout.max - job.payout.min) / 6) * job.payoutLevel) *
@@ -161,15 +158,14 @@ class JobManager {
   }
 
   @Export('getJobPayoutLevel')
-  public getJobPayoutLevel(job: string) {
-    if (!this.jobs.has(job)) {
-      return null;
-    }
-    return this.jobs.get(job).payoutLevel;
+  private _getJobPayoutLevel(jobName: string) {
+    const job = this.jobs.get(jobName);
+    if (!job) return null;
+    return job.payoutLevel;
   }
 
   @Export('registerJob')
-  public registerJob(name: string, info: Omit<Jobs.Job, 'name' | 'payoutLevel'>) {
+  private _registerJob(name: string, info: Omit<Jobs.Job, 'name' | 'payoutLevel'>) {
     if (this.jobs.has(name)) {
       this.logger.warn(`${name} job already existed, overwriting....`);
     } else {

@@ -48,13 +48,14 @@ export const createGroup = (src: number): boolean => {
 
 export const leaveGroup = (src: number): boolean => {
   groupLogger.silly(`[groups:leave] ${Util.getName(src)} has been removed from group`);
-  const group = groupManager.getGroupByServerId(src);
+  const cid = Util.getCID(src);
+  const group = groupManager.getGroupByCID(cid);
   if (!group) {
     groupLogger.warn(`${Util.getName(src)} tried to leave a group while not being in a group`);
     return true;
   }
-  group.removeMember(src);
-  if (group.getMemberByServerId(src)) {
+  group.removeMember(cid);
+  if (group.getMemberByCID(cid)) {
     groupLogger.error(`${Util.getName(src)} left a group but is still in it`);
     return false;
   }

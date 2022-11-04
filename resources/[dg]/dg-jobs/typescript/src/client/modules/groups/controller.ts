@@ -7,15 +7,15 @@ UI.RegisterUICallback('phone/jobs/groups/get', async (_, cb) => {
 });
 UI.RegisterUICallback('phone/jobs/groups/create', async (_, cb) => {
   const isSuccess = await RPC.execute<boolean>('dg-jobs:server:groups:create');
-  cb({ data: {}, meta: { ok: isSuccess, message: isSuccess ? 'done' : 'Failed to create jobgroup' } });
+  cb({ data: {}, meta: { ok: isSuccess ?? false, message: isSuccess ? 'done' : 'Failed to create jobgroup' } });
 });
 UI.RegisterUICallback('phone/jobs/groups/join', async (data: { id: string }, cb) => {
   const isSuccess = await RPC.execute<boolean>('dg-jobs:server:groups:joinRequest', data);
-  cb({ data: {}, meta: { ok: isSuccess, message: isSuccess ? 'done' : 'Failed to join jobgroup' } });
+  cb({ data: {}, meta: { ok: isSuccess ?? false, message: isSuccess ? 'done' : 'Failed to join jobgroup' } });
 });
 UI.RegisterUICallback('phone/jobs/groups/leave', async (_, cb) => {
   const isSuccess = await RPC.execute<boolean>('dg-jobs:server:groups:leave');
-  cb({ data: {}, meta: { ok: isSuccess, message: isSuccess ? 'done' : 'Failed to leave jobgroup' } });
+  cb({ data: {}, meta: { ok: isSuccess ?? false, message: isSuccess ? 'done' : 'Failed to leave jobgroup' } });
 });
 UI.RegisterUICallback('phone/jobs/groups/members', async (_, cb) => {
   const members = await RPC.execute('dg-jobs:server:groups:getMembers');
@@ -28,7 +28,7 @@ UI.RegisterUICallback('phone/jobs/groups/kick', async (data: { name: string }, c
 });
 UI.RegisterUICallback('phone/jobs/group/setReady', async (data: { ready: boolean }, cb) => {
   const isSuccess = await RPC.execute<boolean>('dg-jobs:server:groups:setReady', data);
-  cb({ data: {}, meta: { ok: isSuccess, message: isSuccess ? 'done' : 'Failed to set ready' } });
+  cb({ data: {}, meta: { ok: isSuccess ?? false, message: isSuccess ? 'done' : 'Failed to set ready' } });
 });
 UI.RegisterUICallback('phone/jobs/get', async (_, cb) => {
   const jobs = await RPC.execute('dg-jobs:server:jobs:get');
@@ -36,7 +36,7 @@ UI.RegisterUICallback('phone/jobs/get', async (_, cb) => {
 });
 UI.RegisterUICallback('phone/jobs/waypoint', async (data: { job: string }, cb) => {
   const isSuccess = await RPC.execute<boolean>('dg-jobs:server:jobs:waypoint', data.job);
-  cb({ data: {}, meta: { ok: isSuccess, message: isSuccess ? 'done' : 'Failed to set waypoint' } });
+  cb({ data: {}, meta: { ok: isSuccess ?? false, message: isSuccess ? 'done' : 'Failed to set waypoint' } });
 });
 // endregion
 // region events
