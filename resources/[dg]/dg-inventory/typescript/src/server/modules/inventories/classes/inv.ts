@@ -24,8 +24,11 @@ export class Inv {
   private items!: Set<string>;
   private _allowedItems?: string[];
 
+  private _isLoaded: boolean;
+
   constructor() {
     this.logger = mainLogger.child({ module: 'Inventory' });
+    this._isLoaded = false;
   }
 
   public init = async (id: string) => {
@@ -69,6 +72,7 @@ export class Inv {
     }
 
     this.logger.info(`Inventory ${this.id} loaded`);
+    this._isLoaded = true;
   };
 
   // #region Getters/Setters
@@ -92,6 +96,9 @@ export class Inv {
   }
   public set allowedItems(value: typeof this._allowedItems) {
     this._allowedItems = value;
+  }
+  public get isLoaded() {
+    return this._isLoaded;
   }
   // #endregion
 

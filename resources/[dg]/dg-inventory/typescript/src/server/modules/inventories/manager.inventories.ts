@@ -24,6 +24,14 @@ class InventoryManager extends Util.Singleton<InventoryManager>() {
       this.inventories.set(invId, inventory);
       await inventory.init(invId);
     }
+
+    // This is needed when simultaneously calling this func for same inventoryId
+    // First call will load and instanlty register in this.inventories and then load the items.
+    // The second simultaneous call will see the inv with id in this.inventories but items wont be loaded yet
+    while (!inventory.isLoaded) {
+      await Util.Delay(1);
+    }
+
     return inventory;
   };
 
