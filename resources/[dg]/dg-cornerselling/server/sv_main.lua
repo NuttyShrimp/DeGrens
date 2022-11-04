@@ -68,7 +68,7 @@ RegisterServerEvent("dg-cornerselling:server:SellDrugs", function(sellLocation)
     local itemData = sellableItems[math.random(1, #sellableItems)]
 
     if DGX.Inventory.removeItemFromPlayer(src, itemData.name) then
-        TriggerClientEvent('DGCore:Notify', src, ("Je hebt %s verkocht"):format(DGX.Inventory.getItemData(itemData.name).label))
+      DGX.Notifications.add(src, ("Je hebt %s verkocht"):format(DGX.Inventory.getItemData(itemData.name).label))
 
         local price = calculatePrice(itemData.name, sellLocation)
         DGX.Financials.addCash(src, price, 'corner-sell')

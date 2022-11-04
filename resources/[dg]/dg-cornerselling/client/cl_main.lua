@@ -23,20 +23,20 @@ RegisterNetEvent("dg-cornerselling:client:ToggleSelling", function()
     if not cornersellingEnabled then
         local hasSellableItems = DGCore.Functions.TriggerCallback("dg-cornerselling:server:HasSellableItems")
         if not hasSellableItems then
-            DGCore.Functions.Notify("Je hebt niks op zak", "error")
+            DGX.Notifications.add("Je hebt niks op zak", "error")
             return
         end
     
         if currentCops < Config.RequiredCops then
-            DGCore.Functions.Notify("Burgers hebben momenteel geen interesse", "error")
+            DGX.Notifications.add("Burgers hebben momenteel geen interesse", "error")
             return
         end
 
-        DGCore.Functions.Notify("Gestart met verkopen", "success")
+        DGX.Notifications.add("Gestart met verkopen", "success")
         cornersellingEnabled = true
         buyerTargettingLoop()
     else
-        DGCore.Functions.Notify("Gestopt met verkopen")
+        DGX.Notifications.add("Gestopt met verkopen")
         cornersellingEnabled = false
         hasTargetBuyer = false
     end

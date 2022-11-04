@@ -34,7 +34,7 @@ RegisterServerEvent("dg-weed:server:PlacePlant", function(coords, gender)
             TriggerClientEvent("dg-weed:client:AddPlant", -1, tonumber(result[1].id), activePlants[tonumber(result[1].id)])
         end
     else
-        TriggerClientEvent("DGCore:Notify", source, "Je hebt dit item niet", "error")
+      DGX.Notifications.add(source, "Je hebt dit item niet", "error")
     end
 end)
 
@@ -44,9 +44,9 @@ RegisterServerEvent("dg-weed:server:FeedPlant", function(index)
         activePlants[index].data.food = activePlants[index].data.food + math.random(config.food.amount.min, config.food.amount.max)
         if activePlants[index].data.food > 100 then activePlants[index].data.food = 100 end
         updatePlantData()
-        TriggerClientEvent("DGCore:Notify", source, "Je hebt de plant gevoed", "success")
+      DGX.Notifications.add(source, "Je hebt de plant gevoed", "success")
     else
-        TriggerClientEvent("DGCore:Notify", source, "Je hebt dit item niet", "error")
+      DGX.Notifications.add(source, "Je hebt dit item niet", "error")
     end
 end)
 
@@ -67,16 +67,16 @@ RegisterServerEvent("dg-weed:server:CutPlant", function(index)
         activePlants[index].data.cuttime = os.time()
     
         updatePlantData()
-        TriggerClientEvent("DGCore:Notify", source, "Je hebt de plant geknipt", "success")
+        DGX.Notifications.add(source, "Je hebt de plant geknipt", "success")
     
         Citizen.Wait(100)
         local chance = math.random(100)
         if chance <= config.cut.breakChance then
             removePlant(index)
-            TriggerClientEvent("DGCore:Notify", source, "De plant is dood")
+          DGX.Notifications.add(source, "De plant is dood")
         end
     else
-        TriggerClientEvent("DGCore:Notify", source, "Deze plant is nog niet volgroeid", "success")
+      DGX.Notifications.add(source, "Deze plant is nog niet volgroeid", "success")
     end
 end)
 

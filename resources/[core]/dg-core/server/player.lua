@@ -56,7 +56,7 @@ function DGCore.Player.Login(source, citizenid, newData)
   ]], { citizenid })
   local PlayerData = DGCore.Player.buildPlayerData(result[1])
   if not PlayerData then
-    DGCore.Functions.Notify('Kon karakter niet laden, probeer opnieuw', 'error')
+    DGX.Notifications.add('Kon karakter niet laden, probeer opnieuw', 'error')
     return false
   end
 

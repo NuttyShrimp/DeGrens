@@ -37,10 +37,10 @@ DGCore.Functions.CreateCallback('dg-phone:server:photo:take', function(src, cb)
 	local link = exports['screenshot-basic']:requestClientImgurScreenshot(src)
 	cb()
 	if not link then
-		TriggerClientEvent('DGCore:Notify', src, 'Photo capture failed :(', 'error')
+    DGX.Notifications.add(src, 'Photo capture failed :(', 'error')
 		return
 	end
 	local id = addImage(Player.PlayerData.citizenid, link)
 	if id then return end
-	TriggerClientEvent('DGCore:Notify', src, 'Photo capture failed :(', 'error')
+  DGX.Notifications.add(src, 'Photo capture failed :(', 'error')
 end)

@@ -11,7 +11,7 @@ startCall = function(source, targetPhone, isAnon)
 	end
 	-- Check if the player is calling himself
 	if (targetPhone == Player.PlayerData.charinfo.phone) then
-		TriggerClientEvent("DGCore:Notify", source, "You can't call yourself", "error")
+    DGX.Notifications.add(source, "You can't call yourself", "error")
 		TriggerClientEvent('dg-phone:client:endCurrentCall', source, 0)
 		return
 	end

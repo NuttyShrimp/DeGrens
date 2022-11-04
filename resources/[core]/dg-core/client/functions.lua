@@ -31,24 +31,6 @@ function DGCore.Functions.DrawText3D(x, y, z, text)
     ClearDrawOrigin()
 end
 
-function DGCore.Functions.Notify(text, textype, length, persistent)
-	if persistent then
-		local id = DGCore.NotiId
-		DGCore.NotiId = DGCore.NotiId + 1
-	end
-	SendAppEvent('notifications', {
-		action = 'add',
-		notification = {
-			message = text,
-			type = textype,
-			timeout = length,
-			persistent = persistent,
-			id = id
-		}
-	})
-	return id
-end
-
 function DGCore.Functions.TriggerCallback(name, cb, ...)
 	if (cb == nil or not DGCore.Shared.isFunction(cb)) then
 		-- Promised based return

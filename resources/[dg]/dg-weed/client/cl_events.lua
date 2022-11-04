@@ -50,15 +50,14 @@ RegisterNetEvent("dg-weed:client:Plant", function(gender)
             })
             ClearPedTasks(ped) 
             if wasCancelled then
-              DGCore.Functions.Notify("Canceled...", "error")
               return
             end
             TriggerServerEvent("dg-weed:server:PlacePlant", plantCoords, gender)
         else
-            DGCore.Functions.Notify("Geen goede ondergrond", "error")
+          DGX.Notifications.add("Geen goede ondergrond", "error")
         end
     else
-        DGCore.Functions.Notify("Te dicht bij een andere plant", "error")
+      DGX.Notifications.add("Te dicht bij een andere plant", "error")
     end
 end)
 

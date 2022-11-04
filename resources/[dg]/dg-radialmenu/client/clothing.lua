@@ -998,7 +998,7 @@ function FirstUpper(str)
 end
 
 function Notify(message, color) -- However you want your notifications to be shown, you can switch it up here.
-	DGCore.Functions.Notify(message, color)
+  DGX.Notifications.add(message, color)
 end
 
 function IsMpPed(ped)

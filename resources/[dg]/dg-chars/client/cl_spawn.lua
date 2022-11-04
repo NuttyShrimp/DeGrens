@@ -39,7 +39,7 @@ Spawn.choose = function(idx)
 	local ped = PlayerPedId()
 	local result = DGCore.Functions.TriggerCallback('dg-chars:server:spawn', idx)
 	if (type(result) == 'string') then
-		DGCore.Functions.Notify(result, 'error', 10000)
+    DGX.Notifications.add(result, 'error', 10000)
 		return
 	end
   Cam.destroyCamera()
@@ -96,7 +96,7 @@ end
 Spawn.fetchSpawns = function()
 	result = DGCore.Functions.TriggerCallback("dg-chars:server:getSpawns")
 	if (type(result) ==  'string') then
-		DGCore.Functions.Notify(result, 'error', 10000)
+    DGX.Notifications.add(result, 'error', 10000)
 	end
 	Spawn.list = result
 	SendNUIMessage({

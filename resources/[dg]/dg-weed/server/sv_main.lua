@@ -24,7 +24,7 @@ end)
 DGX.Inventory.registerUseable("weed_bud", function(src, item)
     local hasBags = DGX.Inventory.doesPlayerHaveItems(src, "empty_bags")
     if not bagInfo then
-        TriggerClientEvent("DGCore:Notify", src, "Waar ga je dit insteken?", "error")
+      DGX.Notifications.add(src, "Waar ga je dit insteken?", "error")
         return
     end
 
@@ -40,7 +40,7 @@ DGX.Inventory.registerUseable("weed_bud", function(src, item)
 
         DGX.Inventory.addItemToPlayer(src, 'weed_bag', amount)
     else
-        TriggerClientEvent("DGCore:Notify", src, "Dit is nog niet droog", "error")
+      DGX.Notifications.add(src, "Dit is nog niet droog", "error")
     end
 end)
 

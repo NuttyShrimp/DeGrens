@@ -74,21 +74,6 @@ declare interface ClientFunctions {
    */
   DeleteVehicle(vehicle: number): void;
 
-  /** QBCore.Functions.Notify: Displays a notification on screen
-   *  @param text: notification text
-   *  @param textype: type of notification to display
-   *  @param length: amount of time to display for
-   */
-  Notify(text: string, textype?: string, length?: number): void;
-
-  /** QBCore.Functions.Notify: Displays a notification on screen
-   *  @param text: notification text
-   *  @param textype: type of notification to display
-   *  @param length: amount of time to display for
-   *  @param persistent: if true notification will not disappear
-   */
-  Notify(text: string, textype?: string, length?: number, persistent?: boolean): number;
-
   /** QBCore.Functions.TriggerCallback: Triggers a callback function
    *  @param name: Name of the registered callback
    *  @param cb: callback function

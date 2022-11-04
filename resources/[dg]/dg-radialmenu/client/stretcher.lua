@@ -40,10 +40,10 @@ AddEventHandler('qb-radialmenu:client:TakeStretcher', function()
                 IsAttached = true
             end)
         else
-            DGCore.Functions.Notify("Something went wrong..", 'error')
+          DGX.Notifications.add("Er is iets misgelopen", 'error')
         end
     else
-        DGCore.Functions.Notify("You're not near an Ambulance..", 'error')
+      DGX.Notifications.add("You're not near an Ambulance..", 'error')
     end
 end)
 
@@ -67,7 +67,7 @@ AddEventHandler('qb-radialmenu:client:RemoveStretcher', function()
                 IsLayingOnBed = false
             end
         else
-            DGCore.Functions.Notify('You\'re too far away!', 'error')
+          DGX.Notifications.add('You\'re too far away!', 'error')
         end
     end
 end)
@@ -262,7 +262,7 @@ AddEventHandler('qb-radialmenu:client:Result', function(IsBusy, type)
             AttachEntityToEntity(PlayerPed, Object, 0, 0, 0.0, 1.6, 0.0, 0.0, 360.0, 0.0, false, false, false, false, 2, true)
             IsLayingOnBed = true
         else
-            DGCore.Functions.Notify("This stretcher is already in use!", "error")
+            DGX.Notifications.add("This stretcher is already in use!", "error")
             IsLayingOnBed = false
         end
     else
@@ -276,7 +276,7 @@ AddEventHandler('qb-radialmenu:client:Result', function(IsBusy, type)
             FreezeEntityPosition(Obj, false)
             IsAttached = true
         else
-            DGCore.Functions.Notify("This stretcher is already in use!", "error")
+            DGX.Notifications.add("This stretcher is already in use!", "error")
             IsAttached = false
         end
     end

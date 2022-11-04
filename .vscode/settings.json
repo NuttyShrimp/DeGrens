@@ -6856,7 +6856,6 @@
     "DGCore.Functions.GetCoords",
     "DGCore.Functions.SpawnVehicle",
     "DGCore.Functions.DeleteVehicle",
-    "DGCore.Functions.Notify",
     "DGCore.Functions.GetVehicles",
     "DGCore.Functions.GetPeds",
     "DGCore.Functions.GetPlayers",

@@ -34509,11 +34509,6 @@
     "prefix": "DGCore.Functions.DeleteVehicle",
     "body": ["DGCore.Functions.DeleteVehicle(${1:vehicle})"]
   },
-  "DGCore.Functions.Notify": {
-    "scope": "lua",
-    "prefix": "DGCore.Functions.Notify",
-    "body": ["DGCore.Functions.Notify(${1:text}, ${2:texttype}, ${3:length})"]
-  },
   "DGCore.Functions.GetVehicles": {
     "scope": "lua",
     "prefix": "DGCore.Functions.GetVehicles",

@@ -25,11 +25,11 @@ AddEventHandler("dg-lib:keyEvent", function(keyname, isDown)
                 deleteScene(laserCoords)
             end
         else
-            DGCore.Functions.Notify("Geen geldige plaats", "error")
+          DGX.Notifications.add('Geen geldige plaats', 'error')
         end
 
         toggleLaser()
-        exports['dg-ui']:hideInteraction()
+        DGX.UI.hideInteraction()
     end
 end)
 

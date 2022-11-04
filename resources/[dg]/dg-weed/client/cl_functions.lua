@@ -120,8 +120,8 @@ exports("feedPlant", function(entity)
 	lookAtPlant(entity)
 	local id = getPlantIdFromEntity(entity)
 
-	if activePlants[id].data.food >= 100 then 
-		DGCore.Functions.Notify("Deze plant is al gevoed.", "error")
+	if activePlants[id].data.food >= 100 then
+    DGX.Notifications.add("Deze plant is al gevoed.", "error")
 	else
     local wasCancelled, _ = exports['dg-misc']:Taskbar("hand-holding-seedling", 'Voederen...', 7500, {
       canCancel = true,
@@ -149,7 +149,7 @@ exports("cutPlant", function(entity)
 
 	local canCut = DGCore.Functions.TriggerCallback("dg-weed:server:CanCut", nil, id)
 	if not canCut then 
-		DGCore.Functions.Notify("Deze plant is nog niet volgroeid", "error")
+    DGX.Notifications.add("Deze plant is nog niet volgroeid", "error")
 		return
 	end
 

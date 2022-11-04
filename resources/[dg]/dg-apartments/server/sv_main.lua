@@ -45,14 +45,14 @@ exports('isInLockdown', isInLockdown)
 -- id is an optional parameter
 enterApartment = function(src, id)
   if (state.isInLockdown) then
-    TriggerClientEvent('DGCore:Notify', src, "Het appartementsblok is momenteel onder lockdown", "error")
+    DGX.Notifications.add(src, "Het appartementsblok is momenteel onder lockdown", "error")
     return
   end
   if (not id) then
     id = getPlayerApartment(src)
   end
   if (not doesApartmentExist(id)) then
-    TriggerClientEvent('DGCore:Notify', src, "Dit appartement heeft geen eigenaar", "error")
+    DGX.Notifications.add(src, "Dit appartement heeft geen eigenaar", "error")
     return
   end
   local apartment = joinApartment(id, src)
@@ -111,7 +111,7 @@ RegisterNetEvent('dg-apartments:server:toggleLockDown', function()
     -- TODO add ban for injection
   end
   state.isInLockdown = not state.isInLockdown
-  TriggerClientEvent('DGCore:Notify', source, state.isInLockdown and 'The apartment is under lockdown' or 'The lockdown has been lifted')
+  DGX.Notificiations.add(source, state.isInLockdown and 'The apartment is under lockdown' or 'The lockdown has been lifted')
 end)
 
 RegisterNetEvent('dg-apartments:server:inviteApartment')
@@ -121,7 +121,7 @@ AddEventHandler('dg-apartments:server:inviteApartment', function(targetId)
     return
   end
   inviteToApartment(apartment.id, targetId)
-  TriggerClientEvent('DGCore:Notify', source, 'You invited ' .. GetPlayerName(targetId) .. ' to your apartment')
+  DGX.Notifications.add(source, 'You invited ' .. GetPlayerName(targetId) .. ' to your apartment')
 end)
 
 RegisterNetEvent('dg-apartments:server:removeInvite', function(targetId)
@@ -130,7 +130,7 @@ RegisterNetEvent('dg-apartments:server:removeInvite', function(targetId)
     return
   end
   removeInviteFromApartment(apartment.id, targetId)
-  TriggerClientEvent('DGCore:Notify', source, 'You have removed ' .. GetPlayerName(targetId) .. '\'s invite from the apartment')
+  DGX.Notifications.add(source, 'You have removed ' .. GetPlayerName(targetId) .. '\'s invite from the apartment')
 end)
 
 -- Callbacks

@@ -13,18 +13,12 @@ RegisterNetEvent('DGCore:Client:OnPlayerUnload', function()
 end)
 
 -- Other stuff
-
 RegisterNetEvent('DGCore:Player:SetPlayerData', function(val)
     DGCore.PlayerData = val
 end)
 
 RegisterNetEvent('DGCore:Player:UpdatePlayerData', function()
     TriggerServerEvent('DGCore:UpdatePlayer')
-end)
-
-RegisterNetEvent('DGCore:Notify', function(text, type, length)
-    print('This is deprecated and should be replaced with dg-ui:client:addNotifaction')
-    DGCore.Functions.Notify(text, type, length)
 end)
 
 RegisterNetEvent('DGCore:Client:TriggerCallback', function(name, ...)
