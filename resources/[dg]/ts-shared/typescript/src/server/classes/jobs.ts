@@ -1,17 +1,28 @@
 type GroupLeaveHandler = (plyId: number | null, cid: number, groupId: string) => void;
+type GroupJoinHandler = (plyId: number, cid: number, groupId: string) => void;
 
 class Jobs {
   private groupLeaveHandlers: Set<GroupLeaveHandler>;
+  private groupJoinHandlers: Set<GroupJoinHandler>;
 
   constructor() {
     this.groupLeaveHandlers = new Set();
+    this.groupJoinHandlers = new Set();
+
     on('dg-jobs:server:groups:playerLeft', (plyId: number | null, cid: number, groupId: string) => {
       this.groupLeaveHandlers.forEach(handler => handler(plyId, cid, groupId));
+    });
+    on('dg-jobs:server:groups:playerJoined', (plyId: number, cid: number, groupId: string) => {
+      this.groupJoinHandlers.forEach(handler => handler(plyId, cid, groupId));
     });
   }
 
   onGroupLeave = (handler: GroupLeaveHandler) => {
     this.groupLeaveHandlers.add(handler);
+  };
+
+  onGroupJoin = (handler: GroupJoinHandler) => {
+    this.groupJoinHandlers.add(handler);
   };
 
   createGroup(src: number): boolean {

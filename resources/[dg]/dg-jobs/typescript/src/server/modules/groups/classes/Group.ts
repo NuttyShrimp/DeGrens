@@ -158,6 +158,7 @@ export class Group {
     this.logger.info(
       `${member.name}(${member.serverId}) joined ${ownerMember.name}(${ownerMember.serverId}) job group | size: ${this.members.size}`
     );
+    emit('dg-jobs:server:groups:playerJoined', player.PlayerData.source, player.PlayerData.citizenid, this.id);
     // Make the new member part of the group in is UI store
     Events.emitNet('dg-jobs:client:groups:set', player.PlayerData.source, {
       id: this.id,

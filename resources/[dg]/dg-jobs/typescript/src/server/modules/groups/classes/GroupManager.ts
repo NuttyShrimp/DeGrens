@@ -1,4 +1,4 @@
-import { Util } from '@dgx/server';
+import { Events, Util } from '@dgx/server';
 import { v4 } from 'uuid';
 
 import { Group } from './Group';
@@ -62,9 +62,14 @@ class GroupManager extends Util.Singleton<GroupManager>() {
     this.groups.delete(groupId);
   }
 
-  public seedPlayerStore(cid: number) {
+  public seedPlayerStore(plyId: number, cid: number) {
     const plyGroup = this.getGroupByCID(cid);
-    if (!plyGroup) return;
+    if (!plyGroup) {
+      Events.emitNet('dg-jobs:client:groups:set', plyId, null);
+      Events.emitNet('dg-jobs:client:groups:setMembers', plyId, []);
+      Events.emitNet('dg-jobs:client:groups:setGroupOwner', plyId, false);
+      return;
+    }
     plyGroup.refreshMember(cid);
   }
 

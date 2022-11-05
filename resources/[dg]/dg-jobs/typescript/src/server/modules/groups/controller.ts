@@ -23,9 +23,10 @@ global.exports('leaveGroup', leaveGroup);
 global.exports('disbandGroup', disbandGroup);
 
 onNet('dg-jobs:client:groups:loadStore', () => {
-  const cid = Util.getCID(source, true);
+  const src = source;
+  const cid = Util.getCID(src, true);
   if (!cid) return;
-  groupManager.seedPlayerStore(cid);
+  groupManager.seedPlayerStore(src, cid);
 });
 
 Inventory.onInventoryUpdate(
@@ -37,19 +38,11 @@ Inventory.onInventoryUpdate(
   'vpn'
 );
 
-on('onResourceStart', (res: string) => {
-  if (res !== GetCurrentResourceName()) return;
-  (
-    Object.values({
-      ...DGCore.Functions.GetQBPlayers(),
-    }) as Player[]
-  ).forEach((ply: Player) => {
-    groupManager.seedPlayerStore(ply.PlayerData.citizenid);
-  });
-});
-
 // Check if ply cid is in active group, if so update serverid
 on('DGCore:server:playerLoaded', (playerData: PlayerData) => {
+  // Reload ply store to reset UI group if switched chars
+  groupManager.seedPlayerStore(playerData.source, playerData.citizenid);
+
   const group = groupManager.getGroupByCID(playerData.citizenid);
   if (!group) return;
   group.updateMemberServerId(playerData.citizenid, playerData.source);
