@@ -67,3 +67,16 @@ export const leaveGroup = (src: number): boolean => {
   }
   return true;
 };
+
+// By removing owner, group gets disbanded.
+// If we would directly call groupManager.disbandGroup, we would get in a loop after removing owner within disband and calling disband again
+export const disbandGroup = (groupId: string) => {
+  groupLogger.silly(`[groups:disband] Disbanding group ${groupId}`);
+  const group = groupManager.getGroupById(groupId);
+  if (!group) {
+    groupLogger.warn(`Tried to disband group but group did not exist`);
+    return;
+  }
+  const ownerCid = group.owner;
+  group.removeMember(ownerCid);
+};

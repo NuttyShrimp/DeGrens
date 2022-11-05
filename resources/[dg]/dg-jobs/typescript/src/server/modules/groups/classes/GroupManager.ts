@@ -42,10 +42,10 @@ class GroupManager extends Util.Singleton<GroupManager>() {
     return Array.from(this.groups.values());
   }
 
+  // Do not use this function to disband group, remove owner from group to do so, otherwise will cause infinite loop
   public disbandGroup(groupId: string) {
     const group = this.getGroupById(groupId);
     if (!group) return;
-    // By time this func is called, owner already got deleted from members so this wont cause infinite loop
     const members = group.getMembers();
     members.forEach(m => {
       group.removeMember(m.cid);
@@ -71,7 +71,7 @@ class GroupManager extends Util.Singleton<GroupManager>() {
   public getGroupsForLogs() {
     const groups: { id: string; owner: { cid: number; name: string } }[] = [];
     this.groups.forEach(g => {
-      const gOwner = g.getOwner()!;
+      const gOwner = g.getOwner();
       groups.push({
         id: g.getId(),
         owner: {
@@ -81,6 +81,7 @@ class GroupManager extends Util.Singleton<GroupManager>() {
       });
     });
   }
+
   public getGroupById(id: string) {
     return this.groups.get(id);
   }

@@ -6,6 +6,7 @@ import { groupLogger } from './logger';
 import {
   changeJob,
   createGroup,
+  disbandGroup,
   getGroupByCid,
   getGroupById,
   getGroupByServerId,
@@ -19,6 +20,7 @@ global.exports('getGroupByCid', getGroupByCid);
 global.exports('getGroupByServerId', getGroupByServerId);
 global.asyncExports('changeGroupJob', changeJob);
 global.exports('leaveGroup', leaveGroup);
+global.exports('disbandGroup', disbandGroup);
 
 onNet('dg-jobs:client:groups:loadStore', () => {
   const cid = Util.getCID(source, true);
@@ -88,11 +90,10 @@ RPC.register('dg-jobs:server:groups:getMembers', src => {
     return false;
   }
   const members = group.getMembers();
-  const groupOwner = group.getOwner();
   return members.map(m => ({
     name: nameManager.getName(m.cid),
     ready: m.isReady,
-    isOwner: m.cid == groupOwner!.cid,
+    isOwner: m.cid == group.owner,
   }));
 });
 

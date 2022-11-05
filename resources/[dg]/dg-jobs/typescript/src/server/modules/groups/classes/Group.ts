@@ -74,7 +74,7 @@ export class Group {
     return {
       ...this.getClientInfo(),
       members: this.getMembers(),
-      owner: this.getOwner(),
+      owner: this.members.get(this.owner)!,
     };
   }
 
@@ -154,10 +154,9 @@ export class Group {
       isReady: false,
     };
     this.members.set(cid, member);
+    const ownerMember = this.getOwner();
     this.logger.info(
-      `${member.name}(${member.serverId}) joined ${this.getOwner().name}(${
-        this.getOwner().serverId
-      }) job group | size: ${this.members.size}`
+      `${member.name}(${member.serverId}) joined ${ownerMember.name}(${ownerMember.serverId}) job group | size: ${this.members.size}`
     );
     // Make the new member part of the group in is UI store
     Events.emitNet('dg-jobs:client:groups:set', player.PlayerData.source, {
@@ -172,9 +171,8 @@ export class Group {
       description: 'Joined group',
       icon: 'jobcenter',
     });
-    const ownerServerId = this.getOwner().serverId;
-    if (ownerServerId !== null) {
-      Phone.showNotification(ownerServerId, {
+    if (ownerMember.serverId !== null) {
+      Phone.showNotification(ownerMember.serverId, {
         id: `jobcenter-groups-joined-${player.PlayerData.source}`,
         title: 'jobcenter',
         description: `${nameManager.getName(member.cid)} joined`,
@@ -191,36 +189,31 @@ export class Group {
     return member;
   }
 
+  // Do not use this.getOwner() inside this function because theres a possibility the owner got removed while iterating this func when disbanding group!
   public removeMember(cid: number) {
-    const player = DGCore.Functions.GetPlayerByCitizenId(cid);
+    const removedMember = this.members.get(cid)!;
     if (!this.members.delete(cid)) {
       // TODO: log failed attempt to leave group, src isn't member of
-      this.logger.warn(
-        `cid ${cid} tried to leave ${this.getOwner().name ?? this.owner}(${
-          this.getOwner().serverId
-        }) job group without being part of it`
-      );
+      this.logger.warn(`cid ${cid} tried to leave ${this.owner} job group without being part of it`);
       return;
     }
-    this.logger.info(
-      `cid ${cid} left ${this.getOwner().name ?? this.owner}(${this.getOwner().serverId}) job group successfully`
-    );
-    emit('dg-jobs:server:groups:playerLeft', player.PlayerData.source, this.id);
-    Events.emitNet('dg-jobs:client:groups:set', player.PlayerData.source, null);
-    Events.emitNet('dg-jobs:client:groups:setMembers', player.PlayerData.source, []);
-    Events.emitNet('dg-jobs:client:groups:setGroupOwner', player.PlayerData.source, false);
-    Phone.showNotification(player.PlayerData.source, {
-      id: 'jobcenter-groups-join',
-      title: 'jobcenter',
-      description: 'Group verlaten',
-      icon: 'jobcenter',
-    });
-    Util.Log(
-      'jobs:group:removeMember',
-      this.getInfo(),
-      `${GetPlayerName(String(player.PlayerData.source))} left group ${this.id}`,
-      player.PlayerData.source
-    );
+    this.logger.info(`cid ${cid} left ${this.owner} job group successfully`);
+
+    emit('dg-jobs:server:groups:playerLeft', removedMember.serverId, removedMember.cid, this.id);
+    if (removedMember.serverId !== null) {
+      Events.emitNet('dg-jobs:client:groups:set', removedMember.serverId, null);
+      Events.emitNet('dg-jobs:client:groups:setMembers', removedMember.serverId, []);
+      Events.emitNet('dg-jobs:client:groups:setGroupOwner', removedMember.serverId, false);
+      Phone.showNotification(removedMember.serverId, {
+        id: 'jobcenter-groups-join',
+        title: 'jobcenter',
+        description: 'Group verlaten',
+        icon: 'jobcenter',
+      });
+    }
+
+    Util.Log('jobs:group:removeMember', this.getInfo(), `${removedMember.name} left group ${this.id}`);
+
     if (this.owner === cid) {
       groupManager.disbandGroup(this.id);
     }
@@ -232,10 +225,9 @@ export class Group {
    */
   public refreshMember(cid: number) {
     if (!this.members.has(cid)) {
+      const ownerMember = this.getOwner();
       this.logger.warn(
-        `cid ${cid} tried to refresh his group state with ${this.getOwner().name}(${
-          this.getOwner().serverId
-        }) groups info without being part of it`
+        `cid ${cid} tried to refresh his group state with ${ownerMember.name}(${ownerMember.serverId}) groups info without being part of it`
       );
       // TODO: add graylog
       return;
@@ -254,19 +246,19 @@ export class Group {
       this.currentJob = null;
       return true;
     }
+    const ownerMember = this.getOwner();
     // Get max size from enum
     const job = jobManager.getJobByName(jobName);
     if (!job) {
       this.logger.error(
-        `Group(${this.id}) tried to change its job to an invalid job(${jobName}) | owner: ${this.getOwner().name}`
+        `Group(${this.id}) tried to change its job to an invalid job(${jobName}) | owner: ${ownerMember.name}`
       );
       // TODO: log in graylog
       return false;
     }
     if (this.members.size > job.size) {
-      const ownerServerId = this.getOwner().serverId;
-      if (ownerServerId !== null) {
-        Phone.showNotification(ownerServerId, {
+      if (ownerMember.serverId !== null) {
+        Phone.showNotification(ownerMember.serverId, {
           id: `jobcenter-groups-too-many-members`,
           title: 'Jobcenter',
           description: 'Te veel groepsleden',
@@ -278,16 +270,14 @@ export class Group {
     }
     this.logger.info(`Changing job to ${job.name}`);
     if (this.getMembers().some(m => !m.isReady)) {
-      const ownerServerId = this.getOwner().serverId;
-      if (ownerServerId !== null) {
-        Phone.showNotification(ownerServerId, {
+      if (ownerMember.serverId !== null) {
+        Phone.showNotification(ownerMember.serverId, {
           id: `jobcenter-groups-not-ready`,
           title: 'Jobcenter',
           description: 'Nog niet iedereen is klaar',
           icon: 'jobcenter',
         });
       }
-
       this.logger.debug(`Group(${this.id}) tried to change it job to ${job.name} but not all members are ready`);
       return false;
     }

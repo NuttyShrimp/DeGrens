@@ -44,6 +44,10 @@ on('dg-ui:loadData', () => {
   emitNet('dg-jobs:client:groups:loadStore');
 });
 
+on('DGCore:client:playerLoaded', () => {
+  emitNet('dg-jobs:client:groups:loadStore');
+});
+
 Events.onNet('dg-jobs:client:groups:isFull', () => {
   UI.SendAppEvent('phone', {
     appName: 'jobcenter',
