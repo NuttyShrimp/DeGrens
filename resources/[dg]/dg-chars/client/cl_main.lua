@@ -41,9 +41,7 @@ closeCharMenu = function()
   FreezeEntityPosition(ped, false)
 end
 
-RegisterNetEvent('dg-chars:client:reshowMenu', function()
-  exports['dg-ui']:addNotification("Hang tight, we're logging you out...", "info")
-  TriggerServerEvent('qb-houses:server:LogoutLocation')
+RegisterNetEvent('chars:client:logOut', function()
   DoScreenFadeOut(250)
   while not IsScreenFadedOut() do
     Wait(10)

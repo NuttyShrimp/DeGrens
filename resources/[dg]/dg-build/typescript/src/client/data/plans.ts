@@ -51,7 +51,7 @@ Plans.gabz_apartments_room = {
       options: [
         {
           type: 'server',
-          event: 'qb-houses:server:LogoutLocation',
+          event: 'dg-apartments:server:logOut',
           icon: 'fas fa-sign-out-alt',
           label: 'Logout',
           canInteract: () => global.exports['dg-apartments'].isInApartment(),

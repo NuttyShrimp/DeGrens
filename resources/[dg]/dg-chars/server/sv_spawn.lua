@@ -58,15 +58,15 @@ getPlySpawns = function(src)
       end
     end
   end
-	local houses = exports['qb-houses']:getOwnedHouses(src)
-	for _, v in pairs(houses) do
-		table.insert(Spawns, {
-			label = v.label,
-			spawnType = 'house',
-			position = v.coords,
-			houseIdx = v.house
-		})
-	end
+	-- local houses = exports['qb-houses']:getOwnedHouses(src)
+	-- for _, v in pairs(houses) do
+	-- 	table.insert(Spawns, {
+	-- 		label = v.label,
+	-- 		spawnType = 'house',
+	-- 		position = v.coords,
+	-- 		houseIdx = v.house
+	-- 	})
+	-- end
 	return Spawns
 end
 

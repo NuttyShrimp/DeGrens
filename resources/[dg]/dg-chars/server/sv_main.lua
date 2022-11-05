@@ -15,36 +15,37 @@ local function getFreeInstance()
 end
 
 -- TODO: Remove this garbage from char selection and implement in resource self
-local function loadHouseData()
-	local HouseGarages = {}
-	local Houses = {}
-	local result = exports['dg-sql']:query('SELECT * FROM houselocations', {})
-	if result[1] ~= nil then
-		for k, v in pairs(result) do
-			local owned = false
-			if tonumber(v.owned) == 1 then
-				owned = true
-			end
-			local garage = v.garage ~= nil and json.decode(v.garage) or {}
-			Houses[v.name] = {
-				coords = json.decode(v.coords),
-				owned = v.owned,
-				price = v.price,
-				locked = true,
-				adress = v.label,
-				tier = v.tier,
-				garage = garage,
-				decorations = {},
-			}
-			HouseGarages[v.name] = {
-				label = v.label,
-				takeVehicle = garage,
-			}
-		end
-	end
-	TriggerClientEvent("qb-garages:client:houseGarageConfig", -1, HouseGarages)
-	TriggerClientEvent("qb-houses:client:setHouseConfig", -1, Houses)
-end
+-- TODO of TODO: Only implement when we actually have our own housing system
+-- local function loadHouseData()
+-- 	local HouseGarages = {}
+-- 	local Houses = {}
+-- 	local result = exports['dg-sql']:query('SELECT * FROM houselocations', {})
+-- 	if result[1] ~= nil then
+-- 		for k, v in pairs(result) do
+-- 			local owned = false
+-- 			if tonumber(v.owned) == 1 then
+-- 				owned = true
+-- 			end
+-- 			local garage = v.garage ~= nil and json.decode(v.garage) or {}
+-- 			Houses[v.name] = {
+-- 				coords = json.decode(v.coords),
+-- 				owned = v.owned,
+-- 				price = v.price,
+-- 				locked = true,
+-- 				adress = v.label,
+-- 				tier = v.tier,
+-- 				garage = garage,
+-- 				decorations = {},
+-- 			}
+-- 			HouseGarages[v.name] = {
+-- 				label = v.label,
+-- 				takeVehicle = garage,
+-- 			}
+-- 		end
+-- 	end
+-- 	TriggerClientEvent("qb-garages:client:houseGarageConfig", -1, HouseGarages)
+-- 	TriggerClientEvent("qb-houses:client:setHouseConfig", -1, Houses)
+-- end
 
 RegisterNetEvent('dg-chars:server:newCharSpawn', function()
 	local src = source
@@ -86,7 +87,7 @@ DGCore.Functions.CreateCallback('dg-chars:server:loadPly', function(src, cb, cid
 	if DGCore.Player.Login(src, cid) then
 		DGCore.ShowSuccess(GetCurrentResourceName(), ('%s (Citizen ID: %s) has successfully been loaded!'):format(GetPlayerName(src), cid))
     exports['dg-chat']:refreshCommands(src)
-		loadHouseData()
+		-- loadHouseData()
 		exports['dg-logs']:createGraylogEntry('join', { src, cid }, ("%s (%s | %d) loaded.."):format(GetPlayerName(src), cid, src))
 	end
 	cb()
@@ -102,3 +103,10 @@ DGCore.Functions.CreateCallback('dg-chars:server:createCharacter', function(src,
 	end
 	cb()
 end)
+
+local logOut = function(plyId)
+  DGCore.Player.Logout(plyId)
+  TriggerClientEvent('chars:client:logOut', plyId)
+  DGX.Util.Log('chars:logout', {plyId}, ('%s has logged out to switch characters'):format(DGX.Util.getName(plyId)))
+end
+exports('logOut', logOut)

@@ -11,7 +11,7 @@ export const openCharSelection: CommandData = {
   target: [],
   role: 'staff',
   handler: (caller, data: CharSelectionData) => {
-    emitNet('dg-chars:client:reshowMenu', caller.source ?? data?.Target.serverId);
+    global.exports['dg-chars'].logOut(caller.source ?? data?.Target.serverId);
   },
   UI: {
     title: 'Char Selection Menu',

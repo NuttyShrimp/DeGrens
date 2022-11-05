@@ -105,6 +105,17 @@ RegisterNetEvent('dg-apartments:server:leaveApartment', function()
   leaveApartment(source)
 end)
 
+RegisterNetEvent('dg-apartments:server:logOut', function()
+  local src = source
+  local apartment = getCurrentApartment(src);
+  if not (apartment and apartment.id) then return end
+  TriggerClientEvent('dg-apartments:client:fadeScreen', src, true)
+  Citizen.Wait(500)
+  removeFromApartment(apartment.id, src)
+  TriggerClientEvent('dg-apartments:client:removeRoom', src)
+  exports['dg-chars']:logOut(src)
+end)
+
 RegisterNetEvent('dg-apartments:server:toggleLockDown', function()
   local plyJob = DGX.Jobs.getCurrentJob(source)
   if (plyJob ~= "police") then
