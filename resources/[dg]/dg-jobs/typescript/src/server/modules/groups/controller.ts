@@ -3,9 +3,18 @@ import { Inventory, RPC, Util } from '@dgx/server';
 import groupManager from './classes/GroupManager';
 import nameManager from './classes/NameManager';
 import { groupLogger } from './logger';
-import { changeJob, createGroup, getGroupByCid, getGroupByServerId, getGroupList, leaveGroup } from './service';
+import {
+  changeJob,
+  createGroup,
+  getGroupByCid,
+  getGroupById,
+  getGroupByServerId,
+  getGroupList,
+  leaveGroup,
+} from './service';
 
 global.exports('createGroup', createGroup);
+global.exports('getGroupById', getGroupById);
 global.exports('getGroupByCid', getGroupByCid);
 global.exports('getGroupByServerId', getGroupByServerId);
 global.asyncExports('changeGroupJob', changeJob);
@@ -87,7 +96,7 @@ RPC.register('dg-jobs:server:groups:setReady', (src, data: { ready: boolean }) =
     } for jobs`
   );
   const cid = Util.getCID(src);
-  const group = groupManager.getGroupByCID(src);
+  const group = groupManager.getGroupByCID(cid);
   if (!group) {
     groupLogger.warn(`${GetPlayerName(String(src))}(${src}) tried to set himself ready while not being in a group`);
     return false;

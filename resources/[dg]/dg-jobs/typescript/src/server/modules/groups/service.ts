@@ -12,6 +12,12 @@ export const getGroupList = (): JobGroup[] => {
   return groups.map(g => g.getClientInfo());
 };
 
+export const getGroupById = (groupId: string): Groups.Group | undefined => {
+  const group = groupManager.getGroupById(groupId);
+  if (!group) return undefined;
+  return group.getInfo();
+};
+
 export const getGroupByCid = (cid: number): Groups.Group | undefined => {
   const group = groupManager.getGroupByCID(cid);
   if (!group) return undefined;

@@ -189,7 +189,7 @@ export class Group {
     this.logger.info(
       `cid ${cid} left ${this.getOwner()?.name ?? this.owner}(${this.getOwner()?.serverId}) job group successfully`
     );
-    emit('dg-jobs:server:groups:playerLeft', player.PlayerData.source);
+    emit('dg-jobs:server:groups:playerLeft', player.PlayerData.source, this.id);
     Events.emitNet('dg-jobs:client:groups:set', player.PlayerData.source, null);
     Events.emitNet('dg-jobs:client:groups:setMembers', player.PlayerData.source, []);
     Events.emitNet('dg-jobs:client:groups:setGroupOwner', player.PlayerData.source, false);

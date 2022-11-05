@@ -1,19 +1,23 @@
 class Jobs {
-  private groupLeaveHandlers: Set<(plyId: number) => void>;
+  private groupLeaveHandlers: Set<(plyId: number, groupId: string) => void>;
 
   constructor() {
     this.groupLeaveHandlers = new Set();
-    on('dg-jobs:server:groups:playerLeft', (plyId: number) => {
-      this.groupLeaveHandlers.forEach(handler => handler(plyId));
+    on('dg-jobs:server:groups:playerLeft', (plyId: number, groupId: string) => {
+      this.groupLeaveHandlers.forEach(handler => handler(plyId, groupId));
     });
   }
 
-  onGroupLeave = (handler: (plyId: number) => void) => {
+  onGroupLeave = (handler: (plyId: number, groupId: string) => void) => {
     this.groupLeaveHandlers.add(handler);
   };
 
   createGroup(src: number): boolean {
     return global.exports['dg-jobs'].createGroup(src);
+  }
+
+  getGroupById(groupId: string): Jobs.Groups.Group | undefined {
+    return global.exports['dg-jobs'].getGroupById(groupId);
   }
 
   getGroupByServerId(id: number): Jobs.Groups.Group | undefined {
