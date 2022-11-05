@@ -38,7 +38,18 @@ export class Group {
   }
 
   public getOwner() {
-    return this.members.get(this.owner);
+    const ownerMember = this.members.get(this.owner);
+    if (ownerMember === undefined) {
+      Util.Log(
+        'jobs:group:noOwner',
+        { groupId: this.id, ownerCid: this.owner, members: Array.from(this.members.values()) },
+        `Owner was not a member of group ${this.id} | ownercid ${this.owner}`,
+        undefined,
+        true
+      );
+      throw new Error('Failed to get owner member of group | owner cid: ');
+    }
+    return ownerMember;
   }
 
   public getMembers(): Groups.Member[] {
@@ -63,7 +74,7 @@ export class Group {
     return {
       ...this.getClientInfo(),
       members: this.getMembers(),
-      owner: this.getOwner()!,
+      owner: this.getOwner(),
     };
   }
 
@@ -88,6 +99,7 @@ export class Group {
   private pushMembersUpdate() {
     const clientMembers: JobGroupMember[] = this.getMemberForClient();
     this.members.forEach(m => {
+      if (m.serverId === null) return;
       Events.emitNet('dg-jobs:client:groups:setMembers', m.serverId, clientMembers);
       Events.emitNet('dg-jobs:client:groups:setGroupOwner', m.serverId, this.owner === m.cid);
     });
@@ -103,33 +115,29 @@ export class Group {
 
   private addOwnerAsMember = () => {
     const player = DGCore.Functions.GetPlayerByCitizenId(this.owner);
+    const ownerServerId = player.PlayerData.source;
     const ownerMember: Groups.Member = {
-      serverId: player.PlayerData.source,
+      serverId: ownerServerId,
       name: player.PlayerData.name,
       cid: this.owner,
       isReady: false,
     };
     this.members.set(this.owner, ownerMember);
     // Make the new member part of the group in is UI store
-    Events.emitNet('dg-jobs:client:groups:set', ownerMember.serverId, {
+    Events.emitNet('dg-jobs:client:groups:set', ownerServerId, {
       id: this.id,
       name: nameManager.getName(this.owner),
       size: this.members.size,
       limit: this.maxSize,
     });
-    Phone.showNotification(ownerMember.serverId, {
+    Phone.showNotification(ownerServerId, {
       id: `phone-jobs-groups-create`,
       title: 'jobcenter',
       description: 'Created group',
       icon: 'jobcenter',
     });
-    this.logger.info(`${ownerMember.name}(${ownerMember.serverId}) created a job group`);
-    Util.Log(
-      'jobs:group:addMember',
-      this.getInfo(),
-      `${ownerMember.name} joined group ${this.id}`,
-      ownerMember.serverId
-    );
+    this.logger.info(`${ownerMember.name}(${ownerServerId}) created a job group`);
+    Util.Log('jobs:group:addMember', this.getInfo(), `${ownerMember.name} joined group ${this.id}`, ownerServerId);
     this.pushMembersUpdate();
   };
 
@@ -147,8 +155,8 @@ export class Group {
     };
     this.members.set(cid, member);
     this.logger.info(
-      `${member.name}(${member.serverId}) joined ${this.getOwner()!.name}(${
-        this.getOwner()!.serverId
+      `${member.name}(${member.serverId}) joined ${this.getOwner().name}(${
+        this.getOwner().serverId
       }) job group | size: ${this.members.size}`
     );
     // Make the new member part of the group in is UI store
@@ -164,13 +172,21 @@ export class Group {
       description: 'Joined group',
       icon: 'jobcenter',
     });
-    Phone.showNotification(this.getOwner()!.serverId, {
-      id: `jobcenter-groups-joined-${player.PlayerData.source}`,
-      title: 'jobcenter',
-      description: `${nameManager.getName(member.cid)} joined`,
-      icon: 'jobcenter',
-    });
-    Util.Log('jobs:group:addMember', this.getInfo(), `${member.name} joined group ${this.id}`, member.serverId);
+    const ownerServerId = this.getOwner().serverId;
+    if (ownerServerId !== null) {
+      Phone.showNotification(ownerServerId, {
+        id: `jobcenter-groups-joined-${player.PlayerData.source}`,
+        title: 'jobcenter',
+        description: `${nameManager.getName(member.cid)} joined`,
+        icon: 'jobcenter',
+      });
+    }
+    Util.Log(
+      'jobs:group:addMember',
+      this.getInfo(),
+      `${member.name} joined group ${this.id}`,
+      player.PlayerData.source
+    );
     this.pushMembersUpdate();
     return member;
   }
@@ -180,14 +196,14 @@ export class Group {
     if (!this.members.delete(cid)) {
       // TODO: log failed attempt to leave group, src isn't member of
       this.logger.warn(
-        `cid ${cid} tried to leave ${this.getOwner()?.name ?? this.owner}(${
-          this.getOwner()?.serverId
+        `cid ${cid} tried to leave ${this.getOwner().name ?? this.owner}(${
+          this.getOwner().serverId
         }) job group without being part of it`
       );
       return;
     }
     this.logger.info(
-      `cid ${cid} left ${this.getOwner()?.name ?? this.owner}(${this.getOwner()?.serverId}) job group successfully`
+      `cid ${cid} left ${this.getOwner().name ?? this.owner}(${this.getOwner().serverId}) job group successfully`
     );
     emit('dg-jobs:server:groups:playerLeft', player.PlayerData.source, this.id);
     Events.emitNet('dg-jobs:client:groups:set', player.PlayerData.source, null);
@@ -217,8 +233,8 @@ export class Group {
   public refreshMember(cid: number) {
     if (!this.members.has(cid)) {
       this.logger.warn(
-        `cid ${cid} tried to refresh his group state with ${this.getOwner()!.name}(${
-          this.getOwner()!.serverId
+        `cid ${cid} tried to refresh his group state with ${this.getOwner().name}(${
+          this.getOwner().serverId
         }) groups info without being part of it`
       );
       // TODO: add graylog
@@ -242,29 +258,36 @@ export class Group {
     const job = jobManager.getJobByName(jobName);
     if (!job) {
       this.logger.error(
-        `Group(${this.id}) tried to change its job to an invalid job(${jobName}) | owner: ${this.getOwner()!.name}`
+        `Group(${this.id}) tried to change its job to an invalid job(${jobName}) | owner: ${this.getOwner().name}`
       );
       // TODO: log in graylog
       return false;
     }
     if (this.members.size > job.size) {
-      Phone.showNotification(this.getOwner()!.serverId, {
-        id: `jobcenter-groups-too-many-members`,
-        title: 'Jobcenter',
-        description: 'Te veel groepsleden',
-        icon: 'jobcenter',
-      });
+      const ownerServerId = this.getOwner().serverId;
+      if (ownerServerId !== null) {
+        Phone.showNotification(ownerServerId, {
+          id: `jobcenter-groups-too-many-members`,
+          title: 'Jobcenter',
+          description: 'Te veel groepsleden',
+          icon: 'jobcenter',
+        });
+      }
       this.logger.debug(`Group(${this.id}) tried to change its job to ${job.name} but too many members for job`);
       return false;
     }
     this.logger.info(`Changing job to ${job.name}`);
     if (this.getMembers().some(m => !m.isReady)) {
-      Phone.showNotification(this.getOwner()!.serverId, {
-        id: `jobcenter-groups-not-ready`,
-        title: 'Jobcenter',
-        description: 'Nog niet iedereen is klaar',
-        icon: 'jobcenter',
-      });
+      const ownerServerId = this.getOwner().serverId;
+      if (ownerServerId !== null) {
+        Phone.showNotification(ownerServerId, {
+          id: `jobcenter-groups-not-ready`,
+          title: 'Jobcenter',
+          description: 'Nog niet iedereen is klaar',
+          icon: 'jobcenter',
+        });
+      }
+
       this.logger.debug(`Group(${this.id}) tried to change it job to ${job.name} but not all members are ready`);
       return false;
     }
@@ -290,7 +313,8 @@ export class Group {
       Events.emitNet('dg-jobs:client:groups:isFull', src);
       return;
     }
-    if (this.activeRequests.includes(src)) {
+    const ownerServerId = this.getOwner().serverId;
+    if (this.activeRequests.includes(src) || ownerServerId === null) {
       Phone.showNotification(src, {
         id: 'phone-jobs-groups-join',
         title: 'Jobcenter',
@@ -301,10 +325,10 @@ export class Group {
     }
     this.activeRequests.push(src);
     this.logger.debug(`${GetPlayerName(String(src))}(${src}) requested to join the group`);
-    const isAccepted = await Phone.notificationRequest(this.getOwner()!.serverId, {
+    const isAccepted = await Phone.notificationRequest(ownerServerId, {
       id: `jobcenter-groups-${this.requestId++}`,
-      title: 'Request to join',
-      description: nameManager.getName(player.PlayerData.citizenid),
+      title: 'Jobcenter',
+      description: `Request to join - ${nameManager.getName(player.PlayerData.citizenid)}`,
       icon: 'jobcenter',
       timer: 30,
     });
@@ -325,16 +349,11 @@ export class Group {
     this.pushMembersUpdate();
   }
 
-  public updateMemberInfo = (cid: number) => {
-    const player = DGCore.Functions.GetPlayerByCitizenId(cid);
-    if (!this.members.has(cid)) return;
-    this.members.set(cid, {
-      cid,
-      isReady: false,
-      serverId: player.PlayerData.source,
-      name: player.PlayerData.name,
-    });
-    this.logger.info(`CID ${cid} member info got updated`);
+  public updateMemberServerId = (cid: number, newServerId: number | null) => {
+    const member = this.members.get(cid);
+    if (!member) return;
+    this.members.set(cid, { ...member, isReady: false, serverId: newServerId });
+    this.logger.info(`Group member (${cid}) serverId got updated to ${newServerId}`);
     this.pushMembersUpdate();
   };
 }

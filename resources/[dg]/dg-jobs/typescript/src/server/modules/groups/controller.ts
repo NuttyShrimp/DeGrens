@@ -50,7 +50,14 @@ on('onResourceStart', (res: string) => {
 on('DGCore:server:playerLoaded', (playerData: PlayerData) => {
   const group = groupManager.getGroupByCID(playerData.citizenid);
   if (!group) return;
-  group.updateMemberInfo(playerData.citizenid);
+  group.updateMemberServerId(playerData.citizenid, playerData.source);
+});
+
+// If still in group when unloading, update serverid to null
+on('DGCore:server:playerUnloaded', (plyId: number, cid: number) => {
+  const group = groupManager.getGroupByCID(cid);
+  if (!group) return;
+  group.updateMemberServerId(cid, null);
 });
 
 RPC.register('dg-jobs:server:groups:create', createGroup);

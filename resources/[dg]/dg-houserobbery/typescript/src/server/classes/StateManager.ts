@@ -291,7 +291,9 @@ class StateManager extends Util.Singleton<StateManager>() {
 
     jobGroup.members.forEach(m => {
       this.playerStates.set(m.cid, PlayerState.ASSIGNED);
-      Events.emitNet('houserobbery:client:setSelectedHouse', m.serverId, houseId, houseInfo, this.config.timeToFind);
+      if (m.serverId !== null) {
+        Events.emitNet('houserobbery:client:setSelectedHouse', m.serverId, houseId, houseInfo, this.config.timeToFind);
+      }
     });
     this.groupIdToFindTimeout.set(
       jobGroup.id,

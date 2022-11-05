@@ -30,11 +30,9 @@ declare namespace Jobs {
   }
   namespace Groups {
     interface Member {
-      serverId: number;
+      serverId: number | null;
       name: string;
       cid: number;
-      // TODO: replace with enum for all possible jobs
-      job: string;
       isReady: boolean;
     }
     interface Group {
