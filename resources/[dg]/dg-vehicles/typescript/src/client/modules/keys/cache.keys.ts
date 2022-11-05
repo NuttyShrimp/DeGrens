@@ -5,6 +5,7 @@ import { getCurrentVehicle, getVehicleVinWithoutValidation } from '@helpers/vehi
 const keyCache: Set<string> = new Set();
 
 onNet('DGCore:client:playerLoaded', async () => {
+  keyCache.clear();
   const allVins = await RPC.execute<string[]>('vehicles:keys:getAll');
   (allVins ?? []).forEach(vin => {
     keyCache.add(vin);

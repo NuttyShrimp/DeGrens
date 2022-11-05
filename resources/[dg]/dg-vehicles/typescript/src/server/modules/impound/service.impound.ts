@@ -108,7 +108,7 @@ export const requestImpound = async (src: number, title: string, veh: number, in
     }
     setTimeout(() => {
       if (DoesEntityExist(veh)) {
-        DeleteEntity(veh);
+        deleteVehicle(veh);
       }
     }, 60000);
     return;
