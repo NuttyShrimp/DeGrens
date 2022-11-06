@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { Button } from '@src/components/button';
 import { Paper } from '@src/components/paper';
 import { Loader } from '@src/components/util';
@@ -6,6 +7,7 @@ import { nuiAction } from '@src/lib/nui-comms';
 
 export const CurrentGroup: AppFunction<Omit<Phone.JobCenter.State, 'groups' | 'jobs'>> = props => {
   const [owner, setOwner] = useState<Phone.JobCenter.Member | undefined>(undefined);
+  const ownCid = useSelector<RootState, number>(state => state.character.cid);
 
   useEffect(() => {
     setOwner(props.groupMembers.find(m => m.isOwner));
@@ -13,19 +15,18 @@ export const CurrentGroup: AppFunction<Omit<Phone.JobCenter.State, 'groups' | 'j
 
   const toggleSetReady = () => {
     nuiAction('phone/jobs/group/setReady', {
-      ready: !props.isReady,
-    });
-    props.updateState({
-      isReady: !props.isReady,
+      ready: !isReady,
     });
   };
 
   const handleGroupLeave = () => {
     nuiAction('phone/jobs/groups/leave');
-    props.updateState({
-      isReady: false,
-    });
   };
+
+  const isReady = useMemo(
+    () => props.groupMembers.find(member => member.cid === ownCid)?.ready ?? false,
+    [props.groupMembers, ownCid]
+  );
 
   if (!owner) return <Loader />;
 
@@ -61,7 +62,7 @@ export const CurrentGroup: AppFunction<Omit<Phone.JobCenter.State, 'groups' | 'j
           ))}
       </div>
       <div className='jobcenter__currentgroup__buttons'>
-        <Button.Primary onClick={toggleSetReady}>{props.isReady ? 'Set unready' : 'Set ready'}</Button.Primary>
+        <Button.Primary onClick={toggleSetReady}>{isReady ? 'Set unready' : 'Set ready'}</Button.Primary>
         <Button.Secondary onClick={handleGroupLeave}>Leave group</Button.Secondary>
       </div>
     </div>

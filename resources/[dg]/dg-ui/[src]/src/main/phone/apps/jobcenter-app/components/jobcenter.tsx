@@ -21,7 +21,6 @@ export const JobCenter: AppFunction<Phone.JobCenter.State> = props => {
             updateState={props.updateState}
             groupMembers={props.groupMembers}
             isOwner={props.isOwner}
-            isReady={props.isReady}
           />
         ) : (
           <List groups={props.groups} updateState={props.updateState} />

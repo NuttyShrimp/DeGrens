@@ -23,7 +23,7 @@ export const styles = makeStyles({
     display: 'flex',
     flexDirection: 'column',
     marginBottom: '.5vh',
-    backgroundColor: hexToRGBStr(baseStyle.primary.darker, 0.7),
+    backgroundColor: hexToRGBStr(baseStyle.primary.darker, 0.92),
     borderRadius: '.5vh',
     transition: 'background-color .2s ease-in-out',
     pointerEvents: 'all',

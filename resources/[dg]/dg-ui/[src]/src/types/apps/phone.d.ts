@@ -316,6 +316,7 @@ declare namespace Phone {
     }
 
     interface Member {
+      cid: number;
       name: string;
       ready: boolean;
       isOwner: boolean;
@@ -335,7 +336,6 @@ declare namespace Phone {
       currentGroup: Group | null;
       groupMembers: Member[];
       isOwner: boolean;
-      isReady: boolean;
     }
   }
   namespace Debt {

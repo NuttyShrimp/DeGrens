@@ -8,7 +8,6 @@ const store: StoreObject<Phone.JobCenter.State> = {
     currentGroup: null,
     groupMembers: [],
     isOwner: false,
-    isReady: false,
   },
 };
 

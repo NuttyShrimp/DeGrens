@@ -90,6 +90,7 @@ export class Group {
   // region Members
   private getMemberForClient() {
     return this.getMembers().map(m => ({
+      cid: m.cid,
       name: nameManager.getName(m.cid),
       isOwner: this.owner === m.cid,
       ready: m.isReady,
