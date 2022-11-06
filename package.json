@@ -2,7 +2,7 @@
   "name": "root",
   "private": true,
   "scripts": {
-    "build": "lerna run --stream build ",
+    "build": "lerna run --stream --concurrency=10 build ",
     "build:dev": "lerna run --stream build:dev ",
     "lint:lerna": "lerna run --stream lint",
     "lint:root": "eslint --fix --resolve-plugins-relative-to ./ --ext .js,.ts,.tsx,.jsx,.json,.vue ./resources/[dg]/",
