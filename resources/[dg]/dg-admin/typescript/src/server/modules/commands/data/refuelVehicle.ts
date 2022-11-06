@@ -1,4 +1,4 @@
-import { Notifications } from '@dgx/server';
+import { Notifications, Vehicles } from '@dgx/server';
 import { Inputs } from 'enums/inputs';
 
 import { SelectorTarget } from '../../../enums/SelectorTargets';
@@ -25,7 +25,7 @@ export const refuelVehicle: CommandData = {
       Notifications.add(caller.source, 'Could not find vehicle', 'error');
       return;
     }
-    global.exports['dg-vehicles'].setFuelLevel(vin, 100);
+    Vehicles.setFuelLevel(vin, 100);
   },
   UI: {
     title: 'Refuel Vehicle',

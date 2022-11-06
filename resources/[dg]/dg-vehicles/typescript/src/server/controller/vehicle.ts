@@ -1,6 +1,7 @@
 import { Chat, Events, Notifications, RPC, Util } from '@dgx/server';
 import { Vector4 } from '@dgx/shared';
 import { getPlayerVehicleInfo, insertNewVehicle } from 'db/repository';
+import { fuelManager } from 'modules/fuel/classes/fuelManager';
 import { keyManager } from 'modules/keys/classes/keymanager';
 
 import { deleteVehicle, getVinForVeh, spawnOwnedVehicle, spawnVehicle, teleportInSeat } from '../helpers/vehicle';
@@ -47,6 +48,7 @@ global.exports(
         return;
       }
       keyManager.addKey(vin, plyId);
+      fuelManager.setFuelLevel(vin, 100);
       vehicle = ent;
     }
     if (applyMods) {

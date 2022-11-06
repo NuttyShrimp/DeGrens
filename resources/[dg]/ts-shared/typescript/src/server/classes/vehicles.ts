@@ -38,6 +38,10 @@ class Vehicles {
   giveKeysToPlayer = (plyId: number, vehNetId: number) => {
     global.exports['dg-vehicles'].giveKeysToPlayer(plyId, vehNetId);
   };
+
+  setFuelLevel = (vin: string, amount: number) => {
+    global.exports['dg-vehicles'].setFuelLevel(vin, amount);
+  };
 }
 
 export default {
