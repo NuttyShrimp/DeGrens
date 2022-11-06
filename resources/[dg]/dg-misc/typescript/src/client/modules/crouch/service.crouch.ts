@@ -7,44 +7,48 @@ export const changeWalk = (walk: string) => {
   originalWalk = walk;
 };
 
-// This method instead of libkeybind because we need to overwrite gta control action of crouch button
-export const startCrouchThread = () => {
-  setInterval(() => {
-    const ped = PlayerPedId();
-    if (!ped) return;
+export const toggleCrouching = () => {
+  if (!LocalPlayer.state.isLoggedIn) return;
 
-    const isFreeAiming = IsPlayerFreeAiming(PlayerId());
+  const ped = PlayerPedId();
+  const isFreeAiming = IsPlayerFreeAiming(PlayerId());
+  if (IsPedSittingInAnyVehicle(ped) || IsPedFalling(ped) || isFreeAiming) return;
 
-    if (crouching) {
-      if (isFreeAiming) {
-        crouching = false;
-        ClearPedTasks(ped);
-        resetToOriginalWalk();
-        return;
-      }
+  crouching = !crouching;
+  if (crouching) {
+    ClearPedTasks(ped);
+    setCrouchWalk();
+    startCrouchThread();
+  } else {
+    ClearPedTasks(ped);
+    resetToOriginalWalk();
+  }
+};
 
-      const speed = GetEntitySpeed(ped);
-      if (speed >= 1.0) {
-        SetPedWeaponMovementClipset(ped, 'move_ped_crouched');
-        SetPedStrafeClipset(ped, 'move_ped_crouched_strafing');
-      } else if (speed < 1.0 && GetFollowPedCamViewMode() == 4) {
-        ResetPedWeaponMovementClipset(ped);
-        ResetPedStrafeClipset(ped);
-      }
+const startCrouchThread = () => {
+  const ped = PlayerPedId();
+  const crouchThread = setInterval(() => {
+    if (!crouching) {
+      clearInterval(crouchThread);
+      return;
     }
 
-    if (!IsDisabledControlJustPressed(0, 36)) return;
-    if (IsPedSittingInAnyVehicle(ped) || IsPedFalling(ped) || isFreeAiming) return;
-
-    crouching = !crouching;
-    if (crouching) {
-      ClearPedTasks(ped);
-      setCrouchWalk();
-    } else {
+    if (IsPlayerFreeAiming(PlayerId())) {
+      crouching = false;
       ClearPedTasks(ped);
       resetToOriginalWalk();
+      return;
     }
-  }, 1);
+
+    const speed = GetEntitySpeed(ped);
+    if (speed >= 1.0) {
+      SetPedWeaponMovementClipset(ped, 'move_ped_crouched');
+      SetPedStrafeClipset(ped, 'move_ped_crouched_strafing');
+    } else if (speed < 1.0 && GetFollowPedCamViewMode() == 4) {
+      ResetPedWeaponMovementClipset(ped);
+      ResetPedStrafeClipset(ped);
+    }
+  }, 10);
 };
 
 const setCrouchWalk = async () => {
