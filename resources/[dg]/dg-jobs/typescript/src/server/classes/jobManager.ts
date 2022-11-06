@@ -7,33 +7,21 @@ import groupManager from '../modules/groups/classes/GroupManager';
 
 @ExportRegister()
 @RPCRegister()
-class JobManager {
-  private static instance: JobManager;
-
-  public static getInstance(): JobManager {
-    if (!this.instance) {
-      this.instance = new JobManager();
-    }
-    return this.instance;
-  }
-
+class JobManager extends Util.Singleton<JobManager>() {
   /**
    * Map of jobs on job name
    */
   private jobs: Map<string, Jobs.Job>;
   private jobsToResource: Map<string, string>;
-  private jobsWith6: number;
   private logger: winston.Logger;
 
   constructor() {
+    super();
     this.jobs = new Map();
     this.jobsToResource = new Map();
     this.logger = mainLogger.child({ module: 'JobManager' });
-    if (JobManager.instance) {
-      this.logger.error('Mulitple jobmanager created');
-      throw new Error(`You can't create multiple instances of this class`);
-    }
-    this.jobsWith6 = 0;
+    this.updatePayoutLevels();
+
     on('onResourceStop', (resource: string) => {
       const jobs = [...this.jobsToResource.entries()].filter(([, res]) => res === resource);
       if (jobs.length === 0) return;
@@ -47,37 +35,20 @@ class JobManager {
     });
   }
 
-  private genJobPayoutLvl() {
-    const limit = Math.ceil(this.jobs.size / 6) + 1;
-    let newToken = Util.getRndInteger(1, 7);
-    if (newToken == 6) {
-      if (limit == this.jobsWith6) {
-        while (newToken === 6) {
-          newToken = Util.getRndInteger(1, 7);
-        }
-      } else {
-        this.jobsWith6++;
-      }
-    }
-    return newToken;
-  }
-
-  /**
-   * Schedules the update of payout amount between half an hour and an hour
-   */
-  private schedulePayoutUpdate() {
-    setTimeout(() => {
-      this.updatePayoutLevels();
-    }, Util.getRndInteger(30, 61) * 60 * 1000);
+  private generateJobPayoutLevel() {
+    const amountOfJobsWithMaxPayout = Array.from(this.jobs.values()).reduce(
+      (amount, job) => amount + (job.payoutLevel === 6 ? 1 : 0),
+      0
+    );
+    const limitOfJobsWithMaxPayout = Math.ceil(this.jobs.size / 6) + 1;
+    const maxAllowedPayoutLevel = limitOfJobsWithMaxPayout <= amountOfJobsWithMaxPayout ? 6 : 7;
+    return Util.getRndInteger(1, maxAllowedPayoutLevel);
   }
 
   private updatePayoutLevels() {
-    // We can only have a maximum of ceil divisioned jobs by 6 that have a payoutlevel of 6
     for (const [jobName, job] of this.jobs.entries()) {
-      if (job.payoutLevel == 6) {
-        this.jobsWith6--;
-      }
-      job.payoutLevel = this.genJobPayoutLvl();
+      // Amount of maxPayout gets checked inside gen func, this ensured job cannot be maxPayout twice
+      job.payoutLevel = this.generateJobPayoutLevel();
       this.jobs.set(jobName, job);
     }
     Util.Log(
@@ -90,7 +61,12 @@ class JobManager {
       },
       'Updated payout levels'
     );
-    this.schedulePayoutUpdate();
+
+    // Update payout levels in 60-90 mins
+    const timeout = Util.getRndInteger(60, 91);
+    setTimeout(() => {
+      this.updatePayoutLevels();
+    }, timeout * 60 * 1000);
   }
 
   public getJobByName(job: string) {
@@ -149,18 +125,29 @@ class JobManager {
   @Export('getJobPayout')
   private _getJobPayout(jobName: string, groupSize: number) {
     const job = this.jobs.get(jobName);
-    if (!job) return null;
-    return (
-      job.payout.min *
-      (((job.payout.max - job.payout.min) / 6) * job.payoutLevel) *
-      (1 - (job.payoutLevel * (groupSize - 1)) / 100)
+    if (!job) {
+      this.logger.error('Tried to get payout for nonexistent job');
+      return null;
+    }
+    if (!job.payout) {
+      this.logger.error('Tried to get payout but job did not have payout amounts registered');
+      return null;
+    }
+    // Generate value between min and max based on payoutLevel (lvl 1 = minprice, level 6 (max) = maxprice)
+    // Then add percentage based on amount of groupmembers
+    return Math.round(
+      (job.payout.min + ((job.payout.max - job.payout.min) * (job.payoutLevel - 1)) / 5) *
+        (1 + ((job.payout.groupPercent / 100) * groupSize - 1))
     );
   }
 
   @Export('getJobPayoutLevel')
   private _getJobPayoutLevel(jobName: string) {
     const job = this.jobs.get(jobName);
-    if (!job) return null;
+    if (!job) {
+      this.logger.error('Tried to get payout level for nonexistent job');
+      return null;
+    }
     return job.payoutLevel;
   }
 
@@ -174,7 +161,7 @@ class JobManager {
     this.jobs.set(name, {
       ...info,
       name,
-      payoutLevel: this.genJobPayoutLvl(),
+      payoutLevel: this.generateJobPayoutLevel(),
     });
     this.jobsToResource.set(name, GetInvokingResource());
   }

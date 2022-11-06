@@ -1,4 +1,4 @@
-import { Chat, Util } from '@dgx/server';
+import { Chat, Jobs, Util } from '@dgx/server';
 import stateManager from 'classes/StateManager';
 
 import './controllers';
@@ -11,14 +11,9 @@ setImmediate(() => {
     title: 'Huisinbraak',
     size: 4,
     legal: false,
-    icon: 'fa-user-secret',
-    payout: {
-      max: 100,
-      min: 50,
-      groupPercent: 0,
-    },
+    icon: 'user-secret',
   };
-  global.exports['dg-jobs'].registerJob('houserobbery', jobInfo);
+  Jobs.registerJob('houserobbery', jobInfo);
   initializeShop();
 });
 

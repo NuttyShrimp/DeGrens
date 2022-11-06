@@ -18,16 +18,19 @@ declare namespace Jobs {
       x: number;
       y: number;
     };
-    payout: {
+    payout?: {
       max: number;
       min: number;
       /**
-       * This is the percent that the total payout will do down by based on the group size
-       * eg. 5 means if a player is alone the payout will be 100%, if it are 2 players: it will be 95%. 3 90%,...
-       * This will be done so people get more money while doing a job in a group but not the double for the same amount of work
+       * This the percent a player gets extra per groupmember.
+       * For example: a job with payout of 200. If this percentage is 10, when doing job alone a player gets 200.
+       * When doing job with 1 other person they both get 220. When doing with 6 members they all get 300
        */
       groupPercent: number;
     };
+    /**
+     * 1 - 6 (inclusive)
+     */
     payoutLevel: number;
   }
 }

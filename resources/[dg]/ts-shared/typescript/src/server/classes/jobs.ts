@@ -73,6 +73,14 @@ class Jobs {
   disbandGroup(groupId: string) {
     global.exports['dg-jobs'].disbandGroup(groupId);
   }
+
+  getJobPayout(jobName: string, groupSize: number): number | null {
+    return global.exports['dg-jobs'].getJobPayout(jobName, groupSize);
+  }
+
+  getJobPayoutLevel(jobName: string): number | null {
+    return global.exports['dg-jobs'].getJobPayoutLevel(jobName);
+  }
 }
 
 class Business {
