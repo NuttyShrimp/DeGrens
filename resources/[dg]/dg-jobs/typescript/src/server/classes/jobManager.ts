@@ -137,7 +137,7 @@ class JobManager extends Util.Singleton<JobManager>() {
     // Then add percentage based on amount of groupmembers
     return Math.round(
       (job.payout.min + ((job.payout.max - job.payout.min) * (job.payoutLevel - 1)) / 5) *
-        (1 + ((job.payout.groupPercent / 100) * groupSize - 1))
+        (1 + (job.payout.groupPercent / 100) * (groupSize - 1))
     );
   }
 
