@@ -4,7 +4,14 @@ import { getPlayerVehicleInfo, insertNewVehicle } from 'db/repository';
 import { fuelManager } from 'modules/fuel/classes/fuelManager';
 import { keyManager } from 'modules/keys/classes/keymanager';
 
-import { deleteVehicle, getVinForVeh, spawnOwnedVehicle, spawnVehicle, teleportInSeat } from '../helpers/vehicle';
+import {
+  deleteVehicle,
+  getVinForNetId,
+  getVinForVeh,
+  spawnOwnedVehicle,
+  spawnVehicle,
+  teleportInSeat,
+} from '../helpers/vehicle';
 import vinManager from '../modules/identification/classes/vinmanager';
 import { applyUpgradesToVeh } from '../modules/upgrades/service.upgrades';
 import { mainLogger } from '../sv_logger';
@@ -17,6 +24,7 @@ RPC.register('vehicles:getVehicleByVin', (src, vin: string) => {
 global.asyncExports('spawnVehicle', spawnVehicle);
 global.exports('deleteVehicle', deleteVehicle);
 global.exports('getVinForVeh', getVinForVeh);
+global.exports('getVinForNetId', getVinForNetId);
 
 global.exports(
   'spawnVehicleFromAdminMenu',

@@ -32,7 +32,11 @@ class Vehicles {
   };
 
   getVinForVeh = (vehicle: number): string | null => {
-    return global.exports['dg-vehicles'].deleteVehicle(vehicle);
+    return global.exports['dg-vehicles'].getVinForVeh(vehicle);
+  };
+
+  getVinForNetId = (netId: number): string | null => {
+    return global.exports['dg-vehicles'].getVinForNetId(netId);
   };
 
   giveKeysToPlayer = (plyId: number, vehNetId: number) => {
