@@ -181,6 +181,8 @@ class StateManager {
       });
       if (this.isUIFocused) {
         DisableAllControlActions(0);
+        DisableControlAction(0, 46, false); // push to talk
+        DisableControlAction(0, 249, false); // push to talk
       }
       // LMB
       if (!this.isUIFocused && (IsControlJustPressed(0, 24) || IsDisabledControlJustPressed(0, 24))) {

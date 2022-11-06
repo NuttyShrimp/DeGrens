@@ -11,7 +11,7 @@ let currentBennys: string | null = null;
 let locations: Record<string, Bennys.Location> = {};
 let keyThread: number | null = null;
 let equippedUpgradesOnEnter: Upgrades.Cosmetic;
-const enableKeys = [0, 1, 2, 3, 4, 5, 6];
+const enableKeys = [0, 1, 2, 3, 4, 5, 6, 46, 249];
 
 export let modelStanceData: Stance.Model[] = [];
 export let originalStance: Stance.Data;
