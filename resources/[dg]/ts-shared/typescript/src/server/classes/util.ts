@@ -30,8 +30,8 @@ class Util extends UtilShared {
     global.exports['dg-logs'].createGraylogEntry(type, data, message, isDevImportant);
   }
 
-  getPlyCoords(src = -1) {
-    const plyPed = GetPlayerPed(String(src));
+  getPlyCoords(plyId: number) {
+    const plyPed = GetPlayerPed(String(plyId));
     return this.getEntityCoords(plyPed);
   }
 

@@ -8,7 +8,7 @@ import { setCurrentVehicle } from '../helpers/vehicle';
 import { cleanFuelThread, fetchVehicleFuelLevel, startFuelThread } from '../modules/fuel/service.fuel';
 import { cleanStatusThread, startStatusThread } from '../modules/status/service.status';
 
-on('baseevents:enteringVehicle', async (vehicle: number) => {
+on('baseevents:enteringVehicle', (vehicle: number) => {
   SetVehicleNeedsToBeHotwired(vehicle, false);
 });
 

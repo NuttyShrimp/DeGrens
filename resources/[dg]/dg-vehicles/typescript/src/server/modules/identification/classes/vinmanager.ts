@@ -45,14 +45,15 @@ class VinManager extends Util.Singleton<VinManager>() {
     return this.playerVins.includes(vin);
   }
 
-  setNetId(vin: string, vehId: number) {
+  attachVinToNetId(vin: string, vehId: number) {
     this.logger.debug(`Attaching vin ${vin} to veh id ${vehId}`);
     const veh = NetworkGetEntityFromNetworkId(vehId);
     if (!veh) {
       throw new Error(`Failed to set vin ${vin} to veh id ${vehId} - entity not found`);
     }
-    const vehState = Entity(veh).state;
-    vehState.set('vin', vin, true);
+    if (!this.registeredVins.includes(vin)) {
+      this.registeredVins.push(vin);
+    }
     this.vinToNetId.set(vin, vehId);
   }
 

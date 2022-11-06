@@ -89,9 +89,15 @@ export const startVehicleLockpick = async (src: number, itemId: string) => {
   // Do not return if not found else we cant lockpick shit like a bus or towtruck etcetc
   const vehInfo = getConfigByHash(GetEntityModel(targetVehicle));
   if (!vehInfo) {
-    Util.Log('vehicles:missingConfig', {
-      model: GetEntityModel(targetVehicle)
-    }, `Found a missing model`, undefined, true);
+    Util.Log(
+      'vehicles:missingConfig',
+      {
+        model: GetEntityModel(targetVehicle),
+      },
+      `Found a missing model`,
+      undefined,
+      true
+    );
   }
 
   // TODO: Add dispatch call
