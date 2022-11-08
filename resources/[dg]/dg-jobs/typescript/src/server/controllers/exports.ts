@@ -1,7 +1,7 @@
 // Get current job where this player is on duty for
 // This export can be seen as a hasJob and onDuty check combined
 import { Util } from '@dgx/server';
-import { getPlayerJob } from '../services/signin';
+import { getPlayerJob, getPlayersForJob } from '../services/signin';
 import { addWhitelist, getPlayerInfoForJob, hasSpeciality, removeWhitelist } from '../services/whitelist';
 
 global.exports('getCurrentJob', (src: number) => {
@@ -29,3 +29,4 @@ global.exports('isWhitelisted', (src: number, job: string) => {
 });
 global.asyncExports('addToWhitelist', addWhitelist);
 global.asyncExports('removeFromWhitelist', removeWhitelist);
+global.exports('getPlayersForJob', getPlayersForJob);

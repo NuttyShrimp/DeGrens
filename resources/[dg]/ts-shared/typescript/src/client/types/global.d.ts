@@ -28,6 +28,7 @@ declare global {
     Business: typeof Classes.Business;
     Gangs: typeof Classes.Gangs;
     Minigames: typeof Classes.Minigames;
+    Animations: typeof Classes.Animations;
   };
   var asyncExports: any;
 }

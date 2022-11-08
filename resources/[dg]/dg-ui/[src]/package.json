@@ -23,6 +23,7 @@
     "@mui/styles": "^5.10.10",
     "@sentry/react": "^7.17.3",
     "@sentry/tracing": "^7.17.3",
+    "animate.css": "^4.1.1",
     "dayjs": "^1.11.6",
     "deep-object-diff": "^1.1.7",
     "deepmerge": "^4.2.2",

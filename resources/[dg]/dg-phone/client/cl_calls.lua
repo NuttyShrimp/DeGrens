@@ -18,7 +18,7 @@ end
 stopSounds = function(id)
 	for k, v in pairs(soundInfo) do
 		if v.ids[id] then
-			exports["nutty-sounds"]:stopSoundOnEntity(('phone_call_%s_%s'):format(k, id))
+			exports["nutty-sounds"]:stopSound(('phone_call_%s_%s'):format(k, id))
 			v.ids[id] = nil
 		end
 	end

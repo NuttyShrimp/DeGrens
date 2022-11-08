@@ -366,6 +366,10 @@ class Keys {
     return global.exports['dg-lib'].GetCurrentKeyMap(keycommand, keycontroller);
   }
 
+  isModPressed(): boolean {
+    return global.exports['dg-lib'].modifierKeyPressed()
+  }
+
   onPress(keyName: string, handler: (isDown: boolean) => void) {
     if (!this.listeners.has(keyName)) {
       this.listeners.set(keyName, new Map());

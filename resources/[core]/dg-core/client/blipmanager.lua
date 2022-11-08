@@ -4,7 +4,7 @@ DGCore.Blips.blipStore = {}
 DGCore.Blips.infoStore = {}
 
 local isCatDisabled = function(cat)
-  for k,_ in pairs(DGCore.Blips.disabledCategory) do
+  for k, _ in pairs(DGCore.Blips.disabledCategory) do
     if k == cat then
       return true
     end
@@ -13,7 +13,12 @@ local isCatDisabled = function(cat)
 end
 
 local createBlip = function(name, cat, info)
-  local newBlip = AddBlipForCoord(info.coords.x, info.coords.y, info.coords.z)
+  local newBlip
+  if (info.radius) then
+    newBlip = AddBlipForRadius(info.coords.x, info.coords.y, info.coords.z, info.radius)
+  else
+    newBlip = AddBlipForCoord(info.coords.x, info.coords.y, info.coords.z)
+  end
   SetBlipSprite(newBlip, info.sprite)
   SetBlipScale(newBlip, info.scale)
   SetBlipAsShortRange(newBlip, info.isShortRange)
@@ -21,9 +26,9 @@ local createBlip = function(name, cat, info)
   SetBlipColour(newBlip, info.color)
   SetBlipDisplay(newBlip, info.display)
 
-	BeginTextCommandSetBlipName("STRING")
-	AddTextComponentString(info.text)
-	EndTextCommandSetBlipName(newBlip)
+  BeginTextCommandSetBlipName("STRING")
+  AddTextComponentString(info.text)
+  EndTextCommandSetBlipName(newBlip)
 
   DGCore.Blips.blipStore[cat][name] = newBlip
 end
@@ -63,6 +68,17 @@ DGCore.Blips.Add = function(category, data)
   createBlip(data.id, category, DGCore.Blips.infoStore[category][data.id])
 end
 
+
+DGCore.Blips.Remove = function(category, id)
+  if (DGCore.Blips.infoStore[category] and DGCore.Blips.infoStore[category][id]) then
+    DGCore.Blips.infoStore[category][id] = nil
+  end
+  removeBlip(id, category)
+  if (DGCore.Blips.blipStore[category] and DGCore.Blips.blipStore[category][id]) then
+    DGCore.Blips.blipStore[category] = nil
+  end
+end
+
 DGCore.Blips.enableCategory = function(cat)
   if not isCatDisabled() then
     return
@@ -90,6 +106,7 @@ DGCore.Blips.disableCategory = function(cat)
 end
 
 DGCore.Blips.removeCategory = function(cat)
+  if not DGCore.Blips.infoStore[cat] then return end
   for id, _ in pairs(DGCore.Blips.infoStore[cat]) do
     removeBlip(id, cat)
   end

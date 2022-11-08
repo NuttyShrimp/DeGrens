@@ -371,4 +371,14 @@ export const cmds: {
       data: { id: 2, origin: 3 },
     },
   },
+  {
+    cmd: 'show dispatch',
+    app: 'dispatch',
+    show: true,
+  },
+  {
+    cmd: 'hide dispatch',
+    app: 'dispatch',
+    show: false,
+  },
 ];

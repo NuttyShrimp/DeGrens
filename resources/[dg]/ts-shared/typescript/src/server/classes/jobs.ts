@@ -74,6 +74,10 @@ class Jobs {
     global.exports['dg-jobs'].disbandGroup(groupId);
   }
 
+  getPlayersForJob(job: string): number[] {
+    return global.exports['dg-jobs'].getPlayersForJob(job);
+  }
+
   getJobPayout(jobName: string, groupSize: number): number | null {
     return global.exports['dg-jobs'].getJobPayout(jobName, groupSize);
   }
@@ -125,8 +129,15 @@ class Gangs {
   };
 }
 
+class Police {
+  public createDispatchCall(call: NPolice.DispatchCall): void {
+    global.exports['dg-dispatch'].createDispatchCall(call);
+  }
+}
+
 export default {
   Jobs: new Jobs(),
   Business: new Business(),
   Gangs: new Gangs(),
+  Police: new Police(),
 };

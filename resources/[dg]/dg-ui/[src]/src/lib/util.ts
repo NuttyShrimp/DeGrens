@@ -112,6 +112,7 @@ export function uuidv4(): string {
   return uuid;
 }
 
+// Takes miliseconds unix timestamp
 export const formatRelativeTime = (time: number) => {
   dayjs.extend(relativeTime).locale('nl-be');
   return dayjs(time).fromNow();

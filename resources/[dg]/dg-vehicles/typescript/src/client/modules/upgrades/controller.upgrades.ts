@@ -9,6 +9,8 @@ import {
   getPerformanceUpgradePossibilities,
 } from './service.upgrades';
 
+global.exports('getCosmeticUpgrades', getCosmeticUpgrades);
+
 RPC.register('vehicles:upgrades:getCosmetic', (vehNetId?: number) => {
   const veh = vehNetId !== undefined ? NetworkGetEntityFromNetworkId(vehNetId) : getCurrentVehicle();
   if (!veh) return;

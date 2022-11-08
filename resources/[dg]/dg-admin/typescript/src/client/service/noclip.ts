@@ -69,6 +69,16 @@ export const toggleNoclip = () => {
   });
 };
 
+export const printDebugInfo = () => {
+  if (!noclipEnabled) {
+    console.log('Must be in noclip to do this');
+  }
+  const camCoords = Util.ArrayToVector3(GetCamCoord(noclipCam));
+  const camRot = Util.ArrayToVector3(GetCamRot(noclipCam, 2));
+  console.log(camCoords);
+  console.log(camRot);
+};
+
 const cleanupNoclip = () => {
   if (noclipTick) {
     clearTick(noclipTick);

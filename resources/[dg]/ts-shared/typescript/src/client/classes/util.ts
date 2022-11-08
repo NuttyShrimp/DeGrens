@@ -151,10 +151,20 @@ export class Sounds {
   };
 }
 
+export class Animations {
+  startTabletAnimation() {
+    global.exports['dg-misc'].startTabletAnimation()
+  }
+  stopTabletAnimation() {
+    global.exports['dg-misc'].stopTabletAnimation()
+  }
+}
+
 export default {
   Util: new Util(),
   Interiors: new Interiors(),
   PropAttach: new PropAttach(),
   Particle: new Particle(),
   Sounds: new Sounds(),
+  Animations: new Animations(),
 };

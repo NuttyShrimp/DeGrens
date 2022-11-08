@@ -2,7 +2,7 @@ import { Events, HUD, RPC } from '@dgx/client';
 
 import { assignBind, getAllBinds } from '../helpers/binds';
 import { isDevModeEnabled, setDevModeEnabled } from '../helpers/devmode';
-import { isNoclipEnabled, toggleNoclip } from '../service/noclip';
+import { isNoclipEnabled, printDebugInfo, toggleNoclip } from '../service/noclip';
 import { togglePlayerBlips } from '../service/playerBlips';
 
 setImmediate(() => {
@@ -46,6 +46,10 @@ Events.onNet('admin:penalty:openModel', (target: string) => {
   });
   SetNuiFocus(true, true);
 });
+
+Events.onNet("admin:noclip:printInfo", () => {
+  printDebugInfo()
+})
 
 RPC.register('admin:menu:getBinds', () => {
   return getAllBinds();

@@ -1,7 +1,37 @@
-import { Events, Inventory, RPC, Util } from '@dgx/server';
+import { Events, Inventory, Police, RPC, Util } from '@dgx/server';
 import stateManager from 'classes/StateManager';
 import { getConfig } from 'helpers/config';
 import { mainLogger } from 'sv_logger';
+
+Events.onNet('storerobbery:server:startJob', async (src: number, storeId: Store.Id, type: 'safe' | 'register') => {
+  const isInStore = await RPC.execute<boolean>('storerobbery:client:isInStore', src);
+  if (!isInStore) {
+    mainLogger.warn(`Player ${src} tried to start a store robbery job but was not in store`);
+    Util.Log(
+      'storerobbery:notInStore',
+      { storeId },
+      `${Util.getName(src)} tried to start a store robbery job but was not in store`,
+      src,
+      true
+    );
+    return;
+  }
+  const storeConfig = (await getConfig()).stores[storeId];
+  Police.createDispatchCall({
+    tag: '10-35',
+    title: `Inbraak winkel${type === 'safe' ? 'kluis' : 'kassa'}`,
+    description: `Het inbraakalarm op een winkel${type === 'safe' ? 'kluis' : 'kassa'} is zonet getriggered`,
+    coords: storeConfig.registerzone.center,
+    criminal: src,
+    entries: {
+      'camera-cctv': storeConfig.cam,
+    },
+    blip: {
+      sprite: 628,
+      color: 5,
+    },
+  });
+});
 
 Events.onNet('storerobbery:server:hackSafe', async (src: number, storeId: Store.Id) => {
   const isInStore = await RPC.execute<boolean>('storerobbery:client:isInStore', src);

@@ -35,3 +35,4 @@ Emitted from Server to Server and Client
 | getCurrentGrade | Return the current grade/rank (0-based) for the current signed in job                                     | `source: number`                       |
 | hasSpeciality   | Returns true if the player has the specified speciality (list can be found in config folder for each job) | `source: number`, `speciality: string` |
 | isWhitelisted   | Check if a player can sign in at a certain whitelisted job                                                | `source: number`, `job: string`        |
+| getPlayersForJob | get all serverIds of player signed in for a job | `job: string` |

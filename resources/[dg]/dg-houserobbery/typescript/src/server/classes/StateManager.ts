@@ -1,4 +1,4 @@
-import { Config, Events, Jobs, Notifications, Phone, Taskbar, Util, Inventory } from '@dgx/server';
+import { Config, Events, Jobs, Notifications, Phone, Taskbar, Util, Inventory, Police } from '@dgx/server';
 import { DGXEvent, EventListener, RPCEvent, RPCRegister } from '@dgx/server/decorators';
 
 import { mainLogger } from '../sv_logger';
@@ -116,6 +116,10 @@ class StateManager extends Util.Singleton<StateManager>() {
 
   @DGXEvent('houserobbery:server:unlockDoor')
   unlockDoor = (src: number, houseId: string) => {
+    const houseState = this.houseStates.get(houseId);
+    if (!houseState) return;
+    const houseConfig = this.config.locations[houseState.dataIdx];
+    if (!houseConfig) return;
     if (!this.checkUserIsDoingJob(src, houseId)) return;
     Util.Log(
       'houserobbery:door:unlock',
@@ -125,6 +129,17 @@ class StateManager extends Util.Singleton<StateManager>() {
       `${GetPlayerName(String(src))} unlocked a house robbery door`,
       src
     );
+    Police.createDispatchCall({
+      tag: '10-31',
+      title: 'Poging to inbraak',
+      description: 'Er was een verdacht persoon aan een huisdeur aan het prutsen',
+      blip: {
+        sprite: 418,
+        color: 3,
+      },
+      criminal: src,
+      coords: houseConfig.coords,
+    });
     this.houseStates.get(houseId).state = HouseState.UNLOCKED;
   };
 

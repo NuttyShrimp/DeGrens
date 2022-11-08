@@ -11,6 +11,7 @@ declare interface PowerstationData {
   center: Vec3;
   width: number;
   length: number;
+  camId: number;
   options: {
     heading: number;
     minZ: number;
