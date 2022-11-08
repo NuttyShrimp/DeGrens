@@ -11,8 +11,7 @@ client_script 'client/cl_main.lua'
 files {
     'html/index.html',
     'html/stylesheet.css',
-    'html/imgs/logo.png',
-		'html/imgs/bg.jpg',
+    'html/imgs/*',
     'html/js/app.js',
     'html/assets/*.mp4'
 }

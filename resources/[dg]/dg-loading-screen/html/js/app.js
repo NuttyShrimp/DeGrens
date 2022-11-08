@@ -3,6 +3,14 @@ window.addEventListener('message', function (e) {
     cleanupScreen();
     return;
   }
+  if (e.data.setEnv !== undefined) {
+    const logo = document.querySelector('.logo');
+    if (!logo) {
+      console.error("Could not find logo element");
+      return;
+    }
+    logo.src = e.data.setEnv ? "imgs/logo.png" : 'imgs/logo-dev.png'
+  }
 });
 
 const video = document.querySelector('#id > video');

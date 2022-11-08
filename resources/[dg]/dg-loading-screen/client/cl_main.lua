@@ -11,6 +11,12 @@ AddEventHandler('loadscreen:disableScreen', function()
 	end
 end)
 
+RegisterNetEvent("dgx:isProduction", function(isProd)
+  SendLoadingScreenMessage(json.encode({
+    setEnv = isProd
+  }))
+end)
+
 Citizen.CreateThread( function()
 	ShutdownLoadingScreen()
 end)
