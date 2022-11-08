@@ -1,6 +1,6 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="veh:watch" type="js.build_tools.npm" folderName="veh">
-    <package-json value="$PROJECT_DIR$/resources/[dg]/dg-vehicles/typescript/package.json" />
+  <configuration default="false" name="dispatch:watch" type="js.build_tools.npm" folderName="dispatch">
+    <package-json value="$PROJECT_DIR$/resources/[dg]/dg-dispatch/typescript/package.json" />
     <command value="run" />
     <scripts>
       <script value="watch" />

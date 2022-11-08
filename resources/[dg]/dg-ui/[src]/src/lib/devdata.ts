@@ -931,6 +931,57 @@ devData.phoneVehicles = [
   },
 ];
 
+devData.dispatchCalls = [
+  {
+    id: '123',
+    title: 'An incoming 112 Call',
+    description:
+      'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
+    tag: '112',
+    timestamp: 1667678087200,
+  },
+  {
+    title: '10-13A',
+    callsign: '100',
+    entries: {
+      'id-card-clip': 'BOZO went down :clown:',
+    },
+    coords: { x: 0, y: 0, z: 0 },
+    id: '124',
+    timestamp: 1667678087201,
+  },
+  {
+    title: 'Suspicious trade in broaddaylight in da streets of Los Santos',
+    callsign: '100',
+    entries: {
+      'id-card-clip': 'BOZO went down :clown:',
+    },
+    coords: { x: 0, y: 0, z: 0 },
+    id: '124',
+    important: true,
+    timestamp: 1667678087221,
+  },
+] as Dispatch.Call[];
+
+devData.dispatchCams = [
+  {
+    id: 1,
+    label: 'Pacific Bank #1',
+  },
+  {
+    id: 2,
+    label: 'Pacific Bank #2',
+  },
+  {
+    id: 3,
+    label: 'Paleto Bank #1',
+  },
+  {
+    id: 4,
+    label: 'Paleto Bank #2',
+  },
+] as Dispatch.Cam[];
+
 const emulatedData: Record<
   string,
   {

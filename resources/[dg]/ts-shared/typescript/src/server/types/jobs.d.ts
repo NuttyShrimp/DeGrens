@@ -46,3 +46,28 @@ declare namespace Jobs {
     }
   }
 }
+
+declare namespace NPolice {
+  interface DispatchCall {
+    title: string;
+    // entry with no icon
+    description?: string;
+    important?: boolean;
+    // FA-icon onto text besides it
+    entries?: Record<string, string | number>;
+    // Adds model and car color to call, should be server entity id (NOT NETWORK!)
+    vehicle?: number;
+    coords?: Vec3;
+    // If call is from an officer/EMS with a callsign. use that as a tag
+    officer?: number;
+    // If criminal. It will check if he's in a veh and add it to the call
+    criminal?: number;
+    // a generic tag
+    tag?: string;
+    blip?: {
+      sprite: number;
+      color: number;
+      radius?: number;
+    };
+  }
+}

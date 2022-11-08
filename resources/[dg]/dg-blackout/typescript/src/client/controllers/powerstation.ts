@@ -122,7 +122,7 @@ const placeExplosiveObject = async () => {
 
 const removeExplosiveObject = () => {
   if (explosiveObject === null) return;
-  global.exports['nutty-sounds'].stopSoundOnEntity('explosionBeep');
+  global.exports['nutty-sounds'].stopSound('explosionBeep');
   DeleteEntity(explosiveObject);
   explosiveObject = null;
 };

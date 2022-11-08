@@ -1,4 +1,4 @@
-import { Events, Inventory, Notifications, RayCast, RPC, Util } from '@dgx/server';
+import { Config, Events, Inventory, Notifications, Police, RayCast, RPC, Util } from '@dgx/server';
 import { getConfigByHash } from 'modules/info/service.info';
 
 import { getVinForVeh } from '../../helpers/vehicle';
@@ -100,7 +100,19 @@ export const startVehicleLockpick = async (src: number, itemId: string) => {
     );
   }
 
-  // TODO: Add dispatch call
+  if (Util.getRndInteger(0, 101) < Config.getConfigValue('dispatch.callChance.vehiclelockpick')) {
+    Police.createDispatchCall({
+      tag: '10-31',
+      title: 'Poging to voertuig inbraak',
+      coords: Util.getEntityCoords(targetVehicle),
+      criminal: src,
+      vehicle: targetVehicle,
+      blip: {
+        sprite: 645,
+        color: 0,
+      },
+    });
+  }
   let keygameMinAmount = lockpickType === 'door' ? 4 : 5;
   Events.emitNet(
     'vehicles:keys:startLockpick',

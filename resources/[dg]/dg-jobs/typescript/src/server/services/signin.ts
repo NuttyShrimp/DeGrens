@@ -1,11 +1,13 @@
 import { Config, Notifications, Util } from '@dgx/server';
+
 import { mainLogger } from '../sv_logger';
+
 import { getJobConfig, getPlayerInfoForJob } from './whitelist';
 
 let locations: SignInLocation[] = [];
 let loaded = false;
 // Jobname on Set of CIDs
-const signedIn: Map<string, Set<Number>> = new Map();
+const signedIn: Map<string, { cid: number; srvId: number }[]> = new Map();
 
 export const loadLocations = async () => {
   await Config.awaitConfigLoad();
@@ -86,13 +88,14 @@ export const signIn = (src: number, job: string) => {
   // TODO: Check if signed in for another job
   let signedInJob = signedIn.get(job);
   if (!signedInJob) {
-    signedInJob = new Set();
+    signedInJob = [];
     signedIn.set(job, signedInJob);
   }
-  if (signedInJob.has(cid)) {
-    Notifications.add(src, `Je bent al in dienst bij ${jobConfig.name}`, 'error');
+  const currentPlyJob = getPlayerJob(src);
+  if (currentPlyJob) {
+    Notifications.add(src, `Je bent al in dienst bij ${currentPlyJob}`, 'error');
   }
-  signedInJob.add(cid);
+  signedInJob.push({ cid, srvId: src });
   Util.Log('jobs:whitelist:signin:success', { job }, `Player ${cid} signed in for job ${job}`, src);
   Notifications.add(src, `In dienst gegaan bij ${jobConfig.name}`);
   emitNet('dg-jobs:signin:update', src, job, plyEntry.rank);
@@ -106,11 +109,15 @@ export const signOut = (src: number, job: string) => {
   if (!signedInJob) return;
   const jobConfig = getJobConfig(job);
   if (!jobConfig) return;
-  if (!signedInJob.has(cid)) {
+  const currentJob = getPlayerJob(src);
+  if (currentJob !== jobConfig.name) {
     Notifications.add(src, `Je bent niet in dienst bij ${jobConfig.name}`, 'error');
     return;
   }
-  signedInJob.delete(cid);
+  signedIn.set(
+    job,
+    signedInJob.filter(i => i.cid !== cid)
+  );
   Util.Log('jobs:whitelist:signout:success', { job }, `Player ${cid} signed out for job ${jobConfig.name}`, src);
   Notifications.add(src, `Uit dienst gegaan bij ${jobConfig.name}`);
   emitNet('dg-jobs:signin:update', src, null, null);
@@ -120,9 +127,15 @@ export const getPlayerJob = (src: number) => {
   const cid = Util.getCID(src, true);
   if (!cid) return;
   for (const [job, signedInJob] of signedIn) {
-    if (signedInJob.has(cid)) {
+    if (signedInJob.find(i => i.cid === cid)) {
       return job;
     }
   }
   return;
+};
+
+export const getPlayersForJob = (job: string) => {
+  const activePlys = signedIn.get(job);
+  if (!activePlys) return [];
+  return activePlys.map(p => p.srvId);
 };

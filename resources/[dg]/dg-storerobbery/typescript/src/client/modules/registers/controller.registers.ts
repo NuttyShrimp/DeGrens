@@ -53,6 +53,7 @@ const lockpickRegister = async (registerObject: number) => {
   }
 
   if (HasObjectBeenBroken(registerObject)) {
+    Events.emitNet('storerobbery:server:startJob', locationManager.currentStore, 'register');
     lootRegister(registerCoords);
     return;
   }
@@ -63,6 +64,7 @@ const lockpickRegister = async (registerObject: number) => {
     return;
   }
 
+  Events.emitNet('storerobbery:server:startJob', locationManager.currentStore, 'register');
   const keygameSuccess = await Minigames.keygame(5, 10, 15);
   if (keygameSuccess) {
     lootRegister(registerCoords);

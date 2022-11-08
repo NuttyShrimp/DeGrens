@@ -121,4 +121,5 @@ declare interface RootState {
   configmenu: ConfigMenu.State;
   keygame: Keygame.State;
   gridgame: Gridgame.State;
+  dispatch: Dispatch.State;
 }

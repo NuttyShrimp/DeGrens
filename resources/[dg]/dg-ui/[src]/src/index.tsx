@@ -9,6 +9,7 @@ import { App } from './base-app';
 import { IndexProvider } from './index.provider';
 
 import './styles/main.scss';
+import 'animate.css';
 import '@degrens-21/fa-6/css/all.css';
 
 if (!isDevel()) {

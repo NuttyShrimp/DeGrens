@@ -293,6 +293,11 @@ cli-table3@^0.6.2:
   optionalDependencies:
     "@colors/colors" "1.5.0"
 
+color-name-list@^9.22.0:
+  version "9.22.0"
+  resolved "https://registry.yarnpkg.com/color-name-list/-/color-name-list-9.22.0.tgz#41029e977bd06f530a5280ef76a9a78f79d49254"
+  integrity sha512-c64Mnfmc2rhVhouuWkHxsLhMsA2WtAV6mo3CBdZLvtpdmBeXI1f5lwH4bRiLGLqtb501juO6qRY+tiDFTlM7hw==
+
 commander@^2.20.0:
   version "2.20.3"
   resolved "https://registry.yarnpkg.com/commander/-/commander-2.20.3.tgz#fd485e84c03eb4881c20722ba48035e8531aeb33"
@@ -431,6 +436,11 @@ mime-types@^2.1.27:
   integrity sha512-ZDY+bPm5zTTF+YpCrAU9nK0UgICYPT0QtT1NZWFv4s++TNkcgVaT0g6+4R2uI4MjQjzysHB1zxuWL50hzaeXiw==
   dependencies:
     mime-db "1.52.0"
+
+nearest-color@^0.4.4:
+  version "0.4.4"
+  resolved "https://registry.yarnpkg.com/nearest-color/-/nearest-color-0.4.4.tgz#fb812072b511f4f09a0a316903332e09fa5d7f1d"
+  integrity sha512-orhcaIORC10tf41Ld2wwlcC+FaAavHG87JHWB3eHH5p7v2k9Tzym2XNEZzLAm5YJwGv6Q38WWc7SOb+Qfu/4NQ==
 
 neo-async@^2.6.2:
   version "2.6.2"

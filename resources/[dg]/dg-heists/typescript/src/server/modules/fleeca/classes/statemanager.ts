@@ -1,5 +1,5 @@
 import { DGXEvent, EventListener, RPCEvent, RPCRegister } from '@dgx/server/decorators';
-import { Util } from '@dgx/server';
+import { Config, Police, Util } from '@dgx/server';
 import doorStateManager from 'controllers/classes/doorstatemanager';
 
 @RPCRegister()
@@ -48,7 +48,22 @@ class StateManager extends Util.Singleton<StateManager>() implements Heist.State
     if (!this.robbedBanks.has(fleecaId)) {
       this.robbedBanks.add(fleecaId);
     }
+    const door = Config.getConfigValue<Heist.Door>(`heists.doors.${fleecaId}`);
     setTimeout(this.chooseNewPowerLocation, 45 * 60 * 1000);
+    Police.createDispatchCall({
+      tag: '10-90',
+      title: 'Bank alarm: Overval',
+      blip: {
+        // sprite: 814,
+        sprite: 618,
+        color: 1,
+      },
+      coords: door.coords,
+      entries: {
+        // TODO: replace with actual label if config is cleaned up
+        'building-columns': 'KUIS DE CONFIG Op',
+      },
+    });
   };
 }
 

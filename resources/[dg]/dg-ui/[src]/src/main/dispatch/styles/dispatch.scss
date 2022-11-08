@@ -1,0 +1,128 @@
+@use 'src/styles/variables';
+
+.dispatch {
+  &-list {
+    position: absolute;
+    top: 1vh;
+    max-height: 99vh;
+    padding-bottom: 1vh;
+    overflow: auto;
+  }
+
+  &-call {
+    display: flex;
+    width: 55vh;
+    min-height: 11vh;
+
+    margin-bottom: 1.5vh;
+    padding: 1vh;
+    border-radius: .75vh;
+
+    background-color: rgba(variables.$primary-darker, .9);
+
+    &-list {
+      right: 1vh;
+      width: 55vh;
+    }
+
+    &-content {
+      flex: 1 0 93%;
+    }
+
+    &-header {
+      display: flex;
+      align-items: center;
+
+      &>*:not(:last-child) {
+        margin-right: 1vh;
+      }
+    }
+
+    &-entries {
+      &>* {
+        display: flex;
+        align-items: center;
+
+        &>*:first-child {
+          flex: 0 0 6%;
+          display: flex;
+          justify-content: start;
+        }
+
+        &>*:last-child {
+          flex: 0 0 94%;
+        }
+      }
+    }
+
+    &-location {
+      flex: 1 0 7%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      &:hover {
+        cursor: pointer;
+        color: variables.$primary-light;
+      }
+    }
+
+    &-important {
+      animation: Important 2s infinite;
+    }
+
+    &-new-important {
+      animation: Important 2s infinite, zoomInRight 1s
+    }
+  }
+
+  &-cam {
+    &-list {
+      left: 1vh;
+    }
+
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+
+    width: 30vh;
+
+    margin-bottom: 1vh;
+    padding: 1vh;
+    border-radius: .75vh;
+
+    background-color: rgba(variables.$primary-darker, .9);
+
+    &>span {
+      margin: 0 1vh;
+    }
+
+    &-info {
+      display: flex;
+      flex-direction: column;
+      flex: 1 0 60%;
+    }
+  }
+}
+
+@keyframes Important {
+  0% {
+    background-color: rgba(variables.$primary-darker, .9);
+  }
+
+  25% {
+    background-color: rgba(variables.$tertiary-darker, .9);
+  }
+
+  50% {
+    background-color: rgba(variables.$primary-darker, .9);
+  }
+
+  75% {
+    background-color: rgba(variables.$tertiary-darker, .9);
+  }
+
+  100% {
+    background-color: rgba(variables.$primary-darker, .9);
+  }
+}

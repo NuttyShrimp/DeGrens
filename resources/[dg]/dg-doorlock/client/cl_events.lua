@@ -104,6 +104,7 @@ RegisterNetEvent("lockpick:UseLockpick", function()
     local pos = GetEntityCoords(PlayerPedId())
     for k, v in pairs(doors) do 
         if v.lockpickable and v.locked and #(pos - v.coords) < 1.5 then
+            DGX.Events.emitNet('dg-doorlock:server:triedLockpickingDoor', k);
             exports["dg-keygame"]:OpenGame(function(success)
                 if success then
                     TriggerServerEvent("dg-doorlock:server:changeDoorLockState", k, not doors[k].locked)

@@ -1,4 +1,4 @@
-import { Auth, Config, Events, Inventory, RPC } from '@dgx/server';
+import { Auth, Config, Events, Inventory, Police, RPC } from '@dgx/server';
 
 import powerstationManager from '../classes/PowerstationManager';
 
@@ -19,10 +19,25 @@ RPC.register('blackout:server:isStationHit', (_src: number, stationId: number) =
   return powerstationManager.isStationHit(stationId);
 });
 
-Events.onNet('blackout:server:setStationHit', (_src: number, stationId: number) => {
+Events.onNet('blackout:server:setStationHit', (src: number, stationId: number) => {
   powerstationManager.setStationHit(stationId);
+  Police.createDispatchCall({
+    tag: '10-35',
+    title: 'Verdachte activiteit aan een elektriciteits centrale',
+    description:
+      'Er is een luide explosie gehoord rond de elektriciteits centrale. Er word om dringende assistentie gevraagd!',
+    coords: powerStations[stationId].center,
+    entries: {
+      'camera-cctv': powerStations[stationId].camId,
+    },
+    criminal: src,
+    blip: {
+      sprite: 354,
+      color: 5,
+    },
+  });
 });
 
 Auth.onAuth(src => {
   Events.emitNet('blackout:server:getPowerStations', src, powerStations);
-})
+});

@@ -31,7 +31,7 @@
         }
       },
       "safecoords": { "x": -709.77, "y": -904.12, "z": 19.22 },
-      "cam": 1
+      "cam": 20
     },
     "grove_street": {
       "registerzone": {
@@ -55,7 +55,7 @@
         }
       },
       "safecoords": { "x": -43.43, "y": -1748.3, "z": 29.42 },
-      "cam": 2
+      "cam": 17
     },
     "mirror_park": {
       "registerzone": {
@@ -79,7 +79,7 @@
         }
       },
       "safecoords": { "x": 1159.48, "y": -314.0, "z": 69.21 },
-      "cam": 3
+      "cam": 23
     },
     "richman_glen": {
       "registerzone": {
@@ -103,7 +103,7 @@
         }
       },
       "safecoords": { "x": -1829.22, "y": 798.72, "z": 138.19 },
-      "cam": 4
+      "cam": 25
     },
     "grape_seed": {
       "registerzone": {
@@ -127,7 +127,7 @@
         }
       },
       "safecoords": { "x": 1707.94, "y": 4920.44, "z": 42.06 },
-      "cam": 5
+      "cam": 37
     },
     "vespucci_canals": {
       "registerzone": {
@@ -151,7 +151,7 @@
         }
       },
       "safecoords": { "x": -1220.87, "y": -916.05, "z": 11.33 },
-      "cam": 6
+      "cam": 19
     },
     "grand_senora": {
       "registerzone": {
@@ -175,7 +175,7 @@
         }
       },
       "safecoords": { "x": 1169.24, "y": 2717.82, "z": 37.16 },
-      "cam": 7
+      "cam": 30
     },
     "murrieta_heights": {
       "registerzone": {
@@ -199,7 +199,7 @@
         }
       },
       "safecoords": { "x": 1126.78, "y": -980.15, "z": 45.42 },
-      "cam": 8
+      "cam": 22
     },
     "del_perro": {
       "registerzone": {
@@ -223,7 +223,7 @@
         }
       },
       "safecoords": { "x": -1478.91, "y": -375.45, "z": 39.16 },
-      "cam": 9
+      "cam": 18
     },
     "great_ocean": {
       "registerzone": {
@@ -247,7 +247,7 @@
         }
       },
       "safecoords": { "x": -2959.66, "y": 387.09, "z": 14.04 },
-      "cam": 10
+      "cam": 26
     },
     "banham_canyon": {
       "registerzone": {
@@ -271,7 +271,7 @@
         }
       },
       "safecoords": { "x": -3048.68, "y": 588.57, "z": 7.91 },
-      "cam": 11
+      "cam": 27
     },
     "chumash": {
       "registerzone": {
@@ -295,7 +295,7 @@
         }
       },
       "safecoords": { "x": -3249.7, "y": 1007.37, "z": 12.83 },
-      "cam": 12
+      "cam": 28
     },
     "senora_freeway": {
       "registerzone": {
@@ -319,7 +319,7 @@
         }
       },
       "safecoords": { "x": 2674.35, "y": 3289.16, "z": 55.24 },
-      "cam": 13
+      "cam": 31
     },
     "strawberry": {
       "registerzone": {
@@ -343,7 +343,7 @@
         }
       },
       "safecoords": { "x": 31.24, "y": -1339.32, "z": 29.5 },
-      "cam": 14
+      "cam": 21
     },
     "harmony": {
       "registerzone": {
@@ -367,7 +367,7 @@
         }
       },
       "safecoords": { "x": 543.33, "y": 2662.52, "z": 42.15 },
-      "cam": 15
+      "cam": 29
     },
     "vinewood": {
       "registerzone": {
@@ -391,7 +391,7 @@
         }
       },
       "safecoords": { "x": 381.11, "y": 332.55, "z": 103.57 },
-      "cam": 16
+      "cam": 24
     },
     "mount_chiliad": {
       "registerzone": {
@@ -415,7 +415,7 @@
         }
       },
       "safecoords": { "x": 1737.44, "y": 6419.43, "z": 35.04 },
-      "cam": 17
+      "cam": 33
     },
     "sandy_shores": {
       "registerzone": {
@@ -439,7 +439,7 @@
         }
       },
       "safecoords": { "x": 1962.13, "y": 3750.43, "z": 32.34 },
-      "cam": 18
+      "cam": 32
     },
     "tataviam_mountains": {
       "registerzone": {
@@ -463,7 +463,7 @@
         }
       },
       "safecoords": { "x": 2549.47, "y": 387.95, "z": 108.62 },
-      "cam": 19
+      "cam": 36
     },
     "del_vecchio": {
       "registerzone": {
@@ -487,7 +487,7 @@
         }
       },
       "safecoords": { "x": -168.46, "y": 6318.8, "z": 30.59 },
-      "cam": 20
+      "cam": 34
     },
     "paleto_bay": {
       "registerzone": {
@@ -511,7 +511,7 @@
         }
       },
       "safecoords": { "x": 170.93, "y": 6642.52, "z": 31.7 },
-      "cam": 21
+      "cam": 35
     }
   }
 }

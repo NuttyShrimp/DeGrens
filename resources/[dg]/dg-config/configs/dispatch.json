@@ -1,0 +1,529 @@
+{
+  "callChance": {
+    "cornersell": 40,
+    "doorlockpick": 60,
+    "vehiclelockpick": 75
+  },
+  "cams": [
+    {
+      "label": "Pacific Bank #1",
+      "coords": {
+        "x": 237.844,
+        "y": 234.820,
+        "z": 109.122
+      },
+      "defaultRotation": {
+        "x": -6.692,
+        "y": 0.0,
+        "z": -164.484
+      }
+    },
+    {
+      "label": "Pacific Bank #2",
+      "coords": {
+        "x": 247.098,
+        "y": 230.158,
+        "z": 109.209
+      },
+      "defaultRotation": {
+        "x": -18.031,
+        "y": 0.0,
+        "z": -153.853
+      }
+    },
+    {
+      "label": "Pacific Bank #3",
+      "coords": {
+        "x": 269.23,
+        "y": 221.88,
+        "z": 108.274
+      },
+      "defaultRotation": {
+        "x": -1.377,
+        "y": 0.0,
+        "z": 109.772
+      }
+    },
+    {
+      "label": "Juwelier #1",
+      "coords": {
+        "x": -627.5855,
+        "y": -229.71,
+        "z": 40.38
+      },
+      "defaultRotation": {
+        "x": -25.0,
+        "y": 0.0,
+        "z": 160.38
+      }
+    },
+    {
+      "label": "Juwelier #2",
+      "coords": {
+        "x": -627.3905,
+        "y": -239.77,
+        "z": 40.28
+      },
+      "defaultRotation": {
+        "x": -25.0,
+        "y": 0.0,
+        "z": -40.05
+      }
+    },
+    {
+      "label": "Juwelier #3",
+      "coords": {
+        "x": -622.41,
+        "y": -236.05,
+        "z": 40.35
+      },
+      "defaultRotation": {
+        "x": -35.0,
+        "y": 0.0,
+        "z": -40.05
+      }
+    },
+    {
+      "label": "Juwelier #4",
+      "coords": {
+        "x": -620.32,
+        "y": -224.55,
+        "z": 40.38
+      },
+      "defaultRotation": {
+        "x": -35.0,
+        "y": 0.0,
+        "z": 160.38
+      }
+    },
+    {
+      "label": "Maze Bank",
+      "coords": {
+        "x": -1299.027,
+        "y": -824.84,
+        "z": 20.14
+      },
+      "defaultRotation": {
+        "x": -35.0,
+        "y": 0.0,
+        "z": 106.4
+      }
+    },
+    {
+      "label": "Paleto Bank",
+      "coords": {
+        "x": -99.946,
+        "y": 6465.358,
+        "z": 33.844
+      },
+      "defaultRotation": {
+        "x": -18.385,
+        "y": 0.0,
+        "z": 85.347
+      }
+    },
+    {
+      "label": "Fleeca Bank Hawick Ave",
+      "coords": {
+        "x": 309.341,
+        "y": -281.439,
+        "z": 55.88
+      },
+      "defaultRotation": {
+        "x": -35.0,
+        "y": 0.0,
+        "z": -146.1595
+      }
+    },
+    {
+      "label": "Fleeca Bank Legion Square",
+      "coords": {
+        "x": 144.871,
+        "y": -1043.044,
+        "z": 31.017
+      },
+      "defaultRotation": {
+        "x": -35.0,
+        "y": 0.0,
+        "z": -143.9796
+      }
+    },
+    {
+      "label": "Fleeca Bank Hawick Ave",
+      "coords": {
+        "x": -355.7643,
+        "y": -52.506,
+        "z": 50.746
+      },
+      "defaultRotation": {
+        "x": -35.0,
+        "y": 0.0,
+        "z": -143.8711
+      }
+    },
+    {
+      "label": "Fleeca Bank Del Perro Blvd",
+      "coords": {
+        "x": -1214.226,
+        "y": -335.86,
+        "z": 39.515
+      },
+      "defaultRotation": {
+        "x": -35.0,
+        "y": 0.0,
+        "z": -97.862
+      }
+    },
+    {
+      "label": "Fleeca Bank Great Ocean Hwy",
+      "coords": {
+        "x": -2958.885,
+        "y": 478.983,
+        "z": 17.406
+      },
+      "defaultRotation": {
+        "x": -35.0,
+        "y": 0.0,
+        "z": -34.69595
+      }
+    },
+    {
+      "label": "Fleeca Bank Route 68",
+      "coords": {
+        "x": 1178.786,
+        "y": 2710.909,
+        "z": 39.8879
+      },
+      "defaultRotation": {
+        "x": -35.0,
+        "y": 0.0,
+        "z": 55.69595
+      }
+    },
+    {
+      "label": "Gevangenis",
+      "coords": {
+        "x": 1835.09,
+        "y": 2603.18,
+        "z": 50.96
+      },
+      "defaultRotation": {
+        "x": -35.0,
+        "y": 0.0,
+        "z": -40.38
+      }
+    },
+    {
+      "label": "Limited Ltd Grove St.",
+      "coords": {
+        "x": -53.1433,
+        "y": -1746.714,
+        "z": 31.546
+      },
+      "defaultRotation": {
+        "x": -35.0,
+        "y": 0.0,
+        "z": -168.9182
+      }
+    },
+    {
+      "label": "Rob's Liqour Prosperity St.",
+      "coords": {
+        "x": -1482.9,
+        "y": -380.463,
+        "z": 42.363
+      },
+      "defaultRotation": {
+        "x": -35.0,
+        "y": 0.0,
+        "z": 79.53281
+      }
+    },
+    {
+      "label": "Rob's Liqour San Andreas Ave.",
+      "coords": {
+        "x": -1224.874,
+        "y": -911.094,
+        "z": 14.401
+      },
+      "defaultRotation": {
+        "x": -35.0,
+        "y": 0.0,
+        "z": -6.778894
+      }
+    },
+    {
+      "label": "Limited Ltd Little Seoul",
+      "coords": {
+        "x": -718.153,
+        "y": -909.211,
+        "z": 21.49
+      },
+      "defaultRotation": {
+        "x": -35.0,
+        "y": 0.0,
+        "z": -137.1431
+      }
+    },
+    {
+      "label": "24/7 Supermarkt Innocence Blvd.",
+      "coords": {
+        "x": 23.885,
+        "y": -1342.441,
+        "z": 31.672
+      },
+      "defaultRotation": {
+        "x": -35.0,
+        "y": 0.0,
+        "z": -142.9191
+      }
+    },
+    {
+      "label": "Rob's Liqour El Rancho Blvd.",
+      "coords": {
+        "x": 1133.024,
+        "y": -978.712,
+        "z": 48.515
+      },
+      "defaultRotation": {
+        "x": -35.0,
+        "y": 0.0,
+        "z": -137.302
+      }
+    },
+    {
+      "label": "Limited Ltd West Mirror Drive",
+      "coords": {
+        "x": 1151.93,
+        "y": -320.389,
+        "z": 71.33
+      },
+      "defaultRotation": {
+        "x": -35.0,
+        "y": 0.0,
+        "z": -119.4468
+      }
+    },
+    {
+      "label": "24/7 Supermarkt Clinton Ave",
+      "coords": {
+        "x": 383.28,
+        "y": 328.19,
+        "z": 105.93
+      },
+      "defaultRotation": {
+        "x": -35.0,
+        "y": 0.0,
+        "z": 118.585
+      }
+    },
+    {
+      "label": "Limited Ltd Banham Canyon Dr",
+      "coords": {
+        "x": -1832.057,
+        "y": 789.389,
+        "z": 140.436
+      },
+      "defaultRotation": {
+        "x": -35.0,
+        "y": 0.0,
+        "z": -91.481
+      }
+    },
+    {
+      "label": "Rob's Liqour Great Ocean Hwy",
+      "coords": {
+        "x": -2966.15,
+        "y": 387.067,
+        "z": 17.393
+      },
+      "defaultRotation": {
+        "x": -35.0,
+        "y": 0.0,
+        "z": 32.92229
+      }
+    },
+    {
+      "label": "24/7 Supermarkt Ineseno Road",
+      "coords": {
+        "x": -3046.08,
+        "y": 592.52,
+        "z": 10.26
+      },
+      "defaultRotation": {
+        "x": -35.0,
+        "y": 0.0,
+        "z": -116.673
+      }
+    },
+    {
+      "label": "24/7 Supermarkt Barbareno Rd.",
+      "coords": {
+        "x": -3245.74,
+        "y": 1009.99,
+        "z": 15.0
+      },
+      "defaultRotation": {
+        "x": -35.0,
+        "y": 0.0,
+        "z": -135.2151
+      }
+    },
+    {
+      "label": "24/7 Supermarkt Route 68",
+      "coords": {
+        "x": 539.84,
+        "y": 2665.61,
+        "z": 44.35
+      },
+      "defaultRotation": {
+        "x": -35.0,
+        "y": 0.0,
+        "z": -42.947
+      }
+    },
+    {
+      "label": "Rob's Liqour Route 68",
+      "coords": {
+        "x": 1169.855,
+        "y": 2711.493,
+        "z": 40.432
+      },
+      "defaultRotation": {
+        "x": -35.0,
+        "y": 0.0,
+        "z": 127.17
+      }
+    },
+    {
+      "label": "24/7 Supermarkt Senora Fwy #1",
+      "coords": {
+        "x": 2673.579,
+        "y": 3281.265,
+        "z": 57.541
+      },
+      "defaultRotation": {
+        "x": -35.0,
+        "y": 0.0,
+        "z": -80.242
+      }
+    },
+    {
+      "label": "24/7 Supermarkt Alhambra Dr.",
+      "coords": {
+        "x": 1966.53,
+        "y": 3748.91,
+        "z": 34.12
+      },
+      "defaultRotation": {
+        "x": -35.0,
+        "y": 0.0,
+        "z": 163.065
+      }
+    },
+    {
+      "label": "24/7 Supermarkt Senora Fwy #2",
+      "coords": {
+        "x": 1729.522,
+        "y": 6419.87,
+        "z": 37.262
+      },
+      "defaultRotation": {
+        "x": -35.0,
+        "y": 0.0,
+        "z": -160.089
+      }
+    },
+    {
+      "label": "Del Vecchio Liquor Paleto Bay",
+      "coords": {
+        "x": -163.75,
+        "y": 6323.45,
+        "z": 33.424
+      },
+      "defaultRotation": {
+        "x": -35.0,
+        "y": 0.0,
+        "z": 260.00
+      }
+    },
+    {
+      "label": "Don's Country Store Paleto Bay",
+      "coords": {
+        "x": 166.42,
+        "y": 6634.4,
+        "z": 34.19
+      },
+      "defaultRotation": {
+        "x": -35.0,
+        "y": 0.0,
+        "z": 32.00
+      }
+    },
+    {
+      "label": "24/7 Supermarkt Palamino Freeway",
+      "coords": {
+        "x": 2558.4,
+        "y": 389.8,
+        "z": 110.51
+      },
+      "defaultRotation": {
+        "x": -35.0,
+        "y": 0.0,
+        "z": 153.1
+      }
+    },
+    {
+      "label": "Limited Ltd Grape Seed",
+      "coords": {
+        "x": 1703.13,
+        "y": 4933.82,
+        "z": 43.92
+      },
+      "defaultRotation": {
+        "x": -35.0,
+        "y": 0.0,
+        "z": 165.5
+      }
+    },
+    {
+      "label": "24/7 Supermarkt Ottos Garage",
+      "coords": {
+        "x": 812.25,
+        "y": -783.84,
+        "z": 28.34
+      },
+      "defaultRotation": {
+        "x": -45.0,
+        "y": 0.0,
+        "z": -50.089
+      }
+    },
+    {
+      "label": "Elektriciteit centrale Los Santos",
+      "coords": {
+        "x": 2858.5503,
+        "y": 1527.6771,
+        "z": 35.3116
+      },
+      "defaultRotation": {
+        "x": -30.0,
+        "y": 0.0,
+        "z": 80.0
+      }
+    },
+    {
+      "label": "Elektriciteit station vinewood",
+      "coords": {
+        "x": 724.6768,
+        "y": 149.9145,
+        "z": 85.3128
+      },
+      "defaultRotation": {
+        "x": -30.0,
+        "y": 0.0,
+        "z": 152.0402
+      }
+    }
+  ]
+}

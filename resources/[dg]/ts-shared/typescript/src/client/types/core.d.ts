@@ -176,6 +176,7 @@ declare interface ClientFunctions {
 
 declare interface Blips {
   Add: (category: string, blip: Blip) => void;
+  Remove: (category: string, id: string) => void;
   enableCategory: (category: string) => void;
   disableCategory: (category: string) => void;
   removeCategory: (category: string) => void;
@@ -190,6 +191,7 @@ declare interface Blip {
   color?: number;
   display?: number;
   scale?: number;
+  radius?: number;
 }
 
 declare interface VehicleProperties {

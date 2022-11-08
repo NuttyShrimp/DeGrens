@@ -12,7 +12,9 @@
   },
   "dependencies": {
     "cli-table3": "^0.6.2",
+    "color-name-list": "^9.22.0",
     "core-js": "^3.25.0",
+    "nearest-color": "^0.4.4",
     "reflect-metadata": "^0.1.13"
   },
   "devDependencies": {
