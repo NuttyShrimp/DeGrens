@@ -34397,11 +34397,6 @@
     "prefix": "DGCore.Functions.UseItem",
     "body": ["DGCore.Functions.UseItem(${1:source}, ${2:item})"]
   },
-  "DGCore.Functions.Kick": {
-    "scope": "lua",
-    "prefix": "DGCore.Functions.Kick",
-    "body": ["DGCore.Functions.Kick(${1:source}, ${2:reason}, ${3:setKickReason}, ${4:deferrals})"]
-  },
   "DGCore.Functions.IsWhitelisted": {
     "scope": "lua",
     "prefix": "DGCore.Functions.IsWhitelisted",
@@ -34421,21 +34416,6 @@
     "scope": "lua",
     "prefix": "DGCore.Functions.HasPermission",
     "body": ["DGCore.Functions.HasPermission(${1:source}, ${2:permission})"]
-  },
-  "DGCore.Functions.GetPermission": {
-    "scope": "lua",
-    "prefix": "DGCore.Functions.GetPermission",
-    "body": ["DGCore.Functions.GetPermission(${1:source})"]
-  },
-  "DGCore.Functions.IsOptin": {
-    "scope": "lua",
-    "prefix": "DGCore.Functions.IsOptin",
-    "body": ["DGCore.Functions.IsOptin(${1:source})"]
-  },
-  "DGCore.Functions.ToggleOptin": {
-    "scope": "lua",
-    "prefix": "DGCore.Functions.ToggleOptin",
-    "body": ["DGCore.Functions.ToggleOptin(${1:source})"]
   },
   "DGCore.Functions.IsPlayerBanned": {
     "scope": "lua",

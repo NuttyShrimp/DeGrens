@@ -23,7 +23,7 @@ const baseCommands: Server.Command[] = [
         message: args.join(' '),
       };
       DGCore.Functions.GetPlayers().forEach(player => {
-        let shouldShow = Admin.hasPermission(player, 'staff') && DGCore.Functions.IsOptin(player);
+        let shouldShow = Admin.hasPermission(player, 'staff');
         if (!shouldShow) {
           // Some more expensive shit so we hide it behind an extra check
           const plyCoords = Util.ArrayToVector3(GetEntityCoords(GetPlayerPed(String(player))));

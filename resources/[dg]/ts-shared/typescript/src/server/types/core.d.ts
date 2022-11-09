@@ -120,22 +120,6 @@ interface ServerFunctions {
    * @returns true if the user has the specified permission
    */
   HasPermission(source: number, permission: string): boolean;
-
-  /**
-   * @returns the user's permission level
-   */
-  GetPermission(source: number): string;
-
-  /** Should be IsOnDuty but this function name is in dutch?
-   * @returns if the player is an admin, returns their ON DUTY status
-   */
-  IsOptin(source: number): boolean;
-
-  /** Should be ToggleDuty but this function name is in dutch?
-   *  If the player is an admin, it will toggle their ON DUTY status
-   */
-  ToggleOptin(source: number): void;
-
   /**
    * @returns true if the player is banned
    */

@@ -95,30 +95,6 @@ end
 
 AddEventHandler('playerConnecting', OnPlayerConnecting)
 
--- Open & Close Server (prevents players from joining)
-
-RegisterNetEvent('DGCore:server:CloseServer', function(reason)
-	local src = source
-	if exports['dg-admin']:hasPlayerPermission(src, 'staff') then
-		local reason = reason or 'No reason specified'
-		DGCore.Config.Server.closed = true
-		DGCore.Config.Server.closedReason = reason
-		TriggerClientEvent('qbadmin:client:SetServerStatus', -1, true)
-	else
-		DGCore.Functions.Kick(src, 'You don\'t have permissions for this..', nil, nil)
-	end
-end)
-
-RegisterNetEvent('DGCore:server:OpenServer', function()
-	local src = source
-	if exports['dg-admin']:hasPlayerPermission(src, 'staff') then
-		DGCore.Config.Server.closed = false
-		TriggerClientEvent('qbadmin:client:SetServerStatus', -1, false)
-	else
-		DGCore.Functions.Kick(src, 'You don\'t have permissions for this..', nil, nil)
-	end
-end)
-
 -- Callbacks
 
 RegisterNetEvent('DGCore:Server:TriggerCallback', function(name, ...)

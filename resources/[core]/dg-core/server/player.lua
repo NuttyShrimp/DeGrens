@@ -92,7 +92,7 @@ function DGCore.Player.CheckPlayerData(src, PlayerData)
   PlayerData.charinfo.cash = PlayerData.charinfo.cash or DGCore.Config.Money.defaultCash
 
   -- Character data
-  PlayerData.position = PlayerData.position or QBConfig.DefaultSpawn
+  PlayerData.position = PlayerData.position or DGConfig.DefaultSpawn
 
   -- Metadata
   PlayerData.metadata = PlayerData.metadata or {}
@@ -109,16 +109,6 @@ function DGCore.Player.CheckPlayerData(src, PlayerData)
   PlayerData.metadata['status'] = PlayerData.metadata['status'] or {}
   PlayerData.metadata['fitbit'] = PlayerData.metadata['fitbit'] or {}
   PlayerData.metadata['commandbinds'] = PlayerData.metadata['commandbinds'] or {}
-  PlayerData.metadata['bloodtype'] = PlayerData.metadata['bloodtype'] or
-      DGCore.Config.Player.Bloodtypes[math.random(1, #DGCore.Config.Player.Bloodtypes)]
-  PlayerData.metadata['craftingrep'] = PlayerData.metadata['craftingrep'] or 0
-  PlayerData.metadata['attachmentcraftingrep'] = PlayerData.metadata['attachmentcraftingrep'] or 0
-  PlayerData.metadata['jobrep'] = PlayerData.metadata['jobrep'] or {
-    ['tow'] = 0,
-    ['trucker'] = 0,
-    ['taxi'] = 0,
-    ['hotdog'] = 0,
-  }
   PlayerData.metadata['callsign'] = PlayerData.metadata['callsign'] or 'NO CALLSIGN'
   PlayerData.metadata['fingerprint'] = PlayerData.metadata['fingerprint'] or DGCore.Player.CreateFingerId()
   PlayerData.metadata['criminalrecord'] = PlayerData.metadata['criminalrecord'] or {

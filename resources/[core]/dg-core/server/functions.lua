@@ -7,7 +7,7 @@ DGCore.Functions = {}
 
 function DGCore.Functions.GetIdentifier(source, idtype)
 	local src = source
-	local idtype = idtype or QBConfig.IdentifierType
+	local idtype = idtype or DGConfig.IdentifierType
 	for _, identifier in pairs(GetPlayerIdentifiers(src)) do
 		if string.find(identifier, idtype) then
 			return identifier
@@ -143,67 +143,6 @@ function DGCore.Functions.TriggerCallback(name, source, cb, ...)
 	local src = source
 	if DGCore.ServerCallbacks[name] then
 		DGCore.ServerCallbacks[name](src, cb, ...)
-	end
-end
-
--- Kick Player
-
-function DGCore.Functions.Kick(source, reason, setKickReason, deferrals)
-	local src = source
-	reason = '\n' .. reason .. '\n🔸 Check our Discord for further information: ' .. DGCore.Config.Server.discord
-	if setKickReason then
-		setKickReason(reason)
-	end
-	CreateThread(function()
-		if deferrals then
-			deferrals.update(reason)
-			Wait(2500)
-		end
-		if src then
-			DropPlayer(src, reason)
-		end
-		local i = 0
-		while (i <= 4) do
-			i = i + 1
-			while true do
-				if src then
-					if (GetPlayerPing(src) >= 0) then
-						break
-					end
-					Wait(100)
-					CreateThread(function()
-						DropPlayer(src, reason)
-					end)
-				end
-			end
-			Wait(5000)
-		end
-	end)
-end
-
--- Checking for Permission Level
-
-function DGCore.Functions.GetPermission(source)
-	return 'god'
-end
-
--- Opt in or out of admin reports
-
-function DGCore.Functions.IsOptin(source)
-	local src = source
-	local pSteamId = DGCore.Functions.GetIdentifier(src, 'steam')
-	if exports['dg-admin']:hasPlayerPermission(src, 'staff') then
-		retval = DGCore.Config.Server.PermissionList[pSteamId].optin
-		return retval
-	end
-	return false
-end
-
-function DGCore.Functions.ToggleOptin(source)
-	local src = source
-	local pSteamId = DGCore.Functions.GetIdentifier(src, 'steam')
-	if exports['dg-admin']:hasPlayerPermission(src, 'staff') then
-		DGCore.Config.Server.PermissionList[pSteamId].optin = not DGCore.Config.Server.PermissionList[pSteamId].optin
 	end
 end
 

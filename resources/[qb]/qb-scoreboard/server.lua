@@ -37,7 +37,6 @@ DGCore.Functions.CreateCallback('qb-scoreboard:server:GetPlayersArrays', functio
         local Player = DGCore.Functions.GetPlayer(v)
         if Player ~= nil then 
             players[Player.PlayerData.source] = {}
-            players[Player.PlayerData.source].permission = DGCore.Functions.IsOptin(Player.PlayerData.source)
         end
     end
     cb(players)

@@ -1,6 +1,6 @@
 DGCore = {}
 DGCore.PlayerData = {}
-DGCore.Config = QBConfig
+DGCore.Config = DGConfig
 DGCore.Shared = DGShared
 DGCore.ServerCallbacks = {}
 

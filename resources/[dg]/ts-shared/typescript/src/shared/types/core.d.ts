@@ -53,27 +53,18 @@ declare interface Config {
 }
 
 declare interface PlayerConfig {
-  BloodTypes: BloodTypes;
   HungerRate: number;
   ThirstRate: number;
   JSONData: string[];
 }
 
 declare interface ServerConfig {
-  uptime: number;
-  whitelist: boolean;
-  closed: boolean;
-  PermissionList: any;
-  closedReason: string;
   discord: string;
 }
 
 declare interface MoneyConfig {
-  PayCheckTimeOut: number;
   defaultCash: number;
 }
-
-declare type BloodTypes = 'A+' | 'B+' | 'B-' | 'AB+' | 'AB-' | 'O+' | 'O-';
 
 declare interface Vehicle {
   name: string;
