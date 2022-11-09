@@ -1,8 +1,8 @@
 function syncCoords()
   local coords = {}
   local playerIndices = GetNumPlayerIndices()
-  for i = 1, playerIndices do
-    local plyId = GetPlayerFromIndex(i)
+  for i = 0, playerIndices - 1 do
+    local plyId = tonumber(GetPlayerFromIndex(i))
     if plyId then
       coords[plyId] = DGX.Util.getPlyCoords(plyId)
     end

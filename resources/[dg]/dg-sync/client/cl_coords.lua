@@ -1,6 +1,6 @@
 local playerCoords = {}
 
-RegisterServerEvent('dg-sync:coords:sync', function(pCoords)
+RegisterNetEvent('dg-sync:coords:sync', function(pCoords)
   playerCoords = pCoords
 end)
 
