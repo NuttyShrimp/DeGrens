@@ -1,4 +1,4 @@
-import { Config, Notifications, Util } from '@dgx/server';
+import { Config, Notifications, UI, Util } from '@dgx/server';
 
 import { mainLogger } from '../sv_logger';
 
@@ -28,12 +28,6 @@ export const getLocations = async () => {
   return locations;
 };
 
-export const canJobSignIn = (job: string, locId: number) => {
-  const loc = locations[locId];
-  if (!loc) return false;
-  return loc.jobs.includes(job);
-};
-
 export const openSignInMenu = (src: number, locId: number) => {
   if (!locations[locId]) return;
   const jobs = locations[locId].jobs;
@@ -58,7 +52,7 @@ export const openSignInMenu = (src: number, locId: number) => {
       callbackURL: 'jobs:signin:signout',
     });
   });
-  emitNet('dg-ui:openApplication', src, 'contextmenu', menu);
+  UI.openContextMenu(src, menu);
 };
 
 export const signIn = (src: number, job: string) => {
@@ -85,7 +79,14 @@ export const signIn = (src: number, job: string) => {
     );
     return;
   }
-  // TODO: Check if signed in for another job
+
+  // Check if player already signed in for other job, if so remove from there
+  for (const signedInPlayers of signedIn.values()) {
+    const idx = signedInPlayers.findIndex(p => p.cid === cid);
+    if (idx === -1) continue;
+    signedInPlayers.splice(idx, 1);
+  }
+
   let signedInJob = signedIn.get(job);
   if (!signedInJob) {
     signedInJob = [];
@@ -131,7 +132,6 @@ export const getPlayerJob = (src: number) => {
       return job;
     }
   }
-  return;
 };
 
 export const getPlayersForJob = (job: string) => {

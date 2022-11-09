@@ -32,7 +32,6 @@ Events.onNet('jobs:server:signOut', (src, job: string) => {
 });
 
 Events.onNet('jobs:whitelist:server:openJobAllowlist', (src, filter?: string) => {
-  if (!hasSpeciality(src, 'HC')) return;
   openAllowListMenu(src, filter);
 });
 

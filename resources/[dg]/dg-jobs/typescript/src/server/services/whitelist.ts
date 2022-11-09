@@ -92,6 +92,12 @@ export const openAllowListMenu = (src: number, filter?: string) => {
     Notifications.add(src, 'Je bent niet in dienst voor een whitelisted job', 'error');
     return;
   }
+
+  if (!hasSpeciality(src, 'HC', job)) {
+    Notifications.add(src, 'Je hebt hier geen toegang tot', 'error');
+    return;
+  }
+
   whitelistLogger.debug(`${src} requested whitelist menu for job ${job} (${filter})`);
   const allowListMenu: ContextMenu.Entry[] = [];
   const config = getJobConfig(job);

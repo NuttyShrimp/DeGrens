@@ -1,6 +1,6 @@
-import './modules/groups/controller';
+import './services/groups/controller';
 import './controllers';
-import nameManager from 'modules/groups/classes/NameManager';
+import nameManager from 'services/groups/classes/NameManager';
 import { loadLocations } from 'services/signin';
 
 setImmediate(() => {

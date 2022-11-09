@@ -3,7 +3,7 @@ import { Export, ExportRegister, RPCEvent, RPCRegister } from '@dgx/server/decor
 import { mainLogger } from 'sv_logger';
 import winston from 'winston';
 
-import groupManager from '../modules/groups/classes/GroupManager';
+import groupManager from '../services/groups/classes/GroupManager';
 
 @ExportRegister()
 @RPCRegister()
