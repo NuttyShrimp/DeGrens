@@ -251,8 +251,7 @@ function DGCore.Player.Save(src)
   end
 
   -- Save character data
-  -- TODO: Move to dg-sync player locations cache
-  local position = Player(src).state.isLoggedIn and GetEntityCoords(GetPlayerPed(src)) or PlayerData.position
+  local position = exports['dg-sync']:getPlayerCoords(src) or PlayerData.position
   local charDataResult = exports['dg-sql']:query([[
     INSERT INTO character_data (citizenid, position, metadata)
     VALUES (:citizenid, :position, :metadata)

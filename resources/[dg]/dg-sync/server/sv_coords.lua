@@ -1,3 +1,5 @@
+local playerCoords = {}
+
 function syncCoords()
   local coords = {}
   local playerIndices = GetNumPlayerIndices()
@@ -7,6 +9,7 @@ function syncCoords()
       coords[plyId] = DGX.Util.getPlyCoords(plyId)
     end
   end
+  playerCoords = coords
   TriggerClientEvent('dg-sync:coords:sync', -1, coords)
 end
 
@@ -15,4 +18,8 @@ Citizen.CreateThread(function()
     syncCoords()
     Wait(5000)
   end
+end)
+
+exports('getPlayerCoords', function(plyId)
+  return playerCoords[plyId]
 end)
