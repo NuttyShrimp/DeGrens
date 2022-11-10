@@ -27,11 +27,13 @@ const validatePermissions = () => {
       );
     }
   }
-  Object.entries(config.permissions.base)
-    .concat(Object.entries(config.permissions.extra))
-    .forEach(([perm, val]) => {
-      permissions[perm] = config.permissions.base[perm];
-    });
+  Object.entries(config.permissions.base).forEach(([perm, val]) => {
+    permissions[perm] = config.permissions.base[perm];
+  });
+  Object.entries(config.permissions.extra).forEach(([perm, val]) => {
+    permissions[perm] = config.permissions.extra[perm];
+  });
+
   Events.emitNet('business:client:setPermLabels', -1, config.permissions.labels);
 };
 
