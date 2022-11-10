@@ -152,7 +152,7 @@ RPC.register(
     const business = getBusinessById(id);
     if (!business) return false;
     try {
-      return business.updateRole(src, role, permissions);
+      return await business.updateRole(src, role, permissions);
     } catch (e) {
       business.logger.error(`Failed to create role by ${src}, name: ${role}: ${e}`);
       return false;
