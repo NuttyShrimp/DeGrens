@@ -25,9 +25,9 @@ export const UserPayModal: FC<{
           render: props => <Input.TextField {...props} label={'Opmerking'} icon={'comment'} />,
         },
       ]}
-      onAccept={async (vals: { citizenid: number; amount: number; comment: string }) => {
+      onAccept={async (vals: { citizenid: string; amount: string; comment: string }) => {
         showLoadModal();
-        await onSubmit(vals.citizenid, vals.amount, vals.comment);
+        await onSubmit(Number(vals.citizenid), Number(vals.amount), vals.comment);
       }}
     />
   );

@@ -31,9 +31,9 @@ export const UserModal: FC<{
           defaultValue: role,
         },
       ]}
-      onAccept={async (vals: { citizenid: number; role: string }) => {
+      onAccept={async (vals: { citizenid: string; role: string }) => {
         showLoadModal();
-        await onSubmit(vals.citizenid, vals.role);
+        await onSubmit(Number(vals.citizenid), vals.role);
       }}
     />
   );
