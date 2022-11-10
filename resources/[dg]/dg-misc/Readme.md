@@ -95,3 +95,8 @@ Using this module you can create ingame elevators with seperate business, gang a
   }
 ```
 
+## Status
+Adding new status type:
+- Add config to dg-config/config/playerstatuses.json
+- Add type to ts-shared/typescript/src/shared/types/util.d.ts
+

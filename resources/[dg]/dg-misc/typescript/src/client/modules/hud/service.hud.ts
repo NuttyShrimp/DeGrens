@@ -25,6 +25,10 @@ export const getCapacity = (ped: number, id: number) => {
   if (IsEntityInWater(ped) !== inWater) {
     inWater = IsEntityInWater(ped);
     HUD.toggleEntry('lung-capacity', inWater);
+
+    if (inWater) {
+      Events.emitNet('misc:status:enteredWater');
+    }
   }
   return inWater ? GetPlayerUnderwaterTimeRemaining(id) * 10 : 0;
 };

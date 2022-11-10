@@ -172,7 +172,14 @@ export class Sounds {
   };
 }
 
+export class Status {
+  public addStatusToPlayer = (plyId: number, statusName: StatusName) => {
+    global.exports['dg-misc'].addStatusToPlayer(plyId, statusName);
+  };
+}
+
 export default {
   Util: new Util(),
   Sounds: new Sounds(),
+  Status: new Status(),
 };

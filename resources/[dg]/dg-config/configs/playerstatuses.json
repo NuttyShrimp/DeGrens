@@ -1,0 +1,19 @@
+[
+  {
+    "name": "alcohol",
+    "label": "Alcoholgeur",
+    "duration": 30,
+    "removalMessage": "Je ruikt niet langer naar alcohol"
+  },
+  {
+    "name": "gsw",
+    "label": "Schotwonde",
+    "removalMethod": "revive"
+  },
+  {
+    "name": "gsr",
+    "label": "Kruitresten",
+    "removalMethod": "water",
+    "removalMessage": "Je kruitresten zijn weg"
+  }
+]

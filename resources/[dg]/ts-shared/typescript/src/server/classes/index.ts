@@ -12,7 +12,7 @@ import screenshot from './screenshot';
 import vehicles from './vehicles';
 
 export const { Events, RPC, SQL, API, Auth } = events;
-export const { Util, Sounds } = util;
+export const { Util, Sounds, Status } = util;
 export const { Phone } = phone;
 export const { Chat, RayCast } = interaction;
 export const { Config } = config;

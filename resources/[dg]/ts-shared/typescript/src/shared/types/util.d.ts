@@ -35,3 +35,5 @@ declare type RayCastHit = {
   entity?: number;
   coords?: Vec3;
 };
+
+declare type StatusName = 'alcohol' | 'gsw' | 'gsr';

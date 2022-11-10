@@ -33,8 +33,8 @@ onNet('DGCore:client:playerLoaded', (playerData: PlayerData) => {
 
 onNet('onResourceStop', (res: string) => {
   if (res !== GetCurrentResourceName()) return;
-  HUD.toggleEntry('stress', false);
-  HUD.toggleEntry('lung-capacity', false);
+  HUD.removeEntry('stress');
+  HUD.removeEntry('lung-capacity');
 });
 
 Events.onNet('hud:client:updateStress', (amount: number) => updateStress(amount));
