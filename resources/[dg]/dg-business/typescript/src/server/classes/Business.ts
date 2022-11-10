@@ -229,7 +229,7 @@ export class Business {
 
   async changeBankPermission(src: number, targetCID: number, permissions: IFinancials.Permissions) {
     const cid = Util.getCID(src);
-    if (!this.hasPermission(cid, 'change_role')) {
+    if (!this.hasPermission(cid, 'change_bank_perms')) {
       Util.Log(
         'business:changeBankPermission:missingPermission',
         {

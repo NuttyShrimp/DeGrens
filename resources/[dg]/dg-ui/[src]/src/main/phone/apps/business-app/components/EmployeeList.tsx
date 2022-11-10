@@ -64,7 +64,7 @@ export const EmployeeList: FC<{ list: Phone.Business.Employee[]; permissions: st
         },
       });
     }
-    if (props.permissions.includes('change_role')) {
+    if (props.permissions.includes('change_bank_perms')) {
       actions.push({
         icon: 'building-columns',
         title: 'Bank Toegang Bewerken',

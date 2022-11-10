@@ -7,13 +7,14 @@
       "pay_employee": 8,
       "pay_external": 16,
       "charge_external": 32,
-      "logs": 64
+      "logs": 64,
+      "change_bank_perms": 128
     },
     "extra": {
-      "stash": 128,
-      "property_access": 256,
-      "garage_access": 512,
-      "crafting": 1024
+      "stash": 256,
+      "property_access": 512,
+      "garage_access": 1024,
+      "crafting": 2048
     },
     "labels": {
       "hire": "Inhuren",
@@ -23,6 +24,7 @@
       "pay_external": "Betaal Extern",
       "charge_external": "Belast Extern",
       "logs": "Bekijk logboek",
+      "change_bank_perms": "Bank Toegang Bewerken",
       "stash": "Opslag",
       "property_access": "Eigendom toegang",
       "garage_access": "Garage toegang",
@@ -30,7 +32,14 @@
     }
   },
   "types": {
-    "mechanic": ["stash", "property_access", "garage_access", "crafting"],
-    "showroom": ["property_access"]
+    "mechanic": [
+      "stash",
+      "property_access",
+      "garage_access",
+      "crafting"
+    ],
+    "showroom": [
+      "property_access"
+    ]
   }
 }
