@@ -9,10 +9,7 @@ export const prepareCall = (id: string, call: Dispatch.Call): Dispatch.UICall =>
     ...call,
   };
   if (call.officer) {
-    const DGPlayer = DGCore.Functions.GetPlayer(call.officer);
-    if (DGPlayer.PlayerData.metadata.callsign) {
-      UICall.callsign = DGPlayer.PlayerData.metadata.callsign;
-    }
+    UICall.callsign = String(call.officer);
   }
   return UICall;
 };
@@ -38,6 +35,13 @@ export const createDispatchCall = async (call: Dispatch.Call) => {
       if (plyVeh) {
         call.vehicle = plyVeh;
       }
+    }
+  }
+
+  if (call.officer) {
+    const DGPlayer = await DGCore.Functions.GetOfflinePlayerByCitizenId(call.officer);
+    if (DGPlayer.PlayerData.metadata.callsign) {
+      call.officer = DGPlayer.PlayerData.metadata.callsign;
     }
   }
 
