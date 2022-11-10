@@ -46,7 +46,7 @@ class Events {
         originResource: data.origin,
       },
       startTimestamp: new Date(data.metadata.createdAt).getTime() / 1000,
-  });
+    });
     Sentry.configureScope(scope => {
       scope.setSpan(transaction);
     });
@@ -135,6 +135,18 @@ class Events {
 
   emitNet(evtName: string, target: number, ...args: any[]) {
     setImmediate(async () => {
+      if (target === -1) {
+        if (!GetNumPlayerIndices()) {
+          return;
+        }
+      } else {
+        if (!GetPlayerName(String(target))) {
+          if (Util.isDevEnv()) {
+            console.error(`Tried sending ${evtName} to ${target} who is not online`);
+          }
+          return;
+        }
+      }
       const evtData: DGXEvents.ClientNetEvtData = {
         eventName: evtName,
         args,
