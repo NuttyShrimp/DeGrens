@@ -15,11 +15,24 @@ playSoundFromCoord = function(id, name, audiobank, coords, range)
 end
 exports('playSoundFromCoord', playSoundFromCoord)
 
+stopSound = function(id)
+  DGX.Events.emitNet('nutty-sounds:stopSound', id)
+end
+exports('stopSound', stopSound)
+
 DGX.Events.onNet('nutty-sounds:playSoundOnEntity', function(id, name, bank, netId)
   local entity = NetworkGetEntityFromNetworkId(netId)
   if not DoesEntityExist(entity) then return end
+
+  -- If sound with id still exists then stop that sound before continuing
+  if sounds[id] then
+    clearSoundId(id)
+  end
+
   sounds[id] = GetSoundId()
   PlaySoundFromEntity(sounds[id], name, entity, bank, 0, 1.0)
+
+  -- Wait till sounds stops playing or id has been cleared to stop and clear sound from active ids
   while sounds[id] and not HasSoundFinished(sounds[id]) do
     Citizen.Wait(10)
   end
@@ -30,8 +43,15 @@ DGX.Events.onNet('nutty-sounds:playSoundOnEntity', function(id, name, bank, netI
 end)
 
 DGX.Events.onNet('nutty-sounds:playSoundFromCoord', function(id, name, bank, coords, range)
+  -- If sound with id still exists then stop that sound before continuing
+  if sounds[id] then
+    clearSoundId(id)
+  end
+
   sounds[id] = GetSoundId()
   PlaySoundFromCoord(sounds[id], name, coords.x, coords.y, coords.z, bank, 0, 1.0, 1.0)
+
+  -- Wait till sounds stops playing or id has been cleared to stop and clear sound from active ids
   while sounds[id] and not HasSoundFinished(sounds[id]) do
     Citizen.Wait(10)
   end
@@ -41,14 +61,13 @@ DGX.Events.onNet('nutty-sounds:playSoundFromCoord', function(id, name, bank, coo
   end
 end)
 
-stopSound = function(id)
-  DGX.Events.emitNet('nutty-sounds:stopSound', id)
-end
-exports('stopSound', stopSound)
-
-DGX.Events.onNet('nutty-sounds:stopSound', function(id)
-  if not sounds[id] then return end
+clearSoundId = function(id)
   StopSound(sounds[id])
   ReleaseSoundId(sounds[id])
   sounds[id] = nil
+end
+
+DGX.Events.onNet('nutty-sounds:stopSound', function(id)
+  if not sounds[id] then return end
+  clearSoundId(id)
 end)

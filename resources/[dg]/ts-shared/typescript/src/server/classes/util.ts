@@ -167,8 +167,8 @@ class Util extends UtilShared {
 }
 
 export class Sounds {
-  public playOnEntity = (id: string, name: string, audiobank: string, entity: number) => {
-    global.exports['nutty-sounds'].playSoundOnEntity(id, name, audiobank, entity);
+  public playOnEntity = (id: string, name: string, audiobank: string, netId: number) => {
+    global.exports['nutty-sounds'].playSoundOnEntity(id, name, audiobank, netId);
   };
 
   public playFromCoord = (id: string, name: string, audiobank: string, coords: Vec3, range: number) => {
