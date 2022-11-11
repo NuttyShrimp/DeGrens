@@ -43,8 +43,12 @@ export const Item: FC<{ itemId: string; cellSize: number }> = ({ itemId, cellSiz
       collect: monitor => ({
         isDragging: monitor.isDragging(),
       }),
+      canDrag: () => {
+        if (itemState.amount === undefined) return true;
+        return itemState.amount > 0;
+      },
     }),
-    [itemState.hotkey]
+    [itemState.hotkey, itemState.amount]
   );
 
   const handleDoubleClick = e => {

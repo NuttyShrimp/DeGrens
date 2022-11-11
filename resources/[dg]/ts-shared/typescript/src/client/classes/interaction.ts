@@ -210,6 +210,7 @@ class PolyZone {
       data: { [key: string]: any };
       minZ?: number;
       maxZ?: number;
+      routingBucket?: number;
     },
     removeOnRestart = true
   ) {
@@ -229,8 +230,9 @@ class PolyZone {
       data: { [key: string]: any };
       minZ?: number;
       maxZ?: number;
+      routingBucket?: number;
     },
-    removeOnRestart = false
+    removeOnRestart = true
   ) {
     if (removeOnRestart) {
       this.zonesNamesToDelete.add({ name, id: options.data.id });
@@ -245,6 +247,7 @@ class PolyZone {
     options: {
       useZ?: boolean;
       data: { [key: string]: any };
+      routingBucket?: number;
     },
     removeOnRestart = true
   ) {
@@ -306,6 +309,7 @@ class PolyTarget {
       data: { [key: string]: any };
       minZ?: number;
       maxZ?: number;
+      routingBucket?: number;
     },
     removeOnRestart = true
   ) {
@@ -325,6 +329,7 @@ class PolyTarget {
     options: {
       useZ?: boolean;
       data: { [key: string]: any };
+      routingBucket?: number;
     },
     removeOnRestart = true
   ) {
@@ -367,7 +372,7 @@ class Keys {
   }
 
   isModPressed(): boolean {
-    return global.exports['dg-lib'].modifierKeyPressed()
+    return global.exports['dg-lib'].modifierKeyPressed();
   }
 
   onPress(keyName: string, handler: (isDown: boolean) => void) {

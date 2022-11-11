@@ -41,7 +41,7 @@ class Jobs {
     return global.exports['dg-jobs'].getGroupByCid(cid);
   }
 
-  changeGroupJob(src: number, job: string): Promise<boolean> {
+  changeGroupJob(src: number, job: string): boolean {
     return global.exports['dg-jobs'].changeGroupJob(src, job);
   }
 

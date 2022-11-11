@@ -41,7 +41,7 @@ declare namespace Heist {
 
 declare namespace Drives {
   type Config = Record<Drives.Name, { text: string; laptop: string; cost: number }>;
-  type Name = 'drive_v1' | 'drive_v2' | 'drive_v3' | 'drive_v5';
+  type Name = 'drive_v1' | 'drive_v2' | 'drive_v3' | 'drive_v5' | 'thermite_part' | 'mini_emp_part';
 }
 
 declare namespace Laptop {

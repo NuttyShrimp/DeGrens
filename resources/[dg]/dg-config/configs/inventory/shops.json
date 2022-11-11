@@ -4,17 +4,25 @@
     "hardware": [
       {
         "name": "volt_meter",
-        "amount": 3,
-        "requirements": {
-          "cash": 200
-        }
+        "amount": 5,
+        "price": 200
       },
       {
-        "name": "cleaning_kit",
-        "amount": 15,
-        "requirements": {
-          "cash": 100
-        }
+        "name": "bolt_cutters",
+        "amount": 10,
+        "price": 500
+      },
+      {
+        "name": "screwdriver",
+        "amount": 20,
+        "price": 250
+      }
+    ],
+    "fishing": [
+      {
+        "name": "fishing_rod",
+        "amount": 10,
+        "price": 500
       }
     ]
   },
@@ -40,6 +48,7 @@
     "tataviam_mountains": { "type": "grocery" },
     "del_vecchio": { "type": "grocery" },
     "paleto_bay": { "type": "grocery" },
-    "hardware_city": { "type": "hardware" }
+    "hardware_city": { "type": "hardware" },
+    "fishing_shop": { "type": "fishing" }
   }
 }

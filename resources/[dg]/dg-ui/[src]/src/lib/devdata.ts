@@ -1296,7 +1296,7 @@ devData.inventory = {
   items: {
     microwave_000001: {
       id: 'microwave_000001',
-      inventory: 'player_1001',
+      inventory: 'player__1001',
       position: { x: 0, y: 0 },
       size: { x: 4, y: 1 },
       name: 'microwave',
@@ -1311,7 +1311,7 @@ devData.inventory = {
     },
     phone_000001: {
       id: 'phone_000001',
-      inventory: 'player_1001',
+      inventory: 'player__1001',
       position: { x: 1, y: 4 },
       size: { x: 4, y: 3 },
       name: 'phone',
@@ -1330,7 +1330,7 @@ devData.inventory = {
     },
     burger_000001: {
       id: 'burger_000001',
-      inventory: 'player_1001',
+      inventory: 'player__1001',
       position: { x: 6, y: 1 },
       size: { x: 1, y: 1 },
       name: 'burger',
@@ -1342,7 +1342,7 @@ devData.inventory = {
     },
     burger_000002: {
       id: 'burger_000002',
-      inventory: 'player_1001',
+      inventory: 'player__1001',
       position: { x: 8, y: 10 },
       size: { x: 1, y: 1 },
       name: 'burger',
@@ -1352,61 +1352,39 @@ devData.inventory = {
       description: 'Lekkere mcdonalds burger hmmm',
       metadata: {},
     },
-    burger_000003: {
-      id: 'burger_000003',
-      inventory: 'shop_1abc123',
-      position: { x: 0, y: 0 },
-      size: { x: 1, y: 1 },
-      name: 'burger',
-      label: 'Burger',
-      quality: 5,
-      image: 'burger.png',
-      description: 'Lekkere mcdonalds burger hmmm',
-      metadata: {},
-      requirements: {
-        cash: 100,
-      },
-    },
-    phone_100003: {
-      id: 'phone_100003',
-      inventory: 'shop_1abc123',
-      position: { x: 2, y: 2 },
-      size: { x: 2, y: 2 },
-      name: 'phone',
-      label: 'Telefoon',
-      quality: 100,
-      image: 'phone.png',
-      description: 'Mooie telefoon',
-      metadata: {},
-    },
-    phone_100043: {
-      id: 'phone_100043',
-      inventory: 'shop_1abc123',
-      position: { x: 5, y: 3 },
-      size: { x: 2, y: 2 },
-      name: 'phone',
-      label: 'Telefoon',
-      quality: 100,
-      image: 'phone.png',
-      description: 'Mooie telefoon',
-      metadata: {},
-      requirements: {
-        cash: 159,
-        items: [
-          { name: 'vpn', label: 'VPN' },
-          { name: 'phone', label: 'Telefoon' },
-        ],
-      },
-    },
   },
   primary: {
-    id: 'player_1001',
+    id: 'player__1001',
     size: 25,
   },
   secondary: {
-    id: 'shop_1abc123',
+    id: 'bench__1abc123',
     size: 10,
-    allowedItems: [],
+    shopItems: [
+      {
+        size: { x: 2, y: 3 },
+        name: 'phone',
+        label: 'Telefoon',
+        image: 'phone.png',
+        amount: 10,
+        requirements: {
+          items: [{ name: 'material_aluminum', label: 'Aluminium', amount: 2 }],
+        },
+      },
+      {
+        size: { x: 1, y: 1 },
+        name: 'burger',
+        label: 'Burger',
+        image: 'burger.png',
+        amount: 5,
+        requirements: {
+          items: [
+            { name: 'microwave', label: 'Microwave', amount: 1 },
+            { name: 'burger', label: 'Burger', amount: 2 },
+          ],
+        },
+      },
+    ],
   },
 };
 

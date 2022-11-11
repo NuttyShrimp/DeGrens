@@ -22,7 +22,7 @@ RegisterCommand('offsetcoords', function(source, args)
   local buildingVector = exports["dg-build"]:currentBuildingVector()
 
   if buildingVector ~= false then
-    local v = (GetEntityCoords(PlayerPedId()) - buildingVector)
+    local v = (GetEntityCoords(PlayerPedId()) - vector3(buildingVector.x, buildingVector.y, buildingVector.z))
 
     local PlayerName = GetPlayerName(PlayerId())
 

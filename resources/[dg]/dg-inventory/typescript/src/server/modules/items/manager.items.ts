@@ -27,6 +27,7 @@ class ItemManager extends Util.Singleton<ItemManager>() {
     const isNew = state.id == undefined;
     if (!isNew && this.items.has(state.id!))
       throw new Error(`Tried to create item with already existing id ${state.id}`);
+
     // Check if name is a known item name, if not remove from db and return
     if (!itemDataManager.doesItemNameExist(state.name)) {
       if (isNew) {
@@ -37,6 +38,7 @@ class ItemManager extends Util.Singleton<ItemManager>() {
       }
       return;
     }
+
     const id = state.id ?? Util.uuidv4();
     const item = new Item();
     this.items.set(id, item);
@@ -63,42 +65,6 @@ class ItemManager extends Util.Singleton<ItemManager>() {
     if (!item) {
       this.logger.warn(`Could not get item ${id}, broke while getting item to move`);
       return;
-    }
-
-    // Move requirements used in shops/crafting. Remove cash and items when moving item to ply
-    const requirements = item.getRequirements();
-    if (requirements) {
-      if (requirements.cash) {
-        const playerCash = Financials.getCash(src);
-        if (playerCash < requirements.cash) {
-          throw new Error(`Player tried to buy item for ${requirements.cash} but only had ${playerCash}`);
-        }
-        Financials.removeCash(src, requirements.cash, 'shop-item-bought');
-      }
-      if (requirements.items) {
-        const plyInventory = await inventoryManager.get(invId);
-        const plyItems = plyInventory.getItems();
-        const idsToRemove: Set<string> = new Set();
-        for (const reqItem of requirements.items) {
-          const plyItem = plyItems.find(item => item.name === reqItem.name && !idsToRemove.has(item.id));
-          if (!plyItem) throw new Error(`Player tried to buy item but was missing required item ${reqItem.name}`);
-          idsToRemove.add(plyItem.id);
-        }
-        idsToRemove.forEach(id => itemManager.get(id)?.destroy());
-      }
-      item.clearRequirements();
-      Util.Log(
-        'inventory:item:bought',
-        {
-          shop: item.state.inventory,
-          forCash: requirements.cash,
-          forItems: requirements.items,
-          itemId: item.state.id,
-          player: invId,
-        },
-        `${GetPlayerName(String(src))} bought shopitem ${item.state.name} in shop ${item.state.inventory}`,
-        src
-      );
     }
 
     const prevInvId = item.state.inventory;

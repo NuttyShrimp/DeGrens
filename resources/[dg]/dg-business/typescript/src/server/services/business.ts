@@ -159,7 +159,6 @@ export const getBusinessesForPlayer = (src: number) => {
   const cid = Util.getCID(src);
   const plyBusinesses: Business.UI.Business[] = [];
   businesses.forEach(business => {
-    if (!business.isEmployee(cid)) return;
     const businessInfo = business.getClientInfo(cid);
     if (!businessInfo) return;
     plyBusinesses.push(businessInfo);

@@ -1,0 +1,4 @@
+{
+  "loot": [{ "item": "material_plastic", "chance": 0.3 }],
+  "refillTime": 60
+}

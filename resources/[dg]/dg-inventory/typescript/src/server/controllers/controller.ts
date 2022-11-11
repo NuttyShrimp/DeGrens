@@ -41,20 +41,23 @@ const clearInventory = async (type: Inventory.Type, identifier: string) => {
   );
 };
 
-const addItemToInventory = (
+const addItemToInventory = async (
   type: Inventory.Type,
   identifier: string,
   name: string,
   amount: number,
   metadata?: { [key: string]: any }
 ) => {
+  const createdIds: string[] = [];
   const invId = concatId(type, identifier);
   // If item gets added to playerinv, get plyId to build metadata and send itembox event
   const plyId =
     type === 'player' ? DGCore.Functions.GetPlayerByCitizenId(Number(identifier))?.PlayerData?.source : undefined;
   metadata = metadata ?? itemManager.buildInitialMetadata(plyId, name);
   for (let i = 0; i < amount; i++) {
-    itemManager.create({ inventory: invId, name, metadata });
+    const createdItem = await itemManager.create({ inventory: invId, name, metadata });
+    if (!createdItem) continue;
+    createdIds.push(createdItem.state.id);
   }
   if (plyId) {
     const itemData = itemDataManager.get(name);
@@ -72,6 +75,7 @@ const addItemToInventory = (
     },
     `${amount}x ${name} got added to inventory ${invId}`
   );
+  return createdIds;
 };
 
 const doesInventoryHaveItems = async (type: Inventory.Type, identifier: string, names: string | string[]) => {
@@ -165,11 +169,16 @@ const createScriptedStash = async (identifier: string, size: number, allowedItem
   }
 };
 
+const showItemBox = (plyId: number, label: string, itemName: string) => {
+  const image = itemDataManager.get(itemName).image;
+  Events.emitNet('inventory:client:addItemBox', plyId, label, image);
+};
+
 // Exports
 global.asyncExports('hasObject', hasObject);
 global.exports('giveStarterItems', giveStarterItems);
 global.asyncExports('clearInventory', clearInventory);
-global.exports('addItemToInventory', addItemToInventory);
+global.asyncExports('addItemToInventory', addItemToInventory);
 global.asyncExports('doesInventoryHaveItems', doesInventoryHaveItems);
 global.asyncExports('removeItemFromInventory', removeItemFromInventory);
 global.asyncExports('removeItemByIdFromInventory', removeItemByIdFromInventory);
@@ -182,6 +191,7 @@ global.asyncExports('getFirstItemOfName', getFirstItemOfName);
 global.exports('createScriptedStash', createScriptedStash);
 global.exports('concatId', concatId);
 global.exports('splitId', splitId);
+global.exports('showItemBox', showItemBox);
 
 // Events for client
 RPC.register('inventory:server:doesPlayerHaveItems', (plyId, names: string | string[]) => {

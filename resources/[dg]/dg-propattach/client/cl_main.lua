@@ -55,12 +55,12 @@ exports('add', add)
 
 move = function(propId, offset) 
   if not propId then 
-    print(("[%s] Tried to remove obj without providing id."):format(GetCurrentResourceName()))
+    print(("[%s] Tried to move obj without providing id."):format(GetCurrentResourceName()))
     return 
   end
 
 	if not attachedNetIds[propId] then 
-    debug(("[%s] Tried to remove unattached obj with name: %s."):format(GetCurrentResourceName(), propId))
+    debug(("[%s] Tried to move unattached obj with name: %s."):format(GetCurrentResourceName(), propId))
     return 
   end
 

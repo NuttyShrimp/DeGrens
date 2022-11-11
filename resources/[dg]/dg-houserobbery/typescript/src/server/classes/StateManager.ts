@@ -47,7 +47,7 @@ class StateManager extends Util.Singleton<StateManager>() {
       Util.Log(
         'houserobbery:signin:failed',
         {},
-        `${Player.PlayerData.name} tried to signin for houserobberies but is has the police job`,
+        `${Player.PlayerData.name} tried to signin for houserobberies but has the police job`,
         src
       );
       return;
@@ -272,6 +272,10 @@ class StateManager extends Util.Singleton<StateManager>() {
         `${GetPlayerName(String(src))} got ${item} from a house robbery`,
         src
       );
+    }
+
+    if (Util.getRndInteger(1, 101) <= this.config.moldChance) {
+      global.exports['dg-materials'].tryGivingKeyMold(src);
     }
   };
 

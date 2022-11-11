@@ -1,5 +1,15 @@
 {
   "drives": {
+    "mini_emp_part": {
+      "text": "Onderdeel voor EMP",
+      "laptop": "mini_emp_part",
+      "cost": 5
+    },
+    "thermite_part": {
+      "text": "Thermiet Poeder",
+      "laptop": "thermite_part",
+      "cost": 5
+    },
     "drive_v1": {
       "text": "Laptop met v1.0 Software",
       "laptop": "laptop_v1",

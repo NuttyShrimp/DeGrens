@@ -20,6 +20,10 @@ class Inventory {
     global.exports['dg-inventory'].open({ type: 'tunes', identifier: vin });
   };
 
+  public openBench = (benchId: string) => {
+    global.exports['dg-inventory'].open({ type: 'bench', identifier: benchId });
+  };
+
   public doesPlayerHaveItems = async (name: string | string[]) => {
     return !!(await RPC.execute<boolean>('inventory:server:doesPlayerHaveItems', name));
   };

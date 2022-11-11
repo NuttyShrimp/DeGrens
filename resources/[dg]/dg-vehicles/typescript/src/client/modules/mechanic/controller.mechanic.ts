@@ -127,7 +127,7 @@ UI.RegisterUICallback('vehicles/mechanic/resetOrder', (data, cb) => {
 });
 
 UI.RegisterUICallback('vehicles/mechanic/getStashPerformanceAmount', async (data: Record<string, any>, cb) => {
-  const amount = await getAmountOfItemInStash(data.type, data.part, data.partClass);
+  const amount = await getAmountOfItemInStash(data.type, data.part, data.class);
   cb({
     data: amount,
     meta: { ok: true, message: 'done' },
@@ -135,7 +135,7 @@ UI.RegisterUICallback('vehicles/mechanic/getStashPerformanceAmount', async (data
 });
 
 UI.RegisterUICallback('vehicles/mechanic/getStashRepairAmount', async (data: Record<string, any>, cb) => {
-  const amount = await getAmountOfItemInStash('repair', data.part, data.partClass);
+  const amount = await getAmountOfItemInStash('repair', data.part, data.class);
   cb({
     data: amount,
     meta: { ok: true, message: 'done' },
@@ -178,19 +178,17 @@ Peek.addZoneEntry(
     distance: 2,
     options: [
       {
-        label: 'open crafting bench',
+        label: 'Open Werktafel',
         icon: 'screwdriver-wrench',
         canInteract: (_, __, data) => {
           return Business.isEmployee(data.data.id, ['crafting']) && getCurrentWorkingShop() === data.data.id;
         },
-        action: data => {
-          // TODO: add when crafting is finished
-          // should directly move the created items to mechanic-script-stash-${data.data.id}
-          console.log('opening crafting bench for', data.data.id);
+        action: () => {
+          Inventory.openBench('mechanic_bench');
         },
       },
       {
-        label: 'open stash',
+        label: 'Open Stash',
         icon: 'toolbox',
         canInteract: (_, __, data) => {
           return Business.isEmployee(data.data.id, ['stash']) && getCurrentWorkingShop() === data.data.id;
@@ -200,7 +198,7 @@ Peek.addZoneEntry(
         },
       },
       {
-        label: 'Get repair items',
+        label: 'Maak Order',
         icon: 'gear',
         canInteract: (_, __, data) => {
           return Business.isEmployee(data.data.id) && getCurrentWorkingShop() === data.data.id;

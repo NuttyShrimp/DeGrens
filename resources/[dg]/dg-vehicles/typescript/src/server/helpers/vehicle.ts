@@ -144,6 +144,7 @@ export const spawnOwnedVehicle = async (src: number, vehicleInfo: Vehicle.Vehicl
 };
 
 export const deleteVehicle = (veh: number) => {
+  if (!DoesEntityExist(veh)) return;
   const vehState = Entity(veh).state; // Get from state, getter functions validates if does not exist which we dont want
   if (vehState?.vin) {
     fuelManager.removeVehicle(vehState.vin);

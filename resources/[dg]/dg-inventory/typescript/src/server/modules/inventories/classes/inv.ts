@@ -12,7 +12,6 @@ import { getConfig } from 'services/config';
 import { splitId } from '../../../util';
 import contextManager from 'classes/contextmanager';
 import { getContainerInfo } from 'modules/containers/controller.containers';
-import shopManager from 'modules/shops/classes/shopmanager';
 
 // conflicted with Inventory types namespace so I went with the good old Inv
 export class Inv {
@@ -41,20 +40,7 @@ export class Inv {
     const fixedSizes = getConfig()?.amountOfSlots;
     this.size = fixedSizes[this.type] ?? 0;
 
-    if (this.type === 'shop') {
-      this.allowedItems = [];
-      const items = shopManager.getItems(this.id);
-      for (const entry of items) {
-        const item = await itemManager.create({
-          name: entry.name,
-          inventory: this.id,
-          metadata: {},
-        });
-        if (!item) continue;
-        item.setRequirements(entry.requirements);
-      }
-      // Shop size gets set set in getFirstAvailablePosition
-    } else if (this.type === 'container') {
+    if (this.type === 'container') {
       const name = itemManager.get(this.identifier)?.state?.name;
       if (!name) return;
       const { allowedItems, size } = getContainerInfo(name);
@@ -138,13 +124,13 @@ export class Inv {
   };
 
   public getItems = () => {
-    const ids = [...this.items];
-    const items = ids.reduce<Item[]>((items, id) => {
+    const items: Inventory.ItemState[] = [];
+    this.items.forEach(id => {
       const item = itemManager.get(id);
-      if (item) items.push(item);
-      return items;
-    }, []);
-    return items.map(item => item.state);
+      if (item === undefined) return;
+      items.push(item.state);
+    });
+    return items;
   };
 
   public getItemsForName = (itemName: string) => {
@@ -165,18 +151,12 @@ export class Inv {
       position: state.position,
       size: itemDataManager.get(state.name).size,
     }));
-    const invSize = this.type !== 'shop' ? this.size : 1000;
 
-    for (let y = 0; y < invSize - itemSize.y + 1; y++) {
+    for (let y = 0; y < this.size - itemSize.y + 1; y++) {
       for (let x = 0; x < cellsPerRow - itemSize.x + 1; x++) {
         const position = { x, y };
         const anyOverlapping = mayOverlap.some(i => doRectanglesOverlap(position, itemSize, i.position, i.size));
         if (anyOverlapping) continue;
-        if (this.type === 'shop') {
-          if (position.y + itemSize.y > this.size) {
-            this.size = position.y + itemSize.y;
-          }
-        }
         return position;
       }
     }

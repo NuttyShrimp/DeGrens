@@ -1,0 +1,410 @@
+{
+  "recipes": {
+    "lockpick": {
+      "requiredReputation": 0,
+      "items": [
+        {
+          "name": "refined_iron",
+          "amount": 2
+        },
+        {
+          "name": "refined_steel",
+          "amount": 1
+        }
+      ]
+    },
+    "empty_bags": {
+      "requiredReputation": 10,
+      "items": [
+        {
+          "name": "refined_plastic",
+          "amount": 1
+        }
+      ]
+    },
+    "vpn": {
+      "requiredReputation": 40,
+      "items": [
+        {
+          "name": "material_electronics",
+          "amount": 2
+        },
+        {
+          "name": "refined_plastic",
+          "amount": 1
+        },
+        {
+          "name": "refined_aluminum",
+          "amount": 2
+        }
+      ]
+    },
+    "decoding_tool": {
+      "requiredReputation": 45,
+      "items": [
+        {
+          "name": "refined_iron",
+          "amount": 2
+        },
+        {
+          "name": "refined_aluminum",
+          "amount": 2
+        }
+      ]
+    },
+    "radio": {
+      "requiredReputation": 70,
+      "items": [
+        {
+          "name": "material_electronics",
+          "amount": 3
+        },
+        {
+          "name": "refined_plastic",
+          "amount": 2
+        },
+        {
+          "name": "refined_aluminum",
+          "amount": 2
+        }
+      ]
+    },
+    "explosive_case": {
+      "requiredReputation": 30,
+      "items": [
+        {
+          "name": "refined_steel",
+          "amount": 3
+        },
+        {
+          "name": "refined_iron",
+          "amount": 3
+        }
+      ]
+    },
+    "pistol_ammo": {
+      "requiredReputation": 0,
+      "items": [
+        {
+          "name": "refined_copper",
+          "amount": 2
+        },
+        {
+          "name": "material_glass",
+          "amount": 2
+        }
+      ]
+    },
+    "smg_ammo": {
+      "requiredReputation": 50,
+      "items": [
+        {
+          "name": "refined_copper",
+          "amount": 3
+        },
+        {
+          "name": "material_glass",
+          "amount": 3
+        }
+      ]
+    },
+    "rifle_ammo": {
+      "requiredReputation": 100,
+      "items": [
+        {
+          "name": "refined_copper",
+          "amount": 4
+        },
+        {
+          "name": "material_glass",
+          "amount": 3
+        }
+      ]
+    },
+    "container_ammo": {
+      "requiredReputation": 150,
+      "items": [
+        {
+          "name": "refined_copper",
+          "amount": 5
+        },
+        {
+          "name": "refined_steel",
+          "amount": 5
+        },
+        {
+          "name": "material_glass",
+          "amount": 1
+        },
+        {
+          "name": "refined_iron",
+          "amount": 5
+        },
+        {
+          "name": "refined_plastic",
+          "amount": 4
+        },
+        {
+          "name": "refined_aluminum",
+          "amount": 4
+        }
+      ]
+    },
+    "weapon_pistol": {
+      "requiredReputation": 0,
+      "items": []
+    },
+    "weapon_heavypistol": {
+      "requiredReputation": 20,
+      "items": []
+    },
+    "weapon_appistol": {
+      "requiredReputation": 20,
+      "items": []
+    },
+    "weapon_machinepistol": {
+      "requiredReputation": 35,
+      "items": []
+    },
+    "weapon_microsmg": {
+      "requiredReputation": 35,
+      "items": []
+    },
+    "weapon_assaultsmg": {
+      "requiredReputation": 40,
+      "items": []
+    },
+    "weapon_advancedrifle": {
+      "requiredReputation": 175,
+      "items": []
+    },
+    "weapon_assaultrifle": {
+      "requiredReputation": 175,
+      "items": []
+    },
+    "weapon_grenade": {
+      "requiredReputation": 275,
+      "items": []
+    },
+    "weapon_pipebomb": {
+      "requiredReputation": 275,
+      "items": []
+    },
+    "smg_extendedclip": {
+      "requiredReputation": 70,
+      "items": []
+    },
+    "pistol_suppressor": {
+      "requiredReputation": 70,
+      "items": []
+    },
+    "luxuryfinish": {
+      "requiredReputation": 500,
+      "items": []
+    },
+    "big_explosive": {
+      "requiredReputation": 200,
+      "items": []
+    },
+    "thermite": {
+      "requiredReputation": 300,
+      "items": []
+    },
+    "mini_emp": {
+      "requiredReputation": 200,
+      "items": []
+    },
+    "engine_part_d": {
+      "requiredReputation": 0,
+      "items": []
+    },
+    "suspension_part_d": {
+      "requiredReputation": 0,
+      "items": []
+    },
+    "brakes_part_d": {
+      "requiredReputation": 0,
+      "items": []
+    },
+    "axle_part_d": {
+      "requiredReputation": 0,
+      "items": []
+    },
+    "engine_part_c": {
+      "requiredReputation": 25,
+      "items": []
+    },
+    "suspension_part_c": {
+      "requiredReputation": 25,
+      "items": []
+    },
+    "brakes_part_c": {
+      "requiredReputation": 25,
+      "items": []
+    },
+    "axle_part_c": {
+      "requiredReputation": 25,
+      "items": []
+    },
+    "engine_part_b": {
+      "requiredReputation": 50,
+      "items": []
+    },
+    "suspension_part_b": {
+      "requiredReputation": 50,
+      "items": []
+    },
+    "brakes_part_b": {
+      "requiredReputation": 50,
+      "items": []
+    },
+    "axle_part_b": {
+      "requiredReputation": 50,
+      "items": []
+    },
+    "engine_part_a": {
+      "requiredReputation": 75,
+      "items": []
+    },
+    "suspension_part_a": {
+      "requiredReputation": 75,
+      "items": []
+    },
+    "brakes_part_a": {
+      "requiredReputation": 75,
+      "items": []
+    },
+    "axle_part_a": {
+      "requiredReputation": 75,
+      "items": []
+    },
+    "engine_part_a+": {
+      "requiredReputation": 100,
+      "items": []
+    },
+    "suspension_part_a+": {
+      "requiredReputation": 100,
+      "items": []
+    },
+    "brakes_part_a+": {
+      "requiredReputation": 100,
+      "items": []
+    },
+    "axle_part_a+": {
+      "requiredReputation": 100,
+      "items": []
+    },
+    "engine_part_s": {
+      "requiredReputation": 150,
+      "items": []
+    },
+    "suspension_part_s": {
+      "requiredReputation": 150,
+      "items": []
+    },
+    "brakes_part_s": {
+      "requiredReputation": 150,
+      "items": []
+    },
+    "axle_part_s": {
+      "requiredReputation": 150,
+      "items": []
+    },
+    "engine_part_x": {
+      "requiredReputation": 200,
+      "items": []
+    },
+    "suspension_part_x": {
+      "requiredReputation": 200,
+      "items": []
+    },
+    "brakes_part_x": {
+      "requiredReputation": 200,
+      "items": []
+    },
+    "axle_part_x": {
+      "requiredReputation": 200,
+      "items": []
+    }
+  },
+  "benches": {
+    "crafting_bench": {
+      "items": ["lockpick", "empty_bags", "vpn", "decoding_tool", "radio", "explosive_case"],
+      "reputation": "crafting"
+    },
+    "ammo_bench": {
+      "items": ["pistol_ammo", "smg_ammo", "rifle_ammo", "container_ammo"],
+      "reputation": "ammo_crafting"
+    },
+    "weapon_bench_A": {
+      "items": [
+        "weapon_pistol",
+        "weapon_heavypistol",
+        "weapon_microsmg",
+        "weapon_advancedrifle",
+        "weapon_grenade",
+        "luxuryfinish",
+        "mini_emp",
+        "thermite"
+      ]
+    },
+    "weapon_bench_B": {
+      "items": [
+        "weapon_pistol",
+        "weapon_appistol",
+        "weapon_machinepistol",
+        "weapon_assaultrifle",
+        "weapon_grenade",
+        "luxuryfinish",
+        "smg_extendedclip",
+        "mini_emp",
+        "thermite"
+      ]
+    },
+    "weapon_bench_C": {
+      "items": [
+        "weapon_pistol",
+        "weapon_assaultsmg",
+        "weapon_assaultrifle",
+        "weapon_pipebomb",
+        "pistol_suppressor",
+        "luxuryfinish",
+        "mini_emp",
+        "thermite"
+      ]
+    },
+    "mechanic_bench": {
+      "items": [
+        "engine_part_d",
+        "suspension_part_d",
+        "brakes_part_d",
+        "axle_part_d",
+        "engine_part_c",
+        "suspension_part_c",
+        "brakes_part_c",
+        "axle_part_c",
+        "engine_part_b",
+        "suspension_part_b",
+        "brakes_part_b",
+        "axle_part_b",
+        "engine_part_a",
+        "suspension_part_a",
+        "brakes_part_a",
+        "axle_part_a",
+        "engine_part_a+",
+        "suspension_part_a+",
+        "brakes_part_a+",
+        "axle_part_a+",
+        "engine_part_s",
+        "suspension_part_s",
+        "brakes_part_s",
+        "axle_part_s",
+        "engine_part_x",
+        "suspension_part_x",
+        "brakes_part_x",
+        "axle_part_x"
+      ],
+      "reputation": "mechanic_crafting"
+    }
+  }
+}

@@ -91,7 +91,7 @@ class Util extends UtilShared {
   spawnAggressivePed = async (model: string, position: Vec3, heading: number) => {
     const pedModel = GetHashKey(model);
     await this.loadModel(pedModel);
-    const ped = CreatePed(0, pedModel, position.x, position.y, position.z, heading, true, true);
+    const ped = CreatePed(4, pedModel, position.x, position.y, position.z, heading, true, true);
     await this.awaitEntityExistence(ped);
     SetPedRelationshipGroupHash(ped, GetHashKey('ATTACK_ALL_PLAYERS'));
     SetPedDropsWeaponsWhenDead(ped, false);
@@ -102,8 +102,21 @@ class Util extends UtilShared {
     SetPedCombatAttributes(ped, 5, true);
     SetPedCombatMovement(ped, 2);
     SetPedCombatRange(ped, 2);
-    SetModelAsNoLongerNeeded(model);
+    SetModelAsNoLongerNeeded(pedModel);
     return ped;
+  };
+
+  goToCoords = async (position: Vec4, timeout = 5000) => {
+    const ped = PlayerPedId();
+    const timeoutTime = GetGameTimer() + timeout;
+    TaskGoStraightToCoord(ped, position.x, position.y, position.z, 1.0, timeout, position.w, 0.1);
+    await this.awaitCondition(() => {
+      return GetGameTimer() > timeoutTime || GetScriptTaskStatus(ped, 0x7d8f4411) == 7;
+    }, timeout);
+    if (GetGameTimer() > timeoutTime) {
+      TaskPedSlideToCoord(ped, position.x, position.y, position.z, position.w, 1000);
+      await this.Delay(1000);
+    }
   };
 }
 

@@ -9,6 +9,7 @@
     grid-template-columns: repeat(2, auto);
     padding: 1.5vh;
     gap: 2vh;
+    user-select: none;
 
     & .side {
       position: relative;
@@ -24,7 +25,9 @@
       & .grid {
         height: calc(100% - 3.5vh);
         margin-top: 3.5vh;
-        overflow: auto;
+        overflow-x: hidden;
+        overflow-y: scroll;
+        scrollbar-width: none; // firefox fix for jens dev env
 
         & .background {
           display: flex;

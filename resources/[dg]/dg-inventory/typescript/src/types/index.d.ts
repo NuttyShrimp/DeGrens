@@ -7,9 +7,15 @@ declare interface OpeningData {
   };
   secondary: {
     id: string;
-    size: number;
-    allowedItems?: string[];
-  };
+  } & (
+    | {
+        size: number;
+        allowedItems?: string[];
+      }
+    | {
+        shopItems: Shops.Item[];
+      }
+  );
 }
 
 declare namespace Repository {
@@ -90,11 +96,11 @@ declare namespace Objects {
 declare namespace Shops {
   interface Item {
     name: string;
+    label: string;
+    image: string;
+    size: Vec2;
+    amount: number;
     requirements: Inventory.Requirements;
-  }
-
-  interface Shop {
-    items: Item[];
   }
 
   interface Config {
@@ -102,10 +108,7 @@ declare namespace Shops {
       [key: string]: {
         name: string;
         amount: number;
-        requirements: {
-          cash?: number;
-          items?: string[];
-        };
+        price: number;
       }[];
     };
     shops: {

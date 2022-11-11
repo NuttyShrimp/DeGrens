@@ -1,0 +1,73 @@
+{
+  "zone": {
+    "center": { "x": 1086.3, "y": -2003.66, "z": 30.88 },
+    "heading": 49,
+    "width": 2.8,
+    "length": 4.1,
+    "minZ": 30.28,
+    "maxZ": 32.08
+  },
+  "recipes": [
+    {
+      "from": {
+        "name": "material_copper",
+        "amount": 10
+      },
+      "to": {
+        "name": "refined_copper",
+        "amount": 1
+      }
+    },
+    {
+      "from": {
+        "name": "material_plastic",
+        "amount": 10
+      },
+      "to": {
+        "name": "refined_plastic",
+        "amount": 1
+      }
+    },
+    {
+      "from": {
+        "name": "material_iron",
+        "amount": 10
+      },
+      "to": {
+        "name": "refined_iron",
+        "amount": 1
+      }
+    },
+    {
+      "from": {
+        "name": "material_aluminum",
+        "amount": 10
+      },
+      "to": {
+        "name": "refined_aluminum",
+        "amount": 1
+      }
+    },
+    {
+      "from": {
+        "name": "material_steel",
+        "amount": 10
+      },
+      "to": {
+        "name": "refined_steel",
+        "amount": 1
+      }
+    },
+    {
+      "from": {
+        "name": "sand_bucket",
+        "amount": 10
+      },
+      "to": {
+        "name": "material_glass",
+        "amount": 1
+      }
+    }
+  ],
+  "meltingTime": 30
+}

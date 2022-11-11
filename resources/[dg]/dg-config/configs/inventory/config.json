@@ -79,6 +79,30 @@
         "anim": "idle"
       }
     },
+    "vehicle_door": {
+      "name": "vehicle_door",
+      "type": "primary",
+      "animData": {
+        "animDict": "anim@heists@box_carry@",
+        "anim": "idle"
+      }
+    },
+    "vehicle_bonnet": {
+      "name": "vehicle_bonnet",
+      "type": "primary",
+      "animData": {
+        "animDict": "anim@heists@box_carry@",
+        "anim": "idle"
+      }
+    },
+    "vehicle_boot": {
+      "name": "vehicle_boot",
+      "type": "primary",
+      "animData": {
+        "animDict": "anim@heists@box_carry@",
+        "anim": "idle"
+      }
+    },
     "container_weapons": {
       "name": "item_container_weapons",
       "type": "primary",
@@ -182,8 +206,21 @@
       "allowedItems": ["pistol_ammo", "smg_ammo", "rifle_ammo", "shotgun_ammo", "sniper_ammo", "taser_cartridge"]
     },
     "container_materials": {
-      "size": 15,
-      "allowedItems": []
+      "size": 30,
+      "allowedItems": [
+        "material_copper",
+        "material_glass",
+        "material_plastic",
+        "material_electronics",
+        "material_iron",
+        "material_aluminum",
+        "material_steel",
+        "refined_copper",
+        "refined_plastic",
+        "refined_iron",
+        "refined_aluminum",
+        "refined_steel"
+      ]
     }
   }
 }

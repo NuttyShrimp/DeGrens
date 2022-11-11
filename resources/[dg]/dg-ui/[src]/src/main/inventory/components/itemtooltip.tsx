@@ -13,6 +13,7 @@ export const ItemTooltip: FC<Inventory.Item> = ({
   markedForSeizure,
   quality,
   requirements,
+  amount,
 }) => {
   const isMetadataEmpty = useMemo(() => {
     const hiddenKeys: string[] | undefined = metadata.hiddenKeys;
@@ -37,8 +38,7 @@ export const ItemTooltip: FC<Inventory.Item> = ({
     const formatted = new Map<string, string>(); // name - label
     items.forEach(item => {
       if (formatted.has(item.name)) return;
-      const amount = items.filter(n => n.name === item.name).length;
-      formatted.set(item.name, `${amount}x ${item.label}`);
+      formatted.set(item.name, `${item.amount}x ${item.label}`);
     });
 
     return [...formatted.values()].reduce<JSX.Element[]>((acc, text, key) => {
@@ -51,6 +51,14 @@ export const ItemTooltip: FC<Inventory.Item> = ({
   return (
     <>
       <p className='label text'>{label}</p>
+      {amount !== undefined && (
+        <>
+          <Divider />
+          <p className='description text' style={{ fontSize: '1.6vh' }}>
+            Aantal beschikbaar: {amount}
+          </p>
+        </>
+      )}
       {requirements === undefined ? (
         <>
           {(description || !isMetadataEmpty) && (

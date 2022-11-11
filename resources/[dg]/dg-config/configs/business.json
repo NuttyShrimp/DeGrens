@@ -17,18 +17,18 @@
       "crafting": 2048
     },
     "labels": {
-      "hire": "Inhuren",
+      "hire": "Aannemen",
       "fire": "Ontslaan",
-      "change_role": "Verander rollen",
+      "change_role": "Verander Rollen",
       "pay_employee": "Betaal Medewerker",
       "pay_external": "Betaal Extern",
       "charge_external": "Belast Extern",
-      "logs": "Bekijk logboek",
+      "logs": "Bekijk Logboek",
       "change_bank_perms": "Bank Toegang Bewerken",
-      "stash": "Opslag",
-      "property_access": "Eigendom toegang",
-      "garage_access": "Garage toegang",
-      "crafting": "Werkbank toegang"
+      "stash": "Opslag Toegang",
+      "property_access": "Eigendom Toegang",
+      "garage_access": "Garage Toegang",
+      "crafting": "Werkbank Toegang"
     }
   },
   "types": {

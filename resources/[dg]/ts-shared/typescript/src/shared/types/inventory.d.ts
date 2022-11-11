@@ -16,7 +16,7 @@ declare namespace Inventory {
 
   interface Requirements {
     cash?: number;
-    items?: { name: string; label: string }[];
+    items?: { name: string; label: string; amount: number }[];
   }
 
   // static item data
@@ -34,7 +34,17 @@ declare namespace Inventory {
 
   type Hotkey = 1 | 2 | 3 | 4 | 5;
 
-  type Type = 'player' | 'trunk' | 'glovebox' | 'drop' | 'dumpster' | 'stash' | 'shop' | 'container' | 'tunes';
+  type Type =
+    | 'player'
+    | 'trunk'
+    | 'glovebox'
+    | 'drop'
+    | 'dumpster'
+    | 'stash'
+    | 'shop'
+    | 'container'
+    | 'tunes'
+    | 'bench';
 
   type UsageHandler = (src: number, state: Inventory.ItemState) => void;
 

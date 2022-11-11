@@ -8,6 +8,7 @@ import { nuiAction } from '@src/lib/nui-comms';
 import { Inventory } from './components/inventory';
 import { syncItem } from './lib';
 import store from './store';
+import { generateShopItems } from './util';
 
 import './styles/inventory.scss';
 
@@ -31,16 +32,28 @@ const Component: AppFunction<Inventory.State> = props => {
       setRefreshDrag(refreshDrag + 1);
       syncItem(item);
     },
-    [props.visible, syncItem]
+    [props.visible]
   );
 
   const fetchInventoryData = async () => {
     const activeData: Inventory.OpeningData = await nuiAction('inventory/getData', {}, devData.inventory);
+
+    // Autofill secondary if its a shop
+    let items = activeData.items;
+    let secondaryData: Inventory.SecondarySide;
+    if ('shopItems' in activeData.secondary) {
+      const generatedItems = generateShopItems(activeData.secondary.id, activeData.secondary.shopItems);
+      secondaryData = { id: activeData.secondary.id, size: generatedItems.size, allowedItems: [] };
+      items = { ...items, ...generatedItems.items };
+    } else {
+      secondaryData = activeData.secondary;
+    }
+
     props.updateState({
-      items: activeData.items,
+      items: items,
       inventories: {
         [activeData.primary.id]: activeData.primary,
-        [activeData.secondary.id]: activeData.secondary,
+        [activeData.secondary.id]: secondaryData,
       },
       primaryId: activeData.primary.id,
       secondaryId: activeData.secondary.id,

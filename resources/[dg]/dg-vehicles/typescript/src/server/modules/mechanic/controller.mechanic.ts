@@ -1,4 +1,4 @@
-import { Auth, Events, RPC } from '@dgx/server';
+import { Auth, Events, Inventory, RPC } from '@dgx/server';
 
 import {
   clockPlayerIn,
@@ -7,6 +7,7 @@ import {
   giveOrder,
   loadConfig,
   loadZones,
+  moveCraftedItemToShopParts,
   tradeSalesTickets,
   tryAcceptingJob,
 } from './service.mechanic';
@@ -37,4 +38,9 @@ Events.onNet('vehicles:mechanic:server:acceptTowJob', (src, vin: string) => {
 
 RPC.register('vehicles:mechanic:server:getStashAmount', (src, item: Mechanic.Tickets.Item) => {
   return getAmountOfItem(src, item);
+});
+
+on('inventory:craftedInBench', (plyId: number, benchId: string, item: Inventory.ItemState) => {
+  if (benchId !== 'mechanic_bench') return;
+  moveCraftedItemToShopParts(plyId, item);
 });

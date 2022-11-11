@@ -37,3 +37,5 @@ declare type RayCastHit = {
 };
 
 declare type StatusName = 'alcohol' | 'gsw' | 'gsr';
+
+declare type ReputationType = 'crafting' | 'ammo_crafting' | 'mechanic_crafting';

@@ -1,9 +1,9 @@
-import { XYCoord } from 'react-dnd';
 import { nuiAction } from '@src/lib/nui-comms';
 
 import { store, type } from '../../lib/redux';
 
 import { CELLS_PER_ROW } from './constants';
+import { isAnyItemOverlapping } from './util';
 
 const getState = (): Inventory.State => store.getState()['inventory'];
 
@@ -20,14 +20,24 @@ const setState = (data: any): void => {
   });
 };
 
-export const updateItemPosition = (itemId: string, inventoryId: string, position: XYCoord) => {
+export const updateItemPosition = (itemId: string, inventoryId: string, position: Inventory.XY) => {
   const state = getState();
   const item = state.items[itemId];
   if (!item) return;
+
+  // For shop/crafting we handle this in backend, ui will get updated using the itemsync evt anyway
+  if (item.amount !== undefined) {
+    nuiAction('inventory/getFromShop', { item: item.name, inventory: item.inventory, position });
+    item.amount--;
+    setState(state);
+    return;
+  }
+
   if (item.hotkey && item.inventory !== inventoryId) {
     state.items[itemId].hotkey = undefined;
     nuiAction('inventory/unbindItem', { id: itemId });
   }
+
   item.position = position;
   item.inventory = inventoryId;
   setState(state);
@@ -119,9 +129,9 @@ const getPossibleOverlappingItems = (itemId: string, inventoryId: string): Inven
  * Function which finds first available space for item
  * @param itemId Item you want to find free space for
  * @param inventoryId Inventory you want to find free space in
- * @returns XYCoord of found available position or undefined if none was found
+ * @returns Position of found available position or undefined if none was found
  */
-export const getFirstFreeSpace = (itemId: string, inventoryId: string): XYCoord | undefined => {
+export const getFirstFreeSpace = (itemId: string, inventoryId: string): Inventory.XY | undefined => {
   const state = getState();
   const gridSize = state.inventories[inventoryId].size;
   const itemSize = state.items[itemId].size;
@@ -144,7 +154,7 @@ export const getFirstFreeSpace = (itemId: string, inventoryId: string): XYCoord 
  * @param inventoryId Inventory to check position in
  * @param newPosition Position to check if free
  */
-export const canPlaceItemAtPosition = (itemId: string, inventoryId: string, newPosition: XYCoord): boolean => {
+export const canPlaceItemAtPosition = (itemId: string, inventoryId: string, newPosition: Inventory.XY): boolean => {
   const state = getState();
   const item = state.items[itemId];
 
@@ -169,7 +179,7 @@ export const isItemAllowedInInventory = (itemName: string, inventoryId: string):
   return allowedItems.some(name => name === itemName);
 };
 
-export const areRequirementsFullfilled = (requirements: Inventory.ItemRequirements | undefined): boolean => {
+export const areRequirementsFullfilled = (requirements: Inventory.Shop.Requirements | undefined): boolean => {
   if (!requirements) return true;
   const state = getState();
   if (requirements.cash) {
@@ -177,38 +187,19 @@ export const areRequirementsFullfilled = (requirements: Inventory.ItemRequiremen
     if (playerCash < requirements.cash) return false;
   }
   if (requirements.items) {
-    const playerItemNames = Object.values(state.items)
+    let playerItemNames = Object.values(state.items)
       .filter(i => i.inventory === state.primaryId)
       .map(i => i.name);
     for (const requiredItem of requirements.items) {
-      const index = playerItemNames.findIndex(name => name === requiredItem.name);
-      if (index === -1) return false;
-      playerItemNames.splice(index, 1);
+      const correspondingIndices = playerItemNames
+        .reduce<number[]>((indeces, name, i) => {
+          if (name === requiredItem.name) indeces.push(i);
+          return indeces;
+        }, [])
+        .slice(0, requiredItem.amount);
+      if (correspondingIndices.length < requiredItem.amount) return false;
+      playerItemNames = playerItemNames.filter((_, i) => !correspondingIndices.includes(i));
     }
   }
   return true;
-};
-
-/**
- * Function which checks if any of provided items overlap imaginary item with given position and size
- * @param items All possible overlapping items
- * @param position Position to check
- * @param size Size to check
- */
-const isAnyItemOverlapping = (items: Inventory.Item[], position: XYCoord, size: XYCoord): boolean => {
-  return items.some(i => doRectanglesOverlap(position, size, i.position, i.size));
-};
-
-const doRectanglesOverlap = (
-  movingPosition: XYCoord,
-  movingSize: XYCoord,
-  otherPosition: XYCoord,
-  otherSize: XYCoord
-): boolean => {
-  return (
-    movingPosition.x < otherPosition.x + otherSize.x &&
-    movingPosition.x + movingSize.x > otherPosition.x &&
-    movingPosition.y < otherPosition.y + otherSize.y &&
-    movingPosition.y + movingSize.y > otherPosition.y
-  );
 };

@@ -266,7 +266,7 @@ export class Room {
     SetEntityInvincible(ped, false);
 
     if (safe) {
-      global.exports['dg-weathersync'].FreezeTime(true, 700);
+      global.exports['dg-weathersync'].FreezeTime(true, 0);
       global.exports['dg-weathersync'].FreezeWeather(true, 'CLEAR');
       this.createInteractions();
       this.createPeekZones();

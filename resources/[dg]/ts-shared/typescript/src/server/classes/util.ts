@@ -156,6 +156,14 @@ class Util extends UtilShared {
     }
     return playersInVehicle;
   };
+
+  changePlayerStress = (plyId: number, amount: number) => {
+    global.exports['dg-misc'].changeStress(plyId, amount);
+  };
+
+  getAmountOfPlayers = () => {
+    return (DGCore.Functions.GetPlayers() ?? []).length;
+  };
 }
 
 export class Sounds {
@@ -178,8 +186,19 @@ export class Status {
   };
 }
 
+export class Reputations {
+  public getReputation = (cid: number, type: ReputationType): number | undefined => {
+    return global.exports['dg-misc'].getReputation(cid, type);
+  };
+
+  public setReputation = (cid: number, type: ReputationType, cb: (old: number) => number): void => {
+    global.exports['dg-misc'].setReputation(cid, type, cb);
+  };
+}
+
 export default {
   Util: new Util(),
   Sounds: new Sounds(),
   Status: new Status(),
+  Reputations: new Reputations(),
 };
