@@ -78,7 +78,9 @@ export class Npc {
     await Util.awaitEntityExistence(this.entity);
 
     this.data.flags.forEach(flag => {
-      Entity(this.entity).state[flag.name] = flag.active;
+      const entState = Entity(this.entity)?.state;
+      if (!entState) return;
+      entState.set(flag.name, flag.active, false);
     });
 
     this.data.settings.forEach(setting => {

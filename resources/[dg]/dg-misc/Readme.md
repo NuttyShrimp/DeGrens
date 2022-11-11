@@ -99,4 +99,8 @@ Using this module you can create ingame elevators with seperate business, gang a
 Adding new status type:
 - Add config to dg-config/config/playerstatuses.json
 - Add type to ts-shared/typescript/src/shared/types/util.d.ts
+## Reputations
+Adding new reputation type:
+- Add type name to ts-shared/typescript/src/shared/types/util.d.ts
+- Add column to table `character_reputations` (IMPORTANT: default value 0)
 

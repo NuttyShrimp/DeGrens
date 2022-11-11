@@ -31,7 +31,7 @@ export const loadZones = (src: number) => {
 export const clockPlayerIn = (src: number, shop: string) => {
   const plyShop = getShopForPlayer(src);
   if (plyShop) {
-    Notifications.add(src, `Je bent al in geclocked ergens anders!`, 'error');
+    Notifications.add(src, `Je bent al ingeclocked ergens anders!`, 'error');
     return;
   }
   if (!activeMechanics[shop]) {
@@ -73,7 +73,7 @@ export const getAmountOfItem = async (src: number, item: Mechanic.Tickets.Item):
   if (!plyShop) return 0;
   const itemName = getNameForItem(item);
   if (!itemName) return 0;
-  return Inventory.getAmountInInventory('stash', `mechanic-shop-stash-${plyShop}`, itemName ?? '');
+  return Inventory.getAmountInInventory('stash', `mechanic-shop-parts-${plyShop}`, itemName ?? '');
 };
 
 export const giveOrder = async (src: number, order: Mechanic.Tickets.Item[]) => {
@@ -105,7 +105,7 @@ export const giveOrder = async (src: number, order: Mechanic.Tickets.Item[]) => 
     if (!item) continue;
     const stashAmount = await Inventory.getAmountInInventory(
       'stash',
-      `mechanic-shop-stash-${plyShop}`,
+      `mechanic-shop-parts-${plyShop}`,
       item?.name ?? ''
     );
     if (stashAmount < (item?.amount ?? 0)) {
@@ -121,9 +121,9 @@ export const giveOrder = async (src: number, order: Mechanic.Tickets.Item[]) => 
   const cid = Util.getCID(src);
   for (const itemInfo of items) {
     if (!itemInfo || !itemInfo.name) continue;
-    const item = await Inventory.getFirstItemOfName('stash', `mechanic-${plyShop}-parts`, itemInfo?.name);
+    const item = await Inventory.getFirstItemOfName('stash', `mechanic-shop-parts-${plyShop}`, itemInfo?.name);
     if (!item) {
-      mechanicLogger.error(`Failed to find item ${itemInfo.name} in mechanic-${plyShop}-parts`);
+      mechanicLogger.error(`Failed to find item ${itemInfo.name} in mechanic-shop-parts-${plyShop}`);
       return;
     }
     await Inventory.moveItemToInventory('player', String(cid), item.id);
@@ -255,3 +255,16 @@ export const tryAcceptingJob = (src: number, vin: string) => {
   Events.emitNet('vehicles:mechanic:assignJob', src, vin, vehCoords);
 };
 // endregion
+
+export const moveCraftedItemToShopParts = (plyId: number, item: Inventory.ItemState) => {
+  // If player is not in a mechanic shop but somehow crafted item in mech bench then destroy item
+  const plyShop = getShopForPlayer(plyId);
+  if (!plyShop) {
+    mechanicLogger.warn(
+      `${Util.getName(plyId)}(${plyId}) crafted an item in mechanic bench whilst not being in a mechanicshop`
+    );
+    Inventory.destroyItem(item.id);
+    return;
+  }
+  Inventory.moveItemToInventory('stash', `mechanic-shop-parts-${plyShop}`, item.id);
+};

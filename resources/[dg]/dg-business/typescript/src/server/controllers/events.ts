@@ -96,7 +96,7 @@ RPC.register('business:server:fire', async (src, id: number, cid: number) => {
     await business.fire(src, cid);
     return true;
   } catch (e) {
-    business.logger.error(`Failed to hire ${src} -> ${cid}: ${e}`);
+    business.logger.error(`Failed to fire ${src} -> ${cid}: ${e}`);
     return false;
   }
 });
@@ -154,7 +154,7 @@ RPC.register(
     try {
       return await business.updateRole(src, role, permissions);
     } catch (e) {
-      business.logger.error(`Failed to create role by ${src}, name: ${role}: ${e}`);
+      business.logger.error(`Failed to update role by ${src}, name: ${role}: ${e}`);
       return false;
     }
   }
@@ -167,7 +167,7 @@ RPC.register('business:server:removeRole', async (src, id: number, role: string)
     await business.deleteRole(src, role);
     return true;
   } catch (e) {
-    business.logger.error(`Failed to create role by ${src}, name: ${role}: ${e}`);
+    business.logger.error(`Failed to remove role by ${src}, name: ${role}: ${e}`);
     return false;
   }
 });

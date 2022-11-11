@@ -69,12 +69,17 @@ class Inventory {
     name: string,
     amount: number,
     metadata?: { [key: string]: any }
-  ) => {
-    global.exports['dg-inventory'].addItemToInventory(type, identifier, name, amount, metadata);
+  ): Promise<string[]> => {
+    return global.exports['dg-inventory'].addItemToInventory(type, identifier, name, amount, metadata);
   };
-  public addItemToPlayer = (plyId: number, name: string, amount: number, metadata?: { [key: string]: any }) => {
+  public addItemToPlayer = (
+    plyId: number,
+    name: string,
+    amount: number,
+    metadata?: { [key: string]: any }
+  ): Promise<string[]> => {
     const cid = String(Util.getCID(plyId));
-    this.addItemToInventory('player', cid, name, amount, metadata);
+    return this.addItemToInventory('player', cid, name, amount, metadata);
   };
 
   public doesInventoryHaveItems = (
@@ -182,6 +187,34 @@ class Inventory {
 
   public splitId = (inventoryId: string): { type: Inventory.Type; identifier: string } => {
     return global.exports['dg-inventory'].splitId(inventoryId);
+  };
+
+  public showItemBox = (plyId: number, label: string, itemName: string) => {
+    global.exports['dg-inventory'].showItemBox(plyId, label, itemName);
+  };
+
+  public removeItemAmountFromInventory = async (
+    type: Inventory.Type,
+    identifier: string,
+    name: string,
+    amount: number
+  ): Promise<boolean> => {
+    const items = await this.getItemsForNameInInventory(type, identifier, name);
+    if (items.length < amount) return false;
+    const itemsToRemove = items.slice(0, amount);
+    itemsToRemove.forEach(item => {
+      this.destroyItem(item.id);
+    });
+    return true;
+  };
+
+  public removeItemAmountFromPlayer = async (plyId: number, name: string, amount: number): Promise<boolean> => {
+    const cid = String(Util.getCID(plyId));
+    const success = await this.removeItemAmountFromInventory('player', cid, name, amount);
+    if (success) {
+      this.showItemBox(plyId, `${amount}x verwijderd`, name);
+    }
+    return success;
   };
 }
 

@@ -47,6 +47,10 @@ export class Vector4 implements Vec4 {
     return Vector4.divide(v, v.Length);
   }
 
+  public static isSame(v1: Vec4, v2: Vec4): boolean {
+    return v1.x === v2.x && v1.y === v2.y && v1.z === v2.z && v1.w === v2.w;
+  }
+
   constructor(public x: number, public y: number, public z: number, public w: number) {}
 
   public clone(): Vector4 {

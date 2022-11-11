@@ -40,4 +40,5 @@ declare interface Config {
   shellType: Record<string, string>;
   locations: House.Data[];
   shopPrices: Record<string, number>;
+  moldChance: number;
 }

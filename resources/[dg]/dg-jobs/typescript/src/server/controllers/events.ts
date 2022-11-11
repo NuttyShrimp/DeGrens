@@ -1,4 +1,7 @@
-import { Admin, Auth, Events, RPC, Util } from '@dgx/server';
+import { Admin, Auth, Events, RPC, Util, Jobs, Config } from '@dgx/server';
+import { syncFishingJobToClient } from 'modules/fishing/service.fishing';
+import { syncSanitationJobToClient } from 'modules/sanitation/service.sanitation';
+import { syncScrapyardJobToClient } from 'modules/scrapyard/service.scrapyard';
 import { getLocations, getPlayerJob, openSignInMenu, signIn, signOut } from '../services/signin';
 import {
   assignRank,
@@ -117,3 +120,28 @@ RPC.register('jobs:whitelist:getInfoList', (src: number) => {
   config.forEach((info, name) => jobs.push({ name, ranks: info.grades.length }));
   return jobs;
 });
+
+// #region Jobs
+on('DGCore:server:playerLoaded', (playerData: PlayerData) => {
+  const group = Jobs.getGroupByCid(playerData.citizenid);
+  if (!group) return;
+  syncFishingJobToClient(group.id, playerData.source);
+  syncScrapyardJobToClient(group.id, playerData.source, playerData.citizenid);
+  syncSanitationJobToClient(group.id, playerData.source);
+});
+
+RPC.register('jobs:modules:getInitData', async () => {
+  await Config.awaitConfigLoad();
+  const config = Config.getConfigValue('jobs') as {
+    sanddigging: Sanddigging.Config;
+    fishing: Fishing.Config;
+    scrapyard: Scrapyard.Config;
+    sanitation: Sanitation.Config;
+  };
+  return {
+    sanddigging: config.sanddigging,
+    fishingReturnZone: config.fishing.vehicle,
+    scrapyardReturnZone: config.scrapyard.returnZone,
+  };
+});
+// #endregion

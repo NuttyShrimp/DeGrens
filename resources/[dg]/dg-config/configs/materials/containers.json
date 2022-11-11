@@ -1,0 +1,39 @@
+{
+  "requiredPlayers": 1,
+  "mold": {
+    "location": { "x": 1110.798, "y": -2008.7557, "z": 31.2997 },
+    "requiredSteel": 10
+  },
+  "containers": {
+    "ammo_container_bench_1": {
+      "bench": "ammo_bench",
+      "position": { "x": -49.1427, "y": -1163.2419, "z": 26.556 },
+      "public": true
+    },
+    "ammo_container_bench_2": {
+      "bench": "ammo_bench",
+      "position": { "x": 1.2002, "y": -423.4529, "z": 39.7903 },
+      "public": true
+    },
+    "ammo_container_bench_3": {
+      "bench": "ammo_bench",
+      "position": { "x": 778.0853, "y": -1377.0717, "z": 27.201 },
+      "public": true
+    },
+    "weapon_container_bench_a": {
+      "bench": "weapon_bench_A",
+      "position": { "x": 930.4176, "y": -1499.395, "z": 30.7478 },
+      "public": false
+    },
+    "weapon_container_bench_c": {
+      "bench": "weapon_bench_B",
+      "position": { "x": -366.9218, "y": -2286.1791, "z": 8.017 },
+      "public": false
+    },
+    "weapon_container_bench_b": {
+      "bench": "weapon_bench_C",
+      "position": { "x": -584.8621, "y": -1646.2116, "z": 19.8062 },
+      "public": false
+    }
+  }
+}

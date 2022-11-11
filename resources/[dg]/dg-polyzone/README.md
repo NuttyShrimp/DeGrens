@@ -14,3 +14,6 @@ Ik raad je aan om in het script zelf te kijken voor meer info ivm welke argument
 wel aan om in de options table een data table met een unique id per zone mee te geven. zo kun je meerdere zones aanmaken
 onder dezelfde naam maar ze toch elke identificeren. Deze id zal er ook voor zorgen dat een zone niet 2x zal aangemaakt
 worden mocht u bv. het script herstarten
+
+## Important
+When building polyzones in DGCore:client:playerLoaded event, make sure to provide routingBucket as the current player bucket will get used which is not always the default (0)!

@@ -20,7 +20,6 @@ export class Item {
   private hotkey!: Inventory.Hotkey | null;
   private metadata!: { [key: string]: any };
   private lastDecayTime!: number;
-  private requirements?: Inventory.Requirements;
 
   constructor() {
     this.logger = mainLogger.child({ module: 'Item' });
@@ -37,7 +36,7 @@ export class Item {
     this.metadata = state.metadata;
 
     // Position
-    if (isNew) {
+    if (isNew && !state.position) {
       let newPosition = this.inventory.getFirstAvailablePosition(this.name);
       // If we didnt find a position because inv is full, we drop item on ground
       if (!newPosition) {
@@ -91,7 +90,6 @@ export class Item {
       hotkey: this.hotkey,
       metadata: this.metadata,
       lastDecayTime: this.lastDecayTime,
-      requirements: this.requirements,
     };
   }
   // #endregion
@@ -197,19 +195,6 @@ export class Item {
     this.lastDecayTime = currentSeconds;
     this.setQuality(current => current - amountToDecay);
     return this.quality === 0;
-  };
-
-  // Requirements for moving, used in shops/crafting
-  public getRequirements = () => {
-    return this.requirements;
-  };
-
-  public setRequirements = (requirements: Inventory.Requirements) => {
-    this.requirements = { ...requirements };
-  };
-
-  public clearRequirements = () => {
-    this.requirements = undefined;
   };
 
   private syncItem = (data: Inventory.ItemState, oldInventory = '', emitter = 0) => {

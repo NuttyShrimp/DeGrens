@@ -1,4 +1,6 @@
 declare namespace Inventory {
+  type XY = { x: number; y: number };
+
   interface State extends Base.State {
     items: Record<string, Item>;
     inventories: {
@@ -10,8 +12,8 @@ declare namespace Inventory {
 
   interface OpeningData {
     items: Record<string, Item>;
-    primary: Omit<PrimarySide, 'side'>;
-    secondary: Omit<SecondarySide, 'side'>;
+    primary: PrimarySide;
+    secondary: SecondarySide | (Pick<Grid, 'id'> & { shopItems: Inventory.Shop.Item[] });
   }
 
   type PrimarySide = Omit<Grid, 'items'>;
@@ -26,8 +28,8 @@ declare namespace Inventory {
   interface Item {
     id: string;
     inventory: string;
-    position: XYCoord;
-    size: XYCoord;
+    position: Position;
+    size: Position;
     name: string;
     label: string;
     quality: number;
@@ -38,27 +40,30 @@ declare namespace Inventory {
     hotkey?: number;
     markedForSeizure?: boolean;
     metadata: { [key: string]: any };
-    requirements?: ItemRequirements;
+    // These two get used in shops
+    requirements?: Shop.Requirements;
+    amount?: number;
   }
 
   interface DragItem {
-    id: string;
     size: XYCoord;
-    name: string;
     label: string;
     quality: number;
     image: string;
     hotkey?: number;
-    requirements?: ItemRequirements;
-  }
-
-  interface ItemRequirements {
-    cash?: number;
-    items?: { name: string; label: string }[];
   }
 
   interface Alert {
     message: string;
     type: 'success' | 'error';
+  }
+
+  namespace Shop {
+    type Item = Required<Pick<Inventory.Item, 'size' | 'name' | 'label' | 'image' | 'amount' | 'requirements'>>;
+
+    type Requirements = {
+      cash?: number;
+      items?: { name: string; label: string; amount: number }[];
+    };
   }
 }

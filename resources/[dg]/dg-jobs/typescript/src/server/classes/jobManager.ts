@@ -3,7 +3,7 @@ import { Export, ExportRegister, RPCEvent, RPCRegister } from '@dgx/server/decor
 import { mainLogger } from 'sv_logger';
 import winston from 'winston';
 
-import groupManager from '../services/groups/classes/GroupManager';
+import groupManager from '../modules/groups/classes/GroupManager';
 
 @ExportRegister()
 @RPCRegister()
@@ -11,7 +11,7 @@ class JobManager extends Util.Singleton<JobManager>() {
   /**
    * Map of jobs on job name
    */
-  private jobs: Map<string, Jobs.Job>;
+  private jobs: Map<string, Jobs.Job & { name: string; payoutLevel: number }>;
   private jobsToResource: Map<string, string>;
   private logger: winston.Logger;
 
@@ -123,7 +123,7 @@ class JobManager extends Util.Singleton<JobManager>() {
   }
 
   @Export('getJobPayout')
-  private _getJobPayout(jobName: string, groupSize: number) {
+  public getJobPayout(jobName: string, groupSize: number) {
     const job = this.jobs.get(jobName);
     if (!job) {
       this.logger.error('Tried to get payout for nonexistent job');
@@ -152,7 +152,7 @@ class JobManager extends Util.Singleton<JobManager>() {
   }
 
   @Export('registerJob')
-  private _registerJob(name: string, info: Omit<Jobs.Job, 'name' | 'payoutLevel'>) {
+  public registerJob(name: string, info: Omit<Jobs.Job, 'name' | 'payoutLevel'>) {
     if (this.jobs.has(name)) {
       this.logger.warn(`${name} job already existed, overwriting....`);
     } else {

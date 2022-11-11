@@ -2484,5 +2484,252 @@
     },
     "image": "sales_ticket.png",
     "decayRate": 10080
+  },
+  {
+    "name": "material_copper",
+    "label": "Koper",
+    "image": "material_copper.png",
+    "size": {
+      "x": 1,
+      "y": 1
+    },
+    "decayrate": 10080
+  },
+  {
+    "name": "material_glass",
+    "label": "Glasplaat",
+    "image": "material_glass.png",
+    "size": {
+      "x": 1,
+      "y": 1
+    },
+    "decayrate": 10080
+  },
+  {
+    "name": "material_plastic",
+    "label": "Plastic",
+    "image": "material_plastic.png",
+    "size": {
+      "x": 1,
+      "y": 1
+    },
+    "decayrate": 10080
+  },
+  {
+    "name": "material_electronics",
+    "label": "Electronica",
+    "image": "material_electronics.png",
+    "size": {
+      "x": 1,
+      "y": 1
+    },
+    "decayrate": 10080
+  },
+  {
+    "name": "material_iron",
+    "label": "IJzer",
+    "image": "material_iron.png",
+    "size": {
+      "x": 1,
+      "y": 1
+    },
+    "decayrate": 10080
+  },
+  {
+    "name": "material_aluminum",
+    "label": "Aluminium",
+    "image": "material_aluminum.png",
+    "size": {
+      "x": 1,
+      "y": 1
+    },
+    "decayrate": 10080
+  },
+  {
+    "name": "material_steel",
+    "label": "Staal",
+    "image": "material_steel.png",
+    "size": {
+      "x": 1,
+      "y": 1
+    },
+    "decayrate": 10080
+  },
+  {
+    "name": "refined_copper",
+    "label": "Koper (Verwerkt)",
+    "image": "refined_copper.png",
+    "size": {
+      "x": 2,
+      "y": 2
+    },
+    "decayrate": 30240
+  },
+  {
+    "name": "refined_plastic",
+    "label": "Plastic (Verwerkt)",
+    "image": "refined_plastic.png",
+    "size": {
+      "x": 2,
+      "y": 2
+    },
+    "decayrate": 30240
+  },
+  {
+    "name": "refined_iron",
+    "label": "IJzer (Verwerkt)",
+    "image": "material_iron.png",
+    "size": {
+      "x": 2,
+      "y": 2
+    },
+    "decayrate": 30240
+  },
+  {
+    "name": "refined_aluminum",
+    "label": "Aluminium (Verwerkt)",
+    "image": "refined_aluminum.png",
+    "size": {
+      "x": 2,
+      "y": 2
+    },
+    "decayrate": 30240
+  },
+  {
+    "name": "refined_steel",
+    "label": "Staal (Verwerkt)",
+    "image": "refined_steel.png",
+    "size": {
+      "x": 2,
+      "y": 2
+    },
+    "decayrate": 30240
+  },
+  {
+    "name": "bolt_cutters",
+    "label": "Betonschaar",
+    "image": "bolt_cutters.png",
+    "size": {
+      "x": 2,
+      "y": 4
+    },
+    "decayrate": 40320,
+    "markedForSeizure": true
+  },
+  {
+    "name": "sand_bucket",
+    "label": "Emmer Zand",
+    "image": "sand_bucket.png",
+    "size": {
+      "x": 3,
+      "y": 3
+    },
+    "decayrate": 1440
+  },
+  {
+    "name": "screwdriver",
+    "label": "Schroevendraaier",
+    "image": "screwdriver.png",
+    "size": {
+      "x": 1,
+      "y": 2
+    },
+    "decayrate": 40320
+  },
+  {
+    "name": "vehicle_door",
+    "label": "Autodeur",
+    "image": "vehicle_door.png",
+    "size": {
+      "x": 4,
+      "y": 4
+    },
+    "decayrate": 60
+  },
+  {
+    "name": "vehicle_bonnet",
+    "label": "Motorkap",
+    "image": "vehicle_bonnet.png",
+    "size": {
+      "x": 4,
+      "y": 4
+    },
+    "decayrate": 60
+  },
+  {
+    "name": "vehicle_boot",
+    "label": "Kofferklep",
+    "image": "vehicle_boot.png",
+    "size": {
+      "x": 4,
+      "y": 4
+    },
+    "decayrate": 60
+  },
+  {
+    "name": "fishing_rod",
+    "label": "Vishengel",
+    "image": "fishing_rod.png",
+    "size": {
+      "x": 1,
+      "y": 4
+    },
+    "decayrate": 40320,
+    "useable": true
+  },
+  {
+    "name": "key_mold",
+    "label": "Onbekend voorwerp",
+    "description": "Een raar voorwerp dat lijkt op een mal voor metaal",
+    "image": "key_mold.png",
+    "size": {
+      "x": 5,
+      "y": 3
+    }
+  },
+  {
+    "name": "container_key",
+    "label": "Sleutel",
+    "description": "Onafgewerkte sleutel met scherpe randen",
+    "image": "container_key.png",
+    "size": {
+      "x": 3,
+      "y": 2
+    }
+  },
+  {
+    "markedForSeizure": true,
+    "name": "explosive_case",
+    "label": "Omhulsel",
+    "decayRate": 10080,
+    "image": "explosive_case.png",
+    "size": {
+      "x": 3,
+      "y": 2
+    }
+  },
+  {
+    "markedForSeizure": true,
+    "name": "thermite_part",
+    "label": "Thermiet Poeder",
+    "useable": true,
+    "decayRate": 4320,
+    "image": "thermite_part.png",
+    "size": {
+      "x": 2,
+      "y": 3
+    }
+  },
+  {
+    "markedForSeizure": true,
+    "name": "mini_emp_part",
+    "label": "EMP Onderdelen",
+    "useable": true,
+    "decayRate": 4320,
+    "image": "mini_emp_part.png",
+    "size": {
+      "x": 3,
+      "y": 2
+    }
   }
 ]

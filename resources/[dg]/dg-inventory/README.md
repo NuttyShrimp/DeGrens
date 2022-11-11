@@ -19,6 +19,7 @@
   }
   ```
 - OnCreate metadata can be found in typescript/src/server/modules/items/helpers.items.ts
+- You can add a string array of keys to metadata as key hiddenKeys to not display value of those keys in UI
 - Item objects and container whitelist can be found in dg-config/configs/inventory/config.json
 
 

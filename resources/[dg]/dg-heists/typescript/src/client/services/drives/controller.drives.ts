@@ -1,4 +1,4 @@
-import { Peek, RPC, UI, PolyZone, Keys, Notifications, Events } from '@dgx/client';
+import { Peek, RPC, UI, PolyZone, Keys, Notifications, Events, Inventory } from '@dgx/client';
 
 let inPickupZone = false;
 let pickupBlip: number;
@@ -9,45 +9,18 @@ setImmediate(async () => {
   PolyZone.addCircleZone('heists_laptop_pickup', pickupCoords, 1.5, { data: {} }, true);
 });
 
-Peek.addFlagEntry(
-  'isHeistsSoftwareShop',
-  {
-    options: [
-      {
-        icon: 'fas fa-laptop',
-        label: 'Laptop kopen',
-        action: async () => {
-          const hasActivePickup = await RPC.execute<boolean>('heists:server:hasActivePickup');
-          if (hasActivePickup) {
-            Notifications.add('Je hebt nog een actieve levering.', 'error');
-            return;
-          }
-          const menuData = await RPC.execute<ContextMenuEntry[]>('heists:server:getLaptopShopEntries');
-          UI.openApplication('contextmenu', menuData);
-        },
+Peek.addFlagEntry('isHeistsIllegalShop', {
+  options: [
+    {
+      icon: 'fas fa-laptop',
+      label: 'Open Shop',
+      action: () => {
+        Events.emitNet('heists:server:openIllegalShop');
       },
-    ],
-    distance: 1.5,
-  },
-  true
-);
-
-Peek.addFlagEntry(
-  'isHeistsDriveTrade',
-  {
-    options: [
-      {
-        icon: 'fas fa-usb-drive',
-        label: 'Drive ruilen',
-        action: async () => {
-          console.log('fuckoff');
-        },
-      },
-    ],
-    distance: 1.5,
-  },
-  true
-);
+    },
+  ],
+  distance: 2.0,
+});
 
 onNet('DGCore:client:playerLoaded', async () => {
   const hasActivePickup = await RPC.execute('heists:server:hasActivePickup');
@@ -55,7 +28,7 @@ onNet('DGCore:client:playerLoaded', async () => {
   createLaptopBlip();
 });
 
-UI.RegisterUICallback('heists:UI:closeLaptopShopMenu', async (data: { drive: Drives.Name }, cb) => {
+UI.RegisterUICallback('heists/buyIllegalShopItem', async (data: { drive: Drives.Name }, cb) => {
   cb({ data: {}, meta: { ok: true, message: 'done' } });
   const success = await RPC.execute<boolean>('heists:server:buyLaptop', data.drive as Drives.Name);
   if (!success) {

@@ -172,43 +172,7 @@
     ],
     "flags": [
       {
-        "name": "isHeistsSoftwareShop",
-        "active": true
-      }
-    ],
-    "scenario": "WORLD_HUMAN_CLIPBOARD"
-  },
-  {
-    "id": "heists_drivetrade",
-    "model": "ig_car3guy1",
-    "position": {
-      "x": 165.93,
-      "y": -998.14,
-      "z": 29.35
-    },
-    "heading": 207.15,
-    "distance": 50.0,
-    "settings": [
-      {
-        "type": "invincible",
-        "active": true
-      },
-      {
-        "type": "ignore",
-        "active": true
-      },
-      {
-        "type": "freeze",
-        "active": true
-      },
-      {
-        "type": "collision",
-        "active": true
-      }
-    ],
-    "flags": [
-      {
-        "name": "isHeistsDriveTrade",
+        "name": "isHeistsIllegalShop",
         "active": true
       }
     ],
@@ -1155,6 +1119,210 @@
       "title": "Impound lot",
       "sprite": 68,
       "color": 5
+    }
+  },
+  {
+    "id": "jobs_sanddigging",
+    "model": "s_m_y_construct_01",
+    "position": {
+      "x": 2571.43,
+      "y": 2720.58,
+      "z": 42.9
+    },
+    "heading": 204.588,
+    "distance": 50.0,
+    "settings": [
+      {
+        "type": "invincible",
+        "active": true
+      },
+      {
+        "type": "ignore",
+        "active": true
+      },
+      {
+        "type": "freeze",
+        "active": true
+      },
+      {
+        "type": "collision",
+        "active": true
+      }
+    ],
+    "flags": [
+      {
+        "name": "isSanddiggingFuck",
+        "active": true
+      }
+    ],
+    "scenario": "WORLD_HUMAN_CLIPBOARD",
+    "blip": {
+      "title": "Querry",
+      "sprite": 366,
+      "color": 5,
+      "scale": 0.9
+    }
+  },
+  {
+    "id": "jobs_scrapyard",
+    "model": "mp_m_waremech_01",
+    "position": {
+      "x": 2339.48,
+      "y": 3056.19,
+      "z": 48.15
+    },
+    "heading": 211.62,
+    "distance": 50.0,
+    "settings": [
+      {
+        "type": "invincible",
+        "active": true
+      },
+      {
+        "type": "ignore",
+        "active": true
+      },
+      {
+        "type": "freeze",
+        "active": true
+      },
+      {
+        "type": "collision",
+        "active": true
+      }
+    ],
+    "flags": [
+      {
+        "name": "isScrapyardMfer",
+        "active": true
+      }
+    ],
+    "scenario": "WORLD_HUMAN_CLIPBOARD",
+    "blip": {
+      "title": "Scrapyard",
+      "sprite": 402,
+      "color": 15,
+      "scale": 1.1
+    }
+  },
+  {
+    "id": "jobs_recycleped",
+    "model": "s_m_y_xmech_01",
+    "position": {
+      "x": -465.4301,
+      "y": -1706.4167,
+      "z": 18.8223
+    },
+    "heading": 256.896,
+    "distance": 75.0,
+    "settings": [
+      {
+        "type": "invincible",
+        "active": true
+      },
+      {
+        "type": "ignore",
+        "active": true
+      },
+      {
+        "type": "freeze",
+        "active": true
+      },
+      {
+        "type": "collision",
+        "active": true
+      }
+    ],
+    "flags": [
+      {
+        "name": "isRecyclePed",
+        "active": true
+      }
+    ],
+    "scenario": "WORLD_HUMAN_CLIPBOARD"
+  },
+  {
+    "id": "jobs_fishing",
+    "model": "a_m_m_farmer_01",
+    "position": {
+      "x": -2080.4377,
+      "y": 2609.925,
+      "z": 3.084
+    },
+    "heading": 97.5018,
+    "distance": 75.0,
+    "settings": [
+      {
+        "type": "invincible",
+        "active": true
+      },
+      {
+        "type": "ignore",
+        "active": true
+      },
+      {
+        "type": "freeze",
+        "active": true
+      },
+      {
+        "type": "collision",
+        "active": true
+      }
+    ],
+    "flags": [
+      {
+        "name": "isFishingGuy",
+        "active": true
+      }
+    ],
+    "scenario": "WORLD_HUMAN_HIKER_STANDING",
+    "blip": {
+      "title": "Vissen",
+      "sprite": 317,
+      "color": 5,
+      "scale": 0.9
+    }
+  },
+  {
+    "id": "jobs_sanitation",
+    "model": "s_m_y_garbage",
+    "position": {
+      "x": -346.0635,
+      "y": -1556.1328,
+      "z": 25.2302
+    },
+    "heading": 195.3247,
+    "distance": 75.0,
+    "settings": [
+      {
+        "type": "invincible",
+        "active": true
+      },
+      {
+        "type": "ignore",
+        "active": true
+      },
+      {
+        "type": "freeze",
+        "active": true
+      },
+      {
+        "type": "collision",
+        "active": true
+      }
+    ],
+    "flags": [
+      {
+        "name": "isSanitationManager",
+        "active": true
+      }
+    ],
+    "scenario": "WORLD_HUMAN_CLIPBOARD",
+    "blip": {
+      "title": "Vuilkar",
+      "sprite": 318,
+      "color": 17,
+      "scale": 0.9
     }
   }
 ]

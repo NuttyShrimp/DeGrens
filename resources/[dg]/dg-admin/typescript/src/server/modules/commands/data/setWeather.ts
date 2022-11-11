@@ -11,6 +11,7 @@ export const setWeather: CommandData = {
   target: false,
   isClientCommand: false,
   handler: (_, args: SetWeatherData) => {
+    if (!args.WeatherType.name) return;
     global.exports['dg-weathersync'].setWeather(args.WeatherType.name);
   },
   UI: {

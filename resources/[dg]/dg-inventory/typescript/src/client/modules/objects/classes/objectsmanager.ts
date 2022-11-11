@@ -145,7 +145,7 @@ class ObjectsManager extends Util.Singleton<ObjectsManager>() {
       await Util.loadAnimDict(animDict);
       const ped = PlayerPedId();
       TaskPlayAnim(ped, animDict, anim, 8.0, 2.0, -1, 51, 0, false, false, false); // avoid setinterval initial delay
-      this.animationTimer = setInterval(async () => {
+      this.animationTimer = setInterval(() => {
         if (IsEntityPlayingAnim(ped, animDict, anim, 3)) return;
         TaskPlayAnim(ped, animDict, anim, 8.0, 2.0, -1, 51, 0, false, false, false);
       }, 250);

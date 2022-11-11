@@ -9,6 +9,7 @@ import store from '../store';
 
 export const InputMenu: FC<InputMenu.Data> = props => {
   const [values, setValues] = useState<Record<string, string>>({});
+  const [refreshDisplay, setRefreshDisplay] = useState(false);
 
   useEffect(() => {
     setValues(
@@ -32,16 +33,19 @@ export const InputMenu: FC<InputMenu.Data> = props => {
     }));
   };
 
-  const handleChange = useCallback(
-    (val: string, name: string) => {
-      setValues(vals => ({
-        ...vals,
-        [name]: val,
-      }));
-      fetchDisplays();
-    },
-    [setValues]
-  );
+  useEffect(() => {
+    if (!refreshDisplay) return;
+    fetchDisplays();
+    setRefreshDisplay(false);
+  }, [refreshDisplay]);
+
+  const handleChange = useCallback((val: string, name: string) => {
+    setValues(vals => ({
+      ...vals,
+      [name]: val,
+    }));
+    setRefreshDisplay(true);
+  }, []);
 
   const handleClick = (accepted: boolean) => {
     nuiAction(props.callbackURL, { values, accepted });
@@ -77,8 +81,12 @@ export const InputMenu: FC<InputMenu.Data> = props => {
             case 'display':
               return (
                 <>
-                  <Typography variant='body1'>{i.label}</Typography>;
-                  <Typography variant='body2'>{values[i.name]}</Typography>;
+                  <Typography key={`${i.name}_label`} variant='body1'>
+                    {i.label}
+                  </Typography>
+                  <Typography key={`${i.name}_value`} variant='body2'>
+                    {values[i.name]}
+                  </Typography>
                 </>
               );
             default:

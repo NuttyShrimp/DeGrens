@@ -18,7 +18,7 @@ export const getCurrentWorkingShop = () => {
 
 export const setClockInStatus = (pClockedIn: boolean, shop: string) => {
   clockedIn = pClockedIn ? shop : null;
-  Notifications.add(clockedIn ? "Je hebt juist ingeclocked" : "Je bent juist uitgeclocked");
+  Notifications.add(clockedIn ? 'Je hebt juist ingeclocked' : 'Je bent juist uitgeclocked');
   Events.emitNet('vehicles:mechanic:setClockStatus', shop, pClockedIn);
 };
 
@@ -40,11 +40,11 @@ export const openItemOrder = () => {
       submenu: [
         {
           title: 'Repair Part',
-          callbackURL: 'vehicle/mechanic/addOrderRepairItem',
+          callbackURL: 'vehicles/mechanic/addOrderRepairItem',
         },
         {
           title: 'Performance Part',
-          callbackURL: 'vehicle/mechanic/addOrderPerformanceItem',
+          callbackURL: 'vehicles/mechanic/addOrderPerformanceItem',
         },
       ],
     },
@@ -305,10 +305,10 @@ export const attachHook = async (vehToTow: number) => {
       movement: true,
     },
     animation: {
-        animDict: 'missexile3',
-        anim: 'ex03_dingy_search_case_a_michael',
-        flags: 1,
-    }
+      animDict: 'missexile3',
+      anim: 'ex03_dingy_search_case_a_michael',
+      flags: 1,
+    },
   });
   if (cancelled) {
     Notifications.add('Geannulleerd...', 'error');
@@ -358,7 +358,7 @@ export const isDoingAJob = (ent: number) => {
   const vin = getVehicleVinWithoutValidation(ent);
   if (!vin) return false;
   return vin === jobVin;
-}
+};
 
 export const finishJob = () => {
   if (DoesBlipExist(jobBlip)) {
@@ -379,10 +379,10 @@ export const releaseVehicle = async (towVeh: number) => {
       movement: true,
     },
     animation: {
-        animDict: 'missexile3',
-        anim: 'ex03_dingy_search_case_a_michael',
-        flags: 1,
-    }
+      animDict: 'missexile3',
+      anim: 'ex03_dingy_search_case_a_michael',
+      flags: 1,
+    },
   });
   if (cancelled) {
     Notifications.add('Geannulleerd...', 'error');

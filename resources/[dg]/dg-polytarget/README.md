@@ -9,4 +9,5 @@ de polyzone targets:
 - getTargetZones
 - removeTargetZone (removes all zones with this name)
 
-
+## Important
+When building polyzones in DGCore:client:playerLoaded event, make sure to provide routingBucket as the current player bucket will get used which is not always the default (0)!

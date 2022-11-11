@@ -570,3 +570,31 @@ Plans.furnitured_midapart = {
     },
   ],
 };
+
+// I spawn this shit using vec3 position so all the generator modulo bullshit is not needed
+// Couldnt be bother to figure out how that works to be honest
+Plans.bench_container = {
+  shell: 'container_shell',
+  saveToCache: true,
+  spawnOffset: new Vector4(0.0, -5.23, 0, 0),
+  interactZone: [
+    {
+      offset: new Vector3(0.0, -5.23, 0),
+      dist: 1.5,
+      name: 'exit',
+      GeneralUse: {
+        label: 'Exit',
+        event: 'materials:containers:leave',
+      },
+    },
+    {
+      offset: new Vector3(0.0, 5.23, 0),
+      dist: 2.5,
+      name: 'crafting',
+      GeneralUse: {
+        label: 'Bench',
+        event: 'materials:containers:open',
+      },
+    },
+  ],
+} as unknown as Buildplan;

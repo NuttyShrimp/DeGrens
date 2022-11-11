@@ -21,6 +21,10 @@ Events.onNet('hud:server:RelieveStress', (src, amount: number) => {
   updateStress(src, -amount);
 });
 
+global.exports('changeStress', (plyId: number, amount: number) => {
+  updateStress(plyId, amount);
+});
+
 RPC.register('hud:server:getConfig', async () => {
   if (config) return config;
   await Config.awaitConfigLoad();

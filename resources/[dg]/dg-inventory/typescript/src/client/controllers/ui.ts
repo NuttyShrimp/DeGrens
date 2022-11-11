@@ -40,3 +40,8 @@ UI.RegisterUICallback('inventory/moveItem', (data: Inventory.ItemState, cb) => {
   cb({ data: {}, meta: { ok: true, message: 'done' } });
   Events.emitNet('inventory:server:moveItem', data.id, data.position, data.inventory);
 });
+
+UI.RegisterUICallback('inventory/getFromShop', (data: { item: string; inventory: string; position: Vec2 }, cb) => {
+  cb({ data: {}, meta: { ok: true, message: 'done' } });
+  Events.emitNet('inventory:server:getFromShop', data.item, data.inventory, data.position);
+});
