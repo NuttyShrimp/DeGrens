@@ -209,6 +209,7 @@ class ShopManager extends Util.Singleton<ShopManager>() {
     const cid = Util.getCID(src);
     await insertNewVehicle(vin, cid, model, plate);
     vinManager.addPlayerVin(vin);
+    plateManager.addPlayerPlate(plate);
     const taxedPrice = getVehicleTaxedPrice(model);
     decreaseModelStock(model);
     Util.Log(

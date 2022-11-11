@@ -46,6 +46,10 @@ class Vehicles {
   setFuelLevel = (vin: string, amount: number) => {
     global.exports['dg-vehicles'].setFuelLevel(vin, amount);
   };
+
+  isPlayerPlate = (plate: string): boolean => {
+    return global.exports['dg-vehicles'].isPlayerPlate(plate);
+  };
 }
 
 export default {

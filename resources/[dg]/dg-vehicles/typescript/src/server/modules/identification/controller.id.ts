@@ -19,6 +19,7 @@ RPC.register('vehicles:isOwnerOfVehicle', async (plyId: number, netId: number) =
 });
 
 global.exports('generatePlate', () => plateManager.generatePlate());
+global.exports('isPlayerPlate', (plate: string) => plateManager.isPlayerPlate(plate));
 
 RPC.register('vehicles:validateNewVehicle', (src, netId: number) => {
   return getVinForNetId(netId);
