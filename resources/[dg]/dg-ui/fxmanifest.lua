@@ -9,22 +9,23 @@ shared_scripts {
 
 server_scripts {
   '@ts-shared/server/server.js',
-	'server/sv_*.lua',
+  'server/sv_*.lua',
 }
 
 client_scripts {
   '@ts-shared/client/client.js',
-	'@dg-logs/client/cl_log.lua',
-	'client/cl_*.lua',
-	'client/components/cl_*.lua',
+  '@dg-logs/client/cl_log.lua',
+  'client/cl_*.lua',
+  'client/components/cl_*.lua',
 }
 
 ui_page "html/index.html"
 
 files {
-	"html/index.html",
-	"html/favicon.ico",
-	'html/assets/*',
+  "html/index.html",
+  "html/favicon.ico",
+  'html/assets/*',
+  '!html/assets/*.map',
 }
 
 server_script "@dg-logs/server/sv_log.lua"

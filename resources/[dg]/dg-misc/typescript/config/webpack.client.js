@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 const path = require('path');
 const { TsconfigPathsPlugin } = require('tsconfig-paths-webpack-plugin');
+const WebpackObfuscator = require('webpack-obfuscator');
 const { merge } = require('webpack-merge');
 
 const common = require('./webpack.common');
@@ -25,6 +26,26 @@ const prodClient = {
 	output: {
 		filename: 'client.js',
 	},
+  module: {
+    rules: [
+      {
+        test: /\.[jt]s$/,
+        exclude: /node_modules/,
+        enforce: 'post',
+        use: {
+          loader: WebpackObfuscator.loader,
+          options: {
+            disableConsoleOutput: false,
+            optionsPreset: "medium-obfuscation",
+            ignoreImports: true,
+            sourceMap: false,
+            stringArrayThreshold: 1,
+            target: "node",
+          }
+        }
+      }
+    ]
+  }
 };
 
 const devClient = {

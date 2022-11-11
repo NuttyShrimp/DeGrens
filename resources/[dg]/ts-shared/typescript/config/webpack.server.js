@@ -3,7 +3,7 @@ const path = require('path');
 const { TsconfigPathsPlugin } = require('tsconfig-paths-webpack-plugin');
 const { merge } = require('webpack-merge');
 const SentryCliPlugin = require('@sentry/webpack-plugin');
-const { version } = require('../package.json');
+const { version, name } = require('../package.json');
 
 const common = require('./webpack.common');
 const util = require('./webpack.util.js');
@@ -32,6 +32,7 @@ const prodClient = {
 			ignore: ['node_modules', 'webpack.config.js'],
 			release: version,
 			configFile: 'sentry.properties',
+      urlPrefix: name,
 		}),
 	],
 };
