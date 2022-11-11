@@ -1,4 +1,5 @@
 import { RPC, Util } from '@dgx/server';
+import vehicles from '@dgx/server/classes/vehicles';
 import { insertVehicleStatus } from 'db/repository';
 import { addWaxedVehicle } from 'modules/carwash/service.carwash';
 import { setVehicleNosAmount } from 'modules/nos/service.nos';
@@ -90,6 +91,13 @@ export const spawnVehicle = async (
   SetVehicleNumberPlateText(veh, plate);
   vehState.set('plate', plate, true);
   plateManager.registerPlate(plate);
+
+  // Setting plate sometimes does not work when entity just spawned yey scuffed ass shit
+  setTimeout(() => {
+    if (GetVehicleNumberPlateText(veh) === plate) return;
+    SetVehicleNumberPlateText(veh, plate!);
+  }, 1000);
+
   if (upgrades) {
     applyUpgradesToVeh(vehNetId, upgrades);
   }
