@@ -52,11 +52,11 @@ RegisterNetEvent('dg-phone:server:contacts:shareNumber', function()
 	if not Player then
 		return
 	end
-	local closePlayers = DGCore.Functions.GetPlayersInRadius(source)
+	local closePlayers = DGX.Util.getAllPlayersInRange(source)
 	local notification = {
-		id = ('contacts-share-'):format(Player.PlayerData.phone),
+		id = ('contacts-share-'):format(Player.PlayerData.charinfo.phone),
 		title = 'New Contact',
-		description = ("Add %s to contacts?"):format(Player.PlayerData.phone),
+		description = ("Add %s to contacts?"):format(Player.PlayerData.charinfo.phone),
 		icon = "contacts",
 		onAccept = 'dg-phone:server:contacts:shareNumber:accept',
 		onDecline = 'server:dg-phone:server:contacts:shareNumber:decline',
