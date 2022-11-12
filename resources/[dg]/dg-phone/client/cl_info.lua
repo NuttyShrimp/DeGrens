@@ -26,7 +26,7 @@ exports('registerInfoEntry', registerInfoEntry)
 
 RegisterNetEvent('dg-phone:load',function()
   registerInfoEntry("id", function()
-    return GetPlayerServerId(PlayerId())
+    return DGCore.Functions.GetPlayerData().citizenid
   end, "id-card", nil, "#")
   registerInfoEntry("phone", function()
     local plyData = DGCore.Functions.GetPlayerData()
