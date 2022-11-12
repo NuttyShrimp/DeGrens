@@ -38,13 +38,14 @@ RegisterNetEvent("dg-doorlock:client:changeDoorLockState", function(doorId, door
 	end
 end)
 
-RegisterNetEvent("lib:raycast:entityChanged", function(entity, entityType, entityCoords)
-    if inPolyZone then return end
+RegisterNetEvent("lib:raycast:entityChanged", function(entity, entityCoords)
+  local entityType = GetEntityType(entity)
+  if inPolyZone then return end
 	if entity and entityType == 3 then
         local doorId = getDoorId(entity)
         if doorId then
             currentDoorId = doorId
-            currentDoorCoords = exports['dg-lib']:tableToVector(entityCoords)
+            currentDoorCoords = vector3(entityCoords.x, entityCoords.y, entityCoords.z)
             currentDoorLockState = DoorSystemGetDoorState(doorId) ~= 0 and true or false
 
             if doors[doorId] then
