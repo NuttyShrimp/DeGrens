@@ -44,7 +44,8 @@ function parsePoly(zone)
       printout = printout .. "  vector2(" .. tostring(zone.points[i].x) .. ", " .. tostring(zone.points[i].y) .. ")\n"
     end
   end
-  printout = printout .. "}, {\n  name=\"" .. zone.name .. "\",\n  --minZ = " .. zone.minZ .. ",\n  --maxZ = " .. zone.maxZ .. "\n})\n"
+  printout = printout ..
+      "}, {\n  name=\"" .. zone.name .. "\",\n  --minZ = " .. zone.minZ .. ",\n  --maxZ = " .. zone.maxZ .. "\n})\n"
   if zone.houseOffset then
     for _, zone in pairs(zone.points) do
       zone.points = zone.points - zone.houseOffset
@@ -60,9 +61,13 @@ end
 function parseCircle(zone)
   local printout = printoutHeader(zone.name)
   printout = printout .. "CircleZone:Create("
-  printout = printout .. "vector3(" .. tostring(round(zone.center.x, 2)) .. ", " .. tostring(round(zone.center.y, 2)) .. ", " .. tostring(round(zone.center.z, 2)) .. "), "
+  printout = printout ..
+      "vector3(" ..
+      tostring(round(zone.center.x, 2)) ..
+      ", " .. tostring(round(zone.center.y, 2)) .. ", " .. tostring(round(zone.center.z, 2)) .. "), "
   printout = printout .. tostring(zone.radius) .. ", "
-  printout = printout .. "{\n  name=\"" .. zone.name .. "\",\n  useZ=" .. tostring(zone.useZ) .. ",\n  --debugPoly=true\n})\n"
+  printout = printout ..
+      "{\n  name=\"" .. zone.name .. "\",\n  useZ=" .. tostring(zone.useZ) .. ",\n  --debugPoly=true\n})\n"
   if zone.houseOffset then
     zone.center = zone.center - zone.houseOffset
     zone.minZ = zone.minZ - zone.houseOffset.z
@@ -76,9 +81,12 @@ end
 function parseBox(zone)
   local printout = printoutHeader(zone.name)
   printout = printout .. "BoxZone:Create("
-  printout = printout .. "vector3(" .. tostring(round(zone.center.x, 2)) .. ", " .. tostring(round(zone.center.y, 2)) .. ", " .. tostring(round(zone.center.z, 2)) .. "), "
-  printout = printout .. tostring(zone.length) .. ", "
+  printout = printout ..
+      "vector3(" ..
+      tostring(round(zone.center.x, 2)) ..
+      ", " .. tostring(round(zone.center.y, 2)) .. ", " .. tostring(round(zone.center.z, 2)) .. "), "
   printout = printout .. tostring(zone.width) .. ", "
+  printout = printout .. tostring(zone.length) .. ", "
 
   printout = printout .. "{\n  name=\"" .. zone.name .. "\",\n  heading=" .. zone.heading .. ",\n  --debugPoly=true"
   if zone.minZ then
