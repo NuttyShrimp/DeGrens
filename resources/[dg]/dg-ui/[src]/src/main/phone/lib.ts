@@ -187,7 +187,7 @@ export const addNotification = (
   if (!phoneState.isSilent) {
     genericAction('phone', {
       visible: true,
-      animating: phoneState.animating === 'closed' ? 'peek' : 'open',
+      animating: phoneState.animating !== 'open' ? 'peek' : 'open',
       hasNotifications: true,
     });
   }
