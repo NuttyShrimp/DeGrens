@@ -27,7 +27,7 @@
           {{
             activeArg === 0 || sugIdx !== 0
               ? suggestion.description
-              : suggestion.parameters[Math.min(activeArg - 1, suggestion.parameters.length - 1)].description
+              : suggestion.parameters?.[Math.min(activeArg - 1, suggestion.parameters.length - 1)]?.description ?? ''
           }}
         </p>
       </div>

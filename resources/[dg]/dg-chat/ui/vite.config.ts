@@ -6,6 +6,9 @@ import { defineConfig } from 'vite';
 // https://vitejs.dev/config/
 export default defineConfig({
   base: './',
+  build: {
+    sourcemap: 'inline',
+  },
   plugins: [vueJsx(), vue()],
   resolve: {
     alias: {
