@@ -3,10 +3,15 @@ import { Notifications, RayCast, Sounds, Util } from '@dgx/client';
 import { hasVehicleKeys } from './cache.keys';
 
 export const toggleVehicleLock = async () => {
-  const { entity: veh } = RayCast.doRaycast(7.5, 2);
+  const ped = PlayerPedId();
+  let veh: number | undefined;
+  if (IsPedInAnyVehicle(PlayerPedId(), false)) {
+    veh = GetVehiclePedIsIn(ped, false);
+  } else {
+    veh = RayCast.doRaycast(7.5, 2)?.entity;
+  }
   if (!veh || !IsEntityAVehicle(veh) || !NetworkGetEntityIsNetworked(veh)) return;
   if (!hasVehicleKeys(veh)) return;
-  const ped = PlayerPedId();
   await Util.loadAnimDict('anim@mp_player_intmenu@key_fob@');
   TaskPlayAnim(ped, 'anim@mp_player_intmenu@key_fob@', 'fob_click', 3.0, 3.0, -1, 49, 0, false, false, false);
   const vehLockStatus = GetVehicleDoorLockStatus(veh);
@@ -33,13 +38,11 @@ export const toggleVehicleLock = async () => {
     }
   }
 
-  if (!IsPedInAnyVehicle(ped, false)) {
-    SetVehicleLights(veh, 2);
-    await Util.Delay(250);
-    SetVehicleLights(veh, 0);
-    await Util.Delay(250);
-    SetVehicleLights(veh, 2);
-    await Util.Delay(250);
-    SetVehicleLights(veh, 0);
-  }
+  SetVehicleLights(veh, 2);
+  await Util.Delay(250);
+  SetVehicleLights(veh, 0);
+  await Util.Delay(250);
+  SetVehicleLights(veh, 2);
+  await Util.Delay(250);
+  SetVehicleLights(veh, 0);
 };
