@@ -16,14 +16,15 @@
           dense
           options-dense
           use-input
-          hide-selected
-          fill-input
+          multiple
+          use-chips
+          stack-label
           label="Reden"
           color="secondary"
           input-debounce="0"
-          v-model="reason"
+          :model-value="reasons"
           :options="Object.keys(banReasons)"
-          @input-value="setReason"
+          @update:model-value="setReason"
         >
           <template #option="scope">
             <q-item v-bind="scope.itemProps">
@@ -69,7 +70,7 @@
   import { useStore } from '../lib/store';
 
   const store = useStore();
-  const reason = ref<string | null>(null);
+  const reasons = ref<string[]>([]);
   const penaltyPoints = ref(0);
   const banLength = ref(0);
   const shouldShow = computed(() => store.state.penalty?.visible ?? false);
@@ -78,34 +79,34 @@
   const banClasses = computed(() => store.state.penalty?.classes ?? {});
 
   const warnPlayer = () => {
-    if (!reason.value || reason.value === '') {
+    if (!reasons.value || reasons.value.length === 0) {
       return;
     }
     if (penaltyPoints.value < 0) return;
     nuiAction('penalisePlayer', {
       type: 'warn',
       target: banTarget.value?.steamId,
-      reason: reason.value,
+      reasons: reasons.value,
     });
     store.commit('penalty/setVisible', false);
   };
 
   const kickPlayer = () => {
-    if (!reason.value || reason.value === '') {
+    if (!reasons.value || reasons.value.length === 0) {
       return;
     }
     if (penaltyPoints.value < 0) return;
     nuiAction('penalisePlayer', {
       type: 'kick',
       target: banTarget.value?.steamId,
-      reason: reason.value,
+      reasons: reasons.value,
       points: penaltyPoints.value,
     });
     store.commit('penalty/setVisible', false);
   };
 
   const banPlayer = () => {
-    if (!reason.value || reason.value === '') {
+    if (!reasons.value || reasons.value.length === 0) {
       return;
     }
     if (penaltyPoints.value < 0) return;
@@ -113,22 +114,23 @@
     nuiAction('penalisePlayer', {
       type: 'ban',
       target: banTarget.value?.steamId,
-      reason: reason.value,
+      reasons: reasons.value,
       points: penaltyPoints.value,
       length: banLength.value,
     });
     store.commit('penalty/setVisible', false);
   };
 
-  const setReason = (val: string) => {
-    reason.value = val;
-    if (banReasons.value[val]) {
-      const banClass = banReasons.value[val];
-      penaltyPoints.value = banClasses.value[banClass].points;
-      banLength.value = banClasses.value[banClass].length;
-    } else {
-      penaltyPoints.value = 0;
-      banLength.value = 0;
-    }
+  const setReason = (val: string[]) => {
+    reasons.value = val;
+    penaltyPoints.value = 0;
+    banLength.value = 0;
+    val.forEach(val => {
+      if (banReasons.value[val]) {
+        const banClass = banReasons.value[val];
+        penaltyPoints.value += banClasses.value[banClass].points;
+        banLength.value += banClasses.value[banClass].length;
+      }
+    });
   };
 </script>

@@ -8,12 +8,12 @@ const penalisePlayer = async (
   type: 'ban' | 'kick' | 'warn',
   source: number,
   target: string,
-  reason: string,
+  reasons: string[],
   points?: number,
   length?: number
 ) => {
   const metadata = {
-    reason,
+    reason: reasons.join(" | "),
     points: points ?? 0,
     length: length ?? null,
     automated: source === -1,
@@ -56,7 +56,7 @@ const penalisePlayer = async (
       target,
       ...metadata,
     },
-    `${targetData.name}(${target}) received a ${type} for ${reason}`,
+    `${targetData.name}(${target}) received a ${type} for ${reasons.join(" | ")}`,
     source !== -1 ? source : undefined
   );
   penaltyLogger.info(
@@ -68,7 +68,7 @@ const penalisePlayer = async (
   );
   Chat.sendMessage('admin', {
     type: 'system',
-    message: `${targetData.name}(${target}) received a ${type} for ${reason} (${points} points | ${length} days)`,
+    message: `${targetData.name}(${target}) received a ${type} for ${reasons.join(" | ")} (${points} points | ${length} days)`,
     prefix: 'Admin: ',
   });
 };
@@ -83,35 +83,35 @@ const penalisePlayer = async (
 export const banPlayer = async (
   source: number,
   target: string | number,
-  reason: string,
+  reasons: string[],
   points: number,
   length: number
 ) => {
   if (typeof target === 'number') {
     target = getIdentifierForPlayer(target, 'steam');
   }
-  await penalisePlayer('ban', source, target, reason, points, length);
-  dropBySteamId(target, `Banned for: ${reason}`);
+  await penalisePlayer('ban', source, target, reasons, points, length);
+  dropBySteamId(target, `Banned for: ${reasons.join(" | ")}`);
 };
 
-export const kickPlayer = async (source: number, target: string | number, reason: string, points: number) => {
+export const kickPlayer = async (source: number, target: string | number, reasons: string[], points: number) => {
   if (typeof target === 'number') {
     target = getIdentifierForPlayer(target, 'steam');
   }
-  await penalisePlayer('kick', source, target, reason, points);
-  dropBySteamId(target, `Kicked for: ${reason}`);
+  await penalisePlayer('kick', source, target, reasons, points);
+  dropBySteamId(target, `Kicked for: ${reasons.join(" | ")}`);
 };
 
-export const warnPlayer = async (source: number, target: string | number, reason: string) => {
+export const warnPlayer = async (source: number, target: string | number, reasons: string[]) => {
   if (typeof target === 'number') {
     target = getIdentifierForPlayer(target, 'steam');
   }
-  await penalisePlayer('warn', source, target, reason);
+  await penalisePlayer('warn', source, target, reasons);
   const targetData = getPlayerForSteamId(target);
   if (!targetData) return;
   Chat.sendMessage(targetData.source, {
     type: 'warning',
-    message: `Je bent gewaarschuwd voor: ${reason}`,
+    message: `Je bent gewaarschuwd voor: ${reasons.join(" | ")}`,
     prefix: 'Admin: ',
   });
 };
@@ -144,4 +144,4 @@ export const isPlayerBanned = async (steamId: string) => {
   };
 };
 
-export const ACBan = (target: number, reason: string) => banPlayer(-1, target, `Anticheat: ${reason}`, 30, -1);
+export const ACBan = (target: number, reason: string) => banPlayer(-1, target, [`Anticheat: ${reason}`], 30, -1);

@@ -19,19 +19,19 @@ on('dg-config:moduleLoaded', (module: string, data: Penalty.Config) => {
 Events.onNet('admin:penalties:penalisePlayer', (src, data: Penalty.IncomingData) => {
   switch (data.type) {
     case 'ban':
-      banPlayer(src, data.target, data.reason, data.points, data.length);
+      banPlayer(src, data.target, data.reasons, data.points, data.length);
       break;
     case 'kick':
-      kickPlayer(src, data.target, data.reason, data.points);
+      kickPlayer(src, data.target, data.reasons, data.points);
       break;
     case 'warn':
-      warnPlayer(src, data.target, data.reason);
+      warnPlayer(src, data.target, data.reasons);
       break;
     default:
       banPlayer(
         src,
         getIdentifierForPlayer(src, 'steam'),
-        'Event Triggering with invalid data(penalisePlayer)',
+        ['Event Triggering with invalid data(penalisePlayer)'],
         30,
         -1
       );

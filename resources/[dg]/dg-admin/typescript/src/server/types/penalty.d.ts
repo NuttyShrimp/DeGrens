@@ -12,7 +12,7 @@ declare namespace Penalty {
   interface IncomingData {
     type: 'kick' | 'ban' | 'warn';
     target: string;
-    reason: string;
+    reasons: string[];
     points: number;
     length?: number;
   }
