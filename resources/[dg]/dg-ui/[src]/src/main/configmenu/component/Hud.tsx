@@ -11,7 +11,20 @@ export const Hud = () => {
   const { updateConfig } = useConfigActions();
   return (
     <div>
-      {/*<Section title={'Sections'}></Section>*/}
+      <Section title={'Input'}>
+        <Input.AutoComplete
+          name={'kbdlayout'}
+          value={state?.keyboard || "qwerty"}
+          onChange={e =>
+            updateConfig('hud', {
+              ...state,
+              keyboard: (e || 'qwerty') as "azerty" | 'qwerty',
+            })
+          }
+          label={'Keyboard Layout'}
+          options={[{ label: 'Qwerty', value: 'qwerty' }, { label: "Azerty", value: 'azerty' }]}
+        />
+      </Section>
       <Section title={'Compass'}>
         <Input.Checkbox
           label={'Toon in voertuig'}

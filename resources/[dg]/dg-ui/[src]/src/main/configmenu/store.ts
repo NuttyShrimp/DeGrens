@@ -6,6 +6,7 @@ const store: StoreObject<ConfigMenu.State> = {
     visible: false,
     currentMenu: 'hud',
     hud: {
+      keyboard: 'qwerty',
       sections: {
         food: true,
         health: true,

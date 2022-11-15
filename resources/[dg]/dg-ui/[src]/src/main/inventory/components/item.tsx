@@ -1,4 +1,4 @@
-import React, { FC, useCallback, useEffect, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { useDrag } from 'react-dnd';
 import { useSelector } from 'react-redux';
 import { alpha, Tooltip } from '@mui/material';
@@ -26,6 +26,7 @@ export const Item: FC<{ itemId: string; cellSize: number }> = ({ itemId, cellSiz
   const [isHovering, setIsHovering] = useState(false);
   const itemState = useSelector<RootState, Inventory.Item>(state => state.inventory.items[itemId]);
   const { addNotification } = useNotifications();
+  const [hotkeyPressed, setHotkeyPressed] = useState<number | null>(null);
 
   const [{ isDragging }, dragRef] = useDrag(
     () => ({
@@ -76,29 +77,33 @@ export const Item: FC<{ itemId: string; cellSize: number }> = ({ itemId, cellSiz
     updateItemPosition(itemState.id, targetInventoryId, newPosition);
   };
 
-  const handleKeyPress = useCallback(
-    (e: KeyboardEvent) => {
-      if (e.key !== '1' && e.key !== '2' && e.key !== '3' && e.key !== '4' && e.key !== '5') return;
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => {
+      // fucking scuffed ass way lmao
+      if (![...new Array(5)].some((_, i) => `Digit${i + 1}` === e.code)) return;
       if (e.repeat) return;
 
-      const key = Number(e.key);
-      if (itemState.hotkey === key) {
-        unbindItem(itemState.id);
-        return;
-      }
-      const alert = bindItemToKey(itemState.id, key);
-      addNotification(alert);
-    },
-    [itemState.id]
-  );
+      const key = Number(e.code.replace('Digit', ''));
+      setHotkeyPressed(key);
+    };
 
-  useEffect(() => {
-    if (isHovering) window.addEventListener('keydown', handleKeyPress);
-    else window.removeEventListener('keydown', handleKeyPress);
+    window.addEventListener('keydown', handler);
     return () => {
-      window.removeEventListener('keydown', handleKeyPress);
+      window.removeEventListener('keydown', handler);
     };
   }, [isHovering]);
+
+  useEffect(() => {
+    if (hotkeyPressed === null) return;
+    if (!isHovering) return;
+    setHotkeyPressed(null);
+    if (itemState.hotkey === hotkeyPressed) {
+      unbindItem(itemState.id);
+      return;
+    }
+    const alert = bindItemToKey(itemState.id, hotkeyPressed);
+    addNotification(alert);
+  }, [hotkeyPressed]);
 
   return (
     <Tooltip

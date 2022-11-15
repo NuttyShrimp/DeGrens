@@ -12,6 +12,7 @@ declare namespace ConfigMenu {
   }
 
   interface HudConfig {
+    keyboard: 'azerty' | 'qwerty';
     sections: {
       health: boolean;
       food: boolean;
