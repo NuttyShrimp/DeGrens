@@ -10,21 +10,12 @@ entries.main = {
     end
   },
   {
-    id = 'general',
-    title = 'Acties',
-    icon = 'list-alt',
-    subMenu = 'general',
-    isEnabled = function()
-      return true
-    end
-  },
-  {
     id = 'jobinteractions',
     title = 'Werk',
     icon = 'briefcase',
     subMenu = 'job',
     isEnabled = function()
-      return true
+      return DGX.Jobs.getCurrentJob().name ~= nil
     end
   },
   {
@@ -76,10 +67,7 @@ entries.main = {
     icon = 'car',
     subMenu = 'vehicle',
     isEnabled = function(_, vehicle)
-      if vehicle == 0 then
-        return false
-      end
-      return true
+      return vehicle ~= 0
     end
   },
   {
@@ -95,5 +83,50 @@ entries.main = {
       end
       return true
     end
-  }
+  },
+  {
+    id = "police-rob",
+    title = 'Beroven',
+    icon = "people-robbery",
+    event = 'police:robPlayer',
+    shouldClose = true,
+    isEnabled = function(_, vehicle)
+      if vehicle ~= 0 then return false end
+      return DGX.Police.getPlayerToRob() ~= nil
+    end
+  },
+  {
+    id = "police-escort",
+    title = 'Escorteren',
+    icon = "person",
+    event = 'police:startEscorting',
+    shouldClose = true,
+    isEnabled = function(_, vehicle)
+      if vehicle ~= 0 then return false end
+      return DGX.Police.getPlayerToEscort() ~= nil
+    end
+  },
+  {
+    id = "police-escort-release",
+    title = 'Loslaten',
+    icon = "person",
+    event = 'police:stopEscorting',
+    shouldClose = true,
+    isEnabled = function(_, vehicle)
+      if vehicle ~= 0 then return false end
+      return DGX.Police.isEscorting()
+    end
+  },
+  {
+    id = "police-cuff",
+    title = 'Handboeien',
+    icon = "handcuffs",
+    event = 'police:tryToCuff',
+    shouldClose = true,
+    isEnabled = function(plyData, vehicle)
+      if vehicle ~= 0 then return false end
+      if not DGX.Util.isAnyPlayerCloseAndOutsideVehicle(1) then return false end
+      return plyData.job.name == 'police' or DGX.Inventory.doesPlayerHaveItems('hand_cuffs')
+    end
+  },
 }

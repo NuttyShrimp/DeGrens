@@ -1,7 +1,7 @@
 import { Config, Events, Inventory, Notifications, Police, RayCast, RPC, Util } from '@dgx/server';
 import { getConfigByHash } from 'modules/info/service.info';
 
-import { getVinForVeh } from '../../helpers/vehicle';
+import { getVinForVeh, setEngineState } from '../../helpers/vehicle';
 
 import { keyManager } from './classes/keymanager';
 
@@ -26,7 +26,7 @@ export const handleVehicleLock = async (plyId: number, vehicleNetId: number) => 
     const isDriverDead = await Util.isEntityDead(driver, plyId);
     if (isDriverDead) {
       SetVehicleDoorsLocked(vehicle, 1);
-      Util.sendEventToEntityOwner(vehicle, 'vehicles:setEngineState', vehicleNetId, false, true);
+      setEngineState(vehicle, false, true);
     } else {
       SetVehicleDoorsLocked(vehicle, 2);
     }
@@ -89,10 +89,15 @@ export const startVehicleLockpick = async (src: number, itemId: string) => {
   // Do not return if not found else we cant lockpick shit like a bus or towtruck etcetc
   const vehInfo = getConfigByHash(GetEntityModel(targetVehicle));
   if (!vehInfo) {
+    const modelName = await RPC.execute<string>(
+      'vehicle:getArchType',
+      src,
+      NetworkGetNetworkIdFromEntity(vehiclePedIsIn)
+    );
     Util.Log(
       'vehicles:missingConfig',
       {
-        model: GetEntityModel(targetVehicle),
+        model: modelName,
       },
       `Found a missing model`,
       undefined,

@@ -5,8 +5,8 @@ on('dg-jobs:server:groups:playerLeft', (src: number) => {
   stateManager.cleanupPlayer(src);
 });
 
-on('playerDropped', () => {
-  stateManager.cleanupPlayer(source);
+on('DGCore:server:playerUnloaded', (plyId: number, cid: number) => {
+  stateManager.cleanupPlayer(plyId, cid);
 });
 
 RPC.register('houserobbery:server:getShellTypes', () => {

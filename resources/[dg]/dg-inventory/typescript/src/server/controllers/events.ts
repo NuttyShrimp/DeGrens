@@ -11,11 +11,6 @@ onNet('hospital:server:SetDeathStatus', (isDead: boolean) => {
   Events.emitNet('inventory:client:closeInventory', source);
 });
 
-onNet('police:server:SetHandcuffStatus', (isHandCuffed: boolean) => {
-  if (isHandCuffed === false) return;
-  Events.emitNet('inventory:client:closeInventory', source);
-});
-
 on('dg-config:moduleLoaded', (moduleId: string, data: InventoryConfig) => {
   if (moduleId !== 'inventory.config') return;
   setConfig(data);

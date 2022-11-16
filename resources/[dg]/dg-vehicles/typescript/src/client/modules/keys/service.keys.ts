@@ -22,7 +22,7 @@ export const toggleVehicleLock = async () => {
   // 1 == unlocked
   if (vehLockStatus === 1) {
     SetVehicleDoorsLocked(veh, 2);
-    Sounds.playOnEntity('vehicles_car_key_lock', 'car_lock', 'DLC_NUTTY_SOUNDS', veh);
+    Sounds.playOnEntity(`vehicles_car_key_lock_${veh}`, 'car_lock', 'DLC_NUTTY_SOUNDS', veh);
     if (GetVehicleDoorLockStatus(veh) == 2) {
       Notifications.add('Voertuig op slot gezet');
     } else {
@@ -30,7 +30,7 @@ export const toggleVehicleLock = async () => {
     }
   } else {
     SetVehicleDoorsLocked(veh, 1);
-    Sounds.playOnEntity('vehicles_car_key_unlock', 'car_unlock', 'DLC_NUTTY_SOUNDS', veh);
+    Sounds.playOnEntity(`vehicles_car_key_unlock_${veh}`, 'car_unlock', 'DLC_NUTTY_SOUNDS', veh);
     if (GetVehicleDoorLockStatus(veh) == 1) {
       Notifications.add('Voertuig opengedaan');
     } else {

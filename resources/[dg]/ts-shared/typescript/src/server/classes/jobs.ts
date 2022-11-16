@@ -85,6 +85,14 @@ class Jobs {
   getJobPayoutLevel(jobName: string): number | null {
     return global.exports['dg-jobs'].getJobPayoutLevel(jobName);
   }
+
+  getAmountForJob(job: string): number {
+    return this.getPlayersForJob(job).length;
+  }
+
+  signPlayerOutOfAnyJob(plyId: number) {
+    global.exports['dg-jobs'].signPlayerOutOfAnyJob(plyId);
+  }
 }
 
 class Business {
@@ -133,6 +141,22 @@ class Police {
   public createDispatchCall(call: NPolice.DispatchCall): void {
     global.exports['dg-dispatch'].createDispatchCall(call);
   }
+
+  public addTrackerToVehicle = (vehicleNetId: number, delay: number) => {
+    global.exports['dg-police'].addTrackerToVehicle(vehicleNetId, delay);
+  };
+
+  public removeTrackerFromVehicle = (vehicleNetId: number) => {
+    global.exports['dg-police'].removeTrackerFromVehicle(vehicleNetId);
+  };
+
+  public showBadge = (plyId: number, type: BadgeType) => {
+    global.exports['dg-police'].showBadge(plyId, type);
+  };
+
+  public isCuffed = (plyId: number) => {
+    return global.exports['dg-police'].isCuffed(plyId);
+  };
 }
 
 export default {

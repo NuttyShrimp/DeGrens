@@ -1,4 +1,4 @@
-import { Events, Notifications, RPC, Util } from '@dgx/server';
+import { Events, Notifications, Police, RPC, Util } from '@dgx/server';
 import { deleteVehicle, getVinForNetId, getVinForVeh, spawnVehicle } from 'helpers/vehicle';
 import vinManager from 'modules/identification/classes/vinmanager';
 import { keyManager } from 'modules/keys/classes/keymanager';
@@ -89,12 +89,24 @@ Events.onNet('vehicles:shop:testdrive:start', async (plyId: number, model: strin
     plyId
   );
 
+  const cid = Util.getCID(plyId);
+  const charName = await Util.getCharName(cid);
   setTimeout(() => {
     const testDriveData = activeTestDrives.get(plyId);
     if (!testDriveData || testDriveData.netId !== vehNetId) return; // If already finished or started new one then dont cancel
     activeTestDrives.set(plyId, { ...testDriveData, timeLimitReached: true });
     Notifications.add(plyId, 'Je tijdlimiet is verstreken', 'error');
-    // TODO: Add tracker when police resource is finished
+    Police.createDispatchCall({
+      title: 'Mogelijkse Voertuig Diefstal',
+      description:
+        'PDM meldt dat een getestritte wagen niet is teruggebracht. Bekijk GPS voor actuele locatie van de wagen.',
+      vehicle: vehEnt,
+      tag: '10-37',
+      entries: {
+        'id-card': `${charName} - ${cid}`,
+      },
+    });
+    Police.addTrackerToVehicle(vehNetId, 2000);
   }, shopConfig.testDrive.time * 1000);
 });
 

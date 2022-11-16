@@ -30,10 +30,6 @@ RegisterNetEvent('hospital:server:RespawnAtHospital', function()
 	for k, v in pairs(Config.Locations["beds"]) do
 		TriggerClientEvent('hospital:client:SendToBed', src, k, v, true)
 		TriggerClientEvent('hospital:client:SetBed', -1, k, true)
-		if Config.WipeInventoryOnRespawn then
-      -- TODO: clear inventory
-			TriggerClientEvent('DGCore:Notify', src, 'All your possessions have been taken..', 'error')
-		end
 		local accountId = exports['dg-financials']:getDefaultAccountId(citizenid)
 		exports['dg-financials']:transfer(accountId, 'BE3', citizenid, citizenid, price, 'AZDG: Hospitaalkosten')
 		TriggerEvent('qb-bossmenu:server:addAccountMoney', "ambulance", Config.BillCost)
@@ -137,21 +133,10 @@ RegisterNetEvent('hospital:server:RevivePlayer', function(playerId, isOldMan)
 			if exports['dg-financials']:removeCash(src, 5000, 'Revived player at old man') then
 				Player.Functions.RemoveItem('firstaid', 1)
 				TriggerClientEvent('hospital:client:Revive', Patient.PlayerData.source)
-			else
-				TriggerClientEvent('DGCore:Notify', src, "You don\'t have enough money on you..", "error")
 			end
 		else
 			Player.Functions.RemoveItem('firstaid', 1)
 			TriggerClientEvent('hospital:client:Revive', Patient.PlayerData.source)
-		end
-	end
-end)
-
-RegisterNetEvent('hospital:server:SendDoctorAlert', function()
-    local players = DGCore.Functions.GetQBPlayers()
-    for k,v in pairs(players) do
-        if v.PlayerData.job.name == 'ambulance' and v.PlayerData.job.onduty then
-			TriggerClientEvent('DGCore:Notify', v.PlayerData.source, 'A doctor is needed at Pillbox Hospital', 'ambulance')
 		end
 	end
 end)
@@ -168,8 +153,6 @@ RegisterNetEvent('hospital:server:CanHelp', function(helperId, canHelp)
 	local src = source
 	if canHelp then
 		TriggerClientEvent('hospital:client:HelpPerson', helperId, src)
-	else
-		TriggerClientEvent('DGCore:Notify', helperId, "You can\'t help this person..", "error")
 	end
 end)
 
@@ -253,8 +236,6 @@ DGCore.Commands.Add("status", "Check A Players Health", {}, false, function(sour
 	local Player = DGCore.Functions.GetPlayer(src)
 	if Player.PlayerData.job.name == "ambulance" then
 		TriggerClientEvent("hospital:client:CheckStatus", src)
-	else
-		TriggerClientEvent('DGCore:Notify', src, "You Are Not EMS", "error")
 	end
 end)
 
@@ -263,8 +244,6 @@ DGCore.Commands.Add("heal", "Heal A Player", {}, false, function(source, args)
 	local Player = DGCore.Functions.GetPlayer(src)
 	if Player.PlayerData.job.name == "ambulance" then
 		TriggerClientEvent("hospital:client:TreatWounds", src)
-	else
-		TriggerClientEvent('DGCore:Notify', src, "You Are Not EMS", "error")
 	end
 end)
 
@@ -273,8 +252,6 @@ DGCore.Commands.Add("revivep", "Revive A Player", {}, false, function(source, ar
 	local Player = DGCore.Functions.GetPlayer(src)
 	if Player.PlayerData.job.name == "ambulance" then
 		TriggerClientEvent("hospital:client:RevivePlayer", src)
-	else
-		TriggerClientEvent('DGCore:Notify', src, "You Are Not EMS", "error")
 	end
 end)
 
@@ -284,8 +261,6 @@ DGCore.Commands.Add("setpain", "Set Yours or A Players Pain Level (Admin Only)",
 		local Player = DGCore.Functions.GetPlayer(tonumber(args[1]))
 		if Player then
 			TriggerClientEvent('hospital:client:SetPain', Player.PlayerData.source)
-		else
-			TriggerClientEvent('DGCore:Notify', src, "Player Not Online", "error")
 		end
 	else
 		TriggerClientEvent('hospital:client:SetPain', src)
@@ -298,8 +273,6 @@ DGCore.Commands.Add('aheal', 'Heal A Player or Yourself (Admin Only)', {{name='i
 		local Player = DGCore.Functions.GetPlayer(tonumber(args[1]))
 		if Player then
 			TriggerClientEvent('hospital:client:adminHeal', Player.PlayerData.source)
-		else
-			TriggerClientEvent('DGCore:Notify', src, "Player Not Online", "error")
 		end
 	else
 		TriggerClientEvent('hospital:client:adminHeal', src)

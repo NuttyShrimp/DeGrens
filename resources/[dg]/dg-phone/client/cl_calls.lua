@@ -101,7 +101,7 @@ Citizen.CreateThread(function()
         label = 'Use Payphone',
         item = 'phone',
         action = function(entity)
-          local dialog = exports['dg-ui']:openInput({
+          local result = exports['dg-ui']:openInput({
             header = "Make a call",
             inputs = {
               {
@@ -111,22 +111,48 @@ Citizen.CreateThread(function()
               },
             },
           })
+          if not result.accepted then return end
 
-          if dialog ~= nil then
-            if (dialog.phoneNumber) then
-              SendAppEvent('phone', {
-                appName = "phone",
-                action = 'startAnonCall',
-                data = dialog.phoneNumber
-              })
-            end
+          if (dialog.values.phoneNumber) then
+            SendAppEvent('phone', {
+              appName = "phone",
+              action = 'startAnonCall',
+              data = dialog.values.phoneNumber
+            })
           end
         end,
         canInteract = function(entity, distance, data)
-          return not exports["qb-prison"]:isInJail()
+					return not DGX.Police.isInPrison()
         end,
       }
     },
     distance = 1.5,
+  })
+end)
+
+exports('prisonCall', function()
+  local contacts = DGCore.Functions.TriggerCallback('dg-phone:server:getContacts')
+  local options = {}
+  for _, v in pairs(contacts) do
+    table.insert(options, {label = v.label, value = v.phone})
+  end
+
+  local result = DGX.UI.openInput({
+    header = "Selecteer een contactpersoon",
+    inputs = {
+      {
+        type = 'select',
+        label = 'Contact',
+        name = 'phone',
+        options = options,
+      },
+    },
+  })
+  if not result.accepted then return end
+
+  SendAppEvent('phone', {
+    appName = "phone",
+    action = 'startAnonCall',
+    data = result.values.phone
   })
 end)

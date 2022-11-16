@@ -1,10 +1,11 @@
-import { Business, Gangs, Inventory } from '@dgx/client';
+import { Business, Gangs, Inventory, Jobs } from '@dgx/client';
 import { DEFAULT_DISTANCE } from 'cl_constant';
 import { getCtxPlayerData } from './context';
 
 export const canEntryBeEnabled = async (entry: PeekOption, entity: number): Promise<PeekOption | undefined> => {
-  const { data: PlayerData, job } = getCtxPlayerData();
+  const { data: PlayerData } = getCtxPlayerData();
   if (entry.job) {
+    const job = Jobs.getCurrentJob();
     if (job.name === null) return;
     if (typeof entry.job === 'string') {
       if (entry.job !== job.name) return;
@@ -12,8 +13,8 @@ export const canEntryBeEnabled = async (entry: PeekOption, entity: number): Prom
       if (!entry.job.includes(job.name)) return;
     } else if (typeof entry.job === 'object') {
       if (!entry.job[job.name]) return;
-      if (job.grade === null) return;
-      if (entry.job[job.name] > job.grade) return;
+      if (job.rank === null) return;
+      if (entry.job[job.name] > job.rank) return;
     } else return;
   }
   if (entry.gang) {

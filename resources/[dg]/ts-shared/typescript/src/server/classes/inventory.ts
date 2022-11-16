@@ -216,6 +216,15 @@ class Inventory {
     }
     return success;
   };
+
+  public moveAllItemsToInventory = (
+    originType: Inventory.Type,
+    originIdentifier: string,
+    targetType: Inventory.Type,
+    targetIdentifier: string
+  ) => {
+    global.exports['dg-inventory'].moveAllItemsToInventory(originType, originIdentifier, targetType, targetIdentifier);
+  };
 }
 
 export default {

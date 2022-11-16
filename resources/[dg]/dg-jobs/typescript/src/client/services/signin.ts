@@ -10,7 +10,7 @@ setImmediate(async () => {
   });
 });
 
-onNet('dg-jobs:signin:update', (job: string, rank: number) => {
+onNet('jobs:client:signin:update', (job: string, rank: number) => {
   currentJob.name = job;
   currentJob.rank = rank;
 });

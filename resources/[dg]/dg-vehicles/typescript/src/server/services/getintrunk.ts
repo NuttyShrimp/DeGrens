@@ -1,4 +1,4 @@
-import { Chat, Events, Notifications, RayCast, RPC, Taskbar, Util } from '@dgx/server';
+import { Chat, Events, Notifications, Police, RayCast, RPC, Taskbar, Util } from '@dgx/server';
 
 // players in trunks -- key: vehNetId, value: ply set
 const trunks: Map<number, Set<number>> = new Map();
@@ -39,12 +39,17 @@ Chat.registerCommand('putintrunk', 'Put closest person in trunk', [], 'user', as
     Notifications.add(src, 'Je staat niet bij de open kofferbak', 'error');
     return;
   }
-  const target = Util.getClosestPlayer(src, 2);
+  const target = Util.getClosestPlayerOutsideVehicle(src);
   if (!target) {
     Notifications.add(src, 'Er is niemand in de buurt', 'error');
     return;
   }
-  // TODO: Check if cuffed or dead/laststand
+
+  // TODO: Add dead check
+  if (!Police.isCuffed(target) || false) {
+    Notifications.add(src, 'Deze persoon is niet geboeid of neer', 'error');
+    return;
+  }
 
   const [canceled] = await Taskbar.create(src, 'put-in-trunk', 'car', 'In koffer plaatsen', 3000, {
     canCancel: true,

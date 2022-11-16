@@ -22,13 +22,13 @@ Events.onNet('weapons:client:useWeapon', async (weaponData: Weapons.WeaponItem, 
   const previousWeaponData = getCurrentWeaponData();
   if (previousWeaponData !== null) {
     const lastWeaponItemId = previousWeaponData.id;
-    holsterWeapon(previousWeaponData);
+    await holsterWeapon(previousWeaponData);
     setCurrentWeaponData(null);
     if (lastWeaponItemId === weaponData.id) return;
   }
 
   GiveWeaponToPed(ped, weaponData.hash, ammoCount, false, false);
-  unholsterWeapon(weaponData);
+  await unholsterWeapon(weaponData);
   setCurrentWeaponData(weaponData);
 });
 

@@ -676,15 +676,12 @@ function openMenu(allowedMenus)
     previousSkinData = json.encode(skinData)
     creatingCharacter = true
 
-    local PlayerData = DGCore.Functions.GetPlayerData()
-    local trackerMeta = PlayerData.metadata["tracker"]
-
     GetMaxValues()
     SendNUIMessage({
         action = "open",
         menus = allowedMenus,
         currentClothing = skinData,
-        hasTracker = trackerMeta,
+        hasTracker = false,
     })
     SetNuiFocus(true, true)
     SetCursorLocation(0.9, 0.25)
@@ -1890,7 +1887,6 @@ end
 
 RegisterNetEvent("qb-clothing:client:adjustfacewear")
 AddEventHandler("qb-clothing:client:adjustfacewear",function(type)
-    if DGCore.Functions.GetPlayerData().metadata["ishandcuffed"] then return end
 	removeWear = not removeWear
 	local AnimSet = "none"
 	local AnimationOn = "none"

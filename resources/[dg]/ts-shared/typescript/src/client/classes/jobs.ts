@@ -2,6 +2,10 @@ class Jobs {
   getCurrentJob(): { name: string | null; rank: number | null } {
     return global.exports['dg-jobs'].getCurrentJob();
   }
+
+  getAmountForJob(jobName: string): number {
+    return global.exports['dg-jobs'].getAmountForJob(jobName);
+  }
 }
 
 class Business {
@@ -21,8 +25,39 @@ class Gangs {
   };
 }
 
+class Police {
+  public isAtLocker = (): boolean => {
+    return global.exports['dg-police'].isAtLocker();
+  };
+
+  public pauseCuffAnimation = (pause: boolean) => {
+    global.exports['dg-police'].pauseCuffAnimation();
+  };
+
+  public isCuffed = (): boolean => {
+    return global.exports['dg-police'].isCuffed();
+  };
+
+  public isEscorting = (): boolean => {
+    return global.exports['dg-police'].isEscorting();
+  };
+
+  public getPlayerToRob = (): Promise<number | undefined> => {
+    return global.exports['dg-police'].getPlayerToRob();
+  };
+
+  public getPlayerToEscort = (): Promise<number | undefined> => {
+    return global.exports['dg-police'].getPlayerToEscort();
+  };
+
+  public isInPrison = () => {
+    return global.exports['dg-police'].isInPrison();
+  };
+}
+
 export default {
   Jobs: new Jobs(),
   Business: new Business(),
   Gangs: new Gangs(),
+  Police: new Police(),
 };

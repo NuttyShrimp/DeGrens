@@ -267,5 +267,25 @@ props = {
 		rx = -55.2,
     ry = -18.2,
 		rz = 0,
+  },
+  badge = {
+    model = `prop_fib_badge`,
+    boneId = 28422,
+		x = 0,
+		y = 0,
+		z = 0,
+		rx = 0,
+    ry = 0,
+		rz = 0,
+  },
+  camera = {
+    model = `prop_pap_camera_01`,
+    boneId = 28422,
+		x = 0,
+		y = 0,
+		z = 0,
+		rx = 0,
+    ry = 0,
+		rz = 0,
   }
 }

@@ -381,4 +381,38 @@ export const cmds: {
     app: 'dispatch',
     show: false,
   },
+  {
+    cmd: 'show policeradar',
+    app: 'policeradar',
+    show: true,
+  },
+  {
+    cmd: 'hide policeradar',
+    app: 'policeradar',
+    show: false,
+  },
+  {
+    cmd: 'policeradar update',
+    app: 'policeradar',
+    data: {
+      currentSpeed: 4,
+      topSpeed: 20,
+      plate: 'JENSKKR1',
+      flagged: true,
+    },
+  },
+  {
+    cmd: 'show badge',
+    app: 'badge',
+    show: true,
+    data: {
+      type: 'police',
+      name: 'Dev Loper',
+    },
+  },
+  {
+    cmd: 'hide badge',
+    app: 'badge',
+    show: false,
+  },
 ];

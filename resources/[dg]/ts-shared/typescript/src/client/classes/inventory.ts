@@ -39,6 +39,10 @@ class Inventory {
   public isOpen = () => {
     return global.exports['dg-inventory'].isOpen();
   };
+
+  public close = () => {
+    global.exports['dg-inventory'].close();
+  };
 }
 
 export default {

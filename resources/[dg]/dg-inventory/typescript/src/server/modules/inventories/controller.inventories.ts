@@ -1,6 +1,5 @@
 import { Financials, RPC, Util } from '@dgx/server';
 import contextManager from 'classes/contextmanager';
-import itemDataManager from 'modules/itemdata/classes/itemdatamanager';
 import locationManager from 'modules/locations/manager.locations';
 import shopManager from 'modules/shops/shopmanager';
 import { getConfig } from 'services/config';

@@ -1,7 +1,3 @@
-RegisterNetEvent('dg-jobs:signin:update', function(name, rank)
-  plyJob = {name = name, rank = rank}
-end)
-
 RegisterNetEvent("onResourceStop", function(resourceName)
     if GetCurrentResourceName() ~= resourceName then return end
     if interactionVisible then 

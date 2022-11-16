@@ -63,7 +63,10 @@ Keys.onPressDown('GeneralUse', () => {
 });
 
 on('dg-ui:reload', () => {
-  Events.emitNet('vehicles:bennys:resetVehicle', getCurrentBennys());
+  const currentBennys = getCurrentBennys();
+  if (currentBennys !== null) {
+    Events.emitNet('vehicles:bennys:resetVehicle', getCurrentBennys());
+  }
   closeUI();
   setBennysMenuOpen(false);
   const veh = getCurrentVehicle();

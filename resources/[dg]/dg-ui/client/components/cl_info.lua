@@ -47,7 +47,7 @@ RegisterNetEvent('DGCore:client:playerLoaded', function()
   seedCharData()
 end)
 
-RegisterNetEvent('dg-jobs:signin:update', function(job)
+RegisterNetEvent('jobs:client:signin:update', function(job)
   characterInfo.job = job
   SendAppEvent('character', characterInfo)
 end)

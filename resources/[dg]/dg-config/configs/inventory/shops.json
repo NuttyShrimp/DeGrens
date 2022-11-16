@@ -4,18 +4,23 @@
     "hardware": [
       {
         "name": "volt_meter",
-        "amount": 5,
+        "amount": 10,
         "price": 200
       },
       {
         "name": "bolt_cutters",
-        "amount": 10,
+        "amount": 20,
         "price": 500
       },
       {
         "name": "screwdriver",
-        "amount": 20,
+        "amount": 30,
         "price": 250
+      },
+      {
+        "name": "binoculars",
+        "amount": 50,
+        "price": 500
       }
     ],
     "fishing": [
@@ -24,7 +29,30 @@
         "amount": 10,
         "price": 500
       }
-    ]
+    ],
+    "police_safe": [
+      {
+        "name": "pd_camera",
+        "amount": 100,
+        "price": 250
+      },
+      {
+        "name": "spike_strip",
+        "amount": 100,
+        "price": 750
+      },
+      {
+        "name": "dna_swab",
+        "amount": 100,
+        "price": 100
+      },
+      {
+        "name": "emergency_button",
+        "amount": 100,
+        "price": 500
+      }
+    ],
+    "prison_shop": []
   },
   "shops": {
     "little_seoul": { "type": "grocery" },
@@ -49,6 +77,8 @@
     "del_vecchio": { "type": "grocery" },
     "paleto_bay": { "type": "grocery" },
     "hardware_city": { "type": "hardware" },
-    "fishing_shop": { "type": "fishing" }
+    "fishing_shop": { "type": "fishing" },
+    "police_safe": { "type": "police_safe" },
+    "prison_shop": { "type": "prison_shop" }
   }
 }

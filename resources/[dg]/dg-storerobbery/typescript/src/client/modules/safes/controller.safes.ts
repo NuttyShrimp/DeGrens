@@ -1,4 +1,4 @@
-import { Events, Inventory, Minigames, Notifications, Peek, RPC, Util } from '@dgx/client';
+import { Events, Inventory, Jobs, Minigames, Notifications, Peek, RPC, Util } from '@dgx/client';
 import locationManager from 'controllers/classes/LocationManager';
 
 Peek.addZoneEntry(
@@ -14,7 +14,7 @@ Peek.addZoneEntry(
         },
         canInteract: () => {
           const requiredCops = 1;
-          const enoughCops = global.exports['qb-policejob'].getAmountOfCops() >= requiredCops;
+          const enoughCops = Jobs.getAmountForJob('police') >= requiredCops;
           return locationManager.currentStore !== null && enoughCops;
         },
       },
@@ -47,7 +47,7 @@ const hackSafe = async () => {
     return;
   }
 
-  Events.emitNet('storerobbery:server:startJob', locationManager.currentStore, 'safe')
+  Events.emitNet('storerobbery:server:startJob', locationManager.currentStore, 'safe');
   const gameSuccess = await Minigames.sequencegame(4, 5, 10);
   const removedItem = await Inventory.removeItemFromPlayer('decoding_tool');
   if (!removedItem) return;

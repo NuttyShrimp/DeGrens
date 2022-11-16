@@ -4,6 +4,7 @@ import { buildScrapyardReturnZone } from 'modules/scrapyard/service.scrapyard';
 import { buildFishingReturnZone } from 'modules/fishing/service.fishing';
 
 import './services/signin';
+import './services/amountcache';
 import './controllers';
 import './modules';
 

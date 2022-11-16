@@ -169,11 +169,6 @@ interface PlayerFunctions {
   SaveInventory(source: number): void;
 
   /**
-   * Internal function, generates a new unique fingerprint for a new character
-   */
-  CreateFingerId(): string;
-
-  /**
    * Internal function, generates a new unique phonenumber for a new character
    */
   CreatePhoneNumber(): string;
@@ -198,7 +193,7 @@ interface SelfFunctions {
   /**
    * Sets the specified metadata key to the specified value
    */
-  SetMetaData(meta: string, value: any): void;
+  SetMetaData<T extends keyof MetaData>(meta: T, value: MetaData[T]): void;
 
   /**
    * Sets the cash in the charinfo object

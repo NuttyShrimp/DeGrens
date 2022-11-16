@@ -1,5 +1,4 @@
 import { Animations, Jobs, Notifications, RPC, UI, Util } from '@dgx/client';
-import { inspect } from 'util';
 
 let cams: Dispatch.Cams.Cam[] = [];
 let activeCamera: number = 0;

@@ -1,4 +1,4 @@
-import { Peek, PolyZone, Util, RPC, Notifications, Taskbar, Events, Inventory, Minigames } from '@dgx/client';
+import { Peek, PolyZone, Util, RPC, Notifications, Taskbar, Events, Inventory, Minigames, Jobs } from '@dgx/client';
 import { Vector3 } from '@dgx/shared';
 import locationManager from 'controllers/classes/LocationManager';
 
@@ -36,7 +36,7 @@ Peek.addModelEntry(
 const canRobRegister = () => {
   if (!inRegisterZone || !locationManager.currentStore) return false;
   const requiredCops = 1;
-  return global.exports['qb-policejob'].getAmountOfCops() >= requiredCops;
+  return Jobs.getAmountForJob('police') >= requiredCops;
 };
 
 const lockpickRegister = async (registerObject: number) => {
@@ -71,9 +71,10 @@ const lockpickRegister = async (registerObject: number) => {
   } else {
     if (Util.getRndInteger(0, 100) < 10) {
       Inventory.removeItemFromPlayer('lockpick');
-      Notifications.add('Je lockpick is gebroken...', 'error');
+      Notifications.add('Je lockpick is gebroken', 'error');
     } else {
-      Notifications.add('Mislukt...', 'error');
+      Notifications.add('Je bent uitgeschoven', 'error');
+      Events.emitNet('police:evidence:dropBloop');
     }
   }
 };

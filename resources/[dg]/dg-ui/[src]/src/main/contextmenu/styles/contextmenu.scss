@@ -17,6 +17,7 @@
     position: relative;
     margin: 25vh 0 40vh 65vw;
     min-width: 20vh;
+    max-width: 35vh;
     display: inline-flex;
     flex-direction: column;
 
@@ -32,7 +33,6 @@
       &:not(:last-child) {
         border-bottom: 0.1vh solid rgba(variables.$gray_light, 0.5);
       }
-
 
       &:hover {
         background-color: variables.$primary_darker_darker;

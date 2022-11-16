@@ -204,3 +204,8 @@ export const setNativeStatus = (vehicle: number, status: Omit<Vehicle.VehicleSta
     status
   );
 };
+
+export const setEngineState = (vehicle: number, state: boolean, instantly = false) => {
+  const netId = NetworkGetNetworkIdFromEntity(vehicle);
+  Util.sendEventToEntityOwner(vehicle, 'vehicles:setEngineState', netId, state, instantly);
+};

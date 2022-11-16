@@ -399,10 +399,12 @@ class StateManager extends Util.Singleton<StateManager>() {
     jobGroup.members.forEach(m => this.finishJobForPly(m.serverId, m.cid));
   }
 
-  cleanupPlayer(src: number) {
-    const Player = DGCore.Functions.GetPlayer(src);
-    if (!Player) return;
-    const cid = Player.PlayerData.citizenid;
+  cleanupPlayer(src: number, cid?: number) {
+    if (!cid) {
+      const Player = DGCore.Functions.GetPlayer(src);
+      if (!Player) return;
+      cid = Player.PlayerData.citizenid;
+    }
     this.playerStates.delete(cid);
     emitNet('houserobbery:client:cleanup', src);
   }

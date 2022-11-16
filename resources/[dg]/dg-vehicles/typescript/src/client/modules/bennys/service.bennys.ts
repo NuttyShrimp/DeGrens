@@ -211,7 +211,6 @@ export const enterBennys = async (fromAdminMenu = false) => {
   const currentUpgrades = getCosmeticUpgrades(plyVeh);
   if (!currentUpgrades) return;
   const repairData = getRepairData(plyVeh);
-  console.log(repairData);
   const entered = await RPC.execute<boolean>(
     'vehicles:bennys:enterSpot',
     currentBennys,

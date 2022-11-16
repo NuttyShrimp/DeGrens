@@ -118,6 +118,22 @@ class Util extends UtilShared {
       await this.Delay(1000);
     }
   };
+
+  isAnyPlayerCloseAndOutsideVehicle = (maxDistance = 2) => {
+    const players: number[] = GetActivePlayers();
+    const ownPed = PlayerPedId();
+    const ownCoords = this.getPlyCoords();
+
+    for (const plyId of players) {
+      const ped = GetPlayerPed(plyId);
+      if (ped === ownPed) continue;
+      if (IsPedInAnyVehicle(ped, true)) continue;
+      const [x, y, z] = GetEntityCoords(ped, false);
+      if (ownCoords.distance({ x, y, z }) < (IsPedRagdoll(ped) ? maxDistance + 0.5 : maxDistance)) return true;
+    }
+
+    return false;
+  };
 }
 
 export class Interiors {
@@ -166,10 +182,10 @@ export class Sounds {
 
 export class Animations {
   startTabletAnimation() {
-    global.exports['dg-misc'].startTabletAnimation()
+    global.exports['dg-misc'].startTabletAnimation();
   }
   stopTabletAnimation() {
-    global.exports['dg-misc'].stopTabletAnimation()
+    global.exports['dg-misc'].stopTabletAnimation();
   }
 }
 

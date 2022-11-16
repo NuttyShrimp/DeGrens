@@ -1,25 +1,16 @@
 entries = {}
-local plyJob = {
-  name = nil,
-  rank = nil 
-}
 
 -- TODO: Write tool to generate list/path of submenus
 
-RegisterCommand('radialmenu', function()
-	DGCore.Functions.GetPlayerData(function(PlayerData)
-		if not PlayerData.metadata["ishandcuffed"] and not IsPauseMenuActive() then
-			openRadial()
-			SetCursorLocation(0.5, 0.5)
-		end
-	end)
+DGX.Keys.register('radialmenu', 'Radialmenu', 'F1')
+DGX.Keys.onPressDown('radialmenu', function()
+  if IsPauseMenuActive() then return end
+  openRadial()
+  SetCursorLocation(0.5, 0.5)
 end)
-
-RegisterKeyMapping('radialmenu', 'Open Radial Menu', 'keyboard', 'F1')
 
 function getEnabledItems(items, context)
 	local _items = {}
-	context.plyData.job = plyJob
 	for _, item in pairs(items) do
     if item.isEnabled ~= nil then
       if not item.isEnabled(context.plyData, context.vehicle, context.entity) then
@@ -44,6 +35,7 @@ end
 function generateItems()
   local ped = PlayerPedId()
 	local plyData = DGCore.Functions.GetPlayerData()
+	plyData.job = DGX.Jobs.getCurrentJob()
 	local vehicle = GetVehiclePedIsIn(ped)
   local hit = DGX.RayCast.doRaycast()
   local entity = hit.entity
@@ -52,7 +44,8 @@ function generateItems()
     entity = nil
   end
 	-- Start at entries.main and let the recursion do it's thing
-	local items = getEnabledItems(DGCore.Shared.copyTbl(entries.main), { plyData = plyData, vehicle = vehicle, entity = entity })
+  local start = plyData.metadata.isdead and DGCore.Shared.copyTbl(entries.down) or DGCore.Shared.copyTbl(entries.main)
+	local items = getEnabledItems(start, { plyData = plyData, vehicle = vehicle, entity = entity })
 	return items
 end
 
@@ -93,13 +86,6 @@ RegisterNUICallback('selectItem', function(data)
       end
     end
   end
-end)
-
-RegisterNetEvent('dg-jobs:signin:update', function(job, rank)
-  plyJob = {
-    name = job,
-    rank = rank
-  }
 end)
 
 function DrawText3Ds(x, y, z, text)

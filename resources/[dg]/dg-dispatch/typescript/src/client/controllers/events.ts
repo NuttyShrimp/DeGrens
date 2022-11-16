@@ -1,4 +1,4 @@
-import { Events, Notifications, RPC, Sounds, UI } from '@dgx/client';
+import { Events, Notifications, RPC, UI } from '@dgx/client';
 import { getNearestColorFromHex } from '@dgx/shared/helpers/colorNames';
 import { getDataOfGTAColorById } from '@dgx/shared/helpers/gtacolors';
 import { clearBlips, syncBlips, updateBlipCoords, updateSprite } from 'services/blips';
@@ -28,6 +28,7 @@ on('baseevents:leftVehicle', (pVehicle: number, pSeat: number) => {
   const vehicleClass = GetVehicleClass(pVehicle);
   if (vehicleClass !== 15 || (pSeat !== -1 && pSeat !== 0)) return;
 
+  // TODO: Fix to reset back to normal blip
   Events.emitNet('dg-dispatch:updateBlipSprite', 43);
 });
 
@@ -41,7 +42,6 @@ on('onResourceStop', (res: string) => {
   DGCore.Blips.removeCategory('dispatch');
   clearBlips();
   closeCam();
-  []
 });
 
 onNet('dg-sync:coords:sync', (plyCoords: Record<number, Vec3>) => {
@@ -57,7 +57,7 @@ Events.onNet('dg-dispatch:addCalls', (calls: Dispatch.UICall[], refresh: boolean
     calls,
     refresh,
   });
-  if (refresh && calls?.[0].id) {
+  if (refresh && calls[0]?.id) {
     setLastCallId(calls[0].id);
   }
 });
@@ -71,13 +71,6 @@ Events.onNet('dg-dispatch:addCall', (call: Dispatch.UICall) => {
   addCallBlip(call);
   flashNewCalls();
   setLastCallId(call.id);
-  if (call.important) {
-    const soundId = `dispatch-imp-${call.id}`;
-    Sounds.playOnEntity(soundId, 'emergency', 'DLC_NUTTY_SOUNDS', PlayerPedId());
-    setTimeout(() => {
-      Sounds.stop(soundId);
-    }, 4000);
-  }
 });
 
 Events.onNet('dispatch:setCallMarker', (coords: Vec3) => {
@@ -98,7 +91,7 @@ Events.onNet('dispatch:updateSprite', (plyId: number, info: Dispatch.BlipInfo, s
 });
 
 Events.onNet('dispatch:toggleDispatchNotifications', () => {
-  Events.emitNet("dispatch:setDispatchBlip", isDispatchDisabled())
+  Events.emitNet('dispatch:setDispatchBlip', isDispatchDisabled());
   isDispatchDisabled() ? enableDispatch() : disableDispatch();
 });
 

@@ -8,6 +8,7 @@ import {
   deleteVehicle,
   getVinForNetId,
   getVinForVeh,
+  setEngineState,
   spawnOwnedVehicle,
   spawnVehicle,
   teleportInSeat,
@@ -25,6 +26,7 @@ global.asyncExports('spawnVehicle', spawnVehicle);
 global.exports('deleteVehicle', deleteVehicle);
 global.exports('getVinForVeh', getVinForVeh);
 global.exports('getVinForNetId', getVinForNetId);
+global.exports('setEngineState', setEngineState);
 
 global.exports(
   'spawnVehicleFromAdminMenu',
@@ -77,4 +79,10 @@ Events.onNet('vehicles:server:setOnGround', (src: number, netId: number) => {
   const entity = NetworkGetEntityFromNetworkId(netId);
   if (!entity || !DoesEntityExist(entity)) return;
   Util.sendEventToEntityOwner(entity, 'vehicles:client:setOnGround', netId);
+});
+
+global.asyncExports('getPlateForVin', async (vin: string) => {
+  if (!vinManager.isVinFromPlayerVeh(vin)) return;
+  const info = await getPlayerVehicleInfo(vin);
+  return info.plate;
 });

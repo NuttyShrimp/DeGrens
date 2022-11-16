@@ -84,7 +84,17 @@ declare interface Vector {
 }
 
 declare interface MetaData {
-  [key: string]: any;
+  hunger: number;
+  thirst: number;
+  stress: number;
+  isdead: boolean;
+  inlaststand: boolean;
+  armor: number;
+  callsign: string;
+  licences: { driver: boolean };
+  inside: { house: string | null; apartment: { id: string | null } };
+  dna: string;
+  jailMonths: number;
 }
 
 declare interface PlayerData {
@@ -106,11 +116,4 @@ declare interface CharacterInfo {
   phone: number;
   nationality: string;
   gender: number;
-  cid: string;
-  card?: string | number;
-}
-
-declare interface Grade {
-  name: string;
-  level: number;
 }

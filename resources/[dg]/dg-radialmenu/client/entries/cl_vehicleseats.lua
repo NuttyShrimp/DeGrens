@@ -4,7 +4,6 @@ entries.vehicleseats = {
 		title = 'Bijrijder',
 		icon = '2',
 		event = 'vehicles:radial:seat',
-		shouldClose = false,
 		isEnabled = function(_, vehicle)
       if not vehicle then return false end
 			return GetVehicleModelNumberOfSeats(GetEntityModel(vehicle)) > 1
@@ -35,7 +34,6 @@ entries.vehicleseats = {
 		title = 'Bestuurder',
 		icon = '1',
 		event = 'vehicles:radial:seat',
-		shouldClose = false,
 		isEnabled = function(_, vehicle)
       if not vehicle then return false end
 			return GetVehicleModelNumberOfSeats(GetEntityModel(vehicle)) > 0
