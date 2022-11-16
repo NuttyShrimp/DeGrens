@@ -20,5 +20,10 @@ Config.Server.spawns = {
 	job = {
 		police = {},
 		ambulance = {},
-	}
+	},
+  prison = {
+    label = 'Gevangenis',
+    spawnType = 'world',
+    position = vector4(1767.6893, 2501.2747, 49.693, 210.6193)
+  }
 }

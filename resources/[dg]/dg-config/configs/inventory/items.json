@@ -2731,5 +2731,101 @@
       "x": 3,
       "y": 2
     }
+  },
+  {
+    "useable": true,
+    "name": "spike_strip",
+    "label": "PD Spike Strips",
+    "image": "spike_strip.png",
+    "size": {
+      "x": 3,
+      "y": 2
+    }
+  },
+  {
+    "useable": true,
+    "name": "dna_swab",
+    "label": "DNA Swab",
+    "image": "dna_swab.png",
+    "size": {
+      "x": 4,
+      "y": 2
+    }
+  },
+  {
+    "name": "evidence_blood",
+    "label": "Bewijs Bloed",
+    "image": "evidence_blood.png",
+    "size": {
+      "x": 1,
+      "y": 1
+    }
+  },
+  {
+    "name": "evidence_dna",
+    "label": "Bewijs DNA",
+    "image": "evidence_dna.png",
+    "size": {
+      "x": 1,
+      "y": 1
+    }
+  },
+  {
+    "name": "evidence_bullet",
+    "label": "Bewijs Kogelhuls",
+    "image": "evidence_bullet.png",
+    "size": {
+      "x": 1,
+      "y": 1
+    }
+  },
+  {
+    "useable": true,
+    "name": "binoculars",
+    "label": "Verrekijker",
+    "image": "binoculars.png",
+    "size": {
+      "x": 3,
+      "y": 2
+    }
+  },
+  {
+    "useable": true,
+    "name": "pd_camera",
+    "label": "PD Camera",
+    "image": "pd_camera.png",
+    "size": {
+      "x": 3,
+      "y": 2
+    }
+  },
+  {
+    "useable": true,
+    "name": "emergency_button",
+    "label": "PD Noodknop",
+    "image": "emergency_button.png",
+    "size": {
+      "x": 2,
+      "y": 2
+    }
+  },
+  {
+    "useable": true,
+    "name": "seized_cash",
+    "label": "Inbeslaggenomen Cash",
+    "image": "seized_cash.png",
+    "size": {
+      "x": 2,
+      "y": 2
+    }
+  },
+  {
+    "name": "hand_cuffs",
+    "label": "Handboeien",
+    "image": "hand_cuffs.png",
+    "size": {
+      "x": 2,
+      "y": 2
+    }
   }
 ]

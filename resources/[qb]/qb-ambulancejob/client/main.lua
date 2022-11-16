@@ -154,14 +154,13 @@ local function DoLimbAlert()
             else
                 limbDamageMsg = "You have pain on many places.."
             end
-            DGCore.Functions.Notify(limbDamageMsg, "primary", 5000)
         end
     end
 end
 
 local function DoBleedAlert()
     if not isDead and tonumber(isBleeding) > 0 then
-        DGCore.Functions.Notify("You are "..Config.BleedingStates[tonumber(isBleeding)].label, "error", 5000)
+        print('temp')
     end
 end
 
@@ -593,7 +592,6 @@ RegisterNetEvent('hospital:client:ambulanceAlert', function(coords, text)
     local street1, street2 = GetStreetNameAtCoord(coords.x, coords.y, coords.z, Citizen.ResultAsInteger(), Citizen.ResultAsInteger())
     local street1name = GetStreetNameFromHashKey(street1)
     local street2name = GetStreetNameFromHashKey(street2)
-    DGCore.Functions.Notify({text = text, caption = street1name.. ' ' ..street2name}, 'ambulance')
     PlaySound(-1, "Lose_1st", "GTAO_FM_Events_Soundset", 0, 0, 1)
     local transG = 250
     local blip = AddBlipForCoord(coords.x, coords.y, coords.z)
@@ -662,8 +660,6 @@ RegisterNetEvent('hospital:client:Revive', function()
     TriggerServerEvent("hospital:server:SetDeathStatus", false)
     TriggerServerEvent("hospital:server:SetLaststandStatus", false)
     DGX.Events.emitNet('hud:server:RelieveStress', 100)
-
-    DGCore.Functions.Notify("You are completely healthy again!")
 end)
 
 RegisterNetEvent('hospital:client:SetPain', function()
@@ -705,7 +701,6 @@ RegisterNetEvent('hospital:client:HealInjuries', function(type)
         ResetPartial()
     end
     TriggerServerEvent("hospital:server:RestoreWeaponDamage")
-    DGCore.Functions.Notify("Your wounds have been healed!")
 end)
 
 RegisterNetEvent('hospital:client:SendToBed', function(id, data, isRevive)
@@ -715,7 +710,6 @@ RegisterNetEvent('hospital:client:SendToBed', function(id, data, isRevive)
     CreateThread(function ()
         Wait(5)
         if isRevive then
-            DGCore.Functions.Notify("You are being helped..")
             Wait(Config.AIHealTimer * 1000)
             TriggerEvent("hospital:client:Revive")
         else
@@ -919,12 +913,9 @@ CreateThread(function()
                             local bedId = GetAvailableBed()
                             if bedId then
                                 TriggerServerEvent("hospital:server:SendToBed", bedId, true)
-                            else
-                                DGCore.Functions.Notify("Beds are occupied..", "error")
                             end
                         end, function() -- Cancel
                             TriggerEvent('animations:client:EmoteCommandStart', {"c"})
-                            DGCore.Functions.Notify("Checking in failed!", "error")
                         end)
                     end
                 end
@@ -944,8 +935,6 @@ CreateThread(function()
                     if IsControlJustReleased(0, 38) then
                         if GetAvailableBed(closestBed) then
                             TriggerServerEvent("hospital:server:SendToBed", closestBed, false)
-                        else
-                            DGCore.Functions.Notify("Beds are occupied..", "error")
                         end
                     end
                 end
@@ -960,8 +949,6 @@ exports('SendToBed', function()
     if IsControlJustReleased(0, 38) then
         if GetAvailableBed(closestBed) then
             TriggerServerEvent("hospital:server:SendToBed", closestBed, false)
-        else
-            DGCore.Functions.Notify("Beds are occupied..", "error")
         end
     end
 end)

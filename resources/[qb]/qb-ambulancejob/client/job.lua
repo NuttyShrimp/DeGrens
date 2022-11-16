@@ -147,16 +147,12 @@ RegisterNetEvent('hospital:client:CheckStatus', function()
                             multiline = false,
                             args = {"Status Check", "Is "..Config.BleedingStates[v].label}
                         })
-                    else
-                        DGCore.Functions.Notify('Player Is Healthy', 'success')
                     end
                 end
                 isStatusChecking = true
                 statusCheckTime = Config.CheckTime
             end
         end, playerId)
-    else
-        DGCore.Functions.Notify('No Player Nearby', 'error')
     end
 end)
 
@@ -179,18 +175,12 @@ RegisterNetEvent('hospital:client:RevivePlayer', function()
                 }, {}, {}, function() -- Done
                     isHealingPerson = false
                     StopAnimTask(PlayerPedId(), healAnimDict, "exit", 1.0)
-                    DGCore.Functions.Notify("You revived the person!")
                     TriggerServerEvent("hospital:server:RevivePlayer", playerId)
                 end, function() -- Cancel
                     isHealingPerson = false
                     StopAnimTask(PlayerPedId(), healAnimDict, "exit", 1.0)
-                    DGCore.Functions.Notify("Failed!", "error")
                 end)
-            else
-                DGCore.Functions.Notify("No Player Nearby", "error")
             end
-        else
-            DGCore.Functions.Notify("You Need A First Aid Kit", "error")
         end
     end, 'firstaid')
 end)
@@ -214,18 +204,12 @@ RegisterNetEvent('hospital:client:TreatWounds', function()
                 }, {}, {}, function() -- Done
                     isHealingPerson = false
                     StopAnimTask(PlayerPedId(), healAnimDict, "exit", 1.0)
-                    DGCore.Functions.Notify("You helped the person!")
                     TriggerServerEvent("hospital:server:TreatWounds", playerId)
                 end, function() -- Cancel
                     isHealingPerson = false
                     StopAnimTask(PlayerPedId(), healAnimDict, "exit", 1.0)
-                    DGCore.Functions.Notify("Failed!", "error")
                 end)
-            else
-                DGCore.Functions.Notify("No Player Nearby", "error")
             end
-        else
-            DGCore.Functions.Notify("You Need A Bandage", "error")
         end
     end, 'bandage')
 end)
@@ -265,9 +249,6 @@ CreateThread(function()
                             if dist < 1.5 then
                                 sleep = 0
                                 DrawText3D(v.x, v.y, v.z, "~g~E~w~ - Armory")
-                                if IsControlJustReleased(0, 38) then
-                                    TriggerServerEvent("inventory:server:OpenInventory", "shop", "hospital", Config.Items)
-                                end
                             elseif dist < 2.5 then
                                 DrawText3D(v.x, v.y, v.z, "Armory")
                             end  

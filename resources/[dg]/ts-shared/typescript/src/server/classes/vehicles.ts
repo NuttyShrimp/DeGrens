@@ -50,6 +50,35 @@ class Vehicles {
   isPlayerPlate = (plate: string): boolean => {
     return global.exports['dg-vehicles'].isPlayerPlate(plate);
   };
+
+  isVinFromPlayerVeh = (vin: string): boolean => {
+    return global.exports['dg-vehicles'].isVinFromPlayerVeh(vin);
+  };
+
+  getNetIdOfVin = (vin: string): number => {
+    return global.exports['dg-vehicles'].getNetIdOfVin(vin);
+  };
+
+  getCidFromVin = (vin: string): Promise<number | undefined> => {
+    return global.exports['dg-vehicles'].getCidFromVin(vin);
+  };
+
+  /**
+   * Get legal plate associated with VIN
+   */
+  getPlateForVin = (vin: string): Promise<string | undefined> => {
+    return global.exports['dg-vehicles'].getPlateForVin(vin);
+  };
+
+  getConfigByEntity = (
+    vehicle: number
+  ): { name: string; brand: string; model: string; category: string; class: string } | undefined => {
+    return global.exports['dg-vehicles'].getConfigByEntity(vehicle);
+  };
+
+  setEngineState = (vehicle: number, state: boolean, instantly?: boolean) => {
+    global.exports['dg-vehicles'].setEngineState(vehicle, state, instantly);
+  };
 }
 
 export default {

@@ -149,9 +149,8 @@ function isDead()
     return true
   elseif LocalPlayer.state.inLaststand then
     return true
-  elseif LocalPlayer.state.isHandcuffed then
+  elseif DGX.Police.isCuffed() then
     return true
-
   elseif IsPlayerDead(PlayerId()) then
     return true
   end
@@ -181,7 +180,7 @@ RegisterCommand('+radiotalk', function()
       end
       CreateThread(function()
         TriggerEvent("pma-voice:radioActive", true)
-        while radioPressed and not LocalPlayer.state.disableRadio do
+        while radioPressed and not LocalPlayer.state.disableRadio and not DGX.Police.isCuffed() do
           Wait(0)
           SetControlNormal(0, 249, 1.0)
           SetControlNormal(1, 249, 1.0)
@@ -192,6 +191,7 @@ RegisterCommand('+radiotalk', function()
   end
 end, false)
 
+-- TODO: Properly stop talking on radio when player gets cuffed or dies
 RegisterCommand('-radiotalk', function()
   if (radioChannel > 0 or radioEnabled) and radioPressed then
     radioPressed = false

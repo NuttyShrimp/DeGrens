@@ -4,7 +4,7 @@ entries.vehicle = {
 		title = 'Motor',
 		icon = 'engine',
     event = 'vehicles:radial:engine',
-		shouldClose = true,
+    shouldClose = true,
 		isEnabled = function(_, vehicle)
       if not vehicle then return false end
       if GetPedInVehicleSeat(vehicle, -1) ~= PlayerPedId() then return false end

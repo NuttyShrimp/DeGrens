@@ -7,7 +7,7 @@ setImmediate(() => {
   loadCams();
 });
 
-on('dg-jobs:signin:update', (src: number, job: string) => {
+on('jobs:server:signin:update', (src: number, job: string) => {
   syncBlips();
   if (job !== 'police') {
     cleanPlayer(src);
@@ -39,8 +39,8 @@ Events.onNet('dispatch:server:setMarker', (src, id: string) => {
 
 Events.onNet('dispatch:setDispatchBlip', (src, dispatchEnabled: boolean) => {
   togglePlayer(src, dispatchEnabled);
-})
+});
 
 RPC.register('dispatch:cams:request', () => {
   return getCams();
-})
+});

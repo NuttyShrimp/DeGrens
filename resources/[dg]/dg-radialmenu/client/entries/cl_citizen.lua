@@ -7,18 +7,7 @@ entries.citizen = {
 		event = 'dg-phone:server:contacts:shareNumber',
 		shouldClose = true,
 		isEnabled = function()
-			return DGX.Inventory.doesPlayerHaveItems('phone')
-		end
-	},
-	{
-		id = 'getintrunk',
-		title = 'Stap in koffer',
-		icon = 'car',
-		event = 'qb-trunk:client:GetIn',
-		shouldClose = true,
-		isEnabled = function()
-			-- TODO: Check if near vehicle
-			return true
+			return DGX.Util.isAnyPlayerCloseAndOutsideVehicle() and DGX.Inventory.doesPlayerHaveItems('phone')
 		end
 	},
 	{
@@ -31,25 +20,5 @@ entries.citizen = {
 		isEnabled = function()
 			return true
 		end
-	},
-	{
-		id = 'togglehotdogsell',
-		title = 'Hotdog Selling',
-		icon = 'hotdog',
-		event = 'qb-hotdogjob:client:ToggleSell',
-		shouldClose = true,
-		isEnabled = function(playerData)
-		  -- TODO: replace when job is updated/removed
-			return false
-		end
-	},
-	{
-		id = 'interactions',
-		title = 'Interacties',
-		icon = 'exclamation-triangle',
-		subMenu = 'interactions',
-		isEnabled = function()
-			return true
-		end
-	},
+	}
 }

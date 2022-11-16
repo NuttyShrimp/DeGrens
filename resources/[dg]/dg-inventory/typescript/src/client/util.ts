@@ -7,8 +7,7 @@ export const canOpenInventory = () => {
     LocalPlayer.state.isLoggedIn &&
     !IsPauseMenuActive() &&
     !playerData.metadata.isdead &&
-    !playerData.metadata.inlaststand &&
-    !playerData.metadata.ishandcuffed
+    !playerData.metadata.inlaststand
   );
 };
 

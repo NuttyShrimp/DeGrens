@@ -174,6 +174,22 @@ const showItemBox = (plyId: number, label: string, itemName: string) => {
   Events.emitNet('inventory:client:addItemBox', plyId, label, image);
 };
 
+const moveAllItemsToInventory = async (
+  originType: Inventory.Type,
+  originIdentifier: string,
+  targetType: Inventory.Type,
+  targetIdentifier: string
+) => {
+  const originId = concatId(originType, originIdentifier);
+  const originInventory = await inventoryManager.get(originId);
+  const targetId = concatId(targetType, targetIdentifier);
+  const targetInventory = await inventoryManager.get(targetId);
+  const items = originInventory.getItems();
+  for (const item of items) {
+    await itemManager.move(0, item.id, item.position, targetInventory.id);
+  }
+};
+
 // Exports
 global.asyncExports('hasObject', hasObject);
 global.exports('giveStarterItems', giveStarterItems);
@@ -192,6 +208,7 @@ global.exports('createScriptedStash', createScriptedStash);
 global.exports('concatId', concatId);
 global.exports('splitId', splitId);
 global.exports('showItemBox', showItemBox);
+global.exports('moveAllItemsToInventory', moveAllItemsToInventory);
 
 // Events for client
 RPC.register('inventory:server:doesPlayerHaveItems', (plyId, names: string | string[]) => {

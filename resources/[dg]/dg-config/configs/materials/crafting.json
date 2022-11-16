@@ -52,6 +52,23 @@
         }
       ]
     },
+    "hand_cuffs": {
+      "requiredReputation": 65,
+      "items": [
+        {
+          "name": "refined_iron",
+          "amount": 2
+        },
+        {
+          "name": "refined_aluminum",
+          "amount": 1
+        },
+        {
+          "name": "refined_steel",
+          "amount": 3
+        }
+      ]
+    },
     "radio": {
       "requiredReputation": 70,
       "items": [
@@ -345,7 +362,8 @@
         "weapon_grenade",
         "luxuryfinish",
         "mini_emp",
-        "thermite"
+        "thermite",
+        "hand_cuffs"
       ]
     },
     "weapon_bench_B": {
@@ -358,7 +376,8 @@
         "luxuryfinish",
         "smg_extendedclip",
         "mini_emp",
-        "thermite"
+        "thermite",
+        "hand_cuffs"
       ]
     },
     "weapon_bench_C": {
@@ -370,7 +389,8 @@
         "pistol_suppressor",
         "luxuryfinish",
         "mini_emp",
-        "thermite"
+        "thermite",
+        "hand_cuffs"
       ]
     },
     "mechanic_bench": {

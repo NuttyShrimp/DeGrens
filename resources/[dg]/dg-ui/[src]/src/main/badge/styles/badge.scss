@@ -1,0 +1,22 @@
+.badge {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+
+  & > div {
+    position: relative;
+    margin-left: 3vh;
+
+    & > p {
+      position: absolute;
+      font-size: 2.1vh;
+      font-weight: bold;
+      color: black;
+    }
+
+    & > img {
+      height: 25vh;
+    }
+  }
+}

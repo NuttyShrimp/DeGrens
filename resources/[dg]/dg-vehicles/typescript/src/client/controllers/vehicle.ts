@@ -15,6 +15,12 @@ RPC.register('vehicle:checkModel', (model: string): modelInfo => {
   };
 });
 
+RPC.register('vehicle:getArchType', (netId: number): string => {
+  const entity = NetworkGetEntityFromNetworkId(netId);
+  if (!DoesEntityExist(entity)) return 'UNKNOWN';
+  return GetEntityArchetypeName(entity);
+});
+
 RPC.register('vehicle:getClass', (vehNetId: number) => {
   const veh = NetToVeh(vehNetId);
   return !veh || !DoesEntityExist(veh) ? -1 : GetVehicleClass(veh);

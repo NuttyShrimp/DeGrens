@@ -19,7 +19,7 @@ setImmediate(() => {
 
 const pickLuckyPlayer = (skippedPlys: number[] = []) => {
   const requiredPolice = 0;
-  if (global.exports['qb-policejob'].getAmountOfCops() < requiredPolice) return;
+  if (Jobs.getAmountForJob('police') < requiredPolice) return;
 
   const signedInPlayers: number[] = [];
   stateManager.playerStates.forEach((s, cid) => {

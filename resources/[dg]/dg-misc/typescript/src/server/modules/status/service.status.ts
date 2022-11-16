@@ -96,3 +96,9 @@ export const checkRemovalMethods = (plyId: number, method: Status.RemovalMethod)
 
   statusesWithRemovalMethod.forEach(name => removeStatusFromPlayer(plyId, name));
 };
+
+export const getPlayerStatuses = (plyId: number) => {
+  const cid = Util.getCID(plyId);
+  const playerStatuses = allPlayerStatuses.get(cid) ?? [];
+  return playerStatuses.map(s => s.name);
+};

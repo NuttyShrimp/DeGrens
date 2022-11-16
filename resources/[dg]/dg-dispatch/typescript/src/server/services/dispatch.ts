@@ -1,4 +1,4 @@
-import { Events, Jobs, RPC, Util } from '@dgx/server';
+import { Events, Jobs, RPC, Sounds, Util } from '@dgx/server';
 
 import { addCall } from './store';
 
@@ -39,9 +39,9 @@ export const createDispatchCall = async (call: Dispatch.Call) => {
   }
 
   if (call.officer) {
-    const DGPlayer = await DGCore.Functions.GetOfflinePlayerByCitizenId(call.officer);
-    if (DGPlayer.PlayerData.metadata.callsign) {
-      call.officer = DGPlayer.PlayerData.metadata.callsign;
+    const DGPlayer = DGCore.Functions.GetPlayer(call.officer);
+    if (DGPlayer?.PlayerData.metadata.callsign) {
+      call.officer = DGPlayer.PlayerData.metadata.callsign as unknown as number; // fuckoff typescript
     }
   }
 
@@ -74,5 +74,13 @@ export const createDispatchCall = async (call: Dispatch.Call) => {
   const policeIds = Jobs.getPlayersForJob('police');
   policeIds.forEach(id => {
     Events.emitNet('dg-dispatch:addCall', id, prepareCall(storedCall.id, storedCall));
+    // TODO: Make louder, cant be heared by other players because so quiet
+    if (call.important) {
+      const soundId = `dispatch-imp-${storedCall.id}-${id}`;
+      Sounds.playOnEntity(soundId, 'emergency', 'DLC_NUTTY_SOUNDS', GetPlayerPed(String(id)));
+      setTimeout(() => {
+        Sounds.stop(soundId);
+      }, 4000);
+    }
   });
 };

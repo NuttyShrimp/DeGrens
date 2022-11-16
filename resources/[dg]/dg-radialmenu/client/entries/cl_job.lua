@@ -1,34 +1,121 @@
 entries.job = {
-	{
-		id = 'emergencybutton2',
-		title = 'Emergency button',
-		icon = 'bell',
-		event = 'police:client:SendPoliceEmergencyAlert',
-		shouldClose = true,
-		isEnabled = function(playerData)
-			return playerData.job.name == 'ambulance' or playerData.job.name == 'police'
-		end
-	},
-	{
-		id = 'escort',
-		title = 'Escort',
-		icon = 'user-friends',
-		event = 'police:client:EscortPlayer',
-		shouldClose = true,
-		isEnabled = function(playerData)
-			return playerData.job.name == 'ambulance' or playerData.job.name == 'police'
-		end
-	},
-	{
+  {
 		id = 'whitelistCheck',
 		title = 'Job Allowlist',
 		icon = 'users-gear',
 		event = 'jobs:client:openJobAllowlist',
 		shouldClose = true,
-		isEnabled = function(playerData)
+		isEnabled = function()
 			return DGX.RPC.execute('jobs:whitelist:hasWhitelistAccess')
 		end
 	},
+  {
+		id = 'showBadge',
+		title = 'Toon Badge',
+		icon = 'id-badge',
+    dgx = true,
+    type = 'server',
+		event = 'police:badges:showPoliceBadge',
+		shouldClose = true,
+		isEnabled = function(playerData)
+			return playerData.job.name == 'police'
+		end
+	},
+  {
+		id = 'openLocker',
+		title = 'Open Locker',
+		icon = 'box-archive',
+		event = 'police:openLocker',
+		shouldClose = true,
+		isEnabled = function(playerData)
+			return playerData.job.name == 'police' and DGX.Police.isAtLocker()
+		end
+	},
+  {
+		id = 'seizeCash',
+		title = 'Cash Afnemen',
+		icon = 'money-bill',
+    dgx = true,
+    type = 'server',
+		event = 'police:interactions:seizeCash',
+		shouldClose = true,
+		isEnabled = function(playerData, vehicle)
+      if vehicle ~= 0 then return false end
+			return playerData.job.name == 'police' and DGX.Util.isAnyPlayerCloseAndOutsideVehicle()
+		end
+	},
+  {
+		id = 'searchPlayer',
+		title = 'Fouilleren',
+		icon = 'magnifying-glass',
+    dgx = true,
+    type = 'server',
+		event = 'police:interactions:search',
+		shouldClose = true,
+		isEnabled = function(playerData, vehicle)
+      if vehicle ~= 0 then return false end
+			return playerData.job.name == 'police' and DGX.Util.isAnyPlayerCloseAndOutsideVehicle()
+		end
+	},
+  {
+		id = 'patDownPlayer',
+		title = 'Aftasten',
+		icon = 'hand',
+    dgx = true,
+    type = 'server',
+		event = 'police:interactions:patDown',
+		shouldClose = true,
+		isEnabled = function(playerData, vehicle)
+      if vehicle ~= 0 then return false end
+			return playerData.job.name == 'police' and DGX.Util.isAnyPlayerCloseAndOutsideVehicle()
+		end
+	},
+  {
+		id = 'checkCuffLogs',
+		title = 'Cuff Logs',
+		icon = 'calendar-lines',
+    dgx = true,
+    type = 'server',
+		event = 'police:interactions:showCuffLogs',
+		shouldClose = true,
+		isEnabled = function(playerData, vehicle)
+      if vehicle ~= 0 then return false end
+			return playerData.job.name == 'police' and DGX.Util.isAnyPlayerCloseAndOutsideVehicle()
+		end
+	},
+  {
+		id = 'openPoliceCarStorage',
+		title = 'Open Storage',
+		icon = 'treasure-chest',
+		event = 'police:carStorage',
+		shouldClose = true,
+		isEnabled = function(playerData, vehicle)
+			return vehicle ~= 0 and playerData.job.name == 'police'
+		end
+	},
+  {
+		id = 'confiscateItems',
+		title = 'Confisqueren',
+		icon = 'box-circle-check',
+    dgx = true,
+    type = 'server',
+		event = 'police:prison:confiscate',
+		shouldClose = true,
+		isEnabled = function(playerData, vehicle)
+      if vehicle ~= 0 then return false end
+			return playerData.job.name == 'police' and DGX.Util.isAnyPlayerCloseAndOutsideVehicle()
+		end
+	},
+
+
+
+
+
+
+  
+
+
+  -- REPLACEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
 	--region Ambulance
 	{
 		id = 'statuscheck',
@@ -81,133 +168,5 @@ entries.job = {
 			return playerData.job.name == 'ambulance'
 		end
 	},
-	--endregion
-	--region Taxi
-	{
-		id = 'togglemeter',
-		title = 'Show/Hide Meter',
-		icon = 'eye-slash',
-		event = 'qb-taxi:client:toggleMeter',
-		shouldClose = false,
-		isEnabled = function(playerData)
-			return playerData.job.name == 'taxi'
-		end
-	},
-	{
-		id = 'togglemouse',
-		title = 'Start/Stop Meter',
-		icon = 'hourglass-start',
-		event = 'qb-taxi:client:enableMeter',
-		shouldClose = true,
-		isEnabled = function(playerData)
-			return playerData.job.name == 'taxi'
-		end
-	},
-	{
-		id = 'npc_mission',
-		title = 'NPC Mission',
-		icon = 'taxi',
-		event = 'qb-taxi:client:DoTaxiNpc',
-		shouldClose = true,
-		isEnabled = function(playerData)
-			return playerData.job.name == 'taxi'
-		end
-	},
-	--endregion
-	--region Tow
-	{
-		id = 'togglenpc',
-		title = 'Toggle NPC',
-		icon = 'toggle-on',
-		event = 'jobs:client:ToggleNpc',
-		shouldClose = true,
-		isEnabled = function(playerData)
-			return playerData.job.name == 'tow'
-		end
-	},
-	{
-		id = 'towvehicle',
-		title = 'Tow vehicle',
-		icon = 'truck-pickup',
-		event = 'qb-tow:client:TowVehicle',
-		shouldClose = true,
-		isEnabled = function(playerData)
-			return playerData.job.name == 'tow'
-		end
-	},
-	--endregion
-	--region Mechanic
-	{
-		id = 'towvehicle',
-		title = 'Tow vehicle',
-		icon = 'truck-pickup',
-		event = 'qb-tow:client:TowVehicle',
-		shouldClose = true,
-		isEnabled = function(playerData)
-			return playerData.job.name == 'mechanic'
-		end
-	},
-	--endregion
-	--region Police
-	{
-		id = 'checkvehstatus',
-		title = 'Check Tune Status',
-		icon = 'info-circle',
-		event = 'qb-tunerchip:client:TuneStatus',
-		shouldClose = true,
-		isEnabled = function(playerData)
-			return playerData.job.name == 'police'
-		end
-	},
-	{
-		id = 'resethouse',
-		title = 'Reset house lock',
-		icon = 'key',
-		event = 'qb-houses:client:ResetHouse',
-		shouldClose = true,
-		isEnabled = function(playerData)
-			return playerData.job.name == 'police'
-		end
-	},
-	{
-		id = 'takedriverlicense',
-		title = 'Revoke Drivers License',
-		icon = 'id-card',
-		event = 'police:client:SeizeDriverLicense',
-		shouldClose = true,
-		isEnabled = function(playerData)
-			return playerData.job.name == 'police'
-		end
-	},
-	{
-		id = 'policeinteraction',
-		title = 'Police Actions',
-		icon = 'tasks',
-		subMenu = 'policeActions',
-		isEnabled = function(playerData)
-			return playerData.job.name == 'police'
-		end
-	},
-	{
-		id = 'policeobjects',
-		title = 'Objects',
-		icon = 'road',
-		subMenu = 'policeObject',
-		isEnabled = function(playerData)
-			return playerData.job.name == 'police'
-		end
-	},
-	--endregion
-	--region Hotdog
-	{
-		id = 'togglesell',
-		title = 'Toggle sell',
-		icon = 'hotdog',
-		event = 'qb-hotdogjob:client:ToggleSell',
-		shouldClose = true,
-		isEnabled = function(playerData)
-			return playerData.job.name == 'hotdog'
-		end
-	}
 	--endregion
 }

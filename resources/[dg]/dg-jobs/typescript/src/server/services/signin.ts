@@ -6,8 +6,10 @@ import { getJobConfig, getPlayerInfoForJob } from './whitelist';
 
 let locations: SignInLocation[] = [];
 let loaded = false;
-// Jobname on Set of CIDs
 const signedIn: Map<string, { cid: number; srvId: number }[]> = new Map();
+
+// Map gets filled with players who leave while signed in, to restore them when they log back in
+const jobsToRestore = new Map<number, string>();
 
 export const loadLocations = async () => {
   await Config.awaitConfigLoad();
@@ -80,6 +82,12 @@ export const signIn = (src: number, job: string) => {
     return;
   }
 
+  const currentPlyJob = getPlayerJob(src);
+  if (currentPlyJob === job) {
+    Notifications.add(src, `Je bent al in dienst bij ${jobConfig.name}`);
+    return;
+  }
+
   // Check if player already signed in for other job, if so remove from there
   for (const signedInPlayers of signedIn.values()) {
     const idx = signedInPlayers.findIndex(p => p.cid === cid);
@@ -92,14 +100,12 @@ export const signIn = (src: number, job: string) => {
     signedInJob = [];
     signedIn.set(job, signedInJob);
   }
-  const currentPlyJob = getPlayerJob(src);
-  if (currentPlyJob) {
-    Notifications.add(src, `Je bent al in dienst bij ${currentPlyJob}`, 'error');
-  }
+
   signedInJob.push({ cid, srvId: src });
   Util.Log('jobs:whitelist:signin:success', { job }, `Player ${cid} signed in for job ${job}`, src);
   Notifications.add(src, `In dienst gegaan bij ${jobConfig.name}`);
-  emitNet('dg-jobs:signin:update', src, job, plyEntry.rank);
+  emitNet('jobs:client:signin:update', src, job, plyEntry.rank);
+  emit('jobs:server:signin:update', src, job, plyEntry.rank);
 };
 
 export const signOut = (src: number, job: string) => {
@@ -111,7 +117,7 @@ export const signOut = (src: number, job: string) => {
   const jobConfig = getJobConfig(job);
   if (!jobConfig) return;
   const currentJob = getPlayerJob(src);
-  if (currentJob !== jobConfig.name) {
+  if (currentJob !== job) {
     Notifications.add(src, `Je bent niet in dienst bij ${jobConfig.name}`, 'error');
     return;
   }
@@ -121,7 +127,8 @@ export const signOut = (src: number, job: string) => {
   );
   Util.Log('jobs:whitelist:signout:success', { job }, `Player ${cid} signed out for job ${jobConfig.name}`, src);
   Notifications.add(src, `Uit dienst gegaan bij ${jobConfig.name}`);
-  emitNet('dg-jobs:signin:update', src, null, null);
+  emitNet('jobs:client:signin:update', src, null, null);
+  emit('jobs:server:signin:update', src, null, null);
 };
 
 export const getPlayerJob = (src: number) => {
@@ -138,4 +145,24 @@ export const getPlayersForJob = (job: string) => {
   const activePlys = signedIn.get(job);
   if (!activePlys) return [];
   return activePlys.map(p => p.srvId);
+};
+
+export const getAmountsForEachJob = () => {
+  return Array.from(signedIn.keys()).reduce<Record<string, number>>((acc, jobName) => {
+    acc[jobName] = getPlayersForJob(jobName).length;
+    return acc;
+  }, {});
+};
+
+export const playerLoaded = (plyId: number, cid: number) => {
+  const jobName = jobsToRestore.get(cid);
+  if (!jobName) return;
+  signIn(plyId, jobName);
+};
+
+export const playerUnloaded = (plyId: number, cid: number) => {
+  const plyJob = getPlayerJob(plyId);
+  if (!plyJob) return;
+  signOut(plyId, plyJob);
+  jobsToRestore.set(cid, plyJob);
 };

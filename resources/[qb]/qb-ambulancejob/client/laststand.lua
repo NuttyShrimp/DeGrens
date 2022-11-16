@@ -77,7 +77,6 @@ function SetLaststand(bool, spawn)
                     CanBePickuped = true
                     Config.DeathTime = LaststandTime
                 elseif LaststandTime - 1 <= 0 then
-                    DGCore.Functions.Notify("You have bled out..", "error")
                     SetLaststand(false)
                     local killer_2, killerWeapon = NetworkGetEntityKillerOfPlayer(player)
                     local killer = GetPedSourceOfDeath(playerPed)
@@ -88,8 +87,8 @@ function SetLaststand(bool, spawn)
 
                     local killerId = NetworkGetPlayerIndexFromPed(killer)
                     local killerName = killerId ~= -1 and GetPlayerName(killerId) .. " " .. "("..GetPlayerServerId(killerId)..")" or "Himself or a NPC"
-                    local weaponLabel = DGX.Inventory.getItemData(killerWeapon)?["label"] or "Unknown"
-                    local weaponName = DGX.Inventory.getItemData(killerWeapon)?["name"] or "Unknown_Weapon"
+                    local weaponLabel = "Unknown"
+                    local weaponName = "Unknown_Weapon"
                     TriggerServerEvent("qb-log:server:CreateLog", "death", GetPlayerName(player) .. " ("..GetPlayerServerId(player)..") is dead", "red", "**".. killerName .. "** has killed  ".. GetPlayerName(player) .." with a **".. weaponLabel .. "** (" .. weaponName .. ")")
                     deathTime = 0
                     OnDeath()
@@ -125,8 +124,6 @@ RegisterNetEvent('hospital:client:UseFirstAid', function()
             local playerId = GetPlayerServerId(player)
             TriggerServerEvent('hospital:server:UseFirstAid', playerId)
         end
-    else
-        DGCore.Functions.Notify('Action impossible!', 'error')
     end
 end)
 
@@ -157,11 +154,9 @@ RegisterNetEvent('hospital:client:HelpPerson', function(targetId)
     }, {}, {}, function() -- Done
         isHealingPerson = false
         ClearPedTasks(ped)
-        DGCore.Functions.Notify("You revived a person.")
         TriggerServerEvent("hospital:server:RevivePlayer", targetId)
     end, function() -- Cancel
         isHealingPerson = false
         ClearPedTasks(ped)
-        DGCore.Functions.Notify("Canceled!", "error")
     end)
 end)

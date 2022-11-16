@@ -1,0 +1,52 @@
+{
+  "safes": [
+    { "x": 482.6244, "y": -994.8857, "z": 30.7052 },
+    { "x": 1838.9393, "y": 3686.6113, "z": 33.9794 },
+    { "x": -447.3999, "y": 6016.7993, "z": 36.7987 }
+  ],
+  "labLocation": { "x": 483.3988, "y": -988.3514, "z": 30.9951 },
+  "lockers": [
+    { "x": 462.1432, "y": -999.3965, "z": 30.6896 },
+    { "x": 461.6707, "y": -995.9703, "z": 30.6896 },
+    { "x": 480.9946, "y": -990.363, "z": 30.6898 },
+    { "x": 475.0609, "y": -995.62, "z": 26.2734 },
+    { "x": 472.8759, "y": -995.2853, "z": 26.2734 },
+    { "x": 1830.6995, "y": 3679.9602, "z": 38.8594 },
+    { "x": -439.3377, "y": 6011.4556, "z": 36.9957 },
+    { "x": 1841.5898, "y": 3679.2778, "z": 34.1892 }
+  ],
+  "patDownItems": [
+    "weapon_grenade",
+    "weapon_pipebomb",
+    "weapon_advancedrifle",
+    "weapon_appistol",
+    "weapon_assaultrifle",
+    "weapon_assaultsmg",
+    "weapon_carbinerifle",
+    "weapon_heavypistol",
+    "weapon_machinepistol",
+    "weapon_microsmg",
+    "weapon_pistol",
+    "weapon_pistol_mk2",
+    "weapon_pumpshotgun",
+    "weapon_rpg",
+    "weapon_smg",
+    "weapon_sniperrifle",
+    "weapon_specialcarbine",
+    "weapon_stungun",
+    "weapon_switchblade",
+    "weapon_wrench",
+    "weapon_bat",
+    "weapon_crowbar",
+    "weapon_golfclub",
+    "weapon_hatchet",
+    "weapon_knife",
+    "weapon_knuckle",
+    "weapon_machete",
+    "weapon_poolcue",
+    "weapon_nightstick",
+    "rocket"
+  ],
+  "cuffTimeout": 1000,
+  "carryTimeout": 2000
+}

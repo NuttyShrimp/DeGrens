@@ -122,4 +122,6 @@ declare interface RootState {
   keygame: Keygame.State;
   gridgame: Gridgame.State;
   dispatch: Dispatch.State;
+  policeradar: Policeradar.State;
+  badge: Badge.State;
 }

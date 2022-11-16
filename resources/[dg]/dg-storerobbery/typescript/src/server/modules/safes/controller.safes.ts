@@ -71,7 +71,7 @@ Events.onNet('storerobbery:server:lootSafe', async (src: number, storeId: Store.
   }
 
   const amount = Util.getRndInteger(4, 7);
-  Inventory.addItemToPlayer(src, 'moneyroll', amount);
+  Inventory.addItemToPlayer(src, 'money_roll', amount);
 
   const receiveSpecial = Util.getRndInteger(0, 100) < (await getConfig()).safe.specialItemChance;
   if (receiveSpecial) {

@@ -110,3 +110,6 @@ local logOut = function(plyId)
   DGX.Util.Log('chars:logout', {plyId}, ('%s has logged out to switch characters'):format(DGX.Util.getName(plyId)))
 end
 exports('logOut', logOut)
+DGX.Events.onNet('chars:server:logOut', function(src)
+  logOut(src)
+end)

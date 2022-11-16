@@ -164,7 +164,7 @@ export const showReticle = (show: boolean) => {
   });
 };
 
-export const forceRemoveWeapon = (itemId?: string, skipAnimation?: boolean) => {
+export const forceRemoveWeapon = async (itemId?: string, skipAnimation?: boolean) => {
   const currentWeaponData = getCurrentWeaponData();
   if (currentWeaponData === null) return;
 
@@ -173,7 +173,7 @@ export const forceRemoveWeapon = (itemId?: string, skipAnimation?: boolean) => {
     if (skipAnimation) {
       removeWeapon(currentWeaponData.id);
     } else {
-      holsterWeapon(currentWeaponData);
+      await holsterWeapon(currentWeaponData);
     }
     setCurrentWeaponData(null);
   }

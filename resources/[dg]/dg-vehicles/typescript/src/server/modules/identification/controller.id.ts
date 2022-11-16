@@ -2,7 +2,7 @@ import { Events, RPC } from '@dgx/server';
 import { getVinForNetId } from 'helpers/vehicle';
 
 import plateManager from './classes/platemanager';
-import { applyFakePlateItem, isPlayerVehicleOwner, removeFakePlate } from './service.id';
+import { applyFakePlateItem, getCidFromVin, isPlayerVehicleOwner, removeFakePlate } from './service.id';
 
 Events.onNet('vehicles:plate:useFakePlate', (src: number, netId: number) => {
   applyFakePlateItem(src, netId);
@@ -24,3 +24,5 @@ global.exports('isPlayerPlate', (plate: string) => plateManager.isPlayerPlate(pl
 RPC.register('vehicles:validateNewVehicle', (src, netId: number) => {
   return getVinForNetId(netId);
 });
+
+global.asyncExports('getCidFromVin', getCidFromVin);

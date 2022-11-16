@@ -101,10 +101,6 @@ DGX.Inventory.registerUseable("tosti", function(src, item)
     end
 end)
 
-DGX.Inventory.registerUseable("binoculars", function(src, item)
-    TriggerClientEvent("binoculars:Toggle", src)
-end)
-
 DGX.Inventory.registerUseable("cokebaggy", function(src, item)
     TriggerClientEvent("consumables:client:Cokebaggy", src)
 end)

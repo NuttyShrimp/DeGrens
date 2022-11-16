@@ -16,7 +16,7 @@ import { Chat, Events, Notifications } from '@dgx/server';
 //   }
 //   const vin = getVinForNetId(plyVehNetId);
 //   if (!vin || !keyManager.hasKey(vin, src)) return;
-//   sendEventToEntityOwner(plyVeh, 'vehicles:setEngineState', plyVehNetId, !GetIsVehicleEngineRunning(plyVeh));
+//   setEngineState(plyVeh, !GetIsVehicleEngineRunning(plyVeh))
 // });
 
 Chat.registerCommand(

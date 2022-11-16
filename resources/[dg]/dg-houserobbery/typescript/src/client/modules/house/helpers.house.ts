@@ -24,9 +24,10 @@ export const unlockHouse = async (houseId: string) => {
   } else {
     if (Util.getRndInteger(0, 100) < 10) {
       DGX.Inventory.removeItemFromPlayer('lockpick');
-      Notifications.add('Je lockpick is gebroken...', 'error');
+      Notifications.add('Je lockpick is gebroken', 'error');
     } else {
-      Notifications.add('Mislukt...', 'error');
+      Notifications.add('Je bent uitgeschoven', 'error');
+      Events.emitNet('police:evidence:dropBloop');
     }
   }
 };

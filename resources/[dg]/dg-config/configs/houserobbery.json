@@ -1,7 +1,7 @@
 {
   "moldChance": 3,
   "lootTables": [
-    ["moneyroll", "camera", "gameboy", "hifi", "nintendoswitch", "nokia", "psp"],
+    ["money_roll", "camera", "gameboy", "hifi", "nintendoswitch", "nokia", "psp"],
     ["tv"],
     ["vaas"],
     ["microwave"]

@@ -1,6 +1,3 @@
-plyJob = {name = nil, rank = nil}
--- TODO: Split business and job in doors.json to implement minimum rank for job and permissions for business
-
 doors = {}
 
 currentDoorId = nil
@@ -11,7 +8,6 @@ interactionVisible = false
 inPolyZone = false
 
 Citizen.CreateThread(function()
-  plyJob = DGX.Jobs.getCurrentJob()
   doors = DGCore.Functions.TriggerCallback("dg-doorlock:server:FetchDoors")
 
 	for id, door in pairs(doors) do

@@ -1,7 +1,7 @@
 isAuthorized = function(doorId)
-	if not doors[doorId] or not plyJob then return false end
+	if not doors[doorId] then return false end
   for _, job in pairs(doors[doorId].authorized) do
-    if job == plyJob.name or DGX.Business.isEmployee(job) then
+    if job == DGX.Jobs.getCurrentJob().name or DGX.Business.isEmployee(job) then
       return true
     end
   end
@@ -50,7 +50,7 @@ end
 playDoorSound = function(lock)
   local door = doors[currentDoorId]
   local soundName = lock and "Remote_Control_Close" or "Remote_Control_Open"
-  DGX.Sounds.playFromCoord('door_lock_sound', soundName, 'PI_Menu_Sounds', door.coords, door.distance)
+  DGX.Sounds.playFromCoord(('doorlock_%s'):format(currentDoorId), soundName, 'PI_Menu_Sounds', door.coords, door.distance)
 end
 
 showInteraction = function()

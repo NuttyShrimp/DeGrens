@@ -7,6 +7,13 @@ end)
 getPlySpawns = function(src)
 	local Spawns = {}
 
+  local ply = DGCore.Functions.GetPlayer(src)
+
+  if ply and ply.PlayerData.metadata.jailMonths ~= -1 then
+    table.insert(Spawns, Config.Server.spawns.prison)
+    return Spawns
+  end
+
   local isDevEnv = DGX.Util.isDevEnv()
   local isDev = DGX.Admin.hasPermission(src, "developer")
   local hasCrashed = false
@@ -22,7 +29,6 @@ getPlySpawns = function(src)
   -- is developer
   -- has crashed
   if isDevEnv or isDev or hasCrashed then
-    local ply = DGCore.Functions.GetPlayer(src)
     if ply ~= nil then
       table.insert(Spawns, {
         label = "Laatste locatie",

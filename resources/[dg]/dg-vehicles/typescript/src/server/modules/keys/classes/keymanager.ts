@@ -1,4 +1,5 @@
 import { Events, Util } from '@dgx/server';
+import { setEngineState } from 'helpers/vehicle';
 import winston from 'winston';
 
 import vinManager from '../../identification/classes/vinmanager';
@@ -44,7 +45,7 @@ class KeyManager extends Util.Singleton<KeyManager>() {
     if (!netId) return;
     const veh = NetworkGetEntityFromNetworkId(netId);
     if (!veh || GetPedInVehicleSeat(veh, -1) !== GetPlayerPed(String(source))) return;
-    Util.sendEventToEntityOwner(veh, 'vehicles:setEngineState', netId, true);
+    setEngineState(veh, true);
   }
 
   /**

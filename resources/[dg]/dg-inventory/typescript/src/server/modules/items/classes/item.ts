@@ -144,7 +144,6 @@ export class Item {
     // Check if item is in player inventory
     const playerInvId = concatId('player', Util.getCID(src));
     if (playerInvId !== this.inventory.id) {
-      this.logger.error(`Player tried to use/(un)bind item ${this.id} in different inventory ${this.inventory}`);
       return false;
     }
     return true;

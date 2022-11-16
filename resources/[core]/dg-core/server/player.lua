@@ -102,23 +102,9 @@ function DGCore.Player.CheckPlayerData(src, PlayerData)
   PlayerData.metadata['isdead'] = PlayerData.metadata['isdead'] or false
   PlayerData.metadata['inlaststand'] = PlayerData.metadata['inlaststand'] or false
   PlayerData.metadata['armor'] = PlayerData.metadata['armor'] or 0
-  PlayerData.metadata['ishandcuffed'] = PlayerData.metadata['ishandcuffed'] or false
-  PlayerData.metadata['tracker'] = PlayerData.metadata['tracker'] or false
-  PlayerData.metadata['injail'] = PlayerData.metadata['injail'] or 0
-  PlayerData.metadata['jailitems'] = PlayerData.metadata['jailitems'] or {}
-  PlayerData.metadata['status'] = PlayerData.metadata['status'] or {}
-  PlayerData.metadata['fitbit'] = PlayerData.metadata['fitbit'] or {}
-  PlayerData.metadata['commandbinds'] = PlayerData.metadata['commandbinds'] or {}
   PlayerData.metadata['callsign'] = PlayerData.metadata['callsign'] or 'NO CALLSIGN'
-  PlayerData.metadata['fingerprint'] = PlayerData.metadata['fingerprint'] or DGCore.Player.CreateFingerId()
-  PlayerData.metadata['criminalrecord'] = PlayerData.metadata['criminalrecord'] or {
-    ['hasRecord'] = false,
-    ['date'] = nil
-  }
   PlayerData.metadata['licences'] = PlayerData.metadata['licences'] or {
     ['driver'] = true,
-    ['business'] = false,
-    ['weapon'] = false
   }
   PlayerData.metadata['inside'] = PlayerData.metadata['inside'] or {
     house = nil,
@@ -126,6 +112,8 @@ function DGCore.Player.CheckPlayerData(src, PlayerData)
       id = nil,
     }
   }
+  PlayerData.metadata.dna = PlayerData.metadata.dna or generateDNA()
+  PlayerData.metadata.jailMonths = PlayerData.metadata.jailMonths or -1
 
   DGCore.Player.CreatePlayer(PlayerData)
 end
@@ -172,7 +160,6 @@ function DGCore.Player.CreatePlayer(PlayerData)
   end
 
   self.Functions.SetMetaData = function(meta, val)
-    local meta = meta:lower()
     if val ~= nil then
       self.PlayerData.metadata[meta] = val
       self.Functions.UpdatePlayerData()
@@ -191,6 +178,8 @@ function DGCore.Player.CreatePlayer(PlayerData)
   Player(self.PlayerData.source).state:set('steamId', self.PlayerData.steamid, true)
   if (self.PlayerData.citizenid) then
     Player(self.PlayerData.source).state:set('cid', self.PlayerData.citizenid, true)
+  else
+    print('CORE: DID NOT SET CID TO PLAYER STATE')
   end
 
   -- At this point we are safe to emit new instance to third party resource for load handling
@@ -336,21 +325,18 @@ end
 
 -- Util Functions
 
-function DGCore.Player.CreateFingerId()
-  local UniqueFound = false
-  local FingerId = nil
-  while not UniqueFound do
-    FingerId = tostring(DGCore.Shared.RandomStr(2) ..
-      DGCore.Shared.RandomInt(3) ..
-      DGCore.Shared.RandomStr(1) ..
-      DGCore.Shared.RandomInt(2) .. DGCore.Shared.RandomStr(3) .. DGCore.Shared.RandomInt(4))
-    local query = '%' .. FingerId .. '%'
-    local result = exports['dg-sql']:query('SELECT COUNT(*) as count FROM character_data WHERE `metadata` LIKE ?', { query })
+function generateDNA()
+  local uniqueFound = false
+  local dna
+  while not uniqueFound do
+    dna = tostring(DGCore.Shared.RandomStr(2)..DGCore.Shared.RandomInt(3)..DGCore.Shared.RandomStr(1)..DGCore.Shared.RandomInt(2)..DGCore.Shared.RandomStr(3)..DGCore.Shared.RandomInt(4))
+    local query = '%'..dna..'%'
+    local result = DGX.SQL.query('SELECT COUNT(*) as count FROM character_data WHERE `metadata` LIKE ?', { query })
     if result[1].count == 0 then
-      UniqueFound = true
+      uniqueFound = true
     end
   end
-  return FingerId
+  return dna
 end
 
 function DGCore.Player.GeneratePhoneNumber()

@@ -1,4 +1,4 @@
-import { Events, Keys, Notifications, Peek, RPC, Taskbar, UI, Util } from '@dgx/client';
+import { Events, Keys, Notifications, Peek, RPC, Taskbar, UI, Util, Police } from '@dgx/client';
 
 import { toggleVehicleDoor } from './doors';
 
@@ -74,7 +74,7 @@ RPC.register('vehicles:trunk:canEnterVehicle', (netId: number) => {
   return canEnterVehicleTrunk(vehicle);
 });
 
-const getInTrunk = async (vehicle: number) => {
+const getInTrunk = async (vehicle: number, force = false) => {
   if (isInTrunk) return;
   clearTrunkThread();
   if (!canEnterVehicleTrunk(vehicle)) {
@@ -95,8 +95,13 @@ const getInTrunk = async (vehicle: number) => {
 
   isInTrunk = true;
   setTrunkCamActive(true);
-  UI.showInteraction(`${Keys.getBindedKey('+GeneralUse')} - Stap Uit | ${Keys.getBindedKey('+housingMain')} - Koffer`);
+  if (!force) {
+    UI.showInteraction(
+      `${Keys.getBindedKey('+GeneralUse')} - Stap Uit | ${Keys.getBindedKey('+housingMain')} - Koffer`
+    );
+  }
   Events.emitNet('vehicles:trunk:enter', NetworkGetNetworkIdFromEntity(vehicle));
+  Police.pauseCuffAnimation(true);
 
   trunkThread = setInterval(() => {
     const vehicleAttachedTo = GetEntityAttachedTo(ped);
@@ -109,6 +114,8 @@ const getInTrunk = async (vehicle: number) => {
 
 // We keep in mind that veh can be undefined to be able to leave trunk when vehicle gets deleted
 const getOutOfTrunk = (vehicle?: number, force = false) => {
+  Police.pauseCuffAnimation(false);
+
   if (vehicle) {
     vehicle = DoesEntityExist(vehicle) ? vehicle : undefined;
   }
@@ -174,7 +181,7 @@ Events.onNet('vehicles:trunk:forceEnter', (netId: number) => {
   if (isInTrunk) return;
   const vehicle = NetworkGetEntityFromNetworkId(netId);
   if (!vehicle || !DoesEntityExist(vehicle)) return;
-  getInTrunk(vehicle);
+  getInTrunk(vehicle, true);
 });
 
 Events.onNet('vehicles:trunk:forceLeave', (netId: number) => {

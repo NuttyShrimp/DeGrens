@@ -89,14 +89,29 @@ class Util extends UtilShared {
   }
 
   getClosestPlayer = (src: number, maxDistance = 2) => {
+    const _DGCore = global.exports['dg-core'].GetSharedObject() as Server;
     const originCoords = this.getPlyCoords(src);
-    const players = DGCore.Functions.GetPlayers();
+    const players = _DGCore.Functions.GetPlayers();
     for (const plyId of players) {
       if (plyId === src) continue;
       const playerCoords = this.getPlyCoords(plyId);
       if (originCoords.distance(playerCoords) > maxDistance) continue;
       return plyId;
     }
+  };
+
+  getAllPlayersInRange = (src: number, maxDistance = 2) => {
+    const _DGCore = global.exports['dg-core'].GetSharedObject() as Server;
+    const originCoords = this.getPlyCoords(src);
+    const players = _DGCore.Functions.GetPlayers();
+    const playerIds: number[] = [];
+    for (const plyId of players) {
+      if (plyId === src) continue;
+      const playerCoords = this.getPlyCoords(plyId);
+      if (originCoords.distance(playerCoords) > maxDistance) continue;
+      playerIds.push(plyId);
+    }
+    return playerIds;
   };
 
   isAnyVehicleInRange = (coords: Vec3, range: number) => {
@@ -164,6 +179,20 @@ class Util extends UtilShared {
   getAmountOfPlayers = () => {
     return (DGCore.Functions.GetPlayers() ?? []).length;
   };
+
+  getClosestPlayerOutsideVehicle = (src: number, maxDistance = 2) => {
+    const _DGCore = global.exports['dg-core'].GetSharedObject() as Server;
+    const originCoords = this.getPlyCoords(src);
+    const players = _DGCore.Functions.GetPlayers();
+    for (const plyId of players) {
+      if (plyId === src) continue;
+      const ped = GetPlayerPed(String(plyId));
+      if (GetVehiclePedIsIn(ped, false) !== 0) continue;
+      const playerCoords = this.getEntityCoords(ped);
+      if (originCoords.distance(playerCoords) > maxDistance) continue;
+      return plyId;
+    }
+  };
 }
 
 export class Sounds {
@@ -183,6 +212,14 @@ export class Sounds {
 export class Status {
   public addStatusToPlayer = (plyId: number, statusName: StatusName) => {
     global.exports['dg-misc'].addStatusToPlayer(plyId, statusName);
+  };
+
+  public getPlayerStatuses = (plyId: number): StatusName[] => {
+    return global.exports['dg-misc'].getPlayerStatuses(plyId);
+  };
+
+  public doesPlayerHaveStatus = (plyId: number, status: StatusName) => {
+    return this.getPlayerStatuses(plyId).find(s => s === status) !== undefined;
   };
 }
 

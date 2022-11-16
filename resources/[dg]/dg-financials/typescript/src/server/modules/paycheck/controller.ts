@@ -1,4 +1,4 @@
-import { Jobs } from '@dgx/server';
+import { Jobs, Util } from '@dgx/server';
 
 import { isPlyInLoc } from '../bank/helpers/location';
 
@@ -16,19 +16,12 @@ RegisterCommand(
   true
 );
 
-on('DGCore:server:playerLoaded', async (playerData: PlayerData) => {
-  await seedPlyInCache(playerData.source);
-  const job = Jobs.getCurrentJob(playerData.source);
-  checkInterval(playerData.citizenid, job);
+on('DGCore:server:playerLoaded', (playerData: PlayerData) => {
+  seedPlyInCache(playerData.source);
 });
 
-on('DGCore:server:playerUnloaded', (src: number, cid: number) => {
-  checkInterval(cid, null);
-});
-
-on('dg-jobs:signin:update', (src: number, job: string) => {
-  const Player = DGCore.Functions.GetPlayer(src);
-  const cid = Player.PlayerData.citizenid;
+on('jobs:server:signin:update', (src: number, job: string | null) => {
+  const cid = Util.getCID(src);
   checkInterval(cid, job);
 });
 

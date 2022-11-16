@@ -1,0 +1,32 @@
+{
+  "legion_square": {
+    "center": { "x": 163.65, "y": -1022.54, "z": 21.8 },
+    "heading": 251,
+    "length": 21.8,
+    "width": 72.6
+  },
+  "strawberry": {
+    "center": { "x": 30.36, "y": -1541.4, "z": 29.34 },
+    "heading": 50,
+    "length": 70,
+    "width": 27.8
+  },
+  "la_mesa": {
+    "center": { "x": 815.93, "y": -1506.2, "z": 28.46 },
+    "heading": 293,
+    "length": 60,
+    "width": 20
+  },
+  "little_seoul": {
+    "center": { "x": -690.8, "y": -837.04, "z": 23.95 },
+    "heading": 0,
+    "length": 67.8,
+    "width": 23.4
+  },
+  "hawick_avenue": {
+    "center": { "x": 294.71, "y": -247.19, "z": 54.06 },
+    "heading": 339,
+    "length": 69.4,
+    "width": 22.6
+  }
+}

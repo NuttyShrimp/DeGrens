@@ -308,7 +308,8 @@ export const assignRank = async (src: number, target: number, rank: number) => {
     src
   );
   Notifications.add(src, `${target} is nu ${jobConfig.grades[rank]}`, 'success');
-  emitNet('dg-jobs:signin:update', src, job, entry.rank);
+  emitNet('jobs:client:signin:update', src, job, entry.rank);
+  emit('jobs:server:signin:update', src, job, entry.rank);
 };
 
 export const toggleSpecialty = async (src: number, target: number, speciality: string, type: 'add' | 'remove') => {

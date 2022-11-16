@@ -20,7 +20,7 @@ Events.onNet('storerobbery:server:robRegister', async (src: number, register: Ve
 
   const [min, max] = (await getConfig()).register.rollAmount;
   const amount = Util.getRndInteger(min, max);
-  Inventory.addItemToPlayer(src, 'moneyroll', amount);
+  Inventory.addItemToPlayer(src, 'money_roll', amount);
 
   stateManager.setRegisterAsRobbed(register);
   mainLogger.info(`Player ${src} has robbed a register and received ${amount} moneyrolls`);

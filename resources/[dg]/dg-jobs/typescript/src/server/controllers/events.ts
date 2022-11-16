@@ -2,7 +2,16 @@ import { Admin, Auth, Events, RPC, Util, Jobs, Config } from '@dgx/server';
 import { syncFishingJobToClient } from 'modules/fishing/service.fishing';
 import { syncSanitationJobToClient } from 'modules/sanitation/service.sanitation';
 import { syncScrapyardJobToClient } from 'modules/scrapyard/service.scrapyard';
-import { getLocations, getPlayerJob, openSignInMenu, signIn, signOut } from '../services/signin';
+import {
+  getAmountsForEachJob,
+  getLocations,
+  getPlayerJob,
+  openSignInMenu,
+  playerLoaded,
+  playerUnloaded,
+  signIn,
+  signOut,
+} from '../services/signin';
 import {
   assignRank,
   getPlayerInfoForJob,
@@ -16,9 +25,20 @@ import {
   removeWhitelist,
 } from '../services/whitelist';
 
+global.exports('signPlayerOutOfAnyJob', (plyId: number) => {
+  const job = getPlayerJob(plyId);
+  if (!job) return;
+  signOut(plyId, job);
+});
+
 Auth.onAuth(src => {
   const whitelistedJobs = getWhitelistedJobsForPlayer(src);
   Events.emitNet('jobs:client:whitelistedJobs', src, whitelistedJobs);
+  Events.emitNet('jobs:client:updateAmountCache', src, getAmountsForEachJob());
+});
+
+on('jobs:server:signin:update', () => {
+  Events.emitNet('jobs:client:updateAmountCache', -1, getAmountsForEachJob());
 });
 
 Events.onNet('jobs:server:signIn:openDutyBoard', (src, locId: number) => {
@@ -32,6 +52,14 @@ Events.onNet('jobs:server:signIn', (src, job: string) => {
 
 Events.onNet('jobs:server:signOut', (src, job: string) => {
   signOut(src, job);
+});
+
+on('DGCore:server:playerLoaded', (playerData: PlayerData) => {
+  playerLoaded(playerData.source, playerData.citizenid);
+});
+
+on('DGCore:server:playerUnloaded', (plyId: number, cid: number) => {
+  playerUnloaded(plyId, cid);
 });
 
 Events.onNet('jobs:whitelist:server:openJobAllowlist', (src, filter?: string) => {

@@ -74,7 +74,7 @@ export const startUsingNos = (veh: number) => {
 
 export const purge = (veh: number) => {
   addPurgePtfx(veh);
-  Sounds.playOnEntity('nos-purge-sound', 'nospurge', 'DLC_NUTTY_SOUNDS', veh);
+  Sounds.playOnEntity(`nos_purge_sound_${veh}`, 'nospurge', 'DLC_NUTTY_SOUNDS', veh);
   const currentAmount = getVehicleNosAmount(veh);
   setVehicleNosAmount(veh, currentAmount - 1);
   Events.emitNet('vehicles:nos:save', NetworkGetNetworkIdFromEntity(veh));

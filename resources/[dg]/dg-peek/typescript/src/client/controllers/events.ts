@@ -3,7 +3,7 @@ import { Keys, UI, Util, RayCast, Jobs } from '@dgx/client';
 import { entryManager } from '../classes/entryManager';
 import { stateManager } from '../classes/stateManager';
 import { activateZone, deactivateZone, getCurrentEntity, updateCurrentEntity } from '../helpers/actives';
-import { setCtxJob, setCtxPlayerData } from '../helpers/context';
+import { setCtxPlayerData } from '../helpers/context';
 
 let closingPromiseResolve: (() => void) | null = null;
 
@@ -11,8 +11,6 @@ on('onResourceStart', (resName: string) => {
   if (resName !== GetCurrentResourceName()) return;
   if (!DGCore) return;
   setCtxPlayerData(DGCore.Functions.GetPlayerData());
-  const job = Jobs.getCurrentJob();
-  setCtxJob({ name: job.name, grade: job.rank });
 });
 
 UI.RegisterUICallback('peek:preventShow', (_, cb) => {
@@ -50,10 +48,6 @@ onNet('DGCore:Player:SetPlayerData', (data: PlayerData) => {
   setCtxPlayerData(data);
 });
 
-onNet('dg-jobs:signin:update', (name: string | null, grade: number | null) => {
-  setCtxJob({ name, grade });
-});
-
 RayCast.onEntityChange((entity, coords) => {
   updateCurrentEntity(entity != undefined && coords != undefined ? { entity, coords } : null);
   stateManager.createCheckThread();
@@ -78,6 +72,9 @@ Keys.onPress('playerPeek', isDown => {
 
 on('dg-ui:application-closed', (appName: string) => {
   if (appName !== 'peek') return;
-  if (closingPromiseResolve === null) return;
-  closingPromiseResolve();
+  // lets try if this works for the scuffed UI focus
+  setTimeout(() => {
+    if (closingPromiseResolve === null) return;
+    closingPromiseResolve();
+  }, 100);
 });
