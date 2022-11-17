@@ -8,7 +8,7 @@ RegisterUICallback('phone/contacts/getContacts', function(data, cb)
 	end)
 end)
 
-RegisterUICallback('phone/contacts/update', function(data, cb)
+RegisterUICallback('phone/contacts/edit', function(data, cb)
 	DGCore.Functions.TriggerCallback('dg-phone:server:updateContact', function()
 		cb({data = {}, meta={ok=true, message="done"}})
 	end, data)
