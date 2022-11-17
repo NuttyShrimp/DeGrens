@@ -1,4 +1,3 @@
-export const getCurrentEnv = () =>
-  GetConvar('is_production', 'true') === 'false' ? 'development' : process.env.NODE_ENV ?? 'development';
+import { Util } from '@dgx/server';
 
-export const isDevEnv = () => getCurrentEnv() === 'development';
+export const getCurrentEnv = () => (Util.isDevEnv() ? 'development' : process.env.NODE_ENV ?? 'development');
