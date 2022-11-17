@@ -2827,5 +2827,25 @@
       "x": 2,
       "y": 2
     }
+  },
+  {
+    "useable": true,
+    "name": "sandwich",
+    "label": "Sandwich",
+    "image": "sandwich.png",
+    "size": {
+      "x": 1,
+      "y": 1
+    }
+  },
+  {
+    "useable": true,
+    "name": "water_bottle",
+    "label": "Water",
+    "image": "water_bottle.png",
+    "size": {
+      "x": 1,
+      "y": 1
+    }
   }
 ]

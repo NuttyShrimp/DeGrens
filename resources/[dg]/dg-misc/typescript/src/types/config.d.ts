@@ -41,4 +41,18 @@ declare namespace Config {
     phone: PhoneConfig;
     radio: RadioConfig;
   }
+
+
+  interface Consumable {
+    name: string;
+    gain: number;
+  }
+
+  interface Consumables {
+    drink: {
+      normal: Consumable[];
+      alcohol: Consumable[];
+    };
+    food: Consumable[];
+  }
 }

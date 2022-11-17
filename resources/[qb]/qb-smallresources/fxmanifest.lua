@@ -13,7 +13,7 @@ shared_scripts {
 
 server_script {
     "@ts-shared/server/server.js",
-    'server/*.lua'
+    'server/main.lua'
 }
 client_script {
     "@ts-shared/client/client.js",
@@ -21,10 +21,7 @@ client_script {
 }
 
 data_file 'FIVEM_LOVES_YOU_4B38E96CC036038F' 'events.meta'
-data_file 'FIVEM_LOVES_YOU_341B23A2F0E0F131' 'popgroups.ymt'
 
 files {
 	'events.meta',
-	'popgroups.ymt',
-	'relationships.dat'
 }

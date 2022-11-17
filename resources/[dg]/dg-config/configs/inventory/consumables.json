@@ -1,0 +1,22 @@
+{
+  "drink": {
+    "normal": [
+      {
+        "name": "water_bottle",
+        "gain": 20
+      }
+    ],
+    "alcohol": [
+      {
+        "name": "beer",
+        "gain": 20
+      }
+    ]
+  },
+  "food": [
+    {
+      "name": "sandwich",
+      "gain": 20
+    }
+  ]
+}
