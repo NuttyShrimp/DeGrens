@@ -309,8 +309,8 @@ local playertables = { -- Add tables as needed
 function DGCore.Player.DeleteCharacter(source, citizenid)
   local src = source
   local steamid = DGCore.Functions.GetIdentifier(src, 'steam')
-  local result = exports['dg-sql']:scalar('SELECT steamid FROM characters where citizenid = ?', { citizenid })
-  if steamid == result then
+  local result = exports['dg-sql']:scalar('SELECT steamid FROM characters WHERE citizenid = ?', { citizenid })
+  if steamid == result.steamid then
     for k, v in pairs(playertables) do
       exports['dg-sql']:query('DELETE FROM ' .. v.table .. ' WHERE citizenid = ?', { citizenid })
     end
