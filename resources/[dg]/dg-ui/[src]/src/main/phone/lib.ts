@@ -147,6 +147,10 @@ const stringEvents = ['onAccept', 'onDecline'];
 export const addNotification = (
   notification: Omit<Phone.Notifications.Notification, 'icon'> & { icon: string | Phone.Notifications.Icon }
 ) => {
+  const charState = getState<Character>('character');
+  if (!charState.hasPhone) {
+    return;
+  }
   // Prevent duplicate notifications
   removeNotification(notification.id);
   // Kan naam vam app zijn of FA icon met defaults

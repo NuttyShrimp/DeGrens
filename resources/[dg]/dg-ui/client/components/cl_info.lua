@@ -23,6 +23,7 @@ seedCharData = function()
       phone = PlyData.charinfo.phone,
       server_id = GetPlayerServerId(PlayerId()),
       hasVPN = DGX.Inventory.doesPlayerHaveItems('vpn'),
+      hasPhone = DGX.Inventory.doesPlayerHaveItems("phone"),
       cash = PlyData.charinfo.cash,
     }
     characterInfo = newCharacterInfo

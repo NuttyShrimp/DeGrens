@@ -21,6 +21,7 @@ declare interface Character {
   phone: string;
   server_id: number;
   hasVPN: boolean;
+  hasPhone: boolean;
   cash: number;
 }
 
