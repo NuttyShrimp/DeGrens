@@ -1,4 +1,4 @@
-import { Events } from '@dgx/server';
+import { Chat, Events, Util } from '@dgx/server';
 
 import { getUICommands } from '../commands/service.commands';
 import { ACBan } from '../penalties/service.penalties';
@@ -31,4 +31,25 @@ export const checkBinds = async (src: number, binds: Record<Binds.bindNames, str
     }
   }
   Events.emitNet('admin:bind:check:response', src, binds);
+};
+
+export const announceMessage = (src: number, message: string[] | string) => {
+  if (src > 0) {
+    Util.Log(
+      'admin:announce',
+      {
+        message,
+      },
+      `${Util.getName(src)} heeft een announcement gemaakt in de server`,
+      src
+    );
+  }
+  if (Array.isArray(message)) {
+    message = message.join(' ');
+  }
+  Chat.sendMessage(-1, {
+    prefix: 'Announcement',
+    message,
+    type: 'error',
+  });
 };
