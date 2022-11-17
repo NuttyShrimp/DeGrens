@@ -159,8 +159,14 @@ RegisterNetEvent('dg-ui:reload', function()
 end)
 DGX.Events.on('dg-misc:configChanged', function(data)
   if not data then return end
-  compassWaitMS = 1000 / data.hud.compass.fps
-  shouldShowCompassInVehicle = data.hud.compass.show
+  if not data.hud then return end
+  if not data.hud.compass then return end
+  if data.hud.compass.fps then
+    compassWaitMS = 1000 / data.hud.compass.fps
+  end
+  if data.hud.compass.show then
+    shouldShowCompassInVehicle = data.hud.compass.show
+  end
 end)
 --- endregion
 --- region Loops
