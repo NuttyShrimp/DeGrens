@@ -1,8 +1,7 @@
-import { isDevEnv } from '../../../shared/sh_util';
-
+import { Util } from '@dgx/client';
 import { createCurrentSpotBox, removeCurrentSpotBox } from './service.dev';
 
-if (isDevEnv()) {
+if (Util.isDevEnv()) {
   onNet('vehicles:dev:currentSpot', (spot: Garage.ParkingSpot) => {
     if (spot) {
       createCurrentSpotBox(spot);

@@ -1,7 +1,6 @@
 import { Util } from '@dgx/server';
 import { Vector3 } from '@dgx/shared';
 
-import { isDevEnv } from '../../../../shared/sh_util';
 import { getGarageById } from '../service.garages';
 
 export class GarageThread {
@@ -54,7 +53,7 @@ export class GarageThread {
         if (this.nearGarageSpot) {
           this.nearGarageSpot = false;
           emitNet('dg-ui:closeApplication', this.source, 'interaction');
-          if (isDevEnv()) {
+          if (Util.isDevEnv()) {
             emitNet('vehicles:dev:currentSpot', this.source, null);
           }
         }
@@ -72,7 +71,7 @@ export class GarageThread {
           },
           true
         );
-        if (isDevEnv()) {
+        if (Util.isDevEnv()) {
           emitNet('vehicles:dev:currentSpot', this.source, this.currentSpot);
         }
       }

@@ -4,7 +4,7 @@ import * as Sentry from '@sentry/node';
 import winston from 'winston';
 import winstonSentry from 'winston-sentry-log';
 
-import { getCurrentEnv } from '../shared/sh_util';
+import { getCurrentEnv } from './sv_util';
 
 import { name, sentry_dsn, version } from './../../package.json';
 
