@@ -1,3 +1,5 @@
+import { Config } from '@dgx/server';
+
 let config: InventoryConfig | null;
 export const getConfig = () => {
   if (config === null) {
@@ -6,6 +8,7 @@ export const getConfig = () => {
   return config;
 };
 
-export const setConfig = (data: InventoryConfig) => {
-  config = data;
+export const loadConfig = async () => {
+  await Config.awaitConfigLoad();
+  config = Config.getConfigValue('inventory.config');
 };

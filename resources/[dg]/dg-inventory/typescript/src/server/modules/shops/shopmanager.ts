@@ -1,5 +1,5 @@
 import { Config, Financials, Util } from '@dgx/server';
-import itemDataManager from 'modules/itemdata/classes/itemdatamanager';
+import itemDataManager from 'classes/itemdatamanager';
 import { mainLogger } from 'sv_logger';
 import winston from 'winston';
 

@@ -1,6 +1,6 @@
 import { Events, UI } from '@dgx/client';
 import contextManager from 'classes/contextmanager';
-import itemDataManager from 'modules/itemdata/classes/itemdatamanager';
+import itemDataManager from 'classes/itemdatamanager';
 import { doDropAnimation } from './../util';
 
 on('dg-ui:reload', () => {

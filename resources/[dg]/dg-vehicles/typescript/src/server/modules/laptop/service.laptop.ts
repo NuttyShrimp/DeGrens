@@ -18,7 +18,7 @@ export const loadConfigInfo = async () => {
   const laptopItemsConfig =
     Config.getConfigValue<Record<string, Omit<Laptop.Bennys.Item, 'image' | 'category'>[]>>('vehicles.laptop.items');
   storeItems = [];
-  await Util.awaitCondition(() => Inventory.isItemDataLoaded());
+  await Inventory.awaitItemDataLoad();
   for (const itemCategory in laptopItemsConfig) {
     laptopItemsConfig[itemCategory].forEach(i => {
       const image = Inventory.getItemData(i.item)?.image ?? '';

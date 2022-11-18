@@ -1,6 +1,6 @@
 import { Events, Util, RPC } from '@dgx/server';
 import inventoryManager from 'modules/inventories/manager.inventories';
-import itemDataManager from 'modules/itemdata/classes/itemdatamanager';
+import itemDataManager from 'classes/itemdatamanager';
 import itemManager from 'modules/items/manager.items';
 import { getConfig } from 'services/config';
 import { concatId, splitId } from '../util';

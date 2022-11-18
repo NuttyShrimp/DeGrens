@@ -7,7 +7,7 @@ import { mainLogger } from 'sv_logger';
 import { doRectanglesOverlap } from './../helpers.inventories';
 import winston from 'winston';
 import inventoryManager from '../manager.inventories';
-import itemDataManager from 'modules/itemdata/classes/itemdatamanager';
+import itemDataManager from 'classes/itemdatamanager';
 import { getConfig } from 'services/config';
 import { splitId } from '../../../util';
 import contextManager from 'classes/contextmanager';
@@ -37,7 +37,7 @@ export class Inv {
     this._identifier = identifier;
     this.items = new Set();
 
-    const fixedSizes = getConfig()?.amountOfSlots;
+    const fixedSizes = getConfig().amountOfSlots;
     this.size = fixedSizes[this.type] ?? 0;
 
     if (this.type === 'container') {

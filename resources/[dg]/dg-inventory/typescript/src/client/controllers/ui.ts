@@ -1,6 +1,6 @@
 import { UI, RPC, Events } from '@dgx/client';
 import contextManager from 'classes/contextmanager';
-import itemDataManager from 'modules/itemdata/classes/itemdatamanager';
+import itemDataManager from 'classes/itemdatamanager';
 
 UI.RegisterUICallback('inventory/getData', async (_, cb) => {
   const secondary = await contextManager.getSecondary();

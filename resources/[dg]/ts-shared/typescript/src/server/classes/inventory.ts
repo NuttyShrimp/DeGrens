@@ -1,4 +1,4 @@
-import { Util } from './index';
+import { Util } from '../classes';
 
 class Inventory {
   private usageHandlers: Map<string, Inventory.UsageHandler[]>;
@@ -43,6 +43,9 @@ class Inventory {
     return global.exports['dg-inventory'].getAllItemData();
   };
 
+  /**
+   * Make sure to await itemdata load with awaitItemDataLoad when using this in resource start function
+   */
   public getItemData = (itemName: string): Inventory.ItemData | undefined => {
     return global.exports['dg-inventory'].getItemData(itemName);
   };
@@ -173,8 +176,8 @@ class Inventory {
     this.updateHandlers.set(type, allHandlerData);
   };
 
-  public isItemDataLoaded = () => {
-    return global.exports['dg-inventory'].isItemDataLoaded();
+  public awaitItemDataLoad = (): Promise<void> => {
+    return Util.awaitCondition(() => global.exports['dg-inventory'].isItemDataLoaded());
   };
 
   public createScriptedStash = (identifier: string, size: number, allowedItems?: string[]) => {

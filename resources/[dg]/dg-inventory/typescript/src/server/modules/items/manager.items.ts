@@ -1,4 +1,4 @@
-import { Financials, Util } from '@dgx/server';
+import { Util } from '@dgx/server';
 import { DGXEvent, EventListener, Export, ExportRegister } from '@dgx/server/decorators';
 import { mainLogger } from 'sv_logger';
 import { concatId } from '../../util';
@@ -7,7 +7,7 @@ import contextManager from '../../classes/contextmanager';
 import inventoryManager from '../inventories/manager.inventories';
 import { Item } from './classes/item';
 import { ON_CREATE } from './helpers.items';
-import itemDataManager from 'modules/itemdata/classes/itemdatamanager';
+import itemDataManager from 'classes/itemdatamanager';
 import repository from 'services/repository';
 
 @EventListener()

@@ -33,8 +33,7 @@ class ItemDataManager extends Util.Singleton<ItemDataManager>() {
       }
       this.itemData[i.name] = i;
     });
-    Events.emitNet('inventory:client:updateAllItemData', -1, this.itemData);
-    this.logger.info('Itemdata has been (re)loaded');
+    this.logger.info('Itemdata has been loaded');
     this.loaded = true;
   };
 

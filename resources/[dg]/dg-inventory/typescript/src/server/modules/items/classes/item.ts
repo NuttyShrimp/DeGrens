@@ -4,7 +4,7 @@ import winston from 'winston';
 import inventoryManager from '../../inventories/manager.inventories';
 import repository from 'services/repository';
 import { Inv } from 'modules/inventories/classes/inv';
-import itemDataManager from 'modules/itemdata/classes/itemdatamanager';
+import itemDataManager from 'classes/itemdatamanager';
 import itemManager from '../manager.items';
 import locationManager from 'modules/locations/manager.locations';
 import { concatId, splitId } from '../../../util';
