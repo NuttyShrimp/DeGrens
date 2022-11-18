@@ -183,6 +183,20 @@ class BennysManager extends Util.Singleton<BennysManager>() {
     );
   };
 
+  @RPCEvent('vehicles:bennys:getRepairTimes')
+  private getRepairTimes = (plyId: number, spotId: string) => {
+    const repairData = this.spotData.get(spotId)?.repair;
+    if (!repairData) {
+      this.logger.warn(`Could not get data of spot ${spotId} for getting repair times`);
+      return;
+    }
+    const maxTimePerRepair = serverConfig.bennys.fullTaskBarTime / 2;
+    return {
+      body: maxTimePerRepair * (1 - repairData.body / 1000),
+      engine: maxTimePerRepair * (1 - repairData.engine / 1000),
+    };
+  };
+
   public playerDropped = (plyId: number) => {
     const spotId = this.getSpotByPlyId(plyId);
     if (!spotId) return;
