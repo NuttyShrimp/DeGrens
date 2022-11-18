@@ -1,15 +1,19 @@
 window.addEventListener('message', function (e) {
   if (e.data.shutDown) {
-    cleanupScreen();
+    const video = document.querySelector('#bg > video');
+    if (video) {
+      video.pause();
+      video.currentTime = 0;
+    }
     return;
   }
   if (e.data.setEnv !== undefined) {
     const logo = document.querySelector('.logo');
     if (!logo) {
-      console.error("Could not find logo element");
+      console.error('Could not find logo element');
       return;
     }
-    logo.src = e.data.setEnv ? "imgs/logo.png" : 'imgs/logo-dev.png'
+    logo.src = e.data.setEnv ? 'imgs/logo.png' : 'imgs/logo-dev.png';
   }
 });
 

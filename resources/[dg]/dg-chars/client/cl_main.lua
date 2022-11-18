@@ -26,7 +26,7 @@ setupCharMenu = function()
       debug("Waiting for NUI to mount...")
       Wait(10)
     end
-    TriggerEvent("loadscreen:disableScree")
+    TriggerEvent("loadscreen:disableScreen")
     DoScreenFadeIn(1)
     openCharUI()
   end)
