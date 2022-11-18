@@ -42,7 +42,7 @@ export const clockPlayerIn = (src: number, shop: string) => {
 
 export const clockPlayerOut = (src: number) => {
   for (const shop in activeMechanics) {
-    activeMechanics[shop].filter(serverId => serverId !== Number(src));
+    activeMechanics[shop] = activeMechanics[shop].filter(serverId => serverId !== Number(src));
   }
 };
 
