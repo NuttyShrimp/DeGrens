@@ -113,8 +113,8 @@ declare interface FillableIconProps {
 
 export const FillableIcon: FC<FillableIconProps> = props => {
   const [prevVal, setPrevVal] = useState(0);
-  const targetHeight = useVhToPixel(props.height * ((100 - props.value) / 100));
-  const previousHeight = useVhToPixel(props.height * ((100 - prevVal) / 100));
+  const targetHeight = useVhToPixel(props.height * ((100 - (props.value ?? 0)) / 100));
+  const previousHeight = useVhToPixel(props.height * ((100 - (prevVal ?? 0)) / 100));
   const margin = useVhToPixel(0.7);
   const [ref, { width, height }] = useMeasure();
   // TODO, move to transition to make it usable to go from old values
