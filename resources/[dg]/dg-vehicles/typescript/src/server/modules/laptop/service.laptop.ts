@@ -1,4 +1,4 @@
-import { Config, Events, Financials, Inventory, Phone, Util } from '@dgx/server';
+import { Config, Events, Financials, Inventory, Notifications, Phone, Util } from '@dgx/server';
 
 let storeItems: Laptop.Bennys.Item[] = [];
 let pickupZones: Laptop.Bennys.PickUp[] = [];
@@ -60,6 +60,7 @@ export const doPurchase = async (src: number, items: Record<string, number>) => 
 export const receivePurchasedItems = (src: number) => {
   const cid = Util.getCID(src);
   if (!pendingPickups[cid]) {
+    Notifications.add(src, 'Ik heb niks voor u...', 'error');
     return;
   }
   for (const item in pendingPickups[cid].items) {
