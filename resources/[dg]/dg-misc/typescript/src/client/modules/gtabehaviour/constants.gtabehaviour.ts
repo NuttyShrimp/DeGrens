@@ -55,7 +55,7 @@ export const DENSITY_SETTINGS = {
   scenario: 0.8,
 };
 
-export const HIDDEN_HUD_COMPONENT = [1, 2, 3, 4, 7, 9, 13, 14, 17, 19, 20, 21, 22];
+export const HIDDEN_HUD_COMPONENT = [1, 3, 4, 7, 9, 13, 14, 17, 19, 20, 21, 22];
 
 // https://docs.altv.mp/gta/articles/ped/flags.html
 // https://wiki.rage.mp/index.php?title=Player_Config_Flags
