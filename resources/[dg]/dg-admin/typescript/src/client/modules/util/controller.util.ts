@@ -12,6 +12,7 @@ Events.onNet('admin:util:setPedCoordsKeepVehicle', async (coords: Vec3) => {
     NewLoadSceneStart(coords.x, coords.y, zCoord, coords.x, coords.y, zCoord, 50, 0);
     await Util.awaitCondition(() => IsNetworkLoadingScene(), 1000);
     NewLoadSceneStop();
+    coords.z = zCoord;
     SetPedCoordsKeepVehicle(ped, ...Util.Vector3ToArray(coords));
 
     RequestCollisionAtCoord(...Util.Vector3ToArray(coords));
