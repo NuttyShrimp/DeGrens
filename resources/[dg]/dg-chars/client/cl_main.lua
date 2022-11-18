@@ -8,6 +8,7 @@ setupCharMenu = function()
       print('Awaiting Network sessiosn')
     end
     DGX.Events.awaitSession()
+
     print('DGX session started')
     local ped = PlayerPedId()
     setPlayerToWaitLoc()
@@ -25,8 +26,7 @@ setupCharMenu = function()
       debug("Waiting for NUI to mount...")
       Wait(10)
     end
-    ShutdownLoadingScreen()
-    ShutdownLoadingScreenNui()
+    TriggerEvent("loadscreen:disableScree")
     DoScreenFadeIn(1)
     openCharUI()
   end)
