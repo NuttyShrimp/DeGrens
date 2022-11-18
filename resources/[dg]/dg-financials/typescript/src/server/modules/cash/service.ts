@@ -41,6 +41,7 @@ export const removeCash = (src: number | string, amount: number, reason: string)
   }
   const cid = Player.PlayerData.citizenid;
   const cash = getCash(src);
+  amount = Number(amount.toFixed(0));
   if (cash < amount) {
     cashLogger.debug(`Player ${cid} does not have enough cash (${cash} < ${amount})`);
     return false;
@@ -58,7 +59,7 @@ export const removeCash = (src: number | string, amount: number, reason: string)
     `Cash has been removed from ${Util.getName(src)}`
   );
   updateMetadata(Player);
-  Events.emitNet('financials:client:cashChange', Number(src), cash, -amount);
+  Events.emitNet('financials:client:cashChange', Number(src), cash - amount, -amount);
   return true;
 };
 
@@ -75,8 +76,9 @@ export const addCash = (src: number | string, amount: number, reason: string) =>
   }
   const cid = Player.PlayerData.citizenid;
   const cash = getCash(src);
+  amount = Number(amount.toFixed(0));
   cashLogger.silly(`Player ${cid} has ${cash} cash, adding ${amount}`);
-  cashCache.set(cid, Number(cash) + Number(amount));
+  cashCache.set(cid, Number(cash) + amount);
   Util.Log(
     'cash:add',
     {
@@ -88,6 +90,6 @@ export const addCash = (src: number | string, amount: number, reason: string) =>
     `Cash has been added to ${Util.getName(src)}`
   );
   updateMetadata(Player);
-  Events.emitNet('financials:client:cashChange', Number(src), cash, amount);
+  Events.emitNet('financials:client:cashChange', Number(src), cash + amount, amount);
   return true;
 };
