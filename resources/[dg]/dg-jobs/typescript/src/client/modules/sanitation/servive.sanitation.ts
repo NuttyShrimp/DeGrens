@@ -42,10 +42,6 @@ export const setAssignedVehicle = (netId: typeof assignedVehicle) => {
         label: 'Vuiliszak Weggooien',
         action: (_, vehicle) => {
           if (!vehicle) return;
-          if (GetVehicleDoorAngleRatio(vehicle, 5) < 0.1) {
-            Notifications.add('Dit is nog dicht', 'error');
-            return;
-          }
           putBagInVehicle();
         },
         canInteract: vehicle => {
