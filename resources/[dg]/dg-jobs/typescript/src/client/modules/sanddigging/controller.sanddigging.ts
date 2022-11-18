@@ -15,7 +15,7 @@ Peek.addFlagEntry('isSanddiggingFuck', {
       icon: 'fas fa-shovel',
       label: 'Inklokken',
       action: () => {
-        Events.emitNet('materials:sanddigging:signIn');
+        Events.emitNet('jobs:sanddigging:signIn');
       },
     },
   ],
