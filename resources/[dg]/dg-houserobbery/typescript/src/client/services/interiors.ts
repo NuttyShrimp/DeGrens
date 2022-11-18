@@ -1,6 +1,6 @@
 import { Events, Interiors, Util } from '@dgx/client';
 
-import { selectedHouse, selectedHouseInfo, shellTypes } from '../modules/house/controller.house';
+import { getSelectedHouse, getSelectedHouseInfo, getShellTypes } from '../modules/house/controller.house';
 
 export const enterInterior = async () => {
   emitNet('InteractSound_SV:PlayOnSource', 'houses_door_open', 0.25);
@@ -8,14 +8,14 @@ export const enterInterior = async () => {
   DoScreenFadeOut(500);
   await Util.Delay(500);
 
-  const { size, coords } = selectedHouseInfo;
-  const isSuccess = await Interiors.createRoom(shellTypes[size], {
+  const { size, coords } = getSelectedHouseInfo();
+  const isSuccess = await Interiors.createRoom(getShellTypes()[size], {
     ...coords,
     z: coords.z - 50,
   });
   DoScreenFadeIn(250);
   if (!isSuccess) return;
-  Events.emitNet('houserobbery:server:enterHouse', selectedHouse);
+  Events.emitNet('houserobbery:server:enterHouse', getSelectedHouse());
 };
 
 export const leaveInterior = async () => {
@@ -25,7 +25,7 @@ export const leaveInterior = async () => {
   await Util.Delay(500);
 
   Interiors.exitRoom();
-  Events.emitNet('houserobbery:server:leaveHouse', selectedHouse);
+  Events.emitNet('houserobbery:server:leaveHouse', getSelectedHouse());
 
   DoScreenFadeIn(500);
   await Util.Delay(500);

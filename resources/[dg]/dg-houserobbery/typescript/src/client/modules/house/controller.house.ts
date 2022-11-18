@@ -3,12 +3,16 @@ import { Util } from '@dgx/shared';
 
 import { canSearchLocation, enterHouse, leaveHouse, lockHouse, searchLootLocation, unlockHouse } from './helpers.house';
 
-export let shellTypes: Record<string, string>;
+let shellTypes: Record<string, string>;
 
-export let selectedHouse: string = null;
-export let selectedHouseInfo: House.Data = null;
+let selectedHouse: string = null;
+let selectedHouseInfo: House.Data = null;
 let radiusBlip: any = null;
 let radiusBlipInterval: NodeJS.Timer = null;
+
+export const getShellTypes = () => shellTypes;
+export const getSelectedHouse = () => selectedHouse;
+export const getSelectedHouseInfo = () => selectedHouseInfo;
 
 global.asyncExports('canLootZone', (place: string) => canSearchLocation(selectedHouse, place));
 global.asyncExports('lootZone', (place: string, lootTable?: number) =>
