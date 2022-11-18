@@ -19,17 +19,18 @@ export class Business {
   }
 
   private setEmployees(employees: Business.Employee[]) {
-    employees
-      .sort((e1, e2) => {
-        const e1Role = this.roles.find(r => r.id === e1.role)!;
-        const e2Role = this.roles.find(r => r.id === e2.role)!;
-        return e2Role.permissions - e1Role.permissions;
-      })
-      .sort((e1, e2) => {
+    employees.sort((e1, e2) => {
+      if (e1.isOwner) return -1;
+      if (e2.isOwner) return 1;
+      const e1Role = this.roles.find(r => r.id === e1.role)!;
+      const e2Role = this.roles.find(r => r.id === e2.role)!;
+      const permDiff = e1Role.permissions - e2Role.permissions;
+      if (!permDiff) {
         if (e1.name < e2.name) return -1;
         if (e1.name > e2.name) return 1;
-        return 0;
-      });
+      }
+      return permDiff;
+    });
     this.employees = employees;
   }
 
