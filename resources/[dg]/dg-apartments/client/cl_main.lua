@@ -16,7 +16,7 @@ RegisterUICallback('dg-apartments:client:toggleLockDown', function(_, cb)
 end)
 
 RegisterUICallback('dg-apartments:client:openRaidMenu', function(_, cb)
-	local dialog = exports['dg-ui']:openInput({
+	local result = DGX.UI.openInput({
 		header = "Raid an apartment",
 		inputs = {
 			{
@@ -26,12 +26,8 @@ RegisterUICallback('dg-apartments:client:openRaidMenu', function(_, cb)
 			},
 		},
 	})
-
-	if dialog ~= nil then
-		if (dialog.aid) then
-			TriggerServerEvent('dg-apartments:server:enterApartment', dialog.aid)
-		end
-	end
+  if not result.accepted or not result.values.aid then return end
+  TriggerServerEvent('dg-apartments:server:enterApartment', dialog.values.aid)
 	cb({data={}, meta={ok=true}})
 end)
 
@@ -67,7 +63,7 @@ RegisterNetEvent('dg-apartment:inviteMenu', function()
 end)
 
 RegisterUICallback('dg-apartments:client:inviteApartment', function()
-	local dialog = exports['dg-ui']:openInput({
+	local result = DGX.UI.openInput({
     header = "Invite someone to your apartment",
     inputs = {
       {
@@ -77,8 +73,8 @@ RegisterUICallback('dg-apartments:client:inviteApartment', function()
       },
     },
   })
-	if (not dialog or not dialog.pid) then return end
-	TriggerServerEvent('dg-apartments:server:inviteApartment', dialog.pid)
+  if not result.accepted or not result.values.pid then return end
+	TriggerServerEvent('dg-apartments:server:inviteApartment', dialog.values.pid)
 end)
 
 RegisterUICallback('dg-apartments:client:removeInvite', function(data)
