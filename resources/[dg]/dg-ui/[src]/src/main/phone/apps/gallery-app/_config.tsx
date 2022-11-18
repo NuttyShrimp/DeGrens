@@ -8,7 +8,7 @@ import Container from './component';
 const config = (): ConfigObject => ({
   ...defaultConfigObject,
   name: 'gallery',
-  label: 'Gallerij',
+  label: 'Galerij',
   icon: {
     name: 'images',
     color: 'white',
