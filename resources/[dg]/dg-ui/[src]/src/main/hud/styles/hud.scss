@@ -47,6 +47,7 @@
 
     &-gauge {
       width: 25vh;
+      filter: drop-shadow(0px 1px 3px rgba(0, 0, 0, 0.4));
 
       &-fuel {
         stroke: variables.$secondary_normal;
