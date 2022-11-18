@@ -3,11 +3,8 @@ declare namespace Keygame {
 
   type Open = {
     id: string;
-    keys: Keys;
     cycles: Cycle[];
   };
-
-  type Keys = Record<string, Direction>;
 
   type Direction = 'up' | 'down' | 'left' | 'right';
 

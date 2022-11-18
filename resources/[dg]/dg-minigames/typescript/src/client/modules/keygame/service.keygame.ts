@@ -1,5 +1,5 @@
 import { UI, Util } from '@dgx/client';
-import { DIRECTIONS, ENABLED_KEYS } from './constants.keygame';
+import { ENABLED_KEYS } from './constants.keygame';
 
 let activeId: string | null = null;
 let activePromiseResolve: ((value: boolean) => void) | null = null;
@@ -8,21 +8,12 @@ let keyThread: NodeJS.Timer | null = null;
 export const startKeygame = async (cycles: Minigames.Keygame.Cycle[]) => {
   if (activeId !== null) return;
 
-  const keys = (Object.entries(DIRECTIONS) as [KeygameDirection, number][]).reduce<Record<string, KeygameDirection>>(
-    (acc, [dir, i]) => {
-      acc[Util.getButtonForControl(i)] = dir;
-      return acc;
-    },
-    {}
-  );
-
   activeId = Util.uuidv4();
   startKeyThread();
   UI.openApplication(
     'keygame',
     {
       id: activeId,
-      keys,
       cycles: cycles,
     },
     true

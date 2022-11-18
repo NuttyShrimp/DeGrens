@@ -79,13 +79,6 @@ class Util extends UtilShared {
   };
 
   /**
-   * Test before you use, works at least with nonspecial char keys like W, A, S, D, Z, Q
-   */
-  getButtonForControl = (control: number) => {
-    return GetControlInstructionalButton(0, control, true).replace('t_', '');
-  };
-
-  /**
    * Spawns ped that will attack all players
    */
   spawnAggressivePed = async (model: string, position: Vec3, heading: number) => {

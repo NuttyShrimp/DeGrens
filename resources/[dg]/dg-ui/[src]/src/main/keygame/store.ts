@@ -5,7 +5,6 @@ const store: StoreObject<Keygame.State> = {
   initialState: {
     visible: false,
     id: '',
-    keys: {},
     cycles: [],
   },
 };

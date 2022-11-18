@@ -3,7 +3,7 @@ import AppWrapper, { closeApplication } from '@src/components/appwrapper';
 import { nuiAction } from '@src/lib/nui-comms';
 
 import config from './_config';
-import { ARROW_COLORS, DEFAULT_PATH, PATH_LENGTH } from './constants';
+import { ARROW_COLORS, DEFAULT_PATH, KEYCODE_TO_DIRECTION, PATH_LENGTH } from './constants';
 import { generatePath, getRandomDirection, toLength } from './helpers';
 import store from './store';
 
@@ -33,12 +33,11 @@ const Component: AppFunction<Keygame.State> = props => {
 
   // Keypress handler
   useEffect(() => {
-    if (Object.keys(props.keys).length === 0) return;
     if (currectCycle === null) return;
     if (keyPressed === null) return;
     setKeypressed(null);
 
-    const pressedDirection = props.keys[keyPressed];
+    const pressedDirection = KEYCODE_TO_DIRECTION[keyPressed];
     if (!pressedDirection) return;
 
     const success = percentage >= target.start && percentage <= target.end && direction === pressedDirection;
@@ -55,7 +54,7 @@ const Component: AppFunction<Keygame.State> = props => {
   useEffect(() => {
     if (!props.visible) return;
     const handler = (e: KeyboardEvent) => {
-      setKeypressed(e.key);
+      setKeypressed(e.code);
     };
     window.addEventListener('keydown', handler);
     return () => {
@@ -106,7 +105,6 @@ const Component: AppFunction<Keygame.State> = props => {
     setArrowColor('normal');
     props.updateState({
       id: data.id,
-      keys: Object.entries(data.keys).reduce((acc, [key, dir]) => ({ ...acc, [key.toLowerCase()]: dir }), {}),
       cycles: data.cycles,
     });
     setCurrentCycle(0);
