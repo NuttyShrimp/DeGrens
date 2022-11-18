@@ -53,8 +53,8 @@ RegisterNetEvent('jobs:client:signin:update', function(job)
   SendAppEvent('character', characterInfo)
 end)
 
-DGX.Events.onNet('financials:client:cashChange', function(previous, change)
-  characterInfo.cash = previous + change
+DGX.Events.onNet('financials:client:cashChange', function(total)
+  characterInfo.cash = total
   SendAppEvent('character', characterInfo)
 end)
 
