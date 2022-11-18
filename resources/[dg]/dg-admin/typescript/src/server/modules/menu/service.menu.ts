@@ -48,7 +48,7 @@ export const announceMessage = (src: number, message: string[] | string) => {
     message = message.join(' ');
   }
   Chat.sendMessage(-1, {
-    prefix: 'Announcement',
+    prefix: 'Announcement: ',
     message,
     type: 'error',
   });

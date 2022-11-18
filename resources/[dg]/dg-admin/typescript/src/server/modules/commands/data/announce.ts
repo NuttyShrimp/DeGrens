@@ -8,7 +8,7 @@ export const announce: CommandData = {
   target: false,
   isClientCommand: false,
   handler: (origin, data: { message?: string }) => {
-    if (!data.message || data.message.trim() !== '') {
+    if (!data.message || data.message.trim() === '') {
       Notifications.add(origin.source, 'Je announecement mag niet leeg zijn');
       return;
     }

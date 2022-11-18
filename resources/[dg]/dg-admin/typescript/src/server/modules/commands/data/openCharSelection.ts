@@ -11,7 +11,7 @@ export const openCharSelection: CommandData = {
   target: [],
   role: 'staff',
   handler: (caller, data: CharSelectionData) => {
-    global.exports['dg-chars'].logOut(caller.source ?? data?.Target.serverId);
+    global.exports['dg-chars'].logOut(data?.Target?.serverId ?? caller.source);
   },
   UI: {
     title: 'Char Selection Menu',

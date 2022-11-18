@@ -11,7 +11,7 @@ export const openClothingMenu: CommandData = {
   target: [],
   role: 'staff',
   handler: (caller, data: ClothingMenuData) => {
-    emitNet('qb-clothing:client:openMenu', data?.Target.serverId ?? caller.source);
+    emitNet('qb-clothing:client:openMenu', data?.Target?.serverId ?? caller.source);
   },
   UI: {
     title: 'Give Clothing Menu',
