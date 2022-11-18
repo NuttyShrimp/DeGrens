@@ -23,12 +23,12 @@ end
 
 initPhone = function()
   setState('isDisabled', false)
-  TriggerEvent('dg-phone:load')
-  TriggerServerEvent('dg-phone:load')
   SendAppEvent('phone', {
     action = 'init',
     data = GetCurrentResourceName()
   })
+  TriggerEvent('dg-phone:load')
+  TriggerServerEvent('dg-phone:load')
 end
 
 unloadPhone = function()
@@ -36,6 +36,7 @@ unloadPhone = function()
   closePhone()
   StopAllAnimation()
   stopSounds()
+  cleanInfoEntries()
 end
 
 RegisterUICallback('phone/close', function(data, cb)
