@@ -113,11 +113,11 @@ Citizen.CreateThread(function()
           })
           if not result.accepted then return end
 
-          if (dialog.values.phoneNumber) then
+          if (result.values.phoneNumber) then
             SendAppEvent('phone', {
               appName = "phone",
               action = 'startAnonCall',
-              data = dialog.values.phoneNumber
+              data = result.values.phoneNumber
             })
           end
         end,
