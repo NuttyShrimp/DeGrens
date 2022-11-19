@@ -258,28 +258,6 @@ export const setTyreWear = (veh: number) => {
   }
 };
 
-export const setNativeStatus = (veh: number, status: Omit<Vehicle.VehicleStatus, 'fuel'>) => {
-  // server variants do not work
-  SetVehicleBodyHealth(veh, status?.body ?? 1000);
-  SetVehicleEngineHealth(veh, status?.engine ?? 1000);
-  (status.wheels ?? []).forEach((wheel, wheelId) => {
-    if (wheel === -1) {
-      SetTyreHealth(veh, wheelId, 351);
-      SetVehicleTyreBurst(veh, wheelId, true, 1000);
-    } else {
-      SetTyreHealth(veh, wheelId, wheel);
-    }
-  });
-  (status.doors ?? []).forEach((broken, doorId) => {
-    if (!broken) return;
-    SetVehicleDoorBroken(veh, doorId, broken);
-  });
-  (status.windows ?? []).forEach((broken, windowId) => {
-    if (!broken) return;
-    SmashVehicleWindow(veh, windowId);
-  });
-};
-
 export const fixVehicle = async (veh: number, body = true, engine = true) => {
   if (body) {
     // Fuel level gets reset by the fix native, set to original after calling native

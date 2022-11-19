@@ -197,6 +197,11 @@ export const teleportInSeat = async (src: string, entity: number, seat = -1) => 
 };
 
 export const setNativeStatus = (vehicle: number, status: Omit<Vehicle.VehicleStatus, 'fuel'>) => {
+  SetVehicleBodyHealth(vehicle, status?.body ?? 1000);
+  (status.doors ?? []).forEach((broken, doorId) => {
+    if (!broken) return;
+    SetVehicleDoorBroken(vehicle, doorId, true);
+  });
   Util.sendEventToEntityOwner(
     vehicle,
     'vehicles:client:setNativeStatus',

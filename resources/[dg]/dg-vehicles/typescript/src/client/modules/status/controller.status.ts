@@ -1,19 +1,33 @@
 import { Events, RPC, Util } from '@dgx/client';
 
 import { setDegradationValues } from './constant.status';
-import { fixVehicle, setNativeStatus } from './service.status';
+import { fixVehicle } from './service.status';
 
 setImmediate(async () => {
   Events.emitNet('vehicles:server:requestDegradationValues');
 });
 
+// Completes the server side function for natives that are client sided only
 Events.onNet(
   'vehicles:client:setNativeStatus',
   async (vehNetId: number, status: Omit<Vehicle.VehicleStatus, 'fuel'>) => {
     // Vehicle handles gets changed sometimes for a fucking reason when spawning, check netid
     const exists = await Util.awaitEntityExistence(vehNetId, true);
     if (!exists) return;
-    setNativeStatus(NetworkGetEntityFromNetworkId(vehNetId), status);
+    const vehicle = NetworkGetEntityFromNetworkId(vehNetId);
+    SetVehicleEngineHealth(vehicle, status?.engine ?? 1000);
+    (status.wheels ?? []).forEach((wheel, wheelId) => {
+      if (wheel === -1) {
+        SetTyreHealth(vehicle, wheelId, 351);
+        SetVehicleTyreBurst(vehicle, wheelId, true, 1000);
+      } else {
+        SetTyreHealth(vehicle, wheelId, wheel);
+      }
+    });
+    (status.windows ?? []).forEach((broken, windowId) => {
+      if (!broken) return;
+      SmashVehicleWindow(vehicle, windowId);
+    });
   }
 );
 
