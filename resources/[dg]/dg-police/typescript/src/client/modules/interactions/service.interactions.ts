@@ -12,7 +12,6 @@ let cuffType: 'soft' | 'hard' | null = null;
 let cuffAnimPaused = false;
 let doingCuffAction = false;
 
-let isEscorted = false;
 let isEscorting = false;
 
 export const isCuffed = () => cuffType !== null;
@@ -207,13 +206,13 @@ export const startEscorting = (target: number) => {
   Events.emitNet('police:interactions:escort', target);
   setIsEscorting(true);
 
-  const tick = setTick(() => {
+  const thread = setInterval(() => {
     if (!isEscorting) {
-      clearTick(tick);
+      clearInterval(thread);
       return;
     }
     DISABLED_KEYS_WHILE_ESCORTING.forEach(key => DisableControlAction(0, key, true));
-  });
+  }, 1);
 };
 
 export const stopEscorting = () => {
@@ -228,11 +227,9 @@ export const startGettingEscorted = (origin: number) => {
   const coords = Util.ArrayToVector3(GetOffsetFromEntityInWorldCoords(originPed, 0.0, 0.45, 0.0));
   SetEntityCoords(ped, coords.x, coords.y, coords.z, false, false, false, false);
   AttachEntityToEntity(ped, originPed, 11816, 0.45, 0.45, 0.0, 0.0, 0.0, 0.0, false, false, false, false, 2, true);
-  isEscorted = true;
 };
 
 export const stopGettingEscorted = () => {
   const ped = PlayerPedId();
   DetachEntity(ped, true, false);
-  isEscorted = false;
 };
