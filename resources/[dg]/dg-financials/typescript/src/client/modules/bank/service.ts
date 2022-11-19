@@ -1,4 +1,4 @@
-import { Events, Peek, RPC, UI } from '@dgx/client';
+import { Events, Peek, PolyTarget, RPC, UI } from '@dgx/client';
 import locationManager from 'classes/LocationManager';
 
 import { config } from '../../config';
@@ -39,27 +39,29 @@ export const registerPeekZones = () => {
     },
     true
   );
-  Peek.addModelEntry(
-    config.ATMModels,
-    {
-      options: [
-        {
-          label: 'ATM',
-          icon: 'fas fa-university',
-          async action() {
-            await doAnimation(true, true);
-            locationManager.setAtATM(true);
-            const base = await RPC.execute<BaseState>('financials:accounts:open', 'ATM');
-            if (!base) return;
-            base.isAtm = true;
-            UI.openApplication('financials', base);
-          },
-        },
-      ],
-      distance: 2.0,
-    },
-    true
-  );
+  config.ATMZones.forEach((zone, idx) => {
+    PolyTarget.addCircleZone('atm', zone, 1, { useZ: true, data: { id: idx } });
+  });
+  Peek.addZoneEntry('atm', {
+    options: [
+      {
+        label: 'ATM',
+        icon: 'fas fa-university',
+        action: interactWithATM,
+      },
+    ],
+    distance: 2,
+  });
+  Peek.addModelEntry(config.ATMModels, {
+    options: [
+      {
+        label: 'ATM',
+        icon: 'fas fa-university',
+        action: interactWithATM,
+      },
+    ],
+    distance: 2,
+  });
 };
 
 export const doAnimation = async (isAtm: boolean, isOpen: boolean) => {
@@ -90,4 +92,13 @@ export const doAnimation = async (isAtm: boolean, isOpen: boolean) => {
     },
     animation: anim,
   });
+};
+
+const interactWithATM = async () => {
+  await doAnimation(true, true);
+  locationManager.setAtATM(true);
+  const base = await RPC.execute<BaseState>('financials:accounts:open', 'ATM');
+  if (!base) return;
+  base.isAtm = true;
+  UI.openApplication('financials', base);
 };

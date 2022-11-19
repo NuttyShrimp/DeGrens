@@ -12,6 +12,7 @@ interface IConfig {
     list: IConfigLocation[];
   };
   ATMModels: string[];
+  ATMZones: Vec3[];
   animText: {
     open: string;
     close: string;
@@ -80,6 +81,18 @@ export const config: IConfig = {
     ],
   },
   ATMModels: ['prop_atm_01', 'prop_atm_02', 'prop_atm_03', 'prop_fleeca_atm'],
+  ATMZones: [
+    { x: 147.4892, y: -1036.02, z: 29.5057 },
+    { x: 145.9324, y: -1035.453, z: 29.5138 },
+    { x: 239.0557, y: 212.3731, z: 106.5308 },
+    { x: 239.49, y: 213.5663, z: 106.491 },
+    { x: 239.9143, y: 214.7322, z: 106.446 },
+    { x: 240.3566, y: 215.9474, z: 106.438 },
+    { x: 241.3997, y: 218.8133, z: 106.4164 },
+    { x: 241.8771, y: 220.1251, z: 106.4767 },
+    { x: 242.302, y: 221.2925, z: 106.435 },
+    { x: 242.7707, y: 222.5802, z: 106.4522 },
+  ],
   animText: {
     open: 'Kaart lezen...',
     close: 'Kaart uithalen...',
