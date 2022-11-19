@@ -57,5 +57,5 @@ Events.onNet('vehicles:server:app:setTrackedBlip', (coords: Vec3) => {
     RemoveBlip(trackedVehBlip);
     trackedVehBlip = 0;
     trackedVehTimeout = null;
-  }, 5000);
+  }, 10000);
 });
