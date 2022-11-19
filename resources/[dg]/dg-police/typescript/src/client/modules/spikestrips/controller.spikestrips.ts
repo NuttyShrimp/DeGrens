@@ -5,7 +5,6 @@ let zoneId = 0;
 
 Events.onNet('police:spikestrips:place', async () => {
   const ped = PlayerPedId();
-  const heading = GetEntityHeading(ped);
 
   await Util.loadAnimDict('anim@heists@narcotics@trash');
   TaskPlayAnim(ped, 'anim@heists@narcotics@trash', 'drop_front', 8.0, 8.0, 800, 17, 1, false, false, false);
@@ -15,6 +14,7 @@ Events.onNet('police:spikestrips:place', async () => {
   await Util.loadModel(modelHash);
   const netIds: number[] = [];
 
+  const heading = GetEntityHeading(ped);
   [...new Array(2)].forEach((_, i) => {
     const coords = Util.ArrayToVector3(GetOffsetFromEntityInWorldCoords(ped, 0, 2 * (i + 1) + 1.7 * i, -1));
     const obj = CreateObject(modelHash, coords.x, coords.y, coords.z, true, false, false);
