@@ -13,6 +13,7 @@ AddEventHandler('loadscreen:disableScreen', function()
 end)
 
 RegisterNetEvent("dgx:isProduction", function(isProd)
+  if not GetIsLoadingScreenActive() then return end
   SendLoadingScreenMessage(json.encode({
     setEnv = isProd
   }))
