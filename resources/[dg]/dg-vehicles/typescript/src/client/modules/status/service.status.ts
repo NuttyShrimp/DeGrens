@@ -234,7 +234,6 @@ export const openServiceStatusOverview = async (veh: number) => {
       ]
     : [];
 
-  console.log(info);
   const menu: ContextMenu.Entry[] = [
     {
       title: 'Voertuig info',

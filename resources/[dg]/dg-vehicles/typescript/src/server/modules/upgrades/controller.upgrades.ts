@@ -1,6 +1,6 @@
 import { Auth, Config, Events, Inventory, Notifications, RPC, Taskbar, Util } from '@dgx/server';
 import { getVehicleItemUpgrades, updateVehicleItemUpgrades } from 'db/repository';
-import { getVinForNetId } from 'helpers/vehicle';
+import { getVinForNetId, getVinForVeh } from 'helpers/vehicle';
 import vinManager from 'modules/identification/classes/vinmanager';
 import { getConfigByHash } from 'modules/info/service.info';
 
@@ -15,6 +15,11 @@ Events.onNet('vehicles:upgrades:installItem', async (src: number, netId: number,
   const veh = NetworkGetEntityFromNetworkId(netId);
   if (Util.getPlyCoords(src).distance(Util.getEntityCoords(veh)) > 4) {
     Notifications.add(src, 'Je staat niet dicht genoeg bij het voertuig', 'error');
+    return;
+  }
+
+  if (!vinManager.isVinFromPlayerVeh(vin)) {
+    Notifications.add(src, 'Dit voertuig is niet van een burger', 'error');
     return;
   }
 
@@ -96,6 +101,11 @@ Inventory.registerUseable('rgb_controller', async plyId => {
   const vin = getVinForNetId(netId);
   if (!vin) return;
 
+  if (!vinManager.isVinFromPlayerVeh(vin)) {
+    Notifications.add(plyId, 'Dit voertuig is niet van een burger', 'error');
+    return;
+  }
+
   const installedItems = await getVehicleItemUpgrades(vin);
   if (installedItems.length === 0) {
     Notifications.add(plyId, 'Er is niks geinstalleerd op het voertuig', 'error');
@@ -147,6 +157,13 @@ Inventory.registerUseable('window_tint', async plyId => {
   const isInZone = await RPC.execute<boolean>('vehicles:itemupgrades:isInZone', plyId);
   if (!isInZone) {
     Notifications.add(plyId, 'Je hebt hier niet de juiste tools', 'error');
+    return;
+  }
+
+  const vin = getVinForVeh(veh);
+  if (!vin) return;
+  if (!vinManager.isVinFromPlayerVeh(vin)) {
+    Notifications.add(plyId, 'Dit voertuig is niet van een burger', 'error');
     return;
   }
 

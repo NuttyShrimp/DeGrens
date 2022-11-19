@@ -28,27 +28,20 @@ export const applyFakePlateItem = async (src: number, netId: number) => {
     Notifications.add(src, 'Je staat niet dicht genoeg bij het voertuig', 'error');
     return;
   }
-  const [wasCancelled] = await Taskbar.create(
-    src,
-    'vehicles-apply-fakeplate',
-    'screwdriver',
-    'Nummerplaat monteren',
-    7500,
-    {
-      canCancel: true,
-      cancelOnDeath: true,
-      disableInventory: true,
-      controlDisables: {
-        movement: true,
-        combat: true,
-      },
-      animation: {
-        animDict: 'anim@amb@clubhouse@tutorial@bkr_tut_ig3@',
-        anim: 'machinic_loop_mechandplayer',
-        flags: 1,
-      },
-    }
-  );
+  const [wasCancelled] = await Taskbar.create(src, 'vehicles-apply-fakeplate', 'screwdriver', 'Monteren', 7500, {
+    canCancel: true,
+    cancelOnDeath: true,
+    disableInventory: true,
+    controlDisables: {
+      movement: true,
+      combat: true,
+    },
+    animation: {
+      animDict: 'anim@amb@clubhouse@tutorial@bkr_tut_ig3@',
+      anim: 'machinic_loop_mechandplayer',
+      flags: 1,
+    },
+  });
   if (wasCancelled) return;
   const plateItem = await Inventory.getFirstItemOfNameOfPlayer(src, 'fakeplate');
   if (!plateItem?.metadata.plate) {

@@ -32,7 +32,7 @@ Inventory.registerUseable('harness', async src => {
     return;
   }
 
-  const [canceled] = await Taskbar.create(src, 'harness-install', 'screwdriver', 'Installing Harness', 20000, {
+  const [canceled] = await Taskbar.create(src, 'harness-install', 'screwdriver', 'Installeren', 20000, {
     canCancel: true,
     cancelOnDeath: true,
     disarm: true,
