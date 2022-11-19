@@ -391,4 +391,18 @@ export const PROPS: Record<string, PropAttach.PropInfo> = {
       z: 0,
     },
   },
+  tablet: {
+    model: 'prop_cs_tablet',
+    boneId: 60309,
+    position: {
+      x: 0.03,
+      y: 0.002,
+      z: 0,
+    },
+    rotation: {
+      x: 10,
+      y: 160,
+      z: 0,
+    },
+  },
 };
