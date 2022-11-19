@@ -1,6 +1,6 @@
 import { Keys } from '@dgx/client';
 import { WHITELISTED_HELIS } from './constants.heli';
-import { isHeliCamOn, isInPoliceHeli, setHeliCamOn, setInPoliceHeli } from './service.heli';
+import { changeVision, isHeliCamOn, isInPoliceHeli, setHeliCamOn, setInPoliceHeli } from './service.heli';
 
 // Only register as in popo heli when engine on and in passenger seat
 on('baseevents:engineStateChanged', (vehicle: number, engineState: boolean) => {
@@ -32,4 +32,12 @@ Keys.register('heli_cam', '(police) Toggle heli cam', 'E');
 Keys.onPressDown('heli_cam', () => {
   if (!isInPoliceHeli()) return;
   setHeliCamOn(!isHeliCamOn());
+});
+
+Keys.register('heli_cam_filter', '(police) Heli cam filter', 'SPACE');
+Keys.onPressDown('heli_cam_filter', () => {
+  if (!isInPoliceHeli()) return;
+  if (!isHeliCamOn()) return;
+  PlaySoundFrontend(-1, 'SELECT', 'HUD_FRONTEND_DEFAULT_SOUNDSET', false);
+  changeVision();
 });

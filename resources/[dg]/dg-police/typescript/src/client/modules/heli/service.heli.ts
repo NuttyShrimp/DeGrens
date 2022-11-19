@@ -13,6 +13,9 @@ export const setInPoliceHeli = (val: boolean) => {
 
   if (!inPoliceHeli) {
     setHeliCamOn(false);
+    SetNightvision(false);
+    SetSeethrough(false);
+    visionState = 0;
   }
 };
 
@@ -54,13 +57,9 @@ const enableHeliCam = async () => {
       DestroyCam(cam, false);
       SetNightvision(false);
       SetSeethrough(false);
+      visionState = 0;
 
       return;
-    }
-
-    if (IsControlJustPressed(0, 76)) {
-      PlaySoundFrontend(-1, 'SELECT', 'HUD_FRONTEND_DEFAULT_SOUNDSET', false);
-      changeVision();
     }
 
     const zoomValue = (1 / (MAX_FOV - MIN_FOV)) * (currentFov - MIN_FOV);
@@ -102,7 +101,7 @@ const handleZoom = (cam: number) => {
   SetCamFov(cam, oldFov + (currentFov - oldFov) * 0.05);
 };
 
-const changeVision = () => {
+export const changeVision = () => {
   if (visionState === 0) {
     SetNightvision(true);
     visionState = 1;
