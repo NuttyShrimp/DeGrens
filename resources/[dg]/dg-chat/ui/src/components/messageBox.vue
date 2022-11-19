@@ -17,7 +17,7 @@
   </div>
 </template>
 <script setup lang="ts">
-  import { computed, defineProps, onMounted, PropType } from 'vue';
+  import { computed, defineProps, onMounted, PropType, watchPostEffect } from 'vue';
 
   import { testMessages } from '../lib/devdata';
   import { useStore } from '../lib/store';
@@ -29,6 +29,17 @@
 
   const store = useStore();
   const messages = computed<Chat.Message[]>(() => store.getters.getMessages);
+
+  watchPostEffect(() => {
+    if (!store.state.isMsgVisible) return;
+    const messageBox = document.getElementById('messageBox');
+    if (!messageBox) return;
+    if (store.state.isScrolling) return;
+    setTimeout(() => {
+      messageBox.scrollTop = messageBox.scrollHeight;
+    }, 0);
+  });
+
   onMounted(async () => {
     if (!import.meta.env.DEV) return;
     for (const message of testMessages) {
