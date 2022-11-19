@@ -1,4 +1,5 @@
 import React, { FC, MouseEvent } from 'react';
+import { useSelector } from 'react-redux';
 import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
 import { Button, IconButton } from '@mui/material';
 
@@ -20,9 +21,17 @@ const Account: FC<
     fetchTransactions: () => Promise<void>;
   }>
 > = props => {
+  const plyCid = useSelector<RootState, number>(state => state.character.cid);
+
   const btnClick = (e: MouseEvent, component: React.ReactElement) => {
     e.stopPropagation();
     setModal(component);
+  };
+
+  // We can easily check if player is owner knowing that the owner of a savingsaccount wont be included in the members array
+  const isSavingsAccountOwner = () => {
+    if (!props.account.members) return false;
+    return props.account.members.every(m => m.cid !== plyCid);
   };
 
   return (
@@ -44,7 +53,7 @@ const Account: FC<
           </div>
         </div>
         <div>
-          {props.selected && props.account.type === 'savings' && (
+          {props.selected && props.account.type === 'savings' && isSavingsAccountOwner() && (
             <IconButton
               onClick={e =>
                 btnClick(
