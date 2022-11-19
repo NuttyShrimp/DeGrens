@@ -358,7 +358,7 @@ export class Account {
 
       // Check if amount not negative
       amount = parseInt(String(amount));
-      if (amount <= 0) {
+      if (amount < 0) {
         Util.Log(
           'financials:invalidAmount',
           {
