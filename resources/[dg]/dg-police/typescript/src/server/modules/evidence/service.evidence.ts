@@ -6,6 +6,8 @@ const evidence: Police.Evidence.Evidence[] = [];
 export const getAllEvidenceInArea = (coords: Vector3) => evidence.filter(e => coords.distance(e.coords) < 25);
 
 export const addEvidence = (coords: Vec3, type: Police.Evidence.Type, info: string) => {
+  const vec = Vector3.create(coords);
+  if (evidence.some(e => vec.distance(e.coords) < 0.25)) return;
   const id = Util.uuidv4();
   evidence.push({
     id,
