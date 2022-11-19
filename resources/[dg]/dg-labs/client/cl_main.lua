@@ -130,7 +130,7 @@ end
 
 attachBox = function()
     if attachedBox then return end
-    attachedBox = exports['dg-propattach']:add('cardbox')
+    attachedBox = DGX.PropAttach.add('cardbox')
     Citizen.CreateThread(function()
         local ped = PlayerPedId()
         loadAnimDict("anim@heists@box_carry@")
@@ -146,6 +146,6 @@ end
 
 removeBox = function()
     if not attachedBox then return end
-    exports['dg-propattach']:remove(attachedBox)
+    DGX.PropAttach.remove(attachedBox)
     attachedBox = false
 end

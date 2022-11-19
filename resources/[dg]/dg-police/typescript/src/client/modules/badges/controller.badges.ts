@@ -6,7 +6,7 @@ Events.onNet('police:badges:doAnimation', async () => {
   await Util.loadAnimDict('missfbi_s4mop');
   TaskPlayAnim(ped, 'missfbi_s4mop', 'swipe_card', 1.0, 1.0, -1, 50, 0, false, false, false);
   await Util.Delay(800);
-  const badgePropId = await PropAttach.add('badge');
+  const badgePropId = (await PropAttach.add('badge')) ?? 0;
   await Util.Delay(2500);
   ClearPedSecondaryTask(ped);
   PropAttach.remove(badgePropId);

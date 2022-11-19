@@ -4,19 +4,19 @@ import { Export, ExportRegister } from '@dgx/shared/decorators';
 
 @ExportRegister()
 class ObjectsManager extends Util.Singleton<ObjectsManager>() {
-  private activeObjects: Map<string, { propId: number; info: Objects.Info }>;
-  private queue: {
+  private readonly activeObjects: Map<string, { propId: number; info: Objects.Info }>;
+  private readonly queue: {
     primary: Objects.Obj[];
     secondary: Objects.Obj[];
   };
-  private animationTimer!: NodeJS.Timer;
+  private animationTimer: NodeJS.Timer | null = null;
 
-  private secondaryAmount = 0;
-  private SECONDARY_OFFSET = -0.09;
-  private SECONDARY_MAX = 4;
+  private readonly SECONDARY_OFFSET = -0.09;
+  private readonly SECONDARY_MAX = 4;
 
   private toggledObj: Objects.Obj | null;
 
+  private secondaryAmount = 0;
   private primaryActive: boolean;
 
   constructor() {
@@ -24,6 +24,7 @@ class ObjectsManager extends Util.Singleton<ObjectsManager>() {
     this.activeObjects = new Map();
     this.queue = { primary: [], secondary: [] };
     this.toggledObj = null;
+    this.secondaryAmount = 0;
     this.primaryActive = false;
   }
 
@@ -44,6 +45,9 @@ class ObjectsManager extends Util.Singleton<ObjectsManager>() {
     }
 
     const propId = await PropAttach.add(info.name, offset);
+    if (propId === undefined) {
+      throw new Error('Failed to create prop for item');
+    }
     this.activeObjects.set(itemId, { info, propId });
 
     if (!!info.animData) this.startAnimation(info.animData.animDict, info.animData.anim);
@@ -58,7 +62,7 @@ class ObjectsManager extends Util.Singleton<ObjectsManager>() {
           this.toggledObj = null;
           return;
         }
-        throw new Error(`Tried to remove object for item ${itemId} but was not in queue, active or toggled`);
+        return;
       }
       this.queue[data.type].splice(data.index, 1);
       return;
@@ -134,17 +138,14 @@ class ObjectsManager extends Util.Singleton<ObjectsManager>() {
     }
   };
 
-  public removeAll = () => {
-    [...this.activeObjects.values()].forEach(obj => {
-      PropAttach.remove(obj.propId);
-    });
-  };
-
   private startAnimation = (animDict: string, anim: string) => {
     setImmediate(async () => {
       await Util.loadAnimDict(animDict);
       const ped = PlayerPedId();
       TaskPlayAnim(ped, animDict, anim, 8.0, 2.0, -1, 51, 0, false, false, false); // avoid setinterval initial delay
+      if (this.animationTimer !== null) {
+        clearInterval(this.animationTimer);
+      }
       this.animationTimer = setInterval(() => {
         if (IsEntityPlayingAnim(ped, animDict, anim, 3)) return;
         TaskPlayAnim(ped, animDict, anim, 8.0, 2.0, -1, 51, 0, false, false, false);
@@ -153,8 +154,30 @@ class ObjectsManager extends Util.Singleton<ObjectsManager>() {
   };
 
   private stopAnimation = (animDict: string, anim: string) => {
-    clearInterval(this.animationTimer);
+    if (this.animationTimer !== null) {
+      clearInterval(this.animationTimer);
+      this.animationTimer = null;
+    }
     StopAnimTask(PlayerPedId(), animDict, anim, 1.0);
+  };
+
+  // Properly reset for switching chars
+  public reset = () => {
+    [...this.activeObjects.values()].forEach(obj => {
+      PropAttach.remove(obj.propId);
+    });
+
+    this.activeObjects.clear();
+    this.queue.primary = [];
+    this.queue.secondary = [];
+    this.toggledObj = null;
+    this.secondaryAmount = 0;
+    this.primaryActive = false;
+
+    if (this.animationTimer !== null) {
+      clearInterval(this.animationTimer);
+      this.animationTimer = null;
+    }
   };
 }
 

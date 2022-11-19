@@ -1,3 +1,4 @@
+import { Events } from '@dgx/server';
 import { Inputs } from '../../../enums/inputs';
 import { SelectorTarget } from '../../../enums/SelectorTargets';
 
@@ -21,7 +22,8 @@ export const resetPlayerProps: CommandData = {
     } else {
       target = caller.source;
     }
-    global.exports['dg-propattach'].clearProps(target);
+    global.exports['dg-misc'].clearProps(target);
+    Events.emitNet('propattach:reset', target);
   },
   UI: {
     title: 'Reset Player Props',

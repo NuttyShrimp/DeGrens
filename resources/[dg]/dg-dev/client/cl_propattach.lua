@@ -151,15 +151,6 @@ RegisterCommand("cout", function(source, args, rawCommand)
 	print("PX: " .. px .. " PY: " .. py .. " PZ: " .. pz);
 	print("Bone: " .. bone);
 	print("--------------------------------------------------------");
-	TriggerServerEvent('dg-propattach:tools:writeJson', {
-		x = x,
-		y = y,
-		z = z,
-		rx = px,
-		ry = py,
-		rz = pz,
-		bone = bone,
-	})
 end)
 
 RegisterCommand("cd", function(source, args, rawCommand)

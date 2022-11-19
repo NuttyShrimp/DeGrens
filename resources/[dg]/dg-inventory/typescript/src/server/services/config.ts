@@ -11,4 +11,5 @@ export const getConfig = () => {
 export const loadConfig = async () => {
   await Config.awaitConfigLoad();
   config = Config.getConfigValue('inventory.config');
+  console.log(typeof config);
 };

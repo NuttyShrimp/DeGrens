@@ -26,6 +26,7 @@ function setInstance(source, instanceId)
 		instances[instanceId] = {source}
 	end
 	SetPlayerRoutingBucket(source, instanceId)
+  TriggerEvent('lib:instance:change', source, instanceId)
 	TriggerClientEvent('dg-lib:instance:set', source, instanceId)
 end
 

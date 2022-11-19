@@ -1,5 +1,0 @@
-RegisterNetEvent('dg-propattach:tools:writeJson', function(data)
-	local file = json.decode(LoadResourceFile(GetCurrentResourceName(), 'tools/props.json'))
-	table.insert(file, data)
-	SaveResourceFile(GetCurrentResourceName(), 'tools/props.json', json.decode(file), -1)
-end)

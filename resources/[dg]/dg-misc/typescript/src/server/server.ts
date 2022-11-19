@@ -9,6 +9,7 @@ import './modules/radio/controller.radio';
 import './modules/elevators/controller.elevators';
 import './modules/status';
 import './modules/reputation';
+import './modules/propattach';
 import './services/laptop';
 import './services/config';
 import './services/boatanchor';

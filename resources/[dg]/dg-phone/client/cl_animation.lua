@@ -14,7 +14,7 @@ setPhoneState = function(state)
         handleOpenAnimation(ped)
       end
       if not phoneProp then
-        phoneProp = exports["dg-propattach"]:add("phone")
+        phoneProp = DGX.PropAttach.add("phone")
       end
       Wait(250)
     end
@@ -41,7 +41,7 @@ StopAllAnimation = function()
   handleCallEndAnimation(ped)
   handleCloseAnimation(ped)
   if phoneProp then
-    exports['dg-propattach']:remove(phoneProp);
+    DGX.PropAttach.remove(phoneProp);
     phoneProp = nil
   end
 end
@@ -115,7 +115,7 @@ handleCloseVehicleAnim = function(ped)
   local dict = 'cellphone@in_car@ps';
   StopAnimTask(ped, dict, 'cellphone_text_in', 1.0);
   StopAnimTask(ped, dict, 'cellphone_call_to_text', 1.0);
-  exports['dg-propattach']:remove(phoneProp);
+  DGX.PropAttach.remove(phoneProp);
   phoneProp = nil
 end
 
@@ -127,7 +127,7 @@ handleCloseNormalAnim = function(ped)
   doAnimation(ped, dict, anim, 7.0)
   Citizen.Wait(200)
   StopAnimTask(ped, dict, anim, 1.0);
-  exports['dg-propattach']:remove(phoneProp);
+  DGX.PropAttach.remove(phoneProp);
   phoneProp = nil
 end
 

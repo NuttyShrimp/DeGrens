@@ -1,3 +1,4 @@
+import { RPC } from '../classes';
 import { Util as UtilShared } from '../../shared/classes/util';
 
 class Util extends UtilShared {
@@ -127,6 +128,16 @@ class Util extends UtilShared {
 
     return false;
   };
+
+  /**
+   * Create an object on server
+   * @param routingBucket Defaults to routingbucket player is currently in
+   * @returns NetworkID or 0 if creating failed
+   */
+  createObjectOnServer = async (model: string, coords: Vec3, routingBucket?: number): Promise<number> => {
+    const netId = await RPC.execute<number>('dgx:createObject', model, coords, routingBucket);
+    return netId ?? 0;
+  };
 }
 
 export class Interiors {
@@ -145,9 +156,21 @@ export class Interiors {
 }
 
 export class PropAttach {
-  add = (objName: string, offset?: Vec3): Promise<number> => global.exports['dg-propattach'].add(objName, offset);
-  remove = (objId: number) => global.exports['dg-propattach'].remove(objId);
-  move = (objId: number, offset?: Vec3): Promise<number> => global.exports['dg-propattach'].move(objId, offset);
+  public add = (objName: string, offset?: Vec3): Promise<number | undefined> => {
+    return global.exports['dg-misc'].addProp(objName, offset);
+  };
+
+  public remove = (objId: number) => {
+    global.exports['dg-misc'].removeProp(objId);
+  };
+
+  public move = (objId: number, offset?: Vec3) => {
+    global.exports['dg-misc'].moveProp(objId, offset);
+  };
+
+  public toggleProps = (state: boolean) => {
+    global.exports['dg-misc'].toggleProps(state);
+  };
 }
 
 export class Particle {

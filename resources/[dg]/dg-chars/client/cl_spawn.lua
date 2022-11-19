@@ -58,11 +58,6 @@ Spawn.choose = function(idx)
   if result.fade then
 	  DoScreenFadeIn(250)
   end
-  Citizen.SetTimeout(5000, function()
-    TriggerEvent('propattach:playerLoaded')
-    isSpawned = true
-  end)
-	return
 end
 
 
@@ -153,6 +148,7 @@ RegisterNetEvent('dg-chars:client:finishSpawn', function(isNew)
 	if isNew then
 		TriggerServerEvent('dg-chars:server:newCharSpawn')
 	end
+  isSpawned = true
 end)
 --endregion
 

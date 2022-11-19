@@ -4,6 +4,7 @@ import './modules/particles';
 import './modules/hud';
 import './modules/radio/controller.radio';
 import './modules/elevators';
+import './modules/propattach';
 import './services/laptop';
 import './services/config';
 import './services/boatanchor';
