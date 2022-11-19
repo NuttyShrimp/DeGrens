@@ -69,7 +69,7 @@ Peek.addZoneEntry('prison_phone', {
   distance: 1.0,
 });
 
-Peek.addZoneEntry('prison_phone', {
+Peek.addZoneEntry('prison_shop', {
   options: [
     {
       label: 'Cafetaria',
