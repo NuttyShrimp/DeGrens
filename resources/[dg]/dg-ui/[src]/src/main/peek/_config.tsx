@@ -6,7 +6,7 @@ import store from './store';
 const config: ConfigObject = {
   name: store.key,
   render: p => <Container {...p} />,
-  type: 'interactive',
+  type: 'passive',
 };
 
 export default config;

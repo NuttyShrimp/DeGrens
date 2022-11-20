@@ -48,6 +48,10 @@ class UI {
     global.exports['dg-ui'].SetUIFocusCustom(hasFocus, hasCursor);
   }
 
+  doesUIHaveFocus(): boolean {
+    return global.exports['dg-ui'].doesUIHaveFocus();
+  }
+
   openApplication(app: string, data?: any, preventFocus?: boolean) {
     global.exports['dg-ui'].openApplication(app, data, preventFocus);
   }

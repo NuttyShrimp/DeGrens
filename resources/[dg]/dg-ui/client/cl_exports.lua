@@ -30,6 +30,11 @@ end
 
 exports('SetUIFocus', SetUIFocus)
 
+function doesUIHaveFocus()
+  return IsNuiFocused()
+end
+exports('doesUIHaveFocus', doesUIHaveFocus)
+
 function SendAppEvent(app, data)
   SendUIMessage({
     app = app,

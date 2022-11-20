@@ -5,8 +5,6 @@ import { stateManager } from '../classes/stateManager';
 import { activateZone, deactivateZone, getCurrentEntity, updateCurrentEntity } from '../helpers/actives';
 import { setCtxPlayerData } from '../helpers/context';
 
-let closingPromiseResolve: (() => void) | null = null;
-
 on('onResourceStart', (resName: string) => {
   if (resName !== GetCurrentResourceName()) return;
   if (!DGCore) return;
@@ -18,13 +16,17 @@ UI.RegisterUICallback('peek:preventShow', (_, cb) => {
   cb({ meta: { message: 'done', ok: true }, data: {} });
 });
 
-UI.RegisterUICallback('peek:select', async (data: { id: string }, cb) => {
+UI.RegisterUICallback('peek:select', (data: { id: string }, cb) => {
   cb({ meta: { message: 'done', ok: true }, data: {} });
   let entry = entryManager.getEntry(data.id);
   stateManager.stopPeeking();
 
-  await new Promise<void>(res => (closingPromiseResolve = res));
-  closingPromiseResolve = null;
+  // Cannot open peek again when just selected an entry for short while
+  // This finally fixes the ui focus sometimes not being set
+  stateManager.justSelectedEntry = true;
+  setTimeout(() => {
+    stateManager.justSelectedEntry = false;
+  }, 500);
 
   if (!entry) {
     throw new Error(`[PEEK] Invalid entry | id: ${data.id}`);
@@ -67,14 +69,6 @@ on('dg-polytarget:exit', (name: string) => {
 
 Keys.onPress('playerPeek', isDown => {
   if (!LocalPlayer.state?.isLoggedIn) return;
+  if (stateManager.justSelectedEntry) return;
   isDown ? stateManager.startPeeking() : stateManager.stopPeeking();
-});
-
-on('dg-ui:application-closed', (appName: string) => {
-  if (appName !== 'peek') return;
-  // lets try if this works for the scuffed UI focus
-  setTimeout(() => {
-    if (closingPromiseResolve === null) return;
-    closingPromiseResolve();
-  }, 100);
 });

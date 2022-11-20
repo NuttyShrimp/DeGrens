@@ -8,16 +8,7 @@ import { ZoneManager } from './entryManagers/zoneManager';
 import { entryManager } from './entryManager';
 
 // @ExportManager
-class StateManager {
-  private static instance: StateManager;
-
-  static getInstance() {
-    if (!StateManager.instance) {
-      StateManager.instance = new StateManager();
-    }
-    return StateManager.instance;
-  }
-
+class StateManager extends Util.Singleton<StateManager>() {
   private canPeek: boolean;
   private isPeeking: boolean;
   private isUIFocused: boolean;
@@ -25,11 +16,15 @@ class StateManager {
   private checkInterval: NodeJS.Timer | null = null;
   private controlInterval: NodeJS.Timer | null = null;
 
+  public justSelectedEntry: boolean;
+
   constructor() {
+    super();
     this.canPeek = true;
     this.isPeeking = false;
     this.isUIFocused = false;
     this.isInDebounce = false;
+    this.justSelectedEntry = false;
   }
 
   // @Export('setPeekEnabled')
@@ -49,7 +44,7 @@ class StateManager {
     const { entity, coords } = RayCast.doRaycast();
     updateCurrentEntity(entity != undefined && coords != undefined ? { entity, coords } : null);
 
-    UI.openApplication('peek', {}, true);
+    UI.openApplication('peek');
     this.isPeeking = true;
     entryManager.loadActiveEntries(true);
     this.createCheckThread();
@@ -62,6 +57,7 @@ class StateManager {
       return;
     }
     if (shouldClose) {
+      UI.SetUIFocusCustom(false, false);
       UI.closeApplication('peek');
     }
 
