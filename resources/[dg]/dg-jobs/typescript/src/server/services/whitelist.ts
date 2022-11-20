@@ -12,18 +12,21 @@ setImmediate(async () => {
 });
 
 // region Config
+const registerPlayerWhitelist = async (data: Omit<Whitelist.Entry, 'name'>) => {
+  const charName = await Util.getCharName(data.cid);
+  const entry = { ...data, name: charName };
+  const jobEntries = jobs.get(data.job);
+  if (jobEntries !== undefined) {
+    jobEntries.push(entry);
+  } else {
+    jobs.set(data.job, [entry]);
+  }
+};
+
 export const loadJobs = async () => {
-  const result = await SQL.query<Omit<Whitelist.Entry[], 'name'>>(`SELECT *
-                                                                   FROM whitelist_jobs`);
+  const result = await SQL.query<Omit<Whitelist.Entry, 'name'>[]>(`SELECT * FROM whitelist_jobs`);
   for (const entry of result) {
-    const job = jobs.get(entry.job);
-    const Player = await DGCore.Functions.GetOfflinePlayerByCitizenId(entry.cid);
-    entry.name = Player.PlayerData.charinfo.firstname + ' ' + Player.PlayerData.charinfo.lastname;
-    if (job) {
-      job.push(entry);
-    } else {
-      jobs.set(entry.job, [entry]);
-    }
+    await registerPlayerWhitelist(entry);
   }
   jobs.forEach((entries, job) => {
     whitelistLogger.debug(`Loaded ${entries.length} whitelist entries for job ${job}`);
@@ -219,16 +222,9 @@ export const addWhitelist = async (src: number, jobName: string, rank = 1, cid?:
     Notifications.add(src, `rank ${rank} does not exist on job ${jobConfig.name}`, 'error');
     return;
   }
-  await SQL.insertValues('whitelist_jobs', [
-    {
-      cid,
-      job: jobName,
-      rank,
-      specialty: 0,
-    },
-  ]);
-  // TODO: Replace with less expensive method to add only 1 entry instead of rebuilding everything
-  loadJobs();
+  const jobWhitelistEntry = { cid, job: jobName, rank, specialty: 0 };
+  await SQL.insertValues('whitelist_jobs', [jobWhitelistEntry]);
+  await registerPlayerWhitelist(jobWhitelistEntry);
   whitelistLogger.debug(`Added whitelist entry for ${cid} as ${jobName} with rank: ${rank}`);
   Util.Log('jobs:whitelist:add', { rank, job: jobName, cid }, `Whitelisted ${cid} for ${job} with rank ${rank}`, src);
   Events.emitNet('jobs:whitelist:add', src, jobName);
