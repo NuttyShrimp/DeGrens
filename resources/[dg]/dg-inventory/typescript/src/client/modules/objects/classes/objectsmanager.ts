@@ -4,7 +4,7 @@ import { Export, ExportRegister } from '@dgx/shared/decorators';
 
 @ExportRegister()
 class ObjectsManager extends Util.Singleton<ObjectsManager>() {
-  private readonly activeObjects: Map<string, { propId: number; info: Objects.Info }>;
+  private readonly activeObjects: Map<string, Objects.Active>;
   private readonly queue: {
     primary: Objects.Obj[];
     secondary: Objects.Obj[];
@@ -44,10 +44,22 @@ class ObjectsManager extends Util.Singleton<ObjectsManager>() {
       this.secondaryAmount++;
     }
 
+    // we set it before attaching prop to register the item as being active for canAddItem check
+    // this is needed for when we spam move object items into inv
+    this.activeObjects.set(itemId, { info, propId: null });
     const propId = await PropAttach.add(info.name, offset);
     if (propId === undefined) {
+      this.activeObjects.delete(itemId);
       throw new Error('Failed to create prop for item');
     }
+
+    // when spam moving items the item can possibly be removed from inv while we are awaiting prop creation
+    // if that happens we insta delete prop again
+    if (!this.activeObjects.has(itemId)) {
+      PropAttach.remove(propId);
+      return;
+    }
+
     this.activeObjects.set(itemId, { info, propId });
 
     if (!!info.animData) this.startAnimation(info.animData.animDict, info.animData.anim);
@@ -69,7 +81,9 @@ class ObjectsManager extends Util.Singleton<ObjectsManager>() {
     }
 
     this.activeObjects.delete(itemId);
-    PropAttach.remove(obj.propId);
+    if (obj.propId !== null) {
+      PropAttach.remove(obj.propId);
+    }
 
     // Set to false if this was primary
     if (obj.info.type === 'primary') {
@@ -79,9 +93,10 @@ class ObjectsManager extends Util.Singleton<ObjectsManager>() {
     // move all other objs if secondary
     if (obj.info.type === 'secondary') {
       this.secondaryAmount--;
-      this.getSecondaries().forEach((obj, index) => {
+      this.getSecondaries().forEach((o, index) => {
+        if (o.propId === null) return;
         const offset = { x: 0, y: 0, z: this.SECONDARY_OFFSET * index };
-        PropAttach.move(obj.propId, offset);
+        PropAttach.move(o.propId, offset);
       });
     }
 
@@ -164,6 +179,7 @@ class ObjectsManager extends Util.Singleton<ObjectsManager>() {
   // Properly reset for switching chars
   public reset = () => {
     [...this.activeObjects.values()].forEach(obj => {
+      if (obj.propId === null) return;
       PropAttach.remove(obj.propId);
     });
 

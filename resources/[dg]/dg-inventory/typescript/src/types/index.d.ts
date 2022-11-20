@@ -91,6 +91,11 @@ declare namespace Objects {
     itemId: string;
     info: Info;
   }
+
+  type Active = {
+    propId: number | null;
+    info: Objects.Info;
+  };
 }
 
 declare namespace Shops {

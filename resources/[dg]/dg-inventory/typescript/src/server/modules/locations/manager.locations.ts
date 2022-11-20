@@ -24,7 +24,13 @@ class LocationManager extends Util.Singleton<LocationManager>() {
   }
 
   @RPCEvent('inventory:server:getDrops')
-  private _getDrops = () => [...this.locations.drop.values()].filter(drop => drop.activated).map(drop => drop.pos);
+  private _getDrops = () => {
+    const clientVersion: [string, Vec3][] = [];
+    for (const [id, drop] of this.locations.drop) {
+      clientVersion.push([id, drop.pos]);
+    }
+    return clientVersion;
+  };
 
   public getLocation = (type: Location.Type, coords: Vec3, ignoreOthers = false) => {
     if (!ignoreOthers) {
@@ -52,7 +58,7 @@ class LocationManager extends Util.Singleton<LocationManager>() {
         clearTimeout(drop.timeout);
       }
       if (drop.activated) {
-        Events.emitNet('inventory:client:updateDrop', -1, 'remove', drop.pos);
+        emitNet('inventory:client:removeDrop', -1, id);
       }
     }
 
@@ -64,7 +70,7 @@ class LocationManager extends Util.Singleton<LocationManager>() {
     const pos = this.locations.drop.get(id)?.pos;
     if (!pos) throw new Error('Tried to activate non-existent location id');
 
-    Events.emitNet('inventory:client:updateDrop', -1, 'add', pos);
+    emitNet('inventory:client:addDrop', -1, id, pos);
     this.logger.info(`Drop (${id}) has been activated`);
 
     const dropRemoveTime = getConfig().dropRemoveTime;

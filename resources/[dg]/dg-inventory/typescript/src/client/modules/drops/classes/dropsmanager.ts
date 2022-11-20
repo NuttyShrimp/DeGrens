@@ -1,66 +1,81 @@
-// @ts-nocheck
-// Parameter type of DrawMarker from @citizenfx/client is wrong so otherwise it wont build properly in cicd pipeline
 import { RPC, Util } from '@dgx/client';
 
 class DropsManager extends Util.Singleton<DropsManager>() {
-  private drops: Vec3[];
-  private closeDrops: Vec3[] = [];
+  private drops: Map<string, Vec3>;
+  private markersToShow: Vec3[] = [];
+  private drawThread: NodeJS.Timer | null;
+  private range: number;
 
   constructor() {
     super();
-    this.drops = [];
-    this.closeDrops = [];
+    this.drops = new Map();
+    this.markersToShow = [];
+    this.drawThread = null;
+    this.range = 0;
   }
 
   public load = async () => {
-    const drops = await RPC.execute<Vec3[]>('inventory:server:getDrops');
+    const drops = await RPC.execute<[string, Vec3][]>('inventory:server:getDrops');
     if (!drops) return;
-    this.drops = drops;
-    let range = await RPC.execute<number>('inventory:server:getDropRange');
+    this.drops = new Map(drops);
+    const range = await RPC.execute<number>('inventory:server:getDropRange');
     if (!range) return;
-    range *= 8;
-    this.checkCloseDrops(range);
-    this.showDropsLoop();
+    this.range = range * 8;
+    this.checkCloseDrops();
   };
 
-  public add = (drop: Vec3) => {
-    this.drops.push(drop);
+  public add = (id: string, coords: Vec3) => {
+    this.drops.set(id, coords);
   };
 
-  public remove = (drop: Vec3) => {
-    const index = this.drops.findIndex(d => d.x === drop.x && d.y === drop.y && d.z === drop.z);
-    if (index === -1) return;
-    this.drops.splice(index, 1);
+  public remove = (id: string) => {
+    const success = this.drops.delete(id);
+    if (!success) {
+      console.error(`Tried to remove drop ${id} which was not known to client`);
+    }
   };
 
-  private checkCloseDrops = (range: number) => {
-    setInterval(() => {
-      this.closeDrops = [];
-      const plyPos = Util.getPlyCoords();
-      this.drops.forEach(drop => {
-        if (plyPos.distance(drop) > range) return;
-        this.closeDrops.push(drop);
-      });
+  private checkCloseDrops = () => {
+    this.markersToShow = [];
+    const plyPos = Util.getPlyCoords();
+    this.drops.forEach(coords => {
+      if (plyPos.distance(coords) > this.range) return;
+      this.markersToShow.push(coords);
+    });
+
+    // if no drops close, stop drawthread
+    // else start thread if it wasnt already running
+    if (this.markersToShow.length === 0) {
+      this.clearDrawLoop();
+    } else {
+      if (this.drawThread === null) {
+        this.startDrawLoop();
+      }
+    }
+
+    setTimeout(() => {
+      this.checkCloseDrops();
     }, 500);
   };
 
-  private showDropsLoop = () => {
-    setInterval(() => {
-      this.closeDrops.forEach(drop =>
+  private startDrawLoop = () => {
+    this.drawThread = setInterval(() => {
+      for (let i = 0; i < this.markersToShow.length; i++) {
+        const coords = this.markersToShow[i];
         DrawMarker(
           2,
-          drop.x,
-          drop.y,
-          drop.z - 0.3,
+          coords.x,
+          coords.y,
+          coords.z - 0.55,
           0.0,
           0.0,
           0.0,
           0.0,
           0.0,
           0.0,
-          0.3,
-          0.3,
           0.25,
+          0.25,
+          0.2,
           118,
           127,
           207,
@@ -74,9 +89,15 @@ class DropsManager extends Util.Singleton<DropsManager>() {
           // @ts-ignore
           undefined,
           false
-        )
-      );
+        );
+      }
     }, 1);
+  };
+
+  private clearDrawLoop = () => {
+    if (this.drawThread === null) return;
+    clearInterval(this.drawThread);
+    this.drawThread = null;
   };
 }
 
