@@ -1,9 +1,10 @@
-import { Events, Util, RPC } from '@dgx/server';
+import { Events, Util, RPC, Inventory } from '@dgx/server';
 import inventoryManager from 'modules/inventories/manager.inventories';
 import itemDataManager from 'classes/itemdatamanager';
 import itemManager from 'modules/items/manager.items';
 import { getConfig } from 'services/config';
 import { concatId, splitId } from '../util';
+import repository from 'services/repository';
 
 const hasObject = async (plyId: number) => {
   const cid = Util.getCID(plyId);
@@ -190,6 +191,10 @@ const moveAllItemsToInventory = async (
   }
 };
 
+const getItemStateFromDatabase = (itemId: string) => {
+  return repository.getItemState(itemId);
+};
+
 // Exports
 global.asyncExports('hasObject', hasObject);
 global.exports('giveStarterItems', giveStarterItems);
@@ -209,6 +214,7 @@ global.exports('concatId', concatId);
 global.exports('splitId', splitId);
 global.exports('showItemBox', showItemBox);
 global.exports('moveAllItemsToInventory', moveAllItemsToInventory);
+global.asyncExports('getItemStateFromDatabase', getItemStateFromDatabase);
 
 // Events for client
 RPC.register('inventory:server:doesPlayerHaveItems', (plyId, names: string | string[]) => {

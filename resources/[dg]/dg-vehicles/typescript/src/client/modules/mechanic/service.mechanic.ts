@@ -226,6 +226,7 @@ export const clearItemOrder = () => {
 
 export const finishOrder = () => {
   Events.emitNet('vehicles:mechanic:server:itemOrder', order);
+  clearItemOrder();
 };
 
 export const getAmountOfItemInStash = async (

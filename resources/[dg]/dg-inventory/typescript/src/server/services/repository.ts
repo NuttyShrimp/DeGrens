@@ -76,6 +76,13 @@ class Repository extends Util.Singleton<Repository>() {
     const result = await SQL.query(query);
     this.logger.info(`${result.length} items have been deleted because they were in a nonpersistent inventory`);
   };
+
+  public getItemState = async (itemId: string) => {
+    const query = `SELECT * FROM inventory_items WHERE id = ?`;
+    const result = await SQL.scalar<Repository.FetchResult>(query, [itemId]);
+    if (Object.keys(result).length === 0) return null;
+    return this.resultToState(result);
+  };
 }
 
 const repository = Repository.getInstance();

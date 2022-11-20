@@ -7,8 +7,6 @@ import { mechanicLogger } from './logger.mechanic';
 
 // Object of all shops and there clocked in employees
 const activeMechanics: Record<string, number[]> = {};
-// Items that can be used to repair vehicles
-const whitelistedItems = new Set<string>();
 let config: Mechanic.Config;
 const pendingJobs = new Map<string, { targets: number[]; origin: number; timeoutInfo: NodeJS.Timeout }>();
 const assignedJobs = new Map<string, number>();
@@ -82,26 +80,29 @@ export const giveOrder = async (src: number, order: Mechanic.Tickets.Item[]) => 
     Notifications.add(src, 'Je bent niet ingeclocked!', 'error');
     return;
   }
+
+  // Build inventory items from order items
   const items = order.map(item => {
     // axle_part_d
     // tune_suspension_stage_4_A+
     const itemName = getNameForItem(item);
     return {
-      id: '',
+      ids: [] as string[],
       name: itemName,
       ...item,
     };
   });
   if (items.some(item => item === undefined)) {
-    Notifications.add(src, `Er is iets fout gelopen bij het creeren van de order`, 'error');
+    Notifications.add(src, `Er is iets fout gelopen bij het creeren van het order`, 'error');
     mechanicLogger.error(`Failed to convert order to the right items`, {
       order,
       itemNames: items,
     });
     return;
   }
+
+  // Check if mechanic stash has the required items
   for (const item of items) {
-    // TS doing TS things. This is already checked above
     if (!item) continue;
     const stashAmount = await Inventory.getAmountInInventory(
       'stash',
@@ -117,21 +118,25 @@ export const giveOrder = async (src: number, order: Mechanic.Tickets.Item[]) => 
       return;
     }
   }
-  // Actually move the items
+
+  // Move the items to player
   const cid = Util.getCID(src);
   for (const itemInfo of items) {
     if (!itemInfo || !itemInfo.name) continue;
-    const item = await Inventory.getFirstItemOfName('stash', `mechanic-shop-parts-${plyShop}`, itemInfo?.name);
-    if (!item) {
-      mechanicLogger.error(`Failed to find item ${itemInfo.name} in mechanic-shop-parts-${plyShop}`);
-      return;
+    for (let i = 0; i < itemInfo.amount; i++) {
+      const item = await Inventory.getFirstItemOfName('stash', `mechanic-shop-parts-${plyShop}`, itemInfo.name);
+      if (!item) {
+        mechanicLogger.error(`Failed to find item ${itemInfo.name} in mechanic-shop-parts-${plyShop}`);
+        return;
+      }
+      await Inventory.moveItemToInventory('player', String(cid), item.id);
+      itemInfo.ids.push(item.id);
     }
-    await Inventory.moveItemToInventory('player', String(cid), item.id);
-    whitelistedItems.add(item.id);
-    itemInfo.id = item.id;
   }
   Inventory.addItemToPlayer(src, 'sales_ticket', 1, {
+    hiddenKeys: ['hiddenKeys', 'items'],
     items,
+    info: items.map(i => `${i.amount}x ${Inventory.getItemData(i.name!)?.label}`).join(', '),
   });
 };
 
@@ -143,23 +148,26 @@ export const getRevenueForItem = (item: Mechanic.Tickets.ExtItem) => {
 };
 
 export const tradeSalesTickets = async (src: number) => {
-  const cid = Util.getCID(src);
-  const ticketAmount = await Inventory.getAmountInInventory('player', String(cid), 'sales_ticket');
+  const ticketAmount = await Inventory.getAmountPlayerHas(src, 'sales_ticket');
   if (!ticketAmount) {
     Notifications.add(src, 'Je hebt geen Sales Tickets opzak', 'error');
     return;
   }
+  const cid = Util.getCID(src);
   const tickets = await Inventory.getItemsForNameInInventory('player', String(cid), 'sales_ticket');
   let revenue = 0;
   for (const ticket of tickets) {
     const data = ticket.metadata as Mechanic.Tickets.ItemMetadata;
     const ticketRevenues = await Promise.all(
       data.items.map(async i => {
-        const itemState = Inventory.getItemStateById(i.id);
-        if (itemState && itemState.name === i.name) {
-          return 0;
+        let amountOfIdsThatDontExistAnymore = 0;
+        for (const id of i.ids) {
+          const itemState = await Inventory.getItemStateFromDatabase(id);
+          // If item still exists then dont pay out anything
+          if (itemState && itemState.name === i.name) continue;
+          amountOfIdsThatDontExistAnymore++;
         }
-        return getRevenueForItem(i);
+        return getRevenueForItem(i) * amountOfIdsThatDontExistAnymore;
       })
     );
     revenue += ticketRevenues.reduce((tot, rev) => {
@@ -175,7 +183,7 @@ export const tradeSalesTickets = async (src: number) => {
   }
   Notifications.add(src, `Je hebt €${revenue} verdiend aan je tickets`);
   for (const ticket of tickets) {
-    Inventory.removeItemByIdFromPlayer(cid, ticket.id);
+    Inventory.destroyItem(ticket.id);
   }
 };
 // endregion

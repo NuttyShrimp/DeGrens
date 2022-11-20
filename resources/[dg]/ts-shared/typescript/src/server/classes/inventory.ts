@@ -228,6 +228,14 @@ class Inventory {
   ) => {
     global.exports['dg-inventory'].moveAllItemsToInventory(originType, originIdentifier, targetType, targetIdentifier);
   };
+
+  /**
+   * Only use this function if you are not sure the item you want to get is in a loaded inventory.
+   * Example: you save itemids to later check if they still exist. Use this function for that because those items might be in unloaded inventories
+   */
+  public getItemStateFromDatabase = (itemId: string): Promise<Inventory.ItemState | null> => {
+    return global.exports['dg-inventory'].getItemStateFromDatabase(itemId);
+  };
 }
 
 export default {

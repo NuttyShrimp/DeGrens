@@ -50,7 +50,7 @@ declare namespace Mechanic {
 
     type Item = PerformanceItem | RepairItem;
 
-    type ExtItem = Item & { id: string; name: string };
+    type ExtItem = Item & { ids: string[]; name: string };
 
     // This is metadata of sales_ticket
     interface ItemMetadata {
