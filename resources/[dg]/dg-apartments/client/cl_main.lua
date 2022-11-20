@@ -17,17 +17,19 @@ end)
 
 RegisterUICallback('dg-apartments:client:openRaidMenu', function(_, cb)
 	local result = DGX.UI.openInput({
-		header = "Raid an apartment",
+		header = "Raid een appartement",
 		inputs = {
 			{
-				label = "Apartment Id",
+				label = "Appartementsnummer",
 				name = "aid",
 				type = "number",
 			},
 		},
 	})
-  if not result.accepted or not result.values.aid then return end
-  TriggerServerEvent('dg-apartments:server:enterApartment', dialog.values.aid)
+  if result.accepted and result.values.aid then 
+    local apartmentId = tonumber(result.values.aid)
+    TriggerServerEvent('dg-apartments:server:enterApartment', apartmentId)
+  end
 	cb({data={}, meta={ok=true}})
 end)
 
@@ -44,41 +46,49 @@ RegisterNetEvent('dg-apartment:inviteMenu', function()
 	DGCore.Functions.TriggerCallback('dg-apartments:server:getApartmentInvites', function(inviteListMenu)
 		exports["dg-ui"]:openApplication('contextmenu',{
 			{
-				title = 'Invite',
-				description = "Invite someone to your apartment",
+				title = 'Uitnodigen',
+				description = "Nodig iemand uit in je appartement",
 				callbackURL = "dg-apartments:client:inviteApartment",
 			},
 			{
-				title = "List invites",
-				description = "List all invited people",
+				title = "Uitgenodigden",
+				description = "Lijst van uitgenodigden",
 				submenu = inviteListMenu,
 			},
 			{
 				title = 'Unlock/Lock',
-				description = "Toggle the lock of your apartment",
+				description = "Verander het slot op je appartement",
 				callbackURL = "dg-apartments:client:toggleApartmentLock",
 			},
 		})
 	end)
 end)
 
-RegisterUICallback('dg-apartments:client:inviteApartment', function()
+RegisterUICallback('dg-apartments:client:inviteApartment', function(_, cb)
 	local result = DGX.UI.openInput({
-    header = "Invite someone to your apartment",
+    header = "Nodig iemand uit in je appartement",
     inputs = {
       {
-        label = "Player Id",
+        label = "Speler ID",
         name = "pid",
         type = "number",
       },
     },
   })
-  if not result.accepted or not result.values.pid then return end
-	TriggerServerEvent('dg-apartments:server:inviteApartment', dialog.values.pid)
+  if result.accepted and result.values.pid then 
+	  TriggerServerEvent('dg-apartments:server:inviteApartment', dialog.values.pid)
+  end
+  cb({ data = {}, meta = { ok = true } })
 end)
 
-RegisterUICallback('dg-apartments:client:removeInvite', function(data)
+RegisterUICallback('dg-apartments:client:removeInvite', function(data, cb)
 	TriggerServerEvent('dg-apartments:server:removeInvite', data.id)
+  cb({ data = {}, meta = { ok = true } })
+end)
+
+RegisterUICallback('dg-apartments:client:toggleApartmentLock', function(_, cb)
+  TriggerServerEvent('dg-apartments:server:toggleApartmentLock')
+  cb({ data = {}, meta = { ok = true } })
 end)
 
 RegisterNetEvent('dg-apartment:openStash', function()

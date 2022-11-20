@@ -3,7 +3,7 @@ Citizen.CreateThread(function()
 		local zone = v.enter
 		zone.options.data = zone.options.data or {}
 		zone.options.data.id = v.name
-		exports["dg-polyzone"]:AddBoxZone("apartment", zone.center, zone.length, zone.width, zone.options)
+		DGX.PolyZone.addBoxZone("apartment", zone.center, zone.length, zone.width, zone.options)
 
 		locBlip = AddBlipForCoord(zone.center)
 
@@ -23,7 +23,7 @@ RegisterNetEvent('dg-polyzone:enter')
 AddEventHandler('dg-polyzone:enter', function(name)
   if (name == "apartment") then
     local generalUseKey = exports["dg-lib"]:GetCurrentKeyMap("+GeneralUse")
-    exports['dg-ui']:showInteraction(('%s - Apartment'):format(generalUseKey), 'info')
+    exports['dg-ui']:showInteraction(('%s - Appartement'):format(generalUseKey), 'info')
     inZone = name
     return
   end

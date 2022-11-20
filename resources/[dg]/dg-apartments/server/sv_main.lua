@@ -45,7 +45,7 @@ exports('isInLockdown', isInLockdown)
 -- id is an optional parameter
 enterApartment = function(src, id)
   if (state.isInLockdown) then
-    DGX.Notifications.add(src, "Het appartementsblok is momenteel onder lockdown", "error")
+    DGX.Notifications.add(src, "Dit appartementsblok is momenteel onder lockdown", "error")
     return
   end
   if (not id) then
@@ -118,11 +118,11 @@ end)
 
 RegisterNetEvent('dg-apartments:server:toggleLockDown', function()
   local plyJob = DGX.Jobs.getCurrentJob(source)
-  if (plyJob ~= "police") then
+  if plyJob ~= "police" then
     -- TODO add ban for injection
   end
   state.isInLockdown = not state.isInLockdown
-  DGX.Notificiations.add(source, state.isInLockdown and 'The apartment is under lockdown' or 'The lockdown has been lifted')
+  DGX.Notifications.add(source, state.isInLockdown and 'Dit appartementsblok is nu onder lockdown' or 'Dit appartementsblok is niet meer onder lockdown')
 end)
 
 RegisterNetEvent('dg-apartments:server:inviteApartment')
@@ -132,7 +132,8 @@ AddEventHandler('dg-apartments:server:inviteApartment', function(targetId)
     return
   end
   inviteToApartment(apartment.id, targetId)
-  DGX.Notifications.add(source, 'You invited ' .. GetPlayerName(targetId) .. ' to your apartment')
+  -- We dont show char name because it allowes players to hide their name and showing steamname is just strange
+  DGX.Notifications.add(source, 'Je hebt iemand uitgenodigd in je appartement')
 end)
 
 RegisterNetEvent('dg-apartments:server:removeInvite', function(targetId)
@@ -141,75 +142,86 @@ RegisterNetEvent('dg-apartments:server:removeInvite', function(targetId)
     return
   end
   removeInviteFromApartment(apartment.id, targetId)
-  DGX.Notifications.add(source, 'You have removed ' .. GetPlayerName(targetId) .. '\'s invite from the apartment')
+  -- We dont show char name because it allowes players to hide their name and showing steamname is just strange
+  DGX.Notifications.add(source, 'Je hebt een uitnodiging tot je appartement verwijderd')
+end)
+
+RegisterServerEvent('dg-apartments:server:toggleApartmentLock', function()
+  local src = source
+  local apartment = getCurrentApartment(source)
+  if not apartment or not apartment.id then return end
+  local newOpen = not apartment.open
+  setApartmentOpen(apartment.id, newOpen)
+  DGX.Notifications.add(source, ('Je hebt je appartement %s gezet'):format(newOpen and 'open' or 'op slot'))
 end)
 
 -- Callbacks
 DGCore.Functions.CreateCallback('dg-apartments:server:getApartmentMenu', function(src, cb)
-  local plyJob = DGX.Jobs.getCurrentJob(source)
+  local plyJob = DGX.Jobs.getCurrentJob(src)
   local ownedApartId = getPlayerApartment(src)
   local invApart = getInvitedApartments(src)
   local openApart = getOpenApartments()
   local apartList = {}
+
   -- merge invApart and openApart into openApart & skip duplicates
   for i, v in ipairs(invApart) do
-    local found = false
-    for j, k in ipairs(openApart) do
-      if (v == k) then
-        found = true
+    local alreadyInOpen = false
+    for _, k in ipairs(openApart) do
+      if v == k then
+        alreadyInOpen = true
         break
       end
     end
-    if (not found) then
+    if not alreadyInOpen then
       table.insert(openApart, v)
     end
   end
 
-  if (plyJob == "police") then
+  if plyJob == "police" then
     table.insert(apartList, {
-      title = "Raid apartment",
+      title = "Raid appartement",
       callbackURL = "dg-apartments:client:openRaidMenu"
     })
   end
 
   -- add entries to apartList
-  for k, v in pairs(openApart) do
+  for _, v in pairs(openApart) do
     apartList[#apartList + 1] = {
-      title = ('Apartment #%s'):format(k),
-      description = "Enter this apartment",
+      title = ('Appartement #%s'):format(v),
+      description = "Dit appartement binnengaan",
       callbackURL = "dg-apartments:client:enterApartment",
       data = {
-        id = k
+        id = v
       }
     }
   end
 
   if (#apartList < 1) then
     apartList[#apartList + 1] = {
-      title = "No apartments are open",
+      title = "Er zijn geen appartementen open",
     }
   end
 
   local menu = {
     {
-      title = ("Enter apartment %s"):format(ownedApartId),
-      description = "Enter your private apartment",
+      title = ('Appartement #%s'):format(ownedApartId),
+      description = "Je persoonlijk apparement",
       callbackURL = "dg-apartments:client:enterApartment",
       data = {
         id = ownedApartId,
       },
     },
     {
-      title = "Apartment list",
-      description = "Invited/Open apartment list",
+      title = "Appartement lijst",
+      description = "Open of uitgenodigde appartementen",
       submenu = apartList,
     },
   }
 
-  if (plyJob == "police") then
+  if plyJob == "police" then
     menu[#menu + 1] = {
-      title = ("%s"):format(state.isInLockdown and "Remove lockdown" or "Lockdown apartment"),
-      description = "Prevent citizens to enter their apartment",
+      title = state.isInLockdown and "Lockdown verwijderen" or "Lockdown starten",
+      description = "Beheer lockdown van dit appartementsblok",
       callbackURL = "dg-apartments:client:toggleLockDown",
       data = {}
     }
@@ -231,7 +243,7 @@ DGCore.Functions.CreateCallback('dg-apartments:server:getApartmentInvites', func
     local Player = DGCore.Functions.GetPlayer(tonumber(v))
     menu[#menu + 1] = {
       title = ('%s %s(%s)'):format(Player.PlayerData.charinfo.firstname, Player.PlayerData.charinfo.lastname, v),
-      description = "Remove invite",
+      description = "Uitnodiging verwijderen",
       callbackURL = "dg-apartments:client:removeInvite",
       data = {
         id = v
@@ -240,7 +252,7 @@ DGCore.Functions.CreateCallback('dg-apartments:server:getApartmentInvites', func
   end
   if (#menu < 1) then
     menu[#menu + 1] = {
-      title = "No invites",
+      title = "Geen uitgenodigden",
     }
   end
   cb(menu)

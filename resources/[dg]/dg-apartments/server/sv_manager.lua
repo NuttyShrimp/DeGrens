@@ -93,13 +93,18 @@ getApartmentInvites = function(aId, src)
   return activeApartments[aId].invited
 end
 
+setApartmentOpen = function(apartmentId, open)
+  if not activeApartments[apartmentId] then return end
+  activeApartments[apartmentId].open = open
+end
+
 --- get all apartments that are unlocked
 --- @return table array of apartment id's
 getOpenApartments = function()
 	local openApartments = {}
-  for k,v in pairs(activeApartments) do
-    if (v.open) then
-      openApartments[#openApartments + 1] = k
+  for apartmentId, v in pairs(activeApartments) do
+    if v.open then
+      openApartments[#openApartments + 1] = apartmentId
     end
   end
   return openApartments
