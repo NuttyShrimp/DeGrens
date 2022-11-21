@@ -93,6 +93,13 @@ const findBuyer = async () => {
   pedsSoldTo.push(buyer);
   Peek.removeEntityEntry(peekId);
 
+  const hasSellableItems = await RPC.execute<boolean>('criminal:cornersell:hasSellables');
+  if (!hasSellableItems) {
+    Notifications.add('Je hebt meer om te verkopen', 'error');
+    cornersellEnabled = false;
+    return;
+  }
+
   setTimeout(() => {
     findBuyer();
   }, 10000);
