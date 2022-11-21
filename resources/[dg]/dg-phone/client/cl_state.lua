@@ -38,7 +38,7 @@ setState = function(key, value)
 	if key == 'inCall' and value ~= oldContext[key] then
 		setPhoneCallAnim(value)
 	end
-	if key == 'hasPhone' and value == false and context.state ~= '0' then
+	if key == 'hasPhone' and value == false and context.state ~= 0 then
 		closePhone()
 	end
 end
