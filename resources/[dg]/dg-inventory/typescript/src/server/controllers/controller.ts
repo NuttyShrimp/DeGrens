@@ -2,7 +2,7 @@ import { Events, Util, RPC, Inventory } from '@dgx/server';
 import inventoryManager from 'modules/inventories/manager.inventories';
 import itemDataManager from 'classes/itemdatamanager';
 import itemManager from 'modules/items/manager.items';
-import { getConfig } from 'services/config';
+import { awaitConfigLoad, getConfig } from 'services/config';
 import { concatId, splitId } from '../util';
 import repository from 'services/repository';
 
@@ -162,6 +162,7 @@ const getFirstItemOfName = async (type: Inventory.Type, identifier: string, name
 
 // You can use this to create a stash to be used in script with allowedItems (see houserob sell for example)
 const createScriptedStash = async (identifier: string, size: number, allowedItems?: string[]) => {
+  await awaitConfigLoad();
   const invId = concatId('stash', identifier);
   const inventory = await inventoryManager.get(invId);
   inventory.size = size;
