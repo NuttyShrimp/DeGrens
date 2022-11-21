@@ -30,7 +30,7 @@ const baseCommands: Server.Command[] = [
           shouldShow = senderCoords.subtract(plyCoords).Length <= 20;
         }
         if (!shouldShow) return;
-        sendMessage(src, msg);
+        sendMessage(player, msg);
       });
     },
   },
