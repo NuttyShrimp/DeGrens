@@ -14,11 +14,8 @@ export const setAmmo: CommandData = {
   role: 'staff',
   handler: (caller, args: SetAmmoData) => {
     try {
-      const amount = parseInt(args.amount ?? '0');
-      if (amount < 1 || amount > 250) {
-        Notifications.add(caller.source, 'Amount should be between 1 and 250', 'error');
-        return;
-      }
+      let amount = parseInt(args.amount ?? '1');
+      amount = Math.max(Math.min(amount, 250), 1);
       const plyId = args.Target?.serverId ?? caller.source;
       Events.emitNet('weapons:client:forceAmmo', plyId, amount);
     } catch (e) {
