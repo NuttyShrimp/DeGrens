@@ -35,7 +35,7 @@ export const ContactModal: FC<
     ]}
     onAccept={async contact => {
       showLoadModal();
-      await nuiAction(`phone/contacts/${ModalAction[props.type]}`, contact);
+      await nuiAction(`phone/contacts/${ModalAction[props.type]}`, { id: props.contact.id, ...contact });
       showCheckmarkModal(() => fetchContacts());
     }}
   />
