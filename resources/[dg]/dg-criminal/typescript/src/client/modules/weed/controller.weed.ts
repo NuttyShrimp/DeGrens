@@ -69,9 +69,9 @@ Events.onNet('criminal:weed:plant', async (itemId: string) => {
       if (!isValid) return;
 
       if (IsControlJustPressed(0, 18)) {
-        DeleteEntity(entity);
         clearInterval(interval);
         res(Util.getEntityCoords(entity));
+        DeleteEntity(entity);
       }
     }, 1);
   });
