@@ -1,5 +1,6 @@
 import React, { FC, useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
+import { useKeyboardKey } from '@src/lib/hooks/useKeyboardKey';
 
 import { devData } from '../../../../lib/devdata';
 import { nuiAction } from '../../../../lib/nui-comms';
@@ -19,10 +20,22 @@ const isSameWheel = (
 
 export const WheelsMenu: FC<{ goToMainMenu: () => void }> = ({ goToMainMenu }) => {
   const { setTitle, setEquipped, resetTitle, setIsInCart, setPrice } = useInformationBar();
-  const { showGuide, hideGuide } = useGuide({
-    title: 'Add upgrade to cart',
-    kbdCombo: ['Enter'],
-  });
+  const { key: leftKey } = useKeyboardKey('q');
+  const { key: rightKey } = useKeyboardKey('e');
+  const { showGuide, hideGuide } = useGuide([
+    {
+      title: 'Add to cart',
+      kbdCombo: ['Enter'],
+    },
+    {
+      title: 'Previous Category',
+      kbdCombo: [leftKey.toLocaleUpperCase()],
+    },
+    {
+      title: 'Next Category',
+      kbdCombo: [rightKey.toLocaleUpperCase()],
+    },
+  ]);
   const { addItemToCart, getCartItemByComponent, removeItemFromCart } = useCart();
   const { useEventRegister } = useKeyEvents();
 
