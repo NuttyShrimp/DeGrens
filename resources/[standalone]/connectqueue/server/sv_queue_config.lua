@@ -58,11 +58,10 @@ Citizen.CreateThread(function()
 end)
 
 function loadDatabaseQueue()
-  DGCore.Functions.ExecuteSql(false, "SELECT * FROM queue_priority", function(result)
-    if result[1] ~= nil then
-      for _, v in pairs(result) do
-        Config.Priority[v.steamid] = tonumber(v.priority)
-      end
-    end
-  end)
+  local result = DGX.SQL.query('SELECT * FROM queue_priority')
+  if not result then return end
+
+  for _, data in pairs(result) do
+    Config.Priority[data.steamid] = tonumber(data.priority)
+  end
 end

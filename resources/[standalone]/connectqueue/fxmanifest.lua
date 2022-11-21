@@ -1,8 +1,19 @@
-fx_version 'bodacious'
+fx_version 'cerulean'
 game 'common'
 
-server_script "server/sv_queue_config.lua"
-server_script "connectqueue.lua"
+shared_scripts {
+  '@dg-core/import.lua',
+  '@ts-shared/shared/lib.lua'
+}
 
-server_script "shared/sh_queue.lua"
-client_script "shared/sh_queue.lua"
+client_scripts {
+  "@ts-shared/client/client.js",
+  "shared/sh_queue.lua"
+}
+
+server_scripts {
+  "@ts-shared/server/server.js",
+  "server/sv_queue_config.lua",
+  "connectqueue.lua",
+  "shared/sh_queue.lua",
+}

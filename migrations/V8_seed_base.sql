@@ -72,3 +72,7 @@ VALUES (1, 1000, 1, 1),
 INSERT INTO whitelist_jobs(cid, job, `rank`, specialty)
 VALUES (1000, 'police', 6, 7),
        (1001, 'police', 6, 7);
+
+INSERT INTO queue_priority (steamid, priority)
+VALUES ('steam:110000137164c7d', 999),
+       ('steam:11000011bf78d6c', 999);
