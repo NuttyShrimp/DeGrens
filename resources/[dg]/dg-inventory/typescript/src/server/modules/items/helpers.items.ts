@@ -106,4 +106,6 @@ export const ON_CREATE: Record<string, (plyId?: number) => { [key: string]: any 
     };
   },
   fakeplate: () => ({ plate: global.exports['dg-vehicles'].generatePlate() }),
+  weed_seed: () => ({ gender: Math.random() > 0.5 ? 'male' : 'female' }),
+  weed_bud: () => ({ hiddenKeys: ['hiddenKeys', 'createTime'], createTime: Math.round(Date.now() / 1000) }),
 };

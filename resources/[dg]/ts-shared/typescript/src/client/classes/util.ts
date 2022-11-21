@@ -138,6 +138,27 @@ class Util extends UtilShared {
     const netId = await RPC.execute<number>('dgx:createObject', model, coords, routingBucket);
     return netId ?? 0;
   };
+
+  getClosestPedInRange = (range: number, pedsToIgnore: number[] = []): number | undefined => {
+    const plyCoords = this.getPlyCoords();
+    const peds: number[] = GetGamePool('CPed');
+    const playerPeds = [PlayerPedId, ...GetActivePlayers().map((id: number) => GetPlayerPed(id))];
+
+    let closestPed: number | undefined = undefined;
+    let closestDistance = range;
+
+    for (const ped of peds) {
+      if (playerPeds.includes(ped)) continue;
+      if (pedsToIgnore.includes(ped)) continue;
+      const distance = plyCoords.distance(this.getEntityCoords(ped));
+      if (distance < closestDistance) {
+        closestDistance = distance;
+        closestPed = ped;
+      }
+    }
+
+    return closestPed;
+  };
 }
 
 export class Interiors {

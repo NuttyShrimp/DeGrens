@@ -634,24 +634,13 @@
     }
   },
   {
-    "name": "weed_seed_male",
-    "label": "Mannelijk Weed Zaadje",
+    "markedForSeizure": true,
+    "name": "weed_seed",
+    "label": "Weed Zaadje",
     "useable": true,
     "decayRate": 2880,
     "image": "weed_seed.png",
     "description": "Probeer het eens te planten in de grond, wie weet groeit het!",
-    "size": {
-      "x": 1,
-      "y": 1
-    }
-  },
-  {
-    "name": "weed_seed_female",
-    "label": "Vrouwelijk Weed Zaadje",
-    "useable": true,
-    "decayRate": 2880,
-    "image": "weed_seed.png",
-    "description": "Probeer het eens te planten in de grond, wie weet groeit het",
     "size": {
       "x": 1,
       "y": 1

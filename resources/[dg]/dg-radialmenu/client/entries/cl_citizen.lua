@@ -12,13 +12,12 @@ entries.citizen = {
 	},
 	{
 		id = 'cornerselling',
-		title = 'Corner Selling',
+		title = 'Cornerselling',
 		icon = 'cannabis',
-        type = 'client',
-		event = 'dg-cornerselling:client:ToggleSelling',
+		event = 'criminal:cornersell:toggle',
 		shouldClose = true,
-		isEnabled = function()
-			return true
+		isEnabled = function(playerData)
+			return playerData.job.name ~= 'police'
 		end
 	}
 }

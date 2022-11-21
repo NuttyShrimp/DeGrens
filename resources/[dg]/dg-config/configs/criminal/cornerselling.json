@@ -1,0 +1,14 @@
+{
+  "requiredCops": 0,
+  "sellableItems": {
+    "weed_bag": { "value": 15, "reputation": 0 },
+    "meth_bag": { "value": 65, "reputation": 1000 }
+  },
+  "decayTime": 10,
+  "cleanChance": 25,
+  "sellAmount": {
+    "min": 1,
+    "max": 5
+  },
+  "heatmapSize": 50
+}
