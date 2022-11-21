@@ -23,7 +23,6 @@ export const TransactionModal = () => (
     ]}
     onAccept={vals => {
       showLoadModal();
-      // TODO: move endpoint to financials script after financials UI has been moved to this
       nuiAction('phone/payconiq/makeTransaction', vals);
       showCheckmarkModal(() => {
         genericAction('phone.apps.payconiq', { dirty: true });

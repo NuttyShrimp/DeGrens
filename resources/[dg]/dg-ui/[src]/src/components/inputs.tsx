@@ -272,8 +272,13 @@ Input.Contact = props => {
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const [selValue, setSelValue] = useState<string>('');
   const onChangeCapture: changeFunction = (value, name, evt) => {
-    setSelValue(value ?? '');
-    props.onChange(value, name, evt);
+    const isNum = !isNaN(Number(value));
+    let phoneNumber = value;
+    if (!isNum) {
+      phoneNumber = contacts.find(c => c.label === value)?.phone ?? '';
+    }
+    setSelValue(phoneNumber);
+    props.onChange(phoneNumber, name, evt);
   };
   return (
     <Input.AutoComplete

@@ -14,15 +14,18 @@ export const Hud = () => {
       <Section title={'Input'}>
         <Input.AutoComplete
           name={'kbdlayout'}
-          value={state?.keyboard || "qwerty"}
+          value={state?.keyboard || 'qwerty'}
           onChange={e =>
             updateConfig('hud', {
               ...state,
-              keyboard: (e || 'qwerty') as "azerty" | 'qwerty',
+              keyboard: (e || 'qwerty') as 'azerty' | 'qwerty',
             })
           }
           label={'Keyboard Layout'}
-          options={[{ label: 'Qwerty', value: 'qwerty' }, { label: "Azerty", value: 'azerty' }]}
+          options={[
+            { label: 'Qwerty', value: 'qwerty' },
+            { label: 'Azerty', value: 'azerty' },
+          ]}
         />
       </Section>
       <Section title={'Compass'}>
