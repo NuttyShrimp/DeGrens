@@ -1,4 +1,4 @@
-import { RPC, Chat, Notifications } from '@dgx/server';
+import { RPC, Chat, Notifications, Util } from '@dgx/server';
 
 import { addCash, getCash, removeCash } from './service';
 import { cashLogger } from './util';
@@ -25,45 +25,46 @@ Chat.registerCommand(
     },
   ],
   'user',
-  (src, args) => {
+  (src, _, args) => {
     if (!args[0] || !args[1]) {
       Notifications.add(src, `Niet alle velden zijn ingevuld!`, 'error');
       return;
     }
 
-    try {
-      cashLogger.silly(`givecash: from ${src} to ${args[0]} | amount: ${args[1]}`);
-      const target = parseInt(args[0]);
-      const amount = parseInt(args[1]);
-      if (isNaN(amount)) {
-        throw new Error(`Het bedrag moet een getal zijn!`);
-      }
-      if (amount < 1) {
-        throw new Error(`Het bedrag moet groter zijn dan 0!`);
-      }
-      if (src == target) {
-        throw new Error(`Je kan je eigen geen cash geven!`);
-      }
-      const plyPed = GetPlayerPed(String(src));
-      const plyPos = DGX.Util.ArrayToVector3(GetEntityCoords(plyPed));
-      const trgPed = GetPlayerPed(String(target));
-      if (!trgPed) {
-        throw new Error(`Kon actie niet uitvoeren!`);
-      }
-      const trgPos = DGX.Util.ArrayToVector3(GetEntityCoords(trgPed));
-      if (plyPos.distance(trgPos) > 4) {
-        throw new Error(`Kon actie niet uitvoeren!`);
-      }
-      const cash = getCash(src);
-      if (cash < amount) {
-        throw new Error(`Je hebt niet genoeg cash!`);
-      }
-      removeCash(src, amount, `Gave cash aan ${GetPlayerName(String(target))}(${target}) via cmd`);
-      addCash(target, amount, `Received cash van ${GetPlayerName(String(src))}(${src}) via cmd`);
-      emitNet('animations:client:EmoteCommandStart', src, ['id']);
-    } catch (e) {
-      cashLogger.debug(e);
+    cashLogger.silly(`givecash: from ${src} to ${args[0]} | amount: ${args[1]}`);
+    const target = Number(args[0]);
+    const amount = Number(args[1]);
+    if (isNaN(amount)) {
+      Notifications.add(src, `Het bedrag moet een getal zijn!`, 'error');
+      return;
     }
+
+    if (amount < 1) {
+      Notifications.add(src, `Het bedrag moet hoger dan 0 zijn!`, 'error');
+      return;
+    }
+
+    if (src == target) {
+      Notifications.add(src, `Je kan geen cash aan jezelf geven`, 'error');
+      return;
+    }
+
+    const plyPos = Util.getPlyCoords(src);
+    const targetPos = Util.getPlyCoords(target);
+    if (plyPos.distance(targetPos) > 4) {
+      Notifications.add(src, `Deze persoon is te ver van je`, 'error');
+      return;
+    }
+
+    const cash = getCash(src);
+    if (cash < amount) {
+      Notifications.add(src, `Je hebt niet genoeg cash`, 'error');
+      return;
+    }
+
+    removeCash(src, amount, `Gave cash aan ${GetPlayerName(String(target))}(${target}) via cmd`);
+    addCash(target, amount, `Received cash van ${GetPlayerName(String(src))}(${src}) via cmd`);
+    emitNet('animations:client:EmoteCommandStart', src, ['id']);
   }
 );
 
