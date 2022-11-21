@@ -1,8 +1,11 @@
 import { Events } from '@dgx/server';
 import { seedBusinessTypes } from './business';
 
-export let config: Config.Config;
-export let permissions: Record<string, number> = {};
+let config: Config.Config;
+let permissions: Record<string, number> = {};
+
+export const getConfig = () => config;
+export const getPermissions = () => permissions;
 
 export const setConfig = async (data: Config.Config) => {
   config = data;

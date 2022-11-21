@@ -141,7 +141,7 @@ export class PermissionsManager {
       AND cid = ?`,
       [this.account_id, cid]
     );
-    this.logger.info(`addPermissions: removing access | cid: ${cid}`);
+    this.logger.info(`removePermissions: removing access | cid: ${cid}`);
     this.members = this.members.filter(m => m.cid !== cid);
   }
 

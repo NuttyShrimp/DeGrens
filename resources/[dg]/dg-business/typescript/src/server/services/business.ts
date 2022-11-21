@@ -1,12 +1,13 @@
 import { Events, Financials, SQL, Util } from '@dgx/server';
 import { Business } from 'classes/Business';
-import { config, getBitmaskForPermissions } from './config';
+import { getBitmaskForPermissions, getConfig } from './config';
 import { mainLogger } from '../sv_logger';
 
 let businesses: Map<number, Business> = new Map();
 let businessTypes: Map<number, Business.Type> = new Map();
 
 export const seedBusinessTypes = async () => {
+  const config = getConfig();
   let bTypes = await SQL.query<{ name: string; id: number }[]>('SELECT name, id FROM business_type');
   const bTypesToInsert = Object.keys(config.types)
     .filter(type => !Object.values(bTypes).find(et => et.name === type))
@@ -188,8 +189,7 @@ export const dispatchBusinessPermissionsToClientCache = (cid: number, action: 'a
   if (plyId === undefined) return;
   const business = getBusinessByName(name);
   if (!business) return;
-  const permissions = business.getClientInfo(cid)?.permissions;
-  if (!permissions) return;
+  const permissions = business.getClientInfo(cid)?.permissions ?? [];
   Events.emitNet('business:client:updateCache', plyId, action, name, permissions);
 };
 

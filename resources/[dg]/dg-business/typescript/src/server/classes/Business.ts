@@ -1,6 +1,6 @@
 import { Financials, Phone, SQL, Util } from '@dgx/server';
 import { dispatchBusinessPermissionsToClientCache } from 'services/business';
-import { getBitmaskForPermissions, permissions, permissionsFromBitmask } from 'services/config';
+import { getBitmaskForPermissions, getPermissions, permissionsFromBitmask } from 'services/config';
 import { mainLogger } from 'sv_logger';
 import winston from 'winston';
 
@@ -17,6 +17,10 @@ export class Business {
     this.loadBusinessInfo();
     this.logger = mainLogger.child({ module: pInfo.label });
   }
+
+  private getOwnerCid = () => {
+    return this.employees.find(e => e.isOwner)?.citizenid;
+  };
 
   private setEmployees(employees: Business.Employee[]) {
     employees.sort((e1, e2) => {
@@ -113,11 +117,12 @@ export class Business {
   hasPermission(cid: number, permission: string) {
     const employee = this.employees.find(e => e.citizenid === cid);
     if (!employee) return false;
+    const permissions = getPermissions();
     if (!permissions[permission]) return false;
     if (employee.isOwner) return true;
-    const permMask = this.roles[employee.role].permissions;
-    if (!permMask) return false;
-    return permMask & permissions[permission];
+    const role = this.roles.find(r => employee.role === r.id);
+    if (!role) return false;
+    return role.permissions & permissions[permission];
   }
 
   getClientInfo(cid: number): undefined | Business.UI.Business {
@@ -165,6 +170,7 @@ export class Business {
     if (!target) throw new Error('Invalid CID');
     const roleId = this.roles.find(r => r.name === roleName)?.id;
     if (!roleId) throw new Error('Invalid role');
+
     const employeeId = await SQL.insert(
       'INSERT INTO business_employee (citizenid, role_id, business_id) VALUES (?, ?, ?)',
       [targetCID, roleId, this.info.id]
@@ -214,7 +220,7 @@ export class Business {
     if (!employee) throw new Error('Not employed');
     if (employee.isOwner) throw new Error('Cannot fire the owner');
     await Financials.removePermissions(this.info.bank_account_id, targetCID);
-    await SQL.insert('DELETE FROM business_employee WHERE id = ? AND business_id = ?', [employee.id, this.info.id]);
+    await SQL.query('DELETE FROM business_employee WHERE id = ? AND business_id = ?', [employee.id, this.info.id]);
     this.setEmployees(this.employees.filter(e => e.id !== employee.id));
     Util.Log(
       'business:fire',
@@ -283,7 +289,7 @@ export class Business {
     if (!employeeId) throw new Error('Not employed');
     const role = this.roles.find(r => r.name === roleName);
     if (!role) throw new Error('Invalid role');
-    await SQL.insert('UPDATE business_employee SET role_id = ? WHERE id = ? AND business_id = ?', [
+    await SQL.query('UPDATE business_employee SET role_id = ? WHERE id = ? AND business_id = ?', [
       role.id,
       employeeId,
       this.info.id,
@@ -406,7 +412,7 @@ export class Business {
       .concat(untouchedPerms);
     const roleBitmask = getBitmaskForPermissions(newPerms);
     if (roleBitmask !== this.roles[roleIdx].permissions) {
-      await SQL.insert('UPDATE business_role SET permissions = ? WHERE name = ? AND business_id = ?', [
+      await SQL.query('UPDATE business_role SET permissions = ? WHERE name = ? AND business_id = ?', [
         roleBitmask,
         name,
         this.info.id,
@@ -435,7 +441,7 @@ export class Business {
       Util.Log(
         'business:deleteRole:missingPermission',
         {
-          permissions,
+          permissions: getPermissions(),
           name,
         },
         `${Util.getName(src)} tried to delete a business role for ${
@@ -458,9 +464,6 @@ export class Business {
       `${Util.getName(src)} deleted the ${name} role for ${this.info.label}`,
       src
     );
-    this.employees.forEach(e => {
-      dispatchBusinessPermissionsToClientCache(e.citizenid, 'add', this.info.name);
-    });
     this.logAction(cid, 'role', `de ${name} rol verwijderd`);
   }
 
@@ -483,10 +486,12 @@ export class Business {
     if (!employee) throw new Error(`${targetCID} is not hired`);
     const employeeAccId = Financials.getDefaultAccountId(employee.citizenid);
     if (!employeeAccId) throw new Error(`Could not get default id of ${targetCID}`);
+    const ownerCid = this.getOwnerCid();
+    if (!ownerCid) throw new Error(`Could not get owner of business`);
     const success = await Financials.transfer(
       this.info.bank_account_id,
       employeeAccId,
-      cid,
+      ownerCid,
       employee.citizenid,
       price,
       comment
@@ -506,7 +511,7 @@ export class Business {
 
   async payExtern(src: number, targetCID: number, price: number, comment: string) {
     const cid = Util.getCID(src);
-    if (!this.hasPermission(cid, 'pay_extern')) {
+    if (!this.hasPermission(cid, 'pay_external')) {
       Util.Log(
         'business:payExtern:missingPermission',
         {
@@ -523,7 +528,16 @@ export class Business {
     }
     const externAccId = Financials.getDefaultAccountId(targetCID);
     if (!externAccId) throw new Error(`Could not get default account of ${targetCID}`);
-    const success = await Financials.transfer(this.info.bank_account_id, externAccId, cid, targetCID, price, comment);
+    const ownerCid = this.getOwnerCid();
+    if (!ownerCid) throw new Error(`Could not get owner of business`);
+    const success = await Financials.transfer(
+      this.info.bank_account_id,
+      externAccId,
+      ownerCid,
+      targetCID,
+      price,
+      comment
+    );
     Util.Log(
       `business:payExtern:${success ? 'success' : 'failed'}`,
       {
@@ -583,7 +597,16 @@ export class Business {
 
     const externAccId = Financials.getDefaultAccountId(targetCID);
     if (!externAccId) throw new Error(`Could not get default account of ${targetCID}`);
-    const success = await Financials.transfer(externAccId, this.info.bank_account_id, cid, targetCID, price, comment);
+    const ownerCid = this.getOwnerCid();
+    if (!ownerCid) throw new Error(`Could not get owner of business`);
+    const success = await Financials.transfer(
+      externAccId,
+      this.info.bank_account_id,
+      targetCID,
+      ownerCid,
+      price,
+      comment
+    );
     Util.Log(
       `business:payExtern:${success ? 'success' : 'failed'}`,
       {
