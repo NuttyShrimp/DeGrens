@@ -76,7 +76,7 @@ RegisterUICallback('dg-apartments:client:inviteApartment', function(_, cb)
     },
   })
   if result.accepted and result.values.pid then 
-	  TriggerServerEvent('dg-apartments:server:inviteApartment', dialog.values.pid)
+	  TriggerServerEvent('dg-apartments:server:inviteApartment', result.values.pid)
   end
   cb({ data = {}, meta = { ok = true } })
 end)
