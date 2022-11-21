@@ -55,6 +55,7 @@ export const doPurchase = async (src: number, items: Record<string, number>) => 
     }
     pendingPickups[cid].items[itemName] += items[itemName];
   }
+  return true;
 };
 
 export const receivePurchasedItems = (src: number) => {
