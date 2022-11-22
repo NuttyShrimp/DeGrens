@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import AppWrapper from '@components/appwrapper';
 
 import { sanitizeText } from '../../lib/util';
@@ -9,7 +9,20 @@ import store from './store';
 import './styles/interaction.scss';
 
 const Component: AppFunction<Interaction.State> = props => {
+  const [stopHiding, setStopHiding] = useState(false);
+  const [hidingTimeout, setHidingTimeout] = useState<NodeJS.Timeout | null>(null);
+
+  useEffect(() => {
+    if (!stopHiding) return;
+    if (hidingTimeout !== null) {
+      clearTimeout(hidingTimeout);
+      setHidingTimeout(null);
+    }
+    setStopHiding(false);
+  }, [stopHiding]);
+
   const showInteraction = useCallback((data: { text: string; type: InteractionType }) => {
+    setStopHiding(true);
     props.updateState({
       visible: true,
       show: true,
@@ -25,13 +38,15 @@ const Component: AppFunction<Interaction.State> = props => {
       show: false,
     });
     // Animate out
-    setTimeout(() => {
+    const timeout = setTimeout(() => {
       props.updateState({
         visible: false,
         text: '',
         type: 'info',
       });
     }, 500);
+    // Save timeout to be able to cancel when we show again
+    setHidingTimeout(timeout);
   }, []);
 
   return (

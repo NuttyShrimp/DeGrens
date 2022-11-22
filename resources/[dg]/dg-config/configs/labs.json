@@ -3,82 +3,82 @@
     {
       "coords": { "x": -308.3487, "y": -1354.715, "z": 23.32654 },
       "heading": 0.0,
-      "doorId": 54
+      "doorId": "druglab-door-1"
     },
     {
       "coords": { "x": 160.9491, "y": -1711.339, "z": 21.22452 },
       "heading": 319.83,
-      "doorId": 55
+      "doorId": "druglab-door-2"
     },
     {
       "coords": { "x": -1247.347, "y": -1117.367, "z": -0.193 },
       "heading": 17.74,
-      "doorId": 56
+      "doorId": "druglab-door-3"
     },
     {
       "coords": { "x": 596.1774, "y": -424.0846, "z": 16.64067 },
       "heading": 353.8,
-      "doorId": 57
+      "doorId": "druglab-door-4"
     },
     {
       "coords": { "x": 938.1139, "y": -1474.244, "z": 22.06398 },
       "heading": 89.88,
-      "doorId": 58
+      "doorId": "druglab-door-5"
     },
     {
       "coords": { "x": -1973.997, "y": -227.6927, "z": 26.88121 },
       "heading": 54.81,
-      "doorId": 59
+      "doorId": "druglab-door-6"
     },
     {
       "coords": { "x": -66.64671, "y": -1291.528, "z": 22.80891 },
       "heading": 178.48,
-      "doorId": 60
+      "doorId": "druglab-door-7"
     },
     {
       "coords": { "x": 801.0659, "y": -88.12389, "z": 73.93684 },
       "heading": 58.44,
-      "doorId": 61
+      "doorId": "druglab-door-8"
     },
     {
       "coords": { "x": -146.1172, "y": 6304.999, "z": 23.58811 },
       "heading": 43.55,
-      "doorId": 62
+      "doorId": "druglab-door-9"
     },
     {
       "coords": { "x": -39.16751, "y": 6456.221, "z": 23.35282 },
       "heading": 221.61,
-      "doorId": 63
+      "doorId": "druglab-door-10"
     },
     {
       "coords": { "x": 1395.927, "y": -2091.32, "z": 44.51621 },
       "heading": 308.2,
-      "doorId": 64
+      "doorId": "druglab-door-11"
     },
     {
       "coords": { "x": 2863.625, "y": 4456.72, "z": 40.33921 },
       "heading": 16.29,
-      "doorId": 65
+      "doorId": "druglab-door-12"
     },
     {
       "coords": { "x": 554.0323, "y": 2681.549, "z": 34.0619 },
       "heading": 96.01,
-      "doorId": 66
+      "doorId": "druglab-door-13"
     },
     {
       "coords": { "x": 963.9277, "y": 3629.835, "z": 24.77716 },
       "heading": 87.36,
-      "doorId": 67
+      "doorId": "druglab-door-14"
     },
     {
       "coords": { "x": 2536.701, "y": 4118.594, "z": 30.48421 },
       "heading": 332.6,
-      "doorId": 68
+      "doorId": "druglab-door-15"
     },
     {
       "coords": { "x": 437.865, "y": -1971.171, "z": 16.30181 },
       "heading": 133.56,
-      "doorId": 69
+      "doorId": "druglab-door-16"
     }
   ],
   "types": {

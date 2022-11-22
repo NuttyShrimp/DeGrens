@@ -1,0 +1,3067 @@
+[
+  {
+    "description": "MRPD Hoofdingang",
+    "locked": false,
+    "authorized": {
+      "job": [
+        {
+          "name": "police"
+        }
+      ]
+    },
+    "distance": 3,
+    "doors": [
+      {
+        "model": "gabz_mrpd_reception_entrancedoor",
+        "coords": {
+          "x": 434.744384765625,
+          "y": -980.755615234375,
+          "z": 30.81529998779297
+        }
+      },
+      {
+        "model": "gabz_mrpd_reception_entrancedoor",
+        "coords": {
+          "x": 434.744384765625,
+          "y": -983.078125,
+          "z": 30.81529998779297
+        }
+      }
+    ]
+  },
+  {
+    "description": "MRPD Hoofdingang Ingang links",
+    "locked": true,
+    "authorized": {
+      "job": [
+        {
+          "name": "police"
+        }
+      ]
+    },
+    "distance": 3,
+    "doors": [
+      {
+        "model": "gabz_mrpd_door_04",
+        "coords": {
+          "x": 441.260009765625,
+          "y": -977.60107421875,
+          "z": 30.82319068908691
+        }
+      }
+    ]
+  },
+  {
+    "description": "MRPD Hoofdingang Ingang Rechts",
+    "locked": true,
+    "authorized": {
+      "job": [
+        {
+          "name": "police"
+        }
+      ]
+    },
+    "distance": 3,
+    "doors": [
+      {
+        "model": "gabz_mrpd_door_05",
+        "coords": {
+          "x": 441.260009765625,
+          "y": -986.2335205078124,
+          "z": 30.82319068908691
+        }
+      }
+    ]
+  },
+  {
+    "description": "MRPD Zij ingang",
+    "locked": true,
+    "authorized": {
+      "job": [
+        {
+          "name": "police"
+        }
+      ]
+    },
+    "distance": 3,
+    "doors": [
+      {
+        "model": "gabz_mrpd_reception_entrancedoor",
+        "coords": {
+          "x": 455.8861999511719,
+          "y": -972.2542724609376,
+          "z": 30.81529998779297
+        }
+      },
+      {
+        "model": "gabz_mrpd_reception_entrancedoor",
+        "coords": {
+          "x": 458.2087097167969,
+          "y": -972.2542724609376,
+          "z": 30.81529998779297
+        }
+      }
+    ]
+  },
+  {
+    "description": "MRPD Parking zij ingang",
+    "locked": true,
+    "authorized": {
+      "job": [
+        {
+          "name": "police"
+        }
+      ]
+    },
+    "distance": 3,
+    "doors": [
+      {
+        "model": "gabz_mrpd_reception_entrancedoor",
+        "coords": {
+          "x": 440.73919677734375,
+          "y": -998.7462158203124,
+          "z": 30.81529998779297
+        }
+      },
+      {
+        "model": "gabz_mrpd_reception_entrancedoor",
+        "coords": {
+          "x": 443.0617980957031,
+          "y": -998.7462158203124,
+          "z": 30.81529998779297
+        }
+      }
+    ]
+  },
+  {
+    "description": "MRPD Dak",
+    "locked": true,
+    "authorized": {
+      "job": [
+        {
+          "name": "police"
+        }
+      ]
+    },
+    "distance": 3,
+    "doors": [
+      {
+        "model": "gabz_mrpd_door_03",
+        "coords": {
+          "x": 464.30859375,
+          "y": -984.5283813476564,
+          "z": 43.77712249755859
+        }
+      }
+    ]
+  },
+  {
+    "description": "MRPD Paaltjes oprijden",
+    "locked": true,
+    "authorized": {
+      "job": [
+        {
+          "name": "police"
+        }
+      ]
+    },
+    "distance": 20,
+    "playSound": true,
+    "doors": [
+      {
+        "model": "gabz_mrpd_bollards2",
+        "coords": {
+          "x": 410.010009765625,
+          "y": -1028.3599853515625,
+          "z": 29.38999938964843
+        }
+      }
+    ],
+    "polyzone": {
+      "center": {
+        "x": 410,
+        "y": -1028.34,
+        "z": 29.4
+      },
+      "width": 5,
+      "length": 20,
+      "heading": 90
+    }
+  },
+  {
+    "description": "MRPD Paaltjes uitrijden",
+    "locked": true,
+    "authorized": {
+      "job": [
+        {
+          "name": "police"
+        }
+      ]
+    },
+    "distance": 20,
+    "playSound": true,
+    "doors": [
+      {
+        "model": "gabz_mrpd_bollards1",
+        "coords": {
+          "x": 409.9599914550781,
+          "y": -1020.1699829101564,
+          "z": 29.36000061035156
+        }
+      }
+    ],
+    "polyzone": {
+      "center": {
+        "x": 410.15,
+        "y": -1020.08,
+        "z": 29.36
+      },
+      "width": 5,
+      "length": 20,
+      "heading": 90
+    }
+  },
+  {
+    "description": "MRPD Linkse garagepoort van binnen",
+    "locked": true,
+    "authorized": {
+      "job": [
+        {
+          "name": "police"
+        }
+      ]
+    },
+    "distance": 10,
+    "playSound": true,
+    "doors": [
+      {
+        "model": "gabz_mrpd_garage_door",
+        "coords": {
+          "x": 452.260009765625,
+          "y": -1001.2000122070312,
+          "z": 25.76000022888183
+        }
+      }
+    ]
+  },
+  {
+    "description": "MRPD Rechtse garagepoort van binnen",
+    "locked": true,
+    "authorized": {
+      "job": [
+        {
+          "name": "police"
+        }
+      ]
+    },
+    "distance": 10,
+    "playSound": true,
+    "doors": [
+      {
+        "model": "gabz_mrpd_garage_door",
+        "coords": {
+          "x": 431.3900146484375,
+          "y": -1001.3200073242188,
+          "z": 25.77000045776367
+        }
+      }
+    ]
+  },
+  {
+    "description": "MRPD Ondergrondse Parking Deur Rechts",
+    "locked": true,
+    "authorized": {
+      "job": [
+        {
+          "name": "police"
+        }
+      ]
+    },
+    "distance": 3,
+    "doors": [
+      {
+        "model": "gabz_mrpd_room13_parkingdoor",
+        "coords": {
+          "x": 463.94000244140625,
+          "y": -996.72998046875,
+          "z": 26.3700008392334
+        }
+      }
+    ]
+  },
+  {
+    "description": "MRPD Ondergrondse Parking Deur Links",
+    "locked": true,
+    "authorized": {
+      "job": [
+        {
+          "name": "police"
+        }
+      ]
+    },
+    "distance": 3,
+    "doors": [
+      {
+        "model": "gabz_mrpd_room13_parkingdoor",
+        "coords": {
+          "x": 464.0400085449219,
+          "y": -975.489990234375,
+          "z": 26.3700008392334
+        }
+      }
+    ]
+  },
+  {
+    "description": "MRPD Hek kleine parking",
+    "locked": true,
+    "authorized": {
+      "job": [
+        {
+          "name": "police"
+        }
+      ]
+    },
+    "distance": 10,
+    "playSound": true,
+    "doors": [
+      {
+        "model": "hei_prop_station_gate",
+        "coords": {
+          "x": 488.7999877929688,
+          "y": -1017.2000122070312,
+          "z": 27.10000038146972
+        }
+      }
+    ]
+  },
+  {
+    "description": "MRPD Kleine parking ingang",
+    "locked": true,
+    "authorized": {
+      "job": [
+        {
+          "name": "police"
+        }
+      ]
+    },
+    "distance": 3,
+    "doors": [
+      {
+        "model": "gabz_mrpd_door_03",
+        "coords": {
+          "x": 469.1400146484375,
+          "y": -1014.3400268554688,
+          "z": 26.3799991607666
+        }
+      },
+      {
+        "model": "gabz_mrpd_door_03",
+        "coords": {
+          "x": 468.0299987792969,
+          "y": -1014.3400268554688,
+          "z": 26.3799991607666
+        }
+      }
+    ]
+  },
+  {
+    "description": "MRPD Kleine parking gang richting cellen",
+    "locked": true,
+    "authorized": {
+      "job": [
+        {
+          "name": "police"
+        }
+      ]
+    },
+    "distance": 3,
+    "doors": [
+      {
+        "model": "gabz_mrpd_door_02",
+        "coords": {
+          "x": 471.2699890136719,
+          "y": -1008.4600219726564,
+          "z": 26.32999992370605
+        }
+      },
+      {
+        "model": "gabz_mrpd_door_02",
+        "coords": {
+          "x": 471.2799987792969,
+          "y": -1009.5499877929688,
+          "z": 26.27000045776367
+        }
+      }
+    ]
+  },
+  {
+    "description": "MRPD Main ingang cellen",
+    "locked": true,
+    "authorized": {
+      "job": [
+        {
+          "name": "police"
+        }
+      ]
+    },
+    "distance": 3,
+    "doors": [
+      {
+        "model": "gabz_mrpd_cells_door",
+        "coords": {
+          "x": 476.7799987792969,
+          "y": -1008.4299926757812,
+          "z": 26.27000045776367
+        }
+      }
+    ]
+  },
+  {
+    "description": "MRPD Cel 1",
+    "locked": true,
+    "authorized": {
+      "job": [
+        {
+          "name": "police"
+        }
+      ]
+    },
+    "distance": 3,
+    "doors": [
+      {
+        "model": "gabz_mrpd_cells_door",
+        "coords": {
+          "x": 477.239990234375,
+          "y": -1012.1799926757812,
+          "z": 26.27000045776367
+        }
+      }
+    ]
+  },
+  {
+    "description": "MRPD Cel 2",
+    "locked": true,
+    "authorized": {
+      "job": [
+        {
+          "name": "police"
+        }
+      ]
+    },
+    "distance": 3,
+    "doors": [
+      {
+        "model": "gabz_mrpd_cells_door",
+        "coords": {
+          "x": 480.4599914550781,
+          "y": -1012.0700073242188,
+          "z": 26.27000045776367
+        }
+      }
+    ]
+  },
+  {
+    "description": "MRPD Cel 3",
+    "locked": true,
+    "authorized": {
+      "job": [
+        {
+          "name": "police"
+        }
+      ]
+    },
+    "distance": 3,
+    "doors": [
+      {
+        "model": "gabz_mrpd_cells_door",
+        "coords": {
+          "x": 483.3800048828125,
+          "y": -1011.969970703125,
+          "z": 26.27000045776367
+        }
+      }
+    ]
+  },
+  {
+    "description": "MRPD Cel 4",
+    "locked": true,
+    "authorized": {
+      "job": [
+        {
+          "name": "police"
+        }
+      ]
+    },
+    "distance": 3,
+    "doors": [
+      {
+        "model": "gabz_mrpd_cells_door",
+        "coords": {
+          "x": 486.2200012207031,
+          "y": -1012.030029296875,
+          "z": 26.27000045776367
+        }
+      }
+    ]
+  },
+  {
+    "description": "MRPD Cel 5",
+    "locked": true,
+    "authorized": {
+      "job": [
+        {
+          "name": "police"
+        }
+      ]
+    },
+    "distance": 3,
+    "doors": [
+      {
+        "model": "gabz_mrpd_cells_door",
+        "coords": {
+          "x": 484.739990234375,
+          "y": -1007.7999877929688,
+          "z": 26.27000045776367
+        }
+      }
+    ]
+  },
+  {
+    "description": "MRPD Verhoor 1",
+    "locked": true,
+    "authorized": {
+      "job": [
+        {
+          "name": "police"
+        }
+      ]
+    },
+    "distance": 3,
+    "doors": [
+      {
+        "model": "gabz_mrpd_door_04",
+        "coords": {
+          "x": 482.44000244140625,
+          "y": -996.5,
+          "z": 26.3700008392334
+        }
+      }
+    ]
+  },
+  {
+    "description": "MRPD Verhoor 2",
+    "locked": true,
+    "authorized": {
+      "job": [
+        {
+          "name": "police"
+        }
+      ]
+    },
+    "distance": 3,
+    "doors": [
+      {
+        "model": "gabz_mrpd_door_04",
+        "coords": {
+          "x": 482.510009765625,
+          "y": -988.3900146484376,
+          "z": 26.3700008392334
+        }
+      }
+    ]
+  },
+  {
+    "description": "MRPD Cellen richting verhoorkamer",
+    "locked": true,
+    "authorized": {
+      "job": [
+        {
+          "name": "police"
+        }
+      ]
+    },
+    "distance": 3,
+    "doors": [
+      {
+        "model": "gabz_mrpd_door_02",
+        "coords": {
+          "x": 481.2799987792969,
+          "y": -997.780029296875,
+          "z": 26.27000045776367
+        }
+      },
+      {
+        "model": "gabz_mrpd_door_02",
+        "coords": {
+          "x": 480.2999877929688,
+          "y": -997.8499755859376,
+          "z": 26.27000045776367
+        }
+      }
+    ]
+  },
+  {
+    "description": "MRPD Garage richting cellen",
+    "locked": true,
+    "authorized": {
+      "job": [
+        {
+          "name": "police"
+        }
+      ]
+    },
+    "distance": 3,
+    "doors": [
+      {
+        "model": "gabz_mrpd_door_01",
+        "coords": {
+          "x": 469.239990234375,
+          "y": -1000.6699829101564,
+          "z": 26.3700008392334
+        }
+      },
+      {
+        "model": "gabz_mrpd_door_01",
+        "coords": {
+          "x": 468.2300109863281,
+          "y": -1000.75,
+          "z": 26.36000061035156
+        }
+      }
+    ]
+  },
+  {
+    "description": "MRPD Armory Hoofd",
+    "locked": true,
+    "authorized": {
+      "job": [
+        {
+          "name": "police"
+        }
+      ]
+    },
+    "distance": 3,
+    "doors": [
+      {
+        "model": "gabz_mrpd_door_03",
+        "coords": {
+          "x": 479.7507019042969,
+          "y": -999.6290283203124,
+          "z": 30.82319068908691
+        }
+      }
+    ]
+  },
+  {
+    "description": "MRPD Armory zijingang",
+    "locked": true,
+    "authorized": {
+      "job": [
+        {
+          "name": "police"
+        }
+      ]
+    },
+    "distance": 3,
+    "doors": [
+      {
+        "model": "gabz_mrpd_door_03",
+        "coords": {
+          "x": 487.4378051757813,
+          "y": -1000.1890258789064,
+          "z": 30.82319068908691
+        }
+      }
+    ]
+  },
+  {
+    "description": "MRPD Bewijskast",
+    "locked": true,
+    "authorized": {
+      "job": [
+        {
+          "name": "police"
+        }
+      ]
+    },
+    "distance": 3,
+    "doors": [
+      {
+        "model": "gabz_mrpd_door_03",
+        "coords": {
+          "x": 475.2000122070313,
+          "y": -989.9400024414064,
+          "z": 26.35000038146972
+        }
+      }
+    ]
+  },
+  {
+    "description": "MRPD",
+    "locked": true,
+    "authorized": {
+      "job": [
+        {
+          "name": "police"
+        }
+      ]
+    },
+    "distance": 3,
+    "doors": [
+      {
+        "model": "gabz_mrpd_door_01",
+        "coords": {
+          "x": 475.4500122070313,
+          "y": -1010.760009765625,
+          "z": 26.27000045776367
+        }
+      }
+    ]
+  },
+  {
+    "description": "Druglab 1",
+    "locked": true,
+    "authorized": {},
+    "distance": 10,
+    "hideInteraction": true,
+    "doors": [
+      {
+        "model": "prop_stock_door_01",
+        "coords": {
+          "x": -323.8176,
+          "y": -1356.841,
+          "z": 31.6589
+        }
+      }
+    ],
+    "name": "druglab-door-1"
+  },
+  {
+    "description": "Druglab 2",
+    "locked": true,
+    "authorized": {},
+    "distance": 10,
+    "hideInteraction": true,
+    "doors": [
+      {
+        "model": "prop_stock_door_01",
+        "coords": {
+          "x": 147.7371,
+          "y": -1703.024,
+          "z": 29.53036
+        }
+      }
+    ],
+    "name": "druglab-door-2"
+  },
+  {
+    "description": "Druglab 3",
+    "locked": true,
+    "authorized": {},
+    "distance": 10,
+    "hideInteraction": true,
+    "doors": [
+      {
+        "model": "prop_stock_door_01",
+        "coords": {
+          "x": -1261.402,
+          "y": -1124.17,
+          "z": 8.138565
+        }
+      }
+    ],
+    "name": "druglab-door-3"
+  },
+  {
+    "description": "Druglab 4",
+    "locked": true,
+    "authorized": {},
+    "distance": 10,
+    "hideInteraction": true,
+    "doors": [
+      {
+        "model": "prop_stock_door_01",
+        "coords": {
+          "x": 580.8344,
+          "y": -424.1805,
+          "z": 25.04554
+        }
+      }
+    ],
+    "name": "druglab-door-4"
+  },
+  {
+    "description": "Druglab 5",
+    "locked": true,
+    "authorized": {},
+    "distance": 10,
+    "hideInteraction": true,
+    "doors": [
+      {
+        "model": "prop_stock_door_01",
+        "coords": {
+          "x": 940.2401,
+          "y": -1489.713,
+          "z": 30.39634
+        }
+      }
+    ],
+    "name": "druglab-door-5"
+  },
+  {
+    "description": "Druglab 6",
+    "locked": true,
+    "authorized": {},
+    "distance": 10,
+    "hideInteraction": true,
+    "doors": [
+      {
+        "model": "prop_stock_door_01",
+        "coords": {
+          "x": -1981.128,
+          "y": -241.5837,
+          "z": 35.21357
+        }
+      }
+    ],
+    "name": "druglab-door-6"
+  },
+  {
+    "description": "Druglab 7",
+    "locked": true,
+    "authorized": {},
+    "distance": 10,
+    "hideInteraction": true,
+    "doors": [
+      {
+        "model": "prop_stock_door_01",
+        "coords": {
+          "x": -51.1778,
+          "y": -1289.401,
+          "z": 31.14127
+        }
+      }
+    ],
+    "name": "druglab-door-7"
+  },
+  {
+    "description": "Druglab 8",
+    "locked": true,
+    "authorized": {},
+    "distance": 10,
+    "hideInteraction": true,
+    "doors": [
+      {
+        "model": "prop_stock_door_01",
+        "coords": {
+          "x": 795.1727,
+          "y": -102.5835,
+          "z": 82.2692
+        }
+      }
+    ],
+    "name": "druglab-door-8"
+  },
+  {
+    "description": "Druglab 9",
+    "locked": true,
+    "authorized": {},
+    "distance": 10,
+    "hideInteraction": true,
+    "doors": [
+      {
+        "model": "prop_stock_door_01",
+        "coords": {
+          "x": -155.5519,
+          "y": 6292.557,
+          "z": 31.92047
+        }
+      }
+    ],
+    "name": "druglab-door-9"
+  },
+  {
+    "description": "Druglab 10",
+    "locked": true,
+    "authorized": {},
+    "distance": 10,
+    "hideInteraction": true,
+    "doors": [
+      {
+        "model": "prop_stock_door_01",
+        "coords": {
+          "x": -29.5171,
+          "y": 6468.496,
+          "z": 31.68517
+        }
+      }
+    ],
+    "name": "druglab-door-10"
+  },
+  {
+    "description": "Druglab 11",
+    "locked": true,
+    "authorized": {},
+    "distance": 10,
+    "hideInteraction": true,
+    "doors": [
+      {
+        "model": "prop_stock_door_01",
+        "coords": {
+          "x": 1384.355,
+          "y": -2080.837,
+          "z": 52.84856
+        }
+      }
+    ],
+    "name": "druglab-door-11"
+  },
+  {
+    "description": "Druglab 12",
+    "locked": true,
+    "authorized": {},
+    "distance": 10,
+    "hideInteraction": true,
+    "doors": [
+      {
+        "model": "prop_stock_door_01",
+        "coords": {
+          "x": 2849.458,
+          "y": 4449.884,
+          "z": 48.66911
+        }
+      }
+    ],
+    "name": "druglab-door-12"
+  },
+  {
+    "description": "Druglab 13",
+    "locked": true,
+    "authorized": {},
+    "distance": 10,
+    "hideInteraction": true,
+    "doors": [
+      {
+        "model": "prop_stock_door_01",
+        "coords": {
+          "x": 558.0279,
+          "y": 2666.454,
+          "z": 42.39426
+        }
+      }
+    ],
+    "name": "druglab-door-13"
+  },
+  {
+    "description": "Druglab 14",
+    "locked": true,
+    "authorized": {},
+    "distance": 10,
+    "hideInteraction": true,
+    "doors": [
+      {
+        "model": "prop_stock_door_01",
+        "coords": {
+          "x": 965.7836,
+          "y": 3614.332,
+          "z": 33.10951
+        }
+      }
+    ],
+    "name": "druglab-door-14"
+  },
+  {
+    "description": "Druglab 15",
+    "locked": true,
+    "authorized": {},
+    "distance": 10,
+    "hideInteraction": true,
+    "doors": [
+      {
+        "model": "prop_stock_door_01",
+        "coords": {
+          "x": 2521.866,
+          "y": 4123.464,
+          "z": 38.81657
+        }
+      }
+    ],
+    "name": "druglab-door-15"
+  },
+  {
+    "description": "Druglab 16",
+    "locked": true,
+    "authorized": {},
+    "distance": 10,
+    "hideInteraction": true,
+    "doors": [
+      {
+        "model": "prop_stock_door_01",
+        "coords": {
+          "x": 450.3066,
+          "y": -1980.605,
+          "z": 24.63416
+        }
+      }
+    ],
+    "name": "druglab-door-16"
+  },
+  {
+    "description": "Pacific main entrance",
+    "locked": false,
+    "authorized": {},
+    "distance": 5,
+    "hideInteraction": true,
+    "doors": [
+      {
+        "model": "gabz_sm_pb_door_06",
+        "coords": {
+          "x": 231.5031,
+          "y": 216.5134,
+          "z": 106.4304
+        }
+      },
+      {
+        "model": "gabz_sm_pb_door_07",
+        "coords": {
+          "x": 232.6007,
+          "y": 214.1564,
+          "z": 106.4304
+        }
+      }
+    ]
+  },
+  {
+    "description": "Pacific side entrance",
+    "locked": true,
+    "authorized": {},
+    "distance": 5,
+    "hideInteraction": true,
+    "doors": [
+      {
+        "model": "gabz_sm_pb_door_07",
+        "coords": {
+          "x": 267.3223,
+          "y": 200.7542,
+          "z": 106.4499
+        }
+      },
+      {
+        "model": "gabz_sm_pb_door_06",
+        "coords": {
+          "x": 264.8785,
+          "y": 201.6437,
+          "z": 106.4499
+        }
+      }
+    ]
+  },
+  {
+    "description": "Pacific room entrance",
+    "locked": true,
+    "authorized": {},
+    "distance": 5,
+    "hideInteraction": true,
+    "doors": [
+      {
+        "model": "gabz_sm_pb_door_06",
+        "coords": {
+          "x": 273.897,
+          "y": 234.5862,
+          "z": 123.9748
+        }
+      },
+      {
+        "model": "gabz_sm_pb_door_07",
+        "coords": {
+          "x": 271.4533,
+          "y": 235.4757,
+          "z": 123.9748
+        }
+      }
+    ]
+  },
+  {
+    "description": "Pacific basement right",
+    "locked": true,
+    "authorized": {},
+    "distance": 5,
+    "hideInteraction": true,
+    "doors": [
+      {
+        "model": "gabz_sm_pb_door_08",
+        "coords": {
+          "x": 270.1032,
+          "y": 212.9229,
+          "z": 97.31798
+        }
+      }
+    ]
+  },
+  {
+    "description": "Pacific basement left",
+    "locked": true,
+    "authorized": {},
+    "distance": 5,
+    "hideInteraction": true,
+    "doors": [
+      {
+        "model": "gabz_sm_pb_door_08",
+        "coords": {
+          "x": 272.6422,
+          "y": 219.8987,
+          "z": 97.31798
+        }
+      }
+    ]
+  },
+  {
+    "description": "Pacific left side vault",
+    "locked": true,
+    "authorized": {},
+    "distance": 5,
+    "hideInteraction": true,
+    "doors": [
+      {
+        "model": "gabz_sm_pb_door_08",
+        "coords": {
+          "x": 244.558,
+          "y": 216.8973,
+          "z": 97.31798
+        }
+      }
+    ]
+  },
+  {
+    "description": "Pacific right side vault",
+    "locked": true,
+    "authorized": {},
+    "distance": 5,
+    "hideInteraction": true,
+    "doors": [
+      {
+        "model": "gabz_sm_pb_door_08",
+        "coords": {
+          "x": 250.5642,
+          "y": 233.3994,
+          "z": 97.31798
+        }
+      }
+    ]
+  },
+  {
+    "description": "Pacific vault gold left",
+    "locked": true,
+    "authorized": {},
+    "distance": 5,
+    "hideInteraction": true,
+    "doors": [
+      {
+        "model": "gabz_sm_pb_door_09",
+        "coords": {
+          "x": 229.8905,
+          "y": 227.342,
+          "z": 97.32397
+        }
+      }
+    ]
+  },
+  {
+    "description": "Pacific vault gold right",
+    "locked": true,
+    "authorized": {},
+    "distance": 5,
+    "hideInteraction": true,
+    "doors": [
+      {
+        "model": "gabz_sm_pb_door_09",
+        "coords": {
+          "x": 225.6463,
+          "y": 228.8868,
+          "z": 97.32397
+        }
+      }
+    ]
+  },
+  {
+    "description": "Paleto side entrance",
+    "locked": true,
+    "authorized": {},
+    "distance": 5,
+    "hideInteraction": true,
+    "doors": [
+      {
+        "model": "v_ilev_ct_doorl",
+        "coords": {
+          "x": -116.5127,
+          "y": 6478.96,
+          "z": 31.78798
+        }
+      }
+    ]
+  },
+  {
+    "description": "Paleto back entrance",
+    "locked": true,
+    "authorized": {},
+    "distance": 5,
+    "hideInteraction": true,
+    "doors": [
+      {
+        "model": "v_ilev_ct_doorl",
+        "coords": {
+          "x": -96.70866,
+          "y": 6474.057,
+          "z": 31.78798
+        }
+      }
+    ]
+  },
+  {
+    "description": "Paleto side hallway",
+    "locked": true,
+    "authorized": {},
+    "distance": 5,
+    "hideInteraction": true,
+    "doors": [
+      {
+        "model": "gabz_paletobank_officedoors03",
+        "coords": {
+          "x": -111.0427,
+          "y": 6475.328,
+          "z": 31.78798
+        }
+      }
+    ]
+  },
+  {
+    "description": "Paleto back hallway",
+    "locked": true,
+    "authorized": {},
+    "distance": 5,
+    "hideInteraction": true,
+    "doors": [
+      {
+        "model": "xm_prop_iaa_base_door_01",
+        "coords": {
+          "x": -100.1123,
+          "y": 6474.392,
+          "z": 31.78798
+        }
+      }
+    ]
+  },
+  {
+    "description": "Mazebank offices",
+    "locked": true,
+    "authorized": {},
+    "distance": 5,
+    "hideInteraction": true,
+    "doors": [
+      {
+        "model": "hei_v_ilev_bk_gate2_pris",
+        "coords": {
+          "x": -1305.29,
+          "y": -819.64,
+          "z": 17.14
+        }
+      }
+    ]
+  },
+  {
+    "description": "Mazebank vault",
+    "locked": true,
+    "authorized": {},
+    "distance": 5,
+    "hideInteraction": true,
+    "doors": [
+      {
+        "model": "hei_v_ilev_bk_safegate_pris",
+        "coords": {
+          "x": -1307.42,
+          "y": -813.39,
+          "z": 17.14
+        }
+      }
+    ]
+  },
+  {
+    "description": "Fleeca BP Gate",
+    "locked": true,
+    "authorized": {},
+    "hideInteraction": true,
+    "thermiteable": {
+      "grid": 4,
+      "amount": 1,
+      "ped": {
+        "x": 149.03,
+        "y": -1047.16,
+        "heading": 157.5
+      }
+    },
+    "distance": 2,
+    "doors": [
+      {
+        "model": "v_ilev_gb_vaubar",
+        "coords": {
+          "x": 150.2913,
+          "y": -1047.629,
+          "z": 29.6663
+        }
+      }
+    ]
+  },
+  {
+    "description": "Fleeca Motel Gate",
+    "locked": true,
+    "authorized": {},
+    "hideInteraction": true,
+    "thermiteable": {
+      "grid": 4,
+      "amount": 1,
+      "ped": {
+        "x": 313.33,
+        "y": -285.51,
+        "heading": 161.5
+      }
+    },
+    "distance": 2,
+    "doors": [
+      {
+        "model": "v_ilev_gb_vaubar",
+        "coords": {
+          "x": 314.6239,
+          "y": -285.9945,
+          "z": 54.46301
+        }
+      }
+    ]
+  },
+  {
+    "description": "Fleeca Benny Gate",
+    "locked": true,
+    "authorized": {},
+    "hideInteraction": true,
+    "thermiteable": {
+      "grid": 4,
+      "amount": 1,
+      "ped": {
+        "x": -351.65,
+        "y": -56.34,
+        "heading": 159.5
+      }
+    },
+    "distance": 2,
+    "doors": [
+      {
+        "model": "v_ilev_gb_vaubar",
+        "coords": {
+          "x": -350.4144,
+          "y": -56.79705,
+          "z": 49.3348
+        }
+      }
+    ]
+  },
+  {
+    "description": "Fleeca Lifeinvador Gate",
+    "locked": true,
+    "authorized": {},
+    "hideInteraction": true,
+    "thermiteable": {
+      "grid": 4,
+      "amount": 1,
+      "ped": {
+        "x": -1208.53,
+        "y": -335.7,
+        "heading": 206
+      }
+    },
+    "distance": 2,
+    "doors": [
+      {
+        "model": "v_ilev_gb_vaubar",
+        "coords": {
+          "x": -1207.328,
+          "y": -335.1289,
+          "z": 38.07925
+        }
+      }
+    ]
+  },
+  {
+    "description": "Fleeca Highway Gate",
+    "locked": true,
+    "authorized": {},
+    "hideInteraction": true,
+    "thermiteable": {
+      "grid": 4,
+      "amount": 1,
+      "ped": {
+        "x": -2956.21,
+        "y": 484.09,
+        "heading": 268
+      }
+    },
+    "distance": 2,
+    "doors": [
+      {
+        "model": "v_ilev_gb_vaubar",
+        "coords": {
+          "x": -2956.116,
+          "y": 485.4206,
+          "z": 15.99531
+        }
+      }
+    ]
+  },
+  {
+    "description": "Fleeca Highway Gate",
+    "locked": true,
+    "authorized": {},
+    "hideInteraction": true,
+    "thermiteable": {
+      "grid": 4,
+      "amount": 1,
+      "ped": {
+        "x": 1173.66,
+        "y": 2713.14,
+        "heading": 0.5
+      }
+    },
+    "distance": 2,
+    "doors": [
+      {
+        "model": "v_ilev_gb_vaubar",
+        "coords": {
+          "x": 1172.291,
+          "y": 2713.146,
+          "z": 38.38625
+        }
+      }
+    ]
+  },
+  {
+    "description": "PDM Linkse deur",
+    "locked": true,
+    "authorized": {
+      "business": ["pdm"]
+    },
+    "distance": 2,
+    "doors": [
+      {
+        "model": "v_ilev_fib_door1",
+        "coords": {
+          "x": -31.72,
+          "y": -1101.85,
+          "z": 26.57
+        }
+      }
+    ]
+  },
+  {
+    "description": "PDM Rechtse deur",
+    "locked": true,
+    "authorized": {
+      "business": ["pdm"]
+    },
+    "distance": 2,
+    "doors": [
+      {
+        "model": "v_ilev_fib_door1",
+        "coords": {
+          "x": -33.81,
+          "y": -1107.58,
+          "z": 26.57
+        }
+      }
+    ]
+  },
+  {
+    "description": "Prison inkom linkse staffdeur naast balie",
+    "locked": true,
+    "distance": 2,
+    "doors": [
+      {
+        "model": "sanhje_Prison_recep_door01",
+        "coords": {
+          "x": 1844.4052734375,
+          "y": 2576.998291015625,
+          "z": 46.035640716552734
+        }
+      }
+    ],
+    "authorized": {
+      "job": [
+        {
+          "name": "police",
+          "rank": 0
+        }
+      ]
+    }
+  },
+  {
+    "description": "Prison inkom hek",
+    "locked": true,
+    "distance": 2,
+    "doors": [
+      {
+        "model": "sanhje_Prison_recep_cagedoor",
+        "coords": {
+          "x": 1837.911865234375,
+          "y": 2590.256103515625,
+          "z": 46.19788360595703
+        }
+      }
+    ],
+    "authorized": {
+      "job": [
+        {
+          "name": "police",
+          "rank": 0
+        }
+      ]
+    }
+  },
+  {
+    "description": "Prison inkom staffdeur rechts naast balie",
+    "locked": true,
+    "distance": 2,
+    "doors": [
+      {
+        "model": "sanhje_Prison_recep_door01",
+        "coords": {
+          "x": 1837.63525390625,
+          "y": 2576.992919921875,
+          "z": 46.03863525390625
+        }
+      }
+    ],
+    "authorized": {
+      "job": [
+        {
+          "name": "police",
+          "rank": 0
+        }
+      ]
+    }
+  },
+  {
+    "description": "Prison inkom deur na scanner",
+    "locked": true,
+    "distance": 2,
+    "doors": [
+      {
+        "model": "sanhje_Prison_recep_door02",
+        "coords": {
+          "x": 1831.3414306640625,
+          "y": 2594.993408203125,
+          "z": 46.03794860839844
+        }
+      }
+    ],
+    "authorized": {
+      "job": [
+        {
+          "name": "police",
+          "rank": 0
+        }
+      ]
+    }
+  },
+  {
+    "description": "Prison main ingang tweede hek",
+    "locked": true,
+    "distance": 10,
+    "doors": [
+      {
+        "model": "prop_gate_prison_01",
+        "coords": {
+          "x": 1818.5428466796875,
+          "y": 2604.8125,
+          "z": 44.61100387573242
+        }
+      }
+    ],
+    "authorized": {
+      "job": [
+        {
+          "name": "police",
+          "rank": 0
+        }
+      ]
+    },
+    "playSound": true
+  },
+  {
+    "description": "Prison main ingang eerste hek",
+    "locked": true,
+    "distance": 10,
+    "doors": [
+      {
+        "model": "prop_gate_prison_01",
+        "coords": {
+          "x": 1844.9984130859375,
+          "y": 2604.810546875,
+          "z": 44.639400482177734
+        }
+      }
+    ],
+    "authorized": {
+      "job": [
+        {
+          "name": "police",
+          "rank": 0
+        }
+      ]
+    },
+    "playSound": true
+  },
+  {
+    "description": "Prison tower 1 door",
+    "locked": true,
+    "distance": 2,
+    "doors": [
+      {
+        "model": "v_ilev_gtdoor",
+        "coords": {
+          "x": 1821.1702880859375,
+          "y": 2476.2646484375,
+          "z": 45.68914794921875
+        }
+      }
+    ],
+    "authorized": {
+      "job": [
+        {
+          "name": "police",
+          "rank": 0
+        }
+      ]
+    }
+  },
+  {
+    "description": "Prison tower 2 door",
+    "locked": true,
+    "distance": 2,
+    "doors": [
+      {
+        "model": "v_ilev_gtdoor",
+        "coords": {
+          "x": 1759.6202392578125,
+          "y": 2412.837158203125,
+          "z": 45.71166229248047
+        }
+      }
+    ],
+    "authorized": {
+      "job": [
+        {
+          "name": "police",
+          "rank": 0
+        }
+      ]
+    }
+  },
+  {
+    "description": "Prison tower 3 door",
+    "locked": true,
+    "distance": 2,
+    "doors": [
+      {
+        "model": "v_ilev_gtdoor",
+        "coords": {
+          "x": 1658.58447265625,
+          "y": 2397.721923828125,
+          "z": 45.71525573730469
+        }
+      }
+    ],
+    "authorized": {
+      "job": [
+        {
+          "name": "police",
+          "rank": 0
+        }
+      ]
+    }
+  },
+  {
+    "description": "Prison tower 4 door",
+    "locked": true,
+    "distance": 2,
+    "doors": [
+      {
+        "model": "v_ilev_gtdoor",
+        "coords": {
+          "x": 1543.24072265625,
+          "y": 2471.294189453125,
+          "z": 45.712013244628906
+        }
+      }
+    ],
+    "authorized": {
+      "job": [
+        {
+          "name": "police",
+          "rank": 0
+        }
+      ]
+    }
+  },
+  {
+    "description": "Prison tower 5 door",
+    "locked": true,
+    "distance": 2,
+    "doors": [
+      {
+        "model": "v_ilev_gtdoor",
+        "coords": {
+          "x": 1537.8109130859375,
+          "y": 2585.9951171875,
+          "z": 45.68914794921875
+        }
+      }
+    ],
+    "authorized": {
+      "job": [
+        {
+          "name": "police",
+          "rank": 0
+        }
+      ]
+    }
+  },
+  {
+    "description": "Prison tower 6 door",
+    "locked": true,
+    "distance": 2,
+    "doors": [
+      {
+        "model": "v_ilev_gtdoor",
+        "coords": {
+          "x": 1572.6617431640625,
+          "y": 2679.19140625,
+          "z": 45.729759216308594
+        }
+      }
+    ],
+    "authorized": {
+      "job": [
+        {
+          "name": "police",
+          "rank": 0
+        }
+      ]
+    }
+  },
+  {
+    "description": "Prison tower 7 door",
+    "locked": true,
+    "distance": 2,
+    "doors": [
+      {
+        "model": "v_ilev_gtdoor",
+        "coords": {
+          "x": 1651.16064453125,
+          "y": 2755.43603515625,
+          "z": 45.878684997558594
+        }
+      }
+    ],
+    "authorized": {
+      "job": [
+        {
+          "name": "police",
+          "rank": 0
+        }
+      ]
+    }
+  },
+  {
+    "description": "Prison tower 8",
+    "locked": true,
+    "distance": 2,
+    "doors": [
+      {
+        "model": "v_ilev_gtdoor",
+        "coords": {
+          "x": 1773.1080322265625,
+          "y": 2759.699951171875,
+          "z": 45.88673400878906
+        }
+      }
+    ],
+    "authorized": {
+      "job": [
+        {
+          "name": "police",
+          "rank": 0
+        }
+      ]
+    }
+  },
+  {
+    "description": "Prison tower 9",
+    "locked": true,
+    "distance": 2,
+    "doors": [
+      {
+        "model": "v_ilev_gtdoor",
+        "coords": {
+          "x": 1845.7899169921875,
+          "y": 2698.62060546875,
+          "z": 45.95530700683594
+        }
+      }
+    ],
+    "authorized": {
+      "job": [
+        {
+          "name": "police",
+          "rank": 0
+        }
+      ]
+    }
+  },
+  {
+    "description": "Prison tower 10",
+    "locked": true,
+    "distance": 2,
+    "doors": [
+      {
+        "model": "v_ilev_gtdoor",
+        "coords": {
+          "x": 1820.7698974609375,
+          "y": 2620.77001953125,
+          "z": 45.951263427734375
+        }
+      }
+    ],
+    "authorized": {
+      "job": [
+        {
+          "name": "police",
+          "rank": 0
+        }
+      ]
+    }
+  },
+  {
+    "description": "Prison tower 1 gates",
+    "locked": true,
+    "distance": 10,
+    "doors": [
+      {
+        "model": "prop_gate_prison_01",
+        "coords": {
+          "x": 1813.749267578125,
+          "y": 2488.906982421875,
+          "z": 44.46368408203125
+        }
+      },
+      {
+        "model": "prop_gate_prison_01",
+        "coords": {
+          "x": 1808.9915771484375,
+          "y": 2474.544921875,
+          "z": 44.48077392578125
+        }
+      }
+    ],
+    "authorized": {
+      "job": [
+        {
+          "name": "police",
+          "rank": 0
+        }
+      ]
+    },
+    "playSound": true
+  },
+  {
+    "description": "Prison tower 2 gates",
+    "locked": true,
+    "distance": 10,
+    "doors": [
+      {
+        "model": "prop_gate_prison_01",
+        "coords": {
+          "x": 1762.5419921875,
+          "y": 2426.5068359375,
+          "z": 44.4378662109375
+        }
+      },
+      {
+        "model": "prop_gate_prison_01",
+        "coords": {
+          "x": 1749.141845703125,
+          "y": 2419.81201171875,
+          "z": 44.4251708984375
+        }
+      }
+    ],
+    "authorized": {
+      "job": [
+        {
+          "name": "police",
+          "rank": 0
+        }
+      ]
+    },
+    "playSound": true
+  },
+  {
+    "description": "Prison tower 3 gates",
+    "locked": true,
+    "distance": 10,
+    "doors": [
+      {
+        "model": "prop_gate_prison_01",
+        "coords": {
+          "x": 1667.6693115234375,
+          "y": 2407.647705078125,
+          "z": 44.428794860839844
+        }
+      },
+      {
+        "model": "prop_gate_prison_01",
+        "coords": {
+          "x": 1652.98388671875,
+          "y": 2409.5712890625,
+          "z": 44.443077087402344
+        }
+      }
+    ],
+    "authorized": {
+      "job": [
+        {
+          "name": "police",
+          "rank": 0
+        }
+      ]
+    },
+    "playSound": true
+  },
+  {
+    "description": "Prison tower 4 gates",
+    "locked": true,
+    "distance": 10,
+    "doors": [
+      {
+        "model": "prop_gate_prison_01",
+        "coords": {
+          "x": 1558.22119140625,
+          "y": 2469.34912109375,
+          "z": 44.395286560058594
+        }
+      },
+      {
+        "model": "prop_gate_prison_01",
+        "coords": {
+          "x": 1550.930419921875,
+          "y": 2482.743408203125,
+          "z": 44.395286560058594
+        }
+      }
+    ],
+    "authorized": {
+      "job": [
+        {
+          "name": "police",
+          "rank": 0
+        }
+      ]
+    },
+    "playSound": true
+  },
+  {
+    "description": "Prison tower 5 gates",
+    "locked": true,
+    "distance": 10,
+    "doors": [
+      {
+        "model": "prop_gate_prison_01",
+        "coords": {
+          "x": 1546.9833984375,
+          "y": 2576.129638671875,
+          "z": 44.39032745361328
+        }
+      },
+      {
+        "model": "prop_gate_prison_01",
+        "coords": {
+          "x": 1547.7061767578125,
+          "y": 2591.2822265625,
+          "z": 44.50946807861328
+        }
+      }
+    ],
+    "authorized": {
+      "job": [
+        {
+          "name": "police",
+          "rank": 0
+        }
+      ]
+    },
+    "playSound": true
+  },
+  {
+    "description": "Prison tower 6 gates",
+    "locked": true,
+    "distance": 10,
+    "doors": [
+      {
+        "model": "prop_gate_prison_01",
+        "coords": {
+          "x": 1575.719482421875,
+          "y": 2667.15185546875,
+          "z": 44.50946807861328
+        }
+      },
+      {
+        "model": "prop_gate_prison_01",
+        "coords": {
+          "x": 1584.65283203125,
+          "y": 2679.74951171875,
+          "z": 44.50946807861328
+        }
+      }
+    ],
+    "authorized": {
+      "job": [
+        {
+          "name": "police",
+          "rank": 0
+        }
+      ]
+    },
+    "playSound": true
+  },
+  {
+    "description": "Prison tower 7 gates",
+    "locked": true,
+    "distance": 10,
+    "doors": [
+      {
+        "model": "prop_gate_prison_01",
+        "coords": {
+          "x": 1648.411376953125,
+          "y": 2741.66845703125,
+          "z": 44.44668960571289
+        }
+      },
+      {
+        "model": "prop_gate_prison_01",
+        "coords": {
+          "x": 1662.010986328125,
+          "y": 2748.702880859375,
+          "z": 44.44668960571289
+        }
+      }
+    ],
+    "authorized": {
+      "job": [
+        {
+          "name": "police",
+          "rank": 0
+        }
+      ]
+    },
+    "playSound": true
+  },
+  {
+    "description": "Prison tower 8 gates",
+    "locked": true,
+    "distance": 10,
+    "doors": [
+      {
+        "model": "prop_gate_prison_01",
+        "coords": {
+          "x": 1762.195556640625,
+          "y": 2752.48876953125,
+          "z": 44.44668960571289
+        }
+      },
+      {
+        "model": "prop_gate_prison_01",
+        "coords": {
+          "x": 1776.7012939453125,
+          "y": 2747.14794921875,
+          "z": 44.44668960571289
+        }
+      }
+    ],
+    "authorized": {
+      "job": [
+        {
+          "name": "police",
+          "rank": 0
+        }
+      ]
+    },
+    "playSound": true
+  },
+  {
+    "description": "Prison tower 9 gates",
+    "locked": true,
+    "distance": 10,
+    "doors": [
+      {
+        "model": "prop_gate_prison_01",
+        "coords": {
+          "x": 1830.13427734375,
+          "y": 2703.49853515625,
+          "z": 44.44670104980469
+        }
+      },
+      {
+        "model": "prop_gate_prison_01",
+        "coords": {
+          "x": 1835.2847900390625,
+          "y": 2689.10400390625,
+          "z": 44.44670104980469
+        }
+      }
+    ],
+    "authorized": {
+      "job": [
+        {
+          "name": "police",
+          "rank": 0
+        }
+      ]
+    },
+    "playSound": true
+  },
+  {
+    "description": "Pillbox achter balie",
+    "locked": true,
+    "distance": 2,
+    "doors": [
+      {
+        "model": "gabz_pillbox_singledoor",
+        "coords": {
+          "x": 309.13372802734375,
+          "y": -597.75146484375,
+          "z": 43.43391036987305
+        }
+      }
+    ],
+    "authorized": {
+      "job": [
+        {
+          "name": "ambulance",
+          "rank": 0
+        }
+      ]
+    }
+  },
+  {
+    "description": "Pillbox closet",
+    "locked": true,
+    "distance": 2,
+    "doors": [
+      {
+        "model": "gabz_pillbox_singledoor",
+        "coords": {
+          "x": 303.9596252441406,
+          "y": -572.5579223632812,
+          "z": 43.43391036987305
+        }
+      }
+    ],
+    "authorized": {
+      "job": [
+        {
+          "name": "ambulance",
+          "rank": 0
+        }
+      ]
+    }
+  },
+  {
+    "description": "Pillbox laboratory",
+    "locked": true,
+    "distance": 2,
+    "doors": [
+      {
+        "model": "gabz_pillbox_singledoor",
+        "coords": {
+          "x": 307.1181945800781,
+          "y": -569.5689697265625,
+          "z": 43.43391036987305
+        }
+      }
+    ],
+    "authorized": {
+      "job": [
+        {
+          "name": "ambulance",
+          "rank": 0
+        }
+      ]
+    }
+  },
+  {
+    "description": "Pillbox surgery 1",
+    "locked": true,
+    "distance": 2,
+    "doors": [
+      {
+        "model": "gabz_pillbox_doubledoor_l",
+        "coords": {
+          "x": 312.005126953125,
+          "y": -571.3411865234375,
+          "z": 43.43391036987305
+        }
+      },
+      {
+        "model": "gabz_pillbox_doubledoor_r",
+        "coords": {
+          "x": 314.4241027832031,
+          "y": -572.2215576171875,
+          "z": 43.43391036987305
+        }
+      }
+    ],
+    "authorized": {
+      "job": [
+        {
+          "name": "ambulance",
+          "rank": 0
+        }
+      ]
+    }
+  },
+  {
+    "description": "Pillbox surgery 2",
+    "locked": true,
+    "distance": 2,
+    "doors": [
+      {
+        "model": "gabz_pillbox_doubledoor_l",
+        "coords": {
+          "x": 317.8425598144531,
+          "y": -573.4658813476562,
+          "z": 43.43391036987305
+        }
+      },
+      {
+        "model": "gabz_pillbox_doubledoor_r",
+        "coords": {
+          "x": 320.26153564453125,
+          "y": -574.3463134765625,
+          "z": 43.43391036987305
+        }
+      }
+    ],
+    "authorized": {
+      "job": [
+        {
+          "name": "ambulance",
+          "rank": 0
+        }
+      ]
+    }
+  },
+  {
+    "description": "Pillbox surgery 3",
+    "locked": true,
+    "distance": 2,
+    "doors": [
+      {
+        "model": "gabz_pillbox_doubledoor_l",
+        "coords": {
+          "x": 323.237548828125,
+          "y": -575.429443359375,
+          "z": 43.43391036987305
+        }
+      },
+      {
+        "model": "gabz_pillbox_doubledoor_r",
+        "coords": {
+          "x": 325.6565246582031,
+          "y": -576.3099365234375,
+          "z": 43.43391036987305
+        }
+      }
+    ],
+    "authorized": {
+      "job": [
+        {
+          "name": "ambulance",
+          "rank": 0
+        }
+      ]
+    }
+  },
+  {
+    "description": "Pillbox diagnostics",
+    "locked": true,
+    "distance": 2,
+    "doors": [
+      {
+        "model": "gabz_pillbox_singledoor",
+        "coords": {
+          "x": 340.7818298339844,
+          "y": -581.8214721679688,
+          "z": 43.43391036987305
+        }
+      }
+    ],
+    "authorized": {
+      "job": [
+        {
+          "name": "ambulance",
+          "rank": 0
+        }
+      ]
+    }
+  },
+  {
+    "description": "Plllbox admin B",
+    "locked": true,
+    "distance": 2,
+    "doors": [
+      {
+        "model": "gabz_pillbox_singledoor",
+        "coords": {
+          "x": 339.0049743652344,
+          "y": -586.703369140625,
+          "z": 43.43391036987305
+        }
+      }
+    ],
+    "authorized": {
+      "job": [
+        {
+          "name": "ambulance",
+          "rank": 0
+        }
+      ]
+    }
+  },
+  {
+    "description": "Pillbox reception beneden",
+    "locked": true,
+    "distance": 2,
+    "doors": [
+      {
+        "model": "gabz_pillbox_singledoor",
+        "coords": {
+          "x": 348.54669189453125,
+          "y": -585.158447265625,
+          "z": 28.947092056274414
+        }
+      }
+    ],
+    "authorized": {
+      "job": [
+        {
+          "name": "ambulance",
+          "rank": 0
+        }
+      ]
+    }
+  },
+  {
+    "description": "Pillbox garage poort links van binnen",
+    "locked": true,
+    "distance": 10,
+    "doors": [
+      {
+        "model": "gabz_pillbox_dlc_gate",
+        "coords": {
+          "x": 330.1365051269531,
+          "y": -561.8287963867188,
+          "z": 29.794214248657227
+        }
+      }
+    ],
+    "authorized": {
+      "job": [
+        {
+          "name": "ambulance",
+          "rank": 0
+        }
+      ]
+    },
+    "playSound": true
+  },
+  {
+    "description": "Pillbox garage poort rechts van binnen",
+    "locked": true,
+    "distance": 2,
+    "doors": [
+      {
+        "model": "gabz_pillbox_dlc_gate",
+        "coords": {
+          "x": 337.2776794433594,
+          "y": -564.4320068359375,
+          "z": 29.775291442871094
+        }
+      }
+    ],
+    "authorized": {
+      "job": [
+        {
+          "name": "ambulance",
+          "rank": 0
+        }
+      ]
+    },
+    "playSound": true
+  },
+  {
+    "description": "Pillbox garage dubbeldeur naar buiten",
+    "locked": true,
+    "distance": 2,
+    "doors": [
+      {
+        "model": "v_ilev_ct_doorr",
+        "coords": {
+          "x": 321.01483154296875,
+          "y": -559.9127197265625,
+          "z": 28.94723892211914
+        }
+      },
+      {
+        "model": "v_ilev_ct_doorl",
+        "coords": {
+          "x": 318.6656188964844,
+          "y": -561.0086059570312,
+          "z": 28.94723892211914
+        }
+      }
+    ],
+    "authorized": {
+      "job": [
+        {
+          "name": "ambulance",
+          "rank": 0
+        }
+      ]
+    }
+  },
+  {
+    "description": "Sandy HB Poort",
+    "locked": true,
+    "distance": 10,
+    "doors": [
+      {
+        "model": "prop_facgate_07b",
+        "coords": {
+          "x": 1862.0028076171875,
+          "y": 3687.5244140625,
+          "z": 33.012939453125
+        }
+      }
+    ],
+    "authorized": {
+      "job": [
+        {
+          "name": "police",
+          "rank": 0
+        }
+      ]
+    },
+    "playSound": true
+  },
+  {
+    "description": "Sandy HB Hek naast poort",
+    "locked": true,
+    "distance": 2,
+    "doors": [
+      {
+        "model": "prop_fnclink_03gate5",
+        "coords": {
+          "x": 1845.406982421875,
+          "y": 3677.485107421875,
+          "z": 34.6119499206543
+        }
+      }
+    ],
+    "authorized": {
+      "job": [
+        {
+          "name": "police",
+          "rank": 0
+        }
+      ]
+    }
+  },
+  {
+    "description": "Sandy HB achterdeur",
+    "locked": true,
+    "distance": 2,
+    "doors": [
+      {
+        "model": "v_ilev_shrf2door",
+        "coords": {
+          "x": 1823.86328125,
+          "y": 3681.116943359375,
+          "z": 34.33900833129883
+        }
+      }
+    ],
+    "authorized": {
+      "job": [
+        {
+          "name": "police",
+          "rank": 0
+        }
+      ]
+    }
+  },
+  {
+    "description": "Sandy HB Lockers",
+    "locked": true,
+    "distance": 2,
+    "doors": [
+      {
+        "model": "gabz_sandypd_door_02",
+        "coords": {
+          "x": 1838.006103515625,
+          "y": 3677.10400390625,
+          "z": 34.282230377197266
+        }
+      }
+    ],
+    "authorized": {
+      "job": [
+        {
+          "name": "police",
+          "rank": 0
+        }
+      ]
+    }
+  },
+  {
+    "description": "Sandy HB gang naar offices",
+    "locked": true,
+    "distance": 2,
+    "doors": [
+      {
+        "model": "gabz_sandypd_door_01",
+        "coords": {
+          "x": 1829.852783203125,
+          "y": 3673.788818359375,
+          "z": 34.282230377197266
+        }
+      }
+    ],
+    "authorized": {
+      "job": [
+        {
+          "name": "police",
+          "rank": 0
+        }
+      ]
+    }
+  },
+  {
+    "description": "Sandy HB gang naar gang",
+    "locked": true,
+    "distance": 2,
+    "doors": [
+      {
+        "model": "gabz_sandypd_door_01",
+        "coords": {
+          "x": 1830.650146484375,
+          "y": 3676.562255859375,
+          "z": 34.282230377197266
+        }
+      }
+    ],
+    "authorized": {
+      "job": [
+        {
+          "name": "police",
+          "rank": 0
+        }
+      ]
+    }
+  },
+  {
+    "description": "Sandy HB intero",
+    "locked": true,
+    "distance": 2,
+    "doors": [
+      {
+        "model": "gabz_sandypd_door_02",
+        "coords": {
+          "x": 1812.306640625,
+          "y": 3672.724365234375,
+          "z": 34.282230377197266
+        }
+      }
+    ],
+    "authorized": {
+      "job": [
+        {
+          "name": "police",
+          "rank": 0
+        }
+      ]
+    }
+  },
+  {
+    "description": "Sandy HB hek naar cellen",
+    "locked": true,
+    "distance": 2,
+    "doors": [
+      {
+        "model": "gabz_sandypd_cell_door",
+        "coords": {
+          "x": 1813.55126953125,
+          "y": 3675.055419921875,
+          "z": 34.396087646484375
+        }
+      }
+    ],
+    "authorized": {
+      "job": [
+        {
+          "name": "police",
+          "rank": 0
+        }
+      ]
+    }
+  },
+  {
+    "description": "Sandy HB cel 3",
+    "locked": true,
+    "distance": 2,
+    "doors": [
+      {
+        "model": "gabz_sandypd_cell_door",
+        "coords": {
+          "x": 1807.131103515625,
+          "y": 3681.660400390625,
+          "z": 34.396087646484375
+        }
+      }
+    ],
+    "authorized": {
+      "job": [
+        {
+          "name": "police",
+          "rank": 0
+        }
+      ]
+    }
+  },
+  {
+    "description": "Sandy HB hek 2",
+    "locked": true,
+    "distance": 2,
+    "doors": [
+      {
+        "model": "gabz_sandypd_cell_door",
+        "coords": {
+          "x": 1808.62939453125,
+          "y": 3679.0654296875,
+          "z": 34.396087646484375
+        }
+      }
+    ],
+    "authorized": {
+      "job": [
+        {
+          "name": "police",
+          "rank": 0
+        }
+      ]
+    }
+  },
+  {
+    "description": "Sandy HB cel 1",
+    "locked": true,
+    "distance": 2,
+    "doors": [
+      {
+        "model": "gabz_sandypd_cell_door",
+        "coords": {
+          "x": 1810.131103515625,
+          "y": 3676.46435546875,
+          "z": 34.396087646484375
+        }
+      }
+    ],
+    "authorized": {
+      "job": [
+        {
+          "name": "police",
+          "rank": 0
+        }
+      ]
+    }
+  },
+  {
+    "description": "Paleto PD Paaltjes",
+    "locked": true,
+    "distance": 10,
+    "doors": [
+      {
+        "model": "gabz_paletopd_bollards1",
+        "coords": {
+          "x": -453.5876159667969,
+          "y": 6028.2646484375,
+          "z": 30.348737716674805
+        }
+      }
+    ],
+    "authorized": {
+      "job": [
+        {
+          "name": "police",
+          "rank": 0
+        }
+      ]
+    },
+    "playSound": true,
+    "polyzone": {
+      "center": {
+        "x": -453.68,
+        "y": 6028.27,
+        "z": 31.34
+      },
+      "width": 6,
+      "length": 25.2,
+      "heading": 314
+    }
+  },
+  {
+    "description": "Paleto PD inkom naar balie",
+    "locked": true,
+    "distance": 2,
+    "doors": [
+      {
+        "model": "gabz_paletopd_doors01",
+        "coords": {
+          "x": -443.9599914550781,
+          "y": 6017.162109375,
+          "z": 32.28851318359375
+        }
+      }
+    ],
+    "authorized": {
+      "job": [
+        {
+          "name": "police",
+          "rank": 0
+        }
+      ]
+    }
+  },
+  {
+    "description": "Paleto PD achteringang",
+    "locked": true,
+    "distance": 2,
+    "doors": [
+      {
+        "model": "gabz_paletopd_doors06",
+        "coords": {
+          "x": -453.48675537109375,
+          "y": 5996.63720703125,
+          "z": 32.28851318359375
+        }
+      },
+      {
+        "model": "gabz_paletopd_doors05",
+        "coords": {
+          "x": -454.90167236328125,
+          "y": 5998.0517578125,
+          "z": 32.28851318359375
+        }
+      }
+    ],
+    "authorized": {
+      "job": [
+        {
+          "name": "police",
+          "rank": 0
+        }
+      ]
+    }
+  },
+  {
+    "description": "Paleto PD tussendeur gelijksvloer",
+    "locked": true,
+    "distance": 2,
+    "doors": [
+      {
+        "model": "gabz_paletopd_doors02",
+        "coords": {
+          "x": -448.0712890625,
+          "y": 6004.8681640625,
+          "z": 32.28851318359375
+        }
+      },
+      {
+        "model": "gabz_paletopd_doors01",
+        "coords": {
+          "x": -446.6564025878906,
+          "y": 6003.453125,
+          "z": 32.28851318359375
+        }
+      }
+    ],
+    "authorized": {
+      "job": [
+        {
+          "name": "police",
+          "rank": 0
+        }
+      ]
+    }
+  },
+  {
+    "description": "Paleto PD boven trap",
+    "locked": true,
+    "distance": 2,
+    "doors": [
+      {
+        "model": "gabz_paletopd_doors02",
+        "coords": {
+          "x": -450.00982666015625,
+          "y": 6004.83544921875,
+          "z": 36.99581527709961
+        }
+      },
+      {
+        "model": "gabz_paletopd_doors01",
+        "coords": {
+          "x": -451.4247131347656,
+          "y": 6003.42041015625,
+          "z": 36.99581527709961
+        }
+      }
+    ],
+    "authorized": {
+      "job": [
+        {
+          "name": "police",
+          "rank": 0
+        }
+      ]
+    }
+  },
+  {
+    "description": "Paleto PD beneden trap",
+    "locked": true,
+    "distance": 2,
+    "doors": [
+      {
+        "model": "gabz_paletopd_doors01",
+        "coords": {
+          "x": -451.4247131347656,
+          "y": 6003.42041015625,
+          "z": 27.581214904785156
+        }
+      },
+      {
+        "model": "gabz_paletopd_doors02",
+        "coords": {
+          "x": -450.00982666015625,
+          "y": 6004.83544921875,
+          "z": 27.581214904785156
+        }
+      }
+    ],
+    "authorized": {
+      "job": [
+        {
+          "name": "police",
+          "rank": 0
+        }
+      ]
+    }
+  },
+  {
+    "description": "Paleto PD interogation 1",
+    "locked": true,
+    "distance": 2,
+    "doors": [
+      {
+        "model": "gabz_paletopd_doors01",
+        "coords": {
+          "x": -441.9415588378906,
+          "y": 5998.75439453125,
+          "z": 27.581214904785156
+        }
+      }
+    ],
+    "authorized": {
+      "job": [
+        {
+          "name": "police",
+          "rank": 0
+        }
+      ]
+    }
+  },
+  {
+    "description": "Paleto PD interogation 2",
+    "locked": true,
+    "distance": 2,
+    "doors": [
+      {
+        "model": "gabz_paletopd_doors01",
+        "coords": {
+          "x": -445.35357666015625,
+          "y": 5995.34228515625,
+          "z": 27.581214904785156
+        }
+      }
+    ],
+    "authorized": {
+      "job": [
+        {
+          "name": "police",
+          "rank": 0
+        }
+      ]
+    }
+  },
+  {
+    "description": "Paleto PD hek naar cellen",
+    "locked": true,
+    "distance": 2,
+    "doors": [
+      {
+        "model": "gabz_paletopd_cells_gate",
+        "coords": {
+          "x": -443.6405029296875,
+          "y": 6006.97265625,
+          "z": 27.731000900268555
+        }
+      }
+    ],
+    "authorized": {
+      "job": [
+        {
+          "name": "police",
+          "rank": 0
+        }
+      ]
+    }
+  },
+  {
+    "description": "Paleto PD hek tussen cellen",
+    "locked": true,
+    "distance": 2,
+    "doors": [
+      {
+        "model": "gabz_paletopd_cells_gate",
+        "coords": {
+          "x": -442.24334716796875,
+          "y": 6012.61962890625,
+          "z": 27.731000900268555
+        }
+      }
+    ],
+    "authorized": {
+      "job": [
+        {
+          "name": "police",
+          "rank": 0
+        }
+      ]
+    }
+  },
+  {
+    "description": "Paleto PD cel 1",
+    "locked": true,
+    "distance": 2,
+    "doors": [
+      {
+        "model": "gabz_paletopd_cells_gate",
+        "coords": {
+          "x": -445.9456787109375,
+          "y": 6012.88037109375,
+          "z": 27.731000900268555
+        }
+      }
+    ],
+    "authorized": {
+      "job": [
+        {
+          "name": "police",
+          "rank": 0
+        }
+      ]
+    }
+  },
+  {
+    "description": "Paleto PD cel 2",
+    "locked": true,
+    "distance": 2,
+    "doors": [
+      {
+        "model": "gabz_paletopd_cells_gate",
+        "coords": {
+          "x": -448.9160461425781,
+          "y": 6015.85107421875,
+          "z": 27.731000900268555
+        }
+      }
+    ],
+    "authorized": {
+      "job": [
+        {
+          "name": "police",
+          "rank": 0
+        }
+      ]
+    }
+  },
+  {
+    "description": "Paleto PD cel 3",
+    "locked": true,
+    "distance": 2,
+    "doors": [
+      {
+        "model": "gabz_paletopd_cells_gate",
+        "coords": {
+          "x": -446.3604431152344,
+          "y": 6018.40673828125,
+          "z": 27.731000900268555
+        }
+      }
+    ],
+    "authorized": {
+      "job": [
+        {
+          "name": "police",
+          "rank": 0
+        }
+      ]
+    }
+  },
+  {
+    "description": "Paleto PD cel 4",
+    "locked": true,
+    "distance": 2,
+    "doors": [
+      {
+        "model": "gabz_paletopd_cells_gate",
+        "coords": {
+          "x": -443.39007568359375,
+          "y": 6015.43603515625,
+          "z": 27.731000900268555
+        }
+      }
+    ],
+    "authorized": {
+      "job": [
+        {
+          "name": "police",
+          "rank": 0
+        }
+      ]
+    }
+  }
+]
