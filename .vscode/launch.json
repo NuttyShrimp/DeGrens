@@ -129,16 +129,16 @@
     },
     {
       "type": "node-terminal",
-      "name": "chars:ui:dev",
+      "name": "chars:ui:build",
       "request": "launch",
-      "command": "yarn run dev",
+      "command": "yarn run build",
       "cwd": "${workspaceFolder}/resources/[dg]/dg-chars/ui"
     },
     {
       "type": "node-terminal",
-      "name": "chars:ui:build",
+      "name": "chars:ui:dev",
       "request": "launch",
-      "command": "yarn run build",
+      "command": "yarn run dev",
       "cwd": "${workspaceFolder}/resources/[dg]/dg-chars/ui"
     },
     {
@@ -245,6 +245,27 @@
       "request": "launch",
       "command": "yarn run watch",
       "cwd": "${workspaceFolder}/resources/[dg]/dg-dispatch/typescript"
+    },
+    {
+      "type": "node-terminal",
+      "name": "doorlock:build prod",
+      "request": "launch",
+      "command": "yarn run build",
+      "cwd": "${workspaceFolder}/resources/[dg]/dg-doorlock/typescript"
+    },
+    {
+      "type": "node-terminal",
+      "name": "doorlock:build dev",
+      "request": "launch",
+      "command": "yarn run build:dev",
+      "cwd": "${workspaceFolder}/resources/[dg]/dg-doorlock/typescript"
+    },
+    {
+      "type": "node-terminal",
+      "name": "doorlock:watch",
+      "request": "launch",
+      "command": "yarn run watch",
+      "cwd": "${workspaceFolder}/resources/[dg]/dg-doorlock/typescript"
     },
     {
       "type": "node-terminal",
@@ -381,27 +402,6 @@
     },
     {
       "type": "node-terminal",
-      "name": "minigames:build prod",
-      "request": "launch",
-      "command": "yarn run build",
-      "cwd": "${workspaceFolder}/resources/[dg]/dg-minigames/typescript"
-    },
-    {
-      "type": "node-terminal",
-      "name": "minigames:build dev",
-      "request": "launch",
-      "command": "yarn run build:dev",
-      "cwd": "${workspaceFolder}/resources/[dg]/dg-minigames/typescript"
-    },
-    {
-      "type": "node-terminal",
-      "name": "minigames:watch",
-      "request": "launch",
-      "command": "yarn run watch",
-      "cwd": "${workspaceFolder}/resources/[dg]/dg-minigames/typescript"
-    },
-    {
-      "type": "node-terminal",
       "name": "materials:build prod",
       "request": "launch",
       "command": "yarn run build",
@@ -420,6 +420,27 @@
       "request": "launch",
       "command": "yarn run watch",
       "cwd": "${workspaceFolder}/resources/[dg]/dg-materials/typescript"
+    },
+    {
+      "type": "node-terminal",
+      "name": "minigames:build prod",
+      "request": "launch",
+      "command": "yarn run build",
+      "cwd": "${workspaceFolder}/resources/[dg]/dg-minigames/typescript"
+    },
+    {
+      "type": "node-terminal",
+      "name": "minigames:build dev",
+      "request": "launch",
+      "command": "yarn run build:dev",
+      "cwd": "${workspaceFolder}/resources/[dg]/dg-minigames/typescript"
+    },
+    {
+      "type": "node-terminal",
+      "name": "minigames:watch",
+      "request": "launch",
+      "command": "yarn run watch",
+      "cwd": "${workspaceFolder}/resources/[dg]/dg-minigames/typescript"
     },
     {
       "type": "node-terminal",

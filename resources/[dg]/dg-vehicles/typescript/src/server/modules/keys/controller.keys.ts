@@ -5,7 +5,7 @@ import { getVinForNetId } from '../../helpers/vehicle';
 import { keyManager } from './classes/keymanager';
 import { handleDoorSuccess, handleFail, handleHotwireSuccess, startVehicleLockpick } from './service.keys';
 
-on('dg-doorlock:server:usedLockpick', (src: number, itemId: string) => {
+on('doorlock:server:useLockpick', (src: number, itemId: string) => {
   startVehicleLockpick(src, itemId);
 });
 
