@@ -31,7 +31,7 @@ export const cmds: {
   {
     cmd: 'hide interaction',
     app: 'interaction',
-    hide: true,
+    show: false,
     data: {},
   },
   {

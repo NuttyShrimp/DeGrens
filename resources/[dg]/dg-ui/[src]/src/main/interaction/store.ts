@@ -3,7 +3,7 @@ import { StoreObject } from '@lib/redux';
 const store: StoreObject<Interaction.State> = {
   key: 'interaction',
   initialState: {
-    visible: false,
+    visible: true,
     show: false,
     text: '',
     type: 'info',
