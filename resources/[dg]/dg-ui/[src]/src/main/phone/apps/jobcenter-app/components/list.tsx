@@ -16,7 +16,7 @@ const GroupElement: FC<{ group: Phone.JobCenter.Group; canEnter?: boolean }> = (
     addNotification({
       id: 'phone-jobs-groups-join',
       title: 'jobcenter',
-      description: 'wachten op toegang...',
+      description: 'Wachten op toegang...',
       sticky: true,
       icon: 'jobcenter',
     });
@@ -26,8 +26,8 @@ const GroupElement: FC<{ group: Phone.JobCenter.Group; canEnter?: boolean }> = (
       title={group.name}
       description={
         <div className='jobcenter__groups__actions'>
-          <div>
-            <Icon name='sign-in-alt' size='1rem' onClick={() => handleRequestToJoin()} />
+          <div className='request' onClick={() => handleRequestToJoin()}>
+            <Icon name='sign-in-alt' size='1rem' />
           </div>
           <div className='jobcenter__groups__actions__sizes'>
             <div>
