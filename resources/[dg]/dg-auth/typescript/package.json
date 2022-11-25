@@ -14,10 +14,10 @@
 		"webpack:config": "webpack --config ./config/webpack.client.js --config ./config/webpack.server.js"
 	},
 	"dependencies": {
-		"jsonwebtoken": "^8.5.1"
+		"fast-jwt": "^2.0.2"
 	},
 	"devDependencies": {
 		"@types/jsonwebtoken": "^8.5.8",
-    "webpack": "^5.74.0"
-  }
+		"webpack": "^5.74.0"
+	}
 }

@@ -1,11 +1,24 @@
-import jwt from 'jsonwebtoken';
-
-import { PRIVATE_TOKEN } from '../../helpers/privateToken';
+import { getPrivateToken } from '../../helpers/privateToken';
 import { mainLogger } from '../../sv_logger';
 import { getPlySteamId } from '../../sv_util';
+import { createSigner, createVerifier } from 'fast-jwt';
 
 // Player session tokens made with JWT
 // Tokens are unique for each player and each resource
+
+let signer: any;
+let verifier: any;
+
+export const createJWSHandlers = () => {
+  signer = createSigner({
+    expiresIn: 1000 * 60 * 60 * 12,
+    key: getPrivateToken(),
+  });
+
+  verifier = createVerifier({
+    key: getPrivateToken(),
+  });
+}
 
 export const createResourceToken = (src: number, resource: string) => {
   const steamId = getPlySteamId(src);
@@ -18,10 +31,7 @@ export const createResourceToken = (src: number, resource: string) => {
     timestamp: Date.now(),
     resource,
   };
-  const token = jwt.sign(data, PRIVATE_TOKEN, {
-    // Max span between server restarts
-    expiresIn: '12h',
-  });
+  const token = signer(data);
   emitNet('dg-auth:token:set', src, resource, token);
   setTimeout(() => {
     emit('dg-auth:token:resourceRegistered', src, resource)
@@ -35,12 +45,11 @@ export const validateToken = (src: number, resource: string, token: string) => {
     return;
   }
   try {
-    const data = jwt.verify(token, PRIVATE_TOKEN, {}) as ResourceTokenData;
+    const data = verifier(token) as ResourceTokenData;
     if (!data?.steamId || !data?.resource) {
       global.exports['dg-admin'].ACBan(src, 'Unauthorized event triggering (invalid session token)');
       mainLogger.info(
-        `${GetPlayerName(String(src))} tried to use a invalid token | token.steamId: ${
-          data.steamId
+        `${GetPlayerName(String(src))} tried to use a invalid token | token.steamId: ${data.steamId
         } | token.resource: ${data.resource}`
       );
       return false;
@@ -55,8 +64,7 @@ export const validateToken = (src: number, resource: string, token: string) => {
     if (data.resource !== resource) {
       global.exports['dg-admin'].ACBan(src, 'Unauthorized event triggering (mismatching resources)');
       mainLogger.info(
-        `${GetPlayerName(String(src))} tried to use a token with mismatching resources | ${resource} vs ${
-          data.resource
+        `${GetPlayerName(String(src))} tried to use a token with mismatching resources | ${resource} vs ${data.resource
         }`
       );
       return false;
