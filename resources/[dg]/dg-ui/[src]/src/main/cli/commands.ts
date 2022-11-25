@@ -415,4 +415,24 @@ export const cmds: {
     app: 'badge',
     show: false,
   },
+  {
+    cmd: 'show idlist',
+    app: 'idlist',
+    show: true,
+    data: {
+      info: devData.idListInfo,
+    },
+  },
+  {
+    cmd: 'hide idlist',
+    app: 'idlist',
+    show: false,
+  },
+  {
+    cmd: 'move idlist $1',
+    app: 'idlist',
+    data: {
+      direction: '$1',
+    },
+  },
 ];

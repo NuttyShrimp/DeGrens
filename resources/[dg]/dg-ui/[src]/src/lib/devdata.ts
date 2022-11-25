@@ -1405,3 +1405,110 @@ devData.laptopGang = {
     { name: 'Inspiratie Loos', cid: 10, hasPerms: false, isOwner: false, isPlayer: false },
   ],
 };
+
+devData.idListInfo = {
+  current: [
+    {
+      source: 1,
+      steamId: 'steam:suckdeesnuts',
+    },
+    {
+      source: 2,
+      steamId: 'steam:suckdeesnuts',
+    },
+    {
+      source: 3,
+      steamId: 'steam:suckdeesnuts',
+    },
+    {
+      source: 3,
+      steamId: 'steam:suckdeesnuts',
+    },
+    {
+      source: 1,
+      steamId: 'steam:suckdeesnuts',
+    },
+    {
+      source: 2,
+      steamId: 'steam:suckdeesnuts',
+    },
+    {
+      source: 3,
+      steamId: 'steam:suckdeesnuts',
+    },
+    {
+      source: 3,
+      steamId: 'steam:suckdeesnuts',
+    },
+    {
+      source: 1,
+      steamId: 'steam:suckdeesnuts',
+    },
+    {
+      source: 2,
+      steamId: 'steam:suckdeesnuts',
+    },
+    {
+      source: 3,
+      steamId: 'steam:suckdeesnuts',
+    },
+    {
+      source: 3,
+      steamId: 'steam:suckdeesnuts',
+    },
+    {
+      source: 1,
+      steamId: 'steam:suckdeesnuts',
+    },
+    {
+      source: 2,
+      steamId: 'steam:suckdeesnuts',
+    },
+    {
+      source: 3,
+      steamId: 'steam:suckdeesnuts',
+    },
+    {
+      source: 3,
+      steamId: 'steam:suckdeesnuts',
+    },
+    {
+      source: 1,
+      steamId: 'steam:suckdeesnuts',
+    },
+    {
+      source: 2,
+      steamId: 'steam:suckdeesnuts',
+    },
+    {
+      source: 3,
+      steamId: 'steam:suckdeesnuts',
+    },
+    {
+      source: 3,
+      steamId: 'steam:suckdeesnuts',
+    },
+    {
+      source: 1,
+      steamId: 'steam:suckdeesnuts',
+    },
+    {
+      source: 2,
+      steamId: 'steam:suckdeesnuts',
+    },
+    {
+      source: 3,
+      steamId: 'steam:suckdeesnuts',
+    },
+    {
+      source: 3,
+      steamId: 'steam:suckdeesnuts',
+    },
+  ],
+  recent: [
+    {
+      source: 892,
+      steamId: 'steam:10bytelength',
+    },
+  ],
+};
