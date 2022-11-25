@@ -1,0 +1,32 @@
+@use 'src/styles/variables.scss';
+
+.id-list {
+  &-wrapper {
+    overflow: auto;
+    position: absolute;
+    top: 15vh;
+    right: 20vh;
+    max-height: 70vh;
+    width: 30vh;
+    background-color: rgba($color: variables.$primary-darker, $alpha: 0.8);
+    padding: 1vh;
+    border-radius: .5vh;
+  }
+
+  &-entry {
+    color: rgba(255, 255, 255, 0.8);
+    background-color: rgba($color: variables.$primary-darker-dark, $alpha: 0.65);
+    padding: .25vh .5vh;
+    border-radius: .5vh;
+
+    transition: background-color 200ms ease-in-out;
+
+    &:not(:first-child) {
+      margin-top: .5vh;
+    }
+
+    &.selected {
+      background-color: rgba($color: variables.$primary-dark, $alpha: 0.8);
+    }
+  }
+}

@@ -9,6 +9,7 @@ import './services/laptop';
 import './services/config';
 import './services/boatanchor';
 import './services/minimap';
+import './services/idmenu';
 
 import { setDiscordRichPresence } from 'modules/discord/service.discord';
 import { setGTABehaviour } from 'modules/gtabehaviour/service.gtabehaviour';

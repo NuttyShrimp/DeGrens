@@ -125,4 +125,5 @@ declare interface RootState {
   dispatch: Dispatch.State;
   policeradar: Policeradar.State;
   badge: Badge.State;
+  idlist: IdList.State;
 }
