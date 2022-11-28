@@ -12,3 +12,5 @@ client_scripts {
   'client/*.js',
 }
 
+
+dependency "dg-auth"

@@ -8,3 +8,5 @@ server_scripts {
 }
 
 server_script "@dg-logs/server/sv_log.lua"
+
+dependency "dg-auth"

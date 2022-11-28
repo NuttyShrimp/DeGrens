@@ -1,4 +1,4 @@
-import { Keys, Peek, PolyTarget, PolyZone, Util } from '@dgx/client';
+import { Keys, Peek, PolyTarget, PolyZone, Sync, Util } from '@dgx/client';
 import { Vector3 } from '@dgx/shared';
 
 import { Plans } from '../data/plans';
@@ -263,7 +263,7 @@ export class Room {
     FreezeEntityPosition(ped, false);
     TriggerEvent('build:event:inside', true);
     TriggerServerEvent('build:event:inside', true);
-    SetEntityInvincible(ped, false);
+    Sync.setPlayerInvincible(false);
 
     if (safe) {
       global.exports['dg-weathersync'].FreezeTime(true, 0);

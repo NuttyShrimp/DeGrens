@@ -1,7 +1,7 @@
 import { Events, Inventory, Notifications, RPC, Util } from '@dgx/server';
 import { setWeaponAmmo } from 'modules/ammo/service.ammo';
 import { getWeaponConfig } from 'services/config';
-import { getWeaponItemState, setWeaponQuality } from './service.weapons';
+import { getWeaponItemState, setEquippedWeapon, setWeaponQuality } from './service.weapons';
 
 Events.onNet(
   'weapons:server:stoppedShooting',
@@ -21,6 +21,10 @@ Events.onNet(
     setWeaponAmmo(itemId, ammoCount);
   }
 );
+
+Events.onNet('weapons:server:removeWeapon', src => {
+  setEquippedWeapon(src, GetHashKey('WEAPON_UNARMED'));
+});
 
 Inventory.onInventoryUpdate(
   'player',
@@ -50,3 +54,5 @@ global.exports('forceSetQuality', async (plyId: number, quality: number) => {
     `Quality of weaponitem ${weaponId} has been force set to ${quality}`
   );
 });
+
+global.exports('getPlayerEquippedWeapon', (plyId: number) => {});

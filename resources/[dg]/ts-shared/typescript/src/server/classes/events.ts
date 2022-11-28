@@ -255,19 +255,27 @@ class RPC {
   }
 
   private readonly resourceName: string;
-  private readonly token: string;
+  private token: string;
   // Ids of RPC, of this current resource awaiting response
   private idsInUse: Set<number> = new Set();
   private registeredHandlers: Map<string, DGXEvents.ServerEventHandler> = new Map();
 
   constructor() {
     this.resourceName = GetCurrentResourceName();
-    this.token = global.exports['dg-auth'].createResourceToken();
+    this.token = '';
+    this.generateToken();
 
     onNet('__dgx_rpc:emitServer', (data: DGXRPC.ClientRequestData) => this.handleIncomingRequest(source, data));
     onNet('__dgx_rpc:traceServer', (traceId: string, metadata: DGXRPC.ClientRequestMetadata) =>
       this.finishClientRequestTrace(source, traceId, metadata)
     );
+  }
+
+  private async generateToken() {
+    while (GetResourceState('dg-auth') !== 'started') {
+      await new Promise(res => setTimeout(res, 10));
+    }
+    this.token = global.exports['dg-auth'].createResourceToken();
   }
 
   private async handleIncomingRequest(src: number, data: DGXRPC.ClientRequestData) {
@@ -474,6 +482,7 @@ class API {
 class Auth {
   private resourceName;
   private startHooks: Set<(src: number) => void>;
+
   constructor() {
     this.resourceName = GetCurrentResourceName();
     this.startHooks = new Set();
@@ -482,6 +491,7 @@ class Auth {
       this.startHooks.forEach(hook => hook(src));
     });
   }
+
   onAuth(cb: (src: number) => void) {
     this.startHooks.add(cb);
   }

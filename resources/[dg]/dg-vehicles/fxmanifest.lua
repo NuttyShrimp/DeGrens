@@ -13,3 +13,4 @@ client_scripts {
   '@ts-shared/client/client.js',
   "client/*.js",
 }
+dependency "dg-auth"

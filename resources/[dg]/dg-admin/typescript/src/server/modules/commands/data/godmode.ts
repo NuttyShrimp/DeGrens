@@ -1,6 +1,6 @@
-import { Notifications } from '@dgx/server';
+import { Notifications, Sync } from '@dgx/server';
 
-let godmodeToggled = false;
+let godmodeToggled: Record<number, boolean> = {};
 
 export const godmode: CommandData = {
   name: 'godmode',
@@ -10,9 +10,9 @@ export const godmode: CommandData = {
   role: 'staff',
   handler: caller => {
     // argument is undefined when using bind, so save state and toggle every func call
-    godmodeToggled = !godmodeToggled;
-    SetPlayerInvincible(String(caller.source), godmodeToggled);
-    Notifications.add(caller.source, `Godmode ${godmodeToggled ? 'enabled' : 'disabled'}`);
+    godmodeToggled[caller.source] = !godmodeToggled[caller.source];
+    Sync.setPlayerInvincible(caller.source, godmodeToggled[caller.source]);
+    Notifications.add(caller.source, `Godmode ${godmodeToggled[caller.source] ? 'enabled' : 'disabled'}`);
   },
   UI: {
     title: 'Godmode',

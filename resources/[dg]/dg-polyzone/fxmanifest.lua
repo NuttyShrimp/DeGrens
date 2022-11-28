@@ -12,3 +12,5 @@ client_scripts {
 	"@PolyZone/EntityZone.lua",
 	"client/cl_*.lua",
 }
+
+dependency "dg-auth"

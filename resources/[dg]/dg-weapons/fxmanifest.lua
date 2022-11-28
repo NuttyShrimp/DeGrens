@@ -77,3 +77,4 @@ data_file 'WEAPONINFO_FILE_PATCH' 'meta/weaponstonehatchet.meta'
 data_file 'WEAPONINFO_FILE_PATCH' 'meta/weaponswitchblade.meta'
 data_file 'WEAPONINFO_FILE_PATCH' 'meta/weaponvintagepistol.meta'
 data_file 'WEAPONINFO_FILE_PATCH' 'meta/weaponwrench.meta'
+dependency "dg-auth"

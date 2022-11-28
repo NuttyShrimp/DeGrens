@@ -20,3 +20,5 @@ files {
   'ui/dist/index.html',
   'ui/dist/assets/*'
 }
+
+dependency "dg-auth"

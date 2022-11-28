@@ -19,3 +19,5 @@ client_scripts {
 	"client/cl_*.lua"
 }
 server_script "@dg-logs/server/sv_log.lua"
+
+dependency "dg-auth"

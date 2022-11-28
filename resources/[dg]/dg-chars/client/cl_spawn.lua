@@ -74,8 +74,8 @@ Spawn.setCam = function(idx, init)
 	local vec3 = vector3(spawn.position.x, spawn.position.y, spawn.position.z)
 	SetEntityCoords(ped, vec3 + vector3(0, 0, 100))
 	FreezeEntityPosition(ped, true)
-	SetEntityInvincible(ped, true)
-	SetEntityVisible(ped, false)
+	DGX.Sync.setPlayerInvincible(true)
+  DGX.Sync.setPlayerVisible(false)
 
 	local camFunc = Cam.updateCam
 	if init then
