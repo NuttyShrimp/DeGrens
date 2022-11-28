@@ -1,6 +1,7 @@
 import { Events, RPC } from '@dgx/client';
+import { Util } from '@dgx/shared';
 import {
-    allowCheck,
+  allowCheck,
   cleanup,
   disallowCheck,
   getWeaponInfo,
@@ -14,9 +15,9 @@ Events.onNet('auth:anticheat:forceSyncWeaponInfo', () => {
   scheduleWeaponThread();
 });
 
-RPC.register("auth:anticheat:toggleACAllowed", (check: string, isAllowed: boolean) => {
+RPC.register('auth:anticheat:toggleACAllowed', (check: string, isAllowed: boolean) => {
   isAllowed ? allowCheck(check) : disallowCheck(check);
-})
+});
 
 RPC.register('auth:anticheat:confirmWeaponInfo', (srvInfo: AntiCheat.WeaponInfo) => {
   const clInfo = getWeaponInfo();
@@ -27,6 +28,7 @@ setImmediate(async () => {
   while (!NetworkIsSessionActive()) {
     await new Promise(res => setTimeout(res, 10));
   }
+  await Util.Delay(2000);
   scheduleHeartBeat();
   startThreads();
 });

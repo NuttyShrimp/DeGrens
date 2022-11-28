@@ -1,7 +1,7 @@
 import { Events, Inventory, Notifications, RPC, Util } from '@dgx/server';
 import { setWeaponAmmo } from 'modules/ammo/service.ammo';
 import { getWeaponConfig } from 'services/config';
-import { getWeaponItemState, setEquippedWeapon, setWeaponQuality } from './service.weapons';
+import { getEquippedWeapon, getWeaponItemState, setEquippedWeapon, setWeaponQuality } from './service.weapons';
 
 Events.onNet(
   'weapons:server:stoppedShooting',
@@ -55,4 +55,4 @@ global.exports('forceSetQuality', async (plyId: number, quality: number) => {
   );
 });
 
-global.exports('getPlayerEquippedWeapon', (plyId: number) => {});
+global.exports('getPlayerEquippedWeapon', getEquippedWeapon);

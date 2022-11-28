@@ -40,14 +40,14 @@ export const getWeaponInfo = (): AntiCheat.WeaponInfo => {
 export const allowCheck = (check: string) => {
   if (!allowed.includes(check)) {
     allowed.push(check);
-    Util.debug(`Anticheat: allowed ${check}`)
+    Util.debug(`Anticheat: allowed ${check}`);
   }
-}
+};
 
 export const disallowCheck = (check: string) => {
   allowed = allowed.filter(m => m !== check);
-  Util.debug(`Anticheat: declined ${check}`)
-}
+  Util.debug(`Anticheat: declined ${check}`);
+};
 
 const scheduleAllowedSync = () => {
   if (allowedSync) {
@@ -56,8 +56,8 @@ const scheduleAllowedSync = () => {
   }
   allowedSync = setTimeout(() => {
     Events.emitNet('auth:anticheat:syncAllowedModules', allowed);
-  }, 5000)
-}
+  }, 5000);
+};
 // endregion
 
 // region Checks
@@ -76,6 +76,7 @@ const scheduleAntiTP = () => {
     const ragdoll = IsPedRagdoll(ped);
     const falling = IsPedFalling(ped);
     const inNoclip = global.exports['dg-admin'].inNoclip();
+    // TODO: check distance between coords
     if (!inNoclip) {
       if (!inVeh) {
         if (!jumping && !falling && !ragdoll) {
@@ -117,7 +118,7 @@ export const schedulePedThread = () => {
         Events.emitNet('auth:anticheat:addFlag', 'alpha');
         SetEntityAlpha(ped, 255, true);
       }
-      if (!CanPedRagdoll(ped)) {
+      if (!CanPedRagdoll(ped) && !IsEntityPositionFrozen(ped)) {
         SetPedCanRagdoll(ped, true);
         Events.emitNet('auth:anticheat:addFlag', 'ragdoll');
       }
@@ -133,8 +134,8 @@ export const schedulePedThread = () => {
     if (GetLocalPlayerAimState() !== 3) {
       Events.emitNet('auth:anticheat:addFlag', 'aim-assist');
     }
-  }, 1000)
-}
+  }, 1000);
+};
 
 export const startThreads = () => {
   scheduleAntiTP();
@@ -149,6 +150,6 @@ export const cleanup = () => {
       clearInterval(thread);
       thread = null;
     }
-  })
+  });
 };
 // endregion
