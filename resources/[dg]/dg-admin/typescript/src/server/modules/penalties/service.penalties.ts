@@ -13,7 +13,7 @@ const penalisePlayer = async (
   length?: number
 ) => {
   const metadata = {
-    reason: reasons.join(" | "),
+    reason: reasons.join(' | '),
     points: points ?? 0,
     length: length ?? null,
     automated: source === -1,
@@ -25,7 +25,6 @@ const penalisePlayer = async (
       ...metadata,
     },
   ]);
-  const targetData = getPlayerForSteamId(target);
   if (result.affectedRows < 1) {
     Util.Log(
       `admin:penalties:${type}:failed`,
@@ -33,11 +32,11 @@ const penalisePlayer = async (
         target,
         ...metadata,
       },
-      `Failed to register ${type} for ${targetData.name}(${target})`,
+      `Failed to register ${type} for ${Util.getName(target)}(${target})`,
       source !== -1 ? source : undefined
     );
     penaltyLogger.error(
-      `Failed to register ${type} for ${targetData.name}(${target}) given by ${
+      `Failed to register ${type} for ${Util.getName(target)}(${target}) given by ${
         source !== -1 ? Util.getName(source) : 'AntiCheat'
       } | ${Object.values(metadata)
         .map((k, v) => `${k}: ${v}`)
@@ -45,7 +44,7 @@ const penalisePlayer = async (
     );
     Chat.sendMessage('admin', {
       type: 'error',
-      message: `Failed to register ${type} for ${targetData.name}(${target})`,
+      message: `Failed to register ${type} for ${Util.getName(target)}(${target})`,
       prefix: 'Admin: ',
     });
     return;
@@ -56,11 +55,11 @@ const penalisePlayer = async (
       target,
       ...metadata,
     },
-    `${targetData.name}(${target}) received a ${type} for ${reasons.join(" | ")}`,
+    `${Util.getName(target)}(${target}) received a ${type} for ${reasons.join(' | ')}`,
     source !== -1 ? source : undefined
   );
   penaltyLogger.info(
-    `${targetData.name}(${target}) received a ${type} by ${Util.getName(
+    `${Util.getName(target)}(${target}) received a ${type} by ${Util.getName(
       source !== -1 ? Util.getName(source) : 'AntiCheat'
     )} | ${Object.entries(metadata)
       .map(([k, v]) => `${k}: ${v}`)
@@ -68,7 +67,9 @@ const penalisePlayer = async (
   );
   Chat.sendMessage('admin', {
     type: 'system',
-    message: `${targetData.name}(${target}) received a ${type} for ${reasons.join(" | ")} (${points} points | ${length} days)`,
+    message: `${Util.getName(target)}(${target}) received a ${type} for ${reasons.join(
+      ' | '
+    )} (${points} points | ${length} days)`,
     prefix: 'Admin: ',
   });
 };
@@ -87,11 +88,11 @@ export const banPlayer = async (
   points: number,
   length: number
 ) => {
-  if (typeof target === 'number') {
-    target = getIdentifierForPlayer(target, 'steam');
+  if (typeof target === 'number' || !target.startsWith('steam')) {
+    target = getIdentifierForPlayer(Number(target), 'steam');
   }
   await penalisePlayer('ban', source, target, reasons, points, length);
-  dropBySteamId(target, `Banned for: ${reasons.join(" | ")}`);
+  dropBySteamId(target, `Banned for: ${reasons.join(' | ')}`);
 };
 
 export const kickPlayer = async (source: number, target: string | number, reasons: string[], points: number) => {
@@ -99,7 +100,7 @@ export const kickPlayer = async (source: number, target: string | number, reason
     target = getIdentifierForPlayer(target, 'steam');
   }
   await penalisePlayer('kick', source, target, reasons, points);
-  dropBySteamId(target, `Kicked for: ${reasons.join(" | ")}`);
+  dropBySteamId(target, `Kicked for: ${reasons.join(' | ')}`);
 };
 
 export const warnPlayer = async (source: number, target: string | number, reasons: string[]) => {
@@ -111,7 +112,7 @@ export const warnPlayer = async (source: number, target: string | number, reason
   if (!targetData) return;
   Chat.sendMessage(targetData.source, {
     type: 'warning',
-    message: `Je bent gewaarschuwd voor: ${reasons.join(" | ")}`,
+    message: `Je bent gewaarschuwd voor: ${reasons.join(' | ')}`,
     prefix: 'Admin: ',
   });
 };
