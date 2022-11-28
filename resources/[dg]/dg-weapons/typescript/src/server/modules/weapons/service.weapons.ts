@@ -3,6 +3,14 @@ import { getWeaponAmmo } from 'modules/ammo/service.ammo';
 import { getConfig, getWeaponConfig } from 'services/config';
 import { mainLogger } from 'sv_logger';
 
+const equippedWeapons: Map<number, number> = new Map();
+
+export const setEquippedWeapon = (src: number, weaponHash: number) => {
+  equippedWeapons.set(src, weaponHash);
+};
+
+export const getEquippedWeapon = (src: number) => equippedWeapons.get(src);
+
 export const registerUseableWeapons = () => {
   const weaponNames = Object.values(getConfig().weapons).map(w => w.name);
 
@@ -19,6 +27,7 @@ export const registerUseableWeapons = () => {
     };
 
     const ammoCount = getWeaponAmmo(itemState.id);
+    setEquippedWeapon(src, weaponData.hash);
     Events.emitNet('weapons:client:useWeapon', src, weaponData, ammoCount);
   });
 };

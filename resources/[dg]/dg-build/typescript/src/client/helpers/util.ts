@@ -1,4 +1,4 @@
-import { Util } from '@dgx/client';
+import { Sync, Util } from '@dgx/client';
 import { Vector3 } from '@dgx/shared';
 
 export const GetOffsets = (num: number, multi: number, multiplier: number) => {
@@ -55,7 +55,7 @@ export const FloatTilSafe = async (model: string) => {
   let ped = PlayerPedId();
   const objModel = GetHashKey(model);
   RequestModel(objModel);
-  SetEntityInvincible(ped, true);
+  Sync.setPlayerInvincible(true);
   FreezeEntityPosition(ped, true);
   let timeout = 40;
   while (timeout > 0) {

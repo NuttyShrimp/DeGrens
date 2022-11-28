@@ -17,3 +17,5 @@ client_scripts {
 	"@dg-logs/client/cl_log.lua",
 	"client/cl_*.lua",
 }
+
+dependency "dg-auth"

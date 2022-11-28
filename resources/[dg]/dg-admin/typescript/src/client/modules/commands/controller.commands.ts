@@ -29,10 +29,6 @@ Events.onNet('admin:commands:runCmd', (handler, args: any[]) => {
   new Function(...parameters, `(${handler})(${parameters.join(',')})`)(...args);
 });
 
-Events.onNet('admin:cmd:setPlayerVisible', (toggle: boolean) => {
-  SetEntityVisible(PlayerPedId(), toggle, false);
-});
-
 Events.onNet('admin:command:attach', (target: number) => {
   const ped = PlayerPedId();
   AttachEntityToEntity(ped, target, 0, 0, -1, 1, 0, 0, 0, false, false, false, true, 2, true);

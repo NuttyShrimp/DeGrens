@@ -159,6 +159,11 @@ class Util extends UtilShared {
 
     return closestPed;
   };
+
+  debug(...args: any[]) {
+    if (!this.isDevEnv()) return;
+    console.log(...args);
+  }
 }
 
 export class Interiors {

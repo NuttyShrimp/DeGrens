@@ -15,3 +15,4 @@ files {
     'html/js/app.js',
     'html/assets/*.mp4'
 }
+dependency "dg-auth"

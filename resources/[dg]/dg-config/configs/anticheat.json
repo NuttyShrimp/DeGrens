@@ -1,0 +1,403 @@
+{
+  "blockedModels": [
+    "weapon_assaultrifle_mk2",
+    "weapon_assaultshotgun",
+    "weapon_ball",
+    "weapon_battleaxe",
+    "weapon_bottle",
+    "weapon_bread",
+    "weapon_briefcase",
+    "weapon_briefcase_02",
+    "weapon_bullpuprifle",
+    "weapon_bullpuprifle_mk2",
+    "weapon_bullpupshotgun",
+    "weapon_bzgas",
+    "weapon_carbinerifle_mk2",
+    "weapon_ceramicpistol",
+    "weapon_combatmg",
+    "weapon_combatmg_mk2",
+    "weapon_combatpdw",
+    "weapon_combatpistol",
+    "weapon_combatshotgun",
+    "weapon_compactlauncher",
+    "weapon_compactrifle",
+    "weapon_dagger",
+    "weapon_dbshotgun",
+    "weapon_doubleaction",
+    "weapon_firework",
+    "weapon_flare",
+    "weapon_flaregun",
+    "weapon_grenadelauncher",
+    "weapon_grenadelauncher_smoke",
+    "weapon_gusenberg",
+    "weapon_hammer",
+    "weapon_hazardcan",
+    "weapon_heavyshotgun",
+    "weapon_heavysniper",
+    "weapon_heavysniper_mk2",
+    "weapon_hominglauncher",
+    "weapon_marksmanrifle",
+    "weapon_marksmanrifle_mk2",
+    "weapon_mg",
+    "weapon_militaryrifle",
+    "weapon_minigun",
+    "weapon_minismg",
+    "weapon_molotov",
+    "weapon_musket",
+    "weapon_navyrevolver",
+    "weapon_pistol50",
+    "weapon_pistol_mk2",
+    "weapon_proxmine",
+    "weapon_pumpshotgun_mk2",
+    "weapon_railgun",
+    "weapon_raycarbine",
+    "weapon_rayminigun",
+    "weapon_raypistol",
+    "weapon_remotesniper",
+    "weapon_revolver",
+    "weapon_revolver_mk2",
+    "weapon_sawnoffshotgun",
+    "weapon_smg_mk2",
+    "weapon_smokegrenade",
+    "weapon_snspistol",
+    "weapon_snspistol_mk2",
+    "weapon_specialcarbine_mk2",
+    "weapon_stickybomb",
+    "weapon_stone_hatchet",
+    "weapon_vintagepistol"
+  ],
+  "explosions": [
+    {
+      "name": "GRENADE",
+      "block": false
+    },
+    {
+      "name": "GRENADELAUNCHER",
+      "block": true
+    },
+    {
+      "name": "STICKYBOMB",
+      "block": true
+    },
+    {
+      "name": "MOLOTOV",
+      "block": true
+    },
+    {
+      "name": "ROCKET",
+      "block": false
+    },
+    {
+      "name": "TANKSHELL",
+      "block": false
+    },
+    {
+      "name": "HI_OCTANE",
+      "block": false
+    },
+    {
+      "name": "CAR",
+      "block": false
+    },
+    {
+      "name": "PLANE",
+      "block": false
+    },
+    {
+      "name": "PETROL_PUMP",
+      "block": false
+    },
+    {
+      "name": "BIKE",
+      "block": false
+    },
+    {
+      "name": "DIR_STEAM",
+      "block": false
+    },
+    {
+      "name": "DIR_FLAME",
+      "block": false
+    },
+    {
+      "name": "DIR_WATER_HYDRANT",
+      "block": false
+    },
+    {
+      "name": "DIR_GAS_CANISTER",
+      "block": false
+    },
+    {
+      "name": "BOAT",
+      "block": false
+    },
+    {
+      "name": "SHIP_DESTROY",
+      "block": false
+    },
+    {
+      "name": "TRUCK",
+      "block": false
+    },
+    {
+      "name": "BULLET",
+      "block": false
+    },
+    {
+      "name": "SMOKEGRENADELAUNCHER",
+      "block": true
+    },
+    {
+      "name": "SMOKEGRENADE",
+      "block": true
+    },
+    {
+      "name": "BZGAS",
+      "block": true
+    },
+    {
+      "name": "FLARE",
+      "block": false
+    },
+    {
+      "name": "GAS_CANISTER",
+      "block": true
+    },
+    {
+      "name": "EXTINGUISHER",
+      "block": false
+    },
+    {
+      "name": "PROGRAMMABLE_AR",
+      "block": false
+    },
+    {
+      "name": "EXP_TAG_TRAIN",
+      "block": false
+    },
+    {
+      "name": "EXP_TAG_BARREL",
+      "block": false
+    },
+    {
+      "name": "EXP_TAG_PROPANE",
+      "block": false
+    },
+    {
+      "name": "EXP_TAG_BLIMP",
+      "block": false
+    },
+    {
+      "name": "EXP_TAG_DIR_FLAME_EXPLODE",
+      "block": false
+    },
+    {
+      "name": "EXP_TAG_TANKER",
+      "block": false
+    },
+    {
+      "name": "PLANE_ROCKET",
+      "block": false
+    },
+    {
+      "name": "EXP_TAG_VEHICLE_BULLET",
+      "block": false
+    },
+    {
+      "name": "EXP_TAG_GAS_TANK",
+      "block": false
+    },
+    {
+      "name": "EXP_TAG_BIRD_CRAP",
+      "block": false
+    },
+    {
+      "name": "EXP_TAG_RAILGUN",
+      "block": true
+    },
+    {
+      "name": "EXP_TAG_BLIMP2",
+      "block": false
+    },
+    {
+      "name": "EXP_TAG_FIREWORK",
+      "block": false
+    },
+    {
+      "name": "EXP_TAG_SNOWBALL",
+      "block": false
+    },
+    {
+      "name": "EXP_TAG_PROXMINE",
+      "block": false
+    },
+    {
+      "name": "EXP_TAG_VALKYRIE_CANNON",
+      "block": false
+    },
+    {
+      "name": "EXP_TAG_AIR_DEFENCE",
+      "block": false
+    },
+    {
+      "name": "EXP_TAG_PIPEBOMB",
+      "block": false
+    },
+    {
+      "name": "EXP_TAG_VEHICLEMINE",
+      "block": false
+    },
+    {
+      "name": "EXP_TAG_EXPLOSIVEAMMO",
+      "block": false
+    },
+    {
+      "name": "EXP_TAG_APCSHELL",
+      "block": false
+    },
+    {
+      "name": "EXP_TAG_BOMB_CLUSTER",
+      "block": false
+    },
+    {
+      "name": "EXP_TAG_BOMB_GAS",
+      "block": false
+    },
+    {
+      "name": "EXP_TAG_BOMB_INCENDIARY",
+      "block": false
+    },
+    {
+      "name": "EXP_TAG_BOMB_STANDARD",
+      "block": false
+    },
+    {
+      "name": "EXP_TAG_TORPEDO",
+      "block": false
+    },
+    {
+      "name": "EXP_TAG_TORPEDO_UNDERWATER",
+      "block": false
+    },
+    {
+      "name": "EXP_TAG_BOMBUSHKA_CANNON",
+      "block": false
+    },
+    {
+      "name": "EXP_TAG_BOMB_CLUSTER_SECONDARY",
+      "block": false
+    },
+    {
+      "name": "EXP_TAG_HUNTER_BARRAGE",
+      "block": false
+    },
+    {
+      "name": "EXP_TAG_HUNTER_CANNON",
+      "block": false
+    },
+    {
+      "name": "EXP_TAG_ROGUE_CANNON",
+      "block": false
+    },
+    {
+      "name": "EXP_TAG_MINE_UNDERWATER",
+      "block": false
+    },
+    {
+      "name": "EXP_TAG_ORBITAL_CANNON",
+      "block": true
+    },
+    {
+      "name": "EXP_TAG_BOMB_STANDARD_WIDE",
+      "block": false
+    },
+    {
+      "name": "EXP_TAG_EXPLOSIVEAMMO_SHOTGUN",
+      "block": true
+    },
+    {
+      "name": "EXP_TAG_OPPRESSOR2_CANNON",
+      "block": false
+    },
+    {
+      "name": "EXP_TAG_MORTAR_KINETIC",
+      "block": false
+    },
+    {
+      "name": "EXP_TAG_VEHICLEMINE_KINETIC",
+      "block": false
+    },
+    {
+      "name": "EXP_TAG_VEHICLEMINE_EMP",
+      "block": true
+    },
+    {
+      "name": "EXP_TAG_VEHICLEMINE_SPIKE",
+      "block": true
+    },
+    {
+      "name": "EXP_TAG_VEHICLEMINE_SLICK",
+      "block": true
+    },
+    {
+      "name": "EXP_TAG_VEHICLEMINE_TAR",
+      "block": true
+    },
+    {
+      "name": "EXP_TAG_SCRIPT_DRONE",
+      "block": false
+    },
+    {
+      "name": "EXP_TAG_RAYGUN",
+      "block": true
+    },
+    {
+      "name": "EXP_TAG_BURIEDMINE",
+      "block": false
+    },
+    {
+      "name": "EXP_TAG_SCRIPT_MISSILE",
+      "block": false
+    },
+    {
+      "name": "EXP_TAG_RCTANK_ROCKET",
+      "block": false
+    },
+    {
+      "name": "EXP_TAG_BOMB_WATER",
+      "block": false
+    },
+    {
+      "name": "EXP_TAG_BOMB_WATER_SECONDARY",
+      "block": false
+    },
+    {
+      "name": "_0xF728C4A9",
+      "block": false
+    },
+    {
+      "name": "_0xBAEC056F",
+      "block": false
+    },
+    {
+      "name": "EXP_TAG_FLASHGRENADE",
+      "block": false
+    },
+    {
+      "name": "EXP_TAG_STUNGRENADE",
+      "block": false
+    },
+    {
+      "name": "_0x763D3B3B",
+      "block": false
+    },
+    {
+      "name": "EXP_TAG_SCRIPT_MISSILE_LARGE",
+      "block": false
+    },
+    {
+      "name": "EXP_TAG_SUBMARINE_BIG",
+      "block": false
+    }
+  ]
+}

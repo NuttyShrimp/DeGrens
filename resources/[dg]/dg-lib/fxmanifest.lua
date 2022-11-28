@@ -28,3 +28,4 @@ client_scripts {
   "client/cl_*.js",
   "client/**/*.ymap.xml",
 }
+dependency "dg-auth"

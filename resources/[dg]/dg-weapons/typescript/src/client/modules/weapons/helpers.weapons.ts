@@ -1,4 +1,4 @@
-import { Inventory, Jobs, RPC, Util } from '@dgx/client';
+import { Events, Inventory, Jobs, RPC, Util } from '@dgx/client';
 import { setCurrentWeaponTint } from 'services/tint';
 import { getCurrentWeaponData, setCurrentWeaponData } from './service.weapons';
 
@@ -18,6 +18,7 @@ const setWeapon = async (itemId: string, weaponHash: number, tint?: string) => {
 const removeWeapon = (itemId: string) => {
   Inventory.toggleObject(itemId, true);
   SetCurrentPedWeapon(PlayerPedId(), GetHashKey('WEAPON_UNARMED'), true);
+  Events.emitNet('weapons:server:removeWeapon');
 };
 
 export const holsterWeapon = async (weaponData: Weapons.WeaponItem) => {

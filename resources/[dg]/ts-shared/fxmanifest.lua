@@ -12,3 +12,5 @@ client_scripts {
 }
 
 shared_script "shared/lib.lua"
+
+dependency "dg-auth"

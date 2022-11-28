@@ -1,6 +1,6 @@
-import { Events, Notifications } from '@dgx/server';
+import { Events, Notifications, Sync } from '@dgx/server';
 
-let cloakToggled = false;
+let cloakToggled: Record<number, boolean> = {};
 
 export const cloak: CommandData = {
   name: 'cloak',
@@ -10,9 +10,10 @@ export const cloak: CommandData = {
   role: 'staff',
   handler: caller => {
     // argument is undefined when using bind, so save state and toggle every func call
-    Events.emitNet('admin:cmd:setPlayerVisible', caller.source, cloakToggled);
-    Notifications.add(caller.source, `Cloak ${!cloakToggled ? 'enabled' : 'disabled'}`);
-    cloakToggled = !cloakToggled;
+    const toggle = !cloakToggled[caller.source];
+    cloakToggled[caller.source] = toggle;
+    Sync.setPlayerVisible(caller.source, toggle);
+    Notifications.add(caller.source, `Cloak ${toggle ? 'enabled' : 'disabled'}`);
   },
   UI: {
     title: 'Cloak',

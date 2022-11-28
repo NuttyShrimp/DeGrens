@@ -29,6 +29,7 @@ declare global {
     Police: typeof Classes.Police;
     Status: typeof Classes.Status;
     Reputations: typeof Classes.Reputations;
+    Sync: typeof Classes.Sync;
     Vector3: typeof Vector3Class;
     Vector4: typeof Vector4Class;
   };

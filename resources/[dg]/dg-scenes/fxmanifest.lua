@@ -22,3 +22,4 @@ shared_scripts {
 client_script "@dg-logs/client/cl_log.lua"
 
 server_script "@dg-logs/server/sv_log.lua"
+dependency "dg-auth"

@@ -14,3 +14,5 @@ client_scripts {
   '@ts-shared/shared/lib.lua',
   "@ts-shared/client/client.js",
 }
+
+dependency "dg-auth"

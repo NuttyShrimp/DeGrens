@@ -93,3 +93,11 @@ syncActions.NetworkExplodeVehicle = function(vehicle, isAudible, isInvisible, p3
 		requestSyncedAction("NetworkExplodeVehicle", vehicle, isAudible, isInvisible, p3)
 	end
 end
+
+syncActions.SetEntityVisible = function(ped, isVisible)
+	if NetworkHasControlOfEntity(ped) then
+    SetEntityVisible(ped, isVisible)
+	else
+		requestSyncedAction("SetEntityVisible", ped, isVisible)
+	end
+end
