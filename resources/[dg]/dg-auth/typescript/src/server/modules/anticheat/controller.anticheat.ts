@@ -30,7 +30,7 @@ on('explosionEvent', (sender: string, ev: AntiCheat.ExplosionEventInfo) => {
 });
 
 Events.onNet('auth:heartbeat', (src: number) => {
-  console.log('Received heartbeat', src);
+  registerHeartBeat(src);
 });
 
 Events.onNet('auth:anticheat:addFlag', (src: number, reason: string) => {
