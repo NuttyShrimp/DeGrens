@@ -12,6 +12,7 @@ import './modules/propattach';
 import './services/laptop';
 import './services/config';
 import './services/boatanchor';
+import './services/editor';
 import './controllers';
 
 setImmediate(() => {
