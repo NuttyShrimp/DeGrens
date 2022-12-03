@@ -10,6 +10,7 @@ import './services/config';
 import './services/boatanchor';
 import './services/minimap';
 import './services/idmenu';
+import './services/me';
 import './services/editor';
 
 import { setDiscordRichPresence } from 'modules/discord/service.discord';
