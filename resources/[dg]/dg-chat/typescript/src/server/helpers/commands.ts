@@ -22,15 +22,82 @@ const baseCommands: Server.Command[] = [
         prefix: `OOC (${plyObj.PlayerData.charinfo.firstname} ${plyObj.PlayerData.charinfo.lastname}|${src}): `,
         message: args.join(' '),
       };
+      Util.Log(
+        'chat:ooc:local',
+        {
+          msg,
+        },
+        `${Util.getName(src)} heeft een lokaal OOC bericht verstuurd`,
+        src
+      );
       DGCore.Functions.GetPlayers().forEach(player => {
         let shouldShow = Admin.hasPermission(player, 'staff');
         if (!shouldShow) {
           // Some more expensive shit so we hide it behind an extra check
           const plyCoords = Util.ArrayToVector3(GetEntityCoords(GetPlayerPed(String(player))));
-          shouldShow = senderCoords.subtract(plyCoords).Length <= 20;
+          shouldShow = senderCoords.subtract(plyCoords).Length <= 30;
         }
         if (!shouldShow) return;
         sendMessage(player, msg);
+      });
+    },
+  },
+  {
+    name: 'oocg',
+    description: 'Globaal OOC bericht',
+    parameters: [
+      {
+        name: 'message',
+        required: true,
+      },
+    ],
+    permissionLevel: 'user',
+    handler: (src, _, args) => {
+      const plyObj = DGCore.Functions.GetPlayer(src);
+      const msg: Shared.Message = {
+        prefix: `OOC (${plyObj.PlayerData.charinfo.firstname} ${plyObj.PlayerData.charinfo.lastname}|${src}): `,
+        message: args.join(' '),
+      };
+      Util.Log(
+        'chat:ooc:global',
+        {
+          msg,
+        },
+        `${Util.getName(src)} heeft een globaal OOC bericht verstuurd`,
+        src
+      );
+      DGCore.Functions.GetPlayers().forEach(player => {
+        sendMessage(player, msg);
+      });
+    },
+  },
+  {
+    name: 'me',
+    description: 'Toon bericht om RP te stimuleren met tekst',
+    parameters: [
+      {
+        name: 'message',
+        required: true,
+      },
+    ],
+    permissionLevel: 'user',
+    handler: (src, _, args) => {
+      const senderCoords = Util.ArrayToVector3(GetEntityCoords(GetPlayerPed(String(src))));
+      const plyObj = DGCore.Functions.GetPlayer(src);
+      const msg = args.join(' ');
+      Util.Log(
+        'chat:me',
+        {
+          msg,
+        },
+        `${Util.getName(src)} heeft een /me bericht verstuurd`,
+        src
+      );
+      DGCore.Functions.GetPlayers().forEach(player => {
+        const plyCoords = Util.ArrayToVector3(GetEntityCoords(GetPlayerPed(String(player))));
+        const shouldShow = senderCoords.subtract(plyCoords).Length <= 25;
+        if (!shouldShow) return;
+        Events.emitNet('dg-misc:me:show', player, src, msg);
       });
     },
   },
