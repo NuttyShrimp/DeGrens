@@ -20,12 +20,12 @@ let keyReleaseTime: number | null = null;
 
 HUD.addEntry('nos-amount', 'fire-flame', '#6D0680', () => getNosAmountForHud(), 3, 100, false);
 
-Keys.register('useNos', 'Gebruik NOS (CTRL + for purge)', 'LMENU');
+Keys.register('useNos', 'Gebruik NOS (+mod for purge)', 'LMENU');
 Keys.onPress('useNos', isDown => {
   const veh = getCurrentVehicle();
   if (!veh || !isDriver() || !doesVehicleHaveNos(veh)) return;
   if (isDown) {
-    if (IsDisabledControlPressed(0, 36)) {
+    if (Keys.isModPressed()) {
       purge(veh);
     } else {
       if (!Util.debounce('nos-usage-key', 500)) return;
