@@ -1,12 +1,12 @@
-import React, { FC } from 'react';
+import React, { FC, useCallback } from 'react';
 import { Button } from '@src/components/button';
 import { nuiAction } from '@src/lib/nui-comms';
 
 import { Call } from './call';
 
-export const CallList: FC<{ list: Dispatch.Call[]; viewedIds: string[]; onlyNew: boolean }> = ({
+export const CallList: FC<{ list: Dispatch.Call[]; newIds: string[]; onlyNew: boolean }> = ({
   list,
-  viewedIds,
+  newIds,
   onlyNew,
 }) => {
   const loadMore = () => {
@@ -15,20 +15,21 @@ export const CallList: FC<{ list: Dispatch.Call[]; viewedIds: string[]; onlyNew:
     });
   };
 
+  const getCalls = useCallback(
+    (onlyNew = false) => list.filter(c => (onlyNew ? newIds.includes(c.id) : !newIds.includes(c.id))),
+    [list, newIds]
+  );
+
   return (
     <div className='dispatch-list dispatch-call-list'>
-      {list
-        .filter(c => !viewedIds.includes(c.id))
-        .map(c => (
-          <Call key={c.id} call={c} isNew={true} />
-        ))}
+      {getCalls(true).map(c => (
+        <Call key={c.id} call={c} isNew={true} />
+      ))}
       {!onlyNew && (
         <>
-          {list
-            .filter(c => viewedIds.includes(c.id))
-            .map(c => (
-              <Call key={c.id} call={c} isNew={false} />
-            ))}
+          {getCalls().map(c => (
+            <Call key={c.id} call={c} isNew={false} />
+          ))}
           <div className='center'>
             <Button.Primary onClick={loadMore}>Laad meer</Button.Primary>
           </div>

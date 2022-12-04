@@ -8,7 +8,7 @@ import store from './store';
 import './styles/dispatch.scss';
 
 const Component: AppFunction<Dispatch.State> = props => {
-  const [viewedIds, setViewedIds] = useState<string[]>([]);
+  const [newIds, setNewIds] = useState<string[]>([]);
   const [onlyNew, setOnlyNew] = useState(false);
   const [showCamera, setShowCamera] = useState(false);
 
@@ -24,10 +24,10 @@ const Component: AppFunction<Dispatch.State> = props => {
     props.updateState({
       visible: false,
     });
-    setViewedIds(props.calls.map(c => c.id));
+    setNewIds([]);
     setOnlyNew(false);
     setShowCamera(false);
-  }, [props.calls]);
+  }, [props]);
 
   const addCall = useCallback(
     (call: Dispatch.Call) => {
@@ -35,24 +35,24 @@ const Component: AppFunction<Dispatch.State> = props => {
       props.updateState({
         calls: newCalls,
       });
+      setNewIds(s => [...s, call.id]);
       setTimeout(() => {
-        setViewedIds(s => [...s, call.id]);
+        setNewIds(s => s.filter(id => id !== call.id));
       }, 5000);
     },
-    [props.calls, props.storeSize, props.updateState]
+    [props, newIds]
   );
 
   const addCalls = useCallback(
     (calls: Dispatch.Call[], isRefresh = false) => {
-      const storeSize = isRefresh ? calls.length : props.storeSize + calls.length;
+      const storeSize = isRefresh ? Math.max(20, calls.length) : props.storeSize + calls.length;
       const newCalls = isRefresh ? calls : [...calls, ...props.calls].slice(0, storeSize);
       props.updateState({
         storeSize,
         calls: newCalls,
       });
-      setViewedIds(s => [...s, ...calls.map(c => c.id)]);
     },
-    [props.storeSize, props.calls, props.updateState]
+    [props]
   );
 
   const handleEvent = useCallback(
@@ -77,7 +77,7 @@ const Component: AppFunction<Dispatch.State> = props => {
         }
       }
     },
-    [addCall]
+    [addCall, addCalls]
   );
 
   return (
@@ -91,10 +91,10 @@ const Component: AppFunction<Dispatch.State> = props => {
       hideOnEscape
       hideOverflow
     >
-      <>
-        <CallList list={props.calls} viewedIds={viewedIds} onlyNew={onlyNew} />
+      <div>
+        <CallList list={props.calls} newIds={newIds} onlyNew={onlyNew} />
         {showCamera && <CamList camList={props.cams} />}
-      </>
+      </div>
     </AppWrapper>
   );
 };
