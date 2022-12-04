@@ -3,9 +3,9 @@ import { Util } from '@dgx/shared';
 import { areDoorsLoaded, changeDoorState, getAllDoors, getDoorById, registerNewDoor } from 'services/doors';
 
 // Client and server event emit
-Inventory.registerUseable('lockpick', src => {
+Inventory.registerUseable('lockpick', (src, item) => {
   Events.emitNet('doorlock:client:useLockpick', src);
-  emit('doorlock:server:useLockpick', src);
+  emit('doorlock:server:useLockpick', src, item.id);
 });
 
 Inventory.registerUseable('thermite', src => {
