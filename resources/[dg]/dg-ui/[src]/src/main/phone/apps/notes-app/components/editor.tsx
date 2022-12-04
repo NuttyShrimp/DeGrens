@@ -1,21 +1,31 @@
 import React, { FC, useState } from 'react';
-import Editor from '@components/editor';
+import { useCallback } from 'react';
+import { useEditor } from '@src/lib/hooks/useEditor';
+import { EditorContent } from '@tiptap/react';
 
 import { nuiAction } from '../../../../../lib/nui-comms';
 import { AppContainer } from '../../../os/appcontainer/appcontainer';
 import { removeCurrentNote, setCurrentNote, updateNote } from '../lib';
 
+import '../styles/editor.scss';
 export const Document: FC<React.PropsWithChildren<{ note: Phone.Notes.Note }>> = ({ note }) => {
   const [title, setTitle] = useState(note.title ?? '');
-  const [noteText, setNoteText] = useState(note.note ?? '');
-  const [inEditMode, setEditMode] = useState(false);
+  const [editMode, setEditMode] = useState(false);
+  const editor = useEditor({
+    placeholder: 'Schrijft iet...',
+    defaultValue: note.note,
+    readonly: true,
+  });
 
   // region Actions
   const readActions: Action[] = [
     {
       title: 'Bewerk',
       icon: 'pencil',
-      onClick: () => setEditMode(true),
+      onClick: useCallback(() => {
+        editor?.setEditable(true);
+        setEditMode(true);
+      }, [editor]),
     },
   ];
   const readAuxActions: Action[] = [
@@ -57,10 +67,11 @@ export const Document: FC<React.PropsWithChildren<{ note: Phone.Notes.Note }>> =
     {
       title: 'Save',
       icon: 'save',
-      onClick: () => {
-        updateNote(note.id, title, noteText);
+      onClick: useCallback(() => {
+        updateNote(note.id, title, editor?.getHTML() ?? '');
+        editor?.setEditable(false);
         setEditMode(false);
-      },
+      }, [editor, note.id, title]),
     },
   ];
   // endregion
@@ -72,16 +83,11 @@ export const Document: FC<React.PropsWithChildren<{ note: Phone.Notes.Note }>> =
         onChange: setTitle,
         label: 'Titel',
       }}
-      primaryActions={note.readonly ? [] : inEditMode ? editActions : readActions}
-      auxActions={!note.readonly && !inEditMode ? readAuxActions : undefined}
+      primaryActions={note.readonly ? [] : editMode ? editActions : readActions}
+      auxActions={!note.readonly && !editMode ? readAuxActions : undefined}
       onClickBack={() => setCurrentNote(null)}
     >
-      <Editor
-        onChange={setNoteText}
-        placeholder={'Plaats hier je text'}
-        defaultValue={noteText}
-        readonly={!inEditMode}
-      />
+      <EditorContent editor={editor} className={'phone-editor'} />
     </AppContainer>
   );
 };

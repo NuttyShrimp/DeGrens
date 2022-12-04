@@ -1,4 +1,4 @@
-import React, { FC, MouseEventHandler, useEffect, useRef, useState } from 'react';
+import React, { FC, MouseEventHandler, useCallback, useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useVhToPixel } from '@lib/hooks/useVhToPixel';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
@@ -68,6 +68,19 @@ export const AppContainer: FC<React.PropsWithChildren<AppContainerProps>> = prop
     setTopPadding(padding);
   }, [actionWrapperRef]);
 
+  const doAction = useCallback(
+    (type: 'primary' | 'secondary', idx: number) => {
+      let acts: Action[] = [];
+      if (type === 'primary' && props.primaryActions) {
+        acts = props.primaryActions;
+      } else if (type === 'secondary' && props.auxActions) {
+        acts = props.auxActions;
+      }
+      acts[idx]?.onClick(acts[idx]?.data);
+    },
+    [props.auxActions, props.primaryActions]
+  );
+
   return (
     <div className={[classes.wrapper, props.className ?? ''].join(' ')} style={props.style}>
       <div
@@ -99,7 +112,7 @@ export const AppContainer: FC<React.PropsWithChildren<AppContainerProps>> = prop
               {props.primaryActions &&
                 props.primaryActions.map((action, index) => (
                   <Tooltip key={index} title={action.title} placement='bottom'>
-                    <div className={classes.action} onClick={() => action.onClick(action.data)}>
+                    <div className={classes.action} onClick={() => doAction('primary', index)}>
                       <i className={`${action.iconLib ?? 'fas'} fa-${action.icon}`} />
                     </div>
                   </Tooltip>
@@ -122,7 +135,7 @@ export const AppContainer: FC<React.PropsWithChildren<AppContainerProps>> = prop
                       <MenuItem
                         key={index}
                         onClick={() => {
-                          action.onClick(action.data);
+                          doAction('secondary', index);
                           handleClose();
                         }}
                       >

@@ -1,0 +1,10 @@
+.phone-editor {
+  height: 100%;
+
+  & > .ProseMirror {
+    height: 100%;
+    &-focused {
+      outline: 0;
+    }
+  }
+}
