@@ -3,25 +3,70 @@ import { getCurrentVehicle } from '@helpers/vehicle';
 
 import { toggleVehicleLock } from './service.keys';
 
-export const lockpickInfo = {
+let animThread: NodeJS.Timer | null = null;
+const lockpickAnimations = {
   door: {
     animDict: 'veh@break_in@0h@p_m_one@',
-    anim: 'low_force_entry_ds',
+    play: () => {
+      const doAnim = () => {
+        TaskPlayAnim(
+          PlayerPedId(),
+          'veh@break_in@0h@p_m_one@',
+          'low_force_entry_ds',
+          3.0,
+          3.0,
+          -1.0,
+          17,
+          0,
+          false,
+          false,
+          false
+        );
+      };
+
+      doAnim();
+      animThread = setInterval(doAnim, 1000);
+    },
+    stop: () => {
+      if (animThread !== null) {
+        clearInterval(animThread);
+        animThread = null;
+      }
+      StopAnimTask(PlayerPedId(), 'veh@break_in@0h@p_m_one@', 'low_force_entry_ds', 1.0);
+    },
   },
   hotwire: {
     animDict: 'anim@amb@clubhouse@tutorial@bkr_tut_ig3@',
-    anim: 'machinic_loop_mechandplayer',
+    play: async () => {
+      TaskPlayAnim(
+        PlayerPedId(),
+        'anim@amb@clubhouse@tutorial@bkr_tut_ig3@',
+        'machinic_loop_mechandplayer',
+        3.0,
+        3.0,
+        -1.0,
+        17,
+        0,
+        false,
+        false,
+        false
+      );
+    },
+    stop: () => {
+      StopAnimTask(PlayerPedId(), 'anim@amb@clubhouse@tutorial@bkr_tut_ig3@', 'machinic_loop_mechandplayer', 1.0);
+    },
   },
 };
 
 Events.onNet(
   'vehicles:keys:startLockpick',
-  async (type: keyof typeof lockpickInfo, id: string, amount: number, diff: { speed: number; size: number }) => {
-    await Util.loadAnimDict(lockpickInfo[type].animDict);
+  async (type: keyof typeof lockpickAnimations, id: string, amount: number, diff: { speed: number; size: number }) => {
+    const animData = lockpickAnimations[type];
+    await Util.loadAnimDict(animData.animDict);
     const ped = PlayerPedId();
-    TaskPlayAnim(ped, lockpickInfo[type].animDict, lockpickInfo[type].anim, 3.0, 3.0, -1.0, 17, 0, false, false, false);
+    animData.play();
     const lockpickResult = await Minigames.keygame(amount, diff.speed, diff.size);
-    StopAnimTask(ped, lockpickInfo[type].animDict, lockpickInfo[type].anim, 1.0);
+    animData.stop();
     Events.emitNet('vehicles:keys:finishLockPick', type, id, lockpickResult);
   }
 );
