@@ -118,10 +118,6 @@ export const schedulePedThread = () => {
         Events.emitNet('auth:anticheat:addFlag', 'alpha');
         SetEntityAlpha(ped, 255, true);
       }
-      if (!CanPedRagdoll(ped) && !IsEntityPositionFrozen(ped)) {
-        SetPedCanRagdoll(ped, true);
-        Events.emitNet('auth:anticheat:addFlag', 'ragdoll');
-      }
       if (!IsEntityVisible(ped) && !allowed.includes('invisible')) {
         SetEntityVisible(ped, true, true);
         Events.emitNet('auth:anticheat:addFlag', 'visible');
