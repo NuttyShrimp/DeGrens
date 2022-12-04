@@ -11,7 +11,7 @@ const setWeapon = async (itemId: string, weaponHash: number, tint?: string) => {
   (components ?? []).forEach(comp => GiveWeaponComponentToPed(ped, weaponHash, comp));
 
   if (tint !== undefined) {
-    setCurrentWeaponTint(tint);
+    setCurrentWeaponTint(itemId, weaponHash, tint);
   }
 };
 

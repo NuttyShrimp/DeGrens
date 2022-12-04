@@ -361,6 +361,7 @@ export const ALL_WEAPONS: Weapons.WeaponConfig[] = [
   {
     name: 'weapon_assaultrifle',
     durabilityMultiplier: 0.01,
+    canTint: true,
     // attachments: {
     //   'rifle_extendedclip': 'COMPONENT_ASSAULTRIFLE_CLIP_02',
     //   'rifle_drum': 'COMPONENT_ASSAULTRIFLE_CLIP_03',

@@ -51,21 +51,24 @@ const getTintIdOfName = (tintName: string) => {
   }
 };
 
-export const setCurrentWeaponTint = (tintName: string, saveTint = false) => {
+export const setCurrentWeaponTint = (weaponId: string, weaponHash: number, tintName: string, saveTint = false) => {
+  const tintId = getTintIdOfName(tintName);
+  if (tintId === undefined) {
+    console.error(`Failed to get tintId from name: ${tintName}`);
+    return;
+  }
+  SetPedWeaponTintIndex(PlayerPedId(), weaponHash, tintId);
+  if (saveTint) {
+    Events.emitNet('weapons:server:setTint', weaponId, tintName);
+  }
+};
+
+UI.RegisterUICallback('weapons/setTint', (data, cb) => {
   const currentWeaponData = getCurrentWeaponData();
   if (!currentWeaponData) {
     Notifications.add('Je hebt geen wapen vast', 'error');
     return;
   }
-  const tintId = getTintIdOfName(tintName);
-  if (tintId === undefined) return;
-  SetPedWeaponTintIndex(PlayerPedId(), currentWeaponData.hash, tintId);
-  if (saveTint) {
-    Events.emitNet('weapons:server:setTint', currentWeaponData.id, tintName);
-  }
-};
-
-UI.RegisterUICallback('weapons/setTint', (data, cb) => {
-  setCurrentWeaponTint(data.tint, true);
+  setCurrentWeaponTint(currentWeaponData.id, currentWeaponData.hash, data.tint, true);
   cb({ data: {}, meta: { ok: true, message: 'done' } });
 });
