@@ -13,7 +13,7 @@ export const startEvidenceThread = async () => {
     evidence.forEach(e => {
       if (position.distance(e.coords) > 5) return;
       DrawMarker(
-        27,
+        28,
         e.coords.x,
         e.coords.y,
         e.coords.z,
@@ -23,9 +23,9 @@ export const startEvidenceThread = async () => {
         0,
         0,
         0,
-        0.1,
-        0.1,
-        0.3,
+        0.05,
+        0.05,
+        0.05,
         250,
         0,
         50,

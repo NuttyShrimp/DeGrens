@@ -2836,5 +2836,14 @@
       "x": 1,
       "y": 1
     }
+  },
+  {
+    "name": "evidence_vehicle_damage",
+    "label": "Bewijs Voertuigschade",
+    "image": "evidence_vehicle_damage.png",
+    "size": {
+      "x": 1,
+      "y": 1
+    }
   }
 ]

@@ -20,12 +20,16 @@ Events.onNet('police:evidence:dropBloop', (src: number) => {
   addEvidence({ x: plyCoords.x, y: plyCoords.y, z: plyCoords.z - 0.95 }, 'blood', player.PlayerData.metadata.dna);
 });
 
+Events.onNet('police:evidence:dropVehicleDamage', (src: number, color: string, coords: Vec3) => {
+  addEvidence(coords, 'vehicleDamage', color);
+});
+
 // We limit to 75 other wise player will lagg the fuck out
 RPC.register('police:evidence:getAllInArea', (src: number) => {
   const plyCoords = Util.getPlyCoords(src);
   const evidence = getAllEvidenceInArea(plyCoords);
-  const limit = Math.min(evidence.length, 75);
-  return evidence.slice(-1 * limit);
+  if (evidence.length <= 75) return evidence;
+  return evidence.slice(-75);
 });
 
 Events.onNet('police:evidence:take', (src: number, evidenceId: string) => {

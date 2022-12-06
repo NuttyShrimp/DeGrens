@@ -29,5 +29,8 @@ export const takeEvidence = (plyId: number, evidenceId: string) => {
     case 'bullet':
       Inventory.addItemToPlayer(plyId, 'evidence_bullet', 1, { serialnumber: data.info });
       break;
+    case 'vehicleDamage':
+      Inventory.addItemToPlayer(plyId, 'evidence_vehicle_damage', 1, { color: data.info });
+      break;
   }
 };

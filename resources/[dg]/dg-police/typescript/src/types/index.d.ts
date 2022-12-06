@@ -31,7 +31,7 @@ declare namespace Police {
   }
 
   namespace Evidence {
-    type Type = 'bullet' | 'blood';
+    type Type = 'bullet' | 'blood' | 'vehicleDamage';
 
     type Evidence = {
       id: string;
