@@ -22,6 +22,9 @@ export const getCosmetic = async (vin: string): Promise<Upgrades.Cosmetic | void
     const netId = vinManager.getNetId(vin);
     if (!netId) return;
     currentUpgrades = await getCosmeticUpgradesForVeh(netId);
+    if (!currentUpgrades) {
+      throw new Error('Failed to get cosmetic upgrades of vehicle');
+    }
     await updateVehicleUpgrades(vin, currentUpgrades);
     upgradesLogger.info(`Initialized cosmetic upgrades for vehicle ${vin}`);
     Util.Log(
@@ -147,9 +150,9 @@ export const getPriceForUpgrades = (veh: number, upgrades: Partial<Upgrades.Cosm
   return price;
 };
 
-export const getCosmeticUpgradesForVeh = (netId: number): Promise<Upgrades.Cosmetic> => {
+export const getCosmeticUpgradesForVeh = (netId: number) => {
   const entity = NetworkGetEntityFromNetworkId(netId);
-  return Util.sendRPCtoEntityOwner(entity, 'vehicles:upgrades:getCosmetic', netId);
+  return Util.sendRPCtoEntityOwner<Upgrades.Cosmetic>(entity, 'vehicles:upgrades:getCosmetic', netId);
 };
 
 export const applyUpgradesToVeh = (netId: number, upgrades: Partial<Upgrades.All>) => {

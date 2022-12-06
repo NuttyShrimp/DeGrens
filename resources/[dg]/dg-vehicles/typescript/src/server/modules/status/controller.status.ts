@@ -1,10 +1,12 @@
-import { Events, Inventory, RPC } from '@dgx/server';
+import { Events, Inventory, RPC, Util } from '@dgx/server';
 
 import { getConfigByHash } from '../info/service.info';
 
 import { getConfig, loadConfig } from './services/config';
 import { getServiceStatus, seedServiceStatuses, updateServiceStatus } from './services/store';
 import { generateServiceStatus, useRepairPart } from './service.status';
+import { getTyreState } from './helpers.status';
+import { setNativeStatus } from 'helpers/vehicle';
 
 setImmediate(() => {
   seedServiceStatuses();
@@ -47,4 +49,22 @@ RPC.register('vehicles:service:getVehicleInfo', (src: number, vehNetId: number) 
       useRepairPart(src, part, vehClass, item.name);
     });
   });
+});
+
+// for some reason if you wanna pop 0 or 4 you also need to pop those other ones :shrug:
+const LINKED_TYRE_IDS: Record<number, number> = { 0: 6, 4: 7 };
+global.exports('popTyre', async (vehicle: number) => {
+  const wheelStatus = await getTyreState(vehicle);
+  if (!wheelStatus) return;
+  for (let i = 0; i < wheelStatus.length; i++) {
+    if (wheelStatus[i] === 1000) {
+      wheelStatus[i] = -1;
+      const linked = LINKED_TYRE_IDS[i];
+      if (linked) {
+        wheelStatus[linked] = -1;
+      }
+      break;
+    }
+  }
+  setNativeStatus(vehicle, { wheels: wheelStatus });
 });

@@ -3,6 +3,7 @@ import { Inventory, Notifications, RayCast, RPC, Taskbar } from '@dgx/server';
 import { getVinForVeh } from '../../helpers/vehicle';
 import { fuelManager } from '../fuel/classes/fuelManager';
 import { getConfigByHash } from '../info/service.info';
+import { getDoorState, getTyreState, getWindowState } from './helpers.status';
 
 import { updateServiceStatusPart } from './services/store';
 
@@ -15,20 +16,14 @@ export const getNativeStatus = async (veh: number, vin: string): Promise<Vehicle
     windows: [],
     doors: [],
   };
-  // Basic native shit
+
   status.body = GetVehicleBodyHealth(veh);
   status.engine = GetVehicleEngineHealth(veh);
-  // Fuel via fuelmanager
   status.fuel = fuelManager.getFuelLevel(vin) ?? 0;
 
-  // The loops
-  const vehNetId = NetworkGetNetworkIdFromEntity(veh);
-  status.wheels =
-    (await RPC.execute<number[]>('vehicles:client:getTyreState', NetworkGetEntityOwner(veh), vehNetId)) ?? [];
-  status.windows =
-    (await RPC.execute<boolean[]>('vehicles:client:getWindowSate', NetworkGetEntityOwner(veh), vehNetId)) ?? [];
-  status.doors =
-    (await RPC.execute<boolean[]>('vehicles:client:getDoorSate', NetworkGetEntityOwner(veh), vehNetId)) ?? [];
+  status.wheels = await getTyreState(veh);
+  status.windows = await getWindowState(veh);
+  status.doors = await getDoorState(veh);
 
   return status;
 };

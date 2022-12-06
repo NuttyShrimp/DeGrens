@@ -3,6 +3,8 @@ import { getVinForNetId } from 'helpers/vehicle';
 
 import { applyWaxItem, cleanVehicle } from './service.carwash';
 
+global.exports('cleanVehicle', cleanVehicle);
+
 Events.onNet('vehicles:carwash:clean', (plyId: number, netId: number) => {
   cleanVehicle(netId);
 });

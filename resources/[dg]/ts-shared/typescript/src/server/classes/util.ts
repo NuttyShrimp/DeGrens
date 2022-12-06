@@ -149,10 +149,10 @@ class Util extends UtilShared {
     );
   };
 
-  sendRPCtoEntityOwner = async (entity: number, event: string, ...params: any[]): Promise<any> => {
+  sendRPCtoEntityOwner = async <T = any>(entity: number, event: string, ...params: any[]): Promise<T | null> => {
     const owner = NetworkGetEntityOwner(entity);
     if (owner !== 0) {
-      return RPC.execute(event, owner, ...params);
+      return RPC.execute<T>(event, owner, ...params);
     }
     this.Log(
       'dgx:util:noEntityOwner',

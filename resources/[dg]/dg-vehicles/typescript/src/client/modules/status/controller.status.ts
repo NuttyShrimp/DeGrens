@@ -10,24 +10,31 @@ setImmediate(async () => {
 // Completes the server side function for natives that are client sided only
 Events.onNet(
   'vehicles:client:setNativeStatus',
-  async (vehNetId: number, status: Omit<Vehicle.VehicleStatus, 'fuel'>) => {
+  async (vehNetId: number, status: Partial<Omit<Vehicle.VehicleStatus, 'fuel' | 'body' | 'doors'>>) => {
     // Vehicle handles gets changed sometimes for a fucking reason when spawning, check netid
     const exists = await Util.awaitEntityExistence(vehNetId, true);
     if (!exists) return;
     const vehicle = NetworkGetEntityFromNetworkId(vehNetId);
-    SetVehicleEngineHealth(vehicle, status?.engine ?? 1000);
-    (status.wheels ?? []).forEach((wheel, wheelId) => {
-      if (wheel === -1) {
-        SetTyreHealth(vehicle, wheelId, 351);
-        SetVehicleTyreBurst(vehicle, wheelId, true, 1000);
-      } else {
-        SetTyreHealth(vehicle, wheelId, wheel);
-      }
-    });
-    (status.windows ?? []).forEach((broken, windowId) => {
-      if (!broken) return;
-      SmashVehicleWindow(vehicle, windowId);
-    });
+
+    if (status.engine !== undefined) {
+      SetVehicleEngineHealth(vehicle, status.engine);
+    }
+    if (status.wheels !== undefined) {
+      status.wheels.forEach((wheel, wheelId) => {
+        if (wheel === -1) {
+          SetTyreHealth(vehicle, wheelId, 351);
+          SetVehicleTyreBurst(vehicle, wheelId, true, 1000);
+        } else {
+          SetTyreHealth(vehicle, wheelId, wheel);
+        }
+      });
+    }
+    if (status.windows !== undefined) {
+      status.windows.forEach((broken, windowId) => {
+        if (!broken) return;
+        SmashVehicleWindow(vehicle, windowId);
+      });
+    }
   }
 );
 
