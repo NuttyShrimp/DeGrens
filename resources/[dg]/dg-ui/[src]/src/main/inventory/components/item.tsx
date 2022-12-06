@@ -78,6 +78,7 @@ export const Item: FC<{ itemId: string; cellSize: number }> = ({ itemId, cellSiz
   };
 
   useEffect(() => {
+    if (!isHovering) return;
     const handler = (e: KeyboardEvent) => {
       // fucking scuffed ass way lmao
       if (![...new Array(5)].some((_, i) => `Digit${i + 1}` === e.code)) return;
@@ -86,7 +87,6 @@ export const Item: FC<{ itemId: string; cellSize: number }> = ({ itemId, cellSiz
       const key = Number(e.code.replace('Digit', ''));
       setHotkeyPressed(key);
     };
-
     window.addEventListener('keydown', handler);
     return () => {
       window.removeEventListener('keydown', handler);
@@ -95,7 +95,6 @@ export const Item: FC<{ itemId: string; cellSize: number }> = ({ itemId, cellSiz
 
   useEffect(() => {
     if (hotkeyPressed === null) return;
-    if (!isHovering) return;
     setHotkeyPressed(null);
     if (itemState.hotkey === hotkeyPressed) {
       unbindItem(itemState.id);
