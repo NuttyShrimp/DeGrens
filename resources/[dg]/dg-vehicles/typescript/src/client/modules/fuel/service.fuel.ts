@@ -24,7 +24,7 @@ const syncFuel = () => {
 };
 
 export const setFuelLevel = (level: number) => {
-  fuelLevel = level;
+  fuelLevel = Math.max(0, level);
   emit('vehicles:fuel:change', level);
 };
 
@@ -55,9 +55,8 @@ export const startFuelThread = (veh: number) => {
     // Exponential growth ((2 ** Modifier) - 1) * Max
     const mod = (2 ** vehRPM - 1) * CONSUMATION_PER_SECOND;
     setFuelLevel(fuelLevel - mod);
-    if (fuelLevel < 0) {
+    if (fuelLevel === 0) {
       setEngineState(veh, false, true);
-      setFuelLevel(0);
     }
     Sync.executeNative('SetVehicleFuelLevel', NetworkGetNetworkIdFromEntity(veh), fuelLevel);
     const oldLevel = fuelLevel + mod;
