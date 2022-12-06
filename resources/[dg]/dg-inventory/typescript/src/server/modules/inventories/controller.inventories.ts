@@ -7,40 +7,51 @@ import { concatId } from '../../util';
 import inventoryManager from './manager.inventories';
 
 RPC.register('inventory:server:open', async (src: number, secondaryBuildData: IdBuildData): Promise<OpeningData> => {
-  // Concat inventory id
+  const overrideBuildingSecondaryId = 'override' in secondaryBuildData;
+
+  // Build inventory ids
   const primaryId = concatId('player', Util.getCID(src));
   let secondaryId: string;
-  if (locationManager.isLocationBased(secondaryBuildData.type)) {
-    secondaryId = locationManager.getLocation(
-      secondaryBuildData.type as Location.Type,
-      secondaryBuildData.data as Vec3
-    );
-  } else if (secondaryBuildData.type === 'player') {
-    secondaryId = concatId(secondaryBuildData.type, Util.getCID(secondaryBuildData.data as number));
+  if (overrideBuildingSecondaryId) {
+    secondaryId = secondaryBuildData.override;
   } else {
-    secondaryId = concatId(secondaryBuildData.type, secondaryBuildData.identifier!);
+    if (locationManager.isLocationBased(secondaryBuildData.type)) {
+      secondaryId = locationManager.getLocation(
+        secondaryBuildData.type as Location.Type,
+        secondaryBuildData.data as Vec3
+      );
+    } else if (secondaryBuildData.type === 'player') {
+      secondaryId = concatId(secondaryBuildData.type, Util.getCID(secondaryBuildData.data as number));
+    } else {
+      secondaryId = concatId(secondaryBuildData.type, secondaryBuildData.identifier!);
+    }
   }
 
   // Get inventories
   const primaryInv = await inventoryManager.get(primaryId);
   const secondaryInv = await inventoryManager.get(secondaryId);
 
-  // Dynamic sizes for trunk or stash based on secondary parameter data
-  if (secondaryInv.type === 'trunk') {
-    const truckSlots = getConfig().trunkSlots;
-    secondaryInv.size = truckSlots[secondaryBuildData.data as string] ?? 10;
-  } else if (secondaryInv.type === 'stash') {
-    secondaryInv.size = (secondaryBuildData.data as number) ?? 10;
+  // On first opening of inv, check if size is dynamic and set it
+  if (secondaryInv.size === 0) {
+    if (overrideBuildingSecondaryId) {
+      secondaryInv.size = 100;
+    } else {
+      if (secondaryInv.type === 'trunk') {
+        const truckSlots = getConfig().trunkSlots;
+        secondaryInv.size = truckSlots[secondaryBuildData.data as string] ?? 10;
+      } else if (secondaryInv.type === 'stash') {
+        secondaryInv.size = (secondaryBuildData.data as number) ?? 10;
+      }
+    }
   }
 
   // If shoptype get shopdata
   let secondary: OpeningData['secondary'];
-  if (secondaryBuildData.type === 'shop') {
-    const shopItems = shopManager.getItems(secondaryBuildData.identifier!);
+  if (secondaryInv.type === 'shop') {
+    const shopItems = shopManager.getItems(secondaryInv.identifier);
     secondary = { id: secondaryInv.id, shopItems };
-  } else if (secondaryBuildData.type === 'bench') {
-    const items: Shops.Item[] =
-      global.exports['dg-materials'].getBenchItems(src, secondaryBuildData.identifier as string) ?? [];
+  } else if (secondaryInv.type === 'bench') {
+    const items: Shops.Item[] = global.exports['dg-materials'].getBenchItems(src, secondaryInv.identifier) ?? [];
     secondary = { id: secondaryInv.id, shopItems: items };
   } else {
     secondary = { id: secondaryInv.id, size: secondaryInv.size, allowedItems: secondaryInv.allowedItems };

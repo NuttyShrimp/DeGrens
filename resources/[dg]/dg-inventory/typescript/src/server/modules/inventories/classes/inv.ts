@@ -1,4 +1,4 @@
-import { Events, Util } from '@dgx/server';
+import { Events, Inventory, Util } from '@dgx/server';
 import { Item } from 'modules/items/classes/item';
 import itemManager from 'modules/items/manager.items';
 import locationManager from 'modules/locations/manager.locations';
@@ -41,7 +41,22 @@ export class Inv {
     this.size = fixedSizes[this.type] ?? 0;
 
     if (this.type === 'container') {
-      const name = itemManager.get(this.identifier)?.state?.name;
+      // Item manager only contains items from loaded inventories, when opening containerinv using admin menu. The item might possibly not be loaded
+      const containerItem = await Inventory.getItemStateFromDatabase(this.identifier);
+      if (!containerItem) {
+        this.logger.error('`Tried to open container inventory but container item does not exist`');
+        Util.Log(
+          'inventory:invalidContainer',
+          {
+            identifier: this.identifier,
+          },
+          `Tried to open container inventory but container item does not exist`,
+          undefined,
+          true
+        );
+        return;
+      }
+      const name = containerItem.name;
       if (!name) return;
       const { allowedItems, size } = getContainerInfo(name);
       this.allowedItems = allowedItems;

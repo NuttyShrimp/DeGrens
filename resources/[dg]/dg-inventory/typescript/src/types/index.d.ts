@@ -30,7 +30,15 @@ declare namespace Repository {
 declare type ItemBuildData = Partial<Inventory.ItemState> &
   Pick<Inventory.ItemState, 'name' | 'inventory' | 'metadata'>;
 
-declare type IdBuildData = { type: Inventory.Type; identifier?: string; data?: unknown };
+declare type IdBuildData =
+  | {
+      type: Inventory.Type;
+      identifier?: string;
+      data?: unknown;
+    }
+  | {
+      override: string; // Skip all id building, used for opening id from adminmenu
+    };
 
 declare namespace Location {
   interface Drop {

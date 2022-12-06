@@ -52,7 +52,7 @@ class ContextManager extends Util.Singleton<ContextManager>() {
 
   public getSecondary = async (): Promise<IdBuildData> => {
     if (this.forceSecondary != null) {
-      if (TYPES_WITH_OPEN_ANIMATION.includes(this.forceSecondary.type)) {
+      if ('type' in this.forceSecondary && TYPES_WITH_OPEN_ANIMATION.includes(this.forceSecondary.type)) {
         this.closingData = { type: this.forceSecondary.type };
         doOpenAnimation();
       } else {

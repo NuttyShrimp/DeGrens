@@ -23,3 +23,9 @@ Events.onNet('inventory:client:doDropAnimation', () => {
 Events.onNet('inventory:client:closeInventory', () => {
   contextManager.close();
 });
+
+Events.onNet('inventory:client:openOverride', (invId: string) => {
+  contextManager.openInventory({
+    override: invId,
+  });
+});
