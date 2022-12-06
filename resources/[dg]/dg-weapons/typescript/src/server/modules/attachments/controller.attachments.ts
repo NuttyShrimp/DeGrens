@@ -2,7 +2,7 @@ import { Chat, Events, Notifications, RPC, Util, Inventory } from '@dgx/server';
 import { getWeaponItemState } from 'modules/weapons/service.weapons';
 import { getWeaponConfig } from 'services/config';
 import { getAttachmentStashId, getAttachmentNameFromComponent } from './helpers.attachments';
-import { getEquippedComponents } from './service.attachments';
+import { getEquippedComponents, updateAttachments } from './service.attachments';
 
 Chat.registerCommand('attachments', 'Beheer de attachments op je wapen', [], 'user', async src => {
   const weaponId = await RPC.execute<string | null>('weapons:client:getCurrentWeaponId', src);
@@ -39,15 +39,6 @@ Chat.registerCommand('attachments', 'Beheer de attachments op je wapen', [], 'us
   Events.emitNet('weapons:client:openAttachmentMenu', src, menu);
 });
 
-RPC.register('weapons:server:getWeaponAttachments', async (src, weaponItemId: string) => {
-  const weaponItemState = getWeaponItemState(weaponItemId);
-  if (!weaponItemState) return;
-
-  const stashId = getAttachmentStashId(weaponItemState);
-  const components = await getEquippedComponents(weaponItemState.name, stashId);
-  return components;
-});
-
 Events.onNet('weapons:server:removeAttachment', async (src: number, weaponItemId: string, attachmentName: string) => {
   const weaponItemState = getWeaponItemState(weaponItemId);
   if (!weaponItemState) return;
@@ -59,10 +50,11 @@ Events.onNet('weapons:server:removeAttachment', async (src: number, weaponItemId
   const attachmentItem = await Inventory.getFirstItemOfName('stash', stashId, attachmentName);
   if (!attachmentItem) return;
   const cid = Util.getCID(src);
-  await Inventory.moveItemToInventory('player', String(cid), attachmentItem?.id);
+  await Inventory.moveItemToInventory('player', String(cid), attachmentItem.id);
 
   const components = await getEquippedComponents(weaponItemState.name, stashId);
-  Events.emitNet('weapons:client:updateAttachments', src, Object.values(weaponConfig.attachments ?? {}), components);
+  updateAttachments(src, GetHashKey(weaponItemState.name), Object.values(weaponConfig.attachments ?? {}), components);
+
   Util.Log(
     'weapons:attachment:remove',
     {

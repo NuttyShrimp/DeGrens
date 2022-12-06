@@ -408,7 +408,7 @@ function OnEmotePlay(EmoteName)
 
   if Config.DisarmPlayer then
     if IsPedArmed(PlayerPedId(), 7) then
-      SetCurrentPedWeapon(PlayerPedId(), GetHashKey('WEAPON_UNARMED'), true)
+      exports['dg-weapons']:removeWeapon(nil, true)
     end
   end
 

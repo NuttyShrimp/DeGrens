@@ -1,16 +1,14 @@
-import { Events, Inventory, Notifications, RPC, Util } from '@dgx/server';
+import { Inventory, Notifications, RPC, Util } from '@dgx/server';
 import { getWeaponItemState } from 'modules/weapons/service.weapons';
 import { getConfig, getWeaponConfig } from 'services/config';
 import { getAttachmentStashId } from './helpers.attachments';
 
 export const registerUseableAttachments = () => {
   const items = getConfig().attachmentItems;
-  Inventory.registerUseable(items, (src, itemState) => {
-    addAttachment(src, itemState);
-  });
+  Inventory.registerUseable(items, handleAttachmentUsage);
 };
 
-const addAttachment = async (plyId: number, attachmentItem: Inventory.ItemState) => {
+const handleAttachmentUsage = async (plyId: number, attachmentItem: Inventory.ItemState) => {
   const weaponId = await RPC.execute<string | null>('weapons:client:getCurrentWeaponId', plyId);
   if (!weaponId) {
     Notifications.add(plyId, 'Je hebt geen wapen vast', 'error');
@@ -38,10 +36,11 @@ const addAttachment = async (plyId: number, attachmentItem: Inventory.ItemState)
   }
 
   await Inventory.moveItemToInventory('stash', stashId, attachmentItem.id);
-  Events.emitNet('weapons:client:updateAttachments', plyId, Object.values(weaponConfig.attachments ?? {}), [
+  updateAttachments(plyId, GetHashKey(weaponItemState.name), Object.values(weaponConfig.attachments ?? {}), [
     ...components,
     newComponent,
   ]);
+
   Util.Log(
     'weapons:attachment:add',
     {
@@ -55,6 +54,15 @@ const addAttachment = async (plyId: number, attachmentItem: Inventory.ItemState)
   );
 };
 
+export const getWeaponAttachments = async (weaponItemId: string) => {
+  const weaponItemState = getWeaponItemState(weaponItemId);
+  if (!weaponItemState) return;
+
+  const stashId = getAttachmentStashId(weaponItemState);
+  const components = await getEquippedComponents(weaponItemState.name, stashId);
+  return components;
+};
+
 export const getEquippedComponents = async (weaponName: string, stashId: string) => {
   const weaponConfig = getWeaponConfig(weaponName);
   if (weaponConfig?.attachments === undefined) return [];
@@ -64,4 +72,18 @@ export const getEquippedComponents = async (weaponName: string, stashId: string)
     all.push(weaponConfig.attachments![item.name]);
     return all;
   }, []);
+};
+
+export const updateAttachments = (
+  plyId: number,
+  weaponHash: number,
+  allComponents: string[],
+  equippedComponents: string[]
+) => {
+  const ped = GetPlayerPed(String(plyId));
+  // first remove all then add the equipped ones
+  allComponents.forEach(c => {
+    RemoveWeaponComponentFromPed(ped, weaponHash, c);
+  });
+  equippedComponents.forEach(c => GiveWeaponComponentToPed(ped, weaponHash, c));
 };

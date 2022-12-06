@@ -1,4 +1,4 @@
-import { RayCast, Util } from '@dgx/client';
+import { RayCast, Util, Weapons } from '@dgx/client';
 import { Vector3 } from '@dgx/shared';
 
 import { drawText3d } from '../util/service.util';
@@ -68,7 +68,7 @@ const showEntityInfo = () => {
 export const activateSelector = async () => {
   isActive = true;
   handleRayCastChange(undefined);
-  global.exports['dg-weapons'].showReticle(true);
+  Weapons.showReticle(true);
   selectorRayInterval = setInterval(() => {
     if (!isActive) {
       clearInterval(selectorRayInterval);
@@ -85,7 +85,7 @@ export const stopSelector = () => {
     clearInterval(selectorRayInterval);
     selectorRayInterval = undefined;
   }
-  global.exports['dg-weapons'].showReticle(false);
+  Weapons.showReticle(false);
 };
 
 export const handleRayCastChange = (entity?: number) => {

@@ -1,24 +1,14 @@
-import { Events, Inventory, Jobs, RPC, Util } from '@dgx/client';
-import { setCurrentWeaponTint } from 'services/tint';
-import { getCurrentWeaponData, setCurrentWeaponData } from './service.weapons';
+import { Events, Inventory, Jobs, Util } from '@dgx/client';
+import { getCurrentWeaponData, setAnimationBusy, setCurrentWeaponData } from './service.weapons';
 
-const setWeapon = async (itemId: string, weaponHash: number, tint?: string) => {
+const setWeapon = async (itemId: string) => {
   Inventory.toggleObject(itemId, false);
-  const ped = PlayerPedId();
-  SetCurrentPedWeapon(ped, weaponHash, true);
-
-  const components = await RPC.execute<string[]>('weapons:server:getWeaponAttachments', itemId);
-  (components ?? []).forEach(comp => GiveWeaponComponentToPed(ped, weaponHash, comp));
-
-  if (tint !== undefined) {
-    setCurrentWeaponTint(itemId, weaponHash, tint);
-  }
+  Events.emitNet('weapons:setWeapon', itemId);
 };
 
-const removeWeapon = (itemId: string) => {
+const removeWeapon = async (itemId: string) => {
   Inventory.toggleObject(itemId, true);
-  SetCurrentPedWeapon(PlayerPedId(), GetHashKey('WEAPON_UNARMED'), true);
-  Events.emitNet('weapons:server:removeWeapon');
+  Events.emitNet('weapons:removeWeapon');
 };
 
 export const holsterWeapon = async (weaponData: Weapons.WeaponItem) => {
@@ -31,6 +21,7 @@ export const holsterWeapon = async (weaponData: Weapons.WeaponItem) => {
   const blockInterval = startBlockShootingInterval();
 
   const pedCoords = Util.getPlyCoords();
+  setAnimationBusy(true);
   if (doFastAnimation()) {
     await Util.loadAnimDict('reaction@intimidation@cop@unarmed');
     TaskPlayAnimAdvanced(
@@ -79,11 +70,12 @@ export const holsterWeapon = async (weaponData: Weapons.WeaponItem) => {
 
   removeWeapon(weaponData.id);
   clearInterval(blockInterval);
+  setAnimationBusy(false);
 };
 
 export const unholsterWeapon = async (weaponData: Weapons.WeaponItem) => {
   if (weaponData.noHolstering) {
-    setWeapon(weaponData.id, weaponData.hash, weaponData.metadata?.tint);
+    setWeapon(weaponData.id);
     return;
   }
 
@@ -91,6 +83,7 @@ export const unholsterWeapon = async (weaponData: Weapons.WeaponItem) => {
   const blockInterval = startBlockShootingInterval();
 
   const pedCoords = Util.getPlyCoords();
+  setAnimationBusy(true);
   if (doFastAnimation()) {
     await Util.loadAnimDict('rcmjosh4');
     TaskPlayAnimAdvanced(
@@ -112,7 +105,7 @@ export const unholsterWeapon = async (weaponData: Weapons.WeaponItem) => {
       0
     );
     await Util.Delay(300);
-    setWeapon(weaponData.id, weaponData.hash, weaponData.metadata?.tint);
+    setWeapon(weaponData.id);
     await Util.Delay(300);
     StopAnimTask(ped, 'rcmjosh4', 'josh_leadout_cop2', 1.0);
   } else {
@@ -136,12 +129,13 @@ export const unholsterWeapon = async (weaponData: Weapons.WeaponItem) => {
       0
     );
     await Util.Delay(1000);
-    setWeapon(weaponData.id, weaponData.hash, weaponData.metadata?.tint);
+    setWeapon(weaponData.id);
     await Util.Delay(1400);
     StopAnimTask(ped, 'reaction@intimidation@1h', 'intro', 1.0);
   }
 
   clearInterval(blockInterval);
+  setAnimationBusy(false);
 };
 
 const doFastAnimation = () => {
@@ -169,8 +163,7 @@ export const forceRemoveWeapon = async (itemId?: string, skipAnimation?: boolean
   const currentWeaponData = getCurrentWeaponData();
   if (currentWeaponData === null) return;
 
-  if (itemId === undefined || currentWeaponData.id === itemId) {
-    RemoveAllPedWeapons(PlayerPedId(), true);
+  if (itemId == undefined || currentWeaponData.id === itemId) {
     if (skipAnimation) {
       removeWeapon(currentWeaponData.id);
     } else {

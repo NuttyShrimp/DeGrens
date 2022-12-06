@@ -1,5 +1,4 @@
-import { Admin, Config, Events, RPC, Sync, Util } from '@dgx/server';
-import { timeStamp } from 'console';
+import { Admin, Config, Events, RPC, Sync, Util, Weapons } from '@dgx/server';
 import { mainLogger } from '../../sv_logger';
 
 let blockedWeaponHashes: number[] = [];
@@ -72,7 +71,7 @@ export const validateWeaponInfo = (src: number, info: AntiCheat.WeaponInfo) => {
     Admin.ACBan(src, 'Weapon mismatch (native)');
     return;
   }
-  const scriptWeapon = global.exports['dg-weapons'].getPlayerEquippedWeapon(src) ?? GetHashKey('WEAPON_UNARMED');
+  const scriptWeapon = Weapons.getPlayerEquippedWeapon(src);
   if (scriptWeapon != info.weapon) {
     Admin.ACBan(src, 'Weapon mismatch (script)');
     return;

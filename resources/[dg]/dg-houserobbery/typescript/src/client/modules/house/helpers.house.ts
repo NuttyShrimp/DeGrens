@@ -1,4 +1,4 @@
-import { Events, Inventory, Minigames, Notifications, PolyZone, RPC, Util } from '@dgx/client';
+import { Events, Inventory, Minigames, Notifications, PolyZone, RPC, Util, Weapons } from '@dgx/client';
 import { enterInterior, leaveInterior } from 'services/interiors';
 
 export const unlockHouse = async (houseId: string) => {
@@ -10,7 +10,7 @@ export const unlockHouse = async (houseId: string) => {
     return;
   }
 
-  const hasCrowbar = global.exports['dg-weapons'].getCurrentWeaponData()?.name == 'weapon_crowbar' ?? false;
+  const hasCrowbar = Weapons.getCurrentWeaponData()?.name == 'weapon_crowbar' ?? false;
   const hasLockpick = hasCrowbar ? false : await Inventory.doesPlayerHaveItems('lockpick');
   if (!hasCrowbar && !hasLockpick) {
     Notifications.add('Hoe ga je dit openen?', 'error');

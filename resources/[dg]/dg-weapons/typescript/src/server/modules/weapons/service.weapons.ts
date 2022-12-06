@@ -1,5 +1,4 @@
 import { Events, Inventory, Util } from '@dgx/server';
-import { getWeaponAmmo } from 'modules/ammo/service.ammo';
 import { getConfig, getWeaponConfig } from 'services/config';
 import { mainLogger } from 'sv_logger';
 
@@ -9,7 +8,22 @@ export const setEquippedWeapon = (src: number, weaponHash: number) => {
   equippedWeapons.set(src, weaponHash);
 };
 
-export const getEquippedWeapon = (src: number) => equippedWeapons.get(src);
+export const getEquippedWeapon = (src: number) => {
+  let weaponHash = equippedWeapons.get(src);
+  if (weaponHash === undefined) {
+    Util.Log(
+      'weapons:noWeaponRegistered',
+      {},
+      `${Util.getName(src)} did not have a weapon registered to him (Should default to UNARMED)`,
+      src,
+      true
+    );
+    mainLogger.error(`${Util.getName(src)} did not have a weapon registered to him (Should default to unarmed)`);
+    weaponHash = GetHashKey('WEAPON_UNARMED');
+    setEquippedWeapon(src, weaponHash);
+  }
+  return weaponHash;
+};
 
 export const registerUseableWeapons = () => {
   const weaponNames = Object.values(getConfig().weapons).map(w => w.name);
@@ -26,9 +40,7 @@ export const registerUseableWeapons = () => {
       canTint: weaponConfig.canTint ?? false,
     };
 
-    const ammoCount = getWeaponAmmo(itemState.id);
-    setEquippedWeapon(src, weaponData.hash);
-    Events.emitNet('weapons:client:useWeapon', src, weaponData, ammoCount);
+    Events.emitNet('weapons:client:useWeapon', src, weaponData);
   });
 };
 

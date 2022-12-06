@@ -1,6 +1,10 @@
 import { Events, Inventory, RPC } from '@dgx/client';
+import { Util } from '@dgx/shared';
 import { holsterWeapon, unholsterWeapon, forceRemoveWeapon, showReticle } from './helpers.weapons';
-import { getCurrentWeaponData, setCurrentWeaponData } from './service.weapons';
+import { getCurrentWeaponData, isAnimationBusy, setCurrentWeaponData } from './service.weapons';
+
+// Prevents weapon usage spamming
+let isAwaitingAnim = false;
 
 on('onResourceStop', (resourceName: string) => {
   if (resourceName !== GetCurrentResourceName()) return;
@@ -15,9 +19,14 @@ RPC.register('weapons:client:getCurrentWeaponId', () => {
   return getCurrentWeaponData()?.id ?? null;
 });
 
-Events.onNet('weapons:client:useWeapon', async (weaponData: Weapons.WeaponItem, ammoCount: number) => {
-  const ped = PlayerPedId();
-  RemoveAllPedWeapons(ped, true);
+Events.onNet('weapons:client:useWeapon', async (weaponData: Weapons.WeaponItem) => {
+  if (isAwaitingAnim) return;
+
+  if (isAnimationBusy()) {
+    isAwaitingAnim = true;
+    await Util.awaitCondition(() => !isAnimationBusy());
+    isAwaitingAnim = false;
+  }
 
   const previousWeaponData = getCurrentWeaponData();
   if (previousWeaponData !== null) {
@@ -27,7 +36,6 @@ Events.onNet('weapons:client:useWeapon', async (weaponData: Weapons.WeaponItem, 
     if (lastWeaponItemId === weaponData.id) return;
   }
 
-  GiveWeaponToPed(ped, weaponData.hash, ammoCount, false, false);
   await unholsterWeapon(weaponData);
   setCurrentWeaponData(weaponData);
 });

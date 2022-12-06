@@ -30,6 +30,7 @@ declare global {
     Status: typeof Classes.Status;
     Reputations: typeof Classes.Reputations;
     Sync: typeof Classes.Sync;
+    Weapons: typeof Classes.Weapons;
     Vector3: typeof Vector3Class;
     Vector4: typeof Vector4Class;
   };

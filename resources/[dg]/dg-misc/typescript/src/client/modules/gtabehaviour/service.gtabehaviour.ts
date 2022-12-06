@@ -6,6 +6,7 @@ import {
   DISABLED_CONTROLS,
   HIDDEN_HUD_COMPONENT,
   PED_CONFIG_FLAGS,
+  PICKUP_HASHES,
   RELATION_GROUPS,
 } from './constants.gtabehaviour';
 
@@ -36,6 +37,9 @@ export const setGTABehaviour = async () => {
   for (let id = 1; id <= 15; id++) {
     EnableDispatchService(id, false);
   }
+
+  // Disable ammo pick ups
+  SetPickupAmmoAmountScaler(0.0);
 
   // Max wanted level to 0
   SetMaxWantedLevel(0);
@@ -118,6 +122,7 @@ export const setGTABehaviour = async () => {
       cachedId = newId;
       SetPlayerHealthRechargeMultiplier(newId, 0.0);
       SetPlayerHealthRechargeLimit(newId, 0.0);
+      PICKUP_HASHES.forEach(hash => ToggleUsePickupsForPlayer(newId, hash, false));
     }
   }, 3000);
 };

@@ -1,15 +1,35 @@
-import { Events, RPC } from '@dgx/server';
+import { Events, Inventory, Notifications, RPC } from '@dgx/server';
+import { getWeaponItemState } from 'modules/weapons/service.weapons';
 import { getConfig } from 'services/config';
 import { getWeaponAmmo, setWeaponAmmo } from './service.ammo';
 
-RPC.register('weapons:server:getAmmoConfig', src => {
-  return getConfig().ammo;
+Events.onNet('weapons:server:finishAmmoUsage', async (src: number, weaponItemId: string, ammoItemId: string) => {
+  const weaponItemState = getWeaponItemState(weaponItemId);
+  if (!weaponItemState) return;
+
+  const ammoItemState = Inventory.getItemStateById(ammoItemId);
+  if (!ammoItemState) return;
+  const succesfulRemoval = await Inventory.removeItemByIdFromPlayer(src, ammoItemId);
+  if (!succesfulRemoval) {
+    Notifications.add(src, 'Je hebt geen ammo opzak', 'error');
+    return;
+  }
+
+  const currentAmmo = getWeaponAmmo(weaponItemState);
+  const increase = getConfig().ammo[ammoItemState.name].amount;
+  const newAmount = Math.min(250, currentAmmo + increase);
+
+  setWeaponAmmo(src, weaponItemState, newAmount);
 });
 
-RPC.register('weapons:server:getAmmo', (src, itemId: string) => {
-  return getWeaponAmmo(itemId);
-});
+global.exports('forceSetAmmo', async (plyId: number, amount: number) => {
+  const weaponId = await RPC.execute<string | null>('weapons:client:getCurrentWeaponId', plyId);
+  if (!weaponId) {
+    Notifications.add(plyId, 'Je hebt geen wapen vast', 'error');
+    return;
+  }
+  const itemState = getWeaponItemState(weaponId);
+  if (!itemState) return;
 
-Events.onNet('weapons:server:setAmmo', (src: number, itemId: string, amount: number) => {
-  setWeaponAmmo(itemId, amount);
+  setWeaponAmmo(plyId, itemState, amount);
 });

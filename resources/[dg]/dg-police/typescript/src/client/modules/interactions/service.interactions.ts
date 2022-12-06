@@ -1,4 +1,4 @@
-import { Events, RPC, Taskbar, Inventory, Util, Notifications, Minigames } from '@dgx/client';
+import { Events, RPC, Taskbar, Inventory, Util, Notifications, Minigames, Weapons } from '@dgx/client';
 import {
   DISABLED_KEYS_WHILE_ESCORTING,
   ENABLED_KEYS_WHILE_CUFFED,
@@ -151,7 +151,7 @@ export const getCuffed = async () => {
   await Util.loadAnimDict('mp_arresting');
   await Util.loadAnimDict('anim@move_m@prisoner_cuffed');
   global.exports['dg-lib'].shouldExecuteKeyMaps(false);
-  global.exports['dg-weapons'].removeWeapon();
+  Weapons.removeWeapon(undefined, true);
   cuffThread = setInterval(() => {
     const ped = PlayerPedId();
     DisableAllControlActions(0);

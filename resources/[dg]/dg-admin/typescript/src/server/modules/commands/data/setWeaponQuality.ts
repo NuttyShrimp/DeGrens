@@ -1,4 +1,4 @@
-import { Events, Notifications } from '@dgx/server';
+import { Events, Notifications, Weapons } from '@dgx/server';
 import { Inputs } from 'enums/inputs';
 
 declare interface SetAmmoData {
@@ -20,7 +20,7 @@ export const setWeaponQuality: CommandData = {
         return;
       }
       const plyId = args.Target?.serverId ?? caller.source;
-      global.exports['dg-weapons'].forceSetQuality(plyId, quality);
+      Weapons.forceSetQuality(plyId, quality);
     } catch (e) {
       console.error(e);
       Notifications.add(caller.source, 'Quality should be a number', 'error');

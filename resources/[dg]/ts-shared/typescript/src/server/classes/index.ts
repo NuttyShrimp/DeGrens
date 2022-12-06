@@ -11,6 +11,7 @@ import financials from './financials';
 import screenshot from './screenshot';
 import sync from './sync';
 import vehicles from './vehicles';
+import weapons from './weapons';
 
 export const { Events, RPC, SQL, API, Auth } = events;
 export const { Util, Sounds, Status, Reputations } = util;
@@ -25,3 +26,4 @@ export const { Financials } = financials;
 export const { Screenshot } = screenshot;
 export const { Vehicles } = vehicles;
 export const { Sync } = sync;
+export const { Weapons } = weapons;

@@ -1,4 +1,4 @@
-import { PropAttach, UI, Util } from '@dgx/client';
+import { Peek, PropAttach, UI, Util, Weapons } from '@dgx/client';
 import { disabledControlMap, TaskbarState } from './constants.taskbar';
 
 let state: TaskbarState = TaskbarState.Idle;
@@ -24,7 +24,7 @@ export const taskbar = async (
     return [true, 0];
   }
   if (settings.disarm) {
-    global.exports['dg-weapons'].removeWeapon();
+    Weapons.removeWeapon();
   }
   if (settings.disableInventory) {
     LocalPlayer.state.set('inv_busy', true, true);

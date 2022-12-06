@@ -1,18 +1,14 @@
 import { Events, Inventory, Util } from '@dgx/server';
-import { getWeaponItemState } from 'modules/weapons/service.weapons';
 import { getConfig, getWeaponConfig } from 'services/config';
 
 export const registerUseableAmmo = () => {
-  const items = Object.keys(getConfig().ammo);
-  Inventory.registerUseable(items, (src, item) => {
-    Events.emitNet('weapons:client:useAmmo', src, item.name);
+  const ammoConfig = getConfig().ammo;
+  Inventory.registerUseable(Object.keys(ammoConfig), (src, item) => {
+    Events.emitNet('weapons:client:useAmmo', src, item.id, ammoConfig[item.name].ammoType);
   });
 };
 
-export const getWeaponAmmo = (itemId: string) => {
-  const itemState = getWeaponItemState(itemId);
-  if (!itemState) return;
-
+export const getWeaponAmmo = (itemState: Inventory.ItemState) => {
   const weaponConfig = getWeaponConfig(itemState.name);
   if (!weaponConfig) return 0;
 
@@ -22,7 +18,14 @@ export const getWeaponAmmo = (itemId: string) => {
   return Number(itemState.metadata.ammo ?? 1);
 };
 
-export const setWeaponAmmo = (itemId: string, amount: number) => {
+export const setWeaponAmmo = (plyId: number, itemState: Inventory.ItemState, amount: number) => {
+  const ped = GetPlayerPed(String(plyId));
+  const weaponHash = GetHashKey(itemState.name);
+  SetPedAmmo(ped, weaponHash, amount);
+  saveWeaponAmmo(plyId, itemState.id, amount);
+};
+
+export const saveWeaponAmmo = (plyId: number, itemId: string, amount: number) => {
   Inventory.setMetadataOfItem(itemId, metadata => ({
     ...metadata,
     ammo: amount,

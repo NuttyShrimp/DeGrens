@@ -1,7 +1,40 @@
 import { Events, Inventory, Notifications, Police, RPC, Util } from '@dgx/server';
-import { setWeaponAmmo } from 'modules/ammo/service.ammo';
+import { getWeaponAmmo, saveWeaponAmmo } from 'modules/ammo/service.ammo';
+import { getWeaponAttachments } from 'modules/attachments/service.attachments';
 import { getWeaponConfig } from 'services/config';
+import { applyWeaponTint } from 'services/tint';
 import { getEquippedWeapon, getWeaponItemState, setEquippedWeapon, setWeaponQuality } from './service.weapons';
+
+// Give weapon to ped and set attachments/tint
+Events.onNet('weapons:setWeapon', async (src, itemId: string) => {
+  const cid = Util.getCID(src);
+  const item = getWeaponItemState(itemId);
+  if (!item) return; // Can happen if item breaks this exact moment
+  if (item.inventory !== Inventory.concatId('player', cid)) return; // Can happen if item gets removed during animation
+
+  const weaponHash = GetHashKey(item.name);
+  const ped = GetPlayerPed(String(src));
+  const ammo = getWeaponAmmo(item);
+  GiveWeaponToPed(ped, weaponHash, ammo, false, true);
+  setEquippedWeapon(src, weaponHash);
+
+  const components = await getWeaponAttachments(itemId);
+  (components ?? []).forEach(comp => GiveWeaponComponentToPed(ped, weaponHash, comp));
+
+  const tint = item.metadata?.tint as string;
+  if (tint !== undefined) {
+    applyWeaponTint(src, tint);
+  }
+});
+
+// Remove weapon from ped
+Events.onNet('weapons:removeWeapon', src => {
+  const ped = GetPlayerPed(String(src));
+  const unarmedHash = GetHashKey('WEAPON_UNARMED');
+  RemoveAllPedWeapons(ped, true);
+  SetCurrentPedWeapon(ped, unarmedHash, true);
+  setEquippedWeapon(src, unarmedHash);
+});
 
 Events.onNet(
   'weapons:server:stoppedShooting',
@@ -18,15 +51,11 @@ Events.onNet(
     }
 
     setWeaponQuality(itemId, itemState.quality - weaponConfig.durabilityMultiplier * qualityDecrease);
-    setWeaponAmmo(itemId, ammoCount);
+    saveWeaponAmmo(src, itemId, ammoCount);
 
     Police.addBulletCasings(src, itemState, shotFirePositions);
   }
 );
-
-Events.onNet('weapons:server:removeWeapon', src => {
-  setEquippedWeapon(src, GetHashKey('WEAPON_UNARMED'));
-});
 
 Inventory.onInventoryUpdate(
   'player',
@@ -42,6 +71,10 @@ Inventory.onInventoryUpdate(
   undefined,
   'remove'
 );
+
+on('playerJoining', () => {
+  setEquippedWeapon(source, GetHashKey('WEAPON_UNARMED'));
+});
 
 global.exports('forceSetQuality', async (plyId: number, quality: number) => {
   const weaponId = await RPC.execute<string | null>('weapons:client:getCurrentWeaponId', plyId);

@@ -1,23 +1,16 @@
-import { Events, Notifications, Taskbar, RPC, Inventory } from '@dgx/client';
+import { Events, Notifications, Taskbar } from '@dgx/client';
 import { getCurrentWeaponData } from 'modules/weapons/service.weapons';
-import { AMMO_CONFIG } from '../../constants';
 
-Events.onNet('weapons:client:useAmmo', async (itemName: string) => {
+Events.onNet('weapons:client:useAmmo', async (ammoItemId: string, ammoType: string) => {
   if (getCurrentWeaponData() === null) {
     Notifications.add('Je hebt geen wapen vast', 'error');
     return;
   }
 
-  const ammoConfig = AMMO_CONFIG[itemName];
-  if (!ammoConfig) {
-    Notifications.add('Dit is geen ammo', 'error');
-    return;
-  }
-
   const ped = PlayerPedId();
   const equippedWeapon = GetSelectedPedWeapon(ped);
-  const ammoType = GetPedAmmoTypeFromWeapon_2(ped, equippedWeapon); // _2 version always gives base type
-  if (ammoType !== GetHashKey(ammoConfig.ammoType)) {
+  const requiredAmmoType = GetPedAmmoTypeFromWeapon_2(ped, equippedWeapon); // _2 version always gives base type
+  if (requiredAmmoType !== GetHashKey(ammoType)) {
     Notifications.add('Dit past niet in je wapen', 'error');
     return;
   }
@@ -32,6 +25,7 @@ Events.onNet('weapons:client:useAmmo', async (itemName: string) => {
     canCancel: true,
     disableInventory: true,
     cancelOnDeath: true,
+    disablePeek: true,
     controlDisables: {
       combat: true,
     },
@@ -44,31 +38,5 @@ Events.onNet('weapons:client:useAmmo', async (itemName: string) => {
     return;
   }
 
-  const succesfulRemoval = await Inventory.removeItemFromPlayer(itemName);
-  if (!succesfulRemoval) {
-    Notifications.add('Je hebt geen ammo opzak', 'error');
-    return;
-  }
-
-  let amount = await RPC.execute<number>('weapons:server:getAmmo', currentWeaponData.id);
-  if (!amount) {
-    console.log('Failed to get weapon ammo');
-    return;
-  }
-
-  amount = Math.min(250, amount + ammoConfig.amount);
-  SetPedAmmo(ped, equippedWeapon, amount);
-  Events.emitNet('weapons:server:setAmmo', currentWeaponData.id, amount);
-});
-
-Events.onNet('weapons:client:forceAmmo', (amount: number) => {
-  const currentWeaponData = getCurrentWeaponData();
-  if (!currentWeaponData) {
-    Notifications.add('Je hebt geen wapen vast', 'error');
-    return;
-  }
-
-  amount = Math.min(amount, 250);
-  SetPedAmmo(PlayerPedId(), currentWeaponData.hash, amount);
-  Events.emitNet('weapons:server:setAmmo', currentWeaponData.id, amount);
+  Events.emitNet('weapons:server:finishAmmoUsage', currentWeaponData.id, ammoItemId);
 });

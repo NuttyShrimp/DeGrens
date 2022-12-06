@@ -51,24 +51,23 @@ const getTintIdOfName = (tintName: string) => {
   }
 };
 
-export const setCurrentWeaponTint = (weaponId: string, weaponHash: number, tintName: string, saveTint = false) => {
-  const tintId = getTintIdOfName(tintName);
-  if (tintId === undefined) {
-    console.error(`Failed to get tintId from name: ${tintName}`);
-    return;
-  }
-  SetPedWeaponTintIndex(PlayerPedId(), weaponHash, tintId);
-  if (saveTint) {
-    Events.emitNet('weapons:server:setTint', weaponId, tintName);
-  }
-};
-
-UI.RegisterUICallback('weapons/setTint', (data, cb) => {
+UI.RegisterUICallback('weapons/setTint', (data: { tint: string }, cb) => {
   const currentWeaponData = getCurrentWeaponData();
   if (!currentWeaponData) {
     Notifications.add('Je hebt geen wapen vast', 'error');
     return;
   }
-  setCurrentWeaponTint(currentWeaponData.id, currentWeaponData.hash, data.tint, true);
+  Events.emitNet('weapons:server:saveTint', currentWeaponData.id, data.tint);
   cb({ data: {}, meta: { ok: true, message: 'done' } });
+});
+
+Events.onNet('weapons:server:applyTint', (tintName: string) => {
+  const tintId = getTintIdOfName(tintName);
+  if (tintId === undefined) {
+    console.error(`Failed to get tintId from name: ${tintName}`);
+    return;
+  }
+  const ped = PlayerPedId();
+  const weaponHash = GetSelectedPedWeapon(ped);
+  SetPedWeaponTintIndex(ped, weaponHash, tintId);
 });

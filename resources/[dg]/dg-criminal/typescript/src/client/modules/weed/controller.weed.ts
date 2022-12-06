@@ -1,4 +1,4 @@
-import { Events, Util, UI, Taskbar, Peek, RayCast, Notifications } from '@dgx/client/classes';
+import { Events, Util, UI, Taskbar, Peek, RayCast, Notifications, Weapons } from '@dgx/client/classes';
 import { MODELS_PER_STAGE } from './constants.weed';
 import {
   checkPlantStatus,
@@ -23,7 +23,7 @@ Events.onNet('criminal:weed:plant', async (itemId: string) => {
   }
 
   UI.showInteraction('Spatie om te plaatsen');
-  global.exports['dg-weapons'].showReticle(true);
+  Weapons.showReticle(true);
   isPlacing = true;
 
   // Logic to select a valid location using raycasts, materials and display entity
@@ -77,7 +77,7 @@ Events.onNet('criminal:weed:plant', async (itemId: string) => {
   });
 
   UI.hideInteraction();
-  global.exports['dg-weapons'].showReticle(false);
+  Weapons.showReticle(false);
   const [canceled] = await Taskbar.create('shovel', 'Planten', 10000, {
     canCancel: true,
     cancelOnDeath: true,

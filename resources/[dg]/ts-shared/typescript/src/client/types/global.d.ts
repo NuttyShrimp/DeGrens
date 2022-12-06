@@ -30,6 +30,7 @@ declare global {
     Minigames: typeof Classes.Minigames;
     Animations: typeof Classes.Animations;
     Police: typeof Classes.Police;
+    Weapons: typeof Classes.Weapons;
   };
   var asyncExports: any;
 }

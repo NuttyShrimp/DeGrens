@@ -4,6 +4,12 @@ import { showReticle } from './helpers.weapons';
 let currentWeaponData: Weapons.WeaponItem | null = null;
 let weaponThread: NodeJS.Timer | null = null;
 
+let animationBusy = false;
+export const isAnimationBusy = () => animationBusy;
+export const setAnimationBusy = (busy: boolean) => {
+  animationBusy = busy;
+};
+
 export const getCurrentWeaponData = () => currentWeaponData;
 export const setCurrentWeaponData = (data: typeof currentWeaponData) => {
   currentWeaponData = data;
@@ -40,11 +46,13 @@ export const startWeaponThread = () => {
     if (currentWeaponData === null) return;
 
     const ped = PlayerPedId();
-    const [hasWeapon, weapon] = GetCurrentPedWeapon(ped, true);
-    if (!hasWeapon || weapon !== currentWeaponData.hash) {
-      setCurrentWeaponData(null);
-      return;
-    }
+
+    SetWeaponsNoAutoswap(true);
+    SetPedCanSwitchWeapon(ped, false);
+    DisplayAmmoThisFrame(true);
+
+    const weapon = GetSelectedPedWeapon(ped);
+    if (weapon !== currentWeaponData.hash) return; // Can happen with big weapons in vehicles
 
     const ammoInWeapon = Number(GetAmmoInPedWeapon(ped, weapon));
 
@@ -112,17 +120,9 @@ export const startWeaponThread = () => {
       isFreeAiming = false;
     }
 
-    SetWeaponsNoAutoswap(true);
-    SetPedCanSwitchWeapon(ped, false);
-    DisplayAmmoThisFrame(true);
-
     if (ammoInWeapon === 1 && !currentWeaponData.oneTimeUse) {
       DisablePlayerFiring(ped, true);
     }
-
-    DisableControlAction(1, 140, true);
-    DisableControlAction(1, 141, true);
-    DisableControlAction(1, 142, true);
 
     previousAmmoCount = ammoInWeapon;
   }, 1);
