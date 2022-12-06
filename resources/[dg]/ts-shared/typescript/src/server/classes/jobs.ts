@@ -157,6 +157,10 @@ class Police {
   public isCuffed = (plyId: number) => {
     return global.exports['dg-police'].isCuffed(plyId);
   };
+
+  public addBulletCasings = (plyId: number, itemState: Inventory.ItemState, shotFirePositions: Vec3[]) => {
+    global.exports['dg-police'].addBulletCasings(plyId, itemState, shotFirePositions);
+  };
 }
 
 export default {

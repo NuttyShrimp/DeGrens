@@ -2,22 +2,16 @@ import { Events, Inventory, Jobs, Notifications, RPC, Taskbar, Util } from '@dgx
 import { BLOCKED_CASINGS_WEAPONS } from './constants.evidence';
 import { addEvidence, getAllEvidenceInArea, takeEvidence } from './service.evidence';
 
-Events.onNet(
-  'weapons:server:stoppedShooting',
-  (src: number, itemId: string, ammoCount: number, qualityDecrease: number, shotFirePositions: Vec3[]) => {
-    const vehicle = GetVehiclePedIsIn(GetPlayerPed(String(src)), false);
-    const type = GetVehicleType(vehicle);
-    if (vehicle !== 0 && type !== 'bike') return;
+global.exports('addBulletCasings', (plyId: number, itemState: Inventory.ItemState, shotFirePositions: Vec3[]) => {
+  const vehicle = GetVehiclePedIsIn(GetPlayerPed(String(plyId)), false);
+  const type = GetVehicleType(vehicle);
+  if (vehicle !== 0 && type !== 'bike') return;
+  if (BLOCKED_CASINGS_WEAPONS.has(GetHashKey(itemState.name))) return;
 
-    const itemState = Inventory.getItemStateById(itemId);
-    if (!itemState) return;
-    if (BLOCKED_CASINGS_WEAPONS.has(GetHashKey(itemState.name))) return;
-
-    shotFirePositions.forEach(pos => {
-      addEvidence({ x: pos.x, y: pos.y, z: pos.z - 0.95 }, 'bullet', itemState.metadata.serialnumber);
-    });
-  }
-);
+  shotFirePositions.forEach(pos => {
+    addEvidence({ x: pos.x, y: pos.y, z: pos.z - 0.95 }, 'bullet', itemState.metadata.serialnumber);
+  });
+});
 
 // TODO: add to ambu resource when finished
 Events.onNet('police:evidence:dropBloop', (src: number) => {

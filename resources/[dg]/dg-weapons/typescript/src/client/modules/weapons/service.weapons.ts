@@ -40,7 +40,12 @@ export const startWeaponThread = () => {
     if (currentWeaponData === null) return;
 
     const ped = PlayerPedId();
-    const weapon = currentWeaponData?.hash;
+    const [hasWeapon, weapon] = GetCurrentPedWeapon(ped, true);
+    if (!hasWeapon || weapon !== currentWeaponData.hash) {
+      setCurrentWeaponData(null);
+      return;
+    }
+
     const ammoInWeapon = Number(GetAmmoInPedWeapon(ped, weapon));
 
     if (IsPedShooting(ped) && ammoInWeapon > 0) {

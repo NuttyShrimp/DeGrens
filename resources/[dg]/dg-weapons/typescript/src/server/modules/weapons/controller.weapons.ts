@@ -1,11 +1,11 @@
-import { Events, Inventory, Notifications, RPC, Util } from '@dgx/server';
+import { Events, Inventory, Notifications, Police, RPC, Util } from '@dgx/server';
 import { setWeaponAmmo } from 'modules/ammo/service.ammo';
 import { getWeaponConfig } from 'services/config';
 import { getEquippedWeapon, getWeaponItemState, setEquippedWeapon, setWeaponQuality } from './service.weapons';
 
 Events.onNet(
   'weapons:server:stoppedShooting',
-  (src: number, itemId: string, ammoCount: number, qualityDecrease: number) => {
+  (src: number, itemId: string, ammoCount: number, qualityDecrease: number, shotFirePositions: Vec3[]) => {
     const itemState = getWeaponItemState(itemId);
     if (!itemState) return;
 
@@ -19,6 +19,8 @@ Events.onNet(
 
     setWeaponQuality(itemId, itemState.quality - weaponConfig.durabilityMultiplier * qualityDecrease);
     setWeaponAmmo(itemId, ammoCount);
+
+    Police.addBulletCasings(src, itemState, shotFirePositions);
   }
 );
 
