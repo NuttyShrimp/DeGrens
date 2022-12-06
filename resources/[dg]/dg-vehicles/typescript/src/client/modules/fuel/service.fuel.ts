@@ -126,7 +126,7 @@ export const doRefuel = async (price: number, vin: string, missingFuel: number) 
     // Calculate the chance on a engine explosion
     const chance = Math.random();
     if (chance < 0.05) {
-      Sync.executeNative('NetworkExplodeVehicle', vehNetId, true, false, false);
+      Sync.executeNative('NetworkExplodeVehicle', NetworkGetEntityFromNetworkId(vehNetId), true, false, false);
     }
   }
   const account = await RPC.execute<Financials.Account>('financials:getDefaultAccount');

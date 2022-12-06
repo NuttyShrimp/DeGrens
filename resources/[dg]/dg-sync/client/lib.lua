@@ -1,18 +1,17 @@
-RegisterNetEvent("sync:execute")
-AddEventHandler('sync:execute', function(native, netId, ...)
-	local entity = NetworkGetEntityFromNetworkId(netId)
-
-	if (syncActions[native]) then
-		syncActions[native](entity,...)
-	end
-end)
-
 function SyncExecution(native, entity, ...)
+  if not syncActions[native] then return end
+  if not DoesEntityExist(entity) then return end
+
 	if NetworkHasControlOfEntity(entity) then
 		syncActions[native](entity, ...)
 	else
-		requestSyncedAction(native, entity, ...)
+		TriggerServerEvent('sync:request', native, NetworkGetNetworkIdFromEntity(entity), ...)
 	end
 end
 
 exports('SyncExecution', SyncExecution)
+
+RegisterNetEvent("sync:execute", function(native, netId, ...)
+	local entity = NetworkGetEntityFromNetworkId(netId)
+  SyncExecution(native, entity, ...)
+end)

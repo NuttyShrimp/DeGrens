@@ -1,16 +1,15 @@
 class Sync {
-  executeNative(native: string, owner: number, netId: number, ...args: any[]) {
-    emit('sync:request', native, owner, netId, ...args);
+  executeNative(native: string, entity: number, ...args: any[]) {
+    global.exports['dg-sync'].SyncExecution(native, entity, ...args);
   }
   setPlayerInvincible(src: number, isEnabled: boolean) {
-    global.exports['dg-auth'].SetPlayerInvincible(src, isEnabled)
+    global.exports['dg-auth'].SetPlayerInvincible(src, isEnabled);
   }
   setPlayerVisible(src: number, isVisible: boolean) {
     global.exports['dg-auth'].SetPlayerVisible(src, isVisible);
   }
 }
 
-
 export default {
-  Sync: new Sync()
-}
+  Sync: new Sync(),
+};

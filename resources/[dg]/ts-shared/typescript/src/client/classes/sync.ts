@@ -1,8 +1,8 @@
 import { RPC, Events } from './index';
 
 class Sync {
-  executeNative(native: string, vehNetId: number, ...args: any[]) {
-    global.exports['dg-sync'].SyncExecution(native, vehNetId, ...args);
+  executeNative(native: string, entity: number, ...args: any[]) {
+    global.exports['dg-sync'].SyncExecution(native, entity, ...args);
   }
   setPlayerInvincible(isEnabled: boolean) {
     Events.emitNet('auth:anticheat:native:setPlayerInvincible', isEnabled);

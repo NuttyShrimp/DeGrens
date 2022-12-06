@@ -134,7 +134,7 @@ export const setPlayerInvincible = (src: number, isEnabled: boolean) => {
 };
 export const setPlayerVisible = (src: number, isVisible: boolean) => {
   toggleAllowedMod(src, 'invisible', !isVisible);
-  Sync.executeNative('SetEntityVisible', src, GetPlayerPed(String(src)), true);
+  Sync.executeNative('SetEntityVisible', GetPlayerPed(String(src)), isVisible, false);
 };
 // endregion
 
