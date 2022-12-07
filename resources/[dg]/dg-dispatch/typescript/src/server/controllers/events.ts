@@ -19,9 +19,9 @@ on('jobs:server:signin:update', (src: number, job: string) => {
   Events.emitNet('dg-dispatch:addCalls', src, getCalls(20), true);
 });
 
-on('dg-config:moduleLoaded', (module: string, config: Dispatch.Cams.Cam[]) => {
+on('dg-config:moduleLoaded', (module: string, { cams }: { cams: Dispatch.Cams.Cam[] }) => {
   if (module !== 'dispatch') return;
-  loadCams(config);
+  loadCams(cams);
 });
 
 Events.onNet('dg-dispatch:loadMore', (src, offset: number) => {
