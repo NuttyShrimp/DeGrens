@@ -69,3 +69,7 @@ const damageEntity = (entity: number) => {
     }
   }
 };
+
+Events.onNet('admin:command:fadeIn', () => {
+  DoScreenFadeIn(0);
+});
