@@ -1,0 +1,28 @@
+{
+  "type": {
+    "fleeca": [
+      "fleeca_bp",
+      "fleeca_motel",
+      "fleeca_benny",
+      "fleeca_lifeinvader",
+      "fleeca_highway",
+      "fleeca_sandy"
+    ]
+  },
+  "labels": {
+    "fleeca_bp": "Fleeca Bank Legion Square",
+    "fleeca_motel": "Fleeca Bank Hawick Ave",
+    "fleeca_benny": "Fleeca Bank Rockford Plaza",
+    "fleeca_lifeinvader": "Fleeca Bank Del Perro Blvd",
+    "fleeca_highway": "Fleeca Bank Great Ocean Hwy",
+    "fleeca_sandy": "Fleeca Bank Route 68"
+  },
+  "cams": {
+    "fleeca_bp": 11,
+    "fleeca_motel": 10,
+    "fleeca_benny": 12,
+    "fleeca_lifeinvader": 13,
+    "fleeca_highway": 14,
+    "fleeca_sandy": 15
+  }
+}

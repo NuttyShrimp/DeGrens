@@ -146,8 +146,9 @@ export class Business {
       `SELECT id, business_id, type, action, CONCAT(firstname, ' ', lastname) as name
        FROM business_log
               JOIN character_info USING (citizenid)
+       WHERE business_id = ?
        LIMIT 30 OFFSET ?`,
-      [30 * offset]
+      [this.info.id, 30 * offset]
     );
   }
 

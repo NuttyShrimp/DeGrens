@@ -11,11 +11,13 @@ export class PermissionsManager {
   private members: IAccountMember[];
   private logger: winston.Logger;
   private readonly isSeededAccount: boolean;
+  private cache: Map<number, IAccountPermission>;
 
   constructor(account_id: string, members: IAccountMember[]) {
     this.account_id = account_id;
     this.members = members;
     this.isSeededAccount = accountManager.getSeededAccountIds().some(aId => aId === account_id);
+    this.cache = new Map();
 
     this.logger = bankLogger.child({
       module: `PermsManager - ${account_id}`,
@@ -53,6 +55,7 @@ export class PermissionsManager {
       ON DUPLICATE KEY UPDATE access_level = ?
     `;
     await SQL.query(query, [this.account_id, cid, access_level, access_level]);
+    this.cache.delete(cid);
   }
 
   public buildPermissions(level: number): IAccountPermission {
@@ -87,6 +90,8 @@ export class PermissionsManager {
   };
 
   public getMemberPermissions = (cid: number) => {
+    const permissions = this.cache.get(cid);
+    if (permissions) return permissions;
     const level = this.getMemberLevel(cid);
     return this.buildPermissions(level);
   };
@@ -98,7 +103,10 @@ export class PermissionsManager {
       this.logger.debug(`hasPermission: not in members array | cid: ${cid}`);
       return false;
     }
-    const perms = this.buildPermissions(member.access_level);
+    let perms = this.cache.get(cid);
+    if (!perms) {
+      perms = this.buildPermissions(member.access_level);
+    }
     this.logger.info(`hasPermission | cid: ${cid} | ${permission}: ${perms[permission]}`);
     return perms[permission];
   }
@@ -143,6 +151,7 @@ export class PermissionsManager {
     );
     this.logger.info(`removePermissions: removing access | cid: ${cid}`);
     this.members = this.members.filter(m => m.cid !== cid);
+    this.cache.delete(cid);
   }
 
   public buildAccessLevel = (perms: IAccountPermission): number => {

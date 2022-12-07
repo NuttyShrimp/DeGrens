@@ -96,7 +96,7 @@ export class Account {
       name: this.name,
       type: this.accType,
       balance: this.balance,
-      permissions: this.permsManager.buildPermissions(access_level),
+      permissions: this.permsManager.getMemberPermissions(cid),
     };
     if (this.accType === 'savings') {
       const accountOwnerCid = this.permsManager.getAccountOwner()?.cid;
@@ -114,7 +114,7 @@ export class Account {
               return {
                 cid: m.cid,
                 name,
-                ...this.permsManager.buildPermissions(m.access_level),
+                ...this.permsManager.getMemberPermissions(m.cid),
               };
             })
         );

@@ -1,11 +1,11 @@
-import { Config, Events, Financials, Inventory, RPC, Util, UI, Notifications } from '@dgx/server';
+import { Config, Events, Financials, Inventory, Notifications, RPC, UI, Util } from '@dgx/server';
 
-let activePickups: Record<number, Drives.Name> = {};
+const activePickups: Record<number, Shop.Name> = {};
 
-let driveConfig: Drives.Config;
+let shopConfig: Shop.Config;
 setImmediate(async () => {
   await Config.awaitConfigLoad();
-  driveConfig = Config.getConfigValue<Drives.Config>('heists.drives');
+  shopConfig = Config.getConfigValue<Shop.Config>('heists.shop');
 });
 
 const hasActivePickup = (plyId: number) => {
@@ -26,23 +26,23 @@ Events.onNet('heists:server:openIllegalShop', async (src: number) => {
     },
   ];
 
-  for (const [driveName, { text }] of Object.entries(driveConfig)) {
-    const hasItem = await Inventory.doesPlayerHaveItems(src, driveName);
-    if (!hasItem && !['thermite_part', 'mini_emp_part'].includes(driveName)) continue;
+  for (const [itemName, { text }] of Object.entries(shopConfig)) {
+    const hasItem = await Inventory.doesPlayerHaveItems(src, itemName);
+    if (!hasItem && !['thermite_part', 'mini_emp_part'].includes(itemName)) continue;
     menuData.push({
       title: text,
       callbackURL: 'heists/buyIllegalShopItem',
-      data: { drive: driveName },
+      data: { drive: itemName },
     });
   }
   UI.openContextMenu(src, menuData);
 });
 
-RPC.register('heists:server:buyLaptop', async (source: number, drive: Drives.Name) => {
+RPC.register('heists:server:buyLaptop', async (source: number, drive: Shop.Name) => {
   const cid = Util.getCID(source);
-  const cryptoCost = driveConfig[drive]?.cost ?? 100;
+  const cryptoCost = shopConfig[drive]?.cost ?? 100;
   const hasEnoughCrypto = (await Financials.cryptoGet(source, 'Manera')) >= cryptoCost;
-  let hasItem = await Inventory.doesPlayerHaveItems(source, drive);
+  const hasItem = await Inventory.doesPlayerHaveItems(source, drive);
   const shouldRemoveItem = !['thermite_part', 'mini_emp_part'].includes(drive);
   if (!hasEnoughCrypto || (!hasItem && shouldRemoveItem)) {
     Util.Log(
@@ -79,7 +79,7 @@ RPC.register('heists:server:buyLaptop', async (source: number, drive: Drives.Nam
 Events.onNet('heists:server:pickupLaptop', async (src: number) => {
   const cid = Util.getCID(src);
   if (!activePickups[cid]) return;
-  const laptop = driveConfig[activePickups[cid]]?.laptop ?? 'laptop_v1';
+  const laptop = shopConfig[activePickups[cid]]?.laptop ?? 'laptop_v1';
   Util.Log(
     'heists:laptop:pickup',
     {

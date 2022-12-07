@@ -1,0 +1,112 @@
+{
+  "fleeca_bp": {
+    "model": "v_ilev_gb_vauldr",
+    "coords": {
+      "x": 148.0266,
+      "y": -1044.364,
+      "z": 29.50693
+    },
+    "heading": {
+      "open": 149.846,
+      "closed": 249.846
+    }
+  },
+  "fleeca_motel": {
+    "model": "v_ilev_gb_vauldr",
+    "coords": {
+      "x": 312.358,
+      "y": -282.3701,
+      "z": 54.30365
+    },
+    "heading": {
+      "open": 149.866,
+      "closed": 249.866
+    }
+  },
+  "fleeca_benny": {
+    "model": "v_ilev_gb_vauldr",
+    "coords": {
+      "x": -352.7365,
+      "y": -53.57248,
+      "z": 49.17543
+    },
+    "heading": {
+      "open": 150.86,
+      "closed": 250.86
+    }
+  },
+  "fleeca_lifeinvader": {
+    "model": "v_ilev_gb_vauldr",
+    "coords": {
+      "x": -1211.427,
+      "y": -334.6483,
+      "z": 37.94341
+    },
+    "heading": {
+      "open": 196.864,
+      "closed": 296.864
+    }
+  },
+  "fleeca_highway": {
+    "model": "hei_prop_heist_sec_door",
+    "coords": {
+      "x": -2958.539,
+      "y": 482.2706,
+      "z": 15.83594
+    },
+    "heading": {
+      "open": 257.542,
+      "closed": 357.542
+    }
+  },
+  "fleeca_sandy": {
+    "model": "v_ilev_gb_vauldr",
+    "coords": {
+      "x": 1175.542,
+      "y": 2710.861,
+      "z": 38.22689
+    },
+    "heading": {
+      "open": 350.0,
+      "closed": 90.0
+    }
+  },
+  "paleto": {
+    "model": "ch_prop_ch_vault_d_door_01a",
+    "coords": {
+      "x": -100.2419,
+      "y": 6464.549,
+      "z": 31.8846
+    },
+    "heading": {
+      "open": 135.0,
+      "closed": 225.0
+    },
+    "portalId": 2
+  },
+  "maze": {
+    "model": "v_ilev_bk_vaultdoor",
+    "coords": {
+      "x": -1307.837,
+      "y": -816.4876,
+      "z": 17.81906
+    },
+    "heading": {
+      "open": 219.634,
+      "closed": 36.74
+    }
+  },
+  "pacific": {
+    "model": "v_ilev_bk_vaultdoor",
+    "coords": {
+      "x": 234.9857,
+      "y": 228.0696,
+      "z": 97.72185
+    },
+    "heading": {
+      "open": 303.0,
+      "closed": 70.0
+    },
+    "portalId": 19
+  }
+}

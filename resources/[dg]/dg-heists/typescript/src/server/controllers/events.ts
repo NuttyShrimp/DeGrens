@@ -20,5 +20,5 @@ RPC.register('heists:server:getLaptopPickup', async () => {
 RPC.register('heists:server:getTrolleyLocations', async (_src: number, heistId: Heist.Id) => {
   await Config.awaitConfigLoad();
   const trolleys = Config.getConfigValue<Trolley.Config>('heists.trolleys');
-  return trolleys[heistId].locations;
+  return trolleys.locations[heistId];
 });

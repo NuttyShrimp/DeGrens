@@ -1,12 +1,13 @@
 import { Config, RPC } from '@dgx/server';
 import { Vector3 } from '@dgx/shared';
+
 import stateManager from './classes/statemanager';
 
 setImmediate(async () => {
   await Config.awaitConfigLoad();
   const config = Config.getConfigValue<Fleeca.Config>('heists.fleeca');
-  stateManager.setConfig(config.powerLocations, config.ids);
-})
+  stateManager.setConfig(config);
+});
 
 RPC.register('heists:server:fleeca:getPowerPercentage', (_src: number, coords: Vec3) => {
   const powerLocation = stateManager.getPowerLocation();

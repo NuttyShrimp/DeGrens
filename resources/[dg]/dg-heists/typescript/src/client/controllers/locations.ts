@@ -1,4 +1,5 @@
 import { PolyZone, RPC } from '@dgx/client';
+
 import { setDoorState } from './doors';
 
 let currentLocation: Heist.Id;
