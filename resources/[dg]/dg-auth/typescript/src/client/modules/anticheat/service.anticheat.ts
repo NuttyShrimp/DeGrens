@@ -75,10 +75,11 @@ const scheduleAntiTP = () => {
     const jumping = IsPedJumping(ped);
     const ragdoll = IsPedRagdoll(ped);
     const falling = IsPedFalling(ped);
+    const onVeh = IsPedOnVehicle(ped);
     const inNoclip = global.exports['dg-admin'].inNoclip();
     // TODO: check distance between coords
     if (!inNoclip) {
-      if (!inVeh) {
+      if (!inVeh && !onVeh) {
         if (!jumping && !falling && !ragdoll) {
           if (speed > 10) {
             Events.emitNet('auth:anticheat:addFlag', 'speed');
