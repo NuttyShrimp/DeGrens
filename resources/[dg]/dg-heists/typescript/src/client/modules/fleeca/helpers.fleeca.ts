@@ -1,4 +1,4 @@
-import { Util, RPC } from '@dgx/client';
+import { RPC, Util } from '@dgx/client';
 
 export const getPercentageOfPowerBox = async (entity: number): Promise<number> => {
   const coords = Util.getEntityCoords(entity);

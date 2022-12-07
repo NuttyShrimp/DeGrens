@@ -1,10 +1,18 @@
 import { Config, Events, Inventory, Util } from '@dgx/server';
+import { getTypeForId } from 'services/metadata';
+
+let config: Trolley.Config;
+
+setImmediate(() => {
+  config = Config.getConfigValue<Trolley.Config>('heists.trolleys');
+});
 
 Events.onNet('heists:server:lootTrolley', async (src: number, heistId: Heist.Id, type: Trolley.Type) => {
   if (!heistId || !type) throw new Error('Attempted to receive trolley loot without providing correct data');
   await Config.awaitConfigLoad();
-  const config = Config.getConfigValue<Trolley.Config>('heists.trolleys');
-  const possibleLoot = config[heistId].types[type];
+  const heistType = getTypeForId(heistId);
+  if (!heistType) return;
+  const possibleLoot = config.heists[heistType].types[type];
   const loot = possibleLoot[Math.floor(Math.random() * possibleLoot.length)];
   Inventory.addItemToPlayer(src, loot.name, Util.getRndInteger(loot.min, loot.max));
   Util.Log(
@@ -19,8 +27,8 @@ Events.onNet('heists:server:lootTrolley', async (src: number, heistId: Heist.Id,
   );
 
   const chance = Util.getRndInteger(0, 100);
-  if (chance < config[heistId].specialChance) {
-    const specialItems = config[heistId].specialItems;
+  if (chance < config.heists[heistType].specialChance) {
+    const specialItems = config.heists[heistType].specialItems;
     const specialItem = specialItems[Math.floor(Math.random() * specialItems.length)];
     Inventory.addItemToPlayer(src, specialItem, 1);
     Util.Log(

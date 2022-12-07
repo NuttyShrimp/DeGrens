@@ -1,5 +1,6 @@
-import { Events, Util, RPC } from '@dgx/client';
+import { Events, RPC, Util } from '@dgx/client';
 import { getCurrentLocation } from 'controllers/locations';
+
 import { TROLLEY_OBJECTS } from './constants.trolleys';
 
 export const spawnTrolleys = async (heistId: Heist.Id) => {

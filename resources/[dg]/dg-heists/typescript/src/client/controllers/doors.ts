@@ -1,5 +1,6 @@
-import { getCurrentLocation } from './locations';
 import { Events, RPC, Util } from '@dgx/client';
+
+import { getCurrentLocation } from './locations';
 
 // TODO: smooth opening
 export const setDoorState = async (heistId: Heist.Id, open: boolean) => {

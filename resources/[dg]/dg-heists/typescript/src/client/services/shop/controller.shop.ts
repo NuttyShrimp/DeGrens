@@ -1,4 +1,4 @@
-import { Peek, RPC, UI, PolyZone, Keys, Notifications, Events, Inventory } from '@dgx/client';
+import { Events, Inventory, Keys, Notifications, Peek, PolyZone, RPC, UI } from '@dgx/client';
 
 let inPickupZone = false;
 let pickupBlip: number;
@@ -28,9 +28,9 @@ onNet('DGCore:client:playerLoaded', async () => {
   createLaptopBlip();
 });
 
-UI.RegisterUICallback('heists/buyIllegalShopItem', async (data: { drive: Drives.Name }, cb) => {
+UI.RegisterUICallback('heists/buyIllegalShopItem', async (data: { drive: Shop.Name }, cb) => {
   cb({ data: {}, meta: { ok: true, message: 'done' } });
-  const success = await RPC.execute<boolean>('heists:server:buyLaptop', data.drive as Drives.Name);
+  const success = await RPC.execute<boolean>('heists:server:buyLaptop', data.drive as Shop.Name);
   if (!success) {
     Notifications.add('Je kan dit momenteel niet kopen', 'error');
     return;

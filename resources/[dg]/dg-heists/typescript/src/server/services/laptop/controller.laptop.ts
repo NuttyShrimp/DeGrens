@@ -1,6 +1,7 @@
-import { Events, Notifications, RPC, Util, Config, Inventory } from '@dgx/server';
-import fleecaStateManager from './../../modules/fleeca/classes/statemanager';
+import { Config, Events, Inventory, Notifications, RPC, Util } from '@dgx/server';
+
 import doorStateManager from './../../controllers/classes/doorstatemanager';
+import fleecaStateManager from './../../modules/fleeca/classes/statemanager';
 
 const heistStateManagers: Record<Laptop.Name, Heist.StateManager> = {
   laptop_v1: fleecaStateManager,
@@ -10,29 +11,52 @@ const heistStateManagers: Record<Laptop.Name, Heist.StateManager> = {
 };
 
 let laptopConfig: Laptop.Config;
+
 setImmediate(async () => {
   await Config.awaitConfigLoad();
   laptopConfig = Config.getConfigValue<Laptop.Config>('heists.laptops');
 
-  // TODO: Quality decrease on laptop use
-  const laptopNames = Object.keys(laptopConfig.interactCoords);
-  Inventory.registerUseable(laptopNames, async (src: number, itemState: Inventory.ItemState) => {
+  Inventory.registerUseable(Object.keys(heistStateManagers), async (src: number, itemState: Inventory.ItemState) => {
     const laptopName = itemState.name as Laptop.Name;
 
     const plyCoords = Util.getPlyCoords(src);
-    const hackLocation = laptopConfig.interactCoords[laptopName].find(coord => plyCoords.distance(coord) <= 1.0);
-    if (!hackLocation) return;
+    const laptopLoc = Object.entries(laptopConfig.coords[laptopName]).find(
+      ([id, coords]) => plyCoords.distance(coords) <= 2.0
+    );
+    if (!laptopLoc) return;
+    const [heistId, hackLocation] = laptopLoc as [Heist.Id, Vec4];
 
-    const heistId = await RPC.execute<Heist.Id>('heists:client:getCurrentLocation', src);
-    if (!heistId) return;
-
-    if (!heistStateManagers[laptopName]?.canHack(heistId)) {
+    if (!heistStateManagers[laptopName] || !heistStateManagers[laptopName].canHack(src, heistId)) {
       Notifications.add(src, 'Je kan dit momenteel niet hacken', 'error');
       return;
     }
 
+    Inventory.setQualityOfItem(itemState.id, old => Math.max(0, old - 20));
+    heistStateManagers[laptopName].startHack(src, heistId);
+    Util.Log(
+      'heists:hack:start',
+      {
+        id: heistId,
+      },
+      `${Util.getName(src)} started a hack at ${heistId}`,
+      src
+    );
     Events.emitNet('heists:client:startHack', src, laptopName, hackLocation);
   });
+});
+
+Events.onNet('heists:server:failedHack', async (src: number, laptopName: Laptop.Name, heistId: Heist.Id) => {
+  if (!heistId) return;
+  Util.Log(
+    'heists:laptop:failed',
+    {
+      heist: heistId,
+      laptopItem: laptopName,
+    },
+    `${GetPlayerName(String(src))} failed to hack the ${heistId} heist door with a ${laptopName}`,
+    src
+  );
+  return heistStateManagers[laptopName]?.failedHack(src, heistId);
 });
 
 RPC.register('heists:server:finishHack', async (src: number, laptopName: Laptop.Name, heistId: Heist.Id) => {
@@ -64,5 +88,5 @@ RPC.register('heists:server:finishHack', async (src: number, laptopName: Laptop.
     `${GetPlayerName(String(src))} successfully hacked the ${heistId} heist door with a  ${laptopName}`,
     src
   );
-  heistStateManagers[laptopName]?.finishedHack(heistId);
+  return heistStateManagers[laptopName]?.finishedHack(src, heistId);
 });

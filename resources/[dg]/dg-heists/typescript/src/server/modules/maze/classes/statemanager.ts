@@ -12,7 +12,15 @@ class StateManager extends Util.Singleton<StateManager>() implements Heist.State
     return true;
   };
 
-  finishedHack = () => {};
+  startHack = () => {
+    return true;
+  };
+
+  failedHack(src: number, heistId: Heist.Id) {}
+
+  finishedHack = () => {
+    return true;
+  };
 }
 
 const stateManager = StateManager.getInstance();

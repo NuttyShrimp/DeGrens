@@ -1,4 +1,5 @@
-import { Events, Notifications, Peek, UI, Taskbar, Inventory, Minigames } from '@dgx/client';
+import { Events, Inventory, Minigames, Notifications, Peek, Taskbar, UI } from '@dgx/client';
+
 import { getPercentageOfPowerBox, placePlayerAtPowerBox } from './helpers.fleeca';
 
 Peek.addModelEntry(

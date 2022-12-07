@@ -1,23 +1,26 @@
+import { Admin, Config, Police, Util } from '@dgx/server';
 import { DGXEvent, EventListener, RPCEvent, RPCRegister } from '@dgx/server/decorators';
-import { Config, Police, Util } from '@dgx/server';
 import doorStateManager from 'controllers/classes/doorstatemanager';
+import { getCamForId, getIdForType, getLabelForId } from 'services/metadata';
 
 @RPCRegister()
 @EventListener()
 class StateManager extends Util.Singleton<StateManager>() implements Heist.StateManager {
+  private config: Fleeca.Config;
   private powerLocation: Vec3;
   private powerDisabled = false;
   private robbedBanks: Set<Fleeca.Id> = new Set();
-  private allPowerLocations: Vec3[];
+  private bankHackers: Map<Fleeca.Id, number> = new Map();
+  private callTimeouts: Map<Fleeca.Id, NodeJS.Timeout> = new Map();
 
-  setConfig = (powerLocations: Vec3[], ids: Fleeca.Id[]) => {
-    this.allPowerLocations = powerLocations;
+  setConfig = (config: Fleeca.Config) => {
+    this.config = config;
     this.chooseNewPowerLocation();
-    doorStateManager.registerDoors(...ids);
+    doorStateManager.registerDoors(...getIdForType('fleeca'));
   };
 
   private chooseNewPowerLocation = () => {
-    this.powerLocation = this.allPowerLocations[Math.floor(Math.random() * this.allPowerLocations.length)];
+    this.powerLocation = this.config.power[Math.floor(Math.random() * this.config.power.length)];
   };
 
   @RPCEvent('heists:server:fleeca:getPowerLocation')
@@ -39,31 +42,61 @@ class StateManager extends Util.Singleton<StateManager>() implements Heist.State
     this.powerLocation = null;
   };
 
-  canHack = (fleecaId: Fleeca.Id) => {
-    return this.powerDisabled && !this.robbedBanks.has(fleecaId);
+  canHack = (src: number, fleecaId: Fleeca.Id) => {
+    return this.powerDisabled && !this.robbedBanks.has(fleecaId) && !this.bankHackers.get(fleecaId);
   };
 
-  finishedHack = (fleecaId: Fleeca.Id) => {
+  startHack = (src: number, fleecaId: Fleeca.Id) => {
+    if (this.bankHackers.get(fleecaId)) return;
+    if (!this.callTimeouts.get(fleecaId)) {
+      const door = Config.getConfigValue<Heist.Door>(`heists.doors.${fleecaId}`);
+      Police.createDispatchCall({
+        tag: '10-90',
+        title: 'Bank alarm: Overval',
+        blip: {
+          // sprite: 814,
+          sprite: 618,
+          color: 1,
+        },
+        coords: door.coords,
+        entries: {
+          // TODO: replace with actual label if config is cleaned up
+          'building-columns': getLabelForId(fleecaId),
+          'camera-cctv': getCamForId(fleecaId),
+        },
+      });
+      this.callTimeouts.set(
+        fleecaId,
+        setTimeout(() => {
+          if (!this.callTimeouts.get(fleecaId)) return;
+          this.callTimeouts.delete(fleecaId);
+        })
+      );
+    }
+    this.bankHackers.set(fleecaId, src);
+  };
+
+  failedHack(src: number, heistId: Fleeca.Id) {
+    if (!this.powerDisabled) {
+      Admin.ACBan(src, `Tried finishing bank without initiating process`);
+    }
+    if (this.robbedBanks.has(heistId) && !this.bankHackers.get(heistId)) {
+      Admin.ACBan(src, `Tried finishing bank without initiating process`);
+    }
+    this.bankHackers.delete(heistId);
+  }
+
+  finishedHack = (src: number, fleecaId: Fleeca.Id) => {
+    if (!this.bankHackers.get(fleecaId) || this.bankHackers.get(fleecaId) !== src) {
+      Admin.ACBan(src, `Tried finishing bank without initiating process`);
+    }
     this.powerDisabled = false;
     if (!this.robbedBanks.has(fleecaId)) {
       this.robbedBanks.add(fleecaId);
     }
-    const door = Config.getConfigValue<Heist.Door>(`heists.doors.${fleecaId}`);
+    this.bankHackers.delete(fleecaId);
     setTimeout(this.chooseNewPowerLocation, 45 * 60 * 1000);
-    Police.createDispatchCall({
-      tag: '10-90',
-      title: 'Bank alarm: Overval',
-      blip: {
-        // sprite: 814,
-        sprite: 618,
-        color: 1,
-      },
-      coords: door.coords,
-      entries: {
-        // TODO: replace with actual label if config is cleaned up
-        'building-columns': 'KUIS DE CONFIG Op',
-      },
-    });
+    return true;
   };
 }
 
