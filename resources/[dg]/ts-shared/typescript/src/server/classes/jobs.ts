@@ -161,6 +161,10 @@ class Police {
   public addBulletCasings = (plyId: number, itemState: Inventory.ItemState, shotFirePositions: Vec3[]) => {
     global.exports['dg-police'].addBulletCasings(plyId, itemState, shotFirePositions);
   };
+
+  public leavePrison = (plyId: number) => {
+    global.exports['dg-police'].leavePrison(plyId);
+  };
 }
 
 export default {

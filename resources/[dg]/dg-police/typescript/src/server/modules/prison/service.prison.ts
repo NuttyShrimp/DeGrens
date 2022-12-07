@@ -51,6 +51,11 @@ export const leavePrison = (plyId: number) => {
   Notifications.add(plyId, 'Neem je spullen aan balie', 'success');
 };
 
+export const restoreAllPlayerSentences = () => {
+  const playerIds = DGCore.Functions.GetPlayers();
+  playerIds.forEach(plyId => restorePlayerSentence(plyId));
+};
+
 export const restorePlayerSentence = (plyId: number) => {
   const player = DGCore.Functions.GetPlayer(plyId);
   if (!player) return;

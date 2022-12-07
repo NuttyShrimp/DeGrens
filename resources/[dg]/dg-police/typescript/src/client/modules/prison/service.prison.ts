@@ -43,7 +43,8 @@ export const enterPrison = async () => {
   PolyTarget.addCircleZone('prison_shop', prisonConfig.shop, 2, { useZ: true, data: {}, routingBucket: 0 });
 };
 
-export const restoreSentence = () => {
+export const restoreSentence = async () => {
+  await Util.awaitCondition(() => prisonConfig != undefined);
   inPrison = true;
   emit('InteractSound_CL:PlayOnOne', 'jail', 0.2);
   PolyTarget.addCircleZone('prison_phone', prisonConfig.jailControl, 1, { useZ: true, data: {}, routingBucket: 0 });

@@ -198,3 +198,7 @@ Events.onNet('police:prison:leftPrisonZone', (src: number) => {
     important: true,
   });
 });
+
+global.exports('leavePrison', (plyId: number) => {
+  leavePrison(plyId);
+});
