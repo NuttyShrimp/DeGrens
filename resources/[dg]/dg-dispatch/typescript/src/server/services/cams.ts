@@ -1,10 +1,9 @@
-import { Config, Events } from '@dgx/server';
+import { Events } from '@dgx/server';
 
 let cams: Dispatch.Cams.Cam[] = [];
 
-export const loadCams = async () => {
-  await Config.awaitConfigLoad();
-  cams = Config.getConfigValue('dispatch.cams');
+export const loadCams = (config: Dispatch.Cams.Cam[]) => {
+  cams = config;
   Events.emitNet('dispatch:cams:load', -1, cams);
 };
 

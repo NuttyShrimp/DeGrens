@@ -1,10 +1,12 @@
-import { Events, RPC } from '@dgx/server';
+import { Config, Events, RPC } from '@dgx/server';
 import { cleanPlayer, syncBlips, togglePlayer, updateSprite } from 'services/blips';
 import { getCams, loadCams } from 'services/cams';
 import { getCall, getCalls } from 'services/store';
 
-setImmediate(() => {
-  loadCams();
+setImmediate(async () => {
+  await Config.awaitConfigLoad();
+  const config = Config.getConfigValue('dispatch.cams');
+  loadCams(config);
 });
 
 on('jobs:server:signin:update', (src: number, job: string) => {
@@ -17,9 +19,9 @@ on('jobs:server:signin:update', (src: number, job: string) => {
   Events.emitNet('dg-dispatch:addCalls', src, getCalls(20), true);
 });
 
-on('dg-config:moduleLoaded', (module: string) => {
+on('dg-config:moduleLoaded', (module: string, config: Dispatch.Cams.Cam[]) => {
   if (module !== 'dispatch') return;
-  loadCams();
+  loadCams(config);
 });
 
 Events.onNet('dg-dispatch:loadMore', (src, offset: number) => {
