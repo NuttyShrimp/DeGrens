@@ -1,6 +1,6 @@
 class Screenshot {
-  imgur(target: number, options: { fileName: string }): Promise<string> {
-    return global.exports['screenshot-basic'].requestClientImgurScreenshot(target, options);
+  imgur(target: number): Promise<string> {
+    return global.exports['screenshot-basic'].requestClientImgurScreenshot(target);
   }
   minio(target: number, options: { fileName: string }): Promise<string> {
     return global.exports['screenshot-basic'].requestClientMinioScreenshot(target, options);

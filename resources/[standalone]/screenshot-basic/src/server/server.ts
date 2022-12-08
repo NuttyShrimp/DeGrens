@@ -119,7 +119,7 @@ exp(
   }
 );
 
-const captureImgureScreenshot = async (player: string | number, cb?: Function): Promise<string> => {
+exp('requestClientImgurScreenshot', async (player: string | number): Promise<string> => {
   const tkn = v4();
 
   const data = {
@@ -141,16 +141,7 @@ const captureImgureScreenshot = async (player: string | number, cb?: Function): 
 
   emitNet('screenshot_basic:requestImgurScreenshot', player, data);
   const result = await request;
-  if (cb) cb(result);
-  else return result;
-};
-
-exp('requestClientImgurScreenshot', (player: string | number, cb?: Function) => {
-  if (cb) {
-    captureImgureScreenshot(player, cb);
-  } else {
-    return captureImgureScreenshot(player);
-  }
+  return result;
 });
 
 onNet('screenshot-basic:incomingImgurScreenshot', (data: any, screenData: string) => {
