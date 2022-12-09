@@ -7,26 +7,20 @@ export const coordToPx = (coord: Inventory.XY, cellSize: number): Inventory.XY =
 export const getInventoryType = (id: string) => id.split('__', 2)[0];
 
 export const isAnyItemOverlapping = (
-  items: Pick<Inventory.Item, 'position' | 'size'>[],
-  position: Inventory.XY,
-  size: Inventory.XY
+  items: [Inventory.XY, Inventory.XY][],
+  item: [Inventory.XY, Inventory.XY]
 ): boolean => {
-  return items.some(i => doRectanglesOverlap(position, size, i.position, i.size));
+  return items.some(i => doRectanglesOverlap(i, item));
 };
 
-export const doRectanglesOverlap = (
-  movingPosition: Inventory.XY,
-  movingSize: Inventory.XY,
-  otherPosition: Inventory.XY,
-  otherSize: Inventory.XY
-): boolean => {
-  return (
-    movingPosition.x < otherPosition.x + otherSize.x &&
-    movingPosition.x + movingSize.x > otherPosition.x &&
-    movingPosition.y < otherPosition.y + otherSize.y &&
-    movingPosition.y + movingSize.y > otherPosition.y
-  );
-};
+const doRectanglesOverlap = (
+  [firstRectangle1, firstRectangle2]: [Inventory.XY, Inventory.XY],
+  [secondRectangle1, secondRectangle2]: [Inventory.XY, Inventory.XY]
+): boolean =>
+  firstRectangle1.x < secondRectangle2.x &&
+  firstRectangle2.x > secondRectangle1.x &&
+  firstRectangle1.y < secondRectangle2.y &&
+  firstRectangle2.y > secondRectangle1.y;
 
 export const generateShopItems = (
   inventoryId: string,
@@ -40,22 +34,27 @@ export const generateShopItems = (
       size = itemSize.y;
       return { x: 0, y: 0 };
     }
-    const mayOverlap = Object.values(items).map(i => ({
-      position: i.position,
-      size: i.size,
-    }));
+
+    const mayOverlap = Object.values(items).map(
+      i => [i.position, { x: i.position.x + i.size.x, y: i.position.y + i.size.y }] as [Inventory.XY, Inventory.XY]
+    );
 
     for (let y = 0; y < 1000 - itemSize.y + 1; y++) {
       for (let x = 0; x < CELLS_PER_ROW - itemSize.x + 1; x++) {
-        const position = { x, y };
-        const anyOverlapping = isAnyItemOverlapping(mayOverlap, position, itemSize);
+        const rect = [
+          { x, y },
+          { x: x + itemSize.x, y: y + itemSize.y },
+        ] as [Inventory.XY, Inventory.XY];
+        const anyOverlapping = isAnyItemOverlapping(mayOverlap, rect);
         if (anyOverlapping) continue;
-        if (position.y + itemSize.y > size) {
-          size = position.y + itemSize.y;
+        if (y + itemSize.y > size) {
+          size = y + itemSize.y;
         }
-        return position;
+        return { x, y };
       }
     }
+
+    return { x: 0, y: 0 };
   };
 
   for (const shopItem of shopItems) {

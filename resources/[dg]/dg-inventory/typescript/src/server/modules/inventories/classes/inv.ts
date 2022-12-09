@@ -162,20 +162,26 @@ export class Inv {
     if (this.items.size === 0) return { x: 0, y: 0 };
     const itemSize = itemDataManager.get(itemName).size;
     const cellsPerRow = getConfig().cellsPerRow;
-    const mayOverlap = this.getItems().map(state => ({
-      position: state.position,
-      size: itemDataManager.get(state.name).size,
-    }));
+    const itemsThatMayOverlap = this.getItems().map(state => {
+      const size = itemDataManager.get(state.name).size;
+      return [state.position, { x: state.position.x + size.x, y: state.position.y + size.y }] as [Vec2, Vec2];
+    });
 
     for (let y = 0; y < this.size - itemSize.y + 1; y++) {
       for (let x = 0; x < cellsPerRow - itemSize.x + 1; x++) {
-        const position = { x, y };
-        const anyOverlapping = mayOverlap.some(i => doRectanglesOverlap(position, itemSize, i.position, i.size));
+        const anyOverlapping = itemsThatMayOverlap.some(i =>
+          doRectanglesOverlap(
+            [
+              { x, y },
+              { x: x + itemSize.x, y: y + itemSize.y },
+            ],
+            i
+          )
+        );
         if (anyOverlapping) continue;
-        return position;
+        return { x, y };
       }
     }
-    return;
   };
 
   public save = () => {

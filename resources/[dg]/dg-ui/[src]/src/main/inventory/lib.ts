@@ -90,14 +90,15 @@ export const bindItemToKey = (itemId: string, key: number): Inventory.Alert => {
 
   if (!isUseable(item)) return { message: 'Je kan dit item niet binden', type: 'error' };
 
-  Object.values(state.items)
-    .filter(i => i.inventory === item.inventory)
-    .filter(i => i.id !== itemId)
-    .forEach(i => {
-      if (i.hotkey !== key) return;
-      state.items[i.id].hotkey = undefined;
-      nuiAction('inventory/unbindItem', { id: i.id });
-    });
+  // Find item that already has key assigned and unbind
+  for (const i of Object.values(state.items)) {
+    if (i.hotkey !== key) continue;
+    if (i.inventory !== item.inventory) continue;
+    if (i.id === item.id) continue;
+    state.items[i.id].hotkey = undefined;
+    nuiAction('inventory/unbindItem', { id: i.id });
+    break;
+  }
 
   state.items[itemId].hotkey = key;
   setState(state);
@@ -114,15 +115,19 @@ export const getOtherInventoryId = (inventoryId: string): string => {
 };
 
 /**
- * Function which returns array with all items that need to be checked for interference
+ * Function which returns array with all items rectangle coordinates that need to be checked for interference
  * @param itemId Item to not include in array
  * @param inventoryId Inventory to check
  */
-const getPossibleOverlappingItems = (itemId: string, inventoryId: string): Inventory.Item[] => {
+const getPossibleOverlappingItems = (itemId: string, inventoryId: string) => {
   const state = getState();
-  return Object.values(state.items)
-    .filter(i => i.inventory === inventoryId)
-    .filter(i => i.id !== itemId);
+  const rectangles: [Inventory.XY, Inventory.XY][] = [];
+  for (const item of Object.values(state.items)) {
+    if (item.inventory !== inventoryId) continue;
+    if (item.id === itemId) continue;
+    rectangles.push([item.position, { x: item.position.x + item.size.x, y: item.position.y + item.size.y }]);
+  }
+  return rectangles;
 };
 
 /**
@@ -141,11 +146,14 @@ export const getFirstFreeSpace = (itemId: string, inventoryId: string): Inventor
 
   for (let y = 0; y < gridSize - itemSize.y + 1; y++) {
     for (let x = 0; x < CELLS_PER_ROW - itemSize.x + 1; x++) {
-      if (isAnyItemOverlapping(itemsThatMayOverlap, { x, y }, itemSize)) continue;
+      const rect = [
+        { x, y },
+        { x: x + itemSize.x, y: y + itemSize.y },
+      ] as [Inventory.XY, Inventory.XY];
+      if (isAnyItemOverlapping(itemsThatMayOverlap, rect)) continue;
       return { x, y };
     }
   }
-  return;
 };
 
 /**
@@ -158,6 +166,11 @@ export const canPlaceItemAtPosition = (itemId: string, inventoryId: string, newP
   const state = getState();
   const item = state.items[itemId];
 
+  const itemRect: [Inventory.XY, Inventory.XY] = [
+    newPosition,
+    { x: newPosition.x + item.size.x, y: newPosition.y + item.size.y },
+  ];
+
   const outOfBounds =
     newPosition.x < 0 ||
     newPosition.x + item.size.x > CELLS_PER_ROW ||
@@ -168,7 +181,7 @@ export const canPlaceItemAtPosition = (itemId: string, inventoryId: string, newP
   const itemsThatMayOverlap = getPossibleOverlappingItems(itemId, inventoryId);
   if (itemsThatMayOverlap.length === 0) return true;
 
-  return !isAnyItemOverlapping(itemsThatMayOverlap, newPosition, item.size);
+  return !isAnyItemOverlapping(itemsThatMayOverlap, itemRect);
 };
 
 export const isItemAllowedInInventory = (itemName: string, inventoryId: string): boolean => {

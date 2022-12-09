@@ -28,8 +28,8 @@ declare namespace Inventory {
   interface Item {
     id: string;
     inventory: string;
-    position: Position;
-    size: Position;
+    position: XY;
+    size: XY;
     name: string;
     label: string;
     quality: number;

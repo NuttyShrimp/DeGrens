@@ -199,11 +199,10 @@ export class Item {
   private syncItem = (data: Inventory.ItemState, oldInventory = '', emitter = 0) => {
     [...new Set([data.inventory, oldInventory])].forEach(inv => {
       const plyWithOpen = contextManager.getPlayersById(inv);
-      plyWithOpen
-        .filter(ply => ply !== emitter)
-        .forEach(ply => {
-          Events.emitNet('inventory:client:syncItem', ply, data);
-        });
+      plyWithOpen.forEach(ply => {
+        if (ply === emitter) return;
+        Events.emitNet('inventory:client:syncItem', ply, data);
+      });
     });
   };
 }
