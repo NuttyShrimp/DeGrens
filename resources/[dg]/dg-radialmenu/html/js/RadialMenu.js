@@ -56,7 +56,7 @@ RadialMenu.prototype.close = function () {
   var self = this;
 
   if (self.currentMenu) {
-    $.post(`https://${GetParentResourceName()}/closeRadial`);
+    $.post(`https://${GetParentResourceName()}/closeRadialMenu`);
     var parentMenu;
     while ((parentMenu = self.parentMenu.pop())) {
       parentMenu.remove();
@@ -106,7 +106,6 @@ RadialMenu.prototype.showNestedMenu = function (item) {
   RadialMenu.nextTick(function () {
     self.getParentMenu().setAttribute('class', 'menu outer');
     self.currentMenu.setAttribute('class', 'menu');
-    self.onClick(item);
   });
 };
 
@@ -135,9 +134,7 @@ RadialMenu.prototype.handleClick = function (index) {
       if (item.items) {
         self.showNestedMenu(item);
       } else {
-        if (self.onClick) {
-          self.onClick(item);
-        }
+        self.onClick(item);
       }
     }
   }
@@ -443,7 +440,6 @@ RadialMenu.prototype.appendSectorPath = function (startAngleDeg, endAngleDeg, sv
     if (index == 0) {
       g.setAttribute('class', 'sector selected');
     }
-    g.setAttribute('data-id', item.id);
     g.setAttribute('data-index', index);
 
     if (item.title) {

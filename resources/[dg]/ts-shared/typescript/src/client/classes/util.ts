@@ -122,11 +122,35 @@ class Util extends UtilShared {
       const ped = GetPlayerPed(plyId);
       if (ped === ownPed) continue;
       if (IsPedInAnyVehicle(ped, true)) continue;
+
       const [x, y, z] = GetEntityCoords(ped, false);
-      if (ownCoords.distance({ x, y, z }) < (IsPedRagdoll(ped) ? maxDistance + 0.5 : maxDistance)) return true;
+      if (ownCoords.distance({ x, y, z }) < (IsPedRagdoll(ped) ? maxDistance + 0.5 : maxDistance)) {
+        return true;
+      }
     }
 
     return false;
+  };
+
+  getDistanceToClosestPlayerOutsideVehicle = () => {
+    const players: number[] = GetActivePlayers();
+    const ownPed = PlayerPedId();
+    const ownCoords = this.getPlyCoords();
+
+    let closestDistance = 99999;
+
+    for (const plyId of players) {
+      const ped = GetPlayerPed(plyId);
+      if (ped === ownPed) continue;
+      if (IsPedInAnyVehicle(ped, true)) continue;
+
+      const [x, y, z] = GetEntityCoords(ped, false);
+      const distance = ownCoords.distance({ x, y, z });
+      if (distance > closestDistance) continue;
+      closestDistance = distance;
+    }
+
+    return closestDistance;
   };
 
   /**

@@ -32,6 +32,10 @@ class Inventory {
     return !!(await RPC.execute<boolean>('inventory:server:removeItemFromPlayer', name));
   };
 
+  public getAllItemNames = async () => {
+    return (await RPC.execute<string[]>('inventory:server:getAllPlayerItemNames')) ?? [];
+  };
+
   public toggleObject = (itemId: string, toggle: boolean) => {
     global.exports['dg-inventory'].toggleObject(itemId, toggle);
   };

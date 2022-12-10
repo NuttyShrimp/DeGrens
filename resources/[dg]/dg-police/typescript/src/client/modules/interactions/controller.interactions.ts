@@ -10,7 +10,6 @@ import {
   pauseCuffAnimation,
   putInVehicle,
   robPlayer,
-  setIsEscorting,
   stopGettingEscorted,
   stopEscorting,
   takeOutVehicle,

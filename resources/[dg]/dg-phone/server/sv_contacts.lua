@@ -47,7 +47,7 @@ DGCore.Functions.CreateCallback('dg-phone:server:deleteContact', function(src, c
 	cb()
 end)
 
-RegisterNetEvent('dg-phone:server:contacts:shareNumber', function()
+DGX.Events.onNet('dg-phone:server:contacts:shareNumber', function(source)
 	local Player = DGCore.Functions.GetPlayer(source)
 	if not Player then
 		return

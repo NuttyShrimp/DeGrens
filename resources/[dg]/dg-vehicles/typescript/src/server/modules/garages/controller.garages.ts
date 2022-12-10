@@ -59,8 +59,8 @@ onNet('playerJoining', () => {
   emitNet('vehicles:garages:load', source, GetGarages());
 });
 
-onNet('dg-vehicles:garages:open', () => {
-  showPlayerGarage(source);
+Events.onNet('dg-vehicles:garages:open', (src: number) => {
+  showPlayerGarage(src);
 });
 
 Events.onNet('vehicles:garage:takeVehicle', (src, data: { vin: string }) => {

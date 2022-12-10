@@ -28,21 +28,19 @@ on('vehicles:radial:engine', () => {
   setEngineState(vehicle, !curState);
 });
 
-on('vehicles:radial:door', (data: { id: number }) => {
-  const doorId = data.id;
+on('vehicles:radial:door', (data: { doorId: number }) => {
   const veh = getCurrentVehicle();
   if (!veh) return;
-  if (!GetIsDoorValid(veh, doorId)) {
+  if (!GetIsDoorValid(veh, data.doorId)) {
     Notifications.add('Dit voertuig heeft deze deur niet', 'error');
     return;
   }
-  toggleVehicleDoor(veh, doorId);
+  toggleVehicleDoor(veh, data.doorId);
 });
 
-on('vehicles:radial:seat', (data: { id: number }) => {
-  const seatIndex = data.id;
+on('vehicles:radial:seat', (data: { seatId: number }) => {
   const veh = getCurrentVehicle();
   if (!veh) return;
-  moveToSeat(veh, seatIndex);
+  moveToSeat(veh, data.seatId);
 });
 //#endregion
