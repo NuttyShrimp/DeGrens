@@ -10,4 +10,5 @@ Peek.addModelEntry('prop_toolchest_05', {
       },
     },
   ],
+  distance: 2.0,
 });

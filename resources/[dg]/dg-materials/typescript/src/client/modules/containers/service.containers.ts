@@ -49,16 +49,4 @@ export const enterContainer = async (entity: number) => {
 
 export const buildMoldZone = (coords: Vec3) => {
   PolyTarget.addCircleZone('materials_mold_melting', coords, 4, { useZ: true, data: {} });
-  Peek.addZoneEntry('materials_mold_melting', {
-    options: [
-      {
-        label: 'Mal Vullen',
-        icon: 'fas fa-fill',
-        items: 'key_mold',
-        action: () => {
-          Events.emitNet('materials:containers:meltMold');
-        },
-      },
-    ],
-  });
 };

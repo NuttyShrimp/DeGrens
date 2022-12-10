@@ -25,6 +25,20 @@ Peek.addModelEntry(
   }
 );
 
+Peek.addZoneEntry('materials_mold_melting', {
+  options: [
+    {
+      label: 'Mal Vullen',
+      icon: 'fas fa-fill',
+      items: 'key_mold',
+      action: () => {
+        Events.emitNet('materials:containers:meltMold');
+      },
+    },
+  ],
+  distance: 3.0,
+});
+
 on('materials:containers:leave', async () => {
   DoScreenFadeOut(500);
   await Util.Delay(500);

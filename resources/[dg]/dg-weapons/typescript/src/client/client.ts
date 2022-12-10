@@ -5,6 +5,6 @@ import './services/tint';
 
 import { registerTintPeek } from 'services/tint';
 
-setImmediate(async () => {
+setImmediate(() => {
   registerTintPeek();
 });
