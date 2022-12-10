@@ -44,7 +44,7 @@ Events.onNet('vehicles:keys:shareToPassengers', (src: number, netId: number, num
   const vehicle = NetworkGetEntityFromNetworkId(netId);
   for (let seat = -1; seat < numSeats - 1; seat++) {
     const ped = GetPedInVehicleSeat(vehicle, seat);
-    const plyId = Util.getPlyIdFromPed(ped);
+    const plyId = NetworkGetEntityOwner(ped);
     if (!plyId || plyId === src) continue;
     if (keyManager.hasKey(vin, plyId)) continue;
     keyManager.addKey(vin, plyId);
@@ -68,7 +68,7 @@ Events.onNet('vehicles:keys:shareToClosest', (src: number, netId: number) => {
     }
     target = closestPlayer;
   } else {
-    const driverPlyId = Util.getPlyIdFromPed(driver);
+    const driverPlyId = NetworkGetEntityOwner(driver);
     if (!driverPlyId) {
       Notifications.add(src, 'Kon bestuurder niet vinden', 'error');
       return;

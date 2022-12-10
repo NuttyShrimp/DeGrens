@@ -51,15 +51,6 @@ class Util extends UtilShared {
     return this.ArrayToVector3(entityCoords);
   }
 
-  getPlyIdFromPed = (ped: number) => {
-    const players = DGCore.Functions.GetPlayers();
-    for (const plyId of players) {
-      const plyPed = GetPlayerPed(String(plyId));
-      if (plyPed !== ped) continue;
-      return plyId;
-    }
-  };
-
   isEntityDead(entity: number, target?: number): Promise<boolean | null> {
     const entityNetId = NetworkGetNetworkIdFromEntity(entity);
     if (!target) {
@@ -103,12 +94,20 @@ class Util extends UtilShared {
     const _DGCore = global.exports['dg-core'].GetSharedObject() as Server;
     const originCoords = this.getPlyCoords(src);
     const players = _DGCore.Functions.GetPlayers();
+
+    let closestPlayer: number | undefined = undefined;
+    let closestDistance = maxDistance;
+
     for (const plyId of players) {
       if (plyId === src) continue;
       const playerCoords = this.getPlyCoords(plyId);
-      if (originCoords.distance(playerCoords) > maxDistance) continue;
-      return plyId;
+      const distance = originCoords.distance(playerCoords);
+      if (distance > closestDistance) continue;
+      closestPlayer = plyId;
+      closestDistance = distance;
     }
+
+    return closestPlayer;
   };
 
   getAllPlayersInRange = (src: number, maxDistance = 2) => {
@@ -195,14 +194,22 @@ class Util extends UtilShared {
     const _DGCore = global.exports['dg-core'].GetSharedObject() as Server;
     const originCoords = this.getPlyCoords(src);
     const players = _DGCore.Functions.GetPlayers();
+
+    let closestPlayer: number | undefined = undefined;
+    let closestDistance = maxDistance;
+
     for (const plyId of players) {
       if (plyId === src) continue;
       const ped = GetPlayerPed(String(plyId));
       if (GetVehiclePedIsIn(ped, false) !== 0) continue;
       const playerCoords = this.getEntityCoords(ped);
-      if (originCoords.distance(playerCoords) > maxDistance) continue;
-      return plyId;
+      const distance = originCoords.distance(playerCoords);
+      if (distance > closestDistance) continue;
+      closestPlayer = plyId;
+      closestDistance = distance;
     }
+
+    return closestPlayer;
   };
 }
 
