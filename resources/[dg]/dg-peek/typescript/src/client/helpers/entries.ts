@@ -31,8 +31,9 @@ export const canEntryBeEnabled = async (entry: PeekOption, entity: number): Prom
     if (!isEmployed) return;
   }
   if (entry.items) {
-    const hasItems = await Inventory.doesPlayerHaveItems(entry.items);
-    if (!hasItems) return;
+    const requiredItems = Array.isArray(entry.items) ? entry.items : [entry.items];
+    const items = Inventory.getAllItemNames();
+    if (!requiredItems.every(i => items.includes(i))) return;
   }
   if (!entry?._metadata?.state) {
     if (!entry._metadata) entry._metadata = {};

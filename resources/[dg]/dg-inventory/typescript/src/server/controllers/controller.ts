@@ -226,10 +226,3 @@ RPC.register('inventory:server:removeItemFromPlayer', (plyId, name: string) => {
   const cid = String(Util.getCID(plyId));
   return removeItemFromInventory('player', cid, name);
 });
-RPC.register('inventory:server:getAllPlayerItemNames', async plyId => {
-  const cid = String(Util.getCID(plyId));
-  const itemNames = new Set<string>();
-  const items = await getItemsInInventory('player', cid);
-  items.forEach(i => itemNames.add(i.name));
-  return [...itemNames];
-});
