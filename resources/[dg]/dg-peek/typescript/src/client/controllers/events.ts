@@ -1,15 +1,8 @@
-import { Keys, UI, Util, RayCast, Jobs } from '@dgx/client';
+import { Keys, UI, Util, RayCast } from '@dgx/client';
 
 import { entryManager } from '../classes/entryManager';
 import { stateManager } from '../classes/stateManager';
 import { activateZone, deactivateZone, getCurrentEntity, updateCurrentEntity } from '../helpers/actives';
-import { setCtxPlayerData } from '../helpers/context';
-
-on('onResourceStart', (resName: string) => {
-  if (resName !== GetCurrentResourceName()) return;
-  if (!DGCore) return;
-  setCtxPlayerData(DGCore.Functions.GetPlayerData());
-});
 
 UI.RegisterUICallback('peek:preventShow', (_, cb) => {
   stateManager.stopPeeking(false);
@@ -44,10 +37,6 @@ UI.RegisterUICallback('peek:select', (data: { id: string }, cb) => {
       emit(entry.event, entry, entity);
     }
   }
-});
-
-onNet('DGCore:Player:SetPlayerData', (data: PlayerData) => {
-  setCtxPlayerData(data);
 });
 
 RayCast.onEntityChange((entity, coords) => {

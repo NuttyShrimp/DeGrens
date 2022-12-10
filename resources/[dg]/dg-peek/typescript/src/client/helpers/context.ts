@@ -1,4 +1,3 @@
-let PlayerData: PlayerData | null = null;
 const registeredFlags: Set<string> = new Set();
 
 export const getEntityCtx = (entity: number): Context => {
@@ -44,14 +43,4 @@ export const addCtxFlag = (flag: string) => {
   if (!registeredFlags.has(flag)) {
     registeredFlags.add(flag);
   }
-};
-
-export const setCtxPlayerData = (data: typeof PlayerData) => {
-  PlayerData = data;
-};
-
-export const getCtxPlayerData = (): { data: typeof PlayerData } => {
-  return {
-    data: PlayerData,
-  };
 };

@@ -1,9 +1,7 @@
 import { Business, Gangs, Inventory, Jobs } from '@dgx/client';
 import { DEFAULT_DISTANCE } from 'cl_constant';
-import { getCtxPlayerData } from './context';
 
 export const canEntryBeEnabled = async (entry: PeekOption, entity: number): Promise<PeekOption | undefined> => {
-  const { data: PlayerData } = getCtxPlayerData();
   if (entry.job) {
     const job = Jobs.getCurrentJob();
     if (job.name === null) return;
