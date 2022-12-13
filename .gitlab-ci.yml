@@ -110,7 +110,7 @@ JS building:
   stage: build
   script:
     - yarn format -- -- --loglevel error
-    - yarn build
+    - yarn build --skip-nx-cache
 
 rebase UPD:
   stage: housekeeping
