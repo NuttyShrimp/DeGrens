@@ -120,10 +120,6 @@ interface ServerFunctions {
    * @returns true if the user has the specified permission
    */
   HasPermission(source: number, permission: string): boolean;
-  /**
-   * @returns true if the player is banned
-   */
-  IsPlayerBanned(source: number): boolean;
 
   /**
    * @returns true if there is already a player online with this license

@@ -11,11 +11,11 @@ The binds are primarily used in testing/development envs.
 ### Server
 
 | Name           | Parameters                                                                                            | Returns                                     |
-|----------------|-------------------------------------------------------------------------------------------------------|---------------------------------------------|
+| -------------- | ----------------------------------------------------------------------------------------------------- | ------------------------------------------- |
 | ban            | `source: number`, `target: steamId or serverId`, `reason: string`, `points: number`, `length: number` | `Promise<void>`                             |
 | kick           | `source: number`, `target: steamId or serverId`, `reason: string`, `points: number`                   | `Promise<void>`                             |
 | warn           | `source: number`, `target: steamId or serverId`, `reason: string`                                     | `Promise<void>`                             |
-| ACBan          | `target: steamId or serverId`, `reason: string`                                                       | `Promise<void>`                             |
+| ACBan          | `target: steamId or serverId`, `reason: string`, `data?: Record<string, any>`                         | `Promise<void>`                             |
 | isPlayerBanned | `target: steamId`                                                                                     | `Promise<{isBanned: bool, reason: string}>` |
 
 ## Permissions
@@ -23,7 +23,7 @@ The binds are primarily used in testing/development envs.
 ### Server
 
 | Name                | Parameters                       | Returns   |
-|---------------------|----------------------------------|-----------|
+| ------------------- | -------------------------------- | --------- |
 | hasPlayerPermission | `source: number`, `role: string` | `boolean` |
 
 ## Whitelist
@@ -31,5 +31,5 @@ The binds are primarily used in testing/development envs.
 ### Server
 
 | Name                | Parameters       | Returns            |
-|---------------------|------------------|--------------------|
+| ------------------- | ---------------- | ------------------ |
 | isPlayerWhitelisted | `source: number` | `Promise<boolean>` |

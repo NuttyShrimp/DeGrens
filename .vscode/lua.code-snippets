@@ -34417,11 +34417,6 @@
     "prefix": "DGCore.Functions.HasPermission",
     "body": ["DGCore.Functions.HasPermission(${1:source}, ${2:permission})"]
   },
-  "DGCore.Functions.IsPlayerBanned": {
-    "scope": "lua",
-    "prefix": "DGCore.Functions.IsPlayerBanned",
-    "body": ["DGCore.Functions.IsPlayerBanned(${1:source})"]
-  },
   "DGCore.Player.Login": {
     "scope": "lua",
     "prefix": "DGCore.Player.Login",

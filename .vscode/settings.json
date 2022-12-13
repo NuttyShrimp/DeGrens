@@ -6838,7 +6838,6 @@
     "DGCore.Functions.AddPermission",
     "DGCore.Functions.RemovePermission",
     "DGCore.Functions.HasPermission",
-    "DGCore.Functions.IsPlayerBanned",
     "DGCore.Player.Login",
     "DGCore.Player.CheckPlayerData",
     "DGCore.Player.CreatePlayer",
