@@ -68,22 +68,33 @@ export const validateWeaponInfo = (src: number, info: AntiCheat.WeaponInfo) => {
   const ped = GetPlayerPed(String(src));
   const pedAttachedWeapon = GetSelectedPedWeapon(ped);
   if (pedAttachedWeapon != info.weapon) {
-    Admin.ACBan(src, 'Weapon mismatch (native)');
+    Admin.ACBan(src, 'Weapon mismatch (native)', {
+      attachedWeapon: pedAttachedWeapon,
+      weaponInfo: info,
+    });
     return;
   }
   const scriptWeapon = Weapons.getPlayerEquippedWeapon(src);
   if (scriptWeapon != info.weapon) {
-    Admin.ACBan(src, 'Weapon mismatch (script)');
+    Admin.ACBan(src, 'Weapon mismatch (script)', {
+      scriptWeapon: scriptWeapon,
+      weaponInfo: info,
+    });
     return;
   }
   if (blockedWeaponHashes.includes(info.weapon)) {
-    Admin.ACBan(src, 'Blocked weapon equipped');
+    Admin.ACBan(src, 'Blocked weapon equipped', {
+      weaponInfo: info,
+    });
     return;
   }
   // TODO: do something with the ammo
   const svDamageModifier = GetPlayerWeaponDamageModifier(String(src));
   if (info.damageModifier !== svDamageModifier) {
-    Admin.ACBan(src, 'Weapon damage modifier modification');
+    Admin.ACBan(src, 'Weapon damage modifier modification', {
+      damageModifier: svDamageModifier,
+      weaponInfo: info,
+    });
     return;
   }
 };

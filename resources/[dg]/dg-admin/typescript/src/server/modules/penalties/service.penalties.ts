@@ -10,7 +10,8 @@ const penalisePlayer = async (
   target: string,
   reasons: string[],
   points?: number,
-  length?: number
+  length?: number,
+  data?: Record<string, any>
 ) => {
   const metadata = {
     reason: reasons.join(' | '),
@@ -30,6 +31,7 @@ const penalisePlayer = async (
       `admin:penalties:${type}:failed`,
       {
         target,
+        ...data,
         ...metadata,
       },
       `Failed to register ${type} for ${Util.getName(target)}(${target})`,
@@ -86,12 +88,13 @@ export const banPlayer = async (
   target: string | number,
   reasons: string[],
   points: number,
-  length: number
+  length: number,
+  data?: Record<string, any>
 ) => {
   if (typeof target === 'number' || !target.startsWith('steam')) {
     target = getIdentifierForPlayer(Number(target), 'steam');
   }
-  await penalisePlayer('ban', source, target, reasons, points, length);
+  await penalisePlayer('ban', source, target, reasons, points, length, data);
   dropBySteamId(target, `Banned for: ${reasons.join(' | ')}`);
 };
 
@@ -145,4 +148,5 @@ export const isPlayerBanned = async (steamId: string) => {
   };
 };
 
-export const ACBan = (target: number, reason: string) => banPlayer(-1, target, [`Anticheat: ${reason}`], 30, -1);
+export const ACBan = (target: number, reason: string, data?: Record<string, any>) =>
+  banPlayer(-1, target, [`Anticheat: ${reason}`], 30, -1, data);
