@@ -6,6 +6,7 @@ openPhone = function()
   SetUIFocusCustom(true, true)
   exports['dg-lib']:shouldExecuteKeyMaps(false)
   setState('state', 1)
+  DGX.Weapons.removeWeapon(nil, true)
 end
 
 closePhone = function(state, skipUI)
