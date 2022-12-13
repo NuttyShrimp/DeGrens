@@ -3,7 +3,7 @@ import { getWeaponAmmo, saveWeaponAmmo } from 'modules/ammo/service.ammo';
 import { getWeaponAttachments } from 'modules/attachments/service.attachments';
 import { getWeaponConfig } from 'services/config';
 import { applyWeaponTint } from 'services/tint';
-import { getEquippedWeapon, getWeaponItemState, setEquippedWeapon, setWeaponQuality } from './service.weapons';
+import { getEquippedWeapon, getWeaponItemState, setEquippedWeapon } from './service.weapons';
 
 // Give weapon to ped and set attachments/tint
 Events.onNet('weapons:setWeapon', async (src, itemId: string) => {
@@ -38,7 +38,7 @@ Events.onNet('weapons:removeWeapon', src => {
 
 Events.onNet(
   'weapons:server:stoppedShooting',
-  (src: number, itemId: string, ammoCount: number, qualityDecrease: number, shotFirePositions: Vec3[]) => {
+  (src: number, itemId: string, ammoCount: number, shotFirePositions: Vec3[]) => {
     const itemState = getWeaponItemState(itemId);
     if (!itemState) return;
 
@@ -50,7 +50,9 @@ Events.onNet(
       return;
     }
 
-    setWeaponQuality(itemId, itemState.quality - weaponConfig.durabilityMultiplier * qualityDecrease);
+    // We decrease quality based on amount of shots fired
+    const decrease = weaponConfig.durabilityMultiplier * shotFirePositions.length;
+    Inventory.setQualityOfItem(itemId, old => old - decrease);
     saveWeaponAmmo(src, itemId, ammoCount);
 
     Police.addBulletCasings(src, itemState, shotFirePositions);
@@ -82,7 +84,7 @@ global.exports('forceSetQuality', async (plyId: number, quality: number) => {
     Notifications.add(plyId, 'Je hebt geen wapen vast', 'error');
     return;
   }
-  setWeaponQuality(weaponId, quality);
+  Inventory.setQualityOfItem(weaponId, () => quality);
   Util.Log(
     'weapons:forceSetQuality',
     { itemId: weaponId, quality },

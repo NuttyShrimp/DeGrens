@@ -27,7 +27,7 @@ export const setCurrentWeaponData = (data: typeof currentWeaponData) => {
 
 export const startWeaponThread = () => {
   const playerId = PlayerId();
-  let qualityDecrease = 0;
+
   let reticleEnabled = false;
   let previousViewMode = 1;
   let viewModeReset = false;
@@ -36,11 +36,14 @@ export const startWeaponThread = () => {
   let shotFired = false;
 
   // To keep track of shots fired for bullet casings
+  // positions get cleared every time we emit saving event
   let previousAmmoCount = Number(GetAmmoInPedWeapon(PlayerPedId(), currentWeaponData!.hash));
   let shotFirePositions: Vec3[] = [];
 
   // needed for checking evidence
   let isFreeAiming = IsPlayerFreeAiming(playerId);
+
+  let stoppedShootingTimeout: NodeJS.Timeout | null = null;
 
   weaponThread = setInterval(() => {
     if (currentWeaponData === null) return;
@@ -56,32 +59,43 @@ export const startWeaponThread = () => {
 
     const ammoInWeapon = Number(GetAmmoInPedWeapon(ped, weapon));
 
+    // Player is holding left click
     if (IsPedShooting(ped) && ammoInWeapon > 0) {
       // Add GSR for first shot
       if (!shotFired) {
         Events.emitNet('weapons:server:firstShot', currentWeaponData.hash);
         shotFired = true;
       }
-      qualityDecrease++;
     }
 
+    // Player has fired a bullet
     if (ammoInWeapon < previousAmmoCount) {
       const plyCoords = Util.getEntityCoords(ped);
       shotFirePositions.push(plyCoords);
     }
 
+    // Player stopped shooting
     if (IsControlJustReleased(0, 24) || IsDisabledControlJustReleased(0, 24)) {
-      Events.emitNet(
-        'weapons:server:stoppedShooting',
-        currentWeaponData.id,
-        ammoInWeapon,
-        qualityDecrease,
-        shotFirePositions
-      );
-      qualityDecrease = 0;
       SetPedUsingActionMode(ped, false, -1, 'DEFAULT_ACTION');
+
+      // Throttle
+      if (stoppedShootingTimeout) {
+        clearTimeout(stoppedShootingTimeout);
+        stoppedShootingTimeout = null;
+      }
+      // Provide weaponId as param so timeout will still work if we remove weapon during timeout
+      stoppedShootingTimeout = setTimeout(
+        (weaponId: string) => {
+          Events.emitNet('weapons:server:stoppedShooting', weaponId, ammoInWeapon, shotFirePositions);
+          shotFirePositions = [];
+        },
+        1000,
+        currentWeaponData.id
+      );
     }
 
+    // Player is holding rightclick
+    // handle vehicle first person, reticle and free aiming event
     if (IsPlayerFreeAiming(playerId)) {
       if (!viewModeReset && IsPedInAnyVehicle(ped, false)) {
         const currentViewMode = GetFollowVehicleCamViewMode();
@@ -120,6 +134,8 @@ export const startWeaponThread = () => {
       isFreeAiming = false;
     }
 
+    // Stop player from shooting when player only has 1 bullet
+    // Having 0 bullets auto removes the gun (gta behavior) so we cap at 1
     if (ammoInWeapon === 1 && !currentWeaponData.oneTimeUse) {
       DisablePlayerFiring(ped, true);
     }

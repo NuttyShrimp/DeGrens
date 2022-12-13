@@ -53,7 +53,3 @@ export const getWeaponItemState = (itemId: string) => {
   }
   return itemState;
 };
-
-export const setWeaponQuality = (itemId: string, quality: number) => {
-  Inventory.setQualityOfItem(itemId, () => quality);
-};
