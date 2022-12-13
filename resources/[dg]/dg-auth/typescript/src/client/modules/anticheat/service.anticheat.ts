@@ -111,6 +111,10 @@ export const schedulePedThread = () => {
     clearTimeout(pedMods);
     pedMods = null;
   }
+
+  // Disable GTA's built-in aim assist
+  SetPlayerTargetingMode(3);
+
   pedMods = setInterval(() => {
     const inNoclip = global.exports['dg-admin'].inNoclip();
     const ped = PlayerPedId();
