@@ -55,6 +55,7 @@ const penalisePlayer = async (
     `admin:penalties:${type}`,
     {
       target,
+      ...data,
       ...metadata,
     },
     `${Util.getName(target)}(${target}) received a ${type} for ${reasons.join(' | ')}`,
