@@ -16,9 +16,9 @@ const debug = (msg: string) => {
 };
 
 export const addProp = async (name: string, offset?: Vec3) => {
-  await new Promise(res =>
+  await new Promise<void>(res =>
     setInterval(() => {
-      if (isEnabled) res(null);
+      if (isEnabled) res();
     }, 50)
   );
 

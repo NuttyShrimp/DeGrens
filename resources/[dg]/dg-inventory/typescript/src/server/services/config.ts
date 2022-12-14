@@ -1,6 +1,7 @@
 import { Config, Util } from '@dgx/server';
 
 let config: InventoryConfig | null = null;
+
 export const getConfig = () => {
   if (config == null) {
     throw new Error('Tried to get inventory config but was not loaded yet');

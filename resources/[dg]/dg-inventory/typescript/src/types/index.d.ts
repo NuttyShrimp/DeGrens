@@ -73,9 +73,6 @@ interface InventoryConfig {
     [key in Location.Type]: number;
   };
   dropRemoveTime: number;
-  itemObjects: {
-    [key: string]: Objects.Info | undefined;
-  };
   starterItems: string[];
   containers: {
     [key: string]: {
@@ -86,24 +83,34 @@ interface InventoryConfig {
 }
 
 declare namespace Objects {
+  interface Config {
+    positions: Record<
+      string,
+      {
+        max: number;
+        offset: Vec3;
+      }
+    >;
+    items: Record<string, Info>;
+  }
+
   interface Info {
-    name: string;
-    type: 'primary' | 'secondary';
+    propName: string;
     animData?: {
       animDict: string;
       anim: string;
     };
+    position: string;
   }
 
-  interface Obj {
-    itemId: string;
-    info: Info;
-  }
-
-  type Active = {
+  interface Active extends Item {
     propId: number | null;
-    info: Objects.Info;
-  };
+  }
+
+  interface Item {
+    id: string;
+    name: string;
+  }
 }
 
 declare namespace Shops {

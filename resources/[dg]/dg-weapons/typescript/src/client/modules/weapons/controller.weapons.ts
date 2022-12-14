@@ -1,4 +1,4 @@
-import { Events, Inventory, RPC } from '@dgx/client';
+import { Events, RPC } from '@dgx/client';
 import { Util } from '@dgx/shared';
 import { holsterWeapon, unholsterWeapon, forceRemoveWeapon, showReticle } from './helpers.weapons';
 import { getCurrentWeaponData, isAnimationBusy, setCurrentWeaponData } from './service.weapons';
@@ -6,12 +6,9 @@ import { getCurrentWeaponData, isAnimationBusy, setCurrentWeaponData } from './s
 // Prevents weapon usage spamming
 let isAwaitingAnim = false;
 
+// Reenabling back items on restart wont work as thats a server call sadly
 on('onResourceStop', (resourceName: string) => {
   if (resourceName !== GetCurrentResourceName()) return;
-  const currentWeaponData = getCurrentWeaponData();
-  if (currentWeaponData) {
-    Inventory.toggleObject(currentWeaponData.id, true);
-  }
   RemoveAllPedWeapons(PlayerPedId(), true);
 });
 

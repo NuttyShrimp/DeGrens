@@ -236,6 +236,14 @@ class Inventory {
   public getItemStateFromDatabase = (itemId: string): Promise<Inventory.ItemState | null> => {
     return global.exports['dg-inventory'].getItemStateFromDatabase(itemId);
   };
+
+  public toggleObject = (plyId: number, itemId: string, toggle: boolean) => {
+    global.exports['dg-inventory'].toggleObject(plyId, itemId, toggle);
+  };
+
+  public toggleAllObjects = (plyId: number, toggle: boolean) => {
+    global.exports['dg-inventory'].toggleAllObjects(plyId, toggle);
+  };
 }
 
 export default {

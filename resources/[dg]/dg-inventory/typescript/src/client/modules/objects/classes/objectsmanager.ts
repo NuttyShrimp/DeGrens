@@ -1,171 +1,193 @@
-import { PropAttach } from '@dgx/client';
+import { PropAttach, RPC } from '@dgx/client';
 import { Util } from '@dgx/client';
+import { Vector3 } from '@dgx/shared';
 import { Export, ExportRegister } from '@dgx/shared/decorators';
 
 @ExportRegister()
 class ObjectsManager extends Util.Singleton<ObjectsManager>() {
+  private config!: Objects.Config;
+  private configLoaded = false;
+
   private readonly activeObjects: Map<string, Objects.Active>;
-  private readonly queue: {
-    primary: Objects.Obj[];
-    secondary: Objects.Obj[];
-  };
+  private queues: Record<string | 'toggled', Objects.Item[]>; // Item queue per position
   private animationTimer: NodeJS.Timer | null = null;
-
-  private readonly SECONDARY_OFFSET = -0.09;
-  private readonly SECONDARY_MAX = 4;
-
-  private toggledObj: Objects.Obj | null;
-
-  private secondaryAmount = 0;
-  private primaryActive: boolean;
 
   constructor() {
     super();
     this.activeObjects = new Map();
-    this.queue = { primary: [], secondary: [] };
-    this.toggledObj = null;
-    this.secondaryAmount = 0;
-    this.primaryActive = false;
+    this.queues = {
+      toggled: [], // toggled is a special queue for manuel overrides
+    };
   }
 
-  public addedItem = async (itemId: string, info: Objects.Info) => {
-    if (this.canAddItem(info.type)) {
-      this.queue[info.type].push({ itemId, info });
+  public fetchConfig = async () => {
+    const config = await RPC.execute<Objects.Config>('inventory:objects:getConfig');
+    if (!config) {
+      throw new Error('Failed to fetch objects config');
+    }
+    this.config = config;
+    this.configLoaded = true;
+  };
+
+  public addedItem = async (item: Objects.Item) => {
+    await Util.awaitCondition(() => this.configLoaded, 999999);
+
+    const info = this.config.items[item.name];
+    if (!info) return;
+
+    if (this.isPositionFull(info.position)) {
+      this.addToQueue(item, info.position);
       return;
     }
 
-    if (info.type === 'primary') {
-      this.primaryActive = true;
-    }
-
-    let offset = { x: 0, y: 0, z: 0 };
-    if (info.type === 'secondary') {
-      offset = { x: 0, y: 0, z: this.SECONDARY_OFFSET * this.secondaryAmount };
-      this.secondaryAmount++;
-    }
+    let amountOfPosition = this.getActivesForPosition(info.position).length;
+    let offset = Vector3.create(this.config.positions[info.position].offset).multiply(amountOfPosition);
 
     // we set it before attaching prop to register the item as being active for canAddItem check
     // this is needed for when we spam move object items into inv
-    this.activeObjects.set(itemId, { info, propId: null });
-    const propId = await PropAttach.add(info.name, offset);
+    this.activeObjects.set(item.id, { ...item, propId: null });
+    const propId = await PropAttach.add(info.propName, offset);
     if (propId === undefined) {
-      this.activeObjects.delete(itemId);
+      this.activeObjects.delete(item.id);
       throw new Error('Failed to create prop for item');
     }
 
     // when spam moving items the item can possibly be removed from inv while we are awaiting prop creation
     // if that happens we insta delete prop again
-    if (!this.activeObjects.has(itemId)) {
+    if (!this.activeObjects.has(item.id)) {
       PropAttach.remove(propId);
       return;
     }
 
-    this.activeObjects.set(itemId, { info, propId });
+    this.activeObjects.set(item.id, { ...item, propId });
 
     if (!!info.animData) this.startAnimation(info.animData.animDict, info.animData.anim);
   };
 
-  public removedItem = (itemId: string) => {
-    const obj = this.activeObjects.get(itemId);
+  public removedItem = (item: Objects.Item) => {
+    const obj = this.activeObjects.get(item.id);
+
+    // Do some checks if item is not active
     if (!obj) {
-      const data = this.getObjOfIdInQueue(itemId);
-      if (!data) {
-        if (this.toggledObj?.itemId == itemId) {
-          this.toggledObj = null;
-          return;
-        }
+      // Check if in queue
+      const data = this.findItemInQueue(item.id);
+      if (data !== undefined) {
+        this.queues[data.position].splice(data.index, 1);
         return;
       }
-      this.queue[data.type].splice(data.index, 1);
+
+      console.error('Removed object item but was not active, queued or toggled');
       return;
     }
 
-    this.activeObjects.delete(itemId);
+    this.activeObjects.delete(item.id);
     if (obj.propId !== null) {
       PropAttach.remove(obj.propId);
     }
 
-    // Set to false if this was primary
-    if (obj.info.type === 'primary') {
-      this.primaryActive = false;
-    }
-
     // move all other objs if secondary
-    if (obj.info.type === 'secondary') {
-      this.secondaryAmount--;
-      this.getSecondaries().forEach((o, index) => {
-        if (o.propId === null) return;
-        const offset = { x: 0, y: 0, z: this.SECONDARY_OFFSET * index };
-        PropAttach.move(o.propId, offset);
-      });
-    }
+    const info = this.config.items[obj.name];
+    const positionConfig = this.config.positions[info.position];
+    const activesForSamePosition = this.getActivesForPosition(info.position);
+    activesForSamePosition.forEach((i, idx) => {
+      if (i.propId === null) return;
+      const offset = Vector3.create(positionConfig.offset).multiply(idx);
+      PropAttach.move(i.propId, offset);
+    });
 
-    if (!!obj.info.animData) this.stopAnimation(obj.info.animData.animDict, obj.info.animData.anim);
+    if (!!info.animData) this.stopAnimation(info.animData.animDict, info.animData.anim);
 
-    this.checkQueue(obj.info.type);
+    this.checkQueue(info.position);
   };
 
-  @Export('toggleObject')
+  private addToQueue = (item: Objects.Item, queueName: string) => {
+    let queue = this.queues[queueName];
+    if (!queue) {
+      queue = [];
+      this.queues[queueName] = queue;
+    }
+    queue.push(item);
+  };
+
+  private checkQueue = (position: string) => {
+    const unqueued = (this.queues[position] ?? []).shift();
+    if (!unqueued) return;
+    this.addedItem(unqueued);
+  };
+
+  private findItemInQueue = (itemId: string) => {
+    for (const [position, objs] of Object.entries(this.queues)) {
+      const index = objs.findIndex(i => i.id == itemId);
+      if (index === -1) continue;
+      return {
+        position: position,
+        index,
+      };
+    }
+  };
+
   public toggleObject = (itemId: string, toggle: boolean) => {
     if (toggle) {
-      if (!this.toggledObj) return;
-      this.addedItem(this.toggledObj.itemId, this.toggledObj.info);
-      this.toggledObj = null;
+      const toggledIdx = (this.queues['toggled'] ?? []).findIndex(i => i.id === itemId);
+      if (toggledIdx === -1) return;
+      this.addedItem(this.queues['toggled'][toggledIdx]);
+      this.queues['toggled'].splice(toggledIdx, 1);
     } else {
       const obj = this.activeObjects.get(itemId);
       if (!obj) return;
-      this.toggledObj = { itemId, info: obj.info };
-      this.removedItem(itemId);
+      const item = { id: itemId, name: obj.name };
+      this.addToQueue(item, 'toggled');
+      this.removedItem(item);
     }
   };
 
-  private checkQueue = (type: keyof typeof this.queue) => {
-    const unqueued = this.queue[type].shift();
-    if (!unqueued) return;
-    this.addedItem(unqueued.itemId, unqueued.info);
+  public toggleAllObjects = (toggle: boolean) => {
+    // We cache ids or we will get problems for modifying array while iterating over it
+    let ids: string[];
+    if (toggle) {
+      ids = (this.queues['toggled'] ?? []).map(obj => obj.id);
+    } else {
+      ids = [...this.activeObjects.keys()];
+    }
+    ids.forEach(id => {
+      this.toggleObject(id, toggle);
+    });
   };
 
   @Export('hasObject')
-  private isAPrimaryActive = () => {
-    return this.primaryActive;
+  private _isAPrimaryActive = () => {
+    return this.isPositionFull('primary');
   };
 
-  private getSecondaries = () => {
-    return [...this.activeObjects.values()].filter(obj => obj.info.type === 'secondary');
+  private isPositionFull = (position: string) => {
+    const positionConfig = this.config.positions[position];
+    if (!positionConfig) throw new Error('Unknown position name for inventory object');
+
+    const amount = this.getActivesForPosition(position).length;
+    return amount >= positionConfig.max;
   };
 
-  private canAddItem = (type: string) => {
-    return (
-      (type === 'primary' && this.isAPrimaryActive()) ||
-      (type === 'secondary' && this.secondaryAmount === this.SECONDARY_MAX)
-    );
-  };
-
-  private getObjOfIdInQueue = (itemId: string) => {
-    for (const [type, objs] of Object.entries(this.queue)) {
-      const index = objs.findIndex(i => i.itemId == itemId);
-      if (index !== -1) {
-        return {
-          type: type as keyof typeof this.queue,
-          index,
-        };
+  private getActivesForPosition = (position: string) => {
+    const actives = [];
+    for (const [_, obj] of this.activeObjects) {
+      const info = this.config.items[obj.name];
+      if (info.position === position) {
+        actives.push(obj);
       }
     }
+    return actives;
   };
 
-  private startAnimation = (animDict: string, anim: string) => {
-    setImmediate(async () => {
-      await Util.loadAnimDict(animDict);
+  private startAnimation = async (animDict: string, anim: string) => {
+    await Util.loadAnimDict(animDict);
+    if (this.animationTimer !== null) {
+      clearInterval(this.animationTimer);
+    }
+    this.animationTimer = setInterval(() => {
       const ped = PlayerPedId();
-      TaskPlayAnim(ped, animDict, anim, 8.0, 2.0, -1, 51, 0, false, false, false); // avoid setinterval initial delay
-      if (this.animationTimer !== null) {
-        clearInterval(this.animationTimer);
-      }
-      this.animationTimer = setInterval(() => {
-        if (IsEntityPlayingAnim(ped, animDict, anim, 3)) return;
-        TaskPlayAnim(ped, animDict, anim, 8.0, 2.0, -1, 51, 0, false, false, false);
-      }, 250);
-    });
+      if (IsEntityPlayingAnim(ped, animDict, anim, 3)) return;
+      TaskPlayAnim(ped, animDict, anim, 8.0, 2.0, -1, 51, 0, false, false, false);
+    }, 1);
   };
 
   private stopAnimation = (animDict: string, anim: string) => {
@@ -184,11 +206,7 @@ class ObjectsManager extends Util.Singleton<ObjectsManager>() {
     });
 
     this.activeObjects.clear();
-    this.queue.primary = [];
-    this.queue.secondary = [];
-    this.toggledObj = null;
-    this.secondaryAmount = 0;
-    this.primaryActive = false;
+    this.queues = {};
 
     if (this.animationTimer !== null) {
       clearInterval(this.animationTimer);

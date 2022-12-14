@@ -1,4 +1,4 @@
-import { RPC } from './index';
+import { Events, RPC } from './index';
 
 class Inventory {
   public getItemData = (itemName: string): Inventory.ItemData | undefined =>
@@ -37,7 +37,11 @@ class Inventory {
   };
 
   public toggleObject = (itemId: string, toggle: boolean) => {
-    global.exports['dg-inventory'].toggleObject(itemId, toggle);
+    Events.emitNet('inventory:objects:toggle', itemId, toggle);
+  };
+
+  public toggleAllObjects = (toggle: boolean) => {
+    Events.emitNet('inventory:objects:toggleAll', toggle);
   };
 
   public isOpen = () => {

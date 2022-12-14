@@ -1,4 +1,4 @@
-import { Keys, Util } from '@dgx/client';
+import { Inventory, Keys, Util } from '@dgx/client';
 
 let noclipEnabled = false;
 let noclipTick: number | null = null;
@@ -45,6 +45,8 @@ export const toggleNoclip = () => {
   SetEntityAlpha(noclipEnt, 0, false);
   SetEntityVisible(noclipEnt, false, false);
   SetPedCanRagdoll(ped, false);
+
+  Inventory.toggleAllObjects(false);
 
   const plyId = PlayerId();
   noclipTick = setTick(() => {
@@ -108,6 +110,7 @@ const cleanupNoclip = () => {
     clearInterval(noclipMovingTicks[key as keyof typeof noclipMovingTicks]);
     noclipMovingTicks[key as keyof typeof noclipMovingTicks] = null;
   }
+  Inventory.toggleAllObjects(true);
 };
 
 const getMultiplier = (): number => {

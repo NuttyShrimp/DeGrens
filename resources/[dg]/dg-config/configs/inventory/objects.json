@@ -1,0 +1,150 @@
+{
+  "positions": {
+    "primary": {
+      "max": 1,
+      "offset": { "x": 0, "y": 0, "z": 0 }
+    },
+    "back": {
+      "max": 4,
+      "offset": { "x": 0, "y": 0, "z": -0.09 }
+    }
+  },
+  "items": {
+    "crt_tv": {
+      "propName": "item_crt_tv",
+      "position": "primary",
+      "animData": {
+        "animDict": "anim@heists@box_carry@",
+        "anim": "idle"
+      }
+    },
+    "tv": {
+      "propName": "item_tv",
+      "position": "primary",
+      "animData": {
+        "animDict": "anim@heists@box_carry@",
+        "anim": "idle"
+      }
+    },
+    "vaas": {
+      "propName": "item_vaas",
+      "position": "primary",
+      "animData": {
+        "animDict": "anim@heists@box_carry@",
+        "anim": "idle"
+      }
+    },
+    "cardbox": {
+      "propName": "item_cardbox",
+      "position": "primary",
+      "animData": {
+        "animDict": "anim@heists@box_carry@",
+        "anim": "idle"
+      }
+    },
+    "microwave": {
+      "propName": "item_microwave",
+      "position": "primary",
+      "animData": {
+        "animDict": "anim@heists@box_carry@",
+        "anim": "idle"
+      }
+    },
+    "vehicle_door": {
+      "propName": "vehicle_door",
+      "position": "primary",
+      "animData": {
+        "animDict": "anim@heists@box_carry@",
+        "anim": "idle"
+      }
+    },
+    "vehicle_bonnet": {
+      "propName": "vehicle_bonnet",
+      "position": "primary",
+      "animData": {
+        "animDict": "anim@heists@box_carry@",
+        "anim": "idle"
+      }
+    },
+    "vehicle_boot": {
+      "propName": "vehicle_boot",
+      "position": "primary",
+      "animData": {
+        "animDict": "anim@heists@box_carry@",
+        "anim": "idle"
+      }
+    },
+    "container_weapons": {
+      "propName": "item_container_weapons",
+      "position": "primary",
+      "animData": {
+        "animDict": "anim@heists@box_carry@",
+        "anim": "idle"
+      }
+    },
+    "container_ammo": {
+      "propName": "item_container_ammo",
+      "position": "primary",
+      "animData": {
+        "animDict": "anim@heists@box_carry@",
+        "anim": "idle"
+      }
+    },
+    "container_materials": {
+      "propName": "item_container_materials",
+      "position": "primary",
+      "animData": {
+        "animDict": "anim@heists@box_carry@",
+        "anim": "idle"
+      }
+    },
+    "weapon_microsmg": {
+      "propName": "item_weapon_microsmg",
+      "position": "back"
+    },
+    "weapon_compactrifle": {
+      "propName": "item_weapon_compactrifle",
+      "position": "back"
+    },
+    "weapon_assaultrifle": {
+      "propName": "item_weapon_assaultrifle",
+      "position": "back"
+    },
+    "weapon_smg": {
+      "propName": "item_weapon_smg",
+      "position": "back"
+    },
+    "weapon_assaultsmg": {
+      "propName": "item_weapon_assaultsmg",
+      "position": "back"
+    },
+    "weapon_pumpshotgun": {
+      "propName": "item_weapon_pumpshotgun",
+      "position": "back"
+    },
+    "weapon_carbinerifle": {
+      "propName": "item_weapon_carbinerifle",
+      "position": "back"
+    },
+    "weapon_specialcarbine": {
+      "propName": "item_weapon_specialcarbine",
+      "position": "back"
+    },
+    "weapon_advancedrifle": {
+      "propName": "item_weapon_advancedrifle",
+      "position": "back"
+    },
+    "weapon_sniperrifle": {
+      "propName": "item_weapon_sniperrifle",
+      "position": "back"
+    },
+    "weapon_rpg": {
+      "propName": "item_weapon_rpg",
+      "position": "back"
+    },
+    "rocket": {
+      "propName": "item_rocket",
+      "position": "back"
+    }
+  }
+}
