@@ -1,14 +1,14 @@
 import { Events } from '@dgx/server';
 import {
   checkAllowedModules,
-  cleanup,
   flagUser,
   loadConfig,
+  queueHit,
+  queueShot,
   registerExplosion,
   registerHeartBeat,
   setPlayerInvincible,
   setPlayerVisible,
-  startThreads,
   stopHeartBeat,
   validateWeaponInfo,
 } from './service.anticheat';
@@ -53,11 +53,14 @@ Events.onNet('auth:anticheat:native:setPlayerVisible', (src: number, isVisible: 
   setPlayerVisible(src, isVisible);
 });
 
-setImmediate(() => {
-  startThreads();
-  loadConfig();
+Events.onNet('auth:anticheat:stats:killConfirm', (src: number, killInfo: AntiCheat.EntityDamage) => {
+  queueHit(killInfo);
 });
 
-on('onResourceStop', () => {
-  cleanup();
+Events.onNet('auth:anticheat:stats:ammoInfo', (src: number, ammo: number[]) => {
+  queueShot(src, ammo);
+});
+
+setImmediate(() => {
+  loadConfig();
 });
