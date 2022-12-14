@@ -10,8 +10,12 @@ const specialTarget: { [k: string]: (PlayerData: PlayerData) => boolean } = {
 
 export const sendMessage = (target: number | keyof typeof specialTarget, data: Shared.Message) => {
   if (typeof target === 'string') {
-    Object.values(DGCore.Functions.GetQBPlayers).forEach((plyObj: Player) => {
-      if (!specialTarget?.[target]?.(plyObj.PlayerData)) return;
+    (
+      Object.values({
+        ...DGCore.Functions.GetQBPlayers(),
+      }) as Player[]
+    ).forEach(plyObj => {
+      if (!specialTarget[target]?.(plyObj.PlayerData)) return;
       Events.emitNet('chat:addNuiMessage', plyObj.PlayerData.source, data);
     });
     return;
