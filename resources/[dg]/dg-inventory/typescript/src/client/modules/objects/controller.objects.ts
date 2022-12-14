@@ -1,11 +1,11 @@
-import { Events } from '@dgx/client';
+import { Events, Inventory } from '@dgx/client';
 import objectsManager from './classes/objectsmanager';
 
-Events.onNet('inventory:client:updateObject', (action: 'add' | 'remove', itemId: string, objectInfo: Objects.Info) => {
+Events.onNet('inventory:client:updateObject', (action: 'add' | 'remove', item: Objects.Item) => {
   if (action === 'add') {
-    objectsManager.addedItem(itemId, objectInfo);
+    objectsManager.addedItem(item);
   } else {
-    objectsManager.removedItem(itemId);
+    objectsManager.removedItem(item);
   }
 });
 
@@ -20,4 +20,12 @@ onNet('DGCore:client:playerUnloaded', () => {
 
 Events.onNet('propattach:reset', () => {
   objectsManager.reset();
+});
+
+Events.onNet('inventory:objects:toggle', (itemId: string, toggle: boolean) => {
+  objectsManager.toggleObject(itemId, toggle);
+});
+
+Events.onNet('inventory:objects:toggleAll', (toggle: boolean) => {
+  objectsManager.toggleAllObjects(toggle);
 });

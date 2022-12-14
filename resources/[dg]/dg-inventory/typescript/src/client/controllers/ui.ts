@@ -6,7 +6,6 @@ UI.RegisterUICallback('inventory/getData', async (_, cb) => {
   const secondary = await contextManager.getSecondary();
   const openingData = await RPC.execute<OpeningData>('inventory:server:open', secondary);
   if (!openingData) throw new Error('Failed to get openingdata');
-  console.log(`[INVENTORY] Opening - Secondary ID: '${openingData.secondary.id}'`);
 
   cb({
     data: {

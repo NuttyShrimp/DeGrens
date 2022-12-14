@@ -1,5 +1,4 @@
 import { Events, Inventory, Util } from '@dgx/server';
-import { Item } from 'modules/items/classes/item';
 import itemManager from 'modules/items/manager.items';
 import locationManager from 'modules/locations/manager.locations';
 import repository from 'services/repository';
@@ -12,6 +11,7 @@ import { getConfig } from 'services/config';
 import { splitId } from '../../../util';
 import contextManager from 'classes/contextmanager';
 import { getContainerInfo } from 'modules/containers/controller.containers';
+import objectsUtility from 'classes/objectsutility';
 
 // conflicted with Inventory types namespace so I went with the good old Inv
 export class Inv {
@@ -133,9 +133,9 @@ export class Inv {
       Events.emitNet('inventory:client:doDropAnimation', serverId);
     }
 
-    const objectInfo = getConfig().itemObjects[itemState.name];
-    if (objectInfo) {
-      Events.emitNet('inventory:client:updateObject', serverId, action, itemState.id, objectInfo);
+    // If item has associated obj
+    if (objectsUtility.config?.items[itemState.name]) {
+      Events.emitNet('inventory:client:updateObject', serverId, action, { id: itemState.id, name: itemState.name });
     }
   };
 
@@ -212,11 +212,11 @@ export class Inv {
 
   public hasObject = () => {
     const items = this.getItems();
-    const objectConfig = getConfig().itemObjects;
+    const objectItems = objectsUtility.config?.items ?? {};
     return items.some(item => {
-      const info = objectConfig[item.name];
+      const info = objectItems[item.name];
       if (!info) return false;
-      return info.type === 'primary';
+      return info.position === 'primary';
     });
   };
 

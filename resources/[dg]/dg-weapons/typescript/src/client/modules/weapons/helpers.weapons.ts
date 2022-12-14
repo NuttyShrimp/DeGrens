@@ -1,14 +1,12 @@
-import { Events, Inventory, Jobs, Util } from '@dgx/client';
+import { Events, Jobs, Util } from '@dgx/client';
 import { getCurrentWeaponData, setAnimationBusy, setCurrentWeaponData } from './service.weapons';
 
-const setWeapon = async (itemId: string) => {
-  Inventory.toggleObject(itemId, false);
+const setWeapon = (itemId: string) => {
   Events.emitNet('weapons:setWeapon', itemId);
 };
 
-const removeWeapon = async (itemId: string) => {
-  Inventory.toggleObject(itemId, true);
-  Events.emitNet('weapons:removeWeapon');
+const removeWeapon = (itemId: string) => {
+  Events.emitNet('weapons:removeWeapon', itemId);
 };
 
 export const holsterWeapon = async (weaponData: Weapons.WeaponItem) => {

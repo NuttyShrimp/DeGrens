@@ -6,7 +6,7 @@ import { applyWeaponTint } from 'services/tint';
 import { getEquippedWeapon, getWeaponItemState, setEquippedWeapon } from './service.weapons';
 
 // Give weapon to ped and set attachments/tint
-Events.onNet('weapons:setWeapon', async (src, itemId: string) => {
+Events.onNet('weapons:setWeapon', async (src: number, itemId: string) => {
   const cid = Util.getCID(src);
   const item = getWeaponItemState(itemId);
   if (!item) return; // Can happen if item breaks this exact moment
@@ -18,6 +18,7 @@ Events.onNet('weapons:setWeapon', async (src, itemId: string) => {
   const ammo = getWeaponAmmo(item);
   GiveWeaponToPed(ped, weaponHash, ammo, false, true);
   setEquippedWeapon(src, weaponHash);
+  Inventory.toggleObject(src, itemId, false);
 
   const components = await getWeaponAttachments(itemId);
   (components ?? []).forEach(comp => GiveWeaponComponentToPed(ped, weaponHash, comp));
@@ -29,13 +30,14 @@ Events.onNet('weapons:setWeapon', async (src, itemId: string) => {
 });
 
 // Remove weapon from ped
-Events.onNet('weapons:removeWeapon', src => {
+Events.onNet('weapons:removeWeapon', (src: number, itemId: string) => {
   const ped = GetPlayerPed(String(src));
   const unarmedHash = GetHashKey('WEAPON_UNARMED');
   RemoveAllPedWeapons(ped, true);
   SetCurrentPedWeapon(ped, unarmedHash, true);
   setEquippedWeapon(src, unarmedHash);
   Events.emitNet("auth:anticheat:weaponRemoved", src);
+  Inventory.toggleObject(src, itemId, true);
 });
 
 Events.onNet(

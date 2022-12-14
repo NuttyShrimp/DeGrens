@@ -25,18 +25,17 @@
 
 ## Client
 ### Exports
-| Name                 | Parameters                          | Returns                                            |
-| -------------------- | ----------------------------------- | -------------------------------------------------- |
-| getItemData          | `itemName: string`                  | ItemData object                                    |
-| getAllItemData       | /                                   | ItemData object array                              |
-| hasObject            | /                                   | boolean whether player has primary holdable object |
-| openStash            | `stashId: string`, `size?: number`  | /                                                  |
-| openOtherPlayer      | `plyId: number`                     | /                                                  |
-| openShop             | `shopId: string`                    | /                                                  |
-| doesPlayerHaveItems  | `itemNames: string or string[]`     | boolean                                            |
-| removeItemFromPlayer | `itemName: string`                  | /                                                  |
-| toggleObject         | `itemId: string`, `toggle: boolean` | /                                                  |
-| isOpen               | /                                   | boolean                                            |
+| Name                 | Parameters                         | Returns                                            |
+| -------------------- | ---------------------------------- | -------------------------------------------------- |
+| getItemData          | `itemName: string`                 | ItemData object                                    |
+| getAllItemData       | /                                  | ItemData object array                              |
+| hasObject            | /                                  | boolean whether player has primary holdable object |
+| openStash            | `stashId: string`, `size?: number` | /                                                  |
+| openOtherPlayer      | `plyId: number`                    | /                                                  |
+| openShop             | `shopId: string`                   | /                                                  |
+| doesPlayerHaveItems  | `itemNames: string or string[]`    | boolean                                            |
+| removeItemFromPlayer | `itemName: string`                 | /                                                  |  |
+| isOpen               | /                                  | boolean                                            |
 
 ## Server
 ### Exports
