@@ -1,4 +1,5 @@
 import { Events, Util } from '@dgx/client';
+import { StatsThread } from './classes/StatsThread';
 
 let allowed: string[] = [];
 
@@ -8,6 +9,7 @@ let heartbeat: NodeJS.Timeout;
 let antiTP: NodeJS.Timer;
 let weapons: NodeJS.Timeout;
 let pedMods: NodeJS.Timeout;
+let statsThread: StatsThread;
 
 export const scheduleHeartBeat = () => {
   if (heartbeat) stopHeartBeat();
@@ -106,6 +108,14 @@ export const scheduleWeaponThread = () => {
   }, 30000);
 };
 
+export const startStatThread = () => {
+  statsThread.startThread();
+};
+
+export const stopStatsThread = () => {
+  statsThread.stopThread();
+};
+
 export const schedulePedThread = () => {
   if (pedMods) {
     clearTimeout(pedMods);
@@ -143,6 +153,7 @@ export const startThreads = () => {
   scheduleWeaponThread();
   schedulePedThread();
   scheduleAllowedSync();
+  statsThread = new StatsThread();
 };
 
 export const cleanup = () => {
@@ -152,5 +163,7 @@ export const cleanup = () => {
       thread = null;
     }
   });
+  statsThread.stopThread();
 };
+// endregion
 // endregion

@@ -1,5 +1,5 @@
 import { Events, RPC } from '@dgx/client';
-import { Util } from '@dgx/shared';
+import { Util } from '@dgx/client';
 import {
   allowCheck,
   cleanup,
@@ -7,9 +7,35 @@ import {
   getWeaponInfo,
   scheduleHeartBeat,
   scheduleWeaponThread,
+  startStatThread,
   startThreads,
   stopHeartBeat,
+  stopStatsThread,
 } from './service.anticheat';
+
+on('entityDamaged', (victim: number, attacker: number, weapon: number, baseDamage: number) => {
+  const attackerPly = Util.getServerIdForPed(Number(attacker));
+  if (Number(victim) !== PlayerPedId() || !attackerPly) {
+    return;
+  }
+  if (!IsPlayerDead(PlayerId())) return;
+  const [______, boneHit] = GetPedLastDamageBone(Number(victim));
+  Events.emitNet('auth:anticheat:stats:killConfirm', {
+    attacker: attackerPly,
+    victim: Util.getServerIdForPed(Number(victim)),
+    weaponHash: Number(weapon),
+    damage: baseDamage,
+    headshot: boneHit === GetHashKey('SKEL_Head'),
+  });
+});
+
+Events.onNet('auth:anticheat:weaponDrawn', () => {
+  startStatThread();
+});
+
+Events.onNet('auth:anticheat:weaponRemoved', () => {
+  stopStatsThread();
+});
 
 Events.onNet('auth:anticheat:forceSyncWeaponInfo', () => {
   scheduleWeaponThread();

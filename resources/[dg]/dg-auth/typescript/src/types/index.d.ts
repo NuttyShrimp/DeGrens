@@ -7,7 +7,7 @@ interface ResourceTokenData {
 declare namespace AntiCheat {
   interface Config {
     blockedModels: string[];
-    explosions: { name: string, block: boolean }[]
+    explosions: { name: string; block: boolean }[];
   }
 
   interface WeaponInfo {
@@ -27,5 +27,13 @@ declare namespace AntiCheat {
     isInvisible: boolean;
     ownerNetId: number;
     damageScale: number;
+  }
+
+  interface EntityDamage {
+    attacker: number | string;
+    victim: number | string;
+    weaponHash: number;
+    damage: number;
+    headshot: boolean;
   }
 }

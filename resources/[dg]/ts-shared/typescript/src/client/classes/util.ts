@@ -188,6 +188,11 @@ class Util extends UtilShared {
     if (!this.isDevEnv()) return;
     console.log(...args);
   }
+
+  getServerIdForPed(ped: number) {
+    const owner = NetworkGetEntityOwner(ped);
+    return ped === GetPlayerPed(owner) ? GetPlayerServerId(owner) : 0;
+  }
 }
 
 export class Interiors {
@@ -197,9 +202,11 @@ export class Interiors {
   createRoom(planName: string, initPos: number | Vec3): Promise<[Vec3, number[]] | null> {
     return global.exports['dg-build'].createRoom(planName, initPos);
   }
+
   exitRoom(overrideExitPos?: number[] | Vec3) {
     global.exports['dg-build'].exitRoom(overrideExitPos);
   }
+
   isInBuilding(): boolean {
     return global.exports['dg-build'].isInBuilding();
   }
@@ -250,6 +257,7 @@ export class Animations {
   startTabletAnimation() {
     global.exports['dg-misc'].startTabletAnimation();
   }
+
   stopTabletAnimation() {
     global.exports['dg-misc'].stopTabletAnimation();
   }

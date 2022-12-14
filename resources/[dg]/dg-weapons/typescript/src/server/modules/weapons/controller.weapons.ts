@@ -11,6 +11,7 @@ Events.onNet('weapons:setWeapon', async (src, itemId: string) => {
   const item = getWeaponItemState(itemId);
   if (!item) return; // Can happen if item breaks this exact moment
   if (item.inventory !== Inventory.concatId('player', cid)) return; // Can happen if item gets removed during animation
+  Events.emitNet("auth:anticheat:weaponDrawn", src);
 
   const weaponHash = GetHashKey(item.name);
   const ped = GetPlayerPed(String(src));
@@ -34,6 +35,7 @@ Events.onNet('weapons:removeWeapon', src => {
   RemoveAllPedWeapons(ped, true);
   SetCurrentPedWeapon(ped, unarmedHash, true);
   setEquippedWeapon(src, unarmedHash);
+  Events.emitNet("auth:anticheat:weaponRemoved", src);
 });
 
 Events.onNet(
