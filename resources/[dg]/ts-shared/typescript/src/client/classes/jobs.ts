@@ -31,7 +31,7 @@ class Police {
   };
 
   public pauseCuffAnimation = (pause: boolean) => {
-    global.exports['dg-police'].pauseCuffAnimation();
+    global.exports['dg-police'].pauseCuffAnimation(pause);
   };
 
   public isCuffed = (): boolean => {
