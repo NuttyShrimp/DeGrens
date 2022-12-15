@@ -1,4 +1,4 @@
-import { Events, Financials, Inventory, RPC, Util } from '@dgx/server';
+import { Events, Financials, Inventory, RPC, Util, Weather } from '@dgx/server';
 import { getUICommands } from 'modules/commands/service.commands';
 
 import { getUserData } from '../../helpers/identifiers';
@@ -174,7 +174,7 @@ RPC.register('admin:menu:getItems', async () => {
 });
 
 RPC.register('admin:menu:getWeatherTypes', (): { name: string }[] => {
-  const types: string[] = global.exports['dg-weathersync'].getWeatherTypes();
+  const types: string[] = Weather.getWeatherTypes();
   return types.map(t => ({ name: t }));
 });
 

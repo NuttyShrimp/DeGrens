@@ -12,6 +12,7 @@ import screenshot from './screenshot';
 import sync from './sync';
 import vehicles from './vehicles';
 import weapons from './weapons';
+import weather from './weather';
 
 export const { Events, RPC, SQL, API, Auth } = events;
 export const { Util, Sounds, Status, Reputations } = util;
@@ -27,3 +28,4 @@ export const { Screenshot } = screenshot;
 export const { Vehicles } = vehicles;
 export const { Sync } = sync;
 export const { Weapons } = weapons;
+export const { Weather } = weather;

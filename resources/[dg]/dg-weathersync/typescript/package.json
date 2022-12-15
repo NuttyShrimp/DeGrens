@@ -1,5 +1,5 @@
 {
-  "name": "dg-weather",
+  "name": "dg-weathersync",
   "version": "1.0.0",
   "main": "index.js",
   "author": "NuttyShrimp",
@@ -14,6 +14,6 @@
     "webpack:config": "webpack --config ./config/webpack.server.js --config ./config/webpack.client.js"
   },
   "devDependencies": {
-    "webpack": "^5.74.0"
+    "webpack": "^5.72.1"
   }
 }

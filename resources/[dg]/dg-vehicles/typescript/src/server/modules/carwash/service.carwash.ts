@@ -45,7 +45,6 @@ export const startWaxThread = () => {
 
     const currentData = Math.floor(Date.now() / (1000 * 60));
     vehiclesWithWax.forEach((data, vin) => {
-      carwashLogger.debug(data);
       if (data.expirationDate <= currentData) {
         waxToRemove.push(vin);
       }

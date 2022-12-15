@@ -1,4 +1,4 @@
-import { Keys, Peek, PolyTarget, PolyZone, Sync, Util } from '@dgx/client';
+import { Keys, Peek, PolyTarget, PolyZone, Sync, Util, Weather } from '@dgx/client';
 import { Vector3 } from '@dgx/shared';
 
 import { Plans } from '../data/plans';
@@ -266,8 +266,8 @@ export class Room {
     Sync.setPlayerInvincible(false);
 
     if (safe) {
-      global.exports['dg-weathersync'].FreezeTime(true, 0);
-      global.exports['dg-weathersync'].FreezeWeather(true, 'CLEAR');
+      Weather.freezeTime(true, 0);
+      Weather.freezeWeather(true, 'CLEAR');
       this.createInteractions();
       this.createPeekZones();
       this.createPeekEntries();
@@ -287,8 +287,8 @@ export class Room {
 
     emit('build:event:inside', false);
     emitNet('build:event:inside', false);
-    global.exports['dg-weathersync'].FreezeTime(false);
-    global.exports['dg-weathersync'].FreezeWeather(false);
+    Weather.freezeTime(false);
+    Weather.freezeWeather(false);
     if (overridePos) {
       SetEntityCoords(PlayerPedId(), overridePos.x, overridePos.y, overridePos.z, true, false, false, false);
       return;

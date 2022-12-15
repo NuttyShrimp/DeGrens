@@ -37,8 +37,8 @@ const prodClient = {
           options: {
             disableConsoleOutput: false,
             optionsPreset: "medium-obfuscation",
-            ignoreImports: true,
             sourceMap: false,
+            ignoreImports: true,
             stringArrayThreshold: 1,
             target: "node",
           }

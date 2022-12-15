@@ -68,12 +68,12 @@ RegisterNetEvent('onResourceStart', function(resource)
   seedCharData()
 end)
 
-RegisterNetEvent('dg-weathersync:client:SyncTime', function(hour, minute)
+AddEventHandler('weathersync:timeUpdated', function(hour, minute)
   setGameValue("time", ("%s:%s"):format(hour > 9 and hour or "0" .. hour, minute > 9 and minute or "0" .. minute))
 end)
 
-RegisterNetEvent('dg-weathersync:client:weather', function(weatherProg)
-  setGameValue("weather", weatherProg.weather)
+AddEventHandler('weathersync:weatherUpdated', function(weatherType)
+  setGameValue("weather", weatherType)
 end)
 
 DGX.Events.onNet('jobs:client:whitelistedJobs', function(pWhitelistedJobs)

@@ -1,3 +1,4 @@
+import { Weather } from '@dgx/server';
 import { Inputs } from '../../../enums/inputs';
 
 interface SetWeatherData {
@@ -12,7 +13,7 @@ export const setWeather: CommandData = {
   isClientCommand: false,
   handler: (_, args: SetWeatherData) => {
     if (!args.WeatherType.name) return;
-    global.exports['dg-weathersync'].setWeather(args.WeatherType.name);
+    Weather.setCurrentWeather(args.WeatherType.name);
   },
   UI: {
     title: 'Set Weather',

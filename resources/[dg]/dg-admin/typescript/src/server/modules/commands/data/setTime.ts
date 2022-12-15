@@ -1,4 +1,4 @@
-import { Notifications } from '@dgx/server';
+import { Notifications, Weather } from '@dgx/server';
 
 export const setTime: CommandData = {
   name: 'setTime',
@@ -12,7 +12,7 @@ export const setTime: CommandData = {
       if (time < 0 || time > 1440) {
         return Notifications.add(source, 'Time should be between 0 and 1440', 'error');
       }
-      global.exports['dg-weathersync'].setTime(time);
+      Weather.setCurrentTime(time);
     } catch (e) {
       console.error(e);
       Notifications.add(caller.source, 'Time should be a number', 'error');
