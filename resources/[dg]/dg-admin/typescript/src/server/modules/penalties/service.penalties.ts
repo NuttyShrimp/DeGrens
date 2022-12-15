@@ -1,6 +1,6 @@
 import { Chat, SQL, Util } from '@dgx/server';
 
-import { getIdentifierForPlayer, getPlayerForSteamId } from '../../helpers/identifiers';
+import { getIdentifierForPlayer, getPlayerForSteamId, getServerIdForSteamId } from '../../helpers/identifiers';
 
 import { dropBySteamId, penaltyLogger } from './util.penalties';
 
@@ -13,6 +13,7 @@ const penalisePlayer = async (
   length?: number,
   data?: Record<string, any>
 ) => {
+  const targetSrvId = getServerIdForSteamId(target);
   const metadata = {
     reason: reasons.join(' | '),
     points: points ?? 0,
@@ -34,11 +35,11 @@ const penalisePlayer = async (
         ...data,
         ...metadata,
       },
-      `Failed to register ${type} for ${Util.getName(target)}(${target})`,
+      `Failed to register ${type} for ${Util.getName(targetSrvId)}(${target})`,
       source !== -1 ? source : undefined
     );
     penaltyLogger.error(
-      `Failed to register ${type} for ${Util.getName(target)}(${target}) given by ${
+      `Failed to register ${type} for ${Util.getName(targetSrvId)}(${target}) given by ${
         source !== -1 ? Util.getName(source) : 'AntiCheat'
       } | ${Object.values(metadata)
         .map((k, v) => `${k}: ${v}`)
@@ -46,7 +47,7 @@ const penalisePlayer = async (
     );
     Chat.sendMessage('admin', {
       type: 'error',
-      message: `Failed to register ${type} for ${Util.getName(target)}(${target})`,
+      message: `Failed to register ${type} for ${Util.getName(targetSrvId)}(${target})`,
       prefix: 'Admin: ',
     });
     return;
@@ -58,11 +59,11 @@ const penalisePlayer = async (
       ...data,
       ...metadata,
     },
-    `${Util.getName(target)}(${target}) received a ${type} for ${reasons.join(' | ')}`,
+    `${Util.getName(targetSrvId)}(${target}) received a ${type} for ${reasons.join(' | ')}`,
     source !== -1 ? source : undefined
   );
   penaltyLogger.info(
-    `${Util.getName(target)}(${target}) received a ${type} by ${Util.getName(
+    `${Util.getName(targetSrvId)}(${target}) received a ${type} by ${Util.getName(
       source !== -1 ? Util.getName(source) : 'AntiCheat'
     )} | ${Object.entries(metadata)
       .map(([k, v]) => `${k}: ${v}`)
@@ -70,7 +71,7 @@ const penalisePlayer = async (
   );
   Chat.sendMessage('admin', {
     type: 'system',
-    message: `${Util.getName(target)}(${target}) received a ${type} for ${reasons.join(
+    message: `${Util.getName(targetSrvId)}(${target}) received a ${type} for ${reasons.join(
       ' | '
     )} (${points} points | ${length} days)`,
     prefix: 'Admin: ',
@@ -138,7 +139,6 @@ export const isPlayerBanned = async (steamId: string) => {
       WHERE steamId = ?
         AND penalty = 'ban'
         AND (length = -1 OR CURRENT_TIMESTAMP < date + INTERVAL length DAY)
-
     `,
     [steamId]
   );

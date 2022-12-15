@@ -20,6 +20,16 @@ export const getUserData = (src: number): UserData => {
   };
 };
 
+export const getServerIdForSteamId = (steamId: string): number | null => {
+  const playerCount = GetNumPlayerIndices();
+  for (let i = 0; i < playerCount; i++) {
+    const srvId = Number(GetPlayerFromIndex(i));
+    if (getIdentifierForPlayer(srvId, "steam") === steamId) {
+      return srvId;
+    }
+  }
+}
+
 export const getPlayerForSteamId = (steamId: string): UserData | null => {
   const ply = Object.values(DGCore.Functions.GetQBPlayers()).find((ply: Player) => ply.PlayerData.steamid === steamId);
   if (!ply) return null;
