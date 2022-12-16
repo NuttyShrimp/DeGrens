@@ -5,6 +5,7 @@ declare namespace Service {
     engine: number;
     suspension: number;
   }
+
   interface Degradation {
     name: string;
     percent: number;

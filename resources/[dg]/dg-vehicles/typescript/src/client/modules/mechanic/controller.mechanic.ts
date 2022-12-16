@@ -64,6 +64,14 @@ Events.onNet('vehicles:mechanic:client:loadConfig', (zones: Mechanic.Shops, offs
         maxZ: shopConfig.repair.coords.z + shopConfig.repair.height,
       }
     );
+    DGCore.Blips.Add('mechanic', {
+      id: `mechanic-${shop}`,
+      text: shopConfig.label,
+      coords: shopConfig.repair.coords,
+      sprite: 446,
+      color: 5,
+      scale: 0.8,
+    });
   }
   setTowOffsets(offsets);
   if (modelPeekIds) {

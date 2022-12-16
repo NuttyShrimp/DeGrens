@@ -32,6 +32,7 @@
   },
   "shops": {
     "dff": {
+      "label": "Flierefluiters",
       "board": {
         "coords": {
           "x": -1426.78,

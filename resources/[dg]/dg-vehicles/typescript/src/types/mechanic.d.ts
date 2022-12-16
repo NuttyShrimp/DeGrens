@@ -9,6 +9,7 @@ declare namespace Mechanic {
     }
 
     interface Locations {
+      label: string;
       board: BoxZone;
       bench: BoxZone;
       repair: BoxZone;
