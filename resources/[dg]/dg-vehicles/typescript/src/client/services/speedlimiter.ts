@@ -12,20 +12,22 @@ Keys.onPressDown('toggle-speedlimiter', () => {
     Notifications.add('Dit voertuig heeft geen snelheidsbegrenzer', 'error');
     return;
   }
+
+  if (limiterOn) {
+    disableSpeedLimiter(veh);
+    limiterOn = false;
+    return;
+  }
+
   const vehSpeed = Util.getVehicleSpeed(veh);
   if (vehSpeed < MINIMUM_SPEED) {
     Notifications.add(`Minimum snelheid: ${MINIMUM_SPEED}km/u`, 'error');
     return;
   }
 
-  limiterOn = !limiterOn;
-  if (!limiterOn) {
-    disableSpeedLimiter(veh);
-    return;
-  }
-
   Notifications.add(`Snelheidsbegrenzer ingeschakeld op ${Util.getVehicleSpeed(veh)}km/u`, 'success');
   SetVehicleMaxSpeed(veh, GetEntitySpeed(veh));
+  limiterOn = true;
 });
 
 const doesVehicleHaveLimiter = (vehicle: number) => {
