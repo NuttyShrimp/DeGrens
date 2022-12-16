@@ -142,7 +142,6 @@ export const getFirstFreeSpace = (itemId: string, inventoryId: string): Inventor
   const itemSize = state.items[itemId].size;
 
   const itemsThatMayOverlap = getPossibleOverlappingItems(itemId, inventoryId);
-  if (itemsThatMayOverlap.length === 0) return { x: 0, y: 0 }; // If there are no overlapping items, we can place item at origin
 
   for (let y = 0; y < gridSize - itemSize.y + 1; y++) {
     for (let x = 0; x < CELLS_PER_ROW - itemSize.x + 1; x++) {

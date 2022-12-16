@@ -160,7 +160,6 @@ export class Inv {
   };
 
   public getFirstAvailablePosition = (itemName: string) => {
-    if (this.items.size === 0) return { x: 0, y: 0 };
     const itemSize = itemDataManager.get(itemName).size;
     const cellsPerRow = getConfig().cellsPerRow;
     const itemsThatMayOverlap = this.getItems().map(state => {
