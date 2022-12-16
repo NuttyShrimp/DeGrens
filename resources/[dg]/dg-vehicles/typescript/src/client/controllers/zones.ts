@@ -183,7 +183,7 @@ Peek.addGlobalEntry(
         },
       },
       {
-        label: 'Do Impound',
+        label: 'Impound',
         icon: 'garage-car',
         canInteract: ent =>
           ent != undefined &&
@@ -191,7 +191,7 @@ Peek.addGlobalEntry(
           PolyZone.isPointInside(Util.getEntityCoords(ent), 'vehicles_depot_impound'),
         action: async (_, ent) => {
           if (!ent) return;
-          const [cancelled] = await Taskbar.create('garage-car', 'Voertuig inbeslagnemen', 15000, {
+          const [cancelled] = await Taskbar.create('garage-car', 'In beslag nemen', 15000, {
             canCancel: true,
             cancelOnDeath: true,
             cancelOnMove: true,

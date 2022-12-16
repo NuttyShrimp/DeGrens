@@ -150,75 +150,67 @@ UI.RegisterUICallback('vehicles/mechanic/getStashRepairAmount', async (data: Rec
   });
 });
 
-Peek.addZoneEntry(
-  'mechanic-clock-board',
-  {
-    distance: 2,
-    options: [
-      {
-        label: 'Clock in',
-        canInteract: (_, __, data) => {
-          return Business.isEmployee(data.data.id) && !isClockedIn();
-        },
-        action: data => {
-          setClockInStatus(true, data.data.id);
-        },
-        icon: 'right-to-bracket',
+Peek.addZoneEntry('mechanic-clock-board', {
+  distance: 2,
+  options: [
+    {
+      label: 'Inklokken',
+      canInteract: (_, __, data) => {
+        return Business.isEmployee(data.data.id) && !isClockedIn();
       },
-      {
-        label: 'Clock out',
-        canInteract: (_, __, data) => {
-          return Business.isEmployee(data.data.id) && getCurrentWorkingShop() === data.data.id;
-        },
-        action: data => {
-          setClockInStatus(false, data.data.id);
-        },
-        icon: 'right-from-bracket',
+      action: data => {
+        setClockInStatus(true, data.data.id);
       },
-    ],
-  },
-  true
-);
+      icon: 'right-to-bracket',
+    },
+    {
+      label: 'Uitklokken',
+      canInteract: (_, __, data) => {
+        return Business.isEmployee(data.data.id) && getCurrentWorkingShop() === data.data.id;
+      },
+      action: data => {
+        setClockInStatus(false, data.data.id);
+      },
+      icon: 'right-from-bracket',
+    },
+  ],
+});
 
-Peek.addZoneEntry(
-  'mechanic-bench',
-  {
-    distance: 2,
-    options: [
-      {
-        label: 'Open Werktafel',
-        icon: 'screwdriver-wrench',
-        canInteract: (_, __, data) => {
-          return Business.isEmployee(data.data.id, ['crafting']) && getCurrentWorkingShop() === data.data.id;
-        },
-        action: () => {
-          Inventory.openBench('mechanic_bench');
-        },
+Peek.addZoneEntry('mechanic-bench', {
+  distance: 2,
+  options: [
+    {
+      label: 'Open Werktafel',
+      icon: 'screwdriver-wrench',
+      canInteract: (_, __, data) => {
+        return Business.isEmployee(data.data.id, ['crafting']) && getCurrentWorkingShop() === data.data.id;
       },
-      {
-        label: 'Open Stash',
-        icon: 'toolbox',
-        canInteract: (_, __, data) => {
-          return Business.isEmployee(data.data.id, ['stash']) && getCurrentWorkingShop() === data.data.id;
-        },
-        action: data => {
-          Inventory.openStash(`mechanic-shop-stash-${data.data.id}`, 100);
-        },
+      action: () => {
+        Inventory.openBench('mechanic_bench');
       },
-      {
-        label: 'Maak Order',
-        icon: 'gear',
-        canInteract: (_, __, data) => {
-          return Business.isEmployee(data.data.id) && getCurrentWorkingShop() === data.data.id;
-        },
-        action: () => {
-          openItemOrder();
-        },
+    },
+    {
+      label: 'Open Stash',
+      icon: 'toolbox',
+      canInteract: (_, __, data) => {
+        return Business.isEmployee(data.data.id, ['stash']) && getCurrentWorkingShop() === data.data.id;
       },
-    ],
-  },
-  true
-);
+      action: data => {
+        Inventory.openStash(`mechanic-shop-stash-${data.data.id}`, 100);
+      },
+    },
+    {
+      label: 'Maak Order',
+      icon: 'gear',
+      canInteract: (_, __, data) => {
+        return Business.isEmployee(data.data.id) && getCurrentWorkingShop() === data.data.id;
+      },
+      action: () => {
+        openItemOrder();
+      },
+    },
+  ],
+});
 
 PolyZone.onEnter('mechanic-repair', (_, data) => {
   setRepairZone(data.id);
