@@ -1,68 +1,88 @@
 import { Events, RPC, UI } from '@dgx/client';
 
-import { getCurrentVehicle } from '../../helpers/vehicle';
+import { getCurrentVehicle, getVehicleVin } from '../../helpers/vehicle';
 import { getCurrentWorkingShop } from '../mechanic/service.mechanic';
 import { getPerformanceUpgrades } from '../upgrades/service.upgrades';
 
 import { degradationValues, handlingOverrideFunctions, partNames, serviceConditions } from './constant.status';
 
-let statusThread: NodeJS.Timer | null = null;
-let applyThread: NodeJS.Timer | null = null;
-let syncThread: NodeJS.Timer | null = null;
-let serviceInfo: Service.Status | null = null;
-let state = {
-  engine: {
-    current: 1000,
-    delta: 0,
+const vehicleService: {
+  vehicle: number;
+  vin: string;
+  threads: {
+    status: NodeJS.Timer;
+    apply: NodeJS.Timer;
+    sync: NodeJS.Timer;
+  } | null;
+  info: Service.Status | null;
+  state: Record<'engine' | 'body', number>;
+  originalHandling: Record<string, number>;
+} = {
+  vehicle: 0,
+  vin: '',
+  threads: null,
+  info: null,
+  state: {
+    engine: 1000,
+    body: 1000,
   },
-  body: {
-    current: 1000,
-    delta: 0,
-  },
+  originalHandling: {},
 };
 
 const multipliers = {
   brake: 1,
 };
 
+let overrideThreads: NodeJS.Timer[] = [];
+const clearOverrideThreads = () => {
+  overrideThreads.forEach(t => clearInterval(t));
+  overrideThreads = [];
+};
+
 // region Service satuts
-const calculateHandlingSteps = (veh: number) => {
-  const handlingValues = Entity(veh).state.handlingValues;
-  if (!DoesEntityExist(veh)) return;
+const saveHandlingValues = (veh: number) => {
   for (const part in degradationValues) {
     for (const value of degradationValues[part as keyof Service.Status]) {
-      const maxHandling = handlingValues[value.name];
-      value.step = (maxHandling - maxHandling * value.percent) / 1000;
-      value.bottom = maxHandling * value.percent;
+      const isOverride = !!handlingOverrideFunctions[value.name];
+      const original = isOverride ? 1 : GetVehicleHandlingFloat(veh, 'CHandlingData', value.name);
+      vehicleService.originalHandling[value.name] = original;
     }
   }
 };
 
-const saveHandlingValues = (veh: number) => {
-  if (Entity(veh).state.handlingValues) return;
-  const handlingInfo: Record<string, number> = {};
+const resetHandlingValues = (veh: number) => {
+  for (const [hKey, hValue] of Object.entries(vehicleService.originalHandling)) {
+    if (handlingOverrideFunctions[hKey]) return;
+    SetVehicleHandlingFloat(veh, 'CHandlingData', hKey, hValue);
+  }
+  clearOverrideThreads();
+  vehicleService.originalHandling = {};
+};
+
+const calculateDegrationSteps = () => {
   for (const part in degradationValues) {
     for (const value of degradationValues[part as keyof Service.Status]) {
-      handlingInfo[value.name] = GetVehicleHandlingFloat(veh, 'CHandlingData', value.name);
+      const original = vehicleService.originalHandling[value.name];
+      value.bottom = original * value.percent;
+      value.step = (original - value.bottom) / 1000;
     }
   }
-  Entity(veh).state.set('handlingValues', handlingInfo, true);
 };
 
 const setVehicleDegradation = (veh: number) => {
-  if (!serviceInfo) return;
-  // const handlingInfo: Record<string, number> = {};
-  // for (const part in degradationValues) {
-  //   for (const value of degradationValues[part as keyof Service.Status]) {
-  //     handlingInfo[value.name] = GetVehicleHandlingFloat(veh, 'CHandlingData', value.name);
-  //   }
-  // }
-  // console.log('Applying degradations', serviceInfo, handlingInfo);
-  for (const part in serviceInfo) {
+  if (!vehicleService.info) return;
+
+  clearOverrideThreads();
+
+  for (const part in vehicleService.info) {
     for (const value of degradationValues[part as keyof Service.Status]) {
-      const newValue = value.bottom + value.step * serviceInfo[part as keyof Service.Status];
-      if (handlingOverrideFunctions?.[value.name]) {
-        handlingOverrideFunctions?.[value.name](veh, newValue);
+      const newValue = value.bottom + value.step * vehicleService.info[part as keyof Service.Status];
+      if (handlingOverrideFunctions[value.name]) {
+        overrideThreads.push(
+          setInterval(() => {
+            handlingOverrideFunctions[value.name](veh, newValue);
+          }, 1)
+        );
       } else {
         SetVehicleHandlingFloat(veh, 'CHandlingData', value.name, newValue);
       }
@@ -70,110 +90,114 @@ const setVehicleDegradation = (veh: number) => {
   }
 };
 
-const resetHandlingValues = (veh: number) => {
-  if (!Entity(veh).state.handlingValues) return;
-  const handlingValues = Entity(veh).state.handlingValues;
-  for (const hValue of Object.keys(handlingValues)) {
-    SetVehicleHandlingFloat(veh, 'CHandlingData', hValue, handlingValues[hValue]);
+// Thread gets started whenever player entered driver seat of a vehicle
+export const startStatusThread = async (vehicle: number) => {
+  if (vehicleService.threads !== null) {
+    console.error('Status threads already running, canceling');
+    return;
   }
-  Entity(veh).state.set('handlingValues', undefined, true);
-};
 
-export const startStatusThread = async (veh: number) => {
-  cleanStatusThread(veh);
-  const vin = Entity(veh).state.vin;
-  if (!vin) return;
-  serviceInfo = await RPC.execute('vehicles:service:getStatus', NetworkGetNetworkIdFromEntity(veh));
-  const plyVeh = getCurrentVehicle();
-  if (!plyVeh || veh !== getCurrentVehicle() || GetPedInVehicleSeat(veh, -1) !== PlayerPedId()) return;
-  state.engine.current = GetVehicleEngineHealth(veh);
-  state.body.current = GetVehicleBodyHealth(veh);
+  const netId = NetworkGetNetworkIdFromEntity(vehicle);
+  const vin = await getVehicleVin(vehicle);
+  if (!netId || !vin) return;
+
+  vehicleService.vehicle = vehicle;
+  vehicleService.vin = vin;
+  vehicleService.info = await RPC.execute('vehicles:service:getStatus', netId);
+  vehicleService.state.engine = GetVehicleEngineHealth(vehicle);
+  vehicleService.state.body = GetVehicleBodyHealth(vehicle);
 
   // Calc handling values
-  saveHandlingValues(veh);
-  calculateHandlingSteps(veh);
+  saveHandlingValues(vehicle);
+  calculateDegrationSteps();
 
-  setVehicleDegradation(veh);
-  statusThread = setInterval(() => {
-    if (!DoesEntityExist(veh)) {
-      cleanStatusThread(veh);
-      return;
-    }
-    if (!serviceInfo) return;
-    const newEngine = GetVehicleEngineHealth(veh);
-    const newBody = GetVehicleBodyHealth(veh);
-    state = {
-      engine: {
-        current: newEngine,
-        delta: state.engine.current - newEngine,
-      },
-      body: {
-        current: newBody,
-        delta: state.body.current - newBody,
-      },
-    };
-    // Brakes
-    const brakePressure: number[] = [];
-    for (let i = 0; i < 10; i++) {
-      brakePressure.push(GetVehicleWheelBrakePressure(veh, i));
-    }
-    const avgBrakePressure =
-      brakePressure.reduce((tSusCom, susComp) => tSusCom + susComp, 0) / brakePressure.length || 0;
-    if (avgBrakePressure <= 0) {
-      multipliers.brake = 1;
-    } else {
-      serviceInfo.brakes -= (avgBrakePressure * multipliers.brake) / 50;
-      multipliers.brake += 0.03;
-    }
-    // Axle & engine
-    if (state.engine.delta >= 75) {
-      serviceInfo.axle -= state.engine.delta / 45;
-    }
-    if (state.engine.delta > 0) {
-      serviceInfo.engine -= state.engine.delta / 20;
-    }
-    // Suspension
-    const suspCompress: number[] = [];
-    for (let i = 0; i < GetVehicleNumberOfWheels(veh); i++) {
-      suspCompress.push(GetVehicleWheelSuspensionCompression(veh, i));
-    }
-    const avgSuspCompress = suspCompress.reduce((tSusCom, susComp) => tSusCom + susComp, 0) / suspCompress.length || 0;
-    if (avgSuspCompress > 0.15) {
-      serviceInfo.suspension -= avgSuspCompress / 50;
-    }
-  }, 100);
-  applyThread = setInterval(() => {
-    setVehicleDegradation(veh);
-  }, 5000);
-  // Sync status each minute
-  const vehNetId = NetworkGetNetworkIdFromEntity(veh);
-  syncThread = setInterval(() => {
-    if (!serviceInfo || !veh) return;
-    Events.emitNet('vehicles:service:updateStatus', vehNetId, serviceInfo);
-  }, 60000);
+  setVehicleDegradation(vehicle);
+  vehicleService.threads = {
+    // Statusthread calculates the vehicle status every 100ms
+    status: setInterval(() => {
+      const currentVehicle = getCurrentVehicle();
+      if (
+        currentVehicle === null ||
+        !DoesEntityExist(currentVehicle) ||
+        GetPedInVehicleSeat(currentVehicle, -1) !== PlayerPedId()
+      ) {
+        cleanStatusThread();
+        return;
+      }
+
+      if (!vehicleService.info) return;
+
+      const brakePressure: number[] = [];
+      const suspCompress: number[] = [];
+      for (let i = 0; i < GetVehicleNumberOfWheels(currentVehicle); i++) {
+        brakePressure.push(GetVehicleWheelBrakePressure(currentVehicle, i));
+        suspCompress.push(GetVehicleWheelSuspensionCompression(currentVehicle, i));
+      }
+
+      // Brakes
+      // Brake natives give wrong values when engine is off
+      if (GetIsVehicleEngineRunning(currentVehicle)) {
+        const avgBrakePressure =
+          brakePressure.reduce((tSusCom, susComp) => tSusCom + susComp, 0) / brakePressure.length;
+        if (avgBrakePressure <= 0) {
+          multipliers.brake = 1;
+        } else {
+          vehicleService.info.brakes -= (avgBrakePressure * multipliers.brake) / 50;
+          multipliers.brake += 0.03;
+        }
+      }
+
+      // Suspension
+      const avgSuspCompress = suspCompress.reduce((tSusCom, susComp) => tSusCom + susComp, 0) / suspCompress.length;
+      if (avgSuspCompress > 0.15) {
+        vehicleService.info.suspension -= avgSuspCompress / 50;
+      }
+
+      // Axle & engine
+      const newBody = GetVehicleBodyHealth(currentVehicle);
+      const bodyDelta = vehicleService.state.body - newBody;
+      vehicleService.state.body = newBody;
+
+      const newEngine = GetVehicleEngineHealth(currentVehicle);
+      const engineDelta = vehicleService.state.engine - newEngine;
+      vehicleService.state.engine = newEngine;
+
+      if (bodyDelta > 0) {
+        vehicleService.info.axle -= bodyDelta / 45;
+      }
+      if (engineDelta > 0) {
+        vehicleService.info.engine -= engineDelta / 20;
+      }
+    }, 100),
+    // Apply thread applies calculated service values every 5 seconds
+    apply: setInterval(() => {
+      setVehicleDegradation(vehicle);
+    }, 5000),
+    // Every minute we sync calculated service values
+    sync: setInterval(() => {
+      if (!vehicleService.info) return;
+      Events.emitNet('vehicles:service:updateStatus', vehicleService.vin, vehicleService.info);
+    }, 60000),
+  };
 };
 
-export const cleanStatusThread = (veh?: number) => {
-  if (veh && serviceInfo && DoesEntityExist(veh)) {
-    const vehNetId = NetworkGetNetworkIdFromEntity(veh);
-    Events.emitNet('vehicles:service:updateStatus', vehNetId, serviceInfo);
-    if (!GetPedInVehicleSeat(veh, -1)) {
-      resetHandlingValues(veh);
+const cleanStatusThread = () => {
+  Events.emitNet('vehicles:service:updateStatus', vehicleService.vin, vehicleService.info);
+
+  if (DoesEntityExist(vehicleService.vehicle)) {
+    resetHandlingValues(vehicleService.vehicle);
+  }
+
+  if (vehicleService.threads) {
+    for (const thread of Object.values(vehicleService.threads)) {
+      clearInterval(thread);
     }
+    vehicleService.threads = null;
   }
-  serviceInfo = null;
-  if (statusThread) {
-    clearInterval(statusThread);
-    statusThread = null;
-  }
-  if (applyThread) {
-    clearInterval(applyThread);
-    applyThread = null;
-  }
-  if (syncThread) {
-    clearInterval(syncThread);
-    syncThread = null;
-  }
+
+  vehicleService.vehicle = 0;
+  vehicleService.vin = '';
+  vehicleService.info = null;
 };
 
 export const openServiceStatusOverview = async (veh: number) => {
@@ -213,23 +237,23 @@ export const openServiceStatusOverview = async (veh: number) => {
         },
         {
           title: 'Brakes',
-          description: `Level ${upgrades?.brakes ?? 0}`,
+          description: (upgrades?.brakes ?? -1) === -1 ? 'Basis' : `Level ${upgrades!.brakes + 1}`,
         },
         {
           title: 'Engine',
-          description: `Level ${upgrades?.engine ?? 0}`,
+          description: (upgrades?.engine ?? -1) === -1 ? 'Basis' : `Level ${upgrades!.engine + 1}`,
         },
         {
           title: 'Transmission',
-          description: `Level ${upgrades?.transmission ?? 0}`,
+          description: (upgrades?.transmission ?? -1) === -1 ? 'Basis' : `Level ${upgrades!.transmission + 1}`,
         },
         {
           title: 'Turbo',
-          description: upgrades?.turbo ? `Installed` : 'Not installed',
+          description: upgrades?.turbo ? `Geinstalleerd` : 'Niet geinstalleerd',
         },
         {
           title: 'Suspension',
-          description: `Level ${upgrades?.transmission ?? 0}`,
+          description: (upgrades?.suspension ?? -1) === -1 ? 'Basis' : `Level ${upgrades!.suspension + 1}`,
         },
       ]
     : [];
@@ -247,16 +271,6 @@ export const openServiceStatusOverview = async (veh: number) => {
   UI.openApplication('contextmenu', menu);
 };
 // endregion
-
-// This functions makes tyres invincible so dont use till the natives are fixed or better solution is found!
-export const setTyreWear = (veh: number) => {
-  for (let i = 0; i < 10; i++) {
-    const tyreMultiplier = GetTyreWearMultiplier(veh, i);
-    if (tyreMultiplier !== 0.2) {
-      SetTyreWearMultiplier(veh, i, 0.2);
-    }
-  }
-};
 
 export const fixVehicle = async (veh: number, body = true, engine = true) => {
   if (body) {

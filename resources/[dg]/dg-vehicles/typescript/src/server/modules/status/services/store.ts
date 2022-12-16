@@ -49,7 +49,8 @@ export const updateServiceStatus = (vin: string, status: Service.Status) => {
 // Modifier is amount in percentage that is added to the part
 export const updateServiceStatusPart = (vin: string, part: keyof Service.Status, modifier: number) => {
   const status = getServiceStatus(vin);
-  status[part] = Math.max(1000, status[part] * (1 + modifier / 100));
+  status[part] = Math.min(1000, status[part] * (1 + modifier / 100));
+  updateServiceStatus(vin, status);
 };
 
 export const getServiceStatus = (vin: string): Service.Status => {

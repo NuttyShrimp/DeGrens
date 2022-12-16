@@ -6,7 +6,7 @@ import { disableSpeedLimiter } from 'services/speedlimiter';
 
 import { setCurrentVehicle } from '../helpers/vehicle';
 import { cleanFuelThread, fetchVehicleFuelLevel, startFuelThread } from '../modules/fuel/service.fuel';
-import { cleanStatusThread, startStatusThread } from '../modules/status/service.status';
+import { startStatusThread } from '../modules/status/service.status';
 
 on('baseevents:enteringVehicle', (vehicle: number) => {
   SetVehicleNeedsToBeHotwired(vehicle, false);
@@ -29,7 +29,6 @@ on('baseevents:enteredVehicle', (vehicle: number, seat: number) => {
 on('baseevents:leftVehicle', (vehicle: number, seat: number) => {
   if (seat === -1) {
     cleanFuelThread();
-    cleanStatusThread(vehicle);
     disableSpeedLimiter(vehicle);
     clearVehicleRolloverThread();
   }
@@ -44,7 +43,6 @@ on('baseevents:vehicleChangedSeat', (vehicle: number, newSeat: number, oldSeat: 
   setCurrentVehicle(vehicle, newSeat === -1);
   if (oldSeat === -1) {
     cleanFuelThread();
-    cleanStatusThread(vehicle);
     stopUsingNos(vehicle);
     disableSpeedLimiter(vehicle);
     clearVehicleRolloverThread();
@@ -53,5 +51,6 @@ on('baseevents:vehicleChangedSeat', (vehicle: number, newSeat: number, oldSeat: 
     startFuelThread(vehicle);
     updateHudDisplayAmount(vehicle);
     startVehicleRolloverThread(vehicle);
+    startStatusThread(vehicle);
   }
 });

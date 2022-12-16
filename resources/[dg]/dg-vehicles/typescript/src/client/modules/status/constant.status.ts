@@ -1,6 +1,6 @@
 export const degradationValues: Record<
   keyof Service.Status,
-  (Service.Degradation & { step: number; init: number; bottom: number })[]
+  (Service.Degradation & { step: number; bottom: number })[]
 > = {
   engine: [],
   axle: [],
@@ -11,13 +11,9 @@ export const degradationValues: Record<
 export const setDegradationValues = (config: Service.DegradationConfig) => {
   for (const part of Object.keys(config)) {
     for (const value of config[part as keyof Service.Status]) {
-      if (!degradationValues[part as keyof Service.Status]) {
-        degradationValues[part as keyof Service.Status] = [];
-      }
       degradationValues[part as keyof Service.Status].push({
         ...value,
         step: 0,
-        init: 0,
         bottom: 0,
       });
     }
@@ -52,5 +48,4 @@ export const partNames: Record<keyof Service.Status, string> = {
 
 export const handlingOverrideFunctions: Record<string, (veh: number, value: number) => void> = {
   fInitialDriveForce: (veh, val) => SetVehicleCheatPowerIncrease(veh, val),
-  fInitialDriveMaxFlatVel: (veh, val) => ModifyVehicleTopSpeed(veh, val),
 };

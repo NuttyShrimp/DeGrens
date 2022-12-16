@@ -13,11 +13,7 @@ setImmediate(() => {
   loadConfig();
 });
 
-Events.onNet('vehicles:service:updateStatus', (src: number, vehNetId: number, status: Service.Status) => {
-  const veh = NetworkGetEntityFromNetworkId(vehNetId);
-  if (!DoesEntityExist(veh)) return;
-  const vin = Entity(veh).state.vin;
-  if (!vin) return;
+Events.onNet('vehicles:service:updateStatus', (src: number, vin: string, status: Service.Status) => {
   updateServiceStatus(vin, status);
 });
 

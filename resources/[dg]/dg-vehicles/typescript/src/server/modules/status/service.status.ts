@@ -94,13 +94,10 @@ export const useRepairPart = async (src: number, type: keyof Service.Status, par
       combat: true,
     },
   });
-  if (cancelled) {
-    Notifications.add(src, 'geannuleerd...', 'error');
-    return;
-  }
+  if (cancelled) return;
   const couldRemove = await Inventory.removeItemFromPlayer(src, itemName);
   if (couldRemove === false) {
-    Notifications.add(src, 'Kon je voertuig onderdeel niet uit je inventory verwijderen ...', 'error');
+    Notifications.add(src, 'Je hebt dit item niet', 'error');
     return;
   }
   updateServiceStatusPart(vin, type, 10);
