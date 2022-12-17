@@ -370,6 +370,11 @@ end
 
 function setMinimapOffset()
   Citizen.CreateThread(function()
+    local minimap = RequestScaleformMovie("minimap")
+    while not HasScaleformMovieLoaded(minimap) do
+      Wait(0)
+    end
+
     Wait(50)
     -- Credit to Dalrae for the solve.
     local defaultAspectRatio = 1920 / 1080 -- Don't change this.
