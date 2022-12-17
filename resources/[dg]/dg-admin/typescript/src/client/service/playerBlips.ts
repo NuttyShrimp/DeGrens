@@ -1,11 +1,10 @@
-import { Util } from '@dgx/client';
+import { Sync, Util } from '@dgx/client';
+import { EntityBlip } from '@dgx/client/classes/blip';
 
 import { drawText3d } from '../modules/util/service.util';
 
 let blipsEnabled = false;
-let tick: number;
-let blipInterval: NodeJS.Timer;
-let plyBlips: Record<number, number> = {};
+const plyBlips: Map<number, EntityBlip> = new Map();
 
 export const togglePlayerBlips = (isEnabled: boolean) => {
   isEnabled ? enableBlips() : disableBlips();
@@ -14,9 +13,10 @@ export const togglePlayerBlips = (isEnabled: boolean) => {
 const enableBlips = () => {
   blipsEnabled = true;
   const plyId = PlayerId();
-  tick = setTick(() => {
+
+  const textInterval = setInterval(() => {
     if (!blipsEnabled) {
-      clearTick(tick);
+      clearInterval(textInterval);
       return;
     }
     GetActivePlayers().forEach((ply: number) => {
@@ -26,43 +26,76 @@ const enableBlips = () => {
       coords.z += 1.0;
       drawText3d(`${GetPlayerName(ply)}(${GetPlayerServerId(ply)})`, coords, 0.4);
     });
-  });
-  blipInterval = setInterval(() => {
-    if (!blipsEnabled) {
-      clearInterval(blipInterval);
-      return;
-    }
-    // TODO: Fetch froms server, players far away are invisible due to onesync
-    const plys = GetActivePlayers();
-    // Remove blips for players that are no longer active
-    for (const ply in plyBlips) {
-      if (!plys.includes(ply)) {
-        RemoveBlip(plyBlips[ply]);
-        delete plyBlips[ply];
-      }
-    }
-    plys.forEach((ply: number) => {
-      if (plyBlips[ply]) return;
-      const ped = GetPlayerPed(ply);
-      const blip = AddBlipForEntity(ped);
-      SetBlipSprite(blip, 1);
-      SetBlipColour(blip, 0);
-      SetBlipAsShortRange(blip, true);
-      BeginTextCommandSetBlipName('STRING');
-      AddTextComponentString(`${GetPlayerName(ply)}(${GetPlayerServerId(ply)})`);
-      EndTextCommandSetBlipName(blip);
-      SetBlipCategory(blip, 7);
-      plyBlips[ply] = blip;
-    });
-  }, 1000);
+  }, 1);
+
+  const allPlayerCoords = Sync.getAllPlayerCoords();
+  for (const key of Object.keys(allPlayerCoords)) {
+    addBlip(Number(key));
+  }
 };
 
 const disableBlips = () => {
   blipsEnabled = false;
-  clearTick(tick);
-  clearInterval(blipInterval);
-  for (const ply in plyBlips) {
-    RemoveBlip(plyBlips[ply]);
-  }
-  plyBlips = {};
+  plyBlips.forEach(blip => {
+    blip.disable();
+  });
+  plyBlips.clear();
 };
+
+const addBlip = (plyId: number) => {
+  if (GetPlayerServerId(PlayerId()) === plyId) return;
+  const newBlip = new EntityBlip('player', plyId, {
+    sprite: 1,
+    color: 0,
+    heading: true,
+    category: 7,
+    text: `${GetPlayerName(GetPlayerFromServerId(plyId))}(${plyId})`,
+    shortRange: true,
+  });
+  newBlip.enable();
+  plyBlips.set(plyId, newBlip);
+};
+
+const removeBlip = (plyId: number) => {
+  const blip = plyBlips.get(plyId);
+  if (!blip) return;
+  blip.disable();
+  plyBlips.delete(plyId);
+};
+
+onNet('sync:coords:sync', (plyCoords: Record<number, Vec3>) => {
+  if (!blipsEnabled) return;
+
+  // If plyids have blips but not in allcoords anymore, they left server so remove blip
+  const disconnectedPlayers = [...plyBlips.keys()].reduce<number[]>((acc, id) => {
+    if (!plyCoords[id]) acc.push(id);
+    return acc;
+  }, []);
+  disconnectedPlayers.forEach(id => {
+    removeBlip(id);
+  });
+
+  for (const key in plyCoords) {
+    const plyId = Number(key);
+    if (GetPlayerServerId(PlayerId()) === plyId) continue;
+
+    const blip = plyBlips.get(plyId);
+    if (!blip) {
+      addBlip(plyId);
+      continue;
+    }
+
+    const existLocally = blip.doesEntityExistsLocally();
+    if (blip.getMode() === 'entity') {
+      if (!existLocally) {
+        blip.changeMode('coords');
+      }
+    } else {
+      if (existLocally) {
+        blip.changeMode('entity');
+      } else {
+        blip.updateCoords(plyCoords[plyId]);
+      }
+    }
+  }
+});

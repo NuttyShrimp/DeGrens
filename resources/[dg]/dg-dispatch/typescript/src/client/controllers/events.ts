@@ -44,7 +44,7 @@ on('onResourceStop', (res: string) => {
   closeCam();
 });
 
-onNet('dg-sync:coords:sync', (plyCoords: Record<number, Vec3>) => {
+onNet('sync:coords:sync', (plyCoords: Record<number, Vec3>) => {
   for (const plyId in plyCoords) {
     updateBlipCoords(Number(plyId), plyCoords[plyId]);
   }

@@ -15,7 +15,6 @@ const openMenu = async () => {
     });
   }, 1);
   const scopeInfo = await Sync.getScopeInfo();
-  console.log(scopeInfo);
   if (!scopeInfo) return;
   UI.openApplication(
     'idlist',

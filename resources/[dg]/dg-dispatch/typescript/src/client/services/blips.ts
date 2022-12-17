@@ -40,9 +40,10 @@ const deleteBlip = (id: number) => {
 };
 
 export const clearBlips = () => {
-  blips.forEach((_, id) => {
-    deleteBlip(id);
+  blips.forEach(blip => {
+    blip.disable;
   });
+  blips.clear();
 };
 
 export const syncBlips = (plys: Record<number, Dispatch.BlipInfo>) => {
@@ -63,16 +64,22 @@ export const syncBlips = (plys: Record<number, Dispatch.BlipInfo>) => {
 
 export const updateSprite = (plyId: number, info: Dispatch.BlipInfo, sprite: number) => {
   deleteBlip(plyId);
-
   addBlip(plyId, info, sprite);
 };
 
 export const updateBlipCoords = (plyId: number, coords: Vec3) => {
   const blip = blips.get(plyId);
-  if (!blip || blip.mode === 'entity') return;
+  if (!blip) return;
 
-  blip.updateCoords(coords);
-  if (blip.doesEntityExistsLocally()) {
-    blip.changeMode('entity');
+  if (blip.getMode() === 'entity') {
+    if (!blip.doesEntityExistsLocally()) {
+      blip.changeMode('coords');
+    }
+  } else {
+    if (blip.doesEntityExistsLocally()) {
+      blip.changeMode('entity');
+    } else {
+      blip.updateCoords(coords);
+    }
   }
 };

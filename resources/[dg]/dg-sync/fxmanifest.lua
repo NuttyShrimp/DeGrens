@@ -1,21 +1,15 @@
-fx_version 'cerulean'
-game 'gta5'
+fx_version "cerulean"
+games {"gta5"}
 
-client_script '@ts-shared/client/client.js'
-server_script '@ts-shared/server/server.js'
-shared_script '@ts-shared/shared/lib.lua'
-
-client_scripts {
-  'client/cl_*.lua',
-  'client/lib.lua',
-}
+shared_script '@dg-core/import.js'
 
 server_scripts {
-  'server/sv_*.lua',
+  "server/*.js",
 }
 
-client_script "@dg-logs/client/cl_log.lua"
-
-server_script "@dg-logs/server/sv_log.lua"
+client_scripts {
+  "@dg-logs/client/cl_log.lua",
+  "client/*.js",
+}
 
 dependency "dg-auth"

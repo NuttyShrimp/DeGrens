@@ -1,30 +1,39 @@
-const getLocalEntity = (pType: string, pNetId: number) => {
-  let entity;
-  if (pType === 'player') {
-    const playerIndex = GetPlayerFromServerId(pNetId);
+import { Sync } from './index';
+
+const getLocalEntity = (type: string, id: number) => {
+  let entity: number;
+  if (type === 'player') {
+    const playerIndex = GetPlayerFromServerId(id);
     entity = playerIndex !== -1 ? GetPlayerPed(playerIndex) : 0;
   } else {
-    entity = NetworkGetEntityFromNetworkId(pNetId);
+    entity = NetworkGetEntityFromNetworkId(id);
   }
   return entity;
-}
+};
 
 export class EntityBlip {
   private id: number;
-  private type: string;
-  private enabled: boolean = false;
-  private handle: number | null = null;
+  private type: NBlip.Type;
+  private enabled: boolean;
+  private handle: number | null;
   private settings: NBlip.Settings;
-  mode: 'coords' | 'entity' | null = null;
+  private mode: 'coords' | 'entity' | null;
 
-  constructor(pType: string, pNetId: number, pSettings: NBlip.Settings) {
-    this.id = pNetId;
-    this.type = pType;
-    this.settings = pSettings;
+  constructor(type: NBlip.Type, id: number, settings: NBlip.Settings) {
+    this.id = id;
+    this.type = type;
+    this.enabled = false;
+    this.handle = null;
+    this.settings = settings;
+    this.mode = null;
+  }
+
+  public getMode() {
+    return this.mode;
   }
 
   private applySettings() {
-    if(!this.handle) return;
+    if (!this.handle) return;
 
     if (this.settings.sprite !== undefined) {
       SetBlipSprite(this.handle, this.settings.sprite);
@@ -42,34 +51,35 @@ export class EntityBlip {
       SetBlipCategory(this.handle, this.settings.category);
     }
     if (this.settings.text !== undefined) {
-        BeginTextCommandSetBlipName("STRING")
-        AddTextComponentString(this.settings.text)
-        EndTextCommandSetBlipName(this.handle)
+      BeginTextCommandSetBlipName('STRING');
+      AddTextComponentString(this.settings.text);
+      EndTextCommandSetBlipName(this.handle);
+    }
+    if (this.settings.shortRange !== undefined) {
+      SetBlipAsShortRange(this.handle, this.settings.shortRange);
     }
   }
 
-  changeMode(mode: 'entity'|'coords') {
+  changeMode(mode: 'entity' | 'coords') {
     if (mode === this.mode || !this.enabled) return;
 
     if (this.handle && DoesBlipExist(this.handle)) {
       RemoveBlip(this.handle);
     }
-    
+
     if (mode === 'coords') {
-      // This needs some refactoring if we want to support 
-      // other shit then players
-      const coords = global.exports['dg-sync'].getPlayerCoords(this.id) as Vec3;
+      const coords = Sync.getPlayerCoords(this.id);
 
       if (coords) {
         this.mode = 'coords';
-        this.handle = AddBlipForCoord(coords.x, coords.y, coords.z)
+        this.handle = AddBlipForCoord(coords.x, coords.y, coords.z);
       }
     } else if (mode === 'entity') {
       const entity = getLocalEntity(this.type, this.id);
-      
-      if (entity) {
-        this.handle = AddBlipForEntity(entity);
+
+      if (entity && DoesEntityExist(entity)) {
         this.mode = 'entity';
+        this.handle = AddBlipForEntity(entity);
       }
     }
 
@@ -89,16 +99,14 @@ export class EntityBlip {
     if (this.enabled) return;
     this.enabled = true;
 
-    const entity = getLocalEntity(this.type, this.id);
-    const mode = DoesEntityExist(entity) ? "entity" : 'coords';
-
+    const mode = this.doesEntityExistsLocally() ? 'entity' : 'coords';
     this.changeMode(mode);
   }
 
   disable() {
     if (!this.enabled) return;
     this.enabled = false;
-    
+
     if (this.handle && DoesBlipExist(this.handle)) {
       RemoveBlip(this.handle);
     }

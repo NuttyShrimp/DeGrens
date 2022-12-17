@@ -1,6 +1,6 @@
 class Sync {
   executeNative(native: string, entity: number, ...args: any[]) {
-    global.exports['dg-sync'].SyncExecution(native, entity, ...args);
+    global.exports['dg-sync'].syncExecution(native, entity, ...args);
   }
   setPlayerInvincible(src: number, isEnabled: boolean) {
     global.exports['dg-auth'].SetPlayerInvincible(src, isEnabled);

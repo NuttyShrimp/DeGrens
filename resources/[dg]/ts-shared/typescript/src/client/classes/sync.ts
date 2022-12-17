@@ -2,7 +2,7 @@ import { RPC, Events } from './index';
 
 class Sync {
   executeNative(native: string, entity: number, ...args: any[]) {
-    global.exports['dg-sync'].SyncExecution(native, entity, ...args);
+    global.exports['dg-sync'].syncExecution(native, entity, ...args);
   }
   setPlayerInvincible(isEnabled: boolean) {
     Events.emitNet('auth:anticheat:native:setPlayerInvincible', isEnabled);
@@ -13,6 +13,14 @@ class Sync {
   getScopeInfo(): Promise<{ current: Sync.ScopePlayer[]; recent: Sync.ScopePlayer[] } | null> {
     return RPC.execute('sync:scopes:get');
   }
+
+  public getAllPlayerCoords = (): Record<number, Vec3> => {
+    return global.exports['dg-sync'].getAllPlayerCoords();
+  };
+
+  public getPlayerCoords = (plyId: number): Vec3 => {
+    return global.exports['dg-sync'].getPlayerCoords(plyId);
+  };
 }
 
 export default {

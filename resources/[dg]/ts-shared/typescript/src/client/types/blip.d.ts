@@ -6,5 +6,8 @@ declare namespace NBlip {
     heading?: boolean;
     category?: number;
     text?: string;
+    shortRange?: boolean;
   }
+
+  type Type = 'player' | 'entity';
 }
