@@ -13,7 +13,7 @@ class Admin {
   }
   // Ban is given via anti-cheat and is permanent. Reason is prefixed with AntiCheat:
   ACBan(target: string | number, reason: string, data?: Record<string, any>): Promise<void> {
-    return global.exports['dg-admin'].ACBan(target, reason);
+    return global.exports['dg-admin'].ACBan(target, reason, data);
   }
   kick(source: number, target: string | number, reason: string, points: number): Promise<void> {
     return global.exports['dg-admin'].kick(source, target, reason, points);
