@@ -2,6 +2,8 @@ import { getPrivateToken } from '../../helpers/privateToken';
 import { mainLogger } from '../../sv_logger';
 import { getPlySteamId } from '../../sv_util';
 import { createSigner, createVerifier } from 'fast-jwt';
+import { isResourceKnown } from 'helpers/resources';
+import { Admin } from '@dgx/server';
 
 // Player session tokens made with JWT
 // Tokens are unique for each player and each resource
@@ -26,6 +28,11 @@ export const createResourceToken = (src: number, resource: string) => {
     DropPlayer(String(src), 'Auth: Could not find steamId identifier. Is your steam running?');
     return;
   }
+  if (!isResourceKnown(resource)) {
+    Admin.ACBan(src, "Auth: trying to retrieve event key for unknown resource", {
+      resource
+    })
+  }
   const data = {
     steamId,
     timestamp: Date.now(),
@@ -47,7 +54,7 @@ export const validateToken = (src: number, resource: string, token: string) => {
   try {
     const data = verifier(token) as ResourceTokenData;
     if (!data?.steamId || !data?.resource) {
-      global.exports['dg-admin'].ACBan(src, 'Unauthorized event triggering (invalid session token)');
+      Admin.ACBan(src, 'Unauthorized event triggering (invalid session token)');
       mainLogger.info(
         `${GetPlayerName(String(src))} tried to use a invalid token | token.steamId: ${data.steamId
         } | token.resource: ${data.resource}`
@@ -55,14 +62,14 @@ export const validateToken = (src: number, resource: string, token: string) => {
       return false;
     }
     if (data.steamId !== steamId) {
-      global.exports['dg-admin'].ACBan(src, 'Unauthorized event triggering (mismatching steam ids)');
+      Admin.ACBan(src, 'Unauthorized event triggering (mismatching steam ids)');
       mainLogger.info(
         `${GetPlayerName(String(src))} tried to use a token with mismatching steamIds | ${steamId} vs ${data.steamId}`
       );
       return false;
     }
     if (data.resource !== resource) {
-      global.exports['dg-admin'].ACBan(src, 'Unauthorized event triggering (mismatching resources)');
+      Admin.ACBan(src, 'Unauthorized event triggering (mismatching resources)');
       mainLogger.info(
         `${GetPlayerName(String(src))} tried to use a token with mismatching resources | ${resource} vs ${data.resource
         }`
