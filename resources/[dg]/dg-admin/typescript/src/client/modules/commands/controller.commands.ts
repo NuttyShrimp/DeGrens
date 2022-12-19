@@ -1,4 +1,4 @@
-import { Events, RPC, Util } from '@dgx/client';
+import { Events, Notifications, RPC, Util } from '@dgx/client';
 
 import { togglePlayerBlips } from '../../service/playerBlips';
 
@@ -72,4 +72,19 @@ const damageEntity = (entity: number) => {
 
 Events.onNet('admin:command:fadeIn', () => {
   DoScreenFadeIn(0);
+});
+
+RPC.register('admin:command:isValidPed', (hash: number) => IsModelAPed(hash));
+
+Events.onNet('admin:command:setModel', async (model: string) => {
+  const hash = GetHashKey(model);
+  await Util.loadModel(hash);
+
+  if (!HasModelLoaded(model)) {
+    console.log(`Failed to load model ${model}`);
+    return;
+  }
+
+  SetPlayerModel(PlayerId(), hash);
+  SetPedComponentVariation(PlayerPedId(), 0, 0, 0, 0);
 });
