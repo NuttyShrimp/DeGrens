@@ -1,3 +1,4 @@
+import { Events } from '@dgx/server';
 import { Inputs } from 'enums/inputs';
 
 declare interface CharSelectionData {
@@ -11,7 +12,12 @@ export const openCharSelection: CommandData = {
   target: [],
   role: 'staff',
   handler: (caller, data: CharSelectionData) => {
-    global.exports['dg-chars'].logOut(data?.Target?.serverId ?? caller.source);
+    const plyId = data?.Target?.serverId ?? caller.source;
+    global.exports['dg-chars'].logOut(plyId);
+
+    if (plyId === caller.source) {
+      Events.emitNet('admin:menu:forceClose', caller.source);
+    }
   },
   UI: {
     title: 'Char Selection Menu',

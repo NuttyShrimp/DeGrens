@@ -1,3 +1,4 @@
+import { Events } from '@dgx/server';
 import { Inputs } from 'enums/inputs';
 
 declare interface ClothingMenuData {
@@ -11,7 +12,12 @@ export const openClothingMenu: CommandData = {
   target: [],
   role: 'staff',
   handler: (caller, data: ClothingMenuData) => {
-    emitNet('qb-clothing:client:openMenu', data?.Target?.serverId ?? caller.source);
+    const plyId = data?.Target?.serverId ?? caller.source;
+    emitNet('qb-clothing:client:openMenu', plyId);
+
+    if (plyId === caller.source) {
+      Events.emitNet('admin:menu:forceClose', caller.source);
+    }
   },
   UI: {
     title: 'Give Clothing Menu',

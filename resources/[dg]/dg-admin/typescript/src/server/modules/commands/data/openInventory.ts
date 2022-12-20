@@ -33,6 +33,7 @@ export const openInventory: CommandData = {
       inv = Inventory.concatId('player', Util.getCID(targetPlayer));
     }
     Events.emitNet('inventory:client:openOverride', caller.source, inv);
+    Events.emitNet('admin:menu:forceClose', caller.source);
   },
   UI: {
     title: 'Open Inventory',
