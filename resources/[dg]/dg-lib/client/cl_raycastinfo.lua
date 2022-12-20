@@ -99,36 +99,37 @@ AddEventHandler('onResourceStop', function(res)
 	end
 end)
 
-if GetConvar('is_production', 'true') == 'false' then
-	RegisterCommand('raycast:debug:toggle', function()
-    if debugEnabled then 
-      debugEnabled = false
-      if GetEntityType(lastHit.entity) ~= 1 then
-        SetEntityDrawOutline(lastHit.entity, false)
-      end
-    else
-      debugEnabled = true
-      CreateThread(function()
-        local prevTarget = nil
-        while debugEnabled do
-          if prevTarget and prevTarget ~= lastHit.entity and GetEntityType(lastHit.entity) ~= 1 then
-            SetEntityDrawOutline(prevTarget, false)
-          end
-          prevTarget = lastHit.entity
+DGX.Events.onNet('raycast:debug:toggle', function(toggle)
+  if debugEnabled == toggle then return end
 
-          if lastHit.coords then
-            local plyCoords = GetEntityCoords(PlayerPedId())
-            DrawLine(plyCoords.x, plyCoords.y, plyCoords.z, lastHit.coords.x, lastHit.coords.y, lastHit.coords.z, 255, 0, 0, 255)
-            DrawMarker(28, lastHit.coords.x, lastHit.coords.y, lastHit.coords.z, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.03, 0.03, 0.03, 255, 0, 0, 255, false, false, 2, nil, nil, false)
-          end
-
-          if GetEntityType(lastHit.entity) ~= 1 then
-            SetEntityDrawOutline(lastHit.entity, true)
-          end
-
-          Wait(0)
-        end
-      end)
+  if not toggle then 
+    debugEnabled = false
+    if GetEntityType(lastHit.entity) ~= 1 then
+      SetEntityDrawOutline(lastHit.entity, false)
     end
-	end)
-end
+    return
+  end
+
+  debugEnabled = true
+  CreateThread(function()
+    local prevTarget = nil
+    while debugEnabled do
+      if prevTarget and prevTarget ~= lastHit.entity and GetEntityType(lastHit.entity) ~= 1 then
+        SetEntityDrawOutline(prevTarget, false)
+      end
+      prevTarget = lastHit.entity
+
+      if lastHit.coords then
+        local plyCoords = GetEntityCoords(PlayerPedId())
+        DrawLine(plyCoords.x, plyCoords.y, plyCoords.z, lastHit.coords.x, lastHit.coords.y, lastHit.coords.z, 255, 0, 0, 255)
+        DrawMarker(28, lastHit.coords.x, lastHit.coords.y, lastHit.coords.z, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.03, 0.03, 0.03, 255, 0, 0, 255, false, false, 2, nil, nil, false)
+      end
+
+      if GetEntityType(lastHit.entity) ~= 1 then
+        SetEntityDrawOutline(lastHit.entity, true)
+      end
+
+      Wait(0)
+    end
+  end)
+end)

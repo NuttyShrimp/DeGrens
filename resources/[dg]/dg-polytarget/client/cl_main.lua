@@ -141,24 +141,25 @@ AddEventHandler('baseevents:leftVehicle', function()
   IsInVehicle = false
 end)
 
-function toggleTargetDebug()
-  DEBUG_ENABLED = not DEBUG_ENABLED
+function toggleTargetDebug(toggle)
+  DEBUG_ENABLED = toggle
   if (DEBUG_ENABLED and targetZone ~= nil) then
-    while DEBUG_ENABLED do
-      local plyPos = GetEntityCoords(PlayerPedId()).xy
-      for i, zone in ipairs(targetZone.zones) do
-        if zone and not zone.destroyed and #(plyPos - zone.center.xy) < DEBUG_MAX_DISTANCE then
-          zone:draw()
+    Citizen.CreateThread(function()
+      while DEBUG_ENABLED do
+        local plyPos = GetEntityCoords(PlayerPedId()).xy
+        for i, zone in ipairs(targetZone.zones) do
+          if zone and not zone.destroyed and #(plyPos - zone.center.xy) < DEBUG_MAX_DISTANCE then
+            zone:draw()
+          end
         end
+        Wait(0)
       end
-      Wait(0)
-    end
+    end)
   end
   print('polytarget debug: ' .. tostring(DEBUG_ENABLED))
 end
 
-if (GetConvar('is_production', "true") == "false") then
-  RegisterCommand('polytarget:debug:toggle', function()
-    toggleTargetDebug()
-  end)
-end
+DGX.Events.onNet('polytarget:debug:toggle', function(toggle)
+  if DEBUG_ENABLED == toggle then return end
+  toggleTargetDebug(toggle)
+end)

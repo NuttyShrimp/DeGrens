@@ -4,6 +4,8 @@ games { "gta5" }
 description "DeGrens PolyZone"
 
 client_scripts {
+  '@ts-shared/shared/lib.lua',
+  "@ts-shared/client/client.js",
 	'@dg-logs/client/cl_log.lua',
 	"@PolyZone/client.lua",
 	"@PolyZone/BoxZone.lua",

@@ -4,6 +4,8 @@ games { "gta5" }
 description "DeGrens Polytarget"
 
 client_scripts {
+  '@ts-shared/shared/lib.lua',
+  "@ts-shared/client/client.js",
 	'@dg-logs/client/cl_log.lua',
 	"@PolyZone/client.lua",
 	"@PolyZone/BoxZone.lua",
@@ -11,8 +13,6 @@ client_scripts {
 	"@PolyZone/ComboZone.lua",
 	"@PolyZone/EntityZone.lua",
 	"client/cl_*.lua",
-  '@ts-shared/shared/lib.lua',
-  "@ts-shared/client/client.js",
 }
 
 dependency "dg-auth"

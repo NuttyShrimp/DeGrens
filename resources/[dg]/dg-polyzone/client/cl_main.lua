@@ -137,24 +137,25 @@ exports('isPointInside', function(point, zoneName)
   return inside
 end)
 
-local function toggleDebug()
-  DEBUG_ENABLED = not DEBUG_ENABLED
+local function toggleDebug(toggle)
+  DEBUG_ENABLED = toggle
   print('polyzone debug: ' .. tostring(DEBUG_ENABLED))
   if (DEBUG_ENABLED and targetZone ~= nil) then
-    while DEBUG_ENABLED do
-      local plyPos = GetEntityCoords(PlayerPedId()).xy
-      for i, zone in ipairs(targetZone.zones) do
-        if zone and not zone.destroyed and #(plyPos - zone.center.xy) < DEBUG_MAX_DISTANCE then
-          zone:draw()
+    Citizen.CreateThread(function()
+      while DEBUG_ENABLED do
+        local plyPos = GetEntityCoords(PlayerPedId()).xy
+        for i, zone in ipairs(targetZone.zones) do
+          if zone and not zone.destroyed and #(plyPos - zone.center.xy) < DEBUG_MAX_DISTANCE then
+            zone:draw()
+          end
         end
+        Wait(0)
       end
-      Wait(0)
-    end
+    end)
   end
 end
 
-if (GetConvar('is_production', "true") == "false") then
-  RegisterCommand('polyzone:debug:toggle', function()
-    toggleDebug()
-  end)
-end
+DGX.Events.onNet('polyzone:debug:toggle', function(toggle)
+  if DEBUG_ENABLED == toggle then return end
+  toggleDebug(toggle)
+end)
