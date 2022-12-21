@@ -31,10 +31,10 @@ class Events {
   }
 
   private async netEventHandler(src: number, data: DGXEvents.ServerNetEvtData) {
-    // Check if resource token is valid
-    if (!global.exports['dg-auth'].validateToken(src, data.origin, data.token)) return;
     const eventName = atob(data.eventId);
     if (!this.netEventHandlers.has(eventName)) return;
+    // Check if resource token is valid
+    if (!global.exports['dg-auth'].validateToken(src, data.origin, data.token)) return;
     data.metadata.finishedAt = new Date().getTime() / 1000;
     const transaction = Sentry.startTransaction({
       name: eventName,
