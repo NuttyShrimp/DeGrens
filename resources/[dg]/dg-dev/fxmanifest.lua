@@ -15,7 +15,7 @@ server_scripts {
 client_scripts {
   "@ts-shared/client/client.js",
 	"@dg-logs/client/cl_log.lua",
-	"client/cl_*.lua",
+	"client/**/*.lua",
 }
 
 dependency "dg-auth"
