@@ -34,9 +34,15 @@ exports('registerKeyMapping', function(name, description, onKeyDownCommand, onKe
   RegisterKeyMapping(cmdStringDown, description, type, default)
 end)
 
-exports('shouldExecuteKeyMaps', function(toggle)
-  debug("shouldExecuteKeyMaps: " .. tostring(toggle))
-  shouldExecute = toggle
+function setShouldExecuteKeyMaps(execute)
+  debug("shouldExecuteKeyMaps: " .. tostring(execute))
+  shouldExecute = execute
+end
+exports('shouldExecuteKeyMaps', function(execute)
+  setShouldExecuteKeyMaps(execute)
+end)
+DGX.Events.onNet('lib:keys:shouldExecuteKeyMaps', function(execute)
+  setShouldExecuteKeyMaps(execute)
 end)
 
 exports('GetCurrentKeyMap', function(keycommand, keycontroller)
