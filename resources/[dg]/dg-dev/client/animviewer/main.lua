@@ -18,7 +18,7 @@ local selection = {
   flag = 0
 }
 
-local animations = ALL_ANIMATIONS
+local animations = json.decode(LoadResourceFile(GetCurrentResourceName(), "data/animations.json"))
 
 local isOpen = false
 local movementEnabled = false
@@ -157,7 +157,7 @@ function open()
         end
         if IsDisabledControlJustPressed(0, KEYS['R']) then
           searchedStrings = {}
-          animations = ALL_ANIMATIONS
+          animations = json.decode(LoadResourceFile(GetCurrentResourceName(), "data/animations.json"))
         end
         if IsDisabledControlJustPressed(0, KEYS['S']) then
           print(selection.anim.dict, selection.anim.anim)
