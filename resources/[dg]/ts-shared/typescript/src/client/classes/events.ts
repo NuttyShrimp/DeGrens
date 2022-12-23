@@ -11,10 +11,11 @@ class TokenStorage {
     return this.instance;
   }
 
-  private token!: string;
+  private token: string | null;
   private readonly resourceName: string;
 
   constructor() {
+    this.token = null;
     this.resourceName = GetCurrentResourceName();
     onNet('dg-auth:token:reset', () => {
       this.getResourceToken();
@@ -32,14 +33,23 @@ class TokenStorage {
   }
 
   async getToken() {
-    while (!this.token) {
-      await new Promise(res => setTimeout(res, 100));
-    }
-    return this.token;
+    await new Promise<void>(res => {
+      if (this.token === null) {
+        const thread = setInterval(() => {
+          if (this.token === null) {
+            clearInterval(thread);
+            res();
+          }
+        }, 100);
+      } else {
+        res();
+      }
+    });
+    return this.token!;
   }
 }
 
-export class Events {
+class Events {
   private static instance: Events;
 
   static getInstance() {
@@ -50,7 +60,8 @@ export class Events {
   }
 
   private readonly resName: string;
-  private tokenStorage: TokenStorage;
+  private readonly tokenStorage: TokenStorage;
+
   private serverEventHandlers: Map<string, DGXEvents.LocalEventHandler[]> = new Map();
   private localEventHandlers: Map<string, DGXEvents.LocalEventHandler[]> = new Map();
 
@@ -72,7 +83,7 @@ export class Events {
       handler(...data.args);
     });
     if (Util.isDevEnv()) {
-      console.log(`[DGX] [S -> C] Event: ${data.eventName}`);
+      console.log(`[DGX] [C -> C] Event: ${data.eventName}`);
     }
   }
 
@@ -81,11 +92,11 @@ export class Events {
     data.metadata.receiver.finishedAt = new Date().toString();
     data.metadata.handler.createdAt = new Date().toString();
     if (!this.serverEventHandlers.has(data.eventName)) return;
-    const handlers = this.serverEventHandlers.get(data.eventName)!;
-    await Promise.all(handlers.map(handler => handler(...data.args)));
     if (Util.isDevEnv()) {
       console.log(`[DGX] [S -> C] Event: ${data.eventName}`);
     }
+    const handlers = this.serverEventHandlers.get(data.eventName)!;
+    await Promise.all(handlers.map(handler => handler(...data.args)));
     data.metadata.handler.finishedAt = new Date().toString();
     if (data.traceId && data.traceId.trim() !== '') {
       emitNet('__dgx_event:createTrace', data.traceId, data.metadata);
@@ -96,26 +107,24 @@ export class Events {
     await this.tokenStorage.getToken();
   }
 
-  emitNet(event: string, ...args: any[]) {
-    setImmediate(async () => {
-      const metadata = {
-        createdAt: new Date().toString(),
-      };
-      const token = await this.tokenStorage.getToken();
-      // Just base64 but enough for stupid people
-      const eventHash = btoa(event);
-      if (Util.isDevEnv()) {
-        console.log(`[DGX] [${this.resName}] [C-S] Event: ${event}`);
-      }
-      const evtData: DGXEvents.ServerNetEvtData = {
-        token,
-        origin: this.resName,
-        eventId: eventHash,
-        metadata,
-        args,
-      };
-      emitNet('__dgx_event:ServerNetEvent', evtData);
-    });
+  async emitNet(event: string, ...args: any[]) {
+    const metadata = {
+      createdAt: new Date().toString(),
+    };
+    const token = await this.tokenStorage.getToken();
+    // Just base64 but enough for stupid people
+    const eventHash = btoa(event);
+    if (Util.isDevEnv()) {
+      console.log(`[DGX] [C -> S] Event: ${event}`);
+    }
+    const evtData: DGXEvents.ServerNetEvtData = {
+      token,
+      origin: this.resName,
+      eventId: eventHash,
+      metadata,
+      args,
+    };
+    emitNet('__dgx_event:ServerNetEvent', evtData);
   }
 
   emit(evtName: string, ...args: any[]) {
@@ -194,6 +203,9 @@ class RPC {
       createdAt: new Date().toString(),
       finishedAt: new Date().toString(),
     };
+    if (Util.isDevEnv()) {
+      console.log(`[DGX] [S -> C -> S] RPC: ${data.name}`);
+    }
     const result = await handler(...data.args);
     const token = await this.tokenStorage.getToken();
     metadata.finishedAt = new Date().toString();

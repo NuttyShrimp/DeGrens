@@ -1,5 +1,4 @@
 import { TransactionContext } from '@sentry/types';
-import { Transaction } from '@sentry/types';
 
 import { Sentry } from '../helpers/sentry';
 
@@ -116,11 +115,11 @@ class Events {
     });
     try {
       const handlers = this.localEventHandlers.get(data.eventName);
-      if (handlers) {
-        await Promise.all(handlers.map(handler => handler(...data.args)));
-      }
       if (Util.isDevEnv()) {
         console.log(`[EVENTS] [S -> S] event: ${data.eventName} | trigger: ${GetInvokingResource()}`);
+      }
+      if (handlers) {
+        await Promise.all(handlers.map(handler => handler(...data.args)));
       }
       span.setStatus(handlers ? 'ok' : 'not_found');
     } catch (e) {
@@ -134,74 +133,70 @@ class Events {
   }
 
   emitNet(evtName: string, target: number, ...args: any[]) {
-    setImmediate(async () => {
-      if (target === -1) {
-        if (!GetNumPlayerIndices()) {
-          return;
-        }
-      } else {
-        if (!GetPlayerName(String(target))) {
-          if (Util.isDevEnv()) {
-            console.error(`Tried sending ${evtName} to ${target} who is not online`);
-          }
-          return;
-        }
+    if (target === -1) {
+      if (!GetNumPlayerIndices()) {
+        return;
       }
-      const evtData: DGXEvents.ClientNetEvtData = {
-        eventName: evtName,
-        args,
-        traceId: '',
-        metadata: {
-          receiver: {
-            createdAt: new Date().toString(),
-          },
-          handler: {},
+    } else {
+      if (!GetPlayerName(String(target))) {
+        if (Util.isDevEnv()) {
+          console.error(`Tried sending ${evtName} to ${target} who is not online`);
+        }
+        return;
+      }
+    }
+    const evtData: DGXEvents.ClientNetEvtData = {
+      eventName: evtName,
+      args,
+      traceId: '',
+      metadata: {
+        receiver: {
+          createdAt: new Date().toString(),
+        },
+        handler: {},
+      },
+    };
+    if (!evtName.startsWith('__dg')) {
+      const transactionContext: TransactionContext = {
+        name: evtName,
+        op: 'server.event.net',
+        description: `Outgoing network event ${evtName} on server`,
+        data: {
+          args,
+          target: target !== -1 ? Player(target).state.steamId : target,
+        },
+        tags: {
+          handler: 'Events',
+          target: 'Client',
         },
       };
-      if (!evtName.startsWith('__dg')) {
-        const transactionContext: TransactionContext = {
-          name: evtName,
-          op: 'server.event.net',
-          description: `Outgoing network event ${evtName} on server`,
-          data: {
-            args,
-            target: target !== -1 ? Player(target).state.steamId : target,
-          },
-          tags: {
-            handler: 'Events',
-            target: 'Client',
-          },
-        };
-        // 2 spans -> receiver + handler
-        const transaction = sentryHandler.startTransaction(transactionContext, 20000, 2);
-        evtData.traceId = transaction.traceId ?? null;
-        if (Util.isDevEnv()) {
-          console.log(
-            `[EVENTS] [S -> C] event: ${evtName} | trigger: ${GetInvokingResource()} | ply: ${
-              target === -1 ? 'All' : Util.getName(target)
-            }(${target})`
-          );
-        }
+      // 2 spans -> receiver + handler
+      const transaction = sentryHandler.startTransaction(transactionContext, 20000, 2);
+      evtData.traceId = transaction.traceId ?? null;
+      if (Util.isDevEnv()) {
+        console.log(
+          `[EVENTS] [S -> C] event: ${evtName} | trigger: ${GetInvokingResource()} | ply: ${
+            target === -1 ? 'All' : Util.getName(target)
+          }(${target})`
+        );
       }
-      try {
-        emitNet('__dgx_event:ClientNetEvent', Number(target), evtData);
-      } catch (e) {
-        Sentry.captureException(e);
-        console.error('[DGX] Error emitting net event', evtName, target, e);
-      }
-    });
+    }
+    try {
+      emitNet('__dgx_event:ClientNetEvent', Number(target), evtData);
+    } catch (e) {
+      Sentry.captureException(e);
+      console.error('[DGX] Error emitting net event', evtName, target, e);
+    }
   }
 
   emit(evtName: string, ...args: any[]) {
-    setImmediate(() => {
-      const metadata = {
-        createdAt: new Date().getTime() / 1000,
-      };
-      emit(`__dgx_event:ServerLocalEvent`, {
-        eventName: evtName,
-        metadata,
-        args,
-      });
+    const metadata = {
+      createdAt: new Date().getTime() / 1000,
+    };
+    emit(`__dgx_event:ServerLocalEvent`, {
+      eventName: evtName,
+      metadata,
+      args,
     });
   }
 
@@ -233,7 +228,7 @@ class Events {
         op: type,
         data: {
           origin: src,
-          originSteamId: Player(src).state.steamId,
+          originSteamId: steamId,
         },
         startTimestamp: new Date(metadata[type].createdAt).getTime() / 1000,
       });
@@ -266,9 +261,11 @@ class RPC {
     this.generateToken();
 
     onNet('__dgx_rpc:emitServer', (data: DGXRPC.ClientRequestData) => this.handleIncomingRequest(source, data));
-    onNet('__dgx_rpc:traceServer', (traceId: string, metadata: DGXRPC.ClientRequestMetadata) =>
-      this.finishClientRequestTrace(source, traceId, metadata)
-    );
+    if (this.resourceName === 'ts-shared') {
+      onNet('__dgx_rpc:traceServer', (traceId: string, metadata: DGXRPC.ClientRequestMetadata) =>
+        this.finishClientRequestTrace(source, traceId, metadata)
+      );
+    }
   }
 
   private async generateToken() {
@@ -284,25 +281,25 @@ class RPC {
     if (!global.exports['dg-auth'].validateToken(source, data.resource, data.token)) return;
     data.metadata.request.finishedAt = new Date().toString();
     data.metadata.handler.createdAt = new Date().toString();
+    const steamId = Player(src).state.steamId;
     const { traceId } = sentryHandler.startTransaction(
       {
         op: 'client.rpc',
         name: data.name,
         description: `Incoming RPC on server`,
         data: {
-          origin: Player(src).state.steamId,
+          origin: steamId,
           name: data.name,
           args: data.args,
         },
         tags: {
-          origin: Player(src).state.steamId,
+          origin: steamId,
           handler: 'RPC',
         },
       },
       20000,
       3
     );
-    const steamId = Player(src).state.steamId;
     let spanId;
     if (traceId) {
       spanId = sentryHandler.addSpan(steamId, traceId, {
@@ -324,6 +321,9 @@ class RPC {
       });
     }
     try {
+      if (Util.isDevEnv()) {
+        console.log(`[DGX] [C -> S -> C] RPC: ${data.name} | origin: ${src}`);
+      }
       const result = await handler(src, ...data.args);
       const responseData: DGXRPC.ServerResponseData = {
         id: data.id,
