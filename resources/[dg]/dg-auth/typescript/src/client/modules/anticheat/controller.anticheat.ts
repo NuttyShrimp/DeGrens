@@ -13,7 +13,8 @@ import {
   stopStatsThread,
 } from './service.anticheat';
 
-on('entityDamaged', (victim: number, attacker: number, weapon: number, baseDamage: number) => {
+// Damage param is always 0
+on('entityDamaged', (victim: number, attacker: number, weapon: number) => {
   const attackerPly = Util.getServerIdForPed(Number(attacker));
   if (Number(victim) !== PlayerPedId() || !attackerPly) {
     return;
@@ -24,8 +25,7 @@ on('entityDamaged', (victim: number, attacker: number, weapon: number, baseDamag
     attacker: attackerPly,
     victim: Util.getServerIdForPed(Number(victim)),
     weaponHash: Number(weapon),
-    damage: baseDamage,
-    headshot: boneHit === GetHashKey('SKEL_Head'),
+    headshot: boneHit === GetPedBoneIndex(PlayerPedId(), 31086), // Cannot convert bone name to id for ped without lookuptable
   });
 });
 

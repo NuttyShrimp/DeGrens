@@ -33,7 +33,6 @@ declare namespace AntiCheat {
     attacker: number | string;
     victim: number | string;
     weaponHash: number;
-    damage: number;
     headshot: boolean;
   }
 }
