@@ -47,16 +47,15 @@ export const setGameWeather = async (weather: WeatherSync.Weather, skipTransitio
     const time = skipTransition ? 0 : TRANSITION_TIME;
     SetWeatherTypeOvertimePersist(weather.type, time);
     await Util.Delay(time * 1000);
+
     currentWeather = weather;
+    ClearOverrideWeather();
+    SetWeatherTypePersist(weather.type);
+    SetWeatherTypeNow(weather.type);
+    SetWeatherTypeNowPersist(weather.type);
+
     emit('weathersync:weatherUpdated', weather.type);
   }
-
-  ClearOverrideWeather();
-  ClearWeatherTypePersist();
-
-  SetWeatherTypePersist(weather.type);
-  SetWeatherTypeNow(weather.type);
-  SetWeatherTypeNowPersist(weather.type);
 
   SetWindSpeed(weather.windSpeed);
   SetWindDirection(weather.windDirection);

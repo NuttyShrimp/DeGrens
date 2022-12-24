@@ -97,5 +97,5 @@ export const overideCurrentWeather = (type: string) => {
   skipNextTransition = true;
 
   const weather = generateWeatherData(type as WeatherSync.Type);
-  setCurrentWeather(weather, true);
+  setCurrentWeather(weather);
 };
