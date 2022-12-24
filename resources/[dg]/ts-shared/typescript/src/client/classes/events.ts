@@ -32,20 +32,19 @@ class TokenStorage {
     emitNet('dg-auth:token:requestResource', GetCurrentResourceName());
   }
 
-  async getToken() {
-    await new Promise<void>(res => {
-      if (this.token === null) {
-        const thread = setInterval(() => {
-          if (this.token === null) {
-            clearInterval(thread);
-            res();
-          }
-        }, 100);
-      } else {
-        res();
+  getToken() {
+    return new Promise<string>(res => {
+      if (this.token !== null) {
+        res(this.token);
+        return;
       }
+
+      const thread = setInterval(() => {
+        if (this.token === null) return;
+        clearInterval(thread);
+        res(this.token);
+      }, 100);
     });
-    return this.token!;
   }
 }
 
