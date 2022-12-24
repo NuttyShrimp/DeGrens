@@ -43,6 +43,7 @@ end
 
 function getAnimDataFromIndex(idx)
   local s = animations[idx]
+  if not s then return end
   local split = {}
   for w in s:gmatch("%S+") do split[#split+1] = w end
   local dict = split[1]
