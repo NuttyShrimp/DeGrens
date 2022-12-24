@@ -1,8 +1,16 @@
 import { Util } from '@dgx/client';
 
 export const isAnyPlayerInVehicle = (vehicle: number) => {
-  if (!IsVehicleSeatFree(vehicle, -1)) return true;
-  return GetVehicleNumberOfPassengers(vehicle) !== 0;
+  const amountOfSeats = GetVehicleModelNumberOfSeats(GetEntityModel(vehicle));
+
+  for (let seat = -1; seat < amountOfSeats - 1; seat++) {
+    const ped = GetPedInVehicleSeat(vehicle, seat);
+    if (ped && DoesEntityExist(ped) && IsPedAPlayer(ped)) {
+      return true;
+    }
+  }
+
+  return false;
 };
 
 export const getClosestSeatId = (vehicle: number) => {

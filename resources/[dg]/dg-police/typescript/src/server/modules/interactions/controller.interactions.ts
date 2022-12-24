@@ -29,7 +29,7 @@ Events.onNet(
     // Check if a player in closest seat to origin player
     if (closestSeat !== undefined) {
       const pedInClosestSeat = GetPedInVehicleSeat(vehicle, closestSeat);
-      if (pedInClosestSeat !== 0) {
+      if (pedInClosestSeat !== 0 && IsPedAPlayer(pedInClosestSeat)) {
         targetPed = pedInClosestSeat;
       }
     }
@@ -38,7 +38,7 @@ Events.onNet(
     if (targetPed === null) {
       for (let i = amountOfSeats - 2; i >= -1; i--) {
         const pedInSeat = GetPedInVehicleSeat(vehicle, i);
-        if (pedInSeat !== 0) {
+        if (pedInSeat !== 0 && IsPedAPlayer(pedInSeat)) {
           targetPed = pedInSeat;
           break;
         }
