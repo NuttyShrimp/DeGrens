@@ -402,6 +402,27 @@
     },
     {
       "type": "node-terminal",
+      "name": "lockers:build prod",
+      "request": "launch",
+      "command": "yarn run build",
+      "cwd": "${workspaceFolder}/resources/[dg]/dg-lockers/typescript"
+    },
+    {
+      "type": "node-terminal",
+      "name": "lockers:build dev",
+      "request": "launch",
+      "command": "yarn run build:dev",
+      "cwd": "${workspaceFolder}/resources/[dg]/dg-lockers/typescript"
+    },
+    {
+      "type": "node-terminal",
+      "name": "lockers:watch",
+      "request": "launch",
+      "command": "yarn run watch",
+      "cwd": "${workspaceFolder}/resources/[dg]/dg-lockers/typescript"
+    },
+    {
+      "type": "node-terminal",
       "name": "materials:build prod",
       "request": "launch",
       "command": "yarn run build",
@@ -595,6 +616,27 @@
       "request": "launch",
       "command": "yarn run watch",
       "cwd": "${workspaceFolder}/resources/[dg]/dg-storerobbery/typescript"
+    },
+    {
+      "type": "node-terminal",
+      "name": "sync:build prod",
+      "request": "launch",
+      "command": "yarn run build",
+      "cwd": "${workspaceFolder}/resources/[dg]/dg-sync/typescript"
+    },
+    {
+      "type": "node-terminal",
+      "name": "sync:build dev",
+      "request": "launch",
+      "command": "yarn run build:dev",
+      "cwd": "${workspaceFolder}/resources/[dg]/dg-sync/typescript"
+    },
+    {
+      "type": "node-terminal",
+      "name": "sync:watch",
+      "request": "launch",
+      "command": "yarn run watch",
+      "cwd": "${workspaceFolder}/resources/[dg]/dg-sync/typescript"
     },
     {
       "type": "node-terminal",

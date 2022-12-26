@@ -1,6 +1,32 @@
-import { Events, RPC } from './index';
+import { Events, RPC, Util } from './index';
 
 class UI {
+  private readonly inputResolveFunctions: Map<string, (result: UI.Input.Result<Record<string, string>>) => void>;
+
+  constructor() {
+    this.inputResolveFunctions = new Map();
+    // Dont use DGX because probably not instantiated yet as this gets registered in constructor
+    onNet('dgx:server:ui:inputResult', (id: string, result: UI.Input.Result<Record<string, string>>) => {
+      const res = this.inputResolveFunctions.get(id);
+      if (!res) return;
+      res(result);
+      this.inputResolveFunctions.delete(id);
+    });
+  }
+
+  public async openInput<T extends Record<string, string> = Record<string, string>>(
+    target: number,
+    data: UI.Input.Data
+  ): Promise<UI.Input.Result<T>> {
+    const id = Util.uuidv4();
+    const prom = new Promise<any>(res => {
+      this.inputResolveFunctions.set(id, res);
+    });
+    emitNet('dgx:client:ui:openInput', target, id, data);
+    const result: UI.Input.Result<T> = await prom;
+    return result;
+  }
+
   openContextMenu(target: number, menu: ContextMenu.Entry[]) {
     Events.emitNet('dgx:client:ui:openContextmenu', target, menu);
   }
