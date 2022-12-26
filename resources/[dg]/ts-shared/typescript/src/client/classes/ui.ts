@@ -60,7 +60,9 @@ class UI {
     global.exports['dg-ui'].closeApplication(app, data);
   }
 
-  openInput = async (data: UI.Input.Data): Promise<{ accepted: boolean; values: Record<string, string> }> => {
+  openInput = async <T extends Record<string, string> = Record<string, string>>(
+    data: UI.Input.Data
+  ): Promise<UI.Input.Result<T>> => {
     const result = await global.exports['dg-ui'].openInput(data);
     return { accepted: result.accepted, values: result.values };
   };

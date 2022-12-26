@@ -56,6 +56,8 @@ declare namespace UI {
       label: string;
       name: string;
     } & (FreeInput | SelectInput | Text);
+
+    type Result<T extends Record<string, string> = Record<string, string>> = { accepted: boolean; values: T };
   }
 
   type InteractionType = 'info' | 'error' | 'success';

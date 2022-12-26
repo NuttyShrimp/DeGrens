@@ -11,4 +11,9 @@ if (GetCurrentResourceName() === 'ts-shared') {
   Events.onNet('dgx:client:ui:openContextmenu', (menu: ContextMenu.Entry[]) => {
     UI.openApplication('contextmenu', menu);
   });
+
+  onNet('dgx:client:ui:openInput', async (id: string, data: UI.Input.Data) => {
+    const result = await UI.openInput(data);
+    emitNet('dgx:server:ui:inputResult', id, result);
+  });
 }
