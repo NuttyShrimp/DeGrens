@@ -17,3 +17,9 @@ Events.onNet('admin:server:deleteEntity', (_, netId: number) => {
   if (!entity || !DoesEntityExist(entity)) return;
   DeleteEntity(entity);
 });
+
+Events.onNet('admin:server:toggleFreezeEntity', (_, netId: number, isFrozen: boolean) => {
+  const entity = NetworkGetEntityFromNetworkId(netId);
+  if (!entity || !DoesEntityExist(entity)) return;
+  FreezeEntityPosition(entity, !isFrozen);
+});

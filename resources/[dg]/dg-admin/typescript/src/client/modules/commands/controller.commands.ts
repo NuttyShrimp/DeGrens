@@ -1,4 +1,4 @@
-import { Events, Notifications, RPC, Util } from '@dgx/client';
+import { Events, RPC, Util } from '@dgx/client';
 
 import { togglePlayerBlips } from '../../service/playerBlips';
 
@@ -19,6 +19,16 @@ on('admin:commands:deleteEntity', (ent: number) => {
     return;
   }
   Events.emitNet('admin:server:deleteEntity', NetworkGetNetworkIdFromEntity(ent));
+});
+on('admin:commands:toggleFreezeEntity', (ent: number) => {
+  const entity = Number(ent);
+  const isFrozen = IsEntityPositionFrozen(entity);
+
+  if (!NetworkGetEntityIsNetworked(entity)) {
+    FreezeEntityPosition(entity, !isFrozen);
+    return;
+  }
+  Events.emitNet('admin:server:toggleFreezeEntity', NetworkGetNetworkIdFromEntity(entity), isFrozen);
 });
 
 Events.onNet('admin:commands:runCmd', (handler, args: any[]) => {
