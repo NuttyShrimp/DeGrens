@@ -13,6 +13,9 @@ import {
   stopStatsThread,
 } from './service.anticheat';
 
+// Headbones
+const HEAD_BONES = new Set([31085, 31086, 39317]);
+
 // Damage param is always 0
 on('entityDamaged', (victim: number, attacker: number, weapon: number) => {
   const attackerPly = Util.getServerIdForPed(Number(attacker));
@@ -25,7 +28,7 @@ on('entityDamaged', (victim: number, attacker: number, weapon: number) => {
     attacker: attackerPly,
     victim: Util.getServerIdForPed(Number(victim)),
     weaponHash: Number(weapon),
-    headshot: boneHit === GetPedBoneIndex(PlayerPedId(), 31086), // Cannot convert bone name to id for ped without lookuptable
+    headshot: HEAD_BONES.has(boneHit),
   });
 });
 
