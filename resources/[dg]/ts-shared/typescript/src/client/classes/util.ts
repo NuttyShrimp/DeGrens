@@ -160,6 +160,9 @@ class Util extends UtilShared {
    */
   createObjectOnServer = async (model: string, coords: Vec3, routingBucket?: number): Promise<number> => {
     const netId = await RPC.execute<number>('dgx:createObject', model, coords, routingBucket);
+    if (netId) {
+      NetworkRequestControlOfNetworkId(netId);
+    }
     return netId ?? 0;
   };
 

@@ -130,6 +130,14 @@ class Util extends UtilShared {
     return anyInRange;
   };
 
+  isAnyPedInRange = (coords: Vec3, range: number, onlyPlayers = false) => {
+    const allPeds: number[] = GetAllPeds();
+    const anyInRange = allPeds
+      .filter(ped => !onlyPlayers || IsPedAPlayer(ped))
+      .some(ped => this.getEntityCoords(ped).distance(coords) <= range);
+    return anyInRange;
+  };
+
   sendEventToEntityOwner = (entity: number, event: string, ...params: any[]) => {
     const owner = NetworkGetEntityOwner(entity);
     if (owner !== 0) {
