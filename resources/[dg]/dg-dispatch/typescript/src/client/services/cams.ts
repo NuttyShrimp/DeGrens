@@ -10,6 +10,8 @@ let moveKeyThreads: Record<Direction, NodeJS.Timer | undefined> = {
   right: undefined,
 };
 
+const DISABLED_CONTROLS = [30, 31, 32, 33, 34, 35];
+
 setImmediate(async () => {
   const pCams = await RPC.execute('dispatch:cams:request');
   if (!pCams) return;
@@ -84,6 +86,16 @@ export const openCam = async (id: number) => {
   await Util.awaitCondition(() => IsScreenFadedOut());
 
   FreezeEntityPosition(PlayerPedId(), true);
+  const keyDisableThread = setInterval(() => {
+    if (!activeCamera) {
+      clearInterval(keyDisableThread);
+      return;
+    }
+
+    DISABLED_CONTROLS.forEach(id => {
+      DisableControlAction(0, id, true);
+    });
+  }, 0);
 
   SetFocusPosAndVel(camInfo.coords.x, camInfo.coords.y, camInfo.coords.z, 0, 0, 0);
   activeCamera = CreateCam('DEFAULT_SCRIPTED_CAMERA', true);
@@ -142,6 +154,7 @@ export const moveCam = (dir: Direction) => {
 };
 
 export const startCamMoveThread = (dir: Direction) => {
+  if (!activeCamera) return;
   stopCamMoveThread(dir);
   moveKeyThreads[dir] = setInterval(() => {
     moveCam(dir);
