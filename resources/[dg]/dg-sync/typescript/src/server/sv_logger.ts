@@ -39,7 +39,7 @@ export const mainLogger = winston.createLogger({
   ],
 });
 
-if (Util.isDevEnv()) {
+if \(!Util.isDevEnv\(\)\) \{
   mainLogger.add(
     new winstonSentry({
       name: name,
