@@ -24,10 +24,8 @@ image: node:16
 .js_changes:
   only:
     refs:
-      - main
       - UPD
       - merge_requests
-      - tags
     changes:
       - "**/*.js"
       - "**/*.ts"
@@ -50,11 +48,10 @@ validate json:
       - main
       - UPD
       - merge_requests
-      - tags
     changes:
       - "**/*.json"
 
-Validate Errorlogger:
+validate Errorlogger:
   image: python:3-slim
   stage: test
   script:
@@ -65,7 +62,6 @@ Validate Errorlogger:
       - main
       - UPD
       - merge_requests
-      - tags
     changes:
       - '**/fxmanifest.lua'
 
@@ -89,7 +85,6 @@ validate db migrations:
       - main
       - UPD
       - merge_requests
-      - tags
     changes:
       - 'migrations/*'
 
@@ -102,11 +97,23 @@ JS linting:
   script:
     - yarn lint
 
-JS building:
+TS dev build:
   extends:
     - .lerna_installation
     - .cache_modules
     - .js_changes
+  stage: build
+  script:
+    - yarn format -- -- --loglevel error
+    - yarn build:dev --skip-nx-cache
+
+TS prod build:
+  extends:
+    - .lerna_installation
+    - .cache_modules
+  only:
+    refs:
+      - main 
   stage: build
   script:
     - yarn format -- -- --loglevel error
