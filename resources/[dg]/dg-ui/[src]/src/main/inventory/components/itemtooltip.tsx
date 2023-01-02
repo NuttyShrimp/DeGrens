@@ -25,7 +25,7 @@ export const ItemTooltip: FC<Inventory.Item> = ({
     const hiddenKeys: string[] = metadata.hiddenKeys ?? [];
     const formatted: JSX.Element[] = [];
     Object.entries(metadata)
-      .filter(([key]) => !hiddenKeys.some(hidden => key === hidden))
+      .filter(([key]) => !hiddenKeys.some(hidden => key === hidden) || key !== 'hiddenKeys')
       .forEach(([key, value]) => {
         formatted.push(<span key={`${key}-span`}>{`${capitalize(key)}: ${value.toString()}`}</span>);
         formatted.push(<br key={`${key}-br`} />);
