@@ -27,5 +27,5 @@ declare namespace Settings {
 
 type Flag = {
   name: string;
-  active: boolean;
+  active: boolean | string | number;
 };

@@ -70,10 +70,16 @@ class Vehicles {
     return global.exports['dg-vehicles'].getPlateForVin(vin);
   };
 
-  getConfigByEntity = (
-    vehicle: number
-  ): { name: string; brand: string; model: string; category: string; class: string } | undefined => {
+  getConfigByEntity = (vehicle: number): NVehicles.Config | undefined => {
     return global.exports['dg-vehicles'].getConfigByEntity(vehicle);
+  };
+
+  getConfigByHash = (hash: number): NVehicles.Config | undefined => {
+    return global.exports['dg-vehicles'].getConfigByHash(hash);
+  };
+
+  getConfigByModel = (model: string): NVehicles.Config | undefined => {
+    return global.exports['dg-vehicles'].getConfigByModel(model);
   };
 
   setEngineState = (vehicle: number, state: boolean, instantly?: boolean) => {

@@ -5,6 +5,7 @@ import './modules/hud';
 import './modules/radio/controller.radio';
 import './modules/elevators';
 import './modules/propattach';
+import './modules/rental/controller.rental';
 import './services/laptop';
 import './services/config';
 import './services/boatanchor';

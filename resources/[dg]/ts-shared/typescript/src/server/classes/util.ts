@@ -219,6 +219,15 @@ class Util extends UtilShared {
 
     return closestPlayer;
   };
+
+  getAllPlayers() {
+    const plyNum = GetNumPlayerIndices();
+    const plys: number[] = [];
+    for (let i = 0; i < plyNum; i++) {
+      plys.push(Number(GetPlayerFromIndex(i)));
+    }
+    return plys;
+  }
 }
 
 export class Sounds {

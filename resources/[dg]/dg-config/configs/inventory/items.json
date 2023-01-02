@@ -2845,5 +2845,15 @@
       "x": 1,
       "y": 1
     }
+  },
+  {
+    "name": "rent_papers",
+    "label": "Voertuig huur papieren",
+    "image": "paper_folder.png",
+    "size": {
+      "x": 2,
+      "y": 2
+    },
+    "useable": true
   }
 ]
