@@ -13,6 +13,7 @@ import './services/minimap';
 import './services/idmenu';
 import './services/me';
 import './services/editor';
+import './services/point';
 
 import { setDiscordRichPresence } from 'modules/discord/service.discord';
 import { setGTABehaviour } from 'modules/gtabehaviour/service.gtabehaviour';
