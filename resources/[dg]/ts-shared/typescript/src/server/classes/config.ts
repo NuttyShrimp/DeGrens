@@ -5,6 +5,7 @@ class Config {
     return global.exports['dg-config'].getModuleConfig(moduleId);
   }
   async awaitConfigLoad(): Promise<void> {
+    Util.awaitCondition(() => GetResourceState("dg-config") === 'started' && global?.exports?.['dg-config'] !== undefined)
     while (!this.areConfigsReady()) {
       await Util.Delay(10);
     }
