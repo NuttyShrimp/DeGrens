@@ -1,7 +1,7 @@
 import { Inventory, Keys, Util } from '@dgx/client';
 
 let noclipEnabled = false;
-let noclipTick: number | null = null;
+let noclipThread: NodeJS.Timer | null = null;
 let noclipCam: number | null = null;
 let noclipEnt: number | null = null;
 let noclipPed: number | null = null;
@@ -49,7 +49,7 @@ export const toggleNoclip = () => {
   Inventory.toggleAllObjects(false);
 
   const plyId = PlayerId();
-  noclipTick = setTick(() => {
+  noclipThread = setInterval(() => {
     const camRot = GetCamRot(noclipCam, 2);
     SetEntityHeading(noclipEnt, (360 + camRot[2]) % 360);
     DisablePlayerFiring(plyId, true);
@@ -68,7 +68,7 @@ export const toggleNoclip = () => {
         SetCamRot(noclipCam, rotX, camRot[1], rotZ, 2);
       }
     }
-  });
+  }, 1);
 };
 
 export const printDebugInfo = () => {
@@ -82,10 +82,11 @@ export const printDebugInfo = () => {
 };
 
 const cleanupNoclip = () => {
-  if (noclipTick) {
-    clearTick(noclipTick);
-    noclipTick = null;
+  if (noclipThread) {
+    clearInterval(noclipThread);
+    noclipThread = null;
   }
+
   DestroyCam(noclipCam, false);
   noclipCam = null;
   RenderScriptCams(false, false, 3000, true, false);
@@ -115,15 +116,15 @@ const cleanupNoclip = () => {
 
 const getMultiplier = (): number => {
   // LSHIFT
-  if (IsControlPressed(2, 209)) {
+  if (IsControlPressed(2, 209) || IsDisabledControlPressed(2, 209)) {
     return 2;
   }
   // LALT
-  if (IsControlPressed(2, 19)) {
+  if (IsControlPressed(2, 19) || IsDisabledControlPressed(2, 19)) {
     return 4;
   }
   // LCTRL
-  if (IsControlPressed(2, 36)) {
+  if (IsControlPressed(2, 36) || IsDisabledControlPressed(2, 36)) {
     return 0.25;
   }
   return 1;
@@ -157,15 +158,15 @@ Keys.register('admin-noclip-spd-down', '(zAdmin) Noclip speed down', 'IOM_WHEEL_
 
 const getSpeedMultiplier = (): number => {
   // LSHIFT
-  if (IsControlPressed(2, 209)) {
+  if (IsControlPressed(2, 209) || IsDisabledControlPressed(2, 209)) {
     return 1;
   }
   // LALT
-  if (IsControlPressed(2, 19)) {
+  if (IsControlPressed(2, 19) || IsDisabledControlPressed(2, 19)) {
     return 5;
   }
   // LCTRL
-  if (IsControlPressed(2, 36)) {
+  if (IsControlPressed(2, 36) || IsDisabledControlPressed(2, 36)) {
     return 0.1;
   }
   return 0.5;
