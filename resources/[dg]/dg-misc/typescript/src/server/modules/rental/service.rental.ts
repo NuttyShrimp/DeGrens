@@ -114,6 +114,7 @@ export const rentVehicle = async (src: number, model: string, locId: string, pay
     const plyAccId = Financials.getDefaultAccountId(plyCid);
     if (!plyAccId) {
       Notifications.add(src, 'Je hebt geen bankaccount??', 'error');
+      rentalLogger.warn(`${Util.getName(src)}(${src}|${plyCid}) doesn't have a standard bankaccount`);
       return;
     }
     const success = await Financials.purchase(plyAccId, plyCid, vehRentInfo.price, `Verhuur: ${vehName}`, 6);
@@ -153,4 +154,9 @@ export const rentVehicle = async (src: number, model: string, locId: string, pay
     vin: vehVin,
     hiddenKeys: ['vin'],
   });
+  Util.Log('rentals:rent', {
+    plate: vehPlate,
+    vin: vehVin,
+    payed: taxPrice,
+  }, `${Util.getName(src)} rented a ${model}`, src);
 };
