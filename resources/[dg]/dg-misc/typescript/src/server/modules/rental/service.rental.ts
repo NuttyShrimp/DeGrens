@@ -9,12 +9,6 @@ export const getLocations = () => config.locations;
 export const loadConfig = async () => {
   await Config.awaitConfigLoad();
   config = Config.getModuleConfig('rentals');
-  // FOR SOME REASON DOES THIS NOT WORK DIRECTLY REEEEEEEE
-  setTimeout(() => {
-    Util.getAllPlayers().forEach(ply => {
-      Events.emitNet('misc:rentals:loadLocations', ply, config.locations);
-    });
-  }, 1000);
 };
 
 const getSpawnLocation = (locId: string): Vec4 | undefined => {
@@ -154,9 +148,14 @@ export const rentVehicle = async (src: number, model: string, locId: string, pay
     vin: vehVin,
     hiddenKeys: ['vin'],
   });
-  Util.Log('rentals:rent', {
-    plate: vehPlate,
-    vin: vehVin,
-    payed: taxPrice,
-  }, `${Util.getName(src)} rented a ${model}`, src);
+  Util.Log(
+    'rentals:rent',
+    {
+      plate: vehPlate,
+      vin: vehVin,
+      payed: taxPrice,
+    },
+    `${Util.getName(src)} rented a ${model}`,
+    src
+  );
 };

@@ -16,7 +16,7 @@ export const loadLocations = (locs: Rentals.Location[]) => {
       model: 'cs_josef',
       position: l.coords,
       heading: l.coords.w,
-      distance: 20.0,
+      distance: 50.0,
       settings: [
         {
           type: 'invincible',

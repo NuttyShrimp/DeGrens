@@ -4,7 +4,7 @@ import { Npc } from './npc';
 
 @ExportRegister()
 class Handler extends Util.Singleton<Handler>() {
-  private npcs: Record<string, Npc> = {};
+  private npcs: Map<string, Npc> = new Map();
   private _active: boolean = false;
   private thread: NodeJS.Timer;
 
@@ -23,14 +23,14 @@ class Handler extends Util.Singleton<Handler>() {
     if (!id) {
       throw new Error(`[NPCS] Tried to get NPC without providing id`);
     }
-    return this.npcs[id];
+    return this.npcs.get(id);
   };
 
   constructor() {
     super();
     on('onResourceStop', (resourceName: string) => {
       if (GetCurrentResourceName() != resourceName) return;
-      Object.entries(this.npcs).forEach(([_id, npc]) => {
+      this.npcs.forEach(npc => {
         npc.delete();
       });
     });
@@ -50,7 +50,7 @@ class Handler extends Util.Singleton<Handler>() {
       throw new Error(`[NPCS] Tried to add NPC with already registered id: ${npcData.id}`);
     }
     const npc = new Npc(npcData);
-    this.npcs[npcData.id] = npc;
+    this.npcs.set(npcData.id, npc);
   };
 
   @Export('removeNpc')
@@ -58,7 +58,7 @@ class Handler extends Util.Singleton<Handler>() {
     const npc = this.getNpc(id);
     if (!npc) return;
     npc.delete();
-    delete this.npcs[id];
+    this.npcs.delete(id);
   };
 
   @Export('findPedData')
@@ -78,7 +78,7 @@ class Handler extends Util.Singleton<Handler>() {
   startThread = () => {
     this.thread = setInterval(() => {
       const pos = Util.getPlyCoords();
-      Object.entries(this.npcs).forEach(([id, npc]) => {
+      this.npcs.forEach(npc => {
         const distance = pos.distance(npc.data.position);
         if (distance <= npc.data.distance && npc.enabled && !npc.entity) {
           npc.spawn();

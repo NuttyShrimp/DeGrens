@@ -1,4 +1,4 @@
-import { Events, Inventory, Notifications, Vehicles } from '@dgx/server';
+import { Auth, Events, Inventory, Notifications, Vehicles } from '@dgx/server';
 
 import { getLocations, loadConfig, openRentList, rentVehicle } from './service.rental';
 
@@ -6,13 +6,14 @@ setImmediate(() => {
   loadConfig();
 });
 
-on('DGCore:server:playerLoaded', (playerData: PlayerData) => {
-  Events.emitNet('misc:rentals:loadLocations', playerData.source, getLocations());
+Auth.onAuth(plyId => {
+  Events.emitNet('misc:rentals:loadLocations', plyId, getLocations());
 });
 
-on('dg-config:moduleLoaded', (name: string) => {
+on('dg-config:moduleLoaded', async (name: string) => {
   if (name !== 'rentals') return;
-  loadConfig();
+  await loadConfig();
+  Events.emitNet('misc:rentals:loadLocations', -1, getLocations());
 });
 
 Events.onNet('misc:rentals:openList', (src: number, locationId: string) => {
@@ -27,7 +28,7 @@ Inventory.registerUseable('rent_papers', (src, itemState) => {
   if (!itemState.metadata?.vin) return;
   const vehNetId = Vehicles.getNetIdOfVin(itemState.metadata.vin);
   if (!vehNetId) {
-    Notifications.add(src, "Da voertuig bestaat nie", "error");
+    Notifications.add(src, 'Da voertuig bestaat nie', 'error');
     return;
   }
   Vehicles.giveKeysToPlayer(src, vehNetId);
