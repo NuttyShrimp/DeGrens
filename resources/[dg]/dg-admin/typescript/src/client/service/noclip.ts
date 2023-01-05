@@ -1,4 +1,4 @@
-import { Inventory, Keys, Util } from '@dgx/client';
+import { Keys, PropAttach, Util } from '@dgx/client';
 
 let noclipEnabled = false;
 let noclipThread: NodeJS.Timer | null = null;
@@ -20,9 +20,13 @@ export const isNoclipEnabled = () => {
 };
 
 export const toggleNoclip = () => {
-  noclipEnabled = !noclipEnabled;
-  cleanupNoclip();
-  if (!noclipEnabled) return;
+  if (noclipEnabled) {
+    noclipEnabled = false;
+    cleanupNoclip();
+    return;
+  }
+
+  noclipEnabled = true;
   // Noclip logic
   const ped = PlayerPedId();
   const veh = GetVehiclePedIsIn(ped, false);
@@ -46,7 +50,7 @@ export const toggleNoclip = () => {
   SetEntityVisible(noclipEnt, false, false);
   SetPedCanRagdoll(ped, false);
 
-  Inventory.toggleAllObjects(false);
+  PropAttach.toggleProps(false);
 
   const plyId = PlayerId();
   noclipThread = setInterval(() => {
@@ -111,7 +115,8 @@ const cleanupNoclip = () => {
     clearInterval(noclipMovingTicks[key as keyof typeof noclipMovingTicks]);
     noclipMovingTicks[key as keyof typeof noclipMovingTicks] = null;
   }
-  Inventory.toggleAllObjects(true);
+
+  PropAttach.toggleProps(true);
 };
 
 const getMultiplier = (): number => {

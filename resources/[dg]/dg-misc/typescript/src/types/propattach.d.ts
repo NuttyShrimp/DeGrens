@@ -7,7 +7,7 @@ declare namespace PropAttach {
   };
 
   type ActiveProp = {
-    netId: number;
+    netId: number | null;
     name: string;
     offset: Vec3;
   };

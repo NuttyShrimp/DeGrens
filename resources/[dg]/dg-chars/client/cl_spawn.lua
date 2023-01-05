@@ -6,7 +6,6 @@ Spawn = {
 		currentDegree = -90,
 	}
 }
-isSpawned = false
 
 Spawn.setupSpawnMenu = function()
 	CreateThread(function()
@@ -148,10 +147,5 @@ RegisterNetEvent('dg-chars:client:finishSpawn', function(isNew)
 	if isNew then
 		TriggerServerEvent('dg-chars:server:newCharSpawn')
 	end
-  isSpawned = true
 end)
 --endregion
-
-exports('isSpawned', function()
-  return isSpawned;
-end)

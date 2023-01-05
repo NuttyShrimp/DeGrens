@@ -3,25 +3,92 @@ import { PROPS } from './constants.propattach';
 
 let currentId = 0;
 const attachedProps: Map<number, PropAttach.ActiveProp> = new Map();
+let enabled = true;
 
-// All actions get delayed till this is true
-let isEnabled = false;
-export const loadIsEnabled = () => {
-  const isSpawned = global.exports['dg-chars'].isSpawned();
-  isEnabled = isSpawned;
-};
+export const isEnabled = () => enabled;
 
 const debug = (msg: string) => {
   console.log(`[PropAttach] ${msg}`);
 };
 
 export const addProp = async (name: string, offset?: Vec3) => {
-  await new Promise<void>(res =>
-    setInterval(() => {
-      if (isEnabled) res();
-    }, 50)
-  );
+  offset = offset ?? { x: 0, y: 0, z: 0 };
+  let netId: number | null = null;
+  if (enabled) {
+    const newNetId = await createAndAttachObject(name, offset);
+    if (!newNetId) return;
+    netId = newNetId;
+  }
 
+  currentId++;
+  attachedProps.set(currentId, {
+    netId,
+    name,
+    offset,
+  });
+  return currentId;
+};
+
+export const removeProp = (propId: number) => {
+  const data = attachedProps.get(propId);
+  if (!data) {
+    debug(`Tried to remove prop ${propId} but was not an attached prop`);
+    return;
+  }
+
+  if (data.netId !== null) {
+    Events.emitNet('propattach:remove', data.netId);
+  }
+
+  attachedProps.delete(propId);
+};
+
+export const moveProp = (propId: number, position: Vec3) => {
+  const data = attachedProps.get(propId);
+  if (!data) {
+    debug(`Tried to move prop ${propId} but was not an attached prop`);
+    return;
+  }
+
+  if (data.netId !== null) {
+    const entity = NetworkGetEntityFromNetworkId(data.netId);
+    if (!DoesEntityExist(entity)) {
+      debug(`Tried to move prop ${propId} but entity does not exist`);
+      return;
+    }
+
+    const info = PROPS[data.name];
+    if (!info) {
+      debug(`Tried to move prop but name ${data.name} is not registered`);
+      return;
+    }
+
+    const ped = PlayerPedId();
+    DetachEntity(entity, true, false);
+    AttachEntityToEntity(
+      entity,
+      ped,
+      GetPedBoneIndex(ped, info.boneId),
+      info.position.x + position.x,
+      info.position.y + position.y,
+      info.position.z + position.z,
+      info.rotation.x,
+      info.rotation.y,
+      info.rotation.z,
+      true,
+      true,
+      false,
+      false,
+      2,
+      true
+    );
+    SetEntityCompletelyDisableCollision(entity, false, true);
+  }
+
+  data.offset = position;
+};
+
+const createAndAttachObject = async (name: string, offset: Vec3) => {
   const info = PROPS[name];
   if (!info) {
     debug(`Tried to add prop but name ${name} is not registered`);
@@ -47,11 +114,11 @@ export const addProp = async (name: string, offset?: Vec3) => {
   }
 
   const ped = PlayerPedId();
-  offset = offset ?? { x: 0, y: 0, z: 0 };
+  const boneIdx = GetPedBoneIndex(ped, info.boneId);
   AttachEntityToEntity(
     entity,
     ped,
-    GetPedBoneIndex(ped, info.boneId),
+    boneIdx,
     info.position.x + offset.x,
     info.position.y + offset.y,
     info.position.z + offset.z,
@@ -66,126 +133,28 @@ export const addProp = async (name: string, offset?: Vec3) => {
     true
   );
   SetEntityCompletelyDisableCollision(entity, false, true);
-  SetModelAsNoLongerNeeded(info.model);
   Events.emitNet('propattach:register', netId);
 
-  currentId++;
-  attachedProps.set(currentId, {
-    netId,
-    name,
-    offset,
-  });
-  return currentId;
-};
-
-export const removeProp = async (propId: number) => {
-  await new Promise(res =>
-    setInterval(() => {
-      if (isEnabled) res(null);
-    }, 50)
-  );
-
-  const data = attachedProps.get(propId);
-  if (!data) {
-    debug(`Tried to remove prop ${propId} but was not an attached prop`);
-    return;
-  }
-
-  Events.emitNet('propattach:remove', data.netId);
-  attachedProps.delete(propId);
-};
-
-export const moveProp = async (propId: number, position: Vec3) => {
-  await new Promise(res =>
-    setInterval(() => {
-      if (isEnabled) res(null);
-    }, 50)
-  );
-
-  const data = attachedProps.get(propId);
-  if (!data) {
-    debug(`Tried to move prop ${propId} but was not an attached prop`);
-    return;
-  }
-
-  const entity = NetworkGetEntityFromNetworkId(data.netId);
-  if (!DoesEntityExist(entity)) {
-    debug(`Tried to move prop ${propId} but entity does not exist`);
-    return;
-  }
-
-  const info = PROPS[data.name];
-  if (!info) {
-    debug(`Tried to move prop but name ${data.name} is not registered`);
-    return;
-  }
-
-  const ped = PlayerPedId();
-  DetachEntity(entity, true, false);
-  AttachEntityToEntity(
-    entity,
-    ped,
-    GetPedBoneIndex(ped, info.boneId),
-    info.position.x + position.x,
-    info.position.y + position.y,
-    info.position.z + position.z,
-    info.rotation.x,
-    info.rotation.y,
-    info.rotation.z,
-    true,
-    true,
-    false,
-    false,
-    2,
-    true
-  );
-  SetEntityCompletelyDisableCollision(entity, false, true);
-  data.offset = position;
+  return netId;
 };
 
 export const resetProps = () => {
   attachedProps.clear();
 };
 
-export const toggleProps = (toggle: boolean) => {
+export const toggleProps = async (toggle: boolean) => {
+  enabled = toggle;
+
   if (!toggle) {
-    // toggle props off
-    const pedCoords = Util.getPlyCoords();
-    attachedProps.forEach(({ netId }) => {
-      const entity = NetworkGetEntityFromNetworkId(netId);
-      if (!entity || !DoesEntityExist(entity)) return;
-      DetachEntity(entity, true, false);
-      SetEntityCoords(entity, pedCoords.x, pedCoords.y, pedCoords.z - 30, false, false, false, false);
-      SetEntityVisible(entity, false, false);
+    attachedProps.forEach(data => {
+      Events.emitNet('propattach:remove', data.netId);
+      data.netId = null;
     });
   } else {
-    // toggles props on
-    const ped = PlayerPedId();
-    attachedProps.forEach(prop => {
-      const entity = NetworkGetEntityFromNetworkId(prop.netId);
-      if (!entity || !DoesEntityExist(entity)) return;
-      const info = PROPS[prop.name];
-      AttachEntityToEntity(
-        entity,
-        ped,
-        GetPedBoneIndex(ped, info.boneId),
-        info.position.x + prop.offset.x,
-        info.position.y + prop.offset.y,
-        info.position.z + prop.offset.z,
-        info.rotation.x,
-        info.rotation.y,
-        info.rotation.z,
-        true,
-        true,
-        false,
-        false,
-        2,
-        true
-      );
-      SetEntityCompletelyDisableCollision(entity, false, true);
-      SetEntityVisible(entity, true, false);
+    attachedProps.forEach(async data => {
+      const netId = await createAndAttachObject(data.name, data.offset);
+      if (!netId) return;
+      data.netId = netId;
     });
   }
-
-  isEnabled = toggle;
 };

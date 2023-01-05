@@ -1,4 +1,4 @@
-import { Util } from '@dgx/server';
+import { Events, Util } from '@dgx/server';
 import { propattachLogger } from './logger.propattach';
 
 const propsByPlayer: Map<number, Set<number>> = new Map();
@@ -70,4 +70,5 @@ export const clearProps = (plyId: number) => {
     DeleteEntity(entity);
   });
   props.clear();
+  Events.emitNet('propattach:reset', plyId);
 };
