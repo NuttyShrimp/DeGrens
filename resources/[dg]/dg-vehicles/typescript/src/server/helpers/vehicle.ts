@@ -69,6 +69,12 @@ export const spawnVehicle = async (
   }
   SetEntityHeading(veh, position.w);
 
+  // Sometimes a vehicle would get spawned with ped inside, hopefully this fixes it
+  const pedInDriverSeat = GetPedInVehicleSeat(veh, -1);
+  if (pedInDriverSeat) {
+    DeleteEntity(pedInDriverSeat);
+  }
+
   const doesExist = await Util.awaitEntityExistence(veh);
   if (!doesExist) {
     mainLogger.error(`Spawn vehicle: vehicle didn't spawn | model: ${model}`);
