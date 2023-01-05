@@ -19,7 +19,7 @@ RPC.register(
         src,
         true
       );
-      await Admin.ACBan(src, 'Tried opening inventory without providing correct data');
+      Admin.ACBan(src, 'Tried opening inventory without providing correct data');
       return null;
     }
 
@@ -74,10 +74,9 @@ RPC.register(
     }
 
     contextManager.playerOpened(src, [primaryInv.id, secondaryInv.id]);
-    const playerCash = Financials.getCash(src);
     return {
       items: [...primaryInv.getItems(), ...secondaryInv.getItems()],
-      primary: { id: primaryInv.id, size: primaryInv.size, cash: playerCash },
+      primary: { id: primaryInv.id, size: primaryInv.size },
       secondary,
     };
   }

@@ -3,7 +3,6 @@ declare interface OpeningData {
   primary: {
     id: string;
     size: number;
-    cash: number;
   };
   secondary: {
     id: string;
