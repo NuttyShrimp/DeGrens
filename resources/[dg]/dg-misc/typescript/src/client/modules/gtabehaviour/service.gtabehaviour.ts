@@ -5,16 +5,13 @@ import {
   DENSITY_SETTINGS,
   DISABLED_CONTROLS,
   HIDDEN_HUD_COMPONENT,
-  PED_CONFIG_FLAGS,
-  PICKUP_HASHES,
+  PLAYER_RELATIONSHIP_HASH,
   RELATION_GROUPS,
 } from './constants.gtabehaviour';
-
-let cachedPed: number;
-let cachedId: number;
+import { BLACKLISTED_VEHICLE_MODELS, BLACKLISTED_PED_MODELS } from '../../../shared/constants';
 
 export const setGTABehaviour = async () => {
-  await Util.awaitCondition(() => NetworkIsSessionStarted());
+  await Util.awaitCondition(() => NetworkIsSessionStarted(), 9999);
 
   // Disable automatic camera movement when afk'ing
   DisableIdleCamera(true);
@@ -23,18 +20,17 @@ export const setGTABehaviour = async () => {
   DisplayRadar(false);
 
   // Relationships between groups
-  const playerRelationshipHash = GetHashKey('PLAYER');
   RELATION_GROUPS.forEach(group => {
-    SetRelationshipBetweenGroups(1, group, playerRelationshipHash);
+    SetRelationshipBetweenGroups(1, group, PLAYER_RELATIONSHIP_HASH);
   });
 
   // Relationship for insta attack peds
   const relationship = AddRelationshipGroup('ATTACK_ALL_PLAYERS')[1];
-  SetRelationshipBetweenGroups(5, relationship, playerRelationshipHash);
-  SetRelationshipBetweenGroups(5, playerRelationshipHash, relationship);
+  SetRelationshipBetweenGroups(5, relationship, PLAYER_RELATIONSHIP_HASH);
+  SetRelationshipBetweenGroups(5, PLAYER_RELATIONSHIP_HASH, relationship);
 
   // Disable dispatch services
-  for (let id = 1; id <= 15; id++) {
+  for (let id = 0; id <= 15; id++) {
     EnableDispatchService(id, false);
   }
 
@@ -43,6 +39,9 @@ export const setGTABehaviour = async () => {
 
   // Max wanted level to 0
   SetMaxWantedLevel(0);
+
+  // Shootyshooty
+  NetworkSetFriendlyFireOption(true);
 
   // Disable scenarios
   BLACKLISTED_SCENARIO_GROUPS.forEach(group => {
@@ -77,6 +76,10 @@ export const setGTABehaviour = async () => {
   // RemoveVehiclesFromGeneratorsInArea(-1273.15, 5919.85, -290.0, -1273.15, 6519.85, 304.62, 0);
   // RemoveVehiclesFromGeneratorsInArea(2781.76, -4470.42, -290.0, 3381.76, -4470.42, 315.26, 0); // Vliegdek schip
 
+  // Suppress models
+  BLACKLISTED_PED_MODELS.forEach(m => SetPedModelIsSuppressed(GetHashKey(m), true));
+  BLACKLISTED_VEHICLE_MODELS.forEach(m => SetVehicleModelIsSuppressed(GetHashKey(m), true));
+
   // EVERY FRAME LOOP
   setInterval(() => {
     // Perma disable controls
@@ -95,34 +98,8 @@ export const setGTABehaviour = async () => {
     HIDDEN_HUD_COMPONENT.forEach(comp => {
       HideHudComponentThisFrame(comp);
     });
+
+    // This one somehow needs to be set at interval
+    SetPlayerHealthRechargeMultiplier(PlayerId(), 0.0);
   }, 1);
-
-  // Ped & player config etc
-  setInterval(() => {
-    // Check if ped changed
-    const newPed = PlayerPedId();
-    if (cachedPed !== newPed) {
-      cachedPed = newPed;
-      SetEntityProofs(newPed, false, false, false, false, false, true, false, false);
-      SetPedMinGroundTimeForStungun(newPed, 5000);
-      SetPedCanLosePropsOnDamage(newPed, false, 0);
-      SetPedMaxHealth(newPed, 200);
-      SetPedDropsWeaponsWhenDead(newPed, false);
-      PED_CONFIG_FLAGS.forEach(([flag, val]) => {
-        SetPedConfigFlag(newPed, flag, val);
-      });
-      SetPedRelationshipGroupHash(newPed, playerRelationshipHash);
-      SetCanAttackFriendly(PlayerPedId(), true, false);
-      NetworkSetFriendlyFireOption(true);
-    }
-
-    // Check if player id changed
-    const newId = PlayerId();
-    if (cachedId !== newId) {
-      cachedId = newId;
-      SetPlayerHealthRechargeMultiplier(newId, 0.0);
-      SetPlayerHealthRechargeLimit(newId, 0.0);
-      PICKUP_HASHES.forEach(hash => ToggleUsePickupsForPlayer(newId, hash, false));
-    }
-  }, 3000);
 };

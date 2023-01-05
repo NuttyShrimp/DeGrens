@@ -6,8 +6,10 @@ author 'Cfx.re <root@cfx.re>'
 description 'Adds basic events for developers to use in their scripts. Some third party resources may depend on this resource.'
 repository 'https://github.com/citizenfx/cfx-server-data'
 
-client_script 'deathevents.lua'
-client_script 'vehiclechecker.lua'
+client_scripts {
+  'playerchecker.lua',
+  'vehiclechecker.lua'
+}
 server_script 'server.lua'
 
 fx_version 'adamant'
