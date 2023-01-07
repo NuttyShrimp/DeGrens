@@ -57,25 +57,24 @@ Events.onNet('vehicles:keys:shareToClosest', (src: number, netId: number) => {
   if (!vin) return;
   if (!keyManager.hasKey(vin, src)) return;
 
-  let target: number;
+  // If people in car give keys to them, else give to closest ply
+  let targets: number[] = [];
   const vehicle = NetworkGetEntityFromNetworkId(netId);
-  const driver = GetPedInVehicleSeat(vehicle, -1);
-  if (!driver) {
+  const playersInVehicle = Util.getPlayersInVehicle(vehicle);
+  if (playersInVehicle.length === 0) {
     const closestPlayer = Util.getClosestPlayer(src, 3.0);
     if (!closestPlayer) {
       Notifications.add(src, 'Er is niemand in de buurt', 'error');
       return;
     }
-    target = closestPlayer;
+    targets.push(closestPlayer);
   } else {
-    const driverPlyId = NetworkGetEntityOwner(driver);
-    if (!driverPlyId) {
-      Notifications.add(src, 'Kon bestuurder niet vinden', 'error');
-      return;
-    }
-    target = driverPlyId;
+    targets = [...playersInVehicle];
   }
-  if (keyManager.hasKey(vin, target)) return;
-  keyManager.addKey(vin, target);
-  Notifications.add(target, 'Je hebt de sleutels van dit voertuig ontvangen');
+
+  for (const target of targets) {
+    if (keyManager.hasKey(vin, target)) return;
+    keyManager.addKey(vin, target);
+    Notifications.add(target, 'Je hebt de sleutels van dit voertuig ontvangen');
+  }
 });

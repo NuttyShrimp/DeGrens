@@ -158,7 +158,13 @@ Peek.addGlobalEntry(
         },
         canInteract: ent => {
           if (!ent || !NetworkGetEntityIsNetworked(ent)) return false;
-          return hasVehicleKeys(ent);
+          if (!hasVehicleKeys(ent)) return false;
+          // Option enabled if someone in driverseat, passenger seats or close and outside vehicle
+          return (
+            !IsVehicleSeatFree(ent, -1) ||
+            GetVehicleNumberOfPassengers(ent) > 0 ||
+            Util.isAnyPlayerCloseAndOutsideVehicle(3)
+          );
         },
       },
       {
