@@ -3,6 +3,8 @@ import { getVinForNetId } from 'helpers/vehicle';
 
 import { seatbeltLogger } from './logger.seatbelts';
 import { getVehicleHarnessUses, setVehicleHarnessUses } from './service.seatbelts';
+import { updateVehicleHarness } from 'db/repository';
+import vinManager from 'modules/identification/classes/vinmanager';
 
 Inventory.registerUseable('harness', async src => {
   const ped = GetPlayerPed(String(src));
@@ -52,7 +54,11 @@ Inventory.registerUseable('harness', async src => {
   }
 
   const config = Config.getConfigValue<{ harnessUses: number }>('vehicles.config');
-  setVehicleHarnessUses(vin, config.harnessUses);
+  setVehicleHarnessUses(veh, config.harnessUses);
+  if (vinManager.isVinFromPlayerVeh(vin)) {
+    updateVehicleHarness(vin, config.harnessUses);
+  }
+
   seatbeltLogger.info(`Harness has been added to vehicle (${vin})`);
   Util.Log(
     'vehicles:installedHarness',
@@ -65,8 +71,18 @@ Inventory.registerUseable('harness', async src => {
   );
 });
 
-Events.onNet('vehicles:seatbelts:decreaseHarness', async (plyId: number, vin: string) => {
-  const uses = getVehicleHarnessUses(vin);
+Events.onNet('vehicles:seatbelts:decreaseHarness', async (plyId: number, netId: number) => {
+  const vin = getVinForNetId(netId);
+  if (!vin) return;
+
+  const vehicle = NetworkGetEntityFromNetworkId(netId);
+  if (!DoesEntityExist(vehicle)) return;
+
+  const uses = getVehicleHarnessUses(vehicle);
   if (!uses) return;
-  setVehicleHarnessUses(vin, uses - 1);
+
+  setVehicleHarnessUses(vehicle, uses - 1);
+  if (vinManager.isVinFromPlayerVeh(vin)) {
+    updateVehicleHarness(vin, uses - 1);
+  }
 });

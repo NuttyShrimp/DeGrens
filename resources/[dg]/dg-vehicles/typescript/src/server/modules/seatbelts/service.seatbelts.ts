@@ -1,23 +1,11 @@
-import { updateVehicleHarness } from 'db/repository';
-import vinManager from 'modules/identification/classes/vinmanager';
-
-export const setVehicleHarnessUses = (vin: string, uses: number) => {
-  const netId = vinManager.getNetId(vin);
-  if (!netId) return;
-  const veh = NetworkGetEntityFromNetworkId(netId);
-  const vehState = Entity(veh).state;
+export const setVehicleHarnessUses = (vehicle: number, uses: number) => {
+  const vehState = Entity(vehicle).state;
   if (!vehState) return;
   vehState.harnessUses = uses;
-  if (vinManager.isVinFromPlayerVeh(vin)) {
-    updateVehicleHarness(vin, uses);
-  }
 };
 
-export const getVehicleHarnessUses = (vin: string) => {
-  const netId = vinManager.getNetId(vin);
-  if (!netId) return;
-  const veh = NetworkGetEntityFromNetworkId(netId);
-  const vehState = Entity(veh).state;
+export const getVehicleHarnessUses = (vehicle: number): number | undefined => {
+  const vehState = Entity(vehicle).state;
   if (!vehState) return;
-  return vehState.harnessUses as number;
+  return vehState.harnessUses;
 };

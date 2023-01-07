@@ -42,8 +42,6 @@ export const toggleSeatbelt = async () => {
     return;
   }
 
-  const vehVin = Entity(veh).state.vin;
-  if (!vehVin) return;
   const uses: number = Entity(veh).state.harnessUses ?? 0;
 
   if (uses > 0) {
@@ -52,7 +50,7 @@ export const toggleSeatbelt = async () => {
       cancelOnDeath: true,
     });
     if (wasCanceled) return;
-    Events.emitNet('vehicles:seatbelts:decreaseHarness', vehVin);
+    Events.emitNet('vehicles:seatbelts:decreaseHarness', NetworkGetNetworkIdFromEntity(veh));
   }
 
   emit('vehicles:seatbelt:toggle', true);
