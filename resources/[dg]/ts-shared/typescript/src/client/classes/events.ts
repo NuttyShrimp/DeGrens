@@ -29,7 +29,7 @@ class TokenStorage {
   }
 
   private getResourceToken() {
-    emitNet('dg-auth:token:requestResource', GetCurrentResourceName());
+    emitNet('dg-auth:token:requestResource', this.resourceName);
   }
 
   getToken() {

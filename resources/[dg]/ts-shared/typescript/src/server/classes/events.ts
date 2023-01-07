@@ -486,7 +486,7 @@ class Auth {
   constructor() {
     this.resourceName = GetCurrentResourceName();
     this.startHooks = new Set();
-    onNet('dg-auth:token:resourceRegistered', (src: number, resource: string) => {
+    on('dg-auth:token:resourceRegistered', (src: number, resource: string) => {
       if (resource !== this.resourceName) return;
       this.startHooks.forEach(hook => hook(src));
     });

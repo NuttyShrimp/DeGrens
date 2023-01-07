@@ -1,10 +1,10 @@
 import { RPC, Util } from '../classes';
 
-onNet('dgx:requestEnv', () => {
-  emitNet('dgx:isProduction', source, !Util.isDevEnv());
-});
-
 if (GetCurrentResourceName() === 'ts-shared') {
+  onNet('dgx:requestEnv', () => {
+    emitNet('dgx:isProduction', source, !Util.isDevEnv());
+  });
+
   RPC.register('dgx:createObject', async (src, model: string, coords: Vec3, routingBucket?: number) => {
     if (routingBucket == undefined) {
       routingBucket = GetPlayerRoutingBucket(String(src));
