@@ -11,14 +11,9 @@ const clientPaths = Object.entries(basePaths).reduce((acc, [key, value]) => {
 	acc[key] = path.resolve(value, 'client');
 	return acc;
 }, {});
-const serverPaths = Object.entries(basePaths).reduce((acc, [key, value]) => {
-	acc[key] = path.resolve(value, 'server');
-	return acc;
-}, {});
 
 module.exports = {
 	paths: {
 		client: clientPaths,
-		server: serverPaths,
 	},
 };
