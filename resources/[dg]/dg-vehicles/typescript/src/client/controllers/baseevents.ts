@@ -1,4 +1,4 @@
-import { stopUsingNos, updateHudDisplayAmount } from 'modules/nos/service.nos';
+import { resetNos, updateVehicleNosAmount } from 'modules/nos/service.nos';
 import { cleanSeatbeltThread, startSeatbeltThread } from 'modules/seatbelts/service.seatbelts';
 import { clearVehicleRolloverThread, startVehicleRolloverThread } from 'services/flipcar';
 import { startNoShuffleThread, stopNoShuffleThread } from 'services/seats';
@@ -22,7 +22,7 @@ on('baseevents:enteredVehicle', (vehicle: number, seat: number) => {
 
   if (seat !== -1) return;
   startStatusThread(vehicle);
-  updateHudDisplayAmount(vehicle);
+  updateVehicleNosAmount(vehicle);
   startVehicleRolloverThread(vehicle);
 });
 
@@ -34,7 +34,7 @@ on('baseevents:leftVehicle', (vehicle: number, seat: number) => {
   }
   setCurrentVehicle(null, false);
   cleanSeatbeltThread();
-  stopUsingNos(vehicle);
+  resetNos(vehicle);
   stopNoShuffleThread();
   DisplayRadar(false);
 });
@@ -43,13 +43,13 @@ on('baseevents:vehicleChangedSeat', (vehicle: number, newSeat: number, oldSeat: 
   setCurrentVehicle(vehicle, newSeat === -1);
   if (oldSeat === -1) {
     cleanFuelThread();
-    stopUsingNos(vehicle);
+    resetNos(vehicle);
     disableSpeedLimiter(vehicle);
     clearVehicleRolloverThread();
   }
   if (newSeat === -1) {
     startFuelThread(vehicle);
-    updateHudDisplayAmount(vehicle);
+    updateVehicleNosAmount(vehicle);
     startVehicleRolloverThread(vehicle);
     startStatusThread(vehicle);
   }

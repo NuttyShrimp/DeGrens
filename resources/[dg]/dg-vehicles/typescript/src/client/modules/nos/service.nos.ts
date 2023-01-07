@@ -6,35 +6,32 @@ import { setEngineState } from 'services/engine';
 import { getNosConfig } from './config.nos';
 import { exhaustBones } from './constants.nos';
 
+let isPurging = false;
 let usingNos = false;
-let nosUsageStartAmount = 0;
-let nosDepletionThread: NodeJS.Timer | null = null;
+let nosAmount = 0;
+let nosAmountAtStart = 0;
+
 let originalPower: number;
+
+let nosDepletionThread: NodeJS.Timer | null = null;
 let nosPowerThread: NodeJS.Timer | null = null;
+
 let flowrate = 0; // LOW - MEDIUM - HIGH
 const ptfxIds: { purge: Set<string>; nos: Set<string> } = { purge: new Set(), nos: new Set() };
 
 let hudIconShown = false;
-let hudDisplayAmount = 0;
-export const setHudDisplayAmount = (value: number) => (hudDisplayAmount = value);
 
-export const isUsingNos = () => usingNos;
-
-const setVehicleNosAmount = (veh: number, nos: number) => {
-  const vehState = Entity(veh).state;
-  if (!vehState) return;
-  vehState.set('nos', nos, true);
+export const updateVehicleNosAmount = (vehicle: number) => {
+  nosAmount = Entity(vehicle).state?.nos ?? 0;
 };
 
-const getVehicleNosAmount = (veh: number): number => Entity(veh).state?.nos ?? 0;
-
-export const doesVehicleHaveNos = (veh: number) => getVehicleNosAmount(veh) !== 0;
+export const doesVehicleHaveNos = (veh: number) => nosAmount !== 0;
 
 export const startUsingNos = (veh: number) => {
   if (usingNos) return;
 
-  nosUsageStartAmount = getVehicleNosAmount(veh);
-  if (nosUsageStartAmount === getNosConfig().refillAmount) {
+  nosAmountAtStart = nosAmount;
+  if (nosAmountAtStart === getNosConfig().refillAmount) {
     Notifications.add('Vergeet niet te purgen!', 'info');
     return;
   }
@@ -48,18 +45,19 @@ export const startUsingNos = (veh: number) => {
   }, 100);
 
   // Thread manages nos depletion
-  const usageLimit = nosUsageStartAmount - getNosConfig().maxPortion;
+  const usageLimit = nosAmountAtStart - getNosConfig().maxPortion;
   const depletionTick = getNosConfig()?.flowrates[flowrate]?.depletionTick ?? 1;
   nosDepletionThread = setInterval(() => {
-    const newAmount = Math.max(getVehicleNosAmount(veh) - depletionTick, 0);
+    const newAmount = Math.max(nosAmount - depletionTick, 0);
     if (newAmount <= usageLimit) {
       setEngineState(veh, false, true);
       Notifications.add('Er is iets kapot gegaan...', 'error');
       stopUsingNos(veh);
       return;
     }
-    setVehicleNosAmount(veh, newAmount);
-    if (newAmount === 0) {
+
+    nosAmount = newAmount;
+    if (nosAmount === 0) {
       stopUsingNos(veh);
     }
   }, 100);
@@ -73,31 +71,43 @@ export const startUsingNos = (veh: number) => {
 };
 
 export const purge = (veh: number) => {
+  if (isPurging) return;
+  isPurging = true;
   addPurgePtfx(veh);
   Sounds.playOnEntity(`nos_purge_sound_${veh}`, 'nospurge', 'DLC_NUTTY_SOUNDS', veh);
-  const currentAmount = getVehicleNosAmount(veh);
-  setVehicleNosAmount(veh, currentAmount - 1);
-  Events.emitNet('vehicles:nos:save', NetworkGetNetworkIdFromEntity(veh));
+  nosAmount--;
+  saveNos(veh);
 };
 
 export const stopUsingNos = (veh: number) => {
   if (!usingNos) return;
+
   usingNos = false;
+
   if (nosDepletionThread !== null) {
     clearInterval(nosDepletionThread);
     nosDepletionThread = null;
   }
+
   if (nosPowerThread !== null) {
     clearInterval(nosPowerThread);
     nosPowerThread = null;
   }
-  Events.emitNet('vehicles:nos:save', NetworkGetNetworkIdFromEntity(veh));
+
+  saveNos(veh);
   SetVehicleCheatPowerIncrease(veh, originalPower);
   ptfxIds.nos.forEach(id => Particle.remove(id));
   ptfxIds.nos.clear();
 };
 
+export const resetNos = (vehicle: number) => {
+  stopUsingNos(vehicle);
+  nosAmount = 0;
+};
+
 export const stopPurge = () => {
+  if (!isPurging) return;
+  isPurging = false;
   Sounds.stop('purge-nos-sound');
   ptfxIds.purge.forEach(id => Particle.remove(id));
   ptfxIds.purge.clear();
@@ -144,10 +154,6 @@ export const cycleFlowrate = () => {
   Notifications.add(`Flowrate: ${label}`, 'info');
 };
 
-export const updateHudDisplayAmount = (vehicle: number) => {
-  hudDisplayAmount = getVehicleNosAmount(vehicle);
-};
-
 export const getNosAmountForHud = () => {
   const veh = getCurrentVehicle();
   if (!veh || !isDriver()) {
@@ -157,24 +163,33 @@ export const getNosAmountForHud = () => {
     }
     return 0;
   }
-  if (hudDisplayAmount === 0) {
-    if (hudIconShown) {
-      HUD.toggleEntry('nos-amount', false);
-      hudIconShown = false;
-    }
+
+  const hasNos = doesVehicleHaveNos(veh);
+
+  if (!hasNos && hudIconShown) {
+    HUD.toggleEntry('nos-amount', false);
+    hudIconShown = false;
     return 0;
-  } else {
+  }
+
+  if (hasNos) {
     if (!hudIconShown) {
       HUD.toggleEntry('nos-amount', true);
       hudIconShown = true;
     }
-    let display = 0;
+
     if (usingNos) {
       const max = getNosConfig().maxPortion;
-      display = ((max - (nosUsageStartAmount - hudDisplayAmount)) / max) * 100;
+      return ((max - (nosAmountAtStart - nosAmount)) / max) * 100;
     } else {
-      display = (hudDisplayAmount / getNosConfig().refillAmount) * 100;
+      return (nosAmount / getNosConfig().refillAmount) * 100;
     }
-    return display;
   }
+
+  return 0;
+};
+
+// Saved when stop using nos, exited veh
+export const saveNos = (vehicle: number) => {
+  Events.emitNet('vehicles:nos:save', NetworkGetNetworkIdFromEntity(vehicle), nosAmount);
 };

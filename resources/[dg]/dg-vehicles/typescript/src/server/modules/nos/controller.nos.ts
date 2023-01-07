@@ -4,9 +4,8 @@ import { getVinForNetId } from 'helpers/vehicle';
 import vinManager from 'modules/identification/classes/vinmanager';
 import { keyManager } from 'modules/keys/classes/keymanager';
 import { getPerformance } from 'modules/upgrades/service.upgrades';
-
 import { nosLogger } from './logger.nos';
-import { getVehicleNosAmount, setVehicleNosAmount } from './service.nos';
+import { setVehicleNosAmount } from './service.nos';
 
 Inventory.registerUseable('nos', async src => {
   const ped = GetPlayerPed(String(src));
@@ -59,14 +58,17 @@ Inventory.registerUseable('nos', async src => {
   if (vinManager.isVinFromPlayerVeh(vin)) {
     await updateVehicleNos(vin, refillAmount);
   }
-  nosLogger.info(`NOS for ${vin} has been refilled`);
+
+  Events.emitNet('vehicles:nos:update', src, netId);
+
+  nosLogger.info(`NOS for ${vin} has been installed`);
   Util.Log(
     'vehicles:nos:installed',
     {
       src,
       vin,
     },
-    `${GetPlayerName(String(src))} has refilled nos for vehicle (${vin})`,
+    `${GetPlayerName(String(src))} has installed nos for vehicle (${vin})`,
     src
   );
 });
@@ -77,21 +79,23 @@ RPC.register('vehicles:nos:getConfig', async () => {
   return config;
 });
 
-Events.onNet('vehicles:nos:save', (src: number, netId: number) => {
+Events.onNet('vehicles:nos:save', (src: number, netId: number, amount: number) => {
   const vin = getVinForNetId(netId);
   if (!vin || !vinManager.isVinFromPlayerVeh(vin)) return;
+
   const veh = NetworkGetEntityFromNetworkId(netId);
-  const nosAmount = getVehicleNosAmount(veh);
-  updateVehicleNos(vin, nosAmount);
-  nosLogger.info(`NOS for ${vin} has been updated to ${nosAmount}`);
+  setVehicleNosAmount(veh, amount);
+  updateVehicleNos(vin, amount);
+
+  nosLogger.info(`NOS for ${vin} has been updated to ${amount}`);
   Util.Log(
     'vehicles:nos:saved',
     {
       src,
       vin,
-      nosAmount,
+      amount,
     },
-    `NOS for vehicle (${vin}) has been updated to ${nosAmount}`,
+    `NOS for vehicle (${vin}) has been updated to ${amount}`,
     src
   );
 });

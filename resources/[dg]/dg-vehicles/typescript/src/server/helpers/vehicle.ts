@@ -67,6 +67,17 @@ export const spawnVehicle = async (
   } else {
     veh = CreateVehicle(modelHash, position.x, position.y, position.z, position.w, true, true);
   }
+
+  const doesExist = await Util.awaitEntityExistence(veh);
+  if (!doesExist) {
+    mainLogger.error(`Spawn vehicle: vehicle didn't spawn | model: ${model}`);
+    return;
+  }
+
+  mainLogger.debug(
+    `Spawn vehicle: spawned | model: ${model} | entity: ${veh} | netId: ${NetworkGetNetworkIdFromEntity(veh)}`
+  );
+
   SetEntityHeading(veh, position.w);
 
   // Sometimes a vehicle would get spawned with ped inside, hopefully this fixes it
@@ -74,15 +85,6 @@ export const spawnVehicle = async (
   if (pedInDriverSeat) {
     DeleteEntity(pedInDriverSeat);
   }
-
-  const doesExist = await Util.awaitEntityExistence(veh);
-  if (!doesExist) {
-    mainLogger.error(`Spawn vehicle: vehicle didn't spawn | model: ${model}`);
-    return;
-  }
-  mainLogger.debug(
-    `Spawn vehicle: spawned | model: ${model} | entity: ${veh} | netId: ${NetworkGetNetworkIdFromEntity(veh)}`
-  );
 
   const vehNetId = NetworkGetNetworkIdFromEntity(veh);
   if (!vin) {
@@ -148,10 +150,10 @@ export const spawnOwnedVehicle = async (src: number, vehicleInfo: Vehicle.Vehicl
   if (vehicleInfo.wax) {
     addWaxedVehicle(vehicleInfo.vin, vehicleInfo.wax);
   }
-  if (vehicleInfo.nos) {
-    setVehicleNosAmount(vehicle, vehicleInfo.nos);
-  }
-  setVehicleHarnessUses(vehicleInfo.vin, vehicleInfo.harness);
+
+  setVehicleNosAmount(vehicle, vehicleInfo.nos);
+  setVehicleHarnessUses(vehicle, vehicleInfo.harness);
+
   applyUpgrades(vehicleInfo.vin);
 
   return vehicle;
