@@ -157,11 +157,9 @@ exp('generateMinioFilename', async () => {
   let found = false;
   while (!found) {
     try {
-      const statInfo = await minioClient.statObject(MINIO_BUCKET_ID, fileName);
-      console.log(statInfo);
+      await minioClient.statObject(MINIO_BUCKET_ID, fileName);
     } catch (e) {
       if (e == 'S3Error: Not Found') {
-        console.log(`${fileName} is valid`);
         found = true;
         return;
       }
