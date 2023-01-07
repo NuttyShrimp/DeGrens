@@ -5,14 +5,6 @@ DGX.Inventory.registerUseable("joint", function(src, item)
     end
 end)
 
-DGX.Inventory.registerUseable("armor", function(src)
-    TriggerClientEvent("consumables:client:UseArmor", src)
-end)
-
-DGX.Inventory.registerUseable("heavyarmor", function(src)
-    TriggerClientEvent("consumables:client:UseHeavyArmor", src)
-end)
-
 -- DGX.Inventory.registerUseable("smoketrailred", function(src, item)
 --     local Player = DGCore.Functions.GetPlayer(src)
 -- 	if Player.Functions.RemoveItem(item.name, 1, item.slot) then

@@ -31,7 +31,6 @@ class ContextManager extends Util.Singleton<ContextManager>() {
     TriggerScreenblurFadeIn(0);
   };
 
-  @Export('close')
   public close = () => {
     TriggerScreenblurFadeOut(0);
     if (!this.isInventoryOpen) return;

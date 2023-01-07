@@ -1,3 +1,4 @@
+import { Events, Hospital } from '@dgx/server';
 import { Inputs } from 'enums/inputs';
 
 import { SelectorTarget } from '../../../enums/SelectorTargets';
@@ -20,7 +21,7 @@ export const revive: CommandData = {
     } else if (args?.Target) {
       ply = args.Target.serverId;
     }
-    emitNet('hospital:client:Revive', ply);
+    Hospital.revivePlayer(ply);
   },
   UI: {
     title: 'Revive',

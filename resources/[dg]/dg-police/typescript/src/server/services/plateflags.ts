@@ -1,4 +1,4 @@
-import { Chat, Events, Jobs, Notifications, RPC, SQL, Util, Vehicles } from '@dgx/server';
+import { Chat, Events, Jobs, Notifications, RPC, SQL, Util, Vehicles, UI } from '@dgx/server';
 import { mainLogger } from 'sv_logger';
 
 const plateFlags: Police.Plateflags.Flag[] = [];
@@ -57,19 +57,33 @@ Chat.registerCommand(
     }
 
     const plate = args[0];
-    const flags: (Police.Plateflags.Flag & { issuedByName: string; issuedDateString: string })[] = [];
+
+    const menu: ContextMenu.Entry[] = [
+      {
+        title: plate,
+        disabled: true,
+        description: 'Klik op een flag om te verwijderen',
+      },
+    ];
+
     for (const flag of plateFlags) {
       if (flag.plate !== plate) continue;
-      const issuedByName = await Util.getCharName(flag.issuedBy);
+
       const date = new Date(flag.issuedDate * 1000);
-      flags.push({
-        ...flag,
-        issuedByName,
-        issuedDateString: `${date.toLocaleTimeString()} ${date.toLocaleDateString()}`,
+      const issuedDate = `${date.toLocaleTimeString()} ${date.toLocaleDateString()}`;
+      const issuedByName = await Util.getCharName(flag.issuedBy);
+
+      menu.push({
+        title: '',
+        description: `${flag.reason} - ${issuedByName} - ${issuedDate}`,
+        callbackURL: 'police/plateflags/remove',
+        data: {
+          id: flag.id,
+        },
       });
     }
 
-    Events.emitNet('police:plateflags:openFlagsList', src, plate, flags);
+    UI.openContextMenu(src, menu);
   }
 );
 

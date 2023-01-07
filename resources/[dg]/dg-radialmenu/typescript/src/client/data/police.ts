@@ -81,4 +81,13 @@ export const police: RadialMenu.Entry[] = [
     minimumPlayerDistance: 2,
     isEnabled: ({ currentVehicle }) => !currentVehicle,
   },
+  {
+    title: 'GSR Test',
+    icon: 'thermometer',
+    type: 'dgxServer',
+    event: 'police:checkGSR',
+    shouldClose: true,
+    minimumPlayerDistance: 2,
+    isEnabled: ({ currentVehicle }) => !currentVehicle,
+  },
 ];

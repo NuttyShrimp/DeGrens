@@ -1,5 +1,4 @@
-import { Chat, Jobs, Notifications, Inventory, Events, Util, RPC, UI, Vehicles, Police } from '@dgx/server';
-import { isPlayerCuffed } from 'modules/interactions/service.interactions';
+import { Chat, Jobs, Notifications, Inventory, Events, Util, UI, Police } from '@dgx/server';
 import { getPoliceConfig } from 'services/config';
 import {
   cleanupPlayerInJail,
@@ -11,6 +10,7 @@ import {
   restorePlayerSentence,
   sendPlayerToPrison,
 } from './service.prison';
+import { isPlayerCuffed } from 'modules/interactions/modules/cuffs';
 
 Chat.registerCommand(
   'jail',

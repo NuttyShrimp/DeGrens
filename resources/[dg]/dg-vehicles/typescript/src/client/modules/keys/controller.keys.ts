@@ -1,4 +1,4 @@
-import { Events, Keys, Minigames, Util } from '@dgx/client';
+import { Events, Hospital, Keys, Minigames, Police, Util } from '@dgx/client';
 import { getCurrentVehicle } from '@helpers/vehicle';
 
 import { toggleVehicleLock } from './service.keys';
@@ -72,6 +72,7 @@ Events.onNet(
 );
 
 Keys.onPressDown('vehicle-lock', () => {
+  if (Police.isCuffed() || Hospital.isDown()) return;
   toggleVehicleLock();
 });
 

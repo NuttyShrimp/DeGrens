@@ -32,6 +32,7 @@ declare global {
     Sync: typeof Classes.Sync;
     Weapons: typeof Classes.Weapons;
     Weather: typeof Classes.Weather;
+    Hospital: typeof Classes.Hospital;
     Vector3: typeof Vector3Class;
     Vector4: typeof Vector4Class;
   };

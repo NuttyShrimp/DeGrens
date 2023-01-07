@@ -17,7 +17,7 @@ export const enableBinoculars = async (type: 'binoculars' | 'pd_camera') => {
   global.exports['dg-lib'].shouldExecuteKeyMaps(false);
 
   if (type === 'binoculars') {
-    TaskStartScenarioInPlace(ped, 'WORLD_HUMAN_BINOCULARS', 0, true);
+    Util.startScenarioInPlace('WORLD_HUMAN_BINOCULARS');
   } else if (type === 'pd_camera') {
     await Util.loadAnimDict('amb@world_human_paparazzi@male@base');
     TaskPlayAnim(ped, 'amb@world_human_paparazzi@male@base', 'base', 2.0, 2.0, -1, 17, 1, false, false, false);

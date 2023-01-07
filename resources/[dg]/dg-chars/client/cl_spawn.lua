@@ -23,6 +23,15 @@ Spawn.setupSpawnMenu = function()
 	end)
 end
 
+Spawn.instaSpawn = function()
+  DoScreenFadeOut(250)
+  Spawn.fetchSpawns()
+  while IsScreenFadingOut() do
+    Wait(0)
+  end
+  Spawn.choose(1)
+end
+
 Spawn.choose = function(idx)
   Spawn.spinner.shouldSpin = false
 	local spawn = Spawn.list[idx]

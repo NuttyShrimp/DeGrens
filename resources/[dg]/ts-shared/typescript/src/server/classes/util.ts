@@ -1,3 +1,4 @@
+import { off } from 'process';
 import { Util as UtilShared } from '../../shared/classes/util';
 import { firstNames, lastNames } from '../data/names';
 
@@ -228,6 +229,23 @@ class Util extends UtilShared {
     }
     return plys;
   }
+
+  getOffsetFromPlayer = (plyId: number, offset: Vec3): Vec3 => {
+    const offsetLength = Math.sqrt(Math.pow(offset.x, 2) + Math.pow(offset.y, 2));
+    const offsetRadians = Math.acos(offset.x / offsetLength);
+
+    const plyPed = GetPlayerPed(String(plyId));
+    const plyCoords = this.getEntityCoords(plyPed);
+    const plyRadians = GetEntityHeading(plyPed) * (Math.PI / 180);
+
+    const radians = offsetRadians + plyRadians;
+
+    return {
+      x: plyCoords.x + Math.cos(radians) * offsetLength,
+      y: plyCoords.y + Math.sin(radians) * offsetLength,
+      z: plyCoords.z + offset.z,
+    };
+  };
 }
 
 export class Sounds {
@@ -254,7 +272,11 @@ export class Status {
   };
 
   public doesPlayerHaveStatus = (plyId: number, status: StatusName) => {
-    return this.getPlayerStatuses(plyId).find(s => s === status) !== undefined;
+    return this.getPlayerStatuses(plyId).includes(status);
+  };
+
+  public showStatusesToPlayer = (showTo: number, target: number, filter?: StatusName[]) => {
+    global.exports['dg-misc'].showStatusesToPlayer(showTo, target, filter);
   };
 }
 

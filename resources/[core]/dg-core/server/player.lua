@@ -96,13 +96,9 @@ function DGCore.Player.CheckPlayerData(src, PlayerData)
 
   -- Metadata
   PlayerData.metadata = PlayerData.metadata or {}
-  PlayerData.metadata['hunger'] = PlayerData.metadata['hunger'] or 100
-  PlayerData.metadata['thirst'] = PlayerData.metadata['thirst'] or 100
-  PlayerData.metadata['stress'] = PlayerData.metadata['stress'] or 0
-  PlayerData.metadata['isdead'] = PlayerData.metadata['isdead'] or false
-  PlayerData.metadata['inlaststand'] = PlayerData.metadata['inlaststand'] or false
-  PlayerData.metadata['armor'] = PlayerData.metadata['armor'] or 0
-  PlayerData.metadata['callsign'] = PlayerData.metadata['callsign'] or 'NO CALLSIGN'
+  PlayerData.metadata.stress = PlayerData.metadata.stress or 0
+  PlayerData.metadata.armor = PlayerData.metadata.armor or 0
+  PlayerData.metadata.callsign = PlayerData.metadata.callsign or 'NO CALLSIGN'
   PlayerData.metadata['licences'] = PlayerData.metadata['licences'] or {
     ['driver'] = true,
   }
@@ -114,6 +110,11 @@ function DGCore.Player.CheckPlayerData(src, PlayerData)
   }
   PlayerData.metadata.dna = PlayerData.metadata.dna or generateDNA()
   PlayerData.metadata.jailMonths = PlayerData.metadata.jailMonths or -1
+  PlayerData.metadata.downState = PlayerData.metadata.downState or 'alive'
+  PlayerData.metadata.needs = {
+    hunger = PlayerData.metadata.needs ~= nil and PlayerData.metadata.needs.hunger or 100,
+    thirst = PlayerData.metadata.needs ~= nil and PlayerData.metadata.needs.thirst or 100,
+  }
 
   DGCore.Player.CreatePlayer(PlayerData)
 end

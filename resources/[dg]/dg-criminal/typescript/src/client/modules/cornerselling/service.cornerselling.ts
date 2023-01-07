@@ -42,7 +42,7 @@ const findBuyer = async () => {
   await Util.Delay(5000);
 
   const ped = PlayerPedId();
-  const buyer = Util.getClosestPedInRange(10, pedsSoldTo);
+  const buyer = Util.getClosestNpcInRange(10, pedsSoldTo);
   if (
     !buyer ||
     IsPedInAnyVehicle(buyer, true) ||

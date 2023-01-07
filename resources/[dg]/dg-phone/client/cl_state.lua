@@ -3,7 +3,6 @@ local context = {
 	state = 0,
 	inCall = false,
 	isMuted = false,
-	isDead = false,
 	isDisabled = true,
 	characterLoaded = false,
 	hasPhone = false,
@@ -12,7 +11,6 @@ oldContext = {
 	state = 0,
 	inCall = false,
 	isMuted = false,
-	isDead = false,
 	isDisabled = true,
 	characterLoaded = false,
 	hasPhone = false
@@ -44,7 +42,7 @@ setState = function(key, value)
 end
 
 canOpen = function()
-	return not context.isDead and not context.isDisabled and context.characterLoaded and context.hasPhone
+	return not context.isDisabled and context.characterLoaded and context.hasPhone and not DGX.Hospital.isDown() and not DGX.Police.isCuffed()
 end
 
 RegisterNetEvent('dg-phone:client:setState', setState)

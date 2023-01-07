@@ -1,4 +1,4 @@
-import { Peek, PropAttach, UI, Util, Weapons } from '@dgx/client';
+import { Hospital, PropAttach, UI, Util, Weapons, Peek } from '@dgx/client';
 import { disabledControlMap, TaskbarState } from './constants.taskbar';
 
 let state: TaskbarState = TaskbarState.Idle;
@@ -19,8 +19,7 @@ export const taskbar = async (
   if (state !== TaskbarState.Idle) return [true, 0];
 
   const ped = PlayerPedId();
-  // TODO: Use hospitalresource for deathcheck
-  if (settings.cancelOnDeath && IsEntityDead(ped)) {
+  if (settings.cancelOnDeath && (IsEntityDead(ped) || Hospital.isDown())) {
     return [true, 0];
   }
   if (settings.disarm) {
@@ -30,7 +29,7 @@ export const taskbar = async (
     LocalPlayer.state.set('inv_busy', true, true);
   }
   if (settings.disablePeek) {
-    LocalPlayer.state.set('peekDisabled', true, true);
+    Peek.setPeekEnabled(false);
   }
   if (settings.animation) {
     doAnimation(ped, settings.animation);
@@ -70,11 +69,10 @@ export const cancelTaskbar = () => {
   state = TaskbarState.Canceled;
 };
 
-// TODO: check if this is not cancelable
 const doAnimation = async (ped: number, settings: TaskBar.TaskBarSettings['animation']) => {
   if (!settings) return;
   if ('task' in settings) {
-    TaskStartScenarioInPlace(ped, settings.task, 0, true);
+    Util.startScenarioInPlace(settings.task);
   } else {
     await Util.loadAnimDict(settings.animDict);
     TaskPlayAnim(ped, settings.animDict, settings.anim, 3.0, 3.0, -1, settings.flags ?? 1, 0, false, false, false);
@@ -111,7 +109,7 @@ const doTaskbarThread = async (endTime: number): Promise<[TaskbarState, number]>
 
     // Check settings
     if (
-      (runningTaskbar.settings.cancelOnDeath && IsEntityDead(ped)) ||
+      (runningTaskbar.settings.cancelOnDeath && (IsEntityDead(ped) || Hospital.isDown())) ||
       (runningTaskbar.settings.cancelOnMove && startPosition.distance(Util.getPlyCoords()) > 1)
     ) {
       newState = TaskbarState.Canceled;
@@ -157,7 +155,7 @@ const cleanUp = (settings: TaskBar.TaskBarSettings) => {
   runningTaskbar.settings = {};
   LocalPlayer.state.set('inv_busy', false, true);
   if (settings.disablePeek) {
-    LocalPlayer.state.set('peekDisabled', false, true);
+    Peek.setPeekEnabled(true);
   }
   state = TaskbarState.Idle;
 };

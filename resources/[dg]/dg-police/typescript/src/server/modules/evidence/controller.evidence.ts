@@ -1,6 +1,6 @@
 import { Events, Inventory, Jobs, Notifications, RPC, Taskbar, Util } from '@dgx/server';
 import { BLOCKED_CASINGS_WEAPONS } from './constants.evidence';
-import { addEvidence, getAllEvidenceInArea, takeEvidence } from './service.evidence';
+import { addBloodDrop, addEvidence, getAllEvidenceInArea, takeEvidence } from './service.evidence';
 
 global.exports('addBulletCasings', (plyId: number, itemState: Inventory.ItemState, shotFirePositions: Vec3[]) => {
   const vehicle = GetVehiclePedIsIn(GetPlayerPed(String(plyId)), false);
@@ -13,12 +13,8 @@ global.exports('addBulletCasings', (plyId: number, itemState: Inventory.ItemStat
   });
 });
 
-// TODO: add to ambu resource when finished
-Events.onNet('police:evidence:dropBloop', (src: number) => {
-  const player = DGCore.Functions.GetPlayer(src);
-  const plyCoords = Util.getPlyCoords(src);
-  addEvidence({ x: plyCoords.x, y: plyCoords.y, z: plyCoords.z - 0.95 }, 'blood', player.PlayerData.metadata.dna);
-});
+global.exports('addBloodDrop', addBloodDrop);
+Events.onNet('police:evidence:addBloodDrop', addBloodDrop);
 
 Events.onNet('police:evidence:dropVehicleDamage', (src: number, color: string, coords: Vec3) => {
   addEvidence(coords, 'vehicleDamage', color);
@@ -37,6 +33,7 @@ Events.onNet('police:evidence:take', (src: number, evidenceId: string) => {
 });
 
 Events.onNet('police:evidence:researchBlood', async (src: number) => {
+  if (Jobs.getCurrentJob(src) !== 'ambulance') return;
   const itemState = await Inventory.getFirstItemOfNameOfPlayer(src, 'evidence_blood');
   if (!itemState) return;
   Inventory.destroyItem(itemState.id);
@@ -44,13 +41,16 @@ Events.onNet('police:evidence:researchBlood', async (src: number) => {
 });
 
 Inventory.registerUseable('dna_swab', async src => {
-  if (Jobs.getCurrentJob(src) !== 'police') return;
+  const job = Jobs.getCurrentJob(src);
+  if (!job || ['police', 'ambulance'].includes(job)) return;
+
   const target = Util.getClosestPlayerOutsideVehicle(src);
   if (!target) {
     Notifications.add(src, 'Er is niemand in de buurt', 'error');
     return;
   }
 
+  Notifications.add(target, 'Je dna wordt genomen, mondje open');
   const [canceled] = await Taskbar.create(src, 'dna', 'DNA Nemen', 5000, {
     canCancel: true,
     cancelOnDeath: true,

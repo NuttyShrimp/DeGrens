@@ -2137,7 +2137,7 @@
   },
   {
     "description": "Pillbox achter balie",
-    "locked": true,
+    "locked": false,
     "distance": 2,
     "doors": [
       {
@@ -2393,7 +2393,7 @@
   {
     "description": "Pillbox garage poort rechts van binnen",
     "locked": true,
-    "distance": 2,
+    "distance": 10,
     "doors": [
       {
         "model": "gabz_pillbox_dlc_gate",
@@ -3063,5 +3063,57 @@
         }
       ]
     }
+  },
+  {
+    "description": "Pillbox Lift voor ingang",
+    "locked": true,
+    "distance": 2,
+    "doors": [
+      {
+        "model": "gabz_pillbox_elevdoor_r",
+        "coords": {
+          "x": 342.1202087402344,
+          "y": -580.2324829101562,
+          "z": 27.793302536010742
+        }
+      },
+      {
+        "model": "gabz_pillbox_elevdoor_l",
+        "coords": {
+          "x": 341.4742736816406,
+          "y": -582.01171875,
+          "z": 27.793302536010742
+        }
+      }
+    ],
+    "authorized": {},
+    "hideInteraction": true,
+    "noAnimation": true
+  },
+  {
+    "description": "Pillbox Lift naar garage",
+    "locked": true,
+    "distance": 2,
+    "doors": [
+      {
+        "model": "gabz_pillbox_elevdoor_l",
+        "coords": {
+          "x": 343.6728820800781,
+          "y": -587.0098876953125,
+          "z": 27.793460845947266
+        }
+      },
+      {
+        "model": "gabz_pillbox_elevdoor_r",
+        "coords": {
+          "x": 344.31976318359375,
+          "y": -585.2310180664062,
+          "z": 27.793460845947266
+        }
+      }
+    ],
+    "authorized": {},
+    "hideInteraction": true,
+    "noAnimation": true
   }
 ]

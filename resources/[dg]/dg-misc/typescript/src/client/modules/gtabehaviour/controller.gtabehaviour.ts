@@ -8,6 +8,7 @@ on('baseevents:playerPedChanged', () => {
   SetPedMinGroundTimeForStungun(ped, 5000);
   SetPedCanLosePropsOnDamage(ped, false, 0);
   SetPedMaxHealth(ped, 200);
+  SetEntityHealth(ped, 200);
   SetPedDropsWeaponsWhenDead(ped, false);
   PED_CONFIG_FLAGS.forEach(([flag, val]) => {
     SetPedConfigFlag(ped, flag, val);

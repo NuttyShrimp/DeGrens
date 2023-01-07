@@ -55,9 +55,20 @@ class Police {
   };
 }
 
+class Hospital {
+  public pauseDownAnimation = (pause: boolean) => {
+    global.exports['dg-hospital'].pauseDownAnimation(pause);
+  };
+
+  public isDown = () => {
+    return global.exports['dg-hospital'].isDown();
+  };
+}
+
 export default {
   Jobs: new Jobs(),
   Business: new Business(),
   Gangs: new Gangs(),
   Police: new Police(),
+  Hospital: new Hospital(),
 };

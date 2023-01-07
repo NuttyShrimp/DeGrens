@@ -90,7 +90,9 @@ DGCore.Functions.CreateCallback('dg-chars:server:loadPly', function(src, cb, cid
 		-- loadHouseData()
 		exports['dg-logs']:createGraylogEntry('join', { src, cid }, ("%s (%s | %d) loaded.."):format(GetPlayerName(src), cid, src))
 	end
-	cb()
+
+  local ply = DGCore.Functions.GetPlayer(src)
+	cb(ply.PlayerData)
 end)
 
 DGCore.Functions.CreateCallback('dg-chars:server:createCharacter', function(src, cb, data)

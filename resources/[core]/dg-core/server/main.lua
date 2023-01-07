@@ -19,7 +19,3 @@ CreateThread(function()
 		print('\x1b[33m====================================')
 	end
 end)
-
-RegisterCommand('forceSave', function(src)
-  DGCore.Players.Save(src)
-end)

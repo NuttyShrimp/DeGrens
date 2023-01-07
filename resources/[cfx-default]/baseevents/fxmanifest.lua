@@ -10,7 +10,6 @@ client_scripts {
   'playerchecker.lua',
   'vehiclechecker.lua'
 }
-server_script 'server.lua'
 
 fx_version 'adamant'
 game 'gta5'

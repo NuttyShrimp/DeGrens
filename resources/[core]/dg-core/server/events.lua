@@ -113,35 +113,7 @@ end)
 
 -- Player
 
-RegisterNetEvent('DGCore:UpdatePlayer', function()
-	local src = source
-	local Player = DGCore.Functions.GetPlayer(src)
-	if Player then
-		local newHunger = Player.PlayerData.metadata['hunger'] - DGCore.Config.Player.HungerRate
-		local newThirst = Player.PlayerData.metadata['thirst'] - DGCore.Config.Player.ThirstRate
-		if newHunger <= 0 then
-			newHunger = 0
-		end
-		if newThirst <= 0 then
-			newThirst = 0
-		end
-		Player.Functions.SetMetaData('thirst', newThirst)
-		Player.Functions.SetMetaData('hunger', newHunger)
-		TriggerClientEvent('hud:client:UpdateNeeds', src, newHunger, newThirst)
-		Player.Functions.Save()
-	end
-end)
-
-RegisterNetEvent('DGCore:Server:SetMetaData', function(meta, data)
-	local src = source
-	local Player = DGCore.Functions.GetPlayer(src)
-	if meta == 'hunger' or meta == 'thirst' then
-		if data > 100 then
-			data = 100
-		end
-	end
-	if Player then
-		Player.Functions.SetMetaData(meta, data)
-	end
-	TriggerClientEvent('hud:client:UpdateNeeds', src, Player.PlayerData.metadata['hunger'], Player.PlayerData.metadata['thirst'])
+RegisterNetEvent('DGCore:server:save', function()
+  local src = source
+  DGCore.Player.Save(src)
 end)

@@ -7,7 +7,7 @@ export const isInPrison = () => inPrison;
 
 export const loadPrisonConfig = (config: Police.Prison.Config) => {
   config.itemRetrievalPlaces.forEach((zone, id) => {
-    PolyTarget.addCircleZone('prison_item_retrieval', zone, 3, { useZ: true, data: { id } });
+    PolyTarget.addCircleZone('prison_item_retrieval', zone, 1, { useZ: true, data: { id } });
   });
   PolyZone.addPolyZone('prison', config.prisonZone, { data: {} });
   PolyTarget.addBoxZone(

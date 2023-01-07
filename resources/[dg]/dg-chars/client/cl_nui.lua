@@ -44,8 +44,18 @@ RegisterNUICallback('selectChar', function(_, cb)
 	DoScreenFadeOut(250)
 	Wait(250)
 	closeCharMenu()
-	DGCore.Functions.TriggerCallback('dg-chars:server:loadPly', plyCid)
-	Spawn.setupSpawnMenu()
+
+	local playerData = DGCore.Functions.TriggerCallback('dg-chars:server:loadPly', plyCid)
+
+  local isDown = playerData.metadata.downState ~= 'alive'
+  local inJail = playerData.metadata.jailMonths ~= -1
+  -- When ply is down or jailed, we force player to select the one and only possible spawnpoint
+  if isDown or inJail then
+    Spawn.instaSpawn()
+  else
+    Spawn.setupSpawnMenu()
+  end
+
 	cb({ data={}, meta={ok=true, message='done'} })
 end)
 

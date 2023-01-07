@@ -14,6 +14,12 @@ export const main: RadialMenu.Entry[] = [
     jobs: ['police'],
   },
   {
+    title: 'Ambulance',
+    icon: 'user-doctor',
+    subMenu: 'ambulance',
+    jobs: ['ambulance'],
+  },
+  {
     title: 'Voertuig',
     icon: 'car',
     subMenu: 'vehicle',

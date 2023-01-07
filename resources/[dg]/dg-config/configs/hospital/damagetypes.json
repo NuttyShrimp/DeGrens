@@ -1,0 +1,414 @@
+{
+  "SCRIPT_WISE_UNCONSCIOUS": {
+    "downType": "unconscious",
+    "status": "bruises"
+  },
+  "UNKNOWN": {
+    "downType": "unconscious",
+    "status": "bruises"
+  },
+  "WEAPON_ANIMAL": {
+    "downType": "unconscious",
+    "status": "bruises"
+  },
+  "WEAPON_BARBED_WIRE": {
+    "downType": "unconscious",
+    "status": "bruises"
+  },
+  "WEAPON_BAT": {
+    "downType": "unconscious",
+    "status": "bruises"
+  },
+  "WEAPON_COUGAR": {
+    "downType": "unconscious",
+    "status": "bruises"
+  },
+  "WEAPON_CROWBAR": {
+    "downType": "unconscious",
+    "status": "bruises"
+  },
+  "WEAPON_FIREWORK": {
+    "downType": "unconscious",
+    "status": "burns"
+  },
+  "WEAPON_FLARE": {
+    "downType": "unconscious",
+    "status": "burns"
+  },
+  "WEAPON_FLAREGUN": {
+    "downType": "unconscious",
+    "status": "burns"
+  },
+  "WEAPON_GOLFCLUB": {
+    "downType": "unconscious",
+    "status": "bruises"
+  },
+  "WEAPON_GRENADELAUNCHER_SMOKE": {
+    "downType": "unconscious",
+    "status": "bruises"
+  },
+  "WEAPON_HAMMER": {
+    "downType": "unconscious",
+    "status": "bruises"
+  },
+  "WEAPON_HIT_BY_WATER_CANNON": {
+    "downType": "unconscious",
+    "status": "bruises"
+  },
+  "WEAPON_KNUCKLE": {
+    "downType": "unconscious",
+    "status": "bruises"
+  },
+  "WEAPON_NIGHTSTICK": {
+    "downType": "unconscious",
+    "status": "bruises"
+  },
+  "WEAPON_POOLCUE": {
+    "downType": "unconscious",
+    "status": "bruises"
+  },
+  "WEAPON_RAMMED_BY_CAR": {
+    "downType": "unconscious",
+    "status": "bruises"
+  },
+  "WEAPON_RUN_OVER_BY_CAR": {
+    "downType": "unconscious",
+    "status": "bruises"
+  },
+  "WEAPON_STUNGUN": {
+    "downType": "unconscious",
+    "status": "bruises"
+  },
+  "WEAPON_UNARMED": {
+    "downType": "unconscious",
+    "status": "bruises"
+  },
+  "WEAPON_WRENCH": {
+    "downType": "unconscious",
+    "status": "bruises"
+  },
+  "SCRIPT_WISE_DOWN": {
+    "downType": "dead",
+    "status": "bruises"
+  },
+  "VEHICLE_WEAPON_PLANE_ROCKET": {
+    "downType": "dead",
+    "status": "burns"
+  },
+  "VEHICLE_WEAPON_PLAYER_BULLET": {
+    "downType": "dead",
+    "status": "gsw"
+  },
+  "VEHICLE_WEAPON_PLAYER_HUNTER": {
+    "downType": "dead",
+    "status": "gsw"
+  },
+  "VEHICLE_WEAPON_PLAYER_LASER": {
+    "downType": "dead",
+    "status": "gsw"
+  },
+  "VEHICLE_WEAPON_PLAYER_LAZER": {
+    "downType": "dead",
+    "status": "gsw"
+  },
+  "VEHICLE_WEAPON_PLAYER_SAVAGE": {
+    "downType": "dead",
+    "status": "burns"
+  },
+  "VEHICLE_WEAPON_RUINER_BULLET": {
+    "downType": "dead",
+    "status": "burns"
+  },
+  "VEHICLE_WEAPON_SPACE_ROCKET": {
+    "downType": "dead",
+    "status": "burns"
+  },
+  "VEHICLE_WEAPON_TANK": {
+    "downType": "dead",
+    "status": "burns"
+  },
+  "VEHICLE_WEAPON_TURRET_BOXVILLE": {
+    "downType": "dead",
+    "status": "burns"
+  },
+  "VEHICLE_WEAPON_TURRET_INSURGENT": {
+    "downType": "dead",
+    "status": "burns"
+  },
+  "VEHICLE_WEAPON_TURRET_LIMO": {
+    "downType": "dead",
+    "status": "burns"
+  },
+  "VEHICLE_WEAPON_TURRET_TECHNICAL": {
+    "downType": "dead",
+    "status": "burns"
+  },
+  "WEAPON_ADVANCEDRIFLE": {
+    "downType": "dead",
+    "status": "gsw"
+  },
+  "WEAPON_AIR_DEFENCE_GUN": {
+    "downType": "dead",
+    "status": "gsw"
+  },
+  "WEAPON_AIRSTRIKE_ROCKET": {
+    "downType": "dead",
+    "status": "burns"
+  },
+  "WEAPON_APPISTOL": {
+    "downType": "dead",
+    "status": "gsw"
+  },
+  "WEAPON_ASSAULTRIFLE": {
+    "downType": "dead",
+    "status": "gsw"
+  },
+  "WEAPON_ASSAULTSHOTGUN": {
+    "downType": "dead",
+    "status": "gsw"
+  },
+  "WEAPON_ASSAULTSMG": {
+    "downType": "dead",
+    "status": "gsw"
+  },
+  "WEAPON_AUTOSHOTGUN": {
+    "downType": "dead",
+    "status": "gsw"
+  },
+  "WEAPON_BATTLEAXE": {
+    "downType": "dead",
+    "status": "stabwound"
+  },
+  "WEAPON_BOTTLE": {
+    "downType": "dead",
+    "status": "stabwound"
+  },
+  "WEAPON_BULLPUPRIFLE": {
+    "downType": "dead",
+    "status": "gsw"
+  },
+  "WEAPON_BULLPUPSHOTGUN": {
+    "downType": "dead",
+    "status": "gsw"
+  },
+  "WEAPON_BZGAS": {
+    "downType": "dead",
+    "status": "bruises"
+  },
+  "WEAPON_CARBINERIFLE": {
+    "downType": "dead",
+    "status": "gsw"
+  },
+  "WEAPON_COMBATMG": {
+    "downType": "dead",
+    "status": "gsw"
+  },
+  "WEAPON_COMBATPDW": {
+    "downType": "dead",
+    "status": "gsw"
+  },
+  "WEAPON_COMBATPISTOL": {
+    "downType": "dead",
+    "status": "gsw"
+  },
+  "WEAPON_COMPACTLAUNCHER": {
+    "downType": "dead",
+    "status": "burns"
+  },
+  "WEAPON_COMPACTRIFLE": {
+    "downType": "dead",
+    "status": "gsw"
+  },
+  "WEAPON_DAGGER": {
+    "downType": "dead",
+    "status": "stabwound"
+  },
+  "WEAPON_DBSHOTGUN": {
+    "downType": "dead",
+    "status": "gsw"
+  },
+  "WEAPON_DROWNING": {
+    "downType": "dead",
+    "status": "drowned"
+  },
+  "WEAPON_DROWNING_IN_VEHICLE": {
+    "downType": "dead",
+    "status": "drowned"
+  },
+  "WEAPON_EXPLOSION": {
+    "downType": "dead",
+    "status": "burns"
+  },
+  "WEAPON_FALL": {
+    "downType": "dead",
+    "status": "bruises"
+  },
+  "WEAPON_FIRE": {
+    "downType": "dead",
+    "status": "burns"
+  },
+  "WEAPON_GRENADE": {
+    "downType": "dead",
+    "status": "burns"
+  },
+  "WEAPON_GRENADELAUNCHER": {
+    "downType": "dead",
+    "status": "burns"
+  },
+  "WEAPON_HATCHET": {
+    "downType": "dead",
+    "status": "stabwound"
+  },
+  "WEAPON_HEAVYPISTOL": {
+    "downType": "dead",
+    "status": "gsw"
+  },
+  "WEAPON_HEAVYSHOTGUN": {
+    "downType": "dead",
+    "status": "gsw"
+  },
+  "WEAPON_HEAVYSNIPER": {
+    "downType": "dead",
+    "status": "gsw"
+  },
+  "WEAPON_HELI_CRASH": {
+    "downType": "dead",
+    "status": "burns"
+  },
+  "WEAPON_HOMINGLAUNCHER": {
+    "downType": "dead",
+    "status": "burns"
+  },
+  "WEAPON_KNIFE": {
+    "downType": "dead",
+    "status": "stabwound"
+  },
+  "WEAPON_MACHETE": {
+    "downType": "dead",
+    "status": "stabwound"
+  },
+  "WEAPON_MACHINEPISTOL": {
+    "downType": "dead",
+    "status": "gsw"
+  },
+  "WEAPON_MARKSMANPISTOL": {
+    "downType": "dead",
+    "status": "gsw"
+  },
+  "WEAPON_MARKSMANRIFLE": {
+    "downType": "dead",
+    "status": "gsw"
+  },
+  "WEAPON_MG": {
+    "downType": "dead",
+    "status": "gsw"
+  },
+  "WEAPON_MICROSMG": {
+    "downType": "dead",
+    "status": "gsw"
+  },
+  "WEAPON_MINIGUN": {
+    "downType": "dead",
+    "status": "gsw"
+  },
+  "WEAPON_MINISMG": {
+    "downType": "dead",
+    "status": "gsw"
+  },
+  "WEAPON_MOLOTOV": {
+    "downType": "dead",
+    "status": "burns"
+  },
+  "WEAPON_MUSKET": {
+    "downType": "dead",
+    "status": "gsw"
+  },
+  "WEAPON_PASSENGER_ROCKET": {
+    "downType": "dead",
+    "status": "burns"
+  },
+  "WEAPON_PETROLCAN": {
+    "downType": "dead",
+    "status": "burns"
+  },
+  "WEAPON_PIPEBOMB": {
+    "downType": "dead",
+    "status": "burns"
+  },
+  "WEAPON_PISTOL": {
+    "downType": "dead",
+    "status": "gsw"
+  },
+  "WEAPON_PISTOL50": {
+    "downType": "dead",
+    "status": "gsw"
+  },
+  "WEAPON_PROXMINE": {
+    "downType": "dead",
+    "status": "burns"
+  },
+  "WEAPON_PUMPSHOTGUN": {
+    "downType": "dead",
+    "status": "gsw"
+  },
+  "WEAPON_RAILGUN": {
+    "downType": "dead",
+    "status": "gsw"
+  },
+  "WEAPON_REMOTESNIPER": {
+    "downType": "dead",
+    "status": "gsw"
+  },
+  "WEAPON_REVOLVER": {
+    "downType": "dead",
+    "status": "gsw"
+  },
+  "WEAPON_RPG": {
+    "downType": "dead",
+    "status": "burns"
+  },
+  "WEAPON_SAWNOFFSHOTGUN": {
+    "downType": "dead",
+    "status": "gsw"
+  },
+  "WEAPON_SMG": {
+    "downType": "dead",
+    "status": "gsw"
+  },
+  "WEAPON_SMOKEGRENADE": {
+    "downType": "dead",
+    "status": "bruises"
+  },
+  "WEAPON_SNIPERRIFLE": {
+    "downType": "dead",
+    "status": "gsw"
+  },
+  "WEAPON_SNSPISTOL": {
+    "downType": "dead",
+    "status": "gsw"
+  },
+  "WEAPON_SPECIALCARBINE": {
+    "downType": "dead",
+    "status": "gsw"
+  },
+  "WEAPON_STICKYBOMB": {
+    "downType": "dead",
+    "status": "burns"
+  },
+  "WEAPON_STINGER": {
+    "downType": "dead",
+    "status": "bruises"
+  },
+  "WEAPON_SWITCHBLADE": {
+    "downType": "dead",
+    "status": "stabwound"
+  },
+  "WEAPON_VEHICLE_ROCKET": {
+    "downType": "dead",
+    "status": "burns"
+  },
+  "WEAPON_VINTAGEPISTOL": {
+    "downType": "dead",
+    "status": "gsw"
+  }
+}

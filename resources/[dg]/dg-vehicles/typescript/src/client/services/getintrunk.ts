@@ -1,16 +1,18 @@
-import { Events, Keys, Notifications, Peek, RPC, Taskbar, UI, Util, Police } from '@dgx/client';
+import { Events, Keys, Notifications, Peek, RPC, Taskbar, UI, Util, Police, Hospital } from '@dgx/client';
 
 import { toggleVehicleDoor } from './doors';
+import { isCloseToBoot } from '@helpers/vehicle';
 
 const ANIM_DICT = 'fin_ext_p1-7';
 const ANIM = 'cs_devin_dual-7';
 
 let isInTrunk = false;
+let forcedIn = false;
 let trunkThread: NodeJS.Timer | null = null;
 let cam: number | null = null;
 
-Peek.addBoneEntry(
-  'boot',
+Peek.addGlobalEntry(
+  'vehicle',
   {
     options: [
       {
@@ -21,7 +23,7 @@ Peek.addBoneEntry(
             Notifications.add('Geen kofferbak te vinden', 'error');
             return;
           }
-          const [canceled] = await Taskbar.create('car', 'In koffer gaan', 3000, {
+          const [canceled] = await Taskbar.create('car', 'In koffer gaan', 5000, {
             canCancel: true,
             cancelOnDeath: true,
             cancelOnMove: true,
@@ -48,37 +50,38 @@ Peek.addBoneEntry(
 
 Keys.onPressDown('GeneralUse', () => {
   if (!isInTrunk) return;
+  if (forcedIn) return;
   const vehicle = GetEntityAttachedTo(PlayerPedId());
   getOutOfTrunk(vehicle);
 });
 Keys.onPressDown('housingMain', () => {
   if (!isInTrunk) return;
+  if (forcedIn) return;
   const vehicle = GetEntityAttachedTo(PlayerPedId());
   toggleVehicleDoor(vehicle, 5);
 });
 
-const isTrunkOpen = (vehicle: number) => GetVehicleDoorAngleRatio(vehicle, 5) > 0.5;
-
 const canEnterVehicleTrunk = (vehicle: number): boolean => {
-  if (!isTrunkOpen(vehicle)) return false;
   const vehClass = GetVehicleClass(vehicle);
   const bannedClasses = [8, 13, 14, 15, 16, 21];
   if (bannedClasses.includes(vehClass)) return false;
-  return true;
+  return isCloseToBoot(vehicle, 2, true);
 };
 
 RPC.register('vehicles:trunk:canEnterVehicle', (netId: number) => {
   const vehicle = NetworkGetEntityFromNetworkId(netId);
   if (!vehicle || !DoesEntityExist(vehicle)) return false;
-  if (Util.getBoneDistance(vehicle, 'boot') > 2.0) return false;
   return canEnterVehicleTrunk(vehicle);
 });
 
 const getInTrunk = async (vehicle: number, force = false) => {
   if (isInTrunk) return;
   clearTrunkThread();
+
   if (!canEnterVehicleTrunk(vehicle)) {
-    Notifications.add('Je kan niet in deze kofferbak', 'error');
+    if (!force) {
+      Notifications.add('Je kan niet in deze kofferbak', 'error');
+    }
     return;
   }
 
@@ -94,6 +97,7 @@ const getInTrunk = async (vehicle: number, force = false) => {
   AttachEntityToEntity(ped, vehicle, 0, offset.x, offset.y, offset.z, 5, 0, 50, true, false, false, true, 1, true);
 
   isInTrunk = true;
+  forcedIn = force;
   setTrunkCamActive(true);
   if (!force) {
     UI.showInteraction(
@@ -101,7 +105,9 @@ const getInTrunk = async (vehicle: number, force = false) => {
     );
   }
   Events.emitNet('vehicles:trunk:enter', NetworkGetNetworkIdFromEntity(vehicle));
+
   Police.pauseCuffAnimation(true);
+  Hospital.pauseDownAnimation(true);
 
   trunkThread = setInterval(() => {
     const vehicleAttachedTo = GetEntityAttachedTo(ped);
@@ -109,17 +115,15 @@ const getInTrunk = async (vehicle: number, force = false) => {
       getOutOfTrunk();
     }
     setTrunkCamPosition();
-  }, 3);
+  }, 1);
 };
 
 // We keep in mind that veh can be undefined to be able to leave trunk when vehicle gets deleted
 const getOutOfTrunk = (vehicle?: number, force = false) => {
-  Police.pauseCuffAnimation(false);
-
   if (vehicle) {
     vehicle = DoesEntityExist(vehicle) ? vehicle : undefined;
   }
-  if (vehicle && !isTrunkOpen(vehicle) && !force) {
+  if (vehicle && GetVehicleDoorAngleRatio(vehicle, 5) === 0 && !force) {
     Notifications.add('De koffer is dicht...', 'error');
     return;
   }
@@ -135,9 +139,13 @@ const getOutOfTrunk = (vehicle?: number, force = false) => {
   StopAnimTask(ped, ANIM_DICT, ANIM, 1);
 
   isInTrunk = false;
+  forcedIn = false;
   setTrunkCamActive(false);
   UI.hideInteraction();
   Events.emitNet('vehicles:trunk:leave');
+
+  Police.pauseCuffAnimation(false);
+  Hospital.pauseDownAnimation(false);
 };
 
 const clearTrunkThread = () => {

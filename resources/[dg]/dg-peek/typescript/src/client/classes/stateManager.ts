@@ -1,4 +1,5 @@
-import { RayCast, UI, Util } from '@dgx/client';
+import { Hospital, Notifications, Police, RayCast, UI, Util } from '@dgx/client';
+import { Export, ExportRegister } from '@dgx/shared/decorators';
 
 import { DEFAULT_DISTANCE, DISABLED_KEYS, PEEK_TYPES } from '../cl_constant';
 import { getActiveZones, getCurrentEntity, updateCurrentEntity } from '../helpers/actives';
@@ -7,7 +8,7 @@ import { isEntryDisabled } from '../helpers/entries';
 import { ZoneManager } from './entryManagers/zoneManager';
 import { entryManager } from './entryManager';
 
-// @ExportManager
+@ExportRegister()
 class StateManager extends Util.Singleton<StateManager>() {
   private canPeek: boolean;
   private isPeeking: boolean;
@@ -27,14 +28,15 @@ class StateManager extends Util.Singleton<StateManager>() {
     this.justSelectedEntry = false;
   }
 
-  // @Export('setPeekEnabled')
+  @Export('setPeekEnabled')
   setCanPeek(canPeek: boolean) {
     this.canPeek = canPeek;
   }
 
   // Handler when button is pressed down
   startPeeking() {
-    if (!this.canPeek || this.isPeeking || LocalPlayer.state?.peekDisabled) {
+    if (!this.canPeek || this.isPeeking || Police.isCuffed() || Hospital.isDown()) {
+      Notifications.add('Je kan dit momenteel niet', 'error');
       return;
     }
 

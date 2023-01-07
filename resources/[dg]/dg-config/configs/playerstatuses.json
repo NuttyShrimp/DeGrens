@@ -15,5 +15,25 @@
     "label": "Kruitresten",
     "removalMethod": "water",
     "removalMessage": "Je kruitresten zijn weg"
+  },
+  {
+    "name": "bruises",
+    "label": "Kneuzingen",
+    "removalMethod": "revive"
+  },
+  {
+    "name": "burns",
+    "label": "Brandwonden",
+    "removalMethod": "revive"
+  },
+  {
+    "name": "drowned",
+    "label": "Water in longen",
+    "removalMethod": "revive"
+  },
+  {
+    "name": "stabwound",
+    "label": "Steekwonde",
+    "removalMethod": "revive"
   }
 ]

@@ -1,0 +1,27 @@
+{
+  "respawnTime": {
+    "unconscious": 5,
+    "dead": 5
+  },
+  "respawnPosition": {
+    "x": 353.2316,
+    "y": -589.1978,
+    "z": 28.7969
+  },
+  "healItems": {
+    "bandage": {
+      "taskbar": {
+        "icon": "bandage",
+        "label": "Verbanden",
+        "time": 5000
+      },
+      "animation": {
+        "animDict": "anim@amb@business@weed@weed_inspecting_high_dry@",
+        "anim": "weed_inspecting_high_base_inspector",
+        "flags": 49
+      },
+      "health": 10,
+      "bleed": 20
+    }
+  }
+}

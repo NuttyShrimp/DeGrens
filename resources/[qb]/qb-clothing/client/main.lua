@@ -346,7 +346,7 @@ end)
 Citizen.CreateThread(function()
     while true do
 
-        if isLoggedIn then
+        if true then
 
             local ped = PlayerPedId()
             local pos = GetEntityCoords(ped)

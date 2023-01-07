@@ -81,7 +81,7 @@ export const takeEvidence = async () => {
 };
 
 export const buildLabPeekZone = (coords: Vec3) => {
-  PolyTarget.addCircleZone('police_evidence_lab', coords, 1, { useZ: true, data: {} });
+  PolyTarget.addCircleZone('police_evidence_lab', coords, 0.5, { useZ: true, data: {} });
 };
 
 export const researchBlood = async () => {

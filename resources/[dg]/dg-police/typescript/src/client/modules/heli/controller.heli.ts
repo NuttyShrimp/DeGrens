@@ -1,6 +1,7 @@
 import { Keys } from '@dgx/client';
 import { WHITELISTED_HELIS } from './constants.heli';
 import { changeVision, isHeliCamOn, isInPoliceHeli, setHeliCamOn, setInPoliceHeli } from './service.heli';
+import { isCuffed } from 'modules/interactions/modules/cuffs';
 
 // Only register as in popo heli when engine on and in passenger seat
 on('baseevents:engineStateChanged', (vehicle: number, engineState: boolean) => {
@@ -31,7 +32,9 @@ on('baseevents:vehicleChangedSeat', (vehicle: number, newSeat: number, oldSeat: 
 Keys.register('heli_cam', '(police) Toggle heli cam', 'E');
 Keys.onPressDown('heli_cam', () => {
   if (!isInPoliceHeli()) return;
-  setHeliCamOn(!isHeliCamOn());
+  const currentlyOn = isHeliCamOn();
+  if (!currentlyOn && isCuffed()) return;
+  setHeliCamOn(!currentlyOn);
 });
 
 Keys.register('heli_cam_filter', '(police) Heli cam filter', 'SPACE');

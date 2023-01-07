@@ -131,6 +131,10 @@ class Peek {
     global.exports['dg-peek'].removeGlobalEntry(ids);
     this.peekIdsToRemove.global.delete(ids);
   }
+
+  setPeekEnabled(enabled: boolean) {
+    global.exports['dg-peek'].setPeekEnabled(enabled);
+  }
 }
 
 class RayCast {

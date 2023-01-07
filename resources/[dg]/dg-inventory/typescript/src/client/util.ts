@@ -1,14 +1,8 @@
-import { Util } from '@dgx/client';
+import { Hospital, Police, Util } from '@dgx/client';
 
 export const canOpenInventory = () => {
-  const playerData = DGCore.Functions.GetPlayerData();
-  return (
-    !LocalPlayer.state.inv_busy &&
-    LocalPlayer.state.isLoggedIn &&
-    !IsPauseMenuActive() &&
-    !playerData.metadata.isdead &&
-    !playerData.metadata.inlaststand
-  );
+  const state = LocalPlayer.state;
+  return !state.inv_busy && state.isLoggedIn && !IsPauseMenuActive() && !Hospital.isDown() && !Police.isCuffed();
 };
 
 export const doLookAnimation = async () => {

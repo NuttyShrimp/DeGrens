@@ -28,8 +28,7 @@ on('baseevents:leftVehicle', (pVehicle: number, pSeat: number) => {
   const vehicleClass = GetVehicleClass(pVehicle);
   if (vehicleClass !== 15 || (pSeat !== -1 && pSeat !== 0)) return;
 
-  // TODO: Fix to reset back to normal blip
-  Events.emitNet('dg-dispatch:updateBlipSprite', 43);
+  Events.emitNet('dg-dispatch:updateBlipSprite', 0);
 });
 
 on('onResourceStop', (res: string) => {
@@ -45,8 +44,9 @@ on('onResourceStop', (res: string) => {
 });
 
 onNet('sync:coords:sync', (plyCoords: Record<number, Vec3>) => {
-  for (const plyId in plyCoords) {
-    updateBlipCoords(Number(plyId), plyCoords[plyId]);
+  for (const key in plyCoords) {
+    const plyId = Number(key);
+    updateBlipCoords(plyId, plyCoords[plyId]);
   }
 });
 
@@ -91,7 +91,7 @@ Events.onNet('dispatch:updateSprite', (plyId: number, info: Dispatch.BlipInfo, s
 });
 
 Events.onNet('dispatch:toggleDispatchNotifications', () => {
-  Events.emitNet('dispatch:setDispatchBlip', isDispatchDisabled());
+  Events.emitNet('dispatch:toggleDispatchBlip', isDispatchDisabled());
   isDispatchDisabled() ? enableDispatch() : disableDispatch();
 });
 

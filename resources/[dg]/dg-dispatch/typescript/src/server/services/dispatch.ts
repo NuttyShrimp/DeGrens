@@ -14,7 +14,7 @@ export const prepareCall = (id: string, call: Dispatch.Call): Dispatch.UICall =>
   return UICall;
 };
 
-export const createDispatchCall = async (call: Dispatch.Call) => {
+export const createDispatchCall = async (job: 'ambulance' | 'police', call: Dispatch.Call) => {
   call.timestamp = Date.now();
 
   if (call.coords) {
@@ -71,8 +71,8 @@ export const createDispatchCall = async (call: Dispatch.Call) => {
 
   const storedCall = addCall(call);
 
-  const policeIds = Jobs.getPlayersForJob('police');
-  policeIds.forEach(id => {
+  const playerIds = Jobs.getPlayersForJob(job);
+  playerIds.forEach(id => {
     Events.emitNet('dg-dispatch:addCall', id, prepareCall(storedCall.id, storedCall));
     // TODO: Make louder, cant be heared by other players because so quiet
     if (call.important) {

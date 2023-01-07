@@ -74,7 +74,7 @@ const lockpickRegister = async (registerObject: number) => {
       Notifications.add('Je lockpick is gebroken', 'error');
     } else {
       Notifications.add('Je bent uitgeschoven', 'error');
-      Events.emitNet('police:evidence:dropBloop');
+      Events.emitNet('police:evidence:addBloodDrop');
     }
   }
 };

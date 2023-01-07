@@ -129,16 +129,16 @@
     },
     {
       "type": "node-terminal",
-      "name": "chars:ui:build",
+      "name": "chars:ui:dev",
       "request": "launch",
-      "command": "yarn run build",
+      "command": "yarn run dev",
       "cwd": "${workspaceFolder}/resources/[dg]/dg-chars/ui"
     },
     {
       "type": "node-terminal",
-      "name": "chars:ui:dev",
+      "name": "chars:ui:build",
       "request": "launch",
-      "command": "yarn run dev",
+      "command": "yarn run build",
       "cwd": "${workspaceFolder}/resources/[dg]/dg-chars/ui"
     },
     {
@@ -336,6 +336,27 @@
       "request": "launch",
       "command": "yarn run watch",
       "cwd": "${workspaceFolder}/resources/[dg]/dg-heists/typescript"
+    },
+    {
+      "type": "node-terminal",
+      "name": "hospital:build prod",
+      "request": "launch",
+      "command": "yarn run build",
+      "cwd": "${workspaceFolder}/resources/[dg]/dg-hospital/typescript"
+    },
+    {
+      "type": "node-terminal",
+      "name": "hospital:build dev",
+      "request": "launch",
+      "command": "yarn run build:dev",
+      "cwd": "${workspaceFolder}/resources/[dg]/dg-hospital/typescript"
+    },
+    {
+      "type": "node-terminal",
+      "name": "hospital:watch",
+      "request": "launch",
+      "command": "yarn run watch",
+      "cwd": "${workspaceFolder}/resources/[dg]/dg-hospital/typescript"
     },
     {
       "type": "node-terminal",

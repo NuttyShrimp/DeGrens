@@ -98,3 +98,10 @@ Events.onNet('admin:command:setModel', async (model: string) => {
   SetPlayerModel(PlayerId(), hash);
   SetPedComponentVariation(PlayerPedId(), 0, 0, 0, 0);
 });
+
+Events.onNet('admin:command:collision', () => {
+  const ped = PlayerPedId();
+  const isDisabled = GetEntityCollisionDisabled(ped);
+  SetEntityCompletelyDisableCollision(ped, isDisabled, isDisabled);
+  SetGravityLevel(isDisabled ? 0 : 2);
+});
