@@ -53,10 +53,6 @@ class ShopManager extends Util.Singleton<ShopManager>() {
   @DGXEvent('vehicles:shop:setActive')
   public setPlayerActive = (plyId: number, active: boolean) => {
     if (!active) {
-      if (!this.playersInShop.has(plyId)) {
-        this.logger.error('Tried removing inactive player from playersInShop');
-        return;
-      }
       this.playersInShop.delete(plyId);
       return;
     }
