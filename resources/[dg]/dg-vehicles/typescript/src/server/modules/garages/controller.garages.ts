@@ -1,4 +1,4 @@
-import { Events, RPC } from '@dgx/server';
+import { Auth, Events, RPC } from '@dgx/server';
 import { setAllVehiclesInGarage } from 'db/repository';
 import fs from 'fs';
 import { validateVehicleVin } from 'modules/identification/service.id';
@@ -18,6 +18,7 @@ import {
   storeVehicleInGarage,
   takeVehicleOutGarage,
 } from './service.garages';
+import { Util } from '@dgx/shared';
 
 const root = GetResourcePath(GetCurrentResourceName());
 
@@ -46,17 +47,14 @@ setImmediate(async () => {
     if (successArr.some(x => !x)) return;
     garageLogger.info(`${fileNames.length} garage(s) loaded`);
     setGaragesLoaded();
-    DGCore.Functions.GetPlayers().forEach(player => {
-      emitNet('vehicles:garages:load', player, GetGarages());
-    });
   } catch (e) {
     garageLogger.error(`Error while loading garage directory: ${e}`);
   }
 });
 
-onNet('playerJoining', () => {
-  if (!areGaragesLoaded()) return;
-  emitNet('vehicles:garages:load', source, GetGarages());
+Auth.onAuth(async plyId => {
+  await Util.awaitCondition(() => areGaragesLoaded());
+  emitNet('vehicles:garages:load', plyId, GetGarages());
 });
 
 Events.onNet('dg-vehicles:garages:open', (src: number) => {
