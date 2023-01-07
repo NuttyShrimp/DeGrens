@@ -17,7 +17,7 @@ const registerFood = (info: Config.Consumable) => {
     const success = await Inventory.removeItemByIdFromPlayer(src, item.name);
     if (success) {
       emitNet('animations:client:EmoteCommandStart', src, ["eat"]);
-      const [isCancelled] = await Taskbar.create(src, "consuming_consumable", "burger", "Eten...", 5000, {
+      const [isCancelled] = await Taskbar.create(src, "burger", "Eten...", 5000, {
         controlDisables: {
           combat: true
         },
@@ -39,7 +39,7 @@ const handleDrinkUse = async (src: number, item: Inventory.ItemState, info: Conf
     const success = await Inventory.removeItemByIdFromPlayer(src, item.name);
     if (success) {
       emitNet('animations:client:EmoteCommandStart', src, ["drink"]);
-      const [isCancelled] = await Taskbar.create(src, "consuming_consumable", "bottle-water", "Drinken...", 5000, {
+      const [isCancelled] = await Taskbar.create(src, "bottle-water", "Drinken...", 5000, {
         controlDisables: {
           combat: true
         },
