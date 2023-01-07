@@ -18,29 +18,27 @@ deleteImage = function(cid, id)
 	return exports['dg-sql']:query(query, { cid, id })
 end
 
-DGCore.Functions.CreateCallback('dg-phone:server:photo:get', function(src, cb)
-	local Player = DGCore.Functions.GetPlayer(src)
-	if not Player then cb({}) return end
-	cb(getImages(Player.PlayerData.citizenid))
+DGX.RPC.register('dg-phone:server:photo:get', function(src)
+  local cid = DGX.Util.getCID(src)
+	return getImages(cid)
 end)
 
-DGCore.Functions.CreateCallback('dg-phone:server:photo:delete', function(src, cb, data)
-	local Player = DGCore.Functions.GetPlayer(src)
-	if not Player then cb({}) return end
-	deleteImage(Player.PlayerData.citizenid, data.id)
-	cb()
+DGX.RPC.register('dg-phone:server:photo:delete', function(src, imageId)
+  local cid = DGX.Util.getCID(src)
+	deleteImage(cid, imageId)
 end)
 
-DGCore.Functions.CreateCallback('dg-phone:server:photo:take', function(src, cb)
-	local Player = DGCore.Functions.GetPlayer(src)
-	if not Player then cb() return end
+DGX.RPC.register('dg-phone:server:photo:take', function(src)
+  local cid = DGX.Util.getCID(src)
 	local link = exports['screenshot-basic']:requestClientImgurScreenshot(src)
-	cb()
 	if not link then
-    DGX.Notifications.add(src, 'Photo capture failed :(', 'error')
-		return
+		return false
 	end
-	local id = addImage(Player.PlayerData.citizenid, link)
-	if id then return end
-  DGX.Notifications.add(src, 'Photo capture failed :(', 'error')
+  
+	local id = addImage(cid, link)
+	if not id then 
+    return false
+  end
+
+  return true
 end)

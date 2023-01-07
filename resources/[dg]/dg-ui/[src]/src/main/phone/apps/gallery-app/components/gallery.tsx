@@ -21,8 +21,8 @@ export const Gallery: FC<
             {
               icon: 'trash',
               title: 'Delete',
-              onClick: () => {
-                nuiAction('phone/gallery/delete', { id: i.id });
+              onClick: async () => {
+                await nuiAction('phone/gallery/delete', { id: i.id });
                 props.fetchImages();
               },
             },

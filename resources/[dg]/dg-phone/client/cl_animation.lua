@@ -1,25 +1,31 @@
-local isLoopRunning = false
+local loopRunning = false
 local phoneProp = nil
 
 setPhoneState = function(state)
-  isLoopRunning = state ~= 0
-  if (isLoopRunning) then
-    while getState('state') ~= 0 or getState('inCall') do
-      local ped = PlayerPedId()
-      if getState('state') == 2 then
-        openCamera()
-      elseif getState('inCall') then
-        handleCallAnimation(ped)
-      elseif getState('state') == 1 then
-        handleOpenAnimation(ped)
+  if state == 1 and not loopRunning then
+    Citizen.CreateThread(function()
+      loopRunning = true
+      while getState('state') ~= 0 or getState('inCall') do
+        if getState('state') == 2 then
+          openCamera()
+        end
+
+        local ped = PlayerPedId()
+        if getState('inCall') then
+          handleCallAnimation(ped)
+        elseif getState('state') == 1 then
+          handleOpenAnimation(ped)
+        end
+        if not phoneProp then
+          phoneProp = DGX.PropAttach.add("phone")
+        end
+        DGX.Weapons.removeWeapon(nil, true)
+        Wait(250)
       end
-      if not phoneProp then
-        phoneProp = DGX.PropAttach.add("phone")
-      end
-      DGX.Weapons.removeWeapon(nil, true)
-      Wait(250)
-    end
+      loopRunning = false
+    end)
   end
+
   if state == 0 and state ~= oldContext.state then
     if not getState('inCall') then
       handleCloseAnimation(PlayerPedId())
@@ -37,7 +43,6 @@ end
 
 StopAllAnimation = function()
   local ped = PlayerPedId()
-  isLoopRunning = false
   closeCamera()
   handleCallEndAnimation(ped)
   handleCloseAnimation(ped)
@@ -162,52 +167,6 @@ handleCallEndNormalAnim = function(ped)
   if getState('state') ~= 1 then
     handleCloseNormalAnim(ped)
   end
-end
-
---endregion
-
---region Camera
-local isFrontCam = false
-
-CellFrontCamActivate = function(activate)
-  return Citizen.InvokeNative(0x2491A93618B7D838, activate)
-end
-
-exports["dg-lib"]:registerKeyMapping('switchPhoneCamera', 'Verander phone camera', '+switchPhoneCamera',
-  '-switchPhoneCamera', 'UP', true)
-
-exports["dg-lib"]:registerKeyMapping('takePhoneCameraPicture', 'Neem photo (phone)', '+takePhoneCameraPicture',
-  '-takePhoneCameraPicture', 'RETURN', true)
-
-AddEventHandler('dg-lib:keyEvent', function(name, isDown)
-  if getState('state') ~= 2 or not isDown then return end
-  if name == "takePhoneCameraPicture" then
-    setState('state', 1)
-    local event = DGCore.Functions.TriggerCallback('dg-phone:server:photo:take', nil)
-  elseif name == "switchPhoneCamera" then
-    isFrontCam = not isFrontCam
-    CellFrontCamActivate(isFrontCam)
-  end
-end)
-
-openCamera = function()
-  isFrontCam = false
-  CreateMobilePhone(phoneId)
-  CellCamActivate(true, true)
-  while getState('state') == 2 do
-    if IsControlJustPressed(0, 177) then
-      break
-    end
-    Wait(0)
-  end
-  closeCamera()
-  openPhone()
-end
-
-closeCamera = function()
-  DestroyMobilePhone()
-  CellCamActivate(false, false)
-  CellFrontCamActivate(false)
 end
 
 --endregion
