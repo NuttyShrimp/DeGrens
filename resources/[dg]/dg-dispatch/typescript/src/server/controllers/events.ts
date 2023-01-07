@@ -9,14 +9,16 @@ setImmediate(async () => {
   loadCams(config);
 });
 
-on('jobs:server:signin:update', (src: number, job: string) => {
+on('jobs:server:signin:update', (src: number, job: string | null) => {
   syncBlips();
   if (job !== 'police') {
     cleanPlayer(src);
     return;
   }
   // seed 20 first stored dispatch calls
-  Events.emitNet('dg-dispatch:addCalls', src, getCalls(20), true);
+  if (job !== null) {
+    Events.emitNet('dg-dispatch:addCalls', src, getCalls(20), true);
+  }
 });
 
 on('dg-config:moduleLoaded', (module: string, { cams }: { cams: Dispatch.Cams.Cam[] }) => {
@@ -39,7 +41,7 @@ Events.onNet('dispatch:server:setMarker', (src, id: string) => {
   Events.emitNet('dispatch:setCallMarker', src, call.coords);
 });
 
-Events.onNet('dispatch:setDispatchBlip', (src, dispatchEnabled: boolean) => {
+Events.onNet('dispatch:toggleDispatchBlip', (src, dispatchEnabled: boolean) => {
   togglePlayer(src, dispatchEnabled);
 });
 

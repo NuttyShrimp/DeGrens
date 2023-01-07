@@ -32,6 +32,7 @@ declare global {
     Police: typeof Classes.Police;
     Weapons: typeof Classes.Weapons;
     Weather: typeof Classes.Weather;
+    Hospital: typeof Classes.Hospital;
   };
   var asyncExports: any;
 }

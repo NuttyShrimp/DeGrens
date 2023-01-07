@@ -1,0 +1,32 @@
+{
+  "shopLocation": {
+    "x": 306.6577,
+    "y": -602.1562,
+    "z": 43.4405
+  },
+  "lockerLocation": {
+    "x": 302.2737,
+    "y": -599.6099,
+    "z": 43.4761
+  },
+  "checkinZone": {
+    "center": {
+      "x": 306.53,
+      "y": -594.95,
+      "z": 43.28
+    },
+    "length": 2.0,
+    "width": 2.2,
+    "heading": 342,
+    "minZ": 41.43,
+    "maxZ": 45.23
+  },
+  "checkableStatuses": [
+    "alcohol",
+    "gsw",
+    "burns",
+    "drowned",
+    "bruises",
+    "stabwound"
+  ]
+}

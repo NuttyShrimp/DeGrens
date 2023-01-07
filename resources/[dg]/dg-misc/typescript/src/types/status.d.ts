@@ -12,7 +12,7 @@ declare namespace Status {
   };
 
   type Active = {
-    name: Status.Name;
+    name: Name;
     timeout?: NodeJS.Timeout;
   };
 }

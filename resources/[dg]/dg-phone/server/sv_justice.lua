@@ -42,6 +42,7 @@ setPlyAvailable = function(src, isAvailable)
 	end
 end
 
+-- TODO: Update to dg-jobs
 RegisterNetEvent('DGCore:Server:OnJobUpdate', function(src, job)
 	removeFromRegistered(src)
 	if not registered[job] then return end

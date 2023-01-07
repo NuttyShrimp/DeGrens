@@ -9,11 +9,13 @@ getPlySpawns = function(src)
 
   local ply = DGCore.Functions.GetPlayer(src)
 
+  -- Limit to prison if in prison
   if ply and ply.PlayerData.metadata.jailMonths ~= -1 then
     table.insert(Spawns, Config.Server.spawns.prison)
     return Spawns
   end
 
+  local isDown = ply ~= nil and ply.PlayerData.metadata.downState ~= 'alive' or false
   local isDevEnv = DGX.Util.isDevEnv()
   local isDev = DGX.Admin.hasPermission(src, "developer")
   local hasCrashed = false
@@ -28,7 +30,8 @@ getPlySpawns = function(src)
   -- isDevEnv
   -- is developer
   -- has crashed
-  if isDevEnv or isDev or hasCrashed then
+  -- is dead
+  if isDevEnv or isDev or hasCrashed or isDown then
     if ply ~= nil then
       table.insert(Spawns, {
         label = "Laatste locatie",
@@ -36,6 +39,11 @@ getPlySpawns = function(src)
         position = {x = ply.PlayerData.position.x, y = ply.PlayerData.position.y, z = ply.PlayerData.position.z, w = 0},
       })
     end
+  end
+
+  -- If dead then limit to last position
+  if isDown then 
+    return Spawns
   end
 
 	for _, v in pairs(Config.Server.spawns.base) do

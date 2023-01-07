@@ -1,3 +1,4 @@
+// Weapons that dont register gsr
 export const BLOCKED_GSR_WEAPONS = new Set(
   [
     'weapon_unarmed',

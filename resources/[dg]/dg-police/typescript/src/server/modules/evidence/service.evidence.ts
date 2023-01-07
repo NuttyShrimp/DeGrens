@@ -34,3 +34,9 @@ export const takeEvidence = (plyId: number, evidenceId: string) => {
       break;
   }
 };
+
+export const addBloodDrop = (plyId: number) => {
+  const player = DGCore.Functions.GetPlayer(plyId);
+  const plyCoords = Util.getPlyCoords(plyId);
+  addEvidence({ x: plyCoords.x, y: plyCoords.y, z: plyCoords.z - 0.95 }, 'blood', player.PlayerData.metadata.dna);
+};

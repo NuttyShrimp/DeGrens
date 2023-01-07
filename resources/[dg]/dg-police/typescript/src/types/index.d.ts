@@ -63,4 +63,6 @@ declare namespace Police {
       camId: number;
     };
   }
+
+  type CanRob = 'allowed' | 'checkAnim' | 'notAllowed';
 }

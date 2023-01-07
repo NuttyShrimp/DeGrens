@@ -23,10 +23,18 @@ Peek.addGlobalEntry('vehicle', {
   ],
 });
 
+let pressedEmergencyButton = false;
 on('police:emergencyButton', () => {
-  Notifications.add('Een automatisch signaal wordt binnen 15 seconden uitgezonden');
+  if (pressedEmergencyButton) {
+    Notifications.add('Je hebt hier net op gedrukt', 'error');
+    return;
+  }
+
+  Notifications.add('Een automatisch signaal wordt binnen 15 seconden uitgezonden', 'success');
+  pressedEmergencyButton = true;
   setTimeout(() => {
     Events.emitNet('police:alerts:emergency');
+    pressedEmergencyButton = false;
   }, 15000);
 });
 

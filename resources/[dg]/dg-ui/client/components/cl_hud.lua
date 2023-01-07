@@ -2,9 +2,9 @@
 state = {
   values = {
     health = 100,
-    armor = 100,
-    hunger = 0,
-    thirst = 0,
+    armor = 0,
+    hunger = 100,
+    thirst = 100,
   },
   voice = {
     range = 1,
@@ -141,11 +141,11 @@ AddStateBagChangeHandler('radioChannel', ('player:%s'):format(GetPlayerServerId(
 RegisterNetEvent('dg-ui:loadData', function()
   local plyData = DGCore.Functions.GetPlayerData()
   if (plyData and plyData.metadata) then
-    state.values.hunger = plyData.metadata.hunger
-    state.values.thirst = plyData.metadata.thirst
+    state.values.hunger = plyData.metadata.needs.hunger
+    state.values.thirst = plyData.metadata.needs.thirst
   end
   state.voice.channel = LocalPlayer.state.radioChannel
-  state.voice.range = LocalPlayer.state.proximity.index
+  state.voice.range = LocalPlayer.state.proximity.index or 2
   isDirty = true
 end)
 
@@ -168,6 +168,15 @@ DGX.Events.on('dg-misc:configChanged', function(data)
     shouldShowCompassInVehicle = data.hud.compass.show
   end
 end)
+
+AddEventHandler('baseevents:playerPedChanged', function()
+  cache.ped = PlayerPedId()
+end)
+
+AddEventHandler('baseevents:playerPedChanged', function()
+  cache.id = PlayerId()
+end)
+
 --- endregion
 --- region Loops
 CreateThread(function()
@@ -193,15 +202,13 @@ Citizen.CreateThread(function()
     compassWaitMS = 1000 / preferences.hud.compass.fps
     shouldShowCompassInVehicle = preferences.hud.compass.show
   end
+
+  cache = {
+    ped = PlayerPedId(),
+    id = PlayerId()
+  }
+
   while true do
-    local newPed = PlayerPedId()
-    if cache.ped ~= newPed then
-      cache.ped = newPed
-    end
-    local newId = PlayerId()
-    if cache.id ~= newId then
-      cache.id = newId
-    end
     SetRadarBigmapEnabled(false, false)
     Wait(2000)
   end
@@ -219,34 +226,31 @@ startValueLoop = function()
   if threads.values then
     return
   end
+  
   CreateThread(function()
     threads.values = true
     while isLoggedIn do
-      -- if IsPedSwimmingUnderWater(ped) then
-      --   isDirty = true
-      --   state.values.air = GetPlayerUnderwaterTimeRemaining(ped)
-      --   -- Above handles if value is disabled and gets is water, this handles when ply leaves water
-      -- elseif state.values.air.enabled ~= IsPedSwimmingUnderWater(ped) then
-      --   isDirty = true
-      --   state.values.air = 0
-      -- end
-      pedHealth = GetEntityHealth(cache.ped)
-      maxHealth = GetPedMaxHealth(cache.ped)
-      health = (pedHealth / maxHealth) * 100
+      local maxHealth = GetEntityMaxHealth(cache.ped) - 100
+      local nativeHealth = math.max(GetEntityHealth(cache.ped) - 100, 0)
+      local health = (nativeHealth / maxHealth) * 100
+
       if state.values.health ~= health then
         isDirty = true
         state.values.health = health
       end
-      armor = GetPedArmour(cache.ped)
+
+      armor = math.floor(GetPedArmour(cache.ped) + 0.5)
       if state.values.armor ~= armor then
         isDirty = true
         state.values.armor = armor
       end
+
       local isTalking = (MumbleIsPlayerTalking(cache.id) == 1)
       if state.voice.active ~= isTalking then
         isDirty = true
         state.voice.active = isTalking
       end
+
       if vehicleEngineRunning then
         engineHealth = GetVehicleEngineHealth(car) < 500
         if engineHealth ~= state.car.indicator.engine then
@@ -254,6 +258,7 @@ startValueLoop = function()
           isCarDirty = true
         end
       end
+
       for name, getter in pairs(entryHooks) do
         newVal = getter(cache.ped, cache.id)
         if newVal ~= state.values[name] then
@@ -261,6 +266,7 @@ startValueLoop = function()
           isDirty = true
         end
       end
+
       Wait(100)
     end
     threads.values = false

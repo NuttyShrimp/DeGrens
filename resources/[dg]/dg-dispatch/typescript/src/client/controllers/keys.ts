@@ -1,5 +1,5 @@
-import { Events, Jobs, Keys, UI } from '@dgx/client';
-import { closeCam, moveCam, startCamMoveThread, stopCamMoveThread } from 'services/cams';
+import { Events, Hospital, Jobs, Keys, Notifications, Police, UI } from '@dgx/client';
+import { closeCam, startCamMoveThread, stopCamMoveThread } from 'services/cams';
 import { clearFlashThread, getLastCallId, setDispatchOpen } from 'services/dispatch';
 
 let openWFocus = false;
@@ -10,16 +10,21 @@ Keys.onPressDown('setLastCall', () => {
   if (!id) return;
   Events.emitNet('dispatch:server:setMarker', id);
 });
-Keys.register('setLastCall', '(police) Set marker to last call (+ mod)');
+Keys.register('setLastCall', '(gov) Set marker to last call (+ mod)');
 
 Keys.onPressDown('openDispatch', () => {
-  if (Jobs.getCurrentJob().name !== 'police') return;
+  const currentJob = Jobs.getCurrentJob().name;
+  if (currentJob !== 'police' && currentJob !== 'ambulance') return;
+  if (Police.isCuffed() || Hospital.isDown()) {
+    Notifications.add('Je kan dit momenteel niet', 'error');
+    return;
+  }
   clearFlashThread();
   setDispatchOpen(true);
   UI.openApplication(
     'dispatch',
     {
-      showCamera: Keys.isModPressed(),
+      showCamera: Keys.isModPressed() && currentJob === 'police',
     },
     !Keys.isModPressed()
   );
@@ -36,7 +41,7 @@ Keys.onPressUp('openDispatch', () => {
   UI.closeApplication('dispatch');
   setDispatchOpen(false);
 });
-Keys.register('openDispatch', '(police) Open dispatch (focus w modifier)');
+Keys.register('openDispatch', '(gov) Open dispatch (focus w modifier)');
 
 Keys.onPressDown('closeDispatchCam', () => {
   closeCam();

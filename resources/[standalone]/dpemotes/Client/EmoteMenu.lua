@@ -62,7 +62,7 @@ local FavoriteEmote = ""
 
 Citizen.CreateThread(function()
   while true do
-    if Config.FavKeybindEnabled and not PlayerData.metadata['inlaststand'] and not PlayerData.metadata['isdead'] then
+    if Config.FavKeybindEnabled and not DGX.Hospital.isDown() then
       if IsControlPressed(0, Config.FavKeybind) then
         if not IsPedSittingInAnyVehicle(PlayerPedId()) then
           if FavoriteEmote ~= "" then

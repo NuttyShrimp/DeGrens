@@ -2,7 +2,6 @@ fx_version 'cerulean'
 game 'common'
 
 shared_scripts {
-  '@dg-core/import.lua',
   '@ts-shared/shared/lib.lua'
 }
 
@@ -12,6 +11,7 @@ client_scripts {
 }
 
 server_scripts {
+  '@dg-core/import.lua',
   "@ts-shared/server/server.js",
   "server/sv_queue_config.lua",
   "connectqueue.lua",

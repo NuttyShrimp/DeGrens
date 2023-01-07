@@ -20,6 +20,12 @@ Chat.registerCommand(
       Notifications.add(src, 'Je moet een bericht meegeven', 'error');
       return;
     }
+
+    if (Police.isCuffed(src)) {
+      Notifications.add(src, 'Je kan dit momenteel niet', 'error');
+      return;
+    }
+
     const cid = Util.getCID(src);
     const plyName = await Util.getCharName(cid);
     const plyCoords = Util.getPlyCoords(src);

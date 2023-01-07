@@ -2855,5 +2855,37 @@
       "y": 2
     },
     "useable": true
+  },
+  {
+    "useable": true,
+    "name": "armor",
+    "label": "Vest",
+    "description": "Kogelwerende vest",
+    "image": "armor.png",
+    "size": {
+      "x": 2,
+      "y": 2
+    }
+  },
+  {
+    "useable": true,
+    "name": "pd_armor",
+    "label": "PD Vest",
+    "description": "Kogelwerende vest",
+    "image": "pd_armor.png",
+    "size": {
+      "x": 2,
+      "y": 2
+    }
+  },
+  {
+    "useable": true,
+    "name": "bandage",
+    "label": "Verband",
+    "image": "bandage.png",
+    "size": {
+      "x": 2,
+      "y": 1
+    }
   }
 ]

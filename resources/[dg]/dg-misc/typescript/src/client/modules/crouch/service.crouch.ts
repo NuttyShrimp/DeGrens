@@ -1,11 +1,7 @@
-import { Util } from '@dgx/client';
+import { Hospital, Police, Util } from '@dgx/client';
 
 let originalWalk: string | null = null;
 let crouching = false;
-
-export const changeWalk = (walk: string) => {
-  originalWalk = walk;
-};
 
 export const toggleCrouching = () => {
   if (!LocalPlayer.state.isLoggedIn) return;
@@ -17,6 +13,7 @@ export const toggleCrouching = () => {
   crouching = !crouching;
   if (crouching) {
     ClearPedTasks(ped);
+    originalWalk = Util.getPedMovementClipset(ped) ?? null;
     setCrouchWalk();
     startCrouchThread();
   } else {
@@ -33,7 +30,7 @@ const startCrouchThread = () => {
       return;
     }
 
-    if (IsPlayerFreeAiming(PlayerId())) {
+    if (IsPlayerFreeAiming(PlayerId()) || Police.isCuffed() || Hospital.isDown()) {
       crouching = false;
       ClearPedTasks(ped);
       resetToOriginalWalk();
@@ -69,4 +66,5 @@ const resetToOriginalWalk = async () => {
   await Util.loadAnimSet(originalWalk);
   SetPedMovementClipset(ped, originalWalk, 1.0);
   RemoveAnimSet(originalWalk);
+  originalWalk = null;
 };

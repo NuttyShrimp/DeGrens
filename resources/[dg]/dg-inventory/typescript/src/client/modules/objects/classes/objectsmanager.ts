@@ -188,6 +188,7 @@ class ObjectsManager extends Util.Singleton<ObjectsManager>() {
 
       const ped = PlayerPedId();
       if (IsEntityPlayingAnim(ped, animDict, anim, 3)) return;
+      ClearPedTasksImmediately(ped);
       TaskPlayAnim(ped, animDict, anim, 8.0, 8.0, -1, 51, 0, false, false, false);
     }, 1);
   };

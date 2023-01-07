@@ -1,7 +1,14 @@
 import { HUD, Keys } from '@dgx/client';
 import { getCurrentVehicle } from '@helpers/vehicle';
 
-import { getHarnessUses, isHarnessOn, isSeatbeltOn, setHarnessUses, toggleSeatbelt } from './service.seatbelts';
+import {
+  getHarnessUses,
+  isHarnessOn,
+  isSeatbeltOn,
+  justEjected,
+  setHarnessUses,
+  toggleSeatbelt,
+} from './service.seatbelts';
 
 HUD.addEntry('harness-uses', 'user-slash', '#11A156', () => getHarnessUses() / 10, 3, 100, false);
 
@@ -25,3 +32,4 @@ AddStateBagChangeHandler('harnessUses', null, (bagName: string, _, value: number
 
 global.exports('isSeatbeltOn', isSeatbeltOn);
 global.exports('isHarnessOn', isHarnessOn);
+global.exports('justEjected', justEjected);

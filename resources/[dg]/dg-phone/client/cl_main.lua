@@ -95,30 +95,26 @@ RegisterNetEvent('dg-ui:reload', function()
 end)
 
 --region Keybindings
-RegisterNetEvent('dg-lib:keyEvent')
-AddEventHandler('dg-lib:keyEvent', function(name, isDown)
-  if not isDown or not canOpen() then return end
-  if name == "openPhone" then
-    openPhone()
-  end
-  if name == 'acceptNotification' then
-    SendNUIMessage({
-      appName = 'home-screen',
-      action = 'acceptNotification'
-    })
-  end
-  if name == "declineNotification" then
-    SendNUIMessage({
-      appName = 'home-screen',
-      action = 'declineNotification'
-    })
-  end
+DGX.Keys.register('openPhone', '(phone) Open Telefoon', 'M')
+DGX.Keys.register('acceptNotification', '(phone) Melding Accepteren')
+DGX.Keys.register('declineNotification', '(phone) Melding Weigeren')
+
+DGX.Keys.onPressDown('openPhone', function()
+  if not canOpen() then return end
+  openPhone()
 end)
-
-exports["dg-lib"]:registerKeyMapping("openPhone", "(phone) Open jouw telefoon", '+openPhone', '-openPhone', "M", true)
-exports["dg-lib"]:registerKeyMapping("acceptNotification", "(phone) Accepteer melding", '+acceptNotification',
-  '-acceptNotification', "", true)
-exports["dg-lib"]:registerKeyMapping("declineNotification", "(phone) Weiger melding", '+declineNotification',
-  '-declineNotification', "", true)
-
+DGX.Keys.onPressDown('acceptNotification', function()
+  if not canOpen() then return end
+  SendNUIMessage({
+    appName = 'home-screen',
+    action = 'acceptNotification'
+  })
+end)
+DGX.Keys.onPressDown('declineNotification', function()
+  if not canOpen() then return end
+  SendNUIMessage({
+    appName = 'home-screen',
+    action = 'declineNotification'
+  })
+end)
 --endregion

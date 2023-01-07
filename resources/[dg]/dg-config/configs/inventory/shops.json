@@ -52,7 +52,14 @@
         "price": 500
       }
     ],
-    "prison_shop": []
+    "prison_shop": [],
+    "hospital_shop": [
+      {
+        "name": "dna_swab",
+        "amount": 100,
+        "price": 100
+      }
+    ]
   },
   "shops": {
     "little_seoul": { "type": "grocery" },
@@ -79,6 +86,7 @@
     "hardware_city": { "type": "hardware" },
     "fishing_shop": { "type": "fishing" },
     "police_safe": { "type": "police_safe" },
-    "prison_shop": { "type": "prison_shop" }
+    "prison_shop": { "type": "prison_shop" },
+    "hospital_shop": { "type": "hospital_shop" }
   }
 }

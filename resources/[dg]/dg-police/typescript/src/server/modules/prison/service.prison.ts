@@ -1,4 +1,5 @@
 import { Events, Inventory, Jobs, Notifications, Util } from '@dgx/server';
+import { forceUncuff } from 'modules/interactions/modules/cuffs';
 
 // plyid to month
 const playersInPrison = new Map<number, { months: number; thread: NodeJS.Timer }>();
@@ -19,6 +20,8 @@ export const sendPlayerToPrison = (plyId: number, months: number) => {
   playersInPrison.set(plyId, { months, thread });
   moveAllPlayerItemsToPrisonStash(plyId);
   Jobs.signPlayerOutOfAnyJob(plyId);
+
+  forceUncuff(plyId);
 };
 
 export const isPlayerInJail = (plyId: number) => playersInPrison.has(plyId);

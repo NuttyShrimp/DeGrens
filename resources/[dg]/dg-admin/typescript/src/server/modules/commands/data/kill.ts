@@ -1,7 +1,9 @@
+import { Events } from '@dgx/server';
 import { Inputs } from 'enums/inputs';
 
 interface KillData {
   Target: UI.Player;
+  unconscious: boolean;
 }
 
 export const kill: CommandData = {
@@ -11,12 +13,13 @@ export const kill: CommandData = {
   isClientCommand: false,
   log: 'killed a player',
   handler: (caller, args: KillData) => {
-    emitNet('hospital:client:KillPlayer', args.Target?.serverId ?? caller.source);
+    Events.emitNet('hospital:client:kill', args.Target?.serverId ?? caller.source, args.unconscious ?? false);
   },
   UI: {
     title: 'Kill',
     info: {
       inputs: [Inputs.Player],
+      checkBoxes: ['unconscious'],
     },
   },
 };

@@ -139,7 +139,7 @@ class Gangs {
 
 class Police {
   public createDispatchCall(call: NPolice.DispatchCall): void {
-    global.exports['dg-dispatch'].createDispatchCall(call);
+    global.exports['dg-dispatch'].createDispatchCall('police', call);
   }
 
   public addTrackerToVehicle = (vehicleNetId: number, delay: number) => {
@@ -162,8 +162,47 @@ class Police {
     global.exports['dg-police'].addBulletCasings(plyId, itemState, shotFirePositions);
   };
 
+  public addBloodDrop = (plyId: number) => {
+    global.exports['dg-police'].addBloodDrop(plyId);
+  };
+
   public leavePrison = (plyId: number) => {
     global.exports['dg-police'].leavePrison(plyId);
+  };
+
+  public forceUncuff = (plyId: number): Promise<void> => {
+    return global.exports['dg-police'].forceUncuff(plyId);
+  };
+
+  public cycleCuffs = (plyId: number) => {
+    global.exports['dg-police'].cycleCuffs(plyId);
+  };
+
+  public forceStopInteractions = (plyId: number): Promise<void> => {
+    return global.exports['dg-police'].forceStopInteractions(plyId);
+  };
+}
+
+class Hospital {
+  public setNeed = (plyId: number, need: CharacterNeed, value: (old: number) => number) => {
+    global.exports['dg-hospital'].setNeed(plyId, need, value);
+  };
+
+  public setArmor = (plyId: number, armor: number) => {
+    global.exports['dg-hospital'].setArmor(plyId, armor);
+  };
+
+  public createDispatchCall(call: NPolice.DispatchCall): void {
+    global.exports['dg-dispatch'].createDispatchCall('ambulance', call);
+  }
+
+  public revivePlayer = (plyId: number) => {
+    global.exports['dg-hospital'].revivePlayer(plyId);
+  };
+
+  public isDown = (plyId: number) => {
+    const player = DGCore.Functions.GetPlayer(plyId);
+    return player?.PlayerData?.metadata?.downState !== 'alive' ?? false;
   };
 }
 
@@ -172,4 +211,5 @@ export default {
   Business: new Business(),
   Gangs: new Gangs(),
   Police: new Police(),
+  Hospital: new Hospital(),
 };

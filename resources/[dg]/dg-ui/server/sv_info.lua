@@ -23,8 +23,16 @@ DGX.Inventory.onInventoryUpdate('player', function(identifier, action)
   })
 end, 'phone')
 
-RegisterNetEvent('DGCore:Server:OnJobUpdate', function(src, job)
-  TriggerClientEvent('dg-ui:SendAppEvent', src, 'character', {
-    job = job.name,
-  })
+AddEventHandler('onResourceStop', function(res)
+  if GetCurrentResourceName() ~= res then return end
+  print([[
+
+    -------------------------------------
+
+    Restart server to properly restart UI.
+    New players will not be able to join!
+    
+    --------------------------------------
+  
+  ]])
 end)

@@ -136,7 +136,8 @@ attachBox = function()
         loadAnimDict("anim@heists@box_carry@")
         while attachedBox do
             if not IsEntityPlayingAnim(ped, "anim@heists@box_carry@", "idle", 3) then
-                TaskPlayAnim(ped, "anim@heists@box_carry@", "idle", 2.0, 2.0, -1, 51, 0, false, false, false)
+              ClearPedTasksImmediately(ped)
+              TaskPlayAnim(ped, "anim@heists@box_carry@", "idle", 2.0, 2.0, -1, 51, 0, false, false, false)
             end
             Citizen.Wait(100)
         end

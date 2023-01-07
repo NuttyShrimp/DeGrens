@@ -53,8 +53,6 @@ declare interface Config {
 }
 
 declare interface PlayerConfig {
-  HungerRate: number;
-  ThirstRate: number;
   JSONData: string[];
 }
 
@@ -84,17 +82,15 @@ declare interface Vector {
 }
 
 declare interface MetaData {
-  hunger: number;
-  thirst: number;
   stress: number;
-  isdead: boolean;
-  inlaststand: boolean;
   armor: number;
   callsign: string;
   licences: { driver: boolean };
   inside: { house: string | null; apartment: { id: string | null } };
   dna: string;
   jailMonths: number;
+  downState: 'unconscious' | 'dead' | 'alive';
+  needs: Record<CharacterNeed, number>;
 }
 
 declare interface PlayerData {

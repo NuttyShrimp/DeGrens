@@ -142,18 +142,8 @@ end)
 --- check if the player is dead
 --- seperating this so if people use different methods they can customize
 --- it to their need as this will likely never be changed
---- but you can integrate the below state bag to your death resources.
---- LocalPlayer.state:set('isDead', true or false, false)
 function isDead()
-  if LocalPlayer.state.isDead then
-    return true
-  elseif LocalPlayer.state.inLaststand then
-    return true
-  elseif DGX.Police.isCuffed() then
-    return true
-  elseif IsPlayerDead(PlayerId()) then
-    return true
-  end
+  return DGX.Hospital.isDown() or DGX.Police.isCuffed()
 end
 
 RegisterCommand('+radiotalk', function()

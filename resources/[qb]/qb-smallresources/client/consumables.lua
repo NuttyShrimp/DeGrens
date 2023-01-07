@@ -103,70 +103,6 @@ end)
 --     end
 -- end)
 
-RegisterNetEvent("consumables:client:UseArmor")
-AddEventHandler("consumables:client:UseArmor", function()
-    if GetPedArmour(PlayerPedId()) >= 75 then DGCore.Functions.Notify('You already have enough armor on!', 'error') return end
-    DGCore.Functions.Progressbar("use_armor", "Putting on the body armour..", 5000, false, true, {
-        disableMovement = false,
-        disableCarMovement = false,
-		disableMouse = false,
-		disableCombat = true,
-    }, {}, {}, {}, function() -- Done
-        TriggerServerEvent('hospital:server:SetArmor', 75)
-        TriggerServerEvent("DGCore:Server:RemoveItem", "armor", 1)
-        SetPedArmour(PlayerPedId(), 75)
-    end)
-end)
-local currentVest = nil
-local currentVestTexture = nil
-RegisterNetEvent("consumables:client:UseHeavyArmor")
-AddEventHandler("consumables:client:UseHeavyArmor", function()
-    if GetPedArmour(PlayerPedId()) == 100 then DGCore.Functions.Notify('You already have enough armor on!', 'error') return end
-    local ped = PlayerPedId()
-    local PlayerData = DGCore.Functions.GetPlayerData()
-    DGCore.Functions.Progressbar("use_heavyarmor", "Putting on body armour..", 5000, false, true, {
-        disableMovement = false,
-        disableCarMovement = false,
-		disableMouse = false,
-		disableCombat = true,
-    }, {}, {}, {}, function() -- Done
-        if PlayerData.charinfo.gender == 0 then
-            currentVest = GetPedDrawableVariation(ped, 9)
-            currentVestTexture = GetPedTextureVariation(ped, 9)
-            if GetPedDrawableVariation(ped, 9) == 7 then
-                SetPedComponentVariation(ped, 9, 19, GetPedTextureVariation(ped, 9), 2)
-            else
-                SetPedComponentVariation(ped, 9, 5, 2, 2) -- blauw
-            end
-        else
-            currentVest = GetPedDrawableVariation(ped, 30)
-            currentVestTexture = GetPedTextureVariation(ped, 30)
-            SetPedComponentVariation(ped, 9, 30, 0, 2)
-        end
-        TriggerServerEvent("DGCore:Server:RemoveItem", "heavyarmor", 1)
-        SetPedArmour(ped, 100)
-    end)
-end)
-
-RegisterNetEvent("consumables:client:ResetArmor")
-AddEventHandler("consumables:client:ResetArmor", function()
-    local ped = PlayerPedId()
-    if currentVest ~= nil and currentVestTexture ~= nil then 
-        DGCore.Functions.Progressbar("remove_armor", "Removing the body armour..", 2500, false, true, {
-            disableMovement = false,
-            disableCarMovement = false,
-            disableMouse = false,
-            disableCombat = true,
-        }, {}, {}, {}, function() -- Done
-            SetPedComponentVariation(ped, 9, currentVest, currentVestTexture, 2)
-            SetPedArmour(ped, 0)
-            -- TriggerServerEvent("DGCore:Server:AddItem", "heavyarmor", 1)
-        end)
-    else
-        DGCore.Functions.Notify("You\'re not wearing a vest..", "error")
-    end
-end)
-
 RegisterNetEvent("consumables:client:DrinkAlcohol")
 AddEventHandler("consumables:client:DrinkAlcohol", function(itemName)
     TriggerEvent('animations:client:EmoteCommandStart', {"drink"})
@@ -178,7 +114,6 @@ AddEventHandler("consumables:client:DrinkAlcohol", function(itemName)
     }, {}, {}, {}, function() -- Done
         TriggerEvent('animations:client:EmoteCommandStart', {"c"})
         TriggerServerEvent("DGCore:Server:RemoveItem", itemName, 1)
-        TriggerServerEvent("DGCore:Server:SetMetaData", "thirst", DGCore.Functions.GetPlayerData().metadata["thirst"] + Consumeables[itemName])
         alcoholCount = alcoholCount + 1
         if alcoholCount > 1 and alcoholCount < 4 then
             TriggerEvent("evidence:client:SetStatus", "alcohol", 200)
@@ -270,7 +205,6 @@ AddEventHandler("consumables:client:Eat", function(itemName)
     }, {}, {}, {}, function() -- Done
         TriggerEvent('animations:client:EmoteCommandStart', {"c"})
         TriggerServerEvent("DGCore:Server:SetMetaData", "hunger", DGCore.Functions.GetPlayerData().metadata["hunger"] + Consumeables[itemName])
-        TriggerServerEvent('hud:server:RelieveStress', math.random(2, 4))
     end)
 end)
 
@@ -284,7 +218,6 @@ AddEventHandler("consumables:client:Drink", function(itemName)
 		disableCombat = true,
     }, {}, {}, {}, function() -- Done
         TriggerEvent('animations:client:EmoteCommandStart', {"c"})
-        TriggerServerEvent("DGCore:Server:SetMetaData", "thirst", DGCore.Functions.GetPlayerData().metadata["thirst"] + Consumeables[itemName])
     end)
 end)
 

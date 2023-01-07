@@ -1,5 +1,5 @@
 class Weapons {
-  getCurrentWeaponData = (): Inventory.ItemState => {
+  getCurrentWeaponData = (): Inventory.ItemState | null => {
     return global.exports['dg-weapons'].getCurrentWeaponData();
   };
 

@@ -11,7 +11,7 @@ Events.onNet('weapons:setWeapon', async (src: number, itemId: string) => {
   const item = getWeaponItemState(itemId);
   if (!item) return; // Can happen if item breaks this exact moment
   if (item.inventory !== Inventory.concatId('player', cid)) return; // Can happen if item gets removed during animation
-  Events.emitNet("auth:anticheat:weaponDrawn", src);
+  Events.emitNet('auth:anticheat:weaponDrawn', src);
 
   const weaponHash = GetHashKey(item.name);
   const ped = GetPlayerPed(String(src));
@@ -36,7 +36,7 @@ Events.onNet('weapons:removeWeapon', (src: number, itemId: string) => {
   RemoveAllPedWeapons(ped, true);
   SetCurrentPedWeapon(ped, unarmedHash, true);
   setEquippedWeapon(src, unarmedHash);
-  Events.emitNet("auth:anticheat:weaponRemoved", src);
+  Events.emitNet('auth:anticheat:weaponRemoved', src);
   Inventory.toggleObject(src, itemId, true);
 });
 
@@ -80,6 +80,18 @@ Inventory.onInventoryUpdate(
 
 on('playerJoining', () => {
   setEquippedWeapon(source, GetHashKey('WEAPON_UNARMED'));
+});
+
+on('onResourceStart', (resourceName: string) => {
+  if (resourceName !== GetCurrentResourceName()) return;
+  Util.getAllPlayers().forEach(plyId => {
+    setEquippedWeapon(plyId, GetHashKey('WEAPON_UNARMED'));
+  });
+});
+
+on('onResourceStop', (resourceName: string) => {
+  if (resourceName !== GetCurrentResourceName()) return;
+  Events.emitNet('auth:anticheat:weaponRemoved', -1);
 });
 
 global.exports('forceSetQuality', async (plyId: number, quality: number) => {

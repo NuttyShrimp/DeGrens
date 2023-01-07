@@ -7,6 +7,7 @@ let seatbeltThread: NodeJS.Timer | null = null;
 let keyThread: NodeJS.Timer | null = null;
 
 let harnessUses = 0;
+let ejected = false;
 
 export const isSeatbeltOn = () => {
   return currentSeatbelt !== 'none';
@@ -128,6 +129,11 @@ const ejectFromVehicle = (vehicleVelocity: Vec3) => {
     const velocity = Vector3.create(vehicleVelocity).multiply(3);
     SetEntityVelocity(ped, velocity.x, velocity.y, velocity.z);
   }, 10);
+
+  ejected = true;
+  setTimeout(() => {
+    ejected = false;
+  }, 20000);
 };
 
 export const getHarnessUses = () => harnessUses;
@@ -141,3 +147,5 @@ const checkHarnessHUD = (veh: number) => {
   if (harnessUses === 0) return;
   HUD.toggleEntry('harness-uses', true);
 };
+
+export const justEjected = () => ejected;

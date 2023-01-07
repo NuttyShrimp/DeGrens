@@ -22,7 +22,7 @@ Peek.addZoneEntry('police_evidence_lab', {
     {
       label: 'Onderzoek bloed',
       icon: 'fas fa-dna',
-      job: 'police',
+      job: 'ambulance',
       action: () => {
         researchBlood();
       },
@@ -33,9 +33,12 @@ Peek.addZoneEntry('police_evidence_lab', {
 
 // Handles vehicle damage evidence when entity gets damaged
 const vehicleColorCache = new Map<number, string>();
-on('entityDamaged', (entity: number, origin: number, weaponHash: number) => {
-  if (origin !== PlayerPedId()) return; // only damage inflicted by self
+let vehicleDamageThrottle: NodeJS.Timeout | null = null;
+on('entityDamaged', (entity: number, origin: number) => {
+  const ped = PlayerPedId();
+  if (origin !== ped) return; // only damage inflicted by self
   if (GetEntityType(entity) !== 2) return; // only damage inflicted on vehicles
+  if (GetVehiclePedIsUsing(ped) === entity) return; // no damage drops when crashing veh
   if (!NetworkGetEntityIsNetworked(entity)) return;
 
   // First we get color of vehicle
@@ -56,5 +59,10 @@ on('entityDamaged', (entity: number, origin: number, weaponHash: number) => {
   const [min, max] = GetModelDimensions(GetEntityModel(entity));
   const zOffset = (max[2] - min[2]) / 2 - 0.4;
 
-  Events.emitNet('police:evidence:dropVehicleDamage', color, { x, y, z: z - zOffset });
+  if (vehicleDamageThrottle !== null) {
+    clearTimeout(vehicleDamageThrottle);
+  }
+  vehicleDamageThrottle = setTimeout(() => {
+    Events.emitNet('police:evidence:dropVehicleDamage', color, { x, y, z: z - zOffset });
+  }, 1000);
 });

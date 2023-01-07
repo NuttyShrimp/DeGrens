@@ -1,4 +1,4 @@
-import { Inventory, Jobs, RayCast, Util } from '@dgx/client';
+import { Hospital, Inventory, Jobs, RayCast, Util } from '@dgx/client';
 
 const entries: Record<string, RadialMenu.Entry[]> = {};
 
@@ -38,7 +38,7 @@ const generateEntries = async () => {
   const items = Inventory.getAllItemNames();
 
   // If down then use down entries else use main
-  const startMenuName = playerData.metadata.isdead ? 'down' : 'main';
+  const startMenuName = Hospital.isDown() ? 'down' : 'main';
   const context: RadialMenu.Context = {
     playerData,
     job: Jobs.getCurrentJob(),

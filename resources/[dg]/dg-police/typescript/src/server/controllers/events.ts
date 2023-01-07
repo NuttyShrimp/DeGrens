@@ -1,4 +1,4 @@
-import { RPC, Events, Chat, Vehicles, Util, Inventory } from '@dgx/server';
+import { RPC, Events, Chat, Vehicles, Util, Inventory, Notifications, Status } from '@dgx/server';
 import { awaitPoliceConfigLoad, getPoliceConfig } from 'services/config';
 
 RPC.register('police:getConfig', async src => {
@@ -51,14 +51,17 @@ Inventory.registerUseable(['binoculars', 'pd_camera'], (plyId, itemState) => {
   Events.emitNet('police:binoculars:use', plyId, itemState.name);
 });
 
-Chat.registerCommand(
-  'callsign',
-  'Pas je callsign aan',
-  [{ name: 'callsign', description: 'Je callsign' }],
-  'user',
-  (src, _, args) => {
-    const callsign = args.join(' ');
-    const player = DGCore.Functions.GetPlayer(src);
-    player.Functions.SetMetaData('callsign', callsign);
+Events.onNet('police:checkGSR', (src: number) => {
+  const target = Util.getClosestPlayerOutsideVehicle(src);
+  if (target === undefined) {
+    Notifications.add(src, 'Er is niemand in de buurt', 'error');
+    return;
   }
-);
+
+  const hasGsr = Status.doesPlayerHaveStatus(target, 'gsr');
+  Chat.sendMessage(src, {
+    prefix: '',
+    message: `Persoon is GSR ${hasGsr ? 'positief' : 'negatief'}.`,
+    type: 'normal',
+  });
+});

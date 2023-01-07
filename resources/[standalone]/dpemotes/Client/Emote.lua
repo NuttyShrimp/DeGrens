@@ -61,57 +61,57 @@ Citizen.CreateThread(function()
 end)
 
 RegisterCommand('e', function(source, args, raw)
-    if not PlayerData.metadata['inlaststand'] and not PlayerData.metadata['isdead'] then
+    if not DGX.Police.isCuffed() and not DGX.Hospital.isDown() then
         EmoteCommandStart(source, args, raw)
     end
 end)
 
 RegisterCommand('emote', function(source, args, raw)
-    if not PlayerData.metadata['inlaststand'] and not PlayerData.metadata['isdead'] then
+    if not DGX.Police.isCuffed() and not DGX.Hospital.isDown() then
         EmoteCommandStart(source, args, raw)
     end
 end)
 
 if Config.SqlKeybinding then
     RegisterCommand('emotebind', function(source, args, raw)
-        if not PlayerData.metadata['inlaststand'] and not PlayerData.metadata['isdead'] then
+        if not DGX.Police.isCuffed() and not DGX.Hospital.isDown() then
             EmoteBindStart(source, args, raw)
         end
     end)
 
     RegisterCommand('emotebinds', function(source, args, raw)
-        if not PlayerData.metadata['inlaststand'] and not PlayerData.metadata['isdead'] then
+        if not DGX.Police.isCuffed() and not DGX.Hospital.isDown() then
             EmoteBindsStart(source, args, raw)
         end
     end)
 end
 
 RegisterCommand('emotemenu', function(source, args, raw)
-    if not PlayerData.metadata['inlaststand'] and not PlayerData.metadata['isdead'] then
+    if not DGX.Police.isCuffed() and not DGX.Hospital.isDown() then
         OpenEmoteMenu()
     end
 end)
 
 RegisterCommand('em', function(source, args, raw)
-    if not PlayerData.metadata['inlaststand'] and not PlayerData.metadata['isdead'] then
+    if not DGX.Police.isCuffed() and not DGX.Hospital.isDown() then
         OpenEmoteMenu()
     end
 end)
 
 RegisterCommand('emotes', function(source, args, raw)
-    if not PlayerData.metadata['inlaststand'] and not PlayerData.metadata['isdead'] then
+    if not DGX.Police.isCuffed() and not DGX.Hospital.isDown() then
         EmotesOnCommand()
     end
 end)
 
 RegisterCommand('walk', function(source, args, raw)
-    if not PlayerData.metadata['inlaststand'] and not PlayerData.metadata['isdead'] then
+    if not DGX.Police.isCuffed() and not DGX.Hospital.isDown() then
         WalkCommandStart(source, args, raw)
     end
 end)
 
 RegisterCommand('walks', function(source, args, raw)
-    if not PlayerData.metadata['inlaststand'] and not PlayerData.metadata['isdead'] then
+    if not DGX.Police.isCuffed() and not DGX.Hospital.isDown() then
         WalksOnCommand()
     end
 end)
@@ -133,7 +133,6 @@ AddEventHandler('animations:client:SmokeWeed', function()
   Citizen.CreateThread(function()
     while SmokingWeed do
       Citizen.Wait(10000)
-      TriggerServerEvent('hud:server:RelieveStress', math.random(15, 18))
       RelieveCount = RelieveCount + 1
       if RelieveCount == 6 then
         if ChosenDict == "MaleScenario" and IsInAnimation then
@@ -429,7 +428,7 @@ function OnEmotePlay(EmoteName)
     if ChosenDict == "MaleScenario" then if InVehicle then return end
       if PlayerGender == "male" then
         ClearPedTasks(PlayerPedId())
-        TaskStartScenarioInPlace(PlayerPedId(), ChosenAnimation, 0, true)
+        DGX.Util.startScenarioInPlace(ChosenAnimation)
         DebugPrint("Playing scenario = ("..ChosenAnimation..")")
         IsInAnimation = true
       else
@@ -444,7 +443,7 @@ function OnEmotePlay(EmoteName)
       return
     elseif ChosenDict == "Scenario" then if InVehicle then return end
       ClearPedTasks(PlayerPedId())
-      TaskStartScenarioInPlace(PlayerPedId(), ChosenAnimation, 0, true)
+      DGX.Util.startScenarioInPlace(ChosenAnimation)
       DebugPrint("Playing scenario = ("..ChosenAnimation..")")
       IsInAnimation = true
     return end 

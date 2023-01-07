@@ -14,6 +14,9 @@ const workingShotQueues: Set<string> = new Set();
 const queuedHits: Record<string, AntiCheat.EntityDamage[]> = {};
 const workingHitQueues: Set<string> = new Set();
 
+// Unarmed and the weaponhash whenever a scenario is active are always allowed
+const ALWAYS_ALLOWED_WEAPONS = new Set([GetHashKey('WEAPON_UNARMED'), 966099553]);
+
 export const loadConfig = async () => {
   await Config.awaitConfigLoad();
   config = Config.getModuleConfig<AntiCheat.Config>('anticheat');
@@ -71,29 +74,35 @@ export const validateWeaponInfo = (src: number, info: AntiCheat.WeaponInfo) => {
     Events.emitNet('auth:anticheat:forceSyncWeaponInfo', src);
     return;
   }
+
+  const hasAlwaysAllowedWeapon = ALWAYS_ALLOWED_WEAPONS.has(info.weapon);
+
   const ped = GetPlayerPed(String(src));
   const pedAttachedWeapon = GetSelectedPedWeapon(ped);
-  if (info.weapon !== GetHashKey('WEAPON_UNARMED') && pedAttachedWeapon != info.weapon) {
+  if (!hasAlwaysAllowedWeapon && pedAttachedWeapon != info.weapon) {
     Admin.ACBan(src, 'Weapon mismatch (native)', {
       attachedWeapon: pedAttachedWeapon,
       weaponInfo: info,
     });
     return;
   }
+
   const scriptWeapon = Weapons.getPlayerEquippedWeapon(src);
-  if (info.weapon !== GetHashKey('WEAPON_UNARMED') && scriptWeapon != info.weapon) {
+  if (!hasAlwaysAllowedWeapon && scriptWeapon != info.weapon) {
     Admin.ACBan(src, 'Weapon mismatch (script)', {
       scriptWeapon: scriptWeapon,
       weaponInfo: info,
     });
     return;
   }
+
   if (blockedWeaponHashes.includes(info.weapon)) {
     Admin.ACBan(src, 'Blocked weapon equipped', {
       weaponInfo: info,
     });
     return;
   }
+
   const svDamageModifier = GetPlayerWeaponDamageModifier(String(src));
   if (info.damageModifier !== svDamageModifier) {
     Admin.ACBan(src, 'Weapon damage modifier modification', {

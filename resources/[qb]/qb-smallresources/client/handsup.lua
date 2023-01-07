@@ -7,6 +7,7 @@ exports['dg-lib']:registerKeyMapping('handsup', 'Handen omhoog doen', '+toggleHa
 AddEventHandler('dg-lib:keyEvent', function(name, isDown)
     if not isDown then return end
 	if name ~= 'toggleHandsup' then return end
+  if DGX.Police.isCuffed() or DGX.Hospital.isDown() then return end
 
     local ped = PlayerPedId()
 	RequestAnimDict(animDict)

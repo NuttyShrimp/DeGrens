@@ -4,7 +4,7 @@ import { statusLogger } from './logger.status';
 const statusData = new Map<Status.Name, Status.ConfigData>();
 const allPlayerStatuses = new Map<number, Status.Active[]>();
 
-const getStatusData = (name: Status.Name) => {
+export const getStatusData = (name: Status.Name) => {
   const data = statusData.get(name);
   if (!data) {
     statusLogger.warn(`Tried to get status data for '${name}' but is not a known status`);
@@ -56,11 +56,7 @@ export const addStatusToPlayer = (plyId: number, name: Status.Name) => {
   playerStatuses.push(newStatus);
   allPlayerStatuses.set(cid, playerStatuses);
 
-  Chat.sendMessage(plyId, {
-    prefix: 'Status: ',
-    message: data.label,
-    type: 'normal',
-  });
+  Notifications.add(plyId, data.label, 'info', 10000);
   statusLogger.silly(`Added status ${name} to player ${cid}`);
 };
 
@@ -89,12 +85,11 @@ export const checkRemovalMethods = (plyId: number, method: Status.RemovalMethod)
   const playerStatuses = allPlayerStatuses.get(cid);
   if (!playerStatuses) return;
 
-  const statusesWithRemovalMethod = Array.from(statusData).reduce<Status.Name[]>((acc, [name, data]) => {
-    if (data.removalMethod === method) acc.push(name);
-    return acc;
-  }, []);
-
-  statusesWithRemovalMethod.forEach(name => removeStatusFromPlayer(plyId, name));
+  for (const [name, data] of statusData) {
+    if (data.removalMethod === method) {
+      removeStatusFromPlayer(plyId, name);
+    }
+  }
 };
 
 export const getPlayerStatuses = (plyId: number) => {

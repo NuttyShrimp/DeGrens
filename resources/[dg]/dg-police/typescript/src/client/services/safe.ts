@@ -2,7 +2,7 @@ import { Inventory, Peek, PolyTarget } from '@dgx/client';
 
 export const buildSafeZones = (zones: Vec3[]) => {
   zones.forEach((zone, i) => {
-    PolyTarget.addCircleZone('police_safe', zone, 4, { useZ: true, data: { id: i } });
+    PolyTarget.addCircleZone('police_safe', zone, 0.8, { useZ: true, data: { id: i } });
   });
 };
 

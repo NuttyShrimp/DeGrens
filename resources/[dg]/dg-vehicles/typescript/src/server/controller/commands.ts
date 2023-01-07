@@ -1,4 +1,4 @@
-import { Chat, Events, Notifications } from '@dgx/server';
+import { Chat, Events, Hospital, Notifications, Police } from '@dgx/server';
 
 // Option got moved to radialmenu
 // Chat.registerCommand('motor', 'Zet je motor aan/uit', [], 'user', async src => {
@@ -30,6 +30,12 @@ Chat.registerCommand(
       Notifications.add(src, 'Incorrect formaat van stoel nr', 'error');
       return;
     }
+
+    if (Hospital.isDown(src) || Police.isCuffed(src)) {
+      Notifications.add(src, 'Je kan dit momenteel niet', 'error');
+      return;
+    }
+
     Events.emitNet('vehicles:seat:set', src, seatIndex);
   }
 );

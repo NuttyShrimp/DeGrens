@@ -10,7 +10,7 @@ setImmediate(() => {
     Chat.registerCommand('testDispatch', 'create dummy dispatch', [], 'developer', src => {
       const plyPed = GetPlayerPed(String(src));
       const plyVeh = GetVehiclePedIsIn(plyPed, false);
-      createDispatchCall({
+      createDispatchCall('police', {
         title: '10-13A: BOZO DOWN',
         description: 'This a description with some useless text for testing purposes only. Do not try this at home :)',
         tag: '100',

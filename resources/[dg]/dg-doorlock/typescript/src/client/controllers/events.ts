@@ -1,4 +1,4 @@
-import { Events, Keys, PolyZone, RayCast } from '@dgx/client';
+import { Events, Hospital, Keys, Police, PolyZone, RayCast } from '@dgx/client';
 import {
   changeDoorState,
   enterDoorPolyZone,
@@ -14,6 +14,8 @@ let inDebounce = false;
 
 Keys.register('toggleDoor', 'Toggle Deurslot', 'P');
 Keys.onPressDown('toggleDoor', () => {
+  if (Police.isCuffed() || Hospital.isDown()) return;
+
   if (inDebounce) {
     return;
   } else {

@@ -1,12 +1,12 @@
 import { Events, Jobs } from '@dgx/server';
 
 let blipPlys: number[] = [];
-let disabledPlys: number[] = [];
+let disabledPlys: Set<number> = new Set();
 
 export const syncBlips = () => {
   const policePlys = Jobs.getPlayersForJob('police');
   const ambuPlys = Jobs.getPlayersForJob('ambulance');
-  const newPlys = [...policePlys, ...ambuPlys].filter(ply => !disabledPlys.includes(ply));
+  const newPlys = [...policePlys, ...ambuPlys].filter(ply => !disabledPlys.has(ply));
   const oldPlys = blipPlys.filter(ply => !newPlys.includes(ply));
   blipPlys = newPlys;
 
@@ -28,19 +28,25 @@ export const syncBlips = () => {
 };
 
 export const updateSprite = (src: number, sprite: number) => {
+  const player = DGCore.Functions.GetPlayer(src);
+  const blipInfo: Dispatch.BlipInfo = {
+    job: Jobs.getCurrentJob(src)!,
+    callsign: player.PlayerData.metadata.callsign,
+  };
+
   blipPlys.forEach(ply => {
-    Events.emitNet('dispatch:updateSprite', ply, src, sprite);
+    Events.emitNet('dispatch:updateSprite', ply, src, blipInfo, sprite);
   });
 };
 
 export const togglePlayer = (src: number, shouldRemove: boolean) => {
   if (shouldRemove) {
-    disabledPlys = disabledPlys.filter(ply => ply != src);
+    disabledPlys.delete(src);
   } else {
-    disabledPlys.push(src);
+    disabledPlys.add(src);
   }
-}
+};
 
 export const cleanPlayer = (src: number) => {
-  disabledPlys = disabledPlys.filter(ply => ply != src);
-}
+  disabledPlys.delete(src);
+};

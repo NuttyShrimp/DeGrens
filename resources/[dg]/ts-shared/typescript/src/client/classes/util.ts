@@ -1,5 +1,6 @@
-import { RPC } from '../classes';
+import { RPC } from './index';
 import { Util as UtilShared } from '../../shared/classes/util';
+import { MOVEMENT_CLIPSET_ENUM } from '../constants';
 
 class Util extends UtilShared {
   private prodEnv!: boolean;
@@ -113,7 +114,10 @@ class Util extends UtilShared {
     }
   };
 
-  isAnyPlayerCloseAndOutsideVehicle = (maxDistance = 2) => {
+  /**
+   * @returns playerId (not serverId)
+   */
+  getFirstPlayerInDistanceAndOutsideVehicle = (distance: number) => {
     const players: number[] = GetActivePlayers();
     const ownPed = PlayerPedId();
     const ownCoords = this.getPlyCoords();
@@ -123,34 +127,54 @@ class Util extends UtilShared {
       if (ped === ownPed) continue;
       if (IsPedInAnyVehicle(ped, true)) continue;
 
+      const maxDistance = IsPedRagdoll(ped) ? distance + 0.5 : distance;
       const [x, y, z] = GetEntityCoords(ped, false);
-      if (ownCoords.distance({ x, y, z }) < (IsPedRagdoll(ped) ? maxDistance + 0.5 : maxDistance)) {
-        return true;
+      if (ownCoords.distance({ x, y, z }) < maxDistance) {
+        return plyId;
       }
     }
+  };
 
-    return false;
+  isAnyPlayerCloseAndOutsideVehicle = (maxDistance = 2) => {
+    return this.getFirstPlayerInDistanceAndOutsideVehicle(maxDistance) != undefined;
+  };
+
+  /**
+   * @returns playerId (not serverId)
+   */
+  getClosestPlayerInDistanceAndOutsideVehicle = (distance = 999999) => {
+    const players: number[] = GetActivePlayers();
+    const ownPed = PlayerPedId();
+    const ownCoords = this.getPlyCoords();
+
+    let closestDistance = distance;
+    let closestPly: number | undefined = undefined;
+
+    for (const plyId of players) {
+      const ped = GetPlayerPed(plyId);
+      if (ped === ownPed) continue;
+      if (IsPedInAnyVehicle(ped, true)) continue;
+
+      const [x, y, z] = GetEntityCoords(ped, false);
+      let distance = ownCoords.distance({ x, y, z });
+      distance = IsPedRagdoll(ped) ? Math.max(0, distance - 0.5) : distance;
+      if (distance > closestDistance) continue;
+
+      closestDistance = distance;
+      closestPly = plyId;
+    }
+
+    return closestPly;
   };
 
   getDistanceToClosestPlayerOutsideVehicle = () => {
-    const players: number[] = GetActivePlayers();
-    const ownPed = PlayerPedId();
-    const ownCoords = this.getPlyCoords();
+    const maxDistance = 999999;
+    const closestPly = this.getClosestPlayerInDistanceAndOutsideVehicle(maxDistance);
+    if (!closestPly) return maxDistance;
 
-    let closestDistance = 99999;
-
-    for (const plyId of players) {
-      const ped = GetPlayerPed(plyId);
-      if (ped === ownPed) continue;
-      if (IsPedInAnyVehicle(ped, true)) continue;
-
-      const [x, y, z] = GetEntityCoords(ped, false);
-      const distance = ownCoords.distance({ x, y, z });
-      if (distance > closestDistance) continue;
-      closestDistance = distance;
-    }
-
-    return closestDistance;
+    const ped = GetPlayerPed(closestPly);
+    const coords = this.getEntityCoords(ped);
+    return this.getPlyCoords().distance(coords);
   };
 
   /**
@@ -166,16 +190,15 @@ class Util extends UtilShared {
     return netId ?? 0;
   };
 
-  getClosestPedInRange = (range: number, pedsToIgnore: number[] = []): number | undefined => {
+  getClosestNpcInRange = (range: number, pedsToIgnore: number[] = []): number | undefined => {
     const plyCoords = this.getPlyCoords();
     const peds: number[] = GetGamePool('CPed');
-    const playerPeds = [PlayerPedId, ...GetActivePlayers().map((id: number) => GetPlayerPed(id))];
 
     let closestPed: number | undefined = undefined;
     let closestDistance = range;
 
     for (const ped of peds) {
-      if (playerPeds.includes(ped)) continue;
+      if (IsPedAPlayer(ped)) continue;
       if (pedsToIgnore.includes(ped)) continue;
       const distance = plyCoords.distance(this.getEntityCoords(ped));
       if (distance < closestDistance) {
@@ -196,6 +219,55 @@ class Util extends UtilShared {
     const owner = NetworkGetEntityOwner(ped);
     return ped === GetPlayerPed(owner) ? GetPlayerServerId(owner) : 0;
   }
+
+  getCurrentVehicleInfo = () => {
+    const ped = PlayerPedId();
+    const vehicle = GetVehiclePedIsIn(ped, false);
+    if (vehicle === 0 || !DoesEntityExist(vehicle)) return;
+    const model = GetEntityModel(vehicle);
+    const numSeats = GetVehicleModelNumberOfSeats(model);
+    let seat = -1;
+    for (let i = -1; i < numSeats - 1; i++) {
+      if (GetPedInVehicleSeat(vehicle, i) !== ped) continue;
+      seat = i;
+      break;
+    }
+    return {
+      vehicle,
+      seat,
+    };
+  };
+
+  getPedMovementClipset = (ped: number): string | undefined => {
+    //@ts-ignore
+    const clipsetHash = GetPedMovementClipset(ped);
+    return MOVEMENT_CLIPSET_ENUM[clipsetHash];
+  };
+
+  /**
+   * Wrapper for scenarios to regain equipped weapon when scenario stops
+   * This is needed to prevent anticheat bans for mismatching weapons
+   */
+  public startScenarioInPlace = (scenario: string) => {
+    const ped = PlayerPedId();
+    const startWeapon = GetSelectedPedWeapon(ped);
+
+    TaskStartScenarioInPlace(ped, scenario, 0, true);
+
+    let scenarioStarted = false;
+    const thread = setInterval(() => {
+      const isUsingScenario = IsPedUsingScenario(ped, scenario);
+      if (isUsingScenario && !scenarioStarted) {
+        scenarioStarted = true;
+        return;
+      }
+
+      if (scenarioStarted && !isUsingScenario) {
+        SetCurrentPedWeapon(ped, startWeapon, true);
+        clearInterval(thread);
+      }
+    }, 1);
+  };
 }
 
 export class Interiors {
