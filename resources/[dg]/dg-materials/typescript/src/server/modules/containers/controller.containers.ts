@@ -79,7 +79,7 @@ Events.onNet('materials:containers:meltMold', async (src: number) => {
 
   // we dont await taskbar to ensure player does not somehow cancel by crashing etc, this way even if player crashes, item shit will still go through
   const timeout = 15000;
-  Taskbar.create(src, 'mold_melt_filling', 'fill', 'Vullen', timeout, {
+  Taskbar.create(src, 'fill', 'Vullen', timeout, {
     disarm: true,
     disableInventory: true,
     controlDisables: {

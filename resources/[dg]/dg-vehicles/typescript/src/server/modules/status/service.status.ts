@@ -81,7 +81,7 @@ export const useRepairPart = async (src: number, type: keyof Service.Status, par
       break;
     }
   }
-  const [cancelled] = await Taskbar.create(src, 'apply-part', 'car-wrench', 'Repairing', 30000, {
+  const [cancelled] = await Taskbar.create(src, 'car-wrench', 'Repairing', 30000, {
     cancelOnMove: true,
     cancelOnDeath: true,
     canCancel: true,

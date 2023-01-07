@@ -51,7 +51,7 @@ Inventory.registerUseable('dna_swab', async src => {
     return;
   }
 
-  const [canceled] = await Taskbar.create(src, 'dna_swab_taking', 'dna', 'DNA Nemen', 5000, {
+  const [canceled] = await Taskbar.create(src, 'dna', 'DNA Nemen', 5000, {
     canCancel: true,
     cancelOnDeath: true,
     cancelOnMove: true,

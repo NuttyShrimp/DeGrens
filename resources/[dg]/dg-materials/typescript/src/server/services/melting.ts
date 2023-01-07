@@ -51,7 +51,7 @@ Events.onNet('materials:melting:melt', async (src: number, recipeId: number) => 
     return;
   }
 
-  const [canceled] = await Taskbar.create(src, 'melting_putin', 'fire', 'Insteken', 3000, {
+  const [canceled] = await Taskbar.create(src, 'fire', 'Insteken', 3000, {
     disarm: true,
     disableInventory: true,
     disablePeek: true,
@@ -88,7 +88,7 @@ Events.onNet('materials:melting:take', async (src: number) => {
     return;
   }
 
-  const [canceled] = await Taskbar.create(src, 'melting_takeout', 'fire', 'Uithalen', 3000, {
+  const [canceled] = await Taskbar.create(src, 'fire', 'Uithalen', 3000, {
     disarm: true,
     disableInventory: true,
     disablePeek: true,

@@ -216,29 +216,22 @@ class StateManager extends Util.Singleton<StateManager>() {
     }
     houseState.searched.add(zoneName);
 
-    const [wasCancelled] = await Taskbar.create(
-      src,
-      `houserob-loot-${zoneName}`,
-      'magnifying-glass',
-      'Doorzoeken...',
-      15000,
-      {
-        canCancel: true,
-        cancelOnDeath: true,
-        disarm: true,
-        disableInventory: true,
-        controlDisables: {
-          movement: true,
-          carMovement: true,
-          combat: true,
-        },
-        animation: {
-          animDict: 'anim@gangops@facility@servers@bodysearch@',
-          anim: 'player_search',
-          flags: 17,
-        },
-      }
-    );
+    const [wasCancelled] = await Taskbar.create(src, 'magnifying-glass', 'Doorzoeken...', 15000, {
+      canCancel: true,
+      cancelOnDeath: true,
+      disarm: true,
+      disableInventory: true,
+      controlDisables: {
+        movement: true,
+        carMovement: true,
+        combat: true,
+      },
+      animation: {
+        animDict: 'anim@gangops@facility@servers@bodysearch@',
+        anim: 'player_search',
+        flags: 17,
+      },
+    });
     if (wasCancelled) {
       houseState.searched.delete(zoneName);
       return;

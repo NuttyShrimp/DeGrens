@@ -33,26 +33,33 @@ class UI {
 }
 
 class Taskbar {
+  private readonly resolveFunctions: Map<string, (data: [boolean, number]) => void>;
+
+  constructor() {
+    this.resolveFunctions = new Map();
+    // Dont use DGX because probably not instantiated yet as this gets registered in constructor
+    onNet('misc:taskbar:finished', (promId: string, canceled: boolean, atPercentage: number) => {
+      const res = this.resolveFunctions.get(promId);
+      if (!res) return;
+      res([canceled, atPercentage]);
+      this.resolveFunctions.delete(promId);
+    });
+  }
+
   async create(
     src: number,
-    id: string,
     icon: string,
     label: string,
     duration: number,
     settings: TaskBar.TaskBarSettings
-  ) {
+  ): Promise<[boolean, number]> {
+    const promId = Util.uuidv4();
     const prom = new Promise<[boolean, number]>(res => {
-      Events.onNet(
-        `misc:taskbar:finished`,
-        (src: number, evtId: string, wasCanceled: boolean, atPercentage: number) => {
-          if (id === evtId) {
-            res([wasCanceled, atPercentage]);
-          }
-        }
-      );
+      this.resolveFunctions.set(promId, res);
     });
-    Events.emitNet('misc:taskbar:new', src, id, icon, label, duration, settings);
-    return prom;
+    Events.emitNet('misc:taskbar:new', src, promId, icon, label, duration, settings);
+    const result = await prom;
+    return result;
   }
 }
 

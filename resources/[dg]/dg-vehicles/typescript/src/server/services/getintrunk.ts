@@ -51,7 +51,7 @@ Chat.registerCommand('putintrunk', 'Put closest person in trunk', [], 'user', as
     return;
   }
 
-  const [canceled] = await Taskbar.create(src, 'put-in-trunk', 'car', 'In koffer plaatsen', 3000, {
+  const [canceled] = await Taskbar.create(src, 'car', 'In koffer plaatsen', 3000, {
     canCancel: true,
     cancelOnDeath: true,
     cancelOnMove: true,
@@ -87,7 +87,7 @@ Chat.registerCommand('takeouttrunk', 'Get person from trunk', [], 'user', async 
     return;
   }
 
-  const [canceled] = await Taskbar.create(src, 'take-out-trunk', 'car', 'Uit koffer halen', 3000, {
+  const [canceled] = await Taskbar.create(src, 'car', 'Uit koffer halen', 3000, {
     canCancel: true,
     cancelOnDeath: true,
     cancelOnMove: true,

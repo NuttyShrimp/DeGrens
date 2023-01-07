@@ -9,7 +9,7 @@ Keys.onPressDown('taskbar-cancel', cancelTaskbar);
 Events.onNet(
   'misc:taskbar:new',
   async (id: string, icon: string, label: string, duration: number, settings: TaskBar.TaskBarSettings) => {
-    const [wasCanceled, atPercentage] = await taskbar(icon, label, duration, settings, id);
-    Events.emitNet('misc:taskbar:finished', id, wasCanceled, atPercentage);
+    const [wasCanceled, atPercentage] = await taskbar(icon, label, duration, settings);
+    emitNet('misc:taskbar:finished', id, wasCanceled, atPercentage);
   }
 );

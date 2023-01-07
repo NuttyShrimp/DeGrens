@@ -28,7 +28,7 @@ export const applyFakePlateItem = async (src: number, netId: number) => {
     Notifications.add(src, 'Je staat niet dicht genoeg bij het voertuig', 'error');
     return;
   }
-  const [wasCancelled] = await Taskbar.create(src, 'vehicles-apply-fakeplate', 'screwdriver', 'Monteren', 7500, {
+  const [wasCancelled] = await Taskbar.create(src, 'screwdriver', 'Monteren', 7500, {
     canCancel: true,
     cancelOnDeath: true,
     disableInventory: true,
@@ -111,27 +111,20 @@ export const removeFakePlate = async (src: number, netId: number) => {
     Notifications.add(src, 'Dit voertuig heeft geen valse nummerplaat', 'error');
     return;
   }
-  const [wasCancelled] = await Taskbar.create(
-    src,
-    'vehicles-remove-fakeplate',
-    'screwdriver',
-    'Schroeven losdraaien',
-    7500,
-    {
-      canCancel: true,
-      cancelOnDeath: true,
-      disableInventory: true,
-      controlDisables: {
-        movement: true,
-        combat: true,
-      },
-      animation: {
-        animDict: 'anim@amb@clubhouse@tutorial@bkr_tut_ig3@',
-        anim: 'machinic_loop_mechandplayer',
-        flags: 1,
-      },
-    }
-  );
+  const [wasCancelled] = await Taskbar.create(src, 'screwdriver', 'Schroeven losdraaien', 7500, {
+    canCancel: true,
+    cancelOnDeath: true,
+    disableInventory: true,
+    controlDisables: {
+      movement: true,
+      combat: true,
+    },
+    animation: {
+      animDict: 'anim@amb@clubhouse@tutorial@bkr_tut_ig3@',
+      anim: 'machinic_loop_mechandplayer',
+      flags: 1,
+    },
+  });
   if (wasCancelled) return;
   SetVehicleNumberPlateText(vehicle, vehState.plate);
   Inventory.addItemToPlayer(src, 'fakeplate', 1, { plate: vehState.fakePlate });

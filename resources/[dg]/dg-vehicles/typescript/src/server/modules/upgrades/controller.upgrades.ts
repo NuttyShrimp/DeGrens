@@ -29,7 +29,7 @@ Events.onNet('vehicles:upgrades:installItem', async (src: number, netId: number,
     return;
   }
 
-  const [canceled] = await Taskbar.create(src, 'vehicles-install-item', 'screwdriver', 'Installeren', 15000, {
+  const [canceled] = await Taskbar.create(src, 'screwdriver', 'Installeren', 15000, {
     canCancel: true,
     cancelOnDeath: true,
     disableInventory: true,

@@ -35,7 +35,7 @@ Inventory.registerUseable('nos', async src => {
     return;
   }
 
-  const [canceled] = await Taskbar.create(src, 'vehicles-install-nos', 'wine-bottle', 'Aansluiten', 10000, {
+  const [canceled] = await Taskbar.create(src, 'wine-bottle', 'Aansluiten', 10000, {
     canCancel: true,
     cancelOnDeath: true,
     disableInventory: true,

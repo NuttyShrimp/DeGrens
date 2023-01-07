@@ -70,7 +70,7 @@ Events.onNet('materials:radiotowers:loot', async (src: number, towerId: string) 
     return;
   }
 
-  const [canceled] = await Taskbar.create(src, 'radiotowers_loot', 'screwdriver', 'Onderdelen nemen', 30000, {
+  const [canceled] = await Taskbar.create(src, 'screwdriver', 'Onderdelen nemen', 30000, {
     canCancel: true,
     cancelOnDeath: true,
     cancelOnMove: true,
