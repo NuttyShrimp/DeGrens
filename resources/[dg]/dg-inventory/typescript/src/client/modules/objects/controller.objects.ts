@@ -1,4 +1,4 @@
-import { Events, Inventory } from '@dgx/client';
+import { Events } from '@dgx/client';
 import objectsManager from './classes/objectsmanager';
 
 Events.onNet('inventory:client:updateObject', (action: 'add' | 'remove', item: Objects.Item) => {

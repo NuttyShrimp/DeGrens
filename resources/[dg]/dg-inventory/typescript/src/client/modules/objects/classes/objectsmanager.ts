@@ -202,11 +202,6 @@ class ObjectsManager extends Util.Singleton<ObjectsManager>() {
 
   // Properly reset for switching chars
   public reset = () => {
-    [...this.activeObjects.values()].forEach(obj => {
-      if (obj.propId === null) return;
-      PropAttach.remove(obj.propId);
-    });
-
     this.activeObjects.clear();
     this.queues = {};
 

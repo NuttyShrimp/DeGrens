@@ -152,6 +152,7 @@ export const toggleProps = async (toggle: boolean) => {
     });
   } else {
     attachedProps.forEach(async data => {
+      if (data.netId !== null) return;
       const netId = await createAndAttachObject(data.name, data.offset);
       if (!netId) return;
       data.netId = netId;
