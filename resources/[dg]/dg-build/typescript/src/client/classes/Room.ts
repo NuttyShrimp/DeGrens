@@ -23,6 +23,7 @@ export class Room {
   keyHandlers: Map<string, number[]> = new Map();
   // Array with all tracked zones where the player is currently in
   activeZones: string[] = [];
+  dryVolHandle: number | null = null;
 
   constructor(planName: string, roomPos: number | Vec3) {
     this.plan = Plans[planName];
@@ -188,6 +189,17 @@ export class Room {
     });
   }
 
+  private createDryVolume(volume: { min: ArrayVec3; max: ArrayVec3 }) {
+    if (this.dryVolHandle) return;
+    this.dryVolHandle = CreateDryVolume(...volume.min, ...volume.max);
+  }
+
+  private removeDryVolume() {
+    if (!this.dryVolHandle) return;
+    RemoveDryVolume(this.dryVolHandle);
+    this.dryVolHandle = null;
+  }
+
   async createRoom(): Promise<[Coords, number[]]> {
     const ped = PlayerPedId();
     this.startingPos = Util.ArrayToVector3(GetEntityCoords(ped, true));
@@ -198,7 +210,7 @@ export class Room {
       await Util.Delay(1000);
     }
 
-    const ymapObjects = global.exports['dg-lib'].parse(this.planName, this.plan.saveToCache);
+    const [ymapObjects, extents] = global.exports['dg-lib'].parse(this.planName, this.plan.saveToCache);
     let mainPos = new Vector3(0, 0, 0);
     let objectSpawnCoords: Vector3;
 
@@ -259,21 +271,24 @@ export class Room {
 
     const safe = await FloatTilSafe(this.plan.shell);
 
-    DoScreenFadeIn(1000);
     FreezeEntityPosition(ped, false);
     TriggerEvent('build:event:inside', true);
     TriggerServerEvent('build:event:inside', true);
     Sync.setPlayerInvincible(false);
 
+    Util.debug(`created: ${this.planName} | success: ${safe}`);
     if (safe) {
       Weather.freezeTime(true, 0);
       Weather.freezeWeather(true, 'CLEAR');
       this.createInteractions();
       this.createPeekZones();
       this.createPeekEntries();
+      this.createDryVolume(extents);
+      DoScreenFadeIn(250);
       return [objectSpawnCoords, this.cachedObjects];
     }
     this.exit();
+    return undefined;
   }
 
   exit(overridePos?: Coords) {
@@ -283,6 +298,7 @@ export class Room {
     this.removeInteractions();
     this.removePeekZones();
     this.removePeekEntries();
+    this.removeDryVolume();
     this.unregisterKeyHandler();
 
     emit('build:event:inside', false);
@@ -303,5 +319,6 @@ export class Room {
       false,
       false
     );
+    DoScreenFadeIn(250);
   }
 }

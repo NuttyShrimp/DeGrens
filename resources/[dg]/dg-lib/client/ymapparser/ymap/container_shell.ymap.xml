@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CMapData>
+ <name>hash_DF96E700</name>
+ <parent />
+ <flags value="0" />
+ <contentFlags value="1" />
+ <streamingExtentsMin x="-208.102" y="-210.5981" z="-201.5009" />
+ <streamingExtentsMax x="208.102" y="210.5981" z="201.5009" />
+ <entitiesExtentsMin x="-8.102" y="-10.5981" z="-1.5009" />
+ <entitiesExtentsMax x="8.102" y="10.5981" z="1.5009" />
+ <entities>
+  <Item type="CEntityDef">
+   <archetypeName>hash_DF96E700</archetypeName>
+   <flags value="32" />
+   <guid value="0" />
+   <position x="0" y="0" z="0" />
+   <rotation x="0" y="0" z="0" w="1" />
+   <scaleXY value="1" />
+   <scaleZ value="1" />
+   <parentIndex value="-1" />
+   <lodDist value="200" />
+   <childLodDist value="0" />
+   <lodLevel>LODTYPES_DEPTH_ORPHANHD</lodLevel>
+   <numChildren value="0" />
+   <priorityLevel>PRI_REQUIRED</priorityLevel>
+   <extensions />
+   <ambientOcclusionMultiplier value="255" />
+   <artificialAmbientOcclusion value="255" />
+   <tintValue value="0" />
+  </Item>
+ </entities>
+ <containerLods itemType="rage__fwContainerLodDef" />
+ <boxOccluders itemType="BoxOccluder" />
+ <occludeModels itemType="OccludeModel" />
+ <physicsDictionaries />
+ <instancedData>
+ <error>Couldn't find structure info rage__fwInstancedMapData!</error>
+ </instancedData>
+ <timeCycleModifiers itemType="CTimeCycleModifier" />
+ <carGenerators itemType="CCarGen" />
+ <LODLightsSOA>
+ <error>Couldn't find structure info CLODLight!</error>
+ </LODLightsSOA>
+ <DistantLODLightsSOA>
+ <error>Couldn't find structure info CDistantLODLight!</error>
+ </DistantLODLightsSOA>
+ <block>
+ <error>Couldn't find structure info CBlockDesc!</error>
+ </block>
+</CMapData>

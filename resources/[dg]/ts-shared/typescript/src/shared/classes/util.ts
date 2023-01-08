@@ -46,7 +46,7 @@ export class Util {
     return new Vector3(array[0], array[1], array[2]);
   };
 
-  Vector3ToArray = (vector: Vec3): [number, number, number] => {
+  Vector3ToArray = (vector: Vec3): ArrayVec3 => {
     return [vector.x, vector.y, vector.z];
   };
 

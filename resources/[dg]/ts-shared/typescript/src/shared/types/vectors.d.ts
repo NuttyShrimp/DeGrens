@@ -10,3 +10,5 @@ declare interface Vec3 extends Vec2 {
 declare interface Vec4 extends Vec3 {
   w: number;
 }
+
+declare type ArrayVec3 = [number, number, number]
