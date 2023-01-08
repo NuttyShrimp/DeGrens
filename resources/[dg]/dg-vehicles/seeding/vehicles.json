@@ -6541,24 +6541,12 @@
   },
   {
     "category": "super",
-    "model": "pgt3",
+    "model": "pgt322",
     "brand": "Porsche",
     "name": "911 GT3 RS",
     "class": "S",
     "defaultStock": 3,
     "restockTime": 45,
-    "price": 1,
-    "shop": "pdm",
-    "type": "land"
-  },
-  {
-    "category": "suvs",
-    "model": "pct18",
-    "brand": "Porsche",
-    "name": "Cayenne Turbo",
-    "class": "A+",
-    "defaultStock": 5,
-    "restockTime": 30,
     "price": 1,
     "shop": "pdm",
     "type": "land"
