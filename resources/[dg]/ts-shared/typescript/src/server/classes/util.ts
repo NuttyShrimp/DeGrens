@@ -230,21 +230,15 @@ class Util extends UtilShared {
     return plys;
   }
 
+  getOffsetFromEntity = (entity: number, offset: Vec3): Vec3 => {
+    const entityCoords = this.getEntityCoords(entity);
+    const entityHeading = GetEntityHeading(entity);
+
+    return this.getOffsetFromCoords({ ...entityCoords, w: entityHeading }, offset);
+  };
+
   getOffsetFromPlayer = (plyId: number, offset: Vec3): Vec3 => {
-    const offsetLength = Math.sqrt(Math.pow(offset.x, 2) + Math.pow(offset.y, 2));
-    const offsetRadians = Math.acos(offset.x / offsetLength);
-
-    const plyPed = GetPlayerPed(String(plyId));
-    const plyCoords = this.getEntityCoords(plyPed);
-    const plyRadians = GetEntityHeading(plyPed) * (Math.PI / 180);
-
-    const radians = offsetRadians + plyRadians;
-
-    return {
-      x: plyCoords.x + Math.cos(radians) * offsetLength,
-      y: plyCoords.y + Math.sin(radians) * offsetLength,
-      z: plyCoords.z + offset.z,
-    };
+    return this.getOffsetFromEntity(GetPlayerPed(String(plyId)), offset);
   };
 }
 

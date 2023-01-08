@@ -124,4 +124,22 @@ export class Util {
     }, timeout);
     return true;
   };
+
+  /**
+   * Only use for actual coords. For entities use:
+   * - Server: Util functions
+   * - Client: GetOffsetFromEntityInWorldCoords native (which is quicker)
+   */
+  getOffsetFromCoords = (position: Vec4, offset: Vec3): Vec3 => {
+    const { w: angle, ...coords } = position;
+    const offsetLength = Math.sqrt(Math.pow(offset.x, 2) + Math.pow(offset.y, 2));
+    const offsetRadians = Math.atan2(offset.y, offset.x);
+    const radians = offsetRadians + angle * (Math.PI / 180);
+
+    return {
+      x: coords.x + Math.cos(radians) * offsetLength,
+      y: coords.y + Math.sin(radians) * offsetLength,
+      z: coords.z + offset.z,
+    };
+  };
 }
