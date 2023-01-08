@@ -15,7 +15,7 @@ export class RoomManager extends Util.Singleton<RoomManager>() {
     if (!Plans[planName]) {
       throw new Error(`Plan ${planName} not found`);
     }
-    if (!IsScreenFadedOut) {
+    if (!IsScreenFadedOut()) {
       DoScreenFadeOut(250);
       await Util.Delay(250);
     }

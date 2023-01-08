@@ -78,7 +78,7 @@ export const enterContainer = async (entity: number) => {
   const position = Util.getEntityCoords(entity);
   DoScreenFadeOut(500);
   await Util.Delay(500);
-  await Interiors.createRoom('bench_container', position.subtract({ x: 0, y: 0, z: 50 }));
+  await Interiors.createRoom('container_shell', position.subtract({ x: 0, y: 0, z: 50 }));
   await Util.Delay(500);
   DoScreenFadeIn(500);
   Events.emitNet('materials:containers:entered', containerCoords);

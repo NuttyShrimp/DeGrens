@@ -210,9 +210,9 @@ class Util extends UtilShared {
     return closestPed;
   };
 
-  debug(...args: any[]) {
+  debug(msg: string) {
     if (!this.isDevEnv()) return;
-    console.log(...args);
+    console.log(`[${GetCurrentResourceName()}] ${msg}`);
   }
 
   getServerIdForPed(ped: number) {

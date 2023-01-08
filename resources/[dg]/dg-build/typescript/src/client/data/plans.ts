@@ -573,7 +573,7 @@ Plans.furnitured_midapart = {
 
 // I spawn this shit using vec3 position so all the generator modulo bullshit is not needed
 // Couldnt be bother to figure out how that works to be honest
-Plans.bench_container = {
+Plans.container_shell = {
   shell: 'container_shell',
   saveToCache: true,
   spawnOffset: new Vector4(0.0, -5.23, 0, 0),
