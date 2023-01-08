@@ -1,29 +1,4 @@
 import { Events, Interiors, Inventory, Notifications, Peek, RPC, Util } from '@dgx/client';
-import { CONTAINER_MODELS } from './constants.containers';
-import { getContainerEntrance } from './helpers.containers';
-import { enterContainer } from './service.containers';
-
-Peek.addModelEntry(
-  CONTAINER_MODELS.map(i => i.model),
-  {
-    options: [
-      {
-        label: 'Proberen Openen',
-        icon: 'fas fa-lock',
-        action: (_, entity) => {
-          if (!entity) return;
-          enterContainer(entity);
-        },
-        canInteract: entity => {
-          if (!entity) return false;
-          const entrance = getContainerEntrance(entity);
-          return Util.getPlyCoords().distance(entrance) < 1.5;
-        },
-      },
-    ],
-    distance: 3.0,
-  }
-);
 
 Peek.addZoneEntry('materials_mold_melting', {
   options: [

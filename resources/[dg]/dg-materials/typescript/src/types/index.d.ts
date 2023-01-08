@@ -14,6 +14,7 @@ declare namespace Materials {
     radiotowerLocations: Radiotowers.Config['towers'];
     meltingZone: Melting.Config['zone'];
     moldZone: Containers.Config['mold']['location'];
+    containerProps: Containers.Config['props'];
   };
 
   namespace Wirecutting {
@@ -128,6 +129,7 @@ declare namespace Materials {
         requiredSteel: number;
       };
       containers: Record<string, ContainerConfig>;
+      props: Prop<string>[];
     };
 
     type ContainerConfig = {
@@ -146,5 +148,7 @@ declare namespace Materials {
           keyItemId: string | null;
         }
     );
+
+    type Prop<T extends string | number> = { model: T; doZOffset: boolean };
   }
 }
