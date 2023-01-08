@@ -14,6 +14,6 @@ setImmediate(async () => {
   await setConfig(config);
 
   // Wait till accounts loaded before seeding businesses, bankaccounts gets checked when building business
-  await Financials.awaitAccountsLoaded();
+  await Financials.awaitFinancialsLoaded();
   seedBusinesses();
 });

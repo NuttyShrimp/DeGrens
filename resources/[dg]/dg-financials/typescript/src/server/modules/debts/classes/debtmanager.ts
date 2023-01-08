@@ -1,4 +1,4 @@
-import { Notifications, SQL, Util } from '@dgx/server';
+import { Events, Notifications, SQL, Util } from '@dgx/server';
 import { getConfig } from 'helpers/config';
 import accountManager from 'modules/bank/classes/AccountManager';
 
@@ -41,6 +41,8 @@ class DebtManager extends Util.Singleton<DebtManager>() {
     reason: string,
     origin: string,
     given_by?: number,
+    cbEvt?: string,
+    payTerm?: number,
     type: Debts.Type = 'debt'
   ) {
     const debt: Debts.Debt = {
@@ -50,14 +52,16 @@ class DebtManager extends Util.Singleton<DebtManager>() {
       debt: fine,
       payed: 0,
       type,
-      given_by: given_by ?? 0,
+      given_by: given_by ?? 1000,
       origin_name: origin,
       reason: reason,
+      event: cbEvt,
       date: Math.floor(Date.now() / 1000),
+      pay_term: payTerm,
     };
     const query = `
-			INSERT INTO debts (cid, debt, target_account, type, given_by, reason, date)
-			VALUES (?, ?, ?, ?, ?, ?, FROM_UNIXTIME(?))
+			INSERT INTO debts (cid, debt, target_account, type, given_by, origin_name, reason, date, event, pay_term)
+			VALUES (?, ?, ?, ?, ?, ?, ?, FROM_UNIXTIME(?), ?, ?)
 			RETURNING id
 		`;
     const result = await SQL.query(query, [
@@ -66,8 +70,12 @@ class DebtManager extends Util.Singleton<DebtManager>() {
       debt.target_account,
       debt.type,
       debt.given_by,
+      debt.origin_name,
       debt.reason,
       debt.date,
+      // mysql2 being mysql2
+      debt.event ?? null,
+      debt.pay_term ?? null,
     ]);
     if (!result || !result[0]) {
       debtLogger.error(
@@ -145,21 +153,16 @@ class DebtManager extends Util.Singleton<DebtManager>() {
       Util.Log('financials:debt:pay:failed', { id, cid, debt }, `Failed to pay debt, no default account found`);
       return false;
     }
-    const success = await account.transfer(
-      debt.target_account,
-      debt.given_by ?? cid,
-      cid,
-      debt.debt * (percentage / 100),
-      debt.reason,
-      true
-    );
+
+    const amount = (debt.debt - debt.payed) * (percentage / 100);
+    const success = await account.transfer(debt.target_account, cid, cid, amount, debt.reason, true);
     if (success) {
-      Util.Log('financials:debt:pay', { id, cid, debt }, `Successfully paid debt of ${debt.debt}`);
+      Util.Log('financials:debt:pay', { id, cid, debt }, `Successfully paid debt of ${amount}`);
       if (percentage === 100) {
         this.removeDebts([id]);
       } else {
         // Update payed value in DB and manager storage
-        debt.payed = Number((debt.payed + debt.debt * (percentage / 100)).toFixed(2));
+        debt.payed = debt.payed + Number(amount.toFixed(2));
         await SQL.query('UPDATE debts SET payed = ? WHERE id = ?', [debt.payed, debt.id]);
         this.replaceDebt(debt);
       }
@@ -176,6 +179,11 @@ class DebtManager extends Util.Singleton<DebtManager>() {
       Util.Log('financials:debt:overduePay:failed', { id }, `Failed to pay debt, non existing debt`);
       return false;
     }
+    if (debt.event) {
+      Events.emit(debt.event, debt);
+      this.removeDebts([id]);
+      return true;
+    }
     const account = accountManager.getDefaultAccount(debt.cid);
     if (!account) {
       debtLogger.warn(`Failed to pay debt | id: ${id} | cid: ${debt.cid}`);
@@ -186,23 +194,23 @@ class DebtManager extends Util.Singleton<DebtManager>() {
       );
       return false;
     }
-    const newDebt = debt.debt * (1 + getConfig().debts.fineDefaultInterest / 100);
+    const newDebt = (debt.debt - debt.payed) * (1 + getConfig().debts.fineDefaultInterest / 100);
     const success = await account.transfer(
       debt.target_account,
-      debt.given_by ?? debt.cid,
+      debt.cid,
       debt.cid,
       newDebt,
       `Overtijd | ${debt.reason}`,
       true
     );
     if (success) {
-      Util.Log('financials:debt:overduePay', { id, cid: debt.cid, debt }, `Successfully paid debt of ${debt.debt}`);
+      Util.Log('financials:debt:overduePay', { id, cid: debt.cid, debt }, `Successfully paid debt of ${newDebt}`);
       this.removeDebts([id]);
     } else {
       Util.Log(
         'financials:debt:overduePay:failed',
         { id, cid: debt.cid, debt },
-        `Failed to pay overdue debt of ${debt.debt}`,
+        `Failed to pay overdue debt of ${newDebt}`,
         undefined,
         true
       );

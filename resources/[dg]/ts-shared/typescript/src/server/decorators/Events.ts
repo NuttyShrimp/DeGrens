@@ -61,6 +61,24 @@ export const LocalEvent = (evtName: string) => {
   };
 };
 
+export const DGXLocalEvent = (evtName: string) => {
+  return function (target: any, key: string) {
+    if (!Reflect.hasMetadata('events', target)) {
+      Reflect.defineMetadata('events', [], target);
+    }
+
+    const netEvents = Reflect.getMetadata('events', target) as Array<Decorators.Event>;
+
+    netEvents.push({
+      name: evtName,
+      net: false,
+      dgx: true,
+      key,
+    });
+    Reflect.defineMetadata('events', netEvents, target);
+  };
+};
+
 /**
  * Add listeners for events on class creation
  */
@@ -79,6 +97,10 @@ export const EventListener = () => {
           if (e.dgx) {
             if (e.net) {
               Events.onNet(e.name, (...args: any[]) => {
+                this[e.key](...args);
+              });
+            } else {
+              Events.on(e.name, (...args: any[]) => {
                 this[e.key](...args);
               });
             }
