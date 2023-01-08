@@ -66,7 +66,6 @@ doAnimation = function(ped, dict, anim, speed, speedOut, flag)
   if flag == nil then flag = 50 end
   LoadAnimDict(dict)
   if (not IsEntityPlayingAnim(ped, dict, anim, 3)) then
-    ClearPedTasksImmediately(ped)
     TaskPlayAnim(ped, dict, anim, speed, speedOut, -1, flag, 0, false, false, false);
   end
 end
