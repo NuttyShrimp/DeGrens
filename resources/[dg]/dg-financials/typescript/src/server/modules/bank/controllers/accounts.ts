@@ -5,7 +5,6 @@ import accountManager from '../classes/AccountManager';
 import { createDefaultAccount, getPermissions, removePermissions, setPermissions } from '../helpers/accounts';
 import { bankLogger } from '../utils';
 
-global.exports('areAccountsLoaded', () => accountManager.loaded);
 global.asyncExports('createAccount', async (cid: number, name: string, accType: AccountType) => {
   const acc = await accountManager.createAccount(cid, name, accType);
   return acc.getAccountId();

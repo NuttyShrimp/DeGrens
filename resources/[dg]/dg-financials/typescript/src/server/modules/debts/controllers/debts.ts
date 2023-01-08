@@ -8,8 +8,8 @@ import { removeMaintenanceFees } from '../helpers/maintenanceFees';
 
 global.exports(
   'giveFine',
-  (cid: number, target_account: string, fine: number, reason: string, origin_name: string, given_by?: number) => {
-    debtManager.addDebt(cid, target_account, fine, reason, origin_name, given_by);
+  (cid: number, target_account: string, fine: number, reason: string, origin_name: string, given_by?: number, cbEvt?: string, payTerm?: number) => {
+    debtManager.addDebt(cid, target_account, fine, reason, origin_name, given_by, cbEvt, payTerm);
   }
 );
 global.exports('removeMaintenanceFees', (src: number) => removeMaintenanceFees(src));
@@ -23,7 +23,7 @@ RPC.register('financials:server:debts:get', src => {
   const debts = debtManager.getDebtsByCid(Player.PlayerData.citizenid);
   debtLogger.silly(`getDebts: ${debts.length}`);
   return debts.map(d => {
-    const date = dayjs.unix(d.date).add(getDaysUntilDue(d.debt), 'day').unix();
+    const date = dayjs.unix(d.date).add(d.pay_term ?? getDaysUntilDue(d.debt), 'day').unix();
     const accountName = accountManager.getAccountById(d.target_account)?.getName();
     return {
       ...d,

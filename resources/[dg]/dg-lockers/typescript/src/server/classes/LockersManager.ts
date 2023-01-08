@@ -1,4 +1,4 @@
-import { DGXEvent, EventListener } from '@dgx/server/decorators';
+import { DGXEvent, DGXLocalEvent, EventListener } from '@dgx/server/decorators';
 import winston from 'winston';
 import { mainLogger } from 'sv_logger';
 import { Admin, Events, Financials, Notifications, Util } from '@dgx/server';
@@ -48,22 +48,22 @@ class LockersManager extends Util.Singleton<LockersManager>() {
     this.registerLockers(lockers);
     this.logger.info(`Succesfully loaded ${lockers.length} ${lockers.length > 1 ? 'lockers' : 'locker'}`);
 
-    this.checkDebts();
-  };
-
-  // TODO: Implement the maintenance fees
-  private checkDebts = () => {
-    const currentDay = getCurrentDay();
+    await Financials.awaitFinancialsLoaded();
     this.lockers.forEach(locker => {
-      if (!locker.data.owner) return;
-      if (currentDay < locker.data.paymentDay) return;
-      this.logger.info('Implement debts for lockers');
+      locker.checkMaintenanceFee();
     });
   };
 
   private getBuildData = (): Lockers.BuildData[] => {
     const lockers = [...this.lockers.values()];
     return lockers.map(l => ({ id: l.id, coords: l.data.coords, radius: l.data.radius }));
+  };
+
+  @DGXLocalEvent('lockers:server:lockerDefaulted')
+  private _removeLocker = (debt: IFinancials.Debt) => {
+    const locker = [...this.lockers.values()].find(l => l.data.owner === debt.cid);
+    if (!locker) return;
+    locker.removeOwnership();
   };
 
   @DGXEvent('lockers:server:request')

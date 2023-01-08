@@ -57,10 +57,31 @@ export class Locker {
     this.open(plyId);
   };
 
-  private changePaymentDay = () => {
+  private updatePaymentDate = () => {
     const paymentDay = getCurrentDay() + config.debtIntervalInDays;
     repository.updatePaymentDay(this.id, paymentDay);
     this.paymentDay = paymentDay;
+  };
+
+  // Every 7 days a maintenance fee gets given to owner, owner has 14 days to pay before losing ownership
+  public checkMaintenanceFee = () => {
+    const currentDay = getCurrentDay();
+    if (this.owner === null) return;
+    if (currentDay < this.paymentDay) return;
+
+    const debtPrice = Financials.getTaxedPrice(this.price * config.debtPercentage, config.taxId).taxPrice;
+    Financials.giveFine(
+      this.owner,
+      'BE1',
+      debtPrice,
+      'Locker Onderhoudskosten',
+      'DG Real Estate',
+      undefined,
+      'lockers:server:lockerDefaulted',
+      14
+    );
+    this.updatePaymentDate();
+    this.logger.silly(`Given maintenance fee to owner ${this.owner}`);
   };
 
   private tryToBuy = async (plyId: number) => {
@@ -91,7 +112,11 @@ export class Locker {
     this.owner = cid;
     repository.updateOwner(this.id, cid);
 
-    this.changePaymentDay();
+    // Default to empty string incase player declines password change after buying lockers
+    // He would get locked ouf because password would stay null
+    repository.updatePassword(this.id, '');
+
+    this.updatePaymentDate();
     this.changePassword(plyId);
 
     Util.Log(
@@ -101,6 +126,12 @@ export class Locker {
       plyId
     );
     this.logger.silly(`${Util.getName(plyId)} bought locker ${this.id} for ${priceWithTax}`);
+  };
+
+  public removeOwnership = async () => {
+    this.owner = null;
+    repository.updateOwner(this.id, null);
+    repository.updatePassword(this.id, null);
   };
 
   private open = async (plyId: number) => {

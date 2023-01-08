@@ -73,7 +73,9 @@ declare namespace Debts {
     given_by: number;
     origin_name: string;
     date: number;
+    event?: string;
     reason?: string;
+    pay_term?: number;
   }
 }
 

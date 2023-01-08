@@ -46,7 +46,7 @@ export const seedBusinesses = async () => {
       ...bInfo,
       business_type: businessTypes.get(bInfo.business_type)!,
     });
-    mainLogger.debug(`Loaded business: ${bInfo.label} (${bInfo.id}`);
+    mainLogger.info(`Loaded business: ${bInfo.label} (${bInfo.id})`);
     businesses.set(bInfo.id, business);
   });
 };

@@ -20,7 +20,7 @@ class ShopManager extends Util.Singleton<ShopManager>() {
 
     // Resource gets started before financials so wait till taxes loaded before continuing
     const taxId = 6;
-    await Util.awaitCondition(() => Financials.getTaxInfo(taxId) !== undefined);
+    await Financials.awaitFinancialsLoaded();
 
     // Generate items per type
     Object.entries(config.types).forEach(([type, items]) => {

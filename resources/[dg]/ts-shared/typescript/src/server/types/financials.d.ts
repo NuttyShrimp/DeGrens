@@ -20,4 +20,19 @@ declare namespace IFinancials {
     transfer: boolean;
     transactions: boolean;
   }
+  
+  interface Debt {
+    id: number;
+    cid: number;
+    target_account: string;
+    debt: number;
+    payed: number;
+    type: "debt" | "maintenance";
+    given_by: number;
+    origin_name: string;
+    date: number;
+    event?: string;
+    reason?: string;
+    pay_term?: number;
+  }
 }

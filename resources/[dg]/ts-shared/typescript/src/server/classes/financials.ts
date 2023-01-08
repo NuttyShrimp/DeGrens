@@ -3,8 +3,8 @@ import { Util } from './index';
 const fexp = global.exports['dg-financials'];
 
 class Financials {
-  awaitAccountsLoaded(): Promise<void> {
-    return Util.awaitCondition(() => fexp.areAccountsLoaded());
+  public awaitFinancialsLoaded(): Promise<void> {
+    return fexp.awaitFinancialsLoaded();
   }
 
   // Returns accountId after creation
@@ -107,15 +107,21 @@ class Financials {
     return fexp.cryptoGet(src, coin);
   }
 
+  /**
+   * @param cbEvt This is triggered when a debt is defaulted. (NOT TRIGGERED WHEN JUST PAYING)
+   * @param payTerm If you want to overwrite the time the user has to pay the fine
+   **/
   giveFine(
     cid: number,
     target_account: string,
     fine: number,
     reason: string,
     origin_name: string,
-    given_by?: number
+    given_by?: number,
+    cbEvt?: string,
+    payTerm?: number
   ): void {
-    fexp.giveFine(cid, target_account, fine, reason, origin_name, given_by);
+    fexp.giveFine(cid, target_account, fine, reason, origin_name, given_by, cbEvt, payTerm);
   }
 
   removeMaintenanceFees(src: number) {
