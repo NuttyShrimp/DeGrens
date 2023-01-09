@@ -1,6 +1,6 @@
-import { Events, Inventory, RPC, Util } from '@dgx/server';
+import { Events, Inventory, RPC } from '@dgx/server';
 
-import { getConfigByHash } from '../info/service.info';
+import { getConfigByEntity } from '../info/service.info';
 
 import { getConfig, loadConfig } from './services/config';
 import { getServiceStatus, seedServiceStatuses, updateServiceStatus } from './services/store';
@@ -32,7 +32,7 @@ RPC.register('vehicles:service:getStatus', (src: number, vehNetId: number) => {
 
 RPC.register('vehicles:service:getVehicleInfo', (src: number, vehNetId: number) => {
   const veh = NetworkGetEntityFromNetworkId(vehNetId);
-  const vehInfo = getConfigByHash(GetEntityModel(veh));
+  const vehInfo = getConfigByEntity(veh);
   return {
     name: `${vehInfo?.brand} ${vehInfo?.name}`,
     class: vehInfo?.class ?? 'D',

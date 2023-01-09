@@ -1,4 +1,4 @@
-import { Config, Financials, Inventory, Util } from '@dgx/server';
+import { Config, Financials, Inventory, RPC, Util } from '@dgx/server';
 import { getVehicleCosmeticUpgrades, updateVehicleUpgrades } from 'db/repository';
 import bennysManager from 'modules/bennys/classes/BennysManager';
 import vinManager from 'modules/identification/classes/vinmanager';
@@ -104,12 +104,10 @@ export const getUpgradePrices = (veh: number) => {
   if (!upgradePrices) {
     seedPrices();
   }
-  const vehClass = getConfigByEntity(veh)?.class;
+  let vehClass = getConfigByEntity(veh)?.class;
+  // Default to D class so bennys does not throw errors if model is not in config
   if (!vehClass) {
-    upgradesLogger.error(
-      `Could not get class of vehicle | entity: ${veh} | netId: ${NetworkGetNetworkIdFromEntity(veh)}`
-    );
-    return;
+    vehClass = 'D';
   }
   const isVehInNoChargeSpot = bennysManager.isVehInNoChargeSpot(veh);
   const priceModifier = upgradePrices.classMultiplier[vehClass] ?? 1;

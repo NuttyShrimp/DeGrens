@@ -2,7 +2,7 @@ import { Auth, Config, Events, Inventory, Notifications, RPC, Taskbar, Util } fr
 import { getVehicleItemUpgrades, updateVehicleItemUpgrades } from 'db/repository';
 import { getVinForNetId, getVinForVeh } from 'helpers/vehicle';
 import vinManager from 'modules/identification/classes/vinmanager';
-import { getConfigByHash } from 'modules/info/service.info';
+import { getConfigByEntity } from 'modules/info/service.info';
 
 import { tuneItems, upgradeItems, windowTintMenuEntries } from './constants.upgrades';
 import { upgradesLogger } from './logger.upgrades';
@@ -174,7 +174,7 @@ global.exports('getAllowedTuneItems', (vin: string): string[] => {
   const netId = vinManager.getNetId(vin);
   if (!netId) return [];
   const vehicle = NetworkGetEntityFromNetworkId(netId);
-  const carClass = getConfigByHash(GetEntityModel(vehicle))?.class;
+  const carClass = getConfigByEntity(vehicle)?.class;
   if (!carClass) return [];
   return tuneItems[carClass];
 });

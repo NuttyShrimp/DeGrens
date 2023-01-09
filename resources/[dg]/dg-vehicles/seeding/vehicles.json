@@ -6610,5 +6610,41 @@
     "price": 1,
     "shop": "pdm",
     "type": "land"
+  },
+  {
+    "category": "commercial",
+    "model": "mule",
+    "brand": "Maibatsu",
+    "name": "Mule",
+    "class": "C",
+    "defaultStock": 10,
+    "restockTime": 15,
+    "price": 1,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "service",
+    "model": "trash",
+    "brand": "Jobuilt",
+    "name": "Trashmaster",
+    "class": "C",
+    "defaultStock": 10,
+    "restockTime": 15,
+    "price": 1,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "service",
+    "model": "bus",
+    "brand": "Brute",
+    "name": "Bus",
+    "class": "C",
+    "defaultStock": 10,
+    "restockTime": 15,
+    "price": 1,
+    "shop": "nfs",
+    "type": "land"
   }
 ]

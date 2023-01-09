@@ -1,5 +1,5 @@
 import { Config, Events, Inventory, Notifications, Police, RayCast, RPC, Util } from '@dgx/server';
-import { getConfigByHash } from 'modules/info/service.info';
+import { getConfigByEntity } from 'modules/info/service.info';
 
 import { getVinForVeh, setEngineState } from '../../helpers/vehicle';
 
@@ -86,24 +86,7 @@ export const startVehicleLockpick = async (src: number, itemId: string) => {
   SetVehicleAlarm(targetVehicle, true);
 
   // Check info to determine difficulty
-  // Do not return if not found else we cant lockpick shit like a bus or towtruck etcetc
-  const vehInfo = getConfigByHash(GetEntityModel(targetVehicle));
-  if (!vehInfo) {
-    const modelName = await RPC.execute<string>(
-      'vehicle:getArchType',
-      src,
-      NetworkGetNetworkIdFromEntity(vehiclePedIsIn)
-    );
-    Util.Log(
-      'vehicles:missingConfig',
-      {
-        model: modelName,
-      },
-      `Found a missing model`,
-      undefined,
-      true
-    );
-  }
+  const vehInfo = getConfigByEntity(targetVehicle);
 
   if (Util.getRndInteger(0, 101) < Config.getConfigValue('dispatch.callChance.vehiclelockpick')) {
     Police.createDispatchCall({

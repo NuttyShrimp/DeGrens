@@ -49,13 +49,15 @@ const MenuEntry: FC<
         <div className={'title'}>{props.title}</div>
         {props.description && <div className={'description'}>{props.description}</div>}
       </div>
-      {props.icon && (props.icon as ContextMenu.Icon).name && (props.icon as ContextMenu.Icon)?.position === 'right' && (
-        <div className={'icon'} style={{ color: (props.icon as ContextMenu.Icon)?.color ?? 'inherit' }}>
-          <i
-            className={`${(props.icon as ContextMenu.Icon).lib ?? 'fas'} fa-${(props.icon as ContextMenu.Icon).name}`}
-          />
-        </div>
-      )}
+      {props.icon &&
+        (props.icon as ContextMenu.Icon).name &&
+        (props.icon as ContextMenu.Icon)?.position === 'right' && (
+          <div className={'icon'} style={{ color: (props.icon as ContextMenu.Icon)?.color ?? 'inherit' }}>
+            <i
+              className={`${(props.icon as ContextMenu.Icon).lib ?? 'fas'} fa-${(props.icon as ContextMenu.Icon).name}`}
+            />
+          </div>
+        )}
       {props.submenu && (
         <div className={'icon'}>
           <i className={'fas fa-chevron-right'} />

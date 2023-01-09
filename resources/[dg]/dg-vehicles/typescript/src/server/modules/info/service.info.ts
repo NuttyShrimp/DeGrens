@@ -1,10 +1,11 @@
-import { SQL } from '@dgx/server';
+import { SQL, Util } from '@dgx/server';
 import { insertVehicleRestockDate, updateVehicleStock } from 'db/repository';
 import * as fs from 'fs';
 
 import { VEHICLE_TYPE_MAP } from './constants.info';
 import { infoLogger } from './logger.info';
 import { isSchemaValid } from './schema.info';
+import { mainLogger } from 'sv_logger';
 
 // key: modelhash, value: config
 const vehicleInfo: Map<number, Config.Car> = new Map();
@@ -46,8 +47,28 @@ export const getConfigByEntity = (entity: number) => {
     infoLogger.error(`Could not get info of non-existing vehicle`);
     return;
   }
+
   const modelHash = GetEntityModel(entity);
-  return getConfigByHash(modelHash);
+  const config = getConfigByHash(modelHash);
+
+  if (!config) {
+    Util.sendRPCtoEntityOwner<string>(entity, 'vehicle:getArchType', NetworkGetNetworkIdFromEntity(entity)).then(
+      modelName => {
+        Util.Log(
+          'vehicles:missingConfig',
+          {
+            model: modelName,
+          },
+          `Found a missing model`,
+          undefined,
+          true
+        );
+        infoLogger.warn(`Found a missing model: ${modelName}`);
+      }
+    );
+  }
+
+  return config;
 };
 
 /**

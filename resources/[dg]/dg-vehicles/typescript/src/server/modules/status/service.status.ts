@@ -2,7 +2,7 @@ import { Inventory, Notifications, RayCast, RPC, Taskbar } from '@dgx/server';
 
 import { getVinForVeh } from '../../helpers/vehicle';
 import { fuelManager } from '../fuel/classes/fuelManager';
-import { getConfigByHash } from '../info/service.info';
+import { getConfigByEntity } from '../info/service.info';
 import { getDoorState, getTyreState, getWindowState } from './helpers.status';
 
 import { updateServiceStatusPart } from './services/store';
@@ -41,7 +41,7 @@ export const useRepairPart = async (src: number, type: keyof Service.Status, par
     Notifications.add(src, 'Er is geen voertuig in de buurt', 'error');
     return;
   }
-  const vehInfo = getConfigByHash(GetEntityModel(veh));
+  const vehInfo = getConfigByEntity(veh);
   if (!vehInfo) {
     return;
   }
