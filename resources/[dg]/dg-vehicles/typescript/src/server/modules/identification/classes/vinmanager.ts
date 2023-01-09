@@ -8,14 +8,17 @@ import { idLogger } from '../logger.id';
 
 @ExportRegister()
 class VinManager extends Util.Singleton<VinManager>() {
-  private registeredVins: string[] = [];
-  private playerVins: string[] = [];
+  private registeredVins: Set<string>;
+  private playerVins: Set<string>;
   // Map of vin to veh net id
   private vinToNetId: Map<string, number> = new Map();
   private logger: winston.Logger;
 
   constructor() {
     super();
+    this.registeredVins = new Set();
+    this.playerVins = new Set();
+
     this.logger = idLogger.child({
       module: 'VinManager',
     });
@@ -23,13 +26,15 @@ class VinManager extends Util.Singleton<VinManager>() {
 
   async fetchVins() {
     const query = 'SELECT vin from player_vehicles';
-    const result = await SQL.query(query);
-    this.playerVins = result.map((row: { vin: string }) => row.vin);
-    this.logger.debug(`Registered ${this.playerVins.length} vins`);
+    const result = await SQL.query<{ vin: string }[]>(query);
+    for (const row of result) {
+      this.playerVins.add(row.vin);
+    }
+    this.logger.debug(`Registered ${this.playerVins.size} vins`);
   }
 
   doesVinExist(vin: string): boolean {
-    return this.registeredVins.includes(vin) || this.playerVins.includes(vin);
+    return this.registeredVins.has(vin) || this.playerVins.has(vin);
   }
 
   doesVinMatch(vin: string, vehNetId: number): boolean {
@@ -41,8 +46,8 @@ class VinManager extends Util.Singleton<VinManager>() {
 
   @Export('isVinFromPlayerVeh')
   isVinFromPlayerVeh(vin: string) {
-    this.logger.silly(`${vin} is ${this.playerVins.includes(vin) ? '' : 'not '}a playervin`);
-    return this.playerVins.includes(vin);
+    this.logger.silly(`${vin} is ${this.playerVins.has(vin) ? '' : 'not '}a playervin`);
+    return this.playerVins.has(vin);
   }
 
   attachVinToNetId(vin: string, vehId: number) {
@@ -51,9 +56,7 @@ class VinManager extends Util.Singleton<VinManager>() {
     if (!veh) {
       throw new Error(`Failed to set vin ${vin} to veh id ${vehId} - entity not found`);
     }
-    if (!this.registeredVins.includes(vin)) {
-      this.registeredVins.push(vin);
-    }
+    this.registeredVins.add(vin);
     this.vinToNetId.set(vin, vehId);
   }
 
@@ -61,11 +64,14 @@ class VinManager extends Util.Singleton<VinManager>() {
   getNetId(vin: string): number | null {
     const netId = this.vinToNetId.get(vin);
     if (!netId) return null;
+
     const veh = NetworkGetEntityFromNetworkId(netId);
-    if (!Entity(veh).state?.vin) {
+    if (!DoesEntityExist(veh) || !Entity(veh).state?.vin) {
+      this.logger.debug(`Deleting registered vin ${vin} because entity does not exist anymore`);
       this.vinToNetId.delete(vin);
       return null;
     }
+
     return netId;
   }
 
@@ -76,14 +82,15 @@ class VinManager extends Util.Singleton<VinManager>() {
     }
     if (netId) {
       this.logger.debug(`Generated vin ${vin} for netId ${netId}`);
-      this.registeredVins.push(vin);
+      this.registeredVins.add(vin);
       this.vinToNetId.set(vin, netId);
     }
     return vin;
   }
 
+  // Use when you add new player owned vehicle in script (Buying new veh for example)
   addPlayerVin(vin: string) {
-    this.playerVins.push(vin);
+    this.playerVins.add(vin);
   }
 }
 
