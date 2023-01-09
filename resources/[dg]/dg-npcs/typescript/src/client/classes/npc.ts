@@ -48,7 +48,7 @@ export class Npc {
     }
   }
 
-  async spawn() {
+  public async spawn() {
     if (this.entity) {
       throw new Error(`[NPCS] Tried to spawn already existing ped`);
     }
@@ -121,14 +121,20 @@ export class Npc {
     }
   }
 
-  delete() {
+  public delete(fade = false) {
     if (!this.entity || !DoesEntityExist(this.entity)) return;
+
+    if (!fade) {
+      DeleteEntity(this.entity);
+      this.entity = null;
+      return;
+    }
+
     const alphaThread = setInterval(() => {
       const currentAlpha = GetEntityAlpha(this.entity);
       if (currentAlpha === 0) {
         clearInterval(alphaThread);
-        DeleteEntity(this.entity);
-        this.entity = null;
+        this.delete();
         return;
       }
       SetEntityAlpha(this.entity, currentAlpha - 51, false); // alpha changes only happen every 51
