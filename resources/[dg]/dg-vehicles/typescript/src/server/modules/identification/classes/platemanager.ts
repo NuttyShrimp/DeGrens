@@ -2,12 +2,13 @@ import { SQL, Util } from '@dgx/server';
 
 // This small class is used to prevent to create fake plates from existing plates.
 export class PlateManager extends Util.Singleton<PlateManager>() {
-  private plates: Set<string>;
-  private playerPlates!: Set<string>;
+  private readonly plates: Set<string>;
+  private readonly playerPlates: Set<string>;
 
   constructor() {
     super();
     this.plates = new Set();
+    this.playerPlates = new Set();
     this.seedPlates();
   }
 
@@ -17,9 +18,13 @@ export class PlateManager extends Util.Singleton<PlateManager>() {
     );
     DBPlates.forEach(({ plate, fakeplate }) => {
       this.plates.add(plate);
-      this.plates.add(fakeplate);
+      this.playerPlates.add(plate);
+
+      if (fakeplate) {
+        this.plates.add(fakeplate);
+        this.playerPlates.add(fakeplate);
+      }
     });
-    this.playerPlates = new Set(this.plates);
   }
 
   // Adds plate to the list if we spawn a vehicle

@@ -48,11 +48,12 @@ export const applyFakePlateItem = async (src: number, netId: number) => {
     Notifications.add(src, 'Je hebt geen nummerplaat', 'error');
     return;
   }
-  const isSuccess = await applyFakePlate(src, netId, plateItem.metadata.plate);
+  const isSuccess = applyFakePlate(src, netId, plateItem.metadata.plate);
   if (!isSuccess) {
     Notifications.add(src, 'De nummerplaat kon niet worden toegepast', 'error');
     return;
   }
+  updateVehicleFakeplate(vin, plateItem.metadata.plate);
   Inventory.destroyItem(plateItem.id);
   Util.Log(
     'vehicles:fakeplate:applied',
@@ -88,9 +89,8 @@ export const applyFakePlate = async (src: number, netId: number, plate: string) 
     );
     return false;
   }
-  updateVehicleFakeplate(vin, plate);
-  vehState.set('fakePlate', plate.toUpperCase(), true);
-  SetVehicleNumberPlateText(vehicle, plate);
+  vehState.set('fakePlate', plate, true);
+  Util.setVehicleNumberPlate(vehicle, plate);
   return true;
 };
 

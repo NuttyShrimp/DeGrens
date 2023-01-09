@@ -95,16 +95,11 @@ export const spawnVehicle = async (
   const vehState = Entity(veh).state;
   vehState.set('vin', vin, true);
   fuelManager.registerVehicle(vin);
-  plate = plate ?? plateManager.generatePlate();
-  SetVehicleNumberPlateText(veh, plate);
-  vehState.set('plate', plate, true);
-  plateManager.registerPlate(plate);
 
-  // Setting plate sometimes does not work when entity just spawned yey scuffed ass shit
-  setTimeout(() => {
-    if (GetVehicleNumberPlateText(veh) === plate) return;
-    SetVehicleNumberPlateText(veh, plate!);
-  }, 1000);
+  const newPlate = plate ?? plateManager.generatePlate();
+  vehState.set('plate', newPlate, true);
+  plateManager.registerPlate(newPlate);
+  await Util.setVehicleNumberPlate(veh, newPlate);
 
   if (upgrades) {
     applyUpgradesToVeh(vehNetId, upgrades);
@@ -142,7 +137,9 @@ export const spawnOwnedVehicle = async (src: number, vehicleInfo: Vehicle.Vehicl
   }
 
   if (vehicleInfo.fakeplate) {
-    applyFakePlate(src, vehNetId, vehicleInfo.fakeplate);
+    Util.awaitCondition(() => GetVehicleNumberPlateText(vehicle) === vehicleInfo.plate).then(() => {
+      applyFakePlate(src, vehNetId, vehicleInfo.fakeplate);
+    });
   }
   if (vehicleInfo.stance) {
     setVehicleStance(vehicle, vehicleInfo.stance);

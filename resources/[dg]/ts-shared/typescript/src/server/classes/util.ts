@@ -240,6 +240,20 @@ class Util extends UtilShared {
   getOffsetFromPlayer = (plyId: number, offset: Vec3): Vec3 => {
     return this.getOffsetFromEntity(GetPlayerPed(String(plyId)), offset);
   };
+
+  // When setting num plate at spawn it will not work otherwise
+  setVehicleNumberPlate = (vehicle: number, plate: string) => {
+    return new Promise<void>(res => {
+      const plateInterval = setInterval(() => {
+        if (GetVehicleNumberPlateText(vehicle) === plate) {
+          clearInterval(plateInterval);
+          res();
+          return;
+        }
+        SetVehicleNumberPlateText(vehicle, plate);
+      });
+    });
+  };
 }
 
 export class Sounds {
