@@ -1,5 +1,6 @@
 import { RPC, Events, Chat, Vehicles, Util, Inventory, Notifications, Status } from '@dgx/server';
 import { awaitPoliceConfigLoad, getPoliceConfig } from 'services/config';
+import { isPlateFlagged } from 'services/plateflags';
 
 RPC.register('police:getConfig', async src => {
   await awaitPoliceConfigLoad();
@@ -38,12 +39,14 @@ Events.onNet('police:showVehicleInfo', async (src: number, netId: number) => {
     );
   }
 
+  const plateFlagged = isPlateFlagged(plate);
+
   Chat.sendMessage(src, {
     prefix: 'Dispatch: ',
-    type: 'normal',
+    type: plateFlagged ? 'warning' : 'normal',
     message: `<br>Plaat: ${plate}<br>Eigenaar: ${ownerName}<br>Merk: ${vehicleInfo?.brand ?? 'Unknown'}<br>Model: ${
       vehicleInfo?.name ?? 'Unknown'
-    }<br>Klasse: ${vehicleInfo?.class ?? 'Unknown'}`,
+    }<br>Klasse: ${vehicleInfo?.class ?? 'Unknown'}${plateFlagged ? '<br>Plaat is geflagged!' : ''}`,
   });
 });
 

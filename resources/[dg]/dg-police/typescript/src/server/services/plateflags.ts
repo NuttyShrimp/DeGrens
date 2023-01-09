@@ -146,6 +146,10 @@ Events.onNet('police:plateflags:removeFlag', (src: number, id: string) => {
   );
 });
 
-RPC.register('police:plateflags:isFlagged', (src, plate: string) => {
+export const isPlateFlagged = (plate: string) => {
   return plateFlags.some(f => f.plate === plate);
+};
+
+RPC.register('police:plateflags:isFlagged', (src, plate: string) => {
+  return isPlateFlagged(plate);
 });
