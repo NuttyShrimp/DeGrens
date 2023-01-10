@@ -42,7 +42,7 @@ Events.onNet('police:evidence:researchBlood', async (src: number) => {
 
 Inventory.registerUseable('dna_swab', async src => {
   const job = Jobs.getCurrentJob(src);
-  if (!job || ['police', 'ambulance'].includes(job)) return;
+  if (!job || !['police', 'ambulance'].includes(job)) return;
 
   const target = Util.getClosestPlayerOutsideVehicle(src);
   if (!target) {
