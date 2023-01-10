@@ -54,7 +54,7 @@ class Handler extends Util.Singleton<Handler>() {
 
   @Export('findPedData')
   private _getNpcData = (ped: number) => {
-    const npc = Object.values(this.npcs).find(npc => npc.entity === ped);
+    const npc = [...this.npcs.values()].find(npc => npc.entity === ped);
     if (!npc) return;
     return npc.data;
   };
