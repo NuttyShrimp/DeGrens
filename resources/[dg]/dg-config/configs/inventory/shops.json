@@ -42,13 +42,58 @@
         "price": 750
       },
       {
-        "name": "dna_swab",
-        "amount": 100,
-        "price": 100
-      },
-      {
         "name": "emergency_button",
         "amount": 100,
+        "price": 500
+      },
+      {
+        "name": "pistol_ammo",
+        "amount": 100,
+        "price": 500
+      },
+      {
+        "name": "smg_ammo",
+        "amount": 100,
+        "price": 500
+      },
+      {
+        "name": "rifle_ammo",
+        "amount": 100,
+        "price": 500
+      },
+      {
+        "name": "pd_armor",
+        "amount": 100,
+        "price": 500
+      },
+      {
+        "name": "weapon_knightstick",
+        "amount": 10,
+        "price": 1000
+      },
+      {
+        "name": "weapon_stungun",
+        "amount": 10,
+        "price": 500
+      },
+      {
+        "name": "weapon_pistol_mk2",
+        "amount": 10,
+        "price": 500
+      },
+      {
+        "name": "weapon_smg",
+        "amount": 10,
+        "price": 500
+      },
+      {
+        "name": "weapon_specialcarbine",
+        "amount": 10,
+        "price": 500
+      },
+      {
+        "name": "weapon_carbinerifle",
+        "amount": 10,
         "price": 500
       }
     ],
@@ -58,35 +103,92 @@
         "name": "dna_swab",
         "amount": 100,
         "price": 100
+      },
+      {
+        "name": "bandage",
+        "amount": 500,
+        "price": 100
       }
     ]
   },
   "shops": {
-    "little_seoul": { "type": "grocery" },
-    "grove_street": { "type": "grocery" },
-    "mirror_park": { "type": "grocery" },
-    "richman_glen": { "type": "grocery" },
-    "grape_seed": { "type": "grocery" },
-    "vespucci_canals": { "type": "grocery" },
-    "grand_senora": { "type": "grocery" },
-    "murrieta_heights": { "type": "grocery" },
-    "del_perro": { "type": "grocery" },
-    "great_ocean": { "type": "grocery" },
-    "banham_canyon": { "type": "grocery" },
-    "chumash": { "type": "grocery" },
-    "senora_freeway": { "type": "grocery" },
-    "strawberry": { "type": "grocery" },
-    "harmony": { "type": "grocery" },
-    "vinewood": { "type": "grocery" },
-    "mount_chiliad": { "type": "grocery" },
-    "sandy_shores": { "type": "grocery" },
-    "tataviam_mountains": { "type": "grocery" },
-    "del_vecchio": { "type": "grocery" },
-    "paleto_bay": { "type": "grocery" },
-    "hardware_city": { "type": "hardware" },
-    "fishing_shop": { "type": "fishing" },
-    "police_safe": { "type": "police_safe" },
-    "prison_shop": { "type": "prison_shop" },
-    "hospital_shop": { "type": "hospital_shop" }
+    "little_seoul": {
+      "type": "grocery"
+    },
+    "grove_street": {
+      "type": "grocery"
+    },
+    "mirror_park": {
+      "type": "grocery"
+    },
+    "richman_glen": {
+      "type": "grocery"
+    },
+    "grape_seed": {
+      "type": "grocery"
+    },
+    "vespucci_canals": {
+      "type": "grocery"
+    },
+    "grand_senora": {
+      "type": "grocery"
+    },
+    "murrieta_heights": {
+      "type": "grocery"
+    },
+    "del_perro": {
+      "type": "grocery"
+    },
+    "great_ocean": {
+      "type": "grocery"
+    },
+    "banham_canyon": {
+      "type": "grocery"
+    },
+    "chumash": {
+      "type": "grocery"
+    },
+    "senora_freeway": {
+      "type": "grocery"
+    },
+    "strawberry": {
+      "type": "grocery"
+    },
+    "harmony": {
+      "type": "grocery"
+    },
+    "vinewood": {
+      "type": "grocery"
+    },
+    "mount_chiliad": {
+      "type": "grocery"
+    },
+    "sandy_shores": {
+      "type": "grocery"
+    },
+    "tataviam_mountains": {
+      "type": "grocery"
+    },
+    "del_vecchio": {
+      "type": "grocery"
+    },
+    "paleto_bay": {
+      "type": "grocery"
+    },
+    "hardware_city": {
+      "type": "hardware"
+    },
+    "fishing_shop": {
+      "type": "fishing"
+    },
+    "police_safe": {
+      "type": "police_safe"
+    },
+    "prison_shop": {
+      "type": "prison_shop"
+    },
+    "hospital_shop": {
+      "type": "hospital_shop"
+    }
   }
 }
