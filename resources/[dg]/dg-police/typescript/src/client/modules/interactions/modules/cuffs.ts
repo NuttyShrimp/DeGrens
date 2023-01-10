@@ -86,7 +86,7 @@ const cuff = async (canBreakOut = true) => {
 
     if (!cuffAnimPaused) {
       if (!IsEntityPlayingAnim(ped, animDict, 'idle', 3)) {
-        ClearPedTasksImmediately(ped);
+        ClearPedTasks(ped);
         TaskPlayAnim(ped, animDict, 'idle', 8, -8, -1, 49, 0, false, false, false);
       }
     }

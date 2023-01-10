@@ -125,7 +125,7 @@ const startDownThread = async () => {
       const { animDict, anim, flag } = DOWN_ANIMATIONS[inVehicle ? 'vehicle' : playerState];
 
       if (!IsEntityPlayingAnim(ped, animDict, anim, 3)) {
-        ClearPedTasksImmediately(ped);
+        ClearPedTasks(ped);
         TaskPlayAnim(ped, animDict, anim, 128, 128, -1, flag, 0, false, false, false);
       }
     }
