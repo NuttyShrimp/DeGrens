@@ -1,7 +1,7 @@
 {
   "respawnTime": {
-    "unconscious": 5,
-    "dead": 5
+    "unconscious": 60,
+    "dead": 300
   },
   "respawnPosition": {
     "x": 353.2316,
