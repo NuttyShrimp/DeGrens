@@ -90,4 +90,13 @@ export const police: RadialMenu.Entry[] = [
     minimumPlayerDistance: 2,
     isEnabled: ({ currentVehicle }) => !currentVehicle,
   },
+  {
+    title: 'Check Status',
+    icon: 'monitor-waveform',
+    type: 'dgxServer',
+    event: 'police:checkStatus',
+    shouldClose: true,
+    minimumPlayerDistance: 2,
+    isEnabled: ({ currentVehicle }) => !currentVehicle,
+  },
 ];

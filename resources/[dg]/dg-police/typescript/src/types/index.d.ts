@@ -8,6 +8,7 @@ declare namespace Police {
       patDownItems: string[];
       cuffTimeout: number;
       carryTimeout: number;
+      checkableStatuses: StatusName[];
     };
     prison: Prison.Config;
   };

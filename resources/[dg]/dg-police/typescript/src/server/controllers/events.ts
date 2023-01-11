@@ -1,6 +1,7 @@
-import { RPC, Events, Chat, Vehicles, Util, Inventory, Notifications, Status } from '@dgx/server';
+import { RPC, Events, Chat, Vehicles, Util, Inventory, Notifications, Status, Jobs } from '@dgx/server';
 import { awaitPoliceConfigLoad, getPoliceConfig } from 'services/config';
 import { isPlateFlagged } from 'services/plateflags';
+import { mainLogger } from 'sv_logger';
 
 RPC.register('police:getConfig', async src => {
   await awaitPoliceConfigLoad();
@@ -67,4 +68,21 @@ Events.onNet('police:checkGSR', (src: number) => {
     message: `Persoon is GSR ${hasGsr ? 'positief' : 'negatief'}.`,
     type: 'normal',
   });
+});
+
+Events.onNet('police:checkStatus', (src: number) => {
+  if (Jobs.getCurrentJob(src) !== 'police') {
+    Notifications.add(src, 'Je bent geen politie agent', 'error');
+    mainLogger.warn(`${Util.getName(src)} tried to check a players status but was not a police`);
+    return;
+  }
+
+  const target = Util.getClosestPlayerOutsideVehicle(src);
+  if (target === undefined) {
+    Notifications.add(src, 'Er is niemand in de buurt', 'error');
+    return;
+  }
+
+  const checkable = getPoliceConfig().config.checkableStatuses;
+  Status.showStatusesToPlayer(src, target, checkable);
 });
