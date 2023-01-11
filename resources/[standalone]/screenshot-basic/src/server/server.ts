@@ -19,7 +19,7 @@ const minioClient = new Minio.Client({
 });
 
 class UploadData {
-  fileName: string;
+  fileName?: string;
 
   cb: (err: string | boolean, data: string) => void;
 }
@@ -46,10 +46,11 @@ router.post('/upload/:token', async ctx => {
     };
 
     const f = ctx.request.files['file'] as File;
+    console.log(ctx.request.files, ctx.request.body);
 
     if (f) {
       if (upload.fileName) {
-        mv(f.filepath, upload.fileName, err => {
+        mv(f.path, upload.fileName, err => {
           if (err) {
             finish(err.message, null);
             return;
@@ -58,14 +59,14 @@ router.post('/upload/:token', async ctx => {
           finish(null, upload.fileName);
         });
       } else {
-        fs.readFile(f.filepath, (err, data) => {
+        fs.readFile(f.path, (err, data) => {
           if (err) {
             finish(err.message, null);
             return;
           }
 
-          fs.unlink(f.filepath, err => {
-            finish(null, `data:${f.mimetype};base64,${data.toString('base64')}`);
+          fs.unlink(f.path, err => {
+            finish(null, `data:${f.type};base64,${data.toString('base64')}`);
           });
         });
       }
@@ -161,7 +162,7 @@ exp('generateMinioFilename', async () => {
     } catch (e) {
       if (e == 'S3Error: Not Found') {
         found = true;
-        return;
+        break;
       }
       console.error(e);
     }
@@ -169,38 +170,44 @@ exp('generateMinioFilename', async () => {
   return fileName;
 });
 
-exp(
-  'requestClientMinioScreenshot',
-  (player: string | number, options: any, cb?: (err: string | boolean, link: string) => void) => {
-    const tkn = v4();
+global.exports('requestClientMinioScreenshot', async (player: string | number, options: any) => {
+  const tkn = v4();
 
-    const fileName = options.fileName;
-    delete options['fileName']; // so the client won't get to know this
+  const fileName = options.fileName + '.png';
+  delete options['fileName']; // so the client won't get to know this
 
-    const middlewareCb = async (err: string | false, data: string) => {
+  const request = new Promise<string>(res => {
+    const middlewareCb = async (err: string | false, fPath: string) => {
       if (err) {
-        if (cb) {
-          cb(err, null);
-          return;
-        } else {
-          throw Error(err || 'unknown error');
-        }
+        throw Error(err || 'unknown error');
       }
-      await minioClient.putObject(MINIO_BUCKET_ID, fileName, data);
-      const filePath = `https://minioserver.nuttyshrimp.me/dg-image-storage/${data}.png`;
 
-      if (cb) {
-        cb(null, filePath);
-      } else {
-        return filePath;
-      }
+      const data = fs.readFileSync(fPath);
+      fs.unlinkSync(fPath);
+      await minioClient.putObject(MINIO_BUCKET_ID, fileName, data);
+      const filePath = `https://minioserver.nuttyshrimp.me/dg-image-storage/${fileName}`;
+      res(filePath);
+      return;
     };
 
     uploads[tkn] = {
-      fileName,
+      fileName: 'uploads/' + fileName,
       cb: middlewareCb,
     };
+  });
 
-    emitNet('screenshot_basic:requestScreenshot', player, options, `/${GetCurrentResourceName()}/upload/${tkn}`);
-  }
+  emitNet('screenshot_basic:requestScreenshot', player, options, `/${GetCurrentResourceName()}/upload/${tkn}`);
+
+  const result = await request;
+  return result;
+});
+
+RegisterCommand(
+  'test',
+  async (src: number) => {
+    const fileName = await global.exports['screenshot-basic'].generateMinioFilename();
+    const minioLink = await global.exports['screenshot-basic'].requestClientMinioScreenshot(src, { fileName });
+    console.log(minioLink);
+  },
+  false
 );
