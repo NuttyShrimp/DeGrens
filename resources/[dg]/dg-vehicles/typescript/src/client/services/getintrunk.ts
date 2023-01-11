@@ -65,7 +65,13 @@ const canEnterVehicleTrunk = (vehicle: number): boolean => {
   const vehClass = GetVehicleClass(vehicle);
   const bannedClasses = [8, 13, 14, 15, 16, 21];
   if (bannedClasses.includes(vehClass)) return false;
-  return isCloseToBoot(vehicle, 2, true);
+
+  const boneIndex = GetEntityBoneIndexByName(vehicle, 'boot');
+  if (boneIndex === -1) return false;
+  if (GetVehicleDoorAngleRatio(vehicle, 5) === 0) return false;
+
+  const bonePos = Util.ArrayToVector3(GetWorldPositionOfEntityBone(vehicle, boneIndex));
+  return Util.getPlyCoords().distance(bonePos) < 2;
 };
 
 RPC.register('vehicles:trunk:canEnterVehicle', (netId: number) => {
