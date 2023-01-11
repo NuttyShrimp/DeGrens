@@ -1,5 +1,6 @@
 import { Events, Inventory, Minigames, Notifications, PolyTarget, RayCast, RPC, Taskbar, Util } from '@dgx/client';
 import { Vector3 } from '@dgx/shared';
+import { getEvidenceLabel } from './helpers.evidence';
 
 let evidence: Police.Evidence.Evidence[] = [];
 let evidenceThread: NodeJS.Timer | null = null;
@@ -40,7 +41,7 @@ export const startEvidenceThread = async () => {
         null,
         false
       );
-      const text = e.type === 'blood' ? 'Bloed' : 'Kogelhuls';
+      const text = getEvidenceLabel(e.type);
       drawText(`[~g~E~w~] - ${text}`, { x: e.coords.x, y: e.coords.y, z: e.coords.z + 0.3 });
     });
   }, 1);
