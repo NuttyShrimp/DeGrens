@@ -83,7 +83,11 @@ Events.onNet('vehicles:mechanic:client:loadConfig', (zones: Mechanic.Shops, offs
       {
         label: 'Take Hook',
         icon: 'truck-tow',
-        canInteract: () => isClockedIn(),
+        canInteract: ent => {
+          if (!isClockedIn()) return false;
+          if (!ent) return false;
+          return !hasVehicleAttached(ent);
+        },
         action: (_, ent) => {
           if (!ent) return;
           takeHook(ent);

@@ -254,7 +254,7 @@ export const tryAcceptingJob = (src: number, vin: string) => {
   jobInfo.targets.forEach(srvId => {
     emitNet('dg-phone:client:notification:remove', srvId, `tow-request-${vin}`);
   });
-  Notifications.add(jobInfo.origin, 'Er is takeldiens onderweg voor je aanvraag!');
+  Notifications.add(jobInfo.origin, 'Er is takeldienst onderweg voor je aanvraag!');
   assignedJobs.set(vin, src);
   const vehNetId = vinManager.getNetId(vin);
   if (!vehNetId) return;

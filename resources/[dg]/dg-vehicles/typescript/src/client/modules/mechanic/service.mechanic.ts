@@ -271,7 +271,7 @@ export const canTow = (veh: number) => {
   if (!isClockedIn()) return false;
   // Vehicle should be in half circle of a const radius behind towVehicle
   const towVehLength = getVehHalfLength(towVehicle);
-  const towVehBackPos = Util.ArrayToVector3(GetOffsetFromEntityInWorldCoords(veh, 0, -towVehLength, 0));
+  const towVehBackPos = Util.ArrayToVector3(GetOffsetFromEntityInWorldCoords(towVehicle, 0, -towVehLength, 0));
   // front/back of veh should be in radius of 3 from towVehBackPos
   const vehToTowLength = getVehHalfLength(veh);
   const vehToTowFront = Util.ArrayToVector3(GetOffsetFromEntityInWorldCoords(veh, 0, vehToTowLength, 0));
@@ -386,12 +386,12 @@ export const releaseVehicle = async (towVeh: number) => {
     },
   });
   if (cancelled) {
-    Notifications.add('Geannulleerd...', 'error');
+    Notifications.add('Geannuleerd...', 'error');
     return;
   }
   const attachedVehNetId = Entity(towVeh).state.vehicleAttached;
   const attachedVeh = NetworkGetEntityFromNetworkId(attachedVehNetId);
-  FreezeEntityPosition(towVeh, false);
+  FreezeEntityPosition(attachedVeh, false);
   // Do some math magic
   const [towDimMin, towDimMax] = GetModelDimensions(GetEntityModel(towVeh));
   const [targetDimMin, targetDimMax] = GetModelDimensions(GetEntityModel(towVeh));
