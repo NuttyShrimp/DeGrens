@@ -17,12 +17,17 @@ export const addjobwhitelist: CommandData = {
     if (args.rank === undefined) {
       args.rank = 0;
     }
-    global.exports['dg-jobs'].addToWhitelist(
-      caller.source,
-      args.WhitelistedJobs.name,
-      Number(args.rank),
-      args.cid ?? args?.Target.cid ?? caller.cid
-    );
+
+    let cid: number;
+    if (args.cid && args.cid === '') {
+      cid = Number(args.cid);
+    } else if (args?.Target?.cid) {
+      cid = args.Target.cid;
+    } else {
+      caller.cid;
+    }
+
+    global.exports['dg-jobs'].addToWhitelist(caller.source, args.WhitelistedJobs.name, Number(args.rank), cid);
   },
   UI: {
     title: 'Add whitelist for job',

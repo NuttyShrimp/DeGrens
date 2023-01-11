@@ -13,11 +13,16 @@ export const removejobwhitelist: CommandData = {
   target: false,
   isClientCommand: false,
   handler: (caller, args: SetJobData) => {
-    global.exports['dg-jobs'].removeFromWhitelist(
-      caller.source,
-      args.WhitelistedJobs.name,
-      args.cid ?? args?.Target.cid ?? caller.cid
-    );
+    let cid: number;
+    if (args.cid && args.cid === '') {
+      cid = Number(args.cid);
+    } else if (args?.Target?.cid) {
+      cid = args.Target.cid;
+    } else {
+      caller.cid;
+    }
+
+    global.exports['dg-jobs'].removeFromWhitelist(caller.source, args.WhitelistedJobs.name, cid);
   },
   UI: {
     title: 'Remove whitelist for job',

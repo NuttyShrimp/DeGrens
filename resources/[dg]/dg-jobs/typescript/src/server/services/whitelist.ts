@@ -23,6 +23,15 @@ const registerPlayerWhitelist = async (data: Omit<Whitelist.Entry, 'name'>) => {
   }
 };
 
+const unregisterPlayerWhitelist = (jobName: string, cid: number) => {
+  const jobEntries = jobs.get(jobName);
+  if (!jobEntries) return;
+  jobs.set(
+    jobName,
+    jobEntries.filter(j => j.cid !== cid)
+  );
+};
+
 export const loadJobs = async () => {
   const result = await SQL.query<Omit<Whitelist.Entry, 'name'>[]>(`SELECT * FROM whitelist_jobs`);
   for (const entry of result) {
@@ -213,7 +222,7 @@ export const addWhitelist = async (src: number, jobName: string, rank = 1, cid?:
   if (!cid) return;
   const job = getPlayerInfoForJob(cid, jobName);
   if (job) {
-    Notifications.add(src, `player ${cid} already has job ${jobName}`, 'error');
+    Notifications.add(src, `Burger ${cid} heeft de job ${jobName} al`, 'error');
     return;
   }
   const jobConfig = getJobConfig(jobName);
@@ -245,8 +254,9 @@ export const removeWhitelist = async (src: number, jobName: string, cid?: number
     whitelistLogger.error(`Failed to remove whitelist entry for ${cid} at ${jobName}`, cid, jobName);
     return;
   }
+  unregisterPlayerWhitelist(jobName, cid);
   whitelistLogger.debug(`Removed whitelist entry for ${cid} as ${jobName}`);
-  Util.Log('jobs:whitelist:removed', { job: jobName }, `Removed whiteliste for ${cid} at ${job}`, src);
+  Util.Log('jobs:whitelist:removed', { job: jobName }, `Removed whitelist for ${cid} at ${job}`, src);
   Events.emitNet('jobs:whitelist:remove', src, jobName);
 };
 

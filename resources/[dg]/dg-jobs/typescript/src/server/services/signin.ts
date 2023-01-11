@@ -79,6 +79,7 @@ export const signIn = (src: number, job: string) => {
       `Player ${cid} tried to sign in for job ${job} but is not whitelisted`,
       src
     );
+    Notifications.add(src, 'Je hebt deze job niet', 'error');
     return;
   }
 
@@ -109,15 +110,14 @@ export const signIn = (src: number, job: string) => {
 };
 
 export const signOut = (src: number, job: string) => {
-  if (!signedIn.has(job)) return;
   const cid = Util.getCID(src);
   if (!cid) return;
-  const signedInJob = signedIn.get(job);
-  if (!signedInJob) return;
   const jobConfig = getJobConfig(job);
   if (!jobConfig) return;
+
+  const signedInJob = signedIn.get(job);
   const currentJob = getPlayerJob(src);
-  if (currentJob !== job) {
+  if (!signedInJob || currentJob !== job) {
     Notifications.add(src, `Je bent niet in dienst bij ${jobConfig.name}`, 'error');
     return;
   }
