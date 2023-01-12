@@ -47,18 +47,18 @@ const prodClient = {
   }
 };
 
-const devClient = {
+const devClient = (noHash) => ({
 	output: {
-		filename: '[contenthash].client.js',
+    filename: noHash ? "client.js" : '[contenthash].client.js',
 	},
-};
+});
 
-module.exports = (_, args, fName) => {
+module.exports = (_, args, fName, noHash) => {
 	const env = args.mode ?? 'production';
   const baseConfig = merge(common, defClient(fName ?? "client"))
 	switch (env) {
 		case 'development':
-			return merge(baseConfig, devClient);
+			return merge(baseConfig, devClient(noHash));
 		case 'production':
 			return merge(baseConfig, prodClient);
 		default:
