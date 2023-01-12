@@ -26,12 +26,13 @@ export const doQuery = async (
   cb?: (result: any) => void,
   resource = GetInvokingResource()
 ) => {
-  const resultPromise = handler.query(query, params, resource);
+  // awaiting here actually takes less ticks than returning promise
+  const result = await handler.query(query, params, resource);
   if (cb) {
-    cb(await resultPromise);
+    cb(result);
     return;
   }
-  return resultPromise;
+  return result;
 };
 
 export const doScalar = async (query: string, params: any[] = [], cb?: (result: any) => void) => {
