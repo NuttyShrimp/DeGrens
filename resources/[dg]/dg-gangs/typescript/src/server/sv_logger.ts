@@ -1,7 +1,7 @@
 import winston from 'winston';
 import winstonSentry from 'winston-sentry-log';
 import * as Sentry from '@sentry/node';
-import { name, sentry_dsn, version } from './../../package.json';
+import packageInfo from './../../package.json';
 import { RewriteFrames } from '@sentry/integrations';
 import { Config, Util } from '@dgx/server';
 
@@ -16,9 +16,9 @@ const formatLogs = (log: winston.Logform.TransformableInfo): string => {
 };
 
 Sentry.init({
-  dsn: sentry_dsn,
+  dsn: packageInfo.sentry_dsn,
   integrations: [new RewriteFrames()],
-  release: version,
+  release: packageInfo.version,
   environment: Util.isDevEnv() ? 'development' : 'production',
   // Set tracesSampleRate to 1.0 to capture 100%
   // of transactions for performance monitoring.
@@ -42,14 +42,14 @@ export const mainLogger = winston.createLogger({
 if (!Util.isDevEnv()) {
   mainLogger.add(
     new winstonSentry({
-      name: name,
+      name: packageInfo.name,
       level: 'error',
       isClientInitialized: true,
       sentryClient: Sentry,
       config: {
-        dsn: sentry_dsn,
-        logger: name,
-        release: version,
+        dsn: packageInfo.sentry_dsn,
+        logger: packageInfo.name,
+        release: packageInfo.version,
       },
     })
   );

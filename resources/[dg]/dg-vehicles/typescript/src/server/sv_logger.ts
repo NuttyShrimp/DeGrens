@@ -6,7 +6,7 @@ import winstonSentry from 'winston-sentry-log';
 
 import { getCurrentEnv } from './sv_util';
 
-import { name, sentry_dsn, version } from './../../package.json';
+import packageInfo from './../../package.json';
 
 // Needed to manually apply a color to componenent property of log
 const manualColorize = (strToColor: string): string => `[\x1b[35m${strToColor}\x1b[0m]`;
@@ -19,9 +19,9 @@ const formatLogs = (log: winston.Logform.TransformableInfo): string => {
 };
 
 Sentry.init({
-  dsn: sentry_dsn,
+  dsn: packageInfo.sentry_dsn,
   integrations: [new RewriteFrames()],
-  release: version,
+  release: packageInfo.version,
   environment: getCurrentEnv(),
   // Set tracesSampleRate to 1.0 to capture 100%
   // of transactions for performance monitoring.
@@ -45,14 +45,14 @@ export const mainLogger = winston.createLogger({
 if (getCurrentEnv() === 'production') {
   mainLogger.add(
     new winstonSentry({
-      name: name,
+      name: packageInfo.name,
       level: 'error',
       isClientInitialized: true,
       sentryClient: Sentry,
       config: {
-        dsn: sentry_dsn,
-        logger: name,
-        release: version,
+        dsn: packageInfo.sentry_dsn,
+        logger: packageInfo.name,
+        release: packageInfo.version,
       },
     })
   );

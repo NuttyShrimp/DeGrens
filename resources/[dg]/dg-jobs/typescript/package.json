@@ -1,23 +1,23 @@
 {
-	"name": "dg-jobs",
-	"version": "1.0.0",
-	"main": "index.js",
-	"author": "NuttyShrimp",
-	"license": "MIT",
-	"sentry_dsn": "https://ca666003b9db4baeb7bf5b1aab7bc6d1@sentry.nuttyshrimp.me/9",
-	"scripts": {
-		"build": "yarn webpack:config --color ",
-		"build:dev": "yarn build --mode development",
-		"watch": "yarn webpack:config --mode development --watch",
-		"lint": "eslint --fix --ext .js,.ts ./src",
-		"format": "prettier --write src/**/*.{js,ts,json,md}",
-		"webpack:config": "webpack --config ./config/webpack.server.js --config ./config/webpack.client.js"
-	},
-	"dependencies": {
-		"uuid": "^8.3.2"
-	},
-	"devDependencies": {
-		"@types/uuid": "^8.3.4",
+  "name": "dg-jobs",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "NuttyShrimp",
+  "license": "MIT",
+  "sentry_dsn": "https://ca666003b9db4baeb7bf5b1aab7bc6d1@sentry.nuttyshrimp.me/9",
+  "scripts": {
+    "build": "yarn webpack:config --color ",
+    "build:dev": "yarn build --mode development",
+    "watch": "yarn webpack:config --mode development --watch",
+    "lint": "eslint --fix --ext .js,.ts ./src",
+    "format": "prettier --write src/**/*.{js,ts,json,md}",
+    "webpack:config": "webpack --config ./webpack.config.js"
+  },
+  "dependencies": {
+    "uuid": "^8.3.2"
+  },
+  "devDependencies": {
+    "@types/uuid": "^8.3.4",
     "webpack": "^5.74.0"
-	}
+  }
 }

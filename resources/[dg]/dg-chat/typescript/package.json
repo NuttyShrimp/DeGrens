@@ -1,17 +1,17 @@
 {
-	"name": "dg-chat-resource",
-	"version": "1.0.0",
-	"main": "index.js",
-	"author": "NuttyShrimp",
-	"license": "MIT",
-	"scripts": {
-		"build": "yarn webpack:config --color",
-		"build:dev": "yarn build --mode development",
-		"watch": "yarn webpack:config --mode development --watch",
-		"lint": "eslint --fix --ext .js,.ts ./src",
-		"format": "prettier --write src/**/*.{js,ts,json,md}",
-		"webpack:config": "webpack --config ./config/webpack.server.js --config ./config/webpack.client.js"
-	},
+  "name": "dg-chat-resource",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "NuttyShrimp",
+  "license": "MIT",
+  "scripts": {
+    "build": "yarn webpack:config --color",
+    "build:dev": "yarn build --mode development",
+    "watch": "yarn webpack:config --mode development --watch",
+    "lint": "eslint --fix --ext .js,.ts ./src",
+    "format": "prettier --write src/**/*.{js,ts,json,md}",
+    "webpack:config": "webpack --config ./webpack.config.js"
+  },
   "devDependencies": {
     "webpack": "^5.74.0"
   }
