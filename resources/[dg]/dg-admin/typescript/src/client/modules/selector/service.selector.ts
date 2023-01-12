@@ -2,6 +2,7 @@ import { RayCast, Util, Weapons } from '@dgx/client';
 import { Vector3 } from '@dgx/shared';
 
 import { drawText3d } from '../util/service.util';
+import { isDevModeEnabled } from 'helpers/devmode';
 
 let isActive = false;
 let selectorTick: number;
@@ -66,6 +67,8 @@ const showEntityInfo = () => {
 };
 
 export const activateSelector = async () => {
+  if (!isDevModeEnabled()) return;
+
   isActive = true;
   handleRayCastChange(undefined);
   Weapons.showReticle(true);

@@ -1,4 +1,4 @@
-import { HUD } from '@dgx/client';
+import { Events, HUD } from '@dgx/client';
 
 let devModeEnabled = false;
 
@@ -11,10 +11,11 @@ export const setDevModeEnabled = (toggle: boolean) => {
 
 onNet('dgx:isProduction', (isProd: boolean) => {
   devModeEnabled = !isProd;
-  if (isProd) return;
-  HUD.toggleEntry('dev-mode', !isProd);
+  if (!devModeEnabled) return;
+
+  Events.emitNet('admin:menu:toggleDevMode', true);
   SendNUIMessage({
     action: 'overwriteDevmode',
-    data: !isProd,
+    data: devModeEnabled,
   });
 });
