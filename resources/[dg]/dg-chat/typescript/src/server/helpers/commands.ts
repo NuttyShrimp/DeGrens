@@ -19,7 +19,7 @@ const baseCommands: Server.Command[] = [
       const senderCoords = Util.ArrayToVector3(GetEntityCoords(GetPlayerPed(String(src))));
       const plyObj = DGCore.Functions.GetPlayer(src);
       const msg: Shared.Message = {
-        prefix: `OOC (${plyObj.PlayerData.charinfo.firstname} ${plyObj.PlayerData.charinfo.lastname}|${src}): `,
+        prefix: `OOC (${plyObj.PlayerData.charinfo.firstname} ${plyObj.PlayerData.charinfo.lastname} | ${src}): `,
         message: args.join(' '),
       };
       Util.Log(
@@ -55,7 +55,7 @@ const baseCommands: Server.Command[] = [
     handler: (src, _, args) => {
       const plyObj = DGCore.Functions.GetPlayer(src);
       const msg: Shared.Message = {
-        prefix: `OOC (${plyObj.PlayerData.charinfo.firstname} ${plyObj.PlayerData.charinfo.lastname}|${src}): `,
+        prefix: `OOCG (${plyObj.PlayerData.charinfo.firstname} ${plyObj.PlayerData.charinfo.lastname} | ${src}): `,
         message: args.join(' '),
       };
       Util.Log(
@@ -119,17 +119,17 @@ const baseCommands: Server.Command[] = [
     },
   },
   {
-    name: "id",
-    description: "Bezie je Server-ID",
+    name: 'id',
+    description: 'Bezie je Server-ID',
     parameters: [],
     handler: src => {
       sendMessage(src, {
         message: String(src),
-        prefix: "ID: ",
-        type: "system"
+        prefix: 'ID: ',
+        type: 'system',
       });
-    }
-  }
+    },
+  },
 ];
 
 setImmediate(() => {
