@@ -40,27 +40,31 @@ export class Item {
       let newPosition = this.inventory.getFirstAvailablePosition(this.name);
       // If we didnt find a position because inv is full, we drop item on ground
       if (!newPosition) {
-        if (this.inventory.type !== 'player')
-          throw new Error('Tried to add overflowing item to drop but overflowing inventory is not a player');
+        // This can happen when adding item to stash by script (mechanic crafting for exampel)
+        if (this.inventory.type === 'player') {
+          const cid = splitId(this.inventory.id).identifier;
+          const source = DGCore.Functions.GetPlayerByCitizenId(Number(cid)).PlayerData.source;
+          const coords = Util.getPlyCoords(source);
 
-        const cid = splitId(this.inventory.id).identifier;
-        const source = DGCore.Functions.GetPlayerByCitizenId(Number(cid)).PlayerData.source;
-        const coords = Util.getPlyCoords(source);
-
-        let dropId = locationManager.getLocation('drop', coords);
-        this.inventory = await inventoryManager.get(dropId);
-        newPosition = this.inventory.getFirstAvailablePosition(this.name);
-        // if somehow the drop is also full, we add it to a new drop at position
-        if (!newPosition) {
-          dropId = locationManager.getLocation('drop', coords, true);
+          let dropId = locationManager.getLocation('drop', coords);
           this.inventory = await inventoryManager.get(dropId);
+          newPosition = this.inventory.getFirstAvailablePosition(this.name);
+          // if somehow the drop is also full, we add it to a new drop at position
+          if (!newPosition) {
+            dropId = locationManager.getLocation('drop', coords, true);
+            this.inventory = await inventoryManager.get(dropId);
+            newPosition = { x: 0, y: 0 };
+          }
+          Notifications.add(source, 'Voorwerp ligt op de grond, je zakken zitten vol', 'error');
+        } else {
           newPosition = { x: 0, y: 0 };
         }
-        Notifications.add(source, 'Voorwerp ligt op de grond, je zakken zitten vol', 'error');
       }
       this.position = newPosition;
 
-      repository.createItem(this.state);
+      // Max date item can life to
+      const destroyDate = itemDataManager.getDestroyDate(this.name, 100);
+      repository.createItem(this.state, destroyDate);
       this.logger.info(`New item has been created with id ${this.id}`);
       Util.Log(
         'inventory:item:create',
@@ -156,12 +160,21 @@ export class Item {
   public getMetadata = () => this.metadata;
 
   public setQuality = (cb: (current: number) => number) => {
-    let newQuality = cb(this.quality);
-    newQuality = Math.min(Math.max(newQuality, 0), 100);
-    if (newQuality === 0) {
+    const newQuality = cb(this.quality);
+    const clampedNewQuality = Math.min(Math.max(newQuality, 0), 100);
+
+    if (clampedNewQuality === 0) {
       this.destroy();
     }
-    this.quality = newQuality;
+
+    // Update destroydate when increasing quality
+    if (clampedNewQuality > this.quality) {
+      console.log('getting des date ' + this.name);
+      const destroyDate = itemDataManager.getDestroyDate(this.name, clampedNewQuality);
+      repository.updateDestroyDate(this.id, destroyDate);
+    }
+
+    this.quality = clampedNewQuality;
   };
 
   public destroy = () => {
@@ -172,8 +185,7 @@ export class Item {
     Util.Log(
       'inventory:item:destroyed',
       {
-        itemId: this.id,
-        quality: this.quality,
+        ...this.state,
       },
       `${this.name} got destroyed (${this.quality}% quality remaining)`
     );
@@ -197,12 +209,13 @@ export class Item {
   };
 
   private syncItem = (data: Inventory.ItemState, oldInventory = '', emitter = 0) => {
-    [...new Set([data.inventory, oldInventory])].forEach(inv => {
+    const inventories = data.inventory === oldInventory ? [data.inventory] : [data.inventory, oldInventory];
+    for (const inv of inventories) {
       const plyWithOpen = contextManager.getPlayersById(inv);
       plyWithOpen.forEach(ply => {
         if (ply === emitter) return;
         Events.emitNet('inventory:client:syncItem', ply, data);
       });
-    });
+    }
   };
 }

@@ -1,5 +1,4 @@
-import { SQL } from '@dgx/server';
-import { Util } from '@dgx/shared';
+import { SQL, Util } from '@dgx/server';
 import { mainLogger } from 'sv_logger';
 import winston from 'winston';
 
@@ -44,9 +43,10 @@ class Repository extends Util.Singleton<Repository>() {
     return result.map(x => this.resultToState(x));
   };
 
-  public createItem = (state: Inventory.ItemState) => {
-    const query = `INSERT INTO inventory_items (id, name, inventory, position, quality, hotkey, lastDecayTime, metadata) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
+  public createItem = (state: Inventory.ItemState, destroyDate: number | null) => {
+    const query = `INSERT INTO inventory_items (id, name, inventory, position, quality, hotkey, lastDecayTime, metadata, destroyDate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`;
     const params = this.stateToParams(state);
+    params.push(destroyDate);
     SQL.query(query, params);
   };
 
@@ -73,7 +73,12 @@ class Repository extends Util.Singleton<Repository>() {
 
   public deleteNonPersistent = async () => {
     const query = `DELETE FROM inventory_items WHERE inventory = 'nonpersistent' RETURNING id`;
-    const result = await SQL.query(query);
+    const result: string[] = await SQL.query(query);
+    Util.Log(
+      'inventory:deleteNonPersistent',
+      { items: result },
+      `${result.length} items have been deleted because they were in a nonpersistent inventory`
+    );
     this.logger.info(`${result.length} items have been deleted because they were in a nonpersistent inventory`);
   };
 
@@ -82,6 +87,23 @@ class Repository extends Util.Singleton<Repository>() {
     const result = await SQL.scalar<Repository.FetchResult>(query, [itemId]);
     if (Object.keys(result).length === 0) return null;
     return this.resultToState(result);
+  };
+
+  public updateDestroyDate = (itemId: string, destroyDate: number | null) => {
+    const query = 'UPDATE inventory_items SET destroyDate = ? WHERE id = ?';
+    SQL.query(query, [destroyDate, itemId]);
+  };
+
+  public deleteByDestroyDate = async () => {
+    const currentMinutes = Math.floor(Date.now() / (1000 * 60));
+    const query = `DELETE FROM inventory_items WHERE destroyDate < ? RETURNING id`;
+    const result: string[] = await SQL.query(query, [currentMinutes]);
+    Util.Log(
+      'inventory:deleteByDestroyDate',
+      { items: result },
+      `${result.length} items have been deleted because their destroydate has passed`
+    );
+    this.logger.info(`${result.length} items have been deleted because their destroydate has passed`);
   };
 }
 

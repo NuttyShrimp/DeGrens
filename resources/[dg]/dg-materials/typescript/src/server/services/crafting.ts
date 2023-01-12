@@ -8,7 +8,7 @@ const benches = new Map<string, Materials.Crafting.Bench.Data>();
 const recipes = new Map<string, Materials.Crafting.Recipes.Recipe>();
 
 export const loadCrafting = async () => {
-  await Inventory.awaitItemDataLoad();
+  await Inventory.awaitLoad();
 
   // Build the required UI data for each recipe so we can cache it
   const configRecipes = Object.entries(getConfig().crafting.recipes);

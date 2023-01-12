@@ -44,7 +44,7 @@ class Inventory {
   };
 
   /**
-   * Make sure to await itemdata load with awaitItemDataLoad when using this in resource start function
+   * Make sure to await load when using this in resource start function
    */
   public getItemData = (itemName: string): Inventory.ItemData | undefined => {
     return global.exports['dg-inventory'].getItemData(itemName);
@@ -176,8 +176,8 @@ class Inventory {
     this.updateHandlers.set(type, allHandlerData);
   };
 
-  public awaitItemDataLoad = (): Promise<void> => {
-    return Util.awaitCondition(() => global.exports['dg-inventory'].isItemDataLoaded());
+  public awaitLoad = (): Promise<void> => {
+    return Util.awaitCondition(() => global.exports['dg-inventory'].isLoaded());
   };
 
   public createScriptedStash = (identifier: string, size: number, allowedItems?: string[]) => {

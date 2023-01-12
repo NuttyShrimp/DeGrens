@@ -31,7 +31,7 @@ setImmediate(async () => {
       return;
     }
 
-    Inventory.setQualityOfItem(itemState.id, old => Math.max(0, old - 20));
+    Inventory.setQualityOfItem(itemState.id, old => old - 20);
     heistStateManagers[laptopName].startHack(src, heistId);
     Util.Log(
       'heists:hack:start',
