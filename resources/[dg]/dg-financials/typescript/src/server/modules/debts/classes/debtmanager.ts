@@ -2,7 +2,7 @@ import { Events, Notifications, SQL, Util } from '@dgx/server';
 import { getConfig } from 'helpers/config';
 import accountManager from 'modules/bank/classes/AccountManager';
 
-import { debtLogger, scheduleOverDueDebt, unscheduleDebt } from '../helpers/debts';
+import { debtLogger, scheduleOverDueDebt, unscheduleDebt, getDaysUntilDue } from '../helpers/debts';
 
 class DebtManager extends Util.Singleton<DebtManager>() {
   private debts: Debts.Debt[];
@@ -164,6 +164,10 @@ class DebtManager extends Util.Singleton<DebtManager>() {
         // Update payed value in DB and manager storage
         debt.payed = debt.payed + Number(amount.toFixed(2));
         await SQL.query('UPDATE debts SET payed = ? WHERE id = ?', [debt.payed, debt.id]);
+        if (!debt.pay_term) {
+          debt.pay_term = getDaysUntilDue(debt.payed)
+          await SQL.query('UPDATE debts SET pay_term = ? WHERE id = ?', [debt.pay_term, debt.id]);
+        }
         this.replaceDebt(debt);
       }
     } else {
