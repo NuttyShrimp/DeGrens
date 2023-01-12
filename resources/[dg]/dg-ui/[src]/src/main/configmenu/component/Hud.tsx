@@ -44,7 +44,7 @@ export const Hud = () => {
           }
         />
         <Input.Number
-          label={'FPS'}
+          label={'FPS (disclaimer: bij hoge waarden kan je lag ondervinden)'}
           value={state.compass.fps}
           min={1}
           max={60}
