@@ -9,7 +9,7 @@ declare interface ResetPlayerPropsData {
 
 export const resetPlayerProps: CommandData = {
   name: 'resetPlayerProps',
-  role: 'staff',
+  role: 'developer',
   log: "has reset a player's props",
   isClientCommand: false,
   target: [SelectorTarget.PLAYER],

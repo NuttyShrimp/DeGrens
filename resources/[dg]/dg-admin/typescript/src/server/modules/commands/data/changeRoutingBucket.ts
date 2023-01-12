@@ -9,7 +9,7 @@ declare interface RoutingBucketData {
 
 export const changeRoutingBucket: CommandData = {
   name: 'changeRoutingBucket',
-  role: 'staff',
+  role: 'developer',
   target: false,
   isClientCommand: false,
   log: 'changed his routingbucket',
