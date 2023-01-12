@@ -15,6 +15,7 @@ import './services/config';
 import './services/boatanchor';
 import './services/editor';
 import './services/consumables';
+import './services/tackle';
 import './controllers';
 
 setImmediate(() => {

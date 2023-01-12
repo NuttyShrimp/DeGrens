@@ -118,6 +118,18 @@ const baseCommands: Server.Command[] = [
       Events.emitNet('chat:restart', src);
     },
   },
+  {
+    name: "id",
+    description: "Bezie je Server-ID",
+    parameters: [],
+    handler: src => {
+      sendMessage(src, {
+        message: String(src),
+        prefix: "ID: ",
+        type: "system"
+      });
+    }
+  }
 ];
 
 setImmediate(() => {
