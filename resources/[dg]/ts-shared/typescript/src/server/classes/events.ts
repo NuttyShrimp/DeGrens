@@ -2,7 +2,7 @@ import { TransactionContext } from '@sentry/types';
 
 import { Sentry } from '../helpers/sentry';
 
-import { Util } from './index';
+import { Admin, Util } from './index';
 import { sentryHandler } from './sentry';
 
 // Idea for extra layer of security:
@@ -66,7 +66,15 @@ class Distributor {
 
   private registerNetEvent = (evtName: string, resource: string) => {
     let resources = this.netEventToResources.get(evtName);
-    (resources ??= new Set()).add(resource);
+    if (!resources) {
+      resources = new Set()
+      onNet(evtName, () => {
+        Admin.ACBan(source, "emitted DGX event", {
+          evtName
+        })
+      })
+    }
+    resources.add(resource);
     this.netEventToResources.set(evtName, resources);
   };
 
@@ -78,6 +86,13 @@ class Distributor {
 
   private registerRPC = (evtName: string, resource: string) => {
     this.rpcToResource.set(evtName, resource);
+    if (this.rpcToResource.has(evtName)) {
+      onNet(evtName, () => {
+        Admin.ACBan(source, "emitted RPC event", {
+          evtName
+        })
+      })
+    }
   };
 
   public static awaitDGX = () => {
@@ -272,8 +287,7 @@ class Events {
       evtData.traceId = transaction.traceId ?? null;
       if (Util.isDevEnv()) {
         console.log(
-          `[EVENTS] [S -> C] event: ${evtName} | trigger: ${GetInvokingResource()} | ply: ${
-            target === -1 ? 'All' : Util.getName(target)
+          `[EVENTS] [S -> C] event: ${evtName} | trigger: ${GetInvokingResource()} | ply: ${target === -1 ? 'All' : Util.getName(target)
           }(${target})`
         );
       }
