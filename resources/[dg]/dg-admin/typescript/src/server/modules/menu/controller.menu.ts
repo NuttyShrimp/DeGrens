@@ -5,7 +5,9 @@ import { getUserData } from '../../helpers/identifiers';
 import { ACBan } from '../penalties/service.penalties';
 import { hasPlayerPermission } from '../permissions/service.permissions';
 
-import { checkBinds, setDevMode } from './service.menu';
+import { checkBinds, isInDevMode, setDevMode } from './service.menu';
+
+global.exports("isInDevMode", isInDevMode)
 
 Events.onNet('admin:menu:open', src => {
   if (!hasPlayerPermission(src, 'staff')) {

@@ -21,6 +21,9 @@ class Admin {
   warn(source: number, target: string | number, reason: string): Promise<void> {
     return global.exports['dg-admin'].warn(source, target, reason);
   }
+  isInDevMode(src: number): boolean {
+    return global.exports['dg-admin'].isInDevMode(source);
+  }
 }
 
 export default {

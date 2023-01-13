@@ -54,3 +54,5 @@ export const announceMessage = (src: number, message: string[] | string) => {
     type: 'error',
   });
 };
+
+export const isInDevMode = (src: number) => plysInDevMode.has(src);
