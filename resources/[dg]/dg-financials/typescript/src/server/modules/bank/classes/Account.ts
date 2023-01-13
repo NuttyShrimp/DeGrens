@@ -668,7 +668,7 @@ export class Account {
     const triggerPlyId = DGCore.Functions.GetPlayerByCitizenId(triggerCid)?.PlayerData?.source;
     if (!triggerPlyId) return false;
 
-    const acceptorCid = (await DGCore.Functions.GetOfflinePlayerByCitizenId(Number(targetPhone)))?.PlayerData
+    const acceptorCid = (await DGCore.Functions.GetOfflinePlayerByPhone(Number(targetPhone)))?.PlayerData
       ?.citizenid;
     if (!acceptorCid) return false;
     const targetAccount = accountManager.getDefaultAccount(acceptorCid);

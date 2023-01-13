@@ -263,12 +263,18 @@ declare namespace Phone {
   }
   namespace PayConiq {
     interface Transasction {
+      origin_account_id: string;
+      origin_account_name: string;
+      origin_change: number;
+      target_account_id: string;
+      target_account_name: string;
+      target_change: string;
       transaction_id: string;
       change: number;
       comment: string;
       // Name of characters
       triggered_by: string;
-      accepted_by: string;
+      accepted_by?: string;
       // UNIX timestamp
       date: number;
     }

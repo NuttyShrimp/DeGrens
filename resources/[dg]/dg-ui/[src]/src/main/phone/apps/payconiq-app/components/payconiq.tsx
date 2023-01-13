@@ -30,7 +30,7 @@ export const Payconiq: FC<Phone.PayConiq.State> = props => {
             key={t.transaction_id}
             title={
               <div className={classes.transTitle}>
-                <div className={incoming ? 'green' : 'red'}>€{t.change}</div>
+                <div className={incoming ? 'green' : 'red'}>€{t.origin_change}</div>
                 <div>{incoming ? t.triggered_by : t.accepted_by}</div>
               </div>
             }
