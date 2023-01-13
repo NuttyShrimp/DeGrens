@@ -36,10 +36,11 @@
       v-for="(box, idx) in props.action?.info?.checkBoxes ?? []"
       :key="idx"
       :label="box"
-      v-model="inputs[box]"
+      :modelValue="inputs[box] ?? false"
       color="secondary"
       dense
       :style="{ width: '100%' }"
+      @update:modelValue="(v: string) => (inputs[box] = v)"
     />
     <q-btn color="primary" @click.prevent="dispatchAction">{{ props.action.title }}</q-btn>
   </div>
