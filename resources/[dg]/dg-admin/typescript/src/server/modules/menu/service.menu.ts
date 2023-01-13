@@ -7,7 +7,8 @@ import { hasPlayerPermission } from '../permissions/service.permissions';
 const plysInDevMode = new Set<number>();
 
 export const setDevMode = (src: number, toggle: boolean) => {
-  if (!hasPlayerPermission(src, 'staff')) {
+  // dev env check because devmode will be auto toggled for everyone when in dev env
+  if (!Util.isDevEnv() && !hasPlayerPermission(src, 'staff')) {
     ACBan(src, 'Event injection: toggle dev mode');
     return;
   }

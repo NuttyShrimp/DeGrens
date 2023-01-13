@@ -26,6 +26,6 @@ RPC.register('sync:scopes:get', (src: number) => {
   return getPlayerScope(src);
 });
 
-RPC.register("sync:players:count", () => {
-  return GetNumPlayerIndices()
-})
+RPC.register('sync:players:count', () => {
+  return GetNumPlayerIndices();
+});

@@ -6,6 +6,7 @@ const store: StoreObject<IdList.State> = {
     visible: false,
     current: [],
     recent: [],
+    dropped: [],
   },
 };
 export default store;

@@ -24,17 +24,17 @@ const openMenu = async () => {
     true
   );
   keyThread = setInterval(() => {
-    if (IsControlJustPressed(0, 172) || IsDisabledControlJustPressed(0, 172)) {
+    if (IsControlJustPressed(0, 188) || IsDisabledControlJustPressed(0, 188)) {
       UI.SendAppEvent('idlist', {
         direction: 'up',
       });
     }
-    if (IsControlJustPressed(0, 173) || IsDisabledControlJustPressed(0, 173)) {
+    if (IsControlJustPressed(0, 187) || IsDisabledControlJustPressed(0, 187)) {
       UI.SendAppEvent('idlist', {
         direction: 'down',
       });
     }
-  }, 100);
+  }, 1);
 };
 
 const closeMenu = () => {

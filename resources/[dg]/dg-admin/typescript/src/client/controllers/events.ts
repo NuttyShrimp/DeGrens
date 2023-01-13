@@ -47,9 +47,9 @@ Events.onNet('admin:penalty:openModel', (target: string) => {
   SetNuiFocus(true, true);
 });
 
-Events.onNet("admin:noclip:printInfo", () => {
-  printDebugInfo()
-})
+Events.onNet('admin:noclip:printInfo', () => {
+  printDebugInfo();
+});
 
 RPC.register('admin:menu:getBinds', () => {
   return getAllBinds();

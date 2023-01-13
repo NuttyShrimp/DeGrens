@@ -10,6 +10,8 @@ export const setDevModeEnabled = (toggle: boolean) => {
 };
 
 onNet('dgx:isProduction', (isProd: boolean) => {
+  if (devModeEnabled === !isProd) return;
+
   devModeEnabled = !isProd;
   if (!devModeEnabled) return;
 

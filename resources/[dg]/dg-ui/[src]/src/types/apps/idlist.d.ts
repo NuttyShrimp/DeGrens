@@ -6,6 +6,7 @@ declare namespace IdList {
   interface ScopeInfo {
     current: ScopePlayer[];
     recent: ScopePlayer[];
+    dropped: ScopePlayer[];
   }
   type State = Base.State & ScopeInfo;
 }

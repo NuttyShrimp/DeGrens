@@ -10,19 +10,31 @@
     width: 30vh;
     background-color: rgba($color: variables.$primary-darker, $alpha: 0.8);
     padding: 1vh;
-    border-radius: .5vh;
+    border-radius: 0.5vh;
+  }
+
+  &-divider {
+    margin-top: 0.5vh;
+    margin-bottom: 0.5vh;
+  }
+
+  &-label {
+    width: 100%;
+    text-align: center;
+    font-size: 1.1vh;
+    color: rgba(255, 255, 255, 0.8);
   }
 
   &-entry {
     color: rgba(255, 255, 255, 0.8);
     background-color: rgba($color: variables.$primary-darker-dark, $alpha: 0.65);
-    padding: .25vh .5vh;
-    border-radius: .5vh;
+    padding: 0.25vh 0.5vh;
+    border-radius: 0.5vh;
 
     transition: background-color 200ms ease-in-out;
 
     &:not(:first-child) {
-      margin-top: .5vh;
+      margin-top: 0.5vh;
     }
 
     &.selected {
