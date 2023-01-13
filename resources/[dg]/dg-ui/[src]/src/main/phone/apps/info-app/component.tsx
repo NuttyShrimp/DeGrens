@@ -1,23 +1,17 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+import { devData } from '@src/lib/devdata';
 
 import { nuiAction } from '../../../../lib/nui-comms';
-import { genericAction, getState } from '../../lib';
 import { AppContainer } from '../../os/appcontainer/appcontainer';
 
 import { InfoApp } from './components/infoapp';
 
-const Component: AppFunction<Phone.Info.Props> = props => {
+const Component: AppFunction = () => {
+  const [entries, setEntries] = useState<Phone.Info.InfoAppEntry[]>([]);
+
   const refreshValues = async () => {
-    const info = await nuiAction('phone/info/fetchInfo');
-    const newEntries: Phone.Info.InfoAppEntry[] = Object.values(
-      getState<Phone.Info.Props>('phone.apps.info').entries
-    ).map((entry: Phone.Info.InfoAppEntry) => {
-      if (info[entry.name]) {
-        entry.value = info[entry.name];
-      }
-      return entry;
-    });
-    genericAction('phone.apps.info', { entries: newEntries });
+    const info = await nuiAction('phone/info/fetchInfo', undefined, devData.phoneInfoApp);
+    setEntries(info);
   };
 
   useEffect(() => {
@@ -34,7 +28,7 @@ const Component: AppFunction<Phone.Info.Props> = props => {
         },
       ]}
     >
-      <InfoApp entries={props.entries} />
+      <InfoApp entries={entries} />
     </AppContainer>
   );
 };

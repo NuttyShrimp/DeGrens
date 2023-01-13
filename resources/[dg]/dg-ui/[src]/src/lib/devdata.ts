@@ -1018,244 +1018,6 @@ emulatedData.initPhone = {
   data: {},
 };
 
-emulatedData.phoneInfoApp = {
-  app: 'phone',
-  appName: 'info',
-  action: 'registerInfoEntry',
-  iterateData: true,
-  data: [
-    {
-      data: {
-        entry: {
-          name: 'id',
-          value: 183,
-          icon: 'id-card',
-          prefix: '#',
-        },
-      },
-    },
-    {
-      data: {
-        entry: {
-          name: 'phone',
-          value: '0467227521',
-          icon: 'hashtag',
-          prefix: '',
-        },
-      },
-    },
-    {
-      data: {
-        entry: {
-          name: 'cash',
-          value: 1672,
-          icon: 'wallet',
-          prefix: '€',
-          color: '#81c784',
-        },
-      },
-    },
-    {
-      data: {
-        entry: {
-          name: 'bank',
-          value: 12783790,
-          icon: 'piggy-bank',
-          prefix: '€',
-          color: '#64b5f6',
-        },
-      },
-    },
-    {
-      data: {
-        entry: {
-          name: 'bank',
-          value: 12783790,
-          icon: 'piggy-bank',
-          prefix: '€',
-          color: '#64b5f6',
-        },
-      },
-    },
-    {
-      data: {
-        entry: {
-          name: 'bank',
-          value: 12783790,
-          icon: 'piggy-bank',
-          prefix: '€',
-          color: '#64b5f6',
-        },
-      },
-    },
-    {
-      data: {
-        entry: {
-          name: 'bank',
-          value: 12783790,
-          icon: 'piggy-bank',
-          prefix: '€',
-          color: '#64b5f6',
-        },
-      },
-    },
-    {
-      data: {
-        entry: {
-          name: 'bank',
-          value: 12783790,
-          icon: 'piggy-bank',
-          prefix: '€',
-          color: '#64b5f6',
-        },
-      },
-    },
-    {
-      data: {
-        entry: {
-          name: 'bank',
-          value: 12783790,
-          icon: 'piggy-bank',
-          prefix: '€',
-          color: '#64b5f6',
-        },
-      },
-    },
-    {
-      data: {
-        entry: {
-          name: 'bank',
-          value: 12783790,
-          icon: 'piggy-bank',
-          prefix: '€',
-          color: '#64b5f6',
-        },
-      },
-    },
-    {
-      data: {
-        entry: {
-          name: 'bank',
-          value: 12783790,
-          icon: 'piggy-bank',
-          prefix: '€',
-          color: '#64b5f6',
-        },
-      },
-    },
-    {
-      data: {
-        entry: {
-          name: 'bank',
-          value: 12783790,
-          icon: 'piggy-bank',
-          prefix: '€',
-          color: '#64b5f6',
-        },
-      },
-    },
-    {
-      data: {
-        entry: {
-          name: 'bank',
-          value: 12783790,
-          icon: 'piggy-bank',
-          prefix: '€',
-          color: '#64b5f6',
-        },
-      },
-    },
-    {
-      data: {
-        entry: {
-          name: 'bank',
-          value: 12783790,
-          icon: 'piggy-bank',
-          prefix: '€',
-          color: '#64b5f6',
-        },
-      },
-    },
-    {
-      data: {
-        entry: {
-          name: 'bank',
-          value: 12783790,
-          icon: 'piggy-bank',
-          prefix: '€',
-          color: '#64b5f6',
-        },
-      },
-    },
-    {
-      data: {
-        entry: {
-          name: 'bank',
-          value: 12783790,
-          icon: 'piggy-bank',
-          prefix: '€',
-          color: '#64b5f6',
-        },
-      },
-    },
-    {
-      data: {
-        entry: {
-          name: 'bank',
-          value: 12783790,
-          icon: 'piggy-bank',
-          prefix: '€',
-          color: '#64b5f6',
-        },
-      },
-    },
-    {
-      data: {
-        entry: {
-          name: 'bank',
-          value: 12783790,
-          icon: 'piggy-bank',
-          prefix: '€',
-          color: '#64b5f6',
-        },
-      },
-    },
-    {
-      data: {
-        entry: {
-          name: 'bank',
-          value: 12783790,
-          icon: 'piggy-bank',
-          prefix: '€',
-          color: '#64b5f6',
-        },
-      },
-    },
-    {
-      data: {
-        entry: {
-          name: 'bank',
-          value: 12783790,
-          icon: 'piggy-bank',
-          prefix: '€',
-          color: '#64b5f6',
-        },
-      },
-    },
-    {
-      data: {
-        entry: {
-          name: 'bank',
-          value: 12783790,
-          icon: 'piggy-bank',
-          prefix: '€',
-          color: '#64b5f6',
-        },
-      },
-    },
-  ],
-};
-
 emulatedData.newMail = {
   app: 'phone',
   appName: 'mail',
@@ -1512,3 +1274,32 @@ devData.idListInfo = {
     },
   ],
 };
+
+devData.phoneInfoApp = [
+  {
+    name: 'id',
+    value: 183,
+    icon: 'id-card',
+    prefix: '#',
+  },
+  {
+    name: 'phone',
+    value: '0467227521',
+    icon: 'hashtag',
+    prefix: '',
+  },
+  {
+    name: 'cash',
+    value: 1672,
+    icon: 'wallet',
+    prefix: '€',
+    color: '#81c784',
+  },
+  {
+    name: 'bank',
+    value: 12783790,
+    icon: 'piggy-bank',
+    prefix: '€',
+    color: '#64b5f6',
+  },
+] satisfies Phone.Info.InfoAppEntry[];

@@ -95,9 +95,7 @@ declare interface RootState {
   'phone.apps.crypto': Phone.Crypto.State;
   'phone.apps.gallery': Phone.Gallery.State;
   'phone.apps.home-screen': {};
-  'phone.apps.info': {
-    entries: Phone.Info.InfoAppEntry[];
-  };
+  'phone.apps.info': {};
   'phone.apps.justice': Phone.Justice.State;
   'phone.apps.mail': Phone.Mail.State;
   'phone.apps.messages': Phone.Messages.State;
