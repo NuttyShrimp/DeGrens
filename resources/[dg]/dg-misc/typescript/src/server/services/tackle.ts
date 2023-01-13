@@ -1,5 +1,5 @@
-import { Events } from "@dgx/server";
+import { Events } from '@dgx/server';
 
-Events.onNet("misc:tackle:server", (target: number) => {
-  Events.emitNet("misc:tackle:do", target)
-})
+Events.onNet('misc:tackle:server', (_: number, target: number) => {
+  Events.emitNet('misc:tackle:do', target);
+});
