@@ -11,6 +11,7 @@ defaultState.character = {
   hasVPN: true,
   hasPhone: true,
   cash: 6969,
+  isAdmin: true,
 } as Character;
 
 defaultState.hud = {

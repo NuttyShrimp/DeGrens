@@ -23,6 +23,7 @@ declare interface Character {
   hasVPN: boolean;
   hasPhone: boolean;
   cash: number;
+  isAdmin: boolean;
 }
 
 interface Action {
