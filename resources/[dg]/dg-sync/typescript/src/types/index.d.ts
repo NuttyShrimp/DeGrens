@@ -1,12 +1,17 @@
 declare namespace Scopes {
-  type Type = 'current' | 'recent' | 'dropped';
+  type ClientType = 'current' | 'recent';
+  type Type = ClientType | 'dropped';
 
-  type Scope = Record<number, Info>;
-
-  type Info = {
+  type Player = {
     source: number;
     steamId: string;
+  };
+
+  type Info = Player & {
     type: Type;
     recentTimeout?: NodeJS.Timeout;
+    timestamp: number;
   };
+
+  type Scope = Record<number, Info>;
 }

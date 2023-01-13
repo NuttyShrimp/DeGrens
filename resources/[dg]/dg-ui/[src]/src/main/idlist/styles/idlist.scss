@@ -18,13 +18,6 @@
     margin-bottom: 0.5vh;
   }
 
-  &-label {
-    width: 100%;
-    text-align: center;
-    font-size: 1.1vh;
-    color: rgba(255, 255, 255, 0.8);
-  }
-
   &-entry {
     color: rgba(255, 255, 255, 0.8);
     background-color: rgba($color: variables.$primary-darker-dark, $alpha: 0.65);

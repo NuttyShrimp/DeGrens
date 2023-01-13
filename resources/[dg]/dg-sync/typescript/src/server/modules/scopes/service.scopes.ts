@@ -1,11 +1,11 @@
+import { Util } from '@dgx/server';
+
 const scopes: Map<number, Scopes.Scope> = new Map();
 
-const getPlayerInfo = (plyId: number) => {
-  return {
-    source: plyId,
-    steamId: Player(plyId).state.steamId,
-  };
-};
+const getPlayerInfo = (plyId: number): Scopes.Player => ({
+  source: plyId,
+  steamId: Player(plyId).state.steamId,
+});
 
 const getScope = (plyId: number) => {
   let scope = scopes.get(plyId);
@@ -19,16 +19,22 @@ const getScope = (plyId: number) => {
 export const playerEnteredScope = (player: number, playerEntering: number) => {
   const scope = getScope(player);
 
-  const scopePlayer = scope[playerEntering];
+  const scopePlayer: Scopes.Info | undefined = scope[playerEntering];
+
+  // If already known, change info
   if (scopePlayer) {
+    // If player was known because he left, cancel timeout
     if (scopePlayer.recentTimeout) {
       clearTimeout(scopePlayer.recentTimeout);
       scopePlayer.recentTimeout = undefined;
     }
+
     scopePlayer.type = 'current';
+    scopePlayer.timestamp = Date.now();
   } else {
     scope[playerEntering] = {
       type: 'current',
+      timestamp: Date.now(),
       ...getPlayerInfo(playerEntering),
     };
   }
@@ -43,13 +49,17 @@ export const playerLeftScope = (player: number, playerLeaving: number) => {
     delete scope[playerLeaving];
   }, 30000);
 
-  const scopePlayer = scope[playerLeaving];
+  const scopePlayer: Scopes.Info | undefined = scope[playerLeaving];
+
+  // If already known, change info
   if (scopePlayer) {
     scopePlayer.recentTimeout = timeout;
     scopePlayer.type = 'recent';
+    scopePlayer.timestamp = Date.now();
   } else {
     scope[playerLeaving] = {
       type: 'recent',
+      timestamp: Date.now(),
       ...getPlayerInfo(playerLeaving),
     };
   }
@@ -62,6 +72,7 @@ export const playerDropped = (droppedPlayer: number) => {
   for (const [_, scope] of scopes) {
     if (scope[droppedPlayer]) {
       scope[droppedPlayer].type = 'dropped';
+      scope[droppedPlayer].timestamp = Date.now();
     }
   }
 
@@ -73,17 +84,23 @@ export const playerDropped = (droppedPlayer: number) => {
   }, 30000);
 };
 
+// Returns obj with client types array sorted by timestamp
 export const getPlayerScope = (plyId: number) => {
   const scope = getScope(plyId);
 
-  const scopeInfo: Record<Scopes.Type, Omit<Scopes.Info, 'type' | 'recentTimeout'>[]> = {
+  Util.Log('sync:getScope', { scope }, `${Util.getName(plyId)} received his scope for idmenu`, plyId);
+
+  const scopeInfo: Record<Scopes.ClientType, Scopes.Player[]> = {
     current: [],
     recent: [],
-    dropped: [],
   };
 
   for (const info of Object.values(scope)) {
-    scopeInfo[info.type].push({ source: info.source, steamId: info.steamId });
+    const type: Scopes.ClientType = info.type === 'current' ? 'current' : 'recent';
+    scopeInfo[type].push({ source: info.source, steamId: info.steamId });
+
+    // sort newest first
+    scopeInfo[type].sort((a, b) => scope[b.source].timestamp - scope[a.source].timestamp);
   }
 
   return scopeInfo;

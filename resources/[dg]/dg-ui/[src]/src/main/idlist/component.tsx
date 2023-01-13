@@ -47,7 +47,6 @@ const Component: AppFunction<IdList.State> = props => {
 
   const anyCurrent = props.current.length !== 0;
   const anyRecent = props.recent.length !== 0;
-  const anyDropped = props.dropped.length !== 0;
 
   return (
     <AppWrapper appName={store.key} onShow={handleShow} onHide={handleHide} onEvent={handleEvent} unSelectable full>
@@ -78,27 +77,6 @@ const Component: AppFunction<IdList.State> = props => {
               <div
                 ref={saveRef(idx + props.current.length)}
                 className={`id-list-entry ${selectedEntry === idx + props.current.length ? 'selected' : ''}`}
-                key={`recent-${entry.source}`}
-              >
-                ({entry.source}): {entry.steamId}
-              </div>
-            ))}
-          </div>
-        )}
-        {anyRecent && anyDropped && (
-          <div className='id-list-divider'>
-            <Divider />
-          </div>
-        )}
-        {anyDropped && (
-          <div>
-            <div className='id-list-label'>left server</div>
-            {props.dropped.map((entry, idx) => (
-              <div
-                ref={saveRef(idx + props.current.length + props.recent.length)}
-                className={`id-list-entry ${
-                  selectedEntry === idx + props.current.length + props.recent.length ? 'selected' : ''
-                }`}
                 key={`recent-${entry.source}`}
               >
                 ({entry.source}): {entry.steamId}
