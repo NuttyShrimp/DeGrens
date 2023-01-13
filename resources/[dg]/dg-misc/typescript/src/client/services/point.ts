@@ -1,4 +1,4 @@
-import { Keys, Util } from '@dgx/client';
+import { Hospital, Keys, Police, Util } from '@dgx/client';
 
 let pointing = false;
 let pointingThread: NodeJS.Timer | null = null;
@@ -10,6 +10,8 @@ Keys.onPressDown('misc_point', () => {
     stopPointing();
     return;
   }
+
+  if (Hospital.isDown() || Police.isCuffed()) return;
   startPointing();
 });
 
