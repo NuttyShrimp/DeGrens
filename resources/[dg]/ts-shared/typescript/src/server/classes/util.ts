@@ -72,9 +72,7 @@ class Util extends UtilShared {
    * @returns citizenid of player associated with playerid
    */
   getCID(src: number, ignoreUndefined = false): number {
-    // For some reason global DGCore obj is not defined, when using this function inside Inventory.onInventoryUpdate handler
-    const _DGCore = global.exports['dg-core'].GetSharedObject() as Server;
-    const Player = _DGCore.Functions.GetPlayer(src);
+    const Player = DGCore.Functions.GetPlayer(src);
     const cid = Player?.PlayerData?.citizenid;
     if (!ignoreUndefined && cid === undefined)
       throw new Error('Tried to get CID of player that is not known to server');
@@ -86,15 +84,13 @@ class Util extends UtilShared {
   }
 
   async getCharName(cid: number) {
-    const _DGCore = global.exports['dg-core'].GetSharedObject() as Server;
-    const player = await _DGCore.Functions.GetOfflinePlayerByCitizenId(cid);
+    const player = await DGCore.Functions.GetOfflinePlayerByCitizenId(cid);
     return `${player.PlayerData.charinfo.firstname} ${player.PlayerData.charinfo.lastname}`;
   }
 
   getClosestPlayer = (src: number, maxDistance = 2) => {
-    const _DGCore = global.exports['dg-core'].GetSharedObject() as Server;
     const originCoords = this.getPlyCoords(src);
-    const players = _DGCore.Functions.GetPlayers();
+    const players = DGCore.Functions.GetPlayers();
 
     let closestPlayer: number | undefined = undefined;
     let closestDistance = maxDistance;
@@ -112,9 +108,8 @@ class Util extends UtilShared {
   };
 
   getAllPlayersInRange = (src: number, maxDistance = 2) => {
-    const _DGCore = global.exports['dg-core'].GetSharedObject() as Server;
     const originCoords = this.getPlyCoords(src);
-    const players = _DGCore.Functions.GetPlayers();
+    const players = DGCore.Functions.GetPlayers();
     const playerIds: number[] = [];
     for (const plyId of players) {
       if (plyId === src) continue;
@@ -200,9 +195,8 @@ class Util extends UtilShared {
   };
 
   getClosestPlayerOutsideVehicle = (src: number, maxDistance = 2) => {
-    const _DGCore = global.exports['dg-core'].GetSharedObject() as Server;
     const originCoords = this.getPlyCoords(src);
-    const players = _DGCore.Functions.GetPlayers();
+    const players = DGCore.Functions.GetPlayers();
 
     let closestPlayer: number | undefined = undefined;
     let closestDistance = maxDistance;
