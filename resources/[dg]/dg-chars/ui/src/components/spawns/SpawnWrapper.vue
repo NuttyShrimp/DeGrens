@@ -3,13 +3,13 @@
     <div v-if="locations[curLocIdx]" class="spawn-wrapper" @click="toggleList(false)">
       <div class="spawn-body">
         <div>
-          <q-btn flat round color="dark" icon="chevron_left" @click="decrement" />
+          <q-btn flat round color="white" icon="chevron_left" @click="decrement" />
         </div>
         <div class="spawn-label" @click.stop="toggleList()">
           {{ locations[curLocIdx].label }}
         </div>
         <div>
-          <q-btn flat round color="dark" icon="chevron_right" @click="increment" />
+          <q-btn flat round color="white" icon="chevron_right" @click="increment" />
         </div>
       </div>
       <transition appear enter-active-class="animated fadeInDown" leave-active-class="animated fadeOutUp">

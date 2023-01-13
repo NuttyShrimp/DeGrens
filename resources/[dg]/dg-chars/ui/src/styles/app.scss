@@ -18,12 +18,12 @@
   align-items: center;
   justify-content: center;
 
-  & > * {
+  &>* {
     user-select: none;
   }
 
   &--title {
-    font-size: 1.2rem;
+    font-size: 1.4vh;
     font-weight: bold;
     color: $gray_2;
     margin-bottom: 0.5vh;
@@ -48,18 +48,18 @@
     justify-content: center;
     position: relative;
 
-    & > *:not(.spawn-label) {
-      margin: 0 1rem;
+    &>*:not(.spawn-label) {
+      margin: 0 1vh;
     }
   }
 
   &-label {
     width: 30vh;
     text-align: center;
-    font-size: 1.2rem;
+    font-size: 1.4vh;
     font-weight: bold;
-    padding: 1rem;
-    border-radius: 0.25rem;
+    padding: 1vh;
+    border-radius: 0.25vh;
     color: $gray_2;
     background: $primary-darker-9;
     cursor: pointer;
