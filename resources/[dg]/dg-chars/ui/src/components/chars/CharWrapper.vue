@@ -1,5 +1,5 @@
 <template>
-  <div id="selector-body" @contextmenu="doContextMenu" @mousemove="getXYPos">
+  <div id="selector-body" @onclick="doContextMenu" @contextmenu="doContextMenu" @mousemove="getXYPos">
     <info-box v-if="!!curChar" :loc="{ top: `${yPos + 16}px`, left: `${xPos + 16}px` }" />
   </div>
 </template>
