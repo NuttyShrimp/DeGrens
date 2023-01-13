@@ -1,38 +1,35 @@
+-- dont use full data gotten from ui callback, data includes more than needed for event
+
 RegisterUICallback('phone/twitter/getTweets', function(data, cb)
-  DGCore.Functions.TriggerCallback('dg-phone:server:getTweets', function(tweets)
-    cb({ data = tweets, meta = { ok = true, message = 'done' } })
-  end, data)
+  local tweets = DGX.RPC.execute('dg-phone:server:getTweets', data.recBatches)
+  cb({ data = tweets, meta = { ok = true, message = 'done' } })
 end)
 
 RegisterUICallback('phone/twitter/new', function(data, cb)
-  TriggerServerEvent('dg-phone:server:twitter:newTweet', data)
+  DGX.Events.emitNet('dg-phone:server:twitter:newTweet', data.tweet, data.date)
   cb({ data = {}, meta = { ok = true, message = 'done' } })
 end)
 
 RegisterUICallback('phone/twitter/addLike', function(data, cb)
-  DGCore.Functions.TriggerCallback('dg-phone:server:twitter:addLike', function()
-  end, data)
+  DGX.Events.emitNet('dg-phone:server:twitter:addLike', data.tweetId)
   cb({ data = {}, meta = { ok = true, message = 'done' } })
 end)
 RegisterUICallback('phone/twitter/removeLike', function(data, cb)
-  DGCore.Functions.TriggerCallback('dg-phone:server:twitter:removeLike', function()
-  end, data)
+  DGX.Events.emitNet('dg-phone:server:twitter:removeLike', data.tweetId)
   cb({ data = {}, meta = { ok = true, message = 'done' } })
 end)
 
 RegisterUICallback('phone/twitter/addRetweet', function(data, cb)
-  DGCore.Functions.TriggerCallback('dg-phone:server:twitter:addRetweet', function()
-  end, data)
+  DGX.Events.emitNet('dg-phone:server:twitter:addRetweet', data.tweetId)
   cb({ data = {}, meta = { ok = true, message = 'done' } })
 end)
 
 RegisterUICallback('phone/twitter/deleteTweet', function(data, cb)
-  DGCore.Functions.TriggerCallback('dg-phone:server:twitter:deleteTweet', function()
-  end, data)
+  DGX.Events.emitNet('dg-phone:server:twitter:deleteTweet', data.tweetId)
   cb({ data = {}, meta = { ok = true, message = 'done' } })
 end)
 
-RegisterNetEvent('dg-phone:client:newTweet', function(tweet)
+DGX.Events.onNet('dg-phone:client:newTweet', function(tweet)
   SendAppEvent('phone', {
     appName = 'twitter',
     action = 'newTweet',
@@ -40,7 +37,7 @@ RegisterNetEvent('dg-phone:client:newTweet', function(tweet)
   })
 end)
 
-RegisterNetEvent('dg-phone:client:twitter:addLike', function(tweetid)
+DGX.Events.onNet('dg-phone:client:twitter:addLike', function(tweetid)
   SendAppEvent('phone', {
     appName = 'twitter',
     action = 'addLike',
@@ -48,7 +45,7 @@ RegisterNetEvent('dg-phone:client:twitter:addLike', function(tweetid)
   })
 end)
 
-RegisterNetEvent('dg-phone:client:twitter:removeLike', function(tweetid)
+DGX.Events.onNet('dg-phone:client:twitter:removeLike', function(tweetid)
   SendAppEvent('phone', {
     appName = 'twitter',
     action = 'removeLike',
@@ -56,7 +53,7 @@ RegisterNetEvent('dg-phone:client:twitter:removeLike', function(tweetid)
   })
 end)
 
-RegisterNetEvent('dg-phone:client:twitter:addRetweet', function(tweetid)
+DGX.Events.onNet('dg-phone:client:twitter:addRetweet', function(tweetid)
   SendAppEvent('phone', {
     appName = 'twitter',
     action = 'addRetweet',
@@ -64,7 +61,7 @@ RegisterNetEvent('dg-phone:client:twitter:addRetweet', function(tweetid)
   })
 end)
 
-RegisterNetEvent('dg-phone:client:twitter:deleteTweet', function(tweetid)
+DGX.Events.onNet('dg-phone:client:twitter:deleteTweet', function(tweetid)
   SendAppEvent('phone', {
     appName = 'twitter',
     action = 'deleteTweet',

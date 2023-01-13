@@ -51,8 +51,10 @@ const Component: AppFunction<Phone.Twitter.State> = props => {
       },
       devData.tweets
     );
-    const tweets = [...props.tweets, ...newTweets.reverse()];
-    props.updateState({ tweets, requestAmount: props.requestAmount + 1 });
+    props.updateState(state => ({
+      tweets: [...state['phone.apps.twitter'].tweets, ...newTweets.reverse()],
+      requestAmount: state['phone.apps.twitter'].requestAmount + 1,
+    }));
   };
 
   useEffect(() => {

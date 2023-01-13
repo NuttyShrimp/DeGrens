@@ -45,5 +45,8 @@ export const styles = makeStyles({
     '& .retweet button:hover': {
       color: '#2ecc71',
     },
+    '& .delete button:hover': {
+      color: '#2ecc71',
+    },
   },
 });

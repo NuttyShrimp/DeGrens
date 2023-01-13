@@ -1,11 +1,22 @@
 TWEET_BATCH_SIZE = 20
 -- Build based on users askings
 tweetCache={}
+
+local getHighestKey = function(obj)
+  local key = 0
+  for k, v in pairs(obj) do
+    if tonumber(k) > key then
+      key = tonumber(k)
+    end
+  end
+  return key
+end
+
 getTweets = function(cid, recBatches, force)
 	-- Get 20 tweets from cache skipping the first recBatches * 20 tweets
 	local tweets = {}
 	local skippedTweets = 0
-	for i = #tweetCache, 1, -1 do
+	for i = getHighestKey(tweetCache), 1, -1 do
     if skippedTweets < recBatches * TWEET_BATCH_SIZE then
       skippedTweets = skippedTweets + 1
     else
@@ -111,69 +122,77 @@ likeTweet = function(cid, tweetId)
 	exports['dg-sql']:query(query, {cid, tweetId})
 end
 
-DGCore.Functions.CreateCallback('dg-phone:server:getTweets', function(src, cb, data)
-	local offset = data.recBatches
+DGX.RPC.register('dg-phone:server:getTweets', function(src, offset)
 	local Player = DGCore.Functions.GetPlayer(src)
 	local tweets = getTweets(Player.PlayerData.citizenid, offset)
-	cb(tweets)
+	return tweets
 end)
 
-DGCore.Functions.CreateCallback('dg-phone:server:twitter:addLike', function(src, cb, data)
-	if not data.tweetId or not tweetCache[data.tweetId] then cb() end
+DGX.Events.onNet('dg-phone:server:twitter:addLike', function(src, tweetId)
+	if not tweetId or not tweetCache[tweetId] then return end
+
 	local Player = DGCore.Functions.GetPlayer(src)
-	tweetCache[data.tweetId].like_count = tweetCache[data.tweetId].like_count + 1
-	likeTweet(Player.PlayerData.citizenid, data.tweetId)
-	TriggerClientEvent('dg-phone:client:twitter:addLike', -1, data.tweetId)
-	cb()
+	tweetCache[tweetId].like_count = tweetCache[tweetId].like_count + 1
+	likeTweet(Player.PlayerData.citizenid, tweetId)
+	DGX.Events.emitNet('dg-phone:client:twitter:addLike', -1, tweetId)
+
+  DGX.Util.Log('phone:tweet:addLike', {tweetId = tweetId}, ('%s has added a like to a tweet'):format(DGX.Util.getName(src)), src)
 end)
 
-DGCore.Functions.CreateCallback('dg-phone:server:twitter:removeLike', function(src, cb, data)
-	if not data.tweetId or not tweetCache[data.tweetId] then cb() end
+DGX.Events.onNet('dg-phone:server:twitter:removeLike', function(src, tweetId)
+	if not tweetId or not tweetCache[tweetId] then return end
+
 	local Player = DGCore.Functions.GetPlayer(src)
-	tweetCache[data.tweetId].like_count = tweetCache[data.tweetId].like_count - 1
+	tweetCache[tweetId].like_count = tweetCache[tweetId].like_count - 1
 	local query = [[
 		DELETE FROM phone_tweets_likes
 		WHERE cid = ? AND tweetid = ?;
 	]]
-	exports['dg-sql']:query(query, {Player.PlayerData.citizenid, data.tweetId})
-	TriggerClientEvent('dg-phone:client:twitter:removeLike', -1, data.tweetId)
-	cb()
+	exports['dg-sql']:query(query, {Player.PlayerData.citizenid, tweetId})
+	DGX.Events.emitNet('dg-phone:client:twitter:removeLike', -1, tweetId)
+
+  DGX.Util.Log('phone:tweet:removeLike', {tweetId = tweetId}, ('%s has removed a like from a tweet'):format(DGX.Util.getName(src)), src)
 end)
 
-DGCore.Functions.CreateCallback('dg-phone:server:twitter:addRetweet', function(src, cb, data)
-	if not data.tweetId or not tweetCache[data.tweetId] then cb() end
+DGX.Events.onNet('dg-phone:server:twitter:addRetweet', function(src, tweetId)
+	if not tweetId or not tweetCache[tweetId] then return end
+
 	local Player = DGCore.Functions.GetPlayer(src)
-	tweetCache[data.tweetId].retweet_count = tweetCache[data.tweetId].retweet_count + 1
+	tweetCache[tweetId].retweet_count = tweetCache[tweetId].retweet_count + 1
 	local query = [[
 		INSERT INTO phone_tweets_retweets (cid, tweetid)
 		VALUES (?, ?);
 	]]
-	exports['dg-sql']:query(query, {Player.PlayerData.citizenid, data.tweetId})
-	TriggerClientEvent('dg-phone:client:twitter:addRetweet', -1, data.tweetId)
-	cb()
+	exports['dg-sql']:query(query, {Player.PlayerData.citizenid, tweetId})
+	DGX.Events.emitNet('dg-phone:client:twitter:addRetweet', -1, tweetId)
+
+  DGX.Util.Log('phone:tweet:addRetweet', {tweetId = tweetId}, ('%s has retweeted a tweet'):format(DGX.Util.getName(src)), src)
 end)
 
-DGCore.Functions.CreateCallback('dg-phone:server:twitter:deleteTweet', function(src, cb, data)
-	if not data.tweetId or not tweetCache[data.tweetId] then cb() end
-	local Player = DGCore.Functions.GetPlayer(src)
-	if not DGX.Admin.hasPermission(src, 'staff') then
-		-- TODO add ban for injection
+DGX.Events.onNet('dg-phone:server:twitter:deleteTweet', function(src, tweetId)
+	if not tweetId or not tweetCache[tweetId] then return end
+
+  if not DGX.Admin.hasPermission(src, 'staff') then
+		DGX.Admin.ACBan(src, 'Try to remove tweet')
+    return
 	end
+
 	local query = [[
 		DELETE FROM phone_tweets
 		WHERE id = ?;
 	]]
-	exports['dg-sql']:query(query, {data.tweetId})
-	TriggerClientEvent('dg-phone:client:twitter:deleteTweet', -1, data.tweetId)
-	cb()
+	exports['dg-sql']:query(query, {tweetId})
+	DGX.Events.emitNet('dg-phone:client:twitter:deleteTweet', -1, tweetId)
+
+  DGX.Util.Log('phone:tweet:deleteTweet', {tweetId = tweetId}, ('%s has deleted a tweet'):format(DGX.Util.getName(src)), src)
 end)
 
-RegisterNetEvent('dg-phone:server:twitter:newTweet', function(data)
-	local insertId = addTweet(source, data.tweet, data.date)
-	if insertId then
-		local _tweet = tweetCache[insertId]
-		_tweet.liked = false
-		_tweet.retweeted = false
-		TriggerClientEvent('dg-phone:client:newTweet', -1, _tweet)
-	end
+DGX.Events.onNet('dg-phone:server:twitter:newTweet', function(src, message, date)
+	local insertId = addTweet(src, message, date)
+  local _tweet = tweetCache[insertId]
+  _tweet.liked = false
+  _tweet.retweeted = false
+  DGX.Events.emitNet('dg-phone:client:newTweet', -1, _tweet)
+
+  DGX.Util.Log('phone:tweet:newTweet', {tweetId = insertId, message = message}, ('%s has posted a tweet'):format(DGX.Util.getName(src)), src)
 end)

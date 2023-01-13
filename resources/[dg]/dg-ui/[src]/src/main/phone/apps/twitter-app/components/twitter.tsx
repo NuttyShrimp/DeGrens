@@ -1,4 +1,5 @@
 import React, { FC, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { IconButton } from '@mui/material';
 
 import { Button } from '../../../../../components/button';
@@ -16,6 +17,7 @@ export const Tweet: FC<
     }
   >
 > = ({ tweet, ...props }) => {
+  const isAdmin = useSelector<RootState, boolean>(state => state.character.isAdmin);
   const classes = styles();
 
   return (
@@ -52,6 +54,19 @@ export const Tweet: FC<
           </IconButton>
           {tweet.retweet_count}
         </div>
+        {isAdmin && (
+          <div className={'delete'}>
+            <IconButton
+              size={'small'}
+              sx={{
+                color: '#fff',
+              }}
+              onClick={() => props.doDelete(tweet.id)}
+            >
+              <i className='fas fa-trash-can' />
+            </IconButton>
+          </div>
+        )}
       </div>
     </div>
   );
