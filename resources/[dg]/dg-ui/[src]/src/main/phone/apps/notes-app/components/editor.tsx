@@ -25,6 +25,7 @@ export const Document: FC<React.PropsWithChildren<{ note: Phone.Notes.Note }>> =
       onClick: useCallback(() => {
         editor?.setEditable(true);
         setEditMode(true);
+        nuiAction('phone/notes/enterEdit', { edit: true });
       }, [editor]),
     },
   ];
@@ -71,6 +72,7 @@ export const Document: FC<React.PropsWithChildren<{ note: Phone.Notes.Note }>> =
         updateNote(note.id, title, editor?.getHTML() ?? '');
         editor?.setEditable(false);
         setEditMode(false);
+        nuiAction('phone/notes/enterEdit', { edit: false });
       }, [editor, note.id, title]),
     },
   ];
@@ -82,6 +84,7 @@ export const Document: FC<React.PropsWithChildren<{ note: Phone.Notes.Note }>> =
         value: title,
         onChange: setTitle,
         label: 'Titel',
+        disabled: !editMode,
       }}
       primaryActions={note.readonly ? [] : editMode ? editActions : readActions}
       auxActions={!note.readonly && !editMode ? readAuxActions : undefined}

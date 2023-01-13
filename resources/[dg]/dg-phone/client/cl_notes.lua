@@ -1,3 +1,8 @@
+RegisterUICallback('phone/notes/enterEdit', function(data, cb)
+  setKeysState(data.edit)
+  cb({ data = {}, meta = { ok = true, message = 'done' } })
+end)
+
 RegisterUICallback('phone/notes/get', function(data, cb)
   local notes = DGCore.Functions.TriggerCallback('dg-phone:server:notes:get', nil)
   cb({ data = notes, meta = { ok = true, message = 'done' } })
@@ -26,7 +31,7 @@ end)
 RegisterUICallback('phone/notes/resolveShare', function(data, cb)
   local id = DGCore.Functions.TriggerCallback('dg-phone:server:notes:resolve', nil, data)
   if id == nil then
-    cb({ data = {  }, meta = { ok = true, message = 'done' } })
+    cb({ data = {}, meta = { ok = true, message = 'done' } })
   elseif type(id) == 'string' then
     cb({ data = {}, meta = { ok = false, message = id } })
   else

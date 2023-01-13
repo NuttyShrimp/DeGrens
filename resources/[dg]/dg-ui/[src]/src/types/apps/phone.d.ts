@@ -58,6 +58,7 @@ declare namespace Phone {
       onChange: (value: string) => void;
       label?: string;
       icon?: string;
+      disabled?: boolean;
     }
 
     interface Props {
