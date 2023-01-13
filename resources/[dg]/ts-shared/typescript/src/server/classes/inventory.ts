@@ -1,10 +1,14 @@
-import { Util } from '../classes';
+import { Util } from './index';
+import { Util as UtilShared } from '../../shared';
 
-class Inventory {
-  private usageHandlers: Map<string, Inventory.UsageHandler[]>;
-  private updateHandlers: Map<Inventory.Type, Inventory.UpdateHandlerData[]>;
+class Inventory extends UtilShared.Singleton<Inventory>() {
+  private isLoaded: boolean;
+  private readonly usageHandlers: Map<string, Inventory.UsageHandler[]>;
+  private readonly updateHandlers: Map<Inventory.Type, Inventory.UpdateHandlerData[]>;
 
   constructor() {
+    super();
+    this.isLoaded = false;
     this.usageHandlers = new Map();
     this.updateHandlers = new Map();
     on('inventory:usedItem', (src: number, state: Inventory.ItemState) => {
@@ -23,6 +27,9 @@ class Inventory {
         });
       }
     );
+    on('inventory:loaded', () => {
+      this.isLoaded = true;
+    });
   }
 
   public registerUseable = (items: string | string[], handler: Inventory.UsageHandler): void => {
@@ -177,7 +184,7 @@ class Inventory {
   };
 
   public awaitLoad = (): Promise<void> => {
-    return Util.awaitCondition(() => global.exports['dg-inventory'].isLoaded());
+    return Util.awaitCondition(() => this.isLoaded);
   };
 
   public createScriptedStash = (identifier: string, size: number, allowedItems?: string[]) => {
@@ -247,5 +254,5 @@ class Inventory {
 }
 
 export default {
-  Inventory: new Inventory(),
+  Inventory: Inventory.getInstance(),
 };
