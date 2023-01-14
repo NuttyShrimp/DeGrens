@@ -1,4 +1,4 @@
-import { Events, RPC } from '@dgx/client';
+import { Events, Hospital, RPC } from '@dgx/client';
 import { Util } from '@dgx/client';
 import {
   allowCheck,
@@ -18,15 +18,17 @@ const HEAD_BONES = new Set([31085, 31086, 39317]);
 
 // Damage param is always 0
 on('entityDamaged', (victim: number, attacker: number, weapon: number) => {
+  const ped = PlayerPedId();
+  if (Number(victim) !== ped) return;
+  if (!IsPedInjured(ped)) return;
+
+  if (!IsEntityAPed(attacker) || !IsPedAPlayer(attacker)) return;
   const attackerPly = Util.getServerIdForPed(Number(attacker));
-  if (Number(victim) !== PlayerPedId() || !attackerPly) {
-    return;
-  }
-  if (!IsPlayerDead(PlayerId())) return;
-  const [______, boneHit] = GetPedLastDamageBone(Number(victim));
+  if (!attackerPly) return;
+
+  const [______, boneHit] = GetPedLastDamageBone(ped);
   Events.emitNet('auth:anticheat:stats:killConfirm', {
     attacker: attackerPly,
-    victim: Util.getServerIdForPed(Number(victim)),
     weaponHash: Number(weapon),
     headshot: HEAD_BONES.has(boneHit),
   });

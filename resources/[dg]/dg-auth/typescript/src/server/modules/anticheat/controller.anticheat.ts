@@ -53,8 +53,8 @@ Events.onNet('auth:anticheat:native:setPlayerVisible', (src: number, isVisible: 
   setPlayerVisible(src, isVisible);
 });
 
-Events.onNet('auth:anticheat:stats:killConfirm', (src: number, killInfo: AntiCheat.EntityDamage) => {
-  queueHit(killInfo);
+Events.onNet('auth:anticheat:stats:killConfirm', (src: number, killInfo: Omit<AntiCheat.EntityDamage, 'victim'>) => {
+  queueHit({ victim: src, ...killInfo });
 });
 
 Events.onNet('auth:anticheat:stats:ammoInfo', (src: number, ammo: number[]) => {
