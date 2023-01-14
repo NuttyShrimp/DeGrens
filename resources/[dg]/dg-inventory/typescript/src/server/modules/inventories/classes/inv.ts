@@ -108,8 +108,7 @@ export class Inv {
     this.items.add(itemState.id);
     this.updatedInv('add', itemState);
 
-    if (!checkSave) return;
-    if (contextManager.getPlayersById(this.id).length === 0) {
+    if (checkSave && contextManager.getPlayersById(this.id).length === 0) {
       this.logger.info(`Saving ${this.id} because no one had it open`);
       this.save();
     }
@@ -200,7 +199,7 @@ export class Inv {
     this.logger.info(`Inventory ${this.id} has been saved`);
   };
 
-  private isPersistent = () => {
+  public isPersistent = () => {
     const cfg = getConfig();
     if (cfg.persistentTypes.includes(this.type)) return true;
     if (cfg.vehicleTypes.includes(this.type)) {

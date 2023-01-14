@@ -64,7 +64,9 @@ export class Item {
 
       // Max date item can life to
       const destroyDate = itemDataManager.getDestroyDate(this.name, 100);
-      repository.createItem(this.state, destroyDate);
+      // When adding new item to nonpresistent inventory, start inv as nonpersistent.
+      const dbInventory = this.inventory.isPersistent() ? this.state.inventory : 'nonpersistent';
+      repository.createItem({ ...this.state, inventory: dbInventory }, destroyDate);
       this.logger.info(`New item has been created with id ${this.id}`);
       Util.Log(
         'inventory:item:create',
