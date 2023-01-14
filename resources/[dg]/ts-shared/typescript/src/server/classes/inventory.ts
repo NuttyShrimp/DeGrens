@@ -183,8 +183,8 @@ class Inventory extends UtilShared.Singleton<Inventory>() {
     this.updateHandlers.set(type, allHandlerData);
   };
 
-  public awaitLoad = (): Promise<void> => {
-    return Util.awaitCondition(() => this.isLoaded);
+  public awaitLoad = async () => {
+    await Util.awaitCondition(() => this.isLoaded, 60000);
   };
 
   public createScriptedStash = (identifier: string, size: number, allowedItems?: string[]) => {
