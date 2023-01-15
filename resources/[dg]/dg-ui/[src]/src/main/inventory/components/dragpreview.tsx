@@ -1,7 +1,7 @@
 import React from 'react';
 import { FC } from 'react';
 import { usePreview } from 'react-dnd-preview';
-import { usePreviewStateFull } from 'react-dnd-preview/dist/cjs/usePreview';
+import { usePreviewStateFull } from 'react-dnd-preview/dist/usePreview';
 import { alpha } from '@mui/material';
 import { baseStyle } from '@src/base.styles';
 

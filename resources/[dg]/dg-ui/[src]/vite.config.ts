@@ -1,9 +1,8 @@
-// import react from '@vitejs/plugin-react';
+import react from '@vitejs/plugin-react-swc';
 import { defineConfig, splitVendorChunkPlugin } from 'vite';
 import Checker from 'vite-plugin-checker';
 import viteSentry from 'vite-plugin-sentry';
 import svgrPlugin from 'vite-plugin-svgr';
-import { swcReactRefresh } from 'vite-plugin-swc-react-refresh';
 import tsconfigPaths from 'vite-tsconfig-paths';
 
 export default defineConfig(({ mode }) => ({
@@ -21,7 +20,7 @@ export default defineConfig(({ mode }) => ({
   envDir: './env',
   esbuild: { jsx: 'automatic' },
   plugins: [
-    swcReactRefresh(),
+    react(),
     svgrPlugin(),
     tsconfigPaths(),
     splitVendorChunkPlugin(),
