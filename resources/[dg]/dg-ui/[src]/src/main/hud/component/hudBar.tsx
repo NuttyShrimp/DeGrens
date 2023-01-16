@@ -1,15 +1,14 @@
-import React, { FC } from 'react';
+import React from 'react';
 import { FillableIcon } from '@src/components/icon';
+
+import { useHudStore } from '../stores/useHudStore';
 
 import { HealthArmor } from './entries/HealthArmor';
 import { Needs } from './entries/Needs';
 import { Voice } from './entries/Voice';
 
-export const HudBar: FC<{ voice: Hud.State['voice']; values: Record<string, number>; entries: Hud.Entry[] }> = ({
-  voice,
-  values,
-  entries,
-}) => {
+export const HudBar = () => {
+  const [voice, values, entries] = useHudStore(s => [s.voice, s.values, s.entries]);
   return (
     <div className='hud-entries'>
       <Voice {...voice} />

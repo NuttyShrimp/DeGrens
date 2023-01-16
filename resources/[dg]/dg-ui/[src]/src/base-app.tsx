@@ -1,13 +1,11 @@
-import React from 'react';
-import { useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import React, { useEffect } from 'react';
 
 import { AppContainer } from './components/appcontainer';
 import { isDevel, isGameDevel } from './lib/env';
-import { handleIncomingEvent } from './lib/event-relay';
+import { useMainStore } from './lib/stores/useMainStore';
 
 export function App() {
-  const apps = useSelector<RootState, ConfigObject[]>(state => state.main.apps);
+  const apps = useMainStore(s => s.apps);
 
   useEffect(() => {
     const devMode = isDevel();
@@ -20,10 +18,6 @@ export function App() {
         console.log('[DG-UI] Running in game development mode');
       }
     }
-    window.addEventListener('message', handleIncomingEvent);
-    return () => {
-      window.removeEventListener('message', handleIncomingEvent);
-    };
   }, []);
 
   return (

@@ -1,11 +1,9 @@
 import { useCallback } from 'react';
-import { useSelector } from 'react-redux';
 
-import { useUpdateState } from '../redux';
+import { useMainStore } from '../stores/useMainStore';
 
 export const useApps = () => {
-  const mainState = useSelector<RootState, Main.State>(state => state.main);
-  const updateState = useUpdateState('main');
+  const [currentApp, apps, setApps] = useMainStore(s => [s.currentApp, s.apps, s.setApps]);
 
   const loadApps = useCallback(async () => {
     const components: ConfigObject[] = [];
@@ -22,18 +20,16 @@ export const useApps = () => {
       );
     };
     await importAll(import.meta.glob('../../main/*/_config.tsx'));
-    updateState({
-      apps: components,
-    });
+    setApps(components);
   }, []);
 
   const getApp = useCallback(
-    (name: keyof RootState): ConfigObject | undefined => mainState.apps.find(a => a.name === name),
-    [mainState.apps]
+    (name: keyof RootState): ConfigObject | undefined => apps.find(a => a.name === name),
+    [apps]
   );
 
   const getCurrentAppType = useCallback(() => {
-    const activeApp = mainState.apps.find(a => a.name !== 'cli' && a.name === mainState.currentApp);
+    const activeApp = apps.find(a => a.name !== 'cli' && a.name === currentApp);
     if (!activeApp) return;
 
     if (activeApp.type instanceof Function) {
@@ -41,7 +37,7 @@ export const useApps = () => {
     }
 
     return activeApp.type;
-  }, [mainState.apps, mainState.currentApp]);
+  }, [apps, currentApp]);
 
   return {
     loadApps,

@@ -2,37 +2,42 @@ import React, { useCallback } from 'react';
 import AppWrapper from '@components/appwrapper';
 
 import { ItemboxList } from './components/itemboxlist';
-import store from './store';
+import { useItemBoxStore } from './stores/useItemboxStore';
+import config from './_config';
 
 import './styles/itemboxes.scss';
 
-const Component: AppFunction<Itemboxes.State> = props => {
-  const handleVisibility = (visible: boolean) => {
-    props.updateState(() => ({ visible }));
-  };
-
+const Component: AppFunction = props => {
+  const updateStore = useItemBoxStore(s => s.updateStore);
   const eventHandler = useCallback((data: any) => {
     const itembox: Itemboxes.Itembox = {
       action: data.action ?? '',
       image: data.image ?? 'noicon.png',
     };
-    props.updateState(rootState => ({ itemboxes: [itembox, ...rootState.itemboxes.itemboxes] }));
+    updateStore(rootState => ({ itemboxes: [itembox, ...rootState.itemboxes] }));
     // We can just remove last item because new ones get added to front of array and removal time is always same so last one is always oldest
     setTimeout(() => {
-      props.updateState(rootState => {
-        const lastItemIndex = rootState.itemboxes.itemboxes.length - 1;
+      updateStore(rootState => {
+        const lastItemIndex = rootState.itemboxes.length - 1;
         return {
-          itemboxes: rootState.itemboxes.itemboxes.filter((_, i) => i !== lastItemIndex),
+          itemboxes: rootState.itemboxes.filter((_, i) => i !== lastItemIndex),
         };
       });
     }, 3000);
   }, []);
 
-  const handleShow = useCallback(() => handleVisibility(true), []);
-  const handleHide = useCallback(() => handleVisibility(false), []);
+  const handleShow = useCallback(() => props.showApp, [props.showApp]);
+  const handleHide = useCallback(() => props.hideApp, [props.hideApp]);
   return (
-    <AppWrapper appName={store.key} onShow={handleShow} onHide={handleHide} onEvent={eventHandler} center unSelectable>
-      <ItemboxList {...props} />
+    <AppWrapper
+      appName={config.name}
+      onShow={handleShow}
+      onHide={handleHide}
+      onEvent={eventHandler}
+      center
+      unSelectable
+    >
+      <ItemboxList />
     </AppWrapper>
   );
 };

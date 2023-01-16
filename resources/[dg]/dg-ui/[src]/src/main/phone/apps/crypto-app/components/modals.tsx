@@ -3,12 +3,11 @@ import React, { FC } from 'react';
 import { Input } from '../../../../../components/inputs';
 import { SimpleForm } from '../../../../../components/simpleform';
 import { nuiAction } from '../../../../../lib/nui-comms';
-import { genericAction, showCheckmarkModal, showLoadModal } from '../../../lib';
+import { showCheckmarkModal, showLoadModal } from '../../../lib';
+import { useCryptoAppStore } from '../stores/useCryptoAppStore';
 
 const setDirty = () => {
-  genericAction('phone.apps.crypto', {
-    shouldRenew: true,
-  });
+  useCryptoAppStore.setState({ shouldRenew: true });
 };
 
 export const ExchangeModal: FC<React.PropsWithChildren<{ coin: Phone.Crypto.Coin }>> = ({ coin }) => (

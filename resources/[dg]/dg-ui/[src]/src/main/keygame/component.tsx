@@ -1,21 +1,24 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import AppWrapper, { closeApplication } from '@src/components/appwrapper';
 import { nuiAction } from '@src/lib/nui-comms';
+import { useVisibleStore } from '@src/lib/stores/useVisibleStore';
 
 import config from './_config';
 import { ARROW_COLORS, DEFAULT_PATH, KEYCODE_TO_DIRECTION, PATH_LENGTH } from './constants';
 import { generatePath, getRandomDirection, toLength } from './helpers';
-import store from './store';
 
 import './styles/keygame.scss';
 
-const Component: AppFunction<Keygame.State> = props => {
+const Component: AppFunction = props => {
+  const visible = useVisibleStore(s => s.visibleApps.includes('keygame'));
   const [currectCycle, setCurrentCycle] = useState<number | null>(null);
 
   const [percentage, setPercentage] = useState(0);
   const [target, setTarget] = useState<Keygame.Target>({ start: 0, end: 0 });
   const [arrowColor, setArrowColor] = useState<Keygame.ArrowColor>('normal');
   const [direction, setDirection] = useState<Keygame.Direction>('up');
+  const [id, setId] = useState('');
+  const [cycles, setCycles] = useState<Keygame.Cycle[]>([]);
 
   const [keyPressed, setKeypressed] = useState<string | null>(null);
 
@@ -24,11 +27,11 @@ const Component: AppFunction<Keygame.State> = props => {
       setCurrentCycle(null);
       setArrowColor(success ? 'success' : 'fail');
       setTimeout(() => {
-        nuiAction('keygame/finished', { id: props.id, success });
+        nuiAction('keygame/finished', { id: id, success });
         closeApplication(config.name);
       }, 500);
     },
-    [closeApplication, props.id]
+    [closeApplication, id]
   );
 
   // Keypress handler
@@ -42,7 +45,7 @@ const Component: AppFunction<Keygame.State> = props => {
 
     const success = percentage >= target.start && percentage <= target.end && direction === pressedDirection;
 
-    if (!success || props.cycles.length - 1 === currectCycle) {
+    if (!success || cycles.length - 1 === currectCycle) {
       handleFinish(success);
       return;
     }
@@ -52,7 +55,7 @@ const Component: AppFunction<Keygame.State> = props => {
 
   // Handle keypress listener
   useEffect(() => {
-    if (!props.visible) return;
+    if (!visible) return;
     const handler = (e: KeyboardEvent) => {
       setKeypressed(e.code);
     };
@@ -60,13 +63,13 @@ const Component: AppFunction<Keygame.State> = props => {
     return () => {
       window.removeEventListener('keydown', handler);
     };
-  }, [props.visible]);
+  }, [visible]);
 
   // Handles cycle
   useEffect(() => {
     if (currectCycle === null) return;
 
-    const cycle = props.cycles[currectCycle];
+    const cycle = cycles[currectCycle];
 
     // Generate center of targetarea, minimum is 45 + half of size, maximum is 95 - half of size
     // For example for size 20, the center will be between 55 and 85
@@ -81,7 +84,7 @@ const Component: AppFunction<Keygame.State> = props => {
 
     setPercentage(0);
     setDirection(getRandomDirection());
-    props.updateState({ visible: true });
+    props.showApp();
 
     // Animation logic
     let currentPercentage = 0;
@@ -103,19 +106,21 @@ const Component: AppFunction<Keygame.State> = props => {
 
   const handleShow = useCallback(async (data: Keygame.Open) => {
     setArrowColor('normal');
-    props.updateState({
-      id: data.id,
-      cycles: data.cycles,
-    });
+    setId(data.id);
+    setCycles(data.cycles);
     setCurrentCycle(0);
   }, []);
 
-  const handleHide = useCallback(() => props.updateState({ ...store.initialState }), []);
+  const handleHide = useCallback(() => {
+    props.hideApp();
+    setCycles([]);
+    setId('');
+  }, []);
 
   const targetPath = useMemo(() => generatePath(target.start, target.end), [target.start, target.end]);
 
   return (
-    <AppWrapper appName={store.key} onShow={handleShow} onHide={handleHide} full>
+    <AppWrapper appName={config.name} onShow={handleShow} onHide={handleHide} full>
       <div className='keygame_wrapper'>
         <svg className='arch' viewBox='0 -4.644660949707031 90.710678118655 34.644660949707031'>
           <path className='background' d={DEFAULT_PATH} />

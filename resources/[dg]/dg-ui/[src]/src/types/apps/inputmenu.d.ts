@@ -27,6 +27,4 @@ declare namespace InputMenu {
     callbackURL: string;
     header: string;
   };
-
-  type State = Base.State;
 }

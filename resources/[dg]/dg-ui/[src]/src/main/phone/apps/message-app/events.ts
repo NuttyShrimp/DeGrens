@@ -1,4 +1,5 @@
-import { addNotification, genericAction, isAppActive } from '../../lib';
+import { addNotification, isAppActive } from '../../lib';
+import { usePhoneStore } from '../../stores/usePhoneStore';
 import { getContact } from '../contacts-app/lib';
 
 import { addMessage } from './lib';
@@ -19,7 +20,5 @@ events.addNew = (data: { message: Phone.Messages.Message; otherPhone: string }) 
     });
   }
   if (isAppActive('messages')) return;
-  genericAction('phone.apps.messages', {
-    hasNotification: true,
-  });
+  usePhoneStore.setState(s => ({ appNotifications: [...s.appNotifications, 'messages'] }));
 };

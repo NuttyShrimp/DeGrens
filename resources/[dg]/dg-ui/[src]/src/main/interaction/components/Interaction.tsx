@@ -3,15 +3,17 @@ import { animated, Transition } from 'react-spring';
 import { Typography } from '@mui/material';
 
 import { useVhToPixel } from '../../../lib/hooks/useVhToPixel';
+import { useInteractionStore } from '../stores/useInteractionStore';
 
-export const Interaction = props => {
+export const Interaction = () => {
+  const [show, text, type] = useInteractionStore(s => [s.show, s.text, s.type]);
   const hiddenMargin = useVhToPixel(-20);
   const showMargin = useVhToPixel(1);
   return (
     <div className={'interaction__wrapper'}>
       <Transition
-        items={props.show}
-        reverse={props.show}
+        items={show}
+        reverse={show}
         config={{
           duration: 350,
         }}
@@ -21,8 +23,8 @@ export const Interaction = props => {
       >
         {(styles, item) =>
           item && (
-            <animated.div style={styles} className={`interaction ${props.type}`}>
-              <Typography variant='button' dangerouslySetInnerHTML={{ __html: props.text }} />
+            <animated.div style={styles} className={`interaction ${type}`}>
+              <Typography variant='button' dangerouslySetInnerHTML={{ __html: text }} />
             </animated.div>
           )
         }

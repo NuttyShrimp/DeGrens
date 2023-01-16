@@ -1,13 +1,14 @@
 import React, { FC } from 'react';
-import { useSelector } from 'react-redux';
 import { Input } from '@src/components/inputs';
 import { SimpleForm } from '@src/components/simpleform';
 import { showLoadModal } from '@src/main/phone/lib';
 
+import { useBusinessAppStore } from '../../stores/useBusinessAppStore';
+
 export const RoleModal: FC<{
   onSubmit: (name: string) => Promise<any>;
 }> = ({ onSubmit }) => {
-  const roles = useSelector<RootState, Record<string, string[]>>(state => state['phone.apps.business'].roles);
+  const roles = useBusinessAppStore(s => s.roles);
   return (
     <SimpleForm
       elements={[

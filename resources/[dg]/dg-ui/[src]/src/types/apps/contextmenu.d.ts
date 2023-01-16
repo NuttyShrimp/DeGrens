@@ -27,12 +27,18 @@ declare namespace ContextMenu {
     preventCloseOnClick?: boolean;
   }
 
-  interface State extends Base.State {
+  interface State {
     entries: Entry[];
     allEntries: Entry[];
     /**
      * Index in entries list
      */
     parentEntry: string[];
+  }
+
+  interface StateActions {
+    resetEntries: () => void;
+    loadEntries: (data: Entry[]) => void;
+    setEntries: (ent: Entry[], parent: string[]) => void;
   }
 }

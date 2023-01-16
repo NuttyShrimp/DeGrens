@@ -2,11 +2,13 @@ import React, { useCallback, useRef, useState } from 'react';
 import AppWrapper from '@components/appwrapper';
 import { Divider } from '@mui/material';
 
-import store from './store';
+import { useIdListStore } from './stores/useIdlistStore';
+import config from './_config';
 
 import './styles/idlist.scss';
 
-const Component: AppFunction<IdList.State> = props => {
+const Component: AppFunction = props => {
+  const [current, recent, setList] = useIdListStore(s => [s.current, s.recent, s.setList]);
   const [selectedEntry, setSelectedEntry] = useState(0);
   const self = useRef({});
   const saveRef = (key: number) => (r: any) => {
@@ -15,10 +17,11 @@ const Component: AppFunction<IdList.State> = props => {
 
   const handleShow = useCallback((data: { info: IdList.ScopeInfo }) => {
     setSelectedEntry(0);
-    props.updateState(() => ({ visible: true, ...data.info }));
+    props.showApp();
+    setList(data.info);
   }, []);
   const handleHide = useCallback(() => {
-    props.updateState(() => ({ visible: false }));
+    props.hideApp();
   }, []);
 
   const handleEvent = useCallback(
@@ -30,7 +33,7 @@ const Component: AppFunction<IdList.State> = props => {
           break;
         }
         case 'down': {
-          const newEntry = Math.min(selectedEntry + 1, props.current.length + props.recent.length - 1);
+          const newEntry = Math.min(selectedEntry + 1, current.length + recent.length - 1);
           self.current[newEntry]?.scrollIntoView({
             block: 'center',
           });
@@ -42,19 +45,19 @@ const Component: AppFunction<IdList.State> = props => {
         }
       }
     },
-    [props.current, props.recent, selectedEntry]
+    [current, recent, selectedEntry]
   );
 
-  const anyCurrent = props.current.length !== 0;
-  const anyRecent = props.recent.length !== 0;
+  const anyCurrent = current.length !== 0;
+  const anyRecent = recent.length !== 0;
 
   return (
-    <AppWrapper appName={store.key} onShow={handleShow} onHide={handleHide} onEvent={handleEvent} unSelectable full>
+    <AppWrapper appName={config.name} onShow={handleShow} onHide={handleHide} onEvent={handleEvent} unSelectable full>
       <div className='id-list-wrapper'>
         {anyCurrent && (
           <>
             <div className='id-list-label'>in scope</div>
-            {props.current.map((entry, idx) => (
+            {current.map((entry, idx) => (
               <div
                 ref={saveRef(idx)}
                 className={`id-list-entry ${selectedEntry === idx ? 'selected' : ''}`}
@@ -73,10 +76,10 @@ const Component: AppFunction<IdList.State> = props => {
         {anyRecent && (
           <div>
             <div className='id-list-label'>recently seen</div>
-            {props.recent.map((entry, idx) => (
+            {recent.map((entry, idx) => (
               <div
-                ref={saveRef(idx + props.current.length)}
-                className={`id-list-entry ${selectedEntry === idx + props.current.length ? 'selected' : ''}`}
+                ref={saveRef(idx + current.length)}
+                className={`id-list-entry ${selectedEntry === idx + current.length ? 'selected' : ''}`}
                 key={`recent-${entry.source}`}
               >
                 ({entry.source}): {entry.steamId}

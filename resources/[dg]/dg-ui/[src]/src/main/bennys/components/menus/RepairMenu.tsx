@@ -1,9 +1,9 @@
 import React, { FC, useCallback, useEffect } from 'react';
-import { useSelector } from 'react-redux';
 
 import { nuiAction } from '../../../../lib/nui-comms';
-import { useGuide, useInformationBar } from '../../hooks/useInformationBar';
+import { useGuide } from '../../hooks/useInformationBar';
 import { useKeyEvents } from '../../hooks/useKeyEvents';
+import { useBennyStore } from '../../stores/useBennyStore';
 
 import { MainMenuEntry } from './MainMenu';
 
@@ -14,9 +14,13 @@ export const RepairMenu: FC<{}> = () => {
     title: 'Repair Vehicle',
     kbdCombo: ['Enter'],
   });
-  const { setTitle, resetTitle, setPrice } = useInformationBar();
+  const [setTitle, resetTitle, setPrice, repairPrice] = useBennyStore(s => [
+    s.setBarTitle,
+    s.resetTitleBar,
+    s.setBarPrice,
+    s.currentCost,
+  ]);
   const { useEventRegister } = useKeyEvents();
-  const repairPrice = useSelector<RootState, number>(state => state.bennys.currentCost);
 
   useEffect(() => {
     showGuide();

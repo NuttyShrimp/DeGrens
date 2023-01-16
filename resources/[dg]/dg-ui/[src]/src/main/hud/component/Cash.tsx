@@ -2,6 +2,8 @@ import React, { FC } from 'react';
 import { animated, useSpring } from 'react-spring';
 import { NumberFormat } from '@src/components/numberformat';
 
+import { useHudStore } from '../stores/useHudStore';
+
 export const CashEntry: FC<{ amount: number; noPrefix?: boolean }> = ({ amount, noPrefix }) => {
   const animStyles = useSpring({
     from: {
@@ -22,7 +24,8 @@ export const CashEntry: FC<{ amount: number; noPrefix?: boolean }> = ({ amount, 
   );
 };
 
-export const Cash: FC<Hud.Cash> = ({ current, history }) => {
+export const Cash: FC<{}> = () => {
+  const { current, history } = useHudStore(s => s.cash);
   return (
     <div className='hud-cash'>
       <CashEntry amount={current} noPrefix />

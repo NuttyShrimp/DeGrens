@@ -1,15 +1,13 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
 import { setBackground } from '@src/main/phone/lib';
 
 import { Input } from '../../../components/inputs';
-import { useConfigActions } from '../hooks/useConfigActions';
+import { useConfigmenuStore } from '../stores/useConfigmenuStore';
 
 import { Section } from './Utils';
 
 export const Phone = () => {
-  const { updateConfig } = useConfigActions();
-  const state = useSelector<RootState, ConfigMenu.PhoneConfig>(state => state.configmenu.phone);
+  const [state, updateConfig] = useConfigmenuStore(s => [s.phone, s.updateConfig]);
   return (
     <div>
       <Section title={'Background'}>

@@ -4,7 +4,7 @@ import { Autocomplete, Box, TextField } from '@mui/material';
 import { Input } from '../../../../components/inputs';
 import { SimpleForm } from '../../../../components/simpleform';
 import { nuiAction } from '../../../../lib/nui-comms';
-import { closeModal, openLoadModal } from '../../lib';
+import { useFinancialsStore } from '../../stores/useFinancialsStore';
 
 const PERMISSIONS: Record<keyof Financials.AccountPermission, string> = {
   transactions: 'Transactions',
@@ -24,6 +24,7 @@ const buildDefaultModalValues = (cid?: number) => {
 };
 
 export const PermissionsModal: FC<React.PropsWithChildren<Financials.ModalProps>> = props => {
+  const [closeModal, openLoadModal] = useFinancialsStore(s => [s.closeModal, s.openLoaderModal]);
   const [value, setValue] = useState(''); // This is input value whatever it is
   // Processed modal values (for example cid is a number else undefined compared to value)
   const [modalValues, setModalValues] = useState<Omit<Financials.PermissionsMember, 'cid' | 'name'> & { cid?: number }>(

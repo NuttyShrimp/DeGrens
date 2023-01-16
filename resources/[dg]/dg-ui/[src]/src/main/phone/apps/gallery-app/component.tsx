@@ -5,12 +5,12 @@ import { nuiAction } from '../../../../lib/nui-comms';
 import { AppContainer } from '../../os/appcontainer/appcontainer';
 
 import { Gallery } from './components/gallery';
-const Component: AppFunction<Phone.Gallery.State> = props => {
+import { useGalleryAppStore } from './stores/useGalleryAppStore';
+const Component = () => {
+  const [setList, listLen] = useGalleryAppStore(s => [s.setList, s.list.length]);
   const fetchImages = async () => {
     const imgs = await nuiAction('phone/gallery/get', {}, devData.images);
-    props.updateState({
-      list: imgs,
-    });
+    setList(imgs);
   };
 
   useEffect(() => {
@@ -18,8 +18,8 @@ const Component: AppFunction<Phone.Gallery.State> = props => {
   }, []);
 
   return (
-    <AppContainer>
-      <Gallery {...props} fetchImages={fetchImages} />
+    <AppContainer emptyList={listLen === 0}>
+      <Gallery fetchImages={fetchImages} />
     </AppContainer>
   );
 };

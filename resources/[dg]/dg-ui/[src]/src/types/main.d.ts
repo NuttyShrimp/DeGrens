@@ -1,11 +1,10 @@
 declare type InteractionType = 'info' | 'success' | 'error';
 declare type UpdateState<T> = (state: Partial<T>) => void;
 
-declare type AppFunction<T = {}> = React.FC<
-  T & {
-    updateState: (data: Partial<T> | ((state: RootState) => Partial<RootState[T]>)) => void;
-  }
->;
+declare type AppFunction = React.FC<{
+  showApp: () => void;
+  hideApp: () => void;
+}>;
 
 declare interface ConfigObject {
   name: keyof RootState;
@@ -40,34 +39,31 @@ interface ListItem {
   label: string | JSX.Element;
 }
 
-declare namespace Base {
-  interface State {
-    visible: boolean;
-  }
-
-  interface Props<T = {}> extends T {
-    updateState: (data: Partial<T>) => void;
-  }
-}
-
 declare namespace Main {
   interface State {
     currentApp: string;
     error: string | null;
     mounted: boolean;
     apps: ConfigObject[];
+    character: Character;
+    game: Game;
+  }
+
+  interface StateActions {
+    setCurrentApp: (app: keyof RootState | '') => void;
+    setApps: (app: ConfigObject[]) => void;
+    // Set errors and unmounts
+    setError: (err: string | null) => void;
+    removeError: () => void;
+    setCharacter: (char: Character) => void;
+    setTime: (time: string) => void;
+    setWeather: (weather: string) => void;
   }
 
   interface Game {
     location: string;
     time: string;
     weather: string;
-  }
-
-  interface Aux {
-    character: Character;
-    game: Game;
-    jobs: string[];
   }
 }
 
@@ -80,49 +76,25 @@ declare interface RootState {
   debuglogs: DebugLogs.State;
   financials: Financials.State;
   hud: Hud.State;
-  input: InputMenu.State;
+  input: null;
   interaction: Interaction.State;
   notifications: Notifications.State;
-  cli: Base.State;
+  cli: null;
   taskbar: TaskBar.State;
   sliders: Sliders.State;
-  scenes: Scenes.State;
+  scenes: null;
   peek: Peek.State;
   bennys: Bennys.State;
   phone: Phone.State;
-  'phone.notifications': Phone.Notifications.State;
-  'phone.apps.example': {};
-  'phone.apps.contacts': Phone.Contacts.State;
-  'phone.apps.crypto': Phone.Crypto.State;
-  'phone.apps.gallery': Phone.Gallery.State;
-  'phone.apps.home-screen': {};
-  'phone.apps.info': {};
-  'phone.apps.justice': Phone.Justice.State;
-  'phone.apps.mail': Phone.Mail.State;
-  'phone.apps.messages': Phone.Messages.State;
-  'phone.apps.notes': Phone.Notes.State;
-  'phone.apps.payconiq': Phone.PayConiq.State;
-  'phone.apps.phone': Phone.Phone.State;
-  'phone.apps.pinger': {};
-  'phone.apps.twitter': Phone.Twitter.State;
-  'phone.apps.yellowpages': Phone.YellowPages.State;
-  'phone.apps.jobcenter': Phone.JobCenter.State;
-  'phone.apps.debt': Phone.Debt.State;
-  'phone.apps.garage': Phone.Garage.State;
-  'phone.apps.business': Phone.Business.State;
   inventory: Inventory.State;
   itemboxes: Itemboxes.State;
   laptop: Laptop.State;
-  'laptop.config': Laptop.Config.State;
-  'laptop.gang': Laptop.Gang.State;
-  'laptop.confirm': Laptop.Confirm.State;
-  'laptop.bennys': Laptop.Bennys.State;
   radio: Radio.State;
   configmenu: ConfigMenu.State;
   keygame: Keygame.State;
   gridgame: Gridgame.State;
   dispatch: Dispatch.State;
-  policeradar: Policeradar.State;
+  policeradar: null;
   badge: Badge.State;
   idlist: IdList.State;
 }

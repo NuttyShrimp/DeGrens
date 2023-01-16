@@ -4,35 +4,41 @@ import { TouchBackend } from 'react-dnd-touch-backend';
 import AppWrapper from '@components/appwrapper';
 import { devData } from '@src/lib/devdata';
 import { nuiAction } from '@src/lib/nui-comms';
+import { useVisibleStore } from '@src/lib/stores/useVisibleStore';
 
 import { Inventory } from './components/inventory';
-import { syncItem } from './lib';
-import store from './store';
+import { useInventory } from './hooks/useInventory';
+import { useInventoryStore } from './stores/useInventoryStore';
+import config from './_config';
 import { generateShopItems } from './util';
 
 import './styles/inventory.scss';
 
-const Component: AppFunction<Inventory.State> = props => {
+const Component: AppFunction = props => {
   // useDragDropContext can only be used in childcomponents of DndProvidor.
   // we need to refresh the childcomp when we want to cancel dragdrop from itemsync event
   const [refreshDrag, setRefreshDrag] = useState(0);
+  const [updateStore, resetStore] = useInventoryStore(s => [s.updateStore, s.resetStore]);
+  const visible = useVisibleStore(s => s.visibleApps.includes(config.name));
+  const { syncItem } = useInventory();
 
   const handleShow = useCallback(() => {
-    props.updateState({
-      visible: true,
-    });
+    props.showApp();
     fetchInventoryData();
-  }, []);
+  }, [props.showApp]);
 
-  const handleHide = useCallback(() => props.updateState(store.initialState), []);
+  const handleHide = useCallback(() => {
+    props.hideApp();
+    resetStore();
+  }, [props.hideApp, resetStore]);
 
   const updateItem = useCallback(
     (item: Inventory.Item) => {
-      if (!props.visible) return;
+      if (!visible) return;
       setRefreshDrag(refreshDrag + 1);
       syncItem(item);
     },
-    [props.visible]
+    [visible]
   );
 
   const fetchInventoryData = async () => {
@@ -49,7 +55,7 @@ const Component: AppFunction<Inventory.State> = props => {
       secondaryData = activeData.secondary;
     }
 
-    props.updateState({
+    updateStore({
       items: items,
       inventories: {
         [activeData.primary.id]: activeData.primary,
@@ -62,7 +68,7 @@ const Component: AppFunction<Inventory.State> = props => {
 
   return (
     <AppWrapper
-      appName={store.key}
+      appName={config.name}
       onShow={handleShow}
       onHide={handleHide}
       hideOnEscape

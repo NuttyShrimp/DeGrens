@@ -1,31 +1,24 @@
-import React, { useState } from 'react';
+import React, { FC, useState } from 'react';
 import { Tab, Tabs } from '@mui/material';
 import { AppContainer } from '@src/main/phone/os/appcontainer/appcontainer';
+
+import { useJobcenterAppStore } from '../stores/useJobcenterAppStore';
 
 import { CurrentGroup } from './currentGroup';
 import { Jobs } from './jobs';
 import { List } from './list';
 
-export const JobCenter: AppFunction<Phone.JobCenter.State> = props => {
+export const JobCenter: FC<{}> = () => {
   const [tab, setTab] = useState(0);
+  const [currentGroup] = useJobcenterAppStore(s => [s.currentGroup]);
   return (
     <AppContainer>
       <Tabs value={tab} onChange={(_, v) => setTab(v)} style={{ width: '100%' }} variant='fullWidth'>
         <Tab label='Groep' />
         <Tab label='Joblijst' />
       </Tabs>
-      {tab == 0 &&
-        (props.currentGroup ? (
-          <CurrentGroup
-            currentGroup={props.currentGroup}
-            updateState={props.updateState}
-            groupMembers={props.groupMembers}
-            isOwner={props.isOwner}
-          />
-        ) : (
-          <List groups={props.groups} updateState={props.updateState} />
-        ))}
-      {tab == 1 && <Jobs jobs={props.jobs} />}
+      {tab == 0 && (currentGroup ? <CurrentGroup /> : <List />)}
+      {tab == 1 && <Jobs />}
     </AppContainer>
   );
 };

@@ -3,27 +3,30 @@ import AppWrapper from '@components/appwrapper';
 
 import { CallList } from './component/callList';
 import { CamList } from './component/camList';
-import store from './store';
+import { useDispatchStore } from './stores/useDispatchStore';
+import config from './_config';
 
 import './styles/dispatch.scss';
 
-const Component: AppFunction<Dispatch.State> = props => {
+const Component: AppFunction = props => {
   const [newIds, setNewIds] = useState<string[]>([]);
   const [onlyNew, setOnlyNew] = useState(false);
   const [showCamera, setShowCamera] = useState(false);
+  const [addStoreCall, addStoreCalls, setStoreCalls, setStoreCams] = useDispatchStore(s => [
+    s.addCall,
+    s.addCalls,
+    s.setCalls,
+    s.setCams,
+  ]);
 
   const onShow = useCallback((data: { onlyNew?: boolean; showCamera?: boolean }) => {
-    props.updateState({
-      visible: true,
-    });
+    props.showApp();
     setOnlyNew(data?.onlyNew ?? false);
     setShowCamera(data?.showCamera ?? false);
   }, []);
 
   const onHide = useCallback(() => {
-    props.updateState({
-      visible: false,
-    });
+    props.hideApp();
     setNewIds([]);
     setOnlyNew(false);
     setShowCamera(false);
@@ -31,28 +34,24 @@ const Component: AppFunction<Dispatch.State> = props => {
 
   const addCall = useCallback(
     (call: Dispatch.Call) => {
-      const newCalls = [call, ...props.calls].slice(0, props.storeSize);
-      props.updateState({
-        calls: newCalls,
-      });
+      addStoreCall(call);
       setNewIds(s => [...s, call.id]);
       setTimeout(() => {
         setNewIds(s => s.filter(id => id !== call.id));
       }, 5000);
     },
-    [props, newIds]
+    [newIds, addStoreCall]
   );
 
   const addCalls = useCallback(
     (calls: Dispatch.Call[], isRefresh = false) => {
-      const storeSize = isRefresh ? Math.max(20, calls.length) : props.storeSize + calls.length;
-      const newCalls = isRefresh ? calls : [...calls, ...props.calls].slice(0, storeSize);
-      props.updateState({
-        storeSize,
-        calls: newCalls,
-      });
+      if (isRefresh) {
+        setStoreCalls(calls);
+      } else {
+        addStoreCalls(calls);
+      }
     },
-    [props]
+    [addStoreCalls]
   );
 
   const handleEvent = useCallback(
@@ -67,9 +66,7 @@ const Component: AppFunction<Dispatch.State> = props => {
           break;
         }
         case 'addCams': {
-          props.updateState({
-            cams: pData.cams,
-          });
+          setStoreCams(pData.cams);
           break;
         }
         default: {
@@ -82,7 +79,7 @@ const Component: AppFunction<Dispatch.State> = props => {
 
   return (
     <AppWrapper
-      appName={store.key}
+      appName={config.name}
       onShow={onShow}
       onHide={onHide}
       onEvent={handleEvent}
@@ -92,8 +89,8 @@ const Component: AppFunction<Dispatch.State> = props => {
       hideOverflow
     >
       <div>
-        <CallList list={props.calls} newIds={newIds} onlyNew={onlyNew} />
-        {showCamera && <CamList camList={props.cams} />}
+        <CallList newIds={newIds} onlyNew={onlyNew} />
+        {showCamera && <CamList />}
       </div>
     </AppWrapper>
   );

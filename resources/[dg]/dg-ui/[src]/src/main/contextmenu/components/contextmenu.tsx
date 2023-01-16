@@ -1,28 +1,22 @@
 import React, { FC } from 'react';
-import { useSelector } from 'react-redux';
 
 import { closeApplication } from '../../../components/appwrapper';
 import { nuiAction } from '../../../lib/nui-comms';
-import store from '../store';
+import config from '../_config';
+import { useCtxMenuStore } from '../stores/useCtxMenuStore';
 
-const MenuEntry: FC<
-  React.PropsWithChildren<ContextMenu.Entry & Base.Props<ContextMenu.State> & { onClick?: Function }>
-> = props => {
-  const parentEntry = useSelector<RootState, string[]>(state => state.contextmenu.parentEntry);
-
+const MenuEntry: FC<React.PropsWithChildren<ContextMenu.Entry & { onClick?: Function }>> = props => {
+  const [parentEntry, setEntries] = useCtxMenuStore(s => [s.parentEntry, s.setEntries]);
   const handleClick = () => {
     let hasSub = false;
     if (props.submenu) {
-      props.updateState({
-        entries: props.submenu,
-        parentEntry: parentEntry ? parentEntry.concat([props.id]) : [props.id],
-      });
+      setEntries(props.submenu, parentEntry ? parentEntry.concat([props.id]) : [props.id]);
       hasSub = true;
     }
     if (props.callbackURL) {
       nuiAction(props.callbackURL, props.data);
       if (!hasSub && !props.preventCloseOnClick) {
-        closeApplication(store.key);
+        closeApplication(config.name);
       }
     }
     if (props.onClick) {
@@ -85,31 +79,28 @@ const searchForEntries = (entries: ContextMenu.Entry[], keys: string[]): Context
   return false;
 };
 
-export const ContextMenu: AppFunction<ContextMenu.State> = props => {
+export const ContextMenu = () => {
+  const [entries, allEntries, parentEntry, setEntries] = useCtxMenuStore(s => [
+    s.entries,
+    s.allEntries,
+    s.parentEntry,
+    s.setEntries,
+  ]);
   const goMenuBack = () => {
-    const newEntries = searchForEntries(props.allEntries, [...props.parentEntry]);
+    const newEntries = searchForEntries(allEntries, [...parentEntry]);
     if (newEntries && typeof newEntries !== 'boolean') {
-      props.updateState({
-        entries: newEntries,
-        parentEntry: props.parentEntry.slice(0, -1),
-      });
+      setEntries(newEntries, parentEntry.slice(0, -1));
     }
   };
 
   return (
     <div className='contextmenu_scroll'>
       <div className={'contextmenu__wrapper'}>
-        {props.parentEntry.length > 0 && (
-          <MenuEntry
-            id={`back-${props.parentEntry}`}
-            title={'Back'}
-            icon={'chevron-left'}
-            updateState={props.updateState}
-            onClick={goMenuBack}
-          />
+        {parentEntry.length > 0 && (
+          <MenuEntry id={`back-${parentEntry}`} title={'Back'} icon={'chevron-left'} onClick={goMenuBack} />
         )}
-        {props.entries.map(entry => (
-          <MenuEntry key={entry.id} {...entry} updateState={props.updateState} />
+        {entries.map(entry => (
+          <MenuEntry key={entry.id} {...entry} />
         ))}
       </div>
     </div>

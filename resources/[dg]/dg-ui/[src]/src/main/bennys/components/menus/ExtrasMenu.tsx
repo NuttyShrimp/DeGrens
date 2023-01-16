@@ -1,19 +1,17 @@
 import React, { FC, useCallback, useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
 import { useKeyboardKey } from '@src/lib/hooks/useKeyboardKey';
 
 import { devData } from '../../../../lib/devdata';
 import { nuiAction } from '../../../../lib/nui-comms';
-import { useCart } from '../../hooks/useCart';
-import { useGuide, useInformationBar } from '../../hooks/useInformationBar';
+import { useGuide } from '../../hooks/useInformationBar';
 import { useKeyEvents } from '../../hooks/useKeyEvents';
+import { useBennyStore } from '../../stores/useBennyStore';
 import { CategorySlider } from '../CategorySlider';
 import { IdSelector } from '../IdSelector';
 
 const getExtraId = (id: number) => `extra_${id}`;
 
 export const ExtrasMenu: FC<{ goToMainMenu: () => void }> = ({ goToMainMenu }) => {
-  const { setTitle, setEquipped, resetTitle, setIsInCart, setPrice } = useInformationBar();
   const { key: leftKey } = useKeyboardKey('q');
   const { key: rightKey } = useKeyboardKey('e');
   const { showGuide, hideGuide } = useGuide([
@@ -30,10 +28,30 @@ export const ExtrasMenu: FC<{ goToMainMenu: () => void }> = ({ goToMainMenu }) =
       kbdCombo: [rightKey.toLocaleUpperCase()],
     },
   ]);
-  const { addItemToCart, getCartItemByComponent, removeItemFromCart } = useCart();
+  const [
+    addItemToCart,
+    getCartItemByComponent,
+    removeItemFromCart,
+    setTitle,
+    resetTitle,
+    setEquipped,
+    setIsInCart,
+    setPrice,
+    pricePerExtra,
+    cart,
+  ] = useBennyStore(s => [
+    s.addToCart,
+    s.getCartItemForComp,
+    s.removeFromCart,
+    s.setBarTitle,
+    s.resetTitleBar,
+    s.setEquipped,
+    s.setInCart,
+    s.setBarPrice,
+    s.prices.extras,
+    s.cart,
+  ]);
   const { useEventRegister } = useKeyEvents();
-
-  const pricePerExtra = useSelector<RootState, number>(state => state.bennys.prices['extras']);
 
   const [extrasData, setExtrasData] = useState<Bennys.Components.Extra[]>([]);
   const [currentExtraId, setCurrentExtraId] = useState<number>(0);
@@ -73,7 +91,7 @@ export const ExtrasMenu: FC<{ goToMainMenu: () => void }> = ({ goToMainMenu }) =
       name: 'extras',
       data: { id: extra.id, enabled: onEnableOption },
     });
-  }, [currentExtraId, onEnableOption, extrasData, getCartItemByComponent]);
+  }, [currentExtraId, onEnableOption, extrasData, cart]);
 
   const addToCart = useCallback(
     (optionId: number) => {
@@ -94,7 +112,7 @@ export const ExtrasMenu: FC<{ goToMainMenu: () => void }> = ({ goToMainMenu }) =
       }
       addItemToCart(itemId, { id: extrasData[currentExtraId].id, enabled: onEnable });
     },
-    [currentExtraId, extrasData, getCartItemByComponent]
+    [currentExtraId, extrasData]
   );
 
   // Reset previewed item to cartitem else equipped on leave
@@ -109,7 +127,7 @@ export const ExtrasMenu: FC<{ goToMainMenu: () => void }> = ({ goToMainMenu }) =
         enabled,
       },
     });
-  }, [extrasData, currentExtraId, getCartItemByComponent]);
+  }, [extrasData, currentExtraId]);
 
   const exit = useCallback(() => {
     previewPreviousOnChange();
@@ -117,14 +135,11 @@ export const ExtrasMenu: FC<{ goToMainMenu: () => void }> = ({ goToMainMenu }) =
   }, [previewPreviousOnChange, goToMainMenu]);
   useEventRegister('Escape', exit);
 
-  const startOnCartOrEquipped = useCallback(
-    (data: Bennys.Components.Extra[], extraId: number) => {
-      const startId = getExtraId(data[extraId].id);
-      const cartItem = (getCartItemByComponent(startId)?.data as Bennys.Components.Extra)?.enabled;
-      setOnEnableOption(cartItem ?? data[extraId].enabled);
-    },
-    [getCartItemByComponent]
-  );
+  const startOnCartOrEquipped = (data: Bennys.Components.Extra[], extraId: number) => {
+    const startId = getExtraId(data[extraId].id);
+    const cartItem = (getCartItemByComponent(startId)?.data as Bennys.Components.Extra)?.enabled;
+    setOnEnableOption(cartItem ?? data[extraId].enabled);
+  };
 
   return (
     <>

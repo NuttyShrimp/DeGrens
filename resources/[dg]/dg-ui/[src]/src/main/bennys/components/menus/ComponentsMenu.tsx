@@ -1,13 +1,12 @@
 import React, { FC, useCallback, useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
 import { useKeyboardKey } from '@src/lib/hooks/useKeyboardKey';
 
 import { devData } from '../../../../lib/devdata';
 import { nuiAction } from '../../../../lib/nui-comms';
 import { componentTitles } from '../../data/componentTitles';
-import { useCart } from '../../hooks/useCart';
-import { useGuide, useInformationBar } from '../../hooks/useInformationBar';
+import { useGuide } from '../../hooks/useInformationBar';
 import { useKeyEvents } from '../../hooks/useKeyEvents';
+import { useBennyStore } from '../../stores/useBennyStore';
 import { CategorySlider } from '../CategorySlider';
 import { IdSelector } from '../IdSelector';
 
@@ -15,7 +14,6 @@ export const ComponentsMenu: FC<{ menuType: 'interior' | 'exterior'; goToMainMen
   menuType,
   goToMainMenu,
 }) => {
-  const { setTitle, setEquipped, resetTitle, setIsInCart, setPrice } = useInformationBar();
   const { key: leftKey } = useKeyboardKey('q');
   const { key: rightKey } = useKeyboardKey('e');
   const { showGuide, hideGuide } = useGuide([
@@ -32,10 +30,30 @@ export const ComponentsMenu: FC<{ menuType: 'interior' | 'exterior'; goToMainMen
       kbdCombo: [rightKey.toLocaleUpperCase()],
     },
   ]);
-  const { addItemToCart, getCartItemByComponent, removeItemFromCart } = useCart();
+  const [
+    addItemToCart,
+    getCartItemByComponent,
+    removeItemFromCart,
+    setTitle,
+    resetTitle,
+    setEquipped,
+    setIsInCart,
+    setPrice,
+    pricePerComponent,
+    cart,
+  ] = useBennyStore(s => [
+    s.addToCart,
+    s.getCartItemForComp,
+    s.removeFromCart,
+    s.setBarTitle,
+    s.resetTitleBar,
+    s.setEquipped,
+    s.setInCart,
+    s.setBarPrice,
+    s.prices,
+    s.cart,
+  ]);
   const { useEventRegister } = useKeyEvents();
-
-  const pricePerComponent = useSelector<RootState, Bennys.State['prices']>(state => state.bennys.prices);
 
   const [categories, setCategories] = useState<Bennys.Components.Generic[]>([]);
   const [currentCategoryId, setCurrentCategoryId] = useState<number>(0);
@@ -78,7 +96,7 @@ export const ComponentsMenu: FC<{ menuType: 'interior' | 'exterior'; goToMainMen
       name: cat.name,
       data: currentComponentId,
     });
-  }, [currentCategoryId, currentComponentId, categories, getCartItemByComponent]);
+  }, [currentCategoryId, currentComponentId, categories, cart]);
 
   const addToCart = useCallback(
     (componentId: number) => {
@@ -99,7 +117,7 @@ export const ComponentsMenu: FC<{ menuType: 'interior' | 'exterior'; goToMainMen
       }
       addItemToCart(cat.name, componentId);
     },
-    [currentCategoryId, categories, getCartItemByComponent]
+    [currentCategoryId, categories]
   );
 
   // Reset previewed item to cartitem else equipped on leave
@@ -110,7 +128,7 @@ export const ComponentsMenu: FC<{ menuType: 'interior' | 'exterior'; goToMainMen
       name: previousCategory.name,
       data: cartItem ?? previousCategory.equipped,
     });
-  }, [categories, currentCategoryId, getCartItemByComponent]);
+  }, [categories, currentCategoryId]);
 
   const exit = useCallback(() => {
     previewPreviousOnChange();
@@ -118,14 +136,10 @@ export const ComponentsMenu: FC<{ menuType: 'interior' | 'exterior'; goToMainMen
   }, [previewPreviousOnChange, goToMainMenu]);
   useEventRegister('Escape', exit);
 
-  const startOnCartOrEquipped = useCallback(
-    (data: Bennys.Components.Generic[], categoryId: number) => {
-      const cartItem = getCartItemByComponent(data[categoryId].name)?.data as number;
-      setCurrentComponentId(cartItem ?? data[categoryId].equipped);
-    },
-    [getCartItemByComponent]
-  );
-
+  const startOnCartOrEquipped = (data: Bennys.Components.Generic[], categoryId: number) => {
+    const cartItem = getCartItemByComponent(data[categoryId].name)?.data as number;
+    setCurrentComponentId(cartItem ?? data[categoryId].equipped);
+  };
   return (
     <>
       {categories.length !== 0 && (

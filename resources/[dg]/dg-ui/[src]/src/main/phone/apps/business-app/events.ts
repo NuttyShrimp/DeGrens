@@ -1,11 +1,9 @@
-import { genericAction, getState } from '../../lib';
+import { useBusinessAppStore } from './stores/useBusinessAppStore';
 
 export const events: Phone.Events = {};
 
 events.setBusinessPermissionLabels = (labels: Record<string, string>) => {
-  const businessState = getState<Phone.Business.State>('phone.apps.business');
-  genericAction('phone.apps.business', {
-    ...businessState,
+  useBusinessAppStore.setState({
     permissionLabels: labels,
   });
 };

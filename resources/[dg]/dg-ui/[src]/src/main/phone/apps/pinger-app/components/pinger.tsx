@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useMainStore } from '@src/lib/stores/useMainStore';
 import { AppContainer } from '@src/main/phone/os/appcontainer/appcontainer';
 
 import { Button } from '../../../../../components/button';
@@ -10,7 +10,7 @@ import { styles } from './pinger.styles';
 
 export const Pinger = () => {
   const [target, setTarget] = useState('');
-  const hasVpn = useSelector<RootState, boolean>(state => state.character.hasVPN);
+  const hasVpn = useMainStore(s => s.character.hasVPN);
   const classes = styles();
 
   const sendPingRequest = (isAnon = false) => {

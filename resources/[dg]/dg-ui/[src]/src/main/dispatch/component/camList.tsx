@@ -4,6 +4,8 @@ import { IconButton } from '@src/components/button';
 import { Icon } from '@src/components/icon';
 import { nuiAction } from '@src/lib/nui-comms';
 
+import { useDispatchStore } from '../stores/useDispatchStore';
+
 const Cam: FC<{ cam: Dispatch.Cam }> = ({ cam }) => {
   const openCamera = () => {
     nuiAction('dispatch/openCamera', {
@@ -27,7 +29,8 @@ const Cam: FC<{ cam: Dispatch.Cam }> = ({ cam }) => {
   );
 };
 
-export const CamList: FC<{ camList: Dispatch.Cam[] }> = ({ camList }) => {
+export const CamList = () => {
+  const camList = useDispatchStore(s => s.cams);
   return (
     <div className='dispatch-list dispatch-cam-list'>
       {camList.map(cam => (

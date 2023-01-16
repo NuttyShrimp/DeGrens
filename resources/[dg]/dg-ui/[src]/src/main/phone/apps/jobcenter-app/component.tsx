@@ -1,31 +1,27 @@
-import React, { useEffect } from 'react';
+import React, { FC, useEffect } from 'react';
 import { devData } from '@src/lib/devdata';
 import { isDevel } from '@src/lib/env';
 
 import { nuiAction } from '../../../../lib/nui-comms';
 
 import { JobCenter } from './components/jobcenter';
+import { useJobcenterAppStore } from './stores/useJobcenterAppStore';
 
 import './styles/jobcenter.scss';
 
-const Component: AppFunction<Phone.JobCenter.State> = props => {
+const Component: FC<{}> = () => {
+  const [setJobs, setGroup] = useJobcenterAppStore(s => [s.setJobs, s.setGroup]);
   const fetchJobs = async () => {
-    props.updateState({
-      jobs: await nuiAction('phone/jobs/get', {}, devData.jobs),
-    });
+    setJobs(await nuiAction('phone/jobs/get', {}, devData.jobs));
   };
 
   useEffect(() => {
     fetchJobs();
     if (!isDevel()) return;
-    props.updateState({
-      currentGroup: devData.currentGroup,
-      groupMembers: devData.groupMembers,
-      isOwner: true,
-    });
+    setGroup(devData.currentGroup, devData.groupMembers, true);
   }, []);
 
-  return <JobCenter {...props} />;
+  return <JobCenter />;
 };
 
 export default Component;

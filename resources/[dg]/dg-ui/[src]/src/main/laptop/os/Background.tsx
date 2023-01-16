@@ -1,9 +1,9 @@
 import React, { CSSProperties, FC, useMemo } from 'react';
-import { useSelector } from 'react-redux';
 import { Typography } from '@mui/material';
 
 import { LaptopIcon } from '../components/LaptopIcon';
 import { useActions } from '../hooks/useActions';
+import { useLaptopConfigStore } from '../stores/useLaptopConfigStore';
 
 const getIconPosition = (column: number, row: number): CSSProperties => {
   return {
@@ -12,7 +12,7 @@ const getIconPosition = (column: number, row: number): CSSProperties => {
 };
 
 export const Background: FC = () => {
-  const enabledApps = useSelector<RootState, Laptop.Config.Config[]>(state => state['laptop.config'].enabledApps);
+  const enabledApps = useLaptopConfigStore(s => s.enabledApps);
   const { openApp } = useActions();
 
   const backgroundIcons = useMemo(() => {

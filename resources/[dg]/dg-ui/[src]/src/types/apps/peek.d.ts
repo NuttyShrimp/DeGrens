@@ -5,7 +5,7 @@ declare namespace Peek {
     icon: string;
   }
 
-  interface State extends Base.State {
+  interface State {
     hasTarget: boolean;
     showList: boolean;
     entries: Entry[];

@@ -2,15 +2,18 @@ import React, { FC } from 'react';
 import { animated, easings, Transition } from 'react-spring';
 import { useVhToPixel } from '@lib/hooks/useVhToPixel';
 
+import { useItemBoxStore } from '../stores/useItemboxStore';
+
 import { Itembox } from './itembox';
 
-export const ItemboxList: FC<Pick<Itemboxes.State, 'itemboxes'>> = ({ itemboxes }) => {
+export const ItemboxList: FC<{}> = () => {
+  const itemBoxes = useItemBoxStore(s => s.itemboxes);
   const hiddenMargin = useVhToPixel(40);
 
   return (
     <div className={'itemboxes__list'}>
       <Transition
-        items={itemboxes}
+        items={itemBoxes}
         config={{
           duration: 500,
           easing: easings.easeInOutQuart,

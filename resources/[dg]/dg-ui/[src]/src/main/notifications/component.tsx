@@ -3,18 +3,15 @@ import AppWrapper from '@components/appwrapper';
 
 import { NotificationList } from './components/list';
 import { useNotifications } from './hooks/useNotification';
-import store from './store';
+import config from './_config';
 
 import './styles/notifications.scss';
 
-const Component: AppFunction<Notifications.State> = props => {
+const Component: AppFunction = props => {
   const { addNotification, removeNotification } = useNotifications();
 
-  const handleVisibility = (visible: boolean) => {
-    props.updateState({ visible });
-  };
-  const handleShow = useCallback(() => handleVisibility(true), []);
-  const handleHide = useCallback(() => handleVisibility(false), []);
+  const handleShow = useCallback(() => props.showApp(), [props.showApp]);
+  const handleHide = useCallback(() => props.hideApp(), [props.hideApp]);
 
   const eventHandler = useCallback(
     (data: any) => {
@@ -36,8 +33,15 @@ const Component: AppFunction<Notifications.State> = props => {
   );
 
   return (
-    <AppWrapper appName={store.key} onShow={handleShow} onHide={handleHide} onEvent={eventHandler} center unSelectable>
-      <NotificationList {...props} />
+    <AppWrapper
+      appName={config.name}
+      onShow={handleShow}
+      onHide={handleHide}
+      onEvent={eventHandler}
+      center
+      unSelectable
+    >
+      <NotificationList />
     </AppWrapper>
   );
 };

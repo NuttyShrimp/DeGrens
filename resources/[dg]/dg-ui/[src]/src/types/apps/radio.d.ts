@@ -3,5 +3,5 @@ declare namespace Radio {
     frequency: number;
     enabled: boolean;
   }
-  type State = Base.State & Info;
+  type State = Info;
 }

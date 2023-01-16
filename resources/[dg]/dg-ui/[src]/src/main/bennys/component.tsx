@@ -6,9 +6,16 @@ import AppWrapper from '../../components/appwrapper';
 
 import { Bars } from './components/Bars';
 import { Menu } from './components/menus/Menu';
-import store from './store';
+import { useBennyStore } from './stores/useBennyStore';
+import config from './_config';
 
-const Component: AppFunction<Bennys.State> = props => {
+const Component: AppFunction = props => {
+  const [setCost, setMenu, setPrices, resetStore] = useBennyStore(s => [
+    s.setCost,
+    s.setMenu,
+    s.setPrices,
+    s.resetStore,
+  ]);
   const onShow = useCallback(async (data: { repairCost?: number }) => {
     const currentCost = data?.repairCost ?? 0;
     const currentMenu = currentCost > 0 ? 'repair' : 'main';
@@ -18,23 +25,21 @@ const Component: AppFunction<Bennys.State> = props => {
       prices = await nuiAction('bennys:getPrices', {}, devData.bennysPrices);
     }
 
-    props.updateState({
-      ...store.initialState,
-      visible: true,
-      currentCost,
-      currentMenu,
-      prices,
-    });
+    props.showApp();
+    setCost(currentCost);
+    setMenu(currentMenu);
+    setPrices(prices);
   }, []);
 
   const onHide = useCallback(() => {
-    props.updateState(store.initialState);
+    props.hideApp();
+    resetStore();
   }, []);
 
   return (
-    <AppWrapper appName={store.key} onShow={onShow} onHide={onHide}>
-      <Menu {...props} />
-      <Bars {...props.bars} />
+    <AppWrapper appName={config.name} onShow={onShow} onHide={onHide}>
+      <Menu />
+      <Bars />
     </AppWrapper>
   );
 };

@@ -1,4 +1,5 @@
-import { acceptNotification, addNotification, getState, removeNotification, updateNotification } from '../../lib';
+import { acceptNotification, addNotification, removeNotification, updateNotification } from '../../lib';
+import { usePhoneNotiStore } from '../../stores/usePhoneNotiStore';
 
 export const events: Phone.Events = {};
 
@@ -12,13 +13,13 @@ events.updateNotification = (data: { id: string; notification: Phone.Notificatio
   updateNotification(data.id, data.notification);
 };
 events.acceptNotification = () => {
-  const notis = getState<Phone.Notifications.State>('phone.notifications');
+  const notis = usePhoneNotiStore.getState();
   const acceptableNoti = notis.list.find(n => n.onAccept);
   if (!acceptableNoti) return;
   acceptNotification(acceptableNoti.id);
 };
 events.declineNotification = () => {
-  const notis = getState<Phone.Notifications.State>('phone.notifications');
+  const notis = usePhoneNotiStore.getState();
   const acceptableNoti = notis.list.find(n => n.onDecline);
   if (!acceptableNoti) return;
   acceptNotification(acceptableNoti.id);

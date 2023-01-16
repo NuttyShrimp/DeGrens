@@ -10,41 +10,41 @@ import { Textwrapper } from '../../../../../components/textwrapper';
 import { nuiAction } from '../../../../../lib/nui-comms';
 import { AppContainer } from '../../../os/appcontainer/appcontainer';
 import { addMessage } from '../lib';
+import { useMessageStoreApp } from '../stores/useMessageStoreApp';
 
 import { styles } from './messages.styles';
 
-export const Conversation: AppFunction<Phone.Messages.State> = props => {
+export const Conversation = () => {
   // We use the selector state bcs the props state is to inconsistent
   const [messages, setMessages] = useState<Phone.Messages.Message[]>([]);
   const [canLoadMore, setCanLoadMore] = useState(true);
   const [message, setMessage] = useState('');
   const classes = styles();
   const messageListRef = useRef<HTMLDivElement>(null);
+  const [setNumber, currentNumber, storeMessages] = useMessageStoreApp(s => [s.setNumber, s.currentNumber, s.messages]);
 
   const showList = () => {
-    props.updateState({
-      currentNumber: null,
-    });
+    setNumber(null);
   };
 
   const loadMore = async () => {
-    if (!props.currentNumber) return;
+    if (!currentNumber) return;
     const newMes = await nuiAction<Record<string, Phone.Messages.Message[]>>('phone/messages/get', {
-      target: props.currentNumber,
+      target: currentNumber,
       offset: messages.length,
     });
-    if (typeof newMes !== 'object' || Array.isArray(newMes) || newMes[props.currentNumber].length === 0) {
+    if (typeof newMes !== 'object' || Array.isArray(newMes) || newMes[currentNumber].length === 0) {
       console.log('could not load more messages');
       setCanLoadMore(false);
       return;
     }
-    addMessage(props.currentNumber, newMes[props.currentNumber], 'prepend');
+    addMessage(currentNumber, newMes[currentNumber], 'prepend');
   };
 
   const sendMessage = () => {
     nuiAction('phone/messages/send', {
       msg: message,
-      target: props.currentNumber,
+      target: currentNumber,
       date: Date.now(),
     });
     setMessage('');
@@ -55,29 +55,29 @@ export const Conversation: AppFunction<Phone.Messages.State> = props => {
       if (!messageListRef.current) return;
       messageListRef.current.scrollTop = messageListRef.current.scrollHeight;
     }, 10);
-  }, [props.messages]);
+  }, [storeMessages]);
 
   useEffect(() => {
-    if (!props.currentNumber) {
+    if (!currentNumber) {
       setMessages([]);
       setCanLoadMore(true);
       return;
     }
-    if (!props.messages[props.currentNumber]) {
+    if (!storeMessages[currentNumber]) {
       setCanLoadMore(false);
       return;
     }
-    if (props.messages[props.currentNumber] === messages) {
+    if (storeMessages[currentNumber] === messages) {
       return;
     }
-    if (props.messages[props.currentNumber].length - messages.length === 1) {
+    if (storeMessages[currentNumber].length - messages.length === 1) {
       setTimeout(() => {
         if (!messageListRef.current) return;
         messageListRef.current.scrollTop = messageListRef.current.scrollHeight;
       }, 10);
     }
-    setMessages(props.messages[props.currentNumber]);
-  }, [props]);
+    setMessages(storeMessages[currentNumber]);
+  }, [storeMessages, currentNumber]);
 
   return (
     <AppContainer onClickBack={showList}>

@@ -3,6 +3,7 @@ import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 
 import { Paper } from '../../../../../components/paper';
 import { nuiAction } from '../../../../../lib/nui-comms';
+import { useJobcenterAppStore } from '../stores/useJobcenterAppStore';
 
 const DollarLevel: FC<React.PropsWithChildren<{ level: number }>> = props => {
   return (
@@ -21,14 +22,11 @@ const DollarLevel: FC<React.PropsWithChildren<{ level: number }>> = props => {
   );
 };
 
-export const Jobs: FC<
-  React.PropsWithChildren<{
-    jobs: Phone.JobCenter.Job[];
-  }>
-> = props => {
+export const Jobs = () => {
+  const jobs = useJobcenterAppStore(s => s.jobs);
   return (
     <div className={'jobcenter__jobList'}>
-      {(props.jobs ?? []).map(j => (
+      {(jobs ?? []).map(j => (
         <Paper
           key={j.title}
           title={

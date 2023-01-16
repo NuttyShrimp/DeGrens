@@ -1,10 +1,10 @@
-import { genericAction } from '../../lib';
+import { useYPAppStore } from './stores/useYPAppStore';
 
 export const events: Phone.Events = {};
 
 events.setCurrentAd = (ad: Phone.YellowPages.Ad) => {
   ad = ad ?? null;
-  genericAction('phone.apps.yellowpages', {
+  useYPAppStore.setState({
     current: ad,
   });
 };

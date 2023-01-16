@@ -8,26 +8,36 @@ import { SequenceGame } from './components/games/sequencegame';
 import { VisionGame } from './components/games/visiongame';
 import { InfoDisplay } from './components/infodisplay';
 import { useGrid } from './hooks/usegrid';
-import store from './store';
+import { useGridGameStore } from './stores/useGridGameStore';
+import config from './_config';
 
 import './styles/gridgame.scss';
 
-const Component: AppFunction<Gridgame.State> = props => {
+const Component: AppFunction = props => {
   const { setCells } = useGrid();
   const [infoDisplay, setInfoDisplay] = useState<Gridgame.InfoDisplay | null>(null);
+  const [startGame, resetGame, id, active, data, gridSize] = useGridGameStore(s => [
+    s.startGame,
+    s.resetGame,
+    s.id,
+    s.active,
+    s.data,
+    s.gridSize,
+  ]);
 
   useEffect(() => {
     setCells(() =>
-      [...new Array(Math.pow(props.gridSize, 2))].map((_, i) => ({
+      [...new Array(Math.pow(gridSize, 2))].map((_, i) => ({
         id: i,
         active: false,
       }))
     );
-  }, [props.gridSize]);
+  }, [gridSize]);
 
   const handleShow = useCallback((data: Gridgame.GameData & { id: string }) => {
     const { id, game: active, gridSize, ...gameData } = data;
-    props.updateState({ visible: true, id, active, gridSize, data: gameData });
+    props.showApp();
+    startGame(id, active, gridSize, gameData);
 
     setInfoDisplay({
       text: 'Override Required...',
@@ -39,7 +49,8 @@ const Component: AppFunction<Gridgame.State> = props => {
   }, []);
 
   const handleHide = useCallback(() => {
-    props.updateState({ ...store.initialState });
+    props.hideApp();
+    resetGame();
   }, []);
 
   const finishGame = useCallback(
@@ -49,44 +60,30 @@ const Component: AppFunction<Gridgame.State> = props => {
         color: success ? baseStyle.primary.normal : baseStyle.tertiary.dark,
       });
       setTimeout(() => {
-        nuiAction('gridgame/finished', { id: props.id, success });
+        nuiAction('gridgame/finished', { id: id, success });
         closeApplication('gridgame');
       }, 3000);
     },
-    [closeApplication, props.id]
+    [closeApplication, id]
   );
 
   const activeGame = useMemo(() => {
-    switch (props.active) {
+    switch (active) {
       case 'order':
-        return (
-          <OrderGame gridSize={props.gridSize} {...(props.data as Gridgame.OrderGameData)} finishGame={finishGame} />
-        );
+        return <OrderGame gridSize={gridSize} {...(data as Gridgame.OrderGameData)} finishGame={finishGame} />;
       case 'sequence':
-        return (
-          <SequenceGame
-            gridSize={props.gridSize}
-            {...(props.data as Gridgame.SequenceGameData)}
-            finishGame={finishGame}
-          />
-        );
+        return <SequenceGame gridSize={gridSize} {...(data as Gridgame.SequenceGameData)} finishGame={finishGame} />;
       case 'vision':
-        return (
-          <VisionGame gridSize={props.gridSize} {...(props.data as Gridgame.VisionGameData)} finishGame={finishGame} />
-        );
+        return <VisionGame gridSize={gridSize} {...(data as Gridgame.VisionGameData)} finishGame={finishGame} />;
       default:
         return null;
     }
   }, [props]);
 
   return (
-    <AppWrapper appName={store.key} onShow={handleShow} onHide={handleHide} full center>
+    <AppWrapper appName={config.name} onShow={handleShow} onHide={handleHide} full center>
       <div className='gridgame'>
-        {infoDisplay !== null ? (
-          <InfoDisplay size={props.gridSize * 10 + 1} {...infoDisplay}></InfoDisplay>
-        ) : (
-          activeGame
-        )}
+        {infoDisplay !== null ? <InfoDisplay size={gridSize * 10 + 1} {...infoDisplay}></InfoDisplay> : activeGame}
       </div>
     </AppWrapper>
   );

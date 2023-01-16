@@ -1,13 +1,18 @@
 declare namespace Inventory {
   type XY = { x: number; y: number };
 
-  interface State extends Base.State {
+  interface State {
     items: Record<string, Item>;
     inventories: {
       [key: string]: PrimarySide | SecondarySide;
     };
     primaryId: string;
     secondaryId: string;
+  }
+
+  interface StateActions {
+    updateItem: (item: Item) => void;
+    deleteItem: (id: string) => void;
   }
 
   interface OpeningData {

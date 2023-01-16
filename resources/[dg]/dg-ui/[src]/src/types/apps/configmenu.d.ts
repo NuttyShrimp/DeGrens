@@ -51,7 +51,14 @@ declare namespace ConfigMenu {
     radio: RadioConfig;
   }
 
-  interface State extends Base.State, Categories {
+  interface State extends Categories {
     currentMenu: Menu;
+  }
+
+  interface StateActions {
+    setMenu: (menu: Menu) => void;
+    setConfig: (conf: Categories) => Categories;
+    updateConfig: <T extends keyof Categories>(cKey: T, data: Partial<Categories[T]>) => void;
+    saveConfig: () => void;
   }
 }

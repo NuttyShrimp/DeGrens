@@ -1,6 +1,4 @@
 declare namespace Keygame {
-  type State = Base.State & Open;
-
   type Open = {
     id: string;
     cycles: Cycle[];

@@ -1,5 +1,4 @@
 import React, { FC, useCallback, useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
 import { animated, useSpring } from 'react-spring';
 import useMeasure from 'react-use-measure';
 import Logo from '@assets/bennys/bennysmotorwork-logo.png';
@@ -9,9 +8,8 @@ import { modulo } from '@src/lib/util';
 import { nuiAction } from '../../../../lib/nui-comms';
 import { menuTitles } from '../../data/menuTitles';
 import { selectableMenuTypeToId } from '../../enum/selectableMenuTypeToId';
-import { useCart } from '../../hooks/useCart';
-import { useInformationBar } from '../../hooks/useInformationBar';
 import { useKeyEvents } from '../../hooks/useKeyEvents';
+import { useBennyStore } from '../../stores/useBennyStore';
 
 import '../../styles/mainMenu.scss';
 
@@ -66,13 +64,11 @@ const findSelectableMenu = (
   return found;
 };
 
-export const MainMenu: FC<{ updateState: UpdateState<Bennys.State> }> = ({ updateState }) => {
+export const MainMenu = () => {
   const [selectedMenu, setSelectedMenu] = useState<Bennys.SelectableMenu>('colors'); // colors for ingame, cart for browser
   const [activeMenus, setActiveMenus] = useState<Bennys.SelectableMenu[]>([]);
   const { useEventRegister } = useKeyEvents();
-  const { getCartItems } = useCart();
-  const { setPrice } = useInformationBar();
-  const currectCost = useSelector<RootState, number>(state => state.bennys.currentCost);
+  const [cart, setPrice, currectCost, setMenu] = useBennyStore(s => [s.cart, s.setBarPrice, s.currentCost, s.setMenu]);
 
   const fetchActiveMenus = async () => {
     const active = await nuiAction<Bennys.SelectableMenu[]>('bennys:getActiveMenus', {}, [
@@ -82,7 +78,7 @@ export const MainMenu: FC<{ updateState: UpdateState<Bennys.State> }> = ({ updat
       'wheels',
       'extras',
     ]);
-    const cartLength = getCartItems().length;
+    const cartLength = cart.length;
     if (cartLength !== 0) {
       active.push('cart');
     }
@@ -108,22 +104,18 @@ export const MainMenu: FC<{ updateState: UpdateState<Bennys.State> }> = ({ updat
   useEventRegister('ArrowRight', moveRight);
 
   const enterMenu = useCallback(() => {
-    updateState({
-      currentMenu: selectedMenu as Bennys.Menu,
-    });
-  }, [selectedMenu, updateState]);
+    setMenu(selectedMenu as Bennys.Menu);
+  }, [selectedMenu, setMenu]);
   useEventRegister('Enter', enterMenu);
 
   const exitBennys = useCallback(() => {
-    const cartLength = getCartItems().length;
+    const cartLength = cart.length;
     if (cartLength === 0) {
       nuiAction('bennys:exit');
     } else {
-      updateState({
-        currentMenu: 'cart' as Bennys.Menu,
-      });
+      setMenu('cart');
     }
-  }, [getCartItems, updateState]);
+  }, [cart, setMenu]);
   useEventRegister('Escape', exitBennys);
 
   return (

@@ -20,10 +20,17 @@ declare namespace Dispatch {
     label: string;
   }
 
-  interface State extends Base.State {
+  interface State {
     // Acts as buffer where fifo is being used when an overflow occurs
     calls: Call[];
     storeSize: number;
     cams: Cam[];
+  }
+
+  interface StateActions {
+    addCall: (call: Call) => void;
+    addCalls: (calls: Call[]) => void;
+    setCalls: (calls: Call[]) => void;
+    setCams: (cams: Cam[]) => void;
   }
 }

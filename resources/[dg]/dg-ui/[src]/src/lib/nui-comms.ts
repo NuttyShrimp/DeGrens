@@ -1,5 +1,6 @@
-import { store } from '@lib/redux';
 import { addLog, finishLog } from '@main/debuglogs/lib';
+
+import { useMainStore } from './stores/useMainStore';
 
 const doRequest = async (action: string, body = {}) => {
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -24,7 +25,7 @@ export const nuiAction: <T = any>(action: string, body?: Object, devData?: Objec
   body = {},
   devData = {}
 ) => {
-  body = { ...body, _character: store.getState().character };
+  body = { ...body, _character: useMainStore.getState().character };
   const actionId = addLog({
     name: action,
     body,

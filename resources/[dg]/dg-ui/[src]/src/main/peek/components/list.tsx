@@ -1,9 +1,11 @@
-import React, { FC } from 'react';
+import React from 'react';
 
 import { Icon } from '../../../components/icon';
 import { nuiAction } from '../../../lib/nui-comms';
+import { usePeekStore } from '../stores/usePeekStore';
 
-export const List: FC<{ entries: Peek.Entry[]; show: boolean }> = ({ entries, show }) => {
+export const List = () => {
+  const [entries, show] = usePeekStore(s => [s.entries, s.showList]);
   const handleClick = (id: string) => {
     nuiAction('peek:select', { id });
   };

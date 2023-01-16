@@ -1,30 +1,25 @@
 import React, { useCallback, useEffect } from 'react';
 import { DndProvider } from 'react-dnd';
 import { TouchBackend } from 'react-dnd-touch-backend';
-import { useSelector } from 'react-redux';
 import AppWrapper from '@components/appwrapper';
-
-import { useUpdateState } from '../../lib/redux';
+import { useMainStore } from '@src/lib/stores/useMainStore';
 
 import { useActions } from './hooks/useActions';
 import { Laptop } from './os/Laptop';
-import store from './store';
+import { useLaptopConfigStore } from './stores/useLaptopConfigStore';
+import config from './_config';
 
 import './styles/laptop.scss';
 
-const Component: AppFunction<Laptop.State> = props => {
+const Component: AppFunction = props => {
   const { loadApps } = useActions();
 
   const showLaptop = useCallback(() => {
-    props.updateState({
-      visible: true,
-    });
+    props.showApp();
   }, []);
 
   const hideLaptop = useCallback(() => {
-    props.updateState({
-      visible: false,
-    });
+    props.hideApp();
   }, []);
 
   useEffect(() => {
@@ -32,10 +27,9 @@ const Component: AppFunction<Laptop.State> = props => {
   }, []);
 
   // region Enabled Apps
-  const laptopApps = useSelector<RootState, Laptop.Config.Config[]>(state => state['laptop.config'].config);
-  const activeJob = useSelector<RootState, string | undefined>(state => state.character.job);
-  const hasVPN = useSelector<RootState, boolean>(state => state.character.hasVPN);
-  const setLaptopConfig = useUpdateState('laptop.config');
+  const laptopApps = useLaptopConfigStore(s => s.config);
+  const [activeJob, hasVPN] = useMainStore(s => [s.character.job, s.character.hasVPN]);
+  const setLaptopConfig = useLaptopConfigStore(s => s.updateStore);
 
   useEffect(() => {
     const enabledApps: Laptop.Config.Config[] = [];
@@ -53,7 +47,7 @@ const Component: AppFunction<Laptop.State> = props => {
   // endregion
 
   return (
-    <AppWrapper appName={store.key} onShow={showLaptop} onHide={hideLaptop} hideOnEscape full center>
+    <AppWrapper appName={config.name} onShow={showLaptop} onHide={hideLaptop} hideOnEscape full center>
       <DndProvider backend={TouchBackend} options={{ enableMouseEvents: true }}>
         <Laptop {...props} />
       </DndProvider>

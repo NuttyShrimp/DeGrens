@@ -1,6 +1,6 @@
 import React, { FC, useMemo, useState } from 'react';
-import { useSelector } from 'react-redux';
 import { Badge, Tooltip } from '@mui/material';
+import { usePhoneStore } from '@src/main/phone/stores/usePhoneStore';
 
 import { Icon } from '../../../../../components/icon';
 import { isDevel } from '../../../../../lib/env';
@@ -11,7 +11,7 @@ import { AppContainer } from '../../../os/appcontainer/appcontainer';
 import { styles } from './homescreen.styles';
 
 const AppIcon: FC<React.PropsWithChildren<ConfigObject>> = props => {
-  const hasNotification = useSelector<RootState, boolean>(state => state[`phone.apps.${props.name}`]?.hasNotification);
+  const hasNotification = usePhoneStore(s => s.appNotifications.includes(props.name));
   const classes = styles();
   const appName = useMemo(() => {
     return isDevel() ? `${props.name} | ${props.label} (${props.position})` : props.label;

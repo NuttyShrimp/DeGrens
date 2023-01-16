@@ -8,8 +8,13 @@ declare namespace Notifications {
     id?: string | number;
   }
 
-  interface State extends Base.State {
+  interface State {
     notifications: Notification[];
     lastId: number;
+  }
+
+  interface StateActions {
+    addNotification: (noti: Notification) => void;
+    removeNotification: (id: string | number) => void;
   }
 }

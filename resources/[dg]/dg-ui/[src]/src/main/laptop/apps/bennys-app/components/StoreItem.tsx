@@ -1,21 +1,20 @@
 import React, { FC } from 'react';
 import { getImg } from '@lib/util';
 
-import { useUpdateState } from '../../../../../lib/redux';
+import { useBennyAppStore } from '../stores/useBennyAppStore';
 
 import { Button } from './Button';
 
 export const StoreItem: FC<{ item: Laptop.Bennys.Item }> = props => {
-  const updateState = useUpdateState('laptop.bennys');
+  const [setCart, cart] = useBennyAppStore(s => [s.setCart, s.cart]);
+
   const addToCart = () => {
-    updateState(state => {
-      const cart = { ...state['laptop.bennys'].cart };
-      if (!cart[props.item.item]) {
-        cart[props.item.item] = 0;
-      }
-      cart[props.item.item]++;
-      return { cart };
-    });
+    const nCart = { ...cart };
+    if (!nCart[props.item.item]) {
+      nCart[props.item.item] = 0;
+    }
+    nCart[props.item.item]++;
+    setCart(nCart);
   };
   return (
     <div className={'laptop-bennys-store-item'}>

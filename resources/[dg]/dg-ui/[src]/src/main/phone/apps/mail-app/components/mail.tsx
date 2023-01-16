@@ -1,7 +1,8 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useState } from 'react';
 
 import { formatRelativeTime, getFirstLine, sanitizeText } from '../../../../../lib/util';
 import { AppContainer } from '../../../os/appcontainer/appcontainer';
+import { useMailAppStore } from '../stores/useMailAppStore';
 
 import { styles } from './mail,styles';
 
@@ -25,19 +26,13 @@ export const MailEntry: FC<React.PropsWithChildren<{ mail: Phone.Mail.Mail }>> =
   );
 };
 
-export const Mail: AppFunction<Phone.Mail.State> = props => {
+export const Mail = () => {
+  const mails = useMailAppStore(s => s.mails);
   const classes = styles();
-  useEffect(() => {
-    if (props.hasNotification) {
-      props.updateState({
-        hasNotification: false,
-      });
-    }
-  }, []);
   return (
-    <AppContainer emptyList={props.mails.length === 0}>
+    <AppContainer emptyList={mails.length === 0}>
       <div className={classes.list}>
-        {props.mails.map(mail => (
+        {mails.map(mail => (
           <MailEntry key={mail.id} mail={mail} />
         ))}
       </div>

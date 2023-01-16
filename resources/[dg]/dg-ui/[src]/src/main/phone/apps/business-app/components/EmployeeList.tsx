@@ -1,7 +1,6 @@
 import React, { FC, useEffect, useState } from 'react';
 import { Paper } from '@src/components/paper';
 import { ConfirmationModal } from '@src/components/util';
-import { useUpdateState } from '@src/lib/redux';
 import { hideFormModal, showFormModal, showLoadModal } from '@src/main/phone/lib';
 import { AppContainer } from '@src/main/phone/os/appcontainer/appcontainer';
 
@@ -18,6 +17,7 @@ import {
   updateEmployee,
   updateRole,
 } from '../lib';
+import { useBusinessAppStore } from '../stores/useBusinessAppStore';
 
 import { BankAccessModal } from './modals/BankAccessModal';
 import { RoleModal } from './modals/RoleModal';
@@ -25,13 +25,13 @@ import { RolePermsModal } from './modals/RolePermsModal';
 import { UserPayModal } from './modals/UserPayModal';
 import { UserModal } from './modals/UserRoleModal';
 
-export const EmployeeList: FC<{ list: Phone.Business.Employee[]; permissions: string[]; id: number }> = props => {
-  const updateState = useUpdateState('phone.apps.business');
-  const [employees, setEmployees] = useState(props.list);
+export const EmployeeList: FC<{ permissions: string[]; id: number }> = props => {
+  const [storeEmployees, updateStore] = useBusinessAppStore(s => [s.employees, s.updateStore]);
+  const [employees, setEmployees] = useState(storeEmployees);
 
   useEffect(() => {
-    setEmployees(props.list);
-  }, [props.list]);
+    setEmployees(storeEmployees);
+  }, [storeEmployees]);
 
   const getPaperActions = (employee: Phone.Business.Employee) => {
     const actions: Action[] = [];
@@ -151,7 +151,7 @@ export const EmployeeList: FC<{ list: Phone.Business.Employee[]; permissions: st
             id: props.id,
           });
           hideFormModal();
-          updateState({
+          updateStore({
             activeApp: 'log',
             logs,
           });
@@ -163,9 +163,9 @@ export const EmployeeList: FC<{ list: Phone.Business.Employee[]; permissions: st
 
   return (
     <AppContainer
-      emptyList={Object.keys(props.list).length === 0}
+      emptyList={Object.keys(storeEmployees).length === 0}
       onClickBack={() =>
-        updateState({
+        updateStore({
           currentBusiness: null,
           activeApp: 'business',
           employees: [],
@@ -173,7 +173,7 @@ export const EmployeeList: FC<{ list: Phone.Business.Employee[]; permissions: st
         })
       }
       search={{
-        list: props.list,
+        list: storeEmployees,
         filter: ['citizenid', 'name'],
         onChange: setEmployees,
       }}

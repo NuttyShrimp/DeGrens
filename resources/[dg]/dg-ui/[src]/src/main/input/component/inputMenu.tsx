@@ -5,7 +5,7 @@ import { Typography } from '@mui/material';
 
 import { closeApplication } from '../../../components/appwrapper';
 import { nuiAction } from '../../../lib/nui-comms';
-import store from '../store';
+import config from '../_config';
 
 export const InputMenu: FC<InputMenu.Data> = props => {
   const [values, setValues] = useState<Record<string, string>>({});
@@ -49,7 +49,7 @@ export const InputMenu: FC<InputMenu.Data> = props => {
 
   const handleClick = (accepted: boolean) => {
     nuiAction(props.callbackURL, { values, accepted });
-    closeApplication(store.key);
+    closeApplication(config.name);
   };
 
   return (

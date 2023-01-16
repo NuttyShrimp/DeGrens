@@ -2,21 +2,16 @@ import React, { useCallback } from 'react';
 import AppWrapper from '@components/appwrapper';
 
 import { LogList } from './components/Log';
-import store from './store';
+import config from './_config';
 
 import './styles/debuglogs.scss';
 
-const Component: AppFunction<DebugLogs.State> = props => {
-  const handleVisibility = (isVis: boolean) => {
-    props.updateState({
-      visible: isVis,
-    });
-  };
-  const handleShow = useCallback(() => handleVisibility(true), []);
-  const handleHide = useCallback(() => handleVisibility(false), []);
+const Component: AppFunction = props => {
+  const handleShow = useCallback(() => props.showApp(), []);
+  const handleHide = useCallback(() => props.hideApp, []);
   return (
-    <AppWrapper appName={store.key} onShow={handleShow} onHide={handleHide}>
-      <LogList {...props} />
+    <AppWrapper appName={config.name} onShow={handleShow} onHide={handleHide}>
+      <LogList />
     </AppWrapper>
   );
 };

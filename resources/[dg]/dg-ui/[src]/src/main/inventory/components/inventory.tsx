@@ -1,14 +1,24 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { FC, useCallback, useEffect, useState } from 'react';
 import { useDragDropManager } from 'react-dnd';
 import { useVhToPixel } from '@src/lib/hooks/useVhToPixel';
+import { useVisibleStore } from '@src/lib/stores/useVisibleStore';
+
+import { useInventoryStore } from '../stores/useInventoryStore';
 
 import { DragPreview } from './dragpreview';
 import { PrimarySide, SecondarySide } from './sides';
 
-export const Inventory: AppFunction<Inventory.State & { refreshDrag: number }> = props => {
+export const Inventory: FC<{ refreshDrag: number }> = props => {
   const dndManager = useDragDropManager();
   const cellVhToPixel = useVhToPixel(6);
   const [cellSize, setCellSize] = useState(64);
+  const visible = useVisibleStore(s => s.visibleApps.includes('inventory'));
+  const [inventories, items, primaryId, secondaryId] = useInventoryStore(s => [
+    s.inventories,
+    s.items,
+    s.primaryId,
+    s.secondaryId,
+  ]);
 
   const cancelDrag = useCallback(() => {
     dndManager.dispatch({ type: 'dnd-core/END_DRAG' });
@@ -19,9 +29,9 @@ export const Inventory: AppFunction<Inventory.State & { refreshDrag: number }> =
   }, [cellVhToPixel]);
 
   useEffect(() => {
-    if (props.visible) return;
+    if (visible) return;
     cancelDrag();
-  }, [props.visible]);
+  }, [visible]);
 
   useEffect(() => {
     cancelDrag();
@@ -31,16 +41,16 @@ export const Inventory: AppFunction<Inventory.State & { refreshDrag: number }> =
     <>
       <div className='inventory__wrapper' tabIndex={-1}>
         <PrimarySide
-          {...(props.inventories[props.primaryId] as Inventory.PrimarySide)}
-          items={Object.values(props.items)
-            .filter(i => i.inventory === props.primaryId)
+          {...(inventories[primaryId] as Inventory.PrimarySide)}
+          items={Object.values(items)
+            .filter(i => i.inventory === primaryId)
             .map(i => i.id)}
           cellSize={cellSize}
         />
         <SecondarySide
-          {...(props.inventories[props.secondaryId] as Inventory.SecondarySide)}
-          items={Object.values(props.items)
-            .filter(i => i.inventory === props.secondaryId)
+          {...(inventories[secondaryId] as Inventory.SecondarySide)}
+          items={Object.values(items)
+            .filter(i => i.inventory === secondaryId)
             .map(i => i.id)}
           cellSize={cellSize}
         />

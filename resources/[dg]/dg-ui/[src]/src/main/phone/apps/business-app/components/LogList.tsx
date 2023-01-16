@@ -1,12 +1,11 @@
 import React, { FC, useEffect, useState } from 'react';
 import { flushSync } from 'react-dom';
-import { useSelector } from 'react-redux';
 
 import { Button } from '../../../../../components/button';
 import { Paper } from '../../../../../components/paper';
 import { nuiAction } from '../../../../../lib/nui-comms';
-import { useUpdateState } from '../../../../../lib/redux';
 import { AppContainer } from '../../../os/appcontainer/appcontainer';
+import { useBusinessAppStore } from '../stores/useBusinessAppStore';
 
 const ACTION_ICONS = {
   hire: 'user-plus',
@@ -23,9 +22,7 @@ const ACTION_TITLE = {
 };
 
 export const LogList: FC<{}> = () => {
-  const updateState = useUpdateState('phone.apps.business');
-  const logs = useSelector<RootState, Phone.Business.Log[]>(state => state['phone.apps.business'].logs);
-  const currentBusiness = useSelector<RootState, number | null>(state => state['phone.apps.business'].currentBusiness);
+  const [logs, currentBusiness, updateStore] = useBusinessAppStore(s => [s.logs, s.currentBusiness, s.updateStore]);
   const [filteredLogs, setFilteredLogs] = useState(logs);
   const [fetchingLogs, setFetchingLogs] = useState(false);
   const [offset, setOffset] = useState(0);
@@ -45,7 +42,7 @@ export const LogList: FC<{}> = () => {
       return;
     }
     setOffset(offset + 1);
-    updateState({
+    updateStore({
       logs: logs.concat(extraLogs),
     });
     flushSync(() => setFetchingLogs(false));
@@ -60,7 +57,7 @@ export const LogList: FC<{}> = () => {
         onChange: setFilteredLogs,
       }}
       onClickBack={() => {
-        updateState({
+        updateStore({
           currentBusiness: null,
           activeApp: 'employee',
           employees: [],

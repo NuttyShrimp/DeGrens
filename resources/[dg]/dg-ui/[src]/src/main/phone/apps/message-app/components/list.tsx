@@ -7,6 +7,7 @@ import { showFormModal } from '../../../lib';
 import { AppContainer } from '../../../os/appcontainer/appcontainer';
 import { getContact } from '../../contacts-app/lib';
 import { openConversation } from '../lib';
+import { useMessageStoreApp } from '../stores/useMessageStoreApp';
 
 import { styles } from './messages.styles';
 import { NewConversationModal } from './modals';
@@ -18,16 +19,11 @@ declare interface ListEntry {
   hasUnread: boolean;
 }
 
-export const List: FC<
-  React.PropsWithChildren<
-    {
-      list: Record<string, Phone.Messages.Message[]>;
-    } & Base.Props
-  >
-> = props => {
+export const List: FC<{}> = () => {
   const classes = styles();
   const [list, setList] = useState<ListEntry[]>([]);
   const [filteredList, setFilteredList] = useState<ListEntry[]>([]);
+  const [setMessages, msgs] = useMessageStoreApp(s => [s.setMessages, s.messages]);
 
   const fetchMessages = async () => {
     const messages = await nuiAction<Record<string, Phone.Messages.Message[]>>(
@@ -40,9 +36,8 @@ export const List: FC<
       .forEach(KeyValuePair => {
         messages[KeyValuePair[0]] = KeyValuePair[1];
       });
-    props.updateState({
-      messages,
-    });
+
+    setMessages(messages);
   };
 
   useEffect(() => {
@@ -51,7 +46,7 @@ export const List: FC<
 
   useEffect(() => {
     const newList: any = [];
-    Object.entries(props.list).forEach(([nr, value]) => {
+    Object.entries(msgs).forEach(([nr, value]) => {
       const contact = getContact(nr);
       newList.push({
         nr,
@@ -62,7 +57,7 @@ export const List: FC<
     });
     setList(newList);
     setFilteredList(newList);
-  }, [props.list]);
+  }, [msgs]);
 
   return (
     <AppContainer
@@ -82,7 +77,7 @@ export const List: FC<
           setFilteredList(value);
         },
       }}
-      emptyList={Object.keys(props.list).length === 0}
+      emptyList={Object.keys(msgs).length === 0}
     >
       <div className={classes.list}>
         {filteredList.map(e => (

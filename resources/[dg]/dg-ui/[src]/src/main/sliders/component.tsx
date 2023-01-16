@@ -2,28 +2,28 @@ import React, { useCallback } from 'react';
 import AppWrapper from '@components/appwrapper';
 
 import { Sliders } from './components/sliders';
-import store from './store';
+import { useSlidersStore } from './stores/useSlidersStore';
+import config from './_config';
 
 import './styles/sliders.scss';
 
-const Component: AppFunction<Sliders.State> = props => {
+const Component: AppFunction = props => {
+  const updateStore = useSlidersStore(s => s.updateStore);
   const onShow = useCallback((data: { power: number[]; amount: number[] }) => {
-    props.updateState({
-      visible: true,
+    props.showApp();
+    updateStore({
       power: data.power,
       amount: data.amount,
     });
   }, []);
 
   const onHide = useCallback(() => {
-    props.updateState({
-      visible: false,
-    });
+    props.hideApp();
   }, []);
 
   return (
-    <AppWrapper appName={store.key} onShow={onShow} onHide={onHide} hideOnEscape full center>
-      <Sliders {...props} />
+    <AppWrapper appName={config.name} onShow={onShow} onHide={onHide} hideOnEscape full center>
+      <Sliders />
     </AppWrapper>
   );
 };

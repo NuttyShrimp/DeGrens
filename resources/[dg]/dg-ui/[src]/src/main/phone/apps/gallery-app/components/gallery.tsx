@@ -5,15 +5,15 @@ import { Paper } from '../../../../../components/paper';
 import { nuiAction } from '../../../../../lib/nui-comms';
 import { copyToClipboard } from '../../../../../lib/util';
 import { AppContainer } from '../../../os/appcontainer/appcontainer';
+import { useGalleryAppStore } from '../stores/useGalleryAppStore';
 
-export const Gallery: FC<
-  Phone.Gallery.State & {
-    fetchImages: () => Promise<void>;
-  }
-> = props => {
+export const Gallery: FC<{
+  fetchImages: () => Promise<void>;
+}> = props => {
+  const list = useGalleryAppStore(s => s.list);
   return (
     <AppContainer>
-      {props.list.map(i => (
+      {list.map(i => (
         <Paper
           image={<Icon name={i.link} lib={'img'} />}
           key={i.id}

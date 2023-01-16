@@ -1,12 +1,11 @@
 import React, { FC, useCallback, useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
 import { useKeyboardKey } from '@src/lib/hooks/useKeyboardKey';
 
 import { devData } from '../../../../lib/devdata';
 import { nuiAction } from '../../../../lib/nui-comms';
-import { useCart } from '../../hooks/useCart';
-import { useGuide, useInformationBar } from '../../hooks/useInformationBar';
+import { useGuide } from '../../hooks/useInformationBar';
 import { useKeyEvents } from '../../hooks/useKeyEvents';
+import { useBennyStore } from '../../stores/useBennyStore';
 import { CategorySlider } from '../CategorySlider';
 import { IdSelector } from '../IdSelector';
 
@@ -19,7 +18,29 @@ const isSameWheel = (
 };
 
 export const WheelsMenu: FC<{ goToMainMenu: () => void }> = ({ goToMainMenu }) => {
-  const { setTitle, setEquipped, resetTitle, setIsInCart, setPrice } = useInformationBar();
+  const [
+    addItemToCart,
+    getCartItemByComponent,
+    removeItemFromCart,
+    setTitle,
+    setEquipped,
+    resetTitle,
+    setIsInCart,
+    setPrice,
+    priceForWheels,
+    cart,
+  ] = useBennyStore(s => [
+    s.addToCart,
+    s.getCartItemForComp,
+    s.removeFromCart,
+    s.setBarTitle,
+    s.setEquipped,
+    s.resetTitleBar,
+    s.setInCart,
+    s.setBarPrice,
+    s.prices.wheels ?? 0,
+    s.cart,
+  ]);
   const { key: leftKey } = useKeyboardKey('q');
   const { key: rightKey } = useKeyboardKey('e');
   const { showGuide, hideGuide } = useGuide([
@@ -36,10 +57,7 @@ export const WheelsMenu: FC<{ goToMainMenu: () => void }> = ({ goToMainMenu }) =
       kbdCombo: [rightKey.toLocaleUpperCase()],
     },
   ]);
-  const { addItemToCart, getCartItemByComponent, removeItemFromCart } = useCart();
   const { useEventRegister } = useKeyEvents();
-
-  const priceForWheels = useSelector<RootState, number>(state => state.bennys.prices['wheels']);
 
   const [categories, setCategories] = useState<Bennys.Components.Wheels['categories']>([]);
   const [currentCategoryId, setCurrentCategoryId] = useState<number>(0);
@@ -88,7 +106,7 @@ export const WheelsMenu: FC<{ goToMainMenu: () => void }> = ({ goToMainMenu }) =
       }
       addItemToCart('wheels', added);
     },
-    [currentCategoryId, categories, equippedWheel, getCartItemByComponent]
+    [currentCategoryId, categories, equippedWheel]
   );
 
   const changeCategory = (newCat: number) => {
@@ -117,7 +135,7 @@ export const WheelsMenu: FC<{ goToMainMenu: () => void }> = ({ goToMainMenu }) =
         id: currentComponentId,
       },
     });
-  }, [currentCategoryId, currentComponentId, categories, equippedWheel, getCartItemByComponent]);
+  }, [currentCategoryId, currentComponentId, categories, equippedWheel, cart]);
 
   // Reset previewed item to cartitem else equipped on leave
   const previewPreviousOnChange = useCallback(() => {
@@ -126,7 +144,7 @@ export const WheelsMenu: FC<{ goToMainMenu: () => void }> = ({ goToMainMenu }) =
       name: 'wheels',
       data: previewWheel,
     });
-  }, [equippedWheel, getCartItemByComponent]);
+  }, [equippedWheel]);
 
   const exit = useCallback(() => {
     previewPreviousOnChange();

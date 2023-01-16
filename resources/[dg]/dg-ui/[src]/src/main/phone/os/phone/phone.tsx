@@ -1,11 +1,13 @@
 import React, { FC, useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
 import { animated, useSpring } from 'react-spring';
 import shell from '@assets/phone/shell.png';
 import { useVhToPixel } from '@lib/hooks/useVhToPixel';
 import { AppContainer } from '@src/components/appcontainer';
+import { useVisibleStore } from '@src/lib/stores/useVisibleStore';
 
 import { ConfigObject } from '../../config';
+import { usePhoneNotiStore } from '../../stores/usePhoneNotiStore';
+import { usePhoneStore } from '../../stores/usePhoneStore';
 import { BottomBar } from '../bottombar/bottombar';
 import { Form } from '../form/form';
 import { NotificationWrapper } from '../notifications/notifications';
@@ -17,7 +19,15 @@ export const Phone: FC<React.PropsWithChildren<Phone.Props & { config: ConfigObj
   const classes = styles();
   const closedVh = useVhToPixel(60);
   const basedOffset = useVhToPixel(60 - 8.7);
-  const notificationState = useSelector<RootState, Phone.Notifications.State>(state => state['phone.notifications']);
+  const notifications = usePhoneNotiStore(s => s.list);
+  const [animating, hasNotifications, activeApp, bigPhoto, background] = usePhoneStore(s => [
+    s.animating,
+    s.hasNotifications,
+    s.activeApp,
+    s.bigPhoto,
+    s.background,
+  ]);
+  const visible = useVisibleStore(s => s.visibleApps.includes('phone'));
   const [bottomOffset, setBottomOffset] = useState(basedOffset);
   const [activeAppCfg, setActiveAppCfg] = useState<ConfigObject | undefined>(undefined);
   const [rootAnimStyle, api] = useSpring(() => ({
@@ -35,15 +45,15 @@ export const Phone: FC<React.PropsWithChildren<Phone.Props & { config: ConfigObj
 
   useEffect(() => {
     let offset = 0;
-    const notiWithActions = notificationState.list.filter(n => n.onAccept || n.onDecline);
+    const notiWithActions = notifications.filter(n => n.onAccept || n.onDecline);
     offset += notiWithActions.length * 7.5;
-    offset += (notificationState.list.length - notiWithActions.length) * 4.3;
+    offset += (notifications.length - notiWithActions.length) * 4.3;
     setBottomOffset(basedOffset - offset);
-  }, [notificationState, basedOffset]);
+  }, [notifications, basedOffset]);
 
   useEffect(() => {
     let target = '0px';
-    switch (props.animating) {
+    switch (animating) {
       case 'closed': {
         target = `-${closedVh}px`;
         break;
@@ -53,7 +63,6 @@ export const Phone: FC<React.PropsWithChildren<Phone.Props & { config: ConfigObj
         break;
       }
       case 'open': {
-        target = '0px';
         break;
       }
     }
@@ -63,19 +72,18 @@ export const Phone: FC<React.PropsWithChildren<Phone.Props & { config: ConfigObj
         duration: 300,
       },
     });
-    console.log(`visible: ${props.visible} animating: ${props.animating} hasNoti: ${props.hasNotifications}`);
-  }, [props.visible, props.animating, props.hasNotifications, api]);
+  }, [visible, animating, hasNotifications, api, closedVh, bottomOffset]);
 
   useEffect(() => {
-    setActiveAppCfg(props.config.find(c => c.name === props.activeApp));
-  }, [props.activeApp]);
+    setActiveAppCfg(props.config.find(c => c.name === activeApp));
+  }, [activeApp]);
 
   return (
     <animated.div className={classes.root} style={rootAnimStyle}>
-      {props.bigPhoto && (
+      {bigPhoto && (
         <div className={classes.bigPhoto}>
           <div>
-            <img src={props.bigPhoto} alt='big photo' />
+            <img src={bigPhoto} alt='big photo' />
           </div>
         </div>
       )}
@@ -83,14 +91,14 @@ export const Phone: FC<React.PropsWithChildren<Phone.Props & { config: ConfigObj
         <img src={shell} alt={'phone shell'} />
       </div>
       <div className={classes.notifications} />
-      <div className={classes.appWrapper} style={props.background}>
+      <div className={classes.appWrapper} style={background}>
         <TopContent character={props.character} game={props.game} />
         <div className={classes.activeApp}>
           <NotificationWrapper />
           {(activeAppCfg && (
             <AppContainer config={{ ...activeAppCfg, name: `phone.apps.${activeAppCfg.name}` as keyof RootState }} />
           )) ??
-            `${props.activeApp} is not registered`}
+            `${activeApp} is not registered`}
         </div>
         <BottomBar />
       </div>

@@ -5,11 +5,13 @@ import AppWrapper from '@components/appwrapper';
 import { useVhToPixel } from '../../lib/hooks/useVhToPixel';
 
 import { Radio } from './component/Radio';
-import store from './store';
+import { useRadioStore } from './stores/useRadioStore';
+import config from './_config';
 
 import './styles/radio.scss';
 
-const Component: AppFunction<Radio.State> = props => {
+const Component: AppFunction = props => {
+  const updateStore = useRadioStore(s => s.updateStore);
   const [show, setShow] = useState(false);
   const closedVh = useVhToPixel(-51);
   const openVh = useVhToPixel(-1);
@@ -21,17 +23,13 @@ const Component: AppFunction<Radio.State> = props => {
     },
     onRest: useCallback(() => {
       if (show) return;
-      props.updateState({
-        visible: false,
-      });
-    }, [show]),
+      props.hideApp();
+    }, [show, props.hideApp]),
   });
 
   const showRadio = useCallback((data: Radio.Info) => {
-    props.updateState({
-      visible: true,
-      ...data,
-    });
+    props.showApp();
+    updateStore(data);
     setShow(true);
   }, []);
 
@@ -40,9 +38,9 @@ const Component: AppFunction<Radio.State> = props => {
   }, []);
 
   return (
-    <AppWrapper appName={store.key} onShow={showRadio} onHide={hideRadio} full center hideOnEscape>
+    <AppWrapper appName={config.name} onShow={showRadio} onHide={hideRadio} full center hideOnEscape>
       <animated.div style={slideStyle} className={'radio-wrapper'}>
-        <Radio frequency={props.frequency} enabled={props.enabled} updateState={props.updateState} />
+        <Radio />
       </animated.div>
     </AppWrapper>
   );

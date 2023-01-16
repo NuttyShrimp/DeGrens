@@ -1,23 +1,20 @@
 import React, { FC, useEffect, useMemo, useState } from 'react';
-import { useSelector } from 'react-redux';
 import { Input } from '@src/components/inputs';
 import { SimpleForm } from '@src/components/simpleform';
 import { showLoadModal } from '@src/main/phone/lib';
+
+import { useBusinessAppStore } from '../../stores/useBusinessAppStore';
 
 export const RolePermsModal: FC<{
   name?: boolean;
   permissions?: string[];
   onSubmit: (name: string, permissions: Record<string, boolean>) => Promise<any>;
 }> = ({ onSubmit, name, permissions }) => {
-  const myPerms = useSelector<RootState, string[]>(
-    state =>
-      state['phone.apps.business'].list.find(b => b.id === state['phone.apps.business'].currentBusiness)?.permissions ??
-      []
-  );
-  const permLabels = useSelector<RootState, Record<string, string>>(
-    state => state['phone.apps.business'].permissionLabels
-  );
-  const roles = useSelector<RootState, Record<string, string[]>>(state => state['phone.apps.business'].roles);
+  const [myPerms, permLabels, roles] = useBusinessAppStore(s => [
+    s.list.find(b => b.id === s.currentBusiness)?.permissions ?? [],
+    s.permissionLabels,
+    s.roles,
+  ]);
 
   const [selectedPermissions, setSelectedPermissions] = useState<Record<string, boolean>>({});
   const [selectedRole, setSelectedRole] = useState<string>(Object.keys(roles)[0] ?? '');

@@ -1,10 +1,11 @@
 import React, { FC, useEffect, useState } from 'react';
 import { Paper } from '@src/components/paper';
-import { useUpdateState } from '@src/lib/redux';
 import { AppContainer } from '@src/main/phone/os/appcontainer/appcontainer';
 
+import { useBusinessAppStore } from '../stores/useBusinessAppStore';
+
 export const BusinessList: FC<{ list: Phone.Business.Business[] }> = props => {
-  const updateState = useUpdateState('phone.apps.business');
+  const updateStore = useBusinessAppStore(s => s.updateStore);
   const [businesses, setBusinesses] = useState(props.list);
 
   useEffect(() => {
@@ -12,7 +13,7 @@ export const BusinessList: FC<{ list: Phone.Business.Business[] }> = props => {
   }, [props.list]);
 
   const selectBusiness = (id: number) => {
-    updateState({
+    updateStore({
       currentBusiness: id,
       activeApp: 'employee',
     });

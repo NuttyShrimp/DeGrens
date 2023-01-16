@@ -5,20 +5,20 @@ import { nuiAction } from '../../../../lib/nui-comms';
 import { AppContainer } from '../../os/appcontainer/appcontainer';
 
 import { VehicleList } from './components/VehicleList';
+import { useGarageAppStore } from './stores/useGarageAppStore';
 
-const Component: AppFunction<Phone.Garage.State> = props => {
+const Component = () => {
+  const [setList, listLen] = useGarageAppStore(s => [s.setList, s.list.length]);
   const fetchVehicles = async () => {
     const vehicles = await nuiAction('phone/garage/get', {}, devData.phoneVehicles);
-    props.updateState({
-      list: vehicles,
-    });
+    setList(vehicles);
   };
 
   useEffect(() => {
     fetchVehicles();
   }, []);
   return (
-    <AppContainer emptyList={props.list.length === 0}>
+    <AppContainer emptyList={listLen === 0}>
       <VehicleList />
     </AppContainer>
   );

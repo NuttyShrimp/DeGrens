@@ -2,11 +2,11 @@ import React, { useCallback, useState } from 'react';
 import AppWrapper from '@components/appwrapper';
 
 import { InputMenu } from './component/inputMenu';
-import store from './store';
+import config from './_config';
 
 import './styles/inputs.scss';
 
-const Component: AppFunction<InputMenu.State> = props => {
+const Component: AppFunction = props => {
   const [inputs, setInputs] = useState<InputMenu.Input[]>([]);
   const [header, setHeader] = useState('');
   const [callbackURL, setCallbackURL] = useState('');
@@ -33,19 +33,15 @@ const Component: AppFunction<InputMenu.State> = props => {
     setHeader(data.header ?? '');
     setCallbackURL(data.callbackURL ?? '');
 
-    props.updateState({
-      visible: true,
-    });
+    props.showApp();
   }, []);
 
   const onHide = useCallback(() => {
-    props.updateState({
-      visible: false,
-    });
+    props.hideApp();
   }, []);
 
   return (
-    <AppWrapper appName={store.key} onShow={onShow} onHide={onHide} full center>
+    <AppWrapper appName={config.name} onShow={onShow} onHide={onHide} full center>
       <InputMenu inputs={inputs} header={header} callbackURL={callbackURL} />
     </AppWrapper>
   );

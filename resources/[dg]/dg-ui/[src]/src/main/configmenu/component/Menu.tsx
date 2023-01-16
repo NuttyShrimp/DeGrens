@@ -1,10 +1,8 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
 import { Divider } from '@mui/material';
 
 import { Button } from '../../../components/button';
-import { useUpdateState } from '../../../lib/redux';
-import { useConfigActions } from '../hooks/useConfigActions';
+import { useConfigmenuStore } from '../stores/useConfigmenuStore';
 
 import { Hud } from './Hud';
 import { Phone } from './Phone';
@@ -19,15 +17,11 @@ const MENU_COMPONENTS: Record<ConfigMenu.Menu, JSX.Element> = {
 };
 
 const NavBar = () => {
-  const activeMenu = useSelector<RootState, ConfigMenu.Menu>(state => state.configmenu.currentMenu);
-  const updateState = useUpdateState('configmenu');
-  const { saveConfig } = useConfigActions();
+  const [activeMenu, saveConfig, setMenu] = useConfigmenuStore(s => [s.currentMenu, s.saveConfig, s.setMenu]);
 
   const changeMenu = (menu: ConfigMenu.Menu) => {
     if (activeMenu === menu) return;
-    updateState({
-      currentMenu: menu,
-    });
+    setMenu(menu);
   };
 
   return (
@@ -54,7 +48,7 @@ const NavBar = () => {
 };
 
 export const Menu = () => {
-  const activeMenu = useSelector<RootState, ConfigMenu.Menu>(state => state.configmenu.currentMenu);
+  const activeMenu = useConfigmenuStore(s => s.currentMenu);
   return (
     <div className={'configmenu'}>
       <NavBar />

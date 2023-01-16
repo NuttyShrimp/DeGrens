@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { useSelector } from 'react-redux';
+import { useMainStore } from '@src/lib/stores/useMainStore';
 
 import { TITLE_OF_TYPE } from '../constants';
 import { getInventoryType } from '../util';
@@ -7,7 +7,7 @@ import { getInventoryType } from '../util';
 import { Grid } from './grid';
 
 export const PrimarySide: FC<Inventory.PrimarySide & { items: string[]; cellSize: number }> = props => {
-  const cash = useSelector<RootState, number>(state => state.character.cash);
+  const cash = useMainStore(s => s.character.cash);
 
   return (
     <div className='side' style={{ width: props.cellSize * 9 }}>

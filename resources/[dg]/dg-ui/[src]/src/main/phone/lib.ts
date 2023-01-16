@@ -1,69 +1,50 @@
 import baseBackground from '@assets/phone/background.png';
+import { useMainStore } from '@src/lib/stores/useMainStore';
+import { useVisibleStore } from '@src/lib/stores/useVisibleStore';
 
 import { Loader } from '../../components/util';
 import { nuiAction } from '../../lib/nui-comms';
-import { store, type } from '../../lib/redux';
+import { useConfigmenuStore } from '../configmenu/stores/useConfigmenuStore';
 
+import { usePhoneFormStore } from './stores/usePhoneFormStore';
+import { usePhoneNotiStore } from './stores/usePhoneNotiStore';
+import { usePhoneStore } from './stores/usePhoneStore';
 import { getPhoneApp, getPhoneApps, phoneApps } from './config';
 
-export const getState: <T = Phone.State>(key?: string) => T = (key = 'phone') => store.getState()[key];
-
-export const genericAction = (storeKey: string, data: any) => {
-  store.dispatch({
-    type,
-    cb: state => ({
-      ...state,
-      [storeKey]: {
-        ...state[storeKey],
-        ...data,
-      },
-    }),
-  });
-};
-
 export const hidePhone = () => {
-  const state = getState();
-  genericAction('phone', {
+  const state = usePhoneStore.getState();
+  usePhoneStore.setState({
     animating: state.hasNotifications ? 'peek' : 'closed',
   });
   setTimeout(() => {
     if (state.hasNotifications) return;
-    genericAction('phone', {
-      visible: false,
-    });
+    useVisibleStore.getState().toggleApp('phone', false);
   }, 500);
   nuiAction('phone/close', { inCamera: state.inCamera });
-  genericAction('phone', {
+  usePhoneStore.setState({
     inCamera: false,
   });
 };
 
-export const phoneInit = async () => {
-  const results: { app: string; result: any }[] = [];
+export const phoneInit = () => {
   for (const app of getPhoneApps()) {
     if (app.init) {
-      results.push({
-        app: app.name,
-        result: await app.init(),
-      });
+      app.init();
     }
   }
-  results.map(({ app, result }) => {
-    genericAction(`phone.apps.${app}`, result);
-  });
 };
 
 export const setBackground = () => {
-  const currentAppInfo = phoneApps.find(app => app.name === getState().activeApp);
-  const configMenuState = getState<ConfigMenu.State>('configmenu');
+  const activeApp = usePhoneStore.getState().activeApp;
+  const currentAppInfo = phoneApps.find(app => app.name === activeApp);
   const getStandardBackground = () => {
-    const charBG = configMenuState?.phone?.background?.phone;
+    const charBG = useConfigmenuStore.getState().phone?.background?.phone;
     return {
       backgroundImage: `url(${(charBG && charBG.trim() !== '' ? charBG : baseBackground) || baseBackground}`,
     };
   };
   if (!currentAppInfo || !currentAppInfo?.background) {
-    genericAction('phone', {
+    usePhoneStore.setState({
       background: getStandardBackground(),
     });
     return;
@@ -74,7 +55,7 @@ export const setBackground = () => {
       : typeof currentAppInfo?.background === 'string'
       ? { background: currentAppInfo?.background }
       : currentAppInfo?.background;
-  genericAction('phone', {
+  usePhoneStore.setState({
     background: newBackground,
   });
 };
@@ -83,16 +64,17 @@ export const changeApp = (app: string) => {
   if (!phoneApps.find(a => a.name === app)) {
     console.error(`Phone app ${app} not found`);
   }
-  genericAction('phone', {
+  usePhoneStore.setState(s => ({
     activeApp: app,
-  });
+    appNotifications: s.appNotifications.filter(a => a !== app),
+  }));
   setBackground();
 };
 
-export const isAppActive = (app: string) => getState().activeApp === app;
+export const isAppActive = (app: string) => usePhoneStore.getState().activeApp === app;
 
 export const showFormModal = (Form: any) => {
-  genericAction('phone.form', {
+  usePhoneFormStore.setState({
     visible: true,
     element: Form,
     checkmark: false,
@@ -101,7 +83,7 @@ export const showFormModal = (Form: any) => {
 };
 
 export const hideFormModal = () => {
-  genericAction('phone.form', {
+  usePhoneFormStore.setState({
     visible: false,
     checkmark: false,
     warning: false,
@@ -114,7 +96,7 @@ export const showLoadModal = () => {
 };
 
 export const showCheckmarkModal = (payload?: Function) => {
-  genericAction('phone.form', {
+  usePhoneFormStore.setState({
     visible: false,
     checkmark: true,
     element: null,
@@ -128,7 +110,7 @@ export const showCheckmarkModal = (payload?: Function) => {
 };
 
 export const showWarningModal = (payload?: Function) => {
-  genericAction('phone.form', {
+  usePhoneFormStore.setState({
     visible: false,
     checkmark: false,
     element: null,
@@ -147,7 +129,7 @@ const stringEvents = ['onAccept', 'onDecline'];
 export const addNotification = (
   notification: Omit<Phone.Notifications.Notification, 'icon'> & { icon: string | Phone.Notifications.Icon }
 ) => {
-  const charState = getState<Character>('character');
+  const charState = useMainStore.getState().character;
   if (!charState.hasPhone) {
     return;
   }
@@ -182,15 +164,15 @@ export const addNotification = (
   if (notification.app && !getPhoneApp(notification.app)) {
     throw new Error(`Phone app ${notification.app} not found (notification: ${notification.id})`);
   }
-  const notiState = getState<Phone.Notifications.State>('phone.notifications');
+  const notiState = usePhoneNotiStore.getState();
   notiState.list.unshift(notification as Phone.Notifications.Notification);
-  genericAction('phone.notifications', {
+  usePhoneNotiStore.setState({
     list: notiState.list,
   });
-  const phoneState = getState();
+  const phoneState = usePhoneStore.getState();
   if (!phoneState.isSilent) {
-    genericAction('phone', {
-      visible: true,
+    useVisibleStore.getState().toggleApp('phone', true);
+    usePhoneStore.setState({
       animating: phoneState.animating !== 'open' ? 'peek' : 'open',
       hasNotifications: true,
     });
@@ -209,16 +191,16 @@ export const addNotification = (
 };
 
 export const removeNotification = (id: string) => {
-  const notiState = getState<Phone.Notifications.State>('phone.notifications');
+  const notiState = usePhoneNotiStore.getState();
   const index = notiState.list.findIndex(n => n.id === id);
   if (index === -1) return;
   notiState.list.splice(index, 1);
-  genericAction('phone.notifications', {
+  usePhoneNotiStore.setState({
     list: notiState.list,
   });
-  const phoneState = getState();
+  const phoneState = usePhoneStore.getState();
   if (notiState.list.length === 0) {
-    genericAction('phone', {
+    usePhoneStore.setState({
       animating: phoneState.animating === 'peek' ? 'closed' : 'open',
       hasNotifications: false,
     });
@@ -226,7 +208,7 @@ export const removeNotification = (id: string) => {
 };
 
 export const acceptNotification = (id: string) => {
-  const notiState = getState<Phone.Notifications.State>('phone.notifications');
+  const notiState = usePhoneNotiStore.getState();
   const notification = notiState.list.find(n => n.id === id);
   if (!notification) return;
   if (notification.onAccept) {
@@ -240,7 +222,7 @@ export const acceptNotification = (id: string) => {
 };
 
 export const declineNotification = (id: string) => {
-  const notiState = getState<Phone.Notifications.State>('phone.notifications');
+  const notiState = usePhoneNotiStore.getState();
   const notification = notiState.list.find(n => n.id === id);
   if (!notification) return;
   if (notification.onDecline) {
@@ -251,21 +233,21 @@ export const declineNotification = (id: string) => {
 };
 
 export const updateNotification = (id: string, notification: Partial<Phone.Notifications.Notification>) => {
-  const notiState = getState<Phone.Notifications.State>('phone.notifications');
+  const notiState = usePhoneNotiStore.getState();
   const index = notiState.list.findIndex(n => n.id === id);
   if (index === -1) return;
   notiState.list[index] = {
     ...notiState.list[index],
     ...notification,
   };
-  genericAction('phone.notifications', {
+  usePhoneNotiStore.setState({
     list: notiState.list,
   });
 };
 // endregion
 
 export const setBigPhoto = (url: string | null) => {
-  genericAction('phone', {
+  usePhoneStore.setState({
     bigPhoto: url,
   });
 };

@@ -7,5 +7,8 @@ declare namespace IdList {
     current: ScopePlayer[];
     recent: ScopePlayer[];
   }
-  type State = Base.State & ScopeInfo;
+  type State = ScopeInfo;
+  interface StateActions {
+    setList: (data: ScopeInfo) => void;
+  }
 }

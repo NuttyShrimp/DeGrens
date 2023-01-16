@@ -1,25 +1,27 @@
 import React, { useCallback, useEffect, useMemo } from 'react';
-import { useSelector } from 'react-redux';
 import AppWrapper from '@components/appwrapper';
+import { useMainStore } from '@src/lib/stores/useMainStore';
 
 import { Phone } from './os/phone/phone';
+import { usePhoneStore } from './stores/usePhoneStore';
+import modConfig from './_config';
 import { getPhoneApps, phoneEvents } from './config';
 import { hidePhone, phoneInit, setBackground } from './lib';
-import store from './store';
 
-const Component: AppFunction<Phone.State> = props => {
+const Component: AppFunction = props => {
   const config = useMemo(() => getPhoneApps(), []);
-  const character = useSelector<RootState, Character>(state => state.character);
-  const game = useSelector<RootState, Main.Game>(state => state.game);
+  const character = useMainStore(s => s.character);
+  const game = useMainStore(s => s.game);
+  const updateStore = usePhoneStore(s => s.updateStore);
 
   useEffect(() => {
     setBackground();
   }, []);
 
-  const handleShow = useCallback((data: Omit<typeof store.initialState, 'visible'>) => {
-    props.updateState({
+  const handleShow = useCallback((data: Omit<Phone.State, 'visible'>) => {
+    props.showApp();
+    updateStore({
       ...data,
-      visible: true,
       animating: 'open',
     });
   }, []);
@@ -42,7 +44,7 @@ const Component: AppFunction<Phone.State> = props => {
 
   return (
     <AppWrapper
-      appName={store.key}
+      appName={modConfig.name}
       onShow={handleShow}
       onEvent={handleEvent}
       onHide={handleHide}
@@ -50,7 +52,7 @@ const Component: AppFunction<Phone.State> = props => {
       full
       hideOverflow
     >
-      <Phone {...props} game={game} character={character} config={config} />
+      <Phone game={game} character={character} config={config} />
     </AppWrapper>
   );
 };

@@ -1,14 +1,12 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
 
 import { Input } from '../../../components/inputs';
-import { useConfigActions } from '../hooks/useConfigActions';
+import { useConfigmenuStore } from '../stores/useConfigmenuStore';
 
 import { Section } from './Utils';
 
 export const Hud = () => {
-  const state = useSelector<RootState, ConfigMenu.HudConfig>(state => state.configmenu.hud);
-  const { updateConfig } = useConfigActions();
+  const [state, updateConfig] = useConfigmenuStore(s => [s.hud, s.updateConfig]);
   return (
     <div>
       <Section title={'Input'}>
@@ -17,7 +15,6 @@ export const Hud = () => {
           value={state?.keyboard || 'qwerty'}
           onChange={e =>
             updateConfig('hud', {
-              ...state,
               keyboard: (e || 'qwerty') as 'azerty' | 'qwerty',
             })
           }
@@ -35,7 +32,6 @@ export const Hud = () => {
           name={'showCompass'}
           onChange={e =>
             updateConfig('hud', {
-              ...state,
               compass: {
                 ...state.compass,
                 show: e.currentTarget.checked,
@@ -44,13 +40,12 @@ export const Hud = () => {
           }
         />
         <Input.Number
-          label={'FPS (disclaimer: bij hoge waarden kan je lag ondervinden)'}
+          label={'FPS (disclaimer: bij waarde >30 kan je UI lag verwachten)'}
           value={state.compass.fps}
           min={1}
           max={60}
           onChange={val =>
             updateConfig('hud', {
-              ...state,
               compass: {
                 ...state.compass,
                 fps: Number(val),

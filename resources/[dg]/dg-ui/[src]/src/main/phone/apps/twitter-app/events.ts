@@ -1,17 +1,22 @@
-import { addNotification, genericAction, getState } from '../../lib';
+import { useMainStore } from '@src/lib/stores/useMainStore';
+import { useConfigmenuStore } from '@src/main/configmenu/stores/useConfigmenuStore';
 
+import { addNotification } from '../../lib';
+
+import { useTwitterAppStore } from './stores/useTwitterAppStore';
 import { changeTweetStatus } from './lib';
 
 export const events: Phone.Events = {};
 
 events.newTweet = (tweet: Phone.Twitter.Tweet) => {
-  const appState = getState<Phone.Twitter.State>('phone.apps.twitter');
-  appState.tweets.unshift(tweet);
-  genericAction('phone.apps.twitter', appState);
-  const characterState = getState<Character>('character');
+  const tweets = useTwitterAppStore.getState().tweets;
+  tweets.unshift(tweet);
+  useTwitterAppStore.setState({ tweets });
+
+  const characterState = useMainStore.getState().character;
   if (`${characterState.firstname}_${characterState.lastname}`.replace(' ', '_') === tweet.sender_name) return;
-  const configMenu = getState<ConfigMenu.State>('configmenu');
-  if (!configMenu.phone.notifications.twitter) return;
+  const twitterNotis = useConfigmenuStore.getState().phone.notifications.twitter;
+  if (!twitterNotis) return;
   addNotification({
     id: `tweet_${tweet.id}`,
     icon: 'twitter',
@@ -34,7 +39,7 @@ events.addRetweet = (tweetId: number) => {
 };
 
 events.deleteTweet = (tweetId: number) => {
-  const appState = getState<Phone.Twitter.State>('phone.apps.twitter');
-  appState.tweets = appState.tweets.filter(tweet => tweet.id !== tweetId);
-  genericAction('phone.apps.twitter', appState);
+  let tweets = useTwitterAppStore.getState().tweets;
+  tweets = tweets.filter(tweet => tweet.id !== tweetId);
+  useTwitterAppStore.setState({ tweets });
 };

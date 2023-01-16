@@ -14,7 +14,7 @@ export interface ConfigObject {
   /**
    * Ran after phone is mounted, should return a part of the apps store
    **/
-  init?: () => any;
+  init?: () => void;
   hidden?: () => boolean;
   events?: Phone.Events;
 }

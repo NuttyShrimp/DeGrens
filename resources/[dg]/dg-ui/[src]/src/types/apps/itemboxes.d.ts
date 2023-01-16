@@ -1,5 +1,5 @@
 declare namespace Itemboxes {
-  interface State extends Base.State {
+  interface State {
     itemboxes: Itembox[];
   }
 
