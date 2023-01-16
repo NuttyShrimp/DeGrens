@@ -1,11 +1,11 @@
 import React, { FC, MouseEvent, useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
 import { Button } from '@mui/material';
 import { styled } from '@mui/material/styles';
 
 import { Icon } from '../../../../components/icon';
 import { formatTime } from '../../../../lib/util';
 import { acceptNotification, declineNotification } from '../../lib';
+import { usePhoneNotiStore } from '../../stores/usePhoneNotiStore';
 
 import { styles } from './notification.styles';
 
@@ -105,12 +105,12 @@ export const Notification: FC<React.PropsWithChildren<{ notification: Phone.Noti
 
 export const NotificationWrapper: FC<React.PropsWithChildren<unknown>> = () => {
   const classes = styles();
-  const notifications = useSelector<RootState, Phone.Notifications.State>(state => state['phone.notifications']);
+  const list = usePhoneNotiStore(s => s.list);
 
   return (
     <div className={classes.list}>
       <div className={classes.innerList}>
-        {notifications.list.map(notification => (
+        {list.map(notification => (
           <Notification notification={notification} key={notification.id} />
         ))}
       </div>

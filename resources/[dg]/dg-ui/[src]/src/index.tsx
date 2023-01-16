@@ -4,7 +4,6 @@ import * as Sentry from '@sentry/react';
 import { BrowserTracing } from '@sentry/tracing';
 
 import { isDevel, isGameDevel } from './lib/env';
-import { Provider, store } from './lib/redux';
 import { App } from './base-app';
 import { IndexProvider } from './index.provider';
 
@@ -37,9 +36,7 @@ if (!isDevel()) {
 const rootElem = document.getElementById('root');
 const root = createRoot(rootElem as HTMLElement);
 root.render(
-  <Provider store={store}>
-    <IndexProvider>
-      <App />
-    </IndexProvider>
-  </Provider>
+  <IndexProvider>
+    <App />
+  </IndexProvider>
 );

@@ -7,6 +7,8 @@ import { devData } from '@src/lib/devdata';
 import { nuiAction } from '@src/lib/nui-comms';
 import { addNotification } from '@src/main/phone/lib';
 
+import { useJobcenterAppStore } from '../stores/useJobcenterAppStore';
+
 const GroupElement: FC<{ group: Phone.JobCenter.Group; canEnter?: boolean }> = ({ group, canEnter }) => {
   const handleRequestToJoin = () => {
     if (!canEnter) return;
@@ -46,14 +48,11 @@ const GroupElement: FC<{ group: Phone.JobCenter.Group; canEnter?: boolean }> = (
   );
 };
 
-export const List: FC<
-  React.PropsWithChildren<Base.Props<Phone.JobCenter.State> & { groups: Phone.JobCenter.Group[] }>
-> = props => {
+export const List: FC<{}> = () => {
+  const [setGroups, groups] = useJobcenterAppStore(s => [s.setGroups, s.groups]);
   const fetchGroups = async () => {
     const groups = await nuiAction('phone/jobs/groups/get', {}, devData.jobGroups);
-    props.updateState({
-      groups,
-    });
+    setGroups(groups);
   };
 
   const handleGroupCreation = () => {
@@ -67,14 +66,14 @@ export const List: FC<
     <div className='jobcenter__groups__list'>
       <Button.Primary onClick={handleGroupCreation}>Create Group</Button.Primary>
       <Typography variant={'subtitle1'}>Inactieve</Typography>
-      {props.groups
+      {groups
         .filter(g => g.idle)
         .map(g => (
           <GroupElement key={g.id} group={g} canEnter />
         ))}
       <Divider />
       <Typography variant={'subtitle1'}>Actieve</Typography>
-      {props.groups
+      {groups
         .filter(g => !g.idle)
         .map(g => (
           <GroupElement key={g.id} group={g} />

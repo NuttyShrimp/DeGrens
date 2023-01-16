@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React from 'react';
 
 import { Paper } from '../../../../../components/paper';
 import { formatRelativeTime } from '../../../../../lib/util';
@@ -6,11 +6,13 @@ import { addNotification, showFormModal } from '../../../lib';
 import { ContactModal } from '../../contacts-app/components/modals';
 import { getContact } from '../../contacts-app/lib';
 import { startPhoneCall } from '../lib';
+import { usePhoneAppStore } from '../stores/usePhoneAppStore';
 
 import { styles } from './phone.styles';
 
-export const PhoneList: FC<Phone.Phone.State> = ({ calls }) => {
+export const PhoneList = () => {
   const classes = styles();
+  const calls = usePhoneAppStore(s => s.calls);
   const actions: Action[] = [
     {
       title: 'Bel terug',

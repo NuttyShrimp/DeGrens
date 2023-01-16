@@ -4,19 +4,21 @@ import { Badge, Divider, IconButton, Tooltip } from '@mui/material';
 import { Icon } from '../../../../../components/icon';
 import { JusticeNames } from '../../../enum';
 import { startPhoneCall } from '../../phone-app/lib';
+import { useJusticeAppStore } from '../stores/useJusticeAppStore';
 
 import { styles } from './justice.styles';
 
-export const Justice: AppFunction<Phone.Justice.Props> = props => {
+export const Justice = () => {
+  const list = useJusticeAppStore(s => s.list);
   const classes = styles();
   return (
     <div>
-      {Object.keys(props.list).map(k => (
+      {Object.keys(list).map(k => (
         <div key={`phone-justice-${k}`}>
           <div className={classes.header}>{JusticeNames[k]}</div>
           <Divider />
           <div className={classes.body}>
-            {props.list[k].map(e => (
+            {list[k].map(e => (
               <div className={classes.entry} key={e.phone}>
                 <div>
                   <Badge

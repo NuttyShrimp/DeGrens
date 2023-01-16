@@ -1,29 +1,27 @@
 import React, { FC, useEffect, useMemo } from 'react';
-import { useSelector } from 'react-redux';
 
 import { devData } from '../../../../lib/devdata';
 import { nuiAction } from '../../../../lib/nui-comms';
-import { useUpdateState } from '../../../../lib/redux';
 import { AppWindow } from '../../os/windows/AppWindow';
 
 import { Header } from './components/header';
 import { Cart } from './pages/cart';
 import { StoreList } from './pages/storeList';
+import { useBennyAppStore } from './stores/useBennyAppStore';
 
 import '../../styles/bennys.scss';
 
 export const Component: FC = () => {
-  const state = useSelector<RootState, Laptop.Bennys.State>(state => state['laptop.bennys']);
-  const updateState = useUpdateState('laptop.bennys');
+  const [activeTab, items, setItems] = useBennyAppStore(s => [s.activeTab, s.items, s.setItems]);
 
   const loadItems = async () => {
-    if (state.items.length > 0) return;
+    if (items.length > 0) return;
     const newItems = await nuiAction<Laptop.Bennys.Item[]>('laptop/bennys/getItems', {}, devData.bennyLaptopItems);
-    updateState({ items: newItems });
+    setItems(newItems);
   };
 
   const storePage = useMemo(() => {
-    switch (state.activeTab) {
+    switch (activeTab) {
       case 'cosmetic':
         return <StoreList category={'cosmetic'} />;
       case 'illegal':
@@ -33,7 +31,7 @@ export const Component: FC = () => {
       default:
         return <div>Unknown Page</div>;
     }
-  }, [state.activeTab]);
+  }, [activeTab]);
 
   useEffect(() => {
     loadItems();

@@ -1,16 +1,19 @@
 import { nuiAction } from '../../../../lib/nui-comms';
-import { addNotification, genericAction, getState, removeNotification, updateNotification } from '../../lib';
+import { addNotification, removeNotification, updateNotification } from '../../lib';
+import { usePhoneStore } from '../../stores/usePhoneStore';
 import { getContact } from '../contacts-app/lib';
 
+import { usePhoneAppStore } from './stores/usePhoneAppStore';
+
 const addCallEntry = (name: string, number: string, date: number, incoming: boolean) => {
-  const calls = getState<Phone.Phone.State>('phone.apps.phone').calls;
+  const calls = usePhoneAppStore.getState().calls;
   calls.push({
     name,
     number,
     date,
     incoming,
   });
-  genericAction('phone.apps.phone', { calls });
+  usePhoneAppStore.setState({ calls });
 };
 
 // region Call logic
@@ -22,7 +25,7 @@ export const startPhoneCall = (nr: string, isAnon = false) => {
     phone: nr,
     isAnon,
   });
-  genericAction('phone', {
+  usePhoneStore.setState({
     callMeta: {
       number: nr,
       isAnon,
@@ -48,12 +51,12 @@ export const endPhoneCall = () => {
   });
   nuiAction('phone/endcall');
   removeNotification(phoneCallNotiId);
-  const callMeta = getState().callMeta;
+  const callMeta = usePhoneStore.getState().callMeta;
   const contact = getContact(callMeta.number);
   if (!callMeta.isAnon) {
     addCallEntry(contact?.label ?? callMeta.number, contact?.phone ?? '', Date.now(), incoming);
   }
-  genericAction('phone', {
+  usePhoneStore.setState({
     callMeta: {},
   });
   incoming = false;
@@ -62,7 +65,7 @@ export const endPhoneCall = () => {
 export const setIncomingCall = (data: { label: string; isAnon: boolean }) => {
   incoming = true;
   const contact = getContact(data.label);
-  genericAction('phone', {
+  usePhoneStore.setState({
     callMeta: {
       number: data.label,
       isAnon: data.isAnon,

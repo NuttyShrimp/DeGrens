@@ -1,14 +1,12 @@
 import { useCallback } from 'react';
-import { useSelector } from 'react-redux';
-import { useUpdateState } from '@src/lib/redux';
+
+import { useGridGameStore } from '../stores/useGridGameStore';
 
 export const useGrid = () => {
-  const gridSize = useSelector<RootState, number>(state => state.gridgame.gridSize);
-  const cells = useSelector<RootState, Gridgame.Cell[]>(state => state.gridgame.cells);
-  const updateState = useUpdateState('gridgame');
+  const [gridSize, cells, setStoreCells] = useGridGameStore(s => [s.gridSize, s.cells, s.setCells]);
 
   const setCells = useCallback((cb: (oldCells: Gridgame.Cell[]) => Gridgame.Cell[]) => {
-    updateState(state => ({ cells: cb(state.gridgame.cells).sort((c1, c2) => c1.id - c2.id) }));
+    setStoreCells(cb(cells).sort((c1, c2) => c1.id - c2.id));
   }, []);
 
   const setLabelsVisible = useCallback((displayLabel: boolean) => {

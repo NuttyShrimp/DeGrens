@@ -1,15 +1,13 @@
 import React from 'react';
 
-import { store as reduxStore } from '../../lib/redux/store';
-
+import { usePhoneStore } from './stores/usePhoneStore';
 import Container from './component';
-import store from './store';
 
 const config: ConfigObject = {
-  name: store.key,
+  name: 'phone',
   render: p => <Container {...p} />,
   type: () => {
-    if ((reduxStore.getState() as RootState)?.phone?.animating === 'peek') {
+    if (usePhoneStore.getState().animating === 'peek') {
       return 'passive';
     }
     return 'interactive';

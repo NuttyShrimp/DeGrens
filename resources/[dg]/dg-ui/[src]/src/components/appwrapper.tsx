@@ -1,9 +1,9 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { useSelector } from 'react-redux';
 import { nuiAction } from '@lib/nui-comms';
-import { store, type } from '@lib/redux';
 import makeStyles from '@mui/styles/makeStyles';
 import * as Sentry from '@sentry/react';
+import { useMainStore } from '@src/lib/stores/useMainStore';
+import { useVisibleStore } from '@src/lib/stores/useVisibleStore';
 
 import { useApps } from '../lib/hooks/useApps';
 
@@ -68,27 +68,14 @@ const registeredApps: {
   };
 } = {};
 
-const setCurrentApp = (app: string) => {
-  store.dispatch({
-    type,
-    cb: state => ({
-      ...state,
-      main: {
-        ...state.main,
-        currentApp: app,
-      },
-    }),
-  });
-};
-
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export default function AppWrapper(props: AppWrapperProps) {
-  const mainStateApp = useSelector<RootState, string>(state => state.main.currentApp);
+  const [setCurrentApp, currentApp, setError] = useMainStore(s => [s.setCurrentApp, s.currentApp, s.setError]);
   const styles = useStyles(props);
   const { getApp } = useApps();
   const { addHandler, removeHandler } = useEventHandler();
   const appInfo = getApp(props.appName);
-  const appVisible = useSelector<RootState, boolean>(state => state[props.appName].visible);
+  const appVisible = useVisibleStore(s => s.visibleApps.includes(props.appName));
 
   const [active, setActive] = useState(false);
 
@@ -197,17 +184,7 @@ export default function AppWrapper(props: AppWrapperProps) {
       onError.current(e);
     }
     console.error(e);
-    store.dispatch({
-      type,
-      cb: state => ({
-        ...state,
-        main: {
-          ...state.main,
-          error: props.appName,
-          mounted: false,
-        },
-      }),
-    });
+    setError(props.appName);
   };
 
   const handleActiveApp: any = () => {
@@ -242,10 +219,10 @@ export default function AppWrapper(props: AppWrapperProps) {
   }, [appVisible]);
 
   useEffect(() => {
-    const isActiveApp = mainStateApp === props.appName;
+    const isActiveApp = currentApp === props.appName;
     if (isActiveApp === active) return;
     setActive(isActiveApp);
-  }, [mainStateApp]);
+  }, [currentApp]);
 
   useEffect(() => {
     if (!appInfo) {

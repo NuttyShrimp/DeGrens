@@ -1,5 +1,5 @@
 declare namespace Sliders {
-  interface State extends Base.State {
+  interface State {
     power: number[];
     amount: number[];
   }

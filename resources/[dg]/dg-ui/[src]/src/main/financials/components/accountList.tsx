@@ -1,11 +1,11 @@
 import React, { FC, MouseEvent } from 'react';
-import { useSelector } from 'react-redux';
 import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
 import { Button, IconButton } from '@mui/material';
+import { useMainStore } from '@src/lib/stores/useMainStore';
 
 import Numberformat from '../../../components/numberformat';
 import { AccountIcon } from '../enum';
-import { setModal } from '../lib';
+import { useFinancialsStore } from '../stores/useFinancialsStore';
 
 import { DepositModal } from './modals/DepositModal';
 import { PermissionsModal } from './modals/PermissionsModal';
@@ -21,7 +21,8 @@ const Account: FC<
     fetchTransactions: () => Promise<void>;
   }>
 > = props => {
-  const plyCid = useSelector<RootState, number>(state => state.character.cid);
+  const [setModal] = useFinancialsStore(s => [s.setModal]);
+  const plyCid = useMainStore(s => s.character.cid);
 
   const btnClick = (e: MouseEvent, component: React.ReactElement) => {
     e.stopPropagation();
@@ -129,21 +130,20 @@ const Account: FC<
 
 export const AccountList: FC<
   React.PropsWithChildren<{
-    accounts: Financials.Account[];
-    selected: Financials.Account | null;
     setActiveAccount: (acc: Financials.Account) => void;
     fetchAccounts: () => Promise<void>;
     fetchTransactions: () => Promise<void>;
   }>
 > = props => {
+  const [accounts, selected] = useFinancialsStore(s => [s.accounts, s.selected]);
   return (
     <div className={'account__list'}>
-      {props.accounts.map(account => (
+      {accounts.map(account => (
         <Account
           key={account.account_id}
           account={account}
           setActiveAccount={props.setActiveAccount}
-          selected={account.account_id === props?.selected?.account_id}
+          selected={account.account_id === selected?.account_id}
           fetchAccounts={props.fetchAccounts}
           fetchTransactions={props.fetchTransactions}
         />

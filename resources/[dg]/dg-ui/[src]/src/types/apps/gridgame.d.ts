@@ -1,11 +1,17 @@
 declare namespace Gridgame {
-  type State = Base.State & {
+  type State = {
     gridSize: number;
     active: Game | null;
     id: string;
     data: OrderGameData | SequenceGameData | LogicGameData | null;
     cells: Cells[];
   };
+
+  interface StateActions {
+    startGame: (id: string, active: Game, size: number, data: GameData) => void;
+    resetGame: () => void;
+    setCells: (cells: Cells[]) => void;
+  }
 
   type GameData = BaseGameData &
     (

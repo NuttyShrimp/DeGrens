@@ -4,13 +4,15 @@ import AppWrapper from '@components/appwrapper';
 import { sanitizeText } from '../../lib/util';
 
 import { Interaction } from './components/Interaction';
-import store from './store';
+import { useInteractionStore } from './stores/useInteractionStore';
+import config from './_config';
 
 import './styles/interaction.scss';
 
-const Component: AppFunction<Interaction.State> = props => {
+const Component: AppFunction = () => {
+  const updateStore = useInteractionStore(s => s.updateStore);
   const showInteraction = useCallback((data: { text: string; type: InteractionType }) => {
-    props.updateState({
+    updateStore({
       show: true,
       text: sanitizeText(
         (data.text ?? '').toUpperCase().replace(/\[.\]/, match => `<span class='shadow'>${match}</span>`)
@@ -20,14 +22,14 @@ const Component: AppFunction<Interaction.State> = props => {
   }, []);
 
   const hideInteraction = useCallback(() => {
-    props.updateState({
+    updateStore({
       show: false,
     });
   }, []);
 
   return (
-    <AppWrapper appName={store.key} onShow={showInteraction} onHide={hideInteraction} full unSelectable>
-      <Interaction {...props} />
+    <AppWrapper appName={config.name} onShow={showInteraction} onHide={hideInteraction} full unSelectable>
+      <Interaction />
     </AppWrapper>
   );
 };

@@ -3,12 +3,7 @@ import { useDrop } from 'react-dnd';
 import { useNotifications } from '@src/main/notifications/hooks/useNotification';
 
 import { CELLS_PER_ROW } from '../constants';
-import {
-  areRequirementsFullfilled,
-  canPlaceItemAtPosition,
-  isItemAllowedInInventory,
-  updateItemPosition,
-} from '../lib';
+import { useInventory } from '../hooks/useInventory';
 
 import { GridBackground } from './gridbackground';
 import { Item } from './item';
@@ -16,6 +11,8 @@ import { Item } from './item';
 export const Grid: FC<{ id: string; size: number; items: string[]; cellSize: number }> = props => {
   const gridRef = useRef<HTMLDivElement>(null);
   const { addNotification } = useNotifications();
+  const { areRequirementsFullfilled, canPlaceItemAtPosition, isItemAllowedInInventory, updateItemPosition } =
+    useInventory();
 
   const [, dropRef] = useDrop(
     () => ({
@@ -41,7 +38,15 @@ export const Grid: FC<{ id: string; size: number; items: string[]; cellSize: num
         return;
       },
     }),
-    [gridRef.current, props.id, props.cellSize]
+    [
+      gridRef.current,
+      props.id,
+      props.cellSize,
+      updateItemPosition,
+      isItemAllowedInInventory,
+      areRequirementsFullfilled,
+      canPlaceItemAtPosition,
+    ]
   );
   dropRef(gridRef);
 

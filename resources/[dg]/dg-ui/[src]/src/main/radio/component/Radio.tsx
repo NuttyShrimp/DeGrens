@@ -3,9 +3,11 @@ import RadioPng from '@assets/radio/radio.png';
 import { Tooltip } from '@mui/material';
 
 import { nuiAction } from '../../../lib/nui-comms';
+import { useRadioStore } from '../stores/useRadioStore';
 
-export const Radio: AppFunction<Radio.Info> = props => {
-  const [freq, setFreq] = useState<string>(String(props.frequency ?? 0));
+export const Radio = () => {
+  const [enabled, frequency, updateStore] = useRadioStore(s => [s.enabled, s.frequency, s.updateStore]);
+  const [freq, setFreq] = useState<string>(String(frequency ?? 0));
   const handleFreqChange = (e: ChangeEvent<HTMLInputElement>) => {
     let val = e.currentTarget.value;
     const newFreq = Number(val);
@@ -23,10 +25,10 @@ export const Radio: AppFunction<Radio.Info> = props => {
 
   const toggleRadio = () => {
     nuiAction('radio/toggle', {
-      toggle: !props.enabled,
+      toggle: !enabled,
     });
-    props.updateState({
-      enabled: !props.enabled,
+    updateStore({
+      enabled: !enabled,
     });
   };
 
@@ -42,10 +44,10 @@ export const Radio: AppFunction<Radio.Info> = props => {
         <img src={RadioPng} alt={'photo of radio'} />
       </div>
       <div className={'radio-freq'}>
-        {props.enabled ? <input value={freq} onChange={handleFreqChange} onBlur={setChannel} /> : <p>Off</p>}
+        {enabled ? <input value={freq} onChange={handleFreqChange} onBlur={setChannel} /> : <p>Off</p>}
       </div>
       <div className={'radio-toggle'}>
-        <Tooltip title={props.enabled ? 'Switch off' : 'Switch on'} placement={'left'} arrow>
+        <Tooltip title={enabled ? 'Switch off' : 'Switch on'} placement={'left'} arrow>
           <div className={'fill'} onClick={toggleRadio} />
         </Tooltip>
       </div>

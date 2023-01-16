@@ -1,15 +1,17 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { useSelector } from 'react-redux';
 import AppWrapper from '@components/appwrapper';
 import { devData } from '@src/lib/devdata';
 import { isDevel } from '@src/lib/env';
 import { nuiAction } from '@src/lib/nui-comms';
 
+import { usePhoneStore } from '../phone/stores/usePhoneStore';
+
 import { Cash } from './component/Cash';
 import { Compass } from './component/Compass';
 import { HudBar } from './component/hudBar';
 import { SpeedoMeter } from './component/Speedometer';
-import store from './store';
+import { useHudStore } from './stores/useHudStore';
+import config from './_config';
 
 import './styles/hud.scss';
 
@@ -17,46 +19,42 @@ import './styles/hud.scss';
 // have their own events. Extra entries can be registered via
 // exports
 
-const Component: AppFunction<Hud.State> = props => {
+const Component: AppFunction = props => {
   const [cashVisible, setCashVisible] = useState(false);
   const cashFlashTimeout = useRef<NodeJS.Timeout | null>(null);
-  const phoneOpen = useSelector<RootState, boolean>(state => state.phone.animating !== 'closed');
+  const phoneOpen = usePhoneStore(s => s.animating !== 'closed');
+  const [addEntry, deleteEntry, toggleEntry, updateStore, carVisible] = useHudStore(s => [
+    s.addEntry,
+    s.deleteEntry,
+    s.toggleEntry,
+    s.updateStore,
+    s.car.visible,
+  ]);
 
   const evtHandlers = useMemo(() => {
     return {
       setValues: (evt: any) => {
-        props.updateState({
+        updateStore({
           values: evt.values,
           voice: evt.voice,
         });
       },
       addEntry: (evt: any) => {
-        props.updateState(state => ({
-          entries: [...state.hud.entries, evt.data as Hud.Entry].sort((e1, e2) => e1.order - e2.order),
-        }));
+        addEntry(evt.data);
       },
       deleteEntry: (evt: any) => {
-        props.updateState(state => ({
-          entries: state.hud.entries.filter(e => e.name !== evt.data.name),
-        }));
+        deleteEntry(evt.data.name);
       },
       toggleEntry: (evt: any) => {
-        props.updateState(state => ({
-          entries: state.hud.entries.map(e => {
-            if (e.name === evt.data.name) {
-              e.enabled = evt.data.enabled;
-            }
-            return e;
-          }),
-        }));
+        toggleEntry(evt.data.name, evt.data.enabled);
       },
       setCarValues: (evt: any) => {
-        props.updateState({
+        updateStore({
           car: evt.data,
         });
       },
       setCompassValues: (evt: any) => {
-        props.updateState({
+        updateStore({
           compass: evt.data,
         });
       },
@@ -64,45 +62,41 @@ const Component: AppFunction<Hud.State> = props => {
         flashCash(evt.data as number);
       },
       addCashHistory: (evt: any) => {
-        props.updateState(state => ({
+        updateStore(state => ({
           cash: {
-            ...state.hud.cash,
-            history: [evt.amount, ...state.hud.cash.history],
+            ...state.cash,
+            history: [evt.amount, ...state.cash.history],
           },
         }));
         flashCash(evt.data as number);
         setTimeout(() => {
-          props.updateState(state => ({
+          updateStore(state => ({
             cash: {
-              ...state.hud.cash,
-              history: state.hud.cash.history.slice(1),
+              ...state.cash,
+              history: state.cash.history.slice(1),
             },
           }));
         }, 5000);
       },
     };
-  }, [props.updateState]);
+  }, [updateStore]);
 
   const showHud = useCallback(() => {
-    props.updateState({
-      visible: true,
-    });
+    props.showApp();
     if (isDevel()) {
-      props.updateState({
+      updateStore({
         values: devData.hudValues,
       });
     }
   }, []);
 
   const hideHud = useCallback(() => {
-    props.updateState({
-      visible: false,
-    });
+    props.hideApp();
   }, []);
 
   const fetchEntries = async () => {
     const entries = await nuiAction('hud/entries/get', {}, devData.hudEntries);
-    props.updateState({
+    updateStore({
       entries: entries,
     });
   };
@@ -113,9 +107,9 @@ const Component: AppFunction<Hud.State> = props => {
       cashFlashTimeout.current = null;
     }
     setCashVisible(true);
-    props.updateState(state => ({
+    updateStore(state => ({
       cash: {
-        ...state.hud.cash,
+        ...state.cash,
         current: cash,
       },
     }));
@@ -137,11 +131,11 @@ const Component: AppFunction<Hud.State> = props => {
   }, []);
 
   return (
-    <AppWrapper appName={store.key} onShow={showHud} onHide={hideHud} onEvent={handleEvents} full>
-      <HudBar voice={props.voice} values={props.values} entries={props.entries} />
-      {props.car.visible && !phoneOpen && <SpeedoMeter />}
-      <Compass {...props.compass} />
-      {cashVisible && <Cash {...props.cash} />}
+    <AppWrapper appName={config.name} onShow={showHud} onHide={hideHud} onEvent={handleEvents} full>
+      <HudBar />
+      {carVisible && !phoneOpen && <SpeedoMeter />}
+      <Compass />
+      {cashVisible && <Cash />}
     </AppWrapper>
   );
 };

@@ -1,6 +1,5 @@
 import React, { FC, useEffect, useState } from 'react';
 import { useDrag } from 'react-dnd';
-import { useSelector } from 'react-redux';
 import { alpha, Tooltip } from '@mui/material';
 import { baseStyle } from '@src/base.styles';
 import { closeApplication } from '@src/components/appwrapper';
@@ -8,25 +7,27 @@ import { nuiAction } from '@src/lib/nui-comms';
 import { useNotifications } from '@src/main/notifications/hooks/useNotification';
 
 import { getImg } from '../../../lib/util';
-import {
-  bindItemToKey,
-  getFirstFreeSpace,
-  getOtherInventoryId,
-  isItemAllowedInInventory,
-  isUseable,
-  unbindItem,
-  updateItemPosition,
-} from '../lib';
-import store from '../store';
+import config from '../_config';
+import { useInventory } from '../hooks/useInventory';
+import { useInventoryStore } from '../stores/useInventoryStore';
 import { coordToPx } from '../util';
 
 import { ItemTooltip } from './itemtooltip';
 
 export const Item: FC<{ itemId: string; cellSize: number }> = ({ itemId, cellSize }) => {
   const [isHovering, setIsHovering] = useState(false);
-  const itemState = useSelector<RootState, Inventory.Item>(state => state.inventory.items[itemId]);
+  const itemState = useInventoryStore(s => s.items[itemId]);
   const { addNotification } = useNotifications();
   const [hotkeyPressed, setHotkeyPressed] = useState<number | null>(null);
+  const {
+    bindItemToKey,
+    getFirstFreeSpace,
+    getOtherInventoryId,
+    isItemAllowedInInventory,
+    isUseable,
+    unbindItem,
+    updateItemPosition,
+  } = useInventory();
 
   const [{ isDragging }, dragRef] = useDrag(
     () => ({
@@ -59,7 +60,7 @@ export const Item: FC<{ itemId: string; cellSize: number }> = ({ itemId, cellSiz
     nuiAction('inventory/useItem', { id: itemState.id });
 
     if (itemState.closeOnUse ?? true) {
-      closeApplication(store.key);
+      closeApplication(config.name);
     } else {
       addNotification({ message: `Je hebt ${itemState.label} gebruikt`, type: 'success' });
     }

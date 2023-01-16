@@ -1,5 +1,5 @@
 declare namespace TaskBar {
-  interface State extends Base.State {
+  interface State {
     icon: string;
     duration: number;
     label: string;

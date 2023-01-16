@@ -1,11 +1,11 @@
 import React, { FC } from 'react';
-import { useSelector } from 'react-redux';
 
 import { Button } from '../../../../../components/button';
 import { List } from '../../../../../components/list';
 import { Paper } from '../../../../../components/paper';
 import { nuiAction } from '../../../../../lib/nui-comms';
 import { showFormModal } from '../../../lib';
+import { useGarageAppStore } from '../stores/useGarageAppStore';
 
 import { SellModal } from './SellModal';
 
@@ -16,7 +16,7 @@ const STATE_LABELS = {
 };
 
 export const VehicleList: FC<{}> = () => {
-  const vehicles = useSelector<RootState, Phone.Garage.Vehicle[]>(state => state['phone.apps.garage'].list);
+  const vehicles = useGarageAppStore(s => s.list);
 
   const trackVehicle = (vin: string) => {
     nuiAction('phone/garage/track', { vin });

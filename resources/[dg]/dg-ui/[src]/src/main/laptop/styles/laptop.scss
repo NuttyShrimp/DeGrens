@@ -11,6 +11,7 @@
     width: calc(100% - 30vh);
     background-size: contain;
     overflow: hidden;
+    background-repeat: round;
   }
 
   &-icon {

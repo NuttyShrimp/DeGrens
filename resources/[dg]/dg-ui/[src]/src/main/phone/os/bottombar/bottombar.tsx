@@ -1,28 +1,28 @@
 import React, { FC } from 'react';
-import { useSelector } from 'react-redux';
 import { nuiAction } from '@lib/nui-comms';
 import { Typography } from '@mui/material';
 
 import { baseStyle } from '../../../../base.styles';
-import { addNotification, changeApp, genericAction } from '../../lib';
+import { addNotification, changeApp } from '../../lib';
+import { usePhoneStore } from '../../stores/usePhoneStore';
 
 import { styles } from './bottombar.styles';
 
 export const BottomBar: FC<React.PropsWithChildren<unknown>> = () => {
   const classes = styles();
-  const phoneState = useSelector<RootState, Phone.State>(state => state.phone);
+  const [isSilent, activeApp, updatePhoneStore] = usePhoneStore(s => [s.isSilent, s.activeApp, s.updateStore]);
   const [isHovering, setHovering] = React.useState(false);
 
   const toggleSilence = () => {
     nuiAction('phone/silence', {
-      silenced: !phoneState.isSilent,
+      silenced: !isSilent,
     });
-    genericAction('phone', {
-      isSilent: !phoneState.isSilent,
+    updatePhoneStore({
+      isSilent: !isSilent,
     });
     addNotification({
       id: 'bottomBar.silence',
-      description: phoneState.isSilent ? 'Meldingen aangezet' : 'Meldingen uitgezet',
+      description: isSilent ? 'Meldingen aangezet' : 'Meldingen uitgezet',
       title: 'Settings',
       icon: {
         name: 'cog',
@@ -33,12 +33,12 @@ export const BottomBar: FC<React.PropsWithChildren<unknown>> = () => {
   };
 
   const goHome = () => {
-    if (phoneState.activeApp == 'home-screen') return;
+    if (activeApp == 'home-screen') return;
     changeApp('home-screen');
   };
 
   const openCamera = () => {
-    genericAction('phone', {
+    updatePhoneStore({
       inCamera: true,
     });
     nuiAction('phone/camera/open');
@@ -47,7 +47,7 @@ export const BottomBar: FC<React.PropsWithChildren<unknown>> = () => {
   return (
     <div className={classes.root}>
       <Typography variant='body2' onClick={toggleSilence}>
-        <i className={`fas fa-${phoneState.isSilent ? 'bell-slash' : 'bell'}`} />
+        <i className={`fas fa-${isSilent ? 'bell-slash' : 'bell'}`} />
       </Typography>
       <div>
         <Typography

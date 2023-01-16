@@ -1,11 +1,12 @@
 import React, { FC } from 'react';
-import { useSelector } from 'react-redux';
 import { animated, useSpring } from 'react-spring';
 import { Stack } from '@mui/material';
 import { Icon } from '@src/components/icon';
 
+import { useHudStore } from '../stores/useHudStore';
+
 export const SpeedoMeter: FC<{}> = () => {
-  const car = useSelector<RootState, Hud.Car>(state => state.hud.car);
+  const car = useHudStore(s => s.car);
 
   const fuelStyle = useSpring({
     strokeDashoffset: 135 - car.fuel * 1.35,

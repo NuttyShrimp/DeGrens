@@ -2,22 +2,17 @@ import React, { useCallback } from 'react';
 import AppWrapper from '@components/appwrapper';
 
 import { Scenes } from './components/scenes';
-import store from './store';
+import config from './_config';
 
 import './styles/scenes.scss';
 
-const Component: AppFunction<Scenes.State> = props => {
-  const handleVisibility = (isVis: boolean) => {
-    props.updateState({
-      visible: isVis,
-    });
-  };
-  const handleShow = useCallback(() => handleVisibility(true), []);
-  const handleHide = useCallback(() => handleVisibility(false), []);
+const Component: AppFunction = props => {
+  const handleShow = useCallback(() => props.showApp(), [props.showApp]);
+  const handleHide = useCallback(() => props.hideApp(), [props.hideApp]);
 
   return (
-    <AppWrapper appName={store.key} onShow={handleShow} onHide={handleHide} hideOnEscape full center>
-      <Scenes {...props} />
+    <AppWrapper appName={config.name} onShow={handleShow} onHide={handleHide} hideOnEscape full center>
+      <Scenes />
     </AppWrapper>
   );
 };

@@ -1,10 +1,9 @@
 import React from 'react';
 
 import Container from './component';
-import store from './store';
 
 const config: ConfigObject = {
-  name: store.key,
+  name: 'policeradar',
   render: p => <Container {...p} />,
   type: 'passive',
 };

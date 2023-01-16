@@ -49,7 +49,7 @@ export const YPAd: FC<
   );
 };
 
-export const YellowPages: AppFunction<Phone.YellowPages.State> = props => {
+export const YellowPages: FC<{ list: Phone.YellowPages.Ad[] }> = props => {
   const classes = styles();
   return (
     <div className={classes.list}>

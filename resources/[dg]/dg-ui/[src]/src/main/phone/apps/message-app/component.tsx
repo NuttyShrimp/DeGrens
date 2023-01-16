@@ -2,25 +2,16 @@ import React, { useEffect } from 'react';
 
 import { Conversation } from './components/conversation';
 import { List } from './components/list';
+import { useMessageStoreApp } from './stores/useMessageStoreApp';
 
-const Component: AppFunction<Phone.Messages.State> = props => {
+const Component = () => {
+  const [setNumber, currentNumber] = useMessageStoreApp(s => [s.setNumber, s.currentNumber]);
   useEffect(() => {
-    if (props.hasNotification) {
-      props.updateState({
-        hasNotification: false,
-      });
-    }
     return () => {
-      props.updateState({
-        currentNumber: null,
-      });
+      setNumber(null);
     };
   }, []);
-  return props.currentNumber === null ? (
-    <List list={props.messages} updateState={props.updateState} />
-  ) : (
-    <Conversation {...props} />
-  );
+  return currentNumber === null ? <List /> : <Conversation />;
 };
 
 export default Component;

@@ -2,28 +2,31 @@ import React, { useCallback } from 'react';
 import AppWrapper from '@components/appwrapper';
 
 import { TaskBar } from './component/TaskBar';
-import store from './store';
+import { useTaskbarStore } from './stores/useTaskbarStore';
+import config from './_config';
 
 import './styles/taskbar.scss';
 
-const Component: AppFunction<TaskBar.State> = props => {
-  const showInput = useCallback((data: Partial<TaskBar.State>) => {
-    data.duration = Number(data.duration);
-    props.updateState({
-      visible: true,
-      ...data,
-    });
-  }, []);
+const Component: AppFunction = props => {
+  const updateStore = useTaskbarStore(s => s.updateStore);
+  const showInput = useCallback(
+    (data: Partial<TaskBar.State>) => {
+      data.duration = Number(data.duration);
+      props.showApp();
+      updateStore({
+        ...data,
+      });
+    },
+    [props.showApp, updateStore]
+  );
 
   const hideInput = useCallback(() => {
-    props.updateState({
-      visible: false,
-    });
-  }, []);
+    props.hideApp();
+  }, [props.hideApp]);
 
   const handleEvent = useCallback(data => {
     if (data.action === 'cancel') {
-      props.updateState({
+      updateStore({
         duration: 1000,
         label: 'Geannuleerd',
       });
@@ -31,8 +34,8 @@ const Component: AppFunction<TaskBar.State> = props => {
   }, []);
 
   return (
-    <AppWrapper appName={store.key} onShow={showInput} onHide={hideInput} onEvent={handleEvent} full center>
-      <TaskBar {...props} />
+    <AppWrapper appName={config.name} onShow={showInput} onHide={hideInput} onEvent={handleEvent} full center>
+      <TaskBar />
     </AppWrapper>
   );
 };

@@ -1,6 +1,8 @@
 import React, { FC, PropsWithChildren, useCallback, useMemo } from 'react';
 import { Box } from '@mui/material';
 
+import { useBennyStore } from '../../stores/useBennyStore';
+
 import { CartMenu } from './CartMenu';
 import { ColorMenu } from './ColorMenu';
 import { ComponentsMenu } from './ComponentsMenu';
@@ -17,15 +19,16 @@ const HeightWrapper: FC<PropsWithChildren<{}>> = ({ children }) => {
   );
 };
 
-export const Menu: AppFunction<Bennys.State> = props => {
+export const Menu = () => {
+  const [setMenu, currentMenu] = useBennyStore(s => [s.setMenu, s.currentMenu]);
   const goToMainMenu = useCallback(() => {
-    props.updateState({ currentMenu: 'main' });
-  }, [props.updateState]);
+    setMenu('main');
+  }, [setMenu]);
 
   const component = useMemo(() => {
-    switch (props.currentMenu) {
+    switch (currentMenu) {
       case 'main': {
-        return <MainMenu updateState={props.updateState} />;
+        return <MainMenu />;
       }
       case 'repair': {
         return <RepairMenu />;
@@ -51,7 +54,7 @@ export const Menu: AppFunction<Bennys.State> = props => {
       default:
         return null;
     }
-  }, [props.currentMenu, props.updateState, goToMainMenu]);
+  }, [currentMenu, goToMainMenu]);
 
   return <HeightWrapper>{component}</HeightWrapper>;
 };

@@ -5,13 +5,13 @@ import { nuiAction } from '@src/lib/nui-comms';
 import { AppContainer } from '../../os/appcontainer/appcontainer';
 
 import { DebtList } from './components/debtList';
+import { useDebtAppStore } from './stores/useDebtAppStore';
 
-const Component: AppFunction<Phone.Debt.State> = props => {
+const Component = () => {
+  const [setList, listLen] = useDebtAppStore(s => [s.setList, s.list.length]);
   const fetchDebts = async () => {
     const debts = await nuiAction<Phone.Debt.Debt[]>('phone/debts/get', {}, devData.phoneDebtEntry);
-    props.updateState({
-      list: debts,
-    });
+    setList(debts);
   };
 
   useEffect(() => {
@@ -19,8 +19,8 @@ const Component: AppFunction<Phone.Debt.State> = props => {
   }, []);
 
   return (
-    <AppContainer emptyList={props.list.length === 0}>
-      <DebtList list={props.list} />
+    <AppContainer emptyList={listLen === 0}>
+      <DebtList />
     </AppContainer>
   );
 };

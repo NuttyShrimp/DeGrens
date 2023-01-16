@@ -1,17 +1,18 @@
 import React, { FC, isValidElement } from 'react';
-import { useSelector } from 'react-redux';
+
+import { usePhoneFormStore } from '../../stores/usePhoneFormStore';
 
 import { styles } from './form.styles';
 
 export const Form: FC<React.PropsWithChildren<unknown>> = () => {
   const classes = styles();
-  const phoneFormState = useSelector<RootState, Phone.FormState>(state => state['phone.form']);
+  const [visible, checkmark, element, warning] = usePhoneFormStore(s => [s.visible, s.checkmark, s.element, s.warning]);
 
   return (
     <div
       className={classes.forms}
       style={
-        phoneFormState.visible || phoneFormState.checkmark
+        visible || checkmark
           ? {
               backgroundColor: '#00000090',
               pointerEvents: 'all',
@@ -22,8 +23,8 @@ export const Form: FC<React.PropsWithChildren<unknown>> = () => {
             }
       }
     >
-      {phoneFormState.visible && isValidElement(phoneFormState.element) && <div>{phoneFormState.element}</div>}
-      {phoneFormState.checkmark && (
+      {visible && isValidElement(element) && <div>{element}</div>}
+      {checkmark && (
         <div className={classes.checkmarkWrapper}>
           <svg className={classes.checkmark} xmlns='http://www.w3.org/2000/svg' viewBox='0 0 52 52'>
             <circle className='checkmark__circle' cx='26' cy='26' r='25' fill='none' />
@@ -31,7 +32,7 @@ export const Form: FC<React.PropsWithChildren<unknown>> = () => {
           </svg>
         </div>
       )}
-      {phoneFormState.warning && (
+      {warning && (
         <div className={classes.warningContainer}>
           <div className={classes.warning}>
             <span className={classes.warningBody}></span>

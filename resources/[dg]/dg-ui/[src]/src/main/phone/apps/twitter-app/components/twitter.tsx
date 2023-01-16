@@ -1,10 +1,11 @@
 import React, { FC, useState } from 'react';
-import { useSelector } from 'react-redux';
 import { IconButton } from '@mui/material';
+import { useMainStore } from '@src/lib/stores/useMainStore';
 
 import { Button } from '../../../../../components/button';
 import { Textwrapper } from '../../../../../components/textwrapper';
 import { formatRelativeTime } from '../../../../../lib/util';
+import { useTwitterAppStore } from '../stores/useTwitterAppStore';
 
 import { styles } from './twitter.styles';
 
@@ -17,7 +18,7 @@ export const Tweet: FC<
     }
   >
 > = ({ tweet, ...props }) => {
-  const isAdmin = useSelector<RootState, boolean>(state => state.character.isAdmin);
+  const isAdmin = useMainStore(s => s.character.isAdmin);
   const classes = styles();
 
   return (
@@ -73,17 +74,16 @@ export const Tweet: FC<
 };
 
 export const Twitter: FC<
-  React.PropsWithChildren<
-    Phone.Twitter.State & {
-      toggleLike: (tweetId: number, isLiked: boolean) => void;
-      doRetweet: (tweet: Phone.Twitter.Tweet) => void;
-      doDelete: (tweetId: number) => void;
-      fetchTweets: () => Promise<void>;
-    }
-  >
+  React.PropsWithChildren<{
+    toggleLike: (tweetId: number, isLiked: boolean) => void;
+    doRetweet: (tweet: Phone.Twitter.Tweet) => void;
+    doDelete: (tweetId: number) => void;
+    fetchTweets: () => Promise<void>;
+  }>
 > = props => {
   const classes = styles();
   const [disableLoad, setDisableLoad] = useState(false);
+  const tweets = useTwitterAppStore(s => s.tweets);
 
   const loadMore = async () => {
     if (disableLoad) return;
@@ -94,7 +94,7 @@ export const Twitter: FC<
 
   return (
     <div className={classes.root}>
-      {props.tweets.map(tweet => (
+      {tweets.map(tweet => (
         <Tweet
           key={`phone-twt-${tweet.id}`}
           tweet={tweet}

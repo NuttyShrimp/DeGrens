@@ -1,19 +1,19 @@
 import React, { FC, useState } from 'react';
 import { flushSync } from 'react-dom';
-import { useSelector } from 'react-redux';
 
 import { Icon } from '../../../../../components/icon';
 import { nuiAction } from '../../../../../lib/nui-comms';
-import { useUpdateState } from '../../../../../lib/redux';
 import { getImg } from '../../../../../lib/util';
 import { useActions } from '../../../hooks/useActions';
 import { Button } from '../components/Button';
+import { useBennyAppStore } from '../stores/useBennyAppStore';
 
 const CartItem: FC<{ itemName: string; amount: number }> = props => {
-  const updateState = useUpdateState('laptop.bennys');
-  const itemInfo = useSelector<RootState, Laptop.Bennys.Item | undefined>(state =>
-    state['laptop.bennys'].items.find(i => i.item === props.itemName)
-  );
+  const [itemInfo, cart, setCart] = useBennyAppStore(s => [
+    s.items.find(i => i.item === props.itemName),
+    s.cart,
+    s.setCart,
+  ]);
   if (itemInfo === undefined) return null;
   return (
     <div className={'laptop-bennys-cart-entry'}>
@@ -30,17 +30,11 @@ const CartItem: FC<{ itemName: string; amount: number }> = props => {
         label={'Remove from Cart'}
         color={'#ff3845'}
         size={'1.4vh'}
-        onClick={() =>
-          updateState(state => {
-            const newCart = {
-              ...state['laptop.bennys'].cart,
-            };
-            delete newCart[props.itemName];
-            return {
-              cart: newCart,
-            };
-          })
-        }
+        onClick={() => {
+          const nCart = { ...cart };
+          delete nCart[props.itemName];
+          setCart(nCart);
+        }}
       />
     </div>
   );
@@ -49,13 +43,13 @@ const CartItem: FC<{ itemName: string; amount: number }> = props => {
 export const Cart: FC = () => {
   const { addNotification } = useActions();
   const [purchasing, setPurchasing] = useState(false);
-  const updateState = useUpdateState('laptop.bennys');
-  const cartItems = useSelector<RootState, Laptop.Bennys.State['cart']>(state => state['laptop.bennys'].cart);
-  const totalPrice = useSelector<RootState, number>(state =>
-    Object.entries(state['laptop.bennys'].cart).reduce<number>((total, [itemName, amount]) => {
-      return total + (state['laptop.bennys'].items.find(i => i.item === itemName)?.price ?? 0) * amount;
-    }, 0)
-  );
+  const [cartItems, totalPrice, setCart] = useBennyAppStore(s => [
+    s.cart,
+    Object.entries(s.cart).reduce<number>((total, [itemName, amount]) => {
+      return total + (s.items.find(i => i.item === itemName)?.price ?? 0) * amount;
+    }, 0),
+    s.setCart,
+  ]);
 
   const finishPurchase = async () => {
     if (purchasing) return;
@@ -67,9 +61,7 @@ export const Cart: FC = () => {
       'bennys',
       success ? 'Order successful, go to the marked location' : 'Order failed, Do you have enough funds?'
     );
-    updateState({
-      cart: {},
-    });
+    setCart({});
     setPurchasing(false);
   };
 

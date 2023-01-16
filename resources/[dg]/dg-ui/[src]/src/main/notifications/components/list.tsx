@@ -4,11 +4,14 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import ErrorIcon from '@mui/icons-material/Error';
 import InfoIcon from '@mui/icons-material/Info';
 
-export const NotificationList: AppFunction<Notifications.State> = props => {
+import { useNotificationStore } from '../stores/useNotificationStore';
+
+export const NotificationList = () => {
+  const notifications = useNotificationStore(s => s.notifications);
   return (
     <div className={'notification__list'}>
       <Transition
-        items={props.notifications}
+        items={notifications}
         config={{
           duration: 300,
           easing: easings.easeInOutQuart,

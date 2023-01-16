@@ -1,15 +1,18 @@
-import React, { FC } from 'react';
+import React from 'react';
 import { FillableIcon } from '@src/components/icon';
 
-export const TaskBar: FC<TaskBar.State> = props => {
+import { useTaskbarStore } from '../stores/useTaskbarStore';
+
+export const TaskBar = () => {
+  const [icon, duration, label] = useTaskbarStore(s => [s.icon, s.duration, s.label]);
   return (
     <div className={'taskbar__wrapper'}>
       <div>
         <div className='taskbar__icon'>
-          <FillableIcon height={7} name={props.icon} duration={props.duration} value={100} />
+          <FillableIcon height={7} name={icon} duration={duration} value={100} />
         </div>
         <div>
-          <div className={'taskbar__label'}>{props.label}</div>
+          <div className={'taskbar__label'}>{label}</div>
         </div>
       </div>
     </div>

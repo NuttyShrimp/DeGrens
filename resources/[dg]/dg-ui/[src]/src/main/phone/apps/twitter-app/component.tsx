@@ -7,16 +7,18 @@ import { AppContainer } from '../../os/appcontainer/appcontainer';
 
 import { TweetModal } from './components/modals';
 import { Twitter } from './components/twitter';
-const Component: AppFunction<Phone.Twitter.State> = props => {
+import { useTwitterAppStore } from './stores/useTwitterAppStore';
+const Component = () => {
+  const [tweets, requestAmount, updateStore] = useTwitterAppStore(s => [s.tweets, s.requestAmount, s.updateStore]);
   // region Tweet actions
   const toggleLike = (tweetId: number, isLiked: boolean) => {
     nuiAction(isLiked ? 'phone/twitter/removeLike' : 'phone/twitter/addLike', { tweetId });
-    const newTweets = [...props.tweets];
+    const newTweets = [...tweets];
     const index = newTweets.findIndex(tweet => tweet.id === tweetId);
     if (index !== -1) {
       newTweets[index].liked = !isLiked;
     }
-    props.updateState({
+    updateStore({
       tweets: newTweets,
     });
   };
@@ -25,12 +27,12 @@ const Component: AppFunction<Phone.Twitter.State> = props => {
       <TweetModal
         onAccept={() => {
           nuiAction('phone/twitter/addRetweet', { tweetId: tweet.id });
-          const newTweets = [...props.tweets];
+          const newTweets = [...tweets];
           const index = newTweets.findIndex(_tweet => _tweet.id === tweet.id);
           if (index !== -1) {
-            props.tweets[index].retweeted = true;
+            newTweets[index].retweeted = true;
           }
-          props.updateState({
+          updateStore({
             tweets: newTweets,
           });
         }}
@@ -47,20 +49,20 @@ const Component: AppFunction<Phone.Twitter.State> = props => {
     const newTweets = await nuiAction<Phone.Twitter.Tweet[]>(
       'phone/twitter/getTweets',
       {
-        recBatches: props.requestAmount,
+        recBatches: requestAmount,
       },
       devData.tweets
     );
-    props.updateState(state => ({
-      tweets: [...state['phone.apps.twitter'].tweets, ...newTweets.reverse()],
-      requestAmount: state['phone.apps.twitter'].requestAmount + 1,
-    }));
+    updateStore({
+      tweets: [...tweets, ...newTweets.reverse()],
+      requestAmount: requestAmount + 1,
+    });
   };
 
   useEffect(() => {
     fetchTweets();
     return () => {
-      props.updateState({ requestAmount: 0, tweets: [] });
+      updateStore({ requestAmount: 0, tweets: [] });
     };
   }, []);
 
@@ -76,9 +78,9 @@ const Component: AppFunction<Phone.Twitter.State> = props => {
           },
         },
       ]}
-      emptyList={props.tweets.length === 0}
+      emptyList={tweets.length === 0}
     >
-      <Twitter {...props} toggleLike={toggleLike} doRetweet={doRetweet} doDelete={doDelete} fetchTweets={fetchTweets} />
+      <Twitter toggleLike={toggleLike} doRetweet={doRetweet} doDelete={doDelete} fetchTweets={fetchTweets} />
     </AppContainer>
   );
 };

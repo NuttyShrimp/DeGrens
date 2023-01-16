@@ -4,13 +4,13 @@ import { devData } from '../../../../lib/devdata';
 import { nuiAction } from '../../../../lib/nui-comms';
 
 import { Payconiq } from './components/payconiq';
+import { usePayconiqAppStore } from './stores/usePayconiqAppStore';
 
-const Component: AppFunction<Phone.PayConiq.State> = props => {
+const Component = () => {
+  const [setList, setDirty, dirty] = usePayconiqAppStore(s => [s.setList, s.setDirty, s.dirty]);
   const fetchList = async () => {
     const trans = await nuiAction('phone/payconiq/get', {}, devData.bankTrans);
-    props.updateState({
-      list: trans,
-    });
+    setList(trans);
   };
 
   useEffect(() => {
@@ -18,14 +18,12 @@ const Component: AppFunction<Phone.PayConiq.State> = props => {
   }, []);
 
   useEffect(() => {
-    if (!props.dirty) return;
+    if (!dirty) return;
     fetchList();
-    props.updateState({
-      dirty: false,
-    });
-  }, [props.dirty]);
+    setDirty(false);
+  }, [dirty]);
 
-  return <Payconiq {...props} />;
+  return <Payconiq />;
 };
 
 export default Component;

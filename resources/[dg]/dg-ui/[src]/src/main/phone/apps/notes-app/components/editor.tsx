@@ -6,9 +6,11 @@ import { EditorContent } from '@tiptap/react';
 import { nuiAction } from '../../../../../lib/nui-comms';
 import { AppContainer } from '../../../os/appcontainer/appcontainer';
 import { removeCurrentNote, setCurrentNote, updateNote } from '../lib';
+import { useNotesAppStore } from '../stores/useNotesAppStore';
 
 import '../styles/editor.scss';
-export const Document: FC<React.PropsWithChildren<{ note: Phone.Notes.Note }>> = ({ note }) => {
+export const Document: FC<{}> = () => {
+  const note = useNotesAppStore(s => s.current!);
   const [title, setTitle] = useState(note.title ?? '');
   const [editMode, setEditMode] = useState(false);
   const editor = useEditor({

@@ -1,15 +1,22 @@
-import React, { useEffect } from 'react';
+import React, { FC, useEffect } from 'react';
 import { devData } from '@src/lib/devdata';
 import { nuiAction } from '@src/lib/nui-comms';
 
 import { BusinessList } from './components/BusinessList';
 import { EmployeeList } from './components/EmployeeList';
 import { LogList } from './components/LogList';
+import { useBusinessAppStore } from './stores/useBusinessAppStore';
 
-const Component: AppFunction<Phone.Business.State> = props => {
+const Component: FC<{}> = () => {
+  const [list, activeApp, currentBusiness, updateStore] = useBusinessAppStore(s => [
+    s.list,
+    s.activeApp,
+    s.currentBusiness,
+    s.updateStore,
+  ]);
   const fetchBusinesses = async () => {
     const businesses = await nuiAction('phone/business/get', {}, devData.phoneBusinesses);
-    props.updateState({
+    updateStore({
       list: businesses,
     });
   };
@@ -17,23 +24,23 @@ const Component: AppFunction<Phone.Business.State> = props => {
   const fetchBusinessInfo = async () => {
     let employees: Phone.Business.Employee[] = [];
     let roles: Record<string, string[]> = {};
-    if (props.currentBusiness) {
+    if (currentBusiness) {
       employees = await nuiAction(
         'phone/business/employees',
         {
-          id: props.currentBusiness,
+          id: currentBusiness,
         },
         devData.phoneBusinessEmployees
       );
       roles = await nuiAction(
         'phone/business/roles',
         {
-          id: props.currentBusiness,
+          id: currentBusiness,
         },
         devData.phoneBusinessRoles
       );
     }
-    props.updateState({
+    updateStore({
       employees,
       roles,
     });
@@ -45,22 +52,18 @@ const Component: AppFunction<Phone.Business.State> = props => {
 
   useEffect(() => {
     fetchBusinessInfo();
-  }, [props.currentBusiness]);
+  }, [currentBusiness]);
 
-  if (props.activeApp === 'employee' && props.currentBusiness) {
+  if (activeApp === 'employee' && currentBusiness) {
     return (
-      <EmployeeList
-        list={props.employees}
-        permissions={props.list.find(b => b.id === props.currentBusiness)?.permissions ?? []}
-        id={props.currentBusiness}
-      />
+      <EmployeeList permissions={list.find(b => b.id === currentBusiness)?.permissions ?? []} id={currentBusiness} />
     );
   }
-  if (props.activeApp === 'log') {
+  if (activeApp === 'log') {
     return <LogList />;
   }
 
-  return <BusinessList list={props.list} />;
+  return <BusinessList list={list} />;
 };
 
 export default Component;

@@ -1,15 +1,13 @@
 import React, { FC } from 'react';
-import { useSelector } from 'react-redux';
 import { Slider, Typography } from '@mui/material';
 
 import { Input } from '../../../components/inputs';
-import { useConfigActions } from '../hooks/useConfigActions';
+import { useConfigmenuStore } from '../stores/useConfigmenuStore';
 
 import { Section } from './Utils';
 
 const VolumeSlider: FC<{ volType: 'volume' | 'balance'; device: 'radio' | 'phone' }> = ({ volType, device }) => {
-  const state = useSelector<RootState, ConfigMenu.RadioConfig>(state => state.configmenu.radio);
-  const { updateConfig } = useConfigActions();
+  const [state, updateConfig] = useConfigmenuStore(s => [s.radio, s.updateConfig]);
 
   const updateVolumeConfig = (volume: number | number[]) => {
     if (typeof volume !== 'number') return;
@@ -44,8 +42,7 @@ const VolumeSlider: FC<{ volType: 'volume' | 'balance'; device: 'radio' | 'phone
 };
 
 export const Radio = () => {
-  const state = useSelector<RootState, ConfigMenu.RadioConfig>(state => state.configmenu.radio);
-  const { updateConfig } = useConfigActions();
+  const [state, updateConfig] = useConfigmenuStore(s => [s.radio, s.updateConfig]);
 
   const updateClickConfig = (who: 'me' | 'someElse', way: 'incoming' | 'outgoing', toggle: boolean) => {
     updateConfig('radio', {

@@ -37,18 +37,26 @@ declare namespace Hud {
     history: number[];
   }
 
-  interface State extends Base.State {
+  interface Voice {
+    range: number;
+    channel: number;
+    active: boolean;
+    // Talking on radio
+    onRadio: boolean;
+  }
+
+  interface State {
     entries: Entry[];
     values: Record<string, number>;
-    voice: {
-      range: number;
-      channel: number;
-      active: boolean;
-      // Talking on radio
-      onRadio: boolean;
-    };
+    voice: Voice;
     car: Car;
     compass: Compass;
     cash: Cash;
+  }
+
+  interface StateActions {
+    addEntry: (entry: Entry) => void;
+    deleteEntry: (name: string) => void;
+    toggleEntry: (name: string, enabled: boolean) => void;
   }
 }

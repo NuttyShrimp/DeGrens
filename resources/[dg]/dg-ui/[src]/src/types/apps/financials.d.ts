@@ -47,7 +47,7 @@ declare namespace Financials {
     fetchAccounts: () => Promise<void>;
   }
 
-  interface State extends Base.State {
+  interface State {
     transactions: Transaction[];
     accounts: Account[];
     selected: Account | null;
@@ -58,6 +58,12 @@ declare namespace Financials {
     canLoadMore: boolean;
     backdrop: boolean;
     modalComponent: React.ReactElement<any, any> | null;
+  }
+
+  interface StateActions {
+    setModal: (modal: React.ReactElement<any, any> | null) => void;
+    openLoaderModal: () => void;
+    closeModal: () => void;
   }
 
   type PermissionsMember = { cid: number; name: string } & AccountPermission;

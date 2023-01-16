@@ -1,42 +1,30 @@
 import React, { useCallback } from 'react';
 import AppWrapper from '@components/appwrapper';
-import deepmerge from 'deepmerge';
 
 import { nuiAction } from '../../lib/nui-comms';
 
 import { Menu } from './component/Menu';
-import store from './store';
+import { useConfigmenuStore } from './stores/useConfigmenuStore';
+import config from './_config';
 
 import './styles/configmenu.scss';
 
-const Component: AppFunction<ConfigMenu.State> = props => {
+const Component: AppFunction = props => {
+  const [setConfig] = useConfigmenuStore(s => [s.setConfig]);
   const showMenu = useCallback(() => {
-    props.updateState({
-      visible: true,
-    });
+    props.showApp();
   }, []);
 
   const hideMenu = useCallback(() => {
-    props.updateState({
-      visible: false,
-    });
+    props.hideApp();
   }, []);
 
   const handleEvent = useCallback(data => {
     if (!data.action) return;
     switch (data.action) {
       case 'load': {
-        const newConfig = deepmerge(
-          {
-            hud: props.hud,
-            phone: props.phone,
-            radio: props.radio,
-          },
-          data.data
-        );
-        props.updateState(newConfig);
         nuiAction('configmenu/save', {
-          data: newConfig,
+          data: setConfig(data.data),
         });
         break;
       }
@@ -44,7 +32,15 @@ const Component: AppFunction<ConfigMenu.State> = props => {
   }, []);
 
   return (
-    <AppWrapper appName={store.key} onShow={showMenu} onHide={hideMenu} onEvent={handleEvent} full center hideOnEscape>
+    <AppWrapper
+      appName={config.name}
+      onShow={showMenu}
+      onHide={hideMenu}
+      onEvent={handleEvent}
+      full
+      center
+      hideOnEscape
+    >
       <Menu />
     </AppWrapper>
   );

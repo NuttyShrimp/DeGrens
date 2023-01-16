@@ -3,9 +3,10 @@ import React, { FC } from 'react';
 import { Input } from '../../../../components/inputs';
 import { SimpleForm } from '../../../../components/simpleform';
 import { nuiAction } from '../../../../lib/nui-comms';
-import { closeModal, openLoadModal } from '../../lib';
+import { useFinancialsStore } from '../../stores/useFinancialsStore';
 
 export const WithdrawModal: FC<React.PropsWithChildren<Financials.ModalProps>> = props => {
+  const [closeModal, openLoadModal] = useFinancialsStore(s => [s.closeModal, s.openLoaderModal]);
   return (
     <SimpleForm
       header='Geld afhalen'

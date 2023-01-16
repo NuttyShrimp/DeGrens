@@ -1,5 +1,5 @@
 import { MutableRefObject, useEffect, useRef } from 'react';
-import { useSelector } from 'react-redux';
+import { useConfigmenuStore } from '@src/main/configmenu/stores/useConfigmenuStore';
 
 const QWERTY_TO_AZERTY = {
   '`': '²',
@@ -75,7 +75,7 @@ const QWERTY_TO_AZERTY = {
 };
 
 export const useKeyboardKey = (key: string) => {
-  const layout = useSelector<RootState, string>(s => s.configmenu.hud.keyboard);
+  const layout = useConfigmenuStore(s => s.hud.keyboard);
   const keyRef: MutableRefObject<string> = useRef(key);
 
   useEffect(() => {

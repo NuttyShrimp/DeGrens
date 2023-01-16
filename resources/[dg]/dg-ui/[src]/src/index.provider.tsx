@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import { Alert, Snackbar } from '@mui/material';
 import CssBaseline from '@mui/material/CssBaseline';
 import { StyledEngineProvider, ThemeProvider } from '@mui/material/styles';
@@ -8,20 +7,17 @@ import * as Sentry from '@sentry/react';
 import { EventHandlerProvider } from './components/context/eventHandlerCtx';
 import { useApps } from './lib/hooks/useApps';
 import { nuiAction } from './lib/nui-comms';
-import { GetInitialState, type } from './lib/redux';
+import { resetAllStores } from './lib/store';
+import { useMainStore } from './lib/stores/useMainStore';
 import { theme } from './base.styles';
 
 export const IndexProvider = ({ children }) => {
   const { loadApps } = useApps();
-  const mainState = useSelector<RootState, Main.State>(state => state.main);
-  const dispatch = useDispatch();
+  const [mounted, error] = useMainStore(s => [s.mounted, s.error]);
 
   const handleClose = () => {
     nuiAction('reload');
-    dispatch({
-      type,
-      cb: () => GetInitialState(),
-    });
+    resetAllStores();
     loadApps();
   };
 
@@ -35,11 +31,11 @@ export const IndexProvider = ({ children }) => {
         <StyledEngineProvider injectFirst>
           <ThemeProvider theme={theme}>
             <CssBaseline />
-            {mainState.mounted ? (
+            {mounted ? (
               children
             ) : (
               <Snackbar
-                open={!mainState.mounted}
+                open={!mounted}
                 autoHideDuration={3000}
                 anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
                 onClose={handleClose}
@@ -47,10 +43,10 @@ export const IndexProvider = ({ children }) => {
                 <Alert
                   onClose={handleClose}
                   variant='filled'
-                  severity={mainState.error ? 'error' : 'info'}
+                  severity={error ? 'error' : 'info'}
                   sx={{ width: '100%' }}
                 >
-                  {mainState.error ? `An error occurred in ${mainState.error}.` : ''} Reloading the UI...
+                  {error ? `An error occurred in ${error}.` : ''} Reloading the UI...
                 </Alert>
               </Snackbar>
             )}

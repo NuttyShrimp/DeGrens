@@ -1,5 +1,5 @@
 declare namespace Interaction {
-  interface State extends Base.State {
+  interface State {
     show: boolean;
     text: string;
     type: 'error' | 'info' | 'success';

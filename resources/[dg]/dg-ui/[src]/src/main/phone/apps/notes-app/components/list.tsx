@@ -3,16 +3,12 @@ import React, { FC } from 'react';
 import { Paper } from '../../../../../components/paper';
 import { AppContainer } from '../../../os/appcontainer/appcontainer';
 import { addNewNote, setCurrentNote } from '../lib';
+import { useNotesAppStore } from '../stores/useNotesAppStore';
 
 import { styles } from './notes.styles';
 
-export const List: FC<
-  React.PropsWithChildren<
-    Base.Props & {
-      list: Phone.Notes.Note[];
-    }
-  >
-> = props => {
+export const List: FC<{}> = () => {
+  const list = useNotesAppStore(s => s.list);
   const classes = styles();
 
   return (
@@ -26,10 +22,10 @@ export const List: FC<
           },
         },
       ]}
-      emptyList={props.list.length === 0}
+      emptyList={list.length === 0}
     >
       <div className={classes.list}>
-        {props.list.map(note => (
+        {list.map(note => (
           <Paper title={note.title} key={note.id} onClick={() => setCurrentNote(note)} />
         ))}
       </div>

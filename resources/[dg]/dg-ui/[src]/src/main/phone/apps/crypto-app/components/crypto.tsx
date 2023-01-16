@@ -4,11 +4,13 @@ import { Button } from '../../../../../components/button';
 import { List } from '../../../../../components/list';
 import { Paper } from '../../../../../components/paper';
 import { showFormModal } from '../../../lib';
+import { useCryptoAppStore } from '../stores/useCryptoAppStore';
 
 import { styles } from './crypto.styles';
 import { ExchangeModal, PurchaseModal } from './modals';
 
-export const Crypto: FC<Phone.Crypto.State> = props => {
+export const Crypto: FC<{}> = () => {
+  const [list] = useCryptoAppStore(s => [s.list]);
   const classes = styles();
   const getCoinInfo = (coin: Phone.Crypto.Coin): ListItem[] => [
     {
@@ -35,7 +37,7 @@ export const Crypto: FC<Phone.Crypto.State> = props => {
   };
   return (
     <div className={classes.list}>
-      {props.list.map(c => (
+      {list.map(c => (
         <Paper
           key={c.crypto_name}
           title={c.crypto_name}

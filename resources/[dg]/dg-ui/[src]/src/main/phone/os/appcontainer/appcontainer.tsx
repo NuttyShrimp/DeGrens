@@ -1,5 +1,4 @@
 import React, { FC, MouseEventHandler, useCallback, useEffect, useRef, useState } from 'react';
-import { useSelector } from 'react-redux';
 import { useVhToPixel } from '@lib/hooks/useVhToPixel';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import { Fade, ListItemIcon, Menu, MenuItem, Tooltip, Typography } from '@mui/material';
@@ -7,6 +6,7 @@ import { Fade, ListItemIcon, Menu, MenuItem, Tooltip, Typography } from '@mui/ma
 import { baseStyle } from '../../../../base.styles';
 import { Input } from '../../../../components/inputs';
 import { getPhoneApp } from '../../config';
+import { usePhoneStore } from '../../stores/usePhoneStore';
 
 import { styles } from './appcontainer.styles';
 
@@ -18,7 +18,7 @@ declare interface AppContainerProps extends Phone.AppContainer.Props {
 export const AppContainer: FC<React.PropsWithChildren<AppContainerProps>> = props => {
   const classes = styles();
   const wrapperTop = useVhToPixel(1);
-  const activeApp = useSelector<RootState, string>(state => state.phone.activeApp);
+  const activeApp = usePhoneStore(s => s.activeApp);
 
   const [anchorEl, setAnchorEl] = useState<HTMLDivElement | null>(null);
   const [topPadding, setTopPadding] = useState<number>(0);

@@ -1,4 +1,6 @@
-import { genericAction, updateNotification } from '../../lib';
+import { updateNotification } from '../../lib';
+
+import { useJobcenterAppStore } from './stores/useJobcenterAppStore';
 
 export const events: Phone.Events = {};
 
@@ -10,19 +12,19 @@ events.groupIsFull = () => {
 };
 
 events.setCurrentGroup = (data: Phone.JobCenter.Group | null) => {
-  genericAction('phone.apps.jobcenter', {
+  useJobcenterAppStore.setState({
     currentGroup: data,
   });
 };
 
-events.setMembers = (data: Phone.JobCenter.Member[] | null) => {
-  genericAction('phone.apps.jobcenter', {
+events.setMembers = (data: Phone.JobCenter.Member[] | undefined) => {
+  useJobcenterAppStore.setState({
     groupMembers: data,
   });
 };
 
 events.setOwner = (data: boolean) => {
-  genericAction('phone.apps.jobcenter', {
+  useJobcenterAppStore.setState({
     isOwner: data,
   });
 };

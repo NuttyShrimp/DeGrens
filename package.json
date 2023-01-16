@@ -4,13 +4,11 @@
   "scripts": {
     "build": "lerna run --stream --concurrency=10 build ",
     "build:dev": "lerna run --stream build:dev ",
-    "lint:lerna": "lerna run --stream lint",
     "lint:root": "eslint --fix --resolve-plugins-relative-to ./ --ext .js,.ts,.tsx,.jsx,.json,.vue ./resources/[dg]/",
     "lint": "yarn run lint:root --quiet",
     "format": "lerna run --stream format",
-    "bootstrap": "lerna bootstrap",
-    "postinstall": "husky install && yarn bootstrap",
-    "test": "lerna run test"
+    "postinstall": "husky install && lerna bootstrap",
+    "postinstall:lerna": "lerna run --stream postinstall"
   },
   "dependencies": {
     "@citizenfx/client": "^2.0.6200-1",

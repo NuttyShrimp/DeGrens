@@ -1,20 +1,19 @@
 import React, { useEffect } from 'react';
+import { flushSync } from 'react-dom';
 
 import { devData } from '../../../../lib/devdata';
 import { nuiAction } from '../../../../lib/nui-comms';
 import { AppContainer } from '../../os/appcontainer/appcontainer';
 
 import { Crypto } from './components/crypto';
+import { useCryptoAppStore } from './stores/useCryptoAppStore';
 
-const Component: AppFunction<Phone.Crypto.State> = props => {
+const Component = () => {
+  const [list, shouldRenew, setList, setRenew] = useCryptoAppStore(s => [s.list, s.shouldRenew, s.setList, s.setRenew]);
   const loadCoins = async () => {
-    props.updateState({
-      list: [],
-    });
+    flushSync(() => setList([]));
     const coins: Phone.Crypto.Coin[] = await nuiAction('phone/crypto/get', {}, devData.crypto);
-    props.updateState({
-      list: coins,
-    });
+    setList(coins);
   };
 
   useEffect(() => {
@@ -22,17 +21,15 @@ const Component: AppFunction<Phone.Crypto.State> = props => {
   }, []);
 
   useEffect(() => {
-    if (props.shouldRenew) {
+    if (shouldRenew) {
       loadCoins();
-      props.updateState({
-        shouldRenew: false,
-      });
+      setRenew(false);
     }
-  }, [props.shouldRenew]);
+  }, [shouldRenew]);
 
   return (
-    <AppContainer emptyList={props.list.length === 0}>
-      <Crypto {...props} />
+    <AppContainer emptyList={list.length === 0}>
+      <Crypto />
     </AppContainer>
   );
 };

@@ -2,22 +2,21 @@ import React, { FC, useCallback } from 'react';
 import { Button } from '@src/components/button';
 import { nuiAction } from '@src/lib/nui-comms';
 
+import { useDispatchStore } from '../stores/useDispatchStore';
+
 import { Call } from './call';
 
-export const CallList: FC<{ list: Dispatch.Call[]; newIds: string[]; onlyNew: boolean }> = ({
-  list,
-  newIds,
-  onlyNew,
-}) => {
+export const CallList: FC<{ newIds: string[]; onlyNew: boolean }> = ({ newIds, onlyNew }) => {
+  const callList = useDispatchStore(s => s.calls);
   const loadMore = () => {
     nuiAction('dispatch/load', {
-      offset: list.length,
+      offset: callList.length,
     });
   };
 
   const getCalls = useCallback(
-    (onlyNew = false) => list.filter(c => (onlyNew ? newIds.includes(c.id) : !newIds.includes(c.id))),
-    [list, newIds]
+    (onlyNew = false) => callList.filter(c => (onlyNew ? newIds.includes(c.id) : !newIds.includes(c.id))),
+    [callList, newIds]
   );
 
   return (

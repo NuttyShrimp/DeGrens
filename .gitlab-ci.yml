@@ -80,6 +80,7 @@ validate db migrations:
     - cd ./tools/migrations
     - yarn --pure-lockfile
     - yarn start --init-db
+    - yarn postinstall:lerna
   only:
     refs:
       - main

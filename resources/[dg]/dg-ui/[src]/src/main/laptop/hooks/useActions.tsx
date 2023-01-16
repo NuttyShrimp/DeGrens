@@ -1,14 +1,16 @@
 import { useCallback } from 'react';
-import { useSelector } from 'react-redux';
 
-import { useUpdateState } from '../../../lib/redux';
 import { uuidv4 } from '../../../lib/util';
+import { useLaptopConfigStore } from '../stores/useLaptopConfigStore';
+import { useLaptopConfirmStore } from '../stores/useLaptopConfirmStore';
+import { useLaptopStore } from '../stores/useLaptopStore';
 
 export const useActions = () => {
-  const updateState = useUpdateState('laptop');
-  const updateConfigState = useUpdateState('laptop.config');
-  const updateConfirmState = useUpdateState('laptop.confirm');
-  const laptopState = useSelector<RootState, Laptop.State>(state => state.laptop);
+  const updateConfirmData = useLaptopConfirmStore(s => s.setData);
+  const updateConfigStore = useLaptopConfigStore(s => s.updateStore);
+  const [addActiveApp, removeActiveApp, setFocusedApp, addStoreNotification, removeStoreNotfication] = useLaptopStore(
+    s => [s.addActiveApp, s.removeActiveApp, s.setFocusedApp, s.addNotification, s.removeNotification]
+  );
 
   const loadApps = useCallback(() => {
     const apps: Laptop.Config.Config[] = [];
@@ -19,73 +21,38 @@ export const useActions = () => {
       });
     };
     importAll(import.meta.glob('../apps/**/config.tsx', { eager: true }));
-    updateConfigState({
+    updateConfigStore({
       config: apps,
     });
   }, []);
 
   const openApp = useCallback(
     (name: string) => {
-      if (laptopState.activeApps.includes(name)) return;
-      updateState(state => ({
-        activeApps: [...state.laptop.activeApps, name],
-      }));
-      focusApp(name);
+      addActiveApp(name);
     },
-    [laptopState]
-  );
-
-  const closeApp = useCallback(
-    (name: string) => {
-      if (!laptopState.activeApps.includes(name)) return;
-      updateState(state => ({
-        activeApps: state.laptop.activeApps.filter(a => a !== name),
-      }));
-    },
-    [laptopState]
-  );
-
-  const focusApp = useCallback(
-    (name: string) => {
-      if (laptopState.focusedApp === name) return;
-      updateState({
-        focusedApp: name,
-      });
-    },
-    [laptopState]
+    [addActiveApp]
   );
 
   const addNotification = useCallback((app: string, message: string) => {
     const id = uuidv4();
-    updateState(state => ({
-      notifications: [
-        ...state.laptop.notifications,
-        {
-          id,
-          app,
-          message,
-        },
-      ],
-    }));
+    addStoreNotification({ id, app, message });
     setTimeout(() => {
-      updateState(state => ({
-        notifications: state.laptop.notifications.filter(n => n.id !== id),
-      }));
+      removeStoreNotfication(id);
     }, 5000);
   }, []);
 
   const openConfirm = useCallback(
     (data: Laptop.Confirm.Data) => {
       openApp('confirm');
-      updateConfirmState({ data });
+      updateConfirmData(data);
     },
     [openApp]
   );
 
   return {
     openApp,
-    closeApp,
-    focusApp,
+    closeApp: removeActiveApp,
+    focusApp: setFocusedApp,
     loadApps,
     addNotification,
     openConfirm,

@@ -1,8 +1,9 @@
 import { nuiAction } from '../../../../lib/nui-comms';
-import { genericAction, getState } from '../../lib';
+
+import { useNotesAppStore } from './stores/useNotesAppStore';
 
 export const setCurrentNote = (note: Phone.Notes.Note | null) => {
-  genericAction('phone.apps.notes', {
+  useNotesAppStore.setState({
     current: note,
   });
 };
@@ -13,28 +14,28 @@ export const addNewNote = async () => {
     note: '',
     date: Date.now(),
   });
-  const appState = getState<Phone.Notes.State>('phone.apps.notes');
+  const appState = useNotesAppStore.getState();
   appState.list.unshift(newNote);
   appState.current = newNote;
-  genericAction('phone.apps.notes', appState);
+  useNotesAppStore.setState(appState);
 };
 
 export const removeCurrentNote = () => {
-  const appState = getState<Phone.Notes.State>('phone.apps.notes');
+  const appState = useNotesAppStore.getState();
   if (!appState.current) return;
   appState.list = appState.list.filter(n => n.id !== appState.current?.id);
   appState.current = null;
-  genericAction('phone.apps.notes', appState);
+  useNotesAppStore.setState(appState);
 };
 
 export const updateNote = (id: number, title: string, text: string) => {
-  const appState = getState<Phone.Notes.State>('phone.apps.notes');
+  const appState = useNotesAppStore.getState();
   const note = appState.list.find(n => n.id === id);
   if (!note) return;
   note.title = title;
   note.note = text;
   note.date = Date.now();
-  genericAction('phone.apps.notes', appState);
+  useNotesAppStore.setState(appState);
   nuiAction('phone/notes/save', {
     id: note.id,
     note: text,

@@ -7,6 +7,8 @@ import { Paper } from '@src/components/paper';
 import { formatRelativeTime } from '@src/lib/util';
 import { showFormModal } from '@src/main/phone/lib';
 
+import { useDebtAppStore } from '../stores/useDebtAppStore';
+
 import { PayModal } from './modals';
 
 const DebtPaper: FC<{ debt: Phone.Debt.Debt }> = ({ debt }) => {
@@ -65,7 +67,8 @@ const DebtPaper: FC<{ debt: Phone.Debt.Debt }> = ({ debt }) => {
   );
 };
 
-export const DebtList: FC<{ list: Phone.Debt.Debt[] }> = ({ list }) => {
+export const DebtList: FC<{}> = () => {
+  const list = useDebtAppStore(s => s.list);
   return (
     <div>
       <Typography variant='subtitle1'>Debts</Typography>

@@ -1,13 +1,19 @@
 declare namespace Laptop {
-  interface State extends Base.State {
+  type WindowPos = { x: number; y: number };
+  interface State {
     activeApps: string[];
     focusedApp: string;
     notifications: Notification[];
-    windowPositions: Record<string, { x: number; y: number }>;
+    windowPositions: Record<string, WindowPos>;
   }
 
-  interface AuxState {
-    'laptop.config': Config.State;
+  interface StateActions {
+    setFocusedApp: (app: string) => void;
+    addNotification: (notification: Notification) => void;
+    removeNotification: (id: string) => void;
+    addActiveApp: (app: string) => void;
+    removeActiveApp: (app: string) => void;
+    setWindowPosition: (app: string, position: WindowPos) => void;
   }
 
   interface Notification {
@@ -90,6 +96,10 @@ declare namespace Laptop {
   namespace Confirm {
     type State = { data: Data | null };
 
+    interface StateActions {
+      setData: (data: Data | null) => void;
+    }
+
     type Data = {
       label: string;
       onAccept: () => void;
@@ -104,6 +114,12 @@ declare namespace Laptop {
       activeTab: string;
       items: Item[];
       cart: Record<string, number>;
+    }
+
+    interface StateActions {
+      setItems: (items: Item[]) => void;
+      setActiveTab: (tab: string) => void;
+      setCart: (cart: Record<string, number>) => void;
     }
 
     interface Item {

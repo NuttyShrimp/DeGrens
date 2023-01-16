@@ -1,7 +1,7 @@
-import { genericAction, getState } from '../../lib';
+import { useTwitterAppStore } from './stores/useTwitterAppStore';
 
 export const changeTweetStatus = (tweetId: number, action: string) => {
-  const appState = getState<Phone.Twitter.State>('phone.apps.twitter');
+  const appState = useTwitterAppStore.getState();
   const tweets: Phone.Twitter.Tweet[] = [...appState.tweets];
   const index = tweets.findIndex(tweet => tweet.id === tweetId);
   if (index !== -1) {
@@ -22,7 +22,7 @@ export const changeTweetStatus = (tweetId: number, action: string) => {
         break;
       }
     }
-    genericAction('phone.apps.twitter', { tweets });
+    useTwitterAppStore.setState({ tweets });
   } else {
     console.warn(`couldn't find tweet with id: ${tweetId}`);
   }

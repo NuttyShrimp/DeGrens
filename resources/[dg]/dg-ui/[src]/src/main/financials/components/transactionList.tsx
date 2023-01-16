@@ -3,6 +3,7 @@ import { Button } from '@src/components/button';
 
 import Numberformat from '../../../components/numberformat';
 import { formatRelativeTime } from '../../../lib/util';
+import { useFinancialsStore } from '../stores/useFinancialsStore';
 
 const Transaction: FC<
   React.PropsWithChildren<{ transaction: Financials.Transaction; selected: Financials.Account }>
@@ -62,12 +63,10 @@ const Transaction: FC<
 
 export const TransactionList: FC<
   React.PropsWithChildren<{
-    selected: Financials.Account | null;
-    transactions: Financials.Transaction[];
     fetchTransactions: () => Promise<void>;
-    canLoadMore: boolean;
   }>
 > = props => {
+  const [selected, transactions, canLoadMore] = useFinancialsStore(s => [s.selected, s.transactions, s.canLoadMore]);
   const [loadBtnDisabled, setLoadBtnDisabled] = useState(false);
   const loadMoreTrans = async () => {
     setLoadBtnDisabled(true);
@@ -75,10 +74,10 @@ export const TransactionList: FC<
     setLoadBtnDisabled(false);
   };
 
-  if (!props.selected) {
+  if (!selected) {
     return <div className={'transaction__list'}>Kies een account om de transacties te bezichtegen</div>;
   }
-  if (!props.selected?.permissions?.transactions) {
+  if (!selected?.permissions?.transactions) {
     return (
       <div className={'transaction__list'}>
         <div className={'transaction__no_perms'}>
@@ -90,14 +89,14 @@ export const TransactionList: FC<
   }
   return (
     <div className={'transaction__list'}>
-      {props.transactions.map(transaction => (
+      {transactions.map(transaction => (
         <Transaction
           key={transaction.transaction_id}
           transaction={transaction}
-          selected={props.selected as Financials.Account}
+          selected={selected as Financials.Account}
         />
       ))}
-      {props.canLoadMore && (
+      {canLoadMore && (
         <Button.Primary disabled={loadBtnDisabled} onClick={loadMoreTrans}>
           Laad meer
         </Button.Primary>

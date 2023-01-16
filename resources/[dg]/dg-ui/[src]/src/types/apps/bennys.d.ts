@@ -16,12 +16,35 @@ declare namespace Bennys {
     isInCart: boolean;
   }
 
-  interface State extends Base.State {
+  interface State {
     currentCost: number;
     currentMenu: Menu;
     bars: TitleBars;
     cart: Cart[];
     prices: Record<string, number>;
+  }
+
+  interface StateActions {
+    setCost: (price: number) => void;
+    setMenu: (menu: Menu) => void;
+    setPrices: (prices: Record<string, number>) => void;
+    resetStore: () => void;
+
+    // useInformationbar replace
+    setBarTitle: (title: string) => void;
+    resetTitleBar: () => void;
+    setEquipped: (equipped: boolean) => void;
+    setInCart: (isInCart: boolean) => void;
+    setBarPrice: (price: number) => void;
+
+    // useCart replace
+    getPriceOfComp: (comp: string) => number;
+    getCartItemForComp: (comp: string) => Cart | undefined;
+    addToCart: (comp: string, data: any) => void;
+    removeFromCart: (comp: string) => void;
+
+    addGuides: (guides: Guide[]) => void;
+    removeGuides: (guides: Guide[]) => void;
   }
 
   interface ControllerComponent<T> {

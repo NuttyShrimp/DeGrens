@@ -1,6 +1,8 @@
 import { nuiAction } from '@src/lib/nui-comms';
 
-import { genericAction, getState, showCheckmarkModal, showLoadModal, showWarningModal } from '../../lib';
+import { showCheckmarkModal, showLoadModal, showWarningModal } from '../../lib';
+
+import { useBusinessAppStore } from './stores/useBusinessAppStore';
 
 export const updateEmployee = async (id: number, cid: number, role: string) => {
   const success = await nuiAction('phone/business/updateEmployee', { cid, role, id });
@@ -8,9 +10,8 @@ export const updateEmployee = async (id: number, cid: number, role: string) => {
     showWarningModal();
     return false;
   }
-  const businessState = getState<Phone.Business.State>('phone.apps.business');
-  genericAction('phone.apps.business', {
-    ...businessState,
+  const businessState = useBusinessAppStore.getState();
+  useBusinessAppStore.setState({
     employees: businessState.employees.map(e => {
       if (e.citizenid === cid) {
         e.role = role;
@@ -27,9 +28,8 @@ export const hireEmployee = async (id: number, cid: number, role: string) => {
     showWarningModal();
     return false;
   }
-  const businessState = getState<Phone.Business.State>('phone.apps.business');
-  genericAction('phone.apps.business', {
-    ...businessState,
+  const businessState = useBusinessAppStore.getState();
+  useBusinessAppStore.setState({
     employees: [
       ...businessState.employees,
       {
@@ -37,6 +37,7 @@ export const hireEmployee = async (id: number, cid: number, role: string) => {
         citizenid: cid,
         isOwner: false,
         name: employeeName,
+        bank: { deposit: false, transactions: false, transfer: false, withdraw: false },
       },
     ],
   });
@@ -50,8 +51,8 @@ export const fireEmployee = async (id: number, cid: number) => {
     showWarningModal();
     return false;
   }
-  const businessState = getState<Phone.Business.State>('phone.apps.business');
-  genericAction('phone.apps.business', {
+  const businessState = useBusinessAppStore.getState();
+  useBusinessAppStore.setState({
     ...businessState,
     employees: businessState.employees.filter(e => e.citizenid !== cid),
   });
@@ -79,10 +80,10 @@ export const addRole = async (id: number, role: string, permissions: Record<stri
   if (!success) {
     showWarningModal();
   }
-  const businessState = getState<Phone.Business.State>('phone.apps.business');
-  businessState.roles[role] = chosenPerms;
-  genericAction('phone.apps.business', {
-    ...businessState,
+  const roles = useBusinessAppStore.getState().roles;
+  roles[role] = chosenPerms;
+  useBusinessAppStore.setState({
+    roles,
   });
   showCheckmarkModal();
 };
@@ -93,10 +94,10 @@ export const updateRole = async (id: number, role: string, permissions: Record<s
     showWarningModal();
     return;
   }
-  const businessState = getState<Phone.Business.State>('phone.apps.business');
-  businessState.roles[role] = newPerms;
-  genericAction('phone.apps.business', {
-    ...businessState,
+  const roles = useBusinessAppStore.getState().roles;
+  roles[role] = newPerms;
+  useBusinessAppStore.setState({
+    roles,
   });
   showCheckmarkModal();
 };
@@ -106,10 +107,10 @@ export const removeRole = async (id: number, role: string) => {
   if (!success) {
     showWarningModal();
   }
-  const businessState = getState<Phone.Business.State>('phone.apps.business');
-  delete businessState.roles[role];
-  genericAction('phone.apps.business', {
-    ...businessState,
+  const roles = useBusinessAppStore.getState().roles;
+  delete roles[role];
+  useBusinessAppStore.setState({
+    roles,
   });
 };
 
@@ -119,15 +120,15 @@ export const changeBankPerms = async (id: number, cid: number, perms: Financials
     showWarningModal();
     return;
   }
-  const businessState = getState<Phone.Business.State>('phone.apps.business');
-  const employee = businessState.employees.find(e => e.citizenid === cid);
+  const employees = useBusinessAppStore.getState().employees;
+  const employee = employees.find(e => e.citizenid === cid);
   if (!employee) {
     showWarningModal();
     return;
   }
   employee.bank = perms;
-  genericAction('phone.apps.business', {
-    ...businessState,
+  useBusinessAppStore.setState({
+    employees,
   });
   showCheckmarkModal();
 };

@@ -1,18 +1,21 @@
-import { addNotification, genericAction, getState, isAppActive } from '../../lib';
+import { addNotification, isAppActive } from '../../lib';
+import { usePhoneStore } from '../../stores/usePhoneStore';
+
+import { useMailAppStore } from './stores/useMailAppStore';
 
 export const events: Phone.Events = {};
 
 let mailId = 0;
 
 events.newMail = (mail: Partial<Phone.Mail.Mail>) => {
-  const mailState = getState<Phone.Mail.State>('phone.apps.mail');
+  const mailState = useMailAppStore.getState();
   mail.id = `mail-${mailId++}`;
   mail.date = Date.now();
   mailState.mails.push(mail as Phone.Mail.Mail);
   if (!isAppActive('mail')) {
-    mailState.hasNotification = true;
+    usePhoneStore.setState(s => ({ appNotifications: [...s.appNotifications, 'mail'] }));
   }
-  genericAction('phone.apps.mail', mailState);
+  useMailAppStore.setState(mailState);
   addNotification({
     id: `mail_${mail.id}`,
     icon: 'mail',

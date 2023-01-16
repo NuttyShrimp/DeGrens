@@ -1,5 +1,5 @@
 declare namespace Phone {
-  interface State extends Base.State {
+  interface State {
     animating: 'closed' | 'peek' | 'open';
     hasNotifications: boolean;
     callActive: boolean;
@@ -9,14 +9,9 @@ declare namespace Phone {
     callMeta: any;
     background: Object;
     bigPhoto: string | null;
+    appNotifications: string[];
   }
-
-  interface AuxState {
-    'phone.form': FormState;
-    'phone.notifications': Notifications.State;
-  }
-
-  interface Props extends State {
+  interface Props {
     character: Character;
     game: Main.Game;
   }
@@ -160,9 +155,10 @@ declare namespace Phone {
     }
 
     interface State {
-      hasNotification: boolean;
       messages: Record<string, Message[]>;
       currentNumber: string | null;
+      setNumber: (num: string | null) => void;
+      setMessages: (msgs: Record<string, Message[]>) => void;
     }
   }
   namespace Phone {
@@ -193,7 +189,6 @@ declare namespace Phone {
     }
 
     interface State {
-      hasNotification: boolean;
       mails: Mail[];
     }
   }
@@ -208,6 +203,7 @@ declare namespace Phone {
     interface State {
       list: Ad[];
       current: Ad | null;
+      setList: (ads: Ad[]) => void;
     }
   }
   namespace Twitter {
@@ -242,6 +238,7 @@ declare namespace Phone {
     interface State {
       list: Note[];
       current: Note | null;
+      setList: (list: Note[]) => void;
     }
   }
   namespace Crypto {
@@ -259,6 +256,11 @@ declare namespace Phone {
     interface State {
       list: Coin[];
       shouldRenew: boolean;
+    }
+
+    interface StateActions {
+      setList: (list: Coin[]) => void;
+      setRenew: (should: boolean) => void;
     }
   }
   namespace PayConiq {
@@ -281,7 +283,9 @@ declare namespace Phone {
 
     interface State {
       list: Transasction[];
-      dirty: false;
+      dirty: boolean;
+      setDirty: (dirty: boolean) => void;
+      setList: (list: Transasction[]) => void;
     }
   }
   namespace Gallery {
@@ -292,6 +296,7 @@ declare namespace Phone {
 
     interface State {
       list: Img[];
+      setList: (l: Img[]) => void;
     }
   }
   namespace Justice {
@@ -303,6 +308,7 @@ declare namespace Phone {
 
     interface State {
       list: Record<string, Person[]>;
+      setList: (list: Record<string, Person[]>) => void;
     }
 
     interface Props extends State {
@@ -340,6 +346,11 @@ declare namespace Phone {
       groupMembers: Member[];
       isOwner: boolean;
     }
+    interface StateActions {
+      setJobs: (jobs: Job[]) => void;
+      setGroup: (group: Group, members: Member[], owner: boolean) => void;
+      setGroups: (group: Group[]) => void;
+    }
   }
   namespace Debt {
     interface Debt {
@@ -357,6 +368,10 @@ declare namespace Phone {
 
     interface State {
       list: Debt[];
+    }
+
+    interface StateActions {
+      setList: (list: Debt[]) => void;
     }
   }
   namespace Business {
@@ -410,6 +425,7 @@ declare namespace Phone {
     }
     interface State {
       list: Vehicle[];
+      setList: (l: Vehicle[]) => void;
     }
   }
   // endregion

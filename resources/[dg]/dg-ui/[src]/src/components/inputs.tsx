@@ -1,5 +1,4 @@
 import React, { ChangeEvent, FC, FocusEvent, forwardRef, KeyboardEvent, SyntheticEvent, useState } from 'react';
-import { useSelector } from 'react-redux';
 import Autocomplete, { AutocompleteProps as AutocompletePropsMUI } from '@mui/material/Autocomplete';
 import Checkbox, { CheckboxProps } from '@mui/material/Checkbox';
 import FormControlLabel from '@mui/material/FormControlLabel';
@@ -7,6 +6,7 @@ import InputAdornment from '@mui/material/InputAdornment';
 import { styled } from '@mui/material/styles';
 import TextField, { TextFieldProps as TextFieldPropsMUI } from '@mui/material/TextField';
 import { makeStyles } from '@mui/styles';
+import { useContactAppStore } from '@src/main/phone/apps/contacts-app/stores/useContactAppStore';
 
 import { nuiAction } from '../lib/nui-comms';
 
@@ -268,7 +268,7 @@ Input.Search = props => {
 
 Input.Contact = props => {
   // eslint-disable-next-line react-hooks/rules-of-hooks
-  const contacts = useSelector<RootState, Phone.Contacts.Contact[]>(state => state['phone.apps.contacts'].contacts);
+  const contacts = useContactAppStore(s => s.contacts);
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const [selValue, setSelValue] = useState<string>('');
   const onChangeCapture: changeFunction = (value, name, evt) => {

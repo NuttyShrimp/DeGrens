@@ -1,20 +1,17 @@
 import React, { FC } from 'react';
-import { useSelector } from 'react-redux';
 import { Badge } from '@mui/material';
+import { useMainStore } from '@src/lib/stores/useMainStore';
 
 import { Icon } from '../../../../../components/icon';
-import { useUpdateState } from '../../../../../lib/redux';
+import { useBennyAppStore } from '../stores/useBennyAppStore';
 
 export const HeaderIcon: FC<{ name: string; label: string; isCart?: boolean }> = props => {
-  const selected = useSelector<RootState, boolean>(state => state['laptop.bennys'].activeTab === props.name);
-  const updateState = useUpdateState('laptop.bennys');
+  const [selected, setActiveTab] = useBennyAppStore(s => [s.activeTab === props.name, s.setActiveTab]);
   return (
     <div
       className={['laptop-bennys-header-entry', selected ? 'selected' : ''].join(' ')}
       onClick={() => {
-        updateState({
-          activeTab: props.name,
-        });
+        setActiveTab(props.name);
       }}
     >
       {props.isCart && <Icon name={'cart-shopping'} size={'1.5vh'} />}
@@ -24,10 +21,8 @@ export const HeaderIcon: FC<{ name: string; label: string; isCart?: boolean }> =
 };
 
 export const Header: FC<{}> = () => {
-  const hasVPN = useSelector<RootState, boolean>(state => state.character.hasVPN);
-  const storeItems = useSelector<RootState, number>(state =>
-    Object.values(state['laptop.bennys'].cart).reduce((total, a) => total + a, 0)
-  );
+  const hasVPN = useMainStore(s => s.character.hasVPN);
+  const storeItems = useBennyAppStore(s => Object.values(s.cart).reduce((total, a) => total + a, 0));
 
   return (
     <div className={'laptop-bennys-header'}>

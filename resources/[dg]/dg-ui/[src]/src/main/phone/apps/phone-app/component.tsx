@@ -8,7 +8,7 @@ import { AppContainer } from '../../os/appcontainer/appcontainer';
 import { Dialer } from './components/dialer';
 import { PhoneList } from './components/list';
 
-const Component: AppFunction<Phone.Phone.State> = props => {
+const Component = () => {
   const [tab, setTab] = useState(0);
 
   // TODO: add slide transition
@@ -18,7 +18,7 @@ const Component: AppFunction<Phone.Phone.State> = props => {
         <Tab icon={<PhoneIcon />} />
         <Tab icon={<DialpadIcon />} />
       </Tabs>
-      {tab === 0 && <PhoneList calls={props.calls} />}
+      {tab === 0 && <PhoneList />}
       {tab === 1 && <Dialer />}
     </AppContainer>
   );

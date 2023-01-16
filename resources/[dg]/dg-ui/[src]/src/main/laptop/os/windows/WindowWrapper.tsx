@@ -1,14 +1,16 @@
 import React, { CSSProperties, FC, useCallback, useEffect, useRef, useState } from 'react';
 import { useDrop } from 'react-dnd';
-import { useSelector } from 'react-redux';
-import { store, useUpdateState } from '@src/lib/redux';
+
+import { useLaptopConfigStore } from '../../stores/useLaptopConfigStore';
+import { useLaptopStore } from '../../stores/useLaptopStore';
 
 export const WindowWrapper: FC<{ activeApps: Laptop.State['activeApps']; focusedApp: Laptop.State['focusedApp'] }> = ({
   activeApps,
   focusedApp,
 }) => {
-  const appConfigs = useSelector<RootState, Laptop.Config.Config[]>(state => state['laptop.config'].enabledApps);
-  const updateState = useUpdateState('laptop');
+  const appConfigs = useLaptopConfigStore(s => s.config);
+  const storeWindowPositions = useLaptopStore(s => s.windowPositions);
+  const [setStoreWindowPosition] = useLaptopStore(s => [s.setWindowPosition]);
   const containerRef = useRef<HTMLDivElement>(null);
 
   // We store app position seperatly to allow smooth dragging, only updating to reduxstore on drop
@@ -16,8 +18,7 @@ export const WindowWrapper: FC<{ activeApps: Laptop.State['activeApps']; focused
 
   // On first render we fetch from store
   useEffect(() => {
-    const startPositions = (store.getState() as RootState).laptop.windowPositions;
-    setWindowPosition({ ...startPositions });
+    setWindowPosition({ ...storeWindowPositions });
   }, []);
 
   const [, dropRef] = useDrop(
@@ -41,12 +42,7 @@ export const WindowWrapper: FC<{ activeApps: Laptop.State['activeApps']; focused
         // We only update position to store on drop
         const newPosition = windowPositions[item.name];
         if (!newPosition) return;
-        updateState(state => ({
-          windowPositions: {
-            ...state.laptop.windowPositions,
-            [item.name]: newPosition,
-          },
-        }));
+        setStoreWindowPosition(item.name, newPosition);
       },
     }),
     [containerRef.current, windowPositions]

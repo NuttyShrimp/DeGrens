@@ -1,5 +1,4 @@
 import React, { FC, useCallback, useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
 import { useKeyboardKey } from '@src/lib/hooks/useKeyboardKey';
 
 import { devData } from '../../../../lib/devdata';
@@ -7,9 +6,9 @@ import { useDebounce } from '../../../../lib/hooks/useDebounce';
 import { nuiAction } from '../../../../lib/nui-comms';
 import { componentTitles } from '../../data/componentTitles';
 import { getDataOfGTAColorById, getDataOfGTAColorByRGB, getRGBOfColor } from '../../data/gtacolors';
-import { useCart } from '../../hooks/useCart';
-import { useGuide, useInformationBar } from '../../hooks/useInformationBar';
+import { useGuide } from '../../hooks/useInformationBar';
 import { useKeyEvents } from '../../hooks/useKeyEvents';
+import { useBennyStore } from '../../stores/useBennyStore';
 import { compareRGB } from '../../utils/rgbComparator';
 import { CategorySlider } from '../CategorySlider';
 import { GTAColorPicker } from '../ColorPickers/GTAColorPicker';
@@ -26,7 +25,6 @@ const isSameColor = (a: RGB | number, b: RGB | number) => {
 };
 
 export const ColorMenu: FC<{ goToMainMenu: () => void }> = ({ goToMainMenu }) => {
-  const { setTitle, resetTitle, setEquipped, setIsInCart, setPrice } = useInformationBar();
   const { key: leftKey } = useKeyboardKey('q');
   const { key: rightKey } = useKeyboardKey('e');
   const { showGuide, hideGuide } = useGuide([
@@ -43,10 +41,30 @@ export const ColorMenu: FC<{ goToMainMenu: () => void }> = ({ goToMainMenu }) =>
       kbdCombo: [rightKey.toLocaleUpperCase()],
     },
   ]);
-  const { addItemToCart, getCartItemByComponent, removeItemFromCart } = useCart();
+  const [
+    addItemToCart,
+    getCartItemByComponent,
+    removeItemFromCart,
+    setTitle,
+    resetTitle,
+    setEquipped,
+    setIsInCart,
+    setPrice,
+    pricesPerColor,
+    cart,
+  ] = useBennyStore(s => [
+    s.addToCart,
+    s.getCartItemForComp,
+    s.removeFromCart,
+    s.setBarTitle,
+    s.resetTitleBar,
+    s.setEquipped,
+    s.setInCart,
+    s.setBarPrice,
+    s.prices,
+    s.cart,
+  ]);
   const { useEventRegister } = useKeyEvents();
-
-  const pricesPerColor = useSelector<RootState, Bennys.State['prices']>(state => state.bennys.prices);
 
   const [categories, setCategories] = useState<Bennys.Components.Color[]>([]);
   const [currentCategoryId, setCurrentCategoryId] = useState<number>(0);
@@ -100,7 +118,7 @@ export const ColorMenu: FC<{ goToMainMenu: () => void }> = ({ goToMainMenu }) =>
     const cartItem = getCartItemByComponent(cat.name)?.data as number | RGB;
     setIsInCart(isSameColor(currentColor, cartItem));
     setPrice(pricesPerColor[cat.name]);
-  }, [currentCategoryId, categories, currentColor, getCartItemByComponent]);
+  }, [currentCategoryId, categories, currentColor, cart]);
 
   const changeCategory = (newCat: number) => {
     previewPreviousOnChange();
@@ -127,7 +145,7 @@ export const ColorMenu: FC<{ goToMainMenu: () => void }> = ({ goToMainMenu }) =>
       }
       addItemToCart(cat.name, color);
     },
-    [currentCategoryId, categories, getCartItemByComponent]
+    [currentCategoryId, categories]
   );
 
   // Reset previewed item to cartitem else equipped on leave
@@ -138,7 +156,7 @@ export const ColorMenu: FC<{ goToMainMenu: () => void }> = ({ goToMainMenu }) =>
       name: previousCategory.name,
       data: color,
     });
-  }, [categories, currentCategoryId, getCartItemByComponent]);
+  }, [categories, currentCategoryId]);
 
   const exit = useCallback(() => {
     previewPreviousOnChange();
@@ -146,13 +164,10 @@ export const ColorMenu: FC<{ goToMainMenu: () => void }> = ({ goToMainMenu }) =>
   }, [previewPreviousOnChange, goToMainMenu]);
   useEventRegister('Escape', exit);
 
-  const startOnCartOrEquipped = useCallback(
-    (data: Bennys.Components.Color[], categoryId: number) => {
-      const color = (getCartItemByComponent(data[categoryId].name)?.data as number | RGB) ?? data[categoryId].equipped;
-      setCurrentColor(color);
-    },
-    [getCartItemByComponent]
-  );
+  const startOnCartOrEquipped = (data: Bennys.Components.Color[], categoryId: number) => {
+    const color = (getCartItemByComponent(data[categoryId].name)?.data as number | RGB) ?? data[categoryId].equipped;
+    setCurrentColor(color);
+  };
 
   return (
     <>

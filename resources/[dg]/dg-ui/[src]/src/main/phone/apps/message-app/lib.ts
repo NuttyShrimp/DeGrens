@@ -1,6 +1,8 @@
 import { devData } from '../../../../lib/devdata';
 import { nuiAction } from '../../../../lib/nui-comms';
-import { changeApp, genericAction, getState } from '../../lib';
+import { changeApp } from '../../lib';
+
+import { useMessageStoreApp } from './stores/useMessageStoreApp';
 
 export const addMessage = (
   phoneNr: string,
@@ -8,7 +10,7 @@ export const addMessage = (
   place?: 'append' | 'prepend',
   reset?: boolean
 ) => {
-  const { messages } = getState<Phone.Messages.State>('phone.apps.messages');
+  const messages = useMessageStoreApp.getState().messages;
   if (reset) {
     messages[phoneNr] = pMessages;
   } else {
@@ -26,11 +28,11 @@ export const addMessage = (
       }
     }
   }
-  genericAction('phone.apps.messages', { messages });
+  useMessageStoreApp.setState({ messages });
 };
 
 export const openConversation = async (phoneNr: string) => {
-  const appState = getState<Phone.Messages.State>('phone.apps.messages');
+  const appState = useMessageStoreApp.getState();
   appState.currentNumber = phoneNr;
   const messages = (await nuiAction(
     'phone/messages/get',
@@ -41,7 +43,7 @@ export const openConversation = async (phoneNr: string) => {
     devData.messages
   )) ?? { [phoneNr]: [] }; // This will prevent from the app from crashing if the persons never send any messages
   appState.messages[phoneNr] = messages[phoneNr] || [];
-  genericAction('phone.apps.messages', appState);
+  useMessageStoreApp.setState(appState);
   changeApp('messages');
   nuiAction('phone/messages/set-read', { target: phoneNr });
 };

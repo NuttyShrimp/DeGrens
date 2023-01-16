@@ -1,14 +1,13 @@
 import React, { FC, useCallback, useEffect, useMemo, useState } from 'react';
-import { useSelector } from 'react-redux';
 import { Button, Divider, Tooltip } from '@mui/material';
 import { devData } from '@src/lib/devdata';
 import { nuiAction } from '@src/lib/nui-comms';
-import { useUpdateState } from '@src/lib/redux';
 
 import { AppWindow } from '../../os/windows/AppWindow';
 
 import { Home } from './pages/home';
 import { MemberList } from './pages/memberlist';
+import { useGangApp } from './stores/useGangAppStore';
 import config from './config';
 
 import '../../styles/gang.scss';
@@ -21,20 +20,19 @@ const TABS: Record<Laptop.Gang.Tab, { label: string; requiredPerms: boolean }> =
 
 export const Component: FC = () => {
   const [activeTab, setActiveTab] = useState<Laptop.Gang.Tab>(Object.keys(TABS)[0] as Laptop.Gang.Tab);
-  const gangInfo = useSelector<RootState, Laptop.Gang.State>(state => state['laptop.gang']);
-  const updateState = useUpdateState('laptop.gang');
+  const [updateStore, members, label, name] = useGangApp(s => [s.updateStore, s.members, s.label, s.name]);
   const [hasGang, setHasGang] = useState(false);
 
   const playerMember = useMemo(() => {
-    return gangInfo.members.find(m => m.isPlayer);
-  }, [gangInfo]);
+    return members.find(m => m.isPlayer);
+  }, [members]);
 
   const fetchGangData = useCallback(async () => {
     // Serialization changes null to undefined yey
     const result = await nuiAction<Laptop.Gang.State | undefined>('laptop/gang/fetch', {}, devData.laptopGang);
     setHasGang(result != undefined);
     if (result == undefined) return;
-    updateState(result);
+    updateStore(result);
   }, []);
 
   useEffect(() => {
@@ -45,19 +43,14 @@ export const Component: FC = () => {
     switch (activeTab) {
       case 'home':
         return (
-          <Home
-            label={gangInfo.label}
-            gangName={gangInfo.name}
-            fetchGangData={fetchGangData}
-            isOwner={playerMember?.isOwner ?? false}
-          />
+          <Home label={label} gangName={name} fetchGangData={fetchGangData} isOwner={playerMember?.isOwner ?? false} />
         );
       case 'members':
-        return <MemberList gangName={gangInfo.name} members={gangInfo.members} fetchGangData={fetchGangData} />;
+        return <MemberList gangName={name} members={members} fetchGangData={fetchGangData} />;
       default:
         return null;
     }
-  }, [activeTab, gangInfo]);
+  }, [activeTab, name, members]);
 
   if (active === null) return null;
 
