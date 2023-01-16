@@ -1,4 +1,4 @@
-import { Keys, Sync, UI, Util } from '@dgx/client';
+import { Keys, RPC, Sync, UI, Util } from '@dgx/client';
 import { drawText3d } from 'helpers/util';
 
 let idThread: NodeJS.Timer | null = null;
@@ -6,16 +6,18 @@ let keyThread: NodeJS.Timer | null = null;
 
 const openMenu = async () => {
   closeMenu();
+  const scopeInfo = await Sync.getScopeInfo();
+  if (!scopeInfo) return;
+  const hiddenPlys = await RPC.execute<number[]>('admin:hideinfo:get');
   idThread = setInterval(() => {
     GetActivePlayers().forEach((ply: number) => {
+      if (hiddenPlys?.includes(GetPlayerServerId(ply))) return;
       const ped = GetPlayerPed(ply);
       const coords = Util.getEntityCoords(ped);
       coords.z += 1.0;
       drawText3d(`${GetPlayerServerId(ply)}`, coords, 0.4);
     });
   }, 1);
-  const scopeInfo = await Sync.getScopeInfo();
-  if (!scopeInfo) return;
   UI.openApplication(
     'idlist',
     {

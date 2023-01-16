@@ -1,4 +1,4 @@
-import { Keys, PropAttach, Util } from '@dgx/client';
+import { Events, Keys, PropAttach, Util } from '@dgx/client';
 
 let noclipEnabled = false;
 let noclipThread: NodeJS.Timer | null = null;
@@ -20,6 +20,7 @@ export const isNoclipEnabled = () => {
 };
 
 export const toggleNoclip = () => {
+  Events.emitNet('admin:hideinfo:toggle', !noclipEnabled);
   if (noclipEnabled) {
     noclipEnabled = false;
     cleanupNoclip();

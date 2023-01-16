@@ -22,7 +22,10 @@ class Admin {
     return global.exports['dg-admin'].warn(source, target, reason);
   }
   isInDevMode(src: number): boolean {
-    return global.exports['dg-admin'].isInDevMode(source);
+    return global.exports['dg-admin'].isInDevMode(src);
+  }
+  getHiddenPlys(): number[] {
+    return global.exports['dg-admin'].getHiddenPlys();
   }
 }
 

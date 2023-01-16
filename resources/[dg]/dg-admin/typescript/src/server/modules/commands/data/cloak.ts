@@ -1,4 +1,5 @@
 import { Notifications, Sync } from '@dgx/server';
+import { hidePly } from 'services/hideInfo';
 
 let cloakToggled: Record<number, boolean> = {};
 
@@ -13,6 +14,7 @@ export const cloak: CommandData = {
     const toggle = !cloakToggled[caller.source];
     cloakToggled[caller.source] = toggle;
     Sync.setPlayerVisible(caller.source, !toggle);
+    hidePly(caller.source, toggle);
     Notifications.add(caller.source, `Cloak ${toggle ? 'enabled' : 'disabled'}`);
   },
   UI: {
