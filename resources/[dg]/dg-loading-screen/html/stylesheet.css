@@ -31,20 +31,32 @@ body {
   filter: blur(var(--background-blur)) contrast(var(--background-contrast));
 }
 
-.logo {
-  width: 223px;
-  height: 111px;
-}
-
 #container {
-  text-shadow: 2px 2px 5px #424242;
   position: absolute;
-  color: rgb(241, 235, 235);
-  top: 15%;
+  top: 25vh;
   left: 50%;
   transform: translate(-50%, -50%);
-  font-size: 75px;
   text-align: center;
+}
+
+#inner_logo_container {
+  position: absolute;
+  overflow: hidden;
+  top: 13vh;
+  left: 0;
+}
+
+.logo {
+  width: 24vh;
+  height: 13vh;
+  transition: top 0.25s ease-in-out;
+}
+
+#logo_fg {
+  position: absolute;
+  /* crop foutje */
+  left: 1;
+  top: -13vh;
 }
 
 #bg > .video-overlay {
@@ -52,7 +64,7 @@ body {
   width: 100vw;
   height: 100vh;
   background: rgb(0, 0, 0);
-  background: radial-gradient(circle, rgba(0, 0, 0, 0) 20%, rgba(232, 84, 118, 0.2) 100%)
+  background: radial-gradient(circle, rgba(0, 0, 0, 0) 30%, rgba(232, 84, 118, 0.2) 80%), linear-gradient(0deg, rgba(0, 0, 0, 0) 85%, rgba(232, 84, 118, 0.3) 100%), linear-gradient(180deg, rgba(0, 0, 0, 0) 85%, rgba(232, 84, 118, 0.3) 100%);
 }
 
 #bg > video {

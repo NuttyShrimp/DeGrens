@@ -22,10 +22,3 @@ AddEventHandler('loadscreen:disableScreen', function()
     print('Failed to shutdown loading screen. Trying again...')
   end
 end)
-
-RegisterNetEvent("dgx:isProduction", function(isProd)
-  if not GetIsLoadingScreenActive() then return end
-  SendLoadingScreenMessage(json.encode({
-    setEnv = isProd
-  }))
-end)
