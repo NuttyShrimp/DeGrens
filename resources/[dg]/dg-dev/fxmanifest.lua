@@ -18,8 +18,4 @@ client_scripts {
 	"client/**/*.lua",
 }
 
-files {
-  "data/*.json"
-}
-
 dependency "dg-auth"
