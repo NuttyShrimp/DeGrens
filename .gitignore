@@ -1,5 +1,6 @@
 cache/
 /db/
+/resources/\[local\]/
 mysql.cfg
 server.cfg
 .yarn.installed
