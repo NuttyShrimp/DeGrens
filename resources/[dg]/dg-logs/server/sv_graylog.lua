@@ -43,7 +43,9 @@ createGraylogEntry = function(logtype, data, message, isImportant, timestamp)
 			short_message = message or logtype,
 			_resource = GetInvokingResource(),
 			_logtype = logtype,
+      _citizenid = data.plyInfo and data.plyInfo.cid,
 			full_message = json.encode(data, { indent = true }),
+      _devMsg = isImportant,
       timestamp = timestamp
 		}
 
