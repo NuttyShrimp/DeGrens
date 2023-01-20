@@ -65,13 +65,12 @@ exports('createGraylogEntry', createGraylogEntry)
 
 --- region Storage
 function storeEntry(msg)
-  local storedentries = LoadResourceFile(GetCurrentResourceName(), "./data/logs.json")
-  if storedentries then
-    storedEntries = json.decode(storedEntries)
-  else
-    storedEntries = {}
+  local storedEntriesJSON = LoadResourceFile(GetCurrentResourceName(), "./data/logs.json")
+  local storedEntries = {}
+  if storedEntriesJSON then
+    storedEntries = json.decode(storedEntriesJSON)
   end
-  storedentries[#storedentries+1] = msg
+  storedEntries[#storedEntries+1] = msg
   SaveResourceFile(GetCurrentResourceName(), "./data/logs.json", json.encode(storedEntries), -1)
   hasStoredEntries = true
 end
@@ -80,12 +79,12 @@ function sendStoredEntries()
   if not hasStoredEntries then
     return
   end
-  local storedentries = LoadResourceFile(GetCurrentResourceName(), "./data/logs.json")
-  if not storedEntries then
+  local storedEntriesJSON = LoadResourceFile(GetCurrentResourceName(), "./data/logs.json")
+  if not storedEntriesJSON then
     hasStoredEntries = false
     return
   end
-  storedEntries = json.decode(storedEntries)
+  local storedEntries = json.decode(storedEntriesJSON)
   if #storedEntries == 0 then
     hasStoredEntries = false
     return
