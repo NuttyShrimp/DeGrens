@@ -28,7 +28,7 @@
     modelValue: any;
     options: any[];
     label: string;
-    filterKey: string;
+    filterKeys: string[];
   }>();
   const options = ref(props.options);
 
@@ -43,7 +43,11 @@
   const filterFn = (val: string, update: Function) => {
     update(() => {
       const needle = val.toLowerCase();
-      options.value = props.options.filter(v => v[props.filterKey].toLowerCase().indexOf(needle) > -1);
+      options.value = props.options.filter(v => {
+        // We concat all values from the filterkeys to search
+        const fullIdentifier = props.filterKeys.reduce((acc, cur) => `${acc}${v[cur]}`, '');
+        return fullIdentifier.toLowerCase().indexOf(needle) > -1;
+      });
     });
   };
 </script>

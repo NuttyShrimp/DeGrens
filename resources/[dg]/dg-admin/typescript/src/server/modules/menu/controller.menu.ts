@@ -183,5 +183,5 @@ RPC.register('admin:menu:getWeatherTypes', (): { name: string }[] => {
 RPC.register('admin:menu:getVehicleModels', (): UI.VehicleModel[] => {
   // We get more data from export but only need some so we type it like this
   const models = global.exports['dg-vehicles'].getVehicleModels() as UI.VehicleModel[];
-  return models.map(t => ({ name: t.model, brand: t.brand, model: t.model, class: t.class }));
+  return models.map(t => ({ name: t.name, brand: t.brand, model: t.model, class: t.class }));
 });

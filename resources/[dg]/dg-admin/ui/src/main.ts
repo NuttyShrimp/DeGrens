@@ -24,7 +24,7 @@ Sentry.init({
   integrations: [
     new BrowserTracing({
       // @ts-ignore
-      tracingOrigins: [`https://${GetParentResourceName()}`],
+      tracingOrigins: [`https://${typeof GetParentResourceName !== 'undefined' ? GetParentResourceName() : 'dev-env'}`],
     }),
   ],
   // Set tracesSampleRate to 1.0 to capture 100%

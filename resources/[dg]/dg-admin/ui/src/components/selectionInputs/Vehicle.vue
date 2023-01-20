@@ -4,11 +4,12 @@
     @update:modelValue="updateValue"
     :options="models"
     label="Vehicle Model"
-    filter-key="model"
+    :filter-keys="['model', 'brand', 'name']"
   >
     <template v-if="props.modelValue?.model !== undefined" #selected>
       <p>
-        {{ props.modelValue?.model ?? '' }} ({{ props.modelValue.brand ?? '' }} {{ props.modelValue.name ?? '' }} | {{ props.modelValue.class ?? '' }})
+        {{ props.modelValue?.model ?? '' }} ({{ props.modelValue.brand ?? '' }} {{ props.modelValue.name ?? '' }} |
+        {{ props.modelValue.class ?? '' }})
       </p>
     </template>
     <template v-else #selected>

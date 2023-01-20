@@ -4,7 +4,7 @@
     @update:modelValue="updateValue"
     :options="players"
     label="Target"
-    filter-key="name"
+    :filter-keys="['name', 'serverId']"
   >
     <template v-if="props.modelValue?.name" #selected>
       {{ props.modelValue.name }} ({{ props.modelValue.serverId }} | {{ props.modelValue.steamId }})

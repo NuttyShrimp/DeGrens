@@ -4,7 +4,7 @@
     @update:modelValue="updateValue"
     :options="models"
     label="Bank Account"
-    filter-key="name"
+    :filter-keys="['name']"
   >
     <template v-if="props.modelValue?.name !== undefined" #selected>
       {{ props.modelValue?.name ?? '' }} ({{ props.modelValue?.id ?? '' }} | {{ props.modelValue?.owner ?? '' }} |

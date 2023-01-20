@@ -4,7 +4,7 @@
     @update:modelValue="updateValue"
     :options="models"
     label="Item"
-    filter-key="name"
+    :filter-keys="['name', 'label']"
   >
     <template v-if="props.modelValue?.name !== undefined" #selected>
       <p>

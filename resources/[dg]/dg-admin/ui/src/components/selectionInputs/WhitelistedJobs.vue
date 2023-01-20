@@ -4,7 +4,7 @@
     @update:modelValue="updateValue"
     :options="models"
     label="Whitelisted Job"
-    filter-key="name"
+    :filter-keys="['name']"
   >
     <template v-if="props.modelValue?.name !== undefined" #selected>
       {{ props.modelValue?.name ?? '' }} (ranks: {{ props.modelValue?.ranks ?? 0 }})

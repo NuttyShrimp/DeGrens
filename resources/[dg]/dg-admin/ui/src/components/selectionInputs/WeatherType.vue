@@ -4,7 +4,7 @@
     @update:modelValue="updateValue"
     :options="models"
     label="Weather Type"
-    filter-key="name"
+    :filter-keys="['name']"
   >
     <template v-if="props.modelValue?.name !== undefined" #selected>
       {{ props.modelValue?.name ?? '' }}
