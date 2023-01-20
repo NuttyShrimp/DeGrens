@@ -6,6 +6,7 @@ import { initializeSanddigging } from 'modules/sanddigging/service.sanddigging';
 import { initializeFishing } from 'modules/fishing/service.fishing';
 import { initializeScrapyard } from 'modules/scrapyard/service.scrapyard';
 import { initializeSanitation } from 'modules/sanitation/service.sanitation';
+import { initializePostop } from 'modules/postop/service.postop';
 
 import './controllers';
 import './modules';
@@ -24,4 +25,5 @@ const initializeJobs = async () => {
   initializeFishing();
   initializeScrapyard();
   initializeSanitation();
+  initializePostop();
 };

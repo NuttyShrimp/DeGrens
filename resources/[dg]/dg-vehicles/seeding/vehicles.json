@@ -6646,5 +6646,17 @@
     "price": 1,
     "shop": "nfs",
     "type": "land"
+  },
+  {
+    "category": "vans",
+    "model": "boxville4",
+    "brand": "Brute",
+    "name": "Boxville (PostOP)",
+    "class": "C",
+    "defaultStock": 10,
+    "restockTime": 10,
+    "price": 1,
+    "shop": "nfs",
+    "type": "land"
   }
 ]

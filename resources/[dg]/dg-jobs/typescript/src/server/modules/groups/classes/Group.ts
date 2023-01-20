@@ -270,7 +270,6 @@ export class Group {
       this.logger.debug(`Group(${this.id}) tried to change its job to ${job.name} but too many members for job`);
       return false;
     }
-    this.logger.info(`Changing job to ${job.name}`);
     if (this.getMembers().some(m => !m.isReady)) {
       if (ownerMember.serverId !== null) {
         Phone.showNotification(ownerMember.serverId, {
@@ -283,6 +282,7 @@ export class Group {
       this.logger.debug(`Group(${this.id}) tried to change it job to ${job.name} but not all members are ready`);
       return false;
     }
+    this.logger.info(`Changing job to ${job.name}`);
     Util.Log(
       'jobs:group:changeJob',
       {
@@ -291,7 +291,8 @@ export class Group {
       },
       `Changing job to ${job.name}`
     );
-    this.currentJob = jobName;
+    this.currentJob = job.name;
+    this.maxSize = job.size;
     return true;
   }
 

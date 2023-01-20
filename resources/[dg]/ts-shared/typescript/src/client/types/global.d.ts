@@ -33,6 +33,7 @@ declare global {
     Weapons: typeof Classes.Weapons;
     Weather: typeof Classes.Weather;
     Hospital: typeof Classes.Hospital;
+    Phone: typeof Classes.Phone;
   };
   var asyncExports: any;
 }

@@ -24,6 +24,7 @@ import {
   addWhitelist,
   removeWhitelist,
 } from '../services/whitelist';
+import { syncPostOPJobToClient } from 'modules/postop/service.postop';
 
 global.exports('signPlayerOutOfAnyJob', (plyId: number) => {
   const job = getPlayerJob(plyId);
@@ -153,9 +154,14 @@ RPC.register('jobs:whitelist:getInfoList', (src: number) => {
 on('DGCore:server:playerLoaded', (playerData: PlayerData) => {
   const group = Jobs.getGroupByCid(playerData.citizenid);
   if (!group) return;
-  syncFishingJobToClient(group.id, playerData.source);
-  syncScrapyardJobToClient(group.id, playerData.source, playerData.citizenid);
-  syncSanitationJobToClient(group.id, playerData.source);
+
+  // wait a few sec to ensure everything has properly loaded for the player like phone, inventory etc
+  setTimeout(() => {
+    syncFishingJobToClient(group.id, playerData.source);
+    syncScrapyardJobToClient(group.id, playerData.source, playerData.citizenid);
+    syncSanitationJobToClient(group.id, playerData.source);
+    syncPostOPJobToClient(group.id, playerData.source);
+  }, 5000);
 });
 
 RPC.register('jobs:modules:getInitData', async () => {
@@ -164,12 +170,13 @@ RPC.register('jobs:modules:getInitData', async () => {
     sanddigging: Sanddigging.Config;
     fishing: Fishing.Config;
     scrapyard: Scrapyard.Config;
-    sanitation: Sanitation.Config;
+    postop: PostOP.Config;
   };
   return {
     sanddigging: config.sanddigging,
     fishingReturnZone: config.fishing.vehicle,
     scrapyardReturnZone: config.scrapyard.returnZone,
+    postopTypes: config.postop.types,
   };
 });
 // #endregion

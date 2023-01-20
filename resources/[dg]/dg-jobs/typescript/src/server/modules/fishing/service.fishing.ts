@@ -36,11 +36,20 @@ export const startJobForGroup = async (plyId: number, jobType: Fishing.JobType) 
     return;
   }
 
+  const vehicleLocation = fishingConfig.vehicle[jobType];
+  if (Util.isAnyVehicleInRange(fishingConfig.vehicle[jobType], 5)) {
+    Notifications.add(plyId, 'Er staat een voertuig in de weg', 'error');
+    return;
+  }
+
   const jobAssigned = changeJob(plyId, 'fishing');
   if (!jobAssigned) return;
 
-  const vehicle = await Vehicles.spawnVehicle(BOAT_FOR_JOBTYPE[jobType], fishingConfig.vehicle[jobType], plyId);
-  if (!vehicle) return;
+  const vehicle = await Vehicles.spawnVehicle(BOAT_FOR_JOBTYPE[jobType], vehicleLocation, plyId);
+  if (!vehicle) {
+    Notifications.add(plyId, 'Kon het voertuig niet uithalen', 'error');
+    return;
+  }
   const netId = NetworkGetNetworkIdFromEntity(vehicle);
   Vehicles.giveKeysToPlayer(plyId, netId);
   const vin = Vehicles.getVinForVeh(vehicle);

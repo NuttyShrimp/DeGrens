@@ -11,15 +11,6 @@ import {
 } from './service.scrapyard';
 
 Events.onNet('jobs:scrapyard:signIn', async (src: number) => {
-  const group = getGroupByServerId(src);
-  if (!group) {
-    Notifications.add(src, 'Je zit niet in een groep!', 'error');
-    return;
-  }
-
-  const jobAssigned = changeJob(src, 'scrapyard');
-  if (!jobAssigned) return;
-
   assignLocationToGroup(src);
 });
 

@@ -42,11 +42,19 @@ export const startJobForGroup = async (plyId: number) => {
     return;
   }
 
+  if (Util.isAnyVehicleInRange(sanitationConfig.vehicleLocation, 5)) {
+    Notifications.add(plyId, 'Er staat een voertuig in de weg', 'error');
+    return;
+  }
+
   const jobAssigned = changeJob(plyId, 'sanitation');
   if (!jobAssigned) return;
 
   const vehicle = await Vehicles.spawnVehicle('trash', sanitationConfig.vehicleLocation, plyId);
-  if (!vehicle) return;
+  if (!vehicle) {
+    Notifications.add(plyId, 'Kon het voertuig niet uithalen', 'error');
+    return;
+  }
   const netId = NetworkGetNetworkIdFromEntity(vehicle);
   Vehicles.giveKeysToPlayer(plyId, netId);
   const vin = Vehicles.getVinForVeh(vehicle);
