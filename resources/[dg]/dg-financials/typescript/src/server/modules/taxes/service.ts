@@ -1,5 +1,4 @@
-import { Config, SQL } from '@dgx/server';
-import { Util } from '@dgx/shared';
+import { Config, SQL, Util } from '@dgx/server';
 import dayjs from 'dayjs';
 import { getConfig } from 'helpers/config';
 import accountManager from 'modules/bank/classes/AccountManager';
@@ -88,7 +87,20 @@ const taxBankAccounts = async (lastLog: number) => {
     if (dayjs(account.lastOperation).isBefore(prevLogDate)) return;
     if (seededAccs.includes(account.getAccountId())) return;
 
-    const accOwner = account.permsManager.getAccountOwner()!;
+    const accOwner = account.permsManager.getAccountOwner();
+    if (!accOwner) {
+      Util.Log(
+        'financials:noOwner',
+        {
+          accountId: account.getAccountId(),
+        },
+        `failed to get owner for account ${account.getAccountId()}`,
+        undefined,
+        true
+      );
+      return;
+    }
+
     account.transfer('BE1', accOwner.cid, accOwner.cid, taxAmount, 'Account operation cost', true);
   });
   taxLogger.info('Applied taxes to bank accounts');
