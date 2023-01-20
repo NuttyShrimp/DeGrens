@@ -29,6 +29,14 @@ class Phone {
     emitNet('dg-phone:client:notification:add', target, notification);
   }
 
+  removeNotification(target: number, id: string) {
+    emitNet('dg-phone:client:notification:remove', target, id);
+  }
+
+  updateNotification(target: number, id: string, notification: Partial<Phone.Notification>) {
+    emitNet('dg-phone:client:notification:update', target, id, notification);
+  }
+
   sendMail(target: number, subject: string, sender: string, mail: string) {
     emitNet('dg-phone:client:addNewMail', target, subject, sender, mail);
   }

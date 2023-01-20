@@ -405,4 +405,32 @@ export const PROPS: Record<string, PropAttach.PropInfo> = {
       z: 0,
     },
   },
+  postop_box_1: {
+    model: 'bkr_prop_fakeid_boxpassport_01a',
+    boneId: 24818,
+    position: {
+      x: -0.28,
+      y: 0.42,
+      z: 0.02,
+    },
+    rotation: {
+      x: 0.0,
+      y: 92.0,
+      z: 8.5,
+    },
+  },
+  postop_box_2: {
+    model: 'bkr_prop_fakeid_boxdriverl_01a',
+    boneId: 24818,
+    position: {
+      x: -0.28,
+      y: 0.38,
+      z: 0.02,
+    },
+    rotation: {
+      x: -1.9,
+      y: 91.2,
+      z: 0.7,
+    },
+  },
 };

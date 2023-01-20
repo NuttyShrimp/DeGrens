@@ -1,7 +1,6 @@
 import { Peek, UI, Keys, Notifications, Events, PolyZone, Util, RPC, PropAttach } from '@dgx/client';
 import { Vector3 } from '@dgx/shared';
 import { DUMPSTER_MODELS } from './constants.sanitation';
-import { isAtBack } from './helpers.sanitation';
 
 let assignedVehicle: number | null = null;
 let vehiclePeekIds: string[] = [];
@@ -47,7 +46,7 @@ export const setAssignedVehicle = (netId: typeof assignedVehicle) => {
         canInteract: vehicle => {
           if (!vehicle) return false;
           if (!hasTrashbag) return false;
-          return isAtBack(vehicle);
+          return Util.isAtBackOfEntity(vehicle);
         },
       },
     ],

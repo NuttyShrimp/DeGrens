@@ -1,4 +1,4 @@
-import { Events, Jobs, Notifications, Vehicles } from '@dgx/server';
+import { Events, Jobs, Notifications, Vehicles, Util } from '@dgx/server';
 import { changeJob, getGroupByServerId } from 'modules/groups/service';
 import {
   assignSpotToGroup,
@@ -12,15 +12,24 @@ import {
 
 Events.onNet('jobs:sanddigging:signIn', async (src: number) => {
   if (getGroupByServerId(src) === undefined) {
-    Notifications.add(src, 'Je zit niet in een groep');
+    Notifications.add(src, 'Je zit niet in een groep', 'error');
+    return;
+  }
+
+  const vehicleLocation = getSanddiggingConfig().vehicle;
+  if (Util.isAnyVehicleInRange(vehicleLocation, 3)) {
+    Notifications.add(src, 'Er staat een voertuig in de weg', 'error');
     return;
   }
 
   const success = changeJob(src, 'sanddigging');
   if (!success) return;
 
-  const vehicle = await Vehicles.spawnVehicle('caddy3', getSanddiggingConfig().vehicle, src);
-  if (!vehicle) return;
+  const vehicle = await Vehicles.spawnVehicle('caddy3', vehicleLocation, src);
+  if (!vehicle) {
+    Notifications.add(src, 'Kon het voertuig niet uithalen', 'error');
+    return;
+  }
   const netId = NetworkGetNetworkIdFromEntity(vehicle);
   Vehicles.giveKeysToPlayer(src, netId);
   const vin = Vehicles.getVinForVeh(vehicle);

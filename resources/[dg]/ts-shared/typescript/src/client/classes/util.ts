@@ -268,6 +268,15 @@ class Util extends UtilShared {
       }
     }, 1);
   };
+
+  public isAtBackOfEntity = (entity: number, distance = 2) => {
+    const model = GetEntityModel(entity);
+    const [min, max] = GetModelDimensions(model);
+    const yOffset = (max[1] - min[1]) / -2;
+    const zOffset = (max[2] - min[2]) / 2;
+    const coords = this.ArrayToVector3(GetOffsetFromEntityInWorldCoords(entity, 0, yOffset, zOffset));
+    return this.getPlyCoords().distance(coords) < distance;
+  };
 }
 
 export class Interiors {

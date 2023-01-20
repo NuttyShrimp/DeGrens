@@ -1,6 +1,6 @@
 import { Events, Jobs, Notifications, Phone, Util, Vehicles, Inventory, RPC, Config } from '@dgx/server';
 import jobManager from 'classes/jobManager';
-import { disbandGroup, getGroupById, getGroupByServerId } from 'modules/groups/service';
+import { changeJob, disbandGroup, getGroupById, getGroupByServerId } from 'modules/groups/service';
 import { scrapyardLogger } from './logger.scrapyard';
 
 let scrapyardConfig: Scrapyard.Config;
@@ -41,13 +41,21 @@ const getRandomModel = () => {
 };
 
 export const assignLocationToGroup = async (ownerId: number) => {
+  const group = getGroupByServerId(ownerId);
+  if (!group) {
+    Notifications.add(ownerId, 'Je zit niet in een groep!', 'error');
+    return;
+  }
+
   const location = getNonBusyLocation();
   if (!location) {
     Notifications.add(ownerId, 'Ik heb geen opdracht voor je', 'error');
     return;
   }
 
-  const group = getGroupByServerId(ownerId);
+  const jobAssigned = changeJob(ownerId, 'scrapyard');
+  if (!jobAssigned) return;
+
   const model = getRandomModel();
   const vehicle = await Vehicles.spawnVehicle(model, location.vehicleLocation, ownerId);
   if (!vehicle || !group) {
