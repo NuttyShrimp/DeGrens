@@ -32,6 +32,7 @@ class Inventory {
     return !!(await RPC.execute<boolean>('inventory:server:removeItemFromPlayer', name));
   };
 
+  // Get names of all items player currently has without needing to call server
   public getAllItemNames = () => {
     return global.exports['dg-inventory'].getAllItemNames();
   };

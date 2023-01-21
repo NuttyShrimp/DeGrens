@@ -1,17 +1,16 @@
 import { Events } from '@dgx/client';
 
-const items: string[] = [];
+const items: Set<string> = new Set();
 
 Events.onNet('inventory:client:updateCache', (action: 'add' | 'remove', itemName: string) => {
   switch (action) {
     case 'add':
-      items.push(itemName);
+      items.add(itemName);
       break;
     case 'remove':
-      const idx = items.indexOf(itemName);
-      items.splice(idx, 1);
+      items.delete(itemName);
       break;
   }
 });
 
-global.exports('getAllItemNames', () => items);
+global.exports('getAllItemNames', () => [...items]);

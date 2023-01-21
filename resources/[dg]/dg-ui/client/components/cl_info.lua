@@ -1,32 +1,32 @@
-local gameDirty = true
 local gameValues = {}
 local characterInfo = {}
 local whitelistedJobs = {}
-
-setGameValue = function(k, v)
-  if gameValues[k] == nil or gameValues[k] ~= v then
-    gameDirty = true
-  end
-  gameValues[k] = v
-end
 
 -- Only use when restarting resource or player joins
 -- Fucks up every open ui app
 seedCharData = function()
   CreateThread(function()
     local PlyData = DGCore.Functions.GetPlayerData()
+    local currentJob = DGX.Jobs.getCurrentJob()
+    local allItemNames = DGX.Inventory.getAllItemNames()
+
+    for _, v in pairs(allItemNames) do
+      print(v)
+    end
+
     local newCharacterInfo = {
       cid = PlyData.citizenid,
       firstname = PlyData.charinfo.firstname,
       lastname = PlyData.charinfo.lastname,
-      job = DGX.RPC.execute('jobs:server:getCurrentJob'),
+      job = currentJob and currentJob.name or nil,
       phone = PlyData.charinfo.phone,
       server_id = GetPlayerServerId(PlayerId()),
-      hasVPN = DGX.Inventory.doesPlayerHaveItems('vpn'),
-      hasPhone = DGX.Inventory.doesPlayerHaveItems("phone"),
+      hasVPN = DGCore.Shared.arrayIncludes(allItemNames, 'vpn'),
+      hasPhone = DGCore.Shared.arrayIncludes(allItemNames, 'phone'),
       cash = PlyData.charinfo.cash,
       isAdmin = DGX.RPC.execute('admin:permissions:hasPermission', 'staff')
     }
+
     characterInfo = newCharacterInfo
     SendAppEvent('character', characterInfo)
     Wait(1000)
@@ -34,16 +34,6 @@ seedCharData = function()
     TriggerEvent('dg-ui:loadData')
   end)
 end
-
-CreateThread(function()
-  while true do
-    Wait(250)
-    if gameDirty then
-      gameDirty = false
-      SendAppEvent("game", gameValues)
-    end
-  end
-end)
 
 RegisterNetEvent('DGCore:client:playerLoaded', function()
   seedCharData()
@@ -70,11 +60,13 @@ RegisterNetEvent('onResourceStart', function(resource)
 end)
 
 AddEventHandler('weathersync:timeUpdated', function(hour, minute)
-  setGameValue("time", ("%s:%s"):format(hour > 9 and hour or "0" .. hour, minute > 9 and minute or "0" .. minute))
+  gameValues['time'] = ("%s:%s"):format(hour > 9 and hour or "0" .. hour, minute > 9 and minute or "0" .. minute)
+  SendAppEvent("game", gameValues)
 end)
 
 AddEventHandler('weathersync:weatherUpdated', function(weatherType)
-  setGameValue("weather", weatherType)
+  gameValues['weather'] = weatherType
+  SendAppEvent("game", gameValues)
 end)
 
 DGX.Events.onNet('jobs:client:whitelistedJobs', function(pWhitelistedJobs)
