@@ -118,7 +118,11 @@ class JobManager extends Util.Singleton<JobManager>() {
       // TODO: ban mfker from server
       return;
     }
-    Events.emitNet('dg-jobs:client:jobs:waypoint', src, jobObj.location);
+
+    if (jobObj.location) {
+      Util.setWaypoint(src, jobObj.location);
+    }
+
     return true;
   }
 

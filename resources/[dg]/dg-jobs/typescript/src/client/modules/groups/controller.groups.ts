@@ -77,10 +77,4 @@ Events.onNet('dg-jobs:client:groups:setGroupOwner', (isOwner: boolean) => {
     data: isOwner,
   });
 });
-
-Events.onNet('dg-jobs:client:jobs:waypoint', (loc: { x: number; y: number }) => {
-  DeleteWaypoint();
-  ClearGpsPlayerWaypoint();
-  SetNewWaypoint(loc.x, loc.y);
-});
 // endregion

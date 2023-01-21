@@ -1,4 +1,4 @@
-import { Config, Events, RPC } from '@dgx/server';
+import { Config, Events, Notifications, RPC, Util } from '@dgx/server';
 import { cleanPlayer, syncBlips, togglePlayer, updateSprite } from 'services/blips';
 import { getCams, loadCams } from 'services/cams';
 import { getCall, getCalls } from 'services/store';
@@ -38,7 +38,8 @@ Events.onNet('dg-dispatch:updateBlipSprite', (src, sprite: number) => {
 Events.onNet('dispatch:server:setMarker', (src, id: string) => {
   const call = getCall(id);
   if (!call || !call.coords) return;
-  Events.emitNet('dispatch:setCallMarker', src, call.coords);
+  Util.setWaypoint(src, call.coords);
+  Notifications.add(src, 'Locatie aangeduid op GPS');
 });
 
 Events.onNet('dispatch:toggleDispatchBlip', (src, dispatchEnabled: boolean) => {

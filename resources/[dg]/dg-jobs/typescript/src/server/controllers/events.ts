@@ -143,6 +143,7 @@ RPC.register('jobs:whitelist:isWhitelisted', (src: number, job: string) => {
   return !!getPlayerInfoForJob(cid, job);
 });
 
+// Admin menu jobs selector seeding
 RPC.register('jobs:whitelist:getInfoList', (src: number) => {
   if (!Admin.hasPermission(src, 'staff')) return [];
   const jobs: { name: string; ranks: number }[] = [];

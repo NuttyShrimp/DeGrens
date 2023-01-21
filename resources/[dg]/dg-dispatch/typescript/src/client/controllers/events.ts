@@ -73,11 +73,6 @@ Events.onNet('dg-dispatch:addCall', (call: Dispatch.UICall) => {
   setLastCallId(call.id);
 });
 
-Events.onNet('dispatch:setCallMarker', (coords: Vec3) => {
-  SetNewWaypoint(coords.x, coords.y);
-  Notifications.add('Waypoint set!');
-});
-
 Events.onNet('dispatch:syncBlips', (blipInfo: Record<number, Dispatch.BlipInfo>) => {
   syncBlips(blipInfo);
 });

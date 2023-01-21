@@ -16,4 +16,10 @@ if (GetCurrentResourceName() === 'ts-shared') {
     const result = await UI.openInput(data);
     emitNet('dgx:server:ui:inputResult', id, result);
   });
+
+  onNet('dgx:client:setWaypoint', (coords: Vec2) => {
+    DeleteWaypoint();
+    ClearGpsPlayerWaypoint();
+    SetNewWaypoint(coords.x, coords.y);
+  });
 }

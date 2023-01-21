@@ -248,6 +248,10 @@ class Util extends UtilShared {
       });
     });
   };
+
+  setWaypoint = (plyId: number, coords: Vec2) => {
+    emitNet('dgx:client:setWaypoint', plyId, coords);
+  };
 }
 
 export class Sounds {
