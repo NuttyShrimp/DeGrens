@@ -5,24 +5,19 @@ local whitelistedJobs = {}
 -- Only use when restarting resource or player joins
 -- Fucks up every open ui app
 seedCharData = function()
+  -- I suspect this can sometimes not correctly get items or job as those also get loaded from playerLoaded evt
   CreateThread(function()
     local PlyData = DGCore.Functions.GetPlayerData()
-    local currentJob = DGX.Jobs.getCurrentJob()
-    local allItemNames = DGX.Inventory.getAllItemNames()
-
-    for _, v in pairs(allItemNames) do
-      print(v)
-    end
 
     local newCharacterInfo = {
       cid = PlyData.citizenid,
       firstname = PlyData.charinfo.firstname,
       lastname = PlyData.charinfo.lastname,
-      job = currentJob and currentJob.name or nil,
+      job = DGX.RPC.execute('jobs:server:getCurrentJob'),
       phone = PlyData.charinfo.phone,
       server_id = GetPlayerServerId(PlayerId()),
-      hasVPN = DGCore.Shared.arrayIncludes(allItemNames, 'vpn'),
-      hasPhone = DGCore.Shared.arrayIncludes(allItemNames, 'phone'),
+      hasVPN = DGX.Inventory.doesPlayerHaveItems('vpn'),
+      hasPhone = DGX.Inventory.doesPlayerHaveItems("phone"),
       cash = PlyData.charinfo.cash,
       isAdmin = DGX.RPC.execute('admin:permissions:hasPermission', 'staff')
     }
