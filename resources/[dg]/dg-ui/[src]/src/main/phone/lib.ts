@@ -233,15 +233,16 @@ export const declineNotification = (id: string) => {
 };
 
 export const updateNotification = (id: string, notification: Partial<Phone.Notifications.Notification>) => {
-  const notiState = usePhoneNotiStore.getState();
-  const index = notiState.list.findIndex(n => n.id === id);
+  const notificationList = [...usePhoneNotiStore.getState().list];
+  const index = notificationList.findIndex(n => n.id === id);
   if (index === -1) return;
-  notiState.list[index] = {
-    ...notiState.list[index],
+
+  notificationList[index] = {
+    ...notificationList[index],
     ...notification,
   };
   usePhoneNotiStore.setState({
-    list: notiState.list,
+    list: notificationList,
   });
 };
 // endregion
