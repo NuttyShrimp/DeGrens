@@ -70,8 +70,6 @@ function parseCircle(zone)
       "{\n  name=\"" .. zone.name .. "\",\n  useZ=" .. tostring(zone.useZ) .. ",\n  --debugPoly=true\n})\n"
   if zone.houseOffset then
     zone.center = zone.center - zone.houseOffset
-    zone.minZ = zone.minZ - zone.houseOffset.z
-    zone.maxZ = zone.maxZ - zone.houseOffset.z
     zone.houseOffset = nil
     printout = printout .. "-- Instanced CircleZone\n" .. parseCircle(zone)
   end
