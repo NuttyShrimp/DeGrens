@@ -599,7 +599,7 @@ Plans.tihulu_kafi_motel = {
         maxZ: -0.7174891,
       },
       entries: {
-        distance: 1.5,
+        distance: 2.5,
         options: [
           {
             type: 'server',
