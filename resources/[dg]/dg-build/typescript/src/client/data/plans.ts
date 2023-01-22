@@ -2,79 +2,6 @@ import { Vector3, Vector4 } from '@dgx/shared';
 
 export const Plans: Record<string, Buildplan> = {};
 
-// Initial use is apartments, hence the event name
-Plans.gabz_apartments_room = {
-  shell: 'gabz_pinkcage_ymap_shell',
-  saveToCache: true,
-  origin: new Vector3(0, 0, 0),
-  generator: new Vector3(-334.32, -953.21, -98.9),
-  spawnOffset: new Vector4(-3.88, -2.97, -1.28, 0.0),
-  modulo: {
-    multi: {
-      x: 12.0,
-      y: 12.0,
-      z: -14.0,
-    },
-    xLimit: 24,
-    yLimit: 22,
-  },
-  interactZone: [
-    {
-      offset: new Vector3(-4.03, -3.62, -0.78),
-      dist: 1.5,
-      name: 'exit',
-      GeneralUse: {
-        label: 'Exit',
-        isServer: true,
-        event: 'dg-apartments:server:leaveApartment',
-      },
-      housingMain: {
-        label: 'Invite',
-        event: 'dg-apartment:inviteMenu',
-      },
-    },
-    {
-      offset: new Vector3(-0.1, 2.52, -0.78),
-      dist: 1,
-      name: 'outfit',
-      GeneralUse: {
-        label: 'Change Outfit',
-        event: 'qb-clothing:client:openOutfitMenu',
-      },
-    },
-  ],
-  peek: [
-    {
-      type: 'model',
-      id: 'gabz_pinkcage_bed',
-      distance: 1.5,
-      options: [
-        {
-          type: 'server',
-          event: 'dg-apartments:server:logOut',
-          icon: 'fas fa-sign-out-alt',
-          label: 'Logout',
-          canInteract: () => global.exports['dg-apartments'].isInApartment(),
-        },
-      ],
-    },
-    {
-      type: 'model',
-      id: 'v_res_tre_storagebox',
-      distance: 1.5,
-      options: [
-        {
-          type: 'client',
-          event: 'dg-apartment:openStash',
-          icon: 'fas fa-box',
-          label: 'Open stash',
-          canInteract: () => global.exports['dg-apartments'].isInApartment(),
-        },
-      ],
-    },
-  ],
-};
-
 // Initial use is houserobberies
 Plans.standardmotel_shell = {
   shell: 'standardmotel_shell',
@@ -598,3 +525,91 @@ Plans.container_shell = {
     },
   ],
 } as unknown as Buildplan;
+
+Plans.tihulu_kafi_motel = {
+  shell: 'tihulu_kafi_motel',
+  saveToCache: true,
+  origin: new Vector3(0, 0, 0),
+  generator: new Vector3(-334.32, -953.21, -98.9),
+  spawnOffset: new Vector4(-0.0047694, -4.44846, -0.5030229, 0.0),
+  modulo: {
+    multi: {
+      x: 15.0,
+      y: 15.0,
+      z: -5.0,
+    },
+    xLimit: 24,
+    yLimit: 22,
+  },
+  interactZone: [
+    {
+      offset: new Vector3(-0.03, -4.49, -0.46),
+      dist: 1.5,
+      name: 'exit',
+      GeneralUse: {
+        label: 'Exit',
+        isServer: true,
+        event: 'dg-apartments:server:leaveApartment',
+      },
+      housingMain: {
+        label: 'Invite',
+        event: 'dg-apartment:inviteMenu',
+      },
+    },
+    {
+      offset: new Vector3(4.39, -1.18, -0.46),
+      dist: 1.2,
+      name: 'outfit',
+      GeneralUse: {
+        label: 'Change Outfit',
+        event: 'qb-clothing:client:openOutfitMenu',
+      },
+    },
+  ],
+  targetZone: [
+    {
+      offset: new Vector3(-2.260268, -2.18021, -0.9601879),
+      length: 1.5,
+      width: 0.6,
+      options: {
+        data: {},
+        minZ: -1.449465,
+        maxZ: 0,
+      },
+      entries: {
+        distance: 1.5,
+        options: [
+          {
+            type: 'client',
+            event: 'dg-apartment:openStash',
+            icon: 'fas fa-box',
+            label: 'Open stash',
+            canInteract: () => global.exports['dg-apartments'].isInApartment(),
+          },
+        ],
+      },
+    },
+    {
+      offset: new Vector3(-3.508246, 1.460316, -1.073186),
+      length: 3,
+      width: 2.3,
+      options: {
+        data: {},
+        minZ: -1.394461,
+        maxZ: -0.7174891,
+      },
+      entries: {
+        distance: 1.5,
+        options: [
+          {
+            type: 'server',
+            event: 'dg-apartments:server:logOut',
+            icon: 'fas fa-sign-out-alt',
+            label: 'Logout',
+            canInteract: () => global.exports['dg-apartments'].isInApartment(),
+          },
+        ],
+      },
+    },
+  ],
+};

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CMapData>
+  <name>tihulu_kafi_motel</name>
+  <parent />
+  <flags value="0" />
+  <contentFlags value="1" />
+  <streamingExtentsMin x="-205.2843" y="-204.875" z="-201.6112" />
+  <streamingExtentsMax x="205.2912" y="204.9529" z="201.687" />
+  <entitiesExtentsMin x="-5.284279" y="-4.874949" z="-1.611206" />
+  <entitiesExtentsMax x="5.291164" y="4.952846" z="1.686943" />
+  <entities>
+    <Item type="CEntityDef">
+      <archetypeName>tihulu_kafi_motel</archetypeName>
+      <flags value="32" />
+      <guid value="0" />
+      <position x="0" y="0" z="0" />
+      <rotation x="0" y="0" z="0" w="1" />
+      <scaleXY value="1" />
+      <scaleZ value="1" />
+      <parentIndex value="-1" />
+      <lodDist value="200" />
+      <childLodDist value="0" />
+      <lodLevel>LODTYPES_DEPTH_ORPHANHD</lodLevel>
+      <numChildren value="0" />
+      <priorityLevel>PRI_REQUIRED</priorityLevel>
+      <extensions />
+      <ambientOcclusionMultiplier value="255" />
+      <artificialAmbientOcclusion value="255" />
+      <tintValue value="0" />
+    </Item>
+  </entities>
+</CMapData>
