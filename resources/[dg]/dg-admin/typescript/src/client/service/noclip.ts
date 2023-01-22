@@ -179,9 +179,11 @@ const getSpeedMultiplier = (): number => {
 };
 
 Keys.onPressDown('admin-noclip-spd-up', () => {
+  if (!noclipEnabled) return;
   noclipSpeed = Math.min(noclipSpeed + getSpeedMultiplier(), 32.0);
 });
 Keys.onPressDown('admin-noclip-spd-down', () => {
+  if (!noclipEnabled) return;
   noclipSpeed = Math.max(noclipSpeed - getSpeedMultiplier(), 0.1);
 });
 // endregion
