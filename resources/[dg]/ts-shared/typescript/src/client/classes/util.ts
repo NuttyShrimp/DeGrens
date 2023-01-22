@@ -277,6 +277,12 @@ class Util extends UtilShared {
     const coords = this.ArrayToVector3(GetOffsetFromEntityInWorldCoords(entity, 0, yOffset, zOffset));
     return this.getPlyCoords().distance(coords) < distance;
   };
+
+  public setWaypoint = (coords: Vec2) => {
+    DeleteWaypoint();
+    ClearGpsPlayerWaypoint();
+    SetNewWaypoint(coords.x, coords.y);
+  };
 }
 
 export class Interiors {

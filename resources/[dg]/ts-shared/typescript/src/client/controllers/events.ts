@@ -1,4 +1,4 @@
-import { RPC, Events, UI } from '../index';
+import { RPC, Events, UI, Util } from '../index';
 
 if (GetCurrentResourceName() === 'ts-shared') {
   // Util RPC to be used from server
@@ -18,8 +18,6 @@ if (GetCurrentResourceName() === 'ts-shared') {
   });
 
   onNet('dgx:client:setWaypoint', (coords: Vec2) => {
-    DeleteWaypoint();
-    ClearGpsPlayerWaypoint();
-    SetNewWaypoint(coords.x, coords.y);
+    Util.setWaypoint(coords);
   });
 }

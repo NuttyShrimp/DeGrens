@@ -99,8 +99,9 @@ export const setFishingLocation = (location: typeof fishingLocation) => {
   SetBlipHighDetail(fishingLocationBlip, true);
   SetBlipColour(fishingLocationBlip, 7);
   SetBlipAlpha(fishingLocationBlip, 150);
+
   if (currentJobType === 'car') {
-    SetNewWaypoint(fishingLocation.x, fishingLocation.y);
+    Util.setWaypoint(fishingLocation);
   }
 };
 
