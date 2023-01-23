@@ -7,17 +7,33 @@ import { sentryHandler } from './sentry';
 
 // Idea for extra layer of security:
 class Distributor {
-  private netEventToResources: Map<string, Set<string>>;
-  private localEventToResources: Map<string, Set<string>>;
-  private rpcToResource: Map<string, string>;
+  public static init = () => {
+    const distributor = new Distributor();
+    distributor.isLoaded = true;
+  };
+
+  public isLoaded = false;
+
+  // Event name to resources
+  private readonly netEventToResources: Map<string, Set<string>>;
+  private readonly localEventToResources: Map<string, Set<string>>;
+  private readonly rpcToResource: Map<string, string>;
+
+  // Resource name to handler
+  // This acts the same as 5m exports but get cached at resource start instead of first call
+  private readonly netEventHandlers: Record<string, Function>;
+  private readonly localEventHandlers: Record<string, Function>;
+  private readonly rpcHandlers: Record<string, Function>;
 
   constructor() {
     this.netEventToResources = new Map();
     this.localEventToResources = new Map();
     this.rpcToResource = new Map();
-  }
 
-  public init = () => {
+    this.netEventHandlers = {};
+    this.localEventHandlers = {};
+    this.rpcHandlers = {};
+
     onNet('__dgx_event:ServerNetEvent', (data: DGXEvents.ServerNetEvtData) => {
       this.distributeNetEvent(source, data);
     });
@@ -31,7 +47,22 @@ class Distributor {
     global.exports('registerNetEvent', this.registerNetEvent);
     global.exports('registerLocalEvent', this.registerLocalEvent);
     global.exports('registerRPC', this.registerRPC);
-  };
+
+    global.exports('isDistributorLoaded', () => this.isLoaded);
+
+    // Get handlers when a resource starts using makeshift exports
+    on('onServerResourceStart', (resource: string) => {
+      emit(`__dgx:${resource}:getServerNetEventHandler`, (handler: Function) => {
+        this.netEventHandlers[resource] = handler;
+      });
+      emit(`__dgx:${resource}:getServerLocalEventHandler`, (handler: Function) => {
+        this.localEventHandlers[resource] = handler;
+      });
+      emit(`__dgx:${resource}:getRPCHandler`, (handler: Function) => {
+        this.rpcHandlers[resource] = handler;
+      });
+    });
+  }
 
   private distributeNetEvent = (src: number, data: DGXEvents.ServerNetEvtData) => {
     // Check if resource token is valid
@@ -42,7 +73,7 @@ class Distributor {
     if (!resources) return;
 
     for (const resource of resources) {
-      emit(`__dgx_event:${resource}:ServerNetEvent`, src, eventName, data);
+      this.netEventHandlers[resource](src, eventName, data);
     }
   };
 
@@ -51,7 +82,7 @@ class Distributor {
     if (!resources) return;
 
     for (const resource of resources) {
-      emit(`__dgx_event:${resource}:ServerLocalEvent`, data);
+      this.localEventHandlers[resource](data);
     }
   };
 
@@ -61,18 +92,18 @@ class Distributor {
 
     const resource = this.rpcToResource.get(data.name);
     if (!resource) return;
-    emit(`__dgx_rpc:${resource}:emitServer`, src, data);
+    this.rpcHandlers[resource](src, data);
   };
 
   private registerNetEvent = (evtName: string, resource: string) => {
     let resources = this.netEventToResources.get(evtName);
     if (!resources) {
-      resources = new Set()
+      resources = new Set();
       onNet(evtName, () => {
-        Admin.ACBan(source, "emitted DGX event", {
-          evtName
-        })
-      })
+        Admin.ACBan(source, 'emitted DGX event', {
+          evtName,
+        });
+      });
     }
     resources.add(resource);
     this.netEventToResources.set(evtName, resources);
@@ -88,17 +119,21 @@ class Distributor {
     this.rpcToResource.set(evtName, resource);
     if (this.rpcToResource.has(evtName)) {
       onNet(evtName, () => {
-        Admin.ACBan(source, "emitted RPC event", {
-          evtName
-        })
-      })
+        Admin.ACBan(source, 'emitted RPC event', {
+          evtName,
+        });
+      });
     }
   };
 
-  public static awaitDGX = () => {
+  public static awaitLoad = () => {
     return new Promise<void>(res => {
       const thread = setInterval(() => {
-        if (GetResourceState('ts-shared') === 'started' && !!global.exports['ts-shared']) {
+        if (
+          GetResourceState('ts-shared') === 'started' &&
+          !!global.exports['ts-shared'] &&
+          global.exports['ts-shared'].isDistributorLoaded()
+        ) {
           clearInterval(thread);
           res();
         }
@@ -108,8 +143,7 @@ class Distributor {
 }
 
 if (GetCurrentResourceName() === 'ts-shared') {
-  const distributor = new Distributor();
-  distributor.init();
+  Distributor.init();
 }
 
 class Events {
@@ -129,20 +163,22 @@ class Events {
   constructor() {
     this.resName = GetCurrentResourceName();
 
-    on(
-      `__dgx_event:${this.resName}:ServerNetEvent`,
-      (src: number, eventName: string, data: DGXEvents.ServerNetEvtData) => this.netEventHandler(src, eventName, data)
-    );
-    on(`__dgx_event:${this.resName}:ServerLocalEvent`, (data: DGXEvents.ServerLocalEvtData) =>
-      this.localEventHandler(data)
-    );
+    on(`__dgx:${this.resName}:getServerNetEventHandler`, (setCB: (func: typeof this.netEventHandler) => void) => {
+      setCB(this.netEventHandler);
+    });
+    on(`__dgx:${this.resName}:getServerLocalEventHandler`, (setCB: (func: typeof this.localEventHandler) => void) => {
+      setCB(this.localEventHandler);
+    });
 
     if (this.resName === 'ts-shared') {
-      onNet('__dgx_event:createTrace', this.createClientEvtTransaction);
+      onNet('__dgx_event:traceServer', (traceId: string, metadata: DGXEvents.EventMetadata) => {
+        this.createClientEvtTransaction(source, traceId, metadata);
+      });
     }
   }
 
-  private async netEventHandler(src: number, eventName: string, data: DGXEvents.ServerNetEvtData) {
+  // Arrow func to retain 'this' context when passing to export in constructor
+  private netEventHandler = async (src: number, eventName: string, data: DGXEvents.ServerNetEvtData) => {
     const handlers = this.netEventHandlers.get(eventName);
     if (!handlers) return;
 
@@ -198,9 +234,10 @@ class Events {
         transaction.finish();
       }
     }
-  }
+  };
 
-  private async localEventHandler(data: DGXEvents.ServerLocalEvtData) {
+  // Arrow func to retain 'this' context when passing to export in constructor
+  private localEventHandler = async (data: DGXEvents.ServerLocalEvtData) => {
     const handlers = this.localEventHandlers.get(data.eventName);
     if (!handlers) return;
 
@@ -242,9 +279,9 @@ class Events {
       span.finish();
       transaction.finish();
     }
-  }
+  };
 
-  emitNet(evtName: string, target: number, ...args: any[]) {
+  public emitNet(evtName: string, target: number, ...args: any[]) {
     if (target === -1) {
       if (!GetNumPlayerIndices()) {
         return;
@@ -287,11 +324,13 @@ class Events {
       evtData.traceId = transaction.traceId ?? null;
       if (Util.isDevEnv()) {
         console.log(
-          `[EVENTS] [S -> C] event: ${evtName} | trigger: ${GetInvokingResource()} | ply: ${target === -1 ? 'All' : Util.getName(target)
+          `[EVENTS] [S -> C] event: ${evtName} | trigger: ${GetInvokingResource()} | ply: ${
+            target === -1 ? 'All' : Util.getName(target)
           }(${target})`
         );
       }
     }
+
     try {
       emitNet('__dgx_event:ClientNetEvent', Number(target), evtData);
     } catch (e) {
@@ -300,7 +339,7 @@ class Events {
     }
   }
 
-  emit(evtName: string, ...args: any[]) {
+  public emit(evtName: string, ...args: any[]) {
     const metadata = {
       createdAt: new Date().getTime() / 1000,
     };
@@ -311,7 +350,7 @@ class Events {
     });
   }
 
-  onNet(evtName: string, handler: DGXEvents.LocalEventHandler) {
+  public onNet(evtName: string, handler: DGXEvents.LocalEventHandler) {
     let netHandlers = this.netEventHandlers.get(evtName);
     if (!netHandlers) {
       netHandlers = [];
@@ -320,12 +359,12 @@ class Events {
     this.netEventHandlers.set(evtName, netHandlers);
     this.on(evtName, handler);
 
-    Distributor.awaitDGX().then(() => {
-      global.exports['ts-shared'].registerNetEvent(evtName, GetCurrentResourceName());
+    Distributor.awaitLoad().then(() => {
+      global.exports['ts-shared'].registerNetEvent(evtName, this.resName);
     });
   }
 
-  on(evtName: string, handler: DGXEvents.LocalEventHandler) {
+  public on(evtName: string, handler: DGXEvents.LocalEventHandler) {
     let clientHandlers = this.localEventHandlers.get(evtName);
     if (!clientHandlers) {
       clientHandlers = [];
@@ -333,13 +372,12 @@ class Events {
     clientHandlers.push(handler);
     this.localEventHandlers.set(evtName, clientHandlers);
 
-    Distributor.awaitDGX().then(() => {
-      global.exports['ts-shared'].registerNetEvent(evtName, GetCurrentResourceName());
+    Distributor.awaitLoad().then(() => {
+      global.exports['ts-shared'].registerNetEvent(evtName, this.resName);
     });
   }
 
-  createClientEvtTransaction(traceId: string, metadata: DGXEvents.EventMetadata) {
-    const src = source;
+  private createClientEvtTransaction = (src: number, traceId: string, metadata: DGXEvents.EventMetadata) => {
     const steamId = Player(src).state.steamId;
     if (!steamId) return;
     (['receiver', 'handler'] as (keyof DGXEvents.EventMetadata)[]).forEach(type => {
@@ -355,7 +393,7 @@ class Events {
       sentryHandler.finishSpan(steamId, traceId, spanId, new Date(metadata[type].finishedAt).getTime() / 1000);
     });
     sentryHandler.finishTransaction(traceId);
-  }
+  };
 }
 
 class RPC {
@@ -372,16 +410,16 @@ class RPC {
   private token: string;
   // Ids of RPC, of this current resource awaiting response
   private idsInUse: Set<number> = new Set();
-  private registeredHandlers: Map<string, DGXEvents.ServerEventHandler> = new Map();
+  private registeredHandlers: Map<string, DGXEvents.ServerEventHandler<unknown>> = new Map();
 
   constructor() {
     this.resourceName = GetCurrentResourceName();
     this.token = '';
     this.generateToken();
 
-    on(`__dgx_rpc:${this.resourceName}:emitServer`, (src: number, data: DGXRPC.ClientRequestData) =>
-      this.handleIncomingRequest(src, data)
-    );
+    on(`__dgx:${this.resourceName}:getRPCHandler`, (setCB: (func: typeof this.handleIncomingRequest) => void) => {
+      setCB(this.handleIncomingRequest);
+    });
 
     if (this.resourceName === 'ts-shared') {
       onNet('__dgx_rpc:traceServer', (traceId: string, metadata: DGXRPC.ClientRequestMetadata) =>
@@ -397,7 +435,8 @@ class RPC {
     this.token = global.exports['dg-auth'].createResourceToken();
   }
 
-  private async handleIncomingRequest(src: number, data: DGXRPC.ClientRequestData) {
+  // Arrow func to retain 'this' context when passing to export in constructor
+  private handleIncomingRequest = async (src: number, data: DGXRPC.ClientRequestData) => {
     const handler = this.registeredHandlers.get(data.name);
     if (!handler) return;
 
@@ -466,7 +505,7 @@ class RPC {
         sentryHandler.finishSpan(steamId, traceId, spanId);
       }
     }
-  }
+  };
 
   private async finishClientRequestTrace(src: number, traceId: string, data: DGXRPC.ClientRequestMetadata) {
     const steamId = Player(src).state.steamId;
@@ -585,8 +624,8 @@ class RPC {
   register(name: string, handler: DGXEvents.ServerEventHandler<any>) {
     this.registeredHandlers.set(name, handler);
 
-    Distributor.awaitDGX().then(() => {
-      global.exports['ts-shared'].registerRPC(name, GetCurrentResourceName());
+    Distributor.awaitLoad().then(() => {
+      global.exports['ts-shared'].registerRPC(name, this.resourceName);
     });
   }
 }

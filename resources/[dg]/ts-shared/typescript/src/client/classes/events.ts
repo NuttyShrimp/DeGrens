@@ -98,7 +98,7 @@ class Events {
     await Promise.all(handlers.map(handler => handler(...data.args)));
     data.metadata.handler.finishedAt = new Date().toString();
     if (data.traceId && data.traceId.trim() !== '') {
-      emitNet('__dgx_event:createTrace', data.traceId, data.metadata);
+      emitNet('__dgx_event:traceServer', data.traceId, data.metadata);
     }
   }
 
