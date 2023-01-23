@@ -1,4 +1,4 @@
-import { PolyZone, RPC } from '@dgx/client';
+import { Events, PolyZone, RPC } from '@dgx/client';
 
 import { setDoorState } from './doors';
 
@@ -6,9 +6,7 @@ let currentLocation: Heist.Id;
 
 export const getCurrentLocation = () => currentLocation;
 
-// build zones on start
-setImmediate(async () => {
-  const zones = await RPC.execute<Record<Heist.Id, Heist.Zone>>('heists:server:getHeistZones');
+Events.onNet('heists:client:buildHeistZones', (zones: Record<Heist.Id, Heist.Zone>) => {
   Object.entries(zones).forEach(([id, data]) => {
     const options = {
       ...data.options,

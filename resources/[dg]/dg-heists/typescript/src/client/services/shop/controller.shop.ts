@@ -1,12 +1,12 @@
-import { Events, Inventory, Keys, Notifications, Peek, PolyZone, RPC, UI } from '@dgx/client';
+import { Events, Keys, Notifications, Peek, PolyZone, RPC, UI } from '@dgx/client';
 
 let inPickupZone = false;
 let pickupBlip: number;
 let pickupCoords: Vec3;
 
-setImmediate(async () => {
-  pickupCoords = await RPC.execute<Vec3>('heists:server:getLaptopPickup');
-  PolyZone.addCircleZone('heists_laptop_pickup', pickupCoords, 1.5, { data: {} }, true);
+Events.emitNet('heists:shop:loadLaptopPickup', (coords: Vec3) => {
+  pickupCoords = coords;
+  PolyZone.addCircleZone('heists_laptop_pickup', coords, 1.5, { data: {} }, true);
 });
 
 Peek.addFlagEntry('isHeistsIllegalShop', {
@@ -22,9 +22,7 @@ Peek.addFlagEntry('isHeistsIllegalShop', {
   distance: 2.0,
 });
 
-onNet('DGCore:client:playerLoaded', async () => {
-  const hasActivePickup = await RPC.execute('heists:server:hasActivePickup');
-  if (!hasActivePickup) return;
+Events.onNet('heists:shop:restorePickup', () => {
   createLaptopBlip();
 });
 
@@ -45,7 +43,6 @@ const removePickupBlip = () => {
 
 const createLaptopBlip = async () => {
   removePickupBlip();
-  if (!pickupCoords) await RPC.execute<Vec3>('heists:server:getLaptopPickup');
   pickupBlip = AddBlipForCoord(pickupCoords.x, pickupCoords.y, pickupCoords.z);
   SetBlipSprite(pickupBlip, 521);
   SetBlipColour(pickupBlip, 3);

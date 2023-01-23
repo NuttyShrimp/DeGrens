@@ -1,8 +1,10 @@
-import { Config, RPC } from '@dgx/server';
+import { Auth, Config, Events, RPC } from '@dgx/server';
 
-RPC.register('heists:server:getHeistZones', async () => {
+Auth.onAuth(async plyId => {
   await Config.awaitConfigLoad();
-  return Config.getConfigValue<Record<Heist.Id, Heist.Zone>>('heists.zones');
+  const config = Config.getConfigValue<{ zones: Record<Heist.Id, Heist.Zone>; laptops: { pickup: Vec3 } }>('heists');
+  Events.emitNet('heists:client:buildHeistZones', plyId, config.zones);
+  Events.emitNet('heists:shop:loadLaptopPickup', plyId, config.laptops.pickup);
 });
 
 RPC.register('heists:server:getDoorData', async (_src: number, heistId: Heist.Id) => {
@@ -10,11 +12,6 @@ RPC.register('heists:server:getDoorData', async (_src: number, heistId: Heist.Id
   const data = Config.getConfigValue<Partial<Record<Heist.Id, Heist.Door>>>('heists.doors');
   const door = data[heistId];
   return door ?? false;
-});
-
-RPC.register('heists:server:getLaptopPickup', async () => {
-  await Config.awaitConfigLoad();
-  return Config.getConfigValue<Vec3>('heists.laptops.pickup');
 });
 
 RPC.register('heists:server:getTrolleyLocations', async (_src: number, heistId: Heist.Id) => {

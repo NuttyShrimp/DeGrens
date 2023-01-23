@@ -13,6 +13,11 @@ const hasActivePickup = (plyId: number) => {
   return !!activePickups[cid];
 };
 
+onNet('DGCore:client:playerLoaded', (playerData: PlayerData) => {
+  if (!hasActivePickup(playerData.source)) return;
+  Events.emitNet('heists:shop:restorePickup', playerData.source);
+});
+
 Events.onNet('heists:server:openIllegalShop', async (src: number) => {
   if (hasActivePickup(src)) {
     Notifications.add(src, 'Je hebt nog een actieve levering', 'error');
@@ -78,7 +83,11 @@ RPC.register('heists:server:buyLaptop', async (source: number, drive: Shop.Name)
 
 Events.onNet('heists:server:pickupLaptop', async (src: number) => {
   const cid = Util.getCID(src);
-  if (!activePickups[cid]) return;
+  if (!activePickups[cid]) {
+    Notifications.add(src, 'Ik heb niks voor je', 'error');
+    return;
+  }
+
   const laptop = shopConfig[activePickups[cid]]?.laptop ?? 'laptop_v1';
   Util.Log(
     'heists:laptop:pickup',
