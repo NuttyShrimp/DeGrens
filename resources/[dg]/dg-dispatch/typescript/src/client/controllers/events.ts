@@ -1,8 +1,8 @@
-import { Events, Notifications, RPC, UI } from '@dgx/client';
+import { Events, RPC, UI } from '@dgx/client';
 import { getNearestColorFromHex } from '@dgx/shared/helpers/colorNames';
 import { getDataOfGTAColorById } from '@dgx/shared/helpers/gtacolors';
 import { clearBlips, syncBlips, updateBlipCoords, updateSprite } from 'services/blips';
-import { closeCam, openCam, seedUICams, setCams } from 'services/cams';
+import { closeCam, openCam, seedUICams } from 'services/cams';
 import {
   addCallBlip,
   disableDispatch,
@@ -89,12 +89,6 @@ Events.onNet('dispatch:toggleDispatchNotifications', () => {
   Events.emitNet('dispatch:toggleDispatchBlip', isDispatchDisabled());
   isDispatchDisabled() ? enableDispatch() : disableDispatch();
 });
-
-// Region cams
-Events.onNet('dispatch:cams:load', (cams: Dispatch.Cams.Cam[]) => {
-  setCams(cams);
-});
-// endregion
 
 RPC.register('dispatch:getVehicleInfo', (vehNetId: number) => {
   const veh = NetworkGetEntityFromNetworkId(vehNetId);

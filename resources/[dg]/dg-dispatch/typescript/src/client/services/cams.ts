@@ -1,4 +1,4 @@
-import { Animations, Events, Jobs, Notifications, RPC, UI, Util } from '@dgx/client';
+import { Animations, Events, Jobs, Notifications, UI, Util } from '@dgx/client';
 
 let cams: Dispatch.Cams.Cam[] = [];
 let activeCamera: number = 0;
@@ -14,6 +14,7 @@ const DISABLED_CONTROLS = [30, 31, 32, 33, 34, 35];
 
 Events.onNet('dispatch:cams:set', (pCams: Dispatch.Cams.Cam[]) => {
   cams = pCams;
+  seedUICams();
 });
 
 const createScaleform = async () => {
@@ -53,11 +54,6 @@ const createScaleform = async () => {
   EndScaleformMovieMethod();
 
   return scaleform;
-};
-
-export const setCams = (pCams: Dispatch.Cams.Cam[]) => {
-  cams = pCams;
-  seedUICams();
 };
 
 export const seedUICams = () => {
