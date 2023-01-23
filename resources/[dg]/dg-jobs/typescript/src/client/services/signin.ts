@@ -1,10 +1,8 @@
-import { Events, Peek, PolyTarget, RPC, UI } from '@dgx/client';
+import { Events, Peek, PolyTarget, UI } from '@dgx/client';
 
 const currentJob: { name: string | null; rank: number | null } = { name: null, rank: null };
 
-setImmediate(async () => {
-  const locations = await RPC.execute<SignInLocation[]>('jobs:server:getSignInLocations');
-  if (!locations) return;
+Events.onNet('jobs:client:buildSignInLocations', (locations: SignInLocation[]) => {
   locations.forEach(({ zone }) => {
     PolyTarget.addBoxZone('jobs:signin', zone.vector, zone.width, zone.length, zone.data, true);
   });

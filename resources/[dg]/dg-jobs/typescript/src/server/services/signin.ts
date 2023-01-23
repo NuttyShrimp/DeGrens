@@ -1,4 +1,4 @@
-import { Config, Notifications, UI, Util } from '@dgx/server';
+import { Config, Events, Notifications, UI, Util } from '@dgx/server';
 
 import { mainLogger } from '../sv_logger';
 
@@ -25,9 +25,9 @@ export const loadLocations = async () => {
   loaded = true;
 };
 
-export const getLocations = async () => {
+export const dispatchSignInLocationsToClient = async (plyId: number) => {
   await Util.awaitCondition(() => loaded);
-  return locations;
+  Events.emitNet('jobs:client:buildSignInLocations', plyId, locations);
 };
 
 export const openSignInMenu = (src: number, locId: number) => {

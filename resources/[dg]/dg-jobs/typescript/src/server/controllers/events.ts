@@ -3,8 +3,8 @@ import { syncFishingJobToClient } from 'modules/fishing/service.fishing';
 import { syncSanitationJobToClient } from 'modules/sanitation/service.sanitation';
 import { syncScrapyardJobToClient } from 'modules/scrapyard/service.scrapyard';
 import {
+  dispatchSignInLocationsToClient,
   getAmountsForEachJob,
-  getLocations,
   getPlayerJob,
   openSignInMenu,
   playerLoaded,
@@ -32,10 +32,27 @@ global.exports('signPlayerOutOfAnyJob', (plyId: number) => {
   signOut(plyId, job);
 });
 
-Auth.onAuth(src => {
+Auth.onAuth(async src => {
   const whitelistedJobs = getWhitelistedJobsForPlayer(src);
   Events.emitNet('jobs:client:whitelistedJobs', src, whitelistedJobs);
   Events.emitNet('jobs:client:updateAmountCache', src, getAmountsForEachJob());
+  dispatchSignInLocationsToClient(src);
+
+  // Init jobs
+  await Config.awaitConfigLoad();
+  const config = Config.getConfigValue('jobs') as {
+    sanddigging: Sanddigging.Config;
+    fishing: Fishing.Config;
+    scrapyard: Scrapyard.Config;
+    postop: PostOP.Config;
+  };
+
+  Events.emitNet('jobs:modules:init', src, {
+    sanddigging: config.sanddigging,
+    fishingReturnZone: config.fishing.vehicle,
+    scrapyardReturnZone: config.scrapyard.returnZone,
+    postopTypes: config.postop.types,
+  });
 });
 
 on('jobs:server:signin:update', () => {
@@ -121,10 +138,6 @@ Events.onNet('jobs:whitelist:fire', (src, job: string, target: number) => {
   removeWhitelist(src, job, target);
 });
 
-RPC.register('jobs:server:getSignInLocations', () => {
-  return getLocations();
-});
-
 RPC.register('jobs:whitelist:hasWhitelistAccess', src => {
   return hasSpeciality(src, 'HC');
 });
@@ -163,21 +176,5 @@ on('DGCore:server:playerLoaded', (playerData: PlayerData) => {
     syncSanitationJobToClient(group.id, playerData.source);
     syncPostOPJobToClient(group.id, playerData.source);
   }, 5000);
-});
-
-RPC.register('jobs:modules:getInitData', async () => {
-  await Config.awaitConfigLoad();
-  const config = Config.getConfigValue('jobs') as {
-    sanddigging: Sanddigging.Config;
-    fishing: Fishing.Config;
-    scrapyard: Scrapyard.Config;
-    postop: PostOP.Config;
-  };
-  return {
-    sanddigging: config.sanddigging,
-    fishingReturnZone: config.fishing.vehicle,
-    scrapyardReturnZone: config.scrapyard.returnZone,
-    postopTypes: config.postop.types,
-  };
 });
 // #endregion
