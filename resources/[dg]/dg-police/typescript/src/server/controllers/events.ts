@@ -1,12 +1,12 @@
-import { RPC, Events, Chat, Vehicles, Util, Inventory, Notifications, Status, Jobs } from '@dgx/server';
+import { RPC, Events, Chat, Vehicles, Util, Inventory, Notifications, Status, Jobs, Auth } from '@dgx/server';
 import { awaitPoliceConfigLoad, getPoliceConfig } from 'services/config';
 import { isPlateFlagged } from 'services/plateflags';
 import { mainLogger } from 'sv_logger';
 
-RPC.register('police:getConfig', async src => {
+Auth.onAuth(async plyId => {
   await awaitPoliceConfigLoad();
   const config = getPoliceConfig();
-  return config;
+  Events.emitNet('police:client:init', plyId, config);
 });
 
 Events.onNet('police:showVehicleInfo', async (src: number, netId: number) => {

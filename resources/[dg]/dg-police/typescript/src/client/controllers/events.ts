@@ -1,4 +1,17 @@
 import { Events, Inventory, Jobs, Notifications, Peek, Taskbar, Util } from '@dgx/client';
+import { buildLabPeekZone } from 'modules/evidence/service.evidence';
+import { loadPrisonConfig } from 'modules/prison/service.prison';
+import { buildSpeedZones } from 'modules/speedzones/service.speedzones';
+import { loadLockers } from 'services/lockers';
+import { buildSafeZones } from 'services/safe';
+
+Events.onNet('police:client:init', (config: Police.Config) => {
+  buildSpeedZones(config.speedzones);
+  loadLockers(config.config.lockers);
+  buildLabPeekZone(config.config.labLocation);
+  buildSafeZones(config.config.safes);
+  loadPrisonConfig(config.prison);
+});
 
 Peek.addGlobalEntry('vehicle', {
   options: [
