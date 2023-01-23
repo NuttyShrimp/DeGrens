@@ -1,9 +1,7 @@
-import { PolyZone, RPC } from '@dgx/client/classes';
+import { Events, PolyZone, RPC } from '@dgx/client/classes';
 import locationManager from './classes/LocationManager';
 
-setImmediate(async () => {
-  const storeZones = await RPC.execute<Record<Store.Id, IBoxZone>>('storerobbery:server:getStoreZones');
-  if (!storeZones) return;
+Events.onNet('storerobbery:client:buildStoreZones', (storeZones: Record<Store.Id, IBoxZone>) => {
   Object.entries(storeZones).forEach(([id, data]) => {
     PolyZone.addBoxZone(
       'store_building',

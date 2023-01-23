@@ -2,10 +2,11 @@ import { Config } from '@dgx/server';
 
 let config: IConfig;
 
-export const getConfig = async (): Promise<IConfig> => {
-  if (config === undefined) {
-    await Config.awaitConfigLoad();
-    config = Config.getModuleConfig('storerobbery');
-  }
+export const loadConfig = async () => {
+  await Config.awaitConfigLoad();
+  config = Config.getModuleConfig('storerobbery');
+};
+
+export const getConfig = () => {
   return config;
 };
