@@ -6,6 +6,7 @@ import {
   handleToggleKeyPress,
   hideInteraction,
   leaveDoorPolyZone,
+  loadDoors,
   tryToLockpickDoor,
   tryToThermiteDoor,
 } from 'services/doors';
@@ -56,3 +57,5 @@ Events.onNet('doorlock:client:useLockpick', () => {
 Events.onNet('doorlock:client:useThermite', () => {
   tryToThermiteDoor();
 });
+
+Events.onNet('doorlock:client:loadDoors', loadDoors);

@@ -9,9 +9,7 @@ let isInPolyZone = false;
 let activeDoorEntity: number | undefined = undefined;
 let debounceTimeout: NodeJS.Timeout | null = null;
 
-export const loadDoors = async () => {
-  const doorData = await RPC.execute<Doorlock.ClientData>('doorlock:server:getDoors');
-  if (!doorData) return;
+export const loadDoors = (doorData: Doorlock.ClientData) => {
   doors = doorData;
 
   for (const key of Object.keys(doors)) {

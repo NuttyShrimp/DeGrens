@@ -1,4 +1,4 @@
-import { Config, Events, Inventory, Police, RPC } from '@dgx/server';
+import { Auth, Config, Events, Inventory, Police, RPC } from '@dgx/server';
 import { Util } from '@dgx/shared';
 import { areDoorsLoaded, changeDoorState, getAllDoors, getDoorById, registerNewDoor } from 'services/doors';
 
@@ -12,9 +12,9 @@ Inventory.registerUseable('thermite', src => {
   Events.emitNet('doorlock:client:useThermite', src);
 });
 
-RPC.register('doorlock:server:getDoors', async () => {
+Auth.onAuth(async plyId => {
   await Util.awaitCondition(() => areDoorsLoaded());
-  return getAllDoors();
+  Events.emitNet('doorlock:client:loadDoors', plyId, getAllDoors());
 });
 
 Events.onNet('doorlock:server:changeDoorState', (src: number, doorId: number, state: boolean) => {
