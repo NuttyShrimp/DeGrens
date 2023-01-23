@@ -1,4 +1,4 @@
-import { Events, PolyZone, RPC } from '@dgx/client';
+import { Events, PolyZone } from '@dgx/client';
 import blackoutManager from 'classes/BlackoutManager';
 
 on('onResourceStop', (resourceName: string) => {
@@ -6,16 +6,13 @@ on('onResourceStop', (resourceName: string) => {
   blackoutManager.state = false;
 });
 
-Events.onNet('blackout:client:setBlackout', (value: boolean) => {
-  blackoutManager.state = value;
+AddStateBagChangeHandler('blackout', 'global', (bagName: string, keyName: string, blackout: boolean) => {
+  blackoutManager.state = blackout;
 });
 
 Events.onNet('blackout:client:flicker', blackoutManager.flicker);
 
-setImmediate(async () => {
-  blackoutManager.state = await RPC.execute<boolean>('blackout:server:getBlackoutState');
-  const safeZones = await RPC.execute<ZoneData[]>('blackout:server:getSafeZones');
-
+Events.onNet('blackout:server:buildSafeZones', (safeZones: ZoneData[]) => {
   safeZones.forEach(zone => {
     PolyZone.addPolyZone('blackout_safezone', zone.vectors, zone.options, true);
   });

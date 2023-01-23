@@ -1,12 +1,11 @@
 import { Util } from '@dgx/server';
-
 import blackoutManager from './BlackoutManager';
 
 class PowerstationManager extends Util.Singleton<PowerstationManager>() {
-  private stations: boolean[];
+  private readonly stations: boolean[] = [];
 
   setupStations = (amount: number) => {
-    this.stations = new Array(amount).fill(false);
+    this.stations.fill(false, 0, amount - 1);
   };
 
   isStationHit = (stationId: number) => {

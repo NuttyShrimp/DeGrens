@@ -1,5 +1,4 @@
 import { Auth, Config, Events, Inventory, Police, RPC } from '@dgx/server';
-
 import powerstationManager from '../classes/PowerstationManager';
 
 let powerStations: PowerstationData[];
@@ -12,7 +11,6 @@ setImmediate(async () => {
   await Config.awaitConfigLoad();
   powerStations = Config.getConfigValue('blackout.powerstations');
   powerstationManager.setupStations(powerStations.length);
-  Events.emitNet('blackout:server:getPowerStations', -1, powerStations);
 });
 
 RPC.register('blackout:server:isStationHit', (_src: number, stationId: number) => {
@@ -38,6 +36,6 @@ Events.onNet('blackout:server:setStationHit', (src: number, stationId: number) =
   });
 });
 
-Auth.onAuth(src => {
-  Events.emitNet('blackout:server:getPowerStations', src, powerStations);
+Auth.onAuth(plyId => {
+  Events.emitNet('blackout:server:buildPowerStations', plyId, powerStations);
 });

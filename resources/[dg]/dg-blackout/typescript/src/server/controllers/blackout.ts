@@ -1,5 +1,4 @@
-import { Config, Events, RPC, Util } from '@dgx/server';
-
+import { Config, Events, Util, Auth } from '@dgx/server';
 import blackoutManager from '../classes/BlackoutManager';
 
 Events.onNet('blackout:server:setBlackout', (src: number, state: boolean) => {
@@ -12,13 +11,10 @@ Events.onNet('blackout:server:setBlackout', (src: number, state: boolean) => {
   );
 });
 
-RPC.register('blackout:server:getBlackoutState', () => {
-  return blackoutManager.state;
-});
-
-RPC.register('blackout:server:getSafeZones', async () => {
+Auth.onAuth(async plyId => {
   await Config.awaitConfigLoad();
-  return Config.getConfigValue<ZoneData[]>('blackout.safezones');
+  const safeZones = Config.getConfigValue<ZoneData[]>('blackout.safezones');
+  Events.emitNet('blackout:server:buildSafeZones', plyId, safeZones);
 });
 
 global.exports('toggleBlackout', () => {

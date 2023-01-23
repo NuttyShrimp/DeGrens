@@ -35,6 +35,10 @@ class BlackoutManager extends Util.Singleton<BlackoutManager>() {
       this.disableLights(false);
     }, 300);
   };
+
+  public loadState = () => {
+    this.state = GlobalState.blackout;
+  };
 }
 
 const blackoutManager = BlackoutManager.getInstance();

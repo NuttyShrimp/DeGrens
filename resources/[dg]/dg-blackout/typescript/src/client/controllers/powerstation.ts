@@ -25,7 +25,7 @@ Events.onNet('blackout:client:useExplosive', async () => {
   plantExplosive(currentStation);
 });
 
-Events.onNet('blackout:server:getPowerStations', (data: PowerstationData[]) => {
+Events.onNet('blackout:server:buildPowerStations', (data: PowerstationData[]) => {
   powerStations = data;
   powerStations.forEach((zone, id) => {
     const options = { ...zone.options, data: { id: id } };

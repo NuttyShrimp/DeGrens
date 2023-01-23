@@ -2,8 +2,8 @@ import { Chat, Events, Util } from '@dgx/server';
 
 class BlackoutManager extends Util.Singleton<BlackoutManager>() {
   private _state = false;
-  private flickeringThread: NodeJS.Timer;
-  private flickeringTimeout: NodeJS.Timeout;
+  private flickeringThread: NodeJS.Timer | null = null;
+  private flickeringTimeout: NodeJS.Timeout | null = null;
 
   get state() {
     return this._state;
@@ -19,17 +19,31 @@ class BlackoutManager extends Util.Singleton<BlackoutManager>() {
         : 'De stroompanne is opgelost. Excuses voor het ongemak.',
       type: 'system',
     });
-    Events.emitNet('blackout:client:setBlackout', -1, this.state);
+    this.setStatebag(this.state);
     if (this.state) this.startFlickeringThread();
   }
 
+  public setStatebag = (state: boolean) => {
+    GlobalState.blackout = state;
+  };
+
   private startFlickeringThread = () => {
-    clearTimeout(this.flickeringTimeout);
+    if (this.flickeringTimeout) {
+      clearTimeout(this.flickeringTimeout);
+    }
+
     this.flickeringTimeout = setTimeout(() => {
+      if (this.flickeringThread) {
+        clearInterval(this.flickeringThread);
+        this.flickeringThread = null;
+      }
+
       this.flickeringThread = setInterval(() => {
         if (!this.state) {
-          clearInterval(this.flickeringThread);
-          this.flickeringThread = null;
+          if (this.flickeringThread) {
+            clearInterval(this.flickeringThread);
+            this.flickeringThread = null;
+          }
           return;
         }
         if (Util.getRndInteger(1, 100) <= 20) Events.emitNet('blackout:client:flicker', -1);
