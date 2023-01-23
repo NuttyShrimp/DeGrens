@@ -3,10 +3,6 @@ import { Events, RPC, Util } from '@dgx/client';
 import { setDegradationValues } from './constant.status';
 import { fixVehicle } from './service.status';
 
-setImmediate(async () => {
-  Events.emitNet('vehicles:server:requestDegradationValues');
-});
-
 // Completes the server side function for natives that are client sided only
 Events.onNet(
   'vehicles:client:setNativeStatus',

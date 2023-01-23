@@ -1,4 +1,4 @@
-import { Config, Events, Inventory, Notifications, RPC, Taskbar, Util } from '@dgx/server';
+import { Auth, Config, Events, Inventory, Notifications, RPC, Taskbar, Util } from '@dgx/server';
 import { updateVehicleNos } from 'db/repository';
 import { getVinForNetId } from 'helpers/vehicle';
 import vinManager from 'modules/identification/classes/vinmanager';
@@ -73,10 +73,10 @@ Inventory.registerUseable('nos', async src => {
   );
 });
 
-RPC.register('vehicles:nos:getConfig', async () => {
+Auth.onAuth(async plyId => {
   await Config.awaitConfigLoad();
   const config = Config.getConfigValue('vehicles.config.nos');
-  return config;
+  Events.emitNet('vehicles:nos:setConfig', plyId, config);
 });
 
 Events.onNet('vehicles:nos:save', (src: number, netId: number, amount: number) => {

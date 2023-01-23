@@ -1,15 +1,12 @@
-import { Events, RPC } from '@dgx/client';
+import { Events } from '@dgx/client';
 import { getCurrentVehicle, getVehicleVinWithoutValidation } from '@helpers/vehicle';
 
 // We cache all keys we have, to avoid unneeded server calls which slows down things like radialmenu isEnabled and peek canInteract
 const keyCache: Set<string> = new Set();
 
-onNet('DGCore:client:playerLoaded', async () => {
+Events.onNet('vehicles:keys:initCache', (vins: string[]) => {
   keyCache.clear();
-  const allVins = await RPC.execute<string[]>('vehicles:keys:getAll');
-  (allVins ?? []).forEach(vin => {
-    keyCache.add(vin);
-  });
+  vins.forEach(vin => keyCache.add(vin));
 });
 
 Events.onNet('vehicles:keys:addToCache', (vin: string) => {

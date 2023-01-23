@@ -1,4 +1,4 @@
-import { Events, Inventory, RPC } from '@dgx/server';
+import { Auth, Events, Inventory, RPC } from '@dgx/server';
 
 import { getConfigByEntity } from '../info/service.info';
 
@@ -17,9 +17,9 @@ Events.onNet('vehicles:service:updateStatus', (src: number, vin: string, status:
   updateServiceStatus(vin, status);
 });
 
-Events.onNet('vehicles:server:requestDegradationValues', async src => {
+Auth.onAuth(async plyId => {
   const config = await getConfig();
-  Events.emitNet('vehicles:service:setDegradationValues', src, config.degradationValues);
+  Events.emitNet('vehicles:service:setDegradationValues', plyId, config.degradationValues);
 });
 
 RPC.register('vehicles:service:getStatus', (src: number, vehNetId: number) => {

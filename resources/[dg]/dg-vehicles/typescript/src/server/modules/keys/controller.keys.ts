@@ -1,7 +1,5 @@
-import { Events, Notifications, RPC, Util } from '@dgx/server';
-
+import { Events, Notifications, Util } from '@dgx/server';
 import { getVinForNetId } from '../../helpers/vehicle';
-
 import { keyManager } from './classes/keymanager';
 import { handleDoorSuccess, handleFail, handleHotwireSuccess, startVehicleLockpick } from './service.keys';
 
@@ -27,8 +25,9 @@ Events.onNet('vehicles:keys:finishLockPick', (src, type: string, id: string, isS
   }
 });
 
-RPC.register('vehicles:keys:getAll', (src: number) => {
-  return keyManager.getAllPlayerKeys(src);
+on('DGCore:server:playerLoaded', (playerData: PlayerData) => {
+  const keys = keyManager.getAllPlayerKeys(playerData.source);
+  Events.emitNet('vehicles:keys:initCache', playerData.source, keys);
 });
 
 global.exports('giveKeysToPlayer', (plyId: number, vehNetId: number) => {
