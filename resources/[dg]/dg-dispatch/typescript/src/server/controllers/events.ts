@@ -1,4 +1,4 @@
-import { Config, Events, Notifications, RPC, Util } from '@dgx/server';
+import { Auth, Config, Events, Jobs, Notifications, RPC, Util } from '@dgx/server';
 import { cleanPlayer, syncBlips, togglePlayer, updateSprite } from 'services/blips';
 import { getCams, loadCams } from 'services/cams';
 import { getCall, getCalls } from 'services/store';
@@ -46,6 +46,6 @@ Events.onNet('dispatch:toggleDispatchBlip', (src, dispatchEnabled: boolean) => {
   togglePlayer(src, dispatchEnabled);
 });
 
-RPC.register('dispatch:cams:request', () => {
-  return getCams();
+Auth.onAuth(plyId => {
+  Events.emitNet('dispatch:cams:set', plyId, getCams());
 });

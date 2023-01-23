@@ -1,4 +1,4 @@
-import { Animations, Jobs, Notifications, RPC, UI, Util } from '@dgx/client';
+import { Animations, Events, Jobs, Notifications, RPC, UI, Util } from '@dgx/client';
 
 let cams: Dispatch.Cams.Cam[] = [];
 let activeCamera: number = 0;
@@ -12,9 +12,7 @@ let moveKeyThreads: Record<Direction, NodeJS.Timer | undefined> = {
 
 const DISABLED_CONTROLS = [30, 31, 32, 33, 34, 35];
 
-setImmediate(async () => {
-  const pCams = await RPC.execute('dispatch:cams:request');
-  if (!pCams) return;
+Events.onNet('dispatch:cams:set', (pCams: Dispatch.Cams.Cam[]) => {
   cams = pCams;
 });
 
