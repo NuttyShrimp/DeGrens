@@ -1,4 +1,5 @@
 import { Events, Phone, Util } from '@dgx/server';
+import { dispatchCurrentGangToClient } from 'helpers';
 import repository from 'services/repository';
 import { mainLogger } from 'sv_logger';
 import winston from 'winston';
@@ -46,13 +47,13 @@ export class Gang {
   public addMember = (cid: number, hasPerms = false) => {
     this.members.set(cid, { cid, hasPerms });
     repository.insertNewMember(this.name, cid, hasPerms);
-    this.dispatchToClient(cid, this.name);
+    dispatchCurrentGangToClient(cid, this.name);
   };
 
   public removeMember = (cid: number) => {
     this.members.delete(cid);
     repository.deleteMember(this.name, cid);
-    this.dispatchToClient(cid, null);
+    dispatchCurrentGangToClient(cid, null);
   };
 
   public modifyMemberPerms = (cid: number, hasPerms: boolean) => {
@@ -104,12 +105,5 @@ export class Gang {
       });
     }
     return { name: this.name, label: this.label, owner: this.owner, members };
-  };
-
-  // Dispatch to client to keep cache of current gang
-  private dispatchToClient = (cid: number, newGang: string | null) => {
-    const player = DGCore.Functions.GetPlayerByCitizenId(cid);
-    if (!player) return;
-    Events.emitNet('gangs:client:updateCurrentGang', player.PlayerData.source, newGang);
   };
 }

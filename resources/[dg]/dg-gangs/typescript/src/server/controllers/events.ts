@@ -1,5 +1,6 @@
 import { Chat, RPC, Util } from '@dgx/server';
 import gangManager from 'classes/gangmanager';
+import { dispatchCurrentGangToClient } from 'helpers';
 
 Chat.registerCommand(
   'createGang',
@@ -28,15 +29,15 @@ Chat.registerCommand(
   }
 );
 
-RPC.register('gangs:server:getCurrentGang', (plyId: number) => {
-  const cid = Util.getCID(plyId);
-  const gang = gangManager.getPlayerGang(cid);
-  return gang?.name ?? null;
-});
-
 RPC.register('gangs:server:getClientVersion', async (plyId: number): Promise<GangData | null> => {
   const cid = Util.getCID(plyId);
   const gang = gangManager.getPlayerGang(cid);
   if (!gang) return null;
   return await gang.getClientVersion();
+});
+
+on('DGCore:server:playerLoaded', (playerData: PlayerData) => {
+  const gang = gangManager.getPlayerGang(playerData.citizenid);
+  if (!gang) return;
+  dispatchCurrentGangToClient(playerData.citizenid, gang.name);
 });

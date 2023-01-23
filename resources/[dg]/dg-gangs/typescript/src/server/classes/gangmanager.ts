@@ -1,4 +1,4 @@
-import { Util, Phone } from '@dgx/server';
+import { Util } from '@dgx/server';
 import { RPCEvent, RPCRegister } from '@dgx/server/decorators';
 import repository from 'services/repository';
 import { mainLogger } from 'sv_logger';
