@@ -5,13 +5,14 @@ import {
   doWeaponStress,
   getCapacity,
   getStressLevel,
-  loadConfig,
   scheduleBlurEffect,
+  setConfig,
   updateStress,
 } from './service.hud';
 
-setImmediate(async () => {
-  await loadConfig();
+Events.onNet('hud:client:initialize', (config: HUD.Config) => {
+  setConfig(config);
+
   HUD.addEntry('lung-capacity', 'lungs', '#ABBEE2', (ped, id) => getCapacity(ped, id), 2, 600, false);
   HUD.addEntry('stress', 'head-side-brain', '', () => getStressLevel(), 1, 100, false);
 

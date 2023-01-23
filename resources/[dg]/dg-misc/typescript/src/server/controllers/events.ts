@@ -1,4 +1,6 @@
+import { Auth } from '@dgx/server';
 import { BLACKLISTED_MODELS } from '../constants';
+import { dispatchHudConfigToPlayer } from 'modules/hud/service.hud';
 
 const checkEntityBlacklisted = (entity: number) => {
   const model = GetEntityModel(entity);
@@ -15,4 +17,8 @@ on('entityCreating', (entity: number) => {
       checkEntityBlacklisted(entity);
     }, 250);
   }
+});
+
+Auth.onAuth(plyId => {
+  dispatchHudConfigToPlayer(plyId);
 });

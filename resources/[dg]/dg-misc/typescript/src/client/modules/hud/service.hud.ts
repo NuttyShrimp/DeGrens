@@ -1,22 +1,14 @@
-import { Events, HUD, RPC, Util } from '@dgx/client';
+import { Events, HUD, Util } from '@dgx/client';
 
-let config: HUD.Config;
+let config: HUD.Config | null = null;
 let inWater = false;
 let stressLevel = 0;
 let stressTimeout: NodeJS.Timeout | null;
 let stressSteps: number;
 
-export const loadConfig = async (tries = 0) => {
-  if (tries >= 3) {
-    throw new Error('[MISC] Failed to get hud config');
-  }
-  const newConfig = await RPC.execute<HUD.Config>('hud:server:getConfig');
-  if (!newConfig) {
-    loadConfig(++tries);
-    return;
-  }
+export const setConfig = (newConfig: HUD.Config) => {
   config = newConfig;
-  stressSteps = (config.shake.interval.max - config.shake.interval.min) / (100 - config.shake.minimum);
+  stressSteps = (newConfig.shake.interval.max - newConfig.shake.interval.min) / (100 - newConfig.shake.minimum);
 };
 
 export const getStressLevel = () => stressLevel;
@@ -40,6 +32,7 @@ export const updateStress = (amount: number) => {
 };
 
 export const doSpeedStress = () => {
+  if (!config) return;
   const ped = PlayerPedId();
   if (!IsPedInAnyVehicle(ped, false)) return;
   const speed = GetEntitySpeed(GetVehiclePedIsIn(ped, false)) * 3.6;
@@ -55,6 +48,7 @@ const SKIPPED_WEAPONS = ['WEAPON_UNARMED', 'WEAPON_PETROLCAN', 'WEAPON_HAZARDCAN
 );
 
 export const doWeaponStress = () => {
+  if (!config) return;
   const ped = PlayerPedId();
   const pedWeapon = GetSelectedPedWeapon(ped);
   if (
@@ -67,9 +61,7 @@ export const doWeaponStress = () => {
 };
 
 export const scheduleBlurEffect = async () => {
-  if (!config) {
-    await Util.awaitCondition(() => config !== undefined);
-  }
+  if (!config) return;
   if (stressLevel < config.shake.minimum) return;
   if (stressTimeout) return;
   const timeout = config.shake.interval.max - stressSteps * (stressLevel - config.shake.minimum);
@@ -84,6 +76,7 @@ export const scheduleBlurEffect = async () => {
 };
 
 const doBlurEffect = async () => {
+  if (!config) return;
   const length = (config.shake.maxLength / 100) * stressLevel;
   TriggerScreenblurFadeIn(250);
   await Util.Delay(length + 100);
