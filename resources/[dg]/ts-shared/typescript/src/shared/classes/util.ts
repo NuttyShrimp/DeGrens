@@ -84,13 +84,26 @@ export class Util {
   };
 
   awaitCondition = async (condition: () => boolean, timeout = 5000) => {
-    let timedOut = false;
-    setTimeout(() => {
-      timedOut = true;
-    }, timeout);
-    while (!condition() && !timedOut) {
-      await this.Delay(100);
-    }
+    return new Promise<void>(res => {
+      // do check first to avoid initial delay if condition already fulfilled
+      if (condition()) {
+        res();
+        return;
+      }
+
+      let timedOut = false;
+      setTimeout(() => {
+        timedOut = true;
+      }, timeout);
+
+      const thread = setInterval(() => {
+        if (timedOut || condition()) {
+          clearInterval(thread);
+          res();
+          return;
+        }
+      }, 10);
+    });
   };
 
   awaitEntityExistence = (entity: number, isNetId = false): Promise<boolean> => {
