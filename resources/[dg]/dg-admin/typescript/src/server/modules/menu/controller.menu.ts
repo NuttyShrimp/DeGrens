@@ -7,7 +7,7 @@ import { hasPlayerPermission } from '../permissions/service.permissions';
 
 import { checkBinds, isInDevMode, setDevMode } from './service.menu';
 
-global.exports("isInDevMode", isInDevMode)
+global.exports('isInDevMode', isInDevMode);
 
 Events.onNet('admin:menu:open', src => {
   if (!hasPlayerPermission(src, 'staff')) {
@@ -128,7 +128,7 @@ Events.onNet('admin:bind:check', (src, binds: Record<Binds.bindNames, string | n
   checkBinds(src, binds);
 });
 
-RPC.register('admin:menu:getPlayers', async () => {
+RPC.register('admin:menu:getPlayers', () => {
   return Object.values(DGCore.Functions.GetQBPlayers()).map<UI.Player>((ply: Player) => ({
     name: ply.PlayerData.name,
     cid: ply.PlayerData.citizenid,
@@ -164,14 +164,14 @@ RPC.register('admin:menu:getBankAccounts', () => {
   }));
 });
 
-RPC.register('admin:menu:getPlayerData', async (src): Promise<UI.PlayerData> => {
+RPC.register('admin:menu:getPlayerData', (src): UI.PlayerData => {
   return {
     bucketId: GetPlayerRoutingBucket(String(src)),
   };
 });
 
-RPC.register('admin:menu:getItems', async () => {
-  const items = await Inventory.getAllItemData();
+RPC.register('admin:menu:getItems', () => {
+  const items = Inventory.getAllItemData();
   return Object.values(items).map(item => ({ name: item.name, label: item.label, size: item.size }));
 });
 

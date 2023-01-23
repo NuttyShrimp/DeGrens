@@ -46,7 +46,7 @@ class Inventory extends UtilShared.Singleton<Inventory>() {
     this.usageHandlers.set(item, allHandlers);
   };
 
-  public getAllItemData = (): Promise<Record<string, Inventory.ItemData>> => {
+  public getAllItemData = (): Record<string, Inventory.ItemData> => {
     return global.exports['dg-inventory'].getAllItemData();
   };
 
