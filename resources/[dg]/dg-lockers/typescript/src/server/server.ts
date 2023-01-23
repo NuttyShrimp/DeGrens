@@ -1,7 +1,8 @@
 import lockersManager from './classes/LockersManager';
-
-import './services/config';
 import { loadConfig } from './services/config';
+
+import './controllers/events';
+import './services/config';
 
 setImmediate(async () => {
   await loadConfig();

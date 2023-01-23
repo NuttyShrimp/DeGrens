@@ -11,16 +11,18 @@ import { getCurrentDay } from 'helpers';
 class LockersManager extends Util.Singleton<LockersManager>() {
   private readonly logger: winston.Logger;
   private readonly lockers: Map<Lockers.Locker['id'], Locker>;
+  private loaded: boolean;
 
   constructor() {
     super();
     this.logger = mainLogger.child({ module: 'Manager' });
     this.lockers = new Map();
+    this.loaded = false;
   }
 
-  private registerLockers = (data: Lockers.Locker | Lockers.Locker[]) => {
+  private registerLocker = (data: Lockers.Locker | Lockers.Locker[]) => {
     if (Array.isArray(data)) {
-      data.forEach(this.registerLockers);
+      data.forEach(this.registerLocker);
       return;
     }
     const locker = new Locker(data);
@@ -45,8 +47,9 @@ class LockersManager extends Util.Singleton<LockersManager>() {
 
   public loadLockers = async () => {
     const lockers = await repository.getAll();
-    this.registerLockers(lockers);
+    this.registerLocker(lockers);
     this.logger.info(`Succesfully loaded ${lockers.length} ${lockers.length > 1 ? 'lockers' : 'locker'}`);
+    this.loaded = true;
 
     await Financials.awaitFinancialsLoaded();
     this.lockers.forEach(locker => {
@@ -54,9 +57,11 @@ class LockersManager extends Util.Singleton<LockersManager>() {
     });
   };
 
-  private getBuildData = (): Lockers.BuildData[] => {
+  public distributeLockersToPlayer = async (plyId: number) => {
+    await Util.awaitCondition(() => this.loaded);
     const lockers = [...this.lockers.values()];
-    return lockers.map(l => ({ id: l.id, coords: l.data.coords, radius: l.data.radius }));
+    const buildData = lockers.map(l => ({ id: l.id, coords: l.data.coords, radius: l.data.radius }));
+    Events.emitNet('lockers:client:add', plyId, buildData);
   };
 
   @DGXLocalEvent('lockers:server:lockerDefaulted')
@@ -64,11 +69,6 @@ class LockersManager extends Util.Singleton<LockersManager>() {
     const locker = [...this.lockers.values()].find(l => l.data.owner === debt.cid);
     if (!locker) return;
     locker.removeOwnership();
-  };
-
-  @DGXEvent('lockers:server:request')
-  private _request = (src: number) => {
-    Events.emitNet('lockers:client:add', src, this.getBuildData());
   };
 
   @DGXEvent('lockers:server:place')
@@ -91,7 +91,7 @@ class LockersManager extends Util.Singleton<LockersManager>() {
       paymentDay: 0,
     };
 
-    this.registerLockers(locker);
+    this.registerLocker(locker);
     repository.insert(locker);
     this.logger.info(`A new locker (${locker.id}) has been placed`);
     Util.Log('lockers:placed', { ...locker }, `${Util.getName(src)} has placed a new locker (${locker.id})`, src);
