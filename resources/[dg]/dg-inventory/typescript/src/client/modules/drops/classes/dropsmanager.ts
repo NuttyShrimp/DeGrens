@@ -1,4 +1,4 @@
-import { RPC, Util } from '@dgx/client';
+import { Util } from '@dgx/client';
 
 class DropsManager extends Util.Singleton<DropsManager>() {
   private drops: Map<string, Vec3>;
@@ -14,12 +14,8 @@ class DropsManager extends Util.Singleton<DropsManager>() {
     this.range = 0;
   }
 
-  public load = async () => {
-    const drops = await RPC.execute<[string, Vec3][]>('inventory:server:getDrops');
-    if (!drops) return;
+  public initialize = (drops: [string, Vec3][], range: number) => {
     this.drops = new Map(drops);
-    const range = await RPC.execute<number>('inventory:server:getDropRange');
-    if (!range) return;
     this.range = range * 8;
     this.checkCloseDrops();
   };

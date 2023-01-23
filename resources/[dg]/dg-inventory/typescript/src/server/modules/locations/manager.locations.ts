@@ -23,13 +23,12 @@ class LocationManager extends Util.Singleton<LocationManager>() {
     this.locations = { drop: new Map(), dumpster: new Map() };
   }
 
-  @RPCEvent('inventory:server:getDrops')
-  private _getDrops = () => {
+  public dispatchDropsToPlayer = (plyId: number) => {
     const clientVersion: [string, Vec3][] = [];
     for (const [id, drop] of this.locations.drop) {
       clientVersion.push([id, drop.pos]);
     }
-    return clientVersion;
+    Events.emitNet('inventory:drops:initialize', plyId, clientVersion, getConfig().locationInvRange.drop);
   };
 
   public getLocation = (type: Location.Type, coords: Vec3, ignoreOthers = false) => {

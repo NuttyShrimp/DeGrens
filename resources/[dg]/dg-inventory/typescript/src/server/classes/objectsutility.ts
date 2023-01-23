@@ -1,5 +1,5 @@
 import { Config, Events } from '@dgx/server';
-import { DGXEvent, EventListener, Export, ExportRegister, RPCEvent, RPCRegister } from '@dgx/server/decorators';
+import { DGXEvent, EventListener, Export, ExportRegister, RPCRegister } from '@dgx/server/decorators';
 import { Util } from '@dgx/shared';
 
 @RPCRegister()
@@ -25,16 +25,10 @@ class ObjectsUtility extends Util.Singleton<ObjectsUtility>() {
     this.config = Config.getConfigValue('inventory.objects');
   }
 
-  @RPCEvent('inventory:objects:getConfig')
-  private async _fetchConfig() {
-    await new Promise<void>(res => {
-      setInterval(() => {
-        if (this._config === null) return;
-        res();
-      }, 10);
-    });
-    return this.config;
-  }
+  public dispatchConfigToPlayer = async (plyId: number) => {
+    await Util.awaitCondition(() => this.config !== null);
+    Events.emitNet('inventory:objects:setConfig', plyId, this.config);
+  };
 
   @Export('toggleObject')
   @DGXEvent('inventory:objects:toggle')

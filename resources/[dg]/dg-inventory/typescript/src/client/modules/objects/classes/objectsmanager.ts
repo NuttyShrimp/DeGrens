@@ -1,4 +1,4 @@
-import { PropAttach, RPC } from '@dgx/client';
+import { PropAttach } from '@dgx/client';
 import { Util } from '@dgx/client';
 import { Vector3 } from '@dgx/shared';
 import { Export, ExportRegister } from '@dgx/shared/decorators';
@@ -16,15 +16,11 @@ class ObjectsManager extends Util.Singleton<ObjectsManager>() {
     super();
     this.activeObjects = new Map();
     this.queues = {
-      toggled: [], // toggled is a special queue for manuel overrides
+      toggled: [], // toggled is a special queue for manual overrides
     };
   }
 
-  public fetchConfig = async () => {
-    const config = await RPC.execute<Objects.Config>('inventory:objects:getConfig');
-    if (!config) {
-      throw new Error('Failed to fetch objects config');
-    }
+  public setConfig = (config: Objects.Config) => {
     this.config = config;
     this.configLoaded = true;
   };

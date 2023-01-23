@@ -29,3 +29,7 @@ Events.onNet('inventory:objects:toggle', (itemId: string, toggle: boolean) => {
 Events.onNet('inventory:objects:toggleAll', (toggle: boolean) => {
   objectsManager.toggleAllObjects(toggle);
 });
+
+Events.onNet('inventory:objects:setConfig', (config: Objects.Config) => {
+  objectsManager.setConfig(config);
+});

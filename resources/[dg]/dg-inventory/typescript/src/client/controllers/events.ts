@@ -25,3 +25,7 @@ Events.onNet('inventory:client:openOverride', (invId: string) => {
     override: invId,
   });
 });
+
+Events.onNet('inventory:itemdata:seed', (itemData: Record<string, Inventory.ItemData>) => {
+  itemDataManager.seed(itemData);
+});

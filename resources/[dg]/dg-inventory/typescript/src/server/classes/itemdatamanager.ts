@@ -1,5 +1,5 @@
 import { Config, Events } from '@dgx/server';
-import { RPCEvent, RPCRegister } from '@dgx/server/decorators';
+import { RPCRegister } from '@dgx/server/decorators';
 import { Util } from '@dgx/shared';
 import { Export, ExportRegister } from '@dgx/shared/decorators';
 import { mainLogger } from 'sv_logger';
@@ -51,9 +51,12 @@ class ItemDataManager extends Util.Singleton<ItemDataManager>() {
   };
 
   @Export('getAllItemData')
-  @RPCEvent('inventory:server:getAllItemData')
-  private _getAll = () => {
+  private getAll = () => {
     return Object.fromEntries(this.itemData);
+  };
+
+  public seedItemDataForPlayer = (plyId: number) => {
+    Events.emitNet('inventory:itemdata:seed', plyId, this.getAll());
   };
 
   // yes i like doing this using date.now because i cant be bothered to use actual dates and math is easier
