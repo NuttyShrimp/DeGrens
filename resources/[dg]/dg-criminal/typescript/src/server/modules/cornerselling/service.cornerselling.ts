@@ -1,7 +1,11 @@
-import { SQL, Inventory, Reputations, Util } from '@dgx/server';
+import { SQL, Inventory, Reputations, Util, Events } from '@dgx/server';
 import { getConfig } from 'services/config';
 
 const salesHeatmap: Record<string, number> = {};
+
+export const dispatchRequiredCopsToClient = (plyId: number) => {
+  Events.emitNet('criminal:cornersell:setRequiredCops', plyId, getConfig().cornerselling.requiredCops);
+};
 
 export const initializeCornerselling = async () => {
   await dropOldSales();

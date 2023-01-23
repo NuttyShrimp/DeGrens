@@ -14,6 +14,11 @@ export const getClientPlants = () => {
   return clientVersion;
 };
 
+export const seedExistingPlantsForClient = async (plyId: number) => {
+  await awaitPlantsLoaded();
+  Events.emitNet('criminal:weed:seedExistingPlants', plyId, getClientPlants());
+};
+
 export const fetchAllPlants = async () => {
   const result: Criminal.Weed.DBPlant[] = await SQL.query('SELECT * FROM weed_plants');
   if (!result) return;

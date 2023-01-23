@@ -1,23 +1,10 @@
 import { Events, Inventory, Notifications, RPC, Util } from '@dgx/server';
 import { getConfig } from 'services/config';
 import { weedLogger } from './logger.weed';
-import {
-  addNewPlant,
-  awaitPlantsLoaded,
-  canCutPlant,
-  cutPlant,
-  feedPlant,
-  getClientPlants,
-  removePlant,
-} from './service.weed';
+import { addNewPlant, canCutPlant, cutPlant, feedPlant, removePlant } from './service.weed';
 
 Inventory.registerUseable('weed_seed', (plyId, itemState) => {
   Events.emitNet('criminal:weed:plant', plyId, itemState.id);
-});
-
-RPC.register('criminal:weed:fetch', async (plyId: number) => {
-  await awaitPlantsLoaded();
-  return getClientPlants();
 });
 
 Events.onNet('criminal:weed:add', (src: number, itemId: string, coords: Vec3) => {

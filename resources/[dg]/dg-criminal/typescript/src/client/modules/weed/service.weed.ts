@@ -5,17 +5,6 @@ import { lookAtPlant } from './helpers.weed';
 
 let plants: Map<number, Criminal.Weed.Plant & { entity?: number }> = new Map();
 
-export const fetchExistingPlants = async () => {
-  const existingPlants = await RPC.execute<Record<number, Criminal.Weed.Plant>>('criminal:weed:fetch');
-  if (!existingPlants) {
-    console.error('Failed to load existing plants');
-    return;
-  }
-  for (const [i, p] of Object.entries(existingPlants)) {
-    plants.set(Number(i), p);
-  }
-};
-
 export const registerPlant = (id: number, data: Criminal.Weed.Plant) => {
   plants.set(id, data);
 };

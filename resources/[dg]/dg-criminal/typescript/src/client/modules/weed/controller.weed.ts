@@ -16,6 +16,12 @@ import {
 
 let isPlacing = false;
 
+Events.onNet('criminal:weed:seedExistingPlants', (existingPlants: Record<number, Criminal.Weed.Plant>) => {
+  for (const [i, p] of Object.entries(existingPlants)) {
+    registerPlant(Number(i), p);
+  }
+});
+
 Events.onNet('criminal:weed:plant', async (itemId: string) => {
   if (isPlacing) {
     Notifications.add('Je bent al een plant aan het plaatsen', 'error');
