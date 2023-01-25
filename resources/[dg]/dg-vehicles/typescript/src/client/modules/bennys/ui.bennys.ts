@@ -82,7 +82,8 @@ UI.RegisterUICallback('bennys:getActiveMenus', (_, cb) => {
     if (activeMenus.includes(type as keyof typeof upgradeableCategories)) return;
     if (
       !categories.some(key => {
-        const amount = possibilities[key as keyof typeof possibilities] ?? 0;
+        let amount = possibilities[key as keyof typeof possibilities] ?? 0;
+        if (typeof amount === 'object') amount = 1;
         const min = key === 'extras' ? 0 : 1;
         return amount > min;
       })
