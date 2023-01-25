@@ -1,7 +1,18 @@
-import { Util } from '@dgx/server';
+import { Util, Config } from '@dgx/server';
 import { updateVehicleStance } from 'db/repository';
 import { getVinForNetId } from 'helpers/vehicle';
 import vinManager from 'modules/identification/classes/vinmanager';
+
+let stanceConfig: Stance.Model[];
+
+export const loadStanceConfig = async () => {
+  await Config.awaitConfigLoad();
+  stanceConfig = Config.getConfigValue('vehicles.stance');
+};
+
+export const getModelStanceData = (model: number) => {
+  return stanceConfig.filter(c => GetHashKey(c.model) === model);
+};
 
 export const setVehicleStance = (veh: number, stanceData: Stance.Data) => {
   const vehState = Entity(veh).state;
