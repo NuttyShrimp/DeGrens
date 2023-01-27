@@ -19,6 +19,7 @@ const common = {
 	plugins: [new webpack.DefinePlugin({ 'global.GENTLY': false })],
 	optimization: {
 		minimize: true,
+    usedExports: true,
 	},
 	resolve: {
 		extensions: ['.ts', '.js'],

@@ -2,20 +2,27 @@
   "name": "root",
   "private": true,
   "scripts": {
-    "build": "lerna run --stream --concurrency=10 build ",
-    "build:dev": "lerna run --stream build:dev ",
+    "build": "turbo run build ",
+    "build:dev": "turbo run build:dev ",
     "lint:root": "eslint --fix --resolve-plugins-relative-to ./ --ext .js,.ts,.tsx,.jsx,.json,.vue ./resources/[dg]/",
     "lint": "yarn run lint:root --quiet",
-    "format": "lerna run --stream format",
-    "postinstall": "husky install && lerna bootstrap",
-    "postinstall:lerna": "lerna run --stream postinstall"
+    "format": "turbo run format",
+    "postinstall": "husky install && patch-package"
   },
   "dependencies": {
     "@citizenfx/client": "^2.0.6200-1",
     "@citizenfx/server": "^2.0.6200-1",
-    "@types/node": "^18.11.18",
     "esbuild-loader": "^2.20.0",
+    "javascript-obfuscator": "^4.0.0",
+    "patch-package": "^6.5.1",
+    "postinstall-postinstall": "^2.1.0",
+    "tsconfig-paths-webpack-plugin": "^4.0.0",
+    "typescript": "^4.9.4",
+    "webpack": "^5.75.0",
+    "webpack-cli": "^5.0.1",
+    "webpack-env": "^0.8.0",
     "webpack-merge": "^5.8.0",
+    "webpack-obfuscator": "^3.5.1",
     "winston": "^3.8.2",
     "winston-sentry-log": "^1.0.26"
   },
@@ -24,6 +31,8 @@
     "@sentry/node": "^7.30.0",
     "@sentry/tracing": "^7.30.0",
     "@sentry/webpack-plugin": "^1.20.0",
+    "@types/node": "^18.11.18",
+    "@types/webpack-env": "^1.18.0",
     "@typescript-eslint/eslint-plugin": "^5.48.1",
     "@typescript-eslint/parser": "^5.48.1",
     "@vue/eslint-config-prettier": "^7.0.0",
@@ -39,17 +48,10 @@
     "eslint-plugin-vue": "^9.9.0",
     "eslint-webpack-plugin": "^3.2.0",
     "husky": "^8.0.3",
-    "javascript-obfuscator": "^4.0.0",
-    "lerna": "^6.4.1",
     "lint-staged": "^13.1.0",
-    "nx": "^15.5.0",
     "prettier": "^2.8.2",
     "pretty-quick": "^3.1.3",
-    "tsconfig-paths-webpack-plugin": "^4.0.0",
-    "typescript": "^4.9.4",
-    "webpack": "^5.75.0",
-    "webpack-cli": "^5.0.1",
-    "webpack-obfuscator": "^3.5.1"
+    "turbo": "^1.7.0"
   },
   "lint-staged": {
     "*.{js,ts,tsx,scss,css,md,vue}": "eslint --fix --resolve-plugins-relative-to ./ --ext .js,.ts,.tsx,.jsx,.json,.vue ./resources/[dg]/ --cache"
@@ -58,5 +60,9 @@
     "hooks": {
       "pre-commit": "lint-staged && pretty-quick --staged"
     }
-  }
+  },
+  "workspaces": [
+    "resources/**",
+    "packages/*"
+  ]
 }

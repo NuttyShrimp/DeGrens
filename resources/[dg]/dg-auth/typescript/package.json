@@ -17,7 +17,11 @@
     "fast-jwt": "^2.1.0"
   },
   "devDependencies": {
+    "@dgx/client": "*",
+    "@dgx/server": "*",
+    "@dgx/shared": "*",
     "@types/jsonwebtoken": "^8.5.8",
-    "webpack": "^5.74.0"
+    "tsconfig": "*",
+    "webpack": "*"
   }
 }

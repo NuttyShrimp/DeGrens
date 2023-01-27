@@ -19,7 +19,7 @@ export const nuiAction: <T>(event: string, body?: {}, devData?: any) => Promise<
   body = {},
   devData: any = {}
 ) => {
-  if (process.env.NODE_ENV === 'development') return devData;
+  if (import.meta.env.DEV) return devData;
   const request = await doRequest(event, body);
   if (!request?.meta?.ok) {
     throw new Error(request.meta.message);

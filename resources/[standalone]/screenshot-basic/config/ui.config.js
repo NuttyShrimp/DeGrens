@@ -1,31 +1,32 @@
-const HtmlWebpackPlugin = require("html-webpack-plugin");
-const HtmlWebpackInlineSourcePlugin = require("html-webpack-inline-source-plugin");
-const path = require("path");
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const path = require('path');
 
 module.exports = {
-	entry: "./ui/src/main.ts",
-	module: {
-		rules: [
-			{
-				test: /\.tsx?$/,
-				use: "ts-loader",
-				exclude: /node_modules/,
-			},
-		],
-	},
-	plugins: [
-		new HtmlWebpackPlugin({
-			inlineSource: ".(js|css)$",
-			template: "./ui/index.html",
-			filename: "ui.html",
-		}),
-		new HtmlWebpackInlineSourcePlugin(),
-	],
-	resolve: {
-		extensions: [".ts", ".js"],
-	},
-	output: {
-		filename: "ui.js",
-		path: path.resolve( "./dist/")
-	},
+  entry: './ui/src/main.ts',
+  module: {
+    rules: [
+      {
+        test: /\.tsx?$/,
+        loader: 'esbuild-loader',
+        options: {
+          target: 'es6',
+          loader: 'ts',
+        },
+        exclude: /node_modules/,
+      },
+    ],
+  },
+  plugins: [
+    new HtmlWebpackPlugin({
+      template: './ui/index.html',
+      filename: 'ui.html',
+    }),
+  ],
+  resolve: {
+    extensions: ['.ts', '.js'],
+  },
+  output: {
+    filename: 'ui.js',
+    path: path.resolve('./dist/'),
+  },
 };

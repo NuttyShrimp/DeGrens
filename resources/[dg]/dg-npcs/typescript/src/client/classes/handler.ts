@@ -1,5 +1,5 @@
 import { Util } from '@dgx/client';
-import { Export, ExportRegister } from '@dgx/shared/decorators';
+import { Export, ExportRegister } from '@dgx/shared';
 import { Npc } from './npc';
 
 @ExportRegister()

@@ -1,6 +1,5 @@
 import { Events, Notifications, RayCast, RPC, UI, Util } from '@dgx/client';
-import { Vector3 } from '@dgx/shared';
-import { Export, ExportRegister } from '@dgx/shared/decorators';
+import { Vector3, Export, ExportRegister } from '@dgx/shared';
 import { TYPES_WITH_OPEN_ANIMATION } from '../constants';
 import { canOpenInventory, doCloseAnimation, doLookAnimation, doOpenAnimation } from '../util';
 

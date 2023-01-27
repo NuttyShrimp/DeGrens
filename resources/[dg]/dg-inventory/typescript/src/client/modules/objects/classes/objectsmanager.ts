@@ -1,7 +1,7 @@
 import { PropAttach } from '@dgx/client';
 import { Util } from '@dgx/client';
 import { Vector3 } from '@dgx/shared';
-import { Export, ExportRegister } from '@dgx/shared/decorators';
+import { Export, ExportRegister } from '@dgx/shared';
 
 @ExportRegister()
 class ObjectsManager extends Util.Singleton<ObjectsManager>() {

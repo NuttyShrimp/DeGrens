@@ -1,30 +1,7 @@
 {
+  "extends": "tsconfig/server.json",
   "compilerOptions": {
-    "strict": true,
-    "outDir": "./",
-    "noImplicitAny": true,
-    "module": "commonjs",
-    "target": "es6",
-    "allowJs": true,
-    "lib": [
-      "es2017"
-    ],
-    "types": [
-      "@citizenfx/server",
-      "@types/node"
-    ],
-    "moduleResolution": "node",
-    "sourceMap": true,
-    "experimentalDecorators": true,
-    "resolveJsonModule": true,
-    "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
-    "baseUrl": ".",
-    "paths": {
-      "@dgx/*": [
-        "../../../../ts-shared/typescript/src/*"
-      ]
-    }
+    "baseUrl": "./"
   },
   "include": [
     "./**/*",
@@ -33,7 +10,6 @@
     "../../../../ts-shared/typescript/src/server/types/*.d.ts"
   ],
   "exclude": [
-    "**/node_modules",
-    "**/__tests__/*"
+    "**/node_modules"
   ]
 }

@@ -57,7 +57,7 @@ class ScreenshotUI {
       this.request = event.data.request;
     });
 
-    window.addEventListener('resize', event => {
+    window.addEventListener('resize', () => {
       this.resize();
     });
 

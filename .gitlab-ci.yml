@@ -16,7 +16,7 @@ image: node:16
 
 .cache_modules:
   cache:
-    key: "$CI_COMMIT_REF_NAME-node_modules"
+    key: '$CI_COMMIT_REF_NAME-node_modules'
     paths:
       - node_modules/
       - '**/node_modules/'
@@ -27,15 +27,15 @@ image: node:16
       - UPD
       - merge_requests
     changes:
-      - "**/*.js"
-      - "**/*.ts"
-      - "**/*.jsx"
-      - "**/*.tsx"
-      - "**/*.css"
-      - "**/*.scss"
-      - "**/*.html"
-      - "**/package.json"
-      - "**/yarn.lock"
+      - '**/*.js'
+      - '**/*.ts'
+      - '**/*.jsx'
+      - '**/*.tsx'
+      - '**/*.css'
+      - '**/*.scss'
+      - '**/*.html'
+      - '**/package.json'
+      - '**/yarn.lock'
 
 validate json:
   stage: test
@@ -49,7 +49,7 @@ validate json:
       - UPD
       - merge_requests
     changes:
-      - "**/*.json"
+      - '**/*.json'
 
 validate Errorlogger:
   image: python:3-slim
@@ -106,7 +106,7 @@ TS dev build:
   stage: build
   script:
     - yarn format -- -- --loglevel error
-    - yarn build:dev --skip-nx-cache
+    - yarn build:dev --force
 
 TS prod build:
   extends:
@@ -114,11 +114,11 @@ TS prod build:
     - .cache_modules
   only:
     refs:
-      - main 
+      - main
   stage: build
   script:
     - yarn format -- -- --loglevel error
-    - yarn build --skip-nx-cache
+    - yarn build --force
 
 rebase UPD:
   stage: housekeeping

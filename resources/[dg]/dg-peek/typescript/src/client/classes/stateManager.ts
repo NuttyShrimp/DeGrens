@@ -1,5 +1,5 @@
 import { Hospital, Notifications, Police, RayCast, UI, Util } from '@dgx/client';
-import { Export, ExportRegister } from '@dgx/shared/decorators';
+import { Export, ExportRegister } from '@dgx/shared';
 
 import { DEFAULT_DISTANCE, DISABLED_KEYS, PEEK_TYPES } from '../cl_constant';
 import { getActiveZones, getCurrentEntity, updateCurrentEntity } from '../helpers/actives';

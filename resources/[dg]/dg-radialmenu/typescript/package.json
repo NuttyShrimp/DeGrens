@@ -17,7 +17,10 @@
     "webpack-env": "^0.8.0"
   },
   "devDependencies": {
+    "@dgx/client": "*",
+    "@dgx/shared": "*",
     "@types/webpack-env": "^1.17.0",
-    "webpack": "^5.74.0"
+    "tsconfig": "*",
+    "webpack": "*"
   }
 }
