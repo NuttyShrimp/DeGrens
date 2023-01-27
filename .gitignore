@@ -11,6 +11,7 @@ seed.sql
 *-Coords.txt
 node_modules/
 !migrate.bat
+.turbo
 
 
 positions.txt

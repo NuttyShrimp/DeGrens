@@ -1,21 +1,7 @@
 {
+  "extends": "tsconfig/client.json",
   "compilerOptions": {
-    "strict": true,
-    "outDir": "./",
-    "noImplicitAny": true,
-    "module": "commonjs",
-    "target": "es6",
-    "allowJs": true,
-    "lib": ["es2017"], 
-    "types": ["@citizenfx/client", "@types/node", "@types/webpack-env"],
-    "moduleResolution": "node",
-    "experimentalDecorators": true,
-    "resolveJsonModule": true,
-    "esModuleInterop": true,
-    "baseUrl": "./",
-    "paths": {
-      "@dgx/*": ["../../../../ts-shared/typescript/src/*"]
-    }
+    "baseUrl": "./"
   },
   "include": [
     "./**/*",
@@ -23,5 +9,7 @@
     "../../../../ts-shared/typescript/src/shared/types/*.d.ts",
     "../../../../ts-shared/typescript/src/client/types/*.d.ts"
   ],
-  "exclude": ["**/node_modules", "**/__tests__/*"]
+  "exclude": [
+    "**/node_modules"
+  ]
 }

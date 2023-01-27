@@ -17,7 +17,11 @@
     "uuid": "^8.3.2"
   },
   "devDependencies": {
+    "@dgx/client": "*",
+    "@dgx/server": "*",
+    "@dgx/shared": "*",
     "@types/uuid": "^8.3.4",
-    "webpack": "^5.74.0"
+    "tsconfig": "*",
+    "webpack": "*"
   }
 }

@@ -19,7 +19,7 @@
     "allowJs": true,
     "sourceMap": true,
     "downlevelIteration": true,
-    "types": ["node", "vite/client"],
+    "types": ["node", "vite/client", "@sentry/types"],
     "baseUrl": "./",
     "paths": {
       "@src/*": ["./src/*"],

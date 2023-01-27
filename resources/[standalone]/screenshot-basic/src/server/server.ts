@@ -49,7 +49,7 @@ router.post('/upload/:token', async ctx => {
 
     if (f) {
       if (upload.fileName) {
-        mv(f.path, upload.fileName, err => {
+        mv(f.filepath, upload.fileName, err => {
           if (err) {
             finish(err.message, null);
             return;
@@ -58,14 +58,14 @@ router.post('/upload/:token', async ctx => {
           finish(null, upload.fileName);
         });
       } else {
-        fs.readFile(f.path, (err, data) => {
+        fs.readFile(f.filepath, (err, data) => {
           if (err) {
             finish(err.message, null);
             return;
           }
 
-          fs.unlink(f.path, err => {
-            finish(null, `data:${f.type};base64,${data.toString('base64')}`);
+          fs.unlink(f.filepath, err => {
+            finish(null, `data:${f.mimetype};base64,${data.toString('base64')}`);
           });
         });
       }
@@ -187,7 +187,7 @@ exp(
         }
       }
       await minioClient.putObject(MINIO_BUCKET_ID, fileName, data);
-      const filePath = `https://minioserver.nuttyshrimp.me/dg-image-storage/${data}.png`
+      const filePath = `https://minioserver.nuttyshrimp.me/dg-image-storage/${data}.png`;
 
       if (cb) {
         cb(null, filePath);

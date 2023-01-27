@@ -1,4 +1,4 @@
-import { EntityBlip } from '@dgx/client/classes/blip';
+import { EntityBlip } from '@dgx/client';
 // srvId to blipHandle
 const blips: Map<number, EntityBlip> = new Map();
 

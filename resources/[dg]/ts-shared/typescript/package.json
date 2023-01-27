@@ -20,6 +20,6 @@
   "devDependencies": {
     "@types/core-js": "^2.5.5",
     "@types/webpack-env": "^1.16.4",
-    "webpack": "^5.74.0"
+    "webpack": "*"
   }
 }

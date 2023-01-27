@@ -14,6 +14,9 @@
     "webpack:config": "webpack --config ./webpack.config.js"
   },
   "devDependencies": {
-    "webpack": "^5.74.0"
+    "@dgx/server": "*",
+    "@dgx/shared": "*",
+    "tsconfig": "*",
+    "webpack": "*"
   }
 }

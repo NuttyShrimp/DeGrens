@@ -26,6 +26,7 @@ Sentry.init({
   app,
   dsn: 'https://421dd5306b6d4f2abe6465a0dd8457ef@glitchtip.nuttyshrimp.me/3',
   integrations: [
+    // @ts-ignore
     new BrowserTracing({
       // @ts-ignore
       tracingOrigins: [`https://${GetParentResourceName()}`],

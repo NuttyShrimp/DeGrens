@@ -18,7 +18,11 @@
     "mysql2": "^2.3.3"
   },
   "devDependencies": {
+    "@dgx/client": "*",
+    "@dgx/server": "*",
+    "@dgx/shared": "*",
     "clean-webpack-plugin": "^4.0.0",
-    "webpack": "^5.74.0"
+    "tsconfig": "*",
+    "webpack": "*"
   }
 }

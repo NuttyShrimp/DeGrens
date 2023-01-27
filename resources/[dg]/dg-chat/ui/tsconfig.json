@@ -16,11 +16,15 @@
 		"importHelpers": true,
 		"skipLibCheck": true,
 		"allowSyntheticDefaultImports": true,
+    "isolatedModules": true,
 		"lib": [
 			"esnext",
 			"dom",
 			"dom.iterable"
 		],
+    "types": [
+      "node"
+    ],
 		"baseUrl": ".",
 		"paths": {
 			"@/*": [

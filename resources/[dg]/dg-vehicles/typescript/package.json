@@ -17,6 +17,10 @@
     "jsonschema": "^1.4.0"
   },
   "devDependencies": {
-    "webpack": "^5.66.0"
+    "@dgx/client": "*",
+    "@dgx/server": "*",
+    "@dgx/shared": "*",
+    "tsconfig": "*",
+    "webpack": "*"
   }
 }

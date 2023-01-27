@@ -1,3 +1,4 @@
+export * from './blip'
 import events from './events';
 import interaction from './interaction';
 import inventory from './inventory';

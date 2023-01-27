@@ -1,7 +1,7 @@
 import { Config, Events } from '@dgx/server';
 import { RPCRegister } from '@dgx/server/decorators';
 import { Util } from '@dgx/shared';
-import { Export, ExportRegister } from '@dgx/shared/decorators';
+import { Export, ExportRegister } from '@dgx/shared';
 import { mainLogger } from 'sv_logger';
 import winston from 'winston';
 

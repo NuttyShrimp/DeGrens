@@ -1,5 +1,5 @@
 import { Events, SQL, Util } from '@dgx/server';
-import { Export, ExportRegister } from '@dgx/shared/decorators';
+import { Export, ExportRegister } from '@dgx/shared';
 
 import vinManager from '../../identification/classes/vinmanager';
 import { fuelLogger } from '../logger.fuel';

@@ -15,6 +15,7 @@ if (!isDevel()) {
   Sentry.init({
     dsn: 'https://ecf541af25474c54917d8e2445317213@sentry.nuttyshrimp.me/10',
     integrations: [
+      // @ts-ignore
       new BrowserTracing({
         // @ts-ignore
         tracingOrigins: [`https://${GetParentResourceName()}`],

@@ -1,5 +1,4 @@
-import { Sync, Util } from '@dgx/client';
-import { EntityBlip } from '@dgx/client/classes/blip';
+import { Sync, Util, EntityBlip } from '@dgx/client';
 
 import { drawText3d } from '../modules/util/service.util';
 
