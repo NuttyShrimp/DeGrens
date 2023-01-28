@@ -22,7 +22,7 @@ export const loadVehicleInfo = () => {
     if (!isSchemaValid(data)) return;
     const info: Config.Car[] = JSON.parse(data);
     info.forEach(car => {
-      const hash = Util.getHash(car.model);
+      const hash = GetHashKey(car.model);
       vehicleInfo.set(hash, { ...car, hash });
     });
     validateDBStock();
@@ -38,7 +38,7 @@ export const getConfigByHash = (hash: number) => {
 };
 
 export const getConfigByModel = (model: string) => {
-  const modelHash = Util.getHash(model);
+  const modelHash = GetHashKey(model);
   return getConfigByHash(modelHash);
 };
 
@@ -88,7 +88,7 @@ const validateDBStock = async () => {
   // First we check if any model stock exists in db but the model does not exist in config, if so remove those from db
   const modelStockToDelete: string[] = [];
   modelStock.forEach((_, model) => {
-    if (vehicleInfo.has(Util.getHash(model))) return;
+    if (vehicleInfo.has(GetHashKey(model))) return;
     modelStockToDelete.push(model);
   });
   modelStockToDelete.forEach(model => {

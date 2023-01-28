@@ -93,7 +93,7 @@ const plantExplosive = async (stationId: number) => {
 };
 
 const placeExplosiveObject = async () => {
-  const modelHash = Util.getHash('prop_ld_bomb');
+  const modelHash = GetHashKey('prop_ld_bomb');
   RequestModel(modelHash);
   while (!HasModelLoaded(modelHash)) {
     await Util.Delay(10);

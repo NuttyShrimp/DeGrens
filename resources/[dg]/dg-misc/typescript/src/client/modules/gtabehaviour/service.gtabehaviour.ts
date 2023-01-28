@@ -77,8 +77,8 @@ export const setGTABehaviour = async () => {
   // RemoveVehiclesFromGeneratorsInArea(2781.76, -4470.42, -290.0, 3381.76, -4470.42, 315.26, 0); // Vliegdek schip
 
   // Suppress models
-  BLACKLISTED_PED_MODELS.forEach(m => SetPedModelIsSuppressed(Util.getHash(m), true));
-  BLACKLISTED_VEHICLE_MODELS.forEach(m => SetVehicleModelIsSuppressed(Util.getHash(m), true));
+  BLACKLISTED_PED_MODELS.forEach(m => SetPedModelIsSuppressed(GetHashKey(m), true));
+  BLACKLISTED_VEHICLE_MODELS.forEach(m => SetVehicleModelIsSuppressed(GetHashKey(m), true));
 
   // EVERY FRAME LOOP
   setInterval(() => {

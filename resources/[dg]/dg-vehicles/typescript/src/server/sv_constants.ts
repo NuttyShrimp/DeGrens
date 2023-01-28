@@ -1,3 +1,1 @@
-import { Util } from '@dgx/shared';
-
-export const CREATE_AUTOMOBILE = Util.getHash('CREATE_AUTOMOBILE');
+export const CREATE_AUTOMOBILE = GetHashKey('CREATE_AUTOMOBILE');

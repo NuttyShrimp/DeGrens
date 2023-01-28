@@ -1,4 +1,4 @@
-import { Events, PolyTarget, PolyZone, UI, Keys } from '@dgx/client';
+import { Events, Jobs, Notifications, PolyTarget, PolyZone, Taskbar, UI, Keys } from '@dgx/client';
 
 let atCheckin = false;
 export const setAtCheckin = (val: boolean) => {

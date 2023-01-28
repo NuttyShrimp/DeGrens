@@ -26,7 +26,7 @@ export const loadDoors = async () => {
 
         doorStates.set(doorId, doorConfig.locked);
         doors.set(doorId, {
-          model: Util.getHash(doorData.model),
+          model: GetHashKey(doorData.model),
           coords: doorData.coords,
           distance: doorConfig.distance ?? 2,
           authorized: doorConfig.authorized ?? [],

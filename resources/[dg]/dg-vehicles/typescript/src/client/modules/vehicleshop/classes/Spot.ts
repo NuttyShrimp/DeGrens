@@ -66,7 +66,7 @@ export class Spot {
       this.despawnVehicle();
     }
 
-    const hash = Util.getHash(modelToSpawn);
+    const hash = GetHashKey(modelToSpawn);
     await Util.loadModel(hash);
     if (!HasModelLoaded(hash)) {
       this.log(`Failed to load vehicle model ${modelToSpawn}`);

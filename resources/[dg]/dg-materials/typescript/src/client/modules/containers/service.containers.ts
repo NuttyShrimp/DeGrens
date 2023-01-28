@@ -3,7 +3,7 @@ import { Interiors, Notifications, Util, RPC, Taskbar, Events, PolyTarget, Peek 
 let containerProps: Materials.Containers.Prop<number>[];
 
 export const registerContainerProps = (props: Materials.Containers.Prop<string>[]) => {
-  containerProps = props.map(p => ({ ...p, model: Util.getHash(p.model) }));
+  containerProps = props.map(p => ({ ...p, model: GetHashKey(p.model) }));
 
   Peek.addModelEntry(
     containerProps.map(i => i.model),

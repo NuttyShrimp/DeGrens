@@ -11,7 +11,7 @@ export const loadStanceConfig = async () => {
 };
 
 export const getModelStanceData = (model: number) => {
-  return stanceConfig.filter(c => Util.getHash(c.model) === model);
+  return stanceConfig.filter(c => GetHashKey(c.model) === model);
 };
 
 export const setVehicleStance = (veh: number, stanceData: Stance.Data) => {

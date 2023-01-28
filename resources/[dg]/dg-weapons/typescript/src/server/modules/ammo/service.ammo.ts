@@ -20,7 +20,7 @@ export const getWeaponAmmo = (itemState: Inventory.ItemState) => {
 
 export const setWeaponAmmo = (plyId: number, itemState: Inventory.ItemState, amount: number) => {
   const ped = GetPlayerPed(String(plyId));
-  const weaponHash = Util.getHash(itemState.name);
+  const weaponHash = GetHashKey(itemState.name);
   SetPedAmmo(ped, weaponHash, amount);
   saveWeaponAmmo(plyId, itemState.id, amount);
 };

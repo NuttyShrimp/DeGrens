@@ -19,7 +19,7 @@ export const setDownConfig = (resConfig: typeof respawnTimeConfig, weapons: Hosp
   respawnTimeConfig = resConfig;
 
   for (const [name, data] of Object.entries(weapons)) {
-    damageTypesConfig[Util.getHash(name)] = { cause: name, type: data.downType };
+    damageTypesConfig[GetHashKey(name)] = { cause: name, type: data.downType };
   }
 };
 
@@ -71,8 +71,8 @@ export const checkDeathOnDamage = (originPed: number, weaponHash: number) => {
   // stupid edgecase...
   // we want ejections from vehicle to always be unconscious to improve gameplay
   // most of the time hash is 'WEAPON_RUN_OVER_BY_CAR' or 'WEAPON_RAMMED_BY_CAR' but can also 'WEAPON_FALL' in rare cases
-  if (weaponHash === Util.getHash('WEAPON_FALL') && global.exports['dg-vehicles'].justEjected()) {
-    weaponHash = Util.getHash('WEAPON_RAMMED_BY_CAR');
+  if (weaponHash === GetHashKey('WEAPON_FALL') && global.exports['dg-vehicles'].justEjected()) {
+    weaponHash = GetHashKey('WEAPON_RAMMED_BY_CAR');
   }
 
   const damageTypeData = damageTypesConfig[weaponHash] ?? { cause: 'UNKNOWN', type: 'unconscious' };

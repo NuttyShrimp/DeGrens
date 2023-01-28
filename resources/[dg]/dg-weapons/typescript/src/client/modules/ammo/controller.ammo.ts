@@ -1,4 +1,4 @@
-import { Events, Notifications, Taskbar, Util } from '@dgx/client';
+import { Events, Notifications, Taskbar } from '@dgx/client';
 import { getCurrentWeaponData } from 'modules/weapons/service.weapons';
 
 Events.onNet('weapons:client:useAmmo', async (ammoItemId: string, ammoType: string) => {
@@ -10,7 +10,7 @@ Events.onNet('weapons:client:useAmmo', async (ammoItemId: string, ammoType: stri
   const ped = PlayerPedId();
   const equippedWeapon = GetSelectedPedWeapon(ped);
   const requiredAmmoType = GetPedAmmoTypeFromWeapon_2(ped, equippedWeapon); // _2 version always gives base type
-  if (requiredAmmoType !== Util.getHash(ammoType)) {
+  if (requiredAmmoType !== GetHashKey(ammoType)) {
     Notifications.add('Dit past niet in je wapen', 'error');
     return;
   }

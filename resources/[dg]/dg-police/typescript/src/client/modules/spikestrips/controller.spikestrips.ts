@@ -10,7 +10,7 @@ Events.onNet('police:spikestrips:place', async () => {
   TaskPlayAnim(ped, 'anim@heists@narcotics@trash', 'drop_front', 8.0, 8.0, 800, 17, 1, false, false, false);
   await Util.Delay(500);
 
-  const modelHash = Util.getHash('p_ld_stinger_s');
+  const modelHash = GetHashKey('p_ld_stinger_s');
   await Util.loadModel(modelHash);
   const netIds: number[] = [];
 

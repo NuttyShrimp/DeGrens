@@ -1,4 +1,3 @@
-import { Util } from '@dgx/shared';
 import { BaseManager } from './baseManager';
 
 export class ModelManager extends BaseManager implements IEntryManager {
@@ -6,7 +5,7 @@ export class ModelManager extends BaseManager implements IEntryManager {
 
   addEntry(key: PeekValueType, info: Required<EntryAddParameter>): string[] {
     if (typeof key === 'string') {
-      key = Util.getHash(key);
+      key = GetHashKey(key);
     }
     if (!this.entries.has(key)) {
       this.entries.set(key, []);

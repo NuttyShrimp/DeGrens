@@ -44,7 +44,7 @@ export const doSpeedStress = () => {
 };
 
 const SKIPPED_WEAPONS = ['WEAPON_UNARMED', 'WEAPON_PETROLCAN', 'WEAPON_HAZARDCAN', 'WEAPON_FIREEXTINGUISHER'].map(w =>
-  Util.getHash(w)
+  GetHashKey(w)
 );
 
 export const doWeaponStress = () => {

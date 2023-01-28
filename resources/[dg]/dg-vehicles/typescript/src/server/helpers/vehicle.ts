@@ -52,7 +52,7 @@ export const spawnVehicle = async (
   }
 
   let veh: number;
-  const modelHash = Util.getHash(model);
+  const modelHash = GetHashKey(model);
   if (modelInfo.automobile) {
     // Cheeky little hack to get this func working
     veh = (Citizen as any).invokeNativeByHash(

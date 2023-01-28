@@ -13,7 +13,7 @@ Events.onNet('weapons:setWeapon', async (src: number, itemId: string) => {
   if (item.inventory !== Inventory.concatId('player', cid)) return; // Can happen if item gets removed during animation
   Events.emitNet('auth:anticheat:weaponDrawn', src);
 
-  const weaponHash = Util.getHash(item.name);
+  const weaponHash = GetHashKey(item.name);
   const ped = GetPlayerPed(String(src));
   const ammo = getWeaponAmmo(item);
   GiveWeaponToPed(ped, weaponHash, ammo, false, true);
@@ -32,7 +32,7 @@ Events.onNet('weapons:setWeapon', async (src: number, itemId: string) => {
 // Remove weapon from ped
 Events.onNet('weapons:removeWeapon', (src: number, itemId: string) => {
   const ped = GetPlayerPed(String(src));
-  const unarmedHash = Util.getHash('WEAPON_UNARMED');
+  const unarmedHash = GetHashKey('WEAPON_UNARMED');
   RemoveAllPedWeapons(ped, true);
   SetCurrentPedWeapon(ped, unarmedHash, true);
   setEquippedWeapon(src, unarmedHash);
@@ -79,13 +79,13 @@ Inventory.onInventoryUpdate(
 );
 
 on('playerJoining', () => {
-  setEquippedWeapon(source, Util.getHash('WEAPON_UNARMED'));
+  setEquippedWeapon(source, GetHashKey('WEAPON_UNARMED'));
 });
 
 on('onResourceStart', (resourceName: string) => {
   if (resourceName !== GetCurrentResourceName()) return;
   Util.getAllPlayers().forEach(plyId => {
-    setEquippedWeapon(plyId, Util.getHash('WEAPON_UNARMED'));
+    setEquippedWeapon(plyId, GetHashKey('WEAPON_UNARMED'));
   });
 });
 

@@ -41,7 +41,7 @@ export const lootTrolley = async (trolleyObject: number) => {
   await Util.requestEntityControl(trolleyObject);
   const animDict = 'anim@heists@ornate_bank@grab_cash';
   await Util.loadAnimDict(animDict);
-  const bagHash = Util.getHash('hei_p_m_bag_var22_arm_s');
+  const bagHash = GetHashKey('hei_p_m_bag_var22_arm_s');
   await Util.loadModel(bagHash);
 
   // animation intro
@@ -95,8 +95,8 @@ export const lootTrolley = async (trolleyObject: number) => {
     SetModelAsNoLongerNeeded(pickupHash);
 
     const startTime = GetGameTimer();
-    const appearEvent = Util.getHash('CASH_APPEAR');
-    const destroyEvent = Util.getHash('RELEASE_CASH_DESTROY');
+    const appearEvent = GetHashKey('CASH_APPEAR');
+    const destroyEvent = GetHashKey('RELEASE_CASH_DESTROY');
     while (GetGameTimer() - startTime < 36900) {
       await Util.Delay(1);
       DisableControlAction(0, 73, true); // disable taking cover to not ruin animation

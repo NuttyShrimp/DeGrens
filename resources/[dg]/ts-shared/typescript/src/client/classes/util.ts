@@ -84,11 +84,11 @@ class Util extends UtilShared {
    * Spawns ped that will attack all players
    */
   spawnAggressivePed = async (model: string, position: Vec3, heading: number) => {
-    const pedModel = this.getHash(model);
+    const pedModel = GetHashKey(model);
     await this.loadModel(pedModel);
     const ped = CreatePed(4, pedModel, position.x, position.y, position.z, heading, true, true);
     await this.awaitEntityExistence(ped);
-    SetPedRelationshipGroupHash(ped, this.getHash('ATTACK_ALL_PLAYERS'));
+    SetPedRelationshipGroupHash(ped, GetHashKey('ATTACK_ALL_PLAYERS'));
     SetPedDropsWeaponsWhenDead(ped, false);
     StopPedWeaponFiringWhenDropped(ped);
     RemoveAllPedWeapons(ped, false);

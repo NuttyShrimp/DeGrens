@@ -14,7 +14,7 @@ const bleedDamageTypes: Set<number> = new Set();
 export const loadBleedDamageTypes = (damageTypes: Hospital.Config['damagetypes']) => {
   for (const [name, data] of Object.entries(damageTypes)) {
     if (BLEED_DAMAGE_TYPES.includes(data.status)) {
-      bleedDamageTypes.add(Util.getHash(name));
+      bleedDamageTypes.add(GetHashKey(name));
     }
   }
 };
@@ -113,7 +113,7 @@ export const setHealth = (health: number, unconscious = false) => {
   let nativeAmount = 99 + processedAmount;
   if (nativeAmount >= 199) nativeAmount = 200;
   SetEntityHealth(ped, nativeAmount);
-  checkDeathOnDamage(0, unconscious ? Util.getHash('SCRIPT_WISE_UNCONSCIOUS') : Util.getHash('SCRIPT_WISE_DOWN'));
+  checkDeathOnDamage(0, unconscious ? GetHashKey('SCRIPT_WISE_UNCONSCIOUS') : GetHashKey('SCRIPT_WISE_DOWN'));
 };
 
 /**

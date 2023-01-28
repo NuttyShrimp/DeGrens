@@ -1,4 +1,4 @@
-import { Events, Notifications, RPC, Util } from '@dgx/server';
+import { Events, Notifications, RPC } from '@dgx/server';
 import { Inputs } from 'enums/inputs';
 
 declare interface ChangeModelData {
@@ -19,7 +19,7 @@ export const changeModel: CommandData = {
     }
 
     const plyId = data.Target?.serverId ?? caller.source;
-    const isValid = await RPC.execute<boolean>('admin:command:isValidPed', plyId, Util.getHash(data.model));
+    const isValid = await RPC.execute<boolean>('admin:command:isValidPed', plyId, GetHashKey(data.model));
     if (!isValid) {
       Notifications.add(caller.source, 'Model bestaat niet', 'error');
       return;

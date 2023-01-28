@@ -2,6 +2,7 @@ import { Events, Minigames, RPC, Util } from '@dgx/client';
 import { getCurrentLocation } from 'controllers/locations';
 import { spawnTrolleys } from 'services/trolleys/helpers.trolley';
 
+const hackActive = false;
 Events.onNet('heists:client:startHack', async (laptopName: Laptop.Name, location: Vec4) => {
   const plyPed = PlayerPedId();
   SetEntityHeading(plyPed, location.w);
@@ -10,7 +11,7 @@ Events.onNet('heists:client:startHack', async (laptopName: Laptop.Name, location
 
   const animDict = 'anim@heists@ornate_bank@hack';
   await Util.loadAnimDict(animDict);
-  const laptopHash = Util.getHash('hei_prop_hst_laptop');
+  const laptopHash = GetHashKey('hei_prop_hst_laptop');
   await Util.loadModel(laptopHash);
   const laptopObject = CreateObject(laptopHash, ...plyCoords, true, false, false);
   SetModelAsNoLongerNeeded(laptopHash);
