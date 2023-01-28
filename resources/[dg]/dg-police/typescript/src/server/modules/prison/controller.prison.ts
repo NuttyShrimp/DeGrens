@@ -164,7 +164,7 @@ Events.onNet('police:prison:enteredPrisonZone', (src: number, netId: number) => 
   const veh = NetworkGetEntityFromNetworkId(netId);
   if (!DoesEntityExist(veh)) return;
   if (GetVehicleType(veh) !== 'heli') return;
-  const whitelisted = getPoliceConfig().prison.whitelistedZoneVehicle.map(m => GetHashKey(m));
+  const whitelisted = getPoliceConfig().prison.whitelistedZoneVehicle.map(m => Util.getHash(m));
   const model = GetEntityModel(veh);
   if (whitelisted.includes(model)) return;
 

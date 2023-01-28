@@ -53,7 +53,7 @@ export const setCorrectZ = (obj: number, offsetZ: number) => {
 
 export const FloatTilSafe = async (model: string) => {
   let ped = PlayerPedId();
-  const objModel = GetHashKey(model);
+  const objModel = Util.getHash(model);
   RequestModel(objModel);
   Sync.setPlayerInvincible(true);
   FreezeEntityPosition(ped, true);

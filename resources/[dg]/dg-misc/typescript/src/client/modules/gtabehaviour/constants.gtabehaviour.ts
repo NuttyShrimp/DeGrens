@@ -1,4 +1,6 @@
-export const PLAYER_RELATIONSHIP_HASH = GetHashKey('PLAYER');
+import { Util } from '@dgx/shared';
+
+export const PLAYER_RELATIONSHIP_HASH = Util.getHash('PLAYER');
 
 export const RELATION_GROUPS = [
   'AMBIENT_GANG_HILLBILLY',
@@ -16,7 +18,7 @@ export const RELATION_GROUPS = [
   'MEDIC',
   'COP',
   'PRISONER',
-].map(i => GetHashKey(i));
+].map(i => Util.getHash(i));
 
 // https://docs.fivem.net/natives/?_0xEB47EC4E34FB7EE1
 export const BLACKLISTED_SCENARIO_TYPES = [
@@ -199,4 +201,4 @@ export const PICKUP_HASHES = [
   `PICKUP_WEAPON_SWITCHBLADE`,
   `PICKUP_WEAPON_VINTAGEPISTOL`,
   `PICKUP_WEAPON_WRENCH`,
-].map(x => GetHashKey(x));
+].map(x => Util.getHash(x));

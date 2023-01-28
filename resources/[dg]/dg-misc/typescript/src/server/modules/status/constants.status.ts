@@ -1,3 +1,5 @@
+import { Util } from '@dgx/server';
+
 // Weapons that dont register gsr
 export const BLOCKED_GSR_WEAPONS = new Set(
   [
@@ -21,5 +23,5 @@ export const BLOCKED_GSR_WEAPONS = new Set(
     'weapon_machete',
     'weapon_nightstick',
     'weapon_poolcue',
-  ].map(w => GetHashKey(w))
+  ].map(w => Util.getHash(w))
 );

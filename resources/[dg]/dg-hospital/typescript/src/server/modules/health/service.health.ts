@@ -1,3 +1,4 @@
+import { Util } from '@dgx/server';
 import { getHospitalConfig } from 'services/config';
 
 const APPLY_ON_DAMAGE = ['gsw', 'stabwound'];
@@ -11,7 +12,7 @@ export const loadOnDamageStatusses = () => {
 
   for (const [name, data] of weapons) {
     if (APPLY_ON_DAMAGE.includes(data.status)) {
-      const hash = GetHashKey(name) >>> 0;
+      const hash = Util.getHash(name);
       onDamageStatusses.set(hash, data.status);
     }
   }

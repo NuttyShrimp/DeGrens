@@ -9,7 +9,7 @@ if (GetCurrentResourceName() === 'ts-shared') {
     if (routingBucket == undefined) {
       routingBucket = GetPlayerRoutingBucket(String(src));
     }
-    const entity = CreateObject(GetHashKey(model), coords.x, coords.y, coords.z, true, false, false);
+    const entity = CreateObject(Util.getHash(model), coords.x, coords.y, coords.z, true, false, false);
     await Util.awaitCondition(() => DoesEntityExist(entity), 1000);
     if (!DoesEntityExist(entity)) return 0;
     SetEntityRoutingBucket(entity, routingBucket);

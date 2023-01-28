@@ -36,7 +36,7 @@ const handleAttachmentUsage = async (plyId: number, attachmentItem: Inventory.It
   }
 
   await Inventory.moveItemToInventory('stash', stashId, attachmentItem.id);
-  updateAttachments(plyId, GetHashKey(weaponItemState.name), Object.values(weaponConfig.attachments ?? {}), [
+  updateAttachments(plyId, Util.getHash(weaponItemState.name), Object.values(weaponConfig.attachments ?? {}), [
     ...components,
     newComponent,
   ]);

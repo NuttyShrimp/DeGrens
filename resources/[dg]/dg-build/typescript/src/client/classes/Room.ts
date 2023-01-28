@@ -249,7 +249,7 @@ export class Room {
 
     const buildingPos = objectSpawnCoords.add(mainPos);
 
-    const buildingHash = GetHashKey(this.plan.shell);
+    const buildingHash = Util.getHash(this.plan.shell);
     await Util.loadModel(this.plan.shell);
     this.buildingObj = CreateObject(buildingHash, buildingPos.x, buildingPos.y, buildingPos.z, false, false, false);
     setCorrectZ(this.buildingObj, objectSpawnCoords.z + mainPos.z);
@@ -262,7 +262,15 @@ export class Room {
         continue;
       }
       const worldCoords = new Vector3(objectSpawnCoords.x + v.x, objectSpawnCoords.y + v.y, objectSpawnCoords.z);
-      const intObj = CreateObject(GetHashKey(v.name), worldCoords.x, worldCoords.y, worldCoords.z, false, false, false);
+      const intObj = CreateObject(
+        Util.getHash(v.name),
+        worldCoords.x,
+        worldCoords.y,
+        worldCoords.z,
+        false,
+        false,
+        false
+      );
       setCorrectZ(intObj, objectSpawnCoords.z + v.z);
       SetEntityQuaternion(intObj, v.rx, v.ry, v.rz, v.rw * -1);
       FreezeEntityPosition(intObj, true);

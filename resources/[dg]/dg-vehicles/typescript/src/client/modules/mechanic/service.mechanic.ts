@@ -256,7 +256,7 @@ let jobVin: string | null = null;
 
 const getOffset = (veh: number) => {
   for (const model in modelOffsets) {
-    if (GetEntityModel(veh) == GetHashKey(model)) {
+    if (GetEntityModel(veh) == Util.getHash(model)) {
       return modelOffsets[model];
     }
   }

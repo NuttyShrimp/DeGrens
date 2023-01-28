@@ -29,7 +29,7 @@ export class Npc {
   constructor(npcData: NpcData) {
     this.data = npcData;
     if (typeof this.data.model === 'string') {
-      this.data.model = GetHashKey(this.data.model);
+      this.data.model = Util.getHash(this.data.model);
     }
 
     this.entity = null;

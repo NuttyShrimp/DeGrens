@@ -32,7 +32,7 @@ const createScaleform = async () => {
   ScaleformMovieMethodAddParamInt(1);
   const instructionalBtn = GetControlInstructionalButton(
     2,
-    GetHashKey('+keybind_wrapper__+closeDispatchCam') | 0x80000000,
+    Util.getHash('+keybind_wrapper__+closeDispatchCam') | 0x80000000,
     true
   );
   ScaleformMovieMethodAddParamPlayerNameString(instructionalBtn);

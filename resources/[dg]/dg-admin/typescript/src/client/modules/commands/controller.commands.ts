@@ -87,7 +87,7 @@ Events.onNet('admin:command:fadeIn', () => {
 RPC.register('admin:command:isValidPed', (hash: number) => IsModelAPed(hash));
 
 Events.onNet('admin:command:setModel', async (model: string) => {
-  const hash = GetHashKey(model);
+  const hash = Util.getHash(model);
   await Util.loadModel(hash);
 
   if (!HasModelLoaded(model)) {

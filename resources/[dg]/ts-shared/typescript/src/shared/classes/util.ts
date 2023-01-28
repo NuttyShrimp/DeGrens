@@ -167,4 +167,9 @@ export class Util {
     }
     return array;
   };
+
+  public getHash = (name: string) => {
+    const hash = GetHashKey(name);
+    return hash >>> 0;
+  };
 }

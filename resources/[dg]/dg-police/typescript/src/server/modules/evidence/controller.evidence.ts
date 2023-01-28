@@ -6,7 +6,7 @@ global.exports('addBulletCasings', (plyId: number, itemState: Inventory.ItemStat
   const vehicle = GetVehiclePedIsIn(GetPlayerPed(String(plyId)), false);
   const type = GetVehicleType(vehicle);
   if (vehicle !== 0 && type !== 'bike') return;
-  if (BLOCKED_CASINGS_WEAPONS.has(GetHashKey(itemState.name))) return;
+  if (BLOCKED_CASINGS_WEAPONS.has(Util.getHash(itemState.name))) return;
 
   shotFirePositions.forEach(pos => {
     addEvidence({ x: pos.x, y: pos.y, z: pos.z - 0.95 }, 'bullet', itemState.metadata.serialnumber);

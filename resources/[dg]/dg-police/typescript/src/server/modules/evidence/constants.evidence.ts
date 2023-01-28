@@ -1,3 +1,5 @@
+import { Util } from '@dgx/shared';
+
 export const BLOCKED_CASINGS_WEAPONS = new Set(
   [
     'weapon_unarmed',
@@ -21,5 +23,5 @@ export const BLOCKED_CASINGS_WEAPONS = new Set(
     'weapon_nightstick',
     'weapon_poolcue',
     'weapon_rpg',
-  ].map(w => GetHashKey(w))
+  ].map(w => Util.getHash(w))
 );

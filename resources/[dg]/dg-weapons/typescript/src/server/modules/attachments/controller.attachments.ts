@@ -53,7 +53,7 @@ Events.onNet('weapons:server:removeAttachment', async (src: number, weaponItemId
   await Inventory.moveItemToInventory('player', String(cid), attachmentItem.id);
 
   const components = await getEquippedComponents(weaponItemState.name, stashId);
-  updateAttachments(src, GetHashKey(weaponItemState.name), Object.values(weaponConfig.attachments ?? {}), components);
+  updateAttachments(src, Util.getHash(weaponItemState.name), Object.values(weaponConfig.attachments ?? {}), components);
 
   Util.Log(
     'weapons:attachment:remove',

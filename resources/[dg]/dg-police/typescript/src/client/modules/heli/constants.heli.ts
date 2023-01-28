@@ -1,4 +1,6 @@
-export const WHITELISTED_HELIS = ['frogger'].map(m => GetHashKey(m));
+import { Util } from '@dgx/shared';
+
+export const WHITELISTED_HELIS = ['frogger'].map(m => Util.getHash(m));
 
 export const MAX_FOV = 80.0;
 export const MIN_FOV = 3.0;
