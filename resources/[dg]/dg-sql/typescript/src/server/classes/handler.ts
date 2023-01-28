@@ -70,9 +70,9 @@ class Handler {
       return result;
     } catch (e) {
       mainLogger.error(
-        `[${resource}] ^1Error^7 while excuting query!\n${e.message}\nquery: ${query}\nvalues: ${JSON.stringify(
-          params
-        )}`
+        `[${resource}] ^1Error^7 while excuting query!\n${
+          (e as any).message
+        }\nquery: ${query}\nvalues: ${JSON.stringify(params)}`
       );
       Sentry.captureException(e);
     }

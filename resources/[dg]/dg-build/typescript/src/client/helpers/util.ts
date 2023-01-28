@@ -8,9 +8,12 @@ export const GetOffsets = (num: number, multi: number, multiplier: number) => {
     }
     return num;
   }
+  return 0;
 };
 
 export const OffsetsModulo = (vect: Vector3, pModulo: Buildplan['modulo'], multi: number) => {
+  if (!pModulo) return Vector3.create(0);
+
   let modulo = multi % pModulo.xLimit;
 
   const yOffset = Math.ceil(multi / pModulo.xLimit);
@@ -32,7 +35,7 @@ export const getGeneratorFromRoom = (plan: Buildplan, multi: number) => {
 
   if (plan.generator) {
     generator = new Vector3(plan.generator.x, plan.generator.y, plan.generator.z);
-    if (plan.offsetX) {
+    if (plan.offsetX && plan.offsetY && plan.offsetZ) {
       const x = GetOffsets(plan.offsetX.num, plan.offsetX.multi, multi);
       const y = GetOffsets(plan.offsetY.num, plan.offsetY.multi, multi);
       const z = GetOffsets(plan.offsetZ.num, plan.offsetZ.multi, multi);

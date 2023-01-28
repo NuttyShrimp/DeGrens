@@ -17,9 +17,9 @@ declare namespace Shared {
 
   interface Command {
     name: string;
-    description?: string;
+    description: string;
     parameters: Parameter[];
-    permissionLevel?: string;
+    permissionLevel: string;
   }
 
   interface Message {

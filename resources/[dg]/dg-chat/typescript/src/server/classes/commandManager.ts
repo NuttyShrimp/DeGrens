@@ -1,12 +1,12 @@
 import { Admin, Events, Util } from '@dgx/server';
-import { DGXEvent, Event, EventListener, Export, ExportRegister, LocalEvent } from '@dgx/server/decorators';
+import { DGXEvent, EventListener, Export, ExportRegister, LocalEvent } from '@dgx/server/decorators';
 import { handleCommandExecution } from 'helpers/commands';
 
 @ExportRegister()
 @EventListener()
 class CommandManager extends Util.Singleton<CommandManager>() {
   private commands: Map<string, Server.Command>;
-  private refreshTimeout: NodeJS.Timeout;
+  private refreshTimeout: NodeJS.Timeout | null = null;
 
   constructor() {
     super();
@@ -47,6 +47,7 @@ class CommandManager extends Util.Singleton<CommandManager>() {
   ) {
     if (this.refreshTimeout) {
       clearTimeout(this.refreshTimeout);
+      this.refreshTimeout = null;
     }
     parameters.reduce((wasReq, val) => {
       if (!wasReq && val.required) {

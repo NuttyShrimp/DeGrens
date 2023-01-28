@@ -5,22 +5,26 @@ import { canSearchLocation, enterHouse, leaveHouse, lockHouse, searchLootLocatio
 
 let shellTypes: Record<string, string>;
 
-let selectedHouse: string = null;
-let selectedHouseInfo: House.Data = null;
+let selectedHouse: string | null = null;
+let selectedHouseInfo: House.Data | null = null;
 let radiusBlip: any = null;
-let radiusBlipInterval: NodeJS.Timer = null;
+let radiusBlipInterval: NodeJS.Timer | null = null;
 
 export const getShellTypes = () => shellTypes;
 export const getSelectedHouse = () => selectedHouse;
 export const getSelectedHouseInfo = () => selectedHouseInfo;
 
-global.asyncExports('canLootZone', (place: string) => canSearchLocation(selectedHouse, place));
-global.asyncExports('lootZone', (place: string, lootTable?: number) =>
-  searchLootLocation(selectedHouse, place, lootTable)
-);
+global.asyncExports('canLootZone', (place: string) => {
+  if (!selectedHouse) return false;
+  return canSearchLocation(selectedHouse, place);
+});
+global.exports('lootZone', (place: string, lootTable?: number) => {
+  if (!selectedHouse) return;
+  searchLootLocation(selectedHouse, place, lootTable);
+});
 
 on('__dg_auth_authenticated', async () => {
-  shellTypes = await RPC.execute('houserobbery:server:getShellTypes');
+  shellTypes = (await RPC.execute('houserobbery:server:getShellTypes'))!;
 });
 
 on('dg-houserobbery:leave', () => {
@@ -32,7 +36,10 @@ onNet('houserobbery:client:cleanup', () => {
   selectedHouse = null;
   selectedHouseInfo = null;
   PolyTarget.removeZone('houserobbery_door');
-  clearInterval(radiusBlipInterval);
+  if (radiusBlipInterval) {
+    clearInterval(radiusBlipInterval);
+    radiusBlipInterval = null;
+  }
   RemoveBlip(radiusBlip);
 });
 
@@ -137,7 +144,10 @@ Events.onNet('houserobbery:client:setSelectedHouse', (houseId: string, houseInfo
 
   radiusBlipInterval = setInterval(() => {
     if (blipAlpha == 0) {
-      clearInterval(radiusBlipInterval);
+      if (radiusBlipInterval) {
+        clearInterval(radiusBlipInterval);
+        radiusBlipInterval = null;
+      }
       RemoveBlip(radiusBlip);
       selectedHouse = null;
       return;

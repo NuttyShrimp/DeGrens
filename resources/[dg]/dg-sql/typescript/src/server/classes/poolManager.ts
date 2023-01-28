@@ -12,7 +12,7 @@ class PoolManager {
   }
 
   private connectionConfig: Record<string, string>;
-  private pool: Pool;
+  private pool: Pool | null = null;
 
   constructor() {
     this.connectionConfig = connectionOptions;
@@ -40,7 +40,7 @@ class PoolManager {
       mainLogger.info('Database connection established');
       emit('sql:onReady');
     } catch (error) {
-      mainLogger.error(`SQL Pool Error [${error.code}]:\n${error.message}`);
+      mainLogger.error(`SQL Pool Error [${(error as any).code}]:\n${(error as any).message}`);
     }
   };
 
@@ -53,7 +53,7 @@ class PoolManager {
     if (!this.pool) {
       this.createPool();
     }
-    return this.pool;
+    return this.pool!;
   }
 }
 

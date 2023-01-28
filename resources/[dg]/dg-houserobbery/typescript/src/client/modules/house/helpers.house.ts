@@ -64,7 +64,8 @@ export const lockHouse = async (houseId: number) => {
 
 export const canSearchLocation = async (houseId: string, zoneName: string): Promise<boolean> => {
   if (zoneName == undefined) return false;
-  return RPC.execute('houserobbery:server:canLootZone', houseId, zoneName);
+  const canLoot = await RPC.execute('houserobbery:server:canLootZone', houseId, zoneName);
+  return canLoot ?? false;
 };
 
 export const searchLootLocation = async (houseId: string, zoneName: string, lootTableId = 0) => {

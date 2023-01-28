@@ -1,7 +1,10 @@
-let hideTimeout: NodeJS.Timeout = null;
+let hideTimeout: NodeJS.Timeout | null = null;
 
 export const openChat = () => {
-  clearTimeout(hideTimeout);
+  if (hideTimeout) {
+    clearTimeout(hideTimeout);
+    hideTimeout = null;
+  }
   // Open chat + input
   SendNUIMessage({
     action: 'setInputVisibility',
@@ -29,7 +32,10 @@ export const closeChat = () => {
 };
 
 export const forceClose = () => {
-  clearTimeout(hideTimeout);
+  if (hideTimeout) {
+    clearTimeout(hideTimeout);
+    hideTimeout = null;
+  }
   SetNuiFocus(false, false);
   SendNUIMessage({
     action: 'setInputVisibility',
@@ -43,7 +49,10 @@ export const forceClose = () => {
 
 export const peekChat = () => {
   // Open chat
-  clearTimeout(hideTimeout);
+  if (hideTimeout) {
+    clearTimeout(hideTimeout);
+    hideTimeout = null;
+  }
   SendNUIMessage({
     action: 'setMsgVisibility',
     data: true,

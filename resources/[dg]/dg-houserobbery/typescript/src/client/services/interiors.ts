@@ -8,7 +8,7 @@ export const enterInterior = async () => {
   DoScreenFadeOut(500);
   await Util.Delay(500);
 
-  const { size, coords } = getSelectedHouseInfo();
+  const { size, coords } = getSelectedHouseInfo()!;
   const isSuccess = await Interiors.createRoom(getShellTypes()[size], {
     ...coords,
     z: coords.z - 50,

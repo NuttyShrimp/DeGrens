@@ -9,9 +9,9 @@ export class Room {
   planName: string;
   position: number | Vec3;
   cachedObjects: number[] = [];
-  buildingObj: number;
-  startingPos: Vector3;
-  roomOrigin: Vector3;
+  buildingObj: number = 0;
+  startingPos: Vector3 | null = null;
+  roomOrigin: Vector3 = Vector3.create(0);
   peekZoneIds: string[] = [];
   peekIds: Record<Peek.EntryType, string[]> = {
     model: [],
@@ -80,25 +80,25 @@ export class Room {
     this.plan.interactZone.forEach(i => {
       let label = '';
 
-      ['GeneralUse', 'housingMain', 'housingSecondary'].forEach(
-        (key: keyof Omit<InteractionZone, 'dist' | 'offset' | 'name'>) => {
-          if (!i[key]) return;
-          if (!this.keyHandlers.has(key)) {
-            this.keyHandlers.set(key, []);
-          }
-          label += `[${Keys.getBindedKey(`+${key}`)}] - ${i[key].label} | `;
-          this.keyHandlers.get(key).push(
-            Keys.onPressDown(key, () => {
-              if (!i[key] || this.activeZones.findIndex(z => z === i.name) === -1) return;
-              if (i[key].isServer) {
-                emitNet(i[key].event);
-                return;
-              }
-              emit(i[key].event);
-            })
-          );
+      (
+        ['GeneralUse', 'housingMain', 'housingSecondary'] as (keyof Omit<InteractionZone, 'dist' | 'offset' | 'name'>)[]
+      ).forEach(key => {
+        if (!i[key]) return;
+        if (!this.keyHandlers.has(key)) {
+          this.keyHandlers.set(key, []);
         }
-      );
+        label += `[${Keys.getBindedKey(`+${key}`)}] - ${i[key]!.label} | `;
+        this.keyHandlers.get(key)!.push(
+          Keys.onPressDown(key, () => {
+            if (!i[key] || this.activeZones.findIndex(z => z === i.name) === -1) return;
+            if (i[key]!.isServer) {
+              emitNet(i[key]!.event);
+              return;
+            }
+            emit(i[key]!.event);
+          })
+        );
+      });
       label = label.replace(/( \| ?)$/, '');
 
       PolyZone.addCircleZone(`${this.planName}_interact_${i.name}`, this.roomOrigin.add(i.offset), i.dist, {
@@ -136,8 +136,8 @@ export class Room {
       } else {
         const options = {
           ...i.options,
-          minZ: i.options.minZ + this.roomOrigin.z,
-          maxZ: i.options.maxZ + this.roomOrigin.z,
+          minZ: i.options.minZ! + this.roomOrigin.z,
+          maxZ: i.options.maxZ! + this.roomOrigin.z,
         };
         // Box targetZone
         PolyTarget.addBoxZone(zoneName, this.roomOrigin.add(i.offset), i.width, i.length, options, true);
@@ -200,7 +200,7 @@ export class Room {
     this.dryVolHandle = null;
   }
 
-  async createRoom(): Promise<[Coords, number[]]> {
+  async createRoom(): Promise<[Coords, number[]] | null> {
     const ped = PlayerPedId();
     this.startingPos = Util.ArrayToVector3(GetEntityCoords(ped, true));
     FreezeEntityPosition(ped, true);
@@ -216,7 +216,7 @@ export class Room {
 
     switch (typeof this.position) {
       case 'number': {
-        objectSpawnCoords = getGeneratorFromRoom(this.plan, this.position);
+        objectSpawnCoords = getGeneratorFromRoom(this.plan, this.position)!;
         break;
       }
       default: {
@@ -296,7 +296,7 @@ export class Room {
       return [objectSpawnCoords, this.cachedObjects];
     }
     this.exit();
-    return undefined;
+    return null;
   }
 
   exit(overridePos?: Coords) {
@@ -317,16 +317,19 @@ export class Room {
       SetEntityCoords(PlayerPedId(), overridePos.x, overridePos.y, overridePos.z, true, false, false, false);
       return;
     }
-    SetEntityCoords(
-      PlayerPedId(),
-      this.startingPos.x,
-      this.startingPos.y,
-      this.startingPos.z,
-      true,
-      false,
-      false,
-      false
-    );
+    if (this.startingPos) {
+      SetEntityCoords(
+        PlayerPedId(),
+        this.startingPos.x,
+        this.startingPos.y,
+        this.startingPos.z,
+        true,
+        false,
+        false,
+        false
+      );
+      this.startingPos = null;
+    }
     DoScreenFadeIn(250);
   }
 }

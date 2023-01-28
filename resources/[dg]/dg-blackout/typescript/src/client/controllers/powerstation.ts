@@ -1,8 +1,8 @@
 import { Events, Inventory, Notifications, PolyZone, RPC, Taskbar, Util } from '@dgx/client';
 
 let powerStations: PowerstationData[] = [];
-let currentStation: number = null;
-let explosiveObject: number;
+let currentStation: number | null = null;
+let explosiveObject: number | null = null;
 let placingExplosive = false;
 
 PolyZone.onEnter<{ id: number }>('blackout_powerstation', (name: string, data: { id: number }) => {

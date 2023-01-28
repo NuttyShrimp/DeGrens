@@ -27,7 +27,7 @@ Events.onNet('chat:incomingMessage', (source: number, msg: string) => {
   emit('chatMessage', source, GetPlayerName(String(source)), msg);
   msg = msg.replace(/^\//, '');
   const args = msg.split(' ');
-  const cmd = args.shift();
+  const cmd = args.shift()!;
   Util.Log(
     'chat:message',
     {

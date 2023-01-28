@@ -4,11 +4,11 @@ import { StatsThread } from './classes/StatsThread';
 let allowed: string[] = [];
 
 // threads
-let allowedSync: NodeJS.Timeout;
-let heartbeat: NodeJS.Timeout;
+let allowedSync: NodeJS.Timeout | null = null;
+let heartbeat: NodeJS.Timeout | null = null;
 let antiTP: NodeJS.Timer;
-let weapons: NodeJS.Timeout;
-let pedMods: NodeJS.Timeout;
+let weapons: NodeJS.Timeout | null = null;
+let pedMods: NodeJS.Timeout | null = null;
 let statsThread: StatsThread;
 
 export const scheduleHeartBeat = () => {
@@ -20,6 +20,7 @@ export const scheduleHeartBeat = () => {
 };
 
 export const stopHeartBeat = () => {
+  if (heartbeat === null) return;
   clearTimeout(heartbeat);
   heartbeat = null;
 };

@@ -14,10 +14,11 @@ export const addOldSuggestion = (
     description: help,
   }));
   cmdName = cmdName.replace(/^\//, '');
-  const suggestion = {
+  const suggestion: Shared.Command = {
     name: cmdName,
     description,
     parameters: newParams,
+    permissionLevel: 'user',
   };
   oldSuggestions.add(suggestion);
   SendNUIMessage({
@@ -38,7 +39,7 @@ export const addOldMessage = (data: {
     prefix: '',
     type: 'normal',
     message: data.template.replace(/{(\d+)}/g, (match, number) => {
-      return data.args[number] ?? match;
+      return (data.args ?? [])[number] ?? match;
     }),
   };
   peekChat();

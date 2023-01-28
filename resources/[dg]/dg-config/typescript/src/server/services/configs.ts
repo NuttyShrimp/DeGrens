@@ -73,16 +73,16 @@ export const getConfigValue = (path: string): any => {
   if (!configsLoaded) return;
   const steps = path.split('.');
   const moduleId = steps.shift();
-  if (!configs.has(moduleId)) {
+  if (!moduleId || !configs.has(moduleId)) {
     mainLogger.warn(
       `${GetInvokingResource()} tried to access a invalid module: ${moduleId} via following path: ${path}`
     );
     return null;
   }
-  let currentValue = configs.get(moduleId);
+  let currentValue = configs.get(moduleId)!;
   while (steps.length !== 0) {
     const key = steps.shift();
-    if (currentValue?.[key] === undefined) {
+    if (!key || !(key in currentValue)) {
       mainLogger.error(`${key} is an invalid key in the ${moduleId} module, path: ${path}`);
       break;
     }

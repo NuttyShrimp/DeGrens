@@ -1,5 +1,6 @@
 import { Admin, Config, Events, RPC, SQL, Sync, Util, Weapons } from '@dgx/server';
 import { mainLogger } from '../../sv_logger';
+import { ALWAYS_ALLOWED_WEAPONS } from './constants.anticheat';
 
 let blockedWeaponHashes: number[] = [];
 let config: AntiCheat.Config;
@@ -14,13 +15,10 @@ const workingShotQueues: Set<string> = new Set();
 const queuedHits: Record<string, AntiCheat.EntityDamage[]> = {};
 const workingHitQueues: Set<string> = new Set();
 
-// Unarmed and the weaponhash whenever a scenario is active are always allowed
-const ALWAYS_ALLOWED_WEAPONS = new Set([GetHashKey('WEAPON_UNARMED'), 966099553]);
-
 export const loadConfig = async () => {
   await Config.awaitConfigLoad();
   config = Config.getModuleConfig<AntiCheat.Config>('anticheat');
-  blockedWeaponHashes = config.blockedModels.map(GetHashKey);
+  blockedWeaponHashes = config.blockedModels.map(m => Util.getHash(m));
 };
 
 // region Heartbeat
@@ -207,7 +205,7 @@ const travereseAmmo = (ammo: number[]) => {
 
 const pushShotQueue = async (steamId: string) => {
   while (queuedShots?.[steamId].length) {
-    let entry = queuedShots[steamId].shift();
+    let entry = queuedShots[steamId].shift()!;
     const records = await SQL.query<{ shots: number }[]>('SELECT shots FROM user_kill_stats WHERE steamid = ?', [
       steamId,
     ]);
@@ -237,7 +235,7 @@ export const queueHit = (killInfo: AntiCheat.EntityDamage) => {
 
 const pushHitQueue = async (steamId: string) => {
   while (queuedHits?.[steamId].length) {
-    const entry = queuedHits[steamId].shift();
+    const entry = queuedHits[steamId].shift()!;
     await registerHit(steamId, entry);
   }
   workingHitQueues.delete(steamId);

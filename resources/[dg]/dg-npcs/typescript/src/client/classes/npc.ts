@@ -1,9 +1,9 @@
 import { Util } from '@dgx/client';
 
 export class Npc {
-  private _data: NpcData;
-  private _entity: number;
-  private _enabled: boolean;
+  private _data!: NpcData;
+  private _entity!: number | null;
+  private _enabled!: boolean;
 
   // #region Getters/Setters
   get data() {
@@ -15,13 +15,13 @@ export class Npc {
   get entity() {
     return this._entity;
   }
-  private set entity(value: number) {
+  private set entity(value: typeof this._entity) {
     this._entity = value;
   }
   get enabled() {
     return this._enabled;
   }
-  set enabled(value: boolean) {
+  set enabled(value: typeof this._enabled) {
     this._enabled = value;
   }
   // #endregion
@@ -78,7 +78,7 @@ export class Npc {
     await Util.awaitEntityExistence(this.entity);
 
     this.data.flags.forEach(flag => {
-      const entState = Entity(this.entity)?.state;
+      const entState = Entity(this.entity ?? 0)?.state;
       if (!entState) return;
       entState.set(flag.name, flag.active, false);
     });
@@ -96,6 +96,7 @@ export class Npc {
     }
 
     const alphaThread = setInterval(() => {
+      if (!this.entity) return;
       const currentAlpha = GetEntityAlpha(this.entity);
       if (currentAlpha === 255) {
         clearInterval(alphaThread);
@@ -106,6 +107,7 @@ export class Npc {
   }
 
   private setSetting(setting: Settings.Setting) {
+    if (!this.entity) return;
     switch (setting.type) {
       case 'invincible':
         SetEntityInvincible(this.entity, setting.active);
@@ -131,6 +133,7 @@ export class Npc {
     }
 
     const alphaThread = setInterval(() => {
+      if (!this.entity) return;
       const currentAlpha = GetEntityAlpha(this.entity);
       if (currentAlpha === 0) {
         clearInterval(alphaThread);

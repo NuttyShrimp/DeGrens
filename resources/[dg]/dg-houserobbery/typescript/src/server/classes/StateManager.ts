@@ -7,7 +7,7 @@ import { HouseState, PlayerState } from '../enums/states';
 @RPCRegister()
 @EventListener()
 class StateManager extends Util.Singleton<StateManager>() {
-  private config: Config;
+  private config!: Config;
   playerStates: Map<number, PlayerState> = new Map();
   // The prevent players from logging out and back in when in a job
   private plyInCd: Set<number> = new Set();
@@ -73,7 +73,7 @@ class StateManager extends Util.Singleton<StateManager>() {
       return false;
     }
     const Player = DGCore.Functions.GetPlayer(src);
-    if (!Player) return;
+    if (!Player) return false;
     if (Jobs.getCurrentJob(src) === 'police') return true;
     const jobGroup = Jobs.getGroupByServerId(src);
     if (!jobGroup) {

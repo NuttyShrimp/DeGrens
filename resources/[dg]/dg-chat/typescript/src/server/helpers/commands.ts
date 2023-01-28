@@ -114,6 +114,7 @@ const baseCommands: Server.Command[] = [
     name: 'chat:restart',
     description: 'herstart je chat',
     parameters: [],
+    permissionLevel: 'user',
     handler: src => {
       Events.emitNet('chat:restart', src);
     },
@@ -122,6 +123,7 @@ const baseCommands: Server.Command[] = [
     name: 'id',
     description: 'Bezie je Server-ID',
     parameters: [],
+    permissionLevel: 'user',
     handler: src => {
       sendMessage(src, {
         message: String(src),
@@ -140,8 +142,10 @@ setImmediate(() => {
 
 export const handleCommandExecution = (source: number, cmd: string, args: string[]) => {
   const cmdInfo = commandManager.getCommandInfo(cmd);
-  if (!cmdInfo && source > 0) {
-    Events.emitNet('executeLocalCmd', source, [cmd, args].join(' '));
+  if (!cmdInfo) {
+    if (source > 0) {
+      Events.emitNet('executeLocalCmd', source, [cmd, args].join(' '));
+    }
     return;
   }
   if (source > 0 && !Admin.hasPermission(source, cmdInfo.permissionLevel)) return;

@@ -30,11 +30,11 @@ export class RoomManager extends Util.Singleton<RoomManager>() {
         ? { x: overridePos[0], y: overridePos[1], z: overridePos[2] }
         : overridePos;
       this.currentRoom.exit(pos);
-      this.currentRoom = undefined;
+      this.currentRoom = null;
       return;
     }
     this.currentRoom.exit();
-    this.currentRoom = undefined;
+    this.currentRoom = null;
   }
 
   isInBuilding() {
