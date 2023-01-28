@@ -38,7 +38,7 @@ const Component: AppFunction = props => {
       setRefreshDrag(refreshDrag + 1);
       syncItem(item);
     },
-    [visible]
+    [visible, syncItem]
   );
 
   const fetchInventoryData = async () => {

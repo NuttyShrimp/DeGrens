@@ -40,32 +40,23 @@ export const useInventory = () => {
       updateItem(item);
       nuiAction('inventory/moveItem', { id: itemId, inventory: inventoryId, position });
     },
-    [items, updateItem]
+    [items]
   );
 
   const syncItem = useCallback(
     (pItem: Inventory.Item) => {
-      const item = { ...items[pItem.id] };
+      const isInVisibleInventory = pItem.inventory === primaryId || pItem.inventory === secondaryId;
+      const itemExists = pItem.id in items;
 
-      // Check if item to be synced already exists
-      if (item) {
-        // if the syncing items new position is not in primary or secondary inv, we need to remove it
-        // else we update its position
-        if (primaryId !== pItem.inventory && secondaryId !== pItem.inventory) {
-          deleteItem(pItem.id);
-          return;
-        } else {
-          item.inventory = pItem.inventory;
-          item.position = pItem.position;
-          updateItem(item);
-        }
-      } else {
-        // if the syncing item is not in primary or secondary inv, we dont need to add it at all
-        if (primaryId !== pItem.inventory && secondaryId !== pItem.inventory) return;
+      // If syncing item is in a visible inventory, update it
+      // If syncing item is not in a visible inventory but still exists for us, delete it
+      if (isInVisibleInventory) {
         updateItem(pItem);
+      } else if (itemExists) {
+        deleteItem(pItem.id);
       }
     },
-    [primaryId, secondaryId, updateItem, items]
+    [primaryId, secondaryId, items]
   );
 
   const isUseable = useCallback(
@@ -82,7 +73,7 @@ export const useInventory = () => {
       updateItem(item);
       nuiAction('inventory/unbindItem', { id: itemId });
     },
-    [items, updateItem]
+    [items]
   );
 
   /**
@@ -112,7 +103,7 @@ export const useInventory = () => {
       nuiAction('inventory/bindItem', { id: itemId, key });
       return { message: `Je hebt dit item gebind aan '${key}'`, type: 'success' };
     },
-    [items, updateItem, isUseable]
+    [items, isUseable]
   );
 
   /**

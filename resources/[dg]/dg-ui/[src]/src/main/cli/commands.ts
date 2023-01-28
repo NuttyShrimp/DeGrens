@@ -249,7 +249,21 @@ export const cmds: {
   {
     cmd: 'inventory update',
     app: 'inventory',
-    data: {},
+    data: {
+      id: 'microwave_000002',
+      inventory: 'player__1001',
+      position: { x: 1, y: 2 },
+      size: { x: 4, y: 1 },
+      name: 'microwave',
+      label: 'test',
+      quality: 69,
+      image: 'weapon_nightstick.png',
+      description: 'Een apparaat om je identiteit geheim te houden terwijl je verbonden bent met een netwerk!',
+      useable: true,
+      closeOnUse: false,
+      markedForSeizure: true,
+      metadata: {},
+    },
   },
   {
     cmd: 'itembox $1 $2',
