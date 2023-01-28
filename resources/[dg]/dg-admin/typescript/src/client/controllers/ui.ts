@@ -157,47 +157,47 @@ RegisterUICallback('openCoordsSelector', async (_, cb) => {
   });
 
   UI.showInteraction('Enter to select');
-  let selectedCoords: Vec3 | null = null;
 
-  const tick = setTick(() => {
-    const coords = RayCast.getLastHitCoord();
-    if (coords) {
-      const plyCoords = Util.getPlyCoords();
-      DrawLine(plyCoords.x, plyCoords.y, plyCoords.z, coords.x, coords.y, coords.z, 0, 0, 255, 255);
-      DrawMarker(
-        28,
-        coords.x,
-        coords.y,
-        coords.z,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0.05,
-        0.05,
-        0.05,
-        0,
-        0,
-        255,
-        255,
-        false,
-        true,
-        2,
-        false,
-        null,
-        null,
-        false
-      );
-      if (IsControlJustPressed(0, 18)) {
-        selectedCoords = coords;
+  const selectedCoords = await new Promise<Vec3>(res => {
+    const thread = setInterval(() => {
+      const coords = RayCast.getLastHitCoord();
+      if (coords) {
+        const plyCoords = Util.getPlyCoords();
+        DrawLine(plyCoords.x, plyCoords.y, plyCoords.z, coords.x, coords.y, coords.z, 0, 0, 255, 255);
+        DrawMarker(
+          28,
+          coords.x,
+          coords.y,
+          coords.z,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0.05,
+          0.05,
+          0.05,
+          0,
+          0,
+          255,
+          255,
+          false,
+          true,
+          2,
+          false,
+          //@ts-ignore
+          null,
+          null,
+          false
+        );
+        if (IsControlJustPressed(0, 18)) {
+          clearInterval(thread);
+          res(coords);
+        }
       }
-    }
+    });
   });
-
-  await Util.awaitCondition(() => selectedCoords !== null);
-  clearTick(tick);
 
   const data = {
     x: Util.round(selectedCoords.x, 4),

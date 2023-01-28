@@ -13,22 +13,22 @@ export const getIdentifierForPlayer = (source: number, identifier: string) => {
 
 export const getUserData = (src: number): UserData => {
   return {
-    steamId: getIdentifierForPlayer(src, 'steam'),
+    steamId: getIdentifierForPlayer(src, 'steam')!,
     source: src,
     name: GetPlayerName(String(src)),
     cid: Util.getCID(src, true),
   };
 };
 
-export const getServerIdForSteamId = (steamId: string): number | null => {
+export const getServerIdForSteamId = (steamId: string) => {
   const playerCount = GetNumPlayerIndices();
   for (let i = 0; i < playerCount; i++) {
     const srvId = Number(GetPlayerFromIndex(i));
-    if (getIdentifierForPlayer(srvId, "steam") === steamId) {
+    if (getIdentifierForPlayer(srvId, 'steam') === steamId) {
       return srvId;
     }
   }
-}
+};
 
 export const getPlayerForSteamId = (steamId: string): UserData | null => {
   const ply = Object.values(DGCore.Functions.GetQBPlayers()).find((ply: Player) => ply.PlayerData.steamid === steamId);

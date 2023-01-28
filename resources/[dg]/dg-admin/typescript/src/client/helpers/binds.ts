@@ -4,7 +4,7 @@ import { isDevModeEnabled } from './devmode';
 
 const bindNames: Binds.bindNames[] = ['bind-1', 'bind-2', 'bind-3'];
 
-export const assignBind = (bind: Binds.bindNames, cmd: string) => {
+export const assignBind = (bind: Binds.bindNames, cmd: string | null) => {
   Storage.setValue(`admin:binds:${bind}`, cmd);
 };
 

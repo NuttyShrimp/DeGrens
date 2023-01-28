@@ -54,10 +54,13 @@ const testSettings = async () => {
 };
 
 export const getPlayerDiscordRoles = async (src: number): Promise<string[]> => {
-  const discordId = getIdentifierForPlayer(src, 'discord').replace('discord:', '');
+  const identifier = getIdentifierForPlayer(src, 'discord');
+  if (!identifier) return [];
+  const discordId = identifier.replace('discord:', '');
   if (!discordId) return [];
   const endpoint = `guilds/${config.guildId}/members/${discordId}`;
   const member = await discordRequest('GET', endpoint);
+  if (!member) return [];
   return member.status !== 200 ? [] : member.data.roles;
 };
 

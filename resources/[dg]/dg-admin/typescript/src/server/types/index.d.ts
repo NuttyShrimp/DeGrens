@@ -29,7 +29,7 @@ declare interface CommandData {
   // If handler should run on client
   isClientCommand: boolean;
   handler: (caller: UserData, args?: any) => void;
-  UI?: Omit<UI.Entry, 'name'>;
+  UI: Omit<UI.Entry, 'name'>;
 }
 
 declare interface DiscordConfig {

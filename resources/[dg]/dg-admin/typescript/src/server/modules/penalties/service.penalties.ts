@@ -14,6 +14,7 @@ const penalisePlayer = async (
   data?: Record<string, any>
 ) => {
   const targetSrvId = getServerIdForSteamId(target);
+  const targetName = targetSrvId ? Util.getName(targetSrvId) : String(targetSrvId);
   const metadata = {
     reason: reasons.join(' | '),
     points: points ?? 0,
@@ -35,11 +36,11 @@ const penalisePlayer = async (
         ...data,
         ...metadata,
       },
-      `Failed to register ${type} for ${Util.getName(targetSrvId)}(${target})`,
+      `Failed to register ${type} for ${targetName}(${target})`,
       source !== -1 ? source : undefined
     );
     penaltyLogger.error(
-      `Failed to register ${type} for ${Util.getName(targetSrvId)}(${target}) given by ${
+      `Failed to register ${type} for ${targetName}(${target}) given by ${
         source !== -1 ? Util.getName(source) : 'AntiCheat'
       } | ${Object.values(metadata)
         .map((k, v) => `${k}: ${v}`)
@@ -47,7 +48,7 @@ const penalisePlayer = async (
     );
     Chat.sendMessage('admin', {
       type: 'error',
-      message: `Failed to register ${type} for ${Util.getName(targetSrvId)}(${target})`,
+      message: `Failed to register ${type} for ${targetName}(${target})`,
       prefix: 'Admin: ',
     });
     return;
@@ -59,11 +60,11 @@ const penalisePlayer = async (
       ...data,
       ...metadata,
     },
-    `${Util.getName(targetSrvId)}(${target}) received a ${type} for ${reasons.join(' | ')}`,
+    `${targetName}(${target}) received a ${type} for ${reasons.join(' | ')}`,
     source !== -1 ? source : undefined
   );
   penaltyLogger.info(
-    `${Util.getName(targetSrvId)}(${target}) received a ${type} by ${Util.getName(
+    `${targetName}(${target}) received a ${type} by ${Util.getName(
       source !== -1 ? Util.getName(source) : 'AntiCheat'
     )} | ${Object.entries(metadata)
       .map(([k, v]) => `${k}: ${v}`)
@@ -71,7 +72,7 @@ const penalisePlayer = async (
   );
   Chat.sendMessage('admin', {
     type: 'system',
-    message: `${Util.getName(targetSrvId)}(${target}) received a ${type} for ${reasons.join(
+    message: `${targetName}(${target}) received a ${type} for ${reasons.join(
       ' | '
     )} (${points} points | ${length} days)`,
     prefix: 'Admin: ',
@@ -94,7 +95,7 @@ export const banPlayer = async (
   data?: Record<string, any>
 ) => {
   if (typeof target === 'number' || !target.startsWith('steam')) {
-    target = getIdentifierForPlayer(Number(target), 'steam');
+    target = getIdentifierForPlayer(Number(target), 'steam')!;
   }
   await penalisePlayer('ban', source, target, reasons, points, length, data);
   dropBySteamId(target, `Banned for: ${reasons.join(' | ')}`);
@@ -102,7 +103,7 @@ export const banPlayer = async (
 
 export const kickPlayer = async (source: number, target: string | number, reasons: string[], points: number) => {
   if (typeof target === 'number') {
-    target = getIdentifierForPlayer(target, 'steam');
+    target = getIdentifierForPlayer(target, 'steam')!;
   }
   await penalisePlayer('kick', source, target, reasons, points);
   dropBySteamId(target, `Kicked for: ${reasons.join(' | ')}`);
@@ -110,7 +111,7 @@ export const kickPlayer = async (source: number, target: string | number, reason
 
 export const warnPlayer = async (source: number, target: string | number, reasons: string[]) => {
   if (typeof target === 'number') {
-    target = getIdentifierForPlayer(target, 'steam');
+    target = getIdentifierForPlayer(target, 'steam')!;
   }
   await penalisePlayer('warn', source, target, reasons);
   const targetData = getPlayerForSteamId(target);

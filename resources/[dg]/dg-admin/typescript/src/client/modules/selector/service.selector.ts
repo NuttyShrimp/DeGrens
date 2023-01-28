@@ -5,11 +5,11 @@ import { drawText3d } from '../util/service.util';
 import { isDevModeEnabled } from 'helpers/devmode';
 
 let isActive = false;
-let selectorTick: number;
-let selectorRayInterval: NodeJS.Timer;
+let selectorInterval: NodeJS.Timer | null = null;
+let selectorRayInterval: NodeJS.Timer | null = null;
 
-export let selectedEntity: number;
-export let selectedEntityType: number;
+export let selectedEntity: number | null = null;
+export let selectedEntityType: number | null = null;
 
 const showEntityInfo = () => {
   if (!selectedEntity) return;
@@ -44,18 +44,19 @@ const showEntityInfo = () => {
       true,
       2,
       false,
+      //@ts-ignore
       undefined,
       undefined,
       false
     );
-  } else if ([2, 3].includes(selectedEntityType)) {
+  } else if (selectedEntityType && [2, 3].includes(selectedEntityType)) {
     drawText3d(
       `~r~(${GetEntityHealth(selectedEntity)}/${GetEntityMaxHealth(selectedEntity)})`,
       Vector3.add(selectedEntityCoords, new Vector3(0, 0, 1.4)),
       0.5
     );
   }
-  if ([1, 2, 3].includes(selectedEntityType)) {
+  if (selectedEntityType && [1, 2, 3].includes(selectedEntityType)) {
     drawText3d(
       `~q~${selectedEntity} ~o~${GetEntityArchetypeName(selectedEntity)} ~g~${selectedEntityCoords.x.toFixed(
         2
@@ -74,8 +75,11 @@ export const activateSelector = async () => {
   Weapons.showReticle(true);
   selectorRayInterval = setInterval(() => {
     if (!isActive) {
-      clearInterval(selectorRayInterval);
-      selectorRayInterval = undefined;
+      if (selectorRayInterval) {
+        clearInterval(selectorRayInterval);
+        selectorRayInterval = null;
+      }
+      return;
     }
     const { entity } = RayCast.doRaycast(100);
     handleRayCastChange(entity);
@@ -86,7 +90,7 @@ export const stopSelector = () => {
   isActive = false;
   if (selectorRayInterval) {
     clearInterval(selectorRayInterval);
-    selectorRayInterval = undefined;
+    selectorRayInterval = null;
   }
   Weapons.showReticle(false);
 };
@@ -96,13 +100,13 @@ export const handleRayCastChange = (entity?: number) => {
   if (selectedEntity && selectedEntityType !== 1) {
     SetEntityDrawOutline(selectedEntity, false);
   }
-  if (selectorTick) {
-    clearTick(selectorTick);
-    selectorTick = undefined;
+  if (selectorInterval) {
+    clearInterval(selectorInterval);
+    selectorInterval = null;
   }
   if (!entity) {
-    selectedEntity = undefined;
-    selectedEntityType = undefined;
+    selectedEntity = null;
+    selectedEntityType = null;
     return;
   }
   const entityType = GetEntityType(entity);
@@ -112,17 +116,22 @@ export const handleRayCastChange = (entity?: number) => {
   }
   selectedEntity = entity;
   selectedEntityType = entityType;
-  selectorTick = setTick(() => {
+  selectorInterval = setInterval(() => {
     if (!selectedEntity) {
-      clearTick(selectorTick);
-      selectorTick = undefined;
+      if (selectorInterval) {
+        clearInterval(selectorInterval);
+        selectorInterval = null;
+      }
       return;
     }
     showEntityInfo();
-  });
+  }, 1);
 };
 
 const GetEntityName = () => {
+  if (!selectedEntity) {
+    return 'UNKNOWN';
+  }
   if (selectedEntityType === 1 && IsPedAPlayer(selectedEntity)) {
     return GetPlayerName(NetworkGetPlayerIndexFromPed(selectedEntity));
   }
