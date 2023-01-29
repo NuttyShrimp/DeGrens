@@ -1,3 +1,4 @@
+import { Keys } from '@dgx/client';
 import { entryManager } from '../classes/entryManager';
 
 const addExports = {
@@ -35,4 +36,4 @@ global.exports('removeEntry', (type: PeekEntryType, id: string | string[]) => {
   return entryManager.removeEntry(type, id);
 });
 
-global.exports['dg-lib'].registerKeyMapping('playerPeek', 'Open peek eye', '+playerPeek', '-playerPeek', 'LMENU', true);
+Keys.register('playerPeek', '(peek) oog openen', 'LMENU');
