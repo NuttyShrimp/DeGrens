@@ -19,7 +19,7 @@ export const setDownConfig = (resConfig: typeof respawnTimeConfig, weapons: Hosp
   respawnTimeConfig = resConfig;
 
   for (const [name, data] of Object.entries(weapons)) {
-    damageTypesConfig[GetHashKey(name)] = { cause: name, type: data.downType };
+    damageTypesConfig[GetHashKey(name) >>> 0] = { cause: name, type: data.downType };
   }
 };
 
@@ -74,6 +74,7 @@ export const checkDeathOnDamage = (originPed: number, weaponHash: number) => {
   if (weaponHash === GetHashKey('WEAPON_FALL') && global.exports['dg-vehicles'].justEjected()) {
     weaponHash = GetHashKey('WEAPON_RAMMED_BY_CAR');
   }
+  weaponHash = weaponHash >>> 0;
 
   const damageTypeData = damageTypesConfig[weaponHash] ?? { cause: 'UNKNOWN', type: 'unconscious' };
 

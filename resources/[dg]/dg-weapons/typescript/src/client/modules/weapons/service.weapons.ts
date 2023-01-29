@@ -54,7 +54,7 @@ export const startWeaponThread = () => {
     SetPedCanSwitchWeapon(ped, false);
     DisplayAmmoThisFrame(true);
 
-    const weapon = GetSelectedPedWeapon(ped);
+    const weapon = GetSelectedPedWeapon(ped) >>> 0;
     if (weapon !== currentWeaponData.hash) return; // Can happen with big weapons in vehicles
 
     const ammoInWeapon = Number(GetAmmoInPedWeapon(ped, weapon));

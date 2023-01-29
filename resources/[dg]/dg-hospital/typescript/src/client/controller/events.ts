@@ -59,6 +59,7 @@ on('entityDamaged', (victim: number, originPed: number, weaponHash: number) => {
   const ped = PlayerPedId();
   if (ped !== victim) return;
 
+  weaponHash = weaponHash >>> 0;
   checkDeathOnDamage(originPed, weaponHash);
   processDamage(weaponHash);
 });

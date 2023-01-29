@@ -18,7 +18,7 @@ const workingHitQueues: Set<string> = new Set();
 export const loadConfig = async () => {
   await Config.awaitConfigLoad();
   config = Config.getModuleConfig<AntiCheat.Config>('anticheat');
-  blockedWeaponHashes = config.blockedModels.map(m => Util.getHash(m));
+  blockedWeaponHashes = config.blockedModels.map(m => GetHashKey(m) >>> 0);
 };
 
 // region Heartbeat
@@ -76,7 +76,7 @@ export const validateWeaponInfo = (src: number, info: AntiCheat.WeaponInfo) => {
   const hasAlwaysAllowedWeapon = ALWAYS_ALLOWED_WEAPONS.has(info.weapon);
 
   const ped = GetPlayerPed(String(src));
-  const pedAttachedWeapon = GetSelectedPedWeapon(ped);
+  const pedAttachedWeapon = GetSelectedPedWeapon(ped) >>> 0;
   if (!hasAlwaysAllowedWeapon && pedAttachedWeapon != info.weapon) {
     Admin.ACBan(src, 'Weapon mismatch (native)', {
       attachedWeapon: pedAttachedWeapon,

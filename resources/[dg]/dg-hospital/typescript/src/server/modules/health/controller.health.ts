@@ -38,7 +38,7 @@ export const registerHealItems = () => {
 
 // Handle on damage statusses and blood drops
 on('weaponDamageEvent', (sender: number, data: WeaponDamageEventData) => {
-  const status = getOnDamageStatusFromWeapon(data.weaponType);
+  const status = getOnDamageStatusFromWeapon(data.weaponType >>> 0);
   if (!status) return;
 
   const targets = data.hitGlobalIds;

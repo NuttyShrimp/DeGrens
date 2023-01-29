@@ -1,4 +1,4 @@
-import { Events, HUD, Util } from '@dgx/client';
+import { HUD, Util } from '@dgx/client';
 import { checkDeathOnDamage } from 'modules/down/service.down';
 import { BLEED_DAMAGE_TYPES, BONES } from './constants.health';
 import { applyScreenBlur } from './helpers.health';
@@ -14,7 +14,7 @@ const bleedDamageTypes: Set<number> = new Set();
 export const loadBleedDamageTypes = (damageTypes: Hospital.Config['damagetypes']) => {
   for (const [name, data] of Object.entries(damageTypes)) {
     if (BLEED_DAMAGE_TYPES.includes(data.status)) {
-      bleedDamageTypes.add(GetHashKey(name));
+      bleedDamageTypes.add(GetHashKey(name) >>> 0);
     }
   }
 };
@@ -113,7 +113,9 @@ export const setHealth = (health: number, unconscious = false) => {
   let nativeAmount = 99 + processedAmount;
   if (nativeAmount >= 199) nativeAmount = 200;
   SetEntityHealth(ped, nativeAmount);
-  checkDeathOnDamage(0, unconscious ? GetHashKey('SCRIPT_WISE_UNCONSCIOUS') : GetHashKey('SCRIPT_WISE_DOWN'));
+
+  const deadHash = unconscious ? GetHashKey('SCRIPT_WISE_UNCONSCIOUS') : GetHashKey('SCRIPT_WISE_DOWN');
+  checkDeathOnDamage(0, deadHash >>> 0);
 };
 
 /**

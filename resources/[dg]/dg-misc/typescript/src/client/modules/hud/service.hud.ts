@@ -43,14 +43,14 @@ export const doSpeedStress = () => {
   }
 };
 
-const SKIPPED_WEAPONS = ['WEAPON_UNARMED', 'WEAPON_PETROLCAN', 'WEAPON_HAZARDCAN', 'WEAPON_FIREEXTINGUISHER'].map(w =>
-  GetHashKey(w)
+const SKIPPED_WEAPONS = ['WEAPON_UNARMED', 'WEAPON_PETROLCAN', 'WEAPON_HAZARDCAN', 'WEAPON_FIREEXTINGUISHER'].map(
+  w => GetHashKey(w) >>> 0
 );
 
 export const doWeaponStress = () => {
   if (!config) return;
   const ped = PlayerPedId();
-  const pedWeapon = GetSelectedPedWeapon(ped);
+  const pedWeapon = GetSelectedPedWeapon(ped) >>> 0;
   if (
     IsPedShooting(ped) &&
     !SKIPPED_WEAPONS.includes(pedWeapon) &&

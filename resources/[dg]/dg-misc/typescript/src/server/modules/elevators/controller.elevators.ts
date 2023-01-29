@@ -1,4 +1,4 @@
-import { Auth, Config, Events, RPC } from '@dgx/server';
+import { Auth, Config, Events } from '@dgx/server';
 
 on('dg-config:moduleLoaded', (moduleName: string, elevators: Elevators.Config) => {
   if (moduleName !== 'elevators') return;

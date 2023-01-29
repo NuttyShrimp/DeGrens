@@ -47,7 +47,7 @@ const findBuyer = async () => {
     !buyer ||
     IsPedInAnyVehicle(buyer, true) ||
     IsPedDeadOrDying(buyer, true) ||
-    BLACKLISTED_PED_MODELS.has(GetEntityModel(buyer))
+    BLACKLISTED_PED_MODELS.has(GetEntityModel(buyer) >>> 0)
   ) {
     findBuyer();
     return;

@@ -9,8 +9,8 @@ Events.onNet('weapons:client:useAmmo', async (ammoItemId: string, ammoType: stri
 
   const ped = PlayerPedId();
   const equippedWeapon = GetSelectedPedWeapon(ped);
-  const requiredAmmoType = GetPedAmmoTypeFromWeapon_2(ped, equippedWeapon); // _2 version always gives base type
-  if (requiredAmmoType !== GetHashKey(ammoType)) {
+  const requiredAmmoType = GetPedAmmoTypeFromWeapon_2(ped, equippedWeapon) >>> 0; // _2 version always gives base type
+  if (requiredAmmoType !== GetHashKey(ammoType) >>> 0) {
     Notifications.add('Dit past niet in je wapen', 'error');
     return;
   }

@@ -19,7 +19,7 @@ export const getEquippedWeapon = (src: number) => {
       true
     );
     mainLogger.error(`${Util.getName(src)} did not have a weapon registered to him (Should default to unarmed)`);
-    weaponHash = GetHashKey('WEAPON_UNARMED');
+    weaponHash = GetHashKey('WEAPON_UNARMED') >>> 0;
     setEquippedWeapon(src, weaponHash);
   }
   return weaponHash;
@@ -34,7 +34,7 @@ export const registerUseableWeapons = () => {
 
     const weaponData: Weapons.WeaponItem = {
       ...itemState,
-      hash: GetHashKey(itemState.name),
+      hash: GetHashKey(itemState.name) >>> 0,
       oneTimeUse: weaponConfig.oneTimeUse ?? false,
       noHolstering: weaponConfig.noHolstering ?? false,
       canTint: weaponConfig.canTint ?? false,

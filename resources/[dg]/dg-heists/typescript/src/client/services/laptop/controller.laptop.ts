@@ -2,7 +2,6 @@ import { Events, Minigames, RPC, Util } from '@dgx/client';
 import { getCurrentLocation } from 'controllers/locations';
 import { spawnTrolleys } from 'services/trolleys/helpers.trolley';
 
-const hackActive = false;
 Events.onNet('heists:client:startHack', async (laptopName: Laptop.Name, location: Vec4) => {
   const plyPed = PlayerPedId();
   SetEntityHeading(plyPed, location.w);

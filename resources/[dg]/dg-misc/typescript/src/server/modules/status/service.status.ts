@@ -1,4 +1,4 @@
-import { Chat, Config, Notifications, Util } from '@dgx/server';
+import { Config, Notifications, Util } from '@dgx/server';
 import { statusLogger } from './logger.status';
 
 const statusData = new Map<Status.Name, Status.ConfigData>();

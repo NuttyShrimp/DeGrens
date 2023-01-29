@@ -3,7 +3,7 @@ import { BLACKLISTED_MODELS } from '../constants';
 import { dispatchHudConfigToPlayer } from 'modules/hud/service.hud';
 
 const checkEntityBlacklisted = (entity: number) => {
-  const model = GetEntityModel(entity);
+  const model = GetEntityModel(entity) >>> 0;
   if (BLACKLISTED_MODELS.has(model)) {
     CancelEvent();
   }

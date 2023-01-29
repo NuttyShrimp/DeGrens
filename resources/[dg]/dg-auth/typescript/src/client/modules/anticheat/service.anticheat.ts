@@ -28,7 +28,7 @@ export const stopHeartBeat = () => {
 // region collectors
 export const getWeaponInfo = (): AntiCheat.WeaponInfo => {
   const ped = PlayerPedId();
-  const equippedWeapon = GetSelectedPedWeapon(ped);
+  const equippedWeapon = GetSelectedPedWeapon(ped) >>> 0;
   const weaponAmmoType = GetPedAmmoTypeFromWeapon(ped, equippedWeapon);
   const ammoInWeapon = GetPedAmmoByType(ped, weaponAmmoType);
   return {

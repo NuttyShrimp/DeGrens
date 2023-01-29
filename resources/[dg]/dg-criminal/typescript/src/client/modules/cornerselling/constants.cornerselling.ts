@@ -32,5 +32,5 @@ export const BLACKLISTED_PED_MODELS = new Set(
     'a_c_shepherd',
     'a_c_stingray',
     'a_c_westy',
-  ].map(m => GetHashKey(m))
+  ].map(m => GetHashKey(m) >>> 0)
 );

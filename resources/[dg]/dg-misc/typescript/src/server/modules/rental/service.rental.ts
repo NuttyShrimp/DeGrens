@@ -1,4 +1,4 @@
-import { Admin, Config, Events, Financials, Inventory, Notifications, Phone, UI, Util, Vehicles } from '@dgx/server';
+import { Admin, Config, Financials, Inventory, Notifications, Phone, UI, Util, Vehicles } from '@dgx/server';
 
 import { rentalLogger } from './logger.rental';
 
