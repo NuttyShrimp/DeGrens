@@ -6,6 +6,7 @@ export const useDispatchStore = create<Dispatch.State & Dispatch.StateActions>('
   calls: isDevel() ? devData.dispatchCalls : [],
   storeSize: 20,
   cams: isDevel() ? devData.dispatchCams : [],
+  hasCursor: false, // used to determine passive/interactive apptype
   addCall: c => set(s => ({ calls: [c, ...s.calls].slice(0, s.storeSize) })),
   addCalls: calls =>
     set(s => ({
@@ -16,5 +17,9 @@ export const useDispatchStore = create<Dispatch.State & Dispatch.StateActions>('
   setCams: cams =>
     set(() => ({
       cams,
+    })),
+  setHasCursor: hasCursor =>
+    set(() => ({
+      hasCursor,
     })),
 }));

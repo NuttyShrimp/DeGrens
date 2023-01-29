@@ -24,19 +24,21 @@ export const useApps = () => {
   }, []);
 
   const getApp = useCallback(
-    (name: keyof RootState): ConfigObject | undefined => apps.find(a => a.name === name),
+    (name: keyof RootState): ConfigObject => {
+      const app = apps.find(a => a.name === name);
+      if (!app) {
+        throw new Error(`No config found for ${name}`);
+      }
+      return app;
+    },
     [apps]
   );
 
   const getCurrentAppType = useCallback(() => {
     const activeApp = apps.find(a => a.name !== 'cli' && a.name === currentApp);
     if (!activeApp) return;
-
-    if (activeApp.type instanceof Function) {
-      return activeApp.type();
-    }
-
-    return activeApp.type;
+    const appType = activeApp.type instanceof Function ? activeApp.type() : activeApp.type;
+    return appType;
   }, [apps, currentApp]);
 
   return {

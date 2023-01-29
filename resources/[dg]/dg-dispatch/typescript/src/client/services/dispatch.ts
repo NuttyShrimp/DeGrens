@@ -22,6 +22,7 @@ export const flashNewCalls = () => {
     'dispatch',
     {
       onlyNew: true,
+      hasCursor: false,
     },
     true
   );

@@ -12,17 +12,19 @@ const Component: AppFunction = props => {
   const [newIds, setNewIds] = useState<string[]>([]);
   const [onlyNew, setOnlyNew] = useState(false);
   const [showCamera, setShowCamera] = useState(false);
-  const [addStoreCall, addStoreCalls, setStoreCalls, setStoreCams] = useDispatchStore(s => [
+  const [addStoreCall, addStoreCalls, setStoreCalls, setStoreCams, setHasCursor] = useDispatchStore(s => [
     s.addCall,
     s.addCalls,
     s.setCalls,
     s.setCams,
+    s.setHasCursor,
   ]);
 
-  const onShow = useCallback((data: { onlyNew?: boolean; showCamera?: boolean }) => {
+  const onShow = useCallback((data: { onlyNew?: boolean; showCamera?: boolean; hasCursor: boolean }) => {
     props.showApp();
     setOnlyNew(data?.onlyNew ?? false);
     setShowCamera(data?.showCamera ?? false);
+    setHasCursor(data.hasCursor);
   }, []);
 
   const onHide = useCallback(() => {
@@ -30,6 +32,7 @@ const Component: AppFunction = props => {
     setNewIds([]);
     setOnlyNew(false);
     setShowCamera(false);
+    setHasCursor(false);
   }, [props]);
 
   const addCall = useCallback(

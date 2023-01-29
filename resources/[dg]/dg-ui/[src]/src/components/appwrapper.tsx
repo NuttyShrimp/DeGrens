@@ -109,10 +109,13 @@ export default function AppWrapper(props: AppWrapperProps) {
 
   const hideApp = useCallback<AppWrapperProps['onHide']>(
     (data?: any) => {
+      // cache apptype before hadnling onhide of funciton incase it changes dynamic type whgich would cause focus not getting removed
+      const appType = appInfo.type instanceof Function ? appInfo.type() : appInfo.type;
       onHide.current(data);
+
       nuiAction('dg-ui:applicationClosed', {
-        app: appInfo?.name,
-        type: appInfo?.type,
+        app: appInfo.name,
+        type: appType,
       });
     },
     [appInfo]
@@ -123,13 +126,8 @@ export default function AppWrapper(props: AppWrapperProps) {
       onShow.current(data?.data);
 
       // Check apptype to set focus
-      if (!appInfo?.type || !data?.shouldFocus) return;
-      let appType: string;
-      if (appInfo?.type instanceof Function) {
-        appType = appInfo.type();
-      } else {
-        appType = appInfo.type;
-      }
+      if (!data?.shouldFocus) return;
+      const appType = appInfo.type instanceof Function ? appInfo.type() : appInfo.type;
       if (appType === 'interactive') {
         nuiAction('__appwrapper:setfocus');
       }
@@ -188,7 +186,8 @@ export default function AppWrapper(props: AppWrapperProps) {
   };
 
   const handleActiveApp: any = () => {
-    if (appInfo?.type === 'passive') return;
+    const appType = appInfo.type instanceof Function ? appInfo.type() : appInfo.type;
+    if (appType === 'passive') return;
     if (active) return;
     setCurrentApp(props.appName);
   };
@@ -223,12 +222,6 @@ export default function AppWrapper(props: AppWrapperProps) {
     if (isActiveApp === active) return;
     setActive(isActiveApp);
   }, [currentApp]);
-
-  useEffect(() => {
-    if (!appInfo) {
-      throw new Error(`No config found for ${props.appName}`);
-    }
-  }, [appInfo]);
 
   useEffect(() => {
     addHandler(props.appName, eventHandler);

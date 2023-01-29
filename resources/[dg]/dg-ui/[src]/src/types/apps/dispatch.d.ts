@@ -25,6 +25,7 @@ declare namespace Dispatch {
     calls: Call[];
     storeSize: number;
     cams: Cam[];
+    hasCursor: boolean;
   }
 
   interface StateActions {
@@ -32,5 +33,6 @@ declare namespace Dispatch {
     addCalls: (calls: Call[]) => void;
     setCalls: (calls: Call[]) => void;
     setCams: (cams: Cam[]) => void;
+    setHasCursor: (hasCursor: boolean) => void;
   }
 }

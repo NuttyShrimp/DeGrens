@@ -25,6 +25,7 @@ Keys.onPressDown('openDispatch', () => {
     'dispatch',
     {
       showCamera: Keys.isModPressed() && currentJob === 'police',
+      hasCursor: Keys.isModPressed(), // used to determine passive/interactive apptype
     },
     !Keys.isModPressed()
   );
