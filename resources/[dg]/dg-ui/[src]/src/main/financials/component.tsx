@@ -9,6 +9,7 @@ import { useFinancialsStore } from './stores/useFinancialsStore';
 import config from './_config';
 
 import './styles/financials.scss';
+import { flushSync } from 'react-dom';
 
 const Component: AppFunction = props => {
   const [updateStore, resetStore, modalComponent, selected, transactions, openLoadModal] = useFinancialsStore(s => [
@@ -21,20 +22,19 @@ const Component: AppFunction = props => {
   ]);
   const handleShow = useCallback(
     (data: Financials.BaseInfo) => {
-      props.showApp();
+      flushSync(() => props.showApp());
       updateStore({
         openPane: true,
         ...data,
       });
       setTimeout(() => {
         fetchAccounts();
-      }, 500);
+      }, 400);
     },
     [updateStore]
   );
 
   const handleHide = useCallback(() => {
-    props.hideApp();
     updateStore({
       openPane: false,
       // Clear these otherwise we got a strange effect with those list not closing
@@ -42,6 +42,7 @@ const Component: AppFunction = props => {
       transactions: [],
     });
     setTimeout(() => {
+      props.hideApp();
       resetStore();
     }, 500);
   }, [updateStore]);
