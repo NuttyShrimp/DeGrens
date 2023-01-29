@@ -29,6 +29,7 @@
       cursor: pointer;
       background-color: rgba(variables.$primary_darker_darker, 0.75);
       color: white;
+      transition: border .1s ease-in-out;
 
       &:not(:last-child) {
         border-bottom: 0.1vh solid rgba(variables.$gray_light, 0.5);
@@ -36,6 +37,7 @@
 
       &:hover {
         background-color: variables.$primary_darker_darker;
+        border-bottom: .2vh solid white;
       }
 
       &.disabled {

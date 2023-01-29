@@ -32,6 +32,7 @@ export const Paper: FC<React.PropsWithChildren<Paper.Props>> = props => {
         imgOnly ? 'imgonly' : '',
         showExtDescription ? 'extended' : '',
         props.actions ? 'keepBackground' : '',
+        'bordered-div',
       ].join(' ')}
       ref={rootRef}
       onMouseEnter={() => setShowActions(true)}

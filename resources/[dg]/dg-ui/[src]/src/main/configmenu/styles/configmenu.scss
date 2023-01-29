@@ -24,16 +24,10 @@
 
     &-btn {
       padding: .75vh;
-      background-color: variables.$primary_darker_dark;
       border-right: .2vh solid #c8c8c8;
       cursor: pointer;
-
       &.active {
         background-color: variables.$primary_darker_normal;
-      }
-
-      &:hover {
-        background-color: variables.$primary_normal;
       }
 
       &:first-child {

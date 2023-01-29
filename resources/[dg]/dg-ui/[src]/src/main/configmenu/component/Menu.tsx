@@ -31,9 +31,11 @@ const NavBar = () => {
         {MENUS.map(m => (
           <div
             key={m}
-            className={['configmenu-navbar-btn', activeMenu.toLowerCase() === m.toLowerCase() ? 'active' : ''].join(
-              ' '
-            )}
+            className={[
+              'configmenu-navbar-btn',
+              'fillable-div',
+              activeMenu.toLowerCase() === m.toLowerCase() ? 'active' : '',
+            ].join(' ')}
             onClick={() => changeMenu(m)}
           >
             {m.toUpperCase()}

@@ -37,7 +37,7 @@ const Account: FC<
 
   return (
     <div
-      className={`account ${props.selected ? 'selected' : ''}`}
+      className={`account bordered-div ${props.selected ? 'selected' : ''}`}
       onClick={() => props.setActiveAccount(props.account)}
     >
       <div className='account__body'>

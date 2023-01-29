@@ -1,3 +1,5 @@
+@use "./variables.scss";
+
 @keyframes checkmark-stroke {
   100% {
     stroke-dashoffset: 0;
@@ -55,4 +57,89 @@
   100% {
     background-color: #F8BB86;
   }
+}
+
+.fillable-div {
+  background-image: linear-gradient(variables.$primary_normal, variables.$primary_normal);
+  background-repeat: no-repeat;
+  background-position: 50% 100%;
+  background-size: 100% 0%;
+  transition: background-size .5s;
+
+  &:hover {
+    background-size: 100% 100%;
+  }
+}
+
+/* https://codepen.io/cobra_winfrey/pen/mdJeqZb */
+@mixin magic-border($width, $color, $duration, $direction){
+  position:relative;
+    &:before{
+      content:'';
+      position:absolute;
+      width:calc(100%);
+      height:calc(100% + #{$width});
+      top:0;
+      left:0;
+      background:linear-gradient(to right, $color 0%, $color 100%), linear-gradient(to top, $color 50%, transparent 50%), linear-gradient(to top, $color 50%, transparent 50%), linear-gradient(to right, $color 0%, $color 100%), linear-gradient(to left, $color 0%, $color 100%);
+      background-size:100% $width, $width 200%, $width 200%, 0% $width, 0% $width;
+      background-position:50% 100%, 0% 0%, 100% 0%, 100% 0%, 0% 0%;
+      background-repeat:no-repeat, no-repeat;
+      transition:transform $duration ease-in-out, background-position $duration ease-in-out, background-size $duration ease-in-out;
+      transform:scaleX(0) rotate(180deg * $direction);
+      transition-delay:$duration*2, $duration, 0s;
+      border-radius: .3vh;
+    }
+    &:hover{
+      &:before{
+        background-size:200% $width, $width 400%, $width 400%, 55% $width, 55% $width;
+        background-position:50% 100%, 0% 100%, 100% 100%, 100% 0%, 0% 0%;
+        transform:scaleX(1) rotate(180deg * $direction);
+        transition-delay:0s, $duration, $duration*2;
+      }
+    }
+  &.extended:before, &.selected:before {
+      position:absolute;
+      width:calc(100%);
+      height:calc(100% + #{$width});
+      top:0;
+      left:0;
+      background:linear-gradient(to right, $color 0%, $color 100%), linear-gradient(to top, $color 50%, transparent 50%), linear-gradient(to top, $color 50%, transparent 50%), linear-gradient(to right, $color 0%, $color 100%), linear-gradient(to left, $color 0%, $color 100%);
+        background-size:200% $width, $width 400%, $width 400%, 55% $width, 55% $width;
+        background-position:50% 100%, 0% 100%, 100% 100%, 100% 0%, 0% 0%;
+      background-repeat:no-repeat, no-repeat;
+      transform:scaleX(1) rotate(180deg * $direction);
+  }
+}
+
+@mixin magic-border-mask($width, $duration, $background, $direction){
+  position:relative;
+    &:before{
+      content:'';
+      position:absolute;
+      width:calc(100% + #{$width * 2});
+      height:calc(100% + #{$width * 2});
+      top:calc(#{$width}/-1);
+      left:calc(#{$width}/-1);
+      mask:linear-gradient(to right, #000 0%, #000 100%), linear-gradient(to top, #000 50%, transparent 50%), linear-gradient(to top, #000 50%, transparent 50%), linear-gradient(to right, #000 0%, #000 100%), linear-gradient(to left, #000 0%, #000 100%);
+      mask-size:100% $width, $width 200%, $width 200%, 0% $width, 0% $width;
+      mask-position:50% 100%, 0% 0%, 100% 0%, 100% 0%, 0% 0%;
+      mask-repeat:no-repeat, no-repeat;
+      transition:transform $duration ease-in-out, mask-position $duration ease-in-out, mask-size $duration ease-in-out;
+      transform:scaleX(0) rotate(180deg * $direction);
+      transition-delay:$duration*2, $duration, 0s;
+      background:$background;
+    }
+    &:hover{
+      &:before{
+        mask-size:200% $width, $width 400%, $width 400%, 55% $width, 55% $width;
+        mask-position:50% 100%, 0% 100%, 100% 100%, 100% 0%, 0% 0%;
+        transform:scaleX(1) rotate(180deg * $direction);
+        transition-delay:0s, $duration, $duration*2;
+      }
+    }
+}
+
+.bordered-div {
+  @include magic-border(.2vh, white, .1s, 0);
 }
