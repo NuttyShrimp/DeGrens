@@ -6,7 +6,10 @@ import { hexToRGBStr } from '../../../../lib/util';
 export const styles = makeStyles({
   list: {
     position: 'absolute',
-    width: '100%',
+    left: "50%",
+    transform: "translate(-50%, 0)",
+    width: '85%',
+    height: "100%",
     top: 0,
     display: 'flex',
     flexDirection: 'column',
@@ -16,7 +19,10 @@ export const styles = makeStyles({
     pointerEvents: 'none',
   },
   innerList: {
-    width: '85%',
+    width: '100%',
+    display: 'flex',
+    flexDirection: 'column',
+    overflow: 'hidden',
   },
   box: {
     width: '100%',
@@ -25,7 +31,7 @@ export const styles = makeStyles({
     marginBottom: '.5vh',
     backgroundColor: hexToRGBStr(baseStyle.primary.darker, 0.92),
     borderRadius: '.5vh',
-    transition: 'background-color .2s ease-in-out',
+    transition: 'background-color 0.2s ease-in-out, top 0.4s ease-out',
     pointerEvents: 'all',
     '& > *': {
       pointerEvents: 'none',
@@ -62,14 +68,14 @@ export const styles = makeStyles({
     textOverflow: 'ellipsis',
   },
   title: {
-    fontSize: '.9rem',
+    fontSize: '.8rem',
     fontWeight: 'bold',
-    height: '.9rem',
+    height: '.8rem',
     lineHeight: '1',
   },
   description: {
-    fontSize: '.8rem',
-    height: '.8rem',
+    fontSize: '.7rem',
+    height: '.7rem',
     lineHeight: '1',
   },
   btns: {

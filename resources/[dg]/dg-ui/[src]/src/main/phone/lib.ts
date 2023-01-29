@@ -11,6 +11,8 @@ import { usePhoneNotiStore } from './stores/usePhoneNotiStore';
 import { usePhoneStore } from './stores/usePhoneStore';
 import { getPhoneApp, getPhoneApps, phoneApps } from './config';
 
+const notificationTimers: Record<string, NodeJS.Timer> = {};
+
 export const hidePhone = () => {
   const state = usePhoneStore.getState();
   usePhoneStore.setState({
@@ -165,9 +167,8 @@ export const addNotification = (
     throw new Error(`Phone app ${notification.app} not found (notification: ${notification.id})`);
   }
   const notiState = usePhoneNotiStore.getState();
-  notiState.list.unshift(notification as Phone.Notifications.Notification);
   usePhoneNotiStore.setState({
-    list: notiState.list,
+    list: [...notiState.list, notification as Phone.Notifications.Notification],
   });
   const phoneState = usePhoneStore.getState();
   if (!phoneState.isSilent) {
@@ -182,6 +183,9 @@ export const addNotification = (
   if ((notification.onAccept || notification.onDecline) && !((notification?.timer ?? 0) > 0)) {
     cd = 30000;
   }
+  if (notification.timer !== undefined) {
+    startNotificationTimer(notification.id, notification.timer);
+  }
   setTimeout(() => {
     removeNotification(notification.id);
     if (notification?.onDecline) {
@@ -191,12 +195,13 @@ export const addNotification = (
 };
 
 export const removeNotification = (id: string) => {
+  if (notificationTimers[id]) {
+    clearInterval(notificationTimers[id]);
+    delete notificationTimers[id];
+  }
   const notiState = usePhoneNotiStore.getState();
-  const index = notiState.list.findIndex(n => n.id === id);
-  if (index === -1) return;
-  notiState.list.splice(index, 1);
   usePhoneNotiStore.setState({
-    list: notiState.list,
+    list: notiState.list.filter(n => n.id !== id),
   });
   const phoneState = usePhoneStore.getState();
   if (notiState.list.length === 0) {
@@ -244,6 +249,27 @@ export const updateNotification = (id: string, notification: Partial<Phone.Notif
   usePhoneNotiStore.setState({
     list: notificationList,
   });
+};
+
+const startNotificationTimer = (id: string, timer: number) => {
+  if (timer > 0) {
+    let time = Number(timer);
+    usePhoneNotiStore.setState(s => ({
+      timers: { ...s.timers, [id]: time },
+    }));
+    notificationTimers[id] = setInterval(() => {
+      usePhoneNotiStore.setState(s => ({
+        timers: { ...s.timers, [id]: --time },
+      }));
+    }, 1000);
+  } else {
+    let time = 0;
+    notificationTimers[id] = setInterval(() => {
+      usePhoneNotiStore.setState(s => ({
+        timers: { ...s.timers, [id]: ++time },
+      }));
+    }, 1000);
+  }
 };
 // endregion
 

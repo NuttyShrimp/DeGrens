@@ -113,6 +113,7 @@ declare namespace Phone {
 
     interface State {
       list: Notification[];
+      timers: Record<string, number>;
     }
   }
 

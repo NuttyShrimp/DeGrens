@@ -72,7 +72,7 @@ export const Bar: React.FC = () => {
     if (!cmdInfo.cmd.data) {
       cmdInfo.cmd.data = {};
     }
-    let parsedData = cmdInfo.cmd.data ?? {};
+    let parsedData = typeof cmdInfo.cmd.data === 'function' ? cmdInfo.cmd.data() : cmdInfo.cmd.data ?? {};
     if (args) {
       args.split(/(?<!'[^']+) (?![^' ]+')/).forEach((arg, idx) => {
         parsedData = setReplacer(parsedData, arg, idx);

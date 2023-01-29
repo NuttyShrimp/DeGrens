@@ -7,7 +7,7 @@ export const cmds: {
   app: string;
   show?: boolean;
   hide?: boolean;
-  data?: Record<string, any>;
+  data?: Record<string, any> | (() => Record<string, any>);
 }[] = [
   {
     cmd: 'show debuglogs',
@@ -379,11 +379,11 @@ export const cmds: {
   {
     cmd: 'phone notification',
     app: 'phone',
-    data: {
+    data: () => ({
       appName: 'pinger',
       action: 'doRequest',
-      data: { id: 2, origin: 3 },
-    },
+      data: { id: Math.floor(Math.random() * 100) , origin: 3 },
+    }),
   },
   {
     cmd: 'show dispatch',
