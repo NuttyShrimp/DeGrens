@@ -7,6 +7,7 @@ declare namespace Inventory {
     name: string;
     inventory: string;
     position: Vec2;
+    rotated: boolean;
     quality: number;
     hotkey: Hotkey | null;
     metadata: { [key: string]: any };

@@ -1,18 +1,25 @@
-import React from 'react';
-import { FC } from 'react';
+import React, { FC } from 'react';
 import { usePreview } from 'react-dnd-preview';
 import { usePreviewStateFull } from 'react-dnd-preview/dist/usePreview';
 import { alpha } from '@mui/material';
 import { baseStyle } from '@src/base.styles';
 
-import { getImg } from '../../../lib/util';
+import { useInventoryStore } from '../stores/useInventoryStore';
 import { coordToPx } from '../util';
 
+import { ItemImage } from './itemimage';
+
 export const DragPreview: FC<{ cellSize: number }> = ({ cellSize }) => {
-  const { display, item, style } = usePreview<Inventory.DragItem, HTMLDivElement>() as usePreviewStateFull<
-    Inventory.DragItem,
+  const { display, item, style } = usePreview<{ id: string }, HTMLDivElement>() as usePreviewStateFull<
+    { id: string },
     HTMLDivElement
   >;
+  const itemState = useInventoryStore(s => (item?.id ? s.items[item.id] : null));
+
+  if (!itemState) return null;
+
+  const itemWidth = coordToPx(itemState.size, cellSize)[itemState.rotated ? 'y' : 'x'];
+  const itemHeight = coordToPx(itemState.size, cellSize)[itemState.rotated ? 'x' : 'y'];
 
   return (
     <>
@@ -21,25 +28,18 @@ export const DragPreview: FC<{ cellSize: number }> = ({ cellSize }) => {
           className='inventory__item'
           style={{
             ...style,
-            width: coordToPx(item.size, cellSize).x,
-            height: coordToPx(item.size, cellSize).y,
-            backgroundColor: alpha(item.quality > 10 ? baseStyle.primary.normal : baseStyle.tertiary.normal, 0.5),
-            borderColor: alpha(item.quality > 10 ? baseStyle.primaryDarker.dark : baseStyle.tertiary.dark, 0.9),
+            width: itemWidth,
+            height: itemHeight,
+            backgroundColor: alpha(itemState.quality > 10 ? baseStyle.primary.normal : baseStyle.tertiary.normal, 0.5),
+            borderColor: alpha(itemState.quality > 10 ? baseStyle.primaryDarker.dark : baseStyle.tertiary.dark, 0.9),
           }}
         >
-          {
-            <div className='image'>
-              <img
-                src={getImg(item.image)}
-                onError={() => console.log(`No image found with filename '${item.image}'`)}
-              />
-            </div>
-          }
-          {item.size.x != 1 && <p className='label text'>{item.label}</p>}
-          {item.hotkey && (
+          <ItemImage width={itemWidth} height={itemHeight} itemState={itemState} />
+          {itemState.size[itemState.rotated ? 'y' : 'x'] != 1 && <p className='label text'>{itemState.label}</p>}
+          {itemState.hotkey && (
             <div className='hotkey'>
               <div />
-              <p>{item.hotkey}</p>
+              <p>{itemState.hotkey}</p>
             </div>
           )}
         </div>

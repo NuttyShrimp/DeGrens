@@ -13,7 +13,11 @@ export const useInventoryStore = create<
   ...initialStore,
   updateStore: nState => set(s => (typeof nState === 'function' ? nState(s) : nState)),
   resetStore: () => set(() => ({ ...initialStore })),
-  updateItem: item => set(s => ({ items: { ...s.items, [item.id]: item } })),
+  updateItem: itemState =>
+    set(s => {
+      const item = typeof itemState === 'function' ? itemState(s.items) : itemState;
+      return { items: { ...s.items, [item.id]: item } };
+    }),
   deleteItem: id =>
     set(s => {
       const nItems = { ...s.items };

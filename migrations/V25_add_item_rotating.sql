@@ -1,0 +1,2 @@
+ALTER TABLE `inventory_items`
+   ADD COLUMN IF NOT EXISTS `rotated` TINYINT(1) NOT NULL DEFAULT 0 AFTER `position`;

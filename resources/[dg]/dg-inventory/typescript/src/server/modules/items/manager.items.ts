@@ -60,7 +60,7 @@ class ItemManager extends Util.Singleton<ItemManager>() {
   };
 
   @DGXEvent('inventory:server:moveItem')
-  public move = async (src: number, id: string, position: Vec2, invId: string) => {
+  public move = async (src: number, id: string, position: Vec2, rotated: boolean, invId: string) => {
     const item = this.get(id);
     if (!item) {
       this.logger.warn(`Could not get item ${id}, broke while getting item to move`);
@@ -79,6 +79,7 @@ class ItemManager extends Util.Singleton<ItemManager>() {
     Util.Log(
       'inventory:item:moved',
       {
+        byScript: src === 0,
         itemId: id,
         oldPosition: item.state.position,
         newPosition: position,
@@ -88,7 +89,7 @@ class ItemManager extends Util.Singleton<ItemManager>() {
       `${GetPlayerName(String(src))} moved ${item.state.name} from ${prevInvId} to ${invId}`,
       src
     );
-    await item.move(src, position, invId);
+    await item.move(src, position, rotated, invId);
   };
 
   @DGXEvent('inventory:server:useItem')

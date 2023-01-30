@@ -4,6 +4,7 @@ import { useNotifications } from '@src/main/notifications/hooks/useNotification'
 
 import { CELLS_PER_ROW } from '../constants';
 import { useInventory } from '../hooks/useInventory';
+import { useInventoryStore } from '../stores/useInventoryStore';
 
 import { GridBackground } from './gridbackground';
 import { Item } from './item';
@@ -11,34 +12,70 @@ import { Item } from './item';
 export const Grid: FC<{ id: string; size: number; items: string[]; cellSize: number }> = props => {
   const gridRef = useRef<HTMLDivElement>(null);
   const { addNotification } = useNotifications();
-  const { areRequirementsFullfilled, canPlaceItemAtPosition, isItemAllowedInInventory, updateItemPosition } =
-    useInventory();
+  const {
+    areRequirementsFullfilled,
+    canPlaceItemAtPosition,
+    isItemAllowedInInventory,
+    updateItemPosition,
+    toggleItemRotation,
+  } = useInventory();
+  const items = useInventoryStore(s => s.items);
 
   const [, dropRef] = useDrop(
     () => ({
       accept: 'ITEM',
-      drop({ id, name, requirements }: Pick<Inventory.Item, 'id' | 'name' | 'requirements'>, monitor) {
-        if (!isItemAllowedInInventory(name, props.id))
-          return addNotification({ message: 'Dit kan hier niet in', type: 'error' });
+      drop({ id, originalRotated }: { id: string; originalRotated: boolean }, monitor) {
+        const itemState = items[id];
 
-        if (!areRequirementsFullfilled(requirements))
-          return addNotification({ message: 'Je mist iets', type: 'error' });
+        if (!isItemAllowedInInventory(itemState.name, props.id)) {
+          addNotification({ message: 'Dit kan hier niet in', type: 'error' });
+          if (itemState.rotated !== originalRotated) {
+            toggleItemRotation(id, originalRotated);
+          }
+          return;
+        }
 
-        if (!gridRef.current) return;
+        if (!areRequirementsFullfilled(itemState.requirements)) {
+          addNotification({ message: 'Je mist iets', type: 'error' });
+          if (itemState.rotated !== originalRotated) {
+            toggleItemRotation(id, originalRotated);
+          }
+          return;
+        }
+
+        if (!gridRef.current) {
+          if (itemState.rotated !== originalRotated) {
+            toggleItemRotation(id, originalRotated);
+          }
+          return;
+        }
+
         const gridPosition = gridRef.current.getBoundingClientRect();
         const dropPosition = monitor.getSourceClientOffset();
-        if (!dropPosition) return;
+        if (!dropPosition) {
+          if (itemState.rotated !== originalRotated) {
+            toggleItemRotation(id, originalRotated);
+          }
+          return;
+        }
 
         const newPosition = {
           x: Math.round((dropPosition.x - gridPosition.x) / props.cellSize),
           y: Math.round((dropPosition.y - gridPosition.y + gridRef.current.scrollTop) / props.cellSize),
         };
-        if (!canPlaceItemAtPosition(id, props.id, newPosition)) return;
+
+        if (!canPlaceItemAtPosition(id, props.id, newPosition)) {
+          if (itemState.rotated !== originalRotated) {
+            toggleItemRotation(id, originalRotated);
+          }
+          return;
+        }
+
         updateItemPosition(id, props.id, newPosition);
-        return;
       },
     }),
     [
+      items,
       gridRef.current,
       props.id,
       props.cellSize,

@@ -1,4 +1,4 @@
-import { Events, Util, RPC, Inventory } from '@dgx/server';
+import { Events, Util, RPC } from '@dgx/server';
 import inventoryManager from 'modules/inventories/manager.inventories';
 import itemDataManager from 'classes/itemdatamanager';
 import itemManager from 'modules/items/manager.items';
@@ -139,8 +139,8 @@ const moveItemToInventory = async (type: Inventory.Type, identifier: string, ite
   const item = itemManager.get(itemId);
   if (!item) return;
   const itemName = itemDataManager.get(item.state.name).name;
-  const position = inventory.getFirstAvailablePosition(itemName) ?? { x: 0, y: 0 };
-  await itemManager.move(0, itemId, position, inventory.id);
+  const position = inventory.getFirstAvailablePosition(itemName, item.state.rotated) ?? { x: 0, y: 0 };
+  await itemManager.move(0, itemId, position, item.state.rotated, inventory.id);
 };
 
 const getItemsInInventory = async (type: Inventory.Type, identifier: string) => {
@@ -188,7 +188,7 @@ const moveAllItemsToInventory = async (
   const targetInventory = await inventoryManager.get(targetId);
   const items = originInventory.getItems();
   for (const item of items) {
-    await itemManager.move(0, item.id, item.position, targetInventory.id);
+    await itemManager.move(0, item.id, item.position, item.rotated, targetInventory.id);
   }
 };
 

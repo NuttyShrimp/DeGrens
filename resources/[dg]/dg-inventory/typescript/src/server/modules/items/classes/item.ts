@@ -16,6 +16,7 @@ export class Item {
   private name!: string;
   private inventory!: Inv;
   private position!: Vec2;
+  private rotated!: boolean;
   private quality!: number;
   private hotkey!: Inventory.Hotkey | null;
   private metadata!: { [key: string]: any };
@@ -30,6 +31,7 @@ export class Item {
     this.name = state.name;
     // Do not check if loaded because this shit gets called inside inv loading func which causes infinite loop
     this.inventory = await inventoryManager.get(state.inventory, false);
+    this.rotated = state.rotated ?? false;
     this.quality = state.quality ?? 100;
     this.hotkey = state.hotkey ?? null;
     this.lastDecayTime = state.lastDecayTime ?? Math.floor(Date.now() / 1000); // Seconds
@@ -78,7 +80,7 @@ export class Item {
         `Item ${this.name} has been created`
       );
     } else {
-      this.position = state.position!;
+      this.position = state.position ?? { x: 0, y: 0 };
     }
 
     this.inventory.registerItemId(this.state);
@@ -92,6 +94,7 @@ export class Item {
       name: this.name,
       inventory: this.inventory?.id,
       position: this.position,
+      rotated: this.rotated,
       quality: this.quality,
       hotkey: this.hotkey,
       metadata: this.metadata,
@@ -100,10 +103,16 @@ export class Item {
   }
   // #endregion
 
-  public move = async (src: number, position: Vec2, invId: string) => {
+  public move = async (src: number, position: Vec2, rotated: boolean, invId: string) => {
     const oldInvId = this.inventory.id;
     this.position = position;
+    this.rotated = rotated;
     if (this.inventory.id !== invId) {
+      // auto unbind when moving to other inv
+      if (this.hotkey) {
+        this.hotkey = null;
+      }
+
       const oldInv = this.inventory;
       const newInv = await inventoryManager.get(invId);
       this.inventory = newInv;
@@ -171,7 +180,6 @@ export class Item {
 
     // Update destroydate when increasing quality
     if (clampedNewQuality > this.quality) {
-      console.log('getting des date ' + this.name);
       const destroyDate = itemDataManager.getDestroyDate(this.name, clampedNewQuality);
       repository.updateDestroyDate(this.id, destroyDate);
     }
