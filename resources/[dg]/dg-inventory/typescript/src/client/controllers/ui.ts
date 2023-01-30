@@ -37,10 +37,13 @@ UI.RegisterUICallback('inventory/unbindItem', (data: { id: string }, cb) => {
 
 UI.RegisterUICallback('inventory/moveItem', (data: Inventory.ItemState, cb) => {
   cb({ data: {}, meta: { ok: true, message: 'done' } });
-  Events.emitNet('inventory:server:moveItem', data.id, data.position, data.inventory);
+  Events.emitNet('inventory:server:moveItem', data.id, data.position, data.rotated, data.inventory);
 });
 
-UI.RegisterUICallback('inventory/getFromShop', (data: { item: string; inventory: string; position: Vec2 }, cb) => {
-  cb({ data: {}, meta: { ok: true, message: 'done' } });
-  Events.emitNet('inventory:server:getFromShop', data.item, data.inventory, data.position);
-});
+UI.RegisterUICallback(
+  'inventory/getFromShop',
+  (data: { item: string; inventory: string; position: Vec2; rotated: boolean }, cb) => {
+    cb({ data: {}, meta: { ok: true, message: 'done' } });
+    Events.emitNet('inventory:server:getFromShop', data.item, data.inventory, data.position, data.rotated);
+  }
+);

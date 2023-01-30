@@ -198,7 +198,15 @@ class ObjectsManager extends Util.Singleton<ObjectsManager>() {
   };
 
   // Properly reset for switching chars
-  public reset = () => {
+  public reset = (removeProps = false) => {
+    if (removeProps) {
+      for (const prop of this.activeObjects.values()) {
+        if (prop.propId) {
+          PropAttach.remove(prop.propId);
+        }
+      }
+    }
+
     this.activeObjects.clear();
     this.queues = {};
 

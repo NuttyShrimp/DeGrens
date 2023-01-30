@@ -17,6 +17,7 @@ class Repository extends Util.Singleton<Repository>() {
       state.name,
       state.inventory,
       JSON.stringify(state.position),
+      state.rotated ? 1 : 0,
       state.quality,
       state.hotkey,
       state.lastDecayTime,
@@ -27,6 +28,7 @@ class Repository extends Util.Singleton<Repository>() {
   private resultToState = (state: Repository.FetchResult): Inventory.ItemState => {
     return {
       ...state,
+      rotated: state.rotated === 1,
       metadata: JSON.parse(state.metadata) as { [key: string]: any },
       position: JSON.parse(state.position) as Vec2,
     };
@@ -44,7 +46,7 @@ class Repository extends Util.Singleton<Repository>() {
   };
 
   public createItem = (state: Inventory.ItemState, destroyDate: number | null) => {
-    const query = `INSERT INTO inventory_items (id, name, inventory, position, quality, hotkey, lastDecayTime, metadata, destroyDate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+    const query = `INSERT INTO inventory_items (id, name, inventory, position, rotated, quality, hotkey, lastDecayTime, metadata, destroyDate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
     const params = this.stateToParams(state);
     params.push(destroyDate);
     SQL.query(query, params);
@@ -58,12 +60,12 @@ class Repository extends Util.Singleton<Repository>() {
   // I'm sorry god, please don't look at this monstrosity
   public updateItems = (itemStates: Inventory.ItemState[]) => {
     const amount = itemStates.length;
-    let query = `INSERT INTO inventory_items (id, name, inventory, position, quality, hotkey, lastDecayTime, metadata) VALUES`;
+    let query = `INSERT INTO inventory_items (id, name, inventory, position, rotated, quality, hotkey, lastDecayTime, metadata) VALUES`;
     for (let i = 0; i < amount; i++) {
-      query += ` (?, ?, ?, ?, ?, ?, ?, ?)`;
+      query += ` (?, ?, ?, ?, ?, ?, ?, ?, ?)`;
       if (i !== amount - 1) query += `,`;
     }
-    query += ` ON DUPLICATE KEY UPDATE inventory = VALUES(inventory), position = VALUES(position), quality = VALUES(quality), hotkey = VALUES(hotkey), metadata = VALUES(metadata);`;
+    query += ` ON DUPLICATE KEY UPDATE inventory = VALUES(inventory), position = VALUES(position), rotated = VALUES(rotated), quality = VALUES(quality), hotkey = VALUES(hotkey), metadata = VALUES(metadata);`;
     const params = itemStates.reduce<Repository.UpdateParameters>(
       (acc, cur) => [...acc, ...this.stateToParams(cur)],
       []

@@ -11,7 +11,7 @@ Events.onNet('inventory:client:updateObject', (action: 'add' | 'remove', item: O
 
 on('onResourceStop', (resourceName: string) => {
   if (resourceName !== GetCurrentResourceName()) return;
-  objectsManager.reset();
+  objectsManager.reset(true);
 });
 
 onNet('DGCore:client:playerUnloaded', () => {

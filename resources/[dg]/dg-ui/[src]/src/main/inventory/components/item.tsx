@@ -6,12 +6,12 @@ import { closeApplication } from '@src/components/appwrapper';
 import { nuiAction } from '@src/lib/nui-comms';
 import { useNotifications } from '@src/main/notifications/hooks/useNotification';
 
-import { getImg } from '../../../lib/util';
 import config from '../_config';
 import { useInventory } from '../hooks/useInventory';
 import { useInventoryStore } from '../stores/useInventoryStore';
 import { coordToPx } from '../util';
 
+import { ItemImage } from './itemimage';
 import { ItemTooltip } from './itemtooltip';
 
 export const Item: FC<{ itemId: string; cellSize: number }> = ({ itemId, cellSize }) => {
@@ -27,6 +27,7 @@ export const Item: FC<{ itemId: string; cellSize: number }> = ({ itemId, cellSiz
     isUseable,
     unbindItem,
     updateItemPosition,
+    toggleItemRotation,
   } = useInventory();
 
   const [{ isDragging }, dragRef] = useDrag(
@@ -34,13 +35,7 @@ export const Item: FC<{ itemId: string; cellSize: number }> = ({ itemId, cellSiz
       type: 'ITEM',
       item: {
         id: itemState.id,
-        name: itemState.name,
-        size: itemState.size,
-        quality: itemState.quality,
-        image: itemState.image,
-        label: itemState.label,
-        hotkey: itemState.hotkey,
-        requirements: itemState.requirements,
+        originalRotated: itemState.rotated, // We pass this to check if rotation was changed while dragging because this will be state before drag start
       },
       collect: monitor => ({
         isDragging: monitor.isDragging(),
@@ -50,7 +45,7 @@ export const Item: FC<{ itemId: string; cellSize: number }> = ({ itemId, cellSiz
         return itemState.amount > 0;
       },
     }),
-    [itemState.hotkey, itemState.amount]
+    [itemState.amount, itemState.rotated]
   );
 
   const handleDoubleClick = e => {
@@ -105,6 +100,21 @@ export const Item: FC<{ itemId: string; cellSize: number }> = ({ itemId, cellSiz
     addNotification(alert);
   }, [hotkeyPressed]);
 
+  useEffect(() => {
+    if (!isDragging) return;
+    const handler = (e: KeyboardEvent) => {
+      if (e.key !== 'r') return;
+      toggleItemRotation(itemState.id);
+    };
+    window.addEventListener('keydown', handler);
+    return () => {
+      window.removeEventListener('keydown', handler);
+    };
+  }, [isDragging]);
+
+  const itemWidth = coordToPx(itemState.size, cellSize)[itemState.rotated ? 'y' : 'x'];
+  const itemHeight = coordToPx(itemState.size, cellSize)[itemState.rotated ? 'x' : 'y'];
+
   return (
     <Tooltip
       classes={{ tooltip: 'inventory__tooltip' }}
@@ -120,8 +130,8 @@ export const Item: FC<{ itemId: string; cellSize: number }> = ({ itemId, cellSiz
         style={{
           left: coordToPx(itemState.position, cellSize).x,
           top: coordToPx(itemState.position, cellSize).y,
-          width: coordToPx(itemState.size, cellSize).x,
-          height: coordToPx(itemState.size, cellSize).y,
+          width: itemWidth,
+          height: itemHeight,
           backgroundColor: alpha(itemState.quality > 10 ? baseStyle.primary.normal : baseStyle.tertiary.normal, 0.4),
           borderColor: alpha(itemState.quality > 10 ? baseStyle.primaryDarker.dark : baseStyle.tertiary.dark, 0.9),
           display: isDragging ? 'none' : 'initial',
@@ -131,15 +141,8 @@ export const Item: FC<{ itemId: string; cellSize: number }> = ({ itemId, cellSiz
         onMouseEnter={() => setIsHovering(true)}
         onMouseLeave={() => setIsHovering(false)}
       >
-        {
-          <div className='image'>
-            <img
-              src={getImg(itemState.image)}
-              onError={() => console.log(`No image found with filename '${itemState.image}'`)}
-            />
-          </div>
-        }
-        {itemState.size.x != 1 && <p className='label text'>{itemState.label}</p>}
+        <ItemImage width={itemWidth} height={itemHeight} itemState={itemState} />
+        {itemState.size[itemState.rotated ? 'y' : 'x'] != 1 && <p className='label text'>{itemState.label}</p>}
         {itemState.hotkey && (
           <div className='hotkey'>
             <div />

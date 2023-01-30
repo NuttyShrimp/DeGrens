@@ -24,8 +24,14 @@ export const useInventory = () => {
 
       // For shop/crafting we handle this in backend, ui will get updated using the itemsync evt anyway
       if (item.amount !== undefined) {
-        nuiAction('inventory/getFromShop', { item: item.name, inventory: item.inventory, position });
+        nuiAction('inventory/getFromShop', {
+          item: item.name,
+          inventory: item.inventory,
+          position,
+          rotated: item.rotated,
+        });
         item.amount--;
+        item.rotated = false; // keep item at default rotation
         updateItem(item);
         return;
       }
@@ -38,7 +44,7 @@ export const useInventory = () => {
       item.position = position;
       item.inventory = inventoryId;
       updateItem(item);
-      nuiAction('inventory/moveItem', { id: itemId, inventory: inventoryId, position });
+      nuiAction('inventory/moveItem', { id: itemId, inventory: inventoryId, position, rotated: item.rotated });
     },
     [items]
   );
@@ -127,7 +133,13 @@ export const useInventory = () => {
       for (const item of Object.values(items)) {
         if (item.inventory !== inventoryId) continue;
         if (item.id === itemId) continue;
-        rectangles.push([item.position, { x: item.position.x + item.size.x, y: item.position.y + item.size.y }]);
+        rectangles.push([
+          item.position,
+          {
+            x: item.position.x + item.size[item.rotated ? 'y' : 'x'],
+            y: item.position.y + item.size[item.rotated ? 'x' : 'y'],
+          },
+        ]);
       }
       return rectangles;
     },
@@ -143,7 +155,11 @@ export const useInventory = () => {
   const getFirstFreeSpace = useCallback(
     (itemId: string, inventoryId: string): Inventory.XY | undefined => {
       const gridSize = inventories[inventoryId].size;
-      const itemSize = items[itemId].size;
+      const item = items[itemId];
+      const itemSize = {
+        x: item.size[item.rotated ? 'y' : 'x'],
+        y: item.size[item.rotated ? 'x' : 'y'],
+      };
 
       const itemsThatMayOverlap = getPossibleOverlappingItems(itemId, inventoryId);
 
@@ -171,20 +187,29 @@ export const useInventory = () => {
     (itemId: string, inventoryId: string, newPosition: Inventory.XY): boolean => {
       const item = items[itemId];
 
-      const itemRect: [Inventory.XY, Inventory.XY] = [
-        newPosition,
-        { x: newPosition.x + item.size.x, y: newPosition.y + item.size.y },
-      ];
+      // Keep rotation in mind
+      const itemSize: Inventory.XY = {
+        x: item.size[item.rotated ? 'y' : 'x'],
+        y: item.size[item.rotated ? 'x' : 'y'],
+      };
 
       const outOfBounds =
         newPosition.x < 0 ||
-        newPosition.x + item.size.x > CELLS_PER_ROW ||
+        newPosition.x + itemSize.x > CELLS_PER_ROW ||
         newPosition.y < 0 ||
-        newPosition.y + item.size.y > inventories[inventoryId].size;
+        newPosition.y + itemSize.y > inventories[inventoryId].size;
       if (outOfBounds) return false;
 
       const itemsThatMayOverlap = getPossibleOverlappingItems(itemId, inventoryId);
       if (itemsThatMayOverlap.length === 0) return true;
+
+      const itemRect: [Inventory.XY, Inventory.XY] = [
+        newPosition,
+        {
+          x: newPosition.x + itemSize.x,
+          y: newPosition.y + itemSize.y,
+        },
+      ];
 
       return !isAnyItemOverlapping(itemsThatMayOverlap, itemRect);
     },
@@ -227,6 +252,14 @@ export const useInventory = () => {
     [playerCash, items, primaryId]
   );
 
+  const toggleItemRotation = useCallback((itemId: string, override?: boolean) => {
+    updateItem(items => {
+      const item = items[itemId];
+      const rotated = override === undefined ? !item.rotated : override;
+      return { ...item, rotated };
+    });
+  }, []);
+
   return {
     updateItemPosition,
     syncItem,
@@ -238,5 +271,6 @@ export const useInventory = () => {
     canPlaceItemAtPosition,
     isItemAllowedInInventory,
     getFirstFreeSpace,
+    toggleItemRotation,
   };
 };

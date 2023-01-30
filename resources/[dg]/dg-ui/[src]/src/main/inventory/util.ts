@@ -61,6 +61,7 @@ export const generateShopItems = (
     const itemData: Inventory.Item = {
       ...shopItem,
       id: `shopitem_${shopItem.name}`,
+      rotated: false,
       inventory: inventoryId,
       position: getNextPosition(shopItem.size),
       quality: 100,

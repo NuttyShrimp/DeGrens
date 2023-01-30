@@ -11,7 +11,7 @@ declare namespace Inventory {
   }
 
   interface StateActions {
-    updateItem: (item: Item) => void;
+    updateItem: (item: Item | ((items: Record<string, Item>) => Item)) => void;
     deleteItem: (id: string) => void;
   }
 
@@ -35,6 +35,7 @@ declare namespace Inventory {
     inventory: string;
     position: XY;
     size: XY;
+    rotated: boolean;
     name: string;
     label: string;
     quality: number;
@@ -48,14 +49,6 @@ declare namespace Inventory {
     // These two get used in shops
     requirements?: Shop.Requirements;
     amount?: number;
-  }
-
-  interface DragItem {
-    size: XYCoord;
-    label: string;
-    quality: number;
-    image: string;
-    hotkey?: number;
   }
 
   interface Alert {

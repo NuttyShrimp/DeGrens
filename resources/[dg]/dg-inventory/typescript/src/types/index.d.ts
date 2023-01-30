@@ -18,7 +18,8 @@ declare interface OpeningData {
 }
 
 declare namespace Repository {
-  interface FetchResult extends Omit<Inventory.ItemState, 'metadata' | 'position'> {
+  interface FetchResult extends Omit<Inventory.ItemState, 'metadata' | 'position' | 'rotated'> {
+    rotated: number;
     metadata: string;
     position: string;
   }

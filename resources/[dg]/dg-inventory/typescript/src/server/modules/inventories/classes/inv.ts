@@ -158,21 +158,26 @@ export class Inv {
     return items;
   };
 
-  public getFirstAvailablePosition = (itemName: string) => {
+  public getFirstAvailablePosition = (itemName: string, rotated = false) => {
     const itemSize = itemDataManager.get(itemName).size;
+    const rotatedItemSize = {
+      x: itemSize[rotated ? 'y' : 'x'],
+      y: itemSize[rotated ? 'x' : 'y'],
+    };
+
     const cellsPerRow = getConfig().cellsPerRow;
     const itemsThatMayOverlap = this.getItems().map(state => {
       const size = itemDataManager.get(state.name).size;
       return [state.position, { x: state.position.x + size.x, y: state.position.y + size.y }] as [Vec2, Vec2];
     });
 
-    for (let y = 0; y < this.size - itemSize.y + 1; y++) {
-      for (let x = 0; x < cellsPerRow - itemSize.x + 1; x++) {
+    for (let y = 0; y < this.size - rotatedItemSize.y + 1; y++) {
+      for (let x = 0; x < cellsPerRow - rotatedItemSize.x + 1; x++) {
         const anyOverlapping = itemsThatMayOverlap.some(i =>
           doRectanglesOverlap(
             [
               { x, y },
-              { x: x + itemSize.x, y: y + itemSize.y },
+              { x: x + rotatedItemSize.x, y: y + rotatedItemSize.y },
             ],
             i
           )
