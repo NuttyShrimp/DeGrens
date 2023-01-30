@@ -5,6 +5,8 @@ let currentId = 0;
 const attachedProps: Map<number, PropAttach.ActiveProp> = new Map();
 let enabled = true;
 
+let existenceThread: NodeJS.Timer | null = null;
+
 export const isEnabled = () => enabled;
 
 const debug = (msg: string) => {
@@ -26,6 +28,7 @@ export const addProp = async (name: string, offset?: Vec3) => {
     name,
     offset,
   });
+  startExistenceThread();
   return currentId;
 };
 
@@ -41,6 +44,7 @@ export const removeProp = (propId: number) => {
   }
 
   attachedProps.delete(propId);
+  clearExistenceThread();
 };
 
 export const moveProp = (propId: number, position: Vec3) => {
@@ -140,6 +144,7 @@ const createAndAttachObject = async (name: string, offset: Vec3) => {
 
 export const resetProps = () => {
   attachedProps.clear();
+  clearExistenceThread();
 };
 
 export const toggleProps = async (toggle: boolean) => {
@@ -147,6 +152,7 @@ export const toggleProps = async (toggle: boolean) => {
 
   if (!toggle) {
     attachedProps.forEach(data => {
+      if (data.netId === null) return;
       Events.emitNet('propattach:remove', data.netId);
       data.netId = null;
     });
@@ -158,4 +164,30 @@ export const toggleProps = async (toggle: boolean) => {
       data.netId = netId;
     });
   }
+};
+
+// Existence thread checks if every attached prop entity still exists, else reapply prop
+// Can happen when teleporting and entity somehow going out of scope whilst being attached
+const startExistenceThread = () => {
+  if (existenceThread !== null) return;
+
+  existenceThread = setInterval(() => {
+    attachedProps.forEach(async data => {
+      if (data.netId === null) return;
+      if (NetworkDoesEntityExistWithNetworkId(data.netId)) return;
+
+      debug(`Entity ${data.netId} does not exist anymore, readding ${data.name}`);
+      Events.emitNet('propattach:remove', data.netId);
+      const netId = await createAndAttachObject(data.name, data.offset);
+      data.netId = netId ?? null;
+    });
+  }, 1000);
+};
+
+const clearExistenceThread = () => {
+  if (existenceThread === null) return;
+  if (attachedProps.size > 0) return;
+
+  clearInterval(existenceThread);
+  existenceThread = null;
 };

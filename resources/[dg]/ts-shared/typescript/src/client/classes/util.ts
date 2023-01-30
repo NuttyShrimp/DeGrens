@@ -183,11 +183,13 @@ class Util extends UtilShared {
    * @returns NetworkID or 0 if creating failed
    */
   createObjectOnServer = async (model: string, coords: Vec3, routingBucket?: number): Promise<number> => {
+    await this.loadModel(GetHashKey(model));
     const netId = await RPC.execute<number>('dgx:createObject', model, coords, routingBucket);
-    if (netId) {
-      NetworkRequestControlOfNetworkId(netId);
-    }
-    return netId ?? 0;
+    if (!netId) return 0;
+    const exists = await this.awaitEntityExistence(netId, true);
+    if (!exists) return 0;
+    await this.requestEntityControl(NetworkGetEntityFromNetworkId(netId));
+    return netId;
   };
 
   getClosestNpcInRange = (range: number, pedsToIgnore: number[] = []): number | undefined => {
