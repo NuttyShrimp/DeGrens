@@ -6,6 +6,7 @@ export const useConfigmenuStore = create<ConfigMenu.State & ConfigMenu.StateActi
   currentMenu: 'hud',
   hud: {
     keyboard: 'qwerty',
+    size: 1,
     sections: {
       food: true,
       health: true,

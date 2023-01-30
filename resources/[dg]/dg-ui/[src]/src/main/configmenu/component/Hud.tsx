@@ -1,4 +1,5 @@
 import React from 'react';
+import { Slider, Typography } from '@mui/material';
 
 import { Input } from '../../../components/inputs';
 import { useConfigmenuStore } from '../stores/useConfigmenuStore';
@@ -24,6 +25,31 @@ export const Hud = () => {
             { label: 'Azerty', value: 'azerty' },
           ]}
         />
+      </Section>
+      <Section title='Icons'>
+        <div>
+          <Typography id='input-slider' gutterBottom>
+            Hud size
+          </Typography>
+          <Slider
+            size='small'
+            min={50}
+            max={120}
+            step={5}
+            value={Math.round(state.size * 100)}
+            onChange={(_, value) => {
+              if (Array.isArray(value)) return;
+              updateConfig('hud', {
+                size: Number((value / 100).toFixed(2)),
+              });
+            }}
+            aria-label='Small'
+            valueLabelDisplay='auto'
+            color={'secondary'}
+            getAriaValueText={v => `${v}%`}
+            valueLabelFormat={v => `${v}%`}
+          />
+        </div>
       </Section>
       <Section title={'Compass'}>
         <Input.Checkbox

@@ -131,7 +131,7 @@ const Component: AppFunction = props => {
   }, []);
 
   return (
-    <AppWrapper appName={config.name} onShow={showHud} onHide={hideHud} onEvent={handleEvents} full>
+    <AppWrapper appName={config.name} onShow={showHud} onHide={hideHud} onEvent={handleEvents} full hideOverflow>
       <HudBar />
       {carVisible && !phoneOpen && <SpeedoMeter />}
       <Compass />
