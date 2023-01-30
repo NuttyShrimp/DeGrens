@@ -23,8 +23,10 @@ export const Interaction = () => {
       >
         {(styles, item) =>
           item && (
-            <animated.div style={styles} className={`interaction ${type}`}>
-              <Typography variant='button' dangerouslySetInnerHTML={{ __html: text }} />
+            <animated.div style={styles} className='interaction__outer'>
+              <div className={`interaction ${type}`}>
+                <Typography variant='button' dangerouslySetInnerHTML={{ __html: text }} />
+              </div>
             </animated.div>
           )
         }
