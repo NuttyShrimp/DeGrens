@@ -168,7 +168,13 @@ export class Inv {
     const cellsPerRow = getConfig().cellsPerRow;
     const itemsThatMayOverlap = this.getItems().map(state => {
       const size = itemDataManager.get(state.name).size;
-      return [state.position, { x: state.position.x + size.x, y: state.position.y + size.y }] as [Vec2, Vec2];
+      return [
+        state.position,
+        {
+          x: state.position.x + size[state.rotated ? 'y' : 'x'],
+          y: state.position.y + size[state.rotated ? 'x' : 'y'],
+        },
+      ] as [Vec2, Vec2];
     });
 
     for (let y = 0; y < this.size - rotatedItemSize.y + 1; y++) {
