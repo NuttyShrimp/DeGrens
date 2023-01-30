@@ -199,12 +199,12 @@ export const removeNotification = (id: string) => {
     clearInterval(notificationTimers[id]);
     delete notificationTimers[id];
   }
-  const notiState = usePhoneNotiStore.getState();
+  const notiList = usePhoneNotiStore.getState().list.filter(n => n.id !== id);
   usePhoneNotiStore.setState({
-    list: notiState.list.filter(n => n.id !== id),
+    list: notiList,
   });
   const phoneState = usePhoneStore.getState();
-  if (notiState.list.length === 0) {
+  if (notiList.length === 0) {
     usePhoneStore.setState({
       animating: phoneState.animating === 'peek' ? 'closed' : 'open',
       hasNotifications: false,
