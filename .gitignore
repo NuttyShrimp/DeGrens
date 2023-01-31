@@ -12,6 +12,7 @@ seed.sql
 node_modules/
 !migrate.bat
 .turbo
+/uploads/
 
 
 positions.txt
