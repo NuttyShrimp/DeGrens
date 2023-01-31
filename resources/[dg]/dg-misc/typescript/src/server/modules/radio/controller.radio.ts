@@ -21,7 +21,14 @@ Inventory.registerUseable(['radio', 'pd_radio'], async (src: number, state: Inve
     frequency: radioFreq,
   }));
   let isES = ['police', 'ambulance'].includes(Jobs.getCurrentJob(src) ?? '');
-  if ((radioFreq >= 1 || radioFreq < 11) && !isES) {
+  if (radioFreq >= 1 && radioFreq < 11 && (!isES || state.name === 'radio')) {
+    Inventory.setMetadataOfItem(state.id, data => ({
+      ...data,
+      frequency: 0,
+    }));
+    radioFreq = 0;
+  }
+  if (radioFreq > 10 && state.name === 'pd_radio') {
     Inventory.setMetadataOfItem(state.id, data => ({
       ...data,
       frequency: 0,
