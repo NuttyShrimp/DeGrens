@@ -1,6 +1,7 @@
 import { Events, RPC, Util } from '@dgx/client';
 
 import { togglePlayerBlips } from '../../service/playerBlips';
+import { setCmdState } from './state';
 
 // Functiontypes fuck up when putting this in command directly because that file is serversided but function gets executed on client
 on('admin:commands:damageEntity', (ent: number) => {
@@ -105,3 +106,7 @@ Events.onNet('admin:command:collision', () => {
   SetEntityCompletelyDisableCollision(ped, isDisabled, isDisabled);
   SetGravityLevel(isDisabled ? 0 : 2);
 });
+
+Events.onNet("admin:commands:cloack", (toggle) => {
+  setCmdState('invisible', toggle);
+})

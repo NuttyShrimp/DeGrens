@@ -98,7 +98,7 @@ Events.onNet('heists:server:pickupLaptop', async (src: number) => {
     `${Util.getName(src)} picked up a ${laptop} laptop`,
     source
   );
-  activePickups[cid] = null;
+  delete activePickups[cid]
   Inventory.addItemToPlayer(src, laptop, 1);
 });
 

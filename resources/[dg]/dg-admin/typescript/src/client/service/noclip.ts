@@ -1,4 +1,5 @@
 import { Events, Keys, PropAttach, Util } from '@dgx/client';
+import { getCmdState } from 'modules/commands/state';
 
 let noclipEnabled = false;
 let noclipThread: NodeJS.Timer | null = null;
@@ -42,6 +43,7 @@ export const toggleNoclip = () => {
   const pos = Util.getEntityCoords(noclipEnt);
   const rot = Util.getEntityRotation(noclipEnt);
   noclipCam = CreateCamWithParams('DEFAULT_SCRIPTED_CAMERA', pos.x, pos.y, pos.z, 0, 0, rot.z, 75.0, true, 2);
+  if (!noclipCam) return;
   AttachCamToEntity(noclipCam, noclipEnt, 0.0, 0.0, 0.0, true);
   RenderScriptCams(true, false, 1, true, false);
 
@@ -55,6 +57,7 @@ export const toggleNoclip = () => {
 
   const plyId = PlayerId();
   noclipThread = setInterval(() => {
+    if (!noclipCam || !noclipEnt) return;
     const camRot = GetCamRot(noclipCam, 2);
     SetEntityHeading(noclipEnt, (360 + camRot[2]) % 360);
     DisablePlayerFiring(plyId, true);
@@ -77,8 +80,9 @@ export const toggleNoclip = () => {
 };
 
 export const printDebugInfo = () => {
-  if (!noclipEnabled) {
+  if (!noclipEnabled || !noclipCam) {
     console.log('Must be in noclip to do this');
+    return;
   }
   const camCoords = Util.ArrayToVector3(GetCamCoord(noclipCam));
   const camRot = Util.ArrayToVector3(GetCamRot(noclipCam, 2));
@@ -92,28 +96,40 @@ const cleanupNoclip = () => {
     noclipThread = null;
   }
 
-  DestroyCam(noclipCam, false);
+  if (noclipCam) {
+    DestroyCam(noclipCam, false);
+  }
   noclipCam = null;
   RenderScriptCams(false, false, 3000, true, false);
-  FreezeEntityPosition(noclipEnt, false);
-  SetEntityCollision(noclipEnt, true, true);
-  SetEntityAlpha(noclipEnt, 255, false);
-  SetPedCanRagdoll(noclipEnt, true);
-  SetEntityVisible(noclipEnt, true, true);
-  ClearPedTasksImmediately(noclipEnt);
+  if (noclipEnt) {
+    FreezeEntityPosition(noclipEnt, false);
+    SetEntityCollision(noclipEnt, true, true);
+    SetPedCanRagdoll(noclipEnt, true);
+    if (!getCmdState('invisible') || GetEntityType(noclipEnt) !== 1) {
+      SetEntityAlpha(noclipEnt, 255, false);
+      SetEntityVisible(noclipEnt, true, true);
+    }
+    ClearPedTasksImmediately(noclipEnt);
+  }
   if (noclipPed) {
     FreezeEntityPosition(noclipPed, false);
     SetEntityCollision(noclipPed, true, true);
-    SetEntityAlpha(noclipPed, 255, false);
-    SetEntityVisible(noclipPed, true, true);
     SetPedCanRagdoll(noclipPed, true);
-    SetPedIntoVehicle(noclipPed, noclipEnt, -1);
+    if (!getCmdState('invisible')) {
+      SetEntityAlpha(noclipPed, 255, false);
+      SetEntityVisible(noclipPed, true, true);
+    }
+    if (noclipEnt) {
+      SetPedIntoVehicle(noclipPed, noclipEnt, -1);
+    }
   }
   noclipEnt = null;
   noclipPed = null;
   noclipSpeed = 1;
   for (const key in noclipMovingTicks) {
-    clearInterval(noclipMovingTicks[key as keyof typeof noclipMovingTicks]);
+    let thread = noclipMovingTicks[key as keyof typeof noclipMovingTicks]
+    if (!thread) return;
+    clearInterval(thread);
     noclipMovingTicks[key as keyof typeof noclipMovingTicks] = null;
   }
 
@@ -137,13 +153,16 @@ const getMultiplier = (): number => {
 };
 
 const moveX = (dir = 1) => {
+  if (!noclipCam) return;
   const fv = GetCamMatrix(noclipCam)[1];
   const fVector = Util.ArrayToVector3(fv).multiply(dir * noclipSpeed * getMultiplier());
+  if (!noclipEnt) return;
   const pos = Util.getEntityCoords(noclipEnt).add(fVector);
   SetEntityCoordsNoOffset(noclipEnt, pos.x, pos.y, pos.z, true, true, true);
 };
 
 const moveY = (dir = 1) => {
+  if (!noclipEnt) return;
   const pos = Util.ArrayToVector3(
     GetOffsetFromEntityInWorldCoords(noclipEnt, dir * noclipSpeed * getMultiplier(), 0, 0)
   );
@@ -152,6 +171,7 @@ const moveY = (dir = 1) => {
 };
 
 const moveZ = (dir = 1) => {
+  if (!noclipEnt) return;
   const pos = Util.ArrayToVector3(
     GetOffsetFromEntityInWorldCoords(noclipEnt, 0, 0, (dir * noclipSpeed * getMultiplier()) / 2)
   );

@@ -2,7 +2,6 @@ import { SQL, Util } from '@dgx/server';
 
 class BanManager extends Util.Singleton<BanManager>() {
   private bannedIps: Set<string>;
-  private permaBannedIps: Set<string>;
 
   constructor() {
     super();

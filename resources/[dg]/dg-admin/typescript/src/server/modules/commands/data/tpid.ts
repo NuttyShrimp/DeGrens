@@ -13,7 +13,10 @@ export const tpid: CommandData = {
   target: false,
   isClientCommand: false,
   handler: (caller, args: TpIdData) => {
-    if (caller.steamId === args.Target.steamId) {
+    if (!args.Target?.serverId) {
+      return;
+    }
+    if (caller.source === args.Target?.serverId) {
       Notifications.add(caller.source, "You can't tp to yourself", 'error');
       return;
     }

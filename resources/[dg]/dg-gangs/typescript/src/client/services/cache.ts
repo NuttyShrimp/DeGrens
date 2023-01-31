@@ -5,7 +5,7 @@ let currentGang: string | null = null;
 
 const setCurrentGang = (value: typeof currentGang) => {
   currentGang = value;
-  console.log(`[Gangs] Current Gang: ${value ?? 'None'}`);
+  // console.log(`[Gangs] Current Gang: ${value ?? 'None'}`);
 };
 
 Events.onNet('gangs:client:updateCurrentGang', (gang: typeof currentGang) => {

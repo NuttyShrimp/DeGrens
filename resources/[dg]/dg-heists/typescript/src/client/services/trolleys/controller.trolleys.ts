@@ -16,6 +16,7 @@ Peek.addModelEntry(
           lootTrolley(entity);
         },
         canInteract: entity => {
+          if (!entity) return;
           return Entity(entity).state['canBeLooted'];
         },
       },

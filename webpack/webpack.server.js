@@ -2,6 +2,7 @@
 const path = require('path');
 const fs = require('fs')
 const { TsconfigPathsPlugin } = require('tsconfig-paths-webpack-plugin');
+const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const { merge } = require('webpack-merge');
 const SentryCliPlugin = require('@sentry/webpack-plugin');
 const { version } = require('../package.json');
@@ -20,11 +21,19 @@ const findResourceName = (filePath) => {
 
 const defClient = (fName) => ({
 	entry: path.resolve(`./src/server/${fName}.ts`),
+  plugins: [
+    new ForkTsCheckerWebpackPlugin({
+      typescript: {
+        configFile: path.resolve('./src/server/tsconfig.json'),
+      },
+      logger: console,
+    })
+  ],
 	resolve: {
 		plugins: [
 			new TsconfigPathsPlugin({
 				configFile: path.resolve('./src/server/tsconfig.json'),
-			}),
+			})
 		],
 	},
 	output: {

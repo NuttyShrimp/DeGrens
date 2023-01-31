@@ -13,6 +13,7 @@
     "@citizenfx/client": "^2.0.6200-1",
     "@citizenfx/server": "^2.0.6200-1",
     "esbuild-loader": "^2.20.0",
+    "fork-ts-checker-webpack-plugin": "^7.3.0",
     "javascript-obfuscator": "^4.0.0",
     "patch-package": "^6.5.1",
     "postinstall-postinstall": "^2.1.0",

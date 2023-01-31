@@ -3,7 +3,7 @@ import { Config, Events, Inventory, Notifications, RPC, Util } from '@dgx/server
 import doorStateManager from './../../controllers/classes/doorstatemanager';
 import fleecaStateManager from './../../modules/fleeca/classes/statemanager';
 
-const heistStateManagers: Record<Laptop.Name, Heist.StateManager> = {
+const heistStateManagers: Record<Laptop.Name, Heist.StateManager|null> = {
   laptop_v1: fleecaStateManager,
   laptop_v2: null,
   laptop_v3: null,
@@ -25,14 +25,14 @@ setImmediate(async () => {
     );
     if (!laptopLoc) return;
     const [heistId, hackLocation] = laptopLoc as [Heist.Id, Vec4];
-
-    if (!heistStateManagers[laptopName] || !heistStateManagers[laptopName].canHack(src, heistId)) {
+    const laptopManager = heistStateManagers[laptopName];
+    if (!laptopManager || !laptopManager.canHack(src, heistId)) {
       Notifications.add(src, 'Je kan dit momenteel niet hacken', 'error');
       return;
     }
 
     Inventory.setQualityOfItem(itemState.id, old => old - 20);
-    heistStateManagers[laptopName].startHack(src, heistId);
+    laptopManager.startHack(src, heistId);
     Util.Log(
       'heists:hack:start',
       {

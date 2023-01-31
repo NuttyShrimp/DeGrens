@@ -59,7 +59,9 @@ Events.onNet('heists:client:startHack', async (laptopName: Laptop.Name, location
       'Hackermans',
       'Ik doe er alles aan om zo snel mogelijk de deur te laten opengaan.'
     );
-    spawnTrolleys(getCurrentLocation());
+    let curLoc = getCurrentLocation();
+    if (!curLoc) return;
+    spawnTrolleys(curLoc);
   } else {
     Events.emitNet('heists:server:failedHack', laptopName, getCurrentLocation());
   }

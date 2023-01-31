@@ -12,7 +12,10 @@ Events.onNet('heists:server:lootTrolley', async (src: number, heistId: Heist.Id,
   await Config.awaitConfigLoad();
   const heistType = getTypeForId(heistId);
   if (!heistType) return;
-  const possibleLoot = config.heists[heistType].types[type];
+  const heistConfig = config.heists[heistType]
+  if (!heistConfig) return;
+  const possibleLoot = config.heists[heistType]!.types[type];
+  if (!possibleLoot) return;
   const loot = possibleLoot[Math.floor(Math.random() * possibleLoot.length)];
   Inventory.addItemToPlayer(src, loot.name, Util.getRndInteger(loot.min, loot.max));
   Util.Log(
@@ -27,8 +30,8 @@ Events.onNet('heists:server:lootTrolley', async (src: number, heistId: Heist.Id,
   );
 
   const chance = Util.getRndInteger(0, 100);
-  if (chance < config.heists[heistType].specialChance) {
-    const specialItems = config.heists[heistType].specialItems;
+  if (chance < heistConfig.specialChance) {
+    const specialItems = heistConfig.specialItems;
     const specialItem = specialItems[Math.floor(Math.random() * specialItems.length)];
     Inventory.addItemToPlayer(src, specialItem, 1);
     Util.Log(

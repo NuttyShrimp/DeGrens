@@ -16,12 +16,12 @@ export const changeRoutingBucket: CommandData = {
   handler: (caller, data: RoutingBucketData) => {
     if (!data.Instance && (data?.bucketId === undefined || data.bucketId === '')) return;
     try {
-      const id = data.bucketId !== null && data.bucketId !== '' ? parseInt(data.bucketId) : data.Instance.id;
+      const id = data.bucketId !== null && data.bucketId !== '' ? parseInt(data.bucketId!) : data.Instance!.id;
       global.exports['dg-lib'].setInstance(data?.Target?.serverId ?? caller.source, id);
       Notifications.add(
         caller.source,
         `Successfully changed ${data?.Target?.name ?? 'your'} routing bucket to ${
-          data.bucketId !== undefined && data.bucketId !== '' ? id : `${data.Instance.name}(${data.Instance.id})`
+          data.bucketId !== undefined && data.bucketId !== '' ? id : `${data.Instance!.name}(${data.Instance!.id})`
         })`,
         'success'
       );

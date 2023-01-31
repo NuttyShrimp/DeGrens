@@ -21,7 +21,7 @@ const getRouteResponser =
   (
     code: number,
     data: any,
-    headers = {
+    headers: Record<string, string> = {
       ['Content-Type']: 'application/json',
     }
   ) => {
@@ -33,10 +33,10 @@ export const registerRoute = (method: API.Method, path: string, handler: (reques
   if (getRoute(path)) {
     mainLogger.error(`${resource} tried registering an API path (${path}) that already was defined`);
   }
-  if (!routeMap.has(resource)) {
+  if (!routeMap.get(resource)) {
     routeMap.set(resource, []);
   }
-  routeMap.get(resource).push({
+  routeMap.get(resource)!.push({
     method,
     path,
     handler,

@@ -29,7 +29,9 @@ export const setDoorState = async (heistId: Heist.Id, open: boolean) => {
 const loadVaultRoom = (data: Heist.Door) => {
   const interior = GetInteriorFromEntity(PlayerPedId());
   if (interior == 0) return;
-  SetInteriorPortalFlag(interior, data.portalId, 0);
+  if (data.portalId) {
+    SetInteriorPortalFlag(interior, data.portalId, 0);
+  }
   RefreshInterior(interior);
 };
 

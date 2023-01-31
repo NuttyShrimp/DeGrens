@@ -6,8 +6,8 @@ import { getCamForId, getIdForType, getLabelForId } from 'services/metadata';
 @RPCRegister()
 @EventListener()
 class StateManager extends Util.Singleton<StateManager>() implements Heist.StateManager {
-  private config: Fleeca.Config;
-  private powerLocation: Vec3;
+  private config: Fleeca.Config = { power: [] };
+  private powerLocation: Vec3 | null = null;
   private powerDisabled = false;
   private robbedBanks: Set<Fleeca.Id> = new Set();
   private bankHackers: Map<Fleeca.Id, number> = new Map();

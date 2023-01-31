@@ -1,4 +1,4 @@
-import { Notifications, Sync } from '@dgx/server';
+import { Events, Notifications, Sync } from '@dgx/server';
 import { hidePly } from 'services/hideInfo';
 
 let cloakToggled: Record<number, boolean> = {};
@@ -16,6 +16,7 @@ export const cloak: CommandData = {
     Sync.setPlayerVisible(caller.source, !toggle);
     hidePly(caller.source, toggle);
     Notifications.add(caller.source, `Cloak ${toggle ? 'enabled' : 'disabled'}`);
+    Events.emitNet('admin:commands:cloack', caller.source, toggle);
   },
   UI: {
     title: 'Cloak',

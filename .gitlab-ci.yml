@@ -6,7 +6,7 @@ stages:
 
 image: node:16
 
-.lerna_installation:
+.node_mod_installation:
   before_script:
     - npm config set @degrens-21:registry https://gitlab.pieter557.dscloud.me/api/v4/packages/npm/
     - npm config set -- '//gitlab.pieter557.dscloud.me/api/v4/packages/npm/:_authToken' "${CI_JOB_TOKEN}"
@@ -80,7 +80,6 @@ validate db migrations:
     - cd ./tools/migrations
     - yarn --pure-lockfile
     - yarn start --init-db
-    - yarn postinstall:lerna
   only:
     refs:
       - main
@@ -91,7 +90,7 @@ validate db migrations:
 
 JS linting:
   extends:
-    - .lerna_installation
+    - .node_mod_installation
     - .cache_modules
     - .js_changes
   stage: linting
@@ -100,7 +99,7 @@ JS linting:
 
 TS dev build:
   extends:
-    - .lerna_installation
+    - .node_mod_installation
     - .cache_modules
     - .js_changes
   stage: build
@@ -110,7 +109,7 @@ TS dev build:
 
 TS prod build:
   extends:
-    - .lerna_installation
+    - .node_mod_installation
     - .cache_modules
   only:
     refs:

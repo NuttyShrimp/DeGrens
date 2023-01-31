@@ -1,6 +1,8 @@
 const webpack = require('webpack');
+const path = require("path");
 
 const common = {
+  context: path.resolve("."),
 	devtool: 'eval-source-map',
 	mode: 'production',
 	module: {
@@ -16,7 +18,7 @@ const common = {
 			},
 		],
 	},
-	plugins: [new webpack.DefinePlugin({ 'global.GENTLY': false })],
+  plugins: [new webpack.DefinePlugin({ 'global.GENTLY': false })],
 	optimization: {
 		minimize: true,
     usedExports: true,

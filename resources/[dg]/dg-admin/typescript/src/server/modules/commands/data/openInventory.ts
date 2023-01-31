@@ -25,6 +25,9 @@ export const openInventory: CommandData = {
       }
       inv = args.inventoryId;
     } else {
+      if (!args.Target?.serverId) {
+        return;
+      }
       const targetPlayer = args.entity ? NetworkGetEntityOwner(args.entity) : args.Target.serverId;
       if (!targetPlayer) {
         Notifications.add(caller.source, 'Je moet een target invullen', 'error');
