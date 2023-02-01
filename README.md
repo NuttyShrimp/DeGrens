@@ -6,6 +6,8 @@
 git clone https://gitlab.pieter557.dscloud.me/degrens-qb/degrens-main.git
 git submodule init
 git submodule update
+git lfs pull
+git submodule foreach --recursive git lfs pull
 ```
 
 ## Submodules en al
