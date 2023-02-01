@@ -30,12 +30,12 @@ const defClient = (fName) => ({
   },
 });
 
-const prodClient = {
+const prodClient = (skipObfu) => ({
   output: {
     filename: 'client.js',
   },
   module: {
-    rules: [
+    rules: skipObfu ? [] : [
       {
         test: /\.[jt]s$/,
         exclude: /node_modules/,
@@ -54,7 +54,7 @@ const prodClient = {
       }
     ]
   }
-};
+});
 
 const devClient = (noHash) => ({
   output: {
@@ -62,14 +62,14 @@ const devClient = (noHash) => ({
   },
 });
 
-module.exports = (_, args, fName, noHash) => {
+module.exports = (_, args, fName, noHash, skipObfu) => {
   const env = args.mode ?? 'production';
   const baseConfig = merge(common, defClient(fName ?? "client"))
   switch (env) {
     case 'development':
       return merge(baseConfig, devClient(noHash));
     case 'production':
-      return merge(baseConfig, prodClient);
+      return merge(baseConfig, prodClient(skipObfu));
     default:
       throw new Error('Client: No matching configuration was found!');
   }
