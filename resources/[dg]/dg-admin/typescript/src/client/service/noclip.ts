@@ -127,8 +127,8 @@ const cleanupNoclip = () => {
   noclipPed = null;
   noclipSpeed = 1;
   for (const key in noclipMovingTicks) {
-    let thread = noclipMovingTicks[key as keyof typeof noclipMovingTicks]
-    if (!thread) return;
+    let thread = noclipMovingTicks[key as keyof typeof noclipMovingTicks];
+    if (!thread) continue;
     clearInterval(thread);
     noclipMovingTicks[key as keyof typeof noclipMovingTicks] = null;
   }
