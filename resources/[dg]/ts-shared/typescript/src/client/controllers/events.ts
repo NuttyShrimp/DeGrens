@@ -1,4 +1,4 @@
-import { RPC, Events, UI, Util } from '../index';
+import { RPC, Events, UI, Util, Minigames } from '../index';
 
 if (GetCurrentResourceName() === 'ts-shared') {
   // Util RPC to be used from server
@@ -19,5 +19,32 @@ if (GetCurrentResourceName() === 'ts-shared') {
 
   onNet('dgx:client:setWaypoint', (coords: Vec2) => {
     Util.setWaypoint(coords);
+  });
+
+  Events.onNet('dgx:minigames:playGame', async (id: number, ...args: any[]) => {
+    const getRetVal = () => {
+      switch (args[0]) {
+        case 'keygame': {
+          // @ts-ignore
+          return Minigames.keygame(...args.slice(1));
+        }
+        case 'order': {
+          // @ts-ignore
+          return Minigames.ordergame(...args.slice(1));
+        }
+        case 'sequence': {
+          // @ts-ignore
+          return Minigames.sequencegame(...args.slice(1));
+        }
+        case 'vision': {
+          // @ts-ignore
+          return Minigames.visiongame(...args.slice(1));
+        }
+        default:
+          return false;
+      }
+    };
+    const retVal = await getRetVal();
+    Events.emitNet('dgx:minigames:finishGame', id, retVal);
   });
 }

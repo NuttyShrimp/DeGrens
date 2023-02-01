@@ -1,6 +1,6 @@
 const doRequest = async (action: string, body = {}) => {
   // @ts-ignore
-  const rawResult = await fetch(`https://${GetParentResourceName()}/${action}`, {
+  const rawResult = await fetch(`https://${import.meta.env.PROD ? GetParentResourceName() : 'dev-env'}/${action}`, {
     method: 'post',
     headers: {
       'Content-Type': 'application/json; charset=UTF-8',

@@ -2,6 +2,16 @@ import { Util } from './index';
 
 const fexp = global.exports['dg-financials'];
 
+enum TaxIds {
+  None = 1,
+  Vehicles,
+  RealEstate,
+  Income,
+  Services,
+  Goederen,
+  Gas
+}
+
 class Financials {
   public awaitFinancialsLoaded(): Promise<void> {
     return fexp.awaitFinancialsLoaded();
@@ -155,4 +165,5 @@ class Financials {
 
 export default {
   Financials: new Financials(),
+  TaxIds
 };

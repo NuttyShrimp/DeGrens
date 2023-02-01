@@ -38,7 +38,7 @@
     "dumpster": 1
   },
   "dropRemoveTime": 10,
-  "starterItems": ["phone", "id_card", "drivers_license"],
+  "starterItems": ["phone", "id_card"],
   "containers": {
     "container_weapons": {
       "size": 10,

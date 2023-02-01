@@ -42,10 +42,15 @@ declare namespace Config {
     radio: RadioConfig;
   }
 
-
   interface Consumable {
     name: string;
     gain: number;
+  }
+
+  interface EffectConsumable {
+    name: string;
+    effect: 'speed' | 'stress' | 'damage';
+    duration: number;
   }
 
   interface Consumables {
@@ -54,5 +59,17 @@ declare namespace Config {
       alcohol: Consumable[];
     };
     food: Consumable[];
+
+    drugs: EffectConsumable[];
+  }
+
+  namespace Seats {
+    interface Seat {
+      model: string | number;
+      offset: Vec3;
+    }
+    interface Config {
+      seats: Seat[];
+    }
   }
 }

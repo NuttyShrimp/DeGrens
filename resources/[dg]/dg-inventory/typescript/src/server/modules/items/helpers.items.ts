@@ -87,22 +87,12 @@ export const ON_CREATE: Record<string, (plyId?: number) => { [key: string]: any 
     if (!plyId) return {};
     const playerData = DGCore.Functions.GetPlayer(plyId).PlayerData;
     return {
-      BSN: playerData.citizenid,
-      voornaam: playerData.charinfo.firstname,
-      achternaam: playerData.charinfo.lastname,
-      geboortedatum: playerData.charinfo.birthdate,
-      gender: playerData.charinfo.gender == 0 ? 'Man' : 'Vrouw',
-      nationaliteit: playerData.charinfo.nationality,
-    };
-  },
-  drivers_license: (plyId?: number) => {
-    if (!plyId) return {};
-    const playerData = DGCore.Functions.GetPlayer(plyId).PlayerData;
-    return {
-      voornaam: playerData.charinfo.firstname,
-      achternaam: playerData.charinfo.lastname,
-      geboortedatum: playerData.charinfo.birthdate,
-      categorie: 'AM | A | B',
+      cid: playerData.citizenid,
+      firstName: playerData.charinfo.firstname,
+      lastName: playerData.charinfo.lastname,
+      dob: playerData.charinfo.birthdate,
+      gender: playerData.charinfo.gender == 0 ? 'M' : 'V',
+      nationality: playerData.charinfo.nationality.toUpperCase().slice(0,3),
     };
   },
   fakeplate: () => ({ plate: global.exports['dg-vehicles'].generatePlate() }),

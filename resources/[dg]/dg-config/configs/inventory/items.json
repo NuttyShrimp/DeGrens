@@ -763,6 +763,19 @@
   },
   {
     "markedForSeizure": true,
+    "name": "joint",
+    "label": "Joint",
+    "decayRate": 7200,
+    "image": "joint.png",
+    "description": "The good stuff",
+    "useable": true,
+    "size": {
+      "x": 2,
+      "y": 1
+    }
+  },
+  {
+    "markedForSeizure": true,
     "name": "thermite",
     "label": "Thermite",
     "useable": true,
@@ -798,6 +811,19 @@
     "size": {
       "x": 2,
       "y": 2
+    }
+  },
+  {
+    "markedForSeizure": true,
+    "name": "coke_bag",
+    "label": "Zakje Coke",
+    "useable": true,
+    "decayRate": 7200,
+    "image": "coke_bag.png",
+    "description": "Zakje Coke van 1 gram",
+    "size": {
+      "x": 1,
+      "y": 1
     }
   },
   {
@@ -916,16 +942,6 @@
     "name": "id_card",
     "label": "ID Kaart",
     "image": "id_card.png",
-    "size": {
-      "x": 2,
-      "y": 1
-    },
-    "useable": true
-  },
-  {
-    "name": "drivers_license",
-    "label": "Rijbewijs",
-    "image": "drivers_license.png",
     "size": {
       "x": 2,
       "y": 1
@@ -2868,6 +2884,16 @@
     }
   },
   {
+    "name": "beer",
+    "label": "Bier",
+    "image": "beer.png",
+    "useable": true,
+    "size": {
+      "x": 1,
+      "y": 2
+    }
+  },
+  {
     "useable": true,
     "name": "pd_armor",
     "label": "PD Vest",
@@ -2879,6 +2905,16 @@
     }
   },
   {
+    "name": "vodka",
+    "label": "Relative Vodka",
+    "image": "vodka.png",
+    "useable": true,
+    "size": {
+      "x": 1,
+      "y": 2
+    }
+  },
+  {
     "useable": true,
     "name": "bandage",
     "label": "Verband",
@@ -2886,6 +2922,16 @@
     "size": {
       "x": 2,
       "y": 1
+    }
+  },
+  {
+    "name": "mojito",
+    "label": "Mojito",
+    "image": "mojito.png",
+    "useable": true,
+    "size": {
+      "x": 2,
+      "y": 2
     }
   }
 ]

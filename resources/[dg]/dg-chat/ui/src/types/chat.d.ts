@@ -1,11 +1,25 @@
 export namespace Chat {
-  type MessageType = 'normal' | 'warning' | 'error' | 'system' | 'success';
+  type MessageType = 'normal' | 'warning' | 'error' | 'system' | 'success' | 'idcard' | 'driverlicense';
 
-  interface Message {
-    prefix: string;
+  interface BaseMessage {
+    prefix?: string;
     message: string;
-    type: ChatMessageType;
+    type: Exclude<ChatMessageType, 'idcard' | 'driverlicense'>;
   }
+
+  interface CardMessage {
+    message: {
+      firstName: string;
+      lastName: string;
+      dob: string;
+      gender: 'M' | 'F';
+      cid: number;
+      nationality: string;
+    };
+    type: 'idcard';
+  }
+
+  type Message = BaseMessage | IdCardMessage;
 
   interface SuggestionParameter {
     name: string;

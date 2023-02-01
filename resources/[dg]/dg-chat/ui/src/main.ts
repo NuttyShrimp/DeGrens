@@ -17,7 +17,7 @@ Sentry.init({
     // @ts-ignore
     new BrowserTracing({
       // @ts-ignore
-      tracingOrigins: [`https://${GetParentResourceName()}`],
+      tracingOrigins: [`https://${import.meta.env.PROD ? GetParentResourceName() : 'dev-env'}`],
     }),
   ],
   // Set tracesSampleRate to 1.0 to capture 100%
