@@ -77,7 +77,7 @@ export const validateWeaponInfo = (src: number, info: AntiCheat.WeaponInfo) => {
 
   const ped = GetPlayerPed(String(src));
   const pedAttachedWeapon = GetSelectedPedWeapon(ped) >>> 0;
-  if (!hasAlwaysAllowedWeapon && pedAttachedWeapon != info.weapon) {
+  if (!hasAlwaysAllowedWeapon && !ALWAYS_ALLOWED_WEAPONS.has(pedAttachedWeapon) && pedAttachedWeapon != info.weapon) {
     Admin.ACBan(src, 'Weapon mismatch (native)', {
       attachedWeapon: pedAttachedWeapon,
       weaponInfo: info,
