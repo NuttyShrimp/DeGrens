@@ -81,6 +81,15 @@ class BennysManager extends Util.Singleton<BennysManager>() {
       upgrades,
       repair,
     });
+    Util.Log(
+      'bennys:entered',
+      {
+        vin,
+        spotId,
+      },
+      `${Util.getName(plyId)} has entered a bennys`,
+      plyId
+    );
     return true;
   };
 
@@ -179,7 +188,8 @@ class BennysManager extends Util.Singleton<BennysManager>() {
         upgrades,
         isNoChargeSpot,
       },
-      `${GetPlayerName(String(plyId))} has purchased upgrades for vehicle (${spotData.vin})`
+      `${Util.getName(plyId)} has purchased upgrades for vehicle (${spotData.vin})`,
+      plyId
     );
   };
 
@@ -233,7 +243,7 @@ class BennysManager extends Util.Singleton<BennysManager>() {
         spotId,
         cid,
       },
-      `${GetPlayerName(String(plyId))} has registered a spot to be free`,
+      `${Util.getName(plyId)} has registered a spot to be free`,
       plyId
     );
   };
