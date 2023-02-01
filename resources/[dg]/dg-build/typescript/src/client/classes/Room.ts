@@ -201,94 +201,108 @@ export class Room {
   }
 
   async createRoom(): Promise<[Coords, number[]] | null> {
-    const ped = PlayerPedId();
-    this.startingPos = Util.ArrayToVector3(GetEntityCoords(ped, true));
-    FreezeEntityPosition(ped, true);
+    try {
+      const ped = PlayerPedId();
+      this.startingPos = Util.ArrayToVector3(GetEntityCoords(ped, true));
+      FreezeEntityPosition(ped, true);
 
-    if (this.plan.origin) {
-      SetEntityCoords(ped, this.plan.origin.x, this.plan.origin.y, this.plan.origin.z, true, false, false, false);
-      await Util.Delay(1000);
-    }
-
-    const [ymapObjects, extents] = global.exports['dg-lib'].parse(this.planName, this.plan.saveToCache);
-    let mainPos = new Vector3(0, 0, 0);
-    let objectSpawnCoords: Vector3;
-
-    switch (typeof this.position) {
-      case 'number': {
-        objectSpawnCoords = getGeneratorFromRoom(this.plan, this.position)!;
-        break;
+      if (this.plan.origin) {
+        SetEntityCoords(ped, this.plan.origin.x, this.plan.origin.y, this.plan.origin.z, true, false, false, false);
+        await Util.Delay(1000);
       }
-      default: {
-        objectSpawnCoords = new Vector3(this.position.x, this.position.y, this.position.z);
-        break;
+
+      const [ymapObjects, extents] = global.exports['dg-lib'].parse(this.planName, this.plan.saveToCache);
+      let mainPos = new Vector3(0, 0, 0);
+      let objectSpawnCoords: Vector3;
+
+      switch (typeof this.position) {
+        case 'number': {
+          objectSpawnCoords = getGeneratorFromRoom(this.plan, this.position)!;
+          break;
+        }
+        default: {
+          objectSpawnCoords = new Vector3(this.position.x, this.position.y, this.position.z);
+          break;
+        }
       }
-    }
-    this.roomOrigin = objectSpawnCoords;
+      this.roomOrigin = objectSpawnCoords;
 
-    for (const v of ymapObjects) {
-      if (v.name.toLowerCase() === this.plan.shell.toLowerCase()) {
-        mainPos = new Vector3(v.x, v.y, v.z);
+      for (const v of ymapObjects) {
+        if (v.name.toLowerCase() === this.plan.shell.toLowerCase()) {
+          mainPos = new Vector3(v.x, v.y, v.z);
+        }
       }
-    }
-    // Set entity coords to spawnppoint
-    SetEntityCoords(
-      ped,
-      objectSpawnCoords.x + this.plan.spawnOffset.x,
-      objectSpawnCoords.y + this.plan.spawnOffset.y,
-      objectSpawnCoords.z + this.plan.spawnOffset.z,
-      true,
-      false,
-      false,
-      false
-    );
-    SetEntityHeading(ped, this.plan.spawnOffset.w);
+      // Set entity coords to spawnppoint
+      SetEntityCoords(
+        ped,
+        objectSpawnCoords.x + this.plan.spawnOffset.x,
+        objectSpawnCoords.y + this.plan.spawnOffset.y,
+        objectSpawnCoords.z + this.plan.spawnOffset.z,
+        true,
+        false,
+        false,
+        false
+      );
+      SetEntityHeading(ped, this.plan.spawnOffset.w);
 
-    this.Area();
-    this.Peds();
+      this.Area();
+      this.Peds();
 
-    const buildingPos = objectSpawnCoords.add(mainPos);
+      const buildingPos = objectSpawnCoords.add(mainPos);
 
-    const buildingHash = GetHashKey(this.plan.shell);
-    await Util.loadModel(this.plan.shell);
-    this.buildingObj = CreateObject(buildingHash, buildingPos.x, buildingPos.y, buildingPos.z, false, false, false);
-    setCorrectZ(this.buildingObj, objectSpawnCoords.z + mainPos.z);
-    FreezeEntityPosition(this.buildingObj, true);
+      const buildingHash = GetHashKey(this.plan.shell);
+      await Util.loadModel(this.plan.shell);
+      this.buildingObj = CreateObject(buildingHash, buildingPos.x, buildingPos.y, buildingPos.z, false, false, false);
+      setCorrectZ(this.buildingObj, objectSpawnCoords.z + mainPos.z);
+      FreezeEntityPosition(this.buildingObj, true);
 
-    for (const k in ymapObjects) {
-      const v = ymapObjects[k];
-      if (v.name == this.plan.shell) {
-        SetEntityQuaternion(this.buildingObj, v.rx, v.ry, v.rz, v.rw * -1);
-        continue;
+      for (const k in ymapObjects) {
+        const v = ymapObjects[k];
+        if (v.name == this.plan.shell) {
+          SetEntityQuaternion(this.buildingObj, v.rx, v.ry, v.rz, v.rw * -1);
+          continue;
+        }
+        const worldCoords = new Vector3(objectSpawnCoords.x + v.x, objectSpawnCoords.y + v.y, objectSpawnCoords.z);
+        const intObj = CreateObject(
+          GetHashKey(v.name),
+          worldCoords.x,
+          worldCoords.y,
+          worldCoords.z,
+          false,
+          false,
+          false
+        );
+        setCorrectZ(intObj, objectSpawnCoords.z + v.z);
+        SetEntityQuaternion(intObj, v.rx, v.ry, v.rz, v.rw * -1);
+        FreezeEntityPosition(intObj, true);
+        this.cachedObjects.push(intObj);
       }
-      const worldCoords = new Vector3(objectSpawnCoords.x + v.x, objectSpawnCoords.y + v.y, objectSpawnCoords.z);
-      const intObj = CreateObject(GetHashKey(v.name), worldCoords.x, worldCoords.y, worldCoords.z, false, false, false);
-      setCorrectZ(intObj, objectSpawnCoords.z + v.z);
-      SetEntityQuaternion(intObj, v.rx, v.ry, v.rz, v.rw * -1);
-      FreezeEntityPosition(intObj, true);
-      this.cachedObjects.push(intObj);
+
+      const safe = await FloatTilSafe(this.plan.shell);
+
+      FreezeEntityPosition(ped, false);
+      TriggerEvent('build:event:inside', true);
+      TriggerServerEvent('build:event:inside', true);
+      Sync.setPlayerInvincible(false);
+
+      Util.debug(`created: ${this.planName} | success: ${safe}`);
+      if (safe) {
+        Weather.freezeTime(true, 0);
+        Weather.freezeWeather(true, 'CLEAR');
+        this.createInteractions();
+        this.createPeekZones();
+        this.createPeekEntries();
+        this.createDryVolume(extents);
+        DoScreenFadeIn(250);
+        return [objectSpawnCoords, this.cachedObjects];
+      }
+      this.exit();
+      return null;
+    } catch (e) {
+      console.error(e);
+      this.exit();
+      return null;
     }
-
-    const safe = await FloatTilSafe(this.plan.shell);
-
-    FreezeEntityPosition(ped, false);
-    TriggerEvent('build:event:inside', true);
-    TriggerServerEvent('build:event:inside', true);
-    Sync.setPlayerInvincible(false);
-
-    Util.debug(`created: ${this.planName} | success: ${safe}`);
-    if (safe) {
-      Weather.freezeTime(true, 0);
-      Weather.freezeWeather(true, 'CLEAR');
-      this.createInteractions();
-      this.createPeekZones();
-      this.createPeekEntries();
-      this.createDryVolume(extents);
-      DoScreenFadeIn(250);
-      return [objectSpawnCoords, this.cachedObjects];
-    }
-    this.exit();
-    return null;
   }
 
   exit(overridePos?: Coords) {
