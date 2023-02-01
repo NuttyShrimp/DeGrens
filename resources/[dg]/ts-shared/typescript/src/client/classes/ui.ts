@@ -4,7 +4,7 @@ class UI {
 
   constructor() {
     this.registered = [];
-    this.resourceStarted = false;
+    this.resourceStarted = GetResourceState('dg-ui') == 'started';
     // eventHandlers
     on('__dg_ui:Ready', () => {
       this.registered.forEach(evt => {

@@ -9,7 +9,15 @@
     "alcohol": [
       {
         "name": "beer",
-        "gain": 20
+        "gain": 0.8
+      },
+      {
+        "name": "vodka",
+        "gain": 1.9
+      },
+      {
+        "name": "mojito",
+        "gain": 1.2
       }
     ]
   },
@@ -17,6 +25,23 @@
     {
       "name": "sandwich",
       "gain": 20
+    }
+  ],
+  "drugs": [
+    {
+      "name": "joint",
+      "effect": "stress",
+      "duration": 20000
+    },
+    {
+      "name": "coke_bag",
+      "effect": "damage",
+      "duration": 10000
+    },
+    {
+      "name": "meth_bag",
+      "effect": "speed",
+      "duration": 12000
     }
   ]
 }

@@ -1,4 +1,5 @@
-import { Chat } from '../types/chat';
+import { Store } from 'vuex';
+import { Chat, State } from '../types/chat';
 
 export const testMessages: Chat.Message[] = [
   {
@@ -27,8 +28,23 @@ export const testMessages: Chat.Message[] = [
     type: 'warning',
   },
   {
-    message: 'Bozo ran into a problem',
-    prefix: 'System: ',
-    type: 'warning',
+    message: {
+      cid: 1000,
+      dob: "11/9/2001",
+      firstName: "John",
+      lastName: "doe",
+      gender: "M",
+      nationality: "BEL"
+    },
+    type: 'idcard',
   },
 ];
+
+export const devStorePlugin = (store: Store<State>) => {
+  if (import.meta.env.PROD) return;
+  store.commit("setIsMsgVisible", true)
+  store.commit("setIsInputVisible", true)
+  testMessages.forEach(msg => {
+    store.commit("addMessage", msg)
+  })
+}

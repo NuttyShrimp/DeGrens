@@ -6,12 +6,27 @@
       :duration="500"
     >
       <div v-if="shouldShow" id="messageBox" class="message__innerbox">
-        <div :class="`message__entry ${message.type ?? ''}`" v-for="(message, id) in messages" :key="id">
-          <span v-if="message.prefix">
-            <strong>{{ message.prefix }}</strong>
-          </span>
-          <span v-html="message.message" />
-        </div>
+        <template v-for="(message, id) in messages">
+          <div :class="`message__entry message__card`" v-if="message.type === 'idcard'" :key="`${id}-card`">
+            <div class="message__card__info">
+              <p class="message__card__elem message__card__lastname">{{ message.message.lastName }}</p>
+              <p class="message__card__elem message__card__firstname">{{ message.message.firstName }}</p>
+              <p class="message__card__elem message__card__dob">{{ message.message.dob }}</p>
+              <p class="message__card__elem message__card__nationality">{{ message.message.nationality }}</p>
+              <p class="message__card__elem message__card__gender">{{ message.message.gender }}</p>
+              <p class="message__card__elem message__card__cid">{{ message.message.cid }}</p>
+              <div class="message__card__elem message__card__photo">
+                <img :src="message.message.gender === 'M' ? 'assets/male.png' : 'assets/female.png'" />
+              </div>
+            </div>
+          </div>
+          <div v-else :class="`message__entry ${message.type ?? ''}`" :key="id">
+            <span v-if="message.prefix">
+              <strong>{{ message.prefix }}</strong>
+            </span>
+            <span v-html="message.message" />
+          </div>
+        </template>
       </div>
     </transition>
   </div>
@@ -118,6 +133,72 @@
       &.success {
         background-color: $chat_success;
         border-color: darken($chat_success, 10%);
+      }
+    }
+
+    &__card {
+      background-color: unset;
+      background-image: url("/assets/card.png");
+      background-size: auto 20vh;
+      background-repeat: no-repeat;
+      position: relative;
+      border: none;
+      padding: 0;
+      width: 100%;
+      height: 20vh;
+      &__img {
+        height: 20vh;
+        position: absolute;
+        top: 0;
+        left:0;
+        & > img {
+          height: 100%;
+          object-fit: contain;
+        }
+      }
+      &__info {
+        color: black;
+        font-size: .75rem;
+        position: relative;
+        height: inherit;
+      }
+      &__elem {
+        width: fit-content;
+        position: absolute;
+      }
+      &__lastname {
+        top: 3.7vh;
+        left: 1.1vh;
+      }
+      &__firstname {
+        top: 5.3vh;
+        left: 1.1vh;
+      }
+      &__dob {
+        top: 8.3vh;
+        left: 24.2vh;
+      }
+      &__nationality {
+        top: 8.3vh;
+        left: 16.7vh;
+      }
+      &__gender {
+        top: 8.3vh;
+        left: 11.9vh;
+      }
+      &__cid {
+        top: 10.3vh;
+        left: 11.8vh;
+      }
+      &__photo {
+        bottom: 1vh;
+        left: 1.2vh;
+        width: 9.4vh;
+        height: 10vh;
+        & > img {
+          width: 100%;
+          height: 100%;
+        }
       }
     }
   }

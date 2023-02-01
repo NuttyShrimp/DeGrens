@@ -16,6 +16,9 @@ import './services/me';
 import './services/editor';
 import './services/point';
 import './services/tackle';
+import './services/consumables';
+import './services/yoga';
+import './services/seats';
 
 import { setDiscordRichPresence } from 'modules/discord/service.discord';
 import { setGTABehaviour } from 'modules/gtabehaviour/service.gtabehaviour';

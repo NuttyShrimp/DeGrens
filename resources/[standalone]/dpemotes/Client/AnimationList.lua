@@ -375,7 +375,7 @@ DP.Dances = {
 DP.Emotes = {
    ["drink"] = {"mp_player_intdrink", "loop_bottle", "Drink", AnimationOptions =
    {
-        Prop = "prop_ld_flow_bottle",
+        Prop = "bzzz_pack_drpepper001",
         PropBone = 18905,
         PropPlacement = {0.12, 0.008, 0.03, 240.0, -60.0},
         EmoteMoving = true,
@@ -1311,7 +1311,7 @@ DP.Emotes = {
 
    ["eat"] = {"mp_player_inteat@burger", "mp_player_int_eat_burger_fp", "Eat", AnimationOptions =
    {
-        Prop = "prop_cs_burger_01",
+        Prop = "bzzz_pack_croissant001",
         PropBone = 18905,
         PropPlacement = {0.12, 0.028, 0.001, 10.0, 175.0},
         EmoteMoving = true,

@@ -33,6 +33,7 @@ declare global {
     Weapons: typeof Classes.Weapons;
     Weather: typeof Classes.Weather;
     Hospital: typeof Classes.Hospital;
+    Minigames: typeof Classes.Minigames;
     Vector3: typeof Vector3Class;
     Vector4: typeof Vector4Class;
   };

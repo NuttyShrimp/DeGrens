@@ -1,4 +1,4 @@
-type MessageType = 'normal' | 'warning' | 'error' | 'system' | 'success';
+type MessageType = 'normal' | 'warning' | 'error' | 'system' | 'success' | 'idcard';
 
 declare namespace Server {
   type CommandHandler = (src: number, cmd: string, args: string[]) => void;
@@ -22,9 +22,23 @@ declare namespace Shared {
     permissionLevel: string;
   }
 
-  interface Message {
+  type Message = BaseMessage | CardMessage;
+
+  interface BaseMessage {
     prefix: string;
     message: string;
-    type?: MessageType;
+    type?: Exclude<MessageType, 'idcard'>;
+  }
+
+  interface CardMessage {
+    message: {
+      firstName: string;
+      lastName: string;
+      dob: string;
+      gender: 'M' | 'F';
+      cid: number;
+      nationality: string;
+    };
+    type: 'idcard';
   }
 }

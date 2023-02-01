@@ -1,5 +1,69 @@
-import { Config, Hospital, Inventory, Taskbar } from '@dgx/server';
+import { Chat, Config, Events, Hospital, Inventory, Minigames, Notifications, Taskbar, Util } from '@dgx/server';
 
+const effects: Record<Config.EffectConsumable['effect'], (target: number, duration: number, itemId: string) => void> = {
+  stress: async(target, duration, itemId) => {
+    const success = await Inventory.removeItemByIdFromPlayer(target, itemId);
+    if (!success) {
+      Notifications.add(target, 'Item is verdwenen?..');
+      return;
+    };
+    Events.emitNet('misc:consumables:applyEffect', target, 'stress', duration);
+  },
+  speed: async (target, duration, itemId) => {
+    let success = await Minigames.keygame(target, 1, 4, 18);
+    if (!success) return;
+    const [isCancelled] = await Taskbar.create(target, 'nose', 'sniffing drugs', 5000, {
+      canCancel: true,
+      cancelOnDeath: true,
+      controlDisables: {
+        combat: true,
+      },
+      disableInventory: true,
+      animation: {
+        animDict: 'anim@amb@nightclub@peds@',
+        anim: 'missfbi3_party_snort_coke_b_male3',
+        flags: 49,
+      },
+    });
+    if (isCancelled) {
+      Notifications.add(target, 'Geannuleerd...', 'error');
+      return;
+    }
+    success = await Inventory.removeItemByIdFromPlayer(target, itemId);
+    if (!success) {
+      Notifications.add(target, 'Item is verdwenen?..');
+      return;
+    };
+    Events.emitNet('misc:consumables:applyEffect', target, 'speed', duration);
+  },
+  damage: async (target, duration, itemId) => {
+    let success = await Minigames.keygame(target, 1, 6, 13);
+    if (!success) return;
+    const [isCancelled] = await Taskbar.create(target, 'nose', 'sniffing drugs', 5000, {
+      canCancel: true,
+      cancelOnDeath: true,
+      controlDisables: {
+        combat: true,
+      },
+      disableInventory: true,
+      animation: {
+        animDict: 'anim@amb@nightclub@peds@',
+        anim: 'missfbi3_party_snort_coke_b_male3',
+        flags: 49,
+      },
+    });
+    if (isCancelled) {
+      Notifications.add(target, 'Geannuleerd...', 'error');
+      return;
+    }
+    success = await Inventory.removeItemByIdFromPlayer(target, itemId);
+    if (!success) {
+      Notifications.add(target, 'Item is verdwenen?..');
+      return;
+    };
+    Events.emitNet('misc:consumables:applyEffect', target, 'damage', duration);
+  },
+};
 setImmediate(async () => {
   await Config.awaitConfigLoad();
   const config = await Config.getConfigValue('inventory.consumables');
@@ -10,11 +74,11 @@ const registerUsables = (config: Config.Consumables) => {
   config.food.forEach(food => registerFood(food));
   config.drink.normal.forEach(drink => registerDrink(drink));
   config.drink.alcohol.forEach(drink => registerAlcoholDrink(drink));
+  config.drugs.forEach(drug => registerDrug(drug));
 };
 
 const registerFood = (info: Config.Consumable) => {
   Inventory.registerUseable(info.name, async (src, item) => {
-    Inventory.destroyItem(item.id);
     emitNet('animations:client:EmoteCommandStart', src, ['eat']);
     const [isCancelled] = await Taskbar.create(src, 'burger', 'Eten...', 5000, {
       controlDisables: {
@@ -22,16 +86,22 @@ const registerFood = (info: Config.Consumable) => {
       },
       canCancel: true,
       cancelOnDeath: true,
-      disarm: true,
     });
     emitNet('animations:client:EmoteCommandStart', src, ['c']);
-    if (isCancelled) return;
+    if (isCancelled) {
+      Notifications.add(src, 'Geannuleerd..');
+      return;
+    }
+    const success = await Inventory.removeItemByIdFromPlayer(src, item.id);
+    if (!success) {
+      Notifications.add(src, 'Item is verdwenen?..');
+      return;
+    }
     Hospital.setNeed(src, 'hunger', old => old + info.gain);
   });
 };
 
 const handleDrinkUse = async (src: number, item: Inventory.ItemState, info: Config.Consumable) => {
-  Inventory.destroyItem(item.id);
   emitNet('animations:client:EmoteCommandStart', src, ['drink']);
   const [isCancelled] = await Taskbar.create(src, 'bottle-water', 'Drinken...', 5000, {
     controlDisables: {
@@ -39,22 +109,53 @@ const handleDrinkUse = async (src: number, item: Inventory.ItemState, info: Conf
     },
     canCancel: true,
     cancelOnDeath: true,
-    disarm: true,
   });
   emitNet('animations:client:EmoteCommandStart', src, ['c']);
-  if (isCancelled) return;
+  if (isCancelled) {
+    Notifications.add(src, 'Geannuleerd..');
+    return false;
+  }
+  const success = await Inventory.removeItemByIdFromPlayer(src, item.id);
+  if (!success) {
+    Notifications.add(src, 'Item is verdwenen?..');
+    return false;
+  }
   Hospital.setNeed(src, 'thirst', old => old + info.gain);
-};
+  return success;
+}
 
 const registerDrink = (info: Config.Consumable) => {
-  Inventory.registerUseable(info.name, (src, item) => {
+  Inventory.registerUseable(info.name, async (src, item) => {
     handleDrinkUse(src, item, info);
   });
 };
 
 const registerAlcoholDrink = (info: Config.Consumable) => {
   Inventory.registerUseable(info.name, async (src, item) => {
-    await handleDrinkUse(src, item, info);
-    // TODO: Add drunk effect if drank enough
+    const success = await handleDrinkUse(src, item, info);
+    if (success) {
+      Events.emitNet('misc:consumables:applyAlcohol', src, info.gain);
+    }
   });
 };
+
+const registerDrug = (info: Config.EffectConsumable) => {
+  Inventory.registerUseable(info.name, async (src, item) => {
+    effects[info.effect](src, info.duration, item.id);
+  });
+};
+
+// Registration of 'normal' items
+Inventory.registerUseable("id_card", (src, item) => {
+  const plyInRadius = Util.getAllPlayersInRange(src, 5);
+  Chat.sendMessage(src, {
+    type: "idcard",
+    message: item.metadata as Chat.CardMessage['message']
+  })
+  plyInRadius.forEach(ply => {
+    Chat.sendMessage(ply, {
+      type: "idcard",
+      message: item.metadata as Chat.CardMessage['message']
+    })
+  })
+})

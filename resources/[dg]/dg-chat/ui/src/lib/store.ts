@@ -2,6 +2,7 @@ import { InjectionKey } from 'vue';
 import { createStore, Store, useStore as baseUseStore } from 'vuex';
 
 import { Chat, State } from '../types/chat';
+import { devStorePlugin, testMessages } from './devdata';
 
 import { nuiAction } from './nui/action';
 import { sanitizeText } from './util';
@@ -42,7 +43,9 @@ export const store = createStore<State>({
       state.messages = [];
     },
     addMessage(state, message: Chat.Message) {
-      message.message = sanitizeText(message.message);
+      if (message.type !== 'idcard') {
+        message.message = sanitizeText(message.message);
+      }
       state.messages = [...state.messages, message];
     },
     setSuggestions(state, suggestions: Chat.Suggestion[]) {
@@ -71,6 +74,7 @@ export const store = createStore<State>({
       nuiAction('sendMessage', { message });
     },
   },
+  plugins: [devStorePlugin],
 });
 
 export function useStore() {

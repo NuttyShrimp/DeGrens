@@ -1,4 +1,12 @@
 declare namespace Minigames {
+  type Game = 'keygame' | 'sequence' | 'order' | 'vision';
+
+  type HandlerParams =
+    | ['keygame', number, number, number]
+    | ['sequence', number, number, number]
+    | ['order', number, number, number, number, number]
+    | ['vision', number, number];
+
   namespace Keygame {
     type Cycle = {
       speed: number;
