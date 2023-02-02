@@ -135,8 +135,10 @@ export const addNotification = (
   if (!charState.hasPhone) {
     return;
   }
+
   // Prevent duplicate notifications
   removeNotification(notification.id);
+
   // Kan naam vam app zijn of FA icon met defaults
   if (typeof notification.icon === 'string') {
     const app = phoneApps.find(app => app.name === notification.icon);
@@ -163,21 +165,23 @@ export const addNotification = (
       };
     }
   });
+
   if (notification.app && !getPhoneApp(notification.app)) {
     throw new Error(`Phone app ${notification.app} not found (notification: ${notification.id})`);
   }
-  const notiState = usePhoneNotiStore.getState();
-  usePhoneNotiStore.setState({
-    list: [...notiState.list, notification as Phone.Notifications.Notification],
-  });
+
+  usePhoneNotiStore.setState(s => ({
+    list: [...s.list, notification as Phone.Notifications.Notification],
+  }));
   const phoneState = usePhoneStore.getState();
   if (!phoneState.isSilent) {
     useVisibleStore.getState().toggleApp('phone', true);
     usePhoneStore.setState({
-      animating: phoneState.animating !== 'open' ? 'peek' : 'open',
+      animating: phoneState.animating === 'open' ? 'open' : 'peek',
       hasNotifications: true,
     });
   }
+
   if (notification.sticky) return;
   let cd = notification?.timer && notification.timer > 0 ? notification.timer * 1000 : 8000;
   if ((notification.onAccept || notification.onDecline) && !((notification?.timer ?? 0) > 0)) {
@@ -195,20 +199,24 @@ export const addNotification = (
 };
 
 export const removeNotification = (id: string) => {
+  const oldList = usePhoneNotiStore.getState().list;
+  if (!oldList.some(n => n.id === id)) return;
+
   if (notificationTimers[id]) {
     clearInterval(notificationTimers[id]);
     delete notificationTimers[id];
   }
-  const notiList = usePhoneNotiStore.getState().list.filter(n => n.id !== id);
+
+  const newList = oldList.filter(n => n.id !== id);
   usePhoneNotiStore.setState({
-    list: notiList,
+    list: newList,
   });
-  const phoneState = usePhoneStore.getState();
-  if (notiList.length === 0) {
-    usePhoneStore.setState({
-      animating: phoneState.animating === 'peek' ? 'closed' : 'open',
+
+  if (newList.length === 0) {
+    usePhoneStore.setState(s => ({
+      animating: s.animating === 'peek' ? 'closed' : s.animating,
       hasNotifications: false,
-    });
+    }));
   }
 };
 

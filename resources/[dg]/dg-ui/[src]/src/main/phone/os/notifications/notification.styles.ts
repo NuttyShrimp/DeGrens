@@ -6,10 +6,10 @@ import { hexToRGBStr } from '../../../../lib/util';
 export const styles = makeStyles({
   list: {
     position: 'absolute',
-    left: "50%",
-    transform: "translate(-50%, 0)",
+    left: '50%',
+    transform: 'translate(-50%, 0)',
     width: '85%',
-    height: "100%",
+    height: '100%',
     top: 0,
     display: 'flex',
     flexDirection: 'column',

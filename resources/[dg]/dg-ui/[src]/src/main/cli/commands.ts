@@ -449,4 +449,43 @@ export const cmds: {
       direction: '$1',
     },
   },
+  {
+    cmd: 'phone add notification',
+    app: 'phone',
+    data: () => ({
+      appName: 'home-screen',
+      action: 'addNotification',
+      data: {
+        id: 'test_notif',
+        title: `bar`,
+        description: 'foo',
+        sticky: true,
+        keepOnAction: true,
+        icon: 'jobcenter',
+      },
+    }),
+  },
+  {
+    cmd: 'phone update notification',
+    app: 'phone',
+    data: () => ({
+      appName: 'home-screen',
+      action: 'updateNotification',
+      data: {
+        id: 'test_notif',
+        notification: {
+          title: 'ziektes',
+        },
+      },
+    }),
+  },
+  {
+    cmd: 'phone remove notification',
+    app: 'phone',
+    data: () => ({
+      appName: 'home-screen',
+      action: 'removeNotification',
+      data: 'test_notif',
+    }),
+  },
 ];

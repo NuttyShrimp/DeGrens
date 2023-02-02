@@ -115,7 +115,7 @@ export const NotificationWrapper: FC<React.PropsWithChildren<unknown>> = () => {
       refMap.delete(n.id);
     },
     config: { duration: 400, easing: easings.easeOutQuad },
-    // keys: n => n.id,
+    keys: n => n.id,
   });
 
   return (
