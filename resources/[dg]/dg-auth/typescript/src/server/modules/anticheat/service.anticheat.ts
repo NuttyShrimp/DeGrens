@@ -150,12 +150,12 @@ const toggleAllowedMod = async (src: number, mod: string, isAllowed: boolean) =>
   pendingAllowedMods[src] = pendingAllowedMods[src].filter(pm => pm.id !== pendingChangeId);
 };
 
-export const setPlayerInvincible = (src: number, isEnabled: boolean) => {
-  toggleAllowedMod(src, 'invincible', isEnabled);
+export const setPlayerInvincible = async (src: number, isEnabled: boolean) => {
+  await toggleAllowedMod(src, 'invincible', isEnabled);
   SetPlayerInvincible(String(src), isEnabled);
 };
-export const setPlayerVisible = (src: number, isVisible: boolean) => {
-  toggleAllowedMod(src, 'invisible', !isVisible);
+export const setPlayerVisible = async (src: number, isVisible: boolean) => {
+  await toggleAllowedMod(src, 'invisible', !isVisible);
   Sync.executeNative('SetEntityVisible', GetPlayerPed(String(src)), isVisible, false);
 };
 // endregion
