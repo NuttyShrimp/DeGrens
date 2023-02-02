@@ -68,6 +68,10 @@ const scheduleAllowedSync = () => {
 // TODO: Should take drugeffects in count
 const scheduleAntiTP = () => {
   if (antiTP) return;
+
+  // 10 sec grace period when ped was on vehicle to avoid ban while falling off
+  let onVehicleGracePeriod = 0;
+
   antiTP = setInterval(() => {
     const ped = PlayerPedId();
     let speed = GetEntitySpeed(ped);
@@ -75,12 +79,21 @@ const scheduleAntiTP = () => {
     if (inVeh) {
       speed = GetEntitySpeed(GetVehiclePedIsIn(ped, false));
     }
+
     const jumping = IsPedJumping(ped);
     const ragdoll = IsPedRagdoll(ped);
     const falling = IsPedFalling(ped);
-    const onVeh = IsPedOnVehicle(ped);
+    let onVeh = IsPedOnVehicle(ped);
     const inNoclip = global.exports?.['dg-admin']?.inNoclip() ?? false;
     const speedDrug = global.exports?.['dg-misc']?.isOnDrugs('speed') ?? false;
+
+    if (onVeh) {
+      onVehicleGracePeriod = 10;
+    } else if (onVehicleGracePeriod !== 0) {
+      onVeh = true;
+      onVehicleGracePeriod--;
+    }
+
     // TODO: check distance between coords
     if (!inNoclip) {
       if (!inVeh && !onVeh) {
