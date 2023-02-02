@@ -14,9 +14,8 @@ import {
   teleportInSeat,
 } from '../helpers/vehicle';
 import vinManager from '../modules/identification/classes/vinmanager';
-import { applyUpgradesToVeh } from '../modules/upgrades/service.upgrades';
 import { mainLogger } from '../sv_logger';
-import { getConfigByEntity, getConfigByModel } from 'modules/info/service.info';
+import { getConfigByEntity } from 'modules/info/service.info';
 import { tuneItems } from 'modules/upgrades/constants.upgrades';
 
 RPC.register('vehicles:getVehicleByVin', (src, vin: string) => {

@@ -99,7 +99,7 @@ export const spawnVehicle = async (
   const newPlate = plate ?? plateManager.generatePlate();
   vehState.set('plate', newPlate, true);
   plateManager.registerPlate(newPlate);
-  await Util.setVehicleNumberPlate(veh, newPlate);
+  Util.setVehicleNumberPlate(veh, newPlate);
 
   if (upgrades) {
     applyUpgradesToVeh(vehNetId, upgrades);

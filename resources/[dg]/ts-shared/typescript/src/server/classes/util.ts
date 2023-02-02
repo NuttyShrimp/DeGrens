@@ -236,6 +236,7 @@ class Util extends UtilShared {
   };
 
   // When setting num plate at spawn it will not work otherwise
+  // A player needs to be inscope for this to resolve!
   setVehicleNumberPlate = (vehicle: number, plate: string) => {
     return new Promise<void>(res => {
       const plateInterval = setInterval(() => {
@@ -245,7 +246,7 @@ class Util extends UtilShared {
           return;
         }
         SetVehicleNumberPlateText(vehicle, plate);
-      });
+      }, 50);
     });
   };
 
