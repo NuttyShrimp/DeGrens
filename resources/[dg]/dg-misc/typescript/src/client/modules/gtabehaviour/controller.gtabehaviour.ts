@@ -1,7 +1,7 @@
+import { BaseEvents } from '@dgx/client';
 import { PED_CONFIG_FLAGS, PICKUP_HASHES, PLAYER_RELATIONSHIP_HASH } from './constants.gtabehaviour';
 
-on('baseevents:playerPedChanged', () => {
-  console.log('Player ped changed, reapplying config');
+BaseEvents.onPedChange(() => {
   const ped = PlayerPedId();
 
   SetEntityProofs(ped, false, false, false, false, false, true, false, false);
@@ -17,8 +17,7 @@ on('baseevents:playerPedChanged', () => {
   SetCanAttackFriendly(ped, true, false);
 });
 
-on('baseevents:playerIdChanged', () => {
-  console.log('Player id changed, reapplying config');
+BaseEvents.onIdChange(() => {
   const id = PlayerId();
 
   SetPlayerHealthRechargeLimit(id, 0.0);

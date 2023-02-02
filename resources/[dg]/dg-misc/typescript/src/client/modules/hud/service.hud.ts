@@ -1,7 +1,7 @@
 import { Events, HUD, Util } from '@dgx/client';
 
 let config: HUD.Config | null = null;
-let inWater = false;
+let isDiving = false;
 let stressLevel = 0;
 let stressTimeout: NodeJS.Timeout | null;
 let stressSteps: number;
@@ -13,16 +13,14 @@ export const setConfig = (newConfig: HUD.Config) => {
 
 export const getStressLevel = () => stressLevel;
 
-export const getCapacity = (ped: number, id: number) => {
-  if (IsEntityInWater(ped) !== inWater) {
-    inWater = IsEntityInWater(ped);
-    HUD.toggleEntry('lung-capacity', inWater);
+export const setIsDiving = (diving: boolean) => {
+  isDiving = diving;
+  HUD.toggleEntry('lung-capacity', isDiving);
+};
 
-    if (inWater) {
-      Events.emitNet('misc:status:enteredWater');
-    }
-  }
-  return inWater ? GetPlayerUnderwaterTimeRemaining(id) * 10 : 0;
+export const getCapacity = (ped: number, id: number) => {
+  if (!isDiving) return 0;
+  return GetPlayerUnderwaterTimeRemaining(id) * 10;
 };
 
 export const updateStress = (amount: number) => {

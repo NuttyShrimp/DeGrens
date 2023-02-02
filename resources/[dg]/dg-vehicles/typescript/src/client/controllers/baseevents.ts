@@ -7,12 +7,13 @@ import { disableSpeedLimiter } from 'services/speedlimiter';
 import { setCurrentVehicle } from '../helpers/vehicle';
 import { cleanFuelThread, fetchVehicleFuelLevel, startFuelThread } from '../modules/fuel/service.fuel';
 import { startStatusThread } from '../modules/status/service.status';
+import { BaseEvents } from '@dgx/client';
 
-on('baseevents:enteringVehicle', (vehicle: number) => {
+BaseEvents.onEnteringVehicle(vehicle => {
   SetVehicleNeedsToBeHotwired(vehicle, false);
 });
 
-on('baseevents:enteredVehicle', (vehicle: number, seat: number) => {
+BaseEvents.onEnteredVehicle((vehicle, seat) => {
   setCurrentVehicle(vehicle, seat === -1);
   startSeatbeltThread(vehicle);
   fetchVehicleFuelLevel(vehicle, seat);
@@ -26,7 +27,7 @@ on('baseevents:enteredVehicle', (vehicle: number, seat: number) => {
   startVehicleRolloverThread(vehicle);
 });
 
-on('baseevents:leftVehicle', (vehicle: number, seat: number) => {
+BaseEvents.onLeftVehicle((vehicle, seat) => {
   if (seat === -1) {
     cleanFuelThread();
     disableSpeedLimiter(vehicle);
@@ -39,7 +40,7 @@ on('baseevents:leftVehicle', (vehicle: number, seat: number) => {
   DisplayRadar(false);
 });
 
-on('baseevents:vehicleChangedSeat', (vehicle: number, newSeat: number, oldSeat: number) => {
+BaseEvents.onVehicleSeatChange((vehicle, newSeat, oldSeat) => {
   setCurrentVehicle(vehicle, newSeat === -1);
   if (oldSeat === -1) {
     cleanFuelThread();

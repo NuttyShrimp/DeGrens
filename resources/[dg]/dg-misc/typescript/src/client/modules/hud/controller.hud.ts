@@ -1,4 +1,4 @@
-import { Events, HUD } from '@dgx/client';
+import { BaseEvents, Events, HUD } from '@dgx/client';
 
 import {
   doSpeedStress,
@@ -7,6 +7,7 @@ import {
   getStressLevel,
   scheduleBlurEffect,
   setConfig,
+  setIsDiving,
   updateStress,
 } from './service.hud';
 
@@ -39,3 +40,11 @@ onNet('onResourceStop', (res: string) => {
 });
 
 Events.onNet('hud:client:updateStress', (amount: number) => updateStress(amount));
+
+BaseEvents.onStartDiving(() => {
+  setIsDiving(true);
+});
+
+BaseEvents.onStopDiving(() => {
+  setIsDiving(false);
+});

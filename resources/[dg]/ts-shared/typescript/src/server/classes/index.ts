@@ -13,6 +13,7 @@ import sync from './sync';
 import vehicles from './vehicles';
 import weapons from './weapons';
 import weather from './weather';
+import baseevents from './baseevents';
 
 export const { Events, RPC, SQL, API, Auth } = events;
 export const { Util, Sounds, Status, Reputations } = util;
@@ -29,3 +30,4 @@ export const { Vehicles } = vehicles;
 export const { Sync } = sync;
 export const { Weapons } = weapons;
 export const { Weather } = weather;
+export const { BaseEvents } = baseevents;

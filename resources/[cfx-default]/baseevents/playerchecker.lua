@@ -1,7 +1,7 @@
-CreateThread(function()
-  local cachedPed = nil
-  local cachedId = nil
+cachedPed = nil
+cachedId = nil
 
+CreateThread(function()
   while true do
     local newPed = PlayerPedId()
     if cachedPed ~= newPed then
@@ -15,6 +15,6 @@ CreateThread(function()
       TriggerEvent('baseevents:playerIdChanged')
     end
 
-    Wait(50)
+    Wait(2)
   end
 end)

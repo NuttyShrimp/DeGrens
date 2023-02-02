@@ -133,11 +133,11 @@ exports('removeZone', function(name, id)
   end
 end)
 
-AddEventHandler('baseevents:enteredVehicle', function()
+DGX.BaseEvents.onEnteredVehicle(function()
   IsInVehicle = true
 end)
 
-AddEventHandler('baseevents:leftVehicle', function()
+DGX.BaseEvents.onLeftVehicle(function()
   IsInVehicle = false
 end)
 

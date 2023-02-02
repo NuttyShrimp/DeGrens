@@ -100,7 +100,7 @@ RegisterNetEvent("pma-voice:radioActive", function(radioActive)
   isDirty = true
 end)
 
-AddEventHandler('baseevents:engineStateChanged', function(vehicle, engineState)
+DGX.BaseEvents.onVehicleEngineStateChange(function(vehicle, engineState)
   if engineState then
     vehicleEngineRunning = true
     startCarLoop()
@@ -169,11 +169,11 @@ DGX.Events.on('dg-misc:configChanged', function(data)
   end
 end)
 
-AddEventHandler('baseevents:playerPedChanged', function()
+DGX.BaseEvents.onPedChange(function()
   cache.ped = PlayerPedId()
 end)
 
-AddEventHandler('baseevents:playerPedChanged', function()
+DGX.BaseEvents.onIdChange(function()
   cache.id = PlayerId()
 end)
 

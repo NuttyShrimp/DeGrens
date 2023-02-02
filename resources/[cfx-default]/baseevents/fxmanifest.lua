@@ -8,7 +8,8 @@ repository 'https://github.com/citizenfx/cfx-server-data'
 
 client_scripts {
   'playerchecker.lua',
-  'vehiclechecker.lua'
+  'vehiclechecker.lua',
+  'waterchecker.lua'
 }
 
 fx_version 'adamant'

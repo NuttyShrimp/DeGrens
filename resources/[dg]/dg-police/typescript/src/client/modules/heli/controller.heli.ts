@@ -1,10 +1,10 @@
-import { Keys } from '@dgx/client';
+import { BaseEvents, Keys } from '@dgx/client';
 import { WHITELISTED_HELIS } from './constants.heli';
 import { changeVision, isHeliCamOn, isInPoliceHeli, setHeliCamOn, setInPoliceHeli } from './service.heli';
 import { isCuffed } from 'modules/interactions/modules/cuffs';
 
 // Only register as in popo heli when engine on and in passenger seat
-on('baseevents:engineStateChanged', (vehicle: number, engineState: boolean) => {
+BaseEvents.onVehicleEngineStateChange((vehicle, engineState) => {
   if (!engineState) {
     setInPoliceHeli(false);
     return;
@@ -20,7 +20,7 @@ on('baseevents:engineStateChanged', (vehicle: number, engineState: boolean) => {
   setInPoliceHeli(true);
 });
 
-on('baseevents:vehicleChangedSeat', (vehicle: number, newSeat: number, oldSeat: number) => {
+BaseEvents.onVehicleSeatChange((vehicle, newSeat, oldSeat) => {
   if (oldSeat === 0 && isInPoliceHeli()) {
     setInPoliceHeli(false);
   }

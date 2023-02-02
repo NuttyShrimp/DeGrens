@@ -1,40 +1,25 @@
 import { Util } from '@dgx/server';
 
-import { getVinForNetId } from '../helpers/vehicle';
-
 class SeatingService extends Util.Singleton<SeatingService>() {
-  private promises: { [vin: string]: { [seat: number]: { resolve: (e?: any) => void; reject: (e?: any) => void } } } =
-    {};
+  private enteringPlayers: Record<number, NodeJS.Timeout> = {};
 
-  tryEnteringVeh(pSrc: number, pNetId: number, pSeat: number) {
-    const vin = getVinForNetId(pNetId);
-    if (!vin) return;
-    const veh = NetworkGetEntityFromNetworkId(pNetId);
-    if (!veh) return;
-    if (!DoesEntityExist(veh)) return;
-    if (GetVehicleDoorLockStatus(veh) === 2) return;
-    if (!this.promises[vin]) this.promises[vin] = {};
-    new Promise((resolve, reject) => {
-      this.promises[vin][pSeat] = { resolve, reject };
-    }).catch(() => {
-      const ped = GetPlayerPed(String(pSrc));
-      SetPedIntoVehicle(ped, pNetId, pSeat);
-    });
-    setTimeout(() => {
-      if (this.promises[vin][pSeat]) {
-        this.promises[vin][pSeat].reject();
-        delete this.promises[vin][pSeat];
-      }
+  public trySeating(plyId: number, netId: number, seat: number) {
+    const veh = NetworkGetEntityFromNetworkId(netId);
+    if (!veh || !DoesEntityExist(veh)) return;
+
+    this.enteringPlayers[plyId] = setTimeout(() => {
+      const ped = GetPlayerPed(String(plyId));
+      SetPedIntoVehicle(ped, veh, seat);
+      delete this.enteringPlayers[plyId];
     }, 5000);
   }
 
-  enteredVeh(pNetId: number, pSeat: number) {
-    const vin = getVinForNetId(pNetId);
-    if (!vin) return;
-    if (!this.promises[vin]) return;
-    if (!this.promises[vin][pSeat]) return;
-    this.promises[vin][pSeat].resolve(true);
-    delete this.promises[vin][pSeat];
+  public cancelSeating(plyId: number) {
+    const timeout = this.enteringPlayers[plyId];
+    if (!timeout) return;
+
+    clearTimeout(timeout);
+    delete this.enteringPlayers[plyId];
   }
 }
 

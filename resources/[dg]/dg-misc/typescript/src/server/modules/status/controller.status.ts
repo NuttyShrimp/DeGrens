@@ -1,4 +1,4 @@
-import { Events, Chat, Status } from '@dgx/server';
+import { Events, Chat, Status, BaseEvents } from '@dgx/server';
 import { BLOCKED_GSR_WEAPONS } from './constants.status';
 import { addStatusToPlayer, checkRemovalMethods, getPlayerStatuses, getStatusData } from './service.status';
 
@@ -12,7 +12,7 @@ Events.onNet('weapons:server:firstShot', (src: number, weaponHash: number) => {
   addStatusToPlayer(src, 'gsr');
 });
 
-Events.onNet('misc:status:enteredWater', (plyId: number) => {
+BaseEvents.onEnterWater(plyId => {
   checkRemovalMethods(plyId, 'water');
 });
 

@@ -1,4 +1,4 @@
-import { Jobs, Keys, Notifications } from '@dgx/client/classes';
+import { BaseEvents, Jobs, Keys, Notifications } from '@dgx/client/classes';
 import { isRadarActive, lockPlate, openPlateHistory, resetRadar, setRadarActive } from './service.radar';
 
 Keys.register('police_radar_toggle', '(police) Radar - Toggle (+mod)', '7');
@@ -30,11 +30,11 @@ Keys.onPressDown('police_radar_history', () => {
   openPlateHistory();
 });
 
-on('baseevents:leftVehicle', () => {
+BaseEvents.onLeftVehicle(() => {
   setRadarActive(false);
 });
 
-on('baseevents:engineStateChanged', (_: any, engineState: boolean) => {
+BaseEvents.onVehicleEngineStateChange((_, engineState) => {
   if (engineState) return;
   setRadarActive(false);
 });

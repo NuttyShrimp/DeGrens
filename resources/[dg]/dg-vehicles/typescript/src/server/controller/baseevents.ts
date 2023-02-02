@@ -1,13 +1,18 @@
+import { BaseEvents } from '@dgx/server';
 import { validateVehicleVin } from '../modules/identification/service.id';
 import { handleVehicleLock } from '../modules/keys/service.keys';
 import seatingService from '../services/seating';
 
-onNet('baseevents:enteringVehicle', (pVehNetId: number, pSeat: number) => {
-  validateVehicleVin(pVehNetId);
-  handleVehicleLock(source, pVehNetId);
-  seatingService.tryEnteringVeh(source, pVehNetId, pSeat);
+BaseEvents.onEnteringVehicle((plyId, vehNetId, seat) => {
+  validateVehicleVin(vehNetId);
+  handleVehicleLock(plyId, vehNetId);
+  seatingService.trySeating(plyId, vehNetId, seat);
 });
 
-onNet('baseevents:enteredVehicle', (pVehNetId: number, pSeat: number) => {
-  seatingService.enteredVeh(pVehNetId, pSeat);
+BaseEvents.onEnteredVehicle(plyId => {
+  seatingService.cancelSeating(plyId);
+});
+
+BaseEvents.onEnteringVehicleAborted(plyId => {
+  seatingService.cancelSeating(plyId);
 });

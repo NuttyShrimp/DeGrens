@@ -1,4 +1,4 @@
-import { Util } from '@dgx/server';
+import { Util, Vehicles } from '@dgx/server';
 
 const generateWeaponSerial = () => {
   return (
@@ -92,10 +92,10 @@ export const ON_CREATE: Record<string, (plyId?: number) => { [key: string]: any 
       lastName: playerData.charinfo.lastname,
       dob: playerData.charinfo.birthdate,
       gender: playerData.charinfo.gender == 0 ? 'M' : 'V',
-      nationality: playerData.charinfo.nationality.toUpperCase().slice(0,3),
+      nationality: playerData.charinfo.nationality.toUpperCase().slice(0, 3),
     };
   },
-  fakeplate: () => ({ plate: global.exports['dg-vehicles'].generatePlate() }),
+  fakeplate: () => ({ plate: Vehicles.generatePlate() }),
   weed_seed: () => ({ gender: Math.random() > 0.5 ? 'male' : 'female' }),
   weed_bud: () => ({ hiddenKeys: ['hiddenKeys', 'createTime'], createTime: Math.round(Date.now() / 1000) }),
 };

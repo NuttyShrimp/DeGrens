@@ -34,6 +34,7 @@ declare global {
     Weather: typeof Classes.Weather;
     Hospital: typeof Classes.Hospital;
     Phone: typeof Classes.Phone;
+    BaseEvents: typeof Classes.BaseEvents;
   };
   var asyncExports: any;
 }

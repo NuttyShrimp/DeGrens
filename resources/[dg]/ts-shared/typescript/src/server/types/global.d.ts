@@ -34,6 +34,7 @@ declare global {
     Weather: typeof Classes.Weather;
     Hospital: typeof Classes.Hospital;
     Minigames: typeof Classes.Minigames;
+    BaseEvents: typeof Classes.BaseEvents;
     Vector3: typeof Vector3Class;
     Vector4: typeof Vector4Class;
   };

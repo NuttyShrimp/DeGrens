@@ -1,4 +1,5 @@
-export * from './blip'
+export * from './blip';
+import baseevents from './baseevents';
 import events from './events';
 import interaction from './interaction';
 import inventory from './inventory';
@@ -24,3 +25,4 @@ export const { Minigames } = minigames;
 export const { Weapons } = weapons;
 export const { Weather } = weather;
 export const { Phone } = phone;
+export const { BaseEvents } = baseevents;

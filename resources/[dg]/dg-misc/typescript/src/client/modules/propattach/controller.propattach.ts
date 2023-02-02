@@ -1,4 +1,4 @@
-import { Events } from '@dgx/client';
+import { BaseEvents, Events } from '@dgx/client';
 import { addProp, isEnabled, moveProp, removeProp, resetProps, toggleProps } from './service.propattach';
 
 global.asyncExports('addProp', addProp);
@@ -10,7 +10,7 @@ Events.onNet('propattach:reset', () => {
   resetProps();
 });
 
-on('baseevents:playerPedChanged', async () => {
+BaseEvents.onPedChange(() => {
   if (!isEnabled()) return;
   toggleProps(false);
   setTimeout(() => {

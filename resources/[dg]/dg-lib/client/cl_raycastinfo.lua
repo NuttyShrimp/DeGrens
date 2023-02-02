@@ -84,12 +84,12 @@ Citizen.CreateThread(function()
 	end
 end)
 
-AddEventHandler('baseevents:enteredVehicle', function()
-	isInVehicle = true
+DGX.BaseEvents.onEnteredVehicle(function()
+  isInVehicle = true
 end)
 
-AddEventHandler('baseevents:leftVehicle', function()
-	isInVehicle = false
+DGX.BaseEvents.onLeftVehicle(function()
+  isInVehicle = false
 end)
 
 AddEventHandler('onResourceStop', function(res)

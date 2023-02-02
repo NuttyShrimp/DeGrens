@@ -1,4 +1,4 @@
-import { Events, RPC, UI } from '@dgx/client';
+import { BaseEvents, Events, RPC, UI } from '@dgx/client';
 import { getNearestColorFromHex } from '@dgx/shared/helpers/colorNames';
 import { getDataOfGTAColorById } from '@dgx/shared/helpers/gtacolors';
 import { clearBlips, syncBlips, updateBlipCoords, updateSprite } from 'services/blips';
@@ -17,16 +17,16 @@ on('dg-ui:loadData', () => {
   seedUICams();
 });
 
-on('baseevents:enteredVehicle', (pVehicle: number, pSeat: number) => {
-  const vehicleClass = GetVehicleClass(pVehicle);
-  if (vehicleClass !== 15 || (pSeat !== -1 && pSeat !== 0)) return;
+BaseEvents.onEnteredVehicle((vehicle, seat) => {
+  const vehicleClass = GetVehicleClass(vehicle);
+  if (vehicleClass !== 15 || (seat !== -1 && seat !== 0)) return;
 
   Events.emitNet('dg-dispatch:updateBlipSprite', 43);
 });
 
-on('baseevents:leftVehicle', (pVehicle: number, pSeat: number) => {
-  const vehicleClass = GetVehicleClass(pVehicle);
-  if (vehicleClass !== 15 || (pSeat !== -1 && pSeat !== 0)) return;
+BaseEvents.onLeftVehicle((vehicle, seat) => {
+  const vehicleClass = GetVehicleClass(vehicle);
+  if (vehicleClass !== 15 || (seat !== -1 && seat !== 0)) return;
 
   Events.emitNet('dg-dispatch:updateBlipSprite', 0);
 });
