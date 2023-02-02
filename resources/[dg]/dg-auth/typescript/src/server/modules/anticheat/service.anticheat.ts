@@ -41,7 +41,15 @@ export const stopHeartBeat = (src: number) => {
 // endregion
 
 // region Flags
+const FLAG_TO_WHITELIST: Record<string, string> = {
+  visible: 'invisible',
+  invincible: 'invincible',
+};
+
 export const flagUser = (src: number, flag: string, data?: any) => {
+  if (FLAG_TO_WHITELIST[flag] && allowedAC[src].includes(FLAG_TO_WHITELIST[flag])) {
+    return;
+  }
   if (!trackedFlags[src]) {
     trackedFlags[src] = [];
   }
