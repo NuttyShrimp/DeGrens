@@ -1,6 +1,8 @@
 type GroupLeaveHandler = (plyId: number | null, cid: number, groupId: string) => void;
 type GroupJoinHandler = (plyId: number, cid: number, groupId: string) => void;
 
+import { Jobs as JobsClass } from './index';
+
 class Jobs {
   private groupLeaveHandlers: Set<GroupLeaveHandler>;
   private groupJoinHandlers: Set<GroupJoinHandler>;
@@ -180,6 +182,16 @@ class Police {
 
   public forceStopInteractions = (plyId: number): Promise<void> => {
     return global.exports['dg-police'].forceStopInteractions(plyId);
+  };
+
+  public getRequirementForActivity = (activity: string) => {
+    return global.exports['dg-police'].getRequirementForActivity(activity);
+  };
+
+  public enoughCopsForActivity = (activity: string) => {
+    const amountOfCops = JobsClass.getAmountForJob('police');
+    const requirement = this.getRequirementForActivity(activity);
+    return amountOfCops >= requirement;
   };
 }
 

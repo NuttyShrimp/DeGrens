@@ -13,3 +13,4 @@ import './modules/binoculars';
 import './modules/interactions';
 import './modules/prison';
 import './modules/heli';
+import './services/requirements';

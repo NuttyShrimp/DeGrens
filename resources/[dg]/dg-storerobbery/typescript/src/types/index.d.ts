@@ -1,20 +1,20 @@
-interface IConfig {
-  register: {
-    refillTime: number;
-    rollAmount: [number, number];
+declare namespace Storerobbery {
+  type Config = {
+    register: {
+      refillTime: number;
+      rollAmount: [number, number];
+    };
+    safe: {
+      crackDelay: number;
+      refillTime: number;
+      specialItemChance: number;
+    };
+    stores: Record<Id, Data>;
   };
-  safe: {
-    crackDelay: number;
-    refillTime: number;
-    specialItemChance: number;
-  };
-  stores: Record<Store.Id, Store.Data>;
-}
 
-declare namespace Store {
   interface Data {
-    registerzone: IBoxZone;
-    storezone: IBoxZone;
+    registerzone: Zone;
+    storezone: Zone;
     safecoords: Vec3;
     cam: number;
   }
@@ -41,19 +41,17 @@ declare namespace Store {
     | 'tataviam_mountains'
     | 'del_vecchio'
     | 'paleto_bay';
-}
 
-declare namespace Safe {
-  type State = 'closed' | 'decoding' | 'opened' | 'looted';
-}
+  type SafeState = 'closed' | 'decoding' | 'opened' | 'looted';
 
-declare interface IBoxZone {
-  center: Vec3;
-  width: number;
-  length: number;
-  options: {
-    heading: number;
-    minZ: number;
-    maxZ: number;
+  type Zone = {
+    center: Vec3;
+    width: number;
+    length: number;
+    options: {
+      heading: number;
+      minZ: number;
+      maxZ: number;
+    };
   };
 }

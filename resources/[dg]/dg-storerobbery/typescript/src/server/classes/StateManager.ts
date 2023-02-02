@@ -7,8 +7,8 @@ import { mainLogger } from 'sv_logger';
 @RPCRegister()
 class StateManager extends Util.Singleton<StateManager>() {
   private robbedRegisters: Vec3[];
-  private safeStates: Partial<Record<Store.Id, Safe.State>>;
-  private safeHackers: Partial<Record<Store.Id, number | null>>;
+  private safeStates: Partial<Record<Storerobbery.Id, Storerobbery.SafeState>>;
+  private safeHackers: Partial<Record<Storerobbery.Id, number | null>>;
   private logger: winston.Logger;
 
   constructor() {
@@ -37,27 +37,27 @@ class StateManager extends Util.Singleton<StateManager>() {
   };
 
   @RPCEvent('storerobbery:server:getSafeState')
-  private _getSafeState = (_src: number, storeId: Store.Id) => {
+  private _getSafeState = (_src: number, storeId: Storerobbery.Id) => {
     return this.getSafeState(storeId);
   };
 
-  getSafeState = (storeId: Store.Id) => {
+  getSafeState = (storeId: Storerobbery.Id) => {
     if (!this.safeStates[storeId]) this.safeStates[storeId] = 'closed';
     return this.safeStates[storeId];
   };
 
-  setSafeState = (storeId: Store.Id, state: Safe.State) => {
+  setSafeState = (storeId: Storerobbery.Id, state: Storerobbery.SafeState) => {
     this.logger.silly(`Safe with id ${storeId} has been set to state: ${state}`);
     this.safeStates[storeId] = state;
   };
 
-  setSafeHacker = (storeId: Store.Id, src: number | null) => {
+  setSafeHacker = (storeId: Storerobbery.Id, src: number | null) => {
     this.logger.silly(`Player ${src} has been registered as hacker for safe ${storeId}`);
     this.safeHackers[storeId] = src;
   };
 
   @RPCEvent('storerobbery:server:isSafeHacker')
-  private _isSafeHacker = (src: number, storeId: Store.Id) => {
+  private _isSafeHacker = (src: number, storeId: Storerobbery.Id) => {
     if (this.safeStates[storeId] !== 'decoding') return false;
     return this.safeHackers[storeId] == src;
   };

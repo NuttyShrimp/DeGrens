@@ -1,4 +1,4 @@
-import { Chat, Jobs, Util } from '@dgx/server';
+import { Chat, Jobs, Police, Util } from '@dgx/server';
 import stateManager from 'classes/StateManager';
 
 import './controllers';
@@ -18,8 +18,7 @@ setImmediate(() => {
 });
 
 const pickLuckyPlayer = (skippedPlys: number[] = []) => {
-  const requiredPolice = 0;
-  if (Jobs.getAmountForJob('police') < requiredPolice) return;
+  if (!Police.enoughCopsForActivity('houserobbery')) return;
 
   const signedInPlayers: number[] = [];
   stateManager.playerStates.forEach((s, cid) => {

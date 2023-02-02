@@ -1,3 +1,5 @@
+import { Jobs as JobsClass, Util } from './index';
+
 class Jobs {
   getCurrentJob(): { name: string | null; rank: number | null } {
     return global.exports['dg-jobs'].getCurrentJob();
@@ -52,6 +54,16 @@ class Police {
 
   public isInPrison = () => {
     return global.exports['dg-police'].isInPrison();
+  };
+
+  public getRequirementForActivity = (activity: string) => {
+    return global.exports['dg-police'].getRequirementForActivity(activity);
+  };
+
+  public enoughCopsForActivity = (activity: string) => {
+    const amountOfCops = JobsClass.getAmountForJob('police');
+    const requirement = this.getRequirementForActivity(activity);
+    return amountOfCops >= requirement;
   };
 }
 

@@ -1,8 +1,7 @@
-import { Notifications, RPC, Jobs, Util, Peek, Events } from '@dgx/client';
+import { Notifications, RPC, Util, Peek, Events, Police } from '@dgx/client';
 import { BLACKLISTED_PED_MODELS } from './constants.cornerselling';
 
 let cornersellEnabled = false;
-let requiredCops = 0;
 
 const pedsSoldTo: number[] = [];
 
@@ -20,8 +19,7 @@ export const setCornersellEnabled = async (enabled: boolean) => {
     return;
   }
 
-  const copCount = Jobs.getAmountForJob('police');
-  if (copCount < requiredCops) {
+  if (Police.enoughCopsForActivity('cornersell')) {
     Notifications.add('Er is momenteel geen interesse', 'error');
     return;
   }
@@ -30,10 +28,6 @@ export const setCornersellEnabled = async (enabled: boolean) => {
   cornersellEnabled = true;
 
   findBuyer();
-};
-
-export const setRequiredCopsForCornersell = (amount: number) => {
-  requiredCops = amount;
 };
 
 const findBuyer = async () => {

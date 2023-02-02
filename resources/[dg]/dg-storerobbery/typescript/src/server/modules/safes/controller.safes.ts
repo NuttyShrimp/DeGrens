@@ -3,37 +3,40 @@ import stateManager from 'classes/StateManager';
 import { getConfig } from 'helpers/config';
 import { mainLogger } from 'sv_logger';
 
-Events.onNet('storerobbery:server:startJob', async (src: number, storeId: Store.Id, type: 'safe' | 'register') => {
-  const isInStore = await RPC.execute<boolean>('storerobbery:client:isInStore', src);
-  if (!isInStore) {
-    mainLogger.warn(`Player ${src} tried to start a store robbery job but was not in store`);
-    Util.Log(
-      'storerobbery:notInStore',
-      { storeId },
-      `${Util.getName(src)} tried to start a store robbery job but was not in store`,
-      src,
-      true
-    );
-    return;
+Events.onNet(
+  'storerobbery:server:startJob',
+  async (src: number, storeId: Storerobbery.Id, type: 'safe' | 'register') => {
+    const isInStore = await RPC.execute<boolean>('storerobbery:client:isInStore', src);
+    if (!isInStore) {
+      mainLogger.warn(`Player ${src} tried to start a store robbery job but was not in store`);
+      Util.Log(
+        'storerobbery:notInStore',
+        { storeId },
+        `${Util.getName(src)} tried to start a store robbery job but was not in store`,
+        src,
+        true
+      );
+      return;
+    }
+    const storeConfig = getConfig().stores[storeId];
+    Police.createDispatchCall({
+      tag: '10-35',
+      title: `Inbraak winkel${type === 'safe' ? 'kluis' : 'kassa'}`,
+      description: `Het inbraakalarm op een winkel${type === 'safe' ? 'kluis' : 'kassa'} is zonet getriggered`,
+      coords: storeConfig.registerzone.center,
+      criminal: src,
+      entries: {
+        'camera-cctv': storeConfig.cam,
+      },
+      blip: {
+        sprite: 628,
+        color: 5,
+      },
+    });
   }
-  const storeConfig = (await getConfig()).stores[storeId];
-  Police.createDispatchCall({
-    tag: '10-35',
-    title: `Inbraak winkel${type === 'safe' ? 'kluis' : 'kassa'}`,
-    description: `Het inbraakalarm op een winkel${type === 'safe' ? 'kluis' : 'kassa'} is zonet getriggered`,
-    coords: storeConfig.registerzone.center,
-    criminal: src,
-    entries: {
-      'camera-cctv': storeConfig.cam,
-    },
-    blip: {
-      sprite: 628,
-      color: 5,
-    },
-  });
-});
+);
 
-Events.onNet('storerobbery:server:hackSafe', async (src: number, storeId: Store.Id) => {
+Events.onNet('storerobbery:server:hackSafe', async (src: number, storeId: Storerobbery.Id) => {
   const isInStore = await RPC.execute<boolean>('storerobbery:client:isInStore', src);
   if (!isInStore) {
     mainLogger.warn(`Player ${src} tried to hack safe but was not in store`);
@@ -49,14 +52,14 @@ Events.onNet('storerobbery:server:hackSafe', async (src: number, storeId: Store.
 
   stateManager.setSafeState(storeId, 'decoding');
   stateManager.setSafeHacker(storeId, src);
-  const timeout = (await getConfig()).safe.crackDelay * 60 * 1000;
+  const timeout = getConfig().safe.crackDelay * 60 * 1000;
   setTimeout(() => {
     if (stateManager.getSafeState(storeId) !== 'decoding') return;
     stateManager.setSafeState(storeId, 'opened');
   }, timeout);
 });
 
-Events.onNet('storerobbery:server:lootSafe', async (src: number, storeId: Store.Id) => {
+Events.onNet('storerobbery:server:lootSafe', async (src: number, storeId: Storerobbery.Id) => {
   const isInStore = await RPC.execute<boolean>('storerobbery:client:isInStore', src);
   if (!isInStore) {
     mainLogger.warn(`Player ${src} tried to receive loot but was not in store`);
@@ -93,14 +96,14 @@ Events.onNet('storerobbery:server:lootSafe', async (src: number, storeId: Store.
   stateManager.setSafeState(storeId, 'looted');
   stateManager.setSafeHacker(storeId, null);
 
-  const timeout = (await getConfig()).safe.refillTime * 60 * 1000;
+  const timeout = getConfig().safe.refillTime * 60 * 1000;
   setTimeout(() => {
     if (stateManager.getSafeState(storeId) !== 'looted') return;
     stateManager.setSafeState(storeId, 'closed');
   }, timeout);
 });
 
-Events.onNet('storerobbery:server:cancelHack', (src: number, storeId: Store.Id) => {
+Events.onNet('storerobbery:server:cancelHack', (src: number, storeId: Storerobbery.Id) => {
   stateManager.setSafeState(storeId, 'closed');
   stateManager.setSafeHacker(storeId, null);
 });

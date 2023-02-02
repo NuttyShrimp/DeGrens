@@ -11,6 +11,7 @@ declare namespace Police {
       checkableStatuses: StatusName[];
     };
     prison: Prison.Config;
+    requirements: Record<string, number>;
   };
 
   namespace Trackers {

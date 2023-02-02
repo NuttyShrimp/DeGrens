@@ -1,2 +1,3 @@
-import './modules';
-import './controllers/locations';
+import './controllers';
+import './modules/registers';
+import './modules/safes';

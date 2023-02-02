@@ -18,7 +18,7 @@ Events.onNet('storerobbery:server:robRegister', async (src: number, register: Ve
     return;
   }
 
-  const [min, max] = (await getConfig()).register.rollAmount;
+  const [min, max] = getConfig().register.rollAmount;
   const amount = Util.getRndInteger(min, max);
   Inventory.addItemToPlayer(src, 'money_roll', amount);
 

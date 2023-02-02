@@ -10,7 +10,6 @@ export const setTowerState = <T extends keyof Materials.Radiotowers.State>(
   key: T,
   value: Materials.Radiotowers.State[typeof key]
 ) => {
-  console.log(towerId, key, value);
   towerStates[towerId][key] = value;
 };
 

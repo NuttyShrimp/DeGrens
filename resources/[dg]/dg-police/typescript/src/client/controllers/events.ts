@@ -3,6 +3,7 @@ import { buildLabPeekZone } from 'modules/evidence/service.evidence';
 import { loadPrisonConfig } from 'modules/prison/service.prison';
 import { buildSpeedZones } from 'modules/speedzones/service.speedzones';
 import { loadLockers } from 'services/lockers';
+import { setRequirements } from 'services/requirements';
 import { buildSafeZones } from 'services/safe';
 
 Events.onNet('police:client:init', (config: Police.Config) => {
@@ -11,6 +12,7 @@ Events.onNet('police:client:init', (config: Police.Config) => {
   buildLabPeekZone(config.config.labLocation);
   buildSafeZones(config.config.safes);
   loadPrisonConfig(config.prison);
+  setRequirements(config.requirements);
 });
 
 Peek.addGlobalEntry('vehicle', {

@@ -1,6 +1,6 @@
 import { Config } from '@dgx/server';
 
-let config: IConfig;
+let config: Storerobbery.Config;
 
 export const loadConfig = async () => {
   await Config.awaitConfigLoad();
