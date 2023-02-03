@@ -1,6 +1,11 @@
 import { Admin, Events, Financials, Notifications, Phone, RPC, Util } from '@dgx/server';
 
-import { getPlayerOwnedVehicles, getPlayerVehicleInfo, setVehicleOwner } from '../db/repository';
+import {
+  getPlayerOwnedVehicles,
+  getPlayerVehicleInfo,
+  insertVehicleTransferLog,
+  setVehicleOwner,
+} from '../db/repository';
 import { getGarageById } from '../modules/garages/service.garages';
 import vinManager from '../modules/identification/classes/vinmanager';
 import { getConfigByModel } from '../modules/info/service.info';
@@ -75,6 +80,7 @@ Events.onNet('vehicles:server:app:sellVehicle', async (src, targetCID: number, v
     return;
   }
   await setVehicleOwner(vin, targetCID);
+  insertVehicleTransferLog(vin, cid, targetCID);
   Notifications.add(src, 'Voertuig successvol vergekocht', 'success');
   Notifications.add(target.PlayerData.source, 'Voertuig successvol overgekocht', 'success');
 });

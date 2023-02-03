@@ -179,8 +179,17 @@ export const setVehicleGarage = (vin: string, garageId: string): Promise<any> =>
 
 export const setVehicleOwner = (vin: string, owner: number) => {
   const query = 'UPDATE player_vehicles SET cid = ? WHERE vin = ?';
-
   return SQL.query(query, [owner, vin]);
+};
+
+export const insertVehicleTransferLog = (vin: string, origin: number, target: number) => {
+  return SQL.insertValues('vehicle_transfer_logs', [
+    {
+      vin,
+      origin,
+      target,
+    },
+  ]);
 };
 
 /**
@@ -230,13 +239,7 @@ export const insertNewVehicle = async (
     },
   ]);
 
-  await SQL.insertValues('vehicle_transfer_logs', [
-    {
-      vin,
-      origin: 0,
-      target: cid,
-    },
-  ]);
+  insertVehicleTransferLog(vin, 0, cid);
 };
 
 export const insertVehicleStatus = (vin: string, status: Vehicle.VehicleStatus): Promise<any> => {
