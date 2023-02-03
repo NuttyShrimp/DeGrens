@@ -1,23 +1,20 @@
-import { Keys, RPC, Sync, UI, Util } from '@dgx/client';
+import { Keys, RPC, UI, Util } from '@dgx/client';
 import { drawText3d } from 'helpers/util';
 
-let idThread: NodeJS.Timer | null = null;
-let keyThread: NodeJS.Timer | null = null;
+let isOpen = false;
 
 const openMenu = async () => {
-  closeMenu();
-  const scopeInfo = await Sync.getScopeInfo();
-  if (!scopeInfo) return;
-  const hiddenPlys = await RPC.execute<number[]>('admin:hideinfo:get');
-  idThread = setInterval(() => {
-    GetActivePlayers().forEach((ply: number) => {
-      if (hiddenPlys?.includes(GetPlayerServerId(ply))) return;
-      const ped = GetPlayerPed(ply);
-      const coords = Util.getEntityCoords(ped);
-      coords.z += 1.0;
-      drawText3d(`${GetPlayerServerId(ply)}`, coords, 0.4);
-    });
-  }, 1);
+  if (isOpen) return;
+  isOpen = true;
+
+  // Merged all rpc calls in 1 general evt
+  const data = await RPC.execute<IdList.Data>('misc:idlist:getData');
+  if (!data) return;
+  const { scopeInfo, isAdmin, hiddenPlys } = data;
+
+  // Double check after events if should still be open. Can happen when insta let go off button
+  if (!isOpen) return;
+
   UI.openApplication(
     'idlist',
     {
@@ -25,7 +22,51 @@ const openMenu = async () => {
     },
     true
   );
-  keyThread = setInterval(() => {
+
+  let players: { id: number; coords: Vec3 }[] = [];
+  const playersThread = setInterval(() => {
+    if (!isOpen) {
+      clearInterval(playersThread);
+      return;
+    }
+
+    players = [];
+    const ownPed = PlayerPedId();
+    // const ownCoords = Util.getEntityCoords(ownPed);
+    for (const ply of GetActivePlayers()) {
+      const plyId = GetPlayerServerId(ply);
+      if (hiddenPlys.includes(plyId)) continue;
+
+      const ped = GetPlayerPed(ply);
+      const coords = Util.getEntityCoords(ped);
+      if (ped !== ownPed && !isAdmin) {
+        // If LOS proves to not be a good way
+
+        // Check by LOS
+        const hasLos = HasEntityClearLosToEntity(ownPed, ped, 17);
+        if (!hasLos) continue;
+
+        // Check by distance
+        // const distance = ownCoords.distance(coords);
+        // if (distance > 20) continue;
+      }
+
+      coords.z += 1.0;
+      players.push({ id: plyId, coords });
+    }
+  }, 2);
+
+  const drawThread = setInterval(() => {
+    if (!isOpen) {
+      clearInterval(drawThread);
+      return;
+    }
+
+    for (const ply of players) {
+      drawText3d(`${ply.id}`, ply.coords, 0.4);
+    }
+
+    // Handle moving up and down
     if (IsControlJustPressed(0, 188) || IsDisabledControlJustPressed(0, 188)) {
       UI.SendAppEvent('idlist', {
         direction: 'up',
@@ -41,14 +82,7 @@ const openMenu = async () => {
 
 const closeMenu = () => {
   UI.closeApplication('idlist');
-  if (idThread) {
-    clearInterval(idThread);
-    idThread = null;
-  }
-  if (keyThread) {
-    clearInterval(keyThread);
-    keyThread = null;
-  }
+  isOpen = false;
 };
 
 Keys.onPressDown('showIdMenu', () => {
@@ -59,4 +93,4 @@ Keys.onPressUp('showIdMenu', () => {
   closeMenu();
 });
 
-Keys.register('showIdMenu', '(general) Show Id menu', 'U');
+Keys.register('showIdMenu', '(general) show id menu (hold)', 'U');

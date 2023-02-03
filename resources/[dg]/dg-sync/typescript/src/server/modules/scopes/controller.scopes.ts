@@ -22,9 +22,7 @@ on('playerDropped', () => {
   playerDropped(droppedPlayer);
 });
 
-RPC.register('sync:scopes:get', (src: number) => {
-  return getPlayerScope(src);
-});
+global.exports('getPlayerScope', getPlayerScope);
 
 RPC.register('sync:players:count', () => {
   return GetNumPlayerIndices();

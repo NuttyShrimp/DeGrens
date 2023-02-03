@@ -13,5 +13,3 @@ export const hidePly = (ply: number, toggle: boolean) => {
 };
 
 Events.onNet('admin:hideinfo:toggle', hidePly);
-
-RPC.register('admin:hideinfo:get', () => hiddenPlys);

@@ -18,6 +18,7 @@ import './services/editor';
 import './services/consumables';
 import './services/tackle';
 import './services/seats';
+import './services/idlist';
 import './controllers';
 
 setImmediate(() => {

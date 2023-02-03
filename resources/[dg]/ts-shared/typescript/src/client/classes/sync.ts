@@ -1,4 +1,4 @@
-import { RPC, Events } from './index';
+import { Events } from './index';
 
 class Sync {
   executeNative(native: string, entity: number, ...args: any[]) {
@@ -9,9 +9,6 @@ class Sync {
   }
   setPlayerVisible(isVisible: boolean) {
     Events.emitNet('auth:anticheat:native:setPlayerVisible', isVisible);
-  }
-  getScopeInfo(): Promise<{ current: Sync.ScopePlayer[]; recent: Sync.ScopePlayer[] } | null> {
-    return RPC.execute('sync:scopes:get');
   }
 
   public getAllPlayerCoords = (): Record<number, Vec3> => {
