@@ -9,10 +9,11 @@ import {
   enableDispatch,
   flashNewCalls,
   isDispatchDisabled,
+  setDispatchOpen,
   setLastCallId,
 } from 'services/dispatch';
 
-on('dg-ui:loadData', () => {
+UI.onLoad(() => {
   Events.emitNet('dg-dispatch:loadMore', 0);
   seedUICams();
 });
@@ -136,3 +137,7 @@ UI.RegisterUICallback('dispatch/openCamera', (data: { id: number }, cb) => {
   cb({ data: {}, meta: { ok: true, message: 'done' } });
   openCam(data.id);
 });
+
+UI.onApplicationClose(() => {
+  setDispatchOpen(false);
+}, 'dispatch');

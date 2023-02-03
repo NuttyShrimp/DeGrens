@@ -2,7 +2,7 @@ import { Events, Hospital, Jobs, Keys, Notifications, Police, UI } from '@dgx/cl
 import { closeCam, startCamMoveThread, stopCamMoveThread } from 'services/cams';
 import { clearFlashThread, getLastCallId, setDispatchOpen } from 'services/dispatch';
 
-let openWFocus = false;
+let hasCursor = false;
 
 Keys.onPressDown('setLastCall', () => {
   if (!Keys.isModPressed()) return;
@@ -21,26 +21,24 @@ Keys.onPressDown('openDispatch', () => {
   }
   clearFlashThread();
   setDispatchOpen(true);
+  hasCursor = Keys.isModPressed();
   UI.openApplication(
     'dispatch',
     {
-      showCamera: Keys.isModPressed() && currentJob === 'police',
-      hasCursor: Keys.isModPressed(), // used to determine passive/interactive apptype
+      showCamera: hasCursor && currentJob === 'police',
+      hasCursor, // used to determine passive/interactive apptype
     },
-    !Keys.isModPressed()
+    !hasCursor
   );
-  if (Keys.isModPressed()) {
-    openWFocus = true;
-  }
 });
 
 Keys.onPressUp('openDispatch', () => {
-  if (openWFocus) {
-    openWFocus = false;
+  if (hasCursor) {
+    hasCursor = false;
     return;
   }
+
   UI.closeApplication('dispatch');
-  setDispatchOpen(false);
 });
 Keys.register('openDispatch', '(gov) Open dispatch (focus w modifier)');
 
