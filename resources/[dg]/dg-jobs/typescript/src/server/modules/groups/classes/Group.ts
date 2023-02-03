@@ -47,7 +47,7 @@ export class Group {
         undefined,
         true
       );
-      throw new Error('Failed to get owner member of group | owner cid: ');
+      throw new Error(`Failed to get owner member of group | owner cid: ${this.owner}`);
     }
     return ownerMember;
   }
@@ -101,8 +101,11 @@ export class Group {
     const clientMembers: JobGroupMember[] = this.getMemberForClient();
     this.members.forEach(m => {
       if (m.serverId === null) return;
-      Events.emitNet('dg-jobs:client:groups:setMembers', m.serverId, clientMembers);
-      Events.emitNet('dg-jobs:client:groups:setGroupOwner', m.serverId, this.owner === m.cid);
+
+      Events.emitNet('dg-jobs:client:groups:updateStore', m.serverId, {
+        groupMembers: clientMembers,
+        isOwner: this.owner === m.cid,
+      } satisfies UIStoreData);
     });
   }
 
@@ -124,13 +127,17 @@ export class Group {
       isReady: false,
     };
     this.members.set(this.owner, ownerMember);
+
     // Make the new member part of the group in is UI store
-    Events.emitNet('dg-jobs:client:groups:set', ownerServerId, {
-      id: this.id,
-      name: nameManager.getName(this.owner),
-      size: this.members.size,
-      limit: this.maxSize,
-    });
+    Events.emitNet('dg-jobs:client:groups:updateStore', ownerServerId, {
+      currentGroup: {
+        id: this.id,
+        name: nameManager.getName(this.owner),
+        size: this.members.size,
+        limit: this.maxSize,
+      },
+    } satisfies UIStoreData);
+
     Phone.showNotification(ownerServerId, {
       id: `phone-jobs-groups-create`,
       title: 'jobcenter',
@@ -160,13 +167,17 @@ export class Group {
       `${member.name}(${member.serverId}) joined ${ownerMember.name}(${ownerMember.serverId}) job group | size: ${this.members.size}`
     );
     emit('dg-jobs:server:groups:playerJoined', player.PlayerData.source, player.PlayerData.citizenid, this.id);
+
     // Make the new member part of the group in is UI store
-    Events.emitNet('dg-jobs:client:groups:set', player.PlayerData.source, {
-      id: this.id,
-      name: nameManager.getName(this.owner),
-      size: this.members.size,
-      limit: this.maxSize,
-    });
+    Events.emitNet('dg-jobs:client:groups:updateStore', player.PlayerData.source, {
+      currentGroup: {
+        id: this.id,
+        name: nameManager.getName(this.owner),
+        size: this.members.size,
+        limit: this.maxSize,
+      },
+    } satisfies UIStoreData);
+
     Phone.showNotification(player.PlayerData.source, {
       id: `phone-jobs-groups-join`,
       title: 'jobcenter',
@@ -203,9 +214,11 @@ export class Group {
 
     emit('dg-jobs:server:groups:playerLeft', removedMember.serverId, removedMember.cid, this.id);
     if (removedMember.serverId !== null) {
-      Events.emitNet('dg-jobs:client:groups:set', removedMember.serverId, null);
-      Events.emitNet('dg-jobs:client:groups:setMembers', removedMember.serverId, []);
-      Events.emitNet('dg-jobs:client:groups:setGroupOwner', removedMember.serverId, false);
+      Events.emitNet('dg-jobs:client:groups:updateStore', removedMember.serverId, {
+        currentGroup: null,
+        groupMembers: [],
+        isOwner: false,
+      } satisfies UIStoreData);
       Phone.showNotification(removedMember.serverId, {
         id: 'jobcenter-groups-join',
         title: 'jobcenter',
@@ -236,9 +249,11 @@ export class Group {
     }
     const plyId = DGCore.Functions.GetPlayerByCitizenId(cid).PlayerData.source;
     const clientMembers: JobGroupMember[] = this.getMemberForClient();
-    Events.emitNet('dg-jobs:client:groups:set', plyId, this.getClientInfo());
-    Events.emitNet('dg-jobs:client:groups:setMembers', plyId, clientMembers);
-    Events.emitNet('dg-jobs:client:groups:setGroupOwner', plyId, this.owner === cid);
+    Events.emitNet('dg-jobs:client:groups:updateStore', plyId, {
+      currentGroup: this.getClientInfo(),
+      groupMembers: clientMembers,
+      isOwner: this.owner === cid,
+    } satisfies UIStoreData);
   }
 
   // endregion

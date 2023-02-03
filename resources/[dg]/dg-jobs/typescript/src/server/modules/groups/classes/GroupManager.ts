@@ -65,9 +65,11 @@ class GroupManager extends Util.Singleton<GroupManager>() {
   public seedPlayerStore(plyId: number, cid: number) {
     const plyGroup = this.getGroupByCID(cid);
     if (!plyGroup) {
-      Events.emitNet('dg-jobs:client:groups:set', plyId, null);
-      Events.emitNet('dg-jobs:client:groups:setMembers', plyId, []);
-      Events.emitNet('dg-jobs:client:groups:setGroupOwner', plyId, false);
+      Events.emitNet('dg-jobs:client:groups:updateStore', plyId, {
+        currentGroup: null,
+        groupMembers: [],
+        isOwner: false,
+      } satisfies UIStoreData);
       return;
     }
     plyGroup.refreshMember(cid);

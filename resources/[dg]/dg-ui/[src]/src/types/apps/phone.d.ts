@@ -343,7 +343,7 @@ declare namespace Phone {
     interface State {
       jobs: Job[];
       groups: Group[];
-      currentGroup: Group | null;
+      currentGroup: Omit<Group, 'idle'> | null;
       groupMembers: Member[];
       isOwner: boolean;
     }

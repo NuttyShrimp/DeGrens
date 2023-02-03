@@ -11,20 +11,24 @@ events.groupIsFull = () => {
   });
 };
 
-events.setCurrentGroup = (data: Phone.JobCenter.Group | null) => {
-  useJobcenterAppStore.setState({
-    currentGroup: data,
-  });
-};
+events.updateStore = (
+  data: Partial<
+    Omit<Phone.JobCenter.State, 'jobs' | 'groups' | 'currentGroup'> & {
+      currentGroup: Omit<Phone.JobCenter.Group, 'idle'> | 'null';
+    }
+  >
+) => {
+  // filter undefined from data and parse string null to actual null
+  const newState = Object.entries(data).reduce<Partial<Omit<Phone.JobCenter.State, 'jobs' | 'groups'>>>(
+    (acc, [key, value]) => {
+      if (value !== undefined) {
+        const parsedValue = value === 'null' ? null : value;
+        acc[key] = parsedValue;
+      }
+      return acc;
+    },
+    {}
+  );
 
-events.setMembers = (data: Phone.JobCenter.Member[] | undefined) => {
-  useJobcenterAppStore.setState({
-    groupMembers: data,
-  });
-};
-
-events.setOwner = (data: boolean) => {
-  useJobcenterAppStore.setState({
-    isOwner: data,
-  });
+  useJobcenterAppStore.setState(newState);
 };

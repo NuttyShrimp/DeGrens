@@ -51,30 +51,17 @@ Events.onNet('dg-jobs:client:groups:isFull', () => {
   });
 });
 
-// Set the current group the player is part of
-Events.onNet('dg-jobs:client:groups:set', (group: JobGroup | null) => {
-  UI.SendAppEvent('phone', {
-    appName: 'jobcenter',
-    action: 'setCurrentGroup',
-    data: group,
-  });
-});
+// update ui store
+Events.onNet('dg-jobs:client:groups:updateStore', (data: UIStoreData) => {
+  if (data.currentGroup === null) {
+    //@ts-ignore fuckoff man klote ding
+    data.currentGroup = 'null';
+  }
 
-// Set the members of the current group
-Events.onNet('dg-jobs:client:groups:setMembers', (members: JobGroupMember[]) => {
   UI.SendAppEvent('phone', {
     appName: 'jobcenter',
-    action: 'setMembers',
-    data: members,
-  });
-});
-
-// Set if this player is the owner/creator of the group
-Events.onNet('dg-jobs:client:groups:setGroupOwner', (isOwner: boolean) => {
-  UI.SendAppEvent('phone', {
-    appName: 'jobcenter',
-    action: 'setOwner',
-    data: isOwner,
+    action: 'updateStore',
+    data,
   });
 });
 // endregion

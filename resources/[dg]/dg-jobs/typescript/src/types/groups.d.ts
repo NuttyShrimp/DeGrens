@@ -11,3 +11,9 @@ declare interface JobGroup {
   limit: number;
   idle: boolean;
 }
+
+declare type UIStoreData = {
+  currentGroup?: Omit<JobGroup, 'idle'> | null;
+  groupMembers?: JobGroupMember[];
+  isOwner?: boolean;
+};
