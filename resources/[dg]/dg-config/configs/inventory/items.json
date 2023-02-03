@@ -908,7 +908,6 @@
     "markedForSeizure": true,
     "name": "mini_emp",
     "label": "Mini EMP",
-    "useable": true,
     "decayRate": 4320,
     "image": "mini_emp.png",
     "description": "Kleine EMP voor elektronica uit te schakelen.",
@@ -920,7 +919,6 @@
   {
     "name": "volt_meter",
     "label": "Multimeter",
-    "useable": true,
     "decayRate": 8640,
     "image": "volt_meter.png",
     "size": {
