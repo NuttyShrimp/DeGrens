@@ -25,7 +25,7 @@ export const Call: FC<{ call: Dispatch.Call; isNew: boolean }> = ({ call, isNew 
         <div className='dispatch-call-header'>
           {call.callsign && <Chip color={'primary'} label={call.callsign} />}
           {call.tag && <Chip color={'secondary'} label={call.tag} />}
-          <Typography variant='body1' fontWeight={'bold'}>
+          <Typography variant='body1' fontWeight={'bold'} style={{ fontSize: '1.5vh' }}>
             {call.title}
           </Typography>
         </div>
@@ -33,18 +33,24 @@ export const Call: FC<{ call: Dispatch.Call; isNew: boolean }> = ({ call, isNew 
           {call.description && (
             <div>
               <div />
-              <Typography variant='body1'>{call.description}</Typography>
+              <Typography variant='body1' style={{ fontSize: '1.4vh' }}>
+                {call.description}
+              </Typography>
             </div>
           )}
           <div>
             <Icon name={'clock'} size='1rem' />
-            <Typography variant='body1'>{formatRelativeTime(call.timestamp)}</Typography>
+            <Typography variant='body1' style={{ fontSize: '1.4vh' }}>
+              {formatRelativeTime(call.timestamp)}
+            </Typography>
           </div>
           {call.entries &&
             Object.entries(call.entries).map(([icon, entry], idx) => (
               <div key={`call-${call.id}-${idx}`}>
                 <Icon name={icon} size='1rem' />
-                <Typography variant='body1'>{entry}</Typography>
+                <Typography variant='body1' style={{ fontSize: '1.4vh' }}>
+                  {entry}
+                </Typography>
               </div>
             ))}
         </div>

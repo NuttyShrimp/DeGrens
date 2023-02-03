@@ -11,8 +11,8 @@
 
   &-call {
     display: flex;
-    width: 55vh;
-    min-height: 11vh;
+    width: 45vh;
+    min-height: 9vh;
 
     margin-bottom: 1.5vh;
     padding: 1vh;
@@ -22,7 +22,6 @@
 
     &-list {
       right: 1vh;
-      width: 55vh;
     }
 
     &-content {
@@ -32,6 +31,7 @@
     &-header {
       display: flex;
       align-items: center;
+      margin-bottom: 0.5vh;
 
       &>*:not(:last-child) {
         margin-right: 1vh;
