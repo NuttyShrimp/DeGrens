@@ -76,6 +76,7 @@ class ItemManager extends Util.Singleton<ItemManager>() {
         throw new Error(`Player tried to move item ${id} but does not have the original inventory id open`);
     }
 
+    const playerName = src === 0 ? 'Server' : Util.getName(src);
     Util.Log(
       'inventory:item:moved',
       {
@@ -86,8 +87,8 @@ class ItemManager extends Util.Singleton<ItemManager>() {
         oldInventory: prevInvId,
         newInventory: invId,
       },
-      `${GetPlayerName(String(src))} moved ${item.state.name} from ${prevInvId} to ${invId}`,
-      src
+      `${playerName} moved ${item.state.name} from ${prevInvId} to ${invId}`,
+      src === 0 ? undefined : src
     );
     await item.move(src, position, rotated, invId);
   };

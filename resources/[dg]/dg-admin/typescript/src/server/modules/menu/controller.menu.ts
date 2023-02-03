@@ -52,7 +52,7 @@ Events.onNet('admin:menu:action', (src, data: { name: string; inputs: any[] }) =
     {
       cmdData: data,
     },
-    `${GetPlayerName(String(src))} ${cmd.log} ${cmd.name}`,
+    `${GetPlayerName(String(src))} ${cmd.log} (${cmd.name})`,
     src
   );
   cmd.handler(getUserData(src), data.inputs);

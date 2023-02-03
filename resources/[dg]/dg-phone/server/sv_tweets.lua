@@ -194,5 +194,5 @@ DGX.Events.onNet('dg-phone:server:twitter:newTweet', function(src, message, date
   _tweet.retweeted = false
   DGX.Events.emitNet('dg-phone:client:newTweet', -1, _tweet)
 
-  DGX.Util.Log('phone:tweet:newTweet', {tweetId = insertId, message = message}, ('%s has posted a tweet'):format(DGX.Util.getName(src)), src)
+  DGX.Util.Log('phone:tweet:newTweet', {tweetId = insertId, tweetMessage = message}, ('%s has posted a tweet'):format(DGX.Util.getName(src)), src)
 end)
