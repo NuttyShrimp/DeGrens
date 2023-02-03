@@ -1,4 +1,4 @@
-import { Events, HUD, RPC } from '@dgx/client';
+import { Events, HUD, Keys, RPC } from '@dgx/client';
 
 import { assignBind, getAllBinds } from '../helpers/binds';
 import { isDevModeEnabled, setDevModeEnabled } from '../helpers/devmode';
@@ -60,3 +60,9 @@ Events.onNet('admin:menu:forceClose', () => {
     action: 'forceCloseMenu',
   });
 });
+
+Keys.onPressDown("open-admin", () => {
+  Events.emitNet("admin:menu:open")
+})
+
+Keys.register("open-admin", "(zAdmin) open menu");

@@ -11,6 +11,13 @@ global.exports('isInDevMode', isInDevMode);
 
 Events.onNet('admin:menu:open', src => {
   if (!hasPlayerPermission(src, 'staff')) {
+    return;
+  }
+  Events.emitNet('admin:menu:open', src);
+});
+
+Events.onNet('admin:menu:openlog', src => {
+  if (!hasPlayerPermission(src, 'staff')) {
     ACBan(src, 'Event injection: open admin menu');
     return;
   }

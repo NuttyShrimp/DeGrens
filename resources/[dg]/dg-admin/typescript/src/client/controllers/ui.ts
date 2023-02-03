@@ -5,7 +5,7 @@ import { RegisterUICallback } from '../helpers/ui';
 import { selectedEntity, selectedEntityType } from '../modules/selector/service.selector';
 
 RegisterUICallback('logOpenMenu', (_, cb) => {
-  Events.emitNet('admin:menu:open');
+  Events.emitNet('admin:menu:openlog');
   cb({ meta: { ok: true, message: 'done' }, data: {} });
 });
 
