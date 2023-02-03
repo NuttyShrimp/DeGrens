@@ -6658,5 +6658,101 @@
     "price": 1,
     "shop": "nfs",
     "type": "land"
+  },
+  {
+    "category": "commercial",
+    "model": "benson",
+    "brand": "Vapid",
+    "name": "Benson",
+    "class": "C",
+    "defaultStock": 10,
+    "restockTime": 10,
+    "price": 1,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "commercial",
+    "model": "biff",
+    "brand": "HVY",
+    "name": "Biff",
+    "class": "C",
+    "defaultStock": 10,
+    "restockTime": 10,
+    "price": 1,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "commercial",
+    "model": "hauler",
+    "brand": "Jobuilt",
+    "name": "Hauler",
+    "class": "C",
+    "defaultStock": 10,
+    "restockTime": 10,
+    "price": 1,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "commercial",
+    "model": "hauler",
+    "brand": "MTL",
+    "name": "Packer",
+    "class": "C",
+    "defaultStock": 10,
+    "restockTime": 10,
+    "price": 1,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "commercial",
+    "model": "packer",
+    "brand": "MTL",
+    "name": "Packer",
+    "class": "C",
+    "defaultStock": 10,
+    "restockTime": 10,
+    "price": 1,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "commercial",
+    "model": "phantom",
+    "brand": "Jobuilt",
+    "name": "Phantom",
+    "class": "C",
+    "defaultStock": 10,
+    "restockTime": 10,
+    "price": 1,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "commercial",
+    "model": "pounder",
+    "brand": "MTL",
+    "name": "Pounder",
+    "class": "C",
+    "defaultStock": 10,
+    "restockTime": 10,
+    "price": 1,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "commercial",
+    "model": "pounder",
+    "brand": "Brute",
+    "name": "Stockade",
+    "class": "C",
+    "defaultStock": 10,
+    "restockTime": 10,
+    "price": 1,
+    "shop": "nfs",
+    "type": "land"
   }
 ]
