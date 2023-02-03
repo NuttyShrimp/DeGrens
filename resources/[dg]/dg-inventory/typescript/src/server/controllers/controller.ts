@@ -20,13 +20,6 @@ const giveStarterItems = (plyId: number) => {
     const metadata = itemManager.buildInitialMetadata(plyId, name);
     itemManager.create({ inventory, name, metadata });
   });
-  Util.Log(
-    'inventory:inventory:starterItems',
-    {
-      cid,
-    },
-    `${cid} received startitems`
-  );
 };
 
 const clearInventory = async (type: Inventory.Type, identifier: string) => {

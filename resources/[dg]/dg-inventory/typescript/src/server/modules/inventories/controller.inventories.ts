@@ -1,4 +1,4 @@
-import { Admin, Financials, RPC, Util } from '@dgx/server';
+import { Admin, RPC, Util } from '@dgx/server';
 import contextManager from 'classes/contextmanager';
 import locationManager from 'modules/locations/manager.locations';
 import shopManager from 'modules/shops/shopmanager';
@@ -72,6 +72,15 @@ RPC.register(
     } else {
       secondary = { id: secondaryInv.id, size: secondaryInv.size, allowedItems: secondaryInv.allowedItems };
     }
+
+    Util.Log(
+      'inventory:open',
+      {
+        secondaryId: secondaryInv.id,
+      },
+      `${Util.getName(src)} opened inventory ${secondaryInv.id}`,
+      src
+    );
 
     contextManager.playerOpened(src, [primaryInv.id, secondaryInv.id]);
     return {

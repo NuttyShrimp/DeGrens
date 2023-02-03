@@ -134,7 +134,7 @@ export class Item {
       {
         itemId: this.id,
       },
-      `${GetPlayerName(String(src))} used ${this.name}`,
+      `${Util.getName(src)} used ${this.name}`,
       src
     );
   };
@@ -197,7 +197,7 @@ export class Item {
       {
         ...this.state,
       },
-      `${this.name} got destroyed (${this.quality}% quality remaining)`
+      `${this.name} got destroyed (${Math.ceil(this.quality)}% quality remaining)`
     );
     this.syncItem({ ...this.state, inventory: 'destroyed' }, this.inventory.id);
   };
