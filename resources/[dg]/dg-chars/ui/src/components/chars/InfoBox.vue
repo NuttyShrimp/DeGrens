@@ -145,6 +145,7 @@
       const confirmDelete = () => {
         deleteDialog.value = false;
         nuiAction('deleteChar');
+        store.commit('setFreezePosition', false);
       };
 
       const createChar = () => {

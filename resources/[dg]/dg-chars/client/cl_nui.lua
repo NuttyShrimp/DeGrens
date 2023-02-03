@@ -62,9 +62,12 @@ end)
 RegisterNUICallback('deleteChar', function(_, cb)
 	if entCid == 0 then return end
 	DGCore.Functions.TriggerCallback('dg-chars:server:deleteCharacter', entCid)
+  DoScreenFadeOut(250)
+	Wait(250)
 	removeEntities(true)
 	plyChars = DGCore.Functions.TriggerCallback('dg-chars:server:getChars')
 	spawnCharPeds()
+  DoScreenFadeIn(250)
 	cb({ data= {}, meta={ok=true, message='done'} })
 end)
 
