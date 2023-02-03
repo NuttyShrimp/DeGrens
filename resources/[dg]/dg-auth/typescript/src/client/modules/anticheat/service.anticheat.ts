@@ -84,8 +84,8 @@ const scheduleAntiTP = () => {
     const ragdoll = IsPedRagdoll(ped);
     const falling = IsPedFalling(ped);
     let onVeh = IsPedOnVehicle(ped);
-    const inNoclip = global.exports?.['dg-admin']?.inNoclip() ?? false;
-    const speedDrug = global.exports?.['dg-misc']?.isOnDrugs('speed') ?? false;
+    const inNoclip = global.exports?.['dg-admin']?.inNoclip?.() ?? false;
+    const speedDrug = global.exports?.['dg-misc']?.isOnDrugs?.('speed') ?? false;
 
     if (onVeh) {
       onVehicleGracePeriod = 10;

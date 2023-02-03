@@ -1,22 +1,22 @@
 import { Events, Peek, Util } from '@dgx/client';
 
 let peekIds: string[] = [];
-let buildingEntries = false;
 
 const sitOnChair = (chair: number, offset: Vec3) => {
   const entPos = Util.getEntityCoords(chair);
-  const entRot = Util.getEntityCoords(chair);
+  const entHeading = GetEntityHeading(chair);
+
   offset = {
-    x: offset.y * -Math.sin((Math.PI / 180) * entRot.z),
-    y: offset.y * Math.cos((Math.PI / 180) * entRot.z),
+    x: offset.y * -Math.sin((Math.PI / 180) * entHeading),
+    y: offset.y * Math.cos((Math.PI / 180) * entHeading),
     z: offset.z,
   };
 
   const plyCoords = entPos.add(offset);
   const ped = PlayerPedId();
 
-  SetEntityCoords(ped, plyCoords.x, plyCoords.y, plyCoords.z, true, false, false, false);
-  SetEntityHeading(ped, GetEntityHeading(chair) - 180.0);
+  SetEntityCoords(ped, plyCoords.x, plyCoords.y, plyCoords.z, false, false, false, false);
+  SetEntityHeading(ped, entHeading - 180.0);
   emit('animations:client:EmoteCommandStart', ['sitchair']);
 };
 

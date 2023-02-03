@@ -1,4 +1,4 @@
-import { Auth, Config, Events, Util } from '@dgx/server';
+import { Auth, Config, Events } from '@dgx/server';
 
 let config: Config.Seats.Config;
 
@@ -14,7 +14,7 @@ onNet('dg-config:moduleLoaded', (module: string, data: Config.Seats.Config) => {
   config = data;
 });
 
-Auth.onAuth(async src => {
+Auth.onAuth(src => {
   if (config === null) return;
   Events.emitNet('misc:seats:seed', src, config);
 });
