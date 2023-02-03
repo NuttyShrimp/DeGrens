@@ -20,7 +20,7 @@ export const setCurrentWeather = (weather: WeatherSync.Weather, skipTransition =
 };
 
 export const startWeatherThread = () => {
-  const startType = getRandomEnabledType();
+  const startType = getStartType();
   const startWeather = generateWeatherData(startType);
   setCurrentWeather(startWeather, true);
 
@@ -72,9 +72,9 @@ const chooseTransitionForType = (type: WeatherSync.Type) => {
 
 const isTypeEnabled = (type: WeatherSync.Type) => WEATHERS[type].enabled;
 
-const getRandomEnabledType = () => {
+const getStartType = () => {
   const enabledTypes = Object.entries(WEATHERS).reduce<WeatherSync.Type[]>((acc, [type, data]) => {
-    if (data.enabled) {
+    if (data.enabled && !data.cannotBeFirst) {
       acc.push(type as WeatherSync.Type);
     }
     return acc;
