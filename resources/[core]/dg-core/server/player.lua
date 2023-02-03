@@ -289,32 +289,12 @@ function DGCore.Player.Save(src)
 end
 
 -- Delete character
-
-local playertables = { -- Add tables as needed
-  { table = 'characters' },
-  { table = 'character_data' },
-  { table = 'character_info' },
-  { table = 'apartments' },
-  { table = 'crypto_transactions' },
-  { table = 'phone_invoices' },
-  { table = 'phone_messages' },
-  { table = 'playerskins' },
-  { table = 'player_boats' },
-  { table = 'player_contacts' },
-  { table = 'player_houses' },
-  { table = 'player_mails' },
-  { table = 'player_outfits' },
-  { table = 'player_vehicles' }
-}
-
 function DGCore.Player.DeleteCharacter(source, citizenid)
   local src = source
   local steamid = DGCore.Functions.GetIdentifier(src, 'steam')
   local result = exports['dg-sql']:scalar('SELECT steamid FROM characters WHERE citizenid = ?', { citizenid })
   if steamid == result.steamid then
-    for k, v in pairs(playertables) do
-      exports['dg-sql']:query('DELETE FROM ' .. v.table .. ' WHERE citizenid = ?', { citizenid })
-    end
+    exports['dg-sql']:query('DELETE FROM characters WHERE citizenid = ?', { citizenid })
     TriggerEvent('qb-log:server:CreateLog', 'joinleave', 'Character Deleted', 'red',
       '**' .. GetPlayerName(src) .. '** ' .. steamid .. ' deleted **' .. citizenid .. '**..')
   else
