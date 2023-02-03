@@ -55,7 +55,7 @@ export const CurrentGroup = () => {
                         title: 'Kick',
                         onClick: () =>
                           nuiAction('phone/jobs/groups/kick', {
-                            name: m.name,
+                            cid: m.cid,
                           }),
                       },
                     ]

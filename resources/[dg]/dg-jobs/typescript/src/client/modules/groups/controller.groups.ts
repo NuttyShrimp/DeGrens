@@ -10,7 +10,7 @@ UI.RegisterUICallback('phone/jobs/groups/create', async (_, cb) => {
   cb({ data: {}, meta: { ok: isSuccess ?? false, message: isSuccess ? 'done' : 'Failed to create jobgroup' } });
 });
 UI.RegisterUICallback('phone/jobs/groups/join', async (data: { id: string }, cb) => {
-  const isSuccess = await RPC.execute<boolean>('dg-jobs:server:groups:joinRequest', data);
+  const isSuccess = await RPC.execute<boolean>('dg-jobs:server:groups:joinRequest', data.id);
   cb({ data: {}, meta: { ok: isSuccess ?? false, message: isSuccess ? 'done' : 'Failed to join jobgroup' } });
 });
 UI.RegisterUICallback('phone/jobs/groups/leave', async (_, cb) => {
@@ -21,13 +21,12 @@ UI.RegisterUICallback('phone/jobs/groups/members', async (_, cb) => {
   const members = await RPC.execute('dg-jobs:server:groups:getMembers');
   cb({ data: members, meta: { ok: true, message: 'done' } });
 });
-// TODO: add backend receiver
-UI.RegisterUICallback('phone/jobs/groups/kick', async (data: { name: string }, cb) => {
-  await RPC.execute('dg-jobs:server:groups:kick', data);
+UI.RegisterUICallback('phone/jobs/groups/kick', async (data: { cid: number }, cb) => {
+  await RPC.execute('dg-jobs:server:groups:kick', data.cid);
   cb({ data: {}, meta: { ok: true, message: 'done' } });
 });
 UI.RegisterUICallback('phone/jobs/group/setReady', async (data: { ready: boolean }, cb) => {
-  const isSuccess = await RPC.execute<boolean>('dg-jobs:server:groups:setReady', data);
+  const isSuccess = await RPC.execute<boolean>('dg-jobs:server:groups:setReady', data.ready);
   cb({ data: {}, meta: { ok: isSuccess ?? false, message: isSuccess ? 'done' : 'Failed to set ready' } });
 });
 UI.RegisterUICallback('phone/jobs/get', async (_, cb) => {

@@ -204,12 +204,13 @@ export class Group {
 
   // Do not use this.getOwner() inside this function because theres a possibility the owner got removed while iterating this func when disbanding group!
   public removeMember(cid: number) {
-    const removedMember = this.members.get(cid)!;
-    if (!this.members.delete(cid)) {
+    const removedMember = this.members.get(cid);
+    if (!removedMember) {
       // TODO: log failed attempt to leave group, src isn't member of
       this.logger.warn(`cid ${cid} tried to leave ${this.owner} job group without being part of it`);
       return;
     }
+    this.members.delete(cid);
     this.logger.info(`cid ${cid} left ${this.owner} job group successfully`);
 
     emit('dg-jobs:server:groups:playerLeft', removedMember.serverId, removedMember.cid, this.id);
@@ -362,6 +363,36 @@ export class Group {
     if (!member) return;
     this.members.set(cid, { ...member, isReady: false, serverId: newServerId });
     this.logger.info(`Group member (${cid}) serverId got updated to ${newServerId}`);
+    this.pushMembersUpdate();
+  };
+
+  public kickMember = (origin: number, targetCid: number) => {
+    const owner = this.getOwner();
+    if (owner.serverId !== origin) return;
+
+    const memberToKick = this.members.get(targetCid);
+    if (!memberToKick) return;
+
+    this.members.delete(targetCid);
+    this.logger.info(`cid ${targetCid} got kicked from ${this.owner} job group successfully`);
+
+    emit('dg-jobs:server:groups:playerLeft', memberToKick.serverId, memberToKick.cid, this.id);
+    if (memberToKick.serverId !== null) {
+      Events.emitNet('dg-jobs:client:groups:updateStore', memberToKick.serverId, {
+        currentGroup: null,
+        groupMembers: [],
+        isOwner: false,
+      } satisfies UIStoreData);
+      Phone.showNotification(memberToKick.serverId, {
+        id: 'jobcenter-groups-join',
+        title: 'jobcenter',
+        description: 'Gekickt uit group',
+        icon: 'jobcenter',
+      });
+    }
+
+    Util.Log('jobs:group:kickMember', this.getInfo(), `${memberToKick.name} got kicked from group ${this.id}`);
+
     this.pushMembersUpdate();
   };
 }

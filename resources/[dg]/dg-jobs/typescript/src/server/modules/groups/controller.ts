@@ -57,13 +57,12 @@ on('DGCore:server:playerUnloaded', (plyId: number, cid: number) => {
 
 RPC.register('dg-jobs:server:groups:create', createGroup);
 
-RPC.register('dg-jobs:server:groups:joinRequest', (src, data: { id: string }) => {
-  groupLogger.silly(
-    `[groups:joinRequest] ${GetPlayerName(String(src))}(${src}) tries to join group with id ${data.id}`
-  );
-  const group = groupManager.getGroupById(data.id);
+RPC.register('dg-jobs:server:groups:joinRequest', (src, groupId: string) => {
+  const plySteamName = Util.getName(src);
+  groupLogger.silly(`[groups:joinRequest] ${plySteamName}(${src}) tries to join group with id ${groupId}`);
+  const group = groupManager.getGroupById(groupId);
   if (!group) {
-    groupLogger.warn(`${GetPlayerName(String(src))}(${src}) tried to join an invalid group | id: ${data.id}`);
+    groupLogger.warn(`${plySteamName}(${src}) tried to join an invalid group | id: ${groupId}`);
     // TODO: log warn with all clients
     return false;
   }
@@ -73,12 +72,11 @@ RPC.register('dg-jobs:server:groups:joinRequest', (src, data: { id: string }) =>
 
 // CB to send the members of the current player group to the requestor
 RPC.register('dg-jobs:server:groups:getMembers', src => {
-  groupLogger.silly(`[groups:joinRequest] ${GetPlayerName(String(src))}(${src}) has request the members of his group`);
+  const plySteamName = Util.getName(src);
+  groupLogger.silly(`[groups:joinRequest] ${plySteamName}(${src}) has request the members of his group`);
   const group = groupManager.getGroupByServerId(src);
   if (!group) {
-    groupLogger.warn(
-      `${GetPlayerName(String(src))}(${src}) tried to get the members of a group while not being in a group`
-    );
+    groupLogger.warn(`${plySteamName}(${src}) tried to get the members of a group while not being in a group`);
     // TODO: log warn with all clients
     return false;
   }
@@ -90,33 +88,33 @@ RPC.register('dg-jobs:server:groups:getMembers', src => {
   }));
 });
 
-RPC.register('dg-jobs:server:groups:setReady', (src, data: { ready: boolean }) => {
+RPC.register('dg-jobs:server:groups:setReady', (src, ready: boolean) => {
+  const plySteamName = Util.getName(src);
   groupLogger.silly(
-    `[groups:setReady] ${GetPlayerName(String(src))}(${src}) has set himself ${
-      data.ready ? 'ready' : 'unready'
-    } for jobs`
+    `[groups:setReady] ${plySteamName}(${src}) has set himself ${ready ? 'ready' : 'unready'} for jobs`
   );
   const cid = Util.getCID(src);
   const group = groupManager.getGroupByCID(cid);
   if (!group) {
-    groupLogger.warn(`${GetPlayerName(String(src))}(${src}) tried to set himself ready while not being in a group`);
+    groupLogger.warn(`${plySteamName}(${src}) tried to set himself ready while not being in a group`);
     return false;
   }
-  group.setReady(cid, data.ready);
+  group.setReady(cid, ready);
   return true;
 });
 
 RPC.register('dg-jobs:server:groups:leave', src => {
-  groupLogger.silly(`[groups:leave] ${GetPlayerName(String(src))}(${src}) has left his group`);
+  const plySteamName = Util.getName(src);
+  groupLogger.silly(`[groups:leave] ${plySteamName}(${src}) has left his group`);
   const cid = Util.getCID(src);
   const group = groupManager.getGroupByCID(cid);
   if (!group) {
-    groupLogger.warn(`${GetPlayerName(String(src))}(${src}) tried to leave a group while not being in a group`);
+    groupLogger.warn(`${plySteamName}(${src}) tried to leave a group while not being in a group`);
     return true;
   }
   group.removeMember(cid);
   if (group.getMemberByCID(cid)) {
-    groupLogger.error(`${GetPlayerName(String(src))}(${src}) left a group but is still in it`);
+    groupLogger.error(`${plySteamName}(${src}) left a group but is still in it`);
     // TODO: log error with all clients
     return false;
   }
@@ -126,4 +124,16 @@ RPC.register('dg-jobs:server:groups:leave', src => {
 RPC.register('dg-jobs:server:groups:get', src => {
   groupLogger.silly(`[groups:get] ${GetPlayerName(String(src))}(${src}) has requested the list of groups`);
   return getGroupList();
+});
+
+RPC.register('dg-jobs:server:groups:kick', (src, cid: number) => {
+  const plySteamName = Util.getName(src);
+  groupLogger.silly(`[groups:kickMember] ${plySteamName}(${src}) tries to kick player ${cid}`);
+  const group = groupManager.getGroupByServerId(src);
+  if (!group) {
+    groupLogger.warn(`${plySteamName}(${src}) is not in a group to be able to kick`);
+    return false;
+  }
+  group.kickMember(src, cid);
+  return true;
 });
