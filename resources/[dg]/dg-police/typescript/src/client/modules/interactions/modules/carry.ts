@@ -1,6 +1,12 @@
-import { Events, Hospital, Police, Util } from '@dgx/client';
+import { Events, Hospital, Keys, Police, Util } from '@dgx/client';
 import { DISABLED_KEYS_WHILE_ESCORTING } from '../constants.interactions';
 import { pauseCuffAnimation } from './cuffs';
+
+let cancelCarry = false;
+
+Keys.onPressDown('cancelEmote', () => {
+  cancelCarry = true;
+});
 
 Events.onNet('police:interactions:carryPlayer', async () => {
   const ped = PlayerPedId();
@@ -11,11 +17,13 @@ Events.onNet('police:interactions:carryPlayer', async () => {
   await Util.awaitCondition(() => IsEntityPlayingAnim(ped, 'missfinale_c2mcs_1', 'fin_c2_mcs_1_camman', 3));
 
   // Check loop
+  cancelCarry = false;
   const thread = setInterval(() => {
     DISABLED_KEYS_WHILE_ESCORTING.forEach(key => DisableControlAction(0, key, true));
 
-    if (IsControlJustPressed(0, 73)) {
+    if (cancelCarry) {
       ClearPedTasksImmediately(ped);
+      cancelCarry = false;
     }
 
     if (!IsEntityPlayingAnim(ped, 'missfinale_c2mcs_1', 'fin_c2_mcs_1_camman', 3)) {
@@ -24,7 +32,7 @@ Events.onNet('police:interactions:carryPlayer', async () => {
       ClearPedTasksImmediately(ped);
       clearInterval(thread);
     }
-  });
+  }, 1);
 });
 
 Events.onNet('police:interactions:getCarried', async (plyId: number) => {
@@ -42,11 +50,14 @@ Events.onNet('police:interactions:getCarried', async (plyId: number) => {
   await Util.awaitCondition(() => IsEntityPlayingAnim(ped, 'nm', 'firemans_carry', 3));
 
   // Check loop
+  cancelCarry = false;
   const thread = setInterval(() => {
     DisableAllControlActions(0);
 
-    if (IsDisabledControlJustPressed(0, 73) && !Police.isCuffed() && !Hospital.isDown()) {
+    // TODO: Replace cancel key with emotes cancel key
+    if (cancelCarry && !Police.isCuffed() && !Hospital.isDown()) {
       ClearPedTasksImmediately(ped);
+      cancelCarry = false;
     }
 
     if (!IsEntityPlayingAnim(ped, 'nm', 'firemans_carry', 3)) {
@@ -60,5 +71,5 @@ Events.onNet('police:interactions:getCarried', async (plyId: number) => {
       Hospital.pauseDownAnimation(false);
       global.exports['dg-lib'].shouldExecuteKeyMaps(true);
     }
-  });
+  }, 1);
 });

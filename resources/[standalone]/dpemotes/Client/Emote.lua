@@ -17,6 +17,11 @@ local PtfxPrompt = false
 local PtfxWait = 500
 local PtfxNoProp = false
 
+DGX.Keys.register('cancelEmote', '(emotes) cancel emote', 'X');
+DGX.Keys.onPressDown('cancelEmote', function()
+  EmoteCancel()
+end);
+
 Citizen.CreateThread(function()
   while true do
 
@@ -38,7 +43,6 @@ Citizen.CreateThread(function()
     end
 
     if Config.MenuKeybindEnabled then if IsControlPressed(0, Config.MenuKeybind) then OpenEmoteMenu() end end
-    if Config.EnableXtoCancel then if IsControlPressed(0, 73) then EmoteCancel() end end
     Citizen.Wait(1)
   end
 end)

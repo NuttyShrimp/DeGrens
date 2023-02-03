@@ -99,7 +99,6 @@ export const lootTrolley = async (trolleyObject: number) => {
     const destroyEvent = GetHashKey('RELEASE_CASH_DESTROY');
     while (GetGameTimer() - startTime < 36900) {
       await Util.Delay(1);
-      DisableControlAction(0, 73, true); // disable taking cover to not ruin animation
       if (HasAnimEventFired(plyPed, appearEvent) && !IsEntityVisible(pickupObject))
         SetEntityVisible(pickupObject, true, false);
       if (HasAnimEventFired(plyPed, destroyEvent) && IsEntityVisible(pickupObject))
