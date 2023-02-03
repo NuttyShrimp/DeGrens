@@ -8,13 +8,12 @@ let controllerMenuOpen = false;
 
 let previousWindowTint: number | null = null;
 
-on('dg-ui:reload', () => {
+UI.onUIReload(() => {
   controllerMenuOpen = false;
   resetWindowTint();
 });
 
-on('dg-ui:application-closed', (appName: string) => {
-  if (appName !== 'contextmenu') return;
+UI.onApplicationClose(() => {
   if (controllerMenuOpen) {
     controllerMenuOpen = false;
     const veh = getCurrentVehicle();
@@ -27,7 +26,7 @@ on('dg-ui:application-closed', (appName: string) => {
     Events.emitNet('vehicles:itemupgrades:saveChanges', NetworkGetNetworkIdFromEntity(veh), newUpgrades);
   }
   resetWindowTint();
-});
+}, 'contextmenu');
 
 Events.onNet('vehicles:itemupgrades:openControllerMenu', (menu: ContextMenu.Entry[]) => {
   if (!getIsInItemZone()) return;

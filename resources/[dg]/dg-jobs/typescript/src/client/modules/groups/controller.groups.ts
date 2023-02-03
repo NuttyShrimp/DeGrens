@@ -40,7 +40,7 @@ UI.RegisterUICallback('phone/jobs/waypoint', async (data: { job: string }, cb) =
 });
 // endregion
 // region events
-on('dg-ui:loadData', () => {
+UI.onLoad(() => {
   emitNet('dg-jobs:client:groups:loadStore');
 });
 

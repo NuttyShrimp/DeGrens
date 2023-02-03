@@ -1,7 +1,8 @@
+import { UI } from '@dgx/client';
 import { finishGridGame, getActiveGridGameId } from 'modules/gridgames/service.gridgames';
 import { finishKeygame, getActiveKeyGameId } from 'modules/keygame/service.keygame';
 
-on('dg-ui:reload', () => {
+UI.onUIReload(() => {
   // if any game is active, return false as result
   const activeGridId = getActiveGridGameId();
   if (activeGridId !== null) {

@@ -138,7 +138,7 @@ AddStateBagChangeHandler('radioChannel', ('player:%s'):format(GetPlayerServerId(
     isDirty = true
   end)
 
-RegisterNetEvent('dg-ui:loadData', function()
+DGX.UI.onLoad(function()
   local plyData = DGCore.Functions.GetPlayerData()
   if (plyData and plyData.metadata) then
     state.values.hunger = plyData.metadata.needs.hunger
@@ -149,7 +149,7 @@ RegisterNetEvent('dg-ui:loadData', function()
   isDirty = true
 end)
 
-RegisterNetEvent('dg-ui:reload', function()
+DGX.UI.onUIReload(function()
   for _, entry in ipairs(state.entries) do
     SendAppEventWESentry('hud', {
       action = 'addEntry',
@@ -157,6 +157,7 @@ RegisterNetEvent('dg-ui:reload', function()
     })
   end
 end)
+
 DGX.Events.on('dg-misc:configChanged', function(data)
   if not data then return end
   if not data.hud then return end

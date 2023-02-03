@@ -3,14 +3,13 @@ import contextManager from 'classes/contextmanager';
 import itemDataManager from 'classes/itemdatamanager';
 import { doDropAnimation } from './../util';
 
-on('dg-ui:reload', () => {
+UI.onUIReload(() => {
   contextManager.close();
 });
 
-on('dg-ui:application-closed', (appName: string) => {
-  if (appName !== 'inventory') return;
+UI.onApplicationClose(() => {
   contextManager.close();
-});
+}, 'inventory');
 
 Events.onNet('inventory:client:syncItem', (item: Inventory.ItemState) => {
   UI.SendAppEvent('inventory', { ...item, ...itemDataManager.get(item.name) });

@@ -1,4 +1,5 @@
 import React, { useCallback } from 'react';
+import { flushSync } from 'react-dom';
 import AppWrapper from '@components/appwrapper';
 
 import { devData } from '../../lib/devdata';
@@ -9,7 +10,6 @@ import { useFinancialsStore } from './stores/useFinancialsStore';
 import config from './_config';
 
 import './styles/financials.scss';
-import { flushSync } from 'react-dom';
 
 const Component: AppFunction = props => {
   const [updateStore, resetStore, modalComponent, selected, transactions, openLoadModal] = useFinancialsStore(s => [

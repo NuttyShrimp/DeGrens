@@ -16,12 +16,11 @@ const closeLaptop = () => {
   stopTabletAnimation();
 };
 
-on('dg-ui:application-closed', (appName: string) => {
-  if (appName !== 'laptop') return;
+UI.onApplicationClose(() => {
   closeLaptop();
-});
+}, 'laptop');
 
-on('dg-ui:reload', () => {
+UI.onUIReload(() => {
   closeLaptop();
 });
 

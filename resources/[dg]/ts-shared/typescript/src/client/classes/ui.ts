@@ -73,6 +73,22 @@ class UI {
   hideInteraction() {
     global.exports['dg-ui'].hideInteraction();
   }
+
+  public onApplicationClose = (handler: (closedApp: string) => void, appName?: string) => {
+    on('dg-ui:application-closed', (closedApp: string) => {
+      if (appName === undefined || closedApp === appName) {
+        handler(closedApp);
+      }
+    });
+  };
+
+  public onUIReload = (handler: () => void) => {
+    on('dg-ui:reload', handler);
+  };
+
+  public onLoad = (handler: () => void) => {
+    on('dg-ui:loadData', handler);
+  };
 }
 
 class Taskbar {

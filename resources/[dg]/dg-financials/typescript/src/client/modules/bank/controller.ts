@@ -19,11 +19,10 @@ onNet('financials:client:SetBankDisabled', (name: string, isDisabled: boolean) =
   locationManager.currentLocation.setDisabled(isDisabled);
 });
 
-on('dg-ui:application-closed', (app: string) => {
-  if (app !== 'financials') return;
+UI.onApplicationClose(() => {
   doAnimation(locationManager.isAtAtm(), false);
   locationManager.setAtATM(false);
-});
+}, 'financials');
 
 UI.RegisterUICallback('financials/accounts/get', async (_, cb) => {
   if (!locationManager.isInALocation()) return;

@@ -6,7 +6,7 @@ Events.onNet('dg-misc:openConfigMenu', () => {
   UI.openApplication('configmenu');
 });
 
-on('dg-ui:loadData', () => {
+UI.onLoad(() => {
   UI.SendAppEvent('configmenu', {
     action: 'load',
     data: Storage.getValue('dg-config') ?? {},

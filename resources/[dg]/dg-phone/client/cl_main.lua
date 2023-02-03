@@ -85,11 +85,11 @@ RegisterNetEvent('onResourceStop', function(res)
   end
 end)
 
-RegisterNetEvent('dg-ui:loadData', function()
+DGX.UI.onLoad(function()
   initPhone()
 end)
 
-RegisterNetEvent('dg-ui:reload', function()
+DGX.UI.onUIReload(function()
   if not getState('characterLoaded') then return end
   unloadPhone()
 end)

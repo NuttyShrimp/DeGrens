@@ -382,7 +382,7 @@ export const cmds: {
     data: () => ({
       appName: 'pinger',
       action: 'doRequest',
-      data: { id: Math.floor(Math.random() * 100) , origin: 3 },
+      data: { id: Math.floor(Math.random() * 100), origin: 3 },
     }),
   },
   {

@@ -8,25 +8,24 @@ let changeStep = 0.005;
 
 export const isStanceMenuOpen = () => stanceMenuOpen;
 
-on('dg-ui:reload', () => {
+UI.onUIReload(() => {
   stanceMenuOpen = false;
 });
 
-on('dg-ui:application-closed', (appName: string) => {
-  if (appName !== 'contextmenu') return;
-  if (stanceMenuOpen) {
-    stanceMenuOpen = false;
-    removeInfoNotif();
-    changeStep = 0.005;
-    const veh = getCurrentVehicle();
-    if (!veh || !isDriver()) {
-      Notifications.add('Kon stance niet opslaan...', 'error');
-      return;
-    }
-    if (!Entity(veh).state.stance) return;
-    Events.emitNet('vehicles:stance:save', NetworkGetNetworkIdFromEntity(veh));
+UI.onApplicationClose(() => {
+  if (!stanceMenuOpen) return;
+
+  stanceMenuOpen = false;
+  removeInfoNotif();
+  changeStep = 0.005;
+  const veh = getCurrentVehicle();
+  if (!veh || !isDriver()) {
+    Notifications.add('Kon stance niet opslaan...', 'error');
+    return;
   }
-});
+  if (!Entity(veh).state.stance) return;
+  Events.emitNet('vehicles:stance:save', NetworkGetNetworkIdFromEntity(veh));
+}, 'contextmenu');
 
 Events.onNet('vehicles:stance:openMenu', () => {
   const veh = getCurrentVehicle();
