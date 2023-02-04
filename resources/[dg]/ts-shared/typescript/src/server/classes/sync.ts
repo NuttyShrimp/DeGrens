@@ -12,6 +12,10 @@ class Sync {
   public getPlayerScope = (plyId: number): { current: Sync.ScopePlayer[]; recent: Sync.ScopePlayer[] } => {
     return global.exports['dg-sync'].getPlayerScope(plyId);
   };
+
+  public getAmountOfPlayers = () => {
+    return GetNumPlayerIndices();
+  };
 }
 
 export default {

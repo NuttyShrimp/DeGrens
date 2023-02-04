@@ -78,12 +78,11 @@ exports("startMeth", function()
         return
     end
 
-    local enoughPlayers = DGCore.Functions.TriggerCallback("dg-labs:server:enoughPlayers", "meth")
-    if not enoughPlayers then 
-        exports['dg-ui']:addNotification("Dit werkt momenteel niet...", "error")
-        return
+    if not DGX.Police.canDoActivity('labs_meth') then
+      exports['dg-ui']:addNotification("Dit werkt momenteel niet...", "error")
+      return
     end
-
+    
     DGCore.Functions.Progressbar("start_meth", "Aanzetten..", 8000, false, true, {
         disableMovement = true,
         disableCarMovement = true,

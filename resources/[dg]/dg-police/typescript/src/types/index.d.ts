@@ -11,7 +11,7 @@ declare namespace Police {
       checkableStatuses: StatusName[];
     };
     prison: Prison.Config;
-    requirements: Record<string, number>;
+    requirements: Record<string, Requirement>;
   };
 
   namespace Trackers {
@@ -67,4 +67,9 @@ declare namespace Police {
   }
 
   type CanRob = 'allowed' | 'checkAnim' | 'notAllowed';
+
+  type Requirement = {
+    police?: number;
+    players?: number;
+  };
 }

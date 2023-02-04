@@ -1,10 +1,23 @@
+import { Sync, Jobs } from '@dgx/server';
 import { getPoliceConfig } from './config';
 
-global.exports('getRequirementForActivity', (activity: string) => {
+global.exports('canDoActivity', (activity: string) => {
   const requirements = getPoliceConfig().requirements;
   if (!(activity in requirements)) {
     throw new Error(`${activity} is not a known activity`);
   }
 
-  return requirements[activity];
+  const requiment = requirements[activity];
+
+  if (requiment.players) {
+    const amountOfPlayers = Sync.getAmountOfPlayers();
+    if (requiment.players > amountOfPlayers) return false;
+  }
+
+  if (requiment.police) {
+    const amountOfCops = Jobs.getAmountForJob('police');
+    if (requiment.police > amountOfCops) return false;
+  }
+
+  return true;
 });

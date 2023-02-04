@@ -1,13 +1,27 @@
+import { Jobs, Sync } from '@dgx/client';
+
 let requirements: Police.Config['requirements'];
 
 export const setRequirements = (config: typeof requirements) => {
   requirements = config;
 };
 
-global.exports('getRequirementForActivity', (activity: string) => {
+global.exports('canDoActivity', (activity: string) => {
   if (!(activity in requirements)) {
     throw new Error(`${activity} is not a known activity`);
   }
 
-  return requirements[activity];
+  const requiment = requirements[activity];
+
+  if (requiment.players) {
+    const amountOfPlayers = Sync.getAmountOfPlayers();
+    if (requiment.players > amountOfPlayers) return false;
+  }
+
+  if (requiment.police) {
+    const amountOfCops = Jobs.getAmountForJob('police');
+    if (requiment.police > amountOfCops) return false;
+  }
+
+  return true;
 });

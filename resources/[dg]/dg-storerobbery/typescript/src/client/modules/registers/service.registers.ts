@@ -33,7 +33,7 @@ export const setInRegisterZone = (val: boolean) => {
 
 export const canLockpickRegister = () => {
   if (!inRegisterZone || !locationManager.currentStore) return false;
-  return Police.enoughCopsForActivity('storerobbery_register');
+  return Police.canDoActivity('storerobbery_register');
 };
 
 export const tryToLockpick = async (registerObject: number) => {

@@ -190,10 +190,6 @@ class Util extends UtilShared {
     global.exports['dg-misc'].changeStress(plyId, amount);
   };
 
-  getAmountOfPlayers = () => {
-    return (DGCore.Functions.GetPlayers() ?? []).length;
-  };
-
   getClosestPlayerOutsideVehicle = (src: number, maxDistance = 2) => {
     const originCoords = this.getPlyCoords(src);
     const players = DGCore.Functions.GetPlayers();

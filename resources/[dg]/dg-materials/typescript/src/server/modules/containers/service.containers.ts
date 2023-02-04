@@ -1,4 +1,4 @@
-import { Util, Gangs, Inventory } from '@dgx/server';
+import { Util, Gangs, Inventory, Police, Notifications } from '@dgx/server';
 import { Vector3 } from '@dgx/shared';
 import { getConfig } from 'services/config';
 import { fetchContainerKeyItems, updateContainerKeyItemId } from './helpers.containers';
@@ -75,8 +75,7 @@ export const canEnterContainer = async (plyId: number, containerId: string) => {
 
   const cid = Util.getCID(plyId);
 
-  const required = getConfig().containers.requiredPlayers;
-  if (Util.getAmountOfPlayers() < required) {
+  if (!Police.canDoActivity('bench_container_enter')) {
     containersLogger.silly(`${cid} tried to enter container (${containerId}) but not enough players in server`);
     Util.Log(
       'materials:containers:couldNotEnter',

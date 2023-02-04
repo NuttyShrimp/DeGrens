@@ -18,7 +18,7 @@ setImmediate(() => {
 });
 
 const pickLuckyPlayer = (skippedPlys: number[] = []) => {
-  if (!Police.enoughCopsForActivity('houserobbery')) return;
+  if (!Police.canDoActivity('houserobbery')) return;
 
   const signedInPlayers: number[] = [];
   stateManager.playerStates.forEach((s, cid) => {

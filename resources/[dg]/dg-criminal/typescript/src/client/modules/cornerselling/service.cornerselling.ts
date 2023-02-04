@@ -19,7 +19,7 @@ export const setCornersellEnabled = async (enabled: boolean) => {
     return;
   }
 
-  if (Police.enoughCopsForActivity('cornersell')) {
+  if (!Police.canDoActivity('cornersell')) {
     Notifications.add('Er is momenteel geen interesse', 'error');
     return;
   }

@@ -28,7 +28,7 @@ export const destroySafeZone = () => {
 
 export const canInteractWithSafe = () => {
   if (!locationManager.currentStore === null) return false;
-  return Police.enoughCopsForActivity('storerobbery_safe');
+  return Police.canDoActivity('storerobbery_safe');
 };
 
 export const setIsSafeHacker = (val: boolean) => {

@@ -15,9 +15,12 @@ export const loadPoliceConfig = async () => {
   await Config.awaitConfigLoad();
   policeConfig = Config.getConfigValue<Police.Config>('police');
 
+  // Set all req to 0 if devenv
   if (Util.isDevEnv()) {
     for (const activity of Object.keys(policeConfig.requirements)) {
-      policeConfig.requirements[activity] = 0;
+      for (const requirementKey of Object.keys(policeConfig.requirements[activity]) as (keyof Police.Requirement)[]) {
+        policeConfig.requirements[activity][requirementKey] = 0;
+      }
     }
   }
 };

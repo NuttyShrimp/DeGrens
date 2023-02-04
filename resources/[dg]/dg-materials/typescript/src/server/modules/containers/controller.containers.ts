@@ -1,4 +1,4 @@
-import { Events, Inventory, Notifications, RPC, Taskbar, Util } from '@dgx/server';
+import { Events, Inventory, Notifications, Police, RPC, Taskbar, Util } from '@dgx/server';
 import { getConfig } from 'services/config';
 import { containersLogger } from './logger.containers';
 import {
@@ -47,9 +47,8 @@ Events.onNet('materials:containers:meltMold', async (src: number) => {
     return;
   }
 
-  const required = getConfig().containers.requiredPlayers;
-  if (Util.getAmountOfPlayers() < required) {
-    Notifications.add(src, 'Is niet warm genoeg', 'error');
+  if (!Police.canDoActivity('bench_container_mold')) {
+    Notifications.add(src, 'Momenteel niet warm genoeg', 'error');
     return;
   }
 

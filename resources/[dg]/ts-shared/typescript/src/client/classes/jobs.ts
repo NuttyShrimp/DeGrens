@@ -1,4 +1,4 @@
-import { Events, Jobs as JobsClass, Util } from './index';
+import { Events } from './index';
 
 class Jobs {
   getCurrentJob(): { name: string | null; rank: number | null } {
@@ -56,14 +56,8 @@ class Police {
     return global.exports['dg-police'].isInPrison();
   };
 
-  public getRequirementForActivity = (activity: string) => {
-    return global.exports['dg-police'].getRequirementForActivity(activity);
-  };
-
-  public enoughCopsForActivity = (activity: string) => {
-    const amountOfCops = JobsClass.getAmountForJob('police');
-    const requirement = this.getRequirementForActivity(activity);
-    return amountOfCops >= requirement;
+  public canDoActivity = (activity: string) => {
+    return global.exports['dg-police'].canDoActivity(activity);
   };
 
   public addBloodDrop = () => {

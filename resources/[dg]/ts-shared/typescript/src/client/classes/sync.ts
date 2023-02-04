@@ -22,6 +22,10 @@ class Sync {
   public onPlayerCoordsUpdate = (handler: (playerCoords: Record<number, Vec3>) => void) => {
     onNet('sync:coords:sync', handler);
   };
+
+  public getAmountOfPlayers = () => {
+    return Object.keys(this.getAllPlayerCoords()).length;
+  };
 }
 
 export default {

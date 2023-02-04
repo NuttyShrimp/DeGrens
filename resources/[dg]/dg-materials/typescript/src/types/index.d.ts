@@ -123,7 +123,6 @@ declare namespace Materials {
 
   namespace Containers {
     type Config = {
-      requiredPlayers: number;
       mold: {
         location: Vec3;
         requiredSteel: number;

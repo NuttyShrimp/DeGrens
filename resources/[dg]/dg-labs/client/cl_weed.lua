@@ -66,10 +66,9 @@ exports('hasWeedFertilizer', function()
 end) 
 
 exports("takeWeedFertilizer", function()
-    local enoughPlayers = DGCore.Functions.TriggerCallback("dg-labs:server:enoughPlayers", "weed")
-    if not enoughPlayers then
-        exports['dg-ui']:addNotification("De voeding is momenteel op...", "error")
-        return
+    if not DGX.Police.canDoActivity('labs_weed') then
+      exports['dg-ui']:addNotification("De voeding is momenteel op...", "error")
+      return
     end
 
     DGCore.Functions.Progressbar("weed_take_fertilizer", "Nemen...", 5000, false, true, {

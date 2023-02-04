@@ -184,14 +184,8 @@ class Police {
     return global.exports['dg-police'].forceStopInteractions(plyId);
   };
 
-  public getRequirementForActivity = (activity: string) => {
-    return global.exports['dg-police'].getRequirementForActivity(activity);
-  };
-
-  public enoughCopsForActivity = (activity: string) => {
-    const amountOfCops = JobsClass.getAmountForJob('police');
-    const requirement = this.getRequirementForActivity(activity);
-    return amountOfCops >= requirement;
+  public canDoActivity = (activity: string) => {
+    return global.exports['dg-police'].canDoActivity(activity);
   };
 }
 

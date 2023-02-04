@@ -1,6 +1,26 @@
 {
-  "storerobbery_register": 1,
-  "storerobbery_safe": 1,
-  "cornersell": 1,
-  "houserobbery": 1
+  "storerobbery_register": {
+    "police": 1
+  },
+  "storerobbery_safe": {
+    "police": 1
+  },
+  "cornersell": {
+    "police": 1
+  },
+  "houserobbery": {
+    "police": 1
+  },
+  "bench_container_enter": {
+    "players": 48
+  },
+  "bench_container_mold": {
+    "players": 48
+  },
+  "labs_meth": {
+    "players": 32
+  },
+  "labs_weed": {
+    "players": 20
+  }
 }

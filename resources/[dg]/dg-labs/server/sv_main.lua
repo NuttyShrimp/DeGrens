@@ -55,18 +55,3 @@ AddEventHandler("onResourceStop", function(resourceName)
         exports['dg-doorlock']:changeDoorState(getConfig().labs[labId-1].doorId, true)
     end
 end)
-
-DGCore.Functions.CreateCallback("dg-labs:server:enoughPlayers", function(source, cb, labType)
-    if not labType then return end
-    local amount = DGCore.Shared.tableLen(DGCore.Functions.GetPlayers())
-    local enoughPlayers = amount >= getConfig().requiredPeople[labType]
-    cb(enoughPlayers)
-end)
-
-DGCore.Functions.CreateCallback("dg-labs:server:getPeekZones", function(source, cb, labType)
-    if not labType then return end
-    local amount = DGCore.Shared.tableLen(DGCore.Functions.GetPlayers())
-    local enoughPlayers = amount >= getConfig().requiredPeople[labType]
-    cb(enoughPlayers)
-end)
-
