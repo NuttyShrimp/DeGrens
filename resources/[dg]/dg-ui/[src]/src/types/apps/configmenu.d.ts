@@ -1,5 +1,5 @@
 declare namespace ConfigMenu {
-  type Menu = 'hud' | 'phone' | 'radio';
+  type Menu = 'hud' | 'phone' | 'radio' | 'sounds';
 
   interface PhoneConfig {
     background: {
@@ -46,10 +46,15 @@ declare namespace ConfigMenu {
     };
   }
 
+  type SoundsConfig = {
+    interactionSoundVolume: number;
+  };
+
   interface Categories {
     hud: HudConfig;
     phone: PhoneConfig;
     radio: RadioConfig;
+    sounds: SoundsConfig;
   }
 
   interface State extends Categories {

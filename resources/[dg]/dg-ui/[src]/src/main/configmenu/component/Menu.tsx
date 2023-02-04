@@ -7,13 +7,15 @@ import { useConfigmenuStore } from '../stores/useConfigmenuStore';
 import { Hud } from './Hud';
 import { Phone } from './Phone';
 import { Radio } from './Radio';
+import { Sounds } from './Sounds';
 
-const MENUS: ConfigMenu.Menu[] = ['radio', 'hud', 'phone'];
+const MENUS: ConfigMenu.Menu[] = ['radio', 'hud', 'phone', 'sounds'];
 
 const MENU_COMPONENTS: Record<ConfigMenu.Menu, JSX.Element> = {
   radio: <Radio />,
   hud: <Hud />,
   phone: <Phone />,
+  sounds: <Sounds />,
 };
 
 const NavBar = () => {

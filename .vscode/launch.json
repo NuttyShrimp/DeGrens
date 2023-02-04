@@ -423,6 +423,48 @@
     },
     {
       "type": "node-terminal",
+      "name": "justice:build prod",
+      "request": "launch",
+      "command": "yarn run build",
+      "cwd": "${workspaceFolder}/resources/[dg]/dg-justice/typescript"
+    },
+    {
+      "type": "node-terminal",
+      "name": "justice:build dev",
+      "request": "launch",
+      "command": "yarn run build:dev",
+      "cwd": "${workspaceFolder}/resources/[dg]/dg-justice/typescript"
+    },
+    {
+      "type": "node-terminal",
+      "name": "justice:watch",
+      "request": "launch",
+      "command": "yarn run watch",
+      "cwd": "${workspaceFolder}/resources/[dg]/dg-justice/typescript"
+    },
+    {
+      "type": "node-terminal",
+      "name": "localsounds:build prod",
+      "request": "launch",
+      "command": "yarn run build",
+      "cwd": "${workspaceFolder}/resources/[dg]/dg-localsounds/typescript"
+    },
+    {
+      "type": "node-terminal",
+      "name": "localsounds:build dev",
+      "request": "launch",
+      "command": "yarn run build:dev",
+      "cwd": "${workspaceFolder}/resources/[dg]/dg-localsounds/typescript"
+    },
+    {
+      "type": "node-terminal",
+      "name": "localsounds:watch",
+      "request": "launch",
+      "command": "yarn run watch",
+      "cwd": "${workspaceFolder}/resources/[dg]/dg-localsounds/typescript"
+    },
+    {
+      "type": "node-terminal",
       "name": "lockers:build prod",
       "request": "launch",
       "command": "yarn run build",

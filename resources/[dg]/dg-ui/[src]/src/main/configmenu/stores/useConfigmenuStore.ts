@@ -46,6 +46,9 @@ export const useConfigmenuStore = create<ConfigMenu.State & ConfigMenu.StateActi
       phone: 50,
     },
   },
+  sounds: {
+    interactionSoundVolume: 50,
+  },
   setMenu: m => set(() => ({ currentMenu: m })),
   setConfig: conf => {
     const newConfig = deepmerge(
@@ -53,6 +56,7 @@ export const useConfigmenuStore = create<ConfigMenu.State & ConfigMenu.StateActi
         hud: get().hud,
         phone: get().phone,
         radio: get().radio,
+        sounds: get().sounds,
       },
       conf
     );
@@ -66,6 +70,7 @@ export const useConfigmenuStore = create<ConfigMenu.State & ConfigMenu.StateActi
         hud: get().hud,
         radio: get().radio,
         phone: get().phone,
+        sounds: get().sounds,
       },
     });
   },

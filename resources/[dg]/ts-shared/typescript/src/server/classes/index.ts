@@ -15,9 +15,10 @@ import weapons from './weapons';
 import weather from './weather';
 import baseevents from './baseevents';
 import minigames from './minigames';
+import sounds from './sounds';
 
 export const { Events, RPC, SQL, API, Auth } = events;
-export const { Util, Sounds, Status, Reputations } = util;
+export const { Util, Status, Reputations } = util;
 export const { Phone } = phone;
 export const { Chat, RayCast } = interaction;
 export const { Config } = config;
@@ -33,3 +34,4 @@ export const { Weapons } = weapons;
 export const { Weather } = weather;
 export const { BaseEvents } = baseevents;
 export const { Minigames } = minigames;
+export const { Sounds } = sounds;

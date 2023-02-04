@@ -51,6 +51,8 @@
     display: flex;
     flex-direction: column;
     margin-bottom: 2vh;
+    width: 96%;
+    margin-left: 2%;
 
     &:not(:first-child) {
       border-top: .3vh solid lightgray;

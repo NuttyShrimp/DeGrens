@@ -91,14 +91,14 @@ RegisterUICallback('dg-apartments:client:toggleApartmentLock', function(_, cb)
   cb({ data = {}, meta = { ok = true } })
 end)
 
-RegisterNetEvent('dg-apartment:openStash', function()
+AddEventHandler('dg-apartment:openStash', function()
 	DGCore.Functions.TriggerCallback('dg-apartments:server:getCurrentApartment', function(CurrentApartment)
 		if not CurrentApartment then
 			return
 		end
     local apartmentStashId = ('apartment_%s'):format(CurrentApartment)
     DGX.Inventory.openStash(apartmentStashId, Config.StashSize)
-		TriggerServerEvent("InteractSound_SV:PlayOnSource", "StashOpen", 0.4)
+    DGX.Sounds.playLocalSound('StashOpen', 1);
 	end)
 end)
 

@@ -1,4 +1,17 @@
-import { Notifications, Peek, Util, PolyZone, UI, Keys, Events, PropAttach, Taskbar, RPC, Phone } from '@dgx/client';
+import {
+  Notifications,
+  Peek,
+  Util,
+  PolyZone,
+  UI,
+  Keys,
+  Events,
+  PropAttach,
+  Taskbar,
+  RPC,
+  Phone,
+  Sounds,
+} from '@dgx/client';
 import { getDistanceToFurthestCoord, getPropAttachItem, isAnyBackDoorOpen } from './helpers.postop';
 
 let assignedVehicle: number | null = null;
@@ -206,7 +219,7 @@ export const tryDropoff = async () => {
     return;
   }
 
-  emit('InteractSound_CL:PlayOnOne', 'doorbell', 0.5);
+  Sounds.playLocalSound('doorbell', 1);
   const [canceled] = await Taskbar.create('person-carry-box', 'Afleveren', 15000, {
     canCancel: true,
     cancelOnDeath: true,

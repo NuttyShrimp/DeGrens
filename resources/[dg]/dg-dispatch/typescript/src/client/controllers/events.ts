@@ -72,6 +72,10 @@ Events.onNet('dg-dispatch:addCall', (call: Dispatch.UICall) => {
   addCallBlip(call);
   flashNewCalls();
   setLastCallId(call.id);
+
+  if (!call.important) {
+    PlaySound(-1, 'Event_Start_Text', 'GTAO_FM_Events_Soundset', false, 0, true);
+  }
 });
 
 Events.onNet('dispatch:syncBlips', (blipInfo: Record<number, Dispatch.BlipInfo>) => {

@@ -1,4 +1,4 @@
-import { Events, HUD, Taskbar, Util } from '@dgx/client';
+import { Events, HUD, Sounds, Taskbar, Util } from '@dgx/client';
 import { Vector3 } from '@dgx/shared';
 import { getCurrentVehicle } from '@helpers/vehicle';
 
@@ -38,7 +38,7 @@ export const toggleSeatbelt = async () => {
     }
 
     emit('vehicles:seatbelt:toggle', false);
-    emit('InteractSound_CL:PlayOnOne', 'carunbuckle', 0.2);
+    Sounds.playLocalSound('carunbuckle', 0.8);
     currentSeatbelt = 'none';
     return;
   }
@@ -55,7 +55,7 @@ export const toggleSeatbelt = async () => {
   }
 
   emit('vehicles:seatbelt:toggle', true);
-  emit('InteractSound_CL:PlayOnOne', 'carbuckle', 0.2);
+  Sounds.playLocalSound('carbuckle', 0.7);
   currentSeatbelt = uses > 0 ? 'harness' : 'seatbelt';
 
   // Disable exiting vehicle while seatbelt on

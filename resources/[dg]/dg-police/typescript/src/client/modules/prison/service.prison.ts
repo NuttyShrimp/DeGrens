@@ -1,4 +1,4 @@
-import { PolyTarget, PolyZone, Util } from '@dgx/client';
+import { PolyTarget, PolyZone, Sounds, Util } from '@dgx/client';
 
 let prisonConfig: Police.Prison.Config;
 
@@ -38,7 +38,7 @@ export const enterPrison = async () => {
   }, 2000);
 
   inPrison = true;
-  emit('InteractSound_CL:PlayOnOne', 'jail', 0.2);
+  Sounds.playLocalSound('jail', 0.3);
   PolyTarget.addCircleZone('prison_phone', prisonConfig.jailControl, 1, { useZ: true, data: {}, routingBucket: 0 });
   PolyTarget.addCircleZone('prison_shop', prisonConfig.shop, 2, { useZ: true, data: {}, routingBucket: 0 });
 };
@@ -46,7 +46,7 @@ export const enterPrison = async () => {
 export const restoreSentence = async () => {
   await Util.awaitCondition(() => prisonConfig != undefined);
   inPrison = true;
-  emit('InteractSound_CL:PlayOnOne', 'jail', 0.2);
+  Sounds.playLocalSound('jail', 0.3);
   PolyTarget.addCircleZone('prison_phone', prisonConfig.jailControl, 1, { useZ: true, data: {}, routingBucket: 0 });
   PolyTarget.addCircleZone('prison_shop', prisonConfig.shop, 2, { useZ: true, data: {}, routingBucket: 0 });
 };

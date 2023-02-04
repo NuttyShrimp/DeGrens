@@ -18,19 +18,13 @@ UI.RegisterUICallback('configmenu/save', (data, cb) => {
   Storage.setValue('dg-config', data.data);
   if (initial) {
     setTimeout(() => {
-      Events.emit('dg-misc:configChanged', data.data);
+      emit('dg-misc:configChanged', data.data);
     }, 10000);
     initial = false;
   } else {
-    Events.emit('dg-misc:configChanged', data.data);
+    emit('dg-misc:configChanged', data.data);
   }
-  cb({
-    data: {},
-    meta: {
-      ok: true,
-      message: 'done',
-    },
-  });
+  cb({ data: {}, meta: { ok: true, message: 'done' } });
 });
 
 global.exports('getPreferences', () => {

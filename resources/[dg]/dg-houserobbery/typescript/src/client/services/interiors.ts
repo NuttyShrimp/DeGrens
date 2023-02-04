@@ -1,9 +1,9 @@
-import { Events, Interiors, Util } from '@dgx/client';
+import { Events, Interiors, Sounds, Util } from '@dgx/client';
 
 import { getSelectedHouse, getSelectedHouseInfo, getShellTypes } from '../modules/house/controller.house';
 
 export const enterInterior = async () => {
-  emitNet('InteractSound_SV:PlayOnSource', 'houses_door_open', 0.25);
+  Sounds.playLocalSound('houses_door_open', 1);
   doDoorAnimation();
   DoScreenFadeOut(500);
   await Util.Delay(500);
@@ -19,7 +19,7 @@ export const enterInterior = async () => {
 };
 
 export const leaveInterior = async () => {
-  emitNet('InteractSound_SV:PlayOnSource', 'houses_door_open', 0.25);
+  Sounds.playLocalSound('houses_door_close', 0.4);
   doDoorAnimation();
   DoScreenFadeOut(500);
   await Util.Delay(500);

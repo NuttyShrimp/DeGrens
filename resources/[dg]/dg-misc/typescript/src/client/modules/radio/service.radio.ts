@@ -1,4 +1,4 @@
-import { Events, Inventory, UI } from '@dgx/client';
+import { Events, UI } from '@dgx/client';
 
 let radioEnabled = false;
 let frequency = LocalPlayer?.state?.radioChannel ?? 0;

@@ -1,4 +1,4 @@
-import { Events, Notifications, RPC, Taskbar, UI, Util } from '@dgx/client';
+import { Events, Notifications, RPC, Sounds, Taskbar, UI, Util } from '@dgx/client';
 import { getAppliedStance } from 'modules/stances/service.stances';
 import { fixVehicle } from 'modules/status/service.status';
 import { getCosmeticUpgrades } from 'modules/upgrades/service.upgrades';
@@ -78,7 +78,7 @@ export const handleVehicleRepair = async () => {
         movement: true,
       },
     });
-    emit('InteractSound_CL:PlayOnOne', 'airwrench', 0.1);
+    Sounds.playLocalSound('airwrench', 0.08);
     fixVehicle(plyVeh, false, true);
   }
   if (repairTimes.body > 0) {
@@ -89,7 +89,7 @@ export const handleVehicleRepair = async () => {
         movement: true,
       },
     });
-    emit('InteractSound_CL:PlayOnOne', 'airwrench', 0.1);
+    Sounds.playLocalSound('airwrench', 0.08);
     fixVehicle(plyVeh, true, false);
   }
 };

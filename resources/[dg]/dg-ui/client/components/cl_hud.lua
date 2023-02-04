@@ -158,7 +158,7 @@ DGX.UI.onUIReload(function()
   end
 end)
 
-DGX.Events.on('dg-misc:configChanged', function(data)
+DGX.Util.onPreferenceChange(function(data)
   if not data then return end
   if not data.hud then return end
   if not data.hud.compass then return end

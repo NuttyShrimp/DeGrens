@@ -306,6 +306,14 @@ class Util extends UtilShared {
   public onPlayerUnloaded = (handler: (cid: number) => void) => {
     onNet('DGCore:client:playerUnloaded', handler);
   };
+
+  public getPreferences = (): Record<string, any> => {
+    return global.exports['dg-misc'].getPreferences();
+  };
+
+  public onPreferenceChange = (handler: (preferences: Record<string, any>) => void) => {
+    on('dg-misc:configChanged', handler);
+  };
 }
 
 export class Interiors {
@@ -352,20 +360,6 @@ export class Particle {
   };
 }
 
-export class Sounds {
-  public playOnEntity = (id: string, name: string, audiobank: string, entity: number) => {
-    global.exports['nutty-sounds'].playSoundOnEntity(id, name, audiobank, entity);
-  };
-
-  public playFromCoord = (id: string, name: string, audiobank: string, coords: Vec3, range: number) => {
-    global.exports['nutty-sounds'].playSoundFromCoord(id, name, audiobank, coords, range);
-  };
-
-  public stop = (id: string) => {
-    global.exports['nutty-sounds'].stopSound(id);
-  };
-}
-
 export class Animations {
   startTabletAnimation() {
     global.exports['dg-misc'].startTabletAnimation();
@@ -381,6 +375,5 @@ export default {
   Interiors: new Interiors(),
   PropAttach: new PropAttach(),
   Particle: new Particle(),
-  Sounds: new Sounds(),
   Animations: new Animations(),
 };

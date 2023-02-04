@@ -56,7 +56,7 @@ enterApartment = function(src, id)
     return
   end
   local apartment = joinApartment(id, src)
-  TriggerEvent("InteractSound_SV:PlayOnOne", src, "houses_door_open", 0.1)
+  DGX.Sounds.playLocalSoundForPlayer(src, 'houses_door_open', 1)
   TriggerClientEvent('dg-apartments:client:doKeyAnim', src)
   TriggerClientEvent('dg-apartments:client:fadeScreen', src, true)
   Citizen.Wait(500)
@@ -82,7 +82,7 @@ leaveApartment = function(src)
   if not (apartment and apartment.id) then
     return
   end
-  TriggerEvent("InteractSound_SV:PlayOnOne", src, "houses_door_open", 0.1)
+  DGX.Sounds.playLocalSoundForPlayer(src, 'houses_door_open', 1)
   TriggerClientEvent('dg-apartments:client:doKeyAnim', src)
   TriggerClientEvent('dg-apartments:client:fadeScreen', src, true)
   Citizen.Wait(500)
@@ -97,7 +97,7 @@ leaveApartment = function(src)
   exports['dg-lib']:setInstance(src, 0)
 
   TriggerClientEvent('dg-apartments:client:fadeScreen', src, false)
-  TriggerEvent("InteractSound_SV:PlayOnOne", src, "houses_door_close", 0.1)
+  DGX.Sounds.playLocalSoundForPlayer(src, 'houses_door_close', 0.4)
 end
 exports('leaveApartment', leaveApartment)
 

@@ -263,20 +263,6 @@ class Util extends UtilShared {
   };
 }
 
-export class Sounds {
-  public playOnEntity = (id: string, name: string, audiobank: string, netId: number) => {
-    global.exports['nutty-sounds'].playSoundOnEntity(id, name, audiobank, netId);
-  };
-
-  public playFromCoord = (id: string, name: string, audiobank: string, coords: Vec3, range: number) => {
-    global.exports['nutty-sounds'].playSoundFromCoord(id, name, audiobank, coords, range);
-  };
-
-  public stop = (id: string) => {
-    global.exports['nutty-sounds'].stopSound(id);
-  };
-}
-
 export class Status {
   public addStatusToPlayer = (plyId: number, statusName: StatusName) => {
     global.exports['dg-misc'].addStatusToPlayer(plyId, statusName);
@@ -307,7 +293,6 @@ export class Reputations {
 
 export default {
   Util: new Util(),
-  Sounds: new Sounds(),
   Status: new Status(),
   Reputations: new Reputations(),
 };

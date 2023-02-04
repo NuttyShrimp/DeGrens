@@ -1,4 +1,4 @@
-import { Util, UI, Notifications, RPC } from '@dgx/client';
+import { Util, UI, Notifications, RPC, Sounds } from '@dgx/client';
 import { Vector3 } from '@dgx/shared';
 
 let radarActive = false;
@@ -87,7 +87,7 @@ const startRadarThread = () => {
         activeData.plate = targetPlate;
         const isFlagged = (await RPC.execute<boolean>('police:plateflags:isFlagged', targetPlate)) ?? false;
         if (isFlagged) {
-          emit('InteractSound_CL:PlayOnOne', 'pager', 0.1);
+          Sounds.playLocalSound('pager', 0.1);
           activeData.flagged = true;
           lockedPlate = targetPlate;
           Notifications.add('Geflagde nummerplaat is automatisch gelocked');

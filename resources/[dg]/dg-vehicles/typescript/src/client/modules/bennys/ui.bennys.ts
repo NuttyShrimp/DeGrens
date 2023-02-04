@@ -1,4 +1,4 @@
-import { Events, RPC, UI } from '@dgx/client';
+import { Events, RPC, Sounds, UI } from '@dgx/client';
 import { getCurrentVehicle } from '@helpers/vehicle';
 import { applyModelStance } from 'modules/stances/service.stances';
 import { applyUpgrade, getCosmeticUpgradePossibilities } from 'modules/upgrades/service.upgrades';
@@ -209,7 +209,7 @@ UI.RegisterUICallback('bennys:repairVehicle', (_, cb) => {
 });
 
 UI.RegisterUICallback('bennys:playSound', (_, cb) => {
-  emit('InteractSound_CL:PlayOnOne', 'airwrench', 0.1);
+  Sounds.playLocalSound('airwrench', 0.08);
   cb({ data: {}, meta: { ok: true, message: '' } });
 });
 

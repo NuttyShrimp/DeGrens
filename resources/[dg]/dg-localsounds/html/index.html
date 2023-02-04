@@ -1,0 +1,18 @@
+<html>
+  <head>
+    <script>
+      window.addEventListener('message', async e => {
+        if (e.data.action !== 'playSound') return;
+
+        const volume = Math.max(0, Math.min(1, e.data.soundVolume));
+
+        const filePath = `./sounds/${e.data.soundName}.ogg`;
+        const audio = new Audio(filePath);
+        audio.volume = volume;
+        audio.play().catch(() => {
+          console.log(`Sound ${e.data.soundName} does not exist`);
+        });
+      });
+    </script>
+  </head>
+</html>
