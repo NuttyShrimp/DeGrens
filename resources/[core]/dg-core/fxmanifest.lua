@@ -20,7 +20,6 @@ client_scripts {
 	'client/functions.lua',
 	'client/loops.lua',
 	'client/events.lua',
-  'client/blipmanager.lua',
 }
 
 server_scripts {

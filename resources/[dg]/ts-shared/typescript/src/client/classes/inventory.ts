@@ -33,7 +33,7 @@ class Inventory {
   };
 
   // Get names of all items player currently has without needing to call server
-  public getAllItemNames = () => {
+  public getAllItemNames = (): string[] => {
     return global.exports['dg-inventory'].getAllItemNames();
   };
 

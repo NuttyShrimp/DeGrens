@@ -1,4 +1,4 @@
-import { Business, Events, Inventory, Peek, PolyTarget, PolyZone, UI } from '@dgx/client';
+import { BlipManager, Business, Events, Inventory, Peek, PolyTarget, PolyZone, UI } from '@dgx/client';
 
 import {
   assignJob,
@@ -64,7 +64,8 @@ Events.onNet('vehicles:mechanic:client:loadConfig', (zones: Mechanic.Shops, offs
         maxZ: shopConfig.repair.coords.z + shopConfig.repair.height,
       }
     );
-    DGCore.Blips.Add('mechanic', {
+    BlipManager.addBlip({
+      category: 'dg-vehicles',
       id: `mechanic-${shop}`,
       text: shopConfig.label,
       coords: shopConfig.repair.coords,

@@ -1,6 +1,7 @@
+import { Sync } from '@dgx/client';
 import { getPlayerCoords, setAllPlayerCoords, getAllPlayerCoords } from './service.coords';
 
-onNet('sync:coords:sync', (coords: Record<number, Vec3>) => {
+Sync.onPlayerCoordsUpdate(coords => {
   setAllPlayerCoords(coords);
 });
 

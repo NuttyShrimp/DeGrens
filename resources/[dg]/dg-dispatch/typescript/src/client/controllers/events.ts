@@ -1,4 +1,4 @@
-import { BaseEvents, Events, RPC, UI } from '@dgx/client';
+import { BaseEvents, BlipManager, Events, RPC, Sync, UI } from '@dgx/client';
 import { getNearestColorFromHex } from '@dgx/shared/helpers/colorNames';
 import { getDataOfGTAColorById } from '@dgx/shared/helpers/gtacolors';
 import { clearBlips, syncBlips, updateBlipCoords, updateSprite } from 'services/blips';
@@ -39,12 +39,12 @@ on('onResourceStop', (res: string) => {
     calls: [],
     refresh: true,
   });
-  DGCore.Blips.removeCategory('dispatch');
+  BlipManager.removeCategory('dispatch');
   clearBlips();
   closeCam();
 });
 
-onNet('sync:coords:sync', (plyCoords: Record<number, Vec3>) => {
+Sync.onPlayerCoordsUpdate((plyCoords: Record<number, Vec3>) => {
   for (const key in plyCoords) {
     const plyId = Number(key);
     updateBlipCoords(plyId, plyCoords[plyId]);

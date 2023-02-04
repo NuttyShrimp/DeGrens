@@ -1,4 +1,4 @@
-import { Events, Keys, PolyZone, UI } from '@dgx/client';
+import { BlipManager, Events, Keys, PolyZone, UI } from '@dgx/client';
 import { Vector3 } from '@dgx/shared';
 
 import { getCurrentVehicle, isDriver } from '../../helpers/vehicle';
@@ -30,7 +30,8 @@ Events.onNet('vehicles:bennys:load', (locations: Bennys.Location[]) => {
       },
       true
     );
-    DGCore.Blips.Add('vehicleshop', {
+    BlipManager.addBlip({
+      category: 'dg-vehicles',
       id: `vehicleshop-${l.name}`,
       text: `Benny's Motorworks`,
       coords: l.vector,

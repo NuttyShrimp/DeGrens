@@ -1,4 +1,4 @@
-import { Keys, PolyZone, UI } from '@dgx/client';
+import { BlipManager, Keys, PolyZone, UI } from '@dgx/client';
 import { getCurrentVehicle, isDriver } from '@helpers/vehicle';
 
 const carwashZones: {
@@ -39,7 +39,8 @@ export const loadCarwashZones = () => {
       },
       true
     );
-    DGCore.Blips.Add('carwash', {
+    BlipManager.addBlip({
+      category: 'dg-vehicles',
       id: `carwash-${id}`,
       text: 'Carwash',
       coords: zone.center,

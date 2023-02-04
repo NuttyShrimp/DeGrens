@@ -1,4 +1,4 @@
-import { Events, UI } from '@dgx/client';
+import { BlipManager, Events, UI } from '@dgx/client';
 
 let isDispatchOpen = false;
 let lastCallId: string;
@@ -43,7 +43,8 @@ export const addCallBlip = (call: Dispatch.UICall) => {
     console.error(`Dispatch call with title: ${call.title} needs coords to display blip`);
     return;
   }
-  DGCore.Blips.Add('dispatch', {
+  BlipManager.addBlip({
+    category: 'dispatch',
     id: call.id,
     text: call.title,
     coords: call.coords,
@@ -51,7 +52,7 @@ export const addCallBlip = (call: Dispatch.UICall) => {
     scale: 1.5,
   });
   setTimeout(() => {
-    DGCore.Blips.Remove('dispatch', call.id);
+    BlipManager.removeBlip(call.id);
   }, 60000);
 };
 
@@ -64,11 +65,11 @@ export const disableDispatch = () => {
     calls: [],
     refresh: true,
   });
-  DGCore.Blips.disableCategory('dispatch');
+  BlipManager.disableCategory('dispatch');
 };
 
 export const enableDispatch = () => {
   dispatchDisabled = false;
   Events.emitNet('dg-dispatch:loadMore', 0);
-  DGCore.Blips.enableCategory('dispatch');
+  BlipManager.enableCategory('dispatch');
 };

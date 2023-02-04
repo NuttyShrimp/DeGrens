@@ -18,6 +18,10 @@ class Sync {
   public getPlayerCoords = (plyId: number): Vec3 => {
     return global.exports['dg-sync'].getPlayerCoords(plyId);
   };
+
+  public onPlayerCoordsUpdate = (handler: (playerCoords: Record<number, Vec3>) => void) => {
+    onNet('sync:coords:sync', handler);
+  };
 }
 
 export default {

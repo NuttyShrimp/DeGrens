@@ -1,4 +1,4 @@
-import { Keys, Notifications, PolyZone, RPC, UI } from '@dgx/client';
+import { Keys, Notifications, PolyZone, RPC, UI, BlipManager } from '@dgx/client';
 import { getCurrentVehicle, isDriver } from '@helpers/vehicle';
 
 // This shit does not matter so no fucking config on server for this stupid ass bitch positiuon
@@ -17,7 +17,8 @@ export const buildQuicksellZone = () => {
     heading: quicksellPosition.heading,
     data: {},
   });
-  DGCore.Blips.Add('vehicleshop', {
+  BlipManager.addBlip({
+    category: 'dg-vehicles',
     id: `vehicleshop-quicksell`,
     text: 'Quicksell',
     coords: quicksellPosition.position,

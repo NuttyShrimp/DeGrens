@@ -62,7 +62,7 @@ const removeBlip = (plyId: number) => {
   plyBlips.delete(plyId);
 };
 
-onNet('sync:coords:sync', (plyCoords: Record<number, Vec3>) => {
+Sync.onPlayerCoordsUpdate((plyCoords: Record<number, Vec3>) => {
   if (!blipsEnabled) return;
 
   // If plyids have blips but not in allcoords anymore, they left server so remove blip

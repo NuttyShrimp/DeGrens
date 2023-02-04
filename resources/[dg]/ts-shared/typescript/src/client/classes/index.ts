@@ -1,5 +1,6 @@
 export * from './blip';
 import baseevents from './baseevents';
+import blipmanager from './blipmanager';
 import events from './events';
 import interaction from './interaction';
 import inventory from './inventory';
@@ -26,3 +27,4 @@ export const { Weapons } = weapons;
 export const { Weather } = weather;
 export const { Phone } = phone;
 export const { BaseEvents } = baseevents;
+export const { BlipManager } = blipmanager;

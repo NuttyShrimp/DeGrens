@@ -139,7 +139,7 @@ export const doRefuel = async (price: number, vin: string, missingFuel: number) 
     Math.max(missingFuel * REFUEL_DURATION_PER_LEVEL, 5000),
     {
       canCancel: true,
-      cancelOnDeath: false,
+      cancelOnDeath: true,
       controlDisables: {
         movement: true,
         combat: true,

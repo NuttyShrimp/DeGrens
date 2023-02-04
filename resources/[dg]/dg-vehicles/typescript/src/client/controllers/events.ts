@@ -1,4 +1,4 @@
-import { HUD, Notifications } from '@dgx/client';
+import { BlipManager, HUD, Notifications } from '@dgx/client';
 import { getCurrentVehicle } from '@helpers/vehicle';
 import { hasVehicleKeys } from 'modules/keys/cache.keys';
 import shopManager from 'modules/vehicleshop/classes/ShopManager';
@@ -8,9 +8,7 @@ import { moveToSeat } from 'services/seats';
 
 on('onResourceStop', (resourceName: string) => {
   if (GetCurrentResourceName() !== resourceName) return;
-  DGCore.Blips.removeCategory('carwash');
-  DGCore.Blips.removeCategory('gasstation');
-  DGCore.Blips.removeCategory('vehicleshop');
+  BlipManager.removeCategory('dg-vehicles');
   HUD.removeEntry('harness-uses');
   HUD.removeEntry('nos-amount');
   shopManager.leftShop(); // Destroy vehicles inside shop

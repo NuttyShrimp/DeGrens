@@ -35,6 +35,7 @@ declare global {
     Hospital: typeof Classes.Hospital;
     Phone: typeof Classes.Phone;
     BaseEvents: typeof Classes.BaseEvents;
+    BlipManager: typeof Classes.BlipManager;
   };
   var asyncExports: any;
 }

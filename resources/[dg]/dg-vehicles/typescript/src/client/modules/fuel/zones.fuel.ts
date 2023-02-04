@@ -1,4 +1,4 @@
-import { PolyZone } from '@dgx/client';
+import { BlipManager, PolyZone } from '@dgx/client';
 
 const gasStationZones: {
   center: Vec3;
@@ -302,23 +302,17 @@ export const isInZone = (): boolean => {
 
 setImmediate(() => {
   gasStationZones.forEach((zone, idx) => {
-    PolyZone.addBoxZone(
-      'gasstation',
-      zone.center,
-      zone.width,
-      zone.length,
-      {
-        minZ: zone.minZ,
-        maxZ: zone.maxZ,
-        // For some reason are our heading shifter quarter of a circle
-        heading: zone.heading + 90,
-        data: {
-          id: idx,
-        },
+    PolyZone.addBoxZone('gasstation', zone.center, zone.width, zone.length, {
+      minZ: zone.minZ,
+      maxZ: zone.maxZ,
+      // For some reason are our heading shifter quarter of a circle
+      heading: zone.heading + 90,
+      data: {
+        id: idx,
       },
-      true
-    );
-    DGCore.Blips.Add('gasstation', {
+    });
+    BlipManager.addBlip({
+      category: 'dg-vehicles',
       id: `station-${idx}`,
       text: 'Tankstation',
       coords: zone.center,

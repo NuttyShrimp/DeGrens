@@ -1,4 +1,4 @@
-import { Events, Keys, PolyZone, UI } from '@dgx/client';
+import { BlipManager, Events, Keys, PolyZone, UI } from '@dgx/client';
 
 import shopManager from './classes/ShopManager';
 
@@ -15,7 +15,8 @@ Events.onNet('vehicles:shop:buildZone', (shopZone: VehicleShop.Config['shopZone'
   );
   const vectorsSum = shopZone.vectors.reduce((prev, cur) => ({ x: prev.x + cur.x, y: prev.y + cur.y }));
   const vectorsAverage = { x: vectorsSum.x / shopZone.vectors.length, y: vectorsSum.y / shopZone.vectors.length, z: 0 };
-  DGCore.Blips.Add('vehicleshop', {
+  BlipManager.addBlip({
+    category: 'dg-vehicles',
     id: `vehicleshop-pdm`,
     text: 'PDM',
     coords: vectorsAverage,
