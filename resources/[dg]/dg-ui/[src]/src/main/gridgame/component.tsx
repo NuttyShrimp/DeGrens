@@ -78,7 +78,7 @@ const Component: AppFunction = props => {
       default:
         return null;
     }
-  }, [props]);
+  }, [active]);
 
   return (
     <AppWrapper appName={config.name} onShow={handleShow} onHide={handleHide} full center>
