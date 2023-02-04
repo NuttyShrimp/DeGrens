@@ -66,12 +66,12 @@ Chat.registerCommand(
 );
 
 // We preload the prison stash inventory for each player to ensure there are no allowed items
-on('DGCore:server:playerLoaded', (playerData: PlayerData) => {
+Util.onPlayerLoaded(playerData => {
   const stashId = `prison_items_${playerData.citizenid}`;
-  Inventory.createScriptedStash(stashId, 40, []); // Same as player inventory!
+  Inventory.createScriptedStash(stashId, 40, []); // Same size as player inventory!
 });
 
-on('DGCore:server:playerUnloaded', (plyId: number) => {
+Util.onPlayerUnloaded(plyId => {
   cleanupPlayerInJail(plyId);
 });
 

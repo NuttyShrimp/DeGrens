@@ -1,4 +1,4 @@
-import { Events } from '@dgx/server';
+import { Events, Util } from '@dgx/server';
 import {
   clearProps,
   handlePlayerJoin,
@@ -44,6 +44,6 @@ on('onResourceStop', (resourceName: string) => {
   });
 });
 
-on('DGCore:server:playerUnloaded', (plyId: number) => {
+Util.onPlayerUnloaded(plyId => {
   clearProps(plyId);
 });

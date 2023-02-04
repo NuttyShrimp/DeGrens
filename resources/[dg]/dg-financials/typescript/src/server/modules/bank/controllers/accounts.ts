@@ -27,7 +27,7 @@ global.exports('setPermissions', (accountId: string, cid: number, permissions: I
 global.exports('removePermissions', (accountId: string, cid: number) => removePermissions(accountId, cid));
 global.exports('getPermissions', (accountId: string, cid: number) => getPermissions(accountId, cid));
 
-on('DGCore:server:playerLoaded', (playerData: PlayerData) => {
+Util.onPlayerLoaded(playerData => {
   createDefaultAccount(playerData.source);
 });
 

@@ -1,4 +1,4 @@
-import { RPC } from '@dgx/server';
+import { RPC, Util } from '@dgx/server';
 import cryptoManager from './classes/CryptoManager';
 
 import { CryptoWallet } from './classes/CryptoWallet';
@@ -20,7 +20,7 @@ RegisterCommand(
   true
 );
 
-on('DGCore:server:playerLoaded', (playerData: PlayerData) => {
+Util.onPlayerLoaded(playerData => {
   cryptoManager.loadPlayerWallet(playerData.citizenid);
 });
 

@@ -143,7 +143,7 @@ Events.onNet('police:interactions:showCuffLogs', (src: number) => {
   UI.openContextMenu(src, menu);
 });
 
-on('DGCore:server:playerUnloaded', (plyId: number, cid: number) => {
+Util.onPlayerUnloaded((plyId, cid) => {
   if (!isPlayerCuffed(plyId)) return;
   Util.Log('police:interactions:droppedWithCuffs', { plyId, cid }, `Player ${cid} unloaded while cuffed`);
   cuffedPlayers.delete(plyId);

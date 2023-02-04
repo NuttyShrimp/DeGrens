@@ -25,7 +25,7 @@ Events.onNet('vehicles:keys:finishLockPick', (src, type: string, id: string, isS
   }
 });
 
-on('DGCore:server:playerLoaded', (playerData: PlayerData) => {
+Util.onPlayerLoaded(playerData => {
   const keys = keyManager.getAllPlayerKeys(playerData.source);
   Events.emitNet('vehicles:keys:initCache', playerData.source, keys);
 });

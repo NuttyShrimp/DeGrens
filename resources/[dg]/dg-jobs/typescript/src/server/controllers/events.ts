@@ -72,11 +72,11 @@ Events.onNet('jobs:server:signOut', (src, job: string) => {
   signOut(src, job);
 });
 
-on('DGCore:server:playerLoaded', (playerData: PlayerData) => {
+Util.onPlayerLoaded(playerData => {
   playerLoaded(playerData.source, playerData.citizenid);
 });
 
-on('DGCore:server:playerUnloaded', (plyId: number, cid: number) => {
+Util.onPlayerUnloaded((plyId, cid) => {
   playerUnloaded(plyId, cid);
 });
 
@@ -165,7 +165,7 @@ RPC.register('jobs:whitelist:getInfoList', (src: number) => {
 });
 
 // #region Jobs
-on('DGCore:server:playerLoaded', (playerData: PlayerData) => {
+Util.onPlayerLoaded(playerData => {
   const group = Jobs.getGroupByCid(playerData.citizenid);
   if (!group) return;
 

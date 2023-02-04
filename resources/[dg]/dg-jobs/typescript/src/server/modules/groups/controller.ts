@@ -1,5 +1,4 @@
 import { Inventory, RPC, Util } from '@dgx/server';
-
 import groupManager from './classes/GroupManager';
 import nameManager from './classes/NameManager';
 import { groupLogger } from './logger';
@@ -39,7 +38,7 @@ Inventory.onInventoryUpdate(
 );
 
 // Check if ply cid is in active group, if so update serverid
-on('DGCore:server:playerLoaded', (playerData: PlayerData) => {
+Util.onPlayerLoaded(playerData => {
   // Reload ply store to reset UI group if switched chars
   groupManager.seedPlayerStore(playerData.source, playerData.citizenid);
 
@@ -49,7 +48,7 @@ on('DGCore:server:playerLoaded', (playerData: PlayerData) => {
 });
 
 // If still in group when unloading, update serverid to null
-on('DGCore:server:playerUnloaded', (plyId: number, cid: number) => {
+Util.onPlayerUnloaded((_, cid) => {
   const group = groupManager.getGroupByCID(cid);
   if (!group) return;
   group.updateMemberServerId(cid, null);

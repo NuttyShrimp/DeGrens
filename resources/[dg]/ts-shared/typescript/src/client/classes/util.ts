@@ -298,6 +298,14 @@ class Util extends UtilShared {
     }
     return heading;
   };
+
+  public onPlayerLoaded = (handler: (playerData: PlayerData) => void) => {
+    onNet('DGCore:client:playerLoaded', handler);
+  };
+
+  public onPlayerUnloaded = (handler: (cid: number) => void) => {
+    onNet('DGCore:client:playerUnloaded', handler);
+  };
 }
 
 export class Interiors {

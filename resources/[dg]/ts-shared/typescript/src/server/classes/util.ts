@@ -253,6 +253,14 @@ class Util extends UtilShared {
   setWaypoint = (plyId: number, coords: Vec2) => {
     emitNet('dgx:client:setWaypoint', plyId, coords);
   };
+
+  public onPlayerLoaded = (handler: (playerData: PlayerData) => void) => {
+    on('DGCore:server:playerLoaded', handler);
+  };
+
+  public onPlayerUnloaded = (handler: (plyId: number, cid: number) => void) => {
+    on('DGCore:server:playerUnloaded', handler);
+  };
 }
 
 export class Sounds {

@@ -30,7 +30,7 @@ seedCharData = function()
   end)
 end
 
-RegisterNetEvent('DGCore:client:playerLoaded', function()
+DGX.Util.onPlayerLoaded(function()
   seedCharData()
 end)
 

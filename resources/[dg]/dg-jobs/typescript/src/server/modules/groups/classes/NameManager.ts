@@ -1,11 +1,8 @@
 import { Inventory, Util } from '@dgx/server';
-import { EventListener, LocalEvent } from '@dgx/server/decorators';
 import winston from 'winston';
-
 import { groupLogger } from '../logger';
 
 // Manages the name that is used in the groups for the current player
-@EventListener()
 class NameManager extends Util.Singleton<NameManager>() {
   private players: Map<number, { name: string; isVPNName: boolean }>;
   private logger: winston.Logger;
@@ -14,6 +11,10 @@ class NameManager extends Util.Singleton<NameManager>() {
     super();
     this.players = new Map();
     this.logger = groupLogger.child({ module: 'NameManager' });
+
+    Util.onPlayerLoaded((playerData: PlayerData) => {
+      nameManager.updatePlayerName(playerData.citizenid);
+    });
   }
 
   public async updatePlayerName(cid: number) {
@@ -51,11 +52,6 @@ class NameManager extends Util.Singleton<NameManager>() {
     ).forEach((ply: Player) => {
       this.updatePlayerName(ply.PlayerData.citizenid);
     });
-  };
-
-  @LocalEvent('DGCore:server:playerLoaded')
-  private _playerJoined = (playerData: PlayerData) => {
-    nameManager.updatePlayerName(playerData.citizenid);
   };
 }
 

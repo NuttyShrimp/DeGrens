@@ -108,6 +108,6 @@ Events.onNet('storerobbery:safes:cancelHack', (plyId: number, storeId: Storerobb
   handlePlayerCanceledHack(plyId);
 });
 
-on('DGCore:server:playerUnloaded', (plyId: number) => {
+Util.onPlayerUnloaded(plyId => {
   handlePlayerCanceledHack(plyId);
 });

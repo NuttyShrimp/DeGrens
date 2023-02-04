@@ -11,6 +11,10 @@ class CommandManager extends Util.Singleton<CommandManager>() {
   constructor() {
     super();
     this.commands = new Map();
+
+    Util.onPlayerLoaded(playerData => {
+      this.specificRefresh(playerData.source);
+    });
   }
 
   private specificRefresh(src: number) {
@@ -31,11 +35,6 @@ class CommandManager extends Util.Singleton<CommandManager>() {
   public refreshCommands(src = -1) {
     src === -1 ? this.globalRefresh() : this.specificRefresh(src);
   }
-
-  @LocalEvent('DGCore:server:playerLoaded')
-  private _playerLoaded = (playerData: PlayerData) => {
-    this.specificRefresh(playerData.source);
-  };
 
   @Export('registerCommand')
   public registerCommand(

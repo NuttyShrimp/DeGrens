@@ -1,4 +1,4 @@
-import { Events } from '@dgx/client';
+import { Events, Util } from '@dgx/client';
 import objectsManager from './classes/objectsmanager';
 
 Events.onNet('inventory:client:updateObject', (action: 'add' | 'remove', item: Objects.Item) => {
@@ -14,7 +14,7 @@ on('onResourceStop', (resourceName: string) => {
   objectsManager.reset(true);
 });
 
-onNet('DGCore:client:playerUnloaded', () => {
+Util.onPlayerUnloaded(() => {
   objectsManager.reset();
 });
 

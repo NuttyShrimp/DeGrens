@@ -1,10 +1,11 @@
+import { Util } from '@dgx/server';
 import { getReputation, loadPlayerReputation, setReputation, unloadPlayerReputation } from './service.reputation';
 
-on('DGCore:server:playerLoaded', (playerData: PlayerData) => {
+Util.onPlayerLoaded(playerData => {
   loadPlayerReputation(playerData.citizenid);
 });
 
-on('DGCore:server:playerUnloaded', (plyId: number, cid: number) => {
+Util.onPlayerUnloaded((_, cid) => {
   unloadPlayerReputation(cid);
 });
 

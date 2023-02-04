@@ -1,4 +1,4 @@
-import { Jobs, Util } from '@dgx/server';
+import { Util } from '@dgx/server';
 
 import { isPlyInLoc } from '../bank/helpers/location';
 
@@ -16,7 +16,7 @@ RegisterCommand(
   true
 );
 
-on('DGCore:server:playerLoaded', (playerData: PlayerData) => {
+Util.onPlayerLoaded(playerData => {
   seedPlyInCache(playerData.source);
 });
 

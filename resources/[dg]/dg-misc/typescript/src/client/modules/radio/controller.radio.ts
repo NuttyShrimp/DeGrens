@@ -1,7 +1,7 @@
-import { Events, UI } from '@dgx/client';
+import { Events, UI, Util } from '@dgx/client';
 import { openRadio, setFreq, toggleRadio } from './service.radio';
 
-onNet('DGCore:server:playerUnloaded', () => {
+Util.onPlayerUnloaded(() => {
   toggleRadio(false);
 });
 

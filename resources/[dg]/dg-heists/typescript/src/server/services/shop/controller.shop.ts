@@ -13,7 +13,7 @@ const hasActivePickup = (plyId: number) => {
   return !!activePickups[cid];
 };
 
-onNet('DGCore:client:playerLoaded', (playerData: PlayerData) => {
+Util.onPlayerLoaded(playerData => {
   if (!hasActivePickup(playerData.source)) return;
   Events.emitNet('heists:shop:restorePickup', playerData.source);
 });
@@ -98,7 +98,7 @@ Events.onNet('heists:server:pickupLaptop', async (src: number) => {
     `${Util.getName(src)} picked up a ${laptop} laptop`,
     source
   );
-  delete activePickups[cid]
+  delete activePickups[cid];
   Inventory.addItemToPlayer(src, laptop, 1);
 });
 

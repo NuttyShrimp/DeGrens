@@ -1,4 +1,4 @@
-import { Events } from '@dgx/client';
+import { Events, Util } from '@dgx/client';
 import { cleanupSanddigging, loadSanddiggingConfig } from 'modules/sanddigging/service.sanddigging';
 import { buildFishingReturnZone, cleanupFishingJob } from 'modules/fishing/service.fishing';
 import { buildScrapyardReturnZone, cleanupScrapyard } from 'modules/scrapyard/service.scrapyard';
@@ -9,7 +9,7 @@ on('jobs:client:openJobAllowlist', () => {
   Events.emitNet('jobs:whitelist:server:openJobAllowlist');
 });
 
-onNet('DGCore:client:playerUnloaded', () => {
+Util.onPlayerUnloaded(() => {
   cleanupSanddigging();
   cleanupFishingJob();
   cleanupScrapyard();

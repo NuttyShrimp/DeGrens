@@ -1,5 +1,4 @@
-import { BaseEvents, Events, HUD } from '@dgx/client';
-
+import { BaseEvents, Events, HUD, Util } from '@dgx/client';
 import {
   doSpeedStress,
   doWeaponStress,
@@ -29,7 +28,7 @@ Events.onNet('hud:client:initialize', (config: HUD.Config) => {
   scheduleBlurEffect();
 });
 
-onNet('DGCore:client:playerLoaded', (playerData: PlayerData) => {
+Util.onPlayerLoaded(playerData => {
   updateStress(playerData?.metadata?.stress ?? 0);
 });
 

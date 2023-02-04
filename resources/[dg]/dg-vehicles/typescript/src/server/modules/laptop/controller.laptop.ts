@@ -1,5 +1,4 @@
-import { Config, Events, RPC } from '@dgx/server';
-
+import { Config, Events, RPC, Util } from '@dgx/server';
 import { doPurchase, getStoreItems, loadConfigInfo, receivePurchasedItems, restorePurchase } from './service.laptop';
 
 setImmediate(async () => {
@@ -24,6 +23,6 @@ RPC.register('vehicles:laptop:benny:getItems', () => {
   return getStoreItems();
 });
 
-on('DGCore:server:playerLoaded', (playerData: PlayerData) => {
+Util.onPlayerLoaded(playerData => {
   restorePurchase(playerData.source, playerData.citizenid);
 });

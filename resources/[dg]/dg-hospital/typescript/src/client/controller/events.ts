@@ -1,4 +1,4 @@
-import { Events } from '@dgx/client';
+import { Events, Util } from '@dgx/client';
 import {
   doNormalRevive,
   checkDeathOnDamage,
@@ -38,12 +38,12 @@ Events.onNet('hospital:client:revive', async () => {
   setPauseDownAnimation(false);
 });
 
-onNet('DGCore:client:playerLoaded', (playerData: PlayerData) => {
+Util.onPlayerLoaded(playerData => {
   setPlayerState(playerData.metadata.downState, false);
   startNeedsThread();
 });
 
-onNet('DGCore:client:playerUnloaded', () => {
+Util.onPlayerUnloaded(() => {
   setPlayerState('alive', false);
   setBleedAmount(0);
   cleanNeedsThread();

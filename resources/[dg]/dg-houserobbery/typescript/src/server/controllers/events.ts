@@ -1,11 +1,11 @@
 import stateManager from '../classes/StateManager';
-import { Config, RPC } from '@dgx/server';
+import { Config, RPC, Util } from '@dgx/server';
 
 on('dg-jobs:server:groups:playerLeft', (src: number) => {
   stateManager.cleanupPlayer(src);
 });
 
-on('DGCore:server:playerUnloaded', (plyId: number, cid: number) => {
+Util.onPlayerUnloaded((plyId, cid) => {
   stateManager.cleanupPlayer(plyId, cid);
 });
 

@@ -1,4 +1,4 @@
-import { Inventory, Notifications, Taskbar } from '@dgx/server';
+import { Inventory, Notifications, Taskbar, Util } from '@dgx/server';
 
 Inventory.registerUseable(['armor', 'pd_armor'], async (plyId, itemState) => {
   const [canceled] = await Taskbar.create(plyId, 'vest', 'Aantrekken', 5000, {
@@ -23,7 +23,7 @@ Inventory.registerUseable(['armor', 'pd_armor'], async (plyId, itemState) => {
   setArmor(plyId, max);
 });
 
-on('DGCore:server:playerLoaded', (playerData: PlayerData) => {
+Util.onPlayerLoaded(playerData => {
   const armor = playerData?.metadata?.armor ?? 0;
   setArmor(playerData.source, armor);
 });
