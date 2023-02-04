@@ -1,5 +1,4 @@
-import { Config } from '@dgx/server';
-import { Util } from '@dgx/shared';
+import { Config, Util } from '@dgx/server';
 
 let policeConfig: Police.Config | null = null;
 
@@ -14,5 +13,11 @@ export const getPoliceConfig = () => {
 
 export const loadPoliceConfig = async () => {
   await Config.awaitConfigLoad();
-  policeConfig = Config.getConfigValue('police');
+  policeConfig = Config.getConfigValue<Police.Config>('police');
+
+  if (Util.isDevEnv()) {
+    for (const activity of Object.keys(policeConfig.requirements)) {
+      policeConfig.requirements[activity] = 0;
+    }
+  }
 };
