@@ -154,7 +154,8 @@ Peek.addGlobalEntry(
         icon: 'fas fa-key',
         action: (_, entity) => {
           if (!entity) return;
-          Events.emitNet('vehicles:keys:shareToClosest', NetworkGetNetworkIdFromEntity(entity));
+          const numSeats = GetVehicleModelNumberOfSeats(GetEntityModel(entity));
+          Events.emitNet('vehicles:keys:shareToClosest', NetworkGetNetworkIdFromEntity(entity), numSeats);
         },
         canInteract: ent => {
           if (!ent || !NetworkGetEntityIsNetworked(ent)) return false;

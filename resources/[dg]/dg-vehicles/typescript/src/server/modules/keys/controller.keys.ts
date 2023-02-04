@@ -51,7 +51,7 @@ Events.onNet('vehicles:keys:shareToPassengers', (src: number, netId: number, num
   }
 });
 
-Events.onNet('vehicles:keys:shareToClosest', (src: number, netId: number) => {
+Events.onNet('vehicles:keys:shareToClosest', (src: number, netId: number, numberOfSeats: number) => {
   const vin = getVinForNetId(netId);
   if (!vin) return;
   if (!keyManager.hasKey(vin, src)) return;
@@ -59,7 +59,7 @@ Events.onNet('vehicles:keys:shareToClosest', (src: number, netId: number) => {
   // If people in car give keys to them, else give to closest ply
   let targets: number[] = [];
   const vehicle = NetworkGetEntityFromNetworkId(netId);
-  const playersInVehicle = Util.getPlayersInVehicle(vehicle);
+  const playersInVehicle = Util.getPlayersInVehicle(vehicle, numberOfSeats);
   if (playersInVehicle.length === 0) {
     const closestPlayer = Util.getClosestPlayer(src, 3.0);
     if (!closestPlayer) {
@@ -68,7 +68,7 @@ Events.onNet('vehicles:keys:shareToClosest', (src: number, netId: number) => {
     }
     targets.push(closestPlayer);
   } else {
-    targets = [...playersInVehicle];
+    targets = playersInVehicle;
   }
 
   for (const target of targets) {

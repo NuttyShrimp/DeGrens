@@ -38,12 +38,9 @@ export const removeLoopedParticle = (id: string) => {
 
 export const sendToClosePlayers = (id: string, data: Required<Particles.Particle>) => {
   const coords = 'coords' in data ? data.coords : Util.getEntityCoords(NetworkGetEntityFromNetworkId(data.netId));
-  const closePlyIds = DGCore.Functions.GetPlayers().reduce<number[]>((all, ply) => {
-    if (Util.getPlyCoords(ply).distance(coords) > 100) return all;
-    all.push(ply);
-    return all;
-  }, []);
-  closePlyIds.forEach(plyId => {
+
+  for (const plyId of Util.getAllPlayers()) {
+    if (Util.getPlyCoords(plyId).distance(coords) > 100) continue;
     Events.emitNet('particles:client:addLooped', plyId, id, data);
-  });
+  }
 };

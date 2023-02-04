@@ -170,18 +170,14 @@ class Util extends UtilShared {
     return null;
   };
 
-  // This way is more effecient than
-  // getting amount of seats for a client ->
-  // iterating over seatamount ->
-  // getting ped in seat ->
-  // looping through players to find playerid that belongs to ped
-  getPlayersInVehicle = (vehicle: number): number[] => {
+  // Default to 10 seats
+  getPlayersInVehicle = (vehicle: number, amountOfSeats = 10): number[] => {
     const playersInVehicle = [];
-    for (const plyId of DGCore.Functions.GetPlayers()) {
-      const plyPed = GetPlayerPed(String(plyId));
-      const vehiclePedIsIn = GetVehiclePedIsIn(plyPed, false);
-      if (vehiclePedIsIn !== vehicle) continue;
-      playersInVehicle.push(plyId);
+
+    for (let i = -1; i < amountOfSeats - 1; i++) {
+      const ped = GetPedInVehicleSeat(vehicle, i);
+      if (!ped || !IsPedAPlayer(ped)) continue;
+      playersInVehicle.push(NetworkGetEntityOwner(ped));
     }
     return playersInVehicle;
   };
