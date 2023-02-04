@@ -162,11 +162,14 @@ DGX.Util.onPreferenceChange(function(data)
   if not data then return end
   if not data.hud then return end
   if not data.hud.compass then return end
-  if data.hud.compass.fps then
-    compassWaitMS = 1000 / data.hud.compass.fps
-  end
-  if data.hud.compass.show then
+
+  compassWaitMS = 1000 / data.hud.compass.fps
+  if data.hud.compass.show ~= shouldShowCompassInVehicle then
     shouldShowCompassInVehicle = data.hud.compass.show
+    if shouldShowCompassInVehicle then
+      startRoadnameLoop()
+      startCompassLoop()
+    end
   end
 end)
 
@@ -198,7 +201,7 @@ Citizen.CreateThread(function()
   setMinimapOffset()
 
   -- Set Preferences from configmenu
-  local preferences = exports['dg-misc']:getPreferences()
+  local preferences = DGX.Util.getPreferences()
   if (preferences and preferences.hud) then
     compassWaitMS = 1000 / preferences.hud.compass.fps
     shouldShowCompassInVehicle = preferences.hud.compass.show
@@ -366,6 +369,7 @@ function startCompassLoop()
       -- ~30fps
       Wait(compassWaitMS)
     end
+
     state.compass.visible = false
     SendAppEventWESentry('hud', {
       action = 'setCompassValues',
