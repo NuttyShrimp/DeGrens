@@ -2,9 +2,17 @@ import { Util } from './index';
 
 class Minigames {
   private generateKeygameCycle = (speed: number, size: number): Minigames.Keygame.Cycle => {
+    const minSpeed = Math.round(speed - speed * 0.2);
+    const maxSpeed = Math.round(speed + speed * 0.2);
+    const minSize = Math.round(size - size * 0.3);
+    const maxSize = Math.round(size + size * 0.3);
+
+    const randomSpeed = Math.round(Util.getRndDecimal(minSpeed, maxSpeed) * 10) / 10;
+    const randomSize = Math.round(Util.getRndDecimal(minSize, maxSize) * 10) / 10;
+
     return {
-      speed: Math.round(Util.getRndDecimal(speed - speed * 0.2, speed + speed * 0.2) * 10) / 10,
-      size: Math.round(Util.getRndDecimal(size - size * 0.3, size + size * 0.3) * 10) / 10,
+      speed: Math.max(randomSpeed, 0),
+      size: Math.max(randomSize, 0),
     };
   };
 

@@ -1,4 +1,4 @@
-import { Util, PolyZone, RPC } from '@dgx/client';
+import { Util, PolyZone } from '@dgx/client';
 import { buildRegisterZone, destroyRegisterZone } from 'modules/registers/service.registers';
 import { buildSafeZone, checkSafeState, destroySafeZone } from 'modules/safes/service.safe';
 
@@ -12,9 +12,6 @@ class LocationManager extends Util.Singleton<LocationManager>() {
     });
     PolyZone.onLeave('store_building', () => {
       this.leftStore();
-    });
-    RPC.register('storerobbery:client:isInStore', () => {
-      return this.currentStore !== null;
     });
   }
 

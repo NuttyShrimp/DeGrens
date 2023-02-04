@@ -1,4 +1,4 @@
-import { Events, Inventory, Minigames, Notifications, PolyZone, RPC, Util, Weapons } from '@dgx/client';
+import { Events, Inventory, Minigames, Notifications, Police, PolyZone, RPC, Util, Weapons } from '@dgx/client';
 import { enterInterior, leaveInterior } from 'services/interiors';
 
 export const unlockHouse = async (houseId: string) => {
@@ -24,10 +24,9 @@ export const unlockHouse = async (houseId: string) => {
   } else {
     if (Util.getRndInteger(0, 100) < 10) {
       DGX.Inventory.removeItemFromPlayer('lockpick');
-      Notifications.add('Je lockpick is gebroken', 'error');
     } else {
       Notifications.add('Je bent uitgeschoven', 'error');
-      Events.emitNet('police:evidence:addBloodDrop');
+      Police.addBloodDrop();
     }
   }
 };

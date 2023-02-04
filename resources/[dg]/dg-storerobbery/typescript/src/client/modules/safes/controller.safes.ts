@@ -1,5 +1,6 @@
-import { Peek } from '@dgx/client';
-import { canInteractWithSafe, hackSafe, lootSafe } from './service.safe';
+import { Events, Peek } from '@dgx/client';
+import { canInteractWithSafe, lootSafe, setIsSafeHacker } from './service.safe';
+import locationManager from 'classes/LocationManager';
 
 Peek.addZoneEntry('store_safe', {
   options: [
@@ -8,7 +9,7 @@ Peek.addZoneEntry('store_safe', {
       label: 'Hack',
       items: 'decoding_tool',
       action: () => {
-        hackSafe();
+        Events.emitNet('storerobbery:safes:hack', locationManager.currentStore);
       },
       canInteract: canInteractWithSafe,
     },
@@ -22,4 +23,8 @@ Peek.addZoneEntry('store_safe', {
     },
   ],
   distance: 1.2,
+});
+
+Events.onNet('storerobbery:safes:setIsHacker', (isSafeHacker: boolean) => {
+  setIsSafeHacker(isSafeHacker);
 });

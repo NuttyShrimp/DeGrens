@@ -285,6 +285,19 @@ class Util extends UtilShared {
     ClearGpsPlayerWaypoint();
     SetNewWaypoint(coords.x, coords.y);
   };
+
+  public getHeadingToFaceEntity = (entity: number) => {
+    const pedCoords = this.getPlyCoords();
+    const entityCoords = this.getEntityCoords(entity);
+    const vector = { x: pedCoords.x - entityCoords.x, y: pedCoords.y - entityCoords.y };
+    let heading = Math.atan(vector.y / vector.x);
+    heading = (heading * 180) / Math.PI;
+    heading = heading + 90;
+    if (vector.x < 0) {
+      heading = Math.abs(heading) + 180;
+    }
+    return heading;
+  };
 }
 
 export class Interiors {

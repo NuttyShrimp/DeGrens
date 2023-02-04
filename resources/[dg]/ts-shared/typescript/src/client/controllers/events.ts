@@ -21,30 +21,36 @@ if (GetCurrentResourceName() === 'ts-shared') {
     Util.setWaypoint(coords);
   });
 
-  Events.onNet('dgx:minigames:playGame', async (id: number, ...args: any[]) => {
+  // @ts-ignore
+  Events.onNet('dgx:minigames:playGame', async (resName: string, id: number, ...args: Minigames.HandlerParams) => {
     const getRetVal = () => {
-      switch (args[0]) {
+      const [game, ...data] = args;
+      switch (game) {
         case 'keygame': {
           // @ts-ignore
-          return Minigames.keygame(...args.slice(1));
+          return Minigames.keygame(...data);
         }
         case 'order': {
           // @ts-ignore
-          return Minigames.ordergame(...args.slice(1));
+          return Minigames.ordergame(...data);
         }
         case 'sequence': {
           // @ts-ignore
-          return Minigames.sequencegame(...args.slice(1));
+          return Minigames.sequencegame(...data);
         }
         case 'vision': {
           // @ts-ignore
-          return Minigames.visiongame(...args.slice(1));
+          return Minigames.visiongame(...data);
+        }
+        case 'keygameCustom': {
+          // @ts-ignore
+          return Minigames.keygameCustom(...data);
         }
         default:
           return false;
       }
     };
     const retVal = await getRetVal();
-    Events.emitNet('dgx:minigames:finishGame', id, retVal);
+    Events.emitNet(`dgx:minigames:finishGame:${resName}`, id, retVal);
   });
 }

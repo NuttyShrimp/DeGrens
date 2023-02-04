@@ -1,11 +1,11 @@
-import { Events, Notifications, PolyZone, RPC, Taskbar, Util, Inventory, Minigames, Police } from '@dgx/client';
-import { Vector3 } from '@dgx/shared';
+import { Events, Notifications, PolyZone, Taskbar, Util, Police, Minigames, Inventory } from '@dgx/client';
 import locationManager from 'classes/LocationManager';
+import { LOCKPICK_ANIM } from './constants.registers';
+import { generateKeygameSequence } from './helpers.registers';
 
 const registerZones: Partial<Record<Storerobbery.Id, Storerobbery.Data['registerzone']>> = {};
 
 let inRegisterZone = false;
-let robAnimTime = 0;
 
 export const setRegisterZones = (storeConfig: Storerobbery.Config['stores']) => {
   for (const [id, store] of Object.entries(storeConfig)) {
@@ -31,74 +31,77 @@ export const setInRegisterZone = (val: boolean) => {
   inRegisterZone = val;
 };
 
-export const canRobRegister = () => {
+export const canLockpickRegister = () => {
   if (!inRegisterZone || !locationManager.currentStore) return false;
   return Police.enoughCopsForActivity('storerobbery_register');
 };
 
-export const lockpickRegister = async (registerObject: number) => {
-  if (!canRobRegister()) {
+export const tryToLockpick = async (registerObject: number) => {
+  if (!locationManager.currentStore) return;
+
+  if (!canLockpickRegister()) {
     Notifications.add('Je kan dit momenteel niet', 'error');
     return;
   }
 
+  const heading = Util.getHeadingToFaceEntity(registerObject);
+  await Util.goToCoords({ ...Util.getPlyCoords(), w: heading }, 2000);
+
+  const isBroken = HasObjectBeenBroken(registerObject);
   const registerCoords = Util.getEntityCoords(registerObject);
-  const isRobbed = await RPC.execute<boolean>('storerobbery:server:isRegisterRobbed', registerCoords);
-  if (isRobbed) {
-    Notifications.add('Deze kassa is al open...', 'error');
-    return;
-  }
-
-  if (HasObjectBeenBroken(registerObject)) {
-    Events.emitNet('storerobbery:server:startJob', locationManager.currentStore, 'register');
-    lootRegister(registerCoords);
-    return;
-  }
-
-  const hasLockpick = await Inventory.doesPlayerHaveItems('lockpick');
-  if (!hasLockpick) {
-    Notifications.add('Hoe ga je dit openen?', 'error');
-    return;
-  }
-
-  Events.emitNet('storerobbery:server:startJob', locationManager.currentStore, 'register');
-  const keygameSuccess = await Minigames.keygame(5, 10, 15);
-  if (keygameSuccess) {
-    lootRegister(registerCoords);
-  } else {
-    if (Util.getRndInteger(0, 100) < 10) {
-      Inventory.removeItemFromPlayer('lockpick');
-      Notifications.add('Je lockpick is gebroken', 'error');
-    } else {
-      Notifications.add('Je bent uitgeschoven', 'error');
-      Events.emitNet('police:evidence:addBloodDrop');
-    }
-  }
+  Events.emitNet('storerobbery:registers:tryToRob', locationManager.currentStore, registerCoords, isBroken);
 };
 
-export const lootRegister = async (registerObject: Vector3) => {
-  doRobAnimation();
-  const [canceled] = await Taskbar.create('cash-register', 'Kassa beroven...', 20 * 1000, {
+export const lootRegister = async (registerIdx: number, isBroken: boolean) => {
+  if (!isBroken) {
+    const ped = PlayerPedId();
+    await Util.loadAnimDict(LOCKPICK_ANIM.animDict);
+    TaskPlayAnim(ped, LOCKPICK_ANIM.animDict, LOCKPICK_ANIM.anim, 1, 2, -1, 17, 0, false, false, false);
+    const keygameSequence = generateKeygameSequence();
+    const keygameSuccess = await Minigames.keygameCustom(keygameSequence);
+    StopAnimTask(ped, LOCKPICK_ANIM.animDict, LOCKPICK_ANIM.anim, 1);
+    RemoveAnimDict(LOCKPICK_ANIM.animDict);
+
+    if (!keygameSuccess) {
+      if (Util.getRndInteger(0, 100) < 20) {
+        Inventory.removeItemFromPlayer('lockpick');
+      } else {
+        Notifications.add('Je bent uitgeschoven', 'error');
+        Police.addBloodDrop();
+      }
+      Events.emitNet('storerobbery:registers:canceled', locationManager.currentStore, registerIdx);
+      return;
+    }
+  }
+
+  const robTime = isBroken ? 40000 : 20000;
+  doRobAnimation(robTime);
+  const [canceled] = await Taskbar.create('cash-register', 'Kassa beroven...', robTime, {
     canCancel: true,
     cancelOnDeath: true,
     disarm: true,
     disableInventory: true,
+    disablePeek: true,
     controlDisables: {
       movement: true,
       carMovement: true,
       combat: true,
     },
   });
-  ClearPedTasks(PlayerPedId());
-  robAnimTime = 0;
-  if (canceled) return;
-  Events.emitNet('storerobbery:server:robRegister', registerObject);
+
+  if (canceled) {
+    Events.emitNet('storerobbery:registers:canceled', locationManager.currentStore, registerIdx);
+    return;
+  }
+
+  Events.emitNet('storerobbery:registers:rob', locationManager.currentStore, registerIdx);
 };
 
-export const doRobAnimation = async () => {
+const doRobAnimation = async (time: number) => {
   const ped = PlayerPedId();
-  robAnimTime = 20 * 1000 - 1000; // accounts for exit anim
   await Util.loadAnimDict('oddjobs@shop_robbery@rob_till');
+  let robAnimTime = time - 1000; // accounts for exit anim
+  TaskPlayAnim(ped, 'oddjobs@shop_robbery@rob_till', 'loop', 2.0, 2.0, -1, 16, 0, false, false, false);
   const interval = setInterval(() => {
     if (robAnimTime <= 0) {
       clearInterval(interval);

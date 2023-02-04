@@ -14,11 +14,12 @@ import vehicles from './vehicles';
 import weapons from './weapons';
 import weather from './weather';
 import baseevents from './baseevents';
+import minigames from './minigames';
 
 export const { Events, RPC, SQL, API, Auth } = events;
 export const { Util, Sounds, Status, Reputations } = util;
 export const { Phone } = phone;
-export const { Chat, RayCast, Minigames } = interaction;
+export const { Chat, RayCast } = interaction;
 export const { Config } = config;
 export const { Jobs, Business, Gangs, Police, Hospital } = jobs;
 export const { Admin } = admin;
@@ -31,3 +32,4 @@ export const { Sync } = sync;
 export const { Weapons } = weapons;
 export const { Weather } = weather;
 export const { BaseEvents } = baseevents;
+export const { Minigames } = minigames;

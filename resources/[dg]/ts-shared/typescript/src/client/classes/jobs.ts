@@ -1,4 +1,4 @@
-import { Jobs as JobsClass, Util } from './index';
+import { Events, Jobs as JobsClass, Util } from './index';
 
 class Jobs {
   getCurrentJob(): { name: string | null; rank: number | null } {
@@ -64,6 +64,10 @@ class Police {
     const amountOfCops = JobsClass.getAmountForJob('police');
     const requirement = this.getRequirementForActivity(activity);
     return amountOfCops >= requirement;
+  };
+
+  public addBloodDrop = () => {
+    Events.emitNet('police:evidence:addBloodDrop');
   };
 }
 

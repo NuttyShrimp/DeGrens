@@ -5,7 +5,8 @@ declare namespace Minigames {
     | ['keygame', number, number, number]
     | ['sequence', number, number, number]
     | ['order', number, number, number, number, number]
-    | ['vision', number, number];
+    | ['vision', number, number]
+    | ['keygameCustom', Keygame.Cycle[]];
 
   namespace Keygame {
     type Cycle = {

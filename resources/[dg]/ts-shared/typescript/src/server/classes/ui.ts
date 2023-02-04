@@ -37,7 +37,7 @@ class Taskbar {
 
   constructor() {
     this.resolveFunctions = new Map();
-    // Dont use DGX because probably not instantiated yet as this gets registered in constructor
+    // Dont use DGX because this will get handled in every resource which causes lots of overhead
     onNet('misc:taskbar:finished', (promId: string, canceled: boolean, atPercentage: number) => {
       const res = this.resolveFunctions.get(promId);
       if (!res) return;
