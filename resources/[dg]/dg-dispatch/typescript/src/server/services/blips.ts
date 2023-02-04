@@ -28,14 +28,8 @@ export const syncBlips = () => {
 };
 
 export const updateSprite = (src: number, sprite: number) => {
-  const player = DGCore.Functions.GetPlayer(src);
-  const blipInfo: Dispatch.BlipInfo = {
-    job: Jobs.getCurrentJob(src)!,
-    callsign: player.PlayerData.metadata.callsign,
-  };
-
   blipPlys.forEach(ply => {
-    Events.emitNet('dispatch:updateSprite', ply, src, blipInfo, sprite);
+    Events.emitNet('dispatch:updateSprite', ply, src, sprite);
   });
 };
 

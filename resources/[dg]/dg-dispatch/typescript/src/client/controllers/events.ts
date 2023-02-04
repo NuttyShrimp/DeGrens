@@ -1,4 +1,4 @@
-import { BaseEvents, BlipManager, Events, Jobs, RPC, Sync, UI } from '@dgx/client';
+import { BaseEvents, BlipManager, Events, RPC, Sync, UI } from '@dgx/client';
 import { getNearestColorFromHex } from '@dgx/shared/helpers/colorNames';
 import { getDataOfGTAColorById } from '@dgx/shared/helpers/gtacolors';
 import { areBlipsEnabled, clearBlips, syncBlips, updateBlipCoords, updateSprite } from 'services/blips';

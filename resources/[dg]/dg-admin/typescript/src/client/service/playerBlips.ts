@@ -32,7 +32,7 @@ export const enableBlips = () => {
 export const disableBlips = () => {
   blipsEnabled = false;
   plyBlips.forEach(blip => {
-    blip.disable();
+    blip.destroy();
   });
   plyBlips.clear();
 };
@@ -45,16 +45,15 @@ const addBlip = (plyId: number) => {
     color: 0,
     heading: true,
     category: 7,
-    text: `${GetPlayerName(GetPlayerFromServerId(plyId))}(${plyId})`,
+    text: () => `${GetPlayerName(GetPlayerFromServerId(plyId))}(${plyId})`,
   });
-  newBlip.enable();
   plyBlips.set(plyId, newBlip);
 };
 
 const removeBlip = (plyId: number) => {
   const blip = plyBlips.get(plyId);
   if (!blip) return;
-  blip.disable();
+  blip.destroy();
   plyBlips.delete(plyId);
 };
 
@@ -72,25 +71,12 @@ Sync.onPlayerCoordsUpdate((plyCoords: Record<number, Vec3>) => {
 
   for (const key in plyCoords) {
     const plyId = Number(key);
-    if (GetPlayerServerId(PlayerId()) === plyId) continue;
 
     const blip = plyBlips.get(plyId);
-    if (!blip) {
-      addBlip(plyId);
-      continue;
-    }
-
-    const existLocally = blip.doesEntityExistsLocally();
-    if (blip.getMode() === 'entity') {
-      if (!existLocally) {
-        blip.changeMode('coords');
-      }
+    if (blip) {
+      blip.updateCoords(plyCoords[plyId]);
     } else {
-      if (existLocally) {
-        blip.changeMode('entity');
-      } else {
-        blip.updateCoords(plyCoords[plyId]);
-      }
+      addBlip(plyId);
     }
   }
 });

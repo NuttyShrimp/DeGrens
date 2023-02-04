@@ -25,28 +25,22 @@ const getBlipSettings = (info: Dispatch.BlipInfo): NBlip.Settings => {
   return {};
 };
 
-const addBlip = (ply: number, info: Dispatch.BlipInfo, sprite?: number) => {
+const addBlip = (ply: number, info: Dispatch.BlipInfo) => {
   const blipSettings = getBlipSettings(info);
-
-  if (sprite) {
-    blipSettings.sprite = sprite;
-  }
-
   const blip = new EntityBlip('player', ply, blipSettings);
-  blip.enable();
   blips.set(ply, blip);
 };
 
 const deleteBlip = (id: number) => {
   const blip = blips.get(id);
   if (!blip) return;
-  blip.disable();
+  blip.destroy();
   blips.delete(id);
 };
 
 export const clearBlips = () => {
   blips.forEach(blip => {
-    blip.disable();
+    blip.destroy();
   });
   blips.clear();
   blipsEnabled = false;
@@ -54,41 +48,32 @@ export const clearBlips = () => {
 
 export const syncBlips = (plys: Record<number, Dispatch.BlipInfo>) => {
   blipsEnabled = true;
-  const plyId = GetPlayerServerId(PlayerId());
-  const oldPlyIds = [...blips.keys()];
-  const newPlyIds = Object.keys(plys).map(ply => Number(ply));
-  const toRemove = oldPlyIds.filter(ply => !newPlyIds.includes(ply));
-  const toAdd = newPlyIds.filter(ply => !oldPlyIds.includes(ply) && ply !== plyId);
 
-  toRemove.forEach(ply => {
-    const blip = blips.get(ply);
-    blip?.disable();
-    blips.delete(ply);
-  });
-  toAdd.forEach(ply => {
-    addBlip(ply, plys[ply]);
-  });
+  const oldPlyIds = new Set(blips.keys());
+  const newPlyIds = Object.keys(plys).reduce<Set<number>>((acc, key) => acc.add(Number(key)), new Set());
+
+  // Remove blips that are in old but not in new
+  for (const plyId of oldPlyIds) {
+    if (newPlyIds.has(plyId)) continue;
+    deleteBlip(plyId);
+  }
+
+  // Add blips that are in new but not in old
+  const ownPlyId = GetPlayerServerId(PlayerId());
+  for (const plyId of newPlyIds) {
+    if (oldPlyIds.has(plyId) || plyId === ownPlyId) continue;
+    addBlip(plyId, plys[plyId]);
+  }
 };
 
 export const updateSprite = (plyId: number, info: Dispatch.BlipInfo, sprite: number) => {
-  deleteBlip(plyId);
-  addBlip(plyId, info, sprite);
+  const blip = blips.get(plyId);
+  if (!blip) return;
+  blip.changeSprite(sprite);
 };
 
 export const updateBlipCoords = (plyId: number, coords: Vec3) => {
   const blip = blips.get(plyId);
   if (!blip) return;
-
-  const existLocally = blip.doesEntityExistsLocally();
-  if (blip.getMode() === 'entity') {
-    if (!existLocally) {
-      blip.changeMode('coords');
-    }
-  } else {
-    if (existLocally) {
-      blip.changeMode('entity');
-    } else {
-      blip.updateCoords(coords);
-    }
-  }
+  blip.updateCoords(coords);
 };

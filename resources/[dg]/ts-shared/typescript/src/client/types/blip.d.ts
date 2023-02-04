@@ -5,9 +5,11 @@ declare namespace NBlip {
     scale?: number;
     heading?: boolean;
     category?: number;
-    text?: string;
+    text?: string | (() => string);
     shortRange?: boolean;
   }
 
   type Type = 'player' | 'entity';
+
+  type Mode = 'entity' | 'coords';
 }

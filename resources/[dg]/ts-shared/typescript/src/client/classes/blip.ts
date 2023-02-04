@@ -1,6 +1,6 @@
 import { Sync } from './index';
 
-const getLocalEntity = (type: string, id: number) => {
+const getLocalEntity = (type: NBlip.Type, id: number) => {
   let entity: number;
   if (type === 'player') {
     const playerIndex = GetPlayerFromServerId(id);
@@ -14,22 +14,19 @@ const getLocalEntity = (type: string, id: number) => {
 export class EntityBlip {
   private id: number;
   private type: NBlip.Type;
-  private enabled: boolean;
   private handle: number | null;
   private settings: NBlip.Settings;
-  private mode: 'coords' | 'entity' | null;
+  private mode: NBlip.Mode | null;
 
   constructor(type: NBlip.Type, id: number, settings: NBlip.Settings) {
     this.id = id;
     this.type = type;
-    this.enabled = false;
     this.handle = null;
     this.settings = settings;
     this.mode = null;
-  }
 
-  public getMode() {
-    return this.mode;
+    const mode: NBlip.Mode = this.doesEntityExistsLocally() ? 'entity' : 'coords';
+    this.changeMode(mode);
   }
 
   private applySettings() {
@@ -51,17 +48,17 @@ export class EntityBlip {
       SetBlipCategory(this.handle, this.settings.category);
     }
     if (this.settings.text !== undefined) {
+      const text = typeof this.settings.text === 'function' ? this.settings.text() : this.settings.text;
       BeginTextCommandSetBlipName('STRING');
-      AddTextComponentString(this.settings.text);
+      AddTextComponentString(text);
       EndTextCommandSetBlipName(this.handle);
     }
-    if (this.settings.shortRange !== undefined) {
-      SetBlipAsShortRange(this.handle, this.settings.shortRange);
-    }
+
+    SetBlipAsShortRange(this.handle, this.settings.shortRange ?? true);
   }
 
-  changeMode(mode: 'entity' | 'coords') {
-    if (mode === this.mode || !this.enabled) return;
+  private changeMode(mode: NBlip.Mode) {
+    if (this.mode === mode) return;
 
     if (this.handle && DoesBlipExist(this.handle)) {
       RemoveBlip(this.handle);
@@ -86,29 +83,38 @@ export class EntityBlip {
     this.applySettings();
   }
 
-  updateCoords(coords: Vec3) {
-    if (this.mode !== 'coords' || !this.enabled || !this.handle) return;
-    SetBlipCoords(this.handle, coords.x, coords.y, coords.z);
-  }
-
-  doesEntityExistsLocally() {
+  private doesEntityExistsLocally = () => {
     return DoesEntityExist(getLocalEntity(this.type, this.id));
-  }
+  };
 
-  enable() {
-    if (this.enabled) return;
-    this.enabled = true;
-
-    const mode = this.doesEntityExistsLocally() ? 'entity' : 'coords';
-    this.changeMode(mode);
-  }
-
-  disable() {
-    if (!this.enabled) return;
-    this.enabled = false;
-
+  public destroy() {
     if (this.handle && DoesBlipExist(this.handle)) {
       RemoveBlip(this.handle);
+      this.handle = null;
+    }
+  }
+
+  public updateCoords(coords: Vec3) {
+    const existLocally = this.doesEntityExistsLocally();
+    if (this.mode === 'entity') {
+      if (!existLocally) {
+        this.changeMode('coords');
+      }
+    } else {
+      if (existLocally) {
+        this.changeMode('entity');
+      } else {
+        if (this.handle) {
+          SetBlipCoords(this.handle, coords.x, coords.y, coords.z);
+        }
+      }
+    }
+  }
+
+  public changeSprite(sprite: number) {
+    this.settings.sprite = sprite;
+    if (this.handle) {
+      SetBlipSprite(this.handle, sprite);
     }
   }
 }
