@@ -9,7 +9,7 @@ const createBlip = (id: string, info: NBlipManager.Info) => {
     newBlip = AddBlipForCoord(info.coords.x, info.coords.y, info.coords.z);
     SetBlipSprite(newBlip, info.sprite);
     SetBlipScale(newBlip, info.scale ?? 1);
-    SetBlipAsShortRange(newBlip, info.isShortRange ?? false);
+    SetBlipAsShortRange(newBlip, info.isShortRange ?? true);
 
     if (info.text) {
       BeginTextCommandSetBlipName('STRING');
