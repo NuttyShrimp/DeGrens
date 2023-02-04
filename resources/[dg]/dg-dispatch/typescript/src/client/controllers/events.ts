@@ -1,7 +1,7 @@
-import { BaseEvents, BlipManager, Events, RPC, Sync, UI } from '@dgx/client';
+import { BaseEvents, BlipManager, Events, Jobs, RPC, Sync, UI } from '@dgx/client';
 import { getNearestColorFromHex } from '@dgx/shared/helpers/colorNames';
 import { getDataOfGTAColorById } from '@dgx/shared/helpers/gtacolors';
-import { clearBlips, syncBlips, updateBlipCoords, updateSprite } from 'services/blips';
+import { areBlipsEnabled, clearBlips, syncBlips, updateBlipCoords, updateSprite } from 'services/blips';
 import { closeCam, openCam, seedUICams } from 'services/cams';
 import {
   addCallBlip,
@@ -19,6 +19,8 @@ UI.onLoad(() => {
 });
 
 BaseEvents.onEnteredVehicle((vehicle, seat) => {
+  if (!areBlipsEnabled()) return;
+
   const vehicleClass = GetVehicleClass(vehicle);
   if (vehicleClass !== 15 || (seat !== -1 && seat !== 0)) return;
 
@@ -26,6 +28,8 @@ BaseEvents.onEnteredVehicle((vehicle, seat) => {
 });
 
 BaseEvents.onLeftVehicle((vehicle, seat) => {
+  if (!areBlipsEnabled()) return;
+
   const vehicleClass = GetVehicleClass(vehicle);
   if (vehicleClass !== 15 || (seat !== -1 && seat !== 0)) return;
 
@@ -45,6 +49,8 @@ on('onResourceStop', (res: string) => {
 });
 
 Sync.onPlayerCoordsUpdate((plyCoords: Record<number, Vec3>) => {
+  if (!areBlipsEnabled()) return;
+
   for (const key in plyCoords) {
     const plyId = Number(key);
     updateBlipCoords(plyId, plyCoords[plyId]);

@@ -1,6 +1,9 @@
 import { EntityBlip } from '@dgx/client';
 // srvId to blipHandle
 const blips: Map<number, EntityBlip> = new Map();
+let blipsEnabled = false;
+
+export const areBlipsEnabled = () => blipsEnabled;
 
 const getBlipSettings = (info: Dispatch.BlipInfo): NBlip.Settings => {
   if (info.job === 'police') {
@@ -46,9 +49,11 @@ export const clearBlips = () => {
     blip.disable();
   });
   blips.clear();
+  blipsEnabled = false;
 };
 
 export const syncBlips = (plys: Record<number, Dispatch.BlipInfo>) => {
+  blipsEnabled = true;
   const plyId = GetPlayerServerId(PlayerId());
   const oldPlyIds = [...blips.keys()];
   const newPlyIds = Object.keys(plys).map(ply => Number(ply));
