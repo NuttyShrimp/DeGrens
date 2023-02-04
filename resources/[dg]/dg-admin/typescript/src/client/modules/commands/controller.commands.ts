@@ -1,6 +1,6 @@
 import { Events, RPC, Util } from '@dgx/client';
 
-import { togglePlayerBlips } from '../../service/playerBlips';
+import { disableBlips, enableBlips } from '../../service/playerBlips';
 import { setCmdState } from './state';
 
 // Functiontypes fuck up when putting this in command directly because that file is serversided but function gets executed on client
@@ -50,7 +50,7 @@ Events.onNet('admin:command:detach', () => {
 });
 
 Events.onNet('dg-admin:client:togglePlayerBlips', (toggle: boolean) => {
-  togglePlayerBlips(toggle);
+  toggle ? enableBlips() : disableBlips();
 });
 
 RPC.register('admin:cmd:getWaypointCoords', () => {
@@ -69,7 +69,7 @@ Events.onNet('admin:client:damageEntity', (netId: number) => {
 const damageEntity = (entity: number) => {
   switch (GetEntityType(entity)) {
     case 1: {
-      ApplyDamageToPed(entity, 100, false);
+      ApplyDamageToPed(entity, 100, true);
       break;
     }
     case 2: {
@@ -107,6 +107,6 @@ Events.onNet('admin:command:collision', () => {
   SetGravityLevel(isDisabled ? 0 : 2);
 });
 
-Events.onNet("admin:commands:cloack", (toggle) => {
+Events.onNet('admin:commands:cloack', toggle => {
   setCmdState('invisible', toggle);
-})
+});

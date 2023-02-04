@@ -3,18 +3,17 @@ import { Events, HUD, Keys, RPC } from '@dgx/client';
 import { assignBind, getAllBinds } from '../helpers/binds';
 import { isDevModeEnabled, setDevModeEnabled } from '../helpers/devmode';
 import { isNoclipEnabled, printDebugInfo, toggleNoclip } from '../service/noclip';
-import { togglePlayerBlips } from '../service/playerBlips';
 
 setImmediate(() => {
   Events.emitNet('admin:bind:check');
   HUD.addEntry('dev-mode', 'terminal', '#111', () => (isDevModeEnabled() ? 1 : 0), 2, 1, isDevModeEnabled());
 });
 
-on('onResourceStop', () => {
+on('onResourceStop', (resourceName: string) => {
+  if (GetCurrentResourceName() !== resourceName) return;
   if (isNoclipEnabled()) {
     toggleNoclip();
   }
-  togglePlayerBlips(false);
   HUD.removeEntry('dev-mode');
 });
 
@@ -61,8 +60,8 @@ Events.onNet('admin:menu:forceClose', () => {
   });
 });
 
-Keys.onPressDown("open-admin", () => {
-  Events.emitNet("admin:menu:open")
-})
+Keys.onPressDown('open-admin', () => {
+  Events.emitNet('admin:menu:open');
+});
 
-Keys.register("open-admin", "(zAdmin) open menu");
+Keys.register('open-admin', '(zAdmin) open menu');

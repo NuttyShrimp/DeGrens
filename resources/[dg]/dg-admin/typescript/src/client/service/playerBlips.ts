@@ -5,11 +5,7 @@ import { drawText3d } from '../modules/util/service.util';
 let blipsEnabled = false;
 const plyBlips: Map<number, EntityBlip> = new Map();
 
-export const togglePlayerBlips = (isEnabled: boolean) => {
-  isEnabled ? enableBlips() : disableBlips();
-};
-
-const enableBlips = () => {
+export const enableBlips = () => {
   blipsEnabled = true;
   const plyId = PlayerId();
 
@@ -33,7 +29,7 @@ const enableBlips = () => {
   }
 };
 
-const disableBlips = () => {
+export const disableBlips = () => {
   blipsEnabled = false;
   plyBlips.forEach(blip => {
     blip.disable();
@@ -43,13 +39,13 @@ const disableBlips = () => {
 
 const addBlip = (plyId: number) => {
   if (GetPlayerServerId(PlayerId()) === plyId) return;
+
   const newBlip = new EntityBlip('player', plyId, {
     sprite: 1,
     color: 0,
     heading: true,
     category: 7,
     text: `${GetPlayerName(GetPlayerFromServerId(plyId))}(${plyId})`,
-    shortRange: true,
   });
   newBlip.enable();
   plyBlips.set(plyId, newBlip);
