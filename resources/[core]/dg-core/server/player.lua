@@ -174,7 +174,6 @@ function DGCore.Player.CreatePlayer(PlayerData)
   end
 
   DGCore.Players[self.PlayerData.source] = self
-  DGCore.cidToPlyId[self.PlayerData.citizenid] = self.PlayerData.source
   DGCore.Player.Save(self.PlayerData.source)
 
   -- Make the player state aware that we are loggedin
@@ -182,6 +181,7 @@ function DGCore.Player.CreatePlayer(PlayerData)
   Player(self.PlayerData.source).state:set('steamId', self.PlayerData.steamid, true)
   if (self.PlayerData.citizenid) then
     Player(self.PlayerData.source).state:set('cid', self.PlayerData.citizenid, true)
+    DGCore.cidToPlyId[self.PlayerData.citizenid] = self.PlayerData.source
   else
     print('CORE: DID NOT SET CID TO PLAYER STATE')
   end
