@@ -45,8 +45,7 @@ const addItemToInventory = async (
   const createdIds: string[] = [];
   const invId = concatId(type, identifier);
   // If item gets added to playerinv, get plyId to build metadata and send itembox event
-  const plyId =
-    type === 'player' ? DGCore.Functions.GetPlayerByCitizenId(Number(identifier))?.PlayerData?.source : undefined;
+  const plyId = type === 'player' ? DGCore.Functions.getPlyIdForCid(Number(identifier)) : undefined;
   metadata = metadata ?? itemManager.buildInitialMetadata(plyId, name);
   for (let i = 0; i < amount; i++) {
     const createdItem = await itemManager.create({ inventory: invId, name, metadata });
@@ -55,7 +54,7 @@ const addItemToInventory = async (
   }
   if (plyId) {
     const itemData = itemDataManager.get(name);
-    Events.emitNet('inventory:client:addItemBox', plyId, `${amount}x Ontvangen`, itemData.image);
+    emitNet('inventory:addItemBox', plyId, `${amount}x Ontvangen`, itemData.image);
   }
   Util.Log(
     'inventory:item:added',
@@ -91,8 +90,10 @@ const removeItemFromInventory = async (type: Inventory.Type, identifier: string,
   itemManager.get(itemState.id)?.destroy();
   if (type === 'player') {
     const image = itemDataManager.get(itemState.name).image;
-    const plyId = DGCore.Functions.GetPlayerByCitizenId(Number(identifier))?.PlayerData?.source;
-    Events.emitNet('inventory:client:addItemBox', plyId, 'Verwijderd', image);
+    const plyId = DGCore.Functions.getPlyIdForCid(Number(identifier));
+    if (plyId) {
+      emitNet('inventory:addItemBox', plyId, 'Verwijderd', image);
+    }
   }
   return true;
 };
@@ -105,8 +106,10 @@ const removeItemByIdFromInventory = async (type: Inventory.Type, identifier: str
   itemManager.get(id)?.destroy();
   if (type === 'player') {
     const image = itemDataManager.get(itemState.name).image;
-    const plyId = DGCore.Functions.GetPlayerByCitizenId(Number(identifier))?.PlayerData?.source;
-    Events.emitNet('inventory:client:addItemBox', plyId, 'Verwijderd', image);
+    const plyId = DGCore.Functions.getPlyIdForCid(Number(identifier));
+    if (plyId) {
+      emitNet('inventory:addItemBox', plyId, 'Verwijderd', image);
+    }
   }
   return true;
 };
@@ -166,7 +169,7 @@ const createScriptedStash = async (identifier: string, size: number, allowedItem
 
 const showItemBox = (plyId: number, label: string, itemName: string) => {
   const image = itemDataManager.get(itemName).image;
-  Events.emitNet('inventory:client:addItemBox', plyId, label, image);
+  emitNet('inventory:addItemBox', plyId, label, image);
 };
 
 const moveAllItemsToInventory = async (

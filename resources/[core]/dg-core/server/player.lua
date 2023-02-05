@@ -1,5 +1,6 @@
 DGCore.Players = {}
 DGCore.Player = {}
+DGCore.cidToPlyId = {}
 
 -- On player login get their data or set defaults
 -- Don't touch any of this unless you know what you are doing
@@ -131,6 +132,7 @@ function DGCore.Player.Logout(source)
   Player(src).state:set('cid', nil, true)
   Citizen.Wait(200)
   DGCore.Players[src] = nil
+  DGCore.cidToPlyId[citizenid] = nil
 end
 
 -- Create a new character
@@ -172,6 +174,7 @@ function DGCore.Player.CreatePlayer(PlayerData)
   end
 
   DGCore.Players[self.PlayerData.source] = self
+  DGCore.cidToPlyId[self.PlayerData.citizenid] = self.PlayerData.source
   DGCore.Player.Save(self.PlayerData.source)
 
   -- Make the player state aware that we are loggedin

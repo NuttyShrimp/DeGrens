@@ -185,8 +185,8 @@ export const getBusinessEmployees = (id: number): Business.UI.Employee[] => {
  * @param name Business Name
  */
 export const dispatchBusinessPermissionsToClientCache = (cid: number, action: 'add' | 'remove', name: string) => {
-  const plyId = DGCore.Functions.GetPlayerByCitizenId(cid)?.PlayerData?.source;
-  if (plyId === undefined) return;
+  const plyId = DGCore.Functions.getPlyIdForCid(cid);
+  if (plyId == undefined) return;
   const business = getBusinessByName(name);
   if (!business) return;
   const permissions = business.getClientInfo(cid)?.permissions ?? [];

@@ -233,16 +233,13 @@ class GangManager extends Util.Singleton<GangManager>() {
     if (!this.checkActionPerms(gang, plyCid)) return false;
     if (gang.isMember(targetCid)) return false;
 
-    const targetPlayer = DGCore.Functions.GetPlayerByCitizenId(targetCid);
-    if (!targetPlayer) {
+    const targetPlyId = DGCore.Functions.getPlyIdForCid(targetCid);
+    if (!targetPlyId) {
       this.logger.warn(`${plyCid} tried to add offline member with cid ${targetCid}`);
       return false;
     }
 
-    // Handle in different thread because RPC will timeout while waiting for notif accept and we need to return success value to client
-    setImmediate(() => {
-      gang.requestPlayerToJoin(plyId, targetPlayer.PlayerData);
-    });
+    gang.requestPlayerToJoin(plyId, targetPlyId, targetCid);
 
     return true;
   };

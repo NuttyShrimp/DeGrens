@@ -657,10 +657,10 @@ export class Business {
     }
     targetCID = Number(targetCID);
 
-    const player = DGCore.Functions.GetPlayerByCitizenId(targetCID);
-    if (!player) throw new Error(`${targetCID} is an invalid CID`);
+    const targetServerId = DGCore.Functions.getPlyIdForCid(targetCID);
+    if (!targetServerId) throw new Error(`${targetCID} is an invalid CID`);
 
-    this.chargePhoneHelper(src, player.PlayerData.source, targetCID, price, comment);
+    this.chargePhoneHelper(src, targetServerId, targetCID, price, comment);
     return true;
   }
 }

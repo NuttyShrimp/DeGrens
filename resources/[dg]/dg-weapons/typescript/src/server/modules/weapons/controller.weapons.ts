@@ -70,7 +70,7 @@ Inventory.onInventoryUpdate(
     if (!weaponConfig) return;
     if (weaponConfig.oneTimeUse) return;
 
-    const targetId = DGCore.Functions.GetPlayerByCitizenId(Number(identifier))?.PlayerData?.source;
+    const targetId = DGCore.Functions.getPlyIdForCid(Number(identifier));
     if (!targetId) return;
     Events.emitNet('weapons:client:removeWeapon', targetId, itemState.id);
   },

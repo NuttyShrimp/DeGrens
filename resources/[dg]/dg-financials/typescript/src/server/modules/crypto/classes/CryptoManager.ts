@@ -111,8 +111,8 @@ class CryptoManager extends Util.Singleton<CryptoManager>() {
 
   public async createWallet(cid: number, coin: string): Promise<boolean> {
     await Util.awaitCondition(() => this.coinsLoaded);
-    const Player = DGCore.Functions.GetPlayerByCitizenId(cid);
-    if (!Player) {
+    const plyId = DGCore.Functions.getPlyIdForCid(cid);
+    if (!plyId) {
       this.logger.warn(`No player found for ${cid}`);
       return false;
     }

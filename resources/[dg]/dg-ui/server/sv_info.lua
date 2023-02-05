@@ -6,7 +6,7 @@ DGX.Inventory.onInventoryUpdate('player', function(identifier, action)
   if action == 'remove' then
     hasVPN = DGX.Inventory.doesInventoryHaveItems('player', identifier, 'vpn')
   end
-  local plySource = DGCore.Functions.GetPlayerByCitizenId(tonumber(identifier)).PlayerData.source
+  local plySource = DGCore.Functions.getPlyIdForCid(tonumber(identifier))
   TriggerClientEvent('dg-ui:SendAppEvent', plySource, 'character', {
     hasVPN = hasVPN,
   })
@@ -17,7 +17,7 @@ DGX.Inventory.onInventoryUpdate('player', function(identifier, action)
   if action == 'remove' then
     hasPhone = DGX.Inventory.doesInventoryHaveItems('player', identifier, 'phone')
   end
-  local plySource = DGCore.Functions.GetPlayerByCitizenId(tonumber(identifier)).PlayerData.source
+  local plySource = DGCore.Functions.getPlyIdForCid(tonumber(identifier))
   TriggerClientEvent('dg-ui:SendAppEvent', plySource, 'character', {
     hasPhone = hasPhone,
   })

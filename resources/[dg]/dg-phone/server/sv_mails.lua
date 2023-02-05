@@ -4,9 +4,9 @@ fetchEmails = function(cid)
 end
 
 addOfflineMail = function(cid, subject, sender, message)
-  local Player = DGCore.Functions.GetPlayerByCitizenId(cid)
-  if Player then
-    TriggerClientEvent('dg-phone:client:addNewMail', Player.PlayerData.source, subject, sender, message)
+  local plySource = DGCore.Functions.getPlyIdForCid(cid)
+  if plySource then
+    TriggerClientEvent('dg-phone:client:addNewMail', plySource, subject, sender, message)
     return
   end
   local query = "INSERT INTO phone_mails (cid, sender, subject, message) VALUES (?, ?, ?, ?)"

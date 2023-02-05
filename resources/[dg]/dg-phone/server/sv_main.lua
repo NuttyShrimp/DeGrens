@@ -12,7 +12,7 @@ DGX.Inventory.onInventoryUpdate('player', function(identifier, action)
   if action == 'remove' then
     hasPhone = DGX.Inventory.doesInventoryHaveItems('player', identifier, 'phone')
   end
-  local plySource = DGCore.Functions.GetPlayerByCitizenId(tonumber(identifier)).PlayerData.source
+  local plySource = DGCore.Functions.getPlyIdForCid(tonumber(identifier))
 	TriggerClientEvent('dg-phone:client:setState', plySource, 'hasPhone', hasPhone)
 end, 'phone')
 

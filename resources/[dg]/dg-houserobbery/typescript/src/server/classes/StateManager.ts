@@ -295,7 +295,8 @@ class StateManager extends Util.Singleton<StateManager>() {
       mainLogger.debug(`Could not find job group for player ${plyCID}`);
       return false;
     }
-    const plyId = DGCore.Functions.GetPlayerByCitizenId(plyCID).PlayerData.source;
+    const plyId = DGCore.Functions.getPlyIdForCid(plyCID);
+    if (!plyId) return;
     const couldChange = await Jobs.changeGroupJob(plyId, 'houserobbery');
     if (!couldChange) {
       mainLogger.debug(`Could not change job for player ${plyCID} - ${plyId}`);
@@ -399,13 +400,13 @@ class StateManager extends Util.Singleton<StateManager>() {
       'houserobbery:job:finish',
       {
         houseId,
-        members: jobGroup?.members ?? "No members defined",
+        members: jobGroup?.members ?? 'No members defined',
       },
-      `${jobGroup?.owner.name ?? "unknown group owner"} finished his house robbery job`
+      `${jobGroup?.owner.name ?? 'unknown group owner'} finished his house robbery job`
     );
     jobGroup?.members.forEach(m => {
       if (!m.serverId) return;
-      this.finishJobForPly(m.serverId, m.cid)
+      this.finishJobForPly(m.serverId, m.cid);
     });
   }
 

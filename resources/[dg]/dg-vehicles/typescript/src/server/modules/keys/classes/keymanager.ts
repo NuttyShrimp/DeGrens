@@ -111,9 +111,9 @@ class KeyManager extends Util.Singleton<KeyManager>() {
     }
     this.logger.debug(`Removing all car keys for ${pVin}`);
     keys.forEach(cid => {
-      const ply = DGCore.Functions.GetPlayerByCitizenId(cid);
-      if (!ply) return;
-      Events.emitNet('vehicles:keys:removeFromCache', ply.PlayerData.source, pVin);
+      const plyId = DGCore.Functions.getPlyIdForCid(cid);
+      if (!plyId) return;
+      Events.emitNet('vehicles:keys:removeFromCache', plyId, pVin);
     });
     this.keys.delete(pVin);
   }

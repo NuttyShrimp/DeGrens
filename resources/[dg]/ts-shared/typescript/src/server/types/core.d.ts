@@ -10,6 +10,8 @@ interface Server {
     [key: string]: (...args: any[]) => void;
   };
 
+  cidToPlyId: Record<number, number>;
+
   /**
    * Prints a table in a formatted string in the server console
    */
@@ -53,6 +55,12 @@ interface ServerFunctions {
    * @returns Player object
    */
   GetPlayerByCitizenId(citizenid: number): Player;
+
+  /**
+   * @param citizenid: Player's citizenid
+   * @returns server id
+   */
+  getPlyIdForCid(citizenid: number): number | undefined;
 
   /**
    * @param number: Character's Phone Number

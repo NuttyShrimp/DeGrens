@@ -118,11 +118,11 @@ export class Group {
   }
 
   private addOwnerAsMember = () => {
-    const player = DGCore.Functions.GetPlayerByCitizenId(this.owner);
-    const ownerServerId = player.PlayerData.source;
+    const ownerServerId = DGCore.Functions.getPlyIdForCid(this.owner);
+    if (!ownerServerId) return;
     const ownerMember: Groups.Member = {
       serverId: ownerServerId,
-      name: player.PlayerData.name,
+      name: Util.getName(ownerServerId),
       cid: this.owner,
       isReady: false,
     };
@@ -150,15 +150,13 @@ export class Group {
   };
 
   public addMember(cid: number) {
-    const player = DGCore.Functions.GetPlayerByCitizenId(cid);
-    if (!player) {
-      // TODO: log this event exception, add way so player get forced unloaded back into char screen
-      return;
-    }
+    const plyId = DGCore.Functions.getPlyIdForCid(cid);
+    if (!plyId) return;
+
     const member: Groups.Member = {
-      serverId: player.PlayerData.source,
-      name: player.PlayerData.name,
-      cid: player.PlayerData.citizenid,
+      serverId: plyId,
+      name: Util.getName(plyId),
+      cid: cid,
       isReady: false,
     };
     this.members.set(cid, member);
@@ -166,10 +164,10 @@ export class Group {
     this.logger.info(
       `${member.name}(${member.serverId}) joined ${ownerMember.name}(${ownerMember.serverId}) job group | size: ${this.members.size}`
     );
-    emit('dg-jobs:server:groups:playerJoined', player.PlayerData.source, player.PlayerData.citizenid, this.id);
+    emit('dg-jobs:server:groups:playerJoined', plyId, cid, this.id);
 
     // Make the new member part of the group in is UI store
-    Events.emitNet('dg-jobs:client:groups:updateStore', player.PlayerData.source, {
+    Events.emitNet('dg-jobs:client:groups:updateStore', plyId, {
       currentGroup: {
         id: this.id,
         name: nameManager.getName(this.owner),
@@ -178,7 +176,7 @@ export class Group {
       },
     } satisfies UIStoreData);
 
-    Phone.showNotification(player.PlayerData.source, {
+    Phone.showNotification(plyId, {
       id: `phone-jobs-groups-join`,
       title: 'jobcenter',
       description: 'Joined group',
@@ -186,18 +184,13 @@ export class Group {
     });
     if (ownerMember.serverId !== null) {
       Phone.showNotification(ownerMember.serverId, {
-        id: `jobcenter-groups-joined-${player.PlayerData.source}`,
+        id: `jobcenter-groups-joined-${plyId}`,
         title: 'jobcenter',
         description: `${nameManager.getName(member.cid)} joined`,
         icon: 'jobcenter',
       });
     }
-    Util.Log(
-      'jobs:group:addMember',
-      this.getInfo(),
-      `${member.name} joined group ${this.id}`,
-      player.PlayerData.source
-    );
+    Util.Log('jobs:group:addMember', this.getInfo(), `${member.name} joined group ${this.id}`, plyId);
     this.pushMembersUpdate();
     return member;
   }
@@ -248,7 +241,8 @@ export class Group {
       // TODO: add graylog
       return;
     }
-    const plyId = DGCore.Functions.GetPlayerByCitizenId(cid).PlayerData.source;
+    const plyId = DGCore.Functions.getPlyIdForCid(cid);
+    if (!plyId) return;
     const clientMembers: JobGroupMember[] = this.getMemberForClient();
     Events.emitNet('dg-jobs:client:groups:updateStore', plyId, {
       currentGroup: this.getClientInfo(),

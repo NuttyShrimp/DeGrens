@@ -46,11 +46,9 @@ Inventory.onInventoryUpdate(
   'player',
   async (id, _) => {
     if (!id) return;
-    const player = DGCore.Functions.GetPlayerByCitizenId(Number(id));
-    if (!player) return;
-    const source = player.PlayerData.source;
+    const plyId = DGCore.Functions.getPlyIdForCid(Number(id));
+    if (!plyId) return;
     const radioAmount = await Inventory.getAmountPlayerHas(source, 'radio');
-    console.log(radioAmount);
     if (radioAmount) return;
     Events.emitNet('misc:radio:client:disconnect', source);
   },

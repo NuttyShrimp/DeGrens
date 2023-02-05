@@ -413,7 +413,7 @@ export class Account {
     const isValid = await this.actionValidation('deposit', triggerCid, amount);
     if (!isValid) return false;
 
-    const triggerPlyId = DGCore.Functions.GetPlayerByCitizenId(triggerCid)?.PlayerData?.source;
+    const triggerPlyId = DGCore.Functions.getPlyIdForCid(triggerCid);
     if (!triggerPlyId) return false;
 
     amount = parseInt(String(amount));
@@ -450,7 +450,7 @@ export class Account {
     const isValid = await this.actionValidation('withdraw', triggerCid, amount, { balanceDecrease: true });
     if (!isValid) return false;
 
-    const triggerPlyId = DGCore.Functions.GetPlayerByCitizenId(triggerCid)?.PlayerData?.source;
+    const triggerPlyId = DGCore.Functions.getPlyIdForCid(triggerCid);
     if (!triggerPlyId) return false;
 
     amount = parseInt(String(amount));
@@ -493,7 +493,7 @@ export class Account {
     });
     if (!isValid) return false;
 
-    const triggerPlyId = DGCore.Functions.GetPlayerByCitizenId(triggerCid)?.PlayerData?.source;
+    const triggerPlyId = DGCore.Functions.getPlyIdForCid(triggerCid);
     if (!triggerPlyId) return false;
 
     const targetAccount = accountManager.getAccountById(targetAccountId);
@@ -571,7 +571,7 @@ export class Account {
     const isValid = await this.actionValidation('purchase', triggerCid, amount, { balanceDecrease: true });
     if (!isValid) return false;
 
-    const triggerPlyId = DGCore.Functions.GetPlayerByCitizenId(triggerCid)?.PlayerData?.source;
+    const triggerPlyId = DGCore.Functions.getPlyIdForCid(triggerCid);
     if (!triggerPlyId) return false;
 
     amount = parseInt(String(amount));
@@ -604,7 +604,7 @@ export class Account {
     const isValid = await this.actionValidation('paycheck', triggerCid, amount);
     if (!isValid) return false;
 
-    const triggerPlyId = DGCore.Functions.GetPlayerByCitizenId(triggerCid)?.PlayerData?.source;
+    const triggerPlyId = DGCore.Functions.getPlyIdForCid(triggerCid);
     if (!triggerPlyId) return false;
 
     // Check if standard account
@@ -665,11 +665,10 @@ export class Account {
     });
     if (!isValid) return false;
 
-    const triggerPlyId = DGCore.Functions.GetPlayerByCitizenId(triggerCid)?.PlayerData?.source;
+    const triggerPlyId = DGCore.Functions.getPlyIdForCid(triggerCid);
     if (!triggerPlyId) return false;
 
-    const acceptorCid = (await DGCore.Functions.GetOfflinePlayerByPhone(Number(targetPhone)))?.PlayerData
-      ?.citizenid;
+    const acceptorCid = (await DGCore.Functions.GetOfflinePlayerByPhone(Number(targetPhone)))?.PlayerData?.citizenid;
     if (!acceptorCid) return false;
     const targetAccount = accountManager.getDefaultAccount(acceptorCid);
     if (!targetAccount) return false;

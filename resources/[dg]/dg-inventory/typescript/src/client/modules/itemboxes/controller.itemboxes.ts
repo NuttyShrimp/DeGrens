@@ -1,5 +1,5 @@
-import { Events, UI } from '@dgx/client';
+import { UI } from '@dgx/client';
 
-Events.onNet('inventory:client:addItemBox', (action: string, image: string) => {
+onNet('inventory:addItemBox', (action: string, image: string) => {
   UI.SendAppEvent('itemboxes', { action, image });
 });

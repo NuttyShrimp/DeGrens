@@ -3,9 +3,9 @@ import gangManager from 'classes/gangmanager';
 
 // Dispatch to client to keep cache of current gang
 export const dispatchCurrentGangToClient = (cid: number, newGang: string | null) => {
-  const player = DGCore.Functions.GetPlayerByCitizenId(cid);
-  if (!player) return;
-  Events.emitNet('gangs:client:updateCurrentGang', player.PlayerData.source, newGang);
+  const plyId = DGCore.Functions.getPlyIdForCid(cid);
+  if (!plyId) return;
+  Events.emitNet('gangs:client:updateCurrentGang', plyId, newGang);
 };
 
 export const dispatchCurrentGangToAllClients = () => {

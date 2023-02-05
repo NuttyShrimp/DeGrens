@@ -124,17 +124,19 @@ export class Inv {
 
     if (this.type !== 'player') return;
 
-    const serverId = DGCore.Functions.GetPlayerByCitizenId(Number(this.identifier)).PlayerData.source;
-    emitNet('inventory:updateCache', serverId, action, itemState.name);
+    const serverId = DGCore.Functions.getPlyIdForCid(Number(this.identifier));
+    if (serverId) {
+      emitNet('inventory:updateCache', serverId, action, itemState.name);
 
-    const newInv = await inventoryManager.get(itemState.inventory);
-    if (newInv.type === 'drop' && newInv.items.size === 0) {
-      emitNet('inventory:doDropAnimation', serverId);
-    }
+      const newInv = await inventoryManager.get(itemState.inventory);
+      if (newInv.type === 'drop' && newInv.items.size === 0) {
+        emitNet('inventory:doDropAnimation', serverId);
+      }
 
-    // If item has associated obj
-    if (objectsUtility.config?.items[itemState.name]) {
-      Events.emitNet('inventory:client:updateObject', serverId, action, { id: itemState.id, name: itemState.name });
+      // If item has associated obj
+      if (objectsUtility.config?.items[itemState.name]) {
+        Events.emitNet('inventory:client:updateObject', serverId, action, { id: itemState.id, name: itemState.name });
+      }
     }
   };
 

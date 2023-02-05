@@ -131,8 +131,10 @@ export const checkInterval = (cid: number, job: string | null) => {
     // Went offduty or changed jobs
     const intervalInfo = paycheckIntervals.get(cid)!;
     if (intervalInfo.job !== job) {
-      const Player = DGCore.Functions.GetPlayerByCitizenId(cid);
-      registerPaycheck(Player.PlayerData.source, intervalInfo.amount, intervalInfo.job, 'Whitelisted paycheck');
+      const plyId = DGCore.Functions.getPlyIdForCid(cid);
+      if (plyId) {
+        registerPaycheck(plyId, intervalInfo.amount, intervalInfo.job, 'Whitelisted paycheck');
+      }
       paycheckIntervals.delete(cid);
       paycheckLogger.debug(`Cleared paycheck interval for ${cid}`);
     }

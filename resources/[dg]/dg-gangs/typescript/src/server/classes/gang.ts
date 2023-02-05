@@ -68,8 +68,8 @@ export class Gang {
     this.modifyMemberPerms(cid, true);
   };
 
-  public requestPlayerToJoin = async (plyId: number, playerData: PlayerData) => {
-    const hasAccepted = await Phone.notificationRequest(playerData.source, {
+  public requestPlayerToJoin = async (plyId: number, targetPlyId: number, targetCid: number) => {
+    const hasAccepted = await Phone.notificationRequest(targetPlyId, {
       icon: {
         name: 'right-to-bracket',
         color: 'white',
@@ -81,15 +81,15 @@ export class Gang {
     });
     if (!hasAccepted) return;
 
-    this.addMember(playerData.citizenid);
-    this.logger.info(`${playerData.citizenid} has been added to gang ${this.name} by ${plyId}`);
+    this.addMember(targetCid);
+    this.logger.info(`${targetCid} has been added to gang ${this.name} by ${plyId}`);
     Util.Log(
       'gangs:addMember',
       {
-        targetCid: playerData.citizenid,
+        targetCid,
         gangName: this.name,
       },
-      `${Util.getName(plyId)} has added ${playerData.citizenid} to gang ${this.name}`,
+      `${Util.getName(plyId)} has added ${targetCid} to gang ${this.name}`,
       plyId
     );
   };

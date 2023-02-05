@@ -41,8 +41,8 @@ Events.onNet('vehicles:server:app:sellVehicle', async (src, targetCID: number, v
   if (!vinManager.doesVinExist(vin) || !vinManager.isVinFromPlayerVeh(vin)) {
     return;
   }
-  const target = DGCore.Functions.GetPlayerByCitizenId(targetCID);
-  if (!target) return;
+  const targetServerId = DGCore.Functions.getPlyIdForCid(targetCID);
+  if (!targetServerId) return;
   const vehicle = await getPlayerVehicleInfo(vin);
   if (!vehicle) return;
   const cid = Util.getCID(src);
@@ -56,7 +56,7 @@ Events.onNet('vehicles:server:app:sellVehicle', async (src, targetCID: number, v
     return;
   }
   const vehicleInfo = getConfigByModel(vehicle.model)!;
-  const accepted = await Phone.notificationRequest(target.PlayerData.source, {
+  const accepted = await Phone.notificationRequest(targetServerId, {
     id: `sell-vehicle-${vin}-${price}`,
     title: 'Buy Vehicle',
     description: `${vehicleInfo.name} - €${price}`,
@@ -82,7 +82,7 @@ Events.onNet('vehicles:server:app:sellVehicle', async (src, targetCID: number, v
   await setVehicleOwner(vin, targetCID);
   insertVehicleTransferLog(vin, cid, targetCID);
   Notifications.add(src, 'Voertuig successvol vergekocht', 'success');
-  Notifications.add(target.PlayerData.source, 'Voertuig successvol overgekocht', 'success');
+  Notifications.add(targetServerId, 'Voertuig successvol overgekocht', 'success');
 });
 
 RPC.register('vehicles:server:app:getVehicles', async src => {

@@ -57,7 +57,7 @@ class GroupManager extends Util.Singleton<GroupManager>() {
         members,
       },
       `${group.owner}'s job group was disbanded`,
-      DGCore.Functions.GetPlayerByCitizenId(group.owner).PlayerData.source
+      DGCore.Functions.getPlyIdForCid(group.owner)
     );
     this.groups.delete(groupId);
   }

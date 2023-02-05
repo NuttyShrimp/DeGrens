@@ -37,13 +37,14 @@ function DGCore.Functions.GetPlayer(source)
 	end
 end
 
+function DGCore.Functions.getPlyIdForCid(citizenid)
+  return DGCore.cidToPlyId[citizenid]
+end
+
 function DGCore.Functions.GetPlayerByCitizenId(citizenid)
-	for src, player in pairs(DGCore.Players) do
-		if DGCore.Players[src].PlayerData.citizenid == citizenid then
-			return DGCore.Players[src]
-		end
-	end
-	return nil
+  local plyId = DGCore.Functions.getPlyIdForCid(citizenid)
+  if not plyId then return nil end
+  return DGCore.Players[plyId]
 end
 
 function DGCore.Functions.GetPlayerByPhone(number)

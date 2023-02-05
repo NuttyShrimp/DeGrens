@@ -45,19 +45,24 @@ export class Item {
         // This can happen when adding item to stash by script (mechanic crafting for exampel)
         if (this.inventory.type === 'player') {
           const cid = splitId(this.inventory.id).identifier;
-          const source = DGCore.Functions.GetPlayerByCitizenId(Number(cid)).PlayerData.source;
-          const coords = Util.getPlyCoords(source);
+          const plyId = DGCore.Functions.getPlyIdForCid(Number(cid));
 
-          let dropId = locationManager.getLocation('drop', coords);
-          this.inventory = await inventoryManager.get(dropId);
-          newPosition = this.inventory.getFirstAvailablePosition(this.name);
-          // if somehow the drop is also full, we add it to a new drop at position
-          if (!newPosition) {
-            dropId = locationManager.getLocation('drop', coords, true);
+          if (plyId) {
+            const coords = Util.getPlyCoords(source);
+
+            let dropId = locationManager.getLocation('drop', coords);
             this.inventory = await inventoryManager.get(dropId);
+            newPosition = this.inventory.getFirstAvailablePosition(this.name);
+            // if somehow the drop is also full, we add it to a new drop at position
+            if (!newPosition) {
+              dropId = locationManager.getLocation('drop', coords, true);
+              this.inventory = await inventoryManager.get(dropId);
+              newPosition = { x: 0, y: 0 };
+            }
+            Notifications.add(source, 'Voorwerp ligt op de grond, je zakken zitten vol', 'error');
+          } else {
             newPosition = { x: 0, y: 0 };
           }
-          Notifications.add(source, 'Voorwerp ligt op de grond, je zakken zitten vol', 'error');
         } else {
           newPosition = { x: 0, y: 0 };
         }
@@ -128,7 +133,7 @@ export class Item {
     this.logger.info(`Item ${this.id} has been used`);
     emit('inventory:usedItem', src, this.state);
     const itemImage = itemDataManager.get(this.name).image;
-    if (hotkey) Events.emitNet('inventory:client:addItemBox', src, 'Gebruikt', itemImage);
+    if (hotkey) emitNet('inventory:addItemBox', src, 'Gebruikt', itemImage);
     Util.Log(
       'inventory:item:used',
       {

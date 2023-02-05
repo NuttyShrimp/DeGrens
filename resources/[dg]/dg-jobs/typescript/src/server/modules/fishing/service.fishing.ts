@@ -95,12 +95,12 @@ export const finishFishingJob = (plyId: number, netId: number) => {
   }
 
   for (const [cid, fishAmount] of active.fishPerCid) {
-    const player = DGCore.Functions.GetPlayerByCitizenId(cid);
-    if (!player) {
+    const plyId = DGCore.Functions.getPlyIdForCid(cid);
+    if (!plyId) {
       fishingLogger.warn(`Could not pay ${cid} for fishing, player is not in server`);
       continue;
     }
-    Financials.addCash(player.PlayerData.source, fishAmount * payoutPerFish, 'fishing-payout');
+    Financials.addCash(plyId, fishAmount * payoutPerFish, 'fishing-payout');
   }
 
   Vehicles.deleteVehicle(NetworkGetEntityFromNetworkId(active.netId));

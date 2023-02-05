@@ -347,8 +347,8 @@ export const doesCidHasAccess = (cid: number, garageId: string) => {
   if (!garage) {
     return false;
   }
-  const player = DGCore.Functions.GetPlayerByCitizenId(cid);
-  const plyJob = Jobs.getCurrentJob(player.PlayerData.source);
+  const plyId = DGCore.Functions.getPlyIdForCid(cid);
+  const plyJob = plyId == undefined ? null : Jobs.getCurrentJob(plyId);
   switch (garage.type) {
     case 'public':
       return true;

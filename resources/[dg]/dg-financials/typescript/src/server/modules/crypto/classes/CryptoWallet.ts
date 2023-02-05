@@ -51,7 +51,7 @@ export class CryptoWallet {
       this.logger.debug(`Buy: ${this.cname} can't be bought | cid: ${this.cid}`);
       return false;
     }
-    if (!DGCore.Functions.GetPlayerByCitizenId(this.cid)) {
+    if (!DGCore.Functions.getPlyIdForCid(this.cid)) {
       this.logger.debug(`Buy: Player not found | cid: ${this.cid}`);
       return false;
     }
@@ -87,22 +87,21 @@ export class CryptoWallet {
   }
 
   public async add(amount: number, comment: string): Promise<boolean> {
-    const Player = DGCore.Functions.GetPlayerByCitizenId(this.cid);
-    if (!Player) {
+    const plyId = DGCore.Functions.getPlyIdForCid(this.cid);
+    if (!plyId) {
       this.logger.debug(`Add: Player not found | cid: ${this.cid}`);
       return false;
     }
     if (!comment) {
       this.logger.warn(`Add: Comment is empty | cid: ${this.cid}`);
     }
-    const cid = Player.PlayerData.citizenid;
     this.amount += amount;
     await this.saveWallet();
     this.logger.debug(`Add: ${amount}`);
     Util.Log(
       'financials:crypto:add',
       {
-        cid,
+        cid: this.cid,
         coin: this.cname,
         amount,
         newTotal: this.amount + amount,
@@ -114,8 +113,7 @@ export class CryptoWallet {
   }
 
   public async transfer(src: number, target: number, amount: number): Promise<boolean> {
-    const Target = DGCore.Functions.GetPlayerByCitizenId(target);
-    if (!Target) {
+    if (!DGCore.Functions.getPlyIdForCid(target)) {
       this.logger.debug(`Transfer: Target not found | cid: ${this.cid}`);
       return false;
     }
@@ -147,8 +145,7 @@ export class CryptoWallet {
   }
 
   public async remove(amount: number): Promise<boolean> {
-    const Player = DGCore.Functions.GetPlayerByCitizenId(this.cid);
-    if (!Player) {
+    if (!DGCore.Functions.getPlyIdForCid(this.cid)) {
       this.logger.debug(`Remove: Player not found | cid: ${this.cid}`);
       return false;
     }
@@ -156,14 +153,13 @@ export class CryptoWallet {
       this.logger.debug(`Remove: Not enough crypto | cid: ${this.cid}`);
       return false;
     }
-    const cid = Player.PlayerData.citizenid;
     this.amount -= amount;
     await this.saveWallet();
     this.logger.debug(`Remove: ${amount}`);
     Util.Log(
       'financials:crypto:remove',
       {
-        cid,
+        cid: this.cid,
         coin: this.cname,
         amount,
         newTotal: this.amount,
