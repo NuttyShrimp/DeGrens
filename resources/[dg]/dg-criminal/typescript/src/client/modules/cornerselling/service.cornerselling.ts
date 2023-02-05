@@ -1,39 +1,24 @@
-import { Notifications, RPC, Util, Peek, Events, Police } from '@dgx/client';
+import { Notifications, Util, Peek, Events } from '@dgx/client';
 import { BLACKLISTED_PED_MODELS } from './constants.cornerselling';
 
 let cornersellEnabled = false;
-
-const pedsSoldTo: number[] = [];
+let pedsSoldTo: number[] = [];
 
 export const isCornersellEnabled = () => cornersellEnabled;
-export const setCornersellEnabled = async (enabled: boolean) => {
-  if (!enabled) {
+
+export const setCornersellEnabled = (enabled: boolean) => {
+  if (cornersellEnabled === enabled) return;
+
+  if (enabled) {
+    cornersellEnabled = true;
+    Notifications.add('Gestart met verkopen');
+  } else {
     cornersellEnabled = false;
-    Notifications.add('Gestopt met verkopen');
-    return;
   }
-
-  const hasSellableItems = await RPC.execute<boolean>('criminal:cornersell:hasSellables');
-  if (!hasSellableItems) {
-    Notifications.add('Je hebt niks om te verkopen', 'error');
-    return;
-  }
-
-  if (!Police.canDoActivity('cornersell')) {
-    Notifications.add('Er is momenteel geen interesse', 'error');
-    return;
-  }
-
-  Notifications.add('Gestart met verkopen');
-  cornersellEnabled = true;
-
-  findBuyer();
 };
 
-const findBuyer = async () => {
+export const findBuyer = async () => {
   if (!cornersellEnabled) return;
-
-  await Util.Delay(5000);
 
   const ped = PlayerPedId();
   const buyer = Util.getClosestNpcInRange(10, pedsSoldTo);
@@ -43,42 +28,80 @@ const findBuyer = async () => {
     IsPedDeadOrDying(buyer, true) ||
     BLACKLISTED_PED_MODELS.has(GetEntityModel(buyer) >>> 0)
   ) {
-    findBuyer();
+    setTimeout(() => {
+      findBuyer();
+    }, 1000);
     return;
   }
 
   let hasSold = false;
+  await Util.requestEntityControl(buyer);
+  await Util.loadAnimDict('mp_safehouselost@');
+
+  ClearPedTasksImmediately(buyer);
+  const buyerCoords = Util.getEntityCoords(buyer);
+  const buyerHeading = Util.getHeadingToFaceEntity(buyer);
+  await Util.goToCoords({ ...buyerCoords, w: buyerHeading + 180 }, 2000, buyer);
+
   TaskStartScenarioInPlace(buyer, 'WORLD_HUMAN_STAND_IMPATIENT_UPRIGHT', 0, false);
   const peekId = Peek.addEntityEntry(buyer, {
     options: [
       {
         label: 'Verkoop',
         icon: 'fas fa-handshake',
-        action: async () => {
-          await Util.loadAnimDict('mp_safehouselost@');
-          TaskPlayAnim(ped, 'mp_safehouselost@', 'package_dropoff', 8.0, 1.0, -1, 16, 0, false, false, false);
-          TaskPlayAnim(buyer, 'mp_safehouselost@', 'package_dropoff', 8.0, 1.0, -1, 16, 0, false, false, false);
-          await Util.Delay(5000);
-          RemoveAnimDict('mp_safehouselost@');
+        action: async (_, entity) => {
+          if (!entity) return;
 
-          Events.emitNet('criminal:cornersell:sell');
-          hasSold = true;
+          ClearPedTasksImmediately(entity);
+          const plyCoords = Util.getPlyCoords();
+          const heading = Util.getHeadingToFaceEntity(entity);
+
+          let pedPositioned = false;
+          let buyerPositioned = false;
+
+          Util.goToCoords(
+            {
+              ...Util.getEntityCoords(entity),
+              w: heading + 180,
+            },
+            3000,
+            entity
+          ).then(() => {
+            buyerPositioned = true;
+            FreezeEntityPosition(entity, true);
+          });
+          Util.goToCoords(
+            {
+              ...plyCoords,
+              w: heading,
+            },
+            3000
+          ).then(() => {
+            pedPositioned = true;
+          });
+
+          await Util.awaitCondition(() => pedPositioned && buyerPositioned);
+
+          TaskPlayAnim(ped, 'mp_safehouselost@', 'package_dropoff', 8.0, 1.0, -1, 16, 0, false, false, false);
+          TaskPlayAnim(entity, 'mp_safehouselost@', 'package_dropoff', 8.0, 1.0, -1, 16, 0, false, false, false);
+
+          setTimeout(() => {
+            FreezeEntityPosition(entity, false);
+            const zone = GetNameOfZone(plyCoords.x, plyCoords.y, plyCoords.z);
+            Events.emitNet('criminal:cornersell:sell', zone);
+            hasSold = true;
+          }, 5000);
         },
       },
     ],
-    distance: 1.0,
+    distance: 1.4,
   });
 
-  // Promise resolved when ped is too far away, ped is dead or we sold to ped
-  await new Promise<void>(res => {
-    const interval = setInterval(() => {
-      const distance = Util.getPlyCoords().distance(Util.getEntityCoords(buyer));
-      if (distance > 20 || IsPedDeadOrDying(buyer, true) || hasSold) {
-        clearInterval(interval);
-        res();
-      }
-    }, 50);
-  });
+  // Await ped being too far away, ped dead or sold to ped
+  await Util.awaitCondition(() => {
+    const distance = Util.getPlyCoords().distance(Util.getEntityCoords(buyer));
+    return distance > 20 || IsPedDeadOrDying(buyer, true) || hasSold;
+  }, 60000);
 
   SetPedKeepTask(buyer, false);
   ClearPedTasks(buyer);
@@ -86,15 +109,4 @@ const findBuyer = async () => {
   SetPedAsNoLongerNeeded(buyer);
   pedsSoldTo.push(buyer);
   Peek.removeEntityEntry(peekId);
-
-  const hasSellableItems = await RPC.execute<boolean>('criminal:cornersell:hasSellables');
-  if (!hasSellableItems) {
-    Notifications.add('Je hebt meer om te verkopen', 'error');
-    cornersellEnabled = false;
-    return;
-  }
-
-  setTimeout(() => {
-    findBuyer();
-  }, 10000);
 };

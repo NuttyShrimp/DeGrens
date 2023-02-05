@@ -51,14 +51,14 @@ declare namespace Criminal {
 
   namespace Cornerselling {
     type Config = {
-      sellableItems: Record<string, { value: number; reputation: number }>;
+      sellableItems: Record<string, { basePrice: number; requiredReputation: number }>;
       decayTime: 10;
       cleanChance: 25;
       sellAmount: {
         min: number;
         max: number;
       };
-      heatmapSize: number;
+      maxModifier: number;
     };
   }
 

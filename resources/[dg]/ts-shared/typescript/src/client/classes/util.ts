@@ -101,8 +101,11 @@ class Util extends UtilShared {
     return ped;
   };
 
-  goToCoords = async (position: Vec4, timeout = 5000) => {
-    const ped = PlayerPedId();
+  goToCoords = async (position: Vec4, timeout = 5000, targetPed?: number) => {
+    let ped = PlayerPedId();
+    if (targetPed) {
+      ped = targetPed;
+    }
     const timeoutTime = GetGameTimer() + timeout;
     TaskGoStraightToCoord(ped, position.x, position.y, position.z, 1.0, timeout, position.w, 0.1);
     await this.awaitCondition(() => {
