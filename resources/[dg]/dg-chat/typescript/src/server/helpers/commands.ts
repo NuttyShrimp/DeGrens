@@ -83,7 +83,6 @@ const baseCommands: Server.Command[] = [
     permissionLevel: 'user',
     handler: (src, _, args) => {
       const senderCoords = Util.ArrayToVector3(GetEntityCoords(GetPlayerPed(String(src))));
-      const plyObj = DGCore.Functions.GetPlayer(src);
       const msg = args.join(' ');
       Util.Log(
         'chat:me',

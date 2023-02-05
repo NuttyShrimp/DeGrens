@@ -90,7 +90,7 @@ class Util extends UtilShared {
 
   getClosestPlayer = (src: number, maxDistance = 2) => {
     const originCoords = this.getPlyCoords(src);
-    const players = DGCore.Functions.GetPlayers();
+    const players = this.getAllPlayers();
 
     let closestPlayer: number | undefined = undefined;
     let closestDistance = maxDistance;
@@ -109,7 +109,7 @@ class Util extends UtilShared {
 
   getAllPlayersInRange = (src: number, maxDistance = 2) => {
     const originCoords = this.getPlyCoords(src);
-    const players = DGCore.Functions.GetPlayers();
+    const players = this.getAllPlayers();
     const playerIds: number[] = [];
     for (const plyId of players) {
       if (plyId === src) continue;
@@ -188,7 +188,7 @@ class Util extends UtilShared {
 
   getClosestPlayerOutsideVehicle = (src: number, maxDistance = 2) => {
     const originCoords = this.getPlyCoords(src);
-    const players = DGCore.Functions.GetPlayers();
+    const players = this.getAllPlayers();
 
     let closestPlayer: number | undefined = undefined;
     let closestDistance = maxDistance;

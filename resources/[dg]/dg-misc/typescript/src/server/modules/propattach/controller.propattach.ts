@@ -32,14 +32,14 @@ on('playerDropped', () => {
 
 on('onResourceStart', (resourceName: string) => {
   if (resourceName !== GetCurrentResourceName()) return;
-  DGCore.Functions.GetPlayers().forEach(plyId => {
+  Util.getAllPlayers().forEach(plyId => {
     handlePlayerJoin(plyId);
   });
 });
 
 on('onResourceStop', (resourceName: string) => {
   if (resourceName !== GetCurrentResourceName()) return;
-  DGCore.Functions.GetPlayers().forEach(plyId => {
+  Util.getAllPlayers().forEach(plyId => {
     handlePlayerLeave(plyId);
   });
 });

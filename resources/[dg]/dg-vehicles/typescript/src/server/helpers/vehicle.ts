@@ -37,7 +37,7 @@ export const spawnVehicle = async (
   // First we check model if model is vehicle on client
   let modelCheckPlayer = owner;
   if (!modelCheckPlayer) {
-    const firstPlayer = DGCore.Functions.GetPlayers()[0];
+    const firstPlayer = Number(GetPlayerFromIndex(0));
     if (!firstPlayer) {
       mainLogger.error(`No players available to check model for 'spawnVehicle'`);
       return;

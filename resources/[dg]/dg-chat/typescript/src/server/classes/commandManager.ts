@@ -27,7 +27,7 @@ class CommandManager extends Util.Singleton<CommandManager>() {
   }
 
   private globalRefresh() {
-    DGCore.Functions.GetPlayers().forEach(ply => this.specificRefresh(ply));
+    Util.getAllPlayers().forEach(ply => this.specificRefresh(ply));
   }
 
   @DGXEvent('chat:requestRefresh')
