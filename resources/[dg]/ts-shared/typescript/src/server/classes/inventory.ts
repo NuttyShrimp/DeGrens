@@ -148,6 +148,11 @@ class Inventory extends UtilShared.Singleton<Inventory>() {
     return global.exports['dg-inventory'].getItemsInInventory(type, identifier);
   };
 
+  public getPlayerItems = (plyId: number) => {
+    const cid = String(Util.getCID(plyId));
+    return this.getItemsInInventory('player', cid);
+  };
+
   public getItemsForNameInInventory = (
     type: Inventory.Type,
     identifier: string,

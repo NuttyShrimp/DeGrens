@@ -3,17 +3,19 @@ import { getConfig } from 'services/config';
 
 export const randomSellBlackMoney = async (plyId: number) => {
   const items = getConfig().blackmoney.items;
-  const itemNames = Object.keys(items);
-  const selectedItem = itemNames[Math.floor(Math.random() * itemNames.length)];
-  const removedItem = await Inventory.removeItemFromPlayer(plyId, selectedItem);
-  if (removedItem === false) return;
+  const itemNames = Util.shuffleArray(Object.keys(items));
+  const playerItems = await Inventory.getPlayerItems(plyId);
+  const itemToSell = playerItems.find(i => itemNames.includes(i.name));
+  if (!itemToSell) return;
 
-  const price = items[selectedItem].value;
+  Inventory.destroyItem(itemToSell.id);
+
+  const price = items[itemToSell.name].value;
   Financials.addCash(plyId, price, 'randomsell-blackmoney');
   Util.Log(
     'blackmoney:randomSell',
-    { plyId, item: selectedItem, price },
-    `${GetPlayerName(String(plyId))} has randomly sold ${selectedItem} for ${price}$`,
+    { plyId, itemId: itemToSell.id, name: itemToSell.name, price },
+    `${Util.getName(plyId)} has randomly sold ${itemToSell.name} for ${price}$`,
     plyId
   );
 };

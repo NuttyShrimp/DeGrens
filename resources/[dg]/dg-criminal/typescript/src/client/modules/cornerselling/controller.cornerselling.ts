@@ -18,7 +18,7 @@ Events.onNet('criminal:cornersell:findBuyer', () => {
 
   setTimeout(() => {
     findBuyer();
-  }, 5000);
+  }, 15000);
 });
 
 Events.onNet('criminal:cornersell:stop', () => {
