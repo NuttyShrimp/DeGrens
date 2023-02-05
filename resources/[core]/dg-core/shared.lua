@@ -23,71 +23,6 @@ DGShared.RandomInt = function(length)
     end
 end
 
-DGShared.SplitStr = function(str, delimiter)
-    local result = { }
-    local from = 1
-    local delim_from, delim_to = string.find(str, delimiter, from)
-    while delim_from do
-		result[#result+1] = string.sub(str, from, delim_from - 1)
-        from = delim_to + 1
-        delim_from, delim_to = string.find(str, delimiter, from)
-    end
-	result[#result+1] = string.sub(str, from)
-    return result
-end
-
--- This returns the diffs between tbl1 and tbl2 this will result in a table with keys added & removed
-DGShared.GetTableDiff = function(tbl1, tbl2)
-	diff = {added = {}, removed = {}}
-	for k, v in pairs(tbl1) do
-		if v == nil then goto skip_to_next end
-		if not tbl2[k] or DGShared.isDiff(v, tbl2[k]) then
-			diff.removed[k] = v
-		end
-		::skip_to_next::
-	end
-	for k, v in pairs(tbl2) do
-		if v == nil then goto skip_to_next end
-		if not tbl1[k] or DGShared.isDiff(tbl1[k], v) then
-			diff.added[k] = v
-		end
-		::skip_to_next::
-	end
-	return diff
-end
-
-DGShared.isDiff = function(v1, v2)
-	if type(v1) ~= type(v2) then
-		return true
-	end
-	if type(v1) == "table" then
-		for k, v in pairs(v1) do
-			if type(v) == "table" then
-				if DGShared.isDiff(v, v2[k]) then
-					return true
-				end
-			else
-				if v ~= v2[k] then
-					return true
-				end
-			end
-		end
-		for k, v in pairs(v2) do
-			if type(v) == "table" then
-				if DGShared.isDiff(v1[k], v) then
-					return true
-				end
-			else
-				if v1[k] ~= v then
-					return true
-				end
-			end
-		end
-		return false
-	end
-	return v1 ~= v2
-end
-
 DGShared.copyTbl = function(tbl)
 	local newTbl = {}
 	for k, v in pairs(tbl) do
@@ -100,16 +35,6 @@ DGShared.copyTbl = function(tbl)
 		end
 	end
 	return newTbl
-end
-
-DGShared.tableLen = function(tbl)
-	local count = 0
-	for _, v in pairs(tbl) do
-		if v ~= nil then
-			count = count + 1
-		end
-	end
-	return count
 end
 
 DGShared.isFunction = function(f)
@@ -128,15 +53,6 @@ DGShared.isStringEmpty = function(str)
   end
   if str:match( "^%s*(.-)%s*$" ) == '' then
     return true
-  end
-  return false
-end
-
-DGShared.arrayIncludes = function(arr, val)
-  for _, v in pairs(arr) do
-    if v == val then 
-      return true 
-    end
   end
   return false
 end

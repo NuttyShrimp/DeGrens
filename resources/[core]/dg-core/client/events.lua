@@ -15,11 +15,3 @@ RegisterNetEvent('DGCore:Client:TriggerPromiseCallback', function(callId, ...)
 		DGCore.Promises[callId]:resolve(...)
 	end
 end)
-
-DGX.RPC.register('core:functions:getClosestVehicle', function()
-  local veh = DGCore.Functions.GetClosestVehicle()
-  if not NetworkGetEntityIsNetworked(veh) then
-    return -1
-  end
-  return NetworkGetNetworkIdFromEntity(veh)
-end)

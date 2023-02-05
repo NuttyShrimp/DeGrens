@@ -89,7 +89,7 @@ DGCore.Functions.CreateCallback('dg-phone:server:notes:share', function(src, cb,
 	local note = getNote(Player.PlayerData.citizenid, data.id)
 	if not note then cb('ok') end
 
-	local targets = DGCore.Functions.GetPlayersInRadius(src)
+  local targets = DGX.Util.getAllPlayersInRange(src, 5)
 	for _, id in ipairs(targets) do
 		if tonumber(id) == tonumber(src) then
 			goto skip_to_next

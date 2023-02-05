@@ -13,7 +13,7 @@ end)
 
 CreateThread(function()
 	Wait(1000)
-	if GetConvar('is_production', 'true') == 'true' then
+	if not DGX.Util.isDevEnv() then
 		print('\x1b[33m====================================')
 		print('\x1b[31m[DG-Core] Running in production mode')
 		print('\x1b[33m====================================')

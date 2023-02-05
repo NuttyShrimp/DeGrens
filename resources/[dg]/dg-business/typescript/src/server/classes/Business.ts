@@ -657,7 +657,7 @@ export class Business {
     }
     targetCID = Number(targetCID);
 
-    const player = await DGCore.Functions.GetPlayerByCitizenId(targetCID);
+    const player = DGCore.Functions.GetPlayerByCitizenId(targetCID);
     if (!player) throw new Error(`${targetCID} is an invalid CID`);
 
     this.chargePhoneHelper(src, player.PlayerData.source, targetCID, price, comment);

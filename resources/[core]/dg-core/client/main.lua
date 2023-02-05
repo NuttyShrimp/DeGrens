@@ -5,7 +5,7 @@ DGCore.Shared = DGShared
 DGCore.ServerCallbacks = {}
 
 exports('GetCoreObject', function()
-    return DGCore
+  return DGCore
 end)
 
 -- thread and evt from client so starting time is based on when ply joined

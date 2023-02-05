@@ -98,35 +98,6 @@ function DGCore.Functions.GetOfflinePlayerByPhone(number)
 	return nil
 end
 
--- Returns player server ids in given radius
-function DGCore.Functions.GetPlayersInRadius(src, radius)
-	radius = radius or 5
-	local plyPed = GetPlayerPed(src)
-	local plyPos = GetEntityCoords(plyPed)
-	local closePlayers = {}
-	for _, id in ipairs(DGCore.Functions.GetPlayers()) do
-		if id == src then
-			goto continue
-		end
-		local targetPed = GetPlayerPed(id)
-		local targetPos = GetEntityCoords(targetPed)
-		local distance = #(targetPos - plyPos)
-		if distance <= radius then
-			closePlayers[#closePlayers + 1] = id
-		end
-		:: continue ::
-	end
-	return closePlayers
-end
-
-function DGCore.Functions.GetClosestVehicle(src)
-  local vehNetId = DGX.RPC.execute('core:functions:getClosestVehicle', src)
-  if (not vehNetId or vehNetId < 0) then
-    return 0
-  end
-  return NetworkGetEntityFromNetworkId(vehNetId)
-end
-
 -- Will return an array of QB Player class instances
 -- unlike the GetPlayers() wrapper which only returns IDs
 function DGCore.Functions.GetQBPlayers()
