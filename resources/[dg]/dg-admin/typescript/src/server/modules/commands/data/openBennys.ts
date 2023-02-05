@@ -21,7 +21,7 @@ export const openBennys: CommandData = {
     if (plyId === caller.source) {
       Events.emitNet('admin:menu:forceClose', caller.source);
     }
-    Events.emitNet('vehicles:bennys:enter', plyId);
+    Events.emitNet('vehicles:bennys:adminEnter', plyId);
     if (args?.free) {
       emit('vehicles:bennys:registerNoChargeSpot', plyId);
     }

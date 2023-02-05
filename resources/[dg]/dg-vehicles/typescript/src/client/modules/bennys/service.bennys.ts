@@ -178,6 +178,7 @@ export const enterBennys = async (fromAdminMenu = false) => {
     const cid = DGCore.Functions.GetPlayerData().citizenid;
     setCurrentBennys(`bennys_admin_${cid}`);
   }
+
   const currentBennys = getCurrentBennys();
   if (!currentBennys) return;
 

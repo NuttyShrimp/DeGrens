@@ -54,9 +54,6 @@ PolyZone.onEnter('benny', (_, data) => {
 PolyZone.onLeave('benny', () => {
   setCurrentBennys(null);
   UI.closeApplication('interaction');
-  // This is a safety check
-  const veh = getCurrentVehicle();
-  if (!veh || !isDriver()) return;
 });
 
 Keys.onPressDown('GeneralUse', () => {
@@ -76,6 +73,16 @@ UI.onUIReload(() => {
   }
 });
 
-Events.onNet('vehicles:bennys:enter', () => {
+Events.onNet('vehicles:bennys:adminEnter', () => {
   enterBennys(true);
 });
+
+// Reset currentBennys on close if current one is from adminmenu
+UI.onApplicationClose(() => {
+  const curBennys = getCurrentBennys();
+  if (curBennys && curBennys.includes('admin')) {
+    setTimeout(() => {
+      setCurrentBennys(null);
+    }, 1000);
+  }
+}, 'bennys');
