@@ -653,6 +653,7 @@
     "useable": true,
     "decayRate": 43200,
     "image": "pistol_ammo.png",
+    "description": "Doosje met 50 kogels",
     "size": {
       "x": 2,
       "y": 2
@@ -665,6 +666,7 @@
     "useable": true,
     "decayRate": 43200,
     "image": "smg_ammo.png",
+    "description": "Doosje met 50 kogels",
     "size": {
       "x": 2,
       "y": 2
@@ -677,6 +679,7 @@
     "useable": true,
     "decayRate": 43200,
     "image": "rifle_ammo.png",
+    "description": "Doosje met 50 kogels",
     "size": {
       "x": 2,
       "y": 2
@@ -689,6 +692,7 @@
     "useable": true,
     "decayRate": 43200,
     "image": "shotgun_ammo.png",
+    "description": "Doosje met 50 kogels",
     "size": {
       "x": 2,
       "y": 2
@@ -701,6 +705,7 @@
     "useable": true,
     "decayRate": 43200,
     "image": "sniper_ammo.png",
+    "description": "Doosje met 50 kogels",
     "size": {
       "x": 2,
       "y": 2
