@@ -30,7 +30,7 @@ export const canEntryBeEnabled = async (entry: PeekOption, entity: number): Prom
   }
   if (entry.items) {
     const requiredItems = Array.isArray(entry.items) ? entry.items : [entry.items];
-    const items = Inventory.getAllItemNames();
+    const items = Inventory.getCachedItemNames();
     if (!requiredItems.every(i => items.includes(i))) return;
   }
   if (!entry?._metadata?.state) {

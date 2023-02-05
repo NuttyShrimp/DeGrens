@@ -15,7 +15,7 @@ Events.onNet('inventory:client:syncItem', (item: Inventory.ItemState) => {
   UI.SendAppEvent('inventory', { ...item, ...itemDataManager.get(item.name) });
 });
 
-Events.onNet('inventory:client:doDropAnimation', () => {
+onNet('inventory:doDropAnimation', () => {
   doDropAnimation();
 });
 

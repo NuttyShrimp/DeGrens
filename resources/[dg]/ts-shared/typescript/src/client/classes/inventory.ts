@@ -32,9 +32,12 @@ class Inventory {
     return !!(await RPC.execute<boolean>('inventory:server:removeItemFromPlayer', name));
   };
 
-  // Get names of all items player currently has without needing to call server
-  public getAllItemNames = (): string[] => {
-    return global.exports['dg-inventory'].getAllItemNames();
+  /**
+   * Only use to do first check in things like peek, radialmenu where you dont want to call server every time
+   * Make sure to use proper server check when doing action
+   */
+  public getCachedItemNames = (): string[] => {
+    return global.exports['dg-inventory'].getCachedItemNames();
   };
 
   public toggleObject = (itemId: string, toggle: boolean) => {

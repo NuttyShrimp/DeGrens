@@ -1,8 +1,9 @@
-import { Events } from '@dgx/client';
+// Only use to do first check in things like peek, radialmenu where you dont want to call server every time
+// Make sure to use proper server check when doing action
 
 const items: string[] = [];
 
-Events.onNet('inventory:client:updateCache', (action: 'add' | 'remove', itemName: string) => {
+onNet('inventory:updateCache', (action: 'add' | 'remove', itemName: string) => {
   switch (action) {
     case 'add':
       items.push(itemName);
@@ -17,4 +18,4 @@ Events.onNet('inventory:client:updateCache', (action: 'add' | 'remove', itemName
   }
 });
 
-global.exports('getAllItemNames', () => items);
+global.exports('getCachedItemNames', () => items);
