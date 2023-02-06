@@ -1556,25 +1556,25 @@ end
 
 RegisterNetEvent('qb-clothes:client:CreateFirstCharacter')
 AddEventHandler('qb-clothes:client:CreateFirstCharacter', function()
-    DGCore.Functions.GetPlayerData(function(PlayerData)
-        local skin = "mp_m_freemode_01"
-        openMenu({
-            {menu = "character", label = "Character", selected = true},
-            {menu = "clothing", label = "Features", selected = false},
-            {menu = "accessoires", label = "Accessories", selected = false}
-        })
+  local playerData = DGCore.Functions.GetPlayerData()
 
-        FromChars = true
+  local skin = "mp_m_freemode_01"
+  openMenu({
+      {menu = "character", label = "Character", selected = true},
+      {menu = "clothing", label = "Features", selected = false},
+      {menu = "accessoires", label = "Accessories", selected = false}
+  })
 
-        if PlayerData.charinfo.gender == 1 then 
-            skin = "mp_f_freemode_01" 
-        end
-        
-        ChangeToSkinNoUpdate(skin)
-        SendNUIMessage({
-            action = "ResetValues",
-        })
-    end)
+  FromChars = true
+
+  if PlayerData.charinfo.gender == 1 then 
+      skin = "mp_f_freemode_01" 
+  end
+  
+  ChangeToSkinNoUpdate(skin)
+  SendNUIMessage({
+      action = "ResetValues",
+  })
 end)
 
 RegisterNetEvent("qb-clothes:loadSkin")

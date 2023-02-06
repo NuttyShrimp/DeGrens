@@ -4,7 +4,7 @@ DGCore.NotiId = 1 -- Ids of persistent notifications
 DGCore.Promises = {} -- Promises
 
 -- Player
-function DGCore.Functions.GetPlayerData(cb)
+function DGCore.Functions.GetPlayerData()
   return DGCore.PlayerData
 end
 
