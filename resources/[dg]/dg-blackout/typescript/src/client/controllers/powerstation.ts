@@ -37,7 +37,7 @@ const plantExplosive = async (stationId: number) => {
   if (placingExplosive) return;
   placingExplosive = true;
 
-  const [wasCanceled, _percentage] = await Taskbar.create('bomb', 'Explosief plaatsen...', 5000, {
+  const [wasCanceled, _percentage] = await Taskbar.create('bomb', 'Explosief plaatsen', 5000, {
     canCancel: true,
     cancelOnDeath: true,
     disarm: true,
@@ -52,9 +52,13 @@ const plantExplosive = async (stationId: number) => {
       flags: 0,
     },
   });
+  if (wasCanceled) {
+    placingExplosive = false;
+    return;
+  }
 
-  const removedItem = await Inventory.removeItemFromPlayer('big_explosive');
-  if (wasCanceled || !removedItem) {
+  const removedItem = await Inventory.removeItemByNameFromPlayer('big_explosive');
+  if (!removedItem) {
     placingExplosive = false;
     return;
   }

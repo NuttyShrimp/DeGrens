@@ -23,7 +23,7 @@ Events.onNet('criminal:weed:add', (src: number, itemId: string, coords: Vec3) =>
 });
 
 Events.onNet('criminal:weed:feed', async (src: number, id: number) => {
-  const removed = await Inventory.removeItemFromPlayer(src, 'plant_fertilizer');
+  const removed = await Inventory.removeItemByNameFromPlayer(src, 'plant_fertilizer');
   if (!removed) {
     Notifications.add(src, 'Je hebt geen voeding', 'error');
     return;

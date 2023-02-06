@@ -1,7 +1,6 @@
-import { Util } from '@dgx/server';
+import { Util, Inventory } from '@dgx/server';
 import { DGXEvent, EventListener, Export, ExportRegister } from '@dgx/server/decorators';
 import { mainLogger } from 'sv_logger';
-import { concatId } from '../../util';
 import winston from 'winston';
 import contextManager from '../../classes/contextmanager';
 import inventoryManager from '../inventories/manager.inventories';
@@ -105,11 +104,12 @@ class ItemManager extends Util.Singleton<ItemManager>() {
 
   @DGXEvent('inventory:server:useHotkey')
   private _useHotkey = async (src: number, key: Inventory.Hotkey) => {
-    const plyInvId = concatId('player', Util.getCID(src));
-    const plyItemStates = (await inventoryManager.get(plyInvId)).getItems();
-    const itemId = plyItemStates.find(state => state.hotkey === key)?.id;
-    if (!itemId) return;
-    this.use(src, itemId, true);
+    const invId = Inventory.concatId('player', Util.getCID(src));
+    const inventory = await inventoryManager.get(invId);
+    const items = inventory.getItems();
+    const itemToUse = items.find(i => i.state.hotkey === key);
+    if (!itemToUse) return;
+    itemToUse.use(src, true);
   };
 
   @DGXEvent('inventory:server:bindItem')
@@ -165,7 +165,7 @@ class ItemManager extends Util.Singleton<ItemManager>() {
       this.logger.warn(`Could not get item ${id}, broke while getting item to set destroy`);
       return;
     }
-    item.destroy();
+    item.destroy(true);
   };
 
   public unloadItem = (id: string) => {

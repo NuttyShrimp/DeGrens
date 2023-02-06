@@ -95,7 +95,7 @@ export const useRepairPart = async (src: number, type: keyof Service.Status, par
     },
   });
   if (cancelled) return;
-  const couldRemove = await Inventory.removeItemFromPlayer(src, itemName);
+  const couldRemove = await Inventory.removeItemByNameFromPlayer(src, itemName);
   if (couldRemove === false) {
     Notifications.add(src, 'Je hebt dit item niet', 'error');
     return;

@@ -66,7 +66,7 @@ RPC.register('heists:server:buyLaptop', async (source: number, drive: Shop.Name)
   const success = await Financials.cryptoRemove(source, 'Manera', cryptoCost);
   if (!success) return false;
   if (shouldRemoveItem) {
-    Inventory.removeItemFromPlayer(source, drive);
+    Inventory.removeItemByNameFromPlayer(source, drive);
   }
 
   Util.Log(
@@ -105,7 +105,7 @@ Events.onNet('heists:server:pickupLaptop', async (src: number) => {
 RPC.register('heists:server:hasActivePickup', hasActivePickup);
 
 Inventory.registerUseable(['thermite_part', 'mini_emp_part'], async (plyId, item) => {
-  const caseRemoved = await Inventory.removeItemFromPlayer(plyId, 'explosive_case');
+  const caseRemoved = await Inventory.removeItemByNameFromPlayer(plyId, 'explosive_case');
   if (!caseRemoved) {
     Notifications.add(plyId, 'Waar ga je dit insteken?', 'error');
     return;

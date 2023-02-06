@@ -35,7 +35,7 @@ Events.onNet('jobs:scrapyard:givePart', async (src: number) => {
   let success = false;
   const config = getScrapyardConfig();
   for (const itemName of config.partItems) {
-    success = await Inventory.removeItemFromPlayer(src, itemName);
+    success = await Inventory.removeItemByNameFromPlayer(src, itemName);
     if (success) break;
   }
   if (!success) {

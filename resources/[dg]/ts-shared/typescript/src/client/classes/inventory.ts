@@ -28,8 +28,8 @@ class Inventory {
     return !!(await RPC.execute<boolean>('inventory:server:doesPlayerHaveItems', name));
   };
 
-  public removeItemFromPlayer = async (name: string): Promise<boolean> => {
-    return !!(await RPC.execute<boolean>('inventory:server:removeItemFromPlayer', name));
+  public removeItemByNameFromPlayer = async (name: string, amount?: number): Promise<boolean> => {
+    return !!(await RPC.execute<boolean>('inventory:server:removeItemByNameFromPlayer', name, amount));
   };
 
   /**

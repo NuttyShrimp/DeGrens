@@ -47,7 +47,7 @@ Inventory.registerUseable('harness', async src => {
   });
   if (canceled) return;
 
-  const removedItem = await Inventory.removeItemFromPlayer(src, 'harness');
+  const removedItem = await Inventory.removeItemByNameFromPlayer(src, 'harness');
   if (removedItem === false) {
     Notifications.add(src, 'Je hebt geen harness', 'error');
     return;

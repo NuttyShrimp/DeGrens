@@ -196,7 +196,7 @@ export const tryToThermiteDoor = async () => {
   if (doorId === null) return;
 
   const thermiteData = doors[doorId].thermiteable;
-  const removed = await Inventory.removeItemFromPlayer('thermite');
+  const removed = await Inventory.removeItemByNameFromPlayer('thermite');
   if (!removed || !thermiteData) return;
 
   await Util.loadModel('hei_p_m_bag_var22_arm_s');

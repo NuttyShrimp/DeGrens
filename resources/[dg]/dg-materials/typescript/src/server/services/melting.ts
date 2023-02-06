@@ -41,7 +41,7 @@ Events.onNet('materials:melting:showMenu', (src: number) => {
 
 Events.onNet('materials:melting:melt', async (src: number, recipeId: number) => {
   const choosenRecipe = recipes[recipeId];
-  const removeSuccessful = await Inventory.removeItemAmountFromPlayer(
+  const removeSuccessful = await Inventory.removeItemByNameFromPlayer(
     src,
     choosenRecipe.from.name,
     choosenRecipe.from.amount

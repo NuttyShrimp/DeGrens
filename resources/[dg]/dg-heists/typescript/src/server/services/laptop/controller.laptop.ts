@@ -3,7 +3,7 @@ import { Config, Events, Inventory, Notifications, RPC, Util } from '@dgx/server
 import doorStateManager from './../../controllers/classes/doorstatemanager';
 import fleecaStateManager from './../../modules/fleeca/classes/statemanager';
 
-const heistStateManagers: Record<Laptop.Name, Heist.StateManager|null> = {
+const heistStateManagers: Record<Laptop.Name, Heist.StateManager | null> = {
   laptop_v1: fleecaStateManager,
   laptop_v2: null,
   laptop_v3: null,
@@ -61,7 +61,7 @@ Events.onNet('heists:server:failedHack', async (src: number, laptopName: Laptop.
 
 RPC.register('heists:server:finishHack', async (src: number, laptopName: Laptop.Name, heistId: Heist.Id) => {
   if (!heistId) return false;
-  const removed = await Inventory.removeItemFromPlayer(src, laptopName);
+  const removed = await Inventory.removeItemByNameFromPlayer(src, laptopName);
   if (!removed) {
     Util.Log(
       'heists:laptop:error',

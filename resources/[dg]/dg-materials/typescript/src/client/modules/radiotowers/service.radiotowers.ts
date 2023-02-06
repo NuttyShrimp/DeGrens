@@ -69,7 +69,7 @@ export const disablePower = async (towerId: string) => {
 
   const minigameSuccess = await Minigames.keygame(3, 6, 25);
   if (!minigameSuccess) {
-    Inventory.removeItemFromPlayer('screwdriver');
+    Inventory.removeItemByNameFromPlayer('screwdriver');
     Notifications.add('Je schroevendraaier is verbrand', 'error');
     return;
   }

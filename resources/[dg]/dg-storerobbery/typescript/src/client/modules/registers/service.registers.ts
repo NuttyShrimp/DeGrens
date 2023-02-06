@@ -64,7 +64,7 @@ export const lootRegister = async (registerIdx: number, isBroken: boolean) => {
 
     if (!keygameSuccess) {
       if (Util.getRndInteger(0, 100) < 20) {
-        Inventory.removeItemFromPlayer('lockpick');
+        Inventory.removeItemByNameFromPlayer('lockpick');
       } else {
         Notifications.add('Je bent uitgeschoven', 'error');
         Police.addBloodDrop();

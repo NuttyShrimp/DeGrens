@@ -1,4 +1,4 @@
-import { Events, Notifications, Util } from '@dgx/server';
+import { Events, Notifications, Util, Inventory } from '@dgx/server';
 import { mainLogger } from 'sv_logger';
 import winston from 'winston';
 import inventoryManager from '../../inventories/manager.inventories';
@@ -7,7 +7,6 @@ import { Inv } from 'modules/inventories/classes/inv';
 import itemDataManager from 'classes/itemdatamanager';
 import itemManager from '../manager.items';
 import locationManager from 'modules/locations/manager.locations';
-import { concatId, splitId } from '../../../util';
 import contextManager from 'classes/contextmanager';
 
 export class Item {
@@ -44,7 +43,7 @@ export class Item {
       if (!newPosition) {
         // This can happen when adding item to stash by script (mechanic crafting for exampel)
         if (this.inventory.type === 'player') {
-          const cid = splitId(this.inventory.id).identifier;
+          const cid = Inventory.splitId(this.inventory.id).identifier;
           const plyId = DGCore.Functions.getPlyIdForCid(Number(cid));
 
           if (plyId) {
@@ -75,15 +74,6 @@ export class Item {
       const dbInventory = this.inventory.isPersistent() ? this.state.inventory : 'nonpersistent';
       repository.createItem({ ...this.state, inventory: dbInventory }, destroyDate);
       this.logger.info(`New item has been created with id ${this.id}`);
-      Util.Log(
-        'inventory:item:create',
-        {
-          itemId: this.id,
-          position: this.position,
-          invId: state.inventory,
-        },
-        `Item ${this.name} has been created`
-      );
     } else {
       this.position = state.position ?? { x: 0, y: 0 };
     }
@@ -162,7 +152,7 @@ export class Item {
       return false;
     }
     // Check if item is in player inventory
-    const playerInvId = concatId('player', Util.getCID(src));
+    const playerInvId = Inventory.concatId('player', Util.getCID(src));
     if (playerInvId !== this.inventory.id) {
       return false;
     }
@@ -180,7 +170,7 @@ export class Item {
     const clampedNewQuality = Math.min(Math.max(newQuality, 0), 100);
 
     if (clampedNewQuality === 0) {
-      this.destroy();
+      this.destroy(true);
     }
 
     // Update destroydate when increasing quality
@@ -192,19 +182,31 @@ export class Item {
     this.quality = clampedNewQuality;
   };
 
-  public destroy = () => {
+  public destroy = (showItembox = false) => {
+    const originalInvType = this.inventory.type;
+    const originalInvIdentifier = this.inventory.identifier;
+
     this.inventory.unregisterItemId(this.state); // delete from inventory it was in
     itemManager.remove(this.id); // remove in item manager
     repository.deleteItem(this.id); // remove from db
     this.logger.info(`${this.id} has been destroyed. Quality: ${this.quality}`);
+    this.syncItem({ ...this.state, inventory: 'destroyed' }, this.inventory.id);
+
     Util.Log(
       'inventory:item:destroyed',
       {
         ...this.state,
       },
-      `${this.name} got destroyed (${Math.ceil(this.quality)}% quality remaining)`
+      `${this.name} got destroyed (${Math.ceil(this.quality)}% quality)`
     );
-    this.syncItem({ ...this.state, inventory: 'destroyed' }, this.inventory.id);
+
+    if (showItembox && originalInvType === 'player') {
+      const image = itemDataManager.get(this.name).image;
+      const plyId = DGCore.Functions.getPlyIdForCid(Number(originalInvIdentifier));
+      if (plyId) {
+        emitNet('inventory:addItemBox', plyId, 'Verwijderd', image);
+      }
+    }
   };
 
   /**

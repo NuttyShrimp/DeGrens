@@ -35,7 +35,7 @@ Events.onNet('storerobbery:safes:hack', async (plyId: number, storeId: Storerobb
   Util.changePlayerStress(plyId, Util.getRndInteger(10, 15));
 
   const gameSuccess = await Minigames.sequencegame(plyId, 4, 5, 4);
-  const removedItem = await Inventory.removeItemFromPlayer(plyId, 'decoding_tool');
+  const removedItem = await Inventory.removeItemByNameFromPlayer(plyId, 'decoding_tool');
   if (!removedItem) return;
 
   if (!gameSuccess) {

@@ -13,7 +13,7 @@ Inventory.registerUseable(['armor', 'pd_armor'], async (plyId, itemState) => {
   });
   if (canceled) return;
 
-  const removed = await Inventory.removeItemAmountFromPlayer(plyId, itemState.name, 1);
+  const removed = await Inventory.removeItemByIdFromPlayer(plyId, itemState.id);
   if (!removed) {
     Notifications.add(plyId, 'Je hebt dit niet', 'error');
     return;

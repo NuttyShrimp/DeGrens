@@ -32,6 +32,20 @@ class Inventory extends UtilShared.Singleton<Inventory>() {
     });
   }
 
+  private getPlyIdentifier = (plyId: number) => String(Util.getCID(plyId));
+
+  public concatId = (type: Inventory.Type, identifier: string | number): string => {
+    return `${type}__${identifier}`;
+  };
+
+  public splitId = (inventoryId: string): { type: Inventory.Type; identifier: string } => {
+    const splitted = inventoryId.split('__', 2);
+    return {
+      type: splitted[0] as Inventory.Type,
+      identifier: splitted[1],
+    };
+  };
+
   public registerUseable = (items: string | string[], handler: Inventory.UsageHandler): void => {
     if (Array.isArray(items)) {
       items.forEach(item => this.addUsageHandler(item, handler));
@@ -69,8 +83,7 @@ class Inventory extends UtilShared.Singleton<Inventory>() {
     global.exports['dg-inventory'].clearInventory(type, identifier);
   };
   public clearPlayerInventory = (plyId: number) => {
-    const cid = String(Util.getCID(plyId));
-    this.clearInventory('player', cid);
+    this.clearInventory('player', this.getPlyIdentifier(plyId));
   };
 
   public addItemToInventory = (
@@ -88,8 +101,7 @@ class Inventory extends UtilShared.Singleton<Inventory>() {
     amount: number,
     metadata?: { [key: string]: any }
   ): Promise<string[]> => {
-    const cid = String(Util.getCID(plyId));
-    return this.addItemToInventory('player', cid, name, amount, metadata);
+    return this.addItemToInventory('player', this.getPlyIdentifier(plyId), name, amount, metadata);
   };
 
   public doesInventoryHaveItems = (
@@ -100,32 +112,33 @@ class Inventory extends UtilShared.Singleton<Inventory>() {
     return global.exports['dg-inventory'].doesInventoryHaveItems(type, identifier, items);
   };
   public doesPlayerHaveItems = (plyId: number, items: string | string[]): Promise<boolean> => {
-    const cid = String(Util.getCID(plyId));
-    return this.doesInventoryHaveItems('player', cid, items);
+    return this.doesInventoryHaveItems('player', this.getPlyIdentifier(plyId), items);
   };
 
-  public removeItemFromInventory = (type: Inventory.Type, identifier: string, name: string): Promise<boolean> => {
-    return global.exports['dg-inventory'].removeItemFromInventory(type, identifier, name);
+  public removeItemByNameFromInventory = (
+    type: Inventory.Type,
+    identifier: string,
+    name: string,
+    amount?: number
+  ): Promise<boolean> => {
+    return global.exports['dg-inventory'].removeItemByNameFromInventory(type, identifier, name, amount);
   };
-  public removeItemFromPlayer = (plyId: number, name: string): Promise<boolean> => {
-    const cid = String(Util.getCID(plyId));
-    return this.removeItemFromInventory('player', cid, name);
+  public removeItemByNameFromPlayer = (plyId: number, name: string, amount?: number): Promise<boolean> => {
+    return this.removeItemByNameFromInventory('player', this.getPlyIdentifier(plyId), name, amount);
   };
 
   removeItemByIdFromInventory = (type: Inventory.Type, identifier: string, id: string): Promise<boolean> => {
     return global.exports['dg-inventory'].removeItemByIdFromInventory(type, identifier, id);
   };
   removeItemByIdFromPlayer = (plyId: number, id: string): Promise<boolean> => {
-    const cid = String(Util.getCID(plyId));
-    return this.removeItemByIdFromInventory('player', cid, id);
+    return this.removeItemByIdFromInventory('player', this.getPlyIdentifier(plyId), id);
   };
 
   public getAmountInInventory = (type: Inventory.Type, identifier: string, name: string): Promise<number> => {
     return global.exports['dg-inventory'].getAmountInInventory(type, identifier, name);
   };
   public getAmountPlayerHas = (plyId: number, name: string): Promise<number> => {
-    const cid = String(Util.getCID(plyId));
-    return this.getAmountInInventory('player', cid, name);
+    return this.getAmountInInventory('player', this.getPlyIdentifier(plyId), name);
   };
 
   public getItemStateById = (id: string): Inventory.ItemState | undefined => {
@@ -153,12 +166,12 @@ class Inventory extends UtilShared.Singleton<Inventory>() {
     return this.getItemsInInventory('player', cid);
   };
 
-  public getItemsForNameInInventory = (
+  public getItemsWithNameInInventory = (
     type: Inventory.Type,
     identifier: string,
     name: string
   ): Promise<Inventory.ItemState[]> => {
-    return global.exports['dg-inventory'].getItemsForNameInInventory(type, identifier, name);
+    return global.exports['dg-inventory'].getItemsWithNameInInventory(type, identifier, name);
   };
 
   public getFirstItemOfName = (
@@ -169,8 +182,7 @@ class Inventory extends UtilShared.Singleton<Inventory>() {
     return global.exports['dg-inventory'].getFirstItemOfName(type, identifier, name);
   };
   public getFirstItemOfNameOfPlayer = (plyId: number, name: string): Promise<Inventory.ItemState | undefined> => {
-    const cid = String(Util.getCID(plyId));
-    return this.getFirstItemOfName('player', cid, name);
+    return this.getFirstItemOfName('player', this.getPlyIdentifier(plyId), name);
   };
 
   public destroyItem = (id: string) => {
@@ -194,42 +206,6 @@ class Inventory extends UtilShared.Singleton<Inventory>() {
 
   public createScriptedStash = (identifier: string, size: number, allowedItems?: string[]) => {
     global.exports['dg-inventory'].createScriptedStash(identifier, size, allowedItems);
-  };
-
-  public concatId = (type: Inventory.Type, identifier: string | number): string => {
-    return global.exports['dg-inventory'].concatId(type, identifier);
-  };
-
-  public splitId = (inventoryId: string): { type: Inventory.Type; identifier: string } => {
-    return global.exports['dg-inventory'].splitId(inventoryId);
-  };
-
-  public showItemBox = (plyId: number, label: string, itemName: string) => {
-    global.exports['dg-inventory'].showItemBox(plyId, label, itemName);
-  };
-
-  public removeItemAmountFromInventory = async (
-    type: Inventory.Type,
-    identifier: string,
-    name: string,
-    amount: number
-  ): Promise<boolean> => {
-    const items = await this.getItemsForNameInInventory(type, identifier, name);
-    if (items.length < amount) return false;
-    const itemsToRemove = items.slice(0, amount);
-    itemsToRemove.forEach(item => {
-      this.destroyItem(item.id);
-    });
-    return true;
-  };
-
-  public removeItemAmountFromPlayer = async (plyId: number, name: string, amount: number): Promise<boolean> => {
-    const cid = String(Util.getCID(plyId));
-    const success = await this.removeItemAmountFromInventory('player', cid, name, amount);
-    if (success) {
-      this.showItemBox(plyId, `${amount}x verwijderd`, name);
-    }
-    return success;
   };
 
   public moveAllItemsToInventory = (

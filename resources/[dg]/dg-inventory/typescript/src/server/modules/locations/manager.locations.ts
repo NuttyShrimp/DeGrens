@@ -1,10 +1,8 @@
-import { Events, Util } from '@dgx/server';
-import { RPCEvent, RPCRegister } from '@dgx/server/decorators';
+import { Events, Util, Inventory } from '@dgx/server';
 import { Vector3 } from '@dgx/shared';
 import inventoryManager from 'modules/inventories/manager.inventories';
 import { getConfig } from 'services/config';
 import { mainLogger } from 'sv_logger';
-import { concatId } from '../../util';
 import winston from 'winston';
 
 // This keeps track of all location based inventories.
@@ -12,7 +10,6 @@ import winston from 'winston';
 // When an item gets moved into the inventory, it gets activated
 // Players can open non activated inventories
 // But only activated inventories will be client sided visible (ex: drop markers)
-@RPCRegister()
 class LocationManager extends Util.Singleton<LocationManager>() {
   private readonly logger: winston.Logger;
   private readonly locations: Location.Locations;
@@ -42,7 +39,7 @@ class LocationManager extends Util.Singleton<LocationManager>() {
       }
     }
 
-    const newId = concatId(type, Util.uuidv4());
+    const newId = Inventory.concatId(type, Util.uuidv4());
     this.locations[type].set(newId, { pos: coords, activated: false });
     return newId;
   };

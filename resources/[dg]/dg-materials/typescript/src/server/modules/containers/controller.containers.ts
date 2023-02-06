@@ -68,7 +68,7 @@ Events.onNet('materials:containers:meltMold', async (src: number) => {
   }
 
   const amount = getConfig().containers.mold.requiredSteel;
-  const removedItems = await Inventory.removeItemAmountFromPlayer(src, 'refined_steel', amount);
+  const removedItems = await Inventory.removeItemByNameFromPlayer(src, 'refined_steel', amount);
   if (!removedItems) {
     Notifications.add(src, 'Je hebt niet genoeg om dit te vullen', 'error');
     return;

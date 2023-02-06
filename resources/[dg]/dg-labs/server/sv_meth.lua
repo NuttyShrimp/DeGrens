@@ -13,8 +13,8 @@ DGX.Inventory.registerUseable("meth_brick", function(src, item)
         local amount = math.floor((3 * item.info.purity^2) / 100) -- calculate amount
         print(("Amount: %s, Purity: %s"):format(amount, item.info.purity))
 
-        DGX.Inventory.removeItemFromPlayer(src, 'empty_bags')
-        DGX.Inventory.removeItemFromPlayer(src, item.name)
+        DGX.Inventory.removeItemByNameFromPlayer(src, 'empty_bags')
+        DGX.Inventory.removeItemByNameFromPlayer(src, item.name)
         
         DGX.Inventory.addItemToPlayer(src, 'meth_bag', amount)
     else

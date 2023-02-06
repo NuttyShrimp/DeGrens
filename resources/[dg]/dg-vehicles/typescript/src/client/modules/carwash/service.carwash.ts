@@ -66,7 +66,7 @@ export const useCleaningKit = async () => {
   });
   if (wasCanceled) return;
 
-  const removedItem = await Inventory.removeItemFromPlayer('cleaning_kit');
+  const removedItem = await Inventory.removeItemByNameFromPlayer('cleaning_kit');
   if (!removedItem) {
     Notifications.add('Je hebt geen schoonmaakset', 'error');
     return;
@@ -108,7 +108,7 @@ export const useWax = async () => {
   });
   if (wasCanceled) return;
 
-  const removedItem = await Inventory.removeItemFromPlayer('vehicle_wax');
+  const removedItem = await Inventory.removeItemByNameFromPlayer('vehicle_wax');
   if (!removedItem) {
     Notifications.add('Je hebt geen voertuig wax', 'error');
     return;

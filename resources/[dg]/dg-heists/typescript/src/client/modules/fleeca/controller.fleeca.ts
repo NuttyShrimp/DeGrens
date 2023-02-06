@@ -52,7 +52,7 @@ Peek.addModelEntry(
             return;
           }
           placePlayerAtPowerBox(powerEntity);
-          Inventory.removeItemFromPlayer('mini_emp');
+          Inventory.removeItemByNameFromPlayer('mini_emp');
           const hackSuccess = await Minigames.sequencegame(4, 6, 10);
           if (!hackSuccess) return Notifications.add('Mislukt', 'error');
           Events.emitNet('heists:server:fleeca:disablePower');

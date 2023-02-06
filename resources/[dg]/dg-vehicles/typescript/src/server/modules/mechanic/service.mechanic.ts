@@ -154,7 +154,7 @@ export const tradeSalesTickets = async (src: number) => {
     return;
   }
   const cid = Util.getCID(src);
-  const tickets = await Inventory.getItemsForNameInInventory('player', String(cid), 'sales_ticket');
+  const tickets = await Inventory.getItemsWithNameInInventory('player', String(cid), 'sales_ticket');
   let revenue = 0;
   for (const ticket of tickets) {
     const data = ticket.metadata as Mechanic.Tickets.ItemMetadata;

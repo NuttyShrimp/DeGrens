@@ -26,7 +26,7 @@ Events.onNet('criminal:cornersell:sell', async (plyId: number, zone: string) => 
   const sellAmount = getConfig().cornerselling.sellAmount;
   const amountToRemove = Math.min(amountPlayerHas, Util.getRndInteger(sellAmount.min, sellAmount.max + 1));
 
-  const removed = await Inventory.removeItemAmountFromPlayer(plyId, choosenItem, amountToRemove);
+  const removed = await Inventory.removeItemByNameFromPlayer(plyId, choosenItem, amountToRemove);
   if (!removed) {
     Notifications.add(plyId, 'Er is iets misgelopen met de verkoop!', 'error');
     Events.emitNet('criminal:cornersell:findBuyer', plyId);

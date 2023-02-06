@@ -47,7 +47,7 @@ Events.onNet('vehicles:upgrades:installItem', async (src: number, netId: number,
   });
   if (canceled) return;
 
-  const removedItem = await Inventory.removeItemFromPlayer(src, upgradeItems[item].itemName);
+  const removedItem = await Inventory.removeItemByNameFromPlayer(src, upgradeItems[item].itemName);
   if (removedItem === false) {
     Notifications.add(src, 'Je hebt dit niet', 'error');
     return;

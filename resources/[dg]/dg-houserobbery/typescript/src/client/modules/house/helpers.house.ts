@@ -23,7 +23,7 @@ export const unlockHouse = async (houseId: string) => {
     Events.emitNet('houserobbery:server:unlockDoor', houseId);
   } else {
     if (Util.getRndInteger(0, 100) < 10) {
-      DGX.Inventory.removeItemFromPlayer('lockpick');
+      Inventory.removeItemByNameFromPlayer('lockpick');
     } else {
       Notifications.add('Je bent uitgeschoven', 'error');
       Police.addBloodDrop();

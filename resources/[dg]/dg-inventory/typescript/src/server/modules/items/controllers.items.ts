@@ -1,15 +1,16 @@
-import { Events, Util, Financials } from '@dgx/server';
+import { Events, Util, Financials, Inventory } from '@dgx/server';
 import contextManager from 'classes/contextmanager';
 import inventoryManager from 'modules/inventories/manager.inventories';
 import shopManager from 'modules/shops/shopmanager';
-import { concatId, splitId } from '../../util';
 import itemManager from './manager.items';
+import { Item } from './classes/item';
+import { mainLogger } from 'sv_logger';
 
 // Event to get item from shop inv (shop or bench), handles cash or required items removal
 Events.onNet(
   'inventory:server:getFromShop',
   async (src: number, name: string, inventoryId: string, position: Vec2, rotated: boolean) => {
-    const shopInventory = splitId(inventoryId);
+    const shopInventory = Inventory.splitId(inventoryId);
 
     let shopItem: Shops.Item | null = null;
     if (shopInventory.type === 'shop') {
@@ -55,7 +56,7 @@ Events.onNet(
     if (shopInventory.type === 'shop' && shopItem.amount <= 0) return;
 
     const cid = Util.getCID(src);
-    const invId = concatId('player', cid);
+    const invId = Inventory.concatId('player', cid);
 
     // Check requirements
     if (shopItem.requirements.cash) {
@@ -69,15 +70,21 @@ Events.onNet(
     if (shopItem.requirements.items) {
       const plyInventory = await inventoryManager.get(invId);
       const plyItems = plyInventory.getItems();
-      const idsToRemove: Set<string> = new Set();
+      const itemsToRemove: Item[] = [];
       for (const reqItem of shopItem.requirements.items) {
         for (let i = 0; i < reqItem.amount; i++) {
-          const plyItem = plyItems.find(item => item.name === reqItem.name && !idsToRemove.has(item.id));
-          if (!plyItem) throw new Error(`Player tried to get item but was missing required item ${reqItem.name}`);
-          idsToRemove.add(plyItem.id);
+          const plyItem = plyItems.find(item => {
+            if (item.state.name !== reqItem.name) return false;
+            return itemsToRemove.findIndex(i => i.state.id === item.state.id) === -1;
+          });
+          if (!plyItem) {
+            mainLogger.error(`Player tried to get item but was missing required item ${reqItem.name}`);
+            return;
+          }
+          itemsToRemove.push(plyItem);
         }
       }
-      idsToRemove.forEach(id => itemManager.get(id)?.destroy());
+      itemsToRemove.forEach(item => item.destroy());
     }
 
     const metadata = itemManager.buildInitialMetadata(src, name);

@@ -47,7 +47,7 @@ Inventory.registerUseable('nos', async src => {
   });
   if (canceled) return;
 
-  const removedItem = await Inventory.removeItemFromPlayer(src, 'nos');
+  const removedItem = await Inventory.removeItemByNameFromPlayer(src, 'nos');
   if (removedItem === false) {
     Notifications.add(src, 'Je hebt dit niet', 'error');
     return;

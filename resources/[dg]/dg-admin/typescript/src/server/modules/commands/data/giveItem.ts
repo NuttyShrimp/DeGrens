@@ -9,8 +9,6 @@ declare interface GiveItemData {
 }
 
 // TODO: add ability to add item to non-player inventory
-// For above, we need to add some extra exports to inv to check if inv exists
-// and add that we also can give items to non-player invs
 export const giveItem: CommandData = {
   name: 'giveItem',
   role: 'staff',

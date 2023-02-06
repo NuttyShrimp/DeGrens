@@ -8,10 +8,10 @@ import winston from 'winston';
 import inventoryManager from '../manager.inventories';
 import itemDataManager from 'classes/itemdatamanager';
 import { getConfig } from 'services/config';
-import { splitId } from '../../../util';
 import contextManager from 'classes/contextmanager';
 import { getContainerInfo } from 'modules/containers/controller.containers';
 import objectsUtility from 'classes/objectsutility';
+import { Item } from 'modules/items/classes/item';
 
 // conflicted with Inventory types namespace so I went with the good old Inv
 export class Inv {
@@ -32,7 +32,7 @@ export class Inv {
 
   public init = async (id: string) => {
     this._id = id;
-    const { identifier, type } = splitId(id);
+    const { identifier, type } = Inventory.splitId(id);
     this._type = type;
     this._identifier = identifier;
     this.items = new Set();
@@ -140,21 +140,28 @@ export class Inv {
     }
   };
 
+  public hasItemId = (itemId: string) => {
+    return this.items.has(itemId);
+  };
+
   public getItems = () => {
-    const items: Inventory.ItemState[] = [];
+    const items: Item[] = [];
     this.items.forEach(id => {
       const item = itemManager.get(id);
       if (item === undefined) return;
-      items.push(item.state);
+      items.push(item);
     });
     return items;
   };
 
-  public getItemsForName = (itemName: string) => {
+  public getItemStates = () => {
+    return this.getItems().map(i => i.state);
+  };
+
+  public getItemStatesForName = (itemName: string) => {
     const items: Inventory.ItemState[] = [];
-    this.items.forEach(id => {
-      const item = itemManager.get(id);
-      if (item?.state.name !== itemName) return;
+    this.getItems().forEach(item => {
+      if (item.state.name !== itemName) return;
       items.push(item.state);
     });
     return items;
@@ -168,7 +175,7 @@ export class Inv {
     };
 
     const cellsPerRow = getConfig().cellsPerRow;
-    const itemsThatMayOverlap = this.getItems().map(state => {
+    const itemsThatMayOverlap = this.getItemStates().map(state => {
       const size = itemDataManager.get(state.name).size;
       return [
         state.position,
@@ -202,7 +209,7 @@ export class Inv {
         locationManager.removeLocation(this.type as Location.Type, this.id);
       return;
     }
-    let itemStates = this.getItems();
+    let itemStates = this.getItemStates();
     // If inv is not persistent we save the items under inventory id 'nonpersistent'. These get removed from db on resource start
     // By not deleting them from db immediatly we never need to recreate an item in db if item gets moved back to persistent inv
     if (!this.isPersistent()) {
@@ -222,7 +229,7 @@ export class Inv {
   };
 
   public hasObject = () => {
-    const items = this.getItems();
+    const items = this.getItemStates();
     const objectItems = objectsUtility.config?.items ?? {};
     return items.some(item => {
       const info = objectItems[item.name];
@@ -232,11 +239,22 @@ export class Inv {
   };
 
   public destroyAllItems = () => {
+    const itemIds: string[] = [];
     [...this.items].forEach(id => {
       const item = itemManager.get(id);
       if (item) {
         item.destroy();
+        itemIds.push(item.state.id);
       }
     });
+
+    Util.Log(
+      'inventory:inventory:destroyAll',
+      {
+        inventoryId: this.id,
+        itemIds,
+      },
+      `All items in ${this.id} have been destroyed`
+    );
   };
 }

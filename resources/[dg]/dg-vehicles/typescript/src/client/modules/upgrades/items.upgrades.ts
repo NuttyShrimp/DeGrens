@@ -103,7 +103,7 @@ UI.RegisterUICallback('upgrades/windowtint/apply', async (_, cb) => {
     return;
   }
 
-  const removed = await Inventory.removeItemFromPlayer('window_tint');
+  const removed = await Inventory.removeItemByNameFromPlayer('window_tint');
   if (!removed) {
     Notifications.add('Je hebt geen folie...', 'error');
     return;

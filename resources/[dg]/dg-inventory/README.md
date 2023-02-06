@@ -39,25 +39,25 @@
 
 ## Server
 ### Exports
-| Name                       | Parameters                                                                                                             | Returns                                                  |
-| -------------------------- | ---------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------- |
-| registerUseable            | `items: string or string[]`, `handler: Inventory.UsageHandler`                                                         | /                                                        |
-| onInventoryUpdate          | `type: Inventory.Type`, `handler: Inventory.UpdateHandlerData['handler]`, `item: string`, `action: 'add' or 'remove' ` | /                                                        |
-| getAllItemData             | /                                                                                                                      | Promise<Record<string, Inventory.ItemData>>              |
-| getItemData                | `itemName: string`                                                                                                     | Inventory.ItemData                          or undefined |
-| hasObject                  | `plyId: number`                                                                                                        | boolean, whether player has holdable obj                 |
-| giveStarterItems           | `plyId: number`                                                                                                        | /                                                        |
-| clearPlayerInventory       | `plyId: number`                                                                                                        | /                                                        |
-| addItemToPlayer            | `plyId: number`, `itemName: string`, `amount: number`, `metadata?: object`                                             | /                                                        |
-| doesPlayerHaveItems        | `plyId: number`, `itemName: string or string[]`                                                                        | Promise<boolean>                                         |
-| removeItemFromPlayer       | `plyId: number`, `itemName: string `                                                                                   | Promise<boolean>, boolean shows succes                   |
-| getAmountPlayerHas         | `plyId: number`, `itemName: string`                                                                                    | Promise<number>, amount of item                          |
-| getItemStateById           | `itemId: string`                                                                                                       | Inventory.ItemData or undefined                          |
-| setMetadataOfItem          | `itemId: string`, `cb: (old) => new`                                                                                   | /                                                        |
-| setQualityOfitem           | `itemId: string`, `cb: (old) => new`                                                                                   | /                                                        |
-| moveItemToInventory        | `type: Inventory.Type`, `identifier: string`, `itemId: string`,                                                        | /                                                        |
-| getItemsInInventory        | `type: Inventory.Type`, `identifier: string`                                                                           | Promise<Inventory.ItemState[]>                           |
-| getItemsForNameInInventory | `type: Inventory.Type`, `identifier: string`, `name: string`                                                           | Promise<Inventory.ItemState[]>                           |
-| getFirstItemOfName         | `type: Inventory.Type`, `identifier: string`, `itemName: string`                                                       | Promise<Inventory.ItemState or undefined>                |
-| destroyItem                | `itemId: string`                                                                                                       | /                                                        |
-| createScriptedStash        | `identifier: string`, `size: number`, `allowedItems?: string[]`                                                        | /                                                        |
+| Name                        | Parameters                                                                                                             | Returns                                                  |
+| --------------------------- | ---------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------- |
+| registerUseable             | `items: string or string[]`, `handler: Inventory.UsageHandler`                                                         | /                                                        |
+| onInventoryUpdate           | `type: Inventory.Type`, `handler: Inventory.UpdateHandlerData['handler]`, `item: string`, `action: 'add' or 'remove' ` | /                                                        |
+| getAllItemData              | /                                                                                                                      | Promise<Record<string, Inventory.ItemData>>              |
+| getItemData                 | `itemName: string`                                                                                                     | Inventory.ItemData                          or undefined |
+| hasObject                   | `plyId: number`                                                                                                        | boolean, whether player has holdable obj                 |
+| giveStarterItems            | `plyId: number`                                                                                                        | /                                                        |
+| clearPlayerInventory        | `plyId: number`                                                                                                        | /                                                        |
+| addItemToPlayer             | `plyId: number`, `itemName: string`, `amount: number`, `metadata?: object`                                             | /                                                        |
+| doesPlayerHaveItems         | `plyId: number`, `itemName: string or string[]`                                                                        | Promise<boolean>                                         |
+| removeItemFromPlayer        | `plyId: number`, `itemName: string `                                                                                   | Promise<boolean>, boolean shows succes                   |
+| getAmountPlayerHas          | `plyId: number`, `itemName: string`                                                                                    | Promise<number>, amount of item                          |
+| getItemStateById            | `itemId: string`                                                                                                       | Inventory.ItemData or undefined                          |
+| setMetadataOfItem           | `itemId: string`, `cb: (old) => new`                                                                                   | /                                                        |
+| setQualityOfitem            | `itemId: string`, `cb: (old) => new`                                                                                   | /                                                        |
+| moveItemToInventory         | `type: Inventory.Type`, `identifier: string`, `itemId: string`,                                                        | /                                                        |
+| getItemsInInventory         | `type: Inventory.Type`, `identifier: string`                                                                           | Promise<Inventory.ItemState[]>                           |
+| getItemsWithNameInInventory | `type: Inventory.Type`, `identifier: string`, `name: string`                                                           | Promise<Inventory.ItemState[]>                           |
+| getFirstItemOfName          | `type: Inventory.Type`, `identifier: string`, `itemName: string`                                                       | Promise<Inventory.ItemState or undefined>                |
+| destroyItem                 | `itemId: string`                                                                                                       | /                                                        |
+| createScriptedStash         | `identifier: string`, `size: number`, `allowedItems?: string[]`                                                        | /                                                        |

@@ -1,9 +1,8 @@
-import { Admin, RPC, Util } from '@dgx/server';
+import { Admin, RPC, Util, Inventory } from '@dgx/server';
 import contextManager from 'classes/contextmanager';
 import locationManager from 'modules/locations/manager.locations';
 import shopManager from 'modules/shops/shopmanager';
 import { getConfig } from 'services/config';
-import { concatId } from '../../util';
 import { validateIdBuildData } from './service.inventories';
 import inventoryManager from './manager.inventories';
 
@@ -26,7 +25,7 @@ RPC.register(
     const overrideBuildingSecondaryId = 'override' in secondaryBuildData;
 
     // Build inventory ids
-    const primaryId = concatId('player', Util.getCID(src));
+    const primaryId = Inventory.concatId('player', Util.getCID(src));
     let secondaryId: string;
     if (overrideBuildingSecondaryId) {
       secondaryId = secondaryBuildData.override;
@@ -37,9 +36,9 @@ RPC.register(
           secondaryBuildData.data as Vec3
         );
       } else if (secondaryBuildData.type === 'player') {
-        secondaryId = concatId(secondaryBuildData.type, Util.getCID(secondaryBuildData.data as number));
+        secondaryId = Inventory.concatId(secondaryBuildData.type, Util.getCID(secondaryBuildData.data as number));
       } else {
-        secondaryId = concatId(secondaryBuildData.type, secondaryBuildData.identifier!);
+        secondaryId = Inventory.concatId(secondaryBuildData.type, secondaryBuildData.identifier!);
       }
     }
 
@@ -84,7 +83,7 @@ RPC.register(
 
     contextManager.playerOpened(src, [primaryInv.id, secondaryInv.id]);
     return {
-      items: [...primaryInv.getItems(), ...secondaryInv.getItems()],
+      items: [...primaryInv.getItemStates(), ...secondaryInv.getItemStates()],
       primary: { id: primaryInv.id, size: primaryInv.size },
       secondary,
     };
@@ -97,15 +96,15 @@ export const preloadActivePlayerInventories = () => {
       ...DGCore.Functions.GetQBPlayers(),
     }) as Player[]
   ).forEach((ply: Player) => {
-    inventoryManager.get(concatId('player', ply.PlayerData.citizenid));
+    inventoryManager.get(Inventory.concatId('player', ply.PlayerData.citizenid));
   });
 };
 
 Util.onPlayerLoaded(playerData => {
-  inventoryManager.get(concatId('player', playerData.citizenid));
+  inventoryManager.get(Inventory.concatId('player', playerData.citizenid));
 });
 
 Util.onPlayerUnloaded((plyId, cid) => {
-  inventoryManager.unload(concatId('player', cid));
+  inventoryManager.unload(Inventory.concatId('player', cid));
   contextManager.playerClosed(plyId, true);
 });
