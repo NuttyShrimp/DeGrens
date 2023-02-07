@@ -48,8 +48,8 @@ RegisterServerEvent('dg-labs:server:weed:Search', function(labId)
     if math.random(1, 100) <= getConfig().weed.rewardChance then
         local item = getConfig().weed.rewards[math.random(1, #getConfig().weed.rewards)]
         DGX.Inventory.addItemToPlayer(source, item, 1)
-        DGX.RPC.execute('dg-ui:client:addNotification', source, "Je hebt iets nuttig gevonden!", "success")
+        DGX.Notifications.add(source, "Je hebt iets nuttig gevonden!", "success")
     else
-        DGX.RPC.execute('dg-ui:client:addNotification', source, "Er zat niks nuttig tussen...", "error")
+      DGX.Notifications.add(source, "Er zat niks nuttig tussen...", "error")
     end
 end)

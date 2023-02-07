@@ -4,7 +4,7 @@ DGX.Inventory.registerUseable("meth_brick", function(src, item)
     local Player = DGCore.Functions.GetPlayer(src)
     local hasEmptyBags = DGX.Inventory.doesPlayerHaveItems(src, 'empty_bags')
     if not hasEmptyBags then
-        DGX.RPC.execute("dg-ui:client:addNotification", src, "Waar ga je dit insteken?", "error")
+        DGX.Notifications.add(src, "Waar ga je dit insteken?", "error")
         return
     end
     
@@ -18,7 +18,7 @@ DGX.Inventory.registerUseable("meth_brick", function(src, item)
         
         DGX.Inventory.addItemToPlayer(src, 'meth_bag', amount)
     else
-        DGX.RPC.execute('dg-ui:client:addNotification', src, "Dit is nog niet droog", "error")
+        DGX.Notifications.add(src, "Dit is nog niet droog", "error")
     end
 end)
 
@@ -94,13 +94,13 @@ DGCore.Functions.CreateCallback("dg-labs:server:meth:CanCollect", function(sourc
     if not labId or getLabTypeFromId(labId) ~= "meth" then return end
 
     if not states[labId].started then
-        DGX.RPC.execute("dg-ui:client:addNotification", source, "Er staat nog niks aan...", "error")
+      DGX.Notifications.add(source, "Er staat nog niks aan...", "error")
         cb(false)
         return
     end
 
     if not getAllStationsFilled(labId) then
-        DGX.RPC.execute("dg-ui:client:addNotification", source, "Nog niet alles is gevuld...", "error")
+        DGX.Notifications.add(source, "Nog niet alles is gevuld...", "error")
         cb(false)
         return
     end
@@ -113,7 +113,7 @@ RegisterServerEvent("dg-labs:server:meth:SetStartState", function(labId)
     if not labId or getLabTypeFromId(labId) ~= "meth" then return end
 
     if states[labId].started then 
-        DGX.RPC.execute("dg-ui:client:addNotification", source, "Dit staat al aan...", "error")
+      DGX.Notifications.add(source, "Dit staat al aan...", "error")
         return
     end
 

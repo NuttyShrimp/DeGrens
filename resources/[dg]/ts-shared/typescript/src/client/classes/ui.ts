@@ -106,12 +106,18 @@ class Taskbar {
 }
 
 class Notifications {
-  add(text: string, type: 'info' | 'error' | 'success' = 'info', durationInMs = 5000, persistent?: boolean): string {
-    return global.exports['dg-ui'].addNotification(text, type, durationInMs, persistent);
+  add(
+    text: string,
+    type: 'info' | 'error' | 'success' = 'info',
+    durationInMs = 5000,
+    persistent = false,
+    overrideId?: string
+  ) {
+    global.exports['dg-ui'].addNotification(text, type, durationInMs, persistent, overrideId);
   }
 
-  remove(id: string) {
-    return global.exports['dg-ui'].removeNotification(id);
+  remove(notificationId: string) {
+    global.exports['dg-ui'].removeNotification(notificationId);
   }
 }
 

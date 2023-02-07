@@ -1,23 +1,21 @@
 local notiId = 1
 
-addNotification = function(text, textype, length, persistent)
-	if persistent then
-		id = 'ui'..notiId
-		notiId = notiId + 1
-	end
+addNotification = function(text, textype, duration, persistent, overrideId)
+  local id = nil
+  if overrideId then
+    id = overrideId
+  end
 	SendAppEvent('notifications', {
 		action = 'add',
 		notification = {
 			message = text,
 			type = textype,
-			timeout = length,
+			timeout = duration,
 			persistent = persistent,
 			id = id
 		}
 	})
-	return id
 end
-exports('addNotification', addNotification)
 
 removeNotification = function(id)
 	SendAppEvent('notifications', {
@@ -25,11 +23,13 @@ removeNotification = function(id)
 		id = id
 	})
 end
+
+-- Notifications can be normal events as they have no significant value apart from providing information
+-- Cheaters can use the export anyway
+-- addNotif was one of the most used RPC events, might help with server performance
+
+exports('addNotification', addNotification)
 exports('removeNotification', removeNotification)
 
-DGX.RPC.register('dg-ui:client:addNotification', function(...)
-  return addNotification(...)
-end)
-DGX.Events.onNet('dg-ui:client:removeNotification', function(...)
-  removeNotification(...)
-end)
+RegisterNetEvent('dg-ui:client:addNotification', addNotification)
+RegisterNetEvent('dg-ui:client:removeNotification', removeNotification)

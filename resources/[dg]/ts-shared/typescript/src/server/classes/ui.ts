@@ -69,13 +69,14 @@ class Notifications {
     text: string,
     type: 'info' | 'error' | 'success' = 'info',
     durationInMs = 5000,
-    persistent?: boolean
+    persistent = false,
+    overrideId?: string
   ) {
-    return RPC.execute<string>('dg-ui:client:addNotification', source, text, type, durationInMs, persistent);
+    emitNet('dg-ui:client:addNotification', source, text, type, durationInMs, persistent, overrideId);
   }
 
-  remove(source: number, id: string) {
-    Events.emitNet('dg-ui:client:removeNotification', source, id);
+  remove(plyId: number, notificationId: string) {
+    emitNet('dg-ui:client:removeNotification', plyId, notificationId);
   }
 }
 

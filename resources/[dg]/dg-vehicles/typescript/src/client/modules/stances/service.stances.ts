@@ -2,6 +2,7 @@ import { Notifications, Util } from '@dgx/client';
 import { isBennysMenuOpen } from 'modules/bennys/service.bennys';
 
 import { isStanceMenuOpen } from './controller.stances';
+import { NOTIFICATION_ID } from './constants.stances';
 
 const closeVehicles: Map<number, Stance.Data> = new Map();
 let stancingThread: NodeJS.Timer | null = null;
@@ -76,10 +77,10 @@ export const getAppliedStance = (veh: number): Stance.Data => {
 
 export const updateInfoNotif = (text: string) => {
   removeInfoNotif();
-  activeNotification = Notifications.add(text, 'info', undefined, true);
+  Notifications.add(text, 'info', undefined, true, NOTIFICATION_ID);
 };
 
-export const removeInfoNotif = () => Notifications.remove(activeNotification);
+export const removeInfoNotif = () => Notifications.remove(NOTIFICATION_ID);
 
 export const roundOffset = (offset: number) => Math.round(offset * 200) / 200;
 
