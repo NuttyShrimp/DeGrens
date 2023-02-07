@@ -120,4 +120,15 @@ export const main: RadialMenu.Entry[] = [
       return job.name === 'police' || items.includes('hand_cuffs');
     },
   },
+  {
+    title: 'Anker',
+    icon: 'anchor',
+    type: 'dgxServer',
+    event: 'misc:server:toggleAnchor',
+    shouldClose: true,
+    isEnabled: ({ job, currentVehicle, items }) => {
+      if (!currentVehicle || GetVehicleClass(currentVehicle) !== 14) return false;
+      return GetPedInVehicleSeat(currentVehicle, -1) === PlayerPedId();
+    },
+  },
 ];

@@ -1,16 +1,23 @@
-import { Events } from '@dgx/client';
+import { BaseEvents, Events } from '@dgx/client';
 
-Events.onNet('misc:toggleAnchor', (netId: number) => {
-  const boat = NetworkGetEntityFromNetworkId(netId);
-  //@ts-ignore returns false or 1
-  const shouldAnchor = IsBoatAnchoredAndFrozen(boat) !== 1;
-
-  if (shouldAnchor && !CanAnchorBoatHere(boat)) {
-    console.log('Cannot anchor here');
+const toggleAnchor = (boatEntity: number, toggle: boolean) => {
+  if (toggle && !CanAnchorBoatHere(boatEntity)) {
     return;
   }
 
-  SetBoatAnchor(boat, shouldAnchor);
-  SetBoatFrozenWhenAnchored(boat, shouldAnchor);
-  SetForcedBoatLocationWhenAnchored(boat, shouldAnchor);
+  SetBoatAnchor(boatEntity, toggle);
+  SetBoatFrozenWhenAnchored(boatEntity, toggle);
+  SetForcedBoatLocationWhenAnchored(boatEntity, toggle);
+};
+
+Events.onNet('misc:client:toggleAnchor', (netId: number, toggle: boolean) => {
+  const boat = NetworkGetEntityFromNetworkId(netId);
+  toggleAnchor(boat, toggle);
+});
+
+BaseEvents.onEnteredVehicle(boat => {
+  if (!NetworkHasControlOfEntity(boat) || GetVehicleClass(boat) !== 14) return;
+  const hasAnchor = Entity(boat).state.anchor;
+  if (!hasAnchor) return;
+  toggleAnchor(boat, hasAnchor);
 });

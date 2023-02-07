@@ -1,21 +1,26 @@
-import { Chat, Notifications, Util } from '@dgx/server';
+import { Events, Notifications, Util } from '@dgx/server';
 
 const toggleBoatAnchor = (boatEntity: number) => {
-  Util.sendEventToEntityOwner(boatEntity, 'misc:toggleAnchor', NetworkGetNetworkIdFromEntity(boatEntity));
+  const entState = Entity(boatEntity).state;
+  const newState = !entState.anchor;
+  entState.anchor = newState;
+  Util.sendEventToEntityOwner(
+    boatEntity,
+    'misc:client:toggleAnchor',
+    NetworkGetNetworkIdFromEntity(boatEntity),
+    newState
+  );
 };
 
 global.exports('toggleBoatAnchor', toggleBoatAnchor);
 
-Chat.registerCommand('anker', 'Toggle het anker van je boot!', [], 'user', src => {
-  const ped = GetPlayerPed(String(src));
-  const vehicle = GetVehiclePedIsIn(ped, false);
-  if (!vehicle || GetVehicleType(vehicle) !== 'boat') {
-    Notifications.add(src, 'Je zit niet in een boot', 'error');
+Events.onNet('misc:server:toggleAnchor', (plyId: number) => {
+  const plyPed = GetPlayerPed(String(plyId));
+  const boat = GetVehiclePedIsIn(plyPed, false);
+  if (GetPedInVehicleSeat(boat, -1) !== plyPed) {
+    Notifications.add(plyId, 'Je bent geen bestuurder van dit voertuig', 'error');
     return;
   }
-  if (GetPedInVehicleSeat(vehicle, -1) !== ped) {
-    Notifications.add(src, 'Je kan dit enkel als bestuurder', 'error');
-    return;
-  }
-  toggleBoatAnchor(vehicle);
+
+  toggleBoatAnchor(boat);
 });
