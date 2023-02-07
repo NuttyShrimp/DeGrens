@@ -48,9 +48,9 @@ Inventory.onInventoryUpdate(
     if (!id) return;
     const plyId = DGCore.Functions.getPlyIdForCid(Number(id));
     if (!plyId) return;
-    const radioAmount = await Inventory.getAmountPlayerHas(source, 'radio');
+    const radioAmount = await Inventory.getAmountPlayerHas(plyId, 'radio');
     if (radioAmount) return;
-    Events.emitNet('misc:radio:client:disconnect', source);
+    Events.emitNet('misc:radio:client:disconnect', plyId);
   },
   'radio',
   'remove'
