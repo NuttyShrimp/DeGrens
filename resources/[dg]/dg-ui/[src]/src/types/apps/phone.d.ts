@@ -181,13 +181,16 @@ declare namespace Phone {
     }
   }
   namespace Mail {
-    interface Mail {
+    type Mail = {
       id: string;
+      date: number;
+    } & MailData;
+
+    type MailData = {
       sender: string;
       subject: string;
       message: string;
-      date: number;
-    }
+    };
 
     interface State {
       mails: Mail[];

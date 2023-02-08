@@ -7,20 +7,25 @@ export const events: Phone.Events = {};
 
 let mailId = 0;
 
-events.newMail = (mail: Partial<Phone.Mail.Mail>) => {
-  const mailState = useMailAppStore.getState();
-  mail.id = `mail-${mailId++}`;
-  mail.date = Date.now();
-  mailState.mails.push(mail as Phone.Mail.Mail);
+events.newMail = (mailData: Phone.Mail.MailData) => {
+  const newMail = {
+    ...mailData,
+    id: `mail-${mailId++}`,
+    date: Date.now(),
+  };
+
+  useMailAppStore.setState(s => ({
+    mails: [newMail, ...s.mails],
+  }));
+
   if (!isAppActive('mail')) {
     usePhoneStore.setState(s => ({ appNotifications: [...s.appNotifications, 'mail'] }));
   }
-  useMailAppStore.setState(mailState);
   addNotification({
-    id: `mail_${mail.id}`,
+    id: `mail_${newMail.id}`,
     icon: 'mail',
     title: `Email`,
-    description: mail.subject ?? 'New email',
+    description: newMail.subject ?? 'New email',
     app: 'mail',
   });
 };
