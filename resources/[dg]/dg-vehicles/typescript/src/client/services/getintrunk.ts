@@ -67,7 +67,7 @@ const canEnterVehicleTrunk = (vehicle: number): boolean => {
   if (bannedClasses.includes(vehClass)) return false;
 
   const boneIndex = GetEntityBoneIndexByName(vehicle, 'boot');
-  if (boneIndex === -1) return false;
+  if (boneIndex === -1) return true;
   if (GetVehicleDoorAngleRatio(vehicle, 5) === 0) return false;
 
   const bonePos = Util.ArrayToVector3(GetWorldPositionOfEntityBone(vehicle, boneIndex));
