@@ -1,8 +1,8 @@
 import { Admin, Config, Events, RPC, SQL, Sync, Util, Weapons } from '@dgx/server';
 import { mainLogger } from '../../sv_logger';
-import { ALWAYS_ALLOWED_WEAPONS } from './constants.anticheat';
 
 let blockedWeaponHashes: number[] = [];
+const alwaysAllowedWeapons: Set<number> = new Set();
 let config: AntiCheat.Config;
 const allowedAC: Record<number, string[]> = {};
 const pendingAllowedMods: Record<number, { mod: string; allowed: boolean; id: string }[]> = {};
@@ -19,6 +19,11 @@ export const loadConfig = async () => {
   await Config.awaitConfigLoad();
   config = Config.getModuleConfig<AntiCheat.Config>('anticheat');
   blockedWeaponHashes = config.blockedModels.map(m => GetHashKey(m) >>> 0);
+
+  config.alwaysAllowedWeapons.forEach(weapon => {
+    const hash = typeof weapon === 'string' ? GetHashKey(weapon) : weapon;
+    alwaysAllowedWeapons.add(hash >>> 0);
+  });
 };
 
 // region Heartbeat
@@ -81,11 +86,11 @@ export const validateWeaponInfo = (src: number, info: AntiCheat.WeaponInfo) => {
     return;
   }
 
-  const hasAlwaysAllowedWeapon = ALWAYS_ALLOWED_WEAPONS.has(info.weapon);
+  const hasAlwaysAllowedWeapon = alwaysAllowedWeapons.has(info.weapon);
 
   const ped = GetPlayerPed(String(src));
   const pedAttachedWeapon = GetSelectedPedWeapon(ped) >>> 0;
-  if (!hasAlwaysAllowedWeapon && !ALWAYS_ALLOWED_WEAPONS.has(pedAttachedWeapon) && pedAttachedWeapon != info.weapon) {
+  if (!hasAlwaysAllowedWeapon && !alwaysAllowedWeapons.has(pedAttachedWeapon) && pedAttachedWeapon != info.weapon) {
     Admin.ACBan(src, 'Weapon mismatch (native)', {
       attachedWeapon: pedAttachedWeapon,
       weaponInfo: info,
@@ -110,11 +115,27 @@ export const validateWeaponInfo = (src: number, info: AntiCheat.WeaponInfo) => {
   }
 
   const svDamageModifier = GetPlayerWeaponDamageModifier(String(src));
-  if (info.damageModifier !== svDamageModifier) {
-    Admin.ACBan(src, 'Weapon damage modifier modification', {
+
+  // if modifier gotten from client is not 1, insta ban
+  if (info.damageModifier !== 1) {
+    Admin.ACBan(src, 'Weapon damage modifier modification (client)', {
       damageModifier: svDamageModifier,
       weaponInfo: info,
     });
+    return;
+  }
+
+  if (info.damageModifier !== svDamageModifier) {
+    Util.Log(
+      'anticheat:damageModifier',
+      {
+        damageModifier: svDamageModifier,
+        weaponInfo: info,
+      },
+      `${Util.getName(src)}(${src}) client damage modifier is not same as servermodifier`,
+      src,
+      true
+    );
     return;
   }
 };

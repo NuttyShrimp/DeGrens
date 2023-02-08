@@ -8,6 +8,7 @@ declare namespace AntiCheat {
   interface Config {
     blockedModels: string[];
     explosions: { name: string; block: boolean }[];
+    alwaysAllowedWeapons: (string | number)[];
   }
 
   interface WeaponInfo {
