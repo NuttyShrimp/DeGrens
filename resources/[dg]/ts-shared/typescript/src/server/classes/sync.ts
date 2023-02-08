@@ -1,5 +1,5 @@
 class Sync {
-  executeNative(native: string, entity: number, ...args: any[]) {
+  executeNative<T extends keyof SyncNatives>(native: T, entity: number, ...args: SyncNatives[T]) {
     global.exports['dg-sync'].syncExecution(native, entity, ...args);
   }
   setPlayerInvincible(src: number, isEnabled: boolean) {

@@ -1,4 +1,4 @@
-import { Events, Taskbar, Util } from '@dgx/client';
+import { Events, Taskbar, Util, Sync } from '@dgx/client';
 import { isVehicleUpsideDown } from '@helpers/vehicle';
 
 // Disables being able to roll vehicle over
@@ -37,19 +37,5 @@ export const flipVehicle = async (vehicle: number) => {
     },
   });
   if (canceled) return;
-  const netId = NetworkGetNetworkIdFromEntity(vehicle);
-  Events.emitNet('vehicles:server:setOnGround', netId);
+  Sync.executeNative('setVehicleOnGround', vehicle);
 };
-
-Events.onNet('vehicles:client:setOnGround', (vehNetId: number) => {
-  const vehicle = NetworkGetEntityFromNetworkId(vehNetId);
-  if (!vehicle || !DoesEntityExist(vehicle)) return;
-  const success = SetVehicleOnGroundProperly(vehicle);
-  if (success) return;
-
-  // Backup method if setonground failed
-  const curPos = Util.getEntityCoords(vehicle);
-  const curRot = Util.getEntityRotation(vehicle);
-  SetEntityCoords(vehicle, curPos.x, curPos.y, curPos.z + 4, false, false, false, false);
-  SetEntityRotation(vehicle, 0, 0, curRot.z, 0, false);
-});

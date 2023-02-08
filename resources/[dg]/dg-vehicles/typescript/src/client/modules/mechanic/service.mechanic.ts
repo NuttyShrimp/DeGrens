@@ -1,4 +1,4 @@
-import { Events, Notifications, RPC, Taskbar, UI, Util } from '@dgx/client';
+import { Events, Notifications, RPC, Sync, Taskbar, UI, Util } from '@dgx/client';
 import { getVehHalfLength, getVehicleVinWithoutValidation } from '@helpers/vehicle';
 
 import { itemInputBase, valueToLabel } from '../../../shared/constant.mechanic';
@@ -415,7 +415,7 @@ export const releaseVehicle = async (towVeh: number) => {
     true
   );
   DetachEntity(attachedVeh, true, true);
-  Events.emitNet('vehicles:server:setOnGround', attachedVehNetId);
+  Sync.executeNative('setVehicleOnGround', attachedVeh);
   Notifications.add('Voertuig is losgelaten');
   Entity(towVeh).state.set('vehicleAttached', null, true);
 };

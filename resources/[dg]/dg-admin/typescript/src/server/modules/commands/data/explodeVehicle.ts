@@ -1,4 +1,4 @@
-import { Sync, Util } from '@dgx/server';
+import { Sync } from '@dgx/server';
 import { SelectorTarget } from 'enums/SelectorTargets';
 import { Inputs } from '../../../enums/inputs';
 

@@ -1,4 +1,4 @@
-import { Events, Notifications, RayCast, RPC, UI, Util } from '@dgx/client';
+import { Events, Notifications, RayCast, RPC, Sync, UI, Util } from '@dgx/client';
 import { Vector3, Export, ExportRegister } from '@dgx/shared';
 import { TYPES_WITH_OPEN_ANIMATION } from '../constants';
 import { canOpenInventory, doCloseAnimation, doLookAnimation, doOpenAnimation } from '../util';
@@ -36,7 +36,7 @@ class ContextManager extends Util.Singleton<ContextManager>() {
 
     if (this.closingData) {
       if (this.closingData.type === 'trunk') {
-        Util.setVehicleDoorOpen(this.closingData.data as number, 5, false);
+        Sync.executeNative('setVehicleDoorOpen', this.closingData.data as number, 5, false);
       }
       if (TYPES_WITH_OPEN_ANIMATION.includes(this.closingData.type)) {
         doCloseAnimation();
@@ -89,7 +89,7 @@ class ContextManager extends Util.Singleton<ContextManager>() {
           const vin = await Util.getVehicleVin(entityAimingAt);
           if (vin) {
             const vehicleClass = GetVehicleClass(entityAimingAt);
-            Util.setVehicleDoorOpen(entityAimingAt, 5, true);
+            Sync.executeNative('setVehicleDoorOpen', entityAimingAt, 5, true);
             doOpenAnimation();
             this.closingData = { type: 'trunk', data: entityAimingAt };
             return { type: 'trunk', identifier: vin, data: vehicleClass };

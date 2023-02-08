@@ -1,4 +1,4 @@
-import { PolyZone, Peek, Notifications, Util, Taskbar, Inventory, Events, RPC } from '@dgx/client';
+import { PolyZone, Peek, Notifications, Util, Taskbar, Inventory, Events, RPC, Sync } from '@dgx/client';
 import { DOOR_BONES } from './constants.scrapyard';
 
 let inReturnZone = false;
@@ -89,7 +89,7 @@ const disassembleVehicle = async (vehicle: number) => {
     return;
   }
 
-  Util.setVehicleDoorOpen(vehicle, closestDoorId, true);
+  Sync.executeNative('setVehicleDoorOpen', vehicle, closestDoorId, true);
   const [canceled] = await Taskbar.create('wrench', 'Demonteren', 10000, {
     canCancel: true,
     cancelOnDeath: true,

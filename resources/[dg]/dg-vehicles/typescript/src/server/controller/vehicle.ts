@@ -101,12 +101,6 @@ Chat.registerCommand('giveDevCar', 'Puts a car in the DB', [], 'developer', asyn
   insertNewVehicle(vinManager.generateVin(), Player(source).state.cid, 'elegy', 'dev-123');
 });
 
-Events.onNet('vehicles:server:setOnGround', (src: number, netId: number) => {
-  const entity = NetworkGetEntityFromNetworkId(netId);
-  if (!entity || !DoesEntityExist(entity)) return;
-  Util.sendEventToEntityOwner(entity, 'vehicles:client:setOnGround', netId);
-});
-
 global.asyncExports('getPlateForVin', async (vin: string) => {
   if (!vinManager.isVinFromPlayerVeh(vin)) return;
   const info = await getPlayerVehicleInfo(vin);

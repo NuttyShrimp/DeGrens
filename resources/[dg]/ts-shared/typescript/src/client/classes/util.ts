@@ -72,10 +72,6 @@ class Util extends UtilShared {
     return global.exports['dg-vehicles'].getVehicleVinWithoutValidation(vehicle);
   };
 
-  setVehicleDoorOpen = (vehicle: number, doorId: number, open: boolean) => {
-    global.exports['dg-vehicles'].setVehicleDoorOpen(vehicle, doorId, open);
-  };
-
   getVehicleSpeed = (veh: number) => {
     return Math.ceil(GetEntitySpeed(veh) * 3.6);
   };
