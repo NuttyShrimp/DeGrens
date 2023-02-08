@@ -14,7 +14,15 @@ Events.onNet('misc:tackle:do', () => {
 
 const tackleInit = async () => {
   const ped = PlayerPedId();
-  if (Police.isCuffed() || Police.isEscorting() || IsPedRagdoll(ped)) return;
+  if (
+    IsPedInAnyVehicle(ped, false) ||
+    GetEntitySpeed(ped) < 2.5 ||
+    IsPedRagdoll(ped) ||
+    Police.isCuffed() ||
+    Police.isEscorting() ||
+    !IsPedJumping(ped)
+  )
+    return;
 
   const closestPlayer = Util.getClosestPlayerInDistanceAndOutsideVehicle(2);
   if (!closestPlayer) return;
@@ -44,8 +52,6 @@ const tackleInit = async () => {
 };
 
 Keys.onPressDown('tackle', () => {
-  const ped = PlayerPedId();
-  if (IsPedInAnyVehicle(ped, false) || GetEntitySpeed(ped) < 2.5) return;
   tackleInit();
 });
 
