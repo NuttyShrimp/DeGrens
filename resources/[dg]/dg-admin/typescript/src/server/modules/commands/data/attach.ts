@@ -7,7 +7,7 @@ export const attach: CommandData = {
   log: 'Has attached itself to a player.',
   role: 'staff',
   isClientCommand: false,
-  target: [SelectorTarget.PLAYER],
+  target: [SelectorTarget.PLAYER, SelectorTarget.VEHICLE],
   handler: (caller, args: { entity?: number }) => {
     if (!args.entity) return;
 
@@ -16,8 +16,9 @@ export const attach: CommandData = {
       return;
     }
 
-    const targetPly = NetworkGetEntityOwner(args.entity);
-    Events.emitNet('admin:command:attach', caller.source, targetPly);
+    // we can also use netid for player peds instead of getting serverid here, and getting playerid on client
+    const netId = NetworkGetNetworkIdFromEntity(args.entity);
+    Events.emitNet('admin:command:attach', caller.source, netId);
   },
   UI: {
     title: 'Attach',

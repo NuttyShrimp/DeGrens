@@ -40,11 +40,26 @@ Events.onNet('admin:commands:runCmd', (handler, args: any[]) => {
   new Function(...parameters, `(${handler})(${parameters.join(',')})`)(...args);
 });
 
-Events.onNet('admin:command:attach', (targetServerId: number) => {
+Events.onNet('admin:command:attach', (netId: number) => {
   const ped = PlayerPedId();
-  const targetPly = GetPlayerFromServerId(targetServerId);
-  const targetPed = GetPlayerPed(targetPly);
-  AttachEntityToEntity(ped, targetPed, 0, 0, -1, 1, 0, 0, 0, false, false, false, true, 2, true);
+  const targetEntity = NetworkGetEntityFromNetworkId(netId);
+
+  let offset: Vec3;
+  switch (GetEntityType(targetEntity)) {
+    case 1:
+      offset = { x: 0, y: -1, z: 1 };
+      break;
+    case 2:
+      offset = { x: 0, y: -2.5, z: 2 };
+      break;
+    default:
+      throw new Error('Invalid attach entity');
+  }
+
+  if (!DoesEntityExist(targetEntity)) {
+    throw new Error('Attach entity does not exist');
+  }
+  AttachEntityToEntity(ped, targetEntity, 0, offset.x, offset.y, offset.z, 0, 0, 0, false, false, false, true, 2, true);
 });
 
 Events.onNet('admin:command:detach', () => {
