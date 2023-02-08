@@ -13,6 +13,7 @@ node_modules/
 !migrate.bat
 .turbo
 /uploads/
+logtypes.json
 
 
 positions.txt
