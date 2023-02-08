@@ -9,11 +9,9 @@ Events.onNet(
     const vehicle = NetworkGetEntityFromNetworkId(netId);
     if (!DoesEntityExist(vehicle)) return;
 
+    // Little check if vehicle was somehow really far away
     const vehCoords = Util.getEntityCoords(vehicle);
-    if (Util.getPlyCoords(src).distance(vehCoords) > 4) {
-      Notifications.add(src, 'Je bent niet in de buurt van het voertuig', 'error');
-      return;
-    }
+    if (Util.getPlyCoords(src).distance(vehCoords) > 20) return;
 
     let targetPed: number | null = null;
 
@@ -63,11 +61,9 @@ Events.onNet(
     const vehicle = NetworkGetEntityFromNetworkId(netId);
     if (!DoesEntityExist(vehicle)) return;
 
+    // Little check if vehicle was somehow really far away
     const vehCoords = Util.getEntityCoords(vehicle);
-    if (Util.getPlyCoords(src).distance(vehCoords) > 4) {
-      Notifications.add(src, 'Je bent niet in de buurt van het voertuig', 'error');
-      return;
-    }
+    if (Util.getPlyCoords(src).distance(vehCoords) > 20) return;
 
     let target: number | undefined = undefined;
 

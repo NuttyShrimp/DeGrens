@@ -40,6 +40,9 @@ const takeOutVehicle = async (vehicle: number) => {
     return;
   }
 
+  // Get distance at start of taskbar to check if vehicle didnt move at end of taskbar
+  const distanceAtStart = Util.getPlyCoords().distance(Util.getEntityCoords(vehicle));
+
   const [canceled] = await Taskbar.create('right-from-bracket', 'Uithalen', 5000, {
     canCancel: true,
     cancelOnDeath: true,
@@ -55,6 +58,12 @@ const takeOutVehicle = async (vehicle: number) => {
   });
   if (canceled) return;
 
+  const distanceAtEnd = Util.getPlyCoords().distance(Util.getEntityCoords(vehicle));
+  if (distanceAtEnd > distanceAtStart + 5) {
+    Notifications.add('Je bent niet meer bij het voertuig');
+    return;
+  }
+
   const netId = NetworkGetNetworkIdFromEntity(vehicle);
   const amountOfSeats = GetVehicleModelNumberOfSeats(GetEntityModel(vehicle));
   const closestSeat = getClosestSeatId(vehicle);
@@ -66,6 +75,9 @@ const putInVehicle = async (vehicle: number) => {
     Notifications.add('Het voertuig staat op slot', 'error');
     return;
   }
+
+  // Get distance at start of taskbar to check if vehicle didnt move at end of taskbar
+  const distanceAtStart = Util.getPlyCoords().distance(Util.getEntityCoords(vehicle));
 
   const [canceled] = await Taskbar.create('right-to-bracket', 'Insteken', 5000, {
     canCancel: true,
@@ -81,6 +93,12 @@ const putInVehicle = async (vehicle: number) => {
     },
   });
   if (canceled) return;
+
+  const distanceAtEnd = Util.getPlyCoords().distance(Util.getEntityCoords(vehicle));
+  if (distanceAtEnd > distanceAtStart + 5) {
+    Notifications.add('Je bent niet meer bij het voertuig');
+    return;
+  }
 
   const netId = NetworkGetNetworkIdFromEntity(vehicle);
   const amountOfSeats = GetVehicleModelNumberOfSeats(GetEntityModel(vehicle));
