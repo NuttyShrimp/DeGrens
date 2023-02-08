@@ -6,7 +6,7 @@ import { getVinForVeh, setEngineState } from '../../helpers/vehicle';
 import { keyManager } from './classes/keymanager';
 
 const vehClassToDifficulty: Record<CarClass, { speed: number; size: number }> = {
-  D: { speed: 0.5, size: 40 },
+  D: { speed: 1, size: 40 },
   C: { speed: 2, size: 30 },
   B: { speed: 4, size: 20 },
   A: { speed: 6, size: 15 },
@@ -101,7 +101,7 @@ export const startVehicleLockpick = async (src: number, itemId: string) => {
       },
     });
   }
-  let keygameMinAmount = lockpickType === 'door' ? 4 : 5;
+  const keygameMinAmount = lockpickType === 'door' ? 4 : 5;
   Events.emitNet(
     'vehicles:keys:startLockpick',
     src,

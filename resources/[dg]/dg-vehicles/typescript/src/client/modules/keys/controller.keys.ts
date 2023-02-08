@@ -63,7 +63,6 @@ Events.onNet(
   async (type: keyof typeof lockpickAnimations, id: string, amount: number, diff: { speed: number; size: number }) => {
     const animData = lockpickAnimations[type];
     await Util.loadAnimDict(animData.animDict);
-    const ped = PlayerPedId();
     animData.play();
     const lockpickResult = await Minigames.keygame(amount, diff.speed, diff.size);
     animData.stop();
