@@ -40,9 +40,11 @@ Events.onNet('admin:commands:runCmd', (handler, args: any[]) => {
   new Function(...parameters, `(${handler})(${parameters.join(',')})`)(...args);
 });
 
-Events.onNet('admin:command:attach', (target: number) => {
+Events.onNet('admin:command:attach', (targetServerId: number) => {
   const ped = PlayerPedId();
-  AttachEntityToEntity(ped, target, 0, 0, -1, 1, 0, 0, 0, false, false, false, true, 2, true);
+  const targetPly = GetPlayerFromServerId(targetServerId);
+  const targetPed = GetPlayerPed(targetPly);
+  AttachEntityToEntity(ped, targetPed, 0, 0, -1, 1, 0, 0, 0, false, false, false, true, 2, true);
 });
 
 Events.onNet('admin:command:detach', () => {

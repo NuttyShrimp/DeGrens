@@ -8,12 +8,16 @@ export const attach: CommandData = {
   role: 'staff',
   isClientCommand: false,
   target: [SelectorTarget.PLAYER],
-  handler: (caller, args: { entity: number }) => {
+  handler: (caller, args: { entity?: number }) => {
+    if (!args.entity) return;
+
     if (GetEntityAttachedTo(GetPlayerPed(String(caller.source))) === args.entity) {
       Events.emitNet('admin:command:detach', caller.source);
       return;
     }
-    Events.emitNet('admin:command:attach', caller.source, args.entity);
+
+    const targetPly = NetworkGetEntityOwner(args.entity);
+    Events.emitNet('admin:command:attach', caller.source, targetPly);
   },
   UI: {
     title: 'Attach',
