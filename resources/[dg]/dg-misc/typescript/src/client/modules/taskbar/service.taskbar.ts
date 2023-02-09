@@ -108,10 +108,9 @@ const doTaskbarThread = async (endTime: number): Promise<[TaskbarState, number]>
     }
 
     // Check settings
-    if (
-      (runningTaskbar.settings.cancelOnDeath && (IsEntityDead(ped) || Hospital.isDown())) ||
-      (runningTaskbar.settings.cancelOnMove && startPosition.distance(Util.getPlyCoords()) > 1)
-    ) {
+    const isDead = IsEntityDead(ped) || Hospital.isDown();
+    const moved = startPosition.distance(Util.getPlyCoords()) > 1 || IsPedRagdoll(ped);
+    if ((runningTaskbar.settings.cancelOnDeath && isDead) || (runningTaskbar.settings.cancelOnMove && moved)) {
       newState = TaskbarState.Canceled;
     }
 
