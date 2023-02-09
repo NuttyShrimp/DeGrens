@@ -51,7 +51,7 @@ exports("AddBoxZone", function(name, vectors, length, width, options)
     options = {}
   end
   options.name = name
-  options.debugPoly = DEBUG_ENABLED or options.debugPoly
+  options.debugPoly = options.debugPoly
   if not doCreateZone(options) then
     return
   end
@@ -65,7 +65,7 @@ exports("AddCircleZone", function(name, center, radius, options)
     options = {}
   end
   options.name = name
-  options.debugPoly = DEBUG_ENABLED or options.debugPoly
+  options.debugPoly = options.debugPoly
   if not doCreateZone(options) then
     return
   end
@@ -85,7 +85,7 @@ exports("AddPolyZone", function(name, pVectors, options)
     options = {}
   end
   options.name = name
-  options.debugPoly = DEBUG_ENABLED or options.debugPoly
+  options.debugPoly = options.debugPoly
   if not doCreateZone(options) then
     return
   end
