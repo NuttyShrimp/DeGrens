@@ -19,4 +19,9 @@ declare namespace Weapons {
     Required<Pick<WeaponConfig, 'noHolstering' | 'oneTimeUse' | 'canTint'>> & {
       hash: number;
     };
+
+  type EquippedData = {
+    removeTimeout: NodeJS.Timeout | null;
+    weaponHash: number;
+  };
 }

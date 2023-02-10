@@ -3,7 +3,14 @@ import { getWeaponAmmo, saveWeaponAmmo } from 'modules/ammo/service.ammo';
 import { getWeaponAttachments } from 'modules/attachments/service.attachments';
 import { getWeaponConfig } from 'services/config';
 import { applyWeaponTint } from 'services/tint';
-import { getEquippedWeapon, getWeaponItemState, setEquippedWeapon } from './service.weapons';
+import {
+  getEquippedData,
+  getWeaponItemState,
+  initiateEquippedPlayerWeapon,
+  removeEquippedWeapon,
+  setEquippedWeapon,
+} from './service.weapons';
+import { UNARMED_HASH } from './constants.weapons';
 
 // Give weapon to ped and set attachments/tint
 Events.onNet('weapons:setWeapon', async (src: number, itemId: string) => {
@@ -30,12 +37,12 @@ Events.onNet('weapons:setWeapon', async (src: number, itemId: string) => {
 });
 
 // Remove weapon from ped
-Events.onNet('weapons:removeWeapon', (src: number, itemId: string) => {
+Events.onNet('weapons:removeWeapon', async (src: number, itemId: string) => {
   const ped = GetPlayerPed(String(src));
-  const unarmedHash = GetHashKey('WEAPON_UNARMED') >>> 0;
+
   RemoveAllPedWeapons(ped, true);
-  SetCurrentPedWeapon(ped, unarmedHash, true);
-  setEquippedWeapon(src, unarmedHash);
+  removeEquippedWeapon(src);
+  SetCurrentPedWeapon(ped, UNARMED_HASH, true);
   Events.emitNet('auth:anticheat:weaponRemoved', src);
   Inventory.toggleObject(src, itemId, true);
 });
@@ -79,13 +86,13 @@ Inventory.onInventoryUpdate(
 );
 
 on('playerJoining', () => {
-  setEquippedWeapon(source, GetHashKey('WEAPON_UNARMED') >>> 0);
+  initiateEquippedPlayerWeapon(source);
 });
 
 on('onResourceStart', (resourceName: string) => {
   if (resourceName !== GetCurrentResourceName()) return;
   Util.getAllPlayers().forEach(plyId => {
-    setEquippedWeapon(plyId, GetHashKey('WEAPON_UNARMED') >>> 0);
+    initiateEquippedPlayerWeapon(plyId);
   });
 });
 
@@ -108,4 +115,6 @@ global.exports('forceSetQuality', async (plyId: number, quality: number) => {
   );
 });
 
-global.exports('getPlayerEquippedWeapon', getEquippedWeapon);
+global.exports('getPlayerEquippedWeapon', (plyId: number) => {
+  return getEquippedData(plyId).weaponHash;
+});
