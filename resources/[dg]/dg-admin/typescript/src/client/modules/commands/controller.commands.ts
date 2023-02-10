@@ -1,4 +1,4 @@
-import { Events, RPC, Util } from '@dgx/client';
+import { Events, Notifications, RPC, Util } from '@dgx/client';
 
 import { disableBlips, enableBlips } from '../../service/playerBlips';
 import { setCmdState } from './state';
@@ -70,13 +70,6 @@ Events.onNet('dg-admin:client:togglePlayerBlips', (toggle: boolean) => {
   toggle ? enableBlips() : disableBlips();
 });
 
-RPC.register('admin:cmd:getWaypointCoords', () => {
-  const blip = GetFirstBlipInfoId(8);
-  if (!blip) return null;
-  const coords = GetBlipCoords(blip);
-  return Util.ArrayToVector3(coords);
-});
-
 Events.onNet('admin:client:damageEntity', (netId: number) => {
   const entity = NetworkGetEntityFromNetworkId(netId);
   if (!entity || !DoesEntityExist(entity)) return;
@@ -126,4 +119,43 @@ Events.onNet('admin:command:collision', () => {
 
 Events.onNet('admin:commands:cloack', toggle => {
   setCmdState('invisible', toggle);
+});
+
+Events.onNet('admin:commands:tpm', async () => {
+  const blip = GetFirstBlipInfoId(8);
+  if (!blip) {
+    Notifications.add('Je hebt geen waypoint', 'error');
+    return;
+  }
+  const coords = Util.ArrayToVector3(GetBlipCoords(blip));
+
+  const ped = PlayerPedId();
+  const vehicle = GetVehiclePedIsIn(ped, false);
+
+  const oldCoords = Util.getPlyCoords();
+  SetPedCoordsKeepVehicle(ped, ...Util.Vector3ToArray(coords));
+  FreezeEntityPosition(vehicle ?? ped, true);
+  let found, groundZ;
+  for (let zCoord = 825; zCoord > 0; zCoord -= 25) {
+    NewLoadSceneStart(coords.x, coords.y, zCoord, coords.x, coords.y, zCoord, 50, 0);
+    await Util.awaitCondition(() => IsNetworkLoadingScene(), 1000);
+    NewLoadSceneStop();
+    coords.z = zCoord;
+    SetPedCoordsKeepVehicle(ped, ...Util.Vector3ToArray(coords));
+
+    RequestCollisionAtCoord(...Util.Vector3ToArray(coords));
+    await Util.awaitCondition(() => HasCollisionLoadedAroundEntity(ped), 1000);
+
+    [found, groundZ] = GetGroundZFor_3dCoord(coords.x, coords.y, coords.z, false);
+    if (found) {
+      SetPedCoordsKeepVehicle(ped, coords.x, coords.y, groundZ);
+      break;
+    }
+  }
+
+  FreezeEntityPosition(vehicle ?? ped, false);
+  if (!found) {
+    console.log(`Could not find ground for ${coords.x}, ${coords.y}, ${coords.z}`);
+    SetPedCoordsKeepVehicle(ped, ...Util.Vector3ToArray(oldCoords));
+  }
 });

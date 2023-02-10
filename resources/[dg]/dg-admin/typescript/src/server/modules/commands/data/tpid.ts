@@ -1,4 +1,4 @@
-import { Notifications, Util } from '@dgx/server';
+import { Events, Notifications, Util } from '@dgx/server';
 
 import { Inputs } from '../../../enums/inputs';
 
@@ -13,17 +13,14 @@ export const tpid: CommandData = {
   target: false,
   isClientCommand: false,
   handler: (caller, args: TpIdData) => {
-    if (!args.Target?.serverId) {
-      return;
-    }
+    if (!args.Target?.serverId) return;
     if (caller.source === args.Target?.serverId) {
       Notifications.add(caller.source, "You can't tp to yourself", 'error');
       return;
     }
-    const callerPed = GetPlayerPed(String(caller.source));
-    if (!callerPed) return;
+
     const targetCoords = Util.getPlyCoords(args.Target.serverId);
-    SetEntityCoords(callerPed, targetCoords.x, targetCoords.y, targetCoords.z, true, true, true, false);
+    Events.emitNet('admin:util:setPedCoordsKeepVehicle', caller.source, targetCoords);
   },
   UI: {
     title: 'Teleport to a player',

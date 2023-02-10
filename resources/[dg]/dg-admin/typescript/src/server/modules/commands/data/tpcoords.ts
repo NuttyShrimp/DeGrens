@@ -1,4 +1,4 @@
-import { Notifications } from '@dgx/server';
+import { Events, Notifications } from '@dgx/server';
 
 declare interface TPCoordsData {
   x: string;
@@ -15,7 +15,6 @@ export const tpcoords: CommandData = {
   target: [],
   role: 'developer',
   handler: (caller, data: TPCoordsData) => {
-    const callerPed = GetPlayerPed(String(caller.source));
     if (data.vector3) {
       const [x, y, z] = data.vector3.split(',');
       if (!x || !y || !z) {
@@ -23,16 +22,12 @@ export const tpcoords: CommandData = {
         return;
       }
       try {
-        SetEntityCoords(
-          callerPed,
-          parseInt(x.trim()),
-          parseInt(y.trim()),
-          parseInt(z.trim()),
-          true,
-          false,
-          false,
-          false
-        );
+        const coords = {
+          x: parseInt(data.x.trim()),
+          y: parseInt(data.y.trim()),
+          z: parseInt(data.z.trim()),
+        };
+        Events.emitNet('admin:util:setPedCoordsKeepVehicle', caller.source, coords);
       } catch (e) {
         console.error(e);
         Notifications.add(caller.source, 'Failed to teleport, Could the vector be invalid?', 'error');
@@ -40,16 +35,12 @@ export const tpcoords: CommandData = {
       return;
     }
     try {
-      SetEntityCoords(
-        callerPed,
-        parseInt(data.x.trim()),
-        parseInt(data.y.trim()),
-        parseInt(data.z.trim()),
-        true,
-        false,
-        false,
-        false
-      );
+      const coords = {
+        x: parseInt(data.x.trim()),
+        y: parseInt(data.y.trim()),
+        z: parseInt(data.z.trim()),
+      };
+      Events.emitNet('admin:util:setPedCoordsKeepVehicle', caller.source, coords);
     } catch (e) {
       console.error(e);
       Notifications.add(caller.source, 'Failed to teleport, Could the vector be invalid?', 'error');
