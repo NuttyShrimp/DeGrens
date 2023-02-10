@@ -1,7 +1,7 @@
 import { Events } from './index';
 
 class Sync {
-  executeNative<T extends keyof SyncNatives>(native: T, entity: number, ...args: SyncNatives[T]) {
+  executeNative<T extends keyof Sync.Natives>(native: T, entity: number, ...args: Sync.Natives[T]) {
     global.exports['dg-sync'].syncExecution(native, entity, ...args);
   }
   setPlayerInvincible(isEnabled: boolean) {
