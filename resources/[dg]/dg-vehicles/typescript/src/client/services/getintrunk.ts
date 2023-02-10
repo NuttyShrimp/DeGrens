@@ -67,7 +67,13 @@ const canEnterVehicleTrunk = (vehicle: number): boolean => {
   if (bannedClasses.includes(vehClass)) return false;
 
   const boneIndex = GetEntityBoneIndexByName(vehicle, 'boot');
-  if (boneIndex === -1) return true;
+  if (boneIndex === -1 || !GetIsDoorValid(vehicle, 5)) return false; // if no bone/trunk exists, cant enter
+
+  // When door is broken, entitybone pos will return pos of broken off part, so we use back of veh
+  if (IsVehicleDoorDamaged(vehicle, 5)) {
+    return Util.isAtBackOfEntity(vehicle, 2);
+  }
+
   if (GetVehicleDoorAngleRatio(vehicle, 5) === 0) return false;
 
   const bonePos = Util.ArrayToVector3(GetWorldPositionOfEntityBone(vehicle, boneIndex));
@@ -129,7 +135,7 @@ const getOutOfTrunk = (vehicle?: number, force = false) => {
   if (vehicle) {
     vehicle = DoesEntityExist(vehicle) ? vehicle : undefined;
   }
-  if (vehicle && GetVehicleDoorAngleRatio(vehicle, 5) === 0 && !force) {
+  if (vehicle && GetVehicleDoorAngleRatio(vehicle, 5) === 0 && !IsVehicleDoorDamaged(vehicle, 5) && !force) {
     Notifications.add('De koffer is dicht...', 'error');
     return;
   }
