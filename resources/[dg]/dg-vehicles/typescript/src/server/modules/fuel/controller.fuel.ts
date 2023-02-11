@@ -1,25 +1,25 @@
-import { Events, RPC } from '@dgx/server';
-import { getVinForNetId } from 'helpers/vehicle';
-
+import { Events } from '@dgx/server';
 import { fuelManager } from './classes/fuelManager';
-import { getFuelPrice, payRefuel } from './service.fuel';
+import { doRefuel, openRefuelMenu } from './service.fuel';
 
-RPC.register('vehicle:fuel:getByNetId', (src: number, netId: number) => {
-  const vin = getVinForNetId(netId);
-  if (!vin) return;
-  return fuelManager.getFuelLevel(vin);
+Events.onNet('vehicle:fuel:overrideSet', (src: number, netId: number, fuelLevel: number) => {
+  const vehicle = NetworkGetEntityFromNetworkId(netId);
+  if (!vehicle || !DoesEntityExist(vehicle)) return;
+  fuelManager.setFuelLevel(vehicle, fuelLevel);
 });
 
-Events.onNet('vehicle:fuel:updateForNetId', (src: number, netId: number, fuel: number) => {
-  const vin = getVinForNetId(netId);
-  if (!vin) return;
-  fuelManager.setFuelLevel(vin, fuel);
+Events.onNet('vehicles:fuel:doRefuel', (src, netId: number) => {
+  doRefuel(src, netId);
 });
 
-Events.onNet('vehicles:fuel:payRefuel', (src, vin: string) => {
-  payRefuel(src, vin);
+Events.onNet('vehicles:fuel:openRefuelMenu', (src, netId: number) => {
+  openRefuelMenu(src, netId);
 });
 
-RPC.register('vehicles:fuel:getPrice', (src, vin: string) => {
-  return getFuelPrice(vin);
+//@ts-ignore
+AddStateBagChangeHandler('fuelLevel', null, (bagName: string, _, value: number) => {
+  const netId = Number(bagName.replace('entity:', ''));
+  if (Number.isNaN(netId)) return;
+  const vehicle = NetworkGetEntityFromNetworkId(netId);
+  fuelManager.handleStateChange(vehicle, value);
 });

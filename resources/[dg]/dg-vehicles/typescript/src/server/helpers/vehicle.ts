@@ -94,7 +94,7 @@ export const spawnVehicle = async (
   }
   const vehState = Entity(veh).state;
   vehState.set('vin', vin, true);
-  fuelManager.registerVehicle(vin);
+  fuelManager.registerVehicle(veh);
 
   const newPlate = plate ?? plateManager.generatePlate();
   vehState.set('plate', newPlate, true);
@@ -119,7 +119,7 @@ export const spawnOwnedVehicle = async (src: number, vehicleInfo: Vehicle.Vehicl
   keyManager.addKey(vehicleInfo.vin, src);
 
   const vehNetId = NetworkGetNetworkIdFromEntity(vehicle);
-  fuelManager.setFuelLevel(vehicleInfo.vin, vehicleInfo.status.fuel ?? 100);
+  fuelManager.setFuelLevel(vehicle, vehicleInfo.status.fuel ?? 100);
 
   // If status is all null generate a perfect status and save it
   if (Object.values(vehicleInfo.status).every(v => v === null)) {
@@ -158,10 +158,6 @@ export const spawnOwnedVehicle = async (src: number, vehicleInfo: Vehicle.Vehicl
 
 export const deleteVehicle = (veh: number) => {
   if (!DoesEntityExist(veh)) return;
-  const vehState = Entity(veh).state; // Get from state, getter functions validates if does not exist which we dont want
-  if (vehState?.vin) {
-    fuelManager.removeVehicle(vehState.vin);
-  }
   DeleteEntity(veh);
 };
 

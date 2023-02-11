@@ -108,9 +108,7 @@ Peek.addGlobalEntry(
         icon: 'fas fa-gas-pump',
         action: async (_, entity) => {
           if (!entity) return;
-          const vin = await getVehicleVin(entity);
-          if (!vin) return;
-          openRefuelMenu(vin);
+          openRefuelMenu(entity);
         },
         canInteract(entity: number) {
           if (!entity || !NetworkGetEntityIsNetworked(entity)) return false;

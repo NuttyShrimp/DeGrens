@@ -15,7 +15,7 @@ export const validateVehicleVin = (pNetId: number) => {
   const vin = vinManager.generateVin(pNetId);
   vehicleState.set('vin', vin, true);
   vehicleState.set('plate', GetVehicleNumberPlateText(vehicle), true);
-  fuelManager.registerVehicle(vin);
+  fuelManager.registerVehicle(vehicle);
   SetVehicleDoorsLocked(vehicle, 2);
 };
 

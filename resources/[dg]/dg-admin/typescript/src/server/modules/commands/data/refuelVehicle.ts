@@ -20,12 +20,7 @@ export const refuelVehicle: CommandData = {
       const plyId = args?.Target?.serverId ?? caller.source;
       vehicle = GetVehiclePedIsIn(GetPlayerPed(String(plyId)), false);
     }
-    const vin = global.exports['dg-vehicles'].getVinForVeh(vehicle);
-    if (!vin) {
-      Notifications.add(caller.source, 'Could not find vehicle', 'error');
-      return;
-    }
-    Vehicles.setFuelLevel(vin, 100);
+    Vehicles.setFuelLevel(vehicle, 100);
   },
   UI: {
     title: 'Refuel Vehicle',

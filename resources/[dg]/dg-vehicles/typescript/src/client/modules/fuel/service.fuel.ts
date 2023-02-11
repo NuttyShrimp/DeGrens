@@ -1,76 +1,69 @@
 // Fuel level of vehicle ply is in
-import { Events, Notifications, RPC, Sync, Taskbar, UI, Util } from '@dgx/client';
+import { Events, Sounds, Sync, Util } from '@dgx/client';
 import { setEngineState } from 'services/engine';
-
-import { getCurrentVehicle } from '../../helpers/vehicle';
-
 import { isInZone } from './zones.fuel';
+import { CONSUMATION_PER_SECOND, VEHICLE_BEEP_LEVELS } from './constants.fuel';
 
 let fuelLevel = 0;
+
+let fuelThreadRunning = false;
 let fuelThread: NodeJS.Timer | null = null;
 let syncThread: NodeJS.Timer | null = null;
-// How long a full tank lasts in minutes
-const FULL_TANK_LAST = 15;
-const CONSUMATION_PER_SECOND = 100 / (FULL_TANK_LAST * 60);
-const VEHICLE_BEEP_LEVELS = [10, 5, 0];
-const REFUEL_DURATION_PER_LEVEL = 350;
 
 let fuelThreadPaused = false;
 
-const syncFuel = () => {
-  const veh = getCurrentVehicle();
-  if (!veh || !NetworkGetEntityIsNetworked(veh)) return;
-  Events.emitNet('vehicle:fuel:updateForNetId', NetworkGetNetworkIdFromEntity(veh), fuelLevel);
-};
-
 export const setFuelLevel = (level: number) => {
-  fuelLevel = Math.max(0, level);
+  fuelLevel = Math.max(0, Math.min(100, level));
   emit('vehicles:fuel:change', level);
 };
 
-export const fetchVehicleFuelLevel = async (veh: number, seat: number) => {
-  const vehClass = GetVehicleClass(veh);
-  // Bicycles don't have fuel
-  if (vehClass == 13) return;
-
-  const level = await RPC.execute<number>('vehicle:fuel:getByNetId', NetworkGetNetworkIdFromEntity(veh));
-  if (!level) return;
-  setFuelLevel(level);
-
-  // Driver also handles fuel threads
-  if (seat !== -1) return;
-  startFuelThread(veh);
+// Fetch from state to set local variable on vehicle enter
+export const fetchFuelLevelOnEnter = (vehicle: number) => {
+  const fuelFromState = Number(Entity(vehicle).state.fuelLevel);
+  setFuelLevel(fuelFromState);
 };
 
-export const startFuelThread = (veh: number) => {
-  cleanFuelThread();
+// The driver is always the owner of the vehicle
+// Knowing this, we can utilize statebags and directly setVehicleFuelLevel without sync
+export const startFuelThread = (vehicle: number) => {
+  if (fuelThreadRunning) return;
+
+  // Bicycles don't have fuel
+  const vehClass = GetVehicleClass(vehicle);
+  if (vehClass == 13) return;
+
+  fuelThreadRunning = true;
   fuelThread = setInterval(() => {
-    if (!veh || !DoesEntityExist(veh)) {
-      cleanFuelThread();
-      return;
-    }
+    if (!vehicle || !DoesEntityExist(vehicle)) return;
     if (fuelThreadPaused) return;
-    if (!GetIsVehicleEngineRunning(veh)) return;
-    const vehRPM = GetVehicleCurrentRpm(veh);
+    if (!GetIsVehicleEngineRunning(vehicle)) return;
+
+    const vehRPM = GetVehicleCurrentRpm(vehicle);
     // Exponential growth ((2 ** Modifier) - 1) * Max
     const mod = (2 ** vehRPM - 1) * CONSUMATION_PER_SECOND;
     setFuelLevel(fuelLevel - mod);
     if (fuelLevel === 0) {
-      setEngineState(veh, false, true);
+      setEngineState(vehicle, false, true);
     }
-    Sync.executeNative('SetVehicleFuelLevel', NetworkGetNetworkIdFromEntity(veh), fuelLevel);
+
+    SetVehicleFuelLevel(vehicle, fuelLevel);
     const oldLevel = fuelLevel + mod;
     for (const lvl of VEHICLE_BEEP_LEVELS) {
       if (fuelLevel <= lvl && oldLevel > lvl) {
-        global.exports['nutty-sounds'].playSoundOnEntity('vehicles_fuel_10', 'lowfuel', 'DLC_NUTTY_SOUNDS', veh);
+        const netId = NetworkGetNetworkIdFromEntity(vehicle);
+        Sounds.playOnEntity(`vehicles_fuel_${netId}`, 'lowfuel', 'DLC_NUTTY_SOUNDS', vehicle);
         break;
       }
     }
   }, 1000);
-  syncThread = setInterval(syncFuel, 20000);
+  syncThread = setInterval(() => {
+    Entity(vehicle).state.set('fuelLevel', fuelLevel, true);
+  }, 20000);
 };
 
-export const cleanFuelThread = () => {
+export const cleanFuelThread = (vehicle: number) => {
+  if (!fuelThreadRunning) return;
+
   if (fuelThread) {
     clearInterval(fuelThread);
     fuelThread = null;
@@ -79,26 +72,17 @@ export const cleanFuelThread = () => {
     clearInterval(syncThread);
     syncThread = null;
   }
-  syncFuel();
+
+  // Save fuel to server, when leaving we might not be owner anymore so for safety we dont use statebag setter
+  if (vehicle && NetworkGetEntityIsNetworked(vehicle)) {
+    overrideSetFuel(vehicle, fuelLevel);
+  }
+
+  fuelThreadRunning = false;
 };
 
-export const openRefuelMenu = async (vin: string) => {
-  const priceInfo = await RPC.execute<{ price: number; fuel: number }>('vehicles:fuel:getPrice', vin);
-  if (!priceInfo) return;
-  UI.openApplication('contextmenu', [
-    {
-      id: 'vehicles_fuel_price',
-      title: 'Tankstation',
-      description: `Prijs: €${priceInfo.price} incl. BTW`,
-      icon: 'gas-pump',
-      callbackURL: 'vehicles:fuel:startRefuel',
-      data: {
-        price: priceInfo.price,
-        vin,
-        fuel: priceInfo.fuel,
-      },
-    },
-  ]);
+export const openRefuelMenu = (entity: number) => {
+  Events.emitNet('vehicles:fuel:openRefuelMenu', NetworkGetNetworkIdFromEntity(entity));
 };
 
 export const canRefuel = (veh: number): boolean => {
@@ -112,51 +96,27 @@ export const canRefuel = (veh: number): boolean => {
   return Math.min(Util.getBoneDistance(veh, 'wheel_lr'), Util.getBoneDistance(veh, 'wheel_rr')) <= 1.2;
 };
 
-export const doRefuel = async (price: number, vin: string, missingFuel: number) => {
-  const vehNetId = await RPC.execute<number>('vehicles:getVehicleByVin', vin);
-  if (!vehNetId) {
-    throw new Error(`Vehicle with VIN ${vin} does not exist`);
-  }
-  const veh = NetworkGetEntityFromNetworkId(vehNetId);
-  if (veh === 0) {
-    throw new Error(`Vehicle with VIN ${vin} not on this client`);
-  }
+export const doRefuel = async (netId: number) => {
+  const veh = NetworkGetEntityFromNetworkId(netId);
   if (GetIsVehicleEngineRunning(veh)) {
     // Calculate the chance on a engine explosion
-    const chance = Math.random();
-    if (chance < 0.05) {
-      Sync.executeNative('NetworkExplodeVehicle', NetworkGetEntityFromNetworkId(vehNetId), true, false, false);
+    const chance = Util.getRndInteger(1, 101);
+    if (chance < 10) {
+      Sync.executeNative('NetworkExplodeVehicle', NetworkGetEntityFromNetworkId(netId), true, false, false);
     }
   }
-  const account = await RPC.execute<Financials.Account>('financials:getDefaultAccount');
-  if (Math.max(account?.balance ?? 0, global.exports['dg-financials'].getCash()) < price) {
-    Notifications.add('Je hebt niet genoeg geld!', 'error');
-    return;
-  }
-  const [wasCanceled] = await Taskbar.create(
-    'gas-pump',
-    'Tanken',
-    Math.max(missingFuel * REFUEL_DURATION_PER_LEVEL, 5000),
-    {
-      canCancel: true,
-      cancelOnDeath: true,
-      controlDisables: {
-        movement: true,
-        combat: true,
-      },
-      animation: {
-        animDict: 'timetable@gardener@filling_can',
-        anim: 'gar_ig_5_filling_can',
-        flags: 50,
-      },
-    }
-  );
-  if (wasCanceled) {
-    return;
-  }
-  Events.emitNet('vehicles:fuel:payRefuel', vin);
+  Events.emitNet('vehicles:fuel:doRefuel', netId);
 };
 
 export const pauseFuelThread = (pause: boolean) => {
   fuelThreadPaused = pause;
+};
+
+export const getVehicleFuel = (vehicle: number) => {
+  return Entity(vehicle).state.fuelLevel;
+};
+
+// Use if you are not sure you are entityowner
+export const overrideSetFuel = (vehicle: number, fuelLevel: number) => {
+  Events.emitNet('vehicle:fuel:overrideSet', NetworkGetNetworkIdFromEntity(vehicle), fuelLevel);
 };

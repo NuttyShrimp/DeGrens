@@ -31,8 +31,8 @@ class Vehicles {
     global.exports['dg-vehicles'].giveKeysToPlayer(plyId, vehNetId);
   };
 
-  setFuelLevel = (vin: string, amount: number) => {
-    global.exports['dg-vehicles'].setFuelLevel(vin, amount);
+  setFuelLevel = (vehicle: number, fuelLevel: number) => {
+    global.exports['dg-vehicles'].setFuelLevel(vehicle, fuelLevel);
   };
 
   public generatePlate = () => {

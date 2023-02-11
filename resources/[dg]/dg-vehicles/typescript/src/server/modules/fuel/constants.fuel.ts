@@ -1,0 +1,1 @@
+export const REFUEL_DURATION_PER_LEVEL = 350;

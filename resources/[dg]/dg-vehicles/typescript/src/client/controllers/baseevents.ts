@@ -5,7 +5,7 @@ import { startNoShuffleThread, stopNoShuffleThread } from 'services/seats';
 import { disableSpeedLimiter } from 'services/speedlimiter';
 
 import { setCurrentVehicle } from '../helpers/vehicle';
-import { cleanFuelThread, fetchVehicleFuelLevel, startFuelThread } from '../modules/fuel/service.fuel';
+import { cleanFuelThread, startFuelThread, fetchFuelLevelOnEnter } from '../modules/fuel/service.fuel';
 import { startStatusThread } from '../modules/status/service.status';
 import { BaseEvents } from '@dgx/client';
 
@@ -16,20 +16,21 @@ BaseEvents.onEnteringVehicle(vehicle => {
 BaseEvents.onEnteredVehicle((vehicle, seat) => {
   setCurrentVehicle(vehicle, seat === -1);
   startSeatbeltThread(vehicle);
-  fetchVehicleFuelLevel(vehicle, seat);
   SetVehicleAutoRepairDisabled(vehicle, true); // Disabled repair on extra
   startNoShuffleThread(vehicle);
   DisplayRadar(true);
+  fetchFuelLevelOnEnter(vehicle);
 
   if (seat !== -1) return;
   startStatusThread(vehicle);
   updateVehicleNosAmount(vehicle);
   startVehicleRolloverThread(vehicle);
+  startFuelThread(vehicle);
 });
 
 BaseEvents.onLeftVehicle((vehicle, seat) => {
   if (seat === -1) {
-    cleanFuelThread();
+    cleanFuelThread(vehicle);
     disableSpeedLimiter(vehicle);
     clearVehicleRolloverThread();
   }
@@ -43,7 +44,7 @@ BaseEvents.onLeftVehicle((vehicle, seat) => {
 BaseEvents.onVehicleSeatChange((vehicle, newSeat, oldSeat) => {
   setCurrentVehicle(vehicle, newSeat === -1);
   if (oldSeat === -1) {
-    cleanFuelThread();
+    cleanFuelThread(vehicle);
     resetNos(vehicle);
     disableSpeedLimiter(vehicle);
     clearVehicleRolloverThread();

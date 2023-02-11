@@ -5,6 +5,7 @@ import { getCurrentWorkingShop } from '../mechanic/service.mechanic';
 import { getPerformanceUpgrades } from '../upgrades/service.upgrades';
 
 import { degradationValues, handlingOverrideFunctions, partNames, serviceConditions } from './constant.status';
+import { getVehicleFuel, overrideSetFuel } from 'modules/fuel/service.fuel';
 
 const vehicleService: {
   vehicle: number;
@@ -272,10 +273,10 @@ export const openServiceStatusOverview = async (veh: number) => {
 };
 // endregion
 
-export const fixVehicle = async (veh: number, body = true, engine = true) => {
+export const fixVehicle = (veh: number, body = true, engine = true) => {
   if (body) {
     // Fuel level gets reset by the fix native, set to original after calling native
-    const fuelLevel = await RPC.execute<number>('vehicle:fuel:getByNetId', NetworkGetNetworkIdFromEntity(veh));
+    const fuelLevel = getVehicleFuel(veh);
     SetVehicleBodyHealth(veh, 1000);
     SetVehicleDeformationFixed(veh);
     SetVehicleFixed(veh);
@@ -283,7 +284,7 @@ export const fixVehicle = async (veh: number, body = true, engine = true) => {
       SetVehicleTyreFixed(veh, i);
       SetTyreHealth(veh, i, 1000);
     }
-    Events.emitNet('vehicle:fuel:updateForNetId', NetworkGetNetworkIdFromEntity(veh), fuelLevel);
+    overrideSetFuel(veh, fuelLevel);
   }
   if (engine) {
     SetVehicleEngineHealth(veh, 1000);

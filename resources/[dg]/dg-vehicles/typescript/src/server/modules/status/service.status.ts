@@ -19,7 +19,7 @@ export const getNativeStatus = async (veh: number, vin: string): Promise<Vehicle
 
   status.body = GetVehicleBodyHealth(veh);
   status.engine = GetVehicleEngineHealth(veh);
-  status.fuel = fuelManager.getFuelLevel(vin) ?? 0;
+  status.fuel = fuelManager.getFuelLevel(veh) ?? 0;
 
   status.wheels = await getTyreState(veh);
   status.windows = await getWindowState(veh);

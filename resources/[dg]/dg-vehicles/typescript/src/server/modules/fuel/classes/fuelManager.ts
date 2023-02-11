@@ -1,51 +1,45 @@
-import { Events, SQL, Util } from '@dgx/server';
+import { SQL, Util } from '@dgx/server';
 import { Export, ExportRegister } from '@dgx/shared';
 
 import vinManager from '../../identification/classes/vinmanager';
 import { fuelLogger } from '../logger.fuel';
+import { getVinForVeh } from 'helpers/vehicle';
 
 @ExportRegister()
 class FuelManager extends Util.Singleton<FuelManager>() {
-  // Map of vin to fuel level
-  private fuelMap: Map<string, number> = new Map();
-
   private async updateFuelDB(vin: string, fuelLevel: number) {
     const query = `UPDATE vehicle_status SET fuel = ? WHERE vin = ? `;
-    const params = [fuelLevel, vin];
-    const result = await SQL.query(query, params);
+    const result = await SQL.query(query, [fuelLevel, vin]);
     if (result.affectedRows === 0) {
       fuelLogger.error(`Failed to update fuel level for vin ${vin}`);
     }
   }
 
-  getFuelLevel(vin: string): number | undefined {
-    return this.fuelMap.get(vin);
+  getFuelLevel(vehicle: number): number | undefined {
+    const fuelLevel = Entity(vehicle).state.fuelLevel;
+    fuelLogger.debug(`Getting fuelLevel for ${vehicle}: ${fuelLevel}`);
+    return fuelLevel;
   }
 
   @Export('setFuelLevel')
-  setFuelLevel(vin: string, fuelLevel: number): void {
-    fuelLogger.silly(`Setting fuel for ${vin} to ${fuelLevel}`);
-    this.fuelMap.set(vin, fuelLevel);
-    if (vinManager.isVinFromPlayerVeh(vin)) {
-      this.updateFuelDB(vin, fuelLevel);
-    }
-    // This will set the fuel level for the players in the vehicle matching the vin
-    const netId = vinManager.getNetId(vin);
-    if (netId) {
-      const veh = NetworkGetEntityFromNetworkId(netId);
-      Util.getPlayersInVehicle(veh).forEach(ply => Events.emitNet('vehicles:fuel:set', ply, fuelLevel));
-    }
+  setFuelLevel(vehicle: number, fuelLevel: number): void {
+    fuelLogger.silly(`Setting fuel for ${vehicle} to ${fuelLevel}`);
+    Entity(vehicle).state.fuelLevel = fuelLevel;
   }
-  registerVehicle(vin: string) {
-    if (this.fuelMap.has(vin)) {
-      return;
-    }
-    const fuelLevel = Util.getRndInteger(20, 81);
-    fuelLogger.debug(`Registering ${vin} with ${fuelLevel}% in tank`);
-    this.fuelMap.set(vin, fuelLevel);
-  }
-  removeVehicle(vin: string) {
-    this.fuelMap.delete(vin);
+
+  // Fired when fuelLevel statebag of a vehicle has changed
+  public handleStateChange = (vehicle: number, fuelLevel: number) => {
+    const vin = getVinForVeh(vehicle);
+    if (!vin) return;
+    if (!vinManager.isVinFromPlayerVeh(vin)) return;
+    this.updateFuelDB(vin, fuelLevel);
+  };
+
+  // Register new vehicles that dont have fuel registered yet
+  registerVehicle(vehicle: number) {
+    const fuelLevel = Util.getRndInteger(40, 81);
+    this.setFuelLevel(vehicle, fuelLevel);
+    fuelLogger.debug(`Registering ${vehicle} with ${fuelLevel}% in tank`);
   }
 }
 

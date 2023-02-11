@@ -59,7 +59,7 @@ global.exports(
         return;
       }
       keyManager.addKey(vin, plyId);
-      fuelManager.setFuelLevel(vin, 100);
+      fuelManager.setFuelLevel(ent, 100);
       vehicle = ent;
     }
 
