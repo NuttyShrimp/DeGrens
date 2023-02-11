@@ -2,7 +2,7 @@ import { Notifications, Util } from '@dgx/server';
 import { Inputs } from 'enums/inputs';
 
 declare interface BringData {
-  Target: UI.Player;
+  Target?: UI.Player;
 }
 
 export const bring: CommandData = {
@@ -12,6 +12,10 @@ export const bring: CommandData = {
   target: [],
   role: 'staff',
   handler: (caller, data: BringData) => {
+    if (!data.Target) {
+      Notifications.add(caller.source, 'Je moet een target selecteren', 'error');
+      return;
+    }
     if (caller.steamId === data.Target.steamId) {
       Notifications.add(caller.source, "You can't bring yourself", 'error');
       return;
