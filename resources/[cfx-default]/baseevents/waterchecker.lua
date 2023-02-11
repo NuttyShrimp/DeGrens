@@ -10,9 +10,11 @@ CreateThread(function()
       if inWater then
         TriggerEvent('baseevents:enteredWater')
         TriggerServerEvent('baseevents:net:enteredWater')
+        debugPrint('Entered water')
       else
         TriggerEvent('baseevents:leftWater')
         TriggerServerEvent('baseevents:net:leftWater')
+        debugPrint('Left water')
       end
     end
 
@@ -23,9 +25,11 @@ CreateThread(function()
       if underWater then
         TriggerEvent('baseevents:startedDiving')
         TriggerServerEvent('baseevents:net:startedDiving')
+        debugPrint('Started diving')
       else
         TriggerEvent('baseevents:stoppedDiving')
         TriggerServerEvent('baseevents:net:stoppedDiving')
+        debugPrint('Stopped diving')
       end
     end
 

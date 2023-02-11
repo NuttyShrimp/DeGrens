@@ -7,12 +7,14 @@ CreateThread(function()
     if cachedPed ~= newPed then
       cachedPed = newPed
       TriggerEvent('baseevents:playerPedChanged')
+      debugPrint('Player Ped has changed')
     end
 
     local newId = PlayerId()
     if cachedId ~= newId then
       cachedId = newId
       TriggerEvent('baseevents:playerIdChanged')
+      debugPrint('Player Id has changed')
     end
 
     Wait(2)

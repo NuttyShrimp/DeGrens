@@ -11,6 +11,9 @@ const DEBUG_OPTIONS = {
   raycast: (plyId: number, toggle: boolean) => {
     Events.emitNet('raycast:debug:toggle', plyId, toggle);
   },
+  baseevents: (plyId: number, toggle: boolean) => {
+    emitNet('baseevents:toggleDebug', plyId, toggle);
+  },
 };
 
 declare type ToggleDebugData = {

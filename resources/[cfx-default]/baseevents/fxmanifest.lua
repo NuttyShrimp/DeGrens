@@ -7,6 +7,7 @@ description 'Adds basic events for developers to use in their scripts. Some thir
 repository 'https://github.com/citizenfx/cfx-server-data'
 
 client_scripts {
+  'main.lua',
   'playerchecker.lua',
   'vehiclechecker.lua',
   'waterchecker.lua'
