@@ -23,7 +23,7 @@ class BaseEvents {
     on('baseevents:stoppedDiving', handler);
   };
 
-  public onEnteringVehicle = (handler: (vehicle: number, seat: number) => void) => {
+  public onEnteringVehicle = (handler: (vehicle: number) => void) => {
     on('baseevents:enteringVehicle', handler);
   };
 

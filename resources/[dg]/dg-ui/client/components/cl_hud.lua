@@ -100,7 +100,7 @@ RegisterNetEvent("pma-voice:radioActive", function(radioActive)
   isDirty = true
 end)
 
-DGX.BaseEvents.onVehicleEngineStateChange(function(vehicle, engineState)
+DGX.BaseEvents.onVehicleEngineStateChange(function(_, engineState)
   if engineState then
     vehicleEngineRunning = true
     startCarLoop()

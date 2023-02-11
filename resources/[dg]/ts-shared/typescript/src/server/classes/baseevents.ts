@@ -23,9 +23,9 @@ class BaseEvents {
     });
   };
 
-  public onEnteringVehicle = (handler: (plyId: number, vehicle: number, seat: number) => void) => {
-    onNet('baseevents:net:enteringVehicle', (vehicle: number, seat: number) => {
-      handler(source, vehicle, seat);
+  public onEnteringVehicle = (handler: (plyId: number, vehicle: number) => void) => {
+    onNet('baseevents:net:enteringVehicle', (vehicle: number) => {
+      handler(source, vehicle);
     });
   };
 
