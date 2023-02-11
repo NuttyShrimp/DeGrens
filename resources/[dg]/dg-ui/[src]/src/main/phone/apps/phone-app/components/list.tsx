@@ -12,7 +12,7 @@ import { styles } from './phone.styles';
 
 export const PhoneList = () => {
   const classes = styles();
-  const calls = usePhoneAppStore(s => s.calls);
+  const calls = usePhoneAppStore(s => s.calls); // devData.phoneCalls
   const actions: Action[] = [
     {
       title: 'Bel terug',
@@ -52,7 +52,7 @@ export const PhoneList = () => {
       {calls.map(c => (
         <Paper
           key={`${c.name ?? c.number ?? ''}${c.date}`}
-          actions={actions.map(a => ({ ...a, _data: c }))}
+          actions={actions.map(a => ({ ...a, data: c }))}
           image={<i className={`fas fa-phone${c.incoming ? '-alt' : ''}`} />}
           title={c.name ?? c.number ?? ''}
           description={formatRelativeTime(c.date)}

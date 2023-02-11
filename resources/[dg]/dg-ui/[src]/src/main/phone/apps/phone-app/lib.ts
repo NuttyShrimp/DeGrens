@@ -6,14 +6,17 @@ import { getContact } from '../contacts-app/lib';
 import { usePhoneAppStore } from './stores/usePhoneAppStore';
 
 const addCallEntry = (name: string, number: string, date: number, incoming: boolean) => {
-  const calls = usePhoneAppStore.getState().calls;
-  calls.push({
-    name,
-    number,
-    date,
-    incoming,
-  });
-  usePhoneAppStore.setState({ calls });
+  usePhoneAppStore.setState(s => ({
+    calls: [
+      ...s.calls,
+      {
+        name,
+        number,
+        date,
+        incoming,
+      },
+    ],
+  }));
 };
 
 // region Call logic

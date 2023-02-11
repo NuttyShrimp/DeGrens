@@ -52,7 +52,7 @@ export const Notification = forwardRef<HTMLDivElement, { notification: Phone.Not
               />
             </div>
             <div className={classes.textWrapper}>
-              <div className={[classes.text, classes.title].join(' ')}>{notification.title.toUpperCase()}</div>
+              <div className={[classes.text, classes.title].join(' ')}>{String(notification.title).toUpperCase()}</div>
               {notification.description && (
                 <div className={[classes.text, classes.description].join(' ')}>
                   {timer !== undefined

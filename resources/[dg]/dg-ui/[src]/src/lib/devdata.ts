@@ -1307,3 +1307,12 @@ devData.phoneInfoApp = [
     color: '#64b5f6',
   },
 ] satisfies Phone.Info.InfoAppEntry[];
+
+devData.phoneCalls = [
+  {
+    name: 'JEEE',
+    number: 469,
+    date: 69,
+    incoming: true,
+  },
+];
