@@ -1,10 +1,10 @@
 Spawn = {
-  list = {},
-  faded = false,
-  spinner = {
-    shouldSpin = false,
-    currentDegree = -90,
-  }
+    list = {},
+    faded = false,
+    spinner = {
+        shouldSpin = false,
+        currentDegree = -90,
+    }
 }
 
 Spawn.setupSpawnMenu = function()
@@ -54,6 +54,7 @@ Spawn.choose = function(idx)
 
   if (result.resetPed) then
     FreezeEntityPosition(ped, false)
+    SetEntityAlpha(ped, 255)
     DGX.Sync.setPlayerInvincible(false)
     DGX.Sync.setPlayerVisible(true)
     SetEntityCollision(ped, true) --client
@@ -89,9 +90,9 @@ Spawn.setCam = function(idx, init)
   if init then
     camFunc = Cam.createCam
   end
-  camFunc(vec3 + vector3(0, 0, 300), vector3(-85.0, 0, 0), 100.0)
+  camFunc(vec3 + vector3(0, 0, 300), vector3( -85.0, 0, 0), 100.0)
   local coord = Spawn.getCamOffset()
-  Cam.updateCam(vec3 + coord, vector3(-60.0, 0, 0))
+  Cam.updateCam(vec3 + coord, vector3( -60.0, 0, 0))
   Spawn.spinner.shouldSpin = true
   Spawn.doCamSpinner(vec3)
 end
@@ -103,8 +104,8 @@ Spawn.fetchSpawns = function()
   end
   Spawn.list = result
   SendNUIMessage({
-    action = "seedSpawnsLocs",
-    data = Spawn.strippedSpawns()
+      action = "seedSpawnsLocs",
+      data = Spawn.strippedSpawns()
   })
 end
 
@@ -113,7 +114,7 @@ Spawn.strippedSpawns = function()
   local stripped = {}
   for _, v in pairs(Spawn.list) do
     table.insert(stripped, {
-      label = v.label,
+        label = v.label,
     })
   end
   return stripped
@@ -123,7 +124,7 @@ Spawn.doCamSpinner = function(baseCoord)
     while Spawn.spinner.shouldSpin do
       local coord = Spawn.getCamOffset()
       Spawn.spinner.currentDegree = Spawn.spinner.currentDegree + 1
-      Cam.updateNoLoop(baseCoord + coord, vector3(-60.0, 0, Spawn.spinner.currentDegree + 90))
+      Cam.updateNoLoop(baseCoord + coord, vector3( -60.0, 0, Spawn.spinner.currentDegree + 90))
       Wait(15)
     end
     Spawn.spinner.currentDegree = -90
@@ -134,16 +135,16 @@ Spawn.getCamOffset = function()
     Spawn.calcTriangle()
   end
   return vector3(
-    math.cos(math.rad(Spawn.spinner.currentDegree)) * Spawn.triangle.a,
-    math.sin(math.rad(Spawn.spinner.currentDegree)) * Spawn.triangle.a,
-    Spawn.triangle.c
-  )
+          math.cos(math.rad(Spawn.spinner.currentDegree)) * Spawn.triangle.a,
+          math.sin(math.rad(Spawn.spinner.currentDegree)) * Spawn.triangle.a,
+          Spawn.triangle.c
+      )
 end
 Spawn.calcTriangle = function()
   Spawn.triangle = {
-    a = 0, -- Will be used to calc x and y
-    b = 35,
-    c = 0, -- Z coord equiv
+      a = 0, -- Will be used to calc x and y
+      b = 35,
+      c = 0, -- Z coord equiv
   }
 
   Spawn.triangle.a = (Spawn.triangle.b * math.sin(math.rad(60))) / math.sin(math.rad(90))
