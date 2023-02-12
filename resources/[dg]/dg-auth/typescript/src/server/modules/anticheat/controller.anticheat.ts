@@ -1,4 +1,5 @@
-import { Events } from '@dgx/server';
+import { Admin, Events } from '@dgx/server';
+import { isRecentlyRestarted } from 'helpers/resources';
 import {
   checkAllowedModules,
   flagUser,
@@ -59,6 +60,14 @@ Events.onNet('auth:anticheat:stats:killConfirm', (src: number, killInfo: Omit<An
 
 Events.onNet('auth:anticheat:stats:ammoInfo', (src: number, ammo: number[]) => {
   queueShot(src, ammo);
+});
+
+Events.onNet('auth:anticheat:resourceStart', (src: number, res: string) => {
+  if (!isRecentlyRestarted(res)) {
+    Admin.ACBan(src, '(re)started a unknown resource', {
+      resource: res,
+    });
+  }
 });
 
 setImmediate(() => {

@@ -1,5 +1,4 @@
-import { Events, Hospital, RPC } from '@dgx/client';
-import { Util } from '@dgx/client';
+import { Events, RPC, Util } from '@dgx/client';
 import {
   allowCheck,
   cleanup,
@@ -32,6 +31,11 @@ on('entityDamaged', (victim: number, attacker: number, weapon: number) => {
     weaponHash: Number(weapon),
     headshot: HEAD_BONES.has(boneHit),
   });
+});
+
+on('onClientResourceStart', (res: string) => {
+  if (!NetworkIsSessionStarted()) return;
+  Events.emitNet('auth:anticheat:resourceStart', res);
 });
 
 Events.onNet('auth:anticheat:weaponDrawn', () => {
