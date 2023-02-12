@@ -1,4 +1,4 @@
-import { Sounds, Util } from '@dgx/client';
+import { Util } from '@dgx/client';
 
 let volumeModifier = 0.5;
 
@@ -27,13 +27,3 @@ setImmediate(() => {
   const preferences = Util.getPreferences();
   setSoundModifier(preferences);
 });
-
-RegisterCommand(
-  'st',
-  (src: number, args: string[]) => {
-    const soundName = args[0];
-    const soundVolume = Number(args[1]);
-    Sounds.playLocalSound(soundName, soundVolume);
-  },
-  false
-);
