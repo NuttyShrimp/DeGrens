@@ -1,6 +1,7 @@
 import { Events, Notifications, RPC, Util } from '@dgx/client';
 
 import { disableBlips, enableBlips } from '../../service/playerBlips';
+import { toggleLocalVis } from './service.commands';
 import { setCmdState } from './state';
 
 // Functiontypes fuck up when putting this in command directly because that file is serversided but function gets executed on client
@@ -117,8 +118,9 @@ Events.onNet('admin:command:collision', () => {
   SetGravityLevel(isDisabled ? 0 : 2);
 });
 
-Events.onNet('admin:commands:cloack', toggle => {
+Events.onNet('admin:commands:cloak', toggle => {
   setCmdState('invisible', toggle);
+  toggleLocalVis(toggle);
 });
 
 Events.onNet('admin:commands:tpm', async () => {

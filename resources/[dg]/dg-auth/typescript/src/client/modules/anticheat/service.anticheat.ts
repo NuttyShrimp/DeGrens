@@ -144,9 +144,9 @@ export const schedulePedThread = () => {
     const inNoclip = global.exports['dg-admin'].inNoclip();
     const ped = PlayerPedId();
     if (!inNoclip) {
-      if (GetEntityAlpha(ped) !== 255) {
+      if (GetEntityAlpha(ped) !== 255 && !allowed.includes('invisible')) {
         Events.emitNet('auth:anticheat:addFlag', 'alpha');
-        SetEntityAlpha(ped, 255, true);
+        SetEntityAlpha(ped, 255, false);
       }
       if (!IsEntityVisible(ped) && !allowed.includes('invisible')) {
         SetEntityVisible(ped, true, true);

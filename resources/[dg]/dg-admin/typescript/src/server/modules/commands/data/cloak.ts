@@ -13,10 +13,10 @@ export const cloak: CommandData = {
     // argument is undefined when using bind, so save state and toggle every func call
     const toggle = !cloakToggled[caller.source];
     cloakToggled[caller.source] = toggle;
+    Events.emitNet('admin:commands:cloak', caller.source, toggle);
     Sync.setPlayerVisible(caller.source, !toggle);
     hidePly(caller.source, toggle);
     Notifications.add(caller.source, `Cloak ${toggle ? 'enabled' : 'disabled'}`);
-    Events.emitNet('admin:commands:cloack', caller.source, toggle);
   },
   UI: {
     title: 'Cloak',
