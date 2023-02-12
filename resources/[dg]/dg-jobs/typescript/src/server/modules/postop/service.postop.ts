@@ -74,10 +74,7 @@ export const startJobForGroup = async (plyId: number, jobType: PostOP.JobType) =
   }
   const netId = NetworkGetNetworkIdFromEntity(vehicle);
   Vehicles.giveKeysToPlayer(plyId, netId);
-  const vin = Vehicles.getVinForVeh(vehicle);
-  if (vin !== null) {
-    Vehicles.setFuelLevel(vin, 100);
-  }
+  Vehicles.setFuelLevel(vehicle, 100);
 
   const locationSequence = generateLocationSequence(jobType);
   const targetLocationId = locationSequence.shift()!;

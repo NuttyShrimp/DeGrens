@@ -32,10 +32,7 @@ Events.onNet('jobs:sanddigging:signIn', async (src: number) => {
   }
   const netId = NetworkGetNetworkIdFromEntity(vehicle);
   Vehicles.giveKeysToPlayer(src, netId);
-  const vin = Vehicles.getVinForVeh(vehicle);
-  if (vin !== null) {
-    Vehicles.setFuelLevel(vin, 100);
-  }
+  Vehicles.setFuelLevel(vehicle, 100);
 
   const group = getGroupByServerId(src)!;
   registerVehicleToGroup(group.id, netId);
