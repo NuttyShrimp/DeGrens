@@ -90,6 +90,14 @@ export const printDebugInfo = () => {
   console.log(camRot);
 };
 
+// get noclip data for entityselector
+export const getNoclipCamData = () => {
+  if (!noclipCam) return;
+  const coords = Util.ArrayToVector3(GetCamCoord(noclipCam));
+  const rotation = Util.ArrayToVector3(GetCamRot(noclipCam, 0));
+  return { coords, rotation };
+};
+
 const cleanupNoclip = () => {
   if (noclipThread) {
     clearInterval(noclipThread);

@@ -1,8 +1,10 @@
-import { RayCast, Util, Weapons } from '@dgx/client';
+import { Util, Weapons } from '@dgx/client';
 import { Vector3 } from '@dgx/shared';
 
 import { drawText3d } from '../util/service.util';
 import { isDevModeEnabled } from 'helpers/devmode';
+import { getForwardVector } from './helpers.selector';
+import { getNoclipCamData } from 'service/noclip';
 
 let isActive = false;
 let selectorInterval: NodeJS.Timer | null = null;
@@ -81,7 +83,7 @@ export const activateSelector = async () => {
       }
       return;
     }
-    const { entity } = RayCast.doRaycast(100);
+    const entity = doRaycast();
     handleRayCastChange(entity);
   }, 250);
 };
@@ -151,4 +153,31 @@ export const openSelectorMenu = async () => {
     },
   });
   SetNuiFocus(true, true);
+};
+
+// Dont use lib because we want cam coords of noclip cam
+const doRaycast = () => {
+  const noclipCamData = getNoclipCamData();
+
+  const originCoords = noclipCamData?.coords ?? Util.ArrayToVector3(GetGameplayCamCoord());
+  const originRotation = noclipCamData?.rotation ?? Util.ArrayToVector3(GetGameplayCamRot(0));
+  const forwardVector = getForwardVector(originRotation);
+  const forwardCoords = originCoords.add(forwardVector.multiply(100));
+
+  const handle = StartExpensiveSynchronousShapeTestLosProbe(
+    originCoords.x,
+    originCoords.y,
+    originCoords.z,
+    forwardCoords.x,
+    forwardCoords.y,
+    forwardCoords.z,
+    -1,
+    PlayerPedId(),
+    0
+  );
+  const [_, hit, __, ___, entity] = GetShapeTestResult(handle);
+  if (!hit) return;
+  if (GetEntityType(entity) === 0 || !DoesEntityExist(entity)) return;
+
+  return entity;
 };
