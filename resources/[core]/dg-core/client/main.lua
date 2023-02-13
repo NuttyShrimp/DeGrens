@@ -16,8 +16,3 @@ CreateThread(function()
     TriggerServerEvent('DGCore:server:save')
   end
 end)
-
--- TODO: Remove for prod
-RegisterCommand('forceSave', function(src)
-  TriggerServerEvent('DGCore:server:save')
-end)

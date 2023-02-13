@@ -201,13 +201,3 @@ global.exports('requestClientMinioScreenshot', async (player: string | number, o
   const result = await request;
   return result;
 });
-
-RegisterCommand(
-  'test',
-  async (src: number) => {
-    const fileName = await global.exports['screenshot-basic'].generateMinioFilename();
-    const minioLink = await global.exports['screenshot-basic'].requestClientMinioScreenshot(src, { fileName });
-    console.log(minioLink);
-  },
-  false
-);

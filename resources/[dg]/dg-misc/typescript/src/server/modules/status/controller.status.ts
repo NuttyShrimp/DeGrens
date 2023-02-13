@@ -42,11 +42,3 @@ global.exports('showStatusesToPlayer', (showTo: number, target: number, filter?:
     type: 'normal',
   });
 });
-
-RegisterCommand(
-  'stat',
-  (src: number) => {
-    Status.showStatusesToPlayer(src, src);
-  },
-  false
-);

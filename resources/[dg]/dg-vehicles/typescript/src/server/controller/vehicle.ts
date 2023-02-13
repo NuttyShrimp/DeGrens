@@ -97,10 +97,6 @@ global.exports(
   }
 );
 
-Chat.registerCommand('giveDevCar', 'Puts a car in the DB', [], 'developer', async source => {
-  insertNewVehicle(vinManager.generateVin(), Player(source).state.cid, 'elegy', 'dev-123');
-});
-
 global.asyncExports('getPlateForVin', async (vin: string) => {
   if (!vinManager.isVinFromPlayerVeh(vin)) return;
   const info = await getPlayerVehicleInfo(vin);
