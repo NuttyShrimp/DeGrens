@@ -75,6 +75,27 @@ async function main() {
       { cid: 1000, job: 'lawyer', rank: 0, specialty: 1 },
     ],
   });
+  await prisma.queue_priority.createMany({
+    data: [
+      {
+        steamid: 'steam:110000137164c7d',
+        priority: 999,
+      },
+      {
+        steamid: 'steam:11000011bf78d6c',
+        priority: 999,
+      },
+      {
+        steamid: 'steam:11000010119ac2a',
+        priority: 999,
+      },
+    ],
+  });
+  await prisma.tax_logs.create({
+    data: {
+      date: new Date(),
+    },
+  });
 }
 
 async function devEnv() {
