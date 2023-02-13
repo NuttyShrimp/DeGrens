@@ -161,3 +161,30 @@ Events.onNet('admin:commands:tpm', async () => {
     SetPedCoordsKeepVehicle(ped, ...Util.Vector3ToArray(oldCoords));
   }
 });
+
+Events.onNet('admin:commands:teleportInVehicle', (netId: number) => {
+  if (!NetworkDoesEntityExistWithNetworkId(netId)) {
+    Notifications.add('Voertuig is niet in je buurt', 'error');
+    return;
+  }
+  const vehicle = NetworkGetEntityFromNetworkId(netId);
+  if (!vehicle || !DoesEntityExist(vehicle)) {
+    Notifications.add('Voertuig is niet in je buurt', 'error');
+    return;
+  }
+
+  const numSeats = GetVehicleModelNumberOfSeats(GetEntityModel(vehicle));
+  let freeSeat: number | undefined = undefined;
+  for (let i = numSeats - 2; i >= -1; i--) {
+    if (IsVehicleSeatFree(vehicle, i)) {
+      freeSeat = i;
+      break;
+    }
+  }
+  if (freeSeat === undefined) {
+    Notifications.add('Er is geen plaats in het voertuig', 'error');
+    return;
+  }
+
+  TaskWarpPedIntoVehicle(PlayerPedId(), vehicle, freeSeat);
+});
