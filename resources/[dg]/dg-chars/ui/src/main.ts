@@ -24,7 +24,7 @@ const app = createApp(App);
 
 Sentry.init({
   app,
-  dsn: 'https://421dd5306b6d4f2abe6465a0dd8457ef@glitchtip.nuttyshrimp.me/3',
+  dsn: 'https://cc7344654c4d4627a26960e6f6848d07@sentry.nuttyshrimp.me/15',
   integrations: [
     // @ts-ignore
     new BrowserTracing({
