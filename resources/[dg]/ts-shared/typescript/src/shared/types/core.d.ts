@@ -98,6 +98,7 @@ declare interface PlayerData {
   source: number;
   license: string;
   steamid: string;
+  discord: string;
   charinfo: CharacterInfo;
   name: string;
   citizenid: number;

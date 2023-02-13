@@ -119,3 +119,5 @@ RegisterNetEvent('DGCore:server:save', function()
   local src = source
   DGCore.Player.Save(src)
 end)
+
+exports("GetPlayer", DGCore.Functions.GetPlayer)

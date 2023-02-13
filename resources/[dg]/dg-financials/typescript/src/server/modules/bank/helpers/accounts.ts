@@ -1,5 +1,7 @@
 import { Util } from '@dgx/server';
+import { AccountPermissionValue } from 'sv_constant';
 import accountManager from '../classes/AccountManager';
+import { bankLogger } from '../utils';
 
 export const createDefaultAccount = async (src: number) => {
   const cid = Util.getCID(src);
@@ -29,3 +31,23 @@ export const getPermissions = (accountId: string, cid: number) => {
   if (!account) return null;
   return account.permsManager.getMemberPermissions(cid);
 };
+
+export const buildPermissions = (accessLevel: number): IAccountPermission => {
+  const permissions: IAccountPermission = {
+    deposit: false,
+    withdraw: false,
+    transfer: false,
+    transactions: false,
+  };
+  try {
+    Object.keys(AccountPermissionValue).forEach(key => {
+      if (accessLevel & AccountPermissionValue[key as keyof IAccountPermission]) {
+        permissions[key as keyof IAccountPermission] = true;
+      }
+    });
+  } catch (e) {
+    bankLogger.error(`Error building permissions for level ${accessLevel}`, e);
+  } finally {
+    return permissions;
+  }
+}

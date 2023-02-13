@@ -39,6 +39,10 @@ class Util extends UtilShared {
         };
       }
     }
+    data.resource = GetCurrentResourceName();
+    if (data.resource === 'ts-shared') {
+      data.resource = GetInvokingResource();
+    }
     global.exports['dg-logs'].createGraylogEntry(type, data, message, isDevImportant);
   }
 

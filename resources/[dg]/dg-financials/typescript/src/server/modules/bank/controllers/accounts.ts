@@ -2,7 +2,7 @@ import { Chat, Events, Financials, Notifications, RPC, Util } from '@dgx/server'
 
 import { getCash } from '../../cash/service';
 import accountManager from '../classes/AccountManager';
-import { createDefaultAccount, getPermissions, removePermissions, setPermissions } from '../helpers/accounts';
+import { buildPermissions, createDefaultAccount, getPermissions, removePermissions, setPermissions } from '../helpers/accounts';
 import { bankLogger } from '../utils';
 
 global.asyncExports('createAccount', async (cid: number, name: string, accType: AccountType) => {
@@ -26,6 +26,7 @@ global.exports('setPermissions', (accountId: string, cid: number, permissions: I
 );
 global.exports('removePermissions', (accountId: string, cid: number) => removePermissions(accountId, cid));
 global.exports('getPermissions', (accountId: string, cid: number) => getPermissions(accountId, cid));
+global.exports('buildPermissions', (level: number) => buildPermissions(level));
 
 Util.onPlayerLoaded(playerData => {
   createDefaultAccount(playerData.source);

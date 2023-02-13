@@ -87,8 +87,8 @@ DGCore.Functions.CreateCallback('dg-chars:server:loadPly', function(src, cb, cid
 	if DGCore.Player.Login(src, cid) then
 		DGCore.ShowSuccess(GetCurrentResourceName(), ('%s (Citizen ID: %s) has successfully been loaded!'):format(GetPlayerName(src), cid))
     exports['dg-chat']:refreshCommands(src)
-		-- loadHouseData()
-		exports['dg-logs']:createGraylogEntry('join', { src, cid }, ("%s (%s | %d) loaded.."):format(GetPlayerName(src), cid, src))
+	  -- loadHouseData()
+		exports['dg-logs']:createGraylogEntry('chars:select', { source = src, citizendid = cid }, ("%s (%d | %d) loaded.."):format(GetPlayerName(src), cid, src))
 	end
 
   local ply = DGCore.Functions.GetPlayer(src)
@@ -99,8 +99,9 @@ DGCore.Functions.CreateCallback('dg-chars:server:createCharacter', function(src,
 	local newData = {}
 	newData.charinfo = data
 	if DGCore.Player.Login(src, false, newData) then
+		DGCore.ShowSuccess(GetCurrentResourceName(), ('%s is creating a new character!'):format(GetPlayerName(src)))
     exports['dg-chat']:refreshCommands(src)
-		exports['dg-logs']:createGraylogEntry('chars:created', { src, data }, "Created a new character")
+		exports['dg-logs']:createGraylogEntry('chars:created', { source = src, data = data }, ("%s (%d) is creating a new character (%s %s)"):format(GetPlayerName(src), src, data.firstname, data.lastname))
 		TriggerClientEvent('qb-clothes:client:CreateFirstCharacter', src)
 	end
 	cb()

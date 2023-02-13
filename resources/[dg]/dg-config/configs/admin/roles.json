@@ -10,11 +10,6 @@
     "allowAFK": true
   },
   {
-    "name": "staffHead",
-    "power": 55,
-    "allowAFK": false
-  },
-  {
     "name": "staff",
     "power": 50,
     "allowAFK": false

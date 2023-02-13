@@ -37,11 +37,11 @@ const penalisePlayer = async (
         ...metadata,
       },
       `Failed to register ${type} for ${targetName}(${target})`,
-      source !== -1 ? source : undefined
+      source < 1 ? source : undefined
     );
     penaltyLogger.error(
       `Failed to register ${type} for ${targetName}(${target}) given by ${
-        source !== -1 ? Util.getName(source) : 'AntiCheat'
+        source === -1 ? "AntiCheat" : source === 0 ? "Panel" : Util.getName(source)
       } | ${Object.values(metadata)
         .map((k, v) => `${k}: ${v}`)
         .join('| ')}`
@@ -61,11 +61,11 @@ const penalisePlayer = async (
       ...metadata,
     },
     `${targetName}(${target}) received a ${type} for ${reasons.join(' | ')}`,
-    source !== -1 ? source : undefined
+    source < 1 ? source : undefined
   );
   penaltyLogger.info(
     `${targetName}(${target}) received a ${type} by ${Util.getName(
-      source !== -1 ? Util.getName(source) : 'AntiCheat'
+      source === -1 ? "AntiCheat" : source === 0 ? "Panel" : Util.getName(source)
     )} | ${Object.entries(metadata)
       .map(([k, v]) => `${k}: ${v}`)
       .join('| ')}`

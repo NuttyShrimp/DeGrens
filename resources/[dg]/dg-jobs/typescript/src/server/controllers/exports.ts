@@ -27,6 +27,10 @@ global.exports('isWhitelisted', (src: number, job: string) => {
   if (!cid) return false;
   return !!getPlayerInfoForJob(cid, job);
 });
+global.exports('isSteamIdWhitelisted', async (steamId: string, job: string) => {
+  const cids = await DGCore.Functions.GetCidsForSteamId(steamId)
+  return cids.some(cid => !!getPlayerInfoForJob(cid, job))
+})
 global.asyncExports('addToWhitelist', addWhitelist);
 global.asyncExports('removeFromWhitelist', removeWhitelist);
 global.exports('getPlayersForJob', getPlayersForJob);

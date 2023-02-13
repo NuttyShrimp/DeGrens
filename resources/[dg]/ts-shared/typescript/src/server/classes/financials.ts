@@ -51,6 +51,10 @@ class Financials {
     return fexp.getPermissions(accountId, cid);
   }
 
+  buildPermissions(accessLevel: number): IFinancials.Permissions {
+    return fexp.buildPermissions(accessLevel);
+  }
+
   deposit(accountId: string, triggerCid: number, amount: number, comment?: string): Promise<boolean> {
     return fexp.deposit(accountId, triggerCid, amount, comment);
   }

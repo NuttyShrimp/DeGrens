@@ -3,6 +3,8 @@ declare namespace API {
 
   type Responser = (code: number, data: any, headers?: Record<string, string>) => void;
 
+  type Handler = (request: any, res: Responser) => any
+
   interface Token {
     token: string;
     comment: string;
@@ -11,6 +13,14 @@ declare namespace API {
   interface Route {
     method: Method;
     path: string;
-    handler: (request: any, res: Responser) => any;
+    params: Record<string, number>
+    handler: Handler;
+  }
+
+  interface Player {
+    source: number;
+    cid: number;
+    firstname: string;
+    lastname: string;
   }
 }

@@ -95,6 +95,11 @@ interface ServerFunctions {
   GetOfflinePlayerByPhone(phoneNumber: number): Promise<Pick<Player, 'PlayerData'>>;
 
   /**
+    * Fetch all the citizenid's tied to this steamId
+    */
+  GetCidsForSteamId(steamId: string): number[];
+
+  /**
    * Registers a new server callback, use QBCore.Functions.TriggerCallback on the client side to trigger the callback
    */
   CreateCallback(name: string, cb: (source: number, cb: Function, ...args: any[]) => void): void;

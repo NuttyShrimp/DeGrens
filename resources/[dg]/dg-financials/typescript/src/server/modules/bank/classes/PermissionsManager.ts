@@ -1,10 +1,10 @@
 import { SQL } from '@dgx/server';
-import { getConfig } from 'helpers/config';
 import winston from 'winston';
 
 import { AccountPermissionValue } from '../../../sv_constant';
 import { bankLogger } from '../utils';
 import accountManager from './AccountManager';
+import { buildPermissions as buildPerms } from '../helpers/accounts';
 
 export class PermissionsManager {
   private account_id: string;
@@ -59,22 +59,8 @@ export class PermissionsManager {
   }
 
   public buildPermissions(level: number): IAccountPermission {
-    const permissions: IAccountPermission = {
-      deposit: false,
-      withdraw: false,
-      transfer: false,
-      transactions: false,
-    };
-    try {
-      Object.keys(AccountPermissionValue).forEach(key => {
-        if (level & AccountPermissionValue[key as keyof IAccountPermission]) {
-          permissions[key as keyof IAccountPermission] = true;
-        }
-      });
-    } catch (e) {
-      this.logger.error(`Error building permissions for account ${this.account_id}`, e);
-    }
-    this.logger.debug(`buildPermissions | level: ${level} | permissions: ${JSON.stringify(permissions)}`);
+    const permissions = buildPerms(level)
+    this.logger.silly(`buildPermissions | level: ${level} | permissions: ${JSON.stringify(permissions)}`);
     return permissions;
   }
 

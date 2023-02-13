@@ -1,6 +1,12 @@
 import { Config, RPC } from '@dgx/server';
 
-import { canPlayerBeAFK, hasPlayerPermission, loadPlayerRoles, loadRoles } from './service.permissions';
+import {
+  canPlayerBeAFK,
+  hasPlayerPermission,
+  hasSteamIdPermission,
+  loadPlayerRoles,
+  loadRoles,
+} from './service.permissions';
 
 setImmediate(async () => {
   await Config.awaitConfigLoad();
@@ -11,6 +17,9 @@ setImmediate(async () => {
 
 global.exports('hasPlayerPermission', (src: number, permission: string) => hasPlayerPermission(src, permission));
 global.exports('canPlayerBeAFK', (src: number) => canPlayerBeAFK(src));
+global.exports('hasSteamIdPermission', (steamId: string, permission: string) =>
+  hasSteamIdPermission(steamId, permission)
+);
 
 on('dg-config:moduleLoaded', (module: string, data: Permissions.Role[]) => {
   if (module === 'admin.roles') {

@@ -20,7 +20,6 @@
     "@dgx/client": "*",
     "@dgx/server": "*",
     "@dgx/shared": "*",
-    "@types/jsonwebtoken": "^8.5.8",
     "tsconfig": "*",
     "webpack": "*"
   }

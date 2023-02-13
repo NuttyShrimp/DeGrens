@@ -5,6 +5,9 @@ class Admin {
   canPlayerBeAFK(source: number): boolean {
     return global.exports['dg-admin'].canPlayerBeAFK(source);
   }
+  hasSteamIdPermission(steamId: string, role: string): boolean {
+    return global.exports['dg-admin'].hasSteamIdPermission(steamId, role);
+  }
   isWhitelisted(source: number): Promise<boolean> {
     return global.exports['dg-admin'].isplayerwhitelisted(source);
   }

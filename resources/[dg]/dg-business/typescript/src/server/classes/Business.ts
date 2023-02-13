@@ -152,6 +152,11 @@ export class Business {
     );
   }
 
+  async updateOwner(targetCID: number) {
+    this.logger.info(`Updated business owner to ${targetCID}`)
+    this.setEmployees(this.employees.map(e => ({...e, isOwner: e.citizenid === targetCID})))
+  }
+
   async hire(src: number, targetCID: number, roleName: string) {
     const cid = Util.getCID(src);
     if (!this.hasPermission(cid, 'hire')) {

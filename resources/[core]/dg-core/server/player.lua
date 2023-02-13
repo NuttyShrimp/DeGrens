@@ -333,3 +333,5 @@ function DGCore.Player.GeneratePhoneNumber()
     Citizen.Wait(100)
   end
 end
+
+exports('GetOfflinePlayerByCitizenId', DGCore.Functions.GetOfflinePlayerByCitizenId)
