@@ -76,17 +76,16 @@ validate db migrations:
     MYSQL_USER: dguser
     MYSQL_PASSWORD: dgpw
   script:
-    - echo 'set mysql_connection_string "mysql://dguser:dgpw@mariadb/degrens2?charset=utf8mb4"' > ./config/mysql.cfg
-    - cd ./tools/migrations
+    - echo 'DATABASE_URL=mysql://dguser:dgpw@mariadb/degrens2?charset=utf8mb4' > ./packages/db/.env
     - yarn --pure-lockfile
-    - yarn start --init-db
+    - yarn db:deploy
   only:
     refs:
       - main
       - UPD
       - merge_requests
     changes:
-      - 'migrations/*'
+      - 'packages/db/*'
 
 JS linting:
   extends:

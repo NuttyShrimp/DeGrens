@@ -1,0 +1,687 @@
+generator client {
+  provider        = "prisma-client-js"
+  engineType      = "binary"
+  previewFeatures = ["views"]
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model apartments {
+  id         Int        @id @default(autoincrement())
+  citizenid  Int
+  characters characters @relation(fields: [citizenid], references: [citizenid], onDelete: Cascade, map: "fk_apartments_cid")
+
+  @@index([citizenid], map: "fk_apartments_cid")
+}
+
+model api_bans {
+  id Int    @id @default(autoincrement())
+  ip String @db.Text
+}
+
+model api_tokens {
+  token      String    @id @default("") @db.VarChar(255)
+  comment    String    @db.LongText
+  created_at DateTime? @default(now()) @db.Timestamp(0)
+}
+
+model bank_accounts {
+  account_id           String                 @id @db.VarChar(255)
+  name                 String?                @default("Name") @db.VarChar(255)
+  type                 bank_accounts_type
+  balance              Float?                 @db.Float
+  updated_at           DateTime?              @default(now()) @db.Timestamp(0)
+  bank_accounts_access bank_accounts_access[]
+  business             business[]
+  debts                debts[]
+}
+
+model bank_accounts_access {
+  account_id    String        @db.VarChar(255)
+  cid           Int
+  access_level  Int           @default(1)
+  bank_accounts bank_accounts @relation(fields: [account_id], references: [account_id], onDelete: Cascade, map: "fk_bank_accounts_access_account_id")
+  characters    characters    @relation(fields: [cid], references: [citizenid], onDelete: Cascade, map: "fk_bank_accounts_access_cid")
+
+  @@id([account_id, cid])
+  @@index([cid], map: "fk_bank_accounts_access_cid")
+}
+
+model bans {
+  id       Int     @id @default(autoincrement())
+  name     String? @db.VarChar(50)
+  steamid  String? @db.VarChar(50)
+  license  String? @db.VarChar(50)
+  discord  String? @db.VarChar(50)
+  ip       String? @db.VarChar(50)
+  reason   String? @db.Text
+  expire   Int?
+  bannedby String  @default("LeBanhammer") @db.VarChar(255)
+}
+
+model bench_levels {
+  benchId String @id @db.VarChar(50)
+  level   Int
+}
+
+model business {
+  id                                                  Int                 @id @default(autoincrement())
+  label                                               String              @db.VarChar(255)
+  business_type                                       Int
+  bank_account_id                                     String?             @db.VarChar(255)
+  name                                                String              @unique(map: "name") @db.VarChar(255)
+  bank_accounts                                       bank_accounts?      @relation(fields: [bank_account_id], references: [account_id], onDelete: Cascade, map: "fk_business_bank_account")
+  business_type_business_business_typeTobusiness_type business_type       @relation("business_business_typeTobusiness_type", fields: [business_type], references: [id], onDelete: Cascade, map: "fk_business_business_type")
+  business_employee                                   business_employee[]
+  business_log                                        business_log[]
+  business_role                                       business_role[]
+
+  @@index([bank_account_id], map: "fk_business_bank_account")
+  @@index([business_type], map: "fk_business_business_type")
+}
+
+model business_employee {
+  id            Int           @id @default(autoincrement())
+  is_owner      Boolean       @default(false)
+  citizenid     Int
+  role_id       Int
+  business_id   Int
+  business      business      @relation(fields: [business_id], references: [id], onDelete: Cascade, map: "fk_business_employee_business")
+  business_role business_role @relation(fields: [role_id], references: [id], map: "fk_business_employee_business_role")
+  characters    characters    @relation(fields: [citizenid], references: [citizenid], onDelete: Cascade, map: "fk_business_employee_character")
+
+  @@index([business_id], map: "fk_business_employee_business")
+  @@index([role_id], map: "fk_business_employee_business_role")
+  @@index([citizenid], map: "fk_business_employee_character")
+}
+
+model business_log {
+  id          Int        @id @default(autoincrement())
+  citizenid   Int
+  business_id Int
+  type        String     @db.VarChar(255)
+  action      String     @db.Text
+  business    business   @relation(fields: [business_id], references: [id], onDelete: Cascade, map: "fk_business_log_employee_business")
+  characters  characters @relation(fields: [citizenid], references: [citizenid], onDelete: Cascade, map: "fk_business_log_employee_character")
+
+  @@index([business_id], map: "fk_business_log_employee_business")
+  @@index([citizenid], map: "fk_business_log_employee_character")
+}
+
+model business_role {
+  id                Int                 @id @default(autoincrement())
+  name              String              @db.VarChar(255)
+  permissions       Int
+  business_id       Int
+  business_employee business_employee[]
+  business          business            @relation(fields: [business_id], references: [id], onDelete: Cascade, map: "fk_business_role_business")
+
+  @@unique([name, business_id], map: "name")
+  @@index([business_id], map: "fk_business_role_business")
+}
+
+model business_type {
+  id                                             Int        @id @default(autoincrement())
+  name                                           String     @db.VarChar(255)
+  business_business_business_typeTobusiness_type business[] @relation("business_business_typeTobusiness_type")
+}
+
+model character_data {
+  citizenid    Int        @id
+  position     String     @db.Text
+  metadata     String     @db.Text
+  last_updated DateTime   @default(now()) @db.Timestamp(0)
+  created_at   DateTime   @default(now()) @db.Timestamp(0)
+  characters   characters @relation(fields: [citizenid], references: [citizenid], onDelete: Cascade, map: "character_data_ibfk_1")
+}
+
+model character_info {
+  citizenid    Int        @id
+  firstname    String     @db.Text
+  lastname     String     @db.Text
+  birthdate    String     @db.VarChar(11)
+  gender       Int
+  nationality  String     @db.Text
+  phone        String     @db.VarChar(255)
+  cash         BigInt?    @default(0)
+  last_updated DateTime   @default(now()) @db.Timestamp(0)
+  created_at   DateTime   @default(now()) @db.Timestamp(0)
+  characters   characters @relation(fields: [citizenid], references: [citizenid], onDelete: Cascade, map: "character_info_ibfk_1")
+}
+
+model character_reputations {
+  citizenid         Int        @id
+  crafting          Int        @default(0)
+  ammo_crafting     Int        @default(0)
+  mechanic_crafting Int        @default(0)
+  cornersell        Int        @default(0)
+  characters        characters @relation(fields: [citizenid], references: [citizenid], onDelete: Cascade, map: "character_reputations_ibfk_1")
+}
+
+model characters {
+  citizenid                        Int                     @id @default(autoincrement())
+  steamid                          String                  @db.VarChar(255)
+  last_updated                     DateTime                @default(now()) @db.Timestamp(0)
+  created_at                       DateTime                @default(now()) @db.Timestamp(0)
+  apartments                       apartments[]
+  bank_accounts_access             bank_accounts_access[]
+  business_employee                business_employee[]
+  business_log                     business_log[]
+  character_data                   character_data?
+  character_info                   character_info?
+  character_reputations            character_reputations?
+  users                            users                   @relation(fields: [steamid], references: [steamid], onDelete: Cascade, map: "characters_ibfk_1")
+  crypto_wallets                   crypto_wallets[]
+  debts_debts_cidTocharacters      debts[]                 @relation("debts_cidTocharacters")
+  debts_debts_given_byTocharacters debts[]                 @relation("debts_given_byTocharacters")
+  gang_members                     gang_members[]
+  lockers                          lockers[]
+  phone_contacts                   phone_contacts[]
+  phone_images                     phone_images[]
+  phone_mails                      phone_mails[]
+  phone_notes                      phone_notes[]
+  phone_tweets                     phone_tweets[]
+  phone_tweets_likes               phone_tweets_likes[]
+  phone_tweets_retweets            phone_tweets_retweets[]
+  plate_flags                      plate_flags[]
+  player_outfits                   player_outfits[]
+  player_paycheck                  player_paycheck?
+  player_vehicles                  player_vehicles[]
+  playerskins                      playerskins[]
+  vehicle_transfer_logs            vehicle_transfer_logs[]
+  whitelist_jobs                   whitelist_jobs[]
+
+  @@index([steamid], map: "steamid")
+}
+
+model container_benches {
+  containerId     String           @id @db.VarChar(50)
+  keyItemId       String?          @db.VarChar(36)
+  inventory_items inventory_items? @relation(fields: [keyItemId], references: [id], map: "container_benches_ibfk_1")
+
+  @@index([keyItemId], map: "keyItemId")
+}
+
+model cornerselling_sales {
+  id   Int      @id @default(autoincrement())
+  zone String
+  date DateTime @db.DateTime(0)
+}
+
+model crypto {
+  crypto_name    String           @id @db.VarChar(255)
+  value          Int              @default(100)
+  crypto_wallets crypto_wallets[]
+}
+
+model crypto_wallets {
+  cid         Int
+  crypto_name String     @db.VarChar(255)
+  amount      Int        @default(0)
+  characters  characters @relation(fields: [cid], references: [citizenid], onDelete: Cascade, map: "fk_crypto_wallets_cid")
+  crypto      crypto     @relation(fields: [crypto_name], references: [crypto_name], onDelete: Cascade, map: "fk_crypto_wallets_name")
+
+  @@id([cid, crypto_name])
+  @@index([crypto_name], map: "fk_crypto_wallets_name")
+}
+
+model debts {
+  id                                    Int           @id @default(autoincrement())
+  cid                                   Int
+  target_account                        String        @db.VarChar(255)
+  debt                                  Float?        @db.Float
+  payed                                 BigInt        @default(0)
+  type                                  debts_type    @default(debt)
+  given_by                              Int?
+  origin_name                           String        @db.Text
+  date                                  DateTime      @default(now()) @db.Timestamp(0)
+  reason                                String        @db.LongText
+  event                                 String?       @db.VarChar(255)
+  pay_term                              Float?        @db.Float
+  bank_accounts                         bank_accounts @relation(fields: [target_account], references: [account_id], onDelete: Cascade, map: "fk_debts_acc_id")
+  characters_debts_cidTocharacters      characters    @relation("debts_cidTocharacters", fields: [cid], references: [citizenid], onDelete: Cascade, map: "fk_debts_cid")
+  characters_debts_given_byTocharacters characters?   @relation("debts_given_byTocharacters", fields: [given_by], references: [citizenid], onDelete: Cascade, map: "fk_debts_origin_cid")
+
+  @@index([target_account], map: "fk_debts_acc_id")
+  @@index([cid], map: "fk_debts_cid")
+  @@index([given_by], map: "fk_debts_origin_cid")
+}
+
+model gang_info {
+  name         String         @id @db.VarChar(255)
+  label        String         @db.VarChar(255)
+  owner        Int
+  gang_members gang_members[]
+}
+
+model gang_members {
+  id         Int        @id @default(autoincrement())
+  gang       String     @db.VarChar(255)
+  citizenid  Int
+  hasPerms   Boolean
+  gang_info  gang_info  @relation(fields: [gang], references: [name], onDelete: Cascade, map: "gang_members_ibfk_1")
+  characters characters @relation(fields: [citizenid], references: [citizenid], onDelete: Cascade, map: "gang_members_ibfk_2")
+
+  @@index([citizenid], map: "citizenid")
+  @@index([gang], map: "gang")
+}
+
+model inventory_items {
+  id                String              @id @db.VarChar(36)
+  name              String              @db.VarChar(50)
+  inventory         String              @db.VarChar(100)
+  position          String              @db.VarChar(50)
+  rotated           Int                 @default(0) @db.TinyInt()
+  quality           Float               @db.Float
+  hotkey            Int?
+  metadata          String              @db.LongText
+  lastDecayTime     Int
+  destroyDate       Int?
+  container_benches container_benches[]
+}
+
+model lockers {
+  id          String      @id @db.VarChar(50)
+  x           Float       @db.Float
+  y           Float       @db.Float
+  z           Float       @db.Float
+  radius      Float       @db.Float
+  owner       Int?
+  password    String?     @db.VarChar(255)
+  price       Int
+  payment_day Int
+  characters  characters? @relation(fields: [owner], references: [citizenid], map: "lockers_ibfk_1")
+
+  @@index([owner], map: "owner")
+}
+
+model maintenance_fee_log {
+  id   Int      @id @default(autoincrement())
+  date DateTime @default(now()) @db.Timestamp(0)
+}
+
+model penalties {
+  id        Int               @id @default(autoincrement())
+  steamId   String            @db.VarChar(255)
+  penalty   penalties_penalty
+  reason    String            @db.LongText
+  points    Int               @default(0)
+  length    Int?
+  date      DateTime          @default(now()) @db.Timestamp(0)
+  automated Boolean           @default(false)
+
+  @@index([steamId], map: "steamId")
+}
+
+model permissions {
+  id      Int    @id @default(autoincrement())
+  name    String @db.VarChar(255)
+  steamid String @db.VarChar(255)
+  role    String @db.VarChar(255)
+
+  @@index([name], map: "name")
+  @@index([steamid], map: "steamid")
+}
+
+model phone_contacts {
+  id         Int        @id @default(autoincrement())
+  cid        Int
+  label      String     @db.VarChar(255)
+  phone      String     @db.VarChar(255)
+  characters characters @relation(fields: [cid], references: [citizenid], onDelete: Cascade, map: "fk_phone_contacts_cid")
+
+  @@index([cid], map: "fk_phone_contacts_cid")
+}
+
+model phone_images {
+  id         Int        @id @default(autoincrement())
+  cid        Int
+  link       String     @db.VarChar(255)
+  characters characters @relation(fields: [cid], references: [citizenid], onDelete: Cascade, map: "fk_phone_images_cid")
+
+  @@index([cid], map: "fk_phone_images_cid")
+}
+
+model phone_mails {
+  id         Int        @id @default(autoincrement())
+  cid        Int
+  sender     String     @db.VarChar(255)
+  subject    String     @db.VarChar(255)
+  message    String     @db.LongText
+  characters characters @relation(fields: [cid], references: [citizenid], onDelete: Cascade, map: "fk_phone_mails_cid")
+
+  @@index([cid], map: "fk_phone_mails_cid")
+}
+
+model phone_messages {
+  id       Int     @id @default(autoincrement())
+  sender   String  @db.VarChar(255)
+  receiver String  @db.VarChar(255)
+  message  String  @db.Text
+  isread   Boolean
+  date     BigInt
+}
+
+model phone_notes {
+  id         Int        @id @default(autoincrement())
+  cid        Int
+  title      String     @db.VarChar(255)
+  note       String     @db.LongText
+  date       BigInt
+  characters characters @relation(fields: [cid], references: [citizenid], onDelete: Cascade, map: "fk_phone_notes_cid")
+
+  @@index([cid], map: "fk_phone_notes_cid")
+}
+
+model phone_tweets {
+  id                    Int                     @id @default(autoincrement())
+  cid                   Int
+  tweet                 String                  @db.LongText
+  date                  BigInt
+  characters            characters              @relation(fields: [cid], references: [citizenid], onDelete: Cascade, map: "fk_phone_tweets_cid")
+  phone_tweets_likes    phone_tweets_likes[]
+  phone_tweets_retweets phone_tweets_retweets[]
+
+  @@index([cid], map: "fk_phone_tweets_cid")
+}
+
+model phone_tweets_likes {
+  tweetid      Int
+  cid          Int
+  characters   characters   @relation(fields: [cid], references: [citizenid], onDelete: Cascade, map: "fk_phone_tweets_likes_cid")
+  phone_tweets phone_tweets @relation(fields: [tweetid], references: [id], onDelete: Cascade, map: "fk_phone_tweets_likes_tweetid")
+
+  @@id([tweetid, cid])
+  @@index([cid], map: "fk_phone_tweets_likes_cid")
+}
+
+model phone_tweets_retweets {
+  tweetid      Int
+  cid          Int
+  characters   characters   @relation(fields: [cid], references: [citizenid], onDelete: Cascade, map: "fk_phone_tweets_retweets_cid")
+  phone_tweets phone_tweets @relation(fields: [tweetid], references: [id], onDelete: Cascade, map: "fk_phone_tweets_retweets_tweetid")
+
+  @@id([tweetid, cid])
+  @@index([cid], map: "fk_phone_tweets_retweets_cid")
+}
+
+model plate_flags {
+  id              String     @id @db.VarChar(36)
+  plate           String     @db.VarChar(8)
+  reason          String     @db.LongText
+  issued_by       Int
+  issued_date     Int
+  expiration_date Int
+  characters      characters @relation(fields: [issued_by], references: [citizenid], onDelete: Cascade, map: "plate_flags_ibfk_1")
+
+  @@index([issued_by], map: "issued_by")
+}
+
+model player_outfits {
+  id         Int         @id @default(autoincrement())
+  citizenid  Int?
+  outfitname String      @db.VarChar(50)
+  model      String?     @db.VarChar(50)
+  skin       String?     @db.Text
+  outfitId   String      @db.VarChar(50)
+  characters characters? @relation(fields: [citizenid], references: [citizenid], onDelete: Cascade, map: "fk_player_outfits_cid")
+
+  @@index([citizenid], map: "fk_player_outfits_cid")
+}
+
+model player_paycheck {
+  cid        Int        @id
+  amount     BigInt
+  characters characters @relation(fields: [cid], references: [citizenid], onDelete: Cascade, map: "fk_player_paycheck_cid")
+}
+
+model player_vehicles {
+  vin                    String                  @id @db.VarChar(255)
+  cid                    Int
+  model                  String                  @db.VarChar(255)
+  plate                  String                  @db.VarChar(8)
+  fakeplate              String?                 @db.VarChar(8)
+  state                  player_vehicles_state   @default(parked)
+  garageId               String                  @default("alta_apartments") @db.VarChar(255)
+  harness                Int                     @default(0) @db.SmallInt
+  stance                 String?                 @db.LongText
+  wax                    Int?
+  nos                    Int                     @default(0) @db.SmallInt
+  characters             characters              @relation(fields: [cid], references: [citizenid], onDelete: Cascade, map: "player_vehicles_ibfk_1")
+  vehicle_depot_info     vehicle_depot_info[]
+  vehicle_garage_logs    vehicle_garage_logs[]
+  vehicle_service_status vehicle_service_status?
+  vehicle_status         vehicle_status?
+  vehicle_strikes        vehicle_strikes?
+  vehicle_transfer_logs  vehicle_transfer_logs[]
+  vehicle_upgrades       vehicle_upgrades?
+
+  @@index([cid], map: "cid")
+}
+
+model playerskins {
+  id         Int        @id @default(autoincrement())
+  citizenid  Int
+  model      String     @db.VarChar(255)
+  skin       String     @db.Text
+  active     Int        @default(1) @db.TinyInt
+  characters characters @relation(fields: [citizenid], references: [citizenid], onDelete: Cascade, map: "fk_playerskins_cid")
+
+  @@index([citizenid], map: "fk_playerskins_cid")
+}
+
+model queue_priority {
+  steamid  String @id @db.VarChar(255)
+  priority Int    @default(1)
+}
+
+model tax_logs {
+  id   Int       @id @default(autoincrement())
+  date DateTime? @default(now()) @db.Timestamp(0)
+}
+
+model taxes {
+  tax_id   Int      @id @default(autoincrement())
+  tax_name String   @db.VarChar(255)
+  tax_rate Int      @default(0)
+  set_date DateTime @default(now()) @db.Timestamp(0)
+}
+
+model transaction_log {
+  transaction_id      String               @id @db.VarChar(255)
+  origin_account_id   String               @db.VarChar(255)
+  origin_account_name String               @db.VarChar(255)
+  origin_change       Float                @db.Float
+  target_account_id   String               @db.VarChar(255)
+  target_account_name String               @db.VarChar(255)
+  target_change       Float                @db.Float
+  comment             String               @default("") @db.LongText
+  triggered_by        String               @db.VarChar(255)
+  accepted_by         String?              @db.VarChar(255)
+  date                BigInt
+  type                transaction_log_type
+}
+
+model user_kill_stats {
+  steamid   String @id @db.VarChar(255)
+  shots     Int?   @default(0)
+  kills     Int?   @default(0)
+  headshots Int?   @default(0)
+  users     users  @relation(fields: [steamid], references: [steamid], onDelete: Cascade, map: "user_kill_stats_ibfk_1")
+}
+
+model users {
+  name            String           @db.VarChar(255)
+  steamid         String           @id @db.VarChar(255)
+  license         String           @db.VarChar(255)
+  discord         String           @db.VarChar(255)
+  last_updated    DateTime         @default(now()) @db.Timestamp(0)
+  created_at      DateTime         @default(now()) @db.Timestamp(0)
+  characters      characters[]
+  user_kill_stats user_kill_stats?
+
+  @@index([license], map: "license")
+  @@index([name], map: "name")
+}
+
+model vehicle_depot_info {
+  id              Int             @id @default(autoincrement())
+  vin             String          @db.VarChar(255)
+  price           Int
+  created_at      Int             @default(dbgenerated("(unix_timestamp(current_timestamp()))"))
+  until           Int
+  player_vehicles player_vehicles @relation(fields: [vin], references: [vin], onDelete: Cascade, map: "vehicle_depot_info_ibfk_1")
+
+  @@index([vin], map: "vin")
+}
+
+model vehicle_garage_logs {
+  id              Int                         @id @default(autoincrement())
+  vin             String                      @db.VarChar(255)
+  cid             Int
+  logDate         DateTime                    @default(now()) @db.Date
+  action          vehicle_garage_logs_action?
+  state           String                      @db.Text
+  player_vehicles player_vehicles             @relation(fields: [vin], references: [vin], onDelete: Cascade, map: "vehicle_garage_logs_ibfk_1")
+
+  @@index([vin], map: "vin")
+}
+
+model vehicle_resale {
+  vin        String    @id @db.VarChar(255)
+  model      String?   @db.VarChar(255)
+  plate      String?   @db.VarChar(255)
+  created_at DateTime? @default(now()) @db.Timestamp(0)
+}
+
+model vehicle_restocks {
+  id            Int           @id @default(autoincrement())
+  model         String        @db.VarChar(255)
+  restockDate   DateTime      @db.Date
+  vehicle_stock vehicle_stock @relation(fields: [model], references: [model], onDelete: Cascade, map: "vehicle_restocks_ibfk_1")
+
+  @@index([model], map: "model")
+}
+
+model vehicle_service_status {
+  vin             String          @id @db.VarChar(255)
+  axle            Float           @default(1000) @db.Float
+  brakes          Float           @default(1000) @db.Float
+  engine          Float           @default(1000) @db.Float
+  suspension      Float           @default(1000) @db.Float
+  player_vehicles player_vehicles @relation(fields: [vin], references: [vin], onDelete: Cascade, map: "vehicle_service_status_ibfk_1")
+}
+
+model vehicle_status {
+  vin             String          @id @db.VarChar(255)
+  body            String          @default("1000") @db.VarChar(255)
+  engine          String          @default("1000") @db.VarChar(255)
+  fuel            String          @default("100") @db.VarChar(255)
+  wheels          String          @default("[1000,1000,1000,1000,1000,1000,1000,1000,1000,1000]") @db.LongText
+  windows         String          @default("[1,1,1,1,1,1,1,1]") @db.LongText
+  doors           String          @default("[0,0,0,0,0,0,0,0]") @db.LongText
+  player_vehicles player_vehicles @relation(fields: [vin], references: [vin], onDelete: Cascade, map: "vehicle_status_ibfk_1")
+}
+
+model vehicle_stock {
+  model            String             @id @db.VarChar(255)
+  stock            Int
+  vehicle_restocks vehicle_restocks[]
+}
+
+model vehicle_strikes {
+  vin             String          @id @db.VarChar(255)
+  strikes         Int             @default(0)
+  updated_at      DateTime        @default(now()) @db.Timestamp(0)
+  player_vehicles player_vehicles @relation(fields: [vin], references: [vin], onDelete: Cascade, map: "vehicle_strikes_ibfk_1")
+}
+
+model vehicle_transfer_logs {
+  id              Int             @id @default(autoincrement())
+  vin             String          @db.VarChar(255)
+  origin          Int
+  target          Int
+  logDate         DateTime        @default(now()) @db.Date
+  player_vehicles player_vehicles @relation(fields: [vin], references: [vin], onDelete: Cascade, map: "vehicle_transfer_logs_ibfk_1")
+  characters      characters      @relation(fields: [target], references: [citizenid], onDelete: Cascade, map: "vehicle_transfer_logs_ibfk_2")
+
+  @@index([target], map: "target")
+  @@index([vin], map: "vin")
+}
+
+model vehicle_upgrades {
+  vin             String          @id @db.VarChar(255)
+  cosmetic        String          @default("{}") @db.LongText
+  items           String          @default("[]") @db.LongText
+  player_vehicles player_vehicles @relation(fields: [vin], references: [vin], onDelete: Cascade, map: "vehicle_upgrades_ibfk_1")
+}
+
+model weed_plants {
+  id        Int                @id @default(autoincrement())
+  stage     Int?               @default(1) @db.SmallInt
+  coords    String?            @db.Text
+  gender    weed_plants_gender
+  food      Int?               @default(100)
+  grow_time BigInt?
+  cut_time  BigInt?
+}
+
+model whitelist {
+  name     String @id @db.VarChar(255)
+  steam_id String @db.VarChar(255)
+}
+
+model whitelist_jobs {
+  cid        Int
+  job        String     @db.VarChar(255)
+  rank       Int        @default(0)
+  specialty  Int        @default(0)
+  characters characters @relation(fields: [cid], references: [citizenid], onDelete: Cascade, map: "fk_whitelist_jobs_cid")
+
+  @@id([cid, job])
+}
+
+enum bank_accounts_type {
+  standard
+  savings
+  business
+}
+
+enum penalties_penalty {
+  ban
+  kick
+  warn
+}
+
+enum weed_plants_gender {
+  male
+  female
+}
+
+enum vehicle_garage_logs_action {
+  parked
+  retrieved
+}
+
+enum debts_type {
+  debt
+  maintenance
+}
+
+enum player_vehicles_state {
+  parked
+  out
+  impounded
+}
+
+enum transaction_log_type {
+  transfer
+  deposit
+  withdraw
+  purchase
+  paycheck
+  mobile_transaction
+}

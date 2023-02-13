@@ -2,29 +2,19 @@
   "$schema": "https://turbo.build/schema.json",
   "pipeline": {
     "build": {
-      // A package's `build` script depends on that package's
-      // dependencies and devDependencies
-      // `build` tasks  being completed first
-      // (the `^` symbol signifies `upstream`).
       "dependsOn": [
-        "^build"
+        "^build",
+        "^db:generate"
       ],
-      // note: output globs are relative to each package's `package.json`
-      // (and not the monorepo root)
       "outputs": [
         "dist/**"
       ]
     },
     "build:dev": {
-      // A package's `build` script depends on that package's
-      // dependencies and devDependencies
-      // `build` tasks  being completed first
-      // (the `^` symbol signifies `upstream`).
       "dependsOn": [
-        "^build:dev"
+        "^build:dev",
+        "^db:generate"
       ],
-      // note: output globs are relative to each package's `package.json`
-      // (and not the monorepo root)
       "outputs": [
         "../client/**",
         "../server/**",
@@ -33,22 +23,23 @@
       ]
     },
     "format": {
-      // A package's `build` script depends on that package's
-      // dependencies and devDependencies
-      // `build` tasks  being completed first
-      // (the `^` symbol signifies `upstream`).
       "dependsOn": [
         "^format"
       ]
     },
     "lint": {
-      // A package's `build` script depends on that package's
-      // dependencies and devDependencies
-      // `build` tasks  being completed first
-      // (the `^` symbol signifies `upstream`).
       "dependsOn": [
         "^lint"
       ]
+    },
+    "db:generate": {
+      "cache": false
+    },
+    "db:push": {
+      "cache": false
+    },
+    "db:deploy": {
+      "cache": false
     }
   }
 }

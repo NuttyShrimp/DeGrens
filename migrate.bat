@@ -1,5 +1,5 @@
 pushd %~dp0
 
-cd tools/migrations
+cd packages/db
 
-yarn && yarn start
+yarn --frozen-lockfile && yarn db:migrate
