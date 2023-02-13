@@ -33,11 +33,6 @@ on('entityDamaged', (victim: number, attacker: number, weapon: number) => {
   });
 });
 
-on('onClientResourceStart', (res: string) => {
-  if (!NetworkIsSessionStarted()) return;
-  Events.emitNet('auth:anticheat:resourceStart', res);
-});
-
 Events.onNet('auth:anticheat:weaponDrawn', () => {
   startStatThread();
 });
@@ -66,6 +61,10 @@ setImmediate(async () => {
   await Util.Delay(2000);
   scheduleHeartBeat();
   startThreads();
+  on('onClientResourceStart', (res: string) => {
+    if (!NetworkIsSessionStarted()) return;
+    Events.emitNet('auth:anticheat:resourceStart', res);
+  });
 });
 
 on('onResourceStop', (res: string) => {
