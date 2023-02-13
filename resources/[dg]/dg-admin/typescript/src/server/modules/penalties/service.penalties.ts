@@ -146,7 +146,7 @@ export const isPlayerBanned = async (steamId: string) => {
   if (result.length < 1) return { isBanned: false, reason: '' };
   return {
     isBanned: result.length > 0,
-    reason: `Je bent gebanned voor ${result[0].reason}, Verloopt op ${result[0].expiry}`,
+    reason: `Je bent gebanned voor ${result[0].reason}, Verloopt op ${result[0].length === -1 ? "permanently" : result[0].expiry}`,
   };
 };
 
