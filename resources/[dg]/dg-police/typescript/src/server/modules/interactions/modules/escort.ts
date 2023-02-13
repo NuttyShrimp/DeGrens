@@ -64,3 +64,5 @@ export const stopEscorting = (plyId: number) => {
     plyId
   );
 };
+
+global.exports('getPlayerBeingEscorted', getPlayerBeingEscorted);

@@ -670,6 +670,10 @@ class Auth {
   onAuth(cb: (src: number) => void) {
     this.startHooks.add(cb);
   }
+
+  public toggleAllowedMod = (plyId: number, mod: string, allowed: boolean) => {
+    global.exports['dg-auth'].toggleAllowedMod(plyId, mod, allowed);
+  };
 }
 
 export default {

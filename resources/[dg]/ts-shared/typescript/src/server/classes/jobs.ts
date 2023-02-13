@@ -190,6 +190,14 @@ class Police {
   public canDoActivity = (activity: string) => {
     return global.exports['dg-police'].canDoActivity(activity);
   };
+
+  public getPlayerBeingCarried = (plyId: number): number | undefined => {
+    return global.exports['dg-police'].getPlayerBeingCarried(plyId);
+  };
+
+  public getPlayerBeingEscorted = (plyId: number): number | undefined => {
+    return global.exports['dg-police'].getPlayerBeingEscorted(plyId);
+  };
 }
 
 class Hospital {

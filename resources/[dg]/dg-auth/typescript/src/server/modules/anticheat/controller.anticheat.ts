@@ -11,11 +11,13 @@ import {
   setPlayerInvincible,
   setPlayerVisible,
   stopHeartBeat,
+  toggleAllowedMod,
   validateWeaponInfo,
 } from './service.anticheat';
 
 global.exports('SetPlayerInvincible', setPlayerInvincible);
 global.exports('SetPlayerVisible', setPlayerVisible);
+global.exports('toggleAllowedMod', toggleAllowedMod);
 
 onNet('playerJoining', () => {
   registerHeartBeat(source);
