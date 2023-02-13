@@ -2,7 +2,13 @@ import { Chat, Events, Financials, Notifications, RPC, Util } from '@dgx/server'
 
 import { getCash } from '../../cash/service';
 import accountManager from '../classes/AccountManager';
-import { buildPermissions, createDefaultAccount, getPermissions, removePermissions, setPermissions } from '../helpers/accounts';
+import {
+  buildPermissions,
+  createDefaultAccount,
+  getPermissions,
+  removePermissions,
+  setPermissions,
+} from '../helpers/accounts';
 import { bankLogger } from '../utils';
 
 global.asyncExports('createAccount', async (cid: number, name: string, accType: AccountType) => {

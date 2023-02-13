@@ -1,13 +1,6 @@
 {
   "type": {
-    "fleeca": [
-      "fleeca_bp",
-      "fleeca_motel",
-      "fleeca_benny",
-      "fleeca_lifeinvader",
-      "fleeca_highway",
-      "fleeca_sandy"
-    ]
+    "fleeca": ["fleeca_bp", "fleeca_motel", "fleeca_benny", "fleeca_lifeinvader", "fleeca_highway", "fleeca_sandy"]
   },
   "labels": {
     "fleeca_bp": "Fleeca Bank Legion Square",

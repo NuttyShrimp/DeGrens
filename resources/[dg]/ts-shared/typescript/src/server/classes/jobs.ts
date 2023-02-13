@@ -64,7 +64,7 @@ class Jobs {
     return global.exports['dg-jobs'].isWhitelisted(src, job);
   }
   isUserWhitelisted(steamId: string, job: string): Promise<boolean> {
-    return global.exports['dg-jobs'].isSteamIdWhitelisted(steamId, job)
+    return global.exports['dg-jobs'].isSteamIdWhitelisted(steamId, job);
   }
 
   registerJob(name: string, jobInfo: Jobs.Job) {

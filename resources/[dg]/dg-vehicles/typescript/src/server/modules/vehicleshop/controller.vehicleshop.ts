@@ -19,7 +19,7 @@ on('playerDropped', () => {
   shopManager.setPlayerActive(source, false);
 });
 
-Events.onNet('vehicles:shop:openVehicleMenu', (src: number, categorisation: typeof MODEL_CATEGORISATION[number]) => {
+Events.onNet('vehicles:shop:openVehicleMenu', (src: number, categorisation: (typeof MODEL_CATEGORISATION)[number]) => {
   if (!MODEL_CATEGORISATION.includes(categorisation)) {
     vehicleshopLogger.warn('Provided categorisation was not valid');
     return;

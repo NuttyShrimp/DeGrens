@@ -26,19 +26,18 @@ global.exports('getPermissionsFromMask', (mask: number) => {
   return permissionsFromBitmask(mask);
 });
 
-global.exports("getAllPermissions", () => {
+global.exports('getAllPermissions', () => {
   return getPermissions();
-})
+});
 
-global.exports("deleteBusiness", (id: number) => {
-  return deleteBusiness(id)
-})
+global.exports('deleteBusiness', (id: number) => {
+  return deleteBusiness(id);
+});
 
-global.exports("updateOwner", (id: number, newOwner: number) => {
+global.exports('updateOwner', (id: number, newOwner: number) => {
   const business = getBusinessById(id);
   if (!business) return;
   if (!business.isEmployee(newOwner)) {
     return;
   }
-
-})
+});

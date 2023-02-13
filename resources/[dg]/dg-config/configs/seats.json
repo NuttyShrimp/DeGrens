@@ -124,7 +124,7 @@
       "offset": {
         "x": 0,
         "y": -0.45,
-        "z": 0.10
+        "z": 0.1
       },
       "model": -992710074
     },
@@ -155,15 +155,15 @@
     {
       "offset": {
         "x": 0,
-        "y": -0.40,
-        "z": -0.20
+        "y": -0.4,
+        "z": -0.2
       },
       "model": "v_ret_gc_chair01"
     },
     {
       "offset": {
         "x": 0,
-        "y": -0.50,
+        "y": -0.5,
         "z": -0.62
       },
       "model": "bkr_prop_biker_boardchair01"
@@ -172,7 +172,7 @@
       "offset": {
         "x": 0,
         "y": -0.45,
-        "z": 0.30
+        "z": 0.3
       },
       "model": "apa_mp_h_din_stool_04"
     },
@@ -180,7 +180,7 @@
       "offset": {
         "x": 0,
         "y": -0.45,
-        "z": 0.30
+        "z": 0.3
       },
       "model": "apa_mp_h_yacht_barstool_01"
     },
@@ -188,7 +188,7 @@
       "offset": {
         "x": 0,
         "y": -0.35,
-        "z": -0.30
+        "z": -0.3
       },
       "model": "prop_direct_chair_02"
     },
@@ -204,7 +204,7 @@
       "offset": {
         "x": 0,
         "y": -0.35,
-        "z": -0.60
+        "z": -0.6
       },
       "model": "xm_prop_x17_avengerchair_02"
     },
@@ -220,7 +220,7 @@
       "offset": {
         "x": 0,
         "y": -0.35,
-        "z": -1.00
+        "z": -1.0
       },
       "model": "ex_prop_offchair_exec_04"
     },

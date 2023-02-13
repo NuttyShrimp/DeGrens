@@ -21,12 +21,5 @@
     "minZ": 41.43,
     "maxZ": 45.23
   },
-  "checkableStatuses": [
-    "alcohol",
-    "gsw",
-    "burns",
-    "drowned",
-    "bruises",
-    "stabwound"
-  ]
+  "checkableStatuses": ["alcohol", "gsw", "burns", "drowned", "bruises", "stabwound"]
 }

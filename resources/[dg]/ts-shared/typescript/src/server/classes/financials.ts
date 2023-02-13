@@ -9,7 +9,7 @@ enum TaxIds {
   Income,
   Services,
   Goederen,
-  Gas
+  Gas,
 }
 
 class Financials {
@@ -169,5 +169,5 @@ class Financials {
 
 export default {
   Financials: new Financials(),
-  TaxIds
+  TaxIds,
 };

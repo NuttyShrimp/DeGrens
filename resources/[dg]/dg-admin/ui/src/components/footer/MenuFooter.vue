@@ -35,7 +35,7 @@
   const openCoordsSelector = async () => {
     const coords = await nuiAction('openCoordsSelector');
     copyToClipboard(String(coords));
-  }
+  };
 </script>
 <style lang="scss">
   .menu-footer {

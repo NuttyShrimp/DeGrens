@@ -17,9 +17,7 @@
       "maxZ": 22.73
     }
   },
-  "vehicle_types": [
-    "land"
-  ],
+  "vehicle_types": ["land"],
   "parking_spots": [
     {
       "type": "land",

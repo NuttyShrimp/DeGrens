@@ -146,12 +146,12 @@ export const deleteBusiness = (id: number) => {
   const business = businesses.get(id);
   if (!business) return;
   business.getEmployees().forEach(e => {
-    let ply = DGCore.Functions.GetPlayerByCitizenId(e.citizenid)
+    let ply = DGCore.Functions.GetPlayerByCitizenId(e.citizenid);
     if (!ply) return;
     dispatchAllBusinessPermissionsToClientCache(ply.PlayerData.source);
-  })
-  businesses.delete(id)
-}
+  });
+  businesses.delete(id);
+};
 
 export const getBusinessById = (id: number) => {
   return businesses.get(id);

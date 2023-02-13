@@ -14,7 +14,7 @@
     "webpack:config": "webpack --config ./webpack.config.js"
   },
   "dependencies": {
-    "fast-jwt": "^2.1.0"
+    "fast-jwt": "^2.2.0"
   },
   "devDependencies": {
     "@dgx/client": "*",

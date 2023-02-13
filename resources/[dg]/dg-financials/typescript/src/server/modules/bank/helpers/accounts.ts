@@ -50,4 +50,4 @@ export const buildPermissions = (accessLevel: number): IAccountPermission => {
   } finally {
     return permissions;
   }
-}
+};

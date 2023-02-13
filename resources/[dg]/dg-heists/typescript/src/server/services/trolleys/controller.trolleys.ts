@@ -12,7 +12,7 @@ Events.onNet('heists:server:lootTrolley', async (src: number, heistId: Heist.Id,
   await Config.awaitConfigLoad();
   const heistType = getTypeForId(heistId);
   if (!heistType) return;
-  const heistConfig = config.heists[heistType]
+  const heistConfig = config.heists[heistType];
   if (!heistConfig) return;
   const possibleLoot = config.heists[heistType]!.types[type];
   if (!possibleLoot) return;

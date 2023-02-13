@@ -2,9 +2,9 @@ import { InjectionKey } from 'vue';
 import { createStore, Store, useStore as baseUseStore } from 'vuex';
 
 import { Chat, State } from '../types/chat';
-import { devStorePlugin, testMessages } from './devdata';
 
 import { nuiAction } from './nui/action';
+import { devStorePlugin, testMessages } from './devdata';
 import { sanitizeText } from './util';
 
 export const key: InjectionKey<Store<State>> = Symbol();

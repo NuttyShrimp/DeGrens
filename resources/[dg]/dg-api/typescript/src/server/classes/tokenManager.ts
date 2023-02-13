@@ -28,13 +28,13 @@ class TokenManager extends Util.Singleton<TokenManager>() {
   };
 
   getTokenId = (req: any) => {
-    const token = req.headers.Authorization.replace(/Bearer /, '')
+    const token = req.headers.Authorization.replace(/Bearer /, '');
     this.tokens.forEach(info => {
       if (info.token === token) {
-        return `${info.token.substring(0, 6)} (${info.comment})`
+        return `${info.token.substring(0, 6)} (${info.comment})`;
       }
     });
-  }
+  };
 
   registeToken = async (token: string, comment: string) => {
     this.tokens.add({ token, comment });

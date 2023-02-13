@@ -1,4 +1,4 @@
-import { Events } from "@dgx/server";
+import { Events } from '@dgx/server';
 
 export const getNoclipInfo: CommandData = {
   name: 'getNoclipInfo',

@@ -4,7 +4,7 @@ import { getConfigByEntity, getConfigByHash, getConfigByModel, getModelStock, ge
 
 global.exports('getConfigByModel', getConfigByModel);
 global.exports('getConfigByHash', getConfigByHash);
-global.exports("getConfigByEntity", getConfigByEntity);
+global.exports('getConfigByEntity', getConfigByEntity);
 global.exports('getVehicleModels', getVehicleModels);
 
 RPC.register('vehicles:info:getModeltock', (src: number, model: string) => {

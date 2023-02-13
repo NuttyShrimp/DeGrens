@@ -1,12 +1,12 @@
 import { Chat, Config, Events, Hospital, Inventory, Minigames, Notifications, Taskbar, Util } from '@dgx/server';
 
 const effects: Record<Config.EffectConsumable['effect'], (target: number, duration: number, itemId: string) => void> = {
-  stress: async(target, duration, itemId) => {
+  stress: async (target, duration, itemId) => {
     const success = await Inventory.removeItemByIdFromPlayer(target, itemId);
     if (!success) {
       Notifications.add(target, 'Item is verdwenen?..');
       return;
-    };
+    }
     Events.emitNet('misc:consumables:applyEffect', target, 'stress', duration);
   },
   speed: async (target, duration, itemId) => {
@@ -33,7 +33,7 @@ const effects: Record<Config.EffectConsumable['effect'], (target: number, durati
     if (!success) {
       Notifications.add(target, 'Item is verdwenen?..');
       return;
-    };
+    }
     Events.emitNet('misc:consumables:applyEffect', target, 'speed', duration);
   },
   damage: async (target, duration, itemId) => {
@@ -60,7 +60,7 @@ const effects: Record<Config.EffectConsumable['effect'], (target: number, durati
     if (!success) {
       Notifications.add(target, 'Item is verdwenen?..');
       return;
-    };
+    }
     Events.emitNet('misc:consumables:applyEffect', target, 'damage', duration);
   },
 };
@@ -122,7 +122,7 @@ const handleDrinkUse = async (src: number, item: Inventory.ItemState, info: Conf
   }
   Hospital.setNeed(src, 'thirst', old => old + info.gain);
   return success;
-}
+};
 
 const registerDrink = (info: Config.Consumable) => {
   Inventory.registerUseable(info.name, async (src, item) => {
@@ -146,16 +146,16 @@ const registerDrug = (info: Config.EffectConsumable) => {
 };
 
 // Registration of 'normal' items
-Inventory.registerUseable("id_card", (src, item) => {
+Inventory.registerUseable('id_card', (src, item) => {
   const plyInRadius = Util.getAllPlayersInRange(src, 5);
   Chat.sendMessage(src, {
-    type: "idcard",
-    message: item.metadata as Chat.CardMessage['message']
-  })
+    type: 'idcard',
+    message: item.metadata as Chat.CardMessage['message'],
+  });
   plyInRadius.forEach(ply => {
     Chat.sendMessage(ply, {
-      type: "idcard",
-      message: item.metadata as Chat.CardMessage['message']
-    })
-  })
-})
+      type: 'idcard',
+      message: item.metadata as Chat.CardMessage['message'],
+    });
+  });
+});

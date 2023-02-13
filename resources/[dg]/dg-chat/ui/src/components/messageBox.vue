@@ -138,7 +138,7 @@
 
     &__card {
       background-color: unset;
-      background-image: url("/assets/card.png");
+      background-image: url('/assets/card.png');
       background-size: auto 20vh;
       background-repeat: no-repeat;
       position: relative;
@@ -150,7 +150,7 @@
         height: 20vh;
         position: absolute;
         top: 0;
-        left:0;
+        left: 0;
         & > img {
           height: 100%;
           object-fit: contain;
@@ -158,7 +158,7 @@
       }
       &__info {
         color: black;
-        font-size: .75rem;
+        font-size: 0.75rem;
         position: relative;
         height: inherit;
       }
