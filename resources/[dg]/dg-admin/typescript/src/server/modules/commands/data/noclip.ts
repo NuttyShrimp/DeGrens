@@ -1,4 +1,6 @@
 import { Events } from '@dgx/server';
+import { getPlayerCommandState, setPlayerCommandState } from '../state.commands';
+import { allowInvisibleForInteractingPlayers } from '../service.commands';
 
 export const noclip: CommandData = {
   name: 'noclip',
@@ -7,7 +9,10 @@ export const noclip: CommandData = {
   target: false,
   isClientCommand: false,
   handler: async caller => {
-    Events.emitNet('admin:noclip:toggle', caller.source);
+    const toggle = !getPlayerCommandState(caller.source, 'noclip');
+    setPlayerCommandState(caller.source, 'noclip', toggle);
+    Events.emitNet('admin:noclip:toggle', caller.source, toggle);
+    allowInvisibleForInteractingPlayers(caller.source, toggle);
   },
   UI: {
     title: 'Noclip',

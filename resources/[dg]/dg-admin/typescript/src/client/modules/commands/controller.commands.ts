@@ -1,8 +1,8 @@
-import { Events, Notifications, RPC, Util } from '@dgx/client';
+import { Events, Notifications, PropAttach, RPC, Util } from '@dgx/client';
 
 import { disableBlips, enableBlips } from '../../service/playerBlips';
 import { toggleLocalVis } from './service.commands';
-import { setCmdState } from './state';
+import { getCmdState, setCmdState } from './state.commands';
 
 // Functiontypes fuck up when putting this in command directly because that file is serversided but function gets executed on client
 on('admin:commands:damageEntity', (ent: number) => {
@@ -119,8 +119,14 @@ Events.onNet('admin:command:collision', () => {
 });
 
 Events.onNet('admin:commands:cloak', toggle => {
-  setCmdState('invisible', toggle);
+  setCmdState('cloak', toggle);
   toggleLocalVis(toggle);
+
+  if (toggle) {
+    PropAttach.toggleProps(false);
+  } else if (!getCmdState('noclip')) {
+    PropAttach.toggleProps(true);
+  }
 });
 
 Events.onNet('admin:commands:tpm', async () => {

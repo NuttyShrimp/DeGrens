@@ -9,11 +9,12 @@ export const toggleLocalVis = (cloak: boolean) => {
       SetEntityAlpha(ped, 255, false);
     }
   } else {
-    const ped = PlayerPedId();
-    SetEntityAlpha(ped, 102, false);
     localVisThread = setInterval(() => {
       const ped = PlayerPedId();
       SetEntityLocallyVisible(ped);
+      if (GetEntityAlpha(ped) !== 102) {
+        SetEntityAlpha(ped, 102, false);
+      }
     }, 0);
   }
 };
