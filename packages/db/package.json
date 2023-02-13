@@ -1,0 +1,25 @@
+{
+  "name": "db",
+  "version": "1.0.0",
+  "main": "./index.ts",
+  "types": "./index.ts",
+  "license": "MIT",
+  "scripts": {
+    "db:generate": "prisma generate",
+    "db:push": "prisma db push",
+    "db:seed": "prisma db seed",
+    "db:migrate": "prisma migrate dev",
+    "db:deploy": "prisma migrate deploy",
+    "db:reset": "prisma migrate reset"
+  },
+  "dependencies": {
+    "@prisma/client": "latest",
+    "ts-node": "*"
+  },
+  "devDependencies": {
+    "prisma": "latest"
+  },
+  "prisma": {
+    "seed": "ts-node -P ./tsconfig.json ./seed.ts"
+  }
+}

@@ -14,6 +14,8 @@ node_modules/
 .turbo
 /uploads/
 logtypes.json
+.env
+!.env.template
 
 
 positions.txt

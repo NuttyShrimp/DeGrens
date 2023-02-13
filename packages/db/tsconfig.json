@@ -1,0 +1,29 @@
+{
+  "compilerOptions": {
+    "strict": true,
+    "outDir": "./",
+    "noImplicitAny": true,
+    "module": "commonjs",
+    "target": "es6",
+    "allowJs": true,
+    "lib": [
+      "es2017"
+    ],
+    "types": [
+      "@citizenfx/server",
+      "@types/node"
+    ],
+    "moduleResolution": "node",
+    "experimentalDecorators": true,
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "baseUrl": "."
+  },
+  "include": [
+    "./**/*",
+  ],
+  "exclude": [
+    "**/node_modules"
+  ]
+}

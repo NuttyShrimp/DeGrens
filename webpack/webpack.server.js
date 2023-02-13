@@ -40,6 +40,10 @@ const defClient = (fName) => ({
     path: path.resolve("../server"),
 		clean: true,
 	},
+  node: {
+    __filename: true,
+    __dirname: true,
+  },
 });
 
 const prodClient = {
