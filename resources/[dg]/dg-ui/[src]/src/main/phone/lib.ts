@@ -128,6 +128,20 @@ export const showWarningModal = (payload?: Function) => {
 // region notifications
 const stringEvents = ['onAccept', 'onDecline'];
 
+const sortNotification = (s1: Phone.Notifications.Notification, s2: Phone.Notifications.Notification) => {
+  if (s1.sticky && !s2.sticky) {
+    return -1;
+  } else if (!s1.sticky && s2.sticky) {
+    return 1;
+  }
+  if (s1.timer !== undefined && s2.timer === undefined) {
+    return -1;
+  } else if (s1.timer === undefined && s2.timer !== undefined) {
+    return 1;
+  }
+  return 0;
+};
+
 export const addNotification = (
   notification: Omit<Phone.Notifications.Notification, 'icon'> & { icon: string | Phone.Notifications.Icon }
 ) => {
@@ -171,7 +185,7 @@ export const addNotification = (
   }
 
   usePhoneNotiStore.setState(s => ({
-    list: [...s.list, notification as Phone.Notifications.Notification],
+    list: [...s.list, notification as Phone.Notifications.Notification].sort(sortNotification),
   }));
   const phoneState = usePhoneStore.getState();
   if (!phoneState.isSilent) {
@@ -207,7 +221,7 @@ export const removeNotification = (id: string) => {
     delete notificationTimers[id];
   }
 
-  const newList = oldList.filter(n => n.id !== id);
+  const newList = oldList.filter(n => n.id !== id).sort(sortNotification);
   usePhoneNotiStore.setState({
     list: newList,
   });
@@ -255,7 +269,7 @@ export const updateNotification = (id: string, notification: Partial<Phone.Notif
     ...notification,
   };
   usePhoneNotiStore.setState({
-    list: notificationList,
+    list: notificationList.sort(sortNotification),
   });
 };
 

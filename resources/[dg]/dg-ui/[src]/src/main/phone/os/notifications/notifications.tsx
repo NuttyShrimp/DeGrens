@@ -88,32 +88,19 @@ export const Notification = forwardRef<HTMLDivElement, { notification: Phone.Not
 export const NotificationWrapper: FC<React.PropsWithChildren<unknown>> = () => {
   const classes = styles();
   const list = usePhoneNotiStore(s => s.list);
-  const hiddenNoti = useVhToPixel(-10);
-  const bottomMargin = useVhToPixel(0.5);
+  const hiddenNoti = useVhToPixel(-20);
   const refMap = useMemo(() => new Map<string, HTMLDivElement>(), []);
 
   const transitions = useTransition(list, {
     from: (_, i) => ({
-      position: 'absolute',
-      top: hiddenNoti * (i + 1),
+      transform: `translateY(${hiddenNoti * (i + 1)}px)`,
     }),
-    enter: (_, i) => ({
-      position: 'absolute',
-      top: [...refMap.values()].slice(0, i + 1).reduce((c, v) => c + v.offsetHeight + bottomMargin, 0),
-    }),
-    leave: n => async next => {
-      await next({
-        top: hiddenNoti,
-      });
-      const nRef = refMap.get(n.id);
-      if (nRef) {
-        refMap.forEach((ref, id) => {
-          if (id === n.id || nRef?.offsetTop > ref.offsetTop) return;
-          ref.style.top = `${ref.offsetTop - nRef.offsetHeight - bottomMargin}px`;
-        });
-      }
-      refMap.delete(n.id);
+    enter: {
+      transform: `translateY(0px)`,
     },
+    leave: (_, i) => ({
+      transform: `translateY(${hiddenNoti * (i + 1)}px)`,
+    }),
     config: { duration: 400, easing: easings.easeOutQuad },
     keys: n => n.id,
   });

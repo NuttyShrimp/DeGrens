@@ -31,7 +31,7 @@ export const styles = makeStyles({
     marginBottom: '.5vh',
     backgroundColor: hexToRGBStr(baseStyle.primary.darker, 0.92),
     borderRadius: '.5vh',
-    transition: 'background-color 0.2s ease-in-out, top 0.4s ease-out',
+    transition: 'background-color 0.2s ease-in-out',
     pointerEvents: 'all',
     '& > *': {
       pointerEvents: 'none',
