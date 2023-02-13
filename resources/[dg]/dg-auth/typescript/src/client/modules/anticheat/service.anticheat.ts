@@ -1,4 +1,4 @@
-import { Events, Util } from '@dgx/client';
+import { Events, Notifications, Util } from '@dgx/client';
 import { StatsThread } from './classes/StatsThread';
 
 let allowed: string[] = [];
@@ -10,6 +10,16 @@ let antiTP: NodeJS.Timer;
 let weapons: NodeJS.Timeout | null = null;
 let pedMods: NodeJS.Timeout | null = null;
 let statsThread: StatsThread;
+let AFKThread: NodeJS.Timer | null = null;
+let AFKInfo: {
+  tick: number;
+  lastCoords: Vec3;
+  camHeading: number;
+} = {
+  camHeading: 0,
+  lastCoords: { x: 0, y: 0, z: 0 },
+  tick: 0,
+};
 
 export const scheduleHeartBeat = () => {
   if (heartbeat) stopHeartBeat();
@@ -163,16 +173,56 @@ export const schedulePedThread = () => {
   }, 1000);
 };
 
+export const startAFKThread = () => {
+  if (AFKThread) {
+    clearInterval(AFKThread);
+  }
+  AFKThread = setInterval(() => {
+    switch (AFKInfo.tick) {
+      case 5: {
+        Notifications.add('Je bent al 5 minuten AFK geflagged');
+        break;
+      }
+      case 10: {
+        Notifications.add('Je bent al 10 minuten AFK geflagged');
+        break;
+      }
+      case 14: {
+        Notifications.add(
+          'Je bent al 14 minuten AFK geflagged, je wordt binnen de minuut gekicked als je niet beweegt',
+          'info',
+          60000
+        );
+        break;
+      }
+      case 15: {
+        Events.emitNet('auth:anticheat:AFK');
+        AFKInfo.tick = 0;
+      }
+    }
+    const plyCoords = Util.getPlyCoords();
+    const plyHeading = GetGameplayCamRelativeHeading();
+    if (plyCoords.distance(AFKInfo.lastCoords) < 1 && Math.abs(AFKInfo.camHeading - plyHeading) < 1) {
+      AFKInfo.tick++;
+    } else {
+      AFKInfo.tick = 0;
+    }
+    AFKInfo.camHeading = plyHeading;
+    AFKInfo.lastCoords = plyCoords;
+  }, 60000);
+};
+
 export const startThreads = () => {
   scheduleAntiTP();
   scheduleWeaponThread();
   schedulePedThread();
   scheduleAllowedSync();
+  startAFKThread();
   statsThread = new StatsThread();
 };
 
 export const cleanup = () => {
-  [antiTP, weapons, pedMods, allowedSync].forEach(thread => {
+  [antiTP, weapons, pedMods, allowedSync, AFKThread].forEach(thread => {
     if (thread) {
       clearInterval(thread);
       thread = null;

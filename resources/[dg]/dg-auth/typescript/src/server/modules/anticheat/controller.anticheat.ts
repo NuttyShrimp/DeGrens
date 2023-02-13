@@ -70,6 +70,11 @@ Events.onNet('auth:anticheat:resourceStart', (src: number, res: string) => {
   }
 });
 
+Events.onNet('auth:anticheat:AFK', (src: number) => {
+  if (Admin.canPlayerBeAFK(src)) return;
+  Admin.kick(-1, src, 'Je was te lang voor AFk', 0);
+});
+
 setImmediate(() => {
   loadConfig();
 });

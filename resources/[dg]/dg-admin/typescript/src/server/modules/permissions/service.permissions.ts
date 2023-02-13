@@ -78,3 +78,10 @@ export const setPlayerPermission = async (src: number, targetRole: string) => {
   if (!binds) return;
   checkBinds(src, binds);
 };
+
+export const canPlayerBeAFK = (src: number) => {
+  const steamId = Player(src).state.steamId;
+  if (!steamId) return false;
+  const role = playerRoles.get(steamId) ?? 'user';
+  return roles.find(r => r.name === role)?.allowAFK ?? false;
+};

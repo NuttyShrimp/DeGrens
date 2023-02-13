@@ -2,6 +2,9 @@ class Admin {
   hasPermission(source: number, role: string): boolean {
     return global.exports['dg-admin'].hasPlayerPermission(source, role);
   }
+  canPlayerBeAFK(source: number): boolean {
+    return global.exports['dg-admin'].canPlayerBeAFK(source);
+  }
   isWhitelisted(source: number): Promise<boolean> {
     return global.exports['dg-admin'].isplayerwhitelisted(source);
   }
