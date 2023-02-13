@@ -141,10 +141,11 @@ function Queue:IsInQueue(ids, rtnTbl, bySource, connecting)
     return false
 end
 
-function Queue:IsPriority(ids)
+function Queue:IsPriority(src, ids)
     local prio = false
     local tempPower, tempEnd = Queue:HasTempPriority(ids)
     local prioList = Queue:GetPriorityList()
+    local discordRoles = exports['dg-admin'].getPlyDiscordRoles(src)
 
     for _, id in ipairs(ids) do
         id = string_lower(id)
@@ -155,6 +156,12 @@ function Queue:IsPriority(ids)
             local steamid = Queue:HexIdToSteamId(id)
             if prioList[steamid] then prio = prioList[steamid] break end
         end
+    end
+    
+    if not prio then
+      for _, roleId in pairs(discordRoles) do
+        if prioList[roleId] then prio = prioList[roleId] break end
+      end
     end
 
     if tempPower or prio then
@@ -192,7 +199,7 @@ function Queue:AddToQueue(ids, connectTime, name, src, deferrals)
         source = src,
         ids = ids,
         name = name,
-        priority = Queue:IsPriority(ids) or (src == "debug" and math_random(0, 15)),
+        priority = Queue:IsPriority(src, ids) or (src == "debug" and math_random(0, 15)),
         timeout = 0,
         deferrals = deferrals,
         firstconnect = connectTime,
@@ -341,7 +348,7 @@ function Queue:GetIds(src)
 
     if ids and #ids > 1 then
         for k, id in ipairs(ids) do
-            if string_sub(id, 1, 3) == "ip:" and not Queue:IsPriority({id}) then table_remove(ids, k) end
+            if string_sub(id, 1, 3) == "ip:" and not Queue:IsPriority(src, {id}) then table_remove(ids, k) end
         end
     end
 
@@ -523,7 +530,7 @@ local function playerConnect(source, name, setKickReason, deferrals)
     while allow == nil do Citizen.Wait(0) end
     if not allow then return end
 
-    if Config.PriorityOnly and not Queue:IsPriority(ids) then done(Config.Language.wlonly) return end
+    if Config.PriorityOnly and not Queue:IsPriority(src, ids) then done(Config.Language.wlonly) return end
 
     local rejoined = false
 

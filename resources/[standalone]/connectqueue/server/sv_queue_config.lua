@@ -1,9 +1,17 @@
 Config = {}
 
--- priority list can be any identifier. (hex steamid, steamid32, ip) Integer = power over other people with priority
+-- priority list can be any identifier. (hex steamid, steamid32, ip, discord role ids) Integer = power over other people with priority
 -- a lot of the steamid converting websites are broken rn and give you the wrong steamid. I use https://steamid.xyz/ with no problems.
 -- you can also give priority through the API, read the examples/readme.
 Config.Priority = {
+    -- Supporter
+    ["762947901974380554"] = "2",
+    -- Fanclub
+    ["762947978830151710"] = "3",
+    -- Hard kern
+    ["762948041438396416"] = "4",
+    -- Le patron
+    ["762948093754343445"] = "5",
 }
 
 -- require people to run steam
@@ -42,15 +50,15 @@ Config.ShowTemp = false
 
 -- simple localization
 Config.Language = {
-  joining = "\xF0\x9F\x8E\x89Joining...",
-  connecting = "\xE2\x8F\xB3Connecting...",
-  idrr = "\xE2\x9D\x97[Queue] Error: Couldn't retrieve any of your id's, try restarting.",
-  err = "\xE2\x9D\x97[Queue] There was an error",
-  pos = "\xF0\x9F\x90\x8CYou are %d/%d in queue \xF0\x9F\x95\x9C%s",
-  connectingerr = "\xE2\x9D\x97[Queue] Error: Error adding you to connecting list",
-  timedout = "\xE2\x9D\x97[Queue] Error: Timed out?",
-  wlonly = "\xE2\x9D\x97[Queue] You must be whitelisted to join this server",
-  steam = "\xE2\x9D\x97 [Queue] Error: Steam must be running"
+    joining = "\xF0\x9F\x8E\x89Joining...",
+    connecting = "\xE2\x8F\xB3Connecting...",
+    idrr = "\xE2\x9D\x97[Queue] Error: Couldn't retrieve any of your id's, try restarting.",
+    err = "\xE2\x9D\x97[Queue] There was an error",
+    pos = "\xF0\x9F\x90\x8CYou are %d/%d in queue \xF0\x9F\x95\x9C%s",
+    connectingerr = "\xE2\x9D\x97[Queue] Error: Error adding you to connecting list",
+    timedout = "\xE2\x9D\x97[Queue] Error: Timed out?",
+    wlonly = "\xE2\x9D\x97[Queue] You must be whitelisted to join this server",
+    steam = "\xE2\x9D\x97 [Queue] Error: Steam must be running"
 }
 
 Citizen.CreateThread(function()
