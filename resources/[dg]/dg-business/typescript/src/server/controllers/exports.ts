@@ -40,4 +40,5 @@ global.exports('updateOwner', (id: number, newOwner: number) => {
   if (!business.isEmployee(newOwner)) {
     return;
   }
+  business.updateOwner(newOwner);
 });

@@ -159,11 +159,12 @@ export const getBusinessById = (id: number) => {
 
 export const getBusinessByName = (name: string): Business | null => {
   let business: Business | null = null;
-  businesses.forEach(b => {
+  for (const [_, b] of businesses) {
     if (b.getInfo().name === name) {
       business = b;
+      break;
     }
-  });
+  }
   return business;
 };
 
