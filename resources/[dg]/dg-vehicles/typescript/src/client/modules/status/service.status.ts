@@ -1,11 +1,12 @@
 import { Events, RPC, UI } from '@dgx/client';
 
-import { getCurrentVehicle, getVehicleVin } from '../../helpers/vehicle';
+import { getCurrentVehicle } from '../../helpers/vehicle';
 import { getCurrentWorkingShop } from '../mechanic/service.mechanic';
 import { getPerformanceUpgrades } from '../upgrades/service.upgrades';
 
 import { degradationValues, handlingOverrideFunctions, partNames, serviceConditions } from './constant.status';
 import { getVehicleFuel, overrideSetFuel } from 'modules/fuel/service.fuel';
+import { getVehicleVin } from 'modules/identification/service.identification';
 
 const vehicleService: {
   vehicle: number;

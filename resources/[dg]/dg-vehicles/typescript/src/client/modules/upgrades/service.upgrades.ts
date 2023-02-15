@@ -1,5 +1,4 @@
 import { Notifications } from '@dgx/client';
-import { getVehicleVinWithoutValidation } from '@helpers/vehicle';
 
 import {
   cosmeticKeysToId,
@@ -8,6 +7,7 @@ import {
   performanceKeysToId,
   wheelTypesPerClass,
 } from './constants.upgrades';
+import { getVehicleVinWithoutValidation } from 'modules/identification/service.identification';
 
 export const getCosmeticUpgrades = (veh: number): Upgrades.Cosmetic | undefined => {
   if (!DoesEntityExist(veh)) {

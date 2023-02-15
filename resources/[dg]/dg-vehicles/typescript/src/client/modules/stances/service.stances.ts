@@ -6,7 +6,6 @@ import { NOTIFICATION_ID } from './constants.stances';
 
 const closeVehicles: Map<number, Stance.Data> = new Map();
 let stancingThread: NodeJS.Timer | null = null;
-let activeNotification = '';
 
 // Check for close vehicles that need stancing
 export const startStanceCheckThread = () => {

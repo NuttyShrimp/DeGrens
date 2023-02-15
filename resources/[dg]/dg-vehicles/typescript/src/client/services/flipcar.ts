@@ -1,4 +1,4 @@
-import { Events, Taskbar, Util, Sync } from '@dgx/client';
+import { Taskbar, Sync, Peek } from '@dgx/client';
 import { isVehicleUpsideDown } from '@helpers/vehicle';
 
 // Disables being able to roll vehicle over
@@ -18,7 +18,7 @@ export const clearVehicleRolloverThread = () => {
   rolloverThread = null;
 };
 
-export const flipVehicle = async (vehicle: number) => {
+const flipVehicle = async (vehicle: number) => {
   const [canceled] = await Taskbar.create('hand', 'Omduwen', 30000, {
     canCancel: true,
     cancelOnDeath: true,
@@ -39,3 +39,21 @@ export const flipVehicle = async (vehicle: number) => {
   if (canceled) return;
   Sync.executeNative('setVehicleOnGround', vehicle);
 };
+
+Peek.addGlobalEntry('vehicle', {
+  options: [
+    {
+      label: 'Flip Voertuig',
+      icon: 'fas fa-hand',
+      action: (_, entity) => {
+        if (!entity) return;
+        flipVehicle(entity);
+      },
+      canInteract: entity => {
+        if (!entity || !NetworkGetEntityIsNetworked(entity)) return false;
+        return isVehicleUpsideDown(entity);
+      },
+    },
+  ],
+  distance: 2,
+});

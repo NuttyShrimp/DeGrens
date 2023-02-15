@@ -1,12 +1,6 @@
-import { RPC } from '@dgx/client';
+import { Events, RPC, Util } from '@dgx/client';
 
-import {
-  getVehicleVin,
-  getVehicleVinWithoutValidation,
-  isCloseToADoor,
-  isCloseToAWheel,
-  isCloseToHood,
-} from '../helpers/vehicle';
+import { isCloseToADoor, isCloseToAWheel, isCloseToHood } from '../helpers/vehicle';
 
 RPC.register('vehicle:checkModel', (model: string): modelInfo => {
   return {
@@ -44,5 +38,10 @@ RPC.register('vehicles:isNearDoor', (vehNetId: number, distance: number) => {
   return isCloseToADoor(veh, distance);
 });
 
-global.asyncExports('getVehicleVin', getVehicleVin);
-global.exports('getVehicleVinWithoutValidation', getVehicleVinWithoutValidation);
+// When spawning vehicle on server, if model is not loaded yet for owner, the setheading native on server will NOT work
+onNet('vehicle:setHeading', async (netId: number, heading: number) => {
+  const exists = await Util.awaitEntityExistence(netId, true);
+  if (!exists) return;
+  const vehicle = NetworkGetEntityFromNetworkId(netId);
+  SetEntityHeading(vehicle, heading);
+});

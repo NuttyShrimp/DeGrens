@@ -1,7 +1,8 @@
-import { Events, Hospital, Keys, Minigames, Police, Util } from '@dgx/client';
+import { Events, Hospital, Keys, Minigames, Peek, Police, Util } from '@dgx/client';
 import { getCurrentVehicle } from '@helpers/vehicle';
 
 import { toggleVehicleLock } from './service.keys';
+import { hasVehicleKeys } from './cache.keys';
 
 let animThread: NodeJS.Timer | null = null;
 const lockpickAnimations = {
@@ -82,4 +83,30 @@ on('vehicles:keys:share', () => {
   if (!veh) return;
   const numSeats = GetVehicleModelNumberOfSeats(GetEntityModel(veh));
   Events.emitNet('vehicles:keys:shareToPassengers', NetworkGetNetworkIdFromEntity(veh), numSeats);
+});
+
+Peek.addGlobalEntry('vehicle', {
+  options: [
+    {
+      label: 'Geef Sleutels',
+      icon: 'fas fa-key',
+      action: (_, entity) => {
+        if (!entity) return;
+        const numSeats = GetVehicleModelNumberOfSeats(GetEntityModel(entity));
+        Events.emitNet('vehicles:keys:shareToClosest', NetworkGetNetworkIdFromEntity(entity), numSeats);
+      },
+      canInteract: ent => {
+        if (!ent || !NetworkGetEntityIsNetworked(ent)) return false;
+        if (!hasVehicleKeys(ent)) return false;
+        if (IsPedInAnyVehicle(PlayerPedId(), false)) return false;
+        // Option enabled if someone in driverseat, passenger seats or close and outside vehicle
+        return (
+          !IsVehicleSeatFree(ent, -1) ||
+          GetVehicleNumberOfPassengers(ent) > 0 ||
+          Util.isAnyPlayerCloseAndOutsideVehicle(3)
+        );
+      },
+    },
+  ],
+  distance: 2,
 });

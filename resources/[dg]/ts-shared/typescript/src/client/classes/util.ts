@@ -349,6 +349,31 @@ class Util extends UtilShared {
     const materialHash = GetShapeTestResultIncludingMaterial(handle)[4] >>> 0; // fourth is material
     return MATERIAL_HASH_ENUM[materialHash];
   };
+
+  public awaitEntityExistence = (entity: number, isNetId = false): Promise<boolean> => {
+    return new Promise<boolean>(resolve => {
+      let attempts = 0;
+      const interval = setInterval(() => {
+        attempts++;
+
+        // entity is netid here
+        if (isNetId) {
+          if (!NetworkDoesNetworkIdExist(entity)) return;
+          if (!NetworkDoesEntityExistWithNetworkId(entity)) return;
+        }
+
+        const ent = isNetId ? NetworkGetEntityFromNetworkId(entity) : entity;
+        if (attempts > 50) {
+          clearInterval(interval);
+          resolve(false);
+        }
+        if (DoesEntityExist(ent)) {
+          clearInterval(interval);
+          resolve(true);
+        }
+      }, 100);
+    });
+  };
 }
 
 export class Interiors {

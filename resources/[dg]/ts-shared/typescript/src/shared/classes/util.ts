@@ -106,24 +106,6 @@ export class Util {
     });
   };
 
-  awaitEntityExistence = (entity: number, isNetId = false): Promise<boolean> => {
-    return new Promise<boolean>(resolve => {
-      let attempts = 0;
-      const interval = setInterval(() => {
-        const ent = isNetId ? NetworkGetEntityFromNetworkId(entity) : entity;
-        attempts++;
-        if (attempts > 50) {
-          clearInterval(interval);
-          resolve(false);
-        }
-        if (DoesEntityExist(ent)) {
-          clearInterval(interval);
-          resolve(true);
-        }
-      }, 100);
-    });
-  };
-
   /**
    * @param id ID to check debouncing
    * @param timeout Timeout in ms
