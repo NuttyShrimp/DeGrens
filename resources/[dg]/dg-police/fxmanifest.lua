@@ -13,3 +13,11 @@ client_scripts {
 }
 
 dependency "dg-auth"
+
+ui_page "html/index.html"
+
+files {
+	"html/index.html",
+	"html/script.js",
+	"html/tablet-frame.png",
+}

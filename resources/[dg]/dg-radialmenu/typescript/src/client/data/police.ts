@@ -99,4 +99,11 @@ export const police: RadialMenu.Entry[] = [
     minimumPlayerDistance: 2,
     isEnabled: ({ currentVehicle }) => !currentVehicle,
   },
+  {
+    title: 'Open ANG',
+    icon: 'tablet',
+    type: 'client',
+    event: 'police:openAng',
+    shouldClose: true,
+  },
 ];

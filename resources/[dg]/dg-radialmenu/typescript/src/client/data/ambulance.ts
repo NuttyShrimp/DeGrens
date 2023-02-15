@@ -37,4 +37,11 @@ export const ambulance: RadialMenu.Entry[] = [
     event: 'hospital:assistence',
     shouldClose: true,
   },
+  {
+    title: 'Open ANG',
+    icon: 'tablet',
+    type: 'client',
+    event: 'hospital:openAng',
+    shouldClose: true,
+  },
 ];
