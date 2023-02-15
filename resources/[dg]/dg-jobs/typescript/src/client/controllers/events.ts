@@ -4,10 +4,7 @@ import { buildFishingReturnZone, cleanupFishingJob } from 'modules/fishing/servi
 import { buildScrapyardReturnZone, cleanupScrapyard } from 'modules/scrapyard/service.scrapyard';
 import { cleanupSanitationJob } from 'modules/sanitation/servive.sanitation';
 import { cleanupPostOPJob, registerPostOPStartPeekOptions } from 'modules/postop/service.postop';
-
-on('jobs:client:openJobAllowlist', () => {
-  Events.emitNet('jobs:whitelist:server:openJobAllowlist');
-});
+import { cleanupHuntingJob, registerHuntingAnimalPeekEntries } from 'modules/hunting/service.hunting';
 
 Util.onPlayerUnloaded(() => {
   cleanupSanddigging();
@@ -15,6 +12,7 @@ Util.onPlayerUnloaded(() => {
   cleanupScrapyard();
   cleanupSanitationJob();
   cleanupPostOPJob();
+  cleanupHuntingJob();
 });
 
 Events.onNet(
@@ -24,10 +22,12 @@ Events.onNet(
     fishingReturnZone: Fishing.Config['vehicle'];
     scrapyardReturnZone: Scrapyard.Config['returnZone'];
     postopTypes: PostOP.Config['types'];
+    huntingAnimals: Hunting.Config['animals'];
   }) => {
     loadSanddiggingConfig(initData.sanddigging);
     buildFishingReturnZone(initData.fishingReturnZone);
     buildScrapyardReturnZone(initData.scrapyardReturnZone);
     registerPostOPStartPeekOptions(initData.postopTypes);
+    registerHuntingAnimalPeekEntries(initData.huntingAnimals);
   }
 );

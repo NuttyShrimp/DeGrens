@@ -39,6 +39,5 @@ declare interface Config {
   timeToFind: number;
   shellType: Record<string, string>;
   locations: House.Data[];
-  shopPrices: Record<string, number>;
   moldChance: number;
 }

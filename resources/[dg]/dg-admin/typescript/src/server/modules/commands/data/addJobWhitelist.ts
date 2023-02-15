@@ -27,7 +27,7 @@ export const addjobwhitelist: CommandData = {
       cid = caller.cid;
     }
 
-    global.exports['dg-jobs'].addToWhitelist(caller.source, args.WhitelistedJobs.name, Number(args.rank), cid);
+    global.exports['dg-jobs'].addWhitelist(caller.source, args.WhitelistedJobs.name, Number(args.rank), cid);
   },
   UI: {
     title: 'Add whitelist for job',

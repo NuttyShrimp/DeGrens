@@ -13,10 +13,11 @@ declare namespace Weapons {
     oneTimeUse?: boolean;
     unlimitedAmmo?: boolean;
     attachments?: Record<string, string>;
+    useNativeReticle?: boolean;
   };
 
   type WeaponItem = Inventory.ItemState &
-    Required<Pick<WeaponConfig, 'noHolstering' | 'oneTimeUse' | 'canTint'>> & {
+    Required<Pick<WeaponConfig, 'noHolstering' | 'oneTimeUse' | 'canTint' | 'useNativeReticle'>> & {
       hash: number;
     };
 

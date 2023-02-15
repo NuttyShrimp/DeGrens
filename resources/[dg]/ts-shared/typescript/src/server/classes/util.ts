@@ -1,4 +1,3 @@
-import { off } from 'process';
 import { Util as UtilShared } from '../../shared/classes/util';
 import { firstNames, lastNames } from '../data/names';
 
@@ -68,6 +67,10 @@ class Util extends UtilShared {
   }
 
   isDevEnv() {
+    if (!Config.areConfigsReady()) {
+      console.log('[DGX] Configs were not ready yet while calling isDevEnv');
+      return false;
+    }
     return Config.getConfigValue<boolean>('main.production') === false;
   }
 
@@ -257,6 +260,10 @@ class Util extends UtilShared {
   public onPlayerUnloaded = (handler: (plyId: number, cid: number) => void) => {
     on('DGCore:server:playerUnloaded', handler);
   };
+
+  public isPlayerInWater = (plyId: number) => {
+    return RPC.execute('dgx:util:isInWater', plyId);
+  };
 }
 
 export class Status {
@@ -287,8 +294,40 @@ export class Reputations {
   };
 }
 
+class StaticObjects {
+  private objectsToRemove: Set<string>;
+
+  constructor() {
+    this.objectsToRemove = new Set();
+    on('onResourceStop', (res: string) => {
+      if (res !== GetCurrentResourceName()) return;
+      global.exports['dg-misc'].removeStaticObject([...this.objectsToRemove]);
+    });
+  }
+
+  public add = (objectData: StaticObjects.CreateData | StaticObjects.CreateData[]): string[] => {
+    const ids = global.exports['dg-misc'].addStaticObject(objectData) as string[];
+
+    ids.forEach(id => {
+      this.objectsToRemove.add(id);
+    });
+    return ids;
+  };
+
+  public remove = (objId: string | string[]) => {
+    if (Array.isArray(objId)) {
+      objId.forEach(id => this.objectsToRemove.delete(id));
+    } else {
+      this.objectsToRemove.delete(objId);
+    }
+
+    global.exports['dg-misc'].removeStaticObject(objId);
+  };
+}
+
 export default {
   Util: new Util(),
   Status: new Status(),
   Reputations: new Reputations(),
+  StaticObjects: new StaticObjects(),
 };

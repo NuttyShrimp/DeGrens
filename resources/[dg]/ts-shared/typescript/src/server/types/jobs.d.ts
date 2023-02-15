@@ -28,6 +28,7 @@ declare namespace Jobs {
       groupPercent: number;
     };
   }
+
   namespace Groups {
     interface Member {
       serverId: number | null;

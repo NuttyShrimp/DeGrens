@@ -36,7 +36,7 @@ RPC.register('gangs:server:getClientVersion', async (plyId: number): Promise<Gan
   return await gang.getClientVersion();
 });
 
-on('DGCore:server:playerLoaded', (playerData: PlayerData) => {
+Util.onPlayerLoaded(playerData => {
   const gang = gangManager.getPlayerGang(playerData.citizenid);
   if (!gang) return;
   dispatchCurrentGangToClient(playerData.citizenid, gang.name);

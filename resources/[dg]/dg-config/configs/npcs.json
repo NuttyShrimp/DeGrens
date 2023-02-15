@@ -107,7 +107,7 @@
     "scenario": "WORLD_HUMAN_STAND_IMPATIENT"
   },
   {
-    "id": "houserobbery_sell",
+    "id": "fence",
     "model": "mp_m_exarmy_01",
     "position": {
       "x": 1538.55,
@@ -136,7 +136,7 @@
     ],
     "flags": [
       {
-        "name": "isHouseRobSell",
+        "name": "isFence",
         "active": true
       }
     ],
@@ -1364,6 +1364,47 @@
       "title": "PostOP",
       "sprite": 569,
       "color": 15,
+      "scale": 0.9
+    }
+  },
+  {
+    "id": "jobs_hunting",
+    "model": "ig_cletus",
+    "position": {
+      "x": -696.0436,
+      "y": 5802.522,
+      "z": 17.3309
+    },
+    "heading": 67.5144,
+    "distance": 100.0,
+    "settings": [
+      {
+        "type": "invincible",
+        "active": true
+      },
+      {
+        "type": "ignore",
+        "active": true
+      },
+      {
+        "type": "freeze",
+        "active": true
+      },
+      {
+        "type": "collision",
+        "active": true
+      }
+    ],
+    "flags": [
+      {
+        "name": "isHuntingSignIn",
+        "active": true
+      }
+    ],
+    "blip": {
+      "title": "Jagen",
+      "sprite": 119,
+      "color": 6,
       "scale": 0.9
     }
   }

@@ -414,7 +414,7 @@ Citizen.CreateThread(function()
                         DrawMarker(2, Config.ClothingRooms[k].coords, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.4, 0.4, 0.2, 255, 255, 255, 255, 0, 0, 0, 1, 0, 0, 0)
                         if dist < 2 then
                             if plyJob == nil then
-                                plyJob = DGX.RPC.execute('jobs:server:getCurrentJob')
+                                plyJob = DGX.Jobs.getCurrentJob().name
                             end
                             if plyJob == Config.ClothingRooms[k].requiredJob then
                                 DrawText3Ds(Config.ClothingRooms[k].coords.x, Config.ClothingRooms[k].coords.y, Config.ClothingRooms[k].coords.z + 0.3, '~g~E~w~ - View Clothing')

@@ -238,6 +238,7 @@ export class Business {
     );
     this.logAction(cid, 'fire', `${await Util.getCharName(targetCID)}(${targetCID}) ontslagen`);
     dispatchBusinessPermissionsToClientCache(targetCID, 'remove', this.info.name);
+    emit('business:playerFired', this.info.id, this.info.name, targetCID);
   }
 
   async changeBankPermission(src: number, targetCID: number, permissions: IFinancials.Permissions) {

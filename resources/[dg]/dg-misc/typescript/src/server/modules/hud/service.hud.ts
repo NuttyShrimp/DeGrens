@@ -11,13 +11,18 @@ export const dispatchHudConfigToPlayer = (plyId: number) => {
   Events.emitNet('hud:client:initialize', plyId, config);
 };
 
-export const updateStress = (src: number, amount: number) => {
-  const Player = DGCore.Functions.GetPlayer(src);
-  if (!Player) return;
-  if (Jobs.getCurrentJob(src) === 'police') {
+export const loadStress = (plyId: number, amount: number) => {
+  Player(plyId).state.stressAmount = amount;
+};
+
+export const changeStress = (plyId: number, amount: number) => {
+  const player = DGCore.Functions.GetPlayer(plyId);
+  if (!player) return;
+  if (Jobs.getCurrentJob(plyId) === 'police') {
     amount *= 0.6;
   }
-  const newStress = Math.max(0, Math.min(100, (Player.PlayerData.metadata.stress ?? 0) + amount));
-  Player.Functions.SetMetaData('stress', newStress);
-  Events.emitNet('hud:client:updateStress', src, newStress);
+  const newStress = Math.max(0, Math.min(100, (player.PlayerData.metadata.stress ?? 0) + amount));
+  const roundedNewStress = Math.round(newStress * 10) / 10;
+  player.Functions.SetMetaData('stress', roundedNewStress);
+  Player(plyId).state.stressAmount = roundedNewStress;
 };

@@ -194,3 +194,23 @@ Events.onNet('admin:commands:teleportInVehicle', (netId: number) => {
 
   TaskWarpPedIntoVehicle(PlayerPedId(), vehicle, freeSeat);
 });
+
+Events.onNet('admin:commands:materialDebug', (toggle: boolean) => {
+  const alreadyToggled = getCmdState('materialDebug');
+  setCmdState('materialDebug', toggle);
+
+  if (alreadyToggled) return;
+
+  let currentMaterial = '';
+  const thread = setInterval(() => {
+    if (!getCmdState('materialDebug')) {
+      clearInterval(thread);
+      return;
+    }
+    const material = Util.getGroundMaterial();
+    if (material !== currentMaterial) {
+      currentMaterial = material;
+      console.log(`[Admin] Current material: ${currentMaterial}`);
+    }
+  }, 10);
+});

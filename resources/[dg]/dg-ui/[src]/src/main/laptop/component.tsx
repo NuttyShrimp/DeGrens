@@ -28,7 +28,7 @@ const Component: AppFunction = props => {
 
   // region Enabled Apps
   const laptopApps = useLaptopConfigStore(s => s.config);
-  const [activeJob, hasVPN] = useMainStore(s => [s.character.job, s.character.hasVPN]);
+  const [activeJob, hasVPN, whitelistedJobs] = useMainStore(s => [s.character.job, s.character.hasVPN, s.jobs]);
   const setLaptopConfig = useLaptopConfigStore(s => s.updateStore);
 
   useEffect(() => {
@@ -36,14 +36,13 @@ const Component: AppFunction = props => {
     laptopApps.forEach(app => {
       if (app.requiresVPN && !hasVPN) return;
       if (app.requiredJobs && activeJob && !app.requiredJobs.includes(activeJob)) return;
-      // TODO: Check for all whitelisted jobs, not only on duty
-      if (app.blockedJobs && activeJob && app.blockedJobs.includes(activeJob)) return;
+      if (app.blockedJobs && app.blockedJobs.some(j => whitelistedJobs.includes(j))) return;
       enabledApps.push(app);
     });
     setLaptopConfig({
       enabledApps: enabledApps,
     });
-  }, [activeJob, laptopApps, hasVPN]);
+  }, [activeJob, laptopApps, hasVPN, whitelistedJobs]);
   // endregion
 
   return (

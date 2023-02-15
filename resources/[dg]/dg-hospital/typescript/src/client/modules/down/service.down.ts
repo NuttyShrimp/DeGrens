@@ -1,6 +1,6 @@
 import { Events, Keys, Util, Inventory, Police, Weapons, RPC, Jobs } from '@dgx/client';
 import { setBleedAmount, setHealth } from 'modules/health/service.health';
-import { ENABLED_CONTROLS, DOWN_ANIMATIONS } from './constants.down';
+import { ENABLED_CONTROLS, DOWN_ANIMATIONS, NO_TP_VEHICLE_CLASSES } from './constants.down';
 import { doGetUpAnimation, getWeightOfState, resetPedFlagsAfterDown, setPedFlagsOnDown, setText } from './helpers.down';
 
 let playerState: Hospital.State = 'alive';
@@ -71,7 +71,7 @@ export const checkDeathOnDamage = (originPed: number, weaponHash: number) => {
   // stupid edgecase...
   // we want ejections from vehicle to always be unconscious to improve gameplay
   // most of the time hash is 'WEAPON_RUN_OVER_BY_CAR' or 'WEAPON_RAMMED_BY_CAR' but can also 'WEAPON_FALL' in rare cases
-  if (weaponHash === GetHashKey('WEAPON_FALL') && global.exports['dg-vehicles'].justEjected()) {
+  if (weaponHash === GetHashKey('WEAPON_FALL') >>> 0 && global.exports['dg-vehicles'].justEjected()) {
     weaponHash = GetHashKey('WEAPON_RAMMED_BY_CAR');
   }
   weaponHash = weaponHash >>> 0;
@@ -87,25 +87,32 @@ export const checkDeathOnDamage = (originPed: number, weaponHash: number) => {
   const origin = Util.getServerIdForPed(originPed);
   Events.emitNet('hospital:down:playerDied', damageTypeData.cause, origin);
 
-  // Clear bleed on death, otherwise anim would get spam canceled because of bleed damage
   setHealth(1);
   setBleedAmount(0);
-
-  // Resurrect and set health when stopped ragdolling
-  awaitingRagdollFinish = true;
-  Util.awaitCondition(() => !IsPedRagdoll(ped)).then(() => {
-    const coords = Util.getPlyCoords();
-    const heading = GetEntityHeading(ped);
-    const vehData = Util.getCurrentVehicleInfo(); // resurrect tps ped out of veh
-    NetworkResurrectLocalPlayer(coords.x, coords.y, coords.z, heading, true, false);
-    setPedFlagsOnDown();
-    if (vehData) {
-      SetPedIntoVehicle(ped, vehData.vehicle, vehData.seat);
-    }
-    awaitingRagdollFinish = false;
-  });
-
+  resurrectWhenRagdollFinished();
   setPlayerState(downType);
+};
+
+// We do resurrect when we stopped ragdolling
+const resurrectWhenRagdollFinished = async () => {
+  const ped = PlayerPedId();
+  awaitingRagdollFinish = true;
+
+  // First we wait till player starts ragdolling with timeout of 1 sec
+  await Util.awaitCondition(() => IsPedRagdoll(ped), 1000);
+
+  // then we wait till players stops with timeout of 5 sec
+  await Util.awaitCondition(() => !IsPedRagdoll(ped), 5000);
+
+  const coords = Util.getEntityCoords(ped);
+  const heading = GetEntityHeading(ped);
+  const vehData = Util.getCurrentVehicleInfo(); // resurrect tps ped out of veh
+  NetworkResurrectLocalPlayer(coords.x, coords.y, coords.z, heading, false, false);
+  setPedFlagsOnDown();
+  if (vehData && !NO_TP_VEHICLE_CLASSES.includes(vehData.class)) {
+    SetPedIntoVehicle(ped, vehData.vehicle, vehData.seat);
+  }
+  awaitingRagdollFinish = false;
 };
 
 const startDownThread = async () => {

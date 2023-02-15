@@ -97,7 +97,9 @@ const registerFood = (info: Config.Consumable) => {
       Notifications.add(src, 'Item is verdwenen?..');
       return;
     }
-    Hospital.setNeed(src, 'hunger', old => old + info.gain);
+
+    const gain = calculateGain(info, item);
+    Hospital.setNeed(src, 'hunger', old => old + gain);
   });
 };
 
@@ -120,7 +122,9 @@ const handleDrinkUse = async (src: number, item: Inventory.ItemState, info: Conf
     Notifications.add(src, 'Item is verdwenen?..');
     return false;
   }
-  Hospital.setNeed(src, 'thirst', old => old + info.gain);
+
+  const gain = calculateGain(info, item);
+  Hospital.setNeed(src, 'thirst', old => old + gain);
   return success;
 };
 
@@ -159,3 +163,15 @@ Inventory.registerUseable('id_card', (src, item) => {
     });
   });
 });
+
+// quality of metadata can influence gain, we scale from 25-100 to always get a bit at least
+const calculateGain = (info: Config.Consumable, item: Inventory.ItemState) => {
+  let gain = info.gain;
+  if (info.checkQuality) {
+    const quality = item.metadata.quality;
+    if (quality !== undefined) {
+      gain *= Math.round((quality * 0.75 + 25) * 10) / 1000;
+    }
+  }
+  return gain;
+};

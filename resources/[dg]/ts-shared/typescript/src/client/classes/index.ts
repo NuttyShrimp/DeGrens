@@ -17,7 +17,7 @@ import weather from './weather';
 
 export const { Events, RPC } = events;
 export const { Peek, RayCast, PolyZone, Keys, PolyTarget } = interaction;
-export const { Util, Interiors, PropAttach, Particle, Animations } = util;
+export const { Util, Interiors, PropAttach, Particle, Animations, StaticObjects } = util;
 export const { UI, Taskbar, Notifications, HUD } = ui;
 export const { Jobs, Business, Gangs, Police, Hospital } = jobs;
 export const { Storage } = storage;

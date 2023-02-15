@@ -54,7 +54,7 @@ class StateManager extends Util.Singleton<StateManager>() {
     }
     const cid = Player.PlayerData.citizenid;
     if (this.playerStates.has(cid) && this.playerStates.get(cid) !== PlayerState.WAITING) {
-      this.cleanupPlayer(src);
+      this.cleanupPlayer(src, cid);
       Util.Log('houserobbery:signin:logout', {}, `${Player.PlayerData.name} left the queue for houserobberies`, src);
       return false;
     }
@@ -370,8 +370,7 @@ class StateManager extends Util.Singleton<StateManager>() {
     mainLogger.debug(`${src} failed his houserobbery job`);
     Jobs.changeGroupJob(src, null);
     jobGroup.members.forEach(m => {
-      if (!m.serverId) return;
-      this.cleanupPlayer(m.serverId);
+      this.cleanupPlayer(m.serverId, m.cid);
     });
   }
 
@@ -410,14 +409,11 @@ class StateManager extends Util.Singleton<StateManager>() {
     });
   }
 
-  cleanupPlayer(src: number, cid?: number) {
-    if (!cid) {
-      const Player = DGCore.Functions.GetPlayer(src);
-      if (!Player) return;
-      cid = Player.PlayerData.citizenid;
-    }
+  cleanupPlayer(src: number | null, cid: number) {
     this.playerStates.delete(cid);
-    emitNet('houserobbery:client:cleanup', src);
+    if (src !== null) {
+      emitNet('houserobbery:client:cleanup', src);
+    }
   }
 }
 

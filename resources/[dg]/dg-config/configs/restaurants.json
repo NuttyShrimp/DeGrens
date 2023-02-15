@@ -1,0 +1,315 @@
+{
+  "amountPerTicket": 50,
+  "restaurants": {
+    "upnatom": {
+      "label": "Up-n-Atom",
+      "restaurantZone": {
+        "points": [
+          {
+            "x": 90.054252624512,
+            "y": 272.20550537109
+          },
+          {
+            "x": 92.608360290527,
+            "y": 279.49465942383
+          },
+          {
+            "x": 91.811164855957,
+            "y": 280.00137329102
+          },
+          {
+            "x": 93.378952026367,
+            "y": 284.353515625
+          },
+          {
+            "x": 94.808738708496,
+            "y": 284.08676147461
+          },
+          {
+            "x": 95.624740600586,
+            "y": 286.2673034668
+          },
+          {
+            "x": 93.463119506836,
+            "y": 286.97610473633
+          },
+          {
+            "x": 94.978721618652,
+            "y": 287.88098144531
+          },
+          {
+            "x": 98.253204345703,
+            "y": 294.95739746094
+          },
+          {
+            "x": 81.24925994873,
+            "y": 301.044921875
+          },
+          {
+            "x": 78.506660461426,
+            "y": 293.8173828125
+          },
+          {
+            "x": 80.233741760254,
+            "y": 293.21157836914
+          },
+          {
+            "x": 77.146118164062,
+            "y": 285.13482666016
+          },
+          {
+            "x": 75.759635925293,
+            "y": 285.6845703125
+          },
+          {
+            "x": 73.167167663574,
+            "y": 278.45135498047
+          }
+        ],
+        "minZ": 106.55,
+        "maxZ": 115.1882
+      },
+      "managementZone": {
+        "center": {
+          "x": 81.23,
+          "y": 298.13,
+          "z": 110.22
+        },
+        "length": 0.4,
+        "width": 4.8,
+        "options": {
+          "heading": 340,
+          "minZ": 109.17,
+          "maxZ": 111.77
+        }
+      },
+      "stashZone": {
+        "center": {
+          "x": 82.65,
+          "y": 292.31,
+          "z": 110.22
+        },
+        "length": 3,
+        "width": 3.4,
+        "options": {
+          "heading": 340,
+          "minZ": 109.42,
+          "maxZ": 111.02
+        }
+      },
+      "registerZones": [
+        {
+          "center": {
+            "x": 87.12,
+            "y": 284.18,
+            "z": 110.22
+          },
+          "length": 1.4,
+          "width": 1.4,
+          "options": {
+            "heading": 340,
+            "minZ": 110.07,
+            "maxZ": 110.87
+          }
+        },
+        {
+          "center": {
+            "x": 84.9,
+            "y": 285.57,
+            "z": 110.22
+          },
+          "length": 1.4,
+          "width": 1.4,
+          "options": {
+            "heading": 295,
+            "minZ": 110.07,
+            "maxZ": 110.87
+          }
+        }
+      ],
+      "cooking": [
+        {
+          "peekLabel": "Vlees bakken",
+          "from": "animal_meat",
+          "to": "restaurant_burger",
+          "zone": {
+            "center": {
+              "x": 92.93,
+              "y": 289.97,
+              "z": 110.22
+            },
+            "length": 0.8,
+            "width": 1.5,
+            "options": {
+              "heading": 250,
+              "minZ": 110.02,
+              "maxZ": 110.42
+            }
+          }
+        },
+        {
+          "peekLabel": "Kaas maken",
+          "from": "farming_milk",
+          "to": "restaurant_cheese",
+          "zone": {
+            "center": {
+              "x": 88.87,
+              "y": 288.34,
+              "z": 110.22
+            },
+            "length": 0.6,
+            "width": 0.6,
+            "options": {
+              "heading": 340,
+              "minZ": 110.02,
+              "maxZ": 110.42
+            }
+          }
+        }
+      ],
+      "items": {
+        "upnatom_soda": {
+          "zone": {
+            "center": {
+              "x": 93.32,
+              "y": 287.72,
+              "z": 110.22
+            },
+            "length": 0.6,
+            "width": 0.75,
+            "options": {
+              "heading": 340,
+              "minZ": 110.12,
+              "maxZ": 110.72
+            }
+          },
+          "peekLabel": "Soda maken",
+          "requiredItems": [],
+          "isLeftover": true
+        },
+        "upnatom_milkshake": {
+          "zone": {
+            "center": {
+              "x": 90.95,
+              "y": 284.29,
+              "z": 110.22
+            },
+            "length": 0.45,
+            "width": 0.35,
+            "options": {
+              "heading": 340,
+              "minZ": 109.92,
+              "maxZ": 110.72
+            }
+          },
+          "peekLabel": "Milkshake maken",
+          "requiredItems": [
+            "farming_milk"
+          ]
+        },
+        "upnatom_icecream": {
+          "zone": {
+            "center": {
+              "x": 90.03,
+              "y": 284.8,
+              "z": 110.22
+            },
+            "length": 1.6,
+            "width": 0.8,
+            "options": {
+              "heading": 340,
+              "minZ": 109.72,
+              "maxZ": 110.32
+            }
+          },
+          "peekLabel": "Ijsje nemen",
+          "requiredItems": []
+        },
+        "upnatom_fries": {
+          "zone": {
+            "center": {
+              "x": 90.04,
+              "y": 291.05,
+              "z": 110.22
+            },
+            "length": 1.65,
+            "width": 0.75,
+            "options": {
+              "heading": 340,
+              "minZ": 109.87,
+              "maxZ": 110.27
+            }
+          },
+          "peekLabel": "Frieten bakken",
+          "requiredItems": [
+            "farming_potato"
+          ]
+        },
+        "upnatom_burger": {
+          "zone": {
+            "center": {
+              "x": 90.17,
+              "y": 287.22,
+              "z": 110.22
+            },
+            "length": 2.4,
+            "width": 0.8,
+            "options": {
+              "heading": 340,
+              "minZ": 110.02,
+              "maxZ": 110.42
+            }
+          },
+          "peekLabel": "Burger maken",
+          "requiredItems": [
+            "farming_tomato",
+            "farming_lettuce",
+            "farming_onion",
+            "farming_wheat",
+            "restaurant_burger"
+          ],
+          "isLeftover": true
+        },
+        "upnatom_cheeseburger": {
+          "zone": {
+            "center": {
+              "x": 90.59,
+              "y": 288.39,
+              "z": 110.22
+            },
+            "length": 2.4,
+            "width": 0.6,
+            "options": {
+              "heading": 340,
+              "minZ": 110.02,
+              "maxZ": 110.42
+            }
+          },
+          "peekLabel": "Cheeseburger maken",
+          "requiredItems": [
+            "farming_tomato",
+            "farming_lettuce",
+            "farming_onion",
+            "farming_wheat",
+            "restaurant_burger",
+            "restaurant_cheese"
+          ]
+        }
+      },
+      "leftoverZone": {
+        "center": {
+          "x": 81.13,
+          "y": 290.33,
+          "z": 110.21
+        },
+        "length": 1,
+        "width": 1.8,
+        "options": {
+          "heading": 70,
+          "minZ": 109.86,
+          "maxZ": 110.66
+        }
+      }
+    }
+  }
+}

@@ -165,12 +165,12 @@ export class Item {
 
   public getMetadata = () => this.metadata;
 
-  public setQuality = (cb: (current: number) => number) => {
+  public setQuality = (cb: (current: number) => number, noItemBoxOnBreak = false) => {
     const newQuality = cb(this.quality);
     const clampedNewQuality = Math.min(Math.max(newQuality, 0), 100);
 
     if (clampedNewQuality === 0) {
-      this.destroy(true);
+      this.destroy(noItemBoxOnBreak);
     }
 
     // Update destroydate when increasing quality
@@ -182,7 +182,7 @@ export class Item {
     this.quality = clampedNewQuality;
   };
 
-  public destroy = (showItembox = false) => {
+  public destroy = (noItemBox = false) => {
     const originalInvType = this.inventory.type;
     const originalInvIdentifier = this.inventory.identifier;
 
@@ -200,7 +200,7 @@ export class Item {
       `${this.name} got destroyed (${Math.ceil(this.quality)}% quality)`
     );
 
-    if (showItembox && originalInvType === 'player') {
+    if (!noItemBox && originalInvType === 'player') {
       const image = itemDataManager.get(this.name).image;
       const plyId = DGCore.Functions.getPlyIdForCid(Number(originalInvIdentifier));
       if (plyId) {
@@ -212,7 +212,7 @@ export class Item {
   /**
    * @returns Returns true if item broke
    */
-  public checkDecay = () => {
+  public checkDecay = (noItemBoxOnBreak = false) => {
     const itemData = itemDataManager.get(this.name);
     if (!itemData.decayRate) return false;
     if (this.inventory.type === 'shop') return false;
@@ -221,7 +221,7 @@ export class Item {
     const secondsSinceLastDecay = currentSeconds - this.lastDecayTime;
     const amountToDecay = secondsSinceLastDecay * decayPerSecond;
     this.lastDecayTime = currentSeconds;
-    this.setQuality(current => current - amountToDecay);
+    this.setQuality(current => current - amountToDecay, noItemBoxOnBreak);
     return this.quality === 0;
   };
 

@@ -42,7 +42,7 @@ class ItemManager extends Util.Singleton<ItemManager>() {
     const item = new Item();
     this.items.set(id, item);
     await item.init({ state: { ...state, id }, isNew });
-    if (item.checkDecay()) return;
+    if (item.checkDecay(true)) return;
     return item;
   };
 
@@ -165,7 +165,7 @@ class ItemManager extends Util.Singleton<ItemManager>() {
       this.logger.warn(`Could not get item ${id}, broke while getting item to set destroy`);
       return;
     }
-    item.destroy(true);
+    item.destroy();
   };
 
   public unloadItem = (id: string) => {

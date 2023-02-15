@@ -54,7 +54,6 @@ Events.onNet('police:interactions:getCarried', async (plyId: number) => {
   const thread = setInterval(() => {
     DisableAllControlActions(0);
 
-    // TODO: Replace cancel key with emotes cancel key
     if (cancelCarry && !Police.isCuffed() && !Hospital.isDown()) {
       ClearPedTasksImmediately(ped);
       cancelCarry = false;

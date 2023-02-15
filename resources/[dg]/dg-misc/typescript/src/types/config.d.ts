@@ -45,6 +45,7 @@ declare namespace Config {
   interface Consumable {
     name: string;
     gain: number;
+    checkQuality?: boolean;
   }
 
   interface EffectConsumable {

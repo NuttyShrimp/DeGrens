@@ -47,6 +47,7 @@ declare namespace Main {
     apps: ConfigObject[];
     character: Character;
     game: Game;
+    jobs: string[];
   }
 
   interface StateActions {

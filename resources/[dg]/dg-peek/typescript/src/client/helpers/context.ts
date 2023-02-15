@@ -29,9 +29,9 @@ export const getEntityCtx = (entity: number): Context => {
     ctx.globalType = 'vehicle';
   }
 
-  const cfxEntity = Entity(ctx.entity);
+  const entState = Entity(ctx.entity).state;
   registeredFlags.forEach(flag => {
-    if (!cfxEntity.state[flag]) return;
+    if (!entState[flag]) return;
     if (ctx.flags.has(flag)) return;
     ctx.flags.add(flag);
   });

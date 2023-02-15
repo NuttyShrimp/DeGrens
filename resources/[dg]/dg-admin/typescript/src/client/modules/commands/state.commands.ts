@@ -1,6 +1,7 @@
 const commandState = {
   cloak: false,
   noclip: false,
+  materialDebug: false,
 };
 
 type CommandStateType = typeof commandState;

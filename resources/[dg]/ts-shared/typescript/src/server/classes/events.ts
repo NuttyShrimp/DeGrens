@@ -350,7 +350,7 @@ class Events {
     });
   }
 
-  public onNet(evtName: string, handler: DGXEvents.LocalEventHandler) {
+  public onNet(evtName: string, handler: DGXEvents.ServerEventHandler) {
     let netHandlers = this.netEventHandlers.get(evtName);
     if (!netHandlers) {
       netHandlers = [];

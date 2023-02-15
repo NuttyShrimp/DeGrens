@@ -6,5 +6,3 @@ export const DUMPSTER_MODELS = [
   'prop_dumpster_4a',
   'prop_dumpster_4b',
 ].map(m => GetHashKey(m));
-
-export const RANGE = 100;

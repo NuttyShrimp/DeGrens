@@ -13,24 +13,20 @@ onNet('jobs:client:signin:update', (job: string, rank: number) => {
   currentJob.rank = rank;
 });
 
-export const getCurrentJob = () => currentJob;
+global.exports('getCurrentJob', () => currentJob);
 
-Peek.addZoneEntry(
-  'jobs:signin',
-  {
-    distance: 2,
-    options: [
-      {
-        label: 'Open Duty Board',
-        icon: 'list-check',
-        action: option => {
-          Events.emitNet('jobs:server:signIn:openDutyBoard', option.data?.id ?? -1);
-        },
+Peek.addZoneEntry('jobs:signin', {
+  distance: 2,
+  options: [
+    {
+      label: 'Open Duty Board',
+      icon: 'list-check',
+      action: option => {
+        Events.emitNet('jobs:server:signIn:openDutyBoard', option.data?.id ?? -1);
       },
-    ],
-  },
-  true
-);
+    },
+  ],
+});
 
 UI.RegisterUICallback('jobs:signin:signin', (data: { job: string }, cb) => {
   Events.emitNet('jobs:server:signIn', data.job);
@@ -48,9 +44,9 @@ UI.RegisterUICallback('jobs:whitelist:assignRank', (data: { rank: number; cid: n
 });
 
 UI.RegisterUICallback(
-  'jobs:whitelist:toggleSpecialty',
+  'jobs:whitelist:toggleSpeciality',
   (data: { cid: number; spec: string; type: 'add' | 'remove' }, cb) => {
-    Events.emitNet('jobs:whitelist:toggleSpecialty', data.cid, data.spec, data.type);
+    Events.emitNet('jobs:whitelist:toggleSpeciality', data.cid, data.spec, data.type);
     cb({ meta: { ok: true, message: '' }, data: {} });
   }
 );

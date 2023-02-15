@@ -37,7 +37,7 @@ export const assignSpotToGroup = (plyId: number) => {
   const group = getGroupByServerId(plyId);
   if (!group) {
     Util.Log(
-      'jobs:radiotower:noGroup',
+      'jobs:sanddigging:noGroup',
       {},
       `${Util.getName(plyId)} tried to do sanddigging action but was not in a group`,
       plyId
@@ -62,7 +62,7 @@ export const receiveSpotLoot = (plyId: number, spotId: number) => {
   const group = getGroupByServerId(plyId);
   if (!group) {
     Util.Log(
-      'jobs:radiotower:noGroup',
+      'jobs:sanddigging:noGroup',
       { spotId },
       `${Util.getName(plyId)} tried to do sanddigging action but was not in a group`,
       plyId
@@ -83,9 +83,22 @@ export const receiveSpotLoot = (plyId: number, spotId: number) => {
     return;
   }
 
-  Inventory.addItemToPlayer(plyId, 'sand_bucket', 1);
-  Util.Log('jobs:sanddigging:receive', { spotId }, `${Util.getName(plyId)} received loot for sanddigging`, plyId);
-  sanddiggingLogger.silly(`${plyId} received loot for sanddigging`);
+  let itemName = 'sand';
+  if (Util.getRndInteger(1, 101) < sanddiggingConfig.specialItemChance) {
+    itemName = sanddiggingConfig.specialItems[Math.floor(Math.random() * sanddiggingConfig.specialItems.length)];
+  }
+
+  Inventory.addItemToPlayer(plyId, itemName, 1);
+  Util.Log(
+    'jobs:sanddigging:receive',
+    {
+      spotId,
+      itemName,
+    },
+    `${Util.getName(plyId)} received loot for sanddigging`,
+    plyId
+  );
+  sanddiggingLogger.silly(`${plyId} received loot (${itemName}) for sanddigging`);
 };
 
 export const syncSanddiggingJobToClient = (groupId: string, plyId: number) => {
@@ -98,20 +111,21 @@ export const syncSanddiggingJobToClient = (groupId: string, plyId: number) => {
   }
 };
 
-export const playerLeftGroup = (groupId: string, plyId: number | null) => {
+export const handlePlayerLeftSanddiggingGroup = (groupId: string, plyId: number | null) => {
   const active = activeGroups.get(groupId);
   if (!active) return;
 
-  if (plyId !== null) {
+  if (plyId) {
     Events.emitNet('jobs:sanddigging:leftGroup', plyId);
   }
 
   const group = getGroupById(groupId);
   if (group && group.members.length > 0) return;
+
+  activeGroups.delete(groupId);
   setTimeout(() => {
     Vehicles.deleteVehicle(NetworkGetEntityFromNetworkId(active.vehNetId));
   }, 10000);
-  activeGroups.delete(groupId);
   sanddiggingLogger.silly(`Group ${groupId} has been removed from active as there are no members remaining`);
 };
 
@@ -122,4 +136,13 @@ export const finishJob = (plyId: number, vehNetId: number) => {
   if (!active || active.vehNetId !== vehNetId) return;
   disbandGroup(group.id);
   Vehicles.deleteVehicle(NetworkGetEntityFromNetworkId(active.vehNetId));
+
+  Util.Log(
+    'jobs:sanddigging:finish',
+    {
+      groupId: group.id,
+    },
+    `${Util.getName(plyId)}(${plyId}) finished sanddigging job for group`,
+    plyId
+  );
 };

@@ -1,6 +1,5 @@
 local gameValues = {}
 local characterInfo = {}
-local whitelistedJobs = {}
 
 -- Only use when restarting resource or player joins
 -- Fucks up every open ui app
@@ -62,23 +61,4 @@ end)
 AddEventHandler('weathersync:weatherUpdated', function(weatherType)
   gameValues['weather'] = weatherType
   SendAppEvent("game", gameValues)
-end)
-
-DGX.Events.onNet('jobs:client:whitelistedJobs', function(pWhitelistedJobs)
-  whitelistedJobs = pWhitelistedJobs
-  SendAppEvent('jobs', whitelistedJobs)
-end)
-
-DGX.Events.onNet('jobs:whitelist:add', function(jobName)
-  whitelistedJobs[#whitelistedJobs + 1] = jobName
-  SendAppEvent('jobs', whitelistedJobs)
-end)
-
-DGX.Events.onNet('jobs:whitelist:remove', function(jobName)
-  for i, job in ipairs(whitelistedJobs) do
-    if job == jobName then
-      table.remove(whitelistedJobs, i)
-    end
-  end
-  SendAppEvent('jobs', whitelistedJobs)
 end)

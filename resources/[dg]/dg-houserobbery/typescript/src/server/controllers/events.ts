@@ -1,8 +1,8 @@
 import stateManager from '../classes/StateManager';
-import { Config, RPC, Util } from '@dgx/server';
+import { Config, RPC, Util, Jobs } from '@dgx/server';
 
-on('dg-jobs:server:groups:playerLeft', (src: number) => {
-  stateManager.cleanupPlayer(src);
+Jobs.onGroupLeave((plyId, cid) => {
+  stateManager.cleanupPlayer(plyId, cid);
 });
 
 Util.onPlayerUnloaded((plyId, cid) => {

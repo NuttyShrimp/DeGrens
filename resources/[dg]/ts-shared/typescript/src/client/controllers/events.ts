@@ -8,6 +8,11 @@ if (GetCurrentResourceName() === 'ts-shared') {
     return Boolean(IsEntityDead(entity));
   });
 
+  RPC.register('dgx:util:isInWater', () => {
+    const plyPed = PlayerPedId();
+    return IsEntityInWater(plyPed);
+  });
+
   Events.onNet('dgx:client:ui:openContextmenu', (menu: ContextMenu.Entry[]) => {
     UI.openApplication('contextmenu', menu);
   });

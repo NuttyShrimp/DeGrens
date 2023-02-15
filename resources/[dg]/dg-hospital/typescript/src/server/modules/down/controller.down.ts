@@ -7,16 +7,26 @@ import { revivePlayer } from './service.down';
 global.exports('revivePlayer', revivePlayer);
 
 Events.onNet('hospital:down:playerDied', async (src: number, cause: string, killer: number) => {
-  downLogger.info(`${Util.getName(src)} has died | cause: ${cause} | killer: ${killer}`);
+  const killerName = Util.getName(killer) ?? 'Unknown';
+  downLogger.info(`${Util.getName(src)} has died | cause: ${cause} | killer: ${killerName}(${killer})`);
 
   global.exports['dg-phone'].brickPhone(src);
 
   let newStatus = getHospitalConfig().damagetypes[cause].status ?? 'bruises';
   Status.addStatusToPlayer(src, newStatus);
 
-  const fileName = await Screenshot.generateMinioFilename();
-  const minioLink = await Screenshot.minio(src, { fileName });
-  Util.Log('hospital:down:died', { minioLink, cause, killer }, `${Util.getName(src)} has died`, src);
+  const minioPromises = [Screenshot.generateMinioFilename().then(fileName => Screenshot.minio(src, { fileName }))];
+  if (Util.getName(killer)) {
+    minioPromises.push(Screenshot.generateMinioFilename().then(fileName => Screenshot.minio(killer, { fileName })));
+  }
+  const [minioLinkVictim, minioLinkKiller] = await Promise.all(minioPromises);
+
+  Util.Log(
+    'hospital:down:died',
+    { minioLinkVictim, minioLinkKiller, cause, killer, killerName },
+    `${Util.getName(src)} has died by ${killerName} (${cause})`,
+    src
+  );
 });
 
 Events.onNet('hospital:down:changeState', (src: number, state: Hospital.State) => {

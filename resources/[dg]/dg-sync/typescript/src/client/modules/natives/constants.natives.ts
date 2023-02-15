@@ -26,4 +26,5 @@ export const ACTIONS = {
       SetVehicleDoorShut(vehicle, doorId, false);
     }
   },
+  SetEntityHealth,
 };

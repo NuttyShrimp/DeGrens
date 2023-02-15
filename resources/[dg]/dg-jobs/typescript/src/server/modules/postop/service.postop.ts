@@ -18,9 +18,9 @@ export const initializePostop = () => {
     location: { x: -424.2247, y: -2789.7656 },
     // this is payout per package, gets multiplied by amount of packages player has delivered
     payout: {
-      min: 50,
-      max: 100,
-      groupPercent: 30, // Can only do with 2 people so high percentage isnt a problem
+      min: 20,
+      max: 30,
+      groupPercent: 15, // Can only do with 2 people so high percentage isnt a problem
     },
   });
 };
@@ -42,6 +42,21 @@ const getRandomTargetLocation = (type: PostOP.JobType, locationId: number): Post
     dropoffs: choosenDropoffs,
     id: locationId,
   };
+};
+
+const buildPhoneNotificationData = (jobGroup: PostOP.Job) => {
+  const isFinished = jobGroup.totalLocations === jobGroup.locationsDone;
+
+  const data = {
+    title: isFinished
+      ? 'Je bent klaar'
+      : `${jobGroup.dropoffsDone.size}/${jobGroup.targetLocation.dropoffs.length} afgeleverd`,
+    description: isFinished
+      ? 'Lever het voertuig in'
+      : `${jobGroup.totalLocations - jobGroup.locationSequence.length}/${jobGroup.totalLocations} locaties gedaan`,
+  };
+
+  return data;
 };
 
 export const startJobForGroup = async (plyId: number, jobType: PostOP.JobType) => {
@@ -77,8 +92,7 @@ export const startJobForGroup = async (plyId: number, jobType: PostOP.JobType) =
   Vehicles.setFuelLevel(vehicle, 100);
 
   const locationSequence = generateLocationSequence(jobType);
-  const targetLocationId = locationSequence.shift()!;
-  const targetLocation = getRandomTargetLocation(jobType, targetLocationId);
+  const targetLocation = getRandomTargetLocation(jobType, locationSequence[0]);
 
   const job: PostOP.Job = {
     netId,
@@ -88,19 +102,26 @@ export const startJobForGroup = async (plyId: number, jobType: PostOP.JobType) =
     dropoffsBusy: new Set(),
     dropoffsDone: new Set(),
     packagesByPlayer: new Map(),
+    totalLocations: locationSequence.length,
+    locationsDone: 0,
   };
   activeGroups.set(group.id, job);
 
   Util.Log(
     'jobs:postop:start',
-    { jobType, locationSequence },
-    `${Util.getName(plyId)} started postop job for group`,
+    {
+      groupId: group.id,
+      jobType,
+      locationSequence,
+    },
+    `${Util.getName(plyId)}(${plyId}) started postop job for group`,
     plyId
   );
 
+  const phoneNotificationData = buildPhoneNotificationData(job);
   group.members.forEach(m => {
     if (m.serverId === null) return;
-    sendOutStartEvents(m.serverId, job);
+    sendOutStartEvents(m.serverId, job, phoneNotificationData);
     Notifications.add(m.serverId, 'De locatie staat op je GPS aangeduid');
   });
 };
@@ -110,16 +131,20 @@ export const syncPostOPJobToClient = (groupId: string, plyId: number) => {
   if (active === undefined) return;
 
   postopLogger.silly(`Syncing active job to plyId ${plyId}`);
-  sendOutStartEvents(plyId, active);
+  const phoneNotificationData = buildPhoneNotificationData(active);
+  sendOutStartEvents(plyId, active, phoneNotificationData);
 };
 
-const sendOutStartEvents = (plyId: number, job: PostOP.Job) => {
+const sendOutStartEvents = (
+  plyId: number,
+  job: PostOP.Job,
+  phoneNotificationData: ReturnType<typeof buildPhoneNotificationData>
+) => {
   Events.emitNet('jobs:postop:start', plyId, job.netId, postopConfig.vehicleLocation);
   Events.emitNet('jobs:postop:setLocation', plyId, job.targetLocation);
   Phone.showNotification(plyId, {
+    ...phoneNotificationData,
     id: 'postop_amount_tracker',
-    title: `${job.dropoffsDone.size}/${job.targetLocation.dropoffs.length} afgeleverd`,
-    description: '',
     sticky: true,
     keepOnAction: true,
     icon: 'jobcenter',
@@ -147,16 +172,23 @@ export const finishJobForGroup = (plyId: number, netId: number) => {
 
   disbandGroup(group.id);
   Vehicles.deleteVehicle(NetworkGetEntityFromNetworkId(active.netId));
-  Util.Log('jobs:postop:finish', { ...active }, `${Util.getName(plyId)} finished postop for group`, plyId);
+  Util.Log(
+    'jobs:postop:finish',
+    {
+      groupId: group.id,
+      packagesByPlayer: [...active.packagesByPlayer.entries()],
+    },
+    `${Util.getName(plyId)}(${plyId}) finished postop for group`,
+    plyId
+  );
 };
 
-export const playerLeftGroup = (groupId: string, plyId: number | null) => {
+export const handlePlayerLeftPostOPGroup = (groupId: string, plyId: number | null) => {
   const active = activeGroups.get(groupId);
   if (!active) return;
 
   if (plyId) {
     Events.emitNet('jobs:postop:cleanup', plyId);
-    Phone.removeNotification(plyId, 'postop_amount_tracker');
   }
 
   const group = getGroupById(groupId);
@@ -199,35 +231,30 @@ export const finishDropoff = (plyId: number, dropoffId: number, success: boolean
   active.packagesByPlayer.set(cid, amountOfPackages + 1);
 
   // Check if all dropoffs are done for group
-  let changedLocations = false;
-  let isFinished = false;
+  let finishedLocation = false;
+  let finishedAllLocations = false;
 
   if (active.targetLocation.dropoffs.length === active.dropoffsDone.size) {
-    changedLocations = true;
-    const newLocationId = active.locationSequence.shift();
+    finishedLocation = true;
+    active.locationSequence.shift();
+    active.locationsDone++;
 
-    if (newLocationId !== undefined) {
+    if (active.locationSequence[0] !== undefined) {
       active.dropoffsBusy.clear();
       active.dropoffsDone.clear();
-      active.targetLocation = getRandomTargetLocation(active.type, newLocationId);
+      active.targetLocation = getRandomTargetLocation(active.type, active.locationSequence[0]);
     } else {
-      isFinished = true;
+      finishedAllLocations = true;
     }
   }
 
+  const phoneNotificationData = buildPhoneNotificationData(active);
   group.members.forEach(m => {
     if (!m.serverId) return;
-    Phone.updateNotification(m.serverId, 'postop_amount_tracker', {
-      title: `${active.dropoffsDone.size}/${active.targetLocation.dropoffs.length} afgeleverd`,
-    });
+    Phone.updateNotification(m.serverId, 'postop_amount_tracker', phoneNotificationData);
 
-    if (changedLocations) {
-      Events.emitNet('jobs:postop:setLocation', m.serverId, isFinished ? null : active.targetLocation);
-      if (isFinished) {
-        Notifications.add(m.serverId, 'Je bent klaar met bezorgen, keer terug en lever het voertuig in');
-      } else {
-        Notifications.add(m.serverId, 'Je bent hier klaar, ga naar de volgende locatie');
-      }
+    if (finishedLocation) {
+      Events.emitNet('jobs:postop:setLocation', m.serverId, finishedAllLocations ? null : active.targetLocation);
     }
   });
 };

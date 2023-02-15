@@ -1,6 +1,7 @@
 declare namespace Scrapyard {
   type Config = {
     partItems: string[];
+    lootAmount: [number, number];
     loot: string[];
     returnZone: Vec4;
     models: string[];

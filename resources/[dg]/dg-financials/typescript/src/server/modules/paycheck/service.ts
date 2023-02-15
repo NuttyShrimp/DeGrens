@@ -1,8 +1,6 @@
 import { Jobs, Notifications, SQL, Util } from '@dgx/server';
 import { getConfig } from 'helpers/config';
 import accountManager from 'modules/bank/classes/AccountManager';
-import { cashLogger } from '../cash/util';
-
 import { paycheckLogger } from './util';
 
 const paycheckCache: Map<number, number> = new Map();
@@ -19,8 +17,7 @@ const saveToDb = async (cid: number) => {
   await SQL.query(query, [cid, amount, amount]);
 };
 
-export const seedPlyInCache = async (src: number) => {
-  const cid = Util.getCID(src);
+export const seedPlyInCache = async (cid: number) => {
   const query = `
 		SELECT amount
 		FROM player_paycheck
@@ -38,34 +35,41 @@ export const seedPlyInCache = async (src: number) => {
 
 export const seedCache = async () => {
   paycheckCache.clear();
-  DGCore.Functions.GetPlayers().forEach(async player => {
-    await seedPlyInCache(player);
-    const Player = DGCore.Functions.GetPlayer(player);
-    const plyJob = Jobs.getCurrentJob(player);
-    checkInterval(Player.PlayerData.citizenid, plyJob);
+
+  (
+    Object.values({
+      ...DGCore.Functions.GetQBPlayers(),
+    }) as Player[]
+  ).forEach(async (ply: Player) => {
+    await seedPlyInCache(ply.PlayerData.citizenid);
+    const plyJob = Jobs.getCurrentJob(ply.PlayerData.source);
+    checkInterval(ply.PlayerData.citizenid, plyJob);
   });
 };
 
-export const registerPaycheck = (src: number, amount: number, job: string, comment?: string) => {
-  const cid = Util.getCID(src);
+export const registerPaycheck = (cid: number, amount: number, job: string, comment?: string) => {
   const newPaycheck = (paycheckCache.get(cid) ?? 0) + amount;
   paycheckCache.set(cid, newPaycheck);
+
+  const plyId = DGCore.Functions.getPlyIdForCid(cid);
+  const plyName = plyId != undefined ? Util.getName(plyId) : 'Unknown';
   Util.Log(
-    'financials:paycheckRegistered',
+    'financials:paycheck:registered',
     {
       cid,
       amount,
       job,
       comment,
     },
-    `${Util.getName(src)} (${cid}) registered a paycheck of ${amount} for ${job} (${comment})`,
-    src
+    `${plyName} (${cid}) registered a paycheck of ${amount} for ${job} (${comment})`,
+    plyId
   );
   saveToDb(cid);
 };
 
 export const givePaycheck = async (src: number) => {
   const cid = Util.getCID(src);
+  const logName = Util.getName(src);
 
   const paycheckAmount = paycheckCache.get(cid);
   if (paycheckAmount === undefined) {
@@ -84,21 +88,17 @@ export const givePaycheck = async (src: number) => {
   if (account === undefined) {
     Notifications.add(src, 'Je hebt geen paycheck', 'error');
     Util.Log(
-      'financials:paycheckError',
+      'financials:paycheck:error',
       {
         cid,
         amount: paycheckAmount,
       },
-      `${Util.getName(
-        src
-      )} (${cid}) attempted to give a paycheck of €${paycheckAmount} but no default account was found.`,
+      `${logName} (${cid}) attempted to give a paycheck of €${paycheckAmount} but no default account was found.`,
       src,
       true
     );
-    cashLogger.warn(
-      `${Util.getName(
-        src
-      )} (${cid}) attempted to give a paycheck of €${paycheckAmount} but no default account was found.`
+    paycheckLogger.warn(
+      `${logName} (${cid}) attempted to give a paycheck of €${paycheckAmount} but no default account was found.`
     );
     return;
   }
@@ -107,21 +107,21 @@ export const givePaycheck = async (src: number) => {
   if (!result) {
     Notifications.add(src, 'Konden geen paycheck uitbetalen', 'error');
     Util.Log(
-      'financials:paycheckError',
+      'financials:paycheck:error',
       {
         cid,
         amount: paycheckAmount,
       },
-      `${Util.getName(src)} (${cid}) attempted to give a paycheck of €${paycheckAmount} but the paycheck failed.`,
+      `${logName} (${cid}) attempted to give a paycheck of €${paycheckAmount} but the paycheck failed.`,
       src
     );
-    cashLogger.warn(
-      `${Util.getName(src)} (${cid}) attempted to give a paycheck of €${paycheckAmount} but the paycheck failed.`
+    paycheckLogger.warn(
+      `${logName} (${cid}) attempted to give a paycheck of €${paycheckAmount} but the paycheck failed.`
     );
     return;
   }
   Notifications.add(src, `Paycheck van €${paycheckAmount} uitbetaald.`);
-  paycheckLogger.info(`${Util.getName(src)} (${cid}) received his/her paycheck of €${paycheckAmount}`);
+  paycheckLogger.info(`${logName} (${cid}) received his/her paycheck of €${paycheckAmount}`);
   paycheckCache.set(cid, 0);
   saveToDb(cid);
 };
@@ -131,10 +131,7 @@ export const checkInterval = (cid: number, job: string | null) => {
     // Went offduty or changed jobs
     const intervalInfo = paycheckIntervals.get(cid)!;
     if (intervalInfo.job !== job) {
-      const plyId = DGCore.Functions.getPlyIdForCid(cid);
-      if (plyId) {
-        registerPaycheck(plyId, intervalInfo.amount, intervalInfo.job, 'Whitelisted paycheck');
-      }
+      registerPaycheck(cid, intervalInfo.amount, intervalInfo.job, 'Whitelisted paycheck');
       paycheckIntervals.delete(cid);
       paycheckLogger.debug(`Cleared paycheck interval for ${cid}`);
     }

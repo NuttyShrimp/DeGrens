@@ -621,8 +621,9 @@ model vehicle_upgrades {
 
 model weed_plants {
   id        Int                @id @default(autoincrement())
-  stage     Int?               @default(1) @db.SmallInt
+  stage     Int?               @default(0) @db.SmallInt
   coords    String?            @db.Text
+  rotation  String?            @db.Text
   gender    weed_plants_gender
   food      Int?               @default(100)
   grow_time BigInt?
@@ -638,10 +639,18 @@ model whitelist_jobs {
   cid        Int
   job        String     @db.VarChar(255)
   rank       Int        @default(0)
-  specialty  Int        @default(0)
+  speciality Int        @default(0)
   characters characters @relation(fields: [cid], references: [citizenid], onDelete: Cascade, map: "fk_whitelist_jobs_cid")
 
   @@id([cid, job])
+}
+
+model restaurant_prices {
+  restaurant String @db.VarChar(255)
+  item       String @db.VarChar(255)
+  price      Int    @default(0)
+
+  @@id([restaurant, item])
 }
 
 enum bank_accounts_type {
