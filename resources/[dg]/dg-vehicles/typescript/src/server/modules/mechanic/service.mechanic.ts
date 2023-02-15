@@ -134,7 +134,8 @@ export const giveOrder = async (src: number, order: Mechanic.Tickets.Item[]) => 
     }
   }
   Inventory.addItemToPlayer(src, 'sales_ticket', 1, {
-    hiddenKeys: ['hiddenKeys', 'items'],
+    hiddenKeys: ['items', 'origin'],
+    origin: 'mechanic',
     items,
     info: items.map(i => `${i.amount}x ${Inventory.getItemData(i.name!)?.label}`).join(', '),
   });
@@ -145,46 +146,6 @@ export const getRevenueForItem = (item: Mechanic.Tickets.ExtItem) => {
   const classModifier = config.reward.class[item.class] ?? 1;
   const typeModifier = config.reward.type[item.type] ?? 1;
   return partPrice * classModifier * typeModifier;
-};
-
-export const tradeSalesTickets = async (src: number) => {
-  const ticketAmount = await Inventory.getAmountPlayerHas(src, 'sales_ticket');
-  if (!ticketAmount) {
-    Notifications.add(src, 'Je hebt geen Sales Tickets opzak', 'error');
-    return;
-  }
-  const cid = Util.getCID(src);
-  const tickets = await Inventory.getItemsWithNameInInventory('player', String(cid), 'sales_ticket');
-  let revenue = 0;
-  for (const ticket of tickets) {
-    const data = ticket.metadata as Mechanic.Tickets.ItemMetadata;
-    const ticketRevenues = await Promise.all(
-      data.items.map(async i => {
-        let amountOfIdsThatDontExistAnymore = 0;
-        for (const id of i.ids) {
-          const itemState = await Inventory.getItemStateFromDatabase(id);
-          // If item still exists then dont pay out anything
-          if (itemState && itemState.name === i.name) continue;
-          amountOfIdsThatDontExistAnymore++;
-        }
-        return getRevenueForItem(i) * amountOfIdsThatDontExistAnymore;
-      })
-    );
-    revenue += ticketRevenues.reduce((tot, rev) => {
-      return tot + rev;
-    }, 0);
-  }
-  const plyDefAcc = Financials.getDefaultAccountId(cid);
-  if (!plyDefAcc) return;
-  const success = await Financials.paycheck(plyDefAcc, cid, revenue);
-  if (!success) {
-    Notifications.add(src, `Systeem is gefaald om €${revenue} uit te betalen`, 'error');
-    return;
-  }
-  Notifications.add(src, `Je hebt €${revenue} verdiend aan je tickets`);
-  for (const ticket of tickets) {
-    Inventory.destroyItem(ticket.id);
-  }
 };
 // endregion
 

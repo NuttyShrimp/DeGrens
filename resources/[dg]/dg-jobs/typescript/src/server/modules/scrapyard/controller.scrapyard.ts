@@ -1,13 +1,11 @@
-import { Events, Inventory, Jobs, Notifications, RPC, Vehicles } from '@dgx/server';
-import { changeJob, getGroupByServerId } from 'modules/groups/service';
+import { Events, Inventory, Notifications, RPC, Vehicles, Util } from '@dgx/server';
+import { getGroupByServerId } from 'modules/groups/service';
 import {
   assignLocationToGroup,
   getDonePartsForGroup,
   getLootFromVehicle,
   getScrapyardConfig,
   handleVehicleLockpick,
-  playerLeftGroup,
-  syncScrapyardJobToClient,
 } from './service.scrapyard';
 
 Events.onNet('jobs:scrapyard:signIn', async (src: number) => {
@@ -17,14 +15,6 @@ Events.onNet('jobs:scrapyard:signIn', async (src: number) => {
 Vehicles.onLockpick((plyId, vehicle, type) => {
   if (type !== 'door') return;
   handleVehicleLockpick(plyId, vehicle);
-});
-
-Jobs.onGroupJoin((plyId, cid, groupId) => {
-  syncScrapyardJobToClient(groupId, plyId, cid);
-});
-
-Jobs.onGroupLeave((plyId, _, groupId) => {
-  playerLeftGroup(groupId, plyId);
 });
 
 Events.onNet('jobs:scrapyard:getLoot', (src: number, netId: number, doorId: number) => {
@@ -44,7 +34,8 @@ Events.onNet('jobs:scrapyard:givePart', async (src: number) => {
   }
 
   const loot = config.loot[Math.floor(Math.random() * config.loot.length)];
-  Inventory.addItemToPlayer(src, loot, 1);
+  const amount = Util.getRndInteger(...config.lootAmount);
+  Inventory.addItemToPlayer(src, loot, amount);
 });
 
 RPC.register('jobs:scrapyard:getDoneParts', (src: number, netId) => {

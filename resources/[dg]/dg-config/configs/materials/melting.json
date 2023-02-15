@@ -1,6 +1,10 @@
 {
   "zone": {
-    "center": { "x": 1086.3, "y": -2003.66, "z": 30.88 },
+    "center": {
+      "x": 1086.3,
+      "y": -2003.66,
+      "z": 30.88
+    },
     "heading": 49,
     "width": 2.8,
     "length": 4.1,
@@ -60,7 +64,7 @@
     },
     {
       "from": {
-        "name": "sand_bucket",
+        "name": "sand",
         "amount": 10
       },
       "to": {

@@ -1445,7 +1445,9 @@
     "description": "PDM Linkse deur",
     "locked": true,
     "authorized": {
-      "business": ["pdm"]
+      "business": [
+        "pdm"
+      ]
     },
     "distance": 2,
     "doors": [
@@ -1463,7 +1465,9 @@
     "description": "PDM Rechtse deur",
     "locked": true,
     "authorized": {
-      "business": ["pdm"]
+      "business": [
+        "pdm"
+      ]
     },
     "distance": 2,
     "doors": [
@@ -3115,5 +3119,162 @@
     "authorized": {},
     "hideInteraction": true,
     "noAnimation": true
+  },
+  {
+    "description": "Up-n-Atom zijdeur",
+    "locked": false,
+    "distance": 2,
+    "doors": [
+      {
+        "model": "gn_upnatom_vw_door_l",
+        "coords": {
+          "x": 79.89344787597656,
+          "y": 290.1180419921875,
+          "z": 110.36161804199219
+        }
+      },
+      {
+        "model": "gn_upnatom_vw_door_r",
+        "coords": {
+          "x": 79.07577514648438,
+          "y": 287.87225341796875,
+          "z": 110.36161804199219
+        }
+      }
+    ],
+    "authorized": {
+      "business": [
+        "upnatom"
+      ]
+    }
+  },
+  {
+    "description": "Up-n-Atom voordeur",
+    "locked": false,
+    "distance": 2,
+    "doors": [
+      {
+        "model": "gn_upnatom_vw_door_r",
+        "coords": {
+          "x": 82.64714813232422,
+          "y": 274.89044189453125,
+          "z": 110.36161804199219
+        }
+      },
+      {
+        "model": "gn_upnatom_vw_door_l",
+        "coords": {
+          "x": 80.40375518798828,
+          "y": 275.70721435546875,
+          "z": 110.36161804199219
+        }
+      }
+    ],
+    "authorized": {
+      "business": [
+        "upnatom"
+      ]
+    }
+  },
+  {
+    "description": "Up-n-Atom drivethrough",
+    "locked": false,
+    "distance": 2,
+    "doors": [
+      {
+        "model": "gn_upnatom_vw_drivewindow",
+        "coords": {
+          "x": 95.1721420288086,
+          "y": 285.5702209472656,
+          "z": 110.37629699707031
+        }
+      }
+    ],
+    "authorized": {
+      "business": [
+        "upnatom"
+      ]
+    }
+  },
+  {
+    "description": "Up-n-Atom koelcel",
+    "locked": true,
+    "distance": 2,
+    "doors": [
+      {
+        "model": "gn_upnatom_cold_room_door",
+        "coords": {
+          "x": 86.21371459960938,
+          "y": 289.4629821777344,
+          "z": 110.36418914794922
+        }
+      }
+    ],
+    "authorized": {
+      "business": [
+        "upnatom"
+      ]
+    },
+    "hideInteraction": true
+  },
+  {
+    "description": "Up-n-Atom achterdeur",
+    "locked": true,
+    "distance": 2,
+    "doors": [
+      {
+        "model": "prop_bs_map_door_01",
+        "coords": {
+          "x": 89.9170913696289,
+          "y": 297.7799072265625,
+          "z": 110.2790298461914
+        }
+      }
+    ],
+    "authorized": {
+      "business": [
+        "upnatom"
+      ]
+    }
+  },
+  {
+    "description": "Up-n-Atom office",
+    "locked": true,
+    "distance": 2,
+    "doors": [
+      {
+        "model": "gn_upnatom_lb_door",
+        "coords": {
+          "x": 90.64418029785156,
+          "y": 294.7216491699219,
+          "z": 110.37207794189453
+        }
+      }
+    ],
+    "authorized": {
+      "business": [
+        "upnatom"
+      ]
+    }
+  },
+  {
+    "description": "Up-n-Atom lockers",
+    "locked": true,
+    "distance": 2,
+    "doors": [
+      {
+        "model": "gn_upnatom_lb_door",
+        "coords": {
+          "x": 88.6187973022461,
+          "y": 295.45941162109375,
+          "z": 110.37207794189453
+        }
+      }
+    ],
+    "authorized": {
+      "business": [
+        "upnatom"
+      ]
+    }
   }
 ]

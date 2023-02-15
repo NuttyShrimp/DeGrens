@@ -1,8 +1,6 @@
 import { Auth } from '@dgx/server';
-import { seedExistingPlantsForClient } from 'modules/weed/service.weed';
-import { awaitConfig } from 'services/config';
+import { sendWeedPlantModelsToClient } from 'modules/weed/service.weed';
 
-Auth.onAuth(async plyId => {
-  await awaitConfig();
-  seedExistingPlantsForClient(plyId);
+Auth.onAuth(plyId => {
+  sendWeedPlantModelsToClient(plyId);
 });

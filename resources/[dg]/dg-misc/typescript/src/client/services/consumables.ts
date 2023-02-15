@@ -27,7 +27,7 @@ const fxState: Consumables.CState = {
 };
 
 const effects: Record<EffectName, (duration: number) => void> = {
-  stress: duration => {
+  stress: () => {
     const ped = PlayerPedId();
     activeDrugs.stress = true;
     if (IsPedInAnyVehicle(ped, false)) {
@@ -44,7 +44,7 @@ const effects: Record<EffectName, (duration: number) => void> = {
           clearInterval(emotedEffect?.timer);
           return;
         }
-        Events.emitNet('hud:server:RelieveStress', Util.getRndInteger(1, 5));
+        Events.emitNet('hud:server:changeStress', Util.getRndInteger(1, 5) * -1);
       }, 5000),
       type: 'stress',
     };

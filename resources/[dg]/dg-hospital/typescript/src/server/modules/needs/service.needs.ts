@@ -25,8 +25,9 @@ export const setNeed = (plyId: number, need: CharacterNeed, cb: (old: number) =>
 
   const needs = { ...player.PlayerData.metadata.needs };
   const newValue = cb(needs[need]);
-  needs[need] = newValue;
+  const clampedValue = Math.max(0, Math.min(100, newValue));
+  needs[need] = clampedValue;
   player.Functions.SetMetaData('needs', needs);
   emitNet('hud:client:UpdateNeeds', plyId, needs.hunger, needs.thirst);
-  needsLogger.info(`Changed ${need} to ${newValue} for ${Util.getName(plyId)}`);
+  needsLogger.info(`Changed ${need} to ${clampedValue} for ${Util.getName(plyId)}`);
 };

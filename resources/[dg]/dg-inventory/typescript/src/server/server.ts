@@ -10,6 +10,8 @@ import shopManager from 'modules/shops/shopmanager';
 import { loadConfig } from 'services/config';
 import { preloadActivePlayerInventories } from 'modules/inventories/controller.inventories';
 
+let isLoaded = false;
+
 setImmediate(async () => {
   // Load config before doing all other thingies!
   await loadConfig();
@@ -21,5 +23,8 @@ setImmediate(async () => {
   await shopManager.seed();
   preloadActivePlayerInventories();
 
+  isLoaded = true;
   emit('inventory:loaded');
 });
+
+global.exports('isLoaded', () => isLoaded);

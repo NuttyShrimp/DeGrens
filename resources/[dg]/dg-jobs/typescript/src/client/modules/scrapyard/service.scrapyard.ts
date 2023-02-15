@@ -32,14 +32,13 @@ export const setVehicleNetId = (netId: typeof vehicleNetId) => {
           if (!vehicle) return;
           disassembleVehicle(vehicle);
         },
-        canInteract: () => isInReturnZone(),
+        canInteract: () => inReturnZone,
       },
     ],
     distance: 2.0,
   });
 };
 
-const isInReturnZone = () => inReturnZone;
 export const setInReturnZone = (isIn: boolean) => {
   inReturnZone = isIn;
 };

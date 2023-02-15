@@ -3,6 +3,7 @@ declare namespace Criminal {
     weed: Weed.Config;
     cornerselling: Cornerselling.Config;
     blackmoney: Blackmoney.Config;
+    fence: Fence.Config;
   };
 
   namespace Weed {
@@ -26,23 +27,14 @@ declare namespace Criminal {
     };
 
     type Gender = 'male' | 'female';
-
-    type Plant = {
-      coords: Vec3;
-      gender: Gender;
-      metadata: {
-        stage: number;
-        food: number;
-        cutTime: number;
-        growTime: number;
-      };
-    };
+    type Stage = 0 | 1 | 2 | 3;
 
     type DBPlant = {
       id: number;
       coords: string;
+      rotation: string;
       gender: Gender;
-      stage: number;
+      stage: Stage;
       food: number;
       cut_time: number;
       grow_time: number;
@@ -65,6 +57,12 @@ declare namespace Criminal {
   namespace Blackmoney {
     type Config = {
       items: Record<string, { value: number }>;
+    };
+  }
+
+  namespace Fence {
+    type Config = {
+      items: Record<string, number>;
     };
   }
 }

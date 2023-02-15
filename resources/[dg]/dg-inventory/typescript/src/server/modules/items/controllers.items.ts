@@ -84,7 +84,7 @@ Events.onNet(
           itemsToRemove.push(plyItem);
         }
       }
-      itemsToRemove.forEach(item => item.destroy());
+      itemsToRemove.forEach(item => item.destroy(true));
     }
 
     const metadata = itemManager.buildInitialMetadata(src, name);

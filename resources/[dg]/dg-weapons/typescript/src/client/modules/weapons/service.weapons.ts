@@ -72,6 +72,7 @@ export const startWeaponThread = () => {
     if (ammoInWeapon < previousAmmoCount) {
       const plyCoords = Util.getEntityCoords(ped);
       shotFirePositions.push(plyCoords);
+      emit('weapons:shotWeapon', currentWeaponData);
     }
 
     // Player stopped shooting
@@ -109,6 +110,9 @@ export const startWeaponThread = () => {
       if (!reticleEnabled) {
         reticleEnabled = true;
         showReticle(true);
+        if (currentWeaponData.useNativeReticle) {
+          global.exports['dg-misc'].setDefaultReticleEnabled(true);
+        }
       }
 
       if (!isFreeAiming) {
@@ -125,6 +129,9 @@ export const startWeaponThread = () => {
       if (reticleEnabled) {
         reticleEnabled = false;
         showReticle(false);
+        if (currentWeaponData.useNativeReticle) {
+          global.exports['dg-misc'].setDefaultReticleEnabled(false);
+        }
       }
 
       if (isFreeAiming) {

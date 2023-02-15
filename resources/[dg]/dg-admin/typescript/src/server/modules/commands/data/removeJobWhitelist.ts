@@ -22,7 +22,7 @@ export const removejobwhitelist: CommandData = {
       cid = caller.cid;
     }
 
-    global.exports['dg-jobs'].removeFromWhitelist(caller.source, args.WhitelistedJobs.name, cid);
+    global.exports['dg-jobs'].removeWhitelist(caller.source, args.WhitelistedJobs.name, cid);
   },
   UI: {
     title: 'Remove whitelist for job',

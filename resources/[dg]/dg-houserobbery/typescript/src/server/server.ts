@@ -2,9 +2,7 @@ import { Chat, Jobs, Police, Util } from '@dgx/server';
 import stateManager from 'classes/StateManager';
 
 import './controllers';
-import './modules';
 import { PlayerState } from './enums/states';
-import { initializeShop } from 'modules/shop/service.shop';
 
 setImmediate(() => {
   const jobInfo: Jobs.Job = {
@@ -14,7 +12,6 @@ setImmediate(() => {
     icon: 'user-secret',
   };
   Jobs.registerJob('houserobbery', jobInfo);
-  initializeShop();
 });
 
 const pickLuckyPlayer = (skippedPlys: number[] = []) => {

@@ -315,10 +315,9 @@
     }
   },
   {
-    "markedForSeizure": true,
     "useable": true,
     "name": "weapon_sniperrifle",
-    "label": "PD Sniper Rifle",
+    "label": "Jachtgeweer",
     "image": "weapon_sniperrifle.png",
     "size": {
       "x": 7,
@@ -720,17 +719,6 @@
     "size": {
       "x": 2,
       "y": 2
-    }
-  },
-  {
-    "name": "plant_fertilizer",
-    "label": "Plantenvoeding",
-    "decayRate": 10080,
-    "image": "plant_fertilizer.png",
-    "description": "Voeding om je zelf geplante plantjes te voeden",
-    "size": {
-      "x": 2,
-      "y": 3
     }
   },
   {
@@ -2625,12 +2613,12 @@
     "markedForSeizure": true
   },
   {
-    "name": "sand_bucket",
-    "label": "Emmer Zand",
-    "image": "sand_bucket.png",
+    "name": "sand",
+    "label": "Zand",
+    "image": "sand.png",
     "size": {
-      "x": 3,
-      "y": 3
+      "x": 2,
+      "y": 2
     },
     "decayrate": 1440
   },
@@ -2841,6 +2829,7 @@
     "name": "sandwich",
     "label": "Sandwich",
     "image": "sandwich.png",
+    "decayRate": 10,
     "size": {
       "x": 1,
       "y": 1
@@ -2851,6 +2840,7 @@
     "name": "water_bottle",
     "label": "Water",
     "image": "water_bottle.png",
+    "decayRate": 10,
     "size": {
       "x": 1,
       "y": 1
@@ -2935,6 +2925,303 @@
     "size": {
       "x": 2,
       "y": 2
+    }
+  },
+  {
+    "useable": true,
+    "name": "hunting_bait",
+    "label": "Lokaas",
+    "image": "hunting_bait.png",
+    "size": {
+      "x": 1,
+      "y": 1
+    }
+  },
+  {
+    "name": "animal_meat",
+    "label": "Vers Vlees",
+    "image": "animal_meat.png",
+    "size": {
+      "x": 1,
+      "y": 1
+    }
+  },
+  {
+    "name": "animal_skin_boar",
+    "label": "Everzwijnhuid",
+    "image": "animal_skin_boar.png",
+    "size": {
+      "x": 2,
+      "y": 2
+    }
+  },
+  {
+    "name": "animal_skin_coyote",
+    "label": "Coyotehuid",
+    "image": "animal_skin_coyote.png",
+    "size": {
+      "x": 2,
+      "y": 2
+    }
+  },
+  {
+    "name": "animal_skin_deer",
+    "label": "Hertenhuid",
+    "image": "animal_skin_deer.png",
+    "size": {
+      "x": 2,
+      "y": 2
+    }
+  },
+  {
+    "name": "animal_skin_mtlion",
+    "label": "Poemahuid",
+    "image": "animal_skin_mtlion.png",
+    "size": {
+      "x": 2,
+      "y": 2
+    }
+  },
+  {
+    "name": "gold_nugget",
+    "label": "Stukje Goud",
+    "image": "gold_nugget.png",
+    "size": {
+      "x": 2,
+      "y": 2
+    }
+  },
+  {
+    "name": "farming_fertilizer",
+    "label": "Plantenvoeding",
+    "decayRate": 10080,
+    "image": "farming_fertilizer.png",
+    "size": {
+      "x": 2,
+      "y": 3
+    }
+  },
+  {
+    "name": "farming_fertilizer_deluxe",
+    "label": "Deluxe Plantenvoeding",
+    "decayRate": 10080,
+    "image": "farming_fertilizer_deluxe.png",
+    "size": {
+      "x": 2,
+      "y": 3
+    }
+  },
+  {
+    "name": "farming_bucket",
+    "label": "Emmer",
+    "image": "farming_bucket.png",
+    "decayRate": 43200,
+    "useable": true,
+    "size": {
+      "x": 3,
+      "y": 3
+    }
+  },
+  {
+    "name": "farming_milk",
+    "label": "Melk",
+    "image": "farming_milk.png",
+    "decayRate": 4320,
+    "useable": true,
+    "size": {
+      "x": 1,
+      "y": 2
+    }
+  },
+  {
+    "name": "farming_seed_tomato",
+    "label": "Tomaten Zaadje",
+    "image": "farming_seed_tomato.png",
+    "decayRate": 360,
+    "useable": true,
+    "size": {
+      "x": 1,
+      "y": 1
+    }
+  },
+  {
+    "name": "farming_seed_lettuce",
+    "label": "Sla Zaadje",
+    "image": "farming_seed_lettuce.png",
+    "decayRate": 360,
+    "useable": true,
+    "size": {
+      "x": 1,
+      "y": 1
+    }
+  },
+  {
+    "name": "farming_seed_onion",
+    "label": "Uien Zaadje",
+    "image": "farming_seed_onion.png",
+    "decayRate": 360,
+    "useable": true,
+    "size": {
+      "x": 1,
+      "y": 1
+    }
+  },
+  {
+    "name": "farming_seed_wheat",
+    "label": "Graan Zaadje",
+    "image": "farming_seed_wheat.png",
+    "decayRate": 360,
+    "useable": true,
+    "size": {
+      "x": 1,
+      "y": 1
+    }
+  },
+  {
+    "name": "farming_seed_potato",
+    "label": "Aardappel Zaadje",
+    "image": "farming_seed_potato.png",
+    "decayRate": 360,
+    "useable": true,
+    "size": {
+      "x": 1,
+      "y": 1
+    }
+  },
+  {
+    "name": "farming_tomato",
+    "label": "Tomaat",
+    "image": "farming_tomato.png",
+    "decayRate": 20160,
+    "size": {
+      "x": 1,
+      "y": 1
+    }
+  },
+  {
+    "name": "farming_lettuce",
+    "label": "Sla",
+    "image": "farming_lettuce.png",
+    "decayRate": 20160,
+    "size": {
+      "x": 1,
+      "y": 1
+    }
+  },
+  {
+    "name": "farming_onion",
+    "label": "Ui",
+    "image": "farming_onion.png",
+    "decayRate": 20160,
+    "size": {
+      "x": 1,
+      "y": 1
+    }
+  },
+  {
+    "name": "farming_wheat",
+    "label": "Graan",
+    "image": "farming_wheat.png",
+    "decayRate": 20160,
+    "size": {
+      "x": 1,
+      "y": 1
+    }
+  },
+  {
+    "name": "farming_potato",
+    "label": "Aardappel",
+    "image": "farming_potato.png",
+    "decayRate": 20160,
+    "size": {
+      "x": 1,
+      "y": 1
+    }
+  },
+  {
+    "name": "upnatom_soda",
+    "label": "Up-n-Atom Soda",
+    "image": "upnatom_soda.png",
+    "decayRate": 180,
+    "useable": true,
+    "size": {
+      "x": 1,
+      "y": 2
+    }
+  },
+  {
+    "name": "upnatom_milkshake",
+    "label": "Up-n-Atom Milkshake",
+    "image": "upnatom_milkshake.png",
+    "decayRate": 180,
+    "useable": true,
+    "size": {
+      "x": 1,
+      "y": 2
+    }
+  },
+  {
+    "name": "upnatom_icecream",
+    "label": "Up-n-Atom Ijsje",
+    "image": "upnatom_icecream.png",
+    "decayRate": 180,
+    "useable": true,
+    "size": {
+      "x": 1,
+      "y": 1
+    }
+  },
+  {
+    "name": "upnatom_fries",
+    "label": "Up-n-Atom Fries",
+    "image": "upnatom_fries.png",
+    "decayRate": 180,
+    "useable": true,
+    "size": {
+      "x": 1,
+      "y": 1
+    }
+  },
+  {
+    "name": "upnatom_burger",
+    "label": "Up-n-Atom Burger",
+    "image": "upnatom_burger.png",
+    "decayRate": 180,
+    "useable": true,
+    "size": {
+      "x": 1,
+      "y": 1
+    }
+  },
+  {
+    "name": "upnatom_cheeseburger",
+    "label": "Up-n-Atom Cheeseburger",
+    "image": "upnatom_cheeseburger.png",
+    "decayRate": 180,
+    "useable": true,
+    "size": {
+      "x": 1,
+      "y": 1
+    }
+  },
+  {
+    "name": "restaurant_burger",
+    "label": "Burger",
+    "image": "restaurant_burger.png",
+    "decayRate": 20160,
+    "size": {
+      "x": 1,
+      "y": 1
+    }
+  },
+  {
+    "name": "restaurant_cheese",
+    "label": "Plakje Kaas",
+    "image": "restaurant_cheese.png",
+    "decayRate": 20160,
+    "size": {
+      "x": 1,
+      "y": 1
     }
   }
 ]

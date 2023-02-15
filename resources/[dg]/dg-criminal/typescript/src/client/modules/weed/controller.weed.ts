@@ -1,28 +1,18 @@
 import { Events, Util, UI, Taskbar, Peek, RayCast, Notifications, Weapons } from '@dgx/client/classes';
-import { MODELS_PER_STAGE } from './constants.weed';
+import { ACCEPTED_MATERIALS } from './constants.weed';
 import {
-  checkPlantStatus,
-  cleanUpEntities,
-  cutPlant,
-  depleteFood,
-  destroyPlant,
-  feedPlant,
-  getPlantIdFromEntity,
-  isValidPlantLocation,
-  registerPlant,
-  removePlant,
-  updatePlantMetadata,
+  anyPlantInRange,
+  cutWeedPlant,
+  destroyWeedPlant,
+  feedWeedPlant,
+  registerWeedPlantModels,
 } from './service.weed';
 
 let isPlacing = false;
 
-Events.onNet('criminal:weed:seedExistingPlants', (existingPlants: Record<number, Criminal.Weed.Plant>) => {
-  for (const [i, p] of Object.entries(existingPlants)) {
-    registerPlant(Number(i), p);
-  }
-});
+Events.onNet('criminal:weed:setModels', registerWeedPlantModels);
 
-Events.onNet('criminal:weed:plant', async (itemId: string) => {
+Events.onNet('criminal:weed:plant', async (itemId: string, model: string) => {
   if (isPlacing) {
     Notifications.add('Je bent al een plant aan het plaatsen', 'error');
     return;
@@ -33,12 +23,13 @@ Events.onNet('criminal:weed:plant', async (itemId: string) => {
   isPlacing = true;
 
   // Logic to select a valid location using raycasts, materials and display entity
-  const plantCoords = await new Promise<Vec3>(async res => {
-    const entity = CreateObject(MODELS_PER_STAGE[1], 0, 0, 0, false, false, false);
+  const [isValid, plantCoords, plantRotation] = await new Promise<[boolean, Vec3, Vec3]>(async res => {
+    const modelHash = GetHashKey(model);
+    await Util.loadModel(modelHash);
+    const entity = CreateObject(modelHash, 0, 0, 0, false, false, false);
     await Util.awaitEntityExistence(entity);
     FreezeEntityPosition(entity, true);
     SetEntityAsMissionEntity(entity, true, true);
-    SetEntityAlpha(entity, 204, true);
     SetEntityCompletelyDisableCollision(entity, false, false);
 
     const changeEntityPosition = (coords: Vec3) => {
@@ -50,7 +41,7 @@ Events.onNet('criminal:weed:plant', async (itemId: string) => {
 
     const ped = PlayerPedId();
     const interval = setInterval(() => {
-      const raycastCoords = RayCast.doRaycast().coords;
+      const raycastCoords = RayCast.doRaycast(10, -1, entity).coords;
       if (!raycastCoords) {
         if (IsEntityVisible(entity)) {
           SetEntityVisible(entity, false, false);
@@ -58,25 +49,23 @@ Events.onNet('criminal:weed:plant', async (itemId: string) => {
         return;
       }
 
-      // Raycast coords should be in radius of this coord
-      const radiusCoords = Util.ArrayToVector3(GetOffsetFromEntityInWorldCoords(ped, 0, 1, 0));
-      if (radiusCoords.distance(raycastCoords) > 1.4) {
-        if (IsEntityVisible(entity)) {
-          SetEntityVisible(entity, false, false);
-        }
-        return;
-      }
-
       changeEntityPosition(raycastCoords);
-      const isValid = isValidPlantLocation(raycastCoords, entity);
-      if (IsEntityVisible(entity) !== isValid) {
-        SetEntityVisible(entity, isValid, false);
+
+      const inDistance = Util.getPlyCoords().distance(raycastCoords) < 2;
+      const isValidPedLocation = !IsEntityInWater(ped) && !IsEntityInAir(ped);
+      const isValidMaterial = ACCEPTED_MATERIALS.has(Util.getGroundMaterial(raycastCoords, entity));
+      const plantInRange = anyPlantInRange(entity, raycastCoords);
+
+      const isValidLocation = inDistance && isValidPedLocation && isValidMaterial && !plantInRange;
+      if (!!IsEntityVisible(entity) !== isValidLocation) {
+        SetEntityVisible(entity, isValidLocation, false);
       }
-      if (!isValid) return;
 
       if (IsControlJustPressed(0, 18)) {
         clearInterval(interval);
-        res(Util.getEntityCoords(entity));
+        const coords = Util.getEntityCoords(entity);
+        const rotation = Util.getEntityRotation(entity);
+        res([isValidLocation, coords, rotation]);
         DeleteEntity(entity);
       }
     }, 1);
@@ -84,6 +73,17 @@ Events.onNet('criminal:weed:plant', async (itemId: string) => {
 
   UI.hideInteraction();
   Weapons.showReticle(false);
+
+  if (!isValid) {
+    isPlacing = false;
+    Notifications.add('Hier kan je dit niet planten', 'error');
+    return;
+  }
+
+  const plyHeading = Util.getHeadingToFaceCoords(plantCoords);
+  const targetCoords = Util.getOffsetFromCoords({ ...plantCoords, w: plyHeading }, { x: 0, y: -0.5, z: 0 });
+  await Util.goToCoords({ ...targetCoords, w: plyHeading }, 2000);
+
   const [canceled] = await Taskbar.create('shovel', 'Planten', 10000, {
     canCancel: true,
     cancelOnDeath: true,
@@ -102,78 +102,39 @@ Events.onNet('criminal:weed:plant', async (itemId: string) => {
       flags: 1,
     },
   });
+
   isPlacing = false;
   if (canceled) return;
-  Events.emitNet('criminal:weed:add', itemId, plantCoords);
+
+  Events.emitNet('criminal:weed:add', itemId, plantCoords, plantRotation);
 });
 
-Events.onNet('criminal:weed:register', registerPlant);
-Events.onNet('criminal:weed:updatePlant', updatePlantMetadata);
-Events.onNet('criminal:weed:remove', removePlant);
-Events.onNet('criminal:weed:depleteFood', depleteFood);
-
-on('onResourceStop', (resourceName: string) => {
-  if (GetCurrentResourceName() !== resourceName) return;
-  cleanUpEntities();
-});
-
-Peek.addModelEntry(MODELS_PER_STAGE, {
+Peek.addFlagEntry('weedPlantId', {
   options: [
     {
-      icon: 'fas fa-clipboard',
-      label: 'Check Status',
+      label: 'Bekijk Plant',
+      icon: 'fas fa-cannabis',
       action: (_, entity) => {
         if (!entity) return;
-        checkPlantStatus(entity);
-      },
-      canInteract: entity => {
-        if (!entity) return false;
-        return getPlantIdFromEntity(entity) !== undefined;
-      },
-    },
-    {
-      icon: 'fas fa-oil-can',
-      label: 'Voed',
-      items: 'plant_fertilizer',
-      action: (_, entity) => {
-        if (!entity) return;
-        feedPlant(entity);
-      },
-      canInteract: entity => {
-        if (!entity) return false;
-        return getPlantIdFromEntity(entity) !== undefined;
-      },
-    },
-    {
-      icon: 'fas fa-axe',
-      label: 'Maak kapot',
-      action: (_, entity) => {
-        if (!entity) return;
-        destroyPlant(entity);
-      },
-      canInteract: entity => {
-        if (!entity) return false;
-        return getPlantIdFromEntity(entity) !== undefined;
+        const weedPlantId = Entity(entity).state.weedPlantId;
+        if (!weedPlantId) return;
+        Events.emitNet('criminal:weed:viewPlant', weedPlantId);
       },
     },
   ],
-  distance: 2,
 });
 
-Peek.addModelEntry(MODELS_PER_STAGE[MODELS_PER_STAGE.length - 1], {
-  options: [
-    {
-      icon: 'fas fa-cut',
-      label: 'Knip',
-      action: (_, entity) => {
-        if (!entity) return;
-        cutPlant(entity);
-      },
-      canInteract: entity => {
-        if (!entity) return false;
-        return getPlantIdFromEntity(entity) !== undefined;
-      },
-    },
-  ],
-  distance: 2.0,
+UI.RegisterUICallback('criminal/weed/feed', (data: { plantId: number; objectId: string }, cb) => {
+  feedWeedPlant(data.plantId, data.objectId);
+  cb({ data: {}, meta: { ok: true, message: 'done' } });
+});
+
+UI.RegisterUICallback('criminal/weed/destroy', (data: { plantId: number; objectId: string }, cb) => {
+  destroyWeedPlant(data.plantId, data.objectId);
+  cb({ data: {}, meta: { ok: true, message: 'done' } });
+});
+
+UI.RegisterUICallback('criminal/weed/cut', (data: { plantId: number; objectId: string }, cb) => {
+  cutWeedPlant(data.plantId, data.objectId);
+  cb({ data: {}, meta: { ok: true, message: 'done' } });
 });

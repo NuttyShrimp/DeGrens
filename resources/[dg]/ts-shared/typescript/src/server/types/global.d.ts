@@ -35,6 +35,7 @@ declare global {
     Hospital: typeof Classes.Hospital;
     Minigames: typeof Classes.Minigames;
     BaseEvents: typeof Classes.BaseEvents;
+    StaticObjects: typeof Classes.StaticObjects;
     Vector3: typeof Vector3Class;
     Vector4: typeof Vector4Class;
   };

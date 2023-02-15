@@ -3,7 +3,6 @@ declare namespace HUD {
     shootingChance: number;
     speed: {
       minimum: number;
-      unbuckled: number;
     };
     shake: {
       minimum: number;

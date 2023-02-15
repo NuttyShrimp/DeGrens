@@ -10,6 +10,7 @@ import {
   PropAttach,
   Minigames,
   RPC,
+  Phone,
 } from '@dgx/client';
 
 let inReturnZone = false;
@@ -31,12 +32,14 @@ export const setCurrentJobType = (jobType: typeof currentJobType) => {
 
 export const buildFishingReturnZone = (fishingReturnZone: Fishing.Config['vehicle']) => {
   for (const [jobType, returnZone] of Object.entries(fishingReturnZone)) {
-    const { w: heading, ...coords } = returnZone;
-    PolyZone.addBoxZone('fishing_return', coords, 7, 7, {
+    const { w: heading, ...coords } = returnZone.coords;
+    PolyZone.addBoxZone('fishing_return', coords, returnZone.size, returnZone.size, {
       heading,
       minZ: coords.z - 2,
-      maxZ: coords.z + 4,
-      data: { id: jobType },
+      maxZ: coords.z + 6,
+      data: {
+        id: jobType,
+      },
     });
   }
 };
@@ -93,16 +96,12 @@ export const setFishingLocation = (location: typeof fishingLocation) => {
     return;
   }
 
-  Notifications.add('Je vislocatie staat aangeduid op je GPS!');
   const radius = currentJobType === 'boat' ? 75 : 20;
   fishingLocationBlip = AddBlipForRadius(fishingLocation.x, fishingLocation.y, fishingLocation.z, radius);
   SetBlipHighDetail(fishingLocationBlip, true);
   SetBlipColour(fishingLocationBlip, 7);
   SetBlipAlpha(fishingLocationBlip, 150);
-
-  if (currentJobType === 'car') {
-    Util.setWaypoint(fishingLocation);
-  }
+  Util.setWaypoint(fishingLocation);
 };
 
 export const finishJob = () => {
@@ -122,6 +121,7 @@ export const cleanupFishingJob = () => {
   setFishingVehicle(null);
   setFishingLocation(null);
   setCurrentJobType(null);
+  Phone.removeNotification('fishing_amount_tracker');
 
   if (fishingRodProp !== null) {
     PropAttach.remove(fishingRodProp);

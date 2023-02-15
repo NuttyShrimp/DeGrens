@@ -100,20 +100,10 @@ const createAndAttachObject = async (name: string, offset: Vec3) => {
   }
 
   const [x, y, z] = GetEntityCoords(PlayerPedId(), false);
-  const netId = await Util.createObjectOnServer(info.model, { x, y, z: z - 3 });
-  if (netId === 0) {
-    debug(`Tried to add prop ${name} but could not spawn object`);
-    return;
-  }
+  const { netId, entity } = await Util.createObjectOnServer(info.model, { x, y, z: z - 3 });
 
-  if (!NetworkDoesEntityExistWithNetworkId(netId)) {
-    debug(`Tried to add prop ${name} but network id ${netId} does not exist on client`);
-    return;
-  }
-
-  const entity = NetworkGetEntityFromNetworkId(netId);
-  if (!entity || !DoesEntityExist(entity)) {
-    debug(`Tried to add prop ${name} but entity ${entity} does not exist on client`);
+  if (!entity || !netId) {
+    debug(`Failed to create prop ${name} | netId: ${netId} | entity: ${entity}`);
     return;
   }
 

@@ -11,6 +11,7 @@ import {
   getGroupByServerId,
   getGroupList,
   leaveGroup,
+  seedPlyGroupUIStore,
 } from './service';
 
 global.exports('createGroup', createGroup);
@@ -21,11 +22,8 @@ global.exports('changeGroupJob', changeJob);
 global.exports('leaveGroup', leaveGroup);
 global.exports('disbandGroup', disbandGroup);
 
-onNet('dg-jobs:client:groups:loadStore', () => {
-  const src = source;
-  const cid = Util.getCID(src, true);
-  if (!cid) return;
-  groupManager.seedPlayerStore(src, cid);
+onNet('dg-jobs:client:groups:seedStore', () => {
+  seedPlyGroupUIStore(source);
 });
 
 Inventory.onInventoryUpdate(

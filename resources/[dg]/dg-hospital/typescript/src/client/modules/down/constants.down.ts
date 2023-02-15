@@ -42,3 +42,6 @@ export const TEXT_COLORS = {
     b: 0,
   },
 };
+
+// Vehicles classes you dont get tped back into on death
+export const NO_TP_VEHICLE_CLASSES = [8, 13];

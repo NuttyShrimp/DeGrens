@@ -1,4 +1,4 @@
-import { Events, Inventory, Keys, Peek, PolyZone } from '@dgx/client';
+import { Events, Inventory, Keys, Notifications, Peek, PolyZone } from '@dgx/client';
 import {
   setCurrentJobType,
   setFishingVehicle,
@@ -41,6 +41,7 @@ Events.onNet('jobs:fishing:start', (vehicleNetId: number, location: Vec3, jobTyp
   setCurrentJobType(jobType);
   setFishingVehicle(vehicleNetId);
   setFishingLocation(location);
+  Notifications.add('Neem het voertuig en rij naar de visplek. Je hebt het voertuig nodig om vis in te gooien.');
 });
 
 Events.onNet('jobs:fishing:cleanup', () => {

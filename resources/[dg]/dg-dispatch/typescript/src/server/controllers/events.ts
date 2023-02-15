@@ -9,15 +9,17 @@ setImmediate(async () => {
   loadCams(config);
 });
 
-on('jobs:server:signin:update', (src: number, job: string | null) => {
+Jobs.onJobUpdate((plyId, job) => {
   syncBlips();
+
   if (job !== 'police') {
-    cleanPlayer(src);
+    cleanPlayer(plyId);
     return;
   }
+
   // seed 20 first stored dispatch calls
   if (job !== null) {
-    Events.emitNet('dg-dispatch:addCalls', src, getCalls(20), true);
+    Events.emitNet('dg-dispatch:addCalls', plyId, getCalls(20), true);
   }
 });
 

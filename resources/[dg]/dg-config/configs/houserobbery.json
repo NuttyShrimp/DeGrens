@@ -1,10 +1,24 @@
 {
   "moldChance": 3,
   "lootTables": [
-    ["money_roll", "camera", "gameboy", "hifi", "nintendoswitch", "nokia", "psp"],
-    ["tv"],
-    ["vaas"],
-    ["microwave"]
+    [
+      "money_roll",
+      "camera",
+      "gameboy",
+      "hifi",
+      "nintendoswitch",
+      "nokia",
+      "psp"
+    ],
+    [
+      "tv"
+    ],
+    [
+      "vaas"
+    ],
+    [
+      "microwave"
+    ]
   ],
   "playerCooldown": 5,
   "timeToRob": 15,
@@ -32,16 +46,5 @@
       "heading": 207.54,
       "size": "medium"
     }
-  ],
-  "shopPrices": {
-    "camera": 400,
-    "gameboy": 150,
-    "hifi": 250,
-    "nintendo_switch": 250,
-    "nokia": 800,
-    "psp": 150,
-    "crt_tv": 750,
-    "tv": 1500,
-    "vaas": 2000
-  }
+  ]
 }

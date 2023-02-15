@@ -46,7 +46,6 @@ router.post('/upload/:token', async ctx => {
     };
 
     const f = ctx.request.files['file'] as File;
-    console.log(ctx.request.files, ctx.request.body);
 
     if (f) {
       if (upload.fileName) {

@@ -7,6 +7,7 @@ import {
   setAtDropoff,
   setInReturnZone,
   setTargetLocation,
+  setWaypointToReturn,
   tryDropoff,
 } from './service.postop';
 
@@ -17,6 +18,10 @@ Events.onNet('jobs:postop:start', (netId: number, returnZone: Vec4) => {
 
 Events.onNet('jobs:postop:setLocation', (location: PostOP.TargetLocation | null) => {
   setTargetLocation(location);
+
+  if (!location) {
+    setWaypointToReturn();
+  }
 });
 
 Events.onNet('jobs:postop:cleanup', () => {

@@ -1,12 +1,15 @@
-import { Events, Keys, Peek, PolyZone, UI } from '@dgx/client';
+import { BaseEvents, Events, Keys, Peek, PolyZone, UI } from '@dgx/client';
 import {
+  checkNewLocation,
   cleanupSanddigging,
   doSpotAction,
   finishJob,
   isAtVehicleReturn,
+  isEntityAssignedVehicle,
   setAssignedSpot,
   setAssignedVehicle,
   setAtVehicleReturn,
+  setInAssignedVehicle,
 } from './service.sanddigging';
 
 Peek.addFlagEntry('isSanddiggingFuck', {
@@ -30,25 +33,30 @@ Peek.addZoneEntry('sanddigging_spot', {
       action: () => {
         doSpotAction();
       },
+      canInteract: () => {
+        return !IsPedInAnyVehicle(PlayerPedId(), false);
+      },
     },
   ],
   distance: 3.0,
 });
 
 PolyZone.onEnter('sanddigging_vehicle', () => {
-  if (!IsPedInAnyVehicle(PlayerPedId(), false)) return;
-  UI.showInteraction(`${Keys.getBindedKey('+GeneralUse')} - Wegzetten`);
+  const vehicle = GetVehiclePedIsIn(PlayerPedId(), false);
+  if (!vehicle || !isEntityAssignedVehicle(vehicle)) return;
   setAtVehicleReturn(true);
 });
 
 PolyZone.onLeave('sanddigging_vehicle', () => {
-  UI.hideInteraction();
   setAtVehicleReturn(false);
 });
 
 Keys.onPressDown('GeneralUse', () => {
-  if (!isAtVehicleReturn()) return;
-  finishJob();
+  if (isAtVehicleReturn()) {
+    finishJob();
+    return;
+  }
+  checkNewLocation();
 });
 
 Events.onNet('jobs:sanddigging:leftGroup', () => {
@@ -63,6 +71,22 @@ Events.onNet('jobs:sanddigging:addTarget', (spotId: number) => {
   setAssignedSpot(spotId);
 });
 
-PolyZone.onEnter('sanddigging_quarry', () => {
-  Events.emitNet('jobs:sanddigging:checkActive');
+BaseEvents.onEnteredVehicle((vehicle, seat) => {
+  if (seat !== -1) return;
+  if (!isEntityAssignedVehicle(vehicle)) return;
+  if (isAtVehicleReturn()) return;
+  setInAssignedVehicle(true);
+});
+
+BaseEvents.onVehicleSeatChange((vehicle, newSeat, oldSeat) => {
+  if (oldSeat === -1) {
+    setInAssignedVehicle(false);
+  }
+  if (newSeat === -1 && isEntityAssignedVehicle(vehicle)) {
+    setInAssignedVehicle(true);
+  }
+});
+
+BaseEvents.onLeftVehicle(() => {
+  setInAssignedVehicle(false);
 });

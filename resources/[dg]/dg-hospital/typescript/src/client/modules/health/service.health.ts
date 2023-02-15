@@ -109,13 +109,15 @@ const startTemporaryMovementOverride = () => {
  */
 export const setHealth = (health: number, unconscious = false) => {
   const processedAmount = Math.round(Math.min(100, Math.max(0, health)));
-  const ped = PlayerPedId();
   let nativeAmount = 99 + processedAmount;
   if (nativeAmount >= 199) nativeAmount = 200;
+  const ped = PlayerPedId();
   SetEntityHealth(ped, nativeAmount);
 
-  const deadHash = unconscious ? GetHashKey('SCRIPT_WISE_UNCONSCIOUS') : GetHashKey('SCRIPT_WISE_DOWN');
-  checkDeathOnDamage(0, deadHash >>> 0);
+  if (nativeAmount < 100) {
+    const deadHash = unconscious ? GetHashKey('SCRIPT_WISE_UNCONSCIOUS') : GetHashKey('SCRIPT_WISE_DOWN');
+    checkDeathOnDamage(0, deadHash >>> 0);
+  }
 };
 
 /**

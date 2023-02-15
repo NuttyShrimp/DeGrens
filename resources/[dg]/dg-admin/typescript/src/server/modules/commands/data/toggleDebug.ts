@@ -14,6 +14,9 @@ const DEBUG_OPTIONS = {
   baseevents: (plyId: number, toggle: boolean) => {
     emitNet('baseevents:toggleDebug', plyId, toggle);
   },
+  material: (plyId: number, toggle: boolean) => {
+    Events.emitNet('admin:commands:materialDebug', plyId, toggle);
+  },
 };
 
 declare type ToggleDebugData = {

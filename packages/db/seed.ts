@@ -70,9 +70,9 @@ async function main() {
   });
   await prisma.whitelist_jobs.createMany({
     data: [
-      { cid: 1000, job: 'police', rank: 6, specialty: 7 },
-      { cid: 1000, job: 'ambulance', rank: 2, specialty: 1 },
-      { cid: 1000, job: 'lawyer', rank: 0, specialty: 1 },
+      { cid: 1000, job: 'police', rank: 6, speciality: 7 },
+      { cid: 1000, job: 'ambulance', rank: 2, speciality: 1 },
+      { cid: 1000, job: 'lawyer', rank: 0, speciality: 1 },
     ],
   });
   await prisma.queue_priority.createMany({
@@ -257,7 +257,7 @@ async function devEnv() {
     ],
   });
   await prisma.whitelist_jobs.create({
-    data: { cid: 1001, job: 'police', rank: 6, specialty: 7 },
+    data: { cid: 1001, job: 'police', rank: 6, speciality: 7 },
   });
 }
 

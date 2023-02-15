@@ -5,13 +5,14 @@ class Config {
     return global.exports['dg-config'].getModuleConfig(moduleId);
   }
   async awaitConfigLoad(): Promise<void> {
-    await Util.awaitCondition(
-      () => GetResourceState('dg-config') === 'started' && !!global?.exports?.['dg-config'] && this.areConfigsReady(),
-      60000
-    );
+    await Util.awaitCondition(() => this.areConfigsReady(), 60000);
   }
   areConfigsReady(): boolean {
-    return global.exports['dg-config'].areConfigsReady();
+    return (
+      GetResourceState('dg-config') === 'started' &&
+      !!global?.exports?.['dg-config'] &&
+      global.exports['dg-config'].areConfigsReady()
+    );
   }
   /**
    * @param pathToValue path to the value splitted by '.'

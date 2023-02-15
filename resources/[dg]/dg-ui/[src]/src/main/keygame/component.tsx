@@ -70,6 +70,7 @@ const Component: AppFunction = props => {
     if (currectCycle === null) return;
 
     const cycle = cycles[currectCycle];
+    if (!cycle) return;
 
     // Generate center of targetarea, minimum is 45 + half of size, maximum is 95 - half of size
     // For example for size 20, the center will be between 55 and 85

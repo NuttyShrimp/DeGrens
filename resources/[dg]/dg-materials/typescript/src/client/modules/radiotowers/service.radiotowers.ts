@@ -54,7 +54,8 @@ const spawnPeds = async (towerId: string) => {
   if (!shouldSpawn) return;
 
   radiotowers[towerId].peds.forEach(async pos => {
-    const ped = await Util.spawnAggressivePed('s_m_y_blackops_02', pos, 0);
+    const ped = await Util.spawnAggressivePed('s_m_y_blackops_02', { ...pos, w: 0 });
+    if (!ped) return;
     TaskCombatPed(ped, PlayerPedId(), 0, 16);
     SetPedAsNoLongerNeeded(ped);
   });

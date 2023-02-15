@@ -1,4 +1,4 @@
-import { Config, Events, Financials, Inventory, Notifications, RPC, Util, Vehicles } from '@dgx/server';
+import { Config, Events, Financials, Inventory, Notifications, Util, Vehicles, Phone } from '@dgx/server';
 import { Vector3 } from '@dgx/shared';
 import jobManager from 'classes/jobManager';
 import { changeJob, disbandGroup, getGroupById, getGroupByServerId } from 'modules/groups/service';
@@ -16,23 +16,65 @@ export const initializeSanitation = () => {
     legal: true,
     icon: 'trash-can',
     location: { x: -346.0635, y: -1556.1328 },
+    // this is payout per bag player has done, 10 bags means * 10
     payout: {
-      min: 500,
-      max: 750,
-      groupPercent: 5, // More people means WAY faster to complete so we dont really need payincrease
+      min: 10,
+      max: 15,
+      groupPercent: 15,
     },
   });
 };
 
-const getRandomLocationId = (currentId?: number) => {
-  let locs = sanitationConfig.locations.filter((_, i) => i !== (currentId ?? -1));
-  return Math.floor(Math.random() * locs.length);
+const buildPhoneNotificationData = (jobGroup: Sanitation.Job) => {
+  const locationId: number | undefined = jobGroup.locationSequence[0];
+  const isFinished =
+    locationId === undefined ? true : jobGroup.dumpstersDone.length === sanitationConfig.locations[locationId].amount;
+
+  const data = {
+    title: isFinished
+      ? 'Je bent klaar'
+      : `${jobGroup.dumpstersDone.length}/${sanitationConfig.locations[locationId].amount} vuilniszakken`,
+    description: isFinished
+      ? 'Keer terug naar de vuilnisbelt'
+      : `${sanitationConfig.amountOfLocationsPerJob - jobGroup.locationSequence.length}/${
+          sanitationConfig.amountOfLocationsPerJob
+        } locaties gedaan`,
+  };
+
+  return data;
 };
 
-const calculateTotalWithForgiveness = (total: number) => total - Math.ceil(total * 0.1);
+const sendOutStartEvents = (
+  plyId: number,
+  jobGroup: Sanitation.Job,
+  phoneNotificationData: ReturnType<typeof buildPhoneNotificationData>
+) => {
+  Events.emitNet('jobs:sanitation:start', plyId, jobGroup.netId, sanitationConfig.vehicleLocation);
 
-const isGroupFinished = (groupId: string) => {
-  return activeGroups.get(groupId)!.locationsDone >= sanitationConfig.amountOfLocationsPerJob;
+  const locationId = jobGroup.locationSequence[0];
+  if (locationId !== undefined) {
+    const location = sanitationConfig.locations[locationId];
+    Events.emitNet('jobs:sanitation:setLocation', plyId, {
+      id: locationId,
+      coords: location.coords,
+      range: location.range,
+    });
+  } else {
+    Events.emitNet('jobs:sanitation:setLocation', plyId, null);
+  }
+
+  Phone.showNotification(plyId, {
+    ...phoneNotificationData,
+    id: 'sanitation_job_tracker',
+    sticky: true,
+    keepOnAction: true,
+    icon: 'jobcenter',
+  });
+};
+
+const generateLocationSequence = () => {
+  const locationKeys = [...sanitationConfig.locations.keys()];
+  return Util.shuffleArray(locationKeys).slice(0, sanitationConfig.amountOfLocationsPerJob);
 };
 
 export const startJobForGroup = async (plyId: number) => {
@@ -59,33 +101,40 @@ export const startJobForGroup = async (plyId: number) => {
   Vehicles.giveKeysToPlayer(plyId, netId);
   Vehicles.setFuelLevel(vehicle, 100);
 
-  const locationId = getRandomLocationId();
-  activeGroups.set(group.id, {
+  const locationSequence = generateLocationSequence();
+  const jobGroup: Sanitation.Job = {
     netId,
-    locationsDone: 0,
-    location: { id: locationId, dumpsters: null, totalDumpsters: null },
-  });
+    locationSequence,
+    dumpstersDone: [],
+    bagsPerPlayer: new Map(),
+  };
+  activeGroups.set(group.id, jobGroup);
 
-  const location = sanitationConfig.locations[locationId];
+  Util.Log(
+    'jobs:sanitation:start',
+    {
+      groupId: group.id,
+      netId: jobGroup.netId,
+      locationSequence,
+    },
+    `${Util.getName(plyId)}(${plyId}) started sanitation job for group`,
+    plyId
+  );
+
+  const phoneNotificationData = buildPhoneNotificationData(jobGroup);
   group.members.forEach(m => {
     if (m.serverId === null) return;
-    Events.emitNet('jobs:sanitation:addLocation', m.serverId, netId, sanitationConfig.vehicleLocation, location);
+    sendOutStartEvents(m.serverId, jobGroup, phoneNotificationData);
   });
 };
 
 export const syncSanitationJobToClient = (groupId: string, plyId: number) => {
   const active = activeGroups.get(groupId);
   if (active === undefined) return;
+
   sanitationLogger.silly(`Syncing active job to plyId ${plyId}`);
-  const location = sanitationConfig.locations[active.location.id];
-  Events.emitNet('jobs:sanitation:addLocation', plyId, active.netId, sanitationConfig.vehicleLocation, location);
-  if (active.location.totalDumpsters !== null) {
-    Events.emitNet(
-      'jobs:sanitation:addTargetInfo',
-      plyId,
-      calculateTotalWithForgiveness(active.location.totalDumpsters)
-    );
-  }
+  const phoneNotificationData = buildPhoneNotificationData(active);
+  sendOutStartEvents(plyId, active, phoneNotificationData);
 };
 
 export const finishJobForGroup = (plyId: number, netId: number) => {
@@ -98,20 +147,29 @@ export const finishJobForGroup = (plyId: number, netId: number) => {
     return;
   }
 
-  if (isGroupFinished(group.id)) {
-    const payout = jobManager.getJobPayout('sanitation', group.members.length);
-    group.members.forEach(m => {
-      if (m.serverId === null) return;
-      Financials.addCash(m.serverId, payout ?? 0, 'sanitation-payout');
-    });
-  }
+  const payoutPerBag = jobManager.getJobPayout('sanitation', group.members.length) ?? 0;
+  group.members.forEach(m => {
+    if (m.serverId === null) return;
+
+    const amount = active.bagsPerPlayer.get(m.cid);
+    if (!amount) return;
+    Financials.addCash(m.serverId, payoutPerBag * amount, 'sanitation-payout');
+  });
 
   disbandGroup(group.id);
   Vehicles.deleteVehicle(NetworkGetEntityFromNetworkId(active.netId));
-  Util.Log('jobs:sanitation:finish', { ...active }, `${Util.getName(plyId)} finished sanitation for group`, plyId);
+  Util.Log(
+    'jobs:sanitation:finish',
+    {
+      groupId: group.id,
+      bagsPerPlayer: [...active.bagsPerPlayer.entries()],
+    },
+    `${Util.getName(plyId)}(${plyId}) finished sanitation for group`,
+    plyId
+  );
 };
 
-export const playerLeftGroup = (groupId: string, plyId: number | null) => {
+export const handlePlayerLeftSanitationGroup = (groupId: string, plyId: number | null) => {
   const active = activeGroups.get(groupId);
   if (!active) return;
 
@@ -129,7 +187,7 @@ export const playerLeftGroup = (groupId: string, plyId: number | null) => {
   sanitationLogger.silly(`Group ${groupId} has been removed from active as there are no members remaining`);
 };
 
-export const groupEnteredTarget = async (plyId: number) => {
+export const takeBagFromDumpster = (plyId: number, dumpsterLocation: Vec3) => {
   const group = getGroupByServerId(plyId);
   if (!group) {
     sanitationLogger.error(`Player ${plyId} tried to do sanitation job action but was not in group`);
@@ -152,61 +210,30 @@ export const groupEnteredTarget = async (plyId: number) => {
     );
     return;
   }
-  if (active.location.dumpsters !== null) return console.log('WAS NOT NULL ANYMORE');
-  active.location.dumpsters = [];
 
-  const dumpsters = await RPC.execute<Vec3[]>('jobs:sanitation:getDumpsterLocations', plyId);
-  if (!dumpsters) {
-    sanitationLogger.error(`Failed to get garbage locations for group ${group.id}`);
-    return;
+  const dumpster = Vector3.create(dumpsterLocation);
+  const targetLocation = sanitationConfig.locations[active.locationSequence[0]];
+
+  // Check if dumpster is not out of range of targetlocation
+  if (dumpster.distance(targetLocation.coords) > targetLocation.range) {
+    return false;
   }
 
-  active.location.dumpsters = dumpsters;
-  active.location.totalDumpsters = dumpsters.length;
-  const totalWithForgiveness = calculateTotalWithForgiveness(dumpsters.length);
+  // Check if dumpster wasnt already done
+  if (active.dumpstersDone.some(d => dumpster.distance(d) < 0.5)) {
+    return false;
+  }
+
+  // Check if all bags have already been taken
+  if (active.dumpstersDone.length === sanitationConfig.locations[active.locationSequence[0]].amount) return false;
+
+  active.dumpstersDone.push(dumpsterLocation);
+
+  const phoneNotifData = buildPhoneNotificationData(active);
   group.members.forEach(m => {
     if (m.serverId === null) return;
-    Events.emitNet('jobs:sanitation:addTargetInfo', m.serverId, totalWithForgiveness);
+    Phone.updateNotification(m.serverId, 'sanitation_job_tracker', phoneNotifData);
   });
-};
-
-export const takeBagFromDumpster = (plyId: number, location: Vec3) => {
-  const group = getGroupByServerId(plyId);
-  if (!group) {
-    sanitationLogger.error(`Player ${plyId} tried to do sanitation job action but was not in group`);
-    Util.Log(
-      'jobs:sanitation:noGroup',
-      {},
-      `${Util.getName(plyId)} tried to do sanitation job action but was not in group`,
-      plyId
-    );
-    return;
-  }
-  const active = activeGroups.get(group.id);
-  if (!active) {
-    sanitationLogger.error(`Player ${plyId} tried to do sanitation job action but group was not active`);
-    Util.Log(
-      'jobs:sanitation:groupNotActive',
-      {},
-      `${Util.getName(plyId)} tried to do sanitation job action but group was not active`,
-      plyId
-    );
-    return;
-  }
-  if (active.location.dumpsters === null) return false;
-
-  const dumpster = Vector3.create(location);
-  const dumpsterIdx = active.location.dumpsters.findIndex(l => dumpster.distance(l) < 0.5);
-  if (dumpsterIdx === -1) return false;
-  active.location.dumpsters.splice(dumpsterIdx, 1);
-
-  let items: string[];
-  if (Util.getRndInteger(1, 100) === 1) {
-    items = [...sanitationConfig.specialLoot];
-  } else {
-    items = [...sanitationConfig.loot];
-  }
-  Inventory.addItemToPlayer(plyId, items[Math.floor(Math.random() * items.length)], 1);
 
   return true;
 };
@@ -223,6 +250,7 @@ export const putBagInVehicle = (plyId: number) => {
     );
     return;
   }
+
   const active = activeGroups.get(group.id);
   if (!active) {
     sanitationLogger.error(`Player ${plyId} tried to do sanitation job action but group was not active`);
@@ -234,40 +262,49 @@ export const putBagInVehicle = (plyId: number) => {
     );
     return;
   }
-  if (active.location.dumpsters === null || active.location.totalDumpsters == null) return;
 
-  const totalWithForgiveness = calculateTotalWithForgiveness(active.location.totalDumpsters);
-  const amountLeftToDo = active.location.dumpsters.length - (active.location.totalDumpsters - totalWithForgiveness);
-
-  let notif = '';
-  if (amountLeftToDo === 0) {
-    notif = 'Alle vuilniszakken zijn hier opgehaald';
-
-    // If no bags remaining check for next location
-    active.locationsDone++;
-    if (isGroupFinished(group.id)) {
-      notif = 'Je bent klaar, keer terug naar de vuilnisbelt om af te ronden!';
+  // Handle loot chance
+  if (Util.getRndInteger(1, 101) < sanitationConfig.lootChance) {
+    let items: string[];
+    if (Util.getRndInteger(1, 101) === 1) {
+      items = [...sanitationConfig.specialLoot];
     } else {
-      const locationId = getRandomLocationId(active.location.id);
-      active.location = { id: locationId, dumpsters: null, totalDumpsters: null };
-
-      const location = sanitationConfig.locations[locationId];
-      group.members.forEach(m => {
-        if (m.serverId === null) return;
-        Events.emitNet(
-          'jobs:sanitation:addLocation',
-          m.serverId,
-          active.netId,
-          sanitationConfig.vehicleLocation,
-          location
-        );
-      });
+      items = [...sanitationConfig.loot];
     }
-  } else {
-    notif = `Nog ${amountLeftToDo} vuilniszakken te gaan`;
+    Inventory.addItemToPlayer(plyId, items[Math.floor(Math.random() * items.length)], 1);
   }
-  group.members.forEach(m => {
-    if (m.serverId === null) return;
-    Notifications.add(m.serverId, notif, 'info');
-  });
+
+  // Save amount of bags done
+  const cid = Util.getCID(plyId);
+  const amountOfPackages = active.bagsPerPlayer.get(cid) ?? 0;
+  active.bagsPerPlayer.set(cid, amountOfPackages + 1);
+
+  // Check if no bags remaining
+  let finishedLocation = false;
+  if (
+    active.locationSequence[0] &&
+    active.dumpstersDone.length === sanitationConfig.locations[active.locationSequence[0]].amount
+  ) {
+    active.locationSequence.shift();
+    active.dumpstersDone = [];
+    finishedLocation = true;
+  }
+
+  if (finishedLocation) {
+    const locationId: number | undefined = active.locationSequence[0];
+    group.members.forEach(m => {
+      if (m.serverId === null) return;
+
+      if (locationId !== undefined) {
+        const location = sanitationConfig.locations[locationId];
+        Events.emitNet('jobs:sanitation:setLocation', m.serverId, {
+          id: locationId,
+          coords: location.coords,
+          range: location.range,
+        });
+      } else {
+        Events.emitNet('jobs:sanitation:setLocation', m.serverId, null);
+      }
+    });
+  }
 };

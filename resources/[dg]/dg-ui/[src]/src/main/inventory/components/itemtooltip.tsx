@@ -24,12 +24,15 @@ export const ItemTooltip: FC<Inventory.Item> = ({
   const formatMetadata = useCallback(() => {
     const hiddenKeys: string[] = metadata.hiddenKeys ?? [];
     const formatted: JSX.Element[] = [];
-    Object.entries(metadata)
-      .filter(([key]) => !hiddenKeys.some(hidden => key === hidden) && key !== 'hiddenKeys')
-      .forEach(([key, value]) => {
-        formatted.push(<span key={`${key}-span`}>{`${capitalize(key)}: ${value.toString()}`}</span>);
-        formatted.push(<br key={`${key}-br`} />);
-      });
+    for (const [key, value] of Object.entries(metadata)) {
+      if (hiddenKeys.some(hidden => key === hidden) || key === 'hiddenKeys') continue;
+      let formattedValue = value.toString();
+      if (typeof value === 'boolean') {
+        formattedValue = value ? 'Ja' : 'Nee';
+      }
+      formatted.push(<span key={`${key}-span`}>{`${capitalize(key)}: ${formattedValue}`}</span>);
+      formatted.push(<br key={`${key}-br`} />);
+    }
     return formatted;
   }, [metadata]);
 

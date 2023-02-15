@@ -346,11 +346,23 @@
   },
   "benches": {
     "crafting_bench": {
-      "items": ["lockpick", "empty_bags", "vpn", "decoding_tool", "radio", "explosive_case"],
+      "items": [
+        "lockpick",
+        "empty_bags",
+        "vpn",
+        "decoding_tool",
+        "radio",
+        "explosive_case"
+      ],
       "reputation": "crafting"
     },
     "ammo_bench": {
-      "items": ["pistol_ammo", "smg_ammo", "rifle_ammo", "container_ammo"],
+      "items": [
+        "pistol_ammo",
+        "smg_ammo",
+        "rifle_ammo",
+        "container_ammo"
+      ],
       "reputation": "ammo_crafting"
     },
     "weapon_bench_A": {

@@ -2,6 +2,7 @@ import { startParticleThread } from 'modules/particles/service.particles';
 import { loadStatusData } from 'modules/status/service.status';
 import { loadAllPlayerReputations } from 'modules/reputation/service.reputation';
 import { loadHudConfig } from 'modules/hud/service.hud';
+import { initializeStaticObjects } from 'modules/staticobjects/service.staticobjects';
 
 import './modules/particles';
 import './modules/hud';
@@ -11,6 +12,7 @@ import './modules/status';
 import './modules/reputation';
 import './modules/propattach';
 import './modules/rental/controller.rental';
+import './modules/staticobjects';
 import './services/laptop';
 import './services/config';
 import './services/boatanchor';
@@ -26,4 +28,5 @@ setImmediate(() => {
   loadStatusData();
   loadAllPlayerReputations();
   loadHudConfig();
+  initializeStaticObjects();
 });

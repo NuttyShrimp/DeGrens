@@ -1,4 +1,5 @@
 import { Config } from '@dgx/server';
+import { Util } from '@dgx/shared';
 import { mainLogger } from 'sv_logger';
 
 const proxyHandler = {
@@ -14,7 +15,8 @@ let configData: Lockers.Config | null = null;
 const config = new Proxy({}, proxyHandler);
 
 export const loadConfig = async () => {
-  const data = await Config.getConfigValue('lockers');
+  await Config.awaitConfigLoad();
+  const data = Config.getConfigValue('lockers');
   configData = data;
 };
 

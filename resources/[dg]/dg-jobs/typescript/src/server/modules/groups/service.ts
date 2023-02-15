@@ -80,3 +80,9 @@ export const disbandGroup = (groupId: string) => {
   const ownerCid = group.owner;
   group.removeMember(ownerCid);
 };
+
+export const seedPlyGroupUIStore = (plyId: number) => {
+  const cid = Util.getCID(plyId, true);
+  if (!cid) return;
+  groupManager.seedPlayerStore(plyId, cid);
+};

@@ -1,30 +1,16 @@
-type GroupLeaveHandler = (plyId: number | null, cid: number, groupId: string) => void;
-type GroupJoinHandler = (plyId: number, cid: number, groupId: string) => void;
-
 import { Jobs as JobsClass } from './index';
-
 class Jobs {
-  private groupLeaveHandlers: Set<GroupLeaveHandler>;
-  private groupJoinHandlers: Set<GroupJoinHandler>;
-
-  constructor() {
-    this.groupLeaveHandlers = new Set();
-    this.groupJoinHandlers = new Set();
-
-    on('dg-jobs:server:groups:playerLeft', (plyId: number | null, cid: number, groupId: string) => {
-      this.groupLeaveHandlers.forEach(handler => handler(plyId, cid, groupId));
-    });
-    on('dg-jobs:server:groups:playerJoined', (plyId: number, cid: number, groupId: string) => {
-      this.groupJoinHandlers.forEach(handler => handler(plyId, cid, groupId));
-    });
-  }
-
-  onGroupLeave = (handler: GroupLeaveHandler) => {
-    this.groupLeaveHandlers.add(handler);
+  onGroupLeave = (handler: (plyId: number | null, cid: number, groupId: string) => void) => {
+    on('dg-jobs:server:groups:playerLeft', handler);
   };
 
-  onGroupJoin = (handler: GroupJoinHandler) => {
-    this.groupJoinHandlers.add(handler);
+  onGroupJoin = (handler: (plyId: number, cid: number, groupId: string) => void) => {
+    on('dg-jobs:server:groups:playerJoined', handler);
+  };
+
+  // Handler function gets called when players signs in/out of a whitelisted job
+  onJobUpdate = (handler: (plyId: number, job: string | null, rank: number | null) => void) => {
+    on('jobs:server:signin:update', handler);
   };
 
   createGroup(src: number): boolean {
@@ -49,15 +35,15 @@ class Jobs {
 
   // Get current whitelisted job where player is on duty for
   getCurrentJob(src: number): string | null {
-    return global.exports['dg-jobs'].getCurrentJob(src);
+    return global.exports['dg-jobs'].getCurrentJob(src) ?? null;
   }
 
   getCurrentGrade(src: number): number {
     return global.exports['dg-jobs'].getCurrentGrade(src);
   }
 
-  hasSpeciality(src: number, specialty: number): boolean {
-    return global.exports['dg-jobs'].hasSpeciality(src, specialty);
+  hasSpeciality(src: number, speciality: number): boolean {
+    return global.exports['dg-jobs'].hasSpeciality(src, speciality);
   }
 
   isWhitelisted(src: number, job: string): boolean {
@@ -130,6 +116,10 @@ class Business {
   getPermissionsFromMask(mask: number): string[] {
     return global.exports['dg-business'].getPermissionsFromMask(mask);
   }
+
+  onPlayerFired = (handler: (businessId: number, businessName: string, cid: number) => void) => {
+    on('business:playerFired', handler);
+  };
 }
 
 class Gangs {
