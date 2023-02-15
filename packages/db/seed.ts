@@ -8,7 +8,7 @@ async function main() {
   await prisma.users.create({
     data: {
       name: 'NuttyShrimp',
-      steamid: 'steam:110000137164c7',
+      steamid: 'steam:110000137164c7d',
       license: 'license:ea3021d1c62a5a3e3738dfefaed6de1137117a1e',
       discord: 'discord:214294598766297088',
       created_at: new Date('2022-08-30 10:09:41'),
@@ -18,7 +18,7 @@ async function main() {
   await prisma.characters.create({
     data: {
       citizenid: 1000,
-      steamid: 'steam:110000137164c7',
+      steamid: 'steam:110000137164c7d',
     },
   });
   await prisma.character_data.create({
