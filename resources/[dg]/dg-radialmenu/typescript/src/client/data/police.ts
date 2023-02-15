@@ -69,7 +69,7 @@ export const police: RadialMenu.Entry[] = [
     event: 'police:carStorage',
     shouldClose: true,
     isEnabled: ({ currentVehicle }) => {
-      return !!currentVehicle;
+      return !!currentVehicle && Police.isPoliceVehicle(currentVehicle);
     },
   },
   {

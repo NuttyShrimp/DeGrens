@@ -63,6 +63,10 @@ class Police {
   public addBloodDrop = () => {
     Events.emitNet('police:evidence:addBloodDrop');
   };
+
+  public isPoliceVehicle = (vehicle: number) => {
+    return global.exports['dg-police'].isPoliceVehicle(vehicle);
+  };
 }
 
 class Hospital {

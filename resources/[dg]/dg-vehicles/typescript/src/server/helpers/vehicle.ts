@@ -81,7 +81,6 @@ export const spawnVehicle = async (
     `Spawn vehicle: spawned | model: ${model} | entity: ${veh} | netId: ${vehNetId} | owner: ${entityOwner}`
   );
 
-
   // If model is not yet loaded for entityowner, this heading native will not work
   if (entityOwner > 0) {
     emitNet('vehicle:setHeading', entityOwner, vehNetId, position.w);
@@ -111,11 +110,16 @@ export const spawnVehicle = async (
   let npcDriverDeleteCounter = 50;
   const npcDriverDeleteThread = setInterval(() => {
     npcDriverDeleteCounter--;
-    const pedInDriverSeat = GetPedInVehicleSeat(veh, -1);
-    if (pedInDriverSeat && DoesEntityExist(pedInDriverSeat) && !IsPedAPlayer(pedInDriverSeat)) {
-      DeleteEntity(pedInDriverSeat);
+    if (DoesEntityExist(veh)) {
+      const pedInDriverSeat = GetPedInVehicleSeat(veh, -1);
+      if (pedInDriverSeat && DoesEntityExist(pedInDriverSeat) && !IsPedAPlayer(pedInDriverSeat)) {
+        DeleteEntity(pedInDriverSeat);
+        npcDriverDeleteCounter = 0;
+      }
+    } else {
       npcDriverDeleteCounter = 0;
     }
+
     if (npcDriverDeleteCounter <= 0) {
       clearInterval(npcDriverDeleteThread);
     }

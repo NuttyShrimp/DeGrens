@@ -1,4 +1,4 @@
-import { Events, Jobs, PolyZone, Util } from '@dgx/client';
+import { Events, Jobs, PolyZone } from '@dgx/client';
 import { EXCLUDED_JOBS } from './constants.speedzones';
 
 export const buildSpeedZones = (zones: Police.Speedzones.Config) => {

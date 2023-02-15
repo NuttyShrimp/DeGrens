@@ -5,6 +5,7 @@ import { buildSpeedZones } from 'modules/speedzones/service.speedzones';
 import { loadLockers } from 'services/lockers';
 import { setRequirements } from 'services/requirements';
 import { buildSafeZones } from 'services/safe';
+import { isPoliceVehicle, setPoliceVehicles } from 'services/vehicles';
 
 Events.onNet('police:client:init', (config: Police.Config) => {
   buildSpeedZones(config.speedzones);
@@ -13,6 +14,7 @@ Events.onNet('police:client:init', (config: Police.Config) => {
   buildSafeZones(config.config.safes);
   loadPrisonConfig(config.prison);
   setRequirements(config.requirements);
+  setPoliceVehicles(config.vehicles);
 });
 
 Peek.addGlobalEntry('vehicle', {
@@ -60,7 +62,7 @@ on('police:carStorage', async () => {
   const vin = Entity(veh).state.vin;
   if (!vin) return;
 
-  // TODO: Check if police vehicle
+  if (!isPoliceVehicle(veh)) return;
 
   const [canceled] = await Taskbar.create('treasure-chest', 'Openen', 5000, {
     canCancel: true,
