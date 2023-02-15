@@ -3223,5 +3223,16 @@
       "x": 1,
       "y": 1
     }
+  },
+  {
+    "name": "repair_kit",
+    "label": "Reparatie Set",
+    "image": "repair_kit.png",
+    "useable": true,
+    "decayRate": 7200,
+    "size": {
+      "x": 3,
+      "y": 2
+    }
   }
 ]

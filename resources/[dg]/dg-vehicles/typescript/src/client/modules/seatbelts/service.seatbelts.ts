@@ -3,7 +3,6 @@ import { Vector3 } from '@dgx/shared';
 import { getCurrentVehicle } from '@helpers/vehicle';
 
 let currentSeatbelt: 'none' | 'seatbelt' | 'harness' = 'none';
-let seatbeltThread: NodeJS.Timer | null = null;
 let keyThread: NodeJS.Timer | null = null;
 
 let harnessUses = 0;
@@ -73,49 +72,43 @@ export const toggleSeatbelt = async () => {
   }, 1);
 };
 
-export const cleanSeatbeltThread = () => {
-  if (seatbeltThread !== null) {
-    clearInterval(seatbeltThread);
-    seatbeltThread = null;
-  }
+// Update HUD icon when entering vehicle if harnass installed
+export const updateHarnassHUD = (veh: number) => {
+  harnessUses = Entity(veh).state.harnessUses ?? 0;
+  if (harnessUses === 0) return;
+  HUD.toggleEntry('harness-uses', true);
+};
+
+export const disableHarnassHUD = () => {
   currentSeatbelt = 'none';
   harnessUses = 0;
   HUD.toggleEntry('harness-uses', false);
 };
 
-export const startSeatbeltThread = (vehicle: number) => {
-  if (seatbeltThread !== null) return;
-  if (!doesVehicleHaveSeatbelt(vehicle)) return;
+export const tryEjectAfterCrash = (
+  oldHealth: number,
+  newHealth: number,
+  oldSpeed: number,
+  newSpeed: number,
+  oldVelocity: Vec3
+) => {
+  if (currentSeatbelt === 'harness') return; // no eject when harnass
+  if (oldSpeed < 100) return; // minimum of 100/h
+  if (newSpeed > oldSpeed * 0.75) return; // need atleast 25% diff in speed
 
-  checkHarnessHUD(vehicle);
+  const healthDelta = Math.ceil(Math.max(0, oldHealth - newHealth));
 
-  let vehicleVelocity = Util.ArrayToVector3(GetEntityVelocity(vehicle));
-  let previousSpeed = Util.getVehicleSpeed(vehicle);
-  let previousHealth = GetVehicleBodyHealth(vehicle);
-  let healthDifference = 0;
+  // Calculate chance to eject based on seatbelttype and health diff
+  let chance = 0;
+  if (currentSeatbelt === 'none') {
+    chance = Math.min(100, healthDelta * 2);
+  } else if (currentSeatbelt === 'seatbelt') {
+    chance = Math.min(50, healthDelta);
+  }
 
-  seatbeltThread = setInterval(() => {
-    if (currentSeatbelt === 'harness') return;
-
-    healthDifference = Math.ceil(Math.max(0, previousHealth - GetVehicleBodyHealth(vehicle)));
-
-    if (previousSpeed > 100 && healthDifference > 1 && Util.getVehicleSpeed(vehicle) < previousSpeed * 0.75) {
-      let chance = 0;
-      if (currentSeatbelt === 'none') {
-        chance = Math.min(100, healthDifference * 2);
-      } else if (currentSeatbelt === 'seatbelt') {
-        chance = Math.min(50, healthDifference);
-      }
-
-      if (Util.getRndInteger(0, 100) <= chance) {
-        ejectFromVehicle(vehicleVelocity);
-      }
-    }
-
-    vehicleVelocity = Util.ArrayToVector3(GetEntityVelocity(vehicle));
-    previousHealth = GetVehicleBodyHealth(vehicle);
-    previousSpeed = Util.getVehicleSpeed(vehicle);
-  }, 25);
+  if (Util.getRndInteger(0, 101) <= chance) {
+    ejectFromVehicle(oldVelocity);
+  }
 };
 
 const ejectFromVehicle = (vehicleVelocity: Vec3) => {
@@ -133,19 +126,13 @@ const ejectFromVehicle = (vehicleVelocity: Vec3) => {
   ejected = true;
   setTimeout(() => {
     ejected = false;
-  }, 20000);
+  }, 10000);
 };
 
 export const getHarnessUses = () => harnessUses;
 
 export const setHarnessUses = (value: number) => {
   harnessUses = value;
-};
-
-const checkHarnessHUD = (veh: number) => {
-  harnessUses = Entity(veh).state.harnessUses ?? 0;
-  if (harnessUses === 0) return;
-  HUD.toggleEntry('harness-uses', true);
 };
 
 export const justEjected = () => ejected;

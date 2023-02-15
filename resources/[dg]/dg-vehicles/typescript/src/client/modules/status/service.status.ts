@@ -1,15 +1,24 @@
-import { Events, RPC, UI } from '@dgx/client';
+import { Events, RPC, Sounds, UI, Util } from '@dgx/client';
 
-import { getCurrentVehicle } from '../../helpers/vehicle';
+import { getCurrentVehicle, isDriver } from '../../helpers/vehicle';
 import { getCurrentWorkingShop } from '../mechanic/service.mechanic';
 import { getPerformanceUpgrades } from '../upgrades/service.upgrades';
 
-import { degradationValues, handlingOverrideFunctions, partNames, serviceConditions } from './constant.status';
+import {
+  MINIMUM_DAMAGE_FOR_GUARANTEED_STALL,
+  degradationValues,
+  handlingOverrideFunctions,
+  partNames,
+  serviceConditions,
+} from './constant.status';
 import { getVehicleFuel, overrideSetFuel } from 'modules/fuel/service.fuel';
 import { getVehicleVin } from 'modules/identification/service.identification';
+import { tryEjectAfterCrash } from 'modules/seatbelts/service.seatbelts';
+import { setEngineState } from 'services/engine';
 
 const vehicleService: {
   vehicle: number;
+  numWheels: number;
   vin: string;
   threads: {
     status: NodeJS.Timer;
@@ -21,6 +30,7 @@ const vehicleService: {
   originalHandling: Record<string, number>;
 } = {
   vehicle: 0,
+  numWheels: 0,
   vin: '',
   threads: null,
   info: null,
@@ -34,6 +44,8 @@ const vehicleService: {
 const multipliers = {
   brake: 1,
 };
+
+let vehicleCrashThread: NodeJS.Timer | null = null;
 
 let overrideThreads: NodeJS.Timer[] = [];
 const clearOverrideThreads = () => {
@@ -104,6 +116,7 @@ export const startStatusThread = async (vehicle: number) => {
   if (!netId || !vin) return;
 
   vehicleService.vehicle = vehicle;
+  vehicleService.numWheels = GetVehicleNumberOfWheels(vehicle);
   vehicleService.vin = vin;
   vehicleService.info = await RPC.execute('vehicles:service:getStatus', netId);
   vehicleService.state.engine = GetVehicleEngineHealth(vehicle);
@@ -131,7 +144,7 @@ export const startStatusThread = async (vehicle: number) => {
 
       const brakePressure: number[] = [];
       const suspCompress: number[] = [];
-      for (let i = 0; i < GetVehicleNumberOfWheels(currentVehicle); i++) {
+      for (let i = 0; i < vehicleService.numWheels; i++) {
         brakePressure.push(GetVehicleWheelBrakePressure(currentVehicle, i));
         suspCompress.push(GetVehicleWheelSuspensionCompression(currentVehicle, i));
       }
@@ -139,20 +152,19 @@ export const startStatusThread = async (vehicle: number) => {
       // Brakes
       // Brake natives give wrong values when engine is off
       if (GetIsVehicleEngineRunning(currentVehicle)) {
-        const avgBrakePressure =
-          brakePressure.reduce((tSusCom, susComp) => tSusCom + susComp, 0) / brakePressure.length;
+        const avgBrakePressure = Util.average(brakePressure);
         if (avgBrakePressure <= 0) {
           multipliers.brake = 1;
         } else {
-          vehicleService.info.brakes -= (avgBrakePressure * multipliers.brake) / 50;
-          multipliers.brake += 0.03;
+          vehicleService.info.brakes -= (avgBrakePressure * multipliers.brake) / 10;
+          multipliers.brake += 0.1;
         }
       }
 
       // Suspension
-      const avgSuspCompress = suspCompress.reduce((tSusCom, susComp) => tSusCom + susComp, 0) / suspCompress.length;
+      const avgSuspCompress = Util.average(suspCompress);
       if (avgSuspCompress > 0.15) {
-        vehicleService.info.suspension -= avgSuspCompress / 50;
+        vehicleService.info.suspension -= avgSuspCompress / 5;
       }
 
       // Axle & engine
@@ -165,10 +177,10 @@ export const startStatusThread = async (vehicle: number) => {
       vehicleService.state.engine = newEngine;
 
       if (bodyDelta > 0) {
-        vehicleService.info.axle -= bodyDelta / 45;
+        vehicleService.info.axle -= bodyDelta / 3;
       }
       if (engineDelta > 0) {
-        vehicleService.info.engine -= engineDelta / 20;
+        vehicleService.info.engine -= engineDelta / 3;
       }
     }, 100),
     // Apply thread applies calculated service values every 5 seconds
@@ -198,6 +210,7 @@ const cleanStatusThread = () => {
   }
 
   vehicleService.vehicle = 0;
+  vehicleService.numWheels = 0;
   vehicleService.vin = '';
   vehicleService.info = null;
 };
@@ -289,5 +302,77 @@ export const fixVehicle = (veh: number, body = true, engine = true) => {
   }
   if (engine) {
     SetVehicleEngineHealth(veh, 1000);
+  }
+};
+
+// Thread to be able to call functions when vehicle crashes
+export const startVehicleCrashThread = (vehicle: number) => {
+  stopVehicleCrashThread();
+
+  let oldVelocity = Util.getEntityVelocity(vehicle);
+  let oldSpeed = Util.getVehicleSpeed(vehicle);
+  let oldHealth = GetVehicleBodyHealth(vehicle);
+
+  vehicleCrashThread = setInterval(() => {
+    const newHealth = GetVehicleBodyHealth(vehicle);
+    const newSpeed = Util.getVehicleSpeed(vehicle);
+
+    if (newHealth < oldHealth) {
+      // console.log(`Vehicle crashed | speed: ${oldSpeed} -> ${newSpeed} | health: ${oldHealth} -> ${newHealth}`);
+      tryEjectAfterCrash(oldHealth, newHealth, oldSpeed, newSpeed, oldVelocity);
+      tryToStallVehicle(vehicle, newHealth, oldHealth);
+    }
+
+    oldVelocity = Util.getEntityVelocity(vehicle);
+    oldSpeed = newSpeed;
+    oldHealth = newHealth;
+  }, 25);
+};
+
+export const stopVehicleCrashThread = () => {
+  if (vehicleCrashThread === null) return;
+
+  clearInterval(vehicleCrashThread);
+  vehicleCrashThread = null;
+};
+
+export const tryToStallVehicle = (vehicle: number, newHealth: number, oldHealth: number) => {
+  if (!isDriver()) return;
+
+  const healthDecrease = oldHealth - newHealth;
+  if (healthDecrease < 0) return;
+
+  const chance =
+    Math.min(healthDecrease, MINIMUM_DAMAGE_FOR_GUARANTEED_STALL) * (100 / MINIMUM_DAMAGE_FOR_GUARANTEED_STALL);
+  if (Util.getRndInteger(0, 101) > chance) return;
+
+  const entState = Entity(vehicle).state;
+  const amountOfStalls = (entState.amountOfStalls ?? 0) + 1;
+  entState.set('amountOfStalls', amountOfStalls, true);
+
+  entState.set('undriveable', true, true); // stops us from reenabling engine
+  setEngineState(vehicle, false, true);
+
+  setTimeout(() => {
+    entState.set('undriveable', false, true);
+    setEngineState(vehicle, true, true);
+  }, 3000);
+
+  Sounds.playOnEntity(
+    `stall_${NetworkGetNetworkIdFromEntity(vehicle)}`,
+    'Engine_fail',
+    'DLC_PILOT_ENGINE_FAILURE_SOUNDS',
+    vehicle
+  );
+
+  // affect service on stall
+  if (vehicleService.vehicle === vehicle && vehicleService.info) {
+    for (const [k, v] of Object.entries(vehicleService.info) as [keyof Service.Status, number][]) {
+      vehicleService.info[k] = v - 150;
+    }
+  }
+
+  if (amountOfStalls >= 4) {
+    SetVehicleEngineHealth(vehicle, 0);
   }
 };

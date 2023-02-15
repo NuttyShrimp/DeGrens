@@ -49,3 +49,5 @@ export const partNames: Record<keyof Service.Status, string> = {
 export const handlingOverrideFunctions: Record<string, (veh: number, value: number) => void> = {
   fInitialDriveForce: (veh, val) => SetVehicleCheatPowerIncrease(veh, val),
 };
+
+export const MINIMUM_DAMAGE_FOR_GUARANTEED_STALL = 120;

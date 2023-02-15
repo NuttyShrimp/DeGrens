@@ -100,5 +100,8 @@ export const useRepairPart = async (src: number, type: keyof Service.Status, par
     Notifications.add(src, 'Je hebt dit item niet', 'error');
     return;
   }
+
+  // Reset stalls for every repair
+  Entity(veh).state.amountOfStalls = 0;
   updateServiceStatusPart(vin, type, 10);
 };

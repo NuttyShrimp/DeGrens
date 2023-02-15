@@ -29,6 +29,11 @@ class Util extends UtilShared {
     return this.ArrayToVector3(entityRotation);
   }
 
+  getEntityVelocity(entity: number) {
+    const entityVelocity = GetEntityVelocity(entity);
+    return this.ArrayToVector3(entityVelocity);
+  }
+
   getBoneDistance(entity: number, boneId: string | number) {
     const entityType = GetEntityType(entity);
     if (!entityType) {
@@ -373,6 +378,10 @@ class Util extends UtilShared {
         }
       }, 100);
     });
+  };
+
+  public average = (arr: number[]) => {
+    return arr.reduce((a, b) => a + b, 0) / arr.length;
   };
 }
 

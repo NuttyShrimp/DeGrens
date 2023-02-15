@@ -82,6 +82,11 @@
         "name": "farming_bucket",
         "amount": 25,
         "price": 500
+      },
+      {
+        "name": "repair_kit",
+        "amount": 30,
+        "price": 250
       }
     ],
     "fishing": [

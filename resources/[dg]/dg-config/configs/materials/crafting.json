@@ -342,6 +342,23 @@
     "axle_part_x": {
       "requiredReputation": 200,
       "items": []
+    },
+    "repair_kit": {
+      "requiredReputation": 0,
+      "items": [
+        {
+          "name": "material_iron",
+          "amount": 3
+        },
+        {
+          "name": "material_steel",
+          "amount": 3
+        },
+        {
+          "name": "material_plastic",
+          "amount": 3
+        }
+      ]
     }
   },
   "benches": {
@@ -407,6 +424,7 @@
     },
     "mechanic_bench": {
       "items": [
+        "repair_kit",
         "engine_part_d",
         "suspension_part_d",
         "brakes_part_d",

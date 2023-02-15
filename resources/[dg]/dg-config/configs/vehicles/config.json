@@ -3,7 +3,11 @@
   "carwashPrice": 100,
   "waxTime": 7,
   "itemUpgradesZone": {
-    "center": { "x": 1204.0, "y": -3116.9, "z": 5.54 },
+    "center": {
+      "x": 1204.0,
+      "y": -3116.9,
+      "z": 5.54
+    },
     "length": 10,
     "width": 10,
     "heading": 0
@@ -29,5 +33,6 @@
         "depletionTick": 3
       }
     ]
-  }
+  },
+  "repairKitAmount": 500
 }
