@@ -41,9 +41,11 @@ on('weaponDamageEvent', (sender: number, data: WeaponDamageEventData) => {
   const status = getOnDamageStatusFromWeapon(data.weaponType >>> 0);
   if (!status) return;
 
-  const targets = data.hitGlobalIds;
-  for (const target of targets) {
-    const plyId = NetworkGetEntityOwner(NetworkGetEntityFromNetworkId(target));
+  const hitNetIds = data.hitGlobalIds;
+  for (const netId of hitNetIds) {
+    const entity = NetworkGetEntityFromNetworkId(netId);
+    if (!DoesEntityExist(entity) || !IsPedAPlayer(entity)) continue;
+    const plyId = NetworkGetEntityOwner(entity);
     if (!Status.doesPlayerHaveStatus(plyId, status)) {
       Status.addStatusToPlayer(plyId, status);
     }
