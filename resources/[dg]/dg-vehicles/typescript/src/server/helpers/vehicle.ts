@@ -107,23 +107,29 @@ export const spawnVehicle = async (
   }
 
   // in certain zones gta will spawn population peds in vehicles (had this happen multiple times at vehicle rental near pillbox)
-  let npcDriverDeleteCounter = 50;
+  let npcDriverDeleteCounter = 20;
   const npcDriverDeleteThread = setInterval(() => {
+    const exists = DoesEntityExist(veh);
+    if (!exists) {
+      clearInterval(npcDriverDeleteThread);
+      return;
+    }
+
+    // wait till someone is in scope
+    if (NetworkGetEntityOwner(veh) === -1) return;
+
     npcDriverDeleteCounter--;
-    if (DoesEntityExist(veh)) {
-      const pedInDriverSeat = GetPedInVehicleSeat(veh, -1);
-      if (pedInDriverSeat && DoesEntityExist(pedInDriverSeat) && !IsPedAPlayer(pedInDriverSeat)) {
-        DeleteEntity(pedInDriverSeat);
-        npcDriverDeleteCounter = 0;
-      }
-    } else {
-      npcDriverDeleteCounter = 0;
+    const pedInDriverSeat = GetPedInVehicleSeat(veh, -1);
+    if (pedInDriverSeat && DoesEntityExist(pedInDriverSeat) && !IsPedAPlayer(pedInDriverSeat)) {
+      DeleteEntity(pedInDriverSeat);
+      clearInterval(npcDriverDeleteThread);
+      return;
     }
 
     if (npcDriverDeleteCounter <= 0) {
       clearInterval(npcDriverDeleteThread);
     }
-  }, 100);
+  }, 250);
 
   return veh;
 };
