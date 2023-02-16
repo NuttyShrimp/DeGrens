@@ -158,7 +158,9 @@ export const spawnOwnedVehicle = async (src: number, vehicleInfo: Vehicle.Vehicl
   }
 
   if (vehicleInfo.fakeplate) {
-    Util.awaitCondition(() => GetVehicleNumberPlateText(vehicle) === vehicleInfo.plate).then(() => {
+    Util.awaitCondition(
+      () => DoesEntityExist(vehicle) && GetVehicleNumberPlateText(vehicle) === vehicleInfo.plate
+    ).then(() => {
       applyFakePlate(src, vehNetId, vehicleInfo.fakeplate);
     });
   }
