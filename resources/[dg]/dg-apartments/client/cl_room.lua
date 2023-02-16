@@ -1,6 +1,13 @@
 DGX.RPC.register('dg-apartments:client:enterRoom', function(name, appId)
   currentApartment = getInfoByType(name)
-  exports['dg-build']:createRoom(currentApartment.mlo, appId)
+  local retval = exports['dg-build']:createRoom(currentApartment.mlo, appId)
+
+  local success = true
+  if not retval then 
+    success = false
+  end
+
+  return success
 end)
 
 RegisterNetEvent('dg-apartments:client:removeRoom', function()
