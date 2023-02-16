@@ -47,3 +47,7 @@ const getWheelLabels = (amount: number, categoryLabel: string) => {
   }
   return labels;
 };
+
+export const isEMSVehicle = (vehicle: number) => {
+  return GetVehicleClass(vehicle) === 18;
+};

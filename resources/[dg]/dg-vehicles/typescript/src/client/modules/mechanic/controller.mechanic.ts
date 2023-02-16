@@ -251,6 +251,7 @@ Peek.addGlobalEntry('vehicle', {
       // TODO: add crim zones someday
       canInteract: veh => {
         if (!veh || !NetworkGetEntityIsNetworked(veh)) return false;
+        if (GetVehicleClass(veh) === 18) return false;
         return isCloseToHood(veh, 2, true) && hasVehicleKeys(veh) && !!getCurrentWorkingShop();
       },
     },

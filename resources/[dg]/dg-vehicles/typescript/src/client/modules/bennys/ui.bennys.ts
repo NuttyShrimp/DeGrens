@@ -12,7 +12,7 @@ import {
   modelStanceData,
   originalStance,
 } from './service.bennys';
-import { getLabelsForModId, getLiveryLabels, getWheelTypeComponents } from './util.bennys';
+import { getLabelsForModId, getLiveryLabels, getWheelTypeComponents, isEMSVehicle } from './util.bennys';
 
 const createGenericEntry = <T extends keyof Upgrades.Cosmetic>(
   veh: number,
@@ -76,8 +76,14 @@ UI.RegisterUICallback('bennys:getActiveMenus', (_, cb) => {
 
   const possibilities = getCosmeticUpgradePossibilities(plyVeh);
   if (!possibilities) return cb({ data: {}, meta: { ok: false, message: 'Could not upgrade possibilities' } });
-  // Colors and wheels are always available, exterior also bcus of plate, tyresmoke and claxons
-  const activeMenus: (keyof typeof upgradeableCategories)[] = ['colors', 'exterior', 'wheels'];
+
+  // wheels is always available, exterior also bcus of plate, tyresmoke and claxons
+  const activeMenus: (keyof typeof upgradeableCategories)[] = ['exterior', 'wheels'];
+  // Colors not enabled for ems vehicles
+  if (!isEMSVehicle(plyVeh)) {
+    activeMenus.push('colors');
+  }
+
   Object.entries(upgradeableCategories).forEach(([type, categories]) => {
     if (activeMenus.includes(type as keyof typeof upgradeableCategories)) return;
     if (
