@@ -280,7 +280,6 @@ function startCarLoop()
   if threads.vehicle then return end
 
   state.car.visible = true
-  state.car.indicator.belt = true
   state.car.indicator.engine = false
 
   Citizen.CreateThread(function()
@@ -314,7 +313,6 @@ function startCarLoop()
 
     threads.vehicle = false
     state.car.visible = false
-    state.car.indicator.belt = true
     state.car.indicator.engine = false
 
     SendAppEventWESentry('hud', {

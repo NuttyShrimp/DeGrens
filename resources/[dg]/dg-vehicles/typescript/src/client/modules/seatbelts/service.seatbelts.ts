@@ -8,6 +8,11 @@ let keyThread: NodeJS.Timer | null = null;
 let harnessUses = 0;
 let ejected = false;
 
+const setCurrentSeatbelt = (seatbelt: typeof currentSeatbelt) => {
+  currentSeatbelt = seatbelt;
+  emit('vehicles:seatbelt:toggle', currentSeatbelt !== 'none');
+};
+
 export const isSeatbeltOn = () => {
   return currentSeatbelt !== 'none';
 };
@@ -36,9 +41,8 @@ export const toggleSeatbelt = async () => {
       if (wasCanceled) return;
     }
 
-    emit('vehicles:seatbelt:toggle', false);
+    setCurrentSeatbelt('none');
     Sounds.playLocalSound('carunbuckle', 0.8);
-    currentSeatbelt = 'none';
     return;
   }
 
@@ -53,9 +57,8 @@ export const toggleSeatbelt = async () => {
     Events.emitNet('vehicles:seatbelts:decreaseHarness', NetworkGetNetworkIdFromEntity(veh));
   }
 
-  emit('vehicles:seatbelt:toggle', true);
   Sounds.playLocalSound('carbuckle', 0.7);
-  currentSeatbelt = uses > 0 ? 'harness' : 'seatbelt';
+  setCurrentSeatbelt(uses > 0 ? 'harness' : 'seatbelt');
 
   // Disable exiting vehicle while seatbelt on
   if (keyThread !== null) clearInterval(keyThread);
@@ -80,7 +83,7 @@ export const updateHarnassHUD = (veh: number) => {
 };
 
 export const disableHarnassHUD = () => {
-  currentSeatbelt = 'none';
+  setCurrentSeatbelt('none');
   harnessUses = 0;
   HUD.toggleEntry('harness-uses', false);
 };
