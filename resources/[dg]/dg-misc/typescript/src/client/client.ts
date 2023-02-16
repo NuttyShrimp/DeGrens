@@ -21,6 +21,7 @@ import './services/consumables';
 import './services/yoga';
 import './services/seats';
 import './services/blipmanager';
+import './services/walkstyles';
 
 import { setDiscordRichPresence } from 'modules/discord/service.discord';
 import { setGTABehaviour } from 'modules/gtabehaviour/service.gtabehaviour';

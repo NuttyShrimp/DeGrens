@@ -258,6 +258,10 @@ class Util extends UtilShared {
     return MOVEMENT_CLIPSET_ENUM[clipsetHash];
   };
 
+  setWalkstyle = (walkstyle: string, save = true) => {
+    global.exports['dg-misc'].setWalkstyle(walkstyle, save);
+  };
+
   /**
    * Wrapper for scenarios to regain equipped weapon when scenario stops
    * This is needed to prevent anticheat bans for mismatching weapons

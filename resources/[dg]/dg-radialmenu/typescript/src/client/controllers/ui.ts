@@ -1,8 +1,9 @@
 import { Events } from '@dgx/client';
+import { handleRadialMenuClose } from 'services/radialmenu';
 
 RegisterNuiCallbackType('closeRadialMenu');
-on('__cfx_nui:closeRadialMenu', (data: unknown, cb: (_: any) => void) => {
-  SetNuiFocus(false, false);
+on('__cfx_nui:closeRadialMenu', (_: unknown, cb: (_: any) => void) => {
+  handleRadialMenuClose();
   cb({});
 });
 

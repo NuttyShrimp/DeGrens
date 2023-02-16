@@ -91,6 +91,7 @@ declare interface MetaData {
   jailMonths: number;
   downState: 'unconscious' | 'dead' | 'alive';
   needs: Record<CharacterNeed, number>;
+  walkstyle: string;
 }
 
 declare interface PlayerData {

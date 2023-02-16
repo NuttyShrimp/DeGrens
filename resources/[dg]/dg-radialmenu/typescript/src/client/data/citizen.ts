@@ -16,4 +16,14 @@ export const citizen: RadialMenu.Entry[] = [
     shouldClose: true,
     isEnabled: ({ job }) => job.name !== 'police',
   },
+  {
+    title: 'Wandelstijl',
+    icon: 'person-walking',
+    subMenu: 'walkstyles',
+  },
+  {
+    title: 'Expression',
+    icon: 'face-smile',
+    subMenu: 'expressions',
+  },
 ];

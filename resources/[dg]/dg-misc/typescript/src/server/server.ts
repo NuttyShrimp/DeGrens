@@ -20,6 +20,7 @@ import './services/consumables';
 import './services/tackle';
 import './services/seats';
 import './services/idlist';
+import './services/walkstyles';
 import './controllers';
 
 setImmediate(() => {

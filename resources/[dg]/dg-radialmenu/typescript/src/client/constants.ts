@@ -1,0 +1,1 @@
+export const MAXIMUM_ENTRIES_PER_MENU = 8;
