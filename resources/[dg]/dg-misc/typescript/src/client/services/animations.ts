@@ -25,7 +25,7 @@ export const startTabletAnimation = async () => {
     false,
     false
   );
-  const propId = await PropAttach.add('tablet');
+  const propId = PropAttach.add('tablet');
   if (propId !== undefined) {
     tabletPropId = propId;
   }

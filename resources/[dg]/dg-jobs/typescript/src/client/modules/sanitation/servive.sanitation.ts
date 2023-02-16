@@ -155,7 +155,7 @@ export const takeBagFromDumpster = async (dumpster: number) => {
 
   // Animaiton kanker
   await Util.loadAnimDict('missfbi4prepp1');
-  const propId = (await PropAttach.add('garbage_bag')) ?? 0;
+  const propId = PropAttach.add('garbage_bag');
   const ped = PlayerPedId();
   const thread = setInterval(async () => {
     if (!holdingTrashbag) {

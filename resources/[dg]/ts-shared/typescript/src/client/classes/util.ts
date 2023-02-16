@@ -403,7 +403,7 @@ export class Interiors {
 }
 
 export class PropAttach {
-  public add = (objName: string, offset?: Vec3): Promise<number | undefined> => {
+  public add = (objName: string, offset?: Vec3): number => {
     return global.exports['dg-misc'].addProp(objName, offset);
   };
 
@@ -411,7 +411,7 @@ export class PropAttach {
     global.exports['dg-misc'].removeProp(objId);
   };
 
-  public move = (objId: number, offset?: Vec3) => {
+  public move = (objId: number, offset: Vec3) => {
     global.exports['dg-misc'].moveProp(objId, offset);
   };
 

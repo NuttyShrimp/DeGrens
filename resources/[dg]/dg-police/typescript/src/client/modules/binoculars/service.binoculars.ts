@@ -21,7 +21,7 @@ export const enableBinoculars = async (type: 'binoculars' | 'pd_camera') => {
   } else if (type === 'pd_camera') {
     await Util.loadAnimDict('amb@world_human_paparazzi@male@base');
     TaskPlayAnim(ped, 'amb@world_human_paparazzi@male@base', 'base', 2.0, 2.0, -1, 17, 1, false, false, false);
-    const propId = (await PropAttach.add('camera')) ?? 0;
+    const propId = PropAttach.add('camera');
     const propCheckThread = setInterval(() => {
       if (enabled) return;
       PropAttach.remove(propId);

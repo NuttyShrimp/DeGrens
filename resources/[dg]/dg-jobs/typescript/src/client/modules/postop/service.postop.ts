@@ -267,7 +267,7 @@ const addPackage = async (vehicle: number) => {
   if (canceled) return;
 
   hasPackage = true;
-  const propId = await PropAttach.add(getPropAttachItem());
+  const propId = PropAttach.add(getPropAttachItem());
 
   await Util.loadAnimDict('anim@heists@box_carry@');
   const thread = setInterval(() => {

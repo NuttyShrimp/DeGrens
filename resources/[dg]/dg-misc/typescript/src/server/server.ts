@@ -10,7 +10,6 @@ import './modules/radio/controller.radio';
 import './modules/elevators/controller.elevators';
 import './modules/status';
 import './modules/reputation';
-import './modules/propattach';
 import './modules/rental/controller.rental';
 import './modules/staticobjects';
 import './services/laptop';

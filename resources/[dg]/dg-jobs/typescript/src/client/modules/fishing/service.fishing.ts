@@ -155,7 +155,7 @@ export const useRod = async () => {
     await Util.Delay(1500);
   }
 
-  fishingRodProp = (await PropAttach.add('fishing_rod')) ?? 0;
+  fishingRodProp = PropAttach.add('fishing_rod');
 
   await Util.loadAnimDict('amb@world_human_stand_fishing@idle_a');
   TaskPlayAnim(ped, 'amb@world_human_stand_fishing@idle_a', 'idle_c', 2.0, 2.0, -1.0, 11, 1, false, false, false);
