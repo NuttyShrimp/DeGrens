@@ -651,6 +651,6 @@ export class Restaurant {
       return;
     }
 
-    Inventory.addItemToPlayer(plyId, item, 1, { quality: 35 });
+    Inventory.addItemToPlayer(plyId, item, 1, { quality: 50 });
   };
 }

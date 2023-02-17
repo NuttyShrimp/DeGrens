@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Als je eten/drinken stats zeer laag staan zal een revive bij de hospital je een beetje bijgeven zodat je verder kan
 - PMA-sirensync
 - Trashinventory optie in adminpanel
+- Blips voor restaurants
 
 
 ### Changed
