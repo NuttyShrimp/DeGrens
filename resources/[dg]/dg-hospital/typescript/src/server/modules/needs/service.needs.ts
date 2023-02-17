@@ -2,9 +2,14 @@ import { Util } from '@dgx/server';
 import { getHospitalConfig } from 'services/config';
 import { needsLogger } from './logger.needs';
 
+let depletionThread: NodeJS.Timer | null = null;
+
 export const startNeedsThread = () => {
   const needsConfig = getHospitalConfig().needs;
-  setInterval(() => {
+  if (depletionThread) {
+    clearInterval(depletionThread);
+  }
+  depletionThread = setInterval(() => {
     const players = [...Object.values(DGCore.Functions.GetQBPlayers())] as Player[];
     for (const player of players) {
       const needs = { ...player.PlayerData.metadata.needs };

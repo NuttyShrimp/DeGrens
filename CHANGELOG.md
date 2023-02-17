@@ -16,7 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Notification to indicate rental papers should be used to get keys
 - Admin clear vehicle service optie
 - Non-scuffed inbeslagname optie toegevoegd
-
+- phone en laptop toegevoegd aan hardware store
 
 ### Changed
 
@@ -25,6 +25,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Tijdelijk drugslabs uitgezet
 - Reset voertuig stalls bij gebruik van repairkit
 - Send plyInfo als een ander key voor minder data te moeten extracten
+- Eten/drank afnemen verminderd
 
 ### Fixed
 

@@ -1,7 +1,7 @@
 {
   "interval": 300,
   "depletionRates": {
-    "thirst": 3,
-    "hunger": 3
+    "thirst": 2,
+    "hunger": 2
   }
 }
