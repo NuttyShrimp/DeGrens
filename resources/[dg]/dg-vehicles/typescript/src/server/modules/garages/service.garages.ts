@@ -67,6 +67,8 @@ export const stopThread = (src: number) => {
 };
 
 export const isOnParkingSpot = async (src: number, netId: number | null): Promise<boolean> => {
+  const cid = Util.getCID(src);
+
   if (!parkingSpotThreads.has(src)) return false;
   const thread = parkingSpotThreads.get(src);
   if (!thread) return false;
@@ -80,6 +82,7 @@ export const isOnParkingSpot = async (src: number, netId: number | null): Promis
     targetEntity = entity;
     targetIsPlayer = false;
   }
+
   let owner = 0;
   if (!targetIsPlayer) {
     // Check if vehicle is playerOwned
@@ -88,15 +91,18 @@ export const isOnParkingSpot = async (src: number, netId: number | null): Promis
     owner = await getCidFromVin(vehState.vin);
     if (!owner) return false;
   } else {
-    const playerState = Player(src).state;
-    if (!playerState.cid) return false;
-    owner = playerState.cid;
+    owner = cid;
   }
+
   // Check if owner has access to current garage to prevent players from storing vehicles in inaccessible garages
-  const garage_id = thread.getGarage()?.garage_id;
-  if (!garage_id) return false;
+  // Only owner can store in public garages
+  const garage = thread.getGarage();
+  if (!garage) return false;
+  const { garage_id, shared } = garage;
+  if (!shared && owner !== cid) return false;
   const hasAccess = doesCidHasAccess(owner, garage_id);
   if (!hasAccess) return false;
+
   const entityCoords = Util.getEntityCoords(targetEntity);
   const spot = thread.getCurrentParkingSpot();
   if (!spot) return false;
@@ -299,11 +305,12 @@ export const storeVehicleInGarage = async (src: number, entity: number) => {
     Notifications.add(src, 'Je kunt dit voertuig hier niet parkeren', 'error');
     return;
   }
-  const garage_id = garageThread.getGarage()?.garage_id;
-  if (!garage_id) {
+  const garage = garageThread.getGarage();
+  if (!garage) {
     garageLogger.silly(`Could not get garage id from current garage`);
     return;
   }
+  const { garage_id, shared } = garage;
   const cid = Player(src).state.cid;
   const vin = getVinForNetId(NetworkGetNetworkIdFromEntity(entity));
   if (!vin) {
@@ -315,6 +322,11 @@ export const storeVehicleInGarage = async (src: number, entity: number) => {
     return;
   }
   const { cid: vehOwner } = await getPlayerVehicleInfo(vin);
+  if (!shared && cid !== vehOwner) {
+    garageLogger.silly(`Cannot store other peoples car in public garage`);
+    Notifications.add(src, 'Enkel de eigenaar kan het voertuig in deze garage plaatsen', 'error');
+    return;
+  }
   if (!doesCidHasAccess(vehOwner, garage_id)) {
     garageLogger.silly(`Player does not have access to garage`);
     Notifications.add(src, 'De eigenaar van dit voertuig heeft geen toegang tot deze garage', 'error');
