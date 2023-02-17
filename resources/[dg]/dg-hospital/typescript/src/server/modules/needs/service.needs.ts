@@ -31,3 +31,11 @@ export const setNeed = (plyId: number, need: CharacterNeed, cb: (old: number) =>
   emitNet('hud:client:UpdateNeeds', plyId, needs.hunger, needs.thirst);
   needsLogger.info(`Changed ${need} to ${clampedValue} for ${Util.getName(plyId)}`);
 };
+
+export const getNeed = (plyId: number, need: CharacterNeed) => {
+  const player = DGCore.Functions.GetPlayer(plyId);
+  if (!player) return 100;
+
+  const needs = { ...player.PlayerData.metadata.needs };
+  return needs?.[need] ?? 100;
+};
