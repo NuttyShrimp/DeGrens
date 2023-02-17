@@ -1,7 +1,7 @@
 config = nil
 hasStoredEntries = false
 
-Citizen.CreateThread(function() 
+Citizen.CreateThread(function()
   while not exports['dg-config']:areConfigsReady() do
     Wait(100)
   end
@@ -9,7 +9,7 @@ Citizen.CreateThread(function()
   setCorrectServer()
 end)
 
-RegisterNetEvent('dg-config:moduleLoaded', function (modId, modConfig)
+RegisterNetEvent('dg-config:moduleLoaded', function(modId, modConfig)
   if modId ~= 'main' then
     return
   end
@@ -29,7 +29,7 @@ createGraylogEntry = function(logtype, data, message, isImportant, timestamp)
   if not timestamp then
     timestamp = os.time(os.date("*t"))
   end
-	Citizen.CreateThread(function()
+  Citizen.CreateThread(function()
     while not exports['dg-config']:areConfigsReady() do
       Wait(100)
     end
@@ -38,26 +38,29 @@ createGraylogEntry = function(logtype, data, message, isImportant, timestamp)
       data.important = true
     end
     local message = {
-			version = "2.1",
-			host = "dg2.degrensrp.be",
-			short_message = message or logtype,
-			_resource = GetInvokingResource(),
-			_logtype = logtype,
-      _citizenid = data.plyInfo and data.plyInfo.cid,
-			full_message = json.encode(data, { indent = true }),
+      version = "2.1",
+      host = "dg2.degrensrp.be",
+      short_message = message or logtype,
+      _resource = GetInvokingResource(),
+      _logtype = logtype,
+      _plyInfo = json.encode(data.plyInfo, { indent = true }),
+      full_message = json.encode(data, { indent = true }),
       _devMsg = isImportant,
       timestamp = timestamp
-		}
+    }
+    if data.plyInfo then
+      message._plyInfo = json.encode(data.plyInfo, { indent = true })
+    end
 
-		PerformHttpRequest(config.logServer, function(statusCode)
+    PerformHttpRequest(config.logServer, function(statusCode)
       if statusCode >= 300 then
         storeEntry(message)
         p:resolve(true)
         return
       end
       p:resolve(false)
-		end, 'POST', json.encode(message), { ['Content-Type'] = 'application/json' })
-	end)
+    end, 'POST', json.encode(message), { ['Content-Type'] = 'application/json' })
+  end)
   return p
 end
 
@@ -70,7 +73,7 @@ function storeEntry(msg)
   if storedEntriesJSON then
     storedEntries = json.decode(storedEntriesJSON)
   end
-  storedEntries[#storedEntries+1] = msg
+  storedEntries[#storedEntries + 1] = msg
   SaveResourceFile(GetCurrentResourceName(), "./data/logs.json", json.encode(storedEntries), -1)
   hasStoredEntries = true
 end
@@ -108,4 +111,5 @@ function sendStoredEntries()
     end
   end)
 end
+
 --- endregion
