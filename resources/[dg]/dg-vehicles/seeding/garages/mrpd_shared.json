@@ -9,7 +9,7 @@
       "y": -986.61,
       "z": 27.26
     },
-    "width": 28.2,
+    "width": 38.2,
     "length": 41.4,
     "options": {
       "heading": 0,
@@ -17,7 +17,9 @@
       "maxZ": 29.26
     }
   },
-  "vehicle_types": ["land"],
+  "vehicle_types": [
+    "land"
+  ],
   "parking_spots": [
     {
       "type": "land",
