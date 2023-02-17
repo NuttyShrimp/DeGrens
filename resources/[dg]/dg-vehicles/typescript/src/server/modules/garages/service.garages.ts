@@ -369,7 +369,7 @@ export const doesCidHasAccess = (cid: number, garageId: string) => {
     case 'ambulance':
       return plyJob === 'ambulance';
     case 'business':
-      return Business.hasPlyPermission(garage.name, cid, 'garage_access');
+      return Business.hasPlyPermission(garage.garage_id, cid, 'garage_access');
     default:
       return false;
   }
