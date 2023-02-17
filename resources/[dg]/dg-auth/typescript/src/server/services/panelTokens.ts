@@ -30,7 +30,7 @@ export const generatePanelToken = async (src: number) => {
     () => Player(src)?.state?.steamId && Player(src)?.state?.steamId !== null && Player(src)?.state?.steamId !== '',
     60000
   );
-  // if (Util.isDevEnv()) return;
+  if (Util.isDevEnv()) return;
   const steamId = Player(src).state.steamId;
   const token = signer({ steamId });
   if (revokedTokens.has(token)) {

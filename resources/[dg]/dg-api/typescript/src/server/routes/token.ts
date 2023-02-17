@@ -24,8 +24,8 @@ registerRoute('GET', '/tokens/info/:token', async (req, res) => {
     });
     return;
   }
-  const player: { PlayerData: PlayerData } = await global.exports['dg-core'].GetPlayer(steamId);
-  if (!player) {
+  const serverId = await global.exports['dg-auth'].getServerIdForSteamId(steamId);
+  if (!serverId) {
     res(404, {
       message: 'No active player found bind to steamId',
     });
@@ -33,8 +33,8 @@ registerRoute('GET', '/tokens/info/:token', async (req, res) => {
   }
   const tokenInfo = {
     steamId: steamId,
-    discordId: player.PlayerData.discord,
-    username: player.PlayerData.name,
+    discordId: global.exports['dg-admin'].getIdentifierForPlayer(serverId, 'discord'),
+    username: GetPlayerName(serverId),
     roles: await getRoleListForPlayer(steamId),
   };
   res(200, tokenInfo);
