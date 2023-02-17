@@ -1,5 +1,6 @@
 import { Keys, Notifications, Police, UI, Util } from '@dgx/client';
 import { setPauseDownAnimation } from 'modules/down/service.down';
+import { ENABLED_KEYS_IN_BED } from './constants.beds';
 
 let inBed = false;
 let bedCam: number | null = null;
@@ -36,6 +37,9 @@ export const enterBed = async (position: Vec4, timeout: number) => {
     }
 
     DisableAllControlActions(0);
+    ENABLED_KEYS_IN_BED.forEach(key => {
+      EnableControlAction(0, key, true);
+    });
   }, 1);
 
   createBedCam();

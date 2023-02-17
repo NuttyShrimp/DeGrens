@@ -31,8 +31,8 @@
     }
   },
   "shops": {
-    "lowcustoms": {
-      "label": "Low Customs",
+    "lowsantos": {
+      "label": "Low Santos",
       "board": {
         "coords": {
           "x": -1426.78,

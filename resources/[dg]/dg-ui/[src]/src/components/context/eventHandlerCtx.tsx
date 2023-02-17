@@ -39,37 +39,39 @@ export const EventHandlerProvider: FC<PropsWithChildren<{}>> = ({ children }) =>
     async (e: any) => {
       e.preventDefault();
       if (!Object.keys(handlers).includes(e.data.app)) return;
-      if (e.data?.skipSentry) {
-        handlers[e.data.app](e);
-        return;
-      }
-      const transaction = Sentry.startTransaction({
-        name: 'incomingAppEvent',
-        tags: {
-          app: e.data.app,
-        },
-      });
-      Sentry.getCurrentHub().configureScope(scope => {
-        scope.setSpan(transaction);
-      });
-      const span = transaction.startChild({
-        op: 'AppWrapper.eventHandler',
-        description: `Incoming event for ${e.data.app} handled by AppWrapper`,
-        data: {
-          eventData: e.data,
-        },
-      });
+      // if (e.data?.skipSentry) {
+      //   handlers[e.data.app](e);
+      //   return;
+      // }
+      // const transaction = Sentry.startTransaction({
+      //   name: 'incomingAppEvent',
+      //   tags: {
+      //     app: e.data.app,
+      //   },
+      // });
+      // Sentry.getCurrentHub().configureScope(scope => {
+      //   scope.setSpan(transaction);
+      // });
+      // const span = transaction.startChild({
+      //   op: 'AppWrapper.eventHandler',
+      //   description: `Incoming event for ${e.data.app} handled by AppWrapper`,
+      //   data: {
+      //     eventData: e.data,
+      //   },
+      // });
       try {
         addLog({ name: `AppWrapper:${e.data.app}`, body: {}, response: e.data, isOk: true });
         await handlers[e.data.app](e);
-        span.setStatus('ok');
+        // span.setStatus('ok');
       } catch (e) {
-        span.setStatus('unknown_error');
-        throw e;
-      } finally {
-        span.finish();
-        transaction.finish();
+        // span.setStatus('unknown_error');
+        Sentry.captureException(e);
+        console.error(e);
       }
+      // finally {
+      //   span.finish();
+      //   transaction.finish();
+      // }
     },
     [handlers]
   );

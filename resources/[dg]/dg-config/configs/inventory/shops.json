@@ -103,6 +103,16 @@
     ],
     "police_safe": [
       {
+        "name": "weapon_flashlight",
+        "amount": 25,
+        "price": 250
+      },
+      {
+        "name": "pd_radio",
+        "amount": 25,
+        "price": 200
+      },
+      {
         "name": "pd_camera",
         "amount": 100,
         "price": 150
@@ -186,6 +196,11 @@
       }
     ],
     "hospital_shop": [
+      {
+        "name": "pd_radio",
+        "amount": 25,
+        "price": 200
+      },
       {
         "name": "dna_swab",
         "amount": 100,
