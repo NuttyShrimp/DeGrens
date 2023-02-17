@@ -13,7 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - PMA-sirensync
 
 
-## Changed
+### Changed
 
 - Removed sentry transaction in UI event
 
@@ -22,6 +22,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Garage zones groter gemaakt op sommige plaatsen waar je soms de parking spot niet kon zien
 - Props attached aan u speler hebben geen collisions meerc
 - LOD van golf van lokale politie aangepast
+- Mogelijkheid om te praten in hospitaalbed
 
 
 ## [0.0.0]
