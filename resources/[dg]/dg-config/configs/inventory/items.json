@@ -1116,7 +1116,7 @@
   },
   {
     "name": "pd_radio",
-    "label": "PD Radio",
+    "label": "EMS Radio",
     "image": "pd_radio.png",
     "size": {
       "x": 1,

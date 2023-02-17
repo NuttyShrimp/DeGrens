@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Removed sentry transaction in UI event
+- Ontbrekende items toegevoegd aan politie/ambu safe
 
 ### Fixed
 

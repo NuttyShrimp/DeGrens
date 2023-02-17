@@ -1089,15 +1089,15 @@
       "items": [
         {
           "name": "material_iron",
-          "amount": 3
+          "amount": 2
         },
         {
           "name": "material_steel",
-          "amount": 3
+          "amount": 2
         },
         {
           "name": "material_plastic",
-          "amount": 3
+          "amount": 2
         }
       ]
     }
