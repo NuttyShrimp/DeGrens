@@ -27,6 +27,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Props attached aan u speler hebben geen collisions meerc
 - LOD van golf van lokale politie aangepast
 - Mogelijkheid om te praten in hospitaalbed
+- Mogelijkheid om te praten terwijl je gecarried wordt
 
 
 ## [0.0.0]

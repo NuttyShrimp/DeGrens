@@ -1,5 +1,5 @@
 import { Events, Hospital, Keys, Police, Util } from '@dgx/client';
-import { DISABLED_KEYS_WHILE_ESCORTING } from '../constants.interactions';
+import { DISABLED_KEYS_WHILE_ESCORTING, VOICECHAT_KEYS } from '../constants.interactions';
 import { pauseCuffAnimation } from './cuffs';
 
 let cancelCarry = false;
@@ -53,6 +53,9 @@ Events.onNet('police:interactions:getCarried', async (plyId: number) => {
   cancelCarry = false;
   const thread = setInterval(() => {
     DisableAllControlActions(0);
+    VOICECHAT_KEYS.forEach(key => {
+      EnableControlAction(0, key, true);
+    });
 
     if (cancelCarry && !Police.isCuffed() && !Hospital.isDown()) {
       ClearPedTasksImmediately(ped);
