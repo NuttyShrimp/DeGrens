@@ -1,7 +1,7 @@
 {
   "cellsPerRow": 9,
   "amountOfSlots": {
-    "player": 40,
+    "player": 35,
     "glovebox": 3,
     "drop": 20,
     "dumpster": 10,

@@ -459,6 +459,8 @@
     "harvestDelay": 15,
     "timeout": 60,
     "rewardChance": 50,
-    "rewards": ["weed_seed_male", "weed_seed_female"]
+    "rewards": [
+      "weed_seed"
+    ]
   }
 }

@@ -4,62 +4,62 @@
       {
         "name": "water_bottle",
         "amount": 50,
-        "price": 50
+        "price": 25
       },
       {
         "name": "sandwich",
         "amount": 50,
-        "price": 50
+        "price": 25
       },
       {
         "name": "farming_fertilizer",
-        "amount": 25,
-        "price": 100
+        "amount": 500,
+        "price": 10
       },
       {
         "name": "farming_fertilizer_deluxe",
-        "amount": 25,
-        "price": 150
+        "amount": 500,
+        "price": 20
       },
       {
         "name": "binoculars",
         "amount": 50,
-        "price": 500
-      },
-      {
-        "name": "binoculars",
-        "amount": 50,
-        "price": 50
+        "price": 250
       },
       {
         "name": "farming_milk",
         "amount": 100,
-        "price": 50
+        "price": 20
       },
       {
         "name": "farming_seed_tomato",
         "amount": 50,
-        "price": 50
+        "price": 10
       },
       {
         "name": "farming_seed_lettuce",
         "amount": 50,
-        "price": 50
+        "price": 10
       },
       {
         "name": "farming_seed_onion",
         "amount": 50,
-        "price": 50
+        "price": 10
       },
       {
         "name": "farming_seed_wheat",
         "amount": 50,
-        "price": 50
+        "price": 10
       },
       {
         "name": "farming_seed_potato",
         "amount": 50,
-        "price": 50
+        "price": 10
+      },
+      {
+        "name": "bandage",
+        "amount": 500,
+        "price": 15
       }
     ],
     "hardware": [
@@ -71,17 +71,17 @@
       {
         "name": "bolt_cutters",
         "amount": 20,
-        "price": 500
+        "price": 300
       },
       {
         "name": "screwdriver",
         "amount": 30,
-        "price": 250
+        "price": 125
       },
       {
         "name": "farming_bucket",
         "amount": 25,
-        "price": 500
+        "price": 250
       },
       {
         "name": "repair_kit",
@@ -98,59 +98,59 @@
       {
         "name": "fishing_rod",
         "amount": 10,
-        "price": 500
+        "price": 350
       }
     ],
     "police_safe": [
       {
         "name": "pd_camera",
         "amount": 100,
-        "price": 250
+        "price": 150
       },
       {
         "name": "spike_strip",
         "amount": 100,
-        "price": 750
+        "price": 250
       },
       {
         "name": "emergency_button",
         "amount": 100,
-        "price": 500
+        "price": 100
       },
       {
         "name": "taser_cartridge",
         "amount": 250,
-        "price": 50
+        "price": 15
       },
       {
         "name": "pistol_ammo",
         "amount": 100,
-        "price": 500
+        "price": 50
       },
       {
         "name": "smg_ammo",
         "amount": 100,
-        "price": 500
+        "price": 60
       },
       {
         "name": "rifle_ammo",
         "amount": 100,
-        "price": 500
+        "price": 70
       },
       {
         "name": "pd_armor",
         "amount": 100,
-        "price": 500
+        "price": 75
       },
       {
         "name": "weapon_nightstick",
         "amount": 10,
-        "price": 1000
+        "price": 100
       },
       {
         "name": "weapon_stungun",
         "amount": 10,
-        "price": 500
+        "price": 250
       },
       {
         "name": "weapon_pistol_mk2",
@@ -160,47 +160,58 @@
       {
         "name": "weapon_smg",
         "amount": 10,
-        "price": 500
+        "price": 800
       },
       {
         "name": "weapon_specialcarbine",
         "amount": 10,
-        "price": 500
+        "price": 1500
       },
       {
         "name": "weapon_carbinerifle",
         "amount": 10,
-        "price": 500
+        "price": 2000
       }
     ],
-    "prison_shop": [],
+    "prison_shop": [
+      {
+        "name": "water_bottle",
+        "amount": 50,
+        "price": 25
+      },
+      {
+        "name": "sandwich",
+        "amount": 50,
+        "price": 25
+      }
+    ],
     "hospital_shop": [
       {
         "name": "dna_swab",
         "amount": 100,
-        "price": 100
+        "price": 25
       },
       {
         "name": "bandage",
         "amount": 500,
-        "price": 100
+        "price": 15
       }
     ],
     "hunting_shop": [
       {
         "name": "weapon_sniperrifle",
         "amount": 50,
-        "price": 2500
+        "price": 1500
       },
       {
         "name": "hunting_bait",
         "amount": 1000,
-        "price": 100
+        "price": 45
       },
       {
         "name": "sniper_ammo",
         "amount": 100,
-        "price": 200
+        "price": 100
       }
     ]
   },

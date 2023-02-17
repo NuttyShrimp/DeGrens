@@ -2,7 +2,6 @@ import { Config, Events, Notifications, Util, Inventory, Financials } from '@dgx
 import jobManager from 'classes/jobManager';
 import { changeJob } from 'modules/groups/service';
 import { huntingLogger } from './logger.hunting';
-import { group } from 'console';
 
 let huntingConfig: Hunting.Config;
 // plyid to data

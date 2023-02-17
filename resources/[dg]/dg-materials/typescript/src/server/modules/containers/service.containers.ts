@@ -1,4 +1,4 @@
-import { Util, Gangs, Inventory, Police, Notifications } from '@dgx/server';
+import { Util, Gangs, Inventory, Police } from '@dgx/server';
 import { Vector3 } from '@dgx/shared';
 import { getConfig } from 'services/config';
 import { fetchContainerKeyItems, updateContainerKeyItemId } from './helpers.containers';

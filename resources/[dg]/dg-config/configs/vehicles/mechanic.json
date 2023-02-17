@@ -8,11 +8,11 @@
   },
   "reward": {
     "parts": {
-      "suspension": 250,
-      "engine": 250,
-      "transmission": 300,
-      "brakes": 150,
-      "axle": 400
+      "suspension": 20,
+      "engine": 20,
+      "transmission": 25,
+      "brakes": 15,
+      "axle": 30
     },
     "class": {
       "D": 1.0,
