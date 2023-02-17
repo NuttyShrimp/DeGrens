@@ -211,28 +211,50 @@ export const takeBagFromDumpster = (plyId: number, dumpsterLocation: Vec3) => {
     return;
   }
 
+  const locationId: number | undefined = active.locationSequence[0];
+  if (locationId === undefined) return false;
+
   const dumpster = Vector3.create(dumpsterLocation);
-  const targetLocation = sanitationConfig.locations[active.locationSequence[0]];
+  const targetLocation = sanitationConfig.locations[locationId];
 
   // Check if dumpster is not out of range of targetlocation
-  if (dumpster.distance(targetLocation.coords) > targetLocation.range) {
-    return false;
-  }
+  if (dumpster.distance(targetLocation.coords) > targetLocation.range) return false;
 
   // Check if dumpster wasnt already done
-  if (active.dumpstersDone.some(d => dumpster.distance(d) < 0.5)) {
-    return false;
-  }
+  if (active.dumpstersDone.some(d => dumpster.distance(d) < 0.5)) return false;
 
   // Check if all bags have already been taken
-  if (active.dumpstersDone.length === sanitationConfig.locations[active.locationSequence[0]].amount) return false;
+  if (active.dumpstersDone.length === targetLocation.amount) return false;
 
   active.dumpstersDone.push(dumpsterLocation);
+
+  // Check if no bags remaining after tagging dumpster as done
+  let finishedLocation = false;
+  let newLocationId: number | undefined;
+  if (active.dumpstersDone.length === targetLocation.amount) {
+    active.locationSequence.shift();
+    active.dumpstersDone = [];
+    newLocationId = active.locationSequence[0];
+    finishedLocation = true;
+  }
 
   const phoneNotifData = buildPhoneNotificationData(active);
   group.members.forEach(m => {
     if (m.serverId === null) return;
     Phone.updateNotification(m.serverId, 'sanitation_job_tracker', phoneNotifData);
+
+    if (finishedLocation) {
+      if (newLocationId !== undefined) {
+        const location = sanitationConfig.locations[newLocationId];
+        Events.emitNet('jobs:sanitation:setLocation', m.serverId, {
+          id: newLocationId,
+          coords: location.coords,
+          range: location.range,
+        });
+      } else {
+        Events.emitNet('jobs:sanitation:setLocation', m.serverId, null);
+      }
+    }
   });
 
   return true;
@@ -278,33 +300,4 @@ export const putBagInVehicle = (plyId: number) => {
   const cid = Util.getCID(plyId);
   const amountOfPackages = active.bagsPerPlayer.get(cid) ?? 0;
   active.bagsPerPlayer.set(cid, amountOfPackages + 1);
-
-  // Check if no bags remaining
-  let finishedLocation = false;
-  if (
-    active.locationSequence[0] &&
-    active.dumpstersDone.length === sanitationConfig.locations[active.locationSequence[0]].amount
-  ) {
-    active.locationSequence.shift();
-    active.dumpstersDone = [];
-    finishedLocation = true;
-  }
-
-  if (finishedLocation) {
-    const locationId: number | undefined = active.locationSequence[0];
-    group.members.forEach(m => {
-      if (m.serverId === null) return;
-
-      if (locationId !== undefined) {
-        const location = sanitationConfig.locations[locationId];
-        Events.emitNet('jobs:sanitation:setLocation', m.serverId, {
-          id: locationId,
-          coords: location.coords,
-          range: location.range,
-        });
-      } else {
-        Events.emitNet('jobs:sanitation:setLocation', m.serverId, null);
-      }
-    });
-  }
 };
