@@ -19,8 +19,8 @@
   },
   "reasons": [
     {
-      "title": "Scuff",
-      "description": "Een voertuig zit ergens gescuffed",
+      "title": "Wagen Kapot",
+      "description": "Takeldienst nodig",
       "strike": 0,
       "time": 0,
       "price": 0,
@@ -33,6 +33,14 @@
       "time": 24,
       "price": 1000,
       "allowBurger": false
+    },
+    {
+      "title": "Scuff",
+      "description": "Een voertuig zit ergens gescuffed en kan niet meer weg, Doet je voertuig verdwijnen",
+      "strike": 0,
+      "time": 0,
+      "price": 0,
+      "allowBurger": true
     }
   ],
   "strikes": {

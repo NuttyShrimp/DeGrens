@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Blips voor restaurants
 - Notification to indicate rental papers should be used to get keys
 - Admin clear vehicle service optie
+- Non-scuffed inbeslagname optie toegevoegd
 
 
 ### Changed
