@@ -3276,5 +3276,129 @@
         "upnatom"
       ]
     }
+  },
+  {
+    "description": "straightpipers side garage",
+    "locked": true,
+    "distance": 5,
+    "doors": [
+      {
+        "model": "prop_id2_11_gdoorz",
+        "coords": {
+          "x": 1124.91552734375,
+          "y": -784.81689453125,
+          "z": 58.17375183105469
+        }
+      }
+    ],
+    "authorized": {
+      "business": [
+        "straightpipers"
+      ]
+    },
+    "playSound": true
+  },
+  {
+    "description": "straightpipers",
+    "locked": true,
+    "distance": 10,
+    "doors": [
+      {
+        "model": "prop_id2_11_gdoorx",
+        "coords": {
+          "x": 1143.63623046875,
+          "y": -792.3969116210938,
+          "z": 58.16881561279297
+        }
+      }
+    ],
+    "authorized": {
+      "business": [
+        "straightpipers"
+      ]
+    },
+    "playSound": true
+  },
+  {
+    "description": "straightpipers main deur",
+    "locked": true,
+    "distance": 2,
+    "doors": [
+      {
+        "model": "v_ilev_gendoor01",
+        "coords": {
+          "x": 1154.97998046875,
+          "y": -786.0703125,
+          "z": 57.753623962402344
+        }
+      }
+    ],
+    "authorized": {
+      "business": [
+        "straightpipers"
+      ]
+    }
+  },
+  {
+    "description": "straightpipers sidedoor",
+    "locked": true,
+    "distance": 2,
+    "doors": [
+      {
+        "model": "v_ilev_gendoor01",
+        "coords": {
+          "x": 1129.6187744140625,
+          "y": -777.3330078125,
+          "z": 57.753204345703125
+        }
+      }
+    ],
+    "authorized": {
+      "business": [
+        "straightpipers"
+      ]
+    }
+  },
+  {
+    "description": "straightpipers gate",
+    "locked": true,
+    "distance": 10,
+    "doors": [
+      {
+        "model": "hei_prop_station_gate",
+        "coords": {
+          "x": 1124.385009765625,
+          "y": -788.7843627929688,
+          "z": 56.67850875854492
+        }
+      }
+    ],
+    "authorized": {
+      "business": [
+        "straightpipers"
+      ]
+    },
+    "playSound": true
+  },
+  {
+    "description": "straightpipers fence",
+    "locked": true,
+    "distance": 2,
+    "doors": [
+      {
+        "model": "prop_fnclink_03gate5",
+        "coords": {
+          "x": 1161.7061767578125,
+          "y": -776.148193359375,
+          "z": 58.249691009521484
+        }
+      }
+    ],
+    "authorized": {
+      "business": [
+        "straightpipers"
+      ]
+    },
+    "hideInteraction": true
   }
 ]

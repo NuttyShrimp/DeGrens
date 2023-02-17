@@ -1,4 +1,4 @@
-import { BaseEvents, Events, HUD, Util } from '@dgx/client';
+import { BaseEvents, Events, HUD } from '@dgx/client';
 import {
   doSpeedStress,
   doWeaponStress,
