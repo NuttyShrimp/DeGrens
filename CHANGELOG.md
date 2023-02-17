@@ -19,6 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Removed sentry transaction in UI event
 - Ontbrekende items toegevoegd aan politie/ambu safe
+- Tijdelijk drugslabs uitgezet
 
 ### Fixed
 
