@@ -130,9 +130,9 @@ rebase UPD:
     - git config --global user.name "CI"
     - git fetch # Just in case branch is not fetch
     - git switch main
-    - git pull
+    - git pull --rebase
     - git switch UPD
-    - git pull
+    - git pull --rebase
     # Rebase
     - git rebase main UPD
     # Push
