@@ -13,6 +13,6 @@
     "resolveJsonModule": true,
     "esModuleInterop": true
   },
-  "include": ["./**/*", "../shared"],
+  "include": ["./**/*", "../shared", "../../../../../../types"],
   "exclude": ["**/node_modules", "**/__tests__/*"]
 }

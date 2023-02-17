@@ -1316,3 +1316,56 @@ devData.phoneCalls = [
     incoming: true,
   },
 ];
+
+devData.reports = [
+  {
+    id: 1,
+    createdAt: '2022-09-29T12:17:47.197+02:00',
+    updatedAt: '2022-09-29T12:17:47.197+02:00',
+    deletedAt: null,
+    title: 'First cringe RP report',
+    creator: 'NuttyShrimp1',
+    open: true,
+    tags: [{ name: 'bug-report', color: 'red' }],
+    members: [
+      { name: 'NuttyShrimp', steamId: 'steam:110000137164c7d' },
+      { name: 'Jens', steamId: 'steam:11000011bf78d6c' },
+    ],
+    messages: null,
+  },
+  {
+    id: 2,
+    createdAt: '2022-09-29T12:17:47.197+02:00',
+    updatedAt: '2022-09-29T12:17:47.197+02:00',
+    deletedAt: null,
+    title:
+      'Zeer groot probleem wollah ik plaats heel het probleem in de title want ben een grote b-type die niet kan lezen',
+    creator: 'NuttyShrimp1',
+    open: true,
+    tags: [],
+    members: [
+      { name: 'NuttyShrimp', steamId: 'steam:110000137164c7d' },
+      { name: 'Jens', steamId: 'steam:11000011bf78d6c' },
+    ],
+    messages: null,
+  },
+];
+
+devData.reportMessages = [
+  {
+    id: 10,
+    createdAt: '2023-01-13T00:15:30.358+01:00',
+    updatedAt: '2023-01-13T00:15:30.358+01:00',
+    deletedAt: null,
+    message: JSON.parse(
+      '{"content":[{"attrs":{"level":1},"content":[{"marks":[{"type":"bold"}],"text":"COCKa","type":"text"}],"type":"heading"},{"content":[{"text":"This a fat message :)","type":"text"}],"type":"paragraph"}],"type":"doc"}'
+    ),
+    type: 'text',
+    sender: {
+      username: 'NuttyShrimp1',
+      avatarUrl: 'https://cdn.discordapp.com/avatars/214294598766297088/f2b9fae369a33df91702ea5079e3f55d',
+      roles: ['developer'],
+      steamId: 'steam:110000137164c7',
+    },
+  },
+];

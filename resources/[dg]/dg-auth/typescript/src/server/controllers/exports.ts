@@ -1,8 +1,8 @@
 import { generatePanelToken, getSteamIdFromPanelToken, removePanelToken } from 'services/panelTokens';
 import { getPlyServerId } from 'sv_util';
 
-global.exports('generatePanelToken', generatePanelToken);
+asyncExports('generatePanelToken', generatePanelToken);
 global.exports('removePanelToken', removePanelToken);
-global.exports('getSteamIdFromPanelToken', getSteamIdFromPanelToken);
+asyncExports('getSteamIdFromPanelToken', getSteamIdFromPanelToken);
 
-global.exports('getServerIdForSteamId', getPlyServerId);
+asyncExports('getServerIdForSteamId', getPlyServerId);

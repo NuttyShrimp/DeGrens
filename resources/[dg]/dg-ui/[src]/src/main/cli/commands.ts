@@ -488,4 +488,14 @@ export const cmds: {
       data: 'test_notif',
     }),
   },
+  {
+    cmd: 'show reports',
+    app: 'reports',
+    show: true,
+  },
+  {
+    cmd: 'hide reports',
+    app: 'reports',
+    show: false,
+  },
 ];

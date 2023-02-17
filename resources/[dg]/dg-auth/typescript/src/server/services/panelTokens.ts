@@ -1,49 +1,68 @@
-import { Util } from '@dgx/server';
+import { Events, Util } from '@dgx/server';
 import { getPrivateToken } from 'helpers/privateToken';
 import { createSigner, createVerifier } from 'fast-jwt';
+import { mainLogger } from 'sv_logger';
+import { getPlyServerId } from 'sv_util';
 
 const revokedTokens = new Set<string>();
 let signer: any;
 let verifier: any;
+let panelEndpoint: string | null;
+
+export const setPanelEndpoint = (endpoint: string) => {
+  panelEndpoint = endpoint;
+};
 
 export const createPanelJWSHandlers = () => {
   signer = createSigner({
     // Normally on 12 hours needed but is as safety measurement when server skips a restart or so
     expiresIn: 1000 * 60 * 60 * 25,
     key: getPrivateToken(),
-    algorithm: 'HS256',
   });
 
   verifier = createVerifier({
     key: getPrivateToken(),
-    algorithms: ['HS256'],
   });
 };
 
 export const generatePanelToken = async (src: number) => {
-  await Util.awaitCondition(() => !Player(src)?.state?.steamId);
+  await Util.awaitCondition(
+    () => Player(src)?.state?.steamId && Player(src)?.state?.steamId !== null && Player(src)?.state?.steamId !== '',
+    60000
+  );
+  // if (Util.isDevEnv()) return;
   const steamId = Player(src).state.steamId;
-  const token = signer(steamId);
+  const token = signer({ steamId });
   if (revokedTokens.has(token)) {
     revokedTokens.delete(token);
   }
-  return token;
+  mainLogger.debug(`Generated panel token for ${steamId} -> ${token}`);
+  Events.emitNet('auth:panel:init', src, {
+    token,
+    endpoint: panelEndpoint,
+    steamId,
+  });
 };
 
 export const removePanelToken = (token: string) => {
   revokedTokens.add(token);
+  mainLogger.debug(`revoked panel token: ${token}`);
 };
 
 export const getSteamIdFromPanelToken = async (token: string) => {
   try {
     if (revokedTokens.has(token)) {
+      console.log(`${token} is revoken`);
       return null;
     }
-    let steamId = verifier(token);
-    let serverId = await global.exports['dg-auth'].getServerIdForSteamId(steamId);
+    const panelObject = verifier(token);
+    if (!panelObject) return null;
+    const { steamId } = panelObject;
+    let serverId = await getPlyServerId(steamId);
     if (!serverId) return null;
     return steamId;
-  } catch {
+  } catch (e) {
+    console.log(token, e);
     return null;
   }
 };

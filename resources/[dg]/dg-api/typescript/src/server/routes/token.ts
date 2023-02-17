@@ -1,26 +1,5 @@
-import { Admin, Jobs } from '@dgx/server';
 import { registerRoute } from 'sv_routes';
 import { getRoleListForPlayer } from '../helpers/roles';
-
-registerRoute('GET', '/token/:token', async (req, res) => {
-  if (!req.params.token) {
-    return res(400, {
-      valid: false,
-      message: 'No token found to check',
-    });
-  }
-  const cid: string | null = await global.exports['dg-auth'].getSteamIdFromPanelToken(req.params.token);
-
-  if (!cid) {
-    return res(404, {
-      valid: false,
-      message: 'Token did not include a valid SteamId',
-    });
-  }
-  res(200, {
-    valid: true,
-  });
-});
 
 registerRoute('DELETE', '/tokens/:token', (req, res) => {
   if (!req.params.token) {

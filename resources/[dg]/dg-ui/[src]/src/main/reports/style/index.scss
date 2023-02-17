@@ -1,0 +1,122 @@
+@use "src/styles/variables.scss";
+
+.reports {
+  &-container {
+    height: 60vh;
+    width: 40vh;
+    position: absolute;
+    right: 0;
+    top: 0;
+    margin-top: auto;
+    bottom: 0;
+    margin-bottom: auto;
+
+    background-color: variables.$primary_darker_darker;
+    border: .2vh solid variables.$primary_light;
+    border-right: none;
+    border-radius: 1vh 0 0 1vh;
+    overflow: auto;
+
+    display: flex;
+    flex-direction: column;
+
+    &-header {
+      display: flex;
+      justify-content: space-between;
+      background-color: variables.$primary_darker;
+      padding: .5vh .75vh;
+      flex: 0 0 5%;
+    }
+
+    &>div:last-child {
+      flex: 1 1 auto;
+      overflow: scroll;
+    }
+  }
+
+  &-list {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    overflow: scroll;
+
+
+    &-entry {
+      background-color: variables.$primary_darker_darker;
+      border: .3vh solid variables.$primary_darker_normal;
+      margin: .5vh 1vh;
+      padding: .5vh;
+      border-radius: .5vh;
+      cursor: pointer;
+
+      &-info {
+        display: flex;
+        justify-content: space-between;
+        color: variables.$gray_light;
+      }
+    }
+  }
+
+  &-add {
+    &-container {
+      padding-top: 1vh;
+
+      & .ProseMirror {
+        padding: .5vh;
+        height: 30vh;
+        width: 100%;
+      }
+    }
+
+    &-editor {
+      margin-top: .5vh;
+      width: 100%;
+      border: .2vh solid variables.$gray_light;
+      border-radius: .5vh;
+    }
+  }
+
+  &-message {
+    margin: .5vh 1vh;
+    padding: .25vh .5vh;
+    border: .1vh solid variables.$gray_light;
+    border-radius: .3vh;
+
+    &-container {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+
+    &-list {
+      display: flex;
+      flex-direction: column-reverse;
+      overflow: scroll;
+      flex: 1;
+    }
+
+    &-sender {
+      color: variables.$gray_light;
+      font-size: .8rem;
+      line-height: .8
+    }
+
+    &-editor {
+      flex: 0 0 11%;
+      display: flex;
+      flex-direction: row;
+      padding: .5vh 1vh;
+
+      &>div:first-child {
+        flex: 1 0 auto;
+
+        &>.ProseMirror {
+          max-height: 5vh;
+          overflow: scroll;
+        }
+      }
+    }
+  }
+
+
+}

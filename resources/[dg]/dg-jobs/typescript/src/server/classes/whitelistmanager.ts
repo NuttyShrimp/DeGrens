@@ -1,6 +1,6 @@
 import { SQL, Config, Notifications, Events, Util, UI } from '@dgx/server';
 import { DGXEvent, EventListener, RPCEvent, RPCRegister, Event } from '@dgx/server/decorators';
-import { Export, ExportRegister } from '@dgx/shared/decorators';
+import { AsyncExport, Export, ExportRegister } from '@dgx/shared/decorators';
 import { mainLogger } from 'sv_logger';
 import winston from 'winston';
 import signedInManager from './signedinmanager';
@@ -444,6 +444,12 @@ class WhitelistManager extends Util.Singleton<WhitelistManager>() {
     const cid = Util.getCID(plyId);
     if (!cid) return false;
     return !!this.getPlayerInfoForJob(cid, job);
+  };
+
+  @AsyncExport('isSteamIdWhitelisted')
+  private _isSteamIdWhitelisted = async (steamId: string, job: string) => {
+    const cids = await DGCore.Functions.GetCidsForSteamId(steamId);
+    return cids.some(cid => !!this.getPlayerInfoForJob(cid, job));
   };
 
   @Export('getCurrentGrade')

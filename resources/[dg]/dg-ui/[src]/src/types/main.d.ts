@@ -98,4 +98,5 @@ declare interface RootState {
   policeradar: null;
   badge: Badge.State;
   idlist: IdList.State;
+  reports: Reports.State;
 }

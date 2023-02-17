@@ -1,5 +1,5 @@
 import { SQL } from '@dgx/server';
-import { getRolesForPlayer } from 'helpers/roles';
+import { getRoleListForPlayer, getRolesForPlayer } from 'helpers/roles';
 import { registerRoute } from 'sv_routes';
 
 registerRoute('GET', '/info', (req, res) => {
@@ -97,4 +97,14 @@ registerRoute('GET', '/info/serverId/:id', async (req, res) => {
       message: `Failed to retrieve steamId for ${serverId}`,
     });
   }
+});
+
+registerRoute('GET', '/info/player/roles/:steamId', async (req, res) => {
+  const steamId = String(req.params.steamId);
+  if (!steamId || !steamId.startsWith('steam:')) {
+    res(200, []);
+    return;
+  }
+  const roles = await getRoleListForPlayer(steamId);
+  res(200, roles);
 });
