@@ -51,7 +51,7 @@ export const createEntity = (ped: number, name: string, offset: Vec3) => {
     2,
     true
   );
-  SetEntityCompletelyDisableCollision(entity, true, false);
+  SetEntityCompletelyDisableCollision(entity, false, true);
 
   return entity;
 };

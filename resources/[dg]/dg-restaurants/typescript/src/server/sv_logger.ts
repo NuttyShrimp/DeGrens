@@ -3,7 +3,7 @@ import winstonSentry from 'winston-sentry-log';
 import * as Sentry from '@sentry/node';
 import packageInfo from './../../package.json';
 import { RewriteFrames } from '@sentry/integrations';
-import { Util } from '@dgx/server';
+import { Config, Util } from '@dgx/server';
 
 // Needed to manually apply a color to componenent property of log
 const manualColorize = (strToColor: string): string => `[\x1b[35m${strToColor}\x1b[0m]`;
@@ -27,7 +27,7 @@ Sentry.init({
 });
 
 export const mainLogger = winston.createLogger({
-  level: 'silly', // Config.getConfigValue('main.loglevel'),
+  level: Config.getConfigValue('main.loglevel'),
   transports: [
     new winston.transports.Console({
       format: winston.format.combine(

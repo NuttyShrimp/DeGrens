@@ -1,4 +1,4 @@
-import { Events, Notifications, Peek, PolyTarget, PolyZone } from '@dgx/client';
+import { BlipManager, Events, Notifications, Peek, PolyTarget, PolyZone } from '@dgx/client';
 import { doCooking } from './actions';
 
 // This servicefile handles the general locations of restaurants.
@@ -57,6 +57,14 @@ export const loadRestaurants = (config: Restaurants.Config['restaurants']) => {
       data: {
         id,
       },
+    });
+    BlipManager.addBlip({
+      id,
+      category: 'restaurants',
+      text: restaurant.label,
+      scale: 0.9,
+      sprite: 409,
+      coords: restaurant.managementZone.center,
     });
   }
 };
