@@ -95,8 +95,8 @@ interface ServerFunctions {
   GetOfflinePlayerByPhone(phoneNumber: number): Promise<Pick<Player, 'PlayerData'>>;
 
   /**
-    * Fetch all the citizenid's tied to this steamId
-    */
+   * Fetch all the citizenid's tied to this steamId
+   */
   GetCidsForSteamId(steamId: string): number[];
 
   /**

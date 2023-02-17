@@ -308,6 +308,8 @@ function DrawText3Ds(x, y, z, text)
 end
 
 Citizen.CreateThread(function()
+  isLoggedIn = LocalPlayer.state.isLoggedIn
+
     for k, v in pairs (Config.Stores) do
         if Config.Stores[k].shopType == "clothing" then
             local clothingShop = AddBlipForCoord(Config.Stores[k].coords)
@@ -414,9 +416,9 @@ Citizen.CreateThread(function()
                         DrawMarker(2, Config.ClothingRooms[k].coords, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.4, 0.4, 0.2, 255, 255, 255, 255, 0, 0, 0, 1, 0, 0, 0)
                         if dist < 2 then
                             if plyJob == nil then
-                                plyJob = DGX.RPC.execute('jobs:server:getCurrentJob')
+                                plyJob = DGX.Jobs.getCurrentJob().name
                             end
-                            if plyJob == Config.ClothingRooms[k].requiredJob then
+                            if plyJob and plyJob == Config.ClothingRooms[k].requiredJob then
                                 DrawText3Ds(Config.ClothingRooms[k].coords.x, Config.ClothingRooms[k].coords.y, Config.ClothingRooms[k].coords.z + 0.3, '~g~E~w~ - View Clothing')
                                 if IsControlJustPressed(0, 38) then -- E
                                     customCamLocation = Config.ClothingRooms[k].cameraLocation
@@ -424,29 +426,11 @@ Citizen.CreateThread(function()
                                     if DGCore.Functions.GetPlayerData().charinfo.gender == 1 then gender = "female" end
                                     DGCore.Functions.TriggerCallback('qb-clothing:server:getOutfits', function(result)
                                         openMenu({
-                                            {menu = "roomOutfits", label = "Presets", selected = true, outfits = Config.Outfits[plyJob][gender]},
                                             {menu = "myOutfits", label = "My Outfits", selected = false, outfits = result},
                                             {menu = "character", label = "Clothing", selected = false},
                                             {menu = "accessoires", label = "Accessories", selected = false}
                                         })
                                     end)
-                                end
-                            else
-                                if PlayerData.gang.name == Config.ClothingRooms[k].requiredJob then
-                                    DrawText3Ds(Config.ClothingRooms[k].coords.x, Config.ClothingRooms[k].coords.y, Config.ClothingRooms[k].coords.z + 0.3, '~g~E~w~ - View Clothing')
-                                    if IsControlJustPressed(0, 38) then -- E
-                                        customCamLocation = Config.ClothingRooms[k].cameraLocation
-                                        gender = "male"
-                                        if DGCore.Functions.GetPlayerData().charinfo.gender == 1 then gender = "female" end
-                                        DGCore.Functions.TriggerCallback('qb-clothing:server:getOutfits', function(result)
-                                            openMenu({
-                                                {menu = "roomOutfits", label = "Presets", selected = true, outfits = Config.Outfits[PlayerData.gang.name][gender]},
-                                                {menu = "myOutfits", label = "My Outfits", selected = false, outfits = result},
-                                                {menu = "character", label = "Clothing", selected = false},
-                                                {menu = "accessoires", label = "Accessories", selected = false}
-                                            })
-                                        end)
-                                    end
                                 end
                             end
                         end

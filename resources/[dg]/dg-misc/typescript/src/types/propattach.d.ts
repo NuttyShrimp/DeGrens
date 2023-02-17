@@ -6,9 +6,12 @@ declare namespace PropAttach {
     rotation: Vec3;
   };
 
-  type ActiveProp = {
-    netId: number | null;
+  type Prop = {
     name: string;
     offset: Vec3;
+  };
+
+  type ActiveProp = Prop & {
+    entity: number;
   };
 }

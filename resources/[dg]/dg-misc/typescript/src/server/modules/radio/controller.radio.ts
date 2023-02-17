@@ -44,7 +44,7 @@ Inventory.registerUseable(['radio', 'pd_radio'], async (src: number, state: Inve
 
 Inventory.onInventoryUpdate(
   'player',
-  async (id, _) => {
+  async id => {
     if (!id) return;
     const plyId = DGCore.Functions.getPlyIdForCid(Number(id));
     if (!plyId) return;

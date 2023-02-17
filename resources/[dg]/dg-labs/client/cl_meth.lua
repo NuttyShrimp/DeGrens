@@ -103,7 +103,7 @@ exports("startMeth", function()
                 exports['dg-ui']:addNotification("Aanzetten mislukt...", "error")
             end
         end, config.meth.hack.size, config.meth.hack.time)
-        DGX.Events.emitNet('hud:server:GainStress', math.random(5, 15)/10)
+        DGX.Events.emitNet('hud:server:changeStress', math.random(5, 15)/10)
     end, function() -- Cancel
         StopAnimTask(PlayerPedId(), "anim@heists@prison_heiststation@cop_reactions", "cop_b_idle", 1.0)
         exports['dg-ui']:addNotification("Geannuleerd..", "error")
@@ -143,7 +143,7 @@ exports("setMethSettings", function(settingsId)
         local settings = DGCore.Functions.TriggerCallback("dg-labs:server:meth:GetSettings", currentLabId, settingsId)
         openApplication("sliders", settings)
 
-        DGX.Events.emitNet('hud:server:GainStress', math.random(1, 5)/10)
+        DGX.Events.emitNet('hud:server:changeStress', math.random(1, 5)/10)
     end, function()
         StopAnimTask(PlayerPedId(), "anim@amb@business@meth@meth_monitoring_cooking@monitoring@", "button_press_monitor", 1.0)
         exports['dg-ui']:addNotification("Geannuleerd..", "error")
@@ -214,7 +214,7 @@ exports("increaseMethStatus", function(statusId)
             }, {}, {}, function() -- Done
                 StopAnimTask(PlayerPedId(), "timetable@gardener@filling_can", "gar_ig_5_filling_can", 1.0)
                 TriggerServerEvent("dg-labs:server:meth:IncreaseStatus", currentLabId, statusId)
-                DGX.Events.emitNet('hud:server:GainStress', math.random(1, 5)/10)
+                DGX.Events.emitNet('hud:server:changeStress', math.random(1, 5)/10)
             end, function() -- Cancel
                 StopAnimTask(PlayerPedId(), "timetable@gardener@filling_can", "gar_ig_5_filling_can", 1.0)
                 exports['dg-ui']:addNotification("Geannuleerd..", "error")
@@ -241,7 +241,7 @@ exports("collectMeth", function()
     }, {}, {}, function() -- Done
         StopAnimTask(PlayerPedId(), "creatures@rottweiler@tricks@", "petting_franklin", 1.0)
         TriggerServerEvent("dg-labs:server:meth:Collect", currentLabId)
-        DGX.Events.emitNet('hud:server:GainStress', math.random(1, 3))
+        DGX.Events.emitNet('hud:server:changeStress', math.random(1, 3))
     end, function() -- Cancel
         StopAnimTask(PlayerPedId(), "creatures@rottweiler@tricks@", "petting_franklin", 1.0)
         exports['dg-ui']:addNotification("Geannuleerd...", "error")

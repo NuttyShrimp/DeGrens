@@ -1,10 +1,11 @@
-import { Events, Inventory, Jobs, Notifications, Peek, Taskbar, Util } from '@dgx/client';
+import { BlipManager, Events, Inventory, Jobs, Notifications, Peek, Taskbar, Util } from '@dgx/client';
 import { buildLabPeekZone } from 'modules/evidence/service.evidence';
 import { loadPrisonConfig } from 'modules/prison/service.prison';
 import { buildSpeedZones } from 'modules/speedzones/service.speedzones';
 import { loadLockers } from 'services/lockers';
 import { setRequirements } from 'services/requirements';
 import { buildSafeZones } from 'services/safe';
+import { isPoliceVehicle, setPoliceVehicles } from 'services/vehicles';
 
 Events.onNet('police:client:init', (config: Police.Config) => {
   buildSpeedZones(config.speedzones);
@@ -13,6 +14,28 @@ Events.onNet('police:client:init', (config: Police.Config) => {
   buildSafeZones(config.config.safes);
   loadPrisonConfig(config.prison);
   setRequirements(config.requirements);
+  setPoliceVehicles(config.vehicles);
+
+  BlipManager.addBlip({
+    id: 'police-mrpd',
+    category: 'police',
+    coords: { x: 441.2155, y: -982.0308, z: 30.6896 },
+    text: 'MRPD',
+    sprite: 60,
+    color: 0,
+    scale: 0.8,
+    isShortRange: true,
+  });
+  BlipManager.addBlip({
+    id: 'police-prison',
+    category: 'police',
+    coords: { x: 1840.5927, y: 2585.1631, z: 46.007 },
+    text: 'Bolingbroke',
+    sprite: 58,
+    color: 0,
+    scale: 0.7,
+    isShortRange: true,
+  });
 });
 
 Peek.addGlobalEntry('vehicle', {
@@ -60,7 +83,7 @@ on('police:carStorage', async () => {
   const vin = Entity(veh).state.vin;
   if (!vin) return;
 
-  // TODO: Check if police vehicle
+  if (!isPoliceVehicle(veh)) return;
 
   const [canceled] = await Taskbar.create('treasure-chest', 'Openen', 5000, {
     canCancel: true,
@@ -78,4 +101,9 @@ on('police:carStorage', async () => {
 
   const stashId = `police_vehicle_${vin}`;
   Inventory.openStash(stashId, 8);
+});
+
+on('onResourceStop', (resourceName: string) => {
+  if (GetCurrentResourceName() !== resourceName) return;
+  BlipManager.removeCategory('police');
 });

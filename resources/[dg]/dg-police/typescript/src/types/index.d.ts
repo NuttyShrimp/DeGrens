@@ -12,6 +12,7 @@ declare namespace Police {
     };
     prison: Prison.Config;
     requirements: Record<string, Requirement>;
+    vehicles: string[];
   };
 
   namespace Trackers {

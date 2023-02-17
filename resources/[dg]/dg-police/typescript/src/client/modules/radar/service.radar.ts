@@ -1,5 +1,6 @@
 import { Util, UI, Notifications, RPC, Sounds } from '@dgx/client';
 import { Vector3 } from '@dgx/shared';
+import { isPoliceVehicle } from 'services/vehicles';
 
 let radarActive = false;
 let radarThread: NodeJS.Timer | null = null;
@@ -43,11 +44,6 @@ export const setRadarActive = (active: boolean) => {
     clearRadarThread();
     radarActive = false;
   }
-};
-
-// TODO: Check if in police vehicle
-export const isPoliceVehicle = (vehicle: number) => {
-  return true;
 };
 
 const clearRadarThread = () => {

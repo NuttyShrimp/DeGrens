@@ -74,3 +74,5 @@ export const stopCarryDuo = (plyId: number) => {
     break;
   }
 };
+
+global.exports('getPlayerBeingCarried', getPlayerBeingCarried);

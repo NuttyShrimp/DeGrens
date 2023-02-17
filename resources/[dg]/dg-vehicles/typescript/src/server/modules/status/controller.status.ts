@@ -1,7 +1,5 @@
-import { Auth, Events, Inventory, RPC } from '@dgx/server';
-
+import { Auth, Events, Inventory, Notifications, RPC, Config } from '@dgx/server';
 import { getConfigByEntity } from '../info/service.info';
-
 import { getConfig, loadConfig } from './services/config';
 import { getServiceStatus, seedServiceStatuses, updateServiceStatus } from './services/store';
 import { generateServiceStatus, useRepairPart } from './service.status';
@@ -63,4 +61,26 @@ global.exports('popTyre', async (vehicle: number) => {
     }
   }
   setNativeStatus(vehicle, { wheels: wheelStatus });
+});
+
+Inventory.registerUseable('repair_kit', (plyId, itemState) => {
+  if (GetVehiclePedIsIn(GetPlayerPed(String(plyId)), false)) return;
+  Events.emitNet('vehicles:status:useRepairKit', plyId, itemState.id);
+});
+
+Events.onNet('vehicles:status:finishRepairKit', async (plyId, itemId: string, netId: number, oldHealth: number) => {
+  const vehicle = NetworkGetEntityFromNetworkId(netId);
+  if (!vehicle || !DoesEntityExist(vehicle)) return;
+
+  const removed = await Inventory.removeItemByIdFromPlayer(plyId, itemId);
+  if (!removed) {
+    Notifications.add(plyId, 'Je hebt geen repairkit', 'error');
+    return;
+  }
+
+  const increase = Config.getConfigValue<number>('vehicles.config.repairKitAmount');
+  if (!increase) return;
+  setNativeStatus(vehicle, {
+    engine: oldHealth + increase,
+  });
 });

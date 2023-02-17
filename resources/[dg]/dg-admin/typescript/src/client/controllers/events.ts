@@ -2,7 +2,7 @@ import { Events, HUD, Keys, RPC } from '@dgx/client';
 
 import { assignBind, getAllBinds } from '../helpers/binds';
 import { isDevModeEnabled, setDevModeEnabled } from '../helpers/devmode';
-import { isNoclipEnabled, printDebugInfo, toggleNoclip } from '../service/noclip';
+import { printDebugInfo, toggleNoclip } from '../service/noclip';
 
 setImmediate(() => {
   Events.emitNet('admin:bind:check');
@@ -11,9 +11,7 @@ setImmediate(() => {
 
 on('onResourceStop', (resourceName: string) => {
   if (GetCurrentResourceName() !== resourceName) return;
-  if (isNoclipEnabled()) {
-    toggleNoclip();
-  }
+  toggleNoclip(false);
   HUD.removeEntry('dev-mode');
 });
 
@@ -34,8 +32,8 @@ Events.onNet('admin:bind:check:response', (binds: Record<Binds.bindNames, string
   }
 });
 
-Events.onNet('admin:noclip:toggle', () => {
-  toggleNoclip();
+Events.onNet('admin:noclip:toggle', (toggle: boolean) => {
+  toggleNoclip(toggle);
 });
 
 Events.onNet('admin:penalty:openModel', (target: string) => {

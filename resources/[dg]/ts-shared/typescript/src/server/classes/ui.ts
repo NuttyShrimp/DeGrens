@@ -1,4 +1,4 @@
-import { Events, RPC, Util } from './index';
+import { Events, Util } from './index';
 
 class UI {
   private readonly inputResolveFunctions: Map<string, (result: UI.Input.Result<Record<string, string>>) => void>;

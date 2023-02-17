@@ -1,6 +1,6 @@
 import { RPC } from './index';
 import { Util as UtilShared } from '../../shared/classes/util';
-import { MOVEMENT_CLIPSET_ENUM } from '../constants';
+import { MATERIAL_HASH_ENUM, MOVEMENT_CLIPSET_ENUM } from '../constants';
 
 class Util extends UtilShared {
   private prodEnv!: boolean;
@@ -27,6 +27,11 @@ class Util extends UtilShared {
   getEntityRotation(entity: number) {
     const entityRotation = GetEntityRotation(entity, 0);
     return this.ArrayToVector3(entityRotation);
+  }
+
+  getEntityVelocity(entity: number) {
+    const entityVelocity = GetEntityVelocity(entity);
+    return this.ArrayToVector3(entityVelocity);
   }
 
   getBoneDistance(entity: number, boneId: string | number) {
@@ -79,11 +84,10 @@ class Util extends UtilShared {
   /**
    * Spawns ped that will attack all players
    */
-  spawnAggressivePed = async (model: string, position: Vec3, heading: number) => {
+  spawnAggressivePed = async (model: string, position: Vec4) => {
     const pedModel = GetHashKey(model);
-    await this.loadModel(pedModel);
-    const ped = CreatePed(4, pedModel, position.x, position.y, position.z, heading, true, true);
-    await this.awaitEntityExistence(ped);
+    const { entity: ped } = await this.createPedOnServer(model, position);
+    if (!ped) return;
     SetPedRelationshipGroupHash(ped, GetHashKey('ATTACK_ALL_PLAYERS'));
     SetPedDropsWeaponsWhenDead(ped, false);
     StopPedWeaponFiringWhenDropped(ped);
@@ -176,19 +180,27 @@ class Util extends UtilShared {
     return this.getPlyCoords().distance(coords);
   };
 
-  /**
-   * Create an object on server
-   * @param routingBucket Defaults to routingbucket player is currently in
-   * @returns NetworkID or 0 if creating failed
-   */
-  createObjectOnServer = async (model: string, coords: Vec3, routingBucket?: number): Promise<number> => {
-    await this.loadModel(GetHashKey(model));
-    const netId = await RPC.execute<number>('dgx:createObject', model, coords, routingBucket);
-    if (!netId) return 0;
+  private createEntityOnServer = async (
+    entityType: 'object' | 'ped',
+    model: string | number,
+    coords: Vec3 | Vec4,
+    routingBucket?: number
+  ): Promise<{ netId: number | null; entity: number | null }> => {
+    const netId = await RPC.execute<number>('dgx:createEntity', entityType, model, coords, routingBucket);
+    if (!netId) return { netId: null, entity: null };
     const exists = await this.awaitEntityExistence(netId, true);
-    if (!exists) return 0;
-    await this.requestEntityControl(NetworkGetEntityFromNetworkId(netId));
-    return netId;
+    if (!exists) return { netId: null, entity: null };
+    const entity = NetworkGetEntityFromNetworkId(netId);
+    await this.requestEntityControl(entity);
+    return { netId, entity };
+  };
+
+  createObjectOnServer = (model: string | number, coords: Vec3, routingBucket?: number) => {
+    return this.createEntityOnServer('object', model, coords, routingBucket);
+  };
+
+  createPedOnServer = async (model: string | number, coords: Vec3 | Vec4, routingBucket?: number) => {
+    return this.createEntityOnServer('ped', model, coords, routingBucket);
   };
 
   getClosestNpcInRange = (range: number, pedsToIgnore: number[] = []): number | undefined => {
@@ -236,6 +248,7 @@ class Util extends UtilShared {
     return {
       vehicle,
       seat,
+      class: GetVehicleClass(vehicle),
     };
   };
 
@@ -243,6 +256,10 @@ class Util extends UtilShared {
     //@ts-ignore
     const clipsetHash = GetPedMovementClipset(ped);
     return MOVEMENT_CLIPSET_ENUM[clipsetHash];
+  };
+
+  setWalkstyle = (walkstyle: string, save = true) => {
+    global.exports['dg-misc'].setWalkstyle(walkstyle, save);
   };
 
   /**
@@ -286,9 +303,13 @@ class Util extends UtilShared {
   };
 
   public getHeadingToFaceEntity = (entity: number) => {
-    const pedCoords = this.getPlyCoords();
     const entityCoords = this.getEntityCoords(entity);
-    const vector = { x: pedCoords.x - entityCoords.x, y: pedCoords.y - entityCoords.y };
+    return this.getHeadingToFaceCoords(entityCoords);
+  };
+
+  public getHeadingToFaceCoords = (coords: Vec3) => {
+    const pedCoords = this.getPlyCoords();
+    const vector = { x: pedCoords.x - coords.x, y: pedCoords.y - coords.y };
     let heading = Math.atan(vector.y / vector.x);
     heading = (heading * 180) / Math.PI;
     heading = heading + 90;
@@ -313,6 +334,59 @@ class Util extends UtilShared {
   public onPreferenceChange = (handler: (preferences: Record<string, any>) => void) => {
     on('dg-misc:configChanged', handler);
   };
+
+  public getGroundMaterial = (coords?: Vec3, ignoreEntity?: number) => {
+    if (!coords) {
+      coords = this.getPlyCoords();
+    }
+    if (!ignoreEntity) {
+      ignoreEntity = PlayerPedId();
+    }
+
+    const handle = StartShapeTestCapsule(
+      coords.x,
+      coords.y,
+      coords.z + 4,
+      coords.x,
+      coords.y,
+      coords.z - 2,
+      0.5,
+      1,
+      ignoreEntity,
+      7
+    );
+    const materialHash = GetShapeTestResultIncludingMaterial(handle)[4] >>> 0; // fourth is material
+    return MATERIAL_HASH_ENUM[materialHash];
+  };
+
+  public awaitEntityExistence = (entity: number, isNetId = false): Promise<boolean> => {
+    return new Promise<boolean>(resolve => {
+      let attempts = 0;
+      const interval = setInterval(() => {
+        attempts++;
+
+        // entity is netid here
+        if (isNetId) {
+          if (!NetworkDoesNetworkIdExist(entity)) return;
+          if (!NetworkDoesEntityExistWithNetworkId(entity)) return;
+        }
+
+        const ent = isNetId ? NetworkGetEntityFromNetworkId(entity) : entity;
+        if (attempts > 50) {
+          clearInterval(interval);
+          resolve(false);
+        }
+        if (DoesEntityExist(ent)) {
+          clearInterval(interval);
+          resolve(true);
+        }
+      }, 100);
+    });
+  };
+
+  public average = (arr: number[]) => {
+    return arr.reduce((a, b) => a + b, 0) / arr.length;
+  };
 }
 
 export class Interiors {
@@ -333,7 +407,7 @@ export class Interiors {
 }
 
 export class PropAttach {
-  public add = (objName: string, offset?: Vec3): Promise<number | undefined> => {
+  public add = (objName: string, offset?: Vec3): number => {
     return global.exports['dg-misc'].addProp(objName, offset);
   };
 
@@ -341,7 +415,7 @@ export class PropAttach {
     global.exports['dg-misc'].removeProp(objId);
   };
 
-  public move = (objId: number, offset?: Vec3) => {
+  public move = (objId: number, offset: Vec3) => {
     global.exports['dg-misc'].moveProp(objId, offset);
   };
 
@@ -369,10 +443,46 @@ export class Animations {
   }
 }
 
+class StaticObjects {
+  private objectsToRemove: Set<string>;
+
+  constructor() {
+    this.objectsToRemove = new Set();
+    on('onResourceStop', (res: string) => {
+      if (res !== GetCurrentResourceName()) return;
+      global.exports['dg-misc'].removeStaticObject([...this.objectsToRemove]);
+    });
+  }
+
+  public add = async (objectData: StaticObjects.CreateData | StaticObjects.CreateData[]): Promise<string[]> => {
+    const ids: string[] = await global.exports['dg-misc'].addStaticObject(objectData);
+
+    ids.forEach(id => {
+      this.objectsToRemove.add(id);
+    });
+    return ids;
+  };
+
+  public remove = (objId: string | string[]) => {
+    if (Array.isArray(objId)) {
+      objId.forEach(id => this.objectsToRemove.delete(id));
+    } else {
+      this.objectsToRemove.delete(objId);
+    }
+
+    global.exports['dg-misc'].removeStaticObject(objId);
+  };
+
+  public getEntityForObjectId = (objId: string): number | undefined => {
+    return global.exports['dg-misc'].getEntityForObjectId(objId);
+  };
+}
+
 export default {
   Util: new Util(),
   Interiors: new Interiors(),
   PropAttach: new PropAttach(),
   Particle: new Particle(),
   Animations: new Animations(),
+  StaticObjects: new StaticObjects(),
 };

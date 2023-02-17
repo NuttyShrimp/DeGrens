@@ -21,6 +21,7 @@ end
 exports('stopSound', stopSound)
 
 DGX.Events.onNet('nutty-sounds:playSoundOnEntity', function(id, name, bank, netId)
+  if not NetworkDoesEntityExistWithNetworkId(netId) then return end
   local entity = NetworkGetEntityFromNetworkId(netId)
   if not DoesEntityExist(entity) then return end
 

@@ -1,4 +1,4 @@
-import { Events, Jobs, PolyZone, Util } from '@dgx/client';
+import { Events, Jobs, PolyZone } from '@dgx/client';
 import { EXCLUDED_JOBS } from './constants.speedzones';
 
 export const buildSpeedZones = (zones: Police.Speedzones.Config) => {
@@ -19,5 +19,5 @@ export const enteredSpeedZone = () => {
   const speedOverLimit = Math.min(Math.round(GetEntitySpeed(PlayerPedId()) * 3.6), 300) - 100; // limit to 300kph than subtract minimum of 100kph
   if (speedOverLimit <= 0) return;
   const increase = 10 + 10 * (speedOverLimit / 200); // Limit is 0 - 200 so get percentage
-  Events.emitNet('hud:server:GainStress', increase);
+  Events.emitNet('hud:server:changeStress', increase);
 };

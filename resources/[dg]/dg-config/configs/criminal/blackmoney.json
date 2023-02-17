@@ -1,6 +1,10 @@
 {
   "items": {
-    "money_roll": { "value": 75 },
-    "marked_bills": { "value": 325 }
+    "money_roll": {
+      "value": 25
+    },
+    "marked_bills": {
+      "value": 200
+    }
   }
 }

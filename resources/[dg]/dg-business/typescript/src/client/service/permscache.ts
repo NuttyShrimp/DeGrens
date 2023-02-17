@@ -31,11 +31,3 @@ global.exports('isEmployee', (business: string, permissions?: string[]) => {
   const plyPermissions = plyBusinesses.get(business)!;
   return permissions.some(p => plyPermissions.has(p));
 });
-
-RegisterCommand(
-  'business:showCache',
-  () => {
-    console.log(plyBusinesses);
-  },
-  false
-);

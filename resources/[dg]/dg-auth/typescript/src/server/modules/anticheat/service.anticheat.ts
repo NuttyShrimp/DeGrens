@@ -155,7 +155,7 @@ export const checkAllowedModules = (src: number, allowedMods: string[]) => {
 };
 
 // region Wrapped Natives
-const toggleAllowedMod = async (src: number, mod: string, isAllowed: boolean) => {
+export const toggleAllowedMod = async (src: number, mod: string, isAllowed: boolean) => {
   if (!allowedAC[src]) {
     allowedAC[src] = [];
   }

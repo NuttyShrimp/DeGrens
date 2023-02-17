@@ -4,3 +4,4 @@ import './scrapyard';
 import './fishing';
 import './sanitation';
 import './postop';
+import './hunting';

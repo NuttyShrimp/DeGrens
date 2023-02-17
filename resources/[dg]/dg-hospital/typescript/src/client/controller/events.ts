@@ -1,4 +1,4 @@
-import { Events, Util } from '@dgx/client';
+import { BlipManager, Events, Util } from '@dgx/client';
 import {
   doNormalRevive,
   checkDeathOnDamage,
@@ -53,6 +53,7 @@ on('onResourceStop', (resourceName: string) => {
   if (GetCurrentResourceName() !== resourceName) return;
   setPlayerState('alive', false);
   removeBleedHudIcon();
+  BlipManager.removeCategory('hospital');
 });
 
 on('entityDamaged', (victim: number, originPed: number, weaponHash: number) => {

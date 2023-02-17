@@ -1,4 +1,5 @@
-import { Events, Peek, PolyZone, RayCast, UI, Util } from '@dgx/client';
+import { Events, Notifications, Peek, PolyZone, RayCast, Taskbar, UI, Util } from '@dgx/client';
+import { isDoingAJob } from 'modules/mechanic/service.mechanic';
 
 Events.on('vehicles:depot:client:openSelectionMenu', () => {
   const { entity: targetVeh } = RayCast.doRaycast();
@@ -50,19 +51,52 @@ UI.RegisterUICallback('vehicles/impound/getVehicle', (data, cb) => {
   });
 });
 
-Peek.addFlagEntry(
-  'isImpoundHandler',
-  {
-    distance: 2,
-    options: [
-      {
-        icon: 'clipboard-list',
-        label: 'Open impound list',
-        action: () => {
-          Events.emitNet('vehicles:impound:server:getList');
-        },
+Peek.addFlagEntry('isImpoundHandler', {
+  distance: 2,
+  options: [
+    {
+      icon: 'clipboard-list',
+      label: 'Open impound list',
+      action: () => {
+        Events.emitNet('vehicles:impound:server:getList');
       },
-    ],
-  },
-  true
-);
+    },
+  ],
+});
+
+Peek.addGlobalEntry('vehicle', {
+  options: [
+    {
+      label: 'Impound',
+      icon: 'garage-car',
+      canInteract: ent =>
+        ent != undefined &&
+        isDoingAJob(ent) &&
+        PolyZone.isPointInside(Util.getEntityCoords(ent), 'vehicles_depot_impound'),
+      action: async (_, ent) => {
+        if (!ent) return;
+        const [cancelled] = await Taskbar.create('garage-car', 'In beslag nemen', 15000, {
+          canCancel: true,
+          cancelOnDeath: true,
+          cancelOnMove: true,
+          disablePeek: true,
+          controlDisables: {
+            combat: true,
+            movement: true,
+          },
+          animation: {
+            animDict: 'missexile3',
+            anim: 'ex03_dingy_search_case_a_michael',
+            flags: 1,
+          },
+        });
+        if (cancelled) {
+          Notifications.add('Geannuleerd');
+          return;
+        }
+        Events.emitNet('vehicles:depot:server:doImpound', NetworkGetNetworkIdFromEntity(ent));
+      },
+    },
+  ],
+  distance: 2,
+});

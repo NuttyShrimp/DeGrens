@@ -1,6 +1,12 @@
 declare namespace Fishing {
   type Config = {
-    vehicle: Record<JobType, Vec4>;
+    vehicle: Record<
+      JobType,
+      {
+        coords: Vec4;
+        size: number;
+      }
+    >;
     spots: Record<JobType, Vec3[]>;
     specialLoot: {
       chance: number;
@@ -15,5 +21,6 @@ declare namespace Fishing {
     location: Vec3;
     jobType: JobType;
     fishPerCid: Map<number, number>;
+    maxFish: number;
   };
 }

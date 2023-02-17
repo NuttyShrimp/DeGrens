@@ -59,7 +59,7 @@ export class PermissionsManager {
   }
 
   public buildPermissions(level: number): IAccountPermission {
-    const permissions = buildPerms(level)
+    const permissions = buildPerms(level);
     this.logger.silly(`buildPermissions | level: ${level} | permissions: ${JSON.stringify(permissions)}`);
     return permissions;
   }

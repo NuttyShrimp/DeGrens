@@ -13,11 +13,11 @@
     "db:reset": "prisma migrate reset"
   },
   "dependencies": {
-    "@prisma/client": "latest",
+    "@prisma/client": "4.10.1",
     "ts-node": "*"
   },
   "devDependencies": {
-    "prisma": "latest"
+    "prisma": "4.10.1"
   },
   "prisma": {
     "seed": "ts-node -P ./tsconfig.json ./seed.ts"

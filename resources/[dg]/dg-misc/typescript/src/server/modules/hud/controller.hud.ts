@@ -1,14 +1,14 @@
-import { Events } from '@dgx/server';
-import { updateStress } from './service.hud';
+import { Events, Util } from '@dgx/server';
+import { changeStress, loadStress } from './service.hud';
 
-Events.onNet('hud:server:GainStress', (src, amount: number) => {
-  updateStress(src, amount);
-});
-
-Events.onNet('hud:server:RelieveStress', (src, amount: number) => {
-  updateStress(src, -amount);
+Events.onNet('hud:server:changeStress', (plyId, amount: number) => {
+  changeStress(plyId, amount);
 });
 
 global.exports('changeStress', (plyId: number, amount: number) => {
-  updateStress(plyId, amount);
+  changeStress(plyId, amount);
+});
+
+Util.onPlayerLoaded(playerData => {
+  loadStress(playerData.source, playerData.metadata?.stress ?? 0);
 });

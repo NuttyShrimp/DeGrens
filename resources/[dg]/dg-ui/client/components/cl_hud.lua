@@ -255,14 +255,6 @@ startValueLoop = function()
         state.voice.active = isTalking
       end
 
-      if vehicleEngineRunning then
-        engineHealth = GetVehicleEngineHealth(car) < 500
-        if engineHealth ~= state.car.indicator.engine then
-          state.car.indicator.engine = engineHealth
-          isCarDirty = true
-        end
-      end
-
       for name, getter in pairs(entryHooks) do
         newVal = getter(cache.ped, cache.id)
         if newVal ~= state.values[name] then
@@ -284,20 +276,30 @@ function startCarLoop()
       data = state.car,
     })
   end
-  if threads.vehicle then
-    return
-  end
+
+  if threads.vehicle then return end
+
   state.car.visible = true
-  state.car.indicator.belt = true
+  state.car.indicator.engine = false
+
   Citizen.CreateThread(function()
     threads.vehicle = true
+
     while vehicleEngineRunning do
       local car = GetVehiclePedIsIn(cache.ped, false)
-      newSpeed = math.ceil(GetEntitySpeed(car) * 3.6)
+
+      local newSpeed = math.ceil(GetEntitySpeed(car) * 3.6)
       if (newSpeed ~= state.car.speed) then
         state.car.speed = newSpeed;
         isCarDirty = true
       end
+
+      local engineUnderThreshold = GetVehicleEngineHealth(car) < 500
+      if engineUnderThreshold ~= state.car.indicator.engine then
+        state.car.indicator.engine = not engineHealth
+        isCarDirty = true
+      end
+
       if (isCarDirty) then
         SendAppEventWESentry('hud', {
           action = 'setCarValues',
@@ -305,11 +307,14 @@ function startCarLoop()
         })
         isCarDirty = false
       end
+
       Wait(50)
     end
+
     threads.vehicle = false
     state.car.visible = false
-    state.car.indicator.belt = true
+    state.car.indicator.engine = false
+
     SendAppEventWESentry('hud', {
       action = 'setCarValues',
       data = state.car,

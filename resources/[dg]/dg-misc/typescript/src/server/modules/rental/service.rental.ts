@@ -140,7 +140,6 @@ export const rentVehicle = async (src: number, model: string, locId: string, pay
     return;
   }
   await Util.Delay(500);
-  console.log(rentVeh, NetworkGetNetworkIdFromEntity(rentVeh));
   const vehVin = Vehicles.getVinForVeh(rentVeh);
   const vehPlate = GetVehicleNumberPlateText(rentVeh);
   Inventory.addItemToPlayer(src, 'rent_papers', 1, {

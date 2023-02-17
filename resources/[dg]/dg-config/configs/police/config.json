@@ -97,8 +97,5 @@
   ],
   "cuffTimeout": 1000,
   "carryTimeout": 2000,
-  "checkableStatuses": [
-    "alcohol",
-    "bruises"
-  ]
+  "checkableStatuses": ["alcohol", "bruises"]
 }

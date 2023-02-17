@@ -5,6 +5,7 @@ import './modules/down';
 import './modules/job';
 import './modules/health';
 import './modules/beds';
+import './services/ang';
 
 setImmediate(() => {
   // Start needs thread only when ply is logged in

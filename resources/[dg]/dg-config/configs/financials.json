@@ -20,9 +20,9 @@
     ]
   },
   "paycheck": {
-    "police": 15,
-    "ambulance": 15,
-    "realestate": 15
+    "police": 7,
+    "ambulance": 7,
+    "realestate": 7
   },
   "cryptoCoins": [
     {

@@ -165,7 +165,7 @@ class DebtManager extends Util.Singleton<DebtManager>() {
         debt.payed = debt.payed + Number(amount.toFixed(2));
         await SQL.query('UPDATE debts SET payed = ? WHERE id = ?', [debt.payed, debt.id]);
         if (!debt.pay_term) {
-          debt.pay_term = getDaysUntilDue(debt.payed)
+          debt.pay_term = getDaysUntilDue(debt.payed);
           await SQL.query('UPDATE debts SET pay_term = ? WHERE id = ?', [debt.pay_term, debt.id]);
         }
         this.replaceDebt(debt);

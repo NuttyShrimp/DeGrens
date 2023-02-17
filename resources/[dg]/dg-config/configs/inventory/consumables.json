@@ -3,7 +3,21 @@
     "normal": [
       {
         "name": "water_bottle",
-        "gain": 20
+        "gain": 10
+      },
+      {
+        "name": "farming_milk",
+        "gain": 5
+      },
+      {
+        "name": "upnatom_milkshake",
+        "gain": 60,
+        "checkQuality": true
+      },
+      {
+        "name": "upnatom_soda",
+        "gain": 65,
+        "checkQuality": true
       }
     ],
     "alcohol": [
@@ -24,7 +38,27 @@
   "food": [
     {
       "name": "sandwich",
-      "gain": 20
+      "gain": 10
+    },
+    {
+      "name": "upnatom_icecream",
+      "gain": 30,
+      "checkQuality": true
+    },
+    {
+      "name": "upnatom_fries",
+      "gain": 50,
+      "checkQuality": true
+    },
+    {
+      "name": "upnatom_burger",
+      "gain": 65,
+      "checkQuality": true
+    },
+    {
+      "name": "upnatom_cheeseburger",
+      "gain": 70,
+      "checkQuality": true
     }
   ],
   "drugs": [

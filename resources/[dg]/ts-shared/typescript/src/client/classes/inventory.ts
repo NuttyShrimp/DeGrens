@@ -32,6 +32,10 @@ class Inventory {
     return !!(await RPC.execute<boolean>('inventory:server:removeItemByNameFromPlayer', name, amount));
   };
 
+  public removeItemById = async (itemId: string): Promise<boolean> => {
+    return !!(await RPC.execute<boolean>('inventory:server:removeItemById', itemId));
+  };
+
   /**
    * Only use to do first check in things like peek, radialmenu where you dont want to call server every time
    * Make sure to use proper server check when doing action

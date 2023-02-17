@@ -1,12 +1,16 @@
 {
-  "harnessUses": 1000,
+  "harnessUses": 100,
   "carwashPrice": 100,
   "waxTime": 7,
   "itemUpgradesZone": {
-    "center": { "x": 1204.0, "y": -3116.9, "z": 5.54 },
+    "center": {
+      "x": 949.1768,
+      "y": -1749.0718,
+      "z": 21.0252
+    },
     "length": 10,
     "width": 10,
-    "heading": 0
+    "heading": 85.6144
   },
   "nos": {
     "refillAmount": 2000,
@@ -29,5 +33,6 @@
         "depletionTick": 3
       }
     ]
-  }
+  },
+  "repairKitAmount": 500
 }

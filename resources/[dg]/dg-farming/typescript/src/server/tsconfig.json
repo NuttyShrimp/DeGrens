@@ -1,0 +1,13 @@
+{
+  "extends": "tsconfig/server.json",
+  "compilerOptions": {
+    "baseUrl": "./"
+  },
+  "include": [
+    "./**/*",
+    "../types",
+    "../../../../ts-shared/typescript/src/shared/types/*.d.ts",
+    "../../../../ts-shared/typescript/src/server/types/*.d.ts"
+  ],
+  "exclude": ["**/node_modules"]
+}

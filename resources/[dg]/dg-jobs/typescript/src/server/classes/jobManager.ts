@@ -1,4 +1,4 @@
-import { Events, Inventory, Util } from '@dgx/server';
+import { Inventory, Util } from '@dgx/server';
 import { Export, ExportRegister, RPCEvent, RPCRegister } from '@dgx/server/decorators';
 import { mainLogger } from 'sv_logger';
 import winston from 'winston';
@@ -8,12 +8,9 @@ import groupManager from '../modules/groups/classes/GroupManager';
 @ExportRegister()
 @RPCRegister()
 class JobManager extends Util.Singleton<JobManager>() {
-  /**
-   * Map of jobs on job name
-   */
-  private jobs: Map<string, Jobs.Job & { name: string; payoutLevel: number }>;
-  private jobsToResource: Map<string, string>;
-  private logger: winston.Logger;
+  private readonly logger: winston.Logger;
+  private readonly jobs: Map<string, Jobs.Job & { name: string; payoutLevel: number }>;
+  private readonly jobsToResource: Map<string, string>;
 
   constructor() {
     super();
@@ -36,6 +33,11 @@ class JobManager extends Util.Singleton<JobManager>() {
   }
 
   private generateJobPayoutLevel() {
+    // Average payout while in dev env
+    if (Util.isDevEnv()) {
+      return 4;
+    }
+
     const amountOfJobsWithMaxPayout = Array.from(this.jobs.values()).reduce(
       (amount, job) => amount + (job.payoutLevel === 6 ? 1 : 0),
       0

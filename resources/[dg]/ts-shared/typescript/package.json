@@ -12,7 +12,7 @@
   },
   "dependencies": {
     "cli-table3": "^0.6.2",
-    "color-name-list": "^9.22.0",
+    "color-name-list": "^10.3.0",
     "core-js": "^3.25.0",
     "nearest-color": "^0.4.4",
     "reflect-metadata": "^0.1.13"
@@ -20,7 +20,7 @@
   "devDependencies": {
     "@types/core-js": "^2.5.5",
     "@types/webpack-env": "^1.16.4",
-    "webpack": "*",
-    "db": "*"
+    "db": "*",
+    "webpack": "*"
   }
 }

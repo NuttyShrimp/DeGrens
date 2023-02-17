@@ -168,7 +168,7 @@ Fines moeten binnen 7 dagen betaald worden, deze waarde is niet aanpasbaar voor 
 
 #### Exports
 - registerPaycheck
-  - source
+  - cid
   - amount
   - job, Kan elke mogelijke string zijn, is enkel voor log purposes
   - comment, optioneel

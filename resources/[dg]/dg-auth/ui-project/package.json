@@ -1,0 +1,16 @@
+{
+  "name": "dg-auth-ui",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "build:dev": "yarn build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "typescript": "*",
+    "vite": "^4.1.0"
+  }
+}

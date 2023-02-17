@@ -40,6 +40,10 @@
     ],
     "showroom": [
       "property_access"
+    ],
+    "restaurant": [
+      "property_access",
+      "stash"
     ]
   }
 }

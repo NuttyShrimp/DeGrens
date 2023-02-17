@@ -1,3 +1,3 @@
-import { createDispatchCall } from "../services/dispatch";
+import { createDispatchCall } from '../services/dispatch';
 
 global.exports('createDispatchCall', createDispatchCall);

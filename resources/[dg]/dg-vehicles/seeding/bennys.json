@@ -36,27 +36,12 @@
       "z": 30.89
     },
     "name": "bennys_old_shop",
-    "length": 6.5,
-    "width": 8,
-    "heading": 315,
+    "length": 12,
+    "width": 14,
+    "heading": 272.24,
     "data": {
       "minZ": 29.89,
       "maxZ": 33.89
-    }
-  },
-  {
-    "vector": {
-      "x": -33.72,
-      "y": -1053.86,
-      "z": 28.4
-    },
-    "name": "bennys_hub_shop",
-    "length": 6.5,
-    "width": 8,
-    "heading": 30,
-    "data": {
-      "minZ": 27.4,
-      "maxZ": 31.4
     }
   },
   {

@@ -4,11 +4,11 @@ export const police: RadialMenu.Entry[] = [
   {
     title: 'Job Allowlist',
     icon: 'users-gear',
-    type: 'client',
-    event: 'jobs:client:openJobAllowlist',
+    type: 'dgxServer',
+    event: 'jobs:whitelist:server:openJobAllowlist',
     shouldClose: true,
     isEnabled: async () => {
-      const hasAccess = await RPC.execute<boolean>('jobs:whitelist:hasWhitelistAccess');
+      const hasAccess = await RPC.execute<boolean>('jobs:server:hasSpeciality', 'HC');
       return hasAccess ?? false;
     },
   },
@@ -69,7 +69,7 @@ export const police: RadialMenu.Entry[] = [
     event: 'police:carStorage',
     shouldClose: true,
     isEnabled: ({ currentVehicle }) => {
-      return !!currentVehicle;
+      return !!currentVehicle && Police.isPoliceVehicle(currentVehicle);
     },
   },
   {
@@ -98,5 +98,12 @@ export const police: RadialMenu.Entry[] = [
     shouldClose: true,
     minimumPlayerDistance: 2,
     isEnabled: ({ currentVehicle }) => !currentVehicle,
+  },
+  {
+    title: 'Open ANG',
+    icon: 'tablet',
+    type: 'client',
+    event: 'police:openAng',
+    shouldClose: true,
   },
 ];

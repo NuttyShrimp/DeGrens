@@ -25,7 +25,7 @@ export const createJWSHandlers = () => {
   });
 
   startSignTimestamp = Date.now();
-}
+};
 
 export const createResourceToken = (src: number, resource: string) => {
   const steamId = getPlySteamId(src);
@@ -34,9 +34,9 @@ export const createResourceToken = (src: number, resource: string) => {
     return;
   }
   if (!isResourceKnown(resource)) {
-    Admin.ACBan(src, "Auth: trying to retrieve event key for unknown resource", {
-      resource
-    })
+    Admin.ACBan(src, 'Auth: trying to retrieve event key for unknown resource', {
+      resource,
+    });
   }
   const data = {
     steamId,
@@ -46,8 +46,8 @@ export const createResourceToken = (src: number, resource: string) => {
   const token = signer(data);
   emitNet('dg-auth:token:set', src, resource, token);
   setTimeout(() => {
-    emit('dg-auth:token:resourceRegistered', src, resource)
-  }, 200)
+    emit('dg-auth:token:resourceRegistered', src, resource);
+  }, 200);
 };
 
 export const validateToken = (src: number, resource: string, token: string) => {
@@ -61,15 +61,17 @@ export const validateToken = (src: number, resource: string, token: string) => {
     if (data.timeStamp < startSignTimestamp) {
       Admin.ACBan(src, 'Unauthorized event triggering (old token)');
       mainLogger.info(
-        `${GetPlayerName(String(src))} tried to use an old token | token.steamId: ${data.steamId
-        } | token.resource: ${data.resource}`
+        `${GetPlayerName(String(src))} tried to use an old token | token.steamId: ${data.steamId} | token.resource: ${
+          data.resource
+        }`
       );
       return false;
     }
     if (!data?.steamId || !data?.resource) {
       Admin.ACBan(src, 'Unauthorized event triggering (invalid session token)');
       mainLogger.info(
-        `${GetPlayerName(String(src))} tried to use a invalid token | token.steamId: ${data.steamId
+        `${GetPlayerName(String(src))} tried to use a invalid token | token.steamId: ${
+          data.steamId
         } | token.resource: ${data.resource}`
       );
       return false;
@@ -84,7 +86,8 @@ export const validateToken = (src: number, resource: string, token: string) => {
     if (data.resource !== resource) {
       Admin.ACBan(src, 'Unauthorized event triggering (mismatching resources)');
       mainLogger.info(
-        `${GetPlayerName(String(src))} tried to use a token with mismatching resources | ${resource} vs ${data.resource
+        `${GetPlayerName(String(src))} tried to use a token with mismatching resources | ${resource} vs ${
+          data.resource
         }`
       );
       return false;

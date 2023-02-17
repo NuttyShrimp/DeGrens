@@ -8,6 +8,11 @@ let keyThread: NodeJS.Timer | null = null;
 export const startKeygame = async (cycles: Minigames.Keygame.Cycle[]) => {
   if (activeId !== null) return;
 
+  if (cycles.length === 0) {
+    console.log('[Keygame] provided cycles array was empty');
+    return false;
+  }
+
   activeId = Util.uuidv4();
   startKeyThread();
   UI.openApplication(

@@ -1,4 +1,4 @@
-import { Events, RPC } from '@dgx/client';
+import { Events } from '@dgx/client';
 
 let nosConfig: {
   refillAmount: number;

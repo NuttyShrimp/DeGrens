@@ -1,13 +1,16 @@
-import { BlipManager, Business, Events, Inventory, Peek, PolyTarget, PolyZone, UI } from '@dgx/client';
+import { BlipManager, Business, Events, Inventory, Notifications, Peek, PolyTarget, PolyZone, UI } from '@dgx/client';
 
 import {
   assignJob,
+  attachHook,
+  canTow,
   clearItemOrder,
   finishOrder,
   getAmountOfItemInStash,
   getCurrentWorkingShop,
   hasVehicleAttached,
   isClockedIn,
+  isInRepairZone,
   openItemOrder,
   openPerfomanceItemOrderInput,
   openRepairItemOrderInput,
@@ -18,6 +21,10 @@ import {
   setTowOffsets,
   takeHook,
 } from './service.mechanic';
+import { isCloseToHood } from '@helpers/vehicle';
+import { getVehicleVinWithoutValidation } from 'modules/identification/service.identification';
+import { hasVehicleKeys } from 'modules/keys/cache.keys';
+import { openServiceStatusOverview } from 'modules/status/service.status';
 
 let modelPeekIds: string[];
 
@@ -223,4 +230,53 @@ PolyZone.onEnter('mechanic-repair', (_, data) => {
 
 PolyZone.onLeave('mechanic-repair', _ => {
   setRepairZone(null);
+});
+
+Peek.addGlobalEntry('vehicle', {
+  options: [
+    {
+      label: 'Open Tunes',
+      icon: 'fas fa-engine',
+      action: (_, entity) => {
+        if (!entity) return;
+        if (!hasVehicleKeys(entity) || !getCurrentWorkingShop()) return;
+        // Validation not required because if it does not have a vin already neither would it have any upgrades
+        const vin = getVehicleVinWithoutValidation(entity);
+        if (!vin) {
+          Notifications.add('Kon tunes niet openen', 'error');
+          return;
+        }
+        Inventory.openTunes(vin);
+      },
+      // TODO: add crim zones someday
+      canInteract: veh => {
+        if (!veh || !NetworkGetEntityIsNetworked(veh)) return false;
+        if (GetVehicleClass(veh) === 18) return false;
+        return isCloseToHood(veh, 2, true) && hasVehicleKeys(veh) && !!getCurrentWorkingShop();
+      },
+    },
+    {
+      label: 'Check Service Status',
+      icon: 'fas fa-wrench',
+      action: (_, entity) => {
+        if (!entity) return;
+        openServiceStatusOverview(entity);
+      },
+      // TODO: add crim zones someday
+      canInteract: ent => {
+        if (!ent || !NetworkGetEntityIsNetworked(ent)) return false;
+        return isInRepairZone() && isCloseToHood(ent, 2, true);
+      },
+    },
+    {
+      label: 'Attach hook',
+      icon: 'truck-tow',
+      canInteract: ent => ent != undefined && canTow(ent),
+      action: (_, ent) => {
+        if (!ent) return;
+        attachHook(ent);
+      },
+    },
+  ],
+  distance: 2,
 });

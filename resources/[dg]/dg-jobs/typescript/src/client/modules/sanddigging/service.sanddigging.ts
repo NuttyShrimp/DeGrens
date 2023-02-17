@@ -1,7 +1,7 @@
-import { Events, Notifications, Peek, PolyTarget, PolyZone, Minigames, Taskbar } from '@dgx/client';
+import { Events, Notifications, PolyTarget, PolyZone, Minigames, Taskbar, Phone, UI, Keys } from '@dgx/client';
 import { Vector4 } from '@dgx/shared';
 
-let sanddiggingLocations: Omit<Sanddigging.Config, 'quarry'> = {
+let sanddiggingLocations: Pick<Sanddigging.Config, 'spots' | 'vehicle'> = {
   spots: [],
   vehicle: Vector4.create(0),
 };
@@ -10,15 +10,13 @@ let assignedSpot: number | null = null;
 let spotBlip = 0;
 
 let assignedVehicle: number | null = null;
-let vehiclePeekId: string[] = [];
+let inAssignedVehicle = false;
 
 let atVehicleReturn = false;
 let returnBlip = 0;
 
 export const loadSanddiggingConfig = (config: Sanddigging.Config) => {
-  const { quarry, ...rest } = config;
-  sanddiggingLocations = rest;
-  PolyZone.addPolyZone('sanddigging_quarry', quarry, { data: {} });
+  sanddiggingLocations = config;
 };
 
 export const setAssignedSpot = (spot: typeof assignedSpot) => {
@@ -33,7 +31,7 @@ export const setAssignedSpot = (spot: typeof assignedSpot) => {
   if (assignedSpot === null) return;
 
   const spotLocation = sanddiggingLocations.spots[assignedSpot];
-  PolyTarget.addCircleZone('sanddigging_spot', spotLocation, 4, { useZ: true, data: {} });
+  PolyTarget.addCircleZone('sanddigging_spot', spotLocation, 5, { useZ: true, data: {}, routingBucket: 0 });
   spotBlip = AddBlipForCoord(spotLocation.x, spotLocation.y, spotLocation.z);
   SetBlipSprite(spotBlip, 85);
   SetBlipColour(spotBlip, 5);
@@ -52,8 +50,6 @@ export const setAssignedVehicle = (veh: typeof assignedVehicle) => {
   assignedVehicle = veh;
 
   if (assignedVehicle === null) {
-    Peek.removeEntityEntry(vehiclePeekId);
-    vehiclePeekId = [];
     if (DoesBlipExist(returnBlip)) {
       RemoveBlip(returnBlip);
     }
@@ -61,21 +57,10 @@ export const setAssignedVehicle = (veh: typeof assignedVehicle) => {
     return;
   }
 
-  vehiclePeekId = Peek.addEntityEntry(assignedVehicle, {
-    options: [
-      {
-        icon: 'fas fa-map',
-        label: 'Bekijk Locatie',
-        action: () => {
-          Events.emitNet('jobs:sanddigging:assignNewSpot');
-        },
-      },
-    ],
-  });
-  Notifications.add(
-    'De locatie staat in het voertuig. Indien je wil stoppen, gelieve het voertuig terug te zetten en je huidige groep te verlaten!',
-    'info',
-    20000
+  Phone.sendMail(
+    'Querry Medewerker',
+    'Jan Zand',
+    'Je kan een nieuwe locatie bekijken via het voertuig. Indien je wil stoppen, gelieve het voertuig terug te zetten waar je het genomen hebt en je huidige groep te verlaten!'
   );
   const { w: vehicleHeading, ...vehiclePosition } = sanddiggingLocations.vehicle;
   PolyZone.addBoxZone('sanddigging_vehicle', vehiclePosition, 10, 10, {
@@ -96,9 +81,20 @@ export const setAssignedVehicle = (veh: typeof assignedVehicle) => {
 };
 
 export const doSpotAction = async () => {
+  const spot = assignedSpot;
+  setAssignedSpot(null);
+
+  // We set assigned spot to null at start of action & restore if its still null when failed action
+  // This is done so if other ply gets new loc during keygame or taskbar, the spot wont be reset at end of action
+  const restoreSpot = () => {
+    if (assignedSpot !== null) return;
+    setAssignedSpot(spot);
+  };
+
   const minigameSucces = await Minigames.keygame(2, 2, 10);
   if (!minigameSucces) {
     Notifications.add('Je bent echt slecht hierin...');
+    restoreSpot();
     return;
   }
 
@@ -119,15 +115,23 @@ export const doSpotAction = async () => {
       flags: 1,
     },
   });
-  if (canceled) return;
+  if (canceled) {
+    restoreSpot();
+    return;
+  }
 
-  Events.emitNet('jobs:sanddigging:receive', assignedSpot);
-  setAssignedSpot(null);
+  Events.emitNet('jobs:sanddigging:receive', spot);
 };
 
 export const isAtVehicleReturn = () => atVehicleReturn;
 export const setAtVehicleReturn = (val: boolean) => {
   atVehicleReturn = val;
+
+  if (atVehicleReturn) {
+    UI.showInteraction(`${Keys.getBindedKey('+GeneralUse')} - Wegzetten`);
+  } else {
+    UI.hideInteraction();
+  }
 };
 
 export const finishJob = () => {
@@ -152,4 +156,25 @@ export const finishJob = () => {
 export const cleanupSanddigging = () => {
   setAssignedSpot(null);
   setAssignedVehicle(null);
+};
+
+export const isEntityAssignedVehicle = (vehicle: number) => {
+  if (assignedVehicle === null) return false;
+  return NetworkGetEntityFromNetworkId(assignedVehicle) === vehicle;
+};
+
+export const setInAssignedVehicle = (val: boolean) => {
+  inAssignedVehicle = val;
+
+  if (inAssignedVehicle) {
+    UI.showInteraction(`${Keys.getBindedKey('+GeneralUse')} - Nieuwe Locatie`);
+  } else {
+    UI.hideInteraction();
+  }
+};
+
+export const checkNewLocation = () => {
+  if (!inAssignedVehicle) return;
+  setInAssignedVehicle(false);
+  Events.emitNet('jobs:sanddigging:assignNewSpot');
 };

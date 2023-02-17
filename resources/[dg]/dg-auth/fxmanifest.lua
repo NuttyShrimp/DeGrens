@@ -9,3 +9,10 @@ server_scripts {
 client_scripts {
   "client/*.js",
 }
+
+files {
+  "ui/index.html",
+  "ui/assets/*.js",
+}
+
+ui_page 'ui/index.html'

@@ -350,7 +350,7 @@ class Events {
     });
   }
 
-  public onNet(evtName: string, handler: DGXEvents.LocalEventHandler) {
+  public onNet(evtName: string, handler: DGXEvents.ServerEventHandler) {
     let netHandlers = this.netEventHandlers.get(evtName);
     if (!netHandlers) {
       netHandlers = [];
@@ -670,6 +670,10 @@ class Auth {
   onAuth(cb: (src: number) => void) {
     this.startHooks.add(cb);
   }
+
+  public toggleAllowedMod = (plyId: number, mod: string, allowed: boolean) => {
+    global.exports['dg-auth'].toggleAllowedMod(plyId, mod, allowed);
+  };
 }
 
 export default {

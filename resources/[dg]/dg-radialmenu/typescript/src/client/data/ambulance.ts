@@ -4,11 +4,11 @@ export const ambulance: RadialMenu.Entry[] = [
   {
     title: 'Job Allowlist',
     icon: 'users-gear',
-    type: 'client',
-    event: 'jobs:client:openJobAllowlist',
+    type: 'dgxServer',
+    event: 'jobs:whitelist:server:openJobAllowlist',
     shouldClose: true,
     isEnabled: async () => {
-      const hasAccess = await RPC.execute<boolean>('jobs:whitelist:hasWhitelistAccess');
+      const hasAccess = await RPC.execute<boolean>('jobs:server:hasSpeciality', 'HC');
       return hasAccess ?? false;
     },
   },
@@ -35,6 +35,13 @@ export const ambulance: RadialMenu.Entry[] = [
     icon: 'light-emergency',
     type: 'client',
     event: 'hospital:assistence',
+    shouldClose: true,
+  },
+  {
+    title: 'Open ANG',
+    icon: 'tablet',
+    type: 'client',
+    event: 'hospital:openAng',
     shouldClose: true,
   },
 ];

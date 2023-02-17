@@ -153,8 +153,8 @@ export class Business {
   }
 
   async updateOwner(targetCID: number) {
-    this.logger.info(`Updated business owner to ${targetCID}`)
-    this.setEmployees(this.employees.map(e => ({...e, isOwner: e.citizenid === targetCID})))
+    this.logger.info(`Updated business owner to ${targetCID}`);
+    this.setEmployees(this.employees.map(e => ({ ...e, isOwner: e.citizenid === targetCID })));
   }
 
   async hire(src: number, targetCID: number, roleName: string) {
@@ -238,6 +238,7 @@ export class Business {
     );
     this.logAction(cid, 'fire', `${await Util.getCharName(targetCID)}(${targetCID}) ontslagen`);
     dispatchBusinessPermissionsToClientCache(targetCID, 'remove', this.info.name);
+    emit('business:playerFired', this.info.id, this.info.name, targetCID);
   }
 
   async changeBankPermission(src: number, targetCID: number, permissions: IFinancials.Permissions) {

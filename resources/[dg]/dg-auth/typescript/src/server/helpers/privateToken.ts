@@ -1,5 +1,5 @@
-import { createJWSHandlers } from "modules/authTokens/service";
-import { createPanelJWSHandlers } from "services/panelTokens";
+import { createJWSHandlers } from 'modules/authTokens/service';
+import { createPanelJWSHandlers } from 'services/panelTokens';
 
 export let PRIVATE_TOKEN = 'bozo-1';
 
@@ -12,4 +12,4 @@ export const setPrivateToken = (token: string) => {
 
 export const getPrivateToken = () => {
   return PRIVATE_TOKEN;
-}
+};

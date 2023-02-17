@@ -2,18 +2,16 @@ declare namespace Sanitation {
   type Config = {
     amountOfLocationsPerJob: number;
     vehicleLocation: Vec4;
-    locations: Vec3[];
+    locations: { coords: Vec3; range: number; amount: number }[];
+    lootChance: number;
     loot: string[];
     specialLoot: string[];
   };
 
   type Job = {
     netId: number;
-    locationsDone: number;
-    location: {
-      id: number;
-      dumpsters: Vec3[] | null;
-      totalDumpsters: number | null;
-    };
+    locationSequence: number[];
+    dumpstersDone: Vec3[];
+    bagsPerPlayer: Map<number, number>; // keeps track of amount of bags player has done for payout
   };
 }

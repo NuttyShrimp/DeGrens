@@ -22,7 +22,7 @@ export const resetPlayerProps: CommandData = {
     } else {
       target = caller.source;
     }
-    global.exports['dg-misc'].clearProps(target);
+    Events.emitNet('propattach:reset', target);
   },
   UI: {
     title: 'Reset Player Props',

@@ -4,6 +4,12 @@ var QBRadialMenu = null;
 
 $(document).ready(function () {
   window.addEventListener('message', function (event) {
+    if ('reload' in event.data) {
+      QBRadialMenu.close();
+      window.reload();
+      return;
+    }
+
     createMenu(event.data.entries);
     QBRadialMenu.open();
   });

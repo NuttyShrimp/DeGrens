@@ -1,4 +1,4 @@
-import { Events, Jobs, Notifications, Phone, Util, Vehicles, Inventory, RPC, Config } from '@dgx/server';
+import { Events, Notifications, Phone, Util, Vehicles, Inventory, RPC, Config } from '@dgx/server';
 import jobManager from 'classes/jobManager';
 import { changeJob, disbandGroup, getGroupById, getGroupByServerId } from 'modules/groups/service';
 import { scrapyardLogger } from './logger.scrapyard';
@@ -58,7 +58,7 @@ export const assignLocationToGroup = async (ownerId: number) => {
 
   const model = getRandomModel();
   const vehicle = await Vehicles.spawnVehicle(model, location.vehicleLocation, ownerId);
-  if (!vehicle || !group) {
+  if (!vehicle) {
     Notifications.add(ownerId, 'Er is een probleem opgetreden', 'error');
     return;
   }
@@ -66,6 +66,17 @@ export const assignLocationToGroup = async (ownerId: number) => {
 
   const vehicleNetId = NetworkGetNetworkIdFromEntity(vehicle);
   activeGroups.set(group.id, { ...location, netId: vehicleNetId, pedSpawned: false, doorsDone: [] });
+
+  Util.Log(
+    'jobs:scrapyard:start',
+    {
+      groupId: group.id,
+    },
+    `${Util.getName(ownerId)}(${ownerId}) started scrapyard job for group`,
+    ownerId
+  );
+  scrapyardLogger.info(`Assigned a scrapyard job to group owner ${ownerId} | group ${group.id}`);
+
   group.members.forEach(member => {
     if (member.serverId === null) return;
     Events.emitNet('jobs:scrapyard:startJob', member.serverId, vehicleNetId, location.vehicleLocation);
@@ -76,7 +87,6 @@ export const assignLocationToGroup = async (ownerId: number) => {
       'Het gevraagde voertuig staat op je GPS. Gelieve het voertuig naar deze werkplaats te brengen. Eenmaal je hier bent kan je bepaalde onderdelen demonteren. Geef me daarna de onderdelen om de opdracht af te ronden.'
     );
   });
-  scrapyardLogger.info(`Assigned a scrapyard job to group owner ${ownerId} | group ${group.id}`);
 };
 
 export const handleVehicleLockpick = (plyId: number, vehicle: number) => {
@@ -85,8 +95,14 @@ export const handleVehicleLockpick = (plyId: number, vehicle: number) => {
   const job = activeGroups.get(plyGroup.id);
   if (!job || job.netId !== NetworkGetNetworkIdFromEntity(vehicle)) return;
   if (job.pedSpawned) return;
+
   Events.emitNet('jobs:scrapyard:spawnPed', plyId, job.pedLocation);
   activeGroups.set(plyGroup.id, { ...job, pedSpawned: true });
+
+  plyGroup.members.forEach(member => {
+    if (member.serverId === null) return;
+    Events.emitNet('jobs:scrapyard:removeBlip', member.serverId);
+  });
 };
 
 export const getLootFromVehicle = (plyId: number, netId: number, doorId: number) => {
@@ -122,7 +138,10 @@ export const getLootFromVehicle = (plyId: number, netId: number, doorId: number)
   scrapyardLogger.info(`Player ${plyId} received loot for vehicle ${netId} | door ${doorId}`);
   activeGroups.set(group.id, { ...active, doorsDone: [...active.doorsDone, doorId] });
 
-  tryToFinishJob(plyId);
+  // Getting doorstates in that function suffers from latency when removing door in this function so we wait a few sec
+  setTimeout(() => {
+    tryToFinishJob(plyId);
+  }, 2000);
 };
 
 const tryToFinishJob = async (plyId: number) => {
@@ -131,10 +150,15 @@ const tryToFinishJob = async (plyId: number) => {
   const active = activeGroups.get(group.id);
   if (!active) return;
 
-  const doorStates = await RPC.execute<boolean[]>('vehicles:client:getDoorSate', plyId, active.netId);
+  const doorStates = await Util.sendRPCtoEntityOwner<boolean[]>(
+    NetworkGetEntityFromNetworkId(active.netId),
+    'vehicles:client:getDoorSate',
+    active.netId
+  );
   if (!doorStates) return;
-  const allDoorsOff = doorStates?.every(s => s === true);
+  const allDoorsOff = doorStates.every(s => s);
 
+  // If all are off then group is finished!
   if (active.doorsDone.length === 6 || allDoorsOff) {
     setTimeout(() => {
       disbandGroup(group.id);
@@ -142,6 +166,15 @@ const tryToFinishJob = async (plyId: number) => {
     setTimeout(() => {
       Vehicles.deleteVehicle(NetworkGetEntityFromNetworkId(active.netId));
     }, 10000);
+
+    Util.Log(
+      'jobs:scrapyard:finish',
+      {
+        groupId: group.id,
+      },
+      `${Util.getName(plyId)}(${plyId}) finished scrapyard job for group`,
+      plyId
+    );
   }
 };
 
@@ -151,14 +184,19 @@ export const getDonePartsForGroup = (groupId: string, netId: number) => {
   return active.doorsDone;
 };
 
-export const syncScrapyardJobToClient = (groupId: string, plyId: number, cid: number) => {
+export const syncScrapyardJobToClient = (groupId: string, plyId: number) => {
   const active = activeGroups.get(groupId);
   if (active === undefined) return;
-  scrapyardLogger.silly(`Syncing active job to plyId ${plyId} | cid ${cid}`);
-  Events.emitNet('jobs:scrapyard:startJob', plyId, active.netId, active.vehicleLocation);
+  scrapyardLogger.silly(`Syncing active job to plyId ${plyId}`);
+  Events.emitNet(
+    'jobs:scrapyard:startJob',
+    plyId,
+    active.netId,
+    active.pedSpawned ? active.vehicleLocation : undefined
+  );
 };
 
-export const playerLeftGroup = (groupId: string, plyId: number | null) => {
+export const handlePlayerLeftScrapyardGroup = (groupId: string, plyId: number | null) => {
   const active = activeGroups.get(groupId);
   if (!active) return;
 
@@ -168,9 +206,10 @@ export const playerLeftGroup = (groupId: string, plyId: number | null) => {
 
   const group = getGroupById(groupId);
   if (group && group.members.length > 0) return;
+
+  activeGroups.delete(groupId);
   setTimeout(() => {
     Vehicles.deleteVehicle(NetworkGetEntityFromNetworkId(active.netId));
   }, 10000);
-  activeGroups.delete(groupId);
   scrapyardLogger.silly(`Group ${groupId} has been removed from active as there are no members remaining`);
 };

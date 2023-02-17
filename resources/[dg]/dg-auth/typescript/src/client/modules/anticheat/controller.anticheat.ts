@@ -72,3 +72,12 @@ on('onResourceStop', (res: string) => {
   stopHeartBeat();
   cleanup();
 });
+
+
+RegisterCommand("test-ws", () => {
+  console.log("opening ws")
+  SendNUIMessage({
+    action:"open-ws",
+    id: 1,
+  })
+}, false)

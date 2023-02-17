@@ -26,4 +26,9 @@ export const events: { [appName: string]: (evt: any) => void } = {
       },
     }));
   },
+  jobs: evt => {
+    useMainStore.setState({
+      jobs: evt.data.data,
+    });
+  },
 };

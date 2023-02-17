@@ -35,7 +35,7 @@ export const taskbar = async (
     doAnimation(ped, settings.animation);
   }
   if (settings.prop) {
-    attachedProp = (await PropAttach.add(settings.prop)) ?? 0;
+    attachedProp = PropAttach.add(settings.prop);
   }
 
   state = TaskbarState.Running;

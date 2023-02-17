@@ -1,193 +1,133 @@
-import { Events, Util } from '@dgx/client';
 import { PROPS } from './constants.propattach';
+import { createEntity, debug, deleteEntity, moveEntity } from './helpers.propattach';
+import { Vector3 } from '@dgx/shared';
 
 let currentId = 0;
-const attachedProps: Map<number, PropAttach.ActiveProp> = new Map();
 let enabled = true;
 
-let existenceThread: NodeJS.Timer | null = null;
+let attachedProps: Record<number, PropAttach.Prop> = {};
+let toggledProps: Record<number, PropAttach.Prop> = {};
+
+let propsPerPlayer: Record<number, Record<number, PropAttach.ActiveProp>> = {};
 
 export const isEnabled = () => enabled;
 
-const debug = (msg: string) => {
-  console.log(`[PropAttach] ${msg}`);
+const updateState = () => {
+  LocalPlayer.state.set('propattach', attachedProps, true);
 };
 
-export const addProp = async (name: string, offset?: Vec3) => {
+export const addProp = (name: string, offset?: Vec3) => {
   offset = offset ?? { x: 0, y: 0, z: 0 };
-  let netId: number | null = null;
-  if (enabled) {
-    const newNetId = await createAndAttachObject(name, offset);
-    if (!newNetId) return;
-    netId = newNetId;
-  }
 
   currentId++;
-  attachedProps.set(currentId, {
-    netId,
+  attachedProps[currentId] = {
     name,
     offset,
-  });
-  startExistenceThread();
+  };
+  updateState();
+
   return currentId;
 };
 
 export const removeProp = (propId: number) => {
-  const data = attachedProps.get(propId);
-  if (!data) {
+  const activeProp = attachedProps[propId];
+  if (!activeProp) {
     debug(`Tried to remove prop ${propId} but was not an attached prop`);
     return;
   }
 
-  if (data.netId !== null) {
-    Events.emitNet('propattach:remove', data.netId);
-  }
-
-  attachedProps.delete(propId);
-  clearExistenceThread();
+  delete attachedProps[propId];
+  updateState();
 };
 
 export const moveProp = (propId: number, position: Vec3) => {
-  const data = attachedProps.get(propId);
-  if (!data) {
+  const activeProp = attachedProps[propId];
+  if (!activeProp) {
     debug(`Tried to move prop ${propId} but was not an attached prop`);
     return;
   }
 
-  if (data.netId !== null) {
-    const entity = NetworkGetEntityFromNetworkId(data.netId);
-    if (!DoesEntityExist(entity)) {
-      debug(`Tried to move prop ${propId} but entity does not exist`);
-      return;
-    }
-
-    const info = PROPS[data.name];
-    if (!info) {
-      debug(`Tried to move prop but name ${data.name} is not registered`);
-      return;
-    }
-
-    const ped = PlayerPedId();
-    DetachEntity(entity, true, false);
-    AttachEntityToEntity(
-      entity,
-      ped,
-      GetPedBoneIndex(ped, info.boneId),
-      info.position.x + position.x,
-      info.position.y + position.y,
-      info.position.z + position.z,
-      info.rotation.x,
-      info.rotation.y,
-      info.rotation.z,
-      true,
-      true,
-      false,
-      false,
-      2,
-      true
-    );
-    SetEntityCompletelyDisableCollision(entity, false, true);
-  }
-
-  data.offset = position;
+  activeProp.offset = position;
+  updateState();
 };
 
-const createAndAttachObject = async (name: string, offset: Vec3) => {
-  const info = PROPS[name];
-  if (!info) {
-    debug(`Tried to add prop but name ${name} is not registered`);
-    return;
+export const handlePlayerStateUpdate = (plyId: number, newPlayerProps: Record<number, PropAttach.ActiveProp>) => {
+  const ped = GetPlayerPed(GetPlayerFromServerId(plyId));
+
+  // first remove old props that are no longer in new state
+  const oldPlayerProps = (propsPerPlayer[plyId] ??= {});
+  for (const key of Object.keys(oldPlayerProps)) {
+    const propId = Number(key);
+    if (newPlayerProps[propId]) continue;
+
+    deleteEntity(oldPlayerProps[propId].entity);
+    delete propsPerPlayer[plyId][propId];
   }
 
-  const [x, y, z] = GetEntityCoords(PlayerPedId(), false);
-  const netId = await Util.createObjectOnServer(info.model, { x, y, z: z - 3 });
-  if (netId === 0) {
-    debug(`Tried to add prop ${name} but could not spawn object`);
-    return;
+  for (const propId in newPlayerProps) {
+    const newProp = newPlayerProps[propId];
+    const oldProp = oldPlayerProps[propId];
+
+    // check if prop in new exists in old, move if offset changed else do nothing
+    if (oldProp) {
+      if (Vector3.isSame(oldProp.offset, newProp.offset)) continue;
+
+      moveEntity(ped, oldProp.entity, newProp.name, newProp.offset);
+      propsPerPlayer[plyId][propId].offset = newProp.offset;
+      continue;
+    }
+
+    const entity = createEntity(ped, newProp.name, newProp.offset);
+    if (entity) {
+      propsPerPlayer[plyId][propId] = { ...newProp, entity };
+    }
   }
-
-  if (!NetworkDoesEntityExistWithNetworkId(netId)) {
-    debug(`Tried to add prop ${name} but network id ${netId} does not exist on client`);
-    return;
-  }
-
-  const entity = NetworkGetEntityFromNetworkId(netId);
-  if (!entity || !DoesEntityExist(entity)) {
-    debug(`Tried to add prop ${name} but entity ${entity} does not exist on client`);
-    return;
-  }
-
-  const ped = PlayerPedId();
-  const boneIdx = GetPedBoneIndex(ped, info.boneId);
-  AttachEntityToEntity(
-    entity,
-    ped,
-    boneIdx,
-    info.position.x + offset.x,
-    info.position.y + offset.y,
-    info.position.z + offset.z,
-    info.rotation.x,
-    info.rotation.y,
-    info.rotation.z,
-    true,
-    true,
-    false,
-    false,
-    2,
-    true
-  );
-  SetEntityCompletelyDisableCollision(entity, false, true);
-  Events.emitNet('propattach:register', netId);
-
-  return netId;
 };
 
 export const resetProps = () => {
-  attachedProps.clear();
-  clearExistenceThread();
+  attachedProps = {};
+  updateState();
 };
 
-export const toggleProps = async (toggle: boolean) => {
-  enabled = toggle;
-
-  if (!toggle) {
-    attachedProps.forEach(data => {
-      if (data.netId === null) return;
-      Events.emitNet('propattach:remove', data.netId);
-      data.netId = null;
-    });
+export const toggleProps = (toggle: boolean) => {
+  if (toggle) {
+    attachedProps = toggledProps;
+    toggledProps = {};
   } else {
-    attachedProps.forEach(async data => {
-      if (data.netId !== null) return;
-      const netId = await createAndAttachObject(data.name, data.offset);
-      if (!netId) return;
-      data.netId = netId;
-    });
+    toggledProps = attachedProps;
+    attachedProps = {};
   }
+
+  enabled = toggle;
+  updateState();
 };
 
-// Existence thread checks if every attached prop entity still exists, else reapply prop
-// Can happen when teleporting and entity somehow going out of scope whilst being attached
-const startExistenceThread = () => {
-  if (existenceThread !== null) return;
-
-  existenceThread = setInterval(() => {
-    attachedProps.forEach(async data => {
-      if (data.netId === null) return;
-      if (NetworkDoesEntityExistWithNetworkId(data.netId)) return;
-
-      debug(`Entity ${data.netId} does not exist anymore, readding ${data.name}`);
-      Events.emitNet('propattach:remove', data.netId);
-      const netId = await createAndAttachObject(data.name, data.offset);
-      data.netId = netId ?? null;
-    });
-  }, 1000);
+export const deleteAllEntities = () => {
+  for (const plyId in propsPerPlayer) {
+    for (const propId in propsPerPlayer[plyId]) {
+      deleteEntity(propsPerPlayer[plyId][propId].entity);
+    }
+  }
+  propsPerPlayer = {};
 };
 
-const clearExistenceThread = () => {
-  if (existenceThread === null) return;
-  if (attachedProps.size > 0) return;
+export const startPropattachScopeThread = () => {
+  // preload all possible prop models
+  for (const name in PROPS) {
+    RequestModel(PROPS[name].model);
+  }
 
-  clearInterval(existenceThread);
-  existenceThread = null;
+  setInterval(() => {
+    for (const key in propsPerPlayer) {
+      const plyId = Number(key);
+      // returns -1 if player with serverid is out of scope
+      if (GetPlayerFromServerId(plyId) !== -1) continue;
+
+      for (const propId in propsPerPlayer[plyId]) {
+        deleteEntity(propsPerPlayer[plyId][propId].entity);
+      }
+
+      delete propsPerPlayer[plyId];
+    }
+  }, 250);
 };

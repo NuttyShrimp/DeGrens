@@ -2,7 +2,7 @@ import { Util, RPC, Inventory } from '@dgx/server';
 import inventoryManager from 'modules/inventories/manager.inventories';
 import itemDataManager from 'classes/itemdatamanager';
 import itemManager from 'modules/items/manager.items';
-import { awaitConfigLoad, getConfig } from 'services/config';
+import { getConfig } from 'services/config';
 import repository from 'services/repository';
 import { Item } from 'modules/items/classes/item';
 
@@ -89,54 +89,85 @@ const doesInventoryHaveItems = async (type: Inventory.Type, identifier: string, 
   return names.every(name => items.some(item => item.state.name === name));
 };
 
-const removeItemByNameFromInventory = async (
+const removeItemsByNamesFromInventory = async (
   type: Inventory.Type,
   identifier: string,
-  name: string,
-  amount?: number
+  names: string[]
 ): Promise<boolean> => {
-  if (!amount) {
-    amount = 1;
-  }
-
   const invId = Inventory.concatId(type, identifier);
   const inventory = await inventoryManager.get(invId);
 
+  const itemNamesLeft = [...names];
   const itemsToRemove: Item[] = [];
   for (const item of inventory.getItems()) {
-    if (item.state.name !== name) continue;
+    // try early exit if already found all items
+    if (itemNamesLeft.length === 0) break;
+
+    const idx = itemNamesLeft.indexOf(item.state.name);
+    if (idx === -1) continue;
+
     itemsToRemove.push(item);
-    if (itemsToRemove.length === amount) break;
+    itemNamesLeft.splice(idx, 1);
   }
 
-  if (itemsToRemove.length !== amount) return false;
+  if (itemNamesLeft.length !== 0) return false;
 
   for (const item of itemsToRemove) {
-    item.destroy();
+    item.destroy(true);
   }
 
   if (type === 'player') {
-    const image = itemDataManager.get(name).image;
     const plyId = DGCore.Functions.getPlyIdForCid(Number(identifier));
     if (plyId) {
-      emitNet('inventory:addItemBox', plyId, `${amount}x Verwijderd`, image);
+      // group same names for itemboxes
+      const counts: Record<string, number> = {};
+      for (const name of names) {
+        const count = counts[name] ?? 0;
+        counts[name] = count + 1;
+      }
+
+      for (const [n, c] of Object.entries(counts)) {
+        const image = itemDataManager.get(n).image;
+        emitNet('inventory:addItemBox', plyId, `${c}x Verwijderd`, image);
+      }
     }
   }
 
   return true;
 };
 
-const removeItemByIdFromInventory = async (
+const removeItemsByIdsFromInventory = async (
   type: Inventory.Type,
   identifier: string,
-  itemId: string
+  itemIds: string[]
 ): Promise<boolean> => {
   const invId = Inventory.concatId(type, identifier);
   const inventory = await inventoryManager.get(invId);
-  if (!inventory.hasItemId(itemId)) return false;
-  const item = itemManager.get(itemId);
-  if (!item) return false;
-  item.destroy(true);
+
+  const removeCounts: Record<string, number> = {};
+
+  for (const itemId of itemIds) {
+    if (!inventory.hasItemId(itemId)) return false;
+    const item = itemManager.get(itemId);
+    if (!item) return false;
+
+    item.destroy(true);
+
+    const itemName = item.state.name;
+    const count = removeCounts[itemName] ?? 0;
+    removeCounts[itemName] = count + 1;
+  }
+
+  if (type === 'player') {
+    const plyId = DGCore.Functions.getPlyIdForCid(Number(identifier));
+    if (plyId) {
+      for (const [n, c] of Object.entries(removeCounts)) {
+        const image = itemDataManager.get(n).image;
+        emitNet('inventory:addItemBox', plyId, `${c}x Verwijderd`, image);
+      }
+    }
+  }
+
   return true;
 };
 
@@ -184,7 +215,6 @@ const getFirstItemOfName = async (type: Inventory.Type, identifier: string, name
 
 // You can use this to create a stash to be used in script with allowedItems (see houserob sell for example)
 const createScriptedStash = async (identifier: string, size: number, allowedItems?: string[]) => {
-  await awaitConfigLoad();
   const invId = Inventory.concatId('stash', identifier);
   const inventory = await inventoryManager.get(invId);
   inventory.size = size;
@@ -213,14 +243,31 @@ const getItemStateFromDatabase = (itemId: string) => {
   return repository.getItemState(itemId);
 };
 
+const doesInventoryHaveItemWithId = async (type: Inventory.Type, identifier: string, itemId: string) => {
+  const invId = Inventory.concatId(type, identifier);
+  const inventory = await inventoryManager.get(invId);
+  return inventory.hasItemId(itemId);
+};
+
+const getItemByIdFromInventory = (type: Inventory.Type, identifier: string, itemId: string) => {
+  const item = itemManager.get(itemId);
+  if (!item) return;
+
+  const itemState = item.state;
+  const invId = Inventory.concatId(type, identifier);
+  if (itemState.inventory !== invId) return;
+
+  return itemState;
+};
+
 // Exports
 global.asyncExports('hasObject', hasObject);
 global.exports('giveStarterItems', giveStarterItems);
 global.exports('clearInventory', clearInventory);
 global.asyncExports('addItemToInventory', addItemToInventory);
 global.asyncExports('doesInventoryHaveItems', doesInventoryHaveItems);
-global.asyncExports('removeItemByNameFromInventory', removeItemByNameFromInventory);
-global.asyncExports('removeItemByIdFromInventory', removeItemByIdFromInventory);
+global.asyncExports('removeItemsByNamesFromInventory', removeItemsByNamesFromInventory);
+global.asyncExports('removeItemsByIdsFromInventory', removeItemsByIdsFromInventory);
 global.asyncExports('getAmountInInventory', getAmountInInventory);
 global.exports('getItemStateById', getItemStateById);
 global.exports('moveItemToInventory', moveItemToInventory);
@@ -230,6 +277,8 @@ global.asyncExports('getFirstItemOfName', getFirstItemOfName);
 global.exports('createScriptedStash', createScriptedStash);
 global.exports('moveAllItemsToInventory', moveAllItemsToInventory);
 global.asyncExports('getItemStateFromDatabase', getItemStateFromDatabase);
+global.asyncExports('doesInventoryHaveItemWithId', doesInventoryHaveItemWithId);
+global.exports('getItemByIdFromInventory', getItemByIdFromInventory);
 
 // Events for client
 RPC.register('inventory:server:doesPlayerHaveItems', (plyId, names: string | string[]) => {
@@ -238,5 +287,10 @@ RPC.register('inventory:server:doesPlayerHaveItems', (plyId, names: string | str
 });
 RPC.register('inventory:server:removeItemByNameFromPlayer', (plyId, name: string, amount?: number) => {
   const cid = String(Util.getCID(plyId));
-  return removeItemByNameFromInventory('player', cid, name, amount);
+  const names = new Array(amount ?? 1).fill(name);
+  return removeItemsByNamesFromInventory('player', cid, names);
+});
+RPC.register('inventory:server:removeItemById', (plyId, itemId: string) => {
+  const cid = String(Util.getCID(plyId));
+  return removeItemsByIdsFromInventory('player', cid, [itemId]);
 });

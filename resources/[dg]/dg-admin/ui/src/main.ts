@@ -37,6 +37,7 @@ Sentry.init({
 });
 
 app.use(store, key);
+// @ts-ignore
 app.use(Quasar, {
   plugins: {}, // import Quasar plugins and add here
   iconSet: quasarIconSet,

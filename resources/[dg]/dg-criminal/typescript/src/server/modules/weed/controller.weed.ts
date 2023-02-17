@@ -1,51 +1,25 @@
-import { Events, Inventory, Notifications, RPC, Util } from '@dgx/server';
+import { Events, Inventory, Notifications, Util } from '@dgx/server';
 import { getConfig } from 'services/config';
-import { weedLogger } from './logger.weed';
-import { addNewPlant, canCutPlant, cutPlant, feedPlant, removePlant } from './service.weed';
+import { MODELS_PER_STAGE } from './constants.weed';
+import weedPlantManager from './classes/weedplantmanager';
 
 Inventory.registerUseable('weed_seed', (plyId, itemState) => {
-  Events.emitNet('criminal:weed:plant', plyId, itemState.id);
+  Events.emitNet('criminal:weed:plant', plyId, itemState.id, MODELS_PER_STAGE[0]);
 });
 
-Events.onNet('criminal:weed:add', (src: number, itemId: string, coords: Vec3) => {
-  const itemState = Inventory.getItemStateById(itemId);
+Events.onNet('criminal:weed:add', (plyId: number, itemId: string, coords: Vec3, rotation: Vec3) => {
+  const itemState = Inventory.getItemByIdFromPlayer(plyId, itemId);
   if (!itemState) {
-    Notifications.add(src, 'Dit item bestaat niet meer', 'error');
+    Notifications.add(plyId, 'Je hebt het zaadje niet meer', 'error');
     return;
   }
   Inventory.destroyItem(itemState.id);
   const gender = itemState.metadata.gender as Criminal.Weed.Gender | undefined;
   if (!gender) {
-    Notifications.add(src, 'Dit zaadje is kapot', 'error');
+    Notifications.add(plyId, 'Dit zaadje is kapot', 'error');
     return;
   }
-  addNewPlant(src, coords, gender);
-});
-
-Events.onNet('criminal:weed:feed', async (src: number, id: number) => {
-  const removed = await Inventory.removeItemByNameFromPlayer(src, 'plant_fertilizer');
-  if (!removed) {
-    Notifications.add(src, 'Je hebt geen voeding', 'error');
-    return;
-  }
-
-  feedPlant(src, id);
-  Notifications.add(src, 'Je hebt de plant gevoed', 'success');
-});
-
-Events.onNet('criminal:weed:destroy', (src: number, id: number) => {
-  removePlant(id);
-  weedLogger.silly(`Player ${src} has fed a weed plant`);
-  Util.Log('weed:destroy', { plantId: id }, `${Util.getName(src)} has destroyed a weed plant`, src);
-});
-
-RPC.register('criminal:weed:canCut', (src: number, id: number) => {
-  return canCutPlant(id);
-});
-
-Events.onNet('criminal:weed:cut', (src: number, id: number) => {
-  if (!canCutPlant(id)) return;
-  cutPlant(src, id);
+  weedPlantManager.addNew(plyId, coords, rotation, gender);
 });
 
 Inventory.registerUseable('weed_bud', async (src, item) => {

@@ -1,12 +1,12 @@
 import { Chat, Config, Events, Hospital, Inventory, Minigames, Notifications, Taskbar, Util } from '@dgx/server';
 
 const effects: Record<Config.EffectConsumable['effect'], (target: number, duration: number, itemId: string) => void> = {
-  stress: async(target, duration, itemId) => {
+  stress: async (target, duration, itemId) => {
     const success = await Inventory.removeItemByIdFromPlayer(target, itemId);
     if (!success) {
       Notifications.add(target, 'Item is verdwenen?..');
       return;
-    };
+    }
     Events.emitNet('misc:consumables:applyEffect', target, 'stress', duration);
   },
   speed: async (target, duration, itemId) => {
@@ -33,7 +33,7 @@ const effects: Record<Config.EffectConsumable['effect'], (target: number, durati
     if (!success) {
       Notifications.add(target, 'Item is verdwenen?..');
       return;
-    };
+    }
     Events.emitNet('misc:consumables:applyEffect', target, 'speed', duration);
   },
   damage: async (target, duration, itemId) => {
@@ -60,7 +60,7 @@ const effects: Record<Config.EffectConsumable['effect'], (target: number, durati
     if (!success) {
       Notifications.add(target, 'Item is verdwenen?..');
       return;
-    };
+    }
     Events.emitNet('misc:consumables:applyEffect', target, 'damage', duration);
   },
 };
@@ -97,7 +97,9 @@ const registerFood = (info: Config.Consumable) => {
       Notifications.add(src, 'Item is verdwenen?..');
       return;
     }
-    Hospital.setNeed(src, 'hunger', old => old + info.gain);
+
+    const gain = calculateGain(info, item);
+    Hospital.setNeed(src, 'hunger', old => old + gain);
   });
 };
 
@@ -120,9 +122,11 @@ const handleDrinkUse = async (src: number, item: Inventory.ItemState, info: Conf
     Notifications.add(src, 'Item is verdwenen?..');
     return false;
   }
-  Hospital.setNeed(src, 'thirst', old => old + info.gain);
+
+  const gain = calculateGain(info, item);
+  Hospital.setNeed(src, 'thirst', old => old + gain);
   return success;
-}
+};
 
 const registerDrink = (info: Config.Consumable) => {
   Inventory.registerUseable(info.name, async (src, item) => {
@@ -146,16 +150,28 @@ const registerDrug = (info: Config.EffectConsumable) => {
 };
 
 // Registration of 'normal' items
-Inventory.registerUseable("id_card", (src, item) => {
+Inventory.registerUseable('id_card', (src, item) => {
   const plyInRadius = Util.getAllPlayersInRange(src, 5);
   Chat.sendMessage(src, {
-    type: "idcard",
-    message: item.metadata as Chat.CardMessage['message']
-  })
+    type: 'idcard',
+    message: item.metadata as Chat.CardMessage['message'],
+  });
   plyInRadius.forEach(ply => {
     Chat.sendMessage(ply, {
-      type: "idcard",
-      message: item.metadata as Chat.CardMessage['message']
-    })
-  })
-})
+      type: 'idcard',
+      message: item.metadata as Chat.CardMessage['message'],
+    });
+  });
+});
+
+// quality of metadata can influence gain, we scale from 25-100 to always get a bit at least
+const calculateGain = (info: Config.Consumable, item: Inventory.ItemState) => {
+  let gain = info.gain;
+  if (info.checkQuality) {
+    const quality = item.metadata.quality;
+    if (quality !== undefined) {
+      gain *= Math.round((quality * 0.75 + 25) * 10) / 1000;
+    }
+  }
+  return gain;
+};

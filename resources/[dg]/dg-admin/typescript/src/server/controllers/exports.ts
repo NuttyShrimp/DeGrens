@@ -1,3 +1,3 @@
-import { getPlayerDiscordRoles } from "helpers/discord";
+import { getPlayerDiscordRoles } from 'helpers/discord';
 
-global.exports("getPlyDiscordRoles", getPlayerDiscordRoles)
+global.exports('getPlyDiscordRoles', getPlayerDiscordRoles);

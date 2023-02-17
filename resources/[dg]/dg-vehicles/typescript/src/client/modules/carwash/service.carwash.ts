@@ -118,6 +118,7 @@ export const useWax = async () => {
 };
 
 export const cleanDecals = (netId: number) => {
+  if (!NetworkDoesEntityExistWithNetworkId(netId)) return;
   const veh = NetworkGetEntityFromNetworkId(netId);
   if (!DoesEntityExist(veh)) return;
   WashDecalsFromVehicle(veh, 1.0);

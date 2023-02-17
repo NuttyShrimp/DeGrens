@@ -1,0 +1,36 @@
+{
+  "garage_id": "lowsantos",
+  "name": "Low Santos Gedeelde Garage",
+  "type": "business",
+  "shared": true,
+  "location": {
+    "vector": {
+      "x": -1408.74,
+      "y": -459.3,
+      "z": 34.48
+    },
+    "width": 9.6,
+    "length": 6.8,
+    "options": {
+      "heading": 122,
+      "minZ": 31.48,
+      "maxZ": 41.28
+    }
+  },
+  "vehicle_types": [
+    "land"
+  ],
+  "parking_spots": [
+    {
+      "type": "land",
+      "size": 2.5,
+      "distance": 2.3,
+      "heading": 122,
+      "coords": {
+        "x": -1408.74,
+        "y": -459.3,
+        "z": 34.48
+      }
+    }
+  ]
+}

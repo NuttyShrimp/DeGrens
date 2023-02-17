@@ -17,6 +17,7 @@ import { getDistanceToFurthestCoord, getPropAttachItem, isAnyBackDoorOpen } from
 let assignedVehicle: number | null = null;
 let vehiclePeekIds: string[] = [];
 
+let returnCoords: Vec3;
 let returnZoneBuilt = false;
 let returnBlip: number = 0;
 let inReturnZone = false;
@@ -80,11 +81,11 @@ export const setAssignedVehicle = (netId: typeof assignedVehicle) => {
         canInteract: vehicle => {
           if (!vehicle) return false;
           if (!hasPackage) return false;
-          return Util.isAtBackOfEntity(vehicle);
+          return Util.isAtBackOfEntity(vehicle, 3);
         },
       },
     ],
-    distance: 2.0,
+    distance: 5.0,
   });
 };
 
@@ -110,7 +111,7 @@ export const setTargetLocation = (location: typeof targetLocation) => {
   SetBlipColour(targetBlip, 15);
   SetBlipAlpha(targetBlip, 180);
   SetBlipHighDetail(targetBlip, true);
-  SetNewWaypoint(targetLocation.center.x, targetLocation.center.y);
+  Util.setWaypoint(targetLocation.center);
 
   // Build doors
   for (const idx in targetLocation.dropoffs) {
@@ -126,6 +127,7 @@ export const setTargetLocation = (location: typeof targetLocation) => {
 export const buildReturnZone = (zone: Vec4) => {
   if (returnZoneBuilt) return;
   const { w: heading, ...center } = zone;
+  returnCoords = center;
   PolyZone.addBoxZone('jobs_postop_return', center, 15, 15, {
     heading,
     minZ: center.z - 3,
@@ -265,7 +267,7 @@ const addPackage = async (vehicle: number) => {
   if (canceled) return;
 
   hasPackage = true;
-  const propId = await PropAttach.add(getPropAttachItem());
+  const propId = PropAttach.add(getPropAttachItem());
 
   await Util.loadAnimDict('anim@heists@box_carry@');
   const thread = setInterval(() => {
@@ -298,4 +300,8 @@ const removePackage = (vehicle: number) => {
   }
 
   hasPackage = false;
+};
+
+export const setWaypointToReturn = () => {
+  Util.setWaypoint(returnCoords);
 };

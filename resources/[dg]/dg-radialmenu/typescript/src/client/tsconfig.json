@@ -2,19 +2,14 @@
   "extends": "tsconfig/client.json",
   "compilerOptions": {
     "baseUrl": "./",
-    "types": [
-      "@types/node",
-      "@citizenfx/client",
-      "@types/webpack-env"
-    ]
+    "types": ["@types/node", "@citizenfx/client", "@types/webpack-env"]
   },
   "include": [
     "./**/*",
     "../types",
     "../../../../ts-shared/typescript/src/shared/types/*.d.ts",
-    "../../../../ts-shared/typescript/src/client/types/*.d.ts"
+    "../../../../ts-shared/typescript/src/client/types/*.d.ts",
+    "../../../../../../types"
   ],
-  "exclude": [
-    "**/node_modules"
-  ]
+  "exclude": ["**/node_modules"]
 }

@@ -1,0 +1,69 @@
+{
+  "garage_id": "straightpipers",
+  "name": "Straight Pipers Gedeelde Garage",
+  "type": "business",
+  "shared": true,
+  "location": {
+    "vector": {
+      "x": 1126.74,
+      "y": -799.07,
+      "z": 57.69
+    },
+    "width": 16.0,
+    "length": 6.8,
+    "options": {
+      "heading": 269,
+      "minZ": 56.0,
+      "maxZ": 60.0
+    }
+  },
+  "vehicle_types": [
+    "land"
+  ],
+  "parking_spots": [
+    {
+      "type": "land",
+      "size": 2.0,
+      "distance": 1.8,
+      "heading": 0,
+      "coords": {
+        "x": 1132.121,
+        "y": -798.933,
+        "z": 56.613
+      }
+    },
+    {
+      "type": "land",
+      "size": 2.0,
+      "distance": 1.8,
+      "heading": 0,
+      "coords": {
+        "x": 1128.472,
+        "y": -798.952,
+        "z": 56.679
+      }
+    },
+    {
+      "type": "land",
+      "size": 2.0,
+      "distance": 1.8,
+      "heading": 0,
+      "coords": {
+        "x": 1124.824,
+        "y": -798.971,
+        "z": 56.745
+      }
+    },
+    {
+      "type": "land",
+      "size": 2.0,
+      "distance": 1.8,
+      "heading": 0,
+      "coords": {
+        "x": 1121.176,
+        "y": -798.99,
+        "z": 56.811
+      }
+    }
+  ]
+}

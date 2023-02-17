@@ -2,11 +2,19 @@
   "positions": {
     "primary": {
       "max": 1,
-      "offset": { "x": 0, "y": 0, "z": 0 }
+      "offset": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      }
     },
     "back": {
       "max": 4,
-      "offset": { "x": 0, "y": 0, "z": -0.09 }
+      "offset": {
+        "x": 0,
+        "y": 0,
+        "z": -0.09
+      }
     }
   },
   "items": {

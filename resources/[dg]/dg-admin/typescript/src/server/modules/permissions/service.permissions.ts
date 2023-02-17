@@ -38,7 +38,7 @@ export const hasRoleAccess = (sourceRole: string, targetRole: string): boolean =
 export const hasSteamIdPermission = (steamId: string, targetRole: string): boolean => {
   const role = playerRoles.get(steamId) ?? 'user';
   return hasRoleAccess(role, targetRole);
-}
+};
 
 // permissions is the name of a role. We work with inheritance
 export const hasPlayerPermission = (src: number, targetRole: string): boolean => {

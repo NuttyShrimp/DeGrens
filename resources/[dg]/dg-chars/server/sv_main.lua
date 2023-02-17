@@ -1,19 +1,5 @@
 local activeInstances = {}
 
--- Get a newInstanceID close to 1000 as possible\
-local function getFreeInstance()
-  local isFree = false
-  local currentId = 1000
-  while not isFree do
-    if not activeInstances[currentId] then
-      isFree = true
-      break
-    end
-    currentId = currentId + 1
-  end
-  return currentId
-end
-
 -- TODO: Remove this garbage from char selection and implement in resource self
 -- TODO of TODO: Only implement when we actually have our own housing system
 -- local function loadHouseData()
@@ -56,7 +42,7 @@ end)
 DGCore.Functions.CreateCallback('dg-chars:server:setupClient', function(source, cb)
   -- Give the client time to create all polyzones
   Wait(1000)
-  local instanceId = getFreeInstance()
+  local instanceId = 1000 + source -- This instead of the getfreeinstance shit that did not work, no one will ever see eachother by using serverid
   exports['dg-lib']:setInstance(source, instanceId)
   exports['dg-lib']:setInstanceName(instanceId, 'char-selection-'..GetPlayerName(source))
   cb()

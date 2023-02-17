@@ -1,4 +1,5 @@
 import { Hospital, Inventory, Jobs, RayCast, Util } from '@dgx/client';
+import { MAXIMUM_ENTRIES_PER_MENU } from '../constants';
 
 const entries: Record<string, RadialMenu.Entry[]> = {};
 
@@ -20,6 +21,10 @@ export const openRadialMenu = async () => {
   SendNUIMessage({
     entries: entries,
   });
+};
+
+export const handleRadialMenuClose = () => {
+  SetNuiFocus(false, false);
 };
 
 const generateEntries = async () => {
@@ -52,14 +57,28 @@ const generateEntries = async () => {
   return entries;
 };
 
-const getEnabledEntries = async (menuName: string, context: RadialMenu.Context) => {
+const getEnabledEntries = async (menuName: string, context: RadialMenu.Context, offset = 0) => {
   if (!entries[menuName]) {
     throw new Error(`[RadialMenu] ${menuName} is not a valid menu name`);
   }
 
-  const menuEntries: RadialMenu.UIEntry[] = [];
+  const enabledEntries: RadialMenu.UIEntry[] = [];
 
-  for (const entry of entries[menuName]) {
+  for (let i = offset; i < entries[menuName].length; i++) {
+    // If enabledentries is at max, split remaing items to submenu
+    if (enabledEntries.length === MAXIMUM_ENTRIES_PER_MENU) {
+      const subEntries = await getEnabledEntries(menuName, context, i);
+      const extraEntry: RadialMenu.UIEntry = {
+        title: 'Meer',
+        icon: 'ellipsis',
+        items: subEntries,
+      };
+      enabledEntries.push(extraEntry);
+      break;
+    }
+
+    const entry = entries[menuName][i];
+
     if (entry.minimumPlayerDistance && context.closestPlayerDistance > entry.minimumPlayerDistance) continue;
 
     // Check required job
@@ -93,8 +112,8 @@ const getEnabledEntries = async (menuName: string, context: RadialMenu.Context) 
       uiEntry.data = entry.data;
     }
 
-    menuEntries.push(uiEntry);
+    enabledEntries.push(uiEntry);
   }
 
-  return menuEntries;
+  return enabledEntries;
 };

@@ -1,6 +1,5 @@
 import { Keys, Notifications, Police, UI, Util } from '@dgx/client';
 import { setPauseDownAnimation } from 'modules/down/service.down';
-import { setHurtWalk } from './helpers.beds';
 
 let inBed = false;
 let bedCam: number | null = null;
@@ -84,7 +83,7 @@ export const leaveBed = async () => {
   Police.pauseCuffAnimation(false);
   setPauseDownAnimation(false);
 
-  setHurtWalk();
+  Util.setWalkstyle('move_m@injured');
 };
 
 const createBedCam = () => {

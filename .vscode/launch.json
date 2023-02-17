@@ -269,6 +269,27 @@
     },
     {
       "type": "node-terminal",
+      "name": "farming:build prod",
+      "request": "launch",
+      "command": "yarn run build",
+      "cwd": "${workspaceFolder}/resources/[dg]/dg-farming/typescript"
+    },
+    {
+      "type": "node-terminal",
+      "name": "farming:build dev",
+      "request": "launch",
+      "command": "yarn run build:dev",
+      "cwd": "${workspaceFolder}/resources/[dg]/dg-farming/typescript"
+    },
+    {
+      "type": "node-terminal",
+      "name": "farming:watch",
+      "request": "launch",
+      "command": "yarn run watch",
+      "cwd": "${workspaceFolder}/resources/[dg]/dg-farming/typescript"
+    },
+    {
+      "type": "node-terminal",
       "name": "financials:build prod",
       "request": "launch",
       "command": "yarn run build",
@@ -630,6 +651,27 @@
       "request": "launch",
       "command": "yarn run watch",
       "cwd": "${workspaceFolder}/resources/[dg]/dg-radialmenu/typescript"
+    },
+    {
+      "type": "node-terminal",
+      "name": "restaurants:build prod",
+      "request": "launch",
+      "command": "yarn run build",
+      "cwd": "${workspaceFolder}/resources/[dg]/dg-restaurants/typescript"
+    },
+    {
+      "type": "node-terminal",
+      "name": "restaurants:build dev",
+      "request": "launch",
+      "command": "yarn run build:dev",
+      "cwd": "${workspaceFolder}/resources/[dg]/dg-restaurants/typescript"
+    },
+    {
+      "type": "node-terminal",
+      "name": "restaurants:watch",
+      "request": "launch",
+      "command": "yarn run watch",
+      "cwd": "${workspaceFolder}/resources/[dg]/dg-restaurants/typescript"
     },
     {
       "type": "node-terminal",

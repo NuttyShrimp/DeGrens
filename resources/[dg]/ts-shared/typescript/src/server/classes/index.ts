@@ -18,7 +18,7 @@ import minigames from './minigames';
 import sounds from './sounds';
 
 export const { Events, RPC, SQL, API, Auth } = events;
-export const { Util, Status, Reputations } = util;
+export const { Util, Status, Reputations, StaticObjects } = util;
 export const { Phone } = phone;
 export const { Chat, RayCast } = interaction;
 export const { Config } = config;

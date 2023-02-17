@@ -8,7 +8,7 @@ async function main() {
   await prisma.users.create({
     data: {
       name: 'NuttyShrimp',
-      steamid: 'steam:110000137164c7',
+      steamid: 'steam:110000137164c7d',
       license: 'license:ea3021d1c62a5a3e3738dfefaed6de1137117a1e',
       discord: 'discord:214294598766297088',
       created_at: new Date('2022-08-30 10:09:41'),
@@ -18,7 +18,7 @@ async function main() {
   await prisma.characters.create({
     data: {
       citizenid: 1000,
-      steamid: 'steam:110000137164c7',
+      steamid: 'steam:110000137164c7d',
     },
   });
   await prisma.character_data.create({
@@ -70,10 +70,31 @@ async function main() {
   });
   await prisma.whitelist_jobs.createMany({
     data: [
-      { cid: 1000, job: 'police', rank: 6, specialty: 7 },
-      { cid: 1000, job: 'ambulance', rank: 2, specialty: 1 },
-      { cid: 1000, job: 'lawyer', rank: 0, specialty: 1 },
+      { cid: 1000, job: 'police', rank: 6, speciality: 7 },
+      { cid: 1000, job: 'ambulance', rank: 2, speciality: 1 },
+      { cid: 1000, job: 'lawyer', rank: 0, speciality: 1 },
     ],
+  });
+  await prisma.queue_priority.createMany({
+    data: [
+      {
+        steamid: 'steam:110000137164c7d',
+        priority: 999,
+      },
+      {
+        steamid: 'steam:11000011bf78d6c',
+        priority: 999,
+      },
+      {
+        steamid: 'steam:11000010119ac2a',
+        priority: 999,
+      },
+    ],
+  });
+  await prisma.tax_logs.create({
+    data: {
+      date: new Date(),
+    },
   });
 }
 
@@ -236,7 +257,7 @@ async function devEnv() {
     ],
   });
   await prisma.whitelist_jobs.create({
-    data: { cid: 1001, job: 'police', rank: 6, specialty: 7 },
+    data: { cid: 1001, job: 'police', rank: 6, speciality: 7 },
   });
 }
 

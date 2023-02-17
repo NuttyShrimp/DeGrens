@@ -10,6 +10,11 @@ import {
 } from './constants.gtabehaviour';
 import { BLACKLISTED_VEHICLE_MODELS, BLACKLISTED_PED_MODELS } from '../../../shared/constants';
 
+let defaultReticleEnabled = false;
+export const setDefaultReticleEnabled = (val: boolean) => {
+  defaultReticleEnabled = val;
+};
+
 export const setGTABehaviour = async () => {
   await Util.awaitCondition(() => NetworkIsSessionStarted(), 9999);
 
@@ -96,6 +101,7 @@ export const setGTABehaviour = async () => {
 
     // Hide hud components
     HIDDEN_HUD_COMPONENT.forEach(comp => {
+      if (comp === 14 && defaultReticleEnabled) return;
       HideHudComponentThisFrame(comp);
     });
 

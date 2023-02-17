@@ -76,9 +76,6 @@ function storeEntry(msg)
 end
 
 function sendStoredEntries()
-  if not hasStoredEntries then
-    return
-  end
   local storedEntriesJSON = LoadResourceFile(GetCurrentResourceName(), "./data/logs.json")
   if not storedEntriesJSON then
     hasStoredEntries = false

@@ -353,12 +353,7 @@
       }
     },
     "coke": {
-      "interiorProps": [
-        "coke_app",
-        "coke_staff_01",
-        "coke_staff_02",
-        "coke_stock"
-      ],
+      "interiorProps": ["coke_app", "coke_staff_01", "coke_staff_02", "coke_stock"],
       "peekZones": {},
       "defaultState": {}
     },
@@ -421,54 +416,24 @@
         "started": false,
         "settings": {
           "1": {
-            "power": [
-              0,
-              100
-            ],
-            "amount": [
-              0,
-              100
-            ]
+            "power": [0, 100],
+            "amount": [0, 100]
           },
           "2": {
-            "power": [
-              0,
-              100
-            ],
-            "amount": [
-              0,
-              100
-            ]
+            "power": [0, 100],
+            "amount": [0, 100]
           },
           "3": {
-            "power": [
-              0,
-              100
-            ],
-            "amount": [
-              0,
-              100
-            ]
+            "power": [0, 100],
+            "amount": [0, 100]
           },
           "4": {
-            "power": [
-              0,
-              100
-            ],
-            "amount": [
-              0,
-              100
-            ]
+            "power": [0, 100],
+            "amount": [0, 100]
           },
           "5": {
-            "power": [
-              0,
-              100
-            ],
-            "amount": [
-              0,
-              100
-            ]
+            "power": [0, 100],
+            "amount": [0, 100]
           }
         },
         "status": {
@@ -495,8 +460,7 @@
     "timeout": 60,
     "rewardChance": 50,
     "rewards": [
-      "weed_seed_male",
-      "weed_seed_female"
+      "weed_seed"
     ]
   }
 }

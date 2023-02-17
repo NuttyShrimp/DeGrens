@@ -38,11 +38,11 @@
     "id": "weapon_customizer",
     "model": "mp_m_exarmy_01",
     "position": {
-      "x": -172.69,
-      "y": -756.91,
-      "z": 44.23
+      "x": 296.0804,
+      "y": -1715.6857,
+      "z": 29.1813
     },
-    "heading": 249.1,
+    "heading": 174.0258,
     "distance": 50.0,
     "settings": [
       {
@@ -74,11 +74,11 @@
     "id": "houserobbery_signin",
     "model": "g_m_y_famfor_01",
     "position": {
-      "x": -897.35,
-      "y": -1145.86,
-      "z": 6.02
+      "x": -983.1816,
+      "y": -270.4632,
+      "z": 38.2851
     },
-    "heading": 77.46,
+    "heading": 243.1224,
     "distance": 50.0,
     "settings": [
       {
@@ -107,15 +107,15 @@
     "scenario": "WORLD_HUMAN_STAND_IMPATIENT"
   },
   {
-    "id": "houserobbery_sell",
+    "id": "fence",
     "model": "mp_m_exarmy_01",
     "position": {
-      "x": 1538.55,
-      "y": 1704.01,
-      "z": 109.66
+      "x": -291.7782,
+      "y": 2528.7451,
+      "z": 74.6061
     },
-    "heading": 104.21,
-    "distance": 50.0,
+    "heading": 179.0889,
+    "distance": 250.0,
     "settings": [
       {
         "type": "invincible",
@@ -136,7 +136,7 @@
     ],
     "flags": [
       {
-        "name": "isHouseRobSell",
+        "name": "isFence",
         "active": true
       }
     ],
@@ -146,11 +146,11 @@
     "id": "heists_softwareshop",
     "model": "ig_car3guy1",
     "position": {
-      "x": 150.52,
-      "y": 318.79,
-      "z": 112.14
+      "x": 420.6055,
+      "y": 64.7545,
+      "z": 97.9778
     },
-    "heading": 78.24,
+    "heading": 161.9655,
     "distance": 50.0,
     "settings": [
       {
@@ -1364,6 +1364,47 @@
       "title": "PostOP",
       "sprite": 569,
       "color": 15,
+      "scale": 0.9
+    }
+  },
+  {
+    "id": "jobs_hunting",
+    "model": "ig_cletus",
+    "position": {
+      "x": -696.0436,
+      "y": 5802.522,
+      "z": 17.3309
+    },
+    "heading": 67.5144,
+    "distance": 100.0,
+    "settings": [
+      {
+        "type": "invincible",
+        "active": true
+      },
+      {
+        "type": "ignore",
+        "active": true
+      },
+      {
+        "type": "freeze",
+        "active": true
+      },
+      {
+        "type": "collision",
+        "active": true
+      }
+    ],
+    "flags": [
+      {
+        "name": "isHuntingSignIn",
+        "active": true
+      }
+    ],
+    "blip": {
+      "title": "Jagen",
+      "sprite": 119,
+      "color": 6,
       "scale": 0.9
     }
   }

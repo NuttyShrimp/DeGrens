@@ -243,7 +243,7 @@ export class Inv {
     [...this.items].forEach(id => {
       const item = itemManager.get(id);
       if (item) {
-        item.destroy();
+        item.destroy(true);
         itemIds.push(item.state.id);
       }
     });

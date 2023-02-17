@@ -1,3 +1,5 @@
-import { isNoclipEnabled } from "service/noclip";
+import { getCmdState } from 'modules/commands/state.commands';
 
-global.exports('inNoclip', isNoclipEnabled);
+global.exports('inNoclip', () => {
+  return getCmdState('noclip');
+});

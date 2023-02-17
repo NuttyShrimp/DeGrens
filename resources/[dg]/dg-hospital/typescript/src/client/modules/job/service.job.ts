@@ -1,4 +1,4 @@
-import { Events, Jobs, Notifications, PolyTarget, PolyZone, Taskbar, UI, Keys } from '@dgx/client';
+import { Events, Jobs, Notifications, PolyTarget, PolyZone, Taskbar, UI, Keys, BlipManager } from '@dgx/client';
 
 let atCheckin = false;
 export const setAtCheckin = (val: boolean) => {
@@ -27,6 +27,17 @@ export const buildJobConfig = (jobConfig: Hospital.Config['job']) => {
       data: {},
     }
   );
+
+  BlipManager.addBlip({
+    id: 'hospital-pillbox',
+    category: 'hospital',
+    coords: jobConfig.checkinZone.center,
+    text: 'Pillbox Hospital',
+    sprite: 61,
+    color: 0,
+    scale: 0.8,
+    isShortRange: true,
+  });
 };
 
 export const doCheckin = async () => {

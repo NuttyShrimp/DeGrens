@@ -30,4 +30,4 @@ export const isResourceKnown = (res: string) => {
 
 export const isRecentlyRestarted = (res: string) => {
   return recentStarts.has(res);
-}
+};

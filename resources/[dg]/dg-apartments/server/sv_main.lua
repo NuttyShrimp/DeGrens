@@ -64,10 +64,16 @@ enterApartment = function(src, id)
     -- Set player routingbucket
     exports['dg-lib']:setInstance(src, apartment.bucket)
     -- Generate room
-    DGX.RPC.execute('dg-apartments:client:enterRoom', src, apartment.type, id)
+    local success = DGX.RPC.execute('dg-apartments:client:enterRoom', src, apartment.type, id)
     -- Set insidemeta
     setInsideMeta(src, id)
     TriggerClientEvent('dg-apartments:client:fadeScreen', src, false)
+
+    if not success then
+      SetTimeout(1000, function()
+        leaveApartment(src)
+      end)
+    end
   end)
 end
 exports('enterApartment', enterApartment)

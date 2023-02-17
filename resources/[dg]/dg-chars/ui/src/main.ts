@@ -41,6 +41,7 @@ Sentry.init({
 });
 
 app.use(store, key);
+// @ts-ignore
 app.use(Quasar, {
   plugins: {
     Notify,

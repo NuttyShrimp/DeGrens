@@ -46,7 +46,6 @@ router.post('/upload/:token', async ctx => {
     };
 
     const f = ctx.request.files['file'] as File;
-    console.log(ctx.request.files, ctx.request.body);
 
     if (f) {
       if (upload.fileName) {
@@ -201,13 +200,3 @@ global.exports('requestClientMinioScreenshot', async (player: string | number, o
   const result = await request;
   return result;
 });
-
-RegisterCommand(
-  'test',
-  async (src: number) => {
-    const fileName = await global.exports['screenshot-basic'].generateMinioFilename();
-    const minioLink = await global.exports['screenshot-basic'].requestClientMinioScreenshot(src, { fileName });
-    console.log(minioLink);
-  },
-  false
-);

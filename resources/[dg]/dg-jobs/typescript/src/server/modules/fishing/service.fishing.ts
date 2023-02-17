@@ -1,4 +1,4 @@
-import { Events, Notifications, Vehicles, Util, Inventory, Financials, Config } from '@dgx/server';
+import { Events, Notifications, Vehicles, Util, Inventory, Financials, Config, Phone } from '@dgx/server';
 import jobManager from 'classes/jobManager';
 import { changeJob, disbandGroup, getGroupByCid, getGroupById, getGroupByServerId } from 'modules/groups/service';
 import { BOAT_FOR_JOBTYPE } from './constants.fishing';
@@ -17,8 +17,8 @@ export const initializeFishing = () => {
     location: { x: -2080.4377, y: 2609.925 },
     // THIS IS THE PAYOUT PER FISH
     payout: {
-      min: 20,
-      max: 40,
+      min: 14,
+      max: 18,
       groupPercent: 20,
     },
   });
@@ -29,6 +29,17 @@ const getRandomFishingLocationForJobType = (jobType: Fishing.JobType) => {
   return locations[Math.floor(Math.random() * locations.length)];
 };
 
+const buildPhoneNotificationData = (jobGroup: Fishing.Job) => {
+  const isFinished = getTotalFishOfActive(jobGroup) === jobGroup.maxFish;
+
+  const data = {
+    title: isFinished ? 'Je bent klaar' : `${getTotalFishOfActive(jobGroup)}/${jobGroup.maxFish} gevangen`,
+    description: isFinished ? 'Lever het voertuig in' : '',
+  };
+
+  return data;
+};
+
 export const startJobForGroup = async (plyId: number, jobType: Fishing.JobType) => {
   const group = getGroupByServerId(plyId);
   if (!group) {
@@ -36,8 +47,8 @@ export const startJobForGroup = async (plyId: number, jobType: Fishing.JobType) 
     return;
   }
 
-  const vehicleLocation = fishingConfig.vehicle[jobType];
-  if (Util.isAnyVehicleInRange(fishingConfig.vehicle[jobType], 5)) {
+  const vehicleLocation = fishingConfig.vehicle[jobType].coords;
+  if (Util.isAnyVehicleInRange(vehicleLocation, 5)) {
     Notifications.add(plyId, 'Er staat een voertuig in de weg', 'error');
     return;
   }
@@ -56,22 +67,62 @@ export const startJobForGroup = async (plyId: number, jobType: Fishing.JobType) 
 
   if (jobType === 'boat') {
     global.exports['dg-misc'].toggleBoatAnchor(vehicle);
-    Notifications.add(plyId, 'Vergeet de anker van de boot niet op te halen');
   }
 
-  const location = getRandomFishingLocationForJobType(jobType);
-  activeGroups.set(group.id, { netId, location, jobType, fishPerCid: new Map() });
+  const jobGroup = {
+    netId,
+    location: getRandomFishingLocationForJobType(jobType),
+    jobType,
+    fishPerCid: new Map(),
+    maxFish: 10 * group.members.length,
+  };
+  activeGroups.set(group.id, jobGroup);
+
+  Util.Log(
+    'jobs:fishing:start',
+    {
+      groupId: group.id,
+      location: jobGroup.location,
+      jobType: jobType,
+      maxFish: jobGroup.maxFish,
+    },
+    `${Util.getName(plyId)}(${plyId}) started sanitation job for group`,
+    plyId
+  );
+
+  const phoneNotificationData = buildPhoneNotificationData(jobGroup);
   group.members.forEach(m => {
     if (m.serverId === null) return;
-    Events.emitNet('jobs:fishing:start', m.serverId, netId, location, jobType);
+    sendOutStartEvents(m.serverId, jobGroup, phoneNotificationData);
+
+    if (jobType === 'boat') {
+      Notifications.add(m.serverId, 'Vergeet het anker van de boot niet op te halen');
+    }
+  });
+};
+
+const sendOutStartEvents = (
+  plyId: number,
+  active: Fishing.Job,
+  phoneNotificationData: ReturnType<typeof buildPhoneNotificationData>
+) => {
+  Events.emitNet('jobs:fishing:start', plyId, active.netId, active.location, active.jobType);
+  Phone.showNotification(plyId, {
+    ...phoneNotificationData,
+    id: 'fishing_amount_tracker',
+    sticky: true,
+    keepOnAction: true,
+    icon: 'jobcenter',
   });
 };
 
 export const syncFishingJobToClient = (groupId: string, plyId: number) => {
   const active = activeGroups.get(groupId);
   if (active === undefined) return;
+
   fishingLogger.silly(`Syncing active job to plyId ${plyId}`);
-  Events.emitNet('jobs:fishing:start', plyId, active.netId, active.location, active.jobType);
+  const phoneNotificationData = buildPhoneNotificationData(active);
+  sendOutStartEvents(plyId, active, phoneNotificationData);
 };
 
 export const finishFishingJob = (plyId: number, netId: number) => {
@@ -101,7 +152,15 @@ export const finishFishingJob = (plyId: number, netId: number) => {
   }
 
   Vehicles.deleteVehicle(NetworkGetEntityFromNetworkId(active.netId));
-  Util.Log('jobs:fishing:finish', { ...active }, `${Util.getName(plyId)} finished fishing for group`, plyId);
+  Util.Log(
+    'jobs:fishing:finish',
+    {
+      groupId: group.id,
+      fishPerCid: [...active.fishPerCid.entries()],
+    },
+    `${Util.getName(plyId)}(${plyId}) finished fishing for group`,
+    plyId
+  );
 };
 
 const getTotalFishOfActive = (active: Fishing.Job) => {
@@ -118,23 +177,33 @@ export const addFishToGroupVehicle = (plyId: number, netId: number) => {
     Notifications.add(plyId, 'Dit is niet het gegeven visvoertuig', 'error');
     return;
   }
+
+  let isFinished = false;
   const totalFishAmount = getTotalFishOfActive(active);
-  const maxFishAmount = 10 * group.members.length;
-  if (totalFishAmount + 1 >= maxFishAmount) {
-    Notifications.add(
-      plyId,
-      'Het voertuig zit vol, lever het voertuig terug in om je betaling te ontvangen!',
-      'success'
-    );
-    if (totalFishAmount + 1 > maxFishAmount) return;
+  if (totalFishAmount + 1 >= active.maxFish) {
+    isFinished = true;
+    if (totalFishAmount + 1 > active.maxFish) return;
   }
+
   const amountOfCid = active.fishPerCid.get(cid) ?? 0;
   active.fishPerCid.set(cid, amountOfCid + 1);
   activeGroups.set(group.id, active);
   fishingLogger.silly(`Fishamount for group ${group.id} has been increased by ${cid}`);
+
+  const phoneNotificationData = buildPhoneNotificationData(active);
+  const returnCoords = fishingConfig.vehicle[active.jobType].coords;
+  group.members.forEach(m => {
+    if (m.serverId === null) return;
+    Phone.updateNotification(m.serverId, 'fishing_amount_tracker', phoneNotificationData);
+
+    if (isFinished) {
+      Notifications.add(plyId, 'Het voertuig zit vol, lever het voertuig in om je betaling te ontvangen!', 'success');
+      Util.setWaypoint(plyId, returnCoords);
+    }
+  });
 };
 
-export const playerLeftGroup = (groupId: string, plyId: number | null) => {
+export const handlePlayerLeftFishingGroup = (groupId: string, plyId: number | null) => {
   const active = activeGroups.get(groupId);
   if (!active) return;
 
@@ -144,10 +213,11 @@ export const playerLeftGroup = (groupId: string, plyId: number | null) => {
 
   const group = getGroupById(groupId);
   if (group && group.members.length > 0) return;
+
+  activeGroups.delete(groupId);
   setTimeout(() => {
     Vehicles.deleteVehicle(NetworkGetEntityFromNetworkId(active.netId));
   }, 10000);
-  activeGroups.delete(groupId);
   fishingLogger.silly(`Group ${groupId} has been removed from active as there are no members remaining`);
 };
 
@@ -189,7 +259,7 @@ export const trySpecialLoot = (plyId: number) => {
   Util.Log(
     'jobs:fishing:specialLoot',
     { groupId: group.id, item },
-    `${Util.getName(plyId)} received special loot for fishing`,
+    `${Util.getName(plyId)}(${plyId}) received special loot for fishing`,
     plyId
   );
   return true;

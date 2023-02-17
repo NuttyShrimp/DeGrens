@@ -17,22 +17,22 @@ const getRoute = (path: string): API.Route | undefined => {
   return undefined;
 };
 
-const splitParams = (path: string): [API.Route | undefined, Record<string, string> | undefined] => {
+const splitParams = (path: string, method: string): [API.Route | undefined, Record<string, string> | undefined] => {
   const sPath = path.split('/');
   for (const routes of routeMap.values()) {
     for (const route of routes) {
-      const pathPtrn = route.path.replace(/\/:.*/, '/.*');
-      const pathRegExp = new RegExp("^"+pathPtrn+"$", 'g');
-      if (pathRegExp.test('/' + path.replace(/\?.*/, ""))) {
+      const pathPtrn = route.path.replace(/\/:[^//]*/, '/.*');
+      const pathRegExp = new RegExp('^' + pathPtrn + '$', 'g');
+      if (pathRegExp.test('/' + path.replace(/\?.*/, '')) && route.method === method) {
         // seed params
         const params: Record<string, string> = {};
         Object.keys(route.params).forEach(p => {
           params[p] = sPath[route.params[p]];
-        })
+        });
         if (path.split('?').length > 1) {
-          const paramsString = path.split('?')[1]
+          const paramsString = path.split('?')[1];
           const queries = new URLSearchParams(paramsString);
-          for(let pair of queries.entries()){
+          for (let pair of queries.entries()) {
             params[pair[0]] = pair[1];
           }
         }
@@ -40,11 +40,11 @@ const splitParams = (path: string): [API.Route | undefined, Record<string, strin
       }
     }
   }
-  return [undefined, undefined]
-}
+  return [undefined, undefined];
+};
 
 const getRouteResponser =
-  (res: any) =>
+  (res: any, path: string) =>
   (
     code: number,
     data: any,
@@ -52,6 +52,9 @@ const getRouteResponser =
       ['Content-Type']: 'application/json',
     }
   ) => {
+    if (code >= 400) {
+      mainLogger.warn('A API route did not have a success code', 'path', path, 'code', code, 'returnData', data);
+    }
     res.writeHead(code, headers);
     res.send(JSON.stringify(data));
   };
@@ -65,10 +68,16 @@ export const registerRoute = (method: API.Method, path: string, handler: API.Han
     routeMap.set(resource, []);
   }
   // Check if path includes params
-  const params: Record<string, number> = path.split('/').filter(p=>p !== '').map((p, i) => ({ path: p, index: i })).filter(i => i.path.includes(':')).reduce((obj: Record<string, number>, i) => {
-    obj[i.path.replace(':', '')] = i.index;
-    return obj
-  }, {}) ?? {};
+  const params: Record<string, number> =
+    path
+      .split('/')
+      .filter(p => p !== '')
+      .map((p, i) => ({ path: p, index: i }))
+      .filter(i => i.path.includes(':'))
+      .reduce((obj: Record<string, number>, i) => {
+        obj[i.path.replace(':', '')] = i.index;
+        return obj;
+      }, {}) ?? {};
   routeMap.get(resource)!.push({
     method,
     path,
@@ -79,8 +88,8 @@ export const registerRoute = (method: API.Method, path: string, handler: API.Han
 global.exports('registerRoute', registerRoute);
 
 export const handleRoute = (path: string, req: any, res: any) => {
-  const [route, params] = splitParams(path);
-  req.params = {...(req.params ?? {}), ...params};
+  const [route, params] = splitParams(path, req.method);
+  req.params = { ...(req.params ?? {}), ...params };
   if (!route) {
     doRequestResponse(res, { message: 'Path was not found' }, 404);
     Util.Log(
@@ -95,11 +104,11 @@ export const handleRoute = (path: string, req: any, res: any) => {
     return;
   }
   try {
-    route.handler(req, getRouteResponser(res));
+    route.handler(req, getRouteResponser(res, path));
   } catch (e) {
     doRequestResponse(res, { message: 'An error occurred while handling your request' }, 500);
-    mainLogger.error(`An error occurred in the handler of ${path}`)
-    console.error(e)
+    mainLogger.error(`An error occurred in the handler of ${path}`);
+    console.error(e);
   }
 };
 

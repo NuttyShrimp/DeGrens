@@ -74,19 +74,20 @@ export const spawnVehicle = async (
     return;
   }
 
+  const entityOwner = NetworkGetEntityOwner(veh);
+  const vehNetId = NetworkGetNetworkIdFromEntity(veh);
+
   mainLogger.debug(
-    `Spawn vehicle: spawned | model: ${model} | entity: ${veh} | netId: ${NetworkGetNetworkIdFromEntity(veh)}`
+    `Spawn vehicle: spawned | model: ${model} | entity: ${veh} | netId: ${vehNetId} | owner: ${entityOwner}`
   );
 
-  SetEntityHeading(veh, position.w);
-
-  // Sometimes a vehicle would get spawned with ped inside, hopefully this fixes it
-  const pedInDriverSeat = GetPedInVehicleSeat(veh, -1);
-  if (pedInDriverSeat) {
-    DeleteEntity(pedInDriverSeat);
+  // If model is not yet loaded for entityowner, this heading native will not work
+  if (entityOwner > 0) {
+    emitNet('vehicle:setHeading', entityOwner, vehNetId, position.w);
+  } else {
+    SetEntityHeading(veh, position.w);
   }
 
-  const vehNetId = NetworkGetNetworkIdFromEntity(veh);
   if (!vin) {
     vin = vinManager.generateVin(vehNetId);
   } else {
@@ -104,6 +105,32 @@ export const spawnVehicle = async (
   if (upgrades) {
     applyUpgradesToVeh(vehNetId, upgrades);
   }
+
+  // in certain zones gta will spawn population peds in vehicles (had this happen multiple times at vehicle rental near pillbox)
+  let npcDriverDeleteCounter = 20;
+  const npcDriverDeleteThread = setInterval(() => {
+    const exists = DoesEntityExist(veh);
+    if (!exists) {
+      clearInterval(npcDriverDeleteThread);
+      return;
+    }
+
+    // wait till someone is in scope
+    if (NetworkGetEntityOwner(veh) === -1) return;
+
+    npcDriverDeleteCounter--;
+    const pedInDriverSeat = GetPedInVehicleSeat(veh, -1);
+    if (pedInDriverSeat && DoesEntityExist(pedInDriverSeat) && !IsPedAPlayer(pedInDriverSeat)) {
+      DeleteEntity(pedInDriverSeat);
+      clearInterval(npcDriverDeleteThread);
+      return;
+    }
+
+    if (npcDriverDeleteCounter <= 0) {
+      clearInterval(npcDriverDeleteThread);
+    }
+  }, 250);
+
   return veh;
 };
 
@@ -137,7 +164,9 @@ export const spawnOwnedVehicle = async (src: number, vehicleInfo: Vehicle.Vehicl
   }
 
   if (vehicleInfo.fakeplate) {
-    Util.awaitCondition(() => GetVehicleNumberPlateText(vehicle) === vehicleInfo.plate).then(() => {
+    Util.awaitCondition(
+      () => DoesEntityExist(vehicle) && GetVehicleNumberPlateText(vehicle) === vehicleInfo.plate
+    ).then(() => {
       applyFakePlate(src, vehNetId, vehicleInfo.fakeplate);
     });
   }

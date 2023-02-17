@@ -1,5 +1,6 @@
 import { Events } from '@dgx/client';
-import { getCurrentVehicle, getVehicleVinWithoutValidation } from '@helpers/vehicle';
+import { getCurrentVehicle } from '@helpers/vehicle';
+import { getVehicleVinWithoutValidation } from 'modules/identification/service.identification';
 
 // We cache all keys we have, to avoid unneeded server calls which slows down things like radialmenu isEnabled and peek canInteract
 const keyCache: Set<string> = new Set();

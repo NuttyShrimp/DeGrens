@@ -1,12 +1,13 @@
-import { Events } from '@dgx/client';
+import { Events, Notifications } from '@dgx/client';
 
-export const setEngineState = (vehicleId: number, state: boolean, instantly = false) => {
-  // If engine is broken and trying to start engine, disable anyway
-  if (GetVehicleEngineHealth(vehicleId) <= 0) {
+export const setEngineState = (vehicle: number, state: boolean, instantly = false) => {
+  // when trying to start engine check if its possible
+  if (state && (GetVehicleEngineHealth(vehicle) <= 0 || Entity(vehicle).state.undriveable)) {
     state = false;
+    Notifications.add('Er is iets kapot...', 'error');
   }
-  SetVehicleEngineOn(vehicleId, state, instantly, true);
-  SetVehiclePetrolTankHealth(vehicleId, state ? 1000 : 0); // Disabled auto start
+
+  SetVehicleEngineOn(vehicle, state, instantly, true);
 };
 
 Events.onNet('vehicles:setEngineState', (pVehNetId: number, state: boolean, instantly?: boolean) => {

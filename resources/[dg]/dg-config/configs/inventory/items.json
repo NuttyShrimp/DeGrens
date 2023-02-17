@@ -147,6 +147,7 @@
     "name": "phone",
     "label": "Phone",
     "image": "phone.png",
+    "decayRate": 86400,
     "size": {
       "x": 1,
       "y": 2
@@ -158,6 +159,7 @@
     "name": "weapon_grenade",
     "label": "M61 Grenade",
     "image": "weapon_grenade.png",
+    "decayRate": 129600,
     "size": {
       "x": 3,
       "y": 3
@@ -169,6 +171,7 @@
     "name": "weapon_pipebomb",
     "label": "Pipe Bomb",
     "image": "weapon_pipebomb.png",
+    "decayRate": 129600,
     "size": {
       "x": 4,
       "y": 2
@@ -180,6 +183,7 @@
     "name": "weapon_advancedrifle",
     "label": "AUG-A3",
     "image": "weapon_advancedrifle.png",
+    "decayRate": 129600,
     "size": {
       "x": 6,
       "y": 3
@@ -191,6 +195,7 @@
     "name": "weapon_appistol",
     "label": "Glock 18C",
     "image": "weapon_appistol.png",
+    "decayRate": 129600,
     "size": {
       "x": 4,
       "y": 2
@@ -202,6 +207,7 @@
     "name": "weapon_assaultrifle",
     "label": "AK-47",
     "image": "weapon_assaultrifle.png",
+    "decayRate": 129600,
     "size": {
       "x": 6,
       "y": 3
@@ -213,6 +219,7 @@
     "name": "weapon_assaultsmg",
     "label": "Fn P90",
     "image": "weapon_assaultsmg.png",
+    "decayRate": 129600,
     "size": {
       "x": 5,
       "y": 3
@@ -223,6 +230,7 @@
     "name": "weapon_carbinerifle",
     "label": "PD Colt M4A1",
     "image": "weapon_carbinerifle.png",
+    "decayRate": 129600,
     "size": {
       "x": 6,
       "y": 3
@@ -234,6 +242,7 @@
     "name": "weapon_heavypistol",
     "label": "H&L .45",
     "image": "weapon_heavypistol.png",
+    "decayRate": 129600,
     "size": {
       "x": 4,
       "y": 3
@@ -245,6 +254,7 @@
     "name": "weapon_machinepistol",
     "label": "Tec-9",
     "image": "weapon_machinepistol.png",
+    "decayRate": 129600,
     "size": {
       "x": 4,
       "y": 3
@@ -256,6 +266,7 @@
     "name": "weapon_microsmg",
     "label": "IMI Uzi",
     "image": "weapon_microsmg.png",
+    "decayRate": 129600,
     "size": {
       "x": 4,
       "y": 3
@@ -267,6 +278,7 @@
     "name": "weapon_pistol",
     "label": "Walther P99",
     "image": "weapon_pistol.png",
+    "decayRate": 129600,
     "size": {
       "x": 3,
       "y": 2
@@ -277,6 +289,7 @@
     "name": "weapon_pistol_mk2",
     "label": "PD Glock 17",
     "image": "weapon_pistol_mk2.png",
+    "decayRate": 129600,
     "size": {
       "x": 4,
       "y": 3
@@ -287,6 +300,7 @@
     "name": "weapon_pumpshotgun",
     "label": "PD Mossberg 590A1",
     "image": "weapon_pumpshotgun.png",
+    "decayRate": 129600,
     "size": {
       "x": 6,
       "y": 2
@@ -299,6 +313,7 @@
     "label": "RPG",
     "image": "weapon_rpg.png",
     "description": "Kaboooom",
+    "decayRate": 129600,
     "size": {
       "x": 7,
       "y": 2
@@ -309,17 +324,18 @@
     "name": "weapon_smg",
     "label": "PD MP5",
     "image": "weapon_smg.png",
+    "decayRate": 129600,
     "size": {
       "x": 5,
       "y": 3
     }
   },
   {
-    "markedForSeizure": true,
     "useable": true,
     "name": "weapon_sniperrifle",
-    "label": "PD Sniper Rifle",
+    "label": "Jachtgeweer",
     "image": "weapon_sniperrifle.png",
+    "decayRate": 129600,
     "size": {
       "x": 7,
       "y": 2
@@ -330,6 +346,7 @@
     "name": "weapon_specialcarbine",
     "label": "PD FN Scar-L",
     "image": "weapon_specialcarbine.png",
+    "decayRate": 129600,
     "size": {
       "x": 6,
       "y": 3
@@ -340,6 +357,7 @@
     "name": "weapon_stungun",
     "label": "PD Taser X2",
     "image": "weapon_stungun.png",
+    "decayRate": 129600,
     "size": {
       "x": 4,
       "y": 2
@@ -351,6 +369,7 @@
     "name": "weapon_switchblade",
     "label": "Switchblade",
     "image": "weapon_switchblade.png",
+    "decayRate": 129600,
     "size": {
       "x": 4,
       "y": 2
@@ -362,6 +381,7 @@
     "label": "Wrench",
     "image": "weapon_wrench.png",
     "description": "Meest gebruikte tool van een mechanieker.",
+    "decayRate": 129600,
     "size": {
       "x": 4,
       "y": 2
@@ -373,6 +393,7 @@
     "label": "Baseball Bat",
     "image": "weapon_bat.png",
     "description": "Sportmateriaal om op balletjes te slaan.",
+    "decayRate": 129600,
     "size": {
       "x": 1,
       "y": 7
@@ -385,6 +406,7 @@
     "label": "Crowbar",
     "image": "weapon_crowbar.png",
     "description": "Afbraakgereedschap of om te gebruiken voor andere doeleinden...",
+    "decayRate": 129600,
     "size": {
       "x": 2,
       "y": 5
@@ -396,6 +418,7 @@
     "label": "Fire Extinguisher",
     "image": "weapon_fireextinguisher.png",
     "description": "Een draagbaar brandblusapparaat kan altijd van pas komen",
+    "decayRate": 129600,
     "size": {
       "x": 2,
       "y": 5
@@ -406,6 +429,7 @@
     "name": "weapon_flashlight",
     "label": "Flashlight",
     "image": "weapon_flashlight.png",
+    "decayRate": 129600,
     "size": {
       "x": 3,
       "y": 1
@@ -417,6 +441,7 @@
     "label": "Golfclub",
     "image": "weapon_golfclub.png",
     "description": "Sportmateriaal om op balletjes te slaan.",
+    "decayRate": 129600,
     "size": {
       "x": 5,
       "y": 1
@@ -429,6 +454,7 @@
     "label": "Hatchet",
     "image": "weapon_hatchet.png",
     "description": "#SaveTheAmazonForest",
+    "decayRate": 129600,
     "size": {
       "x": 4,
       "y": 2
@@ -440,6 +466,7 @@
     "name": "weapon_knife",
     "label": "Knife",
     "image": "weapon_knife.png",
+    "decayRate": 129600,
     "size": {
       "x": 4,
       "y": 2
@@ -451,6 +478,7 @@
     "name": "weapon_knuckle",
     "label": "Knuckle",
     "image": "weapon_knuckle.png",
+    "decayRate": 129600,
     "size": {
       "x": 2,
       "y": 2
@@ -463,6 +491,7 @@
     "label": "Machete",
     "image": "weapon_machete.png",
     "description": "Handig om bamboo te kappen als je een panda hebt als huisdier.",
+    "decayRate": 129600,
     "size": {
       "x": 5,
       "y": 2
@@ -474,6 +503,7 @@
     "label": "Wapenstok",
     "image": "weapon_nightstick.png",
     "description": "De Politie, uw vriend?",
+    "decayRate": 129600,
     "size": {
       "x": 4,
       "y": 1
@@ -484,6 +514,7 @@
     "name": "weapon_petrolcan",
     "label": "Petrol Can",
     "image": "weapon_petrolcan.png",
+    "decayRate": 129600,
     "size": {
       "x": 3,
       "y": 4
@@ -495,6 +526,7 @@
     "label": "Poolcue",
     "image": "weapon_poolcue.png",
     "description": "Sportmateriaal om op balletjes te duwen.",
+    "decayRate": 129600,
     "size": {
       "x": 1,
       "y": 7
@@ -506,6 +538,7 @@
     "label": "Snowball",
     "image": "weapon_snowball.png",
     "description": "Gemaakt van witte sneeuw, hopelijk...",
+    "decayRate": 129600,
     "size": {
       "x": 2,
       "y": 2
@@ -723,17 +756,6 @@
     }
   },
   {
-    "name": "plant_fertilizer",
-    "label": "Plantenvoeding",
-    "decayRate": 10080,
-    "image": "plant_fertilizer.png",
-    "description": "Voeding om je zelf geplante plantjes te voeden",
-    "size": {
-      "x": 2,
-      "y": 3
-    }
-  },
-  {
     "markedForSeizure": true,
     "name": "weed_bud",
     "label": "Weed Bud",
@@ -750,6 +772,7 @@
     "name": "empty_bags",
     "label": "Lege Plastic Zakjes",
     "image": "empty_bags.png",
+    "decayRate": 43200,
     "size": {
       "x": 3,
       "y": 2
@@ -2625,12 +2648,12 @@
     "markedForSeizure": true
   },
   {
-    "name": "sand_bucket",
-    "label": "Emmer Zand",
-    "image": "sand_bucket.png",
+    "name": "sand",
+    "label": "Zand",
+    "image": "sand.png",
     "size": {
-      "x": 3,
-      "y": 3
+      "x": 2,
+      "y": 2
     },
     "decayrate": 1440
   },
@@ -2690,6 +2713,7 @@
     "label": "Onbekend voorwerp",
     "description": "Een raar voorwerp dat lijkt op een mal voor metaal",
     "image": "key_mold.png",
+    "decayRate": 7200,
     "size": {
       "x": 5,
       "y": 3
@@ -2700,6 +2724,7 @@
     "label": "Sleutel",
     "description": "Onafgewerkte sleutel met scherpe randen",
     "image": "container_key.png",
+    "decayRate": 129600,
     "size": {
       "x": 3,
       "y": 2
@@ -2745,6 +2770,7 @@
     "name": "spike_strip",
     "label": "PD Spike Strips",
     "image": "spike_strip.png",
+    "decayRate": 14400,
     "size": {
       "x": 3,
       "y": 2
@@ -2755,6 +2781,7 @@
     "name": "dna_swab",
     "label": "DNA Swab",
     "image": "dna_swab.png",
+    "decayRate": 2880,
     "size": {
       "x": 4,
       "y": 2
@@ -2792,6 +2819,7 @@
     "name": "binoculars",
     "label": "Verrekijker",
     "image": "binoculars.png",
+    "decayRate": 43200,
     "size": {
       "x": 3,
       "y": 2
@@ -2802,6 +2830,7 @@
     "name": "pd_camera",
     "label": "PD Camera",
     "image": "pd_camera.png",
+    "decayRate": 43200,
     "size": {
       "x": 3,
       "y": 2
@@ -2812,6 +2841,7 @@
     "name": "emergency_button",
     "label": "PD Noodknop",
     "image": "emergency_button.png",
+    "decayRate": 43200,
     "size": {
       "x": 2,
       "y": 2
@@ -2831,6 +2861,7 @@
     "name": "hand_cuffs",
     "label": "Handboeien",
     "image": "hand_cuffs.png",
+    "decayRate": 43200,
     "size": {
       "x": 2,
       "y": 2
@@ -2841,6 +2872,7 @@
     "name": "sandwich",
     "label": "Sandwich",
     "image": "sandwich.png",
+    "decayRate": 10,
     "size": {
       "x": 1,
       "y": 1
@@ -2851,6 +2883,7 @@
     "name": "water_bottle",
     "label": "Water",
     "image": "water_bottle.png",
+    "decayRate": 10,
     "size": {
       "x": 1,
       "y": 1
@@ -2869,6 +2902,7 @@
     "name": "rent_papers",
     "label": "Voertuig huur papieren",
     "image": "paper_folder.png",
+    "decayRate": 720,
     "size": {
       "x": 2,
       "y": 2
@@ -2881,6 +2915,7 @@
     "label": "Vest",
     "description": "Kogelwerende vest",
     "image": "armor.png",
+    "decayRate": 20160,
     "size": {
       "x": 2,
       "y": 2
@@ -2891,6 +2926,7 @@
     "label": "Bier",
     "image": "beer.png",
     "useable": true,
+    "decayRate": 7200,
     "size": {
       "x": 1,
       "y": 2
@@ -2902,6 +2938,7 @@
     "label": "PD Vest",
     "description": "Kogelwerende vest",
     "image": "pd_armor.png",
+    "decayRate": 20160,
     "size": {
       "x": 2,
       "y": 2
@@ -2912,6 +2949,7 @@
     "label": "Relative Vodka",
     "image": "vodka.png",
     "useable": true,
+    "decayRate": 7200,
     "size": {
       "x": 1,
       "y": 2
@@ -2922,6 +2960,7 @@
     "name": "bandage",
     "label": "Verband",
     "image": "bandage.png",
+    "decayRate": 7200,
     "size": {
       "x": 2,
       "y": 1
@@ -2932,8 +2971,324 @@
     "label": "Mojito",
     "image": "mojito.png",
     "useable": true,
+    "decayRate": 7200,
     "size": {
       "x": 2,
+      "y": 2
+    }
+  },
+  {
+    "useable": true,
+    "name": "hunting_bait",
+    "label": "Lokaas",
+    "image": "hunting_bait.png",
+    "decayRate": 7200,
+    "size": {
+      "x": 1,
+      "y": 1
+    }
+  },
+  {
+    "name": "animal_meat",
+    "label": "Vers Vlees",
+    "image": "animal_meat.png",
+    "decayRate": 20160,
+    "size": {
+      "x": 1,
+      "y": 1
+    }
+  },
+  {
+    "name": "animal_skin_boar",
+    "label": "Everzwijnhuid",
+    "image": "animal_skin_boar.png",
+    "decayRate": 1440,
+    "size": {
+      "x": 2,
+      "y": 2
+    }
+  },
+  {
+    "name": "animal_skin_coyote",
+    "label": "Coyotehuid",
+    "image": "animal_skin_coyote.png",
+    "decayRate": 1440,
+    "size": {
+      "x": 2,
+      "y": 2
+    }
+  },
+  {
+    "name": "animal_skin_deer",
+    "label": "Hertenhuid",
+    "image": "animal_skin_deer.png",
+    "decayRate": 1440,
+    "size": {
+      "x": 2,
+      "y": 2
+    }
+  },
+  {
+    "name": "animal_skin_mtlion",
+    "label": "Poemahuid",
+    "image": "animal_skin_mtlion.png",
+    "decayRate": 1440,
+    "size": {
+      "x": 2,
+      "y": 2
+    }
+  },
+  {
+    "name": "gold_nugget",
+    "label": "Stukje Goud",
+    "image": "gold_nugget.png",
+    "decayRate": 14400,
+    "size": {
+      "x": 2,
+      "y": 2
+    }
+  },
+  {
+    "name": "farming_fertilizer",
+    "label": "Plantenvoeding",
+    "decayRate": 10080,
+    "image": "farming_fertilizer.png",
+    "size": {
+      "x": 2,
+      "y": 3
+    }
+  },
+  {
+    "name": "farming_fertilizer_deluxe",
+    "label": "Deluxe Plantenvoeding",
+    "decayRate": 10080,
+    "image": "farming_fertilizer_deluxe.png",
+    "size": {
+      "x": 2,
+      "y": 3
+    }
+  },
+  {
+    "name": "farming_bucket",
+    "label": "Emmer",
+    "image": "farming_bucket.png",
+    "decayRate": 43200,
+    "useable": true,
+    "size": {
+      "x": 3,
+      "y": 3
+    }
+  },
+  {
+    "name": "farming_milk",
+    "label": "Melk",
+    "image": "farming_milk.png",
+    "decayRate": 4320,
+    "useable": true,
+    "size": {
+      "x": 1,
+      "y": 2
+    }
+  },
+  {
+    "name": "farming_seed_tomato",
+    "label": "Tomaten Zaadje",
+    "image": "farming_seed_tomato.png",
+    "decayRate": 360,
+    "useable": true,
+    "size": {
+      "x": 1,
+      "y": 1
+    }
+  },
+  {
+    "name": "farming_seed_lettuce",
+    "label": "Sla Zaadje",
+    "image": "farming_seed_lettuce.png",
+    "decayRate": 360,
+    "useable": true,
+    "size": {
+      "x": 1,
+      "y": 1
+    }
+  },
+  {
+    "name": "farming_seed_onion",
+    "label": "Uien Zaadje",
+    "image": "farming_seed_onion.png",
+    "decayRate": 360,
+    "useable": true,
+    "size": {
+      "x": 1,
+      "y": 1
+    }
+  },
+  {
+    "name": "farming_seed_wheat",
+    "label": "Graan Zaadje",
+    "image": "farming_seed_wheat.png",
+    "decayRate": 360,
+    "useable": true,
+    "size": {
+      "x": 1,
+      "y": 1
+    }
+  },
+  {
+    "name": "farming_seed_potato",
+    "label": "Aardappel Zaadje",
+    "image": "farming_seed_potato.png",
+    "decayRate": 360,
+    "useable": true,
+    "size": {
+      "x": 1,
+      "y": 1
+    }
+  },
+  {
+    "name": "farming_tomato",
+    "label": "Tomaat",
+    "image": "farming_tomato.png",
+    "decayRate": 20160,
+    "size": {
+      "x": 1,
+      "y": 1
+    }
+  },
+  {
+    "name": "farming_lettuce",
+    "label": "Sla",
+    "image": "farming_lettuce.png",
+    "decayRate": 20160,
+    "size": {
+      "x": 1,
+      "y": 1
+    }
+  },
+  {
+    "name": "farming_onion",
+    "label": "Ui",
+    "image": "farming_onion.png",
+    "decayRate": 20160,
+    "size": {
+      "x": 1,
+      "y": 1
+    }
+  },
+  {
+    "name": "farming_wheat",
+    "label": "Graan",
+    "image": "farming_wheat.png",
+    "decayRate": 20160,
+    "size": {
+      "x": 1,
+      "y": 1
+    }
+  },
+  {
+    "name": "farming_potato",
+    "label": "Aardappel",
+    "image": "farming_potato.png",
+    "decayRate": 20160,
+    "size": {
+      "x": 1,
+      "y": 1
+    }
+  },
+  {
+    "name": "upnatom_soda",
+    "label": "Up-n-Atom Soda",
+    "image": "upnatom_soda.png",
+    "decayRate": 180,
+    "useable": true,
+    "size": {
+      "x": 1,
+      "y": 2
+    }
+  },
+  {
+    "name": "upnatom_milkshake",
+    "label": "Up-n-Atom Milkshake",
+    "image": "upnatom_milkshake.png",
+    "decayRate": 180,
+    "useable": true,
+    "size": {
+      "x": 1,
+      "y": 2
+    }
+  },
+  {
+    "name": "upnatom_icecream",
+    "label": "Up-n-Atom Ijsje",
+    "image": "upnatom_icecream.png",
+    "decayRate": 180,
+    "useable": true,
+    "size": {
+      "x": 1,
+      "y": 1
+    }
+  },
+  {
+    "name": "upnatom_fries",
+    "label": "Up-n-Atom Fries",
+    "image": "upnatom_fries.png",
+    "decayRate": 180,
+    "useable": true,
+    "size": {
+      "x": 1,
+      "y": 1
+    }
+  },
+  {
+    "name": "upnatom_burger",
+    "label": "Up-n-Atom Burger",
+    "image": "upnatom_burger.png",
+    "decayRate": 180,
+    "useable": true,
+    "size": {
+      "x": 1,
+      "y": 1
+    }
+  },
+  {
+    "name": "upnatom_cheeseburger",
+    "label": "Up-n-Atom Cheeseburger",
+    "image": "upnatom_cheeseburger.png",
+    "decayRate": 180,
+    "useable": true,
+    "size": {
+      "x": 1,
+      "y": 1
+    }
+  },
+  {
+    "name": "restaurant_burger",
+    "label": "Burger",
+    "image": "restaurant_burger.png",
+    "decayRate": 20160,
+    "size": {
+      "x": 1,
+      "y": 1
+    }
+  },
+  {
+    "name": "restaurant_cheese",
+    "label": "Plakje Kaas",
+    "image": "restaurant_cheese.png",
+    "decayRate": 20160,
+    "size": {
+      "x": 1,
+      "y": 1
+    }
+  },
+  {
+    "name": "repair_kit",
+    "label": "Reparatie Set",
+    "image": "repair_kit.png",
+    "useable": true,
+    "decayRate": 7200,
+    "size": {
+      "x": 3,
       "y": 2
     }
   }

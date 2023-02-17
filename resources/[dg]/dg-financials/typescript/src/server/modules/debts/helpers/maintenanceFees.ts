@@ -24,7 +24,7 @@ export const scheduleMaintenanceFees = async () => {
   debtLogger.info(
     `Maintenance fee check scheduled at ${schedule.format('DD/MM/YYYY HH:mm')} in ${schedule.diff(now, 'hours')} hours`
   );
-  if (schedule.diff(now, "h") > 12) return;
+  if (schedule.diff(now, 'h') > 12) return;
   setTimeout(() => {
     debtLogger.info('Starting maintenance fee check');
     calculateMaintenceFees();

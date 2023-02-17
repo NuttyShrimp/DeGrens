@@ -1,13 +1,16 @@
-import { Events, Keys, Peek, PolyZone, RPC, Util } from '@dgx/client';
-import { DUMPSTER_MODELS, RANGE } from './constants.sanitation';
+import { Events, Keys, Peek, PolyZone } from '@dgx/client';
+import { DUMPSTER_MODELS } from './constants.sanitation';
 import {
-  addTargetInfo,
   buildReturnZone,
   cleanupSanitationJob,
   finishJob,
+  hasTargetLocation,
+  isHoldingTrashbag,
   setAssignedVehicle,
   setInReturnZone,
   setTargetLocation,
+  setWaypointToReturnZone,
+  takeBagFromDumpster,
 } from './servive.sanitation';
 
 Peek.addFlagEntry('isSanitationManager', {
@@ -23,10 +26,35 @@ Peek.addFlagEntry('isSanitationManager', {
   distance: 2.0,
 });
 
-Events.onNet('jobs:sanitation:addLocation', (netId: number, returnZone: Vec4, targetLocation: Vec3) => {
+Peek.addModelEntry(DUMPSTER_MODELS, {
+  options: [
+    {
+      icon: 'fas fa-sack',
+      label: 'Vuiliszak Nemen',
+      action: (_, entity) => {
+        if (!entity) return;
+        takeBagFromDumpster(entity);
+      },
+      canInteract: () => hasTargetLocation() && !isHoldingTrashbag(),
+    },
+  ],
+  distance: 2.0,
+});
+
+Events.onNet('jobs:sanitation:start', (netId: number, returnZone: Vec4) => {
   setAssignedVehicle(netId);
   buildReturnZone(returnZone);
-  setTargetLocation(targetLocation);
+});
+
+Events.onNet('jobs:sanitation:setLocation', (data: { id: number; coords: Vec3; range: number } | null) => {
+  if (data === null) {
+    setTargetLocation(null, null);
+    setWaypointToReturnZone();
+    return;
+  }
+
+  const { id, ...blip } = data;
+  setTargetLocation(id, blip);
 });
 
 Events.onNet('jobs:sanitation:cleanup', () => {
@@ -40,28 +68,6 @@ PolyZone.onLeave('jobs_sanitation_return', () => {
   setInReturnZone(false);
 });
 
-PolyZone.onEnter('jobs_sanitation_target', () => {
-  Events.emitNet('jobs:sanitation:enteredTarget');
-});
-
 Keys.onPressDown('GeneralUse', () => {
   finishJob();
-});
-
-RPC.register('jobs:sanitation:getDumpsterLocations', () => {
-  const plyCoords = Util.getPlyCoords();
-  const objects: number[] = GetGamePool('CObject');
-  const dumpsterCoords = objects.reduce<Vec3[]>((acc, ent) => {
-    if (!DUMPSTER_MODELS.includes(GetEntityModel(ent))) return acc;
-    const [x, y, z] = GetEntityCoords(ent, false);
-    const entityCoords = { x, y, z };
-    if (plyCoords.distance(entityCoords) > RANGE) return acc;
-    acc.push(entityCoords);
-    return acc;
-  }, []);
-  return dumpsterCoords;
-});
-
-Events.onNet('jobs:sanitation:addTargetInfo', (total: number) => {
-  addTargetInfo(total);
 });

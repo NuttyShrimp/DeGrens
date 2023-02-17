@@ -14,13 +14,13 @@
     "webpack:config": "webpack --config ./webpack.config.js"
   },
   "dependencies": {
-    "uuid": "^8.3.2"
+    "uuid": "^9.0.0"
   },
   "devDependencies": {
     "@dgx/client": "*",
     "@dgx/server": "*",
     "@dgx/shared": "*",
-    "@types/uuid": "^8.3.4",
+    "@types/uuid": "^9.0.0",
     "tsconfig": "*",
     "webpack": "*"
   }

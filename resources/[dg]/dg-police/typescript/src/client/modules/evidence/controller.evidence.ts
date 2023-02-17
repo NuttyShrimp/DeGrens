@@ -1,15 +1,15 @@
-import { Events, Jobs, Keys, Peek, Util } from '@dgx/client';
+import { Events, Jobs, Keys, Peek, Weapons } from '@dgx/client';
 import { getNearestColorFromHex } from '@dgx/shared/helpers/colorNames';
 import { getDataOfGTAColorById } from '@dgx/shared/helpers/gtacolors';
 import { researchBlood, startEvidenceThread, stopEvidenceThread, takeEvidence } from './service.evidence';
 
-on('weapons:startedFreeAiming', (itemState: Inventory.ItemState) => {
+Weapons.onFreeAimStart(itemState => {
   if (itemState.name !== 'weapon_flashlight') return;
   if (Jobs.getCurrentJob().name !== 'police') return;
   startEvidenceThread();
 });
 
-on('weapons:stoppedFreeAiming', () => {
+Weapons.onFreeAimStop(() => {
   stopEvidenceThread();
 });
 

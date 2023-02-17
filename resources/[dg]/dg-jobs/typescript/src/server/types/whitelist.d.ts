@@ -7,16 +7,16 @@ declare namespace Whitelist {
     // Index of rank array
     rank: number;
     // Bit mask of specializations
-    specialty: number;
+    speciality: number;
   }
   interface Config {
     grades: string[];
-    specialties: string[];
+    specialities: string[];
     name: string;
   }
   interface Info {
     grades: string[];
-    specialties: Record<string, number>;
+    specialities: Record<string, number>;
     name: string;
   }
 }

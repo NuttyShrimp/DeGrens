@@ -1,8 +1,8 @@
-import { Events, Notifications, RPC, Util } from '@dgx/client';
+import { Events, Notifications, PropAttach, RPC, Util } from '@dgx/client';
 
 import { disableBlips, enableBlips } from '../../service/playerBlips';
 import { toggleLocalVis } from './service.commands';
-import { setCmdState } from './state';
+import { getCmdState, setCmdState } from './state.commands';
 
 // Functiontypes fuck up when putting this in command directly because that file is serversided but function gets executed on client
 on('admin:commands:damageEntity', (ent: number) => {
@@ -119,8 +119,14 @@ Events.onNet('admin:command:collision', () => {
 });
 
 Events.onNet('admin:commands:cloak', toggle => {
-  setCmdState('invisible', toggle);
+  setCmdState('cloak', toggle);
   toggleLocalVis(toggle);
+
+  if (toggle) {
+    PropAttach.toggleProps(false);
+  } else if (!getCmdState('noclip')) {
+    PropAttach.toggleProps(true);
+  }
 });
 
 Events.onNet('admin:commands:tpm', async () => {
@@ -160,4 +166,51 @@ Events.onNet('admin:commands:tpm', async () => {
     console.log(`Could not find ground for ${coords.x}, ${coords.y}, ${coords.z}`);
     SetPedCoordsKeepVehicle(ped, ...Util.Vector3ToArray(oldCoords));
   }
+});
+
+Events.onNet('admin:commands:teleportInVehicle', (netId: number) => {
+  if (!NetworkDoesEntityExistWithNetworkId(netId)) {
+    Notifications.add('Voertuig is niet in je buurt', 'error');
+    return;
+  }
+  const vehicle = NetworkGetEntityFromNetworkId(netId);
+  if (!vehicle || !DoesEntityExist(vehicle)) {
+    Notifications.add('Voertuig is niet in je buurt', 'error');
+    return;
+  }
+
+  const numSeats = GetVehicleModelNumberOfSeats(GetEntityModel(vehicle));
+  let freeSeat: number | undefined = undefined;
+  for (let i = numSeats - 2; i >= -1; i--) {
+    if (IsVehicleSeatFree(vehicle, i)) {
+      freeSeat = i;
+      break;
+    }
+  }
+  if (freeSeat === undefined) {
+    Notifications.add('Er is geen plaats in het voertuig', 'error');
+    return;
+  }
+
+  TaskWarpPedIntoVehicle(PlayerPedId(), vehicle, freeSeat);
+});
+
+Events.onNet('admin:commands:materialDebug', (toggle: boolean) => {
+  const alreadyToggled = getCmdState('materialDebug');
+  setCmdState('materialDebug', toggle);
+
+  if (alreadyToggled) return;
+
+  let currentMaterial = '';
+  const thread = setInterval(() => {
+    if (!getCmdState('materialDebug')) {
+      clearInterval(thread);
+      return;
+    }
+    const material = Util.getGroundMaterial();
+    if (material !== currentMaterial) {
+      currentMaterial = material;
+      console.log(`[Admin] Current material: ${currentMaterial}`);
+    }
+  }, 10);
 });

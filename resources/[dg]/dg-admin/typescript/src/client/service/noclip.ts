@@ -1,7 +1,6 @@
-import { Events, Keys, PropAttach, Util } from '@dgx/client';
-import { getCmdState } from 'modules/commands/state';
+import { Keys, PropAttach, Util } from '@dgx/client';
+import { getCmdState, setCmdState } from 'modules/commands/state.commands';
 
-let noclipEnabled = false;
 let noclipThread: NodeJS.Timer | null = null;
 let noclipCam: number | null = null;
 let noclipEnt: number | null = null;
@@ -16,19 +15,17 @@ const noclipMovingTicks: Record<string, NodeJS.Timer | null> = {
   down: null,
 };
 
-export const isNoclipEnabled = () => {
-  return noclipEnabled;
-};
+export const toggleNoclip = (toggle: boolean) => {
+  const isEnabled = getCmdState('noclip');
+  if (isEnabled === toggle) return;
 
-export const toggleNoclip = () => {
-  Events.emitNet('admin:hideinfo:toggle', !noclipEnabled);
-  if (noclipEnabled) {
-    noclipEnabled = false;
+  if (isEnabled) {
+    setCmdState('noclip', false);
     cleanupNoclip();
     return;
   }
 
-  noclipEnabled = true;
+  setCmdState('noclip', true);
   // Noclip logic
   const ped = PlayerPedId();
   const veh = GetVehiclePedIsIn(ped, false);
@@ -80,7 +77,7 @@ export const toggleNoclip = () => {
 };
 
 export const printDebugInfo = () => {
-  if (!noclipEnabled || !noclipCam) {
+  if (!getCmdState('noclip') || !noclipCam) {
     console.log('Must be in noclip to do this');
     return;
   }
@@ -88,6 +85,14 @@ export const printDebugInfo = () => {
   const camRot = Util.ArrayToVector3(GetCamRot(noclipCam, 2));
   console.log(camCoords);
   console.log(camRot);
+};
+
+// get noclip data for entityselector
+export const getNoclipCamData = () => {
+  if (!noclipCam) return;
+  const coords = Util.ArrayToVector3(GetCamCoord(noclipCam));
+  const rotation = Util.ArrayToVector3(GetCamRot(noclipCam, 0));
+  return { coords, rotation };
 };
 
 const cleanupNoclip = () => {
@@ -105,7 +110,7 @@ const cleanupNoclip = () => {
     FreezeEntityPosition(noclipEnt, false);
     SetEntityCollision(noclipEnt, true, true);
     SetPedCanRagdoll(noclipEnt, true);
-    if (!getCmdState('invisible') || GetEntityType(noclipEnt) !== 1) {
+    if (!getCmdState('cloak') || GetEntityType(noclipEnt) !== 1) {
       SetEntityAlpha(noclipEnt, 255, false);
       SetEntityVisible(noclipEnt, true, true);
     }
@@ -115,7 +120,7 @@ const cleanupNoclip = () => {
     FreezeEntityPosition(noclipPed, false);
     SetEntityCollision(noclipPed, true, true);
     SetPedCanRagdoll(noclipPed, true);
-    if (!getCmdState('invisible')) {
+    if (!getCmdState('cloak')) {
       SetEntityAlpha(noclipPed, 255, false);
       SetEntityVisible(noclipPed, true, true);
     }
@@ -133,7 +138,9 @@ const cleanupNoclip = () => {
     noclipMovingTicks[key as keyof typeof noclipMovingTicks] = null;
   }
 
-  PropAttach.toggleProps(true);
+  if (!getCmdState('cloak')) {
+    PropAttach.toggleProps(true);
+  }
 };
 
 const getMultiplier = (): number => {
@@ -199,11 +206,11 @@ const getSpeedMultiplier = (): number => {
 };
 
 Keys.onPressDown('admin-noclip-spd-up', () => {
-  if (!noclipEnabled) return;
+  if (!getCmdState('noclip')) return;
   noclipSpeed = Math.min(noclipSpeed + getSpeedMultiplier(), 32.0);
 });
 Keys.onPressDown('admin-noclip-spd-down', () => {
-  if (!noclipEnabled) return;
+  if (!getCmdState('noclip')) return;
   noclipSpeed = Math.max(noclipSpeed - getSpeedMultiplier(), 0.1);
 });
 // endregion
@@ -217,7 +224,7 @@ Keys.register('admin-noclip-mv-up', '(zAdmin) Noclip move up', 'Q');
 Keys.register('admin-noclip-mv-down', '(zAdmin) Noclip move down', 'E');
 
 Keys.onPress('admin-noclip-mv-forward', isDown => {
-  if (!noclipEnabled) return;
+  if (!getCmdState('noclip')) return;
   if (!isDown) {
     if (noclipMovingTicks.forward) {
       clearInterval(noclipMovingTicks.forward);
@@ -231,7 +238,7 @@ Keys.onPress('admin-noclip-mv-forward', isDown => {
 });
 
 Keys.onPress('admin-noclip-mv-backward', isDown => {
-  if (!noclipEnabled) return;
+  if (!getCmdState('noclip')) return;
   if (!isDown) {
     if (noclipMovingTicks.backward) {
       clearInterval(noclipMovingTicks.backward);
@@ -245,7 +252,7 @@ Keys.onPress('admin-noclip-mv-backward', isDown => {
 });
 
 Keys.onPress('admin-noclip-mv-left', isDown => {
-  if (!noclipEnabled) return;
+  if (!getCmdState('noclip')) return;
   if (!isDown) {
     if (noclipMovingTicks.left) {
       clearInterval(noclipMovingTicks.left);
@@ -259,7 +266,7 @@ Keys.onPress('admin-noclip-mv-left', isDown => {
 });
 
 Keys.onPress('admin-noclip-mv-right', isDown => {
-  if (!noclipEnabled) return;
+  if (!getCmdState('noclip')) return;
   if (!isDown) {
     if (noclipMovingTicks.right) {
       clearInterval(noclipMovingTicks.right);
@@ -273,7 +280,7 @@ Keys.onPress('admin-noclip-mv-right', isDown => {
 });
 
 Keys.onPress('admin-noclip-mv-up', isDown => {
-  if (!noclipEnabled) return;
+  if (!getCmdState('noclip')) return;
   if (!isDown) {
     if (noclipMovingTicks.up) {
       clearInterval(noclipMovingTicks.up);
@@ -287,7 +294,7 @@ Keys.onPress('admin-noclip-mv-up', isDown => {
 });
 
 Keys.onPress('admin-noclip-mv-down', isDown => {
-  if (!noclipEnabled) return;
+  if (!getCmdState('noclip')) return;
   if (!isDown) {
     if (noclipMovingTicks.down) {
       clearInterval(noclipMovingTicks.down);

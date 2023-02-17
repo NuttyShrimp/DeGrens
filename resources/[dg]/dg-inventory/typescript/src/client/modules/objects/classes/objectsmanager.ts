@@ -39,22 +39,7 @@ class ObjectsManager extends Util.Singleton<ObjectsManager>() {
     let amountOfPosition = this.getActivesForPosition(info.position).length;
     let offset = Vector3.create(this.config.positions[info.position].offset).multiply(amountOfPosition);
 
-    // we set it before attaching prop to register the item as being active for canAddItem check
-    // this is needed for when we spam move object items into inv
-    this.activeObjects.set(item.id, { ...item, propId: null });
-    const propId = await PropAttach.add(info.propName, offset);
-    if (propId === undefined) {
-      this.activeObjects.delete(item.id);
-      throw new Error('Failed to create prop for item');
-    }
-
-    // when spam moving items the item can possibly be removed from inv while we are awaiting prop creation
-    // if that happens we insta delete prop again
-    if (!this.activeObjects.has(item.id)) {
-      PropAttach.remove(propId);
-      return;
-    }
-
+    const propId = PropAttach.add(info.propName, offset);
     this.activeObjects.set(item.id, { ...item, propId });
 
     if (!!info.animData) this.startAnimation(info.animData.animDict, info.animData.anim);

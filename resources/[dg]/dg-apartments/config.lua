@@ -19,4 +19,4 @@ Config.Locations = {
 	}
 }
 
-Config.StashSize = 20
+Config.StashSize = 40

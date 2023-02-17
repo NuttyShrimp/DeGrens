@@ -498,7 +498,7 @@ export const ALL_WEAPONS: Weapons.WeaponConfig[] = [
   {
     name: 'weapon_sniperrifle',
     durabilityMultiplier: 0.01,
-    canTint: true,
+    useNativeReticle: true,
     attachments: {
       // 'sniper_suppressor': 'COMPONENT_AT_AR_SUPP_02',
       // 'sniper_scope': 'COMPONENT_AT_SCOPE_MAX',

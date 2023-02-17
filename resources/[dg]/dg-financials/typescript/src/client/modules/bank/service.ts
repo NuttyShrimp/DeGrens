@@ -31,7 +31,7 @@ export const registerPeekZones = () => {
           icon: 'fas fa-ticket-simple',
           type: 'server',
           action: () => {
-            Events.emitNet('vehicles:mechanic:server:tradeTickets');
+            Events.emitNet('financials:tickets:trade');
           },
         },
       ],

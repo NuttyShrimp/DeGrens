@@ -1,22 +1,20 @@
 import { Events, Notifications, Sync } from '@dgx/server';
-import { hidePly } from 'services/hideInfo';
-
-let cloakToggled: Record<number, boolean> = {};
+import { getPlayerCommandState, setPlayerCommandState } from '../state.commands';
+import { allowInvisibleForInteractingPlayers } from '../service.commands';
 
 export const cloak: CommandData = {
   name: 'cloak',
-  log: 'toggled cloak(visibility)',
+  log: 'toggled visibility',
   isClientCommand: false,
   target: [],
   role: 'staff',
   handler: caller => {
-    // argument is undefined when using bind, so save state and toggle every func call
-    const toggle = !cloakToggled[caller.source];
-    cloakToggled[caller.source] = toggle;
+    const toggle = !getPlayerCommandState(caller.source, 'cloak');
+    setPlayerCommandState(caller.source, 'cloak', toggle);
     Events.emitNet('admin:commands:cloak', caller.source, toggle);
     Sync.setPlayerVisible(caller.source, !toggle);
-    hidePly(caller.source, toggle);
     Notifications.add(caller.source, `Cloak ${toggle ? 'enabled' : 'disabled'}`);
+    allowInvisibleForInteractingPlayers(caller.source, toggle);
   },
   UI: {
     title: 'Cloak',

@@ -4,6 +4,6 @@ export const getAPIPlayer = (src: number): API.Player => {
     source: src,
     cid: Player.PlayerData.citizenid,
     firstname: Player.PlayerData?.charinfo?.firstname ?? GetPlayerName(String(src)),
-    lastname: Player.PlayerData?.charinfo?.lastname ?? ''
-  }
-}
+    lastname: Player.PlayerData?.charinfo?.lastname ?? '',
+  };
+};

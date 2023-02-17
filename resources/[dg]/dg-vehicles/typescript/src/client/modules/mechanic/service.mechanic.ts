@@ -1,7 +1,8 @@
 import { Events, Notifications, RPC, Sync, Taskbar, UI, Util } from '@dgx/client';
-import { getVehHalfLength, getVehicleVinWithoutValidation } from '@helpers/vehicle';
+import { getVehHalfLength } from '@helpers/vehicle';
 
 import { itemInputBase, valueToLabel } from '../../../shared/constant.mechanic';
+import { getVehicleVinWithoutValidation } from 'modules/identification/service.identification';
 
 let clockedIn: string | null = null;
 let repairZone: string | null = null;
@@ -25,6 +26,8 @@ export const setClockInStatus = (pClockedIn: boolean, shop: string) => {
 export const setRepairZone = (zone: string | null) => {
   repairZone = zone;
 };
+
+export const isInRepairZone = () => repairZone !== null;
 
 // region Item order
 export const openItemOrder = () => {
