@@ -87,6 +87,11 @@
         "name": "repair_kit",
         "amount": 30,
         "price": 250
+      },
+      {
+        "name": "container_materials",
+        "amount": 10,
+        "price": 3000
       }
     ],
     "fishing": [

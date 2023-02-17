@@ -1,5 +1,4 @@
 import { Config } from '@dgx/server';
-import { Util } from '@dgx/shared';
 import { mainLogger } from 'sv_logger';
 
 const proxyHandler = {
