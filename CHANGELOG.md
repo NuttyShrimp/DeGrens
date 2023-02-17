@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - PMA-sirensync
 - Trashinventory optie in adminpanel
 - Blips voor restaurants
+- Notification to indicate rental papers should be used to get keys
 
 
 ### Changed

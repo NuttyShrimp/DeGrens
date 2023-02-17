@@ -142,6 +142,7 @@ export const rentVehicle = async (src: number, model: string, locId: string, pay
   await Util.Delay(500);
   const vehVin = Vehicles.getVinForVeh(rentVeh);
   const vehPlate = GetVehicleNumberPlateText(rentVeh);
+  Notifications.add(src, "De sleutels zitten bij de papieren")
   Inventory.addItemToPlayer(src, 'rent_papers', 1, {
     plate: vehPlate,
     vin: vehVin,
