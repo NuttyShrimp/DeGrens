@@ -1,6 +1,6 @@
 import { Events, Notifications } from '@dgx/server';
 
-let blipsToggled = false;
+let blipsToggled: Record<number, boolean> = {};
 
 export const playerBlips: CommandData = {
   name: 'playerBlips',
@@ -10,9 +10,12 @@ export const playerBlips: CommandData = {
   target: false,
   handler: caller => {
     // argument is undefined when using bind, so save state and toggle every func call
-    blipsToggled = !blipsToggled;
-    Events.emitNet('dg-admin:client:togglePlayerBlips', caller.source, blipsToggled);
-    Notifications.add(caller.source, `Player blips ${blipsToggled ? 'enabled' : 'disabled'}`);
+    if (!blipsToggled[caller.source]) {
+      blipsToggled[caller.source] = false;
+    }
+    blipsToggled[caller.source] = !blipsToggled[caller.source];
+    Events.emitNet('dg-admin:client:togglePlayerBlips', caller.source, blipsToggled[caller.source]);
+    Notifications.add(caller.source, `Player blips ${blipsToggled[caller.source] ? 'enabled' : 'disabled'}`);
   },
   UI: {
     title: 'Player Blips',
