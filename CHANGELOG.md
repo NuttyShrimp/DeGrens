@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Trashinventory optie in adminpanel
 - Blips voor restaurants
 - Notification to indicate rental papers should be used to get keys
+- Admin clear vehicle service optie
 
 
 ### Changed
@@ -21,6 +22,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Removed sentry transaction in UI event
 - Ontbrekende items toegevoegd aan politie/ambu safe
 - Tijdelijk drugslabs uitgezet
+- Reset voertuig stalls bij gebruik van repairkit
 
 ### Fixed
 

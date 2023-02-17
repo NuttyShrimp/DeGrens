@@ -4,7 +4,7 @@ import { getConfig, loadConfig } from './services/config';
 import { getServiceStatus, seedServiceStatuses, updateServiceStatus } from './services/store';
 import { generateServiceStatus, useRepairPart } from './service.status';
 import { getTyreState } from './helpers.status';
-import { setNativeStatus } from 'helpers/vehicle';
+import { getVinForVeh, setNativeStatus } from 'helpers/vehicle';
 
 setImmediate(() => {
   seedServiceStatuses();
@@ -80,7 +80,21 @@ Events.onNet('vehicles:status:finishRepairKit', async (plyId, itemId: string, ne
 
   const increase = Config.getConfigValue<number>('vehicles.config.repairKitAmount');
   if (!increase) return;
+
+  // Reset stalls for every repair
+  Entity(vehicle).state.amountOfStalls = 0;
   setNativeStatus(vehicle, {
     engine: oldHealth + increase,
+  });
+});
+
+global.exports('clearServiceStatus', (vehicle: number) => {
+  const vin = getVinForVeh(vehicle);
+  if (!vin) return;
+  updateServiceStatus(vin, {
+    axle: 0,
+    brakes: 0,
+    engine: 0,
+    suspension: 0,
   });
 });
