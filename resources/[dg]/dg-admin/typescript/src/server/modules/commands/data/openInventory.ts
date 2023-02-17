@@ -7,6 +7,7 @@ interface OpenInventoryData {
   Target?: UI.Player;
   entity?: number;
   inventoryId?: string;
+  openTrashcan?: boolean;
 }
 
 export const openInventory: CommandData = {
@@ -17,7 +18,10 @@ export const openInventory: CommandData = {
   log: 'opened an inventory',
   handler: (caller, args: OpenInventoryData) => {
     let inv: string;
-    if (args.inventoryId) {
+    if (args.openTrashcan) {
+      inv = Inventory.concatId('trunk', `${caller.cid}_admin_trash`);
+      Notifications.add(caller.source, 'Je hebt een vuilbak geopened, alle inhoud zal gewist worden volgende restart');
+    } else if (args.inventoryId) {
       const invData = Inventory.splitId(args.inventoryId);
       if (!invData.type || !invData.identifier) {
         Notifications.add(caller.source, 'Meegegeven id is geen inventory id');
@@ -40,6 +44,7 @@ export const openInventory: CommandData = {
     info: {
       inputs: [Inputs.Player],
       overrideFields: ['inventoryId'],
+      checkBoxes: ['openTrashcan'],
     },
   },
 };
