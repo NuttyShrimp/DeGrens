@@ -129,9 +129,9 @@ rebase UPD:
     - git config --global user.email "ci@gitlab.pieter557.dscloud.me"
     - git config --global user.name "CI"
     - git fetch # Just in case branch is not fetch
-    - git checkout -t origin/main
+    - git switch main
     - git pull
-    - git checkout -t origin/UPD
+    - git switch UPD
     - git pull
     # Rebase
     - git rebase main UPD
