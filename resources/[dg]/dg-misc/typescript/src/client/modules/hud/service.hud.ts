@@ -87,7 +87,7 @@ export const scheduleBlurEffect = async () => {
 
 const doBlurEffect = async (length: number) => {
   TriggerScreenblurFadeIn(250);
-  await Util.Delay(length + 250);
+  await Util.Delay(length + 300);
   TriggerScreenblurFadeOut(250);
   await Util.Delay(500);
 };
