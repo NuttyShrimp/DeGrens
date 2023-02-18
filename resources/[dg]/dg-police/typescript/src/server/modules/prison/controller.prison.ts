@@ -83,6 +83,10 @@ Events.onNet('police:prison:confiscate', (src: number) => {
     Notifications.add(src, 'Er is niemand in de buurt', 'error');
     return;
   }
+  if (Jobs.getCurrentJob(target) === 'police') {
+    Notifications.add(src, 'Je kan dit niet bij een agent', 'error');
+    return;
+  }
   if (!isPlayerCuffed(target)) {
     Notifications.add(src, 'Deze persoon is niet geboeit', 'error');
     return;

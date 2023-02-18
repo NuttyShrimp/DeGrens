@@ -8,10 +8,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+
 ### Changed
+
 - Discord presence is aangepast
 - Algemene job payout tweaks
 - Lagere carwash prijs
+
+### Fixed
+
+- Confisqueren van items is niet meer mogelijk bij medeagent
 
 ## [1.0.1]
 
