@@ -54,6 +54,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Verlaagt min percentage van vehicle damage service
 - Fix errors bij proberen kopen van items wanneer je niet genoeg geld hebt
 - Testdrive inleveren geeft je geld weer terug
+- Fix tijd die niet naar nieuwe dag ging
 
 ## [0.0.0]
 

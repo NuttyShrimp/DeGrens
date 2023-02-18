@@ -12,7 +12,7 @@ export const initializeTime = () => {
   const milliSecondsPerGameMinute = (60 / (24 / HOURS_PER_DAY)) * 1000;
   setInterval(() => {
     let newTime = currentTime + 1;
-    if (newTime > 1440) newTime = 0;
+    if (newTime >= 1440) newTime = 0;
     setCurrentTime(newTime);
   }, milliSecondsPerGameMinute);
 };
