@@ -22,5 +22,6 @@ declare namespace Fishing {
     jobType: JobType;
     fishPerCid: Map<number, number>;
     maxFish: number;
+    payoutLevel: number;
   };
 }
