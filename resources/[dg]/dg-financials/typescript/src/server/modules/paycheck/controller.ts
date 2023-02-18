@@ -26,7 +26,10 @@ Jobs.onJobUpdate((plyId, job) => {
 });
 
 onNet('financials:server:paycheck:give', () => {
-  if (!isPlyInLoc(source, 'pacific')) return;
+  if (!isPlyInLoc(source, 'pacific')) {
+    Notifications.add(source, 'NEEN NEEF');
+    return;
+  }
   givePaycheck(source);
 });
 

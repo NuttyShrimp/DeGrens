@@ -35,6 +35,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Mogelijkheid om te praten terwijl je gecarried wordt
 - Custom clothing is nu voor zowel man als vrouw beschikbaar
 - Clothing outfits gefixed
+- Je kunt nu je paycheck gaan ophalen in de pacific
 
 ## [0.0.0]
 
