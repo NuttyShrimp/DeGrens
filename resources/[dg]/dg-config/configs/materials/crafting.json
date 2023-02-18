@@ -677,7 +677,7 @@
       ]
     },
     "engine_part_c": {
-      "requiredReputation": 25,
+      "requiredReputation": 10,
       "items": [
         {
           "name": "material_steel",
@@ -694,7 +694,7 @@
       ]
     },
     "suspension_part_c": {
-      "requiredReputation": 25,
+      "requiredReputation": 10,
       "items": [
         {
           "name": "material_steel",
@@ -711,7 +711,7 @@
       ]
     },
     "brakes_part_c": {
-      "requiredReputation": 25,
+      "requiredReputation": 10,
       "items": [
         {
           "name": "material_steel",
@@ -728,7 +728,7 @@
       ]
     },
     "axle_part_c": {
-      "requiredReputation": 25,
+      "requiredReputation": 10,
       "items": [
         {
           "name": "material_steel",
@@ -745,7 +745,7 @@
       ]
     },
     "engine_part_b": {
-      "requiredReputation": 50,
+      "requiredReputation": 20,
       "items": [
         {
           "name": "material_steel",
@@ -762,7 +762,7 @@
       ]
     },
     "suspension_part_b": {
-      "requiredReputation": 50,
+      "requiredReputation": 20,
       "items": [
         {
           "name": "material_steel",
@@ -779,7 +779,7 @@
       ]
     },
     "brakes_part_b": {
-      "requiredReputation": 50,
+      "requiredReputation": 20,
       "items": [
         {
           "name": "material_steel",
@@ -796,7 +796,7 @@
       ]
     },
     "axle_part_b": {
-      "requiredReputation": 50,
+      "requiredReputation": 20,
       "items": [
         {
           "name": "material_steel",
@@ -813,7 +813,7 @@
       ]
     },
     "engine_part_a": {
-      "requiredReputation": 75,
+      "requiredReputation": 30,
       "items": [
         {
           "name": "material_steel",
@@ -830,7 +830,7 @@
       ]
     },
     "suspension_part_a": {
-      "requiredReputation": 75,
+      "requiredReputation": 30,
       "items": [
         {
           "name": "material_steel",
@@ -847,7 +847,7 @@
       ]
     },
     "brakes_part_a": {
-      "requiredReputation": 75,
+      "requiredReputation": 30,
       "items": [
         {
           "name": "material_steel",
@@ -864,7 +864,7 @@
       ]
     },
     "axle_part_a": {
-      "requiredReputation": 75,
+      "requiredReputation": 30,
       "items": [
         {
           "name": "material_steel",
@@ -881,7 +881,7 @@
       ]
     },
     "engine_part_a+": {
-      "requiredReputation": 100,
+      "requiredReputation": 40,
       "items": [
         {
           "name": "material_steel",
@@ -898,7 +898,7 @@
       ]
     },
     "suspension_part_a+": {
-      "requiredReputation": 100,
+      "requiredReputation": 40,
       "items": [
         {
           "name": "material_steel",
@@ -915,7 +915,7 @@
       ]
     },
     "brakes_part_a+": {
-      "requiredReputation": 100,
+      "requiredReputation": 40,
       "items": [
         {
           "name": "material_steel",
@@ -932,7 +932,7 @@
       ]
     },
     "axle_part_a+": {
-      "requiredReputation": 100,
+      "requiredReputation": 40,
       "items": [
         {
           "name": "material_steel",
@@ -949,7 +949,7 @@
       ]
     },
     "engine_part_s": {
-      "requiredReputation": 150,
+      "requiredReputation": 50,
       "items": [
         {
           "name": "material_steel",
@@ -966,7 +966,7 @@
       ]
     },
     "suspension_part_s": {
-      "requiredReputation": 150,
+      "requiredReputation": 50,
       "items": [
         {
           "name": "material_steel",
@@ -983,7 +983,7 @@
       ]
     },
     "brakes_part_s": {
-      "requiredReputation": 150,
+      "requiredReputation": 50,
       "items": [
         {
           "name": "material_steel",
@@ -1000,7 +1000,7 @@
       ]
     },
     "axle_part_s": {
-      "requiredReputation": 150,
+      "requiredReputation": 50,
       "items": [
         {
           "name": "material_steel",
@@ -1017,7 +1017,7 @@
       ]
     },
     "engine_part_x": {
-      "requiredReputation": 200,
+      "requiredReputation": 100,
       "items": [
         {
           "name": "refined_steel",
@@ -1034,7 +1034,7 @@
       ]
     },
     "suspension_part_x": {
-      "requiredReputation": 200,
+      "requiredReputation": 100,
       "items": [
         {
           "name": "refined_steel",
@@ -1051,7 +1051,7 @@
       ]
     },
     "brakes_part_x": {
-      "requiredReputation": 200,
+      "requiredReputation": 100,
       "items": [
         {
           "name": "refined_steel",
@@ -1068,7 +1068,7 @@
       ]
     },
     "axle_part_x": {
-      "requiredReputation": 200,
+      "requiredReputation": 100,
       "items": [
         {
           "name": "refined_steel",

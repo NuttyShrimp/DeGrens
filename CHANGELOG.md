@@ -21,6 +21,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Lagere carwash prijs
 - Inventory drop remove time verhoogt
 - Laatste locatie kan gebruikt worden voor 5 minuten nadat je uitloggede
+- Reputatie vereisten voor mechanics verlaagd
+- Shopprijzen van sommige items verlaagt
 
 ### Fixed
 

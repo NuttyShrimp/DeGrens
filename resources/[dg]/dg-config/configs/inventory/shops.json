@@ -24,7 +24,7 @@
       {
         "name": "binoculars",
         "amount": 50,
-        "price": 250
+        "price": 150
       },
       {
         "name": "farming_milk",
@@ -81,22 +81,22 @@
       {
         "name": "bolt_cutters",
         "amount": 20,
-        "price": 300
+        "price": 100
       },
       {
         "name": "screwdriver",
         "amount": 30,
-        "price": 125
+        "price": 35
       },
       {
         "name": "farming_bucket",
         "amount": 25,
-        "price": 250
+        "price": 125
       },
       {
         "name": "repair_kit",
         "amount": 30,
-        "price": 250
+        "price": 120
       },
       {
         "name": "container_materials",
@@ -115,12 +115,12 @@
       {
         "name": "weapon_flashlight",
         "amount": 25,
-        "price": 250
+        "price": 150
       },
       {
         "name": "pd_radio",
         "amount": 25,
-        "price": 200
+        "price": 150
       },
       {
         "name": "pd_camera",
@@ -209,7 +209,7 @@
       {
         "name": "pd_radio",
         "amount": 25,
-        "price": 200
+        "price": 150
       },
       {
         "name": "dna_swab",
