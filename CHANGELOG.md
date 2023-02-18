@@ -15,7 +15,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Blips voor restaurants
 - Notification to indicate rental papers should be used to get keys
 - Admin clear vehicle service optie
-
+- Non-scuffed inbeslagname optie toegevoegd
+- phone en laptop toegevoegd aan hardware store
 
 ### Changed
 
@@ -23,6 +24,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Ontbrekende items toegevoegd aan politie/ambu safe
 - Tijdelijk drugslabs uitgezet
 - Reset voertuig stalls bij gebruik van repairkit
+- Send plyInfo als een ander key voor minder data te moeten extracten
+- Eten/drank afnemen verminderd
+- Fietsen zijn goedkoop gemaakt, andere voertuigen volgen soon
 
 ### Fixed
 
@@ -31,8 +35,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Mogelijkheid om te praten in hospitaalbed
 - Mogelijkheid om te praten terwijl je gecarried wordt
 - Custom clothing is nu voor zowel man als vrouw beschikbaar
-- 
-
+- Clothing outfits gefixed
+- Je kunt nu je paycheck gaan ophalen in de pacific
+- De politie voertuigen hebben minder wheelspin
+- De ambulance sprinter heeft een treffelijk handling
 
 ## [0.0.0]
 

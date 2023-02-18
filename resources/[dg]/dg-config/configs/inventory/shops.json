@@ -64,6 +64,16 @@
     ],
     "hardware": [
       {
+        "name": "phne",
+        "amount": 200,
+        "price": 100
+      },
+      {
+        "name": "laptop",
+        "amount": 100,
+        "price": 2000
+      },
+      {
         "name": "volt_meter",
         "amount": 10,
         "price": 200
