@@ -43,6 +43,10 @@ class RestaurantManager extends Util.Singleton<RestaurantManager>() {
     return restaurant;
   };
 
+  private getRestaurantPlayerIsIn = (plyId: number) => {
+    return Object.values(this.restaurants).find(r => r.isPlayerInside(plyId));
+  };
+
   public loadRestaurants = () => {
     for (const id of Object.keys(config.restaurants)) {
       const restaurant = new Restaurant(id);
@@ -51,9 +55,15 @@ class RestaurantManager extends Util.Singleton<RestaurantManager>() {
   };
 
   public leaveCurrentRestaurant = (plyId: number) => {
-    const restaurant = Object.values(this.restaurants).find(r => r.isPlayerInside(plyId));
+    const restaurant = this.getRestaurantPlayerIsIn(plyId);
     if (!restaurant) return;
     restaurant.playerLeft(plyId);
+  };
+
+  public signOutAtCurrentRestaurant = (plyId: number) => {
+    const restaurant = this.getRestaurantPlayerIsIn(plyId);
+    if (!restaurant) return;
+    restaurant.signOut(plyId);
   };
 
   @DGXEvent('restaurants:location:entered')

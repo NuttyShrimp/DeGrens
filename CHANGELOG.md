@@ -25,6 +25,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Confisqueren van items is niet meer mogelijk bij medeagent
 - Farming items gaan niet meer onder nul quality
+- Restaurant medewerker gaat nu automatisch uit dienst als deze de server verlaat
 
 ## [1.0.1]
 
