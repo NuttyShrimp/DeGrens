@@ -21,6 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Smoll staffchat toegevoegd
 - Andere kleur naam in admin blips als speler praat
 - Commands om masker/bril/helm uit te zetten
+- Failsafe in shops waardoor non-existing items nie alles breekt
 
 ### Changed
 
@@ -55,6 +56,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fix errors bij proberen kopen van items wanneer je niet genoeg geld hebt
 - Testdrive inleveren geeft je geld weer terug
 - Fix tijd die niet naar nieuwe dag ging
+- Remove sync:getlogs log
 
 ## [0.0.0]
 
