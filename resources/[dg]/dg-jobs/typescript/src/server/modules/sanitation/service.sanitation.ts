@@ -303,3 +303,52 @@ export const putBagInVehicle = (plyId: number) => {
   const amountOfPackages = active.bagsPerPlayer.get(cid) ?? 0;
   active.bagsPerPlayer.set(cid, amountOfPackages + 1);
 };
+
+export const skipCurrentLocation = (plyId: number) => {
+  const group = getGroupByServerId(plyId);
+  if (!group) {
+    sanitationLogger.error(`Player ${plyId} tried to do sanitation job action but was not in group`);
+    Util.Log(
+      'jobs:sanitation:noGroup',
+      {},
+      `${Util.getName(plyId)} tried to do sanitation job action but was not in group`,
+      plyId
+    );
+    return;
+  }
+
+  const active = activeGroups.get(group.id);
+  if (!active) {
+    sanitationLogger.error(`Player ${plyId} tried to do sanitation job action but group was not active`);
+    Util.Log(
+      'jobs:sanitation:groupNotActive',
+      {},
+      `${Util.getName(plyId)} tried to do sanitation job action but group was not active`,
+      plyId
+    );
+    return;
+  }
+
+  if (active.locationSequence[0] === undefined) return;
+
+  active.locationSequence.shift();
+  active.dumpstersDone = [];
+  const newLocationId = active.locationSequence[0];
+
+  const phoneNotifData = buildPhoneNotificationData(active);
+  group.members.forEach(m => {
+    if (m.serverId === null) return;
+    Phone.updateNotification(m.serverId, 'sanitation_job_tracker', phoneNotifData);
+
+    if (newLocationId !== undefined) {
+      const location = sanitationConfig.locations[newLocationId];
+      Events.emitNet('jobs:sanitation:setLocation', m.serverId, {
+        id: newLocationId,
+        coords: location.coords,
+        range: location.range,
+      });
+    } else {
+      Events.emitNet('jobs:sanitation:setLocation', m.serverId, null);
+    }
+  });
+};

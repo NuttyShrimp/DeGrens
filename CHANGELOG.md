@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Restaurant extra opslag, locker en kledingkast, tweaked taskbar times
 - Plantvoeding heeft nu meerdere usages
+- Je kan nu een huidige sanitation locatie skippen als je de vuilzak niet vindt 
 
 ### Changed
 

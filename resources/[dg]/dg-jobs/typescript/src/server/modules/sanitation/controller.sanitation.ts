@@ -1,5 +1,11 @@
 import { Events, RPC } from '@dgx/server';
-import { finishJobForGroup, takeBagFromDumpster, startJobForGroup, putBagInVehicle } from './service.sanitation';
+import {
+  finishJobForGroup,
+  takeBagFromDumpster,
+  startJobForGroup,
+  putBagInVehicle,
+  skipCurrentLocation,
+} from './service.sanitation';
 
 Events.onNet('jobs:sanitation:signIn', (src: number) => {
   startJobForGroup(src);
@@ -15,4 +21,8 @@ RPC.register('jobs:sanitation:takeFromDumpster', (src: number, location: Vec3) =
 
 Events.onNet('jobs:sanitation:putInVehicle', (src: number) => {
   putBagInVehicle(src);
+});
+
+Events.onNet('jobs:sanitation:skipLocation', (plyId: number) => {
+  skipCurrentLocation(plyId);
 });

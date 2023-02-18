@@ -51,6 +51,14 @@ export const setAssignedVehicle = (netId: typeof assignedVehicle) => {
           return Util.isAtBackOfEntity(vehicle);
         },
       },
+      {
+        icon: 'fas fa-forward',
+        label: 'Volgende locatie',
+        action: (_, vehicle) => {
+          if (!vehicle) return;
+          confirmSkipLocation();
+        },
+      },
     ],
     distance: 5.0,
   });
@@ -188,4 +196,14 @@ const putBagInVehicle = () => {
 
 export const setWaypointToReturnZone = () => {
   Util.setWaypoint(returnZoneCoords);
+};
+
+const confirmSkipLocation = async () => {
+  const result = await UI.openInput({
+    header:
+      'Ben je zeker dat je deze locatie wil completen en naar de volgende wil gaan? Dit kan je gebruiken wanneer je een zak niet vind.',
+  });
+  if (!result.accepted) return;
+
+  Events.emitNet('jobs:sanitation:skipLocation');
 };
