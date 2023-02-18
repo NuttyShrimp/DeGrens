@@ -25,24 +25,18 @@ export const getTestDriveDeposit = (model: string) => {
   return Math.round(deposit);
 };
 
-export const doVehicleShopTransaction = async (
-  transaction: {
-    customer: number;
-    amount: number;
-    comment: string;
-    taxId?: number;
-  },
-  toCustomer = false
-): Promise<boolean> => {
+export const doVehicleShopTransaction = async (transaction: {
+  customer: number;
+  amount: number;
+  comment: string;
+  taxId?: number;
+}): Promise<boolean> => {
   // Get the business data
   const shopBusinessName = getVehicleShopConfig().businessName;
   const shopBusiness = Business.getBusinessByName(shopBusinessName);
   if (!shopBusiness) return false;
 
-  // Get cid of customer and employee (defaults to owner)
   const customerCid = Util.getCID(transaction.customer);
-  const shopOwnerCid = shopBusiness.employees.find(e => e.isOwner)?.citizenid;
-  if (!customerCid || !shopOwnerCid) return false;
 
   // Bank account of customer
   const customerBankAccount = Financials.getDefaultAccountId(customerCid);
@@ -50,27 +44,14 @@ export const doVehicleShopTransaction = async (
   if (!customerBankAccount || !shopBankAccount) return false;
 
   // Do payment
-  let transactionSuccesful = false;
-  if (toCustomer) {
-    transactionSuccesful = await Financials.transfer(
-      shopBankAccount,
-      customerBankAccount,
-      shopOwnerCid,
-      customerCid,
-      transaction.amount,
-      transaction.comment,
-      transaction.taxId
-    );
-  } else {
-    transactionSuccesful = await Financials.transfer(
-      customerBankAccount,
-      shopBankAccount,
-      customerCid,
-      shopOwnerCid,
-      transaction.amount,
-      transaction.comment,
-      transaction.taxId
-    );
-  }
+  const transactionSuccesful = await Financials.transfer(
+    customerBankAccount,
+    shopBankAccount,
+    customerCid,
+    customerCid,
+    transaction.amount,
+    transaction.comment,
+    transaction.taxId
+  );
   return transactionSuccesful;
 };

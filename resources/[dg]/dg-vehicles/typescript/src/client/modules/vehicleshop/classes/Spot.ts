@@ -131,6 +131,7 @@ export class Spot {
       this.log(`Tried to despawn vehicle at spot ${this.id} but no vehicle was present`);
       return;
     }
+    SetEntityAsMissionEntity(this.vehicle, true, true);
     DeleteEntity(this.vehicle);
     this.vehicle = undefined;
     Peek.removeEntityEntry(this.vehiclePeekIds);

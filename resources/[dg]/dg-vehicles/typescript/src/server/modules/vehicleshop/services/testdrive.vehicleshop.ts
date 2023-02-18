@@ -1,5 +1,5 @@
-import { Events, Notifications, Police, RPC, Util } from '@dgx/server';
-import { deleteVehicle, getVinForNetId, getVinForVeh, spawnVehicle } from 'helpers/vehicle';
+import { Events, Financials, Notifications, Police, RPC, Util } from '@dgx/server';
+import { deleteVehicle, spawnVehicle } from 'helpers/vehicle';
 import vinManager from 'modules/identification/classes/vinmanager';
 import { keyManager } from 'modules/keys/classes/keymanager';
 
@@ -65,7 +65,7 @@ Events.onNet('vehicles:shop:testdrive:start', async (plyId: number, model: strin
   const vehEnt = await spawnVehicle(model, shopConfig.vehicleSpawnLocation, plyId, vehVin, `XXJENSXX`);
   if (!vehEnt) {
     Notifications.add(plyId, 'Kon voertuig niet testritten', 'error');
-    await doVehicleShopTransaction({ customer: plyId, amount: depositAmount, comment: `Annulatie van testrit` }, true);
+    Financials.addCash(plyId, depositAmount, `canceling-testdrive`);
     return;
   }
   keyManager.addKey(vehVin, plyId);
@@ -138,14 +138,7 @@ RPC.register('vehicles:shop:testdrive:returnVehicle', (plyId: number, vehNetId: 
   if (!testDriveData.timeLimitReached) {
     const vehDamage = GetVehicleEngineHealth(veh) + GetVehicleBodyHealth(veh);
     const paybackAmount = testDriveData.deposit * (vehDamage / 2000);
-    doVehicleShopTransaction(
-      {
-        customer: plyId,
-        amount: paybackAmount,
-        comment: 'Teruggave voertuig testrit waarborg',
-      },
-      true
-    );
+    Financials.addCash(plyId, paybackAmount, 'payback-testdrive');
   } else {
     Notifications.add(plyId, 'Je tijdlimiet was verstreken dus je verliest je waarborg.');
   }
