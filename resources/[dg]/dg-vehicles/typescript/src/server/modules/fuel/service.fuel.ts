@@ -3,7 +3,7 @@ import { fuelManager } from './classes/fuelManager';
 import { getVinForVeh } from 'helpers/vehicle';
 import { REFUEL_DURATION_PER_LEVEL } from './constants.fuel';
 
-const FUEL_PRICE_PER_LVL = Util.getRndInteger(15, 20) / 10;
+const FUEL_PRICE_PER_LVL = Util.getRndInteger(7, 10) / 10;
 
 export const openRefuelMenu = (plyId: number, netId: number) => {
   const vehicle = NetworkGetEntityFromNetworkId(netId);
