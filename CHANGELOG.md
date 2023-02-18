@@ -18,6 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Algemene job payout tweaks
 - Lagere carwash prijs
 - Inventory drop remove time verhoogt
+- Laatste locatie kan gebruikt worden voor 5 minuten nadat je uitloggede
 
 ### Fixed
 

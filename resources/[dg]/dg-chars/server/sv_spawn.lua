@@ -1,7 +1,11 @@
-local crashed = {}
+-- key cid, value: time
+local recentlyDroppedPlayers = {}
 
-exports('addCrashedPlayer', function (steamId)
-  table.insert(crashed, steamId)
+exports('addDroppedPlayer', function(cid)
+  recentlyDroppedPlayers[cid] = true
+  SetTimeout(5 * 60 * 1000, function()
+    recentlyDroppedPlayers[cid] = nil
+  end)
 end)
 
 getPlySpawns = function(src)
@@ -18,20 +22,14 @@ getPlySpawns = function(src)
   local isDown = ply ~= nil and ply.PlayerData.metadata.downState ~= 'alive' or false
   local isDevEnv = DGX.Util.isDevEnv()
   local isDev = DGX.Admin.hasPermission(src, "developer")
-  local hasCrashed = false
-  local plySteamId = Player(src).state.steamId
-  for _, crashedIds in pairs(crashed) do
-    if crashedIds == plySteamId then
-      hasCrashed = true
-      break
-    end
-  end
+  local recentlyDropped = recentlyDroppedPlayers[ply.PlayerData.citizenid] or false
+  
   -- Only able to join at last location when one of following options is true
   -- isDevEnv
   -- is developer
-  -- has crashed
+  -- has recently dropped
   -- is dead
-  if isDevEnv or isDev or hasCrashed or isDown then
+  if isDevEnv or isDev or recentlyDropped or isDown then
     if ply ~= nil then
       table.insert(Spawns, {
         label = "Laatste locatie",

@@ -1,9 +1,4 @@
 -- Event Handler
-crashExitReasons = {
-  "connection timed out",
-  "Game crashed:",
-}
-
 AddEventHandler('playerDropped', function(reason)
 	local src = source
 	if DGCore.Players[src] then
@@ -12,12 +7,7 @@ AddEventHandler('playerDropped', function(reason)
 		TriggerEvent('qb-log:server:CreateLog', 'joinleave', 'Dropped', 'red', '**' .. GetPlayerName(src) .. '** (' .. Player.PlayerData.license .. ') left..')
 		Player.Functions.Save()
 		TriggerEvent('DGCore:server:playerUnloaded', src, cid)
-    for _, crashReason in ipairs(crashExitReasons) do
-      if reason:match(crashReason) then
-        exports['dg-chars']:addCrashedPlayer(Player.PlayerData.steamid)
-        break
-      end
-    end
+    exports['dg-chars']:addDroppedPlayer(cid)
 		DGCore.Players[src] = nil
     DGCore.cidToPlyId[cid] = nil
 	end
