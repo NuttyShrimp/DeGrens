@@ -102,6 +102,10 @@ const putInVehicle = async (vehicle: number) => {
 
   const netId = NetworkGetNetworkIdFromEntity(vehicle);
   const amountOfSeats = GetVehicleModelNumberOfSeats(GetEntityModel(vehicle));
-  const closestSeat = getClosestSeatId(vehicle);
+  let closestSeat = getClosestSeatId(vehicle);
+  // if motorcycle, force backseat
+  if (GetVehicleClass(vehicle) === 8) {
+    closestSeat = Math.max(-1, amountOfSeats - 2);
+  }
   Events.emitNet('police:interactions:putInVehicle', netId, amountOfSeats, closestSeat);
 };

@@ -41,6 +41,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Je krijgt betaald volgens payout level in het begin van je job
 - Ook een waypoint naar getracked voertuig met langere blip
 - Enkel weedlab aangezet
+- Forceer in-voertuig-plaatsen op achterse seat bij motor
 
 ### Fixed
 
