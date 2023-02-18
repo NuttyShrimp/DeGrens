@@ -26,6 +26,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Reset voertuig stalls bij gebruik van repairkit
 - Send plyInfo als een ander key voor minder data te moeten extracten
 - Eten/drank afnemen verminderd
+- Fietsen zijn goedkoop gemaakt, andere voertuigen volgen soon
 
 ### Fixed
 
