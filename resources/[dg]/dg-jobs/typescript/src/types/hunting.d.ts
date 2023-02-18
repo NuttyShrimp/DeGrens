@@ -4,7 +4,7 @@ declare namespace Hunting {
       model: string;
       item: string;
       chance: number;
-      meatAmount: number;
+      meatChance: number;
     }[];
     sellables: Record<string, number>;
     huntingZones: Vec2[][];

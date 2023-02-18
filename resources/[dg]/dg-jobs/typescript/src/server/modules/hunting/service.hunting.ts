@@ -92,7 +92,11 @@ export const lootAnimal = (plyId: number, animalNetId: number) => {
   const animalConfig = huntingConfig.animals.find(a => GetHashKey(a.model) >>> 0 === animalHash);
   if (!animalConfig) return;
 
-  Inventory.addItemToPlayer(plyId, 'animal_meat', animalConfig.meatAmount);
+  const chance = animalConfig.meatChance * 100;
+  if (Util.getRndInteger(1, 101) < chance) {
+    Inventory.addItemToPlayer(plyId, 'animal_meat', 1);
+  }
+
   Inventory.addItemToPlayer(plyId, animalConfig.item, 1);
 
   Util.Log('jobs:hunting:lootAnimal', {}, `${Util.getName(plyId)}(${plyId}) has skinned an animal`, plyId);

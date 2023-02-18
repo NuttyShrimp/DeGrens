@@ -34,7 +34,8 @@ Events.onNet('jobs:scrapyard:givePart', async (src: number) => {
   }
 
   const loot = config.loot[Math.floor(Math.random() * config.loot.length)];
-  const amount = Util.getRndInteger(...config.lootAmount);
+  const [min, max] = config.lootAmount;
+  const amount = Util.getRndInteger(min, max + 1);
   Inventory.addItemToPlayer(src, loot, amount);
 });
 

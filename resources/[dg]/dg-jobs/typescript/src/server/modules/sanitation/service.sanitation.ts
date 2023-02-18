@@ -18,9 +18,9 @@ export const initializeSanitation = () => {
     location: { x: -346.0635, y: -1556.1328 },
     // this is payout per bag player has done, 10 bags means * 10
     payout: {
-      min: 5,
-      max: 8,
-      groupPercent: 15,
+      min: 7,
+      max: 10,
+      groupPercent: 25,
     },
   });
 };
