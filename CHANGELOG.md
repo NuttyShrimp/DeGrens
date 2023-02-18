@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Admin clear vehicle service optie
 - Non-scuffed inbeslagname optie toegevoegd
 - phone en laptop toegevoegd aan hardware store
+- Salesticket bij uitvoeren van towingjob
 
 ### Changed
 

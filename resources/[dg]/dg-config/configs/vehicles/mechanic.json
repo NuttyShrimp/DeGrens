@@ -1,4 +1,5 @@
 {
+  "towingTicketPrice": 75,
   "towVehicles": {
     "flatbed": {
       "x": 0,

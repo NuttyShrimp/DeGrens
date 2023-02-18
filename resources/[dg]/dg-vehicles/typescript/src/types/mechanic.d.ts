@@ -19,6 +19,7 @@ declare namespace Mechanic {
   type Shops = Record<string, NConfig.Locations>;
 
   interface Config {
+    towingTicketPrice: number;
     // Model to offsets
     towVehicles: Record<string, Vec3>;
     reward: {
