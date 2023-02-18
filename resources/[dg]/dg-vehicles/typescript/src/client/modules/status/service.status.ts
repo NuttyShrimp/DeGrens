@@ -15,6 +15,7 @@ import { getVehicleFuel, overrideSetFuel } from 'modules/fuel/service.fuel';
 import { getVehicleVin } from 'modules/identification/service.identification';
 import { tryEjectAfterCrash } from 'modules/seatbelts/service.seatbelts';
 import { setEngineState } from 'services/engine';
+import { hasVehicleKeys } from 'modules/keys/cache.keys';
 
 const vehicleService: {
   vehicle: number;
@@ -353,7 +354,9 @@ export const tryToStallVehicle = (vehicle: number, newHealth: number, oldHealth:
   entState.set('undriveable', true, true); // stops us from reenabling engine
   setEngineState(vehicle, false, true);
 
+  // Dont reenable engine if you dont have keys
   setTimeout(() => {
+    if (!hasVehicleKeys(vehicle)) return;
     entState.set('undriveable', false, true);
     setEngineState(vehicle, true, true);
   }, 3000);
