@@ -1,6 +1,7 @@
 {
   "bucketFillAmount": 10,
-  "amountPerPlant": 1,
+  "amountPerPlant": 2,
+  "fertilizerDecrease": 10,
   "defaultPlant": {
     "model": "bkr_prop_weed_01_small_01a",
     "zOffset": -0.7

@@ -109,7 +109,8 @@ export class Plant {
       quality += correctness * 25;
     }
 
-    return Math.round(quality);
+    const clampedQuality = Math.max(0, Math.min(quality, 100));
+    return Math.round(clampedQuality);
   };
 
   public hasActionBeenDone = (action: Farming.ActionType) => {

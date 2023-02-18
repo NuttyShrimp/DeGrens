@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Restaurant extra opslag, locker en kledingkast, tweaked taskbar times
+- Plantvoeding heeft nu meerdere usages
 
 ### Changed
 
@@ -23,6 +24,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Confisqueren van items is niet meer mogelijk bij medeagent
+- Farming items gaan niet meer onder nul quality
 
 ## [1.0.1]
 

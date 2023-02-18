@@ -3051,7 +3051,6 @@
   {
     "name": "farming_fertilizer",
     "label": "Plantenvoeding",
-    "decayRate": 10080,
     "image": "farming_fertilizer.png",
     "size": {
       "x": 2,
@@ -3061,7 +3060,6 @@
   {
     "name": "farming_fertilizer_deluxe",
     "label": "Deluxe Plantenvoeding",
-    "decayRate": 10080,
     "image": "farming_fertilizer_deluxe.png",
     "size": {
       "x": 2,

@@ -2,6 +2,7 @@ declare namespace Farming {
   type Config = {
     bucketFillAmount: number;
     amountPerPlant: number;
+    fertilizerDecrease: number;
     defaultPlant: PlantModel;
     seeds: Record<string, Seed>;
     farmingZones: {

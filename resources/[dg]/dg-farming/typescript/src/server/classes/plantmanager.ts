@@ -1,6 +1,7 @@
 import { Util, Inventory } from '@dgx/server';
 import { Plant } from './plant';
 import { EventListener, DGXEvent } from '@dgx/server/decorators';
+import config from 'services/config';
 
 @EventListener()
 class PlantManager extends Util.Singleton<PlantManager>() {
@@ -59,8 +60,11 @@ class PlantManager extends Util.Singleton<PlantManager>() {
     if (!plant) return;
 
     const itemName = deluxe ? 'farming_fertilizer_deluxe' : 'farming_fertilizer';
-    const removedItem = await Inventory.removeItemByNameFromPlayer(plyId, itemName);
-    if (!removedItem) return;
+    const itemState = await Inventory.getFirstItemOfNameOfPlayer(plyId, itemName);
+    if (!itemState) return;
+
+    const decrease = config.fertilizerDecrease;
+    Inventory.setQualityOfItem(itemState.id, old => old - decrease);
 
     const action: Farming.ActionType = deluxe ? 'feedDeluxe' : 'feed';
     plant.setAction(action);
