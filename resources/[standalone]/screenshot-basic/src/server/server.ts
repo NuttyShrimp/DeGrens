@@ -153,16 +153,20 @@ onNet('screenshot-basic:incomingImgurScreenshot', (data: any, screenData: string
 });
 
 exp('generateMinioFilename', async () => {
-  const fileName = v4();
+  let fileName = v4();
+  const dObj = new Date();
+  const date = `${dObj.getFullYear()}/${dObj.getMonth()}/${dObj.getDate()}/`;
   let found = false;
   while (!found) {
     try {
-      await minioClient.statObject(MINIO_BUCKET_ID, fileName);
+      await minioClient.statObject(MINIO_BUCKET_ID, date + fileName);
+      fileName = v4();
     } catch (e) {
       if (e == 'S3Error: Not Found') {
         found = true;
         break;
       }
+      fileName = v4();
       console.error(e);
     }
   }
@@ -173,6 +177,8 @@ global.exports('requestClientMinioScreenshot', async (player: string | number, o
   const tkn = v4();
 
   const fileName = options.fileName + '.png';
+  const dObj = new Date();
+  const date = `${dObj.getFullYear()}/${dObj.getMonth() + 1}/${dObj.getDate()}`;
   delete options['fileName']; // so the client won't get to know this
 
   const request = new Promise<string>(res => {
@@ -183,8 +189,8 @@ global.exports('requestClientMinioScreenshot', async (player: string | number, o
 
       const data = fs.readFileSync(fPath);
       fs.unlinkSync(fPath);
-      await minioClient.putObject(MINIO_BUCKET_ID, fileName, data);
-      const filePath = `https://minioserver.nuttyshrimp.me/dg-image-storage/${fileName}`;
+      await minioClient.putObject(MINIO_BUCKET_ID, `${date}/${fileName}`, data);
+      const filePath = `https://minioserver.nuttyshrimp.me/dg-image-storage/${date}/${fileName}`;
       res(filePath);
       return;
     };
