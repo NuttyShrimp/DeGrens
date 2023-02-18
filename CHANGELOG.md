@@ -29,6 +29,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fietsen zijn goedkoop gemaakt, andere voertuigen volgen soon
 - Fuel goedkoper gemaakt
 - Lockpicks goedkoper en gaan langer mee
+- Goedkopere seeds en meer loot per farming plant
 
 ### Fixed
 

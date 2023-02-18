@@ -68,7 +68,7 @@ export class Plant {
 
     StaticObjects.remove(this.objectId);
     const quality = this.calculateQuality();
-    Inventory.addItemToPlayer(plyId, config.seeds[this.seed].product, 1, {
+    Inventory.addItemToPlayer(plyId, config.seeds[this.seed].product, config.amountPerPlant, {
       quality,
     });
   };
