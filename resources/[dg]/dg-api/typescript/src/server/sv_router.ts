@@ -19,10 +19,16 @@ setImmediate(() => {
       });
     // TODO: Check if rate limiting is needed
     try {
-      if (req.method !== 'GET') {
+      if (req.method !== 'GET' && req.method !== 'HEAD') {
         req.setDataHandler((body: string) => {
-          req.body = JSON.parse(body);
-          handleRequest(req, res);
+          try {
+            req.body = JSON.parse(body);
+            handleRequest(req, res);
+          } catch (e: any) {
+            mainLogger.error(`An error occurred while trying to process an incoming API request:`);
+            console.error(e);
+            doRequestResponse(res, { message: 'An error occurred while processing the request' }, 500);
+          }
         });
       } else {
         handleRequest(req, res);
@@ -34,6 +40,17 @@ setImmediate(() => {
     }
   });
 });
+
+export const handleIncomingRequest = (req: any, res: any, body: string) => {
+  try {
+    handleRequest(req, res);
+  } catch (e: any) {
+    mainLogger.error(`An error occurred while trying to process an incoming API request:`);
+    console.error(e);
+    doRequestResponse(res, { message: 'An error occurred while processing the request' }, 500);
+  }
+};
+global.exports('handleIncomingRequest', handleIncomingRequest);
 
 const handleRequest = (req: any, res: any) => {
   if (!checkDomain(req, res)) {

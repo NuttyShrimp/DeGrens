@@ -1,4 +1,4 @@
-import { deleteBusiness, getBusinessById, getBusinessByName } from 'services/business';
+import { createBusiness, deleteBusiness, getBusinessById, getBusinessByName } from 'services/business';
 import { getPermissions, permissionsFromBitmask } from 'services/config';
 
 global.exports('getBusinessById', (id: number) => getBusinessById(id));
@@ -42,3 +42,5 @@ global.exports('updateOwner', (id: number, newOwner: number) => {
   }
   business.updateOwner(newOwner);
 });
+
+asyncExports("createBusiness", createBusiness)

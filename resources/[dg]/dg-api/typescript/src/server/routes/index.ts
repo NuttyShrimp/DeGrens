@@ -11,3 +11,8 @@ registerRoute('GET', '/', (_, res) => {
     host: ExecuteCommand('sv_projectName'),
   });
 });
+
+registerRoute("POST", "/post-test", (req, res) => {
+  console.log("POST PONG", req.body)
+  res(200, {})
+})

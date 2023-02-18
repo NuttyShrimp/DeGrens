@@ -108,3 +108,10 @@ registerRoute('GET', '/info/player/roles/:steamId', async (req, res) => {
   const roles = await getRoleListForPlayer(steamId);
   res(200, roles);
 });
+
+registerRoute('POST', '/vehicles/give', async (req, res) => {
+  await global.exports['dg-vehicles'].giveNewVehicle(req.body.model, Number(req.body.owner));
+  res(200, {
+    result: true,
+  });
+});

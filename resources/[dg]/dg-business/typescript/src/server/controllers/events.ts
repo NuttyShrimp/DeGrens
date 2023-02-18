@@ -8,40 +8,6 @@ import {
   getBusinessesForPlayer,
 } from '../services/business';
 
-Chat.registerCommand(
-  'createBusiness',
-  'Create a new business',
-  [
-    {
-      name: 'name',
-      description: 'Name of business',
-      required: true,
-    },
-    {
-      name: 'label',
-      description: 'label of business',
-      required: true,
-    },
-    {
-      name: 'cid',
-      description: 'CitizenID of owner',
-      required: true,
-    },
-    {
-      name: 'type',
-      description: 'name of business type',
-      required: true,
-    },
-  ],
-  'developer',
-  (src, _, params) => {
-    if (Number.isNaN(parseInt(params[2]))) {
-      throw new Error('CitizenId should be a valid integer');
-    }
-    createBusiness(params[0], params[1], Number(params[2]), params[3]);
-  }
-);
-
 onNet('dg-config:moduleLoaded', (module: string, data: Config.Config) => {
   if (module !== 'business') return;
   setConfig(data);

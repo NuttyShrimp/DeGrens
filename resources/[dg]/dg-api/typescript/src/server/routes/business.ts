@@ -1,6 +1,17 @@
 import { Config } from '@dgx/server';
 import { registerRoute } from 'sv_routes';
 
+registerRoute('POST', '/business/actions/new', async (req, res) => {
+  console.log(req.body);
+  await global.exports['dg-business'].createBusiness(
+    req.body.name,
+    req.body.label,
+    Number(req.body.owner),
+    Number(req.body.typeId)
+  );
+  res(200, {});
+});
+
 registerRoute('GET', '/business/permissions', async (_, res) => {
   try {
     await Config.awaitConfigLoad();

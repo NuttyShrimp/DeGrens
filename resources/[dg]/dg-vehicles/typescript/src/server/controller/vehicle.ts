@@ -17,6 +17,7 @@ import vinManager from '../modules/identification/classes/vinmanager';
 import { mainLogger } from '../sv_logger';
 import { getConfigByEntity } from 'modules/info/service.info';
 import { tuneItems } from 'modules/upgrades/constants.upgrades';
+import plateManager from 'modules/identification/classes/platemanager';
 
 RPC.register('vehicles:getVehicleByVin', (src, vin: string) => {
   mainLogger.silly(`Request to get vehicle by vin: ${vin}`);
@@ -28,6 +29,12 @@ global.exports('deleteVehicle', deleteVehicle);
 global.exports('getVinForVeh', getVinForVeh);
 global.exports('getVinForNetId', getVinForNetId);
 global.exports('setEngineState', setEngineState);
+global.asyncExports('giveNewVehicle', async (model: string, owner: number) => {
+  const vin = vinManager.generateVin();
+  const plate = plateManager.generatePlate();
+  await insertNewVehicle(vin, owner, model, plate);
+  return true;
+});
 
 global.exports(
   'spawnVehicleFromAdminMenu',
