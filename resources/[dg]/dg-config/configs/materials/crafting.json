@@ -23,7 +23,7 @@
       ]
     },
     "vpn": {
-      "requiredReputation": 40,
+      "requiredReputation": 30,
       "items": [
         {
           "name": "material_electronics",

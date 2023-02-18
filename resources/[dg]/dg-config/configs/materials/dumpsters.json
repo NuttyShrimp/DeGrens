@@ -1,4 +1,9 @@
 {
-  "loot": [{ "item": "material_plastic", "chance": 0.3 }],
+  "loot": [
+    {
+      "item": "material_plastic",
+      "chance": 0.5
+    }
+  ],
   "refillTime": 60
 }

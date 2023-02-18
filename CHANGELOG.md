@@ -43,6 +43,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Enkel weedlab aangezet
 - Forceer in-voertuig-plaatsen op achterse seat bij motor
 - Minder service decrease bij stallen van voertuig
+- Meer plastic te vinden
 
 ### Fixed
 
