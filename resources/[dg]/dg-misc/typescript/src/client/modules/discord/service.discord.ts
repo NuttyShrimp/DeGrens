@@ -13,9 +13,9 @@ export const setDiscordRichPresence = () => {
     SetDiscordRichPresenceAssetSmall('degrens_small');
 
     // Here you can add hover text for the "small" icon.
-    SetDiscordRichPresenceAssetSmallText('Currently being developed');
+    SetDiscordRichPresenceAssetSmallText('Join onze discord');
 
-    SetRichPresence('Under development');
+    SetRichPresence('Join onze discord');
 
     // DGCore.Functions.TriggerCallback('smallresources:server:GetCurrentPlayers', function(result)
     //   SetRichPresence('Players: ' .. result .. '/64')
