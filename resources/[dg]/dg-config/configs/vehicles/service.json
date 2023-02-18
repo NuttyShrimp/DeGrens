@@ -3,7 +3,7 @@
     "engine": [
       {
         "name": "fInitialDriveForce",
-        "percent": 0.4
+        "percent": 0.5
       }
     ],
     "axle": [
@@ -19,13 +19,13 @@
     "brakes": [
       {
         "name": "fBrakeForce",
-        "percent": 0.6
+        "percent": 0.7
       }
     ],
     "suspension": [
       {
         "name": "fSteeringLock",
-        "percent": 0.55
+        "percent": 0.70
       }
     ]
   }

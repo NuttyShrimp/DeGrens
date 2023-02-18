@@ -44,6 +44,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - De politie voertuigen hebben minder wheelspin
 - De ambulance sprinter heeft een treffelijk handling
 - Verwijderd key requirement voor mechanics options
+- Verlaagt min percentage van vehicle damage service
 
 ## [0.0.0]
 
