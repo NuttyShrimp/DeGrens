@@ -23,6 +23,17 @@ Peek.addZoneEntry('restaurant_management', {
       canInteract: getIsSignedIn,
     },
     {
+      label: 'Locker',
+      icon: 'fas fa-box',
+      action: option => {
+        const cid = DGCore.Functions.GetPlayerData().citizenid;
+        if (!cid) return;
+        const stashId = `${option.data.id}_${cid}`;
+        Inventory.openStash(stashId, 8);
+      },
+      canInteract: getIsSignedIn,
+    },
+    {
       label: 'Wijzig Prijzen',
       icon: 'fas fa-money-check-dollar-pen',
       action: option => {
@@ -37,18 +48,17 @@ Peek.addZoneEntry('restaurant_management', {
 });
 
 Peek.addZoneEntry('restaurant_stash', {
-  options: [
-    {
-      label: 'Open Voorraad',
-      icon: 'fas fa-box-open',
-      action: option => {
-        Inventory.openStash(option.data.id, 50);
-      },
-      canInteract: (_, __, option) => {
-        return Business.isEmployee(option.data.id, ['stash']) && getIsSignedIn();
-      },
+  options: [...new Array(5)].map((_, idx) => ({
+    label: `Open voorraad #${idx}`,
+    icon: 'fas fa-box-open',
+    action: option => {
+      const stashId = `${option.data.id}_${idx}`;
+      Inventory.openStash(stashId, 100);
     },
-  ],
+    canInteract: (_, __, option) => {
+      return Business.isEmployee(option.data.id, ['stash']) && getIsSignedIn();
+    },
+  })),
   distance: 3,
 });
 

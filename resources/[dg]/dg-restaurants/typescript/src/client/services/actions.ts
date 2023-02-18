@@ -13,7 +13,7 @@ export const doCooking = async (restaurantId: string, fromItem: string) => {
   const success = await Minigames.keygame(3, 4, 10);
   if (!success) return;
 
-  const canceled = await doTaskbar('knife-kitchen', 'Maken...', 10000);
+  const canceled = await doTaskbar('knife-kitchen', 'Maken...', 3000);
   if (canceled) return;
 
   Events.emitNet('restaurants:location:cook', restaurantId, fromItem);

@@ -8,6 +8,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Restaurant extra opslag, locker en kledingkast, tweaked taskbar times
 
 ### Changed
 
