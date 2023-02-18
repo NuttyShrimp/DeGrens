@@ -1,6 +1,6 @@
 {
   "harnessUses": 100,
-  "carwashPrice": 100,
+  "carwashPrice": 10,
   "waxTime": 7,
   "itemUpgradesZone": {
     "center": {
