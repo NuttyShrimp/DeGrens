@@ -18,6 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Non-scuffed inbeslagname optie toegevoegd
 - phone en laptop toegevoegd aan hardware store
 - Salesticket bij uitvoeren van towingjob
+- Smoll staffchat toegevoegd
 
 ### Changed
 
