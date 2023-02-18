@@ -42,7 +42,7 @@ export const getRepairData = (plyVeh: number): Bennys.RepairInfo | null => {
   const engineHealh = GetVehicleEngineHealth(plyVeh);
   if (bodyHealth > 950 && engineHealh > 950) return null;
   return {
-    price: Math.round(((2000 - bodyHealth - engineHealh) / 2) * 100) / 100,
+    price: (Math.round(((2000 - bodyHealth - engineHealh) / 2) * 100) / 100) * (300 / 2000),
     body: bodyHealth,
     engine: engineHealh,
   };
