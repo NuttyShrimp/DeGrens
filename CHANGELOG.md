@@ -37,6 +37,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Custom clothing is nu voor zowel man als vrouw beschikbaar
 - Clothing outfits gefixed
 - Je kunt nu je paycheck gaan ophalen in de pacific
+- De politie voertuigen hebben minder wheelspin
+- De ambulance sprinter heeft een treffelijk handling
 
 ## [0.0.0]
 
