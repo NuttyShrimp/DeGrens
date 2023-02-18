@@ -42,6 +42,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Ook een waypoint naar getracked voertuig met langere blip
 - Enkel weedlab aangezet
 - Forceer in-voertuig-plaatsen op achterse seat bij motor
+- Minder service decrease bij stallen van voertuig
 
 ### Fixed
 
