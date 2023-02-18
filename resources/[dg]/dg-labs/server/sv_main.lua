@@ -45,6 +45,9 @@ Citizen.CreateThread(function()
     for labType, labId in pairs(labData.activeLabs) do
         states[labId] = json.decode(json.encode(getConfig().types[labType].defaultState))
         -- exports['dg-doorlock']:changeDoorState(getConfig().labs[labId].doorId, false)
+      if labType == 'weed' then
+        exports['dg-doorlock']:changeDoorState(getConfig().labs[labId].doorId, false)
+      end
     end
 end)
 
