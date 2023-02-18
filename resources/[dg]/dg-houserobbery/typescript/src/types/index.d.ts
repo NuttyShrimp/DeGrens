@@ -1,7 +1,6 @@
 declare namespace House {
   interface Data {
-    coords: Vec3;
-    heading: number;
+    coords: Vec4;
     size: Interior.Size;
   }
 

@@ -22,6 +22,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Andere kleur naam in admin blips als speler praat
 - Commands om masker/bril/helm uit te zetten
 - Failsafe in shops waardoor non-existing items nie alles breekt
+- Huisoverval locaties toegevoegd
 
 ### Changed
 

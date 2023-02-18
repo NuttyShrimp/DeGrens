@@ -50,6 +50,7 @@ Peek.addFlagEntry(
       {
         icon: 'fas fa-pen',
         label: 'Meld aan/uit',
+        items: ['vpn'],
         action: async () => {
           const signedIn = await RPC.execute<boolean>('houserobbery:server:toggleSignedIn');
           if (signedIn) {
@@ -135,7 +136,7 @@ Events.onNet('houserobbery:client:setSelectedHouse', (houseId: string, houseInfo
       data: {
         id: houseId,
       },
-      heading: houseInfo.heading,
+      heading: houseInfo.coords.w,
       minZ: houseInfo.coords.z - 2,
       maxZ: houseInfo.coords.z + 2,
     },

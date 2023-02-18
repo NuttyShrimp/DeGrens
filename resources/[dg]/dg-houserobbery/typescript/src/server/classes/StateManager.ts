@@ -40,7 +40,7 @@ class StateManager extends Util.Singleton<StateManager>() {
   }
 
   @RPCEvent('houserobbery:server:toggleSignedIn')
-  toggleSignedIn = (src: number) => {
+  toggleSignedIn = async (src: number) => {
     const Player = DGCore.Functions.GetPlayer(src);
     if (Jobs.isWhitelisted(src, 'police')) {
       Notifications.add(src, 'Bert B: "Ik kan niks voor u betekenen"');
@@ -51,6 +51,16 @@ class StateManager extends Util.Singleton<StateManager>() {
         src
       );
       return;
+    }
+    const hasVPN = await Inventory.doesPlayerHaveItems(src, 'vpn');
+    if (!hasVPN) {
+      Notifications.add(src, 'Bert B: "Ik kan niks voor u betekenen"');
+      Util.Log(
+        'houserobbery:signin:failed',
+        {},
+        `${Player.PlayerData.name} tried to signin for houserobberies but has no vpn`,
+        src
+      );
     }
     const cid = Player.PlayerData.citizenid;
     if (this.playerStates.has(cid) && this.playerStates.get(cid) !== PlayerState.WAITING) {
