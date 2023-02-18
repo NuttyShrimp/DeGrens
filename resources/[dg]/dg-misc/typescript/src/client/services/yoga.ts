@@ -27,7 +27,7 @@ const startYogaSes = async (data: Option, entity: number | undefined) => {
   }
   const entCoords = Util.getEntityCoords(entity);
   SetEntityCoords(PlayerPedId(), entCoords.x, entCoords.y, entCoords.z, true, false, false, false);
-  Events.emitNet('hud:server:changeStress', -10);
+  Events.emitNet('hud:server:changeStress', -15);
 };
 
 Peek.addModelEntry(yogaModels, {
