@@ -239,7 +239,7 @@ Peek.addGlobalEntry('vehicle', {
       icon: 'fas fa-engine',
       action: (_, entity) => {
         if (!entity) return;
-        if (!hasVehicleKeys(entity) || !getCurrentWorkingShop()) return;
+        if (!getCurrentWorkingShop()) return;
         // Validation not required because if it does not have a vin already neither would it have any upgrades
         const vin = getVehicleVinWithoutValidation(entity);
         if (!vin) {

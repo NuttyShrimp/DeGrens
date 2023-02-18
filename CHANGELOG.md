@@ -42,6 +42,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Je kunt nu je paycheck gaan ophalen in de pacific
 - De politie voertuigen hebben minder wheelspin
 - De ambulance sprinter heeft een treffelijk handling
+- Verwijderd key requirement voor mechanics options
 
 ## [0.0.0]
 
