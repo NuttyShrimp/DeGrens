@@ -10,7 +10,7 @@ export const handleStartRegister = async (
 ) => {
   stateManager.setCanRob(plyId, registerIdx, false);
   Events.emitNet('storerobbery:registers:doRobbing', plyId, registerIdx, isBroken);
-  Util.changePlayerStress(plyId, Util.getRndInteger(3, 7));
+  Util.changePlayerStress(plyId, Util.getRndInteger(2, 5));
 
   const storeConfig = getConfig().stores[storeId];
   Police.createDispatchCall({

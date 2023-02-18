@@ -90,7 +90,8 @@ export const startJobForGroup = async (plyId: number) => {
   }
 
   const jobAssigned = changeJob(plyId, 'sanitation');
-  if (!jobAssigned) return;
+  const payoutLevel = jobManager.getJobPayoutLevel('sanitation');
+  if (!jobAssigned || payoutLevel === null) return;
 
   const vehicle = await Vehicles.spawnVehicle('trash', sanitationConfig.vehicleLocation, plyId);
   if (!vehicle) {
@@ -107,6 +108,7 @@ export const startJobForGroup = async (plyId: number) => {
     locationSequence,
     dumpstersDone: [],
     bagsPerPlayer: new Map(),
+    payoutLevel,
   };
   activeGroups.set(group.id, jobGroup);
 
@@ -147,7 +149,7 @@ export const finishJobForGroup = (plyId: number, netId: number) => {
     return;
   }
 
-  const payoutPerBag = jobManager.getJobPayout('sanitation', group.members.length) ?? 0;
+  const payoutPerBag = jobManager.getJobPayout('sanitation', group.size, active.payoutLevel) ?? 0;
   group.members.forEach(m => {
     if (m.serverId === null) return;
 

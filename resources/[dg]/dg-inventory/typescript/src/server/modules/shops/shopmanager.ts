@@ -24,18 +24,25 @@ class ShopManager extends Util.Singleton<ShopManager>() {
 
     // Generate items per type
     Object.entries(config.types).forEach(([type, items]) => {
-      types[type] = items.map(i => {
-        const info = itemDataManager.get(i.name);
-        return {
-          ...i,
-          label: info.label,
-          image: info.image,
-          size: info.size,
-          requirements: {
-            cash: Financials.getTaxedPrice(i.price, taxId).taxPrice,
-          },
-        };
-      });
+      types[type] = items
+        .map(i => {
+          try {
+            const info = itemDataManager.get(i.name);
+            return {
+              ...i,
+              label: info.label,
+              image: info.image,
+              size: info.size,
+              requirements: {
+                cash: Financials.getTaxedPrice(i.price, taxId).taxPrice,
+              },
+            };
+          } catch (e) {
+            this.logger.error(`Tryng to add unknown item to ${type} shop: ${i.name}`);
+            return null;
+          }
+        })
+        .filter(i => i) as Shops.Item[];
     });
 
     // Assign items to shop according to its type

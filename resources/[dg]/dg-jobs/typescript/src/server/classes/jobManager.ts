@@ -129,7 +129,7 @@ class JobManager extends Util.Singleton<JobManager>() {
   }
 
   @Export('getJobPayout')
-  public getJobPayout(jobName: string, groupSize: number) {
+  public getJobPayout(jobName: string, groupSize: number, payoutLevel?: number) {
     const job = this.jobs.get(jobName);
     if (!job) {
       this.logger.error('Tried to get payout for nonexistent job');
@@ -139,16 +139,19 @@ class JobManager extends Util.Singleton<JobManager>() {
       this.logger.error('Tried to get payout but job did not have payout amounts registered');
       return null;
     }
+    if (payoutLevel == undefined) {
+      payoutLevel = job.payoutLevel;
+    }
     // Generate value between min and max based on payoutLevel (lvl 1 = minprice, level 6 (max) = maxprice)
     // Then add percentage based on amount of groupmembers
     return Math.round(
-      (job.payout.min + ((job.payout.max - job.payout.min) * (job.payoutLevel - 1)) / 5) *
+      (job.payout.min + ((job.payout.max - job.payout.min) * (payoutLevel - 1)) / 5) *
         (1 + (job.payout.groupPercent / 100) * (groupSize - 1))
     );
   }
 
   @Export('getJobPayoutLevel')
-  private _getJobPayoutLevel(jobName: string) {
+  public getJobPayoutLevel(jobName: string) {
     const job = this.jobs.get(jobName);
     if (!job) {
       this.logger.error('Tried to get payout level for nonexistent job');

@@ -92,9 +92,9 @@ global.exports('clearServiceStatus', (vehicle: number) => {
   const vin = getVinForVeh(vehicle);
   if (!vin) return;
   updateServiceStatus(vin, {
-    axle: 0,
-    brakes: 0,
-    engine: 0,
-    suspension: 0,
+    axle: 1000,
+    brakes: 1000,
+    engine: 1000,
+    suspension: 1000,
   });
 });

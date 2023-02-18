@@ -29,32 +29,32 @@
       {
         "name": "farming_milk",
         "amount": 100,
-        "price": 20
+        "price": 5
       },
       {
         "name": "farming_seed_tomato",
         "amount": 50,
-        "price": 10
+        "price": 2
       },
       {
         "name": "farming_seed_lettuce",
         "amount": 50,
-        "price": 10
+        "price": 2
       },
       {
         "name": "farming_seed_onion",
         "amount": 50,
-        "price": 10
+        "price": 2
       },
       {
         "name": "farming_seed_wheat",
         "amount": 50,
-        "price": 10
+        "price": 2
       },
       {
         "name": "farming_seed_potato",
         "amount": 50,
-        "price": 10
+        "price": 2
       },
       {
         "name": "bandage",
@@ -64,7 +64,7 @@
     ],
     "hardware": [
       {
-        "name": "phne",
+        "name": "phone",
         "amount": 200,
         "price": 100
       },

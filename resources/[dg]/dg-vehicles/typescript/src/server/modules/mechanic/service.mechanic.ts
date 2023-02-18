@@ -222,6 +222,11 @@ export const tryAcceptingJob = (src: number, vin: string) => {
   const veh = NetworkGetEntityFromNetworkId(vehNetId);
   const vehCoords = Util.ArrayToVector3(GetEntityCoords(veh));
   Events.emitNet('vehicles:mechanic:assignJob', src, vin, vehCoords);
+
+  Inventory.addItemToPlayer(src, 'sales_ticket', 1, {
+    origin: 'generic',
+    amount: config.towingTicketPrice,
+  });
 };
 // endregion
 

@@ -4,7 +4,6 @@ import inventoryManager from 'modules/inventories/manager.inventories';
 import shopManager from 'modules/shops/shopmanager';
 import itemManager from './manager.items';
 import { Item } from './classes/item';
-import { mainLogger } from 'sv_logger';
 
 // Event to get item from shop inv (shop or bench), handles cash or required items removal
 Events.onNet(
@@ -61,9 +60,7 @@ Events.onNet(
     // Check requirements
     if (shopItem.requirements.cash) {
       const playerCash = Financials.getCash(src);
-      if (playerCash < shopItem.requirements.cash) {
-        throw new Error(`Player tried to get item for ${shopItem.requirements.cash} but only had ${playerCash}`);
-      }
+      if (playerCash < shopItem.requirements.cash) return;
       Financials.removeCash(src, shopItem.requirements.cash, 'shop-item-bought');
     }
 
@@ -77,10 +74,7 @@ Events.onNet(
             if (item.state.name !== reqItem.name) return false;
             return itemsToRemove.findIndex(i => i.state.id === item.state.id) === -1;
           });
-          if (!plyItem) {
-            mainLogger.error(`Player tried to get item but was missing required item ${reqItem.name}`);
-            return;
-          }
+          if (!plyItem) return;
           itemsToRemove.push(plyItem);
         }
       }

@@ -23,6 +23,7 @@ declare namespace PostOP {
     packagesByPlayer: Map<number, number>; // keeps track of amount of pakcages player has delivered
     totalLocations: number; // length of sequence at start for phone notif
     locationsDone: number; // easier to build phone notif because sequences gets modified before targetloc so is hard get amount from that
+    payoutLevel: number;
   };
 
   type JobType = 'small' | 'big';

@@ -5,3 +5,4 @@ import './modules/whitelist';
 import './modules/menu';
 import './modules/penalties';
 import './services/selector';
+import './services/staffchat';

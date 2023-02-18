@@ -54,7 +54,8 @@ export const startJobForGroup = async (plyId: number, jobType: Fishing.JobType) 
   }
 
   const jobAssigned = changeJob(plyId, 'fishing');
-  if (!jobAssigned) return;
+  const payoutLevel = jobManager.getJobPayoutLevel('fishing');
+  if (!jobAssigned || payoutLevel === null) return;
 
   const vehicle = await Vehicles.spawnVehicle(BOAT_FOR_JOBTYPE[jobType], vehicleLocation, plyId);
   if (!vehicle) {
@@ -75,6 +76,7 @@ export const startJobForGroup = async (plyId: number, jobType: Fishing.JobType) 
     jobType,
     fishPerCid: new Map(),
     maxFish: 10 * group.members.length,
+    payoutLevel,
   };
   activeGroups.set(group.id, jobGroup);
 
@@ -136,7 +138,7 @@ export const finishFishingJob = (plyId: number, netId: number) => {
   }
 
   disbandGroup(group.id);
-  const payoutPerFish = jobManager.getJobPayout('fishing', group.members.length);
+  const payoutPerFish = jobManager.getJobPayout('fishing', group.size, active.payoutLevel);
   if (payoutPerFish === null) {
     fishingLogger.error(`Could not get payout data for job`);
     return;

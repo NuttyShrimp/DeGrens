@@ -88,8 +88,6 @@ export const playerDropped = (droppedPlayer: number) => {
 export const getPlayerScope = (plyId: number) => {
   const scope = getScope(plyId);
 
-  Util.Log('sync:getScope', { scope }, `${Util.getName(plyId)} received his scope for idmenu`, plyId);
-
   const scopeInfo: Record<Scopes.ClientType, Scopes.Player[]> = {
     current: [],
     recent: [],

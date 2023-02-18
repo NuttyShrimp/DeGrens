@@ -17,6 +17,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Admin clear vehicle service optie
 - Non-scuffed inbeslagname optie toegevoegd
 - phone en laptop toegevoegd aan hardware store
+- Salesticket bij uitvoeren van towingjob
+- Smoll staffchat toegevoegd
+- Andere kleur naam in admin blips als speler praat
+- Commands om masker/bril/helm uit te zetten
+- Failsafe in shops waardoor non-existing items nie alles breekt
 
 ### Changed
 
@@ -27,6 +32,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Send plyInfo als een ander key voor minder data te moeten extracten
 - Eten/drank afnemen verminderd
 - Fietsen zijn goedkoop gemaakt, andere voertuigen volgen soon
+- Fuel goedkoper gemaakt
+- Lockpicks goedkoper en gaan langer mee
+- Goedkopere seeds en meer loot per farming plant
+- Goedkopere bennys reparages 
+- Minder stress gain door speed
+- Je krijgt betaald volgens payout level in het begin van je job
+- Ook een waypoint naar getracked voertuig met langere blip
 
 ### Fixed
 
@@ -39,6 +51,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Je kunt nu je paycheck gaan ophalen in de pacific
 - De politie voertuigen hebben minder wheelspin
 - De ambulance sprinter heeft een treffelijk handling
+- Verwijderd key requirement voor mechanics options
+- Verlaagt min percentage van vehicle damage service
+- Fix errors bij proberen kopen van items wanneer je niet genoeg geld hebt
+- Testdrive inleveren geeft je geld weer terug
+- Fix tijd die niet naar nieuwe dag ging
+- Remove sync:getlogs log
 
 ## [0.0.0]
 

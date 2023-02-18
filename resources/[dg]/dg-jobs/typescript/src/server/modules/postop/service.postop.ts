@@ -18,9 +18,9 @@ export const initializePostop = () => {
     location: { x: -424.2247, y: -2789.7656 },
     // this is payout per package, gets multiplied by amount of packages player has delivered
     payout: {
-      min: 10,
-      max: 15,
-      groupPercent: 15, // Can only do with 2 people so high percentage isnt a problem
+      min: 12,
+      max: 16,
+      groupPercent: 20, // Can only do with 2 people so high percentage isnt a problem
     },
   });
 };
@@ -72,7 +72,8 @@ export const startJobForGroup = async (plyId: number, jobType: PostOP.JobType) =
   }
 
   const jobAssigned = changeJob(plyId, 'postop');
-  if (!jobAssigned) return;
+  const payoutLevel = jobManager.getJobPayoutLevel('postop');
+  if (!jobAssigned || payoutLevel === null) return;
 
   const vehicleModel = postopConfig.types[jobType].model;
   const vehicle = await Vehicles.spawnVehicle(
@@ -104,6 +105,7 @@ export const startJobForGroup = async (plyId: number, jobType: PostOP.JobType) =
     packagesByPlayer: new Map(),
     totalLocations: locationSequence.length,
     locationsDone: 0,
+    payoutLevel,
   };
   activeGroups.set(group.id, job);
 
@@ -162,7 +164,7 @@ export const finishJobForGroup = (plyId: number, netId: number) => {
   }
 
   // Calculate using delivered
-  const payout = jobManager.getJobPayout('postop', group.members.length) ?? 0;
+  const payout = jobManager.getJobPayout('postop', group.size, active.payoutLevel) ?? 0;
   group.members.forEach(m => {
     if (m.serverId === null) return;
     const amount = active.packagesByPlayer.get(m.cid);

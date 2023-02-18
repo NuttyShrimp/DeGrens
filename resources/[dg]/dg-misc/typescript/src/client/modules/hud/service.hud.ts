@@ -39,7 +39,7 @@ export const doSpeedStress = () => {
   const speed = Util.getVehicleSpeed(vehicle);
   const isSeatbeltOn = global.exports['dg-vehicles'].isSeatbeltOn();
   if (speed >= config.speed.minimum * (isSeatbeltOn ? 1.3 : 1)) {
-    Events.emitNet('hud:server:changeStress', Util.getRndInteger(1, 4) / 10);
+    Events.emitNet('hud:server:changeStress', Util.getRndInteger(1, 3) / 20);
   }
 };
 
@@ -61,7 +61,7 @@ export const doWeaponStress = () => {
     !SKIPPED_WEAPONS.includes(pedWeapon) &&
     Util.getRndInteger(0, 100) < config.shootingChance
   ) {
-    Events.emitNet('hud:server:changeStress', Util.getRndInteger(3, 21) / 10);
+    Events.emitNet('hud:server:changeStress', Util.getRndInteger(2, 15) / 10);
   }
 };
 

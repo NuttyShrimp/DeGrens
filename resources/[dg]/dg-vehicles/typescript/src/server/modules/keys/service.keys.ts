@@ -118,7 +118,7 @@ const validateId = (src: number, id: string) => {
   if (!active) return false;
   if (active.id !== id) return false;
   SetVehicleAlarm(active.vehicle, false);
-  Inventory.setQualityOfItem(active.itemId, old => old - 10);
+  Inventory.setQualityOfItem(active.itemId, old => old - 5);
   return true;
 };
 

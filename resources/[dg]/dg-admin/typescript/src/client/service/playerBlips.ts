@@ -16,10 +16,11 @@ export const enableBlips = () => {
     }
     GetActivePlayers().forEach((ply: number) => {
       if (ply === plyId) return;
+      const isTalking = !!MumbleIsPlayerTalking(ply);
       const ped = GetPlayerPed(ply);
       const coords = Util.getEntityCoords(ped);
       coords.z += 1.0;
-      drawText3d(`${GetPlayerName(ply)}(${GetPlayerServerId(ply)})`, coords, 0.4);
+      drawText3d(`${isTalking ? '~g~' : ''}${GetPlayerName(ply)}(${GetPlayerServerId(ply)})`, coords, 0.4);
     });
   }, 1);
 
