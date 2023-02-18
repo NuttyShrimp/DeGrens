@@ -1869,8 +1869,8 @@ function loadAnimDict( dict )
     end
 end 
 
-RegisterNetEvent("qb-clothing:client:adjustfacewear")
-AddEventHandler("qb-clothing:client:adjustfacewear",function(type)
+RegisterNetEvent("clothing:client:adjustfacewear")
+AddEventHandler("clothing:client:adjustfacewear",function(type)
 	removeWear = not removeWear
 	local AnimSet = "none"
 	local AnimationOn = "none"

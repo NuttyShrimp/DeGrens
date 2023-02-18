@@ -83,3 +83,15 @@ DGCore.Functions.CreateCallback('qb-clothing:server:getOutfits', function(source
     end
     cb(anusVal)
 end)
+
+exports['dg-chat']:registerCommand("helm", "Zet je helm op.", {}, 'user', function(source)
+  TriggerClientEvent("clothing:client:adjustfacewear", source, 1) -- Hat
+end)
+
+exports['dg-chat']:registerCommand("bril", "Zet je bril op.", {}, 'user', function(source)
+  TriggerClientEvent("clothing:client:adjustfacewear", source, 2)
+end)
+
+exports['dg-chat']:registerCommand("masker", "Zet je masker op.", {}, 'user', function(source)
+  TriggerClientEvent("clothing:client:adjustfacewear", source, 4)
+end)

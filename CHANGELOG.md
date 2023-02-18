@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Salesticket bij uitvoeren van towingjob
 - Smoll staffchat toegevoegd
 - Andere kleur naam in admin blips als speler praat
+- Commands om masker/bril/helm uit te zetten
 
 ### Changed
 
