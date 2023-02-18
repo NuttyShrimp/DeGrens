@@ -27,6 +27,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Send plyInfo als een ander key voor minder data te moeten extracten
 - Eten/drank afnemen verminderd
 - Fietsen zijn goedkoop gemaakt, andere voertuigen volgen soon
+- Fuel goedkoper gemaakt
+- Lockpicks goedkoper en gaan langer mee
 
 ### Fixed
 

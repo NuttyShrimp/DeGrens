@@ -5,11 +5,11 @@
       "items": [
         {
           "name": "material_iron",
-          "amount": 8
+          "amount": 5
         },
         {
           "name": "material_steel",
-          "amount": 5
+          "amount": 4
         }
       ]
     },
