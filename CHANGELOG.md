@@ -37,6 +37,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Goedkopere bennys reparages 
 - Minder stress gain door speed
 - Je krijgt betaald volgens payout level in het begin van je job
+- Ook een waypoint naar getracked voertuig met langere blip
 
 ### Fixed
 

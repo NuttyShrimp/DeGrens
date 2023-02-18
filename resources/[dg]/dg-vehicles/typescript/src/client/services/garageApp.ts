@@ -1,4 +1,4 @@
-import { Events, RPC, UI } from '@dgx/client';
+import { Events, RPC, UI, Util } from '@dgx/client';
 
 let trackedVehBlip: number;
 let trackedVehTimeout: NodeJS.Timeout | null;
@@ -57,5 +57,6 @@ Events.onNet('vehicles:server:app:setTrackedBlip', (coords: Vec3) => {
     RemoveBlip(trackedVehBlip);
     trackedVehBlip = 0;
     trackedVehTimeout = null;
-  }, 10000);
+  }, 15000);
+  Util.setWaypoint(coords);
 });
