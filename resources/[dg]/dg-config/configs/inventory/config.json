@@ -45,7 +45,7 @@
     "drop": 1,
     "dumpster": 1
   },
-  "dropRemoveTime": 10,
+  "dropRemoveTime": 30,
   "starterItems": [
     "phone",
     "id_card"

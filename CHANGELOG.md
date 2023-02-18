@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Discord presence is aangepast
 - Algemene job payout tweaks
 - Lagere carwash prijs
+- Inventory drop remove time verhoogt
 
 ### Fixed
 
