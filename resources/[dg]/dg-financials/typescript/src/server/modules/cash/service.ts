@@ -47,7 +47,7 @@ export const removeCash = (src: number | string, amount: number, reason: string)
     return false;
   }
   cashLogger.silly(`Player ${cid} has ${cash} cash, removing ${amount}`);
-  cashCache.set(cid, cash - amount);
+  cashCache.set(cid, Number((cash - amount).toFixed(0)));
   Util.Log(
     'cash:remove',
     {
@@ -78,7 +78,7 @@ export const addCash = (src: number | string, amount: number, reason: string) =>
   const cash = getCash(src);
   amount = Number(amount.toFixed(0));
   cashLogger.silly(`Player ${cid} has ${cash} cash, adding ${amount}`);
-  cashCache.set(cid, Number(cash) + amount);
+  cashCache.set(cid, Number((Number(cash) + amount).toFixed(0)));
   Util.Log(
     'cash:add',
     {
