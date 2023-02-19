@@ -108,7 +108,7 @@ export const isOnParkingSpot = async (src: number, netId: number | null): Promis
   const entityCoords = Util.getEntityCoords(targetEntity);
   const spot = thread.getCurrentParkingSpot();
   if (!spot) return false;
-  if (entityCoords.distance(spot.coords) > spot.size + (targetIsPlayer ? spot.distance : 0)) return false;
+  if (entityCoords.distance(spot.coords) > spot.size + spot.distance) return false;
   // Check if there are no vehicles already on spot when checking player
   if (targetIsPlayer && Util.isAnyVehicleInRange(spot.coords, spot.size)) return false;
   return true;
