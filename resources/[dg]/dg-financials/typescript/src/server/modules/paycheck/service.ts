@@ -147,7 +147,7 @@ export const checkInterval = (cid: number, job: string | null) => {
     const interval = setInterval(() => {
       const intervalInfo = paycheckIntervals.get(cid);
       if (intervalInfo === undefined || intervalInfo.job !== job) {
-        paycheckLogger.error(`Unregistered interval running for ${cid}. Clearing interval.`);
+        paycheckLogger.info(`Unregistered interval running for ${cid}. Clearing interval.`);
         clearInterval(interval);
         return;
       }
