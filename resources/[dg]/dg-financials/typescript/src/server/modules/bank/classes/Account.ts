@@ -558,9 +558,9 @@ export class Account {
         comment,
         canBeNegative,
       },
-      `${triggerPlyId ? Util.getName(triggerPlyId) : triggerCid} transfer ${amount} from ${this.name} (${this.account_id}) to ${
-        targetAccount.name
-      } (accountId: ${targetAccount.account_id} | accepted_by: ${acceptorCid})`,
+      `${triggerPlyId ? Util.getName(triggerPlyId) : triggerCid} transfer ${amount} from ${this.name} (${
+        this.account_id
+      }) to ${targetAccount.name} (accountId: ${targetAccount.account_id} | accepted_by: ${acceptorCid})`,
       triggerPlyId ?? triggerCid
     );
     this.logger.info(
@@ -602,12 +602,12 @@ export class Account {
     return true;
   }
 
-  public async paycheck(triggerCid: number, amount: number): Promise<boolean> {
+  public async paycheck(triggerCid: number, amount: number): Promise<number> {
     const isValid = await this.actionValidation('paycheck', triggerCid, amount);
-    if (!isValid) return false;
+    if (!isValid) return 0;
 
     const triggerPlyId = DGCore.Functions.getPlyIdForCid(triggerCid);
-    if (!triggerPlyId) return false;
+    if (!triggerPlyId) return 0;
 
     // Check if standard account
     if (this.accType != 'standard') {
@@ -629,7 +629,7 @@ export class Account {
       this.logger.debug(
         `paycheck: invalid account type | cid: ${triggerCid} | account: ${this.account_id} | accountType: ${this.accType} | amount: ${amount}`
       );
-      return false;
+      return 0;
     }
 
     amount = parseInt(String(amount));
@@ -652,7 +652,7 @@ export class Account {
       triggerPlyId
     );
     this.logger.info(`paycheck: success | cid: ${triggerCid} | account: ${this.account_id} | amount: ${amount}`);
-    return true;
+    return taxPrice;
   }
 
   public async mobileTransfer(

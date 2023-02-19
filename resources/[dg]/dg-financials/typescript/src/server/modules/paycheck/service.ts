@@ -1,6 +1,7 @@
 import { Jobs, Notifications, SQL, Util } from '@dgx/server';
 import { getConfig } from 'helpers/config';
 import accountManager from 'modules/bank/classes/AccountManager';
+import { getTaxedPrice } from 'modules/taxes/service';
 import { paycheckLogger } from './util';
 
 const paycheckCache: Map<number, number> = new Map();
@@ -103,8 +104,8 @@ export const givePaycheck = async (src: number) => {
     return;
   }
 
-  const result = account.paycheck(cid, paycheckAmount);
-  if (!result) {
+  const payedOutPrice = account.paycheck(cid, paycheckAmount);
+  if (!payedOutPrice) {
     Notifications.add(src, 'Konden geen paycheck uitbetalen', 'error');
     Util.Log(
       'financials:paycheck:error',
@@ -120,8 +121,8 @@ export const givePaycheck = async (src: number) => {
     );
     return;
   }
-  Notifications.add(src, `Paycheck van €${paycheckAmount} uitbetaald.`);
-  paycheckLogger.info(`${logName} (${cid}) received his/her paycheck of €${paycheckAmount}`);
+  Notifications.add(src, `Paycheck van €${payedOutPrice} uitbetaald.`);
+  paycheckLogger.info(`${logName} (${cid}) received his/her paycheck of €${payedOutPrice}(${paycheckAmount})`);
   paycheckCache.set(cid, 0);
   saveToDb(cid);
 };

@@ -31,6 +31,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Repairparts repairen een hoger percentage wat meer gebalanceerd is
 - NPCs in Up-n-Atom verwijderd omdat deze geen goede paths hadden
 - Je moet niet meer in hetzelfde vak staan om je voertuig weg te steken
+- Prijs van paycheck notificatie toont taxed price
 
 ### Fixed
 

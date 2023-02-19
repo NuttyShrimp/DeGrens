@@ -88,7 +88,8 @@ export const paycheck = async (accountId: string, triggerCid: number, amount: nu
     bankLogger.error(`Account ${accountId} not found | src: ${plyId} | cid: ${triggerCid}`);
     return false;
   }
-  return account.paycheck(triggerCid, amount);
+  const succ = await account.paycheck(triggerCid, amount);
+  return succ !== 0;
 };
 
 export const mobile_transaction = async (
