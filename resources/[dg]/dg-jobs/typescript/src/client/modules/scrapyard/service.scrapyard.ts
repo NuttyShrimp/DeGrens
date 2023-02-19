@@ -9,7 +9,12 @@ let vehicleNetId: number | null = null;
 
 export const buildScrapyardReturnZone = (returnZone: Vec4) => {
   const { w: heading, ...coords } = returnZone;
-  PolyZone.addBoxZone('scrapyard_return', coords, 16, 8, { heading, minZ: coords.z - 2, maxZ: coords.z + 3, data: {} });
+  PolyZone.addBoxZone('scrapyard_return', coords, 30, 15, {
+    heading,
+    minZ: coords.z - 2,
+    maxZ: coords.z + 3,
+    data: {},
+  });
 };
 
 export const setVehicleNetId = (netId: typeof vehicleNetId) => {

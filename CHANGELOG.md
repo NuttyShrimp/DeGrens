@@ -25,6 +25,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Shopprijzen van sommige items verlaagt
 - Gestallede motor gaat niet meer terug aan als je geen sleutels hebt
 - Confirm button om restaurant order te cancelen
+- Grotere scrapyard zone
 
 ### Fixed
 
