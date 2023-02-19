@@ -13,7 +13,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Restaurant extra opslag, locker en kledingkast, tweaked taskbar times
 - Plantvoeding heeft nu meerdere usages
 - Je kan nu een huidige sanitation locatie skippen als je de vuilzak niet vindt 
-- Admin kan nu een individueel bericht naar een persoon sturen 
+- Admin kan nu een individueel bericht naar een persoon sturen
+- Extra message before AC tries to ban user
 
 ### Changed
 
