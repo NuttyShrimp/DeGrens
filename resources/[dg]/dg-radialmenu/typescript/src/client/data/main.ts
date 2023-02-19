@@ -1,4 +1,4 @@
-import { Police } from '@dgx/client';
+import { Police, Util } from '@dgx/client';
 
 // Start menu when opening radialmenu
 export const main: RadialMenu.Entry[] = [
@@ -54,8 +54,14 @@ export const main: RadialMenu.Entry[] = [
     type: 'dgxServer',
     event: 'dg-vehicles:garages:open',
     shouldClose: true,
-    isEnabled: ({ currentVehicle }) => {
+    isEnabled: ({ currentVehicle, raycastEntity }) => {
       if (currentVehicle) return false;
+      if (
+        raycastEntity &&
+        GetEntityType(raycastEntity) === 2 &&
+        Util.getEntityCoords(raycastEntity).distance(Util.getPlyCoords()) < 2.5
+      )
+        return false;
       return global.exports['dg-vehicles'].isOnParkingSpot();
     },
   },
