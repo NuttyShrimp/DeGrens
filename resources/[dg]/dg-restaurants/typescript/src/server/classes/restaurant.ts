@@ -374,11 +374,16 @@ export class Restaurant {
       {
         title: `Annuleer Order`,
         icon: 'burger-glass',
-        callbackURL: 'restaurant/cancelOrder',
-        data: {
-          restaurantId: this.id,
-          registerId: registerId,
-        },
+        submenu: [
+          {
+            title: 'Confirm',
+            callbackURL: 'restaurant/cancelOrder',
+            data: {
+              restaurantId: this.id,
+              registerId: registerId,
+            },
+          },
+        ],
       },
     ];
 
