@@ -91,7 +91,8 @@ const setVehicleDegradation = (veh: number) => {
 
   for (const part in vehicleService.info) {
     for (const value of degradationValues[part as keyof Service.Status]) {
-      const newValue = value.bottom + value.step * vehicleService.info[part as keyof Service.Status];
+      const partValue = Math.max(0, vehicleService.info[part as keyof Service.Status]);
+      const newValue = value.bottom + value.step * partValue;
       if (handlingOverrideFunctions[value.name]) {
         overrideThreads.push(
           setInterval(() => {
@@ -157,7 +158,8 @@ export const startStatusThread = async (vehicle: number) => {
         if (avgBrakePressure <= 0) {
           multipliers.brake = 1;
         } else {
-          vehicleService.info.brakes -= (avgBrakePressure * multipliers.brake) / 10;
+          const brakeDecrease = (avgBrakePressure * multipliers.brake) / 10;
+          vehicleService.info.brakes = Math.max(vehicleService.info.brakes - brakeDecrease, 0);
           multipliers.brake += 0.1;
         }
       }
@@ -165,7 +167,8 @@ export const startStatusThread = async (vehicle: number) => {
       // Suspension
       const avgSuspCompress = Util.average(suspCompress);
       if (avgSuspCompress > 0.15) {
-        vehicleService.info.suspension -= avgSuspCompress / 5;
+        const suspDecrease = avgSuspCompress / 5;
+        vehicleService.info.suspension = Math.max(vehicleService.info.suspension - suspDecrease, 0);
       }
 
       // Axle & engine
@@ -178,10 +181,12 @@ export const startStatusThread = async (vehicle: number) => {
       vehicleService.state.engine = newEngine;
 
       if (bodyDelta > 0) {
-        vehicleService.info.axle -= bodyDelta / 3;
+        const axleDecrease = bodyDelta / 3;
+        vehicleService.info.axle = Math.max(vehicleService.info.axle - axleDecrease, 0);
       }
       if (engineDelta > 0) {
-        vehicleService.info.engine -= engineDelta / 3;
+        const engineDecrease = engineDelta / 3;
+        vehicleService.info.engine = Math.max(vehicleService.info.engine - engineDecrease, 0);
       }
     }, 100),
     // Apply thread applies calculated service values every 5 seconds
