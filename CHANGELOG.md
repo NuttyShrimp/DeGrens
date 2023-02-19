@@ -40,6 +40,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Je correct emmer wordt nu gebruikt beinvloed bij het water geven van een plant
 - Geld in info app afronden voor komma getal verbergen
 - Tijdelijk disabled dat stalling de voertuigservice beinvloed tot ik service heb gefixt
+- Je stapt niet langer soms automatisch uit na het lockpicken
 
 ## [1.0.1]
 
