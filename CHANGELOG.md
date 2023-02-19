@@ -43,6 +43,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Je stapt niet langer soms automatisch uit na het lockpicken
 - Clamped vehicle service values
 - Staff ziet nu playernames voor mensen ver weg
+- Wagens zouden niet meer random/opeens mogen verdwijnen
 
 ## [1.0.1]
 

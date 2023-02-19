@@ -60,7 +60,7 @@ export const handlePlayerStateUpdate = (plyId: number, newPlayerProps: Record<nu
     const propId = Number(key);
     if (newPlayerProps[propId]) continue;
 
-    deleteEntity(oldPlayerProps[propId].entity);
+    deleteEntity(oldPlayerProps[propId]);
     delete propsPerPlayer[plyId][propId];
   }
 
@@ -79,7 +79,7 @@ export const handlePlayerStateUpdate = (plyId: number, newPlayerProps: Record<nu
 
     const entity = createEntity(ped, newProp.name, newProp.offset);
     if (entity) {
-      propsPerPlayer[plyId][propId] = { ...newProp, entity };
+      propsPerPlayer[plyId][propId] = { ...newProp, entity, hash: GetEntityModel(entity) };
     }
   }
 };
@@ -105,7 +105,7 @@ export const toggleProps = (toggle: boolean) => {
 export const deleteAllEntities = () => {
   for (const plyId in propsPerPlayer) {
     for (const propId in propsPerPlayer[plyId]) {
-      deleteEntity(propsPerPlayer[plyId][propId].entity);
+      deleteEntity(propsPerPlayer[plyId][propId]);
     }
   }
   propsPerPlayer = {};
@@ -124,7 +124,7 @@ export const startPropattachScopeThread = () => {
       if (GetPlayerFromServerId(plyId) !== -1) continue;
 
       for (const propId in propsPerPlayer[plyId]) {
-        deleteEntity(propsPerPlayer[plyId][propId].entity);
+        deleteEntity(propsPerPlayer[plyId][propId]);
       }
 
       delete propsPerPlayer[plyId];

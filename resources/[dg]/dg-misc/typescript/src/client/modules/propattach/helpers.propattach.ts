@@ -4,9 +4,16 @@ export const debug = (msg: string) => {
   console.log(`[PropAttach] ${msg}`);
 };
 
-export const deleteEntity = (entity: number) => {
-  SetEntityAsMissionEntity(entity, true, true);
-  DeleteEntity(entity);
+export const deleteEntity = (propInfo: PropAttach.ActiveProp) => {
+  // console.log(propInfo, DoesEntityExist(propInfo.entity), propInfo.hash, GetEntityModel(propInfo.entity));
+  if (
+    NetworkGetEntityIsLocal(propInfo.entity) &&
+    DoesEntityExist(propInfo.entity) &&
+    propInfo.hash == GetEntityModel(propInfo.entity)
+  ) {
+    SetEntityAsMissionEntity(propInfo.entity, true, true);
+    DeleteEntity(propInfo.entity);
+  }
 };
 
 /**
