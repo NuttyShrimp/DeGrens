@@ -99,6 +99,10 @@ Events.onNet('materials:melting:take', async (src: number) => {
     },
   });
   if (canceled) return;
+  if (activeItem === null) {
+    Notifications.add(src, 'Hier zit niks in', 'error');
+    return;
+  }
 
   Inventory.addItemToPlayer(src, activeItem.name, activeItem.amount);
   Util.Log(
