@@ -18,7 +18,7 @@ Chat.registerCommand(
     Chat.sendMessage('admin', {
       prefix: `SC | ${steamName}: `,
       message: fullMessage,
-      type: 'normal',
+      type: 'system',
     });
   }
 );

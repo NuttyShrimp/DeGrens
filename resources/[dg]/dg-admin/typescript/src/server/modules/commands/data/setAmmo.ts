@@ -1,4 +1,4 @@
-import { Events, Notifications, Weapons } from '@dgx/server';
+import { Notifications, Weapons } from '@dgx/server';
 import { Inputs } from 'enums/inputs';
 
 declare interface SetAmmoData {
