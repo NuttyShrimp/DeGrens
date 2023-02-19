@@ -2872,7 +2872,7 @@
     "name": "sandwich",
     "label": "Sandwich",
     "image": "sandwich.png",
-    "decayRate": 10,
+    "decayRate": 60,
     "size": {
       "x": 1,
       "y": 1
@@ -2883,7 +2883,7 @@
     "name": "water_bottle",
     "label": "Water",
     "image": "water_bottle.png",
-    "decayRate": 10,
+    "decayRate": 60,
     "size": {
       "x": 1,
       "y": 1
