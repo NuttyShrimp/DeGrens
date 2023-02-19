@@ -356,18 +356,15 @@ export const storeVehicleInGarage = async (src: number, entity: number) => {
 // endregion
 export const doesCidHasAccess = (cid: number, garageId: string) => {
   const garage = garages.get(garageId);
-  if (!garage) {
-    return false;
-  }
-  const plyId = DGCore.Functions.getPlyIdForCid(cid);
-  const plyJob = plyId == undefined ? null : Jobs.getCurrentJob(plyId);
+  if (!garage) return false;
+
   switch (garage.type) {
     case 'public':
       return true;
     case 'police':
-      return plyJob === 'police';
+      return Jobs.isCidWhitelisted(cid, 'police');
     case 'ambulance':
-      return plyJob === 'ambulance';
+      return Jobs.isCidWhitelisted(cid, 'ambulance');
     case 'business':
       return Business.hasPlyPermission(garage.garage_id, cid, 'garage_access');
     default:

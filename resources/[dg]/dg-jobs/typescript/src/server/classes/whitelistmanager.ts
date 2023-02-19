@@ -446,6 +446,11 @@ class WhitelistManager extends Util.Singleton<WhitelistManager>() {
     return !!this.getPlayerInfoForJob(cid, job);
   };
 
+  @Export('isCidWhitelisted')
+  private _isCidWhitelisted = (cid: number, job: string) => {
+    return !!this.getPlayerInfoForJob(cid, job);
+  };
+
   @AsyncExport('isSteamIdWhitelisted')
   private _isSteamIdWhitelisted = async (steamId: string, job: string) => {
     const cids = await DGCore.Functions.GetCidsForSteamId(steamId);
