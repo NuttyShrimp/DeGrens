@@ -369,11 +369,11 @@ export const tryToStallVehicle = (vehicle: number, newHealth: number, oldHealth:
   );
 
   // affect service on stall
-  if (vehicleService.vehicle === vehicle && vehicleService.info) {
-    for (const [k, v] of Object.entries(vehicleService.info) as [keyof Service.Status, number][]) {
-      vehicleService.info[k] = v - 100;
-    }
-  }
+  // if (vehicleService.vehicle === vehicle && vehicleService.info) {
+  //   for (const [k, v] of Object.entries(vehicleService.info) as [keyof Service.Status, number][]) {
+  //     vehicleService.info[k] = v - 100;
+  //   }
+  // }
 
   if (amountOfStalls >= 4) {
     SetVehicleEngineHealth(vehicle, 0);

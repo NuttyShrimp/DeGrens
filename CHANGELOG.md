@@ -37,6 +37,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Check garage access op whitelist en niet op active job
 - Je correct emmer wordt nu gebruikt beinvloed bij het water geven van een plant
 - Geld in info app afronden voor komma getal verbergen
+- Tijdelijk disabled dat stalling de voertuigservice beinvloed tot ik service heb gefixt
 
 ## [1.0.1]
 
