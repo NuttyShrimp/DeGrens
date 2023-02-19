@@ -33,6 +33,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Je moet niet meer in hetzelfde vak staan om je voertuig weg te steken
 - Prijs van paycheck notificatie toont taxed price
 - Langere decayrate voor mechanic repairparts
+- Deur van hoofdingang HB verwijderd
 
 ### Fixed
 

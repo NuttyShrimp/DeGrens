@@ -1,35 +1,5 @@
 [
   {
-    "description": "MRPD Hoofdingang",
-    "locked": false,
-    "authorized": {
-      "job": [
-        {
-          "name": "police"
-        }
-      ]
-    },
-    "distance": 3,
-    "doors": [
-      {
-        "model": "gabz_mrpd_reception_entrancedoor",
-        "coords": {
-          "x": 434.744384765625,
-          "y": -980.755615234375,
-          "z": 30.81529998779297
-        }
-      },
-      {
-        "model": "gabz_mrpd_reception_entrancedoor",
-        "coords": {
-          "x": 434.744384765625,
-          "y": -983.078125,
-          "z": 30.81529998779297
-        }
-      }
-    ]
-  },
-  {
     "description": "MRPD Hoofdingang Ingang links",
     "locked": true,
     "authorized": {
