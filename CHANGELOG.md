@@ -33,6 +33,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Restaurant medewerker gaat nu automatisch uit dienst als deze de server verlaat
 - Extra controle op samen materiaal uit smeltoven nemen
 - Check garage access op whitelist en niet op active job
+- Je correct emmer wordt nu gebruikt beinvloed bij het water geven van een plant
 
 ## [1.0.1]
 

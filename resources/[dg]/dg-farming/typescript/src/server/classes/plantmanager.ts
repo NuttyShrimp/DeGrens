@@ -40,7 +40,9 @@ class PlantManager extends Util.Singleton<PlantManager>() {
     const plant = this.getPlant(plantId);
     if (!plant) return;
 
-    const bucketItem = await Inventory.getFirstItemOfNameOfPlayer(plyId, 'farming_bucket');
+    const cid = Util.getCID(plyId);
+    const bucketItems = (await Inventory.getItemsWithNameInInventory('player', String(cid), 'farming_bucket')) ?? [];
+    const bucketItem = bucketItems.find(i => i.metadata.liter > 0);
     if (!bucketItem) return;
 
     Inventory.setMetadataOfItem(bucketItem.id, oldMetadata => ({ liter: oldMetadata.liter - 1 }));
