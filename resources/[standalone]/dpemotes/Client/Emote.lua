@@ -24,7 +24,6 @@ end);
 
 Citizen.CreateThread(function()
   while true do
-
     if (IsPedShooting(PlayerPedId()) and IsInAnimation) or
         (isLoggedIn and PlayerData.metadata['isdead'] and IsInAnimation) then
       EmoteCancel()
@@ -60,11 +59,11 @@ Citizen.CreateThread(function()
     { { name = "emotename", help = "dance, camera, sit or any valid emote." } })
   if Config.SqlKeybinding then
     TriggerEvent('chat:addSuggestion', '/emotebind', 'Bind an emote',
-      { { name = "key", help = "num4, num5, num6, num7. num8, num9. Numpad 4-9!" },
+      { { name = "key",     help = "num4, num5, num6, num7. num8, num9. Numpad 4-9!" },
         { name = "emotename", help = "dance, camera, sit or any valid emote." } })
     TriggerEvent('chat:addSuggestion', '/emotebinds', 'Check your currently bound emotes.')
   end
-  TriggerEvent('chat:addSuggestion', '/emotemenu', 'Open dpemotes menu (F3) by default.')
+  TriggerEvent('chat:addSuggestion', '/emotemenu', 'Open dpemotes menu.')
   TriggerEvent('chat:addSuggestion', '/emotes', 'List available emotes.')
   TriggerEvent('chat:addSuggestion', '/walk', 'Set your walkingstyle.',
     { { name = "style", help = "/walks for a list of valid styles" } })
@@ -159,7 +158,6 @@ end)
 -----------------------------------------------------------------------------------------------------
 
 function EmoteCancel()
-
   if ChosenDict == "MaleScenario" and IsInAnimation then
     ClearPedTasksImmediately(PlayerPedId())
     IsInAnimation = false
@@ -253,21 +251,26 @@ function EmoteMenuStart(args, hard)
 
   if etype == "dances" then
     if DP.Dances[name] ~= nil then
-      if OnEmotePlay(DP.Dances[name]) then end
+      if OnEmotePlay(DP.Dances[name]) then
+      end
     end
   elseif etype == "props" then
     if DP.PropEmotes[name] ~= nil then
-      if OnEmotePlay(DP.PropEmotes[name]) then end
+      if OnEmotePlay(DP.PropEmotes[name]) then
+      end
     end
   elseif etype == "emotes" then
     if DP.Emotes[name] ~= nil then
-      if OnEmotePlay(DP.Emotes[name]) then end
+      if OnEmotePlay(DP.Emotes[name]) then
+      end
     else
-      if name ~= "🕺 Dance Emotes" then end
+      if name ~= "🕺 Dance Emotes" then
+      end
     end
   elseif etype == "expression" then
     if DP.Expressions[name] ~= nil then
-      if OnEmotePlay(DP.Expressions[name]) then end
+      if OnEmotePlay(DP.Expressions[name]) then
+      end
     end
   end
 end
@@ -288,13 +291,16 @@ function EmoteCommandStart(source, args, raw)
     end
 
     if DP.Emotes[name] ~= nil then
-      if OnEmotePlay(DP.Emotes[name]) then end
+      if OnEmotePlay(DP.Emotes[name]) then
+      end
       return
     elseif DP.Dances[name] ~= nil then
-      if OnEmotePlay(DP.Dances[name]) then end
+      if OnEmotePlay(DP.Dances[name]) then
+      end
       return
     elseif DP.PropEmotes[name] ~= nil then
-      if OnEmotePlay(DP.PropEmotes[name]) then end
+      if OnEmotePlay(DP.PropEmotes[name]) then
+      end
       return
     else
       DGX.Notifications.add('That Is Not A Valid Command', 'error')
@@ -372,7 +378,6 @@ end
 -----------------------------------------------------------------------------------------------------
 
 function OnEmotePlay(EmoteName)
-
   InVehicle = IsPedInAnyVehicle(PlayerPedId(), true)
   if not Config.AllowedInCars and InVehicle == 1 then
     return
@@ -402,7 +407,8 @@ function OnEmotePlay(EmoteName)
 
   if ChosenDict == "MaleScenario" or "Scenario" then
     CheckGender()
-    if ChosenDict == "MaleScenario" then if InVehicle then return end
+    if ChosenDict == "MaleScenario" then
+      if InVehicle then return end
       if PlayerGender == "male" then
         ClearPedTasks(PlayerPedId())
         DGX.Util.startScenarioInPlace(ChosenAnimation)
@@ -412,7 +418,8 @@ function OnEmotePlay(EmoteName)
         EmoteChatMessage(Config.Languages[lang]['maleonly'])
       end
       return
-    elseif ChosenDict == "ScenarioObject" then if InVehicle then return end
+    elseif ChosenDict == "ScenarioObject" then
+      if InVehicle then return end
       BehindPlayer = GetOffsetFromEntityInWorldCoords(PlayerPedId(), 0.0, 0 - 0.5, -0.5);
       ClearPedTasks(PlayerPedId())
       TaskStartScenarioAtPosition(PlayerPedId(), ChosenAnimation, BehindPlayer['x'], BehindPlayer['y'],
@@ -421,7 +428,8 @@ function OnEmotePlay(EmoteName)
       DebugPrint("Playing scenario = (" .. ChosenAnimation .. ")")
       IsInAnimation = true
       return
-    elseif ChosenDict == "Scenario" then if InVehicle then return end
+    elseif ChosenDict == "Scenario" then
+      if InVehicle then return end
       ClearPedTasks(PlayerPedId())
       DGX.Util.startScenarioInPlace(ChosenAnimation)
       DebugPrint("Playing scenario = (" .. ChosenAnimation .. ")")
@@ -438,7 +446,6 @@ function OnEmotePlay(EmoteName)
       if EmoteName.AnimationOptions.EmoteMoving then
         MovementType = 51
       end
-
     elseif EmoteName.AnimationOptions.EmoteMoving then
       MovementType = 51
     elseif EmoteName.AnimationOptions.EmoteMoving == false then
@@ -446,7 +453,6 @@ function OnEmotePlay(EmoteName)
     elseif EmoteName.AnimationOptions.EmoteStuck then
       MovementType = 50
     end
-
   else
     MovementType = 0
   end
@@ -499,7 +505,8 @@ function OnEmotePlay(EmoteName)
       if EmoteName.AnimationOptions.SecondProp then
         SecondPropName = EmoteName.AnimationOptions.SecondProp
         SecondPropBone = EmoteName.AnimationOptions.SecondPropBone
-        SecondPropPl1, SecondPropPl2, SecondPropPl3, SecondPropPl4, SecondPropPl5, SecondPropPl6 = table.unpack(EmoteName
+        SecondPropPl1, SecondPropPl2, SecondPropPl3, SecondPropPl4, SecondPropPl5, SecondPropPl6 = table.unpack(
+          EmoteName
           .AnimationOptions.SecondPropPlacement)
         SecondPropEmote = true
       else
