@@ -28,6 +28,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Confirm button om restaurant order te cancelen
 - Grotere scrapyard zone
 - Repairparts repairen een hoger percentage wat meer gebalanceerd is
+- NPCs in Up-n-Atom verwijderd omdat deze geen goede paths hadden
 
 ### Fixed
 
