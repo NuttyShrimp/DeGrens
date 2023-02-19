@@ -6,3 +6,4 @@ import './modules/menu';
 import './modules/penalties';
 import './services/selector';
 import './services/staffchat';
+import './services/names';

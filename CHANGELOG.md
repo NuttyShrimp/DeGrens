@@ -42,6 +42,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Tijdelijk disabled dat stalling de voertuigservice beinvloed tot ik service heb gefixt
 - Je stapt niet langer soms automatisch uit na het lockpicken
 - Clamped vehicle service values
+- Staff ziet nu playernames voor mensen ver weg
 
 ## [1.0.1]
 

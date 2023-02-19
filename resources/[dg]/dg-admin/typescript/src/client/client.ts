@@ -3,3 +3,4 @@ import './modules/util';
 import './modules/selector';
 import './controllers';
 import './helpers/binds';
+import './service/names';
