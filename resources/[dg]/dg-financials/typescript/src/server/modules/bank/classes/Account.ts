@@ -493,8 +493,10 @@ export class Account {
     });
     if (!isValid) return false;
 
-    const triggerPlyId = DGCore.Functions.getPlyIdForCid(triggerCid);
-    if (!triggerPlyId) return false;
+    // FIXME: currently the triggerCid may be offline
+    let triggerPlyId: number | null = null;
+    // triggerPlyId = DGCore.Functions.getPlyIdForCid(triggerCid);
+    // if (!triggerPlyId) return false;
 
     const targetAccount = accountManager.getAccountById(targetAccountId);
     if (!targetAccount) return false;
@@ -556,10 +558,10 @@ export class Account {
         comment,
         canBeNegative,
       },
-      `${Util.getName(triggerPlyId)} transfer ${amount} from ${this.name} (${this.account_id}) to ${
+      `${triggerPlyId ? Util.getName(triggerPlyId) : triggerCid} transfer ${amount} from ${this.name} (${this.account_id}) to ${
         targetAccount.name
       } (accountId: ${targetAccount.account_id} | accepted_by: ${acceptorCid})`,
-      triggerPlyId
+      triggerPlyId ?? triggerCid
     );
     this.logger.info(
       `transfer: success | cid: ${triggerCid} | acceptor_cid: ${acceptorCid} | account: ${this.account_id} | targetAccount: ${targetAccountId} | amount: ${amount}`
