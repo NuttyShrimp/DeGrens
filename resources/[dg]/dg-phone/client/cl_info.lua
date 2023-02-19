@@ -46,7 +46,7 @@ RegisterNetEvent('dg-phone:load', function()
     prefix = '€',
     getter = function()
       local cash = exports['dg-financials']:getCash()
-      return cash
+      return math.floor(cash)
     end,
   })
   registerInfoEntry({
@@ -57,7 +57,7 @@ RegisterNetEvent('dg-phone:load', function()
     getter = function()
       local account = DGX.RPC.execute('financials:getDefaultAccount')
       if not account then return 0 end
-      return account.balance or 0
+      return math.floor(account.balance) or 0
     end,
   })
 end)
