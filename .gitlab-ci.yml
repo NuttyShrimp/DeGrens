@@ -147,7 +147,7 @@ Schedule deploy:
   stage: deploy
   image: ubuntu:jammy
   script:
-    - curl --request PUT --header "PRIVATE-TOKEN: $CI_JOB_TOKEN" --form "value=true" "https://gitlab.pieter557.dscloud.me/api/v4/projects/26/pipeline_schedules/1/variables/SHOULD_DEPLOY"
+    - 'curl --request PUT --header "PRIVATE-TOKEN: $CI_JOB_TOKEN" --form "value=true" "https://gitlab.pieter557.dscloud.me/api/v4/projects/26/pipeline_schedules/1/variables/SHOULD_DEPLOY"'
   only:
     - main
 
