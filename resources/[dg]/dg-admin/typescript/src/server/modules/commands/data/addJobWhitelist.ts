@@ -19,7 +19,7 @@ export const addjobwhitelist: CommandData = {
     }
 
     let cid: number;
-    if (args.cid && args.cid === '') {
+    if (args.cid && args.cid !== '') {
       cid = Number(args.cid);
     } else if (args?.Target?.cid) {
       cid = args.Target.cid;
