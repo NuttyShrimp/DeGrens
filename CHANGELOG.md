@@ -39,6 +39,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Auto lockpick melding lager gezet
 - EMS porto gaat minder snel stuk
 - Kapotte items krijgen sneller een rode background
+- Hunting skinprijzen verlaagd omdat meeste mensen geen bait gebruiken
 
 ### Fixed
 
