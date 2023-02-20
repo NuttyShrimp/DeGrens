@@ -307,6 +307,9 @@
     "hardware_city": {
       "type": "hardware"
     },
+    "hardware_sandy": {
+      "type": "hardware"
+    },
     "fishing_shop": {
       "type": "fishing"
     },
