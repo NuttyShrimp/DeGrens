@@ -6898,5 +6898,17 @@
     "price": 1000000,
     "shop": "nfs",
     "type": "land"
+  },
+  {
+    "category": "industrial",
+    "model": "flatbed",
+    "brand": "MTL",
+    "name": "Flatbed",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 10,
+    "price": 10000,
+    "shop": "nfs",
+    "type": "land"
   }
 ]

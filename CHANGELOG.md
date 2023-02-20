@@ -64,6 +64,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Voertuig blijft niet langer kapot als je stallt zonder dat je sleutels hebt
 - Interiors worden nu wel aangemaakt bij houserobbery
 - SECRET Recycle ped gebruikte verkeerde stashid
+- Flatbed aan vehicles toegevoegd zodat ze gemaakt kan worden
 
 ## [1.0.1]
 
