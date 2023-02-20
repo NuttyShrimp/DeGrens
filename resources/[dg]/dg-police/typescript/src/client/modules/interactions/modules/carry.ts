@@ -4,9 +4,13 @@ import { pauseCuffAnimation } from './cuffs';
 
 let cancelCarry = false;
 
-Keys.onPressDown('cancelEmote', () => {
-  cancelCarry = true;
-});
+Keys.onPressDown(
+  'cancelEmote',
+  () => {
+    cancelCarry = true;
+  },
+  true
+);
 
 Events.onNet('police:interactions:carryPlayer', async () => {
   const ped = PlayerPedId();

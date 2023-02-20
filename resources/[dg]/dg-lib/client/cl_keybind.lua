@@ -19,16 +19,26 @@ exports('registerKeyMapping', function(name, description, onKeyDownCommand, onKe
 
   RegisterCommand(cmdStringDown, function()
     if not shouldExecute then
+      if event then 
+        TriggerEvent("dg-lib:keyEvent:disabled", name, true) 
+      end
       return
     end
-    if event then TriggerEvent("dg-lib:keyEvent", name, true) end
+    if event then 
+      TriggerEvent("dg-lib:keyEvent", name, true) 
+    end
     ExecuteCommand(onKeyDownCommand)
   end, false)
   RegisterCommand(cmdStringUp, function()
     if not shouldExecute then
+      if event then 
+        TriggerEvent("dg-lib:keyEvent:disabled", name, false) 
+      end
       return
     end
-    if event then TriggerEvent("dg-lib:keyEvent", name, false) end
+    if event then 
+      TriggerEvent("dg-lib:keyEvent", name, false) 
+    end
     ExecuteCommand(onKeyUpCommand)
   end, false)
   RegisterKeyMapping(cmdStringDown, description, type, default)

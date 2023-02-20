@@ -58,8 +58,12 @@ Events.onNet('admin:menu:forceClose', () => {
   });
 });
 
-Keys.onPressDown('open-admin', () => {
-  Events.emitNet('admin:menu:open');
-});
+Keys.onPressDown(
+  'open-admin',
+  () => {
+    Events.emitNet('admin:menu:open');
+  },
+  true
+);
 
 Keys.register('open-admin', '(zAdmin) open menu');

@@ -353,14 +353,26 @@ class PolyTarget {
 
 class Keys {
   private listeners: Map<string, Map<number, (isDown: boolean) => void>>;
+  private disabledListeners: Map<string, Map<number, (isDown: boolean) => void>>;
+
   private handlerId: number;
 
   constructor() {
     this.handlerId = 0;
+
     this.listeners = new Map();
+    this.disabledListeners = new Map();
+
     on('dg-lib:keyEvent', (name: string, isDown: boolean) => {
       if (this.listeners.has(name)) {
         this.listeners.get(name)!.forEach(handler => {
+          handler(isDown);
+        });
+      }
+    });
+    on('dg-lib:keyEvent:disabled', (name: string, isDown: boolean) => {
+      if (this.disabledListeners.has(name)) {
+        this.disabledListeners.get(name)!.forEach(handler => {
           handler(isDown);
         });
       }
@@ -379,28 +391,44 @@ class Keys {
     return global.exports['dg-lib'].modifierKeyPressed();
   }
 
-  onPress(keyName: string, handler: (isDown: boolean) => void) {
+  onPress(keyName: string, handler: (isDown: boolean) => void, allowDisabled = false) {
     if (!this.listeners.has(keyName)) {
       this.listeners.set(keyName, new Map());
     }
     this.listeners.get(keyName)!.set(this.handlerId, handler);
+
+    if (allowDisabled) {
+      if (!this.disabledListeners.has(keyName)) {
+        this.disabledListeners.set(keyName, new Map());
+      }
+      this.disabledListeners.get(keyName)!.set(this.handlerId, handler);
+    }
+
     return this.handlerId++;
   }
 
-  onPressUp(keyName: string, handler: () => void) {
-    return this.onPress(keyName, (isDown: boolean) => {
-      if (!isDown) {
-        handler();
-      }
-    });
+  onPressUp(keyName: string, handler: () => void, allowDisabled = false) {
+    return this.onPress(
+      keyName,
+      (isDown: boolean) => {
+        if (!isDown) {
+          handler();
+        }
+      },
+      allowDisabled
+    );
   }
 
-  onPressDown(keyName: string, handler: () => void) {
-    return this.onPress(keyName, (isDown: boolean) => {
-      if (isDown) {
-        handler();
-      }
-    });
+  onPressDown(keyName: string, handler: () => void, allowDisabled = false) {
+    return this.onPress(
+      keyName,
+      (isDown: boolean) => {
+        if (isDown) {
+          handler();
+        }
+      },
+      allowDisabled
+    );
   }
 
   removeHandler(keyName: string, handlerId: number) {
