@@ -24,15 +24,21 @@ Inventory.registerUseable(['armor', 'pd_armor'], async (plyId, itemState) => {
 });
 
 Util.onPlayerLoaded(playerData => {
-  const armor = playerData?.metadata?.armor ?? 0;
-  setArmor(playerData.source, armor);
+  setTimeout(() => {
+    const armor = playerData?.metadata?.armor ?? 0;
+    setArmor(playerData.source, armor, true);
+  }, 5000);
 });
 
-export const setArmor = (plyId: number, armor: number) => {
+export const setArmor = (plyId: number, armor: number, doNotSave = false) => {
   const player = DGCore.Functions.GetPlayer(plyId);
   if (!player) return;
+
   const ped = GetPlayerPed(String(plyId));
   SetPedArmour(ped, armor);
-  player.Functions.SetMetaData('armor', armor);
+
+  if (!doNotSave) {
+    player.Functions.SetMetaData('armor', armor);
+  }
 };
 global.exports('setArmor', setArmor);

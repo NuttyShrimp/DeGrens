@@ -24,6 +24,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Verwerkt ijzer foto aangepast
 - Je ziet hidden metadata van salestickets niet meer
 - PropAttach models worden nu pas geladen wanneer ze nodig zijn
+- Armor restored nu deftig als je terug in de stad komt
 
 ## [1.0.2]
 
