@@ -146,6 +146,20 @@ rebase UPD:
   only:
     - main
 
+Unschedule deploy:
+  stage: housekeeping
+  image: alpine:latest
+  variables:
+    CURL_COMMAND: 'curl --request PUT --header "PRIVATE-TOKEN: $API_TOKEN" --form "value=false" https://gitlab.pieter557.dscloud.me/api/v4/projects/26/pipeline_schedules/1/variables/SHOULD_DEPLOY | jq'
+  before_script:
+    - apk add --no-cache curl jq
+  script:
+    - 'eval "$CURL_COMMAND"'
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "schedule"
+      when: never
+    - if: $CI_COMMIT_BRANCH == "main"
+
 Schedule deploy:
   stage: deploy
   image: alpine:latest
@@ -155,8 +169,10 @@ Schedule deploy:
     - apk add --no-cache curl jq
   script:
     - 'eval "$CURL_COMMAND"'
-  only:
-    - main
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "schedule"
+      when: never
+    - if: $CI_COMMIT_BRANCH == "main"
 
 Deploy production:
   stage: deploy
@@ -170,23 +186,4 @@ Deploy production:
   rules:
     - if: $CI_PIPELINE_SOURCE == "schedule" && $CI_COMMIT_BRANCH == "main" && $SHOULD_DEPLOY == "true"
   script:
-    - call C:\Users\fivem\Desktop\degrens-main\update.bat
-  # before_script:
-  #   - 'command -v ssh-agent >/dev/null || ( apt-get update -y && apt-get install openssh-client -y )'
-  #   - eval $(ssh-agent -s)
-
-  #   - chmod 400 "$SSH_PRIVATE_KEY"
-  #   - ssh-add "$SSH_PRIVATE_KEY"
-
-  #   - mkdir -p ~/.ssh
-  #   - chmod 700 ~/.ssh
-
-  #   - ssh-keyscan "$SERVER_IP" >> ~/.ssh/known_hosts
-  #   - chmod 644 ~/.ssh/known_hosts
-
-  #   - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
-  # script:
-  #   # Login to docker registry with CI credentials
-  #   - ssh "$SERVER_USER@$SERVER_IP" "docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $CI_REGISTRY"
-  #   # The use of single ticks is as-expected, otherwise we don't have access to the API_TOKEN variable
-  #   - ssh "$SERVER_USER@$SERVER_IP" "~/panel/deploy/schedule-update.sh $API_TOKEN"
+    - C:\Users\fivem\Desktop\degrens-main\update.bat
