@@ -1,6 +1,8 @@
-import { Events, Jobs, Notifications, PolyTarget, PolyZone, Taskbar, UI, Keys, BlipManager } from '@dgx/client';
+import { Events, PolyTarget, PolyZone, UI, Keys, BlipManager, Notifications } from '@dgx/client';
 
 let atCheckin = false;
+let checkingTimeoutActive = false;
+
 export const setAtCheckin = (val: boolean) => {
   atCheckin = val;
 
@@ -42,5 +44,16 @@ export const buildJobConfig = (jobConfig: Hospital.Config['job']) => {
 
 export const doCheckin = async () => {
   if (!atCheckin) return;
+
+  if (checkingTimeoutActive) {
+    Notifications.add('Je hebt net op het belletje gedrukt', 'error');
+    return;
+  }
+
   Events.emitNet('hospital:job:checkin');
+  checkingTimeoutActive = true;
+
+  setTimeout(() => {
+    checkingTimeoutActive = false;
+  }, 15000);
 };

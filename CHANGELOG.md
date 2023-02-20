@@ -18,6 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Console spam van inventory logs verminderd
 - Je hoeft fietsen niet langer te lockpicken
 - Propattach objecten worden niet gespawned als je in noclip/cloak bent
+- Ambulance checkin kan niet meer gespammed worden
 
 ### Fixed
 
