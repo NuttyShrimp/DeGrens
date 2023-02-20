@@ -111,6 +111,7 @@ TS prod build:
   extends:
     - .node_mod_installation
     - .cache_modules
+    - .js_changes
   only:
     refs:
       - main
