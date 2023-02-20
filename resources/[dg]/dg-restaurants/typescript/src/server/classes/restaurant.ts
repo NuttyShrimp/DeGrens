@@ -342,6 +342,7 @@ export class Restaurant {
     Inventory.addItemToPlayer(plyId, 'sales_ticket', 1, {
       origin: 'generic',
       amount: Math.min(totalPrice, config.amountPerTicket), // cannot be more than what player had to pay
+      hiddenKeys: ['generic', 'amount'],
     });
   };
 

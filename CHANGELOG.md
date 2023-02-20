@@ -8,9 +8,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+-
+
 ### Changed
 
 - Reduced crypto coin prices
+- Console spam van inventory logs verminderd
+
+### Fixed
+
+- Verwerkt ijzer foto aangepast
+- Je ziet hidden metadata van salestickets niet meer
 
 ## [1.0.2]
 
@@ -46,7 +56,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - EMS porto gaat minder snel stuk
 - Kapotte items krijgen sneller een rode background
 - Hunting skinprijzen verlaagd omdat meeste mensen geen bait gebruiken
-- Console spam van inventory logs verminderd
 
 ### Fixed
 
@@ -69,7 +78,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Interiors worden nu wel aangemaakt bij houserobbery
 - SECRET Recycle ped gebruikte verkeerde stashid
 - Flatbed aan vehicles toegevoegd zodat ze gemaakt kan worden
-- Verwerkt ijzer foto aangepast
 
 ## [1.0.1]
 

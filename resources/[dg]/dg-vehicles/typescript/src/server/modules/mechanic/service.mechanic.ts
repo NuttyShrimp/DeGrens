@@ -226,6 +226,7 @@ export const tryAcceptingJob = (src: number, vin: string) => {
   Inventory.addItemToPlayer(src, 'sales_ticket', 1, {
     origin: 'generic',
     amount: config.towingTicketPrice,
+    hiddenKeys: ['generic', 'amount'],
   });
 };
 // endregion
