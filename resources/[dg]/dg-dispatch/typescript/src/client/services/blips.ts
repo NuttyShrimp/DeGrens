@@ -18,7 +18,7 @@ const getBlipSettings = (info: Dispatch.BlipInfo): NBlip.Settings => {
     return {
       color: 23,
       heading: true,
-      text: `Docter | ${info.callsign}`,
+      text: `Dokter | ${info.callsign}`,
       category: 70,
     };
   }
