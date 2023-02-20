@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Reduced crypto coin prices
 - Console spam van inventory logs verminderd
+- Je hoeft fietsen niet langer te lockpicken
 
 ### Fixed
 

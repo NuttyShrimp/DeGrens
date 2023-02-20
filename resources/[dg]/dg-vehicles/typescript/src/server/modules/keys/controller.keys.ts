@@ -1,7 +1,8 @@
-import { Events, Notifications, Util } from '@dgx/server';
+import { Auth, Events, Notifications, Util } from '@dgx/server';
 import { getVinForNetId } from '../../helpers/vehicle';
 import { keyManager } from './classes/keymanager';
 import { handleDoorSuccess, handleFail, handleHotwireSuccess, startVehicleLockpick } from './service.keys';
+import { NO_LOCK_CLASSES } from './constants.keys';
 
 on('doorlock:server:useLockpick', (src: number, itemId: string) => {
   startVehicleLockpick(src, itemId);
@@ -76,4 +77,8 @@ Events.onNet('vehicles:keys:shareToClosest', (src: number, netId: number, number
     keyManager.addKey(vin, target);
     Notifications.add(target, 'Je hebt de sleutels van dit voertuig ontvangen');
   }
+});
+
+Auth.onAuth(plyId => {
+  Events.emitNet('vehicles:keys:setClassesWithoutLock', plyId, NO_LOCK_CLASSES.door);
 });

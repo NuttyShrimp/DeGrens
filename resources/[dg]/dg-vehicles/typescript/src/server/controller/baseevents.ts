@@ -3,9 +3,9 @@ import { validateVehicleVin } from '../modules/identification/service.id';
 import { handleVehicleLock } from '../modules/keys/service.keys';
 // import seatingService from '../services/seating';
 
-BaseEvents.onEnteringVehicle((plyId, vehNetId) => {
+BaseEvents.onEnteringVehicle((plyId, vehNetId, vehicleClass) => {
   validateVehicleVin(vehNetId);
-  handleVehicleLock(plyId, vehNetId);
+  handleVehicleLock(plyId, vehNetId, vehicleClass);
   // seatingService.trySeating(plyId, vehNetId, seat);
 });
 

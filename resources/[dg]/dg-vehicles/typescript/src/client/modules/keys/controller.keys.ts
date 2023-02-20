@@ -1,7 +1,7 @@
 import { Events, Hospital, Keys, Minigames, Peek, Police, Util } from '@dgx/client';
 import { getCurrentVehicle } from '@helpers/vehicle';
 
-import { toggleVehicleLock } from './service.keys';
+import { setClassesWithoutLock, toggleVehicleLock } from './service.keys';
 import { hasVehicleKeys } from './cache.keys';
 
 let animThread: NodeJS.Timer | null = null;
@@ -109,4 +109,8 @@ Peek.addGlobalEntry('vehicle', {
     },
   ],
   distance: 2,
+});
+
+Events.onNet('vehicles:keys:setClassesWithoutLock', (classes: number[]) => {
+  setClassesWithoutLock(classes);
 });

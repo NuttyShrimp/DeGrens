@@ -4,6 +4,7 @@ import { getConfigByEntity } from 'modules/info/service.info';
 import { getVinForVeh, setEngineState } from '../../helpers/vehicle';
 
 import { keyManager } from './classes/keymanager';
+import { NO_LOCK_CLASSES } from './constants.keys';
 
 const vehClassToDifficulty: Record<CarClass, { speed: number; size: number }> = {
   D: { speed: 1, size: 40 },
@@ -18,9 +19,15 @@ const vehClassToDifficulty: Record<CarClass, { speed: number; size: number }> = 
 // Map of number onto UUID's
 const activeLockPickers = new Map<number, { id: string; vehicle: number; itemId: string }>();
 
-export const handleVehicleLock = async (plyId: number, vehicleNetId: number) => {
+export const handleVehicleLock = async (plyId: number, vehicleNetId: number, vehicleClass: number) => {
   const vehicle = NetworkGetEntityFromNetworkId(vehicleNetId);
   if (!vehicle || !DoesEntityExist(vehicle)) return;
+
+  if (NO_LOCK_CLASSES.door.indexOf(vehicleClass) !== -1) {
+    SetVehicleDoorsLocked(vehicle, 1);
+    return;
+  }
+
   const driver = GetPedInVehicleSeat(vehicle, -1);
   if (driver && !IsPedAPlayer(driver)) {
     const isDriverDead = await Util.isEntityDead(driver, plyId);
@@ -55,7 +62,13 @@ export const startVehicleLockpick = async (src: number, itemId: string) => {
     if (!entity || GetEntityType(entity) !== 2) return;
     targetVehicle = entity;
     lockpickType = 'door';
+  }
 
+  // Check if vehicle class has a lock depending on what we trying to lockpick
+  const vehicleClass = await RPC.execute('vehicle:getClass', src, NetworkGetNetworkIdFromEntity(vehiclePedIsIn));
+  if (!vehicleClass || NO_LOCK_CLASSES[lockpickType].indexOf(vehicleClass) !== -1) return;
+
+  if (lockpickType === 'door') {
     // Check if near door
     const vehNetId = NetworkGetNetworkIdFromEntity(targetVehicle);
     const closeToDoor = await RPC.execute<boolean>('vehicles:isNearDoor', src, vehNetId, 2.0);
