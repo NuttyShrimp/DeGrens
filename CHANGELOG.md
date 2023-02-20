@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Je kan nu een huidige sanitation locatie skippen als je de vuilzak niet vindt 
 - Admin kan nu een individueel bericht naar een persoon sturen
 - Extra message before AC tries to ban user
+- Extra bennys locaties
 
 ### Changed
 
