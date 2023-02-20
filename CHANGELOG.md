@@ -68,6 +68,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Interiors worden nu wel aangemaakt bij houserobbery
 - SECRET Recycle ped gebruikte verkeerde stashid
 - Flatbed aan vehicles toegevoegd zodat ze gemaakt kan worden
+- Verwerkt ijzer foto aangepast
 
 ## [1.0.1]
 
