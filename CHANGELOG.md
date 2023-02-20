@@ -63,6 +63,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Scrapyard zone gedraait omdat deze fout stond
 - Voertuig blijft niet langer kapot als je stallt zonder dat je sleutels hebt
 - Interiors worden nu wel aangemaakt bij houserobbery
+- SECRET Recycle ped gebruikte verkeerde stashid
 
 ## [1.0.1]
 
