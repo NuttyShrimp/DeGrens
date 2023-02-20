@@ -136,11 +136,11 @@ rebase UPD:
     - git pull --rebase
     - git switch UPD
     - git pull --rebase
-    - git reset --hard $(git log -n 1 origin/UPD  --pretty=format:"%H")
     # Rebase
     - git rebase main UPD
     # Push
     - git push -u origin UPD
+    - git reset --hard $(git log -n 1 origin/UPD  --pretty=format:"%H")
 
   only:
     - main
