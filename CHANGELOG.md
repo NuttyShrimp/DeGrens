@@ -34,6 +34,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Prijs van paycheck notificatie toont taxed price
 - Langere decayrate voor mechanic repairparts
 - Deur van hoofdingang HB verwijderd
+- Auto lockpick melding lager gezet
 
 ### Fixed
 
@@ -50,6 +51,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Staff ziet nu playernames voor mensen ver weg
 - Wagens zouden niet meer random/opeens mogen verdwijnen
 - F3 suggestions bij DPEmotes weggehaald
+- Admins kunnen nu wel whitelisted job geven mbv cid
 
 ## [1.0.1]
 
