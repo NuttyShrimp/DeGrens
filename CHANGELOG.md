@@ -53,6 +53,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Wagens zouden niet meer random/opeens mogen verdwijnen
 - F3 suggestions bij DPEmotes weggehaald
 - Admins kunnen nu wel whitelisted job geven mbv cid
+- Scrapyard zone gedraait omdat deze fout stond
 
 ## [1.0.1]
 
