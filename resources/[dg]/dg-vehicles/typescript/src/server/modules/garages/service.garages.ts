@@ -72,7 +72,9 @@ export const isOnParkingSpot = async (src: number, netId: number | null): Promis
   if (!parkingSpotThreads.has(src)) return false;
   const thread = parkingSpotThreads.get(src);
   if (!thread) return false;
-  if (!thread.isNearGarageSpot()) return false;
+  if (!netId) {
+    if (!thread.isNearGarageSpot()) return false;
+  }
 
   let targetEntity: number = GetPlayerPed(String(src));
   let targetIsPlayer = true;
@@ -106,7 +108,7 @@ export const isOnParkingSpot = async (src: number, netId: number | null): Promis
   const entityCoords = Util.getEntityCoords(targetEntity);
   const spot = thread.getCurrentParkingSpot();
   if (!spot) return false;
-  if (entityCoords.distance(spot.coords) > spot.size + (targetIsPlayer ? spot.distance : 0)) return false;
+  if (entityCoords.distance(spot.coords) > spot.size + spot.distance) return false;
   // Check if there are no vehicles already on spot when checking player
   if (targetIsPlayer && Util.isAnyVehicleInRange(spot.coords, spot.size)) return false;
   return true;
@@ -256,7 +258,8 @@ export const takeVehicleOutGarage = async (src: number, vin: string): Promise<nu
       `vehicle:garage:retrieve:failed`,
       {
         vin,
-        garage: garageInfo,
+        garageId: garageInfo.garage_id,
+        isShared: garageInfo.shared,
       },
       `${cid} tried to retrieve vehicle ${vin} from garage ${garageInfo.name} but didn't met the requirements`,
       src

@@ -85,6 +85,10 @@ class Vehicles {
   popTyre = (vehicle: number) => {
     global.exports['dg-vehicles'].popTyre(vehicle);
   };
+
+  doAdminFix = (vehicle: number) => {
+    global.exports['dg-vehicles'].doAdminFix(vehicle);
+  };
 }
 
 export default {

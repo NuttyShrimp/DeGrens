@@ -9,7 +9,7 @@ let vehicleNetId: number | null = null;
 
 export const buildScrapyardReturnZone = (returnZone: Vec4) => {
   const { w: heading, ...coords } = returnZone;
-  PolyZone.addBoxZone('scrapyard_return', coords, 30, 15, {
+  PolyZone.addBoxZone('scrapyard_return', coords, 15, 30, {
     heading,
     minZ: coords.z - 2,
     maxZ: coords.z + 3,

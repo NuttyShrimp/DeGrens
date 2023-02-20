@@ -38,11 +38,16 @@ const insertDBStatus = (vin: string) => {
 };
 
 export const updateServiceStatus = (vin: string, status: Service.Status) => {
+  const clampedStatus = (Object.entries(status) as [keyof Service.Status, number][]).reduce((acc, [key, value]) => {
+    acc[key] = Math.max(0, value);
+    return acc;
+  }, {} as Service.Status);
+
   if (vinManager.isVinFromPlayerVeh(vin)) {
-    DBStore.set(vin, status);
+    DBStore.set(vin, clampedStatus);
     updateDBStatus(vin);
   } else {
-    localStore.set(vin, status);
+    localStore.set(vin, clampedStatus);
   }
 };
 

@@ -8,11 +8,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+
+## [1.0.2]
+
 ### Added
 
 - Restaurant extra opslag, locker en kledingkast, tweaked taskbar times
 - Plantvoeding heeft nu meerdere usages
 - Je kan nu een huidige sanitation locatie skippen als je de vuilzak niet vindt 
+- Admin kan nu een individueel bericht naar een persoon sturen
+- Extra message before AC tries to ban user
+- Extra bennys locaties
+- Hardware store in sandy toegevoegd
 
 ### Changed
 
@@ -26,6 +33,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Gestallede motor gaat niet meer terug aan als je geen sleutels hebt
 - Confirm button om restaurant order te cancelen
 - Grotere scrapyard zone
+- Repairparts repairen een hoger percentage wat meer gebalanceerd is
+- NPCs in Up-n-Atom verwijderd omdat deze geen goede paths hadden
+- Je moet niet meer in hetzelfde vak staan om je voertuig weg te steken
+- Prijs van paycheck notificatie toont taxed price
+- Langere decayrate voor mechanic repairparts
+- Deur van hoofdingang HB verwijderd
+- Auto lockpick melding lager gezet
+- EMS porto gaat minder snel stuk
+- Kapotte items krijgen sneller een rode background
+- Hunting skinprijzen verlaagd omdat meeste mensen geen bait gebruiken
 
 ### Fixed
 
@@ -36,6 +53,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Check garage access op whitelist en niet op active job
 - Je correct emmer wordt nu gebruikt beinvloed bij het water geven van een plant
 - Geld in info app afronden voor komma getal verbergen
+- Tijdelijk disabled dat stalling de voertuigservice beinvloed tot ik service heb gefixt
+- Je stapt niet langer soms automatisch uit na het lockpicken
+- Clamped vehicle service values
+- Staff ziet nu playernames voor mensen ver weg
+- Wagens zouden niet meer random/opeens mogen verdwijnen
+- F3 suggestions bij DPEmotes weggehaald
+- Admins kunnen nu wel whitelisted job geven mbv cid
+- Scrapyard zone gedraait omdat deze fout stond
+- Voertuig blijft niet langer kapot als je stallt zonder dat je sleutels hebt
 
 ## [1.0.1]
 

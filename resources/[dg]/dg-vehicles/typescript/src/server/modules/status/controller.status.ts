@@ -1,4 +1,4 @@
-import { Auth, Events, Inventory, Notifications, RPC, Config } from '@dgx/server';
+import { Auth, Events, Inventory, Notifications, RPC, Config, Util } from '@dgx/server';
 import { getConfigByEntity } from '../info/service.info';
 import { getConfig, loadConfig } from './services/config';
 import { getServiceStatus, seedServiceStatuses, updateServiceStatus } from './services/store';
@@ -82,7 +82,9 @@ Events.onNet('vehicles:status:finishRepairKit', async (plyId, itemId: string, ne
   if (!increase) return;
 
   // Reset stalls for every repair
-  Entity(vehicle).state.amountOfStalls = 0;
+  const entState = Entity(vehicle).state;
+  entState.set('amountOfStalls', 0, true);
+  entState.set('undriveable', false, true);
   setNativeStatus(vehicle, {
     engine: oldHealth + increase,
   });
@@ -97,4 +99,11 @@ global.exports('clearServiceStatus', (vehicle: number) => {
     engine: 1000,
     suspension: 1000,
   });
+});
+
+global.exports('doAdminFix', (vehicle: number) => {
+  Util.sendEventToEntityOwner(vehicle, 'vehicles:client:fixVehicle', NetworkGetNetworkIdFromEntity(vehicle));
+  const entState = Entity(vehicle).state;
+  entState.set('amountOfStalls', 0, true);
+  entState.set('undriveable', false, true);
 });

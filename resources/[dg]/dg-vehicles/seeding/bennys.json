@@ -88,5 +88,35 @@
       "minZ": 21.17,
       "maxZ": 25.17
     }
+  },
+  {
+    "vector": {
+      "x": 450.3452,
+      "y": -975.7226,
+      "z": 25.7
+    },
+    "name": "bennys_mrpd",
+    "length": 3,
+    "width": 10,
+    "heading": 88.7198,
+    "data": {
+      "minZ": 23.7,
+      "maxZ": 29.7
+    }
+  },
+  {
+    "vector": {
+      "x": 534.9802,
+      "y": -177.2214,
+      "z": 54.4693
+    },
+    "name": "bennys_pillbox",
+    "length": 10,
+    "width": 10,
+    "heading": 266.0387,
+    "data": {
+      "minZ": 51.46,
+      "maxZ": 59.46
+    }
   }
 ]

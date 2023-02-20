@@ -41,11 +41,14 @@ class KeyManager extends Util.Singleton<KeyManager>() {
     this.keys.set(pVin, cids);
 
     // If driver then start engine
-    const netId = vinManager.getNetId(pVin);
-    if (!netId) return;
-    const veh = NetworkGetEntityFromNetworkId(netId);
-    if (!veh || GetPedInVehicleSeat(veh, -1) !== GetPlayerPed(String(source))) return;
-    setEngineState(veh, true);
+    // timeout to avoid exiting vehicle when anim is active
+    setTimeout(() => {
+      const netId = vinManager.getNetId(pVin);
+      if (!netId) return;
+      const veh = NetworkGetEntityFromNetworkId(netId);
+      if (!veh || GetPedInVehicleSeat(veh, -1) !== GetPlayerPed(String(source))) return;
+      setEngineState(veh, true);
+    }, 250);
   }
 
   /**

@@ -1,4 +1,4 @@
-import { Events } from '@dgx/server';
+import { Events, Vehicles } from '@dgx/server';
 import { Inputs } from 'enums/inputs';
 
 import { SelectorTarget } from '../../../enums/SelectorTargets';
@@ -20,11 +20,7 @@ export const fixVehicle: CommandData = {
       const plyId = args?.Target?.serverId ?? caller.source;
       vehicle = GetVehiclePedIsIn(GetPlayerPed(String(plyId)), false);
     }
-    Events.emitNet(
-      'vehicles:client:fixVehicle',
-      NetworkGetEntityOwner(vehicle),
-      NetworkGetNetworkIdFromEntity(vehicle)
-    );
+    Vehicles.doAdminFix(vehicle);
   },
   UI: {
     title: 'Fix Vehicle',

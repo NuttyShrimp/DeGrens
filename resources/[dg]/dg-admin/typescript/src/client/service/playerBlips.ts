@@ -1,6 +1,7 @@
 import { Sync, Util, EntityBlip } from '@dgx/client';
 
 import { drawText3d } from '../modules/util/service.util';
+import { getPlayerName } from './names';
 
 let blipsEnabled = false;
 const plyBlips: Map<number, EntityBlip> = new Map();
@@ -20,7 +21,8 @@ export const enableBlips = () => {
       const ped = GetPlayerPed(ply);
       const coords = Util.getEntityCoords(ped);
       coords.z += 1.0;
-      drawText3d(`${isTalking ? '~g~' : ''}${GetPlayerName(ply)}(${GetPlayerServerId(ply)})`, coords, 0.4);
+      const serverId = GetPlayerServerId(ply);
+      drawText3d(`${isTalking ? '~g~' : ''}${getPlayerName(serverId)}(${serverId})`, coords, 0.4);
     });
   }, 1);
 
@@ -46,7 +48,7 @@ const addBlip = (plyId: number) => {
     color: 0,
     heading: true,
     category: 7,
-    text: () => `${GetPlayerName(GetPlayerFromServerId(plyId))}(${plyId})`,
+    text: () => `${getPlayerName(plyId)}(${plyId})`,
   });
   plyBlips.set(plyId, newBlip);
 };
