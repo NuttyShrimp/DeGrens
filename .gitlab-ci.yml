@@ -2,6 +2,7 @@ stages:
   - test
   - linting
   - build
+  - deploy
   - housekeeping
 
 image: node:16
@@ -141,3 +142,44 @@ rebase UPD:
 
   only:
     - main
+
+Schedule deploy:
+  stage: deploy
+  image: ubuntu:jammy
+  script:
+    - curl --request PUT --header "PRIVATE-TOKEN: $CI_JOB_TOKEN" --form "value=true" "https://gitlab.pieter557.dscloud.me/api/v4/projects/26/pipeline_schedules/1/variables/SHOULD_DEPLOY"
+  only:
+    - main
+
+Deploy production:
+  stage: deploy
+  image: ubuntu:jammy
+  variables:
+    SERVER_IP: '10.0.0.1'
+    SERVER_USER: 'fivem'
+  tags:
+    - windows
+    - production
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "schedule" && $CI_COMMIT_BRANCH == "main" && $SHOULD_DEPLOY == "true"
+  script:
+    - call C:\Users\fivem\Desktop\degrens-main\update.bat
+  # before_script:
+  #   - 'command -v ssh-agent >/dev/null || ( apt-get update -y && apt-get install openssh-client -y )'
+  #   - eval $(ssh-agent -s)
+
+  #   - chmod 400 "$SSH_PRIVATE_KEY"
+  #   - ssh-add "$SSH_PRIVATE_KEY"
+
+  #   - mkdir -p ~/.ssh
+  #   - chmod 700 ~/.ssh
+
+  #   - ssh-keyscan "$SERVER_IP" >> ~/.ssh/known_hosts
+  #   - chmod 644 ~/.ssh/known_hosts
+
+  #   - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
+  # script:
+  #   # Login to docker registry with CI credentials
+  #   - ssh "$SERVER_USER@$SERVER_IP" "docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $CI_REGISTRY"
+  #   # The use of single ticks is as-expected, otherwise we don't have access to the API_TOKEN variable
+  #   - ssh "$SERVER_USER@$SERVER_IP" "~/panel/deploy/schedule-update.sh $API_TOKEN"
