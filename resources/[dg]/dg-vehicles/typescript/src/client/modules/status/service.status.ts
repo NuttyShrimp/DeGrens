@@ -361,9 +361,11 @@ export const tryToStallVehicle = (vehicle: number, newHealth: number, oldHealth:
 
   // Dont reenable engine if you dont have keys
   setTimeout(() => {
-    if (!hasVehicleKeys(vehicle)) return;
     entState.set('undriveable', false, true);
-    setEngineState(vehicle, true, true);
+
+    if (hasVehicleKeys(vehicle)) {
+      setEngineState(vehicle, true, true);
+    }
   }, 3000);
 
   Sounds.playOnEntity(

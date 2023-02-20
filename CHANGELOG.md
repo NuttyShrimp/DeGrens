@@ -55,6 +55,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - F3 suggestions bij DPEmotes weggehaald
 - Admins kunnen nu wel whitelisted job geven mbv cid
 - Scrapyard zone gedraait omdat deze fout stond
+- Voertuig blijft niet langer kapot als je stallt zonder dat je sleutels hebt
 
 ## [1.0.1]
 
