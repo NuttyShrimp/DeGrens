@@ -17,11 +17,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Reduced crypto coin prices
 - Console spam van inventory logs verminderd
 - Je hoeft fietsen niet langer te lockpicken
+- Propattach objecten worden niet gespawned als je in noclip/cloak bent
 
 ### Fixed
 
 - Verwerkt ijzer foto aangepast
 - Je ziet hidden metadata van salestickets niet meer
+- PropAttach models worden nu pas geladen wanneer ze nodig zijn
 
 ## [1.0.2]
 

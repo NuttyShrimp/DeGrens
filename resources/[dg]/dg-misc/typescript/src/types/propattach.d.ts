@@ -12,7 +12,8 @@ declare namespace PropAttach {
   };
 
   type ActiveProp = Prop & {
-    entity: number;
+    entity: number | null;
     hash: number;
+    deleted: boolean;
   };
 }

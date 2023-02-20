@@ -1,3 +1,4 @@
+import { Util } from '@dgx/client';
 import { PROPS } from './constants.propattach';
 
 export const debug = (msg: string) => {
@@ -7,28 +8,34 @@ export const debug = (msg: string) => {
 export const deleteEntity = (propInfo: PropAttach.ActiveProp) => {
   // console.log(propInfo, DoesEntityExist(propInfo.entity), propInfo.hash, GetEntityModel(propInfo.entity));
   if (
+    propInfo.entity &&
     NetworkGetEntityIsLocal(propInfo.entity) &&
     DoesEntityExist(propInfo.entity) &&
-    propInfo.hash == GetEntityModel(propInfo.entity)
+    propInfo.hash == GetEntityModel(propInfo.entity) >>> 0
   ) {
     SetEntityAsMissionEntity(propInfo.entity, true, true);
     DeleteEntity(propInfo.entity);
   }
 };
 
-/**
- * Model should already be loaded!
- */
-export const createEntity = (ped: number, name: string, offset: Vec3) => {
-  const info = PROPS[name];
+// this shit works because prodata being an object, the offset will get mutated if it happens to be moved during model load (often during charspawn)
+export const createEntity = async (ped: number, propData: PropAttach.ActiveProp) => {
+  const info = PROPS[propData.name];
   if (!info) {
-    debug(`Tried to create prop but name ${name} is not registered`);
+    debug(`Tried to create prop but name ${propData.name} is not registered`);
     return;
   }
 
   const hash = GetHashKey(info.model);
+  await Util.loadModel(hash);
+
   if (!HasModelLoaded(hash)) {
     debug(`Tried to create prop but ${info.model} was not loaded`);
+    return;
+  }
+
+  if (propData.deleted) {
+    debug(`Prop was deleted before model got loaded`);
     return;
   }
 
@@ -36,7 +43,7 @@ export const createEntity = (ped: number, name: string, offset: Vec3) => {
   const entity = CreateObject(hash, x, y, z, false, false, false);
 
   if (!entity || !DoesEntityExist(entity)) {
-    debug(`Failed to create prop ${name} | entity: ${entity}`);
+    debug(`Failed to create prop ${propData.name} | entity: ${entity}`);
     return;
   }
 
@@ -45,9 +52,9 @@ export const createEntity = (ped: number, name: string, offset: Vec3) => {
     entity,
     ped,
     boneIdx,
-    info.position.x + offset.x,
-    info.position.y + offset.y,
-    info.position.z + offset.z,
+    info.position.x + propData.offset.x,
+    info.position.y + propData.offset.y,
+    info.position.z + propData.offset.z,
     info.rotation.x,
     info.rotation.y,
     info.rotation.z,
@@ -59,6 +66,7 @@ export const createEntity = (ped: number, name: string, offset: Vec3) => {
     true
   );
   SetEntityCompletelyDisableCollision(entity, false, true);
+  SetModelAsNoLongerNeeded(hash);
 
   return entity;
 };
