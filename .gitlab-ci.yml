@@ -117,7 +117,7 @@ TS prod build:
   stage: build
   script:
     - yarn format -- -- --loglevel error
-    - yarn build --force
+    - yarn build
 
 rebase UPD:
   stage: housekeeping

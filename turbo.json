@@ -7,6 +7,9 @@
         "^db:generate"
       ],
       "outputs": [
+        "../client/**",
+        "../server/**",
+        "../html/**",
         "dist/**"
       ]
     },
