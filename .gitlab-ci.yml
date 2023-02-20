@@ -138,6 +138,7 @@ rebase UPD:
     - git pull --rebase
     # Rebase
     - git rebase main UPD
+    - git status
     # Push
     - git push -u origin UPD
     - git reset --hard $(git log -n 1 origin/UPD  --pretty=format:"%H")
