@@ -109,7 +109,7 @@ export class Inv {
     this.updatedInv('add', itemState);
 
     if (checkSave && contextManager.getPlayersById(this.id).length === 0) {
-      this.logger.info(`Saving ${this.id} because no one had it open`);
+      this.logger.debug(`Saving ${this.id} because no one had it open`);
       this.save();
     }
   };
@@ -216,7 +216,7 @@ export class Inv {
       itemStates = itemStates.map(state => ({ ...state, inventory: 'nonpersistent' }));
     }
     repository.updateItems(itemStates);
-    this.logger.info(`Inventory ${this.id} has been saved`);
+    this.logger.debug(`Inventory ${this.id} has been saved`);
   };
 
   public isPersistent = () => {

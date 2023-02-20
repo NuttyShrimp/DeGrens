@@ -73,7 +73,7 @@ export class Item {
       // When adding new item to nonpresistent inventory, start inv as nonpersistent.
       const dbInventory = this.inventory.isPersistent() ? this.state.inventory : 'nonpersistent';
       repository.createItem({ ...this.state, inventory: dbInventory }, destroyDate);
-      this.logger.info(`New item has been created with id ${this.id}`);
+      this.logger.debug(`New item has been created with id ${this.id}`);
     } else {
       this.position = state.position ?? { x: 0, y: 0 };
     }
@@ -120,7 +120,7 @@ export class Item {
 
   public use = (src: number, hotkey: boolean) => {
     if (!this.canUse(src)) return;
-    this.logger.info(`Item ${this.id} has been used`);
+    this.logger.debug(`Item ${this.id} has been used`);
     emit('inventory:usedItem', src, this.state);
     const itemImage = itemDataManager.get(this.name).image;
     if (hotkey) emitNet('inventory:addItemBox', src, 'Gebruikt', itemImage);
@@ -189,7 +189,7 @@ export class Item {
     this.inventory.unregisterItemId(this.state); // delete from inventory it was in
     itemManager.remove(this.id); // remove in item manager
     repository.deleteItem(this.id); // remove from db
-    this.logger.info(`${this.id} has been destroyed. Quality: ${this.quality}`);
+    this.logger.debug(`${this.id} has been destroyed. Quality: ${this.quality}`);
     this.syncItem({ ...this.state, inventory: 'destroyed' }, this.inventory.id);
 
     Util.Log(

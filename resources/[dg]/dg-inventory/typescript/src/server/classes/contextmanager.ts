@@ -38,7 +38,7 @@ class ContextManager extends Util.Singleton<ContextManager>() {
     }
     this.open.idsByPlayer.set(player, ids);
 
-    this.logger.info(`Player ${player} opened ${ids[0]} and ${ids[1]}`);
+    this.logger.silly(`Player ${player} opened ${ids[0]} and ${ids[1]}`);
   };
 
   @DGXEvent('inventory:server:closed')
@@ -66,7 +66,7 @@ class ContextManager extends Util.Singleton<ContextManager>() {
     // Remove from idsByPlayer
     this.open.idsByPlayer.delete(player);
 
-    this.logger.info(`Player ${player} closed ${openIds[0]} and ${openIds[1]}`);
+    this.logger.silly(`Player ${player} closed ${openIds[0]} and ${openIds[1]}`);
   };
 
   public getPlayersById = (id: string) => this.open.playersById.get(id) ?? [];

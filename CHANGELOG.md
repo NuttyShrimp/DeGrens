@@ -46,6 +46,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - EMS porto gaat minder snel stuk
 - Kapotte items krijgen sneller een rode background
 - Hunting skinprijzen verlaagd omdat meeste mensen geen bait gebruiken
+- Console spam van inventory logs verminderd
 
 ### Fixed
 
