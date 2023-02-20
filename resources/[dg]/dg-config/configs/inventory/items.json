@@ -2524,7 +2524,7 @@
       "x": 1,
       "y": 1
     },
-    "decayrate": 10080
+    "decayRate": 10080
   },
   {
     "name": "material_glass",
@@ -2534,7 +2534,7 @@
       "x": 1,
       "y": 1
     },
-    "decayrate": 10080
+    "decayRate": 10080
   },
   {
     "name": "material_plastic",
@@ -2544,7 +2544,7 @@
       "x": 1,
       "y": 1
     },
-    "decayrate": 10080
+    "decayRate": 10080
   },
   {
     "name": "material_electronics",
@@ -2554,7 +2554,7 @@
       "x": 1,
       "y": 1
     },
-    "decayrate": 10080
+    "decayRate": 10080
   },
   {
     "name": "material_iron",
@@ -2564,7 +2564,7 @@
       "x": 1,
       "y": 1
     },
-    "decayrate": 10080
+    "decayRate": 10080
   },
   {
     "name": "material_aluminum",
@@ -2574,7 +2574,7 @@
       "x": 1,
       "y": 1
     },
-    "decayrate": 10080
+    "decayRate": 10080
   },
   {
     "name": "material_steel",
@@ -2584,7 +2584,7 @@
       "x": 1,
       "y": 1
     },
-    "decayrate": 10080
+    "decayRate": 10080
   },
   {
     "name": "refined_copper",
@@ -2594,7 +2594,7 @@
       "x": 2,
       "y": 2
     },
-    "decayrate": 30240
+    "decayRate": 30240
   },
   {
     "name": "refined_plastic",
@@ -2604,7 +2604,7 @@
       "x": 2,
       "y": 2
     },
-    "decayrate": 30240
+    "decayRate": 30240
   },
   {
     "name": "refined_iron",
@@ -2614,7 +2614,7 @@
       "x": 2,
       "y": 2
     },
-    "decayrate": 30240
+    "decayRate": 30240
   },
   {
     "name": "refined_aluminum",
@@ -2624,7 +2624,7 @@
       "x": 2,
       "y": 2
     },
-    "decayrate": 30240
+    "decayRate": 30240
   },
   {
     "name": "refined_steel",
@@ -2634,7 +2634,7 @@
       "x": 2,
       "y": 2
     },
-    "decayrate": 30240
+    "decayRate": 30240
   },
   {
     "name": "bolt_cutters",
@@ -2644,7 +2644,7 @@
       "x": 2,
       "y": 4
     },
-    "decayrate": 40320,
+    "decayRate": 40320,
     "markedForSeizure": true
   },
   {
@@ -2655,7 +2655,7 @@
       "x": 2,
       "y": 2
     },
-    "decayrate": 1440
+    "decayRate": 1440
   },
   {
     "name": "screwdriver",
@@ -2665,7 +2665,7 @@
       "x": 1,
       "y": 2
     },
-    "decayrate": 40320
+    "decayRate": 40320
   },
   {
     "name": "vehicle_door",
@@ -2675,7 +2675,7 @@
       "x": 4,
       "y": 4
     },
-    "decayrate": 60
+    "decayRate": 60
   },
   {
     "name": "vehicle_bonnet",
@@ -2685,7 +2685,7 @@
       "x": 4,
       "y": 4
     },
-    "decayrate": 60
+    "decayRate": 60
   },
   {
     "name": "vehicle_boot",
@@ -2695,7 +2695,7 @@
       "x": 4,
       "y": 4
     },
-    "decayrate": 60
+    "decayRate": 60
   },
   {
     "name": "fishing_rod",
@@ -2705,7 +2705,7 @@
       "x": 1,
       "y": 4
     },
-    "decayrate": 40320,
+    "decayRate": 40320,
     "useable": true
   },
   {
