@@ -36,6 +36,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Deur van hoofdingang HB verwijderd
 - Auto lockpick melding lager gezet
 - EMS porto gaat minder snel stuk
+- Kapotte items krijgen sneller een rode background
 
 ### Fixed
 
