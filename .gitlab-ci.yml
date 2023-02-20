@@ -184,4 +184,5 @@ Deploy production:
   rules:
     - if: $CI_PIPELINE_SOURCE == "schedule" && $CI_COMMIT_BRANCH == "main" && $SHOULD_DEPLOY == "true"
   script:
-    - C:\Users\fivem\Desktop\degrens-main\update.bat
+    - C:\Users\fivem\Desktop\degrens-main\pull.bat
+    - C:\Users\fivem\Desktop\degrens-main\build.bat
