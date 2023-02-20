@@ -131,7 +131,7 @@ rebase UPD:
     - git config --global user.email "ci@gitlab.pieter557.dscloud.me"
     - git config --global user.name "CI"
     - git fetch --all # Just in case branch is not fetch
-    - git rebase --abort # Cancel active rebases
+    - git rebase --abort || true # Cancel active rebases
     - git switch main
     - git pull --rebase
     - git switch UPD
