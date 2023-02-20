@@ -23,8 +23,8 @@ global.exports('lootZone', (place: string, lootTable?: number) => {
   searchLootLocation(selectedHouse, place, lootTable);
 });
 
-on('__dg_auth_authenticated', async () => {
-  shellTypes = (await RPC.execute('houserobbery:server:getShellTypes'))!;
+Events.onNet('houserobbery:server:setShellTypes', (types: typeof shellTypes) => {
+  shellTypes = types;
 });
 
 on('dg-houserobbery:leave', () => {
