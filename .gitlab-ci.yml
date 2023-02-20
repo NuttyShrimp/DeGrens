@@ -78,7 +78,9 @@ validate db migrations:
     MYSQL_PASSWORD: dgpw
   script:
     - echo 'DATABASE_URL=mysql://dguser:dgpw@mariadb/degrens2?charset=utf8mb4' > ./packages/db/.env
-    - yarn --pure-lockfile
+    - cd packages/db
+    - yarn global add prisma
+    # - yarn add prisma --skip-integrity-check --no-save --no-lockfile
     - yarn db:deploy
   only:
     refs:
