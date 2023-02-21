@@ -211,7 +211,7 @@ export const walkstyles: RadialMenu.Entry[] = [
   },
   {
     label: 'Janitor2',
-    icon: 'broom-wide',
+    icon: 'broom',
     walk: 'move_p_m_zero_slow',
   },
   {
@@ -266,7 +266,7 @@ export const walkstyles: RadialMenu.Entry[] = [
   },
   {
     label: 'Quick',
-    icon: 'guage-max',
+    icon: 'gauge-max',
     walk: 'move_m@quick',
   },
   {

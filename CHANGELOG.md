@@ -48,6 +48,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Iedereen kan nu weer kijken hoe hun serviceparts ongeveer staan
 - Je stapt niet langer soms uit alsje een voertuig lockpickt
 - Maintenance fees scheduling is nu werkend
+- Fix sommige walkstyles met invalid icon waardoor menu niet geladen werd
 
 ## [1.0.2]
 
