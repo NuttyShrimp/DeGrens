@@ -49,7 +49,6 @@ Plans.standardmotel_shell = {
             data: {
               name: 'cab_1',
             },
-            canInteract: (_, __, e) => global.exports['dg-houserobbery'].canLootZone(e.data.name),
             action: e => global.exports['dg-houserobbery'].lootZone(e.data.name),
           },
         ],
@@ -74,7 +73,6 @@ Plans.standardmotel_shell = {
             data: {
               name: 'cab_2',
             },
-            canInteract: (_, __, e) => global.exports['dg-houserobbery'].canLootZone(e.data.name),
             action: e => global.exports['dg-houserobbery'].lootZone(e.data.name),
           },
         ],
@@ -99,7 +97,6 @@ Plans.standardmotel_shell = {
             data: {
               name: 'cab_3',
             },
-            canInteract: (_, __, e) => global.exports['dg-houserobbery'].canLootZone(e.data.name),
             action: e => global.exports['dg-houserobbery'].lootZone(e.data.name),
           },
         ],
@@ -124,7 +121,6 @@ Plans.standardmotel_shell = {
             data: {
               name: 'toilet',
             },
-            canInteract: (_, __, e) => global.exports['dg-houserobbery'].canLootZone(e.data.name),
             action: e => global.exports['dg-houserobbery'].lootZone(e.data.name),
           },
         ],
@@ -149,7 +145,6 @@ Plans.standardmotel_shell = {
             data: {
               name: 'sink',
             },
-            canInteract: (_, __, e) => global.exports['dg-houserobbery'].canLootZone(e.data.name),
             action: e => global.exports['dg-houserobbery'].lootZone(e.data.name),
           },
         ],
@@ -174,7 +169,6 @@ Plans.standardmotel_shell = {
             data: {
               name: 'vase',
             },
-            canInteract: (_, __, e) => global.exports['dg-houserobbery'].canLootZone(e.data.name),
             action: e => global.exports['dg-houserobbery'].lootZone(e.data.name, 2),
           },
         ],
@@ -229,7 +223,6 @@ Plans.furnitured_midapart = {
             data: {
               name: 'cab_1',
             },
-            canInteract: (_, __, e) => global.exports['dg-houserobbery'].canLootZone(e.data.name),
             action: e => global.exports['dg-houserobbery'].lootZone(e.data.name),
           },
         ],
@@ -255,7 +248,6 @@ Plans.furnitured_midapart = {
             data: {
               name: 'cab_2',
             },
-            canInteract: (_, __, e) => global.exports['dg-houserobbery'].canLootZone(e.data.name),
             action: e => global.exports['dg-houserobbery'].lootZone(e.data.name),
           },
         ],
@@ -281,7 +273,6 @@ Plans.furnitured_midapart = {
             data: {
               name: 'cab_3',
             },
-            canInteract: (_, __, e) => global.exports['dg-houserobbery'].canLootZone(e.data.name),
             action: e => global.exports['dg-houserobbery'].lootZone(e.data.name),
           },
         ],
@@ -307,7 +298,6 @@ Plans.furnitured_midapart = {
             data: {
               name: 'kist',
             },
-            canInteract: (_, __, e) => global.exports['dg-houserobbery'].canLootZone(e.data.name),
             action: e => global.exports['dg-houserobbery'].lootZone(e.data.name),
           },
         ],
@@ -333,7 +323,6 @@ Plans.furnitured_midapart = {
             data: {
               name: 'kast_1',
             },
-            canInteract: (_, __, e) => global.exports['dg-houserobbery'].canLootZone(e.data.name),
             action: e => global.exports['dg-houserobbery'].lootZone(e.data.name),
           },
         ],
@@ -359,7 +348,6 @@ Plans.furnitured_midapart = {
             data: {
               name: 'cab_4',
             },
-            canInteract: (_, __, e) => global.exports['dg-houserobbery'].canLootZone(e.data.name),
             action: e => global.exports['dg-houserobbery'].lootZone(e.data.name),
           },
         ],
@@ -385,7 +373,6 @@ Plans.furnitured_midapart = {
             data: {
               name: 'cab_5',
             },
-            canInteract: (_, __, e) => global.exports['dg-houserobbery'].canLootZone(e.data.name),
             action: e => global.exports['dg-houserobbery'].lootZone(e.data.name),
           },
         ],
@@ -411,7 +398,6 @@ Plans.furnitured_midapart = {
             data: {
               name: 'baskets_1',
             },
-            canInteract: (_, __, e) => global.exports['dg-houserobbery'].canLootZone(e.data.name),
             action: e => global.exports['dg-houserobbery'].lootZone(e.data.name),
           },
         ],
@@ -437,7 +423,6 @@ Plans.furnitured_midapart = {
             data: {
               name: 'tv',
             },
-            canInteract: (_, __, e) => global.exports['dg-houserobbery'].canLootZone(e.data.name),
             action: e => global.exports['dg-houserobbery'].lootZone(e.data.name, 1),
           },
         ],
@@ -463,7 +448,6 @@ Plans.furnitured_midapart = {
             data: {
               name: 'basket_2',
             },
-            canInteract: (_, __, e) => global.exports['dg-houserobbery'].canLootZone(e.data.name),
             action: e => global.exports['dg-houserobbery'].lootZone(e.data.name),
           },
         ],
@@ -489,7 +473,6 @@ Plans.furnitured_midapart = {
             data: {
               name: 'microwave',
             },
-            canInteract: (_, __, e) => global.exports['dg-houserobbery'].canLootZone(e.data.name),
             action: e => global.exports['dg-houserobbery'].lootZone(e.data.name, 3),
           },
         ],

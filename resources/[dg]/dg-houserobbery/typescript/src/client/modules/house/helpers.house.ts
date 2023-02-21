@@ -61,12 +61,6 @@ export const lockHouse = async (houseId: number) => {
   Events.emitNet('houserobbery:server:lockDoor', houseId);
 };
 
-export const canSearchLocation = async (houseId: string, zoneName: string): Promise<boolean> => {
-  if (zoneName == undefined) return false;
-  const canLoot = await RPC.execute('houserobbery:server:canLootZone', houseId, zoneName);
-  return canLoot ?? false;
-};
-
 export const searchLootLocation = async (houseId: string, zoneName: string, lootTableId = 0) => {
   if (!houseId || !zoneName) return;
   Events.emitNet('houserobbery:server:doLootZone', houseId, zoneName, lootTableId);

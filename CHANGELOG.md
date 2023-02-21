@@ -10,7 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- 
+- Houserobbery timeout per persoon geadd
 
 ### Changed
 
@@ -27,6 +27,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - PropAttach models worden nu pas geladen wanneer ze nodig zijn
 - Armor restored nu deftig als je terug in de stad komt
 - Je kan nu zelf ervoor zorgen dat iemand stop met je te carryen
+- Andere mensen kunnen nu een actieve houserobbery betreden
 
 ## [1.0.2]
 

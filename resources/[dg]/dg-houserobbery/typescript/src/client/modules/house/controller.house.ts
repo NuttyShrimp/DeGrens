@@ -1,7 +1,7 @@
 import { Events, Notifications, Peek, PolyTarget, RPC } from '@dgx/client';
 import { Util } from '@dgx/shared';
 
-import { canSearchLocation, enterHouse, leaveHouse, lockHouse, searchLootLocation, unlockHouse } from './helpers.house';
+import { enterHouse, leaveHouse, lockHouse, searchLootLocation, unlockHouse } from './helpers.house';
 
 let shellTypes: Record<string, string>;
 
@@ -14,10 +14,6 @@ export const getShellTypes = () => shellTypes;
 export const getSelectedHouse = () => selectedHouse;
 export const getSelectedHouseInfo = () => selectedHouseInfo;
 
-global.asyncExports('canLootZone', (place: string) => {
-  if (!selectedHouse) return false;
-  return canSearchLocation(selectedHouse, place);
-});
 global.exports('lootZone', (place: string, lootTable?: number) => {
   if (!selectedHouse) return;
   searchLootLocation(selectedHouse, place, lootTable);
@@ -35,7 +31,6 @@ on('dg-houserobbery:leave', () => {
 onNet('houserobbery:client:cleanup', () => {
   selectedHouse = null;
   selectedHouseInfo = null;
-  PolyTarget.removeZone('houserobbery_door');
   if (radiusBlipInterval) {
     clearInterval(radiusBlipInterval);
     radiusBlipInterval = null;
@@ -52,12 +47,7 @@ Peek.addFlagEntry(
         label: 'Meld aan/uit',
         items: ['vpn'],
         action: async () => {
-          const signedIn = await RPC.execute<boolean>('houserobbery:server:toggleSignedIn');
-          if (signedIn) {
-            Notifications.add('Je bent nu aangemeld.', 'success');
-          } else {
-            Notifications.add('Je bent niet langer aangemeld...', 'error');
-          }
+          Events.emitNet('houserobbery:server:toggleSignedIn');
         },
       },
     ],
@@ -112,6 +102,21 @@ Peek.addZoneEntry(
   true
 );
 
+Events.onNet('houserobbery:client:buildHouseZone', (houseId: string, houseInfo: House.Data) => {
+  PolyTarget.addBoxZone('houserobbery_door', houseInfo.coords, 1.0, 1.0, {
+    data: {
+      id: houseId,
+    },
+    heading: houseInfo.coords.w,
+    minZ: houseInfo.coords.z - 2,
+    maxZ: houseInfo.coords.z + 2,
+  });
+});
+
+Events.onNet('houserobbery:client:destroyHouseZone', (houseId: string) => {
+  PolyTarget.removeZone('houserobbery_door', houseId);
+});
+
 Events.onNet('houserobbery:client:setSelectedHouse', (houseId: string, houseInfo: House.Data, timeToFind: number) => {
   selectedHouse = houseId;
   selectedHouseInfo = houseInfo;
@@ -126,22 +131,6 @@ Events.onNet('houserobbery:client:setSelectedHouse', (houseId: string, houseInfo
   SetBlipColour(radiusBlip, 1);
   SetBlipAlpha(radiusBlip, blipAlpha);
   SetBlipHighDetail(radiusBlip, true);
-
-  PolyTarget.addBoxZone(
-    'houserobbery_door',
-    houseInfo.coords,
-    1.0,
-    1.0,
-    {
-      data: {
-        id: houseId,
-      },
-      heading: houseInfo.coords.w,
-      minZ: houseInfo.coords.z - 2,
-      maxZ: houseInfo.coords.z + 2,
-    },
-    true
-  );
 
   radiusBlipInterval = setInterval(() => {
     if (blipAlpha == 0) {
