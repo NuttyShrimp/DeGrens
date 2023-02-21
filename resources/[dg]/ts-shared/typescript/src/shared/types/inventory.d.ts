@@ -8,11 +8,12 @@ declare namespace Inventory {
     inventory: string;
     position: Vec2;
     rotated: boolean;
-    quality: number;
     hotkey: Hotkey | null;
     metadata: { [key: string]: any };
-    lastDecayTime: number;
+    // the unix timestamp when an item is going to break (sec)
+    destroyDate: number | null;
     requirements?: Requirements;
+    quality?: number;
   }
 
   interface Requirements {

@@ -9,7 +9,7 @@ export const initializeRecyclePed = async () => {
 };
 
 export const addItemToRecycle = (plyIdentifier: string, sellItem: Inventory.ItemState) => {
-  if (sellItem.quality > getConfig().recycleped.maximumPercentage) {
+  if (sellItem.quality === undefined || sellItem.quality > getConfig().recycleped.maximumPercentage) {
     const plyId = DGCore.Functions.getPlyIdForCid(Number(plyIdentifier));
     if (plyId !== undefined) {
       Notifications.add(plyId, 'Dit is nog niet kapot genoeg', 'error');

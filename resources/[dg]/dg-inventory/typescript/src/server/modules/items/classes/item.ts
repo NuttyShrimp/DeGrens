@@ -16,10 +16,9 @@ export class Item {
   private inventory!: Inv;
   private position!: Vec2;
   private rotated!: boolean;
-  private quality!: number;
   private hotkey!: Inventory.Hotkey | null;
   private metadata!: { [key: string]: any };
-  private lastDecayTime!: number;
+  private destroyDate!: number | null;
 
   constructor() {
     this.logger = mainLogger.child({ module: 'Item' });
@@ -31,9 +30,8 @@ export class Item {
     // Do not check if loaded because this shit gets called inside inv loading func which causes infinite loop
     this.inventory = await inventoryManager.get(state.inventory, false);
     this.rotated = state.rotated ?? false;
-    this.quality = state.quality ?? 100;
     this.hotkey = state.hotkey ?? null;
-    this.lastDecayTime = state.lastDecayTime ?? Math.floor(Date.now() / 1000); // Seconds
+    this.destroyDate = state.destroyDate ?? itemDataManager.getInitialDestroyDate(state.name);
     this.metadata = state.metadata;
 
     // Position
@@ -68,11 +66,9 @@ export class Item {
       }
       this.position = newPosition;
 
-      // Max date item can life to
-      const destroyDate = itemDataManager.getDestroyDate(this.name, 100);
       // When adding new item to nonpresistent inventory, start inv as nonpersistent.
       const dbInventory = this.inventory.isPersistent() ? this.state.inventory : 'nonpersistent';
-      repository.createItem({ ...this.state, inventory: dbInventory }, destroyDate);
+      repository.createItem({ ...this.state, inventory: dbInventory });
       this.logger.debug(`New item has been created with id ${this.id}`);
     } else {
       this.position = state.position ?? { x: 0, y: 0 };
@@ -90,10 +86,10 @@ export class Item {
       inventory: this.inventory?.id,
       position: this.position,
       rotated: this.rotated,
-      quality: this.quality,
       hotkey: this.hotkey,
       metadata: this.metadata,
-      lastDecayTime: this.lastDecayTime,
+      destroyDate: this.destroyDate,
+      quality: this.destroyDate ? itemDataManager.getItemQuality(this.name, this.destroyDate) : undefined,
     };
   }
   // #endregion
@@ -165,21 +161,21 @@ export class Item {
 
   public getMetadata = () => this.metadata;
 
+  // This is only called from third-party's, a change in quality == DestroyDate is getting modified
   public setQuality = (cb: (current: number) => number, noItemBoxOnBreak = false) => {
-    const newQuality = cb(this.quality);
+    if (!this.destroyDate) return;
+    const oldQuality = itemDataManager.getItemQuality(this.name, this.destroyDate);
+    const newQuality = cb(oldQuality);
     const clampedNewQuality = Math.min(Math.max(newQuality, 0), 100);
+    const newDestroyDate = itemDataManager.getModifiedDestroyDate(
+      this.name,
+      this.destroyDate,
+      clampedNewQuality - oldQuality
+    );
 
-    if (clampedNewQuality === 0) {
-      this.destroy(noItemBoxOnBreak);
-    }
+    this.destroyDate = newDestroyDate;
 
-    // Update destroydate when increasing quality
-    if (clampedNewQuality > this.quality) {
-      const destroyDate = itemDataManager.getDestroyDate(this.name, clampedNewQuality);
-      repository.updateDestroyDate(this.id, destroyDate);
-    }
-
-    this.quality = clampedNewQuality;
+    this.checkDecay(noItemBoxOnBreak);
   };
 
   public destroy = (noItemBox = false) => {
@@ -189,7 +185,8 @@ export class Item {
     this.inventory.unregisterItemId(this.state); // delete from inventory it was in
     itemManager.remove(this.id); // remove in item manager
     repository.deleteItem(this.id); // remove from db
-    this.logger.debug(`${this.id} has been destroyed. Quality: ${this.quality}`);
+    const quality = itemDataManager.getItemQuality(this.name, this.destroyDate);
+    this.logger.debug(`${this.id} has been destroyed. Quality: ${quality}`, 'destroyDate', this.destroyDate);
     this.syncItem({ ...this.state, inventory: 'destroyed' }, this.inventory.id);
 
     Util.Log(
@@ -197,7 +194,7 @@ export class Item {
       {
         ...this.state,
       },
-      `${this.name} got destroyed (${Math.ceil(this.quality)}% quality)`
+      `${this.name} got destroyed (${quality}% quality)`
     );
 
     if (!noItemBox && originalInvType === 'player') {
@@ -214,15 +211,16 @@ export class Item {
    */
   public checkDecay = (noItemBoxOnBreak = false) => {
     const itemData = itemDataManager.get(this.name);
-    if (!itemData.decayRate) return false;
+    if (!itemData.decayRate || !this.destroyDate) return false;
     if (this.inventory.type === 'shop') return false;
-    const decayPerSecond = 100 / (itemData.decayRate * 60);
-    const currentSeconds = Math.floor(Date.now() / 1000);
-    const secondsSinceLastDecay = currentSeconds - this.lastDecayTime;
-    const amountToDecay = secondsSinceLastDecay * decayPerSecond;
-    this.lastDecayTime = currentSeconds;
-    this.setQuality(current => current - amountToDecay, noItemBoxOnBreak);
-    return this.quality === 0;
+
+    const unixNow = Math.floor(Date.now() / 1000);
+    let isDestroyed = unixNow > this.destroyDate;
+    if (isDestroyed) {
+      this.destroy(noItemBoxOnBreak);
+    }
+
+    return isDestroyed;
   };
 
   private syncItem = (data: Inventory.ItemState, oldInventory = '', emitter = 0) => {

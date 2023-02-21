@@ -18,10 +18,9 @@ class Repository extends Util.Singleton<Repository>() {
       state.inventory,
       JSON.stringify(state.position),
       state.rotated ? 1 : 0,
-      state.quality,
       state.hotkey,
-      state.lastDecayTime,
       JSON.stringify(state.metadata),
+      state.destroyDate,
     ];
   };
 
@@ -45,10 +44,9 @@ class Repository extends Util.Singleton<Repository>() {
     return result.map(x => this.resultToState(x));
   };
 
-  public createItem = (state: Inventory.ItemState, destroyDate: number | null) => {
-    const query = `INSERT INTO inventory_items (id, name, inventory, position, rotated, quality, hotkey, lastDecayTime, metadata, destroyDate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+  public createItem = (state: Inventory.ItemState) => {
+    const query = `INSERT INTO inventory_items (id, name, inventory, position, rotated, hotkey, metadata, destroyDate) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
     const params = this.stateToParams(state);
-    params.push(destroyDate);
     SQL.query(query, params);
   };
 
@@ -57,15 +55,14 @@ class Repository extends Util.Singleton<Repository>() {
     SQL.query(query, [id]);
   };
 
-  // I'm sorry god, please don't look at this monstrosity
   public updateItems = (itemStates: Inventory.ItemState[]) => {
     const amount = itemStates.length;
-    let query = `INSERT INTO inventory_items (id, name, inventory, position, rotated, quality, hotkey, lastDecayTime, metadata) VALUES`;
+    let query = `INSERT INTO inventory_items (id, name, inventory, position, rotated, hotkey, metadata, destroyDate) VALUES`;
     for (let i = 0; i < amount; i++) {
-      query += ` (?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+      query += ` (?, ?, ?, ?, ?, ?, ?, ?)`;
       if (i !== amount - 1) query += `,`;
     }
-    query += ` ON DUPLICATE KEY UPDATE inventory = VALUES(inventory), position = VALUES(position), rotated = VALUES(rotated), quality = VALUES(quality), hotkey = VALUES(hotkey), metadata = VALUES(metadata);`;
+    query += ` ON DUPLICATE KEY UPDATE inventory = VALUES(inventory), position = VALUES(position), rotated = VALUES(rotated), hotkey = VALUES(hotkey), metadata = VALUES(metadata), destroyDate = VALUES(destroyDate);`;
     const params = itemStates.reduce<Repository.UpdateParameters>(
       (acc, cur) => [...acc, ...this.stateToParams(cur)],
       []
@@ -89,11 +86,6 @@ class Repository extends Util.Singleton<Repository>() {
     const result = await SQL.scalar<Repository.FetchResult>(query, [itemId]);
     if (Object.keys(result).length === 0) return null;
     return this.resultToState(result);
-  };
-
-  public updateDestroyDate = (itemId: string, destroyDate: number | null) => {
-    const query = 'UPDATE inventory_items SET destroyDate = ? WHERE id = ?';
-    SQL.query(query, [destroyDate, itemId]);
   };
 
   public deleteByDestroyDate = async () => {

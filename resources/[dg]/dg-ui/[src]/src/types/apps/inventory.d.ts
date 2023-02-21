@@ -38,7 +38,7 @@ declare namespace Inventory {
     rotated: boolean;
     name: string;
     label: string;
-    quality: number;
+    quality?: number;
     image: string;
     description?: string;
     useable?: boolean;
