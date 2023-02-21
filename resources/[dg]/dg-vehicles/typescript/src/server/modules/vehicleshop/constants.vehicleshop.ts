@@ -1,5 +1,8 @@
 export const MODEL_CATEGORISATION = ['brand', 'class', 'category'] as const;
-export const CATEGORY_LABEL: Record<(typeof MODEL_CATEGORISATION)[number], string> = {
+
+export type ModelCategorisation = (typeof MODEL_CATEGORISATION)[number];
+
+export const CATEGORY_LABEL: Record<ModelCategorisation, string> = {
   brand: 'Op Merk',
   class: 'Op Klasse',
   category: 'Op Categorie',

@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Admin kick from vehicle optie toegevoegd
 - Skip locatie optie voor postop
 - Admin neem screenshot optie
+- Je ziet nu info van het huidige voertuig in PDM
 
 ### Changed
 
