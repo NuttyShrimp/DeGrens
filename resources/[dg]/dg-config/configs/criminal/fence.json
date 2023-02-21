@@ -1,14 +1,14 @@
 {
   "items": {
-    "camera": 40,
-    "gameboy": 15,
-    "hifi": 25,
-    "nintendo_switch": 25,
-    "nokia": 20,
-    "psp": 15,
-    "crt_tv": 75,
-    "tv": 150,
-    "vaas": 200,
-    "gold_nugget": 50
+    "camera": 75,
+    "gameboy": 35,
+    "hifi": 45,
+    "nintendo_switch": 50,
+    "nokia": 40,
+    "psp": 30,
+    "crt_tv": 150,
+    "tv": 250,
+    "vaas": 250,
+    "gold_nugget": 75
   }
 }

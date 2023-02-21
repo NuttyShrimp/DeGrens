@@ -8,7 +8,7 @@
           "amount": 5
         },
         {
-          "name": "material_steel",
+          "name": "material_aluminum",
           "amount": 4
         }
       ]
@@ -49,6 +49,10 @@
         {
           "name": "refined_aluminum",
           "amount": 2
+        },
+        {
+          "name": "material_electronics",
+          "amount": 3
         }
       ]
     },
@@ -74,7 +78,7 @@
       "items": [
         {
           "name": "material_electronics",
-          "amount": 3
+          "amount": 4
         },
         {
           "name": "refined_plastic",
@@ -222,6 +226,10 @@
         {
           "name": "refined_aluminum",
           "amount": 3
+        },
+        {
+          "name": "material_electronics",
+          "amount": 4
         }
       ]
     },
@@ -250,6 +258,10 @@
         },
         {
           "name": "refined_aluminum",
+          "amount": 4
+        },
+        {
+          "name": "material_electronics",
           "amount": 4
         }
       ]
@@ -280,6 +292,10 @@
         {
           "name": "refined_aluminum",
           "amount": 6
+        },
+        {
+          "name": "material_electronics",
+          "amount": 4
         }
       ]
     },
@@ -309,6 +325,10 @@
         {
           "name": "refined_aluminum",
           "amount": 6
+        },
+        {
+          "name": "material_electronics",
+          "amount": 4
         }
       ]
     },
@@ -338,6 +358,10 @@
         {
           "name": "refined_aluminum",
           "amount": 7
+        },
+        {
+          "name": "material_electronics",
+          "amount": 4
         }
       ]
     },
@@ -367,6 +391,10 @@
         {
           "name": "refined_aluminum",
           "amount": 7
+        },
+        {
+          "name": "material_electronics",
+          "amount": 4
         }
       ]
     },
@@ -396,6 +424,10 @@
         {
           "name": "refined_aluminum",
           "amount": 10
+        },
+        {
+          "name": "material_electronics",
+          "amount": 4
         }
       ]
     },
@@ -425,6 +457,10 @@
         {
           "name": "refined_aluminum",
           "amount": 10
+        },
+        {
+          "name": "material_electronics",
+          "amount": 4
         }
       ]
     },
@@ -446,6 +482,10 @@
         {
           "name": "refined_aluminum",
           "amount": 15
+        },
+        {
+          "name": "material_electronics",
+          "amount": 10
         }
       ]
     },
@@ -467,6 +507,10 @@
         {
           "name": "refined_aluminum",
           "amount": 15
+        },
+        {
+          "name": "material_electronics",
+          "amount": 10
         }
       ]
     },

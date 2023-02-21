@@ -1,12 +1,12 @@
 {
   "sellableItems": {
     "weed_bag": {
-      "basePrice": 15,
+      "basePrice": 30,
       "requiredReputation": 0
     },
     "meth_bag": {
-      "basePrice": 65,
-      "requiredReputation": 1000
+      "basePrice": 120,
+      "requiredReputation": 500
     }
   },
   "decayTime": 7,

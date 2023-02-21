@@ -3,7 +3,7 @@
     "name": "pistol_suppressor",
     "label": "Pistol Suppressor",
     "useable": true,
-    "decayRate": 43200,
+    "decayRate": 129600,
     "image": "pistol_suppressor.png",
     "size": {
       "x": 4,
@@ -15,7 +15,7 @@
     "name": "smg_extendedclip",
     "label": "SMG Extended Clip",
     "useable": true,
-    "decayRate": 43200,
+    "decayRate": 129600,
     "image": "smg_extendedclip.png",
     "size": {
       "x": 2,
@@ -27,7 +27,7 @@
     "name": "luxuryfinish",
     "label": "Luxury Finish",
     "useable": true,
-    "decayRate": 43200,
+    "decayRate": 129600,
     "image": "luxury_finish.png",
     "size": {
       "x": 2,
@@ -147,7 +147,7 @@
     "name": "phone",
     "label": "Phone",
     "image": "phone.png",
-    "decayRate": 86400,
+    "decayRate": 129600,
     "size": {
       "x": 1,
       "y": 2
@@ -671,7 +671,7 @@
     "name": "weed_seed",
     "label": "Weed Zaadje",
     "useable": true,
-    "decayRate": 2880,
+    "decayRate": 7200,
     "image": "weed_seed.png",
     "description": "Probeer het eens te planten in de grond, wie weet groeit het!",
     "size": {
@@ -782,7 +782,7 @@
     "markedForSeizure": true,
     "name": "weed_bag",
     "label": "Zakje Weed 1g",
-    "decayRate": 7200,
+    "decayRate": 10080,
     "image": "weed_bag.png",
     "size": {
       "x": 1,
@@ -793,7 +793,7 @@
     "markedForSeizure": true,
     "name": "joint",
     "label": "Joint",
-    "decayRate": 7200,
+    "decayRate": 20160,
     "image": "joint.png",
     "description": "The good stuff",
     "useable": true,
@@ -807,7 +807,7 @@
     "name": "thermite",
     "label": "Thermite",
     "useable": true,
-    "decayRate": 10080,
+    "decayRate": 20160,
     "image": "thermite.png",
     "description": "Pas op voor je vingers, kan warm worden",
     "size": {
@@ -820,7 +820,7 @@
     "name": "meth_bag",
     "label": "Zakje Meth",
     "useable": true,
-    "decayRate": 7200,
+    "decayRate": 10080,
     "image": "meth_bag.png",
     "description": "Zakje Meth van 1 gram",
     "size": {
@@ -846,7 +846,7 @@
     "name": "coke_bag",
     "label": "Zakje Coke",
     "useable": true,
-    "decayRate": 7200,
+    "decayRate": 10080,
     "image": "coke_bag.png",
     "description": "Zakje Coke van 1 gram",
     "size": {
@@ -859,7 +859,7 @@
     "name": "big_explosive",
     "label": "Zwaar Explosief",
     "useable": true,
-    "decayRate": 10080,
+    "decayRate": 20160,
     "image": "big_explosive.png",
     "description": "Zwaar explosief. Pas op of het zal je laatste dag kunnen zijn.",
     "size": {
@@ -936,7 +936,7 @@
     "markedForSeizure": true,
     "name": "mini_emp",
     "label": "Mini EMP",
-    "decayRate": 4320,
+    "decayRate": 7200,
     "image": "mini_emp.png",
     "description": "Kleine EMP voor elektronica uit te schakelen.",
     "size": {
@@ -947,7 +947,7 @@
   {
     "name": "volt_meter",
     "label": "Multimeter",
-    "decayRate": 8640,
+    "decayRate": 20160,
     "image": "volt_meter.png",
     "size": {
       "x": 1,
@@ -1009,7 +1009,7 @@
     "name": "rocket",
     "label": "RPG Raket",
     "useable": true,
-    "decayRate": 20160,
+    "decayRate": 43200,
     "image": "rocket.png",
     "size": {
       "x": 2,
@@ -1111,7 +1111,7 @@
       "x": 3,
       "y": 3
     },
-    "decayRate": 30240,
+    "decayRate": 129600,
     "useable": true
   },
   {
@@ -1122,7 +1122,7 @@
       "x": 1,
       "y": 2
     },
-    "decayRate": 20160,
+    "decayRate": 129600,
     "useable": true
   },
   {
@@ -1133,7 +1133,7 @@
       "x": 1,
       "y": 2
     },
-    "decayRate": 10080,
+    "decayRate": 20160,
     "useable": true
   },
   {
@@ -1154,7 +1154,7 @@
       "x": 2,
       "y": 2
     },
-    "decayRate": 43200,
+    "decayRate": 129600,
     "image": "susp_part_s.png",
     "useable": true
   },
@@ -1165,7 +1165,7 @@
       "x": 2,
       "y": 2
     },
-    "decayRate": 43200,
+    "decayRate": 129600,
     "image": "brakes_part_s.png",
     "useable": true
   },
@@ -1176,7 +1176,7 @@
       "x": 2,
       "y": 2
     },
-    "decayRate": 43200,
+    "decayRate": 129600,
     "image": "axle_part_s.png",
     "useable": true
   },
@@ -1187,7 +1187,7 @@
       "x": 2,
       "y": 2
     },
-    "decayRate": 43200,
+    "decayRate": 129600,
     "image": "engine_part_a.png",
     "useable": true
   },
@@ -1198,7 +1198,7 @@
       "x": 2,
       "y": 2
     },
-    "decayRate": 43200,
+    "decayRate": 129600,
     "image": "susp_part_a.png",
     "useable": true
   },
@@ -1209,7 +1209,7 @@
       "x": 2,
       "y": 2
     },
-    "decayRate": 43200,
+    "decayRate": 129600,
     "image": "brakes_part_a.png",
     "useable": true
   },
@@ -1220,7 +1220,7 @@
       "x": 2,
       "y": 2
     },
-    "decayRate": 43200,
+    "decayRate": 129600,
     "image": "axle_part_a.png",
     "useable": true
   },
@@ -1231,7 +1231,7 @@
       "x": 2,
       "y": 2
     },
-    "decayRate": 43200,
+    "decayRate": 129600,
     "image": "engine_part_b.png",
     "useable": true
   },
@@ -1242,7 +1242,7 @@
       "x": 2,
       "y": 2
     },
-    "decayRate": 43200,
+    "decayRate": 129600,
     "image": "susp_part_b.png",
     "useable": true
   },
@@ -1253,7 +1253,7 @@
       "x": 2,
       "y": 2
     },
-    "decayRate": 43200,
+    "decayRate": 129600,
     "image": "brakes_part_b.png",
     "useable": true
   },
@@ -1264,7 +1264,7 @@
       "x": 2,
       "y": 2
     },
-    "decayRate": 43200,
+    "decayRate": 129600,
     "image": "axle_part_b.png",
     "useable": true
   },
@@ -1275,7 +1275,7 @@
       "x": 2,
       "y": 2
     },
-    "decayRate": 43200,
+    "decayRate": 129600,
     "image": "engine_part_c.png",
     "useable": true
   },
@@ -1286,7 +1286,7 @@
       "x": 2,
       "y": 2
     },
-    "decayRate": 43200,
+    "decayRate": 129600,
     "image": "susp_part_c.png",
     "useable": true
   },
@@ -1297,7 +1297,7 @@
       "x": 2,
       "y": 2
     },
-    "decayRate": 43200,
+    "decayRate": 129600,
     "image": "brakes_part_c.png",
     "useable": true
   },
@@ -1308,7 +1308,7 @@
       "x": 2,
       "y": 2
     },
-    "decayRate": 43200,
+    "decayRate": 129600,
     "image": "axle_part_c.png",
     "useable": true
   },
@@ -1319,7 +1319,7 @@
       "x": 2,
       "y": 2
     },
-    "decayRate": 43200,
+    "decayRate": 129600,
     "image": "engine_part_d.png",
     "useable": true
   },
@@ -1330,7 +1330,7 @@
       "x": 2,
       "y": 2
     },
-    "decayRate": 43200,
+    "decayRate": 129600,
     "image": "susp_part_d.png",
     "useable": true
   },
@@ -1341,7 +1341,7 @@
       "x": 2,
       "y": 2
     },
-    "decayRate": 43200,
+    "decayRate": 129600,
     "image": "brakes_part_d.png",
     "useable": true
   },
@@ -1352,7 +1352,7 @@
       "x": 2,
       "y": 2
     },
-    "decayRate": 43200,
+    "decayRate": 129600,
     "image": "axle_part_d.png",
     "useable": true
   },
@@ -1363,7 +1363,7 @@
       "x": 2,
       "y": 2
     },
-    "decayRate": 43200,
+    "decayRate": 129600,
     "image": "engine_part_a+.png",
     "useable": true
   },
@@ -1374,7 +1374,7 @@
       "x": 2,
       "y": 2
     },
-    "decayRate": 43200,
+    "decayRate": 129600,
     "image": "susp_part_a+.png",
     "useable": true
   },
@@ -1385,7 +1385,7 @@
       "x": 2,
       "y": 2
     },
-    "decayRate": 43200,
+    "decayRate": 129600,
     "image": "brakes_part_a+.png",
     "useable": true
   },
@@ -1396,7 +1396,7 @@
       "x": 2,
       "y": 2
     },
-    "decayRate": 43200,
+    "decayRate": 129600,
     "image": "axle_part_a+.png",
     "useable": true
   },
@@ -1407,7 +1407,7 @@
       "x": 2,
       "y": 2
     },
-    "decayRate": 43200,
+    "decayRate": 129600,
     "image": "engine_part_x.png",
     "useable": true
   },
@@ -1418,7 +1418,7 @@
       "x": 2,
       "y": 2
     },
-    "decayRate": 43200,
+    "decayRate": 129600,
     "image": "susp_part_x.png",
     "useable": true
   },
@@ -1429,7 +1429,7 @@
       "x": 2,
       "y": 2
     },
-    "decayRate": 43200,
+    "decayRate": 129600,
     "image": "brakes_part_x.png",
     "useable": true
   },
@@ -1440,7 +1440,7 @@
       "x": 2,
       "y": 2
     },
-    "decayRate": 43200,
+    "decayRate": 129600,
     "image": "axle_part_x.png",
     "useable": true
   },
@@ -1464,7 +1464,7 @@
       "y": 3
     },
     "image": "tune_part.png",
-    "decayRate": 86400
+    "decayRate": 129600
   },
   {
     "name": "tune_brakes_stage_2_X",
@@ -1474,7 +1474,7 @@
       "y": 3
     },
     "image": "tune_part.png",
-    "decayRate": 86400
+    "decayRate": 129600
   },
   {
     "name": "tune_brakes_stage_3_X",
@@ -1484,7 +1484,7 @@
       "y": 3
     },
     "image": "tune_part.png",
-    "decayRate": 86400
+    "decayRate": 129600
   },
   {
     "name": "tune_brakes_stage_1_S",
@@ -1494,7 +1494,7 @@
       "y": 3
     },
     "image": "tune_part.png",
-    "decayRate": 86400
+    "decayRate": 129600
   },
   {
     "name": "tune_brakes_stage_2_S",
@@ -1504,7 +1504,7 @@
       "y": 3
     },
     "image": "tune_part.png",
-    "decayRate": 86400
+    "decayRate": 129600
   },
   {
     "name": "tune_brakes_stage_3_S",
@@ -1514,7 +1514,7 @@
       "y": 3
     },
     "image": "tune_part.png",
-    "decayRate": 86400
+    "decayRate": 129600
   },
   {
     "name": "tune_brakes_stage_1_A+",
@@ -1524,7 +1524,7 @@
       "y": 3
     },
     "image": "tune_part.png",
-    "decayRate": 86400
+    "decayRate": 129600
   },
   {
     "name": "tune_brakes_stage_2_A+",
@@ -1534,7 +1534,7 @@
       "y": 3
     },
     "image": "tune_part.png",
-    "decayRate": 86400
+    "decayRate": 129600
   },
   {
     "name": "tune_brakes_stage_3_A+",
@@ -1544,7 +1544,7 @@
       "y": 3
     },
     "image": "tune_part.png",
-    "decayRate": 86400
+    "decayRate": 129600
   },
   {
     "name": "tune_brakes_stage_1_A",
@@ -1554,7 +1554,7 @@
       "y": 3
     },
     "image": "tune_part.png",
-    "decayRate": 86400
+    "decayRate": 129600
   },
   {
     "name": "tune_brakes_stage_2_A",
@@ -1564,7 +1564,7 @@
       "y": 3
     },
     "image": "tune_part.png",
-    "decayRate": 86400
+    "decayRate": 129600
   },
   {
     "name": "tune_brakes_stage_3_A",
@@ -1574,7 +1574,7 @@
       "y": 3
     },
     "image": "tune_part.png",
-    "decayRate": 86400
+    "decayRate": 129600
   },
   {
     "name": "tune_brakes_stage_1_D",
@@ -1584,7 +1584,7 @@
       "y": 3
     },
     "image": "tune_part.png",
-    "decayRate": 86400
+    "decayRate": 129600
   },
   {
     "name": "tune_brakes_stage_2_D",
@@ -1594,7 +1594,7 @@
       "y": 3
     },
     "image": "tune_part.png",
-    "decayRate": 86400
+    "decayRate": 129600
   },
   {
     "name": "tune_brakes_stage_3_D",
@@ -1604,7 +1604,7 @@
       "y": 3
     },
     "image": "tune_part.png",
-    "decayRate": 86400
+    "decayRate": 129600
   },
   {
     "name": "tune_brakes_stage_1_C",
@@ -1614,7 +1614,7 @@
       "y": 3
     },
     "image": "tune_part.png",
-    "decayRate": 86400
+    "decayRate": 129600
   },
   {
     "name": "tune_brakes_stage_2_C",
@@ -1624,7 +1624,7 @@
       "y": 3
     },
     "image": "tune_part.png",
-    "decayRate": 86400
+    "decayRate": 129600
   },
   {
     "name": "tune_brakes_stage_3_C",
@@ -1634,7 +1634,7 @@
       "y": 3
     },
     "image": "tune_part.png",
-    "decayRate": 86400
+    "decayRate": 129600
   },
   {
     "name": "tune_brakes_stage_1_B",
@@ -1644,7 +1644,7 @@
       "y": 3
     },
     "image": "tune_part.png",
-    "decayRate": 86400
+    "decayRate": 129600
   },
   {
     "name": "tune_brakes_stage_2_B",
@@ -1654,7 +1654,7 @@
       "y": 3
     },
     "image": "tune_part.png",
-    "decayRate": 86400
+    "decayRate": 129600
   },
   {
     "name": "tune_brakes_stage_3_B",
@@ -1664,7 +1664,7 @@
       "y": 3
     },
     "image": "tune_part.png",
-    "decayRate": 86400
+    "decayRate": 129600
   },
   {
     "name": "tune_transmission_stage_1_X",
@@ -1674,7 +1674,7 @@
       "y": 3
     },
     "image": "tune_part.png",
-    "decayRate": 86400
+    "decayRate": 129600
   },
   {
     "name": "tune_transmission_stage_2_X",
@@ -1684,7 +1684,7 @@
       "y": 3
     },
     "image": "tune_part.png",
-    "decayRate": 86400
+    "decayRate": 129600
   },
   {
     "name": "tune_transmission_stage_3_X",
@@ -1694,7 +1694,7 @@
       "y": 3
     },
     "image": "tune_part.png",
-    "decayRate": 86400
+    "decayRate": 129600
   },
   {
     "name": "tune_transmission_stage_1_S",
@@ -1704,7 +1704,7 @@
       "y": 3
     },
     "image": "tune_part.png",
-    "decayRate": 86400
+    "decayRate": 129600
   },
   {
     "name": "tune_transmission_stage_2_S",
@@ -1714,7 +1714,7 @@
       "y": 3
     },
     "image": "tune_part.png",
-    "decayRate": 86400
+    "decayRate": 129600
   },
   {
     "name": "tune_transmission_stage_3_S",
@@ -1724,7 +1724,7 @@
       "y": 3
     },
     "image": "tune_part.png",
-    "decayRate": 86400
+    "decayRate": 129600
   },
   {
     "name": "tune_transmission_stage_1_A+",
@@ -1734,7 +1734,7 @@
       "y": 3
     },
     "image": "tune_part.png",
-    "decayRate": 86400
+    "decayRate": 129600
   },
   {
     "name": "tune_transmission_stage_2_A+",
@@ -1744,7 +1744,7 @@
       "y": 3
     },
     "image": "tune_part.png",
-    "decayRate": 86400
+    "decayRate": 129600
   },
   {
     "name": "tune_transmission_stage_3_A+",
@@ -1754,7 +1754,7 @@
       "y": 3
     },
     "image": "tune_part.png",
-    "decayRate": 86400
+    "decayRate": 129600
   },
   {
     "name": "tune_transmission_stage_1_A",
@@ -1764,7 +1764,7 @@
       "y": 3
     },
     "image": "tune_part.png",
-    "decayRate": 86400
+    "decayRate": 129600
   },
   {
     "name": "tune_transmission_stage_2_A",
@@ -1774,7 +1774,7 @@
       "y": 3
     },
     "image": "tune_part.png",
-    "decayRate": 86400
+    "decayRate": 129600
   },
   {
     "name": "tune_transmission_stage_3_A",
@@ -1784,7 +1784,7 @@
       "y": 3
     },
     "image": "tune_part.png",
-    "decayRate": 86400
+    "decayRate": 129600
   },
   {
     "name": "tune_transmission_stage_1_D",
@@ -1794,7 +1794,7 @@
       "y": 3
     },
     "image": "tune_part.png",
-    "decayRate": 86400
+    "decayRate": 129600
   },
   {
     "name": "tune_transmission_stage_2_D",
@@ -1804,7 +1804,7 @@
       "y": 3
     },
     "image": "tune_part.png",
-    "decayRate": 86400
+    "decayRate": 129600
   },
   {
     "name": "tune_transmission_stage_3_D",
@@ -1814,7 +1814,7 @@
       "y": 3
     },
     "image": "tune_part.png",
-    "decayRate": 86400
+    "decayRate": 129600
   },
   {
     "name": "tune_transmission_stage_1_C",
@@ -1824,7 +1824,7 @@
       "y": 3
     },
     "image": "tune_part.png",
-    "decayRate": 86400
+    "decayRate": 129600
   },
   {
     "name": "tune_transmission_stage_2_C",
@@ -1834,7 +1834,7 @@
       "y": 3
     },
     "image": "tune_part.png",
-    "decayRate": 86400
+    "decayRate": 129600
   },
   {
     "name": "tune_transmission_stage_3_C",
@@ -1844,7 +1844,7 @@
       "y": 3
     },
     "image": "tune_part.png",
-    "decayRate": 86400
+    "decayRate": 129600
   },
   {
     "name": "tune_transmission_stage_1_B",
@@ -1854,7 +1854,7 @@
       "y": 3
     },
     "image": "tune_part.png",
-    "decayRate": 86400
+    "decayRate": 129600
   },
   {
     "name": "tune_transmission_stage_2_B",
@@ -1864,7 +1864,7 @@
       "y": 3
     },
     "image": "tune_part.png",
-    "decayRate": 86400
+    "decayRate": 129600
   },
   {
     "name": "tune_transmission_stage_3_B",
@@ -1874,7 +1874,7 @@
       "y": 3
     },
     "image": "tune_part.png",
-    "decayRate": 86400
+    "decayRate": 129600
   },
   {
     "name": "tune_engine_stage_1_X",
@@ -1884,7 +1884,7 @@
       "y": 3
     },
     "image": "tune_part.png",
-    "decayRate": 86400
+    "decayRate": 129600
   },
   {
     "name": "tune_engine_stage_2_X",
@@ -1894,7 +1894,7 @@
       "y": 3
     },
     "image": "tune_part.png",
-    "decayRate": 86400
+    "decayRate": 129600
   },
   {
     "name": "tune_engine_stage_3_X",
@@ -1904,7 +1904,7 @@
       "y": 3
     },
     "image": "tune_part.png",
-    "decayRate": 86400
+    "decayRate": 129600
   },
   {
     "name": "tune_engine_stage_4_X",
@@ -1914,7 +1914,7 @@
       "y": 3
     },
     "image": "tune_part.png",
-    "decayRate": 86400
+    "decayRate": 129600
   },
   {
     "name": "tune_engine_stage_1_S",
@@ -1924,7 +1924,7 @@
       "y": 3
     },
     "image": "tune_part.png",
-    "decayRate": 86400
+    "decayRate": 129600
   },
   {
     "name": "tune_engine_stage_2_S",
@@ -1934,7 +1934,7 @@
       "y": 3
     },
     "image": "tune_part.png",
-    "decayRate": 86400
+    "decayRate": 129600
   },
   {
     "name": "tune_engine_stage_3_S",
@@ -1944,7 +1944,7 @@
       "y": 3
     },
     "image": "tune_part.png",
-    "decayRate": 86400
+    "decayRate": 129600
   },
   {
     "name": "tune_engine_stage_4_S",
@@ -1954,7 +1954,7 @@
       "y": 3
     },
     "image": "tune_part.png",
-    "decayRate": 86400
+    "decayRate": 129600
   },
   {
     "name": "tune_engine_stage_1_A+",
@@ -1964,7 +1964,7 @@
       "y": 3
     },
     "image": "tune_part.png",
-    "decayRate": 86400
+    "decayRate": 129600
   },
   {
     "name": "tune_engine_stage_2_A+",
@@ -1974,7 +1974,7 @@
       "y": 3
     },
     "image": "tune_part.png",
-    "decayRate": 86400
+    "decayRate": 129600
   },
   {
     "name": "tune_engine_stage_3_A+",
@@ -1984,7 +1984,7 @@
       "y": 3
     },
     "image": "tune_part.png",
-    "decayRate": 86400
+    "decayRate": 129600
   },
   {
     "name": "tune_engine_stage_4_A+",
@@ -1994,7 +1994,7 @@
       "y": 3
     },
     "image": "tune_part.png",
-    "decayRate": 86400
+    "decayRate": 129600
   },
   {
     "name": "tune_engine_stage_1_A",
@@ -2004,7 +2004,7 @@
       "y": 3
     },
     "image": "tune_part.png",
-    "decayRate": 86400
+    "decayRate": 129600
   },
   {
     "name": "tune_engine_stage_2_A",
@@ -2014,7 +2014,7 @@
       "y": 3
     },
     "image": "tune_part.png",
-    "decayRate": 86400
+    "decayRate": 129600
   },
   {
     "name": "tune_engine_stage_3_A",
@@ -2024,7 +2024,7 @@
       "y": 3
     },
     "image": "tune_part.png",
-    "decayRate": 86400
+    "decayRate": 129600
   },
   {
     "name": "tune_engine_stage_4_A",
@@ -2034,7 +2034,7 @@
       "y": 3
     },
     "image": "tune_part.png",
-    "decayRate": 86400
+    "decayRate": 129600
   },
   {
     "name": "tune_engine_stage_1_D",
@@ -2044,7 +2044,7 @@
       "y": 3
     },
     "image": "tune_part.png",
-    "decayRate": 86400
+    "decayRate": 129600
   },
   {
     "name": "tune_engine_stage_2_D",
@@ -2054,7 +2054,7 @@
       "y": 3
     },
     "image": "tune_part.png",
-    "decayRate": 86400
+    "decayRate": 129600
   },
   {
     "name": "tune_engine_stage_3_D",
@@ -2064,7 +2064,7 @@
       "y": 3
     },
     "image": "tune_part.png",
-    "decayRate": 86400
+    "decayRate": 129600
   },
   {
     "name": "tune_engine_stage_4_D",
@@ -2074,7 +2074,7 @@
       "y": 3
     },
     "image": "tune_part.png",
-    "decayRate": 86400
+    "decayRate": 129600
   },
   {
     "name": "tune_engine_stage_1_C",
@@ -2084,7 +2084,7 @@
       "y": 3
     },
     "image": "tune_part.png",
-    "decayRate": 86400
+    "decayRate": 129600
   },
   {
     "name": "tune_engine_stage_2_C",
@@ -2094,7 +2094,7 @@
       "y": 3
     },
     "image": "tune_part.png",
-    "decayRate": 86400
+    "decayRate": 129600
   },
   {
     "name": "tune_engine_stage_3_C",
@@ -2104,7 +2104,7 @@
       "y": 3
     },
     "image": "tune_part.png",
-    "decayRate": 86400
+    "decayRate": 129600
   },
   {
     "name": "tune_engine_stage_4_C",
@@ -2114,7 +2114,7 @@
       "y": 3
     },
     "image": "tune_part.png",
-    "decayRate": 86400
+    "decayRate": 129600
   },
   {
     "name": "tune_engine_stage_1_B",
@@ -2124,7 +2124,7 @@
       "y": 3
     },
     "image": "tune_part.png",
-    "decayRate": 86400
+    "decayRate": 129600
   },
   {
     "name": "tune_engine_stage_2_B",
@@ -2134,7 +2134,7 @@
       "y": 3
     },
     "image": "tune_part.png",
-    "decayRate": 86400
+    "decayRate": 129600
   },
   {
     "name": "tune_engine_stage_3_B",
@@ -2144,7 +2144,7 @@
       "y": 3
     },
     "image": "tune_part.png",
-    "decayRate": 86400
+    "decayRate": 129600
   },
   {
     "name": "tune_engine_stage_4_B",
@@ -2154,7 +2154,7 @@
       "y": 3
     },
     "image": "tune_part.png",
-    "decayRate": 86400
+    "decayRate": 129600
   },
   {
     "name": "tune_suspension_stage_1_X",
@@ -2164,7 +2164,7 @@
       "y": 3
     },
     "image": "tune_part.png",
-    "decayRate": 86400
+    "decayRate": 129600
   },
   {
     "name": "tune_suspension_stage_2_X",
@@ -2174,7 +2174,7 @@
       "y": 3
     },
     "image": "tune_part.png",
-    "decayRate": 86400
+    "decayRate": 129600
   },
   {
     "name": "tune_suspension_stage_3_X",
@@ -2184,7 +2184,7 @@
       "y": 3
     },
     "image": "tune_part.png",
-    "decayRate": 86400
+    "decayRate": 129600
   },
   {
     "name": "tune_suspension_stage_4_X",
@@ -2194,7 +2194,7 @@
       "y": 3
     },
     "image": "tune_part.png",
-    "decayRate": 86400
+    "decayRate": 129600
   },
   {
     "name": "tune_suspension_stage_1_S",
@@ -2204,7 +2204,7 @@
       "y": 3
     },
     "image": "tune_part.png",
-    "decayRate": 86400
+    "decayRate": 129600
   },
   {
     "name": "tune_suspension_stage_2_S",
@@ -2214,7 +2214,7 @@
       "y": 3
     },
     "image": "tune_part.png",
-    "decayRate": 86400
+    "decayRate": 129600
   },
   {
     "name": "tune_suspension_stage_3_S",
@@ -2224,7 +2224,7 @@
       "y": 3
     },
     "image": "tune_part.png",
-    "decayRate": 86400
+    "decayRate": 129600
   },
   {
     "name": "tune_suspension_stage_4_S",
@@ -2234,7 +2234,7 @@
       "y": 3
     },
     "image": "tune_part.png",
-    "decayRate": 86400
+    "decayRate": 129600
   },
   {
     "name": "tune_suspension_stage_1_A+",
@@ -2244,7 +2244,7 @@
       "y": 3
     },
     "image": "tune_part.png",
-    "decayRate": 86400
+    "decayRate": 129600
   },
   {
     "name": "tune_suspension_stage_2_A+",
@@ -2254,7 +2254,7 @@
       "y": 3
     },
     "image": "tune_part.png",
-    "decayRate": 86400
+    "decayRate": 129600
   },
   {
     "name": "tune_suspension_stage_3_A+",
@@ -2264,7 +2264,7 @@
       "y": 3
     },
     "image": "tune_part.png",
-    "decayRate": 86400
+    "decayRate": 129600
   },
   {
     "name": "tune_suspension_stage_4_A+",
@@ -2274,7 +2274,7 @@
       "y": 3
     },
     "image": "tune_part+.png",
-    "decayRate": 86400
+    "decayRate": 129600
   },
   {
     "name": "tune_suspension_stage_1_A",
@@ -2284,7 +2284,7 @@
       "y": 3
     },
     "image": "tune_part.png",
-    "decayRate": 86400
+    "decayRate": 129600
   },
   {
     "name": "tune_suspension_stage_2_A",
@@ -2294,7 +2294,7 @@
       "y": 3
     },
     "image": "tune_part.png",
-    "decayRate": 86400
+    "decayRate": 129600
   },
   {
     "name": "tune_suspension_stage_3_A",
@@ -2304,7 +2304,7 @@
       "y": 3
     },
     "image": "tune_part.png",
-    "decayRate": 86400
+    "decayRate": 129600
   },
   {
     "name": "tune_suspension_stage_4_A",
@@ -2314,7 +2314,7 @@
       "y": 3
     },
     "image": "tune_part.png",
-    "decayRate": 86400
+    "decayRate": 129600
   },
   {
     "name": "tune_suspension_stage_1_D",
@@ -2324,7 +2324,7 @@
       "y": 3
     },
     "image": "tune_part.png",
-    "decayRate": 86400
+    "decayRate": 129600
   },
   {
     "name": "tune_suspension_stage_2_D",
@@ -2334,7 +2334,7 @@
       "y": 3
     },
     "image": "tune_part.png",
-    "decayRate": 86400
+    "decayRate": 129600
   },
   {
     "name": "tune_suspension_stage_3_D",
@@ -2344,7 +2344,7 @@
       "y": 3
     },
     "image": "tune_part.png",
-    "decayRate": 86400
+    "decayRate": 129600
   },
   {
     "name": "tune_suspension_stage_4_D",
@@ -2354,7 +2354,7 @@
       "y": 3
     },
     "image": "tune_part.png",
-    "decayRate": 86400
+    "decayRate": 129600
   },
   {
     "name": "tune_suspension_stage_1_C",
@@ -2364,7 +2364,7 @@
       "y": 3
     },
     "image": "tune_part.png",
-    "decayRate": 86400
+    "decayRate": 129600
   },
   {
     "name": "tune_suspension_stage_2_C",
@@ -2374,7 +2374,7 @@
       "y": 3
     },
     "image": "tune_part.png",
-    "decayRate": 86400
+    "decayRate": 129600
   },
   {
     "name": "tune_suspension_stage_3_C",
@@ -2384,7 +2384,7 @@
       "y": 3
     },
     "image": "tune_part.png",
-    "decayRate": 86400
+    "decayRate": 129600
   },
   {
     "name": "tune_suspension_stage_4_C",
@@ -2394,7 +2394,7 @@
       "y": 3
     },
     "image": "tune_part.png",
-    "decayRate": 86400
+    "decayRate": 129600
   },
   {
     "name": "tune_suspension_stage_1_B",
@@ -2404,7 +2404,7 @@
       "y": 3
     },
     "image": "tune_part.png",
-    "decayRate": 86400
+    "decayRate": 129600
   },
   {
     "name": "tune_suspension_stage_2_B",
@@ -2414,7 +2414,7 @@
       "y": 3
     },
     "image": "tune_part.png",
-    "decayRate": 86400
+    "decayRate": 129600
   },
   {
     "name": "tune_suspension_stage_3_B",
@@ -2424,7 +2424,7 @@
       "y": 3
     },
     "image": "tune_part.png",
-    "decayRate": 86400
+    "decayRate": 129600
   },
   {
     "name": "tune_suspension_stage_4_B",
@@ -2434,7 +2434,7 @@
       "y": 3
     },
     "image": "tune_part.png",
-    "decayRate": 86400
+    "decayRate": 129600
   },
   {
     "name": "tune_turbo_X",
@@ -2444,7 +2444,7 @@
       "y": 3
     },
     "image": "tune_part.png",
-    "decayRate": 86400
+    "decayRate": 129600
   },
   {
     "name": "tune_turbo_S",
@@ -2454,7 +2454,7 @@
       "y": 3
     },
     "image": "tune_part.png",
-    "decayRate": 86400
+    "decayRate": 129600
   },
   {
     "name": "tune_turbo_A+",
@@ -2464,7 +2464,7 @@
       "y": 3
     },
     "image": "tune_part.png",
-    "decayRate": 86400
+    "decayRate": 129600
   },
   {
     "name": "tune_turbo_A",
@@ -2474,7 +2474,7 @@
       "y": 3
     },
     "image": "tune_part.png",
-    "decayRate": 86400
+    "decayRate": 129600
   },
   {
     "name": "tune_turbo_D",
@@ -2484,7 +2484,7 @@
       "y": 3
     },
     "image": "tune_part.png",
-    "decayRate": 86400
+    "decayRate": 129600
   },
   {
     "name": "tune_turbo_C",
@@ -2494,7 +2494,7 @@
       "y": 3
     },
     "image": "tune_part.png",
-    "decayRate": 86400
+    "decayRate": 129600
   },
   {
     "name": "tune_turbo_B",
@@ -2504,7 +2504,7 @@
       "y": 3
     },
     "image": "tune_part.png",
-    "decayRate": 86400
+    "decayRate": 129600
   },
   {
     "name": "sales_ticket",
@@ -2514,7 +2514,7 @@
       "y": 2
     },
     "image": "sales_ticket.png",
-    "decayRate": 10080
+    "decayRate": 2880
   },
   {
     "name": "material_copper",
@@ -2524,7 +2524,7 @@
       "x": 1,
       "y": 1
     },
-    "decayRate": 10080
+    "decayRate": 20160
   },
   {
     "name": "material_glass",
@@ -2534,7 +2534,7 @@
       "x": 1,
       "y": 1
     },
-    "decayRate": 10080
+    "decayRate": 20160
   },
   {
     "name": "material_plastic",
@@ -2544,7 +2544,7 @@
       "x": 1,
       "y": 1
     },
-    "decayRate": 10080
+    "decayRate": 20160
   },
   {
     "name": "material_electronics",
@@ -2554,7 +2554,7 @@
       "x": 1,
       "y": 1
     },
-    "decayRate": 10080
+    "decayRate": 20160
   },
   {
     "name": "material_iron",
@@ -2564,7 +2564,7 @@
       "x": 1,
       "y": 1
     },
-    "decayRate": 10080
+    "decayRate": 20160
   },
   {
     "name": "material_aluminum",
@@ -2574,7 +2574,7 @@
       "x": 1,
       "y": 1
     },
-    "decayRate": 10080
+    "decayRate": 20160
   },
   {
     "name": "material_steel",
@@ -2584,7 +2584,7 @@
       "x": 1,
       "y": 1
     },
-    "decayRate": 10080
+    "decayRate": 20160
   },
   {
     "name": "refined_copper",
@@ -2594,7 +2594,7 @@
       "x": 2,
       "y": 2
     },
-    "decayRate": 30240
+    "decayRate": 64800
   },
   {
     "name": "refined_plastic",
@@ -2604,7 +2604,7 @@
       "x": 2,
       "y": 2
     },
-    "decayRate": 30240
+    "decayRate": 64800
   },
   {
     "name": "refined_iron",
@@ -2614,7 +2614,7 @@
       "x": 2,
       "y": 2
     },
-    "decayRate": 30240
+    "decayRate": 64800
   },
   {
     "name": "refined_aluminum",
@@ -2624,7 +2624,7 @@
       "x": 2,
       "y": 2
     },
-    "decayRate": 30240
+    "decayRate": 64800
   },
   {
     "name": "refined_steel",
@@ -2634,7 +2634,7 @@
       "x": 2,
       "y": 2
     },
-    "decayRate": 30240
+    "decayRate": 64800
   },
   {
     "name": "bolt_cutters",
@@ -2705,7 +2705,7 @@
       "x": 1,
       "y": 4
     },
-    "decayRate": 40320,
+    "decayRate": 86400,
     "useable": true
   },
   {
@@ -2819,7 +2819,7 @@
     "name": "binoculars",
     "label": "Verrekijker",
     "image": "binoculars.png",
-    "decayRate": 43200,
+    "decayRate": 86400,
     "size": {
       "x": 3,
       "y": 2
@@ -2830,7 +2830,7 @@
     "name": "pd_camera",
     "label": "PD Camera",
     "image": "pd_camera.png",
-    "decayRate": 43200,
+    "decayRate": 86400,
     "size": {
       "x": 3,
       "y": 2
@@ -2841,7 +2841,7 @@
     "name": "emergency_button",
     "label": "PD Noodknop",
     "image": "emergency_button.png",
-    "decayRate": 43200,
+    "decayRate": 86400,
     "size": {
       "x": 2,
       "y": 2
@@ -2861,7 +2861,7 @@
     "name": "hand_cuffs",
     "label": "Handboeien",
     "image": "hand_cuffs.png",
-    "decayRate": 43200,
+    "decayRate": 20160,
     "size": {
       "x": 2,
       "y": 2
@@ -3042,7 +3042,7 @@
     "name": "gold_nugget",
     "label": "Stukje Goud",
     "image": "gold_nugget.png",
-    "decayRate": 14400,
+    "decayRate": 10080,
     "size": {
       "x": 2,
       "y": 2
@@ -3070,7 +3070,7 @@
     "name": "farming_bucket",
     "label": "Emmer",
     "image": "farming_bucket.png",
-    "decayRate": 43200,
+    "decayRate": 129600,
     "useable": true,
     "size": {
       "x": 3,
@@ -3197,7 +3197,7 @@
     "name": "upnatom_soda",
     "label": "Up-n-Atom Soda",
     "image": "upnatom_soda.png",
-    "decayRate": 180,
+    "decayRate": 300,
     "useable": true,
     "size": {
       "x": 1,
@@ -3208,7 +3208,7 @@
     "name": "upnatom_milkshake",
     "label": "Up-n-Atom Milkshake",
     "image": "upnatom_milkshake.png",
-    "decayRate": 180,
+    "decayRate": 300,
     "useable": true,
     "size": {
       "x": 1,
@@ -3219,7 +3219,7 @@
     "name": "upnatom_icecream",
     "label": "Up-n-Atom Ijsje",
     "image": "upnatom_icecream.png",
-    "decayRate": 180,
+    "decayRate": 300,
     "useable": true,
     "size": {
       "x": 1,
@@ -3230,7 +3230,7 @@
     "name": "upnatom_fries",
     "label": "Up-n-Atom Fries",
     "image": "upnatom_fries.png",
-    "decayRate": 180,
+    "decayRate": 300,
     "useable": true,
     "size": {
       "x": 1,
@@ -3241,7 +3241,7 @@
     "name": "upnatom_burger",
     "label": "Up-n-Atom Burger",
     "image": "upnatom_burger.png",
-    "decayRate": 180,
+    "decayRate": 300,
     "useable": true,
     "size": {
       "x": 1,
@@ -3252,7 +3252,7 @@
     "name": "upnatom_cheeseburger",
     "label": "Up-n-Atom Cheeseburger",
     "image": "upnatom_cheeseburger.png",
-    "decayRate": 180,
+    "decayRate": 300,
     "useable": true,
     "size": {
       "x": 1,
@@ -3284,7 +3284,7 @@
     "label": "Reparatie Set",
     "image": "repair_kit.png",
     "useable": true,
-    "decayRate": 7200,
+    "decayRate": 43200,
     "size": {
       "x": 3,
       "y": 2

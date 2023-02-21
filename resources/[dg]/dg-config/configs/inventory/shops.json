@@ -60,6 +60,21 @@
         "name": "bandage",
         "amount": 500,
         "price": 15
+      },
+      {
+        "name": "beer",
+        "amount": 500,
+        "price": 25
+      },
+      {
+        "name": "vodka",
+        "amount": 500,
+        "price": 30
+      },
+      {
+        "name": "mojito",
+        "amount": 500,
+        "price": 30
       }
     ],
     "hardware": [
