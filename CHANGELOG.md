@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Sloten op deuren/poorten van Low Santos toegevoegd
 - Log toegevoegd wanneer speler server leavet terwijl hij dood/bewusteloos is
+- Justice on-duty zones added
 
 ### Changed
 
@@ -21,6 +22,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Ambu voertuigen staan nu met juiste spawnnaam in config
 - Fix sommige walkstyles met invalid icon waardoor menu niet geladen werd
 - Nu actually de metadata van salestickets hiden
+- Swapped names for jobs in justice app
 
 ## [1.0.3]
 

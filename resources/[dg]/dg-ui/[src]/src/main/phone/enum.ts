@@ -15,6 +15,6 @@ export enum WeatherIcons {
   'HALLOWEEN' = 'cloud-hail-mixed',
 }
 export enum JusticeNames {
-  'judge' = 'Advocaten',
-  'lawyer' = 'Rechters',
+  'judge' = 'Rechters',
+  'lawyer' = 'Advocaten',
 }

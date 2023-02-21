@@ -1,6 +1,8 @@
 [
   {
-    "jobs": ["police"],
+    "jobs": [
+      "police"
+    ],
     "zone": {
       "vector": {
         "x": 441.82,
@@ -17,7 +19,9 @@
     }
   },
   {
-    "jobs": ["ambulance"],
+    "jobs": [
+      "ambulance"
+    ],
     "zone": {
       "vector": {
         "x": 311.85,
@@ -30,6 +34,46 @@
         "heading": 339,
         "minZ": 43.03,
         "maxZ": 43.28
+      }
+    }
+  },
+  {
+    "jobs": [
+      "lawyer",
+      "judge"
+    ],
+    "zone": {
+      "vector": {
+        "x": -551.04,
+        "y": -202.54,
+        "z": 38.23
+      },
+      "width": 0.7,
+      "length": 0.4,
+      "data": {
+        "heading": 55,
+        "minZ": 38.08,
+        "maxZ": 38.68
+      }
+    }
+  },
+  {
+    "jobs": [
+      "lawyer",
+      "judge"
+    ],
+    "zone": {
+      "vector": {
+        "x": -543.47,
+        "y": -198.12,
+        "z": 38.23
+      },
+      "width": 0.7,
+      "length": 0.4,
+      "data": {
+        "heading": 55,
+        "minZ": 38.08,
+        "maxZ": 38.68
       }
     }
   }
