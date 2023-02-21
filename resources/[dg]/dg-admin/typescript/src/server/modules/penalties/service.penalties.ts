@@ -37,7 +37,7 @@ const penalisePlayer = async (
         ...metadata,
       },
       `Failed to register ${type} for ${targetName}(${target})`,
-      source < 1 ? source : undefined
+      source >= 1 ? source : undefined
     );
     penaltyLogger.error(
       `Failed to register ${type} for ${targetName}(${target}) given by ${
@@ -61,7 +61,7 @@ const penalisePlayer = async (
       ...metadata,
     },
     `${targetName}(${target}) received a ${type} for ${reasons.join(' | ')}`,
-    source < 1 ? source : undefined
+    source >= 1 ? source : undefined
   );
   penaltyLogger.info(
     `${targetName}(${target}) received a ${type} by ${Util.getName(

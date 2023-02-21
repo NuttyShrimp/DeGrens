@@ -16,34 +16,34 @@ class Util extends UtilShared {
 
   Log(type: string, data: { [k: string]: any }, message: string, src?: number, isDevImportant = false) {
     try {
-    if (src) {
-      const ply = DGCore.Functions.GetPlayer(src);
-      if (ply) {
-        data = {
-          ...data,
-          plyInfo: {
-            cid: ply.PlayerData.citizenid,
-            serverId: ply.PlayerData.source,
-            name: ply.PlayerData.name,
-            steamId: ply.PlayerData.steamid,
-          },
-        };
-      } else {
-        data = {
-          ...data,
-          plyInfo: {
-            name: this.getName(src),
-            steamId: Player(src).state.steamId,
-            serverId: src,
-          },
-        };
+      if (src && src > 0) {
+        const ply = DGCore.Functions.GetPlayer(src);
+        if (ply) {
+          data = {
+            ...data,
+            plyInfo: {
+              cid: ply.PlayerData.citizenid,
+              serverId: ply.PlayerData.source,
+              name: ply.PlayerData.name,
+              steamId: ply.PlayerData.steamid,
+            },
+          };
+        } else {
+          data = {
+            ...data,
+            plyInfo: {
+              name: this.getName(src),
+              steamId: Player(src).state.steamId,
+              serverId: src,
+            },
+          };
+        }
       }
-    }
-    data.resource = GetCurrentResourceName();
-    if (data.resource === 'ts-shared') {
-      data.resource = GetInvokingResource();
-    }
-    global.exports['dg-logs'].createGraylogEntry(type, data, message, isDevImportant);
+      data.resource = GetCurrentResourceName();
+      if (data.resource === 'ts-shared') {
+        data.resource = GetInvokingResource();
+      }
+      global.exports['dg-logs'].createGraylogEntry(type, data, message, isDevImportant);
     } catch (e) {
       console.error(e);
       console.log("Failed to log error to graylog", type, data, message, src, isDevImportant)
