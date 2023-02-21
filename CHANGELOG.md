@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+
+### Changed
+
+
+### Fixed
+
+- Ambu voertuigen staan nu met juiste spawnnaam in config
+- Fix sommige walkstyles met invalid icon waardoor menu niet geladen werd
+
+
 ## [1.0.3]
 
 ### Added
@@ -44,11 +56,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fix paycheck receive notificatie
 - Admins zien nu wel blipnamen van spelers die al in server waren voordat ze zelf joinede
 - Logs die gebruik maaktte van export veranderd naar dgx function
-- Ambu voertuigen staan nu met juiste spawnnaam in config
 - Iedereen kan nu weer kijken hoe hun serviceparts ongeveer staan
 - Je stapt niet langer soms uit alsje een voertuig lockpickt
 - Maintenance fees scheduling is nu werkend
-- Fix sommige walkstyles met invalid icon waardoor menu niet geladen werd
 
 ## [1.0.2]
 
