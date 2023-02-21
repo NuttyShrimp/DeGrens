@@ -15,6 +15,7 @@ class Util extends UtilShared {
   };
 
   Log(type: string, data: { [k: string]: any }, message: string, src?: number, isDevImportant = false) {
+    try {
     if (src) {
       const ply = DGCore.Functions.GetPlayer(src);
       if (ply) {
@@ -43,6 +44,10 @@ class Util extends UtilShared {
       data.resource = GetInvokingResource();
     }
     global.exports['dg-logs'].createGraylogEntry(type, data, message, isDevImportant);
+    } catch (e) {
+      console.error(e);
+      console.log("Failed to log error to graylog", type, data, message, src, isDevImportant)
+    }
   }
 
   getPlyCoords(plyId: number) {
