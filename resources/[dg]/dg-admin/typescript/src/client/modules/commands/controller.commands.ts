@@ -214,3 +214,10 @@ Events.onNet('admin:commands:materialDebug', (toggle: boolean) => {
     }
   }, 10);
 });
+
+Events.onNet('admin:commands:kickFromVehicle', () => {
+  const ped = PlayerPedId();
+  const vehicle = GetVehiclePedIsIn(ped, false);
+  if (!vehicle || !DoesEntityExist(vehicle)) return;
+  TaskLeaveVehicle(ped, vehicle, 16);
+});
