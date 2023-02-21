@@ -262,10 +262,9 @@ Peek.addGlobalEntry('vehicle', {
         if (!entity) return;
         openServiceStatusOverview(entity);
       },
-      // TODO: add crim zones someday
       canInteract: ent => {
         if (!ent || !NetworkGetEntityIsNetworked(ent)) return false;
-        return isInRepairZone() && isCloseToHood(ent, 2, true);
+        return isCloseToHood(ent, 2, true);
       },
     },
     {

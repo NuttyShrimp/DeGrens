@@ -25,6 +25,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Logs van SECRET containers aangepast
 - Peek entries worden standaard gedisabled als je in een voertuig zit
 - Staff kan nu zoeken op characternaam in adminmenu
+- Serviceparts gaan minder snel kapot
 
 ### Fixed
 
@@ -37,6 +38,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fix paycheck receive notificatie
 - Admins zien nu wel blipnamen van spelers die al in server waren voordat ze zelf joinede
 - Logs die gebruik maaktte van export veranderd naar dgx function
+- Iedereen kan nu weer kijken hoe hun serviceparts ongeveer staan
 
 ## [1.0.2]
 

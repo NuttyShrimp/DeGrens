@@ -6,6 +6,7 @@ import { getPerformanceUpgrades } from '../upgrades/service.upgrades';
 
 import {
   MINIMUM_DAMAGE_FOR_GUARANTEED_STALL,
+  MINIMUM_DAMAGE_FOR_STALL,
   degradationValues,
   handlingOverrideFunctions,
   partNames,
@@ -158,7 +159,7 @@ export const startStatusThread = async (vehicle: number) => {
         if (avgBrakePressure <= 0) {
           multipliers.brake = 1;
         } else {
-          const brakeDecrease = (avgBrakePressure * multipliers.brake) / 10;
+          const brakeDecrease = (avgBrakePressure * multipliers.brake) / 20;
           vehicleService.info.brakes = Math.max(vehicleService.info.brakes - brakeDecrease, 0);
           multipliers.brake += 0.1;
         }
@@ -167,7 +168,7 @@ export const startStatusThread = async (vehicle: number) => {
       // Suspension
       const avgSuspCompress = Util.average(suspCompress);
       if (avgSuspCompress > 0.15) {
-        const suspDecrease = avgSuspCompress / 5;
+        const suspDecrease = avgSuspCompress / 10;
         vehicleService.info.suspension = Math.max(vehicleService.info.suspension - suspDecrease, 0);
       }
 
@@ -181,11 +182,11 @@ export const startStatusThread = async (vehicle: number) => {
       vehicleService.state.engine = newEngine;
 
       if (bodyDelta > 0) {
-        const axleDecrease = bodyDelta / 3;
+        const axleDecrease = bodyDelta / 6;
         vehicleService.info.axle = Math.max(vehicleService.info.axle - axleDecrease, 0);
       }
       if (engineDelta > 0) {
-        const engineDecrease = engineDelta / 3;
+        const engineDecrease = engineDelta / 6;
         vehicleService.info.engine = Math.max(vehicleService.info.engine - engineDecrease, 0);
       }
     }, 100),
@@ -256,6 +257,13 @@ export const openServiceStatusOverview = async (veh: number) => {
           title: info.name,
           description: `Class: ${info.class}`,
         },
+      ]
+    : [];
+
+  // Only show perf tunes to mechanic
+  if (plyShop) {
+    infoMenu.push(
+      ...[
         {
           title: 'Brakes',
           description: (upgrades?.brakes ?? -1) === -1 ? 'Basis' : `Level ${upgrades!.brakes + 1}`,
@@ -277,7 +285,8 @@ export const openServiceStatusOverview = async (veh: number) => {
           description: (upgrades?.suspension ?? -1) === -1 ? 'Basis' : `Level ${upgrades!.suspension + 1}`,
         },
       ]
-    : [];
+    );
+  }
 
   const menu: ContextMenu.Entry[] = [
     {
@@ -346,10 +355,11 @@ export const tryToStallVehicle = (vehicle: number, newHealth: number, oldHealth:
   if (!isDriver()) return;
 
   const healthDecrease = oldHealth - newHealth;
-  if (healthDecrease < 0) return;
+  if (healthDecrease < MINIMUM_DAMAGE_FOR_STALL) return;
 
   const chance =
-    Math.min(healthDecrease, MINIMUM_DAMAGE_FOR_GUARANTEED_STALL) * (100 / MINIMUM_DAMAGE_FOR_GUARANTEED_STALL);
+    (Math.min(healthDecrease, MINIMUM_DAMAGE_FOR_GUARANTEED_STALL) - MINIMUM_DAMAGE_FOR_STALL) *
+    (100 / (MINIMUM_DAMAGE_FOR_GUARANTEED_STALL - MINIMUM_DAMAGE_FOR_STALL));
   if (Util.getRndInteger(0, 101) > chance) return;
 
   const entState = Entity(vehicle).state;
@@ -374,13 +384,6 @@ export const tryToStallVehicle = (vehicle: number, newHealth: number, oldHealth:
     'DLC_PILOT_ENGINE_FAILURE_SOUNDS',
     vehicle
   );
-
-  // affect service on stall
-  // if (vehicleService.vehicle === vehicle && vehicleService.info) {
-  //   for (const [k, v] of Object.entries(vehicleService.info) as [keyof Service.Status, number][]) {
-  //     vehicleService.info[k] = v - 100;
-  //   }
-  // }
 
   if (amountOfStalls >= 4) {
     SetVehicleEngineHealth(vehicle, 0);
