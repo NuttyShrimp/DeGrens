@@ -4,7 +4,7 @@ import accountManager from 'modules/bank/classes/AccountManager';
 
 import debtManager from '../classes/debtmanager';
 import { debtLogger, getDaysUntilDue } from '../helpers/debts';
-import { removeMaintenanceFees } from '../helpers/maintenanceFees';
+import { removeMaintenanceFees, scheduleMaintenanceFees } from '../helpers/maintenanceFees';
 
 global.exports(
   'giveFine',
@@ -21,7 +21,20 @@ global.exports(
     debtManager.addDebt(cid, target_account, fine, reason, origin_name, given_by, cbEvt, payTerm);
   }
 );
+global.exports(
+  'addMaintentenanceFee',
+  (cid: number, target_account: string, fine: number, reason: string, origin_name: string) => {
+    debtManager.addDebt(cid, target_account, fine, reason, origin_name, undefined, undefined, undefined, 'maintenance');
+  }
+);
 global.exports('removeMaintenanceFees', (src: number) => removeMaintenanceFees(src));
+global.asyncExports('removeDebt', async (debtId: number | number[]) => {
+  if (!Array.isArray(debtId)) {
+    debtId = [debtId];
+  }
+  await debtManager.removeDebts(debtId);
+});
+global.exports('getMaintenanceFee', (id: string) => debtManager.getMaintenanceFee(id));
 
 RPC.register('financials:server:debts:get', src => {
   debtLogger.silly(`getDebts | src: ${src}`);
@@ -54,3 +67,11 @@ RPC.register('financials:server:debts:pay', async (src, debtId: number, percenta
   }
   return debtManager.payDebt(src, debtId, percentage);
 });
+
+RegisterCommand(
+  'financials:scheduleMFees',
+  () => {
+    scheduleMaintenanceFees();
+  },
+  true
+);

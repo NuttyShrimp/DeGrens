@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Skip locatie optie voor postop
 - Admin neem screenshot optie
 - Je ziet nu info van het huidige voertuig in PDM
+- Vehicle maintenance fees
 
 ### Changed
 
@@ -44,6 +45,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Logs die gebruik maaktte van export veranderd naar dgx function
 - Iedereen kan nu weer kijken hoe hun serviceparts ongeveer staan
 - Je stapt niet langer soms uit alsje een voertuig lockpickt
+- Maintenance fees scheduling is nu werkend
 
 ## [1.0.2]
 

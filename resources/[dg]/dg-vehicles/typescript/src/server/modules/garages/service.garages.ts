@@ -7,6 +7,7 @@ import {
   getPlayerSharedVehicles,
   getPlayerVehicleInfo,
   getVehicleLog,
+  hasVehicleMaintenanceFees,
   insertVehicleParkLog,
   insertVehicleStatus,
   setVehicleGarage,
@@ -264,6 +265,12 @@ export const takeVehicleOutGarage = async (src: number, vin: string): Promise<nu
       `${cid} tried to retrieve vehicle ${vin} from garage ${garageInfo.name} but didn't met the requirements`,
       src
     );
+    return;
+  }
+
+  const hasMaintenanceFees = await hasVehicleMaintenanceFees(vehicleInfo.vin);
+  if (hasMaintenanceFees) {
+    Notifications.add(src, 'Je moet eerst je maintenance fees betalen!', 'error');
     return;
   }
 

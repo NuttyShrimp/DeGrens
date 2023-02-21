@@ -400,3 +400,8 @@ export const deleteOwnedVehicle = async (vin: string) => {
     [vin]
   );
 };
+
+export const hasVehicleMaintenanceFees = async (vin: string) => {
+  const debtCount = await SQL.query('SELECT COUNT(*) as count FROM debts WHERE reason = ?', [`veh_${vin}`]);
+  return (debtCount?.count !== 0) ?? false;
+};
