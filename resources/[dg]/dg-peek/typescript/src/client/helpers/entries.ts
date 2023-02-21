@@ -33,6 +33,9 @@ export const canEntryBeEnabled = async (entry: PeekOption, entity: number): Prom
     const items = Inventory.getCachedItemNames();
     if (!requiredItems.every(i => items.includes(i))) return;
   }
+  if (!entry.allowInVehicle) {
+    if (GetVehiclePedIsUsing(PlayerPedId())) return;
+  }
   if (!entry?._metadata?.state) {
     if (!entry._metadata) entry._metadata = {};
     entry._metadata.state = {};

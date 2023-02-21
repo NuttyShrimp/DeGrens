@@ -23,6 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Ambulance checkin kan niet meer gespammed worden
 - Alle payouts en decayrates aangepast
 - Logs van SECRET containers aangepast
+- Peek entries worden standaard gedisabled als je in een voertuig zit
 
 ### Fixed
 
