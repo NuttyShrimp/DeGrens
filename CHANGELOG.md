@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Tweak nog wat inventory logger prints
 - Voertuig prijzen voor klasse B,C,D aangepast
+- Vereiste rechten van resetplayerprops veranderd naar staff
 
 ### Fixed
 
@@ -25,7 +26,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Nu actually de metadata van salestickets hiden
 - Swapped names for jobs in justice app
 - Je moet je UI niet meer opnieuw opstarten na het accepteren van een phone notificatie / UI focus verdwijnt niet als er nog interactive apps openstaan
-- 
+- Admin names van personen in een voertuig overlappen niet meer
 
 ## [1.0.3]
 

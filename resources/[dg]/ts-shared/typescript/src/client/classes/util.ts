@@ -233,10 +233,10 @@ class Util extends UtilShared {
     return ped === GetPlayerPed(owner) ? GetPlayerServerId(owner) : 0;
   }
 
-  getCurrentVehicleInfo = () => {
-    const ped = PlayerPedId();
-    const vehicle = GetVehiclePedIsIn(ped, false);
-    if (vehicle === 0 || !DoesEntityExist(vehicle)) return;
+  getSeatPedIsIn = (vehicle: number, ped?: number) => {
+    if (!ped) {
+      ped = PlayerPedId();
+    }
     const model = GetEntityModel(vehicle);
     const numSeats = GetVehicleModelNumberOfSeats(model);
     let seat = -1;
@@ -245,6 +245,14 @@ class Util extends UtilShared {
       seat = i;
       break;
     }
+    return seat;
+  };
+
+  getCurrentVehicleInfo = () => {
+    const ped = PlayerPedId();
+    const vehicle = GetVehiclePedIsIn(ped, false);
+    if (vehicle === 0 || !DoesEntityExist(vehicle)) return;
+    const seat = this.getSeatPedIsIn(vehicle, ped);
     return {
       vehicle,
       seat,

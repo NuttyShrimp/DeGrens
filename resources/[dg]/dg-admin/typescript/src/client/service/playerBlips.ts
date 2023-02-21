@@ -19,8 +19,16 @@ export const enableBlips = () => {
       if (ply === plyId) return;
       const isTalking = !!MumbleIsPlayerTalking(ply);
       const ped = GetPlayerPed(ply);
-      const coords = Util.getEntityCoords(ped);
-      coords.z += 1.0;
+      const vehicle = GetVehiclePedIsIn(ped, false);
+      let coords: Vec3;
+      if (vehicle && DoesEntityExist(vehicle)) {
+        coords = Util.getEntityCoords(vehicle);
+        const seat = Util.getSeatPedIsIn(vehicle, ped);
+        coords.z += (seat + 2) * 0.6;
+      } else {
+        coords = Util.getEntityCoords(ped);
+        coords.z += 1.0;
+      }
       const serverId = GetPlayerServerId(ply);
       drawText3d(`${isTalking ? '~g~' : ''}${getPlayerName(serverId)}(${serverId})`, coords, 0.4);
     });
