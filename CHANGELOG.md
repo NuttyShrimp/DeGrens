@@ -10,9 +10,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Sloten op deuren/poorten van Low Santos toegevoegd
+- Log toegevoegd wanneer speler server leavet terwijl hij dood/bewusteloos is
 
 ### Changed
 
+- Tweak nog wat inventory logger prints
 
 ### Fixed
 

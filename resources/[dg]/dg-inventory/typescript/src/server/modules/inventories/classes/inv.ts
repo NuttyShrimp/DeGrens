@@ -72,7 +72,7 @@ export class Inv {
       }
     }
 
-    this.logger.info(`Inventory ${this.id} loaded`);
+    this.logger.debug(`Inventory ${this.id} loaded`);
     this._isLoaded = true;
   };
 
