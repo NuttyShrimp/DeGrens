@@ -26,6 +26,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Peek entries worden standaard gedisabled als je in een voertuig zit
 - Staff kan nu zoeken op characternaam in adminmenu
 - Serviceparts gaan minder snel kapot
+- Je stallet minder snel met een voertuig
+- Er spawnen geen random brandweerwagens meer
 
 ### Fixed
 
