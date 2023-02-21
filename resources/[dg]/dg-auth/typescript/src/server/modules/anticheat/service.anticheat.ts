@@ -116,8 +116,8 @@ export const validateWeaponInfo = (src: number, info: AntiCheat.WeaponInfo) => {
 
   const svDamageModifier = GetPlayerWeaponDamageModifier(String(src));
 
-  // if modifier gotten from client is not 1, insta ban
-  if (info.damageModifier !== 1) {
+  // if modifier gotten from client is not 1 or 0, insta ban
+  if (info.damageModifier !== 1 && info.damageModifier !== 0) {
     Admin.ACBan(src, 'Weapon damage modifier modification (client)', {
       damageModifier: svDamageModifier,
       weaponInfo: info,
