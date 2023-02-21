@@ -23,6 +23,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fix sommige walkstyles met invalid icon waardoor menu niet geladen werd
 - Nu actually de metadata van salestickets hiden
 - Swapped names for jobs in justice app
+- Je moet je UI niet meer opnieuw opstarten na het accepteren van een phone notificatie / UI focus verdwijnt niet als er nog interactive apps openstaan
+- 
 
 ## [1.0.3]
 

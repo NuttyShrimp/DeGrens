@@ -1,4 +1,5 @@
 import baseBackground from '@assets/phone/background.png';
+import { closeApplication } from '@src/components/appwrapper';
 import { useMainStore } from '@src/lib/stores/useMainStore';
 import { useVisibleStore } from '@src/lib/stores/useVisibleStore';
 
@@ -20,6 +21,10 @@ export const hidePhone = () => {
   });
   setTimeout(() => {
     if (state.hasNotifications) return;
+    // making sure it is closed
+    usePhoneStore.setState({
+      animating: 'closed',
+    });
     useVisibleStore.getState().toggleApp('phone', false);
   }, 500);
   nuiAction('phone/close', { inCamera: state.inCamera });
@@ -227,10 +232,10 @@ export const removeNotification = (id: string) => {
   });
 
   if (newList.length === 0) {
-    usePhoneStore.setState(s => ({
-      animating: s.animating === 'peek' ? 'closed' : s.animating,
+    usePhoneStore.setState({
       hasNotifications: false,
-    }));
+    });
+    closeApplication('phone');
   }
 };
 

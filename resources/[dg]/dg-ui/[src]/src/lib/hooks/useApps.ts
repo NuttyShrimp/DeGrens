@@ -1,9 +1,11 @@
 import { useCallback } from 'react';
 
 import { useMainStore } from '../stores/useMainStore';
+import { useVisibleStore } from '../stores/useVisibleStore';
 
 export const useApps = () => {
-  const [currentApp, apps, setApps] = useMainStore(s => [s.currentApp, s.apps, s.setApps]);
+  const [apps, setApps] = useMainStore(s => [s.apps, s.setApps]);
+  const visibleApps = useVisibleStore(s => s.visibleApps);
 
   const loadApps = useCallback(async () => {
     const components: ConfigObject[] = [];
@@ -34,16 +36,26 @@ export const useApps = () => {
     [apps]
   );
 
-  const getCurrentAppType = useCallback(() => {
-    const activeApp = apps.find(a => a.name !== 'cli' && a.name === currentApp);
-    if (!activeApp) return;
-    const appType = activeApp.type instanceof Function ? activeApp.type() : activeApp.type;
-    return appType;
-  }, [apps, currentApp]);
+  const isInteractiveAppOpen = useCallback(
+    (skip?: string): boolean => {
+      const hasInteractiveAppVisible = visibleApps.findIndex(s => {
+        if (s === 'cli' || (skip && s === skip)) {
+          return false;
+        }
+        const appConfig = apps.find(a => a.name === s);
+        if (!appConfig) return;
+        const appType = appConfig.type instanceof Function ? appConfig.type() : appConfig.type;
+        console.log(s, appType);
+        return appType === 'interactive';
+      });
+      return hasInteractiveAppVisible > -1;
+    },
+    [apps, visibleApps]
+  );
 
   return {
     loadApps,
     getApp,
-    getCurrentAppType,
+    isInteractiveAppOpen,
   };
 };

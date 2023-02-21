@@ -14,11 +14,11 @@ import config from './_config';
 import './styles/peek.scss';
 
 const Component: AppFunction = props => {
-  const { getCurrentAppType } = useApps();
+  const { isInteractiveAppOpen } = useApps();
   const updateStore = usePeekStore(s => s.updateStore);
 
   const showPeek = useCallback(() => {
-    if (getCurrentAppType() === 'interactive') {
+    if (isInteractiveAppOpen()) {
       nuiAction('peek:preventShow');
       return;
     }
@@ -29,7 +29,7 @@ const Component: AppFunction = props => {
       entries: isDevel() ? devData.peekEntries : [],
     });
     props.showApp();
-  }, [getCurrentAppType, props.showApp]);
+  }, [isInteractiveAppOpen, props.showApp]);
 
   const hidePeek = useCallback(() => {
     props.hideApp();

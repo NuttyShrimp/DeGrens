@@ -17,7 +17,6 @@ closePhone = function(state, skipUI)
     closeApplication('phone')
   end
   disablePauseMenu()
-  SetUIFocusCustom(false, false)
   setState('state', state or 0)
   exports['dg-lib']:shouldExecuteKeyMaps(state and state == 0 or true)
 end
