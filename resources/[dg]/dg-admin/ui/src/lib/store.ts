@@ -41,9 +41,17 @@ export const store = createStore<State>({
     },
     getPlayers: state => (filter: string) => {
       if (filter === '') return state.players;
-      return state.players.filter(
-        a => a.name.includes(filter) || String(a.cid).includes(filter) || String(a.serverId).includes(filter)
-      );
+      return state.players.filter(a => {
+        for (const key in a) {
+          if (
+            String(a[key as keyof Player])
+              .toLowerCase()
+              .includes(filter)
+          )
+            return true;
+        }
+        return false;
+      });
     },
   },
   mutations: {

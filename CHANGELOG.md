@@ -24,6 +24,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Alle payouts en decayrates aangepast
 - Logs van SECRET containers aangepast
 - Peek entries worden standaard gedisabled als je in een voertuig zit
+- Staff kan nu zoeken op characternaam in adminmenu
 
 ### Fixed
 
