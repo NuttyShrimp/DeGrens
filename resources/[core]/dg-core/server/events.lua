@@ -6,7 +6,7 @@ AddEventHandler('playerDropped', function(reason)
     local cid = Player.PlayerData.citizenid
 		TriggerEvent('qb-log:server:CreateLog', 'joinleave', 'Dropped', 'red', '**' .. GetPlayerName(src) .. '** (' .. Player.PlayerData.license .. ') left..')
 		Player.Functions.Save()
-		TriggerEvent('DGCore:server:playerUnloaded', src, cid)
+		TriggerEvent('DGCore:server:playerUnloaded', src, cid, Player.PlayerData)
     exports['dg-chars']:addDroppedPlayer(cid)
 		DGCore.Players[src] = nil
     DGCore.cidToPlyId[cid] = nil

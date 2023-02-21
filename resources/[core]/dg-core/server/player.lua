@@ -124,9 +124,10 @@ end
 
 function DGCore.Player.Logout(source)
   local src = source
-  local citizenid = DGCore.Functions.GetPlayer(src).PlayerData.citizenid
+  local playerData =  DGCore.Functions.GetPlayer(src).PlayerData
+  local citizenid = playerData.citizenid
   TriggerClientEvent('DGCore:client:playerUnloaded', src, citizenid)
-  TriggerEvent('DGCore:server:playerUnloaded', src, citizenid)
+  TriggerEvent('DGCore:server:playerUnloaded', src, citizenid, playerData)
   DGCore.Player.Save(src)
   Player(src).state:set('isLoggedIn', false, true)
   Player(src).state:set('cid', nil, true)
