@@ -97,6 +97,7 @@ declare interface Config {
   };
   debts: {
     maintenance: {
+      daysBetween: number;
       hour: number;
       minute: number;
     };

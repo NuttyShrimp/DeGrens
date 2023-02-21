@@ -35,4 +35,9 @@ declare namespace DB {
     crypto_name: string;
     amount: number;
   }
+
+  interface IMaintenanceLog {
+    id: number;
+    date: number;
+  }
 }

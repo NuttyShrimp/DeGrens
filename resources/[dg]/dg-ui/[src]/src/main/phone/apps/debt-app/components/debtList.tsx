@@ -9,11 +9,12 @@ import { showFormModal } from '@src/main/phone/lib';
 
 import { useDebtAppStore } from '../stores/useDebtAppStore';
 
-import { PayModal } from './modals';
+import { MaintenanceEntry } from './maintenanceEntries';
+import { PayPercentageModal } from './modals';
 
 const DebtPaper: FC<{ debt: Phone.Debt.Debt }> = ({ debt }) => {
   const openPayModal = () => {
-    showFormModal(<PayModal debt={debt} />);
+    showFormModal(<PayPercentageModal debt={debt} />);
   };
   return (
     <Paper
@@ -75,7 +76,7 @@ export const DebtList: FC<{}> = () => {
       {list
         .filter(entry => entry.type === 'debt')
         .map(entry => (
-          <DebtPaper key={entry.id} debt={entry} />
+          <MaintenanceEntry debt={entry} key={entry.id} />
         ))}
       <Typography variant='subtitle1'>Maintenance Fees</Typography>
       {list

@@ -29,6 +29,10 @@ class DebtManager extends Util.Singleton<DebtManager>() {
   public getDebtById(id: number): Debts.Debt | undefined {
     return this.debts.find(debt => debt.id === id);
   }
+  
+  public getMaintenanceFee(id: string): Debts.Debt | undefined {
+    return this.debts.find(debt => debt.type === 'maintenance' && debt.reason === id)
+  }
 
   private replaceDebt(debt: Debts.Debt) {
     this.debts = this.debts.map(d => (d.id === debt.id ? debt : d));
@@ -152,6 +156,11 @@ class DebtManager extends Util.Singleton<DebtManager>() {
       debtLogger.warn(`Failed to pay debt | id: ${id} | cid: ${cid}`);
       Util.Log('financials:debt:pay:failed', { id, cid, debt }, `Failed to pay debt, no default account found`);
       return false;
+    }
+
+    // Maintenance checks should always be payed of fully
+    if (debt.type === 'maintenance') {
+      percentage = 100;
     }
 
     const amount = (debt.debt - debt.payed) * (percentage / 100);
