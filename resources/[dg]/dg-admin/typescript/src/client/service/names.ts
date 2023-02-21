@@ -1,6 +1,10 @@
 import { Events } from '@dgx/client';
 
-const plyNames: Record<number, string> = {};
+let plyNames: Record<number, string> = {};
+
+Events.onNet('admin:names:init', (names: Record<number, string>) => {
+  plyNames = names;
+});
 
 Events.onNet('admin:names:set', (serverId: number, name: string) => {
   plyNames[serverId] = name;
