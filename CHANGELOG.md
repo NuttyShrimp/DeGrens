@@ -28,6 +28,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Armor restored nu deftig als je terug in de stad komt
 - Je kan nu zelf ervoor zorgen dat iemand stop met je te carryen
 - Andere mensen kunnen nu een actieve houserobbery betreden
+- Fix paycheck receive notificatie
 
 ## [1.0.2]
 
