@@ -262,7 +262,7 @@ class Util extends UtilShared {
     on('DGCore:server:playerLoaded', handler);
   };
 
-  public onPlayerUnloaded = (handler: (plyId: number, cid: number) => void) => {
+  public onPlayerUnloaded = (handler: (plyId: number, cid: number, playerData: PlayerData) => void) => {
     on('DGCore:server:playerUnloaded', handler);
   };
 
