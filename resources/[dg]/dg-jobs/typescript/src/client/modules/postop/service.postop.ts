@@ -40,7 +40,27 @@ export const registerPostOPStartPeekOptions = (types: PostOP.Config['types']) =>
     },
   }));
   Peek.addFlagEntry('isPostOPSignin', {
-    options,
+    options: [
+      ...options,
+      {
+        icon: 'fas fa-forward',
+        label: 'Volgende locatie',
+        action: (_, vehicle) => {
+          if (!vehicle) return;
+          UI.openApplication('contextmenu', [
+            {
+              title: 'Wil je zeker dat je deze naar de volgende locatie wil gaan?',
+              submenu: [
+                {
+                  title: 'Ben je echt zeker?',
+                  callbackURL: 'postop/skip',
+                },
+              ],
+            },
+          ] satisfies ContextMenu.Entry[]);
+        },
+      },
+    ],
     distance: 2.0,
   });
 };

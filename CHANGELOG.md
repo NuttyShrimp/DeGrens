@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Houserobbery timeout per persoon geadd
 - Admin kick from vehicle optie toegevoegd
+- Skip locatie optie voor postop
 
 ### Changed
 

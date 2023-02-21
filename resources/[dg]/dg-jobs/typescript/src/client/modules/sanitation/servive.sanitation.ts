@@ -56,7 +56,17 @@ export const setAssignedVehicle = (netId: typeof assignedVehicle) => {
         label: 'Volgende locatie',
         action: (_, vehicle) => {
           if (!vehicle) return;
-          confirmSkipLocation();
+          UI.openApplication('contextmenu', [
+            {
+              title: 'Wil je zeker dat je deze naar de volgende locatie wil gaan?',
+              submenu: [
+                {
+                  title: 'Ben je echt zeker?',
+                  callbackURL: 'sanitation/skip',
+                },
+              ],
+            },
+          ] satisfies ContextMenu.Entry[]);
         },
       },
     ],
@@ -196,14 +206,4 @@ const putBagInVehicle = () => {
 
 export const setWaypointToReturnZone = () => {
   Util.setWaypoint(returnZoneCoords);
-};
-
-const confirmSkipLocation = async () => {
-  const result = await UI.openInput({
-    header:
-      'Ben je zeker dat je deze locatie wil completen en naar de volgende wil gaan? Dit kan je gebruiken wanneer je een zak niet vind.',
-  });
-  if (!result.accepted) return;
-
-  Events.emitNet('jobs:sanitation:skipLocation');
 };
