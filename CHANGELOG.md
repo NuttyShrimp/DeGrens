@@ -31,6 +31,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Andere mensen kunnen nu een actieve houserobbery betreden
 - Fix paycheck receive notificatie
 - Admins zien nu wel blipnamen van spelers die al in server waren voordat ze zelf joinede
+- Logs die gebruik maaktte van export veranderd naar dgx function
 
 ## [1.0.2]
 

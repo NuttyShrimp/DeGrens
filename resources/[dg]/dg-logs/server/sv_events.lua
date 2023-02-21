@@ -4,9 +4,7 @@ local notCrashReasons = {
 }
 
 AddEventHandler('playerJoining', function()
-  createGraylogEntry('core:joined', {
-      source = source,
-    }, ("%s has joined the server"):format(GetPlayerName(source)))
+  DGX.Util.Log('core:joined', {}, ("%s has joined the server"):format(DGX.Util.getName(source)), source)
 end)
 
 AddEventHandler('playerDropped', function(reason)
@@ -18,13 +16,8 @@ AddEventHandler('playerDropped', function(reason)
     end
   end
   if hasCrashed then
-    createGraylogEntry('core:crashed', {
-      source = source,
-      reason = reason,
-    }, ("%s has crashed due: %s"):format(GetPlayerName(source), reason))
+    DGX.Util.Log('core:crashed', { reason = reason }, ("%s has crashed due: %s"):format(DGX.Util.getName(source), reason), source)
   else
-    createGraylogEntry('core:left', {
-      source = source,
-    }, ("%s has left the server"):format(GetPlayerName(source)))
+    DGX.Util.Log('core:left', {}, ("%s has left the server"):format(DGX.Util.getName(source)), source)
   end
 end)
