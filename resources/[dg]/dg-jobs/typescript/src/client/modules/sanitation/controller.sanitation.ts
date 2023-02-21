@@ -1,4 +1,4 @@
-import { Events, Keys, Peek, PolyZone } from '@dgx/client';
+import { Events, Keys, Peek, PolyZone, UI } from '@dgx/client';
 import { DUMPSTER_MODELS } from './constants.sanitation';
 import {
   buildReturnZone,
@@ -70,4 +70,9 @@ PolyZone.onLeave('jobs_sanitation_return', () => {
 
 Keys.onPressDown('GeneralUse', () => {
   finishJob();
+});
+
+UI.RegisterUICallback('sanitation/skip', (_: any, cb) => {
+  Events.emitNet('jobs:sanitation:skipLocation');
+  cb({ data: {}, meta: { ok: true, message: 'done' } });
 });

@@ -91,4 +91,5 @@ export const BLACKLISTED_VEHICLE_MODELS = [
   'tula',
   'alkonost',
   'rcbandito',
+  'firetruk',
 ];

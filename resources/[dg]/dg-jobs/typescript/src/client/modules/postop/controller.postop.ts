@@ -1,4 +1,4 @@
-import { Events, Keys, PolyZone } from '@dgx/client';
+import { Events, Keys, PolyZone, UI } from '@dgx/client';
 import {
   buildReturnZone,
   cleanupPostOPJob,
@@ -46,4 +46,9 @@ PolyZone.onEnter<{ id: number }>('jobs_postop_dropoff', (_: unknown, { id }) => 
 
 PolyZone.onLeave('jobs_postop_dropoff', () => {
   setAtDropoff(null);
+});
+
+UI.RegisterUICallback('postop/skip', (_: any, cb) => {
+  Events.emitNet('jobs:postop:skipLocation');
+  cb({ data: {}, meta: { ok: true, message: 'done' } });
 });

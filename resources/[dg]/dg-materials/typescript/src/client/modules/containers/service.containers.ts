@@ -37,7 +37,7 @@ export const getContainerEntrance = (entity: number) => {
   return Util.ArrayToVector3(GetOffsetFromEntityInWorldCoords(entity, 0, yOffset, doZOffset ? zOffset : 0));
 };
 
-export const enterContainer = async (entity: number) => {
+const enterContainer = async (entity: number) => {
   const containerCoords = getContainerEntrance(entity);
 
   const isValidContainer = await RPC.execute<boolean>('materials:containers:isValid', containerCoords);

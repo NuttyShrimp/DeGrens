@@ -1,5 +1,5 @@
 {
-  "amountPerTicket": 50,
+  "amountPerTicket": 100,
   "restaurants": {
     "upnatom": {
       "label": "Up-n-Atom",

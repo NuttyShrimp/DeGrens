@@ -20,9 +20,9 @@
     ]
   },
   "paycheck": {
-    "police": 7,
-    "ambulance": 7,
-    "realestate": 7
+    "police": 16,
+    "ambulance": 16,
+    "realestate": 16
   },
   "cryptoCoins": [
     {
@@ -37,13 +37,38 @@
   ],
   "taxes": {
     "cats": [
-      { "category": "No Tax", "rate": 0 },
-      { "category": "Vehicles", "rate": 11 },
-      { "category": "Real estate", "rate": 10 },
-      { "category": "Income tax", "rate": 9 },
-      { "category": "Services", "rate": 7 },
-      { "category": "Goederen", "rate": 7 },
-      { "category": "Gas", "rate": 6 }
+      {
+        "category": "No Tax",
+        "rate": 0
+      },
+      {
+        "category": "Vehicles",
+        "rate": 11
+      },
+      {
+        "category": "Real estate",
+        "rate": 10
+      },
+      {
+        "category": "Income tax",
+        "rate": 9
+      },
+      {
+        "category": "Services",
+        "rate": 7
+      },
+      {
+        "category": "Goederen",
+        "rate": 7
+      },
+      {
+        "category": "Gas",
+        "rate": 6
+      },
+      {
+        "category": "Maintenance Fees",
+        "rate": 10
+      }
     ],
     "inflation": 1,
     "brackets": [
@@ -67,6 +92,7 @@
   },
   "debts": {
     "maintenance": {
+      "daysBetween": 21,
       "hour": 5,
       "minute": 0
     },

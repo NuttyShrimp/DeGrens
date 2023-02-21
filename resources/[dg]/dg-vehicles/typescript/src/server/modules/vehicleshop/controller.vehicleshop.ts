@@ -1,11 +1,21 @@
-import { Auth, Config, Events, RPC, UI } from '@dgx/server';
+import { Auth, Config, Events, Notifications, RPC, UI } from '@dgx/server';
 
-import { getConfigByModel, getModelStock, getVehicleModels } from '../info/service.info';
+import { getConfigByModel, getVehicleModels } from '../info/service.info';
 
 import shopManager from './classes/ShopManager';
 import { getVehicleShopConfig } from './services/config.vehicleshop';
-import { CATEGORY_LABEL, MODEL_CATEGORISATION, VEHICLE_CATEGORY_TO_LABEL } from './constants.vehicleshop';
-import { getTestDriveDeposit, getVehicleTaxedPrice } from './helpers.vehicleshop';
+import {
+  CATEGORY_LABEL,
+  MODEL_CATEGORISATION,
+  ModelCategorisation,
+  VEHICLE_CATEGORY_TO_LABEL,
+} from './constants.vehicleshop';
+import {
+  buildVehicleContextMenuEntry,
+  getCategoryLabel,
+  getTestDriveDeposit,
+  getVehicleTaxedPrice,
+} from './helpers.vehicleshop';
 import { vehicleshopLogger } from './logger.vehicleshop';
 
 Auth.onAuth(async plyId => {
@@ -19,7 +29,7 @@ on('playerDropped', () => {
   shopManager.setPlayerActive(source, false);
 });
 
-Events.onNet('vehicles:shop:openVehicleMenu', (src: number, categorisation: (typeof MODEL_CATEGORISATION)[number]) => {
+Events.onNet('vehicles:shop:openVehicleMenu', (src: number, spotId: number, categorisation: ModelCategorisation) => {
   if (!MODEL_CATEGORISATION.includes(categorisation)) {
     vehicleshopLogger.warn('Provided categorisation was not valid');
     return;
@@ -35,6 +45,18 @@ Events.onNet('vehicles:shop:openVehicleMenu', (src: number, categorisation: (typ
     return all;
   }, {});
 
+  const modelAtSpot = shopManager.getModelAtSpot(spotId);
+  if (!modelAtSpot) {
+    Notifications.add(src, 'Kon huidig model niet vinden voor deze plaats', 'error');
+    return;
+  }
+  const currentVehicle = getConfigByModel(modelAtSpot);
+  if (!currentVehicle) {
+    Notifications.add(src, 'Kon huidig model niet vinden voor deze plaats', 'error');
+    return;
+  }
+  const currentVehicleEntry = buildVehicleContextMenuEntry(currentVehicle);
+
   // Base context menu entries
   const menu: ContextMenu.Entry[] = [
     {
@@ -42,6 +64,10 @@ Events.onNet('vehicles:shop:openVehicleMenu', (src: number, categorisation: (typ
       description: 'Selecteer een merk om verder te gaan',
       disabled: true,
       icon: 'car',
+    },
+    {
+      ...currentVehicleEntry,
+      title: `Huidig voertuig: ${currentVehicleEntry.title}`,
     },
     {
       title: 'Categoriseren',
@@ -57,39 +83,15 @@ Events.onNet('vehicles:shop:openVehicleMenu', (src: number, categorisation: (typ
     },
   ];
 
-  const getCategoryLabel = (cat: string) => {
-    switch (categorisation) {
-      case 'brand':
-        return cat;
-      case 'category':
-        return VEHICLE_CATEGORY_TO_LABEL[cat as Category] ?? 'Geen Category';
-      case 'class':
-        return `Klasse: ${cat}`;
-    }
-  };
-
   // Generate context menu and sort them alphabetically
   Object.entries(categorizedVehicles)
     .sort(([brandA], [brandB]) => brandA.localeCompare(brandB))
     .forEach(([category, vehicles]) => {
       menu.push({
-        title: getCategoryLabel(category),
+        title: getCategoryLabel(categorisation, category as Category),
         submenu: vehicles
           .sort((carA, carB) => carA.class.localeCompare(carB.class))
-          .map(vehicle => {
-            const stock = getModelStock(vehicle.model);
-            return {
-              title: `${vehicle.brand} ${vehicle.name}`,
-              description: `Prijs: €${getVehicleTaxedPrice(vehicle.model)} incl. BTW | Klasse: ${
-                vehicle.class
-              } | Voorraad: ${stock}`,
-              callbackURL: 'vehicleshop/selectModel',
-              data: {
-                model: vehicle.model,
-              },
-              preventCloseOnClick: true,
-            } as ContextMenu.Entry;
-          }),
+          .map(vehicle => buildVehicleContextMenuEntry(vehicle)),
       });
     });
 

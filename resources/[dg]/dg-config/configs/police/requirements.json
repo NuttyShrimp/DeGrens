@@ -12,10 +12,10 @@
     "police": 1
   },
   "bench_container_enter": {
-    "players": 48
+    "players": 40
   },
   "bench_container_mold": {
-    "players": 48
+    "players": 40
   },
   "labs_meth": {
     "players": 32

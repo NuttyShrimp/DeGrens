@@ -104,7 +104,7 @@ export const givePaycheck = async (src: number) => {
     return;
   }
 
-  const payedOutPrice = account.paycheck(cid, paycheckAmount);
+  const payedOutPrice = await account.paycheck(cid, paycheckAmount);
   if (!payedOutPrice) {
     Notifications.add(src, 'Konden geen paycheck uitbetalen', 'error');
     Util.Log(

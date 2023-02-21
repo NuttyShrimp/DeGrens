@@ -10,7 +10,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- 
+- Houserobbery timeout per persoon geadd
+- Admin kick from vehicle optie toegevoegd
+- Skip locatie optie voor postop
+- Admin neem screenshot optie
+- Je ziet nu info van het huidige voertuig in PDM
+- Vehicle maintenance fees
 
 ### Changed
 
@@ -19,6 +24,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Je hoeft fietsen niet langer te lockpicken
 - Propattach objecten worden niet gespawned als je in noclip/cloak bent
 - Ambulance checkin kan niet meer gespammed worden
+- Alle payouts en decayrates aangepast
+- Logs van SECRET containers aangepast
+- Peek entries worden standaard gedisabled als je in een voertuig zit
+- Staff kan nu zoeken op characternaam in adminmenu
+- Serviceparts gaan minder snel kapot
+- Je stallet minder snel met een voertuig
+- Er spawnen geen random brandweerwagens meer
 
 ### Fixed
 
@@ -27,6 +39,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - PropAttach models worden nu pas geladen wanneer ze nodig zijn
 - Armor restored nu deftig als je terug in de stad komt
 - Je kan nu zelf ervoor zorgen dat iemand stop met je te carryen
+- Andere mensen kunnen nu een actieve houserobbery betreden
+- Fix paycheck receive notificatie
+- Admins zien nu wel blipnamen van spelers die al in server waren voordat ze zelf joinede
+- Logs die gebruik maaktte van export veranderd naar dgx function
+- Iedereen kan nu weer kijken hoe hun serviceparts ongeveer staan
+- Je stapt niet langer soms uit alsje een voertuig lockpickt
+- Maintenance fees scheduling is nu werkend
 
 ## [1.0.2]
 

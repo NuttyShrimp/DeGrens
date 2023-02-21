@@ -21,6 +21,8 @@ interface Option {
   distance?: number
   // Tie extract info to the option if needed
   data?: any;
+  // Allow option to be viewed while player is inside vehicle
+  allowInVehicle?: boolean
 }
 
 interface EventOption extends Option {

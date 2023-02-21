@@ -40,11 +40,12 @@ PolyZone.onLeave<{ id: number }>('pdm_spot', (_, data) => {
 // Select vehicle model
 Keys.onPressDown('GeneralUse', async () => {
   if (!shopManager.inShop || shopManager.activeSpot === null) return;
-  Events.emitNet('vehicles:shop:openVehicleMenu', 'brand');
+  Events.emitNet('vehicles:shop:openVehicleMenu', shopManager.activeSpot, 'brand');
 });
 
 UI.RegisterUICallback('vehicleshop/changeCategorisation', (data: { cat: string }, cb) => {
-  Events.emitNet('vehicles:shop:openVehicleMenu', data.cat);
+  if (shopManager.activeSpot === null) return;
+  Events.emitNet('vehicles:shop:openVehicleMenu', shopManager.activeSpot, data.cat);
   cb({ data: {}, meta: { ok: true, message: '' } });
 });
 

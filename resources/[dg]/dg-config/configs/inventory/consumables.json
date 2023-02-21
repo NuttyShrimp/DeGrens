@@ -11,13 +11,11 @@
       },
       {
         "name": "upnatom_milkshake",
-        "gain": 60,
-        "checkQuality": true
+        "gain": 80
       },
       {
         "name": "upnatom_soda",
-        "gain": 65,
-        "checkQuality": true
+        "gain": 50
       }
     ],
     "alcohol": [
@@ -42,22 +40,21 @@
     },
     {
       "name": "upnatom_icecream",
-      "gain": 30,
-      "checkQuality": true
+      "gain": 30
     },
     {
       "name": "upnatom_fries",
-      "gain": 50,
+      "gain": 60,
       "checkQuality": true
     },
     {
       "name": "upnatom_burger",
-      "gain": 65,
+      "gain": 85,
       "checkQuality": true
     },
     {
       "name": "upnatom_cheeseburger",
-      "gain": 70,
+      "gain": 95,
       "checkQuality": true
     }
   ],

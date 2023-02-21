@@ -31,14 +31,9 @@ export const loadContainers = async () => {
 export const getContainerById = (containerId: string) => {
   const container = containers.get(containerId);
   if (!container) {
-    containersLogger.error(`Could not find data for container (${containerId})`);
-    Util.Log(
-      'materials:containers:invalidId',
-      { id: containerId },
-      `Could not find data for container (${containerId})`,
-      undefined,
-      true
-    );
+    const logMsg = `Could not find data for container (${containerId})`;
+    containersLogger.error(logMsg);
+    Util.Log('materials:containers:invalidId', { containerId }, logMsg, undefined, true);
     return;
   }
   return container;
@@ -51,19 +46,20 @@ const getContainerNearCoords = (position: Vec3) => {
 
 export const getContainerIdNearPlayer = (plyId: number, targetPosition: Vec3) => {
   const foundContainer = getContainerNearCoords(targetPosition);
-  if (!foundContainer) return;
+  if (!foundContainer) {
+    const logMsg = `${Util.getName(plyId)}(${plyId}) tried to enter a container but was not near any valid one`;
+    containersLogger.silly(logMsg);
+    Util.Log('materials:containers:notNearAny', { coords: targetPosition }, logMsg, plyId);
+    return;
+  }
+
   const [containerId, containerData] = foundContainer;
 
   const plyCoords = Util.getPlyCoords(plyId);
   if (plyCoords.distance(containerData.position) > 3) {
-    containersLogger.error(`Tried to enter but was not near any container`);
-    Util.Log(
-      'materials:containers:notNear',
-      { coords: plyCoords },
-      `Tried to enter but was not near any container`,
-      plyId,
-      true
-    );
+    const logMsg = `${Util.getName(plyId)}(${plyId}) tried to enter a container but provided invalid coords`;
+    containersLogger.error(logMsg);
+    Util.Log('materials:containers:invalidCoords', { coords: plyCoords }, logMsg, plyId, true);
     return;
   }
   return containerId;
@@ -73,16 +69,12 @@ export const canEnterContainer = async (plyId: number, containerId: string) => {
   const container = getContainerById(containerId);
   if (!container) return false;
 
-  const cid = Util.getCID(plyId);
-
   if (!Police.canDoActivity('bench_container_enter')) {
-    containersLogger.silly(`${cid} tried to enter container (${containerId}) but not enough players in server`);
-    Util.Log(
-      'materials:containers:couldNotEnter',
-      { id: containerId },
-      `${Util.getName(plyId)} tried to enter container (${containerId}) but not enough players in server`,
+    const logMsg = `${Util.getName(
       plyId
-    );
+    )}(${plyId}) tried to enter container (${containerId}) but not enough players in server`;
+    containersLogger.silly(logMsg);
+    Util.Log('materials:containers:couldNotEnter', { containerId }, logMsg, plyId);
     return false;
   }
 
@@ -90,36 +82,25 @@ export const canEnterContainer = async (plyId: number, containerId: string) => {
 
   const keyItem = await Inventory.getFirstItemOfNameOfPlayer(plyId, 'container_key');
   if (!keyItem) {
-    containersLogger.silly(`${cid} tried to enter container (${containerId}) but did not have key`);
-    Util.Log(
-      'materials:containers:couldNotEnter',
-      { id: containerId },
-      `${Util.getName(plyId)} tried to enter container (${containerId}) but did not have key`,
-      plyId
-    );
+    const logMsg = `${Util.getName(plyId)}(${plyId}) tried to enter container (${containerId}) but did not have key`;
+    containersLogger.silly(logMsg);
+    Util.Log('materials:containers:couldNotEnter', { containerId }, logMsg, plyId);
     return false;
   }
 
   if (container.keyItemId !== keyItem.id) {
-    containersLogger.silly(`${cid} tried to enter container (${containerId}) but had the wrong key`);
-    Util.Log(
-      'materials:containers:couldNotEnter',
-      { id: containerId },
-      `${Util.getName(plyId)} tried to enter container (${containerId}) but had the wrong key`,
-      plyId
-    );
+    const logMsg = `${Util.getName(plyId)}(${plyId}) tried to enter container (${containerId}) but had the wrong key`;
+    containersLogger.silly(logMsg);
+    Util.Log('materials:containers:couldNotEnter', { containerId }, logMsg, plyId);
     return false;
   }
 
+  const cid = Util.getCID(plyId);
   const isInGang = await Gangs.getPlayerGang(cid);
   if (!isInGang) {
-    containersLogger.silly(`${cid} tried to enter container (${containerId}) but is not in a gang`);
-    Util.Log(
-      'materials:containers:couldNotEnter',
-      { id: containerId },
-      `${Util.getName(plyId)} tried to enter container (${containerId}) but is not in a gang`,
-      plyId
-    );
+    const logMsg = `${Util.getName(plyId)}(${plyId}) tried to enter container (${containerId}) but is not in a gang`;
+    containersLogger.silly(logMsg);
+    Util.Log('materials:containers:couldNotEnter', { containerId }, logMsg, plyId);
     return false;
   }
 
@@ -129,35 +110,25 @@ export const canEnterContainer = async (plyId: number, containerId: string) => {
 export const registerPlayerInContainer = (plyId: number, targetPosition: Vec3) => {
   const [containerId] = getContainerNearCoords(targetPosition) ?? [];
   if (!containerId) return;
-  const cid = Util.getCID(plyId);
-  containerForPlayer.set(cid, containerId);
 
-  containersLogger.silly(`CID ${cid} entered container (${containerId})`);
-  Util.Log(
-    'materials:containers:entered',
-    { id: containerId },
-    `${Util.getName(plyId)} entered container (${containerId})`,
-    plyId
-  );
+  containerForPlayer.set(plyId, containerId);
+
+  const logMsg = `${Util.getName(plyId)}(${plyId}) entered container (${containerId})`;
+  containersLogger.silly(logMsg);
+  Util.Log('materials:containers:entered', { containerId }, logMsg, plyId);
 };
 
 export const unregisterPlayerInContainer = (plyId: number) => {
-  const cid = Util.getCID(plyId);
-  const containerId = containerForPlayer.get(cid);
-  containerForPlayer.delete(cid);
+  const containerId = containerForPlayer.get(plyId);
+  containerForPlayer.delete(plyId);
 
-  containersLogger.silly(`CID ${cid} left container (${containerId})`);
-  Util.Log(
-    'materials:containers:left',
-    { id: containerId },
-    `${Util.getName(plyId)} left container (${containerId})`,
-    plyId
-  );
+  const logMsg = `${Util.getName(plyId)}(${plyId}) left container (${containerId})`;
+  containersLogger.silly(logMsg);
+  Util.Log('materials:containers:left', { containerId }, logMsg, plyId);
 };
 
 export const getContainerIdPlayerIsIn = (plyId: number) => {
-  const cid = Util.getCID(plyId);
-  return containerForPlayer.get(cid);
+  return containerForPlayer.get(plyId);
 };
 
 export const getContainerIdWhereKeyIs = (itemId: string | null) => {
@@ -181,13 +152,9 @@ export const tryGivingKeyMold = async (plyId: number) => {
   const cid = Util.getCID(plyId);
   const isInGang = await Gangs.getPlayerGang(cid);
   if (!isInGang) {
-    containersLogger.silly(`${cid} could not receive mold because he was not in a gang`);
-    Util.Log(
-      'materials:containers:noGangForMold',
-      {},
-      `${Util.getName(plyId)} could not receive mold because he was not in a gang`,
-      plyId
-    );
+    const logMsg = `${Util.getName(plyId)}(${plyId}) could not receive mold because he was not in a gang`;
+    containersLogger.silly(logMsg);
+    Util.Log('materials:containers:noGangForMold', {}, logMsg, plyId);
     return;
   }
 

@@ -71,7 +71,7 @@ class Inventory extends UtilShared.Singleton<Inventory>() {
     return global.exports['dg-inventory'].getItemData(itemName);
   };
 
-  public hasObject = (plyId: number): boolean => {
+  public hasObject = (plyId: number): Promise<boolean> => {
     return global.exports['dg-inventory'].hasObject(plyId);
   };
 

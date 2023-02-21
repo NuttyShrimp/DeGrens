@@ -10,6 +10,7 @@ enum TaxIds {
   Services,
   Goederen,
   Gas,
+  MaintenanceFee,
 }
 
 class Financials {

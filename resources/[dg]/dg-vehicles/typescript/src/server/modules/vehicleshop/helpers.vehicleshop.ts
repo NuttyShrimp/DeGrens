@@ -1,8 +1,9 @@
 import { Business, Financials, Util } from '@dgx/server';
-import { getConfigByModel } from 'modules/info/service.info';
+import { getConfigByModel, getModelStock } from 'modules/info/service.info';
 
 import { getVehicleShopConfig } from './services/config.vehicleshop';
 import { vehicleshopLogger } from './logger.vehicleshop';
+import { ModelCategorisation, VEHICLE_CATEGORY_TO_LABEL } from './constants.vehicleshop';
 
 export const getVehicleTaxedPrice = (model: string) => {
   const modelData = getConfigByModel(model);
@@ -54,4 +55,30 @@ export const doVehicleShopTransaction = async (transaction: {
     transaction.taxId
   );
   return transactionSuccesful;
+};
+
+export const getCategoryLabel = (categorisation: ModelCategorisation, category: Category) => {
+  switch (categorisation) {
+    case 'brand':
+      return category;
+    case 'category':
+      return VEHICLE_CATEGORY_TO_LABEL[category] ?? 'Geen Category';
+    case 'class':
+      return `Klasse: ${category}`;
+  }
+};
+
+export const buildVehicleContextMenuEntry = (vehicle: Config.Car): ContextMenu.Entry => {
+  const stock = getModelStock(vehicle.model);
+  return {
+    title: `${vehicle.brand} ${vehicle.name}`,
+    description: `Prijs: €${getVehicleTaxedPrice(vehicle.model)} incl. BTW | Klasse: ${
+      vehicle.class
+    } | Voorraad: ${stock}`,
+    callbackURL: 'vehicleshop/selectModel',
+    data: {
+      model: vehicle.model,
+    },
+    preventCloseOnClick: true,
+  };
 };

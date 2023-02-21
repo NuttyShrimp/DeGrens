@@ -232,6 +232,10 @@ class ShopManager extends Util.Singleton<ShopManager>() {
       Notifications.add(src, 'Kon je voertuig niet uithalen. Bekijk de Vehiclesapp om je voertuig te vinden', 'error');
     }
   };
+
+  public getModelAtSpot = (spotId: number) => {
+    return this.spots.get(spotId)?.model;
+  };
 }
 
 const shopManager = ShopManager.getInstance();

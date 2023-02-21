@@ -2,7 +2,7 @@
   "loot": [
     {
       "item": "material_plastic",
-      "chance": 0.5
+      "chance": 0.4
     }
   ],
   "refillTime": 60

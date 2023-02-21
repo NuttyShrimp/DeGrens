@@ -1,12 +1,12 @@
 {
-  "moldChance": 3,
+  "moldChance": 0.5,
   "lootTables": [
     [
       "money_roll",
       "camera",
       "gameboy",
       "hifi",
-      "nintendoswitch",
+      "nintendo_switch",
       "nokia",
       "psp"
     ],

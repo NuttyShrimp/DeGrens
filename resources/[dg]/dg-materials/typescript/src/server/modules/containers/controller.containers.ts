@@ -55,14 +55,9 @@ Events.onNet('materials:containers:meltMold', async (src: number) => {
   const containerId = getContainerIdWhereKeyIs(moldItem.id);
   if (!containerId) {
     Notifications.add(src, 'Vorm onbekend', 'error');
-    containersLogger.error(`Player ${src} has key_mold (${moldItem.id}) which is not linked to any containers`);
-    Util.Log(
-      'materials:containers:noLinkedContainer',
-      { moldItem },
-      `${Util.getName(src)} has key_mold (${moldItem.id}) which is not linked to any containers`,
-      src,
-      true
-    );
+    const logMsg = `${Util.getName(src)}(${src}) has key_mold (${moldItem.id}) which is not linked to any containers`;
+    containersLogger.error(logMsg);
+    Util.Log('materials:containers:noLinkedContainer', { moldItem }, logMsg, src, true);
     // if this happens its a cheater or staff that spawned shit in for some fucking reason
     return;
   }
@@ -94,12 +89,8 @@ Events.onNet('materials:containers:meltMold', async (src: number) => {
       linkContainerKeyItemId(containerId, keyItemId);
     }, 1000);
 
-    containersLogger.silly(`Player ${src} has created key for container (${containerId})`);
-    Util.Log(
-      'materials:containers:noLinkedContainer',
-      { containerId, moldItem, keyItemId },
-      `${Util.getName(src)} has created key for container (${containerId})`,
-      src
-    );
+    const logMsg = `${Util.getName(src)}(${src}) has created key for container (${containerId})`;
+    containersLogger.silly(logMsg);
+    Util.Log('materials:containers:createdKey', { containerId, moldItem, keyItemId }, logMsg, src);
   }, timeout);
 });

@@ -32,6 +32,7 @@ interface Option {
    * Tie extract info to the option if needed
    */
   data?: any;
+  allowInVehicle?: boolean;
 }
 
 type GlobalType = 'ped' | 'player' | 'vehicle';

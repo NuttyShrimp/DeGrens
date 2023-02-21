@@ -29,4 +29,22 @@ declare namespace Financials {
   interface TransferAction extends BankAction {
     target: string;
   }
+
+  namespace Debts {
+    type Type = 'debt' | 'maintenance';
+    interface Debt {
+      id: number;
+      cid: number;
+      target_account: string;
+      debt: number;
+      payed: number;
+      type: Type;
+      given_by: number;
+      origin_name: string;
+      date: number;
+      event?: string;
+      reason?: string;
+      pay_term?: number;
+    }
+  }
 }

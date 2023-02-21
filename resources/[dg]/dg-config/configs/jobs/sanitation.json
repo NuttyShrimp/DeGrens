@@ -9,7 +9,6 @@
   "lootChance": 15,
   "loot": [
     "material_iron",
-    "material_steel",
     "material_aluminum"
   ],
   "specialLoot": [

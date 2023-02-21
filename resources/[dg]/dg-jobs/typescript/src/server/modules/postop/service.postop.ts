@@ -18,8 +18,8 @@ export const initializePostop = () => {
     location: { x: -424.2247, y: -2789.7656 },
     // this is payout per package, gets multiplied by amount of packages player has delivered
     payout: {
-      min: 15,
-      max: 20,
+      min: 35,
+      max: 45,
       groupPercent: 25, // Can only do with 2 people so high percentage isnt a problem
     },
   });
@@ -258,5 +258,32 @@ export const finishDropoff = (plyId: number, dropoffId: number, success: boolean
     if (finishedLocation) {
       Events.emitNet('jobs:postop:setLocation', m.serverId, finishedAllLocations ? null : active.targetLocation);
     }
+  });
+};
+
+export const skipCurrentLocation = (plyId: number) => {
+  const group = getGroupByServerId(plyId);
+  if (!group) return;
+  const active = activeGroups.get(group.id);
+  if (!active) return;
+
+  active.locationSequence.shift();
+  active.locationsDone++;
+  active.dropoffsBusy.clear();
+  active.dropoffsDone.clear();
+
+  // Check if all dropoffs are done for group
+  let finishedAllLocations = false;
+  if (active.locationSequence[0] !== undefined) {
+    active.targetLocation = getRandomTargetLocation(active.type, active.locationSequence[0]);
+  } else {
+    finishedAllLocations = true;
+  }
+
+  const phoneNotificationData = buildPhoneNotificationData(active);
+  group.members.forEach(m => {
+    if (!m.serverId) return;
+    Phone.updateNotification(m.serverId, 'postop_amount_tracker', phoneNotificationData);
+    Events.emitNet('jobs:postop:setLocation', m.serverId, finishedAllLocations ? null : active.targetLocation);
   });
 };

@@ -1,8 +1,9 @@
-import { Chat, Jobs, Police, Util } from '@dgx/server';
+import { Chat, Jobs } from '@dgx/server';
 import stateManager from 'classes/StateManager';
+import './services/grouppicker';
 
 import './controllers';
-import { PlayerState } from './enums/states';
+import { startPlayerPickingStash } from './services/grouppicker';
 
 setImmediate(() => {
   const jobInfo: Jobs.Job = {
@@ -12,30 +13,9 @@ setImmediate(() => {
     icon: 'user-secret',
   };
   Jobs.registerJob('houserobbery', jobInfo);
+
+  startPlayerPickingStash();
 });
-
-const pickLuckyPlayer = (skippedPlys: number[] = []) => {
-  if (!Police.canDoActivity('houserobbery')) return;
-
-  const signedInPlayers: number[] = [];
-  stateManager.playerStates.forEach((s, cid) => {
-    if (s !== PlayerState.WAITING) return;
-    signedInPlayers.push(cid);
-  });
-  if (signedInPlayers.length == 0) return;
-  const chosenPlyCID = signedInPlayers[Util.getRndInteger(0, signedInPlayers.length)];
-  if (!chosenPlyCID) return;
-
-  const houseId = stateManager.getRobableHouse();
-  if (!houseId) return;
-
-  const hasStarted = stateManager.startJobForPly(chosenPlyCID, houseId);
-  if (!hasStarted) {
-    skippedPlys.push(chosenPlyCID);
-    pickLuckyPlayer(skippedPlys);
-    return;
-  }
-};
 
 Chat.registerCommand('houserobbery:startJob', '', [], 'developer', (src: number) => {
   const Player = DGCore.Functions.GetPlayer(src);
@@ -44,7 +24,3 @@ Chat.registerCommand('houserobbery:startJob', '', [], 'developer', (src: number)
   if (!houseId) return;
   stateManager.startJobForPly(cid, houseId);
 });
-
-setInterval(() => {
-  pickLuckyPlayer();
-}, 5 * 60 * 1000);

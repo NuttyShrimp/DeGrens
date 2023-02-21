@@ -1,5 +1,5 @@
 {
-  "towingTicketPrice": 75,
+  "towingTicketPrice": 150,
   "towVehicles": {
     "flatbed": {
       "x": 0,
@@ -9,11 +9,11 @@
   },
   "reward": {
     "parts": {
-      "suspension": 20,
-      "engine": 20,
-      "transmission": 25,
-      "brakes": 15,
-      "axle": 30
+      "suspension": 40,
+      "engine": 35,
+      "transmission": 45,
+      "brakes": 30,
+      "axle": 40
     },
     "class": {
       "D": 1.0,
