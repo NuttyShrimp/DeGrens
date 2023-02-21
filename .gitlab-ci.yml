@@ -7,6 +7,10 @@ stages:
 
 image: node:16
 
+variables:
+  GIT_DEPTH: 5
+
+
 .node_mod_installation:
   before_script:
     - npm config set @degrens-21:registry https://gitlab.pieter557.dscloud.me/api/v4/packages/npm/
@@ -123,6 +127,9 @@ TS prod build:
     - yarn build
 
 rebase UPD:
+  variables:
+    # For fetch thing shit
+    GIT_DEPTH: 50
   stage: housekeeping
   image: node:lts
   script:
