@@ -77,7 +77,7 @@ export const ItemTooltip: FC<Inventory.Item> = ({
             </>
           )}
           <Divider />
-          <em className='data text'>Kwaliteit: {Math.round(quality)}%</em>
+          {quality && <em className='data text'>Kwaliteit: {Math.round(quality)}%</em>}
           {markedForSeizure && <em className='data text'> | Gemarkeerd voor inbeslagname </em>}
         </>
       ) : (

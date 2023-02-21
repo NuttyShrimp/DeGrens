@@ -30,8 +30,14 @@ export const DragPreview: FC<{ cellSize: number }> = ({ cellSize }) => {
             ...style,
             width: itemWidth,
             height: itemHeight,
-            backgroundColor: alpha(itemState.quality > 10 ? baseStyle.primary.normal : baseStyle.tertiary.normal, 0.5),
-            borderColor: alpha(itemState.quality > 10 ? baseStyle.primaryDarker.dark : baseStyle.tertiary.dark, 0.9),
+            backgroundColor: alpha(
+              (itemState?.quality ?? 100) > 25 ? baseStyle.primary.normal : baseStyle.tertiary.normal,
+              0.5
+            ),
+            borderColor: alpha(
+              (itemState?.quality ?? 100) > 25 ? baseStyle.primaryDarker.dark : baseStyle.tertiary.dark,
+              0.9
+            ),
           }}
         >
           <ItemImage width={itemWidth} height={itemHeight} itemState={itemState} />

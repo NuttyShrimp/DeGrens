@@ -59,13 +59,30 @@ class ItemDataManager extends Util.Singleton<ItemDataManager>() {
     Events.emitNet('inventory:itemdata:seed', plyId, this.getAll());
   };
 
-  // yes i like doing this using date.now because i cant be bothered to use actual dates and math is easier
-  public getDestroyDate = (itemName: string, quality: number) => {
+  public getInitialDestroyDate = (itemName: string) => {
     const decayRate = this.get(itemName).decayRate; // amount of minutes to decay 100 quality
     if (!decayRate) return null;
 
-    const currentMinutes = Math.floor(Date.now() / (1000 * 60));
-    return currentMinutes + decayRate * (quality / 100) + 1440;
+    const nowUnix = Math.floor(Date.now() / 1000);
+    return Math.round(nowUnix + Math.round(decayRate * 60));
+  };
+
+  public getModifiedDestroyDate = (itemName: string, destroyDate: number, qualityModifier: number) => {
+    const decayRate = this.get(itemName).decayRate; // amount of minutes to decay 100 quality
+    if (!decayRate) return null;
+
+    const modifyRate = decayRate * (qualityModifier / 100);
+
+    return Math.round(destroyDate + modifyRate * 60);
+  };
+
+  public getItemQuality = (itemName: string, destroyDate: number | null): number => {
+    const decayRate = this.get(itemName).decayRate; // amount of minutes to decay 100 quality
+    if (!decayRate || !destroyDate) return 100;
+
+    const secDecayRate = 1 / Math.round(decayRate * 60);
+    const timeToExist = destroyDate - Math.round(Date.now() / 1000);
+    return Number((timeToExist * secDecayRate * 100).toFixed(4));
   };
 }
 

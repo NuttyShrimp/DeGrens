@@ -275,10 +275,9 @@ model inventory_items {
   inventory         String              @db.VarChar(100)
   position          String              @db.VarChar(50)
   rotated           Int                 @default(0) @db.TinyInt()
-  quality           Float               @db.Float
   hotkey            Int?
   metadata          String              @db.LongText
-  lastDecayTime     Int
+  // The date the item is falling apart
   destroyDate       Int?
   container_benches container_benches[]
 }
