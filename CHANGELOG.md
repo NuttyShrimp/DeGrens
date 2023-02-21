@@ -42,6 +42,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Admins zien nu wel blipnamen van spelers die al in server waren voordat ze zelf joinede
 - Logs die gebruik maaktte van export veranderd naar dgx function
 - Iedereen kan nu weer kijken hoe hun serviceparts ongeveer staan
+- Je stapt niet langer soms uit alsje een voertuig lockpickt
 
 ## [1.0.2]
 
