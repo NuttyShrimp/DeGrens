@@ -76,6 +76,7 @@ end)
 
 RegisterNetEvent('dg-phone:client:initiateCall', function(soundId)
   stopSounds(soundId)
+  setState("inCall", true)
   SendAppEvent('phone', {
     appName = "phone",
     action = "setCallActive",
@@ -122,7 +123,7 @@ Citizen.CreateThread(function()
           end
         end,
         canInteract = function(entity, distance, data)
-					return not DGX.Police.isInPrison()
+          return not DGX.Police.isInPrison()
         end,
       }
     },
@@ -134,7 +135,7 @@ exports('prisonCall', function()
   local contacts = DGCore.Functions.TriggerCallback('dg-phone:server:getContacts')
   local options = {}
   for _, v in pairs(contacts) do
-    table.insert(options, {label = v.label, value = v.phone})
+    table.insert(options, { label = v.label, value = v.phone })
   end
 
   local result = DGX.UI.openInput({
