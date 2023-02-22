@@ -19,6 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fix warnings bij het proberen tanken
 - Npc deletion thread bij vehicle spawn weggehaald
 - Er gaan geen random items meer aan je hangen
+- Fixed houserobbery queue picker die oneindigd loopt om speler te vinden
 
 ## [1.0.4]
 
