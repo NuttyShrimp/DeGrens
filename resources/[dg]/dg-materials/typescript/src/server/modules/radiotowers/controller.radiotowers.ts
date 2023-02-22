@@ -89,6 +89,11 @@ Events.onNet('materials:radiotowers:loot', async (src: number, towerId: string) 
   });
   if (canceled) return;
 
+  if (towerState.looted) {
+    Notifications.add(src, 'Hier is niks meer te vinden', 'error');
+    return;
+  }
+
   const item = await Inventory.getFirstItemOfName('player', String(Util.getCID(src)), 'screwdriver');
   if (!item) return;
   Inventory.setQualityOfItem(item.id, oldQuality => oldQuality - 50);

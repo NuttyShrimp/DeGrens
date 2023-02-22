@@ -30,6 +30,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fix falsepositive speedban en damagemultiplier
 - Enkele voertuigen geblacklist
 - PostOP skip staat nu wel op het voertuig ipv signin persoon
+- Fix dupe bug bij looten van radiotowers
 
 ## [1.0.3]
 
