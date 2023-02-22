@@ -68,6 +68,7 @@ Events.onNet('vehicles:shop:openVehicleMenu', (src: number, spotId: number, cate
     {
       ...currentVehicleEntry,
       title: `Huidig voertuig: ${currentVehicleEntry.title}`,
+      disabled: true,
     },
     {
       title: 'Categoriseren',
