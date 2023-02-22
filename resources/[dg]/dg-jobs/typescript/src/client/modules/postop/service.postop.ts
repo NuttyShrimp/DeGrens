@@ -40,27 +40,7 @@ export const registerPostOPStartPeekOptions = (types: PostOP.Config['types']) =>
     },
   }));
   Peek.addFlagEntry('isPostOPSignin', {
-    options: [
-      ...options,
-      {
-        icon: 'fas fa-forward',
-        label: 'Volgende locatie',
-        action: (_, vehicle) => {
-          if (!vehicle) return;
-          UI.openApplication('contextmenu', [
-            {
-              title: 'Wil je zeker dat je deze naar de volgende locatie wil gaan?',
-              submenu: [
-                {
-                  title: 'Ben je echt zeker?',
-                  callbackURL: 'postop/skip',
-                },
-              ],
-            },
-          ] satisfies ContextMenu.Entry[]);
-        },
-      },
-    ],
+    options,
     distance: 2.0,
   });
 };
@@ -102,6 +82,24 @@ export const setAssignedVehicle = (netId: typeof assignedVehicle) => {
           if (!vehicle) return false;
           if (!hasPackage) return false;
           return Util.isAtBackOfEntity(vehicle, 3);
+        },
+      },
+      {
+        icon: 'fas fa-forward',
+        label: 'Volgende locatie',
+        action: (_, vehicle) => {
+          if (!vehicle) return;
+          UI.openApplication('contextmenu', [
+            {
+              title: 'Wil je zeker dat je deze naar de volgende locatie wil gaan?',
+              submenu: [
+                {
+                  title: 'Ben je echt zeker?',
+                  callbackURL: 'postop/skip',
+                },
+              ],
+            },
+          ] satisfies ContextMenu.Entry[]);
         },
       },
     ],

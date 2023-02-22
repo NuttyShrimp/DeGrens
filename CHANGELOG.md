@@ -29,6 +29,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Admin names van personen in een voertuig overlappen niet meer
 - Fix falsepositive speedban en damagemultiplier
 - Enkele voertuigen geblacklist
+- PostOP skip staat nu wel op het voertuig ipv signin persoon
 
 ## [1.0.3]
 
