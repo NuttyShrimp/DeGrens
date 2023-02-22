@@ -28,6 +28,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Je moet je UI niet meer opnieuw opstarten na het accepteren van een phone notificatie / UI focus verdwijnt niet als er nog interactive apps openstaan
 - Admin names van personen in een voertuig overlappen niet meer
 - Fix falsepositive speedban en damagemultiplier
+- Enkele voertuigen geblacklist
 
 ## [1.0.3]
 
