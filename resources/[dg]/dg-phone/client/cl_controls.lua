@@ -42,8 +42,8 @@ Citizen.CreateThread(function()
       wait = 0
       if isInputFocused then
         DisableAllControlActions(0)
-        DisableControlAction(0, 46, false); -- push to talk
-        DisableControlAction(0, 249, false); -- push to talk
+        EnableControlAction(0, 46, true); -- push to talk
+        EnableControlAction(0, 249, true); -- push to talk
       else
         for i = 1, #openDisabled do
           DisableControlAction(0, openDisabled[i], true)

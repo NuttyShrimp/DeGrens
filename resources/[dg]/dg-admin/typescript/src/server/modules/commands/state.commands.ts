@@ -47,3 +47,14 @@ export const getHiddenPlayers = () => {
   }
   return hiddenPlayers;
 };
+
+export const isPlayerHidden = (plyId: number) => {
+  if (!playerCommandStates[plyId]) return false;
+
+  for (const [command, state] of Object.entries(playerCommandStates[plyId])) {
+    if (!state) continue;
+    if (PLAYER_STATE_TOGGLE_COMMANDS[command as PlayerStateToggleCommand].isHidden) {
+      return true;
+    }
+  }
+};

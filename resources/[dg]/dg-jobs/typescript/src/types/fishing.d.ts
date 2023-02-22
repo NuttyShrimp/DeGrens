@@ -17,7 +17,7 @@ declare namespace Fishing {
   type JobType = 'boat' | 'car';
 
   type Job = {
-    netId: number;
+    vin: string;
     location: Vec3;
     jobType: JobType;
     fishPerCid: Map<number, number>;

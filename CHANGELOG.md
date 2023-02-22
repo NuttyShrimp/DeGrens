@@ -7,6 +7,42 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.4]
+
+### Added
+
+- Sloten op deuren/poorten van Low Santos toegevoegd
+- Log toegevoegd wanneer speler server leavet terwijl hij dood/bewusteloos is
+- Justice on-duty zones added
+- Admins krijgen nu geen synced sounds niet meer als ze invis zijn
+- Optie om sommige bennys niet als blip te tonen
+
+### Changed
+
+- Tweak nog wat inventory logger prints
+- Voertuig prijzen voor klasse B,C,D aangepast
+- Vereiste rechten van resetplayerprops veranderd naar staff
+- Minder NPC dieren spawnen terwijl hunting job bezig is en je in een bepaalde zone bent
+- Increase afstand van entity bij admin attach
+
+### Fixed
+
+- Ambu voertuigen staan nu met juiste spawnnaam in config
+- Fix sommige walkstyles met invalid icon waardoor menu niet geladen werd
+- Nu actually de metadata van salestickets hiden
+- Swapped names for jobs in justice app
+- Je moet je UI niet meer opnieuw opstarten na het accepteren van een phone notificatie / UI focus verdwijnt niet als er nog interactive apps openstaan
+- Admin names van personen in een voertuig overlappen niet meer
+- Fix falsepositive speedban en damagemultiplier
+- Enkele voertuigen geblacklist
+- PostOP skip staat nu wel op het voertuig ipv signin persoon
+- Fix dupe bug bij looten van radiotowers
+- Voertuigen zouden niet meer random mogen verdwijnen Prayge
+- Geen AC weapon check meer als de speler dood is
+- Straight Pipers kunnen nu wel een flatbed in hun garage krijgen
+- Je kan nu praten terwijl je iets invult op je telefoon
+- Gebruik VIN als identifier van testrit voertuig ipv netId om reuse van netId te voorkomen
+
 ## [1.0.3]
 
 ### Added

@@ -1,4 +1,4 @@
-import { Events, Inventory, Util, Vehicles, Config } from '@dgx/server';
+import { Events, Inventory, Util, Vehicles, Config, Notifications } from '@dgx/server';
 import jobManager from 'classes/jobManager';
 import { disbandGroup, getGroupById, getGroupByServerId } from 'modules/groups/service';
 import { sanddiggingLogger } from './logger.sanddigging';
@@ -6,7 +6,7 @@ import { sanddiggingLogger } from './logger.sanddigging';
 let sanddiggingConfig: Sanddigging.Config;
 export const getSanddiggingConfig = () => sanddiggingConfig;
 
-const activeGroups = new Map<string, { spotId: number | null; vehNetId: number }>();
+const activeGroups = new Map<string, { spotId: number | null; vin: string }>();
 
 export const initializeSanddigging = () => {
   sanddiggingConfig = Config.getConfigValue('jobs').sanddigging;
@@ -29,8 +29,8 @@ const getRandomAvailableSpot = () => {
   return spotId;
 };
 
-export const registerVehicleToGroup = (groupId: string, netId: number) => {
-  activeGroups.set(groupId, { vehNetId: netId, spotId: null });
+export const registerVehicleToGroup = (groupId: string, vin: string) => {
+  activeGroups.set(groupId, { vin, spotId: null });
 };
 
 export const assignSpotToGroup = (plyId: number) => {
@@ -104,8 +104,15 @@ export const receiveSpotLoot = (plyId: number, spotId: number) => {
 export const syncSanddiggingJobToClient = (groupId: string, plyId: number) => {
   const active = activeGroups.get(groupId);
   if (active === undefined) return;
+
+  const netId = Vehicles.getNetIdOfVin(active.vin);
+  if (!netId) {
+    Notifications.add(plyId, 'Het jobvoertuig bestaat niet', 'error');
+    return;
+  }
+
   sanddiggingLogger.silly(`Syncing active job to plyId ${plyId}`);
-  Events.emitNet('jobs:sanddigging:start', plyId, active.vehNetId);
+  Events.emitNet('jobs:sanddigging:start', plyId, netId);
   if (active.spotId) {
     Events.emitNet('jobs:sanddigging:addTarget', plyId, active.spotId);
   }
@@ -123,9 +130,16 @@ export const handlePlayerLeftSanddiggingGroup = (groupId: string, plyId: number 
   if (group && group.members.length > 0) return;
 
   activeGroups.delete(groupId);
-  setTimeout(() => {
-    Vehicles.deleteVehicle(NetworkGetEntityFromNetworkId(active.vehNetId));
-  }, 10000);
+  setTimeout(
+    (vin: string) => {
+      const netId = Vehicles.getNetIdOfVin(vin);
+      if (!netId) return;
+      const vehicle = NetworkGetEntityFromNetworkId(netId);
+      Vehicles.deleteVehicle(vehicle);
+    },
+    10000,
+    active.vin
+  );
   sanddiggingLogger.silly(`Group ${groupId} has been removed from active as there are no members remaining`);
 };
 
@@ -133,10 +147,18 @@ export const finishJob = (plyId: number, vehNetId: number) => {
   const group = getGroupByServerId(plyId);
   if (!group) return;
   const active = activeGroups.get(group.id);
-  if (!active || active.vehNetId !== vehNetId) return;
-  disbandGroup(group.id);
-  Vehicles.deleteVehicle(NetworkGetEntityFromNetworkId(active.vehNetId));
+  if (!active) return;
 
+  const vin = Vehicles.getVinForNetId(vehNetId);
+  if (active.vin !== vin) {
+    Notifications.add(plyId, 'Dit is niet het gegeven jobvoertuig', 'error');
+    return;
+  }
+
+  const vehicle = NetworkGetEntityFromNetworkId(vehNetId);
+  Vehicles.deleteVehicle(vehicle);
+
+  disbandGroup(group.id);
   Util.Log(
     'jobs:sanddigging:finish',
     {

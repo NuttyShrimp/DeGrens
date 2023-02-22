@@ -62,7 +62,13 @@ export const startJobForGroup = async (plyId: number, jobType: Fishing.JobType) 
     Notifications.add(plyId, 'Kon het voertuig niet uithalen', 'error');
     return;
   }
+  const vin = Vehicles.getVinForVeh(vehicle);
   const netId = NetworkGetNetworkIdFromEntity(vehicle);
+  if (!vin || !netId) {
+    Notifications.add(plyId, 'Kon het voertuig niet registreren', 'error');
+    return;
+  }
+
   Vehicles.giveKeysToPlayer(plyId, netId);
   Vehicles.setFuelLevel(vehicle, 100);
 
@@ -70,8 +76,8 @@ export const startJobForGroup = async (plyId: number, jobType: Fishing.JobType) 
     global.exports['dg-misc'].toggleBoatAnchor(vehicle);
   }
 
-  const jobGroup = {
-    netId,
+  const jobGroup: Fishing.Job = {
+    vin,
     location: getRandomFishingLocationForJobType(jobType),
     jobType,
     fishPerCid: new Map(),
@@ -95,7 +101,7 @@ export const startJobForGroup = async (plyId: number, jobType: Fishing.JobType) 
   const phoneNotificationData = buildPhoneNotificationData(jobGroup);
   group.members.forEach(m => {
     if (m.serverId === null) return;
-    sendOutStartEvents(m.serverId, jobGroup, phoneNotificationData);
+    sendOutStartEvents(m.serverId, jobGroup, netId, phoneNotificationData);
 
     if (jobType === 'boat') {
       Notifications.add(m.serverId, 'Vergeet het anker van de boot niet op te halen');
@@ -106,9 +112,10 @@ export const startJobForGroup = async (plyId: number, jobType: Fishing.JobType) 
 const sendOutStartEvents = (
   plyId: number,
   active: Fishing.Job,
+  netId: number,
   phoneNotificationData: ReturnType<typeof buildPhoneNotificationData>
 ) => {
-  Events.emitNet('jobs:fishing:start', plyId, active.netId, active.location, active.jobType);
+  Events.emitNet('jobs:fishing:start', plyId, netId, active.location, active.jobType);
   Phone.showNotification(plyId, {
     ...phoneNotificationData,
     id: 'fishing_amount_tracker',
@@ -122,9 +129,15 @@ export const syncFishingJobToClient = (groupId: string, plyId: number) => {
   const active = activeGroups.get(groupId);
   if (active === undefined) return;
 
+  const netId = Vehicles.getNetIdOfVin(active.vin);
+  if (!netId) {
+    Notifications.add(plyId, 'Het jobvoertuig bestaat niet', 'error');
+    return;
+  }
+
   fishingLogger.silly(`Syncing active job to plyId ${plyId}`);
   const phoneNotificationData = buildPhoneNotificationData(active);
-  sendOutStartEvents(plyId, active, phoneNotificationData);
+  sendOutStartEvents(plyId, active, netId, phoneNotificationData);
 };
 
 export const finishFishingJob = (plyId: number, netId: number) => {
@@ -132,7 +145,9 @@ export const finishFishingJob = (plyId: number, netId: number) => {
   if (!group) return;
   const active = activeGroups.get(group.id);
   if (!active) return;
-  if (active.netId !== netId) {
+
+  const vin = Vehicles.getVinForNetId(netId);
+  if (active.vin !== vin) {
     Notifications.add(plyId, 'Dit is niet het gegeven visvoertuig', 'error');
     return;
   }
@@ -153,7 +168,9 @@ export const finishFishingJob = (plyId: number, netId: number) => {
     Financials.addCash(plyId, fishAmount * payoutPerFish, 'fishing-payout');
   }
 
-  Vehicles.deleteVehicle(NetworkGetEntityFromNetworkId(active.netId));
+  const vehicle = NetworkGetEntityFromNetworkId(netId);
+  Vehicles.deleteVehicle(vehicle);
+
   Util.Log(
     'jobs:fishing:finish',
     {
@@ -175,7 +192,9 @@ export const addFishToGroupVehicle = (plyId: number, netId: number) => {
   if (!group) return;
   const active = activeGroups.get(group.id);
   if (!active) return;
-  if (active.netId !== netId) {
+
+  const vin = Vehicles.getVinForNetId(netId);
+  if (active.vin !== vin) {
     Notifications.add(plyId, 'Dit is niet het gegeven visvoertuig', 'error');
     return;
   }
@@ -217,9 +236,16 @@ export const handlePlayerLeftFishingGroup = (groupId: string, plyId: number | nu
   if (group && group.members.length > 0) return;
 
   activeGroups.delete(groupId);
-  setTimeout(() => {
-    Vehicles.deleteVehicle(NetworkGetEntityFromNetworkId(active.netId));
-  }, 10000);
+  setTimeout(
+    (vin: string) => {
+      const netId = Vehicles.getNetIdOfVin(vin);
+      if (!netId) return;
+      const vehicle = NetworkGetEntityFromNetworkId(netId);
+      Vehicles.deleteVehicle(vehicle);
+    },
+    10000,
+    active.vin
+  );
   fishingLogger.silly(`Group ${groupId} has been removed from active as there are no members remaining`);
 };
 

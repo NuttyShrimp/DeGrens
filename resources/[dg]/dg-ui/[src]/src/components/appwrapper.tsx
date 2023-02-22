@@ -72,7 +72,7 @@ const registeredApps: {
 export default function AppWrapper(props: AppWrapperProps) {
   const [setCurrentApp, currentApp, setError] = useMainStore(s => [s.setCurrentApp, s.currentApp, s.setError]);
   const styles = useStyles(props);
-  const { getApp } = useApps();
+  const { getApp, isInteractiveAppOpen } = useApps();
   const { addHandler, removeHandler } = useEventHandler();
   const appInfo = getApp(props.appName);
   const appVisible = useVisibleStore(s => s.visibleApps.includes(props.appName));
@@ -116,9 +116,10 @@ export default function AppWrapper(props: AppWrapperProps) {
       nuiAction('dg-ui:applicationClosed', {
         app: appInfo.name,
         type: appType,
+        shouldClose: !isInteractiveAppOpen(appInfo.name),
       });
     },
-    [appInfo]
+    [appInfo, isInteractiveAppOpen]
   );
 
   const showApp = useCallback<AppWrapperProps['onShow']>(

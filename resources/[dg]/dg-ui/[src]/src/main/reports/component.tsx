@@ -9,10 +9,11 @@ import config from './_config';
 import './style/index.scss';
 
 const Container: AppFunction = props => {
-  const [setReports, setReportMessages, setConnected, reportMessages] = useReportStore(s => [
+  const [setReports, setReportMessages, setConnected, reports, reportMessages] = useReportStore(s => [
     s.setReports,
     s.setReportMessages,
     s.setConnected,
+    s.reports,
     s.reportMessages,
   ]);
 
@@ -42,6 +43,16 @@ const Container: AppFunction = props => {
             return dayjs(m1.createdAt).isBefore(dayjs(m2.createdAt)) ? -1 : 1;
           })
         );
+        break;
+      }
+      case 'setReportState': {
+        setReports(reports.map(r => {
+          if (r.id === evt.data.id) {
+            r.open = evt.data.toggle ?? true
+          }
+          return r;
+        }));
+        break;
       }
     }
   };

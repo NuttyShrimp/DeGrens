@@ -1,4 +1,4 @@
-import { Admin, Config, Events, RPC, SQL, Sync, Util, Weapons } from '@dgx/server';
+import { Admin, Config, Events, Hospital, RPC, SQL, Sync, Util, Weapons } from '@dgx/server';
 import { mainLogger } from '../../sv_logger';
 
 let blockedWeaponHashes: number[] = [];
@@ -90,6 +90,8 @@ export const validateWeaponInfo = (src: number, info: AntiCheat.WeaponInfo) => {
 
   const ped = GetPlayerPed(String(src));
   const pedAttachedWeapon = GetSelectedPedWeapon(ped) >>> 0;
+  // Surely da Jens zn code wel goed is
+  if (Hospital.isDown(src)) return;
   if (!hasAlwaysAllowedWeapon && !alwaysAllowedWeapons.has(pedAttachedWeapon) && pedAttachedWeapon != info.weapon) {
     Admin.ACBan(src, 'Weapon mismatch (native)', {
       attachedWeapon: pedAttachedWeapon,
@@ -116,8 +118,8 @@ export const validateWeaponInfo = (src: number, info: AntiCheat.WeaponInfo) => {
 
   const svDamageModifier = GetPlayerWeaponDamageModifier(String(src));
 
-  // if modifier gotten from client is not 1, insta ban
-  if (info.damageModifier !== 1) {
+  // if modifier gotten from client is not 1 or 0, insta ban
+  if (info.damageModifier !== 1 && info.damageModifier !== 0) {
     Admin.ACBan(src, 'Weapon damage modifier modification (client)', {
       damageModifier: svDamageModifier,
       weaponInfo: info,

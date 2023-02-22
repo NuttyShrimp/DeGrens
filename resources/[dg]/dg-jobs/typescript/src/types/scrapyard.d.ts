@@ -15,7 +15,7 @@ declare namespace Scrapyard {
   };
 
   type Job = Location & {
-    netId: number;
+    vin: string;
     pedSpawned: boolean;
     doorsDone: number[];
   };

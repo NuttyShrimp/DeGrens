@@ -16,6 +16,7 @@ export const ReportList = () => {
       title: 'Reports',
       back: false,
       add: true,
+      close: false,
     });
   }, []);
 

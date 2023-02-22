@@ -9,7 +9,7 @@ image: node:16
 
 variables:
   GIT_DEPTH: 5
-  FF_USE_FASTZIP: "true"
+  FF_USE_FASTZIP: 'true'
   ARTIFACT_COMPRESSION_LEVEL: fastest # can also be set to fastest, fast, slow and slowest. If just enabling fastzip is not enough try setting this to fastest or fast.
   CACHE_COMPRESSION_LEVEL: fastest # same as above, but for caches
   TRANSFER_METER_FREQUENCY: 5s # will display transfer progress every 5 seconds for artifacts and remote caches.
@@ -27,7 +27,6 @@ variables:
     key: '$CI_COMMIT_REF_NAME-node_modules'
     paths:
       - node_modules/
-      - '**/node_modules/'
 
 .js_changes:
   only:

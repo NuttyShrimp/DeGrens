@@ -67,7 +67,7 @@ class LocationManager extends Util.Singleton<LocationManager>() {
     if (!pos) throw new Error('Tried to activate non-existent location id');
 
     emitNet('inventory:client:addDrop', -1, id, pos);
-    this.logger.info(`Drop (${id}) has been activated`);
+    this.logger.debug(`Drop (${id}) has been activated`);
 
     const dropRemoveTime = getConfig().dropRemoveTime;
     const timeout = setTimeout(

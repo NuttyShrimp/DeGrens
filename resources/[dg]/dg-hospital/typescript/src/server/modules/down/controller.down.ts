@@ -73,3 +73,13 @@ Events.onNet('hospital:down:respawnToBed', async (src: number) => {
     revivePlayer(src);
   }, bedTimeout * 0.75);
 });
+
+Util.onPlayerUnloaded((plyId, cid, playerData) => {
+  const downState = playerData.metadata.downState;
+  if (downState === 'alive') return;
+  Util.Log(
+    'hospital:down:loggedOut',
+    { cid, plyId, downState },
+    `${playerData.name}(${playerData.source}) has logged out while being ${downState}`
+  );
+});

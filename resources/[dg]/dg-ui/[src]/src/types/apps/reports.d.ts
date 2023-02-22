@@ -4,6 +4,7 @@ declare namespace Reports {
   interface TitleInfo {
     back: boolean;
     add: boolean;
+    close: boolean;
     title: string;
   }
 

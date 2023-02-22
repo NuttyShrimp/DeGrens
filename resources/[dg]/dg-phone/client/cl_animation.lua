@@ -79,6 +79,7 @@ handleCallAnimation = function(ped)
 end
 
 handleCallEndAnimation = function(ped)
+  setState("inCall", false)
   if (IsPedInAnyVehicle(ped, false)) then
     handleCallEndVehicleAnim(ped)
   else

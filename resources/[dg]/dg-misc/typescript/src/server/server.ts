@@ -21,6 +21,7 @@ import './services/tackle';
 import './services/seats';
 import './services/idlist';
 import './services/walkstyles';
+import './services/convars';
 import './controllers';
 
 setImmediate(() => {

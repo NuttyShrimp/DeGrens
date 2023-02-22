@@ -6,7 +6,7 @@ const cashCache: Map<number, number> = new Map();
 const updateMetadata = (ply: Player) => {
   const cid = ply.PlayerData.citizenid;
   const cash = cashCache.get(cid);
-  if (!cash) return;
+  if (cash === undefined) return;
   ply.Functions.setCash(cash);
 };
 

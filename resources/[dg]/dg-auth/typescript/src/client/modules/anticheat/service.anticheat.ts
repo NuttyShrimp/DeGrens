@@ -108,7 +108,7 @@ const scheduleAntiTP = () => {
     if (!inNoclip) {
       if (!inVeh && !onVeh) {
         if (!jumping && !falling && !ragdoll && !speedDrug) {
-          if (speed > 10) {
+          if (speed > 15) {
             Events.emitNet('auth:anticheat:addFlag', 'speed');
           }
         }

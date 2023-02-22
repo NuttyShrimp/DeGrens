@@ -3,6 +3,7 @@ import { Divider, Typography } from '@mui/material';
 import { Stack } from '@mui/system';
 import { IconButton } from '@src/components/button';
 import { Icon } from '@src/components/icon';
+import { nuiAction } from '@src/lib/nui-comms';
 
 import { useReportStore } from '../stores/reportStore';
 
@@ -18,6 +19,15 @@ export const ReportContainer = () => {
     s.setTab,
     s.tab,
   ]);
+
+  const closeReport = () => {
+    if (!selectedReport) return;
+    nuiAction('reports/setState', {
+      id: selectedReport,
+      state: false,
+    });
+  };
+
   return (
     <div className='reports-container'>
       <div className='reports-container-header'>
@@ -44,6 +54,16 @@ export const ReportContainer = () => {
               }}
             >
               <Icon name='plus' size='1rem' />
+            </IconButton.Primary>
+          )}
+          {titleInfo.close && (
+            <IconButton.Primary
+              size='small'
+              onClick={() => {
+                closeReport();
+              }}
+            >
+              <Icon name='xmark' size='1rem' />
             </IconButton.Primary>
           )}
         </div>

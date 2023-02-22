@@ -1,6 +1,6 @@
 import { BaseEvents } from '@dgx/client';
 import { PED_CONFIG_FLAGS, PICKUP_HASHES, PLAYER_RELATIONSHIP_HASH } from './constants.gtabehaviour';
-import { setDefaultReticleEnabled } from './service.gtabehaviour';
+import { overrideDensitySettings, resetDensitySettings, setDefaultReticleEnabled } from './service.gtabehaviour';
 
 BaseEvents.onPedChange(() => {
   const ped = PlayerPedId();
@@ -27,3 +27,5 @@ BaseEvents.onIdChange(() => {
 });
 
 global.exports('setDefaultReticleEnabled', setDefaultReticleEnabled);
+global.exports('overrideDensitySettings', overrideDensitySettings);
+global.exports('resetDensitySettings', resetDensitySettings);

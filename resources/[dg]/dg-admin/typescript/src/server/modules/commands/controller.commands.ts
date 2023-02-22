@@ -1,7 +1,7 @@
 import { Events, Util } from '@dgx/server';
 
 import { loadCommands } from './service.commands';
-import { getHiddenPlayers, setPlayerDefaultCommandState } from './state.commands';
+import { getHiddenPlayers, isPlayerHidden, setPlayerDefaultCommandState } from './state.commands';
 
 setImmediate(() => {
   loadCommands();
@@ -31,3 +31,4 @@ on('playerJoining', () => {
 });
 
 global.exports('getHiddenPlys', getHiddenPlayers);
+global.exports('isPlayerHidden', isPlayerHidden);

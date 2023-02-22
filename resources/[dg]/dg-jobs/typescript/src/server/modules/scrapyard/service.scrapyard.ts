@@ -62,10 +62,21 @@ export const assignLocationToGroup = async (ownerId: number) => {
     Notifications.add(ownerId, 'Er is een probleem opgetreden', 'error');
     return;
   }
+  const vin = Vehicles.getVinForVeh(vehicle);
+  const netId = NetworkGetNetworkIdFromEntity(vehicle);
+  if (!vin || !netId) {
+    Notifications.add(ownerId, 'Kon het voertuig niet registreren', 'error');
+    return;
+  }
+
   SetVehicleDoorsLocked(vehicle, 2);
 
-  const vehicleNetId = NetworkGetNetworkIdFromEntity(vehicle);
-  activeGroups.set(group.id, { ...location, netId: vehicleNetId, pedSpawned: false, doorsDone: [] });
+  activeGroups.set(group.id, {
+    ...location,
+    vin,
+    pedSpawned: false,
+    doorsDone: [],
+  });
 
   Util.Log(
     'jobs:scrapyard:start',
@@ -79,7 +90,7 @@ export const assignLocationToGroup = async (ownerId: number) => {
 
   group.members.forEach(member => {
     if (member.serverId === null) return;
-    Events.emitNet('jobs:scrapyard:startJob', member.serverId, vehicleNetId, location.vehicleLocation);
+    Events.emitNet('jobs:scrapyard:startJob', member.serverId, netId, location.vehicleLocation);
     Phone.sendMail(
       member.serverId,
       'Voertuig Opdracht',
@@ -93,7 +104,10 @@ export const handleVehicleLockpick = (plyId: number, vehicle: number) => {
   const plyGroup = getGroupByServerId(plyId);
   if (!plyGroup) return;
   const job = activeGroups.get(plyGroup.id);
-  if (!job || job.netId !== NetworkGetNetworkIdFromEntity(vehicle)) return;
+  if (!job) return;
+
+  const vin = Vehicles.getVinForVeh(vehicle);
+  if (vin !== job.vin) return;
   if (job.pedSpawned) return;
 
   Events.emitNet('jobs:scrapyard:spawnPed', plyId, job.pedLocation);
@@ -109,12 +123,16 @@ export const getLootFromVehicle = (plyId: number, netId: number, doorId: number)
   const group = getGroupByServerId(plyId);
   if (!group) return;
   const active = activeGroups.get(group.id);
-  if (!active || active.netId !== netId) {
-    scrapyardLogger.warn(`Player ${plyId} tried to get loot for invalid netid: ${netId}`);
+  if (!active) return;
+
+  const vin = Vehicles.getVinForNetId(netId);
+  if (active.vin !== vin) {
+    scrapyardLogger.warn(`Player ${plyId} tried to get loot for invalid vin: ${vin}`);
     return;
   }
 
-  SetVehicleDoorBroken(NetworkGetEntityFromNetworkId(netId), doorId, true);
+  const vehicle = NetworkGetEntityFromNetworkId(netId);
+  SetVehicleDoorBroken(vehicle, doorId, true);
 
   if (active.doorsDone.includes(doorId)) {
     Notifications.add(plyId, 'Dit onderdeel is er al afgehaald', 'error');
@@ -150,22 +168,30 @@ const tryToFinishJob = async (plyId: number) => {
   const active = activeGroups.get(group.id);
   if (!active) return;
 
+  const netId = Vehicles.getNetIdOfVin(active.vin);
+  if (!netId) {
+    Notifications.add(plyId, 'Kon het voertuig niet vinden', 'error');
+    return;
+  }
+
   const doorStates = await Util.sendRPCtoEntityOwner<boolean[]>(
-    NetworkGetEntityFromNetworkId(active.netId),
+    NetworkGetEntityFromNetworkId(netId),
     'vehicles:client:getDoorSate',
-    active.netId
+    netId
   );
   if (!doorStates) return;
   const allDoorsOff = doorStates.every(s => s);
 
   // If all are off then group is finished!
   if (active.doorsDone.length === 6 || allDoorsOff) {
+    // wait 2 sec because will look scuffed when instantly
     setTimeout(() => {
       disbandGroup(group.id);
-    }, 1000);
-    setTimeout(() => {
-      Vehicles.deleteVehicle(NetworkGetEntityFromNetworkId(active.netId));
-    }, 10000);
+
+      const delayedNetId = Vehicles.getNetIdOfVin(active.vin);
+      if (!delayedNetId) return;
+      Vehicles.deleteVehicle(NetworkGetEntityFromNetworkId(delayedNetId));
+    }, 2000);
 
     Util.Log(
       'jobs:scrapyard:finish',
@@ -180,20 +206,26 @@ const tryToFinishJob = async (plyId: number) => {
 
 export const getDonePartsForGroup = (groupId: string, netId: number) => {
   const active = activeGroups.get(groupId);
-  if (!active || active.netId !== netId) return;
+  if (!active) return;
+
+  const vin = Vehicles.getVinForNetId(netId);
+  if (active.vin !== vin) return;
+
   return active.doorsDone;
 };
 
 export const syncScrapyardJobToClient = (groupId: string, plyId: number) => {
   const active = activeGroups.get(groupId);
   if (active === undefined) return;
+
+  const netId = Vehicles.getNetIdOfVin(active.vin);
+  if (!netId) {
+    Notifications.add(plyId, 'Het jobvoertuig bestaat niet', 'error');
+    return;
+  }
+
   scrapyardLogger.silly(`Syncing active job to plyId ${plyId}`);
-  Events.emitNet(
-    'jobs:scrapyard:startJob',
-    plyId,
-    active.netId,
-    active.pedSpawned ? active.vehicleLocation : undefined
-  );
+  Events.emitNet('jobs:scrapyard:startJob', plyId, netId, active.pedSpawned ? active.vehicleLocation : undefined);
 };
 
 export const handlePlayerLeftScrapyardGroup = (groupId: string, plyId: number | null) => {
@@ -208,8 +240,15 @@ export const handlePlayerLeftScrapyardGroup = (groupId: string, plyId: number | 
   if (group && group.members.length > 0) return;
 
   activeGroups.delete(groupId);
-  setTimeout(() => {
-    Vehicles.deleteVehicle(NetworkGetEntityFromNetworkId(active.netId));
-  }, 10000);
+  setTimeout(
+    (vin: string) => {
+      const netId = Vehicles.getNetIdOfVin(vin);
+      if (!netId) return;
+      const vehicle = NetworkGetEntityFromNetworkId(netId);
+      Vehicles.deleteVehicle(vehicle);
+    },
+    10000,
+    active.vin
+  );
   scrapyardLogger.silly(`Group ${groupId} has been removed from active as there are no members remaining`);
 };

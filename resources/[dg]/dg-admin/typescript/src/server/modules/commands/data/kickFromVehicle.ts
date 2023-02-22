@@ -1,8 +1,6 @@
 import { Events, Notifications } from '@dgx/server';
 import { Inputs } from 'enums/inputs';
 
-import { SelectorTarget } from '../../../enums/SelectorTargets';
-
 interface KickFromVehicleData {
   Target: UI.Player;
 }
@@ -10,7 +8,7 @@ interface KickFromVehicleData {
 export const kickFromVehicle: CommandData = {
   name: 'kickFromVehicle',
   role: 'staff',
-  target: [SelectorTarget.VEHICLE],
+  target: [],
   isClientCommand: false,
   log: 'kicked a player from a vehicle',
   handler: (caller, args: KickFromVehicleData) => {

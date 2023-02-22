@@ -9,7 +9,7 @@ declare namespace Sanitation {
   };
 
   type Job = {
-    netId: number;
+    vin: string;
     locationSequence: number[];
     dumpstersDone: Vec3[];
     bagsPerPlayer: Map<number, number>; // keeps track of amount of bags player has done for payout

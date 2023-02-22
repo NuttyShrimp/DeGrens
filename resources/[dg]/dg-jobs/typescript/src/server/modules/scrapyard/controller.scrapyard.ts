@@ -39,7 +39,7 @@ Events.onNet('jobs:scrapyard:givePart', async (src: number) => {
   Inventory.addItemToPlayer(src, loot, amount);
 });
 
-RPC.register('jobs:scrapyard:getDoneParts', (src: number, netId) => {
+RPC.register('jobs:scrapyard:getDoneParts', (src: number, netId: number) => {
   const group = getGroupByServerId(src);
   if (!group) return;
   return getDonePartsForGroup(group.id, netId);
