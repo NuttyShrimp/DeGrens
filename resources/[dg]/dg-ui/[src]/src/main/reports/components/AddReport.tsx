@@ -21,6 +21,7 @@ export const AddReport = () => {
       title: 'Nieuw Report',
       add: false,
       back: true,
+      close: false,
     });
   }, []);
 

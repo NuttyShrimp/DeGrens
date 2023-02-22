@@ -1,5 +1,5 @@
 import { onEvent } from './panel/events';
-import { setInfo } from './panel/reportsocket';
+import { setInfo } from './panel/reports/infoStore';
 
 const msgListener = (evt: MessageEvent) => {
   onEvent(evt);

@@ -1,6 +1,7 @@
 import { nuiAction } from '../events';
 
-import { closeReportWebsocket, createReport, fetchReports, openReportWebsocket, sendNewMessage } from './reportsocket';
+import { createReport, fetchReports, sendNewMessage, toggleReportState } from './reports/actions';
+import { closeReportWebsocket, openReportWebsocket } from './reports/websocket';
 
 export const onEvent = async (evt: MessageEvent) => {
   let trackData: any;
@@ -16,6 +17,10 @@ export const onEvent = async (evt: MessageEvent) => {
     }
     case 'reports/sendMsg': {
       sendNewMessage(evt.data.reportId, evt.data.msg);
+      break;
+    }
+    case 'reports/setState': {
+      toggleReportState(evt.data.reportId, evt.data.state);
       break;
     }
     case 'reports/openSocket': {

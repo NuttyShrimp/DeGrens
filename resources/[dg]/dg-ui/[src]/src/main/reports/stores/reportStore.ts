@@ -13,6 +13,7 @@ export const useReportStore = create<Reports.State & Reports.StateActions>('repo
     title: 'Reports',
     add: true,
     back: false,
+    close: false,
   },
   setTab: t => set(() => ({ tab: t })),
   setReports: r =>

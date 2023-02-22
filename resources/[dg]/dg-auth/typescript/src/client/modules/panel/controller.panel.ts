@@ -68,6 +68,14 @@ RegisterUICallback('panel/reports/addMessages', (data: { msgs: Panel.Message[] }
   cb({ data: {}, meta: { ok: true, message: 'done' } });
 });
 
+RegisterUICallback("panel/reports/state", (data: {id: number, toggle: boolean}, cb) => {
+  UI.SendAppEvent('reports', {
+    action: 'setReportState',
+    data: data,
+  });
+  cb({ data: {}, meta: { ok: true, message: 'done' } });
+})
+
 UI.RegisterUICallback('reports/createReport', async (data: { info: Panel.NewReport }, cb) => {
   const createTrackId = generateTrackId();
   SendNUIMessage({
@@ -112,6 +120,15 @@ UI.RegisterUICallback('reports/sendMessage', async (data: { id: number; msg: Obj
   await registerTrackId(sendTrackId);
   cb({ data: {}, meta: { ok: true, message: 'done' } });
 });
+
+UI.RegisterUICallback("reports/setState", (data: {id: number, state: boolean}, cb) => {
+  SendNUIMessage({
+    action: 'panel/reports/sendMsg',
+    reportId: data.id,
+    state: data.state,
+  });
+  cb({ data: {}, meta: { ok: true, message: 'done' } });
+})
 
 UI.onUIReload(() => {
   Events.emitNet('auth:panel:reconnect');

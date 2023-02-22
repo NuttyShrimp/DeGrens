@@ -30,6 +30,7 @@ export const Report = () => {
       title: reportInfo?.title ?? 'Unknown report',
       back: true,
       add: false,
+      close: true,
     });
     return () => {
       nuiAction('reports/closeSocket', { id: reportId });
