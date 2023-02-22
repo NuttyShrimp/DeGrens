@@ -1,4 +1,4 @@
-import { Events, Financials, Notifications, Police, RPC, Util } from '@dgx/server';
+import { Events, Financials, Notifications, Police, RPC, Util, Vehicles } from '@dgx/server';
 import { deleteVehicle, spawnVehicle } from 'helpers/vehicle';
 import vinManager from 'modules/identification/classes/vinmanager';
 import { keyManager } from 'modules/keys/classes/keymanager';
@@ -11,7 +11,7 @@ import { getVehicleShopConfig } from '../services/config.vehicleshop';
 const activeTestDrives: Map<
   number,
   {
-    netId: number;
+    vin: string;
     deposit: number;
     timeLimitReached: boolean;
   }
@@ -69,10 +69,9 @@ Events.onNet('vehicles:shop:testdrive:start', async (plyId: number, model: strin
     return;
   }
   keyManager.addKey(vehVin, plyId);
-  const vehNetId = NetworkGetNetworkIdFromEntity(vehEnt);
 
   activeTestDrives.set(plyId, {
-    netId: vehNetId,
+    vin: vehVin,
     deposit: depositAmount,
     timeLimitReached: false,
   });
@@ -89,12 +88,16 @@ Events.onNet('vehicles:shop:testdrive:start', async (plyId: number, model: strin
     plyId
   );
 
-  const cid = Util.getCID(plyId);
-  const charName = await Util.getCharName(cid);
-  setTimeout(() => {
+  setTimeout(async () => {
     const testDriveData = activeTestDrives.get(plyId);
-    if (!testDriveData || testDriveData.netId !== vehNetId) return; // If already finished or started new one then dont cancel
-    activeTestDrives.set(plyId, { ...testDriveData, timeLimitReached: true });
+    if (!testDriveData || testDriveData.vin !== vehVin) return; // If already finished or started new one then dont cancel
+
+    const netId = Vehicles.getNetIdOfVin(testDriveData.vin);
+    if (!netId) return;
+
+    const cid = Util.getCID(plyId);
+    const charName = await Util.getCharName(cid);
+    testDriveData.timeLimitReached = true;
     Notifications.add(plyId, 'Je tijdlimiet is verstreken', 'error');
     Police.createDispatchCall({
       title: 'Mogelijkse Voertuig Diefstal',
@@ -106,7 +109,7 @@ Events.onNet('vehicles:shop:testdrive:start', async (plyId: number, model: strin
         'id-card': `${charName} - ${cid}`,
       },
     });
-    Police.addTrackerToVehicle(vehNetId, 2000);
+    Police.addTrackerToVehicle(netId, 2000);
   }, shopConfig.testDrive.time * 1000);
 });
 
@@ -127,7 +130,13 @@ RPC.register('vehicles:shop:testdrive:returnVehicle', (plyId: number, vehNetId: 
     return false;
   }
 
-  if (testDriveData.netId !== vehNetId) {
+  const vin = Vehicles.getVinForNetId(vehNetId);
+  if (!vin) {
+    Notifications.add(plyId, 'Kon vin van voertuig niet vinden', 'error');
+    return false;
+  }
+
+  if (testDriveData.vin !== vin) {
     Notifications.add(plyId, 'Dit is geen testrit voertuig', 'error');
     return false;
   }

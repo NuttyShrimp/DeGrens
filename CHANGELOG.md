@@ -39,6 +39,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Geen AC weapon check meer als de speler dood is
 - Straight Pipers kunnen nu wel een flatbed in hun garage krijgen
 - Je kan nu praten terwijl je iets invult op je telefoon
+- Gebruik VIN als identifier van testrit voertuig ipv netId om reuse van netId te voorkomen
 
 ## [1.0.3]
 
