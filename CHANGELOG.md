@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Addded
+
+### Changed
+
+
+### Fixed
+
+- Je kan terug compacts lockpicken
+
 ## [1.0.4]
 
 ### Added
