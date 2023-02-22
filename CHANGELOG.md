@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Log toegevoegd wanneer speler server leavet terwijl hij dood/bewusteloos is
 - Justice on-duty zones added
 - Admins krijgen nu geen synced sounds niet meer als ze invis zijn
+- Optie om sommige bennys niet als blip te tonen
 
 ### Changed
 

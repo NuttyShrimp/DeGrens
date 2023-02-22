@@ -49,6 +49,7 @@ declare namespace Bennys {
       minZ: number;
       maxZ: number;
     };
+    hideBlip?: boolean;
   }
 
   interface SpotData {

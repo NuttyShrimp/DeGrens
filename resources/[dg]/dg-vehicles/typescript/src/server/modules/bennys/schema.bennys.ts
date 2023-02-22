@@ -34,6 +34,9 @@ const bennysSchema: Schema = {
         },
       },
     },
+    hideBlip: {
+      type: 'boolean',
+    },
   },
 };
 

@@ -30,16 +30,18 @@ Events.onNet('vehicles:bennys:load', (locations: Bennys.Location[]) => {
       },
       true
     );
-    BlipManager.addBlip({
-      category: 'dg-vehicles',
-      id: `vehicleshop-${l.name}`,
-      text: `Benny's Motorworks`,
-      coords: l.vector,
-      sprite: 72,
-      color: 0,
-      scale: 0.8,
-      display: 2,
-    });
+    if (!l.hideBlip) {
+      BlipManager.addBlip({
+        category: 'dg-vehicles',
+        id: `vehicleshop-${l.name}`,
+        text: `Benny's Motorworks`,
+        coords: l.vector,
+        sprite: 72,
+        color: 0,
+        scale: 0.8,
+        display: 2,
+      });
+    }
   });
   setLocations(locations);
   console.log(`[Bennys] Loaded ${locations.length} locations`);
