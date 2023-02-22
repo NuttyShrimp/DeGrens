@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.4]
+
 ### Added
 
 - Sloten op deuren/poorten van Low Santos toegevoegd
