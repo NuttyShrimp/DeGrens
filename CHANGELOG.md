@@ -38,6 +38,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Voertuigen zouden niet meer random mogen verdwijnen Prayge
 - Geen AC weapon check meer als de speler dood is
 - Straight Pipers kunnen nu wel een flatbed in hun garage krijgen
+- Je kan nu praten terwijl je iets invult op je telefoon
 
 ## [1.0.3]
 
