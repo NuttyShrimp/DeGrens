@@ -45,7 +45,6 @@ export const useApps = () => {
         const appConfig = apps.find(a => a.name === s);
         if (!appConfig) return;
         const appType = appConfig.type instanceof Function ? appConfig.type() : appConfig.type;
-        console.log(s, appType);
         return appType === 'interactive';
       });
       return hasInteractiveAppVisible > -1;
