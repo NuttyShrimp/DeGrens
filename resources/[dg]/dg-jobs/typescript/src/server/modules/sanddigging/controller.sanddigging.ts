@@ -29,7 +29,13 @@ Events.onNet('jobs:sanddigging:signIn', async (src: number) => {
     Notifications.add(src, 'Kon het voertuig niet uithalen', 'error');
     return;
   }
+  const vin = Vehicles.getVinForVeh(vehicle);
   const netId = NetworkGetNetworkIdFromEntity(vehicle);
+  if (!vin || !netId) {
+    Notifications.add(src, 'Kon het voertuig niet registreren', 'error');
+    return;
+  }
+
   Vehicles.giveKeysToPlayer(src, netId);
   Vehicles.setFuelLevel(vehicle, 100);
 
@@ -42,7 +48,7 @@ Events.onNet('jobs:sanddigging:signIn', async (src: number) => {
     src
   );
 
-  registerVehicleToGroup(group.id, netId);
+  registerVehicleToGroup(group.id, vin);
   group.members.forEach(member => {
     if (member.serverId === null) return;
     Events.emitNet('jobs:sanddigging:start', member.serverId, netId);

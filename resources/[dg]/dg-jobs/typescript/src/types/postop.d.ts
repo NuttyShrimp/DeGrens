@@ -14,7 +14,7 @@ declare namespace PostOP {
   };
 
   type Job = {
-    netId: number;
+    vin: string;
     type: JobType;
     locationSequence: number[];
     targetLocation: TargetLocation;

@@ -47,9 +47,10 @@ const buildPhoneNotificationData = (jobGroup: Sanitation.Job) => {
 const sendOutStartEvents = (
   plyId: number,
   jobGroup: Sanitation.Job,
+  netId: number,
   phoneNotificationData: ReturnType<typeof buildPhoneNotificationData>
 ) => {
-  Events.emitNet('jobs:sanitation:start', plyId, jobGroup.netId, sanitationConfig.vehicleLocation);
+  Events.emitNet('jobs:sanitation:start', plyId, netId, sanitationConfig.vehicleLocation);
 
   const locationId = jobGroup.locationSequence[0];
   if (locationId !== undefined) {
@@ -98,13 +99,19 @@ export const startJobForGroup = async (plyId: number) => {
     Notifications.add(plyId, 'Kon het voertuig niet uithalen', 'error');
     return;
   }
+  const vin = Vehicles.getVinForVeh(vehicle);
   const netId = NetworkGetNetworkIdFromEntity(vehicle);
+  if (!vin || !netId) {
+    Notifications.add(plyId, 'Kon het voertuig niet registreren', 'error');
+    return;
+  }
+
   Vehicles.giveKeysToPlayer(plyId, netId);
   Vehicles.setFuelLevel(vehicle, 100);
 
   const locationSequence = generateLocationSequence();
   const jobGroup: Sanitation.Job = {
-    netId,
+    vin,
     locationSequence,
     dumpstersDone: [],
     bagsPerPlayer: new Map(),
@@ -116,7 +123,8 @@ export const startJobForGroup = async (plyId: number) => {
     'jobs:sanitation:start',
     {
       groupId: group.id,
-      netId: jobGroup.netId,
+      vin,
+      netId,
       locationSequence,
     },
     `${Util.getName(plyId)}(${plyId}) started sanitation job for group`,
@@ -126,7 +134,7 @@ export const startJobForGroup = async (plyId: number) => {
   const phoneNotificationData = buildPhoneNotificationData(jobGroup);
   group.members.forEach(m => {
     if (m.serverId === null) return;
-    sendOutStartEvents(m.serverId, jobGroup, phoneNotificationData);
+    sendOutStartEvents(m.serverId, jobGroup, netId, phoneNotificationData);
   });
 };
 
@@ -134,9 +142,16 @@ export const syncSanitationJobToClient = (groupId: string, plyId: number) => {
   const active = activeGroups.get(groupId);
   if (active === undefined) return;
 
+  const netId = Vehicles.getNetIdOfVin(active.vin);
+  if (!netId) {
+    Notifications.add(plyId, 'Het jobvoertuig bestaat niet', 'error');
+    return;
+  }
+
   sanitationLogger.silly(`Syncing active job to plyId ${plyId}`);
   const phoneNotificationData = buildPhoneNotificationData(active);
-  sendOutStartEvents(plyId, active, phoneNotificationData);
+
+  sendOutStartEvents(plyId, active, netId, phoneNotificationData);
 };
 
 export const finishJobForGroup = (plyId: number, netId: number) => {
@@ -144,7 +159,9 @@ export const finishJobForGroup = (plyId: number, netId: number) => {
   if (!group) return;
   const active = activeGroups.get(group.id);
   if (!active) return;
-  if (active.netId !== netId) {
+
+  const vin = Vehicles.getVinForNetId(netId);
+  if (active.vin !== vin) {
     Notifications.add(plyId, 'Dit is niet de gegeven vuilkar', 'error');
     return;
   }
@@ -158,8 +175,10 @@ export const finishJobForGroup = (plyId: number, netId: number) => {
     Financials.addCash(m.serverId, payoutPerBag * amount, 'sanitation-payout');
   });
 
+  const vehicle = NetworkGetEntityFromNetworkId(netId);
+  Vehicles.deleteVehicle(vehicle);
+
   disbandGroup(group.id);
-  Vehicles.deleteVehicle(NetworkGetEntityFromNetworkId(active.netId));
   Util.Log(
     'jobs:sanitation:finish',
     {
@@ -179,13 +198,21 @@ export const handlePlayerLeftSanitationGroup = (groupId: string, plyId: number |
     Events.emitNet('jobs:sanitation:cleanup', plyId);
   }
 
+  // if still players inside group do nothing
   const group = getGroupById(groupId);
   if (group && group.members.length > 0) return;
 
   activeGroups.delete(groupId);
-  setTimeout(() => {
-    Vehicles.deleteVehicle(NetworkGetEntityFromNetworkId(active.netId));
-  }, 10000);
+  setTimeout(
+    (vin: string) => {
+      const netId = Vehicles.getNetIdOfVin(vin);
+      if (!netId) return;
+      const vehicle = NetworkGetEntityFromNetworkId(netId);
+      Vehicles.deleteVehicle(vehicle);
+    },
+    10000,
+    active.vin
+  );
   sanitationLogger.silly(`Group ${groupId} has been removed from active as there are no members remaining`);
 };
 

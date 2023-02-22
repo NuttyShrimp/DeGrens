@@ -47,7 +47,7 @@ class Vehicles {
     return global.exports['dg-vehicles'].isVinFromPlayerVeh(vin);
   };
 
-  getNetIdOfVin = (vin: string): number => {
+  getNetIdOfVin = (vin: string): number | null => {
     return global.exports['dg-vehicles'].getNetIdOfVin(vin);
   };
 
