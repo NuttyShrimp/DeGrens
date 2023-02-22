@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Je kan terug compacts lockpicken
 - Je telefoon gaat niet meer dicht wanneer je een melding krijgt
 - Fix warnings bij het proberen tanken
+- Npc deletion thread bij vehicle spawn weggehaald
 
 ## [1.0.4]
 
