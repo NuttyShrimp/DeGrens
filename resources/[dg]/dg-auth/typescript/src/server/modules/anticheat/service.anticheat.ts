@@ -1,4 +1,4 @@
-import { Admin, Config, Events, RPC, SQL, Sync, Util, Weapons } from '@dgx/server';
+import { Admin, Config, Events, Hospital, RPC, SQL, Sync, Util, Weapons } from '@dgx/server';
 import { mainLogger } from '../../sv_logger';
 
 let blockedWeaponHashes: number[] = [];
@@ -90,6 +90,8 @@ export const validateWeaponInfo = (src: number, info: AntiCheat.WeaponInfo) => {
 
   const ped = GetPlayerPed(String(src));
   const pedAttachedWeapon = GetSelectedPedWeapon(ped) >>> 0;
+  // Surely da Jens zn code wel goed is
+  if (Hospital.isDown(src)) return;
   if (!hasAlwaysAllowedWeapon && !alwaysAllowedWeapons.has(pedAttachedWeapon) && pedAttachedWeapon != info.weapon) {
     Admin.ACBan(src, 'Weapon mismatch (native)', {
       attachedWeapon: pedAttachedWeapon,

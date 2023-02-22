@@ -32,6 +32,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - PostOP skip staat nu wel op het voertuig ipv signin persoon
 - Fix dupe bug bij looten van radiotowers
 - Voertuigen zouden niet meer random mogen verdwijnen Prayge
+- Geen AC weapon check meer als de speler dood is
 
 ## [1.0.3]
 
