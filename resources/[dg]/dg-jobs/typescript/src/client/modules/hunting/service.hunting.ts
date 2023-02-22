@@ -1,6 +1,7 @@
 import { Notifications, PolyZone, Util, Weapons, Phone, Peek, Events, Inventory } from '@dgx/client';
 import { TIME_TO_KILL_ANIMAL, TIME_TO_LEAVE_AREA } from './constants.hunting';
 import { doBaitPlaceAnim } from './helpers.hunting';
+import { overrideDensitySettings, resetDensitySettings } from './zone.hunting';
 
 let doingHuntingJob = false;
 
@@ -22,6 +23,7 @@ export const startHuntingJob = () => {
     'Je bent nu bevoegd om te jagen in de jaaggebieden rondt Chiliad Mountain State Wilderness. Ik koop enkel huiden van everzwijnen, herten, coyotes en poemas.'
   );
   doingHuntingJob = true;
+  overrideDensitySettings();
 };
 
 export const buildHuntingZones = (huntingZones: Hunting.Config['huntingZones']) => {
@@ -138,6 +140,7 @@ export const cleanupHuntingJob = () => {
   currentAnimal = null;
   baitPlaced = false;
   destroyHuntingZones();
+  resetDensitySettings();
 };
 
 export const spawnAnimal = async (animalModel: string) => {

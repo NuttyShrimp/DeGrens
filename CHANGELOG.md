@@ -18,6 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Tweak nog wat inventory logger prints
 - Voertuig prijzen voor klasse B,C,D aangepast
 - Vereiste rechten van resetplayerprops veranderd naar staff
+- Minder NPC dieren spawnen terwijl hunting job bezig is en je in een bepaalde zone bent
 
 ### Fixed
 

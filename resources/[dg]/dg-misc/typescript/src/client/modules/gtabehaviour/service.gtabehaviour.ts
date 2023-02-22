@@ -10,9 +10,19 @@ import {
 } from './constants.gtabehaviour';
 import { BLACKLISTED_VEHICLE_MODELS, BLACKLISTED_PED_MODELS } from '../../../shared/constants';
 
+let densitySettings: typeof DENSITY_SETTINGS = { ...DENSITY_SETTINGS };
+
 let defaultReticleEnabled = false;
 export const setDefaultReticleEnabled = (val: boolean) => {
   defaultReticleEnabled = val;
+};
+
+export const overrideDensitySettings = (settings: Partial<typeof DENSITY_SETTINGS>) => {
+  densitySettings = { ...densitySettings, ...settings };
+};
+
+export const resetDensitySettings = () => {
+  densitySettings = { ...DENSITY_SETTINGS };
 };
 
 export const setGTABehaviour = async () => {
