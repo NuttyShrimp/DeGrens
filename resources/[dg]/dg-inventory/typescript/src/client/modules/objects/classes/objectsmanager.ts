@@ -2,6 +2,7 @@ import { PropAttach } from '@dgx/client';
 import { Util } from '@dgx/client';
 import { Vector3 } from '@dgx/shared';
 import { Export, ExportRegister } from '@dgx/shared';
+import { DISABLED_KEYS_DURING_ANIMATION } from '../constants.objects';
 
 @ExportRegister()
 class ObjectsManager extends Util.Singleton<ObjectsManager>() {
@@ -166,6 +167,10 @@ class ObjectsManager extends Util.Singleton<ObjectsManager>() {
     }
     this.animationTimer = setInterval(() => {
       DisablePlayerFiring(PlayerId(), true);
+
+      DISABLED_KEYS_DURING_ANIMATION.forEach(key => {
+        DisableControlAction(0, key, true);
+      });
 
       const ped = PlayerPedId();
       if (IsEntityPlayingAnim(ped, animDict, anim, 3)) return;

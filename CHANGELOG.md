@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Je kan niet meer in de voertuig als je iets vast hebt
 
 ### Fixed
 
