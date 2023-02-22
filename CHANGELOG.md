@@ -34,6 +34,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fix dupe bug bij looten van radiotowers
 - Voertuigen zouden niet meer random mogen verdwijnen Prayge
 - Geen AC weapon check meer als de speler dood is
+- Straight Pipers kunnen nu wel een flatbed in hun garage krijgen
 
 ## [1.0.3]
 

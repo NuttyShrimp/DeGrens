@@ -23,46 +23,13 @@
   "parking_spots": [
     {
       "type": "land",
-      "size": 2.0,
-      "distance": 1.8,
-      "heading": 0,
+      "size": 3.0,
+      "distance": 2.8,
+      "heading": 87.5486,
       "coords": {
-        "x": 1132.121,
-        "y": -798.933,
-        "z": 56.613
-      }
-    },
-    {
-      "type": "land",
-      "size": 2.0,
-      "distance": 1.8,
-      "heading": 0,
-      "coords": {
-        "x": 1128.472,
-        "y": -798.952,
-        "z": 56.679
-      }
-    },
-    {
-      "type": "land",
-      "size": 2.0,
-      "distance": 1.8,
-      "heading": 0,
-      "coords": {
-        "x": 1124.824,
-        "y": -798.971,
-        "z": 56.745
-      }
-    },
-    {
-      "type": "land",
-      "size": 2.0,
-      "distance": 1.8,
-      "heading": 0,
-      "coords": {
-        "x": 1121.176,
-        "y": -798.99,
-        "z": 56.811
+        "x": 1126.5707,
+        "y": -798.7607,
+        "z": 57.622
       }
     }
   ]
