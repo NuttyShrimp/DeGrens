@@ -3,6 +3,16 @@ cache = {}
 playSoundOnEntity = function(id, name, bank, netId)
 	local entity = NetworkGetEntityFromNetworkId(netId)
 	if not entity or not DoesEntityExist(entity) then return end
+
+  -- do not play sounds for plys in cloak/noclip
+  if GetEntityType(entity) == 1 and IsPedAPlayer(entity) then
+    local plyId = NetworkGetEntityOwner(entity)
+    if exports['dg-admin']:isPlayerHidden(plyId) then
+      print('Not playing sound because invis')
+      return
+    end
+  end
+
 	DGX.Events.emitNet('nutty-sounds:playSoundOnEntity', -1, id, name, bank, netId)
 	cache[id] = true
 end
