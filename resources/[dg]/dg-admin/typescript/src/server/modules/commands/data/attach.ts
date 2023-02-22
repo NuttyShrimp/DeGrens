@@ -11,7 +11,8 @@ export const attach: CommandData = {
   handler: (caller, args: { entity?: number }) => {
     if (!args.entity) return;
 
-    if (GetEntityAttachedTo(GetPlayerPed(String(caller.source))) === args.entity) {
+    // always detach when already attached
+    if (GetEntityAttachedTo(GetPlayerPed(String(caller.source)))) {
       Events.emitNet('admin:command:detach', caller.source);
       return;
     }

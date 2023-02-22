@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Voertuig prijzen voor klasse B,C,D aangepast
 - Vereiste rechten van resetplayerprops veranderd naar staff
 - Minder NPC dieren spawnen terwijl hunting job bezig is en je in een bepaalde zone bent
+- Increase afstand van entity bij admin attach
 
 ### Fixed
 

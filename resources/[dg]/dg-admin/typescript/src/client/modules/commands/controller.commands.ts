@@ -48,10 +48,10 @@ Events.onNet('admin:command:attach', (netId: number) => {
   let offset: Vec3;
   switch (GetEntityType(targetEntity)) {
     case 1:
-      offset = { x: 0, y: -1, z: 1 };
+      offset = { x: 0, y: -2, z: 2 };
       break;
     case 2:
-      offset = { x: 0, y: -2.5, z: 2 };
+      offset = { x: 0, y: -3.5, z: 3 };
       break;
     default:
       throw new Error('Invalid attach entity');
