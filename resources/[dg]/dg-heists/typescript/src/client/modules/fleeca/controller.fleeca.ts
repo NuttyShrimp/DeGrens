@@ -31,7 +31,9 @@ Peek.addModelEntry(
           });
           if (canceled) return;
 
-          const amount = await getPercentageOfPowerBox(powerEntity);
+          // here we dont care about copcheck and returnal of -1
+          let amount = await getPercentageOfPowerBox(powerEntity);
+          amount = Math.max(0, amount);
           UI.openApplication('contextmenu', [
             {
               title: `Signaalsterkte: ${amount}%`,
@@ -47,8 +49,12 @@ Peek.addModelEntry(
         action: async (_, powerEntity) => {
           if (!powerEntity) return;
           const amount = await getPercentageOfPowerBox(powerEntity);
+          if (amount === -1) {
+            Notifications.add('Te sterk beveiligd', 'error');
+            return;
+          }
           if (amount !== 100) {
-            Notifications.add('Signaalsterkte te laag.');
+            Notifications.add('Signaalsterkte te laag', 'error');
             return;
           }
           placePlayerAtPowerBox(powerEntity);
