@@ -10,8 +10,8 @@ import { idLogger } from '../logger.id';
 class VinManager extends Util.Singleton<VinManager>() {
   private registeredVins: Set<string>;
   private playerVins: Set<string>;
-  // Map of vin to veh net id
-  private vinToNetId: Map<string, number> = new Map();
+  // Map of vin to veh ent id
+  private vinToEntId: Map<string, number> = new Map();
   private logger: winston.Logger;
 
   constructor() {
@@ -37,11 +37,11 @@ class VinManager extends Util.Singleton<VinManager>() {
     return this.registeredVins.has(vin) || this.playerVins.has(vin);
   }
 
-  doesVinMatch(vin: string, vehNetId: number): boolean {
-    if (!this.doesVinExist(vin) || !this.vinToNetId.has(vin)) {
+  doesVinMatch(vin: string, vehEntId: number): boolean {
+    if (!this.doesVinExist(vin) || !this.vinToEntId.has(vin)) {
       return false;
     }
-    return this.vinToNetId.get(vin) === vehNetId;
+    return this.vinToEntId.get(vin) === vehEntId;
   }
 
   @Export('isVinFromPlayerVeh')
@@ -50,40 +50,37 @@ class VinManager extends Util.Singleton<VinManager>() {
     return this.playerVins.has(vin);
   }
 
-  attachVinToNetId(vin: string, vehId: number) {
+  attachVinToEntId(vin: string, vehId: number) {
     this.logger.debug(`Attaching vin ${vin} to veh id ${vehId}`);
-    const veh = NetworkGetEntityFromNetworkId(vehId);
-    if (!veh) {
+    if (!DoesEntityExist(vehId)) {
       throw new Error(`Failed to set vin ${vin} to veh id ${vehId} - entity not found`);
     }
     this.registeredVins.add(vin);
-    this.vinToNetId.set(vin, vehId);
+    this.vinToEntId.set(vin, vehId);
   }
 
   @Export('getNetIdOfVin')
   getNetId(vin: string): number | null {
-    const netId = this.vinToNetId.get(vin);
-    if (!netId) return null;
-
-    const veh = NetworkGetEntityFromNetworkId(netId);
-    if (!DoesEntityExist(veh) || !Entity(veh).state?.vin) {
+    const vehId = this.vinToEntId.get(vin);
+    if (!vehId || !DoesEntityExist(vehId) || !Entity(vehId).state?.vin || Entity(vehId).state.vin !== vin) {
       this.logger.debug(`Deleting registered vin ${vin} because entity does not exist anymore`);
-      this.vinToNetId.delete(vin);
+      this.vinToEntId.delete(vin);
       return null;
     }
 
-    return netId;
+    const vehNetId = NetworkGetNetworkIdFromEntity(vehId);
+    return vehNetId;
   }
 
-  generateVin(netId?: number): string {
+  generateVin(entId?: number): string {
     let vin = Util.generateRndChar(17).toUpperCase();
     while (this.doesVinExist(vin)) {
       vin = Util.generateRndChar(17).toUpperCase();
     }
-    if (netId) {
-      this.logger.debug(`Generated vin ${vin} for netId ${netId}`);
+    if (entId) {
+      this.logger.debug(`Generated vin ${vin} for entId ${entId}`);
       this.registeredVins.add(vin);
-      this.vinToNetId.set(vin, netId);
+      this.vinToEntId.set(vin, entId);
     }
     return vin;
   }

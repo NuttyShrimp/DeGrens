@@ -89,9 +89,9 @@ export const spawnVehicle = async (
   }
 
   if (!vin) {
-    vin = vinManager.generateVin(vehNetId);
+    vin = vinManager.generateVin(veh);
   } else {
-    vinManager.attachVinToNetId(vin, vehNetId);
+    vinManager.attachVinToEntId(vin, veh);
   }
   const vehState = Entity(veh).state;
   vehState.set('vin', vin, true);
