@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Removed ability to spacespam
 - Reset en cop check aan fleeca toegevoegd
+- Meer feedback bij het inloggen van houserobbery queue
 
 ### Changed
 

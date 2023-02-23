@@ -47,7 +47,7 @@ class StateManager extends Util.Singleton<StateManager>() {
     if (this.playerStates.has(cid) && this.playerStates.get(cid) !== PlayerState.WAITING) {
       this.cleanupPlayer(src, cid);
       Util.Log('houserobbery:signin:logout', {}, `${Util.getName(src)} left the queue for houserobberies`, src);
-      Notifications.add(src, 'Je bent niet langer aangemeld...', 'error');
+      Notifications.add(src, 'Bert B: "Ik heb je van de lijst gehaald"', 'error');
       return;
     }
 
@@ -79,6 +79,7 @@ class StateManager extends Util.Singleton<StateManager>() {
     if (!plyJobGroup) {
       Jobs.createGroup(src);
     }
+    Notifications.add(src, 'Bert B: "Ik heb je op de lijst gezet, hou je mail in de gaten"', 'error');
     Util.Log('houserobbery:signin:login', {}, `${Util.getName(src)} joined the queue for houserobberies`, src);
   };
 
