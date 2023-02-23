@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Je kan niet meer in de voertuig als je iets vast hebt
 - VinManager maakt intern gebruik van entityIds ipv netIds
+- Prijs per items van fence verhoogt
 
 ### Fixed
 

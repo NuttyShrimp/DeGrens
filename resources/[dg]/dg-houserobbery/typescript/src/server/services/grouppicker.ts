@@ -35,7 +35,7 @@ export const pickLuckyPlayer = (skippedPlys: number[] = []) => {
     timedOutPlayers.push(chosenPlyCID);
     setTimeout(() => {
       timedOutPlayers.shift();
-    }, 45 * 60 * 1000);
+    }, 30 * 60 * 1000);
   } else {
     skippedPlys.push(chosenPlyCID);
     pickLuckyPlayer(skippedPlys);
