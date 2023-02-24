@@ -40,8 +40,13 @@ AddStateBagChangeHandler(
     const serverId = Number(bagName.replace('player:', ''));
     if (!serverId) return;
 
+    // we cache local id to make sure ply for serverid is still same after timeout
+    // this can happen when noclipping and ply quickly moves in/out of scope
+    const cachedLocalId = GetPlayerFromServerId(serverId);
+
     // when entering scope, ped will not exist instantly
     setTimeout(() => {
+      if (GetPlayerFromServerId(serverId) !== cachedLocalId) return;
       handlePlayerStateUpdate(serverId, value);
     }, 250);
   }

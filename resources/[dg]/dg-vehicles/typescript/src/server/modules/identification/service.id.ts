@@ -10,9 +10,9 @@ import { idLogger } from './logger.id';
 export const validateVehicleVin = (pNetId: number) => {
   const vehicle = NetworkGetEntityFromNetworkId(pNetId);
   const vehicleState = Entity(vehicle).state;
-  if (vehicleState.vin && vinManager.doesVinMatch(vehicleState.vin, pNetId)) return;
+  if (vehicleState.vin && vinManager.doesVinMatch(vehicleState.vin, vehicle)) return;
   // This is for vehicles new to the server
-  const vin = vinManager.generateVin(pNetId);
+  const vin = vinManager.generateVin(vehicle);
   vehicleState.set('vin', vin, true);
   vehicleState.set('plate', GetVehicleNumberPlateText(vehicle), true);
   fuelManager.registerVehicle(vehicle);

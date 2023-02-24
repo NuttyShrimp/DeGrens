@@ -1,6 +1,6 @@
 {
   "taxId": 3,
-  "debtPercentage": 0.1,
+  "debtPercentage": 0.2,
   "debtIntervalInDays": 7,
   "inventorySize": 45
 }

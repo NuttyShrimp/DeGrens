@@ -15,19 +15,14 @@ export const pickLuckyPlayer = (skippedPlys: number[] = []) => {
 
   const signedInPlayers: number[] = [];
   stateManager.playerStates.forEach((s, cid) => {
-    if (s !== PlayerState.WAITING) return;
+    if (s !== PlayerState.WAITING) return; // only waiting plys
+    if ([...timedOutPlayers, ...skippedPlys].indexOf(cid) !== -1) return; // only plys not timed out or already tried in previous call
     signedInPlayers.push(cid);
   });
   if (signedInPlayers.length == 0) return;
 
-  const chosenPlyCID = signedInPlayers[Util.getRndInteger(0, signedInPlayers.length)];
+  const chosenPlyCID = signedInPlayers[Math.floor(Math.random() * signedInPlayers.length)];
   if (!chosenPlyCID) return;
-
-  if (timedOutPlayers.indexOf(chosenPlyCID) !== -1) {
-    skippedPlys.push(chosenPlyCID);
-    pickLuckyPlayer(skippedPlys);
-    return;
-  }
 
   const houseId = stateManager.getRobableHouse();
   if (!houseId) return;
@@ -40,7 +35,7 @@ export const pickLuckyPlayer = (skippedPlys: number[] = []) => {
     timedOutPlayers.push(chosenPlyCID);
     setTimeout(() => {
       timedOutPlayers.shift();
-    }, 45 * 60 * 1000);
+    }, 30 * 60 * 1000);
   } else {
     skippedPlys.push(chosenPlyCID);
     pickLuckyPlayer(skippedPlys);

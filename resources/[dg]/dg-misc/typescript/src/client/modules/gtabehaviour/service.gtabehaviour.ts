@@ -103,11 +103,11 @@ export const setGTABehaviour = async () => {
     });
 
     // Set density settings
-    SetParkedVehicleDensityMultiplierThisFrame(DENSITY_SETTINGS.parked);
-    SetVehicleDensityMultiplierThisFrame(DENSITY_SETTINGS.vehicle);
-    SetRandomVehicleDensityMultiplierThisFrame(DENSITY_SETTINGS.multiplier);
-    SetPedDensityMultiplierThisFrame(DENSITY_SETTINGS.peds);
-    SetScenarioPedDensityMultiplierThisFrame(DENSITY_SETTINGS.scenario, DENSITY_SETTINGS.scenario);
+    SetParkedVehicleDensityMultiplierThisFrame(densitySettings.parked);
+    SetVehicleDensityMultiplierThisFrame(densitySettings.vehicle);
+    SetRandomVehicleDensityMultiplierThisFrame(densitySettings.multiplier);
+    SetPedDensityMultiplierThisFrame(densitySettings.peds);
+    SetScenarioPedDensityMultiplierThisFrame(densitySettings.scenario, DENSITY_SETTINGS.scenario);
 
     // Hide hud components
     HIDDEN_HUD_COMPONENT.forEach(comp => {

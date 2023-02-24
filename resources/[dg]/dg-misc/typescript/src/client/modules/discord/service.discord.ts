@@ -1,3 +1,5 @@
+import { Util } from "@dgx/client";
+
 export const setDiscordRichPresence = () => {
   setInterval(() => {
     // This is the Application ID (Replace this with you own)
@@ -13,7 +15,7 @@ export const setDiscordRichPresence = () => {
     SetDiscordRichPresenceAssetSmall('degrens_small');
 
     // Here you can add hover text for the "small" icon.
-    SetDiscordRichPresenceAssetSmallText('Join onze discord');
+    SetDiscordRichPresenceAssetSmallText(Util.isDevEnv() ? 'Dev environment' : 'Join onze discord');
 
     SetRichPresence('Join onze discord');
 

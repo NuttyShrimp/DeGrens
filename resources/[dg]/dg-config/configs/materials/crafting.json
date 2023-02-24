@@ -86,6 +86,10 @@
         },
         {
           "name": "refined_aluminum",
+          "amount": 4
+        },
+        {
+          "name": "refined_copper",
           "amount": 2
         }
       ]

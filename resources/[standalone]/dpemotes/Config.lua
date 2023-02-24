@@ -32,8 +32,8 @@ Config = {
 -- You can disable the Walking Styles menu here.
 	WalkingStylesEnabled = true,	
 -- You can disable the Shared Emotes here.
-    SharedEmotesEnabled = true,
-    CheckForUpdates = true,
+    SharedEmotesEnabled = false,
+    CheckForUpdates = false,
 -- If you have the SQL imported enable this to turn on keybinding.
     SqlKeybinding = false,
 }

@@ -287,8 +287,9 @@ export const takeVehicleOutGarage = async (src: number, vin: string): Promise<nu
     'vehicle:garage:retrieve:success',
     {
       vin,
-      garage: garageInfo,
-      vehicleStatus: vehicleInfo.status,
+      netId: NetworkGetNetworkIdFromEntity(veh),
+      garageId: garageInfo.garage_id,
+      isShared: garageInfo.shared,
     },
     `${cid} has successfully retrieved vehicle with vin ${vin} from the garage with id ${garageInfo.garage_id}`,
     src

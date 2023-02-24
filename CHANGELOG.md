@@ -7,6 +7,31 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.5]
+
+### Added
+
+- Removed ability to spacespam
+- Reset en cop check aan fleeca toegevoegd
+- Meer feedback bij het inloggen van houserobbery queue
+
+### Changed
+
+- Je kan niet meer in de voertuig als je iets vast hebt
+- VinManager maakt intern gebruik van entityIds ipv netIds
+- Prijs per items van fence verhoogt
+- Tweak radiotower timeout
+- Tweak radio crafting recipe
+
+### Fixed
+
+- Je kan terug compacts lockpicken
+- Je telefoon gaat niet meer dicht wanneer je een melding krijgt
+- Fix warnings bij het proberen tanken
+- Npc deletion thread bij vehicle spawn weggehaald
+- Er gaan geen random items meer aan je hangen
+- Fixed houserobbery queue picker die oneindigd loopt om speler te vinden
+
 ## [1.0.4]
 
 ### Added

@@ -231,11 +231,22 @@ export const removeNotification = (id: string) => {
     list: newList,
   });
 
+  // only close app when phone is not open
   if (newList.length === 0) {
-    usePhoneStore.setState({
-      hasNotifications: false,
+    let phoneIsOpen = false;
+    usePhoneStore.setState(s => {
+      if (s.animating === 'open') {
+        phoneIsOpen = false;
+      }
+      return {
+        hasNotifications: false,
+      };
     });
-    closeApplication('phone');
+
+    // only close phone when its animating state was not 'open'
+    if (!phoneIsOpen) {
+      closeApplication('phone');
+    }
   }
 };
 

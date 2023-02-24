@@ -88,7 +88,6 @@ export const openRefuelMenu = (entity: number) => {
 export const canRefuel = (veh: number): boolean => {
   if (!isInZone()) return false;
   if (IsPedInAnyVehicle(PlayerPedId(), false)) return false;
-  veh = NetworkGetEntityFromNetworkId(veh) !== 0 ? NetworkGetEntityFromNetworkId(veh) : veh;
   const vehClass = GetVehicleClass(veh);
   if ([13, 14, 15, 16].includes(vehClass)) {
     return false;

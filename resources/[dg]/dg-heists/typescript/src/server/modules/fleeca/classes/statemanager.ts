@@ -12,6 +12,7 @@ class StateManager extends Util.Singleton<StateManager>() implements Heist.State
   private robbedBanks: Set<Fleeca.Id> = new Set();
   private bankHackers: Map<Fleeca.Id, number> = new Map();
   private callTimeouts: Map<Fleeca.Id, NodeJS.Timeout> = new Map();
+  private reenablePowerTimeout: NodeJS.Timeout | null = null;
 
   setConfig = (config: Fleeca.Config) => {
     this.config = config;
@@ -40,6 +41,13 @@ class StateManager extends Util.Singleton<StateManager>() implements Heist.State
       src
     );
     this.powerLocation = null;
+
+    // reenable after 20 min
+    this.reenablePowerTimeout = setTimeout(() => {
+      this.chooseNewPowerLocation();
+      this.reenablePowerTimeout = null;
+      this.powerDisabled = false;
+    }, 20 * 60 * 1000);
   };
 
   canHack = (src: number, fleecaId: Fleeca.Id) => {
@@ -95,7 +103,13 @@ class StateManager extends Util.Singleton<StateManager>() implements Heist.State
       this.robbedBanks.add(fleecaId);
     }
     this.bankHackers.delete(fleecaId);
+
+    if (this.reenablePowerTimeout) {
+      clearTimeout(this.reenablePowerTimeout);
+    }
+
     setTimeout(this.chooseNewPowerLocation, 45 * 60 * 1000);
+
     return true;
   };
 }

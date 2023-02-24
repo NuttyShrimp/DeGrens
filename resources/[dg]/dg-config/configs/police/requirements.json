@@ -11,6 +11,9 @@
   "houserobbery": {
     "police": 1
   },
+  "heist_fleeca": {
+    "police": 4
+  },
   "bench_container_enter": {
     "players": 40
   },

@@ -3,7 +3,7 @@ import { RPC, Util } from '@dgx/client';
 export const getPercentageOfPowerBox = async (entity: number): Promise<number> => {
   const coords = Util.getEntityCoords(entity);
   const amount = await RPC.execute<number>('heists:server:fleeca:getPowerPercentage', coords);
-  return amount ?? 0;
+  return amount ?? -1;
 };
 
 export const placePlayerAtPowerBox = (entity: number) => {
