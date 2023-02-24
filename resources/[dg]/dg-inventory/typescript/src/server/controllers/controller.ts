@@ -144,13 +144,18 @@ const removeItemsByIdsFromInventory = async (
   const invId = Inventory.concatId(type, identifier);
   const inventory = await inventoryManager.get(invId);
 
-  const removeCounts: Record<string, number> = {};
-
+  // we first check if player has all item ids before removing any
+  const itemsToRemove: Item[] = [];
   for (const itemId of itemIds) {
     if (!inventory.hasItemId(itemId)) return false;
     const item = itemManager.get(itemId);
     if (!item) return false;
+    itemsToRemove.push(item);
+  }
 
+  // at this point we are sure ply has all items
+  const removeCounts: Record<string, number> = {};
+  for (const item of itemsToRemove) {
     item.destroy(true);
 
     const itemName = item.state.name;
