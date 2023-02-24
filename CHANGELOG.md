@@ -31,6 +31,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Npc deletion thread bij vehicle spawn weggehaald
 - Er gaan geen random items meer aan je hangen
 - Fixed houserobbery queue picker die oneindigd loopt om speler te vinden
+- Er worden geen peds meer gespawned als je in een andere routingbucket dan 0 zit
 
 ## [1.0.4]
 
