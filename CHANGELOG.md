@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 ### Fixed
+- Timeout that reset spacePressed bool after 1s
 
 - Correct voertuig gebruiken om lockpick native class te bepalen
 

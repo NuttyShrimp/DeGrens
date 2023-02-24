@@ -1,5 +1,6 @@
 let spacePressed = false;
 let checkThread: NodeJS.Timer | null;
+let timeout: NodeJS.Timeout | null = null;
 
 setImmediate(() => {
   scheduleThread();
@@ -31,8 +32,18 @@ const scheduleThread = () => {
           );
         }
         spacePressed = false;
+        if (timeout) {
+          clearTimeout(timeout);
+        }
       } else {
         spacePressed = true;
+        if (!timeout) {
+          timeout = setTimeout(() => {
+            spacePressed = false;
+          }, 1000);
+        } else {
+          timeout.refresh();
+        }
       }
     }
   }, 100);
