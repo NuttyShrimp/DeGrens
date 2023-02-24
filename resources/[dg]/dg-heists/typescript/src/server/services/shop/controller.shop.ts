@@ -1,4 +1,4 @@
-import { Config, Events, Financials, Inventory, Notifications, RPC, UI, Util } from '@dgx/server';
+import { Config, Events, Financials, Inventory, Notifications, RPC, Reputations, UI, Util } from '@dgx/server';
 
 const activePickups: Record<number, Shop.Name> = {};
 
@@ -24,6 +24,13 @@ Events.onNet('heists:server:openIllegalShop', async (src: number) => {
     return;
   }
 
+  const cid = Util.getCID(src);
+  const plyRep = Reputations.getReputation(cid, 'cornersell') ?? 0;
+  if (plyRep < 300) {
+    Notifications.add(src, 'Ik vertrouw je nog niet genoeg om zaken te doen', 'error');
+    return;
+  }
+
   const menuData: ContextMenuEntry[] = [
     {
       title: 'Laptop Shop',
@@ -43,8 +50,11 @@ Events.onNet('heists:server:openIllegalShop', async (src: number) => {
   UI.openContextMenu(src, menuData);
 });
 
-RPC.register('heists:server:buyLaptop', async (source: number, drive: Shop.Name) => {
-  const cid = Util.getCID(source);
+RPC.register('heists:server:buyLaptop', async (plyId: number, drive: Shop.Name) => {
+  const cid = Util.getCID(plyId);
+  const plyRep = Reputations.getReputation(cid, 'cornersell') ?? 0;
+  if (plyRep < 300) return;
+
   const cryptoCost = shopConfig[drive]?.cost ?? 100;
   const hasEnoughCrypto = (await Financials.cryptoGet(source, 'Manera')) >= cryptoCost;
   const hasItem = await Inventory.doesPlayerHaveItems(source, drive);
