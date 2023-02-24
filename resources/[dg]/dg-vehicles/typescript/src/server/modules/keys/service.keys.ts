@@ -65,7 +65,7 @@ export const startVehicleLockpick = async (src: number, itemId: string) => {
   }
 
   // Check if vehicle class has a lock depending on what we trying to lockpick
-  const vehicleClass = await RPC.execute('vehicle:getClass', src, NetworkGetNetworkIdFromEntity(vehiclePedIsIn));
+  const vehicleClass = await RPC.execute('vehicle:getClass', src, NetworkGetNetworkIdFromEntity(targetVehicle));
   if (vehicleClass == undefined || vehicleClass < 0 || NO_LOCK_CLASSES[lockpickType].indexOf(vehicleClass) !== -1)
     return;
 
