@@ -236,7 +236,7 @@ export const removeNotification = (id: string) => {
     let phoneIsOpen = false;
     usePhoneStore.setState(s => {
       if (s.animating === 'open') {
-        phoneIsOpen = false;
+        phoneIsOpen = true;
       }
       return {
         hasNotifications: false,

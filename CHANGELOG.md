@@ -17,8 +17,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 - Timeout that reset spacePressed bool after 1s
-
 - Correct voertuig gebruiken om lockpick native class te bepalen
+- Je telefoon gaat niet meer weg als een notificatie verdwijnd
 
 ## [1.0.5]
 
