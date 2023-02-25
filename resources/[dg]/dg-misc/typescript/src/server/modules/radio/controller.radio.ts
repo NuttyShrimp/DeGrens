@@ -14,6 +14,14 @@ Events.onNet('misc:radio:server:setFrequency', async (src: number, freq: number)
   }));
 });
 
+
+Jobs.onJobUpdate((src, job) => {
+  if (job) return;
+  const radioChannel = Player(src).state.radioChannel;
+  if (!radioChannel || (radioChannel < 1 && radioChannel > 10)) return;
+  global.exports['pma-voice'].setPlayerRadio(src, 0);
+})
+
 Inventory.registerUseable(['radio', 'pd_radio'], async (src: number, state: Inventory.ItemState) => {
   let radioFreq = state.metadata?.frequency ?? 0;
   Inventory.setMetadataOfItem(state.id, data => ({
