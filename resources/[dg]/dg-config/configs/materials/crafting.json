@@ -1148,6 +1148,23 @@
           "amount": 2
         }
       ]
+    },
+    "meth_lab_keycard": {
+      "requiredReputation": 200,
+      "items": [
+        {
+          "name": "refined_plastic",
+          "amount": 1
+        },
+        {
+          "name": "material_electronics",
+          "amount": 8
+        },
+        {
+          "name": "refined_copper",
+          "amount": 1
+        }
+      ]
     }
   },
   "benches": {

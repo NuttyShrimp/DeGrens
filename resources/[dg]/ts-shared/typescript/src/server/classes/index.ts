@@ -16,6 +16,7 @@ import weather from './weather';
 import baseevents from './baseevents';
 import minigames from './minigames';
 import sounds from './sounds';
+import doorlock from './doorlock';
 
 export const { Events, RPC, SQL, API, Auth } = events;
 export const { Util, Status, Reputations, StaticObjects } = util;
@@ -35,3 +36,4 @@ export const { Weather } = weather;
 export const { BaseEvents } = baseevents;
 export const { Minigames } = minigames;
 export const { Sounds } = sounds;
+export const { DoorLock } = doorlock;

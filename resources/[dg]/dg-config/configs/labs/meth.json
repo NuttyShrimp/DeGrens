@@ -1,0 +1,10 @@
+{
+  "fillAmount": 5,
+  "resetTime": 30,
+  "dryTime": 72,
+  "hack": {
+    "length": 6,
+    "time": 4,
+    "gridSize": 5
+  }
+}

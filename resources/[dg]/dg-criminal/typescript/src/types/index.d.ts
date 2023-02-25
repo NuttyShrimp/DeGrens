@@ -17,13 +17,6 @@ declare namespace Criminal {
         timeout: number;
         breakChance: number;
       };
-      dry: {
-        timeout: number;
-        amount: {
-          min: number;
-          max: number;
-        };
-      };
     };
 
     type Gender = 'male' | 'female';

@@ -122,7 +122,7 @@ class Inventory extends UtilShared.Singleton<Inventory>() {
   ): Promise<boolean> => {
     return global.exports['dg-inventory'].removeItemsByNamesFromInventory(type, identifier, names);
   };
-  public removeItemsByNameFromPlayer = (plyId: number, names: string[]): Promise<boolean> => {
+  public removeItemsByNamesFromPlayer = (plyId: number, names: string[]): Promise<boolean> => {
     return global.exports['dg-inventory'].removeItemsByNamesFromInventory(
       'player',
       this.getPlyIdentifier(plyId),

@@ -36,6 +36,7 @@ declare global {
     Minigames: typeof Classes.Minigames;
     BaseEvents: typeof Classes.BaseEvents;
     StaticObjects: typeof Classes.StaticObjects;
+    DoorLock: typeof Classes.DoorLock;
     Vector3: typeof Vector3Class;
     Vector4: typeof Vector4Class;
   };

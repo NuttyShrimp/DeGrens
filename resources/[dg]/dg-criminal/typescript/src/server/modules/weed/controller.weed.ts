@@ -1,5 +1,4 @@
-import { Events, Inventory, Notifications, Util } from '@dgx/server';
-import { getConfig } from 'services/config';
+import { Events, Inventory, Notifications } from '@dgx/server';
 import { MODELS_PER_STAGE } from './constants.weed';
 import weedPlantManager from './classes/weedplantmanager';
 
@@ -20,24 +19,4 @@ Events.onNet('criminal:weed:add', (plyId: number, itemId: string, coords: Vec3, 
     return;
   }
   weedPlantManager.addNew(plyId, coords, rotation, gender);
-});
-
-Inventory.registerUseable('weed_bud', async (src, item) => {
-  const bagItem = await Inventory.getFirstItemOfNameOfPlayer(src, 'empty_bags');
-  if (!bagItem) {
-    Notifications.add(src, 'Waar ga je dit insteken?', 'error');
-    return;
-  }
-
-  const currentTime = Math.round(Date.now() / 1000);
-  const dryConfig = getConfig().weed.dry;
-  if (currentTime < item.metadata.createTime + dryConfig.timeout * 60 * 60) {
-    Notifications.add(src, 'Dit is nog niet droog', 'error');
-    return;
-  }
-
-  const amount = Util.getRndInteger(dryConfig.amount.min, dryConfig.amount.max);
-  Inventory.destroyItem(bagItem.id);
-  Inventory.destroyItem(item.id);
-  Inventory.addItemToPlayer(src, 'weed_bag', amount);
 });

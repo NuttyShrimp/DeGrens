@@ -82,7 +82,7 @@ declare interface RootState {
   notifications: Notifications.State;
   cli: null;
   taskbar: TaskBar.State;
-  sliders: Sliders.State;
+  sliders: null;
   scenes: null;
   peek: Peek.State;
   bennys: Bennys.State;
