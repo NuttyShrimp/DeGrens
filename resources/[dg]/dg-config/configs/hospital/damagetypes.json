@@ -410,5 +410,9 @@
   "WEAPON_VINTAGEPISTOL": {
     "downType": "dead",
     "status": "gsw"
+  },
+  "WEAPON_PISTOL_MK2": {
+    "downType": "dead",
+    "status": "gsw"
   }
 }
