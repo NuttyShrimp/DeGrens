@@ -1,4 +1,4 @@
-import { Auth, Events, Notifications, Util } from '@dgx/server';
+import { Auth, Events, Notifications, Sounds, Util } from '@dgx/server';
 import { getVinForNetId } from '../../helpers/vehicle';
 import { keyManager } from './classes/keymanager';
 import { handleDoorSuccess, handleFail, handleHotwireSuccess, startVehicleLockpick } from './service.keys';
@@ -81,4 +81,29 @@ Events.onNet('vehicles:keys:shareToClosest', (src: number, netId: number, number
 
 Auth.onAuth(plyId => {
   Events.emitNet('vehicles:keys:setClassesWithoutLock', plyId, NO_LOCK_CLASSES.door);
+});
+
+Events.onNet('vehicles:keys:toggleLock', (plyId: number, netId: number) => {
+  const vehicle = NetworkGetEntityFromNetworkId(netId);
+  if (!vehicle || !DoesEntityExist(vehicle)) return;
+
+  // Sound are car_lock and car_unlock
+  // 0 == unlocked for getter on server
+  const vehLockStatus = GetVehicleDoorLockStatus(vehicle);
+  const newLockStatus = vehLockStatus === 0 ? 2 : 0;
+  const soundName = newLockStatus === 0 ? 'car_lock' : 'car_unlock';
+
+  setImmediate(() => {
+    SetVehicleDoorsLocked(vehicle, newLockStatus);
+  });
+  Sounds.playOnEntity(`vehicles_car_key_lock_${netId}`, soundName, 'DLC_NUTTY_SOUNDS', netId);
+
+  setTimeout(() => {
+    if (GetVehicleDoorLockStatus(vehicle) == newLockStatus) {
+      const msg = newLockStatus === 0 ? 'Voertuig opengedaan' : 'Voertuig op slot gezet';
+      Notifications.add(plyId, msg);
+    } else {
+      Notifications.add(plyId, 'Er is iets fout gelopen met het slotensysteem');
+    }
+  }, 500);
 });

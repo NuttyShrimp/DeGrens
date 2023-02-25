@@ -11,7 +11,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Doorlocks worden nu altijd gezet op server en niet op client
+
 ### Fixed
+
 - Je eject nu vanaf de voorkant van een wagen
 
 ## [1.0.3]
