@@ -22,8 +22,12 @@ AddStateBagChangeHandler('harnessUses', null, (bagName: string, _, value: number
   if (!bagName.startsWith('entity:')) return;
   const netId = Number(bagName.replace('entity:', ''));
   if (Number.isNaN(netId)) return;
+
+  // handler fires before entity exists for client. This handler is used for current vehicle only so we dont need to await
+  if (!NetworkDoesNetworkIdExist(netId) || !NetworkDoesEntityExistWithNetworkId(netId)) return;
   const veh = NetworkGetEntityFromNetworkId(netId);
   if (getCurrentVehicle() !== veh) return;
+
   if (value > 0 && getHarnessUses() === 0) {
     HUD.toggleEntry('harness-uses', true);
   }

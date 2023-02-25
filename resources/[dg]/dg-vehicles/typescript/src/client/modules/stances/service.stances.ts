@@ -1,33 +1,25 @@
-import { Notifications, Util } from '@dgx/client';
-import { isBennysMenuOpen } from 'modules/bennys/service.bennys';
-
-import { isStanceMenuOpen } from './controller.stances';
+import { Notifications } from '@dgx/client';
 import { NOTIFICATION_ID } from './constants.stances';
 
 const closeVehicles: Map<number, Stance.Data> = new Map();
 let stancingThread: NodeJS.Timer | null = null;
 
-// Check for close vehicles that need stancing
-export const startStanceCheckThread = () => {
-  setInterval(() => {
-    closeVehicles.clear();
+export const handleStanceStateUpdate = (netId: number, stanceData: Stance.Data) => {
+  // handler fires before entity exists for client. This handler is used for current vehicle only so we dont need to await
+  if (!NetworkDoesNetworkIdExist(netId) || !NetworkDoesEntityExistWithNetworkId(netId)) return false;
+  const veh = NetworkGetEntityFromNetworkId(netId);
+  if (!DoesEntityExist(veh)) return false;
 
-    const vehicles: number[] = GetGamePool('CVehicle');
-    vehicles.forEach(veh => {
-      if (!DoesEntityExist(veh)) return;
-      const distance = Util.getPlyCoords().distance(Util.getEntityCoords(veh));
-      if (distance > 100) return;
-      const stanceData = Entity(veh).state?.stance;
-      if (!stanceData) return;
-      closeVehicles.set(veh, stanceData);
-    });
+  setCloseVehicleStance(veh, stanceData);
+  return true;
+};
 
-    if (closeVehicles.size !== 0) {
-      startStancingThread();
-    } else {
-      stopStancingThread();
-    }
-  }, 2000);
+export const setCloseVehicleStance = (vehicle: number, stanceData: Stance.Data) => {
+  closeVehicles.set(vehicle, stanceData);
+
+  if (closeVehicles.size !== 0) {
+    startStancingThread();
+  }
 };
 
 // Apply visual stancing for close vehicles
@@ -44,11 +36,6 @@ const startStancingThread = () => {
         return;
       }
 
-      // If we in stance menu or bennys menu, we want it to instantly update instead of every 2 sec to preview new stance without delay
-      if (isStanceMenuOpen() || isBennysMenuOpen()) {
-        stance = Entity(veh).state.stance;
-      }
-
       SetVehicleWheelXOffset(veh, 0, -stance.frontLeft);
       SetVehicleWheelXOffset(veh, 1, stance.frontRight);
       SetVehicleWheelXOffset(veh, 2, -stance.backLeft);
@@ -56,6 +43,10 @@ const startStancingThread = () => {
     });
 
     vehToRemove.forEach(veh => closeVehicles.delete(veh));
+
+    if (closeVehicles.size === 0) {
+      stopStancingThread();
+    }
   }, 1);
 };
 

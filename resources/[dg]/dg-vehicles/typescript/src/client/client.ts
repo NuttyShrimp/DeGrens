@@ -1,5 +1,4 @@
 import { loadCarwashZones } from 'modules/carwash/zones.carwash';
-import { startStanceCheckThread } from 'modules/stances/service.stances';
 import { buildQuicksellZone } from 'modules/vehicleshop/services/quicksell.vehicleshop';
 
 import './controllers';
@@ -22,7 +21,6 @@ import './modules/identification';
 import './services';
 
 setImmediate(() => {
-  startStanceCheckThread();
   loadCarwashZones();
   buildQuicksellZone();
 });
