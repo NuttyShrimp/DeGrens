@@ -18,8 +18,8 @@ on('dg-config:moduleLoaded', (module: string, data: Penalty.Config) => {
 
 Util.onPlayerLoaded(async data => {
   const warns = await SQL.query<{ penaltyId: number, reason: string, points: number }[]>("SELECT * FROM admin_unannounced_warns as aaw LEFT JOIN penalties p ON p.id = aaw.penaltyid WHERE aaw.steamid = ?", [data.steamid]);
+  if (warns.length < 1) return;
   const missedWarns = warns.reduce((cur, w) => `${cur}${w.reason}(${w.points}) | `, "").replace(/ | $/, "")
-  console.log(missedWarns)
   UI.openInput(data.source, {
     header: "Gemiste warns",
     inputs: [{
