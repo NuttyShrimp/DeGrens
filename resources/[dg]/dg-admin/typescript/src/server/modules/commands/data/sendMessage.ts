@@ -1,4 +1,4 @@
-import { Chat } from '@dgx/server';
+import { Chat, Notifications } from '@dgx/server';
 import { Inputs } from 'enums/inputs';
 
 declare interface SendMessageData {
@@ -22,6 +22,8 @@ export const sendMessage: CommandData = {
       message: args.message,
       type: 'system',
     });
+
+    Notifications.add(caller.source, `Bericht verzonden naar ${args.Target.name}`);
   },
   UI: {
     title: 'Send Message',
