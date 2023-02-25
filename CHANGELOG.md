@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+### Changed
+
+### Fixed
+- Je eject nu vanaf de voorkant van een wagen
+
 ## [1.0.3]
 
 ### Added

@@ -118,8 +118,12 @@ const ejectFromVehicle = (vehicleVelocity: Vec3) => {
   const ped = PlayerPedId();
   const veh = getCurrentVehicle();
   if (!ped || !veh) return;
-  const coords = Util.ArrayToVector3(GetOffsetFromEntityInWorldCoords(veh, 1.0, 0.0, 1.0));
+
+  const [min, max] = GetModelDimensions(GetEntityModel(veh));
+  const vehLength = max[1] - min[1];
+  const coords = Util.ArrayToVector3(GetOffsetFromEntityInWorldCoords(veh, 0.0, vehLength / 2 - 1, 1.0));
   SetEntityCoords(ped, coords.x, coords.y, coords.z, true, false, false, false);
+
   setTimeout(() => {
     SetPedToRagdoll(ped, 5511, 5511, 0, false, false, false);
     const velocity = Vector3.create(vehicleVelocity).multiply(3);
