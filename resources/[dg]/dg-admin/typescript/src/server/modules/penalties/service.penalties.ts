@@ -40,8 +40,7 @@ const penalisePlayer = async (
       source >= 1 ? source : undefined
     );
     penaltyLogger.error(
-      `Failed to register ${type} for ${targetName}(${target}) given by ${
-        source === -1 ? 'AntiCheat' : source === 0 ? 'Panel' : Util.getName(source)
+      `Failed to register ${type} for ${targetName}(${target}) given by ${source === -1 ? 'AntiCheat' : source === 0 ? 'Panel' : Util.getName(source)
       } | ${Object.values(metadata)
         .map((k, v) => `${k}: ${v}`)
         .join('| ')}`
@@ -64,9 +63,7 @@ const penalisePlayer = async (
     source >= 1 ? source : undefined
   );
   penaltyLogger.info(
-    `${targetName}(${target}) received a ${type} by ${Util.getName(
-      source === -1 ? 'AntiCheat' : source === 0 ? 'Panel' : Util.getName(source)
-    )} | ${Object.entries(metadata)
+    `${targetName}(${target}) received a ${type} by ${source === -1 ? 'AntiCheat' : source === 0 ? 'Panel' : Util.getName(source)} | ${Object.entries(metadata)
       .map(([k, v]) => `${k}: ${v}`)
       .join('| ')}`
   );
@@ -146,9 +143,8 @@ export const isPlayerBanned = async (steamId: string) => {
   if (result.length < 1) return { isBanned: false, reason: '' };
   return {
     isBanned: result.length > 0,
-    reason: `Je bent gebanned voor ${result[0].reason}, Verloopt op ${
-      result[0].length === -1 ? 'permanently' : result[0].expiry
-    }`,
+    reason: `Je bent gebanned voor ${result[0].reason}, Verloopt op ${result[0].length === -1 ? 'permanently' : result[0].expiry
+      }`,
   };
 };
 

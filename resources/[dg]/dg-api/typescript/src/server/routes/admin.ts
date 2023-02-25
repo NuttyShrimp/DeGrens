@@ -9,7 +9,13 @@ registerRoute('POST', '/admin/actions/warn', async (req, res) => {
     });
     return;
   }
-  await Admin.warn(0, req.body.target, req.body.reason);
+  if (req.body.points === undefined || Number.isNaN(Number(req.body.points)) || Number(req.body.points) < 0) {
+    res(400, {
+      message: 'points must be valid number that is positive or 0',
+    });
+    return;
+  }
+  await Admin.warn(0, req.body.target, [req.body.reason], req.body.points);
   res(200, {
     result: true,
   });
@@ -28,13 +34,13 @@ registerRoute('POST', '/admin/actions/kick', async (req, res) => {
     });
     return;
   }
-  if (!req.body.points || Number.isNaN(Number(req.body.points)) || Number(req.body.points) < 0) {
+  if (req.body.points === undefined || Number.isNaN(Number(req.body.points)) || Number(req.body.points) < 0) {
     res(400, {
       message: 'points must be valid number that is positive or 0',
     });
     return;
   }
-  await Admin.kick(0, req.body.target, req.body.reason, req.body.points);
+  await Admin.kick(0, req.body.target, [req.body.reason], req.body.points);
   res(200, {
     result: true,
   });
@@ -68,7 +74,7 @@ registerRoute('POST', '/admin/actions/ban', async (req, res) => {
     });
     return;
   }
-  await Admin.ban(0, req.body.target, req.body.reason, req.body.points, req.body.length);
+  await Admin.ban(0, req.body.target, [req.body.reason], req.body.points, req.body.length);
   res(200, {
     result: true,
   });
