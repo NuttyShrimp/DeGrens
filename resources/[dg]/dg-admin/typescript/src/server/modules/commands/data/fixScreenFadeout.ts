@@ -10,7 +10,7 @@ export const fixScreenFadeout: CommandData = {
   log: 'fixed a persons faded out screen',
   isClientCommand: false,
   target: [],
-  role: 'developer',
+  role: 'staff',
   handler: (caller, data: FixScreenFadeoutData) => {
     const plyId = data.Target?.serverId ?? caller.source;
     Events.emitNet('admin:command:fadeIn', plyId);
