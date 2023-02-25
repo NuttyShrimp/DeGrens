@@ -45,19 +45,19 @@ const splitParams = (path: string, method: string): [API.Route | undefined, Reco
 
 const getRouteResponser =
   (res: any, path: string) =>
-  (
-    code: number,
-    data: any,
-    headers: Record<string, string> = {
-      ['Content-Type']: 'application/json',
-    }
-  ) => {
-    if (code >= 400) {
-      mainLogger.warn('A API route did not have a success code', 'path', path, 'code', code, 'returnData', data);
-    }
-    res.writeHead(code, headers);
-    res.send(JSON.stringify(data));
-  };
+    (
+      code: number,
+      data: any,
+      headers: Record<string, string> = {
+        ['Content-Type']: 'application/json',
+      }
+    ) => {
+      if (code >= 400) {
+        mainLogger.warn('A API route did not have a success code', 'path', path, 'code', code, 'returnData', data);
+      }
+      res.writeHead(code, headers);
+      res.send(JSON.stringify(data));
+    };
 
 export const registerRoute = (method: API.Method, path: string, handler: API.Handler) => {
   const resource = GetInvokingResource();
@@ -88,6 +88,7 @@ export const registerRoute = (method: API.Method, path: string, handler: API.Han
 global.exports('registerRoute', registerRoute);
 
 export const handleRoute = (path: string, req: any, res: any) => {
+  // console.log(`[${req.method}] ${path}`)
   const [route, params] = splitParams(path, req.method);
   req.params = { ...(req.params ?? {}), ...params };
   if (!route) {
