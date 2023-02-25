@@ -18,6 +18,6 @@ export const enteredSpeedZone = () => {
   if (EXCLUDED_JOBS.includes(Jobs.getCurrentJob().name ?? '')) return;
   const speedOverLimit = Math.min(Math.round(GetEntitySpeed(PlayerPedId()) * 3.6), 300) - 100; // limit to 300kph than subtract minimum of 100kph
   if (speedOverLimit <= 0) return;
-  const increase = 10 + 10 * (speedOverLimit / 200); // Limit is 0 - 200 so get percentage
+  const increase = 5 + 8 * (speedOverLimit / 200); // Limit is 0 - 200 so get percentage
   Events.emitNet('hud:server:changeStress', increase);
 };
