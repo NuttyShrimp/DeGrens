@@ -13,7 +13,7 @@ local function addToComboZone(zone)
         for i = 1, #leftZones do
           TriggerEvent("dg-polyzone:exit", leftZones[i].name, leftZones[i].data, leftZones[i].center)
           if DEBUG_ENABLED then
-            debug('[dg-polyzone] Left zone | name: %s | data: %s | center: %s', leftZones[i].name, leftZones[i].data,
+            print('[dg-polyzone] Left zone | name: %s | data: %s | center: %s', leftZones[i].name, leftZones[i].data,
               leftZones[i].center)
           end
         end
@@ -22,7 +22,7 @@ local function addToComboZone(zone)
         for i = 1, #enteredZones do
           TriggerEvent("dg-polyzone:enter", enteredZones[i].name, enteredZones[i].data, enteredZones[i].center)
           if DEBUG_ENABLED then
-            debug('[dg-polyzone] Entered zone | name: %s | data: %s | center: %s', enteredZones[i].name,
+            print('[dg-polyzone] Entered zone | name: %s | data: %s | center: %s', enteredZones[i].name,
               enteredZones[i].data, enteredZones[i].center)
           end
         end

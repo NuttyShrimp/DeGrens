@@ -22,7 +22,7 @@ local function addToTargetZone(zone)
         for i = 1, #leftZones do
           TriggerEvent("dg-polytarget:exit", leftZones[i].name, leftZones[i].data, exports['dg-lib']:vectorToTable(leftZones[i].center))
           if DEBUG_ENABLED then
-						debug('[dg-polytarget] Left zone | name: %s | data: %s | center: %s', leftZones[i].name, leftZones[i].data, leftZones[i].center)
+						print('[dg-polytarget] Left zone | name: %s | data: %s | center: %s', leftZones[i].name, leftZones[i].data, leftZones[i].center)
           end
         end
       end
@@ -30,7 +30,7 @@ local function addToTargetZone(zone)
         for i = 1, #enteredZones do
           TriggerEvent("dg-polytarget:enter", enteredZones[i].name, enteredZones[i].data, exports['dg-lib']:vectorToTable(enteredZones[i].center))
           if DEBUG_ENABLED then
-            debug('[dg-polytarget] Entered zone | name: %s | data: %s | center: %s', enteredZones[i].name, enteredZones[i].data, enteredZones[i].center)
+            print('[dg-polytarget] Entered zone | name: %s | data: %s | center: %s', enteredZones[i].name, enteredZones[i].data, enteredZones[i].center)
           end
         end
       end
