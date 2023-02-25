@@ -4,13 +4,6 @@
     "timeout": 24,
     "breakChance": 10
   },
-  "dry": {
-    "timeout": 72,
-    "amount": {
-      "min": 5,
-      "max": 10
-    }
-  },
   "food": {
     "decayTime": 20,
     "amount": 45

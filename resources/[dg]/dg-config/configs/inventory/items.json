@@ -781,7 +781,7 @@
   {
     "markedForSeizure": true,
     "name": "weed_bag",
-    "label": "Zakje Weed 1g",
+    "label": "Zakje Weed",
     "decayRate": 10080,
     "image": "weed_bag.png",
     "size": {
@@ -822,7 +822,6 @@
     "useable": true,
     "decayRate": 10080,
     "image": "meth_bag.png",
-    "description": "Zakje Meth van 1 gram",
     "size": {
       "x": 1,
       "y": 1
@@ -835,7 +834,7 @@
     "useable": true,
     "decayRate": 10080,
     "image": "meth_brick.png",
-    "description": "Meth Brick van 1 kilogram, best nog even wachten voor open te maken",
+    "description": "best nog even wachten voor open te maken",
     "size": {
       "x": 2,
       "y": 2
@@ -3052,6 +3051,7 @@
     "name": "farming_fertilizer",
     "label": "Plantenvoeding",
     "image": "farming_fertilizer.png",
+    "decayRate": 129600,
     "size": {
       "x": 2,
       "y": 3
@@ -3061,6 +3061,7 @@
     "name": "farming_fertilizer_deluxe",
     "label": "Deluxe Plantenvoeding",
     "image": "farming_fertilizer_deluxe.png",
+    "decayRate": 129600,
     "size": {
       "x": 2,
       "y": 3
@@ -3288,6 +3289,26 @@
     "size": {
       "x": 3,
       "y": 2
+    }
+  },
+  {
+    "name": "meth_lab_keycard",
+    "label": "Lab Keycard",
+    "image": "meth_lab_keycard.png",
+    "decayRate": 7200,
+    "size": {
+      "x": 2,
+      "y": 2
+    }
+  },
+  {
+    "name": "farming_plant",
+    "label": "Plantresten",
+    "image": "farming_plant.png",
+    "decayRate": 1440,
+    "size": {
+      "x": 1,
+      "y": 1
     }
   }
 ]

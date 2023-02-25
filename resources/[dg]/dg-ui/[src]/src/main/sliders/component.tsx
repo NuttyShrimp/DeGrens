@@ -1,29 +1,34 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useState } from 'react';
 import AppWrapper from '@components/appwrapper';
+import { nuiAction } from '@src/lib/nui-comms';
 
 import { Sliders } from './components/sliders';
-import { useSlidersStore } from './stores/useSlidersStore';
 import config from './_config';
 
 import './styles/sliders.scss';
 
 const Component: AppFunction = props => {
-  const updateStore = useSlidersStore(s => s.updateStore);
-  const onShow = useCallback((data: { power: number[]; amount: number[] }) => {
+  const [settings, setSettings] = useState<Sliders.Settings>({
+    power: [0, 100],
+    amount: [0, 100],
+  });
+
+  const onShow = useCallback((data: Sliders.Settings) => {
     props.showApp();
-    updateStore({
-      power: data.power,
-      amount: data.amount,
+    setSettings({
+      power: [...data.power],
+      amount: [...data.amount],
     });
   }, []);
 
   const onHide = useCallback(() => {
     props.hideApp();
-  }, []);
+    nuiAction('sliders/close', { settings });
+  }, [settings]);
 
   return (
     <AppWrapper appName={config.name} onShow={onShow} onHide={onHide} hideOnEscape full center>
-      <Sliders />
+      <Sliders settings={settings} setSettings={setSettings} />
     </AppWrapper>
   );
 };

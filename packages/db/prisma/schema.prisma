@@ -652,6 +652,12 @@ model restaurant_prices {
   @@id([restaurant, item])
 }
 
+model active_labs {
+  type        lab_type @id()
+  id          Int
+  refreshTime Int      @default(0)
+}
+
 enum bank_accounts_type {
   standard
   savings
@@ -692,4 +698,10 @@ enum transaction_log_type {
   purchase
   paycheck
   mobile_transaction
+}
+
+enum lab_type {
+  weed
+  coke
+  meth
 }

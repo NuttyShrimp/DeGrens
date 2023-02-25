@@ -465,6 +465,27 @@
     },
     {
       "type": "node-terminal",
+      "name": "labs:build prod",
+      "request": "launch",
+      "command": "yarn run build",
+      "cwd": "${workspaceFolder}/resources/[dg]/dg-labs/typescript"
+    },
+    {
+      "type": "node-terminal",
+      "name": "labs:build dev",
+      "request": "launch",
+      "command": "yarn run build:dev",
+      "cwd": "${workspaceFolder}/resources/[dg]/dg-labs/typescript"
+    },
+    {
+      "type": "node-terminal",
+      "name": "labs:watch",
+      "request": "launch",
+      "command": "yarn run watch",
+      "cwd": "${workspaceFolder}/resources/[dg]/dg-labs/typescript"
+    },
+    {
+      "type": "node-terminal",
       "name": "localsounds:build prod",
       "request": "launch",
       "command": "yarn run build",

@@ -1,0 +1,541 @@
+{
+  "weed": {
+    "refreshTimeout": 3,
+    "interiorProps": [
+      "weed_app",
+      "weed_staff_01",
+      "weed_staff_02",
+      "weed_update_lamp",
+      "weed_fan_update",
+      "weed_stock",
+      "weed_plant_v5"
+    ],
+    "peekZones": [
+      {
+        "action": "package",
+        "coords": {
+          "x": 7.49,
+          "y": 7.71,
+          "z": 0.8
+        }
+      },
+      {
+        "action": "fertilizer",
+        "coords": {
+          "x": -9.24,
+          "y": -4.28,
+          "z": 0.97
+        }
+      },
+      {
+        "action": "search",
+        "coords": {
+          "x": 4.04,
+          "y": 7.79,
+          "z": 0.8
+        }
+      },
+      {
+        "action": "plant",
+        "coords": {
+          "x": -3.46,
+          "y": -5.52,
+          "z": 0.47
+        },
+        "data": {
+          "plantId": 0
+        }
+      },
+      {
+        "action": "plant",
+        "coords": {
+          "x": -3.46,
+          "y": -4.06,
+          "z": 0.47
+        },
+        "data": {
+          "plantId": 1
+        }
+      },
+      {
+        "action": "plant",
+        "coords": {
+          "x": -1.01,
+          "y": -4.06,
+          "z": 0.47
+        },
+        "data": {
+          "plantId": 2
+        }
+      },
+      {
+        "action": "plant",
+        "coords": {
+          "x": -1.01,
+          "y": -5.52,
+          "z": 0.47
+        },
+        "data": {
+          "plantId": 3
+        }
+      },
+      {
+        "action": "plant",
+        "coords": {
+          "x": 1.55,
+          "y": -5.52,
+          "z": 0.47
+        },
+        "data": {
+          "plantId": 4
+        }
+      },
+      {
+        "action": "plant",
+        "coords": {
+          "x": 1.55,
+          "y": -4.06,
+          "z": 0.47
+        },
+        "data": {
+          "plantId": 5
+        }
+      },
+      {
+        "action": "plant",
+        "coords": {
+          "x": 3.96,
+          "y": -4.06,
+          "z": 0.47
+        },
+        "data": {
+          "plantId": 6
+        }
+      },
+      {
+        "action": "plant",
+        "coords": {
+          "x": 3.96,
+          "y": -5.52,
+          "z": 0.47
+        },
+        "data": {
+          "plantId": 7
+        }
+      },
+      {
+        "action": "plant",
+        "coords": {
+          "x": 6.54,
+          "y": -5.52,
+          "z": 0.47
+        },
+        "data": {
+          "plantId": 8
+        }
+      },
+      {
+        "action": "plant",
+        "coords": {
+          "x": 6.54,
+          "y": -4.06,
+          "z": 0.47
+        },
+        "data": {
+          "plantId": 9
+        }
+      },
+      {
+        "action": "plant",
+        "coords": {
+          "x": 9.23,
+          "y": -4.06,
+          "z": 0.47
+        },
+        "data": {
+          "plantId": 10
+        }
+      },
+      {
+        "action": "plant",
+        "coords": {
+          "x": 9.23,
+          "y": -5.52,
+          "z": 0.47
+        },
+        "data": {
+          "plantId": 11
+        }
+      },
+      {
+        "action": "plant",
+        "coords": {
+          "x": -3.46,
+          "y": -1.36,
+          "z": 0.47
+        },
+        "data": {
+          "plantId": 12
+        }
+      },
+      {
+        "action": "plant",
+        "coords": {
+          "x": -3.46,
+          "y": 0.14,
+          "z": 0.47
+        },
+        "data": {
+          "plantId": 13
+        }
+      },
+      {
+        "action": "plant",
+        "coords": {
+          "x": -1.01,
+          "y": 0.14,
+          "z": 0.47
+        },
+        "data": {
+          "plantId": 14
+        }
+      },
+      {
+        "action": "plant",
+        "coords": {
+          "x": -1.01,
+          "y": -1.36,
+          "z": 0.47
+        },
+        "data": {
+          "plantId": 15
+        }
+      },
+      {
+        "action": "plant",
+        "coords": {
+          "x": 1.55,
+          "y": -1.36,
+          "z": 0.47
+        },
+        "data": {
+          "plantId": 16
+        }
+      },
+      {
+        "action": "plant",
+        "coords": {
+          "x": 1.55,
+          "y": 0.14,
+          "z": 0.47
+        },
+        "data": {
+          "plantId": 17
+        }
+      },
+      {
+        "action": "plant",
+        "coords": {
+          "x": 3.96,
+          "y": 0.14,
+          "z": 0.47
+        },
+        "data": {
+          "plantId": 18
+        }
+      },
+      {
+        "action": "plant",
+        "coords": {
+          "x": 3.96,
+          "y": -1.36,
+          "z": 0.47
+        },
+        "data": {
+          "plantId": 19
+        }
+      },
+      {
+        "action": "plant",
+        "coords": {
+          "x": 6.54,
+          "y": -1.36,
+          "z": 0.47
+        },
+        "data": {
+          "plantId": 20
+        }
+      },
+      {
+        "action": "plant",
+        "coords": {
+          "x": 6.54,
+          "y": 0.14,
+          "z": 0.47
+        },
+        "data": {
+          "plantId": 21
+        }
+      },
+      {
+        "action": "plant",
+        "coords": {
+          "x": 9.23,
+          "y": 0.14,
+          "z": 0.47
+        },
+        "data": {
+          "plantId": 22
+        }
+      },
+      {
+        "action": "plant",
+        "coords": {
+          "x": 9.23,
+          "y": -1.36,
+          "z": 0.47
+        },
+        "data": {
+          "plantId": 23
+        }
+      },
+      {
+        "action": "plant",
+        "coords": {
+          "x": -3.46,
+          "y": 2.61,
+          "z": 0.47
+        },
+        "data": {
+          "plantId": 24
+        }
+      },
+      {
+        "action": "plant",
+        "coords": {
+          "x": -3.46,
+          "y": 4.06,
+          "z": 0.47
+        },
+        "data": {
+          "plantId": 25
+        }
+      },
+      {
+        "action": "plant",
+        "coords": {
+          "x": -1.01,
+          "y": 4.06,
+          "z": 0.47
+        },
+        "data": {
+          "plantId": 26
+        }
+      },
+      {
+        "action": "plant",
+        "coords": {
+          "x": -1.01,
+          "y": 2.61,
+          "z": 0.47
+        },
+        "data": {
+          "plantId": 27
+        }
+      },
+      {
+        "action": "plant",
+        "coords": {
+          "x": 1.55,
+          "y": 2.61,
+          "z": 0.47
+        },
+        "data": {
+          "plantId": 28
+        }
+      },
+      {
+        "action": "plant",
+        "coords": {
+          "x": 1.55,
+          "y": 4.06,
+          "z": 0.47
+        },
+        "data": {
+          "plantId": 29
+        }
+      },
+      {
+        "action": "plant",
+        "coords": {
+          "x": 3.96,
+          "y": 4.06,
+          "z": 0.47
+        },
+        "data": {
+          "plantId": 30
+        }
+      },
+      {
+        "action": "plant",
+        "coords": {
+          "x": 3.96,
+          "y": 2.61,
+          "z": 0.47
+        },
+        "data": {
+          "plantId": 31
+        }
+      },
+      {
+        "action": "plant",
+        "coords": {
+          "x": 6.54,
+          "y": 2.61,
+          "z": 0.47
+        },
+        "data": {
+          "plantId": 32
+        }
+      },
+      {
+        "action": "plant",
+        "coords": {
+          "x": 6.54,
+          "y": 4.06,
+          "z": 0.47
+        },
+        "data": {
+          "plantId": 33
+        }
+      },
+      {
+        "action": "plant",
+        "coords": {
+          "x": 9.23,
+          "y": 4.06,
+          "z": 0.47
+        },
+        "data": {
+          "plantId": 34
+        }
+      },
+      {
+        "action": "plant",
+        "coords": {
+          "x": 9.23,
+          "y": 2.61,
+          "z": 0.47
+        },
+        "data": {
+          "plantId": 35
+        }
+      }
+    ]
+  },
+  "coke": {
+    "refreshTimeout": 14,
+    "interiorProps": [
+      "coke_app",
+      "coke_staff_01",
+      "coke_staff_02",
+      "coke_stock"
+    ],
+    "peekZones": {}
+  },
+  "meth": {
+    "refreshTimeout": 7,
+    "interiorProps": [
+      "light_stock",
+      "meth_app",
+      "meth_staff_01",
+      "meth_staff_02",
+      "meth_update_lab_01",
+      "meth_update_lab_02",
+      "meth_update_lab_01_2",
+      "meth_update_lab_02_2",
+      "meth_stock"
+    ],
+    "peekZones": [
+      {
+        "action": "start",
+        "coords": {
+          "x": -10.44,
+          "y": 5.88,
+          "z": 1.48
+        }
+      },
+      {
+        "action": "station",
+        "coords": {
+          "x": -2.28,
+          "y": -3.97,
+          "z": 0.97
+        },
+        "data": {
+          "stationId": 0
+        }
+      },
+      {
+        "action": "station",
+        "coords": {
+          "x": 0.64,
+          "y": 2.55,
+          "z": 1.19
+        },
+        "data": {
+          "stationId": 1
+        }
+      },
+      {
+        "action": "station",
+        "coords": {
+          "x": 4.23,
+          "y": -1.46,
+          "z": 1.47
+        },
+        "data": {
+          "stationId": 2
+        }
+      },
+      {
+        "action": "station",
+        "coords": {
+          "x": 9.94,
+          "y": -5.3,
+          "z": 1.01
+        },
+        "data": {
+          "stationId": 3
+        }
+      },
+      {
+        "action": "station",
+        "coords": {
+          "x": 8.35,
+          "y": 2.95,
+          "z": 0.88
+        },
+        "data": {
+          "stationId": 4
+        }
+      },
+      {
+        "action": "package",
+        "coords": {
+          "x": -11.36,
+          "y": -5.07,
+          "z": 1.06
+        }
+      },
+      {
+        "action": "take",
+        "coords": {
+          "x": 9.37,
+          "y": 7.75,
+          "z": 0.79
+        }
+      }
+    ]
+  }
+}
