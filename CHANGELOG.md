@@ -14,6 +14,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Doorlocks worden nu altijd gezet op server en niet op client
 - Stancing gebruikt nu statebag handlers
+
+### Fixed
+
+- Je eject nu vanaf de voorkant van een wagen
+- Een motor is nu niet langer automatisch illegaal getuned
+
+## [1.0.3]
+
+### Added
+- Added some suggested clothing
+
+### Changed
+
 - Labos herschreven in de superieure taal
 - Je kunt nu niet meer op de whitelised radio channels als je uit dienst bent
 

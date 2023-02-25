@@ -206,14 +206,18 @@ export const checkIllegalTunes = (vehicle: number) => {
     Notifications.add('Kon upgrades niet vinden', 'error');
     return;
   }
-  let isIllegal = false;
+  let isLegal = true;
   for (const key of Object.keys(upgrades) as (keyof Upgrades.Performance)[]) {
     const maxValue = typeof maxUpgrades[key] === 'boolean' ? 1 : (maxUpgrades[key] as number) - 1;
-    const curValue = typeof upgrades[key] === 'boolean' ? ((upgrades[key] as boolean) === true ? 1 : 0) : upgrades[key];
-    if (maxValue === curValue) {
-      isIllegal = true;
+    // we check max value, for example a motorcycle max susp is 0 so max legal is would be -1 which would cause it to always be marked as illegal
+    if (maxValue < 0) continue;
+
+    const curValue =
+      typeof upgrades[key] === 'boolean' ? ((upgrades[key] as boolean) === true ? 1 : 0) : (upgrades[key] as number);
+    if (curValue >= maxValue) {
+      isLegal = false;
       break;
     }
   }
-  Notifications.add(`Dit voertuig is ${!isIllegal ? 'NIET' : ''} illegaal getuned`, isIllegal ? 'success' : 'error');
+  Notifications.add(`Dit voertuig is ${isLegal ? 'NIET' : ''} illegaal getuned`, isLegal ? 'success' : 'error');
 };

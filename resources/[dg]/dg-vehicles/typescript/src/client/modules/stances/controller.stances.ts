@@ -6,7 +6,6 @@ import {
   handleStanceStateUpdate,
   removeInfoNotif,
   roundOffset,
-  setCloseVehicleStance,
   updateInfoNotif,
 } from './service.stances';
 
