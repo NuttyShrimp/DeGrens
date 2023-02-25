@@ -4,6 +4,7 @@ import './modules/commands';
 import './modules/whitelist';
 import './modules/menu';
 import './modules/penalties';
+import './modules/penaltyPoints/controller.penaltyPoints';
 import './services/selector';
 import './services/staffchat';
 import './services/names';

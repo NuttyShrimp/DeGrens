@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - Added some suggested clothing
+- Added a fall-off timer implementation for points
 
 ### Changed
 - Doorlocks worden nu altijd gezet op server en niet op client

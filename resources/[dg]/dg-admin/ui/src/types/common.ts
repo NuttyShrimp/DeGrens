@@ -23,6 +23,7 @@ export interface Player {
   steamId: string;
   firstName: string;
   lastName: string;
+  points: string;
 }
 
 export interface Vehicle {

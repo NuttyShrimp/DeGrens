@@ -87,6 +87,7 @@
       type: 'warn',
       target: banTarget.value?.steamId,
       reasons: reasons.value,
+      points: penaltyPoints.value,
     });
     store.commit('penalty/setVisible', false);
   };

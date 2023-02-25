@@ -303,14 +303,15 @@ model maintenance_fee_log {
 }
 
 model penalties {
-  id        Int               @id @default(autoincrement())
-  steamId   String            @db.VarChar(255)
-  penalty   penalties_penalty
-  reason    String            @db.LongText
-  points    Int               @default(0)
-  length    Int?
-  date      DateTime          @default(now()) @db.Timestamp(0)
-  automated Boolean           @default(false)
+  id                      Int                       @id @default(autoincrement())
+  steamId                 String                    @db.VarChar(255)
+  penalty                 penalties_penalty
+  reason                  String                    @db.LongText
+  points                  Int                       @default(0)
+  length                  Int?
+  date                    DateTime                  @default(now()) @db.Timestamp(0)
+  automated               Boolean                   @default(false)
+  admin_unannounced_warns admin_unannounced_warns[]
 
   @@index([steamId], map: "steamId")
 }
@@ -513,14 +514,16 @@ model user_kill_stats {
 }
 
 model users {
-  name            String           @db.VarChar(255)
-  steamid         String           @id @db.VarChar(255)
-  license         String           @db.VarChar(255)
-  discord         String           @db.VarChar(255)
-  last_updated    DateTime         @default(now()) @db.Timestamp(0)
-  created_at      DateTime         @default(now()) @db.Timestamp(0)
-  characters      characters[]
-  user_kill_stats user_kill_stats?
+  name                    String                    @db.VarChar(255)
+  steamid                 String                    @id @db.VarChar(255)
+  license                 String                    @db.VarChar(255)
+  discord                 String                    @db.VarChar(255)
+  last_updated            DateTime                  @default(now()) @db.Timestamp(0)
+  created_at              DateTime                  @default(now()) @db.Timestamp(0)
+  characters              characters[]
+  user_kill_stats         user_kill_stats?
+  admin_points            admin_points[]
+  admin_unannounced_warns admin_unannounced_warns[]
 
   @@index([license], map: "license")
   @@index([name], map: "name")
@@ -656,6 +659,23 @@ model active_labs {
   type        lab_type @id()
   id          Int
   refreshTime Int      @default(0)
+}
+
+model admin_points {
+  steamid    String   @id @db.VarChar(255)
+  points     Int
+  created_at DateTime @default(now())
+  updated_at DateTime @default(now())
+  users      users    @relation(fields: [steamid], references: [steamid], onDelete: Cascade)
+}
+
+model admin_unannounced_warns {
+  steamid   String    @db.VarChar(255)
+  penaltyid Int
+  users     users     @relation(fields: [steamid], references: [steamid], onDelete: Cascade)
+  penalty   penalties @relation(fields: [penaltyid], references: [id])
+
+  @@id([steamid, penaltyid])
 }
 
 enum bank_accounts_type {
