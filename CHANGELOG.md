@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 - poly(zone|target) debug prints do not check for `is_production` convar
+- fixed citizenid field in `chars:select` log
 
 ## [1.0.6]
 

@@ -74,7 +74,7 @@ DGCore.Functions.CreateCallback('dg-chars:server:loadPly', function(src, cb, cid
 		DGCore.ShowSuccess(GetCurrentResourceName(), ('%s (Citizen ID: %s) has successfully been loaded!'):format(GetPlayerName(src), cid))
     exports['dg-chat']:refreshCommands(src)
 	  -- loadHouseData()
-    DGX.Util.Log('chars:select', { citizendid = cid }, ("%s (%d | %d) loaded.."):format(DGX.Util.getName(src), cid, src), src)
+    DGX.Util.Log('chars:select', { citizenid = cid }, ("%s (%d | %d) loaded.."):format(DGX.Util.getName(src), cid, src), src)
 	end
 
   local ply = DGCore.Functions.GetPlayer(src)
