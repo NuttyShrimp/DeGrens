@@ -2,6 +2,7 @@ import { SQL } from '@dgx/server';
 
 import vinManager from '../../identification/classes/vinmanager';
 import { generateServiceStatus } from '../service.status';
+import { mainLogger } from '../../../sv_logger';
 
 const localStore: Map<string, Service.Status> = new Map();
 const DBStore: Map<string, Service.Status> = new Map();
@@ -38,6 +39,10 @@ const insertDBStatus = (vin: string) => {
 };
 
 export const updateServiceStatus = (vin: string, status: Service.Status) => {
+  if (!status) {
+    mainLogger.warn(`Failed to update status for ${vin} because status was ${status}`);
+    return;
+  }
   const clampedStatus = (Object.entries(status) as [keyof Service.Status, number][]).reduce((acc, [key, value]) => {
     acc[key] = Math.max(0, value);
     return acc;
