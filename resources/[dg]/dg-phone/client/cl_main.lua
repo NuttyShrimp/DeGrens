@@ -91,6 +91,10 @@ end)
 DGX.UI.onUIReload(function()
   if not getState('characterLoaded') then return end
   unloadPhone()
+
+  SetTimeout(2000, function()
+    restoreStickyNotifs()
+  end)
 end)
 
 --region Keybindings

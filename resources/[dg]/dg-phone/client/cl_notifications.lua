@@ -1,3 +1,6 @@
+-- used to restore sticky notifs on reload
+local stickyNotifCache = {} -- key: notifId, value: notifData
+
 RegisterUICallback('phone/notifications/event', function(data, cb)
   local event = data.event
   local isAccept = data.isAccept
@@ -23,6 +26,9 @@ addNotification = function(notification)
   if notification.onAccept or notification.onDecline then
     PlaySound(-1, "Click_Fail", "WEB_NAVIGATION_SOUNDS_PHONE", 0, 0, 1)
   end
+  if notification.sticky then
+    stickyNotifCache[notification.id] = notification
+  end
   SendAppEvent('phone', {
     appName = "home-screen",
     action = "addNotification",
@@ -33,6 +39,8 @@ exports('addNotification', addNotification)
 RegisterNetEvent('dg-phone:client:notification:add', addNotification)
 
 removeNotification = function(id)
+  stickyNotifCache[id] = nil
+
   SendAppEvent('phone', {
     appName = "home-screen",
     action = "removeNotification",
@@ -48,6 +56,10 @@ RegisterNetEvent('dg-phone:client:notification:remove', removeNotification)
 --- notification is same structure as above
 --- The diff between them is that this each element of this table is optional
 updateNotification = function(id, noti)
+  if stickyNotifCache[id] then
+    stickyNotifCache[id] = mergeObjects(stickyNotifCache[id], noti)
+  end
+
   SendAppEvent('phone', {
     appName = "home-screen",
     action = "updateNotification",
@@ -67,12 +79,31 @@ if DGX.Util.isDevEnv() then
       title = 'New Contact',
       description = "Add Ya mom to contacts?",
       icon = "contacts",
-      onAccept = 'dg-phone:server:contacts',
-      onDecline = 'server:dg-phone:server',
-      _data = {
-        phone = 'YA MOM',
-      },
-      timer = 15,
+      sticky = true,
+      -- onAccept = 'dg-phone:server:contacts',
+      -- onDecline = 'server:dg-phone:server',
+      -- _data = {
+      --   phone = 'YA MOM',
+      -- },
+      -- timer = 15,
     })
   end, false)
+end
+
+restoreStickyNotifs = function()
+  for id, notif in pairs(stickyNotifCache) do
+    print(('Restoring notif with id %s'):format(id))
+    addNotification(notif)
+  end
+end
+
+mergeObjects = function(x, y)
+  local new = {}
+  for k, v in pairs(x) do
+    new[k] = v
+  end
+  for k, v in pairs(y) do
+    new[k] = v
+  end
+  return new
 end

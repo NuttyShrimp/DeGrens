@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Gain less stress from stress/speedzones
 - Permissies voor fixScreenFadeout veranderd van dev naar staff
+- Sticky notificaties worden nu gerestored na UI reset
 
 ### Fixed
 - poly(zone|target) debug prints do not check for `is_production` convar
