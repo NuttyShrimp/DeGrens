@@ -16,4 +16,11 @@ declare namespace Penalty {
     points: number;
     length?: number;
   }
+
+  interface PenaltyReset {
+    steamid: string;
+    points: number;
+    created_at: number;
+    updated_at: number;
+  }
 }

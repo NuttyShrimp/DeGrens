@@ -49,7 +49,7 @@ declare namespace UI {
     interface Text {
       type: 'display';
       value?: string;
-      getEndpoint: string;
+      getEndpoint?: string;
     }
 
     type Input = {

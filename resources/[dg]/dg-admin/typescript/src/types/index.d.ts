@@ -26,6 +26,7 @@ declare namespace UI {
     steamId: string;
     firstName: string;
     lastName: string;
+    points: number;
   }
 
   interface VehicleModel {
