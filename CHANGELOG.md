@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Feedback aan admin sendMessage command voor uitvoerder
 - De owner van een restaurant heeft nu een menu om signedin employees te zien
 - Ladder check thread om camping tegen te gaan
+- Voertuig winkel voor ambulance en politie
 
 ### Changed
 - Gain less stress from stress/speedzones
@@ -20,6 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Rework radiotowers om campers tegen te gaan
 - Je moet niet langer in dienst zijn om restaurant stash te bekijken
 - Increase aantal stress dat joint weghaald
+- Paycheck bump
 
 ### Fixed
 - poly(zone|target) debug prints do not check for `is_production` convar
