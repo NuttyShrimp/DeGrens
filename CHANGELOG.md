@@ -22,6 +22,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Je moet niet langer in dienst zijn om restaurant stash te bekijken
 - Increase aantal stress dat joint weghaald
 - Paycheck bump
+- Je kan de motor nu ook afleggen als je geen sleutels hebt
 
 ### Fixed
 - poly(zone|target) debug prints do not check for `is_production` convar
