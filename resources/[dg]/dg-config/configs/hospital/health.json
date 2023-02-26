@@ -20,7 +20,7 @@
         "anim": "weed_inspecting_high_base_inspector",
         "flags": 49
       },
-      "health": 10,
+      "health": 25,
       "bleed": 20
     }
   }
