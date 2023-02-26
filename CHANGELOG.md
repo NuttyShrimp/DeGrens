@@ -18,6 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Sticky notificaties worden nu gerestored na UI reset
 - Je gaat nu automatisch uit dienst als je het restaurant verlaat
 - Rework radiotowers om campers tegen te gaan
+- Je moet niet langer in dienst zijn om restaurant stash te bekijken
 
 ### Fixed
 - poly(zone|target) debug prints do not check for `is_production` convar

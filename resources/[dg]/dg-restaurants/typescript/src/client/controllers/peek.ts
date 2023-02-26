@@ -66,7 +66,7 @@ Peek.addZoneEntry('restaurant_stash', {
       Inventory.openStash(stashId, 100);
     },
     canInteract: (_, __, option) => {
-      return Business.isEmployee(option.data.id, ['stash']) && getIsSignedIn();
+      return Business.isEmployee(option.data.id, ['stash']);
     },
   })),
   distance: 3,
