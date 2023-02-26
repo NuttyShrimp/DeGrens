@@ -1,4 +1,4 @@
-import { Config, Events, RPC } from '@dgx/server';
+import { Events, RPC } from '@dgx/server';
 
 import { getModelStanceData, saveStance } from './service.stance';
 

@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - fixed citizenid field in `chars:select` log
 - - Je gaat nu neer ipv bewusteloos van PD Glock
 
+- Check op null stance state
 
 ## [1.0.6]
 

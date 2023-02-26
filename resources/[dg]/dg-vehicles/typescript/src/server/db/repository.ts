@@ -227,7 +227,7 @@ export const insertNewVehicle = async (
       state,
       garageId,
       harness,
-      stance: JSON.stringify(stance),
+      stance: stance === null ? null : JSON.stringify(stance),
       wax,
       nos,
     },
@@ -297,7 +297,7 @@ export const updateVehicleStance = async (vin: string, stanceData: Stance.Data) 
   const query = `UPDATE player_vehicles
                  SET stance = ?
                  WHERE vin = ?`;
-  await SQL.query(query, [JSON.stringify(stanceData), vin]);
+  await SQL.query(query, [stanceData === null ? null : JSON.stringify(stanceData), vin]);
 };
 
 export const updateVehicleWax = async (vin: string, wax: number | null) => {

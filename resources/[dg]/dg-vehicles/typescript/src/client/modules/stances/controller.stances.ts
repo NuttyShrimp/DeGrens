@@ -130,7 +130,7 @@ UI.RegisterUICallback('stance/cycleStep', (_, cb) => {
 });
 
 //@ts-ignore
-AddStateBagChangeHandler('stance', null, (bagName: string, _, stanceData: Stance.Data) => {
+AddStateBagChangeHandler('stance', null, (bagName: string, _, stanceData: Stance.Data | null) => {
   if (!bagName.startsWith('entity:')) return;
   const netId = Number(bagName.replace('entity:', ''));
   if (Number.isNaN(netId)) return;
