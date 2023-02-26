@@ -1,7 +1,7 @@
-import { Events, Notifications, Peek, PolyTarget, RPC } from '@dgx/client';
+import { Events, Peek, PolyTarget, Weapons } from '@dgx/client';
 import { Util } from '@dgx/shared';
 
-import { enterHouse, leaveHouse, lockHouse, searchLootLocation, unlockHouse } from './helpers.house';
+import { enterHouse, leaveHouse, searchLootLocation } from './helpers.house';
 
 let shellTypes: Record<string, string>;
 
@@ -12,7 +12,9 @@ let radiusBlipInterval: NodeJS.Timer | null = null;
 
 export const getShellTypes = () => shellTypes;
 export const getSelectedHouse = () => selectedHouse;
-export const setSelectedHouse = (houseId: string) => { selectedHouse = houseId };
+export const setSelectedHouse = (houseId: string) => {
+  selectedHouse = houseId;
+};
 export const getSelectedHouseInfo = () => selectedHouseInfo;
 
 global.exports('lootZone', (place: string, lootTable?: number) => {
@@ -29,7 +31,7 @@ on('dg-houserobbery:leave', () => {
   leaveHouse();
 });
 
-onNet('houserobbery:client:cleanup', () => {
+Events.onNet('houserobbery:client:cleanup', () => {
   selectedHouse = null;
   selectedHouseInfo = null;
   if (radiusBlipInterval) {
@@ -39,69 +41,51 @@ onNet('houserobbery:client:cleanup', () => {
   RemoveBlip(radiusBlip);
 });
 
-Peek.addFlagEntry(
-  'isHouseRobSignin',
-  {
-    options: [
-      {
-        icon: 'fas fa-pen',
-        label: 'Meld aan/uit',
-        items: ['vpn'],
-        action: async () => {
-          Events.emitNet('houserobbery:server:toggleSignedIn');
-        },
+Peek.addFlagEntry('isHouseRobSignin', {
+  options: [
+    {
+      icon: 'fas fa-pen',
+      label: 'Meld aan/uit',
+      items: ['vpn'],
+      action: async () => {
+        Events.emitNet('houserobbery:server:toggleSignedIn');
       },
-    ],
-    distance: 1.5,
-  },
-  true
-);
+    },
+  ],
+  distance: 1.5,
+});
 
-Peek.addZoneEntry(
-  'houserobbery_door',
-  {
-    options: [
-      {
-        icon: 'fas fa-lock-open',
-        label: 'Forceer deur',
-        action: entry => {
-          unlockHouse(entry.data.id);
-        },
-        canInteract: (_, __, entry) => {
-          return selectedHouse == entry.data.id;
-        },
+Peek.addZoneEntry('houserobbery_door', {
+  options: [
+    {
+      icon: 'fas fa-lock-open',
+      label: 'Forceer deur',
+      action: entry => {
+        const holdingCrowbar = Weapons.getCurrentWeaponData()?.name === 'weapon_crowbar' ?? false;
+        Events.emitNet('houserobbery:server:unlockHouse', entry.data.id, holdingCrowbar);
       },
-      {
-        icon: 'fas fa-door-open',
-        label: 'Ga binnen',
-        action: entry => {
-          enterHouse(entry.data.id);
-        },
-        canInteract: (_, __, entry) => {
-          return selectedHouse == entry.data.id;
-        },
+      canInteract: (_, __, entry) => {
+        return selectedHouse == entry.data.id;
       },
-      {
-        icon: 'fas fa-door-open',
-        label: 'Ga binnen',
-        job: 'police',
-        action: entry => {
-          enterHouse(entry.data.id);
-        },
+    },
+    {
+      icon: 'fas fa-door-open',
+      label: 'Ga binnen',
+      action: entry => {
+        enterHouse(entry.data.id);
       },
-      {
-        icon: 'fas fa-lock',
-        label: 'Vergrendel deur',
-        job: 'police',
-        action: entry => {
-          lockHouse(entry.data.houseId);
-        },
+    },
+    {
+      icon: 'fas fa-lock',
+      label: 'Vergrendel deur',
+      job: 'police',
+      action: entry => {
+        Events.emitNet('houserobbery:server:lockDoor', entry.data.id);
       },
-    ],
-    distance: 1.5,
-  },
-  true
-);
+    },
+  ],
+  distance: 1.5,
+});
 
 Events.onNet('houserobbery:client:buildHouseZone', (houseId: string, houseInfo: House.Data) => {
   PolyTarget.addBoxZone('houserobbery_door', houseInfo.coords, 1.0, 1.0, {

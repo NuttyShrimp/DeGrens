@@ -1,9 +1,9 @@
-import { Chat, Jobs } from '@dgx/server';
+import { Chat, Jobs, Util } from '@dgx/server';
 import stateManager from 'classes/StateManager';
 import './services/grouppicker';
 
 import './controllers';
-import { startPlayerPickingStash } from './services/grouppicker';
+import { startPlayerPickingThread } from './services/grouppicker';
 
 setImmediate(() => {
   const jobInfo: Jobs.Job = {
@@ -14,5 +14,5 @@ setImmediate(() => {
   };
   Jobs.registerJob('houserobbery', jobInfo);
 
-  startPlayerPickingStash();
+  startPlayerPickingThread();
 });

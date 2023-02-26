@@ -1,12 +1,12 @@
 import stateManager from '../classes/StateManager';
 import { Config, Util, Jobs, Auth, Events } from '@dgx/server';
 
-Jobs.onGroupLeave((plyId, cid) => {
-  stateManager.cleanupPlayer(plyId, cid);
+Jobs.onGroupLeave(plyId => {
+  stateManager.cleanupPlayer(plyId);
 });
 
-Util.onPlayerUnloaded((plyId, cid) => {
-  stateManager.cleanupPlayer(plyId, cid);
+Util.onPlayerUnloaded((_, cid) => {
+  stateManager.handlePlayerLeft(cid);
 });
 
 Auth.onAuth(async plyId => {

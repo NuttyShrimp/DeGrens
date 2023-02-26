@@ -1,43 +1,11 @@
-import { Events, Inventory, Minigames, Notifications, Police, PolyZone, RPC, Util, Weapons } from '@dgx/client';
+import { Events, Notifications, PolyZone, RPC } from '@dgx/client';
 import { enterInterior, leaveInterior } from 'services/interiors';
 import { setSelectedHouse } from './controller.house';
 
-export const unlockHouse = async (houseId: string) => {
-  if (houseId == undefined) return;
-
-  const houseState = await RPC.execute<boolean>('houserobbery:server:getDoorState', houseId);
-  if (houseState) {
-    Notifications.add('Deze deur is al los...', 'error');
-    return;
-  }
-
-  const hasCrowbar = Weapons.getCurrentWeaponData()?.name == 'weapon_crowbar' ?? false;
-  const hasLockpick = hasCrowbar ? false : await Inventory.doesPlayerHaveItems('lockpick');
-  if (!hasCrowbar && !hasLockpick) {
-    Notifications.add('Hoe ga je dit openen?', 'error');
-    return;
-  }
-
-  const keygameSuccess = await Minigames.keygame(3, 7, 20);
-  if (keygameSuccess) {
-    Notifications.add('De deur is opengebroken!', 'success');
-    Events.emitNet('houserobbery:server:unlockDoor', houseId);
-  } else {
-    if (Util.getRndInteger(0, 100) < 10) {
-      Inventory.removeItemByNameFromPlayer('lockpick');
-    } else {
-      Notifications.add('Je bent uitgeschoven', 'error');
-      Police.addBloodDrop();
-    }
-  }
-};
-
 export const enterHouse = async (houseId: string) => {
-  if (houseId == undefined) return;
-
-  const houseState = await RPC.execute<boolean>('houserobbery:server:getDoorState', houseId);
-  if (!houseState) {
-    Notifications.add('Deze deur is nog vast.', 'error');
+  const canEnter = await RPC.execute<boolean>('houserobbery:server:canEnter', houseId);
+  if (!canEnter) {
+    Notifications.add('Deze deur is nog vast...', 'error');
     return;
   }
 
@@ -48,19 +16,6 @@ export const enterHouse = async (houseId: string) => {
 export const leaveHouse = () => {
   leaveInterior();
   PolyZone.removeZone('houserobbery_exit');
-};
-
-export const lockHouse = async (houseId: string) => {
-  if (houseId == undefined) return;
-
-  const houseState = await RPC.execute<boolean>('houserobbery:server:getDoorState', houseId);
-  if (!houseState) {
-    Notifications.add('Deze deur is al vast.', 'error');
-    return;
-  }
-
-  Notifications.add('Je hebt het huis vergrendeld', 'success');
-  Events.emitNet('houserobbery:server:lockDoor', houseId);
 };
 
 export const searchLootLocation = async (houseId: string, zoneName: string, lootTableId = 0) => {

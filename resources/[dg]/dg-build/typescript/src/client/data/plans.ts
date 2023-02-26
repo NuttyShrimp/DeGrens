@@ -32,8 +32,8 @@ Plans.standardmotel_shell = {
   targetZone: [
     {
       offset: new Vector3(1.81, -3.27, -0.56),
-      length: 1.4,
-      width: 0.6,
+      length: 1.45,
+      width: 0.65,
       options: {
         data: {},
         heading: 0,
@@ -56,8 +56,8 @@ Plans.standardmotel_shell = {
     },
     {
       offset: new Vector3(-1.11, 1.17, -0.56),
-      length: 0.6,
-      width: 0.75,
+      length: 0.65,
+      width: 0.8,
       options: {
         data: {},
         heading: 0,
@@ -80,8 +80,8 @@ Plans.standardmotel_shell = {
     },
     {
       offset: new Vector3(1.46, 3.27, -0.56),
-      length: 1.35,
-      width: 0.8,
+      length: 1.4,
+      width: 0.95,
       options: {
         data: {},
         heading: 0,
@@ -104,8 +104,8 @@ Plans.standardmotel_shell = {
     },
     {
       offset: new Vector3(-3.17, 3.09, -0.55),
-      length: 1.0,
-      width: 0.8,
+      length: 1.05,
+      width: 0.85,
       options: {
         data: {},
         heading: 0,
@@ -128,8 +128,8 @@ Plans.standardmotel_shell = {
     },
     {
       offset: new Vector3(-3.25, 1.93, -0.55),
-      length: 0.7,
-      width: 0.65,
+      length: 0.75,
+      width: 0.7,
       options: {
         data: {},
         heading: 0,
@@ -152,8 +152,8 @@ Plans.standardmotel_shell = {
     },
     {
       offset: new Vector3(-1.12, 1.15, -0.55),
-      width: 0.4,
-      length: 0.4,
+      width: 0.45,
+      length: 0.45,
       options: {
         data: {},
         heading: 2,
@@ -206,8 +206,8 @@ Plans.furnitured_midapart = {
   targetZone: [
     {
       offset: new Vector3(4.25, -5.62, -0.52),
-      width: 0.75,
-      length: 0.7,
+      width: 0.8,
+      length: 0.75,
       options: {
         data: {},
         heading: 0,
@@ -228,11 +228,10 @@ Plans.furnitured_midapart = {
         ],
       },
     },
-
     {
       offset: new Vector3(0.5, 1.22, -0.52),
-      width: 1.45,
-      length: 0.6,
+      width: 1.5,
+      length: 0.65,
       options: {
         data: {},
         heading: 0,
@@ -253,16 +252,15 @@ Plans.furnitured_midapart = {
         ],
       },
     },
-
     {
       offset: new Vector3(6.19, 2.98, -0.52),
-      width: 0.65,
-      length: 1.45,
+      width: 0.75,
+      length: 1.55,
       options: {
         data: {},
         heading: 0,
         minZ: -1.52,
-        maxZ: -0.67,
+        maxZ: -0.63,
       },
       entries: {
         distance: 1.5,
@@ -278,11 +276,10 @@ Plans.furnitured_midapart = {
         ],
       },
     },
-
     {
       offset: new Vector3(7.52, 3.99, -0.52),
-      width: 1.2,
-      length: 0.8,
+      width: 1.3,
+      length: 0.9,
       options: {
         data: {},
         heading: 0,
@@ -303,11 +300,10 @@ Plans.furnitured_midapart = {
         ],
       },
     },
-
     {
       offset: new Vector3(5.99, 10.12, -0.52),
-      width: 1.0,
-      length: 1.4,
+      width: 1.05,
+      length: 1.45,
       options: {
         data: {},
         heading: 0,
@@ -328,11 +324,10 @@ Plans.furnitured_midapart = {
         ],
       },
     },
-
     {
       offset: new Vector3(3.54, 7.89, -0.52),
-      width: 0.7,
-      length: 0.6,
+      width: 0.75,
+      length: 0.65,
       options: {
         data: {},
         heading: 0,
@@ -353,11 +348,10 @@ Plans.furnitured_midapart = {
         ],
       },
     },
-
     {
       offset: new Vector3(1.54, 8.72, -0.52),
-      width: 0.75,
-      length: 0.65,
+      width: 0.8,
+      length: 0.7,
       options: {
         data: {},
         heading: 0,
@@ -378,11 +372,10 @@ Plans.furnitured_midapart = {
         ],
       },
     },
-
     {
       offset: new Vector3(0.78, 7.18, -0.52),
-      width: 0.9,
-      length: 0.6,
+      width: 0.95,
+      length: 0.65,
       options: {
         data: {},
         heading: 0,
@@ -406,8 +399,8 @@ Plans.furnitured_midapart = {
 
     {
       offset: new Vector3(-7.75, 6.19, -0.52),
-      width: 2.35,
-      length: 0.2,
+      width: 2.4,
+      length: 1.1,
       options: {
         data: {},
         heading: 0,
@@ -431,8 +424,8 @@ Plans.furnitured_midapart = {
 
     {
       offset: new Vector3(-4.24, -1.17, -0.52),
-      width: 0.4,
-      length: 0.85,
+      width: 0.45,
+      length: 0.9,
       options: {
         data: {},
         heading: 0,
@@ -456,8 +449,8 @@ Plans.furnitured_midapart = {
 
     {
       offset: new Vector3(-0.38, 0.74, -0.52),
-      width: 0.55,
-      length: 0.35,
+      width: 0.6,
+      length: 0.4,
       options: {
         data: {},
         heading: 0,
