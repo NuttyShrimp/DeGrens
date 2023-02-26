@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 
 import { useMainStore } from '../stores/useMainStore';
 import { useVisibleStore } from '../stores/useVisibleStore';
@@ -6,6 +6,11 @@ import { useVisibleStore } from '../stores/useVisibleStore';
 export const useApps = () => {
   const [apps, setApps] = useMainStore(s => [s.apps, s.setApps]);
   const visibleApps = useVisibleStore(s => s.visibleApps);
+  const vAppRef = useRef<(keyof RootState)[]>([]);
+
+  useEffect(() => {
+    vAppRef.current = visibleApps;
+  }, [vAppRef]);
 
   const loadApps = useCallback(async () => {
     const components: ConfigObject[] = [];
@@ -38,7 +43,7 @@ export const useApps = () => {
 
   const isInteractiveAppOpen = useCallback(
     (skip?: string): boolean => {
-      const hasInteractiveAppVisible = visibleApps.findIndex(s => {
+      const hasInteractiveAppVisible = vAppRef.current.findIndex(s => {
         if (s === 'cli' || (skip && s === skip)) {
           return false;
         }
@@ -49,7 +54,7 @@ export const useApps = () => {
       });
       return hasInteractiveAppVisible > -1;
     },
-    [apps, visibleApps]
+    [apps]
   );
 
   return {

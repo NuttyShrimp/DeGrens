@@ -22,15 +22,16 @@ const Component: AppFunction = props => {
   const visible = useVisibleStore(s => s.visibleApps.includes(config.name));
   const { syncItem } = useInventory();
 
-  const handleShow = useCallback(() => {
+  const handleShow = () => {
+    console.log('Showing inventory :)');
     props.showApp();
     fetchInventoryData();
-  }, [props.showApp]);
+  };
 
-  const handleHide = useCallback(() => {
+  const handleHide = () => {
     props.hideApp();
     resetStore();
-  }, [props.hideApp, resetStore]);
+  };
 
   const updateItem = useCallback(
     (item: Inventory.Item) => {
