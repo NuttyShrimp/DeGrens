@@ -124,10 +124,17 @@ class StateManager extends Util.Singleton<StateManager>() {
     return true;
   }
 
+  @RPCEvent('houserobbery:server:getHouseInfo')
+  getHouseInfo = (src: number, houseId: string) => {
+    const houseState = this.houseStates.get(houseId);
+    if (!houseState) return;
+    const houseInfo = this.config.locations[houseState.dataIdx];
+    return houseInfo;
+  }
+
   @RPCEvent('houserobbery:server:getDoorState')
   getDoorState = (src: number, houseId: string) => {
     if (!this.checkUserIsDoingJob(src, houseId)) return false;
-    const Player = DGCore.Functions.GetPlayer(src);
     const state = this.houseStates.get(houseId)?.state ?? -1;
     if (Jobs.getCurrentJob(src) === 'police' && state === HouseState.LOCKED) return true;
     return state === HouseState.UNLOCKED;

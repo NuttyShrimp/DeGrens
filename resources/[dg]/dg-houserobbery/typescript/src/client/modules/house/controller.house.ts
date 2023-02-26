@@ -12,6 +12,7 @@ let radiusBlipInterval: NodeJS.Timer | null = null;
 
 export const getShellTypes = () => shellTypes;
 export const getSelectedHouse = () => selectedHouse;
+export const setSelectedHouse = (houseId: string) => { selectedHouse = houseId };
 export const getSelectedHouseInfo = () => selectedHouseInfo;
 
 global.exports('lootZone', (place: string, lootTable?: number) => {

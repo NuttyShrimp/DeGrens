@@ -1,5 +1,6 @@
 import { Events, Inventory, Minigames, Notifications, Police, PolyZone, RPC, Util, Weapons } from '@dgx/client';
 import { enterInterior, leaveInterior } from 'services/interiors';
+import { setSelectedHouse } from './controller.house';
 
 export const unlockHouse = async (houseId: string) => {
   if (houseId == undefined) return;
@@ -31,7 +32,7 @@ export const unlockHouse = async (houseId: string) => {
   }
 };
 
-export const enterHouse = async (houseId: number) => {
+export const enterHouse = async (houseId: string) => {
   if (houseId == undefined) return;
 
   const houseState = await RPC.execute<boolean>('houserobbery:server:getDoorState', houseId);
@@ -40,6 +41,7 @@ export const enterHouse = async (houseId: number) => {
     return;
   }
 
+  setSelectedHouse(houseId);
   enterInterior();
 };
 
@@ -48,7 +50,7 @@ export const leaveHouse = () => {
   PolyZone.removeZone('houserobbery_exit');
 };
 
-export const lockHouse = async (houseId: number) => {
+export const lockHouse = async (houseId: string) => {
   if (houseId == undefined) return;
 
   const houseState = await RPC.execute<boolean>('houserobbery:server:getDoorState', houseId);
