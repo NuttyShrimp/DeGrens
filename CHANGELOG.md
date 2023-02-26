@@ -34,6 +34,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Huisinbraken werken nu ietsje beter
 - Labs logger niet op silly
 - Fix ems vehicle shop npcs having same id
+- Enkel save event emitten als je een character hebt gekozen
 
 ## [1.0.6]
 

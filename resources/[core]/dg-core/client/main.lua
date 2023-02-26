@@ -13,6 +13,9 @@ end)
 CreateThread(function()
   while true do
     Wait(1000 * 60 * DGCore.Config.UpdateInterval)
-    TriggerServerEvent('DGCore:server:save')
+
+    if LocalPlayer.state.isLoggedIn then
+      TriggerServerEvent('DGCore:server:save')
+    end
   end
 end)
