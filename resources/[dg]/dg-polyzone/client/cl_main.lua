@@ -13,7 +13,7 @@ local function addToComboZone(zone)
         for i = 1, #leftZones do
           TriggerEvent("dg-polyzone:exit", leftZones[i].name, leftZones[i].data, leftZones[i].center)
           if DEBUG_ENABLED then
-            print('[dg-polyzone] Left zone | name: %s | data: %s | center: %s', leftZones[i].name, leftZones[i].data,
+            debugPrint('[dg-polyzone] Left zone | name: %s | data: %s | center: %s', leftZones[i].name, leftZones[i].data,
               leftZones[i].center)
           end
         end
@@ -22,7 +22,7 @@ local function addToComboZone(zone)
         for i = 1, #enteredZones do
           TriggerEvent("dg-polyzone:enter", enteredZones[i].name, enteredZones[i].data, enteredZones[i].center)
           if DEBUG_ENABLED then
-            print('[dg-polyzone] Entered zone | name: %s | data: %s | center: %s', enteredZones[i].name,
+            debugPrint('[dg-polyzone] Entered zone | name: %s | data: %s | center: %s', enteredZones[i].name,
               enteredZones[i].data, enteredZones[i].center)
           end
         end
@@ -159,3 +159,17 @@ DGX.Events.onNet('polyzone:debug:toggle', function(toggle)
   if DEBUG_ENABLED == toggle then return end
   toggleDebug(toggle)
 end)
+
+debugPrint = function(msg, ...)
+  local params = {}
+
+	for _, param in ipairs({ ... }) do
+		if type(param) == "table" then
+			param = json.encode(param, { indent = true })
+		end
+
+		params[#params + 1] = param
+	end
+
+	print((msg):format(table.unpack(params)))
+end

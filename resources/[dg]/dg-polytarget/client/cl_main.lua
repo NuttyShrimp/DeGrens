@@ -22,7 +22,7 @@ local function addToTargetZone(zone)
         for i = 1, #leftZones do
           TriggerEvent("dg-polytarget:exit", leftZones[i].name, leftZones[i].data, exports['dg-lib']:vectorToTable(leftZones[i].center))
           if DEBUG_ENABLED then
-						print('[dg-polytarget] Left zone | name: %s | data: %s | center: %s', leftZones[i].name, leftZones[i].data, leftZones[i].center)
+						debugPrint('[dg-polytarget] Left zone | name: %s | data: %s | center: %s', leftZones[i].name, leftZones[i].data, leftZones[i].center)
           end
         end
       end
@@ -30,7 +30,7 @@ local function addToTargetZone(zone)
         for i = 1, #enteredZones do
           TriggerEvent("dg-polytarget:enter", enteredZones[i].name, enteredZones[i].data, exports['dg-lib']:vectorToTable(enteredZones[i].center))
           if DEBUG_ENABLED then
-            print('[dg-polytarget] Entered zone | name: %s | data: %s | center: %s', enteredZones[i].name, enteredZones[i].data, enteredZones[i].center)
+            debugPrint('[dg-polytarget] Entered zone | name: %s | data: %s | center: %s', enteredZones[i].name, enteredZones[i].data, enteredZones[i].center)
           end
         end
       end
@@ -163,3 +163,17 @@ DGX.Events.onNet('polytarget:debug:toggle', function(toggle)
   if DEBUG_ENABLED == toggle then return end
   toggleTargetDebug(toggle)
 end)
+
+debugPrint = function(msg, ...)
+  local params = {}
+
+	for _, param in ipairs({ ... }) do
+		if type(param) == "table" then
+			param = json.encode(param, { indent = true })
+		end
+
+		params[#params + 1] = param
+	end
+
+	print((msg):format(table.unpack(params)))
+end
