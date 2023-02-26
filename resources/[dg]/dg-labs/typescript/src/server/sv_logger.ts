@@ -27,7 +27,7 @@ Sentry.init({
 });
 
 export const mainLogger = winston.createLogger({
-  level: 'silly', // Config.getConfigValue('main.loglevel'),
+  level: Config.getConfigValue('main.loglevel'),
   transports: [
     new winston.transports.Console({
       format: winston.format.combine(

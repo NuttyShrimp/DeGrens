@@ -31,6 +31,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Je gaat nu neer ipv bewusteloos van PD Glock
 - Agenten kunnen nu huisinbraak huizen binnen
 - Huisinbraken werken nu ietsje beter
+- Labs logger niet op silly
 
 ## [1.0.6]
 
