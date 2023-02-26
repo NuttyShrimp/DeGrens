@@ -39,13 +39,13 @@ const effects: Record<EffectName, (duration: number) => void> = {
     emotedEffect = {
       timer: setInterval(() => {
         cycle++;
-        if (cycle >= 6) {
+        if (cycle >= 25) {
           activeDrugs.stress = false;
           clearInterval(emotedEffect?.timer);
           return;
         }
         Events.emitNet('hud:server:changeStress', Util.getRndInteger(1, 5) * -1);
-      }, 5000),
+      }, 2000),
       type: 'stress',
     };
   },
