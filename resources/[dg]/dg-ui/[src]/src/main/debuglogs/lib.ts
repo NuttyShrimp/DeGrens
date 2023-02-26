@@ -3,12 +3,13 @@ import { useDebugLogStore } from './stores/useDebugLogStore';
 export let logId = 1;
 
 export const addLog = (info: Partial<DebugLogs.log>): number => {
-  const logs = [...useDebugLogStore.getState().logs];
+  let logs = [...useDebugLogStore.getState().logs];
   const log = {
     ...info,
     id: logId++,
   };
   logs.unshift(log);
+  logs = logs.slice(0, 20);
   useDebugLogStore.setState({ logs });
   return log.id;
 };
