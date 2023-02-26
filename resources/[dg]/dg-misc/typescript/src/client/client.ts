@@ -28,10 +28,12 @@ import { setDiscordRichPresence } from 'modules/discord/service.discord';
 import { setGTABehaviour } from 'modules/gtabehaviour/service.gtabehaviour';
 import { initiateStaticObjects } from 'modules/staticobjects/service.staticobjects';
 import { startPropattachScopeThread } from 'modules/propattach/service.propattach';
+import { startLadderThread } from 'services/ladders';
 
 setImmediate(() => {
   setDiscordRichPresence();
   setGTABehaviour();
   initiateStaticObjects();
   startPropattachScopeThread();
+  startLadderThread();
 });

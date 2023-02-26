@@ -77,6 +77,10 @@ class Hospital {
   public isDown = () => {
     return global.exports['dg-hospital'].isDown();
   };
+
+  public setHealth = (health: number) => {
+    global.exports['dg-hospital'].setHealth(health);
+  };
 }
 
 export default {

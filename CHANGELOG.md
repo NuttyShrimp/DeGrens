@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Feedback aan admin sendMessage command voor uitvoerder
 - De owner van een restaurant heeft nu een menu om signedin employees te zien
+- Ladder check thread om camping tegen te gaan
 
 ### Changed
 - Gain less stress from stress/speedzones

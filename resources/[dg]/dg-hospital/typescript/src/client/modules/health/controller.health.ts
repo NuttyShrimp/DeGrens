@@ -10,3 +10,5 @@ Events.onNet('hospital:health:useHeal', (healthIncrease: number, bleedDecrease: 
   const currentBleed = getBleedAmount();
   setBleedAmount(currentBleed - bleedDecrease);
 });
+
+global.exports('setHealth', setHealth);
