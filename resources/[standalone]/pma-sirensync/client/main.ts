@@ -241,17 +241,17 @@ stateBagWrapper("sirenMode", (ent: number, soundMode: number): void => {
   debugLog(`[sirenMode] Setting sound id ${soundId} for ${ent}`);
   switch (soundMode) {
     case 1: {
-      PlaySoundFromEntity(soundId, "VEHICLES_HORNS_SIREN_1", ent, 0 as any, false, 0);
+      PlaySoundFromEntity(soundId, "SIREN_1", ent, "DLC_NUTTY_SIRENS", false, 0);
       debugLog(`[sirenMode] playing sound 1 for ${ent} with sound id ${soundId}`);
       break;
     }
     case 2: {
-      PlaySoundFromEntity(soundId, "VEHICLES_HORNS_SIREN_2", ent, 0 as any, false, 0);
+      PlaySoundFromEntity(soundId, "SIREN_2", ent, "DLC_NUTTY_SIRENS", false, 0);
       debugLog(`[sirenMode] playing sound 2 for ${ent} with sound id ${soundId}`);
       break;
     }
     case 3: {
-      PlaySoundFromEntity(soundId, "VEHICLES_HORNS_POLICE_WARNING", ent, 0 as any, false, 0);
+      PlaySoundFromEntity(soundId, "SIREN_3", ent, "DLC_NUTTY_SIRENS", false, 0);
       debugLog(`[sirenMode] playing sound 3 for ${ent} with sound id ${soundId}`);
       break;
     }
@@ -272,7 +272,7 @@ stateBagWrapper("siren2Mode", (ent: number, soundMode: number): void => {
   const soundId: number = GetSoundId();
   curSiren2Sound.set(ent, soundId);
   debugLog(`[siren2Mode] Setting sound id ${soundId} for ${ent}`);
-  const sounds: string | string[] = PrimarySirenOverride.get(GetEntityModel(ent)) || "VEHICLES_HORNS_SIREN_1";
+  const sounds: string | string[] = PrimarySirenOverride.get(GetEntityModel(ent)) || "SIREN_1";
   if (typeof sounds === "string") {
     const soundBank = getSoundBankForSound(sounds);
     PlaySoundFromEntity(soundId, sounds, ent, soundBank !== "" ? soundBank : 0 as any, false, 0);
