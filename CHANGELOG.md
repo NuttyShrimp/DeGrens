@@ -37,6 +37,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fix ems vehicle shop npcs having same id
 - Enkel save event emitten als je een character hebt gekozen
 - Voertuig service reset nu deftig de handling van een voertuig
+- Je kan nu terug je motor op slot zetten
+- Een afgebroken voertuig onderdeel zorgt er niet meer voor dat peekopties disabled zijn
 
 ## [1.0.6]
 

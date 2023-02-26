@@ -27,7 +27,13 @@ export const getVehHalfLength = (pEntity: number) => {
 
 export const isCloseToHood = (pEntity: number, pDistance: number, pMustBeOpen = false) => {
   const boneIndex = GetEntityBoneIndexByName(pEntity, 'bonnet');
-  if (pMustBeOpen && boneIndex !== -1 && GetVehicleDoorAngleRatio(pEntity, 4) === 0) return false;
+  const isValidDoor = GetIsDoorValid(pEntity, 4);
+
+  if (pMustBeOpen && isValidDoor) {
+    const isClosed = GetVehicleDoorAngleRatio(pEntity, 4) === 0;
+    const isBrokenOff = IsVehicleDoorDamaged(pEntity, 4);
+    if (boneIndex !== -1 && !isBrokenOff && isClosed) return false;
+  }
 
   const plyCoords = Util.getPlyCoords();
   let coordsWithOffset: Vector3;
@@ -44,7 +50,13 @@ export const isCloseToHood = (pEntity: number, pDistance: number, pMustBeOpen = 
 
 export const isCloseToBoot = (pEntity: number, pDistance: number, pMustBeOpen = false) => {
   const boneIndex = GetEntityBoneIndexByName(pEntity, 'boot');
-  if (pMustBeOpen && boneIndex !== -1 && GetVehicleDoorAngleRatio(pEntity, 5) === 0) return false;
+  const isValidDoor = GetIsDoorValid(pEntity, 5);
+
+  if (pMustBeOpen && isValidDoor) {
+    const isClosed = GetVehicleDoorAngleRatio(pEntity, 5) === 0;
+    const isBrokenOff = IsVehicleDoorDamaged(pEntity, 5);
+    if (boneIndex !== -1 && !isBrokenOff && isClosed) return false;
+  }
 
   const plyCoords = Util.getPlyCoords();
   let coordsWithOffset: Vector3;
@@ -70,14 +82,25 @@ export const isCloseToAWheel = (pEntity: number, pDistance: number) => {
   });
 };
 
-export const isCloseToADoor = (vehicle: number, distance: number) => {
+export const isCloseToADoor = (vehicle: number, maxDistance: number) => {
   const plyCoords = Util.getPlyCoords();
-  return doorBones.some(doorBone => {
+
+  // if no door valid, still return true
+  let amountOfValidDoors = 0;
+
+  for (const doorBone of doorBones) {
     const boneIndex = GetEntityBoneIndexByName(vehicle, doorBone);
-    if (boneIndex === -1) return false;
+    if (boneIndex === -1) continue;
+
     const coordsWithOffset = Util.ArrayToVector3(GetWorldPositionOfEntityBone(vehicle, boneIndex));
-    return coordsWithOffset.distance(plyCoords) <= distance;
-  });
+    const distance = coordsWithOffset.distance(plyCoords);
+    amountOfValidDoors++;
+    if (distance <= maxDistance) {
+      return true;
+    }
+  }
+
+  return amountOfValidDoors === 0;
 };
 
 export const isVehicleUpsideDown = (vehicle: number) => {
