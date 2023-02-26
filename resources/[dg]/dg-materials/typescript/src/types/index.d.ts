@@ -47,6 +47,7 @@ declare namespace Materials {
       position: Vec4;
       actions: { action: Action; position: Vec3 }[];
       peds: Vec3[];
+      swarm: Vec3[];
     };
 
     type Action = 'disable' | 'overrideOne' | 'overrideTwo' | 'loot';

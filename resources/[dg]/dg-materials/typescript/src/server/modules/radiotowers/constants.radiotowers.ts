@@ -1,7 +1,7 @@
-export const TOWER_DEFAULT_STATE: Materials.Radiotowers.State = {
-  pedsSpawned: false,
-  disabled: false,
-  overrideOne: false,
-  overrideTwo: false,
-  looted: false,
-};
+export const TOWER_STATE_KEYS: (keyof Materials.Radiotowers.State)[] = [
+  'pedsSpawned',
+  'disabled',
+  'overrideOne',
+  'overrideTwo',
+  'looted',
+];

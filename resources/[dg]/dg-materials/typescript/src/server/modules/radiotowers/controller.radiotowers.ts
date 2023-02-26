@@ -1,10 +1,32 @@
-import { Events, Inventory, Notifications, Police, RPC, Sounds, Taskbar, Util } from '@dgx/server';
+import { Chat, Events, Inventory, Notifications, Police, RPC, Sounds, Taskbar, Util } from '@dgx/server';
 import { getConfig } from 'services/config';
 import { mainLogger } from 'sv_logger';
-import { getTowerState, setDefaultState, setTowerState, shouldSpawnTowerPeds } from './service.radiotowers';
+import {
+  getTowerState,
+  playerLeftTower,
+  resetTowerState,
+  setPlayerAtTower,
+  setTowerState,
+  tryToSpawnTowerPeds,
+  isAnyPlayerAtTower,
+  spawnPedSwarm,
+} from './service.radiotowers';
+import { radioTowerLogger } from './logger.radiotowers';
 
-RPC.register('materials:radiotower:shouldSpawnPeds', (src: number, towerId: string) => {
-  return shouldSpawnTowerPeds(towerId);
+Events.onNet('materials:radiotower:entered', (plyId: number, towerId: string) => {
+  // if no one here yet, start timeout for ped swarm starts
+  if (!isAnyPlayerAtTower(towerId)) {
+    setTimeout(() => {
+      spawnPedSwarm(towerId);
+    }, 10 * 60 * 1000);
+  }
+
+  setPlayerAtTower(towerId, plyId);
+  tryToSpawnTowerPeds(towerId, plyId);
+});
+
+Events.onNet('materials:radiotower:left', (plyId: number, towerId: string) => {
+  playerLeftTower(towerId, plyId);
 });
 
 RPC.register('materials:radiotower:canDisable', (src: number, towerId: string) => {
@@ -15,11 +37,24 @@ Events.onNet('materials:radiotower:disable', (src: number, towerId: string) => {
   if (getTowerState(towerId).disabled) return;
   setTowerState(towerId, 'disabled', true);
 
-  const configTimeout = getConfig().radiotowers.timeout * 60 * 1000;
+  const coords = getConfig().radiotowers.towers[towerId].position;
+  Police.createDispatchCall({
+    tag: '10-31',
+    title: 'Onbevoegde persoon aan vliegveld radiotoren',
+    description: 'Er is een onbevoegde persoon gespot aan de radiotoren op het vliegveld',
+    coords,
+    criminal: src,
+    blip: {
+      sprite: 307,
+      color: 11,
+    },
+  });
+
+  const configTimeout = getConfig().radiotowers.timeout;
   const timeout = Util.getRndInteger(configTimeout - 30, configTimeout + 30);
   setTimeout(() => {
-    setDefaultState(towerId);
-  }, timeout);
+    resetTowerState(towerId, false);
+  }, timeout * 60 * 1000);
 });
 
 Events.onNet('materials:radiotowers:override', (src: number, towerId: string, key: Materials.Radiotowers.Action) => {
@@ -55,7 +90,7 @@ Events.onNet('materials:radiotowers:override', (src: number, towerId: string, ke
     if (!overrideSuccess) {
       setTowerState(towerId, key, false);
     }
-  }, 1500);
+  }, 1000);
 });
 
 Events.onNet('materials:radiotowers:loot', async (src: number, towerId: string) => {
@@ -104,17 +139,20 @@ Events.onNet('materials:radiotowers:loot', async (src: number, towerId: string) 
   mainLogger.info(`Radiotower ${towerId} has been looted by ${src}`);
 });
 
-Events.onNet('materials:radiotowers:dispatch', (src: number, towerId: string) => {
-  const coords = getConfig().radiotowers.towers[towerId].position;
-  Police.createDispatchCall({
-    tag: '10-31',
-    title: 'Onbevoegde persoon aan vliegveld radiotoren',
-    description: 'Er is een onbevoegde persoon gespot aan de radiotoren op het vliegveld',
-    coords,
-    criminal: src,
-    blip: {
-      sprite: 307,
-      color: 11,
-    },
-  });
+// we delete spawned peds after 10 min
+Events.onNet('materials:radiotower:despawnPeds', (plyId, pedNetIds: number[]) => {
+  const peds = pedNetIds.map(netId => ({ netId, entity: NetworkGetEntityFromNetworkId(netId) }));
+
+  setTimeout(() => {
+    for (const ped of peds) {
+      if (
+        DoesEntityExist(ped.entity) &&
+        GetEntityType(ped.entity) === 1 &&
+        NetworkGetNetworkIdFromEntity(ped.entity) === ped.netId
+      ) {
+        DeleteEntity(ped.entity);
+        radioTowerLogger.debug(`Deleted ped for tower ${ped.netId}`);
+      }
+    }
+  }, 10 * 60 * 1000);
 });
