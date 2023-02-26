@@ -2755,8 +2755,8 @@
     "class": "D",
     "defaultStock": 10,
     "restockTime": 7,
-    "price": 10000,
-    "shop": "nfs",
+    "price": 22500,
+    "shop": "pdm",
     "type": "land"
   },
   {
