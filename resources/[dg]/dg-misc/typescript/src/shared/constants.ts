@@ -94,4 +94,5 @@ export const BLACKLISTED_VEHICLE_MODELS = [
   'firetruk',
   'besra',
   'barracks2',
+  'barracks',
 ];
