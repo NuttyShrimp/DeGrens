@@ -6,6 +6,8 @@ import { radioTowerLogger } from './logger.radiotowers';
 const towerStates: Record<string, Materials.Radiotowers.State> = {};
 const playersAtTower: Record<string, Set<number>> = {};
 
+let swarmTimeout: NodeJS.Timeout | null = null;
+
 export const getTowerState = (towerId: string) => towerStates[towerId];
 
 export const setTowerState = <T extends keyof Materials.Radiotowers.State>(
@@ -44,14 +46,27 @@ export const initializeRadiotowerStates = () => {
 };
 
 export const setPlayerAtTower = (towerId: string, plyId: number) => {
+  // if no one here yet, start timeout for ped swarm starts
+  if (!isAnyPlayerAtTower(towerId) && swarmTimeout === null) {
+    swarmTimeout = setTimeout(() => {
+      swarmTimeout = null;
+      spawnPedSwarm(towerId);
+    }, 10 * 60 * 1000);
+  }
+
   playersAtTower[towerId]?.add(plyId);
 };
 
 export const playerLeftTower = (towerId: string, plyId: number) => {
   playersAtTower[towerId]?.delete(plyId);
+
+  // clear spawn timeout when last ply left
+  if (!isAnyPlayerAtTower(towerId) && swarmTimeout !== null) {
+    clearTimeout(swarmTimeout);
+  }
 };
 
-export const isAnyPlayerAtTower = (towerId: string) => {
+const isAnyPlayerAtTower = (towerId: string) => {
   return (playersAtTower[towerId]?.size ?? 0) > 0;
 };
 
@@ -63,14 +78,29 @@ export const tryToSpawnTowerPeds = (towerId: string, plyId: number) => {
 };
 
 // We check if anyone at tower, spawn peds and call function again after 5 min
-export const spawnPedSwarm = (towerId: string) => {
+const spawnPedSwarm = (towerId: string) => {
   if (!isAnyPlayerAtTower(towerId)) return;
 
   const targetPly = [...playersAtTower[towerId]][0];
   Events.emitNet('materials:radiotower:spawnSwarm', targetPly, towerId);
 
-  // recusively spawn spawm every 5 min
-  setTimeout(() => {
+  // recusively spawn spawn every 5 min
+  swarmTimeout = setTimeout(() => {
     spawnPedSwarm(towerId);
   }, 2 * 60 * 1000);
+};
+
+export const getTowerPlyAt = (plyId: number) => {
+  for (const towerId in playersAtTower) {
+    if (playersAtTower[towerId]?.has(plyId)) {
+      return towerId;
+    }
+  }
+};
+
+export const debugTowerPlayers = () => {
+  for (const towerId in playersAtTower) {
+    console.log(towerId);
+    console.log([...playersAtTower[towerId]]);
+  }
 };

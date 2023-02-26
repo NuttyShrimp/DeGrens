@@ -48,6 +48,7 @@ export const enterTowerLocation = (towerId: string) => {
 export const exitTowerLocation = (towerId: string) => {
   activeTowerId = null;
   PolyTarget.removeZone('radiotower_action');
+  Events.emitNet('materials:radiotower:left', towerId);
 };
 
 export const spawnPeds = async (towerId: string) => {

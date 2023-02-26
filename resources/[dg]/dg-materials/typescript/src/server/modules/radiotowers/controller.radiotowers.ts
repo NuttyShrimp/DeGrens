@@ -1,26 +1,19 @@
-import { Chat, Events, Inventory, Notifications, Police, RPC, Sounds, Taskbar, Util } from '@dgx/server';
+import { Events, Inventory, Notifications, Police, RPC, Sounds, Taskbar, Util } from '@dgx/server';
 import { getConfig } from 'services/config';
 import { mainLogger } from 'sv_logger';
 import {
+  debugTowerPlayers,
+  getTowerPlyAt,
   getTowerState,
   playerLeftTower,
   resetTowerState,
   setPlayerAtTower,
   setTowerState,
   tryToSpawnTowerPeds,
-  isAnyPlayerAtTower,
-  spawnPedSwarm,
 } from './service.radiotowers';
 import { radioTowerLogger } from './logger.radiotowers';
 
 Events.onNet('materials:radiotower:entered', (plyId: number, towerId: string) => {
-  // if no one here yet, start timeout for ped swarm starts
-  if (!isAnyPlayerAtTower(towerId)) {
-    setTimeout(() => {
-      spawnPedSwarm(towerId);
-    }, 10 * 60 * 1000);
-  }
-
   setPlayerAtTower(towerId, plyId);
   tryToSpawnTowerPeds(towerId, plyId);
 });
@@ -156,3 +149,17 @@ Events.onNet('materials:radiotower:despawnPeds', (plyId, pedNetIds: number[]) =>
     }
   }, 10 * 60 * 1000);
 });
+
+Util.onPlayerUnloaded(plyId => {
+  const towerId = getTowerPlyAt(plyId);
+  if (!towerId) return;
+  playerLeftTower(towerId, plyId);
+});
+
+RegisterCommand(
+  'radiotower:debug',
+  () => {
+    debugTowerPlayers();
+  },
+  true
+);
