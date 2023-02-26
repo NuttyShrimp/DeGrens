@@ -1,0 +1,80 @@
+{
+  "garage_id": "mrpd_upper",
+  "name": "MRPD Privaat parking",
+  "type": "police",
+  "shared": false,
+  "location": {
+    "vector": {
+      "x": 442.52,
+      "y": -1025.16,
+      "z": 28.86
+    },
+    "width": 8.8,
+    "length": 19.0,
+    "options": {
+      "heading": 7,
+      "minZ": 27.56,
+      "maxZ": 31.56
+    }
+  },
+  "vehicle_types": [
+    "land"
+  ],
+  "parking_spots": [
+    {
+      "type": "land",
+      "size": 2.0,
+      "distance": 1.8,
+      "heading": 186.0,
+      "coords": {
+        "x": 449.49200439453,
+        "y": -1025.5350341797,
+        "z": 27.549999237061
+      }
+    },
+    {
+      "type": "land",
+      "size": 2.0,
+      "distance": 1.8,
+      "heading": 186.0,
+      "coords": {
+        "x": 445.99499511719,
+        "y": -1025.9110107422,
+        "z": 27.618000030518
+      }
+    },
+    {
+      "type": "land",
+      "size": 2.0,
+      "distance": 1.8,
+      "heading": 186.0,
+      "coords": {
+        "x": 442.49798583984,
+        "y": -1026.2860107422,
+        "z": 27.686000823975
+      }
+    },
+    {
+      "type": "land",
+      "size": 2.0,
+      "distance": 1.8,
+      "heading": 186.0,
+      "coords": {
+        "x": 439.0,
+        "y": -1026.6610107422,
+        "z": 27.753999710083
+      }
+    },
+    {
+      "type": "land",
+      "size": 2.0,
+      "distance": 1.8,
+      "heading": 186.0,
+      "coords": {
+        "x": 435.50299072266,
+        "y": -1027.0369873047,
+        "z": 27.82200050354
+      }
+    }
+  ]
+}

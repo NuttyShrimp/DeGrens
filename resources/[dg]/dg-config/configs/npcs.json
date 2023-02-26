@@ -1448,5 +1448,77 @@
       "color": 6,
       "scale": 0.9
     }
+  },
+  {
+    "id": "vehicles_emsvehshop_mrpd",
+    "model": "cs_fbisuit_01",
+    "position": {
+      "x": 461.0841,
+      "y": -974.6842,
+      "z": 25.7
+    },
+    "heading": 177,
+    "distance": 75.0,
+    "settings": [
+      {
+        "type": "invincible",
+        "active": true
+      },
+      {
+        "type": "ignore",
+        "active": true
+      },
+      {
+        "type": "freeze",
+        "active": true
+      },
+      {
+        "type": "collision",
+        "active": true
+      }
+    ],
+    "flags": [
+      {
+        "name": "isEMSVehShop",
+        "active": true
+      }
+    ],
+    "scenario": "WORLD_HUMAN_GUARD_STAND"
+  },
+  {
+    "id": "vehicles_emsvehshop_mrpd",
+    "model": "cs_fbisuit_01",
+    "position": {
+      "x": 325.3035,
+      "y": -561.1572,
+      "z": 28.7969
+    },
+    "heading": 155.2845,
+    "distance": 75.0,
+    "settings": [
+      {
+        "type": "invincible",
+        "active": true
+      },
+      {
+        "type": "ignore",
+        "active": true
+      },
+      {
+        "type": "freeze",
+        "active": true
+      },
+      {
+        "type": "collision",
+        "active": true
+      }
+    ],
+    "flags": [
+      {
+        "name": "isEMSVehShop",
+        "active": true
+      }
+    ],
+    "scenario": "WORLD_HUMAN_GUARD_STAND"
   }
 ]
