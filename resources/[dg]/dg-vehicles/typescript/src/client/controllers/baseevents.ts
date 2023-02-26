@@ -5,7 +5,12 @@ import { disableSpeedLimiter } from 'services/speedlimiter';
 
 import { setCurrentVehicle } from '../helpers/vehicle';
 import { cleanFuelThread, startFuelThread, fetchFuelLevelOnEnter } from '../modules/fuel/service.fuel';
-import { startStatusThread, startVehicleCrashThread, stopVehicleCrashThread } from '../modules/status/service.status';
+import {
+  cleanStatusThread,
+  startStatusThread,
+  startVehicleCrashThread,
+  stopVehicleCrashThread,
+} from '../modules/status/service.status';
 import { BaseEvents } from '@dgx/client';
 import { disableHarnassHUD, updateHarnassHUD } from 'modules/seatbelts/service.seatbelts';
 
@@ -40,6 +45,7 @@ BaseEvents.onLeftVehicle((vehicle, seat) => {
     cleanFuelThread(vehicle);
     disableSpeedLimiter(vehicle);
     clearVehicleRolloverThread();
+    cleanStatusThread();
   }
 
   setCurrentVehicle(null, false);
@@ -57,6 +63,7 @@ BaseEvents.onVehicleSeatChange((vehicle, newSeat, oldSeat) => {
     resetNos(vehicle);
     disableSpeedLimiter(vehicle);
     clearVehicleRolloverThread();
+    cleanStatusThread();
   }
 
   if (newSeat === -1) {

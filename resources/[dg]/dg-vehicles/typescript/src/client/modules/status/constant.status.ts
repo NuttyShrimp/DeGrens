@@ -20,32 +20,6 @@ export const setDegradationValues = (config: Service.DegradationConfig) => {
   }
 };
 
-export const serviceConditions = [
-  {
-    label: 'Excellent',
-    percentage: 95,
-  },
-  {
-    label: 'Good',
-    percentage: 80,
-  },
-  {
-    label: 'Bad',
-    percentage: 50,
-  },
-  {
-    label: 'Terrible',
-    percentage: 0,
-  },
-];
-
-export const partNames: Record<keyof Service.Status, string> = {
-  engine: 'Engine',
-  suspension: 'Suspension',
-  brakes: 'Brakes',
-  axle: 'Axle',
-};
-
 export const handlingOverrideFunctions: Record<string, (veh: number, value: number) => void> = {
   fInitialDriveForce: (veh, val) => SetVehicleCheatPowerIncrease(veh, val),
 };

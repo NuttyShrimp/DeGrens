@@ -1,4 +1,4 @@
-import { Config, Events, Financials, Inventory, Notifications, Phone, Util } from '@dgx/server';
+import { Config, Events, Inventory, Notifications, Phone, Util } from '@dgx/server';
 import vinManager from 'modules/identification/classes/vinmanager';
 
 import { valueToLabel } from '../../../shared/constant.mechanic';
@@ -44,7 +44,7 @@ export const clockPlayerOut = (src: number) => {
   }
 };
 
-const getShopForPlayer = (src: number) => {
+export const getShopForPlayer = (src: number) => {
   for (const shop in activeMechanics) {
     if (activeMechanics[shop].includes(src)) {
       return shop;

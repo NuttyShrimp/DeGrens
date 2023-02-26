@@ -1,40 +1,115 @@
-import { Auth, Events, Inventory, Notifications, RPC, Config, Util } from '@dgx/server';
+import { Auth, Events, Inventory, Notifications, RPC, Config, Util, UI } from '@dgx/server';
 import { getConfigByEntity } from '../info/service.info';
-import { getConfig, loadConfig } from './services/config';
 import { getServiceStatus, seedServiceStatuses, updateServiceStatus } from './services/store';
-import { generateServiceStatus, useRepairPart } from './service.status';
+import { calculateNeededParts, setPercentagePerPart, useRepairPart } from './service.status';
 import { getTyreState } from './helpers.status';
 import { getVinForVeh, setNativeStatus } from 'helpers/vehicle';
+import { getShopForPlayer } from 'modules/mechanic/service.mechanic';
+import { PART_NAMES, SERVICE_CONDITIONS } from './constants.status';
+import { getPerformance } from 'modules/upgrades/service.upgrades';
 
 setImmediate(() => {
   seedServiceStatuses();
-  loadConfig();
+
+  Config.awaitConfigLoad().then(() => {
+    const config = Config.getConfigValue<Service.Config>('vehicles.service');
+    setPercentagePerPart(config.repairPercentagePerPart);
+  });
 });
 
-Events.onNet('vehicles:service:updateStatus', (src: number, vin: string, status: Service.Status) => {
+Events.onNet('vehicles:service:saveStatus', (plyId: number, vin: string, status: Service.Status) => {
   updateServiceStatus(vin, status);
 });
 
 Auth.onAuth(async plyId => {
-  const config = await getConfig();
+  await Config.awaitConfigLoad();
+  const config = Config.getConfigValue<Service.Config>('vehicles.service');
   Events.emitNet('vehicles:service:setDegradationValues', plyId, config.degradationValues);
 });
 
 RPC.register('vehicles:service:getStatus', (src: number, vehNetId: number) => {
   const veh = NetworkGetEntityFromNetworkId(vehNetId);
-  if (!DoesEntityExist(veh)) return generateServiceStatus();
-  const vin = Entity(veh).state.vin;
-  if (!vin) return generateServiceStatus();
+  const vin = getVinForVeh(veh);
   return getServiceStatus(vin);
 });
 
-RPC.register('vehicles:service:getVehicleInfo', (src: number, vehNetId: number) => {
-  const veh = NetworkGetEntityFromNetworkId(vehNetId);
-  const vehInfo = getConfigByEntity(veh);
-  return {
-    name: `${vehInfo?.brand} ${vehInfo?.name}`,
-    class: vehInfo?.class ?? 'D',
-  };
+Events.onNet('vehicles:service:showOverview', async (plyId: number, netId: number) => {
+  const vehicle = NetworkGetEntityFromNetworkId(netId);
+  if (!vehicle || !DoesEntityExist(vehicle)) return;
+
+  const vin = getVinForVeh(vehicle);
+  if (!vin) return;
+
+  // Service info
+  const serviceStatus = getServiceStatus(vin);
+  if (!serviceStatus) return;
+
+  const partMenu: ContextMenu.Entry[] = [];
+  const plyShop = getShopForPlayer(plyId);
+
+  for (const part in serviceStatus) {
+    const partState = serviceStatus[part as keyof Service.Status];
+    const partPercentage = partState / 10;
+    const serviceCondition = SERVICE_CONDITIONS.find(sc => sc.percentage <= partPercentage);
+    const partsNeeded = calculateNeededParts(partState);
+
+    partMenu.push({
+      title: `${PART_NAMES[part as keyof Service.Status]}`,
+      description: plyShop
+        ? `${partPercentage.toFixed(2)}% | ${Math.ceil(partsNeeded) || 'geen'} parts nodig`
+        : `${serviceCondition?.label} condition`,
+    });
+  }
+
+  // Class info
+  const vehicleConfig = getConfigByEntity(vehicle);
+  const infoMenu: ContextMenu.Entry[] = [
+    {
+      title: `${vehicleConfig?.brand} ${vehicleConfig?.name}`,
+      description: `Class: ${vehicleConfig?.class ?? 'UNKNOWN'}`,
+    },
+  ];
+
+  // Only show perf tunes to mechanic
+  if (plyShop) {
+    const upgrades = await getPerformance(vin);
+    infoMenu.push(
+      ...[
+        {
+          title: 'Brakes',
+          description: (upgrades?.brakes ?? -1) === -1 ? 'Basis' : `Level ${upgrades!.brakes + 1}`,
+        },
+        {
+          title: 'Engine',
+          description: (upgrades?.engine ?? -1) === -1 ? 'Basis' : `Level ${upgrades!.engine + 1}`,
+        },
+        {
+          title: 'Transmission',
+          description: (upgrades?.transmission ?? -1) === -1 ? 'Basis' : `Level ${upgrades!.transmission + 1}`,
+        },
+        {
+          title: 'Turbo',
+          description: upgrades?.turbo ? `Geinstalleerd` : 'Niet geinstalleerd',
+        },
+        {
+          title: 'Suspension',
+          description: (upgrades?.suspension ?? -1) === -1 ? 'Basis' : `Level ${upgrades!.suspension + 1}`,
+        },
+      ]
+    );
+  }
+
+  const menu: ContextMenu.Entry[] = [
+    {
+      title: 'Voertuig info',
+      submenu: infoMenu,
+    },
+    {
+      title: 'Voertuig status',
+      submenu: partMenu,
+    },
+  ];
+  UI.openContextMenu(plyId, menu);
 });
 
 (['engine', 'axle', 'suspension', 'brakes'] as (keyof Service.Status)[]).forEach(part => {
@@ -85,6 +160,7 @@ Events.onNet('vehicles:status:finishRepairKit', async (plyId, itemId: string, ne
   const entState = Entity(vehicle).state;
   entState.set('amountOfStalls', 0, true);
   entState.set('undriveable', false, true);
+
   setNativeStatus(vehicle, {
     engine: oldHealth + increase,
   });

@@ -1,8 +1,9 @@
 import { SQL } from '@dgx/server';
 
 import vinManager from '../../identification/classes/vinmanager';
-import { generateServiceStatus } from '../service.status';
 import { mainLogger } from '../../../sv_logger';
+import { DEFAULT_SERVICE_STATUS } from '../constants.status';
+import { getPartRepairAmount } from '../service.status';
 
 const localStore: Map<string, Service.Status> = new Map();
 const DBStore: Map<string, Service.Status> = new Map();
@@ -11,7 +12,7 @@ export const seedServiceStatuses = async () => {
   const results = await SQL.query<(Service.Status & { vin: string })[]>('SELECT * FROM vehicle_service_status');
   results.forEach(status => {
     const { vin, ...stateWithoutVin } = status;
-    DBStore.set(String(vin), { ...stateWithoutVin } as Service.Status);
+    DBStore.set(String(vin), { ...stateWithoutVin } satisfies Service.Status);
   });
 };
 
@@ -43,39 +44,33 @@ export const updateServiceStatus = (vin: string, status: Service.Status) => {
     mainLogger.warn(`Failed to update status for ${vin} because status was ${status}`);
     return;
   }
-  const clampedStatus = (Object.entries(status) as [keyof Service.Status, number][]).reduce((acc, [key, value]) => {
-    acc[key] = Math.max(0, value);
-    return acc;
-  }, {} as Service.Status);
+
+  // clamp values
+  for (const key in status) {
+    status[key as keyof Service.Status] = Math.max(0, Math.min(1000, status[key as keyof Service.Status]));
+  }
 
   if (vinManager.isVinFromPlayerVeh(vin)) {
-    DBStore.set(vin, clampedStatus);
+    DBStore.set(vin, status);
     updateDBStatus(vin);
   } else {
-    localStore.set(vin, clampedStatus);
+    localStore.set(vin, status);
   }
 };
 
-// Modifier is amount in percentage that is added to the part
-export const updateServiceStatusPart = (vin: string, part: keyof Service.Status, modifier: number) => {
-  const status = getServiceStatus(vin);
-  status[part] = Math.min(1000, status[part] * (1 + modifier / 100));
-  updateServiceStatus(vin, status);
-};
+export const getServiceStatus = (vin: string | null): Service.Status => {
+  if (!vin) return { ...DEFAULT_SERVICE_STATUS };
 
-export const getServiceStatus = (vin: string): Service.Status => {
-  if (DBStore.has(vin)) {
-    return DBStore.get(vin)!;
-  }
-  if (localStore.has(vin)) {
-    return localStore.get(vin)!;
-  }
-  const newStatus = generateServiceStatus();
+  if (DBStore.has(vin)) return DBStore.get(vin)!;
+  if (localStore.has(vin)) return localStore.get(vin)!;
+
+  const newStatus = { ...DEFAULT_SERVICE_STATUS };
   if (vinManager.isVinFromPlayerVeh(vin)) {
     DBStore.set(vin, newStatus);
     insertDBStatus(vin);
   } else {
     localStore.set(vin, newStatus);
   }
+
   return newStatus;
 };

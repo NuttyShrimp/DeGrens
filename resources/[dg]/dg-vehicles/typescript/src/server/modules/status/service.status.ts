@@ -5,7 +5,12 @@ import { fuelManager } from '../fuel/classes/fuelManager';
 import { getConfigByEntity } from '../info/service.info';
 import { getDoorState, getTyreState, getWindowState } from './helpers.status';
 
-import { updateServiceStatusPart } from './services/store';
+import { getServiceStatus, updateServiceStatus } from './services/store';
+
+let percentagePerPart = 1;
+export const setPercentagePerPart = (percentage: number) => {
+  percentagePerPart = percentage;
+};
 
 export const getNativeStatus = async (veh: number, vin: string): Promise<Vehicle.VehicleStatus> => {
   const status: Vehicle.VehicleStatus = {
@@ -21,19 +26,18 @@ export const getNativeStatus = async (veh: number, vin: string): Promise<Vehicle
   status.engine = GetVehicleEngineHealth(veh);
   status.fuel = fuelManager.getFuelLevel(veh) ?? 0;
 
-  status.wheels = await getTyreState(veh);
-  status.windows = await getWindowState(veh);
-  status.doors = await getDoorState(veh);
+  const wheelPromise = getTyreState(veh);
+  const windowPromise = getWindowState(veh);
+  const doorsPromise = getDoorState(veh);
+
+  const [wheels, windows, doors] = await Promise.all([wheelPromise, windowPromise, doorsPromise]);
+
+  status.wheels = wheels;
+  status.windows = windows;
+  status.doors = doors;
 
   return status;
 };
-
-export const generateServiceStatus = (): Service.Status => ({
-  engine: 1000,
-  axle: 1000,
-  brakes: 1000,
-  suspension: 1000,
-});
 
 export const useRepairPart = async (src: number, type: keyof Service.Status, partClass: string, itemName: string) => {
   const { entity: veh } = await RayCast.doRaycast(src);
@@ -81,7 +85,7 @@ export const useRepairPart = async (src: number, type: keyof Service.Status, par
       break;
     }
   }
-  const [cancelled] = await Taskbar.create(src, 'car-wrench', 'Repairing', 30000, {
+  const [cancelled] = await Taskbar.create(src, 'car-wrench', 'Repairing', 10000, {
     cancelOnMove: true,
     cancelOnDeath: true,
     canCancel: true,
@@ -95,8 +99,9 @@ export const useRepairPart = async (src: number, type: keyof Service.Status, par
     },
   });
   if (cancelled) return;
+
   const couldRemove = await Inventory.removeItemByNameFromPlayer(src, itemName);
-  if (couldRemove === false) {
+  if (!couldRemove) {
     Notifications.add(src, 'Je hebt dit item niet', 'error');
     return;
   }
@@ -105,5 +110,26 @@ export const useRepairPart = async (src: number, type: keyof Service.Status, par
   const entState = Entity(veh).state;
   entState.set('amountOfStalls', 0, true);
   entState.set('undriveable', false, true);
-  updateServiceStatusPart(vin, type, 20);
+
+  const status = getServiceStatus(vin);
+  const oldPartValue = status[type];
+  const newPartValue = oldPartValue + getPartRepairAmount(oldPartValue);
+  updateServiceStatus(vin, { ...status, [type]: newPartValue });
+};
+
+export const getPartRepairAmount = (partValue: number) => {
+  const addition = (1000 - partValue) * percentagePerPart;
+  return Math.max(addition, 50);
+};
+
+export const calculateNeededParts = (partValue: number) => {
+  let amount = 0;
+  // fail safe of 10
+  while (amount < 10) {
+    if (partValue >= 1000) break;
+
+    partValue += getPartRepairAmount(partValue);
+    amount++;
+  }
+  return amount;
 };

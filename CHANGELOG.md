@@ -35,6 +35,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Labs logger niet op silly
 - Fix ems vehicle shop npcs having same id
 - Enkel save event emitten als je een character hebt gekozen
+- Voertuig service reset nu deftig de handling van een voertuig
 
 ## [1.0.6]
 

@@ -15,5 +15,6 @@ declare namespace Service {
 
   interface Config {
     degradationValues: DegradationConfig;
+    repairPercentagePerPart: number;
   }
 }

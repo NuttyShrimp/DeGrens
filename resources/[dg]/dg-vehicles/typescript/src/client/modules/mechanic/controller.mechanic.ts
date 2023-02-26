@@ -10,7 +10,6 @@ import {
   getCurrentWorkingShop,
   hasVehicleAttached,
   isClockedIn,
-  isInRepairZone,
   openItemOrder,
   openPerfomanceItemOrderInput,
   openRepairItemOrderInput,
@@ -24,7 +23,6 @@ import {
 import { isCloseToHood } from '@helpers/vehicle';
 import { getVehicleVinWithoutValidation } from 'modules/identification/service.identification';
 import { hasVehicleKeys } from 'modules/keys/cache.keys';
-import { openServiceStatusOverview } from 'modules/status/service.status';
 
 let modelPeekIds: string[];
 
@@ -260,7 +258,7 @@ Peek.addGlobalEntry('vehicle', {
       icon: 'fas fa-wrench',
       action: (_, entity) => {
         if (!entity) return;
-        openServiceStatusOverview(entity);
+        Events.emitNet('vehicles:service:showOverview', NetworkGetNetworkIdFromEntity(entity));
       },
       canInteract: ent => {
         if (!ent || !NetworkGetEntityIsNetworked(ent)) return false;
