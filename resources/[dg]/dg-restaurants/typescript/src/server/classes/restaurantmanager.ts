@@ -60,12 +60,6 @@ class RestaurantManager extends Util.Singleton<RestaurantManager>() {
     restaurant.playerLeft(plyId);
   };
 
-  public signOutAtCurrentRestaurant = (plyId: number) => {
-    const restaurant = this.getRestaurantPlayerIsIn(plyId);
-    if (!restaurant) return;
-    restaurant.signOut(plyId);
-  };
-
   @DGXEvent('restaurants:location:entered')
   private _enteredRestaurant = (plyId: number, restaurantId: string) => {
     const restaurant = this.getRestaurant(restaurantId);
@@ -175,30 +169,44 @@ class RestaurantManager extends Util.Singleton<RestaurantManager>() {
 
   @DGXEvent('restaurants:location:showCreateMenu')
   private _showCreateItemMenu = (plyId: number, restaurantId: string, fromItem: string) => {
-    const restaurant = this.getRestaurantAndValidatePlayer(plyId, restaurantId, 'cooking');
+    const restaurant = this.getRestaurantAndValidatePlayer(plyId, restaurantId, 'showing create menu');
     if (!restaurant) return;
     restaurant.showCreateItemMenu(plyId, fromItem);
   };
 
   @DGXEvent('restaurants:location:createItem')
   private _createItem = (plyId: number, restaurantId: string, registerId: number, item: string) => {
-    const restaurant = this.getRestaurantAndValidatePlayer(plyId, restaurantId, 'cooking');
+    const restaurant = this.getRestaurantAndValidatePlayer(plyId, restaurantId, 'creating item');
     if (!restaurant) return;
     restaurant.createItem(plyId, registerId, item);
   };
 
   @DGXEvent('restaurants:location:showLeftover')
   private _showLeftover = (plyId: number, restaurantId: string) => {
-    const restaurant = this.getRestaurantAndValidatePlayer(plyId, restaurantId, 'cooking');
+    const restaurant = this.getRestaurantAndValidatePlayer(plyId, restaurantId, 'showing leftovers');
     if (!restaurant) return;
     restaurant.showLeftover(plyId);
   };
 
   @DGXEvent('restaurants:location:buyLeftover')
   private _buyLeftover = (plyId: number, restaurantId: string, item: string) => {
-    const restaurant = this.getRestaurantAndValidatePlayer(plyId, restaurantId, 'cooking');
+    const restaurant = this.getRestaurantAndValidatePlayer(plyId, restaurantId, 'buying leftovers');
     if (!restaurant) return;
     restaurant.buyLeftover(plyId, item);
+  };
+
+  @DGXEvent('restaurants:location:openSignedInList')
+  private _openSignedInList = (plyId: number, restaurantId: string) => {
+    const restaurant = this.getRestaurantAndValidatePlayer(plyId, restaurantId, 'opening signedin menu');
+    if (!restaurant) return;
+    restaurant.openSignedInList(plyId);
+  };
+
+  @DGXEvent('restaurants:location:forceOffDuty')
+  private _forceOffDuty = (plyId: number, restaurantId: string, targetId: number) => {
+    const restaurant = this.getRestaurantAndValidatePlayer(plyId, restaurantId, 'forcing off duty');
+    if (!restaurant) return;
+    restaurant.forceOffDuty(plyId, targetId);
   };
 }
 

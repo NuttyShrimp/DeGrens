@@ -43,6 +43,16 @@ Peek.addZoneEntry('restaurant_management', {
         return getIsSignedIn() && Business.isEmployee(option.data.id, ['change_role']);
       },
     },
+    {
+      label: 'Toon Werknemers',
+      icon: 'fas fa-list',
+      action: option => {
+        Events.emitNet('restaurants:location:openSignedInList', option.data.id);
+      },
+      canInteract: (_, __, option) => {
+        return getIsSignedIn() && Business.isEmployee(option.data.id, ['change_role']);
+      },
+    },
   ],
   distance: 2,
 });

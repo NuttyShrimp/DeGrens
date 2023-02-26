@@ -89,6 +89,15 @@ export class Restaurant {
     );
   };
 
+  private validateBusinessEmployee = (plyId: number, perm?: string) => {
+    const cid = Util.getCID(plyId);
+    if (!Business.isPlyEmployed(this.id, cid)) return false;
+    if (perm) {
+      return Business.hasPlyPermission(this.id, cid, perm);
+    }
+    return true;
+  };
+
   public playerEntered = (plyId: number) => {
     this.playersInside.add(plyId);
     this.logger.silly(`${Util.getName(plyId)}(${plyId}) entered`);
@@ -96,6 +105,12 @@ export class Restaurant {
 
   public playerLeft = (plyId: number) => {
     this.playersInside.delete(plyId);
+
+    // sign out when leaving restaurant
+    if (this.signedInPlayers.has(plyId)) {
+      this.signOut(plyId);
+    }
+
     this.logger.silly(`${Util.getName(plyId)}(${plyId}) left`);
   };
 
@@ -108,6 +123,9 @@ export class Restaurant {
   };
 
   public signIn = (plyId: number) => {
+    const isEmployee = this.validateBusinessEmployee(plyId);
+    if (!isEmployee) return;
+
     if (!this.playersInside.has(plyId)) return;
     if (this.isSignedIn(plyId)) {
       Notifications.add(plyId, 'Je bent hier al ingeklokt', 'error');
@@ -121,6 +139,9 @@ export class Restaurant {
   };
 
   public signOut = (plyId: number) => {
+    const isEmployee = this.validateBusinessEmployee(plyId);
+    if (!isEmployee) return;
+
     if (!this.isSignedIn(plyId)) {
       Notifications.add(plyId, 'Je bent hier niet ingeklokt', 'error');
       return;
@@ -242,6 +263,9 @@ export class Restaurant {
   };
 
   public setOrder = (plyId: number, registerId: number, items: string[]) => {
+    const isEmployee = this.validateBusinessEmployee(plyId);
+    if (!isEmployee) return;
+
     if (this.doesRegisterHaveOrder(registerId)) return;
     this.orders.push({
       items: items.map(i => ({ item: i, made: false, quality: 0 })),
@@ -265,6 +289,9 @@ export class Restaurant {
    * Cancel order at register, pay back if already paid
    */
   public cancelRegisterOrder = (plyId: number, registerId: number) => {
+    const isEmployee = this.validateBusinessEmployee(plyId);
+    if (!isEmployee) return;
+
     const order = this.getOrderByRegisterId(registerId);
     if (!order) return;
 
@@ -310,6 +337,9 @@ export class Restaurant {
   };
 
   public finishRegisterOrder = async (plyId: number, registerId: number) => {
+    const isEmployee = this.validateBusinessEmployee(plyId);
+    if (!isEmployee) return;
+
     const order = this.getOrderByRegisterId(registerId);
     if (!order) return;
 
@@ -347,6 +377,9 @@ export class Restaurant {
   };
 
   public showActiveOrder = (plyId: number, registerId: number) => {
+    const isEmployee = this.validateBusinessEmployee(plyId);
+    if (!isEmployee) return false;
+
     const order = this.getOrderByRegisterId(registerId);
     if (!order) return false;
 
@@ -406,11 +439,8 @@ export class Restaurant {
   };
 
   public openPriceMenu = async (plyId: number) => {
-    const cid = Util.getCID(plyId);
-    if (!Business.hasPlyPermission(this.id, cid, 'change_role')) {
-      Notifications.add(plyId, 'Je hebt hier geen toegang toe', 'error');
-      return;
-    }
+    const isEmployee = this.validateBusinessEmployee(plyId, 'change_role');
+    if (!isEmployee) return;
 
     const itemOptions: UI.Input.SelectInput['options'] = [];
     for (const [item, data] of Object.entries(this.menuItems)) {
@@ -457,6 +487,9 @@ export class Restaurant {
   };
 
   public doCooking = async (plyId: number, fromItem: string) => {
+    const isEmployee = this.validateBusinessEmployee(plyId);
+    if (!isEmployee) return;
+
     const toItem = config.restaurants[this.id].cooking.find(c => c.from === fromItem)?.to;
     if (!toItem) return;
 
@@ -469,6 +502,9 @@ export class Restaurant {
   };
 
   public showCreateItemMenu = async (plyId: number, item: string) => {
+    const isEmployee = this.validateBusinessEmployee(plyId);
+    if (!isEmployee) return;
+
     const requiredItems = this.menuItems[item]?.requiredItems;
     if (!requiredItems) return;
 
@@ -515,6 +551,9 @@ export class Restaurant {
   };
 
   public createItem = async (plyId: number, registerId: number, item: string) => {
+    const isEmployee = this.validateBusinessEmployee(plyId);
+    if (!isEmployee) return;
+
     const requiredItems = this.menuItems[item]?.requiredItems;
     if (!requiredItems) return;
 
@@ -658,5 +697,40 @@ export class Restaurant {
     }
 
     Inventory.addItemToPlayer(plyId, item, 1, { quality: 50 });
+  };
+
+  public openSignedInList = (plyId: number) => {
+    const isEmployee = this.validateBusinessEmployee(plyId, 'change_role');
+    if (!isEmployee) return;
+
+    const menuEntries: ContextMenu.Entry[] = [
+      {
+        title: 'Huidige Werknemers',
+        description: 'Klik op een persoon om deze uit dienst te zetten',
+        disabled: true,
+      },
+      ...[...this.signedInPlayers].map(plyId => {
+        const charInfo = DGCore.Functions.GetPlayer(plyId)?.PlayerData?.charinfo;
+        const plyName = `${charInfo ? `${charInfo.firstname} ${charInfo.lastname}` : 'Offline'} | ${plyId}`;
+
+        return {
+          title: plyName,
+          callbackURL: 'restaurant/forceOffDuty',
+          data: {
+            restaurantId: this.id,
+            plyId,
+          },
+        };
+      }),
+    ];
+
+    UI.openContextMenu(plyId, menuEntries);
+  };
+
+  public forceOffDuty = (plyId: number, employeeId: number) => {
+    const isEmployee = this.validateBusinessEmployee(plyId, 'change_role');
+    if (!isEmployee) return;
+
+    this.signOut(employeeId);
   };
 }

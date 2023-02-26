@@ -8,7 +8,6 @@ Auth.onAuth(plyId => {
 
 Util.onPlayerUnloaded(plyId => {
   restaurantManager.leaveCurrentRestaurant(plyId);
-  restaurantManager.signOutAtCurrentRestaurant(plyId);
 });
 
 Business.onPlayerFired((_, restaurantId, cid) => {

@@ -75,7 +75,7 @@ export const fertilizeWeedPlant = async (labId: number, plantId: number) => {
   if (canceled) return;
 
   Events.emitNet('labs:weed:fertilize', labId, plantId);
-  Notifications.add('Wacht tot de plant is volgroeid', 'error');
+  Notifications.add('Wacht tot de plant is volgroeid', 'success');
 };
 
 export const harvestWeedPlant = async (labId: number, plantId: number) => {
