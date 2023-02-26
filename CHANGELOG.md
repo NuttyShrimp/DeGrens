@@ -32,6 +32,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Agenten kunnen nu huisinbraak huizen binnen
 - Huisinbraken werken nu ietsje beter
 - Labs logger niet op silly
+- Fix ems vehicle shop npcs having same id
 
 ## [1.0.6]
 

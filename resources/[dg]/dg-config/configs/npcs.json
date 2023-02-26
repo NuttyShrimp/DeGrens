@@ -1486,7 +1486,7 @@
     "scenario": "WORLD_HUMAN_GUARD_STAND"
   },
   {
-    "id": "vehicles_emsvehshop_mrpd",
+    "id": "vehicles_emsvehshop_pillbox",
     "model": "cs_fbisuit_01",
     "position": {
       "x": 325.3035,
