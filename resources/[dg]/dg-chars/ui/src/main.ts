@@ -12,7 +12,7 @@ import 'quasar/src/css/index.sass';
 import App from './App.vue';
 
 // Import icon libraries
-import './vendor/quasar/roboto-font-latin-ext/roboto-font-latin-ext.css';
+import './vendor/quasar/roboto-font/roboto-font.css';
 import './vendor/quasar/material-icons/material-icons.css';
 // Animations
 import './vendor/quasar/animate/fadeInDown.css';
