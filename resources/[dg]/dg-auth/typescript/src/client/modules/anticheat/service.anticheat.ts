@@ -1,4 +1,4 @@
-import { Events, Notifications, Util } from '@dgx/client';
+import { Events, Hospital, Notifications, Police, Util } from '@dgx/client';
 import { StatsThread } from './classes/StatsThread';
 
 let allowed: string[] = [];
@@ -200,9 +200,15 @@ export const startAFKThread = () => {
         AFKInfo.tick = 0;
       }
     }
+
     const plyCoords = Util.getPlyCoords();
     const plyHeading = GetGameplayCamRelativeHeading();
-    if (plyCoords.distance(AFKInfo.lastCoords) < 1 && Math.abs(AFKInfo.camHeading - plyHeading) < 1) {
+    const closeToOldCoord = plyCoords.distance(AFKInfo.lastCoords) < 1;
+    const closeToOldHeading = Math.abs(AFKInfo.camHeading - plyHeading) < 1;
+    const isDown = Hospital.isDown();
+    const isCuffed = Police.isCuffed();
+
+    if (closeToOldCoord && closeToOldHeading && !isDown && !isCuffed) {
       AFKInfo.tick++;
     } else {
       AFKInfo.tick = 0;
