@@ -121,7 +121,7 @@
       ]
     },
     "smg_ammo": {
-      "requiredReputation": 50,
+      "requiredReputation": 100,
       "items": [
         {
           "name": "refined_copper",
@@ -134,7 +134,7 @@
       ]
     },
     "rifle_ammo": {
-      "requiredReputation": 100,
+      "requiredReputation": 200,
       "items": [
         {
           "name": "refined_copper",
@@ -147,7 +147,7 @@
       ]
     },
     "container_ammo": {
-      "requiredReputation": 150,
+      "requiredReputation": 175,
       "items": [
         {
           "name": "refined_copper",
@@ -1165,6 +1165,107 @@
           "amount": 1
         }
       ]
+    },
+    "weapon_knuckle": {
+      "requiredReputation": 5,
+      "items": [
+        {
+          "name": "refined_iron",
+          "amount": 2
+        },
+        {
+          "name": "refined_copper",
+          "amount": 2
+        },
+        {
+          "name": "refined_aluminum",
+          "amount": 3
+        }
+      ]
+    },
+    "weapon_bat": {
+      "requiredReputation": 15,
+      "items": [
+        {
+          "name": "refined_steel",
+          "amount": 3
+        },
+        {
+          "name": "refined_aluminum",
+          "amount": 2
+        },
+        {
+          "name": "refined_copper",
+          "amount": 2
+        },
+        {
+          "name": "refined_iron",
+          "amount": 1
+        }
+      ]
+    },
+    "weapon_switchblade": {
+      "requiredReputation": 25,
+      "items": [
+        {
+          "name": "refined_steel",
+          "amount": 3
+        },
+        {
+          "name": "refined_aluminum",
+          "amount": 3
+        },
+        {
+          "name": "refined_copper",
+          "amount": 2
+        },
+        {
+          "name": "refined_iron",
+          "amount": 2
+        }
+      ]
+    },
+    "weapon_knife": {
+      "requiredReputation": 35,
+      "items": [
+        {
+          "name": "refined_steel",
+          "amount": 3
+        },
+        {
+          "name": "refined_aluminum",
+          "amount": 2
+        },
+        {
+          "name": "refined_copper",
+          "amount": 3
+        },
+        {
+          "name": "refined_iron",
+          "amount": 2
+        }
+      ]
+    },
+    "weapon_machete": {
+      "requiredReputation": 50,
+      "items": [
+        {
+          "name": "refined_steel",
+          "amount": 4
+        },
+        {
+          "name": "refined_aluminum",
+          "amount": 3
+        },
+        {
+          "name": "refined_copper",
+          "amount": 3
+        },
+        {
+          "name": "refined_iron",
+          "amount": 3
+        }
+      ]
     }
   },
   "benches": {
@@ -1184,7 +1285,12 @@
         "pistol_ammo",
         "smg_ammo",
         "rifle_ammo",
-        "container_ammo"
+        "container_ammo",
+        "weapon_knuckle",
+        "weapon_bat",
+        "weapon_switchblade",
+        "weapon_knife",
+        "weapon_machete"
       ],
       "reputation": "ammo_crafting"
     },
