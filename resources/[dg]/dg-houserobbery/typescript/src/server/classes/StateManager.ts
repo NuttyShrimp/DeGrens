@@ -184,9 +184,13 @@ class StateManager extends Util.Singleton<StateManager>() {
     }
     activeJob.findTimeout = null;
 
-    activeJob.finishTimeout = setTimeout(() => {
-      this.finishJob(group.id, houseId);
-    }, this.config.timeToRob * 60000);
+    activeJob.finishTimeout = setTimeout(
+      groupId => {
+        this.finishJob(groupId, houseId);
+      },
+      this.config.timeToRob * 60000,
+      group.id
+    );
   };
 
   @DGXEvent('houserobbery:server:lockDoor')
@@ -198,7 +202,7 @@ class StateManager extends Util.Singleton<StateManager>() {
 
     const house = this.houseStates.get(houseId);
     if (!house) return;
-    if (house.state !== HouseState.LOCKED) {
+    if (house.state === HouseState.LOCKED) {
       Notifications.add(plyId, 'Deze deur is al vast', 'error');
       return;
     }
@@ -443,11 +447,18 @@ class StateManager extends Util.Singleton<StateManager>() {
 
     if (plyId) {
       Events.emitNet('houserobbery:client:cleanup', plyId);
+
+      Phone.sendMail(
+        plyId,
+        'Taak voltooid',
+        'Bert B.',
+        'Je hebt je taak volbracht, ik laat je staan op de lijst voor een nieuwe opdracht'
+      );
     }
   }
 
   private finishJob(groupId: string, houseId: string) {
-    const house = this.houseStates.get(groupId);
+    const house = this.houseStates.get(houseId);
     if (!house) return;
     const houseConfig = this.config.locations[house.dataIdx];
     if (!houseConfig) return;
@@ -459,15 +470,6 @@ class StateManager extends Util.Singleton<StateManager>() {
       }
       group.members.forEach(m => {
         this.finishJobForPly(m.serverId, m.cid);
-
-        if (m.serverId) {
-          Phone.sendMail(
-            m.serverId,
-            'Taak voltooid',
-            'Bert B.',
-            'Je hebt je taak volbracht, ik laat je staan op de lijst voor een nieuwe opdracht'
-          );
-        }
       });
     }
 

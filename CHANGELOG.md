@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Inventory item tooltip divider wordt niet gedisplayed als er niks onder staat
+- Huisinbraak wordt nu correct afgerond
 
 ## [1.0.7]
 ### Added
