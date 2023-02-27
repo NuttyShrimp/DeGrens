@@ -11,10 +11,10 @@ import 'quasar/src/css/index.sass';
 import App from './App.vue';
 
 // Import icon libraries
-import '@quasar/extras/roboto-font/roboto-font.css';
-import '@quasar/extras/material-icons/material-icons.css';
-import '@quasar/extras/fontawesome-v6/fontawesome-v6.css';
-import '@quasar/extras/line-awesome/line-awesome.css';
+import './vendor/quasar/roboto-font/roboto-font.css';
+import './vendor/quasar/material-icons/material-icons.css';
+import './vendor/quasar/fontawesome-v6/fontawesome-v6.css';
+import './vendor/quasar/line-awesome/line-awesome.css';
 
 const app = createApp(App);
 

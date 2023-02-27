@@ -12,7 +12,6 @@
     "lint": "eslint --ext .js,.ts,.vue --ignore-path .gitignore --fix src -c ./.eslintrc"
   },
   "dependencies": {
-    "@quasar/extras": "^1.15.11",
     "@sentry/tracing": "^7.37.2",
     "@sentry/vue": "^7.37.2",
     "jquery": "^3.6.3",

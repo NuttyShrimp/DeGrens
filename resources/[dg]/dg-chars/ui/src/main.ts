@@ -12,13 +12,13 @@ import 'quasar/src/css/index.sass';
 import App from './App.vue';
 
 // Import icon libraries
-import '@quasar/extras/roboto-font-latin-ext/roboto-font-latin-ext.css';
-import '@quasar/extras/material-icons/material-icons.css';
+import './vendor/quasar/roboto-font-latin-ext/roboto-font-latin-ext.css';
+import './vendor/quasar/material-icons/material-icons.css';
 // Animations
-import '@quasar/extras/animate/fadeInDown.css';
-import '@quasar/extras/animate/fadeOutUp.css';
-import '@quasar/extras/animate/slideInDown.css';
-import '@quasar/extras/animate/slideOutUp.css';
+import './vendor/quasar/animate/fadeInDown.css';
+import './vendor/quasar/animate/fadeOutUp.css';
+import './vendor/quasar/animate/slideInDown.css';
+import './vendor/quasar/animate/slideOutUp.css';
 
 const app = createApp(App);
 

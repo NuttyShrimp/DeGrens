@@ -7,7 +7,7 @@
     "lint:root": "eslint --fix --resolve-plugins-relative-to ./ --ext .js,.ts,.tsx,.jsx,.json,.vue ./resources/[dg]/",
     "lint": "yarn run lint:root --quiet",
     "format": "turbo run format",
-    "postinstall": "husky install && patch-package",
+    "postinstall": "patch-package",
     "db:push": "turbo run db:push",
     "db:deploy": "turbo run db:deploy"
   },
@@ -53,19 +53,12 @@
     "eslint-plugin-simple-import-sort": "^10.0.0",
     "eslint-plugin-vue": "^9.9.0",
     "eslint-webpack-plugin": "^4.0.0",
-    "husky": "^8.0.3",
     "lint-staged": "^13.1.2",
     "prettier": "^2.8.4",
-    "pretty-quick": "^3.1.3",
     "turbo": "^1.7.4"
   },
   "lint-staged": {
     "*.{js,ts,tsx,scss,css,md,vue}": "eslint --fix --resolve-plugins-relative-to ./ --ext .js,.ts,.tsx,.jsx,.json,.vue ./resources/[dg]/ --cache"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged && pretty-quick --staged"
-    }
   },
   "workspaces": [
     "resources/**",
