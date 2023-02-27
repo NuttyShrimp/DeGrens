@@ -10,13 +10,17 @@ declare namespace Criminal {
     type Config = {
       food: {
         decayTime: number;
-        amount: number;
+        amount: {
+          normal: number;
+          deluxe: number;
+        };
       };
       growTime: number;
       cut: {
         timeout: number;
         breakChance: number;
       };
+      fertilizerDecrease: number;
     };
 
     type Gender = 'male' | 'female';

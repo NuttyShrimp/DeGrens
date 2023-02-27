@@ -8,7 +8,7 @@ export const registerWeedPlantModels = (models: string[]) => {
   }
 };
 
-export const feedWeedPlant = async (weedPlantId: number, objectId: string) => {
+export const feedWeedPlant = async (weedPlantId: number, objectId: string, deluxe: boolean) => {
   const entity = StaticObjects.getEntityForObjectId(objectId);
   if (!entity) return;
 
@@ -35,7 +35,7 @@ export const feedWeedPlant = async (weedPlantId: number, objectId: string) => {
   });
   if (canceled) return;
 
-  Events.emitNet('criminal:weed:feed', weedPlantId);
+  Events.emitNet('criminal:weed:feed', weedPlantId, deluxe);
 };
 
 export const destroyWeedPlant = async (weedPlantId: number, objectId: string) => {

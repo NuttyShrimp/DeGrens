@@ -78,10 +78,10 @@ class WeedPlantManager extends Util.Singleton<WeedPlantManager>() {
   };
 
   @DGXEvent('criminal:weed:feed')
-  private _feedWeedPlant = (plyId: number, weedPlantId: number) => {
+  private _feedWeedPlant = (plyId: number, weedPlantId: number, deluxe: boolean) => {
     const weedPlant = this.weedPlants.get(weedPlantId);
     if (!weedPlant) return;
-    weedPlant.feed(plyId);
+    weedPlant.feed(plyId, deluxe);
   };
 
   @DGXEvent('criminal:weed:destroy')

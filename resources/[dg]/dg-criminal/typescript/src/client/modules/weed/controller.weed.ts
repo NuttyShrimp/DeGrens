@@ -124,8 +124,8 @@ Peek.addFlagEntry('weedPlantId', {
   ],
 });
 
-UI.RegisterUICallback('criminal/weed/feed', (data: { plantId: number; objectId: string }, cb) => {
-  feedWeedPlant(data.plantId, data.objectId);
+UI.RegisterUICallback('criminal/weed/feed', (data: { plantId: number; objectId: string; deluxe: boolean }, cb) => {
+  feedWeedPlant(data.plantId, data.objectId, data.deluxe);
   cb({ data: {}, meta: { ok: true, message: 'done' } });
 });
 

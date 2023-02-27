@@ -21,6 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Guards spawnen niet meer als er EMS aan de radiotower is
 - Admins kunnen nu ook players freezen
 - Je kan niet langer sprinten/springen als je een item object vast hebt
+- Weedplanten voeden werkt nu hetzelfde als farmingplanten
 
 ### Fixed
 

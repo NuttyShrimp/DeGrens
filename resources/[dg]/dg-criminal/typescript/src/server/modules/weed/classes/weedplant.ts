@@ -74,8 +74,6 @@ export class WeedPlant {
   };
 
   public view = async (plyId: number) => {
-    const hasFertilizer = await Inventory.doesPlayerHaveItems(plyId, 'farming_fertilizer');
-
     const menuEntries: ContextMenu.Entry[] = [
       {
         title: `Gender: ${this.gender === 'male' ? 'Mannelijk' : 'Vrouwelijk'}`,
@@ -98,16 +96,43 @@ export class WeedPlant {
       },
     ];
 
-    if (hasFertilizer && this.canFeed()) {
-      menuEntries.push({
-        title: 'Voeden',
-        icon: 'oil-can',
-        callbackURL: 'criminal/weed/feed',
-        data: {
-          plantId: this.id,
-          objectId: this.objectId,
-        },
-      });
+    if (this.canFeed()) {
+      const plyItems = await Inventory.getPlayerItems(plyId);
+      const hasFertilizer = plyItems.some(i => i.name === 'farming_fertilizer');
+      const hasDeluxeFertilizer = plyItems.some(i => i.name === 'farming_fertilizer_deluxe');
+
+      const feedSubmenuEntries: ContextMenu.Entry[] = [];
+      if (hasFertilizer) {
+        feedSubmenuEntries.push({
+          title: 'Plantenvoeding',
+          callbackURL: 'criminal/weed/feed',
+          data: {
+            plantId: this.id,
+            objectId: this.objectId,
+            deluxe: false,
+          },
+        });
+      }
+
+      if (hasDeluxeFertilizer) {
+        feedSubmenuEntries.push({
+          title: 'Deluxe Plantenvoeding',
+          callbackURL: 'criminal/weed/feed',
+          data: {
+            plantId: this.id,
+            objectId: this.objectId,
+            deluxe: true,
+          },
+        });
+      }
+
+      if (feedSubmenuEntries.length !== 0) {
+        menuEntries.push({
+          title: 'Voeding Geven',
+          submenu: feedSubmenuEntries,
+          icon: 'oil-can',
+        });
+      }
     }
 
     if (this.canCut()) {
@@ -129,21 +154,26 @@ export class WeedPlant {
     return this.food < 90;
   };
 
-  public feed = async (plyId: number) => {
-    const removed = await Inventory.removeItemByNameFromPlayer(plyId, 'farming_fertilizer');
-    if (!removed) {
-      Notifications.add(plyId, 'Je hebt geen voeding', 'error');
-      return;
-    }
+  public feed = async (plyId: number, deluxe: boolean) => {
+    const itemName = deluxe ? 'farming_fertilizer_deluxe' : 'farming_fertilizer';
+    const itemState = await Inventory.getFirstItemOfNameOfPlayer(plyId, itemName);
+    if (!itemState) return;
+
+    const weedConfig = getConfig().weed;
+    const decrease = weedConfig.fertilizerDecrease;
+    Inventory.setQualityOfItem(itemState.id, old => old - decrease);
 
     Notifications.add(plyId, 'Je hebt de plant gevoed', 'success');
 
-    this.food = Math.min(this.food + getConfig().weed.food.amount, 100);
+    const foodIncrease = deluxe ? weedConfig.food.amount.deluxe : weedConfig.food.amount.normal;
+    this.food = Math.min(this.food + foodIncrease, 100);
     this.save();
 
-    const logMessage = `${Util.getName(plyId)}${plyId} has fed a weed plant`;
+    const logMessage = `${Util.getName(plyId)}${plyId} has fed a weed plant with ${
+      deluxe ? 'normal' : 'deluxe'
+    } fertilizer`;
     this.logger.silly(logMessage);
-    Util.Log('weed:feed', { plantId: this.id }, logMessage, plyId);
+    Util.Log('weed:feed', { plantId: this.id, deluxe }, logMessage, plyId);
   };
 
   // destroy is for ply destroy action

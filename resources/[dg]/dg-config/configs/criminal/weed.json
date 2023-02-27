@@ -6,6 +6,10 @@
   },
   "food": {
     "decayTime": 20,
-    "amount": 45
-  }
+    "amount": {
+      "normal": 40,
+      "deluxe": 70
+    }
+  },
+  "fertilizerDecrease": 20
 }
