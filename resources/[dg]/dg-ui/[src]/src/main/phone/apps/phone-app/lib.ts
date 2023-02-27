@@ -57,7 +57,7 @@ export const endPhoneCall = () => {
   const callMeta = usePhoneStore.getState().callMeta;
   const contact = getContact(callMeta.number);
   if (!callMeta.isAnon) {
-    addCallEntry(contact?.label ?? callMeta.number, contact?.phone ?? '', Date.now(), incoming);
+    addCallEntry(contact?.label ?? callMeta.number, contact?.phone ?? callMeta.number, Date.now(), incoming);
   }
   usePhoneStore.setState({
     callMeta: {},
