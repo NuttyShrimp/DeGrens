@@ -30,4 +30,4 @@ export const PrimarySirenOverride: Map<number, string | string[]> = new Map<numb
 export const AddonAudioBanks: Map<string, { bankName: string, sounds: string | string[] }> = new Map<string, { bankName: string, sounds: string | string[] }>()
   .set("DLC_NUTTY_SIRENS", { bankName: "DLC_NUTTY\\SIRENS", sounds: ["SIREN_1", "SIREN_2", "SIREN_3"] })
 
-export const Debug: boolean = true;
+export const Debug: boolean = false;
