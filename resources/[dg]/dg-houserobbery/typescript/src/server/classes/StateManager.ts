@@ -300,13 +300,20 @@ class StateManager extends Util.Singleton<StateManager>() {
 
     const lootTable = this.config.lootTables[lootTableId];
     const item = lootTable[Util.getRndInteger(0, lootTable.length)];
-    Inventory.addItemToPlayer(plyId, item, 1);
+    const [itemId] = await Inventory.addItemToPlayer(plyId, item, 1);
+
+    // broken phone in loottable is added as a way for a solo player to consistently get electronics by recycling
+    if (item === 'phone') {
+      Inventory.setQualityOfItem(itemId, () => 20);
+    }
+
     Util.Log(
       'houserobbery:house:loot',
       {
         houseId,
         item,
         zoneName,
+        itemId,
       },
       `${Util.getName(plyId)}(${plyId}) got ${item} from a house robbery`,
       plyId
