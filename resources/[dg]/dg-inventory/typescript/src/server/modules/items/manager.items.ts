@@ -81,6 +81,7 @@ class ItemManager extends Util.Singleton<ItemManager>() {
       {
         byScript: src === 0,
         itemId: id,
+        itemName: item.state.name,
         oldPosition: item.state.position,
         newPosition: position,
         oldInventory: prevInvId,
