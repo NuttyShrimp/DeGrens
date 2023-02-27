@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Nieuwe consistent manier om aan electronica te komen
 - Meleewapens toegevoegd aan publieke containerbenches
+- Enkele grote meleewapens hangen nu op je rug
 
 ### Changed
 

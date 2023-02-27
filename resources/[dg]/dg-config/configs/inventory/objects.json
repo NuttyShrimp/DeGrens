@@ -15,6 +15,14 @@
         "y": 0,
         "z": -0.09
       }
+    },
+    "centerBack": {
+      "max": 1,
+      "offset": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      }
     }
   },
   "items": {
@@ -153,6 +161,14 @@
     "rocket": {
       "propName": "item_rocket",
       "position": "back"
+    },
+    "weapon_bat": {
+      "propName": "item_weapon_bat",
+      "position": "centerBack"
+    },
+    "weapon_machete": {
+      "propName": "item_weapon_machete",
+      "position": "centerBack"
     }
   }
 }

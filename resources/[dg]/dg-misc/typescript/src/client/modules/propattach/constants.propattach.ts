@@ -433,4 +433,32 @@ export const PROPS: Record<string, PropAttach.PropInfo> = {
       z: 0.7,
     },
   },
+  item_weapon_bat: {
+    model: 'w_me_bat',
+    boneId: 24818,
+    position: {
+      x: 0.26,
+      y: -0.19,
+      z: -0.17,
+    },
+    rotation: {
+      x: 0,
+      y: 312.7,
+      z: 0,
+    },
+  },
+  item_weapon_machete: {
+    model: 'prop_ld_w_me_machette',
+    boneId: 24818,
+    position: {
+      x: -0.04,
+      y: -0.16,
+      z: -0.14,
+    },
+    rotation: {
+      x: 0,
+      y: 43.2,
+      z: 0,
+    },
+  },
 };
