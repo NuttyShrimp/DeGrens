@@ -50,7 +50,7 @@ on('weaponDamageEvent', (sender: number, data: WeaponDamageEventData) => {
       Status.addStatusToPlayer(plyId, status);
     }
 
-    const bleedEvidenceChance = Util.getRndDecimal(1, 101);
+    const bleedEvidenceChance = Util.getRndInteger(1, 101);
     if (bleedEvidenceChance < 10) {
       Police.addBloodDrop(plyId);
     }
