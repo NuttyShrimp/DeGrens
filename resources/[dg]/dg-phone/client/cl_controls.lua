@@ -1,4 +1,4 @@
-local isInputFocused = false
+local isInputFocused = nil
 
 -- Keys disabled when phone is open
 openDisabled = {
@@ -40,7 +40,7 @@ Citizen.CreateThread(function()
     local isPhoneOpen = getState('state') == 1
     if isPhoneOpen then
       wait = 0
-      if isInputFocused then
+      if isInputFocused ~= nil then
         DisableAllControlActions(0)
         EnableControlAction(0, 46, true); -- push to talk
         EnableControlAction(0, 249, true); -- push to talk
@@ -75,7 +75,9 @@ disablePauseMenu = function()
 end
 
 RegisterUICallback('controls/setFocus', function(data, cb)
-  setKeysState(data.state)
+  if isInputFocused ~= 'edit' then
+    setKeysState(data.state and "input" or nil)
+  end
   cb({ data = {}, meta = { ok = true, message = 'ok' } })
 end)
 
@@ -88,7 +90,6 @@ CreateThread(function()
     local isPauseOpen = IsPauseMenuActive() ~= false
     -- Pause opened and hasn't been handled yet
     if isPauseOpen and not cachedPauseStatus then
-
       setState('isDisabled', true)
       cachedPauseStatus = true
       -- Pause closed and hasn't been undisabled yet

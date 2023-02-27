@@ -1,5 +1,5 @@
 RegisterUICallback('phone/notes/enterEdit', function(data, cb)
-  setKeysState(data.edit)
+  setKeysState(data.edit and "edit" or nil)
   cb({ data = {}, meta = { ok = true, message = 'done' } })
 end)
 
