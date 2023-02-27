@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Ladder check thread om camping tegen te gaan
 - Voertuig winkel voor ambulance en politie
 - Serversided Belgische sirens
+- Bij admin resource start worden all AFK kick gecleared uit de DB
 
 ### Changed
 - Gain less stress from stress/speedzones
@@ -42,6 +43,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Een afgebroken voertuig onderdeel zorgt er niet meer voor dat peekopties disabled zijn
 - Je wandelt niet meer rond terwijl je een notitie bewerkt op je telefoon
 - Het probleem waarbij je probeerde je inventory te openen zonder dat hij openede is opgelost
+- Recent calls kan je terug bellen + in contact zetten zonder dat deze al in u contacten moeten staan
 
 ## [1.0.6]
 

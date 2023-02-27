@@ -3,13 +3,17 @@ import { Events, RPC, SQL, UI, Util } from '@dgx/server';
 import { getIdentifierForPlayer } from '../../helpers/identifiers';
 
 import penaltyInfoManager from './classes/penaltyInfoManager';
-import { ACBan, banPlayer, isPlayerBanned, kickPlayer, warnPlayer } from './service.penalties';
+import { ACBan, banPlayer, clearKickPenalties, isPlayerBanned, kickPlayer, warnPlayer } from './service.penalties';
 
 global.asyncExports('isPlayerBanned', isPlayerBanned);
 global.asyncExports('ban', banPlayer);
 global.asyncExports('kick', kickPlayer);
 global.asyncExports('warn', warnPlayer);
 global.asyncExports('ACBan', ACBan);
+
+setImmediate(() => {
+  clearKickPenalties()
+})
 
 on('dg-config:moduleLoaded', (module: string, data: Penalty.Config) => {
   if (module !== 'admin.bans') return;

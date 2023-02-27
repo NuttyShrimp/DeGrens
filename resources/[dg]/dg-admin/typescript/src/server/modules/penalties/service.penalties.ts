@@ -162,3 +162,7 @@ export const ACBan = (target: number, reason: string, data?: Record<string, any>
   penaltyLogger.warn('Going to ban someone with anticheat: ', 'reason', reason, 'data', data);
   banPlayer(-1, target, [`Anticheat: ${reason}`], 30, -1, data);
 };
+
+export const clearKickPenalties = async () => {
+  await SQL.query("DELETE FROM penalties WHERE penalty = 'kick' AND reason = 'Je was te lang voor AFk'");
+}
