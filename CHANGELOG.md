@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Meleewapens degraden nu een percentage na elke slag
 - Container benches required players omlaag gezet
 - Guards spawnen niet meer als er EMS aan de radiotower is
+- Admins kunnen nu ook players freezen
 
 ### Fixed
 
