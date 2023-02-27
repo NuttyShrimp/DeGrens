@@ -6,6 +6,7 @@ interface ResourceTokenData {
 
 declare namespace AntiCheat {
   interface Config {
+    afkKickMessage: string;
     blockedModels: string[];
     explosions: { name: string; block: boolean }[];
     alwaysAllowedWeapons: (string | number)[];

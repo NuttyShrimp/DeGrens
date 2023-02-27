@@ -1,4 +1,4 @@
-import { Chat, Notifications, SQL, Util } from '@dgx/server';
+import { Chat, Config, Notifications, SQL, Util } from '@dgx/server';
 import { updatePointsReset } from 'modules/penaltyPoints/service.penaltyPoints';
 
 import { getIdentifierForPlayer, getPlayerForSteamId, getServerIdForSteamId } from '../../helpers/identifiers';
@@ -163,6 +163,8 @@ export const ACBan = (target: number, reason: string, data?: Record<string, any>
   banPlayer(-1, target, [`Anticheat: ${reason}`], 30, -1, data);
 };
 
+// ensure config has been loaded before calling
 export const clearKickPenalties = async () => {
-  await SQL.query("DELETE FROM penalties WHERE penalty = 'kick' AND reason = 'Je was te lang voor AFk'");
-}
+  const afkKickMessage = Config.getConfigValue<{ afkKickMessage: string }>('anticheat')?.afkKickMessage ?? '';
+  await SQL.query(`DELETE FROM penalties WHERE penalty = 'kick' AND reason = '${afkKickMessage}'`); // using as param somheow didnt work but i couldnt be bothered
+};

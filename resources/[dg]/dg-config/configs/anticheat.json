@@ -1,4 +1,5 @@
 {
+  "afkKickMessage": "Je was te lang AFK",
   "blockedModels": [
     "weapon_assaultrifle_mk2",
     "weapon_assaultshotgun",
