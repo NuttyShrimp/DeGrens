@@ -1,6 +1,6 @@
 import { getConfig } from 'services/config';
 import { TOWER_STATE_KEYS } from './constants.radiotowers';
-import { Events, Util } from '@dgx/server';
+import { Events, Util, Jobs } from '@dgx/server';
 import { radioTowerLogger } from './logger.radiotowers';
 
 const towerStates: Record<string, Materials.Radiotowers.State> = {};
@@ -70,6 +70,16 @@ const isAnyPlayerAtTower = (towerId: string) => {
   return (playersAtTower[towerId]?.size ?? 0) > 0;
 };
 
+const isAnyEMSAtTower = (towerId: string) => {
+  for (const ply of playersAtTower[towerId]) {
+    const job = Jobs.getCurrentJob(ply);
+    if (job === 'police' || job === 'ambulance') {
+      return true;
+    }
+  }
+  return false;
+};
+
 export const tryToSpawnTowerPeds = (towerId: string, plyId: number) => {
   if (getTowerState(towerId).pedsSpawned) return;
 
@@ -81,8 +91,11 @@ export const tryToSpawnTowerPeds = (towerId: string, plyId: number) => {
 const spawnPedSwarm = (towerId: string) => {
   if (!isAnyPlayerAtTower(towerId)) return;
 
-  const targetPly = [...playersAtTower[towerId]][0];
-  Events.emitNet('materials:radiotower:spawnSwarm', targetPly, towerId);
+  // dont spawn peds if any police or ambu is at tower
+  if (!isAnyEMSAtTower(towerId)) {
+    const targetPly = [...playersAtTower[towerId]][0];
+    Events.emitNet('materials:radiotower:spawnSwarm', targetPly, towerId);
+  }
 
   // recusively spawn spawn every 5 min
   swarmTimeout = setTimeout(() => {
