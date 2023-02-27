@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - De owner van een restaurant heeft nu een menu om signedin employees te zien
 - Ladder check thread om camping tegen te gaan
 - Voertuig winkel voor ambulance en politie
+- Serversided Belgische sirens
 
 ### Changed
 - Gain less stress from stress/speedzones
@@ -39,6 +40,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Voertuig service reset nu deftig de handling van een voertuig
 - Je kan nu terug je motor op slot zetten
 - Een afgebroken voertuig onderdeel zorgt er niet meer voor dat peekopties disabled zijn
+- Je wandelt niet meer rond terwijl je een notitie bewerkt op je telefoon
+- Het probleem waarbij je probeerde je inventory te openen zonder dat hij openede is opgelost
 
 ## [1.0.6]
 
