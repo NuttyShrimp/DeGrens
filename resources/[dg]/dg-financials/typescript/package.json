@@ -14,7 +14,7 @@
     "webpack:config": "webpack --config ./webpack.config.js"
   },
   "dependencies": {
-    "dayjs": "^1.11.2",
+    "dayjs": "*",
     "fast-deep-equal": "^3.1.3"
   },
   "devDependencies": {
