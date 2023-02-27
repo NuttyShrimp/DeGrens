@@ -74,6 +74,8 @@ export const resetProps = () => {
 };
 
 export const toggleProps = (toggle: boolean) => {
+  if (enabled === toggle) return;
+
   if (toggle) {
     attachedProps = toggledProps;
     toggledProps = {};
