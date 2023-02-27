@@ -43,7 +43,10 @@ export const startWeaponThread = () => {
   // needed for checking evidence
   let isFreeAiming = IsPlayerFreeAiming(playerId);
 
-  let stoppedShootingTimeout: NodeJS.Timeout | null = null;
+  let stoppedAttackTimeout: NodeJS.Timeout | null = null;
+
+  // diff logic for melee weapons
+  let meleeHits = 0;
 
   weaponThread = setInterval(() => {
     if (currentWeaponData === null) return;
@@ -59,36 +62,47 @@ export const startWeaponThread = () => {
 
     const ammoInWeapon = Number(GetAmmoInPedWeapon(ped, weapon));
 
-    // Player is holding left click
-    if (IsPedShooting(ped) && ammoInWeapon > 0) {
-      // Add GSR for first shot
+    // Player has fired a bullet
+    if (ammoInWeapon < previousAmmoCount) {
+      const plyCoords = Util.getEntityCoords(ped);
+      shotFirePositions.push(plyCoords);
+      emit('weapons:shotWeapon', currentWeaponData);
+
       if (!shotFired) {
         Events.emitNet('weapons:server:firstShot', currentWeaponData.hash);
         shotFired = true;
       }
     }
 
-    // Player has fired a bullet
-    if (ammoInWeapon < previousAmmoCount) {
-      const plyCoords = Util.getEntityCoords(ped);
-      shotFirePositions.push(plyCoords);
-      emit('weapons:shotWeapon', currentWeaponData);
-    }
+    const attackButtonReleased = IsControlJustReleased(0, 24) || IsDisabledControlJustReleased(0, 24);
+    const justShot = !currentWeaponData.isMelee && attackButtonReleased;
+    const justMeleed =
+      currentWeaponData.isMelee &&
+      (attackButtonReleased || IsControlJustReleased(0, 140) || IsDisabledControlJustReleased(0, 140));
 
-    // Player stopped shooting
-    if (IsControlJustReleased(0, 24) || IsDisabledControlJustReleased(0, 24)) {
+    // handle player stopped shooting with gun
+    if (justShot || justMeleed) {
       SetPedUsingActionMode(ped, false, -1, 'DEFAULT_ACTION');
 
-      // Throttle
-      if (stoppedShootingTimeout) {
-        clearTimeout(stoppedShootingTimeout);
-        stoppedShootingTimeout = null;
+      if (justMeleed) {
+        meleeHits++;
       }
-      // Provide weaponId as param so timeout will still work if we remove weapon during timeout
-      stoppedShootingTimeout = setTimeout(
+
+      // Throttle
+      if (stoppedAttackTimeout) {
+        clearTimeout(stoppedAttackTimeout);
+        stoppedAttackTimeout = null;
+      }
+      // Provide data as params so timeout will still work if we remove weapon during timeout
+      stoppedAttackTimeout = setTimeout(
         (weaponId: string) => {
-          Events.emitNet('weapons:server:stoppedShooting', weaponId, ammoInWeapon, shotFirePositions);
-          shotFirePositions = [];
+          if (justMeleed) {
+            Events.emitNet('weapons:server:meleeHit', weaponId, meleeHits);
+            meleeHits = 0;
+          } else if (justShot) {
+            Events.emitNet('weapons:server:stoppedShooting', weaponId, ammoInWeapon, shotFirePositions);
+            shotFirePositions = [];
+          }
         },
         1000,
         currentWeaponData.id
@@ -146,6 +160,10 @@ export const startWeaponThread = () => {
     if (ammoInWeapon === 1 && !currentWeaponData.oneTimeUse) {
       DisablePlayerFiring(ped, true);
     }
+
+    // TODO: Find way to modify melee weapon damage using weaponmeta files
+    // editting meta damage only works for guns for some reason and i cant find where to modify melee weapon damage
+    SetWeaponDamageModifierThisFrame(currentWeaponData.hash, currentWeaponData.damageModifier ?? 1);
 
     previousAmmoCount = ammoInWeapon;
   }, 1);

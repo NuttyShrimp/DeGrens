@@ -14,10 +14,14 @@ declare namespace Weapons {
     unlimitedAmmo?: boolean;
     attachments?: Record<string, string>;
     useNativeReticle?: boolean;
+    damageModifier?: number;
+    isMelee?: boolean;
   };
 
   type WeaponItem = Inventory.ItemState &
-    Required<Pick<WeaponConfig, 'noHolstering' | 'oneTimeUse' | 'canTint' | 'useNativeReticle'>> & {
+    Required<
+      Pick<WeaponConfig, 'noHolstering' | 'oneTimeUse' | 'canTint' | 'useNativeReticle' | 'damageModifier' | 'isMelee'>
+    > & {
       hash: number;
     };
 

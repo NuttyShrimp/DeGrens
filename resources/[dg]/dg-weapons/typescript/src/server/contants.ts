@@ -6,7 +6,8 @@ export const ALL_WEAPONS: Weapons.WeaponConfig[] = [
   // },
   {
     name: 'weapon_bat',
-    durabilityMultiplier: 0.01,
+    durabilityMultiplier: 0.2,
+    isMelee: true,
   },
   // {
   //     name: 'weapon_bottle',
@@ -14,19 +15,26 @@ export const ALL_WEAPONS: Weapons.WeaponConfig[] = [
   // },
   {
     name: 'weapon_crowbar',
-    durabilityMultiplier: 0.01,
+    durabilityMultiplier: 0.2,
+    damageModifier: 0.4,
+    isMelee: true,
   },
   {
     name: 'weapon_unarmed',
     durabilityMultiplier: 0.0,
+    damageModifier: 0.9,
+    isMelee: true,
   },
   {
     name: 'weapon_flashlight',
-    durabilityMultiplier: 0.01,
+    durabilityMultiplier: 0.2,
+    isMelee: true,
   },
   {
     name: 'weapon_golfclub',
-    durabilityMultiplier: 0.01,
+    durabilityMultiplier: 0.2,
+    damageModifier: 0.42,
+    isMelee: true,
   },
   // {
   //     name: 'weapon_hammer',
@@ -34,33 +42,47 @@ export const ALL_WEAPONS: Weapons.WeaponConfig[] = [
   // },
   {
     name: 'weapon_hatchet',
-    durabilityMultiplier: 0.01,
+    durabilityMultiplier: 0.2,
+    damageModifier: 0.58,
+    isMelee: true,
   },
   {
     name: 'weapon_knuckle',
-    durabilityMultiplier: 0.01,
+    durabilityMultiplier: 0.2,
     noHolstering: true,
+    damageModifier: 0.42,
+    isMelee: true,
   },
   {
     name: 'weapon_knife',
-    durabilityMultiplier: 0.01,
+    durabilityMultiplier: 0.2,
+    damageModifier: 0.58,
+    isMelee: true,
   },
   {
     name: 'weapon_machete',
-    durabilityMultiplier: 0.01,
+    durabilityMultiplier: 0.2,
+    damageModifier: 0.58,
+    isMelee: true,
   },
   {
     name: 'weapon_switchblade',
-    durabilityMultiplier: 0.01,
+    durabilityMultiplier: 0.2,
     noHolstering: true,
+    damageModifier: 0.58,
+    isMelee: true,
   },
   {
     name: 'weapon_nightstick',
-    durabilityMultiplier: 0.01,
+    durabilityMultiplier: 0.2,
+    damageModifier: 0.58,
+    isMelee: true,
   },
   {
     name: 'weapon_wrench',
-    durabilityMultiplier: 0.01,
+    durabilityMultiplier: 0.2,
+    damageModifier: 0.42,
+    isMelee: true,
   },
   // {
   //     name: 'weapon_battleaxe',
@@ -68,7 +90,9 @@ export const ALL_WEAPONS: Weapons.WeaponConfig[] = [
   // },
   {
     name: 'weapon_poolcue',
-    durabilityMultiplier: 0.01,
+    durabilityMultiplier: 0.2,
+    damageModifier: 0.42,
+    isMelee: true,
   },
   // {
   //     name: 'weapon_stone_hatchet',

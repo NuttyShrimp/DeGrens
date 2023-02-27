@@ -68,6 +68,8 @@ export const registerUseableWeapons = () => {
       noHolstering: weaponConfig.noHolstering ?? false,
       canTint: weaponConfig.canTint ?? false,
       useNativeReticle: weaponConfig.useNativeReticle ?? false,
+      damageModifier: weaponConfig.damageModifier ?? 1,
+      isMelee: weaponConfig.isMelee ?? false,
     };
 
     Events.emitNet('weapons:client:useWeapon', src, weaponData);

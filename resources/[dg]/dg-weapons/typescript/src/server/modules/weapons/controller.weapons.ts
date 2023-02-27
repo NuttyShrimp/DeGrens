@@ -70,6 +70,18 @@ Events.onNet(
   }
 );
 
+Events.onNet('weapons:server:meleeHit', (plyId: number, itemId: string, hits: number) => {
+  const itemState = getWeaponItemState(itemId);
+  if (!itemState) return;
+
+  const weaponConfig = getWeaponConfig(itemState.name);
+  if (!weaponConfig) return;
+
+  const decrease = weaponConfig.durabilityMultiplier * hits;
+  Inventory.setQualityOfItem(itemId, old => old - decrease);
+  console.log(decrease);
+});
+
 Inventory.onInventoryUpdate(
   'player',
   (identifier, _, itemState) => {
