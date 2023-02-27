@@ -1,5 +1,5 @@
 {
-  "timeout": 120,
+  "timeout": 90,
   "amountOfItems": 3,
   "towers": {
     "lsia": {

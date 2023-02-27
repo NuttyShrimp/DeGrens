@@ -65,7 +65,7 @@
     {
       "from": {
         "name": "sand",
-        "amount": 10
+        "amount": 5
       },
       "to": {
         "name": "material_glass",

@@ -1132,7 +1132,7 @@
       "x": 1,
       "y": 2
     },
-    "decayRate": 20160,
+    "decayRate": 30240,
     "useable": true
   },
   {
@@ -2523,7 +2523,7 @@
       "x": 1,
       "y": 1
     },
-    "decayRate": 20160
+    "decayRate": 64800
   },
   {
     "name": "material_glass",
@@ -2533,7 +2533,7 @@
       "x": 1,
       "y": 1
     },
-    "decayRate": 20160
+    "decayRate": 64800
   },
   {
     "name": "material_plastic",
@@ -2543,7 +2543,7 @@
       "x": 1,
       "y": 1
     },
-    "decayRate": 20160
+    "decayRate": 64800
   },
   {
     "name": "material_electronics",
@@ -2553,7 +2553,7 @@
       "x": 1,
       "y": 1
     },
-    "decayRate": 20160
+    "decayRate": 64800
   },
   {
     "name": "material_iron",
@@ -2563,7 +2563,7 @@
       "x": 1,
       "y": 1
     },
-    "decayRate": 20160
+    "decayRate": 64800
   },
   {
     "name": "material_aluminum",
@@ -2573,7 +2573,7 @@
       "x": 1,
       "y": 1
     },
-    "decayRate": 20160
+    "decayRate": 64800
   },
   {
     "name": "material_steel",
@@ -2583,7 +2583,7 @@
       "x": 1,
       "y": 1
     },
-    "decayRate": 20160
+    "decayRate": 64800
   },
   {
     "name": "refined_copper",
@@ -2593,7 +2593,7 @@
       "x": 2,
       "y": 2
     },
-    "decayRate": 64800
+    "decayRate": 172800
   },
   {
     "name": "refined_plastic",
@@ -2603,7 +2603,7 @@
       "x": 2,
       "y": 2
     },
-    "decayRate": 64800
+    "decayRate": 172800
   },
   {
     "name": "refined_iron",
@@ -2613,7 +2613,7 @@
       "x": 2,
       "y": 2
     },
-    "decayRate": 64800
+    "decayRate": 172800
   },
   {
     "name": "refined_aluminum",
@@ -2623,7 +2623,7 @@
       "x": 2,
       "y": 2
     },
-    "decayRate": 64800
+    "decayRate": 172800
   },
   {
     "name": "refined_steel",
@@ -2633,7 +2633,7 @@
       "x": 2,
       "y": 2
     },
-    "decayRate": 64800
+    "decayRate": 172800
   },
   {
     "name": "bolt_cutters",
@@ -2654,7 +2654,7 @@
       "x": 2,
       "y": 2
     },
-    "decayRate": 1440
+    "decayRate": 2880
   },
   {
     "name": "screwdriver",

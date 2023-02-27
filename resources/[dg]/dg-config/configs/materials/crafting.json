@@ -17,8 +17,8 @@
       "requiredReputation": 10,
       "items": [
         {
-          "name": "refined_plastic",
-          "amount": 1
+          "name": "material_plastic",
+          "amount": 5
         }
       ]
     },
@@ -27,7 +27,7 @@
       "items": [
         {
           "name": "material_electronics",
-          "amount": 2
+          "amount": 1
         },
         {
           "name": "refined_plastic",
@@ -52,7 +52,7 @@
         },
         {
           "name": "material_electronics",
-          "amount": 3
+          "amount": 2
         }
       ]
     },
@@ -78,19 +78,19 @@
       "items": [
         {
           "name": "material_electronics",
-          "amount": 4
+          "amount": 3
         },
         {
           "name": "refined_plastic",
-          "amount": 2
+          "amount": 1
         },
         {
           "name": "refined_aluminum",
-          "amount": 4
+          "amount": 3
         },
         {
           "name": "refined_copper",
-          "amount": 2
+          "amount": 1
         }
       ]
     },
@@ -1158,7 +1158,7 @@
         },
         {
           "name": "material_electronics",
-          "amount": 8
+          "amount": 5
         },
         {
           "name": "refined_copper",
