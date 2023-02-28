@@ -18,11 +18,7 @@ declare namespace Interior {
 
   interface Data {
     shell: string;
-    exit: {
-      offset: Vec3;
-      heading: number;
-    };
-    lootables: { model: number; item?: string }[];
+    lootZones: number;
   }
 }
 
@@ -36,7 +32,7 @@ declare interface Config {
   timeToRob: number;
   // Time in minutes to find and try to interact with a house
   timeToFind: number;
-  shellType: Record<string, string>;
+  shellInfo: Record<string, Interior.Data>;
   locations: House.Data[];
   moldChance: number;
 }

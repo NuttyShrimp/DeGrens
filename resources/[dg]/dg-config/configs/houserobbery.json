@@ -24,9 +24,15 @@
   "playerCooldown": 5,
   "timeToRob": 15,
   "timeToFind": 15,
-  "shellType": {
-    "small": "standardmotel_shell",
-    "medium": "furnitured_midapart"
+  "shellInfo": {
+    "small": {
+      "plan": "standardmotel_shell",
+      "lootZones": 6
+    },
+    "medium": {
+      "plan": "furnitured_midapart",
+      "lootZones": 8
+    }
   },
   "locations": [
     {

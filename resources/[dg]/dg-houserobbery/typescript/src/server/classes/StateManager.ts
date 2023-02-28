@@ -326,6 +326,13 @@ class StateManager extends Util.Singleton<StateManager>() {
     if (Util.getRndInteger(1, 1001) <= this.config.moldChance * 10) {
       global.exports['dg-materials'].tryGivingKeyMold(plyId);
     }
+
+    // Check if everything is searched
+    if (house.searched.size === this.config.shellInfo[this.config.locations[house.dataIdx].size].lootZones) {
+      const group = Jobs.getGroupByServerId(plyId);
+      if (!group) return;
+      this.finishJob(group.id, houseId);
+    }
   };
 
   public getRobableHouse = () => {
@@ -413,30 +420,12 @@ class StateManager extends Util.Singleton<StateManager>() {
 
     house.state = HouseState.FREE;
 
-    this.activeJobs.delete(groupId);
-
     mainLogger.debug(`${plyId} failed his houserobbery job`);
 
-    const group = Jobs.getGroupByServerId(plyId);
-    if (group && group.id === groupId) {
-      if (group.owner.serverId) {
-        Jobs.changeGroupJob(group.owner.serverId, null);
-      }
-      group.members.forEach(m => {
-        this.cleanupPlayer(m.serverId);
-
-        if (m.serverId)
-          Phone.sendMail(
-            m.serverId,
-            'Huisinbraak',
-            'Bert B.',
-            'Je deed er te lang over! Ik zal je taak overhandige aan een echte professional'
-          );
-      });
-    }
+    this.finishJob(groupId, activeJob.houseId, true);
   }
 
-  private finishJobForPly(plyId: number | null, cid: number) {
+  private finishJobForPly(plyId: number | null, cid: number, failed = false) {
     this.playerStates.set(cid, PlayerState.COOLDOWN);
 
     setTimeout(() => {
@@ -452,16 +441,20 @@ class StateManager extends Util.Singleton<StateManager>() {
         plyId,
         'Taak voltooid',
         'Bert B.',
-        'Je hebt je taak volbracht, ik laat je staan op de lijst voor een nieuwe opdracht'
+        failed
+          ? 'Je deed er te lang over! Ik zal je taak overhandige aan een echte professional'
+          : 'Je hebt je taak volbracht, ik laat je staan op de lijst voor een nieuwe opdracht'
       );
     }
   }
 
-  private finishJob(groupId: string, houseId: string) {
+  private finishJob(groupId: string, houseId: string, failed = false) {
     const house = this.houseStates.get(houseId);
     if (!house) return;
-    const houseConfig = this.config.locations[house.dataIdx];
-    if (!houseConfig) return;
+    const activeJob = this.activeJobs.get(groupId);
+    if (!activeJob) return;
+
+    this.activeJobs.delete(groupId);
 
     const group = Jobs.getGroupById(groupId);
     if (group) {
@@ -469,7 +462,7 @@ class StateManager extends Util.Singleton<StateManager>() {
         Jobs.changeGroupJob(group.owner.serverId, null);
       }
       group.members.forEach(m => {
-        this.finishJobForPly(m.serverId, m.cid);
+        this.finishJobForPly(m.serverId, m.cid, failed);
       });
     }
 
@@ -481,9 +474,13 @@ class StateManager extends Util.Singleton<StateManager>() {
       },
       `${group?.owner.name ?? 'unknown group owner'} finished his house robbery job`
     );
+    house.state = HouseState.COOLDOWN;
+    setTimeout(() => {
+      house.state = HouseState.FREE;
 
-    // destroy zone for everyone when job is finished
-    Events.emitNet('houserobbery:client:destroyHouseZone', -1, houseId);
+      // destroy zone for everyone when job is finished
+      Events.emitNet('houserobbery:client:destroyHouseZone', -1, houseId);
+    }, 10 * 60000);
   }
 
   public cleanupPlayer(plyId: number | null) {
