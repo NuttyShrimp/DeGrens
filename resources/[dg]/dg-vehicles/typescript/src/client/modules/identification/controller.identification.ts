@@ -1,4 +1,4 @@
-import { Events, Notifications, Peek } from '@dgx/client';
+import { Events, Notifications, Peek, UI } from '@dgx/client';
 import { getVehicleVin, getVehicleVinWithoutValidation } from './service.identification';
 import { isCloseToBoot, isCloseToHood } from '@helpers/vehicle';
 import { hasVehicleKeys } from 'modules/keys/cache.keys';
@@ -47,6 +47,7 @@ Peek.addGlobalEntry('vehicle', {
         const vin = await getVehicleVin(entity);
         if (!vin) return;
         Notifications.add(`VIN: '${vin}'`, 'info');
+        UI.SendAppEvent('copy', vin);
       },
       canInteract: ent => {
         if (!ent || !NetworkGetEntityIsNetworked(ent)) return false;

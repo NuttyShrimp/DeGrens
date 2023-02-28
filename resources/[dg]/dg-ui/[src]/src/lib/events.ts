@@ -1,4 +1,5 @@
 import { useMainStore } from './stores/useMainStore';
+import { copyToClipboard } from './util';
 
 export const events: { [appName: string]: (evt: any) => void } = {
   main: evt => {
@@ -30,5 +31,8 @@ export const events: { [appName: string]: (evt: any) => void } = {
     useMainStore.setState({
       jobs: evt.data.data,
     });
+  },
+  copy: evt => {
+    copyToClipboard(evt.data.data);
   },
 };

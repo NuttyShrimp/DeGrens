@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Enkele grote meleewapens hangen nu op je rug
 - Toon een indicator of er een raportje is gemaakt of een bericht is verstuurd in een report waar jij deel van maakt
 - Restore health and armor on join
+- Copy VIN to clipboard when reading it
 
 ### Changed
 
@@ -34,6 +35,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Je wordt niet langer zichtbaar alsje in noclip bent en cloak uitzet
 - Je gaat nu niet meer in een scuffed down state liggen
 - Correcte taskbar icons/labels in weedlab
+- Je input veld verdwijnt niet meer als je een chat bericht ontvangt
 
 ## [1.0.7]
 ### Added
