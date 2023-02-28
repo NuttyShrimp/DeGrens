@@ -349,10 +349,10 @@
     enabled "2.0.x"
     kuler "^2.0.0"
 
-"@degrens-21/fa-6@^1.0.4":
-  version "1.0.4"
-  resolved "https://gitlab.pieter557.dscloud.me/api/v4/projects/34/packages/npm/@degrens-21/fa-6/-/@degrens-21/fa-6-1.0.4.tgz#9a981dfbcd5ee5557623eb654ddfc7f9b7b24c07"
-  integrity sha1-mpgd+81e5VV2I+tlTd/H+beyTAc=
+"@degrens-21/fa-6@^1.0.5":
+  version "1.0.5"
+  resolved "https://gitlab.pieter557.dscloud.me/api/v4/projects/34/packages/npm/@degrens-21/fa-6/-/@degrens-21/fa-6-1.0.5.tgz#28ecfd6b9b2681b79925b8d487706c26a759b57e"
+  integrity sha1-KOz9a5smgbeZJbjUh3BsJqdZtX4=
 
 "@discoveryjs/json-ext@0.5.7", "@discoveryjs/json-ext@^0.5.0":
   version "0.5.7"
