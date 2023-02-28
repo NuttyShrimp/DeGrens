@@ -11,4 +11,11 @@ Events.onNet('hospital:health:useHeal', (healthIncrease: number, bleedDecrease: 
   setBleedAmount(currentBleed - bleedDecrease);
 });
 
+onNet('dg-chars:client:finishSpawn', () => {
+  const data = DGCore.Functions.GetPlayerData();
+  setHealth(data.metadata.health / 2);
+  const ped = PlayerPedId();
+  SetPedArmour(ped, data.metadata.armor);
+});
+
 global.exports('setHealth', setHealth);

@@ -95,10 +95,12 @@ function DGCore.Player.CheckPlayerData(src, PlayerData)
   -- Character data
   PlayerData.position = PlayerData.position or DGConfig.DefaultSpawn
 
+  print(json.encode(PlayerData.metadata))
   -- Metadata
   PlayerData.metadata = PlayerData.metadata or {}
   PlayerData.metadata.stress = PlayerData.metadata.stress or 0
-  PlayerData.metadata.armor = PlayerData.metadata.armor or 0
+  PlayerData.metadata.health = PlayerData.metadata.health ~= nil and PlayerData.metadata.health or 200
+  PlayerData.metadata.armor = PlayerData.metadata.armor ~= nil and PlayerData.metadata.armor or 0
   PlayerData.metadata.callsign = PlayerData.metadata.callsign or 'NO CALLSIGN'
   PlayerData.metadata['licences'] = PlayerData.metadata['licences'] or {
     ['driver'] = true,
@@ -175,7 +177,7 @@ function DGCore.Player.CreatePlayer(PlayerData)
   end
 
   DGCore.Players[self.PlayerData.source] = self
-  DGCore.Player.Save(self.PlayerData.source)
+  DGCore.Player.Save(self.PlayerData.source, true)
 
   -- Make the player state aware that we are loggedin
   Player(self.PlayerData.source).state:set('isLoggedIn', true, true)
@@ -195,12 +197,19 @@ function DGCore.Player.CreatePlayer(PlayerData)
 end
 
 -- Save player info to database (make sure citizenid is the primary key in your database)
-function DGCore.Player.Save(src)
+function DGCore.Player.Save(src, skipHealth)
   local PlayerData = DGCore.Players[src].PlayerData
 
   if not PlayerData then
     DGCore.ShowError(GetCurrentResourceName(), 'ERROR DGCore.PLAYER.SAVE - PLAYERDATA IS EMPTY!')
     return
+  end
+
+  if not skipHealth then
+    local ped = GetPlayerPed(src)
+    local entHealth = math.max(GetEntityHealth(ped), 2)
+    DGCore.Players[src].Functions.SetMetaData("health", entHealth)
+    DGCore.Players[src].Functions.SetMetaData("armor", GetPedArmour(ped))
   end
 
   -- Save user

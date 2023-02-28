@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Meleewapens toegevoegd aan publieke containerbenches
 - Enkele grote meleewapens hangen nu op je rug
 - Toon een indicator of er een raportje is gemaakt of een bericht is verstuurd in een report waar jij deel van maakt
+- Restore health and armor on join
 
 ### Changed
 
