@@ -30,14 +30,14 @@ export const getGroupByServerId = (id: number): Groups.Group | undefined => {
   return group.getInfo();
 };
 
-export const changeJob = (src: number, job: string) => {
+export const changeJob = (src: number, job: string | null) => {
   // Src should be the owner
   const group = groupManager.getGroupByServerId(src);
   if (!group) {
     Notifications.add(src, 'Je moet in een groep zitten om deze job te kunnen kiezen.');
     return false;
   }
-  if (group.isBusy()) {
+  if (job != null && group.isBusy()) {
     Notifications.add(src, 'Je groep is al bezig met een job, Werk deze eerst af voordat je een nieuwe job kiest!');
     return false;
   }
