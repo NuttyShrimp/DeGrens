@@ -15,6 +15,7 @@ export const useReportStore = create<Reports.State & Reports.StateActions>('repo
     back: false,
     close: false,
   },
+  unread: [],
   setTab: t => set(() => ({ tab: t })),
   setReports: r =>
     set(() => ({
@@ -33,4 +34,6 @@ export const useReportStore = create<Reports.State & Reports.StateActions>('repo
   setReportMessages: msgs => set(() => ({ reportMessages: msgs })),
   setConnected: toggle => set(() => ({ connected: toggle })),
   setTitleInfo: info => set(() => ({ titleInfo: info })),
+  addUnread: id => set(s => ({ unread: s.unread.includes(id) ? s.unread : [...s.unread, id] })),
+  markRead: id => set(s => ({ unread: s.unread.filter(uid => uid !== id) })),
 }));

@@ -2,6 +2,8 @@ import React, { useCallback } from 'react';
 import AppWrapper from '@src/components/appwrapper';
 import dayjs from 'dayjs';
 
+import { useReportIndicatorStore } from '../reports-indicator/stores/useReportIndicatorStore';
+
 import { ReportContainer } from './components/ReportContainer';
 import { useReportStore } from './stores/reportStore';
 import config from './_config';
@@ -16,8 +18,12 @@ const Container: AppFunction = props => {
     s.reports,
     s.reportMessages,
   ]);
+  const [resetIndicator] = useReportIndicatorStore(s => [s.resetCounter]);
 
-  const handleShow = useCallback(() => props.showApp(), [props.showApp]);
+  const handleShow = useCallback(() => {
+    props.showApp();
+    resetIndicator();
+  }, [props.showApp, resetIndicator]);
   const handleHide = useCallback(() => {
     props.hideApp();
     setReports([]);
@@ -46,12 +52,14 @@ const Container: AppFunction = props => {
         break;
       }
       case 'setReportState': {
-        setReports(reports.map(r => {
-          if (r.id === evt.data.id) {
-            r.open = evt.data.toggle ?? true
-          }
-          return r;
-        }));
+        setReports(
+          reports.map(r => {
+            if (r.id === evt.data.id) {
+              r.open = evt.data.toggle ?? true;
+            }
+            return r;
+          })
+        );
         break;
       }
     }

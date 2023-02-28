@@ -5,10 +5,17 @@ import { formatRelativeTime } from '@src/lib/util';
 
 import { useReportStore } from '../stores/reportStore';
 export const ReportList = () => {
-  const [reports, selectReport, setTitleInfo] = useReportStore(s => [s.reports, s.selectReport, s.setTitleInfo]);
+  const [reports, unreadIds, selectReport, setTitleInfo, markRead] = useReportStore(s => [
+    s.reports,
+    s.unread,
+    s.selectReport,
+    s.setTitleInfo,
+    s.markRead,
+  ]);
 
   const joinReport = (id: number) => {
     selectReport(id);
+    markRead(id);
   };
 
   useEffect(() => {
@@ -29,7 +36,11 @@ export const ReportList = () => {
       )}
       <div className='reports-list'>
         {reports.map(r => (
-          <div className='reports-list-entry' key={r.id} onClick={() => joinReport(r.id)}>
+          <div
+            className={`reports-list-entry ${unreadIds.includes(r.id) ? 'unread' : ''}`}
+            key={r.id}
+            onClick={() => joinReport(r.id)}
+          >
             <Typography variant='h6'>{r.title}</Typography>
             <div className='reports-list-entry-info'>
               <div>

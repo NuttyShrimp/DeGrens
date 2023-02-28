@@ -1,4 +1,4 @@
-import { Admin } from '@dgx/server';
+import { Admin, Events } from '@dgx/server';
 import { validateBody } from 'helpers/bodyHelper';
 import { registerRoute } from 'sv_routes';
 
@@ -79,3 +79,23 @@ registerRoute('POST', '/admin/actions/ban', async (req, res) => {
     result: true,
   });
 });
+
+registerRoute("POST", '/admin/report/announce', async (req, res) => {
+  if (!req.body.id) {
+    res(400, {
+      message: "missing report id in body"
+    })
+  }
+  const targets = Admin.plyInDevMode();
+  targets.forEach(t => {
+    Events.emitNet("auth:panel:announceNewReportMessage", t, req.body.id)
+  })
+  if (req.body.receivers && Array.isArray(req.body.receivers)) {
+    req.body.receivers.forEach(async (recv: string) =>{ 
+      const serverId = await global.exports['dg-auth'].getServerIdForSteamId(recv);
+      if (!serverId) return;
+      Events.emitNet("auth:panel:announceNewReportMessage", serverId, req.body.id)
+    })
+  }
+  res(200, {})
+})

@@ -99,4 +99,5 @@ declare interface RootState {
   badge: Badge.State;
   idlist: IdList.State;
   reports: Reports.State;
+  'reports-indicator': ReportIndicator.State;
 }

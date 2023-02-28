@@ -48,6 +48,10 @@
       padding: .5vh;
       border-radius: .5vh;
       cursor: pointer;
+      
+      &.unread {
+        border: .3vh solid variables.$secondary_normal;
+      }
 
       &-info {
         display: flex;

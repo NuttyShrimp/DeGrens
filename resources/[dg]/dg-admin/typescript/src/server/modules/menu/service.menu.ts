@@ -56,3 +56,4 @@ export const announceMessage = (src: number, message: string[] | string) => {
 };
 
 export const isInDevMode = (src: number) => plysInDevMode.has(src);
+export const getDevModeSet = () => [...plysInDevMode];

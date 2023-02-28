@@ -15,6 +15,7 @@ declare namespace Reports {
     reportMessages: Panel.Message[];
     connected: boolean;
     titleInfo: TitleInfo;
+    unread: number[];
   }
 
   interface StateActions {
@@ -24,5 +25,15 @@ declare namespace Reports {
     setReportMessages: (messages: Panel.Message[]) => void;
     setConnected: (toggle: boolean) => void;
     setTitleInfo: (info: TitleInfo) => void;
+    addUnread: (id: number) => void;
+    markRead: (id: number) => void;
+  }
+}
+
+declare namespace ReportIndicator {
+  interface State {
+    counter: number;
+    incCounter: () => void;
+    resetCounter: () => void;
   }
 }

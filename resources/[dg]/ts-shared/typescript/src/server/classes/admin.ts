@@ -30,6 +30,9 @@ class Admin {
   isInDevMode(src: number): boolean {
     return global.exports['dg-admin'].isInDevMode(src);
   }
+  plyInDevMode(): number[] {
+    return global.exports['dg-admin'].plyInDevMode();
+  }
   getHiddenPlys(): number[] {
     return global.exports['dg-admin'].getHiddenPlys();
   }

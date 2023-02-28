@@ -16,6 +16,13 @@ Events.onNet('auth:panel:openReports', async () => {
   });
 });
 
+Events.onNet("auth:panel:announceNewReportMessage", async (reportId: number) => {
+  UI.SendAppEvent("reports-indicator", {
+    action: "announce",
+    data: reportId,
+  })
+})
+
 RegisterUICallback('panel/finishAction', (data, cb) => {
   if (!data.trackId) return;
   resolveId(data.trackId, data.data);

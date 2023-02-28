@@ -1357,9 +1357,8 @@ devData.reportMessages = [
     createdAt: '2023-01-13T00:15:30.358+01:00',
     updatedAt: '2023-01-13T00:15:30.358+01:00',
     deletedAt: null,
-    message: JSON.parse(
-      '{"content":[{"attrs":{"level":1},"content":[{"marks":[{"type":"bold"}],"text":"COCKa","type":"text"}],"type":"heading"},{"content":[{"text":"This a fat message :)","type":"text"}],"type":"paragraph"}],"type":"doc"}'
-    ),
+    message:
+      '{"content":[{"attrs":{"level":1},"content":[{"marks":[{"type":"bold"}],"text":"COCKa","type":"text"}],"type":"heading"},{"content":[{"text":"This a fat message :)","type":"text"}],"type":"paragraph"}],"type":"doc"}',
     type: 'text',
     sender: {
       username: 'NuttyShrimp1',
