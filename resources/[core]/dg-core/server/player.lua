@@ -95,7 +95,6 @@ function DGCore.Player.CheckPlayerData(src, PlayerData)
   -- Character data
   PlayerData.position = PlayerData.position or DGConfig.DefaultSpawn
 
-  print(json.encode(PlayerData.metadata))
   -- Metadata
   PlayerData.metadata = PlayerData.metadata or {}
   PlayerData.metadata.stress = PlayerData.metadata.stress or 0
