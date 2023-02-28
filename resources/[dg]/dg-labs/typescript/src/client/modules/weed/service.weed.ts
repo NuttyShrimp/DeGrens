@@ -54,7 +54,7 @@ export const fertilizeWeedPlant = async (labId: number, plantId: number) => {
   removeBox();
   hasFertilizer = false;
 
-  const [canceled] = await Taskbar.create('box', 'Nemen...', 5000, {
+  const [canceled] = await Taskbar.create('oil-can', 'Voeden...', 5000, {
     canCancel: true,
     cancelOnDeath: true,
     cancelOnMove: true,
@@ -85,7 +85,7 @@ export const harvestWeedPlant = async (labId: number, plantId: number) => {
     return;
   }
 
-  const [canceled] = await Taskbar.create('box', 'Nemen...', 5000, {
+  const [canceled] = await Taskbar.create('scissors', 'Oogsten...', 5000, {
     canCancel: true,
     cancelOnDeath: true,
     cancelOnMove: true,
@@ -118,7 +118,7 @@ export const searchHarvestedWeed = async (labId: number) => {
     return;
   }
 
-  const [canceled] = await Taskbar.create('box', 'Nemen...', 5000, {
+  const [canceled] = await Taskbar.create('magnifying-glass', 'Zoeken...', 5000, {
     canCancel: true,
     cancelOnDeath: true,
     cancelOnMove: true,
