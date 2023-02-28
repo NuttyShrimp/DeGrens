@@ -273,6 +273,7 @@ export const stopVehicleCrashThread = () => {
 
 export const tryToStallVehicle = (vehicle: number, newHealth: number, oldHealth: number) => {
   if (!isDriver()) return;
+  if (!GetIsVehicleEngineRunning(vehicle)) return;
 
   const healthDecrease = oldHealth - newHealth;
   if (healthDecrease < MINIMUM_DAMAGE_FOR_STALL) return;
