@@ -53,7 +53,7 @@ export const harvestPlant = (plyId: number, plantId: number) => {
     plant.canFertilize = true;
   }, config.weed.timeout * 60 * 1000);
 
-  Util.changePlayerStress(plyId, 5);
+  Util.changePlayerStress(plyId, 1);
 
   const logMsg = `${Util.getName(plyId)}(${plyId}) has harvested plant ${plantId}`;
   weedLogger.debug(logMsg);
