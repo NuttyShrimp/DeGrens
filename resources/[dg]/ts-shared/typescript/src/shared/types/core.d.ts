@@ -83,6 +83,7 @@ declare interface Vector {
 
 declare interface MetaData {
   stress: number;
+  health: number;
   armor: number;
   callsign: string;
   licences: { driver: boolean };
