@@ -59,7 +59,7 @@ Peek.addZoneEntry('restaurant_management', {
 
 Peek.addZoneEntry('restaurant_stash', {
   options: [...new Array(5)].map((_, idx) => ({
-    label: `Open voorraad #${idx}`,
+    label: `Open voorraad #${idx + 1}`,
     icon: 'fas fa-box-open',
     action: option => {
       const stashId = `${option.data.id}_${idx}`;
