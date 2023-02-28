@@ -27,6 +27,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Weedplanten voeden werkt nu hetzelfde als farmingplanten
 - Spawnnaam van taxi gefixt
 - Minder stress bij het oogsten van weed 
+- Je gaat nu naar yogamat bij begin van anim ipv einde
 
 ### Fixed
 

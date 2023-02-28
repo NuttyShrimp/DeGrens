@@ -12,11 +12,15 @@ const yogaModels = [
 
 const startYogaSes = async (data: Option, entity: number | undefined) => {
   if (!entity) return;
+
+  await Util.goToCoords({ ...Util.getEntityCoords(entity), w: GetEntityHeading(entity) }, 3000);
+
   const [isCancelled] = await Taskbar.create('brain', 'Adem in...', 30000, {
     canCancel: true,
     cancelOnDeath: true,
     cancelOnMove: true,
     disarm: true,
+    disablePeek: true,
     animation: {
       task: 'WORLD_HUMAN_YOGA',
     },
@@ -25,9 +29,8 @@ const startYogaSes = async (data: Option, entity: number | undefined) => {
     Notifications.add('Je hebt je rustige mindset doorbroken', 'info');
     return;
   }
-  const entCoords = Util.getEntityCoords(entity);
-  SetEntityCoords(PlayerPedId(), entCoords.x, entCoords.y, entCoords.z, true, false, false, false);
-  Events.emitNet('hud:server:changeStress', -15);
+
+  Events.emitNet('hud:server:changeStress', -20);
 };
 
 Peek.addModelEntry(yogaModels, {
