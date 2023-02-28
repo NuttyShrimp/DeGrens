@@ -1,7 +1,7 @@
 import { Events, Taskbar } from '@dgx/client';
 
 export const cutPlant = async (plantId: number) => {
-  const [canceled] = await Taskbar.create('scissors', 'Bijknippen...', 10000, {
+  const [canceled] = await Taskbar.create('scissors', 'Bijknippen...', 4000, {
     canCancel: true,
     cancelOnDeath: true,
     cancelOnMove: true,
@@ -25,7 +25,7 @@ export const cutPlant = async (plantId: number) => {
 };
 
 export const waterPlant = async (plantId: number) => {
-  const [canceled] = await Taskbar.create('hand-holding-seedling', 'Water geven...', 10000, {
+  const [canceled] = await Taskbar.create('hand-holding-seedling', 'Water geven...', 4000, {
     canCancel: true,
     cancelOnDeath: true,
     cancelOnMove: true,
@@ -49,7 +49,7 @@ export const waterPlant = async (plantId: number) => {
 };
 
 export const feedPlant = async (plantId: number, deluxe: boolean) => {
-  const [canceled] = await Taskbar.create('hand-holding-seedling', 'Voeden...', 10000, {
+  const [canceled] = await Taskbar.create('hand-holding-seedling', 'Voeden...', 4000, {
     canCancel: true,
     cancelOnDeath: true,
     cancelOnMove: true,
@@ -73,7 +73,7 @@ export const feedPlant = async (plantId: number, deluxe: boolean) => {
 };
 
 export const harvestPlant = async (plantId: number) => {
-  const [canceled] = await Taskbar.create('scissors', 'Oogsten...', 10000, {
+  const [canceled] = await Taskbar.create('scissors', 'Oogsten...', 4000, {
     canCancel: true,
     cancelOnDeath: true,
     cancelOnMove: true,
