@@ -48,8 +48,9 @@ export const forceClose = () => {
 };
 
 export const peekChat = () => {
-  // Open chat
+  if (IsNuiFocused()) return;
   if (hideTimeout) {
+    // Open chat
     clearTimeout(hideTimeout);
     hideTimeout = null;
   }
