@@ -29,6 +29,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Inventory item tooltip divider wordt niet gedisplayed als er niks onder staat
 - Huisinbraak wordt nu correct afgerond
 - Je wordt niet langer zichtbaar alsje in noclip bent en cloak uitzet
+- Je gaat nu niet meer in een scuffed down state liggen
 
 ## [1.0.7]
 ### Added

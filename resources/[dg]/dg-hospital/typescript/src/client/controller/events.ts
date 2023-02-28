@@ -6,6 +6,7 @@ import {
   setPauseDownAnimation,
   loadDownStateOnRestart,
   setDownConfig,
+  loadPedFlags,
 } from 'modules/down/service.down';
 import {
   loadBleedDamageTypes,
@@ -41,6 +42,7 @@ Events.onNet('hospital:client:revive', async () => {
 Util.onPlayerLoaded(playerData => {
   setPlayerState(playerData.metadata.downState, false);
   startNeedsThread();
+  loadPedFlags();
 });
 
 Util.onPlayerUnloaded(() => {

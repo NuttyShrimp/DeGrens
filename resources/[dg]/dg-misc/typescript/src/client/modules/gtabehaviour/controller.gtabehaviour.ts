@@ -5,7 +5,6 @@ import { overrideDensitySettings, resetDensitySettings, setDefaultReticleEnabled
 BaseEvents.onPedChange(() => {
   const ped = PlayerPedId();
 
-  SetEntityProofs(ped, false, false, false, false, false, true, false, false);
   SetPedMinGroundTimeForStungun(ped, 5000);
   SetPedCanLosePropsOnDamage(ped, false, 0);
   SetPedMaxHealth(ped, 200);

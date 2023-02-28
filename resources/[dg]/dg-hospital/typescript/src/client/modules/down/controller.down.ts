@@ -1,5 +1,11 @@
-import { Keys } from '@dgx/client';
-import { getPlayerState, respawnButtonPressed, respawnButtonReleased, setPauseDownAnimation } from './service.down';
+import { BaseEvents, Keys } from '@dgx/client';
+import {
+  getPlayerState,
+  loadPedFlags,
+  respawnButtonPressed,
+  respawnButtonReleased,
+  setPauseDownAnimation,
+} from './service.down';
 
 global.exports('pauseDownAnimation', setPauseDownAnimation);
 global.exports('isDown', () => {
@@ -12,4 +18,8 @@ Keys.onPress('GeneralUse', down => {
   } else {
     respawnButtonReleased();
   }
+});
+
+BaseEvents.onPedChange(() => {
+  loadPedFlags();
 });

@@ -68,6 +68,11 @@ export const checkDeathOnDamage = (originPed: number, weaponHash: number) => {
   const isInjured = IsPedInjured(ped);
   if (!isInjured) return;
 
+  // do reviving/health/bleed settings when dead
+  resurrectWhenRagdollFinished();
+  setHealth(1);
+  setBleedAmount(0);
+
   // stupid edgecase...
   // we want ejections from vehicle to always be unconscious to improve gameplay
   // most of the time hash is 'WEAPON_RUN_OVER_BY_CAR' or 'WEAPON_RAMMED_BY_CAR' but can also 'WEAPON_FALL' in rare cases
@@ -86,10 +91,6 @@ export const checkDeathOnDamage = (originPed: number, weaponHash: number) => {
 
   const origin = Util.getServerIdForPed(originPed);
   Events.emitNet('hospital:down:playerDied', damageTypeData.cause, origin);
-
-  setHealth(1);
-  setBleedAmount(0);
-  resurrectWhenRagdollFinished();
   setPlayerState(downType);
 };
 
@@ -233,5 +234,13 @@ const respawnPlayer = async () => {
     SetEntityCoords(ped, respawnPosition.x, respawnPosition.y, respawnPosition.z, false, false, false, false);
     resetRespawnTime();
     Events.emitNet('hospital:down:respawnToHospital');
+  }
+};
+
+export const loadPedFlags = () => {
+  if (getPlayerState() === 'alive') {
+    resetPedFlagsAfterDown();
+  } else {
+    setPedFlagsOnDown();
   }
 };
