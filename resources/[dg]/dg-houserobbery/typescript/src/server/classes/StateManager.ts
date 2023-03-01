@@ -256,6 +256,13 @@ class StateManager extends Util.Singleton<StateManager>() {
       `${Util.getName(plyId)}(${plyId}) left a house for a robbery`,
       plyId
     );
+
+    // Check if everything is searched
+    if (house.searched.size === this.config.shellInfo[this.config.locations[house.dataIdx].size].lootZones) {
+      const group = Jobs.getGroupByServerId(plyId);
+      if (!group) return;
+      this.finishJob(group.id, houseId);
+    }
   };
 
   @DGXEvent('houserobbery:server:doLootZone')
@@ -325,13 +332,6 @@ class StateManager extends Util.Singleton<StateManager>() {
 
     if (Util.getRndInteger(1, 1001) <= this.config.moldChance * 10) {
       global.exports['dg-materials'].tryGivingKeyMold(plyId);
-    }
-
-    // Check if everything is searched
-    if (house.searched.size === this.config.shellInfo[this.config.locations[house.dataIdx].size].lootZones) {
-      const group = Jobs.getGroupByServerId(plyId);
-      if (!group) return;
-      this.finishJob(group.id, houseId);
     }
   };
 
