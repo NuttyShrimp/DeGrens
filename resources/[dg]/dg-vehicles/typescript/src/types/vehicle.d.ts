@@ -29,7 +29,7 @@ declare namespace Vehicle {
     model: string;
     plate: string;
     fakeplate: string;
-    state: SVGarage.GarageState;
+    state: Garage.GarageState;
     garageId: string;
     status: StatusType;
     harness: number;

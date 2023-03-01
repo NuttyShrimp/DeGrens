@@ -1,7 +1,10 @@
 {
   "extends": "tsconfig/server.json",
   "compilerOptions": {
-    "types": ["@citizenfx/server", "@types/node", "@types/webpack-env"],
+    "types": [
+      "@citizenfx/server",
+      "@types/node"
+    ],
     "baseUrl": "./"
   },
   "include": [

@@ -6,24 +6,21 @@
   "license": "MIT",
   "sentry_dsn": "https://ca666003b9db4baeb7bf5b1aab7bc6d1@sentry.nuttyshrimp.me/9",
   "scripts": {
-    "build": "yarn webpack:config --color",
-    "build:dev": "yarn build --mode development",
-    "watch": "yarn webpack:config --mode development --watch",
+    "build": "node ../../../../scripts/build.js --client --server",
+    "build:dev": "node ../../../../scripts/build.js --client --server --dev",
+    "watch": "node ../../../../scripts/watch --server --client",
     "lint": "eslint --fix --ext .js,.ts ./src",
-    "format": "prettier --write src/**/*.{js,ts,json,md}",
-    "webpack:config": "webpack --config ./webpack.config.js"
+    "format": "prettier --write src/**/*.{js,ts,json,md}"
   },
   "dependencies": {
     "axios": "^0.27.2",
-    "dayjs": "*",
-    "webpack-env": "*"
+    "dayjs": "*"
   },
   "devDependencies": {
     "@dgx/client": "*",
     "@dgx/server": "*",
     "@dgx/shared": "*",
-    "@types/webpack-env": "*",
     "tsconfig": "*",
-    "webpack": "*"
+    "esbuild": "*"
   }
 }

@@ -1,5 +1,6 @@
 declare namespace Garage {
   type GarageType = 'land' | 'air' | 'sea';
+  type GarageState = 'out' | 'parked' | 'impounded';
 
   interface BoxLocation {
     vector: Vec3;

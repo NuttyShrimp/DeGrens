@@ -1,6 +1,4 @@
 declare namespace SVGarage {
-  type GarageState = 'out' | 'parked' | 'impounded';
-
   interface Log {
     vin: string;
     cid: number;

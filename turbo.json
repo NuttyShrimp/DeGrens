@@ -7,8 +7,8 @@
         "^db:generate"
       ],
       "outputs": [
-        "../client/**",
-        "../server/**",
+        "../client/*",
+        "../server/*",
         "../html/**",
         "dist/**"
       ]
@@ -19,8 +19,8 @@
         "^db:generate"
       ],
       "outputs": [
-        "../client/**",
-        "../server/**",
+        "../client/*",
+        "../server/*",
         "../html/**",
         "dist/**"
       ]
