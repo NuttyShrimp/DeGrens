@@ -16,7 +16,7 @@ Auth.onAuth(async plyId => {
     'houserobbery:server:setShellTypes',
     plyId,
     Object.entries(shellInfo).reduce<Record<string, string>>((acc, [name, shell]: [string, any]) => {
-      acc[name] = shell.shell;
+      acc[name] = shell.plan;
       return acc;
     }, {})
   );

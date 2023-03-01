@@ -21,7 +21,7 @@
       "microwave"
     ]
   ],
-  "playerCooldown": 5,
+  "playerCooldown": 30,
   "timeToRob": 15,
   "timeToFind": 15,
   "shellInfo": {
@@ -31,7 +31,7 @@
     },
     "medium": {
       "plan": "furnitured_midapart",
-      "lootZones": 8
+      "lootZones": 11
     }
   },
   "locations": [
