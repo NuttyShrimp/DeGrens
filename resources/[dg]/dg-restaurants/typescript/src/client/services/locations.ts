@@ -110,17 +110,6 @@ const buildRestaurantZones = (restaurantId: string) => {
       },
     }
   );
-
-  restaurantZonesBuilt = true;
-};
-
-// these zones per restaurant get build on signin
-const buildRestaurantEmployeeZones = (restaurantId: string) => {
-  if (restaurantEmployeeZonesBuilt) return;
-
-  const restaurant = restaurants[restaurantId];
-  if (!restaurant) return;
-
   PolyTarget.addBoxZone(
     'restaurant_stash',
     restaurant.stashZone.center,
@@ -133,6 +122,17 @@ const buildRestaurantEmployeeZones = (restaurantId: string) => {
       },
     }
   );
+
+  restaurantZonesBuilt = true;
+};
+
+// these zones per restaurant get build on signin
+const buildRestaurantEmployeeZones = (restaurantId: string) => {
+  if (restaurantEmployeeZonesBuilt) return;
+
+  const restaurant = restaurants[restaurantId];
+  if (!restaurant) return;
+
   restaurant.cooking.forEach((c, idx) => {
     PolyTarget.addBoxZone('restaurant_cook', c.zone.center, c.zone.width, c.zone.length, {
       ...c.zone.options,
