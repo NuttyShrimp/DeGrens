@@ -1,4 +1,5 @@
 import { Events, HUD, Util } from '@dgx/client';
+import { MINIMUM_STRESS_FOR_ICON } from './constants.hud';
 
 let config: HUD.Config | null = null;
 let isDiving = false;
@@ -25,7 +26,7 @@ export const getCapacity = (ped: number, id: number) => {
 
 export const handleStressChange = (amount: number) => {
   stressAmount = amount;
-  HUD.toggleEntry('stress', stressAmount > 0);
+  HUD.toggleEntry('stress', stressAmount > MINIMUM_STRESS_FOR_ICON);
   scheduleBlurEffect();
 };
 

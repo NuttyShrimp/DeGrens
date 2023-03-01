@@ -1,0 +1,1 @@
+export const MINIMUM_STRESS_FOR_ICON = 20;
