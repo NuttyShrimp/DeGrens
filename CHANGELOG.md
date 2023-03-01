@@ -41,6 +41,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Je input veld verdwijnt niet meer als je een chat bericht ontvangt
 - Je voertuig kan niet meer stallen als de motor uitstaat
 - Group job wordt nu wel gereset na bepaalde activiteiten
+- Sanddigging graaf zone afstand verhoogd
 
 ## [1.0.7]
 ### Added

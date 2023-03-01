@@ -33,12 +33,9 @@ Peek.addZoneEntry('sanddigging_spot', {
       action: () => {
         doSpotAction();
       },
-      canInteract: () => {
-        return !IsPedInAnyVehicle(PlayerPedId(), false);
-      },
     },
   ],
-  distance: 3.0,
+  distance: 7.0,
 });
 
 PolyZone.onEnter('sanddigging_vehicle', () => {
