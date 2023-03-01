@@ -28,7 +28,7 @@ Events.onNet('doorlock:server:triedLockpickingDoor', async (src: number, doorId:
   if (!data) return;
 
   const rng = Util.getRndInteger(1, 101);
-  if (rng < Config.getConfigValue('dispatch.callChace.doorlockpick')) {
+  if (rng < Config.getConfigValue('dispatch.callChance.doorlockpick')) {
     Police.createDispatchCall({
       tag: '10-31',
       title: 'Poging to inbraak',

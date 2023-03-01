@@ -1,4 +1,4 @@
-import { Events, Inventory, Police, RPC, Util } from '@dgx/server';
+import { Config, Events, Inventory, Police, RPC, Util } from '@dgx/server';
 import { getConfig } from 'services/config';
 import { mainLogger } from 'sv_logger';
 import { canCutLocation, cutLocation } from './service.wirecutting';
@@ -22,6 +22,10 @@ Events.onNet('materials:wirecutting:cut', async (src: number, locationId: number
 });
 
 Events.onNet('materials:wirecutting:dispatch', (src: number, locationId: number) => {
+  const rng = Util.getRndInteger(1, 101);
+  const callChance = Config.getConfigValue('dispatch.callChance.wirecutting');
+  if (rng > callChance) return;
+
   const coords = getConfig().wirecutting.locations[locationId];
   Police.createDispatchCall({
     tag: '10-31',

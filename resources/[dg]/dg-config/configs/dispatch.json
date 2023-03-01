@@ -2,7 +2,8 @@
   "callChance": {
     "cornersell": 40,
     "doorlockpick": 60,
-    "vehiclelockpick": 65
+    "vehiclelockpick": 65,
+    "wirecutting": 50
   },
   "cams": [
     {
