@@ -51,6 +51,7 @@ export const toggleNoclip = (toggle: boolean) => {
   SetPedCanRagdoll(ped, false);
 
   PropAttach.toggleProps(false);
+  DisplayRadar(true);
 
   const plyId = PlayerId();
   noclipThread = setInterval(() => {
@@ -140,6 +141,11 @@ const cleanupNoclip = () => {
 
   if (!getCmdState('cloak')) {
     PropAttach.toggleProps(true);
+  }
+
+  // disable radar if not in a vehicle
+  if (!IsPedInAnyVehicle(PlayerPedId(), true)) {
+    DisplayRadar(false);
   }
 };
 
