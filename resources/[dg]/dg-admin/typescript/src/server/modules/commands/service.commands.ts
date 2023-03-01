@@ -2,6 +2,9 @@ import { Auth, Police, Util } from '@dgx/server';
 
 import { getPlayerRole, hasRoleAccess } from '../permissions/service.permissions';
 
+// @ts-ignore
+import { entries as cmdArray } from './data/*.ts';
+
 export const commands: CommandData[] = [];
 
 const interactingPlayersForPlayer: Record<number, number[]> = {};
@@ -32,13 +35,12 @@ const getCommandHandler = (src: number, cmd: string) => {
 };
 
 export const loadCommands = () => {
-  const importAll = (r: __WebpackModuleApi.RequireContext) => {
-    r.keys().forEach(key => {
-      const newCommands: Record<string, CommandData> = r(key);
-      Object.values(newCommands).forEach(command => commands.push(command));
+  const importAll = (r: [string, any][]) => {
+    r.forEach(([_, cmdData]) => {
+      Object.values(cmdData).forEach(command => commands.push(command as CommandData));
     });
   };
-  importAll(require.context('./data', false, /\.ts$/));
+  importAll(cmdArray);
 };
 
 export const getUICommands = (src: number): CommandData[] => {

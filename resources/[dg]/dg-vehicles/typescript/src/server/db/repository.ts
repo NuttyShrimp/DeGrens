@@ -165,7 +165,7 @@ export const setAllVehiclesInGarage = () => {
   return SQL.query(query, []);
 };
 
-export const setVehicleState = (vin: string, state: SVGarage.GarageState): Promise<any> => {
+export const setVehicleState = (vin: string, state: Garage.GarageState): Promise<any> => {
   const query = 'UPDATE player_vehicles SET state = ? WHERE vin = ?';
 
   return SQL.query(query, [state, vin]);
@@ -210,7 +210,7 @@ export const insertNewVehicle = async (
   model: string,
   plate: string,
   fakeplate: string | null = null,
-  state: SVGarage.GarageState = 'parked',
+  state: Garage.GarageState = 'parked',
   garageId = 'alta_apartments',
   harness = 0,
   stance: Stance.Data | null = null,
@@ -395,13 +395,13 @@ export const checkVehicleStrikes = async (fallOffDays: number) => {
 export const deleteOwnedVehicle = async (vin: string) => {
   await SQL.query(
     `DELETE
-                   FROM player_vehicles
-                   WHERE vin = ?`,
+     FROM player_vehicles
+     WHERE vin = ?`,
     [vin]
   );
 };
 
 export const hasVehicleMaintenanceFees = async (vin: string) => {
   const debtCount = await SQL.query('SELECT COUNT(*) as count FROM debts WHERE reason = ?', [`veh_${vin}`]);
-  return ((debtCount?.[0]?.count ?? 0) !== 0) ?? false;
+  return (debtCount?.[0]?.count ?? 0) !== 0 ?? false;
 };

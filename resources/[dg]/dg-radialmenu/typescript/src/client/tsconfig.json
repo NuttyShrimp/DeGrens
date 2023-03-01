@@ -2,7 +2,7 @@
   "extends": "tsconfig/client.json",
   "compilerOptions": {
     "baseUrl": "./",
-    "types": ["@types/node", "@citizenfx/client", "@types/webpack-env"]
+    "types": ["@types/node", "@citizenfx/client"]
   },
   "include": [
     "./**/*",

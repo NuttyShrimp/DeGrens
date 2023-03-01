@@ -1,16 +1,18 @@
 import { Hospital, Inventory, Jobs, RayCast, Util } from '@dgx/client';
 import { MAXIMUM_ENTRIES_PER_MENU } from '../constants';
 
+// @ts-ignore
+import { entries as entryArray } from '../data/*.ts';
+
 const entries: Record<string, RadialMenu.Entry[]> = {};
 
 export const loadEntries = () => {
-  const importAll = (requireContext: __WebpackModuleApi.RequireContext) => {
-    requireContext.keys().forEach(file => {
-      const newEntries: Record<string, RadialMenu.Entry[]> = requireContext(file);
-      Object.entries(newEntries).forEach(([key, value]) => (entries[key] = value));
+  const importAll = (r: [string, any][]) => {
+    r.forEach(([_, file]) => {
+      Object.entries(file as Record<string, RadialMenu.Entry[]>).forEach(([key, value]) => (entries[key] = value));
     });
   };
-  importAll(require.context('../data', false, /\.ts$/));
+  importAll(entryArray);
 };
 
 export const openRadialMenu = async () => {
