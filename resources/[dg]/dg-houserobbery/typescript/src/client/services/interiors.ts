@@ -1,4 +1,4 @@
-import { Events, Interiors, Jobs, Notifications, RPC, Sounds, Util } from '@dgx/client';
+import { Events, Interiors, Notifications, RPC, Sounds, Util } from '@dgx/client';
 
 import { getSelectedHouse, getSelectedHouseInfo, getShellTypes } from '../modules/house/controller.house';
 
@@ -8,24 +8,18 @@ export const enterInterior = async () => {
   DoScreenFadeOut(500);
   await Util.Delay(500);
 
-  let size: Interior.Size;
-  let coords: Vec4;
-  if (Jobs.getCurrentJob().name !== "police") {
-    const info = getSelectedHouseInfo()!;
-    size = info.size;
-    coords = info.coords;
-  } else {
-    const info = await RPC.execute<House.Data>("houserobbery:server:getHouseInfo", getSelectedHouse());
-    if (!info) {
-      Notifications.add("De bewoners van dit huis zijn momenteel thuis", "error");
+  let houseInfo = getSelectedHouseInfo();
+  if (!houseInfo) {
+    houseInfo = await RPC.execute<House.Data>('houserobbery:server:getHouseInfo', getSelectedHouse());
+    if (!houseInfo) {
+      Notifications.add('De bewoners van dit huis zijn momenteel thuis', 'error');
       return;
     }
-    size = info.size;
-    coords = info.coords;
   }
-  const isSuccess = await Interiors.createRoom(getShellTypes()[size], {
-    ...coords,
-    z: coords.z - 50,
+
+  const isSuccess = await Interiors.createRoom(getShellTypes()[houseInfo.size], {
+    ...houseInfo.coords,
+    z: houseInfo.coords.z - 50,
   });
   DoScreenFadeIn(250);
   if (!isSuccess) return;
