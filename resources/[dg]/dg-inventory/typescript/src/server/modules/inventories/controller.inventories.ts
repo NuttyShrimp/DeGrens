@@ -105,6 +105,6 @@ Util.onPlayerLoaded(playerData => {
 });
 
 Util.onPlayerUnloaded((plyId, cid) => {
-  inventoryManager.unload(Inventory.concatId('player', cid));
   contextManager.playerClosed(plyId, true);
+  inventoryManager.unload(Inventory.concatId('player', cid));
 });
