@@ -63,7 +63,7 @@ Events.onNet('financials:tickets:trade', async (plyId: number) => {
   if (!account) return;
 
   const success = await account.paycheck(cid, revenue);
-  const clientPrice = getTaxedPrice(revenue, TaxIds.Income).taxPrice;
+  const clientPrice = getTaxedPrice(revenue, TaxIds.Income, true).taxPrice;
   if (!success) {
     Notifications.add(plyId, `Systeem is gefaald om €${clientPrice} uit te betalen`, 'error');
     return;

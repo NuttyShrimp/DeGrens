@@ -48,6 +48,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Sanddigging graaf zone afstand verhoogd
 - Optie om bepaalde lab locaties te disablen
 - Je kan niet meer samen materialen smelten
+- Bij het inleveren van tickets krijg je de juiste prijs tezien als notificatie
 
 ## [1.0.7]
 ### Added
