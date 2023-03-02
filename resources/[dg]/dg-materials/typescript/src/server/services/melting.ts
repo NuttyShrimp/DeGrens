@@ -40,18 +40,15 @@ Events.onNet('materials:melting:showMenu', (src: number) => {
 });
 
 Events.onNet('materials:melting:melt', async (src: number, recipeId: number) => {
-  const choosenRecipe = recipes[recipeId];
-  const removeSuccessful = await Inventory.removeItemByNameFromPlayer(
-    src,
-    choosenRecipe.from.name,
-    choosenRecipe.from.amount
-  );
-  if (!removeSuccessful) {
-    Notifications.add(src, 'Je mist iets om te smelten', 'error');
+  if (activeItem !== null) {
+    Notifications.add(src, 'Hier zit nog iets in', 'error');
     return;
   }
 
   const [canceled] = await Taskbar.create(src, 'fire', 'Insteken', 3000, {
+    canCancel: true,
+    cancelOnDeath: true,
+    cancelOnMove: true,
     disarm: true,
     disableInventory: true,
     disablePeek: true,
@@ -62,6 +59,22 @@ Events.onNet('materials:melting:melt', async (src: number, recipeId: number) => 
     },
   });
   if (canceled) return;
+
+  if (activeItem !== null) {
+    Notifications.add(src, 'Hier zit nog iets in', 'error');
+    return;
+  }
+
+  const choosenRecipe = recipes[recipeId];
+  const removeSuccessful = await Inventory.removeItemByNameFromPlayer(
+    src,
+    choosenRecipe.from.name,
+    choosenRecipe.from.amount
+  );
+  if (!removeSuccessful) {
+    Notifications.add(src, 'Je mist iets om te smelten', 'error');
+    return;
+  }
 
   Notifications.add(src, 'Wacht tot het materiaal is gesmolten');
   activeItem = { ...choosenRecipe.to, isReady: false };
@@ -89,6 +102,9 @@ Events.onNet('materials:melting:take', async (src: number) => {
   }
 
   const [canceled] = await Taskbar.create(src, 'fire', 'Uithalen', 3000, {
+    canCancel: true,
+    cancelOnDeath: true,
+    cancelOnMove: true,
     disarm: true,
     disableInventory: true,
     disablePeek: true,
