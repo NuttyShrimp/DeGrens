@@ -252,7 +252,7 @@ export class Inv {
       'inventory:inventory:destroyAll',
       {
         inventoryId: this.id,
-        itemIds,
+        itemId: itemIds,
       },
       `All items in ${this.id} have been destroyed`
     );

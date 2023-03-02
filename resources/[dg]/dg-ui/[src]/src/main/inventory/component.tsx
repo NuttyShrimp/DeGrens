@@ -23,7 +23,6 @@ const Component: AppFunction = props => {
   const { syncItem } = useInventory();
 
   const handleShow = () => {
-    console.log('Showing inventory :)');
     props.showApp();
     fetchInventoryData();
   };

@@ -29,7 +29,7 @@ const giveStarterItems = async (plyId: number) => {
   Util.Log(
     'inventory:starterItems',
     {
-      itemIds: createdItemIds,
+      itemId: createdItemIds,
     },
     `${Util.getName(plyId)} has received starter items`,
     plyId
@@ -73,7 +73,7 @@ const addItemToInventory = async (
       itemName: name,
       amount,
       metadata,
-      itemIds: createdIds,
+      itemId: createdIds,
     },
     `${amount}x ${name} got added to inventory ${invId}`
   );

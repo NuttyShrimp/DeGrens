@@ -37,7 +37,7 @@ Events.onNet('criminal:cornersell:sell', async (plyId: number, zone: string) => 
   Financials.addCash(plyId, price, 'corner-sell');
   Util.Log(
     'cornersell:sell',
-    { item: choosenItem, amount: amountToRemove, price },
+    { itemName: choosenItem, amount: amountToRemove, price },
     `${Util.getName(plyId)} has sold ${amountToRemove} ${choosenItem} during cornersell`,
     plyId
   );

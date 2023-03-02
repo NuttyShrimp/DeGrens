@@ -17,7 +17,7 @@ Events.onNet(
       if (!item) {
         Util.Log(
           'inventory:shop:notShopItem',
-          { name, inventoryId },
+          { itemName: name, inventoryId },
           `${Util.getName(src)} tried to get item from shop but item was not in shop`,
           src
         );
@@ -29,7 +29,7 @@ Events.onNet(
       if (!item) {
         Util.Log(
           'inventory:bench:notBenchItem',
-          { name, inventoryId },
+          { itemName: name, inventoryId },
           `${Util.getName(src)} tried to get item from bench but item was not in bench or not enough rep`,
           src
         );
@@ -44,7 +44,7 @@ Events.onNet(
     if (!openIds || !openIds.includes(inventoryId)) {
       Util.Log(
         'inventory:shop:notOpen',
-        { name, inventoryId },
+        { itemName: name, inventoryId },
         `${Util.getName(src)} tried to get item from shop but did not have shop open`,
         src
       );
@@ -94,9 +94,10 @@ Events.onNet(
         {
           name,
           inventoryId,
-          newItem: newItem.state.id,
+          itemId: newItem.state.id,
+          itemName: name,
         },
-        `${Util.getName(src)} bought shopitem ${name} in shop ${inventoryId}`,
+        `${Util.getName(src)} bought shopitem ${name} in ${inventoryId}`,
         src
       );
     } else if (shopInventory.type === 'bench') {

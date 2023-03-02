@@ -481,7 +481,7 @@ export class Restaurant {
     repository.updateItemPrice(this.id, itemName, newPrice);
 
     this.logAction(plyId, 'changeItemPrice', `has changed item ${itemName} to ${newPrice}`, {
-      item: itemName,
+      itemName,
       price: newPrice,
     });
   };

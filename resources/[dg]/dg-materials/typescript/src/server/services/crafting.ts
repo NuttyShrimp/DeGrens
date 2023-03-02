@@ -123,7 +123,11 @@ on('inventory:craftedInBench', (plyId: number, benchId: string, item: Inventory.
   increaseReputationForBench(bench, plyId);
   Util.Log(
     'materials:crafting:crafted',
-    { benchId, item },
+    {
+      benchId,
+      itemId: item.id,
+      itemName: item.name,
+    },
     `${Util.getName(plyId)} has crafted ${item.name} in bench ${benchId}`,
     plyId
   );

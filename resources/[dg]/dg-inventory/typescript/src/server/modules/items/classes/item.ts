@@ -192,7 +192,9 @@ export class Item {
     Util.Log(
       'inventory:item:destroyed',
       {
-        ...this.state,
+        itemId: this.id,
+        itemName: this.name,
+        state: this.state,
       },
       `${this.name} got destroyed (${quality}% quality)`
     );
