@@ -11,6 +11,7 @@ declare namespace Labs {
   type LocationConfig = {
     coords: Vec3;
     doorId: string;
+    disabled?: boolean;
   };
 
   type InteriorConfig = {

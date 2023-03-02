@@ -27,7 +27,6 @@ export const initiateLabs = async () => {
   const currentTime = Date.now() / 1000;
   for (const key in activeLabs) {
     const type = key as Labs.Type;
-    const data = activeLabs[type as Labs.Type];
     const refreshTime = refreshTimesPerType[type] ?? 0;
     if (refreshTime > currentTime) continue;
 
@@ -35,7 +34,7 @@ export const initiateLabs = async () => {
     let newId: number | null = null;
     while (newId === null) {
       const generatedId = Math.floor(Math.random() * config.locations.length);
-      if (!getLabTypeFromId(generatedId)) {
+      if (!config.locations[generatedId]?.disabled && !getLabTypeFromId(generatedId)) {
         newId = generatedId;
       }
     }
