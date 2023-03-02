@@ -1,4 +1,4 @@
-import { Events, UI } from '@dgx/client';
+import { Events, Sounds, UI } from '@dgx/client';
 import { RegisterUICallback } from 'helpers/ui';
 import { generateTrackId, registerTrackId, resolveId } from './service.panel';
 
@@ -16,12 +16,13 @@ Events.onNet('auth:panel:openReports', async () => {
   });
 });
 
-Events.onNet("auth:panel:announceNewReportMessage", async (reportId: number) => {
-  UI.SendAppEvent("reports-indicator", {
-    action: "announce",
+Events.onNet('auth:panel:announceNewReportMessage', async (reportId: number) => {
+  Sounds.playLocalSound('beep', 0.7);
+  UI.SendAppEvent('reports-indicator', {
+    action: 'announce',
     data: reportId,
-  })
-})
+  });
+});
 
 RegisterUICallback('panel/finishAction', (data, cb) => {
   if (!data.trackId) return;
@@ -75,13 +76,13 @@ RegisterUICallback('panel/reports/addMessages', (data: { msgs: Panel.Message[] }
   cb({ data: {}, meta: { ok: true, message: 'done' } });
 });
 
-RegisterUICallback("panel/reports/state", (data: {id: number, toggle: boolean}, cb) => {
+RegisterUICallback('panel/reports/state', (data: { id: number; toggle: boolean }, cb) => {
   UI.SendAppEvent('reports', {
     action: 'setReportState',
     data: data,
   });
   cb({ data: {}, meta: { ok: true, message: 'done' } });
-})
+});
 
 UI.RegisterUICallback('reports/createReport', async (data: { info: Panel.NewReport }, cb) => {
   const createTrackId = generateTrackId();
@@ -128,14 +129,14 @@ UI.RegisterUICallback('reports/sendMessage', async (data: { id: number; msg: Obj
   cb({ data: {}, meta: { ok: true, message: 'done' } });
 });
 
-UI.RegisterUICallback("reports/setState", (data: {id: number, state: boolean}, cb) => {
+UI.RegisterUICallback('reports/setState', (data: { id: number; state: boolean }, cb) => {
   SendNUIMessage({
     action: 'panel/reports/sendMsg',
     reportId: data.id,
     state: data.state,
   });
   cb({ data: {}, meta: { ok: true, message: 'done' } });
-})
+});
 
 UI.onUIReload(() => {
   Events.emitNet('auth:panel:reconnect');

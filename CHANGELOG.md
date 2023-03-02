@@ -17,6 +17,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Copy VIN to clipboard when reading it
 - Je kan nu minimap zien in noclip
 - Alle restaurant medewerkers in dienst krijgen een percentage van het ticket als iemand anders een order maakt
+- Judge job is nu geconfigureerd
+- Added beep sound when a report notification comes through
 
 ### Changed
 
