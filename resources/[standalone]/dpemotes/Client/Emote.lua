@@ -65,9 +65,6 @@ Citizen.CreateThread(function()
   end
   TriggerEvent('chat:addSuggestion', '/emotemenu', 'Open dpemotes menu.')
   TriggerEvent('chat:addSuggestion', '/emotes', 'List available emotes.')
-  TriggerEvent('chat:addSuggestion', '/walk', 'Set your walkingstyle.',
-    { { name = "style", help = "/walks for a list of valid styles" } })
-  TriggerEvent('chat:addSuggestion', '/walks', 'List available walking styles.')
 end)
 
 RegisterCommand('e', function(source, args, raw)
@@ -111,18 +108,6 @@ end)
 RegisterCommand('emotes', function(source, args, raw)
   if not DGX.Police.isCuffed() and not DGX.Hospital.isDown() then
     EmotesOnCommand()
-  end
-end)
-
-RegisterCommand('walk', function(source, args, raw)
-  if not DGX.Police.isCuffed() and not DGX.Hospital.isDown() then
-    WalkCommandStart(source, args, raw)
-  end
-end)
-
-RegisterCommand('walks', function(source, args, raw)
-  if not DGX.Police.isCuffed() and not DGX.Hospital.isDown() then
-    WalksOnCommand()
   end
 end)
 
@@ -267,11 +252,6 @@ function EmoteMenuStart(args, hard)
       if name ~= "🕺 Dance Emotes" then
       end
     end
-  elseif etype == "expression" then
-    if DP.Expressions[name] ~= nil then
-      if OnEmotePlay(DP.Expressions[name]) then
-      end
-    end
   end
 end
 
@@ -398,11 +378,6 @@ function OnEmotePlay(EmoteName)
 
   if PlayerHasProp then
     DestroyAllProps()
-  end
-
-  if ChosenDict == "Expression" then
-    SetFacialIdleAnimOverride(PlayerPedId(), ChosenAnimation, 0)
-    return
   end
 
   if ChosenDict == "MaleScenario" or "Scenario" then

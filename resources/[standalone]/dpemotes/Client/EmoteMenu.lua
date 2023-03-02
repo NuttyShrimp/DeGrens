@@ -1,5 +1,3 @@
-TriggerServerEvent("dp:CheckVersion")
-
 rightPosition = {x = 1450, y = 100}
 leftPosition = {x = 0, y = 100}
 menuPosition = {x = 0, y = 200}
@@ -55,8 +53,6 @@ local FavEmoteTable = {}
 local KeyEmoteTable = {}
 local DanceTable = {}
 local PropETable = {}
-local WalkTable = {}
-local FaceTable = {}
 local ShareTable = {}
 local FavoriteEmote = ""
 
@@ -220,76 +216,6 @@ function AddCancelEmote(menu)
     end
 end
 
-function AddWalkMenu(menu)
-    local submenu = _menuPool:AddSubMenu(menu, Config.Languages[lang]['walkingstyles'], "", "", Menuthing, Menuthing)
-
-    walkreset = NativeUI.CreateItem(Config.Languages[lang]['normalreset'], Config.Languages[lang]['resetdef'])
-    submenu:AddItem(walkreset)
-    table.insert(WalkTable, Config.Languages[lang]['resetdef'])
-
-    WalkInjured = NativeUI.CreateItem("Injured", "")
-    submenu:AddItem(WalkInjured)
-    table.insert(WalkTable, "move_m@injured")
-
-    for a,b in pairsByKeys(DP.Walks) do
-      x = table.unpack(b)
-      walkitem = NativeUI.CreateItem(a, "")
-      submenu:AddItem(walkitem)
-      table.insert(WalkTable, x)
-    end
-
-    submenu.OnItemSelect = function(sender, item, index)
-      if item ~= walkreset then
-        WalkMenuStart(WalkTable[index])
-      else
-        ResetPedMovementClipset(PlayerPedId())
-      end
-    end
-end
-
-function AddFaceMenu(menu)
-    local submenu = _menuPool:AddSubMenu(menu, Config.Languages[lang]['moods'], "", "", Menuthing, Menuthing)
-
-    facereset = NativeUI.CreateItem(Config.Languages[lang]['normalreset'], Config.Languages[lang]['resetdef'])
-    submenu:AddItem(facereset)
-    table.insert(FaceTable, "")
-
-    for a,b in pairsByKeys(DP.Expressions) do
-      x,y,z = table.unpack(b)
-      faceitem = NativeUI.CreateItem(a, "")
-      submenu:AddItem(faceitem)
-      table.insert(FaceTable, a)
-    end
-
-    submenu.OnItemSelect = function(sender, item, index)
-      if item ~= facereset then
-        EmoteMenuStart(FaceTable[index], "expression")
-      else
-        ClearFacialIdleAnimOverride(PlayerPedId())
-      end
-    end
-end
-
-function AddInfoMenu(menu)
-    if not UpdateAvailable then
-      infomenu = _menuPool:AddSubMenu(menu, Config.Languages[lang]['infoupdate'], "(1.7.3)", "", Menuthing, Menuthing)
-    else
-      infomenu = _menuPool:AddSubMenu(menu, Config.Languages[lang]['infoupdateav'], Config.Languages[lang]['infoupdateavtext'], "", Menuthing, Menuthing)
-    end
-    contact = NativeUI.CreateItem(Config.Languages[lang]['suggestions'], Config.Languages[lang]['suggestionsinfo'])
-    u170 = NativeUI.CreateItem("1.7.0", "Added /emotebind [key] [emote]!")
-    u165 = NativeUI.CreateItem("1.6.5", "Updated camera/phone/pee/beg, added makeitrain/dance(glowstick/horse).")
-    u160 = NativeUI.CreateItem("1.6.0", "Added shared emotes /nearby, or in menu, also fixed some emotes!")
-    u151 = NativeUI.CreateItem("1.5.1", "Added /walk and /walks, for walking styles without menu")
-    u150 = NativeUI.CreateItem("1.5.0", "Added Facial Expressions menu (if enabled by server owner)")
-    infomenu:AddItem(contact)
-    infomenu:AddItem(u170)
-    infomenu:AddItem(u165)
-    infomenu:AddItem(u160)
-    infomenu:AddItem(u151)
-    infomenu:AddItem(u150)
-end
-
 function OpenEmoteMenu()
     mainMenu:Visible(not mainMenu:Visible())
 end
@@ -300,12 +226,6 @@ end
 
 AddEmoteMenu(mainMenu)
 AddCancelEmote(mainMenu)
-if Config.WalkingStylesEnabled then
-  AddWalkMenu(mainMenu)
-end
-if Config.ExpressionsEnabled then
-  AddFaceMenu(mainMenu)
-end
 
 _menuPool:RefreshIndex()
 
@@ -314,13 +234,6 @@ Citizen.CreateThread(function()
         Citizen.Wait(0)
         _menuPool:ProcessMenus()
     end
-end)
-
-RegisterNetEvent("dp:Update")
-AddEventHandler("dp:Update", function(state)
-    UpdateAvailable = state
-    AddInfoMenu(mainMenu)
-    _menuPool:RefreshIndex()
 end)
 
 RegisterNetEvent("dp:RecieveMenu") -- For opening the emote menu from another resource.
