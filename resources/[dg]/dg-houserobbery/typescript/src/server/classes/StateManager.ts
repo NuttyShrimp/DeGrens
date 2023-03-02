@@ -388,7 +388,7 @@ class StateManager extends Util.Singleton<StateManager>() {
       if (m.serverId !== null) {
         Events.emitNet('houserobbery:client:setSelectedHouse', m.serverId, houseId, houseInfo, this.config.timeToFind);
         Phone.sendMail(
-          plyId,
+          m.serverId,
           'Huisinbraak',
           'Bert B.',
           `Je bent geselecteerd voor de job. Je hebt ${this.config.timeToFind}min om binnen te geraken! De locatie staat op je GPS gemarkeerd.`
