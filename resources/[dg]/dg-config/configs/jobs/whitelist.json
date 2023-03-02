@@ -36,5 +36,14 @@
       "HC"
     ],
     "name": "lawyer"
+  },
+  "judge": {
+    "grades": [
+      "Judge"
+    ],
+    "specialities": [
+      "HC"
+    ],
+    "name": "Judge"
   }
 }
