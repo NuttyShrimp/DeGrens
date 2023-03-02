@@ -7,13 +7,13 @@ import { keyManager } from './classes/keymanager';
 import { NO_LOCK_CLASSES } from './constants.keys';
 
 const vehClassToDifficulty: Record<CarClass, { speed: number; size: number }> = {
-  D: { speed: 1, size: 40 },
-  C: { speed: 2, size: 30 },
-  B: { speed: 4, size: 20 },
-  A: { speed: 6, size: 15 },
-  'A+': { speed: 7, size: 10 },
-  S: { speed: 8, size: 8 },
-  X: { speed: 10, size: 5 },
+  D: { speed: 2, size: 40 },
+  C: { speed: 4, size: 30 },
+  B: { speed: 6, size: 20 },
+  A: { speed: 8, size: 15 },
+  'A+': { speed: 10, size: 10 },
+  S: { speed: 14, size: 8 },
+  X: { speed: 16, size: 7 },
 };
 
 // Map of number onto UUID's
