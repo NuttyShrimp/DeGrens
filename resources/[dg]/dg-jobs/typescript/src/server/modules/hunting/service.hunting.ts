@@ -86,8 +86,7 @@ export const lootAnimal = (plyId: number, animalNetId: number) => {
   const animal = NetworkGetEntityFromNetworkId(animalNetId);
   if (!animal || !DoesEntityExist(animal)) return;
 
-  const fromBait = Entity(animal).state.fromBait;
-  console.log(`Animal from bait: ${fromBait}`);
+  const fromBait = Entity(animal).state?.fromBait ?? false;
 
   const animalHash = GetEntityModel(animal) >>> 0;
   DeleteEntity(animal);
