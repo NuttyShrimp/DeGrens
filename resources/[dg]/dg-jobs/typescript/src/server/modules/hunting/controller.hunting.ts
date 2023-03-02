@@ -25,7 +25,7 @@ Inventory.onInventoryUpdate(
   (identifier, _, itemState) => {
     if (itemState.inventory !== Inventory.concatId('stash', 'hunting_sell')) return;
     const cid = Number(identifier);
-    const plyId = DGCore.Functions.GetPlayerByCitizenId(cid)?.PlayerData?.source;
+    const plyId = DGCore.Functions.getPlyIdForCid(cid);
     if (!plyId) return;
     sellItem(plyId, itemState);
   },

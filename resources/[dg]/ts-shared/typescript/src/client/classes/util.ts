@@ -184,9 +184,10 @@ class Util extends UtilShared {
     entityType: 'object' | 'ped',
     model: string | number,
     coords: Vec3 | Vec4,
-    routingBucket?: number
+    routingBucket?: number,
+    stateBags?: Record<string, any>
   ): Promise<{ netId: number | null; entity: number | null }> => {
-    const netId = await RPC.execute<number>('dgx:createEntity', entityType, model, coords, routingBucket);
+    const netId = await RPC.execute<number>('dgx:createEntity', entityType, model, coords, routingBucket, stateBags);
     if (!netId) return { netId: null, entity: null };
     const exists = await this.awaitEntityExistence(netId, true);
     if (!exists) return { netId: null, entity: null };
@@ -195,12 +196,22 @@ class Util extends UtilShared {
     return { netId, entity };
   };
 
-  createObjectOnServer = (model: string | number, coords: Vec3, routingBucket?: number) => {
-    return this.createEntityOnServer('object', model, coords, routingBucket);
+  createObjectOnServer = (
+    model: string | number,
+    coords: Vec3,
+    routingBucket?: number,
+    stateBags?: Record<string, any>
+  ) => {
+    return this.createEntityOnServer('object', model, coords, routingBucket, stateBags);
   };
 
-  createPedOnServer = async (model: string | number, coords: Vec3 | Vec4, routingBucket?: number) => {
-    return this.createEntityOnServer('ped', model, coords, routingBucket);
+  createPedOnServer = async (
+    model: string | number,
+    coords: Vec3 | Vec4,
+    routingBucket?: number,
+    stateBags?: Record<string, any>
+  ) => {
+    return this.createEntityOnServer('ped', model, coords, routingBucket, stateBags);
   };
 
   getClosestNpcInRange = (range: number, pedsToIgnore: number[] = []): number | undefined => {

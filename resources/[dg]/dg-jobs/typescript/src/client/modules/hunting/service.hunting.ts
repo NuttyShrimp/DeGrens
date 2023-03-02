@@ -100,7 +100,7 @@ export const canLootAnimal = (animal: number) => {
   return IsEntityDead(animal) && NetworkGetEntityIsNetworked(animal) && isDoingHuntingJob();
 };
 
-export const lootAnimal = async (animal: number) => {
+const lootAnimal = async (animal: number) => {
   if (!canLootAnimal(animal)) return;
 
   const cause = GetPedCauseOfDeath(animal) >>> 0;
@@ -242,7 +242,9 @@ export const spawnAnimal = async (animalModel: string) => {
   }
 
   // We keep using networkgetentityfromnetid, because entity id might change during this step
-  const { netId, entity } = await Util.createPedOnServer(animalModel, animalSpawnPosition);
+  const { netId, entity } = await Util.createPedOnServer(animalModel, animalSpawnPosition, undefined, {
+    fromBait: true,
+  });
   baitPlaced = false;
   if (!netId || !entity) return;
 
@@ -262,10 +264,11 @@ export const spawnAnimal = async (animalModel: string) => {
 
   // wait till animal is at bait
   await Util.awaitCondition(() => {
-    if (!currentAnimal) return false;
+    if (!currentAnimal) return true;
     const animal = NetworkGetEntityFromNetworkId(currentAnimal);
-    return !DoesEntityExist(animal) || baitPosition.distance(Util.getEntityCoords(animal)) < 3 || IsEntityDead(animal);
-  }, 999999);
+    if (!DoesEntityExist(animal)) return false;
+    return baitPosition.distance(Util.getEntityCoords(animal)) < 3 || IsEntityDead(animal);
+  }, 180000);
 
   // Check if animal still exists
   spawnedAnimal = NetworkGetEntityFromNetworkId(currentAnimal);

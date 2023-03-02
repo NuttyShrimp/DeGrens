@@ -86,6 +86,9 @@ export const lootAnimal = (plyId: number, animalNetId: number) => {
   const animal = NetworkGetEntityFromNetworkId(animalNetId);
   if (!animal || !DoesEntityExist(animal)) return;
 
+  const fromBait = Entity(animal).state.fromBait;
+  console.log(`Animal from bait: ${fromBait}`);
+
   const animalHash = GetEntityModel(animal) >>> 0;
   DeleteEntity(animal);
 
@@ -97,7 +100,10 @@ export const lootAnimal = (plyId: number, animalNetId: number) => {
     Inventory.addItemToPlayer(plyId, 'animal_meat', 1);
   }
 
-  Inventory.addItemToPlayer(plyId, animalConfig.item, 1);
+  Inventory.addItemToPlayer(plyId, animalConfig.item, 1, {
+    hiddenKeys: ['fromBait'],
+    fromBait,
+  });
 
   Util.Log('jobs:hunting:lootAnimal', {}, `${Util.getName(plyId)}(${plyId}) has skinned an animal`, plyId);
 };
@@ -108,10 +114,13 @@ export const sellItem = (plyId: number, itemState: Inventory.ItemState) => {
     return;
   }
 
+  const fromBait = itemState.metadata?.fromBait ?? false;
+
   setTimeout(async () => {
     const removed = await Inventory.removeItemByIdFromInventory('stash', 'hunting_sell', itemState.id);
     if (!removed) return; // item got removed manually during timeout
     const price = huntingConfig.sellables[itemState.name];
-    Financials.addCash(plyId, price, 'hunting_sell');
+    const multiplier = fromBait ? 1 : huntingConfig.freeroamPercentage;
+    Financials.addCash(plyId, price * multiplier, 'hunting_sell');
   }, 5000);
 };

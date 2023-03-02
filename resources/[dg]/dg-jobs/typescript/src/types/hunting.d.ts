@@ -1,5 +1,6 @@
 declare namespace Hunting {
   type Config = {
+    freeroamPercentage: number;
     animals: {
       model: string;
       item: string;

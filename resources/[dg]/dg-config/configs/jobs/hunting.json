@@ -1,4 +1,5 @@
 {
+  "freeroamPercentage": 0.25,
   "animals": [
     {
       "model": "a_c_deer",

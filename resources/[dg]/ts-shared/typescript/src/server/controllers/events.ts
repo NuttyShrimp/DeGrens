@@ -12,7 +12,8 @@ if (GetCurrentResourceName() === 'ts-shared') {
       entityType: 'object' | 'ped',
       model: string | number,
       coords: Vec3 | Vec4,
-      routingBucket?: number
+      routingBucket?: number,
+      stateBags?: Record<string, any>
     ) => {
       if (routingBucket == undefined) {
         routingBucket = GetPlayerRoutingBucket(String(plyId));
@@ -32,6 +33,11 @@ if (GetCurrentResourceName() === 'ts-shared') {
 
       SetEntityRoutingBucket(entity, routingBucket);
       // SetEntityDistanceCullingRadius(entity, 100);
+
+      for (const key in stateBags) {
+        Entity(entity).state.set(key, stateBags[key], true);
+      }
+
       const netId = NetworkGetNetworkIdFromEntity(entity);
       return netId;
     }
