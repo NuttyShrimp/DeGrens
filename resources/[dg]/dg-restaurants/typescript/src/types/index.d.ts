@@ -1,6 +1,7 @@
 declare namespace Restaurants {
   type Config = {
-    amountPerTicket: number;
+    maxPerTicket: number;
+    sharedPercentage: number;
     restaurants: Record<string, RestaurantConfig>;
   };
 

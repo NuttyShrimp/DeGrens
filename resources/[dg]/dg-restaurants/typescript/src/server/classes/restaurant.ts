@@ -362,6 +362,9 @@ export class Restaurant {
     }
 
     const totalPrice = this.calculateOrderPrice(order);
+    // person who made order gets ticketPrice, other signed in employee get percentage of it
+    const ticketPrice = Math.min(totalPrice, config.maxPerTicket);
+    const sharedPrice = Math.round(ticketPrice * config.sharedPercentage);
 
     this.removeRegisterOrder(registerId);
 
@@ -369,10 +372,12 @@ export class Restaurant {
       registerId,
     });
 
-    Inventory.addItemToPlayer(plyId, 'sales_ticket', 1, {
-      origin: 'generic',
-      amount: Math.min(totalPrice, config.amountPerTicket), // cannot be more than what player had to pay
-      hiddenKeys: ['origin', 'amount'],
+    this.signedInPlayers.forEach(employee => {
+      Inventory.addItemToPlayer(plyId, 'sales_ticket', 1, {
+        origin: 'generic',
+        amount: employee === plyId ? ticketPrice : sharedPrice,
+        hiddenKeys: ['origin', 'amount'],
+      });
     });
   };
 
