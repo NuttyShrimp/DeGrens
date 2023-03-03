@@ -373,7 +373,7 @@ export class Restaurant {
     });
 
     this.signedInPlayers.forEach(employee => {
-      Inventory.addItemToPlayer(plyId, 'sales_ticket', 1, {
+      Inventory.addItemToPlayer(employee, 'sales_ticket', 1, {
         origin: 'generic',
         amount: employee === plyId ? ticketPrice : sharedPrice,
         hiddenKeys: ['origin', 'amount'],

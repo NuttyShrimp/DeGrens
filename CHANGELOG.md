@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+### Changed
+
+- Timeout toegevoegd aan lockpick dispatch call voor individueel voertuig
+- Enkel dispatch call changes verlaagd
+- Phone item kan nu verkocht worden voor bij fence
+
+### Fixed
+
+- Restaurant ticket wordt nu aan juiste persoon gegeven
+
 ## [1.0.8]
 
 ### Added
