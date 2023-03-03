@@ -34,7 +34,6 @@ const buildServer = async () => {
         url: 'https://sentry.nuttyshrimp.me/',
         org: 'nutty',
         project: 'dg-2-ts-errors',
-        debug: true,
       }),
     ],
   });
