@@ -7,6 +7,8 @@ let stressAmount = 0;
 let stressTimeout: NodeJS.Timeout | null;
 let stressSteps: number;
 
+let stressIconEnabled = false;
+
 export const setConfig = (newConfig: HUD.Config) => {
   config = newConfig;
   stressSteps = (newConfig.shake.interval.max - newConfig.shake.interval.min) / (100 - newConfig.shake.minimum);
@@ -26,7 +28,11 @@ export const getCapacity = (ped: number, id: number) => {
 
 export const handleStressChange = (amount: number) => {
   stressAmount = amount;
-  HUD.toggleEntry('stress', stressAmount > MINIMUM_STRESS_FOR_ICON);
+
+  // disable when stress is 0, enable when higher than threshold
+  stressIconEnabled = stressAmount > (stressIconEnabled ? 0 : MINIMUM_STRESS_FOR_ICON);
+  HUD.toggleEntry('stress', stressIconEnabled);
+
   scheduleBlurEffect();
 };
 
