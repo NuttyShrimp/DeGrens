@@ -477,6 +477,7 @@ class StateManager extends Util.Singleton<StateManager>() {
     house.state = HouseState.COOLDOWN;
     setTimeout(() => {
       house.state = HouseState.FREE;
+      house.searched.clear();
 
       // destroy zone for everyone when job is finished
       Events.emitNet('houserobbery:client:destroyHouseZone', -1, houseId);
