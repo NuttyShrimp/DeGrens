@@ -18,6 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Restaurant ticket wordt nu aan juiste persoon gegeven
+- Correcte rotatie van yogamat tijdens animatie
 
 ## [1.0.8]
 

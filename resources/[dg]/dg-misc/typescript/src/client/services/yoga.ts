@@ -13,7 +13,7 @@ const yogaModels = [
 const startYogaSes = async (data: Option, entity: number | undefined) => {
   if (!entity) return;
 
-  await Util.goToCoords({ ...Util.getEntityCoords(entity), w: GetEntityHeading(entity) }, 3000);
+  await Util.goToCoords({ ...Util.getEntityCoords(entity), w: GetEntityHeading(entity) + 90 }, 3000);
 
   const [isCancelled] = await Taskbar.create('brain', 'Adem in...', 30000, {
     canCancel: true,
