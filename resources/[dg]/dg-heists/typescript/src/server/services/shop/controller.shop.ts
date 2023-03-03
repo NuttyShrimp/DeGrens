@@ -26,7 +26,7 @@ Events.onNet('heists:server:openIllegalShop', async (src: number) => {
 
   const cid = Util.getCID(src);
   const plyRep = Reputations.getReputation(cid, 'cornersell') ?? 0;
-  if (plyRep < 300) {
+  if (plyRep < 500) {
     Notifications.add(src, 'Ik vertrouw je nog niet genoeg om zaken te doen', 'error');
     return;
   }

@@ -70,7 +70,8 @@ RPC.register('storerobbery:safes:tryToLoot', async (src: number, storeId: Storer
   if (safeState !== 'opened') return false;
 
   const safeConfig = getConfig().safe;
-  const amount = Util.getRndInteger(...safeConfig.rollAmount);
+  const [minRollAmount, maxRollAmount] = safeConfig.rollAmount;
+  const amount = Util.getRndInteger(minRollAmount, maxRollAmount + 1);
   Inventory.addItemToPlayer(src, 'money_roll', amount);
 
   const receiveSpecial = Util.getRndInteger(1, 101) < safeConfig.specialItemChance;

@@ -65,7 +65,7 @@ Events.onNet('storerobbery:registers:rob', async (plyId: number, storeId: Storer
     return;
   }
 
-  const [min, max] = getConfig().register.rollAmount;
-  const amount = Util.getRndInteger(min, max);
+  const [minRollAmount, maxRollAmount] = getConfig().register.rollAmount;
+  const amount = Util.getRndInteger(minRollAmount, maxRollAmount + 1);
   Inventory.addItemToPlayer(plyId, 'money_roll', amount);
 });
