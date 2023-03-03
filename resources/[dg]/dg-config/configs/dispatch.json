@@ -1,6 +1,6 @@
 {
   "callChance": {
-    "cornersell": 40,
+    "cornersell": 10,
     "doorlockpick": 60,
     "vehiclelockpick": 65,
     "wirecutting": 50
