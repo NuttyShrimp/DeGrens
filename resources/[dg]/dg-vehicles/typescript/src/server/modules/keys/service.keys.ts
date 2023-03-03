@@ -6,6 +6,8 @@ import { getVinForVeh, setEngineState } from '../../helpers/vehicle';
 import { keyManager } from './classes/keymanager';
 import { NO_LOCK_CLASSES } from './constants.keys';
 
+const recentDispatchVehicles = new Set<string>();
+
 const vehClassToDifficulty: Record<CarClass, { speed: number; size: number }> = {
   D: { speed: 2, size: 40 },
   C: { speed: 4, size: 30 },
@@ -102,7 +104,9 @@ export const startVehicleLockpick = async (src: number, itemId: string) => {
   // Check info to determine difficulty
   const vehInfo = getConfigByEntity(targetVehicle);
 
-  if (Util.getRndInteger(0, 101) < Config.getConfigValue('dispatch.callChance.vehiclelockpick')) {
+  const callChance = Config.getConfigValue('dispatch.callChance.vehiclelockpick');
+  const recentlyCalled = recentDispatchVehicles.has(vin);
+  if (!recentlyCalled && Util.getRndInteger(0, 101) < callChance) {
     Police.createDispatchCall({
       tag: '10-31',
       title: 'Poging to voertuig inbraak',
@@ -114,7 +118,13 @@ export const startVehicleLockpick = async (src: number, itemId: string) => {
         color: 0,
       },
     });
+
+    recentDispatchVehicles.add(vin);
+    setTimeout(() => {
+      recentDispatchVehicles.delete(vin);
+    }, 3000 * 60);
   }
+
   const keygameMinAmount = lockpickType === 'door' ? 4 : 5;
   Events.emitNet(
     'vehicles:keys:startLockpick',
