@@ -52,6 +52,8 @@ Chat.registerCommand(
       });
     });
 
+    Events.emitNet('police:doCallAnim', src);
+
     Util.Log('police:112', { message }, `${Util.getName(src)} made a 112p`, src);
     mainLogger.silly(`Player ${src} has made a 112p. Message: ${message}`);
   }

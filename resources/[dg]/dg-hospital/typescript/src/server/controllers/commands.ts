@@ -1,4 +1,4 @@
-import { Chat, Hospital, Jobs, Notifications, Police, Util } from '@dgx/server';
+import { Chat, Events, Hospital, Jobs, Notifications, Police, Util } from '@dgx/server';
 import { mainLogger } from 'sv_logger';
 
 Chat.registerCommand(
@@ -41,6 +41,8 @@ Chat.registerCommand(
         message: `Inkomende 112 melding - ${plyName} (${src}):<br>${message}`,
       });
     });
+
+    Events.emitNet('police:doCallAnim', src);
 
     Util.Log('hospital:112', { message }, `${Util.getName(src)} made a 112a`, src);
     mainLogger.silly(`Player ${src} has made a 112a. Message: ${message}`);

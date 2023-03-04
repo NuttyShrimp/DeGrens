@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - DNA code wordt gekopieerd wanneer je DNA evidence gebruikt
 - Extra politie kledij voor beter passende outfits
 - Joints kunnen maken van weedzakje
+- Animatie bij het maken van 112 melding
 
 ### Changed
 
