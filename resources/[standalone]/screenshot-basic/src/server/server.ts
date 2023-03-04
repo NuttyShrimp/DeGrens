@@ -157,7 +157,8 @@ exp('generateMinioFilename', async () => {
   const dObj = new Date();
   const date = `${dObj.getFullYear()}/${dObj.getMonth()}/${dObj.getDate()}/`;
   let found = false;
-  while (!found) {
+  let timeout = 100;
+  while (!found || timeout > 0) {
     try {
       await minioClient.statObject(MINIO_BUCKET_ID, date + fileName);
       fileName = v4();
@@ -167,14 +168,21 @@ exp('generateMinioFilename', async () => {
         break;
       }
       fileName = v4();
-      console.error(e);
+      timeout--;
+      // console.error(e);
     }
+  }
+  if (timeout <= 0) {
+    fileName = 'NOT_FOUND';
   }
   return fileName;
 });
 
 global.exports('requestClientMinioScreenshot', async (player: string | number, options: any) => {
   const tkn = v4();
+  if (options.fileName === 'NOT_FOUND') {
+    return;
+  }
 
   const fileName = options.fileName + '.png';
   const dObj = new Date();
