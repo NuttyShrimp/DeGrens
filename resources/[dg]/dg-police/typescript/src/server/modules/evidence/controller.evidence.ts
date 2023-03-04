@@ -70,3 +70,7 @@ Inventory.registerUseable('dna_swab', async src => {
   if (!player) return;
   Inventory.addItemToPlayer(src, 'evidence_dna', 1, { dna: player.PlayerData.metadata.dna });
 });
+
+Inventory.registerUseable('evidence_dna', (src, item) => {
+  emitNet('dg-ui:SendAppEvent', src, 'copy', item.metadata.dna);
+});

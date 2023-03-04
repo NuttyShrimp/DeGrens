@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- DNA code wordt gekopieerd wanneer je DNA evidence gebruikt
+
 ### Changed
 
 - Timeout toegevoegd aan lockpick dispatch call voor individueel voertuig
