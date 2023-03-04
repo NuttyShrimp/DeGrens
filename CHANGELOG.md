@@ -23,6 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - De knoppen van een phone modal worden gedisabled als hij bezig is met verwerken
 - Voertuigverkoop modal verdwijnt na verkoop + refreshed garage lijst
 - Oversized textures van enkele kleding stukken gedownscaled
+- Je krijgt een melding als er geen EMS aanwezig is bij het maken van 112 melding
 
 ### Fixed
 

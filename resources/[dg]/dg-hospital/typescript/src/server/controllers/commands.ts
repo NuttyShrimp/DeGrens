@@ -17,6 +17,12 @@ Chat.registerCommand(
       return;
     }
 
+    const onlineAmbu = Jobs.getPlayersForJob('ambulance');
+    if (onlineAmbu.length === 0) {
+      Notifications.add(src, 'Er is geen ambulance aanwezig', 'error');
+      return;
+    }
+
     const cid = Util.getCID(src);
     const plyName = await Util.getCharName(cid);
     const plyCoords = Util.getPlyCoords(src);
@@ -33,7 +39,6 @@ Chat.registerCommand(
       },
     });
 
-    const onlineAmbu = Jobs.getPlayersForJob('ambulance');
     onlineAmbu.forEach(plyId => {
       Chat.sendMessage(plyId, {
         prefix: 'Dispatch: ',

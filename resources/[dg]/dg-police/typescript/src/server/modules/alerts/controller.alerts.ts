@@ -26,6 +26,12 @@ Chat.registerCommand(
       return;
     }
 
+    const onlinePolice = Jobs.getPlayersForJob('police');
+    if (onlinePolice.length === 0) {
+      Notifications.add(src, 'Er is geen politie aanwezig', 'error');
+      return;
+    }
+
     const cid = Util.getCID(src);
     const plyName = await Util.getCharName(cid);
     const plyCoords = Util.getPlyCoords(src);
@@ -43,7 +49,6 @@ Chat.registerCommand(
       },
     });
 
-    const onlinePolice = Jobs.getPlayersForJob('police');
     onlinePolice.forEach(plyId => {
       Chat.sendMessage(plyId, {
         prefix: 'Dispatch: ',
