@@ -83,6 +83,19 @@ Peek.addZoneEntry('lab_action', {
         return true;
       },
     },
+    {
+      icon: 'fas fa-joint',
+      label: 'Rollen',
+      items: ['weed_bag'],
+      action: option => {
+        Events.emitNet('labs:weed:roll', option.data.labId);
+      },
+      canInteract: (_, __, option) => {
+        if (option.data.type !== 'weed') return false;
+        if (option.data.action !== 'roll') return false;
+        return true;
+      },
+    },
   ],
   distance: 1.5,
 });

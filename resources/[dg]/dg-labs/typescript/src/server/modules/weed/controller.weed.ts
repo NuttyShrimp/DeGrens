@@ -108,6 +108,46 @@ Events.onNet('labs:weed:package', async (plyId, labId: number) => {
     return;
   }
 
-  const amount = Util.getRndInteger(dryConfig.amount.min, dryConfig.amount.max);
+  const amount = Util.getRndInteger(dryConfig.amount.min, dryConfig.amount.max + 1);
   Inventory.addItemToPlayer(plyId, 'weed_bag', amount);
+});
+
+Events.onNet('labs:weed:roll', async (plyId, labId: number) => {
+  const validated = validateLabType(plyId, labId, 'weed');
+  if (!validated) return;
+
+  const weedBagItem = await Inventory.getFirstItemOfNameOfPlayer(plyId, 'weed_bag');
+
+  if (!weedBagItem) {
+    Notifications.add(plyId, 'Je hebt niks om te rollen', 'error');
+    return;
+  }
+
+  const [canceled] = await Taskbar.create(plyId, 'joint', 'Rollen...', 5000, {
+    canCancel: true,
+    cancelOnDeath: true,
+    cancelOnMove: true,
+    disableInventory: true,
+    disablePeek: true,
+    disarm: true,
+    controlDisables: {
+      combat: true,
+      carMovement: true,
+      movement: true,
+    },
+    animation: {
+      animDict: 'creatures@rottweiler@tricks@',
+      anim: 'petting_franklin',
+      flags: 0,
+    },
+  });
+  if (canceled) return;
+
+  const removedItems = await Inventory.removeItemByIdFromPlayer(plyId, weedBagItem.id);
+  if (!removedItems) {
+    Notifications.add(plyId, 'Je hebt de items niet meer', 'error');
+    return;
+  }
+
+  Inventory.addItemToPlayer(plyId, 'joint', 1);
 });

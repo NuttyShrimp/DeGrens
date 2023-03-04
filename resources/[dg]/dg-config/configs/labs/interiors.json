@@ -20,6 +20,14 @@
         }
       },
       {
+        "action": "roll",
+        "coords": {
+          "x": -1.52,
+          "y": 7.79,
+          "z": 0.8
+        }
+      },
+      {
         "action": "fertilizer",
         "coords": {
           "x": -9.24,
