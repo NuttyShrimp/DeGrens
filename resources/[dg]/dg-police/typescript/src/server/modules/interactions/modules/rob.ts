@@ -10,8 +10,12 @@ RPC.register('police:interactions:canRobPlayer', (src: number, target: number): 
   const targetCoords = Util.getPlyCoords(target);
   if (Util.getPlyCoords(src).distance(targetCoords) > 5) return 'notAllowed';
 
-  const downOrCuffed = isPlayerCuffed(target) || Hospital.isDown(target);
-  return downOrCuffed ? 'allowed' : 'checkAnim';
+  if (isPlayerCuffed(target)) return 'allowed';
+
+  const targetPlayer = DGCore.Functions.GetPlayer(target);
+  const isDead = targetPlayer?.PlayerData?.metadata?.downState === 'dead';
+
+  return isDead ? 'allowed' : 'checkAnim';
 });
 
 Events.onNet('police:interactions:robbedPlayer', (src: number, target: number) => {
