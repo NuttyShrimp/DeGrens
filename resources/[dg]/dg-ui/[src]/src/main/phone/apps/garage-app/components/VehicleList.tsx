@@ -15,7 +15,7 @@ const STATE_LABELS = {
   impounded: 'In beslaggenomen',
 };
 
-export const VehicleList: FC<{}> = () => {
+export const VehicleList: FC<{ fetchVehicles: () => void }> = ({ fetchVehicles }) => {
   const vehicles = useGarageAppStore(s => s.list);
 
   const trackVehicle = (vin: string) => {
@@ -23,7 +23,7 @@ export const VehicleList: FC<{}> = () => {
   };
 
   const sellVehicle = (veh: Phone.Garage.Vehicle) => {
-    showFormModal(<SellModal vin={veh.vin} name={veh.name} />);
+    showFormModal(<SellModal vin={veh.vin} name={veh.name} fetchVehicles={fetchVehicles} />);
   };
 
   return (

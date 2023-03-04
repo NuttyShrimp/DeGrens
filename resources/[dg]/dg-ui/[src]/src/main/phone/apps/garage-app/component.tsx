@@ -19,7 +19,7 @@ const Component = () => {
   }, []);
   return (
     <AppContainer emptyList={listLen === 0}>
-      <VehicleList />
+      <VehicleList fetchVehicles={fetchVehicles} />
     </AppContainer>
   );
 };
