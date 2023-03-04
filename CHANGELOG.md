@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Enkel dispatch call changes verlaagd
 - Phone item kan nu verkocht worden voor bij fence
 - Tweak blackmoney en cornersell payouts
+- De knoppen van een phone modal worden gedisabled als hij bezig is met verwerken
 
 ### Fixed
 

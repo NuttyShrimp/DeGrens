@@ -9,7 +9,7 @@ declare namespace SimpleForm {
   interface Form {
     header?: string;
     elements: FormElement[];
-    onAccept: (data: any) => void;
-    onDecline?: () => void;
+    onAccept: (data: any) => void | Promise<void>;
+    onDecline?: () => void | Promise<void>;
   }
 }

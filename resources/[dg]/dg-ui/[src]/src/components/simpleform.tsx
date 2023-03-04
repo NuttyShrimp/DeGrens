@@ -10,6 +10,7 @@ export const SimpleForm: FC<React.PropsWithChildren<SimpleForm.Form>> = props =>
   const classes = styles();
   const [values, setValues] = useState<Record<string, string>>({});
   const [errors, setErrors] = useState<Record<string, boolean>>({});
+  const [btnsDisabled, setBtnsDisabled] = useState(false);
   useEffect(() => {
     const newValues = {};
     props.elements.forEach(element => {
@@ -19,13 +20,15 @@ export const SimpleForm: FC<React.PropsWithChildren<SimpleForm.Form>> = props =>
   }, [props.elements]);
 
   const handleDecline = () => {
+    setBtnsDisabled(true);
     if (props.onDecline) {
       props.onDecline();
     }
     hideFormModal();
   };
 
-  const handleAccept = () => {
+  const handleAccept = async () => {
+    setBtnsDisabled(true);
     const newErrors = {};
     for (const element of props.elements) {
       if ((element.required ?? true) && (!values[element.name] || values[element.name].trim() === '')) {
@@ -34,8 +37,9 @@ export const SimpleForm: FC<React.PropsWithChildren<SimpleForm.Form>> = props =>
     }
     setErrors(newErrors);
     if (Object.keys(newErrors).length === 0) {
-      props.onAccept(values);
+      await props.onAccept(values);
     }
+    setBtnsDisabled(false);
   };
 
   const handleChange = (name: string, value: string) => {
@@ -68,6 +72,7 @@ export const SimpleForm: FC<React.PropsWithChildren<SimpleForm.Form>> = props =>
       <div className={classes.btnWrapper}>
         <Button.Secondary
           onClick={handleDecline}
+          disabled={btnsDisabled}
           sx={{
             fontSize: '.75rem',
           }}
@@ -76,6 +81,7 @@ export const SimpleForm: FC<React.PropsWithChildren<SimpleForm.Form>> = props =>
         </Button.Secondary>
         <Button.Primary
           onClick={handleAccept}
+          disabled={btnsDisabled}
           sx={{
             fontSize: '.75rem',
           }}
