@@ -48,7 +48,7 @@ class ItemManager extends Util.Singleton<ItemManager>() {
 
   public get = (id: string) => {
     const item = this.items.get(id);
-    if (!item) throw new Error(`Item ${id} does not exist`);
+    if (!item) return;
     const broke = item.checkDecay();
     if (broke) return;
     return item;
