@@ -52,13 +52,13 @@ export const loadDownStateOnRestart = () => {
   setPlayerState(state, false);
 };
 
-export const resetRespawnTime = () => {
-  if (playerState === 'alive') {
+const setRespawnTime = (state: Hospital.State) => {
+  if (state === 'alive') {
     respawnTime = 0;
     return;
   }
 
-  respawnTime = GetGameTimer() + respawnTimeConfig[playerState] * 1000;
+  respawnTime = GetGameTimer() + respawnTimeConfig[state] * 1000;
 };
 
 export const checkDeathOnDamage = (originPed: number, weaponHash: number) => {
@@ -87,6 +87,10 @@ export const checkDeathOnDamage = (originPed: number, weaponHash: number) => {
   const downType = damageTypeData.type;
   const weight = getWeightOfState(downType);
   const currentWeight = getWeightOfState(playerState);
+
+  // if was alive, use new state, is was already down, always use dead time
+  setRespawnTime(playerState === 'alive' ? downType : 'dead');
+
   if (currentWeight >= weight) return;
 
   const origin = Util.getServerIdForPed(originPed);
@@ -117,7 +121,7 @@ const resurrectWhenRagdollFinished = async () => {
 };
 
 const startDownThread = async () => {
-  resetRespawnTime();
+  setRespawnTime(playerState);
 
   if (downThread !== null || playerState === 'alive') return;
 
@@ -232,7 +236,7 @@ const respawnPlayer = async () => {
     Events.emitNet('hospital:down:respawnToBed');
   } else {
     SetEntityCoords(ped, respawnPosition.x, respawnPosition.y, respawnPosition.z, false, false, false, false);
-    resetRespawnTime();
+    setRespawnTime(playerState);
     Events.emitNet('hospital:down:respawnToHospital');
   }
 };
