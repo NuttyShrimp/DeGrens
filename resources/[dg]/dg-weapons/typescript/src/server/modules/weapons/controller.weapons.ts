@@ -79,7 +79,6 @@ Events.onNet('weapons:server:meleeHit', (plyId: number, itemId: string, hits: nu
 
   const decrease = weaponConfig.durabilityMultiplier * hits;
   Inventory.setQualityOfItem(itemId, old => old - decrease);
-  console.log(decrease);
 });
 
 Inventory.onInventoryUpdate(
