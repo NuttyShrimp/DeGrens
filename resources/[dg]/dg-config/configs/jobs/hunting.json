@@ -1,28 +1,28 @@
 {
-  "freeroamPercentage": 0.25,
+  "freeroamPercentage": 0.35,
   "animals": [
     {
       "model": "a_c_deer",
       "item": "animal_skin_deer",
-      "chance": 35,
+      "chance": 30,
       "meatChance": 1
     },
     {
       "model": "a_c_boar",
       "item": "animal_skin_boar",
-      "chance": 30,
+      "chance": 28,
       "meatChance": 0.7
     },
     {
       "model": "a_c_coyote",
       "item": "animal_skin_coyote",
-      "chance": 15,
+      "chance": 22,
       "meatChance": 0.5
     },
     {
       "model": "a_c_mtlion",
       "item": "animal_skin_mtlion",
-      "chance": 10,
+      "chance": 20,
       "meatChance": 0.5
     }
   ],
