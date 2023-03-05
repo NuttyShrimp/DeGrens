@@ -6,7 +6,7 @@
     "weed_seed"
   ],
   "dry": {
-    "timeout": 72,
+    "timeout": 48,
     "amount": {
       "min": 5,
       "max": 10
