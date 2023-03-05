@@ -28,6 +28,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Je kan bewusteloze mensen niet meer beroven
 - Staff wordt niet langer ge-AFK-kicked
 - Tweak hunting payout en dier kansen bij gebruik van bait
+- Witwas kans verhoogd
 
 ### Fixed
 

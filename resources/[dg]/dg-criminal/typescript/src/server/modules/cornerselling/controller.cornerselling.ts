@@ -49,7 +49,7 @@ Events.onNet('criminal:cornersell:sell', async (plyId: number, zone: string) => 
   Reputations.setReputation(cid, 'cornersell', rep => rep + 1);
 
   // Chance to sell blackmoney
-  if (Util.getRndInteger(1, 101) < getConfig().cornerselling.cleanChance) {
+  if (Util.getRndInteger(1, 101) <= getConfig().cornerselling.cleanChance) {
     randomSellBlackMoney(plyId);
   }
 
