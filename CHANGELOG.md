@@ -30,6 +30,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Tweak hunting payout en dier kansen bij gebruik van bait
 - Witwas kans verhoogd
 - Als je nog eens sterft als je al neerligt reset je respawntimer altijd voor max tijd
+- Lockers groter gemaakt
 
 ### Fixed
 
