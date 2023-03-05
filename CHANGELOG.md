@@ -26,6 +26,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Oversized textures van enkele kleding stukken gedownscaled
 - Je krijgt een melding als er geen EMS aanwezig is bij het maken van 112 melding
 - Je kan bewusteloze mensen niet meer beroven
+- Staff wordt niet langer ge-AFK-kicked
 
 ### Fixed
 

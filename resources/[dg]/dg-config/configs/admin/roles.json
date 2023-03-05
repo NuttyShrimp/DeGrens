@@ -12,7 +12,7 @@
   {
     "name": "staff",
     "power": 50,
-    "allowAFK": false
+    "allowAFK": true
   },
   {
     "name": "user",
