@@ -32,6 +32,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Als je nog eens sterft als je al neerligt reset je respawntimer altijd voor max tijd
 - Lockers groter gemaakt
 - Weedbud droogtijd verlaagd van 3 naar 2 dagen
+- Banverloop datum wordt op FiveM server berekend ipv op de database
 
 ### Fixed
 

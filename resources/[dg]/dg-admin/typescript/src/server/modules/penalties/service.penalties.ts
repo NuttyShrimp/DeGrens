@@ -1,4 +1,5 @@
 import { Chat, Config, Notifications, SQL, Util } from '@dgx/server';
+import dayjs from 'dayjs';
 import { updatePointsReset } from 'modules/penaltyPoints/service.penaltyPoints';
 
 import { getIdentifierForPlayer, getPlayerForSteamId, getServerIdForSteamId } from '../../helpers/identifiers';
@@ -137,7 +138,6 @@ export const isPlayerBanned = async (steamId: string) => {
       points: number;
       length: number;
       date: string;
-      expiry: string;
     }[]
   >(
     `
@@ -151,9 +151,10 @@ export const isPlayerBanned = async (steamId: string) => {
     [steamId]
   );
   if (result.length < 1) return { isBanned: false, reason: '' };
+  const expiry = dayjs.unix(result[0].length).add(result[0].length, "d").format("%DD/%MM/%YYYY %HH:%mm:%ss")
   return {
     isBanned: result.length > 0,
-    reason: `Je bent gebanned voor ${result[0].reason}, Verloopt op ${result[0].length === -1 ? 'permanently' : result[0].expiry
+    reason: `Je bent gebanned voor ${result[0].reason}, Verloopt op ${result[0].length === -1 ? 'permanently' : expiry
       }`,
   };
 };
