@@ -231,85 +231,91 @@ Keys.register('admin-noclip-mv-down', '(zAdmin) Noclip move down', 'E');
 
 Keys.onPress('admin-noclip-mv-forward', isDown => {
   if (!getCmdState('noclip')) return;
-  if (!isDown) {
-    if (noclipMovingTicks.forward) {
-      clearInterval(noclipMovingTicks.forward);
-      noclipMovingTicks.forward = null;
-    }
-    return;
+
+  if (noclipMovingTicks.forward) {
+    clearInterval(noclipMovingTicks.forward);
+    noclipMovingTicks.forward = null;
   }
-  noclipMovingTicks.forward = setInterval(() => {
-    moveX(1);
-  }, 1);
+
+  if (isDown) {
+    noclipMovingTicks.forward = setInterval(() => {
+      moveX(1);
+    }, 1);
+  }
 });
 
 Keys.onPress('admin-noclip-mv-backward', isDown => {
   if (!getCmdState('noclip')) return;
-  if (!isDown) {
-    if (noclipMovingTicks.backward) {
-      clearInterval(noclipMovingTicks.backward);
-      noclipMovingTicks.backward = null;
-    }
-    return;
+
+  if (noclipMovingTicks.backward) {
+    clearInterval(noclipMovingTicks.backward);
+    noclipMovingTicks.backward = null;
   }
-  noclipMovingTicks.backward = setInterval(() => {
-    moveX(-1);
-  }, 1);
+
+  if (isDown) {
+    noclipMovingTicks.backward = setInterval(() => {
+      moveX(-1);
+    }, 1);
+  }
 });
 
 Keys.onPress('admin-noclip-mv-left', isDown => {
   if (!getCmdState('noclip')) return;
-  if (!isDown) {
-    if (noclipMovingTicks.left) {
-      clearInterval(noclipMovingTicks.left);
-      noclipMovingTicks.left = null;
-    }
-    return;
+
+  if (noclipMovingTicks.left) {
+    clearInterval(noclipMovingTicks.left);
+    noclipMovingTicks.left = null;
   }
-  noclipMovingTicks.left = setInterval(() => {
-    moveY(-1);
-  }, 1);
+
+  if (isDown) {
+    noclipMovingTicks.left = setInterval(() => {
+      moveY(-1);
+    }, 1);
+  }
 });
 
 Keys.onPress('admin-noclip-mv-right', isDown => {
   if (!getCmdState('noclip')) return;
-  if (!isDown) {
-    if (noclipMovingTicks.right) {
-      clearInterval(noclipMovingTicks.right);
-      noclipMovingTicks.right = null;
-    }
-    return;
+
+  if (noclipMovingTicks.right) {
+    clearInterval(noclipMovingTicks.right);
+    noclipMovingTicks.right = null;
   }
-  noclipMovingTicks.right = setInterval(() => {
-    moveY(1);
-  }, 1);
+
+  if (isDown) {
+    noclipMovingTicks.right = setInterval(() => {
+      moveY(1);
+    }, 1);
+  }
 });
 
 Keys.onPress('admin-noclip-mv-up', isDown => {
   if (!getCmdState('noclip')) return;
-  if (!isDown) {
-    if (noclipMovingTicks.up) {
-      clearInterval(noclipMovingTicks.up);
-      noclipMovingTicks.up = null;
-    }
-    return;
+
+  if (noclipMovingTicks.up) {
+    clearInterval(noclipMovingTicks.up);
+    noclipMovingTicks.up = null;
   }
-  noclipMovingTicks.up = setInterval(() => {
-    moveZ(1);
-  }, 1);
+
+  if (isDown) {
+    noclipMovingTicks.up = setInterval(() => {
+      moveZ(1);
+    }, 1);
+  }
 });
 
 Keys.onPress('admin-noclip-mv-down', isDown => {
   if (!getCmdState('noclip')) return;
-  if (!isDown) {
-    if (noclipMovingTicks.down) {
-      clearInterval(noclipMovingTicks.down);
-      noclipMovingTicks.down = null;
-    }
-    return;
+
+  if (noclipMovingTicks.down) {
+    clearInterval(noclipMovingTicks.down);
+    noclipMovingTicks.down = null;
   }
-  noclipMovingTicks.down = setInterval(() => {
-    moveZ(-1);
-  }, 1);
+
+  if (isDown) {
+    noclipMovingTicks.down = setInterval(() => {
+      moveZ(-1);
+    }, 1);
+  }
 });
 // endregion
