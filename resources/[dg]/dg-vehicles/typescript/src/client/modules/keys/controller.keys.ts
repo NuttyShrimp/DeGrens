@@ -38,23 +38,28 @@ const lockpickAnimations = {
   },
   hotwire: {
     animDict: 'anim@amb@clubhouse@tutorial@bkr_tut_ig3@',
-    play: async () => {
+    play: () => {
       TaskPlayAnim(
         PlayerPedId(),
         'anim@amb@clubhouse@tutorial@bkr_tut_ig3@',
         'machinic_loop_mechandplayer',
         8.0,
         8.0,
-        -1.0,
-        16,
         -1,
+        17,
+        0,
         false,
         false,
         false
       );
     },
     stop: () => {
-      StopAnimTask(PlayerPedId(), 'anim@amb@clubhouse@tutorial@bkr_tut_ig3@', 'machinic_loop_mechandplayer', 1.0);
+      const ped = PlayerPedId();
+      const vehData = Util.getCurrentVehicleInfo(); // the animcancel SOMEHOW tps ped out of veh
+      StopAnimTask(ped, 'anim@amb@clubhouse@tutorial@bkr_tut_ig3@', 'machinic_loop_mechandplayer', 1);
+      if (vehData) {
+        SetPedIntoVehicle(ped, vehData.vehicle, vehData.seat);
+      }
     },
   },
 };

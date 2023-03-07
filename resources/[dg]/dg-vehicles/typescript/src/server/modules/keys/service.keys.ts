@@ -89,6 +89,10 @@ export const startVehicleLockpick = async (src: number, itemId: string) => {
     }
   }
 
+  if (lockpickType === 'hotwire') {
+    setEngineState(targetVehicle, false, true);
+  }
+
   // Check if already has keys
   const vin = getVinForVeh(targetVehicle);
   if (!vin) return;

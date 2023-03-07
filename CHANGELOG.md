@@ -44,6 +44,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Restaurant ticket wordt nu aan juiste persoon gegeven
 - Correcte rotatie van yogamat tijdens animatie
 - Minio filename generation heeft een timeout
+- Je stapt niet meer uit het voertuig na het lockpicken
 
 ## [1.0.8]
 
