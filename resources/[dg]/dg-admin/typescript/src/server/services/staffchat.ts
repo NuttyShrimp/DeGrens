@@ -10,9 +10,9 @@ Chat.registerCommand(
       required: true,
     },
   ],
-  'staff',
+  'support',
   (plyId, _, args) => {
-    if (!Admin.hasPermission(plyId, 'staff')) return;
+    if (!Admin.hasPermission(plyId, 'support')) return;
     const fullMessage = args.join(' ');
     const steamName = Util.getName(plyId);
     Chat.sendMessage('admin', {

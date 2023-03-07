@@ -4,7 +4,7 @@ import { announceMessage } from 'modules/menu/service.menu';
 export const announce: CommandData = {
   name: 'announcement',
   log: 'made an announcement',
-  role: 'staff',
+  role: 'support',
   target: false,
   isClientCommand: false,
   handler: (origin, data: { message?: string }) => {

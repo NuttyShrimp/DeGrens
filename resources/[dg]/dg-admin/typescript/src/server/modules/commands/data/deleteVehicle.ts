@@ -7,7 +7,7 @@ interface DeleteVehicleData {
 
 export const deleteVehicle: CommandData = {
   name: 'deleteVehicle',
-  role: 'staff',
+  role: 'support',
   log: 'has deleted the vehicle a player was in',
   target: false,
   isClientCommand: false,

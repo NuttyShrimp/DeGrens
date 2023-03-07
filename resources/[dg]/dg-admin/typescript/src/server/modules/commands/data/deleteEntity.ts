@@ -2,7 +2,7 @@ import { SelectorTarget } from '../../../enums/SelectorTargets';
 
 export const deleteEntity: CommandData = {
   name: 'deleteEntity',
-  role: 'staff',
+  role: 'support',
   log: 'has deleted an entity.',
   target: [SelectorTarget.ENTITY, SelectorTarget.PED, SelectorTarget.VEHICLE],
   isClientCommand: true,

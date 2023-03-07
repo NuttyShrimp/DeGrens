@@ -10,7 +10,7 @@ export const bring: CommandData = {
   log: 'brought someone to them',
   isClientCommand: false,
   target: [],
-  role: 'staff',
+  role: 'support',
   handler: (caller, data: BringData) => {
     if (!data.Target) {
       Notifications.add(caller.source, 'Je moet een target selecteren', 'error');

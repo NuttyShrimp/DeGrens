@@ -13,7 +13,7 @@ export const sendMessage: CommandData = {
   log: 'has sent a message to someone',
   isClientCommand: false,
   target: [],
-  role: 'staff',
+  role: 'support',
   handler: (caller, args: SendMessageData) => {
     if (!args.Target || !args.message) return;
 

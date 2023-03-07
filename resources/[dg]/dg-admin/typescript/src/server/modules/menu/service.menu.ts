@@ -8,7 +8,7 @@ const plysInDevMode = new Set<number>();
 
 export const setDevMode = (src: number, toggle: boolean) => {
   // dev env check because devmode will be auto toggled for everyone when in dev env
-  if (!Util.isDevEnv() && !hasPlayerPermission(src, 'staff')) {
+  if (!Util.isDevEnv() && !hasPlayerPermission(src, 'support')) {
     ACBan(src, 'Event injection: toggle dev mode');
     return;
   }

@@ -18,7 +18,7 @@ seedCharData = function()
       hasVPN = DGX.Inventory.doesPlayerHaveItems('vpn'),
       hasPhone = DGX.Inventory.doesPlayerHaveItems("phone"),
       cash = PlyData.charinfo.cash,
-      isAdmin = DGX.RPC.execute('admin:permissions:hasPermission', 'staff')
+      isAdmin = DGX.RPC.execute('admin:permissions:hasPermission', 'support')
     }
 
     characterInfo = newCharacterInfo

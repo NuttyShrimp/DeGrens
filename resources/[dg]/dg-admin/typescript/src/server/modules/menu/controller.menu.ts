@@ -11,14 +11,14 @@ global.exports('isInDevMode', isInDevMode);
 global.exports('plyInDevMode', getDevModeSet);
 
 Events.onNet('admin:menu:open', src => {
-  if (!hasPlayerPermission(src, 'staff')) {
+  if (!hasPlayerPermission(src, 'support')) {
     return;
   }
   Events.emitNet('admin:menu:open', src);
 });
 
 Events.onNet('admin:menu:openlog', src => {
-  if (!hasPlayerPermission(src, 'staff')) {
+  if (!hasPlayerPermission(src, 'support')) {
     ACBan(src, 'Event injection: open admin menu');
     return;
   }
@@ -26,7 +26,7 @@ Events.onNet('admin:menu:openlog', src => {
 });
 
 Events.onNet('admin:menu:close', src => {
-  if (!hasPlayerPermission(src, 'staff')) {
+  if (!hasPlayerPermission(src, 'support')) {
     ACBan(src, 'Event injection: close admin menu');
     return;
   }

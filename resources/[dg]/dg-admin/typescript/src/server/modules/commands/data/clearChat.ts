@@ -3,7 +3,7 @@ import { Events } from '@dgx/server';
 export const clearChat: CommandData = {
   name: 'clearChat',
   log: 'has cleared everyones chat',
-  role: 'staff',
+  role: 'support',
   target: false,
   isClientCommand: false,
   handler: () => {

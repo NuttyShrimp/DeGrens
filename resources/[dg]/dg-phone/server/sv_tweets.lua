@@ -172,7 +172,7 @@ end)
 DGX.Events.onNet('dg-phone:server:twitter:deleteTweet', function(src, tweetId)
 	if not tweetId or not tweetCache[tweetId] then return end
 
-  if not DGX.Admin.hasPermission(src, 'staff') then
+  if not DGX.Admin.hasPermission(src, 'support') then
 		DGX.Admin.ACBan(src, 'Try to remove tweet')
     return
 	end

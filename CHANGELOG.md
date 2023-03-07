@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Animatie bij het maken van 112 melding
 - Admin optie om itemstate by id te verkrijgen
 - Weed container toegevoegd
+- Extra ingame support adminrole toegevoegd
 
 ### Changed
 

@@ -5,7 +5,7 @@ import { handleCommandExecution } from './commands';
 const specialTarget: { [k: string]: (PlayerData: PlayerData) => boolean } = {
   police: data => Jobs.getCurrentJob(data.source) === 'police',
   ambulance: data => Jobs.getCurrentJob(data.source) === 'ambulance',
-  admin: data => Admin.hasPermission(data.source, 'staff') && Admin.isInDevMode(data.source),
+  admin: data => Admin.hasPermission(data.source, 'support') && Admin.isInDevMode(data.source),
 };
 
 export const sendMessage = (target: number | keyof typeof specialTarget, data: Shared.Message) => {

@@ -2,7 +2,7 @@ import { Events } from '@dgx/server';
 
 export const tpid: CommandData = {
   name: 'tpm',
-  role: 'staff',
+  role: 'support',
   log: 'teleported to your waypoint',
   target: false,
   isClientCommand: false,

@@ -36,7 +36,7 @@ Auth.onAuth(async src => {
 
 // Admin menu jobs selector seeding
 RPC.register('jobs:whitelist:getInfoList', (src: number) => {
-  if (!Admin.hasPermission(src, 'staff')) return [];
+  if (!Admin.hasPermission(src, 'support')) return [];
   const jobs: { name: string; ranks: number }[] = [];
   whitelistManager.config.forEach((info, name) => jobs.push({ name, ranks: info.grades.length }));
   return jobs;

@@ -5,7 +5,7 @@ import { SelectorTarget } from '../../../enums/SelectorTargets';
 export const attach: CommandData = {
   name: 'attach',
   log: 'Has attached itself to a player.',
-  role: 'staff',
+  role: 'support',
   isClientCommand: false,
   target: [SelectorTarget.PLAYER, SelectorTarget.VEHICLE],
   handler: (caller, args: { entity?: number }) => {

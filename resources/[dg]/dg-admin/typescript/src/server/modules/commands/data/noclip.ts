@@ -4,7 +4,7 @@ import { allowInvisibleForInteractingPlayers } from '../service.commands';
 
 export const noclip: CommandData = {
   name: 'noclip',
-  role: 'staff',
+  role: 'support',
   log: 'toggled noclip',
   target: false,
   isClientCommand: false,

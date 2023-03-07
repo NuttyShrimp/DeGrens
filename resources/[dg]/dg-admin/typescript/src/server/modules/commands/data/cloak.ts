@@ -7,7 +7,7 @@ export const cloak: CommandData = {
   log: 'toggled visibility',
   isClientCommand: false,
   target: [],
-  role: 'staff',
+  role: 'support',
   handler: caller => {
     const toggle = !getPlayerCommandState(caller.source, 'cloak');
     setPlayerCommandState(caller.source, 'cloak', toggle);

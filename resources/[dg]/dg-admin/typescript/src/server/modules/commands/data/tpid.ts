@@ -8,7 +8,7 @@ interface TpIdData {
 
 export const tpid: CommandData = {
   name: 'tpid',
-  role: 'staff',
+  role: 'support',
   log: 'teleported to a player',
   target: false,
   isClientCommand: false,

@@ -3,7 +3,7 @@ import { Admin, Jobs } from '@dgx/server';
 export const getRolesForPlayer = async (steamId: string): Promise<APIInfo.PlayerRoles> => {
   return {
     developer: Admin.hasSteamIdPermission(steamId, 'developer'),
-    staff: Admin.hasSteamIdPermission(steamId, 'staff'),
+    staff: Admin.hasSteamIdPermission(steamId, 'support'),
     police: await Jobs.isUserWhitelisted(steamId, 'police'),
     ambulance: await Jobs.isUserWhitelisted(steamId, 'ambulance'),
   };

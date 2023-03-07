@@ -10,7 +10,7 @@ export const takeScreenshot: CommandData = {
   log: 'has taken a screenshot of someones screen',
   isClientCommand: false,
   target: [],
-  role: 'staff',
+  role: 'support',
   handler: (caller, args: TakeScreenshotData) => {
     if (!args.Target) {
       Notifications.add(caller.source, 'Je moet een target invullen', 'error');

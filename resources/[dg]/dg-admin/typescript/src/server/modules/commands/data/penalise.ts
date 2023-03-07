@@ -8,7 +8,7 @@ interface BanData {
 
 export const penalise: CommandData = {
   name: 'penalise',
-  role: 'staff',
+  role: 'support',
   log: 'opened penalise menu',
   target: false,
   isClientCommand: false,
