@@ -5716,7 +5716,7 @@
     "model": "frogger",
     "brand": "Unknown",
     "name": "Frogger",
-    "class": "X",
+    "class": "S",
     "defaultStock": 1,
     "restockTime": 60,
     "price": 1000000,
