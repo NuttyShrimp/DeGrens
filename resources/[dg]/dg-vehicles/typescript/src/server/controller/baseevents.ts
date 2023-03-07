@@ -4,7 +4,7 @@ import { handleVehicleLock } from '../modules/keys/service.keys';
 // import seatingService from '../services/seating';
 
 BaseEvents.onEnteringVehicle((plyId, vehNetId, vehicleClass) => {
-  validateVehicleVin(vehNetId);
+  validateVehicleVin(NetworkGetEntityFromNetworkId(vehNetId));
   handleVehicleLock(plyId, vehNetId, vehicleClass);
   // seatingService.trySeating(plyId, vehNetId, seat);
 });

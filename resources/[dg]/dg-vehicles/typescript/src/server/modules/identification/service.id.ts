@@ -7,8 +7,7 @@ import { fuelManager } from '../fuel/classes/fuelManager';
 import vinManager from './classes/vinmanager';
 import { idLogger } from './logger.id';
 
-export const validateVehicleVin = (pNetId: number) => {
-  const vehicle = NetworkGetEntityFromNetworkId(pNetId);
+export const validateVehicleVin = (vehicle: number) => {
   const vehicleState = Entity(vehicle).state;
   if (vehicleState.vin && vinManager.doesVinMatch(vehicleState.vin, vehicle)) return;
   // This is for vehicles new to the server
@@ -17,6 +16,11 @@ export const validateVehicleVin = (pNetId: number) => {
   vehicleState.set('plate', GetVehicleNumberPlateText(vehicle), true);
   fuelManager.registerVehicle(vehicle);
   SetVehicleDoorsLocked(vehicle, 2);
+};
+
+export const doesVehicleHaveVin = (vehicle: number) => {
+  const vin = Entity(vehicle).state?.vin;
+  return vin != undefined && vinManager.doesVinMatch(vin, vehicle);
 };
 
 export const applyFakePlateItem = async (src: number, netId: number) => {

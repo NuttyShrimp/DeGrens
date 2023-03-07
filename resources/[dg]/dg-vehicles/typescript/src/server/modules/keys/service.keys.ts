@@ -5,6 +5,7 @@ import { getVinForVeh, setEngineState } from '../../helpers/vehicle';
 
 import { keyManager } from './classes/keymanager';
 import { NO_LOCK_CLASSES } from './constants.keys';
+import { doesVehicleHaveVin } from 'modules/identification/service.id';
 
 const recentDispatchVehicles = new Set<string>();
 
@@ -71,6 +72,9 @@ export const startVehicleLockpick = async (src: number, itemId: string) => {
   if (vehicleClass == undefined || vehicleClass < 0 || NO_LOCK_CLASSES[lockpickType].indexOf(vehicleClass) !== -1)
     return;
 
+  // check if vehicle already has vin
+  const alreadyHasVin = doesVehicleHaveVin(targetVehicle);
+
   if (lockpickType === 'door') {
     // Check if near door
     const vehNetId = NetworkGetNetworkIdFromEntity(targetVehicle);
@@ -80,17 +84,17 @@ export const startVehicleLockpick = async (src: number, itemId: string) => {
       return;
     }
 
-    // Check if door is locked
-    const vehicleLockStatus = GetVehicleDoorLockStatus(targetVehicle);
-    const OPEN_LOCK_STATES = [0, 10];
-    if (OPEN_LOCK_STATES.includes(vehicleLockStatus)) {
-      Notifications.add(src, 'Voertuig staat niet op slot', 'error');
-      return;
+    // when vehicle was unknown and just got vin, we set doorstate to locked.
+    // this however has some latency as its an RPC native, so if it was new veh ignore doorlock check
+    if (alreadyHasVin) {
+      // Check if door is locked
+      const vehicleLockStatus = GetVehicleDoorLockStatus(targetVehicle);
+      const OPEN_LOCK_STATES = [0, 10];
+      if (OPEN_LOCK_STATES.includes(vehicleLockStatus)) {
+        Notifications.add(src, 'Voertuig staat niet op slot', 'error');
+        return;
+      }
     }
-  }
-
-  if (lockpickType === 'hotwire') {
-    setEngineState(targetVehicle, false, true);
   }
 
   // Check if already has keys
@@ -104,6 +108,9 @@ export const startVehicleLockpick = async (src: number, itemId: string) => {
   const id = Util.uuidv4();
   activeLockPickers.set(src, { id, vehicle: targetVehicle, itemId });
   SetVehicleAlarm(targetVehicle, true);
+  if (lockpickType === 'hotwire') {
+    setEngineState(targetVehicle, false, true);
+  }
 
   // Check info to determine difficulty
   const vehInfo = getConfigByEntity(targetVehicle);

@@ -45,6 +45,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Correcte rotatie van yogamat tijdens animatie
 - Minio filename generation heeft een timeout
 - Je stapt niet meer uit het voertuig na het lockpicken
+- Je krijgt niet langer de melding dat de deur niet opslot staat bij het lockpicken van NPC voertuigen
 
 ## [1.0.8]
 

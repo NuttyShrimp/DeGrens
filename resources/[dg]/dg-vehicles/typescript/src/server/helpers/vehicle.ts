@@ -197,7 +197,7 @@ export const getVinForVeh = (veh: number): string | null => {
   }
   const vehState = Entity(veh).state;
   if (!vehState?.vin) {
-    validateVehicleVin(NetworkGetNetworkIdFromEntity(veh));
+    validateVehicleVin(veh);
   }
   return vehState?.vin ?? null;
 };

@@ -66,8 +66,8 @@ Events.onNet('vehicles:garage:takeVehicle', (src, data: { vin: string }) => {
 });
 
 Events.onNet('vehicles:garage:park', (src, vehNetId: number) => {
-  validateVehicleVin(vehNetId);
   const veh = NetworkGetEntityFromNetworkId(vehNetId);
+  validateVehicleVin(veh);
   if (!veh) return;
   storeVehicleInGarage(src, veh);
 });
