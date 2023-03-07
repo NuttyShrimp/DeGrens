@@ -3310,5 +3310,15 @@
       "x": 1,
       "y": 1
     }
+  },
+  {
+    "name": "container_weedbuds",
+    "label": "Gebundelde Weed",
+    "image": "container_weedbuds.png",
+    "size": {
+      "x": 6,
+      "y": 9
+    },
+    "useable": true
   }
 ]

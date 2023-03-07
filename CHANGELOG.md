@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Joints kunnen maken van weedzakje
 - Animatie bij het maken van 112 melding
 - Admin optie om itemstate by id te verkrijgen
+- Weed container toegevoegd
 
 ### Changed
 

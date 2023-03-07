@@ -23,6 +23,14 @@
         "y": 0,
         "z": 0
       }
+    },
+    "leftShoulder": {
+      "max": 1,
+      "offset": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      }
     }
   },
   "items": {
@@ -44,14 +52,6 @@
     },
     "vaas": {
       "propName": "item_vaas",
-      "position": "primary",
-      "animData": {
-        "animDict": "anim@heists@box_carry@",
-        "anim": "idle"
-      }
-    },
-    "cardbox": {
-      "propName": "item_cardbox",
       "position": "primary",
       "animData": {
         "animDict": "anim@heists@box_carry@",
@@ -169,6 +169,10 @@
     "weapon_machete": {
       "propName": "item_weapon_machete",
       "position": "centerBack"
+    },
+    "container_weedbuds": {
+      "propName": "item_container_weedbuds",
+      "position": "leftShoulder"
     }
   }
 }

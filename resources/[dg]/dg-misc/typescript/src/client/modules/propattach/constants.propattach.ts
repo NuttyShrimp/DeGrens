@@ -461,4 +461,18 @@ export const PROPS: Record<string, PropAttach.PropInfo> = {
       z: 0,
     },
   },
+  item_container_weedbuds: {
+    model: 'bkr_prop_weed_drying_01a',
+    boneId: 24818,
+    position: {
+      x: -0.25,
+      y: -0.13,
+      z: 0.2,
+    },
+    rotation: {
+      x: -87.8,
+      y: 84.0,
+      z: 8.8,
+    },
+  },
 };

@@ -101,6 +101,12 @@
         "refined_aluminum",
         "refined_steel"
       ]
+    },
+    "container_weedbuds": {
+      "size": 60,
+      "allowedItems": [
+        "weed_bud"
+      ]
     }
   }
 }
