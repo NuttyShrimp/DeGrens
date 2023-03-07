@@ -30,8 +30,13 @@ const tryToCuff = () => {
     return;
   }
 
-  if (GetEntitySpeed(PlayerPedId()) * 3.6 > 3) {
+  if (GetEntitySpeed(ped) * 3.6 > 3) {
     Notifications.add('Je kan dit niet als je beweegt', 'error');
+    return;
+  }
+
+  if (IsPedSwimming(ped) || IsPedDiving(ped) || IsPedSwimmingUnderWater(ped)) {
+    Notifications.add('Je kan dit niet in het water', 'error');
     return;
   }
 
