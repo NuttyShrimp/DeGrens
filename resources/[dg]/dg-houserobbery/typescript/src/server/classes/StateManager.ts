@@ -169,7 +169,7 @@ class StateManager extends Util.Singleton<StateManager>() {
     );
     Police.createDispatchCall({
       tag: '10-31',
-      title: 'Poging to inbraak',
+      title: 'Poging tot inbraak',
       description: 'Er was een verdacht persoon aan een huisdeur aan het prutsen',
       blip: {
         sprite: 418,

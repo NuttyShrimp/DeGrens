@@ -120,7 +120,7 @@ export const startVehicleLockpick = async (src: number, itemId: string) => {
   if (!recentlyCalled && Util.getRndInteger(0, 101) < callChance) {
     Police.createDispatchCall({
       tag: '10-31',
-      title: 'Poging to voertuig inbraak',
+      title: 'Poging tot voertuig inbraak',
       coords: Util.getEntityCoords(targetVehicle),
       criminal: src,
       vehicle: targetVehicle,

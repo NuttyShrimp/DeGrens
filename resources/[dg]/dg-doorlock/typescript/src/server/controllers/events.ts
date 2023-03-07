@@ -31,7 +31,7 @@ Events.onNet('doorlock:server:triedLockpickingDoor', async (src: number, doorId:
   if (rng < Config.getConfigValue('dispatch.callChance.doorlockpick')) {
     Police.createDispatchCall({
       tag: '10-31',
-      title: 'Poging to inbraak',
+      title: 'Poging tot inbraak',
       description: 'Er was een verdacht persoon aan een deur aan het prutsen',
       coords: data.coords,
       criminal: src,
