@@ -21,7 +21,10 @@ export const giveItem: CommandData = {
       return;
     }
     try {
-      const amount = parseInt(args.amount ?? '1');
+      let amount = parseInt(args.amount ?? '1');
+      if (isNaN(amount)) {
+        amount = 1;
+      }
       const cid = String(Util.getCID(args?.Target?.serverId ?? caller.source));
       const item = args?.Item?.name ?? '';
       Inventory.addItemToInventory('player', cid, item, amount);

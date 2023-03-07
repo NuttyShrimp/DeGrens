@@ -47,6 +47,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Je stapt niet meer uit het voertuig na het lockpicken
 - Je krijgt niet langer de melding dat de deur niet opslot staat bij het lockpicken van NPC voertuigen
 - Noclip movement blijft niet oneindig doorgaan indien keybinds gedisabled worden tijdens het inhouden van movementkey
+- Admin giveitem aantal default nu deftig naar 1
 
 ## [1.0.8]
 
