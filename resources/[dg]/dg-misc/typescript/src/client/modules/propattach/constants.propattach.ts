@@ -448,17 +448,17 @@ export const PROPS: Record<string, PropAttach.PropInfo> = {
     },
   },
   item_weapon_machete: {
-    model: 'prop_ld_w_me_machette',
+    model: 'w_me_machette_lr',
     boneId: 24818,
     position: {
-      x: -0.04,
+      x: -0.03,
       y: -0.16,
-      z: -0.14,
+      z: -0.16,
     },
     rotation: {
       x: 0,
-      y: 43.2,
-      z: 0,
+      y: -39.5,
+      z: 180.0,
     },
   },
   item_container_weedbuds: {
