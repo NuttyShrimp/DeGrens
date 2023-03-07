@@ -1266,6 +1266,19 @@
           "amount": 3
         }
       ]
+    },
+    "container_weedbuds": {
+      "requiredReputation": 125,
+      "items": [
+        {
+          "name": "refined_plastic",
+          "amount": 4
+        },
+        {
+          "name": "refined_steel",
+          "amount": 2
+        }
+      ]
     }
   },
   "benches": {
@@ -1276,7 +1289,8 @@
         "vpn",
         "decoding_tool",
         "radio",
-        "explosive_case"
+        "explosive_case",
+        "container_weedbuds"
       ],
       "reputation": "crafting"
     },
