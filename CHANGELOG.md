@@ -35,6 +35,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Banverloop datum wordt op FiveM server berekend ipv op de database
 - Check of je nodige items hebt voor taskbar bij smelten
 - Je kan niet meer boeien terwijl je aan het zwemmen bent
+- Container requirements naar beneden
 
 ### Fixed
 
