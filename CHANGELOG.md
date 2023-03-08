@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 - Bait price aangepast
+- Politie kan dna swab enkel gebruiken als er geen ambu is
 
 ### Fixed
 - Je kan weer smelten als je meer dan de nodige items opzak hebt

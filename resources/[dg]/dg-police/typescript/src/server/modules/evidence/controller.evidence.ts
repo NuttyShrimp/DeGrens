@@ -44,6 +44,12 @@ Inventory.registerUseable('dna_swab', async src => {
   const job = Jobs.getCurrentJob(src);
   if (!job || !['police', 'ambulance'].includes(job)) return;
 
+  // As police, can only use when no ambu on duty
+  if (job === 'police' && Jobs.getAmountForJob('ambulance') > 0) {
+    Notifications.add(src, 'Er is een ambulanier aanwezig die dit beter kan!', 'error');
+    return;
+  }
+
   const target = Util.getClosestPlayerOutsideVehicle(src);
   if (!target) {
     Notifications.add(src, 'Er is niemand in de buurt', 'error');
