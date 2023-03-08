@@ -137,12 +137,12 @@ export const isPlayerBanned = async (steamId: string) => {
       reason: string;
       points: number;
       length: number;
-      date: string;
+      date: number;
     }[]
   >(
     `
       SELECT *,
-             DATE_FORMAT(date + INTERVAL length DAY, '%d/%m/%Y %H:%i:%s') as expiry
+             UNIX_TIMESTAMP(date) as date
       FROM penalties
       WHERE steamId = ?
         AND penalty = 'ban'
@@ -151,7 +151,7 @@ export const isPlayerBanned = async (steamId: string) => {
     [steamId]
   );
   if (result.length < 1) return { isBanned: false, reason: '' };
-  const expiry = dayjs.unix(result[0].length).add(result[0].length, "d").format("%DD/%MM/%YYYY %HH:%mm:%ss")
+  const expiry = dayjs.unix(result[0].date).add(result[0].length, "d").format("DD/MM/YYYY HH:mm:ss")
   return {
     isBanned: result.length > 0,
     reason: `Je bent gebanned voor ${result[0].reason}, Verloopt op ${result[0].length === -1 ? 'permanently' : expiry
