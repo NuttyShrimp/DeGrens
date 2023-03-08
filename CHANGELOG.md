@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Admin optie om itemstate by id te verkrijgen
 - Weed container toegevoegd
 - Extra ingame support adminrole toegevoegd
+- Mechanics kunnen nu je voertuig tunen
 
 ### Changed
 
@@ -48,6 +49,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Je krijgt niet langer de melding dat de deur niet opslot staat bij het lockpicken van NPC voertuigen
 - Noclip movement blijft niet oneindig doorgaan indien keybinds gedisabled worden tijdens het inhouden van movementkey
 - Admin giveitem aantal default nu deftig naar 1
+- Nieuwe items die je ontvangt komen nu wel op de grond te liggen als je inventory vol zit
 
 ## [1.0.8]
 

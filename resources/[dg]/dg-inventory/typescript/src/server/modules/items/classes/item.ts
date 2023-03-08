@@ -45,7 +45,7 @@ export class Item {
           const plyId = DGCore.Functions.getPlyIdForCid(Number(cid));
 
           if (plyId) {
-            const coords = Util.getPlyCoords(source);
+            const coords = Util.getPlyCoords(plyId);
 
             let dropId = locationManager.getLocation('drop', coords);
             this.inventory = await inventoryManager.get(dropId);
@@ -56,7 +56,7 @@ export class Item {
               this.inventory = await inventoryManager.get(dropId);
               newPosition = { x: 0, y: 0 };
             }
-            Notifications.add(source, 'Voorwerp ligt op de grond, je zakken zitten vol', 'error');
+            Notifications.add(plyId, 'Voorwerp ligt op de grond, je zakken zitten vol', 'error');
           } else {
             newPosition = { x: 0, y: 0 };
           }
