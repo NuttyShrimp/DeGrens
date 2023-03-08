@@ -4,7 +4,7 @@ import { MINIMUM_STRESS_FOR_ICON } from './constants.hud';
 let config: HUD.Config | null = null;
 let isDiving = false;
 let stressAmount = 0;
-let stressTimeout: NodeJS.Timeout | null;
+let stressTimeout: NodeJS.Timeout | null = null;
 let stressSteps: number;
 
 let stressIconEnabled = false;
