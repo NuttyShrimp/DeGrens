@@ -36,7 +36,11 @@ export const finishOrder = async (plyId: number, order: Mechanic.PartItem[]) => 
       break;
     } else {
       itemIds.add(item.id);
-      ticketItems.push({ itemId: item.id, amount: getRevenueForItem(orderItem) });
+      ticketItems.push({
+        itemId: item.id,
+        amount: getRevenueForItem(orderItem),
+        type: orderItem.type,
+      });
     }
   }
 

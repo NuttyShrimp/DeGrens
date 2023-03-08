@@ -47,6 +47,7 @@ declare namespace Mechanic {
     items: {
       itemId: string;
       amount: number;
+      type: PartType;
     }[];
   };
 }

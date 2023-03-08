@@ -22,9 +22,12 @@ global.exports('calculateSalesTicketsPrice', async (ticketItem: Inventory.ItemSt
   const { items } = ticketItem.metadata as Mechanic.TicketMetadata;
   const ticketRevenues = await Promise.all(
     items.map(async item => {
-      const itemState = await Inventory.getItemStateFromDatabase(item.itemId);
-      // If item still exists then dont pay out anything
-      return itemState != undefined ? 0 : item.amount;
+      // only repair parts need to be used, tunes will always still exist
+      if (item.type === 'repair') {
+        const itemState = await Inventory.getItemStateFromDatabase(item.itemId);
+        if (itemState) return 0;
+      }
+      return item.amount;
     })
   );
 
