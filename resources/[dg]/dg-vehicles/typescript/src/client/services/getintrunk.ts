@@ -1,7 +1,6 @@
 import { Events, Keys, Notifications, Peek, RPC, Taskbar, UI, Util, Police, Hospital } from '@dgx/client';
 
 import { toggleVehicleDoor } from './doors';
-import { isCloseToBoot } from '@helpers/vehicle';
 
 const ANIM_DICT = 'fin_ext_p1-7';
 const ANIM = 'cs_devin_dual-7';

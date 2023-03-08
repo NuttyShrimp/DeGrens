@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- Phone Garage App bevat nu knop om verdwenen voertuigen terug in de garage te plaatsen
 
 ### Changed
 - Bait price aangepast

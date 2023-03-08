@@ -25,6 +25,17 @@ UI.RegisterUICallback('phone/garage/track', (data: { vin: string }, cb) => {
   });
 });
 
+UI.RegisterUICallback('phone/garage/recover', (data: { vin: string }, cb) => {
+  Events.emitNet('vehicles:server:app:recoverVehicle', data.vin);
+  cb({
+    data: {},
+    meta: {
+      ok: true,
+      message: 'done',
+    },
+  });
+});
+
 UI.RegisterUICallback('phone/garage/sell', (data: { cid: number; vin: string; price: number }, cb) => {
   Events.emitNet('vehicles:server:app:sellVehicle', data.cid, data.vin, data.price);
   cb({

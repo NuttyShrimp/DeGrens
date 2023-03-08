@@ -1,4 +1,6 @@
 import React, { FC } from 'react';
+import MuiButton from '@mui/material/Button';
+import { baseStyle } from '@src/base.styles';
 
 import { Button } from '../../../../../components/button';
 import { List } from '../../../../../components/list';
@@ -20,6 +22,10 @@ export const VehicleList: FC<{ fetchVehicles: () => void }> = ({ fetchVehicles }
 
   const trackVehicle = (vin: string) => {
     nuiAction('phone/garage/track', { vin });
+  };
+
+  const recoverVehicle = (vin: string) => {
+    nuiAction('phone/garage/recover', { vin });
   };
 
   const sellVehicle = (veh: Phone.Garage.Vehicle) => {
@@ -73,6 +79,18 @@ export const VehicleList: FC<{ fetchVehicles: () => void }> = ({ fetchVehicles }
                 <Button.Primary size={'small'} onClick={() => trackVehicle(v.vin)}>
                   TRACK
                 </Button.Primary>
+                {v.state === 'out' && (
+                  <MuiButton
+                    variant={'contained'}
+                    size={'small'}
+                    onClick={() => recoverVehicle(v.vin)}
+                    style={{
+                      backgroundColor: baseStyle.tertiary.normal,
+                    }}
+                  >
+                    RECORVER
+                  </MuiButton>
+                )}
                 <Button.Secondary size={'small'} onClick={() => sellVehicle(v)}>
                   SELL
                 </Button.Secondary>
