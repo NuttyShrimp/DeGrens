@@ -47,7 +47,7 @@ Events.onNet('materials:melting:melt', async (src: number, recipeId: number) => 
 
   const choosenRecipe = recipes[recipeId];
   const amountPlyHas = await Inventory.getAmountPlayerHas(src, choosenRecipe.from.name);
-  if (amountPlyHas !== choosenRecipe.from.amount) {
+  if (amountPlyHas < choosenRecipe.from.amount) {
     Notifications.add(src, 'Je hebt niet genoeg om te smelten', 'error');
     return;
   }
