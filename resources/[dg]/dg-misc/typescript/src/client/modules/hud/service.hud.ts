@@ -72,26 +72,34 @@ export const doWeaponStress = () => {
   }
 };
 
-export const scheduleBlurEffect = async () => {
+const scheduleBlurEffect = async () => {
   if (!config) return;
+  if (stressTimeout !== null) return;
+
   const relativeAmount = stressAmount - config.shake.minimum;
   if (relativeAmount <= 0) return;
-  if (stressTimeout) return;
 
   const relativeMaxAmount = 100 - config.shake.minimum;
   const blurAmount = Math.ceil((config.shake.maxAmount / relativeMaxAmount) * relativeAmount);
   const blurLength = (config.shake.maxLength / relativeMaxAmount) * relativeAmount;
-  for (let i = 0; i < blurAmount; i++) {
-    await doBlurEffect(blurLength);
-  }
 
+  // set timeout now instead of after effect, this is to avoid function being called during effect and overwriting timeout
+  // blureffect takes longer than provided length
+  const blurDuration = (blurLength + 800) * blurAmount;
   const timeout = config.shake.interval.max - stressSteps * relativeAmount;
   stressTimeout = setTimeout(() => {
     stressTimeout = null;
     scheduleBlurEffect();
-  }, timeout);
+  }, timeout + blurDuration);
+
+  for (let i = 0; i < blurAmount; i++) {
+    await doBlurEffect(blurLength);
+  }
 };
 
+/**
+ * Function takes length + 800ms time to resolve
+ */
 const doBlurEffect = async (length: number) => {
   TriggerScreenblurFadeIn(250);
   await Util.Delay(length + 300);

@@ -18,6 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixed cursed date formatting for ban + properly get ban creation time
 - Keycard toegevoegd aan crafting table
 - UI Interactive app check werkt nu wel
+- Fix dat stresseffect actief blijft
 
 ## [1.0.9]
 

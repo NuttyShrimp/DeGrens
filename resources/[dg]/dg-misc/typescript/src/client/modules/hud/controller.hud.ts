@@ -5,7 +5,6 @@ import {
   getCapacity,
   getStressLevel,
   handleStressChange,
-  scheduleBlurEffect,
   setConfig,
   setIsDiving,
 } from './service.hud';
@@ -25,7 +24,6 @@ Events.onNet('hud:client:initialize', (config: HUD.Config) => {
     if (!LocalPlayer.state.isLoggedIn) return;
     doWeaponStress();
   }, 500);
-  scheduleBlurEffect();
 });
 
 onNet('onResourceStop', (res: string) => {
