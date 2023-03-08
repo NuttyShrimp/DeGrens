@@ -62,5 +62,6 @@
   ],
   "prisma": {
     "seed": "ts-node -P packages/db/tsconfig.json packages/db/seed.ts"
-  }
+  },
+  "version": "1.0.9"
 }
