@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - Je kan weer smelten als je meer dan de nodige items opzak hebt
 - Fixed cursed date formatting for ban + properly get ban creation time
+- Keycard toegevoegd aan crafting table
 
 ## [1.0.9]
 
