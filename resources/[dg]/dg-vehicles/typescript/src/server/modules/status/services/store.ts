@@ -3,7 +3,6 @@ import { SQL } from '@dgx/server';
 import vinManager from '../../identification/classes/vinmanager';
 import { mainLogger } from '../../../sv_logger';
 import { DEFAULT_SERVICE_STATUS } from '../constants.status';
-import { getPartRepairAmount } from '../service.status';
 
 const localStore: Map<string, Service.Status> = new Map();
 const DBStore: Map<string, Service.Status> = new Map();
@@ -47,7 +46,7 @@ export const updateServiceStatus = (vin: string, status: Service.Status) => {
 
   // clamp values
   for (const key in status) {
-    status[key as keyof Service.Status] = Math.max(0, Math.min(1000, status[key as keyof Service.Status]));
+    status[key as Service.Part] = Math.max(0, Math.min(1000, status[key as Service.Part]));
   }
 
   if (vinManager.isVinFromPlayerVeh(vin)) {

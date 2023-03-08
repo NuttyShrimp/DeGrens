@@ -4,12 +4,7 @@ import { getConfigByModel, getVehicleModels } from '../info/service.info';
 
 import shopManager from './classes/ShopManager';
 import { getVehicleShopConfig } from './services/config.vehicleshop';
-import {
-  CATEGORY_LABEL,
-  MODEL_CATEGORISATION,
-  ModelCategorisation,
-  VEHICLE_CATEGORY_TO_LABEL,
-} from './constants.vehicleshop';
+import { CATEGORY_LABEL, MODEL_CATEGORISATION, ModelCategorisation } from './constants.vehicleshop';
 import {
   buildVehicleContextMenuEntry,
   getCategoryLabel,

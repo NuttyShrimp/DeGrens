@@ -1,10 +1,7 @@
 declare namespace Service {
-  interface Status {
-    axle: number;
-    brakes: number;
-    engine: number;
-    suspension: number;
-  }
+  type Part = 'axle' | 'brakes' | 'engine' | 'suspension';
+
+  type Status = Record<Part, number>;
 
   interface Degradation {
     name: string;

@@ -9,6 +9,8 @@ declare namespace Upgrades {
     value: DeepPartial<Upgrades.Cosmetic[T]>
   ) => void;
 
+  type Tune = keyof Omit<Performance, 'armor'>;
+
   interface Performance {
     // id = 16
     armor: number;

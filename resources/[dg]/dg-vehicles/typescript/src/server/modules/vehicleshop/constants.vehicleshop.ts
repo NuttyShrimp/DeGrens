@@ -21,4 +21,5 @@ export const VEHICLE_CATEGORY_TO_LABEL: Record<Category, string> = {
   muscle: 'Musclecars',
   vans: 'Bestelwagens',
   cycles: 'Fietsen',
+  service: 'Werkvoertuigen',
 };

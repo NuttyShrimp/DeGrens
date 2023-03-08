@@ -62,7 +62,7 @@ export class Inv {
       this.allowedItems = allowedItems;
       this.size = size;
     } else if (this.type === 'tunes') {
-      this.allowedItems = (global.exports['dg-vehicles'].getAllowedTuneItems(this.identifier) as string[]) ?? [];
+      this.allowedItems = (global.exports['dg-vehicles'].getTuneItemNames(this.identifier) as string[]) ?? [];
     }
 
     if (this.isPersistent()) {

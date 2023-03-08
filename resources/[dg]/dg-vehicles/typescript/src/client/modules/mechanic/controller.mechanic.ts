@@ -1,28 +1,19 @@
 import { BlipManager, Business, Events, Inventory, Notifications, Peek, PolyTarget, PolyZone, UI } from '@dgx/client';
 
-import {
-  assignJob,
-  attachHook,
-  canTow,
-  clearItemOrder,
-  finishOrder,
-  getAmountOfItemInStash,
-  getCurrentWorkingShop,
-  hasVehicleAttached,
-  isClockedIn,
-  openItemOrder,
-  openPerfomanceItemOrderInput,
-  openRepairItemOrderInput,
-  releaseVehicle,
-  removeItem,
-  setClockInStatus,
-  setRepairZone,
-  setTowOffsets,
-  takeHook,
-} from './service.mechanic';
 import { isCloseToHood } from '@helpers/vehicle';
 import { getVehicleVinWithoutValidation } from 'modules/identification/service.identification';
 import { hasVehicleKeys } from 'modules/keys/cache.keys';
+import { isClockedIn, setClockInStatus, getCurrentWorkingShop, setRepairZone } from './service.mechanic';
+import { addToOrder, finishOrder, removeItem, clearItemOrder, openItemOrder } from './services/parts.mechanic';
+import {
+  setTowOffsets,
+  hasVehicleAttached,
+  takeHook,
+  releaseVehicle,
+  assignJob,
+  canTow,
+  attachHook,
+} from './services/towing.mechanic';
 
 let modelPeekIds: string[];
 
@@ -119,45 +110,24 @@ Events.onNet('vehicles:mechanic:assignJob', (vin: string, coords: Vec3) => {
   assignJob(vin, coords);
 });
 
-UI.RegisterUICallback('vehicles/mechanic/addOrderPerformanceItem', (data, cb) => {
-  openPerfomanceItemOrderInput();
+UI.RegisterUICallback('mechanic/addPartToOrder', (data: { item: Mechanic.PartItem }, cb) => {
+  addToOrder(data.item);
   cb({ data: {}, meta: { ok: true, message: 'done' } });
 });
 
-UI.RegisterUICallback('vehicles/mechanic/addOrderRepairItem', (data, cb) => {
-  openRepairItemOrderInput();
-  cb({ data: {}, meta: { ok: true, message: 'done' } });
-});
-
-UI.RegisterUICallback('vehicles/mechanic/finishOrder', (data, cb) => {
+UI.RegisterUICallback('vehicles/mechanic/finishOrder', (_, cb) => {
   finishOrder();
   cb({ data: {}, meta: { ok: true, message: 'done' } });
 });
 
-UI.RegisterUICallback('vehicles/mechanic/removeFromOrder', (data, cb) => {
-  removeItem(data);
+UI.RegisterUICallback('vehicles/mechanic/removeFromOrder', (data: { idx: number }, cb) => {
+  removeItem(data.idx);
   cb({ data: {}, meta: { ok: true, message: 'done' } });
 });
 
 UI.RegisterUICallback('vehicles/mechanic/resetOrder', (data, cb) => {
   clearItemOrder();
   cb({ data: {}, meta: { ok: true, message: 'done' } });
-});
-
-UI.RegisterUICallback('vehicles/mechanic/getStashPerformanceAmount', async (data: Record<string, any>, cb) => {
-  const amount = await getAmountOfItemInStash(data.type, data.part, data.class);
-  cb({
-    data: amount,
-    meta: { ok: true, message: 'done' },
-  });
-});
-
-UI.RegisterUICallback('vehicles/mechanic/getStashRepairAmount', async (data: Record<string, any>, cb) => {
-  const amount = await getAmountOfItemInStash('repair', data.part, data.class);
-  cb({
-    data: amount,
-    meta: { ok: true, message: 'done' },
-  });
 });
 
 Peek.addZoneEntry('mechanic-clock-board', {
@@ -201,7 +171,7 @@ Peek.addZoneEntry('mechanic-bench', {
     },
     {
       label: 'Open Stash',
-      icon: 'toolbox',
+      icon: 'box-open',
       canInteract: (_, __, data) => {
         return Business.isEmployee(data.data.id, ['stash']) && getCurrentWorkingShop() === data.data.id;
       },
@@ -210,8 +180,18 @@ Peek.addZoneEntry('mechanic-bench', {
       },
     },
     {
+      label: 'Maak Parts',
+      icon: 'toolbox',
+      canInteract: (_, __, data) => {
+        return Business.isEmployee(data.data.id, ['crafting']) && getCurrentWorkingShop() === data.data.id;
+      },
+      action: () => {
+        Events.emitNet('vehicles:mechanic:openPartsMenu');
+      },
+    },
+    {
       label: 'Maak Order',
-      icon: 'gear',
+      icon: 'ticket',
       canInteract: (_, __, data) => {
         return Business.isEmployee(data.data.id) && getCurrentWorkingShop() === data.data.id;
       },
@@ -276,4 +256,9 @@ Peek.addGlobalEntry('vehicle', {
     },
   ],
   distance: 2,
+});
+
+UI.RegisterUICallback('mechanic/createPart', (data: { item: Mechanic.PartItem }, cb) => {
+  Events.emitNet('vehicles:mechanic:createPart', data.item);
+  cb({ data: {}, meta: { ok: true, message: 'done' } });
 });

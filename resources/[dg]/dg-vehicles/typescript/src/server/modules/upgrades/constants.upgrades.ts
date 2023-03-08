@@ -369,31 +369,3 @@ export const windowTintMenuEntries: ContextMenu.Entry[] = [
     callbackURL: 'upgrades/windowtint/apply',
   },
 ];
-
-export const tuneCategories: { name: keyof Upgrades.Performance; amount: number }[] = [
-  { name: 'brakes', amount: 3 },
-  { name: 'transmission', amount: 3 },
-  { name: 'engine', amount: 4 },
-  { name: 'suspension', amount: 4 },
-  { name: 'turbo', amount: 1 },
-];
-
-const generateTuneItemNames = (): Record<CarClass, string[]> => {
-  const carClasses: CarClass[] = ['X', 'S', 'A+', 'A', 'B', 'C', 'D'];
-  const tuneItems = {} as Record<CarClass, string[]>;
-  carClasses.forEach(carClass => {
-    tuneItems[carClass] = tuneCategories.reduce<string[]>((acc, data) => {
-      if (data.amount > 1) {
-        for (let i = 1; i <= data.amount; i++) {
-          acc.push(`tune_${data.name}_stage_${i}_${carClass}`);
-        }
-      } else {
-        acc.push(`tune_${data.name}_${carClass}`);
-      }
-      return acc;
-    }, []);
-  });
-  return tuneItems;
-};
-
-export const tuneItems = generateTuneItemNames();

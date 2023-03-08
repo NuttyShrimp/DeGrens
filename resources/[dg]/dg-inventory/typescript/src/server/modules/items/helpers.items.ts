@@ -98,16 +98,28 @@ export const ON_CREATE: Record<string, (plyId?: number) => { [key: string]: any 
   fakeplate: () => ({ plate: Vehicles.generatePlate() }),
   weed_seed: () => ({ gender: Math.random() > 0.5 ? 'male' : 'female' }),
   weed_bud: () => ({ hiddenKeys: ['createTime'], createTime: Math.round(Date.now() / 1000) }),
+  // Farming items
   farming_bucket: () => ({ liter: 0 }),
   farming_tomato: () => ({ quality: 25 }),
   farming_lettuce: () => ({ quality: 25 }),
   farming_onion: () => ({ quality: 25 }),
   farming_wheat: () => ({ quality: 25 }),
   farming_potato: () => ({ quality: 25 }),
+  // Upnatom items
   upnatom_soda: () => ({ quality: 35 }),
   upnatom_milkshake: () => ({ quality: 35 }),
   upnatom_icecream: () => ({ quality: 35 }),
   upnatom_fries: () => ({ quality: 35 }),
   upnatom_burger: () => ({ quality: 35 }),
   upnatom_cheeseburger: () => ({ quality: 35 }),
+  // Mechanic vehicle items
+  engine_part: () => ({ class: 'D' }),
+  suspension_part: () => ({ class: 'D' }),
+  brakes_part: () => ({ class: 'D' }),
+  axle_part: () => ({ class: 'D' }),
+  tune_brakes: () => ({ class: 'D', stage: 1 }),
+  tune_transmission: () => ({ class: 'D', stage: 1 }),
+  tune_engine: () => ({ class: 'D', stage: 1 }),
+  tune_turbo: () => ({ class: 'D', stage: 1 }),
+  tune_suspension: () => ({ class: 'D', stage: 1 }),
 };

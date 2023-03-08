@@ -2,11 +2,13 @@ import { Auth, Config, Events, Inventory, Notifications, RPC, Taskbar, Util } fr
 import { getVehicleItemUpgrades, updateVehicleItemUpgrades } from 'db/repository';
 import { getVinForNetId, getVinForVeh } from 'helpers/vehicle';
 import vinManager from 'modules/identification/classes/vinmanager';
-import { getConfigByEntity } from 'modules/info/service.info';
 
-import { tuneItems, upgradeItems, windowTintMenuEntries } from './constants.upgrades';
+import { upgradeItems, windowTintMenuEntries } from './constants.upgrades';
 import { upgradesLogger } from './logger.upgrades';
 import { applyUpgradesToVeh, getPerformance, saveCosmeticUpgrades } from './service.upgrades';
+import { TUNE_PARTS } from '../../../shared/upgrades/constants.upgrades';
+
+const tunesInventoryUpdateTimeouts: Record<string, NodeJS.Timeout> = {};
 
 Events.onNet('vehicles:upgrades:installItem', async (src: number, netId: number, item: keyof typeof upgradeItems) => {
   const vin = getVinForNetId(netId);
@@ -170,18 +172,28 @@ Inventory.registerUseable('window_tint', async plyId => {
   Events.emitNet('vehicles:windowtint:openMenu', plyId, windowTintMenuEntries);
 });
 
-global.exports('getAllowedTuneItems', (vin: string): string[] => {
-  const netId = vinManager.getNetId(vin);
-  if (!netId) return [];
-  const vehicle = NetworkGetEntityFromNetworkId(netId);
-  const carClass = getConfigByEntity(vehicle)?.class;
-  if (!carClass) return [];
-  return tuneItems[carClass];
+global.exports('getTuneItemNames', (): string[] => {
+  return (Object.keys(TUNE_PARTS) as Upgrades.Tune[]).map(tune => `tune_${tune}`);
 });
 
-Inventory.onInventoryUpdate('tunes', async (vin: string) => {
-  const performanceUpgrades = await getPerformance(vin);
-  const netId = vinManager.getNetId(vin);
-  if (!netId) return;
-  applyUpgradesToVeh(netId, performanceUpgrades);
+// when spawning car, all tune items would get loaded which would trigger handler like 5 times after eachother
+// due to latency on events, wrong upghrades might be applied
+Inventory.onInventoryUpdate('tunes', (vin: string) => {
+  const existingTimeout = tunesInventoryUpdateTimeouts[vin];
+  if (existingTimeout) {
+    clearTimeout(existingTimeout);
+  }
+
+  const newTimeout = setTimeout(async () => {
+    delete tunesInventoryUpdateTimeouts[vin];
+
+    const netId = vinManager.getNetId(vin);
+    if (!netId) return;
+
+    const performanceUpgrades = await getPerformance(vin);
+    if (!performanceUpgrades) return;
+
+    applyUpgradesToVeh(netId, performanceUpgrades);
+  }, 500);
+  tunesInventoryUpdateTimeouts[vin] = newTimeout;
 });

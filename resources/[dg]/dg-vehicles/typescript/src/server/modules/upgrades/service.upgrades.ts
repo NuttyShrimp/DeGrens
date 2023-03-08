@@ -1,4 +1,4 @@
-import { Config, Financials, Inventory, RPC, Util } from '@dgx/server';
+import { Config, Financials, Inventory, Util } from '@dgx/server';
 import { getVehicleCosmeticUpgrades, updateVehicleUpgrades } from 'db/repository';
 import bennysManager from 'modules/bennys/classes/BennysManager';
 import vinManager from 'modules/identification/classes/vinmanager';
@@ -6,8 +6,8 @@ import { getConfigByEntity } from 'modules/info/service.info';
 
 import { serverConfig } from '../../../config';
 
-import { tuneCategories } from './constants.upgrades';
 import { upgradesLogger } from './logger.upgrades';
+import { TUNE_PARTS } from '../../../shared/upgrades/constants.upgrades';
 
 let upgradePrices: Config.Prices;
 
@@ -15,8 +15,10 @@ const seedPrices = () => {
   upgradePrices = Config.getConfigValue<Config.Prices>('vehicles.upgradeprices');
 };
 
-// Get cosmetic from db, initialize data if none was found in db
-export const getCosmetic = async (vin: string): Promise<Upgrades.Cosmetic | void> => {
+/**
+ * Get cosmetic from db, initialize data if none was found in db. NOTE: vehicle needs to exist!
+ */
+export const getCosmetic = async (vin: string): Promise<Upgrades.Cosmetic | undefined> => {
   let currentUpgrades = await getVehicleCosmeticUpgrades(vin);
   if (currentUpgrades === null) {
     const netId = vinManager.getNetId(vin);
@@ -39,10 +41,20 @@ export const getCosmetic = async (vin: string): Promise<Upgrades.Cosmetic | void
   return currentUpgrades;
 };
 
-export const getPerformance = async (vin: string): Promise<Upgrades.Performance> => {
-  const items = await Inventory.getItemsInInventory('tunes', vin);
-  const names = items.map(item => item.name);
-  let upgrades: Upgrades.Performance = {
+/**
+ * Build performance updates from items in inventory. NOTE: vehicle needs to exist!
+ */
+export const getPerformance = async (vin: string): Promise<Upgrades.Performance | undefined> => {
+  const netId = vinManager.getNetId(vin);
+  if (!netId) return;
+
+  const vehicle = NetworkGetEntityFromNetworkId(netId);
+  if (!vehicle || !DoesEntityExist(vehicle)) return;
+
+  const vehicleConfig = getConfigByEntity(vehicle);
+  if (!vehicleConfig) return;
+
+  const upgrades: Upgrades.Performance = {
     armor: -1,
     brakes: -1,
     engine: -1,
@@ -50,27 +62,30 @@ export const getPerformance = async (vin: string): Promise<Upgrades.Performance>
     turbo: false,
     suspension: -1,
   };
-  names.forEach(name => {
-    const substrings = name.split('_');
-    if (substrings[0] !== 'tune') {
-      upgradesLogger.warn(`Item in tunes inventory (${vin}) is not a tune`);
-      return;
+
+  const items = await Inventory.getItemsInInventory('tunes', vin);
+  for (const item of items) {
+    if (item.metadata.class !== vehicleConfig.class) continue;
+
+    // stage 1 translates to 0 for native status
+    const stage = +(item.metadata.stage ?? 0) - 1;
+
+    for (const [part, data] of Object.entries(TUNE_PARTS)) {
+      if (data.itemName !== item.name) continue;
+
+      // honestly dont know how to type this
+      if (data.amount === 1) {
+        //@ts-ignore
+        upgrades[part as Upgrades.Tune] = true;
+      } else {
+        if ((upgrades[part as Upgrades.Tune] as number) < stage) {
+          //@ts-ignore
+          upgrades[part as Upgrades.Tune] = stage;
+        }
+      }
     }
-    const catName = substrings[1];
-    const stage = Number(substrings[3]) - 1;
-    const data = tuneCategories.find(data => data.name === catName);
-    if (!data) {
-      upgradesLogger.error(`Could not find category data of tune item`);
-      return;
-    }
-    // amount is one for toggle mods like turbo
-    if (data.amount === 1) {
-      upgrades = { ...upgrades, [data.name]: true };
-    } else {
-      if ((upgrades[data.name] as number) >= stage) return;
-      upgrades = { ...upgrades, [data.name]: stage };
-    }
-  });
+  }
+
   return upgrades;
 };
 
@@ -93,10 +108,11 @@ export const saveCosmeticUpgrades = async (vin: string, newUpgrades?: Partial<Up
 };
 
 export const applyUpgrades = async (vin: string) => {
-  const cosmeticUpgrades = (await getCosmetic(vin)) ?? {};
-  const performanceUpgrades = await getPerformance(vin);
   const netId = vinManager.getNetId(vin);
   if (!netId) return;
+
+  const cosmeticUpgrades = await getCosmetic(vin);
+  const performanceUpgrades = await getPerformance(vin);
   applyUpgradesToVeh(netId, { ...cosmeticUpgrades, ...performanceUpgrades });
 };
 

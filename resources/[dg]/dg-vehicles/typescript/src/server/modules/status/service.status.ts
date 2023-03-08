@@ -39,22 +39,24 @@ export const getNativeStatus = async (veh: number, vin: string): Promise<Vehicle
   return status;
 };
 
-export const useRepairPart = async (src: number, type: keyof Service.Status, partClass: string, itemName: string) => {
+export const useRepairPart = async (src: number, type: Service.Part, itemState: Inventory.ItemState) => {
   const { entity: veh } = await RayCast.doRaycast(src);
   if (!veh || GetEntityType(veh) !== 2) {
     Notifications.add(src, 'Er is geen voertuig in de buurt', 'error');
     return;
   }
+
   const vehInfo = getConfigByEntity(veh);
-  if (!vehInfo) {
-    return;
-  }
-  if (vehInfo.class.at(-1) !== partClass) {
+  if (!vehInfo) return;
+  const vin = getVinForVeh(veh);
+  if (!vin) return;
+
+  const partClass: CarClass = itemState.metadata?.class ?? 'D';
+  if (vehInfo.class !== partClass) {
     Notifications.add(src, 'Dit onderdeel past niet op dit voertuig', 'error');
     return;
   }
-  const vin = getVinForVeh(veh);
-  if (!vin) return;
+
   let taskAnim: TaskBar.Animation;
   const vehNetId = NetworkGetNetworkIdFromEntity(veh);
   switch (type) {
@@ -85,6 +87,7 @@ export const useRepairPart = async (src: number, type: keyof Service.Status, par
       break;
     }
   }
+
   const [cancelled] = await Taskbar.create(src, 'car-wrench', 'Repairing', 10000, {
     cancelOnMove: true,
     cancelOnDeath: true,
@@ -100,7 +103,7 @@ export const useRepairPart = async (src: number, type: keyof Service.Status, par
   });
   if (cancelled) return;
 
-  const couldRemove = await Inventory.removeItemByNameFromPlayer(src, itemName);
+  const couldRemove = await Inventory.removeItemByIdFromPlayer(src, itemState.id);
   if (!couldRemove) {
     Notifications.add(src, 'Je hebt dit item niet', 'error');
     return;

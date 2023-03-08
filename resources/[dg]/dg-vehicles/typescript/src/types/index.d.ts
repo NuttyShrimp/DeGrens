@@ -10,7 +10,8 @@ type Category =
   | 'suvs'
   | 'muscle'
   | 'vans'
-  | 'cycles';
+  | 'cycles'
+  | 'service';
 type Shop = 'pdm' | 'luxury' | 'nfs' | 'air';
 type CarClass = 'X' | 'S' | 'A+' | 'A' | 'B' | 'C' | 'D';
 

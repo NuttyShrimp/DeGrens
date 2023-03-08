@@ -20,43 +20,33 @@ declare namespace Mechanic {
 
   interface Config {
     towingTicketPrice: number;
+    reputationPerClass: number;
     // Model to offsets
     towVehicles: Record<string, Vec3>;
     reward: {
-      parts: Record<Tickets.PerformanceItemPart | Tickets.RepairItemPart, number>;
-      class: Record<CarClass, number>;
-      type: Record<Tickets.ItemType, number>;
+      repair: {
+        parts: Record<Service.Part, number>;
+      };
+      tune: {
+        parts: Record<Upgrades.Tune, number>;
+        stageModifier: Record<number, number>;
+      };
+      classModifier: Record<CarClass, number>;
     };
     shops: Shops;
   }
 
-  namespace Tickets {
-    type ItemType = 'repair' | 'upgrade_1' | 'upgrade_2' | 'upgrade_3';
-    type PerformanceItemPart = 'suspension' | 'engine' | 'transmission' | 'brakes';
-    type RepairItemPart = 'axle' | 'brakes' | 'suspension' | 'engine';
+  type PartType = 'repair' | 'tune';
 
-    interface BaseItem {
-      class: CarClass;
+  type PartItem = { class: CarClass } & (
+    | { type: 'repair'; part: Service.Part }
+    | { type: 'tune'; part: Upgrades.Tune; stage: number }
+  );
+
+  type TicketMetadata = {
+    items: {
+      itemId: string;
       amount: number;
-    }
-
-    interface RepairItem extends BaseItem {
-      type: 'repair';
-      part: RepairItemPart;
-    }
-
-    interface PerformanceItem extends BaseItem {
-      type: Exclude<ItemType, 'repair'>;
-      part: PerformanceItemPart;
-    }
-
-    type Item = PerformanceItem | RepairItem;
-
-    type ExtItem = Item & { ids: string[]; name: string };
-
-    // This is metadata of sales_ticket
-    interface ItemMetadata {
-      items: ExtItem[];
-    }
-  }
+    }[];
+  };
 }

@@ -1,16 +1,8 @@
 import { Auth, Events, Inventory, RPC } from '@dgx/server';
 
-import {
-  clockPlayerIn,
-  clockPlayerOut,
-  getAmountOfItem,
-  getRevenueForItem,
-  giveOrder,
-  loadConfig,
-  loadZones,
-  moveCraftedItemToShopParts,
-  tryAcceptingJob,
-} from './service.mechanic';
+import { clockPlayerIn, clockPlayerOut, loadConfig, loadZones } from './service.mechanic';
+import { openPartsMenu, getOrderMenu, finishOrder, craftPart } from './services/parts.mechanic';
+import { tryAcceptingJob } from './services/towing.mechanic';
 
 setImmediate(() => {
   loadConfig();
@@ -24,37 +16,25 @@ Events.onNet('vehicles:mechanic:setClockStatus', (src, shop: string, isClockedIn
   isClockedIn ? clockPlayerIn(src, shop) : clockPlayerOut(src);
 });
 
-Events.onNet('vehicles:mechanic:server:itemOrder', (src, order: Mechanic.Tickets.Item[]) => {
-  giveOrder(src, order);
-});
-
-Events.onNet('vehicles:mechanic:server:acceptTowJob', (src, vin: string) => {
-  tryAcceptingJob(src, vin);
-});
-
-RPC.register('vehicles:mechanic:server:getStashAmount', (src, item: Mechanic.Tickets.Item) => {
-  return getAmountOfItem(src, item);
-});
-
-on('inventory:craftedInBench', (plyId: number, benchId: string, item: Inventory.ItemState) => {
-  if (benchId !== 'mechanic_bench') return;
-  moveCraftedItemToShopParts(plyId, item);
-});
+Events.onNet('vehicles:mechanic:server:acceptTowJob', tryAcceptingJob);
 
 global.exports('calculateSalesTicketsPrice', async (ticketItem: Inventory.ItemState) => {
-  const data = ticketItem.metadata as Mechanic.Tickets.ItemMetadata;
+  const { items } = ticketItem.metadata as Mechanic.TicketMetadata;
   const ticketRevenues = await Promise.all(
-    data.items.map(async i => {
-      let amountOfIdsThatDontExistAnymore = 0;
-      for (const id of i.ids) {
-        const itemState = await Inventory.getItemStateFromDatabase(id);
-        // If item still exists then dont pay out anything
-        if (itemState && itemState.name === i.name) continue;
-        amountOfIdsThatDontExistAnymore++;
-      }
-      return getRevenueForItem(i) * amountOfIdsThatDontExistAnymore;
+    items.map(async item => {
+      const itemState = await Inventory.getItemStateFromDatabase(item.itemId);
+      // If item still exists then dont pay out anything
+      return itemState != undefined ? 0 : item.amount;
     })
   );
 
   return ticketRevenues.reduce((acc, cur) => acc + cur, 0);
 });
+
+Events.onNet('vehicles:mechanic:openPartsMenu', openPartsMenu);
+
+Events.onNet('vehicles:mechanic:createPart', craftPart);
+
+RPC.register('vehicles:mechanic:getOrderMenu', getOrderMenu);
+
+Events.onNet('vehicles:mechanic:finishOrder', finishOrder);

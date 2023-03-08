@@ -7,6 +7,7 @@ import {
   getCosmeticUpgradePossibilities,
   getCosmeticUpgrades,
   getPerformanceUpgradePossibilities,
+  getPerformanceUpgrades,
 } from './service.upgrades';
 import { hasVehicleKeys } from 'modules/keys/cache.keys';
 
@@ -80,3 +81,15 @@ Peek.addGlobalEntry('vehicle', {
   ],
   distance: 2,
 });
+
+RegisterCommand(
+  'checkTunes',
+  () => {
+    const veh = GetVehiclePedIsIn(PlayerPedId(), false);
+    if (!veh) return;
+    const tunes = getPerformanceUpgrades(veh);
+    if (!tunes) return;
+    console.log(tunes);
+  },
+  false
+);

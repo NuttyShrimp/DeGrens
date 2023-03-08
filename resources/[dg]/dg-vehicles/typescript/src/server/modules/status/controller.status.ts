@@ -5,8 +5,9 @@ import { calculateNeededParts, setPercentagePerPart, useRepairPart } from './ser
 import { getTyreState } from './helpers.status';
 import { getVinForVeh, setNativeStatus } from 'helpers/vehicle';
 import { getShopForPlayer } from 'modules/mechanic/service.mechanic';
-import { PART_NAMES, SERVICE_CONDITIONS } from './constants.status';
+import { SERVICE_CONDITIONS } from './constants.status';
 import { getPerformance } from 'modules/upgrades/service.upgrades';
+import { REPAIR_PARTS } from '../../../shared/status/constants.status';
 
 setImmediate(() => {
   seedServiceStatuses();
@@ -48,13 +49,13 @@ Events.onNet('vehicles:service:showOverview', async (plyId: number, netId: numbe
   const plyShop = getShopForPlayer(plyId);
 
   for (const part in serviceStatus) {
-    const partState = serviceStatus[part as keyof Service.Status];
+    const partState = serviceStatus[part as Service.Part];
     const partPercentage = partState / 10;
     const serviceCondition = SERVICE_CONDITIONS.find(sc => sc.percentage <= partPercentage);
     const partsNeeded = calculateNeededParts(partState);
 
     partMenu.push({
-      title: `${PART_NAMES[part as keyof Service.Status]}`,
+      title: REPAIR_PARTS[part as Service.Part].label,
       description: plyShop
         ? `${partPercentage.toFixed(2)}% | ${Math.ceil(partsNeeded) || 'geen'} parts nodig`
         : `${serviceCondition?.label} condition`,
@@ -112,11 +113,9 @@ Events.onNet('vehicles:service:showOverview', async (plyId: number, netId: numbe
   UI.openContextMenu(plyId, menu);
 });
 
-(['engine', 'axle', 'suspension', 'brakes'] as (keyof Service.Status)[]).forEach(part => {
-  (['X', 'S', 'A+', 'A', 'B', 'C', 'D'] as CarClass[]).forEach(vehClass => {
-    Inventory.registerUseable(`${part}_part_${vehClass.toLowerCase()}`, (src, item) => {
-      useRepairPart(src, part, vehClass, item.name);
-    });
+Object.entries(REPAIR_PARTS).forEach(([part, { itemName }]) => {
+  Inventory.registerUseable(itemName, (plyId, itemState) => {
+    useRepairPart(plyId, part as Service.Part, itemState);
   });
 });
 

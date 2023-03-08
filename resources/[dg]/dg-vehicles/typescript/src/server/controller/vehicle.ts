@@ -16,8 +16,8 @@ import {
 import vinManager from '../modules/identification/classes/vinmanager';
 import { mainLogger } from '../sv_logger';
 import { getConfigByEntity } from 'modules/info/service.info';
-import { tuneItems } from 'modules/upgrades/constants.upgrades';
 import plateManager from 'modules/identification/classes/platemanager';
+import { TUNE_PARTS } from '../../shared/upgrades/constants.upgrades';
 
 RPC.register('vehicles:getVehicleByVin', (src, vin: string) => {
   mainLogger.silly(`Request to get vehicle by vin: ${vin}`);
@@ -73,30 +73,16 @@ global.exports(
     // This is some cursed shit lol
     if (applyMods) {
       setTimeout(() => {
-        if (!vehicle) return;
-        if (!vin) return;
+        if (!vehicle || !vin) return;
         const vehClass = getConfigByEntity(vehicle)?.class;
         if (!vehClass) return;
-        const allPossibleTuneItems = tuneItems[vehClass];
-        const tunes = [
-          ...allPossibleTuneItems.reduce<Set<string>>((acc, cur) => {
-            acc.add(cur.split('_')[1]);
-            return acc;
-          }, new Set()),
-        ];
-        const itemNames = tunes
-          .map(t =>
-            allPossibleTuneItems.reduceRight<string | undefined>((itemName, n) => {
-              if (itemName) return itemName;
-              if (n.split('_')[1] === t) {
-                return n;
-              }
-            }, undefined)
-          )
-          .filter(n => !!n) as string[];
-        itemNames.forEach(item => {
-          Inventory.addItemToInventory('tunes', vin!, item, 1);
-        });
+
+        for (const tune of Object.values(TUNE_PARTS)) {
+          Inventory.addItemToInventory('tunes', vin, tune.itemName, 1, {
+            class: vehClass,
+            stage: tune.amount,
+          });
+        }
       }, 1000);
     }
 

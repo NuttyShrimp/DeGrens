@@ -1,4 +1,4 @@
-export const DEFAULT_SERVICE_STATUS = {
+export const DEFAULT_SERVICE_STATUS: Service.Status = {
   engine: 1000,
   axle: 1000,
   brakes: 1000,
@@ -23,10 +23,3 @@ export const SERVICE_CONDITIONS = [
     percentage: 0,
   },
 ];
-
-export const PART_NAMES: Record<keyof Service.Status, string> = {
-  engine: 'Engine',
-  suspension: 'Suspension',
-  brakes: 'Brakes',
-  axle: 'Axle',
-};

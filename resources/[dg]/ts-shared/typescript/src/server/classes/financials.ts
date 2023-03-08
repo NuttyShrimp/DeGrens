@@ -1,5 +1,3 @@
-import { Util } from './index';
-
 const fexp = global.exports['dg-financials'];
 
 enum TaxIds {

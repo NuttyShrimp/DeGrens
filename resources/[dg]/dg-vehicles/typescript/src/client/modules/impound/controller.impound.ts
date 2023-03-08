@@ -1,5 +1,5 @@
 import { Events, Notifications, Peek, PolyZone, RayCast, Taskbar, UI, Util } from '@dgx/client';
-import { isDoingAJob } from 'modules/mechanic/service.mechanic';
+import { isDoingAJob } from 'modules/mechanic/services/towing.mechanic';
 
 Events.on('vehicles:depot:client:openSelectionMenu', () => {
   const { entity: targetVeh } = RayCast.doRaycast();

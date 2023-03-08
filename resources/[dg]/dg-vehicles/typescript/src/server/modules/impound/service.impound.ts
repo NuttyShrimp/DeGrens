@@ -15,13 +15,8 @@ import { deleteVehicle, getVinForVeh, spawnOwnedVehicle } from 'helpers/vehicle'
 import vinManager from 'modules/identification/classes/vinmanager';
 import { getConfigByModel } from 'modules/info/service.info';
 import { keyManager } from 'modules/keys/classes/keymanager';
-import {
-  finishJob,
-  getAmountOfActiveMechanics,
-  isPlayerAssigned,
-  overwriteTowJob,
-  sendTowJob,
-} from 'modules/mechanic/service.mechanic';
+import { getAmountOfActiveMechanics } from 'modules/mechanic/service.mechanic';
+import { isPlayerAssigned, finishJob, overwriteTowJob, sendTowJob } from 'modules/mechanic/services/towing.mechanic';
 
 let config: Depot.Config;
 const pendingImpounds: Map<string, Depot.Reason> = new Map();
