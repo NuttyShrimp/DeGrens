@@ -10,7 +10,7 @@ export const useApps = () => {
 
   useEffect(() => {
     vAppRef.current = visibleApps;
-  }, [vAppRef]);
+  }, [visibleApps]);
 
   const loadApps = useCallback(async () => {
     const components: ConfigObject[] = [];
@@ -48,7 +48,7 @@ export const useApps = () => {
           return false;
         }
         const appConfig = apps.find(a => a.name === s);
-        if (!appConfig) return;
+        if (!appConfig) return false;
         const appType = appConfig.type instanceof Function ? appConfig.type() : appConfig.type;
         return appType === 'interactive';
       });
