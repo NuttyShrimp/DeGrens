@@ -8,7 +8,7 @@ declare interface ChangeModelData {
 
 export const changeModel: CommandData = {
   name: 'changeModel',
-  role: 'developer',
+  role: 'support',
   target: false,
   isClientCommand: false,
   log: 'changed his model',
