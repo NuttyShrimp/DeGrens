@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Je kan NPCs nu uit voertuigen trekken om deze hun wagen te stelen
 - Prijzen van ID verlaagd
 - Staff toegang gegeven tot changeModel command
+- Cache admin points in backend to reduce load on DB
 
 ### Fixed
 - Je kan weer smelten als je meer dan de nodige items opzak hebt

@@ -1,5 +1,6 @@
 import { Events, Financials, Inventory, RPC, SQL, Util, Weather } from '@dgx/server';
 import { getUICommands } from 'modules/commands/service.commands';
+import { getPointsForSteamId } from 'modules/penaltyPoints/service.penaltyPoints';
 
 import { getUserData } from '../../helpers/identifiers';
 import { ACBan } from '../penalties/service.penalties';
@@ -144,7 +145,7 @@ RPC.register('admin:menu:getPlayers', async () => {
     steamId: ply.PlayerData.steamid,
     firstName: ply.PlayerData.charinfo.firstname,
     lastName: ply.PlayerData.charinfo.lastname,
-    points: (await SQL.scalar("SELECT points from admin_points WHERE steamid = ?", [ply.PlayerData.steamid]))?.points ?? 0,
+    points: getPointsForSteamId(ply.PlayerData.steamid),
   })));
 });
 
