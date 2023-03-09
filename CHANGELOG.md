@@ -23,6 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fix dat stresseffect actief blijft
 - Mechanic kan ticketjes voor tunes nu wel inbrengen
 - Phone peekt nu deftig meerdere notifications
+- Hersorteer bank transactions bij het laden van nieuwe
 
 ## [1.0.9]
 

@@ -757,13 +757,13 @@ export class Account {
           config.accounts.transactionLimit - transactionsToShow.length,
           type
         );
-        transactionsToShow = sortTransactions([...transactionsToShow, ...newTransactions]);
+        transactionsToShow.push(...newTransactions);
       }
 
       this.logger.debug(
         `getTransactions: success | src: ${source} | account: ${this.account_id} | amount: ${transactionsToShow.length}`
       );
-      return transactionsToShow;
+      return sortTransactions(transactionsToShow);
     } catch (e) {
       this.logger.error('Error getting transactions', e);
     }
