@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Phone Garage App bevat nu knop om verdwenen voertuigen terug in de garage te plaatsen
 - Speedometer blijft staan als je maar 1 melding hebt
+- Enkele stoelen toegevoegd om op te zitten
 
 ### Changed
 - Bait price aangepast

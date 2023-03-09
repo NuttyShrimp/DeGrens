@@ -271,6 +271,22 @@
         "z": 0
       },
       "model": "v_res_m_l_chair1"
+    },
+    {
+      "offset": {
+        "x": 0,
+        "y": -0.50,
+        "z": -0.65
+      },
+      "model": "ba_prop_battle_club_chair_01"
+    },
+    {
+      "offset": {
+        "x": 0,
+        "y": -0.45,
+        "z": 0
+      },
+      "model": "gn_upnatom_vw_bench"
     }
   ]
 }
