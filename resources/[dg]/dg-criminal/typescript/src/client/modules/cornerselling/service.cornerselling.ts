@@ -44,12 +44,18 @@ export const findBuyer = async () => {
   if (!cornersellEnabled || buyerPed !== null) return;
 
   const targetPed = Util.getClosestNpcInRange(10, pedsSoldTo);
+  if (targetPed) {
+    pedsSoldTo.push(targetPed);
+  }
+
   if (
     !targetPed ||
     IsPedInAnyVehicle(targetPed, true) ||
     IsPedDeadOrDying(targetPed, true) ||
     BLACKLISTED_PED_MODELS.has(GetEntityModel(targetPed) >>> 0) ||
-    IsPedInAnyVehicle(PlayerPedId(), true)
+    IsPedInAnyVehicle(PlayerPedId(), true) ||
+    !NetworkGetEntityIsNetworked(targetPed) ||
+    IsEntityAMissionEntity(targetPed)
   ) {
     setTimeout(() => {
       findBuyer();
@@ -85,7 +91,6 @@ export const findBuyer = async () => {
   ClearPedTasks(targetPed);
   TaskWanderStandard(targetPed, 10, 10);
   SetPedAsNoLongerNeeded(targetPed);
-  pedsSoldTo.push(targetPed);
 
   buyerPed = null;
 };

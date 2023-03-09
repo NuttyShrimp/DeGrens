@@ -31,6 +31,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Phone peekt nu deftig meerdere notifications
 - Hersorteer bank transactions bij het laden van nieuwe
 - Bank accountlijst overflowed niet meer en is nu scrollable
+- Je kan niet meer cornersellen aan bepaalde NPCs
 
 ## [1.0.9]
 
