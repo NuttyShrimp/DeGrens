@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Politie kan dna swab enkel gebruiken als er geen ambu is
 - Nodige materialen voor te verwerken aangepast
 - Je kan nu meerdere materialen in 1 keer krijgen uit vuilbakken
+- Je kan NPCs nu uit voertuigen trekken om deze hun wagen te stelen
 
 ### Fixed
 - Je kan weer smelten als je meer dan de nodige items opzak hebt

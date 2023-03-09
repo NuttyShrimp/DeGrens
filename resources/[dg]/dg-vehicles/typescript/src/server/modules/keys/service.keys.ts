@@ -22,28 +22,18 @@ const vehClassToDifficulty: Record<CarClass, { speed: number; size: number }> = 
 // Map of number onto UUID's
 const activeLockPickers = new Map<number, { id: string; vehicle: number; itemId: string }>();
 
-export const handleVehicleLock = async (plyId: number, vehicleNetId: number, vehicleClass: number) => {
-  const vehicle = NetworkGetEntityFromNetworkId(vehicleNetId);
-  if (!vehicle || !DoesEntityExist(vehicle)) return;
+// handle doors of new vehicles
+export const handleVehicleLock = async (vehicle: number, vehicleClass?: number) => {
+  const driver = GetPedInVehicleSeat(vehicle, -1);
+  const hasNPCDriver = driver && !IsPedAPlayer(driver);
+  const noDoorlock = vehicleClass !== undefined ? NO_LOCK_CLASSES.door.indexOf(vehicleClass) !== -1 : false;
 
-  if (NO_LOCK_CLASSES.door.indexOf(vehicleClass) !== -1) {
+  if (hasNPCDriver || noDoorlock) {
     SetVehicleDoorsLocked(vehicle, 1);
     return;
   }
 
-  const driver = GetPedInVehicleSeat(vehicle, -1);
-  if (driver && !IsPedAPlayer(driver)) {
-    const isDriverDead = await Util.isEntityDead(driver, plyId);
-    if (isDriverDead) {
-      SetVehicleDoorsLocked(vehicle, 1);
-      setEngineState(vehicle, false, true);
-    } else {
-      SetVehicleDoorsLocked(vehicle, 2);
-    }
-  }
-  if (GetVehicleDoorLockStatus(vehicle) > 2) {
-    SetVehicleDoorsLocked(vehicle, 2);
-  }
+  SetVehicleDoorsLocked(vehicle, 2);
 };
 
 // region Lockpicking

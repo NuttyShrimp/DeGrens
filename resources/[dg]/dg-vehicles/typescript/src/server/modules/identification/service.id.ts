@@ -1,21 +1,25 @@
 import { Inventory, Notifications, SQL, Taskbar, Util } from '@dgx/server';
 import { updateVehicleFakeplate } from 'db/repository';
 
-import { getVinForNetId } from '../../helpers/vehicle';
+import { getVinForNetId, setEngineState } from '../../helpers/vehicle';
 import { fuelManager } from '../fuel/classes/fuelManager';
 
 import vinManager from './classes/vinmanager';
 import { idLogger } from './logger.id';
+import { handleVehicleLock } from 'modules/keys/service.keys';
 
-export const validateVehicleVin = (vehicle: number) => {
+export const validateVehicleVin = (vehicle: number, vehicleClass?: number) => {
   const vehicleState = Entity(vehicle).state;
   if (vehicleState.vin && vinManager.doesVinMatch(vehicleState.vin, vehicle)) return;
+
   // This is for vehicles new to the server
   const vin = vinManager.generateVin(vehicle);
   vehicleState.set('vin', vin, true);
   vehicleState.set('plate', GetVehicleNumberPlateText(vehicle), true);
   fuelManager.registerVehicle(vehicle);
-  SetVehicleDoorsLocked(vehicle, 2);
+
+  handleVehicleLock(vehicle, vehicleClass);
+  setEngineState(vehicle, false, true);
 };
 
 export const doesVehicleHaveVin = (vehicle: number) => {

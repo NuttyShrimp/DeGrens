@@ -24,6 +24,9 @@ BaseEvents.onEnteredVehicle((vehicle, seat) => {
   SetDisableVehiclePetrolTankFires(vehicle, true);
   DisplayRadar(true);
 
+  // WILL SEE WHAT HAPPENS LOL
+  SetVehicleHasBeenOwnedByPlayer(vehicle, true);
+
   setCurrentVehicle(vehicle, seat === -1);
   updateHarnassHUD(vehicle);
   startNoShuffleThread(vehicle);
