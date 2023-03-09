@@ -34,6 +34,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Hersorteer bank transactions bij het laden van nieuwe
 - Bank accountlijst overflowed niet meer en is nu scrollable
 - Je kan niet meer cornersellen aan bepaalde NPCs
+- Je kan motors nu wel afleggen als je sleutels niet hebt
 
 ## [1.0.9]
 

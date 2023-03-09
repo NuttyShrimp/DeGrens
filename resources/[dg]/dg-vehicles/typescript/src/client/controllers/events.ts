@@ -18,11 +18,15 @@ on('onResourceStop', (resourceName: string) => {
 on('vehicles:radial:engine', () => {
   const vehicle = getCurrentVehicle();
   if (!vehicle) return;
-  if (!hasVehicleKeys(vehicle)) {
+
+  const curState = GetIsVehicleEngineRunning(vehicle);
+
+  // only need keys to start, not to stop
+  if (!curState && !hasVehicleKeys(vehicle)) {
     Notifications.add('Je hebt geen sleutels', 'error');
     return;
   }
-  const curState = GetIsVehicleEngineRunning(vehicle);
+
   setEngineState(vehicle, !curState);
 });
 
