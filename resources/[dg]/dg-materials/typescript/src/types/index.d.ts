@@ -30,6 +30,7 @@ declare namespace Materials {
     type Config = {
       loot: {
         item: string;
+        amount: [number, number];
         chance: number;
       }[];
       refillTime: number;

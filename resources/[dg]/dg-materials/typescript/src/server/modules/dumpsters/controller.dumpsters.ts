@@ -1,4 +1,4 @@
-import { Events, Inventory, RPC } from '@dgx/server';
+import { Events, Inventory, RPC, Util } from '@dgx/server';
 import { getConfig } from 'services/config';
 import { mainLogger } from 'sv_logger';
 import { isSearched, setAsSearched } from './service.dumpsters';
@@ -9,15 +9,17 @@ RPC.register('materials:dumpsters:startSearch', (src, position: Vec3) => {
   return true;
 });
 
-Events.onNet('materials:dumpsters:finishSearch', (src: number, position: Vec3) => {
+Events.onNet('materials:dumpsters:finishSearch', (plyId: number, position: Vec3) => {
   if (!isSearched(position)) {
     mainLogger.warn('Tried to finish search but search was never started for dumpster');
     return;
   }
 
-  getConfig().dumpsters.loot.forEach(loot => {
-    if (Math.random() < loot.chance) {
-      Inventory.addItemToPlayer(src, loot.item, 1);
-    }
-  });
+  for (const loot of getConfig().dumpsters.loot) {
+    if (Math.random() > loot.chance) continue;
+
+    const [min, max] = loot.amount;
+    const amount = Util.getRndInteger(min, max + 1);
+    Inventory.addItemToPlayer(plyId, loot.item, amount);
+  }
 });

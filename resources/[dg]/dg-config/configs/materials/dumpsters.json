@@ -2,6 +2,10 @@
   "loot": [
     {
       "item": "material_plastic",
+      "amount": [
+        1,
+        3
+      ],
       "chance": 0.7
     }
   ],
