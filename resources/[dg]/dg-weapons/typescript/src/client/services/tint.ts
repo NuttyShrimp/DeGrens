@@ -19,6 +19,17 @@ export const registerTintPeek = () => {
         label: 'Tint Wapen',
         icon: 'fas fa-spray-can',
         action: () => {
+          const currentWeaponData = getCurrentWeaponData();
+          if (currentWeaponData === null) {
+            Notifications.add('Je hebt niks vast dat ik kan aanpassen voor je', 'error');
+            return;
+          }
+
+          if (!currentWeaponData.canTint) {
+            Notifications.add('Dat wapen kan ik niet aanpassen voor je', 'error');
+            return;
+          }
+
           const menu: ContextMenu.Entry[] = [
             {
               title: 'Wapen Tinten',
@@ -32,11 +43,6 @@ export const registerTintPeek = () => {
             })),
           ];
           UI.openApplication('contextmenu', menu);
-        },
-        canInteract: () => {
-          const currentWeaponData = getCurrentWeaponData();
-          if (currentWeaponData === null) return false;
-          return currentWeaponData.canTint;
         },
       },
     ],

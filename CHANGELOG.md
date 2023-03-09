@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Speedometer blijft staan als je maar 1 melding hebt
 - Enkele stoelen toegevoegd om op te zitten
 - Report WS wordt gesloten met een statuscode + reason
+- Feedback bij een NPC toegevoegd over de werking
 
 ### Changed
 - Bait price aangepast
