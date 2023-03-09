@@ -7,7 +7,7 @@ import { useConfigmenuStore } from '@src/main/configmenu/stores/useConfigmenuSto
 
 import { useHudStore } from '../stores/useHudStore';
 
-export const SpeedoMeter: FC<{}> = () => {
+export const SpeedoMeter: FC<{ offset: number }> = ({ offset }) => {
   const car = useHudStore(s => s.car);
   const hudSize = useConfigmenuStore(s => s.hud.size);
   const speedoSize = useVhToPixel(25 * hudSize);
@@ -44,7 +44,7 @@ export const SpeedoMeter: FC<{}> = () => {
   });
 
   return (
-    <div className={`hud-speedometer`}>
+    <div className={`hud-speedometer`} style={{ marginBottom: `${offset}vh` }}>
       <animated.svg className='hud-speedometer-gauge' style={gaugeStyle} viewBox='0 0 160 140'>
         <path className='hud-speedometer-gauge-fuel-bg' fill='transparent' d='M 20 132 C -14 90 4 37 39 16' />
         <animated.path

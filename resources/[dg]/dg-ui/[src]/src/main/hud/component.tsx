@@ -4,6 +4,7 @@ import { devData } from '@src/lib/devdata';
 import { isDevel } from '@src/lib/env';
 import { nuiAction } from '@src/lib/nui-comms';
 
+import { usePhoneNotiStore } from '../phone/stores/usePhoneNotiStore';
 import { usePhoneStore } from '../phone/stores/usePhoneStore';
 
 import { Cash } from './component/Cash';
@@ -22,7 +23,12 @@ import './styles/hud.scss';
 const Component: AppFunction = props => {
   const [cashVisible, setCashVisible] = useState(false);
   const cashFlashTimeout = useRef<NodeJS.Timeout | null>(null);
-  const phoneOpen = usePhoneStore(s => s.animating !== 'closed');
+  const phoneState = usePhoneStore(s => s.animating);
+  const [phoneHasOnlyOneNotif, phoneNotifHasAction] = usePhoneNotiStore(s => {
+    if (s.list.length !== 1) return [false, false];
+    const firstNotif = s.list[0]; // we check length so will never be undefined
+    return [true, firstNotif.onAccept || firstNotif.onDecline];
+  });
   const [addEntry, deleteEntry, toggleEntry, updateStore, carVisible] = useHudStore(s => [
     s.addEntry,
     s.deleteEntry,
@@ -130,10 +136,14 @@ const Component: AppFunction = props => {
     fetchEntries();
   }, []);
 
+  const showSpeedoMeter = phoneState === 'closed' || (phoneState === 'peek' && phoneHasOnlyOneNotif);
+
   return (
     <AppWrapper appName={config.name} onShow={showHud} onHide={hideHud} onEvent={handleEvents} full hideOverflow>
       <HudBar />
-      {carVisible && !phoneOpen && <SpeedoMeter />}
+      {carVisible && showSpeedoMeter && (
+        <SpeedoMeter offset={phoneState === 'closed' ? 0 : 9 + (phoneNotifHasAction ? 3.2 : 0)} />
+      )}
       <Compass />
       {cashVisible && <Cash />}
     </AppWrapper>

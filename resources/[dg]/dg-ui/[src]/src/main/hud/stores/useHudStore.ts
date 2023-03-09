@@ -1,5 +1,4 @@
 import { create } from '@src/lib/store';
-import { Hud } from '@src/main/configmenu/component/Hud';
 
 export const useHudStore = create<Hud.State & Hud.StateActions & Store.UpdateStore<Hud.State>>('hud')(set => ({
   entries: [],
