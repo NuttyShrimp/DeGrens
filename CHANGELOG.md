@@ -24,6 +24,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Mechanic kan ticketjes voor tunes nu wel inbrengen
 - Phone peekt nu deftig meerdere notifications
 - Hersorteer bank transactions bij het laden van nieuwe
+- Bank accountlijst overflowed niet meer en is nu scrollable
 
 ## [1.0.9]
 

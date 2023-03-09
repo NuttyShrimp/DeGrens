@@ -73,8 +73,9 @@
       &__list {
         display: flex;
         flex-direction: column;
-        height: 100%;
+        height: calc(100% - 4vh);
         padding: 0 1vh;
+        overflow: scroll;
       }
 
       &__icon {
