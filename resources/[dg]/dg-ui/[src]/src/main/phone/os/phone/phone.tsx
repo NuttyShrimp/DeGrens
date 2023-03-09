@@ -1,7 +1,6 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useEffect, useMemo, useState } from 'react';
 import { animated, useSpring } from 'react-spring';
 import shell from '@assets/phone/shell.png';
-import { useVhToPixel } from '@lib/hooks/useVhToPixel';
 import { AppContainer } from '@src/components/appcontainer';
 import { useVisibleStore } from '@src/lib/stores/useVisibleStore';
 
@@ -17,8 +16,6 @@ import { styles } from './phone.styles';
 
 export const Phone: FC<React.PropsWithChildren<Phone.Props & { config: ConfigObject[] }>> = props => {
   const classes = styles();
-  const closedVh = useVhToPixel(60);
-  const basedOffset = useVhToPixel(60 - 8.7);
   const notifications = usePhoneNotiStore(s => s.list);
   const [animating, hasNotifications, activeApp, bigPhoto, background] = usePhoneStore(s => [
     s.animating,
@@ -28,7 +25,6 @@ export const Phone: FC<React.PropsWithChildren<Phone.Props & { config: ConfigObj
     s.background,
   ]);
   const visible = useVisibleStore(s => s.visibleApps.includes('phone'));
-  const [bottomOffset, setBottomOffset] = useState(basedOffset);
   const [activeAppCfg, setActiveAppCfg] = useState<ConfigObject | undefined>(undefined);
   const [rootAnimStyle, api] = useSpring(() => ({
     // notification w actions has height of ~7.5vh
@@ -43,36 +39,31 @@ export const Phone: FC<React.PropsWithChildren<Phone.Props & { config: ConfigObj
     // },
   }));
 
-  useEffect(() => {
-    let offset = 0;
-    const notiWithActions = notifications.filter(n => n.onAccept || n.onDecline);
-    offset += notiWithActions.length * 7.5;
-    offset += (notifications.length - notiWithActions.length) * 4.3;
-    setBottomOffset(basedOffset - offset);
-  }, [notifications, basedOffset]);
+  // default offset of 4
+  const bottomOffset = useMemo(
+    () => notifications.reduce<number>((o, n) => o + (n.onAccept || n.onDecline ? 7.5 : 4.3), 4),
+    [notifications]
+  );
 
   useEffect(() => {
-    let target = '0px';
+    let height = 0;
     switch (animating) {
-      case 'closed': {
-        target = `-${closedVh}px`;
-        break;
-      }
       case 'peek': {
-        target = `-${bottomOffset}px`;
+        height = bottomOffset;
         break;
       }
       case 'open': {
+        height = 60;
         break;
       }
     }
     api.start({
-      bottom: target,
+      bottom: `-${60 - height}vh`,
       config: {
         duration: 300,
       },
     });
-  }, [visible, animating, hasNotifications, api, closedVh, bottomOffset]);
+  }, [visible, animating, hasNotifications, api, bottomOffset]);
 
   useEffect(() => {
     setActiveAppCfg(props.config.find(c => c.name === activeApp));

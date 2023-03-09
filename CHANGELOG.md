@@ -21,6 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - UI Interactive app check werkt nu wel
 - Fix dat stresseffect actief blijft
 - Mechanic kan ticketjes voor tunes nu wel inbrengen
+- Phone peekt nu deftig meerdere notifications
 
 ## [1.0.9]
 
