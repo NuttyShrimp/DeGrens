@@ -17,9 +17,12 @@ exports('addOfflineMail', addOfflineMail)
 RegisterNetEvent('dg-phone:load', function()
   local src = source
   local Players = DGCore.Functions.GetPlayer(src)
-  if not Players then cb({}) end
-  local mails = fetchEmails(Players.PlayerData.citizenid)
+  if not Players then return end
+
+  local cid = Players.PlayerData.citizenid
+  local mails = fetchEmails(cid)
   for _, mail in ipairs(mails) do
     TriggerClientEvent('dg-phone:client:addNewMail', src, mail.subject, mail.sender, mail.message)
   end
-end )
+  exports['dg-sql']:query("DELETE FROM phone_mails WHERE cid = ?", { cid })
+end)
