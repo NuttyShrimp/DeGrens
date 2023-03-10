@@ -123,9 +123,13 @@ Events.onNet('admin:commands:cloak', toggle => {
   toggleLocalVis(toggle);
 
   if (toggle) {
+    Notifications.add('cloak actief', 'info', undefined, true, 'ADMIN_CLOAK_NOTIFICATION');
     PropAttach.toggleProps(false);
-  } else if (!getCmdState('noclip')) {
-    PropAttach.toggleProps(true);
+  } else {
+    Notifications.remove('ADMIN_CLOAK_NOTIFICATION');
+    if (!getCmdState('noclip')) {
+      PropAttach.toggleProps(true);
+    }
   }
 });
 

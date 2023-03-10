@@ -1,4 +1,4 @@
-import { Keys, PropAttach, Util } from '@dgx/client';
+import { Keys, Notifications, PropAttach, Util } from '@dgx/client';
 import { getCmdState, setCmdState } from 'modules/commands/state.commands';
 
 let noclipThread: NodeJS.Timer | null = null;
@@ -22,10 +22,13 @@ export const toggleNoclip = (toggle: boolean) => {
   if (isEnabled) {
     setCmdState('noclip', false);
     cleanupNoclip();
+    Notifications.remove('ADMIN_NOCLIP_NOTIFICATION');
     return;
   }
 
   setCmdState('noclip', true);
+  Notifications.add('noclip actief', 'info', undefined, true, 'ADMIN_NOCLIP_NOTIFICATION');
+
   // Noclip logic
   const ped = PlayerPedId();
   const veh = GetVehiclePedIsIn(ped, false);
