@@ -49,7 +49,7 @@ export const getSellableItems = async (plyId: number) => {
 };
 
 export const calculatePrice = (item: string, zone: string) => {
-  const basePrice = config.cornerselling.sellableItems[item].basePrice;
+  const basePrice = config.cornerselling.sellableItems[item]?.basePrice ?? 0;
   const modifier = getModifierFromSalesHeatmap(zone);
   return Math.floor(basePrice * modifier);
 };
