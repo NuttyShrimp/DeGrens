@@ -21,11 +21,10 @@ export const takeScreenshot: CommandData = {
       return;
     }
 
-    // dumb ass fucking way to let client copy it without much work for me atm
+    Notifications.add(caller.source, 'Screenshot aan het nemen, even geduld');
     Screenshot.imgur(args.Target.serverId).then(link => {
-      UI.openInput(caller.source, {
-        header: `Link of screenshot: ${link}`,
-      });
+      emitNet('dg-ui:SendAppEvent', caller.source, 'copy', link);
+      Notifications.add(caller.source, 'Link staat op je clipboard');
     });
   },
   UI: {
