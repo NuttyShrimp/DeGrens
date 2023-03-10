@@ -48,7 +48,7 @@ export const getDoorId = (entity: number) => {
     if (!door) return;
     return door[0];
   } catch (e) {
-    console.error(e);
+    //
   }
 };
 
