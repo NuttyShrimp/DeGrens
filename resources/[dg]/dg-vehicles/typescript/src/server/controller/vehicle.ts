@@ -95,3 +95,20 @@ global.asyncExports('getPlateForVin', async (vin: string) => {
   const info = await getPlayerVehicleInfo(vin);
   return info.plate;
 });
+
+global.exports('locateVehicleFromAdminMenu', (plyId: number, vin: string) => {
+  const netId = vinManager.getNetId(vin);
+  if (!netId) {
+    Notifications.add(plyId, 'Kan voertuig niet vinden', 'info');
+    return;
+  }
+
+  const vehicle = NetworkGetEntityFromNetworkId(netId);
+  if (!vehicle || !DoesEntityExist(vehicle)) {
+    Notifications.add(plyId, 'Kan voertuig niet vinden', 'info');
+    return;
+  }
+
+  const coords = Util.getEntityCoords(vehicle);
+  Util.setWaypoint(plyId, coords);
+});

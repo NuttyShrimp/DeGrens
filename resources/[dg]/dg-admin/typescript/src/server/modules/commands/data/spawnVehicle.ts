@@ -1,5 +1,3 @@
-import { Notifications } from '@dgx/server';
-
 import { Inputs } from '../../../enums/inputs';
 
 declare interface SpawnVehicleData {

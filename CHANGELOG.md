@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Report WS wordt gesloten met een statuscode + reason
 - Feedback bij een NPC toegevoegd over de werking
 - Zeer veel nieuwe houserobbery locaties toegevoegd
+- Locate player/vehicle commands toegevoegd aan adminmenu
 
 ### Changed
 - Bait price aangepast
