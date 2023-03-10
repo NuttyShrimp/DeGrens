@@ -50,12 +50,14 @@ export const getUICommands = (src: number): CommandData[] => {
 
 // Allow invisibity for players that are in vehicle or attached to person that is invisible
 // If is false, disallow cached interactionPlayers
-export const allowInvisibleForInteractingPlayers = (plyId: number, allow: boolean) => {
+export const allowInvisibleForInteractingPlayers = async (plyId: number, allow: boolean) => {
   if (!allow) {
     const interactingPlayers = interactingPlayersForPlayer[plyId] ?? [];
-    interactingPlayers.forEach(plyId => {
-      Auth.toggleAllowedMod(plyId, 'invisible', false);
-    });
+    await Promise.all(
+      interactingPlayers.map(plyId => {
+        return Auth.toggleAllowedMod(plyId, 'invisible', false);
+      })
+    );
     delete interactingPlayersForPlayer[plyId];
     return;
   }
@@ -76,8 +78,10 @@ export const allowInvisibleForInteractingPlayers = (plyId: number, allow: boolea
     interactingPlayers.push(escortedPlayer);
   }
 
-  interactingPlayers.forEach(plyId => {
-    Auth.toggleAllowedMod(plyId, 'invisible', true);
-  });
+  await Promise.all(
+    interactingPlayers.map(plyId => {
+      return Auth.toggleAllowedMod(plyId, 'invisible', true);
+    })
+  );
   interactingPlayersForPlayer[plyId] = interactingPlayers;
 };

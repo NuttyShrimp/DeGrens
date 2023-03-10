@@ -671,8 +671,8 @@ class Auth {
     this.startHooks.add(cb);
   }
 
-  public toggleAllowedMod = (plyId: number, mod: string, allowed: boolean) => {
-    global.exports['dg-auth'].toggleAllowedMod(plyId, mod, allowed);
+  public toggleAllowedMod = (plyId: number, mod: string, allowed: boolean): Promise<void> => {
+    return global.exports['dg-auth'].toggleAllowedMod(plyId, mod, allowed);
   };
 }
 

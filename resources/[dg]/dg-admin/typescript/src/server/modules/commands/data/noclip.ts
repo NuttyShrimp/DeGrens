@@ -1,4 +1,4 @@
-import { Events, Auth } from '@dgx/server';
+import { Events, Auth, RPC } from '@dgx/server';
 import { getPlayerCommandState, setPlayerCommandState } from '../state.commands';
 import { allowInvisibleForInteractingPlayers } from '../service.commands';
 
@@ -11,14 +11,23 @@ export const noclip: CommandData = {
   handler: async caller => {
     const toggle = !getPlayerCommandState(caller.source, 'noclip');
     setPlayerCommandState(caller.source, 'noclip', toggle);
-    Events.emitNet('admin:noclip:toggle', caller.source, toggle);
 
     // do some logic because when exiting noclip while in cloak, we dont want to disallow invis
     const inCloak = getPlayerCommandState(caller.source, 'cloak');
     const allowInvis = toggle || inCloak;
-    Auth.toggleAllowedMod(caller.source, 'invisible', allowInvis);
 
-    allowInvisibleForInteractingPlayers(caller.source, toggle);
+    // when exiting noclip, we FIRST disable noclip it before toggling allowed mod
+    if (!toggle) {
+      await RPC.execute('admin:noclip:toggle', caller.source, false);
+    }
+
+    await Auth.toggleAllowedMod(caller.source, 'invisible', allowInvis);
+    await allowInvisibleForInteractingPlayers(caller.source, toggle);
+
+    // when enabling noclip, we FIRST allow modules before actually enabling noclip
+    if (toggle) {
+      await RPC.execute('admin:noclip:toggle', caller.source, true);
+    }
   },
   UI: {
     title: 'Noclip',

@@ -15,9 +15,9 @@ import {
   validateWeaponInfo,
 } from './service.anticheat';
 
-global.exports('SetPlayerInvincible', setPlayerInvincible);
-global.exports('SetPlayerVisible', setPlayerVisible);
-global.exports('toggleAllowedMod', toggleAllowedMod);
+global.asyncExports('setPlayerInvincible', setPlayerInvincible);
+global.asyncExports('setPlayerVisible', setPlayerVisible);
+global.asyncExports('toggleAllowedMod', toggleAllowedMod);
 
 onNet('playerJoining', () => {
   registerHeartBeat(source);

@@ -54,6 +54,10 @@ RPC.register('auth:anticheat:confirmWeaponInfo', (srvInfo: AntiCheat.WeaponInfo)
   return clInfo.weapon === srvInfo.weapon && clInfo.ammo === srvInfo.ammo;
 });
 
+RPC.register('auth:anticheat:setVisible', (toggle: boolean) => {
+  SetEntityVisible(PlayerPedId(), toggle, false);
+});
+
 setImmediate(async () => {
   while (!NetworkIsSessionActive()) {
     await new Promise(res => setTimeout(res, 10));

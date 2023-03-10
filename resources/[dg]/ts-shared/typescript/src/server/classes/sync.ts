@@ -2,12 +2,13 @@ class Sync {
   executeNative<T extends keyof Sync.Natives>(native: T, entity: number, ...args: Sync.Natives[T]) {
     global.exports['dg-sync'].syncExecution(native, entity, ...args);
   }
-  setPlayerInvincible(src: number, isEnabled: boolean) {
-    global.exports['dg-auth'].SetPlayerInvincible(src, isEnabled);
-  }
-  setPlayerVisible(src: number, isVisible: boolean) {
-    global.exports['dg-auth'].SetPlayerVisible(src, isVisible);
-  }
+
+  public setPlayerInvincible = (src: number, isEnabled: boolean): Promise<void> => {
+    return global.exports['dg-auth'].setPlayerInvincible(src, isEnabled);
+  };
+  public setPlayerVisible = (src: number, isVisible: boolean): Promise<void> => {
+    return global.exports['dg-auth'].setPlayerVisible(src, isVisible);
+  };
 
   public getPlayerScope = (plyId: number): { current: Sync.ScopePlayer[]; recent: Sync.ScopePlayer[] } => {
     return global.exports['dg-sync'].getPlayerScope(plyId);

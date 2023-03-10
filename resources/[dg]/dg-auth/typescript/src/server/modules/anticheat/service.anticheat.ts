@@ -181,13 +181,31 @@ export const toggleAllowedMod = async (src: number, mod: string, isAllowed: bool
   pendingAllowedMods[src] = pendingAllowedMods[src].filter(pm => pm.id !== pendingChangeId);
 };
 
+// for next two functions:
+// when enabling, we first allow before actually doing action
+// when disabling, we first do action before dissallowing
+// this is to avoid false flags because of latency
 export const setPlayerInvincible = async (src: number, isEnabled: boolean) => {
+  if (!isEnabled) {
+    SetPlayerInvincible(String(src), false);
+  }
+
   await toggleAllowedMod(src, 'invincible', isEnabled);
-  SetPlayerInvincible(String(src), isEnabled);
+
+  if (isEnabled) {
+    SetPlayerInvincible(String(src), true);
+  }
 };
 export const setPlayerVisible = async (src: number, isVisible: boolean) => {
+  if (isVisible) {
+    await RPC.execute('auth:anticheat:setVisible', src, true);
+  }
+
   await toggleAllowedMod(src, 'invisible', !isVisible);
-  Sync.executeNative('SetEntityVisible', GetPlayerPed(String(src)), isVisible, false);
+
+  if (!isVisible) {
+    await RPC.execute('auth:anticheat:setVisible', src, false);
+  }
 };
 // endregion
 

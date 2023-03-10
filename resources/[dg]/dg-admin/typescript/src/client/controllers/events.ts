@@ -32,7 +32,7 @@ Events.onNet('admin:bind:check:response', (binds: Record<Binds.bindNames, string
   }
 });
 
-Events.onNet('admin:noclip:toggle', (toggle: boolean) => {
+RPC.register('admin:noclip:toggle', (toggle: boolean) => {
   toggleNoclip(toggle);
 });
 
