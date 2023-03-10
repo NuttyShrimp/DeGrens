@@ -46,7 +46,7 @@ class LocationManager extends Util.Singleton<LocationManager>() {
 
   public removeLocation = (type: Location.Type, id: string) => {
     const location = this.locations[type].get(id);
-    if (!location) throw new Error('Tried to remove non-existent location id');
+    if (!location) return;
 
     if (type === 'drop') {
       const drop = location as Location.Drop;
@@ -70,24 +70,25 @@ class LocationManager extends Util.Singleton<LocationManager>() {
     this.logger.debug(`Drop (${id}) has been activated`);
 
     const dropRemoveTime = getConfig().dropRemoveTime;
-    const timeout = setTimeout(
-      async id => {
-        Util.Log(
-          'inventory:drop:remove',
-          {
-            id,
-          },
-          `Drop ${id} got removed because of time.`
-        );
-        const inventory = await inventoryManager.get(id);
-        inventory.destroyAllItems();
-        this.removeLocation('drop', id);
-        this.logger.info(`Drop (${id}) and its contents have been destroyed`);
-      },
-      dropRemoveTime * 60 * 1000,
-      id
-    );
-    this.locations.drop.set(id, { pos, activated: true, timeout });
+    const timeout = setTimeout(async () => {
+      Util.Log(
+        'inventory:drop:remove',
+        {
+          id,
+        },
+        `Drop ${id} got removed because of time.`
+      );
+      const inventory = await inventoryManager.get(id);
+      inventory.destroyAllItems();
+      this.removeLocation('drop', id);
+      this.logger.info(`Drop (${id}) and its contents have been destroyed`);
+    }, dropRemoveTime * 60 * 1000);
+
+    this.locations.drop.set(id, {
+      pos,
+      activated: true,
+      timeout,
+    });
   };
 
   public isLocationBased = (type: Inventory.Type) => {

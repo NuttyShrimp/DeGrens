@@ -49,6 +49,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Je kan methlab niet meer starten tijdens timeout
 - Safety check op cornersell baseprice
 - Foute invisiblity anticheat flags tijdens spawn/noclip/cloak opgelost
+- Inventory drop removal throwed geen onnodige errors meer
 
 ## [1.0.9]
 
