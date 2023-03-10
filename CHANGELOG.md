@@ -26,6 +26,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Cache admin points in backend to reduce load on DB
 - Enkel admin command permissies aangepast
 - Heel het houserobbery systeem herschreven, hopelijk werkt het nu deftig
+- Methlab requirements verlaagd
 
 ### Fixed
 - Je kan weer smelten als je meer dan de nodige items opzak hebt
