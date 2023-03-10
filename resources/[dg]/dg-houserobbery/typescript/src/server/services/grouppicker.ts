@@ -1,6 +1,5 @@
 import { Police } from '@dgx/server';
 import stateManager from 'classes/StateManager';
-import { PlayerState } from 'enums/states';
 import { mainLogger } from 'sv_logger';
 
 export const startPlayerPickingThread = () => {
@@ -9,33 +8,28 @@ export const startPlayerPickingThread = () => {
   }, 5 * 60 * 1000);
 };
 
-export const pickLuckyPlayer = (skippedPlys: number[] = []) => {
+export const pickLuckyPlayer = (skippedCids: number[] = []) => {
   mainLogger.info('Picking player for houserobbery job');
   if (!Police.canDoActivity('houserobbery')) return;
 
-  const signedInPlayers: number[] = [];
-  stateManager.playerStates.forEach((s, cid) => {
-    if (s !== PlayerState.WAITING) return; // only waiting plys
-    if (skippedPlys.indexOf(cid) !== -1) return; // only plys not already tried
-    signedInPlayers.push(cid);
-  });
-  if (signedInPlayers.length == 0) return;
+  const cids = stateManager.getPossibleTargets(skippedCids);
+  if (cids.length == 0) return;
 
-  const chosenPlyCID = signedInPlayers[Math.floor(Math.random() * signedInPlayers.length)];
-  if (!chosenPlyCID) return;
+  const cid = cids[Math.floor(Math.random() * cids.length)];
+  if (!cid) return;
 
-  const houseId = stateManager.getRobableHouse();
-  if (!houseId) return;
+  const locationIdx = stateManager.getUnusedLocation();
+  if (!locationIdx) return;
 
-  const hasStarted = stateManager.startJobForPly(chosenPlyCID, houseId);
+  const hasStarted = stateManager.startJobForPly(cid, locationIdx);
 
   // if started, add to timed out so this player can not get chosen for x time
   // if failed to start, try again but ignore this player
   if (hasStarted) {
-    mainLogger.info(`Selected ${chosenPlyCID} for houserobbery job`);
+    mainLogger.info(`Selected ${cid} for houserobbery job`);
   } else {
-    skippedPlys.push(chosenPlyCID);
-    pickLuckyPlayer(skippedPlys);
+    skippedCids.push(cid);
+    pickLuckyPlayer(skippedCids);
     return;
   }
 };

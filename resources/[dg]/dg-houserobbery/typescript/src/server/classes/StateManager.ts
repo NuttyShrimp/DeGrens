@@ -1,68 +1,73 @@
-import { Config, Events, Jobs, Notifications, Phone, Taskbar, Util, Inventory, Police, Minigames } from '@dgx/server';
+import { Events, Jobs, Notifications, Phone, Taskbar, Util, Inventory, Police, Minigames } from '@dgx/server';
 import { DGXEvent, EventListener, RPCEvent, RPCRegister } from '@dgx/server/decorators';
-
 import { mainLogger } from '../sv_logger';
-import { HouseState, PlayerState } from '../enums/states';
+import { getConfig, getLocations } from 'services/config';
 
 @RPCRegister()
 @EventListener()
 class StateManager extends Util.Singleton<StateManager>() {
-  private config!: Config;
-  public playerStates: Map<number, PlayerState> = new Map();
-
-  // The prevent players from logging out and back in when in a job
-  private houseStates: Map<string, House.State<HouseState>> = new Map();
-
-  // Map of jobgroup id to house
-  private activeJobs: Map<
-    string,
-    {
-      houseId: string;
-      findTimeout: NodeJS.Timeout | null;
-      finishTimeout: NodeJS.Timeout | null;
-    }
-  >;
+  private signedInPlayers: Set<number>;
+  private timedOutPlayers: Set<number>;
+  private activeHouses: Map<string, Houserobbery.HouseState>;
+  private usedLocations: Set<number>; // used to ensure a house doesnt get chosen more than once per restart
 
   constructor() {
     super();
-    this.activeJobs = new Map();
-    this.loadLocations();
+    this.signedInPlayers = new Set();
+    this.timedOutPlayers = new Set();
+    this.activeHouses = new Map();
+    this.usedLocations = new Set();
   }
 
-  private async loadLocations() {
-    await Config.awaitConfigLoad();
-    this.config = Config.getModuleConfig<Config>('houserobbery');
+  public getUnusedLocation = (): Houserobbery.Location | undefined => {
+    const locationsPerSize = getLocations();
+    const shellInfo = getConfig().shellInfo;
 
-    // Init state for every house
-    this.config.locations.forEach((_, idx) => {
-      let houseId = Util.uuidv4();
-      while (this.houseStates.has(houseId)) {
-        houseId = Util.uuidv4();
+    const sizes = Object.keys(locationsPerSize) as Houserobbery.Interior.Size[];
+    const filteredSizes = sizes.filter(size => !!shellInfo[size]);
+
+    const choosenSize = filteredSizes[Math.floor(Math.random() * filteredSizes.length)];
+    const locations = locationsPerSize[choosenSize];
+
+    let tries = locations.length;
+    while (tries > 0) {
+      tries--;
+
+      const idx = Math.floor(Math.random() * locations.length);
+      if (!this.usedLocations.has(idx)) {
+        return { size: choosenSize, coords: locations[idx] };
       }
+    }
+  };
 
-      this.houseStates.set(houseId, {
-        searched: new Set(),
-        players: new Set(),
-        dataIdx: idx,
-        state: HouseState.FREE,
-      });
-    });
-  }
+  // Get signed in players who are not timed out & not in provided skipply array
+  public getPossibleTargets = (playersToSkip: number[]) => {
+    const cids: number[] = [];
+    for (const cid of this.signedInPlayers) {
+      if (this.timedOutPlayers.has(cid)) continue;
+      if (playersToSkip.indexOf(cid) !== -1) continue;
+      cids.push(cid);
+    }
+    return cids;
+  };
+
+  private getHouseIdByGroupId = (groupId: string) => {
+    for (const [houseId, house] of this.activeHouses) {
+      if (house.groupId === groupId) {
+        return houseId;
+      }
+    }
+  };
 
   @DGXEvent('houserobbery:server:toggleSignedIn')
   private _toggleSignedIn = async (src: number) => {
     const cid = Util.getCID(src);
-    const playerState = this.playerStates.get(cid);
 
     // can always sign out if already signed in
-    if (playerState !== undefined) {
-      if (playerState === PlayerState.ASSIGNED) {
-        Notifications.add(src, 'Bert B: "Je bent nog met een job bezig"', 'error');
-      } else {
-        this.playerStates.delete(cid);
-        Util.Log('houserobbery:signin:logout', {}, `${Util.getName(src)} left the queue for houserobberies`, src);
-        Notifications.add(src, 'Bert B: "Ik heb je van de lijst gehaald"', 'info');
-      }
+    if (this.signedInPlayers.has(cid)) {
+      this.signedInPlayers.delete(cid);
+      Util.Log('houserobbery:signin:logout', {}, `${Util.getName(src)} left the queue for houserobberies`, src);
+      Notifications.add(src, 'Bert B: "Ik heb je van de lijst gehaald"', 'info');
       return;
     }
 
@@ -94,40 +99,25 @@ class StateManager extends Util.Singleton<StateManager>() {
       return;
     }
 
-    this.playerStates.set(cid, PlayerState.WAITING);
-
+    this.signedInPlayers.add(cid);
     Notifications.add(src, 'Bert B: "Ik heb je op de lijst gezet, hou je mail in de gaten"', 'success');
     Util.Log('houserobbery:signin:login', {}, `${Util.getName(src)} joined the queue for houserobberies`, src);
   };
 
-  @RPCEvent('houserobbery:server:getHouseInfo')
-  private _getHouseInfo = (src: number, houseId: string) => {
-    const houseState = this.houseStates.get(houseId);
-    if (!houseState) return;
-    const houseInfo = this.config.locations[houseState.dataIdx];
-    return houseInfo;
-  };
-
   @RPCEvent('houserobbery:server:canEnter')
   private _canEnter = (plyId: number, houseId: string) => {
-    const state = this.houseStates.get(houseId)?.state;
-    if (!state) return false;
+    const house = this.activeHouses.get(houseId);
+    if (!house) return false;
     if (Jobs.getCurrentJob(plyId) === 'police') return true;
-    return state === HouseState.UNLOCKED;
+    return !house.locked;
   };
 
   @DGXEvent('houserobbery:server:unlockHouse')
   private _unlockDoor = async (plyId: number, houseId: string, holdingCrowbar: boolean) => {
-    const house = this.houseStates.get(houseId);
+    const house = this.activeHouses.get(houseId);
     if (!house) return;
-    const houseConfig = this.config.locations[house.dataIdx];
-    if (!houseConfig) return;
-    const group = Jobs.getGroupByServerId(plyId);
-    if (!group) return;
-    const activeJob = this.activeJobs.get(group.id);
-    if (!activeJob || activeJob.houseId !== houseId) return;
 
-    if (house.state !== HouseState.LOCKED) {
+    if (!house.locked) {
       Notifications.add(plyId, 'Deze deur is al los...', 'error');
       return;
     }
@@ -144,10 +134,10 @@ class StateManager extends Util.Singleton<StateManager>() {
     const keygameSuccess = await Minigames.keygame(plyId, 3, 7, 20);
 
     // double check to avoid multiple people lockpicking at same time causing problems
-    if (house.state !== HouseState.LOCKED) return;
+    if (!house.locked) return;
 
     if (!keygameSuccess) {
-      if (Util.getRndInteger(0, 100) < 10) {
+      if (Util.getRndInteger(0, 101) < 10) {
         Inventory.removeItemByNameFromPlayer(plyId, 'lockpick');
       } else {
         Notifications.add(plyId, 'Je bent uitgeschoven', 'error');
@@ -156,7 +146,7 @@ class StateManager extends Util.Singleton<StateManager>() {
       return;
     }
 
-    house.state = HouseState.UNLOCKED;
+    house.locked = false;
     Notifications.add(plyId, 'De deur is opengebroken!', 'success');
 
     Util.Log(
@@ -176,21 +166,17 @@ class StateManager extends Util.Singleton<StateManager>() {
         color: 3,
       },
       criminal: plyId,
-      coords: houseConfig.coords,
+      coords: house.location.coords,
     });
 
-    if (activeJob.findTimeout) {
-      clearTimeout(activeJob.findTimeout);
+    if (house.findTimeout) {
+      clearTimeout(house.findTimeout);
     }
-    activeJob.findTimeout = null;
+    house.findTimeout = null;
 
-    activeJob.finishTimeout = setTimeout(
-      groupId => {
-        this.finishJob(groupId, houseId);
-      },
-      this.config.timeToRob * 60000,
-      group.id
-    );
+    house.finishTimeout = setTimeout(() => {
+      this.finishJob(houseId, true);
+    }, getConfig().timeToRob * 60000);
   };
 
   @DGXEvent('houserobbery:server:lockDoor')
@@ -200,14 +186,14 @@ class StateManager extends Util.Singleton<StateManager>() {
       return;
     }
 
-    const house = this.houseStates.get(houseId);
+    const house = this.activeHouses.get(houseId);
     if (!house) return;
-    if (house.state === HouseState.LOCKED) {
+    if (house.locked) {
       Notifications.add(plyId, 'Deze deur is al vast', 'error');
       return;
     }
 
-    house.state = HouseState.LOCKED;
+    house.locked = true;
 
     Notifications.add(plyId, 'Je hebt het huis vergrendeld', 'success');
     Util.Log(
@@ -222,71 +208,69 @@ class StateManager extends Util.Singleton<StateManager>() {
 
   @DGXEvent('houserobbery:server:enterHouse')
   private _enterHouse = (plyId: number, houseId: string) => {
-    const cid = Util.getCID(plyId);
-    const house = this.houseStates.get(houseId);
+    const house = this.activeHouses.get(houseId);
     if (!house) return;
-    house.players.add(cid);
+
+    house.insidePlayers.add(plyId);
 
     Util.Log(
       'houserobbery:house:enter',
       {
         houseId,
-        players: house.players,
-        searchedLocations: house.searched,
       },
       `${Util.getName(plyId)}(${plyId}) entered a house for a robbery`,
       plyId
     );
   };
 
+  public getHousePlayerIsIn = (plyId: number) => {
+    for (const [houseId, house] of this.activeHouses) {
+      if (house.insidePlayers.has(plyId)) {
+        return houseId;
+      }
+    }
+  };
+
   @DGXEvent('houserobbery:server:leaveHouse')
-  private _leaveHouse = (plyId: number, houseId: string) => {
-    const cid = Util.getCID(plyId);
-    const house = this.houseStates.get(houseId);
+  private leaveHouse = (plyId: number, houseId: string) => {
+    const house = this.activeHouses.get(houseId);
     if (!house) return;
-    house.players.delete(cid);
+
+    house.insidePlayers.delete(plyId);
 
     Util.Log(
       'houserobbery:house:leave',
       {
         houseId,
-        players: house.players,
-        searchedLocations: house.searched,
       },
       `${Util.getName(plyId)}(${plyId}) left a house for a robbery`,
       plyId
     );
-
-    // Check if everything is searched
-    if (house.searched.size === this.config.shellInfo[this.config.locations[house.dataIdx].size].lootZones) {
-      const group = Jobs.getGroupByServerId(plyId);
-      if (!group) return;
-      this.finishJob(group.id, houseId);
-    }
   };
 
   @DGXEvent('houserobbery:server:doLootZone')
   private _doLootZone = async (plyId: number, houseId: string, zoneName: string, lootTableId = 0) => {
+    const house = this.activeHouses.get(houseId);
+    if (!house) return;
+
     const hasObject = await Inventory.hasObject(plyId);
     if (hasObject) {
       Notifications.add(plyId, 'Je hebt nog iets vast...', 'error');
       return false;
     }
 
-    const house = this.houseStates.get(houseId);
-    if (!house) return;
-
-    const cid = Util.getCID(plyId);
-    if (!house.players.has(cid)) return;
-    if (house.searched.has(zoneName)) {
+    if (!house.insidePlayers.has(plyId)) return;
+    if (house.searchedZones.has(zoneName)) {
       Notifications.add(plyId, 'Deze plek is al eens doorzocht...', 'error');
       return;
     }
+
     if (Jobs.isWhitelisted(plyId, 'police')) {
       Notifications.add(plyId, 'Dit is niet de bedoeling he...');
       return;
     }
-    house.searched.add(zoneName);
+
+    house.searchedZones.add(zoneName);
 
     const [cancelled] = await Taskbar.create(plyId, 'magnifying-glass', 'Doorzoeken...', 15000, {
       canCancel: true,
@@ -305,12 +289,12 @@ class StateManager extends Util.Singleton<StateManager>() {
       },
     });
     if (cancelled) {
-      house.searched.delete(zoneName);
+      house.searchedZones.delete(zoneName);
       return;
     }
 
-    const lootTable = this.config.lootTables[lootTableId];
-    const item = lootTable[Util.getRndInteger(0, lootTable.length)];
+    const lootTable = getConfig().lootTables[lootTableId];
+    const item = lootTable[Math.floor(Math.random() * lootTable.length)];
     const [itemId] = await Inventory.addItemToPlayer(plyId, item, 1);
 
     // broken phone in loottable is added as a way for a solo player to consistently get electronics by recycling
@@ -330,109 +314,89 @@ class StateManager extends Util.Singleton<StateManager>() {
       plyId
     );
 
-    if (Util.getRndInteger(1, 1001) <= this.config.moldChance * 10) {
+    if (Util.getRndInteger(1, 1001) <= getConfig().moldChance * 10) {
       global.exports['dg-materials'].tryGivingKeyMold(plyId);
+    }
+
+    const shellInfo = getConfig().shellInfo[house.location.size];
+    if (shellInfo) {
+      const amountOfLootZones = shellInfo.lootZones;
+      if (house.searchedZones.size >= amountOfLootZones) {
+        this.finishJob(houseId);
+      }
     }
   };
 
-  public getRobableHouse = () => {
-    const robableHouse = [...this.houseStates.entries()].filter(([_, state]) => state.state === HouseState.FREE);
-    if (robableHouse.length == 0) return null;
-    const chosenHouse = robableHouse[Util.getRndInteger(0, robableHouse.length)];
-    return chosenHouse[0];
-  };
-
-  public startJobForPly(cid: number, houseId: string) {
+  public startJobForPly(cid: number, location: Houserobbery.Location) {
     const group = Jobs.getGroupByCid(cid);
     if (!group) {
-      mainLogger.debug(`Could not find job group for player ${cid}`);
+      mainLogger.debug(`could not find job group for player ${cid}`);
       return false;
     }
 
     const plyId = DGCore.Functions.getPlyIdForCid(cid);
-    if (!plyId) return false;
-
-    const couldChange = Jobs.changeGroupJob(plyId, 'houserobbery');
-    if (!couldChange) {
-      mainLogger.debug(`Could not change job for player ${cid} - ${plyId}`);
+    if (!plyId) {
+      mainLogger.debug(`player ${cid} was no longer online to start job`);
       return false;
     }
 
-    const house = this.houseStates.get(houseId);
-    if (!house) return false;
+    if (this.getHouseIdByGroupId(group.id)) {
+      mainLogger.debug(`player group was already busy`);
+      return false;
+    }
 
-    const findTimeout = setTimeout(() => {
-      Util.Log(
-        'houserobbery:job:findtimeout',
-        {
-          houseId,
-          others: group.members,
-        },
-        `${Util.getName(plyId)}(${plyId}) timed out finding a house`,
-        plyId
-      );
-      this.failJob(group.id, plyId);
-    }, this.config.timeToFind * 60000);
+    const couldChange = Jobs.changeGroupJob(plyId, 'houserobbery');
+    if (!couldChange) {
+      mainLogger.debug(`could not change job for group of player ${cid} - ${plyId}`);
+      return false;
+    }
 
-    this.activeJobs.set(group.id, {
-      houseId,
-      findTimeout,
+    let houseId = Util.uuidv4();
+    while (this.activeHouses.has(houseId)) {
+      houseId = Util.uuidv4();
+    }
+
+    const timeToFind = getConfig().timeToFind;
+
+    this.activeHouses.set(houseId, {
+      searchedZones: new Set(),
+      insidePlayers: new Set(),
+      location,
+      locked: true,
+      groupId: group.id,
+      findTimeout: setTimeout(() => {
+        this.finishJob(houseId, true);
+      }, timeToFind * 60 * 1000),
       finishTimeout: null,
     });
-    house.state = HouseState.LOCKED;
 
-    const houseInfo = this.config.locations[house.dataIdx];
+    Events.emitNet('houserobbery:client:activateLocation', -1, houseId, location);
 
     group.members.forEach(m => {
-      this.playerStates.set(m.cid, PlayerState.ASSIGNED);
-      if (m.serverId !== null) {
-        Events.emitNet('houserobbery:client:setSelectedHouse', m.serverId, houseId, houseInfo, this.config.timeToFind);
-        Phone.sendMail(
-          m.serverId,
-          'Huisinbraak',
-          'Bert B.',
-          `Je bent geselecteerd voor de job. Je hebt ${this.config.timeToFind}min om binnen te geraken! De locatie staat op je GPS gemarkeerd.`
-        );
-      }
+      if (m.serverId === null) return;
+      Events.emitNet('houserobbery:client:setSelectedHouse', m.serverId, houseId, location.coords, timeToFind);
     });
-
-    // build zone for everyone so other players can also enter
-    Events.emitNet('houserobbery:client:buildHouseZone', -1, houseId, houseInfo);
 
     Util.Log(
       'houserobbery:job:start',
       {
         houseId,
+        location,
         others: group.members,
       },
-      `${Util.getName(plyId)} started a house robbery job`,
+      `${Util.getName(plyId)}(${plyId}) started a house robbery job`,
       plyId
     );
-    mainLogger.debug(`Started job for player ${cid} in house ${JSON.stringify(houseInfo.coords)}`);
+    mainLogger.debug(`Started job for player ${cid} in house ${JSON.stringify(location)}`);
+
     return true;
   }
 
-  private failJob(groupId: string, plyId: number) {
-    const activeJob = this.activeJobs.get(groupId);
-    if (!activeJob) return;
-    const house = this.houseStates.get(activeJob.houseId);
-    if (!house) return;
-
-    house.state = HouseState.FREE;
-
-    mainLogger.debug(`${plyId} failed his houserobbery job`);
-
-    this.finishJob(groupId, activeJob.houseId, true);
-  }
-
   private finishJobForPly(plyId: number | null, cid: number, failed = false) {
-    this.playerStates.set(cid, PlayerState.COOLDOWN);
-
+    this.timedOutPlayers.add(cid);
     setTimeout(() => {
-      if (this.playerStates.has(cid)) {
-        this.playerStates.set(cid, PlayerState.WAITING);
-      }
-    }, this.config.playerCooldown * 60000);
+      this.timedOutPlayers.delete(cid);
+    }, getConfig().playerCooldown * 60 * 1000);
 
     if (plyId) {
       Events.emitNet('houserobbery:client:cleanup', plyId);
@@ -448,15 +412,15 @@ class StateManager extends Util.Singleton<StateManager>() {
     }
   }
 
-  private finishJob(groupId: string, houseId: string, failed = false) {
-    const house = this.houseStates.get(houseId);
+  private finishJob(houseId: string, failed = false) {
+    const house = this.activeHouses.get(houseId);
     if (!house) return;
-    const activeJob = this.activeJobs.get(groupId);
-    if (!activeJob) return;
 
-    this.activeJobs.delete(groupId);
+    if (house.finishTimeout) {
+      clearTimeout(house.finishTimeout);
+    }
 
-    const group = Jobs.getGroupById(groupId);
+    const group = Jobs.getGroupById(house.groupId);
     if (group) {
       if (group.owner.serverId) {
         Jobs.changeGroupJob(group.owner.serverId, null);
@@ -474,13 +438,10 @@ class StateManager extends Util.Singleton<StateManager>() {
       },
       `${group?.owner.name ?? 'unknown group owner'} finished his house robbery job`
     );
-    house.state = HouseState.COOLDOWN;
-    setTimeout(() => {
-      house.state = HouseState.FREE;
-      house.searched.clear();
 
-      // destroy zone for everyone when job is finished
-      Events.emitNet('houserobbery:client:destroyHouseZone', -1, houseId);
+    setTimeout(() => {
+      this.activeHouses.delete(houseId);
+      Events.emitNet('houserobbery:client:deactivateLocation', -1, houseId);
     }, 10 * 60000);
   }
 
@@ -489,8 +450,14 @@ class StateManager extends Util.Singleton<StateManager>() {
     Events.emitNet('houserobbery:client:cleanup', plyId);
   }
 
-  public handlePlayerLeft = (cid: number) => {
-    this.playerStates.delete(cid);
+  public handlePlayerLeft = (plyId: number, cid: number) => {
+    this.signedInPlayers.delete(cid);
+
+    // If ply is in house when ply leaves, remove from inside plys
+    const houseId = this.getHousePlayerIsIn(plyId);
+    if (houseId) {
+      this.leaveHouse(plyId, houseId);
+    }
   };
 }
 

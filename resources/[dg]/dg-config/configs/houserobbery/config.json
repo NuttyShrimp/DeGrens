@@ -1,0 +1,37 @@
+{
+  "moldChance": 0.5,
+  "lootTables": [
+    [
+      "money_roll",
+      "camera",
+      "gameboy",
+      "hifi",
+      "nintendo_switch",
+      "nokia",
+      "psp",
+      "phone"
+    ],
+    [
+      "tv"
+    ],
+    [
+      "vaas"
+    ],
+    [
+      "microwave"
+    ]
+  ],
+  "playerCooldown": 30,
+  "timeToRob": 15,
+  "timeToFind": 15,
+  "shellInfo": {
+    "small": {
+      "plan": "standardmotel_shell",
+      "lootZones": 6
+    },
+    "medium": {
+      "plan": "furnitured_midapart",
+      "lootZones": 11
+    }
+  }
+}

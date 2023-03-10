@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Enkele stoelen toegevoegd om op te zitten
 - Report WS wordt gesloten met een statuscode + reason
 - Feedback bij een NPC toegevoegd over de werking
+- Zeer veel nieuwe houserobbery locaties toegevoegd
 
 ### Changed
 - Bait price aangepast
@@ -24,6 +25,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Staff toegang gegeven tot changeModel command
 - Cache admin points in backend to reduce load on DB
 - Enkel admin command permissies aangepast
+- Heel het houserobbery systeem herschreven, hopelijk werkt het nu deftig
 
 ### Fixed
 - Je kan weer smelten als je meer dan de nodige items opzak hebt

@@ -1,11 +1,14 @@
-import { Chat, Jobs, Util } from '@dgx/server';
+import { Chat, Jobs } from '@dgx/server';
 import stateManager from 'classes/StateManager';
-import './services/grouppicker';
-
-import './controllers';
 import { startPlayerPickingThread } from './services/grouppicker';
+import { loadConfig } from 'services/config';
 
-setImmediate(() => {
+import './services/grouppicker';
+import './controllers';
+
+setImmediate(async () => {
+  await loadConfig();
+
   const jobInfo: Jobs.Job = {
     title: 'Huisinbraak',
     size: 4,
@@ -20,7 +23,7 @@ setImmediate(() => {
 Chat.registerCommand('houserobbery:startJob', '', [], 'developer', (src: number) => {
   const Player = DGCore.Functions.GetPlayer(src);
   const cid = Player.PlayerData.citizenid;
-  const houseId = stateManager.getRobableHouse();
-  if (!houseId) return;
-  stateManager.startJobForPly(cid, houseId);
+  const location = stateManager.getUnusedLocation();
+  if (!location) return;
+  stateManager.startJobForPly(cid, location);
 });

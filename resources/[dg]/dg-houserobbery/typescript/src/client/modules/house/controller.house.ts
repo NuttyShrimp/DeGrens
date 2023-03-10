@@ -1,39 +1,22 @@
-import { Events, Peek, PolyTarget, Weapons } from '@dgx/client';
+import { Events, Peek, Weapons, Phone } from '@dgx/client';
 import { Util } from '@dgx/shared';
+import { activateLocation, deactivateLocation, enterHouse, leaveHouse } from './service.house';
+import { getInsideHouseId } from 'modules/interior/service.interior';
 
-import { enterHouse, leaveHouse, searchLootLocation } from './helpers.house';
-
-let shellTypes: Record<string, string>;
-
-let selectedHouse: string | null = null;
-let selectedHouseInfo: House.Data | null = null;
+let selectedHouseId: string | null = null;
 let radiusBlip: any = null;
 let radiusBlipInterval: NodeJS.Timer | null = null;
 
-export const getShellTypes = () => shellTypes;
-export const getSelectedHouse = () => selectedHouse;
-export const setSelectedHouse = (houseId: string) => {
-  selectedHouse = houseId;
-};
-export const getSelectedHouseInfo = () => selectedHouseInfo;
-
-global.exports('lootZone', (place: string, lootTable?: number) => {
-  if (!selectedHouse) return;
-  searchLootLocation(selectedHouse, place, lootTable);
+global.exports('lootZone', (zoneName: string, lootTableId = 0) => {
+  const houseId = getInsideHouseId();
+  if (!houseId) return;
+  Events.emitNet('houserobbery:server:doLootZone', houseId, zoneName, lootTableId);
 });
 
-Events.onNet('houserobbery:server:setShellTypes', (types: typeof shellTypes) => {
-  shellTypes = types;
-});
-
-on('dg-houserobbery:leave', () => {
-  if (!selectedHouse) return;
-  leaveHouse();
-});
+on('dg-houserobbery:leave', leaveHouse);
 
 Events.onNet('houserobbery:client:cleanup', () => {
-  selectedHouse = null;
-  selectedHouseInfo = null;
+  selectedHouseId = null;
   if (radiusBlipInterval) {
     clearInterval(radiusBlipInterval);
     radiusBlipInterval = null;
@@ -60,12 +43,12 @@ Peek.addZoneEntry('houserobbery_door', {
     {
       icon: 'fas fa-lock-open',
       label: 'Forceer deur',
-      action: entry => {
+      action: option => {
         const holdingCrowbar = Weapons.getCurrentWeaponData()?.name === 'weapon_crowbar' ?? false;
-        Events.emitNet('houserobbery:server:unlockHouse', entry.data.id, holdingCrowbar);
+        Events.emitNet('houserobbery:server:unlockHouse', option.data.id, holdingCrowbar);
       },
-      canInteract: (_, __, entry) => {
-        return selectedHouse == entry.data.id;
+      canInteract: (_, __, option) => {
+        return selectedHouseId == option.data.id;
       },
     },
     {
@@ -74,60 +57,56 @@ Peek.addZoneEntry('houserobbery_door', {
       action: entry => {
         enterHouse(entry.data.id);
       },
+      canInteract: (_, __, option) => {
+        if (selectedHouseId === null) return true;
+        return option.data.id === selectedHouseId;
+      },
     },
     {
       icon: 'fas fa-lock',
       label: 'Vergrendel deur',
       job: 'police',
-      action: entry => {
-        Events.emitNet('houserobbery:server:lockDoor', entry.data.id);
+      action: option => {
+        Events.emitNet('houserobbery:server:lockDoor', option.data.id);
       },
     },
   ],
   distance: 1.5,
 });
 
-Events.onNet('houserobbery:client:buildHouseZone', (houseId: string, houseInfo: House.Data) => {
-  PolyTarget.addBoxZone('houserobbery_door', houseInfo.coords, 1.0, 1.0, {
-    data: {
-      id: houseId,
-    },
-    heading: houseInfo.coords.w,
-    minZ: houseInfo.coords.z - 2,
-    maxZ: houseInfo.coords.z + 2,
-  });
-});
+Events.onNet('houserobbery:client:activateLocation', activateLocation);
+Events.onNet('houserobbery:client:deactivateLocation', deactivateLocation);
 
-Events.onNet('houserobbery:client:destroyHouseZone', (houseId: string) => {
-  PolyTarget.removeZone('houserobbery_door', houseId);
-});
+Events.onNet('houserobbery:client:setSelectedHouse', (houseId: string, coords: Vec4, timeToFind: number) => {
+  selectedHouseId = houseId;
 
-Events.onNet('houserobbery:client:setSelectedHouse', (houseId: string, houseInfo: House.Data, timeToFind: number) => {
-  selectedHouse = houseId;
-  selectedHouseInfo = houseInfo;
-
-  const coords = {
-    x: houseInfo.coords.x + Util.getRndInteger(0, 50),
-    y: houseInfo.coords.y + Util.getRndInteger(0, 50),
-    z: houseInfo.coords.z,
-  };
   let blipAlpha = 150;
-  radiusBlip = AddBlipForRadius(coords.x, coords.y, coords.z, 100.0);
+  radiusBlip = AddBlipForRadius(
+    coords.x + Util.getRndInteger(-25, 25),
+    coords.y + Util.getRndInteger(-25, 25),
+    coords.z,
+    50.0
+  );
   SetBlipColour(radiusBlip, 1);
   SetBlipAlpha(radiusBlip, blipAlpha);
   SetBlipHighDetail(radiusBlip, true);
 
   radiusBlipInterval = setInterval(() => {
-    if (blipAlpha == 0) {
+    if (blipAlpha === 0) {
       if (radiusBlipInterval) {
         clearInterval(radiusBlipInterval);
         radiusBlipInterval = null;
       }
       RemoveBlip(radiusBlip);
-      selectedHouse = null;
       return;
     }
     blipAlpha--;
     SetBlipAlpha(radiusBlip, blipAlpha);
   }, (timeToFind * 60000) / 150);
+
+  Phone.sendMail(
+    'Huisinbraak',
+    'Bert B.',
+    `Je bent geselecteerd voor de job. Je hebt ${timeToFind}min om binnen te geraken! De locatie staat op je GPS gemarkeerd.`
+  );
 });
