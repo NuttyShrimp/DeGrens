@@ -10,6 +10,8 @@ image: node:16
 variables:
   GIT_DEPTH: 5
   FF_USE_FASTZIP: 'true'
+  ARTIFACT_COMPRESSION_LEVEL: "fastest"
+  CACHE_COMPRESSION_LEVEL: "fastest"
   TRANSFER_METER_FREQUENCY: 5s # will display transfer progress every 5 seconds for artifacts and remote caches.
 
 .node_mod_installation:
