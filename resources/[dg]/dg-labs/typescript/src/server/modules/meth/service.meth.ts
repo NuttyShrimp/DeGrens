@@ -46,7 +46,11 @@ const areAllStationsFull = () => {
 
 // checks if started and not in timeout
 export const isMethStarted = () => {
-  return methState.started && !methState.timedOut;
+  return methState.started;
+};
+
+export const isMethTimedOut = () => {
+  return methState.timedOut;
 };
 
 export const startMeth = async (plyId: number) => {
@@ -57,6 +61,11 @@ export const startMeth = async (plyId: number) => {
 
   if (isMethStarted()) {
     Notifications.add(plyId, 'Dit staat al aan', 'error');
+    return;
+  }
+
+  if (isMethTimedOut()) {
+    Notifications.add(plyId, 'Computer is momenteel in slaapstand', 'error');
     return;
   }
 
@@ -131,7 +140,7 @@ export const isStationFull = (stationId: number) => {
 };
 
 export const increaseStationAmount = (plyId: number, stationId: number) => {
-  if (!isMethStarted()) return;
+  if (!isMethStarted() || isMethTimedOut()) return;
   if (isStationFull(stationId)) return;
 
   const station = getStation(stationId);
@@ -148,7 +157,7 @@ export const getStationSettings = (stationId: number) => {
 };
 
 export const setStationSettings = (plyId: number, stationId: number, settings: Labs.Meth.Settings) => {
-  if (!isMethStarted()) return;
+  if (!isMethStarted() || isMethTimedOut()) return;
 
   const station = getStation(stationId);
   station.settings = settings;
@@ -159,7 +168,7 @@ export const setStationSettings = (plyId: number, stationId: number, settings: L
 };
 
 export const collectMethLoot = async (plyId: number) => {
-  if (!isMethStarted() || !areAllStationsFull()) {
+  if (!isMethStarted() || isMethTimedOut() || !areAllStationsFull()) {
     Notifications.add(plyId, 'Er is nog niks te nemen', 'error');
     return;
   }

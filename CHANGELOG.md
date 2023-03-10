@@ -43,6 +43,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Je kan motors nu wel afleggen als je sleutels niet hebt
 - Betere manier om admin screenshot te kopieren
 - Verwijderd gesavede mails nadat deze verzonden zijn
+- Je kan methlab niet meer starten tijdens timeout
 
 ## [1.0.9]
 

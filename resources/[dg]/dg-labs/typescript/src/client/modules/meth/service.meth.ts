@@ -7,7 +7,7 @@ let changeSettingsData: { labId: number; stationId: number } | null = null;
 export const hasMethPackage = () => hasPackage;
 
 export const takeMethPackage = async (labId: number) => {
-  const isStarted = await RPC.execute<boolean>('labs:meth:isStarted', labId);
+  const isStarted = await RPC.execute<boolean>('labs:meth:canDoAction', labId);
   if (!isStarted) {
     Notifications.add('Lab staat nog niet aan', 'error');
     return;
@@ -48,9 +48,17 @@ export const increaseMethStatus = async (labId: number, stationId: number) => {
     return;
   }
 
-  const canFill = await RPC.execute<'full' | 'notFull' | 'notStarted'>('labs:meth:canFillStation', labId, stationId);
+  const canFill = await RPC.execute<'full' | 'notFull' | 'notStarted' | 'timedOut'>(
+    'labs:meth:canFillStation',
+    labId,
+    stationId
+  );
   if (canFill === 'notStarted') {
     Notifications.add('Dit staat nog niet aan', 'error');
+    return;
+  }
+  if (canFill === 'timedOut') {
+    Notifications.add('Dit is nog te warm', 'error');
     return;
   }
   if (canFill === 'full') {
@@ -93,7 +101,7 @@ export const setMethSettings = async (labId: number, stationId: number) => {
     return;
   }
 
-  const isStarted = await RPC.execute<boolean>('labs:meth:isStarted', labId);
+  const isStarted = await RPC.execute<boolean>('labs:meth:canDoAction', labId);
   if (!isStarted) {
     Notifications.add('Lab staat nog niet aan', 'error');
     return;

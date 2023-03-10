@@ -4,6 +4,7 @@ import {
   getStationSettings,
   increaseStationAmount,
   isMethStarted,
+  isMethTimedOut,
   isStationFull,
   setStationSettings,
   startMeth,
@@ -19,11 +20,11 @@ Events.onNet('labs:meth:start', (plyId: number, labId: number) => {
   startMeth(plyId);
 });
 
-RPC.register('labs:meth:isStarted', (plyId, labId: number) => {
+RPC.register('labs:meth:canDoAction', (plyId, labId: number) => {
   const validated = validateLabType(plyId, labId, 'meth');
   if (!validated) return false;
 
-  return isMethStarted();
+  return isMethStarted() && !isMethTimedOut();
 });
 
 RPC.register('labs:meth:canFillStation', (plyId, labId: number, stationId: number) => {
@@ -31,6 +32,7 @@ RPC.register('labs:meth:canFillStation', (plyId, labId: number, stationId: numbe
   if (!validated) return 'notStarted';
 
   if (!isMethStarted()) return 'notStarted';
+  if (isMethTimedOut()) return 'timedOut';
 
   return isStationFull(stationId) ? 'full' : 'notFull';
 });
