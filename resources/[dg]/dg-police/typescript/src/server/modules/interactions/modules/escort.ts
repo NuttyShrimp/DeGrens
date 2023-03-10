@@ -37,9 +37,8 @@ RPC.register('police:interactions:canEscortPlayer', (src: number, target: number
 
   // Target cannot already be in interaction and must be down or cuffed
   if (isPlayerInActiveInteraction(target)) return false;
-  if (!isPlayerCuffed(target) && !Hospital.isDown(target)) return false;
 
-  return true;
+  return isPlayerCuffed(target) || Hospital.isDown(target);
 });
 
 Events.onNet('police:interactions:escort', (src: number, target: number) => {
