@@ -1,8 +1,9 @@
 import { loadConfig } from 'services/config';
 import restaurantManager from 'classes/restaurantmanager';
+import { Financials, Inventory } from '@dgx/server';
 
 import './controllers';
-import { Financials, Inventory } from '@dgx/server';
+import './services/config';
 
 setImmediate(async () => {
   await loadConfig();

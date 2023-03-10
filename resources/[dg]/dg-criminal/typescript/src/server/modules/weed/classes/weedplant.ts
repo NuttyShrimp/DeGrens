@@ -1,6 +1,6 @@
 import { SQL, StaticObjects, UI, Util, Inventory, Notifications, Phone } from '@dgx/server';
 import { MODELS_PER_STAGE } from '../constants.weed';
-import { getConfig } from 'services/config';
+import config from 'services/config';
 import { mainLogger } from 'sv_logger';
 import winston from 'winston';
 import { getCurrentSeconds } from '../service.weed';
@@ -162,7 +162,7 @@ export class WeedPlant {
     const itemState = await Inventory.getFirstItemOfNameOfPlayer(plyId, itemName);
     if (!itemState) return;
 
-    const weedConfig = getConfig().weed;
+    const weedConfig = config.weed;
     const decrease = weedConfig.fertilizerDecrease;
     Inventory.setQualityOfItem(itemState.id, old => old - decrease);
 
@@ -189,7 +189,7 @@ export class WeedPlant {
     this.logger.silly(logMessage);
     Util.Log('weed:destroy', { plantId: this.id }, logMessage, plyId);
 
-    if (this.cid && Util.getRndInteger(0, 101) < getConfig().weed.destroyMailChance) {
+    if (this.cid && Util.getRndInteger(0, 101) < config.weed.destroyMailChance) {
       const charInfo = DGCore.Functions.GetPlayer(plyId)?.PlayerData?.charinfo;
       const charName = `${charInfo?.firstname ?? 'Onbekende'} ${charInfo?.lastname ?? 'Persoon'}`;
 
@@ -216,7 +216,7 @@ export class WeedPlant {
   public canCut = () => {
     if (!this.isFullyGrown()) return false;
     const currentTime = getCurrentSeconds();
-    return currentTime >= this.cutTime + getConfig().weed.cut.timeout * 60 * 60; // config value is in hours
+    return currentTime >= this.cutTime + config.weed.cut.timeout * 60 * 60; // config value is in hours
   };
 
   public cut = (plyId: number) => {
@@ -230,7 +230,7 @@ export class WeedPlant {
     // Chance of breaking when cutting
     setTimeout(() => {
       const rnd = Util.getRndInteger(1, 101);
-      if (rnd > getConfig().weed.cut.breakChance) return;
+      if (rnd > config.weed.cut.breakChance) return;
       this.remove();
       Notifications.add(plyId, 'De plant is gestorven', 'error');
     }, 1000);

@@ -1,28 +1,26 @@
 import { Config } from '@dgx/server';
-import { mainLogger } from 'sv_logger';
-
-const proxyHandler = {
-  get(_: any, prop: keyof Lockers.Config) {
-    if (configData == null) {
-      throw new Error('Config was not loaded yet...');
-    }
-    return configData[prop];
-  },
-};
 
 let configData: Lockers.Config | null = null;
-const config = new Proxy({}, proxyHandler);
-
-export const loadConfig = async () => {
-  await Config.awaitConfigLoad();
-  const data = Config.getConfigValue('lockers');
-  configData = data;
-};
+const config = new Proxy(
+  {},
+  {
+    get(_: any, prop: keyof Lockers.Config) {
+      if (configData == null) {
+        throw new Error('Config was not loaded yet...');
+      }
+      return configData[prop];
+    },
+  }
+);
 
 on('dg-config:moduleLoaded', (module: string, data: Lockers.Config) => {
   if (module !== 'lockers') return;
   configData = data;
-  mainLogger.silly('Updated config');
 });
+
+export const loadConfig = async () => {
+  await Config.awaitConfigLoad();
+  configData = Config.getConfigValue<Lockers.Config>('lockers');
+};
 
 export default config as Lockers.Config;

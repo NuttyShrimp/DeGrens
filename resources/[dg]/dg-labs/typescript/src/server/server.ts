@@ -7,6 +7,7 @@ import './controllers';
 import './modules/weed';
 import './modules/meth';
 import './modules/coke';
+import './services/config';
 
 setImmediate(async () => {
   await loadConfig();

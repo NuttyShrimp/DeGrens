@@ -1,18 +1,26 @@
 import { Config } from '@dgx/server';
-import { Util } from '@dgx/shared';
 
-let config: Criminal.Config | null = null;
-
-export const awaitConfig = () => Util.awaitCondition(() => config !== null);
-
-export const getConfig = () => {
-  if (config === null) {
-    throw new Error('Tried to get config but was not initialized yet...');
+let configData: Criminal.Config | null = null;
+const config = new Proxy(
+  {},
+  {
+    get(_: any, prop: keyof Criminal.Config) {
+      if (configData == null) {
+        throw new Error('Config was not loaded yet...');
+      }
+      return configData[prop];
+    },
   }
-  return config;
-};
+);
+
+on('dg-config:moduleLoaded', (module: string, data: Criminal.Config) => {
+  if (module !== 'restaurants') return;
+  configData = data;
+});
 
 export const loadConfig = async () => {
   await Config.awaitConfigLoad();
-  config = Config.getConfigValue('criminal');
+  configData = Config.getConfigValue<Criminal.Config>('criminal');
 };
+
+export default config as Criminal.Config;

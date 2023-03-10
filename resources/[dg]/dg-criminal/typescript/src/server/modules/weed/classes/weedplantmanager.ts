@@ -4,7 +4,7 @@ import { WeedPlant } from './weedplant';
 import winston from 'winston';
 import { mainLogger } from 'sv_logger';
 import { getCurrentSeconds } from '../service.weed';
-import { getConfig } from 'services/config';
+import config from 'services/config';
 
 @EventListener()
 class WeedPlantManager extends Util.Singleton<WeedPlantManager>() {
@@ -107,7 +107,7 @@ class WeedPlantManager extends Util.Singleton<WeedPlantManager>() {
 
   public startThreads = () => {
     // Growing loop
-    const growTime = getConfig().weed.growTime * 60 * 60;
+    const growTime = config.weed.growTime * 60 * 60;
     setInterval(() => {
       this.logger.silly('Plant grow interval fired');
 
@@ -131,7 +131,7 @@ class WeedPlantManager extends Util.Singleton<WeedPlantManager>() {
       setTimeout(() => {
         SQL.query('UPDATE weed_plants SET food = food - 1');
       }, 5000);
-    }, getConfig().weed.food.decayTime * 60 * 1000);
+    }, config.weed.food.decayTime * 60 * 1000);
   };
 }
 

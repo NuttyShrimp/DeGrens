@@ -8,6 +8,7 @@ import './modules/cornerselling';
 import './modules/weed';
 import './modules/blackmoney';
 import './modules/fence';
+import './services/config';
 
 setImmediate(async () => {
   await loadConfig();

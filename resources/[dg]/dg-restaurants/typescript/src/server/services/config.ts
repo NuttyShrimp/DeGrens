@@ -13,14 +13,14 @@ const config = new Proxy(
   }
 );
 
-export const loadConfig = async () => {
-  await Config.awaitConfigLoad();
-  configData = Config.getConfigValue<Restaurants.Config>('restaurants');
-};
-
 on('dg-config:moduleLoaded', (module: string, data: Restaurants.Config) => {
   if (module !== 'restaurants') return;
   configData = data;
 });
+
+export const loadConfig = async () => {
+  await Config.awaitConfigLoad();
+  configData = Config.getConfigValue<Restaurants.Config>('restaurants');
+};
 
 export default config as Restaurants.Config;

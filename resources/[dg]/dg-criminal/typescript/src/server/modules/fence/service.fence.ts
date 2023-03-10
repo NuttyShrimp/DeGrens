@@ -1,5 +1,5 @@
 import { Inventory, Notifications, Financials, Util } from '@dgx/server';
-import { getConfig } from 'services/config';
+import config from 'services/config';
 import { fenceLogger } from './logger.fence';
 import { FENCE_INVENTORY_NAME } from './constants.fence';
 
@@ -7,7 +7,7 @@ let currentCash = 0;
 let itemPrices: Criminal.Fence.Config['items'] = {};
 
 export const initializeFence = async () => {
-  itemPrices = getConfig().fence.items;
+  itemPrices = config.fence.items;
   Inventory.createScriptedStash(FENCE_INVENTORY_NAME, 10, Object.keys(itemPrices));
 };
 

@@ -1,8 +1,8 @@
 import { Util, Financials, Inventory } from '@dgx/server';
-import { getConfig } from 'services/config';
+import config from 'services/config';
 
 export const randomSellBlackMoney = async (plyId: number) => {
-  const items = getConfig().blackmoney.items;
+  const items = config.blackmoney.items;
   const itemNames = Util.shuffleArray(Object.keys(items));
   const playerItems = await Inventory.getPlayerItems(plyId);
   const itemToSell = playerItems.find(i => itemNames.includes(i.name));

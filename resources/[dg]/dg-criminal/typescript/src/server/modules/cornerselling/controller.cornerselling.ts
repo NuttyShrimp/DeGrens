@@ -1,7 +1,7 @@
 import { Config, Events, Financials, Inventory, Notifications, Police, Reputations, RPC, SQL, Util } from '@dgx/server';
 import { randomSellBlackMoney } from 'modules/blackmoney/service.blackmoney';
-import { getConfig } from 'services/config';
 import { addSaleToHeatmap, calculatePrice, getSellableItems } from './service.cornerselling';
+import config from 'services/config';
 
 Events.onNet('criminal:cornersell:tryToStart', async (plyId: number) => {
   if (!Police.canDoActivity('cornersell')) {
@@ -23,7 +23,7 @@ Events.onNet('criminal:cornersell:sell', async (plyId: number, zone: string) => 
   const sellableItems = await getSellableItems(plyId);
   const choosenItem = sellableItems[Math.floor(Math.random() * sellableItems.length)];
   const amountPlayerHas = await Inventory.getAmountPlayerHas(plyId, choosenItem);
-  const sellAmount = getConfig().cornerselling.sellAmount;
+  const sellAmount = config.cornerselling.sellAmount;
   const amountToRemove = Math.min(amountPlayerHas, Util.getRndInteger(sellAmount.min, sellAmount.max + 1));
 
   const removed = await Inventory.removeItemByNameFromPlayer(plyId, choosenItem, amountToRemove);
@@ -49,7 +49,7 @@ Events.onNet('criminal:cornersell:sell', async (plyId: number, zone: string) => 
   Reputations.setReputation(cid, 'cornersell', rep => rep + 1);
 
   // Chance to sell blackmoney
-  if (Util.getRndInteger(1, 101) <= getConfig().cornerselling.cleanChance) {
+  if (Util.getRndInteger(1, 101) <= config.cornerselling.cleanChance) {
     randomSellBlackMoney(plyId);
   }
 

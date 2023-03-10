@@ -1,5 +1,5 @@
 import { SQL, Inventory, Reputations, Util } from '@dgx/server';
-import { getConfig } from 'services/config';
+import config from 'services/config';
 
 const salesHeatmap: Record<string, number> = {};
 
@@ -10,7 +10,7 @@ export const initializeCornerselling = async () => {
 
 const dropOldSales = () => {
   return SQL.query('DELETE FROM cornerselling_sales WHERE date < NOW() - INTERVAL ? DAY', [
-    getConfig().cornerselling.decayTime,
+    config.cornerselling.decayTime,
   ]);
 };
 
@@ -24,7 +24,7 @@ const loadSellLocations = async () => {
 export const addSaleToHeatmap = (zone: string) => {
   const prevModifier = salesHeatmap[zone];
   const newModifier = (prevModifier ?? 1) + 0.1;
-  salesHeatmap[zone] = Math.min(getConfig().cornerselling.maxModifier, newModifier);
+  salesHeatmap[zone] = Math.min(config.cornerselling.maxModifier, newModifier);
 };
 
 const getModifierFromSalesHeatmap = (zone: string) => {
@@ -36,7 +36,7 @@ export const getSellableItems = async (plyId: number) => {
   const cid = Util.getCID(plyId);
   const plyRep = Reputations.getReputation(cid, 'cornersell') ?? 0;
 
-  const sellableItems = Object.entries(getConfig().cornerselling.sellableItems);
+  const sellableItems = Object.entries(config.cornerselling.sellableItems);
   const itemsPlayerHas: string[] = [];
   for (const [item, data] of sellableItems) {
     if (data.requiredReputation > plyRep) continue;
@@ -49,7 +49,7 @@ export const getSellableItems = async (plyId: number) => {
 };
 
 export const calculatePrice = (item: string, zone: string) => {
-  const basePrice = getConfig().cornerselling.sellableItems[item].basePrice;
+  const basePrice = config.cornerselling.sellableItems[item].basePrice;
   const modifier = getModifierFromSalesHeatmap(zone);
   return Math.floor(basePrice * modifier);
 };

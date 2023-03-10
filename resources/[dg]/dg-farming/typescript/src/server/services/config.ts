@@ -13,14 +13,14 @@ const config = new Proxy(
   }
 );
 
-export const loadConfig = async () => {
-  await Config.awaitConfigLoad();
-  configData = Config.getConfigValue<Farming.Config>('farming');
-};
-
 on('dg-config:moduleLoaded', (module: string, data: Farming.Config) => {
   if (module !== 'farming') return;
   configData = data;
 });
+
+export const loadConfig = async () => {
+  await Config.awaitConfigLoad();
+  configData = Config.getConfigValue<Farming.Config>('farming');
+};
 
 export default config as Farming.Config;
