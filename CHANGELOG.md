@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Zeer veel nieuwe houserobbery locaties toegevoegd
 - Locate player/vehicle commands toegevoegd aan adminmenu
 - Actieve melding om weer te geven dat je in cloak/noclip ben
+- Je kan nu garagelogs bekijken van gesharede overheids voertuigen
 
 ### Changed
 - Bait price aangepast

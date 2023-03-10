@@ -152,21 +152,17 @@ const validateAccessToGarage = (src: number) => {
 export const showPlayerGarage = async (src: number) => {
   const garageInfo = validateAccessToGarage(src);
   if (!garageInfo) return;
+
   const { garage_id, shared } = garageInfo;
-  const menu: ContextMenu.Entry[] = [
-    {
-      title: 'Persoonlijk',
-      id: 'personal',
-      icon: 'car-garage',
-      submenu: [],
-    },
-  ];
-  const cid = Player(src).state.cid;
-  const plyVehicles = await getPlayerOwnedVehiclesAtGarage(cid, garage_id);
-  // Generate menu
-  for (const veh of plyVehicles) {
+  const cid = Util.getCID(src);
+
+  const personalSubmenu: ContextMenu.Entry[] = [];
+  const personalVehicles = await getPlayerOwnedVehiclesAtGarage(cid, garage_id);
+  for (const veh of personalVehicles) {
     const vehInfo = getConfigByModel(veh.model);
-    menu[0].submenu!.push({
+    const garageLogsEntries = await buildVehicleGarageLogMenuEntries(veh.vin);
+
+    personalSubmenu.push({
       title: vehInfo?.name ?? '',
       description: `Plaat: ${veh.plate} | ${VehicleStateTranslation[veh.state]}`,
       submenu: [
@@ -186,51 +182,71 @@ export const showPlayerGarage = async (src: number) => {
         },
         {
           title: 'Voertuig Garage log',
-          submenu: (await getVehicleGarageLog(veh.vin)).map(log => {
-            const entry: ContextMenu.Entry = {
-              title: `${log.cid} heeft het voertuig ${log.action === 'parked' ? 'geparkeerd' : 'uitgehaald'}`,
-              description: log.state,
-            };
-            return entry;
-          }),
+          submenu: garageLogsEntries,
         },
       ],
     });
   }
+
+  const menu: ContextMenu.Entry[] = [
+    {
+      title: 'Persoonlijk',
+      id: 'personal',
+      icon: 'car-garage',
+      submenu: personalSubmenu,
+    },
+  ];
+
   if (!shared) {
     UI.openContextMenu(src, menu);
     return;
   }
+
+  const sharedSubmenu: ContextMenu.Entry[] = [];
+  const sharedVehicles = await getPlayerSharedVehicles(cid, garage_id);
+  for (const veh of sharedVehicles) {
+    const vehInfo = getConfigByModel(veh.model);
+
+    const vehSubmenu: ContextMenu.Entry[] = [
+      {
+        title: 'Neem voertuig uit garage',
+        callbackURL: 'vehicles:garage:takeVehicle',
+        data: {
+          vin: veh.vin,
+        },
+        disabled: veh.state !== 'parked',
+      },
+      {
+        title: 'Voertuig Status',
+        description: `${VehicleStateTranslation[veh.state]} | Engine: ${Math.round(
+          veh.status.engine / 10
+        )}% | Body: ${Math.round(veh.status.body / 10)}%`,
+      },
+    ];
+
+    // only if you are owner or if its owned by 1000, can you see logs in shared garage
+    if (veh.cid === cid || veh.cid === 1000) {
+      const garageLogsEntries = await buildVehicleGarageLogMenuEntries(veh.vin);
+      vehSubmenu.push({
+        title: 'Voertuig Garage log',
+        submenu: garageLogsEntries,
+      });
+    }
+
+    sharedSubmenu.push({
+      title: vehInfo?.name ?? '',
+      description: `NrPlaat: ${veh.plate} | ${VehicleStateTranslation[veh.state]}`,
+      submenu: vehSubmenu,
+    });
+  }
+
   menu.push({
     title: 'Gedeeld',
     id: 'shared',
     icon: 'car-garage',
-    submenu: [],
+    submenu: sharedSubmenu,
   });
-  const sharedVehicles = await getPlayerSharedVehicles(cid, garage_id);
-  sharedVehicles.forEach(veh => {
-    const vehInfo = getConfigByModel(veh.model);
-    menu[1].submenu!.push({
-      title: vehInfo?.name ?? '',
-      description: `NrPlaat: ${veh.plate} | ${VehicleStateTranslation[veh.state]}`,
-      submenu: [
-        {
-          title: 'Neem voertuig uit garage',
-          callbackURL: 'vehicles:garage:takeVehicle',
-          data: {
-            vin: veh.vin,
-          },
-          disabled: veh.state !== 'parked',
-        },
-        {
-          title: 'Voertuig Status',
-          description: `${VehicleStateTranslation[veh.state]} | Engine: ${Math.round(
-            veh.status.engine / 10
-          )}% | Body: ${Math.round(veh.status.body / 10)}%`,
-        },
-      ],
-    });
-  });
+
   UI.openContextMenu(src, menu);
 };
 
@@ -380,4 +396,12 @@ export const doesCidHasAccess = (cid: number, garageId: string) => {
     default:
       return false;
   }
+};
+
+const buildVehicleGarageLogMenuEntries = async (vin: string): Promise<ContextMenu.Entry[]> => {
+  const logs = await getVehicleGarageLog(vin);
+  return logs.map(log => ({
+    title: `${log.cid} heeft het voertuig ${log.action === 'parked' ? 'geparkeerd' : 'uitgehaald'}`,
+    description: log.state,
+  }));
 };
