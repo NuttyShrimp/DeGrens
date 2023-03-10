@@ -44,7 +44,6 @@ AddStateBagChangeHandler(
   'isLoggedIn',
   `player:${GetPlayerServerId(PlayerId())}`,
   (_: string, key: string, val: boolean) => {
-    console.log(`statebag: ${key} changed to ${val}`);
     if (key !== 'isLoggedIn') return;
     SendNUIMessage({
       action: 'lockVisibility',
