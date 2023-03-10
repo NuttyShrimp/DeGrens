@@ -30,6 +30,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Heel het houserobbery systeem herschreven, hopelijk werkt het nu deftig
 - Lab requirements verlaagd
 - Smelttijd verlaagd nu dat materialen per verwerkt minder zijn
+- Meer info bij inventory destroyAll log
 
 ### Fixed
 - Je kan weer smelten als je meer dan de nodige items opzak hebt

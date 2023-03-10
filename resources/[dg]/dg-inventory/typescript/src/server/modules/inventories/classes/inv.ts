@@ -240,11 +240,13 @@ export class Inv {
 
   public destroyAllItems = () => {
     const itemIds: string[] = [];
+    const itemNames: string[] = [];
     [...this.items].forEach(id => {
       const item = itemManager.get(id);
       if (item) {
-        item.destroy(true);
         itemIds.push(item.state.id);
+        itemNames.push(item.state.name);
+        item.destroy(true);
       }
     });
 
@@ -253,6 +255,7 @@ export class Inv {
       {
         inventoryId: this.id,
         itemId: itemIds,
+        itemName: itemNames,
       },
       `All items in ${this.id} have been destroyed`
     );
