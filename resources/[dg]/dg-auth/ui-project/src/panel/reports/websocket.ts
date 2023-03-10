@@ -74,6 +74,7 @@ export const openReportWebsocket = (id: number) => {
     return;
   }
   ws.addEventListener('open', () => {
+    console.log(`Opening WS ${id}`);
     nuiAction('panel/reports/openedWS');
     wsResolver();
   });
@@ -93,5 +94,5 @@ export const openReportWebsocket = (id: number) => {
 export const closeReportWebsocket = (id: number) => {
   if (!hasOpenWS(id)) return;
   console.log(`Closing ${id} websocket`);
-  getWS(id).close();
+  getWS(id).close(1000, 'closed conversation');
 };
