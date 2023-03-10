@@ -109,7 +109,7 @@ export const getPlayerVehicleInfo = async (
 };
 
 export const getVehicleLog = (vin: string): Promise<SVGarage.Log[]> => {
-  const query = `SELECT *
+  const query = `SELECT cid, action, state
                  FROM vehicle_garage_logs
                  WHERE vin = ?
                  ORDER BY logDate DESC
@@ -257,17 +257,8 @@ export const insertVehicleStatus = (vin: string, status: Vehicle.VehicleStatus):
   ]);
 };
 
-export const insertVehicleParkLog = (vin: string, cid: number, isStoring: boolean, state: Vehicle.VehicleStatus) => {
-  return SQL.insertValues('vehicle_garage_logs', [
-    {
-      vin,
-      cid,
-      action: isStoring ? 'parked' : 'retrieved',
-      state: `Engine: ${Math.round(state.engine / 10)}% | Body: ${Math.round(state.body / 10)}% | Fuel: ${Math.round(
-        state.fuel
-      )}%`,
-    },
-  ]);
+export const insertVehicleParkLog = async (vin: string, cid: number, action: string, state: string) => {
+  await SQL.insertValues('vehicle_garage_logs', [{ vin, cid, action, state }]);
 };
 
 export const getVehicleCosmeticUpgrades = async (vin: string): Promise<Upgrades.Cosmetic | null> => {

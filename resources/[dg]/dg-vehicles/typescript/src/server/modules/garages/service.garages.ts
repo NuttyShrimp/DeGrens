@@ -6,9 +6,7 @@ import {
   getPlayerOwnedVehiclesAtGarage,
   getPlayerSharedVehicles,
   getPlayerVehicleInfo,
-  getVehicleLog,
   hasVehicleMaintenanceFees,
-  insertVehicleParkLog,
   insertVehicleStatus,
   setVehicleGarage,
   setVehicleState,
@@ -20,6 +18,7 @@ import { getNativeStatus } from '../status/service.status';
 
 import { GarageThread } from './classes/parkingSpotThread';
 import { garageLogger } from './logger.garages';
+import { addVehicleGarageLog, getVehicleGarageLog } from './services/logs.garages';
 
 const garages: Map<string, Garage.Garage> = new Map();
 const parkingSpotThreads: Map<number, GarageThread> = new Map();
@@ -187,7 +186,7 @@ export const showPlayerGarage = async (src: number) => {
         },
         {
           title: 'Voertuig Garage log',
-          submenu: ((await getVehicleLog(veh.vin)) ?? []).map(log => {
+          submenu: (await getVehicleGarageLog(veh.vin)).map(log => {
             const entry: ContextMenu.Entry = {
               title: `${log.cid} heeft het voertuig ${log.action === 'parked' ? 'geparkeerd' : 'uitgehaald'}`,
               description: log.state,
@@ -282,7 +281,7 @@ export const takeVehicleOutGarage = async (src: number, vin: string): Promise<nu
   if (!veh) return;
 
   await setVehicleState(vin, 'out');
-  insertVehicleParkLog(vin, cid, false, vehicleInfo.status);
+  addVehicleGarageLog(vin, cid, false, vehicleInfo.status);
   Util.Log(
     'vehicle:garage:retrieve:success',
     {
@@ -351,7 +350,7 @@ export const storeVehicleInGarage = async (src: number, entity: number) => {
   // Set vehicle as parked
   await setVehicleState(vin, 'parked');
   await setVehicleGarage(vin, garage_id);
-  insertVehicleParkLog(vin, cid, true, vehState);
+  addVehicleGarageLog(vin, cid, true, vehState);
   Util.Log(
     'vehicle:garage:parked:success',
     {

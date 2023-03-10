@@ -31,6 +31,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Lab requirements verlaagd
 - Smelttijd verlaagd nu dat materialen per verwerkt minder zijn
 - Meer info bij inventory destroyAll log
+- Garagelogs worden nu gecached om database load te verminderen
 
 ### Fixed
 - Je kan weer smelten als je meer dan de nodige items opzak hebt
@@ -50,6 +51,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Safety check op cornersell baseprice
 - Foute invisiblity anticheat flags tijdens spawn/noclip/cloak opgelost
 - Inventory drop removal throwed geen onnodige errors meer
+- Nieuwste garagelogs sta nu bovenaan
 
 ## [1.0.9]
 
