@@ -23,7 +23,7 @@ const loadSellLocations = async () => {
 
 export const addSaleToHeatmap = (zone: string) => {
   const prevModifier = salesHeatmap[zone];
-  const newModifier = (prevModifier ?? 1) + 0.1;
+  const newModifier = (prevModifier ?? 1) + config.cornerselling.modifierIncreasePerSale;
   salesHeatmap[zone] = Math.min(config.cornerselling.maxModifier, newModifier);
 };
 

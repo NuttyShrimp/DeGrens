@@ -50,6 +50,7 @@ declare namespace Criminal {
         max: number;
       };
       maxModifier: number;
+      modifierIncreasePerSale: number;
     };
   }
 
