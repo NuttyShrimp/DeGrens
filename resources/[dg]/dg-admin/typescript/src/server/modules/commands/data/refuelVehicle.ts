@@ -1,4 +1,4 @@
-import { Notifications, Vehicles } from '@dgx/server';
+import { Vehicles } from '@dgx/server';
 import { Inputs } from 'enums/inputs';
 
 import { SelectorTarget } from '../../../enums/SelectorTargets';
@@ -10,7 +10,7 @@ interface RefuelVehicleData {
 
 export const refuelVehicle: CommandData = {
   name: 'refuelVehicle',
-  role: 'staff',
+  role: 'support',
   target: [SelectorTarget.VEHICLE],
   isClientCommand: false,
   log: 'refueled a vehicle',

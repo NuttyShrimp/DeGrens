@@ -10,7 +10,7 @@ interface ReviveData {
 
 export const revive: CommandData = {
   name: 'revive',
-  role: 'staff',
+  role: 'support',
   target: [SelectorTarget.PLAYER],
   isClientCommand: false,
   log: 'revived a player',

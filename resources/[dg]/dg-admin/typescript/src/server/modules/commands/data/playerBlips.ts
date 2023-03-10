@@ -4,7 +4,7 @@ let blipsToggled: Record<number, boolean> = {};
 
 export const playerBlips: CommandData = {
   name: 'playerBlips',
-  role: 'staff',
+  role: 'support',
   log: 'toggled player blips/names',
   isClientCommand: false,
   target: false,

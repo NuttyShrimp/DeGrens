@@ -10,7 +10,7 @@ interface FixVehicleData {
 
 export const fixVehicle: CommandData = {
   name: 'fixVehicle',
-  role: 'staff',
+  role: 'support',
   target: [SelectorTarget.VEHICLE],
   isClientCommand: false,
   log: 'fixed a vehicle',
