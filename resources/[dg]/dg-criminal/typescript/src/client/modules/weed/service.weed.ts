@@ -15,7 +15,7 @@ export const feedWeedPlant = async (weedPlantId: number, objectId: string, delux
   const heading = Util.getHeadingToFaceEntity(entity);
   await Util.goToCoords({ ...Util.getPlyCoords(), w: heading });
 
-  const [canceled] = await Taskbar.create('hand-holding-seedling', 'Voeden', 10000, {
+  const [canceled] = await Taskbar.create('hand-holding-seedling', 'Voeden', 5000, {
     canCancel: true,
     cancelOnDeath: true,
     cancelOnMove: true,
@@ -45,7 +45,8 @@ export const destroyWeedPlant = async (weedPlantId: number, objectId: string) =>
   const heading = Util.getHeadingToFaceEntity(entity);
   await Util.goToCoords({ ...Util.getPlyCoords(), w: heading });
 
-  const [canceled] = await Taskbar.create('hammer-crash', 'Kapot maken', 10000, {
+  // lil bithces die ze destroyen mogen gwn 2 min per plant wachten
+  const [canceled] = await Taskbar.create('hammer-crash', 'Kapot maken', 2 * 60 * 1000, {
     canCancel: true,
     cancelOnDeath: true,
     cancelOnMove: true,
@@ -75,7 +76,7 @@ export const cutWeedPlant = async (weedPlantId: number, objectId: string) => {
   const heading = Util.getHeadingToFaceEntity(entity);
   await Util.goToCoords({ ...Util.getPlyCoords(), w: heading });
 
-  const [canceled] = await Taskbar.create('scissors', 'Knippen', 10000, {
+  const [canceled] = await Taskbar.create('scissors', 'Knippen', 5000, {
     canCancel: true,
     cancelOnDeath: true,
     cancelOnMove: true,

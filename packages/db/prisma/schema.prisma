@@ -630,6 +630,7 @@ model weed_plants {
   food      Int?               @default(100)
   grow_time BigInt?
   cut_time  BigInt?
+  cid       Int?               @default(0)
 }
 
 model whitelist {

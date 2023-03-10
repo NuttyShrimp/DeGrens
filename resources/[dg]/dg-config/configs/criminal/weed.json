@@ -11,5 +11,6 @@
       "deluxe": 70
     }
   },
-  "fertilizerDecrease": 20
+  "fertilizerDecrease": 20,
+  "destroyMailChance": 40
 }

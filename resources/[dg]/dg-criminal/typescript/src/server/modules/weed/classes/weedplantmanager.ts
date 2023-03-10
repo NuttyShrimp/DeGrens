@@ -32,19 +32,21 @@ class WeedPlantManager extends Util.Singleton<WeedPlantManager>() {
         plantData.stage,
         plantData.food,
         plantData.cut_time,
-        plantData.grow_time
+        plantData.grow_time,
+        plantData.cid ?? 0
       );
       this.weedPlants.set(plantData.id, newWeedPlant);
     }
   };
 
   public addNew = async (plyId: number, coords: Vec3, rotation: Vec3, gender: Criminal.Weed.Gender) => {
+    const cid = Util.getCID(plyId);
     const currentTime = Math.round(Date.now() / 1000);
     const result: Omit<Criminal.Weed.DBPlant, 'coords' | 'rotation' | 'gender'>[] = await SQL.query(
-      `INSERT INTO weed_plants (coords, rotation, gender, grow_time, cut_time)
-                                    VALUES (?, ?, ?, ?, ?) 
+      `INSERT INTO weed_plants (coords, rotation, gender, grow_time, cut_time, cid)
+                                    VALUES (?, ?, ?, ?, ?, ?) 
                                     RETURNING id, stage, food, grow_time, cut_time`,
-      [JSON.stringify(coords), JSON.stringify(rotation), gender, currentTime, currentTime]
+      [JSON.stringify(coords), JSON.stringify(rotation), gender, currentTime, currentTime, cid]
     );
 
     const data = result?.[0];
@@ -61,13 +63,14 @@ class WeedPlantManager extends Util.Singleton<WeedPlantManager>() {
       data.stage,
       data.food,
       data.cut_time,
-      data.grow_time
+      data.grow_time,
+      cid
     );
     this.weedPlants.set(data.id, newWeedPlant);
 
     const logMessage = `${Util.getName(plyId)}(${plyId}) has planted a weed plant`;
     this.logger.silly(logMessage);
-    Util.Log('weed:planted', { gender, coords, rotation, id: data.id }, logMessage, plyId);
+    Util.Log('weed:planted', { gender, coords, rotation, plantId: data.id }, logMessage, plyId);
   };
 
   @DGXEvent('criminal:weed:viewPlant')

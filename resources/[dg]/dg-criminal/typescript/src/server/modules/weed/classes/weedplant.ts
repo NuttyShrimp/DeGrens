@@ -1,4 +1,4 @@
-import { SQL, StaticObjects, UI, Util, Inventory, Notifications } from '@dgx/server';
+import { SQL, StaticObjects, UI, Util, Inventory, Notifications, Phone } from '@dgx/server';
 import { MODELS_PER_STAGE } from '../constants.weed';
 import { getConfig } from 'services/config';
 import { mainLogger } from 'sv_logger';
@@ -16,6 +16,7 @@ export class WeedPlant {
   public food: number;
   private cutTime: number;
   public growTime: number;
+  private cid: number;
 
   private logger: winston.Logger;
 
@@ -27,7 +28,8 @@ export class WeedPlant {
     stage: Criminal.Weed.Stage,
     food: number,
     cutTime: number,
-    growTime: number
+    growTime: number,
+    cid: number
   ) {
     this.id = id;
     this.coords = coords;
@@ -38,6 +40,7 @@ export class WeedPlant {
     this.food = food;
     this.cutTime = cutTime;
     this.growTime = growTime;
+    this.cid = cid;
     this.logger = mainLogger.child({ module: `WeedPlant #${this.id}` });
 
     this.spawnObject();
@@ -169,7 +172,7 @@ export class WeedPlant {
     this.food = Math.min(this.food + foodIncrease, 100);
     this.save();
 
-    const logMessage = `${Util.getName(plyId)}${plyId} has fed a weed plant with ${
+    const logMessage = `${Util.getName(plyId)}(${plyId}) has fed a weed plant with ${
       deluxe ? 'normal' : 'deluxe'
     } fertilizer`;
     this.logger.silly(logMessage);
@@ -185,6 +188,18 @@ export class WeedPlant {
     const logMessage = `${Util.getName(plyId)}(${plyId}) has destroyed a weed plant`;
     this.logger.silly(logMessage);
     Util.Log('weed:destroy', { plantId: this.id }, logMessage, plyId);
+
+    if (this.cid && Util.getRndInteger(0, 101) < getConfig().weed.destroyMailChance) {
+      const charInfo = DGCore.Functions.GetPlayer(plyId)?.PlayerData?.charinfo;
+      const charName = `${charInfo?.firstname ?? 'Onbekende'} ${charInfo?.lastname ?? 'Persoon'}`;
+
+      Phone.sendOfflineMail(
+        this.cid,
+        'Plant Informatie',
+        'Walter Green',
+        `Een contact van mij wist te vertellen dat hij '${charName}' je plant heeft zien kapotmaken.`
+      );
+    }
   };
 
   // remove is for scriptwise deleting plant

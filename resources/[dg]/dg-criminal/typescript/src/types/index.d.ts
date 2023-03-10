@@ -21,6 +21,7 @@ declare namespace Criminal {
         breakChance: number;
       };
       fertilizerDecrease: number;
+      destroyMailChance: number;
     };
 
     type Gender = 'male' | 'female';
@@ -35,6 +36,7 @@ declare namespace Criminal {
       food: number;
       cut_time: number;
       grow_time: number;
+      cid: number | null;
     };
   }
 
