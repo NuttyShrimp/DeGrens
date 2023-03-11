@@ -1,4 +1,3 @@
-import { DoorLock } from '@dgx/server';
 import { SelectorTarget } from '../../../enums/SelectorTargets';
 
 export const toggleDoorLock: CommandData = {
@@ -9,7 +8,7 @@ export const toggleDoorLock: CommandData = {
   isClientCommand: true,
   handler: (_, args: { entity: number }) => {
     if (!args?.entity) return;
-    DoorLock.toggleEntityDoorState(args.entity);
+    global.exports['dg-doorlock'].toggleEntityDoorState(args.entity);
   },
   UI: {
     title: 'Toggle Doorlock',

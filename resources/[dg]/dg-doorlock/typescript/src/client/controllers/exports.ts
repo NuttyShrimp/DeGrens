@@ -1,5 +1,4 @@
 import { Events, Notifications, UI } from '@dgx/client';
-import { Util } from '@dgx/shared';
 import { getDoorId } from 'helpers/doors';
 
 global.exports('toggleEntityDoorState', (entity: number) => {

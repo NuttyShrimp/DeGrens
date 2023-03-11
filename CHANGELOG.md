@@ -53,6 +53,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Foute invisiblity anticheat flags tijdens spawn/noclip/cloak opgelost
 - Inventory drop removal throwed geen onnodige errors meer
 - Nieuwste garagelogs sta nu bovenaan
+- Admin dooropties werken weer
 
 ## [1.0.9]
 
