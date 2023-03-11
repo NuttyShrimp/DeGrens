@@ -1,7 +1,7 @@
 import { nuiAction } from '../../events';
 
 import { getPanelInfo } from './infoStore';
-import { getWS, hasOpenWS, removeWS, setWS } from './socketStorage';
+import { closeWS, getWS, hasOpenWS, removeWS, setWS } from './socketStorage';
 
 export const requestMiddleware = async (
   input: RequestInfo | URL,
@@ -82,7 +82,7 @@ export const openReportWebsocket = (id: number) => {
   ws.addEventListener('close', () => {
     console.log('The WS closed');
     nuiAction('panel/reports/closedWS');
-    removeWS(id);
+    removeWS(ws);
   });
 
   ws.addEventListener('message', handleWSMessage(id));
@@ -94,5 +94,7 @@ export const openReportWebsocket = (id: number) => {
 export const closeReportWebsocket = (id: number) => {
   if (!hasOpenWS(id)) return;
   console.log(`Closing ${id} websocket`);
-  getWS(id).close(1000, 'closed conversation');
+  const ws = getWS(id);
+  closeWS(id);
+  ws.close(1000, 'closed conversation');
 };
