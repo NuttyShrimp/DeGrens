@@ -10,6 +10,7 @@ export const WEATHERS: Record<
     temperatureRange: [number, number];
     transitions: { type: WeatherSync.Type; percentage: number }[]; // percentages should add up type 100!!!
     cannotBeFirst?: boolean;
+    minutes?: number;
   }
 > = {
   EXTRASUNNY: {
@@ -64,6 +65,7 @@ export const WEATHERS: Record<
     windSpeed: 2,
     temperatureRange: [90, 95],
     transitions: [{ type: 'CLEAR', percentage: 100 }],
+    minutes: 10,
   },
   FOGGY: {
     enabled: true,
@@ -73,6 +75,7 @@ export const WEATHERS: Record<
       { type: 'RAIN', percentage: 10 },
       { type: 'CLEAR', percentage: 90 },
     ],
+    minutes: 10,
   },
   CLOUDS: {
     enabled: true,
@@ -83,6 +86,7 @@ export const WEATHERS: Record<
       { type: 'CLEARING', percentage: 50 },
       { type: 'OVERCAST', percentage: 40 },
     ],
+    minutes: 10,
   },
   RAIN: {
     enabled: true,
@@ -91,6 +95,7 @@ export const WEATHERS: Record<
     temperatureRange: [75, 90],
     transitions: [{ type: 'CLEARING', percentage: 100 }],
     cannotBeFirst: true,
+    minutes: 3,
   },
   THUNDER: {
     enabled: true,
@@ -99,6 +104,7 @@ export const WEATHERS: Record<
     temperatureRange: [75, 90],
     transitions: [{ type: 'CLEARING', percentage: 100 }],
     cannotBeFirst: true,
+    minutes: 3,
   },
   // All snow related only cycle between other snow related types
   SNOW: {

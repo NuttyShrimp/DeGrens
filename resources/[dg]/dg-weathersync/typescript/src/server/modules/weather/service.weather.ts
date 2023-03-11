@@ -4,8 +4,8 @@ import { WEATHERS } from './constants.weather';
 
 const weatherLogger = mainLogger.child({ module: 'WeatherLogger' });
 
-let currentWeather: WeatherSync.Weather | null = null;
-let skipNextTransition = false;
+let currentWeather: WeatherSync.Weather;
+let scheduledChange: NodeJS.Timeout;
 
 export const getCurrentWeather = () => currentWeather;
 export const setCurrentWeather = (weather: WeatherSync.Weather, skipTransition = false) => {
@@ -19,21 +19,22 @@ export const setCurrentWeather = (weather: WeatherSync.Weather, skipTransition =
   );
 };
 
-export const startWeatherThread = () => {
+export const startWeatherScheduling = () => {
   const startType = getStartType();
   const startWeather = generateWeatherData(startType);
   setCurrentWeather(startWeather, true);
 
-  setInterval(() => {
-    if (skipNextTransition) {
-      skipNextTransition = false;
-      return;
-    }
+  scheduleWeatherChange(startWeather.minutes);
+};
 
-    const nextType = chooseTransitionForType(currentWeather!.type);
+const scheduleWeatherChange = (minutes: number) => {
+  scheduledChange = setTimeout(() => {
+    const nextType = chooseTransitionForType(currentWeather.type);
     const nextWeather = generateWeatherData(nextType);
     setCurrentWeather(nextWeather);
-  }, 20 * 60 * 1000);
+
+    scheduleWeatherChange(nextWeather.minutes);
+  }, minutes * 60 * 1000);
 };
 
 export const generateWeatherData = (type: WeatherSync.Type) => {
@@ -44,6 +45,7 @@ export const generateWeatherData = (type: WeatherSync.Type) => {
     windDirection: generateWindDirection(),
     rainLevel: nextData.rainLevel,
     temperature: Util.getRndInteger(...nextData.temperatureRange),
+    minutes: nextData.minutes ?? 20,
   };
 };
 
@@ -94,8 +96,10 @@ export const overideCurrentWeather = (type: string) => {
     return;
   }
 
-  skipNextTransition = true;
-
   const weather = generateWeatherData(type as WeatherSync.Type);
+
+  clearTimeout(scheduledChange);
+  scheduleWeatherChange(weather.minutes);
+
   setCurrentWeather(weather);
 };
