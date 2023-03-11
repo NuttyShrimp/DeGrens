@@ -4,9 +4,9 @@ const garageLogs = new Map<string, SVGarage.Log[]>();
 
 export const getVehicleGarageLog = async (vin: string) => {
   let logs = garageLogs.get(vin);
-  if (!logs) {
+  if (!logs || logs.length < 30) {
     const newLogs = await getVehicleLog(vin);
-    logs = [...newLogs.reverse()];
+    logs = [...(logs ?? []), ...newLogs.reverse()];
     garageLogs.set(vin, logs);
   }
 

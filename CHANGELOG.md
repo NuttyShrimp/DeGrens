@@ -54,6 +54,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Inventory drop removal throwed geen onnodige errors meer
 - Nieuwste garagelogs sta nu bovenaan
 - Admin dooropties werken weer
+- Garagelogs zijn nu deftige gesorteerd op insertion moment + worden treffelijk geseed als het nog niet aan de cache limiet zit
 
 ## [1.0.9]
 

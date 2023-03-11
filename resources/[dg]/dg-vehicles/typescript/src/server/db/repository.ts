@@ -112,7 +112,7 @@ export const getVehicleLog = (vin: string): Promise<SVGarage.Log[]> => {
   const query = `SELECT cid, action, state
                  FROM vehicle_garage_logs
                  WHERE vin = ?
-                 ORDER BY logDate DESC
+                 ORDER BY logDate DESC, id DESC
                  LIMIT 30`;
   return SQL.query(query, [vin]);
 };
