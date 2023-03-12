@@ -95,6 +95,7 @@ const scheduleAntiTP = () => {
     const falling = IsPedFalling(ped);
     let onVeh = IsPedOnVehicle(ped);
     const inNoclip = global.exports?.['dg-admin']?.inNoclip?.() ?? false;
+    const inCloak = global.exports?.['dg-admin']?.inCloak?.() ?? false;
     const speedDrug = global.exports?.['dg-misc']?.isOnDrugs?.('speed') ?? false;
 
     if (onVeh) {
@@ -105,7 +106,7 @@ const scheduleAntiTP = () => {
     }
 
     // TODO: check distance between coords
-    if (!inNoclip) {
+    if (!inNoclip && !inCloak) {
       if (!inVeh && !onVeh) {
         if (!jumping && !falling && !ragdoll && !speedDrug) {
           if (speed > 15) {
