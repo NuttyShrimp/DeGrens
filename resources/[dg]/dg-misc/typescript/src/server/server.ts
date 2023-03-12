@@ -2,7 +2,6 @@ import { startParticleThread } from 'modules/particles/service.particles';
 import { loadStatusData } from 'modules/status/service.status';
 import { loadAllPlayerReputations } from 'modules/reputation/service.reputation';
 import { loadHudConfig } from 'modules/hud/service.hud';
-import { initializeStaticObjects } from 'modules/staticobjects/service.staticobjects';
 
 import './modules/particles';
 import './modules/hud';
@@ -29,5 +28,4 @@ setImmediate(() => {
   loadStatusData();
   loadAllPlayerReputations();
   loadHudConfig();
-  initializeStaticObjects();
 });

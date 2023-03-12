@@ -1,30 +1,27 @@
 let currentId = 0;
 const staticObjects: Record<string, StaticObjects.State> = {};
 
-export const initializeStaticObjects = () => {
-  GlobalState.staticObjects = {};
-};
-
-const registerStaticObject = (data: StaticObjects.CreateData) => {
+const registerStaticObject = (data: StaticObjects.CreateData): StaticObjects.State => {
   const id = `staticobject_${currentId++}`;
-  staticObjects[id] = { ...data, id };
-  return id;
+  const state: StaticObjects.State = { ...data, id };
+  staticObjects[id] = state;
+  return state;
 };
 
 export const addStaticObject = (data: StaticObjects.CreateData | StaticObjects.CreateData[]): string[] => {
-  const newIds: string[] = [];
+  const objects: StaticObjects.State[] = [];
   if (Array.isArray(data)) {
     for (const d of data) {
-      const newId = registerStaticObject(d);
-      newIds.push(newId);
+      const object = registerStaticObject(d);
+      objects.push(object);
     }
   } else {
-    const newId = registerStaticObject(data);
-    newIds.push(newId);
+    const object = registerStaticObject(data);
+    objects.push(object);
   }
 
-  GlobalState.staticObjects = staticObjects;
-  return newIds;
+  emitNet('misc:staticObjects:add', -1, objects);
+  return objects.map(o => o.id);
 };
 
 export const removeStaticObject = (objId: string | string[]) => {
@@ -36,5 +33,13 @@ export const removeStaticObject = (objId: string | string[]) => {
     delete staticObjects[objId];
   }
 
-  GlobalState.staticObjects = staticObjects;
+  emitNet('misc:staticObjects:remove', -1, objId);
+};
+
+export const syncStaticObjectsToClient = (plyId: number) => {
+  emitNet('misc:staticObjects:add', plyId, Object.values(staticObjects));
+};
+
+export const logAllToConsole = () => {
+  console.log(staticObjects);
 };

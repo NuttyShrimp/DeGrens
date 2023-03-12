@@ -82,23 +82,17 @@ export const removeLocalStaticObject = (objId: string | string[]) => {
   }
 };
 
-export const initiateStaticObjects = () => {
-  const state: Record<string, StaticObjects.State> = GlobalState?.staticObjects;
-  if (!state) return;
-  handleStateUpdate(state);
+export const handleGlobalAddAction = async (objects: StaticObjects.State[]) => {
+  for (const object of objects) {
+    await createStaticObject(object);
+  }
 };
 
-export const handleStateUpdate = async (newObjects: Record<string, StaticObjects.State>) => {
-  // Remove objects that exist in old but not in new
-  for (const objId of Object.keys(staticObjects)) {
-    if (objId in newObjects || localIds.has(objId)) continue;
+export const handleGlobalRemoveAction = (objId: string | string[]) => {
+  if (Array.isArray(objId)) {
+    objId.forEach(destroyStaticObject);
+  } else {
     destroyStaticObject(objId);
-  }
-
-  // Add objects that are in new but not in old
-  for (const [objId, data] of Object.entries(newObjects)) {
-    if (objId in staticObjects) continue;
-    await createStaticObject(data);
   }
 };
 

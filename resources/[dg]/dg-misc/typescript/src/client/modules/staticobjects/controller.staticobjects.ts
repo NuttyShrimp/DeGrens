@@ -2,19 +2,19 @@ import {
   addLocalStaticObject,
   cleanupStaticObjects,
   getEntityForObjectId,
-  handleStateUpdate,
+  handleGlobalRemoveAction,
+  handleGlobalAddAction,
   logAllToConsole,
   removeLocalStaticObject,
 } from './service.staticobjects';
 
-AddStateBagChangeHandler(
-  'staticObjects',
-  'global',
-  (bagName: string, key: string, state: Record<string, StaticObjects.State>) => {
-    if (bagName !== 'global' || key !== 'staticObjects') return;
-    handleStateUpdate(state);
-  }
-);
+onNet('misc:staticObjects:add', (objects: StaticObjects.State[]) => {
+  handleGlobalAddAction(objects);
+});
+
+onNet('misc:staticObjects:remove', (objId: string | string[]) => {
+  handleGlobalRemoveAction(objId);
+});
 
 on('onResourceStop', (resourceName: string) => {
   if (resourceName !== GetCurrentResourceName()) return;
@@ -28,7 +28,7 @@ global.exports('addStaticObject', addLocalStaticObject);
 global.exports('removeStaticObject', removeLocalStaticObject);
 
 RegisterCommand(
-  'debug:staticobjects',
+  'debug:client:staticObjects',
   () => {
     logAllToConsole();
   },
