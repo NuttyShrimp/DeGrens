@@ -106,7 +106,7 @@ export const tryEjectAfterCrash = (
   if (currentSeatbelt === 'none') {
     chance = Math.min(100, healthDelta * 2);
   } else if (currentSeatbelt === 'seatbelt') {
-    chance = Math.min(50, healthDelta);
+    chance = Math.min(40, healthDelta / 2);
   }
 
   if (Util.getRndInteger(0, 101) <= chance) {

@@ -24,5 +24,5 @@ export const handlingOverrideFunctions: Record<string, (veh: number, value: numb
   fInitialDriveForce: (veh, val) => SetVehicleCheatPowerIncrease(veh, val),
 };
 
-export const MINIMUM_DAMAGE_FOR_GUARANTEED_STALL = 150;
-export const MINIMUM_DAMAGE_FOR_STALL = 30;
+export const MINIMUM_DAMAGE_FOR_GUARANTEED_STALL = 100;
+export const MINIMUM_DAMAGE_FOR_STALL = 20;

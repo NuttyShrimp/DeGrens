@@ -36,6 +36,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Garagelogs worden nu gecached om database load te verminderen
 - Websockets of reports are more stable
 - Meer data bij confiscate log toegevoegd
+- Kans op uitvliegen met normale gordel verlaagd
+- Kans op voertuig stall bij crash verhoogd
 
 ### Fixed
 - Je kan weer smelten als je meer dan de nodige items opzak hebt
