@@ -6,7 +6,7 @@
     },
     "meth_bag": {
       "basePrice": 120,
-      "requiredReputation": 1000
+      "requiredReputation": 250
     }
   },
   "decayTime": 7,

@@ -40,6 +40,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Kans op uitvliegen met normale gordel verlaagd
 - Kans op voertuig stall bij crash verhoogd
 - Anticheat speedchecks runnen nietmeer als je in admin cloak bent
+- Reputatie voor meth verkoop verlaagd
 
 ### Fixed
 - Je kan weer smelten als je meer dan de nodige items opzak hebt
