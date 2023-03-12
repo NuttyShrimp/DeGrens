@@ -1,11 +1,11 @@
 stages:
+  - images 
   - test
-  - linting
   - build
   - deploy
   - housekeeping
 
-image: node:16
+image: registry-gitlab.pieter557.dscloud.me/degrens-21/degrens-main/node:latest
 
 variables:
   GIT_DEPTH: 5
@@ -18,6 +18,9 @@ variables:
     - npm config set -- '//gitlab.pieter557.dscloud.me/api/v4/packages/npm/:_authToken' "${CI_JOB_TOKEN}"
     - npm config set always-auth true
     - yarn config set network-timeout 600000 -g
+    - ls /app
+    - cp -r /app/cache/.yarn .
+    - cp -r /app/cache/node_modules .
     - yarn --pure-lockfile --cache-folder .yarn
 
 .cache_modules:
@@ -43,8 +46,28 @@ variables:
       - '**/package.json'
       - '**/yarn.lock'
 
+build node image:
+  stage: images 
+  image: docker:latest
+  services:
+    - docker:dind
+  only:
+    refs:
+        - master
+        - UPD
+    changes:
+        - package.json
+        - yarn.lock
+  script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_JOB_TOKEN $CI_REGISTRY
+    - docker build -t $CI_REGISTRY_IMAGE/node:latest -t $CI_REGISTRY_IMAGE/node:$CI_COMMIT_SHA .
+    - docker push $CI_REGISTRY_IMAGE/node:latest
+    - docker push $CI_REGISTRY_IMAGE/node:$CI_COMMIT_SHA
+
+
 validate json:
   stage: test
+  image: node:16
   script:
     - cd ./tools/json-validator
     - yarn --pure-lockfile
@@ -73,6 +96,7 @@ validate Errorlogger:
 
 validate db migrations:
   stage: test
+  image: node:16
   services:
     - name: mariadb:10.7
       alias: mariadb
@@ -98,16 +122,16 @@ validate db migrations:
 JS linting:
   extends:
     - .node_mod_installation
-    - .cache_modules
+    # - .cache_modules
     - .js_changes
-  stage: linting
+  stage: test 
   script:
     - yarn lint
 
 TS dev build:
   extends:
     - .node_mod_installation
-    - .cache_modules
+    # - .cache_modules
     - .js_changes
   stage: build
   script:
@@ -117,7 +141,7 @@ TS dev build:
 TS prod build:
   extends:
     - .node_mod_installation
-    - .cache_modules
+    # - .cache_modules
     - .js_changes
   only:
     refs:
@@ -132,7 +156,7 @@ rebase UPD:
     # For fetch thing shit
     GIT_DEPTH: 50
   stage: housekeeping
-  image: node:lts
+  image: node:16
   script:
     # setting up git
     - url_host=`git remote get-url origin | sed -e "s/https:\/\/gitlab-ci-token:.*@//g"`
