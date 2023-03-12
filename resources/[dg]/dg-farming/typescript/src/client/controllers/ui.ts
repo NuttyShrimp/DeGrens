@@ -1,4 +1,4 @@
-import { UI, Events, Peek, StaticObjects } from '@dgx/client';
+import { UI, Events, Peek } from '@dgx/client';
 import { cutPlant, feedPlant, harvestPlant, waterPlant } from 'services/plants';
 
 Peek.addFlagEntry('farmingPlantId', {
@@ -8,7 +8,7 @@ Peek.addFlagEntry('farmingPlantId', {
       icon: 'fas fa-clipboard',
       action: (_, entity) => {
         if (!entity) return;
-        const plantId = StaticObjects.getState<{ farmingPlantId: number }>(entity)?.farmingPlantId;
+        const plantId = Entity(entity).state.farmingPlantId;
         if (!plantId) return;
         Events.emitNet('farming:plant:view', plantId);
       },

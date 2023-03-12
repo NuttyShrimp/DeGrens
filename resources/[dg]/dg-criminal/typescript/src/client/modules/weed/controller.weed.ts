@@ -1,4 +1,4 @@
-import { Events, Util, UI, Taskbar, Peek, RayCast, Notifications, Weapons, StaticObjects } from '@dgx/client/classes';
+import { Events, Util, UI, Taskbar, Peek, RayCast, Notifications, Weapons } from '@dgx/client/classes';
 import { ACCEPTED_MATERIALS } from './constants.weed';
 import {
   anyPlantInRange,
@@ -116,7 +116,7 @@ Peek.addFlagEntry('weedPlantId', {
       icon: 'fas fa-cannabis',
       action: (_, entity) => {
         if (!entity) return;
-        const weedPlantId = StaticObjects.getState<{ weedPlantId: number }>(entity)?.weedPlantId;
+        const weedPlantId = Entity(entity).state.weedPlantId;
         if (!weedPlantId) return;
         Events.emitNet('criminal:weed:viewPlant', weedPlantId);
       },

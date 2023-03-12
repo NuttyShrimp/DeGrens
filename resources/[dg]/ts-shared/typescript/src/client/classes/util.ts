@@ -495,10 +495,6 @@ class StaticObjects {
   public getEntityForObjectId = (objId: string): number | undefined => {
     return global.exports['dg-misc'].getEntityForObjectId(objId);
   };
-
-  public getState = <T extends Record<string, any>>(entity: number): T | undefined => {
-    return global.exports['dg-misc'].getStaticObjectState(entity);
-  };
 }
 
 export default {
