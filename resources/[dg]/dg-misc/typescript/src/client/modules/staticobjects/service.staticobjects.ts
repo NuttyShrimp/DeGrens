@@ -12,9 +12,16 @@ const createStaticObject = async (data: StaticObjects.State) => {
   }
 
   const modelHash = typeof data.model === 'string' ? GetHashKey(data.model) : data.model;
-  await Util.loadModel(modelHash);
+  if (!HasModelLoaded(modelHash)) {
+    await Util.loadModel(modelHash);
+  }
 
   const entity = CreateObjectNoOffset(modelHash, data.coords.x, data.coords.y, data.coords.z, false, false, false);
+  if (!DoesEntityExist(entity)) {
+    console.log(`Failed to create entity ${data.id}`);
+    return;
+  }
+
   if (data.rotation) {
     SetEntityRotation(entity, data.rotation.x, data.rotation.y, data.rotation.z, 0, true);
   } else if ('w' in data.coords) {
@@ -31,7 +38,7 @@ const createStaticObject = async (data: StaticObjects.State) => {
 
   staticObjects[data.id] = { ...data, entity };
 
-  await Util.Delay(10); // might prevent possible crash when creating lots of entities
+  await Util.Delay(50); // might prevent possible crash when creating lots of entities
 };
 
 const destroyStaticObject = (objId: string) => {
