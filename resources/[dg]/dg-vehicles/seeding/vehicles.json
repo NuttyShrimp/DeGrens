@@ -32,7 +32,7 @@
     "defaultStock": 7,
     "restockTime": 20,
     "price": 1000000,
-    "shop": "pdm",
+    "shop": "nfs",
     "type": "land"
   },
   {
@@ -2180,7 +2180,7 @@
     "defaultStock": 10,
     "restockTime": 15,
     "price": 57500,
-    "shop": "pdm",
+    "shop": "nfs",
     "type": "land"
   },
   {
@@ -3332,7 +3332,7 @@
     "defaultStock": 7,
     "restockTime": 20,
     "price": 1000000,
-    "shop": "pdm",
+    "shop": "nfs",
     "type": "land"
   },
   {
@@ -3824,7 +3824,7 @@
     "defaultStock": 3,
     "restockTime": 45,
     "price": 1000000,
-    "shop": "pdm",
+    "shop": "nfs",
     "type": "land"
   },
   {
@@ -3860,7 +3860,7 @@
     "defaultStock": 5,
     "restockTime": 30,
     "price": 1000000,
-    "shop": "pdm",
+    "shop": "nfs",
     "type": "land"
   },
   {
@@ -3884,7 +3884,7 @@
     "defaultStock": 5,
     "restockTime": 30,
     "price": 1000000,
-    "shop": "pdm",
+    "shop": "nfs",
     "type": "land"
   },
   {
@@ -3896,7 +3896,7 @@
     "defaultStock": 10,
     "restockTime": 15,
     "price": 67500,
-    "shop": "pdm",
+    "shop": "nfs",
     "type": "land"
   },
   {
@@ -3932,7 +3932,7 @@
     "defaultStock": 10,
     "restockTime": 15,
     "price": 72500,
-    "shop": "pdm",
+    "shop": "nfs",
     "type": "land"
   },
   {
@@ -5108,7 +5108,7 @@
     "defaultStock": 10,
     "restockTime": 10,
     "price": 22000,
-    "shop": "pdm",
+    "shop": "nfs",
     "type": "land"
   },
   {
@@ -5192,7 +5192,7 @@
     "defaultStock": 7,
     "restockTime": 20,
     "price": 1000000,
-    "shop": "pdm",
+    "shop": "nfs",
     "type": "land"
   },
   {
@@ -5288,7 +5288,7 @@
     "defaultStock": 10,
     "restockTime": 15,
     "price": 50000,
-    "shop": "pdm",
+    "shop": "nfs",
     "type": "land"
   },
   {
