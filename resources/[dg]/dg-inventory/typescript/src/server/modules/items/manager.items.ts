@@ -24,8 +24,12 @@ class ItemManager extends Util.Singleton<ItemManager>() {
 
   public create = async (state: ItemBuildData) => {
     const isNew = state.id == undefined;
-    if (!isNew && this.items.has(state.id!))
-      throw new Error(`Tried to create item with already existing id ${state.id}`);
+    if (!isNew && this.items.has(state.id!)) {
+      const logMsg = `Tried to create item with already existing id ${state.id}`;
+      this.logger.error(logMsg);
+      Util.Log('inventory:item:duplicateId', { itemId: state.id, state }, logMsg, undefined, true);
+      return;
+    }
 
     // Check if name is a known item name, if not remove from db and return
     if (!itemDataManager.doesItemNameExist(state.name)) {

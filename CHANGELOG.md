@@ -63,6 +63,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Garagelogs zijn nu deftige gesorteerd op insertion moment + worden treffelijk geseed als het nog niet aan de cache limiet zit
 - Fix business check voor clothingmenus
 - Storerobbery kassa animatie stopt wanneer je taskbar stopt
+- Fix probleem waarbij je inventory niet meer laad
 
 ## [1.0.9]
 
