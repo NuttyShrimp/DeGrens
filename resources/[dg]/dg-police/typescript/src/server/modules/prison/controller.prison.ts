@@ -93,9 +93,14 @@ Events.onNet('police:prison:confiscate', (src: number) => {
   }
 
   moveAllPlayerItemsToPrisonStash(target);
+
   Util.Log(
     'police:prison:confiscatedItems',
-    { target, place: Util.getPlyCoords(target) },
+    {
+      target,
+      place: Util.getPlyCoords(target),
+      targetCid: Util.getCID(target),
+    },
     `${Util.getName(src)} has confiscated someones items`,
     src
   );

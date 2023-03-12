@@ -34,6 +34,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Meer info bij inventory destroyAll log
 - Garagelogs worden nu gecached om database load te verminderen
 - Websockets of reports are more stable
+- Meer data bij confiscate log toegevoegd
 
 ### Fixed
 - Je kan weer smelten als je meer dan de nodige items opzak hebt
