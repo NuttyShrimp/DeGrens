@@ -90,13 +90,28 @@ Chat.registerCommand(
     }
     const message = args.slice(1).join(' ');
 
+    const cid = Util.getCID(src);
+    const charName = await Util.getCharName(cid);
+
     Chat.sendMessage(target, {
       type: 'normal',
       prefix: 'EMS: ',
-      message,
+      message: `112 Antwoord - ${charName} (${src}):<br>${message}`,
     });
 
-    Util.Log('ems:112r', { message }, `${Util.getName(src)} made a 112r`, src);
+    const targetCid = Util.getCID(target);
+    const targetCharName = await Util.getCharName(targetCid);
+
+    const playersForJob = Jobs.getPlayersForJob(job) ?? [];
+    playersForJob.forEach(ply => {
+      Chat.sendMessage(ply, {
+        type: 'normal',
+        prefix: `Dispatch: `,
+        message: `112 Antwoord - ${charName} (${src}) -> ${targetCharName} (${target}):<br>${message}`,
+      });
+    });
+
+    Util.Log('ems:112r', { message, targetCid }, `${Util.getName(src)} responded to a 112`, src);
     mainLogger.silly(`Player ${src} responded to a 112. Message: ${message}`);
   }
 );

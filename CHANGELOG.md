@@ -18,6 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Actieve melding om weer te geven dat je in cloak/noclip ben
 - Je kan nu garagelogs bekijken van gesharede overheids voertuigen
 - Kleerkasten voor enkel businesses toegevoegd
+- EMS ziet nu ook antwoorden op 112's
 
 ### Changed
 - Bait price aangepast
