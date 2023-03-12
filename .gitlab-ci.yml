@@ -19,10 +19,9 @@ variables:
     - npm config set always-auth true
     - yarn config set network-timeout 600000 -g
     - ls /app
-    - cp -r /app/cache/.yarn .
-    - cp -r /app/cache/node_modules .
-    - ls -al .
-    - yarn --frozen-lockfile --cache-folder ./.yarn
+    - cp -r /app/node_modules .
+    - ls node_modules
+    - yarn
 
 .cache_modules:
   cache:
