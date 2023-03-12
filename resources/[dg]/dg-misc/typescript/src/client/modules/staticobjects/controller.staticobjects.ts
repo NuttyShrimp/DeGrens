@@ -6,6 +6,7 @@ import {
   handleGlobalAddAction,
   logAllToConsole,
   removeLocalStaticObject,
+  getStaticObjectState,
 } from './service.staticobjects';
 
 onNet('misc:staticObjects:add', (objects: StaticObjects.State[]) => {
@@ -22,6 +23,7 @@ on('onResourceStop', (resourceName: string) => {
 });
 
 global.exports('getEntityForObjectId', getEntityForObjectId);
+global.exports('getStaticObjectState', getStaticObjectState);
 
 // Local only
 global.exports('addStaticObject', addLocalStaticObject);

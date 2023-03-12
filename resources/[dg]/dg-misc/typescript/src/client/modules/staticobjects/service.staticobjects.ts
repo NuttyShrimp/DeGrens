@@ -3,6 +3,8 @@ import { Util } from '@dgx/client';
 let currentId = 0;
 const staticObjects: Record<string, StaticObjects.Active> = {};
 
+const staticObjectState = new Map<number, Record<string, any>>();
+
 // Ids of objs that only exist for client (ex house interior objs)
 const localIds = new Set<string>();
 
@@ -12,9 +14,16 @@ const createStaticObject = async (data: StaticObjects.State) => {
   }
 
   const modelHash = typeof data.model === 'string' ? GetHashKey(data.model) : data.model;
-  await Util.loadModel(modelHash);
+  if (!HasModelLoaded(modelHash)) {
+    await Util.loadModel(modelHash);
+  }
 
   const entity = CreateObjectNoOffset(modelHash, data.coords.x, data.coords.y, data.coords.z, false, false, false);
+  if (!DoesEntityExist(entity)) {
+    console.log(`Failed to create entity ${data.id}`);
+    return;
+  }
+
   if (data.rotation) {
     SetEntityRotation(entity, data.rotation.x, data.rotation.y, data.rotation.z, 0, true);
   } else if ('w' in data.coords) {
@@ -22,16 +31,13 @@ const createStaticObject = async (data: StaticObjects.State) => {
   }
   FreezeEntityPosition(entity, true);
 
-  const entState = Entity(entity).state;
   if (data.flags) {
-    for (const [key, value] of Object.entries(data.flags)) {
-      entState[key] = value;
-    }
+    staticObjectState.set(entity, data.flags);
   }
 
   staticObjects[data.id] = { ...data, entity };
 
-  await Util.Delay(10); // might prevent possible crash when creating lots of entities
+  await Util.Delay(50); // might prevent possible crash when creating lots of entities
 };
 
 const destroyStaticObject = (objId: string) => {
@@ -41,6 +47,7 @@ const destroyStaticObject = (objId: string) => {
   SetEntityAsMissionEntity(active.entity, true, true);
   DeleteEntity(active.entity);
   delete staticObjects[objId];
+  staticObjectState.delete(active.entity);
 };
 
 const registerLocalStaticObject = async (data: StaticObjects.CreateData) => {
@@ -109,4 +116,8 @@ export const getEntityForObjectId = (objectId: string) => {
 
 export const logAllToConsole = () => {
   console.log(staticObjects);
+};
+
+export const getStaticObjectState = (entity: number) => {
+  return staticObjectState.get(entity);
 };
