@@ -21,7 +21,8 @@ variables:
     - ls /app
     - cp -r /app/cache/.yarn .
     - cp -r /app/cache/node_modules .
-    - yarn --pure-lockfile --cache-folder .yarn
+    - ls -al .
+    - yarn --frozen-lockfile --cache-folder ./.yarn
 
 .cache_modules:
   cache:
