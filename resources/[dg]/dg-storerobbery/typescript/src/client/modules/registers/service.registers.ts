@@ -6,6 +6,7 @@ import { generateKeygameSequence } from './helpers.registers';
 const registerZones: Partial<Record<Storerobbery.Id, Storerobbery.Data['registerzone']>> = {};
 
 let inRegisterZone = false;
+let cancelRobAnim = false;
 
 export const setRegisterZones = (storeConfig: Storerobbery.Config['stores']) => {
   for (const [id, store] of Object.entries(storeConfig)) {
@@ -90,6 +91,7 @@ export const lootRegister = async (registerIdx: number, isBroken: boolean) => {
   });
 
   if (canceled) {
+    cancelRobAnim = true;
     Events.emitNet('storerobbery:registers:canceled', locationManager.currentStore, registerIdx);
     return;
   }
@@ -102,13 +104,17 @@ const doRobAnimation = async (time: number) => {
   await Util.loadAnimDict('oddjobs@shop_robbery@rob_till');
   let robAnimTime = time - 1000; // accounts for exit anim
   TaskPlayAnim(ped, 'oddjobs@shop_robbery@rob_till', 'loop', 2.0, 2.0, -1, 16, 0, false, false, false);
+  cancelRobAnim = false;
+
   const interval = setInterval(() => {
-    if (robAnimTime <= 0) {
+    if (robAnimTime <= 0 || cancelRobAnim) {
+      cancelRobAnim = true;
       clearInterval(interval);
       TaskPlayAnim(ped, 'oddjobs@shop_robbery@rob_till', 'exit', 2.0, 2.0, -1, 16, 0, false, false, false);
       RemoveAnimDict('oddjobs@shop_robbery@rob_till');
       return;
     }
+
     TaskPlayAnim(ped, 'oddjobs@shop_robbery@rob_till', 'loop', 2.0, 2.0, -1, 16, 0, false, false, false);
     robAnimTime -= 1650;
   }, 1650);
