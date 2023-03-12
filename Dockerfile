@@ -1,4 +1,6 @@
-FROM node:16.9.1 AS builder
+FROM node:16.9.1-alpine AS builder
+RUN apk add --no-cache libc6-compat
+RUN apk update
 WORKDIR /app
 RUN yarn global add turbo
 COPY ./resources/ resources/
@@ -8,8 +10,9 @@ COPY ["package.json", "yarn.lock", ".npmrc", "turbo.json", "."]
 
 RUN turbo prune --scope="dg-ui" --docker
 
-FROM node:16.9.1
-
+FROM node:16.9.1-alpine
+RUN apk add --no-cache libc6-compat
+RUN apk update
 WORKDIR /app
 
 COPY ./.npmrc .
