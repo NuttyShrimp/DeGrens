@@ -2,7 +2,6 @@ local creatingCharacter = false
 local cam = -1
 local heading = 332.219879
 local zoom = "character"
-local customCamLocation = nil
 local isLoggedIn = false
 local PlayerData = {}
 local previousSkinData = {}
@@ -369,18 +368,15 @@ Citizen.CreateThread(function()
                             end
                             if IsControlJustPressed(0, 38) then -- E
                                 if Config.Stores[k].shopType == "clothing" then
-                                    customCamLocation = nil
                                     openMenu({
                                         {menu = "character", label = "Clothing", selected = true},
                                         {menu = "accessoires", label = "Accessories", selected = false}
                                     })
                                 elseif Config.Stores[k].shopType == "barber" then
-                                    customCamLocation = nil
                                     openMenu({
                                         {menu = "clothing", label = "Hair", selected = true},
                                     })
                                 elseif Config.Stores[k].shopType == "surgeon" then
-                                    customCamLocation = nil
                                     openMenu({
                                         {menu = "clothing", label = "Features", selected = true},
                                     })
@@ -410,29 +406,36 @@ Citizen.CreateThread(function()
             local pos = GetEntityCoords(ped)
             local inRange = false
             for k, v in pairs(Config.ClothingRooms) do
-                local dist = #(pos - Config.ClothingRooms[k].coords)
+                local dist = #(pos - v.coords)
                 if dist < 15 then
                     if not creatingCharacter then
-                        DrawMarker(2, Config.ClothingRooms[k].coords, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.4, 0.4, 0.2, 255, 255, 255, 255, 0, 0, 0, 1, 0, 0, 0)
+                        DrawMarker(2, v.coords, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.4, 0.4, 0.2, 255, 255, 255, 255, 0, 0, 0, 1, 0, 0, 0)
                         if dist < 2 then
-                            if plyJob == nil then
-                                plyJob = DGX.Jobs.getCurrentJob().name
+                          if plyJob == nil then
+                            plyJob = DGX.Jobs.getCurrentJob().name
+                          end
+
+                          local canAccess = false
+                          if v.requiredJob then
+                            canAccess = plyJob and plyJob == v.requiredJob
+                          elseif v.requiredBusiness then
+                            canAccess = DGX.Business.isEmployee(v.requiredBusiness)
+                          end
+
+                          if canAccess then
+                            DrawText3Ds(v.coords.x, v.coords.y, v.coords.z + 0.3, '~g~E~w~ - View Clothing')
+                            if IsControlJustPressed(0, 38) then -- E
+                              gender = "male"
+                              if DGCore.Functions.GetPlayerData().charinfo.gender == 1 then gender = "female" end
+                              DGCore.Functions.TriggerCallback('qb-clothing:server:getOutfits', function(result)
+                                openMenu({
+                                  {menu = "myOutfits", label = "My Outfits", selected = false, outfits = result},
+                                  {menu = "character", label = "Clothing", selected = false},
+                                  {menu = "accessoires", label = "Accessories", selected = false}
+                                })
+                              end)
                             end
-                            if plyJob and plyJob == Config.ClothingRooms[k].requiredJob then
-                                DrawText3Ds(Config.ClothingRooms[k].coords.x, Config.ClothingRooms[k].coords.y, Config.ClothingRooms[k].coords.z + 0.3, '~g~E~w~ - View Clothing')
-                                if IsControlJustPressed(0, 38) then -- E
-                                    customCamLocation = Config.ClothingRooms[k].cameraLocation
-                                    gender = "male"
-                                    if DGCore.Functions.GetPlayerData().charinfo.gender == 1 then gender = "female" end
-                                    DGCore.Functions.TriggerCallback('qb-clothing:server:getOutfits', function(result)
-                                        openMenu({
-                                            {menu = "myOutfits", label = "My Outfits", selected = false, outfits = result},
-                                            {menu = "character", label = "Clothing", selected = false},
-                                            {menu = "accessoires", label = "Accessories", selected = false}
-                                        })
-                                    end)
-                                end
-                            end
+                          end
                         end
                         inRange = true
                     end
@@ -529,7 +532,6 @@ local clothingCategorys = {
 
 RegisterNetEvent('qb-clothing:client:openMenu')
 AddEventHandler('qb-clothing:client:openMenu', function()
-    customCamLocation = nil
     openMenu({
         {menu = "character", label = "Character", selected = true},
         {menu = "clothing", label = "Features", selected = false},
@@ -705,10 +707,6 @@ function enableCam()
         RenderScriptCams(true, false, 0, true, true)
         SetCamCoord(cam, coords.x, coords.y, coords.z + 0.5)
         SetCamRot(cam, 0.0, 0.0, GetEntityHeading(PlayerPedId()) + 180)
-    end
-    
-    if customCamLocation ~= nil then
-        SetCamCoord(cam, customCamLocation.x, customCamLocation.y, customCamLocation.z)
     end
 end
 

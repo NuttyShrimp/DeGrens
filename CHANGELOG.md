@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Locate player/vehicle commands toegevoegd aan adminmenu
 - Actieve melding om weer te geven dat je in cloak/noclip ben
 - Je kan nu garagelogs bekijken van gesharede overheids voertuigen
+- Kleerkasten voor enkel businesses toegevoegd
 
 ### Changed
 - Bait price aangepast
@@ -57,6 +58,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Nieuwste garagelogs sta nu bovenaan
 - Admin dooropties werken weer
 - Garagelogs zijn nu deftige gesorteerd op insertion moment + worden treffelijk geseed als het nog niet aan de cache limiet zit
+- Fix business check voor clothingmenus
 
 ## [1.0.9]
 

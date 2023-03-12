@@ -527,12 +527,14 @@ Config.Stores = {
 	[19] =  {shopType = "barber",  coords = vector3(1212.8, -472.9, 65.2)},
 	[20] =  {shopType = "barber",  coords = vector3(-32.9, -152.3, 56.1)},
 	[21] =  {shopType = "barber",  coords = vector3(-278.1, 6228.5, 30.7)},
-	[22] =  {shopType = "clothing",  coords = vector3(82.5859, 296.0225, 110.2168)}
 }
 
 Config.ClothingRooms = {
-    [1] = {requiredJob = "police", coords = vector3(462.2585, -996.6691, 30.6896), cameraLocation = vector4(460.6158, -996.6288, 30.69, 89.0771)},
-    [2] = {requiredJob = "ambulance", coords = vector3(300.6396, -597.5565, 43.284), cameraLocation = vector4(301.1858, -596.1026, 43.284, 339.9339)},  
+  {requiredJob = "police", coords = vector3(462.2585, -996.6691, 30.6896)},
+  {requiredJob = "ambulance", coords = vector3(300.6396, -597.5565, 43.284)},  
+  {requiredBusiness = "upnatom", coords = vector3(82.5859, 296.0225, 110.2168)},
+  {requiredBusiness = "straightpipers", coords = vector3(1160.0858, -781.2817, 57.6052)},
+  {requiredBusiness = "lowsantos", coords = vector3(-1424.8824, -457.3434, 35.9097)},
 }
 
 Config.Outfits = {}
