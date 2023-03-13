@@ -5,847 +5,847 @@
       "type": "node-terminal",
       "name": "admin:build prod",
       "request": "launch",
-      "command": "yarn run build",
+      "command": "pnpm run build",
       "cwd": "${workspaceFolder}/resources/[dg]/dg-admin/typescript"
     },
     {
       "type": "node-terminal",
       "name": "admin:build dev",
       "request": "launch",
-      "command": "yarn run build:dev",
+      "command": "pnpm run build:dev",
       "cwd": "${workspaceFolder}/resources/[dg]/dg-admin/typescript"
     },
     {
       "type": "node-terminal",
       "name": "admin:watch",
       "request": "launch",
-      "command": "yarn run watch",
+      "command": "pnpm run watch",
       "cwd": "${workspaceFolder}/resources/[dg]/dg-admin/typescript"
     },
     {
       "type": "node-terminal",
       "name": "api:build prod",
       "request": "launch",
-      "command": "yarn run build",
+      "command": "pnpm run build",
       "cwd": "${workspaceFolder}/resources/[dg]/dg-api/typescript"
     },
     {
       "type": "node-terminal",
       "name": "api:build dev",
       "request": "launch",
-      "command": "yarn run build:dev",
+      "command": "pnpm run build:dev",
       "cwd": "${workspaceFolder}/resources/[dg]/dg-api/typescript"
     },
     {
       "type": "node-terminal",
       "name": "api:watch",
       "request": "launch",
-      "command": "yarn run watch",
+      "command": "pnpm run watch",
       "cwd": "${workspaceFolder}/resources/[dg]/dg-api/typescript"
     },
     {
       "type": "node-terminal",
       "name": "auth:build prod",
       "request": "launch",
-      "command": "yarn run build",
+      "command": "pnpm run build",
       "cwd": "${workspaceFolder}/resources/[dg]/dg-auth/typescript"
     },
     {
       "type": "node-terminal",
       "name": "auth:build dev",
       "request": "launch",
-      "command": "yarn run build:dev",
+      "command": "pnpm run build:dev",
       "cwd": "${workspaceFolder}/resources/[dg]/dg-auth/typescript"
     },
     {
       "type": "node-terminal",
       "name": "auth:watch",
       "request": "launch",
-      "command": "yarn run watch",
+      "command": "pnpm run watch",
       "cwd": "${workspaceFolder}/resources/[dg]/dg-auth/typescript"
     },
     {
       "type": "node-terminal",
       "name": "blackout:build prod",
       "request": "launch",
-      "command": "yarn run build",
+      "command": "pnpm run build",
       "cwd": "${workspaceFolder}/resources/[dg]/dg-blackout/typescript"
     },
     {
       "type": "node-terminal",
       "name": "blackout:build dev",
       "request": "launch",
-      "command": "yarn run build:dev",
+      "command": "pnpm run build:dev",
       "cwd": "${workspaceFolder}/resources/[dg]/dg-blackout/typescript"
     },
     {
       "type": "node-terminal",
       "name": "blackout:watch",
       "request": "launch",
-      "command": "yarn run watch",
+      "command": "pnpm run watch",
       "cwd": "${workspaceFolder}/resources/[dg]/dg-blackout/typescript"
     },
     {
       "type": "node-terminal",
       "name": "build:build prod",
       "request": "launch",
-      "command": "yarn run build",
+      "command": "pnpm run build",
       "cwd": "${workspaceFolder}/resources/[dg]/dg-build/typescript"
     },
     {
       "type": "node-terminal",
       "name": "build:build dev",
       "request": "launch",
-      "command": "yarn run build:dev",
+      "command": "pnpm run build:dev",
       "cwd": "${workspaceFolder}/resources/[dg]/dg-build/typescript"
     },
     {
       "type": "node-terminal",
       "name": "build:watch",
       "request": "launch",
-      "command": "yarn run watch",
+      "command": "pnpm run watch",
       "cwd": "${workspaceFolder}/resources/[dg]/dg-build/typescript"
     },
     {
       "type": "node-terminal",
       "name": "business:build prod",
       "request": "launch",
-      "command": "yarn run build",
+      "command": "pnpm run build",
       "cwd": "${workspaceFolder}/resources/[dg]/dg-business/typescript"
     },
     {
       "type": "node-terminal",
       "name": "business:build dev",
       "request": "launch",
-      "command": "yarn run build:dev",
+      "command": "pnpm run build:dev",
       "cwd": "${workspaceFolder}/resources/[dg]/dg-business/typescript"
     },
     {
       "type": "node-terminal",
       "name": "business:watch",
       "request": "launch",
-      "command": "yarn run watch",
+      "command": "pnpm run watch",
       "cwd": "${workspaceFolder}/resources/[dg]/dg-business/typescript"
     },
     {
       "type": "node-terminal",
       "name": "chars:ui:dev",
       "request": "launch",
-      "command": "yarn run dev",
+      "command": "pnpm run dev",
       "cwd": "${workspaceFolder}/resources/[dg]/dg-chars/ui"
     },
     {
       "type": "node-terminal",
       "name": "chars:ui:build",
       "request": "launch",
-      "command": "yarn run build",
+      "command": "pnpm run build",
       "cwd": "${workspaceFolder}/resources/[dg]/dg-chars/ui"
     },
     {
       "type": "node-terminal",
       "name": "chat:build prod",
       "request": "launch",
-      "command": "yarn run build",
+      "command": "pnpm run build",
       "cwd": "${workspaceFolder}/resources/[dg]/dg-chat/typescript"
     },
     {
       "type": "node-terminal",
       "name": "chat:build dev",
       "request": "launch",
-      "command": "yarn run build:dev",
+      "command": "pnpm run build:dev",
       "cwd": "${workspaceFolder}/resources/[dg]/dg-chat/typescript"
     },
     {
       "type": "node-terminal",
       "name": "chat:watch",
       "request": "launch",
-      "command": "yarn run watch",
+      "command": "pnpm run watch",
       "cwd": "${workspaceFolder}/resources/[dg]/dg-chat/typescript"
     },
     {
       "type": "node-terminal",
       "name": "config:build prod",
       "request": "launch",
-      "command": "yarn run build",
+      "command": "pnpm run build",
       "cwd": "${workspaceFolder}/resources/[dg]/dg-config/typescript"
     },
     {
       "type": "node-terminal",
       "name": "config:build dev",
       "request": "launch",
-      "command": "yarn run build:dev",
+      "command": "pnpm run build:dev",
       "cwd": "${workspaceFolder}/resources/[dg]/dg-config/typescript"
     },
     {
       "type": "node-terminal",
       "name": "config:watch",
       "request": "launch",
-      "command": "yarn run watch",
+      "command": "pnpm run watch",
       "cwd": "${workspaceFolder}/resources/[dg]/dg-config/typescript"
     },
     {
       "type": "node-terminal",
       "name": "criminal:build prod",
       "request": "launch",
-      "command": "yarn run build",
+      "command": "pnpm run build",
       "cwd": "${workspaceFolder}/resources/[dg]/dg-criminal/typescript"
     },
     {
       "type": "node-terminal",
       "name": "criminal:build dev",
       "request": "launch",
-      "command": "yarn run build:dev",
+      "command": "pnpm run build:dev",
       "cwd": "${workspaceFolder}/resources/[dg]/dg-criminal/typescript"
     },
     {
       "type": "node-terminal",
       "name": "criminal:watch",
       "request": "launch",
-      "command": "yarn run watch",
+      "command": "pnpm run watch",
       "cwd": "${workspaceFolder}/resources/[dg]/dg-criminal/typescript"
     },
     {
       "type": "node-terminal",
       "name": "dgx:build prod",
       "request": "launch",
-      "command": "yarn run build",
+      "command": "pnpm run build",
       "cwd": "${workspaceFolder}/resources/[dg]/ts-shared/typescript"
     },
     {
       "type": "node-terminal",
       "name": "dgx:build dev",
       "request": "launch",
-      "command": "yarn run build:dev",
+      "command": "pnpm run build:dev",
       "cwd": "${workspaceFolder}/resources/[dg]/ts-shared/typescript"
     },
     {
       "type": "node-terminal",
       "name": "dgx:watch",
       "request": "launch",
-      "command": "yarn run watch",
+      "command": "pnpm run watch",
       "cwd": "${workspaceFolder}/resources/[dg]/ts-shared/typescript"
     },
     {
       "type": "node-terminal",
       "name": "dispatch:build prod",
       "request": "launch",
-      "command": "yarn run build",
+      "command": "pnpm run build",
       "cwd": "${workspaceFolder}/resources/[dg]/dg-dispatch/typescript"
     },
     {
       "type": "node-terminal",
       "name": "dispatch:build dev",
       "request": "launch",
-      "command": "yarn run build:dev",
+      "command": "pnpm run build:dev",
       "cwd": "${workspaceFolder}/resources/[dg]/dg-dispatch/typescript"
     },
     {
       "type": "node-terminal",
       "name": "dispatch:watch",
       "request": "launch",
-      "command": "yarn run watch",
+      "command": "pnpm run watch",
       "cwd": "${workspaceFolder}/resources/[dg]/dg-dispatch/typescript"
     },
     {
       "type": "node-terminal",
       "name": "doorlock:build prod",
       "request": "launch",
-      "command": "yarn run build",
+      "command": "pnpm run build",
       "cwd": "${workspaceFolder}/resources/[dg]/dg-doorlock/typescript"
     },
     {
       "type": "node-terminal",
       "name": "doorlock:build dev",
       "request": "launch",
-      "command": "yarn run build:dev",
+      "command": "pnpm run build:dev",
       "cwd": "${workspaceFolder}/resources/[dg]/dg-doorlock/typescript"
     },
     {
       "type": "node-terminal",
       "name": "doorlock:watch",
       "request": "launch",
-      "command": "yarn run watch",
+      "command": "pnpm run watch",
       "cwd": "${workspaceFolder}/resources/[dg]/dg-doorlock/typescript"
     },
     {
       "type": "node-terminal",
       "name": "farming:build prod",
       "request": "launch",
-      "command": "yarn run build",
+      "command": "pnpm run build",
       "cwd": "${workspaceFolder}/resources/[dg]/dg-farming/typescript"
     },
     {
       "type": "node-terminal",
       "name": "farming:build dev",
       "request": "launch",
-      "command": "yarn run build:dev",
+      "command": "pnpm run build:dev",
       "cwd": "${workspaceFolder}/resources/[dg]/dg-farming/typescript"
     },
     {
       "type": "node-terminal",
       "name": "farming:watch",
       "request": "launch",
-      "command": "yarn run watch",
+      "command": "pnpm run watch",
       "cwd": "${workspaceFolder}/resources/[dg]/dg-farming/typescript"
     },
     {
       "type": "node-terminal",
       "name": "financials:build prod",
       "request": "launch",
-      "command": "yarn run build",
+      "command": "pnpm run build",
       "cwd": "${workspaceFolder}/resources/[dg]/dg-financials/typescript"
     },
     {
       "type": "node-terminal",
       "name": "financials:build dev",
       "request": "launch",
-      "command": "yarn run build:dev",
+      "command": "pnpm run build:dev",
       "cwd": "${workspaceFolder}/resources/[dg]/dg-financials/typescript"
     },
     {
       "type": "node-terminal",
       "name": "financials:dev",
       "request": "launch",
-      "command": "yarn run watch",
+      "command": "pnpm run watch",
       "cwd": "${workspaceFolder}/resources/[dg]/dg-financials/typescript"
     },
     {
       "type": "node-terminal",
       "name": "financials:watch",
       "request": "launch",
-      "command": "yarn run watch",
+      "command": "pnpm run watch",
       "cwd": "${workspaceFolder}/resources/[dg]/dg-financials/typescript"
     },
     {
       "type": "node-terminal",
       "name": "gangs:build prod",
       "request": "launch",
-      "command": "yarn run build",
+      "command": "pnpm run build",
       "cwd": "${workspaceFolder}/resources/[dg]/dg-gangs/typescript"
     },
     {
       "type": "node-terminal",
       "name": "gangs:build dev",
       "request": "launch",
-      "command": "yarn run build:dev",
+      "command": "pnpm run build:dev",
       "cwd": "${workspaceFolder}/resources/[dg]/dg-gangs/typescript"
     },
     {
       "type": "node-terminal",
       "name": "gangs:watch",
       "request": "launch",
-      "command": "yarn run watch",
+      "command": "pnpm run watch",
       "cwd": "${workspaceFolder}/resources/[dg]/dg-gangs/typescript"
     },
     {
       "type": "node-terminal",
       "name": "heists:build prod",
       "request": "launch",
-      "command": "yarn run build",
+      "command": "pnpm run build",
       "cwd": "${workspaceFolder}/resources/[dg]/dg-heists/typescript"
     },
     {
       "type": "node-terminal",
       "name": "heists:build dev",
       "request": "launch",
-      "command": "yarn run build:dev",
+      "command": "pnpm run build:dev",
       "cwd": "${workspaceFolder}/resources/[dg]/dg-heists/typescript"
     },
     {
       "type": "node-terminal",
       "name": "heists:watch",
       "request": "launch",
-      "command": "yarn run watch",
+      "command": "pnpm run watch",
       "cwd": "${workspaceFolder}/resources/[dg]/dg-heists/typescript"
     },
     {
       "type": "node-terminal",
       "name": "hospital:build prod",
       "request": "launch",
-      "command": "yarn run build",
+      "command": "pnpm run build",
       "cwd": "${workspaceFolder}/resources/[dg]/dg-hospital/typescript"
     },
     {
       "type": "node-terminal",
       "name": "hospital:build dev",
       "request": "launch",
-      "command": "yarn run build:dev",
+      "command": "pnpm run build:dev",
       "cwd": "${workspaceFolder}/resources/[dg]/dg-hospital/typescript"
     },
     {
       "type": "node-terminal",
       "name": "hospital:watch",
       "request": "launch",
-      "command": "yarn run watch",
+      "command": "pnpm run watch",
       "cwd": "${workspaceFolder}/resources/[dg]/dg-hospital/typescript"
     },
     {
       "type": "node-terminal",
       "name": "houserobbery:build prod",
       "request": "launch",
-      "command": "yarn run build",
+      "command": "pnpm run build",
       "cwd": "${workspaceFolder}/resources/[dg]/dg-houserobbery/typescript"
     },
     {
       "type": "node-terminal",
       "name": "houserobbery:build dev",
       "request": "launch",
-      "command": "yarn run build:dev",
+      "command": "pnpm run build:dev",
       "cwd": "${workspaceFolder}/resources/[dg]/dg-houserobbery/typescript"
     },
     {
       "type": "node-terminal",
       "name": "houserobbery:watch",
       "request": "launch",
-      "command": "yarn run watch",
+      "command": "pnpm run watch",
       "cwd": "${workspaceFolder}/resources/[dg]/dg-houserobbery/typescript"
     },
     {
       "type": "node-terminal",
       "name": "inventory:build prod",
       "request": "launch",
-      "command": "yarn run build",
+      "command": "pnpm run build",
       "cwd": "${workspaceFolder}/resources/[dg]/dg-inventory/typescript"
     },
     {
       "type": "node-terminal",
       "name": "inventory:build dev",
       "request": "launch",
-      "command": "yarn run build:dev",
+      "command": "pnpm run build:dev",
       "cwd": "${workspaceFolder}/resources/[dg]/dg-inventory/typescript"
     },
     {
       "type": "node-terminal",
       "name": "inventory:watch",
       "request": "launch",
-      "command": "yarn run watch",
+      "command": "pnpm run watch",
       "cwd": "${workspaceFolder}/resources/[dg]/dg-inventory/typescript"
     },
     {
       "type": "node-terminal",
       "name": "jobs:build prod",
       "request": "launch",
-      "command": "yarn run build",
+      "command": "pnpm run build",
       "cwd": "${workspaceFolder}/resources/[dg]/dg-jobs/typescript"
     },
     {
       "type": "node-terminal",
       "name": "jobs:build dev",
       "request": "launch",
-      "command": "yarn run build:dev",
+      "command": "pnpm run build:dev",
       "cwd": "${workspaceFolder}/resources/[dg]/dg-jobs/typescript"
     },
     {
       "type": "node-terminal",
       "name": "jobs:watch",
       "request": "launch",
-      "command": "yarn run watch",
+      "command": "pnpm run watch",
       "cwd": "${workspaceFolder}/resources/[dg]/dg-jobs/typescript"
     },
     {
       "type": "node-terminal",
       "name": "justice:build prod",
       "request": "launch",
-      "command": "yarn run build",
+      "command": "pnpm run build",
       "cwd": "${workspaceFolder}/resources/[dg]/dg-justice/typescript"
     },
     {
       "type": "node-terminal",
       "name": "justice:build dev",
       "request": "launch",
-      "command": "yarn run build:dev",
+      "command": "pnpm run build:dev",
       "cwd": "${workspaceFolder}/resources/[dg]/dg-justice/typescript"
     },
     {
       "type": "node-terminal",
       "name": "justice:watch",
       "request": "launch",
-      "command": "yarn run watch",
+      "command": "pnpm run watch",
       "cwd": "${workspaceFolder}/resources/[dg]/dg-justice/typescript"
     },
     {
       "type": "node-terminal",
       "name": "labs:build prod",
       "request": "launch",
-      "command": "yarn run build",
+      "command": "pnpm run build",
       "cwd": "${workspaceFolder}/resources/[dg]/dg-labs/typescript"
     },
     {
       "type": "node-terminal",
       "name": "labs:build dev",
       "request": "launch",
-      "command": "yarn run build:dev",
+      "command": "pnpm run build:dev",
       "cwd": "${workspaceFolder}/resources/[dg]/dg-labs/typescript"
     },
     {
       "type": "node-terminal",
       "name": "labs:watch",
       "request": "launch",
-      "command": "yarn run watch",
+      "command": "pnpm run watch",
       "cwd": "${workspaceFolder}/resources/[dg]/dg-labs/typescript"
     },
     {
       "type": "node-terminal",
       "name": "localsounds:build prod",
       "request": "launch",
-      "command": "yarn run build",
+      "command": "pnpm run build",
       "cwd": "${workspaceFolder}/resources/[dg]/dg-localsounds/typescript"
     },
     {
       "type": "node-terminal",
       "name": "localsounds:build dev",
       "request": "launch",
-      "command": "yarn run build:dev",
+      "command": "pnpm run build:dev",
       "cwd": "${workspaceFolder}/resources/[dg]/dg-localsounds/typescript"
     },
     {
       "type": "node-terminal",
       "name": "localsounds:watch",
       "request": "launch",
-      "command": "yarn run watch",
+      "command": "pnpm run watch",
       "cwd": "${workspaceFolder}/resources/[dg]/dg-localsounds/typescript"
     },
     {
       "type": "node-terminal",
       "name": "lockers:build prod",
       "request": "launch",
-      "command": "yarn run build",
+      "command": "pnpm run build",
       "cwd": "${workspaceFolder}/resources/[dg]/dg-lockers/typescript"
     },
     {
       "type": "node-terminal",
       "name": "lockers:build dev",
       "request": "launch",
-      "command": "yarn run build:dev",
+      "command": "pnpm run build:dev",
       "cwd": "${workspaceFolder}/resources/[dg]/dg-lockers/typescript"
     },
     {
       "type": "node-terminal",
       "name": "lockers:watch",
       "request": "launch",
-      "command": "yarn run watch",
+      "command": "pnpm run watch",
       "cwd": "${workspaceFolder}/resources/[dg]/dg-lockers/typescript"
     },
     {
       "type": "node-terminal",
       "name": "materials:build prod",
       "request": "launch",
-      "command": "yarn run build",
+      "command": "pnpm run build",
       "cwd": "${workspaceFolder}/resources/[dg]/dg-materials/typescript"
     },
     {
       "type": "node-terminal",
       "name": "materials:build dev",
       "request": "launch",
-      "command": "yarn run build:dev",
+      "command": "pnpm run build:dev",
       "cwd": "${workspaceFolder}/resources/[dg]/dg-materials/typescript"
     },
     {
       "type": "node-terminal",
       "name": "materials:watch",
       "request": "launch",
-      "command": "yarn run watch",
+      "command": "pnpm run watch",
       "cwd": "${workspaceFolder}/resources/[dg]/dg-materials/typescript"
     },
     {
       "type": "node-terminal",
       "name": "minigames:build prod",
       "request": "launch",
-      "command": "yarn run build",
+      "command": "pnpm run build",
       "cwd": "${workspaceFolder}/resources/[dg]/dg-minigames/typescript"
     },
     {
       "type": "node-terminal",
       "name": "minigames:build dev",
       "request": "launch",
-      "command": "yarn run build:dev",
+      "command": "pnpm run build:dev",
       "cwd": "${workspaceFolder}/resources/[dg]/dg-minigames/typescript"
     },
     {
       "type": "node-terminal",
       "name": "minigames:watch",
       "request": "launch",
-      "command": "yarn run watch",
+      "command": "pnpm run watch",
       "cwd": "${workspaceFolder}/resources/[dg]/dg-minigames/typescript"
     },
     {
       "type": "node-terminal",
       "name": "misc:build prod",
       "request": "launch",
-      "command": "yarn run build",
+      "command": "pnpm run build",
       "cwd": "${workspaceFolder}/resources/[dg]/dg-misc/typescript"
     },
     {
       "type": "node-terminal",
       "name": "misc:build dev",
       "request": "launch",
-      "command": "yarn run build:dev",
+      "command": "pnpm run build:dev",
       "cwd": "${workspaceFolder}/resources/[dg]/dg-misc/typescript"
     },
     {
       "type": "node-terminal",
       "name": "misc:watch",
       "request": "launch",
-      "command": "yarn run watch",
+      "command": "pnpm run watch",
       "cwd": "${workspaceFolder}/resources/[dg]/dg-misc/typescript"
     },
     {
       "type": "node-terminal",
       "name": "npcs:build prod",
       "request": "launch",
-      "command": "yarn run build",
+      "command": "pnpm run build",
       "cwd": "${workspaceFolder}/resources/[dg]/dg-npcs/typescript"
     },
     {
       "type": "node-terminal",
       "name": "npcs:build dev",
       "request": "launch",
-      "command": "yarn build:dev",
+      "command": "pnpm build:dev",
       "cwd": "${workspaceFolder}/resources/[dg]/dg-npcs/typescript"
     },
     {
       "type": "node-terminal",
       "name": "npcs:watch",
       "request": "launch",
-      "command": "yarn watch",
+      "command": "pnpm watch",
       "cwd": "${workspaceFolder}/resources/[dg]/dg-npcs/typescript"
     },
     {
       "type": "node-terminal",
       "name": "peek:build prod",
       "request": "launch",
-      "command": "yarn run build",
+      "command": "pnpm run build",
       "cwd": "${workspaceFolder}/resources/[dg]/dg-peek/typescript"
     },
     {
       "type": "node-terminal",
       "name": "peek:build dev",
       "request": "launch",
-      "command": "yarn run build:dev",
+      "command": "pnpm run build:dev",
       "cwd": "${workspaceFolder}/resources/[dg]/dg-peek/typescript"
     },
     {
       "type": "node-terminal",
       "name": "peek:watch",
       "request": "launch",
-      "command": "yarn run watch",
+      "command": "pnpm run watch",
       "cwd": "${workspaceFolder}/resources/[dg]/dg-peek/typescript"
     },
     {
       "type": "node-terminal",
       "name": "police:build prod",
       "request": "launch",
-      "command": "yarn run build",
+      "command": "pnpm run build",
       "cwd": "${workspaceFolder}/resources/[dg]/dg-police/typescript"
     },
     {
       "type": "node-terminal",
       "name": "police:build dev",
       "request": "launch",
-      "command": "yarn run build:dev",
+      "command": "pnpm run build:dev",
       "cwd": "${workspaceFolder}/resources/[dg]/dg-police/typescript"
     },
     {
       "type": "node-terminal",
       "name": "police:watch",
       "request": "launch",
-      "command": "yarn run watch",
+      "command": "pnpm run watch",
       "cwd": "${workspaceFolder}/resources/[dg]/dg-police/typescript"
     },
     {
       "type": "node-terminal",
       "name": "radialmenu:build prod",
       "request": "launch",
-      "command": "yarn run build",
+      "command": "pnpm run build",
       "cwd": "${workspaceFolder}/resources/[dg]/dg-radialmenu/typescript"
     },
     {
       "type": "node-terminal",
       "name": "radialmenu:build dev",
       "request": "launch",
-      "command": "yarn run build:dev",
+      "command": "pnpm run build:dev",
       "cwd": "${workspaceFolder}/resources/[dg]/dg-radialmenu/typescript"
     },
     {
       "type": "node-terminal",
       "name": "radialmenu:watch",
       "request": "launch",
-      "command": "yarn run watch",
+      "command": "pnpm run watch",
       "cwd": "${workspaceFolder}/resources/[dg]/dg-radialmenu/typescript"
     },
     {
       "type": "node-terminal",
       "name": "restaurants:build prod",
       "request": "launch",
-      "command": "yarn run build",
+      "command": "pnpm run build",
       "cwd": "${workspaceFolder}/resources/[dg]/dg-restaurants/typescript"
     },
     {
       "type": "node-terminal",
       "name": "restaurants:build dev",
       "request": "launch",
-      "command": "yarn run build:dev",
+      "command": "pnpm run build:dev",
       "cwd": "${workspaceFolder}/resources/[dg]/dg-restaurants/typescript"
     },
     {
       "type": "node-terminal",
       "name": "restaurants:watch",
       "request": "launch",
-      "command": "yarn run watch",
+      "command": "pnpm run watch",
       "cwd": "${workspaceFolder}/resources/[dg]/dg-restaurants/typescript"
     },
     {
       "type": "node-terminal",
       "name": "sql:build prod",
       "request": "launch",
-      "command": "yarn run build",
+      "command": "pnpm run build",
       "cwd": "${workspaceFolder}/resources/[dg]/dg-sql/typescript"
     },
     {
       "type": "node-terminal",
       "name": "sql:build dev",
       "request": "launch",
-      "command": "yarn run build:dev",
+      "command": "pnpm run build:dev",
       "cwd": "${workspaceFolder}/resources/[dg]/dg-sql/typescript"
     },
     {
       "type": "node-terminal",
       "name": "sql:watch",
       "request": "launch",
-      "command": "yarn run watch",
+      "command": "pnpm run watch",
       "cwd": "${workspaceFolder}/resources/[dg]/dg-sql/typescript"
     },
     {
       "type": "node-terminal",
       "name": "storerobbery:build prod",
       "request": "launch",
-      "command": "yarn run build",
+      "command": "pnpm run build",
       "cwd": "${workspaceFolder}/resources/[dg]/dg-storerobbery/typescript"
     },
     {
       "type": "node-terminal",
       "name": "storerobbery:build dev",
       "request": "launch",
-      "command": "yarn run build:dev",
+      "command": "pnpm run build:dev",
       "cwd": "${workspaceFolder}/resources/[dg]/dg-storerobbery/typescript"
     },
     {
       "type": "node-terminal",
       "name": "storerobbery:dev",
       "request": "launch",
-      "command": "yarn watch",
+      "command": "pnpm watch",
       "cwd": "${workspaceFolder}/resources/[dg]/dg-storerobbery/typescript"
     },
     {
       "type": "node-terminal",
       "name": "storerobbery:watch",
       "request": "launch",
-      "command": "yarn run watch",
+      "command": "pnpm run watch",
       "cwd": "${workspaceFolder}/resources/[dg]/dg-storerobbery/typescript"
     },
     {
       "type": "node-terminal",
       "name": "sync:build prod",
       "request": "launch",
-      "command": "yarn run build",
+      "command": "pnpm run build",
       "cwd": "${workspaceFolder}/resources/[dg]/dg-sync/typescript"
     },
     {
       "type": "node-terminal",
       "name": "sync:build dev",
       "request": "launch",
-      "command": "yarn run build:dev",
+      "command": "pnpm run build:dev",
       "cwd": "${workspaceFolder}/resources/[dg]/dg-sync/typescript"
     },
     {
       "type": "node-terminal",
       "name": "sync:watch",
       "request": "launch",
-      "command": "yarn run watch",
+      "command": "pnpm run watch",
       "cwd": "${workspaceFolder}/resources/[dg]/dg-sync/typescript"
     },
     {
       "type": "node-terminal",
       "name": "ui:build prod",
       "request": "launch",
-      "command": "yarn run build",
+      "command": "pnpm run build",
       "cwd": "${workspaceFolder}/resources/[dg]/dg-ui/[src]"
     },
     {
       "type": "node-terminal",
       "name": "ui:build dev",
       "request": "launch",
-      "command": "yarn run build:debug",
+      "command": "pnpm run build:debug",
       "cwd": "${workspaceFolder}/resources/[dg]/dg-ui/[src]"
     },
     {
       "type": "node-terminal",
       "name": "ui:dev",
       "request": "launch",
-      "command": "yarn run start",
+      "command": "pnpm run start",
       "cwd": "${workspaceFolder}/resources/[dg]/dg-ui/[src]"
     },
     {
       "type": "node-terminal",
       "name": "vehicles:build prod",
       "request": "launch",
-      "command": "yarn run build",
+      "command": "pnpm run build",
       "cwd": "${workspaceFolder}/resources/[dg]/dg-vehicles/typescript"
     },
     {
       "type": "node-terminal",
       "name": "vehicles:build dev",
       "request": "launch",
-      "command": "yarn run build:dev",
+      "command": "pnpm run build:dev",
       "cwd": "${workspaceFolder}/resources/[dg]/dg-vehicles/typescript"
     },
     {
       "type": "node-terminal",
       "name": "vehicles:watch",
       "request": "launch",
-      "command": "yarn run watch",
+      "command": "pnpm run watch",
       "cwd": "${workspaceFolder}/resources/[dg]/dg-vehicles/typescript"
     },
     {
       "type": "node-terminal",
       "name": "weapons:build prod",
       "request": "launch",
-      "command": "yarn run build",
+      "command": "pnpm run build",
       "cwd": "${workspaceFolder}/resources/[dg]/dg-weapons/typescript"
     },
     {
       "type": "node-terminal",
       "name": "weapons:build dev",
       "request": "launch",
-      "command": "yarn run build:dev",
+      "command": "pnpm run build:dev",
       "cwd": "${workspaceFolder}/resources/[dg]/dg-weapons/typescript"
     },
     {
       "type": "node-terminal",
       "name": "weapons:watch",
       "request": "launch",
-      "command": "yarn run watch",
+      "command": "pnpm run watch",
       "cwd": "${workspaceFolder}/resources/[dg]/dg-weapons/typescript"
     },
     {
       "type": "node-terminal",
       "name": "weathersync:build prod",
       "request": "launch",
-      "command": "yarn run build",
+      "command": "pnpm run build",
       "cwd": "${workspaceFolder}/resources/[dg]/dg-weathersync/typescript"
     },
     {
       "type": "node-terminal",
       "name": "weathersync:build dev",
       "request": "launch",
-      "command": "yarn run build:dev",
+      "command": "pnpm run build:dev",
       "cwd": "${workspaceFolder}/resources/[dg]/dg-weathersync/typescript"
     },
     {
       "type": "node-terminal",
       "name": "weathersync:watch",
       "request": "launch",
-      "command": "yarn run watch",
+      "command": "pnpm run watch",
       "cwd": "${workspaceFolder}/resources/[dg]/dg-weathersync/typescript"
     }
   ]

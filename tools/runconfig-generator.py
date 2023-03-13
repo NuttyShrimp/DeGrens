@@ -55,7 +55,7 @@ def buildVSCodeJson(resource, cmdName):
       "type": "node-terminal",
       "name": f"{resource}:{cmdName}",
       "request": "launch",
-      "command": f"yarn run {CMDS[cmdName]}",
+      "command": f"pnpm run {CMDS[cmdName]}",
       "cwd": "${workspaceFolder}/resources/[dg]/dg-%s/typescript" % resource
     }
   )

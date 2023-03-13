@@ -3,7 +3,7 @@
 ## Install
 To install & build a production ready version do in the folder of this file:
 ```shell
-cd typescript && yarn && yarn build
+cd typescript && pnpm && pnpm build
 ```
 
 ## Dev

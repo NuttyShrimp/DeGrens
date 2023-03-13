@@ -17,6 +17,7 @@
     "reflect-metadata": "^0.1.13"
   },
   "devDependencies": {
+    "@sentry/types": "^7.42.0",
     "@types/core-js": "^2.5.5",
     "db": "*",
     "esbuild": "*"

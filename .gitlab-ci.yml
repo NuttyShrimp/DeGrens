@@ -1,17 +1,14 @@
 stages:
-  # - images
   - test
   - build
   - deploy
   - housekeeping
 
-# image: registry-gitlab.pieter557.dscloud.me/degrens-21/degrens-main/node:latest
 image: node:16
-
 
 variables:
   GIT_DEPTH: 5
-  FF_USE_FASTZIP: "true" 
+  FF_USE_FASTZIP: 'true'
   TRANSFER_METER_FREQUENCY: 5s # will display transfer progress every 5 seconds for artifacts and remote caches.
 
 .node_mod_installation:
@@ -46,26 +43,7 @@ variables:
       - '**/*.scss'
       - '**/*.html'
       - '**/package.json'
-      - '**/yarn.lock'
-
-# build node image:
-#   stage: images 
-#   image: docker:latest
-#   services:
-#     - docker:dind
-#   only:
-#     refs:
-#         - master
-#         - UPD
-#     changes:
-#         - package.json
-#         - yarn.lock
-#   script:
-#     - docker login -u $CI_REGISTRY_USER -p $CI_JOB_TOKEN $CI_REGISTRY
-#     - docker build -t $CI_REGISTRY_IMAGE/node:latest -t $CI_REGISTRY_IMAGE/node:$CI_COMMIT_SHA -- --cache-from $CI_REGISTRY_IMAGE/node:latest.
-#     - docker push $CI_REGISTRY_IMAGE/node:latest
-#     - docker push $CI_REGISTRY_IMAGE/node:$CI_COMMIT_SHA
-
+      - '**/pnpm-lock.yaml'
 
 validate json:
   stage: test
@@ -111,7 +89,6 @@ validate db migrations:
     - echo 'DATABASE_URL=mysql://dguser:dgpw@mariadb/degrens2?charset=utf8mb4' > ./packages/db/.env
     - cd packages/db
     - yarn global add prisma
-    # - yarn add prisma --skip-integrity-check --no-save --no-lockfile
     - yarn db:deploy
   only:
     refs:
@@ -126,8 +103,9 @@ JS linting:
     - .node_mod_installation
     - .cache_modules
     - .js_changes
-  stage: test 
+  stage: test
   script:
+    - pnpm format -- --loglevel error
     - pnpm lint
 
 TS dev build:
@@ -137,7 +115,6 @@ TS dev build:
     - .js_changes
   stage: build
   script:
-    - pnpm format -- -- --loglevel error
     - pnpm build:dev --force
 
 TS prod build:
@@ -150,7 +127,6 @@ TS prod build:
       - main
   stage: build
   script:
-    - pnpm format -- --loglevel error
     - pnpm build
 
 rebase UPD:

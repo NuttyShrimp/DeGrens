@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "webpack --config ./config/client.config.js --mode production && webpack --config ./config/server.config.js --mode production && webpack --config ./config/ui.config.js --mode production",
-    "build:dev": "yarn build"
+    "build:dev": "pnpm build"
   },
   "author": "",
   "license": "MIT",

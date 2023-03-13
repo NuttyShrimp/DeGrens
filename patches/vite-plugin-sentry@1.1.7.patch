@@ -1,0 +1,34 @@
+diff --git a/dist/index.js b/dist/index.js
+index 1ef25c1b6ae2a31e0e8c6451a0647e8ae7ee4812..e5260b510e54929b26e54e0e9ee0be0ee2591faf 100644
+--- a/dist/index.js
++++ b/dist/index.js
+@@ -175,10 +175,10 @@ function ViteSentry(options) {
+         */
+         configResolved(config) {
+             pluginState.sourcemapsCreated = !!config.build.sourcemap;
+-            pluginState.isProduction = config.isProduction;
++            pluginState.isProduction = config.mode === "production";
+             pluginState.enabled =
+                 pluginState.sourcemapsCreated &&
+-                    (skipEnvironmentCheck || config.isProduction);
++                    (skipEnvironmentCheck || pluginState.isProduction);
+         },
+         /*
+           Resolve id for virtual module
+diff --git a/dist/index.mjs b/dist/index.mjs
+index 4d4ff6b3b725c9fdcaad6ca946b5c4b858759bc1..2a99916a420d8c0e2e9ec3f8e8c02c03c4a18b33 100644
+--- a/dist/index.mjs
++++ b/dist/index.mjs
+@@ -169,10 +169,10 @@ function ViteSentry(options) {
+         */
+         configResolved(config) {
+             pluginState.sourcemapsCreated = !!config.build.sourcemap;
+-            pluginState.isProduction = config.isProduction;
++            pluginState.isProduction = config.mode === "production";
+             pluginState.enabled =
+                 pluginState.sourcemapsCreated &&
+-                    (skipEnvironmentCheck || config.isProduction);
++                    (skipEnvironmentCheck || pluginState.isProduction);
+         },
+         /*
+           Resolve id for virtual module

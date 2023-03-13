@@ -11,7 +11,8 @@
     "moduleResolution": "node",
     "experimentalDecorators": true,
     "resolveJsonModule": true,
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "skipLibCheck": true
   },
   "include": ["./**/*", "../shared", "../../../../../../types"],
   "exclude": ["**/node_modules", "**/__tests__/*"]
