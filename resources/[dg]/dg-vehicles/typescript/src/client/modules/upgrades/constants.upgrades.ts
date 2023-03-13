@@ -1,40 +1,6 @@
-export const cosmeticKeysToId: Record<keyof Upgrades.CosmeticModIds, number> = {
-  spoiler: 0,
-  frontBumper: 1,
-  rearBumper: 2,
-  sideSkirt: 3,
-  exhaust: 4,
-  frame: 5,
-  grille: 6,
-  hood: 7,
-  leftFenders: 8,
-  rightFenders: 9,
-  roof: 10,
-  horn: 14,
-  subwoofer: 19,
-  plateHolder: 25,
-  vanityPlate: 26,
-  trimA: 27,
-  trimB: 44,
-  ornaments: 28,
-  dashboard: 29,
-  dial: 30,
-  doorSpeakers: 31,
-  seats: 32,
-  steeringWheel: 33,
-  shiftLever: 34,
-  plaques: 35,
-  speakers: 36,
-  trunk: 37,
-  engineHydraulics: 38,
-  engineBlock: 39,
-  airFilter: 40,
-  struts: 41,
-  archCover: 42,
-  aerials: 43,
-  tank: 45,
-  door: 46,
-};
+import { cosmeticKeysToId } from "../../../shared/upgrades/constants.upgrades";
+// Small hack to prevent to replace all the imports
+export { cosmeticKeysToId } from "../../../shared/upgrades/constants.upgrades";
 
 export const allCosmeticKeysToId: Record<keyof Upgrades.AllCosmeticModIds, number> = {
   ...cosmeticKeysToId,

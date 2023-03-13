@@ -5,6 +5,7 @@ import { spawnOwnedVehicle } from 'helpers/vehicle';
 import plateManager from 'modules/identification/classes/platemanager';
 import vinManager from 'modules/identification/classes/vinmanager';
 import { decreaseModelStock, getConfigByModel, getModelStock, isInfoLoaded } from 'modules/info/service.info';
+import { applyUpgradesToVeh, generateBaseUpgrades, saveCosmeticUpgrades } from 'modules/upgrades/service.upgrades';
 import { mainLogger } from 'sv_logger';
 import winston from 'winston';
 
@@ -220,17 +221,21 @@ class ShopManager extends Util.Singleton<ShopManager>() {
     // Check if any vehicle at spawnpos, if so alert player to check garage else spawn vehicle
     let spawnedVehicle = false;
     const spawnPosition = getVehicleShopConfig().vehicleSpawnLocation;
+    let vehicle: number | undefined = undefined;
     if (!Util.isAnyVehicleInRange(spawnPosition, 4)) {
       const vehicleInfo = await getPlayerVehicleInfo(vin);
-      const vehicle = await spawnOwnedVehicle(src, vehicleInfo, spawnPosition);
+      vehicle = await spawnOwnedVehicle(src, vehicleInfo, spawnPosition);
       spawnedVehicle = vehicle !== undefined;
     }
 
-    if (spawnedVehicle) {
+    const upgrades = generateBaseUpgrades(vehicle);
+    if (spawnedVehicle && vehicle !== undefined) {
       await setVehicleState(vin, 'out');
+      applyUpgradesToVeh(NetworkGetNetworkIdFromEntity(vehicle), upgrades);
     } else {
       Notifications.add(src, 'Kon je voertuig niet uithalen. Bekijk de Vehiclesapp om je voertuig te vinden', 'error');
     }
+    saveCosmeticUpgrades(vin, upgrades);
   };
 
   public getModelAtSpot = (spotId: number) => {

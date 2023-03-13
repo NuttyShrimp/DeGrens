@@ -1,8 +1,10 @@
 import { Business, Events, Jobs, Notifications, UI, Util } from '@dgx/server';
-import { insertNewVehicle } from 'db/repository';
+import { getPlayerVehicleInfo, insertNewVehicle, setVehicleState } from 'db/repository';
+import { deleteVehicle, spawnOwnedVehicle } from 'helpers/vehicle';
 import plateManager from 'modules/identification/classes/platemanager';
 import vinManager from 'modules/identification/classes/vinmanager';
 import { decreaseModelStock, getConfigByModel, getModelStock } from 'modules/info/service.info';
+import { applyUpgradesToVeh, generateBaseUpgrades, saveCosmeticUpgrades } from 'modules/upgrades/service.upgrades';
 import { doVehicleShopTransaction, getVehicleTaxedPrice } from 'modules/vehicleshop/helpers.vehicleshop';
 import { getVehicleShopConfig } from 'modules/vehicleshop/services/config.vehicleshop';
 import { mainLogger } from 'sv_logger';
@@ -105,4 +107,19 @@ Events.onNet('vehicles:emsShop:buy', async (src, model: string) => {
   );
   mainLogger.info(`Player ${cid} bought a vehicle (${model}) for ${taxedPrice}`);
   Notifications.add(src, `Je ${modelData.brand} ${modelData.name} staat op je te wachten in de garage!`, 'success');
+
+  const spawnPosition = {x:0, y:0, z:0, w:0}
+  let vehicle: number | undefined = undefined;
+  const vehicleInfo = await getPlayerVehicleInfo(vin);
+  vehicle = await spawnOwnedVehicle(src, vehicleInfo, spawnPosition);
+  if (vehicle) {
+    SetEntityCoords(vehicle, 0,0,0, true, false, false, false);
+    FreezeEntityPosition(vehicle, true);
+  }
+
+  const upgrades = generateBaseUpgrades(vehicle);
+  saveCosmeticUpgrades(vin, upgrades);
+  if (vehicle !== undefined) {
+    deleteVehicle(vehicle);
+  }
 });
