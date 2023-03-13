@@ -9,41 +9,22 @@
       "Commissaris",
       "Hoofd-Commissaris"
     ],
-    "specialities": [
-      "SRT",
-      "Detective",
-      "HC"
-    ],
+    "specialities": ["SRT", "Detective", "HC"],
     "name": "Politie"
   },
   "ambulance": {
-    "grades": [
-      "Ambulancier",
-      "Verpleegkundige",
-      "Arts",
-      "Hoofd-Arts"
-    ],
-    "specialities": [
-      "HC"
-    ],
+    "grades": ["Ambulancier", "Verpleegkundige", "Arts", "Hoofd-Arts"],
+    "specialities": ["HC"],
     "name": "Ambulance"
   },
   "lawyer": {
-    "grades": [
-      "Lawyer"
-    ],
-    "specialities": [
-      "HC"
-    ],
+    "grades": ["Lawyer"],
+    "specialities": ["HC"],
     "name": "lawyer"
   },
   "judge": {
-    "grades": [
-      "Judge"
-    ],
-    "specialities": [
-      "HC"
-    ],
+    "grades": ["Judge"],
+    "specialities": ["HC"],
     "name": "Judge"
   }
 }

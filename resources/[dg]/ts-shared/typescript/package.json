@@ -7,7 +7,7 @@
     "build:dev": "node ../../../../scripts/build.js --client --server --dev --index",
     "watch": "node ../../../../scripts/watch --server --client --index",
     "lint": "eslint --fix --ext .js,.ts ./src",
-    "format": "prettier --write src/**/*.{js,ts,json,md}"
+    "format": "prettier  --write --no-error-on-unmatched-pattern src/**/*.{js,ts,json,md}"
   },
   "dependencies": {
     "cli-table3": "^0.6.2",

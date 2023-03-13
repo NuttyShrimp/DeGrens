@@ -31,25 +31,14 @@
     "20": 30,
     "21": 0
   },
-  "persistentTypes": [
-    "player",
-    "stash",
-    "container"
-  ],
-  "vehicleTypes": [
-    "glovebox",
-    "trunk",
-    "tunes"
-  ],
+  "persistentTypes": ["player", "stash", "container"],
+  "vehicleTypes": ["glovebox", "trunk", "tunes"],
   "locationInvRange": {
     "drop": 1,
     "dumpster": 1
   },
   "dropRemoveTime": 30,
-  "starterItems": [
-    "phone",
-    "id_card"
-  ],
+  "starterItems": ["phone", "id_card"],
   "containers": {
     "container_weapons": {
       "size": 10,
@@ -76,14 +65,7 @@
     },
     "container_ammo": {
       "size": 10,
-      "allowedItems": [
-        "pistol_ammo",
-        "smg_ammo",
-        "rifle_ammo",
-        "shotgun_ammo",
-        "sniper_ammo",
-        "taser_cartridge"
-      ]
+      "allowedItems": ["pistol_ammo", "smg_ammo", "rifle_ammo", "shotgun_ammo", "sniper_ammo", "taser_cartridge"]
     },
     "container_materials": {
       "size": 50,
@@ -104,9 +86,7 @@
     },
     "container_weedbuds": {
       "size": 60,
-      "allowedItems": [
-        "weed_bud"
-      ]
+      "allowedItems": ["weed_bud"]
     }
   }
 }

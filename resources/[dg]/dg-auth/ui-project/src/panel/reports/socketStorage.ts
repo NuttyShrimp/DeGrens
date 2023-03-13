@@ -21,4 +21,4 @@ export const closeWS = (wsid: number) => {
   const ws = openSockets[wsid];
   delete openSockets[wsid];
   closingWS.add(ws);
-}
+};

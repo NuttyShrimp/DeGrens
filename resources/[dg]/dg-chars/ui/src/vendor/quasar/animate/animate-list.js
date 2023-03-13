@@ -1,4 +1,3 @@
-
 module.exports.generalAnimations = [
   'bounce',
   'flash',
@@ -14,8 +13,8 @@ module.exports.generalAnimations = [
   'shakeY',
   'swing',
   'tada',
-  'wobble'
-]
+  'wobble',
+];
 
 module.exports.inAnimations = [
   'backInDown',
@@ -59,8 +58,8 @@ module.exports.inAnimations = [
   'zoomInDown',
   'zoomInLeft',
   'zoomInRight',
-  'zoomInUp'
-]
+  'zoomInUp',
+];
 
 module.exports.outAnimations = [
   'backOutDown',
@@ -103,5 +102,5 @@ module.exports.outAnimations = [
   'zoomOutDown',
   'zoomOutLeft',
   'zoomOutRight',
-  'zoomOutUp'
-]
+  'zoomOutUp',
+];

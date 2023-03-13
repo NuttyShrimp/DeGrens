@@ -10,7 +10,7 @@
     "build:dev": "node ../../../../scripts/build.js --client --server --dev",
     "watch": "node ../../../../scripts/watch --server --client",
     "lint": "eslint --fix --ext .js,.ts ./src",
-    "format": "prettier --write src/**/*.{js,ts,json,md}"
+    "format": "prettier  --write --no-error-on-unmatched-pattern src/**/*.{js,ts,json,md}"
   },
   "dependencies": {
     "uuid": "^9.0.0"

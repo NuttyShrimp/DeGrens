@@ -3,46 +3,27 @@
     {
       "model": "bmx",
       "price": 100,
-      "locations": [
-        "legion_square",
-        "sandy",
-        "paleto"
-      ]
+      "locations": ["legion_square", "sandy", "paleto"]
     },
     {
       "model": "faggio",
       "price": 200,
-      "locations": [
-        "legion_square",
-        "sandy",
-        "paleto"
-      ]
+      "locations": ["legion_square", "sandy", "paleto"]
     },
     {
       "model": "sanchez",
       "price": 300,
-      "locations": [
-        "sandy",
-        "paleto"
-      ]
+      "locations": ["sandy", "paleto"]
     },
     {
       "model": "futo",
       "price": 500,
-      "locations": [
-        "legion_square",
-        "sandy",
-        "paleto"
-      ]
+      "locations": ["legion_square", "sandy", "paleto"]
     },
     {
       "model": "bison",
       "price": 650,
-      "locations": [
-        "legion_square",
-        "sandy",
-        "paleto"
-      ]
+      "locations": ["legion_square", "sandy", "paleto"]
     }
   ],
   "locations": [

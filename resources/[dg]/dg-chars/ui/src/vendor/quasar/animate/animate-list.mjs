@@ -1,4 +1,3 @@
-
 export const generalAnimations = [
   'bounce',
   'flash',
@@ -14,8 +13,8 @@ export const generalAnimations = [
   'shakeY',
   'swing',
   'tada',
-  'wobble'
-]
+  'wobble',
+];
 
 export const inAnimations = [
   'backInDown',
@@ -59,8 +58,8 @@ export const inAnimations = [
   'zoomInDown',
   'zoomInLeft',
   'zoomInRight',
-  'zoomInUp'
-]
+  'zoomInUp',
+];
 
 export const outAnimations = [
   'backOutDown',
@@ -103,5 +102,5 @@ export const outAnimations = [
   'zoomOutDown',
   'zoomOutLeft',
   'zoomOutRight',
-  'zoomOutUp'
-]
+  'zoomOutUp',
+];

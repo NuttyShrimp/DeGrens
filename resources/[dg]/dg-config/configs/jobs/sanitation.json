@@ -7,13 +7,8 @@
     "w": 56.8929
   },
   "lootChance": 15,
-  "loot": [
-    "material_iron",
-    "material_aluminum"
-  ],
-  "specialLoot": [
-    "material_electronics"
-  ],
+  "loot": ["material_iron", "material_aluminum"],
+  "specialLoot": ["material_electronics"],
   "locations": [
     {
       "coords": {

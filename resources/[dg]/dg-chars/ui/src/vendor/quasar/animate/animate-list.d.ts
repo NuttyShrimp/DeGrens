@@ -1,5 +1,4 @@
-
-export type generalAnimations = 
+export type generalAnimations =
   | 'bounce'
   | 'flash'
   | 'flip'
@@ -14,10 +13,9 @@ export type generalAnimations =
   | 'shakeY'
   | 'swing'
   | 'tada'
-  | 'wobble'
-;
+  | 'wobble';
 
-export type inAnimations = 
+export type inAnimations =
   | 'backInDown'
   | 'backInLeft'
   | 'backInRight'
@@ -59,10 +57,9 @@ export type inAnimations =
   | 'zoomInDown'
   | 'zoomInLeft'
   | 'zoomInRight'
-  | 'zoomInUp'
-;
+  | 'zoomInUp';
 
-export type outAnimations = 
+export type outAnimations =
   | 'backOutDown'
   | 'backOutLeft'
   | 'backOutRight'
@@ -103,5 +100,4 @@ export type outAnimations =
   | 'zoomOutDown'
   | 'zoomOutLeft'
   | 'zoomOutRight'
-  | 'zoomOutUp'
-;
+  | 'zoomOutUp';

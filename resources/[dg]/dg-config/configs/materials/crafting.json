@@ -878,9 +878,7 @@
       ]
     },
     "mechanic_bench": {
-      "items": [
-        "repair_kit"
-      ],
+      "items": ["repair_kit"],
       "reputation": "mechanic_crafting"
     }
   }

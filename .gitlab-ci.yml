@@ -150,7 +150,7 @@ TS prod build:
       - main
   stage: build
   script:
-    - pnpm format -- -- --loglevel error
+    - pnpm format -- --loglevel error
     - pnpm build
 
 rebase UPD:

@@ -4,12 +4,12 @@ We’ve released the icon pack under either MIT or the [Good Boy License](http:/
 
 ## Permitted Use
 
-* Download in any format
-* Change
-* Fork
+- Download in any format
+- Change
+- Fork
 
 ## Prohibited Use
 
-* No tattoos
-* No touching with unwashed hands
-* No exchanging for drugs.
+- No tattoos
+- No touching with unwashed hands
+- No exchanging for drugs.

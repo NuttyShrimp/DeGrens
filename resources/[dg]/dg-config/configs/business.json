@@ -32,18 +32,8 @@
     }
   },
   "types": {
-    "mechanic": [
-      "stash",
-      "property_access",
-      "garage_access",
-      "crafting"
-    ],
-    "showroom": [
-      "property_access"
-    ],
-    "restaurant": [
-      "property_access",
-      "stash"
-    ]
+    "mechanic": ["stash", "property_access", "garage_access", "crafting"],
+    "showroom": ["property_access"],
+    "restaurant": ["property_access", "stash"]
   }
 }

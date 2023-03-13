@@ -1,7 +1,3 @@
 {
-  "allowedDomains": [
-    "localhost",
-    "panel.degrensrp.be",
-    "10.0.0.1"
-  ]
+  "allowedDomains": ["localhost", "panel.degrensrp.be", "10.0.0.1"]
 }

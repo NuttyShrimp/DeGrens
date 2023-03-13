@@ -443,12 +443,7 @@
   },
   "coke": {
     "refreshTimeout": 14,
-    "interiorProps": [
-      "coke_app",
-      "coke_staff_01",
-      "coke_staff_02",
-      "coke_stock"
-    ],
+    "interiorProps": ["coke_app", "coke_staff_01", "coke_staff_02", "coke_stock"],
     "peekZones": {}
   },
   "meth": {
