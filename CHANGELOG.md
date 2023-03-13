@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 - Hoogte van camera en verrekijker gefixt
+- Je kan weer met een baseballbat targetten
 
 ## [1.0.10]
 

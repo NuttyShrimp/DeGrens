@@ -3478,7 +3478,8 @@
           <AttachPoints />
           <GunFeedBone />
           <TargetSequenceGroup />
-          <WeaponFlags>AllowCloseQuarterKills AllowMeleeBlock CarriedInHand ArmourPenetrating
+          <WeaponFlags>AllowCloseQuarterKills CanLockonOnFoot AllowMeleeBlock CarriedInHand
+            ArmourPenetrating
             TwoHanded MeleeClub UsableOnFoot UsableClimbing DoesRevivableDamage NoWheelStats
             UseFPSAimIK UseFPSSecondaryMotion AttachFPSLeftHandIKToRight UseFPSAimIK
             UseFPSSecondaryMotion</WeaponFlags>
