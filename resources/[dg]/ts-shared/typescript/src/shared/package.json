@@ -2,5 +2,5 @@
   "name": "@dgx/shared",
   "main": "./index.ts",
   "types": "./index.ts",
-  "version": "1.0.9"
+  "version": "1.0.10"
 }
