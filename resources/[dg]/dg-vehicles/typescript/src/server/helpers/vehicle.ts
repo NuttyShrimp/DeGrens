@@ -180,7 +180,7 @@ export const spawnOwnedVehicle = async (src: number, vehicleInfo: Vehicle.Vehicl
   setVehicleNosAmount(vehicle, vehicleInfo.nos);
   setVehicleHarnessUses(vehicle, vehicleInfo.harness);
 
-  applyUpgrades(vehicleInfo.vin);
+  await applyUpgrades(vehicleInfo.vin);
 
   return vehicle;
 };
@@ -227,6 +227,8 @@ export const teleportInSeat = async (src: string, entity: number, seat = -1) => 
 };
 
 export const setNativeStatus = (vehicle: number, status: Partial<Omit<Vehicle.VehicleStatus, 'fuel'>>) => {
+  if (!DoesEntityExist(vehicle)) return;
+
   if (status.body !== undefined) {
     SetVehicleBodyHealth(vehicle, status.body);
   }

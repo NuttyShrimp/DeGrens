@@ -108,17 +108,18 @@ Events.onNet('vehicles:emsShop:buy', async (src, model: string) => {
   mainLogger.info(`Player ${cid} bought a vehicle (${model}) for ${taxedPrice}`);
   Notifications.add(src, `Je ${modelData.brand} ${modelData.name} staat op je te wachten in de garage!`, 'success');
 
-  const spawnPosition = {x:0, y:0, z:0, w:0}
-  let vehicle: number | undefined = undefined;
+  const plyPosition = Util.getPlyCoords(src);
+  const spawnPosition = { x: plyPosition.x, y: plyPosition.y, z: 0, w: 0 };
   const vehicleInfo = await getPlayerVehicleInfo(vin);
-  vehicle = await spawnOwnedVehicle(src, vehicleInfo, spawnPosition);
+  const vehicle = await spawnOwnedVehicle(src, vehicleInfo, spawnPosition);
   if (vehicle) {
-    SetEntityCoords(vehicle, 0,0,0, true, false, false, false);
+    SetEntityCoords(vehicle, spawnPosition.x, spawnPosition.y, spawnPosition.z, true, false, false, false);
     FreezeEntityPosition(vehicle, true);
   }
 
   const upgrades = generateBaseUpgrades(vehicle);
-  saveCosmeticUpgrades(vin, upgrades);
+  await saveCosmeticUpgrades(vin, upgrades);
+
   if (vehicle !== undefined) {
     deleteVehicle(vehicle);
   }

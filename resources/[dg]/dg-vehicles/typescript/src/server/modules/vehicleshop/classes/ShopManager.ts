@@ -219,17 +219,15 @@ class ShopManager extends Util.Singleton<ShopManager>() {
     Notifications.add(src, `Je ${modelData.brand} ${modelData.name} staat op je te wachten in de garage!`, 'success');
 
     // Check if any vehicle at spawnpos, if so alert player to check garage else spawn vehicle
-    let spawnedVehicle = false;
     const spawnPosition = getVehicleShopConfig().vehicleSpawnLocation;
     let vehicle: number | undefined = undefined;
     if (!Util.isAnyVehicleInRange(spawnPosition, 4)) {
       const vehicleInfo = await getPlayerVehicleInfo(vin);
       vehicle = await spawnOwnedVehicle(src, vehicleInfo, spawnPosition);
-      spawnedVehicle = vehicle !== undefined;
     }
 
     const upgrades = generateBaseUpgrades(vehicle);
-    if (spawnedVehicle && vehicle !== undefined) {
+    if (vehicle !== undefined) {
       await setVehicleState(vin, 'out');
       applyUpgradesToVeh(NetworkGetNetworkIdFromEntity(vehicle), upgrades);
     } else {

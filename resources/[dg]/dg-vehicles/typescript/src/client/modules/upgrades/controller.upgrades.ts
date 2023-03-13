@@ -13,8 +13,13 @@ import { hasVehicleKeys } from 'modules/keys/cache.keys';
 
 global.exports('getCosmeticUpgrades', getCosmeticUpgrades);
 
-RPC.register('vehicles:upgrades:getCosmetic', (vehNetId?: number) => {
-  const veh = vehNetId !== undefined ? NetworkGetEntityFromNetworkId(vehNetId) : getCurrentVehicle();
+RPC.register('vehicles:upgrades:getCosmetic', async (vehNetId?: number) => {
+  let veh = getCurrentVehicle();
+  if (vehNetId) {
+    const exists = await Util.awaitEntityExistence(vehNetId, true);
+    if (!exists) return;
+    veh = NetworkGetEntityFromNetworkId(vehNetId);
+  }
   if (!veh) return;
   return getCosmeticUpgrades(veh);
 });
