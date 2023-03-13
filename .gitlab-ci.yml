@@ -5,8 +5,8 @@ stages:
   - deploy
   - housekeeping
 
-# image: registry-gitlab.pieter557.dscloud.me/degrens-21/degrens-main/node:latest
-image: node:16
+image: registry-gitlab.pieter557.dscloud.me/degrens-21/degrens-main/node:latest
+# image: node:16
 
 
 variables:
@@ -20,7 +20,7 @@ variables:
     - npm config set -- '//gitlab.pieter557.dscloud.me/api/v4/packages/npm/:_authToken' "${CI_JOB_TOKEN}"
     - npm config set always-auth true
     - yarn config set network-timeout 600000 -g
-    # - cp -r /app/node_modules .
+    - cp -r /app/node_modules .
     - yarn
 
 .cache_modules:
@@ -122,7 +122,7 @@ validate db migrations:
 JS linting:
   extends:
     - .node_mod_installation
-    - .cache_modules
+    # - .cache_modules
     - .js_changes
   stage: test 
   script:
@@ -131,7 +131,7 @@ JS linting:
 TS dev build:
   extends:
     - .node_mod_installation
-    - .cache_modules
+    # - .cache_modules
     - .js_changes
   stage: build
   script:
@@ -141,7 +141,7 @@ TS dev build:
 TS prod build:
   extends:
     - .node_mod_installation
-    - .cache_modules
+    # - .cache_modules
     - .js_changes
   only:
     refs:
