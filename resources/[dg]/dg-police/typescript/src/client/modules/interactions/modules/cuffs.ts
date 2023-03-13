@@ -19,7 +19,7 @@ export const pauseCuffAnimation = (pause: boolean) => {
 global.exports('pauseCuffAnimation', pauseCuffAnimation);
 
 const tryToCuff = () => {
-  if (doingCuffAction) return console.log('Still handcuffing');
+  if (doingCuffAction) return;
 
   const canDo = Util.debounce('try-to-cuff', 1000);
   if (!canDo) return;
@@ -126,16 +126,22 @@ Events.onNet('police:interactions:doCuff', async () => {
   RemoveAnimDict('mp_arrest_paired');
 });
 
-RPC.register('police:interactions:doUncuff', async () => {
+RPC.register('police:interactions:doUncuff', async (targetServerId: number) => {
   const ped = PlayerPedId();
+  const targetPed = GetPlayerPed(GetPlayerFromServerId(targetServerId));
+
   await Util.loadAnimDict('mp_arresting');
   TaskPlayAnim(ped, 'mp_arresting', 'a_uncuff', 3.0, 3.0, -1, 17, 0, false, false, false);
-  await Util.Delay(4500);
-  //@ts-ignore Return type is false or 1
-  const result = IsEntityPlayingAnim(ped, 'mp_arresting', 'a_uncuff', 3) === 1;
   RemoveAnimDict('mp_arresting');
+  await Util.Delay(4500);
+
+  const distanceBetweenPeds = Util.getEntityCoords(ped).distance(Util.getEntityCoords(targetPed));
+  const stillPlayingAnim = !!IsEntityPlayingAnim(ped, 'mp_arresting', 'a_uncuff', 3);
+  const success = stillPlayingAnim && distanceBetweenPeds > 5;
+
   ClearPedTasks(ped);
-  return result;
+
+  return success;
 });
 
 Events.onNet('police:interactions:getCuffed', async (coords: Vec4) => {

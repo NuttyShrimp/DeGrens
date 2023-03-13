@@ -99,7 +99,7 @@ Events.onNet('police:interactions:tryToCuff', async (src: number, target: number
         }, 500);
       }, 1500);
 
-      const success = await RPC.execute<boolean>('police:interactions:doUncuff', src);
+      const success = await RPC.execute<boolean>('police:interactions:doUncuff', src, target);
       if (success) {
         setCuffState(target, cuffState === 'hard' ? 'soft' : null, true);
       }
