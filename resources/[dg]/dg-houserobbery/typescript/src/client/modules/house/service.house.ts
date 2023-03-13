@@ -5,7 +5,6 @@ import { enterInterior, leaveInterior } from 'modules/interior/service.interior'
 const activeLocations = new Map<string, Houserobbery.Location>();
 
 export const activateLocation = (houseId: string, location: Houserobbery.Location) => {
-  console.log(location);
   activeLocations.set(houseId, location);
   PolyTarget.addBoxZone('houserobbery_door', location.coords, 1.0, 1.0, {
     data: {
