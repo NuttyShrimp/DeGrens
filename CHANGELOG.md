@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 - Mogelijkheid om verschillende verkoop aantallen per item te bepalen bij cornersell
+- Minimum tijd voor bennys repair taskbar
 
 ### Fixed
 - Hoogte van camera en verrekijker gefixt

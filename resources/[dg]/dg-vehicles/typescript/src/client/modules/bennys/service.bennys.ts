@@ -71,7 +71,7 @@ export const handleVehicleRepair = async () => {
 
   // setvehiclefixed native in body part cant be set if engine is broken so engine first
   if (repairTimes.engine > 0) {
-    await Taskbar.create('car-wrench', 'Repairing Engine', repairTimes.engine, {
+    await Taskbar.create('car-wrench', 'Repairing Engine', Math.max(1000, repairTimes.engine), {
       cancelOnMove: true,
       controlDisables: {
         carMovement: true,
@@ -82,7 +82,7 @@ export const handleVehicleRepair = async () => {
     fixVehicle(plyVeh, false, true);
   }
   if (repairTimes.body > 0) {
-    await Taskbar.create('car-wrench', 'Repairing Body', repairTimes.body, {
+    await Taskbar.create('car-wrench', 'Repairing Body', Math.max(1000, repairTimes.body), {
       cancelOnMove: true,
       controlDisables: {
         carMovement: true,
