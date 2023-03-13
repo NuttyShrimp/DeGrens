@@ -42,13 +42,16 @@ declare namespace Criminal {
 
   namespace Cornerselling {
     type Config = {
-      sellableItems: Record<string, { basePrice: number; requiredReputation: number }>;
+      sellableItems: Record<
+        string,
+        {
+          basePrice: number;
+          requiredReputation: number;
+          sellAmount: [number, number];
+        }
+      >;
       decayTime: number;
       cleanChance: number;
-      sellAmount: {
-        min: number;
-        max: number;
-      };
       maxModifier: number;
       modifierIncreasePerSale: number;
     };

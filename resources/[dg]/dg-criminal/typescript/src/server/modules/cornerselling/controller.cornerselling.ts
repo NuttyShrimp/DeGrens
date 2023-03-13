@@ -20,25 +20,32 @@ Events.onNet('criminal:cornersell:tryToStart', async (plyId: number) => {
 });
 
 Events.onNet('criminal:cornersell:sell', async (plyId: number, zone: string) => {
-  const sellableItems = await getSellableItems(plyId);
-  const choosenItem = sellableItems[Math.floor(Math.random() * sellableItems.length)];
-  const amountPlayerHas = await Inventory.getAmountPlayerHas(plyId, choosenItem);
-  const sellAmount = config.cornerselling.sellAmount;
-  const amountToRemove = Math.min(amountPlayerHas, Util.getRndInteger(sellAmount.min, sellAmount.max + 1));
+  const sellableItemNames = await getSellableItems(plyId);
+  const selectedItemName = sellableItemNames[Math.floor(Math.random() * sellableItemNames.length)];
+  const selectedItemData = config.cornerselling.sellableItems[selectedItemName];
+  if (!selectedItemData) {
+    Notifications.add(plyId, 'Er is iets misgelopen', 'error');
+    return;
+  }
 
-  const removed = await Inventory.removeItemByNameFromPlayer(plyId, choosenItem, amountToRemove);
+  const [sellAmountMin, sellAmountMax] = selectedItemData.sellAmount;
+  const randomAmount = Util.getRndInteger(sellAmountMin, sellAmountMax + 1);
+  const amountPlayerHas = await Inventory.getAmountPlayerHas(plyId, selectedItemName);
+  const amountToRemove = Math.min(amountPlayerHas, randomAmount);
+
+  const removed = await Inventory.removeItemByNameFromPlayer(plyId, selectedItemName, amountToRemove);
   if (!removed) {
     Notifications.add(plyId, 'Er is iets misgelopen met de verkoop!', 'error');
     Events.emitNet('criminal:cornersell:findBuyer', plyId);
     return;
   }
 
-  const price = calculatePrice(choosenItem, zone) * amountToRemove;
+  const price = calculatePrice(selectedItemData, zone) * amountToRemove;
   Financials.addCash(plyId, price, 'corner-sell');
   Util.Log(
     'cornersell:sell',
-    { itemName: choosenItem, amount: amountToRemove, price },
-    `${Util.getName(plyId)} has sold ${amountToRemove} ${choosenItem} during cornersell`,
+    { itemName: selectedItemName, amount: amountToRemove, price },
+    `${Util.getName(plyId)} has sold ${amountToRemove} ${selectedItemName} during cornersell`,
     plyId
   );
   addSaleToHeatmap(zone);

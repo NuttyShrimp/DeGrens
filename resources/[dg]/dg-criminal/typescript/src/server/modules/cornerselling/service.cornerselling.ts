@@ -48,8 +48,11 @@ export const getSellableItems = async (plyId: number) => {
   return itemsPlayerHas;
 };
 
-export const calculatePrice = (item: string, zone: string) => {
-  const basePrice = config.cornerselling.sellableItems[item]?.basePrice ?? 0;
+export const calculatePrice = (
+  selectedItemData: Criminal.Cornerselling.Config['sellableItems'][string],
+  zone: string
+) => {
+  const basePrice = selectedItemData.basePrice ?? 0;
   const modifier = getModifierFromSalesHeatmap(zone);
   return Math.floor(basePrice * modifier);
 };
