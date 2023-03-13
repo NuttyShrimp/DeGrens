@@ -17,10 +17,10 @@
     "dayjs": "*"
   },
   "devDependencies": {
-    "@dgx/client": "*",
-    "@dgx/server": "*",
-    "@dgx/shared": "*",
-    "tsconfig": "*",
+    "@dgx/client": "workspace:*",
+    "@dgx/server": "workspace:*",
+    "@dgx/shared": "workspace:*",
+    "tsconfig": "workspace:*",
     "esbuild": "*"
   }
 }

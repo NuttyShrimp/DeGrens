@@ -17,10 +17,10 @@
     "mysql2": "^3.1.2"
   },
   "devDependencies": {
-    "@dgx/client": "*",
-    "@dgx/server": "*",
-    "@dgx/shared": "*",
+    "@dgx/client": "workspace:*",
+    "@dgx/server": "workspace:*",
+    "@dgx/shared": "workspace:*",
     "esbuild": "*",
-    "tsconfig": "*"
+    "tsconfig": "workspace:*"
   }
 }

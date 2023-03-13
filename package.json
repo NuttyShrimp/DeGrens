@@ -7,7 +7,7 @@
     "lint:root": "eslint --fix --resolve-plugins-relative-to ./ --ext .js,.ts,.tsx,.jsx,.json,.vue ./resources/[dg]/",
     "lint": "yarn run lint:root --quiet",
     "format": "turbo run format",
-    "postinstall": "patch-package",
+    "postinstall": "patch-package || exit 0",
     "db:push": "turbo run db:push",
     "db:deploy": "turbo run db:deploy"
   },

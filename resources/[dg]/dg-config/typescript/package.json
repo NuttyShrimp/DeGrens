@@ -13,9 +13,9 @@
     "format": "prettier --write src/**/*.{js,ts,json,md}"
   },
   "devDependencies": {
-    "@dgx/server": "*",
-    "@dgx/shared": "*",
-    "tsconfig": "*",
+    "@dgx/server": "workspace:*",
+    "@dgx/shared": "workspace:*",
+    "tsconfig": "workspace:*",
     "esbuild": "*"
   }
 }
