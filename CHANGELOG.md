@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Mogelijkheid om verschillende verkoop aantallen per item te bepalen bij cornersell
 - Minimum tijd voor bennys repair taskbar
+- Voertuig lockstatus check gebeurd nu ook op einde van taskbar bij in/uit voertuig interacties
 
 ### Fixed
 - Hoogte van camera en verrekijker gefixt

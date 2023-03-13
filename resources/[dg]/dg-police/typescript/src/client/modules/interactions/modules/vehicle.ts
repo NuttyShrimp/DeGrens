@@ -64,6 +64,11 @@ const takeOutVehicle = async (vehicle: number) => {
     return;
   }
 
+  if (GetVehicleDoorLockStatus(vehicle) === 2) {
+    Notifications.add('Het voertuig staat op slot', 'error');
+    return;
+  }
+
   const netId = NetworkGetNetworkIdFromEntity(vehicle);
   const amountOfSeats = GetVehicleModelNumberOfSeats(GetEntityModel(vehicle));
   const closestSeat = getClosestSeatId(vehicle);
@@ -97,6 +102,11 @@ const putInVehicle = async (vehicle: number) => {
   const distanceAtEnd = Util.getPlyCoords().distance(Util.getEntityCoords(vehicle));
   if (distanceAtEnd > distanceAtStart + 5) {
     Notifications.add('Je bent niet meer bij het voertuig');
+    return;
+  }
+
+  if (GetVehicleDoorLockStatus(vehicle) === 2) {
+    Notifications.add('Het voertuig staat op slot', 'error');
     return;
   }
 
