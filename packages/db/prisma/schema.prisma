@@ -583,7 +583,7 @@ model vehicle_status {
   engine          String          @default("1000") @db.VarChar(255)
   fuel            String          @default("100") @db.VarChar(255)
   wheels          String          @default("[1000,1000,1000,1000,1000,1000,1000,1000,1000,1000]") @db.LongText
-  windows         String          @default("[1,1,1,1,1,1,1,1]") @db.LongText
+  windows         String          @default("[0,0,0,0,0,0,0,0]") @db.LongText
   doors           String          @default("[0,0,0,0,0,0,0,0]") @db.LongText
   player_vehicles player_vehicles @relation(fields: [vin], references: [vin], onDelete: Cascade, map: "vehicle_status_ibfk_1")
 }

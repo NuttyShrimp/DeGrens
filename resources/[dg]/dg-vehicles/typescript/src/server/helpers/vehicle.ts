@@ -1,5 +1,4 @@
 import { RPC, Util } from '@dgx/server';
-import vehicles from '@dgx/server/classes/vehicles';
 import { insertVehicleStatus } from 'db/repository';
 import { addWaxedVehicle } from 'modules/carwash/service.carwash';
 import { setVehicleNosAmount } from 'modules/nos/service.nos';
@@ -150,6 +149,7 @@ export const spawnOwnedVehicle = async (src: number, vehicleInfo: Vehicle.Vehicl
 
   // If status is all null generate a perfect status and save it
   if (Object.values(vehicleInfo.status).every(v => v === null)) {
+    // this really should never happen because we insert status when inserting new vehicle
     setImmediate(async () => {
       vehicleInfo.status = await getNativeStatus(vehicle, vehicleInfo.vin);
       vehicleInfo.status.fuel = 100;
