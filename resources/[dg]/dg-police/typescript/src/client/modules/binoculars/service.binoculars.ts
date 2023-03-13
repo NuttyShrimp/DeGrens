@@ -33,7 +33,7 @@ export const enableBinoculars = async (type: 'binoculars' | 'pd_camera') => {
 
   const cam = CreateCam('DEFAULT_SCRIPTED_FLY_CAMERA', true);
 
-  AttachCamToEntity(cam, ped, 0.0, 1.0, 0.0, true);
+  AttachCamToEntity(cam, ped, 0.0, 0.7, 0.7, true);
   SetCamRot(cam, 0, 0, GetEntityHeading(ped), 0);
   fov = (MAX_FOV + MIN_FOV) / 2;
   SetCamFov(cam, fov);

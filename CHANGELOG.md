@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Mogelijkheid om verschillende verkoop aantallen per item te bepalen bij cornersell
 
 ### Fixed
+- Hoogte van camera en verrekijker gefixt
 
 ## [1.0.10]
 
