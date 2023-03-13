@@ -2,15 +2,18 @@ import { Financials, Util } from '@dgx/server';
 import { tokenManager } from 'classes/tokenManager';
 import { registerRoute } from 'sv_routes';
 
-const fineReasons: Record<string, string> = {
-  police: 'Boete',
-  ambulance: 'Ziekte kosten',
-};
-
-const originToNames: Record<string, string> = {
-  police: 'Politiekorps DG',
-  ambulance: 'AZDG',
-};
+const originInfo: Record<string, {name: string, reason: string, accountId: string}> = {
+  police: {
+    name: 'Politiekorps DG',
+    reason: 'Boete',
+    accountId: "BE2"
+  },
+  ambulance: {
+    name: "AZDG",
+    reason: 'Ziekte kosten',
+    accountId: "BE3"
+  }
+}
 
 registerRoute('POST', '/financials/giveFine', (req, res) => {
   if (!req.body.cid || !req.body.price || !req.body.origin) {
@@ -30,10 +33,10 @@ registerRoute('POST', '/financials/giveFine', (req, res) => {
     );
     Financials.giveFine(
       cid,
-      'BE2',
+      originInfo[req.body.origin]?.accountId ?? 'BE2',
       price,
-      fineReasons[req.body.origin] ?? 'Onbekende reden (meld aan devs)',
-      originToNames[req.body.origin] ?? 'Ongekend'
+      originInfo[req.body.origin]?.reason ?? 'Onbekende reden (meld aan devs)',
+      originInfo[req.body.origin]?.name ?? 'Ongekend'
     );
     return res(200, {});
   } catch (e) {
