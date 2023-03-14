@@ -4,7 +4,7 @@
   "scripts": {
     "build": "turbo run build ",
     "build:dev": "turbo run build:dev ",
-    "lint:root": "eslint --fix --resolve-plugins-relative-to ./ --ext .js,.ts,.tsx,.jsx,.json,.vue ./resources/[dg]/",
+    "lint:root": "eslint --fix --resolve-plugins-relative-to ./ --ext .ts,.tsx,.jsx,.json,.vue ./resources/[dg]/",
     "lint": "pnpm run lint:root --quiet",
     "format": "turbo run format",
     "db:push": "turbo run db:push",
