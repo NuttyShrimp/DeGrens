@@ -111,12 +111,12 @@ export const ALL_WEAPONS: Weapons.WeaponConfig[] = [
   {
     name: 'weapon_pistol_mk2',
     durabilityMultiplier: 0.01,
-    // attachments: {
-    //   'pistol_extendedclip': 'COMPONENT_PISTOL_MK2_CLIP_02',
-    //   'flashlight': 'COMPONENT_AT_PI_FLSH_02',
-    //   'pistol_suppressor': 'COMPONENT_AT_PI_SUPP_02',
-    //   'pistol_scope': 'COMPONENT_AT_PI_RAIL',
-    // },
+    attachments: {
+      // 'pistol_extendedclip': 'COMPONENT_PISTOL_MK2_CLIP_02',
+      pistol_flashlight: 'COMPONENT_AT_PI_FLSH_02',
+      // 'pistol_suppressor': 'COMPONENT_AT_PI_SUPP_02',
+      // 'pistol_scope': 'COMPONENT_AT_PI_RAIL',
+    },
   },
   // {
   //     name: 'weapon_combatpistol',

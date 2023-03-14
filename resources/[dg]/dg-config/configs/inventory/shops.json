@@ -206,6 +206,11 @@
         "name": "weapon_carbinerifle",
         "amount": 10,
         "price": 2000
+      },
+      {
+        "name": "pistol_flashlight",
+        "amount": 50,
+        "price": 75
       }
     ],
     "prison_shop": [

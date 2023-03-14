@@ -3,6 +3,7 @@
   "allowedItems": {
     "pistol_suppressor": ["material_steel", "material_iron"],
     "smg_extendedclip": ["material_steel", "material_iron"],
+    "pistol_flashlight": ["material_steel"],
     "lockpick": ["material_iron"],
     "decoding_tool": ["material_copper", "material_steel"],
     "phone": ["material_electronics"],

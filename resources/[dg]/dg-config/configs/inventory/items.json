@@ -12,6 +12,17 @@
     "markedForSeizure": true
   },
   {
+    "name": "pistol_flashlight",
+    "label": "PD Glock Flashlight",
+    "useable": true,
+    "decayRate": 129600,
+    "image": "pistol_flashlight.png",
+    "size": {
+      "x": 3,
+      "y": 2
+    }
+  },
+  {
     "name": "smg_extendedclip",
     "label": "SMG Extended Clip",
     "useable": true,
@@ -2035,7 +2046,8 @@
     "size": {
       "x": 2,
       "y": 2
-    }
+    },
+    "markedForSeizure": true
   },
   {
     "name": "farming_plant",
