@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Phone app payout level heeft nu wel effect bij sanddigging
 - Pistol flashlight voor politie toegevoegd
+- Admin penalise optie via selector
 
 ### Changed
 - Mogelijkheid om verschillende verkoop aantallen per item te bepalen bij cornersell
