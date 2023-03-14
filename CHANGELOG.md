@@ -25,6 +25,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Uncuff stopt als persoon tijdens uncuff actie weg is gelopen
 - Restaurant stash polyzone op juiste moment destroyen
 - Je health/armor wordt nu correct gerestored wanneer je de server inkomt
+- Motor van NPC voertuigen blijft niet meer aanstaan als je deze uit de wagen trekt
 
 ## [1.0.10]
 
