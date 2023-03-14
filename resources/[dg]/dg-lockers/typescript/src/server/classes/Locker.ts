@@ -88,7 +88,9 @@ export class Locker {
     const priceWithTax = Financials.getTaxedPrice(this.price, config.taxId)?.taxPrice;
 
     const result = await UI.openInput<{}>(plyId, {
-      header: `Wil je deze storage unit aankopen voor €${priceWithTax}?\nWekelijks zal er een onderhoudskost aangerekend worden van ${Math.round(
+      header: `Wil je deze storage unit aankopen voor €${priceWithTax}?\nElke ${
+        config.debtIntervalInDays
+      } dagen zal er een onderhoudskost aangerekend worden van ${Math.round(
         config.debtPercentage * 100
       )}% van dit bedrag.`,
     });
