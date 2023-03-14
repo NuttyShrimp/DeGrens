@@ -24,6 +24,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Je kan weer met een baseballbat targetten
 - Uncuff stopt als persoon tijdens uncuff actie weg is gelopen
 - Restaurant stash polyzone op juiste moment destroyen
+- Je health/armor wordt nu correct gerestored wanneer je de server inkomt
 
 ## [1.0.10]
 

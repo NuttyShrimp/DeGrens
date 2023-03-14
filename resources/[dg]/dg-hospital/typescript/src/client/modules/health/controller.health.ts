@@ -13,9 +13,9 @@ Events.onNet('hospital:health:useHeal', (healthIncrease: number, bleedDecrease: 
 
 onNet('dg-chars:client:finishSpawn', () => {
   const data = DGCore.Functions.GetPlayerData();
-  setHealth(data.metadata.health / 2);
-  const ped = PlayerPedId();
-  SetPedArmour(ped, data.metadata.armor);
+  const health = data.metadata.health - 100;
+  setHealth(Math.max(1, Math.min(100, health)));
+  // armor gets restored on serverside in services/armor.ts
 });
 
 global.exports('setHealth', setHealth);

@@ -206,7 +206,7 @@ function DGCore.Player.Save(src, skipHealth)
 
   if not skipHealth then
     local ped = GetPlayerPed(src)
-    local entHealth = math.max(GetEntityHealth(ped), 2)
+    local entHealth = math.max(GetEntityHealth(ped), 100) -- health goes from 0-200 but everything under 100 means dead
     DGCore.Players[src].Functions.SetMetaData("health", entHealth)
     DGCore.Players[src].Functions.SetMetaData("armor", GetPedArmour(ped))
   end
