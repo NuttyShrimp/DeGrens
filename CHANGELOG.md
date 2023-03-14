@@ -21,6 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Hoogte van camera en verrekijker gefixt
 - Je kan weer met een baseballbat targetten
 - Uncuff stopt als persoon tijdens uncuff actie weg is gelopen
+- Restaurant stash polyzone op juiste moment destroyen
 
 ## [1.0.10]
 

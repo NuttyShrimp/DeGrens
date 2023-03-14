@@ -189,6 +189,7 @@ const destroyRestaurantZones = () => {
   PolyTarget.removeZone('restaurant_management');
   PolyTarget.removeZone('restaurant_register');
   PolyTarget.removeZone('restaurant_leftover');
+  PolyTarget.removeZone('restaurant_stash');
 
   restaurantZonesBuilt = false;
 };
@@ -196,7 +197,6 @@ const destroyRestaurantZones = () => {
 const destroyRestaurantEmployeeZones = () => {
   if (!restaurantEmployeeZonesBuilt) return;
 
-  PolyTarget.removeZone('restaurant_stash');
   PolyTarget.removeZone('restaurant_cook');
   PolyTarget.removeZone('restaurant_item');
   Peek.removeZoneEntry(peekIds);
