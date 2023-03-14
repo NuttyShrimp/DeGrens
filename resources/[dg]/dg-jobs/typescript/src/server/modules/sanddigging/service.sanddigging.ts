@@ -6,7 +6,14 @@ import { sanddiggingLogger } from './logger.sanddigging';
 let sanddiggingConfig: Sanddigging.Config;
 export const getSanddiggingConfig = () => sanddiggingConfig;
 
-const activeGroups = new Map<string, { spotId: number | null; vin: string }>();
+const activeGroups = new Map<
+  string,
+  {
+    spotId: number | null;
+    vin: string;
+    payoutLevel: number;
+  }
+>();
 
 export const initializeSanddigging = () => {
   sanddiggingConfig = Config.getConfigValue('jobs').sanddigging;
@@ -16,6 +23,12 @@ export const initializeSanddigging = () => {
     legal: true,
     icon: 'shovel',
     location: { x: 2571.43, y: 2720.58 },
+    // payout number is chance for special item
+    payout: {
+      min: sanddiggingConfig.specialItemChance.min,
+      max: sanddiggingConfig.specialItemChance.max,
+      groupPercent: 10,
+    },
   });
 };
 
@@ -29,8 +42,8 @@ const getRandomAvailableSpot = () => {
   return spotId;
 };
 
-export const registerVehicleToGroup = (groupId: string, vin: string) => {
-  activeGroups.set(groupId, { vin, spotId: null });
+export const registerVehicleToGroup = (groupId: string, vin: string, payoutLevel: number) => {
+  activeGroups.set(groupId, { vin, spotId: null, payoutLevel });
 };
 
 export const assignSpotToGroup = (plyId: number) => {
@@ -83,8 +96,10 @@ export const receiveSpotLoot = (plyId: number, spotId: number) => {
     return;
   }
 
+  // default to sand and use payoutlevel from job as percentage to get specialitem
   let itemName = 'sand';
-  if (Util.getRndInteger(1, 101) < sanddiggingConfig.specialItemChance) {
+  const specialItemChance = jobManager.getJobPayout('sanddigging', group.size, active.payoutLevel) ?? 0;
+  if (Util.getRndInteger(1, 101) < specialItemChance) {
     itemName = sanddiggingConfig.specialItems[Math.floor(Math.random() * sanddiggingConfig.specialItems.length)];
   }
 

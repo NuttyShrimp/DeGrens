@@ -7,6 +7,7 @@ import {
   receiveSpotLoot,
   registerVehicleToGroup,
 } from './service.sanddigging';
+import jobManager from 'classes/jobManager';
 
 Events.onNet('jobs:sanddigging:signIn', async (src: number) => {
   const group = getGroupByServerId(src);
@@ -21,8 +22,9 @@ Events.onNet('jobs:sanddigging:signIn', async (src: number) => {
     return;
   }
 
-  const success = changeJob(src, 'sanddigging');
-  if (!success) return;
+  const jobAssigned = changeJob(src, 'sanddigging');
+  const payoutLevel = jobManager.getJobPayoutLevel('sanddigging');
+  if (!jobAssigned || payoutLevel === null) return;
 
   const vehicle = await Vehicles.spawnVehicle('caddy3', vehicleLocation, src);
   if (!vehicle) {
@@ -48,7 +50,7 @@ Events.onNet('jobs:sanddigging:signIn', async (src: number) => {
     src
   );
 
-  registerVehicleToGroup(group.id, vin);
+  registerVehicleToGroup(group.id, vin, payoutLevel);
   group.members.forEach(member => {
     if (member.serverId === null) return;
     Events.emitNet('jobs:sanddigging:start', member.serverId, netId);
