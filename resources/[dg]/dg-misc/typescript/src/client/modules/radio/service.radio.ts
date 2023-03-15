@@ -1,8 +1,10 @@
-import { Events, UI } from '@dgx/client';
+import { Events, PropAttach, UI, Util } from '@dgx/client';
 
 let radioEnabled = false;
 let frequency = LocalPlayer?.state?.radioChannel ?? 0;
 let allowedFreq: { pd: boolean; normal: boolean };
+
+let playingAnimation = false;
 
 export const openRadio = (freq: number, allowed: { pd: boolean; normal: boolean }) => {
   frequency = freq;
@@ -11,6 +13,7 @@ export const openRadio = (freq: number, allowed: { pd: boolean; normal: boolean 
     frequency,
     enabled: radioEnabled,
   });
+  startRadioAnimation();
 };
 
 export const toggleRadio = (toggle: boolean) => {
@@ -41,4 +44,37 @@ export const setFreq = (freq: number) => {
   setTimeout(() => {
     global.exports['pma-voice'].playMicClicks(false);
   }, 110);
+};
+
+export const startRadioAnimation = async () => {
+  if (playingAnimation) return;
+
+  const ped = PlayerPedId();
+  const isInVehicle = IsPedInAnyVehicle(ped, false);
+  const animDict = isInVehicle ? 'anim@cellphone@in_car@ps' : 'cellphone@';
+  const anim = 'cellphone_text_in';
+
+  await Util.loadAnimDict(animDict);
+
+  playingAnimation = true;
+  const propId = PropAttach.add('radio');
+
+  const thread = setInterval(() => {
+    if (!playingAnimation) {
+      PropAttach.remove(propId);
+      StopAnimTask(ped, animDict, anim, 1);
+      clearInterval(thread);
+      return;
+    }
+
+    if (!IsEntityPlayingAnim(ped, animDict, anim, 3)) {
+      TaskPlayAnim(ped, animDict, anim, 3.0, 3.0, -1, 50, 0, false, false, false);
+    }
+  }, 100);
+};
+
+export const stopRadioAnimation = () => {
+  if (!playingAnimation) return;
+
+  playingAnimation = false;
 };

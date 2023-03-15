@@ -1,5 +1,5 @@
 import { Events, UI, Util } from '@dgx/client';
-import { openRadio, setFreq, toggleRadio } from './service.radio';
+import { openRadio, setFreq, stopRadioAnimation, toggleRadio } from './service.radio';
 
 Util.onPlayerUnloaded(() => {
   toggleRadio(false);
@@ -23,4 +23,12 @@ UI.RegisterUICallback('radio/setFrequency', (data, cb) => {
   if (Number.isNaN(Number(data.frequency))) return;
   setFreq(Number(data.frequency));
   cb({ data: {}, meta: { ok: true, message: 'done' } });
+});
+
+UI.onApplicationClose(() => {
+  stopRadioAnimation();
+}, 'radio');
+
+UI.onUIReload(() => {
+  stopRadioAnimation();
 });

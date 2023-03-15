@@ -13,6 +13,20 @@ export const PROPS: Record<string, PropAttach.PropInfo> = {
       z: 0,
     },
   },
+  radio: {
+    model: 'prop_cs_hand_radio',
+    boneId: 28422,
+    position: {
+      x: 0,
+      y: 0,
+      z: 0,
+    },
+    rotation: {
+      x: 0,
+      y: 0,
+      z: 0,
+    },
+  },
   item_crt_tv: {
     model: 'prop_tv_06',
     boneId: 24818,
