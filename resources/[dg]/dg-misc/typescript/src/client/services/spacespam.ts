@@ -34,19 +34,21 @@ const scheduleThread = () => {
         spacePressed = false;
         if (timeout) {
           clearTimeout(timeout);
+          timeout = null;
         }
       } else {
         spacePressed = true;
         if (!timeout) {
           timeout = setTimeout(() => {
             spacePressed = false;
-          }, 1000);
+            timeout = null;
+          }, 3000);
         } else {
           timeout.refresh();
         }
       }
     }
-  }, 100);
+  }, 2);
 };
 
 const cleanupThread = () => {

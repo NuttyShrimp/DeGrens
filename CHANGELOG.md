@@ -32,6 +32,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fix doorlock polyzone hoogtes
 - Kleine aanpassing om mogelijks het despawnen van wagens tegen te gaan tijdens het attachen van prop
 - Towing wordt nu gehandeled door entity owner
+- Fix anti space spam consistency
 
 ## [1.0.10]
 
