@@ -19,6 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Tweak meth bag price
 - Voertuigprijzen voor A en A+ voertuigen
 - Gebruik locker debt interval uit config in aankoopmenu tekst
+- Cyclecuffs admin command van dev naar staff veranderd
 
 ### Fixed
 - Hoogte van camera en verrekijker gefixt

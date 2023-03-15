@@ -1,4 +1,4 @@
-import { Events, Police } from '@dgx/server';
+import { Police } from '@dgx/server';
 import { Inputs } from 'enums/inputs';
 
 import { SelectorTarget } from '../../../enums/SelectorTargets';
@@ -10,7 +10,7 @@ interface ReviveData {
 
 export const cycleCuffs: CommandData = {
   name: 'cycleCuffs',
-  role: 'developer',
+  role: 'staff',
   target: [SelectorTarget.PLAYER],
   isClientCommand: false,
   log: 'cycled cuffs for a player',
