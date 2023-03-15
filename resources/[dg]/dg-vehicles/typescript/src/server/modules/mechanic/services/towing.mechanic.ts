@@ -4,6 +4,20 @@ import vinManager from 'modules/identification/classes/vinmanager';
 
 const pendingJobs = new Map<string, { targets: number[]; origin: number; timeoutInfo: NodeJS.Timeout }>();
 const assignedJobs = new Map<string, number>();
+let modelOffsets: Record<number, Vec3> = {};
+
+const getTowOffset = (vehicle: number) => {
+  const modelHash = GetEntityModel(vehicle) >>> 0;
+  return modelOffsets[modelHash];
+};
+
+export const setTowOffsets = (offset: Record<string, Vec3>) => {
+  modelOffsets = Object.entries(offset).reduce((acc, [model, offset]) => {
+    const modelHash = GetHashKey(model) >>> 0;
+    acc[modelHash] = offset;
+    return acc;
+  }, {} as typeof modelOffsets);
+};
 
 export const sendTowJob = (src: number, vin: string) => {
   const notification: Phone.Notification = {
@@ -85,4 +99,35 @@ export const tryAcceptingJob = (src: number, vin: string) => {
     amount: getMechanicConfig().towingTicketPrice,
     hiddenKeys: ['origin', 'amount'],
   });
+};
+
+export const attachVehicleToTowVehicle = (towVehicleNetId: number, attachVehicleNetId: number) => {
+  const towVehicle = NetworkGetEntityFromNetworkId(towVehicleNetId);
+  const attachVehicle = NetworkGetEntityFromNetworkId(attachVehicleNetId);
+  if (!DoesEntityExist(towVehicle) || !DoesEntityExist(attachVehicle)) return;
+
+  Entity(towVehicle).state.set('attachedVehicle', attachVehicle, true);
+  Util.sendEventToEntityOwner(
+    attachVehicle,
+    'vehicles:towing:attach',
+    towVehicleNetId,
+    attachVehicleNetId,
+    getTowOffset(towVehicle)
+  );
+};
+
+export const removeVehicleFromTowVehicle = (towVehicleNetId: number) => {
+  const towVehicle = NetworkGetEntityFromNetworkId(towVehicleNetId);
+  if (!DoesEntityExist(towVehicle)) return;
+
+  const attachVehicle = Entity(towVehicle).state.attachedVehicle;
+  if (!attachVehicle) return;
+
+  Entity(towVehicle).state.set('attachedVehicle', null, true);
+  Util.sendEventToEntityOwner(
+    attachVehicle,
+    'vehicles:towing:unattach',
+    towVehicleNetId,
+    NetworkGetNetworkIdFromEntity(attachVehicle)
+  );
 };

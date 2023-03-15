@@ -2,7 +2,7 @@ import { Auth, Events, Inventory, RPC } from '@dgx/server';
 
 import { clockPlayerIn, clockPlayerOut, loadConfig, loadZones } from './service.mechanic';
 import { openPartsMenu, getOrderMenu, finishOrder, craftPart } from './services/parts.mechanic';
-import { tryAcceptingJob } from './services/towing.mechanic';
+import { attachVehicleToTowVehicle, removeVehicleFromTowVehicle, tryAcceptingJob } from './services/towing.mechanic';
 
 setImmediate(() => {
   loadConfig();
@@ -41,3 +41,11 @@ Events.onNet('vehicles:mechanic:createPart', craftPart);
 RPC.register('vehicles:mechanic:getOrderMenu', getOrderMenu);
 
 Events.onNet('vehicles:mechanic:finishOrder', finishOrder);
+
+Events.onNet('vehicles:towing:tow', (plyId, towVehicleNetId: number, attachVehicleNetId) => {
+  attachVehicleToTowVehicle(towVehicleNetId, attachVehicleNetId);
+});
+
+Events.onNet('vehicles:towing:remove', (plyId, towVehicleNetId: number) => {
+  removeVehicleFromTowVehicle(towVehicleNetId);
+});

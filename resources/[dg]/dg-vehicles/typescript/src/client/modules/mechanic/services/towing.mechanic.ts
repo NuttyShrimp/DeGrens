@@ -1,28 +1,20 @@
-import { Notifications, Taskbar, Util, Sync } from '@dgx/client';
+import { Notifications, Taskbar, Util, Sync, Events } from '@dgx/client';
 import { getVehHalfLength } from '@helpers/vehicle';
 import { getVehicleVinWithoutValidation } from 'modules/identification/service.identification';
 import { isClockedIn } from '../service.mechanic';
 
 let towVehicle: number;
-let modelOffsets: Record<string, Vec3> = {};
 let jobBlip: number;
 let jobVin: string | null = null;
-
-const getOffset = (veh: number) => {
-  for (const model in modelOffsets) {
-    if (GetEntityModel(veh) == GetHashKey(model)) {
-      return modelOffsets[model];
-    }
-  }
-};
-
-export const setTowOffsets = (offset: Record<string, Vec3>) => {
-  modelOffsets = offset;
-};
 
 export const canTow = (veh: number) => {
   if (!towVehicle || towVehicle === veh) return false;
   if (!isClockedIn()) return false;
+  if (!DoesEntityExist(towVehicle)) {
+    towVehicle = 0;
+    return false;
+  }
+
   // Vehicle should be in half circle of a const radius behind towVehicle
   const towVehLength = getVehHalfLength(towVehicle);
   const towVehBackPos = Util.ArrayToVector3(GetOffsetFromEntityInWorldCoords(towVehicle, 0, -towVehLength, 0));
@@ -32,25 +24,20 @@ export const canTow = (veh: number) => {
   const vehToTowBack = Util.ArrayToVector3(GetOffsetFromEntityInWorldCoords(veh, 0, -vehToTowLength, 0));
   const distToFront = towVehBackPos.distance(vehToTowFront);
   const distToBack = towVehBackPos.distance(vehToTowBack);
-  return distToFront < 3 || distToBack < 3;
+  return distToFront < 4 || distToBack < 4;
 };
 
 export const takeHook = (veh: number) => {
   towVehicle = veh;
-  Notifications.add('Sleephaak vastgepakt');
+  Notifications.add('Sleephaak genomen', 'success');
 };
 
 export const attachHook = async (vehToTow: number) => {
   if (!canTow(vehToTow)) {
-    Notifications.add('Ge hebt gene haak vast', 'error');
+    Notifications.add('Je kan dit voertuig niet takelen', 'error');
     return;
   }
-  if (vehToTow === towVehicle) {
-    Notifications.add('Ge kunt nie u eigen voertuig takelen...', 'error');
-    return;
-  }
-  const offset = getOffset(towVehicle);
-  if (!offset) return;
+
   const [cancelled] = await Taskbar.create('truck-tow', 'Voertuig vasthangen', 15000, {
     canCancel: true,
     cancelOnDeath: true,
@@ -65,40 +52,23 @@ export const attachHook = async (vehToTow: number) => {
       flags: 1,
     },
   });
-  if (cancelled) {
-    Notifications.add('Geannulleerd...', 'error');
-    return;
-  }
+  if (cancelled) return;
+
   const vin = Entity(vehToTow).state?.vin;
   if (vin && vin != jobVin) {
     finishJob();
   }
-  Entity(towVehicle).state.set('vehicleAttached', NetworkGetNetworkIdFromEntity(vehToTow), true);
-  const [vehToTowDimMin, vehToTowDimMax] = GetModelDimensions(GetEntityModel(vehToTow));
-  const zOffset = (vehToTowDimMax[2] - vehToTowDimMin[2]) / 2;
-  AttachEntityToEntity(
-    vehToTow,
-    towVehicle,
-    GetEntityBoneIndexByName(towVehicle, 'bodyshell'),
-    offset.x,
-    offset.y,
-    offset.z + zOffset,
-    0,
-    0,
-    0,
-    true,
-    true,
-    false,
-    true,
-    0,
-    true
+
+  Events.emitNet(
+    'vehicles:towing:tow',
+    NetworkGetNetworkIdFromEntity(towVehicle),
+    NetworkGetNetworkIdFromEntity(vehToTow)
   );
-  FreezeEntityPosition(vehToTow, true);
   towVehicle = 0;
 };
 
 export const hasVehicleAttached = (towVeh: number) => {
-  return !!Entity(towVeh).state.vehicleAttached;
+  return !!Entity(towVeh).state.attachedVehicle;
 };
 
 export const assignJob = (vin: string, coords: Vec3) => {
@@ -125,6 +95,7 @@ export const finishJob = () => {
 
 export const releaseVehicle = async (towVeh: number) => {
   if (!hasVehicleAttached(towVeh)) return;
+
   const [cancelled] = await Taskbar.create('truck-tow', 'Voertuig loslaten', 15000, {
     canCancel: true,
     cancelOnDeath: true,
@@ -139,37 +110,71 @@ export const releaseVehicle = async (towVeh: number) => {
       flags: 1,
     },
   });
-  if (cancelled) {
-    Notifications.add('Geannuleerd...', 'error');
-    return;
-  }
-  const attachedVehNetId = Entity(towVeh).state.vehicleAttached;
-  const attachedVeh = NetworkGetEntityFromNetworkId(attachedVehNetId);
-  FreezeEntityPosition(attachedVeh, false);
-  // Do some math magic
-  const [towDimMin, towDimMax] = GetModelDimensions(GetEntityModel(towVeh));
-  const [targetDimMin, targetDimMax] = GetModelDimensions(GetEntityModel(towVeh));
-  await Util.Delay(10);
-  const dropYPos = ((towDimMax[1] - towDimMin[1]) / 2 + (targetDimMax[1] - targetDimMin[1]) / 2 + 1) * -1;
+  if (cancelled) return;
+
+  Events.emitNet('vehicles:towing:remove', NetworkGetNetworkIdFromEntity(towVeh));
+};
+
+export const attachVehicleToTowVehicle = (towVehicleNetId: number, attachVehicleNetId: number, offset: Vec3) => {
+  const towVehicle = NetworkGetEntityFromNetworkId(towVehicleNetId);
+  const attachVehicle = NetworkGetEntityFromNetworkId(attachVehicleNetId);
+  if (!DoesEntityExist(towVehicle) || !DoesEntityExist(attachVehicle)) return;
+
+  const [vehToTowDimMin, vehToTowDimMax] = GetModelDimensions(GetEntityModel(attachVehicle));
+  const zOffset = (vehToTowDimMax[2] - vehToTowDimMin[2]) / 2;
   AttachEntityToEntity(
-    attachedVeh,
-    towVeh,
-    GetEntityBoneIndexByName(attachedVeh, 'bodyshell'),
+    attachVehicle,
+    towVehicle,
+    GetEntityBoneIndexByName(towVehicle, 'bodyshell'),
+    offset.x,
+    offset.y,
+    offset.z + zOffset,
+    0,
+    0,
+    0,
+    true,
+    true,
+    false,
+    false,
+    0,
+    true
+  );
+  FreezeEntityPosition(attachVehicle, true);
+};
+
+export const unattachVehicleFromTowVehicle = async (towVehicleNetId: number, attachVehicleNetId: number) => {
+  const towVehicle = NetworkGetEntityFromNetworkId(towVehicleNetId);
+  const attachVehicle = NetworkGetEntityFromNetworkId(attachVehicleNetId);
+  if (!DoesEntityExist(towVehicle) || !DoesEntityExist(attachVehicle)) return;
+
+  FreezeEntityPosition(attachVehicle, false);
+
+  const [towVehicleDimensionMin, towVehicleDimensionMax] = GetModelDimensions(GetEntityModel(towVehicle));
+  const towHalfLength = (towVehicleDimensionMax[1] - towVehicleDimensionMin[1]) / 2;
+  const [attachVehicleDimensionMin, attachVehicleDimensionMax] = GetModelDimensions(GetEntityModel(attachVehicle));
+  const attachVehicleHalfLength = (attachVehicleDimensionMax[1] - attachVehicleDimensionMin[1]) / 2;
+  const dropYPos = (towHalfLength + attachVehicleHalfLength + 1) * -1;
+
+  await Util.Delay(10);
+
+  AttachEntityToEntity(
+    attachVehicle,
+    towVehicle,
+    GetEntityBoneIndexByName(towVehicle, 'bodyshell'),
     0.0,
     dropYPos,
     0.0,
     0.0,
     0.0,
     0.0,
+    true,
+    true,
     false,
     false,
-    false,
-    false,
-    20,
+    0,
     true
   );
-  DetachEntity(attachedVeh, true, true);
-  Sync.executeNative('setVehicleOnGround', attachedVeh);
-  Notifications.add('Voertuig is losgelaten');
-  Entity(towVeh).state.set('vehicleAttached', null, true);
+  DetachEntity(attachVehicle, true, true);
+  Sync.executeNative('setVehicleOnGround', attachVehicle);
+  Notifications.add('Voertuig losgelaten');
 };

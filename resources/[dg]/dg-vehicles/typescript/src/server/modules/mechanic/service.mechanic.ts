@@ -1,4 +1,5 @@
 import { Config, Events, Notifications } from '@dgx/server';
+import { setTowOffsets } from './services/towing.mechanic';
 
 // Object of all shops and their clocked in employees
 const activeMechanics: Record<string, number[]> = {};
@@ -11,12 +12,13 @@ export const loadConfig = async () => {
   await Config.awaitConfigLoad();
   config = Config.getConfigValue('vehicles.mechanic');
   loadZones(-1);
+  setTowOffsets(config.towVehicles);
 };
 
 export const getMechanicConfig = () => config;
 
 export const loadZones = (src: number) => {
-  Events.emitNet('vehicles:mechanic:client:loadConfig', src, config.shops, config.towVehicles);
+  Events.emitNet('vehicles:mechanic:client:loadConfig', src, config.shops, Object.keys(config.towVehicles));
 };
 // endregion
 

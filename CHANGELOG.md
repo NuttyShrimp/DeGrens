@@ -30,6 +30,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Motor van NPC voertuigen blijft niet meer aanstaan als je deze uit de wagen trekt
 - Fix doorlock polyzone hoogtes
 - Kleine aanpassing om mogelijks het despawnen van wagens tegen te gaan tijdens het attachen van prop
+- Towing wordt nu gehandeled door entity owner
 
 ## [1.0.10]
 

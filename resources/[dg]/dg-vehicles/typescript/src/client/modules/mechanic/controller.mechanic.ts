@@ -6,13 +6,14 @@ import { hasVehicleKeys } from 'modules/keys/cache.keys';
 import { isClockedIn, setClockInStatus, getCurrentWorkingShop, setRepairZone } from './service.mechanic';
 import { addToOrder, finishOrder, removeItem, clearItemOrder, openItemOrder } from './services/parts.mechanic';
 import {
-  setTowOffsets,
   hasVehicleAttached,
   takeHook,
   releaseVehicle,
   assignJob,
   canTow,
   attachHook,
+  attachVehicleToTowVehicle,
+  unattachVehicleFromTowVehicle,
 } from './services/towing.mechanic';
 
 let modelPeekIds: string[];
@@ -21,7 +22,7 @@ on('vehicles:mechanic:acceptTowJob', (data: { vin: string }) => {
   Events.emitNet('vehicles:mechanic:server:acceptTowJob', data.vin);
 });
 
-Events.onNet('vehicles:mechanic:client:loadConfig', (zones: Mechanic.Shops, offsets: Record<string, Vec3>) => {
+Events.onNet('vehicles:mechanic:client:loadConfig', (zones: Mechanic.Shops, towVehicleModels: string[]) => {
   for (const shop in zones) {
     const shopConfig = zones[shop];
     PolyTarget.addBoxZone(
@@ -70,11 +71,11 @@ Events.onNet('vehicles:mechanic:client:loadConfig', (zones: Mechanic.Shops, offs
       scale: 0.8,
     });
   }
-  setTowOffsets(offsets);
+
   if (modelPeekIds) {
     Peek.removeModelEntry(modelPeekIds);
   }
-  modelPeekIds = Peek.addModelEntry(Object.keys(offsets), {
+  modelPeekIds = Peek.addModelEntry(towVehicleModels, {
     distance: 3,
     options: [
       {
@@ -261,4 +262,12 @@ Peek.addGlobalEntry('vehicle', {
 UI.RegisterUICallback('mechanic/createPart', (data: { item: Mechanic.PartItem }, cb) => {
   Events.emitNet('vehicles:mechanic:createPart', data.item);
   cb({ data: {}, meta: { ok: true, message: 'done' } });
+});
+
+Events.onNet('vehicles:towing:attach', (towVehicleNetId: number, attachVehicleNetId: number, offset: Vec3) => {
+  attachVehicleToTowVehicle(towVehicleNetId, attachVehicleNetId, offset);
+});
+
+Events.onNet('vehicles:towing:unattach', (towVehicleNetId: number, attachVehicleNetId: number) => {
+  unattachVehicleFromTowVehicle(towVehicleNetId, attachVehicleNetId);
 });
