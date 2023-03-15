@@ -32,9 +32,7 @@ const generateFees = (cids: number[]) => {
       const baseRate = taxInfo?.rate ?? 0.15;
 
       const minDebtPrice = Math.round(vehConfig.price * (baseRate - 0.01) * vehMultiplier);
-      console.log(minDebtPrice);
       const maxDebtPrice = Math.round(vehConfig.price * (baseRate + 0.01) * vehMultiplier);
-      console.log(maxDebtPrice);
       const debtPrice = Util.getRndInteger(minDebtPrice, maxDebtPrice);
       // Little abuse of origin-name right here
       global.exports['dg-financials'].addMaintentenanceFee(
