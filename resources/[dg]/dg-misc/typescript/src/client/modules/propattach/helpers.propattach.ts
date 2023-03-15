@@ -18,7 +18,7 @@ export const deleteEntity = (propInfo: PropAttach.ActiveProp) => {
   }
 };
 
-// this shit works because prodata being an object, the offset will get mutated if it happens to be moved during model load (often during charspawn)
+// this shit works because propdata being an object, the offset will get mutated if it happens to be moved during model load (often during charspawn)
 export const createEntity = async (ped: number, propData: PropAttach.ActiveProp) => {
   const info = PROPS[propData.name];
   if (!info) {
@@ -39,8 +39,7 @@ export const createEntity = async (ped: number, propData: PropAttach.ActiveProp)
     return;
   }
 
-  const [x, y, z] = GetEntityCoords(ped, false);
-  const entity = CreateObject(hash, x, y, z, false, false, false);
+  const entity = CreateObject(hash, 0, 0, 0, false, false, false);
 
   if (!entity || !DoesEntityExist(entity)) {
     debug(`Failed to create prop ${propData.name} | entity: ${entity}`);
