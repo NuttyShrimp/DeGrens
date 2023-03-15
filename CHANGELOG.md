@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Voertuigprijzen voor A en A+ voertuigen
 - Gebruik locker debt interval uit config in aankoopmenu tekst
 - Cyclecuffs admin command van dev naar staff veranderd
+- Radiotower swarms disabled
 
 ### Fixed
 - Hoogte van camera en verrekijker gefixt

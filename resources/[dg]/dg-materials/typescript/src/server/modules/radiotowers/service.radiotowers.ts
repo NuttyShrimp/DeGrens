@@ -47,12 +47,12 @@ export const initializeRadiotowerStates = () => {
 
 export const setPlayerAtTower = (towerId: string, plyId: number) => {
   // if no one here yet, start timeout for ped swarm starts
-  if (!isAnyPlayerAtTower(towerId) && swarmTimeout === null) {
-    swarmTimeout = setTimeout(() => {
-      swarmTimeout = null;
-      spawnPedSwarm(towerId);
-    }, 10 * 60 * 1000);
-  }
+  // if (!isAnyPlayerAtTower(towerId) && swarmTimeout === null) {
+  //   swarmTimeout = setTimeout(() => {
+  //     swarmTimeout = null;
+  //     spawnPedSwarm(towerId);
+  //   }, 10 * 60 * 1000);
+  // }
 
   playersAtTower[towerId]?.add(plyId);
 };
