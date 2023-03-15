@@ -28,6 +28,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Restaurant stash polyzone op juiste moment destroyen
 - Je health/armor wordt nu correct gerestored wanneer je de server inkomt
 - Motor van NPC voertuigen blijft niet meer aanstaan als je deze uit de wagen trekt
+- Fix doorlock polyzone hoogtes
 
 ## [1.0.10]
 

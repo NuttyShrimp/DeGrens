@@ -26,6 +26,8 @@ export const loadDoors = (doorData: Doorlock.ClientData) => {
     if (door.polyzone) {
       PolyZone.addBoxZone('doorlock', door.polyzone.center, door.polyzone.length, door.polyzone.width, {
         heading: door.polyzone.heading,
+        minZ: door.polyzone.center.z - 4,
+        maxZ: door.polyzone.center.z + 10,
         data: {
           id,
         },
