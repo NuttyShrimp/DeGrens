@@ -36,6 +36,8 @@ export const doRefuel = async (plyId: number, netId: number) => {
   const vehicle = NetworkGetEntityFromNetworkId(netId);
   const { price, fuel: missingFuel } = getFuelPrice(vehicle);
   const cid = Util.getCID(plyId);
+  const vin = getVinForVeh(vehicle);
+  if (price === 0 || !vin) return;
 
   const accountId = Financials.getDefaultAccountId(cid);
   const balance = !accountId ? 0 : Financials.getAccountBalance(accountId) ?? 0;
@@ -44,7 +46,7 @@ export const doRefuel = async (plyId: number, netId: number) => {
     return;
   }
 
-  const [canceled] = await Taskbar.create(
+  const [_, taskbarCancelPercentage] = await Taskbar.create(
     plyId,
     'gas-pump',
     'Tanken',
@@ -63,17 +65,17 @@ export const doRefuel = async (plyId: number, netId: number) => {
       },
     }
   );
-  if (canceled) return;
 
-  const vin = getVinForVeh(vehicle);
-  if (price === 0) return;
+  const percentageFilled = taskbarCancelPercentage / 100;
+  const newFuelLevel = 100 - missingFuel + missingFuel * percentageFilled;
+  const priceForPercentage = price * percentageFilled;
 
   let isSuccess = false;
-  if (Financials.getCash(plyId) >= price) {
-    isSuccess = Financials.removeCash(plyId, price, `refuel-${vin}`);
+  if (Financials.getCash(plyId) >= priceForPercentage) {
+    isSuccess = Financials.removeCash(plyId, priceForPercentage, `refuel-${vin}`);
   } else {
     if (accountId !== undefined) {
-      isSuccess = await Financials.purchase(accountId, cid, price, 'Betaald voor benzine', TaxIds.Gas);
+      isSuccess = await Financials.purchase(accountId, cid, priceForPercentage, 'Betaald voor benzine', TaxIds.Gas);
     }
   }
   Notifications.add(
@@ -83,13 +85,14 @@ export const doRefuel = async (plyId: number, netId: number) => {
   );
   if (!isSuccess) return;
 
-  fuelManager.setFuelLevel(vehicle, 100);
+  fuelManager.setFuelLevel(vehicle, newFuelLevel);
 
   Util.Log(
     'vehicles:refuel',
     {
       vin,
-      price,
+      price: priceForPercentage,
+      newFuelLevel,
     },
     `${Util.getName(plyId)}(${plyId}) refueled car with VIN ${vin}`,
     plyId

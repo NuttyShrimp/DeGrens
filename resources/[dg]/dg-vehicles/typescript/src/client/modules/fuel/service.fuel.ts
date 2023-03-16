@@ -81,10 +81,6 @@ export const cleanFuelThread = (vehicle: number) => {
   fuelThreadRunning = false;
 };
 
-export const openRefuelMenu = (entity: number) => {
-  Events.emitNet('vehicles:fuel:openRefuelMenu', NetworkGetNetworkIdFromEntity(entity));
-};
-
 export const canRefuel = (veh: number): boolean => {
   if (!isInZone()) return false;
   if (IsPedInAnyVehicle(PlayerPedId(), false)) return false;
@@ -101,7 +97,7 @@ export const doRefuel = async (netId: number) => {
     // Calculate the chance on a engine explosion
     const chance = Util.getRndInteger(1, 101);
     if (chance < 10) {
-      Sync.executeNative('NetworkExplodeVehicle', NetworkGetEntityFromNetworkId(netId), true, false, false);
+      Sync.executeNative('NetworkExplodeVehicle', veh, true, false, false);
     }
   }
   Events.emitNet('vehicles:fuel:doRefuel', netId);
