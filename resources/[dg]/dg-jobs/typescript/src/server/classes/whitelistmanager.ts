@@ -1,5 +1,5 @@
-import { SQL, Config, Notifications, Events, Util, UI } from '@dgx/server';
-import { DGXEvent, EventListener, RPCEvent, RPCRegister, Event } from '@dgx/server/decorators';
+import { SQL, Config, Notifications, Events, Util, UI, Financials } from '@dgx/server';
+import { DGXEvent, EventListener, RPCEvent, RPCRegister } from '@dgx/server/decorators';
 import { AsyncExport, Export, ExportRegister } from '@dgx/shared/decorators';
 import { mainLogger } from 'sv_logger';
 import winston from 'winston';
@@ -259,6 +259,18 @@ class WhitelistManager extends Util.Singleton<WhitelistManager>() {
     this.logger.debug(`Added whitelist entry for ${cid} as ${jobName} with rank: ${rank}`);
     Util.Log('jobs:whitelist:add', { rank, job: jobName, cid }, `Whitelisted ${cid} for ${job} with rank ${rank}`, src);
     Events.emitNet('jobs:whitelists:update', src, jobName, 'add');
+    if (jobConfig.bankAccount) {
+      const success = Financials.setPermissions(jobConfig.bankAccount, cid, {
+        deposit: true,
+        transfer: true,
+        withdraw: true,
+        transactions: true,
+      });
+      if (!success) {
+        this.logger.error(`Failed to set bank permissions for ${cid} after retrieving HC role`);
+        Notifications.add(src, `Failed to give new member bank permissions: ${cid}, Maak een ticket aan in discord!`)
+      }
+    }
   };
 
   @DGXEvent('jobs:whitelist:fire')

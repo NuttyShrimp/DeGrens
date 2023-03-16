@@ -13,10 +13,12 @@ declare namespace Whitelist {
     grades: string[];
     specialities: string[];
     name: string;
+    bankAccount?: string;
   }
   interface Info {
     grades: string[];
     specialities: Record<string, number>;
     name: string;
+    bankAccount?: string;
   }
 }

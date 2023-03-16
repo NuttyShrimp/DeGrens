@@ -10,12 +10,14 @@
       "Hoofd-Commissaris"
     ],
     "specialities": ["SRT", "Detective", "HC"],
-    "name": "Politie"
+    "name": "Politie",
+    "bankAccount": "BE2"
   },
   "ambulance": {
     "grades": ["Ambulancier", "Verpleegkundige", "Arts", "Hoofd-Arts"],
     "specialities": ["HC"],
-    "name": "Ambulance"
+    "name": "Ambulance",
+    "bankAccount": "BE3"
   },
   "lawyer": {
     "grades": ["Lawyer"],
