@@ -1,8 +1,9 @@
-import { Events, Minigames, RPC, RayCast, Sync, Taskbar, Util } from '@dgx/client';
+import { Events, Minigames, Notifications, RPC, RayCast, Sync, Taskbar, Util } from '@dgx/client';
 
 import { setDegradationValues } from './constant.status';
 import { fixVehicle } from './service.status';
-import { isCloseToHood } from '@helpers/vehicle';
+import { isCloseToAWheel, isCloseToHood } from '@helpers/vehicle';
+import { getWindowState, getDoorState, getTyreState } from './helpers.status';
 
 // Completes the server side function for natives that are client sided only
 Events.onNet(
@@ -17,12 +18,15 @@ Events.onNet(
       SetVehicleEngineHealth(vehicle, status.engine);
     }
     if (status.wheels !== undefined) {
-      status.wheels.forEach((wheel, wheelId) => {
-        if (wheel === -1) {
+      status.wheels.forEach((health, wheelId) => {
+        if (health === -1) {
           SetTyreHealth(vehicle, wheelId, 351);
           SetVehicleTyreBurst(vehicle, wheelId, true, 1000);
         } else {
-          SetTyreHealth(vehicle, wheelId, wheel);
+          if (health === 1000) {
+            SetVehicleTyreFixed(vehicle, wheelId);
+          }
+          SetTyreHealth(vehicle, wheelId, health);
         }
       });
     }
@@ -39,33 +43,22 @@ Events.onNet('vehicles:service:setDegradationValues', (values: Service.Degradati
   setDegradationValues(values);
 });
 
-RPC.register('vehicles:client:getWindowSate', (netId: number) => {
-  const veh = NetworkGetEntityFromNetworkId(netId);
-  const state = [];
-  for (let i = 0; i < 8; i++) {
-    //@ts-ignore return value is false or 1
-    state.push(!(IsVehicleWindowIntact(veh, i) === 1));
-  }
-  return state;
+RPC.register('vehicles:client:getWindowState', (netId: number) => {
+  const vehicle = NetworkGetEntityFromNetworkId(netId);
+  if (!vehicle || !DoesEntityExist(vehicle)) return [];
+  return getWindowState(vehicle);
 });
 
-RPC.register('vehicles:client:getDoorSate', (netId: number) => {
-  const veh = NetworkGetEntityFromNetworkId(netId);
-  const state = [];
-  for (let i = 0; i < 6; i++) {
-    //@ts-ignore return value is false or 1
-    state.push(IsVehicleDoorDamaged(veh, i) === 1);
-  }
-  return state;
+RPC.register('vehicles:client:getDoorState', (netId: number) => {
+  const vehicle = NetworkGetEntityFromNetworkId(netId);
+  if (!vehicle || !DoesEntityExist(vehicle)) return [];
+  return getDoorState(vehicle);
 });
 
 RPC.register('vehicles:client:getTyreState', (netId: number) => {
-  const veh = NetworkGetEntityFromNetworkId(netId);
-  const state = [];
-  for (let i = 0; i < 10; i++) {
-    state.push(IsVehicleTyreBurst(veh, i, true) ? -1 : GetTyreHealth(veh, i));
-  }
-  return state;
+  const vehicle = NetworkGetEntityFromNetworkId(netId);
+  if (!vehicle || !DoesEntityExist(vehicle)) return [];
+  return getTyreState(vehicle);
 });
 
 Events.onNet('vehicles:client:fixVehicle', (netId: number) => {
@@ -76,8 +69,15 @@ Events.onNet('vehicles:client:fixVehicle', (netId: number) => {
 
 Events.onNet('vehicles:status:useRepairKit', async (itemId: string) => {
   const { entity } = RayCast.doRaycast();
-  if (!entity || !IsEntityAVehicle(entity)) return;
-  if (!isCloseToHood(entity, 2)) return;
+  if (!entity || !IsEntityAVehicle(entity)) {
+    Notifications.add('Je staat niet bij een voertuig', 'error');
+    return;
+  }
+
+  if (!isCloseToHood(entity, 2)) {
+    Notifications.add('Je staat niet bij de motorkap', 'error');
+    return;
+  }
 
   const heading = Util.getHeadingToFaceEntity(entity);
   await Util.goToCoords({ ...Util.getPlyCoords(), w: heading }, 2000);
@@ -114,4 +114,51 @@ Events.onNet('vehicles:status:useRepairKit', async (itemId: string) => {
 
   const oldHealth = GetVehicleEngineHealth(entity);
   Events.emitNet('vehicles:status:finishRepairKit', itemId, NetworkGetNetworkIdFromEntity(entity), oldHealth);
+});
+
+// important to note that when tyrestate is 0, it means tyre doesnt exist
+// broken is -1 health!
+Events.onNet('vehicles:status:useTireKit', async (itemId: string) => {
+  const { entity } = RayCast.doRaycast();
+  if (!entity || !IsEntityAVehicle(entity)) {
+    Notifications.add('Je staat niet bij een voertuig', 'error');
+    return;
+  }
+
+  if (!isCloseToAWheel(entity, 1.2)) {
+    Notifications.add('Je staat niet bij een wiel', 'error');
+    return;
+  }
+
+  const oldTyreState = getTyreState(entity);
+  if (oldTyreState.every(health => health === 0 || health > 352)) {
+    Notifications.add('Dit voertuig heeft geen kapotte band', 'error');
+    return;
+  }
+
+  const success = await Minigames.keygame(10, 7, 15);
+  if (!success) return;
+
+  const [canceled] = await Taskbar.create('tire', 'Vervangen', 30000, {
+    canCancel: true,
+    cancelOnDeath: true,
+    cancelOnMove: true,
+    disableInventory: true,
+    disablePeek: true,
+    disarm: true,
+    controlDisables: {
+      carMovement: true,
+      movement: true,
+      combat: true,
+    },
+    animation: {
+      animDict: 'anim@amb@clubhouse@tutorial@bkr_tut_ig3@',
+      anim: 'machinic_loop_mechandplayer',
+      flags: 1,
+    },
+  });
+  if (canceled) return;
+
+  const newTyreState = oldTyreState.map(health => (health === 0 ? 0 : 1000));
+  Events.emitNet('vehicles:status:finishTireKit', itemId, NetworkGetNetworkIdFromEntity(entity), newTyreState);
 });

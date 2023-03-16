@@ -114,6 +114,11 @@
         "price": 120
       },
       {
+        "name": "tire_repair_kit",
+        "amount": 30,
+        "price": 310
+      },
+      {
         "name": "container_materials",
         "amount": 10,
         "price": 3000

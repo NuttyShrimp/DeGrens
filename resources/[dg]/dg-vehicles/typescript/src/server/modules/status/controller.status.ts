@@ -138,7 +138,10 @@ global.exports('popTyre', async (vehicle: number) => {
 });
 
 Inventory.registerUseable('repair_kit', (plyId, itemState) => {
-  if (GetVehiclePedIsIn(GetPlayerPed(String(plyId)), false)) return;
+  if (GetVehiclePedIsIn(GetPlayerPed(String(plyId)), false)) {
+    Notifications.add(plyId, 'Je kan dit niet gebruiken in de wagen', 'error');
+    return;
+  }
   Events.emitNet('vehicles:status:useRepairKit', plyId, itemState.id);
 });
 
@@ -181,4 +184,27 @@ global.exports('doAdminFix', (vehicle: number) => {
   const entState = Entity(vehicle).state;
   entState.set('amountOfStalls', 0, true);
   entState.set('undriveable', false, true);
+});
+
+Inventory.registerUseable('tire_repair_kit', (plyId, itemState) => {
+  if (GetVehiclePedIsIn(GetPlayerPed(String(plyId)), false)) {
+    Notifications.add(plyId, 'Je kan dit niet gebruiken in de wagen', 'error');
+    return;
+  }
+  Events.emitNet('vehicles:status:useTireKit', plyId, itemState.id);
+});
+
+Events.onNet('vehicles:status:finishTireKit', async (plyId, itemId: string, netId: number, tyreState: number[]) => {
+  const vehicle = NetworkGetEntityFromNetworkId(netId);
+  if (!vehicle || !DoesEntityExist(vehicle)) return;
+
+  const removed = await Inventory.removeItemByIdFromPlayer(plyId, itemId);
+  if (!removed) {
+    Notifications.add(plyId, 'Je hebt geen bandenkit meer', 'error');
+    return;
+  }
+
+  setNativeStatus(vehicle, {
+    wheels: tyreState,
+  });
 });

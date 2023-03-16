@@ -673,6 +673,23 @@
         }
       ]
     },
+    "tire_repair_kit": {
+      "requiredReputation": 5,
+      "items": [
+        {
+          "name": "refined_steel",
+          "amount": 1
+        },
+        {
+          "name": "refined_steel",
+          "amount": 1
+        },
+        {
+          "name": "refined_plastic",
+          "amount": 2
+        }
+      ]
+    },
     "meth_lab_keycard": {
       "requiredReputation": 200,
       "items": [
@@ -878,7 +895,10 @@
       ]
     },
     "mechanic_bench": {
-      "items": ["repair_kit"],
+      "items": [
+        "repair_kit",
+        "tire_repair_kit"
+      ],
       "reputation": "mechanic_crafting"
     }
   }

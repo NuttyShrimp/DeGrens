@@ -2068,5 +2068,16 @@
       "y": 9
     },
     "useable": true
+  },
+  {
+    "name": "tire_repair_kit",
+    "label": "Reservewiel",
+    "image": "tire_repair_kit.png",
+    "useable": true,
+    "decayRate": 43200,
+    "size": {
+      "x": 3,
+      "y": 3
+    }
   }
 ]
