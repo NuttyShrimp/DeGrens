@@ -8,8 +8,8 @@ Events.onNet('vehicle:fuel:overrideSet', (src: number, netId: number, fuelLevel:
   fuelManager.setFuelLevel(vehicle, fuelLevel);
 });
 
-Events.onNet('vehicles:fuel:doRefuel', (src, netId: number) => {
-  doRefuel(src, netId);
+Events.onNet('vehicles:fuel:doRefuel', (src, netId: number, usingJerryCan: boolean) => {
+  doRefuel(src, netId, usingJerryCan);
 });
 
 Events.onNet('vehicles:fuel:openRefuelMenu', (src, netId: number) => {

@@ -1,6 +1,6 @@
-import { Events, Peek, UI } from '@dgx/client';
+import { Events, Peek, UI, Weapons } from '@dgx/client';
 
-import { canRefuel, doRefuel } from '../service.fuel';
+import { canRefuel, doRefuel, isHoldingJerryCan } from '../service.fuel';
 
 UI.RegisterUICallback('vehicles:fuel:startRefuel', (data: { netId: number }, cb) => {
   cb({ data: {}, meta: { ok: true, message: 'done' } });
@@ -14,7 +14,14 @@ Peek.addGlobalEntry('vehicle', {
       icon: 'fas fa-gas-pump',
       action: async (_, entity) => {
         if (!entity) return;
-        Events.emitNet('vehicles:fuel:openRefuelMenu', NetworkGetNetworkIdFromEntity(entity));
+
+        const netId = NetworkGetNetworkIdFromEntity(entity);
+        if (isHoldingJerryCan()) {
+          doRefuel(netId, true);
+          Weapons.removeWeapon(undefined, true);
+        } else {
+          Events.emitNet('vehicles:fuel:openRefuelMenu', netId);
+        }
       },
       canInteract: entity => {
         if (!entity || !NetworkGetEntityIsNetworked(entity)) return false;

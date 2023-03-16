@@ -12,6 +12,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Pistol flashlight voor politie toegevoegd
 - Admin penalise optie via selector
 - Animatie en object toegevoegd aan radio gebruik
+- Banden reparatie mogelijkheid toegevoegd
+- Jerrycan toegevoegd
 
 ### Changed
 - Mogelijkheid om verschillende verkoop aantallen per item te bepalen bij cornersell

@@ -83,6 +83,7 @@ export const ON_CREATE: Record<string, (plyId?: number) => { [key: string]: any 
   weapon_stickybomb: () => ({ serialnumber: generateWeaponSerial() }),
   weapon_stungun: () => ({ serialnumber: generateWeaponSerial() }),
   weapon_vintagepistol: () => ({ serialnumber: generateWeaponSerial() }),
+  weapon_petrolcan: () => ({ hiddenKeys: ['ammo'] }),
   id_card: (plyId?: number) => {
     if (!plyId) return {};
     const playerData = DGCore.Functions.GetPlayer(plyId).PlayerData;

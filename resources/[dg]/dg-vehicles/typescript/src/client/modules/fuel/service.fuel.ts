@@ -1,5 +1,5 @@
 // Fuel level of vehicle ply is in
-import { Events, Sounds, Sync, Util } from '@dgx/client';
+import { Events, Sounds, Sync, Util, Weapons } from '@dgx/client';
 import { setEngineState } from 'services/engine';
 import { isInZone } from './zones.fuel';
 import { CONSUMATION_PER_SECOND, VEHICLE_BEEP_LEVELS } from './constants.fuel';
@@ -82,7 +82,7 @@ export const cleanFuelThread = (vehicle: number) => {
 };
 
 export const canRefuel = (veh: number): boolean => {
-  if (!isInZone()) return false;
+  if (!isInZone() && !isHoldingJerryCan()) return false;
   if (IsPedInAnyVehicle(PlayerPedId(), false)) return false;
   const vehClass = GetVehicleClass(veh);
   if ([13, 14, 15, 16].includes(vehClass)) {
@@ -91,7 +91,7 @@ export const canRefuel = (veh: number): boolean => {
   return Math.min(Util.getBoneDistance(veh, 'wheel_lr'), Util.getBoneDistance(veh, 'wheel_rr')) <= 1.2;
 };
 
-export const doRefuel = async (netId: number) => {
+export const doRefuel = async (netId: number, usingJerryCan = false) => {
   const veh = NetworkGetEntityFromNetworkId(netId);
   if (GetIsVehicleEngineRunning(veh)) {
     // Calculate the chance on a engine explosion
@@ -100,7 +100,7 @@ export const doRefuel = async (netId: number) => {
       Sync.executeNative('NetworkExplodeVehicle', veh, true, false, false);
     }
   }
-  Events.emitNet('vehicles:fuel:doRefuel', netId);
+  Events.emitNet('vehicles:fuel:doRefuel', netId, usingJerryCan);
 };
 
 export const pauseFuelThread = (pause: boolean) => {
@@ -114,4 +114,8 @@ export const getVehicleFuel = (vehicle: number) => {
 // Use if you are not sure you are entityowner
 export const overrideSetFuel = (vehicle: number, fuelLevel: number) => {
   Events.emitNet('vehicle:fuel:overrideSet', NetworkGetNetworkIdFromEntity(vehicle), fuelLevel);
+};
+
+export const isHoldingJerryCan = () => {
+  return Weapons.getCurrentWeaponData()?.name === 'weapon_petrolcan';
 };
