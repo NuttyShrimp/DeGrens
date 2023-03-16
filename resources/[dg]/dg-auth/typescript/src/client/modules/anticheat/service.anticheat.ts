@@ -93,6 +93,7 @@ const scheduleAntiTP = () => {
     const jumping = IsPedJumping(ped);
     const ragdoll = IsPedRagdoll(ped);
     const falling = IsPedFalling(ped);
+    const parachuting = GetPedParachuteState(ped) !== -1;
     let onVeh = IsPedOnVehicle(ped);
     const inNoclip = global.exports?.['dg-admin']?.inNoclip?.() ?? false;
     const inCloak = global.exports?.['dg-admin']?.inCloak?.() ?? false;
@@ -108,7 +109,7 @@ const scheduleAntiTP = () => {
     // TODO: check distance between coords
     if (!inNoclip && !inCloak) {
       if (!inVeh && !onVeh) {
-        if (!jumping && !falling && !ragdoll && !speedDrug) {
+        if (!jumping && !falling && !ragdoll && !speedDrug && !parachuting) {
           if (speed > 15) {
             Events.emitNet('auth:anticheat:addFlag', 'speed');
           }

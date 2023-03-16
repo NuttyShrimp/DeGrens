@@ -23,6 +23,7 @@ import './services/seats';
 import './services/blipmanager';
 import './services/walkstyles';
 import './services/spacespam';
+import './services/parachute';
 
 import { setDiscordRichPresence } from 'modules/discord/service.discord';
 import { setGTABehaviour } from 'modules/gtabehaviour/service.gtabehaviour';

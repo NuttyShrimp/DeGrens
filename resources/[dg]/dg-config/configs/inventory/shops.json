@@ -122,6 +122,11 @@
         "name": "container_materials",
         "amount": 10,
         "price": 3000
+      },
+      {
+        "name": "parachute",
+        "amount": 30,
+        "price": 650
       }
     ],
     "fishing": [
@@ -216,6 +221,11 @@
         "name": "pistol_flashlight",
         "amount": 50,
         "price": 75
+      },
+      {
+        "name": "parachute",
+        "amount": 10,
+        "price": 100
       }
     ],
     "prison_shop": [
@@ -245,6 +255,11 @@
         "name": "bandage",
         "amount": 500,
         "price": 15
+      },
+      {
+        "name": "parachute",
+        "amount": 10,
+        "price": 100
       }
     ],
     "hunting_shop": [

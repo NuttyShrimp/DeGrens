@@ -2079,5 +2079,16 @@
       "x": 3,
       "y": 3
     }
+  },
+  {
+    "name": "parachute",
+    "label": "Parachute",
+    "image": "parachute.png",
+    "useable": true,
+    "decayRate": 10080,
+    "size": {
+      "x": 3,
+      "y": 4
+    }
   }
 ]

@@ -12,7 +12,12 @@ const scheduleThread = () => {
     if (IsControlJustPressed(0, 22)) {
       if (spacePressed) {
         const player = PlayerPedId();
-        if (!IsPedRagdoll(player) && IsPedOnFoot(player) && !IsPedSwimming(player)) {
+        if (
+          !IsPedRagdoll(player) &&
+          IsPedOnFoot(player) &&
+          !IsPedSwimming(player) &&
+          GetPedParachuteState(player) === -1
+        ) {
           const fVector = GetEntityForwardVector(player);
           SetPedToRagdollWithFall(
             player,
@@ -42,7 +47,7 @@ const scheduleThread = () => {
           timeout = setTimeout(() => {
             spacePressed = false;
             timeout = null;
-          }, 3000);
+          }, 2000);
         } else {
           timeout.refresh();
         }

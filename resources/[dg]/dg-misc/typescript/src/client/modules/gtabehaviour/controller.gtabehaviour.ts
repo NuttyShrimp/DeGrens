@@ -23,6 +23,8 @@ BaseEvents.onIdChange(() => {
   SetPlayerHealthRechargeLimit(id, 0.0);
   PICKUP_HASHES.forEach(hash => ToggleUsePickupsForPlayer(id, hash, false));
   SetPlayerMaxArmour(id, 100);
+  SetAutoGiveParachuteWhenEnterPlane(id, false);
+  SetAutoGiveScubaGearWhenExitVehicle(id, false);
 });
 
 global.exports('setDefaultReticleEnabled', setDefaultReticleEnabled);
