@@ -1,4 +1,5 @@
-import { Events, Util } from '@dgx/server';
+import { Events, Notifications, Phone, Util } from '@dgx/server';
+import signedInManager from 'classes/signedinmanager';
 import { v4 } from 'uuid';
 
 import { Group } from './Group';
@@ -26,6 +27,15 @@ class GroupManager extends Util.Singleton<GroupManager>() {
   public createGroup(src: number) {
     const groupId = this.genGroupId();
     const ownerCid = Util.getCID(src);
+    if (signedInManager.getPlayerJob(src)) {
+      Phone.showNotification(src, {
+        id: "group-join-error",
+        icon: 'jobcenter',
+        title: "Kan groep niet aanmaken",
+        description: "Je moet off-duty zijn om een groep te maken"
+      })
+      return;
+    }
     const group = new Group(ownerCid, groupId);
     Util.Log(
       'jobs:groupmanger:create',

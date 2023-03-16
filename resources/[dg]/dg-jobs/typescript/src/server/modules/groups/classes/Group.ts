@@ -1,5 +1,6 @@
-import { Events, Phone, Util } from '@dgx/server';
+import { Events, Notifications, Phone, Util } from '@dgx/server';
 import jobManager from 'classes/jobManager';
+import signedInManager from 'classes/signedinmanager';
 import winston from 'winston';
 
 import { groupLogger } from '../logger';
@@ -152,6 +153,16 @@ export class Group {
   public addMember(cid: number) {
     const plyId = DGCore.Functions.getPlyIdForCid(cid);
     if (!plyId) return;
+
+    if (signedInManager.getPlayerJob(plyId)) {
+      Phone.showNotification(plyId, {
+        id: "group-join-error",
+        icon: 'jobcenter',
+        title: "Kan groep niet joinen",
+        description: "Je moet off-duty zijn om een groep te joinen"
+      })
+      return;
+    }
 
     const member: Groups.Member = {
       serverId: plyId,
