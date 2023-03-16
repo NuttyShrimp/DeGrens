@@ -338,7 +338,7 @@ declare namespace Phone {
     interface Job {
       name: string;
       title: string;
-      level: number;
+      level?: number;
       legal: boolean;
       icon: string;
     }

@@ -1,7 +1,7 @@
 import { Events, Notifications, Vehicles, Util, Inventory, Financials, Config, Phone } from '@dgx/server';
 import jobManager from 'classes/jobManager';
 import { changeJob, disbandGroup, getGroupByCid, getGroupById, getGroupByServerId } from 'modules/groups/service';
-import { BOAT_FOR_JOBTYPE } from './constants.fishing';
+import { VEHICLE_FOR_JOBTYPE } from './constants.fishing';
 import { fishingLogger } from './logger.fishing';
 
 let fishingConfig: Fishing.Config;
@@ -55,9 +55,9 @@ export const startJobForGroup = async (plyId: number, jobType: Fishing.JobType) 
 
   const jobAssigned = changeJob(plyId, 'fishing');
   const payoutLevel = jobManager.getJobPayoutLevel('fishing');
-  if (!jobAssigned || payoutLevel === null) return;
+  if (!jobAssigned || !payoutLevel) return;
 
-  const vehicle = await Vehicles.spawnVehicle(BOAT_FOR_JOBTYPE[jobType], vehicleLocation, plyId);
+  const vehicle = await Vehicles.spawnVehicle(VEHICLE_FOR_JOBTYPE[jobType], vehicleLocation, plyId);
   if (!vehicle) {
     Notifications.add(plyId, 'Kon het voertuig niet uithalen', 'error');
     return;

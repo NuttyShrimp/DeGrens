@@ -73,7 +73,7 @@ export const startJobForGroup = async (plyId: number, jobType: PostOP.JobType) =
 
   const jobAssigned = changeJob(plyId, 'postop');
   const payoutLevel = jobManager.getJobPayoutLevel('postop');
-  if (!jobAssigned || payoutLevel === null) return;
+  if (!jobAssigned || !payoutLevel) return;
 
   const vehicleModel = postopConfig.types[jobType].model;
   const vehicle = await Vehicles.spawnVehicle(

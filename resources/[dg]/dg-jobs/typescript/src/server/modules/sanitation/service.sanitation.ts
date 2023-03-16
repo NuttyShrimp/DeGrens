@@ -92,7 +92,7 @@ export const startJobForGroup = async (plyId: number) => {
 
   const jobAssigned = changeJob(plyId, 'sanitation');
   const payoutLevel = jobManager.getJobPayoutLevel('sanitation');
-  if (!jobAssigned || payoutLevel === null) return;
+  if (!jobAssigned || !payoutLevel) return;
 
   const vehicle = await Vehicles.spawnVehicle('trash', sanitationConfig.vehicleLocation, plyId);
   if (!vehicle) {

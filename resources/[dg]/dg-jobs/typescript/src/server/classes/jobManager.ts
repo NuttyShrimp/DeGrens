@@ -9,7 +9,7 @@ import groupManager from '../modules/groups/classes/GroupManager';
 @RPCRegister()
 class JobManager extends Util.Singleton<JobManager>() {
   private readonly logger: winston.Logger;
-  private readonly jobs: Map<string, Jobs.Job & { name: string; payoutLevel: number }>;
+  private readonly jobs: Map<string, Jobs.Job & { name: string; payoutLevel?: number }>;
   private readonly jobsToResource: Map<string, string>;
 
   constructor() {
@@ -49,6 +49,8 @@ class JobManager extends Util.Singleton<JobManager>() {
 
   private updatePayoutLevels() {
     for (const [jobName, job] of this.jobs.entries()) {
+      if (!job.payout) continue;
+
       // Amount of maxPayout gets checked inside gen func, this ensured job cannot be maxPayout twice
       job.payoutLevel = this.generateJobPayoutLevel();
       this.jobs.set(jobName, job);
@@ -142,6 +144,10 @@ class JobManager extends Util.Singleton<JobManager>() {
     if (payoutLevel == undefined) {
       payoutLevel = job.payoutLevel;
     }
+
+    // if payout still undefined, then payoutconfig was not defined for job
+    if (payoutLevel == undefined) return 0;
+
     // Generate value between min and max based on payoutLevel (lvl 1 = minprice, level 6 (max) = maxprice)
     // Then add percentage based on amount of groupmembers
     return Math.round(
@@ -155,7 +161,7 @@ class JobManager extends Util.Singleton<JobManager>() {
     const job = this.jobs.get(jobName);
     if (!job) {
       this.logger.error('Tried to get payout level for nonexistent job');
-      return null;
+      return;
     }
     return job.payoutLevel;
   }
@@ -170,7 +176,7 @@ class JobManager extends Util.Singleton<JobManager>() {
     this.jobs.set(name, {
       ...info,
       name,
-      payoutLevel: this.generateJobPayoutLevel(),
+      payoutLevel: info.payout ? this.generateJobPayoutLevel() : undefined,
     });
     this.jobsToResource.set(name, GetInvokingResource());
   }

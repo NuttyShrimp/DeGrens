@@ -39,7 +39,7 @@ export const Jobs = () => {
               {j.title}
             </p>
           }
-          description={<DollarLevel level={j.level} />}
+          description={j.level ? <DollarLevel level={j.level} /> : null}
           image={j.icon}
           actions={
             j.legal

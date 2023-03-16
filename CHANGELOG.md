@@ -27,6 +27,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Cyclecuffs admin command van dev naar staff veranderd
 - Radiotower swarms disabled
 - Bij het refuelen wordt je wagen nu ook voor een percentage gevuld wanneer je cancelt
+- Je ziet geen dollartekens in jobcenter app meer bij jobs waar payoutlevels niet gebruikt worden
 
 ### Fixed
 - Hoogte van camera en verrekijker gefixt

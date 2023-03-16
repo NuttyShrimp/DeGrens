@@ -24,7 +24,7 @@ Events.onNet('jobs:sanddigging:signIn', async (src: number) => {
 
   const jobAssigned = changeJob(src, 'sanddigging');
   const payoutLevel = jobManager.getJobPayoutLevel('sanddigging');
-  if (!jobAssigned || payoutLevel === null) return;
+  if (!jobAssigned || !payoutLevel) return;
 
   const vehicle = await Vehicles.spawnVehicle('caddy3', vehicleLocation, src);
   if (!vehicle) {

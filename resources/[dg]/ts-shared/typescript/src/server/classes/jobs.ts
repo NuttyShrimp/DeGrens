@@ -76,7 +76,7 @@ class Jobs {
     return global.exports['dg-jobs'].getJobPayout(jobName, groupSize, payoutLevel);
   }
 
-  getJobPayoutLevel(jobName: string): number | null {
+  getJobPayoutLevel(jobName: string): number | undefined {
     return global.exports['dg-jobs'].getJobPayoutLevel(jobName);
   }
 
