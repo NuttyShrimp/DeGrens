@@ -4,7 +4,7 @@ let parachuteThread: NodeJS.Timer | null = null;
 const parachuteHash = GetHashKey('GADGET_PARACHUTE');
 
 Events.onNet('misc:parachute:toggle', async () => {
-  const [canceled] = await Taskbar.create('parachute-box', '', 1000, {
+  const [canceled] = await Taskbar.create('parachute-box', '', 20000, {
     canCancel: true,
     cancelOnDeath: true,
     disableInventory: true,

@@ -489,4 +489,32 @@ export const PROPS: Record<string, PropAttach.PropInfo> = {
       z: 8.8,
     },
   },
+  scubagear_mask: {
+    model: 'p_d_scuba_mask_s',
+    boneId: 12844,
+    position: {
+      x: 0,
+      y: 0,
+      z: 0,
+    },
+    rotation: {
+      x: 180,
+      y: 90,
+      z: 0,
+    },
+  },
+  scubagear_tank: {
+    model: 'p_s_scuba_tank_s',
+    boneId: 24818,
+    position: {
+      x: -0.25,
+      y: -0.25,
+      z: 0,
+    },
+    rotation: {
+      x: 180,
+      y: 90,
+      z: 0,
+    },
+  },
 };

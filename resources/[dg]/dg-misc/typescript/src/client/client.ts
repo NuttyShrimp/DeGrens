@@ -24,6 +24,7 @@ import './services/blipmanager';
 import './services/walkstyles';
 import './services/spacespam';
 import './services/parachute';
+import './services/scubagear';
 
 import { setDiscordRichPresence } from 'modules/discord/service.discord';
 import { setGTABehaviour } from 'modules/gtabehaviour/service.gtabehaviour';

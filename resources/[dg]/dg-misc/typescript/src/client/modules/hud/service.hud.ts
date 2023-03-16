@@ -1,5 +1,6 @@
 import { Events, HUD, Util } from '@dgx/client';
 import { MINIMUM_STRESS_FOR_ICON } from './constants.hud';
+import { getMaxUnderwaterTime } from 'services/scubagear';
 
 let config: HUD.Config | null = null;
 let isDiving = false;
@@ -23,7 +24,9 @@ export const setIsDiving = (diving: boolean) => {
 
 export const getCapacity = (ped: number, id: number) => {
   if (!isDiving) return 0;
-  return GetPlayerUnderwaterTimeRemaining(id) * 10;
+  const maxUnderwaterTime = getMaxUnderwaterTime();
+  const underwaterTimeRemaining = GetPlayerUnderwaterTimeRemaining(id);
+  return Math.round((underwaterTimeRemaining / maxUnderwaterTime) * 100);
 };
 
 export const handleStressChange = (amount: number) => {

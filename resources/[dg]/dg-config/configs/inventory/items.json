@@ -2090,5 +2090,16 @@
       "x": 3,
       "y": 4
     }
+  },
+  {
+    "name": "scuba_gear",
+    "label": "Duikpak",
+    "image": "scuba_gear.png",
+    "useable": true,
+    "decayRate": 10080,
+    "size": {
+      "x": 4,
+      "y": 5
+    }
   }
 ]

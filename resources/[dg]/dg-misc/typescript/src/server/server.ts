@@ -22,6 +22,7 @@ import './services/idlist';
 import './services/walkstyles';
 import './services/convars';
 import './services/parachute';
+import './services/scubagear';
 import './controllers';
 
 setImmediate(() => {

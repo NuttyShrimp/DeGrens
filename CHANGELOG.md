@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - whitelist signed-in spelers kunnen geen job groep meer aanmaken/joinen
 - Characters met de HC role hebben nu toegang tot bank accounts van hun jobs als deze bestaat
 - Parachute item toegevoegd
+- Duikpak item toegevoegd
 
 ### Changed
 - Mogelijkheid om verschillende verkoop aantallen per item te bepalen bij cornersell
