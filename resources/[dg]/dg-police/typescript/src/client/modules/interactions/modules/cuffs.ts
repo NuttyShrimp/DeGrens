@@ -137,7 +137,7 @@ RPC.register('police:interactions:doUncuff', async (targetServerId: number) => {
 
   const distanceBetweenPeds = Util.getEntityCoords(ped).distance(Util.getEntityCoords(targetPed));
   const stillPlayingAnim = !!IsEntityPlayingAnim(ped, 'mp_arresting', 'a_uncuff', 3);
-  const success = stillPlayingAnim && distanceBetweenPeds > 5;
+  const success = stillPlayingAnim && distanceBetweenPeds < 5;
 
   ClearPedTasks(ped);
 
