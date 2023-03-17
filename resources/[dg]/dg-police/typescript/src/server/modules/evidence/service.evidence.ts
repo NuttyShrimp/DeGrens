@@ -1,4 +1,4 @@
-import { Inventory, Util } from '@dgx/server';
+import { Inventory, SQL, Util } from '@dgx/server';
 import { Vector3 } from '@dgx/shared';
 
 const evidence: Police.Evidence.Evidence[] = [];
@@ -39,4 +39,11 @@ export const addBloodDrop = (plyId: number) => {
   const player = DGCore.Functions.GetPlayer(plyId);
   const plyCoords = Util.getPlyCoords(plyId);
   addEvidence({ x: plyCoords.x, y: plyCoords.y, z: plyCoords.z - 0.95 }, 'blood', player.PlayerData.metadata.dna);
+};
+
+export const getCidOfDNA = async (dna: string): Promise<number | undefined> => {
+  // shit would NOT work when using param
+  const query = `SELECT citizenid FROM all_character_data WHERE metadata LIKE '%${dna}%'`;
+  const result = await SQL.query<{ citizenid: number }[]>(query);
+  return result?.[0]?.citizenid;
 };

@@ -1,6 +1,6 @@
 import { Events, Inventory, Jobs, Notifications, RPC, Taskbar, Util } from '@dgx/server';
 import { BLOCKED_CASINGS_WEAPONS } from './constants.evidence';
-import { addBloodDrop, addEvidence, getAllEvidenceInArea, takeEvidence } from './service.evidence';
+import { addBloodDrop, addEvidence, getAllEvidenceInArea, getCidOfDNA, takeEvidence } from './service.evidence';
 
 global.exports('addBulletCasings', (plyId: number, itemState: Inventory.ItemState, shotFirePositions: Vec3[]) => {
   const vehicle = GetVehiclePedIsIn(GetPlayerPed(String(plyId)), false);
@@ -77,6 +77,23 @@ Inventory.registerUseable('dna_swab', async src => {
   Inventory.addItemToPlayer(src, 'evidence_dna', 1, { dna: player.PlayerData.metadata.dna });
 });
 
-Inventory.registerUseable('evidence_dna', (src, item) => {
+Inventory.registerUseable('evidence_dna', async (src, item) => {
   emitNet('dg-ui:SendAppEvent', src, 'copy', item.metadata.dna);
+
+  // TODO: Remove this as its a temporary solution
+  // Currently police have NO way of getting a persons name if he doesnt have an ID
+
+  const job = Jobs.getCurrentJob(src);
+  if (job !== 'police') return;
+
+  const cid = await getCidOfDNA(item.metadata.dna);
+  if (!cid) return;
+
+  const targetPlayer = await DGCore.Functions.GetOfflinePlayerByCitizenId(cid);
+  if (!targetPlayer) return;
+
+  Notifications.add(
+    src,
+    `DNA behoort tot ${targetPlayer.PlayerData.charinfo.firstname} ${targetPlayer.PlayerData.charinfo.lastname}`
+  );
 });

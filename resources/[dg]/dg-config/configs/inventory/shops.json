@@ -236,6 +236,11 @@
         "name": "scuba_gear",
         "amount": 10,
         "price": 150
+      },
+      {
+        "name": "dna_swab",
+        "amount": 100,
+        "price": 25
       }
     ],
     "prison_shop": [
