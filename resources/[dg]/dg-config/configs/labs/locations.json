@@ -69,7 +69,8 @@
       "y": 6304.999,
       "z": 23.58811
     },
-    "doorId": "druglab-door-9"
+    "doorId": "druglab-door-9",
+    "disabled": true
   },
   {
     "coords": {
