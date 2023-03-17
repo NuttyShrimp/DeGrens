@@ -1,9 +1,16 @@
-import { Events, Inventory, Jobs, Util } from '@dgx/server';
+import { Events, Inventory, Jobs } from '@dgx/server';
 
 Events.onNet('misc:radio:server:setFrequency', async (src: number, freq: number) => {
-  const cid = Util.getCID(src);
-  const isESFreq = freq >= 1 && freq < 11;
-  const radioItem = await Inventory.getFirstItemOfName('player', String(cid), isESFreq ? 'pd_radio' : 'radio');
+  const plyJob = Jobs.getCurrentJob(src);
+  const isESFreq = freq >= 1 && freq <= 10;
+
+  // needs to be police or ambu to be on ems frequencies
+  if (isESFreq && (!plyJob || ['police', 'ambulance'].indexOf(plyJob) === -1)) {
+    Events.emitNet('misc:radio:client:disconnect', src);
+    return;
+  }
+
+  const radioItem = await Inventory.getFirstItemOfNameOfPlayer(src, isESFreq ? 'pd_radio' : 'radio');
   if (!radioItem) {
     Events.emitNet('misc:radio:client:disconnect', src);
     return;
@@ -29,7 +36,7 @@ Inventory.registerUseable(['radio', 'pd_radio'], async (src: number, state: Inve
     frequency: radioFreq,
   }));
   let isES = ['police', 'ambulance'].includes(Jobs.getCurrentJob(src) ?? '');
-  if (radioFreq >= 1 && radioFreq < 11 && (!isES || state.name === 'radio')) {
+  if (radioFreq >= 1 && radioFreq <= 10 && (!isES || state.name === 'radio')) {
     Inventory.setMetadataOfItem(state.id, data => ({
       ...data,
       frequency: 0,

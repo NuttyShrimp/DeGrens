@@ -16,21 +16,27 @@ export const openRadio = (freq: number, allowed: { pd: boolean; normal: boolean 
   startRadioAnimation();
 };
 
-export const toggleRadio = (toggle: boolean) => {
+export const toggleRadio = (toggle: boolean, resetFrequency = false) => {
   global.exports['pma-voice'].setRadioChannel(toggle ? frequency : 0);
   global.exports['pma-voice'].setVoiceProperty('radioEnabled', toggle);
   radioEnabled = toggle;
+
+  if (resetFrequency) {
+    frequency = 0;
+  }
 };
 
-export const setFreq = (freq: number) => {
+// Allowed check is to bypass when using radialoptions before caching allowedfres
+// shits gets checked on server anyway
+export const setFreq = (freq: number, skipAllowedCheck = false) => {
   if (freq < 1 && freq !== 0) return;
-  if (freq >= 1 && freq < 11) {
-    if (!allowedFreq.pd) {
+  if (freq >= 1 && freq <= 10) {
+    if (!skipAllowedCheck && !allowedFreq.pd) {
       freq = 0;
       PlaySoundFromEntity(-1, 'error_sound', PlayerPedId(), 'DLC_NUTTY_SOUNDS', false, 5.0);
       return;
     }
-  } else if (freq !== 0 && !allowedFreq.normal) {
+  } else if (freq !== 0 && !skipAllowedCheck && !allowedFreq.normal) {
     freq = 0;
     PlaySoundFromEntity(-1, 'error_sound', PlayerPedId(), 'DLC_NUTTY_SOUNDS', false, 5.0);
     return;
@@ -74,7 +80,5 @@ export const startRadioAnimation = async () => {
 };
 
 export const stopRadioAnimation = () => {
-  if (!playingAnimation) return;
-
   playingAnimation = false;
 };

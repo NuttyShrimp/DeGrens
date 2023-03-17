@@ -10,7 +10,7 @@ Events.onNet('misc:radio:client:open', (freq: number, allowed: { pd: boolean; no
 });
 
 Events.onNet('misc:radio:client:disconnect', () => {
-  toggleRadio(false);
+  toggleRadio(false, true);
 });
 
 UI.RegisterUICallback('radio/toggle', (data: { toggle: boolean }, cb) => {
@@ -31,4 +31,9 @@ UI.onApplicationClose(() => {
 
 UI.onUIReload(() => {
   stopRadioAnimation();
+});
+
+// Radialmenu options
+on('misc:radio:setFrequency', (data: { frequency: number }) => {
+  setFreq(data.frequency, true);
 });

@@ -123,4 +123,7 @@ export const ON_CREATE: Record<string, (plyId?: number) => { [key: string]: any 
   tune_engine: () => ({ class: 'D', stage: 1 }),
   tune_turbo: () => ({ class: 'D', stage: 1 }),
   tune_suspension: () => ({ class: 'D', stage: 1 }),
+  // radios
+  radio: () => ({ frequency: 0 }),
+  pd_radio: () => ({ frequency: 0 }),
 };
