@@ -1,4 +1,4 @@
-let spacePressed = false;
+let timesPressed = 0;
 let checkThread: NodeJS.Timer | null;
 let timeout: NodeJS.Timeout | null = null;
 
@@ -10,7 +10,7 @@ const scheduleThread = () => {
   cleanupThread();
   checkThread = setInterval(() => {
     if (IsControlJustPressed(0, 22)) {
-      if (spacePressed) {
+      if (timesPressed > 3) {
         const player = PlayerPedId();
         if (
           !IsPedRagdoll(player) &&
@@ -36,18 +36,18 @@ const scheduleThread = () => {
             0.0
           );
         }
-        spacePressed = false;
+        timesPressed = 0;
         if (timeout) {
           clearTimeout(timeout);
           timeout = null;
         }
       } else {
-        spacePressed = true;
+        timesPressed++;
         if (!timeout) {
           timeout = setTimeout(() => {
-            spacePressed = false;
+            timesPressed = 0;
             timeout = null;
-          }, 2000);
+          }, 4000);
         } else {
           timeout.refresh();
         }
@@ -59,7 +59,7 @@ const scheduleThread = () => {
 const cleanupThread = () => {
   if (!checkThread) return;
   clearInterval(checkThread);
-  spacePressed = false;
+  timesPressed = 0;
 };
 
 on('onResourceStop', (res: string) => {
