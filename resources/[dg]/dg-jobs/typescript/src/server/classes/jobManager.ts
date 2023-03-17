@@ -11,11 +11,13 @@ class JobManager extends Util.Singleton<JobManager>() {
   private readonly logger: winston.Logger;
   private readonly jobs: Map<string, Jobs.Job & { name: string; payoutLevel?: number }>;
   private readonly jobsToResource: Map<string, string>;
+  private readonly amountOfJobsFinished: Map<number, number>;
 
   constructor() {
     super();
     this.jobs = new Map();
     this.jobsToResource = new Map();
+    this.amountOfJobsFinished = new Map();
     this.logger = mainLogger.child({ module: 'JobManager' });
     this.updatePayoutLevels();
 
@@ -180,6 +182,16 @@ class JobManager extends Util.Singleton<JobManager>() {
     });
     this.jobsToResource.set(name, GetInvokingResource());
   }
+
+  /**
+   * Calculates multiplier based on amount of jobs player has already done and increase amount afterwards
+   */
+  @Export('getPlayerAmountOfJobsFinishedMultiplier')
+  public getPlayerAmountOfJobsFinishedMultiplier = (cid: number) => {
+    const amountOfJobsFinished = this.amountOfJobsFinished.get(cid) ?? 0;
+    this.amountOfJobsFinished.set(cid, amountOfJobsFinished + 1);
+    return Math.min(amountOfJobsFinished - 3, -1) * -1;
+  };
 }
 
 const jobManager = JobManager.getInstance();

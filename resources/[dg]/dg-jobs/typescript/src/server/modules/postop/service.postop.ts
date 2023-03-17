@@ -184,7 +184,8 @@ export const finishJobForGroup = (plyId: number, netId: number) => {
     if (m.serverId === null) return;
     const amount = active.packagesByPlayer.get(m.cid);
     if (!amount) return;
-    Financials.addCash(m.serverId, payout * amount, 'postop-payout');
+    const plyMultiplier = jobManager.getPlayerAmountOfJobsFinishedMultiplier(m.cid);
+    Financials.addCash(m.serverId, payout * amount * plyMultiplier, 'postop-payout');
   });
 
   const vehicle = NetworkGetEntityFromNetworkId(netId);

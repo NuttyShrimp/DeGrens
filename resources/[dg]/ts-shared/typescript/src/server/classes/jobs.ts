@@ -87,6 +87,10 @@ class Jobs {
   signPlayerOutOfAnyJob(plyId: number) {
     global.exports['dg-jobs'].signPlayerOutOfAnyJob(plyId);
   }
+
+  getPlayerAmountOfJobsFinishedMultiplier(cid: number): number {
+    return global.exports['dg-jobs'].getPlayerAmountOfJobsFinishedMultiplier(cid);
+  }
 }
 
 class Business {

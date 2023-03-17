@@ -165,7 +165,8 @@ export const finishFishingJob = (plyId: number, netId: number) => {
       fishingLogger.warn(`Could not pay ${cid} for fishing, player is not in server`);
       continue;
     }
-    Financials.addCash(plyId, fishAmount * payoutPerFish, 'fishing-payout');
+    const plyMultiplier = jobManager.getPlayerAmountOfJobsFinishedMultiplier(cid);
+    Financials.addCash(plyId, fishAmount * payoutPerFish * plyMultiplier, 'fishing-payout');
   }
 
   const vehicle = NetworkGetEntityFromNetworkId(netId);

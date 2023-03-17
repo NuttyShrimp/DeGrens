@@ -172,7 +172,8 @@ export const finishJobForGroup = (plyId: number, netId: number) => {
 
     const amount = active.bagsPerPlayer.get(m.cid);
     if (!amount) return;
-    Financials.addCash(m.serverId, payoutPerBag * amount, 'sanitation-payout');
+    const plyMultiplier = jobManager.getPlayerAmountOfJobsFinishedMultiplier(m.cid);
+    Financials.addCash(m.serverId, payoutPerBag * amount * plyMultiplier, 'sanitation-payout');
   });
 
   const vehicle = NetworkGetEntityFromNetworkId(netId);
