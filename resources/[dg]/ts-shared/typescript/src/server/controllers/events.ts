@@ -1,4 +1,4 @@
-import { RPC, Util } from '../classes';
+import { Events, RPC, Util } from '../classes';
 
 if (GetCurrentResourceName() === 'ts-shared') {
   onNet('dgx:requestEnv', () => {
@@ -42,4 +42,10 @@ if (GetCurrentResourceName() === 'ts-shared') {
       return netId;
     }
   );
+
+  Events.onNet('dgx:deleteEntity', (plyId, netId: number) => {
+    const entity = NetworkGetEntityFromNetworkId(netId);
+    if (!entity || !DoesEntityExist(entity)) return;
+    DeleteEntity(entity);
+  });
 }

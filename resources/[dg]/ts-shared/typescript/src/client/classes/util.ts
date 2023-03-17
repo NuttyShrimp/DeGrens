@@ -1,4 +1,4 @@
-import { RPC } from './index';
+import { Events, RPC } from './index';
 import { Util as UtilShared } from '../../shared/classes/util';
 import { MATERIAL_HASH_ENUM, MOVEMENT_CLIPSET_ENUM } from '../constants';
 
@@ -212,6 +212,13 @@ class Util extends UtilShared {
     stateBags?: Record<string, any>
   ) => {
     return this.createEntityOnServer('ped', model, coords, routingBucket, stateBags);
+  };
+
+  deleteEntity = (entity: number) => {
+    if (!entity || !DoesEntityExist(entity) || NetworkGetEntityIsLocal(entity)) return;
+    const netId = NetworkGetNetworkIdFromEntity(entity);
+    if (!netId || !NetworkDoesNetworkIdExist(netId)) return;
+    Events.emitNet('dgx:deleteEntity', netId);
   };
 
   getClosestNpcInRange = (range: number, pedsToIgnore: number[] = []): number | undefined => {
