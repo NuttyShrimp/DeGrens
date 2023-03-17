@@ -485,6 +485,12 @@ class WhitelistManager extends Util.Singleton<WhitelistManager>() {
     const whitelistedJobs = this.getWhitelistedJobsForPlayer(plyId);
     Events.emitNet('jobs:whitelists:seed', plyId, whitelistedJobs);
   };
+
+  public isJobBlockedFromJoiningGroup = (job: string) => {
+    const jobConfig = this.config.get(job);
+    if (!jobConfig) return false;
+    return jobConfig.blockJoiningGroup ?? false;
+  };
 }
 
 const whitelistManager = WhitelistManager.getInstance();

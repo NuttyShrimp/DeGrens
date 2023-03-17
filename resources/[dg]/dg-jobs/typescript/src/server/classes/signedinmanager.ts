@@ -1,15 +1,7 @@
 import { Config, Notifications, Events, Util, UI } from '@dgx/server';
 import { mainLogger } from 'sv_logger';
 import whitelistManager from './whitelistmanager';
-import {
-  DGXEvent,
-  EventListener,
-  Export,
-  ExportRegister,
-  LocalEvent,
-  RPCEvent,
-  RPCRegister,
-} from '@dgx/server/decorators';
+import { DGXEvent, EventListener, Export, ExportRegister, RPCEvent, RPCRegister } from '@dgx/server/decorators';
 
 @EventListener()
 @ExportRegister()
@@ -198,6 +190,12 @@ class SignedInManager extends Util.Singleton<SignedInManager>() {
     const job = this.getPlayerJob(plyId);
     if (!job) return;
     this.signOut(plyId, job);
+  };
+
+  public isPlayerBlockedFromJoiningGroup = (plyId: number) => {
+    const job = this.getPlayerJob(plyId);
+    if (!job) return false;
+    return whitelistManager.isJobBlockedFromJoiningGroup(job);
   };
 }
 

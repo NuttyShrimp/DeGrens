@@ -9,16 +9,15 @@ declare namespace Whitelist {
     // Bit mask of specializations
     speciality: number;
   }
-  interface Config {
+  type Config = {
     grades: string[];
     specialities: string[];
     name: string;
     bankAccount?: string;
-  }
-  interface Info {
-    grades: string[];
+    blockJoiningGroup?: boolean;
+  };
+
+  type Info = Omit<Config, 'specialities'> & {
     specialities: Record<string, number>;
-    name: string;
-    bankAccount?: string;
-  }
+  };
 }

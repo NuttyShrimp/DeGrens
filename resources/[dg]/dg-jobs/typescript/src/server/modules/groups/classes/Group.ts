@@ -154,7 +154,7 @@ export class Group {
     const plyId = DGCore.Functions.getPlyIdForCid(cid);
     if (!plyId) return;
 
-    if (signedInManager.getPlayerJob(plyId)) {
+    if (signedInManager.isPlayerBlockedFromJoiningGroup(plyId)) {
       Phone.showNotification(plyId, {
         id: "group-join-error",
         icon: 'jobcenter',

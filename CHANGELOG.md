@@ -14,7 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Animatie en object toegevoegd aan radio gebruik
 - Banden reparatie mogelijkheid toegevoegd
 - Jerrycan toegevoegd
-- whitelist signed-in spelers kunnen geen job groep meer aanmaken/joinen
+- whitelist signed-in spelers van sommige jobs kunnen geen job groep meer aanmaken/joinen
 - Characters met de HC role hebben nu toegang tot bank accounts van hun jobs als deze bestaat
 - Parachute item toegevoegd
 - Duikpak item toegevoegd

@@ -11,13 +11,15 @@
     ],
     "specialities": ["SRT", "Detective", "HC"],
     "name": "Politie",
-    "bankAccount": "BE2"
+    "bankAccount": "BE2",
+    "blockJoiningGroup": true
   },
   "ambulance": {
     "grades": ["Ambulancier", "Verpleegkundige", "Arts", "Hoofd-Arts"],
     "specialities": ["HC"],
     "name": "Ambulance",
-    "bankAccount": "BE3"
+    "bankAccount": "BE3",
+    "blockJoiningGroup": true
   },
   "lawyer": {
     "grades": ["Lawyer"],

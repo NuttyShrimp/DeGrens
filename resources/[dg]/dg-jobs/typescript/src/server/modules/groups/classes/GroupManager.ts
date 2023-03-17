@@ -27,7 +27,7 @@ class GroupManager extends Util.Singleton<GroupManager>() {
   public createGroup(src: number) {
     const groupId = this.genGroupId();
     const ownerCid = Util.getCID(src);
-    if (signedInManager.getPlayerJob(src)) {
+    if (signedInManager.isPlayerBlockedFromJoiningGroup(src)) {
       Phone.showNotification(src, {
         id: "group-join-error",
         icon: 'jobcenter',
