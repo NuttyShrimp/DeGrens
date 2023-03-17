@@ -23,6 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Politie kan nu makkelijk weten van wie DNA is doormiddels van DNA te gebruiken
 - Je krijgt nu een beetje cash wanneer je naar de gevangenis wordt gestuurd om eten/drinken te kopen 
 - Mails worden nu teruggezet als je UI restart
+- Je kan nu altijd cornersellen maar met prijsvermindering in bepaalde situaties
 
 ### Changed
 - Mogelijkheid om verschillende verkoop aantallen per item te bepalen bij cornersell

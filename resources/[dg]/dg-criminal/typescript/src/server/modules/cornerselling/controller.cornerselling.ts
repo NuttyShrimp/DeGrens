@@ -4,11 +4,6 @@ import { addSaleToHeatmap, calculatePrice, getSellableItems } from './service.co
 import config from 'services/config';
 
 Events.onNet('criminal:cornersell:tryToStart', async (plyId: number) => {
-  if (!Police.canDoActivity('cornersell')) {
-    Notifications.add(plyId, 'Er is momenteel geen interesse', 'error');
-    return;
-  }
-
   const sellableItems = await getSellableItems(plyId);
   if (sellableItems.length === 0) {
     Notifications.add(plyId, 'Je hebt niks om te verkopen', 'error');
@@ -41,7 +36,9 @@ Events.onNet('criminal:cornersell:sell', async (plyId: number, zone: string) => 
   }
 
   const price = calculatePrice(selectedItemData, zone) * amountToRemove;
-  Financials.addCash(plyId, price, 'corner-sell');
+  const priceWithPoliceMultiplier = price * (Police.canDoActivity('cornersell') ? 1 : 0.5);
+  Financials.addCash(plyId, priceWithPoliceMultiplier, 'corner-sell');
+
   Util.Log(
     'cornersell:sell',
     { itemName: selectedItemName, amount: amountToRemove, price },
