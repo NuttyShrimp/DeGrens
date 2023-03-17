@@ -94,6 +94,7 @@ DGX.UI.onUIReload(function()
 
   SetTimeout(2000, function()
     restoreStickyNotifs()
+    restoreCachedMails()
   end)
 end)
 
