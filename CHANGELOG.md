@@ -43,6 +43,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Towing wordt nu gehandeled door entity owner
 - Fix anti space spam consistency
 - Ontboeien checkt nu correct afstand tot target
+- Mazebank bankingzone juist gezet
 
 ## [1.0.10]
 

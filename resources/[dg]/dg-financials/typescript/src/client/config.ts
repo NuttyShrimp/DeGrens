@@ -76,7 +76,7 @@ export const config: IConfig = {
         id: 'maze',
         name: 'Maze Bank',
         center: { x: -1308.5, y: -823.89, z: 17.15 },
-        heading: 150,
+        heading: 300,
       },
     ],
   },
