@@ -245,14 +245,14 @@
     ],
     "prison_shop": [
       {
-        "name": "water_bottle",
-        "amount": 50,
-        "price": 25
+        "name": "prison_food",
+        "amount": 100,
+        "price": 5
       },
       {
-        "name": "sandwich",
-        "amount": 50,
-        "price": 25
+        "name": "prison_drink",
+        "amount": 100,
+        "price": 5
       }
     ],
     "hospital_shop": [

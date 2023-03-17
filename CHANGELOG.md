@@ -21,6 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Je krijgt nu meer geld voor de eerste jobs die je doet per dag.
 - F1 Menu opties toegevoegd om snel porto te switchen voor politie/ambulance
 - Politie kan nu makkelijk weten van wie DNA is doormiddels van DNA te gebruiken
+- Je krijgt nu een beetje cash wanneer je naar de gevangenis wordt gestuurd om eten/drinken te kopen 
 
 ### Changed
 - Mogelijkheid om verschillende verkoop aantallen per item te bepalen bij cornersell

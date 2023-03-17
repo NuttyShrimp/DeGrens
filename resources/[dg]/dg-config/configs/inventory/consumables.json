@@ -6,6 +6,10 @@
         "gain": 10
       },
       {
+        "name": "prison_drink",
+        "gain": 75
+      },
+      {
         "name": "farming_milk",
         "gain": 5
       },
@@ -15,7 +19,7 @@
       },
       {
         "name": "upnatom_soda",
-        "gain": 50
+        "gain": 40
       }
     ],
     "alcohol": [
@@ -39,12 +43,16 @@
       "gain": 10
     },
     {
+      "name": "prison_food",
+      "gain": 75
+    },
+    {
       "name": "upnatom_icecream",
-      "gain": 30
+      "gain": 25
     },
     {
       "name": "upnatom_fries",
-      "gain": 60,
+      "gain": 50,
       "checkQuality": true
     },
     {

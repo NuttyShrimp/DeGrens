@@ -1,4 +1,4 @@
-import { Events, Inventory, Jobs, Notifications, Util } from '@dgx/server';
+import { Events, Financials, Inventory, Jobs, Notifications, Util } from '@dgx/server';
 import { forceUncuff } from 'modules/interactions/modules/cuffs';
 
 // plyid to month
@@ -20,6 +20,7 @@ export const sendPlayerToPrison = (plyId: number, months: number) => {
   playersInPrison.set(plyId, { months, thread });
   moveAllPlayerItemsToPrisonStash(plyId);
   Jobs.signPlayerOutOfAnyJob(plyId);
+  Financials.addCash(plyId, 50, 'prison_entry'); // to be able to buy food
 
   forceUncuff(plyId);
 };
@@ -87,16 +88,4 @@ export const escapePrison = (plyId: number) => {
   setPlayerMonths(plyId, () => -1);
   cleanupPlayerInJail(plyId);
   Notifications.add(plyId, 'Je bent ontsnapt uit de gevangenis', 'success');
-};
-
-export const reloadPeopleInPrison = () => {
-  (
-    Object.values({
-      ...DGCore.Functions.GetQBPlayers(),
-    }) as Player[]
-  ).forEach((ply: Player) => {
-    const months = ply.PlayerData.metadata.jailMonths;
-    if (months === -1) return;
-    sendPlayerToPrison(ply.PlayerData.source, months);
-  });
 };

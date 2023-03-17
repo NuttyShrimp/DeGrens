@@ -2102,5 +2102,27 @@
       "x": 4,
       "y": 5
     }
+  },
+  {
+    "useable": true,
+    "name": "prison_food",
+    "label": "Sandwich",
+    "image": "sandwich.png",
+    "decayRate": 30,
+    "size": {
+      "x": 1,
+      "y": 1
+    }
+  },
+  {
+    "useable": true,
+    "name": "prison_drink",
+    "label": "Water",
+    "image": "water_bottle.png",
+    "decayRate": 30,
+    "size": {
+      "x": 1,
+      "y": 1
+    }
   }
 ]
