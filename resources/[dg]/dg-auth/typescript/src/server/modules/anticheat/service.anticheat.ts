@@ -72,7 +72,7 @@ export const flagUser = (src: number, flag: string, data?: any) => {
     `${Util.getName(src)} was flagged for ${flag}`,
     src
   );
-  if (trackedFlags[src].length >= 3) {
+  if (trackedFlags[src].length >= 5) {
     Admin.ACBan(src, 'Flagged anticheat');
   }
 };

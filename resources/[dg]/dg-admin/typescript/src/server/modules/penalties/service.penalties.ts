@@ -8,7 +8,7 @@ import { dropBySteamId, penaltyLogger } from './util.penalties';
 
 const penalisePlayer = async (
   type: 'ban' | 'kick' | 'warn',
-  source: number,
+  src: number,
   target: string,
   reasons: string[],
   points: number,
@@ -21,7 +21,7 @@ const penalisePlayer = async (
     reason: reasons.join(' | '),
     points: points,
     length: length ?? null,
-    automated: source === -1,
+    automated: src === -1,
   };
   const penalityId = await SQL.insertValues('penalties', [
     {
@@ -35,14 +35,15 @@ const penalisePlayer = async (
       `admin:penalties:${type}:failed`,
       {
         target,
-        ...data,
-        ...metadata,
+        data,
+        metadata,
       },
       `Failed to register ${type} for ${targetName}(${target})`,
-      source >= 1 ? source : undefined
+      src >= 1 ? src : undefined
     );
     penaltyLogger.error(
-      `Failed to register ${type} for ${targetName}(${target}) given by ${source === -1 ? 'AntiCheat' : source === 0 ? 'Panel' : Util.getName(source)
+      `Failed to register ${type} for ${targetName}(${target}) given by ${
+        src === -1 ? 'AntiCheat' : src === 0 ? 'Panel' : Util.getName(src)
       } | ${Object.values(metadata)
         .map((k, v) => `${k}: ${v}`)
         .join('| ')}`
@@ -58,22 +59,24 @@ const penalisePlayer = async (
     `admin:penalties:${type}`,
     {
       target,
-      ...data,
-      ...metadata,
+      data,
+      metadata,
     },
     `${targetName}(${target}) received a ${type} for ${reasons.join(' | ')}`,
-    source >= 1 ? source : undefined
+    src >= 1 ? src : undefined
   );
   penaltyLogger.info(
-    `${targetName}(${target}) received a ${type} by ${source === -1 ? 'AntiCheat' : source === 0 ? 'Panel' : Util.getName(source)} | ${Object.entries(metadata)
+    `${targetName}(${target}) received a ${type} by ${
+      src === -1 ? 'AntiCheat' : src === 0 ? 'Panel' : Util.getName(src)
+    } | ${Object.entries(metadata)
       .map(([k, v]) => `${k}: ${v}`)
       .join('| ')}`
   );
   Chat.sendMessage('admin', {
     type: 'system',
-    message: `${targetName}(${target}) received a ${type} for ${reasons.join(
-      ' | '
-    )} (${points} points${length !== undefined ? ` | ${length} days` : ""})`,
+    message: `${targetName}(${target}) received a ${type} for ${reasons.join(' | ')} (${points} points${
+      length !== undefined ? ` | ${length} days` : ''
+    })`,
     prefix: 'Admin: ',
   });
   updatePointsReset(target, points);
@@ -88,7 +91,7 @@ const penalisePlayer = async (
  * @param length
  */
 export const banPlayer = async (
-  source: number,
+  src: number,
   target: string | number,
   reasons: string[],
   points: number,
@@ -98,32 +101,32 @@ export const banPlayer = async (
   if (typeof target === 'number' || !target.startsWith('steam')) {
     target = getIdentifierForPlayer(Number(target), 'steam')!;
   }
-  await penalisePlayer('ban', source, target, reasons, points, length, data);
+  await penalisePlayer('ban', src, target, reasons, points, length, data);
   dropBySteamId(target, `Banned for: ${reasons.join(' | ')}`);
 };
 
-export const kickPlayer = async (source: number, target: string | number, reasons: string[], points: number) => {
+export const kickPlayer = async (src: number, target: string | number, reasons: string[], points: number) => {
   if (typeof target === 'number') {
     target = getIdentifierForPlayer(target, 'steam')!;
   }
-  await penalisePlayer('kick', source, target, reasons, points);
+  await penalisePlayer('kick', src, target, reasons, points);
   dropBySteamId(target, `Kicked for: ${reasons.join(' | ')}`);
 };
 
-export const warnPlayer = async (source: number, target: string | number, reasons: string[], points: number) => {
+export const warnPlayer = async (src: number, target: string | number, reasons: string[], points: number) => {
   if (typeof target === 'number') {
     target = getIdentifierForPlayer(target, 'steam')!;
   }
-  const penaltyId = await penalisePlayer('warn', source, target, reasons, points);
-  if (!penaltyId && source > 0) {
-    Notifications.add(source, "Failed to warn player, try again")
+  const penaltyId = await penalisePlayer('warn', src, target, reasons, points);
+  if (!penaltyId && src > 0) {
+    Notifications.add(src, 'Failed to warn player, try again');
     return;
   }
   const targetData = getPlayerForSteamId(target);
   if (!targetData) {
-    await SQL.query("INSERT INTO admin_unnanounced_warns (steamid, penaltyid) VALUES (?, ?)", [target, penaltyId]);
-    return
-  };
+    await SQL.query('INSERT INTO admin_unnanounced_warns (steamid, penaltyid) VALUES (?, ?)', [target, penaltyId]);
+    return;
+  }
   Chat.sendMessage(targetData.source, {
     type: 'warning',
     message: `Je bent gewaarschuwd voor: ${reasons.join(' | ')}`,
@@ -151,11 +154,12 @@ export const isPlayerBanned = async (steamId: string) => {
     [steamId]
   );
   if (result.length < 1) return { isBanned: false, reason: '' };
-  const expiry = dayjs.unix(result[0].date).add(result[0].length, "d").format("DD/MM/YYYY HH:mm:ss")
+  const expiry = dayjs.unix(result[0].date).add(result[0].length, 'd').format('DD/MM/YYYY HH:mm:ss');
   return {
     isBanned: result.length > 0,
-    reason: `Je bent gebanned voor ${result[0].reason}, Verloopt op ${result[0].length === -1 ? 'permanently' : expiry
-      }`,
+    reason: `Je bent gebanned voor ${result[0].reason}, Verloopt op ${
+      result[0].length === -1 ? 'permanently' : expiry
+    }`,
   };
 };
 
