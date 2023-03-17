@@ -9,27 +9,33 @@ export const startPlayerPickingThread = () => {
 };
 
 export const pickLuckyPlayer = (skippedCids: number[] = []) => {
-  mainLogger.info('Picking player for houserobbery job');
-  if (!Police.canDoActivity('houserobbery')) return;
+  if (!Police.canDoActivity('houserobbery')) {
+    mainLogger.info('tried picking player for houserobbery but not enough police');
+    return;
+  }
 
   const cids = stateManager.getPossibleTargets(skippedCids);
-  if (cids.length == 0) return;
+  if (cids.length == 0) {
+    mainLogger.info('tried picking player for houserobbery but no one in queue');
+    return;
+  }
 
   const cid = cids[Math.floor(Math.random() * cids.length)];
   if (!cid) return;
 
   const locationIdx = stateManager.getUnusedLocation();
-  if (!locationIdx) return;
+  if (!locationIdx) {
+    mainLogger.info('tried picking player for houserobbery but no unused locations');
+    return;
+  }
 
   const hasStarted = stateManager.startJobForPly(cid, locationIdx);
 
-  // if started, add to timed out so this player can not get chosen for x time
-  // if failed to start, try again but ignore this player
   if (hasStarted) {
-    mainLogger.info(`Selected ${cid} for houserobbery job`);
+    mainLogger.info(`picked player ${cid} for houserobbery`);
   } else {
+    mainLogger.info(`could not start houserobbery for player ${cid}`);
     skippedCids.push(cid);
     pickLuckyPlayer(skippedCids);
-    return;
   }
 };
