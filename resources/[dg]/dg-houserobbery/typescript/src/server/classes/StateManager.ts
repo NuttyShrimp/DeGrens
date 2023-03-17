@@ -171,8 +171,8 @@ class StateManager extends Util.Singleton<StateManager>() {
 
     if (house.findTimeout) {
       clearTimeout(house.findTimeout);
+      house.findTimeout = null;
     }
-    house.findTimeout = null;
 
     house.finishTimeout = setTimeout(() => {
       this.finishJob(houseId, true);
@@ -416,8 +416,14 @@ class StateManager extends Util.Singleton<StateManager>() {
     const house = this.activeHouses.get(houseId);
     if (!house) return;
 
+    if (house.findTimeout) {
+      clearTimeout(house.findTimeout);
+      house.findTimeout = null;
+    }
+
     if (house.finishTimeout) {
       clearTimeout(house.finishTimeout);
+      house.finishTimeout = null;
     }
 
     const group = Jobs.getGroupById(house.groupId);
