@@ -70,7 +70,7 @@ class WeedPlantManager extends Util.Singleton<WeedPlantManager>() {
 
     const logMessage = `${Util.getName(plyId)}(${plyId}) has planted a weed plant`;
     this.logger.silly(logMessage);
-    Util.Log('weed:planted', { gender, coords, rotation, plantId: data.id }, logMessage, plyId);
+    Util.Log('weed:planted', { gender, coords, rotation, plantId: data.id, ownerCid: cid }, logMessage, plyId);
   };
 
   @DGXEvent('criminal:weed:viewPlant')

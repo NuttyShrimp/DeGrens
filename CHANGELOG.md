@@ -33,6 +33,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Radiotower swarms disabled
 - Bij het refuelen wordt je wagen nu ook voor een percentage gevuld wanneer je cancelt
 - Je ziet geen dollartekens in jobcenter app meer bij jobs waar payoutlevels niet gebruikt worden
+- Meer data bij alle weed logs
 
 ### Fixed
 - Hoogte van camera en verrekijker gefixt

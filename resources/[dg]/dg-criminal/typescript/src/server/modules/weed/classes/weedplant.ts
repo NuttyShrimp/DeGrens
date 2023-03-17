@@ -176,7 +176,7 @@ export class WeedPlant {
       deluxe ? 'normal' : 'deluxe'
     } fertilizer`;
     this.logger.silly(logMessage);
-    Util.Log('weed:feed', { plantId: this.id, deluxe }, logMessage, plyId);
+    Util.Log('weed:feed', { plantId: this.id, deluxe, ownerCid: this.cid }, logMessage, plyId);
   };
 
   // destroy is for ply destroy action
@@ -187,7 +187,7 @@ export class WeedPlant {
 
     const logMessage = `${Util.getName(plyId)}(${plyId}) has destroyed a weed plant`;
     this.logger.silly(logMessage);
-    Util.Log('weed:destroy', { plantId: this.id }, logMessage, plyId);
+    Util.Log('weed:destroy', { plantId: this.id, ownerCid: this.cid }, logMessage, plyId);
 
     if (this.cid && Util.getRndInteger(0, 101) < config.weed.destroyMailChance) {
       const charInfo = DGCore.Functions.GetPlayer(plyId)?.PlayerData?.charinfo;
@@ -210,7 +210,7 @@ export class WeedPlant {
 
     const logMessage = `weed plant ${this.id} has been removed`;
     this.logger.silly(logMessage);
-    Util.Log('weed:remove', { plantId: this.id }, logMessage);
+    Util.Log('weed:remove', { plantId: this.id, ownerCid: this.cid }, logMessage);
   };
 
   public canCut = () => {
@@ -237,7 +237,7 @@ export class WeedPlant {
 
     const logMessage = `${Util.getName(plyId)}(${plyId}) has cut a weed plant`;
     this.logger.silly(logMessage);
-    Util.Log('weed:cut', { plantId: this.id }, logMessage, plyId);
+    Util.Log('weed:cut', { plantId: this.id, ownerCid: this.cid }, logMessage, plyId);
   };
 
   public grow = (currentSeconds: number) => {
