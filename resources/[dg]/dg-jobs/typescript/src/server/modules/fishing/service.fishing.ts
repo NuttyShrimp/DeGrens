@@ -53,9 +53,10 @@ export const startJobForGroup = async (plyId: number, jobType: Fishing.JobType) 
     return;
   }
 
-  const jobAssigned = changeJob(plyId, 'fishing');
+  const jobAssigned = changeJob(group.id, 'fishing');
+  if (!jobAssigned) return;
   const payoutLevel = jobManager.getJobPayoutLevel('fishing');
-  if (!jobAssigned || !payoutLevel) return;
+  if (!payoutLevel) return;
 
   const vehicle = await Vehicles.spawnVehicle(VEHICLE_FOR_JOBTYPE[jobType], vehicleLocation, plyId);
   if (!vehicle) {

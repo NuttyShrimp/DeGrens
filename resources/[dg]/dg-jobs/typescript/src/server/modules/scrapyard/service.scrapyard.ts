@@ -53,7 +53,7 @@ export const assignLocationToGroup = async (ownerId: number) => {
     return;
   }
 
-  const jobAssigned = changeJob(ownerId, 'scrapyard');
+  const jobAssigned = changeJob(group.id, 'scrapyard');
   if (!jobAssigned) return;
 
   const model = getRandomModel();

@@ -350,7 +350,7 @@ class StateManager extends Util.Singleton<StateManager>() {
       return false;
     }
 
-    const couldChange = Jobs.changeGroupJob(plyId, 'houserobbery');
+    const couldChange = Jobs.changeJob(group.id, 'houserobbery');
     if (!couldChange) {
       mainLogger.debug(`could not change job for group of player ${cid} - ${plyId}`);
       return false;
@@ -433,9 +433,7 @@ class StateManager extends Util.Singleton<StateManager>() {
 
     const group = Jobs.getGroupById(house.groupId);
     if (group) {
-      if (group.owner.serverId) {
-        Jobs.changeGroupJob(group.owner.serverId, null);
-      }
+      Jobs.changeJob(group.id, null);
       group.members.forEach(m => {
         this.finishJobForPly(m.serverId, m.cid, failed);
       });

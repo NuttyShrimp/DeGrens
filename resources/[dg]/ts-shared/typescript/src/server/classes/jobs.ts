@@ -29,8 +29,12 @@ class Jobs {
     return global.exports['dg-jobs'].getGroupByCid(cid);
   }
 
-  changeGroupJob(src: number, job: string | null): boolean {
-    return global.exports['dg-jobs'].changeGroupJob(src, job);
+  changeJob(groupId: string, job: string | null): boolean {
+    return global.exports['dg-jobs'].changeGroupJob(groupId, job);
+  }
+
+  changeJobOfPlayerGroup(plyId: number, job: string | null): boolean {
+    return global.exports['dg-jobs'].changeJobOfPlayerGroup(plyId, job);
   }
 
   // Get current whitelisted job where player is on duty for

@@ -1,4 +1,4 @@
-import { Notifications, Util } from '@dgx/server';
+import { Notifications, Util, Phone } from '@dgx/server';
 
 import groupManager from './classes/GroupManager';
 import { groupLogger } from './logger';
@@ -30,18 +30,39 @@ export const getGroupByServerId = (id: number): Groups.Group | undefined => {
   return group.getInfo();
 };
 
-export const changeJob = (src: number, job: string | null) => {
-  // Src should be the owner
-  const group = groupManager.getGroupByServerId(src);
-  if (!group) {
-    Notifications.add(src, 'Je moet in een groep zitten om deze job te kunnen kiezen.');
-    return false;
-  }
+export const changeJob = (groupId: string, job: string | null) => {
+  const group = groupManager.getGroupById(groupId);
+  if (!group) return false;
   if (job != null && group.isBusy()) {
-    Notifications.add(src, 'Je groep is al bezig met een job, Werk deze eerst af voordat je een nieuwe job kiest!');
+    const owner = group.getOwner();
+    if (owner.serverId) {
+      Phone.showNotification(owner.serverId, {
+        id: `phone-jobs-groups-create`,
+        title: 'Kon job niet veranderen',
+        description: 'Groep is al bezig met een job',
+        icon: 'jobcenter',
+      });
+    }
+    group.getMembers().forEach(m => {
+      if (!m.serverId) return;
+    });
     return false;
   }
   return group.setActiveJob(job);
+};
+
+export const changeJobOfPlayerGroup = (plyId: number, job: string | null) => {
+  const group = groupManager.getGroupByServerId(plyId);
+  if (!group) {
+    Phone.showNotification(plyId, {
+      id: `phone-jobs-groups-create`,
+      title: 'jobcenter',
+      description: 'Je zit niet in een groep',
+      icon: 'jobcenter',
+    });
+    return false;
+  }
+  return changeJob(group.getId(), job);
 };
 
 export const createGroup = (src: number): boolean => {

@@ -41,6 +41,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Increase required flags for anticheat ban
 - Meth drytime verlaagd
 - Melding bij het togglen van dispatch
+- Group change function opgesplitst
 
 ### Fixed
 - Hoogte van camera en verrekijker gefixt

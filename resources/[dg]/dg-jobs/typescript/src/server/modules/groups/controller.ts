@@ -4,6 +4,7 @@ import nameManager from './classes/NameManager';
 import { groupLogger } from './logger';
 import {
   changeJob,
+  changeJobOfPlayerGroup,
   createGroup,
   disbandGroup,
   getGroupByCid,
@@ -18,7 +19,8 @@ global.exports('createGroup', createGroup);
 global.exports('getGroupById', getGroupById);
 global.exports('getGroupByCid', getGroupByCid);
 global.exports('getGroupByServerId', getGroupByServerId);
-global.exports('changeGroupJob', changeJob);
+global.exports('changeJob', changeJob);
+global.exports('changeJobOfPlayerGroup', changeJobOfPlayerGroup);
 global.exports('leaveGroup', leaveGroup);
 global.exports('disbandGroup', disbandGroup);
 

@@ -1,6 +1,6 @@
 import { Config, Events, Notifications, Util, Inventory, Financials } from '@dgx/server';
 import jobManager from 'classes/jobManager';
-import { changeJob } from 'modules/groups/service';
+import { changeJobOfPlayerGroup } from 'modules/groups/service';
 import { huntingLogger } from './logger.hunting';
 
 let huntingConfig: Hunting.Config;
@@ -26,7 +26,7 @@ export const initializeHunting = () => {
 };
 
 export const startHuntingJobForPlayer = (plyId: number) => {
-  const jobAssigned = changeJob(plyId, 'hunting');
+  const jobAssigned = changeJobOfPlayerGroup(plyId, 'hunting');
   if (!jobAssigned) return;
 
   activePlayers.add(plyId);

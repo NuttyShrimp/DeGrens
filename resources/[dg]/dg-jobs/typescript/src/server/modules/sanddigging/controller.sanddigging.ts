@@ -21,10 +21,10 @@ Events.onNet('jobs:sanddigging:signIn', async (src: number) => {
     Notifications.add(src, 'Er staat een voertuig in de weg', 'error');
     return;
   }
-
-  const jobAssigned = changeJob(src, 'sanddigging');
+  const jobAssigned = changeJob(group.id, 'sanddigging');
+  if (!jobAssigned) return;
   const payoutLevel = jobManager.getJobPayoutLevel('sanddigging');
-  if (!jobAssigned || !payoutLevel) return;
+  if (!payoutLevel) return;
 
   const vehicle = await Vehicles.spawnVehicle('caddy3', vehicleLocation, src);
   if (!vehicle) {
