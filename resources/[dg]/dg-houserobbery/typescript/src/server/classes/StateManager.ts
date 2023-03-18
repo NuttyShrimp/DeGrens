@@ -293,9 +293,14 @@ class StateManager extends Util.Singleton<StateManager>() {
       return;
     }
 
+    const enoughPoliceForFullPrice = Police.canDoActivity('houserobbery');
+
     const lootTable = getConfig().lootTables[lootTableId];
     const item = lootTable[Math.floor(Math.random() * lootTable.length)];
-    const [itemId] = await Inventory.addItemToPlayer(plyId, item, 1);
+    const [itemId] = await Inventory.addItemToPlayer(plyId, item, 1, {
+      priceMultiplier: enoughPoliceForFullPrice ? 1 : 0.5,
+      hiddenKeys: ['priceMultiplier'],
+    });
 
     // broken phone in loottable is added as a way for a solo player to consistently get electronics by recycling
     if (item === 'phone') {

@@ -21,7 +21,8 @@ export const sellItem = (itemState: Inventory.ItemState) => {
     const success = await Inventory.removeItemByIdFromInventory('stash', FENCE_INVENTORY_NAME, itemState.id);
     if (!success) return;
 
-    const itemPrice = itemPrices[itemState.name];
+    const multiplier = itemState.metadata?.priceMultiplier ?? 1;
+    const itemPrice = itemPrices[itemState.name] * multiplier;
     currentCash += itemPrice;
 
     fenceLogger.silly(`Sold item ${itemState.name} to fence for ${itemPrice}`);

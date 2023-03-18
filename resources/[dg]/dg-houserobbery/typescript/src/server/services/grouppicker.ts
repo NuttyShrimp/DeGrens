@@ -1,4 +1,3 @@
-import { Police } from '@dgx/server';
 import stateManager from 'classes/StateManager';
 import { mainLogger } from 'sv_logger';
 
@@ -9,11 +8,6 @@ export const startPlayerPickingThread = () => {
 };
 
 export const pickLuckyPlayer = (skippedCids: number[] = []) => {
-  if (!Police.canDoActivity('houserobbery')) {
-    mainLogger.info('tried picking player for houserobbery but not enough police');
-    return;
-  }
-
   const cids = stateManager.getPossibleTargets(skippedCids);
   if (cids.length == 0) {
     mainLogger.info('tried picking player for houserobbery but no one in queue');
