@@ -1,4 +1,4 @@
-import { BlipManager, Events, UI } from '@dgx/client';
+import { BlipManager, Events, Notifications, UI } from '@dgx/client';
 
 let isDispatchOpen = false;
 let lastCallId: string;
@@ -66,10 +66,12 @@ export const disableDispatch = () => {
     refresh: true,
   });
   BlipManager.disableCategory('dispatch');
+  Notifications.add('Dispatch gedeactiveerd');
 };
 
 export const enableDispatch = () => {
   dispatchDisabled = false;
   Events.emitNet('dg-dispatch:loadMore', 0);
   BlipManager.enableCategory('dispatch');
+  Notifications.add('Dispatch geactiveerd');
 };

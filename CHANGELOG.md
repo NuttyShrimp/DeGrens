@@ -39,6 +39,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Meer data bij alle weed logs
 - Increase required flags for anticheat ban
 - Meth drytime verlaagd
+- Melding bij het togglen van dispatch
 
 ### Fixed
 - Hoogte van camera en verrekijker gefixt
