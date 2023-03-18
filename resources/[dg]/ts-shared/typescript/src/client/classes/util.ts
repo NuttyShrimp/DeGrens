@@ -215,7 +215,7 @@ class Util extends UtilShared {
   };
 
   deleteEntity = (entity: number) => {
-    if (!entity || !DoesEntityExist(entity) || NetworkGetEntityIsLocal(entity)) return;
+    if (!entity || !DoesEntityExist(entity) || !NetworkGetEntityIsNetworked(entity)) return;
     const netId = NetworkGetNetworkIdFromEntity(entity);
     if (!netId || !NetworkDoesNetworkIdExist(netId)) return;
     Events.emitNet('dgx:deleteEntity', netId);
