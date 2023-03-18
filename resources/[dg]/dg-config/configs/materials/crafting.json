@@ -147,7 +147,7 @@
       ]
     },
     "container_ammo": {
-      "requiredReputation": 175,
+      "requiredReputation": 100,
       "items": [
         {
           "name": "refined_copper",
@@ -208,263 +208,103 @@
       "requiredReputation": 0,
       "items": [
         {
-          "name": "refined_copper",
-          "amount": 3
-        },
-        {
-          "name": "refined_steel",
-          "amount": 3
-        },
-        {
-          "name": "material_glass",
-          "amount": 3
-        },
-        {
-          "name": "refined_iron",
-          "amount": 3
-        },
-        {
-          "name": "refined_plastic",
-          "amount": 3
-        },
-        {
-          "name": "refined_aluminum",
-          "amount": 3
+          "name": "advanced_parts",
+          "amount": 4
         },
         {
           "name": "material_electronics",
-          "amount": 4
+          "amount": 2
         }
       ]
     },
     "weapon_heavypistol": {
-      "requiredReputation": 20,
+      "requiredReputation": 50,
       "items": [
         {
-          "name": "refined_copper",
-          "amount": 4
-        },
-        {
-          "name": "refined_steel",
-          "amount": 4
-        },
-        {
-          "name": "material_glass",
-          "amount": 4
-        },
-        {
-          "name": "refined_iron",
-          "amount": 4
-        },
-        {
-          "name": "refined_plastic",
-          "amount": 2
-        },
-        {
-          "name": "refined_aluminum",
-          "amount": 4
+          "name": "advanced_parts",
+          "amount": 7
         },
         {
           "name": "material_electronics",
-          "amount": 4
+          "amount": 3
         }
       ]
     },
     "weapon_appistol": {
-      "requiredReputation": 20,
+      "requiredReputation": 175,
       "items": [
         {
-          "name": "refined_copper",
-          "amount": 6
-        },
-        {
-          "name": "refined_steel",
-          "amount": 6
-        },
-        {
-          "name": "material_glass",
-          "amount": 6
-        },
-        {
-          "name": "refined_iron",
-          "amount": 6
-        },
-        {
-          "name": "refined_plastic",
-          "amount": 5
-        },
-        {
-          "name": "refined_aluminum",
-          "amount": 6
+          "name": "advanced_parts",
+          "amount": 10
         },
         {
           "name": "material_electronics",
-          "amount": 4
+          "amount": 5
         }
       ]
     },
     "weapon_machinepistol": {
-      "requiredReputation": 35,
+      "requiredReputation": 175,
       "items": [
         {
-          "name": "refined_copper",
-          "amount": 6
-        },
-        {
-          "name": "refined_steel",
-          "amount": 6
-        },
-        {
-          "name": "material_glass",
-          "amount": 6
-        },
-        {
-          "name": "refined_iron",
-          "amount": 6
-        },
-        {
-          "name": "refined_plastic",
-          "amount": 5
-        },
-        {
-          "name": "refined_aluminum",
-          "amount": 6
+          "name": "advanced_parts",
+          "amount": 10
         },
         {
           "name": "material_electronics",
-          "amount": 4
+          "amount": 5
         }
       ]
     },
     "weapon_microsmg": {
-      "requiredReputation": 35,
+      "requiredReputation": 75,
       "items": [
         {
-          "name": "refined_copper",
-          "amount": 7
-        },
-        {
-          "name": "refined_steel",
-          "amount": 8
-        },
-        {
-          "name": "material_glass",
-          "amount": 7
-        },
-        {
-          "name": "refined_iron",
-          "amount": 7
-        },
-        {
-          "name": "refined_plastic",
-          "amount": 6
-        },
-        {
-          "name": "refined_aluminum",
-          "amount": 7
+          "name": "advanced_parts",
+          "amount": 15
         },
         {
           "name": "material_electronics",
-          "amount": 4
+          "amount": 8
         }
       ]
     },
     "weapon_assaultsmg": {
-      "requiredReputation": 40,
+      "requiredReputation": 75,
       "items": [
         {
-          "name": "refined_copper",
-          "amount": 7
-        },
-        {
-          "name": "refined_steel",
-          "amount": 8
-        },
-        {
-          "name": "material_glass",
-          "amount": 7
-        },
-        {
-          "name": "refined_iron",
-          "amount": 7
-        },
-        {
-          "name": "refined_plastic",
-          "amount": 6
-        },
-        {
-          "name": "refined_aluminum",
-          "amount": 7
+          "name": "advanced_parts",
+          "amount": 15
         },
         {
           "name": "material_electronics",
-          "amount": 4
+          "amount": 8
         }
       ]
     },
     "weapon_advancedrifle": {
-      "requiredReputation": 175,
+      "requiredReputation": 125,
       "items": [
         {
-          "name": "refined_copper",
-          "amount": 10
-        },
-        {
-          "name": "refined_steel",
-          "amount": 13
-        },
-        {
-          "name": "material_glass",
-          "amount": 10
-        },
-        {
-          "name": "refined_iron",
-          "amount": 10
-        },
-        {
-          "name": "refined_plastic",
-          "amount": 8
-        },
-        {
-          "name": "refined_aluminum",
-          "amount": 10
+          "name": "advanced_parts",
+          "amount": 20
         },
         {
           "name": "material_electronics",
-          "amount": 4
+          "amount": 10
         }
       ]
     },
     "weapon_assaultrifle": {
-      "requiredReputation": 175,
+      "requiredReputation": 125,
       "items": [
         {
-          "name": "refined_copper",
-          "amount": 10
-        },
-        {
-          "name": "refined_steel",
-          "amount": 13
-        },
-        {
-          "name": "material_glass",
-          "amount": 10
-        },
-        {
-          "name": "refined_iron",
-          "amount": 10
-        },
-        {
-          "name": "refined_plastic",
-          "amount": 8
-        },
-        {
-          "name": "refined_aluminum",
-          "amount": 10
+          "name": "advanced_parts",
+          "amount": 20
         },
         {
           "name": "material_electronics",
-          "amount": 4
+          "amount": 10
         }
       ]
     },
@@ -472,24 +312,12 @@
       "requiredReputation": 275,
       "items": [
         {
-          "name": "refined_steel",
-          "amount": 15
-        },
-        {
-          "name": "material_glass",
-          "amount": 20
-        },
-        {
-          "name": "refined_iron",
-          "amount": 20
-        },
-        {
-          "name": "refined_aluminum",
-          "amount": 15
+          "name": "advanced_parts",
+          "amount": 25
         },
         {
           "name": "material_electronics",
-          "amount": 10
+          "amount": 12
         }
       ]
     },
@@ -497,66 +325,54 @@
       "requiredReputation": 275,
       "items": [
         {
-          "name": "refined_steel",
-          "amount": 15
-        },
-        {
-          "name": "material_glass",
-          "amount": 20
-        },
-        {
-          "name": "refined_iron",
-          "amount": 10
-        },
-        {
-          "name": "refined_aluminum",
-          "amount": 15
+          "name": "advanced_parts",
+          "amount": 25
         },
         {
           "name": "material_electronics",
-          "amount": 10
+          "amount": 12
         }
       ]
     },
     "smg_extendedclip": {
-      "requiredReputation": 70,
+      "requiredReputation": 100,
       "items": [
         {
           "name": "refined_steel",
-          "amount": 3
+          "amount": 5
         },
         {
           "name": "refined_copper",
-          "amount": 3
+          "amount": 5
         },
         {
           "name": "refined_iron",
-          "amount": 3
+          "amount": 5
         },
         {
           "name": "refined_aluminum",
-          "amount": 3
+          "amount": 5
         }
       ]
     },
     "pistol_suppressor": {
-      "requiredReputation": 70,
+      "requiredReputation": 90,
       "items": [
         {
           "name": "refined_steel",
-          "amount": 3
+          "amount": 5
         },
         {
           "name": "refined_copper",
-          "amount": 3
+          "amount": 5
         },
         {
           "name": "refined_iron",
-          "amount": 3
+          "amount": 5
         },
         {
           "name": "refined_aluminum",
-          "amount": 3
+          "amount": 5
         }
       ]
     },
@@ -582,7 +398,7 @@
       ]
     },
     "big_explosive": {
-      "requiredReputation": 200,
+      "requiredReputation": 750,
       "items": [
         {
           "name": "refined_steel",
@@ -602,7 +418,7 @@
         },
         {
           "name": "material_glass",
-          "amount": 3
+          "amount": 10
         }
       ]
     },
@@ -833,6 +649,48 @@
           "amount": 2
         }
       ]
+    },
+    "advanced_parts": {
+      "requiredReputation": 500,
+      "items": [
+        {
+          "name": "refined_aluminum",
+          "amount": 1
+        },
+        {
+          "name": "refined_iron",
+          "amount": 1
+        },
+        {
+          "name": "refined_steel",
+          "amount": 1
+        },
+        {
+          "name": "refined_copper",
+          "amount": 1
+        },
+        {
+          "name": "material_glass",
+          "amount": 1
+        },
+        {
+          "name": "refined_plastic",
+          "amount": 1
+        }
+      ]
+    },
+    "armor": {
+      "requiredReputation": 250,
+      "items": [
+        {
+          "name": "refined_steel",
+          "amount": 2
+        },
+        {
+          "name": "refined_plastic",
+          "amount": 2
+        }
+      ]
     }
   },
   "benches": {
@@ -845,7 +703,10 @@
         "radio",
         "explosive_case",
         "container_weedbuds",
-        "meth_lab_keycard"
+        "meth_lab_keycard",
+        "advanced_parts",
+        "big_explosive",
+        "armor"
       ],
       "reputation": "crafting"
     },
@@ -867,9 +728,11 @@
       "items": [
         "weapon_pistol",
         "weapon_heavypistol",
+        "weapon_machinepistol",
         "weapon_microsmg",
         "weapon_advancedrifle",
         "weapon_grenade",
+        "pistol_suppressor",
         "luxuryfinish",
         "mini_emp",
         "thermite",
@@ -880,8 +743,9 @@
     "weapon_bench_B": {
       "items": [
         "weapon_pistol",
+        "weapon_heavypistol",
         "weapon_appistol",
-        "weapon_machinepistol",
+        "weapon_microsmg",
         "weapon_assaultrifle",
         "weapon_grenade",
         "luxuryfinish",
@@ -896,6 +760,7 @@
       "items": [
         "weapon_pistol",
         "weapon_heavypistol",
+        "weapon_machinepistol",
         "weapon_assaultsmg",
         "weapon_assaultrifle",
         "weapon_pipebomb",
