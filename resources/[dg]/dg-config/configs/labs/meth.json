@@ -1,7 +1,7 @@
 {
   "fillAmount": 5,
   "resetTime": 30,
-  "dryTime": 72,
+  "dryTime": 24,
   "hack": {
     "length": 6,
     "time": 4,

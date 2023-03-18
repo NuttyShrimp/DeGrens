@@ -38,6 +38,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Je ziet geen dollartekens in jobcenter app meer bij jobs waar payoutlevels niet gebruikt worden
 - Meer data bij alle weed logs
 - Increase required flags for anticheat ban
+- Meth drytime verlaagd
 
 ### Fixed
 - Hoogte van camera en verrekijker gefixt
