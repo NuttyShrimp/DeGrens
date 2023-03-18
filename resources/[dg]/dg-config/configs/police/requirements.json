@@ -17,9 +17,6 @@
   "bench_container_enter": {
     "players": 20
   },
-  "bench_container_mold": {
-    "players": 40
-  },
   "labs_meth": {
     "players": 20
   },

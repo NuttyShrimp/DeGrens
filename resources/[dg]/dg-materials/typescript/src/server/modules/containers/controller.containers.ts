@@ -47,11 +47,6 @@ Events.onNet('materials:containers:meltMold', async (src: number) => {
     return;
   }
 
-  if (!Police.canDoActivity('bench_container_mold')) {
-    Notifications.add(src, 'Momenteel niet warm genoeg', 'error');
-    return;
-  }
-
   const containerId = getContainerIdWhereKeyIs(moldItem.id);
   if (!containerId) {
     Notifications.add(src, 'Vorm onbekend', 'error');
