@@ -24,6 +24,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Je krijgt nu een beetje cash wanneer je naar de gevangenis wordt gestuurd om eten/drinken te kopen 
 - Mails worden nu teruggezet als je UI restart
 - Je kan nu altijd cornersellen maar met prijsvermindering in bepaalde situaties
+- Je kan voertuigen nu ook recoveren via de garage lijst. Dit kan enkel wanneer je voertuig uit staat maar nergens meer op de map te vinden is
 
 ### Changed
 - Mogelijkheid om verschillende verkoop aantallen per item te bepalen bij cornersell

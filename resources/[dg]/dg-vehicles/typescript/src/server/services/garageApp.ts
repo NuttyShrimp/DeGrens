@@ -106,31 +106,3 @@ RPC.register('vehicles:server:app:getVehicles', async src => {
   });
   return vehicles;
 });
-
-Events.onNet('vehicles:server:app:recoverVehicle', async (plyId, vin: string) => {
-  if (!vinManager.doesVinExist(vin) || !vinManager.isVinFromPlayerVeh(vin)) return;
-
-  const vehicle = await getPlayerVehicleInfo(vin);
-  if (!vehicle || vehicle.state !== 'out') return;
-
-  const cid = Util.getCID(plyId);
-  if (cid !== vehicle.cid) return;
-
-  const netId = vinManager.getNetId(vin);
-  if (netId) {
-    Notifications.add(plyId, 'Je voertuig staat nog ergens uit! Probeer het te tracken', 'error');
-    return;
-  }
-
-  setVehicleState(vin, 'parked');
-  Notifications.add(plyId, 'Je voertuig staat terug in de garage', 'success');
-
-  Util.Log(
-    'vehicles:garageApp:recover',
-    {
-      vin,
-    },
-    `${Util.getName(plyId)} has recovered nonexistent vehicle`,
-    plyId
-  );
-});

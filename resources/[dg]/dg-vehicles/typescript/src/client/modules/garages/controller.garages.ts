@@ -12,8 +12,19 @@ on('dg-vehicles:garages:park', () => {
   Events.emitNet('vehicles:garage:park', NetworkGetNetworkIdFromEntity(targetVeh));
 });
 
-UI.RegisterUICallback('vehicles:garage:takeVehicle', (data, cb) => {
-  Events.emitNet('vehicles:garage:takeVehicle', data);
+UI.RegisterUICallback('vehicles:garage:takeVehicle', (data: { vin: string }, cb) => {
+  Events.emitNet('vehicles:garage:takeVehicle', data.vin);
+  cb({
+    data: {},
+    meta: {
+      ok: true,
+      message: 'done',
+    },
+  });
+});
+
+UI.RegisterUICallback('vehicles:garage:tryToRecover', (data: { vin: string }, cb) => {
+  Events.emitNet('vehicles:garage:recoverVehicle', data.vin);
   cb({
     data: {},
     meta: {

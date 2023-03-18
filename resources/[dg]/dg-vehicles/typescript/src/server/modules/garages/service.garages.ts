@@ -19,6 +19,7 @@ import { getNativeStatus } from '../status/service.status';
 import { GarageThread } from './classes/parkingSpotThread';
 import { garageLogger } from './logger.garages';
 import { addVehicleGarageLog, getVehicleGarageLog } from './services/logs.garages';
+import vinManager from '../identification/classes/vinmanager';
 
 const garages: Map<string, Garage.Garage> = new Map();
 const parkingSpotThreads: Map<number, GarageThread> = new Map();
@@ -166,20 +167,7 @@ export const showPlayerGarage = async (src: number) => {
       title: vehInfo?.name ?? '',
       description: `Plaat: ${veh.plate} | ${VehicleStateTranslation[veh.state]}`,
       submenu: [
-        {
-          title: 'Neem voertuig uit garage',
-          callbackURL: veh.state === 'parked' ? 'vehicles:garage:takeVehicle' : undefined,
-          data: {
-            vin: veh.vin,
-          },
-          disabled: veh.state !== 'parked',
-        },
-        {
-          title: 'Voertuig Status',
-          description: `${VehicleStateTranslation[veh.state]} | Engine: ${Math.round(
-            (veh.status?.engine ?? 1000) / 10
-          )}% | Body: ${Math.round((veh.status?.body ?? 1000) / 10)}%`,
-        },
+        ...buildBaseGarageVehicleMenuEntry(veh),
         {
           title: 'Voertuig Garage log',
           submenu: garageLogsEntries,
@@ -206,23 +194,7 @@ export const showPlayerGarage = async (src: number) => {
   const sharedVehicles = await getPlayerSharedVehicles(cid, garage_id);
   for (const veh of sharedVehicles) {
     const vehInfo = getConfigByModel(veh.model);
-
-    const vehSubmenu: ContextMenu.Entry[] = [
-      {
-        title: 'Neem voertuig uit garage',
-        callbackURL: 'vehicles:garage:takeVehicle',
-        data: {
-          vin: veh.vin,
-        },
-        disabled: veh.state !== 'parked',
-      },
-      {
-        title: 'Voertuig Status',
-        description: `${VehicleStateTranslation[veh.state]} | Engine: ${Math.round(
-          veh.status.engine / 10
-        )}% | Body: ${Math.round(veh.status.body / 10)}%`,
-      },
-    ];
+    const vehSubmenu: ContextMenu.Entry[] = buildBaseGarageVehicleMenuEntry(veh);
 
     // only if you are owner or if its owned by 1000, can you see logs in shared garage
     if (veh.cid === cid || veh.cid === 1000) {
@@ -398,10 +370,53 @@ export const doesCidHasAccess = (cid: number, garageId: string) => {
   }
 };
 
+const buildBaseGarageVehicleMenuEntry = (veh: Vehicle.Vehicle): ContextMenu.Entry[] => {
+  return [
+    {
+      title: veh.state === 'parked' ? 'Neem voertuig uit garage' : 'Voertuig staat niet hier',
+      callbackURL: veh.state === 'parked' ? 'vehicles:garage:takeVehicle' : 'vehicles:garage:tryToRecover',
+      data: {
+        vin: veh.vin,
+      },
+    },
+    {
+      title: 'Voertuig Status',
+      description: `${VehicleStateTranslation[veh.state]} | Engine: ${Math.round(
+        (veh.status?.engine ?? 1000) / 10
+      )}% | Body: ${Math.round((veh.status?.body ?? 1000) / 10)}%`,
+    },
+  ];
+};
+
 const buildVehicleGarageLogMenuEntries = async (vin: string): Promise<ContextMenu.Entry[]> => {
   const logs = await getVehicleGarageLog(vin);
   return logs.map(log => ({
     title: `${log.cid} heeft het voertuig ${log.action === 'parked' ? 'geparkeerd' : 'uitgehaald'}`,
     description: log.state,
   }));
+};
+
+export const recoverNonExistentVehicle = async (plyId: number, vin: string) => {
+  if (!vinManager.doesVinExist(vin) || !vinManager.isVinFromPlayerVeh(vin)) return;
+
+  const vehicleInfo = await getPlayerVehicleInfo(vin);
+  if (!vehicleInfo || vehicleInfo.state !== 'out') return;
+
+  const netId = vinManager.getNetId(vin);
+  if (netId) {
+    Notifications.add(plyId, 'Je voertuig staat nog ergens uit. Probeer het te tracken', 'error');
+    return;
+  }
+
+  setVehicleState(vin, 'parked');
+  Notifications.add(plyId, 'Je voertuig staat terug in de garage', 'success');
+
+  Util.Log(
+    'vehicles:garage:recover',
+    {
+      vin,
+    },
+    `${Util.getName(plyId)}(${plyId}) has recovered nonexistent vehicle (${vin})`,
+    plyId
+  );
 };

@@ -26,7 +26,7 @@ UI.RegisterUICallback('phone/garage/track', (data: { vin: string }, cb) => {
 });
 
 UI.RegisterUICallback('phone/garage/recover', (data: { vin: string }, cb) => {
-  Events.emitNet('vehicles:server:app:recoverVehicle', data.vin);
+  Events.emitNet('vehicles:garage:recoverVehicle', data.vin);
   cb({
     data: {},
     meta: {

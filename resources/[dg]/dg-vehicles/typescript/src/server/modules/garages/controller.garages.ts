@@ -1,7 +1,6 @@
 import { Auth, Events, RPC } from '@dgx/server';
 import { setAllVehiclesInGarage } from 'db/repository';
 import fs from 'fs';
-import { validateVehicleVin } from 'modules/identification/service.id';
 
 import { garageLogger } from './logger.garages';
 import { isSchemaValid } from './schema.garages';
@@ -10,6 +9,7 @@ import {
   doesCidHasAccess,
   GetGarages,
   isOnParkingSpot,
+  recoverNonExistentVehicle,
   registerGarage,
   setGaragesLoaded,
   showPlayerGarage,
@@ -61,8 +61,8 @@ Events.onNet('dg-vehicles:garages:open', (src: number) => {
   showPlayerGarage(src);
 });
 
-Events.onNet('vehicles:garage:takeVehicle', (src, data: { vin: string }) => {
-  takeVehicleOutGarage(src, data.vin);
+Events.onNet('vehicles:garage:takeVehicle', (src, vin: string) => {
+  takeVehicleOutGarage(src, vin);
 });
 
 Events.onNet('vehicles:garage:park', (src, vehNetId: number) => {
@@ -85,4 +85,8 @@ Events.onNet('vehicles:garage:leftZone', (src: number) => {
 
 RPC.register('vehicles:garage:isOnParkingSpot', (src, netId: number | null) => {
   return isOnParkingSpot(src, netId);
+});
+
+Events.onNet('vehicles:garage:recoverVehicle', async (plyId, vin: string) => {
+  recoverNonExistentVehicle(plyId, vin);
 });
