@@ -37,7 +37,7 @@ export const initializeRadiotowerStates = () => {
   });
 
   // wait random amount before first time available since restart
-  const rndMinutes = Util.getRndInteger(30, 60);
+  const rndMinutes = Util.isDevEnv() ? 1 : Util.getRndInteger(30, 60);
   setTimeout(() => {
     radioTowerIds.forEach(towerId => {
       resetTowerState(towerId, false);
