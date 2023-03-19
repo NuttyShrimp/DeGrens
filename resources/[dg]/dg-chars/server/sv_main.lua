@@ -33,10 +33,11 @@ local activeInstances = {}
 -- 	TriggerClientEvent("qb-houses:client:setHouseConfig", -1, Houses)
 -- end
 
-RegisterNetEvent('dg-chars:server:newCharSpawn', function()
-	local src = source
-  DGX.Inventory.giveStarterItems(src)
-	exports['dg-apartments']:enterApartment(src)
+DGX.Util.onCharSpawn(function(plyId, isNewCharacter)
+  if not isNewCharacter then return end
+  
+  DGX.Inventory.giveStarterItems(plyId)
+	exports['dg-apartments']:enterApartment(plyId)
 end)
 
 DGCore.Functions.CreateCallback('dg-chars:server:setupClient', function(source, cb)

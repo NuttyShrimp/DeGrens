@@ -131,8 +131,8 @@ Events.onNet('police:prison:tryToLeave', (src: number) => {
   leavePrison(src);
 });
 
-Events.onNet('police:prison:tryToRestore', (src: number) => {
-  restorePlayerSentence(src);
+Util.onCharSpawn(plyId => {
+  restorePlayerSentence(plyId);
 });
 
 Events.onNet('police:prison:checkPrisoners', (src: number) => {

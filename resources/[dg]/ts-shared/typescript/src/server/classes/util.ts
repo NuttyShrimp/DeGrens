@@ -287,6 +287,12 @@ class Util extends UtilShared {
       }, 100);
     });
   };
+
+  public onCharSpawn = (handler: (plyId: number, isNewCharacter: boolean) => void) => {
+    onNet('dg-chars:server:finishSpawn', (isNewCharacter: boolean) => {
+      handler(source, isNewCharacter);
+    });
+  };
 }
 
 export class Status {

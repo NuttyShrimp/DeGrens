@@ -38,7 +38,7 @@ export const changeJob = (groupId: string, job: string | null) => {
     if (owner.serverId) {
       Phone.showNotification(owner.serverId, {
         id: `phone-jobs-groups-create`,
-        title: 'Kon job niet veranderen',
+        title: 'jobcenter',
         description: 'Groep is al bezig met een job',
         icon: 'jobcenter',
       });

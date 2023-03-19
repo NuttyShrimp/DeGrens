@@ -90,10 +90,6 @@ Util.onPlayerUnloaded(() => {
   cleanupJail();
 });
 
-onNet('dg-chars:client:finishSpawn', () => {
-  Events.emitNet('police:prison:tryToRestore');
-});
-
 Events.onNet('police:prison:restoreSentence', () => {
   restoreSentence();
 });
