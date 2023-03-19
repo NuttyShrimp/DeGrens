@@ -71,11 +71,6 @@ export const VisionGame: FC<Gridgame.VisionGameData & Gridgame.GameComponentProp
   const handleClick = useCallback(
     (cell: Gridgame.Cell) => {
       if (cell.data?.cantClick) return;
-      if (clickTimeout !== null) {
-        console.log('clear');
-        clearTimeout(clickTimeout);
-        setClickTimeout(null);
-      }
 
       // Cycle colors
       if (cell.active) {
@@ -87,11 +82,15 @@ export const VisionGame: FC<Gridgame.VisionGameData & Gridgame.GameComponentProp
         setCellKey(cell.id, 'active', true);
       }
 
-      const timeout = setTimeout(() => {
-        setClickTimeout(null);
-        setCheckEnd(true);
-      }, 750);
-      setClickTimeout(timeout);
+      if (clickTimeout !== null) {
+        clearTimeout(clickTimeout);
+      }
+      setClickTimeout(
+        setTimeout(() => {
+          setClickTimeout(null);
+          setCheckEnd(true);
+        }, 750)
+      );
     },
     [clickTimeout, cells]
   );

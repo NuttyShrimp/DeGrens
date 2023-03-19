@@ -172,7 +172,7 @@
     ],
     "flags": [
       {
-        "name": "isHeistsIllegalShop",
+        "name": "heistShopNPC",
         "active": true
       }
     ],

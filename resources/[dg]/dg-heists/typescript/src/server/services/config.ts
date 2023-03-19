@@ -1,10 +1,10 @@
 import { Config } from '@dgx/server';
 
-let configData: Criminal.Config | null = null;
+let configData: Heists.Config | null = null;
 const config = new Proxy(
   {},
   {
-    get(_: any, prop: keyof Criminal.Config) {
+    get(_: any, prop: keyof Heists.Config) {
       if (configData == null) {
         throw new Error('Config was not loaded yet...');
       }
@@ -13,14 +13,14 @@ const config = new Proxy(
   }
 );
 
-on('dg-config:moduleLoaded', (module: string, data: Criminal.Config) => {
-  if (module !== 'criminal') return;
+on('dg-config:moduleLoaded', (module: string, data: Heists.Config) => {
+  if (module !== 'heists') return;
   configData = data;
 });
 
 export const loadConfig = async () => {
   await Config.awaitConfigLoad();
-  configData = Config.getConfigValue<Criminal.Config>('criminal');
+  configData = Config.getConfigValue<Heists.Config>('heists');
 };
 
-export default config as Criminal.Config;
+export default config as Heists.Config;

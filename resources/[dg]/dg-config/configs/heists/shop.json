@@ -1,32 +1,39 @@
 {
-  "mini_emp_part": {
-    "text": "Onderdeel voor EMP",
-    "laptop": "mini_emp_part",
-    "cost": 5
+  "pickupZone": {
+    "x": 2735.9851,
+    "y": 4279.0996,
+    "z": 48.4966,
+    "w": 272.7307
   },
-  "thermite_part": {
-    "text": "Thermiet Poeder",
-    "laptop": "thermite_part",
-    "cost": 5
-  },
-  "drive_v1": {
-    "text": "Laptop met v1.0 Software",
-    "laptop": "laptop_v1",
-    "cost": 10
-  },
-  "drive_v2": {
-    "text": "Laptop met v2.0 Software",
-    "laptop": "laptop_v2",
-    "cost": 20
-  },
-  "drive_v3": {
-    "text": "Laptop met v3.0 Software",
-    "laptop": "laptop_v3",
-    "cost": 30
-  },
-  "drive_v5": {
-    "text": "Laptop met v5.0 Software",
-    "laptop": "laptop_v5",
-    "cost": 40
-  }
+  "requiredReputation": 200,
+  "items": [
+    {
+      "item": "mini_emp_part",
+      "price": 5
+    },
+    {
+      "item": "thermite_part",
+      "price": 5
+    },
+    {
+      "item": "laptop_v1",
+      "price": 10,
+      "requiredItem": "drive_v1"
+    },
+    {
+      "item": "laptop_v2",
+      "price": 20,
+      "requiredItem": "drive_v2"
+    },
+    {
+      "item": "laptop_v3",
+      "price": 30,
+      "requiredItem": "drive_v3"
+    },
+    {
+      "item": "laptop_v5",
+      "price": 40,
+      "requiredItem": "drive_v5"
+    }
+  ]
 }
