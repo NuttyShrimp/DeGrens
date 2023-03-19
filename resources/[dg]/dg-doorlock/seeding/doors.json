@@ -1261,8 +1261,8 @@
     "authorized": {},
     "hideInteraction": true,
     "thermiteable": {
-      "grid": 4,
-      "amount": 1,
+      "grid": 5,
+      "amount": 5,
       "ped": {
         "x": 149.03,
         "y": -1047.16,
@@ -1287,8 +1287,8 @@
     "authorized": {},
     "hideInteraction": true,
     "thermiteable": {
-      "grid": 4,
-      "amount": 1,
+      "grid": 5,
+      "amount": 5,
       "ped": {
         "x": 313.33,
         "y": -285.51,
@@ -1313,8 +1313,8 @@
     "authorized": {},
     "hideInteraction": true,
     "thermiteable": {
-      "grid": 4,
-      "amount": 1,
+      "grid": 5,
+      "amount": 5,
       "ped": {
         "x": -351.65,
         "y": -56.34,
@@ -1339,8 +1339,8 @@
     "authorized": {},
     "hideInteraction": true,
     "thermiteable": {
-      "grid": 4,
-      "amount": 1,
+      "grid": 5,
+      "amount": 5,
       "ped": {
         "x": -1208.53,
         "y": -335.7,
@@ -1365,8 +1365,8 @@
     "authorized": {},
     "hideInteraction": true,
     "thermiteable": {
-      "grid": 4,
-      "amount": 1,
+      "grid": 5,
+      "amount": 5,
       "ped": {
         "x": -2956.21,
         "y": 484.09,
@@ -1391,8 +1391,8 @@
     "authorized": {},
     "hideInteraction": true,
     "thermiteable": {
-      "grid": 4,
-      "amount": 1,
+      "grid": 5,
+      "amount": 5,
       "ped": {
         "x": 1173.66,
         "y": 2713.14,
@@ -3473,5 +3473,62 @@
         "lowsantos"
       ]
     }
+  },
+  {
+    "description": "bobcat main door",
+    "locked": true,
+    "distance": 2,
+    "doors": [
+      {
+        "model": "v_ilev_rc_door2",
+        "coords": {
+          "x": 914.78564453125,
+          "y": -2120.54736328125,
+          "z": 31.39502716064453
+        }
+      },
+      {
+        "model": "v_ilev_rc_door2",
+        "coords": {
+          "x": 914.5589599609375,
+          "y": -2123.1376953125,
+          "z": 31.39502716064453
+        }
+      }
+    ],
+    "authorized": {}
+  },
+  {
+    "description": "bobcat main hall tussendeur",
+    "locked": true,
+    "distance": 2,
+    "doors": [
+      {
+        "model": "v_ilev_rc_door2",
+        "coords": {
+          "x": 908.4404296875,
+          "y": -2121.276123046875,
+          "z": 31.380990982055664
+        }
+      }
+    ],
+    "authorized": {}
+  },
+  {
+    "description": "bobcat garage deur",
+    "locked": true,
+    "distance": 10,
+    "doors": [
+      {
+        "model": "gabz_bobcat_garagedoor",
+        "coords": {
+          "x": 889.9194946289062,
+          "y": -2107.7763671875,
+          "z": 30.232088088989258
+        }
+      }
+    ],
+    "authorized": {},
+    "playSound": true
   }
 ]

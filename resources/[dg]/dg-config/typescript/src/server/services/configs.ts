@@ -3,37 +3,50 @@ import * as path from 'path';
 import { mainLogger } from 'sv_logger';
 
 const root = `${GetResourcePath(GetCurrentResourceName())}/configs`;
-const configs: Map<String, Record<string, any>> = new Map();
+const configs: Record<string, any> = {};
 let configsLoaded = false;
 
 export const areConfigsLoaded = () => configsLoaded;
 
-const loadConfigsFromDir = (dir: string) => {
+const loadConfigsFromDir = (dir: string = '') => {
   const folderPath = path.join(root, dir);
-  const fileNames = fs
-    .readdirSync(folderPath, { encoding: 'utf-8' })
-    .filter(d => lstatSync(path.join(folderPath, d)).isFile());
+  const dirContent = fs.readdirSync(folderPath, { encoding: 'utf-8' });
+
+  // first split all dir content in file and subfolders
+  const fileNames: string[] = [];
+  const subfolders: string[] = [];
+  for (const d of dirContent) {
+    const stat = lstatSync(path.join(folderPath, d));
+    if (stat.isFile()) {
+      fileNames.push(d);
+    } else if (stat.isDirectory()) {
+      subfolders.push(d);
+    }
+  }
+
+  // get ref to parent object of module
+  let parentModule = configs;
+  for (const moduleId of dir.split('/')) {
+    if (moduleId === '') continue;
+    parentModule = parentModule[moduleId] ??= {};
+  }
+
+  // fill parentmodule
   for (const fileName of fileNames) {
     try {
       const data = fs.readFileSync(`${folderPath}/${fileName}`, 'utf-8');
       const parsedData = JSON.parse(data);
+
       const moduleId = fileName.replace('.json', '');
-      if (configs.has(moduleId)) {
+      if (moduleId in parentModule) {
         mainLogger.error(`${moduleId} config was already set, overwriting...`);
       }
-      if (dir === '.') {
-        configs.set(moduleId, parsedData);
-        emit('dg-config:moduleLoaded', moduleId, parsedData);
-      } else {
-        const realModule = dir.replace(/\//g, '');
-        let existingConfig = configs.get(realModule);
-        if (!existingConfig) {
-          existingConfig = {};
-        }
-        existingConfig[moduleId] = parsedData;
-        configs.set(realModule, existingConfig);
-        emit('dg-config:moduleLoaded', `${realModule}.${moduleId}`, parsedData);
-      }
+
+      parentModule[moduleId] = parsedData;
+
+      const parentModuleId = dir.substring(dir.startsWith('/') ? 1 : 0).replace('/', '.');
+      const fullModule = [parentModuleId, moduleId].filter(m => m !== '').join('.');
+      emit('dg-config:moduleLoaded', fullModule, parsedData);
     } catch (e) {
       setInterval(() => {
         mainLogger.error('Failed to load configs', e);
@@ -41,52 +54,48 @@ const loadConfigsFromDir = (dir: string) => {
       return;
     }
   }
+
+  // recursive loading of folder
+  for (const subfolder of subfolders) {
+    loadConfigsFromDir(`${dir}/${subfolder}`);
+  }
+
+  if (fileNames.length > 0) {
+    const parentModuleId = dir.substring(dir.startsWith('/') ? 1 : 0).replace('/', '.');
+    if (parentModuleId !== '') {
+      emit('dg-config:moduleLoaded', parentModuleId, parentModule);
+    }
+  }
 };
 
 export const loadConfigs = () => {
   // Use sync variants because thread affinity residentsleeper
-  // Load single files in config folder
-  loadConfigsFromDir('.');
+  loadConfigsFromDir();
 
-  // Load files in subfolders
-  const subfolders = fs
-    .readdirSync(root, { encoding: 'utf-8' })
-    .filter(d => lstatSync(path.join(root, d)).isDirectory());
-  for (const subfolder of subfolders) {
-    loadConfigsFromDir(`/${subfolder}`);
-  }
-
-  mainLogger.info(`Successfully loaded ${configs.size} config modules`);
+  mainLogger.info(`Successfully loaded ${Object.keys(configs).length} config modules`);
   configsLoaded = true;
 };
 
 export const getConfigForModule = (moduleId: string) => {
-  if (!configs.has(moduleId)) {
+  if (!configsLoaded) return;
+  if (!(moduleId in configs)) {
     mainLogger.warn(`${GetInvokingResource()} tried to get a config for an unkown module: ${moduleId}`);
     return null;
   }
-  return configs.get(moduleId);
+  return configs[moduleId];
 };
 
 // To easily get a config value if you dont want to get the whole config
 export const getConfigValue = (path: string): any => {
   if (!configsLoaded) return;
-  const steps = path.split('.');
-  const moduleId = steps.shift();
-  if (!moduleId || !configs.has(moduleId)) {
-    mainLogger.warn(
-      `${GetInvokingResource()} tried to access a invalid module: ${moduleId} via following path: ${path}`
-    );
-    return null;
-  }
-  let currentValue = configs.get(moduleId)!;
-  while (steps.length !== 0) {
-    const key = steps.shift();
-    if (!key || !(key in currentValue)) {
-      mainLogger.error(`${key} is an invalid key in the ${moduleId} module, path: ${path}`);
+  const moduleIds = path.split('.');
+  let module = configs;
+  for (const moduleId of moduleIds) {
+    if (!moduleId || !(moduleId in module)) {
+      mainLogger.error(`${moduleId} is an invalid moduleId, path: ${path}`);
       break;
     }
-    currentValue = currentValue[key];
+    module = module[moduleId];
   }
-  return currentValue;
+  return module;
 };

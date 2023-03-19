@@ -42,6 +42,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Meth drytime verlaagd
 - Melding bij het togglen van dispatch
 - Group change function opgesplitst
+- Heistsysteem opniew gemaakt
 
 ### Fixed
 - Hoogte van camera en verrekijker gefixt

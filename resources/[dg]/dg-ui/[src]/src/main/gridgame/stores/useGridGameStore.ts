@@ -12,5 +12,5 @@ export const useGridGameStore = create<Gridgame.State & Gridgame.StateActions>('
   ...initialStore,
   startGame: (id, active, size, data) => set(() => ({ active, id, gridSize: size, data })),
   resetGame: () => set(() => ({ ...initialStore })),
-  setCells: c => set(() => ({ cells: c })),
+  setCells: cb => set(s => ({ cells: cb(s.cells) })),
 }));

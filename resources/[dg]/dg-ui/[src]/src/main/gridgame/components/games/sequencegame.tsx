@@ -45,7 +45,7 @@ export const SequenceGame: FC<Gridgame.SequenceGameData & Gridgame.GameComponent
           setTimedOut(true);
         }, props.inputTime * 1000);
       }
-    }, 900);
+    }, 750);
   }, [displaySequenceItem]);
 
   useEffect(() => {

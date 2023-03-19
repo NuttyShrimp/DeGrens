@@ -1,2 +1,2 @@
-import './locations';
-import './doors';
+import './events';
+import './zones';

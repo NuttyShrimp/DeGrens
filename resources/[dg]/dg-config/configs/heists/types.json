@@ -1,0 +1,106 @@
+{
+  "fleeca": {
+    "trolley": {
+      "types": {
+        "cash": {
+          "itemName": "marked_bills",
+          "amount": [
+            15,
+            30
+          ],
+          "spawnChance": 100
+        },
+        "gold": {
+          "itemName": "gold_bar",
+          "amount": [
+            2,
+            5
+          ],
+          "spawnChance": 10
+        }
+      },
+      "specialItem": {
+        "chance": 10,
+        "item": "drive_v2"
+      }
+    }
+  },
+  "paleto": {
+    "trolley": {
+      "types": {
+        "cash": {
+          "itemName": "marked_bills",
+          "amount": [
+            15,
+            30
+          ],
+          "spawnChance": 100
+        },
+        "gold": {
+          "itemName": "gold_bar",
+          "amount": [
+            2,
+            5
+          ],
+          "spawnChance": 10
+        }
+      },
+      "specialItem": {
+        "chance": 10,
+        "item": "drive_v2"
+      }
+    }
+  },
+  "maze": {
+    "trolley": {
+      "types": {
+        "cash": {
+          "itemName": "marked_bills",
+          "amount": [
+            15,
+            30
+          ],
+          "spawnChance": 100
+        },
+        "gold": {
+          "itemName": "gold_bar",
+          "amount": [
+            2,
+            5
+          ],
+          "spawnChance": 10
+        }
+      },
+      "specialItem": {
+        "chance": 10,
+        "item": "drive_v2"
+      }
+    }
+  },
+  "pacific": {
+    "trolley": {
+      "types": {
+        "cash": {
+          "itemName": "marked_bills",
+          "amount": [
+            15,
+            30
+          ],
+          "spawnChance": 100
+        },
+        "gold": {
+          "itemName": "gold_bar",
+          "amount": [
+            2,
+            5
+          ],
+          "spawnChance": 10
+        }
+      },
+      "specialItem": {
+        "chance": 10,
+        "item": "drive_v2"
+      }
+    }
+  }
+}

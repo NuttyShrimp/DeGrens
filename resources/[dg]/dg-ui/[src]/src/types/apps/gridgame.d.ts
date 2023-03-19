@@ -10,7 +10,7 @@ declare namespace Gridgame {
   interface StateActions {
     startGame: (id: string, active: Game, size: number, data: GameData) => void;
     resetGame: () => void;
-    setCells: (cells: Cells[]) => void;
+    setCells: (cb: (oldCells: Cells[]) => Cells[]) => void;
   }
 
   type GameData = BaseGameData &
