@@ -15,8 +15,9 @@ def statMainPackage():
 def updateVersionInFile(version, p):
     with open(p, "r+") as f:
         mainCfg = json.loads("".join(f.readlines()))
-        f.seek(0)
         mainCfg["version"] = version
+        f.seek(0)
+        f.truncate()
         f.write(json.dumps(mainCfg, indent=2))
 
 
