@@ -14,11 +14,6 @@ on('onResourceStart', (resName: string) => {
   addStartedResource(resName);
 });
 
-on('dg-config:moduleLoaded', (name: string, data: { private_key: string }) => {
-  if (name !== 'auth') return;
-  setPrivateToken(data.private_key);
-});
-
 on('dg-config:moduleLoaded', (name: string, data: { private_key: string; panelEndpoint: string }) => {
   if (name === 'auth') {
     setPrivateToken(data.private_key);
