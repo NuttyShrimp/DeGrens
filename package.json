@@ -60,10 +60,10 @@
   "prisma": {
     "seed": "ts-node -P packages/db/tsconfig.json packages/db/seed.ts"
   },
-  "version": "1.1.0",
+  "version": "1.0.10",
   "pnpm": {
     "patchedDependencies": {
       "vite-plugin-sentry@1.1.7": "patches/vite-plugin-sentry@1.1.7.patch"
     }
   }
-}}
+}
