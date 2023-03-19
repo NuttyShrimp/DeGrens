@@ -1,6 +1,6 @@
 {
   "name": "dg-chat-ui",
-  "version": "1.0.10",
+  "version": "1.1.0",
   "license": "MIT",
   "scripts": {
     "dev": "vite",
@@ -26,4 +26,4 @@
     "vite": "^4.1.1",
     "vue-tsc": "^1.0.24"
   }
-}
+}}

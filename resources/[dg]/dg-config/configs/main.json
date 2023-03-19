@@ -1,7 +1,7 @@
 {
   "production": false,
   "loglevel": "info",
-  "version": "1.0.10",
+  "version": "1.1.0",
   "logServer": "http://10.0.0.2:12201/gelf",
   "devLogServer": "https://graylog.nuttyshrimp.me/gelf",
   "panelEndpoint": "https://panel.degrensrp.be",
@@ -10,4 +10,4 @@
     "privateKey": "e6928187e7c74dc290c2423ea27d6b65",
     "projectId": "6"
   }
-}
+}}

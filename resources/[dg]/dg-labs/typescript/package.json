@@ -1,6 +1,6 @@
 {
   "name": "dg-labs",
-  "version": "1.0.10",
+  "version": "1.1.0",
   "main": "index.js",
   "author": "DragonwinQ",
   "license": "MIT",
@@ -19,4 +19,4 @@
     "esbuild": "*",
     "tsconfig": "workspace:*"
   }
-}
+}}
