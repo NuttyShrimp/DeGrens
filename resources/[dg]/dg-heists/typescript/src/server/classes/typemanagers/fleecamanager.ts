@@ -49,7 +49,7 @@ export class FleecaManager implements Heists.TypeManager {
 
     UI.openContextMenu(plyId, [
       {
-        title: `Signaalsterkte: ${Math.max(percentage, 0)}%`,
+        title: percentage === -1 ? 'Uitgeschakeld' : `Signaalsterkte:  ${percentage}%`,
         icon: 'bolt',
         disabled: true,
       },
