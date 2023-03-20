@@ -128,7 +128,7 @@ export class FleecaManager implements Heists.TypeManager {
       clearTimeout(this.resetTimeout);
     }
     this.resetTimeout = setTimeout(() => {
-      this.logger.debug(`Resetting`);
+      this.logger.info(`Power has been reset`);
       this.hackAvailable = false;
       this.pickNewPowerLocation();
       this.resetTimeout = null;
