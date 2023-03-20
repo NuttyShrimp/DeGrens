@@ -30,7 +30,7 @@ class Jobs {
   }
 
   changeJob(groupId: string, job: string | null): boolean {
-    return global.exports['dg-jobs'].changeGroupJob(groupId, job);
+    return global.exports['dg-jobs'].changeJob(groupId, job);
   }
 
   changeJobOfPlayerGroup(plyId: number, job: string | null): boolean {
