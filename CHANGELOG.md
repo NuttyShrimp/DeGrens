@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - Fix group job change export name
 - Fix container die onder water zat
+- Fix electronica lootplek dat overlapt met andere peekoption
 
 ## [1.1.0]
 
