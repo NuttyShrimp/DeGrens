@@ -559,7 +559,7 @@
     "markedForSeizure": true,
     "name": "vpn",
     "label": "VPN",
-    "decayRate": 10080,
+    "decayRate": 20160,
     "image": "vpn.png",
     "description": "A VPN that hides your information",
     "size": {
