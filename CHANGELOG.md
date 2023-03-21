@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- Leefloon toegevoegd
 
 ### Changed
 - Meer feedback bij start van fleecaoverval

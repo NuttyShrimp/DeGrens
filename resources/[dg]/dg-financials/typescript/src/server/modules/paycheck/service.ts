@@ -1,7 +1,6 @@
 import { Jobs, Notifications, SQL, Util } from '@dgx/server';
 import { getConfig } from 'helpers/config';
 import accountManager from 'modules/bank/classes/AccountManager';
-import { getTaxedPrice } from 'modules/taxes/service';
 import { paycheckLogger } from './util';
 
 const paycheckCache: Map<number, number> = new Map();
@@ -71,6 +70,11 @@ export const registerPaycheck = (cid: number, amount: number, job: string, comme
 export const givePaycheck = async (src: number) => {
   const cid = Util.getCID(src);
   const logName = Util.getName(src);
+  if (paycheckIntervals.has(cid)) {
+    const intervalInfo = paycheckIntervals.get(cid)!;
+    registerPaycheck(cid, intervalInfo.amount, intervalInfo.job, 'Whitelisted paycheck');
+    paycheckIntervals.set(cid, { job: intervalInfo.job, amount: 0 });
+  }
 
   const paycheckAmount = paycheckCache.get(cid);
   if (paycheckAmount === undefined) {
@@ -128,6 +132,7 @@ export const givePaycheck = async (src: number) => {
 };
 
 export const checkInterval = (cid: number, job: string | null) => {
+  job = String(job)
   if (paycheckIntervals.has(cid)) {
     // Went offduty or changed jobs
     const intervalInfo = paycheckIntervals.get(cid)!;
@@ -139,7 +144,7 @@ export const checkInterval = (cid: number, job: string | null) => {
   }
 
   const paycheckConfig = getConfig().paycheck;
-  if (job !== null && paycheckConfig[job]) {
+  if (paycheckConfig[job]) {
     const paycheckAmount = paycheckConfig[job];
 
     paycheckIntervals.set(cid, { job, amount: 0 });

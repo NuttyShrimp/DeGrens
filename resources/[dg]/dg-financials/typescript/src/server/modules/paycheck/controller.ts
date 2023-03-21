@@ -18,6 +18,7 @@ RegisterCommand(
 
 Util.onPlayerLoaded(playerData => {
   seedPlyInCache(playerData.citizenid);
+  checkInterval(playerData.citizenid, Jobs.getCurrentJob(playerData.source));
 });
 
 Jobs.onJobUpdate((plyId, job) => {

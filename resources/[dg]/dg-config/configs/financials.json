@@ -22,7 +22,8 @@
   "paycheck": {
     "police": 18,
     "ambulance": 18,
-    "realestate": 18
+    "realestate": 18,
+    "null": 1.5
   },
   "cryptoCoins": [
     {
