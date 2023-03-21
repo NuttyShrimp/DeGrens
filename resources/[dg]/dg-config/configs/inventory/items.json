@@ -2134,5 +2134,15 @@
       "x": 3,
       "y": 3
     }
+  },
+  {
+    "name": "container_vegetables",
+    "label": "Groentendoos",
+    "image": "container_vegetables.png",
+    "size": {
+      "x": 5,
+      "y": 4
+    },
+    "useable": true
   }
 ]

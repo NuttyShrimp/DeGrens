@@ -517,4 +517,18 @@ export const PROPS: Record<string, PropAttach.PropInfo> = {
       z: 0,
     },
   },
+  item_container_vegetables: {
+    model: 'prop_coolbox_01',
+    boneId: 24818,
+    position: {
+      x: -0.54,
+      y: 0.41,
+      z: 0.02,
+    },
+    rotation: {
+      x: 91.1,
+      y: 85.3,
+      z: 8.4,
+    },
+  },
 };

@@ -173,6 +173,14 @@
     "container_weedbuds": {
       "propName": "item_container_weedbuds",
       "position": "leftShoulder"
+    },
+    "container_vegetables": {
+      "propName": "item_container_vegetables",
+      "position": "primary",
+      "animData": {
+        "animDict": "anim@heists@box_carry@",
+        "anim": "idle"
+      }
     }
   }
 }
