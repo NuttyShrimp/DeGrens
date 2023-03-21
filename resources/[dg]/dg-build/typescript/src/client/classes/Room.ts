@@ -191,6 +191,8 @@ export class Room {
 
   private createDryVolume(volume: { min: ArrayVec3; max: ArrayVec3 }) {
     if (this.dryVolHandle) return;
+    volume.min = Util.Vector3ToArray(Util.ArrayToVector3(volume.min).add(this.roomOrigin));
+    volume.max = Util.Vector3ToArray(Util.ArrayToVector3(volume.max).add(this.roomOrigin));
     this.dryVolHandle = CreateDryVolume(...volume.min, ...volume.max);
   }
 
