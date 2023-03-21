@@ -1,5 +1,6 @@
 [
-  {
+  
+    {
     "category": "super",
     "model": "adder",
     "brand": "Truffade",
@@ -7042,5 +7043,29 @@
     "price": 20000,
     "shop": "nfs",
     "type": "land"
+  },
+  {
+    "category": "emergency",
+    "model": "prago",
+    "brand": "MD Helicopters",
+    "name": "MD902 Rago",
+    "class": "X",
+    "defaultStock": 10,
+    "restockTime": 10,
+    "price": 1500000,
+    "shop": "nfs",
+    "type": "air"
+  },
+  {
+    "category": "emergency",
+    "model": "ec135",
+    "brand": "Eurocopter",
+    "name": "EC135 MUG",
+    "class": "X",
+    "defaultStock": 10,
+    "restockTime": 10,
+    "price": 1500000,
+    "shop": "nfs",
+    "type": "air"
   }
 ]
