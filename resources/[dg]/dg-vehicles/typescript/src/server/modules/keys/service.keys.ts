@@ -50,6 +50,9 @@ export const startVehicleLockpick = async (src: number, itemId: string) => {
   if (vehiclePedIsIn !== 0) {
     targetVehicle = vehiclePedIsIn;
     lockpickType = 'hotwire';
+
+    const driverSeatPed = GetPedInVehicleSeat(vehiclePedIsIn, -1);
+    if (driverSeatPed !== ped) return;
   } else {
     const { entity } = await RayCast.doRaycast(src);
     if (!entity || GetEntityType(entity) !== 2) return;
