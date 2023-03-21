@@ -44,21 +44,21 @@
       },
       "public": false
     },
-    "weapon_container_bench_c": {
-      "bench": "weapon_bench_B",
-      "position": {
-        "x": -366.9218,
-        "y": -2286.1791,
-        "z": 8.017
-      },
-      "public": false
-    },
     "weapon_container_bench_b": {
-      "bench": "weapon_bench_C",
+      "bench": "weapon_bench_B",
       "position": {
         "x": -584.8621,
         "y": -1646.2116,
         "z": 19.8062
+      },
+      "public": false
+    },
+    "weapon_container_bench_c": {
+      "bench": "weapon_bench_C",
+      "position": {
+        "x": 1494.9758,
+        "y": -2127.6318,
+        "z": 76.4424
       },
       "public": false
     }
