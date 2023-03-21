@@ -1,20 +1,41 @@
-import { Events, Keys, PolyZone, UI } from '@dgx/client';
+import { BlipManager, Events, Keys, PolyZone, UI } from '@dgx/client';
+
+const ZONES = [
+  {
+    coords: { x: -551.25, y: -201.76, z: 38.23 },
+    width: 1.1,
+    length: 2.25,
+    heading: 344,
+  },
+  {
+    coords: { x: -544.03, y: -197.52, z: 38.23 },
+    width: 2.25,
+    length: 1.1,
+    heading: 346,
+  },
+];
 
 let inCityHallZone = false;
 
-PolyZone.addBoxZone('cityhall', { x: -551.25, y: -201.76, z: 38.23 }, 1.1, 2.25, {
-  data: { id: 1 },
-  heading: 344,
-  minZ: 37.03,
-  maxZ: 39.43,
-});
+export const buildCityHallZones = () => {
+  for (let i = 0; i < ZONES.length; i++) {
+    const zone = ZONES[i];
+    PolyZone.addBoxZone('cityhall', zone.coords, zone.width, zone.length, {
+      data: { id: i },
+      heading: zone.heading,
+      minZ: zone.coords.z - 2,
+      maxZ: zone.coords.z + 2,
+    });
+  }
 
-PolyZone.addBoxZone('cityhall', { x: -544.03, y: -197.52, z: 38.23 }, 2.15, 1.1, {
-  data: { id: 2 },
-  heading: 346,
-  minZ: 37.03,
-  maxZ: 39.43,
-});
+  BlipManager.addBlip({
+    category: 'justice',
+    id: 'cityhall',
+    sprite: 439,
+    color: 2,
+    coords: ZONES[0].coords,
+  });
+};
 
 PolyZone.onEnter('cityhall', () => {
   UI.showInteraction(`${Keys.getBindedKey('+GeneralUse')} - Stad huis`);

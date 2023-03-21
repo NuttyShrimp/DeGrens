@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - Leefloon toegevoegd
+- Gemeentehuis is nu zichtbaar op je map
 
 ### Changed
 - Meer feedback bij start van fleecaoverval
