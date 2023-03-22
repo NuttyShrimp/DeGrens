@@ -23,6 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fix container die onder water zat
 - Fix electronica lootplek dat overlapt met andere peekoption
 - Je kan niet langer een voertuig lockpicken als je niet als driver zit
+- Je kan geen geld witwassen tijdens cornersell als er geen agenten zijn
 
 ## [1.1.0]
 
