@@ -2127,7 +2127,7 @@
   },
   {
     "name": "advanced_parts",
-    "label": "Geavanceerd Onderdelen",
+    "label": "Geavanceerde Onderdelen",
     "image": "advanced_parts.png",
     "decayRate": 172800,
     "size": {
