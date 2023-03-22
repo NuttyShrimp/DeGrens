@@ -6,15 +6,15 @@
           "itemName": "marked_bills",
           "amount": [
             15,
-            30
+            25
           ],
           "spawnChance": 100
         },
         "gold": {
           "itemName": "gold_bar",
           "amount": [
-            2,
-            5
+            3,
+            6
           ],
           "spawnChance": 10
         }

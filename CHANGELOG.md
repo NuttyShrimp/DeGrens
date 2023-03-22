@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Enkele decayrates en prijzen van shopitems aangepast
 - Crafting level systeem herwerkt voor sommige type benches
 - Verlaag koper aantal minigame cycles
+- Fleeca loot tweaked
 
 ### Fixed
 - Fix group job change export name
