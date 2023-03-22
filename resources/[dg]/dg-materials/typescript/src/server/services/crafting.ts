@@ -34,15 +34,19 @@ export const loadCrafting = async () => {
   const dbLevels: { benchId: string; level: number }[] = await SQL.query(`SELECT * FROM bench_levels`);
   Object.entries(getConfig().crafting.benches).forEach(([benchId, benchConfig]) => {
     let data: Materials.Crafting.Bench.Data;
+    const items = new Set(benchConfig.items);
     if (benchConfig.reputation === undefined) {
       let level = dbLevels.find(x => x.benchId === benchId)?.level;
       if (level === undefined) {
         updateBenchLevel(benchId, 0);
         level = 0;
       }
-      data = { id: benchId, items: benchConfig.items, level };
+      data = { id: benchId, items, level };
     } else {
-      data = { id: benchId, items: benchConfig.items, reputation: benchConfig.reputation };
+      data = { id: benchId, items, reputation: benchConfig.reputation };
+    }
+    if (benchConfig.visibleReputationLimit) {
+      data.visibleReputationLimit = benchConfig.visibleReputationLimit;
     }
     benches.set(benchId, data);
   });
@@ -76,17 +80,59 @@ const getReputationForBench = (bench: Materials.Crafting.Bench.Data, plyId: numb
   return bench.level;
 };
 
-const increaseReputationForBench = (bench: Materials.Crafting.Bench.Data, plyId: number) => {
+const increaseReputationForBench = (bench: Materials.Crafting.Bench.Data, plyId: number, itemName: string) => {
   if ('reputation' in bench) {
     const cid = Util.getCID(plyId);
     Reputations.setReputation(cid, bench.reputation, rep => rep + 1);
     return;
   }
 
-  const newLevel = bench.level + 1;
-  benches.set(bench.id, { ...bench, level: newLevel });
-  updateBenchLevel(bench.id, newLevel);
+  const currentReputation = getReputationForBench(bench, plyId);
+  if (currentReputation === undefined) return;
+  if (!getRecipeByItemAndValidateReputation(bench, currentReputation, itemName)) return;
+
+  // only increase reputation if item crafted was last item available
+  // by passing -1 we pass rep check, so function just gets all items for bench
+  // items are sorted from least rep to highest so we can use find
+  const availableRecipes = getAvailableRecipes(bench, -1);
+  const lastAvailableRecipe = availableRecipes.reverse().find(r => r.requiredReputation <= currentReputation);
+
+  if (!lastAvailableRecipe) return;
+  if (lastAvailableRecipe.UIData.name !== itemName) return;
+
+  bench.level++;
+  updateBenchLevel(bench.id, bench.level);
   craftingLogger.silly(`Level increased for bench ${bench.id}`);
+};
+
+const getRecipeByItemAndValidateReputation = (
+  bench: Materials.Crafting.Bench.Data,
+  reputation: number,
+  itemName: string
+) => {
+  const recipe = recipes.get(itemName);
+  if (!recipe) return;
+  if (!bench.items.has(recipe.UIData.name)) return;
+
+  if (reputation !== -1) {
+    if (recipe.requiredReputation > reputation) return;
+
+    if (bench.visibleReputationLimit) {
+      if (recipe.requiredReputation >= bench.visibleReputationLimit) return;
+    }
+  }
+
+  return recipe;
+};
+
+const getAvailableRecipes = (bench: Materials.Crafting.Bench.Data, reputation: number) => {
+  const availableRecipes: Materials.Crafting.Recipes.Recipe[] = [];
+  for (const itemName of recipes.keys()) {
+    const recipe = getRecipeByItemAndValidateReputation(bench, reputation, itemName);
+    if (!recipe) continue;
+    availableRecipes.push(recipe);
+  }
+  return availableRecipes.sort((a, b) => (a.requiredReputation < b.requiredReputation ? -1 : 1));
 };
 
 global.exports('getBenchItems', (plyId: number, benchId: string) => {
@@ -96,31 +142,27 @@ global.exports('getBenchItems', (plyId: number, benchId: string) => {
   const reputation = getReputationForBench(bench, plyId);
   if (reputation === undefined) return; // logging happens in rep module
 
-  const benchItems = Array.from(recipes.values()).filter(
-    i => bench.items.includes(i.UIData.name) && i.requiredReputation <= reputation
-  );
-
-  return benchItems.map(i => i.UIData);
+  const availableRecipes = getAvailableRecipes(bench, reputation);
+  return availableRecipes.map(r => r.UIData);
 });
 
 global.exports('getItemRecipe', (plyId: number, benchId: string, itemName: string) => {
   const bench = getBenchById(benchId);
   if (!bench) return;
 
-  const item = recipes.get(itemName);
-  if (!item) return;
-
   const reputation = getReputationForBench(bench, plyId);
   if (reputation === undefined) return;
-  if (item.requiredReputation > reputation) return;
 
-  return item.UIData;
+  const recipe = getRecipeByItemAndValidateReputation(bench, reputation, itemName);
+  if (!recipe) return;
+
+  return recipe.UIData;
 });
 
 on('inventory:craftedInBench', (plyId: number, benchId: string, item: Inventory.ItemState) => {
   const bench = getBenchById(benchId);
   if (!bench) return;
-  increaseReputationForBench(bench, plyId);
+  increaseReputationForBench(bench, plyId, item.name);
   Util.Log(
     'materials:crafting:crafted',
     {

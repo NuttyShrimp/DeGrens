@@ -57,7 +57,7 @@
       ]
     },
     "hand_cuffs": {
-      "requiredReputation": 65,
+      "requiredReputation": 45,
       "items": [
         {
           "name": "refined_iron",
@@ -176,7 +176,7 @@
       ]
     },
     "container_weapons": {
-      "requiredReputation": 200,
+      "requiredReputation": 195,
       "items": [
         {
           "name": "refined_copper",
@@ -231,7 +231,7 @@
       ]
     },
     "weapon_appistol": {
-      "requiredReputation": 175,
+      "requiredReputation": 200,
       "items": [
         {
           "name": "advanced_parts",
@@ -244,7 +244,7 @@
       ]
     },
     "weapon_machinepistol": {
-      "requiredReputation": 175,
+      "requiredReputation": 200,
       "items": [
         {
           "name": "advanced_parts",
@@ -257,7 +257,7 @@
       ]
     },
     "weapon_microsmg": {
-      "requiredReputation": 75,
+      "requiredReputation": 100,
       "items": [
         {
           "name": "advanced_parts",
@@ -270,7 +270,7 @@
       ]
     },
     "weapon_assaultsmg": {
-      "requiredReputation": 75,
+      "requiredReputation": 100,
       "items": [
         {
           "name": "advanced_parts",
@@ -283,7 +283,7 @@
       ]
     },
     "weapon_advancedrifle": {
-      "requiredReputation": 125,
+      "requiredReputation": 150,
       "items": [
         {
           "name": "advanced_parts",
@@ -296,7 +296,7 @@
       ]
     },
     "weapon_assaultrifle": {
-      "requiredReputation": 125,
+      "requiredReputation": 150,
       "items": [
         {
           "name": "advanced_parts",
@@ -309,7 +309,7 @@
       ]
     },
     "weapon_grenade": {
-      "requiredReputation": 275,
+      "requiredReputation": 300,
       "items": [
         {
           "name": "advanced_parts",
@@ -322,7 +322,7 @@
       ]
     },
     "weapon_pipebomb": {
-      "requiredReputation": 275,
+      "requiredReputation": 300,
       "items": [
         {
           "name": "advanced_parts",
@@ -335,7 +335,7 @@
       ]
     },
     "smg_extendedclip": {
-      "requiredReputation": 100,
+      "requiredReputation": 145,
       "items": [
         {
           "name": "refined_steel",
@@ -356,7 +356,7 @@
       ]
     },
     "pistol_suppressor": {
-      "requiredReputation": 90,
+      "requiredReputation": 95,
       "items": [
         {
           "name": "refined_steel",
@@ -377,7 +377,7 @@
       ]
     },
     "luxuryfinish": {
-      "requiredReputation": 500,
+      "requiredReputation": 295,
       "items": [
         {
           "name": "refined_steel",
@@ -423,7 +423,7 @@
       ]
     },
     "thermite": {
-      "requiredReputation": 300,
+      "requiredReputation": 260,
       "items": [
         {
           "name": "refined_steel",
@@ -448,7 +448,7 @@
       ]
     },
     "mini_emp": {
-      "requiredReputation": 200,
+      "requiredReputation": 230,
       "items": [
         {
           "name": "refined_steel",
@@ -738,7 +738,8 @@
         "thermite",
         "hand_cuffs",
         "container_weapons"
-      ]
+      ],
+      "visibleReputationLimit": 50
     },
     "weapon_bench_B": {
       "items": [
@@ -754,7 +755,8 @@
         "thermite",
         "hand_cuffs",
         "container_weapons"
-      ]
+      ],
+      "visibleReputationLimit": 50
     },
     "weapon_bench_C": {
       "items": [
@@ -770,7 +772,8 @@
         "thermite",
         "hand_cuffs",
         "container_weapons"
-      ]
+      ],
+      "visibleReputationLimit": 50
     },
     "mechanic_bench": {
       "items": [

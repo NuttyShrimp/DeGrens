@@ -114,11 +114,13 @@ declare namespace Materials {
       type Config = {
         items: string[];
         reputation?: ReputationType;
+        visibleReputationLimit?: number;
       };
 
       type Data = {
         id: string;
-        items: string[];
+        items: Set<string>;
+        visibleReputationLimit?: number;
       } & ({ reputation: ReputationType } | { level: number });
     }
   }

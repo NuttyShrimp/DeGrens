@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Meer feedback bij start van fleecaoverval
 - Enkele decayrates en prijzen van shopitems aangepast
+- Crafting level systeem herwerkt voor sommige type benches
 
 ### Fixed
 - Fix group job change export name
