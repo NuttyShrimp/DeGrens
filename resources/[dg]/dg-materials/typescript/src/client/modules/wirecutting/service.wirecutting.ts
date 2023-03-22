@@ -27,7 +27,7 @@ export const tryToCutWire = async (locationId: number) => {
     return;
   }
 
-  const minigameSucces = await Minigames.keygame(10, 2, 10);
+  const minigameSucces = await Minigames.keygame(5, 2, 10);
   Events.emitNet('materials:wirecutting:dispatch', locationId);
   if (!minigameSucces) {
     Notifications.add('Je was net niet sterk genoeg om te knippen...');
@@ -44,7 +44,7 @@ const doCutAction = async (locationId: number) => {
     return;
   }
 
-  const [canceled] = await Taskbar.create('scissors', 'Knippen', 30000, {
+  const [canceled] = await Taskbar.create('scissors', 'Knippen', 40000, {
     canCancel: true,
     cancelOnDeath: true,
     cancelOnMove: true,
