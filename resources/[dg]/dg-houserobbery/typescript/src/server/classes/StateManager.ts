@@ -408,7 +408,7 @@ class StateManager extends Util.Singleton<StateManager>() {
 
       Phone.sendMail(
         plyId,
-        'Taak voltooid',
+        `Taak ${failed ? 'mislukt' : 'voltooid'}`,
         'Bert B.',
         failed
           ? 'Je deed er te lang over! Ik zal je taak overhandige aan een echte professional'
