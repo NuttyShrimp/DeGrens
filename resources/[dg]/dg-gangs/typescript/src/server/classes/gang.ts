@@ -8,14 +8,14 @@ export class Gang {
   private readonly logger: winston.Logger;
   private readonly _name: string;
   private readonly _label: string;
-  private _owner!: number;
+  private _owner: number;
   private readonly members: Gangs.Members;
 
   constructor(name: string, label: string, owner: number) {
     this.logger = mainLogger.child({ module: `Gang-${name}` });
     this._name = name;
     this._label = label;
-    this.owner = owner;
+    this._owner = owner;
     this.members = new Map();
     this.loadMembers();
   }

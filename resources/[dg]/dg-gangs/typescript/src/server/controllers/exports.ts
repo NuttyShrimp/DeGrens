@@ -6,8 +6,8 @@ global.asyncExports('getGangByName', async (name: string) => {
   return gang.getClientVersion();
 });
 
-global.asyncExports('getPlayerGang', async (cid: number) => {
+global.exports('getPlayerGangName', (cid: number) => {
   const gang = gangManager.getPlayerGang(cid);
   if (!gang) return;
-  return gang.getClientVersion();
+  return gang.name;
 });
