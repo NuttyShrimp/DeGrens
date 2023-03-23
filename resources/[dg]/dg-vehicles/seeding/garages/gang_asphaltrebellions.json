@@ -1,0 +1,36 @@
+{
+  "garage_id": "asphaltrebellions",
+  "name": "Asphalt Rebellions",
+  "type": "gang",
+  "shared": true,
+  "location": {
+    "vector": {
+      "x": 986.35,
+      "y": -138.52,
+      "z": 73.09
+    },
+    "width": 10.4,
+    "length": 6.0,
+    "options": {
+      "heading": 240,
+      "minZ": 71.09,
+      "maxZ": 77.09
+    }
+  },
+  "vehicle_types": [
+    "land"
+  ],
+  "parking_spots": [
+    {
+      "type": "land",
+      "size": 2.0,
+      "distance": 1.8,
+      "heading": 56.6503,
+      "coords": {
+        "x": 986.3528,
+        "y": -138.5186,
+        "z": 73.0908
+      }
+    }
+  ]
+}

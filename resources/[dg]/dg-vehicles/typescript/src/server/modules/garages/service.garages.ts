@@ -1,4 +1,4 @@
-import { Business, Jobs, Notifications, UI, Util } from '@dgx/server';
+import { Business, Gangs, Jobs, Notifications, UI, Util } from '@dgx/server';
 import { VehicleStateTranslation } from 'helpers/enums';
 import { getConfigByModel, getVehicleType } from 'modules/info/service.info';
 
@@ -365,6 +365,8 @@ export const doesCidHasAccess = (cid: number, garageId: string) => {
       return Jobs.isCidWhitelisted(cid, 'ambulance');
     case 'business':
       return Business.hasPlyPermission(garage.garage_id, cid, 'garage_access');
+    case 'gang':
+      return Gangs.getPlayerGangName(cid) === garage.garage_id;
     default:
       return false;
   }

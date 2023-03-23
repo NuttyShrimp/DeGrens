@@ -1,0 +1,212 @@
+{
+  "garage_id": "postop_garage",
+  "name": "PostOP Garage",
+  "type": "public",
+  "shared": false,
+  "location": {
+    "vector": {
+      "x": -329.56,
+      "y": -2734.62,
+      "z": 6.02
+    },
+    "width": 33.4,
+    "length": 25.3,
+    "options": {
+      "heading": 45,
+      "minZ": 4.02,
+      "maxZ": 10.02
+    }
+  },
+  "vehicle_types": [
+    "land"
+  ],
+  "parking_spots": [
+    {
+      "type": "land",
+      "size": 2.0,
+      "distance": 1.8,
+      "heading": 320.0,
+      "coords": {
+        "x": -334.006,
+        "y": -2718.484,
+        "z": 5.004
+      }
+    },
+    {
+      "type": "land",
+      "size": 2.0,
+      "distance": 1.8,
+      "heading": 320.0,
+      "coords": {
+        "x": -331.739,
+        "y": -2720.752,
+        "z": 5.003
+      }
+    },
+    {
+      "type": "land",
+      "size": 2.0,
+      "distance": 1.8,
+      "heading": 320.0,
+      "coords": {
+        "x": -329.472,
+        "y": -2723.021,
+        "z": 5.003
+      }
+    },
+    {
+      "type": "land",
+      "size": 2.0,
+      "distance": 1.8,
+      "heading": 320.0,
+      "coords": {
+        "x": -327.206,
+        "y": -2725.289,
+        "z": 5.003
+      }
+    },
+    {
+      "type": "land",
+      "size": 2.0,
+      "distance": 1.8,
+      "heading": 320.0,
+      "coords": {
+        "x": -324.939,
+        "y": -2727.558,
+        "z": 5.003
+      }
+    },
+    {
+      "type": "land",
+      "size": 2.0,
+      "distance": 1.8,
+      "heading": 320.0,
+      "coords": {
+        "x": -322.672,
+        "y": -2729.826,
+        "z": 5.002
+      }
+    },
+    {
+      "type": "land",
+      "size": 2.0,
+      "distance": 1.8,
+      "heading": 320.0,
+      "coords": {
+        "x": -320.406,
+        "y": -2732.095,
+        "z": 5.002
+      }
+    },
+    {
+      "type": "land",
+      "size": 2.0,
+      "distance": 1.8,
+      "heading": 320.0,
+      "coords": {
+        "x": -318.139,
+        "y": -2734.364,
+        "z": 5.002
+      }
+    },
+    {
+      "type": "land",
+      "size": 2.0,
+      "distance": 1.8,
+      "heading": 320.0,
+      "coords": {
+        "x": -315.872,
+        "y": -2736.632,
+        "z": 5.001
+      }
+    },
+    {
+      "type": "land",
+      "size": 2.0,
+      "distance": 1.8,
+      "heading": 320.0,
+      "coords": {
+        "x": -313.606,
+        "y": -2738.901,
+        "z": 5.001
+      }
+    },
+    {
+      "type": "land",
+      "size": 2.0,
+      "distance": 1.8,
+      "heading": 140.0,
+      "coords": {
+        "x": -325.505,
+        "y": -2750.681,
+        "z": 5.011
+      }
+    },
+    {
+      "type": "land",
+      "size": 2.0,
+      "distance": 1.8,
+      "heading": 140.0,
+      "coords": {
+        "x": -327.771,
+        "y": -2748.421,
+        "z": 5.015
+      }
+    },
+    {
+      "type": "land",
+      "size": 2.0,
+      "distance": 1.8,
+      "heading": 140.0,
+      "coords": {
+        "x": -330.038,
+        "y": -2746.16,
+        "z": 5.02
+      }
+    },
+    {
+      "type": "land",
+      "size": 2.0,
+      "distance": 1.8,
+      "heading": 140.0,
+      "coords": {
+        "x": -332.305,
+        "y": -2743.9,
+        "z": 5.024
+      }
+    },
+    {
+      "type": "land",
+      "size": 2.0,
+      "distance": 1.8,
+      "heading": 140.0,
+      "coords": {
+        "x": -334.572,
+        "y": -2741.639,
+        "z": 5.028
+      }
+    },
+    {
+      "type": "land",
+      "size": 2.0,
+      "distance": 1.8,
+      "heading": 140.0,
+      "coords": {
+        "x": -336.839,
+        "y": -2739.378,
+        "z": 5.032
+      }
+    },
+    {
+      "type": "land",
+      "size": 2.0,
+      "distance": 1.8,
+      "heading": 140.0,
+      "coords": {
+        "x": -339.106,
+        "y": -2737.118,
+        "z": 5.036
+      }
+    }
+  ]
+}

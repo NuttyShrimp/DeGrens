@@ -1,0 +1,113 @@
+{
+  "garage_id": "sanitation_parking",
+  "name": "Recyclagecentrum Garage",
+  "type": "public",
+  "shared": false,
+  "location": {
+    "vector": {
+      "x": -326.59,
+      "y": -1523.55,
+      "z": 27.54
+    },
+    "width": 20,
+    "length": 18.0,
+    "options": {
+      "heading": 0,
+      "minZ": 25.54,
+      "maxZ": 31.54
+    }
+  },
+  "vehicle_types": [
+    "land"
+  ],
+  "parking_spots": [
+    {
+      "type": "land",
+      "size": 2.0,
+      "distance": 1.8,
+      "heading": 180.0,
+      "coords": {
+        "x": -324.518,
+        "y": -1530.753,
+        "z": 26.547
+      }
+    },
+    {
+      "type": "land",
+      "size": 2.0,
+      "distance": 1.8,
+      "heading": 180.0,
+      "coords": {
+        "x": -327.566,
+        "y": -1530.761,
+        "z": 26.553
+      }
+    },
+    {
+      "type": "land",
+      "size": 2.0,
+      "distance": 1.8,
+      "heading": 180.0,
+      "coords": {
+        "x": -330.615,
+        "y": -1530.77,
+        "z": 26.559
+      }
+    },
+    {
+      "type": "land",
+      "size": 2.0,
+      "distance": 1.8,
+      "heading": 180.0,
+      "coords": {
+        "x": -333.664,
+        "y": -1530.778,
+        "z": 26.565
+      }
+    },
+    {
+      "type": "land",
+      "size": 2.0,
+      "distance": 1.8,
+      "heading": 0.0,
+      "coords": {
+        "x": -329.027,
+        "y": -1516.523,
+        "z": 26.542
+      }
+    },
+    {
+      "type": "land",
+      "size": 2.0,
+      "distance": 1.8,
+      "heading": 0.0,
+      "coords": {
+        "x": -325.892,
+        "y": -1516.49,
+        "z": 26.548
+      }
+    },
+    {
+      "type": "land",
+      "size": 2.0,
+      "distance": 1.8,
+      "heading": 0.0,
+      "coords": {
+        "x": -322.756,
+        "y": -1516.456,
+        "z": 26.554
+      }
+    },
+    {
+      "type": "land",
+      "size": 2.0,
+      "distance": 1.8,
+      "heading": 0.0,
+      "coords": {
+        "x": -319.62,
+        "y": -1516.423,
+        "z": 26.56
+      }
+    }
+  ]
+}

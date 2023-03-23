@@ -1,0 +1,47 @@
+{
+  "garage_id": "kingsmen",
+  "name": "Kingsmen Garage",
+  "type": "gang",
+  "shared": true,
+  "location": {
+    "vector": {
+      "x": -1789.8,
+      "y": 458.89,
+      "z": 128.31
+    },
+    "width": 8.2,
+    "length": 11.8,
+    "options": {
+      "heading": 106,
+      "minZ": 126.31,
+      "maxZ": 132.81
+    }
+  },
+  "vehicle_types": [
+    "land"
+  ],
+  "parking_spots": [
+    {
+      "type": "land",
+      "size": 2.0,
+      "distance": 1.8,
+      "heading": 112.2522,
+      "coords": {
+        "x": -1790.8745,
+        "y": 461.1702,
+        "z": 128.3083
+      }
+    },
+    {
+      "type": "land",
+      "size": 2.0,
+      "distance": 1.8,
+      "heading": 95.969,
+      "coords": {
+        "x": -1790.3644,
+        "y": 456.3333,
+        "z": 128.3083
+      }
+    }
+  ]
+}
