@@ -81,7 +81,8 @@
         "refined_plastic",
         "refined_iron",
         "refined_aluminum",
-        "refined_steel"
+        "refined_steel",
+        "advanced_parts"
       ]
     },
     "container_weedbuds": {
