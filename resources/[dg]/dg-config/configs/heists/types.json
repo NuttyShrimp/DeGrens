@@ -5,8 +5,8 @@
         "cash": {
           "itemName": "marked_bills",
           "amount": [
-            15,
-            30
+            20,
+            25
           ],
           "spawnChance": 100
         },
@@ -16,7 +16,7 @@
             2,
             5
           ],
-          "spawnChance": 10
+          "spawnChance": 20
         }
       },
       "specialItem": {
