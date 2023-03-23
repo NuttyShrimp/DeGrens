@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Leefloon toegevoegd
 - Gemeentehuis is nu zichtbaar op je map
 - Heel wat nieuwe garages toegevoegd
+- PDM medewerker wordt nu betaald als hij een voertuig verkoopt
 
 ### Changed
 - Meer feedback bij start van fleecaoverval

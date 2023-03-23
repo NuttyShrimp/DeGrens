@@ -1,4 +1,4 @@
-import { Business, Config, Events, Notifications, Util } from '@dgx/server';
+import { Business, Config, Events, Inventory, Notifications, Util } from '@dgx/server';
 import { DGXEvent, EventListener, RPCEvent, RPCRegister } from '@dgx/server/decorators';
 import { getPlayerVehicleInfo, insertNewVehicle, setVehicleState } from 'db/repository';
 import { spawnOwnedVehicle } from 'helpers/vehicle';
@@ -177,10 +177,9 @@ class ShopManager extends Util.Singleton<ShopManager>() {
       return;
     }
 
-    const employeeCid =
-      this.spotsForSale.get(spotId)?.employee ??
-      Business.getBusinessOwner(getVehicleShopConfig().businessName)?.citizenid;
-    if (!employeeCid) {
+    const employeeWhoSold = this.spotsForSale.get(spotId)?.employee;
+    const sellerCid = employeeWhoSold ?? Business.getBusinessOwner(getVehicleShopConfig().businessName)?.citizenid;
+    if (!sellerCid) {
       Notifications.add(src, 'Er iets foutgelopen met de transactie', 'error');
       this.logger.error('Could not find business owner cid');
       Util.Log('vehicleshop:noOwner', {}, `Could not find business owner of pdm to sell vehicle`, undefined, true);
@@ -200,6 +199,18 @@ class ShopManager extends Util.Singleton<ShopManager>() {
       return;
     }
 
+    if (employeeWhoSold) {
+      const employeeId = DGCore.Functions.getPlyIdForCid(employeeWhoSold);
+      if (employeeId) {
+        const ticketPrice = modelData.price * ((getVehicleShopConfig()?.employeePercentage ?? 0) / 100);
+        Inventory.addItemToPlayer(employeeId, 'sales_ticket', 1, {
+          origin: 'generic',
+          amount: ticketPrice,
+          hiddenKeys: ['origin', 'amount'],
+        });
+      }
+    }
+
     // Add vehicle to player vehicles
     const vin = vinManager.generateVin();
     const plate = plateManager.generatePlate();
@@ -211,7 +222,7 @@ class ShopManager extends Util.Singleton<ShopManager>() {
     decreaseModelStock(model);
     Util.Log(
       'vehicleshop:boughtVehicle',
-      { employeeCid, spotId, model, vin, plate, taxedPrice },
+      { sellerCid, spotId, model, vin, plate, taxedPrice },
       `${Util.getName(src)} bought a vehicle (${model}) for ${taxedPrice}`,
       src
     );
