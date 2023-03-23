@@ -240,7 +240,7 @@ export const tryDropoff = async () => {
   }
 
   Sounds.playLocalSound('doorbell', 1);
-  const [canceled] = await Taskbar.create('person-carry-box', 'Afleveren', 15000, {
+  const [canceled] = await Taskbar.create('person-carry-box', 'Afleveren', 5000, {
     canCancel: true,
     cancelOnDeath: true,
     cancelOnMove: true,

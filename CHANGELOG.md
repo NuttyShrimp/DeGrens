@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Crafting level systeem herwerkt voor sommige type benches
 - Verlaag koper aantal minigame cycles
 - Fleeca loot tweaked
+- PostOP aflever taskbar time verlaagd
 
 ### Fixed
 - Fix group job change export name
