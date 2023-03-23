@@ -8,6 +8,7 @@ let sanddiggingLocations: Pick<Sanddigging.Config, 'spots' | 'vehicle'> = {
 
 let assignedSpot: number | null = null;
 let spotBlip = 0;
+let isAtAssignedSpot = false;
 
 let assignedVehicle: number | null = null;
 let inAssignedVehicle = false;
@@ -23,7 +24,7 @@ export const setAssignedSpot = (spot: typeof assignedSpot) => {
   if (assignedSpot === spot) return;
   assignedSpot = spot;
 
-  PolyTarget.removeZone('sanddigging_spot');
+  PolyZone.removeZone('sanddigging_spot');
   if (DoesBlipExist(spotBlip)) {
     RemoveBlip(spotBlip);
   }
@@ -31,7 +32,7 @@ export const setAssignedSpot = (spot: typeof assignedSpot) => {
   if (assignedSpot === null) return;
 
   const spotLocation = sanddiggingLocations.spots[assignedSpot];
-  PolyTarget.addCircleZone('sanddigging_spot', spotLocation, 5, { useZ: true, data: {}, routingBucket: 0 });
+  PolyZone.addCircleZone('sanddigging_spot', spotLocation, 8, { useZ: true, data: {}, routingBucket: 0 });
   spotBlip = AddBlipForCoord(spotLocation.x, spotLocation.y, spotLocation.z);
   SetBlipSprite(spotBlip, 85);
   SetBlipColour(spotBlip, 5);
@@ -163,11 +164,23 @@ export const isEntityAssignedVehicle = (vehicle: number) => {
   return NetworkGetEntityFromNetworkId(assignedVehicle) === vehicle;
 };
 
+export const getInAssignedVehicle = () => inAssignedVehicle;
 export const setInAssignedVehicle = (val: boolean) => {
   inAssignedVehicle = val;
 
   if (inAssignedVehicle) {
     UI.showInteraction(`${Keys.getBindedKey('+GeneralUse')} - Nieuwe Locatie`);
+  } else {
+    UI.hideInteraction();
+  }
+};
+
+export const getIsAtAssignedSpot = () => isAtAssignedSpot;
+export const setIsAtAssignedSpot = (atSpot: boolean) => {
+  isAtAssignedSpot = atSpot;
+
+  if (isAtAssignedSpot) {
+    UI.showInteraction(`${Keys.getBindedKey('+GeneralUse')} - Graven`);
   } else {
     UI.hideInteraction();
   }

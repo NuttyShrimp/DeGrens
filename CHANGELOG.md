@@ -18,6 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Verlaag koper aantal minigame cycles
 - Fleeca loot tweaked
 - PostOP aflever taskbar time verlaagd
+- Enkele changes aan sanddigging om aangenamer te maken
 
 ### Fixed
 - Fix group job change export name
