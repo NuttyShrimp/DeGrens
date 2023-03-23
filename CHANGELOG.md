@@ -27,6 +27,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Je kan niet langer een voertuig lockpicken als je niet als driver zit
 - Je kan geen geld witwassen tijdens cornersell als er geen agenten zijn
 - Je kan nu advanced parts in een materiaalcontainer steken
+- Vegetable container is nu buyable
 
 ## [1.1.0]
 
