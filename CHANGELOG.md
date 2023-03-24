@@ -35,6 +35,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Je kan nu advanced parts in een materiaalcontainer steken
 - Vegetable container is nu buyable
 - Phone notificatie keybinds werken nu wel
+- Fix  hoge resource usage wanneer je wapen vasthebt
 
 ## [1.1.0]
 
