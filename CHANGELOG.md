@@ -23,6 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - PostOP aflever taskbar time verlaagd
 - Enkele changes aan sanddigging om aangenamer te maken
 - Gang exports veranderd naar enkel name om geen promise te returnen
+- Politie kan weedplanten nu sneller kapotmaken
 
 ### Fixed
 - Fix group job change export name

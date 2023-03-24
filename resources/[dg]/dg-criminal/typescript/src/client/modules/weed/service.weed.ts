@@ -1,4 +1,4 @@
-import { Util, Taskbar, Events, StaticObjects } from '@dgx/client/classes';
+import { Util, Taskbar, Events, StaticObjects, Jobs } from '@dgx/client/classes';
 
 const weedPlantModels = new Set<number>();
 
@@ -45,8 +45,10 @@ export const destroyWeedPlant = async (weedPlantId: number, objectId: string) =>
   const heading = Util.getHeadingToFaceEntity(entity);
   await Util.goToCoords({ ...Util.getPlyCoords(), w: heading });
 
+  const destroyTime = Jobs.getCurrentJob()?.name === 'police' ? 20 : 120;
+
   // lil bithces die ze destroyen mogen gwn 2 min per plant wachten
-  const [canceled] = await Taskbar.create('hammer-crash', 'Kapot maken', 2 * 60 * 1000, {
+  const [canceled] = await Taskbar.create('hammer-crash', 'Kapot maken', destroyTime * 1000, {
     canCancel: true,
     cancelOnDeath: true,
     cancelOnMove: true,
