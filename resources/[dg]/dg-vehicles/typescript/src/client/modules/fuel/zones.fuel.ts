@@ -292,6 +292,14 @@ const gasStationZones: {
     minZ: 30.98,
     maxZ: 36.98,
   },
+  {
+    center: { x: -319.85, y: -1471.37, z: 30.55 },
+    length: 16.2,
+    width: 30.4,
+    heading: 30,
+    minZ: 28.55,
+    maxZ: 34.98,
+  },
 ];
 
 let inZone = false;
