@@ -252,9 +252,9 @@ export const startVehicleCrashThread = (vehicle: number) => {
     const newHealth = GetVehicleBodyHealth(vehicle);
     const newSpeed = Util.getVehicleSpeed(vehicle);
 
-    if (newHealth < oldHealth) {
+    if (oldHealth - newHealth > 1) {
       // console.log(`Vehicle crashed | speed: ${oldSpeed} -> ${newSpeed} | health: ${oldHealth} -> ${newHealth}`);
-      tryEjectAfterCrash(oldHealth, newHealth, oldSpeed, newSpeed, oldVelocity);
+      tryEjectAfterCrash(oldSpeed, newSpeed, oldVelocity);
       tryToStallVehicle(vehicle, newHealth, oldHealth);
     }
 
