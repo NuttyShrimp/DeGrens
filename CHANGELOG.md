@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Heel wat nieuwe garages toegevoegd
 - PDM medewerker wordt nu betaald als hij een voertuig verkoopt
 - Nieuwe tankstation & carwash locaties toegevoegd
+- Enkele nieuwe politie kledingstukken toegevoegd
 
 ### Changed
 - Meer feedback bij start van fleecaoverval
