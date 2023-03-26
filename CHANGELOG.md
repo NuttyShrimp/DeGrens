@@ -34,6 +34,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Politie kan weedplanten nu sneller kapotmaken
 - Gordels zijn consistenter
 - Health decrease van bloed verlaagd
+- Je kan geen autos zonder medewerker mee kopen als er een medewerker in de winkel is
 
 ### Fixed
 - Fix group job change export name

@@ -38,7 +38,7 @@ class ShopManager extends Util.Singleton<ShopManager>() {
 
   @RPCEvent('vehicles:shop:getCarSpots')
   private _getSpots = () => {
-    return Object.fromEntries(shopManager.spots);
+    return Object.fromEntries(this.spots);
   };
 
   private loadSpotData = async () => {
@@ -150,6 +150,8 @@ class ShopManager extends Util.Singleton<ShopManager>() {
   };
 
   private isEmployeeNeeded = (model: string) => {
+    if (this.isAnyEmployeeInside()) return true;
+
     const modelClass = getConfigByModel(model)?.class;
     if (!modelClass) {
       this.logger.error(`Could not get config of model ${model}`);
@@ -171,7 +173,7 @@ class ShopManager extends Util.Singleton<ShopManager>() {
       return;
     }
 
-    const canBuy = shopManager.canPlayerBuyVehicle(src, spotId, model);
+    const canBuy = this.canPlayerBuyVehicle(src, spotId, model);
     if (!canBuy) {
       Notifications.add(src, 'Je hebt een werknemer nodig om dit voertuig te kopen', 'error');
       return;
@@ -249,6 +251,17 @@ class ShopManager extends Util.Singleton<ShopManager>() {
 
   public getModelAtSpot = (spotId: number) => {
     return this.spots.get(spotId)?.model;
+  };
+
+  public isAnyEmployeeInside = () => {
+    const businessName = getVehicleShopConfig().businessName;
+    for (const ply of this.playersInShop) {
+      const cid = Util.getCID(ply, true);
+      if (!cid) continue;
+      const hired = Business.isPlyEmployed(businessName, cid);
+      if (hired) return true;
+    }
+    return false;
   };
 }
 
