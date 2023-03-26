@@ -125,6 +125,13 @@ class LockersManager extends Util.Singleton<LockersManager>() {
     if (!locker) return;
     locker.changePassword(plyId);
   };
+
+  @DGXEvent('lockers:server:transferOwnership')
+  private _transferOwnership = (plyId: number, id: Lockers.Locker['id']) => {
+    const locker = this.getLocker(id);
+    if (!locker) return;
+    locker.transferOwnership(plyId);
+  };
 }
 
 const lockersManager = LockersManager.getInstance();

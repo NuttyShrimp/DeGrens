@@ -1,4 +1,4 @@
-import { Util, Financials, UI, Notifications } from '@dgx/server';
+import { Util, Financials, UI, Notifications, Phone } from '@dgx/server';
 import config from 'services/config';
 import { mainLogger } from 'sv_logger';
 import winston from 'winston';
@@ -9,13 +9,15 @@ import { getCurrentDay } from 'helpers';
 export class Locker {
   private readonly logger: winston.Logger;
 
-  private readonly _id;
-  private readonly coords;
-  private readonly radius;
-  private owner;
-  private password;
-  private price;
-  private paymentDay;
+  private readonly _id: string;
+  private readonly coords: Vec3;
+  private readonly radius: number;
+  private owner: number | null;
+  private password: string | null;
+  private price: number;
+  private paymentDay: number;
+
+  private activePlayers: Set<number>;
 
   constructor(data: Lockers.Locker) {
     this.logger = mainLogger.child({ module: data.id });
@@ -27,6 +29,8 @@ export class Locker {
     this.password = data.password;
     this.price = data.price;
     this.paymentDay = data.paymentDay;
+
+    this.activePlayers = new Set();
   }
 
   public get id() {
@@ -137,28 +141,38 @@ export class Locker {
   };
 
   private open = async (plyId: number) => {
-    const result = await UI.openInput<{ password: string }>(plyId, {
-      header: '',
-      inputs: [
-        {
-          type: 'password',
-          label: 'Wachtwoord',
-          name: 'password',
-        },
-      ],
-    });
-    if (!result.accepted) return;
+    if (!this.activePlayers.has(plyId)) {
+      const result = await UI.openInput<{ password: string }>(plyId, {
+        header: '',
+        inputs: [
+          {
+            type: 'password',
+            label: 'Wachtwoord',
+            name: 'password',
+          },
+        ],
+      });
+      if (!result.accepted) return;
 
-    if (result.values.password !== this.password) {
-      Notifications.add(plyId, 'Toegang geweigerd', 'error');
-      this.logger.silly(`Player ${Util.getName(plyId)} inputted wrong password ${result.values.password}`);
-      Util.Log(
-        'lockers:wrongPassword',
-        { password: result.values.password },
-        `${Util.getName(plyId)} inputted wrong password`,
-        plyId
-      );
-      return;
+      if (result.values.password !== this.password) {
+        Notifications.add(plyId, 'Toegang geweigerd', 'error');
+        this.logger.silly(`Player ${Util.getName(plyId)} inputted wrong password ${result.values.password}`);
+        Util.Log(
+          'lockers:wrongPassword',
+          { password: result.values.password },
+          `${Util.getName(plyId)} inputted wrong password`,
+          plyId
+        );
+        return;
+      }
+
+      // allow ply to access for 5 minutes
+      this.activePlayers.add(plyId);
+      setTimeout(() => {
+        this.activePlayers.delete(plyId);
+      }, 5 * 60 * 1000);
+
+      Notifications.add(plyId, 'Je hebt toegang voor 5 minuten', 'success');
     }
 
     const menu: ContextMenu.Entry[] = [
@@ -172,13 +186,22 @@ export class Locker {
     ];
 
     if (this.owner === Util.getCID(plyId)) {
-      menu.push({
-        title: 'Wachtwoord Veranderen',
-        callbackURL: 'lockers/changePassword',
-        data: {
-          id: this.id,
+      menu.push(
+        {
+          title: 'Wachtwoord Veranderen',
+          callbackURL: 'lockers/changePassword',
+          data: {
+            id: this.id,
+          },
         },
-      });
+        {
+          title: 'Eigenaar Veranderen',
+          callbackURL: 'lockers/transferOwnership',
+          data: {
+            id: this.id,
+          },
+        }
+      );
     }
 
     UI.openContextMenu(plyId, menu);
@@ -188,14 +211,11 @@ export class Locker {
 
   public changePassword = async (plyId: number) => {
     if (this.owner !== Util.getCID(plyId)) {
-      Util.Log(
-        'lockers:notOwner',
-        { id: this.id },
-        `${Util.getName(plyId)} tried to change password for locker ${this.id} but was not owner`,
-        plyId,
-        true
-      );
-      this.logger.silly(`${Util.getName(plyId)} tried to change password for locker ${this.id} but was not owner`);
+      const logMsg = `${Util.getName(plyId)}(${plyId}) tried to change password for locker ${
+        this.id
+      } but was not owner`;
+      Util.Log('lockers:notOwner', { id: this.id }, logMsg, plyId, true);
+      this.logger.warn(logMsg);
       return;
     }
 
@@ -225,6 +245,9 @@ export class Locker {
     repository.updatePassword(this.id, this.password);
     Notifications.add(plyId, 'Je hebt het wachtwoord aangepast', 'success');
 
+    // clear cached players that still had access because of time
+    this.activePlayers.clear();
+
     Util.Log(
       'locker:changePassword',
       { id: this.id, password: this.password },
@@ -232,5 +255,64 @@ export class Locker {
       plyId
     );
     this.logger.silly(`${Util.getName(plyId)} changed password for locker ${this.id}`);
+  };
+
+  public transferOwnership = async (plyId: number) => {
+    const currentOwner = this.owner;
+    if (currentOwner !== Util.getCID(plyId)) {
+      const logMsg = `${Util.getName(plyId)}(${plyId}) tried to transfer ownership for locker ${
+        this.id
+      } but was not owner`;
+      Util.Log('lockers:notOwner', { id: this.id }, logMsg, plyId, true);
+      this.logger.warn(logMsg);
+      return;
+    }
+
+    const result = await UI.openInput<{ cid: string }>(plyId, {
+      header: 'Geef CID van nieuwe owner',
+      inputs: [
+        {
+          type: 'number',
+          label: 'CID',
+          name: 'cid',
+        },
+      ],
+    });
+    if (!result.accepted) return;
+
+    const newOwner = Number(result.values.cid);
+    if (isNaN(newOwner)) return;
+
+    const ownerServerId = DGCore.Functions.getPlyIdForCid(newOwner);
+    if (!ownerServerId) {
+      Notifications.add(plyId, 'Deze persoon is niet in de stad', 'error');
+      return;
+    }
+
+    const ownerAccepted = await Phone.notificationRequest(ownerServerId, {
+      id: `locker_request_${this.id}_${ownerServerId}`,
+      title: 'Lockers',
+      description: 'Aanvaard Eigenaarschap',
+      icon: 'info',
+      timer: 30,
+    });
+
+    if (!ownerAccepted) {
+      Notifications.add(plyId, 'Aanbod afgewezen');
+      return;
+    }
+
+    this.owner = newOwner;
+    repository.updateOwner(this.id, newOwner);
+    Notifications.add(
+      plyId,
+      `Burger ${newOwner} is nu eigenaar. Openstaande fees zal je nog moeten betalen`,
+      'success'
+    );
+    Notifications.add(ownerServerId, `Je bent nu eigenaar van een locker`, 'success');
+
+    const logMsg = `${Util.getName(plyId)}(${plyId}) has transfered ownership for locker ${this.id} to ${newOwner}`;
+    Util.Log('locker:transferOwnership', { id: this.id, oldOwner: currentOwner, newOwner }, logMsg, plyId);
+    this.logger.silly(logMsg);
   };
 }
