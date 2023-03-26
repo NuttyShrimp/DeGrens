@@ -1,0 +1,49 @@
+{
+  "garage_id": "medellincartel",
+  "name": "Tequilala Garage",
+  "type": "gang",
+  "shared": true,
+  "location": {
+    "vector": {
+      "x": -562.33,
+      "y": 315.37,
+      "z": 84.41
+    },
+    "width": 10.2,
+    "length": 5,
+    "options": {
+      "heading": 355,
+      "minZ": 82.66,
+      "maxZ": 87.06
+    }
+  },
+  "vehicle_types": [
+    "land"
+  ],
+  "parking_spots": [
+    {
+      "type": "land",
+      "size": 2.0,
+      "distance": 1.8,
+      "heading": 80,
+      "coords": { 
+        "x": -561.968, "y": 318.56, "z": 83.41}
+    },
+    {
+      "type": "land",
+      "size": 2.0,
+      "distance": 1.8,
+      "heading": 80,
+      "coords": { 
+        "x": -562.349, "y": 315.279, "z": 83.418}
+    },
+    {
+      "type": "land",
+      "size": 2.0,
+      "distance": 1.8,
+      "heading": 80,
+      "coords": { 
+        "x": -562.729, "y": 311.998, "z": 83.425}
+    }
+  ]
+}

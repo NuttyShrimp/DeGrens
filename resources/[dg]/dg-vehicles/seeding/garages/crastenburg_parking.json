@@ -1,8 +1,8 @@
 {
-  "garage_id": "unknown",
-  "name": "Unknown Garage",
-  "type": "gang",
-  "shared": true,
+  "garage_id": "crastenburg_garage",
+  "name": "Crastenburg Garage",
+  "type": "public",
+  "shared": false,
   "location": {
     "vector": [
       {

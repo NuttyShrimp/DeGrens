@@ -1,0 +1,36 @@
+{
+  "garage_id": "plukketuffers",
+  "name": "De Slechtste Garage",
+  "type": "gang",
+  "shared": true,
+  "location": {
+    "vector": {
+      "x": 2007.2015,
+      "y": 4987.25,
+      "z": 41.3674
+    },
+    "width": 7,
+    "length": 7,
+    "options": {
+      "heading": 223.4771,
+      "minZ": 40.3167,
+      "maxZ": 45.3167
+    }
+  },
+  "vehicle_types": [
+    "land"
+  ],
+  "parking_spots": [
+    {
+      "type": "land",
+      "size": 2.0,
+      "distance": 1.8,
+      "heading": 223.4771,
+      "coords": {
+        "x": 2008.1042,
+        "y": 4986.1216,
+        "z": 41.3167
+      }
+    }
+  ]
+}
