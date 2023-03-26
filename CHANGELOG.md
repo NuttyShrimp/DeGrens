@@ -49,6 +49,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Paychecks worden nu wel opgeslagen
 - Reset local itemcache na characterswitch
 - Je kan sneller bennys repair gebruiken
+- Je kan testrit wagen nu inleveren alsje game gecrashed was
 
 ## [1.1.0]
 
