@@ -18,6 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Je kan lockers nu voor korte tijd accessen nadat je het passwoord invuld
 - Veel liften voor hoge gebouwen toegevoegd
 - Extra banreden toegevoegd in adminpanel
+- Politie signin locaties toegevoegd in Sandy/Paleto
 
 ### Changed
 - Meer feedback bij start van fleecaoverval

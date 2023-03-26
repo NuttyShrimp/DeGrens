@@ -17,6 +17,40 @@
     }
   },
   {
+    "jobs": ["police"],
+    "zone": {
+      "vector": {
+        "x": 1833.72,
+        "y": 3678.46,
+        "z": 34.19
+      },
+      "width": 0.6,
+      "length": 0.8,
+      "data": {
+        "heading": 30,
+        "minZ": 34.14,
+        "maxZ": 34.49
+      }
+    }
+  },
+  {
+    "jobs": ["police"],
+    "zone": {
+      "vector": {
+        "x": -447.31,
+        "y": 6013.0,
+        "z": 32.29
+      },
+      "width": 0.5,
+      "length": 0.7,
+      "data": {
+        "heading": 45,
+        "minZ": 32.34,
+        "maxZ": 32.69
+      }
+    }
+  },
+  {
     "jobs": ["ambulance"],
     "zone": {
       "vector": {
