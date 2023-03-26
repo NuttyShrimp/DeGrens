@@ -1,9 +1,9 @@
 import { Vector3 } from '@dgx/shared';
-import { RPCEvent, RPCRegister } from '@dgx/server/decorators';
+import { RPCRegister } from '@dgx/server/decorators';
 import { getConfig } from 'helpers/config';
 import winston from 'winston';
 import { mainLogger } from 'sv_logger';
-import { Events, Util } from '@dgx/server';
+import { Util } from '@dgx/server';
 
 @RPCRegister()
 class StateManager extends Util.Singleton<StateManager>() {
@@ -30,7 +30,7 @@ class StateManager extends Util.Singleton<StateManager>() {
     let registerIdx: number | undefined = undefined;
     const registerCoords = new Vector3(coords.x, coords.y, coords.z);
     for (let i = 0; i < this.registers.length; i++) {
-      if (registerCoords.distance(this.registers[i].coords) < 0.1) {
+      if (registerCoords.distance(this.registers[i].coords) < 0.5) {
         registerIdx = i;
         break;
       }
