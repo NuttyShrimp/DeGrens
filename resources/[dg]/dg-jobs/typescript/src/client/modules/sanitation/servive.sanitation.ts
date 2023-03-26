@@ -1,4 +1,4 @@
-import { Peek, UI, Keys, Notifications, Events, PolyZone, Util, RPC, PropAttach, Phone } from '@dgx/client';
+import { Peek, UI, Keys, Notifications, Events, PolyZone, Util, RPC, PropAttach, Phone, Animations } from '@dgx/client';
 import { DUMPSTER_MODELS } from './constants.sanitation';
 
 let assignedVehicle: number | null = null;
@@ -21,6 +21,9 @@ const removeBlip = () => {
 };
 
 let holdingTrashbag = false;
+let trashbagAnimLoopId: number | null = null;
+let trashbagPropId: number | null = null;
+
 export const isHoldingTrashbag = () => holdingTrashbag;
 
 export const hasTargetLocation = () => targetLocationId !== null;
@@ -170,37 +173,48 @@ export const takeBagFromDumpster = async (dumpster: number) => {
   }
 
   holdingTrashbag = true;
-
-  // Animaiton kanker
-  await Util.loadAnimDict('missfbi4prepp1');
-  const propId = PropAttach.add('garbage_bag');
-  const ped = PlayerPedId();
-  const thread = setInterval(async () => {
-    if (!holdingTrashbag) {
-      clearInterval(thread);
-      ClearPedTasks(ped);
-      TaskPlayAnim(ped, 'missfbi4prepp1', '_bag_throw_garbage_man', 8.0, 8.0, -1, 17, 1, false, false, false);
-      FreezeEntityPosition(ped, true);
-      await Util.Delay(1250);
-      PropAttach.remove(propId);
-      TaskPlayAnim(ped, 'missfbi4prepp1', 'exit', 8.0, 8.0, 1100, 48, 0.0, false, false, false);
-      FreezeEntityPosition(ped, false);
-      await Util.Delay(1100);
-      ClearPedTasks(ped);
-
-      RemoveAnimDict('missfbi4prepp1');
-      return;
-    }
-
-    if (IsEntityPlayingAnim(ped, 'missfbi4prepp1', '_bag_walk_garbage_man', 3)) return;
-    ClearPedTasksImmediately(ped);
-    TaskPlayAnim(ped, 'missfbi4prepp1', '_bag_walk_garbage_man', 6.0, -6.0, -1, 49, 0, false, false, false);
-  }, 100);
+  trashbagAnimLoopId = Animations.startAnimLoop({
+    animation: {
+      dict: 'missfbi4prepp1',
+      name: '_bag_walk_garbage_man',
+      flag: 49,
+    },
+    weight: 10,
+    disableFiring: true,
+  });
+  trashbagPropId = PropAttach.add('garbage_bag');
 };
 
-const putBagInVehicle = () => {
+const putBagInVehicle = async () => {
   if (!holdingTrashbag) return;
+
   holdingTrashbag = false;
+
+  if (trashbagAnimLoopId !== null) {
+    Animations.stopAnimLoop(trashbagAnimLoopId);
+    trashbagAnimLoopId = null;
+  }
+
+  // pause to allow proper anim
+  Animations.pauseAnimLoopAnimations(true);
+
+  const ped = PlayerPedId();
+  TaskPlayAnim(ped, 'missfbi4prepp1', '_bag_throw_garbage_man', 8.0, 8.0, -1, 17, 1, false, false, false);
+  FreezeEntityPosition(ped, true);
+  await Util.Delay(1250);
+
+  if (trashbagPropId !== null) {
+    PropAttach.remove(trashbagPropId);
+    trashbagPropId = null;
+  }
+
+  TaskPlayAnim(ped, 'missfbi4prepp1', 'exit', 8.0, 8.0, 1100, 48, 0.0, false, false, false);
+  FreezeEntityPosition(ped, false);
+  await Util.Delay(1100);
+  ClearPedTasks(ped);
+
+  Animations.pauseAnimLoopAnimations(false);
+
   Events.emitNet('jobs:sanitation:putInVehicle');
 };
 

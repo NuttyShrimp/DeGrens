@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Extra banreden toegevoegd in adminpanel
 - Politie signin locaties toegevoegd in Sandy/Paleto
 - Schotmeldingen toegevoegd
+- Wrapper toegevoegd voor geloopte animaties zodat deze elkaar niet onderbreken
 
 ### Changed
 - Meer feedback bij start van fleecaoverval

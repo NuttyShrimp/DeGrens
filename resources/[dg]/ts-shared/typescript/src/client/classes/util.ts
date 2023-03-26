@@ -467,6 +467,25 @@ export class Animations {
   stopTabletAnimation() {
     global.exports['dg-misc'].stopTabletAnimation();
   }
+
+  /**
+   * @returns id to be used to cancel later
+   */
+  public startAnimLoop = (animLoop: AnimLoops.Anim): number => {
+    return global.exports['dg-misc'].startAnimLoop(animLoop);
+  };
+
+  public stopAnimLoop = (animLoopId: number) => {
+    global.exports['dg-misc'].stopAnimLoop(animLoopId);
+  };
+
+  public modifyAnimLoop = (animLoopId: number, partialAnimLoop: Partial<AnimLoops.Anim>) => {
+    global.exports['dg-misc'].modifyAnimLoop(animLoopId, partialAnimLoop);
+  };
+
+  public pauseAnimLoopAnimations = (pause: boolean) => {
+    global.exports['dg-misc'].setAnimLoopAnimationsPaused(pause);
+  };
 }
 
 class StaticObjects {

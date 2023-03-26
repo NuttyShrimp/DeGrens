@@ -1,46 +1,36 @@
-import { PropAttach, Util } from '@dgx/client';
+import { Animations, PropAttach } from '@dgx/client';
 
-let attachedBox: number | null = null;
-let animThread: NodeJS.Timer | null = null;
-
-// move to looped anim wrapper
+let isBoxAttached = false;
+let boxPropId: number | null = null;
+let boxAnimLoopId: number | null = null;
 
 export const attachBox = async () => {
-  if (attachedBox !== null) return;
+  if (isBoxAttached) return;
 
-  attachedBox = PropAttach.add('cardbox');
+  isBoxAttached = true;
 
-  const ped = PlayerPedId();
-  await Util.loadAnimDict('anim@heists@box_carry@');
-  TaskPlayAnim(ped, 'anim@heists@box_carry@', 'idle', 2.0, 2.0, -1, 51, 0, false, false, false);
-
-  animThread = setInterval(() => {
-    if (attachedBox === null) {
-      clearAnimThread();
-      return;
-    }
-
-    DisablePlayerFiring(PlayerId(), true);
-
-    if (!IsEntityPlayingAnim(ped, 'anim@heists@box_carry@', 'idle', 3)) {
-      ClearPedTasks(ped);
-      TaskPlayAnim(ped, 'anim@heists@box_carry@', 'idle', 2.0, 2.0, -1, 51, 0, false, false, false);
-    }
-  }, 1);
+  boxPropId = PropAttach.add('cardbox');
+  boxAnimLoopId = Animations.startAnimLoop({
+    animation: {
+      dict: 'anim@heists@box_carry@',
+      name: 'idle',
+      flag: 51,
+    },
+    weight: 10,
+    disableFiring: true,
+  });
 };
 
 export const removeBox = () => {
-  if (attachedBox === null) return;
+  if (!isBoxAttached) return;
 
-  PropAttach.remove(attachedBox);
-  attachedBox = null;
+  if (boxPropId !== null) {
+    PropAttach.remove(boxPropId);
+    boxPropId = null;
+  }
 
-  clearAnimThread();
-};
-
-const clearAnimThread = () => {
-  if (animThread === null) return;
-  clearInterval(animThread);
-  animThread = null;
-  StopAnimTask(PlayerPedId(), 'anim@heists@box_carry@', 'idle', 1.0);
+  if (boxAnimLoopId !== null) {
+    Animations.stopAnimLoop(boxAnimLoopId);
+    boxAnimLoopId = null;
+  }
 };

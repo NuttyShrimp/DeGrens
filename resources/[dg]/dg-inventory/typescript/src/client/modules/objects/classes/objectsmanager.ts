@@ -1,4 +1,4 @@
-import { PropAttach } from '@dgx/client';
+import { Animations, PropAttach } from '@dgx/client';
 import { Util } from '@dgx/client';
 import { Vector3 } from '@dgx/shared';
 import { Export, ExportRegister } from '@dgx/shared';
@@ -11,7 +11,7 @@ class ObjectsManager extends Util.Singleton<ObjectsManager>() {
 
   private readonly activeObjects: Map<string, Objects.Active>;
   private queues: Record<string | 'toggled', Objects.Item[]>; // Item queue per position
-  private animationTimer: NodeJS.Timer | null = null;
+  private animLoopId: number | null;
 
   constructor() {
     super();
@@ -19,6 +19,7 @@ class ObjectsManager extends Util.Singleton<ObjectsManager>() {
     this.queues = {
       toggled: [], // toggled is a special queue for manual overrides
     };
+    this.animLoopId = null;
   }
 
   public setConfig = (config: Objects.Config) => {
@@ -77,7 +78,7 @@ class ObjectsManager extends Util.Singleton<ObjectsManager>() {
       PropAttach.move(i.propId, offset);
     });
 
-    if (!!info.animData) this.stopAnimation(info.animData.animDict, info.animData.anim);
+    if (!!info.animData) this.stopAnimation();
 
     this.checkQueue(info.position);
   };
@@ -161,30 +162,25 @@ class ObjectsManager extends Util.Singleton<ObjectsManager>() {
   };
 
   private startAnimation = async (animDict: string, anim: string) => {
-    await Util.loadAnimDict(animDict);
-    if (this.animationTimer !== null) {
-      clearInterval(this.animationTimer);
-    }
-    this.animationTimer = setInterval(() => {
-      DisablePlayerFiring(PlayerId(), true);
+    this.stopAnimation();
 
-      DISABLED_KEYS_DURING_ANIMATION.forEach(key => {
-        DisableControlAction(0, key, true);
-      });
-
-      const ped = PlayerPedId();
-      if (IsEntityPlayingAnim(ped, animDict, anim, 3)) return;
-      ClearPedTasksImmediately(ped);
-      TaskPlayAnim(ped, animDict, anim, 8.0, 8.0, -1, 51, 0, false, false, false);
-    }, 1);
+    this.animLoopId = Animations.startAnimLoop({
+      weight: 10,
+      disableFiring: true,
+      disabledControls: DISABLED_KEYS_DURING_ANIMATION,
+      animation: {
+        dict: animDict,
+        name: anim,
+        flag: 51,
+      },
+    });
   };
 
-  private stopAnimation = (animDict: string, anim: string) => {
-    if (this.animationTimer !== null) {
-      clearInterval(this.animationTimer);
-      this.animationTimer = null;
+  private stopAnimation = () => {
+    if (this.animLoopId !== null) {
+      Animations.stopAnimLoop(this.animLoopId);
+      this.animLoopId = null;
     }
-    StopAnimTask(PlayerPedId(), animDict, anim, 1.0);
   };
 
   // Properly reset for switching chars
@@ -200,9 +196,8 @@ class ObjectsManager extends Util.Singleton<ObjectsManager>() {
     this.activeObjects.clear();
     this.queues = {};
 
-    if (this.animationTimer !== null) {
-      clearInterval(this.animationTimer);
-      this.animationTimer = null;
+    if (this.animLoopId !== null) {
+      Animations.stopAnimLoop(this.animLoopId);
     }
   };
 }

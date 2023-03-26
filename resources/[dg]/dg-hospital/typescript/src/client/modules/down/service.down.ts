@@ -1,4 +1,4 @@
-import { Events, Keys, Util, Inventory, Police, Weapons, RPC, Jobs } from '@dgx/client';
+import { Events, Keys, Util, Inventory, Police, Weapons, RPC, Jobs, Animations } from '@dgx/client';
 import { setBleedAmount, setHealth } from 'modules/health/service.health';
 import { ENABLED_CONTROLS, DOWN_ANIMATIONS, NO_TP_VEHICLE_CLASSES } from './constants.down';
 import { doGetUpAnimation, getWeightOfState, resetPedFlagsAfterDown, setPedFlagsOnDown, setText } from './helpers.down';
@@ -9,8 +9,8 @@ let downThread: NodeJS.Timer | null = null;
 let respawnTime = 0;
 let respawnButtonPressTime: number | null = null;
 
-let pauseDownAnimation = false;
-let awaitingRagdollFinish = false;
+let resurrectingPlayer = false;
+let downAnimLoopId: number | null = null;
 
 let respawnTimeConfig: Hospital.Config['health']['respawnTime'];
 let damageTypesConfig: Record<number, { cause: string; type: Hospital.DownType }> = {};
@@ -22,11 +22,6 @@ export const setDownConfig = (resConfig: typeof respawnTimeConfig, weapons: Hosp
     damageTypesConfig[GetHashKey(name) >>> 0] = { cause: name, type: data.downType };
   }
 };
-
-export const setPauseDownAnimation = (pause: boolean) => {
-  pauseDownAnimation = pause;
-};
-
 export const getPlayerState = () => playerState;
 export const setPlayerState = (state: Hospital.State, save = true) => {
   playerState = state;
@@ -36,14 +31,13 @@ export const setPlayerState = (state: Hospital.State, save = true) => {
 
   if (state === 'alive') {
     cleanDownThread();
-    setPauseDownAnimation(false);
-    Police.pauseCuffAnimation(false);
   } else {
     startDownThread();
     Inventory.close();
     Weapons.removeWeapon(undefined, true);
-    Police.pauseCuffAnimation(true);
   }
+
+  handleDownAnimLoop();
 };
 
 export const loadDownStateOnRestart = () => {
@@ -62,7 +56,7 @@ const setRespawnTime = (state: Hospital.State) => {
 };
 
 export const checkDeathOnDamage = (originPed: number, weaponHash: number) => {
-  if (awaitingRagdollFinish) return;
+  if (resurrectingPlayer) return;
 
   const ped = PlayerPedId();
   const isInjured = IsPedInjured(ped);
@@ -101,7 +95,8 @@ export const checkDeathOnDamage = (originPed: number, weaponHash: number) => {
 // We do resurrect when we stopped ragdolling
 const resurrectWhenRagdollFinished = async () => {
   const ped = PlayerPedId();
-  awaitingRagdollFinish = true;
+  resurrectingPlayer = true;
+  Animations.pauseAnimLoopAnimations(true);
 
   // First we wait till player starts ragdolling with timeout of 1 sec
   await Util.awaitCondition(() => IsPedRagdoll(ped), 1000);
@@ -117,35 +112,18 @@ const resurrectWhenRagdollFinished = async () => {
   if (vehData && !NO_TP_VEHICLE_CLASSES.includes(vehData.class)) {
     SetPedIntoVehicle(ped, vehData.vehicle, vehData.seat);
   }
-  awaitingRagdollFinish = false;
+
+  resurrectingPlayer = false;
+  Animations.pauseAnimLoopAnimations(false);
 };
 
-const startDownThread = async () => {
+const startDownThread = () => {
   setRespawnTime(playerState);
 
   if (downThread !== null || playerState === 'alive') return;
 
-  for (const { animDict } of Object.values(DOWN_ANIMATIONS)) {
-    await Util.loadAnimDict(animDict);
-  }
-
   downThread = setInterval(() => {
     if (playerState === 'alive') return;
-
-    if (!awaitingRagdollFinish && !pauseDownAnimation) {
-      const ped = PlayerPedId();
-      const inVehicle = IsPedInAnyVehicle(ped, false);
-      const { animDict, anim, flag } = DOWN_ANIMATIONS[inVehicle ? 'vehicle' : playerState];
-
-      if (!IsEntityPlayingAnim(ped, animDict, anim, 3)) {
-        ClearPedTasks(ped);
-        TaskPlayAnim(ped, animDict, anim, 128, 128, -1, flag, 0, false, false, false);
-      }
-    }
-
-    // Disable keys
-    DisableAllControlActions(0);
-    ENABLED_CONTROLS.forEach(key => EnableControlAction(0, key, true));
 
     const currentTime = GetGameTimer();
     const timeRemaining = Math.max(respawnTime - currentTime, 0);
@@ -184,7 +162,6 @@ const cleanDownThread = () => {
   if (downThread === null) return;
   clearInterval(downThread);
   downThread = null;
-  Object.values(DOWN_ANIMATIONS).forEach(({ animDict }) => RemoveAnimDict(animDict));
   resetPedFlagsAfterDown();
 };
 
@@ -202,9 +179,10 @@ export const doNormalRevive = async () => {
 
   const ped = PlayerPedId();
   if (previousState === 'unconscious' && !IsPedInAnyVehicle(ped, false)) {
-    setPauseDownAnimation(true);
+    // pause animloops to allow proper standup anim
+    Animations.pauseAnimLoopAnimations(true);
     await doGetUpAnimation();
-    setPauseDownAnimation(false);
+    Animations.pauseAnimLoopAnimations(false);
   } else {
     ClearPedTasks(ped);
   }
@@ -232,7 +210,6 @@ const respawnPlayer = async () => {
   const isInWater = IsEntityInWater(ped);
   const anyAmbuOnline = Jobs.getAmountForJob('ambulance') > 0;
   if (isNearRespawn || isInWater || !anyAmbuOnline) {
-    setPauseDownAnimation(true);
     Events.emitNet('hospital:down:respawnToBed');
   } else {
     SetEntityCoords(ped, respawnPosition.x, respawnPosition.y, respawnPosition.z, false, false, false, false);
@@ -246,5 +223,36 @@ export const loadPedFlags = () => {
     resetPedFlagsAfterDown();
   } else {
     setPedFlagsOnDown();
+  }
+};
+
+const handleDownAnimLoop = () => {
+  if (playerState === 'alive') {
+    if (downAnimLoopId !== null) {
+      Animations.stopAnimLoop(downAnimLoopId);
+      downAnimLoopId = null;
+    }
+    return;
+  }
+
+  const ped = PlayerPedId();
+  const inVehicle = IsPedInAnyVehicle(ped, false);
+  const { animDict, anim, flag } = DOWN_ANIMATIONS[inVehicle ? 'vehicle' : playerState];
+
+  const animLoop: AnimLoops.Anim = {
+    animation: {
+      dict: animDict,
+      name: anim,
+      flag,
+    },
+    weight: 75,
+    disableAllControls: true,
+    enabledControls: ENABLED_CONTROLS,
+  };
+
+  if (downAnimLoopId === null) {
+    downAnimLoopId = Animations.startAnimLoop(animLoop);
+  } else {
+    Animations.modifyAnimLoop(downAnimLoopId, animLoop);
   }
 };

@@ -1,4 +1,4 @@
-import { Events, Keys, Notifications, Peek, RPC, Taskbar, UI, Util, Police, Hospital } from '@dgx/client';
+import { Events, Keys, Notifications, Peek, RPC, Taskbar, UI, Util, Animations } from '@dgx/client';
 
 import { toggleVehicleDoor } from './doors';
 
@@ -9,6 +9,7 @@ let isInTrunk = false;
 let forcedIn = false;
 let trunkThread: NodeJS.Timer | null = null;
 let cam: number | null = null;
+let trunkAnimLoopId: number | null = null;
 
 Peek.addGlobalEntry(
   'vehicle',
@@ -104,7 +105,6 @@ const getInTrunk = async (vehicle: number, force = false) => {
   const offset = Util.ArrayToVector3(GetOffsetFromEntityGivenWorldCoords(vehicle, bonePos.x, bonePos.y, bonePos.z)).add(
     baseOffset
   );
-  TaskPlayAnim(ped, ANIM_DICT, ANIM, 8.0, 8.0, -1, 1, 999.0, false, false, false);
   AttachEntityToEntity(ped, vehicle, 0, offset.x, offset.y, offset.z, 5, 0, 50, true, false, false, true, 1, true);
 
   isInTrunk = true;
@@ -117,9 +117,6 @@ const getInTrunk = async (vehicle: number, force = false) => {
   }
   Events.emitNet('vehicles:trunk:enter', NetworkGetNetworkIdFromEntity(vehicle));
 
-  Police.pauseCuffAnimation(true);
-  Hospital.pauseDownAnimation(true);
-
   trunkThread = setInterval(() => {
     const vehicleAttachedTo = GetEntityAttachedTo(ped);
     if (!DoesEntityExist(vehicleAttachedTo)) {
@@ -127,6 +124,16 @@ const getInTrunk = async (vehicle: number, force = false) => {
     }
     setTrunkCamPosition();
   }, 1);
+
+  trunkAnimLoopId = Animations.startAnimLoop({
+    animation: {
+      dict: ANIM_DICT,
+      name: ANIM,
+      flag: 1,
+    },
+    weight: 100,
+    disableFiring: true,
+  });
 };
 
 // We keep in mind that veh can be undefined to be able to leave trunk when vehicle gets deleted
@@ -141,22 +148,23 @@ const getOutOfTrunk = (vehicle?: number, force = false) => {
 
   clearTrunkThread();
 
+  if (trunkAnimLoopId !== null) {
+    Animations.stopAnimLoop(trunkAnimLoopId);
+    trunkAnimLoopId = null;
+  }
+
   const ped = PlayerPedId();
   DetachEntity(ped, false, false);
   const coords = vehicle
     ? Util.ArrayToVector3(GetOffsetFromEntityInWorldCoords(vehicle, 0, -3.5, 0))
     : Util.getPlyCoords();
   SetEntityCoords(ped, coords.x, coords.y, coords.z, false, false, false, false);
-  StopAnimTask(ped, ANIM_DICT, ANIM, 1);
 
   isInTrunk = false;
   forcedIn = false;
   setTrunkCamActive(false);
   UI.hideInteraction();
   Events.emitNet('vehicles:trunk:leave');
-
-  Police.pauseCuffAnimation(false);
-  Hospital.pauseDownAnimation(false);
 };
 
 const clearTrunkThread = () => {

@@ -1,13 +1,6 @@
 import { BaseEvents, Keys } from '@dgx/client';
-import {
-  getPlayerState,
-  loadPedFlags,
-  respawnButtonPressed,
-  respawnButtonReleased,
-  setPauseDownAnimation,
-} from './service.down';
+import { getPlayerState, loadPedFlags, respawnButtonPressed, respawnButtonReleased } from './service.down';
 
-global.exports('pauseDownAnimation', setPauseDownAnimation);
 global.exports('isDown', () => {
   return getPlayerState() !== 'alive';
 });

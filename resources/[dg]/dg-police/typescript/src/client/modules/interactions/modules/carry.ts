@@ -1,6 +1,5 @@
-import { Events, Hospital, Keys, Police, Util } from '@dgx/client';
+import { Animations, Events, Hospital, Keys, Police, Util } from '@dgx/client';
 import { DISABLED_KEYS_WHILE_ESCORTING, VOICECHAT_KEYS } from '../constants.interactions';
-import { pauseCuffAnimation } from './cuffs';
 
 let cancelCarry = false;
 
@@ -20,6 +19,9 @@ Events.onNet('police:interactions:carryPlayer', async () => {
   TaskPlayAnim(ped, 'missfinale_c2mcs_1', 'fin_c2_mcs_1_camman', 3.0, -2.0, -1, 49, 0, false, false, false);
   await Util.awaitCondition(() => IsEntityPlayingAnim(ped, 'missfinale_c2mcs_1', 'fin_c2_mcs_1_camman', 3));
 
+  // NOTE: Not using AnimLoops here because we want to do action when anim stops
+  Animations.pauseAnimLoopAnimations(true);
+
   // Check loop
   cancelCarry = false;
   const thread = setInterval(() => {
@@ -35,6 +37,7 @@ Events.onNet('police:interactions:carryPlayer', async () => {
       Events.emitNet('police:interactions:stopCarryDuo');
       ClearPedTasksImmediately(ped);
       clearInterval(thread);
+      Animations.pauseAnimLoopAnimations(false);
     }
   }, 1);
 });
@@ -43,8 +46,7 @@ Events.onNet('police:interactions:getCarried', async (plyId: number) => {
   const ped = PlayerPedId();
   const draggerPed = GetPlayerPed(GetPlayerFromServerId(plyId));
 
-  pauseCuffAnimation(true);
-  Hospital.pauseDownAnimation(true);
+  Animations.pauseAnimLoopAnimations(true);
   global.exports['dg-lib'].shouldExecuteKeyMaps(false);
 
   // Initiate anim/attach and wait till started
@@ -73,8 +75,7 @@ Events.onNet('police:interactions:getCarried', async (plyId: number) => {
       ClearPedTasksImmediately(ped);
       clearInterval(thread);
 
-      pauseCuffAnimation(false);
-      Hospital.pauseDownAnimation(false);
+      Animations.pauseAnimLoopAnimations(false);
       global.exports['dg-lib'].shouldExecuteKeyMaps(true);
     }
   }, 1);

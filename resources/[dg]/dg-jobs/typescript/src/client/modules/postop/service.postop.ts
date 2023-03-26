@@ -11,6 +11,7 @@ import {
   RPC,
   Phone,
   Sounds,
+  Animations,
 } from '@dgx/client';
 import { getDistanceToFurthestCoord, getPropAttachItem, isAnyBackDoorOpen } from './helpers.postop';
 
@@ -27,6 +28,8 @@ let targetBlip = 0;
 let atDropoff: number | null = null;
 
 let hasPackage = false;
+let packagePropId: number | null = null;
+let packageAnimLoopId: number | null = null;
 
 export const registerPostOPStartPeekOptions = (types: PostOP.Config['types']) => {
   const options: PeekParams['options'] = Object.entries(types).map(([type, { peekLabel }]) => ({
@@ -76,7 +79,7 @@ export const setAssignedVehicle = (netId: typeof assignedVehicle) => {
         label: 'Pakje wegleggen',
         action: (_, vehicle) => {
           if (!vehicle) return;
-          removePackage(vehicle);
+          putBackPackageInVehicle(vehicle);
         },
         canInteract: vehicle => {
           if (!vehicle) return false;
@@ -256,7 +259,7 @@ export const tryDropoff = async () => {
 
   if (canceled) return;
 
-  hasPackage = false;
+  removePackage();
 };
 
 const addPackage = async (vehicle: number) => {
@@ -285,31 +288,19 @@ const addPackage = async (vehicle: number) => {
   if (canceled) return;
 
   hasPackage = true;
-  const propId = PropAttach.add(getPropAttachItem());
-
-  await Util.loadAnimDict('anim@heists@box_carry@');
-  const thread = setInterval(() => {
-    const ped = PlayerPedId();
-
-    if (!hasPackage) {
-      if (propId) {
-        PropAttach.remove(propId);
-      }
-      StopAnimTask(ped, 'anim@heists@box_carry@', 'idle', 3);
-      clearInterval(thread);
-      return;
-    }
-
-    DisablePlayerFiring(PlayerId(), true);
-
-    if (!IsEntityPlayingAnim(ped, 'anim@heists@box_carry@', 'idle', 3)) {
-      ClearPedTasks(ped);
-      TaskPlayAnim(ped, 'anim@heists@box_carry@', 'idle', 8.0, 8.0, -1, 51, 0, false, false, false);
-    }
-  }, 1);
+  packagePropId = PropAttach.add(getPropAttachItem());
+  packageAnimLoopId = Animations.startAnimLoop({
+    animation: {
+      dict: 'anim@heists@box_carry@',
+      name: 'idle',
+      flag: 51,
+    },
+    weight: 10,
+    disableFiring: true,
+  });
 };
 
-const removePackage = (vehicle: number) => {
+const putBackPackageInVehicle = (vehicle: number) => {
   if (!hasPackage) return;
 
   if (!isAnyBackDoorOpen(vehicle)) {
@@ -317,9 +308,22 @@ const removePackage = (vehicle: number) => {
     return;
   }
 
-  hasPackage = false;
+  removePackage();
 };
 
 export const setWaypointToReturn = () => {
   Util.setWaypoint(returnCoords);
+};
+
+const removePackage = () => {
+  hasPackage = false;
+
+  if (packagePropId) {
+    PropAttach.remove(packagePropId);
+    packagePropId = null;
+  }
+  if (packageAnimLoopId) {
+    Animations.stopAnimLoop(packageAnimLoopId);
+    packageAnimLoopId = null;
+  }
 };
