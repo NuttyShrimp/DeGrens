@@ -1,4 +1,4 @@
-import { SQL, StaticObjects, UI, Util, Inventory, Notifications, Phone } from '@dgx/server';
+import { SQL, StaticObjects, UI, Util, Inventory, Notifications, Phone, Jobs } from '@dgx/server';
 import { MODELS_PER_STAGE } from '../constants.weed';
 import config from 'services/config';
 import { mainLogger } from 'sv_logger';
@@ -189,7 +189,7 @@ export class WeedPlant {
     this.logger.silly(logMessage);
     Util.Log('weed:destroy', { plantId: this.id, ownerCid: this.cid }, logMessage, plyId);
 
-    if (this.cid && Util.getRndInteger(0, 101) < config.weed.destroyMailChance) {
+    if (this.cid && Util.getRndInteger(0, 101) < config.weed.destroyMailChance && Jobs.getCurrentJob(plyId) !== 'police') {
       const charInfo = DGCore.Functions.GetPlayer(plyId)?.PlayerData?.charinfo;
       const charName = `${charInfo?.firstname ?? 'Onbekende'} ${charInfo?.lastname ?? 'Persoon'}`;
 
