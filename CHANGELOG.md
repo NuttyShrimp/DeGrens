@@ -41,6 +41,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Vegetable container is nu buyable
 - Phone notificatie keybinds werken nu wel
 - Fix  hoge resource usage wanneer je wapen vasthebt
+- Paychecks worden nu wel opgeslagen
 
 ## [1.1.0]
 

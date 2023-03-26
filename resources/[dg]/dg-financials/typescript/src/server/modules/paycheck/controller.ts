@@ -1,11 +1,11 @@
-import { Util, Jobs, Events, Inventory, Notifications, TaxIds } from '@dgx/server';
+import { Util, Events, Inventory, Notifications, TaxIds } from '@dgx/server';
 import { isPlyInLoc } from '../bank/helpers/location';
-import { checkInterval, givePaycheck, registerPaycheck, seedCache, seedPlyInCache } from './service';
+import { addAmountToPaycheck, givePaycheck, seedCache, seedPlyInCache } from './service';
 import accountManager from 'modules/bank/classes/AccountManager';
 import { getTaxedPrice } from 'modules/taxes/service';
 
-global.exports('registerPaycheck', (cid: number, amount: number, job: string, comment?: string) =>
-  registerPaycheck(cid, amount, job, comment)
+global.exports('addAmountToPaycheck', (cid: number, amount: number, comment: string) =>
+  addAmountToPaycheck(cid, amount, comment)
 );
 
 RegisterCommand(
@@ -18,12 +18,6 @@ RegisterCommand(
 
 Util.onPlayerLoaded(playerData => {
   seedPlyInCache(playerData.citizenid);
-  checkInterval(playerData.citizenid, Jobs.getCurrentJob(playerData.source));
-});
-
-Jobs.onJobUpdate((plyId, job) => {
-  const cid = Util.getCID(plyId);
-  checkInterval(cid, job);
 });
 
 onNet('financials:server:paycheck:give', () => {
