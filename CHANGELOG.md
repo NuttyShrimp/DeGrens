@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Enkele nieuwe politie kledingstukken toegevoegd
 - Je kan lockers nu doorgeven
 - Je kan lockers nu voor korte tijd accessen nadat je het passwoord invuld
+- Veel liften voor hoge gebouwen toegevoegd
 
 ### Changed
 - Meer feedback bij start van fleecaoverval
