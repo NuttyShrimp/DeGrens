@@ -44,6 +44,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fix  hoge resource usage wanneer je wapen vasthebt
 - Paychecks worden nu wel opgeslagen
 - Reset local itemcache na characterswitch
+- Je kan sneller bennys repair gebruiken
 
 ## [1.1.0]
 
