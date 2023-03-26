@@ -54,7 +54,7 @@ const startBleedThread = () => {
     if (bleedAmount === 0) return;
 
     // Each second 20% of bloodamounts gets subtracted from health
-    const healthDecrease = Math.max(1, Math.floor(bleedAmount * 0.2));
+    const healthDecrease = Math.max(1, Math.floor(bleedAmount * 0.05));
     const health = getHealth();
     if (health <= 0) return; // So we dont trigger downCheck
     setHealth(health - healthDecrease);

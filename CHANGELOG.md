@@ -33,6 +33,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Gang exports veranderd naar enkel name om geen promise te returnen
 - Politie kan weedplanten nu sneller kapotmaken
 - Gordels zijn consistenter
+- Health decrease van bloed verlaagd
 
 ### Fixed
 - Fix group job change export name
