@@ -19,6 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Veel liften voor hoge gebouwen toegevoegd
 - Extra banreden toegevoegd in adminpanel
 - Politie signin locaties toegevoegd in Sandy/Paleto
+- Schotmeldingen toegevoegd
 
 ### Changed
 - Meer feedback bij start van fleecaoverval
