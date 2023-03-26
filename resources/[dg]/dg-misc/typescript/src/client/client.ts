@@ -8,6 +8,7 @@ import './modules/propattach';
 import './modules/rental/controller.rental';
 import './modules/gtabehaviour';
 import './modules/staticobjects';
+import './modules/animloops';
 import './services/laptop';
 import './services/config';
 import './services/boatanchor';

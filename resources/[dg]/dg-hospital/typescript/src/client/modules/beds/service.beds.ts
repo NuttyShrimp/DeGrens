@@ -1,10 +1,10 @@
-import { Keys, Notifications, Police, UI, Util } from '@dgx/client';
-import { setPauseDownAnimation } from 'modules/down/service.down';
+import { Animations, Keys, Notifications, UI, Util } from '@dgx/client';
 import { ENABLED_KEYS_IN_BED } from './constants.beds';
 
 let inBed = false;
 let bedCam: number | null = null;
 let canLeaveBed = false;
+let bedAnimLoopId: number | null = null;
 
 export const enterBed = async (position: Vec4, timeout: number) => {
   if (inBed) return;
@@ -20,27 +20,22 @@ export const enterBed = async (position: Vec4, timeout: number) => {
   SetEntityHeading(ped, position.w);
   FreezeEntityPosition(ped, true);
 
-  Police.pauseCuffAnimation(true);
-  setPauseDownAnimation(true);
-
   await Util.loadAnimDict('mini@cpr@char_b@cpr_def');
-  const bedThread = setInterval(() => {
-    if (!inBed) {
-      clearInterval(bedThread);
-      return;
-    }
 
-    const ped = PlayerPedId();
-    if (!IsEntityPlayingAnim(ped, 'mini@cpr@char_b@cpr_def', 'cpr_pumpchest_idle', 3)) {
-      ClearPedTasksImmediately(ped);
-      TaskPlayAnim(ped, 'mini@cpr@char_b@cpr_def', 'cpr_pumpchest_idle', 32.0, 32.0, -1, 1, 0, false, false, false);
-    }
-
-    DisableAllControlActions(0);
-    ENABLED_KEYS_IN_BED.forEach(key => {
-      EnableControlAction(0, key, true);
-    });
-  }, 1);
+  if (bedAnimLoopId !== null) {
+    Animations.stopAnimLoop(bedAnimLoopId);
+  }
+  bedAnimLoopId = Animations.startAnimLoop({
+    animation: {
+      dict: 'mini@cpr@char_b@cpr_def',
+      name: 'cpr_pumpchest_idle',
+      flag: 1,
+    },
+    weight: 100, // Anim should overwrite cuffs and downstate
+    disableAllControls: true,
+    disableFiring: true,
+    enabledControls: ENABLED_KEYS_IN_BED,
+  });
 
   createBedCam();
 
@@ -63,6 +58,14 @@ export const leaveBed = async () => {
 
   inBed = false;
 
+  if (bedAnimLoopId !== null) {
+    Animations.stopAnimLoop(bedAnimLoopId);
+    bedAnimLoopId = null;
+  }
+
+  // pause to allow proper leaving anim
+  Animations.pauseAnimLoopAnimations(true);
+
   UI.hideInteraction();
 
   DoScreenFadeOut(250);
@@ -84,8 +87,7 @@ export const leaveBed = async () => {
   StopAnimTask(ped, 'anim@mp_bedmid@right_var_04', 'f_getout_r_bighouse', 1);
   RemoveAnimDict('anim@mp_bedmid@right_var_04');
 
-  Police.pauseCuffAnimation(false);
-  setPauseDownAnimation(false);
+  Animations.pauseAnimLoopAnimations(false);
 
   Util.setWalkstyle('move_m@injured');
 };

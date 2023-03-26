@@ -1,22 +1,14 @@
-import { Notifications, Events, Weapons, Keys, Jobs, RPC, Util, Inventory, Minigames } from '@dgx/client';
+import { Notifications, Events, Weapons, Keys, Jobs, RPC, Util, Inventory, Minigames, Animations } from '@dgx/client';
 import { ENABLED_KEYS_WHILE_CUFFED, ENABLED_KEYS_WHILE_SOFT_CUFFED } from '../constants.interactions';
 
 let cuffSpeed = 10;
 let cuffType: 'soft' | 'hard' | null = null;
-let cuffAnimPaused = false;
 let doingCuffAction = false;
+
+let cuffAnimLoopId: number | null = null;
 
 export const isCuffed = () => cuffType !== null;
 global.exports('isCuffed', isCuffed);
-
-export const pauseCuffAnimation = (pause: boolean) => {
-  cuffAnimPaused = pause;
-  if (cuffAnimPaused) {
-    const animDict = cuffType === 'hard' ? 'mp_arresting' : 'anim@move_m@prisoner_cuffed';
-    StopAnimTask(PlayerPedId(), animDict, 'idle', 1);
-  }
-};
-global.exports('pauseCuffAnimation', pauseCuffAnimation);
 
 const tryToCuff = () => {
   if (doingCuffAction) return;
@@ -72,36 +64,9 @@ const cuff = async (canBreakOut = true) => {
     await Util.Delay(2000);
   }
 
-  cuffType = 'hard';
-  Events.emitNet('police:interactions:setCuffState', cuffType);
-
-  await Util.loadAnimDict('mp_arresting');
-  await Util.loadAnimDict('anim@move_m@prisoner_cuffed');
   Weapons.removeWeapon(undefined, true);
-
-  const cuffThread = setInterval(() => {
-    const ped = PlayerPedId();
-    const animDict = cuffType === 'hard' ? 'mp_arresting' : 'anim@move_m@prisoner_cuffed';
-
-    if (cuffType === null) {
-      clearInterval(cuffThread);
-      StopAnimTask(ped, animDict, 'idle', 1);
-      return;
-    }
-
-    if (!cuffAnimPaused) {
-      if (!IsEntityPlayingAnim(ped, animDict, 'idle', 3)) {
-        ClearPedTasks(ped);
-        TaskPlayAnim(ped, animDict, 'idle', 8, -8, -1, 49, 0, false, false, false);
-      }
-    }
-
-    DisableAllControlActions(0);
-    ENABLED_KEYS_WHILE_CUFFED.forEach(key => EnableControlAction(0, key, true));
-    if (cuffType === 'soft') {
-      ENABLED_KEYS_WHILE_SOFT_CUFFED.forEach(key => EnableControlAction(0, key, true));
-    }
-  }, 1);
+  setCuffType('hard');
+  Events.emitNet('police:interactions:setCuffState', cuffType);
 };
 
 // Radialmenu option
@@ -160,9 +125,39 @@ Events.onNet('police:interactions:getCuffed', async (coords: Vec4) => {
 });
 
 Events.onNet('police:interactions:setCuffState', (state: Police.CuffType | null) => {
-  cuffType = state;
+  setCuffType(state);
 });
 
 Events.onNet('police:interactions:forceCuff', () => {
   cuff(false);
 });
+
+const setCuffType = (state: Police.CuffType | null) => {
+  if (state === null) {
+    if (cuffAnimLoopId !== null) {
+      Animations.stopAnimLoop(cuffAnimLoopId);
+      cuffAnimLoopId = null;
+    }
+    cuffType = null;
+    return;
+  }
+
+  cuffType = state;
+
+  const animLoop: AnimLoops.Anim = {
+    animation: {
+      dict: cuffType === 'hard' ? 'mp_arresting' : 'anim@move_m@prisoner_cuffed',
+      name: 'idle',
+      flag: 49,
+    },
+    weight: 50,
+    disableAllControls: true,
+    enabledControls: [...ENABLED_KEYS_WHILE_CUFFED, ...(cuffType === 'hard' ? [] : ENABLED_KEYS_WHILE_SOFT_CUFFED)],
+  };
+
+  if (cuffAnimLoopId === null) {
+    cuffAnimLoopId = Animations.startAnimLoop(animLoop);
+  } else {
+    Animations.modifyAnimLoop(cuffAnimLoopId, animLoop);
+  }
+};

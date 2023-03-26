@@ -11,6 +11,7 @@ import {
   Minigames,
   RPC,
   Phone,
+  Animations,
 } from '@dgx/client';
 
 let inReturnZone = false;
@@ -24,7 +25,8 @@ let vehiclePeekIds: string[] = [];
 let currentJobType: Fishing.JobType | null = null;
 
 let fishingRodProp: number | null = null;
-let hasFish = false;
+let fishEntity: number | null = null;
+let fishHoldAnimLoopId: number | null = null;
 
 export const setCurrentJobType = (jobType: typeof currentJobType) => {
   currentJobType = jobType;
@@ -74,9 +76,9 @@ export const setFishingVehicle = (netId: typeof fishingVehicle) => {
         label: 'Vis Wegsteken',
         action: (_, vehicle) => {
           if (!vehicle) return;
-          hasFish = false;
+          removeFishEntity();
         },
-        canInteract: () => hasFish,
+        canInteract: () => fishEntity !== null,
       },
     ],
   });
@@ -127,24 +129,33 @@ export const cleanupFishingJob = () => {
     PropAttach.remove(fishingRodProp);
     fishingRodProp = null;
   }
-  hasFish = false;
+  if (fishEntity !== null) {
+    removeFishEntity();
+    fishEntity = null;
+  }
 };
 
 // most braindeath func ever
 export const useRod = async () => {
   if (currentJobType === null) return;
 
+  const ped = PlayerPedId();
+
   if (fishingRodProp !== null) {
     PropAttach.remove(fishingRodProp);
     fishingRodProp = null;
-    ClearPedTasksImmediately(PlayerPedId());
+    ClearPedTasksImmediately(ped);
+    return;
+  }
+
+  if (fishEntity !== null) {
+    Notifications.add('Je hebt nog een vis vast', 'error');
     return;
   }
 
   // if jobtype is car check if we actually aiming at the water
   // Not needed for boat because location is surrounded by water anyway
   // THIS RAYCAST DOES NOT WORK ON OCEANS KEEP IN MIND WHEN YOU WANNA ADD MORE LOCATIONS
-  const ped = PlayerPedId();
   if (currentJobType === 'car') {
     const waterLookingAt = RayCast.doRaycast(50, 128).coords;
     if (!waterLookingAt) {
@@ -190,37 +201,49 @@ export const useRod = async () => {
   const pedCoords = Util.getPlyCoords();
   await Util.loadModel('a_c_fish');
   await Util.loadAnimDict('anim@heists@narcotics@trash');
-  const fish = CreatePed(4, GetHashKey('a_c_fish'), pedCoords.x, pedCoords.y, pedCoords.z, 0, true, false);
-  SetPedComponentVariation(fish, 0, 0, 0, 0);
-  SetPedPropIndex(fish, 0, 0, 0, false);
+  fishEntity = CreatePed(4, GetHashKey('a_c_fish'), pedCoords.x, pedCoords.y, pedCoords.z, 0, true, false);
+  SetPedComponentVariation(fishEntity, 0, 0, 0, 0);
+  SetPedPropIndex(fishEntity, 0, 0, 0, false);
   const bone = GetPedBoneIndex(ped, 24818);
-  SetEntityInvincible(fish, true);
-  AttachEntityToEntity(fish, ped, bone, -0.5, 0.05, -0.45, 180, 90, 90, true, true, false, true, 2, true);
-  SetEntityCompletelyDisableCollision(fish, false, false);
+  SetEntityInvincible(fishEntity, true);
+  AttachEntityToEntity(fishEntity, ped, bone, -0.5, 0.05, -0.45, 180, 90, 90, true, true, false, true, 2, true);
+  SetEntityCompletelyDisableCollision(fishEntity, false, false);
   SetModelAsNoLongerNeeded('a_c_fish');
 
-  hasFish = true;
-  const animInterval = setInterval(async () => {
-    if (!hasFish) {
-      clearInterval(animInterval);
+  fishHoldAnimLoopId = Animations.startAnimLoop({
+    animation: {
+      dict: 'anim@heists@narcotics@trash',
+      name: 'idle',
+      flag: 51,
+    },
+    disableFiring: true,
+  });
+};
 
-      // Finish holding fish logic
-      ClearPedTasksImmediately(ped);
-      await Util.Delay(100);
-      DeleteEntity(fish);
-      TaskPlayAnim(ped, 'anim@heists@narcotics@trash', 'throw_a', 8.0, 8.0, -1, 17, 1, false, false, false);
-      await Util.Delay(1000);
-      ClearPedTasksImmediately(ped);
-      RemoveAnimDict('anim@heists@narcotics@trash');
+const removeFishEntity = async () => {
+  if (!fishEntity || !DoesEntityExist(fishEntity)) return;
 
-      if (fishingVehicle !== null) {
-        Events.emitNet('jobs:fishing:putAwayFish', fishingVehicle);
-      }
-      return;
-    }
+  const ped = PlayerPedId();
 
-    if (IsEntityPlayingAnim(ped, 'anim@heists@narcotics@trash', 'idle', 3)) return;
-    ClearPedTasksImmediately(ped);
-    TaskPlayAnim(ped, 'anim@heists@narcotics@trash', 'idle', 8.0, 2.0, -1, 51, 0, false, false, false);
-  }, 100);
+  if (fishHoldAnimLoopId !== null) {
+    Animations.stopAnimLoop(fishHoldAnimLoopId);
+    fishHoldAnimLoopId = null;
+  }
+
+  // pause to allow proper throwing anim
+  Animations.pauseAnimLoopAnimations(true);
+
+  await Util.Delay(100);
+  DeleteEntity(fishEntity);
+  TaskPlayAnim(ped, 'anim@heists@narcotics@trash', 'throw_a', 8.0, 8.0, -1, 17, 1, false, false, false);
+
+  await Util.Delay(1000);
+  StopAnimTask(ped, 'anim@heists@narcotics@trash', 'throw_a', 1);
+  RemoveAnimDict('anim@heists@narcotics@trash');
+
+  Animations.pauseAnimLoopAnimations(false);
+
+  if (fishingVehicle !== null) {
+    Events.emitNet('jobs:fishing:putAwayFish', fishingVehicle);
+  }
 };
