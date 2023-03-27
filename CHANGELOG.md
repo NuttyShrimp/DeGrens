@@ -35,6 +35,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Gordels zijn consistenter
 - Health decrease van bloed verlaagd
 - Je kan geen autos zonder medewerker mee kopen als er een medewerker in de winkel is
+- Moved winston logger logic/creation to a seperate package to reduce code duplication
 
 ### Fixed
 - Fix group job change export name

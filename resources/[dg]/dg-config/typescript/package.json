@@ -15,6 +15,7 @@
   "devDependencies": {
     "@dgx/server": "workspace:*",
     "@dgx/shared": "workspace:*",
+    "logger": "workspace:*",
     "tsconfig": "workspace:*",
     "esbuild": "*"
   }

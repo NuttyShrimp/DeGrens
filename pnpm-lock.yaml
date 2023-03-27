@@ -44,7 +44,6 @@ importers:
       turbo: ^1.7.4
       typescript: ^4.9.5
       winston: ^3.8.2
-      winston-sentry-log: ^1.0.26
     dependencies:
       '@anatine/esbuild-decorators': 0.2.19_esbuild@0.17.11
       '@citizenfx/client': 2.0.6282-1
@@ -60,7 +59,6 @@ importers:
       ts-node: 10.9.1_4bewfcp2iebiwuold25d6rgcsy
       typescript: 4.9.5
       winston: 3.8.2
-      winston-sentry-log: 1.0.26
     devDependencies:
       '@sentry/esbuild-plugin': 0.4.0
       '@sentry/integrations': 7.42.0
@@ -95,6 +93,16 @@ importers:
     devDependencies:
       prisma: 4.10.1
 
+  packages/logger:
+    specifiers:
+      '@sentry/node': ^7.37.2
+      winston: ^3.8.2
+      winston-sentry-log: ^1.0.26
+    dependencies:
+      '@sentry/node': 7.42.0
+      winston: 3.8.2
+      winston-sentry-log: 1.0.26
+
   packages/tsconfig:
     specifiers: {}
 
@@ -106,6 +114,7 @@ importers:
       axios: ^0.27.2
       dayjs: '*'
       esbuild: '*'
+      logger: workspace:*
       tsconfig: workspace:*
     dependencies:
       axios: 0.27.2
@@ -115,6 +124,7 @@ importers:
       '@dgx/server': link:../../ts-shared/typescript/src/server
       '@dgx/shared': link:../../ts-shared/typescript/src/shared
       esbuild: 0.17.11
+      logger: link:../../../../packages/logger
       tsconfig: link:../../../../packages/tsconfig
 
   resources/[dg]/dg-admin/ui:
@@ -156,12 +166,14 @@ importers:
       '@dgx/server': workspace:*
       '@dgx/shared': workspace:*
       esbuild: '*'
+      logger: workspace:*
       tsconfig: workspace:*
     devDependencies:
       '@dgx/client': link:../../ts-shared/typescript/src/client
       '@dgx/server': link:../../ts-shared/typescript/src/server
       '@dgx/shared': link:../../ts-shared/typescript/src/shared
       esbuild: 0.17.11
+      logger: link:../../../../packages/logger
       tsconfig: link:../../../../packages/tsconfig
 
   resources/[dg]/dg-auth/typescript:
@@ -171,6 +183,7 @@ importers:
       '@dgx/shared': workspace:*
       esbuild: '*'
       fast-jwt: ^2.2.0
+      logger: workspace:*
       tsconfig: workspace:*
     dependencies:
       fast-jwt: 2.2.0
@@ -179,6 +192,7 @@ importers:
       '@dgx/server': link:../../ts-shared/typescript/src/server
       '@dgx/shared': link:../../ts-shared/typescript/src/shared
       esbuild: 0.17.11
+      logger: link:../../../../packages/logger
       tsconfig: link:../../../../packages/tsconfig
 
   resources/[dg]/dg-auth/ui-project:
@@ -195,24 +209,24 @@ importers:
       '@dgx/server': workspace:*
       '@dgx/shared': workspace:*
       esbuild: '*'
+      logger: workspace:*
       tsconfig: workspace:*
     devDependencies:
       '@dgx/client': link:../../ts-shared/typescript/src/client
       '@dgx/server': link:../../ts-shared/typescript/src/server
       '@dgx/shared': link:../../ts-shared/typescript/src/shared
       esbuild: 0.17.11
+      logger: link:../../../../packages/logger
       tsconfig: link:../../../../packages/tsconfig
 
   resources/[dg]/dg-build/typescript:
     specifiers:
       '@dgx/client': workspace:*
-      '@dgx/server': workspace:*
       '@dgx/shared': workspace:*
       esbuild: '*'
       tsconfig: workspace:*
     devDependencies:
       '@dgx/client': link:../../ts-shared/typescript/src/client
-      '@dgx/server': link:../../ts-shared/typescript/src/server
       '@dgx/shared': link:../../ts-shared/typescript/src/shared
       esbuild: 0.17.11
       tsconfig: link:../../../../packages/tsconfig
@@ -223,12 +237,14 @@ importers:
       '@dgx/server': workspace:*
       '@dgx/shared': workspace:*
       esbuild: '*'
+      logger: workspace:*
       tsconfig: workspace:*
     devDependencies:
       '@dgx/client': link:../../ts-shared/typescript/src/client
       '@dgx/server': link:../../ts-shared/typescript/src/server
       '@dgx/shared': link:../../ts-shared/typescript/src/shared
       esbuild: 0.17.11
+      logger: link:../../../../packages/logger
       tsconfig: link:../../../../packages/tsconfig
 
   resources/[dg]/dg-chars/ui:
@@ -316,11 +332,13 @@ importers:
       '@dgx/server': workspace:*
       '@dgx/shared': workspace:*
       esbuild: '*'
+      logger: workspace:*
       tsconfig: workspace:*
     devDependencies:
       '@dgx/server': link:../../ts-shared/typescript/src/server
       '@dgx/shared': link:../../ts-shared/typescript/src/shared
       esbuild: 0.17.11
+      logger: link:../../../../packages/logger
       tsconfig: link:../../../../packages/tsconfig
 
   resources/[dg]/dg-criminal/typescript:
@@ -329,12 +347,14 @@ importers:
       '@dgx/server': workspace:*
       '@dgx/shared': workspace:*
       esbuild: '*'
+      logger: workspace:*
       tsconfig: workspace:*
     devDependencies:
       '@dgx/client': link:../../ts-shared/typescript/src/client
       '@dgx/server': link:../../ts-shared/typescript/src/server
       '@dgx/shared': link:../../ts-shared/typescript/src/shared
       esbuild: 0.17.11
+      logger: link:../../../../packages/logger
       tsconfig: link:../../../../packages/tsconfig
 
   resources/[dg]/dg-dispatch/typescript:
@@ -343,12 +363,14 @@ importers:
       '@dgx/server': workspace:*
       '@dgx/shared': workspace:*
       esbuild: '*'
+      logger: workspace:*
       tsconfig: workspace:*
     devDependencies:
       '@dgx/client': link:../../ts-shared/typescript/src/client
       '@dgx/server': link:../../ts-shared/typescript/src/server
       '@dgx/shared': link:../../ts-shared/typescript/src/shared
       esbuild: 0.17.11
+      logger: link:../../../../packages/logger
       tsconfig: link:../../../../packages/tsconfig
 
   resources/[dg]/dg-doorlock/typescript:
@@ -357,12 +379,14 @@ importers:
       '@dgx/server': workspace:*
       '@dgx/shared': workspace:*
       esbuild: '*'
+      logger: workspace:*
       tsconfig: workspace:*
     devDependencies:
       '@dgx/client': link:../../ts-shared/typescript/src/client
       '@dgx/server': link:../../ts-shared/typescript/src/server
       '@dgx/shared': link:../../ts-shared/typescript/src/shared
       esbuild: 0.17.11
+      logger: link:../../../../packages/logger
       tsconfig: link:../../../../packages/tsconfig
 
   resources/[dg]/dg-farming/typescript:
@@ -371,12 +395,14 @@ importers:
       '@dgx/server': workspace:*
       '@dgx/shared': workspace:*
       esbuild: '*'
+      logger: workspace:*
       tsconfig: workspace:*
     devDependencies:
       '@dgx/client': link:../../ts-shared/typescript/src/client
       '@dgx/server': link:../../ts-shared/typescript/src/server
       '@dgx/shared': link:../../ts-shared/typescript/src/shared
       esbuild: 0.17.11
+      logger: link:../../../../packages/logger
       tsconfig: link:../../../../packages/tsconfig
 
   resources/[dg]/dg-financials/typescript:
@@ -387,6 +413,7 @@ importers:
       dayjs: '*'
       esbuild: '*'
       fast-deep-equal: ^3.1.3
+      logger: workspace:*
       tsconfig: workspace:*
     dependencies:
       dayjs: 1.11.7
@@ -396,6 +423,7 @@ importers:
       '@dgx/server': link:../../ts-shared/typescript/src/server
       '@dgx/shared': link:../../ts-shared/typescript/src/shared
       esbuild: 0.17.11
+      logger: link:../../../../packages/logger
       tsconfig: link:../../../../packages/tsconfig
 
   resources/[dg]/dg-gangs/typescript:
@@ -404,12 +432,14 @@ importers:
       '@dgx/server': workspace:*
       '@dgx/shared': workspace:*
       esbuild: '*'
+      logger: workspace:*
       tsconfig: workspace:*
     devDependencies:
       '@dgx/client': link:../../ts-shared/typescript/src/client
       '@dgx/server': link:../../ts-shared/typescript/src/server
       '@dgx/shared': link:../../ts-shared/typescript/src/shared
       esbuild: 0.17.11
+      logger: link:../../../../packages/logger
       tsconfig: link:../../../../packages/tsconfig
 
   resources/[dg]/dg-heists/typescript:
@@ -418,12 +448,14 @@ importers:
       '@dgx/server': workspace:*
       '@dgx/shared': workspace:*
       esbuild: '*'
+      logger: workspace:*
       tsconfig: workspace:*
     devDependencies:
       '@dgx/client': link:../../ts-shared/typescript/src/client
       '@dgx/server': link:../../ts-shared/typescript/src/server
       '@dgx/shared': link:../../ts-shared/typescript/src/shared
       esbuild: 0.17.11
+      logger: link:../../../../packages/logger
       tsconfig: link:../../../../packages/tsconfig
 
   resources/[dg]/dg-hospital/typescript:
@@ -432,12 +464,14 @@ importers:
       '@dgx/server': workspace:*
       '@dgx/shared': workspace:*
       esbuild: '*'
+      logger: workspace:*
       tsconfig: workspace:*
     devDependencies:
       '@dgx/client': link:../../ts-shared/typescript/src/client
       '@dgx/server': link:../../ts-shared/typescript/src/server
       '@dgx/shared': link:../../ts-shared/typescript/src/shared
       esbuild: 0.17.11
+      logger: link:../../../../packages/logger
       tsconfig: link:../../../../packages/tsconfig
 
   resources/[dg]/dg-houserobbery/typescript:
@@ -446,12 +480,14 @@ importers:
       '@dgx/server': workspace:*
       '@dgx/shared': workspace:*
       esbuild: '*'
+      logger: workspace:*
       tsconfig: workspace:*
     devDependencies:
       '@dgx/client': link:../../ts-shared/typescript/src/client
       '@dgx/server': link:../../ts-shared/typescript/src/server
       '@dgx/shared': link:../../ts-shared/typescript/src/shared
       esbuild: 0.17.11
+      logger: link:../../../../packages/logger
       tsconfig: link:../../../../packages/tsconfig
 
   resources/[dg]/dg-inventory/typescript:
@@ -460,12 +496,14 @@ importers:
       '@dgx/server': workspace:*
       '@dgx/shared': workspace:*
       esbuild: '*'
+      logger: workspace:*
       tsconfig: workspace:*
     devDependencies:
       '@dgx/client': link:../../ts-shared/typescript/src/client
       '@dgx/server': link:../../ts-shared/typescript/src/server
       '@dgx/shared': link:../../ts-shared/typescript/src/shared
       esbuild: 0.17.11
+      logger: link:../../../../packages/logger
       tsconfig: link:../../../../packages/tsconfig
 
   resources/[dg]/dg-jobs/typescript:
@@ -475,6 +513,7 @@ importers:
       '@dgx/shared': workspace:*
       '@types/uuid': ^9.0.0
       esbuild: '*'
+      logger: workspace:*
       tsconfig: workspace:*
       uuid: ^9.0.0
     dependencies:
@@ -485,6 +524,7 @@ importers:
       '@dgx/shared': link:../../ts-shared/typescript/src/shared
       '@types/uuid': 9.0.1
       esbuild: 0.17.11
+      logger: link:../../../../packages/logger
       tsconfig: link:../../../../packages/tsconfig
 
   resources/[dg]/dg-justice/typescript:
@@ -493,12 +533,14 @@ importers:
       '@dgx/server': workspace:*
       '@dgx/shared': workspace:*
       esbuild: '*'
+      logger: workspace:*
       tsconfig: workspace:*
     devDependencies:
       '@dgx/client': link:../../ts-shared/typescript/src/client
       '@dgx/server': link:../../ts-shared/typescript/src/server
       '@dgx/shared': link:../../ts-shared/typescript/src/shared
       esbuild: 0.17.11
+      logger: link:../../../../packages/logger
       tsconfig: link:../../../../packages/tsconfig
 
   resources/[dg]/dg-labs/typescript:
@@ -507,12 +549,14 @@ importers:
       '@dgx/server': workspace:*
       '@dgx/shared': workspace:*
       esbuild: '*'
+      logger: workspace:*
       tsconfig: workspace:*
     devDependencies:
       '@dgx/client': link:../../ts-shared/typescript/src/client
       '@dgx/server': link:../../ts-shared/typescript/src/server
       '@dgx/shared': link:../../ts-shared/typescript/src/shared
       esbuild: 0.17.11
+      logger: link:../../../../packages/logger
       tsconfig: link:../../../../packages/tsconfig
 
   resources/[dg]/dg-localsounds/typescript:
@@ -521,12 +565,14 @@ importers:
       '@dgx/server': workspace:*
       '@dgx/shared': workspace:*
       esbuild: '*'
+      logger: workspace:*
       tsconfig: workspace:*
     devDependencies:
       '@dgx/client': link:../../ts-shared/typescript/src/client
       '@dgx/server': link:../../ts-shared/typescript/src/server
       '@dgx/shared': link:../../ts-shared/typescript/src/shared
       esbuild: 0.17.11
+      logger: link:../../../../packages/logger
       tsconfig: link:../../../../packages/tsconfig
 
   resources/[dg]/dg-lockers/typescript:
@@ -535,12 +581,14 @@ importers:
       '@dgx/server': workspace:*
       '@dgx/shared': workspace:*
       esbuild: '*'
+      logger: workspace:*
       tsconfig: workspace:*
     devDependencies:
       '@dgx/client': link:../../ts-shared/typescript/src/client
       '@dgx/server': link:../../ts-shared/typescript/src/server
       '@dgx/shared': link:../../ts-shared/typescript/src/shared
       esbuild: 0.17.11
+      logger: link:../../../../packages/logger
       tsconfig: link:../../../../packages/tsconfig
 
   resources/[dg]/dg-materials/typescript:
@@ -549,12 +597,14 @@ importers:
       '@dgx/server': workspace:*
       '@dgx/shared': workspace:*
       esbuild: '*'
+      logger: workspace:*
       tsconfig: workspace:*
     devDependencies:
       '@dgx/client': link:../../ts-shared/typescript/src/client
       '@dgx/server': link:../../ts-shared/typescript/src/server
       '@dgx/shared': link:../../ts-shared/typescript/src/shared
       esbuild: 0.17.11
+      logger: link:../../../../packages/logger
       tsconfig: link:../../../../packages/tsconfig
 
   resources/[dg]/dg-minigames/typescript:
@@ -575,12 +625,14 @@ importers:
       '@dgx/server': workspace:*
       '@dgx/shared': workspace:*
       esbuild: '*'
+      logger: workspace:*
       tsconfig: workspace:*
     devDependencies:
       '@dgx/client': link:../../ts-shared/typescript/src/client
       '@dgx/server': link:../../ts-shared/typescript/src/server
       '@dgx/shared': link:../../ts-shared/typescript/src/shared
       esbuild: 0.17.11
+      logger: link:../../../../packages/logger
       tsconfig: link:../../../../packages/tsconfig
 
   resources/[dg]/dg-npcs/typescript:
@@ -589,12 +641,14 @@ importers:
       '@dgx/server': workspace:*
       '@dgx/shared': workspace:*
       esbuild: '*'
+      logger: workspace:*
       tsconfig: workspace:*
     devDependencies:
       '@dgx/client': link:../../ts-shared/typescript/src/client
       '@dgx/server': link:../../ts-shared/typescript/src/server
       '@dgx/shared': link:../../ts-shared/typescript/src/shared
       esbuild: 0.17.11
+      logger: link:../../../../packages/logger
       tsconfig: link:../../../../packages/tsconfig
 
   resources/[dg]/dg-peek/typescript:
@@ -615,12 +669,14 @@ importers:
       '@dgx/server': workspace:*
       '@dgx/shared': workspace:*
       esbuild: '*'
+      logger: workspace:*
       tsconfig: workspace:*
     devDependencies:
       '@dgx/client': link:../../ts-shared/typescript/src/client
       '@dgx/server': link:../../ts-shared/typescript/src/server
       '@dgx/shared': link:../../ts-shared/typescript/src/shared
       esbuild: 0.17.11
+      logger: link:../../../../packages/logger
       tsconfig: link:../../../../packages/tsconfig
 
   resources/[dg]/dg-radialmenu/typescript:
@@ -641,12 +697,14 @@ importers:
       '@dgx/server': workspace:*
       '@dgx/shared': workspace:*
       esbuild: '*'
+      logger: workspace:*
       tsconfig: workspace:*
     devDependencies:
       '@dgx/client': link:../../ts-shared/typescript/src/client
       '@dgx/server': link:../../ts-shared/typescript/src/server
       '@dgx/shared': link:../../ts-shared/typescript/src/shared
       esbuild: 0.17.11
+      logger: link:../../../../packages/logger
       tsconfig: link:../../../../packages/tsconfig
 
   resources/[dg]/dg-sql/typescript:
@@ -656,6 +714,7 @@ importers:
       '@dgx/shared': workspace:*
       cardinal: ^2.1.1
       esbuild: '*'
+      logger: workspace:*
       mysql2: ^3.1.2
       tsconfig: workspace:*
     dependencies:
@@ -666,6 +725,7 @@ importers:
       '@dgx/server': link:../../ts-shared/typescript/src/server
       '@dgx/shared': link:../../ts-shared/typescript/src/shared
       esbuild: 0.17.11
+      logger: link:../../../../packages/logger
       tsconfig: link:../../../../packages/tsconfig
 
   resources/[dg]/dg-storerobbery/typescript:
@@ -674,12 +734,14 @@ importers:
       '@dgx/server': workspace:*
       '@dgx/shared': workspace:*
       esbuild: '*'
+      logger: workspace:*
       tsconfig: workspace:*
     devDependencies:
       '@dgx/client': link:../../ts-shared/typescript/src/client
       '@dgx/server': link:../../ts-shared/typescript/src/server
       '@dgx/shared': link:../../ts-shared/typescript/src/shared
       esbuild: 0.17.11
+      logger: link:../../../../packages/logger
       tsconfig: link:../../../../packages/tsconfig
 
   resources/[dg]/dg-sync/typescript:
@@ -688,12 +750,14 @@ importers:
       '@dgx/server': workspace:*
       '@dgx/shared': workspace:*
       esbuild: '*'
+      logger: workspace:*
       tsconfig: workspace:*
     devDependencies:
       '@dgx/client': link:../../ts-shared/typescript/src/client
       '@dgx/server': link:../../ts-shared/typescript/src/server
       '@dgx/shared': link:../../ts-shared/typescript/src/shared
       esbuild: 0.17.11
+      logger: link:../../../../packages/logger
       tsconfig: link:../../../../packages/tsconfig
 
   resources/[dg]/dg-ui/[src]:
@@ -794,6 +858,7 @@ importers:
       '@dgx/shared': workspace:*
       esbuild: '*'
       jsonschema: ^1.4.0
+      logger: workspace:*
       tsconfig: workspace:*
     dependencies:
       jsonschema: 1.4.1
@@ -802,6 +867,7 @@ importers:
       '@dgx/server': link:../../ts-shared/typescript/src/server
       '@dgx/shared': link:../../ts-shared/typescript/src/shared
       esbuild: 0.17.11
+      logger: link:../../../../packages/logger
       tsconfig: link:../../../../packages/tsconfig
 
   resources/[dg]/dg-weapons/typescript:
@@ -810,12 +876,14 @@ importers:
       '@dgx/server': workspace:*
       '@dgx/shared': workspace:*
       esbuild: '*'
+      logger: workspace:*
       tsconfig: workspace:*
     devDependencies:
       '@dgx/client': link:../../ts-shared/typescript/src/client
       '@dgx/server': link:../../ts-shared/typescript/src/server
       '@dgx/shared': link:../../ts-shared/typescript/src/shared
       esbuild: 0.17.11
+      logger: link:../../../../packages/logger
       tsconfig: link:../../../../packages/tsconfig
 
   resources/[dg]/dg-weathersync/typescript:
@@ -824,12 +892,14 @@ importers:
       '@dgx/server': workspace:*
       '@dgx/shared': workspace:*
       esbuild: '*'
+      logger: workspace:*
       tsconfig: workspace:*
     devDependencies:
       '@dgx/client': link:../../ts-shared/typescript/src/client
       '@dgx/server': link:../../ts-shared/typescript/src/server
       '@dgx/shared': link:../../ts-shared/typescript/src/shared
       esbuild: 0.17.11
+      logger: link:../../../../packages/logger
       tsconfig: link:../../../../packages/tsconfig
 
   resources/[dg]/ts-shared/typescript:
@@ -3861,7 +3931,6 @@ packages:
       tslib: 1.14.1
     transitivePeerDependencies:
       - supports-color
-    dev: true
 
   /@sentry/react/7.42.0_react@18.2.0:
     resolution: {integrity: sha512-DOGK+vuSZq5lTiqVU6wVay0AUMjtSPZu25gzLIXntfoqw36CLUswP7ew61+Tas6tpXDdf4lR3uxJRwySiQLopw==}

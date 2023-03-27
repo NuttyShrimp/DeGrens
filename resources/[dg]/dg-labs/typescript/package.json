@@ -16,6 +16,7 @@
     "@dgx/client": "workspace:*",
     "@dgx/server": "workspace:*",
     "@dgx/shared": "workspace:*",
+    "logger": "workspace:*",
     "esbuild": "*",
     "tsconfig": "workspace:*"
   }
