@@ -39,7 +39,7 @@ declare namespace Garage {
   interface Garage {
     garage_id: string;
     name: string;
-    type: 'public' | 'business' | 'police' | 'ambulance';
+    type: 'public' | 'business' | 'police' | 'ambulance' | 'gang';
     shared: boolean;
     vehicle_types: GarageType[];
     parking_limit?: number;

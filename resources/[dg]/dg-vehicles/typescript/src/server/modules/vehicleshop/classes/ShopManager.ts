@@ -1,4 +1,4 @@
-import { Business, Config, Events, Notifications, Util } from '@dgx/server';
+import { Business, Config, Events, Inventory, Notifications, Util } from '@dgx/server';
 import { DGXEvent, EventListener, RPCEvent, RPCRegister } from '@dgx/server/decorators';
 import { getPlayerVehicleInfo, insertNewVehicle, setVehicleState } from 'db/repository';
 import { spawnOwnedVehicle } from 'helpers/vehicle';
@@ -38,7 +38,7 @@ class ShopManager extends Util.Singleton<ShopManager>() {
 
   @RPCEvent('vehicles:shop:getCarSpots')
   private _getSpots = () => {
-    return Object.fromEntries(shopManager.spots);
+    return Object.fromEntries(this.spots);
   };
 
   private loadSpotData = async () => {
@@ -150,6 +150,8 @@ class ShopManager extends Util.Singleton<ShopManager>() {
   };
 
   private isEmployeeNeeded = (model: string) => {
+    if (this.isAnyEmployeeInside()) return true;
+
     const modelClass = getConfigByModel(model)?.class;
     if (!modelClass) {
       this.logger.error(`Could not get config of model ${model}`);
@@ -171,16 +173,15 @@ class ShopManager extends Util.Singleton<ShopManager>() {
       return;
     }
 
-    const canBuy = shopManager.canPlayerBuyVehicle(src, spotId, model);
+    const canBuy = this.canPlayerBuyVehicle(src, spotId, model);
     if (!canBuy) {
       Notifications.add(src, 'Je hebt een werknemer nodig om dit voertuig te kopen', 'error');
       return;
     }
 
-    const employeeCid =
-      this.spotsForSale.get(spotId)?.employee ??
-      Business.getBusinessOwner(getVehicleShopConfig().businessName)?.citizenid;
-    if (!employeeCid) {
+    const employeeWhoSold = this.spotsForSale.get(spotId)?.employee;
+    const sellerCid = employeeWhoSold ?? Business.getBusinessOwner(getVehicleShopConfig().businessName)?.citizenid;
+    if (!sellerCid) {
       Notifications.add(src, 'Er iets foutgelopen met de transactie', 'error');
       this.logger.error('Could not find business owner cid');
       Util.Log('vehicleshop:noOwner', {}, `Could not find business owner of pdm to sell vehicle`, undefined, true);
@@ -200,6 +201,18 @@ class ShopManager extends Util.Singleton<ShopManager>() {
       return;
     }
 
+    if (employeeWhoSold) {
+      const employeeId = DGCore.Functions.getPlyIdForCid(employeeWhoSold);
+      if (employeeId) {
+        const ticketPrice = modelData.price * ((getVehicleShopConfig()?.employeePercentage ?? 0) / 100);
+        Inventory.addItemToPlayer(employeeId, 'sales_ticket', 1, {
+          origin: 'generic',
+          amount: ticketPrice,
+          hiddenKeys: ['origin', 'amount'],
+        });
+      }
+    }
+
     // Add vehicle to player vehicles
     const vin = vinManager.generateVin();
     const plate = plateManager.generatePlate();
@@ -211,7 +224,7 @@ class ShopManager extends Util.Singleton<ShopManager>() {
     decreaseModelStock(model);
     Util.Log(
       'vehicleshop:boughtVehicle',
-      { employeeCid, spotId, model, vin, plate, taxedPrice },
+      { sellerCid, spotId, model, vin, plate, taxedPrice },
       `${Util.getName(src)} bought a vehicle (${model}) for ${taxedPrice}`,
       src
     );
@@ -238,6 +251,17 @@ class ShopManager extends Util.Singleton<ShopManager>() {
 
   public getModelAtSpot = (spotId: number) => {
     return this.spots.get(spotId)?.model;
+  };
+
+  public isAnyEmployeeInside = () => {
+    const businessName = getVehicleShopConfig().businessName;
+    for (const ply of this.playersInShop) {
+      const cid = Util.getCID(ply, true);
+      if (!cid) continue;
+      const hired = Business.isPlyEmployed(businessName, cid);
+      if (hired) return true;
+    }
+    return false;
   };
 }
 

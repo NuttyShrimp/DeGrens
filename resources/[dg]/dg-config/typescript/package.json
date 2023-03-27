@@ -1,6 +1,6 @@
 {
   "name": "dg-config",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "main": "index.js",
   "author": "NuttyShrimp",
   "license": "MIT",
@@ -15,6 +15,7 @@
   "devDependencies": {
     "@dgx/server": "workspace:*",
     "@dgx/shared": "workspace:*",
+    "logger": "workspace:*",
     "tsconfig": "workspace:*",
     "esbuild": "*"
   }

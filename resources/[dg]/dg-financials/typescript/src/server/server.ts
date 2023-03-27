@@ -12,7 +12,7 @@ import cryptoManager from 'modules/crypto/classes/CryptoManager';
 import debtManager from 'modules/debts/classes/debtmanager';
 import { scheduleMaintenanceFees } from 'modules/debts/helpers/maintenanceFees';
 import accountManager from './modules/bank/classes/AccountManager';
-import { seedCache as seedPaycheckCache } from './modules/paycheck/service';
+import { seedCache as seedPaycheckCache, startPaycheckInterval } from './modules/paycheck/service';
 import { seedTaxes } from './modules/taxes/service';
 
 let financialsLoaded = false;
@@ -27,6 +27,7 @@ setImmediate(async () => {
   setConfig(config);
   await accountManager.init();
   await seedPaycheckCache();
+  startPaycheckInterval();
   await cryptoManager.initiate();
   await debtManager.seedDebts();
   await scheduleMaintenanceFees();

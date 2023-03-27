@@ -106,7 +106,7 @@ const GarageSchema: Schema = {
     // Type will be used to check if a person has access to the garage
     type: {
       type: 'string',
-      enum: ['public', 'business', 'police', 'ambulance'],
+      enum: ['public', 'business', 'police', 'ambulance', 'gang'],
     },
     parking_limit: {
       type: 'number',

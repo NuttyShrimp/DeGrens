@@ -1,4 +1,5 @@
-import { Sync } from './index';
+import { Vector3 } from '../../shared';
+import { Sync, Util } from './index';
 
 const getLocalEntity = (type: NBlip.Type, id: number) => {
   let entity: number;
@@ -17,6 +18,8 @@ export class EntityBlip {
   private handle: number | null;
   private settings: NBlip.Settings;
   private mode: NBlip.Mode | null;
+  private blipLocation: Vec3 = { x:0, y:0, z:0 };
+  private locationInterval: NodeJS.Timer | null;
 
   constructor(type: NBlip.Type, id: number, settings: NBlip.Settings) {
     this.id = id;
@@ -24,6 +27,7 @@ export class EntityBlip {
     this.handle = null;
     this.settings = settings;
     this.mode = null;
+    this.locationInterval = null;
 
     const mode: NBlip.Mode = this.doesEntityExistsLocally() ? 'entity' : 'coords';
     this.changeMode(mode);
@@ -59,24 +63,36 @@ export class EntityBlip {
 
   private changeMode(mode: NBlip.Mode) {
     if (this.mode === mode) return;
+    if (this.locationInterval) {
+      clearInterval(this.locationInterval);
+      this.locationInterval = null;
+    }
 
     if (this.handle && DoesBlipExist(this.handle)) {
       RemoveBlip(this.handle);
     }
 
     if (mode === 'coords') {
-      const coords = Sync.getPlayerCoords(this.id);
+      let coords = Sync.getPlayerCoords(this.id);
 
-      if (coords) {
-        this.mode = 'coords';
-        this.handle = AddBlipForCoord(coords.x, coords.y, coords.z);
+      if (!coords) {
+        coords = this.blipLocation;
       }
+
+      this.mode = 'coords';
+      this.handle = AddBlipForCoord(coords.x, coords.y, coords.z);
     } else if (mode === 'entity') {
       const entity = getLocalEntity(this.type, this.id);
 
       if (entity && DoesEntityExist(entity)) {
         this.mode = 'entity';
         this.handle = AddBlipForEntity(entity);
+        this.blipLocation = Util.ArrayToVector3(GetBlipCoords(this.handle))
+        this.locationInterval = setInterval(() => {
+          if (this.handle && DoesBlipExist(this.handle)) {
+            this.blipLocation = Util.ArrayToVector3(GetBlipCoords(this.handle))
+          }
+        }, 1000)
       }
     }
 

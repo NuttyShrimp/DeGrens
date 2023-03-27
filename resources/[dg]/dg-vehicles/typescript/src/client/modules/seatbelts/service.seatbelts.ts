@@ -88,30 +88,14 @@ export const disableHarnassHUD = () => {
   HUD.toggleEntry('harness-uses', false);
 };
 
-export const tryEjectAfterCrash = (
-  oldHealth: number,
-  newHealth: number,
-  oldSpeed: number,
-  newSpeed: number,
-  oldVelocity: Vec3
-) => {
+export const tryEjectAfterCrash = (oldSpeed: number, newSpeed: number, oldVelocity: Vec3) => {
   if (currentSeatbelt === 'harness') return; // no eject when harnass
-  if (oldSpeed < 100) return; // minimum of 100/h
   if (newSpeed > oldSpeed * 0.75) return; // need atleast 25% diff in speed
 
-  const healthDelta = Math.ceil(Math.max(0, oldHealth - newHealth));
+  const maxSafeSpeed = currentSeatbelt === 'none' ? 80 : 160;
+  if (oldSpeed < maxSafeSpeed) return;
 
-  // Calculate chance to eject based on seatbelttype and health diff
-  let chance = 0;
-  if (currentSeatbelt === 'none') {
-    chance = Math.min(100, healthDelta * 2);
-  } else if (currentSeatbelt === 'seatbelt') {
-    chance = Math.min(40, healthDelta / 2);
-  }
-
-  if (Util.getRndInteger(0, 101) <= chance) {
-    ejectFromVehicle(oldVelocity);
-  }
+  ejectFromVehicle(oldVelocity);
 };
 
 const ejectFromVehicle = (vehicleVelocity: Vec3) => {

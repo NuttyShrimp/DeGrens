@@ -11,6 +11,7 @@ declare namespace VehicleShop {
     };
     timeForSale: number;
     classesThatNeedEmployee: CarClass[];
+    employeePercentage: number;
     quicksell: {
       percentage: number;
       allowedUpgrades: (keyof Upgrades.Cosmetic)[];

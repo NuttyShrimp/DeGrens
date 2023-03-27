@@ -4,12 +4,15 @@ import {
   cleanupSanddigging,
   doSpotAction,
   finishJob,
+  getInAssignedVehicle,
+  getIsAtAssignedSpot,
   isAtVehicleReturn,
   isEntityAssignedVehicle,
   setAssignedSpot,
   setAssignedVehicle,
   setAtVehicleReturn,
   setInAssignedVehicle,
+  setIsAtAssignedSpot,
 } from './service.sanddigging';
 
 Peek.addFlagEntry('isSanddiggingFuck', {
@@ -25,19 +28,6 @@ Peek.addFlagEntry('isSanddiggingFuck', {
   distance: 3.0,
 });
 
-Peek.addZoneEntry('sanddigging_spot', {
-  options: [
-    {
-      icon: 'fas fa-shovel',
-      label: 'Graven',
-      action: () => {
-        doSpotAction();
-      },
-    },
-  ],
-  distance: 7.0,
-});
-
 PolyZone.onEnter('sanddigging_vehicle', () => {
   const vehicle = GetVehiclePedIsIn(PlayerPedId(), false);
   if (!vehicle || !isEntityAssignedVehicle(vehicle)) return;
@@ -48,12 +38,29 @@ PolyZone.onLeave('sanddigging_vehicle', () => {
   setAtVehicleReturn(false);
 });
 
+PolyZone.onEnter('sanddigging_spot', () => {
+  setIsAtAssignedSpot(true);
+});
+
+PolyZone.onLeave('sanddigging_spot', () => {
+  setIsAtAssignedSpot(false);
+});
+
 Keys.onPressDown('GeneralUse', () => {
+  if (getIsAtAssignedSpot()) {
+    doSpotAction();
+    return;
+  }
+
   if (isAtVehicleReturn()) {
     finishJob();
     return;
   }
-  checkNewLocation();
+
+  if (getInAssignedVehicle()) {
+    checkNewLocation();
+    return;
+  }
 });
 
 Events.onNet('jobs:sanddigging:leftGroup', () => {

@@ -138,8 +138,8 @@ class Gangs {
     return global.exports['dg-gangs'].getGangByName(gangName);
   };
 
-  public getPlayerGang = (cid: number): Promise<GangData | undefined> => {
-    return global.exports['dg-gangs'].getPlayerGang(cid);
+  public getPlayerGangName = (cid: number): string | undefined => {
+    return global.exports['dg-gangs'].getPlayerGangName(cid);
   };
 }
 

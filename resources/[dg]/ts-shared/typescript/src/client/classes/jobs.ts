@@ -32,10 +32,6 @@ class Police {
     return global.exports['dg-police'].isAtLocker();
   };
 
-  public pauseCuffAnimation = (pause: boolean) => {
-    global.exports['dg-police'].pauseCuffAnimation(pause);
-  };
-
   public isCuffed = (): boolean => {
     return global.exports['dg-police'].isCuffed();
   };
@@ -70,10 +66,6 @@ class Police {
 }
 
 class Hospital {
-  public pauseDownAnimation = (pause: boolean) => {
-    global.exports['dg-hospital'].pauseDownAnimation(pause);
-  };
-
   public isDown = () => {
     return global.exports['dg-hospital'].isDown();
   };

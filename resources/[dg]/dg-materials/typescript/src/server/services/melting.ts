@@ -72,27 +72,32 @@ Events.onNet('materials:melting:melt', async (src: number, recipeId: number) => 
     return;
   }
 
-  const removeSuccessful = await Inventory.removeItemByNameFromPlayer(
-    src,
-    choosenRecipe.from.name,
-    choosenRecipe.from.amount
-  );
+  const amountOfStacks = Math.floor(amountPlyHas / choosenRecipe.from.amount);
+  const amountToRemove = choosenRecipe.from.amount * amountOfStacks;
+
+  const removeSuccessful = await Inventory.removeItemByNameFromPlayer(src, choosenRecipe.from.name, amountToRemove);
   if (!removeSuccessful) {
     Notifications.add(src, 'Je mist iets om te smelten', 'error');
     return;
   }
 
-  Notifications.add(src, 'Wacht tot het materiaal is gesmolten');
-  activeItem = { ...choosenRecipe.to, isReady: false };
+  const meltTimePerStack = getConfig().melting.meltingTime;
+  const timeMultiplier = 1 - Math.min(amountOfStacks, 10) * 0.05;
+  const secondsTillMelted = Math.round(meltTimePerStack * amountOfStacks * timeMultiplier);
+
+  Notifications.add(src, `Wacht tot het materiaal is gesmolten`);
+  activeItem = { name: choosenRecipe.to.name, amount: choosenRecipe.to.amount * amountOfStacks, isReady: false };
+
   setTimeout(() => {
     if (activeItem === null) return;
+    Notifications.add(src, 'Je materiaal is gesmolten!', 'success');
     activeItem.isReady = true;
-  }, getConfig().melting.meltingTime * 1000);
+  }, secondsTillMelted * 1000);
 
   Util.Log(
     'materials:melting:putIn',
     { ...choosenRecipe },
-    `${Util.getName(src)} put in ${choosenRecipe.from.amount}x ${choosenRecipe.from.name}`,
+    `${Util.getName(src)} put in ${amountToRemove}x ${choosenRecipe.from.name}`,
     src
   );
 });

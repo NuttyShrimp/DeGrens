@@ -1,16 +1,9 @@
-import { Auth, Config, Events, Notifications, RPC, UI } from '@dgx/server';
-
+import { Auth, Config, Events, Notifications, RPC, UI, Util } from '@dgx/server';
 import { getConfigByModel, getVehicleModels } from '../info/service.info';
-
 import shopManager from './classes/ShopManager';
 import { getVehicleShopConfig } from './services/config.vehicleshop';
 import { CATEGORY_LABEL, MODEL_CATEGORISATION, ModelCategorisation } from './constants.vehicleshop';
-import {
-  buildVehicleContextMenuEntry,
-  getCategoryLabel,
-  getTestDriveDeposit,
-  getVehicleTaxedPrice,
-} from './helpers.vehicleshop';
+import { buildVehicleContextMenuEntry, getCategoryLabel, getVehicleTaxedPrice } from './helpers.vehicleshop';
 import { vehicleshopLogger } from './logger.vehicleshop';
 
 Auth.onAuth(async plyId => {
@@ -19,9 +12,9 @@ Auth.onAuth(async plyId => {
   Events.emitNet('vehicles:shop:buildZone', plyId, shopZone);
 });
 
-on('playerDropped', () => {
-  if (!shopManager.playersInShop.has(source)) return;
-  shopManager.setPlayerActive(source, false);
+Util.onPlayerUnloaded(plyId => {
+  if (!shopManager.playersInShop.has(plyId)) return;
+  shopManager.setPlayerActive(plyId, false);
 });
 
 Events.onNet('vehicles:shop:openVehicleMenu', (src: number, spotId: number, categorisation: ModelCategorisation) => {
@@ -92,25 +85,6 @@ Events.onNet('vehicles:shop:openVehicleMenu', (src: number, spotId: number, cate
     });
 
   UI.openContextMenu(src, menu);
-});
-
-RPC.register('vehicles:shop:getTestDriveHeader', (src: number, model: string) => {
-  const maxTestDriveTime = getVehicleShopConfig().testDrive.time;
-  const price = getTestDriveDeposit(model);
-  if (price === undefined) {
-    vehicleshopLogger.error(`Could not get testdrive deposit for ${price}`);
-    return;
-  }
-  const modelData = getConfigByModel(model);
-  if (!modelData) {
-    vehicleshopLogger.error(`Could not get model data for ${model}`);
-    return;
-  }
-  return `Ben je zeker dat je de ${modelData.brand} ${
-    modelData.name
-  } wil testritten?\n\nGelieve het voertuig binnen de ${Math.round(
-    maxTestDriveTime / 60
-  )} minuten terug af te leveren.\n\nEen waarborg van €${price} zal gefactureerd worden bij de start.\nReparatiekosten zullen in rekening gebracht worden.\n\nDit bedrag wordt terugbetaald bij het inleveren van het voertuig.`;
 });
 
 RPC.register('vehicles:shop:getPurchaseHeader', (src: number, model: string) => {

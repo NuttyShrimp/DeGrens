@@ -1,6 +1,6 @@
 {
   "name": "dg-blackout",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "main": "index.js",
   "author": "Jens",
   "license": "MIT",
@@ -16,6 +16,7 @@
     "@dgx/client": "workspace:*",
     "@dgx/server": "workspace:*",
     "@dgx/shared": "workspace:*",
+    "logger": "workspace:*",
     "tsconfig": "workspace:*",
     "esbuild": "*"
   }

@@ -2,6 +2,7 @@ import { Events, Inventory, Util, Vehicles, Config, Notifications } from '@dgx/s
 import jobManager from 'classes/jobManager';
 import { disbandGroup, getGroupById, getGroupByServerId } from 'modules/groups/service';
 import { sanddiggingLogger } from './logger.sanddigging';
+import { Vector3 } from '@dgx/shared';
 
 let sanddiggingConfig: Sanddigging.Config;
 export const getSanddiggingConfig = () => sanddiggingConfig;
@@ -32,11 +33,18 @@ export const initializeSanddigging = () => {
   });
 };
 
-const getRandomAvailableSpot = () => {
+const getRandomAvailableSpot = (previousSpot: number | null) => {
   let spotId: number | null = null;
+  const activeSpots = Array.from(activeGroups.values()).map(a => a.spotId);
+  const oldSpot = previousSpot !== null ? Vector3.create(sanddiggingConfig.spots[previousSpot]) : null;
+  let triesRemaining = 30;
   while (spotId === null) {
     const rnd = Math.floor(Math.random() * sanddiggingConfig.spots.length);
-    if (Array.from(activeGroups.values()).some(active => active.spotId === rnd)) continue;
+    if (triesRemaining > 0) {
+      triesRemaining--;
+      if (activeSpots.indexOf(rnd) !== -1) continue;
+      if (oldSpot && oldSpot.distance(sanddiggingConfig.spots[rnd]) > 100) continue;
+    }
     spotId = rnd;
   }
   return spotId;
@@ -63,7 +71,7 @@ export const assignSpotToGroup = (plyId: number) => {
     sanddiggingLogger.error(`${plyId} tried to do sanddigging action but group was not active`);
     return;
   }
-  const spotId = getRandomAvailableSpot();
+  const spotId = getRandomAvailableSpot(active.spotId);
   activeGroups.set(group.id, { ...active, spotId });
   group.members.forEach(member => {
     if (member.serverId === null) return;

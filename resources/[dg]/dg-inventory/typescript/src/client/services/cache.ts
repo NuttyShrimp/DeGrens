@@ -1,7 +1,7 @@
 // Only use to do first check in things like peek, radialmenu where you dont want to call server every time
 // Make sure to use proper server check when doing action
 
-const items: string[] = [];
+let items: string[] = [];
 
 onNet('inventory:updateCache', (action: 'add' | 'remove', itemName: string) => {
   switch (action) {
@@ -19,3 +19,7 @@ onNet('inventory:updateCache', (action: 'add' | 'remove', itemName: string) => {
 });
 
 global.exports('getCachedItemNames', () => items);
+
+export const clearItemCache = () => {
+  items = [];
+};

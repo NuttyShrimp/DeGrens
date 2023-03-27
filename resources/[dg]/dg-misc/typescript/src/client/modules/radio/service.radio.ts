@@ -1,10 +1,12 @@
-import { Events, PropAttach, UI, Util } from '@dgx/client';
+import { Animations, Events, PropAttach, UI, Util } from '@dgx/client';
 
 let radioEnabled = false;
 let frequency = LocalPlayer?.state?.radioChannel ?? 0;
 let allowedFreq: { pd: boolean; normal: boolean };
 
 let playingAnimation = false;
+let radioPropId: number | null = null;
+let radioAnimLoopId: number | null = null;
 
 export const openRadio = (freq: number, allowed: { pd: boolean; normal: boolean }) => {
   frequency = freq;
@@ -57,28 +59,29 @@ export const startRadioAnimation = async () => {
 
   const ped = PlayerPedId();
   const isInVehicle = IsPedInAnyVehicle(ped, false);
-  const animDict = isInVehicle ? 'anim@cellphone@in_car@ps' : 'cellphone@';
-  const anim = 'cellphone_text_in';
-
-  await Util.loadAnimDict(animDict);
 
   playingAnimation = true;
-  const propId = PropAttach.add('radio');
-
-  const thread = setInterval(() => {
-    if (!playingAnimation) {
-      PropAttach.remove(propId);
-      StopAnimTask(ped, animDict, anim, 1);
-      clearInterval(thread);
-      return;
-    }
-
-    if (!IsEntityPlayingAnim(ped, animDict, anim, 3)) {
-      TaskPlayAnim(ped, animDict, anim, 3.0, 3.0, -1, 50, 0, false, false, false);
-    }
-  }, 100);
+  radioPropId = PropAttach.add('radio');
+  radioAnimLoopId = Animations.startAnimLoop({
+    animation: {
+      dict: isInVehicle ? 'anim@cellphone@in_car@ps' : 'cellphone@',
+      name: 'cellphone_text_in',
+      flag: 50,
+    },
+    weight: 15,
+  });
 };
 
 export const stopRadioAnimation = () => {
   playingAnimation = false;
+
+  if (radioPropId !== null) {
+    PropAttach.remove(radioPropId);
+    radioPropId = null;
+  }
+
+  if (radioAnimLoopId !== null) {
+    Animations.stopAnimLoop(radioAnimLoopId);
+    radioAnimLoopId = null;
+  }
 };

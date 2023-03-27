@@ -7,21 +7,54 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.1.1]
+
 ### Added
 - Leefloon toegevoegd
 - Gemeentehuis is nu zichtbaar op je map
+- Heel wat nieuwe garages toegevoegd
+- PDM medewerker wordt nu betaald als hij een voertuig verkoopt
+- Nieuwe tankstation & carwash locaties toegevoegd
+- Enkele nieuwe politie kledingstukken toegevoegd
+- Je kan lockers nu doorgeven
+- Je kan lockers nu voor korte tijd accessen nadat je het passwoord invuld
+- Veel liften voor hoge gebouwen toegevoegd
+- Extra banreden toegevoegd in adminpanel
+- Politie signin locaties toegevoegd in Sandy/Paleto
+- Schotmeldingen toegevoegd
+- Wrapper toegevoegd voor geloopte animaties zodat deze elkaar niet onderbreken
+- Placeable synced objects toegevoegd
 
 ### Changed
 - Meer feedback bij start van fleecaoverval
 - Enkele decayrates en prijzen van shopitems aangepast
 - Crafting level systeem herwerkt voor sommige type benches
 - Verlaag koper aantal minigame cycles
+- Fleeca loot tweaked
+- PostOP aflever taskbar time verlaagd
+- Enkele changes aan sanddigging om aangenamer te maken
+- Gang exports veranderd naar enkel name om geen promise te returnen
+- Politie kan weedplanten nu sneller kapotmaken
+- Gordels zijn consistenter
+- Health decrease van bloed verlaagd
+- Je kan geen autos zonder medewerker mee kopen als er een medewerker in de winkel is
+- StaticObjects systeem herschrijven naar een chunk-based systeem
+- Moved winston logger logic/creation to a seperate package to reduce code duplication
 
 ### Fixed
 - Fix group job change export name
 - Fix container die onder water zat
 - Fix electronica lootplek dat overlapt met andere peekoption
 - Je kan niet langer een voertuig lockpicken als je niet als driver zit
+- Je kan geen geld witwassen tijdens cornersell als er geen agenten zijn
+- Je kan nu advanced parts in een materiaalcontainer steken
+- Vegetable container is nu buyable
+- Phone notificatie keybinds werken nu wel
+- Fix  hoge resource usage wanneer je wapen vasthebt
+- Paychecks worden nu wel opgeslagen
+- Reset local itemcache na characterswitch
+- Je kan sneller bennys repair gebruiken
+- Je kan testrit wagen nu inleveren alsje game gecrashed was
 
 ## [1.1.0]
 

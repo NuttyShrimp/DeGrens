@@ -35,8 +35,9 @@ Events.onNet('criminal:cornersell:sell', async (plyId: number, zone: string) => 
     return;
   }
 
+  const enoughPolice = Police.canDoActivity('cornersell');
   const price = calculatePrice(selectedItemData, zone) * amountToRemove;
-  const priceWithPoliceMultiplier = price * (Police.canDoActivity('cornersell') ? 1 : 0.5);
+  const priceWithPoliceMultiplier = price * (enoughPolice ? 1 : 0.5);
   Financials.addCash(plyId, priceWithPoliceMultiplier, 'corner-sell');
 
   Util.Log(
@@ -53,7 +54,7 @@ Events.onNet('criminal:cornersell:sell', async (plyId: number, zone: string) => 
   Reputations.setReputation(cid, 'cornersell', rep => rep + 1);
 
   // Chance to sell blackmoney
-  if (Util.getRndInteger(1, 101) <= config.cornerselling.cleanChance) {
+  if (enoughPolice && Util.getRndInteger(1, 101) <= config.cornerselling.cleanChance) {
     randomSellBlackMoney(plyId);
   }
 

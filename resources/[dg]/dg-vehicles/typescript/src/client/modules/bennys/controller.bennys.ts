@@ -18,7 +18,7 @@ Events.onNet('vehicles:bennys:load', (locations: Bennys.Location[]) => {
   locations.forEach(l => {
     PolyZone.addBoxZone(
       'benny',
-      new Vector3(l.vector.x, l.vector.y, l.vector.z),
+      l.vector,
       l.width,
       l.length,
       {
@@ -27,8 +27,7 @@ Events.onNet('vehicles:bennys:load', (locations: Bennys.Location[]) => {
           id: l.name,
         },
         heading: l.heading,
-      },
-      true
+      }
     );
     if (!l.hideBlip) {
       BlipManager.addBlip({

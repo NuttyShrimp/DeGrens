@@ -75,6 +75,11 @@
         "name": "mojito",
         "amount": 500,
         "price": 30
+      },
+      {
+        "name": "container_vegetables",
+        "amount": 5,
+        "price": 700
       }
     ],
     "hardware": [

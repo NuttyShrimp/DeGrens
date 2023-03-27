@@ -34,6 +34,7 @@ export const buildCityHallZones = () => {
     sprite: 439,
     color: 2,
     coords: ZONES[0].coords,
+    text: 'Gemeentehuis',
   });
 };
 

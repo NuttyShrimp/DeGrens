@@ -4,18 +4,6 @@ import accountManager from 'modules/bank/classes/AccountManager';
 import { paycheckLogger } from './util';
 
 const paycheckCache: Map<number, number> = new Map();
-const paycheckIntervals: Map<number, { job: string; amount: number }> = new Map();
-
-const saveToDb = async (cid: number) => {
-  const amount = paycheckCache.get(cid);
-  const query = `
-		INSERT INTO player_paycheck
-			(cid, amount)
-		VALUES (?, ?)
-		ON DUPLICATE KEY UPDATE amount = ?
-	`;
-  await SQL.query(query, [cid, amount, amount]);
-};
 
 export const seedPlyInCache = async (cid: number) => {
   const query = `
@@ -23,7 +11,7 @@ export const seedPlyInCache = async (cid: number) => {
 		FROM player_paycheck
 		WHERE cid = ?
 	`;
-  const result = await SQL.query(query, [cid]);
+  const result = await SQL.query<{ amount: number }[]>(query, [cid]);
   if (result == undefined || result.length == 0) {
     paycheckLogger.info(`No paycheck data found for ${cid}`);
     return;
@@ -36,56 +24,49 @@ export const seedPlyInCache = async (cid: number) => {
 export const seedCache = async () => {
   paycheckCache.clear();
 
-  (
-    Object.values({
-      ...DGCore.Functions.GetQBPlayers(),
-    }) as Player[]
-  ).forEach(async (ply: Player) => {
-    await seedPlyInCache(ply.PlayerData.citizenid);
-    const plyJob = Jobs.getCurrentJob(ply.PlayerData.source);
-    checkInterval(ply.PlayerData.citizenid, plyJob);
+  (Object.values(DGCore.Functions.GetQBPlayers()) as Player[]).forEach(ply => {
+    seedPlyInCache(ply.PlayerData.citizenid);
   });
 };
 
-export const registerPaycheck = (cid: number, amount: number, job: string, comment?: string) => {
-  const newPaycheck = (paycheckCache.get(cid) ?? 0) + amount;
-  paycheckCache.set(cid, newPaycheck);
+export const addAmountToPaycheck = (cid: number, amount: number, comment: string) => {
+  const plyTotalPaycheck = (paycheckCache.get(cid) ?? 0) + amount;
+
+  paycheckCache.set(cid, plyTotalPaycheck);
+  updateDBPaycheck(cid, plyTotalPaycheck);
 
   const plyId = DGCore.Functions.getPlyIdForCid(cid);
   const plyName = plyId != undefined ? Util.getName(plyId) : 'Unknown';
   Util.Log(
-    'financials:paycheck:registered',
+    'financials:paycheck:add',
     {
       cid,
       amount,
-      job,
       comment,
     },
-    `${plyName} (${cid}) registered a paycheck of ${amount} for ${job} (${comment})`,
+    `${amount} got added to paycheck of ${plyName} - ${cid} (${comment})`,
     plyId
   );
-  saveToDb(cid);
+};
+
+const updateDBPaycheck = async (cid: number, amount: number) => {
+  const query = `
+		INSERT INTO player_paycheck
+			(cid, amount)
+		VALUES (?, ?)
+		ON DUPLICATE KEY UPDATE amount = VALUES(amount)
+	`;
+  await SQL.query(query, [cid, amount]);
 };
 
 export const givePaycheck = async (src: number) => {
   const cid = Util.getCID(src);
   const logName = Util.getName(src);
-  if (paycheckIntervals.has(cid)) {
-    const intervalInfo = paycheckIntervals.get(cid)!;
-    registerPaycheck(cid, intervalInfo.amount, intervalInfo.job, 'Whitelisted paycheck');
-    paycheckIntervals.set(cid, { job: intervalInfo.job, amount: 0 });
-  }
 
-  const paycheckAmount = paycheckCache.get(cid);
-  if (paycheckAmount === undefined) {
-    Notifications.add(src, 'Je hebt geen paycheck', 'error');
-    paycheckLogger.debug(`${Util.getName(src)} (${cid}) tried to get his/her paycheck, but they don't have one`);
-    return;
-  }
-
+  const paycheckAmount = paycheckCache.get(cid) ?? 0;
   if (paycheckAmount <= 0) {
     Notifications.add(src, 'Je hebt geen paycheck', 'error');
-    paycheckLogger.debug(`${Util.getName(src)} (${cid}) tried to get his/her paycheck, but they value was negative`);
+    paycheckLogger.debug(`${logName} (${cid}) tried to get his/her paycheck, but they value was negative or zero`);
     return;
   }
 
@@ -110,7 +91,7 @@ export const givePaycheck = async (src: number) => {
 
   const payedOutPrice = await account.paycheck(cid, paycheckAmount);
   if (!payedOutPrice) {
-    Notifications.add(src, 'Konden geen paycheck uitbetalen', 'error');
+    Notifications.add(src, 'Kon geen paycheck uitbetalen', 'error');
     Util.Log(
       'financials:paycheck:error',
       {
@@ -126,40 +107,40 @@ export const givePaycheck = async (src: number) => {
     return;
   }
   Notifications.add(src, `Paycheck van €${payedOutPrice} uitbetaald.`);
-  paycheckLogger.info(`${logName} (${cid}) received his/her paycheck of €${payedOutPrice}(${paycheckAmount})`);
+  paycheckLogger.info(
+    `${logName} (${cid}) received his/her paycheck of €${payedOutPrice} (Without tax: ${paycheckAmount})`
+  );
+
   paycheckCache.set(cid, 0);
-  saveToDb(cid);
+  updateDBPaycheck(cid, 0);
 };
 
-export const checkInterval = (cid: number, job: string | null) => {
-  job = String(job)
-  if (paycheckIntervals.has(cid)) {
-    // Went offduty or changed jobs
-    const intervalInfo = paycheckIntervals.get(cid)!;
-    if (intervalInfo.job !== job) {
-      registerPaycheck(cid, intervalInfo.amount, intervalInfo.job, 'Whitelisted paycheck');
-      paycheckIntervals.delete(cid);
-      paycheckLogger.debug(`Cleared paycheck interval for ${cid}`);
-    }
-  }
-
+export const startPaycheckInterval = () => {
   const paycheckConfig = getConfig().paycheck;
-  if (paycheckConfig[job]) {
-    const paycheckAmount = paycheckConfig[job];
 
-    paycheckIntervals.set(cid, { job, amount: 0 });
-    paycheckLogger.debug(`Registered paycheck interval for ${cid} | job: ${job}`);
+  setInterval(() => {
+    const queryParams: number[] = [];
 
-    const interval = setInterval(() => {
-      const intervalInfo = paycheckIntervals.get(cid);
-      if (intervalInfo === undefined || intervalInfo.job !== job) {
-        paycheckLogger.info(`Unregistered interval running for ${cid}. Clearing interval.`);
-        clearInterval(interval);
-        return;
-      }
-      intervalInfo.amount += paycheckAmount;
-      paycheckIntervals.set(cid, intervalInfo);
-      paycheckLogger.silly(`Scheduled paycheck for ${cid} of ${paycheckAmount} | job: ${job}`);
-    }, 60000);
-  }
+    // this only gets plys with active characters compared to Util.getAllPlayers
+    const players = Object.values(DGCore.Functions.GetQBPlayers()) as Player[];
+    if (players.length === 0) return;
+
+    for (const player of players) {
+      const job = String(Jobs.getCurrentJob(player.PlayerData.source));
+      const amount = paycheckConfig[job] ?? 0;
+      const plyTotalPaycheck = (paycheckCache.get(player.PlayerData.citizenid) ?? 0) + amount;
+
+      paycheckCache.set(player.PlayerData.citizenid, plyTotalPaycheck);
+      queryParams.push(player.PlayerData.citizenid, plyTotalPaycheck);
+    }
+
+    SQL.query(
+      `INSERT INTO player_paycheck (cid, amount) VALUES ${[...new Array(players.length)]
+        .fill('(?, ?)')
+        .join(', ')} ON DUPLICATE KEY UPDATE amount = VALUES(amount)`,
+      queryParams
+    );
+
+    paycheckLogger.info(`Updated paycheck for ${players.length} players`);
+  }, 60 * 1000);
 };

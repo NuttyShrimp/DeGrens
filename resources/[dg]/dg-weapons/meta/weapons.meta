@@ -3977,7 +3977,7 @@
           <MinHeadShotDistancePlayer value="0.000000" />
           <MaxHeadShotDistancePlayer value="2.000000" />
           <HeadShotDamageModifierPlayer value="100.000000" />
-          <Damage value="26.000000" />
+          <Damage value="18.000000" />
           <DamageTime value="0.000000" />
           <DamageTimeInVehicle value="0.000000" />
           <DamageTimeInVehicleHeadShot value="0.000000" />
@@ -4570,7 +4570,7 @@
           <MinHeadShotDistancePlayer value="0.000000" />
           <MaxHeadShotDistancePlayer value="2.000000" />
           <HeadShotDamageModifierPlayer value="100.000000" />
-          <Damage value="25.000000" />
+          <Damage value="12.000000" />
           <DamageTime value="0.000000" />
           <DamageTimeInVehicle value="0.000000" />
           <DamageTimeInVehicleHeadShot value="0.000000" />
@@ -5159,7 +5159,7 @@
           <MinHeadShotDistancePlayer value="0.000000" />
           <MaxHeadShotDistancePlayer value="2.000000" />
           <HeadShotDamageModifierPlayer value="100.000000" />
-          <Damage value="21.000000" />
+          <Damage value="12.000000" />
           <DamageTime value="0.000000" />
           <DamageTimeInVehicle value="0.000000" />
           <DamageTimeInVehicleHeadShot value="0.000000" />
@@ -5468,7 +5468,7 @@
           <MinHeadShotDistancePlayer value="0.000000" />
           <MaxHeadShotDistancePlayer value="2.000000" />
           <HeadShotDamageModifierPlayer value="100.000000" />
-          <Damage value="22.000000" />
+          <Damage value="13.000000" />
           <DamageTime value="0.000000" />
           <DamageTimeInVehicle value="0.000000" />
           <DamageTimeInVehicleHeadShot value="0.000000" />
@@ -5770,7 +5770,7 @@
           <MinHeadShotDistancePlayer value="0.000000" />
           <MaxHeadShotDistancePlayer value="2.000000" />
           <HeadShotDamageModifierPlayer value="100.000000" />
-          <Damage value="23.000000" />
+          <Damage value="12.000000" />
           <DamageTime value="0.000000" />
           <DamageTimeInVehicle value="0.000000" />
           <DamageTimeInVehicleHeadShot value="0.000000" />
@@ -6073,7 +6073,7 @@
           <MinHeadShotDistancePlayer value="0.000000" />
           <MaxHeadShotDistancePlayer value="2.000000" />
           <HeadShotDamageModifierPlayer value="100.000000" />
-          <Damage value="30.000000" />
+          <Damage value="19.000000" />
           <DamageTime value="0.000000" />
           <DamageTimeInVehicle value="0.000000" />
           <DamageTimeInVehicleHeadShot value="0.000000" />
@@ -6385,7 +6385,7 @@
           <MinHeadShotDistancePlayer value="0.000000" />
           <MaxHeadShotDistancePlayer value="2.000000" />
           <HeadShotDamageModifierPlayer value="100.000000" />
-          <Damage value="32.000000" />
+          <Damage value="14.000000" />
           <DamageTime value="0.000000" />
           <DamageTimeInVehicle value="0.000000" />
           <DamageTimeInVehicleHeadShot value="0.000000" />
@@ -6701,7 +6701,7 @@
           <MinHeadShotDistancePlayer value="0.000000" />
           <MaxHeadShotDistancePlayer value="2.000000" />
           <HeadShotDamageModifierPlayer value="100.000000" />
-          <Damage value="25.000000" />
+          <Damage value="14.000000" />
           <DamageTime value="0.000000" />
           <DamageTimeInVehicle value="0.000000" />
           <DamageTimeInVehicleHeadShot value="0.000000" />
@@ -7586,8 +7586,8 @@
           <RecoilAccuracyToAllowHeadShotPlayer value="0.175000" />
           <MinHeadShotDistancePlayer value="0.000000" />
           <MaxHeadShotDistancePlayer value="2.000000" />
-          <HeadShotDamageModifierPlayer value="100.000000" />
-          <Damage value="29.000000" />
+          <HeadShotDamageModifierPlayer value="1.000000" />
+          <Damage value="19.000000" />
           <DamageTime value="0.000000" />
           <DamageTimeInVehicle value="0.000000" />
           <DamageTimeInVehicleHeadShot value="0.000000" />
@@ -7630,8 +7630,8 @@
           <VerticalLaunchAdjustment value="0.000000" />
           <DropForwardVelocity value="0.000000" />
           <Speed value="2000.000000" />
-          <BulletsInBatch value="8" />
-          <BatchSpread value="0.040000" />
+          <BulletsInBatch value="5" />
+          <BatchSpread value="0.100000" />
           <ReloadTimeMP value="-1.000000" />
           <ReloadTimeSP value="-1.000000" />
           <VehicleReloadTime value="1.000000" />
@@ -7696,7 +7696,7 @@
           <NetworkPedDamageModifier value="1.000000" />
           <NetworkHeadShotPlayerDamageModifier value="1.000000" />
           <LockOnRange value="0.000000" />
-          <WeaponRange value="40.000000" />
+          <WeaponRange value="20.000000" />
           <BulletDirectionOffsetInDegrees value="0.000000" />
           <AiSoundRange value="-1.000000" />
           <AiPotentialBlastEventRange value="-1.000000" />

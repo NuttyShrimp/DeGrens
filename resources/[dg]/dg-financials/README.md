@@ -167,11 +167,10 @@ Fines moeten binnen 7 dagen betaald worden, deze waarde is niet aanpasbaar voor 
 ### Paycheck
 
 #### Exports
-- registerPaycheck
+- addAmountToPaycheck
   - cid
   - amount
-  - job, Kan elke mogelijke string zijn, is enkel voor log purposes
-  - comment, optioneel
+  - comment
 
 #### Events
 - `financials:server:paycheck:give`: Geeft een paycheck aan een speler als deze zich in pacific zone bevindt

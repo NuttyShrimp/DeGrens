@@ -46,6 +46,9 @@ class Util extends UtilShared {
   }
 
   loadModel = (model: string | number) => {
+    if (typeof model === 'string') {
+      model = GetHashKey(model)
+    }
     RequestModel(model);
     return this.awaitCondition(() => HasModelLoaded(model));
   };
@@ -467,21 +470,40 @@ export class Animations {
   stopTabletAnimation() {
     global.exports['dg-misc'].stopTabletAnimation();
   }
+
+  /**
+   * @returns id to be used to cancel later
+   */
+  public startAnimLoop = (animLoop: AnimLoops.Anim): number => {
+    return global.exports['dg-misc'].startAnimLoop(animLoop);
+  };
+
+  public stopAnimLoop = (animLoopId: number) => {
+    global.exports['dg-misc'].stopAnimLoop(animLoopId);
+  };
+
+  public modifyAnimLoop = (animLoopId: number, partialAnimLoop: Partial<AnimLoops.Anim>) => {
+    global.exports['dg-misc'].modifyAnimLoop(animLoopId, partialAnimLoop);
+  };
+
+  public pauseAnimLoopAnimations = (pause: boolean) => {
+    global.exports['dg-misc'].setAnimLoopAnimationsPaused(pause);
+  };
 }
 
-class StaticObjects {
+class SyncedObjects {
   private objectsToRemove: Set<string>;
 
   constructor() {
     this.objectsToRemove = new Set();
     on('onResourceStop', (res: string) => {
       if (res !== GetCurrentResourceName()) return;
-      global.exports['dg-misc'].removeStaticObject([...this.objectsToRemove]);
+      global.exports['dg-misc'].removeObject([...this.objectsToRemove]);
     });
   }
 
-  public add = async (objectData: StaticObjects.CreateData | StaticObjects.CreateData[]): Promise<string[]> => {
-    const ids: string[] = await global.exports['dg-misc'].addStaticObject(objectData);
+  public add = (objectData: Objects.CreateData | Objects.CreateData[]): string[] => {
+    const ids: string[] = global.exports['dg-misc'].addLocalObject(objectData);
 
     ids.forEach(id => {
       this.objectsToRemove.add(id);
@@ -496,7 +518,7 @@ class StaticObjects {
       this.objectsToRemove.delete(objId);
     }
 
-    global.exports['dg-misc'].removeStaticObject(objId);
+    global.exports['dg-misc'].removeObject(objId);
   };
 
   public getEntityForObjectId = (objId: string): number | undefined => {
@@ -510,5 +532,5 @@ export default {
   PropAttach: new PropAttach(),
   Particle: new Particle(),
   Animations: new Animations(),
-  StaticObjects: new StaticObjects(),
+  SyncedObjects: new SyncedObjects(),
 };

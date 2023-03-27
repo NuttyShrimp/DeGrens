@@ -141,8 +141,8 @@ class Financials {
     fexp.removeMaintenanceFees(src);
   }
 
-  registerPaycheck(src: number, amount: number, job: string, comment?: string): void {
-    return fexp.registerPaycheck(src, amount, job, comment);
+  addAmountToPaycheck(plyId: number, amount: number, comment: string) {
+    fexp.addAmountToPaycheck(plyId, amount, comment);
   }
 
   getTaxedPrice(

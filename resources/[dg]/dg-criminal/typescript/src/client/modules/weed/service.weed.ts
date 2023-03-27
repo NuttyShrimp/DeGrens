@@ -1,4 +1,4 @@
-import { Util, Taskbar, Events, StaticObjects } from '@dgx/client/classes';
+import { Util, Taskbar, Events, SyncedObjects, Jobs } from '@dgx/client/classes';
 
 const weedPlantModels = new Set<number>();
 
@@ -9,7 +9,7 @@ export const registerWeedPlantModels = (models: string[]) => {
 };
 
 export const feedWeedPlant = async (weedPlantId: number, objectId: string, deluxe: boolean) => {
-  const entity = StaticObjects.getEntityForObjectId(objectId);
+  const entity = SyncedObjects.getEntityForObjectId(objectId);
   if (!entity) return;
 
   const heading = Util.getHeadingToFaceEntity(entity);
@@ -39,14 +39,16 @@ export const feedWeedPlant = async (weedPlantId: number, objectId: string, delux
 };
 
 export const destroyWeedPlant = async (weedPlantId: number, objectId: string) => {
-  const entity = StaticObjects.getEntityForObjectId(objectId);
+  const entity = SyncedObjects.getEntityForObjectId(objectId);
   if (!entity) return;
 
   const heading = Util.getHeadingToFaceEntity(entity);
   await Util.goToCoords({ ...Util.getPlyCoords(), w: heading });
 
+  const destroyTime = Jobs.getCurrentJob()?.name === 'police' ? 20 : 120;
+
   // lil bithces die ze destroyen mogen gwn 2 min per plant wachten
-  const [canceled] = await Taskbar.create('hammer-crash', 'Kapot maken', 2 * 60 * 1000, {
+  const [canceled] = await Taskbar.create('hammer-crash', 'Kapot maken', destroyTime * 1000, {
     canCancel: true,
     cancelOnDeath: true,
     cancelOnMove: true,
@@ -70,7 +72,7 @@ export const destroyWeedPlant = async (weedPlantId: number, objectId: string) =>
 };
 
 export const cutWeedPlant = async (weedPlantId: number, objectId: string) => {
-  const entity = StaticObjects.getEntityForObjectId(objectId);
+  const entity = SyncedObjects.getEntityForObjectId(objectId);
   if (!entity) return;
 
   const heading = Util.getHeadingToFaceEntity(entity);

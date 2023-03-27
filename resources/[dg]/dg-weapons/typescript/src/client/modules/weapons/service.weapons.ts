@@ -25,7 +25,9 @@ export const setCurrentWeaponData = (data: typeof currentWeaponData) => {
   }
 };
 
-export const startWeaponThread = () => {
+const startWeaponThread = () => {
+  if (!currentWeaponData) return;
+
   const playerId = PlayerId();
 
   let reticleEnabled = false;
@@ -37,7 +39,7 @@ export const startWeaponThread = () => {
 
   // To keep track of shots fired for bullet casings
   // positions get cleared every time we emit saving event
-  let previousAmmoCount = Number(GetAmmoInPedWeapon(PlayerPedId(), currentWeaponData!.hash));
+  let previousAmmoCount = Number(GetAmmoInPedWeapon(PlayerPedId(), currentWeaponData.hash));
   let shotFirePositions: Vec3[] = [];
 
   // needed for checking evidence
@@ -47,6 +49,10 @@ export const startWeaponThread = () => {
 
   // diff logic for melee weapons
   let meleeHits = 0;
+
+  // TODO: Find way to modify melee weapon damage using weaponmeta files
+  // editting meta damage only works for guns for some reason and i cant find where to modify melee weapon damage
+  SetWeaponDamageModifierThisFrame(currentWeaponData.hash, currentWeaponData.damageModifier);
 
   weaponThread = setInterval(() => {
     if (currentWeaponData === null) return;
@@ -160,10 +166,6 @@ export const startWeaponThread = () => {
     if (ammoInWeapon === 1 && !currentWeaponData.oneTimeUse) {
       DisablePlayerFiring(ped, true);
     }
-
-    // TODO: Find way to modify melee weapon damage using weaponmeta files
-    // editting meta damage only works for guns for some reason and i cant find where to modify melee weapon damage
-    SetWeaponDamageModifierThisFrame(currentWeaponData.hash, currentWeaponData.damageModifier ?? 1);
 
     previousAmmoCount = ammoInWeapon;
   }, 1);

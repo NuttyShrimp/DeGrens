@@ -3,7 +3,6 @@ import {
   doNormalRevive,
   checkDeathOnDamage,
   setPlayerState,
-  setPauseDownAnimation,
   loadDownStateOnRestart,
   setDownConfig,
   loadPedFlags,
@@ -36,7 +35,6 @@ Events.onNet('hospital:client:revive', async () => {
   setHealth(100);
   ClearPedBloodDamage(PlayerPedId());
   setBleedAmount(0);
-  setPauseDownAnimation(false);
 });
 
 Util.onPlayerLoaded(playerData => {

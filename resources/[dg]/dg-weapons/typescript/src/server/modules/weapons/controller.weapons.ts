@@ -129,3 +129,18 @@ global.exports('forceSetQuality', async (plyId: number, quality: number) => {
 global.exports('getPlayerEquippedWeapon', (plyId: number) => {
   return getEquippedData(plyId).weaponHash;
 });
+
+Events.onNet('weapons:server:firstShot', (plyId: number) => {
+  const coords = Util.getPlyCoords(plyId)
+  Police.createDispatchCall({
+    tag: '10-71',
+    title: 'Schotmelding',
+    description: 'Een wandelaar meldt het horen van een schot',
+    coords: coords,
+    criminal: plyId,
+    blip: {
+      sprite: 110,
+      color: 0,
+    },
+  });
+});

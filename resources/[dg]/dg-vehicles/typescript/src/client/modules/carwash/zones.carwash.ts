@@ -17,6 +17,14 @@ const carwashZones: {
     minZ: 27.33,
     maxZ: 34.33,
   },
+  {
+    center: { x: -699.83, y: -932.36, z: 19.02 },
+    heading: 0,
+    width: 10.4,
+    length: 5.4,
+    minZ: 17.02,
+    maxZ: 23.02,
+  },
 ];
 
 let inCarwash = false;

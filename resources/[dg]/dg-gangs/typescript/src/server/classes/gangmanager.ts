@@ -35,7 +35,11 @@ class GangManager extends Util.Singleton<GangManager>() {
   };
 
   public getPlayerGang = (cid: number) => {
-    return Array.from(this.gangs.values()).find(g => g.isMember(cid));
+    for (const [_, gang] of this.gangs) {
+      if (gang.isMember(cid)) {
+        return gang;
+      }
+    }
   };
 
   //#region Helpers

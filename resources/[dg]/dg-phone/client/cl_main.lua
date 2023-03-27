@@ -109,16 +109,16 @@ DGX.Keys.onPressDown('openPhone', function()
 end)
 DGX.Keys.onPressDown('acceptNotification', function()
   if not canOpen() then return end
-  SendNUIMessage({
-    appName = 'home-screen',
-    action = 'acceptNotification'
+  SendAppEvent('phone', {
+    appName = "home-screen",
+    action = "acceptNotification"
   })
 end)
 DGX.Keys.onPressDown('declineNotification', function()
   if not canOpen() then return end
-  SendNUIMessage({
-    appName = 'home-screen',
-    action = 'declineNotification'
+  SendAppEvent('phone', {
+    appName = "home-screen",
+    action = "declineNotification"
   })
 end)
 --endregion
