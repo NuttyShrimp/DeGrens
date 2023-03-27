@@ -1,9 +1,7 @@
-import { Events, Police, Util } from '@dgx/server';
+import { Events, Util } from '@dgx/server';
 import { downLogger } from './logger.down';
 
 export const revivePlayer = async (plyId: number) => {
-  await Police.forceStopInteractions(plyId);
-
   Events.emitNet('hospital:client:revive', plyId);
   emit('hospital:revive', plyId);
 

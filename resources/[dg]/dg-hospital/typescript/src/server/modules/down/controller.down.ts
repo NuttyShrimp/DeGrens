@@ -51,6 +51,8 @@ RPC.register('hospital:down:getRespawnPosition', src => {
 });
 
 Events.onNet('hospital:down:respawnToHospital', (src: number) => {
+  Police.forceStopInteractions(src);
+
   Util.Log('hospital:down:respawnToHospital', {}, `${Util.getName(src)} has respawned to hospital`, src);
   Hospital.createDispatchCall({
     title: 'Gewonde persoon binnengebracht',

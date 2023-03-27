@@ -1,6 +1,9 @@
 import { Animations, Events, Hospital, Keys, Police, Util } from '@dgx/client';
 import { DISABLED_KEYS_WHILE_ESCORTING, VOICECHAT_KEYS } from '../constants.interactions';
 
+let gettingCarried = false;
+let carrying = false;
+
 let cancelCarry = false;
 
 Keys.onPressDown(
@@ -24,6 +27,8 @@ Events.onNet('police:interactions:carryPlayer', async () => {
 
   // Check loop
   cancelCarry = false;
+  carrying = true;
+
   const thread = setInterval(() => {
     DISABLED_KEYS_WHILE_ESCORTING.forEach(key => DisableControlAction(0, key, true));
 
@@ -38,6 +43,8 @@ Events.onNet('police:interactions:carryPlayer', async () => {
       ClearPedTasksImmediately(ped);
       clearInterval(thread);
       Animations.pauseAnimLoopAnimations(false);
+
+      carrying = false;
     }
   }, 1);
 });
@@ -57,6 +64,8 @@ Events.onNet('police:interactions:getCarried', async (plyId: number) => {
 
   // Check loop
   cancelCarry = false;
+  gettingCarried = true;
+
   const thread = setInterval(() => {
     DisableAllControlActions(0);
     VOICECHAT_KEYS.forEach(key => {
@@ -77,6 +86,12 @@ Events.onNet('police:interactions:getCarried', async (plyId: number) => {
 
       Animations.pauseAnimLoopAnimations(false);
       global.exports['dg-lib'].shouldExecuteKeyMaps(true);
+
+      gettingCarried = false;
     }
   }, 1);
 });
+
+export const isInCarryDuo = () => {
+  return carrying || gettingCarried;
+};

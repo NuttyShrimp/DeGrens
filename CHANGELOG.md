@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 - Porto crafting requirement aangepast
+- Je wordt nu losgelaten wanneer je gerevived wordt
 
 ### Fixed
 - Je kan weer vissen nadat je een vis hebt gevangen

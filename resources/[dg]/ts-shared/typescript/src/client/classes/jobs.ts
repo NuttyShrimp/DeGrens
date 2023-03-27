@@ -63,6 +63,10 @@ class Police {
   public isPoliceVehicle = (vehicle: number) => {
     return global.exports['dg-police'].isPoliceVehicle(vehicle);
   };
+
+  public forceStopInteractions = async () => {
+    await global.exports['dg-police'].forceStopInteractions();
+  };
 }
 
 class Hospital {
