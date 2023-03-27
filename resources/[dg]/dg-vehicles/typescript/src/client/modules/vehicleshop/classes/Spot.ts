@@ -7,7 +7,6 @@ export class Spot {
   private readonly position: Vec3;
   private readonly heading: number;
   private _model: string;
-  private needsEmployee: boolean;
   private vehicle?: number;
 
   private vehiclePeekIds: string[] = [];
@@ -17,7 +16,6 @@ export class Spot {
     this.position = { x: data.position.x, y: data.position.y, z: data.position.z };
     this.heading = data.position.w;
     this._model = data.model;
-    this.needsEmployee = data.needsEmployee;
     this.buildZone();
     this.spawnVehicle();
   }
@@ -51,9 +49,8 @@ export class Spot {
     );
   };
 
-  public changeModel = (newModel: string, needsEmployee: boolean) => {
+  public changeModel = (newModel: string) => {
     this.model = newModel;
-    this.needsEmployee = needsEmployee;
     this.despawnVehicle();
     this.spawnVehicle();
   };
@@ -89,40 +86,33 @@ export class Spot {
     SetVehicleDoorsLocked(this.vehicle, 3);
     SetVehicleNumberPlateText(this.vehicle, `PDMSPOT${this.id}`);
 
-    this.vehiclePeekIds = Peek.addEntityEntry(
-      this.vehicle,
-      {
-        options: [
-          {
-            label: 'Start Testrit',
-            icon: 'fas fa-key',
-            action: () => {
-              requestTestDrive(this.model);
-            },
+    this.vehiclePeekIds = Peek.addEntityEntry(this.vehicle, {
+      options: [
+        {
+          label: 'Start Testrit',
+          icon: 'fas fa-key',
+          action: () => {
+            requestTestDrive(this.model);
           },
-          {
-            label: 'Koop Voertuig',
-            icon: 'fas fa-money-bill',
-            action: () => {
-              this.buyVehicle();
-            },
+        },
+        {
+          label: 'Koop Voertuig',
+          icon: 'fas fa-money-bill',
+          action: () => {
+            this.buyVehicle();
           },
-          {
-            label: 'Stel Beschikbaar',
-            icon: 'fas fa-handshake',
-            business: [{ name: 'pdm' }],
-            action: () => {
-              this.allowPlayerToBuy();
-            },
-            canInteract: () => {
-              return this.needsEmployee;
-            },
+        },
+        {
+          label: 'Stel Beschikbaar',
+          icon: 'fas fa-handshake',
+          business: [{ name: 'pdm' }],
+          action: () => {
+            Events.emitNet('vehicles:shop:allowPlayerToBuy', this.id, this.model);
           },
-        ],
-        distance: 2.0,
-      },
-      true
-    );
+        },
+      ],
+      distance: 2.0,
+    });
   };
 
   public despawnVehicle = () => {
@@ -157,37 +147,5 @@ export class Spot {
     if (!result.accepted) return;
 
     Events.emitNet('vehicles:shop:buyVehicle', this.id, this.model);
-  };
-
-  private allowPlayerToBuy = async () => {
-    if (!this.needsEmployee) return;
-
-    const playersInShop = await RPC.execute<{ label: string; plyId: number }[]>('vehicles:shop:getPlayersInShop');
-    if (!playersInShop) {
-      this.log(`Could not get players inside shop`);
-      return;
-    }
-
-    const result = await UI.openInput({
-      header:
-        'Voor wie wil je het voertuig tekoop stellen?\nDeze persoon zal 3 minuten de tijd hebben om het voertuig te kopen.',
-      inputs: [
-        {
-          label: 'Burger',
-          name: 'target',
-          type: 'select',
-          options: playersInShop.map(p => ({ label: p.label, value: String(p.plyId) })),
-        },
-      ],
-    });
-    if (!result.accepted) return;
-
-    const targetPly = Number(result.values.target);
-    if (isNaN(targetPly)) {
-      this.log('Input player invalid');
-      return;
-    }
-
-    Events.emitNet('vehicles:shop:allowPlayerToBuy', this.id, this.model, targetPly);
   };
 }

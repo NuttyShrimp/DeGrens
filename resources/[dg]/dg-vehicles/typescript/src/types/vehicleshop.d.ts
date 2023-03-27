@@ -21,7 +21,6 @@ declare namespace VehicleShop {
   type Spot = {
     position: Vec4;
     model: string;
-    needsEmployee: boolean;
   };
 
   type Vehicle = {
