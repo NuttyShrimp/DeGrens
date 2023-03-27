@@ -4,9 +4,18 @@ const { clientConfig, serverConfig, findResourceName } = require('./config');
 const { sentryEsbuildPlugin } = require('@sentry/esbuild-plugin');
 const { version } = require('../package.json');
 
+const buildClientDev = async () => {
+  await build({
+    ...clientConfig,
+  });
+  console.log(`[${findResourceName(path.resolve('.'))}] [Client] Successfully built`);
+};
+
 const buildClient = async () => {
   await build({
     ...clientConfig,
+    minify: true,
+    keepNames: false,
   });
   console.log(`[${findResourceName(path.resolve('.'))}] [Client] Successfully built`);
 };
@@ -48,5 +57,9 @@ if (process.argv.includes('--server')) {
   }
 }
 if (process.argv.includes('--client')) {
-  buildClient();
+  if (process.argv.includes('--dev')) {
+    buildClientDev();
+  } else {
+    buildClient();
+  }
 }

@@ -21,8 +21,10 @@ const baseConfig = side => ({
   outfile: `../../../${side}/${side}.js`,
   absWorkingDir: path.resolve(`src/${side}`),
   loader: { '.ts': 'ts', '.json': 'json' },
-  sourcemap: 'inline',
+  sourcemap: 'both',
   bundle: true,
+  minify: false,
+  keepNames: true,
   color: true,
   plugins: [
     importPatternPlugin(),
@@ -51,7 +53,6 @@ const serverConfig = {
 };
 
 const clientConfig = {
-  minify: true,
   ...baseConfig('client'),
 };
 
