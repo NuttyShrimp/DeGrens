@@ -46,7 +46,7 @@ class Util extends UtilShared {
       global.exports['dg-logs'].createGraylogEntry(type, data, message, isDevImportant);
     } catch (e) {
       console.error(e);
-      console.log("Failed to log error to graylog", type, data, message, src, isDevImportant)
+      console.log('Failed to log error to graylog', type, data, message, src, isDevImportant);
     }
   }
 
@@ -323,19 +323,19 @@ export class Reputations {
   };
 }
 
-class StaticObjects {
+class SyncedObjects {
   private objectsToRemove: Set<string>;
 
   constructor() {
     this.objectsToRemove = new Set();
     on('onResourceStop', (res: string) => {
       if (res !== GetCurrentResourceName()) return;
-      global.exports['dg-misc'].removeStaticObject([...this.objectsToRemove]);
+      global.exports['dg-misc'].removeSyncedObject([...this.objectsToRemove]);
     });
   }
 
-  public add = (objectData: StaticObjects.CreateData | StaticObjects.CreateData[]): string[] => {
-    const ids = global.exports['dg-misc'].addStaticObject(objectData) as string[];
+  public add = async (objs: Objects.SyncedCreateData | Objects.SyncedCreateData[], src?: number): Promise<string[]> => {
+    const ids = (await global.exports['dg-misc'].addSyncedObject(Array.isArray(objs) ? objs : [objs], src)) as string[];
 
     ids.forEach(id => {
       this.objectsToRemove.add(id);
@@ -343,14 +343,14 @@ class StaticObjects {
     return ids;
   };
 
-  public remove = (objId: string | string[]) => {
+  public remove = async (objId: string | string[]) => {
     if (Array.isArray(objId)) {
       objId.forEach(id => this.objectsToRemove.delete(id));
     } else {
       this.objectsToRemove.delete(objId);
     }
 
-    global.exports['dg-misc'].removeStaticObject(objId);
+    global.exports['dg-misc'].removeSyncedObject(objId);
   };
 }
 
@@ -358,5 +358,5 @@ export default {
   Util: new Util(),
   Status: new Status(),
   Reputations: new Reputations(),
-  StaticObjects: new StaticObjects(),
+  SyncedObjects: new SyncedObjects(),
 };

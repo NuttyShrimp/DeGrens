@@ -149,4 +149,8 @@ export class Util {
     }
     return array;
   };
+
+  getChunkForPos(pos: Vec2, chunk_size = 256): number {
+    return global.exports['dg-misc'].getChunkForPos(pos, chunk_size);
+  }
 }

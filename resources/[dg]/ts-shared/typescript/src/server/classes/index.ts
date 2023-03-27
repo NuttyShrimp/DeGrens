@@ -19,7 +19,7 @@ import sounds from './sounds';
 import doorlock from './doorlock';
 
 export const { Events, RPC, SQL, API, Auth } = events;
-export const { Util, Status, Reputations, StaticObjects } = util;
+export const { Util, Status, Reputations, SyncedObjects } = util;
 export const { Phone } = phone;
 export const { Chat, RayCast } = interaction;
 export const { Config } = config;

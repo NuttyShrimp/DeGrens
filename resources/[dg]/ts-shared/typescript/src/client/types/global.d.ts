@@ -36,7 +36,7 @@ declare global {
     Phone: typeof Classes.Phone;
     BaseEvents: typeof Classes.BaseEvents;
     BlipManager: typeof Classes.BlipManager;
-    StaticObjects: typeof Classes.StaticObjects;
+    SyncedObjects: typeof Classes.SyncedObjects;
   };
   var asyncExports: any;
 }

@@ -1,4 +1,4 @@
-import { SQL, StaticObjects, UI, Util, Inventory, Notifications, Phone, Jobs } from '@dgx/server';
+import { SQL, SyncedObjects, UI, Util, Inventory, Notifications, Phone, Jobs } from '@dgx/server';
 import { MODELS_PER_STAGE } from '../constants.weed';
 import config from 'services/config';
 import { mainLogger } from 'sv_logger';
@@ -46,23 +46,24 @@ export class WeedPlant {
     this.spawnObject();
   }
 
-  private spawnObject = () => {
-    this.destroyObject();
+  private spawnObject = async () => {
+    await this.destroyObject();
 
-    const [objectId] = StaticObjects.add({
+    const [objectId] = await SyncedObjects.add({
       model: MODELS_PER_STAGE[this.stage],
       coords: this.coords,
       rotation: this.rotation,
       flags: {
         weedPlantId: this.id,
       },
+      skipStore: true,
     });
     this.objectId = objectId;
   };
 
-  private destroyObject = () => {
+  private destroyObject = async () => {
     if (this.objectId == null) return;
-    StaticObjects.remove(this.objectId);
+    await SyncedObjects.remove(this.objectId);
     this.objectId = null;
   };
 
