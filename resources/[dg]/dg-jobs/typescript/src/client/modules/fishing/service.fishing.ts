@@ -235,6 +235,7 @@ const removeFishEntity = async () => {
 
   await Util.Delay(100);
   DeleteEntity(fishEntity);
+  fishEntity = null;
   TaskPlayAnim(ped, 'anim@heists@narcotics@trash', 'throw_a', 8.0, 8.0, -1, 17, 1, false, false, false);
 
   await Util.Delay(1000);
