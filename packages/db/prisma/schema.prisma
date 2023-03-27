@@ -679,6 +679,15 @@ model admin_unannounced_warns {
   @@id([steamid, penaltyid])
 }
 
+model synced_objects {
+  id      Int    @id @default(autoincrement())
+  model   String
+  coords  String
+  vectors String @db.Text
+  flags   String
+  placer  String @db.VarChar(255)
+}
+
 enum bank_accounts_type {
   standard
   savings

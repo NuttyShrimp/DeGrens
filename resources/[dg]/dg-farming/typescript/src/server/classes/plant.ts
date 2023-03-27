@@ -1,4 +1,4 @@
-import { Inventory, StaticObjects } from '@dgx/server';
+import { Inventory, SyncedObjects } from '@dgx/server';
 import { getCurrentSeconds } from 'helpers';
 import config from 'services/config';
 import { mainLogger } from 'sv_logger';
@@ -31,7 +31,7 @@ export class Plant {
 
     const seedConfig = config.seeds[seed];
     setTimeout(() => {
-      StaticObjects.remove(this.objectId);
+      SyncedObjects.remove(this.objectId);
       this.spawn(seedConfig.model, seedConfig.zOffset);
     }, seedConfig.growTime * 60 * 1000);
 
@@ -45,16 +45,18 @@ export class Plant {
     return this._seed;
   }
 
-  private spawn = (model: string, zOffset: number) => {
-    const [objectId] = StaticObjects.add({
+  private spawn = async (model: string, zOffset: number) => {
+    const [objectId] = await SyncedObjects.add({
       model,
       coords: {
         ...this.coords,
         z: this.coords.z + zOffset,
       },
+      rotation: { x: 0, y: 0, z: 0 },
       flags: {
         farmingPlantId: this.id,
       },
+      skipStore: true,
     });
     this.objectId = objectId;
   };
@@ -63,10 +65,10 @@ export class Plant {
     this.actions[action] = getCurrentSeconds();
   };
 
-  public harvest = (plyId: number) => {
+  public harvest = async (plyId: number) => {
     if (!this.canHarvest()) return;
 
-    StaticObjects.remove(this.objectId);
+    await SyncedObjects.remove(this.objectId);
     const quality = this.calculateQuality();
     Inventory.addItemToPlayer(plyId, config.seeds[this.seed].product, config.amountPerPlant, {
       quality,

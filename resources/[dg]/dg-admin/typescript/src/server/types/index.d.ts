@@ -30,6 +30,7 @@ declare interface CommandData {
   isClientCommand: boolean;
   handler: (caller: UserData, args?: any) => void;
   UI: Omit<UI.Entry, 'name'>;
+  isEnabled?: (args?: any) => boolean;
 }
 
 declare interface DiscordConfig {

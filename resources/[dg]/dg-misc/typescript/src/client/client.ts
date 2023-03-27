@@ -7,8 +7,8 @@ import './modules/elevators';
 import './modules/propattach';
 import './modules/rental/controller.rental';
 import './modules/gtabehaviour';
-import './modules/staticobjects';
 import './modules/animloops';
+import './modules/objectManager/controller.objectmanager';
 import './services/laptop';
 import './services/config';
 import './services/boatanchor';
@@ -26,6 +26,7 @@ import './services/walkstyles';
 import './services/spacespam';
 import './services/parachute';
 import './services/scubagear';
+import './services/grid';
 
 import { setDiscordRichPresence } from 'modules/discord/service.discord';
 import { setGTABehaviour } from 'modules/gtabehaviour/service.gtabehaviour';

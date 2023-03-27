@@ -10,7 +10,7 @@ import './modules/elevators/controller.elevators';
 import './modules/status';
 import './modules/reputation';
 import './modules/rental/controller.rental';
-import './modules/staticobjects';
+import './modules/objectManager/controller.objectmanager';
 import './services/laptop';
 import './services/config';
 import './services/boatanchor';

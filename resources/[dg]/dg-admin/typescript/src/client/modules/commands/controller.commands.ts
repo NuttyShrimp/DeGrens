@@ -1,4 +1,4 @@
-import { Events, Notifications, PropAttach, RPC, Util } from '@dgx/client';
+import { Events, Notifications, PropAttach, RPC, SyncedObjects, Util } from '@dgx/client';
 
 import { disableBlips, enableBlips } from '../../service/playerBlips';
 import { toggleLocalVis } from './service.commands';
@@ -15,6 +15,16 @@ on('admin:commands:damageEntity', (ent: number) => {
 });
 on('admin:commands:deleteEntity', (ent: number) => {
   ent = Number(ent);
+  const entState = Entity(ent).state;
+  if (entState.objId) {
+    if (entState.isSynced) {
+      Events.emitNet('dg-misc:objectmanager:deleteSynced', entState.objId);
+      return;
+    } else {
+      SyncedObjects.remove(entState.objId);
+      return;
+    }
+  }
   if (!NetworkGetEntityIsNetworked(ent)) {
     SetEntityAsMissionEntity(ent, true, true);
     DeleteEntity(ent);

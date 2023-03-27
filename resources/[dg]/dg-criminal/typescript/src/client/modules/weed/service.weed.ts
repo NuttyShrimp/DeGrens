@@ -1,4 +1,4 @@
-import { Util, Taskbar, Events, StaticObjects, Jobs } from '@dgx/client/classes';
+import { Util, Taskbar, Events, SyncedObjects, Jobs } from '@dgx/client/classes';
 
 const weedPlantModels = new Set<number>();
 
@@ -9,7 +9,7 @@ export const registerWeedPlantModels = (models: string[]) => {
 };
 
 export const feedWeedPlant = async (weedPlantId: number, objectId: string, deluxe: boolean) => {
-  const entity = StaticObjects.getEntityForObjectId(objectId);
+  const entity = SyncedObjects.getEntityForObjectId(objectId);
   if (!entity) return;
 
   const heading = Util.getHeadingToFaceEntity(entity);
@@ -39,7 +39,7 @@ export const feedWeedPlant = async (weedPlantId: number, objectId: string, delux
 };
 
 export const destroyWeedPlant = async (weedPlantId: number, objectId: string) => {
-  const entity = StaticObjects.getEntityForObjectId(objectId);
+  const entity = SyncedObjects.getEntityForObjectId(objectId);
   if (!entity) return;
 
   const heading = Util.getHeadingToFaceEntity(entity);
@@ -72,7 +72,7 @@ export const destroyWeedPlant = async (weedPlantId: number, objectId: string) =>
 };
 
 export const cutWeedPlant = async (weedPlantId: number, objectId: string) => {
-  const entity = StaticObjects.getEntityForObjectId(objectId);
+  const entity = SyncedObjects.getEntityForObjectId(objectId);
   if (!entity) return;
 
   const heading = Util.getHeadingToFaceEntity(entity);

@@ -21,6 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Politie signin locaties toegevoegd in Sandy/Paleto
 - Schotmeldingen toegevoegd
 - Wrapper toegevoegd voor geloopte animaties zodat deze elkaar niet onderbreken
+- Placeable synced objects toegevoegd
 
 ### Changed
 - Meer feedback bij start van fleecaoverval
@@ -35,6 +36,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Gordels zijn consistenter
 - Health decrease van bloed verlaagd
 - Je kan geen autos zonder medewerker mee kopen als er een medewerker in de winkel is
+- StaticObjects systeem herschrijven naar een chunk-based systeem
 - Moved winston logger logic/creation to a seperate package to reduce code duplication
 
 ### Fixed
