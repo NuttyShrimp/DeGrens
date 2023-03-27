@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - Je kan weer vissen nadat je een vis hebt gevangen
 - PDM medewerkers kunnen nu wel voertuigen verkopen met lage klasse zonder ze opnieuw te moeten selecteren
+- Sanddigging UI interactions overwriten elkaar nu deftig
 
 ## [1.1.1]
 

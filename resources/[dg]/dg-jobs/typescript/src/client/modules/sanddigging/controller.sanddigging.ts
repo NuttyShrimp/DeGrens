@@ -2,6 +2,7 @@ import { BaseEvents, Events, Keys, Peek, PolyZone, UI } from '@dgx/client';
 import {
   checkNewLocation,
   cleanupSanddigging,
+  displaySpotInteraction,
   doSpotAction,
   finishJob,
   getInAssignedVehicle,
@@ -93,4 +94,5 @@ BaseEvents.onVehicleSeatChange((vehicle, newSeat, oldSeat) => {
 
 BaseEvents.onLeftVehicle(() => {
   setInAssignedVehicle(false);
+  displaySpotInteraction();
 });
