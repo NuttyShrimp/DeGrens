@@ -50,11 +50,7 @@ export const getCosmeticUpgrades = (veh: number): Upgrades.Cosmetic | undefined 
       active: IsToggleModOn(veh, 22),
       color: GetVehicleXenonLightsColor(veh),
     },
-    wheels: {
-      id: GetVehicleMod(veh, 23),
-      custom: GetVehicleModVariation(veh, 23),
-      type: GetVehicleWheelType(veh),
-    },
+    wheels: getWheelUpgrade(veh),
     neon: {
       enabled: [0, 1, 2, 3].map(id => ({ id, toggled: IsVehicleNeonLightEnabled(veh, id) })),
       color: {
@@ -177,20 +173,32 @@ export const getPerformanceUpgradePossibilities = (veh: number): Upgrades.Perfor
 };
 
 const getWheelPossibilities = (veh: number) => {
-  const originalType = GetVehicleWheelType(veh);
+  const originalWheelUpgrade = getWheelUpgrade(veh);
+
   let ids = wheelTypesPerClass.normal;
-  if (originalType === 6) {
+  if (originalWheelUpgrade.type === 6) {
     ids = wheelTypesPerClass.motorcycle;
-  } else if (originalType === 10) {
+  } else if (originalWheelUpgrade.type === 10) {
     ids = wheelTypesPerClass.openwheel;
   }
+
   const possibilities = ids.reduce<Record<number, number>>((acc, catId) => {
     SetVehicleWheelType(veh, catId);
     acc[catId] = GetNumVehicleMods(veh, 23);
     return acc;
   }, {});
-  SetVehicleWheelType(veh, originalType);
+
+  cosmeticUpgradeAppliers.wheels!(veh, originalWheelUpgrade);
+
   return possibilities;
+};
+
+const getWheelUpgrade = (vehicle: number): Upgrades.Cosmetic['wheels'] => {
+  return {
+    id: GetVehicleMod(vehicle, 23),
+    custom: GetVehicleModVariation(vehicle, 23),
+    type: GetVehicleWheelType(vehicle),
+  };
 };
 
 export const checkIllegalTunes = (vehicle: number) => {
