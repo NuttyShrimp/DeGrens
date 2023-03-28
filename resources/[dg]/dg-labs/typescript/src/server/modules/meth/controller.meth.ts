@@ -86,7 +86,12 @@ Inventory.registerUseable('meth_brick', async (plyId, itemState) => {
   Inventory.destroyItem(emptyBagsItem.id);
   Inventory.destroyItem(itemState.id);
 
-  Inventory.addItemToPlayer(plyId, 'meth_bag', itemState.metadata.amount);
+  const amountOfBags: number = itemState.metadata.amount;
+  if (amountOfBags > 0) {
+    Inventory.addItemToPlayer(plyId, 'meth_bag', amountOfBags);
+  } else {
+    Notifications.add(plyId, 'Dit was van hele slechte kwaliteit');
+  }
 
   const logMsg = `${Util.getName(plyId)}(${plyId}) has made meth brick into bags`;
   methLogger.debug(logMsg);
