@@ -19,6 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - PDM medewerkers kunnen nu wel voertuigen verkopen met lage klasse zonder ze opnieuw te moeten selecteren
 - Sanddigging UI interactions overwriten elkaar nu deftig
 - Fix wielen die van naar een scuffed kleur veranderen in bennys
+- Stances van voertuigupgrades blijven nu staan als je van bennys category switcht
 
 ## [1.1.1]
 

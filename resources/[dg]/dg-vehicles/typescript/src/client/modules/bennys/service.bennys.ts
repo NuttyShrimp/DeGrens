@@ -13,11 +13,14 @@ let keyThread: number | null = null;
 let equippedUpgradesOnEnter: Upgrades.Cosmetic;
 const enableKeys = [0, 1, 2, 3, 4, 5, 6, 46, 249];
 
-export let modelStanceData: Stance.Model[] = [];
-export let originalStance: Stance.Data;
+let modelStanceData: Stance.Model[] = [];
+let originalStance: Stance.Data;
 
 export const isBennysMenuOpen = () => bennysMenuOpen;
 export const setBennysMenuOpen = (open: boolean) => (bennysMenuOpen = open);
+
+export const getModelStanceData = () => modelStanceData;
+export const getOriginalStance = () => originalStance;
 
 // region getters and setters
 export const setLocations = (locs: Bennys.Location[]) => {

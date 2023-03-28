@@ -8,9 +8,9 @@ import {
   closeUI,
   getCurrentBennys,
   getEquippedUpgradesOnEnter,
+  getModelStanceData,
+  getOriginalStance,
   handleVehicleRepair,
-  modelStanceData,
-  originalStance,
 } from './service.bennys';
 import { getLabelsForModId, getLiveryLabels, getWheelTypeComponents, isEMSVehicle } from './util.bennys';
 
@@ -158,10 +158,8 @@ UI.RegisterUICallback('bennys:preview', (data: Bennys.UI.Change, cb) => {
     applyUpgrade(plyVeh, data.name as keyof Upgrades.AllCosmeticModIds, data.data as any);
   }
 
-  // Stancing per model
-  if (modelStanceData.length !== 0 && upgradeableCategories.exterior.includes(data.name)) {
-    applyModelStance(plyVeh, data.name, data.data as number, modelStanceData, originalStance);
-  }
+  // Try to apply stance related to upgrades
+  applyModelStance(plyVeh, data.name, data.data as number, getModelStanceData(), getOriginalStance());
 
   cb({ data: {}, meta: { ok: true, message: '' } });
 });
@@ -185,10 +183,8 @@ UI.RegisterUICallback('bennys:previewEquipped', (data: { component: string; data
     applyUpgrade(plyVeh, data.component as keyof Upgrades.Cosmetic, equippedData);
   }
 
-  // Stancing per model
-  if (modelStanceData.length !== 0 && upgradeableCategories.exterior.includes(data.component)) {
-    applyModelStance(plyVeh, data.component, equippedData as number, modelStanceData, originalStance);
-  }
+  // Try to apply stance related to upgrades
+  applyModelStance(plyVeh, data.component, equippedData as number, getModelStanceData(), getOriginalStance());
 
   cb({ data: {}, meta: { ok: true, message: '' } });
 });

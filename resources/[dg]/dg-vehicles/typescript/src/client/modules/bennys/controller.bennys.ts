@@ -7,7 +7,7 @@ import {
   closeUI,
   enterBennys,
   getCurrentBennys,
-  originalStance,
+  getOriginalStance,
   setBennysMenuOpen,
   setCurrentBennys,
   setLocations,
@@ -16,19 +16,13 @@ import {
 // Load benny locations
 Events.onNet('vehicles:bennys:load', (locations: Bennys.Location[]) => {
   locations.forEach(l => {
-    PolyZone.addBoxZone(
-      'benny',
-      l.vector,
-      l.width,
-      l.length,
-      {
-        ...l.data,
-        data: {
-          id: l.name,
-        },
-        heading: l.heading,
-      }
-    );
+    PolyZone.addBoxZone('benny', l.vector, l.width, l.length, {
+      ...l.data,
+      data: {
+        id: l.name,
+      },
+      heading: l.heading,
+    });
     if (!l.hideBlip) {
       BlipManager.addBlip({
         category: 'dg-vehicles',
@@ -70,7 +64,7 @@ UI.onUIReload(() => {
   setBennysMenuOpen(false);
   const veh = getCurrentVehicle();
   if (veh) {
-    Entity(veh).state.set('stance', originalStance, true);
+    Entity(veh).state.set('stance', getOriginalStance(), true);
   }
 });
 
