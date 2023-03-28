@@ -124,6 +124,7 @@ export class Item {
       'inventory:item:used',
       {
         itemId: this.id,
+        itemName: this.name,
       },
       `${Util.getName(src)} used ${this.name}`,
       src

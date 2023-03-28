@@ -1,4 +1,4 @@
-import { Inventory, Notifications, RayCast, RPC, Taskbar } from '@dgx/server';
+import { Inventory, Notifications, RayCast, RPC, Taskbar, Util } from '@dgx/server';
 
 import { getVinForVeh } from '../../helpers/vehicle';
 import { fuelManager } from '../fuel/classes/fuelManager';
@@ -117,6 +117,12 @@ export const useRepairPart = async (src: number, type: Service.Part, itemState: 
   const status = getServiceStatus(vin);
   const oldPartValue = status[type];
   const newPartValue = oldPartValue + getPartRepairAmount(oldPartValue);
+  Util.Log("vehicles:status:updatePart", {
+    vin,
+    type,
+    oldPartValue,
+    newPartValue
+  }, `${Util.getName(src)} has updated a ${type} of a vehicle to ${newPartValue}`)
   updateServiceStatus(vin, { ...status, [type]: newPartValue });
 };
 
