@@ -1,7 +1,7 @@
 import { Events, Util } from '@dgx/client';
 import { Vector3 } from '@dgx/shared';
 import { getChunkForPos, getMaxChunks } from '../../../shared/helpers/grid';
-import { eulerAnglesToRotMatrix } from '../../../shared/helpers/math';
+import { eulerAnglesToRotMatrix, rotMatrixToEulerAngles } from '../../../shared/helpers/math';
 import { CHUNK_SIZE, neighbourMods } from './helper.objectmanager';
 
 const objectStore: Record<string, Objects.ActiveState> = {};
@@ -32,6 +32,12 @@ const applyMatrix = (ent: number, matrix: Float32Array) => {
   );
 };
 
+const applyMatrixByEuler = (ent: number, matrix: Float32Array) => {
+  const eulerRot = rotMatrixToEulerAngles(matrix);
+  SetEntityMatrix(ent, 1, 0, 0, 0, 1, 0, 0, 0, 1, matrix[12], matrix[13], matrix[14]);
+  SetEntityRotation(ent, eulerRot.x, eulerRot.y, eulerRot.z, 0, true);
+};
+
 const createObject = async (id: string) => {
   const data = objectStore[id];
   if (!data) return;
@@ -50,7 +56,7 @@ const createObject = async (id: string) => {
     return;
   }
 
-  applyMatrix(entity, data.matrix);
+  applyMatrixByEuler(entity, data.matrix);
   FreezeEntityPosition(entity, true);
 
   Entity(entity).state.set('objId', id, false);
@@ -140,7 +146,6 @@ export const addSyncedObject = (data: Objects.CreateState[]) => {
       obj.flags = {};
     }
     obj.flags['isSynced'] = true;
-    console.log([...obj.matrix]);
     obj.matrix = new Float32Array([...obj.matrix.values()]);
     registerObject(obj);
   }
@@ -231,7 +236,7 @@ export const updateSyncedObject = (objId: string, data: Objects.CreateState) => 
     objData.chunk = objChunk;
   }
   if (objData.entity) {
-    applyMatrix(objData.entity, objData.matrix);
+    applyMatrixByEuler(objData.entity, objData.matrix);
   }
 };
 

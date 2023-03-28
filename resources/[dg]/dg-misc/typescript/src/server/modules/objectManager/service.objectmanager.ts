@@ -152,13 +152,13 @@ export const removeSyncedObject = async (objId: string | string[], src?: number)
 export const updateSyncedObject = async (objId: string, matrix: number[], src?: number) => {
   const objData = objectStore[objId];
   if (!objData) return;
-  const oldObjData = {...objData};
+  const oldObjData = { ...objData };
   objData.matrix = matrix;
   objData.coords = new Vector3(matrix[12], matrix[13], matrix[14]);
-  await SQL.query(`UPDATE synced_objects WHERE id = ? SET vectors = ?, coords = ?`, [
-    objId,
+  await SQL.query(`UPDATE synced_objects SET vectors = ?, coords = ? WHERE id = ?`, [
     JSON.stringify(rotMatrixToVecs(objData.matrix)),
     JSON.stringify(objData.coords),
+    Number(objId.replace(`synced_`, '')),
   ]);
   Events.emitNet('dg-misc:objectmanager:updateSynced', -1, objId, objData);
   Events.emit('dg-misc:objectmanager:updateObject', objId, objData);

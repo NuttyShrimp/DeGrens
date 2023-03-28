@@ -135,7 +135,6 @@ Keys.onPressDown('GeneralUse', () => {
   if (!ghostCoords || !resolver || !ghostEnt) {
     return;
   }
-  console.log(GetEntityMatrix(ghostEnt))
   resolver({ coords: Util.getEntityCoords(ghostEnt), rot: Util.getEntityRotation(ghostEnt) });
 });
 

@@ -59,7 +59,38 @@ export const eulerAnglesToRotMatrix = (rotation: Vec3, coords: Vec3) => {
 
     coords.x,
     coords.y,
-    coords.z,
+    coords.z + 0.5,
     1,
   ];
+};
+
+const clamp = (v: number, min: number, max: number) => {
+  return Math.max(min, Math.min(max, v));
+};
+
+const radToDeg = (rad: number) => {
+  return (rad * 180) / Math.PI;
+};
+
+export const rotMatrixToEulerAngles = (te: number[] | Float32Array) => {
+  const eulerRot = { x: 0, y: 0, z: 0 };
+  const m11 = te[4],
+    m12 = te[0],
+    m13 = te[8],
+    m22 = te[1],
+    m23 = te[9],
+    m32 = te[2],
+    m33 = te[10];
+
+  eulerRot.y = radToDeg(Math.asin(clamp(m13, -1, 1)));
+
+  if (Math.abs(m13) < 0.9999999) {
+    eulerRot.x = radToDeg(Math.atan2(-m23, m33));
+    eulerRot.z = radToDeg(Math.atan2(-m12, m11));
+  } else {
+    eulerRot.x = radToDeg(Math.atan2(m32, m22));
+    eulerRot.z = 0;
+  }
+
+  return eulerRot;
 };

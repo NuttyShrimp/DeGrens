@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Sanddigging UI interactions overwriten elkaar nu deftig
 - Fix wielen die van naar een scuffed kleur veranderen in bennys
 - Stances van voertuigupgrades blijven nu staan als je van bennys category switcht
+- Collision van synced entities kloppen nu (Peek op o.a. weedplanten zou hiermee gefixed worden)
 
 ## [1.1.1]
 

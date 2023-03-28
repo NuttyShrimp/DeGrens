@@ -8,6 +8,7 @@ import {
   removeObject,
   scheduleChunkCheck,
   startObjectGizmo,
+  updateSyncedObject,
 } from './service.objectmanager';
 
 on('onResourceStop', (res: string) => {
@@ -58,7 +59,7 @@ Events.onNet('dg-misc:objectmanager:startObjectMovement', (id: string) => {
 });
 
 Events.onNet("dg-misc:objectmanager:updateSynced", (id: string, objData: Objects.ServerState) => {
-
+  updateSyncedObject(id, {...objData, matrix: new Float32Array(objData.matrix)});
 })
 
 RPC.register('dg-misc:objectmanager:getObjIdForEntity', (ent: number) => {
@@ -79,12 +80,8 @@ Keys.onPress('object-gizmo-translation', isDown => {
 Keys.onPress('object-gizmo-rotation', isDown => {
   isDown ? ExecuteCommand(`+gizmoRotation`) : ExecuteCommand(`-gizmoRotation`);
 });
-Keys.onPress('object-gizmo-scale', isDown => {
-  isDown ? ExecuteCommand(`+gizmoScale`) : ExecuteCommand(`-gizmoScale`);
-});
 
 Keys.register('object-gizmo-select', '(gizmo) Select the gizmo', 'MOUSE_LEFT', 'MOUSE_BUTTON');
 Keys.register('object-gizmo-local', '(gizmo) Swicth local/world axes', 'Z');
 Keys.register('object-gizmo-translation', '(gizmo) Switch to translation', 'Q');
 Keys.register('object-gizmo-rotation', '(gizmo) Switch to rotation', 'E');
-Keys.register('object-gizmo-scale', '(gizmo) Switch to scale', 'R');
