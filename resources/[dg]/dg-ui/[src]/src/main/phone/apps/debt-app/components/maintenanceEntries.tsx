@@ -10,14 +10,14 @@ import { showFormModal } from '@src/main/phone/lib';
 
 import { PayModal } from './modals';
 
-export const MaintenanceEntry = ({ debt }: { debt: Phone.Debt.Debt }) => {
+export const MaintenanceEntry = ({ debt, disablePay }: { debt: Phone.Debt.Debt; disablePay?: boolean }) => {
   if (debt.reason.startsWith('veh_')) {
-    return <VehicleEntry debt={debt} />;
+    return <VehicleEntry debt={debt} disablePay={disablePay} />;
   }
-  return <BareEntry debt={debt} />;
+  return <BareEntry debt={debt} disablePay={disablePay} />;
 };
 
-const VehicleEntry = ({ debt }: { debt: Phone.Debt.Debt }) => {
+const VehicleEntry = ({ debt, disablePay }: { debt: Phone.Debt.Debt; disablePay?: boolean }) => {
   const openPayModal = () => {
     showFormModal(<PayModal debt={debt} />);
   };
@@ -56,16 +56,18 @@ const VehicleEntry = ({ debt }: { debt: Phone.Debt.Debt }) => {
               },
             ]}
           />
-          <Stack mt={1} direction='row' justifyContent='space-between' alignItems='center'>
-            <Button.Primary onClick={openPayModal}>Pay</Button.Primary>
-          </Stack>
+          {!disablePay && (
+            <Stack mt={1} direction='row' justifyContent='space-between' alignItems='center'>
+              <Button.Primary onClick={openPayModal}>Pay</Button.Primary>
+            </Stack>
+          )}
         </div>
       }
     />
   );
 };
 
-const BareEntry = ({ debt }: { debt: Phone.Debt.Debt }) => {
+const BareEntry = ({ debt, disablePay }: { debt: Phone.Debt.Debt; disablePay?: boolean }) => {
   const openPayModal = () => {
     showFormModal(<PayModal debt={debt} />);
   };
@@ -99,9 +101,11 @@ const BareEntry = ({ debt }: { debt: Phone.Debt.Debt }) => {
               },
             ]}
           />
-          <Stack mt={1} direction='row' justifyContent='space-between' alignItems='center'>
-            <Button.Primary onClick={openPayModal}>Pay</Button.Primary>
-          </Stack>
+          {!disablePay && (
+            <Stack mt={1} direction='row' justifyContent='space-between' alignItems='center'>
+              <Button.Primary onClick={openPayModal}>Pay</Button.Primary>
+            </Stack>
+          )}
         </div>
       }
     />

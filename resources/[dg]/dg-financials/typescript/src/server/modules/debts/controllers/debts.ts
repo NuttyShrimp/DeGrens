@@ -34,15 +34,14 @@ global.asyncExports('removeDebt', async (debtId: number | number[]) => {
   }
   await debtManager.removeDebts(debtId);
 });
-global.exports('getMaintenanceFee', (id: string) => debtManager.getMaintenanceFee(id));
 
-RPC.register('financials:server:debts:get', src => {
+RPC.register('financials:server:debts:get', async src => {
   debtLogger.silly(`getDebts | src: ${src}`);
   const Player = DGCore.Functions.GetPlayer(src);
   if (!Player) {
     return [];
   }
-  const debts = debtManager.getDebtsByCid(Player.PlayerData.citizenid);
+  const debts = await debtManager.getDebtsByCid(Player.PlayerData.citizenid);
   debtLogger.silly(`getDebts: ${debts.length}`);
   return debts.map(d => {
     const date = dayjs

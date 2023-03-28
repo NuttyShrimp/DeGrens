@@ -363,7 +363,7 @@ declare namespace Phone {
       payed: number;
       // unix timestamp IN SECONDS
       date: number;
-      type: 'debt' | 'maintenance';
+      type: 'debt' | 'maintenance' | 'scheduled';
       // Name of account where debt goes to
       target_account: string;
       origin_name: string;

@@ -9,10 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - Parking toegevoegd voor taxi bedrijf
+- Scheduled maintenance fees zijn zichtbaar in de app 1 week voordat ze effectief betaald moeten worden
 
 ### Changed
 - Porto crafting requirement aangepast
 - Je wordt nu losgelaten wanneer je gerevived wordt
+- Calculaties voor voertuig maintenance fees aangepast
 
 ### Fixed
 - Je kan weer vissen nadat je een vis hebt gevangen

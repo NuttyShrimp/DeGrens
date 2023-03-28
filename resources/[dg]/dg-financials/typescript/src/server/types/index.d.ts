@@ -62,7 +62,7 @@ declare namespace Taxes {
 }
 
 declare namespace Debts {
-  type Type = 'debt' | 'maintenance';
+  type Type = 'debt' | 'maintenance' | 'scheduled';
   interface Debt {
     id: number;
     cid: number;

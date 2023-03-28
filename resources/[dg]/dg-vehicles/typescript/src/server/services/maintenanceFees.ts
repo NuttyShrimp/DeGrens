@@ -1,13 +1,17 @@
-import { Financials, SQL, TaxIds, Util } from '@dgx/server';
+import { Financials, TaxIds, Util } from '@dgx/server';
 import { getPlayerOwnedVehicles } from 'db/repository';
 import { getConfigByModel } from 'modules/info/service.info';
 import { mainLogger } from 'sv_logger';
 
-const generateFees = (cids: number[]) => {
-  cids.forEach(async cid => {
+const generateFees = async (cids: number[]) => {
+  const fees: IFinancials.MaintenanceFee[] = [];
+  const taxInfo = Financials.getTaxInfo(TaxIds.MaintenanceFee);
+  const baseRate = taxInfo?.rate ?? 0.15;
+  await Promise.all(cids.map(async cid => {
     // Prevent that overheids voertuigen niet meer zouden uithaalbaar zijn
     if (cid == 1000) return;
     let vehicles = await getPlayerOwnedVehicles(cid);
+
     // No fees on bicycles
     vehicles = vehicles.filter(veh => {
       const vehConfig = getConfigByModel(veh.model);
@@ -17,33 +21,26 @@ const generateFees = (cids: number[]) => {
       }
       return vehConfig.category !== 'cycles';
     });
-    let taxInfo = Financials.getTaxInfo(TaxIds.MaintenanceFee);
-    const vehMultiplier = vehicles.length > 2 ? 1 + vehicles.length * 0.04 : 1;
-    vehicles.forEach(async veh => {
-      // Check if a fee already exist:
-      const vehMainFees = await SQL.query<Financials.Debts.Debt[]>('SELECT * FROM debts WHERE reason = ?', [
-        `veh_${veh.vin}`,
-      ]);
-      if (vehMainFees.length > 0) {
-        global.exports['dg-financials'].removeDebt(vehMainFees.map(f => f.id));
-      }
-      const vehConfig = getConfigByModel(veh.model)!;
+    
+    const vehMultiplier = vehicles.length > 2 ? 1 + (((vehicles.length * Math.log10(vehicles.length)) * 2)/100) : 1;
 
-      const baseRate = taxInfo?.rate ?? 0.15;
+    vehicles.forEach(async veh => {
+      const vehConfig = getConfigByModel(veh.model)!;
 
       const minDebtPrice = Math.round(vehConfig.price * (baseRate - 0.01) * vehMultiplier);
       const maxDebtPrice = Math.round(vehConfig.price * (baseRate + 0.01) * vehMultiplier);
       const debtPrice = Util.getRndInteger(minDebtPrice, maxDebtPrice);
       // Little abuse of origin-name right here
-      global.exports['dg-financials'].addMaintentenanceFee(
+      fees.push({
         cid,
-        'BE1',
-        debtPrice,
-        `veh_${veh.vin}`,
-        `${vehConfig.brand} ${vehConfig.name} (${veh.plate})`
-      );
+        target_account: 'BE1',
+        debt: debtPrice,
+        reason: `veh_${veh.vin}`,
+        origin: `${vehConfig.brand} ${vehConfig.name} (${veh.plate})`,
+      })
     });
-  });
+  }));
+  return fees;
 };
 
-global.exports('generateFees', generateFees);
+global.asyncExports('generateFees', generateFees);
