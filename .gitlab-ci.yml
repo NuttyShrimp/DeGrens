@@ -135,6 +135,9 @@ rebase UPD:
     GIT_DEPTH: 50
   stage: housekeeping
   image: ubuntu:jammy
+  before_script:
+    - apt-get update -yq
+    - apt-get install -y git
   script:
     # setting up git
     - url_host=`git remote get-url origin | sed -e "s/https:\/\/gitlab-ci-token:.*@//g"`
