@@ -194,6 +194,10 @@ Inventory.onInventoryUpdate('tunes', (vin: string) => {
     if (!performanceUpgrades) return;
 
     applyUpgradesToVeh(netId, performanceUpgrades);
+    Util.Log("vehicles:upgrades:performace", {
+      vin,
+      performanceUpgrades,
+    }, `new performace upgrades for ${vin} have been added`)
   }, 500);
   tunesInventoryUpdateTimeouts[vin] = newTimeout;
 });

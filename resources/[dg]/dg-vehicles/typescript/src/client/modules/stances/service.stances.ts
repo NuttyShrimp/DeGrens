@@ -86,6 +86,11 @@ export const applyModelStance = (
   modelData: Stance.Model[],
   originalStance: Stance.Data
 ) => {
-  const newStance = modelData.find(d => d.component === comp && d.value === value)?.stance;
+  if (modelData.length === 0) return;
+
+  const modelsByComponent = modelData.filter(d => d.component === comp);
+  if (modelsByComponent.length === 0) return;
+
+  const newStance = modelData.find(d => d.value === value)?.stance;
   Entity(veh).state.set('stance', newStance ?? originalStance, true);
 };

@@ -1,11 +1,14 @@
 import { Events, Notifications, SQL, Util } from '@dgx/server';
+import dayjs, { Dayjs } from 'dayjs';
 import { getConfig } from 'helpers/config';
 import accountManager from 'modules/bank/classes/AccountManager';
 
 import { debtLogger, scheduleOverDueDebt, unscheduleDebt, getDaysUntilDue } from '../helpers/debts';
+import { calculateMaintenceFees, getMaintenanceFeeSchedule, isMaintenanceFeesInWeekOrLess } from '../helpers/maintenanceFees';
 
 class DebtManager extends Util.Singleton<DebtManager>() {
   private debts: Debts.Debt[];
+  private cachedFeeds: Record<string, { fees: IFinancials.MaintenanceFee[], created: Dayjs }> = {};
 
   constructor() {
     super();
@@ -17,21 +20,48 @@ class DebtManager extends Util.Singleton<DebtManager>() {
 			SELECT *,
 						 UNIX_TIMESTAMP(date) AS date
 			FROM debts d
+      ORDER BY id
 		`;
     this.debts = await SQL.query(query);
     this.debts.forEach(debt => scheduleOverDueDebt(debt.id));
   }
 
-  public getDebtsByCid(cid: number): Debts.Debt[] {
-    return this.debts.filter(debt => debt.cid === cid);
+  private async getMaintenanceFees(cid: number): Promise<IFinancials.MaintenanceFee[]> {
+    if (!this.cachedFeeds[cid]) {
+      const fees = await calculateMaintenceFees([cid])
+      this.cachedFeeds[cid] = {fees, created: dayjs()};
+      return fees;
+    }
+    let {fees, created} = this.cachedFeeds[cid];
+    if (created.isBefore(dayjs().add(-1, "h"))) {
+      delete this.cachedFeeds[cid];
+      return this.getMaintenanceFees(cid)
+    }
+    return fees;
+  }
+
+  public async getDebtsByCid(cid: number): Promise<Debts.Debt[]> {
+    let debts = this.debts.filter(debt => debt.cid === cid);
+    if(isMaintenanceFeesInWeekOrLess()) {
+      const mainFees = await this.getMaintenanceFees(cid);
+      const highestId = (debts.at(-1)?.id ?? 0) + 1;
+      mainFees.forEach((f, i) => {
+        debts.push({
+          ...f,
+          origin_name: f.origin,
+          id: highestId + i,
+          payed: 0,
+          type: 'scheduled',
+          given_by: 1000,
+          date: getMaintenanceFeeSchedule().unix() * 1000,
+        })
+      })
+    }
+    return debts;
   }
 
   public getDebtById(id: number): Debts.Debt | undefined {
     return this.debts.find(debt => debt.id === id);
-  }
-  
-  public getMaintenanceFee(id: string): Debts.Debt | undefined {
-    return this.debts.find(debt => debt.type === 'maintenance' && debt.reason === id)
   }
 
   private replaceDebt(debt: Debts.Debt) {

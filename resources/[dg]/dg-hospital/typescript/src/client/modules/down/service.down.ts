@@ -177,6 +177,8 @@ export const doNormalRevive = async () => {
     setHealth(100);
   }
 
+  await Police.forceStopInteractions();
+
   const ped = PlayerPedId();
   if (previousState === 'unconscious' && !IsPedInAnyVehicle(ped, false)) {
     // pause animloops to allow proper standup anim

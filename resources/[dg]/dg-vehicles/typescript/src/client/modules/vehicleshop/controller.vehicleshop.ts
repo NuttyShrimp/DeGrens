@@ -57,8 +57,8 @@ UI.RegisterUICallback('vehicleshop/selectModel', (data: { model: string }, cb) =
   cb({ data: {}, meta: { ok: true, message: '' } });
 });
 
-Events.onNet('vehicles:shop:changeModel', (spotId: number, model: string, needsEmployee: boolean) => {
+Events.onNet('vehicles:shop:changeModel', (spotId: number, model: string) => {
   const spot = shopManager.getSpot(spotId);
   if (!spot) return;
-  spot.changeModel(model, needsEmployee);
+  spot.changeModel(model);
 });

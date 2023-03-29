@@ -1,5 +1,5 @@
 import { Notifications, SQL, Util } from '@dgx/server';
-import dayjs from 'dayjs';
+import dayjs, { Dayjs } from 'dayjs';
 import timezone from 'dayjs/plugin/timezone'; // dependent on utc plugin
 import toObject from 'dayjs/plugin/toObject';
 import utc from 'dayjs/plugin/utc';
@@ -16,6 +16,16 @@ dayjs.extend(utc);
 dayjs.extend(timezone);
 dayjs.locale('nl-be');
 dayjs.utc();
+
+let maintenanceSchedule: Dayjs;
+
+export const isMaintenanceFeesInWeekOrLess = () => {
+  return maintenanceSchedule.isBefore(dayjs().add(7, "d"));
+}
+
+export const getMaintenanceFeeSchedule = () => {
+  return maintenanceSchedule;
+}
 
 export const scheduleMaintenanceFees = async () => {
   const maintenceConfig = getConfig().debts.maintenance;
@@ -36,61 +46,69 @@ export const scheduleMaintenanceFees = async () => {
 
   const last_date = dayjs.unix(last_log.date);
   const now = dayjs();
-  const next_cycle = last_date
+  maintenanceSchedule = last_date
     .add(maintenceConfig.daysBetween, 'day')
     .set('hour', maintenceConfig.hour)
     .set('minute', maintenceConfig.minute);
 
   debtLogger.info(
-    `Maintenance fee check scheduled at ${next_cycle.format('DD/MM/YYYY HH:mm')} in ${next_cycle.diff(
+    `Maintenance fee check scheduled at ${maintenanceSchedule.format('DD/MM/YYYY HH:mm')} in ${maintenanceSchedule.diff(
       now,
       'hours'
     )} hours`
   );
-  if (next_cycle.diff(now, 'h') > 12) return;
+  if (maintenanceSchedule.diff(now, 'h') > 12) return;
 
-  if (next_cycle.isBefore(now)) {
+  if (maintenanceSchedule.isBefore(now)) {
     // rebuild missing logs + calc now
     const missedDays = now.diff(last_date, 'day');
     const missedLogs = Math.floor(missedDays / 21);
     const new_last = last_date.add(missedLogs, 'day');
     SQL.query('INSERT INTO maintenance_fee_log (date) VALUES (FROM_UNIXTIME(?))', [new_last.unix()]);
-    calculateMaintenceFees();
+    registerMaintenanceFees();
     scheduleMaintenanceFees();
     return;
   }
 
   setTimeout(() => {
     debtLogger.info('Starting maintenance fee check');
-    calculateMaintenceFees();
-  }, next_cycle.diff(now));
+    registerMaintenanceFees();
+  }, maintenanceSchedule.diff(now));
 };
 
 // Calculate the maintenance fees for all assets, multiplier is used in case of a calc for mulitple days is needed
-export const calculateMaintenceFees = async () => {
-  // TODO - implement when vehicles and housing are implemented
-  const allCidsStructs = await SQL.query<{ citizenid: number }[]>('SELECT citizenid FROM characters');
-  const allCids = allCidsStructs.map(ac => ac.citizenid);
-  global.exports['dg-vehicles'].generateFees(allCids);
+export const calculateMaintenceFees = async (cids?: number[]) => {
+  if (!cids) {
+    const allCidsStructs = await SQL.query<{ citizenid: number }[]>('SELECT citizenid FROM characters');
+    cids = allCidsStructs.map(ac => ac.citizenid);
+  }
+
+  const fees: IFinancials.MaintenanceFee[] = await global.exports['dg-vehicles'].generateFees(cids);
+
   // TODO - remove old maintenance fees before sending new
   // should be 1 fee per asset
-  SQL.query(`
+
+  return fees
+};
+
+const registerMaintenanceFees = async () => {
+  const fees = await calculateMaintenceFees();
+
+  // Check if fees for debts[].reason exist
+  const feeIds = await SQL.query("SELECT id FROM debts WHERE reason IN (?)", [fees.map(f => f.reason).join(",")]);
+  if (feeIds > 0) {
+    await debtManager.removeDebts(feeIds)
+  }
+
+  await SQL.query(`
     INSERT INTO maintenance_fee_log (date)
     VALUES (NOW());
   `);
-};
-
-RegisterCommand(
-  'vehicles:maintenanceFees',
-  () => {
-    calculateMaintenceFees();
-  },
-  false
-);
+}
 
 export const removeMaintenanceFees = async (src: number) => {
   const cid = Util.getCID(src);
-  const debts = debtManager.getDebtsByCid(cid);
+  const debts = await debtManager.getDebtsByCid(cid);
   const mainFees = debts.filter(d => d.type === 'maintenance').map(f => f.id);
   await debtManager.removeDebts(mainFees);
   Notifications.add(src, 'Succesfully removed maintenance fees', 'success');

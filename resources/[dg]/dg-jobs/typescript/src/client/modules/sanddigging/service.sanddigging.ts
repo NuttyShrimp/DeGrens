@@ -179,11 +179,16 @@ export const getIsAtAssignedSpot = () => isAtAssignedSpot;
 export const setIsAtAssignedSpot = (atSpot: boolean) => {
   isAtAssignedSpot = atSpot;
 
-  if (isAtAssignedSpot) {
-    UI.showInteraction(`${Keys.getBindedKey('+GeneralUse')} - Graven`);
+  if (isAtAssignedSpot && !IsPedInAnyVehicle(PlayerPedId(), true)) {
+    displaySpotInteraction();
   } else {
     UI.hideInteraction();
   }
+};
+
+export const displaySpotInteraction = () => {
+  if (!isAtAssignedSpot) return;
+  UI.showInteraction(`${Keys.getBindedKey('+GeneralUse')} - Graven`);
 };
 
 export const checkNewLocation = () => {

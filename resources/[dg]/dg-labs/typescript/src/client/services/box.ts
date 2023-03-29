@@ -33,4 +33,6 @@ export const removeBox = () => {
     Animations.stopAnimLoop(boxAnimLoopId);
     boxAnimLoopId = null;
   }
+
+  isBoxAttached = false;
 };

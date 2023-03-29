@@ -72,17 +72,29 @@ export const DebtList: FC<{}> = () => {
   const list = useDebtAppStore(s => s.list);
   return (
     <div>
-      <Typography variant='subtitle1'>Debts</Typography>
+      {list.find(entry => entry.type === 'debt') && (
+        <Typography variant='subtitle1'>Debts</Typography>
+      )}
       {list
         .filter(entry => entry.type === 'debt')
         .map(entry => (
-          <MaintenanceEntry debt={entry} key={entry.id} />
+          <DebtPaper key={entry.id} debt={entry} />
         ))}
-      <Typography variant='subtitle1'>Maintenance Fees</Typography>
+      {list.find(entry => entry.type === 'maintenance') && (
+        <Typography variant='subtitle1'>Maintenance Fees</Typography>
+      )}
       {list
         .filter(entry => entry.type === 'maintenance')
         .map(entry => (
-          <DebtPaper key={entry.id} debt={entry} />
+          <MaintenanceEntry debt={entry} key={entry.id} />
+        ))}
+      {list.find(entry => entry.type === 'scheduled') && (
+        <Typography variant='subtitle1'>Upcoming Maintenance Fees</Typography>
+      )}
+      {list
+        .filter(entry => entry.type === 'scheduled')
+        .map(entry => (
+          <MaintenanceEntry debt={entry} key={entry.id} disablePay />
         ))}
     </div>
   );

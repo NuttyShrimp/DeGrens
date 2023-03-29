@@ -35,4 +35,14 @@ declare namespace IFinancials {
     reason?: string;
     pay_term?: number;
   }
+
+  interface MaintenanceFee {
+    cid: number;
+    target_account: string;
+    debt: number;
+    // Fee identifier
+    reason: string;
+    // Extra info about the fee
+    origin: string;
+  }
 }

@@ -5373,7 +5373,7 @@
     "defaultStock": 10,
     "restockTime": 7,
     "price": 5000,
-    "shop": "nfs",
+    "shop": "pdm",
     "type": "land"
   },
   {

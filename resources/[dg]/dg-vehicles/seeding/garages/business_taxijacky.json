@@ -1,0 +1,146 @@
+{
+  "garage_id": "taxijacky",
+  "name": "Garage Taxi Jacky",
+  "type": "business",
+  "shared": true,
+  "location": {
+    "vector": {
+      "x": 909.13,
+      "y": -173.53,
+      "z": 74.18
+    },
+    "width": 16.0,
+    "length": 41.2,
+    "options": {
+      "heading": 58,
+      "minZ": 73.18,
+      "maxZ": 76.98
+    }
+  },
+  "vehicle_types": [
+    "land"
+  ],
+  "parking_spots": [
+    {
+      "type": "land",
+      "size": 2.0,
+      "distance": 1.8,
+      "heading": 60.0,
+      "coords": {
+        "x": 898.951,
+        "y": -180.283,
+        "z": 72.826
+      }
+    },
+    {
+      "type": "land",
+      "size": 2.0,
+      "distance": 1.8,
+      "heading": 60.0,
+      "coords": {
+        "x": 897.065,
+        "y": -183.26,
+        "z": 72.787
+      }
+    },
+    {
+      "type": "land",
+      "size": 2.0,
+      "distance": 1.8,
+      "heading": 60.0,
+      "coords": {
+        "x": 908.975,
+        "y": -183.251,
+        "z": 73.161
+      }
+    },
+    {
+      "type": "land",
+      "size": 2.0,
+      "distance": 1.8,
+      "heading": 60.0,
+      "coords": {
+        "x": 907.215,
+        "y": -186.116,
+        "z": 73.056
+      }
+    },
+    {
+      "type": "land",
+      "size": 2.0,
+      "distance": 1.8,
+      "heading": 60.0,
+      "coords": {
+        "x": 905.455,
+        "y": -188.981,
+        "z": 72.951
+      }
+    },
+    {
+      "type": "land",
+      "size": 2.0,
+      "distance": 1.8,
+      "heading": 60.0,
+      "coords": {
+        "x": 903.696,
+        "y": -191.846,
+        "z": 72.846
+      }
+    },
+    {
+      "type": "land",
+      "size": 2.0,
+      "distance": 1.8,
+      "heading": 280.0,
+      "coords": {
+        "x": 919.832,
+        "y": -163.638,
+        "z": 73.773
+      }
+    },
+    {
+      "type": "land",
+      "size": 2.0,
+      "distance": 1.8,
+      "heading": 280.0,
+      "coords": {
+        "x": 917.701,
+        "y": -167.226,
+        "z": 73.59
+      }
+    },
+    {
+      "type": "land",
+      "size": 2.0,
+      "distance": 1.8,
+      "heading": 280.0,
+      "coords": {
+        "x": 915.57,
+        "y": -170.813,
+        "z": 73.408
+      }
+    },
+    {
+      "type": "land",
+      "size": 2.0,
+      "distance": 1.8,
+      "heading": 10.0,
+      "coords": {
+        "x": 911.547,
+        "y": -163.555,
+        "z": 73.408
+      }
+    },
+    {
+      "type": "land",
+      "size": 2.0,
+      "distance": 1.8,
+      "heading": 10.0,
+      "coords": {
+        "x": 913.772,
+        "y": -159.986,
+        "z": 73.774
+      }
+    }
+  ]
+}

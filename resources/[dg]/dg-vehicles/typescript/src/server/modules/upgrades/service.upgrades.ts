@@ -98,7 +98,7 @@ export const saveCosmeticUpgrades = async (vin: string, newUpgrades?: Partial<Up
   await updateVehicleUpgrades(vin, { ...currentUpgrades, ...newUpgrades });
   upgradesLogger.info(`Saved cosmetic upgrades for vehicle ${vin}`);
   Util.Log(
-    'vehicles:updateUpgrades',
+    'vehicles:upgrades:cosmetic',
     {
       vin: vin,
       newUpgrades,

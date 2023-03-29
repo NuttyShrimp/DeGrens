@@ -252,8 +252,8 @@
   "benny_bank_tower": {
     "name": "Lift",
     "levels": {
-      "middle": {
-        "entrance": "Parking",
+      "entrance": {
+        "name": "Parking",
         "interact": {"x":-349.4644,"y":-47.6101,"z":54.7077},
         "spawn": {"x":-348.6702,"y":-46.7117,"z":54.4232,"w":340.1415}
       },
