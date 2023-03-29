@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Porto crafting requirement aangepast
 - Je wordt nu losgelaten wanneer je gerevived wordt
 - Calculaties voor voertuig maintenance fees aangepast
+- Mitshubitshi Evo 6 heeft nu werkende zitplaatsen op de achterbank
 
 ### Fixed
 - Je kan weer vissen nadat je een vis hebt gevangen
