@@ -9,6 +9,7 @@ import './modules/rental/controller.rental';
 import './modules/gtabehaviour';
 import './modules/animloops';
 import './modules/objectManager/controller.objectmanager';
+import './modules/arena';
 import './services/laptop';
 import './services/config';
 import './services/boatanchor';

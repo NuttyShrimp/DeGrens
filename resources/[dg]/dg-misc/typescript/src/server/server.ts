@@ -11,6 +11,7 @@ import './modules/status';
 import './modules/reputation';
 import './modules/rental/controller.rental';
 import './modules/objectManager/controller.objectmanager';
+import './modules/arena';
 import './services/laptop';
 import './services/config';
 import './services/boatanchor';

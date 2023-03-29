@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Parking toegevoegd voor taxi bedrijf
 - Scheduled maintenance fees zijn zichtbaar in de app 1 week voordat ze effectief betaald moeten worden
+- Mazebank Arena interior toegevoegd met mogelijkheid om te veranderen door staff
 
 ### Changed
 - Porto crafting requirement aangepast
