@@ -134,7 +134,7 @@ rebase UPD:
     # For fetch thing shit
     GIT_DEPTH: 50
   stage: housekeeping
-  image: node:16
+  image: ubuntu:jammy
   script:
     # setting up git
     - url_host=`git remote get-url origin | sed -e "s/https:\/\/gitlab-ci-token:.*@//g"`
