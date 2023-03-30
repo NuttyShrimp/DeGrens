@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Mazebank Arena interior toegevoegd met mogelijkheid om te veranderen door staff
 - Emote toegevoegd
 - Command `reportHouserobbery` toegevoegd om je huidige houserobbery locatie te melden as scuffed (door water etc)
+- Add taxi als businesstype
 
 ### Changed
 - Porto crafting requirement aangepast
