@@ -27,6 +27,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Stances van voertuigupgrades blijven nu staan als je van bennys category switcht
 - Collision van synced entities kloppen nu (Peek op o.a. weedplanten zou hiermee gefixed worden)
 - Je ziet de doos in je handen weer in de labs
+- Animatie terwijl je neer bent switched terug als je in/uit voertuig gaat
 
 ## [1.1.1]
 

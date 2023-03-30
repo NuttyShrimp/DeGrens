@@ -1,5 +1,11 @@
 import { BaseEvents, Keys } from '@dgx/client';
-import { getPlayerState, loadPedFlags, respawnButtonPressed, respawnButtonReleased } from './service.down';
+import {
+  getPlayerState,
+  handleDownAnimLoop,
+  loadPedFlags,
+  respawnButtonPressed,
+  respawnButtonReleased,
+} from './service.down';
 
 global.exports('isDown', () => {
   return getPlayerState() !== 'alive';
@@ -15,4 +21,12 @@ Keys.onPress('GeneralUse', down => {
 
 BaseEvents.onPedChange(() => {
   loadPedFlags();
+});
+
+BaseEvents.onEnteredVehicle(() => {
+  handleDownAnimLoop();
+});
+
+BaseEvents.onLeftVehicle(() => {
+  handleDownAnimLoop();
 });

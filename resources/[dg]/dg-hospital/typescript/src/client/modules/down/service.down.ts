@@ -228,7 +228,7 @@ export const loadPedFlags = () => {
   }
 };
 
-const handleDownAnimLoop = () => {
+export const handleDownAnimLoop = () => {
   if (playerState === 'alive') {
     if (downAnimLoopId !== null) {
       Animations.stopAnimLoop(downAnimLoopId);
