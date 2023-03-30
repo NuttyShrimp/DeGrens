@@ -59,6 +59,17 @@ class StateManager extends Util.Singleton<StateManager>() {
     }
   };
 
+  public getAssignedHouseByPlyId = (plyId: number) => {
+    const groupId = Jobs.getGroupByServerId(plyId)?.id;
+    if (!groupId) return;
+
+    for (const [_, house] of this.activeHouses) {
+      if (house.groupId === groupId) {
+        return house;
+      }
+    }
+  };
+
   @DGXEvent('houserobbery:server:toggleSignedIn')
   private _toggleSignedIn = async (src: number) => {
     const cid = Util.getCID(src);

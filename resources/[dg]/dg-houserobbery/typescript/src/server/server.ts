@@ -1,7 +1,8 @@
-import { Chat, Jobs } from '@dgx/server';
+import { Chat, Jobs, Notifications, Util } from '@dgx/server';
 import stateManager from 'classes/StateManager';
 import { startPlayerPickingThread } from './services/grouppicker';
 import { loadConfig } from 'services/config';
+import { mainLogger } from 'sv_logger';
 
 import './services/grouppicker';
 import './controllers';
@@ -27,3 +28,31 @@ Chat.registerCommand('houserobbery:startJob', '', [], 'developer', (src: number)
   if (!location) return;
   stateManager.startJobForPly(cid, location);
 });
+
+Chat.registerCommand(
+  'reportHouserobbery',
+  'Rapporteer je huidige houserobbery locatie als scuffed',
+  [],
+  'user',
+  plyId => {
+    const house = stateManager.getAssignedHouseByPlyId(plyId);
+    if (!house) {
+      Notifications.add(plyId, 'Je hebt geen assigned huis', 'error');
+      return;
+    }
+
+    const logMsg = `${Util.getName(plyId)}(${plyId}) has reported a houserobbery location as scuffed`;
+    Util.Log(
+      'houserobbery:scuffedLocation',
+      {
+        ...house.location,
+      },
+      logMsg,
+      plyId,
+      true
+    );
+    mainLogger.warn(logMsg);
+
+    Notifications.add(plyId, 'Je hebt de locatie succesvol gerapporteerd', 'success');
+  }
+);
