@@ -78,6 +78,11 @@ DP.Shared = {
 }
 
 DP.Dances = {
+  ["handsback"] = {"anim@amb@casino@valet_scenario@pose_c@", "base_a_m_y_vinewood_01", "Hands Back", AnimationOptions =
+  {	
+      EmoteLoop = true,
+      EmoteMoving = true,
+  }},
    ["dancef"] = {"anim@amb@nightclub@dancers@solomun_entourage@", "mi_dance_facedj_17_v1_female^1", "Dance F", AnimationOptions =
    {
        EmoteLoop = true,
