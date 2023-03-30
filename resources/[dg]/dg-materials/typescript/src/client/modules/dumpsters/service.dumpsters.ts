@@ -18,8 +18,6 @@ export const searchDumpster = async (entity: number) => {
     canCancel: true,
     cancelOnDeath: true,
     cancelOnMove: true,
-    disarm: true,
-    disableInventory: true,
     disablePeek: true,
     controlDisables: {
       movement: true,

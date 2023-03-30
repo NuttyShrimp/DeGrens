@@ -21,7 +21,6 @@ export const feedWeedPlant = async (weedPlantId: number, objectId: string, delux
     cancelOnMove: true,
     disableInventory: true,
     disablePeek: true,
-    disarm: true,
     controlDisables: {
       movement: true,
       carMovement: true,
@@ -52,9 +51,7 @@ export const destroyWeedPlant = async (weedPlantId: number, objectId: string) =>
     canCancel: true,
     cancelOnDeath: true,
     cancelOnMove: true,
-    disableInventory: true,
     disablePeek: true,
-    disarm: true,
     controlDisables: {
       movement: true,
       carMovement: true,
@@ -82,9 +79,7 @@ export const cutWeedPlant = async (weedPlantId: number, objectId: string) => {
     canCancel: true,
     cancelOnDeath: true,
     cancelOnMove: true,
-    disableInventory: true,
     disablePeek: true,
-    disarm: true,
     controlDisables: {
       movement: true,
       carMovement: true,
