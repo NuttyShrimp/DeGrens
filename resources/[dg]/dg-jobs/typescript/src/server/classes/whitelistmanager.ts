@@ -259,18 +259,6 @@ class WhitelistManager extends Util.Singleton<WhitelistManager>() {
     this.logger.debug(`Added whitelist entry for ${cid} as ${jobName} with rank: ${rank}`);
     Util.Log('jobs:whitelist:add', { rank, job: jobName, cid }, `Whitelisted ${cid} for ${job} with rank ${rank}`, src);
     Events.emitNet('jobs:whitelists:update', src, jobName, 'add');
-    if (jobConfig.bankAccount) {
-      const success = Financials.setPermissions(jobConfig.bankAccount, cid, {
-        deposit: true,
-        transfer: true,
-        withdraw: true,
-        transactions: true,
-      });
-      if (!success) {
-        this.logger.error(`Failed to set bank permissions for ${cid} after retrieving HC role`);
-        Notifications.add(src, `Failed to give new member bank permissions: ${cid}, Maak een ticket aan in discord!`)
-      }
-    }
   };
 
   @DGXEvent('jobs:whitelist:fire')
@@ -284,6 +272,9 @@ class WhitelistManager extends Util.Singleton<WhitelistManager>() {
     if (!cid) return;
     const job = this.getPlayerInfoForJob(cid, jobName);
     if (!job) return;
+    const jobConfig = this.config.get(job.job);
+    if (!jobConfig) return;
+    const wasHC = this.hasSpeciality(src, "HC", job.name);
     const result = await SQL.query('DELETE FROM whitelist_jobs WHERE cid = ? AND job = ?', [cid, jobName]);
     if (result.affectedRows < 1) {
       Notifications.add(
@@ -298,6 +289,18 @@ class WhitelistManager extends Util.Singleton<WhitelistManager>() {
     this.logger.debug(`Removed whitelist entry for ${cid} as ${jobName}`);
     Util.Log('jobs:whitelist:removed', { job: jobName }, `Removed whitelist for ${cid} at ${job}`, src);
     Events.emitNet('jobs:whitelists:update', src, jobName, 'remove');
+    if (jobConfig.bankAccount && wasHC) {
+      const success = Financials.setPermissions(jobConfig.bankAccount, cid, {
+        deposit: false,
+        transfer: false,
+        withdraw: false,
+        transactions: false,
+      });
+      if (!success) {
+        this.logger.error(`Failed to set bank permissions for ${cid} after being fired`);
+        Notifications.add(src, `Failed to take removed member bank permissions: ${cid}, Maak een ticket aan in discord!`)
+      }
+    }
   };
 
   @DGXEvent('jobs:whitelist:server:assignRank')
@@ -425,8 +428,34 @@ class WhitelistManager extends Util.Singleton<WhitelistManager>() {
     }
     if (type === 'add') {
       entry.speciality |= jobConfig.specialities[speciality];
+      if (jobConfig.bankAccount && this.hasSpeciality(target, "HC", job)) {
+        const success = Financials.setPermissions(jobConfig.bankAccount, cid, {
+          deposit: true,
+          transfer: true,
+          withdraw: true,
+          transactions: true,
+        });
+        if (!success) {
+          this.logger.error(`Failed to set bank permissions for ${cid} after retrieving HC role`);
+          Notifications.add(src, `Failed to give set the member's bank permissions: ${cid}, Maak een ticket aan in discord!`)
+        }
+      }
     } else {
+      const hasHCBefore = this.hasSpeciality(target, "HC", job);
       entry.speciality &= ~jobConfig.specialities[speciality];
+      const hasHCAfter = this.hasSpeciality(target, "HC", job);
+      if (jobConfig.bankAccount && hasHCBefore && !hasHCAfter) {
+        const success = Financials.setPermissions(jobConfig.bankAccount, cid, {
+          deposit: false,
+          transfer: false,
+          withdraw: false,
+          transactions: false,
+        });
+        if (!success) {
+          this.logger.error(`Failed to set bank permissions for ${cid} after removing HC role`);
+          Notifications.add(src, `Failed to set the member's bank permissions: ${cid}, Maak een ticket aan in discord!`)
+        }
+      }
     }
     await SQL.query(
       `UPDATE whitelist_jobs
