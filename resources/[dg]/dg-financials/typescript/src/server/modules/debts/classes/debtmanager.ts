@@ -53,7 +53,7 @@ class DebtManager extends Util.Singleton<DebtManager>() {
           payed: 0,
           type: 'scheduled',
           given_by: 1000,
-          date: getMaintenanceFeeSchedule().unix() * 1000,
+          date: getMaintenanceFeeSchedule().unix(),
         })
       })
     }
