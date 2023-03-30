@@ -683,8 +683,8 @@
       "requiredReputation": 250,
       "items": [
         {
-          "name": "refined_steel",
-          "amount": 2
+          "name": "material_steel",
+          "amount": 4
         },
         {
           "name": "refined_plastic",
