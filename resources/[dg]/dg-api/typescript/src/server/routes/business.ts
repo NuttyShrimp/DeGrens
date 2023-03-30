@@ -6,7 +6,7 @@ registerRoute('POST', '/business/actions/new', async (req, res) => {
     req.body.name,
     req.body.label,
     Number(req.body.owner),
-    Number(req.body.typeId)
+    req.body.typeName
   );
   res(200, {});
 });
