@@ -33,6 +33,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Animatie terwijl je neer bent switched terug als je in/uit voertuig gaat
 - Automatische toegang tot bankaccount voor whitelisted jobs is gefixed en nu enkel voor HC personen
 - Fix fleeca sandy trolley rotation
+- Je kan als bijrijder nu wel de politie voertuig locker openen terwijl het voertuig rijdt
 
 ## [1.1.1]
 

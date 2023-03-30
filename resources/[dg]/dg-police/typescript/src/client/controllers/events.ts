@@ -78,7 +78,8 @@ on('police:emergencyButton', () => {
 
 on('police:carStorage', async () => {
   if (Jobs.getCurrentJob().name !== 'police') return;
-  const veh = GetVehiclePedIsIn(PlayerPedId(), false);
+  const ped = PlayerPedId()
+  const veh = GetVehiclePedIsIn(ped, false);
   if (veh === 0) return;
   const vin = Entity(veh).state.vin;
   if (!vin) return;
@@ -88,7 +89,7 @@ on('police:carStorage', async () => {
   const [canceled] = await Taskbar.create('treasure-chest', 'Openen', 5000, {
     canCancel: true,
     cancelOnDeath: true,
-    cancelOnMove: true,
+    cancelOnMove: GetPedInVehicleSeat(veh, -1) === ped,
     disableInventory: true,
     disablePeek: true,
     controlDisables: {
