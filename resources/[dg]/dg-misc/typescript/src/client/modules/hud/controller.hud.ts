@@ -26,12 +26,6 @@ Events.onNet('hud:client:initialize', (config: HUD.Config) => {
   }, 500);
 });
 
-onNet('onResourceStop', (res: string) => {
-  if (res !== GetCurrentResourceName()) return;
-  HUD.removeEntry('stress');
-  HUD.removeEntry('lung-capacity');
-});
-
 BaseEvents.onStartDiving(() => {
   setIsDiving(true);
 });

@@ -55,3 +55,7 @@ export const loadLocations = (locs: Rentals.Location[]) => {
     return id;
   });
 };
+
+export const handleRentalModuleResourceStop = () => {
+  removeLocations();
+};

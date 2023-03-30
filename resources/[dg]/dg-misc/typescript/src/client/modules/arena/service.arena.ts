@@ -44,3 +44,7 @@ export const loadArenaInterior = (interior: Arena.Interior) => {
   currentInterior = interior;
   console.log('[ARENA] Loaded interior');
 };
+
+export const handleArenaModuleResourceStop = () => {
+  unloadCurrentArenaInterior();
+};

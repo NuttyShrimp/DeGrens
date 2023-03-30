@@ -10,9 +10,3 @@ Events.onNet('misc:arena:setInterior', (interior: Arena.Interior | undefined) =>
     }, 100);
   }
 });
-
-on('onResourceStop', (resourceName: string) => {
-  if (GetCurrentResourceName() !== resourceName) return;
-
-  unloadCurrentArenaInterior();
-});

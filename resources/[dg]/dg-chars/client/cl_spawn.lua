@@ -155,5 +155,6 @@ end
 --region Events
 RegisterNetEvent('dg-chars:client:finishSpawn', function(isNew)
   TriggerServerEvent('dg-chars:server:finishSpawn', isNew)
+  TriggerEvent('dg-chars:finishSpawn', isNew)
 end)
 --endregion

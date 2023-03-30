@@ -1,3 +1,4 @@
+import './controllers';
 import './modules/crouch';
 import './modules/taskbar';
 import './modules/particles';

@@ -1,16 +1,11 @@
 import { Events, Peek, UI } from '@dgx/client';
-import { loadLocations, removeLocations } from './service.rental';
+import { loadLocations } from './service.rental';
 
 on('misc:rentals:openList', (_: unknown, entity: number | undefined) => {
   if (!entity) return;
   const entState = Entity(entity).state;
   if (!entState.isRentalDealer) return;
   Events.emitNet('misc:rentals:openList', entState.rentalSpot);
-});
-
-on('onResourceStop', (res: string) => {
-  if (res !== GetCurrentResourceName()) return;
-  removeLocations();
 });
 
 UI.RegisterUICallback('misc:rentals:rent', (data: { model: string; id: string; pay: 'cash' | 'bank' }, cb) => {

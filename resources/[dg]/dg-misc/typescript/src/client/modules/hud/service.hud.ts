@@ -109,3 +109,8 @@ const doBlurEffect = async (length: number) => {
   TriggerScreenblurFadeOut(250);
   await Util.Delay(500);
 };
+
+export const handleHudModuleResourceStop = () => {
+  HUD.removeEntry('stress');
+  HUD.removeEntry('lung-capacity');
+};

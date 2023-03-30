@@ -50,7 +50,6 @@ export const stopTabletAnimation = () => {
 };
 global.exports('stopTabletAnimation', stopTabletAnimation);
 
-on('onResourceStop', (res: string) => {
-  if (res !== GetCurrentResourceName()) return;
+export const handleAnimationsServiceResourceStop = () => {
   stopTabletAnimation();
-});
+};

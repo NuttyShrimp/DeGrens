@@ -158,3 +158,8 @@ export const startPropattachScopeThread = () => {
     }
   }, 250);
 };
+
+export const handlePropattachModuleResourceStop = () => {
+  deleteAllEntities();
+  resetProps();
+};

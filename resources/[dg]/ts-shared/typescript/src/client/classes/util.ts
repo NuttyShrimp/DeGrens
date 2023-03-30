@@ -47,7 +47,7 @@ class Util extends UtilShared {
 
   loadModel = (model: string | number) => {
     if (typeof model === 'string') {
-      model = GetHashKey(model)
+      model = GetHashKey(model);
     }
     RequestModel(model);
     return this.awaitCondition(() => HasModelLoaded(model));
@@ -415,6 +415,10 @@ class Util extends UtilShared {
 
   public average = (arr: number[]) => {
     return arr.reduce((a, b) => a + b, 0) / arr.length;
+  };
+
+  public onCharSpawn = (handler: (isNewCharacter: boolean) => void) => {
+    on('dg-chars:finishSpawn', handler);
   };
 }
 

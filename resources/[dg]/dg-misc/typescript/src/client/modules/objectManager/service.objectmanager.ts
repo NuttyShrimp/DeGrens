@@ -287,3 +287,7 @@ RegisterCommand(
   },
   false
 );
+
+export const handleObjectManagerModuleResourceStop = () => {
+  cleanupObjects();
+};

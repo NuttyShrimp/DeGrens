@@ -61,8 +61,3 @@ const cleanupThread = () => {
   clearInterval(checkThread);
   timesPressed = 0;
 };
-
-on('onResourceStop', (res: string) => {
-  if (res !== GetCurrentResourceName()) return;
-  cleanupThread();
-});

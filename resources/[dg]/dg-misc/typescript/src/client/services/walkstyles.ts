@@ -17,10 +17,12 @@ export const setWalkstyle = async (walkstyle: string, save = true) => {
 
 global.exports('setWalkstyle', setWalkstyle);
 
-Util.onPlayerLoaded(playerData => {
-  setTimeout(() => {
-    setWalkstyle(playerData.metadata.walkstyle, false);
-  }, 2000);
+Util.onCharSpawn(isNewChar => {
+  if (isNewChar) return;
+
+  const plyData = DGCore.Functions.GetPlayerData();
+  if (!plyData) return;
+  setWalkstyle(plyData.metadata.walkstyle, false);
 });
 
 on('misc:expressions:set', async (data: { expression: string }) => {

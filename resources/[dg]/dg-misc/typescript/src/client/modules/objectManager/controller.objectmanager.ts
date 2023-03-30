@@ -11,11 +11,6 @@ import {
   updateSyncedObject,
 } from './service.objectmanager';
 
-on('onResourceStop', (res: string) => {
-  if (res !== GetCurrentResourceName()) return;
-  cleanupObjects();
-});
-
 setImmediate(() => {
   if (LocalPlayer.state.isLoggedIn) {
     scheduleChunkCheck();

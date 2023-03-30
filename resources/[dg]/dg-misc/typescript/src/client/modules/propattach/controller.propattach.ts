@@ -1,7 +1,6 @@
 import { BaseEvents, Events, Util } from '@dgx/client';
 import {
   addProp,
-  deleteAllEntities,
   handlePlayerStateUpdate,
   isEnabled,
   moveProp,
@@ -51,12 +50,6 @@ AddStateBagChangeHandler(
     }, 250);
   }
 );
-
-AddEventHandler('onResourceStop', (resourceName: string) => {
-  if (GetCurrentResourceName() !== resourceName) return;
-  deleteAllEntities();
-  resetProps();
-});
 
 Util.onPlayerUnloaded(() => {
   resetProps();
