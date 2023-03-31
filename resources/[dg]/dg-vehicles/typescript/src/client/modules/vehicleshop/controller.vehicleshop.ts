@@ -1,31 +1,41 @@
 import { BlipManager, Events, Keys, PolyZone, UI } from '@dgx/client';
-
 import shopManager from './classes/ShopManager';
 
-Events.onNet('vehicles:shop:buildZone', (shopZone: VehicleShop.Config['shopZone']) => {
-  PolyZone.addPolyZone(
-    'pdm_shop',
-    shopZone.vectors,
-    {
+Events.onNet(
+  'vehicles:shop:buildZone',
+  (shopZone: VehicleShop.Config['shopZone'], returnZone: VehicleShop.Config['vehicleSpawnLocation']) => {
+    PolyZone.addPolyZone('pdm_shop', shopZone.vectors, {
       data: {},
       minZ: shopZone.minZ,
       maxZ: shopZone.maxZ,
-    },
-    true
-  );
-  const vectorsSum = shopZone.vectors.reduce((prev, cur) => ({ x: prev.x + cur.x, y: prev.y + cur.y }));
-  const vectorsAverage = { x: vectorsSum.x / shopZone.vectors.length, y: vectorsSum.y / shopZone.vectors.length, z: 0 };
-  BlipManager.addBlip({
-    category: 'dg-vehicles',
-    id: `vehicleshop-pdm`,
-    text: 'PDM',
-    coords: vectorsAverage,
-    sprite: 326,
-    color: 2,
-    scale: 0.9,
-  });
-  console.log(`[VehicleShop] Shopzone has been built`);
-});
+    });
+
+    const { w: returnZoneHeading, ...returnZoneCoords } = returnZone;
+    PolyZone.addBoxZone('pdm_return', returnZoneCoords, 6, 6, {
+      heading: returnZoneHeading,
+      minZ: returnZoneCoords.z - 2,
+      maxZ: returnZoneCoords.z + 5,
+      data: {},
+    });
+
+    const vectorsSum = shopZone.vectors.reduce((prev, cur) => ({ x: prev.x + cur.x, y: prev.y + cur.y }));
+    const vectorsAverage = {
+      x: vectorsSum.x / shopZone.vectors.length,
+      y: vectorsSum.y / shopZone.vectors.length,
+      z: 0,
+    };
+    BlipManager.addBlip({
+      category: 'dg-vehicles',
+      id: `vehicleshop-pdm`,
+      text: 'PDM',
+      coords: vectorsAverage,
+      sprite: 326,
+      color: 2,
+      scale: 0.9,
+    });
+    console.log(`[VehicleShop] Shopzone has been built`);
+  }
+);
 
 PolyZone.onEnter('pdm_shop', shopManager.enteredShop);
 PolyZone.onLeave('pdm_shop', shopManager.leftShop);

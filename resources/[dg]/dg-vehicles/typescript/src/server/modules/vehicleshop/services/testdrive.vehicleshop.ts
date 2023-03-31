@@ -144,7 +144,6 @@ Events.onNet('vehicles:shop:testdrive:start', async (plyId: number, model: strin
   if (!byEmployee) {
     Notifications.add(plyId, 'Gelieve het voertuig op tijd terug te brengen om de waarborg terug te krijgen');
   }
-  Events.emitNet('vehicles:shop:testdrive:buildReturn', plyId, shopConfig.vehicleSpawnLocation);
   Util.Log(
     'vehicleshop:testdrive:start',
     {

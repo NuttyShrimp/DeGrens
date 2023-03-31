@@ -8,8 +8,8 @@ import { vehicleshopLogger } from './logger.vehicleshop';
 
 Auth.onAuth(async plyId => {
   await Config.awaitConfigLoad();
-  const shopZone = getVehicleShopConfig().shopZone;
-  Events.emitNet('vehicles:shop:buildZone', plyId, shopZone);
+  const { shopZone, vehicleSpawnLocation } = getVehicleShopConfig();
+  Events.emitNet('vehicles:shop:buildZone', plyId, shopZone, vehicleSpawnLocation);
 });
 
 Util.onPlayerUnloaded(plyId => {
