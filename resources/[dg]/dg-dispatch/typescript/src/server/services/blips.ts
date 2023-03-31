@@ -12,10 +12,17 @@ export const syncBlips = () => {
 
   const blipInfo: Record<number, Dispatch.BlipInfo> = {};
   blipPlys.forEach(ply => {
-    const DGPlayer = DGCore.Functions.GetPlayer(ply);
+    const job = Jobs.getCurrentJob(ply);
+    if (!job) return;
+
+    const playerData = DGCore.Functions.GetPlayer(ply)?.PlayerData;
+    if (!playerData) return;
+
+    const jobLabel = job === 'police' ? 'Agent' : 'Dokter';
+    const plyName = `${playerData.charinfo.lastname} ${playerData.charinfo.firstname.charAt(0)}.`;
     blipInfo[ply] = {
-      job: Jobs.getCurrentJob(ply)!,
-      callsign: DGPlayer.PlayerData.metadata.callsign,
+      job,
+      text: `${jobLabel} | [${playerData.metadata.callsign}] - ${plyName}`,
     };
   });
   blipPlys.forEach(ply => {

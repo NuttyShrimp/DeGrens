@@ -18,6 +18,18 @@ class BlipManager {
   public removeCategory = (category: string) => {
     global.exports['dg-misc'].removeCategory(category);
   };
+
+  public addPlayerBlip = (plyId: number, settings: NBlip.Settings, startCoords: Vec3) => {
+    global.exports['dg-misc'].addPlayerBlip(plyId, settings, startCoords);
+  };
+
+  public deletePlayerBlip = (plyId: number | number[]) => {
+    global.exports['dg-misc'].deletePlayerBlip(plyId);
+  };
+
+  public changePlayerBlipSprite = (plyId: number, sprite: number) => {
+    global.exports['dg-misc'].changePlayerBlipSprite(plyId, sprite);
+  };
 }
 
 export default {

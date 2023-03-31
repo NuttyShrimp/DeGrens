@@ -46,6 +46,17 @@ class BaseEvents {
   public onVehicleEngineStateChange = (handler: (vehicle: number, engineState: boolean) => void) => {
     on('baseevents:engineStateChanged', handler);
   };
+
+  /**
+   * Player Ped existence is ensured
+   */
+  public onPlayerEnteredScope = (handler: (serverId: number, localId: number) => void) => {
+    on('baseevents:playerEnteredScope', handler);
+  };
+
+  public onPlayerLeftScope = (handler: (serverId: number, localId: number) => void) => {
+    on('baseevents:playerLeftScope', handler);
+  };
 }
 
 export default {

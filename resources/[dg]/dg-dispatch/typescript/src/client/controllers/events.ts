@@ -1,7 +1,7 @@
-import { BaseEvents, BlipManager, Events, RPC, Sync, UI } from '@dgx/client';
+import { BaseEvents, BlipManager, Events, RPC, UI } from '@dgx/client';
 import { getNearestColorFromHex } from '@dgx/shared/helpers/colorNames';
 import { getDataOfGTAColorById } from '@dgx/shared/helpers/gtacolors';
-import { areBlipsEnabled, clearBlips, syncBlips, updateBlipCoords, updateSprite } from 'services/blips';
+import { areBlipsEnabled, clearBlips, syncBlips, updateSprite } from 'services/blips';
 import { closeCam, openCam, seedUICams } from 'services/cams';
 import {
   addCallBlip,
@@ -48,15 +48,6 @@ on('onResourceStop', (res: string) => {
   closeCam();
 });
 
-Sync.onPlayerCoordsUpdate((plyCoords: Record<number, Vec3>) => {
-  if (!areBlipsEnabled()) return;
-
-  for (const key in plyCoords) {
-    const plyId = Number(key);
-    updateBlipCoords(plyId, plyCoords[plyId]);
-  }
-});
-
 Events.onNet('dg-dispatch:addCalls', (calls: Dispatch.UICall[], refresh: boolean) => {
   if (isDispatchDisabled()) return;
   UI.SendAppEvent('dispatch', {
@@ -92,8 +83,8 @@ Events.onNet('dispatch:removeBlips', () => {
   clearBlips();
 });
 
-Events.onNet('dispatch:updateSprite', (plyId: number, info: Dispatch.BlipInfo, sprite: number) => {
-  updateSprite(plyId, info, sprite);
+Events.onNet('dispatch:updateSprite', (plyId: number, sprite: number) => {
+  updateSprite(plyId, sprite);
 });
 
 Events.onNet('dispatch:toggleDispatchNotifications', () => {

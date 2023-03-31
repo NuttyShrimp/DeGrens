@@ -28,7 +28,7 @@ declare namespace Dispatch {
   type UICall = Omit<Call, 'officer' | 'criminal'> & { id: string; callsign?: string; timestamp: number };
 
   interface BlipInfo {
-    callsign: string;
+    text: string;
     job: string;
   }
 

@@ -1,6 +1,6 @@
-import { EntityBlip } from '@dgx/client';
-// srvId to blipHandle
-const blips: Map<number, EntityBlip> = new Map();
+import { BlipManager, Sync } from '@dgx/client';
+
+const playersWithBlips = new Set<number>();
 let blipsEnabled = false;
 
 export const areBlipsEnabled = () => blipsEnabled;
@@ -10,7 +10,7 @@ const getBlipSettings = (info: Dispatch.BlipInfo): NBlip.Settings => {
     return {
       color: 3,
       heading: true,
-      text: `Agent | ${info.callsign}`,
+      text: info.text,
       category: 69,
     };
   }
@@ -18,44 +18,38 @@ const getBlipSettings = (info: Dispatch.BlipInfo): NBlip.Settings => {
     return {
       color: 23,
       heading: true,
-      text: `Dokter | ${info.callsign}`,
+      text: info.text,
       category: 70,
     };
   }
   return {};
 };
 
-const addBlip = (ply: number, info: Dispatch.BlipInfo) => {
+const addBlip = (plyId: number, info: Dispatch.BlipInfo) => {
   const blipSettings = getBlipSettings(info);
-  const blip = new EntityBlip('player', ply, blipSettings);
-  blips.set(ply, blip);
-};
-
-const deleteBlip = (id: number) => {
-  const blip = blips.get(id);
-  if (!blip) return;
-  blip.destroy();
-  blips.delete(id);
+  const plyCoords = Sync.getPlayerCoords(plyId);
+  BlipManager.addPlayerBlip(plyId, blipSettings, plyCoords);
+  playersWithBlips.add(plyId);
 };
 
 export const clearBlips = () => {
-  blips.forEach(blip => {
-    blip.destroy();
-  });
-  blips.clear();
+  BlipManager.deletePlayerBlip([...playersWithBlips]);
+  playersWithBlips.clear();
   blipsEnabled = false;
 };
 
 export const syncBlips = (plys: Record<number, Dispatch.BlipInfo>) => {
   blipsEnabled = true;
 
-  const oldPlyIds = new Set(blips.keys());
-  const newPlyIds = Object.keys(plys).reduce<Set<number>>((acc, key) => acc.add(Number(key)), new Set());
+  const oldPlyIds = new Set(playersWithBlips);
+  const newPlyIds = new Set(Object.keys(plys).map(Number));
 
   // Remove blips that are in old but not in new
   for (const plyId of oldPlyIds) {
     if (newPlyIds.has(plyId)) continue;
-    deleteBlip(plyId);
+
+    BlipManager.deletePlayerBlip(plyId);
+    playersWithBlips.delete(plyId);
   }
 
   // Add blips that are in new but not in old
@@ -66,14 +60,7 @@ export const syncBlips = (plys: Record<number, Dispatch.BlipInfo>) => {
   }
 };
 
-export const updateSprite = (plyId: number, info: Dispatch.BlipInfo, sprite: number) => {
-  const blip = blips.get(plyId);
-  if (!blip) return;
-  blip.changeSprite(sprite);
-};
-
-export const updateBlipCoords = (plyId: number, coords: Vec3) => {
-  const blip = blips.get(plyId);
-  if (!blip) return;
-  blip.updateCoords(coords);
+export const updateSprite = (plyId: number, sprite: number) => {
+  if (!playersWithBlips.has(plyId)) return;
+  BlipManager.changePlayerBlipSprite(plyId, sprite);
 };

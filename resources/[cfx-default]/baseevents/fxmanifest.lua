@@ -10,7 +10,8 @@ client_scripts {
   'main.lua',
   'playerchecker.lua',
   'vehiclechecker.lua',
-  'waterchecker.lua'
+  'waterchecker.lua',
+  'scope.lua'
 }
 
 fx_version 'adamant'

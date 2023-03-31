@@ -1,5 +1,4 @@
-import { Vector3 } from '../../shared';
-import { Sync, Util } from './index';
+import { Util } from './index';
 
 const getLocalEntity = (type: NBlip.Type, id: number) => {
   let entity: number;
@@ -17,20 +16,21 @@ export class EntityBlip {
   private type: NBlip.Type;
   private handle: number | null;
   private settings: NBlip.Settings;
-  private mode: NBlip.Mode | null;
-  private blipLocation: Vec3 = { x:0, y:0, z:0 };
-  private locationInterval: NodeJS.Timer | null;
+  private mode: NBlip.Mode;
+  private coords: Vec3;
 
-  constructor(type: NBlip.Type, id: number, settings: NBlip.Settings) {
+  constructor(type: NBlip.Type, id: number, settings: NBlip.Settings, startCoords: Vec3) {
     this.id = id;
     this.type = type;
     this.handle = null;
     this.settings = settings;
-    this.mode = null;
-    this.locationInterval = null;
+    this.mode = 'coords'; // start as coords, updatecoords will handle changing to entity if local exists
 
-    const mode: NBlip.Mode = this.doesEntityExistsLocally() ? 'entity' : 'coords';
-    this.changeMode(mode);
+    const entity = getLocalEntity(this.type, this.id);
+    const entityExists = entity && DoesEntityExist(entity);
+    this.coords = entityExists ? Util.getEntityCoords(entity) : startCoords;
+
+    this.checkMode();
   }
 
   private applySettings() {
@@ -61,76 +61,76 @@ export class EntityBlip {
     SetBlipAsShortRange(this.handle, this.settings.shortRange ?? true);
   }
 
-  private changeMode(mode: NBlip.Mode) {
-    if (this.mode === mode) return;
-    if (this.locationInterval) {
-      clearInterval(this.locationInterval);
-      this.locationInterval = null;
+  public checkMode() {
+    const existLocally = this.doesEntityExistsLocally();
+
+    // if current mode is entity but entity does not exist, switch to coord
+    if (this.mode === 'entity') {
+      if (!existLocally) {
+        this.mode = 'coords';
+        this.updateBlip();
+      }
+      return;
     }
 
+    // if current mode is coords but entity does exist, switch to entity
+    if (existLocally) {
+      this.mode = 'entity';
+      this.updateBlip();
+    } else {
+      // if mode is coords, update coord if blip exists, else change to coord to add blip
+      if (this.handle && DoesBlipExist(this.handle)) {
+        SetBlipCoords(this.handle, this.coords.x, this.coords.y, this.coords.z);
+      } else {
+        this.mode = 'coords';
+        this.updateBlip();
+      }
+    }
+  }
+
+  private updateBlip() {
     if (this.handle && DoesBlipExist(this.handle)) {
       RemoveBlip(this.handle);
     }
 
-    if (mode === 'coords') {
-      let coords = Sync.getPlayerCoords(this.id);
-
-      if (!coords) {
-        coords = this.blipLocation;
-      }
-
-      this.mode = 'coords';
-      this.handle = AddBlipForCoord(coords.x, coords.y, coords.z);
-    } else if (mode === 'entity') {
+    if (this.mode === 'coords') {
+      this.handle = AddBlipForCoord(this.coords.x, this.coords.y, this.coords.z);
+    } else if (this.mode === 'entity') {
       const entity = getLocalEntity(this.type, this.id);
-
       if (entity && DoesEntityExist(entity)) {
-        this.mode = 'entity';
         this.handle = AddBlipForEntity(entity);
-        this.blipLocation = Util.ArrayToVector3(GetBlipCoords(this.handle))
-        this.locationInterval = setInterval(() => {
-          if (this.handle && DoesBlipExist(this.handle)) {
-            this.blipLocation = Util.ArrayToVector3(GetBlipCoords(this.handle))
-          }
-        }, 1000)
       }
     }
 
     this.applySettings();
   }
 
-  private doesEntityExistsLocally = () => {
-    return DoesEntityExist(getLocalEntity(this.type, this.id));
-  };
+  private doesEntityExistsLocally = () => DoesEntityExist(getLocalEntity(this.type, this.id));
 
   public destroy() {
-    if (this.handle && DoesBlipExist(this.handle)) {
-      RemoveBlip(this.handle);
-      this.handle = null;
-    }
+    if (!this.handle || !DoesBlipExist(this.handle)) return;
+
+    RemoveBlip(this.handle!);
+    this.handle = null;
   }
 
   public updateCoords(coords: Vec3) {
-    const existLocally = this.doesEntityExistsLocally();
-    if (this.mode === 'entity') {
-      if (!existLocally) {
-        this.changeMode('coords');
-      }
-    } else {
-      if (existLocally) {
-        this.changeMode('entity');
-      } else {
-        if (this.handle) {
-          SetBlipCoords(this.handle, coords.x, coords.y, coords.z);
-        }
-      }
-    }
+    this.coords = coords;
+    this.checkMode();
   }
 
   public changeSprite(sprite: number) {
     this.settings.sprite = sprite;
-    if (this.handle) {
+
+    if (this.handle && DoesBlipExist(this.handle)) {
       SetBlipSprite(this.handle, sprite);
     }
+  }
+
+  public saveCoords() {
+    if (!this.handle || !DoesBlipExist(this.handle)) return;
+
+    const [x, y, z] = GetBlipCoords(this.handle);
+    this.coords = { x, y, z };
   }
 }

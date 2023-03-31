@@ -1,10 +1,9 @@
-import { Sync, Util, EntityBlip } from '@dgx/client';
-
+import { Sync, Util, BlipManager } from '@dgx/client';
 import { drawText3d } from '../modules/util/service.util';
 import { getPlayerName } from './names';
 
 let blipsEnabled = false;
-const plyBlips: Map<number, EntityBlip> = new Map();
+const playersWithBlips = new Set<number>();
 
 export const enableBlips = () => {
   blipsEnabled = true;
@@ -34,60 +33,48 @@ export const enableBlips = () => {
     });
   }, 1);
 
+  // Trigger handler manually to avoid delay when enabling
   const allPlayerCoords = Sync.getAllPlayerCoords();
-  for (const key of Object.keys(allPlayerCoords)) {
-    addBlip(Number(key));
-  }
+  handlePlayerCoordsUpdate(allPlayerCoords);
 };
 
 export const disableBlips = () => {
+  BlipManager.deletePlayerBlip([...playersWithBlips]);
+  playersWithBlips.clear();
   blipsEnabled = false;
-  plyBlips.forEach(blip => {
-    blip.destroy();
-  });
-  plyBlips.clear();
 };
 
-const addBlip = (plyId: number) => {
-  if (GetPlayerServerId(PlayerId()) === plyId) return;
-
-  const newBlip = new EntityBlip('player', plyId, {
-    sprite: 1,
-    color: 0,
-    heading: true,
-    category: 7,
-    text: () => `${getPlayerName(plyId)}(${plyId})`,
-  });
-  plyBlips.set(plyId, newBlip);
-};
-
-const removeBlip = (plyId: number) => {
-  const blip = plyBlips.get(plyId);
-  if (!blip) return;
-  blip.destroy();
-  plyBlips.delete(plyId);
-};
-
-Sync.onPlayerCoordsUpdate((plyCoords: Record<number, Vec3>) => {
+// We just use this as a way to get who joined/left to add/remove blips
+const handlePlayerCoordsUpdate = (plyCoords: Record<number, Vec3>) => {
   if (!blipsEnabled) return;
 
-  // If plyids have blips but not in allcoords anymore, they left server so remove blip
-  const disconnectedPlayers = [...plyBlips.keys()].reduce<number[]>((acc, id) => {
-    if (!plyCoords[id]) acc.push(id);
-    return acc;
-  }, []);
-  disconnectedPlayers.forEach(id => {
-    removeBlip(id);
-  });
+  // if player has blip but not in allcoords anymore, player left server so remove blip
+  for (const plyId of playersWithBlips) {
+    if (plyCoords[plyId]) continue;
 
-  for (const key in plyCoords) {
-    const plyId = Number(key);
-
-    const blip = plyBlips.get(plyId);
-    if (blip) {
-      blip.updateCoords(plyCoords[plyId]);
-    } else {
-      addBlip(plyId);
-    }
+    BlipManager.deletePlayerBlip(plyId);
+    playersWithBlips.delete(plyId);
   }
-});
+
+  // if player is in allcoords but does not have blip, player entered server so add blip
+  const ownPlyId = GetPlayerServerId(PlayerId());
+  for (const [key, coords] of Object.entries(plyCoords)) {
+    const plyId = Number(key);
+    if (playersWithBlips.has(plyId) || plyId === ownPlyId) continue;
+
+    BlipManager.addPlayerBlip(
+      plyId,
+      {
+        sprite: 1,
+        color: 0,
+        heading: true,
+        category: 7,
+        text: `${getPlayerName(plyId)}(${plyId})`,
+      },
+      coords
+    );
+    playersWithBlips.add(plyId);
+  }
+};
+
+Sync.onPlayerCoordsUpdate(handlePlayerCoordsUpdate);

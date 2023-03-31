@@ -11,6 +11,7 @@ import './modules/gtabehaviour';
 import './modules/animloops';
 import './modules/objectManager/controller.objectmanager';
 import './modules/arena';
+import './modules/blipmanager';
 import './services/laptop';
 import './services/config';
 import './services/boatanchor';
@@ -23,7 +24,6 @@ import './services/tackle';
 import './services/consumables';
 import './services/yoga';
 import './services/seats';
-import './services/blipmanager';
 import './services/walkstyles';
 import './services/spacespam';
 import './services/parachute';
@@ -34,10 +34,12 @@ import { setDiscordRichPresence } from 'modules/discord/service.discord';
 import { setGTABehaviour } from 'modules/gtabehaviour/service.gtabehaviour';
 import { startPropattachScopeThread } from 'modules/propattach/service.propattach';
 import { startLadderThread } from 'services/ladders';
+import { startPlayerBlipCoordSaveThread } from 'modules/blipmanager/service.blipmanager';
 
 setImmediate(() => {
   setDiscordRichPresence();
   setGTABehaviour();
   startPropattachScopeThread();
   startLadderThread();
+  startPlayerBlipCoordSaveThread();
 });
