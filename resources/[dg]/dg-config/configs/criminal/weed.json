@@ -2,7 +2,8 @@
   "growTime": 12,
   "cut": {
     "timeout": 24,
-    "breakChance": 20
+    "breakChance": 25,
+    "maxTimes": 4
   },
   "food": {
     "decayTime": 20,

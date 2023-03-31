@@ -630,6 +630,7 @@ model weed_plants {
   food      Int?               @default(100)
   grow_time BigInt?
   cut_time  BigInt?
+  times_cut Int?               @default(0)
   cid       Int?               @default(0)
 }
 

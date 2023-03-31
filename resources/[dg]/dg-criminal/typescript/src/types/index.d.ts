@@ -19,6 +19,7 @@ declare namespace Criminal {
       cut: {
         timeout: number;
         breakChance: number;
+        maxTimes: number;
       };
       fertilizerDecrease: number;
       destroyMailChance: number;
@@ -36,6 +37,7 @@ declare namespace Criminal {
       food: number;
       cut_time: number;
       grow_time: number;
+      times_cut: number;
       cid: number | null;
     };
   }

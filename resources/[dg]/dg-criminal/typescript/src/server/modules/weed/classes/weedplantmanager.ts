@@ -33,7 +33,8 @@ class WeedPlantManager extends Util.Singleton<WeedPlantManager>() {
         plantData.food,
         plantData.cut_time,
         plantData.grow_time,
-        plantData.cid ?? 0
+        plantData.cid ?? 0,
+        plantData.times_cut ?? 0
       );
       this.weedPlants.set(plantData.id, newWeedPlant);
     }

@@ -17,6 +17,7 @@ export class WeedPlant {
   private cutTime: number;
   public growTime: number;
   private cid: number;
+  private timesCut: number;
 
   private logger: winston.Logger;
 
@@ -29,7 +30,8 @@ export class WeedPlant {
     food: number,
     cutTime: number,
     growTime: number,
-    cid: number
+    cid: number,
+    timesCut = 0
   ) {
     this.id = id;
     this.coords = coords;
@@ -41,6 +43,7 @@ export class WeedPlant {
     this.cutTime = cutTime;
     this.growTime = growTime;
     this.cid = cid;
+    this.timesCut = timesCut;
     this.logger = mainLogger.child({ module: `WeedPlant #${this.id}` });
 
     this.spawnObject();
@@ -68,11 +71,12 @@ export class WeedPlant {
   };
 
   private save = () => {
-    SQL.query(`UPDATE weed_plants SET stage = ?, food = ?, grow_time = ?, cut_time = ? WHERE id = ?`, [
+    SQL.query(`UPDATE weed_plants SET stage = ?, food = ?, grow_time = ?, cut_time = ?, times_cut = ? WHERE id = ?`, [
       this.stage,
       this.food,
       this.growTime,
       this.cutTime,
+      this.timesCut,
       this.id,
     ]);
   };
@@ -190,7 +194,11 @@ export class WeedPlant {
     this.logger.silly(logMessage);
     Util.Log('weed:destroy', { plantId: this.id, ownerCid: this.cid }, logMessage, plyId);
 
-    if (this.cid && Util.getRndInteger(0, 101) < config.weed.destroyMailChance && Jobs.getCurrentJob(plyId) !== 'police') {
+    if (
+      this.cid &&
+      Util.getRndInteger(0, 101) < config.weed.destroyMailChance &&
+      Jobs.getCurrentJob(plyId) !== 'police'
+    ) {
       const charInfo = DGCore.Functions.GetPlayer(plyId)?.PlayerData?.charinfo;
       const charName = `${charInfo?.firstname ?? 'Onbekende'} ${charInfo?.lastname ?? 'Persoon'}`;
 
@@ -216,6 +224,8 @@ export class WeedPlant {
 
   public canCut = () => {
     if (!this.isFullyGrown()) return false;
+    if (this.food < 90) return false;
+
     const currentTime = getCurrentSeconds();
     return currentTime >= this.cutTime + config.weed.cut.timeout * 60 * 60; // config value is in hours
   };
@@ -226,14 +236,16 @@ export class WeedPlant {
     const item = this.gender === 'male' ? 'weed_seed' : 'weed_bud';
     Inventory.addItemToPlayer(plyId, item, 1);
     this.cutTime = getCurrentSeconds();
+    this.timesCut++;
     this.save();
 
-    // Chance of breaking when cutting
+    // Chance of breaking when cutting or when max cut times has been reached
     setTimeout(() => {
       const rnd = Util.getRndInteger(1, 101);
-      if (rnd > config.weed.cut.breakChance) return;
-      this.remove();
-      Notifications.add(plyId, 'De plant is gestorven', 'error');
+      if (this.timesCut > config.weed.cut.maxTimes || rnd <= config.weed.cut.breakChance) {
+        this.remove();
+        Notifications.add(plyId, 'De plant is gestorven', 'error');
+      }
     }, 1000);
 
     const logMessage = `${Util.getName(plyId)}(${plyId}) has cut a weed plant`;
