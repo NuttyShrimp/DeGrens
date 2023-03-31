@@ -43,7 +43,7 @@ AddEventHandler('pma-voice:settingsCallback', function(cb)
   cb(Cfg)
 end)
 
-DGX.Events.on("dg-misc:configUpdated", function(data)
+DGX.Util.onPreferenceChange(function(data)
   if not data.radio then return end
   radioConfig = data.radio
   if data.radio.volume then

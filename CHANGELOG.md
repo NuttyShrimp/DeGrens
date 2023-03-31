@@ -36,6 +36,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fix fleeca sandy trolley rotation
 - Je kan als bijrijder nu wel de politie voertuig locker openen terwijl het voertuig rijdt
 - Testrit return zone bestaat nu ook als je gecrashed bent
+- Volume config opties werken nu wel
 
 ## [1.1.1]
 
