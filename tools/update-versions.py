@@ -1,8 +1,18 @@
 import os
 import json
 import re
+from git.repo import Repo
 from pathlib import Path
 
+CHANGELOG_PLACEHOLDER="""
+## [Unreleased]
+
+## Added
+
+## Changed
+
+## Fixed
+"""
 
 def statMainPackage():
     assert os.path.exists(
@@ -32,6 +42,34 @@ def updateVersions(version):
         updateVersionInFile(version, path)
     updateVersionInFile(version, "./package.json")
     updateVersionInFile(version, "./resources/[dg]/dg-config/configs/main.json")
+
+    with open("./CHANGELOG.md", "r+") as f:
+      changelog = f.readlines();
+      
+      versionLine = 0
+      for line in changelog:
+        if line.startswith("## [Unreleased]"):
+          break
+        versionLine += 1
+
+      if versionLine == 0:
+        print("No '##[Unreleased] gevonden in de CHANGELOG.md file'")
+        return
+
+      changelog[versionLine] = f"## [{newVersion}]\n"
+      changelog.insert(versionLine-1, CHANGELOG_PLACEHOLDER)
+
+      f.seek(0)
+      f.truncate()
+      f.write("".join(changelog))
+
+    
+    repo = Repo(".")
+    repo.index.add([item.a_path for item in repo.index.diff(None)])
+    repo.index.commit(f"chore: bump version to v{version}")
+    new_tag = repo.create_tag(f"v{version}") 
+    repo.remotes.origin.push(new_tag.path)
+    repo.remotes.origin.push()
 
 
 statMainPackage()
