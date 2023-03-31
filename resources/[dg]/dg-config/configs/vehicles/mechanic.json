@@ -82,36 +82,36 @@
       "label": "Straight Pipers",
       "board": {
         "coords": {
-          "x": 1157.99,
-          "y": -778.79,
-          "z": 57.2
+          "x": 805.36,
+          "y": -829.46,
+          "z": 26.2
         },
-        "width": 2.5,
-        "length": 1.1,
-        "height": 0.6,
+        "width": 1.2,
+        "length": 2.6,
+        "height": 1.2,
         "heading": 359
       },
       "bench": {
         "coords": {
-          "x": 1155.35,
-          "y": -792.28,
-          "z": 57.2
+          "x": 836.96,
+          "y": -819.46,
+          "z": 25.44
         },
         "width": 0.8,
-        "length": 4.0,
+        "length": 2.2,
         "height": 1.2,
         "heading": 269
       },
       "repair": {
         "coords": {
-          "x": 1143.48,
-          "y": -785.5,
-          "z": 50.61
+          "x": 830.56,
+          "y": -812.2,
+          "z": 22.33
         },
-        "width": 37.4,
-        "length": 20.0,
+        "width": 20.8,
+        "length": 13.2,
         "height": 10,
-        "heading": 269
+        "heading": 0
       }
     }
   }
