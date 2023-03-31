@@ -1,1 +1,1 @@
-import './controller.blipManager';
+import './controller.blipmanager';
