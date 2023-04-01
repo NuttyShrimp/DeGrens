@@ -42,7 +42,7 @@ export const loadDoors = async () => {
       }
     });
 
-    mainLogger.info(`Loaded ${doorsConfig.length} doors`);
+    mainLogger.info(`Loaded ${doors.size} doors`);
     doorsLoaded = true;
   } catch (e) {
     mainLogger.error(`An error occured while loading the doorconfig from the json: ${e}`);

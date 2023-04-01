@@ -1,0 +1,69 @@
+{
+  "garage_id": "ottos_store_parking",
+  "name": "Straightpipers Winkel Parking",
+  "type": "public",
+  "shared": false,
+  "location": {
+    "vector": {
+      "x": 834.32,
+      "y": -789.6,
+      "z": 26.3
+    },
+    "width": 6.2,
+    "length": 14.0,
+    "options": {
+      "heading": 118,
+      "minZ": 25.3,
+      "maxZ": 29.3
+    }
+  },
+  "vehicle_types": [
+    "land"
+  ],
+  "parking_spots": [
+    {
+      "type": "land",
+      "size": 2.0,
+      "distance": 1.8,
+      "heading": 300.0,
+      "coords": {
+        "x": 831.777,
+        "y": -785.372,
+        "z": 25.254
+      }
+    },
+    {
+      "type": "land",
+      "size": 2.0,
+      "distance": 1.8,
+      "heading": 300.0,
+      "coords": {
+        "x": 833.31,
+        "y": -788.373,
+        "z": 25.261
+      }
+    },
+    {
+      "type": "land",
+      "size": 2.0,
+      "distance": 1.8,
+      "heading": 300.0,
+      "coords": {
+        "x": 834.843,
+        "y": -791.374,
+        "z": 25.267
+      }
+    },
+    {
+      "type": "land",
+      "size": 2.0,
+      "distance": 1.8,
+      "heading": 300.0,
+      "coords": {
+        "x": 836.376,
+        "y": -794.374,
+        "z": 25.274
+      }
+    }
+  ]
+}
