@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## Changed
 - Straightpipers op nieuwe locatie
 - Groter verschil tussen methlab settings
+- Koffer afstand check voor te openen verhoogd
 
 ## Fixed
 - Fix speedbans wanneer je uit wagen vliegt of onder de grond valt
