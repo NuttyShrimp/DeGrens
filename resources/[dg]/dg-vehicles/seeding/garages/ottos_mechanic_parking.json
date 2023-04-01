@@ -1,0 +1,69 @@
+{
+  "garage_id": "ottos_mechanic_parking",
+  "name": "Straightpipers Parking",
+  "type": "public",
+  "shared": false,
+  "location": {
+    "vector": {
+      "x": 814.18,
+      "y": -828.81,
+      "z": 26.18
+    },
+    "width": 6.6,
+    "length": 13.4,
+    "options": {
+      "heading": 0,
+      "minZ": 25.18,
+      "maxZ": 29.18
+    }
+  },
+  "vehicle_types": [
+    "land"
+  ],
+  "parking_spots": [
+    {
+      "type": "land",
+      "size": 2.0,
+      "distance": 1.8,
+      "heading": 180.0,
+      "coords": {
+        "x": 809.395,
+        "y": -828.658,
+        "z": 25.192
+      }
+    },
+    {
+      "type": "land",
+      "size": 2.0,
+      "distance": 1.8,
+      "heading": 180.0,
+      "coords": {
+        "x": 812.604,
+        "y": -828.68,
+        "z": 25.198
+      }
+    },
+    {
+      "type": "land",
+      "size": 2.0,
+      "distance": 1.8,
+      "heading": 180.0,
+      "coords": {
+        "x": 815.813,
+        "y": -828.702,
+        "z": 25.204
+      }
+    },
+    {
+      "type": "land",
+      "size": 2.0,
+      "distance": 1.8,
+      "heading": 180.0,
+      "coords": {
+        "x": 819.022,
+        "y": -828.724,
+        "z": 25.21
+      }
+    }
+  ]
+}
