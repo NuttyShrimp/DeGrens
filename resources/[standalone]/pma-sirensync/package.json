@@ -12,9 +12,9 @@
     "watch": "node build.dev.js"
   },
   "devDependencies": {
-    "@citizenfx/client": "^2.0.5949-1",
-    "@citizenfx/server": "^2.0.5949-1",
-    "@types/node": "^18.8.4",
+    "@citizenfx/client": "2.0.6364-1",
+    "@citizenfx/server": "2.0.6364-1",
+    "@types/node": "^18.15.11",
     "esbuild": "^0.15.10",
     "node-fetch": "^3.2.10"
   }

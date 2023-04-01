@@ -11,13 +11,13 @@
   },
   "dependencies": {
     "cli-table3": "^0.6.2",
-    "color-name-list": "^10.3.0",
+    "color-name-list": "^10.7.0",
     "core-js": "^3.25.0",
     "nearest-color": "^0.4.4",
     "reflect-metadata": "^0.1.13"
   },
   "devDependencies": {
-    "@sentry/types": "^7.42.0",
+    "@sentry/types": "^7.46.0",
     "@types/core-js": "^2.5.5",
     "db": "*",
     "esbuild": "*"

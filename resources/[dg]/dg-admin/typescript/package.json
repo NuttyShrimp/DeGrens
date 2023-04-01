@@ -12,15 +12,15 @@
     "format": "prettier  --write --no-error-on-unmatched-pattern src/**/*.{js,ts,json,md}"
   },
   "dependencies": {
-    "axios": "^0.27.2",
+    "axios": "^1.3.4",
     "dayjs": "*"
   },
   "devDependencies": {
     "@dgx/client": "workspace:*",
     "@dgx/server": "workspace:*",
     "@dgx/shared": "workspace:*",
+    "esbuild": "*",
     "logger": "workspace:*",
-    "tsconfig": "workspace:*",
-    "esbuild": "*"
+    "tsconfig": "workspace:*"
   }
 }

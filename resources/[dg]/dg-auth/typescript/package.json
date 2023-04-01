@@ -13,14 +13,14 @@
     "format": "prettier  --write --no-error-on-unmatched-pattern src/**/*.{js,ts,json,md}"
   },
   "dependencies": {
-    "fast-jwt": "^2.2.0"
+    "fast-jwt": "^2.2.1"
   },
   "devDependencies": {
     "@dgx/client": "workspace:*",
     "@dgx/server": "workspace:*",
     "@dgx/shared": "workspace:*",
+    "esbuild": "*",
     "logger": "workspace:*",
-    "tsconfig": "workspace:*",
-    "esbuild": "*"
+    "tsconfig": "workspace:*"
   }
 }
