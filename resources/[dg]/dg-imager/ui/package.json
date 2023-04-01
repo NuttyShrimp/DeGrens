@@ -1,0 +1,17 @@
+{
+  "name": "dg-imager-ui",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "node build.js",
+    "build:dev": "node build.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@citizenfx/three": "^0.100.0",
+    "esbuild": "*"
+  }
+}

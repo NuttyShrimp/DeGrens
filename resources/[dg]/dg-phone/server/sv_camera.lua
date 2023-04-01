@@ -30,7 +30,7 @@ end)
 
 DGX.RPC.register('dg-phone:server:photo:take', function(src)
   local cid = DGX.Util.getCID(src)
-	local link = exports['screenshot-basic']:requestClientImgurScreenshot(src)
+	local link = exports['dg-imager']:requestClientImgurScreenshot(src)
 	if not link then
 		return false
 	end

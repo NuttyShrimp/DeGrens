@@ -1,0 +1,29 @@
+{
+  "name": "dg-imager",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "NuttyShrimp",
+  "license": "MIT",
+  "scripts": {
+    "build": "node ../../../../scripts/build.js --server --client",
+    "build:dev": "node ../../../../scripts/build.js --server --client --dev",
+    "watch": "node ../../../../scripts/watch --server --client",
+    "lint": "eslint --fix --ext .js,.ts ./src",
+    "format": "prettier --write --no-error-on-unmatched-pattern src/**/*.{js,ts,json,md}"
+  },
+  "devDependencies": {
+    "@dgx/client": "workspace:*",
+    "@dgx/server": "workspace:*",
+    "@dgx/shared": "workspace:*",
+    "esbuild": "*",
+    "logger": "workspace:*",
+    "tsconfig": "workspace:*"
+  },
+  "dependencies": {
+    "@citizenfx/http-wrapper": "^0.2.2",
+    "@fastify/multipart": "^7.5.0",
+    "fastify": "^4.15.0",
+    "fastify-plugin": "^4.5.0",
+    "minio": "^7.0.32"
+  }
+}
