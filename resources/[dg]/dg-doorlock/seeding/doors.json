@@ -3446,5 +3446,69 @@
         "straightpipers"
       ]
     }
+  },
+  {
+    "description": "maldinis achterdeur",
+    "locked": true,
+    "distance": 2,
+    "doors": [
+      {
+        "model": "sm_pizzeria_back_door",
+        "coords": {
+          "x": 814.5675048828125,
+          "y": -762.8239135742188,
+          "z": 27.046510696411133
+        }
+      }
+    ],
+    "authorized": {}
+  },
+  {
+    "description": "maldinis terrasdeur",
+    "locked": true,
+    "distance": 2,
+    "doors": [
+      {
+        "model": "sm_pizzeria_mdoor_l",
+        "coords": {
+          "x": 805.657958984375,
+          "y": -747.9281616210938,
+          "z": 27.027021408081055
+        }
+      },
+      {
+        "model": "sm_pizzeria_mdoor_r",
+        "coords": {
+          "x": 803.2781982421875,
+          "y": -747.9281616210938,
+          "z": 27.027021408081055
+        }
+      }
+    ],
+    "authorized": {}
+  },
+  {
+    "description": "maldinis hoofddeur",
+    "locked": true,
+    "distance": 2,
+    "doors": [
+      {
+        "model": "sm_pizzeria_mdoor_l",
+        "coords": {
+          "x": 794.2511596679688,
+          "y": -757.061767578125,
+          "z": 27.027021408081055
+        }
+      },
+      {
+        "model": "sm_pizzeria_mdoor_r",
+        "coords": {
+          "x": 794.2511596679688,
+          "y": -759.4415283203125,
+          "z": 27.027021408081055
+        }
+      }
+    ],
+    "authorized": {}
   }
 ]
