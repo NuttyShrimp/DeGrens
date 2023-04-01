@@ -2,7 +2,7 @@ import { Events, Util } from '@dgx/client';
 import { showReticle } from './helpers.weapons';
 
 let currentWeaponData: Weapons.WeaponItem | null = null;
-let weaponThread: NodeJS.Timer | null = null;
+let weaponTick: number | null = null;
 
 let animationBusy = false;
 export const isAnimationBusy = () => animationBusy;
@@ -14,9 +14,9 @@ export const getCurrentWeaponData = () => currentWeaponData;
 export const setCurrentWeaponData = (data: typeof currentWeaponData) => {
   currentWeaponData = data;
 
-  if (weaponThread !== null) {
-    clearInterval(weaponThread);
-    weaponThread = null;
+  if (weaponTick !== null) {
+    clearTick(weaponTick);
+    weaponTick = null;
     showReticle(false);
   }
 
@@ -34,8 +34,8 @@ const startWeaponThread = () => {
   let previousViewMode = 1;
   let viewModeReset = false;
 
-  // To emit shot event for GSR
   let shotFired = false;
+  let justDoneDispatchAlert = false;
 
   // To keep track of shots fired for bullet casings
   // positions get cleared every time we emit saving event
@@ -52,15 +52,13 @@ const startWeaponThread = () => {
 
   // TODO: Find way to modify melee weapon damage using weaponmeta files
   // editting meta damage only works for guns for some reason and i cant find where to modify melee weapon damage
-  SetWeaponDamageModifierThisFrame(currentWeaponData.hash, currentWeaponData.damageModifier);
+  SetWeaponDamageModifier(currentWeaponData.hash, currentWeaponData.damageModifier);
 
-  weaponThread = setInterval(() => {
+  weaponTick = setTick(() => {
     if (currentWeaponData === null) return;
 
     const ped = PlayerPedId();
 
-    SetWeaponsNoAutoswap(true);
-    SetPedCanSwitchWeapon(ped, false);
     DisplayAmmoThisFrame(true);
 
     const weapon = GetSelectedPedWeapon(ped) >>> 0;
@@ -74,9 +72,22 @@ const startWeaponThread = () => {
       shotFirePositions.push(plyCoords);
       emit('weapons:shotWeapon', currentWeaponData);
 
+      // emit shot event for GSR
       if (!shotFired) {
         Events.emitNet('weapons:server:firstShot', currentWeaponData.hash);
         shotFired = true;
+      }
+
+      if (
+        !justDoneDispatchAlert &&
+        currentWeaponData.dispatchAlertChance !== 0 &&
+        Util.getRndInteger(1, 101) < currentWeaponData.dispatchAlertChance
+      ) {
+        justDoneDispatchAlert = true;
+        setTimeout(() => {
+          justDoneDispatchAlert = false;
+        }, 10000);
+        Events.emitNet('weapons:server:dispatchAlert');
       }
     }
 
@@ -168,5 +179,5 @@ const startWeaponThread = () => {
     }
 
     previousAmmoCount = ammoInWeapon;
-  }, 1);
+  });
 };

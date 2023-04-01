@@ -130,8 +130,8 @@ global.exports('getPlayerEquippedWeapon', (plyId: number) => {
   return getEquippedData(plyId).weaponHash;
 });
 
-Events.onNet('weapons:server:firstShot', (plyId: number) => {
-  const coords = Util.getPlyCoords(plyId)
+Events.onNet('weapons:server:dispatchAlert', (plyId: number) => {
+  const coords = Util.getPlyCoords(plyId);
   Police.createDispatchCall({
     tag: '10-71',
     title: 'Schotmelding',

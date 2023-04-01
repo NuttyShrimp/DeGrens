@@ -10,6 +10,9 @@ import {
 } from './constants.gtabehaviour';
 import { BLACKLISTED_VEHICLE_MODELS, BLACKLISTED_PED_MODELS } from '../../../shared/constants';
 
+let cachedPed = 0;
+let cachedId = 0;
+
 let densitySettings: typeof DENSITY_SETTINGS = { ...DENSITY_SETTINGS };
 
 let defaultReticleEnabled = false;
@@ -27,6 +30,9 @@ export const resetDensitySettings = () => {
 
 export const setGTABehaviour = async () => {
   await Util.awaitCondition(() => NetworkIsSessionStarted(), 9999);
+
+  cachedPed = PlayerPedId();
+  cachedId = PlayerId();
 
   // Disable automatic camera movement when afk'ing
   DisableIdleCamera(true);
@@ -95,6 +101,8 @@ export const setGTABehaviour = async () => {
   BLACKLISTED_PED_MODELS.forEach(m => SetPedModelIsSuppressed(GetHashKey(m), true));
   BLACKLISTED_VEHICLE_MODELS.forEach(m => SetVehicleModelIsSuppressed(GetHashKey(m), true));
 
+  SetWeaponsNoAutoswap(true);
+
   // EVERY FRAME LOOP
   setInterval(() => {
     // Perma disable controls
@@ -116,6 +124,14 @@ export const setGTABehaviour = async () => {
     });
 
     // This one somehow needs to be set at interval
-    SetPlayerHealthRechargeMultiplier(PlayerId(), 0.0);
+    SetPlayerHealthRechargeMultiplier(cachedId, 0.0);
   }, 1);
+};
+
+export const setCachedPed = (ped: number) => {
+  cachedPed = ped;
+};
+
+export const setCachedId = (id: number) => {
+  cachedId = id;
 };

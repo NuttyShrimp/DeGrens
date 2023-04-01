@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Groter verschil tussen methlab settings
 - Koffer afstand check voor te openen verhoogd
 - Screenshot-basic is vervangen met een in-house up to date tool
+- Schotmeldingen configurable gemaakt per wapen
 
 ## Fixed
 - Fix speedbans wanneer je uit wagen vliegt of onder de grond valt

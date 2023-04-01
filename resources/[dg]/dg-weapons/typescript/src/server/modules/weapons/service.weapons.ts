@@ -2,6 +2,7 @@ import { Events, Inventory, Util } from '@dgx/server';
 import { getConfig, getWeaponConfig } from 'services/config';
 import { mainLogger } from 'sv_logger';
 import { UNARMED_HASH } from './constants.weapons';
+import { DEFAULT_SHARED_WEAPON_CONFIG } from 'contants';
 
 const equippedWeapons: Map<number, Weapons.EquippedData> = new Map();
 
@@ -62,14 +63,9 @@ export const registerUseableWeapons = () => {
     if (!weaponConfig) return;
 
     const weaponData: Weapons.WeaponItem = {
+      ...DEFAULT_SHARED_WEAPON_CONFIG,
       ...itemState,
       hash: GetHashKey(itemState.name) >>> 0,
-      oneTimeUse: weaponConfig.oneTimeUse ?? false,
-      noHolstering: weaponConfig.noHolstering ?? false,
-      canTint: weaponConfig.canTint ?? false,
-      useNativeReticle: weaponConfig.useNativeReticle ?? false,
-      damageModifier: weaponConfig.damageModifier ?? 1,
-      isMelee: weaponConfig.isMelee ?? false,
     };
 
     Events.emitNet('weapons:client:useWeapon', src, weaponData);
