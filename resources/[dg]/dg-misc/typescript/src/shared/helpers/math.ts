@@ -59,7 +59,7 @@ export const eulerAnglesToRotMatrix = (rotation: Vec3, coords: Vec3) => {
 
     coords.x,
     coords.y,
-    coords.z + 0.5,
+    coords.z,
     1,
   ];
 };
