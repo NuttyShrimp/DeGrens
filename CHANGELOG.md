@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Straightpipers op nieuwe locatie
 
 ## Fixed
+- Fix speedbans wanneer je uit wagen vliegt of onder de grond valt
 
 ## [1.1.2]
 
