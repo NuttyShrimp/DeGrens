@@ -287,6 +287,46 @@
         "z": 0
       },
       "model": "gn_upnatom_vw_bench"
+    },
+    {
+      "offset": {
+        "x": 0,
+        "y": -0.45,
+        "z": -0.3
+      },
+      "model": "gabz_mba_prop_arena_chair_01"
+    },
+    {
+      "offset": {
+        "x": 0,
+        "y": -0.45,
+        "z": -0.3
+      },
+      "model": "gabz_mba_prop_arena_chair_02"
+    },
+    {
+      "offset": {
+        "x": 0,
+        "y": -0.45,
+        "z": -0.3
+      },
+      "model": "gabz_mba_prop_arena_chair_03"
+    },
+    {
+      "offset": {
+        "x": 0,
+        "y": -0.45,
+        "z": 0
+      },
+      "model": "prop_off_chair_01"
+    },
+    {
+      "offset": {
+        "x": 0,
+        "y": -0.5,
+        "z": -0.1
+      },
+      "model": "gabz_mba_prop_chair_01"
     }
   ]
 }
