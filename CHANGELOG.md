@@ -18,6 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Schotmeldingen configurable gemaakt per wapen
 - Zichtbare craftables verhoogd in specifieke benches
 - Weedplanten voeding gaat trager naar beneden
+- Vuilbak doorzoek taskbar gaat sneller
 
 ## Fixed
 - Fix speedbans wanneer je uit wagen vliegt of onder de grond valt
