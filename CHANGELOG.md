@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Screenshot-basic is vervangen met een in-house up to date tool
 - Schotmeldingen configurable gemaakt per wapen
 - Zichtbare craftables verhoogd in specifieke benches
+- Weedplanten voeding gaat trager naar beneden
 
 ## Fixed
 - Fix speedbans wanneer je uit wagen vliegt of onder de grond valt
