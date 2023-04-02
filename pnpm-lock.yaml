@@ -869,13 +869,6 @@ importers:
         version: link:../../../../packages/tsconfig
 
   resources/[dg]/dg-misc/typescript:
-    dependencies:
-      '@mmarchini/observe':
-        specifier: ^1.0.1
-        version: 1.0.1
-      heapdump:
-        specifier: ^0.3.15
-        version: 0.3.15
     devDependencies:
       '@dgx/client':
         specifier: workspace:*
@@ -3514,17 +3507,6 @@ packages:
 
   /@linaria/core@3.0.0-beta.13:
     resolution: {integrity: sha512-3zEi5plBCOsEzUneRVuQb+2SAx3qaC1dj0FfFAI6zIJQoDWu0dlSwKijMRack7oO9tUWrchfj3OkKQAd1LBdVg==}
-    dev: false
-
-  /@mmarchini/observe@1.0.1:
-    resolution: {integrity: sha512-rwow9qImh9cgBqDZTDPE/3VX4OTelCT/lB9NNBk2j0WApeQlreu7+0RZuj/DE4anyI7AuvbA5EeVWfNf1NQESA==}
-    hasBin: true
-    dependencies:
-      commander: 5.1.0
-      ws: 7.5.9
-    transitivePeerDependencies:
-      - bufferutil
-      - utf-8-validate
     dev: false
 
   /@mui/base@5.0.0-alpha.123(@types/react@18.0.31)(react-dom@18.2.0)(react@18.2.0):
@@ -7139,11 +7121,6 @@ packages:
   /commander@2.20.3:
     resolution: {integrity: sha512-GpVkmM8vF2vQUkj2LvZmD35JxeJOLCwJ9cUkugyk2nuhbv3+mJvpLYYt+0+USMxE+oj+ey/lJEnhZw75x/OMcQ==}
 
-  /commander@5.1.0:
-    resolution: {integrity: sha512-P0CysNDQ7rtVw4QIQtm+MRxV66vKFSvlsQvGYXZWR3qFU0jlMKHZZZgw8e+8DSah4UDKMqnknRDQz+xuQXQ/Zg==}
-    engines: {node: '>= 6'}
-    dev: false
-
   /commander@7.2.0:
     resolution: {integrity: sha512-QrWXB+ZQSVPmIWIhtEO9H+gwHaMGYiF5ChvoJ+K9ZGHG/sVsa6yiesAD1GC/x46sET00Xlwo1u49RVVVzvcSkw==}
     engines: {node: '>= 10'}
@@ -9592,14 +9569,6 @@ packages:
     hasBin: true
     dev: true
 
-  /heapdump@0.3.15:
-    resolution: {integrity: sha512-n8aSFscI9r3gfhOcAECAtXFaQ1uy4QSke6bnaL+iymYZ/dWs9cqDqHM+rALfsHUwukUbxsdlECZ0pKmJdQ/4OA==}
-    engines: {node: '>=0.10.0'}
-    requiresBuild: true
-    dependencies:
-      nan: 2.17.0
-    dev: false
-
   /hermes-estree@0.8.0:
     resolution: {integrity: sha512-W6JDAOLZ5pMPMjEiQGLCXSSV7pIBEgRR5zGkxgmzGSXHOxqV5dC/M1Zevqpbm9TZDE5tu358qZf8Vkzmsc+u7Q==}
     dev: false
@@ -10534,7 +10503,7 @@ packages:
     dependencies:
       universalify: 2.0.0
     optionalDependencies:
-      graceful-fs: 4.2.10
+      graceful-fs: 4.2.11
 
   /jsonschema@1.4.1:
     resolution: {integrity: sha512-S6cATIPVv1z0IlxdN+zUk5EPjkGCdnhN4wVSBlvoUO1tOLJootbo9CquNJmbIh4yikWHiUedhRYrNPn1arpEmQ==}
@@ -11590,11 +11559,6 @@ packages:
     engines: {node: '>=12.0.0'}
     dependencies:
       lru-cache: 7.18.3
-    dev: false
-
-  /nan@2.17.0:
-    resolution: {integrity: sha512-2ZTgtl0nJsO0KQCjEpxcIr5D+Yv90plTitZt9JBfQvVJDS5seMl3FOvsh3+9CoYWXf/1l5OaZzzF6nDm4cagaQ==}
-    requiresBuild: true
     dev: false
 
   /nanoid@3.3.6:
