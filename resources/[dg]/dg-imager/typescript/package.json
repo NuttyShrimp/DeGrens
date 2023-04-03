@@ -15,6 +15,7 @@
     "@dgx/client": "workspace:*",
     "@dgx/server": "workspace:*",
     "@dgx/shared": "workspace:*",
+    "@types/minio": "^7.0.18",
     "esbuild": "*",
     "logger": "workspace:*",
     "tsconfig": "workspace:*"
