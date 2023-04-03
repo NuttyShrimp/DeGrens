@@ -1,4 +1,4 @@
-import { Events, RPC } from '@dgx/client';
+import { Events, RPC, UI } from '@dgx/client';
 import { Util } from '@dgx/shared';
 import { holsterWeapon, unholsterWeapon, forceRemoveWeapon, showReticle } from './helpers.weapons';
 import { getCurrentWeaponData, isAnimationBusy, setCurrentWeaponData } from './service.weapons';
@@ -17,6 +17,12 @@ RPC.register('weapons:client:getCurrentWeaponId', () => {
 });
 
 Events.onNet('weapons:client:useWeapon', async (weaponData: Weapons.WeaponItem) => {
+  // copy serialnumber of weapon on use
+  const serialnumber = weaponData.metadata?.serialnumber;
+  if (serialnumber) {
+    UI.SendAppEvent('copy', serialnumber);
+  }
+
   if (isAwaitingAnim) return;
 
   if (isAnimationBusy()) {
