@@ -22,6 +22,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Weedplanten voeding gaat trager naar beneden
 - Vuilbak doorzoek taskbar gaat sneller
 - Voertuig status decrease een beetje meer gebalanceerd
+- Mechanics ticket prijzen getweaked
 
 ## Fixed
 - Fix speedbans wanneer je uit wagen vliegt of onder de grond valt

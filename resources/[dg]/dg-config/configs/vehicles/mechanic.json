@@ -11,10 +11,10 @@
   "reward": {
     "repair": {
       "parts": {
-        "axle": 40,
-        "brakes": 35,
-        "engine": 45,
-        "suspension": 40
+        "axle": 50,
+        "brakes": 45,
+        "engine": 55,
+        "suspension": 50
       }
     },
     "tune": {
@@ -33,12 +33,12 @@
     },
     "classModifier": {
       "D": 1.0,
-      "C": 1.0,
-      "B": 1.1,
-      "A": 1.2,
-      "A+": 1.5,
-      "S": 1.6,
-      "X": 2.0
+      "C": 1.1,
+      "B": 1.3,
+      "A": 1.6,
+      "A+": 1.8,
+      "S": 2.0,
+      "X": 2.3
     }
   },
   "shops": {
