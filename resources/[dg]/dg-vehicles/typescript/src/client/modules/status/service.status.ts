@@ -145,16 +145,16 @@ export const startStatusThread = async (vehicle: number) => {
         if (avgBrakePressure <= 0) {
           multipliers.brake = 1;
         } else {
-          const brakeDecrease = (avgBrakePressure * multipliers.brake) / 40;
+          const brakeDecrease = (avgBrakePressure * multipliers.brake) / 50;
           vehicleService.info.brakes = Math.max(vehicleService.info.brakes - brakeDecrease, 0);
-          multipliers.brake += 0.1;
+          multipliers.brake += 0.05;
         }
       }
 
       // Suspension
       const avgSuspCompress = Util.average(suspCompress);
       if (avgSuspCompress > 0.15) {
-        const suspDecrease = avgSuspCompress / 30;
+        const suspDecrease = avgSuspCompress / 35;
         vehicleService.info.suspension = Math.max(vehicleService.info.suspension - suspDecrease, 0);
       }
 
