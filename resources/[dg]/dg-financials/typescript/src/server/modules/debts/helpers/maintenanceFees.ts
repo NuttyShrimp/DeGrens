@@ -85,9 +85,6 @@ export const calculateMaintenceFees = async (cids?: number[]) => {
 
   const fees: IFinancials.MaintenanceFee[] = await global.exports['dg-vehicles'].generateFees(cids);
 
-  // TODO - remove old maintenance fees before sending new
-  // should be 1 fee per asset
-
   return fees
 };
 

@@ -24,7 +24,7 @@ const VehicleEntry = ({ debt, disablePay }: { debt: Phone.Debt.Debt; disablePay?
   return (
     <Paper
       title={debt.origin_name}
-      image={'vehicle'}
+      image={'car'}
       description={
         <Stack direction={'row'} justifyContent='space-between' alignItems='flex-start'>
           <Typography variant='body2'>
@@ -74,6 +74,7 @@ const BareEntry = ({ debt, disablePay }: { debt: Phone.Debt.Debt; disablePay?: b
   return (
     <Paper
       title={debt.origin_name}
+      image={'file-pen'}
       description={
         <Stack direction={'row'} justifyContent='space-between' alignItems='flex-start'>
           <Typography variant='body2'>
