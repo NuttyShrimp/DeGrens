@@ -16,7 +16,7 @@ declare namespace Scrapyard {
 
   type Job = Location & {
     vin: string;
-    pedSpawned: boolean;
+    pedHandle: number | null;
     doorsDone: number[];
   };
 }

@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## Added
 - Liften en stoeltjes in Maze Bank Arena bruikbaar gemaakt. 
 - Je krijgt het serienummer van een wapen op je clipboard wanneer je het gebruikt
+- Aangenamere scrapyard locaties toegevoegd
 
 ## Changed
 - Straightpipers op nieuwe locatie
@@ -24,6 +25,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## Fixed
 - Fix speedbans wanneer je uit wagen vliegt of onder de grond valt
 - Je kan niet meer zandgraven terwijl je in een voertuig zit
+- Je groep stopt nu correct na het uitvoeren van scrapyard job
 
 ## [1.1.2]
 
