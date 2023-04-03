@@ -18,7 +18,7 @@ export const validateVehicleVin = (vehicle: number, vehicleClass?: number) => {
   // This is for vehicles new to the server
   const vin = vinManager.generateVin(vehicle);
   vehicleState.set('vin', vin, true);
-  vehicleState.set('plate', GetVehicleNumberPlateText(vehicle), true);
+  vehicleState.set('plate', GetVehicleNumberPlateText(vehicle).trim(), true);
   fuelManager.registerVehicle(vehicle);
 
   handleVehicleLock(vehicle, vehicleClass);
@@ -78,7 +78,7 @@ export const applyFakePlateItem = async (src: number, netId: number) => {
     {
       vin,
       fakePlate: plateItem.metadata.plate,
-      plate: GetVehicleNumberPlateText(vehicle),
+      plate: GetVehicleNumberPlateText(vehicle).trim(),
     },
     `${GetPlayerName(String(src))} applied a fake plate ${plateItem.metadata.plate} to vehicle with VIN ${vin}`
   );
@@ -144,7 +144,7 @@ export const removeFakePlate = async (src: number, netId: number) => {
     },
   });
   if (wasCancelled) return;
-  SetVehicleNumberPlateText(vehicle, vehState.plate);
+  Util.setVehicleNumberPlate(vehicle, vehState.plate);
   Inventory.addItemToPlayer(src, 'fakeplate', 1, { plate: vehState.fakePlate });
   vehState.set('fakePlate', undefined, true);
   updateVehicleFakeplate(vin, null);

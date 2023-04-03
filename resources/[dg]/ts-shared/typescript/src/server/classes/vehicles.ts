@@ -35,6 +35,10 @@ class Vehicles {
     global.exports['dg-vehicles'].setFuelLevel(vehicle, fuelLevel);
   };
 
+  public generateVin = () => {
+    return global.exports['dg-vehicles'].generateVin();
+  };
+
   public generatePlate = () => {
     return global.exports['dg-vehicles'].generatePlate();
   };
