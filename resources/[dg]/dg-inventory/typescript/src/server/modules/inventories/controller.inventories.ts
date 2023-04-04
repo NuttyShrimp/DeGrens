@@ -49,13 +49,13 @@ RPC.register(
     // On first opening of inv, check if size is dynamic and set it
     if (secondaryInv.size === 0) {
       if (overrideBuildingSecondaryId) {
-        secondaryInv.size = 100;
+        secondaryInv.setSize(100);
       } else {
         if (secondaryInv.type === 'trunk') {
           const truckSlots = getConfig().trunkSlots;
-          secondaryInv.size = truckSlots[secondaryBuildData.data as string] ?? 10;
+          secondaryInv.setSize(truckSlots[secondaryBuildData.data as string] ?? 10);
         } else if (secondaryInv.type === 'stash') {
-          secondaryInv.size = (secondaryBuildData.data as number) ?? 10;
+          secondaryInv.setSize((secondaryBuildData.data as number) ?? 10);
         }
       }
     }

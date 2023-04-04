@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useMemo } from 'react';
 import { usePreview } from 'react-dnd-preview';
 import { usePreviewStateFull } from 'react-dnd-preview/dist/usePreview';
 import { alpha } from '@mui/material';
@@ -16,6 +16,18 @@ export const DragPreview: FC<{ cellSize: number }> = ({ cellSize }) => {
   >;
   const itemState = useInventoryStore(s => (item?.id ? s.items[item.id] : null));
 
+  const colors = useMemo(() => {
+    let background = baseStyle.primary.normal;
+    let border = baseStyle.primaryDarker.dark;
+
+    if (itemState?.quality && itemState.quality <= 25) {
+      background = baseStyle.tertiary.normal;
+      border = baseStyle.tertiary.dark;
+    }
+
+    return { background, border };
+  }, [itemState?.quality]);
+
   if (!itemState) return null;
 
   const itemWidth = coordToPx(itemState.size, cellSize)[itemState.rotated ? 'y' : 'x'];
@@ -30,14 +42,8 @@ export const DragPreview: FC<{ cellSize: number }> = ({ cellSize }) => {
             ...style,
             width: itemWidth,
             height: itemHeight,
-            backgroundColor: alpha(
-              (itemState?.quality ?? 100) > 25 ? baseStyle.primary.normal : baseStyle.tertiary.normal,
-              0.5
-            ),
-            borderColor: alpha(
-              (itemState?.quality ?? 100) > 25 ? baseStyle.primaryDarker.dark : baseStyle.tertiary.dark,
-              0.9
-            ),
+            backgroundColor: alpha(colors.background, 0.4),
+            borderColor: alpha(colors.border, 0.9),
           }}
         >
           <ItemImage width={itemWidth} height={itemHeight} itemState={itemState} />

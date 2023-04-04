@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback } from 'react';
 import { DndProvider } from 'react-dnd';
 import { TouchBackend } from 'react-dnd-touch-backend';
 import AppWrapper from '@components/appwrapper';
@@ -15,12 +15,9 @@ import { generateShopItems } from './util';
 import './styles/inventory.scss';
 
 const Component: AppFunction = props => {
-  // useDragDropContext can only be used in childcomponents of DndProvidor.
-  // we need to refresh the childcomp when we want to cancel dragdrop from itemsync event
-  const [refreshDrag, setRefreshDrag] = useState(0);
   const [updateStore, resetStore] = useInventoryStore(s => [s.updateStore, s.resetStore]);
   const visible = useVisibleStore(s => s.visibleApps.includes(config.name));
-  const { syncItem } = useInventory();
+  const { syncItems } = useInventory();
 
   const handleShow = () => {
     props.showApp();
@@ -33,12 +30,11 @@ const Component: AppFunction = props => {
   };
 
   const updateItem = useCallback(
-    (item: Inventory.Item) => {
+    (items: Inventory.Item[]) => {
       if (!visible) return;
-      setRefreshDrag(refreshDrag + 1);
-      syncItem(item);
+      syncItems(items);
     },
-    [visible, syncItem]
+    [visible, syncItems]
   );
 
   const fetchInventoryData = async () => {
@@ -47,10 +43,12 @@ const Component: AppFunction = props => {
     // Autofill secondary if its a shop
     let items = activeData.items;
     let secondaryData: Inventory.SecondarySide;
+    let shopOpen = false;
     if ('shopItems' in activeData.secondary) {
       const generatedItems = generateShopItems(activeData.secondary.id, activeData.secondary.shopItems);
       secondaryData = { id: activeData.secondary.id, size: generatedItems.size, allowedItems: [] };
       items = { ...items, ...generatedItems.items };
+      shopOpen = true;
     } else {
       secondaryData = activeData.secondary;
     }
@@ -63,6 +61,7 @@ const Component: AppFunction = props => {
       },
       primaryId: activeData.primary.id,
       secondaryId: activeData.secondary.id,
+      shopOpen,
     });
   };
 
@@ -77,7 +76,7 @@ const Component: AppFunction = props => {
       center
     >
       <DndProvider backend={TouchBackend} options={{ enableMouseEvents: true }}>
-        <Inventory {...props} refreshDrag={refreshDrag} />
+        <Inventory />
       </DndProvider>
     </AppWrapper>
   );

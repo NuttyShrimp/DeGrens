@@ -71,6 +71,16 @@ class ContextManager extends Util.Singleton<ContextManager>() {
 
   public getPlayersById = (id: string) => this.open.playersById.get(id) ?? [];
 
+  public getPlayersByIds = (ids: string[]) => {
+    const playersWithAnyOpen = new Set<number>();
+
+    for (const id of ids) {
+      this.getPlayersById(id).forEach(ply => playersWithAnyOpen.add(ply));
+    }
+
+    return [...playersWithAnyOpen];
+  };
+
   public getIdsByPlayer = (player: number) => this.open.idsByPlayer.get(player);
 }
 

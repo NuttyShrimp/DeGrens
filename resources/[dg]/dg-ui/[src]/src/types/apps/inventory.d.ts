@@ -8,6 +8,11 @@ declare namespace Inventory {
     };
     primaryId: string;
     secondaryId: string;
+    holdingSelector: boolean;
+    currentSelectorInventory: string | null;
+    selectedItems: string[];
+    syncedItemIds: string[];
+    shopOpen: boolean;
   }
 
   interface StateActions {
@@ -49,11 +54,6 @@ declare namespace Inventory {
     // These two get used in shops
     requirements?: Shop.Requirements;
     amount?: number;
-  }
-
-  interface Alert {
-    message: string;
-    type: 'success' | 'error';
   }
 
   namespace Shop {

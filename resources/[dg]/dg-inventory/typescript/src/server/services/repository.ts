@@ -5,9 +5,14 @@ import winston from 'winston';
 class Repository extends Util.Singleton<Repository>() {
   private logger: winston.Logger;
 
+  private queuedQueries: { query: string; params: Repository.UpdateParameters }[];
+  private queuedQueryExecuting: boolean;
+
   constructor() {
     super();
     this.logger = mainLogger.child({ module: 'Repository' });
+    this.queuedQueries = [];
+    this.queuedQueryExecuting = false;
   }
 
   // Cannot use destructuring as we need these to be in specific order
@@ -33,6 +38,7 @@ class Repository extends Util.Singleton<Repository>() {
     };
   };
 
+  // Does not need to be queued, only gets used on inv load at which point no item in that inventory could have been modified
   public fetchItems = async (invId: string): Promise<Inventory.ItemState[]> => {
     const query = `SELECT * FROM inventory_items WHERE inventory = ?`;
     const result = await SQL.query<Repository.FetchResult[]>(query, [invId]);
@@ -44,35 +50,32 @@ class Repository extends Util.Singleton<Repository>() {
     return result.map(x => this.resultToState(x));
   };
 
-  public createItem = (state: Inventory.ItemState) => {
-    const query = `INSERT INTO inventory_items (id, name, inventory, position, rotated, hotkey, metadata, destroyDate) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
-    const params = this.stateToParams(state);
-    SQL.query(query, params);
-  };
-
   public deleteItem = (id: string) => {
     const query = `DELETE FROM inventory_items WHERE id = ?`;
-    SQL.query(query, [id]);
+    this.addQueryToQueue(query, [id]);
   };
 
   public updateItems = (itemStates: Inventory.ItemState[]) => {
     const amount = itemStates.length;
+    const params: Repository.UpdateParameters = [];
+
     let query = `INSERT INTO inventory_items (id, name, inventory, position, rotated, hotkey, metadata, destroyDate) VALUES`;
     for (let i = 0; i < amount; i++) {
+      params.push(...this.stateToParams(itemStates[i]));
+
       query += ` (?, ?, ?, ?, ?, ?, ?, ?)`;
       if (i !== amount - 1) query += `,`;
     }
     query += ` ON DUPLICATE KEY UPDATE inventory = VALUES(inventory), position = VALUES(position), rotated = VALUES(rotated), hotkey = VALUES(hotkey), metadata = VALUES(metadata), destroyDate = VALUES(destroyDate);`;
-    const params = itemStates.reduce<Repository.UpdateParameters>(
-      (acc, cur) => [...acc, ...this.stateToParams(cur)],
-      []
-    );
-    SQL.query(query, params);
+
+    this.addQueryToQueue(query, params);
   };
 
+  // Does not need to be queued, only gets used on server start and gets awaited
   public deleteNonPersistent = async () => {
     const query = `DELETE FROM inventory_items WHERE inventory = 'nonpersistent' RETURNING id`;
-    const result: string[] = await SQL.query(query);
+    const result: unknown[] = await SQL.query(query);
+    if (result.length === 0) return;
     Util.Log(
       'inventory:deleteNonPersistent',
       { items: result },
@@ -81,6 +84,7 @@ class Repository extends Util.Singleton<Repository>() {
     this.logger.info(`${result.length} items have been deleted because they were in a nonpersistent inventory`);
   };
 
+  // Function to be used by other resources
   public getItemState = async (itemId: string) => {
     const query = `SELECT * FROM inventory_items WHERE id = ?`;
     const result = await SQL.scalar<Repository.FetchResult>(query, [itemId]);
@@ -88,16 +92,41 @@ class Repository extends Util.Singleton<Repository>() {
     return this.resultToState(result);
   };
 
+  // Does not need to be queued, only gets used on server start and gets awaited
   public deleteByDestroyDate = async () => {
     const currentMinutes = Math.floor(Date.now() / (1000 * 60));
     const query = `DELETE FROM inventory_items WHERE destroyDate < ? RETURNING id`;
-    const result: string[] = await SQL.query(query, [currentMinutes]);
+    const result: unknown[] = await SQL.query(query, [currentMinutes]);
+    if (result.length === 0) return;
+
     Util.Log(
       'inventory:deleteByDestroyDate',
       { items: result },
       `${result.length} items have been deleted because their destroydate has passed`
     );
     this.logger.info(`${result.length} items have been deleted because their destroydate has passed`);
+  };
+
+  private addQueryToQueue = (query: string, params: Repository.UpdateParameters) => {
+    this.queuedQueries.push({ query, params });
+    this.executeQeueudQuery();
+  };
+
+  private executeQeueudQuery = async () => {
+    if (this.queuedQueryExecuting) return;
+    this.queuedQueryExecuting = true;
+
+    const queuedQuery = this.queuedQueries.shift();
+    if (!queuedQuery) {
+      this.queuedQueryExecuting = false;
+      return;
+    }
+
+    this.logger.debug(`Executing query`);
+    await SQL.query(queuedQuery.query, queuedQuery.params);
+    this.queuedQueryExecuting = false;
+
+    this.executeQeueudQuery();
   };
 }
 

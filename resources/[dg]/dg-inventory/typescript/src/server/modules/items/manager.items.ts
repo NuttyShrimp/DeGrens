@@ -1,4 +1,4 @@
-import { Util, Inventory } from '@dgx/server';
+import { Util, Inventory, Events } from '@dgx/server';
 import { DGXEvent, EventListener, Export, ExportRegister } from '@dgx/server/decorators';
 import { mainLogger } from 'sv_logger';
 import winston from 'winston';
@@ -63,7 +63,7 @@ class ItemManager extends Util.Singleton<ItemManager>() {
   };
 
   @DGXEvent('inventory:server:moveItem')
-  public move = async (src: number, id: string, position: Vec2, rotated: boolean, invId: string) => {
+  public move = async (src: number, id: string, invId: string, position?: Vec2, rotated?: boolean) => {
     const item = this.get(id);
     if (!item) {
       this.logger.warn(`Could not get item ${id}, broke while getting item to move`);
@@ -79,6 +79,10 @@ class ItemManager extends Util.Singleton<ItemManager>() {
         throw new Error(`Player tried to move item ${id} but does not have the original inventory id open`);
     }
 
+    const inv = await inventoryManager.get(invId);
+    const syncToEmitter = item.move(inv, position, rotated); // returns true when position was changed inside func because space not available, if so still sync to ply
+    this.syncItems(item.state, [prevInvId, invId], syncToEmitter ? undefined : src);
+
     const playerName = src === 0 ? 'Server' : Util.getName(src);
     Util.Log(
       'inventory:item:moved',
@@ -86,25 +90,22 @@ class ItemManager extends Util.Singleton<ItemManager>() {
         byScript: src === 0,
         itemId: id,
         itemName: item.state.name,
-        oldPosition: item.state.position,
-        newPosition: position,
         oldInventory: prevInvId,
         newInventory: invId,
       },
       `${playerName} moved ${item.state.name} from ${prevInvId} to ${invId}`,
       src === 0 ? undefined : src
     );
-    await item.move(src, position, rotated, invId);
   };
 
   @DGXEvent('inventory:server:useItem')
-  private use = (src: number, id: string, hotkey = false) => {
+  private _use = (src: number, id: string) => {
     const item = this.get(id);
     if (!item) {
       this.logger.warn(`Could not get item ${id}, broke while getting item to use`);
       return;
     }
-    item.use(src, hotkey);
+    item.use(src);
   };
 
   @DGXEvent('inventory:server:useHotkey')
@@ -175,6 +176,73 @@ class ItemManager extends Util.Singleton<ItemManager>() {
 
   public unloadItem = (id: string) => {
     this.items.delete(id);
+  };
+
+  public syncItems = (data: Inventory.ItemState | Inventory.ItemState[], inventories: string[], skipPly?: number) => {
+    if (!Array.isArray(data)) {
+      data = [data];
+    }
+
+    const playersWithAnyInventoryOpen = contextManager.getPlayersByIds(inventories);
+    for (const ply of playersWithAnyInventoryOpen) {
+      if (ply === skipPly) continue;
+      Events.emitNet('inventory:client:syncItems', ply, data);
+    }
+  };
+
+  @DGXEvent('inventory:server:moveMultipleItems')
+  public moveMultipleItems = async (src: number, inventoryId: string, itemIds: string[]) => {
+    let previousInventoryId: string | undefined;
+    const items: Item[] = [];
+    for (const itemId of itemIds) {
+      const item = this.get(itemId);
+      if (!item) {
+        this.logger.warn(`Could not get item ${itemId}, broke while getting item to move`);
+        continue;
+      }
+
+      if (!previousInventoryId) {
+        previousInventoryId = item.state.inventory;
+      } else if (item.state.inventory !== previousInventoryId) {
+        this.logger.error(`Not all items, when moving multiple, were in same inventory`);
+        continue;
+      }
+
+      items.push(item);
+    }
+
+    if (!previousInventoryId) return;
+
+    if (src !== 0) {
+      // we use zero when using this function internally
+      const openIds = contextManager.getIdsByPlayer(src);
+      if (!openIds) throw new Error(`Player tried to move multiple items but does not have his inventory open`);
+      if (previousInventoryId !== openIds[0] && previousInventoryId !== openIds[1])
+        throw new Error(`Player tried to move multiple items but does not have the original inventory id open`);
+    }
+
+    const inv = await inventoryManager.get(inventoryId);
+    const itemStates: Inventory.ItemState[] = [];
+    for (const item of items) {
+      item.move(inv);
+      itemStates.push(item.state);
+    }
+
+    this.syncItems(itemStates, [previousInventoryId, inventoryId]);
+
+    const playerName = src === 0 ? 'Server' : Util.getName(src);
+    Util.Log(
+      'inventory:item:movedMultiple',
+      {
+        byScript: src === 0,
+        itemId: itemIds,
+        itemName: itemStates.map(s => s.name),
+        oldInventory: previousInventoryId,
+        newInventory: inventoryId,
+      },
+      `${playerName} moved multiple items from ${previousInventoryId} to ${inventoryId}`,
+      src === 0 ? undefined : src
+    );
   };
 }
 
