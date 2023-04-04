@@ -196,9 +196,7 @@ const moveItemToInventory = async (type: Inventory.Type, identifier: string, ite
   const inventory = await inventoryManager.get(invId);
   const item = itemManager.get(itemId);
   if (!item) return;
-  const itemName = itemDataManager.get(item.state.name).name;
-  const position = inventory.getFirstAvailablePosition(itemName, item.state.rotated) ?? { x: 0, y: 0 };
-  await itemManager.move(0, itemId, position, item.state.rotated, inventory.id);
+  await itemManager.move(0, itemId, inventory.id);
 };
 
 const getItemsInInventory = async (type: Inventory.Type, identifier: string) => {
@@ -222,7 +220,7 @@ const getFirstItemOfName = async (type: Inventory.Type, identifier: string, name
 const createScriptedStash = async (identifier: string, size: number, allowedItems?: string[]) => {
   const invId = Inventory.concatId('stash', identifier);
   const inventory = await inventoryManager.get(invId);
-  inventory.size = size;
+  inventory.setSize(size);
   if (allowedItems) {
     inventory.allowedItems = allowedItems;
   }
@@ -237,11 +235,8 @@ const moveAllItemsToInventory = async (
   const originId = Inventory.concatId(originType, originIdentifier);
   const originInventory = await inventoryManager.get(originId);
   const targetId = Inventory.concatId(targetType, targetIdentifier);
-  const targetInventory = await inventoryManager.get(targetId);
-  const items = originInventory.getItems();
-  for (const item of items) {
-    await itemManager.move(0, item.state.id, item.state.position, item.state.rotated, targetInventory.id);
-  }
+  const itemIds = originInventory.getItems().map(i => i.state.id);
+  await itemManager.moveMultipleItems(0, targetId, itemIds);
 };
 
 const getItemStateFromDatabase = (itemId: string) => {

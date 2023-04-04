@@ -5,6 +5,11 @@ const initialStore: Inventory.State = {
   inventories: {},
   primaryId: '',
   secondaryId: '',
+  holdingSelector: false,
+  currentSelectorInventory: null,
+  selectedItems: [],
+  syncedItemIds: [],
+  shopOpen: false,
 };
 
 export const useInventoryStore = create<

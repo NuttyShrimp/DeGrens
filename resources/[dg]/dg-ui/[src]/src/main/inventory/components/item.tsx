@@ -1,12 +1,8 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useEffect, useMemo, useState } from 'react';
 import { useDrag } from 'react-dnd';
 import { alpha, Tooltip } from '@mui/material';
 import { baseStyle } from '@src/base.styles';
-import { closeApplication } from '@src/components/appwrapper';
-import { nuiAction } from '@src/lib/nui-comms';
-import { useNotifications } from '@src/main/notifications/hooks/useNotification';
 
-import config from '../_config';
 import { useInventory } from '../hooks/useInventory';
 import { useInventoryStore } from '../stores/useInventoryStore';
 import { coordToPx } from '../util';
@@ -16,19 +12,15 @@ import { ItemTooltip } from './itemtooltip';
 
 export const Item: FC<{ itemId: string; cellSize: number }> = ({ itemId, cellSize }) => {
   const [isHovering, setIsHovering] = useState(false);
-  const itemState = useInventoryStore(s => s.items[itemId]);
-  const { addNotification } = useNotifications();
+  const [itemState, currentSelectorInventory, updateInventoryStore, holdingSelector, selectedItems] = useInventoryStore(
+    s => [s.items[itemId], s.currentSelectorInventory, s.updateStore, s.holdingSelector, s.selectedItems]
+  );
   const [hotkeyPressed, setHotkeyPressed] = useState<number | null>(null);
-  const {
-    bindItemToKey,
-    getFirstFreeSpace,
-    getOtherInventoryId,
-    isItemAllowedInInventory,
-    isUseable,
-    unbindItem,
-    updateItemPosition,
-    toggleItemRotation,
-  } = useInventory();
+  const { bindItemToKey, doItemUsage, unbindItem, toggleItemRotation, switchItemsToOtherInventory } = useInventory();
+
+  const isSelected = useMemo(() => {
+    return selectedItems.indexOf(itemId) !== -1;
+  }, [selectedItems]);
 
   const [{ isDragging }, dragRef] = useDrag(
     () => ({
@@ -41,40 +33,49 @@ export const Item: FC<{ itemId: string; cellSize: number }> = ({ itemId, cellSiz
         isDragging: monitor.isDragging(),
       }),
       canDrag: () => {
+        if (holdingSelector) return false;
         if (itemState.amount === undefined) return true;
         return itemState.amount > 0;
       },
     }),
-    [itemState.amount, itemState.rotated]
+    [itemState.amount, itemState.rotated, holdingSelector]
   );
 
   const handleDoubleClick = e => {
     e.preventDefault();
 
-    if (!isUseable(itemState)) return addNotification({ message: 'Je kan dit niet gebruiken.', type: 'error' });
-    nuiAction('inventory/useItem', { id: itemState.id });
-
-    if (itemState.closeOnUse ?? true) {
-      closeApplication(config.name);
-    } else {
-      addNotification({ message: `Je hebt ${itemState.label} gebruikt`, type: 'success' });
-    }
+    if (holdingSelector) return;
+    doItemUsage(itemState.id);
   };
 
   const handleRightClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     e.preventDefault();
 
-    const targetInventoryId = getOtherInventoryId(itemState.inventory);
-    if (!isItemAllowedInInventory(itemState.name, targetInventoryId))
-      return addNotification({ message: 'Dit kan hier niet in', type: 'error' });
+    let itemIds: string | string[] = itemState.id;
+    if (selectedItems.length !== 0) {
+      updateInventoryStore({ selectedItems: [] });
+      itemIds = [...selectedItems];
+    }
 
-    const newPosition = getFirstFreeSpace(itemState.id, targetInventoryId);
-    if (!newPosition) return addNotification({ message: 'Dit past hier niet meer in', type: 'error' });
-    updateItemPosition(itemState.id, targetInventoryId, newPosition);
+    switchItemsToOtherInventory(itemIds);
   };
 
+  const handleMouseEnter = () => {
+    setIsHovering(true);
+
+    if (itemState.amount === undefined && itemState.inventory === currentSelectorInventory && !isSelected) {
+      updateInventoryStore(s => ({ selectedItems: [...s.selectedItems, itemState.id] }));
+    }
+  };
+
+  const handleMouseLeave = () => {
+    setIsHovering(false);
+  };
+
+  // Handle keybind pressing
   useEffect(() => {
-    if (!isHovering) return;
+    if (!isHovering || holdingSelector) return;
+
     const handler = (e: KeyboardEvent) => {
       // fucking scuffed ass way lmao
       if (![...new Array(5)].some((_, i) => `Digit${i + 1}` === e.code)) return;
@@ -89,6 +90,7 @@ export const Item: FC<{ itemId: string; cellSize: number }> = ({ itemId, cellSiz
     };
   }, [isHovering]);
 
+  // Handle binding when key was pressed
   useEffect(() => {
     if (hotkeyPressed === null) return;
     setHotkeyPressed(null);
@@ -96,14 +98,20 @@ export const Item: FC<{ itemId: string; cellSize: number }> = ({ itemId, cellSiz
       unbindItem(itemState.id);
       return;
     }
-    const alert = bindItemToKey(itemState.id, hotkeyPressed);
-    addNotification(alert);
+    bindItemToKey(itemState.id, hotkeyPressed);
   }, [hotkeyPressed]);
 
+  // When started dragging, remove item from selectedItems & handle rotating events
   useEffect(() => {
     if (!isDragging) return;
+
+    updateInventoryStore(s => ({
+      currentSelectorInventory: null,
+      selectedItems: s.selectedItems.filter(id => id !== itemState.id),
+    }));
+
     const handler = (e: KeyboardEvent) => {
-      if (e.key !== 'r') return;
+      if (e.code !== 'KeyR') return;
       toggleItemRotation(itemState.id);
     };
     window.addEventListener('keydown', handler);
@@ -114,6 +122,23 @@ export const Item: FC<{ itemId: string; cellSize: number }> = ({ itemId, cellSiz
 
   const itemWidth = coordToPx(itemState.size, cellSize)[itemState.rotated ? 'y' : 'x'];
   const itemHeight = coordToPx(itemState.size, cellSize)[itemState.rotated ? 'x' : 'y'];
+
+  const colors = useMemo(() => {
+    let background = baseStyle.primary.normal;
+    let border = baseStyle.primaryDarker.dark;
+
+    if (itemState.quality && itemState.quality <= 25) {
+      background = baseStyle.tertiary.normal;
+      border = baseStyle.tertiary.dark;
+    }
+
+    if (isSelected) {
+      background = baseStyle.secondary.normal;
+      border = baseStyle.secondary.dark;
+    }
+
+    return { background, border };
+  }, [itemState.quality, isSelected]);
 
   return (
     <Tooltip
@@ -132,20 +157,14 @@ export const Item: FC<{ itemId: string; cellSize: number }> = ({ itemId, cellSiz
           top: coordToPx(itemState.position, cellSize).y,
           width: itemWidth,
           height: itemHeight,
-          backgroundColor: alpha(
-            (itemState.quality ?? 100) > 25 ? baseStyle.primary.normal : baseStyle.tertiary.normal,
-            0.4
-          ),
-          borderColor: alpha(
-            (itemState.quality ?? 100) > 25 ? baseStyle.primaryDarker.dark : baseStyle.tertiary.dark,
-            0.9
-          ),
+          backgroundColor: alpha(colors.background, 0.4),
+          borderColor: alpha(colors.border, 0.9),
           display: isDragging ? 'none' : 'initial',
         }}
         onContextMenu={handleRightClick}
         onDoubleClick={handleDoubleClick}
-        onMouseEnter={() => setIsHovering(true)}
-        onMouseLeave={() => setIsHovering(false)}
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
       >
         <ItemImage width={itemWidth} height={itemHeight} itemState={itemState} />
         {itemState.size[itemState.rotated ? 'y' : 'x'] != 1 && <p className='label text'>{itemState.label}</p>}

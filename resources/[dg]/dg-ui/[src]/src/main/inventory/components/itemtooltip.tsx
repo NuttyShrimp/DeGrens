@@ -1,5 +1,6 @@
 import React, { FC, useCallback, useMemo } from 'react';
 import { Divider } from '@mui/material';
+import { useMainStore } from '@src/lib/stores/useMainStore';
 
 const capitalize = (text: string): string => {
   text = text.toLowerCase();
@@ -7,6 +8,7 @@ const capitalize = (text: string): string => {
 };
 
 export const ItemTooltip: FC<Inventory.Item> = ({
+  id,
   label,
   description,
   metadata,
@@ -15,6 +17,8 @@ export const ItemTooltip: FC<Inventory.Item> = ({
   requirements,
   amount,
 }) => {
+  const isAdmin = useMainStore(s => s?.character?.isAdmin ?? false);
+
   const isMetadataEmpty = useMemo(() => {
     const hiddenKeys: string[] | undefined = metadata.hiddenKeys;
     if (!hiddenKeys) return Object.keys(metadata).length === 0;
@@ -98,6 +102,12 @@ export const ItemTooltip: FC<Inventory.Item> = ({
               </p>
             </>
           )}
+        </>
+      )}
+      {isAdmin && (
+        <>
+          <Divider />
+          <p className='data text'>{`Item ID: ${id}`}</p>
         </>
       )}
     </>

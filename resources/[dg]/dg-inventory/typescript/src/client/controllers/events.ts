@@ -12,8 +12,13 @@ UI.onApplicationClose(() => {
   contextManager.close();
 }, 'inventory');
 
-Events.onNet('inventory:client:syncItem', (item: Inventory.ItemState) => {
-  UI.SendAppEvent('inventory', { ...item, ...itemDataManager.get(item.name) });
+Events.onNet('inventory:client:syncItems', (itemStates: Inventory.ItemState[]) => {
+  const items: Inventory.Item[] = [];
+  for (const itemState of itemStates) {
+    items.push({ ...itemState, ...itemDataManager.get(itemState.name) });
+  }
+
+  UI.SendAppEvent('inventory', items);
 });
 
 onNet('inventory:doDropAnimation', () => {

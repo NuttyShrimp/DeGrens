@@ -3,13 +3,12 @@ import itemManager from 'modules/items/manager.items';
 import locationManager from 'modules/locations/manager.locations';
 import repository from 'services/repository';
 import { mainLogger } from 'sv_logger';
-import { doRectanglesOverlap } from './../helpers.inventories';
 import winston from 'winston';
 import inventoryManager from '../manager.inventories';
 import itemDataManager from 'classes/itemdatamanager';
 import { getConfig } from 'services/config';
 import contextManager from 'classes/contextmanager';
-import { getContainerInfo } from 'modules/containers/controller.containers';
+import { getContainerInfo } from 'modules/containers/service.containers';
 import objectsUtility from 'classes/objectsutility';
 import { Item } from 'modules/items/classes/item';
 
@@ -22,6 +21,8 @@ export class Inv {
   private _size!: number;
   private items!: Set<string>;
   private _allowedItems?: string[];
+
+  private grid: boolean[][] = [];
 
   private _isLoaded: boolean;
 
@@ -38,7 +39,7 @@ export class Inv {
     this.items = new Set();
 
     const fixedSizes = getConfig().amountOfSlots;
-    this.size = fixedSizes[this.type] ?? 0;
+    this.setSize(fixedSizes[this.type] ?? 0);
 
     if (this.type === 'container') {
       // Item manager only contains items from loaded inventories, when opening containerinv using admin menu. The item might possibly not be loaded
@@ -60,7 +61,7 @@ export class Inv {
       if (!name) return;
       const { allowedItems, size } = getContainerInfo(name);
       this.allowedItems = allowedItems;
-      this.size = size;
+      this.setSize(size);
     } else if (this.type === 'tunes') {
       this.allowedItems = (global.exports['dg-vehicles'].getTuneItemNames(this.identifier) as string[]) ?? [];
     }
@@ -92,7 +93,7 @@ export class Inv {
   public get allowedItems() {
     return this._allowedItems;
   }
-  public set size(value: typeof this._size) {
+  private set size(value: typeof this._size) {
     this._size = value;
   }
   public set allowedItems(value: typeof this._allowedItems) {
@@ -146,61 +147,73 @@ export class Inv {
 
   public getItems = () => {
     const items: Item[] = [];
-    this.items.forEach(id => {
+    for (const id of this.items) {
       const item = itemManager.get(id);
-      if (item === undefined) return;
+      if (item === undefined) continue;
       items.push(item);
-    });
+    }
     return items;
   };
 
   public getItemStates = () => {
-    return this.getItems().map(i => i.state);
+    const itemStates: Inventory.ItemState[] = [];
+    for (const id of this.items) {
+      const item = itemManager.get(id);
+      if (item === undefined) continue;
+      itemStates.push(item.state);
+    }
+    return itemStates;
   };
 
   public getItemStatesForName = (itemName: string) => {
-    const items: Inventory.ItemState[] = [];
-    this.getItems().forEach(item => {
-      if (item.state.name !== itemName) return;
-      items.push(item.state);
-    });
-    return items;
+    const itemStates: Inventory.ItemState[] = [];
+    for (const id of this.items) {
+      const item = itemManager.get(id);
+      if (item === undefined) continue;
+      const itemState = item.state;
+      if (itemState.name !== itemName) continue;
+      itemStates.push(itemState);
+    }
+    return itemStates;
   };
 
-  public getFirstAvailablePosition = (itemName: string, rotated = false) => {
-    const itemSize = itemDataManager.get(itemName).size;
+  public getFirstAvailablePosition = (itemSize: Vec2) => {
     const rotatedItemSize = {
-      x: itemSize[rotated ? 'y' : 'x'],
-      y: itemSize[rotated ? 'x' : 'y'],
+      x: itemSize.y,
+      y: itemSize.x,
     };
 
     const cellsPerRow = getConfig().cellsPerRow;
-    const itemsThatMayOverlap = this.getItemStates().map(state => {
-      const size = itemDataManager.get(state.name).size;
-      return [
-        state.position,
-        {
-          x: state.position.x + size[state.rotated ? 'y' : 'x'],
-          y: state.position.y + size[state.rotated ? 'x' : 'y'],
-        },
-      ] as [Vec2, Vec2];
-    });
+    const maxYToCheck = this.size - Math.min(itemSize.y, rotatedItemSize.y) + 1;
+    const maxXToCheck = cellsPerRow - Math.min(itemSize.x, rotatedItemSize.x) + 1;
 
-    for (let y = 0; y < this.size - rotatedItemSize.y + 1; y++) {
-      for (let x = 0; x < cellsPerRow - rotatedItemSize.x + 1; x++) {
-        const anyOverlapping = itemsThatMayOverlap.some(i =>
-          doRectanglesOverlap(
-            [
-              { x, y },
-              { x: x + rotatedItemSize.x, y: y + rotatedItemSize.y },
-            ],
-            i
-          )
-        );
-        if (anyOverlapping) continue;
-        return { x, y };
+    for (let y = 0; y < maxYToCheck; y++) {
+      for (let x = 0; x < maxXToCheck; x++) {
+        // we do not use rotated param because we explicitely want to check for rotation
+        if (this.isGridSpotFree({ x, y }, itemSize)) {
+          return { position: { x, y }, rotated: false };
+        }
+        if (this.isGridSpotFree({ x, y }, rotatedItemSize)) {
+          return { position: { x, y }, rotated: true };
+        }
       }
     }
+  };
+
+  public isGridSpotFree = (position: Vec2, size: Vec2, rotated = false) => {
+    const maxX = position.x + size[rotated ? 'y' : 'x'];
+    const maxY = position.y + size[rotated ? 'x' : 'y'];
+
+    for (let x = position.x; x < maxX; x++) {
+      const column = this.grid[x];
+      if (column === undefined) return false;
+
+      for (let y = position.y; y < maxY; y++) {
+        if (column[y]) return false;
+      }
+    }
+
+    return true;
   };
 
   public save = () => {
@@ -209,13 +222,27 @@ export class Inv {
         locationManager.removeLocation(this.type as Location.Type, this.id);
       return;
     }
-    let itemStates = this.getItemStates();
+
+    const dirtyItemStates: Inventory.ItemState[] = [];
+    for (const id of this.items) {
+      const item = itemManager.get(id);
+      if (item === undefined) continue;
+      if (!item.isDirty) continue;
+      dirtyItemStates.push(item.state);
+      item.isDirty = false;
+    }
+
+    if (dirtyItemStates.length === 0) return;
+
     // If inv is not persistent we save the items under inventory id 'nonpersistent'. These get removed from db on resource start
     // By not deleting them from db immediatly we never need to recreate an item in db if item gets moved back to persistent inv
     if (!this.isPersistent()) {
-      itemStates = itemStates.map(state => ({ ...state, inventory: 'nonpersistent' }));
+      for (const itemState of dirtyItemStates) {
+        itemState.inventory = 'nonpersistent';
+      }
     }
-    repository.updateItems(itemStates);
+
+    repository.updateItems(dirtyItemStates);
     this.logger.debug(`Inventory ${this.id} has been saved`);
   };
 
@@ -259,5 +286,31 @@ export class Inv {
       },
       `All items in ${this.id} have been destroyed`
     );
+  };
+
+  public setSize = (size: number) => {
+    this.size = size;
+
+    // rebuild grid
+    this.grid = [...new Array(getConfig().cellsPerRow)].map(() => new Array(this.size).fill(false));
+
+    for (const id of this.items) {
+      const item = itemManager.get(id);
+      if (!item) continue;
+      const itemState = item.state;
+      const size = itemDataManager.get(itemState.name).size;
+      this.setGridSpacesOccupied(true, itemState.position, size, itemState.rotated);
+    }
+  };
+
+  public setGridSpacesOccupied = (occupied: boolean, position: Vec2, size: Vec2, rotated: boolean) => {
+    const maxX = position.x + size[rotated ? 'y' : 'x'];
+    const maxY = position.y + size[rotated ? 'x' : 'y'];
+
+    for (let x = position.x; x < maxX; x++) {
+      for (let y = position.y; y < maxY; y++) {
+        this.grid[x][y] = occupied;
+      }
+    }
   };
 }
