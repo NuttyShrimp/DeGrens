@@ -16,8 +16,12 @@
     "@dgx/client": "workspace:*",
     "@dgx/server": "workspace:*",
     "@dgx/shared": "workspace:*",
+    "@types/three": "^0.150.1",
+    "esbuild": "*",
     "logger": "workspace:*",
-    "tsconfig": "workspace:*",
-    "esbuild": "*"
+    "tsconfig": "workspace:*"
+  },
+  "dependencies": {
+    "three": "^0.151.3"
   }
 }

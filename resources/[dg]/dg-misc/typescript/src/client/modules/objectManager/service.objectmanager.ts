@@ -14,15 +14,23 @@ let objId = 1;
 let gizmoTick: number = 0;
 let cursorEnabled = false;
 
+export const isCursorEnabled = () => {
+  return cursorEnabled;
+};
+
+export const setCursorEnabled = (enabled: boolean) => {
+  cursorEnabled = enabled;
+};
+
 const applyMatrix = (ent: number, matrix: Float32Array) => {
   SetEntityMatrix(
     ent,
-    matrix[0],
-    matrix[1],
-    matrix[2],
     matrix[4],
     matrix[5],
     matrix[6],
+    matrix[0],
+    matrix[1],
+    matrix[2],
     matrix[8],
     matrix[9],
     matrix[10],
@@ -35,7 +43,7 @@ const applyMatrix = (ent: number, matrix: Float32Array) => {
 const applyMatrixByEuler = (ent: number, matrix: Float32Array) => {
   const eulerRot = rotMatrixToEulerAngles(matrix);
   SetEntityMatrix(ent, 1, 0, 0, 0, 1, 0, 0, 0, 1, matrix[12], matrix[13], matrix[14]);
-  SetEntityRotation(ent, eulerRot.x, eulerRot.y, eulerRot.z, 0, true);
+  SetEntityRotation(ent, eulerRot.x, eulerRot.y, eulerRot.z, 1, true);
 };
 
 const createObject = async (id: string) => {
@@ -270,23 +278,10 @@ export const startObjectGizmo = (objId: string) => {
     }
     // @ts-ignore
     DrawGizmo(objData.matrix, objId);
-    applyMatrix(objData.entity, objData.matrix);
+    applyMatrixByEuler(objData.entity, objData.matrix);
     DisableControlAction(0, 24, true);
   });
 };
-
-RegisterCommand(
-  'misc:object:toggleCursor',
-  () => {
-    if (!cursorEnabled) {
-      EnterCursorMode();
-    } else {
-      LeaveCursorMode();
-    }
-    cursorEnabled = !cursorEnabled;
-  },
-  false
-);
 
 export const handleObjectManagerModuleResourceStop = () => {
   cleanupObjects();

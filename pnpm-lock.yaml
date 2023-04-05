@@ -872,6 +872,10 @@ importers:
         version: link:../../../../packages/tsconfig
 
   resources/[dg]/dg-misc/typescript:
+    dependencies:
+      three:
+        specifier: ^0.151.3
+        version: 0.151.3
     devDependencies:
       '@dgx/client':
         specifier: workspace:*
@@ -882,6 +886,9 @@ importers:
       '@dgx/shared':
         specifier: workspace:*
         version: link:../../ts-shared/typescript/src/shared
+      '@types/three':
+        specifier: ^0.150.1
+        version: 0.150.1
       esbuild:
         specifier: '*'
         version: 0.17.11
@@ -1134,7 +1141,7 @@ importers:
         version: 0.13.8(react-dom@18.2.0)(react@18.2.0)
       react-spring:
         specifier: ^9.6.1
-        version: 9.7.1(@react-three/fiber@8.12.0)(konva@8.4.3)(react-dom@18.2.0)(react-konva@18.2.5)(react-native@0.71.5)(react-zdog@1.0.11)(react@18.2.0)(three@0.151.2)(zdog@1.1.3)
+        version: 9.7.1(@react-three/fiber@8.12.0)(konva@8.4.3)(react-dom@18.2.0)(react-konva@18.2.5)(react-native@0.71.5)(react-zdog@1.0.11)(react@18.2.0)(three@0.151.3)(zdog@1.1.3)
       react-use-measure:
         specifier: ^2.1.1
         version: 2.1.1(react-dom@18.2.0)(react@18.2.0)
@@ -4063,7 +4070,7 @@ packages:
       react: 18.2.0
     dev: false
 
-  /@react-spring/three@9.7.1(@react-three/fiber@8.12.0)(react@18.2.0)(three@0.151.2):
+  /@react-spring/three@9.7.1(@react-three/fiber@8.12.0)(react@18.2.0)(three@0.151.3):
     resolution: {integrity: sha512-5leUe0PDwIIw1M3GN3788zwTY4Ykyy+kNvQmg9+Hqs1DN3T8J1ovRTGwqWfGAu4ApTta9p5BH7SWNxxt3NO59Q==}
     peerDependencies:
       '@react-three/fiber': '>=6.0'
@@ -4074,9 +4081,9 @@ packages:
       '@react-spring/core': 9.7.1(react@18.2.0)
       '@react-spring/shared': 9.7.1(react@18.2.0)
       '@react-spring/types': 9.7.1
-      '@react-three/fiber': 8.12.0(react-dom@18.2.0)(react-native@0.71.5)(react@18.2.0)(three@0.151.2)
+      '@react-three/fiber': 8.12.0(react-dom@18.2.0)(react-native@0.71.5)(react@18.2.0)(three@0.151.3)
       react: 18.2.0
-      three: 0.151.2
+      three: 0.151.3
     dev: false
 
   /@react-spring/types@9.7.1:
@@ -4115,7 +4122,7 @@ packages:
       zdog: 1.1.3
     dev: false
 
-  /@react-three/fiber@8.12.0(react-dom@18.2.0)(react-native@0.71.5)(react@18.2.0)(three@0.151.2):
+  /@react-three/fiber@8.12.0(react-dom@18.2.0)(react-native@0.71.5)(react@18.2.0)(three@0.151.3):
     resolution: {integrity: sha512-o6DkNtNHqcOFRbxaiY5xayelE/9+Z0z9wWu5awqjVbc0c/1QM6AttJH6rKW0U/O6LWxSfxDTARXVzknZqpDJ7A==}
     peerDependencies:
       expo: '>=43.0'
@@ -4147,7 +4154,7 @@ packages:
       react-use-measure: 2.1.1(react-dom@18.2.0)(react@18.2.0)
       scheduler: 0.21.0
       suspend-react: 0.0.8(react@18.2.0)
-      three: 0.151.2
+      three: 0.151.3
       zustand: 3.7.2(react@18.2.0)
     dev: false
 
@@ -5198,6 +5205,19 @@ packages:
     resolution: {integrity: sha512-Hl219/BT5fLAaz6NDkSuhzasy49dwQS/DSdu4MdggFB8zcXv7vflBI3xp7FEmkmdDkBUI2bPUNeMttp2knYdxw==}
     dev: false
 
+  /@types/stats.js@0.17.0:
+    resolution: {integrity: sha512-9w+a7bR8PeB0dCT/HBULU2fMqf6BAzvKbxFboYhmDtDkKPiyXYbjoe2auwsXlEFI7CFNMF1dCv3dFH5Poy9R1w==}
+    dev: true
+
+  /@types/three@0.150.1:
+    resolution: {integrity: sha512-ZXS1M3brsfAAbTeeUEt0defPi98yWQuEyPBnvjEYY1dCEYfJnFaww0mYgRpJ9JVfmtwRxqISpVcv/g/0lMl1DQ==}
+    dependencies:
+      '@types/stats.js': 0.17.0
+      '@types/webxr': 0.5.1
+      fflate: 0.6.10
+      lil-gui: 0.17.0
+    dev: true
+
   /@types/throttle-debounce@2.1.0:
     resolution: {integrity: sha512-5eQEtSCoESnh2FsiLTxE121IiE60hnMqcb435fShf4bpLRjEu1Eoekht23y6zXS9Ts3l+Szu3TARnTsA0GkOkQ==}
     dev: false
@@ -5213,6 +5233,10 @@ packages:
   /@types/validator@13.7.13:
     resolution: {integrity: sha512-EMfHccxNKXaSxTK6DN0En9WsXa7uR4w3LQtx31f6Z2JjG5hJQeVX5zUYMZoatjZgnoQmRcT94WnNWwi0BzQW6Q==}
     dev: false
+
+  /@types/webxr@0.5.1:
+    resolution: {integrity: sha512-xlFXPfgJR5vIuDefhaHuUM9uUgvPaXB6GKdXy2gdEh8gBWQZ2ul24AJz3foUd8NNKlSTQuWYJpCb1/pL81m1KQ==}
+    dev: true
 
   /@types/ws@8.5.4:
     resolution: {integrity: sha512-zdQDHKUgcX/zBc4GrwsE/7dVdAD8JR4EuiAXiiUhhfyIJXXb2+PrGshFyeXWQPMmmZ2XxgaqclgpIC7eTXc1mg==}
@@ -9093,6 +9117,10 @@ packages:
       web-streams-polyfill: 3.2.1
     dev: true
 
+  /fflate@0.6.10:
+    resolution: {integrity: sha512-IQrh3lEPM93wVCEczc9SaAOvkmcoQn/G8Bo1e8ZPlY3X3bnAxWaBdvTdvM1hP62iZp0BXWDy4vTAy4fF0+Dlpg==}
+    dev: true
+
   /figures@2.0.0:
     resolution: {integrity: sha512-Oa2M9atig69ZkfwiApY8F2Yy+tzMbazyvqv21R0NsSC8floSOC09BbT1ITWAdoMGQvJ/aZnR1KMwdx9tvHnTNA==}
     engines: {node: '>=4'}
@@ -10686,6 +10714,10 @@ packages:
       process-warning: 2.1.0
       set-cookie-parser: 2.6.0
     dev: false
+
+  /lil-gui@0.17.0:
+    resolution: {integrity: sha512-MVBHmgY+uEbmJNApAaPbtvNh1RCAeMnKym82SBjtp5rODTYKWtM+MXHCifLe2H2Ti1HuBGBtK/5SyG4ShQ3pUQ==}
+    dev: true
 
   /lilconfig@2.1.0:
     resolution: {integrity: sha512-utWOt/GHzuUxnLKxB6dk81RoOeoNeHgbrXiuGk4yyF5qlRz+iIVWu56E2fqGHFrXz0QNUhLB/8nKqvRH66JKGQ==}
@@ -13151,7 +13183,7 @@ packages:
       react-dom: 18.2.0(react@18.2.0)
     dev: false
 
-  /react-spring@9.7.1(@react-three/fiber@8.12.0)(konva@8.4.3)(react-dom@18.2.0)(react-konva@18.2.5)(react-native@0.71.5)(react-zdog@1.0.11)(react@18.2.0)(three@0.151.2)(zdog@1.1.3):
+  /react-spring@9.7.1(@react-three/fiber@8.12.0)(konva@8.4.3)(react-dom@18.2.0)(react-konva@18.2.5)(react-native@0.71.5)(react-zdog@1.0.11)(react@18.2.0)(three@0.151.3)(zdog@1.1.3):
     resolution: {integrity: sha512-o2+r2DNQDVEuefiz33ZF76DPd/gLq3kbdObJmllGF2IUfv2W6x+ZP0gR97QYCSR4QLbmOl1mPKUBbI+FJdys2Q==}
     peerDependencies:
       react: ^16.8.0 || ^17.0.0 || ^18.0.0
@@ -13160,7 +13192,7 @@ packages:
       '@react-spring/core': 9.7.1(react@18.2.0)
       '@react-spring/konva': 9.7.1(konva@8.4.3)(react-konva@18.2.5)(react@18.2.0)
       '@react-spring/native': 9.7.1(react-native@0.71.5)(react@18.2.0)
-      '@react-spring/three': 9.7.1(@react-three/fiber@8.12.0)(react@18.2.0)(three@0.151.2)
+      '@react-spring/three': 9.7.1(@react-three/fiber@8.12.0)(react@18.2.0)(three@0.151.3)
       '@react-spring/web': 9.7.1(react-dom@18.2.0)(react@18.2.0)
       '@react-spring/zdog': 9.7.1(react-dom@18.2.0)(react-zdog@1.0.11)(react@18.2.0)(zdog@1.1.3)
       react: 18.2.0
@@ -14438,8 +14470,8 @@ packages:
       real-require: 0.2.0
     dev: false
 
-  /three@0.151.2:
-    resolution: {integrity: sha512-tGaLRP2H6++tj2JumHD25slhFAx0C619rl6G6Utjq7JTrDGJwDxpu+J2XpnYIUMfEmhNvIFDQJfp79JtKmNBWw==}
+  /three@0.151.3:
+    resolution: {integrity: sha512-+vbuqxFy8kzLeO5MgpBHUvP/EAiecaDwDuOPPDe6SbrZr96kccF0ktLngXc7xA7bzyd3N0t2f6mw3Z9y6JCojQ==}
     dev: false
 
   /throat@5.0.0:

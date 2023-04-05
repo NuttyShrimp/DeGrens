@@ -1,3 +1,6 @@
+import { Vector3 } from '@dgx/shared';
+import { Euler, Matrix4, Quaternion } from 'three';
+
 export const eulerAnglesToRotMatrix = (rotation: Vec3, coords: Vec3) => {
   // the z and x swap is intended, by default we most of the time get the ZYX order of rotations but do notate them as XYZ
   // if we keep them swapped our matrix will be mirrored over the diagonal
@@ -39,16 +42,16 @@ export const eulerAnglesToRotMatrix = (rotation: Vec3, coords: Vec3) => {
 
   // Matrix is transposed so order is not same as in threeJS repo
   return [
-    // Right
-    xy + wz,
-    1 - (xx + zz),
-    yz - wx,
-    0,
-
     // Forward
     1 - (yy + zz),
     xy - wz,
     xz + wy,
+    0,
+
+    // Right
+    xy + wz,
+    1 - (xx + zz),
+    yz - wx,
     0,
 
     // Up
@@ -64,33 +67,22 @@ export const eulerAnglesToRotMatrix = (rotation: Vec3, coords: Vec3) => {
   ];
 };
 
-const clamp = (v: number, min: number, max: number) => {
-  return Math.max(min, Math.min(max, v));
-};
-
 const radToDeg = (rad: number) => {
-  return (rad * 180) / Math.PI;
+  return (rad * 180 * -1) / Math.PI;
 };
 
 export const rotMatrixToEulerAngles = (te: number[] | Float32Array) => {
-  const eulerRot = { x: 0, y: 0, z: 0 };
-  const m11 = te[4],
-    m12 = te[0],
-    m13 = te[8],
-    m22 = te[1],
-    m23 = te[9],
-    m32 = te[2],
-    m33 = te[10];
-
-  eulerRot.y = radToDeg(Math.asin(clamp(m13, -1, 1)));
-
-  if (Math.abs(m13) < 0.9999999) {
-    eulerRot.x = radToDeg(Math.atan2(-m23, m33));
-    eulerRot.z = radToDeg(Math.atan2(-m12, m11));
-  } else {
-    eulerRot.x = radToDeg(Math.atan2(m32, m22));
-    eulerRot.z = 0;
+  const q = new Quaternion();
+  const m = new Matrix4();
+  m.set(te[0], te[1], te[2], 1, te[4], te[5], te[6], 1, te[8], te[9], te[10], 1, 0, 0, 0, 1);
+  q.setFromRotationMatrix(m);
+  const eu = new Euler();
+  eu.setFromRotationMatrix(m, 'XYZ');
+  let euArr = eu.toArray();
+  if (euArr[0] === undefined) {
+    euArr = [0, 0, 0];
   }
+  const eulerRot = new Vector3(radToDeg(Number(euArr[0])), radToDeg(Number(euArr[1])), radToDeg(Number(euArr[2])));
 
   return eulerRot;
 };

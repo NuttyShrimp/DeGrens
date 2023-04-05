@@ -28,6 +28,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Voertuig status decrease een beetje meer gebalanceerd
 - Mechanics ticket prijzen getweaked
 - Politie/ambulance paycheck tikkeltje verhoogd na het toevoegen van leefloon
+- Vectors van synced objects worden nu onder de juiste naam opgeslagen in de DB
 
 ## Fixed
 - Fix speedbans wanneer je uit wagen vliegt of onder de grond valt
@@ -36,6 +37,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Items gaan nu direct kapot wanneer hun quality op 0 wordt gezet ipv pas wanneer je je inventory opent
 - Items die weggaan door ze te usen komen nu niet meer terug na te reloggen
 - Mechanic repairparts kunnen nietmeer gebruikt worden als er iemand in het voertuig zit om te voorkomen dat parts overschreven worden
+- Probleem met rotaties van synced objects die niet altijd juist opgeslagen/geapplied werden
 
 ## [1.1.2]
 

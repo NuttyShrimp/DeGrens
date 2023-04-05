@@ -5,8 +5,10 @@ import {
   addSyncedObject,
   cleanupObjects,
   getEntityForObjectId,
+  isCursorEnabled,
   removeObject,
   scheduleChunkCheck,
+  setCursorEnabled,
   startObjectGizmo,
   updateSyncedObject,
 } from './service.objectmanager';
@@ -48,9 +50,9 @@ Events.onNet('dg-misc:objectmanager:startObjectMovement', (id: string) => {
   startObjectGizmo(id);
 });
 
-Events.onNet("dg-misc:objectmanager:updateSynced", (id: string, objData: Objects.ServerState) => {
-  updateSyncedObject(id, {...objData, matrix: new Float32Array(objData.matrix)});
-})
+Events.onNet('dg-misc:objectmanager:updateSynced', (id: string, objData: Objects.ServerState) => {
+  updateSyncedObject(id, { ...objData, matrix: new Float32Array(objData.matrix) });
+});
 
 RPC.register('dg-misc:objectmanager:getObjIdForEntity', (ent: number) => {
   if (!DoesEntityExist(ent)) return '';
@@ -75,3 +77,16 @@ Keys.register('object-gizmo-select', '(gizmo) Select the gizmo', 'MOUSE_LEFT', '
 Keys.register('object-gizmo-local', '(gizmo) Swicth local/world axes', 'Z');
 Keys.register('object-gizmo-translation', '(gizmo) Switch to translation', 'Q');
 Keys.register('object-gizmo-rotation', '(gizmo) Switch to rotation', 'E');
+
+RegisterCommand(
+  'misc:object:toggleCursor',
+  () => {
+    if (!isCursorEnabled()) {
+      EnterCursorMode();
+    } else {
+      LeaveCursorMode();
+    }
+    setCursorEnabled(!isCursorEnabled());
+  },
+  false
+);
