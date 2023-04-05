@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Je kan nu items in je inventory selecteren om deze snel te veplaatsen
 - Je kan containers nu een label geven
 - Er is nu een tutorial tooltip in je inventory om info te geven over de beschikbare controls
+- Inbeslagname reden toegevoegd
 
 ## Changed
 - Straightpipers op nieuwe locatie
