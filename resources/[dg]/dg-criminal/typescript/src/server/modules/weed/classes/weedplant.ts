@@ -237,20 +237,19 @@ export class WeedPlant {
     Inventory.addItemToPlayer(plyId, item, 1);
     this.cutTime = getCurrentSeconds();
     this.timesCut++;
-    this.save();
-
-    // Chance of breaking when cutting or when max cut times has been reached
-    setTimeout(() => {
-      const rnd = Util.getRndInteger(1, 101);
-      if (this.timesCut > config.weed.cut.maxTimes || rnd <= config.weed.cut.breakChance) {
-        this.remove();
-        Notifications.add(plyId, 'De plant is gestorven', 'error');
-      }
-    }, 1000);
 
     const logMessage = `${Util.getName(plyId)}(${plyId}) has cut a weed plant`;
     this.logger.silly(logMessage);
     Util.Log('weed:cut', { plantId: this.id, ownerCid: this.cid }, logMessage, plyId);
+
+    const removePlant =
+      this.timesCut > config.weed.cut.maxTimes || Util.getRndInteger(1, 101) <= config.weed.cut.breakChance;
+    if (removePlant) {
+      this.remove();
+      Notifications.add(plyId, 'De plant is gestorven', 'error');
+    } else {
+      this.save();
+    }
   };
 
   public grow = (currentSeconds: number) => {

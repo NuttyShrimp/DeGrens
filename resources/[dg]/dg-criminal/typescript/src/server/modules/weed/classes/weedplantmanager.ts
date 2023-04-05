@@ -128,10 +128,7 @@ class WeedPlantManager extends Util.Singleton<WeedPlantManager>() {
         weedPlant.depleteFood();
       }
 
-      // save food after timeout, to ensure removed plants are already removed
-      setTimeout(() => {
-        SQL.query('UPDATE weed_plants SET food = food - 1');
-      }, 5000);
+      SQL.query('UPDATE weed_plants SET food = food - 1');
     }, config.weed.food.decayTime * 60 * 1000);
   };
 }
