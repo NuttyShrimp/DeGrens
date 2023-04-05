@@ -29,6 +29,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Mechanics ticket prijzen getweaked
 - Politie/ambulance paycheck tikkeltje verhoogd na het toevoegen van leefloon
 - Vectors van synced objects worden nu onder de juiste naam opgeslagen in de DB
+- DNA swab decayrate verlaagd
+- Bandage goedkoper gemaakt voor ambulance
 
 ## Fixed
 - Fix speedbans wanneer je uit wagen vliegt of onder de grond valt

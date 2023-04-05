@@ -1527,7 +1527,7 @@
     "name": "dna_swab",
     "label": "DNA Swab",
     "image": "dna_swab.png",
-    "decayRate": 2880,
+    "decayRate": 86400,
     "size": {
       "x": 4,
       "y": 2
