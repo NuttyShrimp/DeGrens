@@ -1,1 +1,1 @@
-import './ui.ts';
+import './ui';
