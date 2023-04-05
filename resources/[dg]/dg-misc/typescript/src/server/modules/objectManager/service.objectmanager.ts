@@ -1,11 +1,18 @@
 import { Events, SQL, Util } from '@dgx/server';
 import { Vector3 } from '@dgx/shared';
 import { eulerAnglesToRotMatrix } from '../../../shared/helpers/math';
+import { ACTION_EVENTS } from './constants.objectmanager';
 
 const objectStore: Record<string, Objects.ServerState & { placer: string }> = {};
 let objectId = 1;
-let syncScheduler: NodeJS.Timeout | null = null;
-let syncData: Objects.ServerState[] = [];
+
+const scheduled: {
+  remove: { data: string[]; timeout: NodeJS.Timeout | null };
+  add: { data: Objects.ServerState[]; timeout: NodeJS.Timeout | null };
+} = {
+  remove: { data: [], timeout: null },
+  add: { data: [], timeout: null },
+};
 
 const rotMatrixToVecs = (matrix: number[]): Record<string, Vec3> => {
   return {
@@ -27,20 +34,24 @@ const rotMatrixToVecs = (matrix: number[]): Record<string, Vec3> => {
   };
 };
 
-const scheduleSync = (data: Objects.ServerState[]) => {
-  if (syncScheduler) {
-    clearTimeout(syncScheduler);
+const scheduleAction = <T extends keyof typeof scheduled>(action: T, data: (typeof scheduled)[T]['data']) => {
+  const scheduledAction = scheduled[action];
+  if (scheduledAction.timeout !== null) {
+    clearTimeout(scheduledAction.timeout);
   }
-  syncData = syncData.concat(data);
-  syncScheduler = setTimeout(() => {
-    syncScheduler = null;
-    Events.emitNet('dg-misc:objectmanager:addSynced', -1, syncData);
-    syncData = [];
+  //@ts-ignore
+  scheduledAction.data = scheduledAction.data.concat(data);
+  scheduledAction.timeout = setTimeout(() => {
+    scheduledAction.timeout = null;
+    const eventName = ACTION_EVENTS[action];
+    Events.emitNet(eventName, -1, scheduledAction.data);
+    Events.emit(eventName, scheduledAction.data);
+    scheduledAction.data = [];
   }, 500);
 };
 
 export const seedObjectsToPlayer = (src: number) => {
-  Events.emitNet('dg-misc:objectmanager:seedSynced', src, Object.values(objectStore));
+  Events.emitNet('dg-misc:objectmanager:addSynced', src, Object.values(objectStore));
 };
 
 export const loadDBObjects = async () => {
@@ -110,7 +121,7 @@ export const addSyncedObject = async (objs: Objects.SyncedCreateData[], src?: nu
       );
     }
   }
-  scheduleSync(newData);
+  scheduleAction('add', newData);
   if (src) {
     Util.Log('objects:addSynced', objs, `${newData[0].placer} has placed one or more synced object`, src);
   }
@@ -145,8 +156,7 @@ export const removeSyncedObject = async (objId: string | string[], src?: number)
     );
   }
   await SQL.query(`DELETE FROM synced_objects WHERE id IN (${idToDel.map(() => '?').join(',')})`, idToDel);
-  Events.emitNet('dg-misc:objectmanager:removeSynced', -1, objId);
-  Events.emit('dg-misc:objectmanager:removeObject', objId);
+  scheduleAction('remove', Array.isArray(objId) ? objId : [objId]);
 };
 
 export const updateSyncedObject = async (objId: string, matrix: number[], src?: number) => {

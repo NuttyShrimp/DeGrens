@@ -30,11 +30,6 @@ global.exports('addLocalObject', addLocalObject);
 global.exports('removeObject', removeObject);
 global.exports('getEntityForObjectId', getEntityForObjectId);
 
-Events.onNet('dg-misc:objectmanager:seedSynced', (objs: (Objects.CreateState & { matrix: number[] })[]) => {
-  console.log(`Seeded ${objs.length} objects to store`);
-  addSyncedObject(objs.map(d => ({ ...d, matrix: new Float32Array(d.matrix) })));
-});
-
 Events.onNet('dg-misc:objectmanager:createSynced', async (model: string) => {
   const placementInfo = await startObjectPlacement(model);
   if (!placementInfo) return;
@@ -45,7 +40,7 @@ Events.onNet('dg-misc:objectmanager:addSynced', (data: (Objects.CreateState & { 
   addSyncedObject(data.map(d => ({ ...d, matrix: new Float32Array(d.matrix) })));
 });
 
-Events.onNet('dg-misc:objectmanager:removeSynced', (id: string[]) => {
+Events.onNet('dg-misc:objectmanager:removeSynced', (id: string | string[]) => {
   removeObject(id);
 });
 
