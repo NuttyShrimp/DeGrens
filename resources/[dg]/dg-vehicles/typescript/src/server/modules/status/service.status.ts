@@ -46,6 +46,11 @@ export const useRepairPart = async (src: number, type: Service.Part, itemState: 
     return;
   }
 
+  if (Util.getPlayersInVehicle(veh).length !== 0) {
+    Notifications.add(src, 'Je kan niet aan een voertuig werken als er iemand inzit', 'error');
+    return;
+  }
+
   const vehInfo = getConfigByEntity(veh);
   if (!vehInfo) return;
   const vin = getVinForVeh(veh);
@@ -102,6 +107,11 @@ export const useRepairPart = async (src: number, type: Service.Part, itemState: 
     },
   });
   if (cancelled) return;
+
+  if (Util.getPlayersInVehicle(veh).length !== 0) {
+    Notifications.add(src, 'Je kan niet aan een voertuig werken als er iemand inzit', 'error');
+    return;
+  }
 
   const couldRemove = await Inventory.removeItemByIdFromPlayer(src, itemState.id);
   if (!couldRemove) {

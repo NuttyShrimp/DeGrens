@@ -35,6 +35,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Je groep stopt nu correct na het uitvoeren van scrapyard job
 - Items gaan nu direct kapot wanneer hun quality op 0 wordt gezet ipv pas wanneer je je inventory opent
 - Items die weggaan door ze te usen komen nu niet meer terug na te reloggen
+- Mechanic repairparts kunnen nietmeer gebruikt worden als er iemand in het voertuig zit om te voorkomen dat parts overschreven worden
 
 ## [1.1.2]
 
