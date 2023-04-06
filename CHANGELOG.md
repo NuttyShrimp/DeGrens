@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## Changed
 - Veel item decaysnelheiden verlaagd
 - Enkele crafting recipe requirements verlaagd
+- Hoeveel materiaal je krijgt voor sommige methods verhoogd
 
 ## Fixed
 
