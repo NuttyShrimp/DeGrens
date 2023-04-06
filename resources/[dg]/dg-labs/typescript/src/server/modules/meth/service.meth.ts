@@ -174,7 +174,7 @@ export const collectMethLoot = async (plyId: number) => {
   }
 
   const strain = getRecipeStrain();
-  const amount = Math.floor(Math.ceil(strain / 20) ** 2 * 3); // expontential amount bawed on strain
+  const amount = Math.ceil(Math.ceil(strain) ** 1.3 / 5); // expontential amount bawed on strain
 
   const currentTime = Math.round(Date.now() / 1000);
   Inventory.addItemToPlayer(plyId, 'meth_brick', 1, {

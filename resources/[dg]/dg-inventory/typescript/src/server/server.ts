@@ -5,7 +5,7 @@ import './services/config';
 
 import repository from './services/repository';
 import itemDataManager from 'classes/itemdatamanager';
-import { registerContainers } from 'modules/containers/controller.containers';
+import { registerContainers } from 'modules/containers/service.containers';
 import shopManager from 'modules/shops/shopmanager';
 import { loadConfig } from 'services/config';
 import { preloadActivePlayerInventories } from 'modules/inventories/controller.inventories';

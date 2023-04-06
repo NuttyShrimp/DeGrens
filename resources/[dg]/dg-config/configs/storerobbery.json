@@ -765,6 +765,42 @@
         "z": 31.7
       },
       "cam": 35
+    },
+    "ottos_garage": {
+      "registerzone": {
+        "center": {
+          "x": 812.86,
+          "y": -782.07,
+          "z": 26.17
+        },
+        "width": 4.5,
+        "length": 1.5,
+        "options": {
+          "heading": 270,
+          "minZ": 24.17,
+          "maxZ": 28.17
+        }
+      },
+      "storezone": {
+        "center": {
+          "x": 816.0575,
+          "y": -778.3491,
+          "z": 26.1749
+        },
+        "width": 12,
+        "length": 13,
+        "options": {
+          "heading": 90,
+          "minZ": 24.17,
+          "maxZ": 28.17
+        }
+      },
+      "safecoords": {
+        "x": 819.6445,
+        "y": -774.5533,
+        "z": 26.5407
+      },
+      "cam": 36
     }
   }
 }

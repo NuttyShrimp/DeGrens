@@ -74,7 +74,7 @@ export const assignLocationToGroup = async (ownerId: number) => {
   activeGroups.set(group.id, {
     ...location,
     vin,
-    pedSpawned: false,
+    pedHandle: null,
     doorsDone: [],
   });
 
@@ -100,7 +100,7 @@ export const assignLocationToGroup = async (ownerId: number) => {
   });
 };
 
-export const handleVehicleLockpick = (plyId: number, vehicle: number) => {
+export const handleVehicleLockpick = async (plyId: number, vehicle: number) => {
   const plyGroup = getGroupByServerId(plyId);
   if (!plyGroup) return;
   const job = activeGroups.get(plyGroup.id);
@@ -108,10 +108,11 @@ export const handleVehicleLockpick = (plyId: number, vehicle: number) => {
 
   const vin = Vehicles.getVinForVeh(vehicle);
   if (vin !== job.vin) return;
-  if (job.pedSpawned) return;
+  if (job.pedHandle !== null) return;
 
-  Events.emitNet('jobs:scrapyard:spawnPed', plyId, job.pedLocation);
-  activeGroups.set(plyGroup.id, { ...job, pedSpawned: true });
+  const pedNetId = await RPC.execute('jobs:scrapyard:spawnPed', plyId, job.pedLocation);
+  const pedHandle = NetworkGetEntityFromNetworkId(pedNetId);
+  activeGroups.set(plyGroup.id, { ...job, pedHandle: DoesEntityExist(pedHandle) ? pedHandle : null });
 
   plyGroup.members.forEach(member => {
     if (member.serverId === null) return;
@@ -176,7 +177,7 @@ const tryToFinishJob = async (plyId: number) => {
 
   const doorStates = await Util.sendRPCtoEntityOwner<boolean[]>(
     NetworkGetEntityFromNetworkId(netId),
-    'vehicles:client:getDoorSate',
+    'vehicles:client:getDoorState',
     netId
   );
   if (!doorStates) return;
@@ -184,14 +185,7 @@ const tryToFinishJob = async (plyId: number) => {
 
   // If all are off then group is finished!
   if (active.doorsDone.length === 6 || allDoorsOff) {
-    // wait 2 sec because will look scuffed when instantly
-    setTimeout(() => {
-      disbandGroup(group.id);
-
-      const delayedNetId = Vehicles.getNetIdOfVin(active.vin);
-      if (!delayedNetId) return;
-      Vehicles.deleteVehicle(NetworkGetEntityFromNetworkId(delayedNetId));
-    }, 2000);
+    disbandGroup(group.id);
 
     Util.Log(
       'jobs:scrapyard:finish',
@@ -225,7 +219,12 @@ export const syncScrapyardJobToClient = (groupId: string, plyId: number) => {
   }
 
   scrapyardLogger.silly(`Syncing active job to plyId ${plyId}`);
-  Events.emitNet('jobs:scrapyard:startJob', plyId, netId, active.pedSpawned ? active.vehicleLocation : undefined);
+  Events.emitNet(
+    'jobs:scrapyard:startJob',
+    plyId,
+    netId,
+    active.pedHandle === null ? active.vehicleLocation : undefined
+  );
 };
 
 export const handlePlayerLeftScrapyardGroup = (groupId: string, plyId: number | null) => {
@@ -240,6 +239,11 @@ export const handlePlayerLeftScrapyardGroup = (groupId: string, plyId: number | 
   if (group && group.members.length > 0) return;
 
   activeGroups.delete(groupId);
+
+  if (active.pedHandle && DoesEntityExist(active.pedHandle)) {
+    DeleteEntity(active.pedHandle);
+  }
+
   setTimeout(
     (vin: string) => {
       const netId = Vehicles.getNetIdOfVin(vin);
@@ -247,7 +251,7 @@ export const handlePlayerLeftScrapyardGroup = (groupId: string, plyId: number | 
       const vehicle = NetworkGetEntityFromNetworkId(netId);
       Vehicles.deleteVehicle(vehicle);
     },
-    10000,
+    5000,
     active.vin
   );
   scrapyardLogger.silly(`Group ${groupId} has been removed from active as there are no members remaining`);

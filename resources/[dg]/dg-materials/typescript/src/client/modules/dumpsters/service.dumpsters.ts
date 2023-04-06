@@ -14,7 +14,7 @@ export const searchDumpster = async (entity: number) => {
   }
   searchedDumpsters.add(entity);
 
-  const [canceled] = await Taskbar.create('magnifying-glass', 'Doorzoeken', 15000, {
+  const [canceled] = await Taskbar.create('magnifying-glass', 'Doorzoeken', 10000, {
     canCancel: true,
     cancelOnDeath: true,
     cancelOnMove: true,

@@ -27,11 +27,51 @@
       "allowBurger": true
     },
     {
+      "title": "Achtergelaten voertuig",
+      "description": "Voertuig gebruikt voor het overvallen van een bank",
+      "strike": 0,
+      "time": 1,
+      "price": 250,
+      "allowBurger": false
+    },
+    {
       "title": "Roekeloos rijden",
-      "description": "Persoon is gevaar op baan",
+      "description": "Persoon is een gevaar op baan.",
       "strike": 1,
+      "time": 4,
+      "price": 250,
+      "allowBurger": false
+    },
+    {
+      "title": "Vluchten van Politie",
+      "description": "Voertuig gebruikt voor het vluchten van politie",
+      "strike": 2,
+      "time": 12,
+      "price": 1000,
+      "allowBurger": false
+    },
+    {
+      "title": "Winkeloverval",
+      "description": "Voertuig gebruikt voor een overvallen van een winkel",
+      "strike": 3,
       "time": 24,
       "price": 1000,
+      "allowBurger": false
+    },
+    {
+      "title": "Bankoverval",
+      "description": "Voertuig gebruikt voor het overvallen van een bank",
+      "strike": 5,
+      "time": 48,
+      "price": 1250,
+      "allowBurger": false
+    },
+    {
+      "title": "Schieten uit voertuig",
+      "description": "Voertuig gebruikt om te schieten",
+      "strike": 10,
+      "time": 72,
+      "price": 2000,
       "allowBurger": false
     },
     {

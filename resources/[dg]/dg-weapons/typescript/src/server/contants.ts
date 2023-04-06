@@ -107,6 +107,7 @@ export const ALL_WEAPONS: Weapons.WeaponConfig[] = [
       // 'pistol_extendedclip': 'COMPONENT_PISTOL_CLIP_02',
       // 'flashlight': 'COMPONENT_AT_PI_FLSH',
     },
+    dispatchAlertChance: 50,
   },
   {
     name: 'weapon_pistol_mk2',
@@ -133,6 +134,7 @@ export const ALL_WEAPONS: Weapons.WeaponConfig[] = [
       // 'flashlight': 'COMPONENT_AT_PI_FLSH',
       pistol_suppressor: 'COMPONENT_AT_PI_SUPP',
     },
+    dispatchAlertChance: 25,
   },
   {
     name: 'weapon_stungun',
@@ -177,6 +179,7 @@ export const ALL_WEAPONS: Weapons.WeaponConfig[] = [
       pistol_suppressor: 'COMPONENT_AT_PI_SUPP',
       luxuryfinish: 'COMPONENT_HEAVYPISTOL_VARMOD_LUXE',
     },
+    dispatchAlertChance: 50,
   },
   // {
   //     name: 'weapon_vintagepistol',
@@ -241,6 +244,7 @@ export const ALL_WEAPONS: Weapons.WeaponConfig[] = [
       // 'smg_suppressor': 'COMPONENT_AT_AR_SUPP_02',
       // 'luxuryfinish': 'COMPONENT_MICROSMG_VARMOD_LUXE',
     },
+    dispatchAlertChance: 25,
   },
   {
     name: 'weapon_smg',
@@ -276,6 +280,7 @@ export const ALL_WEAPONS: Weapons.WeaponConfig[] = [
     //   'smg_suppressor': 'COMPONENT_AT_AR_SUPP_02',
     //   'luxuryfinish': 'COMPONENT_ASSAULTSMG_VARMOD_LOWRIDER',
     // },
+    dispatchAlertChance: 25,
   },
   // {
   //     name: 'weapon_combatpdw',
@@ -295,6 +300,7 @@ export const ALL_WEAPONS: Weapons.WeaponConfig[] = [
       // 'smg_drum': 'COMPONENT_MACHINEPISTOL_CLIP_03',
       // 'smg_suppressor': 'COMPONENT_AT_PI_SUPP',
     },
+    dispatchAlertChance: 25,
   },
   // {
   //     name: 'weapon_minismg',
@@ -393,6 +399,7 @@ export const ALL_WEAPONS: Weapons.WeaponConfig[] = [
     //   'flashlight': 'COMPONENT_AT_AR_FLSH',
     //   'rifle_suppressor': 'COMPONENT_AT_AR_SUPP_02',
     // },
+    dispatchAlertChance: 25,
   },
   // {
   //     name: 'weapon_assaultrifle_mk2',
@@ -430,6 +437,7 @@ export const ALL_WEAPONS: Weapons.WeaponConfig[] = [
     //   'rifle_suppressor': 'COMPONENT_AT_AR_SUPP',
     //   'luxuryfinish': 'COMPONENT_ADVANCEDRIFLE_VARMOD_LUXE',
     // },
+    dispatchAlertChance: 25,
   },
   {
     name: 'weapon_specialcarbine',
@@ -676,3 +684,13 @@ export const ALL_WEAPONS: Weapons.WeaponConfig[] = [
   //     noHolstering: true,
   // },
 ];
+
+export const DEFAULT_SHARED_WEAPON_CONFIG: Weapons.SharedWeaponConfig = {
+  noHolstering: false,
+  canTint: false,
+  oneTimeUse: false,
+  useNativeReticle: false,
+  damageModifier: 1,
+  isMelee: false,
+  dispatchAlertChance: 0,
+};

@@ -74,7 +74,7 @@ export const requestImpound = async (src: number, title: string, veh: number, in
   const vin = getVinForVeh(veh);
   if (title === 'Scuff') {
     // Move to garage instead
-    const link = await global.exports['screenshot-basic'].requestClientImgurScreenshot(src);
+    const link = await global.exports['dg-imager'].requestClientImgurScreenshot(src);
     Util.Log(
       'vehicles:impound:scuff',
       {

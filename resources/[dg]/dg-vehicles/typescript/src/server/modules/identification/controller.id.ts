@@ -3,6 +3,7 @@ import { getVinForNetId } from 'helpers/vehicle';
 
 import plateManager from './classes/platemanager';
 import { applyFakePlateItem, getCidFromVin, isPlayerVehicleOwner, removeFakePlate } from './service.id';
+import vinManager from './classes/vinmanager';
 
 Events.onNet('vehicles:plate:useFakePlate', (src: number, netId: number) => {
   applyFakePlateItem(src, netId);
@@ -25,4 +26,5 @@ RPC.register('vehicles:validateNewVehicle', (src, netId: number) => {
   return getVinForNetId(netId);
 });
 
+global.exports('generateVin', () => vinManager.generateVin());
 global.asyncExports('getCidFromVin', getCidFromVin);

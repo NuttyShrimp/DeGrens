@@ -1527,7 +1527,7 @@
     "name": "dna_swab",
     "label": "DNA Swab",
     "image": "dna_swab.png",
-    "decayRate": 2880,
+    "decayRate": 86400,
     "size": {
       "x": 4,
       "y": 2
@@ -1612,7 +1612,8 @@
     "size": {
       "x": 2,
       "y": 2
-    }
+    },
+    "markedForSeizure": true
   },
   {
     "useable": true,
@@ -1666,7 +1667,8 @@
     "size": {
       "x": 2,
       "y": 2
-    }
+    },
+    "markedForSeizure": true
   },
   {
     "name": "beer",

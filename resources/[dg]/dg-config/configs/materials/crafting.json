@@ -739,7 +739,7 @@
         "hand_cuffs",
         "container_weapons"
       ],
-      "visibleReputationLimit": 50
+      "visibleReputationLimit": 100
     },
     "weapon_bench_B": {
       "items": [
@@ -756,7 +756,7 @@
         "hand_cuffs",
         "container_weapons"
       ],
-      "visibleReputationLimit": 50
+      "visibleReputationLimit": 100
     },
     "weapon_bench_C": {
       "items": [
@@ -773,7 +773,7 @@
         "hand_cuffs",
         "container_weapons"
       ],
-      "visibleReputationLimit": 50
+      "visibleReputationLimit": 100
     },
     "mechanic_bench": {
       "items": [

@@ -7,6 +7,32 @@ let vehiclePeekIds: string[] = [];
 let vehicleBlip: number | null = null;
 let vehicleNetId: number | null = null;
 
+export const registerScrapyardStartPeekOptions = (partItems: Scrapyard.Config['partItems']) => {
+  Peek.addFlagEntry('isScrapyardMfer', {
+    options: [
+      {
+        label: 'Neem opdracht',
+        icon: 'fas fa-file',
+        action: () => {
+          Events.emitNet('jobs:scrapyard:signIn');
+        },
+        canInteract: () => vehicleNetId === null,
+      },
+      {
+        label: 'Geef onderdeel',
+        icon: 'fas fa-box',
+        action: () => {
+          Events.emitNet('jobs:scrapyard:givePart');
+        },
+        canInteract: () => {
+          const cachedItems = Inventory.getCachedItemNames();
+          return partItems.some(part => cachedItems.indexOf(part) !== -1);
+        },
+      },
+    ],
+  });
+};
+
 export const buildScrapyardReturnZone = (returnZone: Vec4) => {
   const { w: heading, ...coords } = returnZone;
   PolyZone.addBoxZone('scrapyard_return', coords, 15, 30, {

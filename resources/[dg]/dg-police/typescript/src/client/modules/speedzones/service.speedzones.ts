@@ -5,8 +5,8 @@ export const buildSpeedZones = (zones: Police.Speedzones.Config) => {
   for (const [name, data] of Object.entries(zones)) {
     PolyZone.addBoxZone(`police_speedzone`, data.center, data.width, data.length, {
       heading: data.heading,
-      minZ: data.center.z - 5,
-      maxZ: data.center.z + 25,
+      minZ: data.center.z - 2,
+      maxZ: data.center.z + 6,
       data: {
         id: name,
       },

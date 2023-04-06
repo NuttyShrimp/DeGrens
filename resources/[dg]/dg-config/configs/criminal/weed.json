@@ -6,7 +6,7 @@
     "maxTimes": 4
   },
   "food": {
-    "decayTime": 20,
+    "decayTime": 30,
     "amount": {
       "normal": 40,
       "deluxe": 70

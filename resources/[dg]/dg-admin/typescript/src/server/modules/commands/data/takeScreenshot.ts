@@ -11,7 +11,7 @@ export const takeScreenshot: CommandData = {
   isClientCommand: false,
   target: [],
   role: 'support',
-  handler: (caller, args: TakeScreenshotData) => {
+  handler: async (caller, args: TakeScreenshotData) => {
     if (!args.Target) {
       Notifications.add(caller.source, 'Je moet een target invullen', 'error');
       return;
@@ -22,7 +22,10 @@ export const takeScreenshot: CommandData = {
     }
 
     Notifications.add(caller.source, 'Screenshot aan het nemen, even geduld');
-    Screenshot.imgur(args.Target.serverId).then(link => {
+
+    const fName = await Screenshot.generateMinioFilename();
+
+    Screenshot.minio(args.Target.serverId, { fileName: fName }).then(link => {
       emitNet('dg-ui:SendAppEvent', caller.source, 'copy', link);
       Notifications.add(caller.source, 'Link staat op je clipboard');
     });

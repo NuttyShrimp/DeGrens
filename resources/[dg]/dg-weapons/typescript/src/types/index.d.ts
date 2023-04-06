@@ -5,23 +5,25 @@ declare namespace Weapons {
     weapons: Record<string, WeaponConfig>;
   };
 
-  type WeaponConfig = {
+  type WeaponConfig = Optional<SharedWeaponConfig> & {
     name: string;
     durabilityMultiplier: number;
-    noHolstering?: boolean;
-    canTint?: boolean;
-    oneTimeUse?: boolean;
     unlimitedAmmo?: boolean;
     attachments?: Record<string, string>;
-    useNativeReticle?: boolean;
-    damageModifier?: number;
-    isMelee?: boolean;
+  };
+
+  type SharedWeaponConfig = {
+    noHolstering: boolean;
+    canTint: boolean;
+    oneTimeUse: boolean;
+    useNativeReticle: boolean;
+    damageModifier: number;
+    isMelee: boolean;
+    dispatchAlertChance: number;
   };
 
   type WeaponItem = Inventory.ItemState &
-    Required<
-      Pick<WeaponConfig, 'noHolstering' | 'oneTimeUse' | 'canTint' | 'useNativeReticle' | 'damageModifier' | 'isMelee'>
-    > & {
+    SharedWeaponConfig & {
       hash: number;
     };
 

@@ -133,16 +133,17 @@ export const rentVehicle = async (src: number, model: string, locId: string, pay
     }
   }
 
-  const rentVeh = await Vehicles.spawnVehicle(model, spawnLoc);
+  const vehVin = Vehicles.generateVin();
+  const vehPlate = Vehicles.generatePlate();
+  const rentVeh = await Vehicles.spawnVehicle(model, spawnLoc, src, vehVin, vehPlate);
   if (!rentVeh) {
     Notifications.add(src, 'Kon voertuig niet uithalen', 'error');
     Financials.addCash(src, taxPrice, 'rent-payback-veh-no-spawn');
     return;
   }
   await Util.Delay(500);
-  const vehVin = Vehicles.getVinForVeh(rentVeh);
-  const vehPlate = GetVehicleNumberPlateText(rentVeh);
-  Notifications.add(src, "De sleutels zitten bij de papieren")
+
+  Notifications.add(src, 'De sleutels zitten bij de papieren');
   Inventory.addItemToPlayer(src, 'rent_papers', 1, {
     plate: vehPlate,
     vin: vehVin,

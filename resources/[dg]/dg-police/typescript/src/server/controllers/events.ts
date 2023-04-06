@@ -11,7 +11,7 @@ Auth.onAuth(async plyId => {
 
 Events.onNet('police:showVehicleInfo', async (src: number, netId: number) => {
   const vehicle = NetworkGetEntityFromNetworkId(netId);
-  const plate = GetVehicleNumberPlateText(vehicle);
+  const plate = Entity(vehicle).state.plate;
   const vin = Vehicles.getVinForNetId(netId);
   if (!vin) return;
 

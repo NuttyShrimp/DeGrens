@@ -37,7 +37,12 @@ UI.RegisterUICallback('inventory/unbindItem', (data: { id: string }, cb) => {
 
 UI.RegisterUICallback('inventory/moveItem', (data: Inventory.ItemState, cb) => {
   cb({ data: {}, meta: { ok: true, message: 'done' } });
-  Events.emitNet('inventory:server:moveItem', data.id, data.position, data.rotated, data.inventory);
+  Events.emitNet('inventory:server:moveItem', data.id, data.inventory, data.position, data.rotated);
+});
+
+UI.RegisterUICallback('inventory/moveMultipleItems', (data: { inventory: string; itemIds: string[] }, cb) => {
+  Events.emitNet('inventory:server:moveMultipleItems', data.inventory, data.itemIds);
+  cb({ data: {}, meta: { ok: true, message: 'done' } });
 });
 
 UI.RegisterUICallback(

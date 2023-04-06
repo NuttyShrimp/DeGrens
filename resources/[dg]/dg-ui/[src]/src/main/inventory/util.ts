@@ -6,64 +6,59 @@ export const coordToPx = (coord: Inventory.XY, cellSize: number): Inventory.XY =
 
 export const getInventoryType = (id: string) => id.split('__', 2)[0];
 
-export const isAnyItemOverlapping = (
-  items: [Inventory.XY, Inventory.XY][],
-  item: [Inventory.XY, Inventory.XY]
-): boolean => {
-  return items.some(i => doRectanglesOverlap(i, item));
-};
-
-const doRectanglesOverlap = (
-  [firstRectangle1, firstRectangle2]: [Inventory.XY, Inventory.XY],
-  [secondRectangle1, secondRectangle2]: [Inventory.XY, Inventory.XY]
-): boolean =>
-  firstRectangle1.x < secondRectangle2.x &&
-  firstRectangle2.x > secondRectangle1.x &&
-  firstRectangle1.y < secondRectangle2.y &&
-  firstRectangle2.y > secondRectangle1.y;
-
 export const generateShopItems = (
   inventoryId: string,
   shopItems: Inventory.Shop.Item[]
-): { size: number; items: Inventory.OpeningData['items'] } => {
+): { size: number; items: Inventory.State['items'] } => {
   let size = 0;
-  const items: Inventory.OpeningData['items'] = {};
+  const items: Inventory.State['items'] = {};
 
   const getNextPosition = (itemSize: Inventory.XY) => {
     if (Object.keys(items).length === 0) {
       size = itemSize.y;
-      return { x: 0, y: 0 };
+      return { position: { x: 0, y: 0 }, rotated: false };
     }
 
-    const mayOverlap = Object.values(items).map(
-      i => [i.position, { x: i.position.x + i.size.x, y: i.position.y + i.size.y }] as [Inventory.XY, Inventory.XY]
-    );
+    const rotatedItemSize = {
+      x: itemSize.y,
+      y: itemSize.x,
+    };
 
-    for (let y = 0; y < 1000 - itemSize.y + 1; y++) {
-      for (let x = 0; x < CELLS_PER_ROW - itemSize.x + 1; x++) {
-        const rect = [
-          { x, y },
-          { x: x + itemSize.x, y: y + itemSize.y },
-        ] as [Inventory.XY, Inventory.XY];
-        const anyOverlapping = isAnyItemOverlapping(mayOverlap, rect);
-        if (anyOverlapping) continue;
-        if (y + itemSize.y > size) {
-          size = y + itemSize.y;
+    const occupiedSpaces = buildOccupiedGridSpaces(items, size, inventoryId);
+
+    const maxXToCheck = CELLS_PER_ROW - Math.max(itemSize.x, rotatedItemSize.x) + 1;
+
+    for (let y = 0; y < 1000; y++) {
+      for (let x = 0; x < maxXToCheck; x++) {
+        let freeSpace: { position: Inventory.XY; rotated: boolean } | undefined = undefined;
+        if (areSpacesNotOccupied(occupiedSpaces, { x, y }, itemSize)) {
+          freeSpace = { position: { x, y }, rotated: false };
+        } else if (areSpacesNotOccupied(occupiedSpaces, { x, y }, rotatedItemSize)) {
+          freeSpace = { position: { x, y }, rotated: true };
         }
-        return { x, y };
+
+        if (freeSpace) {
+          const ySize = freeSpace.rotated ? rotatedItemSize.y : itemSize.y;
+          if (y + ySize > size) {
+            size = y + ySize;
+          }
+          return freeSpace;
+        }
       }
     }
 
-    return { x: 0, y: 0 };
+    return { position: { x: 0, y: 0 }, rotated: false };
   };
 
   for (const shopItem of shopItems) {
+    const { rotated, position } = getNextPosition(shopItem.size);
+
     const itemData: Inventory.Item = {
       ...shopItem,
       id: `shopitem_${shopItem.name}`,
-      rotated: false,
+      rotated,
       inventory: inventoryId,
-      position: getNextPosition(shopItem.size),
+      position,
       quality: 100,
       metadata: {},
     };
@@ -71,4 +66,43 @@ export const generateShopItems = (
   }
 
   return { size, items };
+};
+
+// cannot be hook in useInventory because we use in `generateShopItems` which is a util func
+export const buildOccupiedGridSpaces = (
+  items: Inventory.State['items'],
+  inventorySize: number,
+  inventoryId: string,
+  excludeItemId?: string
+) => {
+  const occupiedSpaces: boolean[][] = [...new Array(CELLS_PER_ROW)].map(() => new Array(inventorySize).fill(false));
+
+  for (const item of Object.values(items)) {
+    if (item.inventory !== inventoryId) continue;
+    if (excludeItemId && item.id === excludeItemId) continue;
+
+    const maxX = item.position.x + item.size[item.rotated ? 'y' : 'x'];
+    const maxY = item.position.y + item.size[item.rotated ? 'x' : 'y'];
+    for (let x = item.position.x; x < maxX; x++) {
+      for (let y = item.position.y; y < maxY; y++) {
+        occupiedSpaces[x][y] = true;
+      }
+    }
+  }
+
+  return occupiedSpaces;
+};
+
+export const areSpacesNotOccupied = (occupiedSpaces: boolean[][], position: Inventory.XY, size: Inventory.XY) => {
+  const maxX = position.x + size.x;
+  const maxY = position.y + size.y;
+  for (let x = position.x; x < maxX; x++) {
+    const column = occupiedSpaces[x];
+    if (!column) return false;
+
+    for (let y = position.y; y < maxY; y++) {
+      if (column[y]) return false;
+    }
+  }
+  return true;
 };

@@ -17,7 +17,7 @@ variables:
     - npm config set -- '//gitlab.pieter557.dscloud.me/api/v4/packages/npm/:_authToken' "${CI_JOB_TOKEN}"
     - npm config set always-auth true
     - corepack enable
-    - corepack prepare pnpm@latest-7 --activate
+    - corepack prepare pnpm@latest --activate
     - pnpm config set store-dir .pnpm-store
     - pnpm install
 

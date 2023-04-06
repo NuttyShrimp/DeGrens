@@ -15,7 +15,6 @@ import {
 
 class ScreenshotRequest {
   encoding: 'jpg' | 'png' | 'webp';
-  quality: number;
   headers: any;
   crop: any;
   trim: boolean;
@@ -174,6 +173,7 @@ class ScreenshotUI {
   }
 
   handleRequest(request: ScreenshotRequest) {
+    console.log('Handling reuqest');
     // read the screenshot
     const read = new Uint8Array(window.innerWidth * window.innerHeight * 4);
     this.renderer.readRenderTargetPixels(this.rtTexture, 0, 0, window.innerWidth, window.innerHeight, read);
@@ -204,12 +204,8 @@ class ScreenshotUI {
         break;
     }
 
-    if (!request.quality) {
-      request.quality = 0.92;
-    }
-
     // actual encoding
-    let imageURL = canvas.toDataURL(type, request.quality);
+    let imageURL = canvas.toDataURL(type, 1.0);
 
     // https://stackoverflow.com/questions/35033357/how-do-i-extract-a-portion-of-an-image-in-canvas-and-use-it-as-background-image
     const crop = function (canvas, offsetX, offsetY, width, height) {
@@ -270,5 +266,7 @@ class ScreenshotUI {
   }
 }
 
-const ui = new ScreenshotUI();
-ui.initialize();
+window.onload = () => {
+  const ui = new ScreenshotUI();
+  ui.initialize();
+};

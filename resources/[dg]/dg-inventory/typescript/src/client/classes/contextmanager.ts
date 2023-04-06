@@ -85,7 +85,7 @@ class ContextManager extends Util.Singleton<ContextManager>() {
         }
 
         const distance = Util.getPlyCoords().distance(trunkPosition);
-        if (distance < 1.5) {
+        if (distance < 2) {
           const vin = await Util.getVehicleVin(entityAimingAt);
           if (vin) {
             const vehicleClass = GetVehicleClass(entityAimingAt);

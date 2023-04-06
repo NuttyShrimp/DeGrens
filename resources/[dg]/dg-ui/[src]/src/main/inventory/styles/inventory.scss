@@ -2,6 +2,7 @@
 
 .inventory {
   &__wrapper {
+    position: relative;
     height: 85vh;
     background-color: rgba(variables.$primary_darker_darker, 0.85);
     border-radius: 1%;
@@ -42,6 +43,13 @@
           }
         }
       }
+    }
+
+    & .help {
+      position: absolute;
+      bottom: 0%;
+      right: -4%;
+      color: variables.$secondary_normal;
     }
   }
 

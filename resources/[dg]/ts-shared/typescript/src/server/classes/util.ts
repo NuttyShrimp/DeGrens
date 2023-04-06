@@ -244,7 +244,8 @@ class Util extends UtilShared {
   setVehicleNumberPlate = (vehicle: number, plate: string) => {
     return new Promise<void>(res => {
       const plateInterval = setInterval(() => {
-        if (!DoesEntityExist(vehicle) || GetVehicleNumberPlateText(vehicle) === plate) {
+        const plateText = GetVehicleNumberPlateText(vehicle).trim();
+        if (!DoesEntityExist(vehicle) || plateText === plate) {
           clearInterval(plateInterval);
           res();
           return;

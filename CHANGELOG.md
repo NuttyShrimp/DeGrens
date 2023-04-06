@@ -13,6 +13,42 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Fixed
 
+## [1.1.3]
+
+## Added
+- Liften en stoeltjes in Maze Bank Arena bruikbaar gemaakt. 
+- Je krijgt het serienummer van een wapen op je clipboard wanneer je het gebruikt
+- Aangenamere scrapyard locaties toegevoegd
+- Je kan nu items in je inventory selecteren om deze snel te veplaatsen
+- Je kan containers nu een label geven
+- Er is nu een tutorial tooltip in je inventory om info te geven over de beschikbare controls
+- Inbeslagname reden toegevoegd
+
+## Changed
+- Straightpipers op nieuwe locatie
+- Groter verschil tussen methlab settings
+- Koffer afstand check voor te openen verhoogd
+- Screenshot-basic is vervangen met een in-house up to date tool
+- Schotmeldingen configurable gemaakt per wapen
+- Zichtbare craftables verhoogd in specifieke benches
+- Weedplanten voeding gaat trager naar beneden
+- Vuilbak doorzoek taskbar gaat sneller
+- Voertuig status decrease een beetje meer gebalanceerd
+- Mechanics ticket prijzen getweaked
+- Politie/ambulance paycheck tikkeltje verhoogd na het toevoegen van leefloon
+- Vectors van synced objects worden nu onder de juiste naam opgeslagen in de DB
+- DNA swab decayrate verlaagd
+- Bandage goedkoper gemaakt voor ambulance
+
+## Fixed
+- Fix speedbans wanneer je uit wagen vliegt of onder de grond valt
+- Je kan niet meer zandgraven terwijl je in een voertuig zit
+- Je groep stopt nu correct na het uitvoeren van scrapyard job
+- Items gaan nu direct kapot wanneer hun quality op 0 wordt gezet ipv pas wanneer je je inventory opent
+- Items die weggaan door ze te usen komen nu niet meer terug na te reloggen
+- Mechanic repairparts kunnen nietmeer gebruikt worden als er iemand in het voertuig zit om te voorkomen dat parts overschreven worden
+- Probleem met rotaties van synced objects die niet altijd juist opgeslagen/geapplied werden
+
 ## [1.1.2]
 
 ### Added

@@ -1,4 +1,4 @@
-import React, { FC, useMemo, useRef } from 'react';
+import React, { FC, useEffect, useMemo, useRef, useState } from 'react';
 import { useDrop } from 'react-dnd';
 import { useNotifications } from '@src/main/notifications/hooks/useNotification';
 
@@ -19,7 +19,13 @@ export const Grid: FC<{ id: string; size: number; items: string[]; cellSize: num
     updateItemPosition,
     toggleItemRotation,
   } = useInventory();
-  const items = useInventoryStore(s => s.items);
+  const [items, holdingSelector, updateInventoryStore, shopOpen] = useInventoryStore(s => [
+    s.items,
+    s.holdingSelector,
+    s.updateStore,
+    s.shopOpen,
+  ]);
+  const [hovering, setHovering] = useState(false);
 
   const [, dropRef] = useDrop(
     () => ({
@@ -71,7 +77,7 @@ export const Grid: FC<{ id: string; size: number; items: string[]; cellSize: num
           return;
         }
 
-        updateItemPosition(id, props.id, newPosition);
+        updateItemPosition(id, props.id, originalRotated, newPosition, itemState.rotated);
       },
     }),
     [
@@ -92,8 +98,32 @@ export const Grid: FC<{ id: string; size: number; items: string[]; cellSize: num
     [props.cellSize, props.size]
   );
 
+  const handleMouseEnter = () => {
+    setHovering(true);
+  };
+
+  const handleMouseLeave = () => {
+    setHovering(false);
+    // reset selector things when leaving grid
+    updateInventoryStore({
+      currentSelectorInventory: null,
+      selectedItems: [],
+    });
+  };
+
+  // When holding selector key and hovering grid, set as current selector inventory
+  // disallow selector when shop is open
+  useEffect(() => {
+    if (!holdingSelector || !hovering || shopOpen) return;
+
+    updateInventoryStore({
+      currentSelectorInventory: props.id,
+      selectedItems: [],
+    });
+  }, [hovering, holdingSelector]);
+
   return (
-    <div ref={gridRef} className='grid' tabIndex={-1}>
+    <div ref={gridRef} className='grid' tabIndex={-1} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
       {background}
       {props.items.map(id => (
         <Item itemId={id} cellSize={props.cellSize} key={id} />

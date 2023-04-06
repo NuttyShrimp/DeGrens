@@ -1,3 +1,3 @@
-RegisterCommand('devtest', function()
+RegisterCommand('client-test', function()
   --
 end)

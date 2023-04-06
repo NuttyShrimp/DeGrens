@@ -94,6 +94,6 @@ Inventory.registerUseable('evidence_dna', async (src, item) => {
 
   Notifications.add(
     src,
-    `DNA behoort tot ${targetPlayer.PlayerData.charinfo.firstname} ${targetPlayer.PlayerData.charinfo.lastname}`
+    `DNA behoort tot ${targetPlayer.PlayerData.charinfo.firstname} ${targetPlayer.PlayerData.charinfo.lastname} (CID: ${targetPlayer.PlayerData.citizenid})`
   );
 });

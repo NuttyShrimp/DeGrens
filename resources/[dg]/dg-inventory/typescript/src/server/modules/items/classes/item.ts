@@ -20,8 +20,11 @@ export class Item {
   private metadata!: { [key: string]: any };
   private destroyDate!: number | null;
 
+  public isDirty: boolean;
+
   constructor() {
     this.logger = mainLogger.child({ module: 'Item' });
+    this.isDirty = false;
   }
 
   public init = async ({ state, isNew }: { state: ItemBuildData & { id: string }; isNew: boolean }) => {
@@ -29,16 +32,23 @@ export class Item {
     this.name = state.name;
     // Do not check if loaded because this shit gets called inside inv loading func which causes infinite loop
     this.inventory = await inventoryManager.get(state.inventory, false);
-    this.rotated = state.rotated ?? false;
     this.hotkey = state.hotkey ?? null;
     this.destroyDate = state.destroyDate ?? itemDataManager.getInitialDestroyDate(state.name);
     this.metadata = state.metadata;
 
-    // Position
-    if (isNew && !state.position) {
-      let newPosition = this.inventory.getFirstAvailablePosition(this.name);
-      // If we didnt find a position because inv is full, we drop item on ground
-      if (!newPosition) {
+    const itemSize = itemDataManager.get(this.name).size;
+
+    let finalPosition: Vec2 = state.position ?? { x: 0, y: 0 };
+    let finalRotated = state.rotated ?? false;
+
+    // position logic if item is new
+    if (isNew && (!state.position || !this.inventory.isGridSpotFree(state.position, itemSize, state.rotated))) {
+      const availablePosition = this.inventory.getFirstAvailablePosition(itemSize);
+
+      if (availablePosition) {
+        finalPosition = availablePosition.position;
+        finalRotated = availablePosition.rotated;
+      } else {
         // This can happen when adding item to stash by script (mechanic crafting for exampel)
         if (this.inventory.type === 'player') {
           const cid = Inventory.splitId(this.inventory.id).identifier;
@@ -49,33 +59,38 @@ export class Item {
 
             let dropId = locationManager.getLocation('drop', coords);
             this.inventory = await inventoryManager.get(dropId);
-            newPosition = this.inventory.getFirstAvailablePosition(this.name);
+            const availableInDrop = this.inventory.getFirstAvailablePosition(itemSize);
+
             // if somehow the drop is also full, we add it to a new drop at position
-            if (!newPosition) {
+            if (!availableInDrop) {
               dropId = locationManager.getLocation('drop', coords, true);
               this.inventory = await inventoryManager.get(dropId);
-              newPosition = { x: 0, y: 0 };
+              this.position = { x: 0, y: 0 };
+            } else {
+              this.position = availableInDrop.position;
+              this.rotated = availableInDrop.rotated;
             }
+
             Notifications.add(plyId, 'Voorwerp ligt op de grond, je zakken zitten vol', 'error');
-          } else {
-            newPosition = { x: 0, y: 0 };
           }
-        } else {
-          newPosition = { x: 0, y: 0 };
         }
       }
-      this.position = newPosition;
+    }
 
+    this.position = finalPosition;
+    this.rotated = finalRotated;
+
+    // save when item is new
+    if (isNew) {
       // When adding new item to nonpresistent inventory, start inv as nonpersistent.
       const dbInventory = this.inventory.isPersistent() ? this.state.inventory : 'nonpersistent';
-      repository.createItem({ ...this.state, inventory: dbInventory });
+      repository.updateItems([{ ...this.state, inventory: dbInventory }]);
       this.logger.debug(`New item has been created with id ${this.id}`);
-    } else {
-      this.position = state.position ?? { x: 0, y: 0 };
     }
 
     this.inventory.registerItemId(this.state);
-    this.syncItem(this.state);
+    this.inventory.setGridSpacesOccupied(true, this.position, itemSize, this.rotated);
+    itemManager.syncItems(this.state, [this.inventory.id]);
   };
 
   // #region Getters/Setters
@@ -94,30 +109,48 @@ export class Item {
   }
   // #endregion
 
-  public move = async (src: number, position: Vec2, rotated: boolean, invId: string) => {
-    const oldInvId = this.inventory.id;
+  public move = (newInv: Inv, position?: Vec2, rotated?: boolean) => {
+    const itemSize = itemDataManager.get(this.name).size;
+
+    const oldInv = this.inventory;
+    oldInv.setGridSpacesOccupied(false, this.position, itemSize, this.rotated);
+
+    // if position/rotatioin is not available or not provided, overwrite position/rotation
+    // when this function is called by ply move event, we overwrite src to dispatch sync event to origin client
+    let syncToEmitter = false;
+    if (!position || rotated === undefined || !newInv.isGridSpotFree(position, itemSize, rotated)) {
+      const availablePosition = newInv.getFirstAvailablePosition(itemSize);
+      position = availablePosition?.position ?? { x: 0, y: 0 };
+      rotated = availablePosition?.rotated ?? false;
+      syncToEmitter = true;
+    }
+
     this.position = position;
     this.rotated = rotated;
-    if (this.inventory.id !== invId) {
+
+    // handle inv switchinhS
+    if (oldInv.id !== newInv.id) {
       // auto unbind when moving to other inv
       if (this.hotkey) {
         this.hotkey = null;
       }
 
-      const oldInv = this.inventory;
-      const newInv = await inventoryManager.get(invId);
       this.inventory = newInv;
 
       oldInv.unregisterItemId(this.state);
       newInv.registerItemId(this.state, true);
     }
-    this.syncItem(this.state, oldInvId, src);
+
+    newInv.setGridSpacesOccupied(true, this.position, itemSize, this.rotated);
+
+    this.isDirty = true;
+
+    return syncToEmitter;
   };
 
-  public use = (src: number, hotkey: boolean) => {
+  public use = (src: number, hotkey = false) => {
     if (!this.canUse(src)) return;
     this.logger.debug(`Item ${this.id} has been used`);
-    emit('inventory:usedItem', src, this.state);
     const itemImage = itemDataManager.get(this.name).image;
     if (hotkey) emitNet('inventory:addItemBox', src, 'Gebruikt', itemImage);
     Util.Log(
@@ -129,16 +162,20 @@ export class Item {
       `${Util.getName(src)} used ${this.name}`,
       src
     );
+
+    emit('inventory:usedItem', src, this.state);
   };
 
   public bind = (src: number, key: Inventory.Hotkey) => {
     if (!this.canUse(src)) return;
     this.hotkey = key;
+    this.isDirty = true;
   };
 
   public unbind = (src: number) => {
     if (!this.canUse(src)) return;
     this.hotkey = null;
+    this.isDirty = true;
   };
 
   private canUse = (src: number) => {
@@ -158,6 +195,7 @@ export class Item {
 
   public setMetadata = (cb: (old: { [key: string]: any }) => { [key: string]: any }) => {
     this.metadata = cb(this.getMetadata());
+    this.isDirty = true;
   };
 
   public getMetadata = () => this.metadata;
@@ -176,20 +214,28 @@ export class Item {
 
     this.destroyDate = newDestroyDate;
 
-    this.checkDecay(noItemBoxOnBreak);
+    const destroyed = this.checkDecay(noItemBoxOnBreak);
+
+    if (!destroyed) {
+      this.isDirty = true;
+    }
   };
 
   public destroy = (noItemBox = false) => {
     const originalInvType = this.inventory.type;
     const originalInvIdentifier = this.inventory.identifier;
 
+    const itemSize = itemDataManager.get(this.name)?.size;
+
     this.inventory.unregisterItemId(this.state); // delete from inventory it was in
+    this.inventory.setGridSpacesOccupied(false, this.position, itemSize, this.rotated);
     itemManager.remove(this.id); // remove in item manager
     repository.deleteItem(this.id); // remove from db
-    const quality = itemDataManager.getItemQuality(this.name, this.destroyDate);
-    this.logger.debug(`${this.id} has been destroyed. Quality: ${quality}`, 'destroyDate', this.destroyDate);
-    this.syncItem({ ...this.state, inventory: 'destroyed' }, this.inventory.id);
+    itemManager.syncItems(this.state, ['destroyed', this.inventory.id]); // provide newInventory as 'destroyed' so client will remove it as visible item
+    this.isDirty = false;
 
+    const logMsg = `${this.id} has been destroyed`;
+    this.logger.debug(logMsg);
     Util.Log(
       'inventory:item:destroyed',
       {
@@ -197,7 +243,7 @@ export class Item {
         itemName: this.name,
         state: this.state,
       },
-      `${this.name} got destroyed (${quality}% quality)`
+      logMsg
     );
 
     if (!noItemBox && originalInvType === 'player') {
@@ -218,22 +264,11 @@ export class Item {
     if (this.inventory.type === 'shop') return false;
 
     const unixNow = Math.floor(Date.now() / 1000);
-    let isDestroyed = unixNow > this.destroyDate;
+    let isDestroyed = unixNow >= this.destroyDate;
     if (isDestroyed) {
       this.destroy(noItemBoxOnBreak);
     }
 
     return isDestroyed;
-  };
-
-  private syncItem = (data: Inventory.ItemState, oldInventory = '', emitter = 0) => {
-    const inventories = data.inventory === oldInventory ? [data.inventory] : [data.inventory, oldInventory];
-    for (const inv of inventories) {
-      const plyWithOpen = contextManager.getPlayersById(inv);
-      plyWithOpen.forEach(ply => {
-        if (ply === emitter) return;
-        Events.emitNet('inventory:client:syncItem', ply, data);
-      });
-    }
   };
 }

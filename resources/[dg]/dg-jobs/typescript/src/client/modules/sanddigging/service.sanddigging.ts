@@ -82,6 +82,8 @@ export const setAssignedVehicle = (veh: typeof assignedVehicle) => {
 };
 
 export const doSpotAction = async () => {
+  if (IsPedInAnyVehicle(PlayerPedId(), false)) return;
+
   const spot = assignedSpot;
   setAssignedSpot(null);
 

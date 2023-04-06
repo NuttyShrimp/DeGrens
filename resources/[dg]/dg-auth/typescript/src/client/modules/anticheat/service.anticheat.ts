@@ -82,23 +82,28 @@ const scheduleAntiTP = () => {
   // 10 sec grace period when ped was on vehicle to avoid ban while falling off
   let onVehicleGracePeriod = 0;
 
+  // TODO: check distance between coords
   antiTP = setInterval(() => {
+    // if required resources for this thread are not started, skip execution
+    if (['dg-admin', 'dg-vehicles', 'dg-misc'].some(resName => GetResourceState(resName) !== 'started')) return;
+
     const ped = PlayerPedId();
+    const zCoord = GetEntityCoords(ped, false)?.[2] ?? 0;
+
+    const underground = zCoord <= 0;
+    const inNoclip = global.exports?.['dg-admin']?.inNoclip?.() ?? false;
+    const inCloak = global.exports?.['dg-admin']?.inCloak?.() ?? false;
+    const justEjected = global.exports?.['dg-vehicles']?.justEjected?.() ?? false;
+
+    if (inNoclip || inCloak || justEjected || underground) return;
+
     let speed = GetEntitySpeed(ped);
     const inVeh = IsPedInAnyVehicle(ped, false);
     if (inVeh) {
       speed = GetEntitySpeed(GetVehiclePedIsIn(ped, false));
     }
 
-    const jumping = IsPedJumping(ped);
-    const ragdoll = IsPedRagdoll(ped);
-    const falling = IsPedFalling(ped);
-    const parachuting = GetPedParachuteState(ped) !== -1;
     let onVeh = IsPedOnVehicle(ped);
-    const inNoclip = global.exports?.['dg-admin']?.inNoclip?.() ?? false;
-    const inCloak = global.exports?.['dg-admin']?.inCloak?.() ?? false;
-    const speedDrug = global.exports?.['dg-misc']?.isOnDrugs?.('speed') ?? false;
-
     if (onVeh) {
       onVehicleGracePeriod = 10;
     } else if (onVehicleGracePeriod !== 0) {
@@ -106,19 +111,23 @@ const scheduleAntiTP = () => {
       onVehicleGracePeriod--;
     }
 
-    // TODO: check distance between coords
-    if (!inNoclip && !inCloak) {
-      if (!inVeh && !onVeh) {
-        if (!jumping && !falling && !ragdoll && !speedDrug && !parachuting) {
-          if (speed > 15) {
-            Events.emitNet('auth:anticheat:addFlag', 'speed');
-          }
-        }
-      } else {
-        if (speed > 90) {
-          Events.emitNet('auth:anticheat:addFlag', 'speed');
-        }
+    if (inVeh || onVeh) {
+      if (speed > 90) {
+        Events.emitNet('auth:anticheat:addFlag', 'speed');
       }
+      return;
+    }
+
+    const jumping = IsPedJumping(ped);
+    const ragdoll = IsPedRagdoll(ped);
+    const falling = IsPedFalling(ped);
+    const parachuting = GetPedParachuteState(ped) !== -1;
+    const speedDrug = global.exports?.['dg-misc']?.isOnDrugs?.('speed') ?? false;
+
+    if (jumping || falling || ragdoll || speedDrug || parachuting) return;
+
+    if (speed > 15) {
+      Events.emitNet('auth:anticheat:addFlag', 'speed');
     }
   }, 1000);
 };

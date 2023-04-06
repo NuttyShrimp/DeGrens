@@ -29,6 +29,7 @@ Auth.onAuth(async src => {
     sanddigging: config.sanddigging,
     fishingReturnZone: config.fishing.vehicle,
     scrapyardReturnZone: config.scrapyard.returnZone,
+    scrapyardPartItems: config.scrapyard.partItems,
     postopTypes: config.postop.types,
     huntingAnimals: config.hunting.animals,
   });

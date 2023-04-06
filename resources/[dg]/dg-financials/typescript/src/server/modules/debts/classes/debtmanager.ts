@@ -4,11 +4,15 @@ import { getConfig } from 'helpers/config';
 import accountManager from 'modules/bank/classes/AccountManager';
 
 import { debtLogger, scheduleOverDueDebt, unscheduleDebt, getDaysUntilDue } from '../helpers/debts';
-import { calculateMaintenceFees, getMaintenanceFeeSchedule, isMaintenanceFeesInWeekOrLess } from '../helpers/maintenanceFees';
+import {
+  calculateMaintenceFees,
+  getMaintenanceFeeSchedule,
+  isMaintenanceFeesInWeekOrLess,
+} from '../helpers/maintenanceFees';
 
 class DebtManager extends Util.Singleton<DebtManager>() {
   private debts: Debts.Debt[];
-  private cachedFeeds: Record<string, { fees: IFinancials.MaintenanceFee[], created: Dayjs }> = {};
+  private cachedFeeds: Record<string, { fees: IFinancials.MaintenanceFee[]; created: Dayjs }> = {};
 
   constructor() {
     super();
@@ -28,23 +32,24 @@ class DebtManager extends Util.Singleton<DebtManager>() {
 
   private async getMaintenanceFees(cid: number): Promise<IFinancials.MaintenanceFee[]> {
     if (!this.cachedFeeds[cid]) {
-      const fees = await calculateMaintenceFees([cid])
-      this.cachedFeeds[cid] = {fees, created: dayjs()};
+      const fees = await calculateMaintenceFees([cid]);
+      this.cachedFeeds[cid] = { fees, created: dayjs() };
       return fees;
     }
-    let {fees, created} = this.cachedFeeds[cid];
-    if (created.isBefore(dayjs().add(-1, "h"))) {
+    let { fees, created } = this.cachedFeeds[cid];
+    if (created.isBefore(dayjs().add(-1, 'h'))) {
       delete this.cachedFeeds[cid];
-      return this.getMaintenanceFees(cid)
+      return this.getMaintenanceFees(cid);
     }
     return fees;
   }
 
   public async getDebtsByCid(cid: number): Promise<Debts.Debt[]> {
     let debts = this.debts.filter(debt => debt.cid === cid);
-    if(isMaintenanceFeesInWeekOrLess()) {
+    if (isMaintenanceFeesInWeekOrLess()) {
       const mainFees = await this.getMaintenanceFees(cid);
       const highestId = (debts.at(-1)?.id ?? 0) + 1;
+      const payDate = getMaintenanceFeeSchedule().unix();
       mainFees.forEach((f, i) => {
         debts.push({
           ...f,
@@ -53,9 +58,10 @@ class DebtManager extends Util.Singleton<DebtManager>() {
           payed: 0,
           type: 'scheduled',
           given_by: 1000,
-          date: getMaintenanceFeeSchedule().unix(),
-        })
-      })
+          date: payDate,
+          pay_term: 0,
+        });
+      });
     }
     return debts;
   }

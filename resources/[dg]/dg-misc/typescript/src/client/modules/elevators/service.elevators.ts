@@ -97,8 +97,6 @@ export const goToLevel = async (elevatorId: string, levelId: string) => {
     canCancel: true,
     cancelOnDeath: true,
     cancelOnMove: true,
-    disarm: true,
-    disableInventory: true,
     disablePeek: true,
     controlDisables: {
       movement: true,
