@@ -2088,7 +2088,7 @@
     "label": "Parachute",
     "image": "parachute.png",
     "useable": true,
-    "decayRate": 10080,
+    "decayRate": 129600,
     "size": {
       "x": 3,
       "y": 4
@@ -2099,7 +2099,7 @@
     "label": "Duikpak",
     "image": "scuba_gear.png",
     "useable": true,
-    "decayRate": 10080,
+    "decayRate": 129600,
     "size": {
       "x": 4,
       "y": 5
