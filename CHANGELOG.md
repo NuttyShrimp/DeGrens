@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Veel item decaysnelheiden verlaagd
 - Enkele crafting recipe requirements verlaagd
 - Hoeveel materiaal je krijgt voor sommige methods verhoogd
+- Ambulance ziet meer info bij het inchecken zodat ze een tegenmelding kunnen sturen
 
 ## Fixed
 
