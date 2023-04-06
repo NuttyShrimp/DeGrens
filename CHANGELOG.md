@@ -10,6 +10,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## Added
 
 ## Changed
+- Veel item decaysnelheiden verlaagd
+- Enkele crafting recipe requirements verlaagd
+- Hoeveel materiaal je krijgt voor sommige methods verhoogd
 
 ## Fixed
 - Fixed vehicle plate thread getting stuck on non-existing vehicles
