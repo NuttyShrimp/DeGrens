@@ -97,7 +97,7 @@
   {
     "name": "drive_v1",
     "label": "v1.0 Drive",
-    "decayRate": 4320,
+    "decayRate": 10080,
     "image": "drive_v1.png",
     "description": "Drive met V1.0 software op",
     "size": {
@@ -109,7 +109,7 @@
   {
     "name": "drive_v2",
     "label": "v2.0 Drive",
-    "decayRate": 4320,
+    "decayRate": 10080,
     "image": "drive_v2.png",
     "description": "Drive met V2.0 software op",
     "size": {
@@ -121,7 +121,7 @@
   {
     "name": "drive_v3",
     "label": "v3.0 Drive",
-    "decayRate": 4320,
+    "decayRate": 10080,
     "image": "drive_v3.png",
     "description": "Drive met V3.0 software op",
     "size": {
@@ -133,7 +133,7 @@
   {
     "name": "drive_v5",
     "label": "v5.0 Drive",
-    "decayRate": 4320,
+    "decayRate": 10080,
     "image": "drive_v5.png",
     "description": "Drive met V5.0 software op",
     "size": {
@@ -145,7 +145,7 @@
   {
     "name": "drive_v10",
     "label": "v10.0 Drive",
-    "decayRate": 4320,
+    "decayRate": 10080,
     "image": "drive_v10.png",
     "description": "Drive met V10.0 software op",
     "size": {
@@ -682,7 +682,7 @@
     "name": "weed_seed",
     "label": "Weed Zaadje",
     "useable": true,
-    "decayRate": 7200,
+    "decayRate": 14400,
     "image": "weed_seed.png",
     "description": "Probeer het eens te planten in de grond, wie weet groeit het!",
     "size": {
@@ -695,7 +695,7 @@
     "name": "pistol_ammo",
     "label": "Pistool Ammo",
     "useable": true,
-    "decayRate": 43200,
+    "decayRate": 86400,
     "image": "pistol_ammo.png",
     "description": "Doosje met 50 kogels",
     "size": {
@@ -708,7 +708,7 @@
     "name": "smg_ammo",
     "label": "SMG Ammo",
     "useable": true,
-    "decayRate": 43200,
+    "decayRate": 86400,
     "image": "smg_ammo.png",
     "description": "Doosje met 50 kogels",
     "size": {
@@ -721,7 +721,7 @@
     "name": "rifle_ammo",
     "label": "Rifle Ammo",
     "useable": true,
-    "decayRate": 43200,
+    "decayRate": 86400,
     "image": "rifle_ammo.png",
     "description": "Doosje met 50 kogels",
     "size": {
@@ -734,7 +734,7 @@
     "name": "shotgun_ammo",
     "label": "Shotgun Ammo",
     "useable": true,
-    "decayRate": 43200,
+    "decayRate": 86400,
     "image": "shotgun_ammo.png",
     "description": "Doosje met 50 kogels",
     "size": {
@@ -747,7 +747,7 @@
     "name": "sniper_ammo",
     "label": "Sniper Ammo",
     "useable": true,
-    "decayRate": 43200,
+    "decayRate": 86400,
     "image": "sniper_ammo.png",
     "description": "Doosje met 50 kogels",
     "size": {
@@ -759,7 +759,7 @@
     "name": "taser_cartridge",
     "label": "Taser Cartridge",
     "useable": true,
-    "decayRate": 43200,
+    "decayRate": 86400,
     "image": "taser_cartridge.png",
     "size": {
       "x": 2,
@@ -793,7 +793,7 @@
     "markedForSeizure": true,
     "name": "weed_bag",
     "label": "Zakje Weed",
-    "decayRate": 10080,
+    "decayRate": 30240,
     "image": "weed_bag.png",
     "size": {
       "x": 1,
@@ -1143,7 +1143,7 @@
       "x": 1,
       "y": 2
     },
-    "decayRate": 30240,
+    "decayRate": 64800,
     "useable": true
   },
   {
@@ -1153,7 +1153,7 @@
       "x": 2,
       "y": 2
     },
-    "decayRate": 43200,
+    "decayRate": 129600,
     "image": "engine_part.png",
     "useable": true
   },
@@ -1480,7 +1480,7 @@
     "markedForSeizure": true,
     "name": "explosive_case",
     "label": "Omhulsel",
-    "decayRate": 10080,
+    "decayRate": 43200,
     "image": "explosive_case.png",
     "size": {
       "x": 3,
@@ -1516,7 +1516,7 @@
     "name": "spike_strip",
     "label": "PD Spike Strips",
     "image": "spike_strip.png",
-    "decayRate": 14400,
+    "decayRate": 86400,
     "size": {
       "x": 3,
       "y": 2
@@ -1663,7 +1663,7 @@
     "label": "Vest",
     "description": "Kogelwerende vest",
     "image": "armor.png",
-    "decayRate": 20160,
+    "decayRate": 86400,
     "size": {
       "x": 2,
       "y": 2
@@ -1687,7 +1687,7 @@
     "label": "PD Vest",
     "description": "Kogelwerende vest",
     "image": "pd_armor.png",
-    "decayRate": 20160,
+    "decayRate": 86400,
     "size": {
       "x": 2,
       "y": 2
