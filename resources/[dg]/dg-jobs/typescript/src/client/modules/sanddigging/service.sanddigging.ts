@@ -101,12 +101,10 @@ export const doSpotAction = async () => {
     return;
   }
 
-  const [canceled] = await Taskbar.create('shovel', 'Graven', 10000, {
+  const [canceled] = await Taskbar.create('shovel', 'Graven', 7500, {
     canCancel: true,
     cancelOnDeath: true,
     cancelOnMove: true,
-    disarm: true,
-    disableInventory: true,
     controlDisables: {
       movement: true,
       carMovement: true,

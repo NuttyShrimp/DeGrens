@@ -116,7 +116,7 @@
         },
         {
           "name": "material_glass",
-          "amount": 2
+          "amount": 1
         }
       ]
     },
@@ -129,7 +129,7 @@
         },
         {
           "name": "material_glass",
-          "amount": 3
+          "amount": 2
         }
       ]
     },
