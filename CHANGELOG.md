@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ## Added
+- Re-added custom MRPD/Pillbox textures
 
 ## Changed
 - Veel item decaysnelheiden verlaagd
