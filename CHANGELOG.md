@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## Changed
 
 ## Fixed
+- Fixed vehicle plate thread getting stuck on non-existing vehicles
 
 ## [1.1.3]
 
