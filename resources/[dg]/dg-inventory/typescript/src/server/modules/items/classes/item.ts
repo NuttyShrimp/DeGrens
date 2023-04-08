@@ -43,7 +43,7 @@ export class Item {
 
     // position logic if item is new
     if (isNew && (!state.position || !this.inventory.isGridSpotFree(state.position, itemSize, state.rotated))) {
-      const availablePosition = this.inventory.getFirstAvailablePosition(itemSize);
+      const availablePosition = this.inventory.getFirstAvailablePosition(itemSize, state.rotated);
 
       if (availablePosition) {
         finalPosition = availablePosition.position;
@@ -59,7 +59,7 @@ export class Item {
 
             let dropId = locationManager.getLocation('drop', coords);
             this.inventory = await inventoryManager.get(dropId);
-            const availableInDrop = this.inventory.getFirstAvailablePosition(itemSize);
+            const availableInDrop = this.inventory.getFirstAvailablePosition(itemSize, state.rotated);
 
             // if somehow the drop is also full, we add it to a new drop at position
             if (!availableInDrop) {
@@ -121,8 +121,8 @@ export class Item {
     // if position/rotatioin is not available, overwrite position/rotation
     // if we overwrite we make sure to sync to emitter by returning true
     let syncToEmitter = false;
-    if (!newInv.isGridSpotFree(position, itemSize, rotated)) {
-      const availablePosition = newInv.getFirstAvailablePosition(itemSize);
+    if (!skipGridSpotFreeCheck && !newInv.isGridSpotFree(position, itemSize, rotated)) {
+      const availablePosition = newInv.getFirstAvailablePosition(itemSize, rotated); // prefer provided rotation
       position = availablePosition?.position ?? { x: 0, y: 0 };
       rotated = availablePosition?.rotated ?? false;
       syncToEmitter = true;

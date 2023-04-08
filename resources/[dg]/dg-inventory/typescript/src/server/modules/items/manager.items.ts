@@ -227,7 +227,7 @@ class ItemManager extends Util.Singleton<ItemManager>() {
     const itemStates: Inventory.ItemState[] = [];
     for (const item of items) {
       const itemSize = itemDataManager.get(item.state.name).size;
-      const availableSpot = inv.getFirstAvailablePosition(itemSize);
+      const availableSpot = inv.getFirstAvailablePosition(itemSize, item.state.rotated);
       if (!byScript && !availableSpot) continue; // if this function was called by script we dont care if theres no space
       item.move(inv, availableSpot?.position ?? { x: 0, y: 0 }, availableSpot?.rotated ?? false, true);
       itemStates.push(item.state);

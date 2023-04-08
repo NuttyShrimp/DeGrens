@@ -148,29 +148,27 @@ export const useInventory = () => {
    * Function which finds first available space for item
    * @param itemId Item you want to find free space for
    * @param inventoryId Inventory you want to find free space in
-   * @returns Position of found available position or undefined if none was found
+   * @param preferedRotation Used to prefer old rotation when finding newPosition
+   * @returns Found available position or undefined if none was found
    */
   const getFirstFreeSpace = useCallback(
-    (itemId: string, inventoryId: string) => {
+    (itemId: string, inventoryId: string, preferedRotation: boolean) => {
       const gridSize = inventories[inventoryId].size;
       const item = items[itemId];
-      const rotatedItemSize = {
-        x: item.size.y,
-        y: item.size.x,
-      };
 
       const occupiedSpaces = buildOccupiedGridSpaces(items, gridSize, inventoryId, itemId);
 
-      const maxYToCheck = gridSize - Math.min(item.size.y, rotatedItemSize.y) + 1;
-      const maxXToCheck = CELLS_PER_ROW - Math.min(item.size.x, rotatedItemSize.x) + 1;
+      const minSizeSide = Math.min(item.size.x, item.size.y);
+      const maxYToCheck = gridSize - minSizeSide + 1;
+      const maxXToCheck = CELLS_PER_ROW - minSizeSide + 1;
 
       for (let y = 0; y < maxYToCheck; y++) {
         for (let x = 0; x < maxXToCheck; x++) {
-          if (areSpacesNotOccupied(occupiedSpaces, { x, y }, item.size)) {
-            return { position: { x, y }, rotated: false };
+          if (areSpacesNotOccupied(occupiedSpaces, { x, y }, item.size, preferedRotation)) {
+            return { position: { x, y }, rotated: preferedRotation };
           }
-          if (areSpacesNotOccupied(occupiedSpaces, { x, y }, rotatedItemSize)) {
-            return { position: { x, y }, rotated: true };
+          if (areSpacesNotOccupied(occupiedSpaces, { x, y }, item.size, !preferedRotation)) {
+            return { position: { x, y }, rotated: !preferedRotation };
           }
         }
       }
@@ -202,7 +200,7 @@ export const useInventory = () => {
       if (outOfBounds) return false;
 
       const occupiedSpaces = buildOccupiedGridSpaces(items, gridSize, inventoryId, itemId);
-      return areSpacesNotOccupied(occupiedSpaces, newPosition, itemSize);
+      return areSpacesNotOccupied(occupiedSpaces, newPosition, itemSize); // dont provide rotation param because we already used rotation in itemSize
     },
     [items, inventories]
   );
@@ -287,7 +285,7 @@ export const useInventory = () => {
       return;
     }
 
-    const freeSpace = getFirstFreeSpace(item.id, targetInventoryId);
+    const freeSpace = getFirstFreeSpace(item.id, targetInventoryId, item.rotated);
     if (!freeSpace) {
       addNotification({ message: 'Dit past hier niet meer in', type: 'error' });
       return;
@@ -324,7 +322,6 @@ export const useInventory = () => {
     areRequirementsFullfilled,
     canPlaceItemAtPosition,
     isItemAllowedInInventory,
-    getFirstFreeSpace,
     toggleItemRotation,
     switchItemsToOtherInventory,
     doItemUsage,

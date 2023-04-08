@@ -197,7 +197,7 @@ const moveItemToInventory = async (type: Inventory.Type, identifier: string, ite
   const item = itemManager.get(itemId);
   if (!item) return;
   const itemSize = itemDataManager.get(item.state.name).size;
-  const availableSpot = inventory.getFirstAvailablePosition(itemSize);
+  const availableSpot = inventory.getFirstAvailablePosition(itemSize, item.state.rotated);
   const position = availableSpot?.position ?? { x: 0, y: 0 };
   const rotated = availableSpot?.rotated ?? false;
   await itemManager.move(0, itemId, inventory.id, position, rotated);

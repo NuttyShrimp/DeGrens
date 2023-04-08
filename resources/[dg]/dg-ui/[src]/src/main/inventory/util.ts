@@ -19,26 +19,21 @@ export const generateShopItems = (
       return { position: { x: 0, y: 0 }, rotated: false };
     }
 
-    const rotatedItemSize = {
-      x: itemSize.y,
-      y: itemSize.x,
-    };
-
     const occupiedSpaces = buildOccupiedGridSpaces(items, size, inventoryId);
 
-    const maxXToCheck = CELLS_PER_ROW - Math.max(itemSize.x, rotatedItemSize.x) + 1;
+    const maxXToCheck = CELLS_PER_ROW - Math.max(itemSize.x, itemSize.y) + 1;
 
     for (let y = 0; y < 1000; y++) {
       for (let x = 0; x < maxXToCheck; x++) {
         let freeSpace: { position: Inventory.XY; rotated: boolean } | undefined = undefined;
-        if (areSpacesNotOccupied(occupiedSpaces, { x, y }, itemSize)) {
+        if (areSpacesNotOccupied(occupiedSpaces, { x, y }, itemSize, false)) {
           freeSpace = { position: { x, y }, rotated: false };
-        } else if (areSpacesNotOccupied(occupiedSpaces, { x, y }, rotatedItemSize)) {
+        } else if (areSpacesNotOccupied(occupiedSpaces, { x, y }, itemSize, true)) {
           freeSpace = { position: { x, y }, rotated: true };
         }
 
         if (freeSpace) {
-          const ySize = freeSpace.rotated ? rotatedItemSize.y : itemSize.y;
+          const ySize = freeSpace.rotated ? itemSize.x : itemSize.y;
           if (y + ySize > size) {
             size = y + ySize;
           }
@@ -93,9 +88,14 @@ export const buildOccupiedGridSpaces = (
   return occupiedSpaces;
 };
 
-export const areSpacesNotOccupied = (occupiedSpaces: boolean[][], position: Inventory.XY, size: Inventory.XY) => {
-  const maxX = position.x + size.x;
-  const maxY = position.y + size.y;
+export const areSpacesNotOccupied = (
+  occupiedSpaces: boolean[][],
+  position: Inventory.XY,
+  size: Inventory.XY,
+  rotated = false
+) => {
+  const maxX = position.x + size[rotated ? 'y' : 'x'];
+  const maxY = position.y + size[rotated ? 'x' : 'y'];
   for (let x = position.x; x < maxX; x++) {
     const column = occupiedSpaces[x];
     if (!column) return false;
