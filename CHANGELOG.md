@@ -21,6 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## Fixed
 - Fixed vehicle plate thread getting stuck on non-existing vehicles
 - Er wordt nu wel een sound afgespeeld bij important dispatch meldingen 
+- Fix items die naar positie 0 gaan wanneer inventory vol is tijdens het moven van meerdere items
 
 ## [1.1.3]
 

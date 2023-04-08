@@ -277,6 +277,11 @@ export const useInventory = () => {
       return;
     }
 
+    if (!areRequirementsFullfilled(item.requirements)) {
+      addNotification({ message: 'Je mist iets', type: 'error' });
+      return;
+    }
+
     if (!isItemAllowedInInventory(item.name, targetInventoryId)) {
       addNotification({ message: 'Dit kan hier niet in', type: 'error' });
       return;

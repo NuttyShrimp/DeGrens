@@ -63,7 +63,9 @@ class ItemManager extends Util.Singleton<ItemManager>() {
   };
 
   @DGXEvent('inventory:server:moveItem')
-  public move = async (src: number, id: string, invId: string, position?: Vec2, rotated?: boolean) => {
+  public move = async (src: number, id: string, invId: string, position: Vec2, rotated: boolean) => {
+    const byScript = src < 1;
+
     const item = this.get(id);
     if (!item) {
       this.logger.warn(`Could not get item ${id}, broke while getting item to move`);
@@ -71,8 +73,7 @@ class ItemManager extends Util.Singleton<ItemManager>() {
     }
 
     const prevInvId = item.state.inventory;
-    if (src !== 0) {
-      // we use zero when using this function internally
+    if (!byScript) {
       const openIds = contextManager.getIdsByPlayer(src);
       if (!openIds) throw new Error(`Player tried to move item ${id} but does not have his inventory open`);
       if (prevInvId !== openIds[0] && prevInvId !== openIds[1])
@@ -80,21 +81,21 @@ class ItemManager extends Util.Singleton<ItemManager>() {
     }
 
     const inv = await inventoryManager.get(invId);
-    const syncToEmitter = item.move(inv, position, rotated); // returns true when position was changed inside func because space not available, if so still sync to ply
+    const syncToEmitter = item.move(inv, position, rotated, byScript); // skip gridfree check when byscript because we got position/rotated from getfirstavailable
     this.syncItems(item.state, [prevInvId, invId], syncToEmitter ? undefined : src);
 
-    const playerName = src === 0 ? 'Server' : Util.getName(src);
+    const playerName = byScript ? 'Server' : Util.getName(src);
     Util.Log(
       'inventory:item:moved',
       {
-        byScript: src === 0,
+        byScript,
         itemId: id,
         itemName: item.state.name,
         oldInventory: prevInvId,
         newInventory: invId,
       },
       `${playerName} moved ${item.state.name} from ${prevInvId} to ${invId}`,
-      src === 0 ? undefined : src
+      byScript ? undefined : src
     );
   };
 
@@ -213,8 +214,9 @@ class ItemManager extends Util.Singleton<ItemManager>() {
 
     if (!previousInventoryId) return;
 
-    if (src !== 0) {
-      // we use zero when using this function internally
+    const byScript = src < 1;
+
+    if (!byScript) {
       const openIds = contextManager.getIdsByPlayer(src);
       if (!openIds) throw new Error(`Player tried to move multiple items but does not have his inventory open`);
       if (previousInventoryId !== openIds[0] && previousInventoryId !== openIds[1])
@@ -224,24 +226,27 @@ class ItemManager extends Util.Singleton<ItemManager>() {
     const inv = await inventoryManager.get(inventoryId);
     const itemStates: Inventory.ItemState[] = [];
     for (const item of items) {
-      item.move(inv);
+      const itemSize = itemDataManager.get(item.state.name).size;
+      const availableSpot = inv.getFirstAvailablePosition(itemSize);
+      if (!byScript && !availableSpot) continue; // if this function was called by script we dont care if theres no space
+      item.move(inv, availableSpot?.position ?? { x: 0, y: 0 }, availableSpot?.rotated ?? false, true);
       itemStates.push(item.state);
     }
 
     this.syncItems(itemStates, [previousInventoryId, inventoryId]);
 
-    const playerName = src === 0 ? 'Server' : Util.getName(src);
+    const playerName = byScript ? 'Server' : Util.getName(src);
     Util.Log(
       'inventory:item:movedMultiple',
       {
-        byScript: src === 0,
+        byScript,
         itemId: itemIds,
         itemName: itemStates.map(s => s.name),
         oldInventory: previousInventoryId,
         newInventory: inventoryId,
       },
       `${playerName} moved multiple items from ${previousInventoryId} to ${inventoryId}`,
-      src === 0 ? undefined : src
+      byScript ? undefined : src
     );
   };
 }

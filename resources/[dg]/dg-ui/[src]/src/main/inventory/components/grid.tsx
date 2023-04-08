@@ -49,6 +49,14 @@ export const Grid: FC<{ id: string; size: number; items: string[]; cellSize: num
           return;
         }
 
+        if (itemState.amount !== undefined && itemState.amount <= 0) {
+          addNotification({ message: 'Dit item is out of stock', type: 'error' });
+          if (itemState.rotated !== originalRotated) {
+            toggleItemRotation(id, originalRotated);
+          }
+          return;
+        }
+
         if (!gridRef.current) {
           if (itemState.rotated !== originalRotated) {
             toggleItemRotation(id, originalRotated);

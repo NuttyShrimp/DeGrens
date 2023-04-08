@@ -109,16 +109,19 @@ export class Item {
   }
   // #endregion
 
-  public move = (newInv: Inv, position?: Vec2, rotated?: boolean) => {
+  /**
+   * @param skipGridSpotFreeCheck use when provided position/rotation is gotten from getFreeSpot function
+   */
+  public move = (newInv: Inv, position: Vec2, rotated: boolean, skipGridSpotFreeCheck = false) => {
     const itemSize = itemDataManager.get(this.name).size;
 
     const oldInv = this.inventory;
     oldInv.setGridSpacesOccupied(false, this.position, itemSize, this.rotated);
 
-    // if position/rotatioin is not available or not provided, overwrite position/rotation
-    // when this function is called by ply move event, we overwrite src to dispatch sync event to origin client
+    // if position/rotatioin is not available, overwrite position/rotation
+    // if we overwrite we make sure to sync to emitter by returning true
     let syncToEmitter = false;
-    if (!position || rotated === undefined || !newInv.isGridSpotFree(position, itemSize, rotated)) {
+    if (!newInv.isGridSpotFree(position, itemSize, rotated)) {
       const availablePosition = newInv.getFirstAvailablePosition(itemSize);
       position = availablePosition?.position ?? { x: 0, y: 0 };
       rotated = availablePosition?.rotated ?? false;
