@@ -234,7 +234,7 @@ export class Item {
     this.inventory.setGridSpacesOccupied(false, this.position, itemSize, this.rotated);
     itemManager.remove(this.id); // remove in item manager
     repository.deleteItem(this.id); // remove from db
-    itemManager.syncItems(this.state, ['destroyed', this.inventory.id]); // provide newInventory as 'destroyed' so client will remove it as visible item
+    itemManager.syncItems({ ...this.state, inventory: 'destroyed' }, [this.inventory.id]); // provide newInventory as 'destroyed' so client will remove it as visible item
     this.isDirty = false;
 
     const logMsg = `${this.id} has been destroyed`;
