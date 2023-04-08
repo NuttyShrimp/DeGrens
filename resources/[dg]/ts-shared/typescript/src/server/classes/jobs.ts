@@ -148,12 +148,12 @@ class Police {
     global.exports['dg-dispatch'].createDispatchCall('police', call);
   }
 
-  public addTrackerToVehicle = (vehicleNetId: number, delay: number) => {
-    global.exports['dg-police'].addTrackerToVehicle(vehicleNetId, delay);
+  public addTrackerToVehicle = (vehicle: number, delay: number) => {
+    global.exports['dg-police'].addTrackerToVehicle(vehicle, delay);
   };
 
-  public removeTrackerFromVehicle = (vehicleNetId: number) => {
-    global.exports['dg-police'].removeTrackerFromVehicle(vehicleNetId);
+  public removeTrackerFromVehicle = (vehicle: number) => {
+    global.exports['dg-police'].removeTrackerFromVehicle(vehicle);
   };
 
   public showBadge = (plyId: number, type: BadgeType) => {

@@ -25,8 +25,9 @@ export const setVehicleTracker = (netId: number, coords: Vec3) => {
 export const removeTrackerBlip = (netId: number) => {
   const activeBlip = activeBlips.get(netId);
   if (activeBlip === undefined) return;
-  if (!DoesBlipExist(activeBlip)) return;
-  RemoveBlip(activeBlip);
+  if (DoesBlipExist(activeBlip)) {
+    RemoveBlip(activeBlip);
+  }
   activeBlips.delete(netId);
 };
 

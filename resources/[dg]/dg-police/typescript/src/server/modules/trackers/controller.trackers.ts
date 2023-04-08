@@ -11,5 +11,9 @@ Events.onNet('police:trackers:disable', (src: number, netId: number) => {
     trackersLogger.error(`Player ${src} tried to remove tracker from vehicle but was not police`);
     return;
   }
-  removeTrackerFromVehicle(netId);
+
+  const vehicle = NetworkGetEntityFromNetworkId(netId);
+  if (!vehicle || !DoesEntityExist(vehicle)) return;
+
+  removeTrackerFromVehicle(vehicle);
 });

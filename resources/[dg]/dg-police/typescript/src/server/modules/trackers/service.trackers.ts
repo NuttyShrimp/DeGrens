@@ -1,47 +1,57 @@
-import { Events, Jobs, Sounds, Util } from '@dgx/server';
+import { Events, Jobs, Sounds } from '@dgx/server';
 import { trackersLogger } from './logger.trackers';
 
-const activeTrackers: Police.Trackers.Tracker[] = [];
+const activeTrackers = new Map<number, NodeJS.Timer>();
 
-export const addTrackerToVehicle = (netId: number, delay: number) => {
-  // Check if tracker already exists, if so remove
-  const existingIdx = activeTrackers.findIndex(t => t.netId === netId);
-  if (existingIdx !== -1) {
-    clearInterval(activeTrackers[existingIdx].interval);
-    activeTrackers.splice(existingIdx, 1);
-    trackersLogger.silly(`Removing tracker from vehicle ${netId} to add a new tracker`);
-  }
-
-  emitTrackerLocationToPolice(netId);
-  const interval = setInterval(() => {
-    emitTrackerLocationToPolice(netId);
-  }, delay);
-
-  activeTrackers.push({ netId, interval });
-  trackersLogger.silly(`Adding tracker to vehicle ${netId}`);
-};
-
-const emitTrackerLocationToPolice = (netId: number) => {
-  const vehicle = NetworkGetEntityFromNetworkId(netId);
+export const addTrackerToVehicle = (vehicle: number, delay: number) => {
   if (!DoesEntityExist(vehicle)) {
-    removeTrackerFromVehicle(netId);
+    trackersLogger.warn(`Tried to add tracker to nonexistent vehicle ${vehicle}`);
     return;
   }
+
+  const existingTrackerInterval = activeTrackers.get(vehicle);
+  if (existingTrackerInterval) {
+    clearInterval(existingTrackerInterval);
+    trackersLogger.silly(`Removing tracker from vehicle to add a new tracker ${vehicle}`);
+  }
+
+  emitTrackerLocationToPolice(vehicle);
+  const interval = setInterval(() => {
+    emitTrackerLocationToPolice(vehicle);
+  }, delay);
+
+  activeTrackers.set(vehicle, interval);
+  trackersLogger.silly(`Adding tracker to vehicle ${vehicle}`);
+};
+
+const emitTrackerLocationToPolice = (vehicle: number) => {
+  if (!DoesEntityExist(vehicle)) {
+    removeTrackerFromVehicle(vehicle);
+    return;
+  }
+
+  const netId = NetworkGetNetworkIdFromEntity(vehicle);
+
   const coordsArray = GetEntityCoords(vehicle);
   Jobs.getPlayersForJob('police').forEach(plyId => {
     emitNet('police:trackers:setTrackerCoords', plyId, netId, ...coordsArray);
   });
+
   // Replace with custom single beep sound that is louder, this one works fine but enginesound makes it unhearable
   Sounds.playOnEntity(`police_tracker_sound_${netId}`, 'PIN_BUTTON', 'ATM_SOUNDS', netId);
 };
 
-export const removeTrackerFromVehicle = (netId: number) => {
-  const existingIdx = activeTrackers.findIndex(t => t.netId === netId);
-  if (existingIdx === -1) return;
-  clearInterval(activeTrackers[existingIdx].interval);
-  activeTrackers.splice(existingIdx, 1);
-  trackersLogger.silly(`Removing tracker from vehicle ${netId}`);
-  Jobs.getPlayersForJob('police').forEach(plyId => {
-    Events.emitNet('police:trackers:removeTracker', plyId, netId);
-  });
+export const removeTrackerFromVehicle = (vehicle: number) => {
+  const existingTrackerInterval = activeTrackers.get(vehicle);
+  if (!existingTrackerInterval) return;
+
+  clearInterval(existingTrackerInterval);
+  trackersLogger.silly(`Removing tracker from vehicle ${vehicle}`);
+
+  if (DoesEntityExist(vehicle)) {
+    const netId = NetworkGetNetworkIdFromEntity(vehicle);
+    Jobs.getPlayersForJob('police').forEach(plyId => {
+      Events.emitNet('police:trackers:removeTracker', plyId, netId);
+    });
+  }
 };

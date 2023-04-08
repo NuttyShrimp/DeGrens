@@ -15,10 +15,6 @@ declare namespace Police {
     vehicles: string[];
   };
 
-  namespace Trackers {
-    type Tracker = { netId: number; interval: NodeJS.Timer };
-  }
-
   namespace Plateflags {
     type Flag = {
       id: string;
