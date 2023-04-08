@@ -19,6 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Fixed
 - Fixed vehicle plate thread getting stuck on non-existing vehicles
+- Er wordt nu wel een sound afgespeeld bij important dispatch meldingen 
 
 ## [1.1.3]
 

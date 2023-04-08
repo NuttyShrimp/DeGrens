@@ -77,7 +77,12 @@ export const createDispatchCall = async (job: 'ambulance' | 'police', call: Disp
     // TODO: Make louder, cant be heared by other players because so quiet
     if (call.important) {
       const soundId = `dispatch-imp-${storedCall.id}-${id}`;
-      Sounds.playOnEntity(soundId, 'emergency', 'DLC_NUTTY_SOUNDS', GetPlayerPed(String(id)));
+      Sounds.playOnEntity(
+        soundId,
+        'emergency',
+        'DLC_NUTTY_SOUNDS',
+        NetworkGetNetworkIdFromEntity(GetPlayerPed(String(id)))
+      );
       setTimeout(() => {
         Sounds.stop(soundId);
       }, 4000);
