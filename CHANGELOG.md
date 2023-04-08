@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## Added
 - Re-added custom MRPD/Pillbox textures
 - Een item in je inventory probeert nu in zijn huidige rotatie te blijven wanneer je dit quickmoved
+- Enkele extra checks toegevoegd op het maken van een 112
 
 ## Changed
 - Veel item decaysnelheiden verlaagd

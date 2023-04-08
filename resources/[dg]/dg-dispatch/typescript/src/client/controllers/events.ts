@@ -1,4 +1,4 @@
-import { BaseEvents, BlipManager, Events, RPC, UI } from '@dgx/client';
+import { BaseEvents, BlipManager, Events, RPC, UI, Util } from '@dgx/client';
 import { getNearestColorFromHex } from '@dgx/shared/helpers/colorNames';
 import { getDataOfGTAColorById } from '@dgx/shared/helpers/gtacolors';
 import { areBlipsEnabled, clearBlips, syncBlips, updateSprite } from 'services/blips';
@@ -142,3 +142,12 @@ UI.RegisterUICallback('dispatch/openCamera', (data: { id: number }, cb) => {
 UI.onApplicationClose(() => {
   setDispatchOpen(false);
 }, 'dispatch');
+
+Events.onNet('dispatch:doCallAnim', async () => {
+  const ped = PlayerPedId();
+  await Util.loadAnimDict('cellphone@');
+  TaskPlayAnim(ped, 'cellphone@', 'cellphone_call_listen_base', 3.0, -1, -1, 49, 0, false, false, false);
+  setTimeout(() => {
+    StopAnimTask(ped, 'cellphone@', 'cellphone_call_listen_base', 1.0);
+  }, 5000);
+});
