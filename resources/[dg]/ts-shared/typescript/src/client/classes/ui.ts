@@ -90,6 +90,10 @@ class UI {
   public onLoad = (handler: () => void) => {
     on('dg-ui:loadData', handler);
   };
+
+  public addToClipboard = (text: string) => {
+    this.SendAppEvent('copy', text);
+  };
 }
 
 class Taskbar {

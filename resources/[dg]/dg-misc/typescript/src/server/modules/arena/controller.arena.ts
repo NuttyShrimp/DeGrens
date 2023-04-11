@@ -1,4 +1,4 @@
-import { Auth, Chat, Notifications } from '@dgx/server';
+import { Auth, Chat, Notifications, UI } from '@dgx/server';
 import { ArenaType, dispatchInteriorToClients, getPossibleArenaTypes, setCurrentArenaType } from './service.arena';
 
 Auth.onAuth(plyId => {
@@ -22,7 +22,7 @@ Chat.registerCommand(
     if (!possibleTypes) return;
 
     if (possibleTypes.indexOf(newType) === -1) {
-      emitNet('dg-ui:SendAppEvent', plyId, 'copy', JSON.stringify(possibleTypes));
+      UI.addToClipboard(plyId, JSON.stringify(possibleTypes));
       Notifications.add(plyId, `${newType} is geen geldige type. Alle types staat in je clipboard`, 'error');
       return;
     }
