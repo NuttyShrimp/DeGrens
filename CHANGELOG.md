@@ -22,6 +22,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Ambulance ziet meer info bij het inchecken zodat ze een tegenmelding kunnen sturen
 - Hogere kans om specialloot te krijgen uit storerobbery kluis
 - Politie voertuigtrackers herwerkt zodat deze niet naar het verkeerd voertuig refereren
+- Verbandjes gaan langer mee
 
 ## Fixed
 - Fixed vehicle plate thread getting stuck on non-existing vehicles

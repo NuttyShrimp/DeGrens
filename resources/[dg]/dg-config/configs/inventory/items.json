@@ -1709,7 +1709,7 @@
     "name": "bandage",
     "label": "Verband",
     "image": "bandage.png",
-    "decayRate": 7200,
+    "decayRate": 14400,
     "size": {
       "x": 2,
       "y": 1
