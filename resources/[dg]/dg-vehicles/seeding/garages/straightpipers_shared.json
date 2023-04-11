@@ -5,29 +5,31 @@
   "shared": true,
   "location": {
     "vector": {
-      "x": 803.09,
-      "y": -820.64,
-      "z": 26.18
+      "x": 842.7711,
+      "y": -813.4907,
+      "z": 26.3144
     },
     "width": 13.0,
     "length": 5.0,
     "options": {
-      "heading": 269,
+      "heading": 0,
       "minZ": 25.21,
       "maxZ": 29.30
     }
   },
-  "vehicle_types": ["land"],
+  "vehicle_types": [
+    "land"
+  ],
   "parking_spots": [
     {
       "type": "land",
-      "size": 3.0,
-      "distance": 2.8,
-      "heading": 270,
+      "size": 4.0,
+      "distance": 3.8,
+      "heading": 0,
       "coords": {
-        "x": 803.09,
-        "y": -820.64,
-        "z": 26.18
+        "x": 842.7711,
+        "y": -813.4907,
+        "z": 26.3144
       }
     }
   ]
