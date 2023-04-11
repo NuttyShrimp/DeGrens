@@ -1,9 +1,12 @@
-import { Events, Notifications, PropAttach, Util } from '@dgx/client';
+import { Events, Keys, Notifications, PropAttach, Util, UI } from '@dgx/client';
 
 const ANIM = {
   dict: 'amb@world_human_paparazzi@male@base',
   name: 'base',
 };
+
+let canTakePicture = false;
+let captureDebounce = false;
 
 Events.onNet('police:camera:use', async () => {
   if (Util.isFirstPersonCamEnabled()) {
@@ -18,6 +21,10 @@ Events.onNet('police:camera:use', async () => {
   const propId = PropAttach.add('camera');
 
   await Util.Delay(1500);
+
+  canTakePicture = true;
+  UI.showInteraction(`${Keys.getBindedKey('+GeneralUse')} - Neem Foto`);
+
   const fpCamPromise = Util.startFirstPersonCam();
 
   SetTimecycleModifier('scanline_cam_cheap');
@@ -27,5 +34,27 @@ Events.onNet('police:camera:use', async () => {
 
   ClearTimecycleModifier();
   PropAttach.remove(propId);
+  UI.hideInteraction();
   StopAnimTask(ped, ANIM.dict, ANIM.name, 1.0);
+  canTakePicture = false;
 });
+
+Keys.onPressDown(
+  'GeneralUse',
+  () => {
+    if (!canTakePicture) return;
+    if (captureDebounce) {
+      Notifications.add('Je hebt net een foto genomen', 'error');
+      return;
+    }
+
+    captureDebounce = true;
+    setTimeout(() => {
+      captureDebounce = false;
+    }, 1000);
+
+    Notifications.add('Foto genomen (zie clipboard)', 'success');
+    Events.emitNet('police:camera:takePicture');
+  },
+  true
+);
