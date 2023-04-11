@@ -1,4 +1,4 @@
-export const MAX_FOV = 30.0;
+export const MAX_FOV = 40.0;
 export const MIN_FOV = 1.5;
 export const ZOOM_SPEED = 3.0;
 export const SPEED_X = 3.5;

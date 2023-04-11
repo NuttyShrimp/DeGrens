@@ -2146,5 +2146,45 @@
       "y": 4
     },
     "useable": true
+  },
+  {
+    "name": "news_microphone",
+    "label": "Microfoon",
+    "image": "news_microphone.png",
+    "size": {
+      "x": 1,
+      "y": 2
+    },
+    "useable": true
+  },
+  {
+    "name": "news_boommic",
+    "label": "Microfoon Arm",
+    "image": "news_boommic.png",
+    "size": {
+      "x": 6,
+      "y": 2
+    },
+    "useable": true
+  },
+  {
+    "name": "news_camera",
+    "label": "Camera",
+    "image": "news_camera.png",
+    "size": {
+      "x": 4,
+      "y": 3
+    },
+    "useable": true
+  },
+  {
+    "name": "news_light",
+    "label": "Spotlight",
+    "image": "news_light.png",
+    "size": {
+      "x": 4,
+      "y": 6
+    },
+    "useable": true
   }
 ]

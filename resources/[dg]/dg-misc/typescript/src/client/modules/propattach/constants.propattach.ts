@@ -531,4 +531,46 @@ export const PROPS: Record<string, PropAttach.PropInfo> = {
       z: 8.4,
     },
   },
+  news_microphone: {
+    model: 'p_ing_microphonel_01',
+    boneId: 60309,
+    position: {
+      x: 0.055,
+      y: 0.05,
+      z: 0,
+    },
+    rotation: {
+      x: 240,
+      y: 0,
+      z: 0,
+    },
+  },
+  news_boommic: {
+    model: 'prop_v_bmike_01',
+    boneId: 28422,
+    position: {
+      x: -0.08,
+      y: 0,
+      z: 0,
+    },
+    rotation: {
+      x: 0,
+      y: 0,
+      z: 0,
+    },
+  },
+  news_camera: {
+    model: 'prop_v_cam_01',
+    boneId: 28422,
+    position: {
+      x: 0,
+      y: 0,
+      z: 0,
+    },
+    rotation: {
+      x: 0,
+      y: 0,
+      z: 0,
+    },
+  },
 };

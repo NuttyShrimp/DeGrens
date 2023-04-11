@@ -23,6 +23,7 @@ import './services/idlist';
 import './services/walkstyles';
 import './services/convars';
 import './services/useables';
+import './services/news';
 import './controllers';
 
 setImmediate(() => {

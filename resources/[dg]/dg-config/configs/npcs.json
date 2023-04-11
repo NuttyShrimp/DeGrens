@@ -1520,5 +1520,46 @@
       }
     ],
     "scenario": "WORLD_HUMAN_GUARD_STAND"
+  },
+  {
+    "id": "shop_weazel_news",
+    "model": "csb_reporter",
+    "position": {
+      "x": -598.7726,
+      "y": -929.8391,
+      "z": 23.8635
+    },
+    "heading": 90,
+    "distance": 50.0,
+    "settings": [
+      {
+        "type": "invincible",
+        "active": true
+      },
+      {
+        "type": "ignore",
+        "active": true
+      },
+      {
+        "type": "freeze",
+        "active": true
+      },
+      {
+        "type": "collision",
+        "active": true
+      }
+    ],
+    "flags": [
+      {
+        "name": "isShopKeeper",
+        "active": true
+      }
+    ],
+    "scenario": "WORLD_HUMAN_CLIPBOARD",
+    "blip": {
+      "title": "Weazel News",
+      "sprite": 459,
+      "color": 1
+    }
   }
 ]

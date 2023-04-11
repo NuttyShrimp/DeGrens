@@ -303,6 +303,28 @@
         "amount": 100,
         "price": 100
       }
+    ],
+    "news_shop": [
+      {
+        "name": "news_microphone",
+        "amount": 10,
+        "price": 50
+      },
+      {
+        "name": "news_boommic",
+        "amount": 10,
+        "price": 200
+      },
+      {
+        "name": "news_camera",
+        "amount": 10,
+        "price": 250
+      },
+      {
+        "name": "news_light",
+        "amount": 10,
+        "price": 1500
+      }
     ]
   },
   "shops": {
@@ -389,6 +411,9 @@
     },
     "hunting_shop": {
       "type": "hunting_shop"
+    },
+    "weazel_news": {
+      "type": "news_shop"
     }
   }
 }
