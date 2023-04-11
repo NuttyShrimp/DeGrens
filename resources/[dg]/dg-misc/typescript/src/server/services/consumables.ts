@@ -1,4 +1,4 @@
-import { Chat, Config, Events, Hospital, Inventory, Minigames, Notifications, Taskbar, Util } from '@dgx/server';
+import { Config, Events, Hospital, Inventory, Minigames, Notifications, Taskbar } from '@dgx/server';
 
 const effects: Record<Config.EffectConsumable['effect'], (target: number, duration: number, itemId: string) => void> = {
   stress: async (target, duration, itemId) => {
@@ -64,6 +64,7 @@ const effects: Record<Config.EffectConsumable['effect'], (target: number, durati
     Events.emitNet('misc:consumables:applyEffect', target, 'damage', duration);
   },
 };
+
 setImmediate(async () => {
   await Config.awaitConfigLoad();
   const config = await Config.getConfigValue('inventory.consumables');
@@ -148,21 +149,6 @@ const registerDrug = (info: Config.EffectConsumable) => {
     effects[info.effect](src, info.duration, item.id);
   });
 };
-
-// Registration of 'normal' items
-Inventory.registerUseable('id_card', (src, item) => {
-  const plyInRadius = Util.getAllPlayersInRange(src, 5);
-  Chat.sendMessage(src, {
-    type: 'idcard',
-    message: item.metadata as Chat.CardMessage['message'],
-  });
-  plyInRadius.forEach(ply => {
-    Chat.sendMessage(ply, {
-      type: 'idcard',
-      message: item.metadata as Chat.CardMessage['message'],
-    });
-  });
-});
 
 // quality of metadata can influence gain, we scale from 25-100 to always get a bit at least
 const calculateGain = (info: Config.Consumable, item: Inventory.ItemState) => {

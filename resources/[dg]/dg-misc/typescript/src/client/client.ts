@@ -12,6 +12,7 @@ import './modules/animloops';
 import './modules/objectManager/controller.objectmanager';
 import './modules/arena';
 import './modules/blipmanager';
+import './modules/fpcam';
 import './services/laptop';
 import './services/config';
 import './services/boatanchor';
@@ -29,6 +30,7 @@ import './services/spacespam';
 import './services/parachute';
 import './services/scubagear';
 import './services/grid';
+import './services/binoculars';
 
 import { setDiscordRichPresence } from 'modules/discord/service.discord';
 import { setGTABehaviour } from 'modules/gtabehaviour/service.gtabehaviour';

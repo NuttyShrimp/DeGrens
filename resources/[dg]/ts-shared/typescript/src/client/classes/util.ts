@@ -420,6 +420,14 @@ class Util extends UtilShared {
   public onCharSpawn = (handler: (isNewCharacter: boolean) => void) => {
     on('dg-chars:finishSpawn', handler);
   };
+
+  public startFirstPersonCam = (): Promise<void> => {
+    return global.exports['dg-misc'].startFirstPersonCam();
+  };
+
+  public isFirstPersonCamEnabled = (): boolean => {
+    return global.exports['dg-misc'].isFirstPersonCamEnabled();
+  };
 }
 
 export class Interiors {

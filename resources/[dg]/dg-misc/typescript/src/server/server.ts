@@ -22,8 +22,7 @@ import './services/seats';
 import './services/idlist';
 import './services/walkstyles';
 import './services/convars';
-import './services/parachute';
-import './services/scubagear';
+import './services/useables';
 import './controllers';
 
 setImmediate(() => {
