@@ -57,4 +57,7 @@ const stopKeyThread = () => {
   keyThread = null;
 };
 
-export const getActiveKeyGameId = () => activeId;
+export const forceFinishKeygame = () => {
+  if (activeId === null) return;
+  finishKeygame(activeId, false);
+};

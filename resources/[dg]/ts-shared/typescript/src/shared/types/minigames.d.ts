@@ -1,12 +1,13 @@
 declare namespace Minigames {
-  type Game = 'keygame' | 'sequence' | 'order' | 'vision';
+  type Game = 'keygame' | 'sequence' | 'order' | 'vision' | 'keypad';
 
   type HandlerParams =
     | ['keygame', number, number, number]
     | ['sequence', number, number, number]
     | ['order', number, number, number, number, number]
     | ['vision', number, number]
-    | ['keygameCustom', Keygame.Cycle[]];
+    | ['keygameCustom', Keygame.Cycle[]]
+    | ['keypad', Keypad.Data];
 
   namespace Keygame {
     type Cycle = {
@@ -42,5 +43,12 @@ declare namespace Minigames {
     };
 
     type GenericGameData = OrderGameData | VisionGameData | SequenceGameData;
+  }
+
+  namespace Keypad {
+    type Data = {
+      buttons?: string[]; // LENGTH 10
+      solution: string;
+    };
   }
 }

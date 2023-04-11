@@ -1,5 +1,5 @@
 import { UI } from '@dgx/client';
-import { startKeygame, finishKeygame } from './service.keygame';
+import { startKeygame, finishKeygame, forceFinishKeygame } from './service.keygame';
 
 UI.RegisterUICallback('keygame/finished', (data: { id: string; success: boolean }, cb) => {
   finishKeygame(data.id, data.success);
@@ -7,3 +7,7 @@ UI.RegisterUICallback('keygame/finished', (data: { id: string; success: boolean 
 });
 
 global.asyncExports('keygame', startKeygame);
+
+UI.onApplicationClose(() => {
+  forceFinishKeygame();
+}, 'keygame');

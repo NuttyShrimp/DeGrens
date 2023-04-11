@@ -498,4 +498,17 @@ export const cmds: {
     app: 'reports',
     show: false,
   },
+  {
+    cmd: 'show keypad',
+    app: 'keypad',
+    show: true,
+    data: {
+      buttons: ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'],
+    },
+  },
+  {
+    cmd: 'hide keypad',
+    app: 'keypad',
+    show: false,
+  },
 ];

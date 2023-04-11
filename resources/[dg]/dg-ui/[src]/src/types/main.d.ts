@@ -100,4 +100,5 @@ declare interface RootState {
   idlist: IdList.State;
   reports: Reports.State;
   'reports-indicator': ReportIndicator.State;
+  keypad: null;
 }
