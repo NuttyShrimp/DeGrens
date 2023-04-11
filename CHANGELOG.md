@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Re-added custom MRPD/Pillbox textures
 - Een item in je inventory probeert nu in zijn huidige rotatie te blijven wanneer je dit quickmoved
 - Enkele extra checks toegevoegd op het maken van een 112
+- First Person Cam die gebruikt werd bij pdcam en verrekijker verplaatst naar eigen module om makkelijker opnieuw te gebruiken
+- Je kan nu rechtstreeks fotos maken met de PD Camera
 
 ## Changed
 - Veel item decaysnelheiden verlaagd
