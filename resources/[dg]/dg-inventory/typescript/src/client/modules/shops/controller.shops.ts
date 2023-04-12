@@ -1,4 +1,4 @@
-import { Peek } from '@dgx/client';
+import { Npcs, Peek } from '@dgx/client';
 import contextManager from 'classes/contextmanager';
 
 Peek.addFlagEntry('isShopKeeper', {
@@ -9,7 +9,7 @@ Peek.addFlagEntry('isShopKeeper', {
       action: (_, entity) => {
         if (!entity) return;
         PlayPedAmbientSpeechNative(entity, 'SHOP_GREET', 'SPEECH_PARAMS_FORCE_SHOUTED');
-        const npcId: string = global.exports['dg-npcs'].findPedData(entity)?.id;
+        const npcId: string = Npcs.findPedData(entity)?.id;
         if (!npcId) return;
         const shop = npcId.replace(/^(shop_)/, '');
         contextManager.openInventory({ type: 'shop', identifier: shop });

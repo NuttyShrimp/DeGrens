@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Nieuws gerelateerde items toegevoegd
 - Keypad UI toegevoegd
 - Mogelijkheid toegevoegd om particles te creeren op serverside
+- DGX class voor NPCs om geen explicit exports te hoeven gebruiken
 
 ## Changed
 - Veel item decaysnelheiden verlaagd

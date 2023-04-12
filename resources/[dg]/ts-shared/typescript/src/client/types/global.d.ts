@@ -37,6 +37,7 @@ declare global {
     BaseEvents: typeof Classes.BaseEvents;
     BlipManager: typeof Classes.BlipManager;
     SyncedObjects: typeof Classes.SyncedObjects;
+    Npcs: typeof Classes.Npcs;
   };
   var asyncExports: any;
 }

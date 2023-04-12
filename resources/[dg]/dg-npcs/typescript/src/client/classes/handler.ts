@@ -20,6 +20,7 @@ class Handler extends Util.Singleton<Handler>() {
       if (GetCurrentResourceName() !== resourceName) return;
       this.npcs.forEach(npc => {
         npc.delete();
+        npc.removeBlip();
       });
     });
   }
@@ -49,6 +50,7 @@ class Handler extends Util.Singleton<Handler>() {
     const npc = this.getNpc(id);
     if (!npc) return;
     npc.delete();
+    npc.removeBlip();
     this.npcs.delete(id);
   };
 
@@ -59,11 +61,11 @@ class Handler extends Util.Singleton<Handler>() {
     return npc.data;
   };
 
-  @Export('setNpcState')
-  private _setNpcState = (id: string, state: boolean) => {
+  @Export('setNpcEnabled')
+  private _setNpcEnabled = (id: string, enabled: boolean) => {
     const npc = this.getNpc(id);
     if (!npc) return;
-    npc.enabled = state;
+    npc.enabled = enabled;
   };
 
   public startThread = () => {
