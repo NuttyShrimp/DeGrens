@@ -465,15 +465,6 @@ export class PropAttach {
   };
 }
 
-export class Particle {
-  add = (data: Particles.Particle): string => {
-    return global.exports['dg-misc'].addParticle(data);
-  };
-  remove = (id: string) => {
-    global.exports['dg-misc'].removeParticle(id);
-  };
-}
-
 export class Animations {
   startTabletAnimation() {
     global.exports['dg-misc'].startTabletAnimation();
@@ -542,7 +533,6 @@ export default {
   Util: new Util(),
   Interiors: new Interiors(),
   PropAttach: new PropAttach(),
-  Particle: new Particle(),
   Animations: new Animations(),
   SyncedObjects: new SyncedObjects(),
 };

@@ -6,23 +6,17 @@ const activeLoopedParticles: Map<string, Required<Particles.Particle>> = new Map
 // Every 10s, send event to players who are in range for all particles
 export const startParticleThread = () => {
   setInterval(() => {
-    const toBeRemoved: string[] = [];
-
-    activeLoopedParticles.forEach((data, id) => {
+    for (const [id, data] of activeLoopedParticles) {
       // Check if entity still exists
       if ('netId' in data) {
         const entity = NetworkGetEntityFromNetworkId(data.netId);
         if (!entity || !DoesEntityExist(entity)) {
-          toBeRemoved.push(id);
+          activeLoopedParticles.delete(id);
           mainLogger.silly('Registered particle has been removed because entity does not exist');
         }
       }
       sendToClosePlayers(id, data);
-    });
-
-    toBeRemoved.forEach(id => {
-      removeLoopedParticle(id);
-    });
+    }
   }, 1000 * 10);
 };
 

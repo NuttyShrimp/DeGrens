@@ -1,4 +1,4 @@
-import { Events, Notifications, RPC, Taskbar, Util, Minigames, Inventory, Particle } from '@dgx/client';
+import { Events, Notifications, RPC, Taskbar, Util, Minigames, Particles } from '@dgx/client';
 
 export const checkPercentageOfLocation = async (entity: number) => {
   await movePlayerToBox(entity);
@@ -43,11 +43,15 @@ export const disableLocationPower = async (entity: number) => {
 
   const hackSuccess = await Minigames.sequencegame(3, 6, 10);
   if (hackSuccess) {
-    Particle.add({
+    const [modelSizeMin, modelSizeMax] = GetModelDimensions(GetEntityModel(entity));
+    const halfDepth = (modelSizeMax[1] - modelSizeMin[1]) / 2;
+    const halfHeight = (modelSizeMax[2] - modelSizeMin[2]) / 2;
+    const particleCoords = Util.ArrayToVector3(GetOffsetFromEntityInWorldCoords(entity, 0, -halfDepth, halfHeight));
+    Particles.add({
       dict: 'core',
       name: 'ent_sht_electrical_box',
       looped: false,
-      coords: location,
+      coords: particleCoords,
     });
   } else {
     Notifications.add('Mislukt', 'error');

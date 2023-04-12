@@ -37,6 +37,7 @@ declare global {
     BaseEvents: typeof Classes.BaseEvents;
     SyncedObjects: typeof Classes.SyncedObjects;
     DoorLock: typeof Classes.DoorLock;
+    Particles: typeof Classes.Particles;
     Vector3: typeof Vector3Class;
     Vector4: typeof Vector4Class;
   };

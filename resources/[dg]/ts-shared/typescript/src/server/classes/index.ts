@@ -17,6 +17,7 @@ import baseevents from './baseevents';
 import minigames from './minigames';
 import sounds from './sounds';
 import doorlock from './doorlock';
+import particles from './particles';
 
 export const { Events, RPC, SQL, API, Auth } = events;
 export const { Util, Status, Reputations, SyncedObjects } = util;
@@ -37,3 +38,4 @@ export const { BaseEvents } = baseevents;
 export const { Minigames } = minigames;
 export const { Sounds } = sounds;
 export const { DoorLock } = doorlock;
+export const { Particles } = particles;

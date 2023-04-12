@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Je kan nu rechtstreeks fotos maken met de PD Camera
 - Nieuws gerelateerde items toegevoegd
 - Keypad UI toegevoegd
+- Mogelijkheid toegevoegd om particles te creeren op serverside
 
 ## Changed
 - Veel item decaysnelheiden verlaagd

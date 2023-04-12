@@ -22,7 +22,7 @@ declare global {
     Inventory: typeof Classes.Inventory;
     PropAttach: typeof Classes.PropAttach;
     Storage: typeof Classes.Storage;
-    Particle: typeof Classes.Particle;
+    Particles: typeof Classes.Particles;
     Sounds: typeof Classes.Sounds;
     HUD: typeof Classes.HUD;
     Business: typeof Classes.Business;

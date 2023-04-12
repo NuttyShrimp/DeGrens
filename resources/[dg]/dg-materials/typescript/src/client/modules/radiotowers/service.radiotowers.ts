@@ -3,7 +3,7 @@ import {
   Inventory,
   Minigames,
   Notifications,
-  Particle,
+  Particles,
   PolyTarget,
   PolyZone,
   RPC,
@@ -100,7 +100,7 @@ export const disablePower = async (towerId: string) => {
 
   const coords = radiotowers[towerId].actions.find(a => a.action === 'disable')?.position;
   if (coords !== undefined) {
-    Particle.add({
+    Particles.add({
       dict: 'core',
       name: 'ent_sht_electrical_box',
       looped: false,
