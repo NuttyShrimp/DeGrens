@@ -650,6 +650,47 @@
     }
   },
   {
+    "id": "shop_ottos_garage",
+    "model": "mp_m_shopkeep_01",
+    "position": {
+      "x": 812.56,
+      "y": -783.57,
+      "z": 26.17
+    },
+    "heading": 318.76,
+    "distance": 50.0,
+    "settings": [
+      {
+        "type": "invincible",
+        "active": true
+      },
+      {
+        "type": "ignore",
+        "active": true
+      },
+      {
+        "type": "freeze",
+        "active": true
+      },
+      {
+        "type": "collision",
+        "active": true
+      }
+    ],
+    "flags": [
+      {
+        "name": "isShopKeeper",
+        "active": true
+      }
+    ],
+    "scenario": "WORLD_HUMAN_HANG_OUT_STREET",
+    "blip": {
+      "title": "24/7 Winkel",
+      "sprite": 52,
+      "color": 15
+    }
+  },
+  {
     "id": "shop_hardware_city",
     "model": "s_m_m_gaffer_01",
     "position": {
