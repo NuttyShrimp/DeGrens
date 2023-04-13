@@ -659,30 +659,15 @@
     },
     "heading": 318.76,
     "distance": 50.0,
-    "settings": [
-      {
-        "type": "invincible",
-        "active": true
-      },
-      {
-        "type": "ignore",
-        "active": true
-      },
-      {
-        "type": "freeze",
-        "active": true
-      },
-      {
-        "type": "collision",
-        "active": true
-      }
-    ],
-    "flags": [
-      {
-        "name": "isShopKeeper",
-        "active": true
-      }
-    ],
+    "settings": {
+      "invincible": true,
+      "ignore": true,
+      "freeze": true,
+      "collision": true
+    },
+    "flags": {
+      "isShopKeeper": true
+    },
     "scenario": "WORLD_HUMAN_HANG_OUT_STREET",
     "blip": {
       "title": "24/7 Winkel",
