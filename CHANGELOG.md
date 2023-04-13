@@ -18,6 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Mogelijkheid toegevoegd om particles te creeren op serverside
 - DGX class voor NPCs om geen explicit exports te hoeven gebruiken
 - Paleto heist toegevoegd
+- Extra impound reden toegevoegd
 
 ## Changed
 - Veel item decaysnelheiden verlaagd
@@ -34,6 +35,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Er wordt nu wel een sound afgespeeld bij important dispatch meldingen 
 - Fix items die naar positie 0 gaan wanneer inventory vol is tijdens het moven van meerdere items
 - Items verdwijnen nu wel visueel als je je inventory open hebt wanneer een item gedestroyed wordt
+- Radiotower timeout randomization gefixt
 
 ## [1.1.3]
 

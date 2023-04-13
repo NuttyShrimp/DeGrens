@@ -44,7 +44,7 @@ Events.onNet('materials:radiotower:disable', (src: number, towerId: string) => {
   });
 
   const configTimeout = getConfig().radiotowers.timeout;
-  const timeout = Util.getRndInteger(configTimeout - 30, configTimeout + 30);
+  const timeout = Util.getRndInteger(configTimeout - 5, configTimeout + 5);
   setTimeout(() => {
     resetTowerState(towerId, false);
   }, timeout * 60 * 1000);

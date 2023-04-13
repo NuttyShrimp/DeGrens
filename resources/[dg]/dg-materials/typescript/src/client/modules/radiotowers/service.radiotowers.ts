@@ -89,6 +89,7 @@ export const disablePower = async (towerId: string) => {
     cancelOnDeath: true,
     cancelOnMove: true,
     disarm: true,
+    disablePeek: true,
     disableInventory: true,
     controlDisables: {
       movement: true,
