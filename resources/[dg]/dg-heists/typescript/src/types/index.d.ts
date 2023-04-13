@@ -5,11 +5,15 @@ declare namespace Heists {
     laptops: Laptops.Config;
     types: Partial<Record<HeistType, Type>>;
     fleeca: Fleeca.Config;
+    paleto: Paleto.Config;
   };
 
   type InitData = {
     shopPickupZone: Shop.Config['pickupZone'];
-    zones: [LocationId, Location['zone']][];
+    locations: ({
+      id: LocationId;
+    } & Pick<Location, 'zone' | 'policeDoorReset'>)[];
+    paletoActions: Paleto.Config['actions'];
   };
 
   type HeistType = 'fleeca' | 'paleto' | 'maze' | 'pacific' | 'jewelry' | 'bobcat';
@@ -33,15 +37,16 @@ declare namespace Heists {
       coords: Vec4;
       type: Trolley.Type;
     }[];
+    policeDoorReset?: Vec4;
   };
 
   type Service = 'door' | 'laptop' | 'trolleys';
 
   type TypeManager = {
-    initialize: () => void;
-    canHack: () => boolean;
-    startedHack: () => void;
-    finishedHack: (success: boolean) => void;
+    initialize?: () => void;
+    canHack?: () => boolean;
+    startedHack?: () => void;
+    finishedHack?: (success: boolean) => void;
   };
 
   namespace Door {

@@ -138,6 +138,17 @@ export class Util {
     };
   };
 
+  getHeadingToFaceCoordsFromCoord = (origin: Vec3, target: Vec3) => {
+    const vector = { x: origin.x - target.x, y: origin.y - target.y };
+    let heading = Math.atan(vector.y / vector.x);
+    heading = (heading * 180) / Math.PI;
+    heading = heading + 90;
+    if (vector.x < 0) {
+      heading = Math.abs(heading) + 180;
+    }
+    return heading;
+  };
+
   /**
    * Shuffles immutable
    */

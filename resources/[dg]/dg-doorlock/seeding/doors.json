@@ -1168,7 +1168,8 @@
           "z": 31.78798
         }
       }
-    ]
+    ],
+    "name": "heist_paleto_side_entrance"
   },
   {
     "description": "Paleto back entrance",
@@ -1185,7 +1186,26 @@
           "z": 31.78798
         }
       }
-    ]
+    ],
+    "name": "heist_paleto_back_entrance"
+  },
+  {
+    "description": "Paleto cameraroom door",
+    "locked": true,
+    "distance": 2,
+    "doors": [
+      {
+        "model": "xm_prop_iaa_base_door_01",
+        "coords": {
+          "x": -92.23223114013672,
+          "y": 6468.96044921875,
+          "z": 31.787979125976562
+        }
+      }
+    ],
+    "authorized": {},
+    "hideInteraction": true,
+    "name": "heist_paleto_cameraroom"
   },
   {
     "description": "Paleto side hallway",

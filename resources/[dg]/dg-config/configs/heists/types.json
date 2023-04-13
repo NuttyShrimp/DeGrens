@@ -20,7 +20,7 @@
         }
       },
       "specialItem": {
-        "chance": 10,
+        "chance": 30,
         "item": "drive_v2"
       }
     }
@@ -32,7 +32,7 @@
           "itemName": "marked_bills",
           "amount": [
             15,
-            30
+            20
           ],
           "spawnChance": 100
         },
@@ -42,12 +42,12 @@
             2,
             5
           ],
-          "spawnChance": 10
+          "spawnChance": 50
         }
       },
       "specialItem": {
-        "chance": 10,
-        "item": "drive_v2"
+        "chance": 0,
+        "item": "drive_v3"
       }
     }
   },

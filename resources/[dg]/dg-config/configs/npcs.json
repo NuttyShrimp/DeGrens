@@ -1002,5 +1002,25 @@
       "sprite": 459,
       "color": 1
     }
+  },
+  {
+    "id": "heists_paleto_codes",
+    "model": "u_m_m_bankman",
+    "position": {
+      "x": -3143.7187,
+      "y": 1137.6483,
+      "z": 21.4807
+    },
+    "heading": 244.4,
+    "distance": 50.0,
+    "settings": {
+      "invincible": true,
+      "ignore": true,
+      "freeze": true,
+      "collision": true
+    },
+    "flags": {
+      "heistsPaletoCodes": true
+    }
   }
 ]
