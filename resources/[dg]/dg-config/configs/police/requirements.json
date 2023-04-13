@@ -14,6 +14,9 @@
   "heist_fleeca": {
     "police": 4
   },
+  "heist_paleto": {
+    "police": 5
+  },
   "bench_container_enter": {
     "players": 20
   },

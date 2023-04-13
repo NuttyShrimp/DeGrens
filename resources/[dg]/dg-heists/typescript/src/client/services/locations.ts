@@ -1,18 +1,41 @@
-import { Events, PolyZone, Util } from '@dgx/client';
+import { Events, Npcs, PolyZone, Util } from '@dgx/client';
 
 let currentLocation: Heists.LocationId | null;
 
 export const getCurrentLocation = () => currentLocation;
 
-export const buildLocationZones = (zones: Heists.InitData['zones']) => {
-  for (const [id, zone] of zones) {
-    PolyZone.addPolyZone('heists_location', zone.points, {
-      minZ: zone.minZ,
-      maxZ: zone.maxZ,
+export const buildLocations = (locations: Heists.InitData['locations']) => {
+  for (const location of locations) {
+    // build zone
+    PolyZone.addPolyZone('heists_location', location.zone.points, {
+      minZ: location.zone.minZ,
+      maxZ: location.zone.maxZ,
       data: {
-        id,
+        id: location.id,
       },
     });
+
+    // add door reset npc
+    if (location.policeDoorReset) {
+      const { w: npcHeading, ...npcCoords } = location.policeDoorReset;
+      Npcs.add({
+        id: `heists_doorreset_${location.id}`,
+        model: 'u_m_m_jewelsec_01',
+        position: npcCoords,
+        heading: npcHeading,
+        distance: 50.0,
+        settings: {
+          invincible: true,
+          ignore: true,
+          freeze: true,
+          collision: true,
+        },
+        flags: {
+          heistsDoorReset: true,
+          locationId: location.id,
+        },
+      });
+    }
   }
 };
 

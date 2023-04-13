@@ -2186,5 +2186,25 @@
       "y": 6
     },
     "useable": true
+  },
+  {
+    "name": "paper_note",
+    "label": "Papiertje",
+    "image": "paper_note.png",
+    "decayRate": 300,
+    "size": {
+      "x": 3,
+      "y": 3
+    }
+  },
+  {
+    "name": "heist_paleto_key",
+    "label": "Security Sleutel",
+    "image": "heist_paleto_key.png",
+    "decayRate": 5,
+    "size": {
+      "x": 2,
+      "y": 2
+    }
   }
 ]

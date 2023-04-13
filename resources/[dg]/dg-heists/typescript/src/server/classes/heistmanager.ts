@@ -1,10 +1,11 @@
-import { Util } from '@dgx/server';
+import { Util, Jobs } from '@dgx/server';
 import { DGXEvent, EventListener } from '@dgx/server/decorators';
 import { mainLogger } from 'sv_logger';
 import winston from 'winston';
 import { HeistLocation } from './heistlocation';
 import config from 'services/config';
 import { FleecaManager } from './typemanagers/fleecamanager';
+import { PaletoManager } from './typemanagers/paletomanager';
 
 @EventListener()
 class HeistManager extends Util.Singleton<HeistManager>() {
@@ -18,6 +19,7 @@ class HeistManager extends Util.Singleton<HeistManager>() {
     this.locations = new Map();
     this.typeManagers = {
       fleeca: new FleecaManager(),
+      paleto: new PaletoManager(),
     };
   }
 
@@ -68,7 +70,7 @@ class HeistManager extends Util.Singleton<HeistManager>() {
 
     // initialize type managers
     for (const typeManager of Object.values(this.typeManagers)) {
-      typeManager.initialize();
+      typeManager.initialize?.();
     }
   };
 
@@ -119,7 +121,7 @@ class HeistManager extends Util.Singleton<HeistManager>() {
 
     const typeManager = this.getManagerForType(location.getHeistType());
     if (!typeManager) return false;
-    return typeManager.canHack();
+    return typeManager.canHack?.() ?? true;
   };
 
   public startHackAtLocation = (locationId: Heists.LocationId) => {
@@ -127,7 +129,7 @@ class HeistManager extends Util.Singleton<HeistManager>() {
     if (!location) return;
     const typeManager = this.getManagerForType(location.getHeistType());
     if (!typeManager) return;
-    typeManager.startedHack();
+    typeManager.startedHack?.();
   };
 
   public finishHackAtLocation = (locationId: Heists.LocationId, success: boolean) => {
@@ -140,7 +142,7 @@ class HeistManager extends Util.Singleton<HeistManager>() {
       location.setDone();
     }
 
-    typeManager.finishedHack(success);
+    typeManager.finishedHack?.(success);
   };
 
   public getHeistTypeByLocationId = (locationId: Heists.LocationId) => {
@@ -185,6 +187,23 @@ class HeistManager extends Util.Singleton<HeistManager>() {
     const location = this.getLocation(locationId);
     if (!location) return;
     location.spawnTrolleys();
+  };
+
+  public isLocationDone = (locationId: Heists.LocationId) => {
+    const location = this.getLocation(locationId);
+    if (!location) return;
+    return location.isDone();
+  };
+
+  @DGXEvent('heists:location:resetDoor')
+  private _resetLocationDoor = (plyId: number, locationId: Heists.LocationId) => {
+    if (Jobs.getCurrentJob(plyId) !== 'police') return;
+
+    this.setLocationDoorState(locationId, false);
+
+    const logMsg = `${Util.getName(plyId)}(${plyId}) has reset the door of location ${locationId}`;
+    this.logger.silly(logMsg);
+    Util.Log('heists:resetDoor', { locationId }, logMsg, plyId);
   };
 }
 

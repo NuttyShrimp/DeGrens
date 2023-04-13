@@ -338,14 +338,7 @@ class Util extends UtilShared {
 
   public getHeadingToFaceCoords = (coords: Vec3) => {
     const pedCoords = this.getPlyCoords();
-    const vector = { x: pedCoords.x - coords.x, y: pedCoords.y - coords.y };
-    let heading = Math.atan(vector.y / vector.x);
-    heading = (heading * 180) / Math.PI;
-    heading = heading + 90;
-    if (vector.x < 0) {
-      heading = Math.abs(heading) + 180;
-    }
-    return heading;
+    return this.getHeadingToFaceCoordsFromCoord(pedCoords, coords);
   };
 
   public onPlayerLoaded = (handler: (playerData: PlayerData) => void) => {
