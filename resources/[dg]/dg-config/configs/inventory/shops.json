@@ -414,6 +414,9 @@
     },
     "weazel_news": {
       "type": "news_shop"
+    },
+    "ottos_garage": {
+      "type": "grocery"
     }
   }
 }

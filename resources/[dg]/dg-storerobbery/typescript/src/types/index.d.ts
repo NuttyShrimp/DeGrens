@@ -41,7 +41,8 @@ declare namespace Storerobbery {
     | 'sandy_shores'
     | 'tataviam_mountains'
     | 'del_vecchio'
-    | 'paleto_bay';
+    | 'paleto_bay'
+    | 'ottos_garage';
 
   type SafeState = 'closed' | 'decoding' | 'opened' | 'looted';
 

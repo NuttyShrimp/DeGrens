@@ -121,6 +121,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Schotmeldingen toegevoegd
 - Wrapper toegevoegd voor geloopte animaties zodat deze elkaar niet onderbreken
 - Placeable synced objects toegevoegd
+- Je kan nu aankopen doen in de shop bij otto's garage
 
 ### Changed
 - Meer feedback bij start van fleecaoverval
