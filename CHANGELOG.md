@@ -36,6 +36,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fix items die naar positie 0 gaan wanneer inventory vol is tijdens het moven van meerdere items
 - Items verdwijnen nu wel visueel als je je inventory open hebt wanneer een item gedestroyed wordt
 - Radiotower timeout randomization gefixt
+- Wapentinting werkt weer na de move naar serverside weapon setters
 
 ## [1.1.3]
 

@@ -83,11 +83,14 @@ export class Util {
     return result;
   };
 
+  /**
+   * @returns true if condition fulfilled, false if timed out
+   */
   awaitCondition = async (condition: () => boolean, timeout = 5000) => {
-    return new Promise<void>(res => {
+    return new Promise<boolean>(res => {
       // do check first to avoid initial delay if condition already fulfilled
       if (condition()) {
-        res();
+        res(true);
         return;
       }
 
@@ -97,9 +100,10 @@ export class Util {
       }, timeout);
 
       const thread = setInterval(() => {
-        if (timedOut || condition()) {
+        const fulfilled = condition();
+        if (timedOut || fulfilled) {
           clearInterval(thread);
-          res();
+          res(fulfilled);
           return;
         }
       }, 10);

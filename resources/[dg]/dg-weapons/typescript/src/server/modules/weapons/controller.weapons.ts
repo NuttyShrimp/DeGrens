@@ -30,9 +30,9 @@ Events.onNet('weapons:setWeapon', async (src: number, itemId: string) => {
   const components = await getWeaponAttachments(itemId);
   (components ?? []).forEach(comp => GiveWeaponComponentToPed(ped, weaponHash, comp));
 
-  const tint = item.metadata?.tint as string;
+  const tint: string | undefined = item.metadata?.tint;
   if (tint !== undefined) {
-    applyWeaponTint(src, tint);
+    applyWeaponTint(src, weaponHash, tint);
   }
 });
 
