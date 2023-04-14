@@ -99,11 +99,11 @@
       "items": [
         {
           "name": "refined_steel",
-          "amount": 3
+          "amount": 1
         },
         {
           "name": "refined_iron",
-          "amount": 3
+          "amount": 1
         }
       ]
     },
