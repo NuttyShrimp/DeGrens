@@ -15,7 +15,7 @@
     {
       "from": {
         "name": "material_copper",
-        "amount": 6
+        "amount": 5
       },
       "to": {
         "name": "refined_copper",
@@ -25,7 +25,7 @@
     {
       "from": {
         "name": "material_plastic",
-        "amount": 6
+        "amount": 5
       },
       "to": {
         "name": "refined_plastic",
@@ -35,7 +35,7 @@
     {
       "from": {
         "name": "material_iron",
-        "amount": 6
+        "amount": 5
       },
       "to": {
         "name": "refined_iron",
@@ -45,7 +45,7 @@
     {
       "from": {
         "name": "material_aluminum",
-        "amount": 6
+        "amount": 5
       },
       "to": {
         "name": "refined_aluminum",
@@ -55,7 +55,7 @@
     {
       "from": {
         "name": "material_steel",
-        "amount": 6
+        "amount": 5
       },
       "to": {
         "name": "refined_steel",

@@ -1,4 +1,8 @@
 {
+  "sandAmount": [
+    1,
+    2
+  ],
   "specialItemChance": {
     "min": 10,
     "max": 35

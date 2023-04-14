@@ -105,13 +105,22 @@ export const receiveSpotLoot = (plyId: number, spotId: number) => {
   }
 
   // default to sand and use payoutlevel from job as percentage to get specialitem
-  let itemName = 'sand';
+  let itemName: string;
+  let itemAmount: number;
+
   const specialItemChance = jobManager.getJobPayout('sanddigging', group.size, active.payoutLevel) ?? 0;
   if (Util.getRndInteger(1, 101) < specialItemChance) {
     itemName = sanddiggingConfig.specialItems[Math.floor(Math.random() * sanddiggingConfig.specialItems.length)];
+    itemAmount = 1;
+  } else {
+    const [min, max] = sanddiggingConfig.sandAmount;
+
+    itemName = 'sand';
+    itemAmount = Util.getRndInteger(min, max + 1);
   }
 
-  Inventory.addItemToPlayer(plyId, itemName, 1);
+  Inventory.addItemToPlayer(plyId, itemName, itemAmount);
+
   Util.Log(
     'jobs:sanddigging:receive',
     {
