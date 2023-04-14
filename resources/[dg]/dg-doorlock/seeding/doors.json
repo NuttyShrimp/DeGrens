@@ -3465,7 +3465,7 @@
   },
   {
     "description": "maldinis terrasdeur",
-    "locked": true,
+    "locked": false,
     "distance": 2,
     "doors": [
       {
@@ -3489,7 +3489,7 @@
   },
   {
     "description": "maldinis hoofddeur",
-    "locked": true,
+    "locked": false,
     "distance": 2,
     "doors": [
       {
