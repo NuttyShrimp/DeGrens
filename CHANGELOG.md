@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Je ziet de instel optie niet langer als je een doos vast hebt in het methlab
 
 ### Fixed
+- De driver bij een ATM robbery hoeft niet langer uit te stappen voordat hij de ATM van de muur kan trekken
 
 ## [1.1.4]
 

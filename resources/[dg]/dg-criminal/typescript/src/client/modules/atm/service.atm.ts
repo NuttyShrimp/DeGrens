@@ -252,6 +252,12 @@ export const destroyAllRopes = () => {
 
 export const registerActiveRobbery = (robbery: Criminal.ATM.Robbery) => {
   activeRobberies.push({ ...robbery, rope: null });
+
+  // try starting driverthread if active got registered while ply is in active vehicle
+  const currentVehicle = GetVehiclePedIsIn(PlayerPedId(), false);
+  if (currentVehicle && DoesEntityExist(currentVehicle)) {
+    startActiveRobberyVehicleDriverThread(currentVehicle);
+  }
 };
 
 export const unregisterActiveRobbery = (vehicleNetId: number) => {
