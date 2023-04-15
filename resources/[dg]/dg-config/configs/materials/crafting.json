@@ -723,7 +723,8 @@
         "meth_lab_keycard",
         "advanced_parts",
         "big_explosive",
-        "armor"
+        "armor",
+        "atm_rope"
       ],
       "reputation": "crafting"
     },
