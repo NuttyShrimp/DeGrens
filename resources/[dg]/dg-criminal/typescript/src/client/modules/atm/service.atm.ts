@@ -1,4 +1,4 @@
-import { Events, Keys, Particles, Police, Taskbar, UI, Util } from '@dgx/client';
+import { Events, Keys, Notifications, Particles, Police, Taskbar, UI, Util } from '@dgx/client';
 import { Vector3 } from '@dgx/shared';
 import { REQUIRED_PULLS, REQUIRED_PULL_LENGTH, ROPE_LENGTH } from './constants.atm';
 import { getBackCoordsOfEntity } from './helpers.atm';
@@ -305,17 +305,19 @@ export const startActiveRobberyVehicleDriverThread = (vehicle: number) => {
       // check if ply has been pulling for required time
       const timePulling = gameTime - pullStartTime;
       if (timePulling > REQUIRED_PULL_LENGTH) {
-        pullsDone++;
         pullStartTime = 0;
+        pullsDone++;
+
+        if (pullsDone >= REQUIRED_PULLS) {
+          clearActiveRobberyVehicleDriverThread();
+          Events.emitNet('criminal:atm:unattach', netId);
+        } else {
+          Notifications.add('Je hoort iets kraken aan de ATM!', 'success');
+        }
       }
     }
 
     speedBeforePulling = 0;
-
-    if (pullsDone < REQUIRED_PULLS) return;
-
-    clearActiveRobberyVehicleDriverThread();
-    Events.emitNet('criminal:atm:unattach', netId);
   }, 250);
 };
 
