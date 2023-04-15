@@ -7,11 +7,11 @@ from pathlib import Path
 CHANGELOG_PLACEHOLDER="""
 ## [Unreleased]
 
-## Added
+### Added
 
-## Changed
+### Changed
 
-## Fixed
+### Fixed
 """
 
 def statMainPackage():
