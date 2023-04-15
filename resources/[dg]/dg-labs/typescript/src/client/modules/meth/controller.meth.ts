@@ -30,7 +30,8 @@ Peek.addZoneEntry('lab_action', {
       },
       canInteract: (_, __, option) => {
         if (option.data.type !== 'meth') return false;
-        return option.data.action === 'station';
+        if (option.data.action !== 'station') return false;
+        return !hasMethPackage();
       },
     },
     {
