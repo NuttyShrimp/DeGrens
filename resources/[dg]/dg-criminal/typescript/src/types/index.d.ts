@@ -4,6 +4,7 @@ declare namespace Criminal {
     cornerselling: Cornerselling.Config;
     blackmoney: Blackmoney.Config;
     fence: Fence.Config;
+    atm: ATM.Config;
   };
 
   namespace Weed {
@@ -68,6 +69,27 @@ declare namespace Criminal {
   namespace Fence {
     type Config = {
       items: Record<string, number>;
+    };
+  }
+
+  namespace ATM {
+    type Config = {
+      whitelistedModels: string[];
+      loot: {
+        cash: [number, number];
+        rolls: [number, number];
+      };
+    };
+
+    type Robbery = {
+      vehicleNetId: number;
+      atmData: AtmData;
+    };
+
+    type AtmData = {
+      coords: Vec3;
+      rotation: Vec3;
+      model: number;
     };
   }
 }

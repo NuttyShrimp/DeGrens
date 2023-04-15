@@ -19,6 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - DGX class voor NPCs om geen explicit exports te hoeven gebruiken
 - Paleto heist toegevoegd
 - Extra impound reden toegevoegd
+- ATM overval toegevoegd
 
 ## Changed
 - Veel item decaysnelheiden verlaagd

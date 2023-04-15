@@ -20,7 +20,7 @@ import doorlock from './doorlock';
 import particles from './particles';
 
 export const { Events, RPC, SQL, API, Auth } = events;
-export const { Util, Status, Reputations, SyncedObjects } = util;
+export const { Util, Status, Reputations, SyncedObjects, PropRemover } = util;
 export const { Phone } = phone;
 export const { Chat, RayCast } = interaction;
 export const { Config } = config;
