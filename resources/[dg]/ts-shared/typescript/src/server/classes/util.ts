@@ -361,9 +361,35 @@ class SyncedObjects {
   };
 }
 
+class PropRemover {
+  private objectsToRestore: Set<number>;
+
+  constructor() {
+    this.objectsToRestore = new Set();
+    on('onResourceStop', (res: string) => {
+      if (res !== GetCurrentResourceName()) return;
+      this.objectsToRestore.forEach(propId => {
+        global.exports['dg-misc'].restoreRemovedProp(propId);
+      });
+    });
+  }
+
+  public remove = (model: number, coords: Vec2): number => {
+    const propId = global.exports['dg-misc'].addRemovedProp({ model, coords });
+    this.objectsToRestore.add(propId);
+    return propId;
+  };
+
+  public restore = (propId: number) => {
+    global.exports['dg-misc'].restoreRemovedProp(propId);
+    this.objectsToRestore.delete(propId);
+  };
+}
+
 export default {
   Util: new Util(),
   Status: new Status(),
   Reputations: new Reputations(),
   SyncedObjects: new SyncedObjects(),
+  PropRemover: new PropRemover(),
 };

@@ -8,6 +8,7 @@ import './modules/cornerselling';
 import './modules/weed';
 import './modules/blackmoney';
 import './modules/fence';
+import './modules/atm';
 import './services/config';
 
 setImmediate(async () => {

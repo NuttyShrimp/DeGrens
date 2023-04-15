@@ -25,5 +25,8 @@
   },
   "labs_weed": {
     "players": 5
+  },
+  "atm_robbery": {
+    "police": 3
   }
 }

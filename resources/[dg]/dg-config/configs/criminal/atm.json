@@ -1,0 +1,15 @@
+{
+  "whitelistedModels": [
+    "bison"
+  ],
+  "loot": {
+    "cash": [
+      250,
+      750
+    ],
+    "rolls": [
+      10,
+      20
+    ]
+  }
+}

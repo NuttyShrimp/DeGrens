@@ -181,6 +181,30 @@
         "animDict": "anim@heists@box_carry@",
         "anim": "idle"
       }
+    },
+    "blue_atm": {
+      "propName": "item_blue_atm",
+      "position": "primary",
+      "animData": {
+        "animDict": "anim@heists@box_carry@",
+        "anim": "idle"
+      }
+    },
+    "red_atm": {
+      "propName": "item_red_atm",
+      "position": "primary",
+      "animData": {
+        "animDict": "anim@heists@box_carry@",
+        "anim": "idle"
+      }
+    },
+    "green_atm": {
+      "propName": "item_green_atm",
+      "position": "primary",
+      "animData": {
+        "animDict": "anim@heists@box_carry@",
+        "anim": "idle"
+      }
     }
   }
 }

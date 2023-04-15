@@ -42,26 +42,21 @@ export const registerPeekZones = () => {
   config.ATMZones.forEach((zone, idx) => {
     PolyTarget.addCircleZone('atm', zone, 1, { useZ: true, data: { id: idx } });
   });
-  Peek.addZoneEntry('atm', {
+
+  const atmPeekOptions: PeekParams = {
     options: [
       {
         label: 'ATM',
         icon: 'fas fa-university',
         action: interactWithATM,
+        canInteract: ent =>
+          !!ent && DoesEntityExist(ent) && !IsEntityAMissionEntity(ent) && !NetworkGetEntityIsNetworked(ent),
       },
     ],
     distance: 2,
-  });
-  Peek.addModelEntry(config.ATMModels, {
-    options: [
-      {
-        label: 'ATM',
-        icon: 'fas fa-university',
-        action: interactWithATM,
-      },
-    ],
-    distance: 2,
-  });
+  };
+  Peek.addZoneEntry('atm', atmPeekOptions);
+  Peek.addModelEntry(config.ATMModels, atmPeekOptions);
 };
 
 export const doAnimation = async (isAtm: boolean, isOpen: boolean) => {

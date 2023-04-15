@@ -137,6 +137,11 @@
         "name": "scuba_gear",
         "amount": 30,
         "price": 820
+      },
+      {
+        "name": "big_drill",
+        "amount": 25,
+        "price": 500
       }
     ],
     "fishing": [

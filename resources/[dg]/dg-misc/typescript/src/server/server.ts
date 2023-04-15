@@ -12,6 +12,7 @@ import './modules/reputation';
 import './modules/rental/controller.rental';
 import './modules/objectManager/controller.objectmanager';
 import './modules/arena';
+import './modules/propremover';
 import './services/laptop';
 import './services/config';
 import './services/boatanchor';

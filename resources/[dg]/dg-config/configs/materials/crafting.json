@@ -691,6 +691,23 @@
           "amount": 1
         }
       ]
+    },
+    "atm_rope": {
+      "requiredReputation": 200,
+      "items": [
+        {
+          "name": "refined_plastic",
+          "amount": 3
+        },
+        {
+          "name": "refined_aluminum",
+          "amount": 3
+        },
+        {
+          "name": "refined_steel",
+          "amount": 1
+        }
+      ]
     }
   },
   "benches": {
