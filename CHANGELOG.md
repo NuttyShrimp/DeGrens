@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 - De driver bij een ATM robbery hoeft niet langer uit te stappen voordat hij de ATM van de muur kan trekken
+- Voertuig slot is nu wel deftig toggleble de eerste keer dat je dit probeerd
 
 ## [1.1.4]
 

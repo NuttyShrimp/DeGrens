@@ -90,7 +90,7 @@ Events.onNet('vehicles:keys:toggleLock', (plyId: number, netId: number) => {
   // Sound are car_lock and car_unlock
   // 0 == unlocked for getter on server
   const vehLockStatus = GetVehicleDoorLockStatus(vehicle);
-  const newLockStatus = vehLockStatus === 0 ? 2 : 0;
+  const newLockStatus = vehLockStatus === 2 ? 0 : 2;
   const soundName = newLockStatus === 0 ? 'car_lock' : 'car_unlock';
 
   setImmediate(() => {
