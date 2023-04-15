@@ -235,3 +235,19 @@ Events.onNet('admin:commands:kickFromVehicle', () => {
   if (!vehicle || !DoesEntityExist(vehicle)) return;
   TaskLeaveVehicle(ped, vehicle, 16);
 });
+
+Events.onNet('admin:commands:addEventBlip', (coords: Vec3, time: number) => {
+  const blip = AddBlipForCoord(coords.x, coords.y, coords.z);
+  SetBlipSprite(blip, 439);
+  SetBlipColour(blip, 2);
+  SetBlipScale(blip, 1.1);
+  SetBlipAsShortRange(blip, false);
+  BeginTextCommandSetBlipName('STRING');
+  AddTextComponentString('Eventement');
+  EndTextCommandSetBlipName(blip);
+
+  setTimeout(() => {
+    if (!DoesBlipExist(blip)) return;
+    RemoveBlip(blip);
+  }, time * 60 * 1000);
+});

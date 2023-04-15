@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - Feedback notificatie toegevoegd aan ATM robbery
+- Staff kan nu een tijdelijke evenement blip plaatsen
 
 ### Changed
 - Je ziet de instel optie niet langer als je een doos vast hebt in het methlab

@@ -31,7 +31,7 @@ export const buildCityHallZones = () => {
   BlipManager.addBlip({
     category: 'justice',
     id: 'cityhall',
-    sprite: 439,
+    sprite: 438,
     color: 2,
     coords: ZONES[0].coords,
     text: 'Gemeentehuis',
