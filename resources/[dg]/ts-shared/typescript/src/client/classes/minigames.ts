@@ -55,6 +55,10 @@ class Minigames {
     const data: Minigames.GridGame.VisionGameData = { game: 'vision', gridSize, time };
     return global.exports['dg-minigames'].gridgame(data);
   };
+
+  public keypad = (data: Minigames.Keypad.Data): Promise<boolean> => {
+    return global.exports['dg-minigames'].keypad(data);
+  };
 }
 
 export default {

@@ -1,4 +1,4 @@
-import { Events, Keys, PolyZone, RPC, Util, UI, Minigames, Inventory, Particle } from '@dgx/client';
+import { Events, Keys, PolyZone, Util, UI, Minigames, Inventory, Particles } from '@dgx/client';
 import { doDoorAnimation, getDoorId, isAuthorized } from 'helpers/doors';
 
 let doors: Doorlock.ClientData;
@@ -316,7 +316,7 @@ export const tryToThermiteDoor = async () => {
 
   if (success) {
     const netId = NetworkGetNetworkIdFromEntity(thermiteObject);
-    const particleId = Particle.add({
+    const particleId = Particles.add({
       dict: 'scr_ornate_heist',
       name: 'scr_heist_ornate_thermal_burn',
       looped: true,
@@ -325,7 +325,7 @@ export const tryToThermiteDoor = async () => {
       scale: 0.7,
     });
     await Util.Delay(10000);
-    Particle.remove(particleId);
+    Particles.remove(particleId);
     Events.emitNet('doorlock:server:changeDoorState', doorId, false);
   }
 

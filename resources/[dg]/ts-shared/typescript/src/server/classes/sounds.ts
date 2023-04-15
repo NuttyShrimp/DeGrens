@@ -1,3 +1,5 @@
+import { Util } from './index';
+
 class Sounds {
   public playOnEntity = (id: string, name: string, audiobank: string, netId: number) => {
     global.exports['nutty-sounds'].playSoundOnEntity(id, name, audiobank, netId);
@@ -26,6 +28,13 @@ class Sounds {
   public playLocalSoundForAll = (soundName: string, volume: number) => {
     this.playLocalSoundForPlayer(-1, soundName, volume);
   };
+
+  //#region Helpers functions to not have to remember common sound names
+  public playSuccessSoundFromCoord = (coords: Vec3, success: boolean) => {
+    const soundName = success ? 'Keycard_Success' : 'Keycard_Fail';
+    this.playFromCoord(`success_sound_${Util.uuidv4()}`, soundName, 'DLC_HEISTS_BIOLAB_FINALE_SOUNDS', coords, 10);
+  };
+  //#endregion
 }
 
 export default {

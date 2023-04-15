@@ -47,7 +47,7 @@ Peek.addGlobalEntry('vehicle', {
         const vin = await getVehicleVin(entity);
         if (!vin) return;
         Notifications.add(`VIN: '${vin}'`, 'info');
-        UI.SendAppEvent('copy', vin);
+        UI.addToClipboard(vin);
       },
       canInteract: ent => {
         if (!ent || !NetworkGetEntityIsNetworked(ent)) return false;

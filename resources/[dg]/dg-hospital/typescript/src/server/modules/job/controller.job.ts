@@ -33,13 +33,16 @@ Events.onNet('hospital:job:checkin', async (src: number) => {
   const anyAmbulance = Jobs.getAmountForJob('ambulance') > 0;
 
   Util.Log('hospital:job:checkin', { anyAmbulance }, `${Util.getName(src)} has checked in to hospital`, src);
-  Hospital.createDispatchCall({
-    title: 'Incheckbalie',
-    description: 'Er is iemand ingechecked aan de balie',
-    coords: checkinLocation,
-  });
 
   if (anyAmbulance) {
+    const charInfo = DGCore.Functions.GetPlayer(src)?.PlayerData?.charinfo;
+    Hospital.createDispatchCall({
+      title: 'Incheckbalie',
+      description: `${charInfo?.firstname ?? 'Unknown'} ${
+        charInfo?.lastname ?? 'Person'
+      }(${src}) heeft ingechecked aan de balie`,
+      coords: checkinLocation,
+    });
     Notifications.add(src, 'Er is een dokter opgeroepen, neem plaats in de wachtzaal', 'success');
     return;
   }

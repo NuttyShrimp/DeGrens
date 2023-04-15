@@ -51,10 +51,6 @@ Events.onNet('police:showVehicleInfo', async (src: number, netId: number) => {
   });
 });
 
-Inventory.registerUseable(['binoculars', 'pd_camera'], (plyId, itemState) => {
-  Events.emitNet('police:binoculars:use', plyId, itemState.name);
-});
-
 Events.onNet('police:checkGSR', (src: number) => {
   const target = Util.getClosestPlayerOutsideVehicle(src);
   if (target === undefined) {

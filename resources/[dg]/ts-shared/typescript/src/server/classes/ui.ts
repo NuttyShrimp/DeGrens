@@ -30,6 +30,10 @@ class UI {
   openContextMenu(target: number, menu: ContextMenu.Entry[]) {
     Events.emitNet('dgx:client:ui:openContextmenu', target, menu);
   }
+
+  public addToClipboard = (target: number, text: string) => {
+    emitNet('dg-ui:SendAppEvent', target, 'copy', text);
+  };
 }
 
 class Taskbar {

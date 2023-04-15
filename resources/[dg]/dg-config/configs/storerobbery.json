@@ -6,7 +6,7 @@
   "safe": {
     "crackDelay": 5,
     "refillTime": 120,
-    "specialItemChance": 50,
+    "specialItemChance": 100,
     "rollAmount": [8, 10]
   },
   "stores": {
@@ -800,7 +800,7 @@
         "y": -774.5533,
         "z": 26.5407
       },
-      "cam": 36
+      "cam": 38
     }
   }
 }

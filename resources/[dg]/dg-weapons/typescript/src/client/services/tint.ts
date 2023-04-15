@@ -1,4 +1,4 @@
-import { Events, Notifications, Peek, UI } from '@dgx/client';
+import { Events, Notifications, Peek, UI, Util } from '@dgx/client';
 import { getCurrentWeaponData } from 'modules/weapons/service.weapons';
 
 const TINT_COLOR_NAMES: Record<number, string> = {
@@ -63,17 +63,20 @@ UI.RegisterUICallback('weapons/setTint', (data: { tint: string }, cb) => {
     Notifications.add('Je hebt geen wapen vast', 'error');
     return;
   }
-  Events.emitNet('weapons:server:saveTint', currentWeaponData.id, data.tint);
+  Events.emitNet('weapons:server:saveTint', currentWeaponData.id, currentWeaponData.hash, data.tint);
   cb({ data: {}, meta: { ok: true, message: 'done' } });
 });
 
-Events.onNet('weapons:server:applyTint', (tintName: string) => {
+Events.onNet('weapons:server:applyTint', async (weaponHash: number, tintName: string) => {
   const tintId = getTintIdOfName(tintName);
   if (tintId === undefined) {
     console.error(`Failed to get tintId from name: ${tintName}`);
     return;
   }
   const ped = PlayerPedId();
-  const weaponHash = GetSelectedPedWeapon(ped);
+
+  const fullfilled = await Util.awaitCondition(() => GetSelectedPedWeapon(ped) >>> 0 === weaponHash, 2000);
+  if (!fullfilled) return;
+
   SetPedWeaponTintIndex(ped, weaponHash, tintId);
 });

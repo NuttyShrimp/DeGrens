@@ -1709,7 +1709,7 @@
     "name": "bandage",
     "label": "Verband",
     "image": "bandage.png",
-    "decayRate": 7200,
+    "decayRate": 14400,
     "size": {
       "x": 2,
       "y": 1
@@ -2088,7 +2088,7 @@
     "label": "Parachute",
     "image": "parachute.png",
     "useable": true,
-    "decayRate": 10080,
+    "decayRate": 129600,
     "size": {
       "x": 3,
       "y": 4
@@ -2099,7 +2099,7 @@
     "label": "Duikpak",
     "image": "scuba_gear.png",
     "useable": true,
-    "decayRate": 10080,
+    "decayRate": 129600,
     "size": {
       "x": 4,
       "y": 5
@@ -2146,5 +2146,118 @@
       "y": 4
     },
     "useable": true
+  },
+  {
+    "name": "news_microphone",
+    "label": "Microfoon",
+    "image": "news_microphone.png",
+    "size": {
+      "x": 1,
+      "y": 2
+    },
+    "useable": true
+  },
+  {
+    "name": "news_boommic",
+    "label": "Microfoon Arm",
+    "image": "news_boommic.png",
+    "size": {
+      "x": 6,
+      "y": 2
+    },
+    "useable": true
+  },
+  {
+    "name": "news_camera",
+    "label": "Camera",
+    "image": "news_camera.png",
+    "size": {
+      "x": 4,
+      "y": 3
+    },
+    "useable": true
+  },
+  {
+    "name": "news_light",
+    "label": "Spotlight",
+    "image": "news_light.png",
+    "size": {
+      "x": 4,
+      "y": 6
+    },
+    "useable": true
+  },
+  {
+    "name": "paper_note",
+    "label": "Papiertje",
+    "image": "paper_note.png",
+    "decayRate": 300,
+    "size": {
+      "x": 3,
+      "y": 3
+    }
+  },
+  {
+    "name": "heist_paleto_key",
+    "label": "Security Sleutel",
+    "image": "heist_paleto_key.png",
+    "decayRate": 5,
+    "size": {
+      "x": 2,
+      "y": 2
+    }
+  },
+  {
+    "name": "atm_rope",
+    "label": "Lang Touw",
+    "image": "atm_rope.png",
+    "description": "Perfect touw om aan je Bison pickup trekhaak te hangen",
+    "size": {
+      "x": 5,
+      "y": 4
+    }
+  },
+  {
+    "name": "big_drill",
+    "label": "Boormachine",
+    "image": "big_drill.png",
+    "decayRate": 129600,
+    "size": {
+      "x": 5,
+      "y": 3
+    }
+  },
+  {
+    "name": "blue_atm",
+    "label": "ATM",
+    "image": "blue_atm.png",
+    "size": {
+      "x": 6,
+      "y": 8
+    },
+    "useable": true,
+    "decayRate": 1440
+  },
+  {
+    "name": "red_atm",
+    "label": "ATM",
+    "image": "red_atm.png",
+    "size": {
+      "x": 6,
+      "y": 8
+    },
+    "useable": true,
+    "decayRate": 1440
+  },
+  {
+    "name": "green_atm",
+    "label": "ATM",
+    "image": "green_atm.png",
+    "size": {
+      "x": 6,
+      "y": 8
+    },
+    "useable": true,
+    "decayRate": 1440
   }
 ]

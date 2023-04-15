@@ -83,11 +83,14 @@ export class Util {
     return result;
   };
 
+  /**
+   * @returns true if condition fulfilled, false if timed out
+   */
   awaitCondition = async (condition: () => boolean, timeout = 5000) => {
-    return new Promise<void>(res => {
+    return new Promise<boolean>(res => {
       // do check first to avoid initial delay if condition already fulfilled
       if (condition()) {
-        res();
+        res(true);
         return;
       }
 
@@ -97,9 +100,10 @@ export class Util {
       }, timeout);
 
       const thread = setInterval(() => {
-        if (timedOut || condition()) {
+        const fulfilled = condition();
+        if (timedOut || fulfilled) {
           clearInterval(thread);
-          res();
+          res(fulfilled);
           return;
         }
       }, 10);
@@ -136,6 +140,17 @@ export class Util {
       y: coords.y + Math.sin(radians) * offsetLength,
       z: coords.z + offset.z,
     };
+  };
+
+  getHeadingToFaceCoordsFromCoord = (origin: Vec3, target: Vec3) => {
+    const vector = { x: origin.x - target.x, y: origin.y - target.y };
+    let heading = Math.atan(vector.y / vector.x);
+    heading = (heading * 180) / Math.PI;
+    heading = heading + 90;
+    if (vector.x < 0) {
+      heading = Math.abs(heading) + 180;
+    }
+    return heading;
   };
 
   /**

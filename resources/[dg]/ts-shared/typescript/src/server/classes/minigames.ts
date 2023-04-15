@@ -65,6 +65,14 @@ class Minigames {
       this.games[src][this.id] = res;
     });
   };
+
+  public keypad = (src: number, data: Minigames.Keypad.Data): Promise<boolean> => {
+    this.playGame(src, ++this.id, 'keypad', data);
+    return new Promise<boolean>(res => {
+      if (!this.games[src]) this.games[src] = {};
+      this.games[src][this.id] = res;
+    });
+  };
 }
 
 export default {

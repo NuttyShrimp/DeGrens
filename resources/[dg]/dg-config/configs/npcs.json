@@ -9,30 +9,15 @@
     },
     "heading": 70.76,
     "distance": 50.0,
-    "settings": [
-      {
-        "type": "invincible",
-        "active": true
-      },
-      {
-        "type": "ignore",
-        "active": true
-      },
-      {
-        "type": "freeze",
-        "active": true
-      },
-      {
-        "type": "collision",
-        "active": true
-      }
-    ],
-    "flags": [
-      {
-        "name": "isBanker",
-        "active": true
-      }
-    ]
+    "settings": {
+      "invincible": true,
+      "ignore": true,
+      "freeze": true,
+      "collision": true
+    },
+    "flags": {
+      "isBanker": true
+    }
   },
   {
     "id": "weapon_customizer",
@@ -44,30 +29,15 @@
     },
     "heading": 174.0258,
     "distance": 50.0,
-    "settings": [
-      {
-        "type": "invincible",
-        "active": true
-      },
-      {
-        "type": "ignore",
-        "active": true
-      },
-      {
-        "type": "freeze",
-        "active": true
-      },
-      {
-        "type": "collision",
-        "active": true
-      }
-    ],
-    "flags": [
-      {
-        "name": "isWeaponCustomizer",
-        "active": true
-      }
-    ],
+    "settings": {
+      "invincible": true,
+      "ignore": true,
+      "freeze": true,
+      "collision": true
+    },
+    "flags": {
+      "isWeaponCustomizer": true
+    },
     "scenario": "WORLD_HUMAN_GUARD_STAND_CASINO"
   },
   {
@@ -80,30 +50,15 @@
     },
     "heading": 243.1224,
     "distance": 50.0,
-    "settings": [
-      {
-        "type": "invincible",
-        "active": true
-      },
-      {
-        "type": "ignore",
-        "active": true
-      },
-      {
-        "type": "freeze",
-        "active": true
-      },
-      {
-        "type": "collision",
-        "active": true
-      }
-    ],
-    "flags": [
-      {
-        "name": "isHouseRobSignin",
-        "active": true
-      }
-    ],
+    "settings": {
+      "invincible": true,
+      "ignore": true,
+      "freeze": true,
+      "collision": true
+    },
+    "flags": {
+      "isHouseRobSignin": true
+    },
     "scenario": "WORLD_HUMAN_STAND_IMPATIENT"
   },
   {
@@ -116,30 +71,15 @@
     },
     "heading": 179.0889,
     "distance": 250.0,
-    "settings": [
-      {
-        "type": "invincible",
-        "active": true
-      },
-      {
-        "type": "ignore",
-        "active": true
-      },
-      {
-        "type": "freeze",
-        "active": true
-      },
-      {
-        "type": "collision",
-        "active": true
-      }
-    ],
-    "flags": [
-      {
-        "name": "isFence",
-        "active": true
-      }
-    ],
+    "settings": {
+      "invincible": true,
+      "ignore": true,
+      "freeze": true,
+      "collision": true
+    },
+    "flags": {
+      "isFence": true
+    },
     "scenario": "WORLD_HUMAN_STAND_IMPATIENT"
   },
   {
@@ -152,30 +92,15 @@
     },
     "heading": 161.9655,
     "distance": 50.0,
-    "settings": [
-      {
-        "type": "invincible",
-        "active": true
-      },
-      {
-        "type": "ignore",
-        "active": true
-      },
-      {
-        "type": "freeze",
-        "active": true
-      },
-      {
-        "type": "collision",
-        "active": true
-      }
-    ],
-    "flags": [
-      {
-        "name": "heistShopNPC",
-        "active": true
-      }
-    ],
+    "settings": {
+      "invincible": true,
+      "ignore": true,
+      "freeze": true,
+      "collision": true
+    },
+    "flags": {
+      "heistShopNPC": true
+    },
     "scenario": "WORLD_HUMAN_CLIPBOARD"
   },
   {
@@ -188,30 +113,15 @@
     },
     "heading": 80.51,
     "distance": 50.0,
-    "settings": [
-      {
-        "type": "invincible",
-        "active": true
-      },
-      {
-        "type": "ignore",
-        "active": true
-      },
-      {
-        "type": "freeze",
-        "active": true
-      },
-      {
-        "type": "collision",
-        "active": true
-      }
-    ],
-    "flags": [
-      {
-        "name": "isShopKeeper",
-        "active": true
-      }
-    ],
+    "settings": {
+      "invincible": true,
+      "ignore": true,
+      "freeze": true,
+      "collision": true
+    },
+    "flags": {
+      "isShopKeeper": true
+    },
     "scenario": "WORLD_HUMAN_HANG_OUT_STREET",
     "blip": {
       "title": "24/7 Winkel",
@@ -229,30 +139,15 @@
     },
     "heading": 33.91,
     "distance": 50.0,
-    "settings": [
-      {
-        "type": "invincible",
-        "active": true
-      },
-      {
-        "type": "ignore",
-        "active": true
-      },
-      {
-        "type": "freeze",
-        "active": true
-      },
-      {
-        "type": "collision",
-        "active": true
-      }
-    ],
-    "flags": [
-      {
-        "name": "isShopKeeper",
-        "active": true
-      }
-    ],
+    "settings": {
+      "invincible": true,
+      "ignore": true,
+      "freeze": true,
+      "collision": true
+    },
+    "flags": {
+      "isShopKeeper": true
+    },
     "scenario": "WORLD_HUMAN_HANG_OUT_STREET",
     "blip": {
       "title": "24/7 Winkel",
@@ -270,30 +165,15 @@
     },
     "heading": 89.8,
     "distance": 50.0,
-    "settings": [
-      {
-        "type": "invincible",
-        "active": true
-      },
-      {
-        "type": "ignore",
-        "active": true
-      },
-      {
-        "type": "freeze",
-        "active": true
-      },
-      {
-        "type": "collision",
-        "active": true
-      }
-    ],
-    "flags": [
-      {
-        "name": "isShopKeeper",
-        "active": true
-      }
-    ],
+    "settings": {
+      "invincible": true,
+      "ignore": true,
+      "freeze": true,
+      "collision": true
+    },
+    "flags": {
+      "isShopKeeper": true
+    },
     "scenario": "WORLD_HUMAN_HANG_OUT_STREET",
     "blip": {
       "title": "24/7 Winkel",
@@ -311,30 +191,15 @@
     },
     "heading": 110.08,
     "distance": 50.0,
-    "settings": [
-      {
-        "type": "invincible",
-        "active": true
-      },
-      {
-        "type": "ignore",
-        "active": true
-      },
-      {
-        "type": "freeze",
-        "active": true
-      },
-      {
-        "type": "collision",
-        "active": true
-      }
-    ],
-    "flags": [
-      {
-        "name": "isShopKeeper",
-        "active": true
-      }
-    ],
+    "settings": {
+      "invincible": true,
+      "ignore": true,
+      "freeze": true,
+      "collision": true
+    },
+    "flags": {
+      "isShopKeeper": true
+    },
     "scenario": "WORLD_HUMAN_HANG_OUT_STREET",
     "blip": {
       "title": "24/7 Winkel",
@@ -352,30 +217,15 @@
     },
     "heading": 309.41,
     "distance": 50.0,
-    "settings": [
-      {
-        "type": "invincible",
-        "active": true
-      },
-      {
-        "type": "ignore",
-        "active": true
-      },
-      {
-        "type": "freeze",
-        "active": true
-      },
-      {
-        "type": "collision",
-        "active": true
-      }
-    ],
-    "flags": [
-      {
-        "name": "isShopKeeper",
-        "active": true
-      }
-    ],
+    "settings": {
+      "invincible": true,
+      "ignore": true,
+      "freeze": true,
+      "collision": true
+    },
+    "flags": {
+      "isShopKeeper": true
+    },
     "scenario": "WORLD_HUMAN_HANG_OUT_STREET",
     "blip": {
       "title": "24/7 Winkel",
@@ -393,30 +243,15 @@
     },
     "heading": 66.14,
     "distance": 50.0,
-    "settings": [
-      {
-        "type": "invincible",
-        "active": true
-      },
-      {
-        "type": "ignore",
-        "active": true
-      },
-      {
-        "type": "freeze",
-        "active": true
-      },
-      {
-        "type": "collision",
-        "active": true
-      }
-    ],
-    "flags": [
-      {
-        "name": "isShopKeeper",
-        "active": true
-      }
-    ],
+    "settings": {
+      "invincible": true,
+      "ignore": true,
+      "freeze": true,
+      "collision": true
+    },
+    "flags": {
+      "isShopKeeper": true
+    },
     "scenario": "WORLD_HUMAN_HANG_OUT_STREET",
     "blip": {
       "title": "24/7 Winkel",
@@ -434,30 +269,15 @@
     },
     "heading": 210.8,
     "distance": 50.0,
-    "settings": [
-      {
-        "type": "invincible",
-        "active": true
-      },
-      {
-        "type": "ignore",
-        "active": true
-      },
-      {
-        "type": "freeze",
-        "active": true
-      },
-      {
-        "type": "collision",
-        "active": true
-      }
-    ],
-    "flags": [
-      {
-        "name": "isShopKeeper",
-        "active": true
-      }
-    ],
+    "settings": {
+      "invincible": true,
+      "ignore": true,
+      "freeze": true,
+      "collision": true
+    },
+    "flags": {
+      "isShopKeeper": true
+    },
     "scenario": "WORLD_HUMAN_HANG_OUT_STREET",
     "blip": {
       "title": "24/7 Winkel",
@@ -475,30 +295,15 @@
     },
     "heading": 303.17,
     "distance": 50.0,
-    "settings": [
-      {
-        "type": "invincible",
-        "active": true
-      },
-      {
-        "type": "ignore",
-        "active": true
-      },
-      {
-        "type": "freeze",
-        "active": true
-      },
-      {
-        "type": "collision",
-        "active": true
-      }
-    ],
-    "flags": [
-      {
-        "name": "isShopKeeper",
-        "active": true
-      }
-    ],
+    "settings": {
+      "invincible": true,
+      "ignore": true,
+      "freeze": true,
+      "collision": true
+    },
+    "flags": {
+      "isShopKeeper": true
+    },
     "scenario": "WORLD_HUMAN_HANG_OUT_STREET",
     "blip": {
       "title": "24/7 Winkel",
@@ -516,30 +321,15 @@
     },
     "heading": 157.9,
     "distance": 50.0,
-    "settings": [
-      {
-        "type": "invincible",
-        "active": true
-      },
-      {
-        "type": "ignore",
-        "active": true
-      },
-      {
-        "type": "freeze",
-        "active": true
-      },
-      {
-        "type": "collision",
-        "active": true
-      }
-    ],
-    "flags": [
-      {
-        "name": "isShopKeeper",
-        "active": true
-      }
-    ],
+    "settings": {
+      "invincible": true,
+      "ignore": true,
+      "freeze": true,
+      "collision": true
+    },
+    "flags": {
+      "isShopKeeper": true
+    },
     "scenario": "WORLD_HUMAN_HANG_OUT_STREET",
     "blip": {
       "title": "24/7 Winkel",
@@ -557,30 +347,15 @@
     },
     "heading": 112.1,
     "distance": 50.0,
-    "settings": [
-      {
-        "type": "invincible",
-        "active": true
-      },
-      {
-        "type": "ignore",
-        "active": true
-      },
-      {
-        "type": "freeze",
-        "active": true
-      },
-      {
-        "type": "collision",
-        "active": true
-      }
-    ],
-    "flags": [
-      {
-        "name": "isShopKeeper",
-        "active": true
-      }
-    ],
+    "settings": {
+      "invincible": true,
+      "ignore": true,
+      "freeze": true,
+      "collision": true
+    },
+    "flags": {
+      "isShopKeeper": true
+    },
     "scenario": "WORLD_HUMAN_HANG_OUT_STREET",
     "blip": {
       "title": "24/7 Winkel",
@@ -598,30 +373,15 @@
     },
     "heading": 56.22,
     "distance": 50.0,
-    "settings": [
-      {
-        "type": "invincible",
-        "active": true
-      },
-      {
-        "type": "ignore",
-        "active": true
-      },
-      {
-        "type": "freeze",
-        "active": true
-      },
-      {
-        "type": "collision",
-        "active": true
-      }
-    ],
-    "flags": [
-      {
-        "name": "isShopKeeper",
-        "active": true
-      }
-    ],
+    "settings": {
+      "invincible": true,
+      "ignore": true,
+      "freeze": true,
+      "collision": true
+    },
+    "flags": {
+      "isShopKeeper": true
+    },
     "scenario": "WORLD_HUMAN_HANG_OUT_STREET",
     "blip": {
       "title": "24/7 Winkel",
@@ -639,30 +399,15 @@
     },
     "heading": 23.18,
     "distance": 50.0,
-    "settings": [
-      {
-        "type": "invincible",
-        "active": true
-      },
-      {
-        "type": "ignore",
-        "active": true
-      },
-      {
-        "type": "freeze",
-        "active": true
-      },
-      {
-        "type": "collision",
-        "active": true
-      }
-    ],
-    "flags": [
-      {
-        "name": "isShopKeeper",
-        "active": true
-      }
-    ],
+    "settings": {
+      "invincible": true,
+      "ignore": true,
+      "freeze": true,
+      "collision": true
+    },
+    "flags": {
+      "isShopKeeper": true
+    },
     "scenario": "WORLD_HUMAN_HANG_OUT_STREET",
     "blip": {
       "title": "24/7 Winkel",
@@ -680,30 +425,15 @@
     },
     "heading": 4.78,
     "distance": 50.0,
-    "settings": [
-      {
-        "type": "invincible",
-        "active": true
-      },
-      {
-        "type": "ignore",
-        "active": true
-      },
-      {
-        "type": "freeze",
-        "active": true
-      },
-      {
-        "type": "collision",
-        "active": true
-      }
-    ],
-    "flags": [
-      {
-        "name": "isShopKeeper",
-        "active": true
-      }
-    ],
+    "settings": {
+      "invincible": true,
+      "ignore": true,
+      "freeze": true,
+      "collision": true
+    },
+    "flags": {
+      "isShopKeeper": true
+    },
     "scenario": "WORLD_HUMAN_HANG_OUT_STREET",
     "blip": {
       "title": "24/7 Winkel",
@@ -721,30 +451,15 @@
     },
     "heading": 302.63,
     "distance": 50.0,
-    "settings": [
-      {
-        "type": "invincible",
-        "active": true
-      },
-      {
-        "type": "ignore",
-        "active": true
-      },
-      {
-        "type": "freeze",
-        "active": true
-      },
-      {
-        "type": "collision",
-        "active": true
-      }
-    ],
-    "flags": [
-      {
-        "name": "isShopKeeper",
-        "active": true
-      }
-    ],
+    "settings": {
+      "invincible": true,
+      "ignore": true,
+      "freeze": true,
+      "collision": true
+    },
+    "flags": {
+      "isShopKeeper": true
+    },
     "scenario": "WORLD_HUMAN_HANG_OUT_STREET",
     "blip": {
       "title": "24/7 Winkel",
@@ -762,30 +477,15 @@
     },
     "heading": 100.69,
     "distance": 50.0,
-    "settings": [
-      {
-        "type": "invincible",
-        "active": true
-      },
-      {
-        "type": "ignore",
-        "active": true
-      },
-      {
-        "type": "freeze",
-        "active": true
-      },
-      {
-        "type": "collision",
-        "active": true
-      }
-    ],
-    "flags": [
-      {
-        "name": "isShopKeeper",
-        "active": true
-      }
-    ],
+    "settings": {
+      "invincible": true,
+      "ignore": true,
+      "freeze": true,
+      "collision": true
+    },
+    "flags": {
+      "isShopKeeper": true
+    },
     "scenario": "WORLD_HUMAN_HANG_OUT_STREET",
     "blip": {
       "title": "24/7 Winkel",
@@ -803,30 +503,15 @@
     },
     "heading": 285.05,
     "distance": 50.0,
-    "settings": [
-      {
-        "type": "invincible",
-        "active": true
-      },
-      {
-        "type": "ignore",
-        "active": true
-      },
-      {
-        "type": "freeze",
-        "active": true
-      },
-      {
-        "type": "collision",
-        "active": true
-      }
-    ],
-    "flags": [
-      {
-        "name": "isShopKeeper",
-        "active": true
-      }
-    ],
+    "settings": {
+      "invincible": true,
+      "ignore": true,
+      "freeze": true,
+      "collision": true
+    },
+    "flags": {
+      "isShopKeeper": true
+    },
     "scenario": "WORLD_HUMAN_HANG_OUT_STREET",
     "blip": {
       "title": "24/7 Winkel",
@@ -844,30 +529,15 @@
     },
     "heading": 247.0,
     "distance": 50.0,
-    "settings": [
-      {
-        "type": "invincible",
-        "active": true
-      },
-      {
-        "type": "ignore",
-        "active": true
-      },
-      {
-        "type": "freeze",
-        "active": true
-      },
-      {
-        "type": "collision",
-        "active": true
-      }
-    ],
-    "flags": [
-      {
-        "name": "isShopKeeper",
-        "active": true
-      }
-    ],
+    "settings": {
+      "invincible": true,
+      "ignore": true,
+      "freeze": true,
+      "collision": true
+    },
+    "flags": {
+      "isShopKeeper": true
+    },
     "scenario": "WORLD_HUMAN_HANG_OUT_STREET",
     "blip": {
       "title": "24/7 Winkel",
@@ -885,30 +555,15 @@
     },
     "heading": 321.33,
     "distance": 50.0,
-    "settings": [
-      {
-        "type": "invincible",
-        "active": true
-      },
-      {
-        "type": "ignore",
-        "active": true
-      },
-      {
-        "type": "freeze",
-        "active": true
-      },
-      {
-        "type": "collision",
-        "active": true
-      }
-    ],
-    "flags": [
-      {
-        "name": "isShopKeeper",
-        "active": true
-      }
-    ],
+    "settings": {
+      "invincible": true,
+      "ignore": true,
+      "freeze": true,
+      "collision": true
+    },
+    "flags": {
+      "isShopKeeper": true
+    },
     "scenario": "WORLD_HUMAN_HANG_OUT_STREET",
     "blip": {
       "title": "24/7 Winkel",
@@ -926,30 +581,15 @@
     },
     "heading": 15.71,
     "distance": 50.0,
-    "settings": [
-      {
-        "type": "invincible",
-        "active": true
-      },
-      {
-        "type": "ignore",
-        "active": true
-      },
-      {
-        "type": "freeze",
-        "active": true
-      },
-      {
-        "type": "collision",
-        "active": true
-      }
-    ],
-    "flags": [
-      {
-        "name": "isShopKeeper",
-        "active": true
-      }
-    ],
+    "settings": {
+      "invincible": true,
+      "ignore": true,
+      "freeze": true,
+      "collision": true
+    },
+    "flags": {
+      "isShopKeeper": true
+    },
     "scenario": "WORLD_HUMAN_HANG_OUT_STREET",
     "blip": {
       "title": "24/7 Winkel",
@@ -967,30 +607,15 @@
     },
     "heading": 351.96,
     "distance": 50.0,
-    "settings": [
-      {
-        "type": "invincible",
-        "active": true
-      },
-      {
-        "type": "ignore",
-        "active": true
-      },
-      {
-        "type": "freeze",
-        "active": true
-      },
-      {
-        "type": "collision",
-        "active": true
-      }
-    ],
-    "flags": [
-      {
-        "name": "isShopKeeper",
-        "active": true
-      }
-    ],
+    "settings": {
+      "invincible": true,
+      "ignore": true,
+      "freeze": true,
+      "collision": true
+    },
+    "flags": {
+      "isShopKeeper": true
+    },
     "scenario": "WORLD_HUMAN_HANG_OUT_STREET",
     "blip": {
       "title": "24/7 Winkel",
@@ -1008,30 +633,41 @@
     },
     "heading": 251.15,
     "distance": 50.0,
-    "settings": [
-      {
-        "type": "invincible",
-        "active": true
-      },
-      {
-        "type": "ignore",
-        "active": true
-      },
-      {
-        "type": "freeze",
-        "active": true
-      },
-      {
-        "type": "collision",
-        "active": true
-      }
-    ],
-    "flags": [
-      {
-        "name": "isShopKeeper",
-        "active": true
-      }
-    ],
+    "settings": {
+      "invincible": true,
+      "ignore": true,
+      "freeze": true,
+      "collision": true
+    },
+    "flags": {
+      "isShopKeeper": true
+    },
+    "scenario": "WORLD_HUMAN_HANG_OUT_STREET",
+    "blip": {
+      "title": "24/7 Winkel",
+      "sprite": 52,
+      "color": 15
+    }
+  },
+  {
+    "id": "shop_ottos_garage",
+    "model": "mp_m_shopkeep_01",
+    "position": {
+      "x": 812.56,
+      "y": -783.57,
+      "z": 26.17
+    },
+    "heading": 318.76,
+    "distance": 50.0,
+    "settings": {
+      "invincible": true,
+      "ignore": true,
+      "freeze": true,
+      "collision": true
+    },
+    "flags": {
+      "isShopKeeper": true
+    },
     "scenario": "WORLD_HUMAN_HANG_OUT_STREET",
     "blip": {
       "title": "24/7 Winkel",
@@ -1049,30 +685,15 @@
     },
     "heading": 43.81,
     "distance": 50.0,
-    "settings": [
-      {
-        "type": "invincible",
-        "active": true
-      },
-      {
-        "type": "ignore",
-        "active": true
-      },
-      {
-        "type": "freeze",
-        "active": true
-      },
-      {
-        "type": "collision",
-        "active": true
-      }
-    ],
-    "flags": [
-      {
-        "name": "isShopKeeper",
-        "active": true
-      }
-    ],
+    "settings": {
+      "invincible": true,
+      "ignore": true,
+      "freeze": true,
+      "collision": true
+    },
+    "flags": {
+      "isShopKeeper": true
+    },
     "scenario": "WORLD_HUMAN_CLIPBOARD",
     "blip": {
       "title": "Hardware Winkel",
@@ -1090,30 +711,15 @@
     },
     "heading": 245.8189,
     "distance": 100.0,
-    "settings": [
-      {
-        "type": "invincible",
-        "active": true
-      },
-      {
-        "type": "ignore",
-        "active": true
-      },
-      {
-        "type": "freeze",
-        "active": true
-      },
-      {
-        "type": "collision",
-        "active": true
-      }
-    ],
-    "flags": [
-      {
-        "name": "isShopKeeper",
-        "active": true
-      }
-    ],
+    "settings": {
+      "invincible": true,
+      "ignore": true,
+      "freeze": true,
+      "collision": true
+    },
+    "flags": {
+      "isShopKeeper": true
+    },
     "scenario": "WORLD_HUMAN_CLIPBOARD",
     "blip": {
       "title": "Hardware Winkel",
@@ -1131,30 +737,15 @@
     },
     "heading": 274.51,
     "distance": 20.0,
-    "settings": [
-      {
-        "type": "invincible",
-        "active": true
-      },
-      {
-        "type": "ignore",
-        "active": true
-      },
-      {
-        "type": "freeze",
-        "active": true
-      },
-      {
-        "type": "collision",
-        "active": true
-      }
-    ],
-    "flags": [
-      {
-        "name": "isImpoundHandler",
-        "active": true
-      }
-    ],
+    "settings": {
+      "invincible": true,
+      "ignore": true,
+      "freeze": true,
+      "collision": true
+    },
+    "flags": {
+      "isImpoundHandler": true
+    },
     "scenario": "WORLD_HUMAN_STAND_MOBILE_UPRIGHT",
     "blip": {
       "title": "Impound lot",
@@ -1172,30 +763,15 @@
     },
     "heading": 204.588,
     "distance": 50.0,
-    "settings": [
-      {
-        "type": "invincible",
-        "active": true
-      },
-      {
-        "type": "ignore",
-        "active": true
-      },
-      {
-        "type": "freeze",
-        "active": true
-      },
-      {
-        "type": "collision",
-        "active": true
-      }
-    ],
-    "flags": [
-      {
-        "name": "isSanddiggingFuck",
-        "active": true
-      }
-    ],
+    "settings": {
+      "invincible": true,
+      "ignore": true,
+      "freeze": true,
+      "collision": true
+    },
+    "flags": {
+      "isSanddiggingFuck": true
+    },
     "scenario": "WORLD_HUMAN_CLIPBOARD",
     "blip": {
       "title": "Querry",
@@ -1214,30 +790,15 @@
     },
     "heading": 211.62,
     "distance": 50.0,
-    "settings": [
-      {
-        "type": "invincible",
-        "active": true
-      },
-      {
-        "type": "ignore",
-        "active": true
-      },
-      {
-        "type": "freeze",
-        "active": true
-      },
-      {
-        "type": "collision",
-        "active": true
-      }
-    ],
-    "flags": [
-      {
-        "name": "isScrapyardMfer",
-        "active": true
-      }
-    ],
+    "settings": {
+      "invincible": true,
+      "ignore": true,
+      "freeze": true,
+      "collision": true
+    },
+    "flags": {
+      "isScrapyardMfer": true
+    },
     "scenario": "WORLD_HUMAN_CLIPBOARD",
     "blip": {
       "title": "Scrapyard",
@@ -1256,30 +817,15 @@
     },
     "heading": 256.896,
     "distance": 75.0,
-    "settings": [
-      {
-        "type": "invincible",
-        "active": true
-      },
-      {
-        "type": "ignore",
-        "active": true
-      },
-      {
-        "type": "freeze",
-        "active": true
-      },
-      {
-        "type": "collision",
-        "active": true
-      }
-    ],
-    "flags": [
-      {
-        "name": "isRecyclePed",
-        "active": true
-      }
-    ],
+    "settings": {
+      "invincible": true,
+      "ignore": true,
+      "freeze": true,
+      "collision": true
+    },
+    "flags": {
+      "isRecyclePed": true
+    },
     "scenario": "WORLD_HUMAN_CLIPBOARD"
   },
   {
@@ -1292,30 +838,15 @@
     },
     "heading": 97.5018,
     "distance": 75.0,
-    "settings": [
-      {
-        "type": "invincible",
-        "active": true
-      },
-      {
-        "type": "ignore",
-        "active": true
-      },
-      {
-        "type": "freeze",
-        "active": true
-      },
-      {
-        "type": "collision",
-        "active": true
-      }
-    ],
-    "flags": [
-      {
-        "name": "isFishingGuy",
-        "active": true
-      }
-    ],
+    "settings": {
+      "invincible": true,
+      "ignore": true,
+      "freeze": true,
+      "collision": true
+    },
+    "flags": {
+      "isFishingGuy": true
+    },
     "scenario": "WORLD_HUMAN_HIKER_STANDING",
     "blip": {
       "title": "Vissen",
@@ -1334,30 +865,15 @@
     },
     "heading": 195.3247,
     "distance": 75.0,
-    "settings": [
-      {
-        "type": "invincible",
-        "active": true
-      },
-      {
-        "type": "ignore",
-        "active": true
-      },
-      {
-        "type": "freeze",
-        "active": true
-      },
-      {
-        "type": "collision",
-        "active": true
-      }
-    ],
-    "flags": [
-      {
-        "name": "isSanitationManager",
-        "active": true
-      }
-    ],
+    "settings": {
+      "invincible": true,
+      "ignore": true,
+      "freeze": true,
+      "collision": true
+    },
+    "flags": {
+      "isSanitationManager": true
+    },
     "scenario": "WORLD_HUMAN_CLIPBOARD",
     "blip": {
       "title": "Vuilkar",
@@ -1376,30 +892,15 @@
     },
     "heading": 316.3545,
     "distance": 75.0,
-    "settings": [
-      {
-        "type": "invincible",
-        "active": true
-      },
-      {
-        "type": "ignore",
-        "active": true
-      },
-      {
-        "type": "freeze",
-        "active": true
-      },
-      {
-        "type": "collision",
-        "active": true
-      }
-    ],
-    "flags": [
-      {
-        "name": "isPostOPSignin",
-        "active": true
-      }
-    ],
+    "settings": {
+      "invincible": true,
+      "ignore": true,
+      "freeze": true,
+      "collision": true
+    },
+    "flags": {
+      "isPostOPSignin": true
+    },
     "scenario": "WORLD_HUMAN_CLIPBOARD",
     "blip": {
       "title": "PostOP",
@@ -1418,30 +919,15 @@
     },
     "heading": 67.5144,
     "distance": 100.0,
-    "settings": [
-      {
-        "type": "invincible",
-        "active": true
-      },
-      {
-        "type": "ignore",
-        "active": true
-      },
-      {
-        "type": "freeze",
-        "active": true
-      },
-      {
-        "type": "collision",
-        "active": true
-      }
-    ],
-    "flags": [
-      {
-        "name": "isHuntingSignIn",
-        "active": true
-      }
-    ],
+    "settings": {
+      "invincible": true,
+      "ignore": true,
+      "freeze": true,
+      "collision": true
+    },
+    "flags": {
+      "isHuntingSignIn": true
+    },
     "blip": {
       "title": "Jagen",
       "sprite": 119,
@@ -1459,30 +945,15 @@
     },
     "heading": 177,
     "distance": 75.0,
-    "settings": [
-      {
-        "type": "invincible",
-        "active": true
-      },
-      {
-        "type": "ignore",
-        "active": true
-      },
-      {
-        "type": "freeze",
-        "active": true
-      },
-      {
-        "type": "collision",
-        "active": true
-      }
-    ],
-    "flags": [
-      {
-        "name": "isEMSVehShop",
-        "active": true
-      }
-    ],
+    "settings": {
+      "invincible": true,
+      "ignore": true,
+      "freeze": true,
+      "collision": true
+    },
+    "flags": {
+      "isEMSVehShop": true
+    },
     "scenario": "WORLD_HUMAN_GUARD_STAND"
   },
   {
@@ -1495,30 +966,61 @@
     },
     "heading": 155.2845,
     "distance": 75.0,
-    "settings": [
-      {
-        "type": "invincible",
-        "active": true
-      },
-      {
-        "type": "ignore",
-        "active": true
-      },
-      {
-        "type": "freeze",
-        "active": true
-      },
-      {
-        "type": "collision",
-        "active": true
-      }
-    ],
-    "flags": [
-      {
-        "name": "isEMSVehShop",
-        "active": true
-      }
-    ],
+    "settings": {
+      "invincible": true,
+      "ignore": true,
+      "freeze": true,
+      "collision": true
+    },
+    "flags": {
+      "isEMSVehShop": true
+    },
     "scenario": "WORLD_HUMAN_GUARD_STAND"
+  },
+  {
+    "id": "shop_weazel_news",
+    "model": "csb_reporter",
+    "position": {
+      "x": -598.7726,
+      "y": -929.8391,
+      "z": 23.8635
+    },
+    "heading": 90,
+    "distance": 50.0,
+    "settings": {
+      "invincible": true,
+      "ignore": true,
+      "freeze": true,
+      "collision": true
+    },
+    "flags": {
+      "isShopKeeper": true
+    },
+    "scenario": "WORLD_HUMAN_CLIPBOARD",
+    "blip": {
+      "title": "Weazel News",
+      "sprite": 459,
+      "color": 1
+    }
+  },
+  {
+    "id": "heists_paleto_codes",
+    "model": "u_m_m_bankman",
+    "position": {
+      "x": -3143.7187,
+      "y": 1137.6483,
+      "z": 21.4807
+    },
+    "heading": 244.4,
+    "distance": 50.0,
+    "settings": {
+      "invincible": true,
+      "ignore": true,
+      "freeze": true,
+      "collision": true
+    },
+    "flags": {
+      "heistsPaletoCodes": true
+    }
   }
 ]

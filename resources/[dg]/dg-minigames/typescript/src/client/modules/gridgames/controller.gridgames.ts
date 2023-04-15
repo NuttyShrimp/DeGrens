@@ -1,5 +1,5 @@
 import { UI } from '@dgx/client';
-import { startGridGame, finishGridGame } from './service.gridgames';
+import { startGridGame, finishGridGame, forceFinishGridGame } from './service.gridgames';
 
 UI.RegisterUICallback('gridgame/finished', (data: { id: string; success: boolean }, cb) => {
   finishGridGame(data.id, data.success);
@@ -9,3 +9,7 @@ UI.RegisterUICallback('gridgame/finished', (data: { id: string; success: boolean
 global.asyncExports('gridgame', (data: Minigames.GridGame.GenericGameData) => {
   return startGridGame(data);
 });
+
+UI.onApplicationClose(() => {
+  forceFinishGridGame();
+}, 'gridgame');

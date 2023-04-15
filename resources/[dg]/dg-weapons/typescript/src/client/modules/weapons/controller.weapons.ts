@@ -20,7 +20,7 @@ Events.onNet('weapons:client:useWeapon', async (weaponData: Weapons.WeaponItem) 
   // copy serialnumber of weapon on use
   const serialnumber = weaponData.metadata?.serialnumber;
   if (serialnumber) {
-    UI.SendAppEvent('copy', serialnumber);
+    UI.addToClipboard(serialnumber);
   }
 
   if (isAwaitingAnim) return;

@@ -1,4 +1,4 @@
-import { Events, HUD, Notifications, Particle, Sounds } from '@dgx/client';
+import { Events, HUD, Notifications, Particles, Sounds } from '@dgx/client';
 import { Vector3 } from '@dgx/shared';
 import { getCurrentVehicle, isDriver } from '@helpers/vehicle';
 import { setEngineState } from 'services/engine';
@@ -96,7 +96,7 @@ export const stopUsingNos = (veh: number) => {
 
   saveNos(veh);
   SetVehicleCheatPowerIncrease(veh, originalPower);
-  ptfxIds.nos.forEach(id => Particle.remove(id));
+  ptfxIds.nos.forEach(id => Particles.remove(id));
   ptfxIds.nos.clear();
 };
 
@@ -109,14 +109,14 @@ export const stopPurge = () => {
   if (!isPurging) return;
   isPurging = false;
   Sounds.stop('purge-nos-sound');
-  ptfxIds.purge.forEach(id => Particle.remove(id));
+  ptfxIds.purge.forEach(id => Particles.remove(id));
   ptfxIds.purge.clear();
 };
 
 const addNosPtfx = (veh: number) => {
   for (const boneName of exhaustBones) {
     if (GetEntityBoneIndexByName(veh, boneName) === -1) continue;
-    const ptfxId = Particle.add({
+    const ptfxId = Particles.add({
       dict: 'veh_xs_vehicle_mods',
       name: 'veh_nitrous',
       netId: NetworkGetNetworkIdFromEntity(veh),
@@ -133,7 +133,7 @@ const addPurgePtfx = (veh: number) => {
 
   // left and right
   [-1, 1].forEach(side => {
-    const ptfxId = Particle.add({
+    const ptfxId = Particles.add({
       dict: 'core',
       name: 'ent_sht_steam',
       netId: NetworkGetNetworkIdFromEntity(veh),

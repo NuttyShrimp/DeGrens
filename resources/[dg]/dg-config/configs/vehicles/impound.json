@@ -28,10 +28,18 @@
     },
     {
       "title": "Achtergelaten voertuig",
-      "description": "Voertuig gebruikt voor het overvallen van een bank",
+      "description": "Voertuig is achtergelaten op de openbare weg",
       "strike": 0,
       "time": 1,
       "price": 250,
+      "allowBurger": false
+    },
+    {
+      "title": "Foutief geparkeerd",
+      "description": "Voertuig is foutief geparkeerd",
+      "strike": 0,
+      "time": 1,
+      "price": 300,
       "allowBurger": false
     },
     {

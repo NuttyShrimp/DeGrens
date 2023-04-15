@@ -177,24 +177,23 @@ export class Inv {
     return itemStates;
   };
 
-  public getFirstAvailablePosition = (itemSize: Vec2) => {
-    const rotatedItemSize = {
-      x: itemSize.y,
-      y: itemSize.x,
-    };
-
+  /**
+   * @param oldRotation Used to prefer new position being same rotation
+   */
+  public getFirstAvailablePosition = (itemSize: Vec2, preferedRotation = false) => {
     const cellsPerRow = getConfig().cellsPerRow;
-    const maxYToCheck = this.size - Math.min(itemSize.y, rotatedItemSize.y) + 1;
-    const maxXToCheck = cellsPerRow - Math.min(itemSize.x, rotatedItemSize.x) + 1;
+
+    const minSizeSide = Math.min(itemSize.x, itemSize.y);
+    const maxYToCheck = this.size - minSizeSide + 1;
+    const maxXToCheck = cellsPerRow - minSizeSide + 1;
 
     for (let y = 0; y < maxYToCheck; y++) {
       for (let x = 0; x < maxXToCheck; x++) {
-        // we do not use rotated param because we explicitely want to check for rotation
-        if (this.isGridSpotFree({ x, y }, itemSize)) {
-          return { position: { x, y }, rotated: false };
+        if (this.isGridSpotFree({ x, y }, itemSize, preferedRotation)) {
+          return { position: { x, y }, rotated: preferedRotation };
         }
-        if (this.isGridSpotFree({ x, y }, rotatedItemSize)) {
-          return { position: { x, y }, rotated: true };
+        if (this.isGridSpotFree({ x, y }, itemSize, !preferedRotation)) {
+          return { position: { x, y }, rotated: !preferedRotation };
         }
       }
     }

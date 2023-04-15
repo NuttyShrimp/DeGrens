@@ -4,6 +4,7 @@ export class Npc {
   private _data!: NpcData;
   private _entity!: number | null;
   private _enabled!: boolean;
+  private blip: number | null;
 
   // #region Getters/Setters
   get data() {
@@ -36,21 +37,24 @@ export class Npc {
     this.enabled = true;
 
     if (this.data.blip) {
-      const blip = AddBlipForCoord(this.data.position.x, this.data.position.y, this.data.position.z);
-      SetBlipSprite(blip, this.data.blip.sprite);
-      SetBlipColour(blip, this.data.blip.color);
-      SetBlipDisplay(blip, 2);
-      SetBlipScale(blip, this.data.blip.scale ?? 0.8);
-      SetBlipAsShortRange(blip, true);
+      this.blip = AddBlipForCoord(this.data.position.x, this.data.position.y, this.data.position.z);
+      SetBlipSprite(this.blip, this.data.blip.sprite);
+      SetBlipColour(this.blip, this.data.blip.color);
+      SetBlipDisplay(this.blip, 2);
+      SetBlipScale(this.blip, this.data.blip.scale ?? 0.8);
+      SetBlipAsShortRange(this.blip, true);
       BeginTextCommandSetBlipName('STRING');
       AddTextComponentString(this.data.blip.title);
-      EndTextCommandSetBlipName(blip);
+      EndTextCommandSetBlipName(this.blip);
+    } else {
+      this.blip = null;
     }
   }
 
   public async spawn() {
     if (this.entity) {
-      throw new Error(`[NPCS] Tried to spawn already existing ped`);
+      console.error(`[NPCS] Tried to spawn already existing ped`);
+      return;
     }
 
     await Util.loadModel(this.data.model);
@@ -77,15 +81,8 @@ export class Npc {
     SetPedDefaultComponentVariation(this.entity);
     await Util.awaitEntityExistence(this.entity);
 
-    this.data.flags.forEach(flag => {
-      const entState = Entity(this.entity ?? 0)?.state;
-      if (!entState) return;
-      entState.set(flag.name, flag.active, false);
-    });
-
-    this.data.settings.forEach(setting => {
-      this.setSetting(setting);
-    });
+    this.setFlags();
+    this.setSettings();
 
     if (this.data.scenario) {
       TaskStartScenarioInPlace(this.entity, this.data.scenario, 0, true);
@@ -106,21 +103,46 @@ export class Npc {
     }, 75);
   }
 
-  private setSetting(setting: Settings.Setting) {
+  private setFlags = () => {
     if (!this.entity) return;
-    switch (setting.type) {
+    const entState = Entity(this.entity).state;
+    for (const [flag, data] of Object.entries(this.data.flags)) {
+      entState.set(flag, data, false);
+    }
+  };
+
+  private setSettings = () => {
+    for (const [setting, active] of Object.entries(this.data.settings)) {
+      this.setSetting(setting as keyof NpcData['settings'], active);
+    }
+  };
+
+  private setSetting(setting: keyof NpcData['settings'], active: boolean) {
+    if (!this.entity) return;
+
+    switch (setting) {
       case 'invincible':
-        SetEntityInvincible(this.entity, setting.active);
+        SetEntityInvincible(this.entity, active);
         break;
       case 'freeze':
-        FreezeEntityPosition(this.entity, setting.active);
+        FreezeEntityPosition(this.entity, active);
         break;
       case 'ignore':
-        SetBlockingOfNonTemporaryEvents(this.entity, setting.active);
+        SetBlockingOfNonTemporaryEvents(this.entity, active);
         break;
       case 'collision':
-        SetEntityCompletelyDisableCollision(this.entity, setting.active, setting.active);
+        SetEntityCompletelyDisableCollision(this.entity, active, active);
+        break;
+      default:
+        console.error(`[NPCS] Unknown setting '${setting}' for NPC ${this.data.id}`);
+        break;
     }
+  }
+
+  public removeBlip() {
+    if (!this.blip || !DoesBlipExist(this.blip)) return;
+    RemoveBlip(this.blip);
+    this.blip = null;
   }
 
   public delete(fade = false) {

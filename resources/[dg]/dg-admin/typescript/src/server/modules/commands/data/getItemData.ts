@@ -1,4 +1,4 @@
-import { Inventory, Notifications } from '@dgx/server';
+import { Inventory, Notifications, UI } from '@dgx/server';
 
 declare interface GetItemDataData {
   itemId?: string;
@@ -21,7 +21,7 @@ export const getItemData: CommandData = {
 
     const copyData = { itemId: args.itemId, dbItemData, cacheItemData };
 
-    emitNet('dg-ui:SendAppEvent', caller.source, 'copy', JSON.stringify(copyData));
+    UI.addToClipboard(caller.source, JSON.stringify(copyData));
     Notifications.add(caller.source, 'Data staat in je clipboard');
   },
   UI: {

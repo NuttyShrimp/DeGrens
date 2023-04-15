@@ -1,0 +1,50 @@
+@use 'src/styles/variables';
+
+.keypad {
+  height: auto;
+  width: auto;
+  background-color: variables.$primary_darker_darker;
+  border-radius: 0.75vh;
+  padding: 1vh;
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
+
+  & .grid {
+    display: grid;
+    grid-template-columns: repeat(3, 6vh);
+    grid-template-rows: repeat(4, 6vh);
+    gap: 1vh;
+
+    & :hover {
+      filter: brightness(0.9);
+    }
+
+    & .button {
+      width: 6vh;
+      aspect-ratio: 1;
+      background-color: variables.$primary_normal;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 0.5vh;
+
+      & > p {
+        color: variables.$gray_lighter;
+        font-size: 2vh;
+        user-select: none;
+        text-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
+      }
+    }
+
+    & .accept {
+      grid-column: 1;
+      grid-row: 4;
+      background-color: variables.$secondary_normal;
+    }
+
+    & .reset {
+      grid-column: 3;
+      grid-row: 4;
+      background-color: variables.$tertiary_normal;
+    }
+  }
+}

@@ -6,7 +6,7 @@
     "z": 25.2316,
     "w": 56.8929
   },
-  "lootChance": 15,
+  "lootChance": 40,
   "loot": ["material_iron", "material_aluminum"],
   "specialLoot": ["material_electronics"],
   "locations": [

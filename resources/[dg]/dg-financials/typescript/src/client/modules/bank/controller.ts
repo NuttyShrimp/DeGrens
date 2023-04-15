@@ -1,4 +1,4 @@
-import { Events, Keys, PolyZone, RPC, UI } from '@dgx/client';
+import { Keys, PolyZone, RPC, UI } from '@dgx/client';
 import locationManager from 'classes/LocationManager';
 
 import { doAnimation } from './service';

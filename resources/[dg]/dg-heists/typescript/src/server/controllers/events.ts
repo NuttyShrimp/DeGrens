@@ -7,10 +7,12 @@ Auth.onAuth(async plyId => {
 
   const initData: Heists.InitData = {
     shopPickupZone: config.shop.pickupZone,
-    zones: Object.entries(config.locations).map(([locationId, location]) => [
-      locationId as Heists.LocationId,
-      location.zone,
-    ]),
+    locations: Object.entries(config.locations).map(([locationId, location]) => ({
+      id: locationId as Heists.LocationId,
+      zone: location.zone,
+      policeDoorReset: location.policeDoorReset,
+    })),
+    paletoActions: config.paleto.actions,
   };
 
   Events.emitNet('heists:client:init', plyId, initData);

@@ -26,7 +26,7 @@ export const takeScreenshot: CommandData = {
     const fName = await Screenshot.generateMinioFilename();
 
     Screenshot.minio(args.Target.serverId, { fileName: fName }).then(link => {
-      emitNet('dg-ui:SendAppEvent', caller.source, 'copy', link);
+      UI.addToClipboard(caller.source, link);
       Notifications.add(caller.source, 'Link staat op je clipboard');
     });
   },

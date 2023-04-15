@@ -1,0 +1,61 @@
+{
+  "code": {
+    "resetTime": 15,
+    "price": 7,
+    "lockdownTime": 10
+  },
+  "emp": {
+    "gridSize": 4,
+    "length": 5,
+    "time": 2
+  },
+  "safeDelay": 30,
+  "actions": [
+    {
+      "coords": {
+        "x": -115.5594,
+        "y": 6480.2266,
+        "z": 31.9404
+      },
+      "size": 0.2,
+      "id": "keypad_one"
+    },
+    {
+      "coords": {
+        "x": -95.519,
+        "y": 6473.0703,
+        "z": 31.9422
+      },
+      "size": 0.2,
+      "id": "keypad_two"
+    },
+    {
+      "coords": {
+        "x": -118.3011,
+        "y": 6470.688,
+        "z": 32.3089
+      },
+      "size": 1,
+      "id": "emp"
+    },
+    {
+      "coords": {
+        "x": -105.2183,
+        "y": 6480.6553,
+        "z": 32.0627
+      },
+      "size": 1,
+      "id": "safe",
+      "standaloneAction": true
+    },
+    {
+      "coords": {
+        "x": -93.1257,
+        "y": 6463.6157,
+        "z": 31.5234
+      },
+      "size": 0.5,
+      "id": "unlock"
+    }
+  ]
+}

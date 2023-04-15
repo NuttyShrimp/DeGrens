@@ -1,8 +1,10 @@
+import { Npcs } from '@dgx/client';
+
 let npcs: string[] = [];
 
 export const removeLocations = () => {
   npcs.forEach(id => {
-    global.exports['dg-npcs'].removeNpc(id);
+    Npcs.remove(id);
   });
 };
 
@@ -10,41 +12,22 @@ export const loadLocations = (locs: Rentals.Location[]) => {
   removeLocations();
   npcs = locs.map(l => {
     const id = `misc_vehiclerentals_${l.id}`;
-    npcs.push(id);
-    global.exports['dg-npcs'].addNpc({
+    Npcs.add({
       id,
       model: 'cs_josef',
       position: l.coords,
       heading: l.coords.w,
       distance: 50.0,
-      settings: [
-        {
-          type: 'invincible',
-          active: true,
-        },
-        {
-          type: 'ignore',
-          active: true,
-        },
-        {
-          type: 'freeze',
-          active: true,
-        },
-        {
-          type: 'collision',
-          active: true,
-        },
-      ],
-      flags: [
-        {
-          name: 'isRentalDealer',
-          active: true,
-        },
-        {
-          name: 'rentalSpot',
-          active: l.id,
-        },
-      ],
+      settings: {
+        invincible: true,
+        ignore: true,
+        freeze: true,
+        collision: true,
+      },
+      flags: {
+        isRentalDealer: true,
+        rentalSpot: l.id,
+      },
       scenario: 'WORLD_HUMAN_CLIPBOARD',
       blip: {
         title: 'Vehicle Rentals',
@@ -54,8 +37,4 @@ export const loadLocations = (locs: Rentals.Location[]) => {
     });
     return id;
   });
-};
-
-export const handleRentalModuleResourceStop = () => {
-  removeLocations();
 };

@@ -1,2 +1,1 @@
 import './events';
-import './commands';

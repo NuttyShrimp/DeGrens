@@ -1,15 +1,11 @@
 import { UI } from '@dgx/client';
-import { finishGridGame, getActiveGridGameId } from 'modules/gridgames/service.gridgames';
-import { finishKeygame, getActiveKeyGameId } from 'modules/keygame/service.keygame';
+import { forceFinishGridGame } from 'modules/gridgames/service.gridgames';
+import { forceFinishKeygame } from 'modules/keygame/service.keygame';
+import { forceFinishKeypad } from 'modules/keypad/service.keypad';
 
 UI.onUIReload(() => {
   // if any game is active, return false as result
-  const activeGridId = getActiveGridGameId();
-  if (activeGridId !== null) {
-    finishGridGame(activeGridId, false);
-  }
-  const activeKey = getActiveKeyGameId();
-  if (activeKey !== null) {
-    finishKeygame(activeKey, false);
-  }
+  forceFinishGridGame();
+  forceFinishKeygame();
+  forceFinishKeypad();
 });

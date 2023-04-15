@@ -43,7 +43,7 @@ export class Item {
 
     // position logic if item is new
     if (isNew && (!state.position || !this.inventory.isGridSpotFree(state.position, itemSize, state.rotated))) {
-      const availablePosition = this.inventory.getFirstAvailablePosition(itemSize);
+      const availablePosition = this.inventory.getFirstAvailablePosition(itemSize, state.rotated);
 
       if (availablePosition) {
         finalPosition = availablePosition.position;
@@ -59,7 +59,7 @@ export class Item {
 
             let dropId = locationManager.getLocation('drop', coords);
             this.inventory = await inventoryManager.get(dropId);
-            const availableInDrop = this.inventory.getFirstAvailablePosition(itemSize);
+            const availableInDrop = this.inventory.getFirstAvailablePosition(itemSize, state.rotated);
 
             // if somehow the drop is also full, we add it to a new drop at position
             if (!availableInDrop) {
@@ -109,17 +109,20 @@ export class Item {
   }
   // #endregion
 
-  public move = (newInv: Inv, position?: Vec2, rotated?: boolean) => {
+  /**
+   * @param skipGridSpotFreeCheck use when provided position/rotation is gotten from getFreeSpot function
+   */
+  public move = (newInv: Inv, position: Vec2, rotated: boolean, skipGridSpotFreeCheck = false) => {
     const itemSize = itemDataManager.get(this.name).size;
 
     const oldInv = this.inventory;
     oldInv.setGridSpacesOccupied(false, this.position, itemSize, this.rotated);
 
-    // if position/rotatioin is not available or not provided, overwrite position/rotation
-    // when this function is called by ply move event, we overwrite src to dispatch sync event to origin client
+    // if position/rotatioin is not available, overwrite position/rotation
+    // if we overwrite we make sure to sync to emitter by returning true
     let syncToEmitter = false;
-    if (!position || rotated === undefined || !newInv.isGridSpotFree(position, itemSize, rotated)) {
-      const availablePosition = newInv.getFirstAvailablePosition(itemSize);
+    if (!skipGridSpotFreeCheck && !newInv.isGridSpotFree(position, itemSize, rotated)) {
+      const availablePosition = newInv.getFirstAvailablePosition(itemSize, rotated); // prefer provided rotation
       position = availablePosition?.position ?? { x: 0, y: 0 };
       rotated = availablePosition?.rotated ?? false;
       syncToEmitter = true;
@@ -231,7 +234,7 @@ export class Item {
     this.inventory.setGridSpacesOccupied(false, this.position, itemSize, this.rotated);
     itemManager.remove(this.id); // remove in item manager
     repository.deleteItem(this.id); // remove from db
-    itemManager.syncItems(this.state, ['destroyed', this.inventory.id]); // provide newInventory as 'destroyed' so client will remove it as visible item
+    itemManager.syncItems({ ...this.state, inventory: 'destroyed' }, [this.inventory.id]); // provide newInventory as 'destroyed' so client will remove it as visible item
     this.isDirty = false;
 
     const logMsg = `${this.id} has been destroyed`;

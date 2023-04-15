@@ -78,7 +78,7 @@ on('police:emergencyButton', () => {
 
 on('police:carStorage', async () => {
   if (Jobs.getCurrentJob().name !== 'police') return;
-  const ped = PlayerPedId()
+  const ped = PlayerPedId();
   const veh = GetVehiclePedIsIn(ped, false);
   if (veh === 0) return;
   const vin = Entity(veh).state.vin;
@@ -107,13 +107,4 @@ on('police:carStorage', async () => {
 on('onResourceStop', (resourceName: string) => {
   if (GetCurrentResourceName() !== resourceName) return;
   BlipManager.removeCategory('police');
-});
-
-Events.onNet('police:doCallAnim', async () => {
-  const ped = PlayerPedId();
-  await Util.loadAnimDict('cellphone@');
-  TaskPlayAnim(ped, 'cellphone@', 'cellphone_call_listen_base', 3.0, -1, -1, 49, 0, false, false, false);
-  setTimeout(() => {
-    StopAnimTask(ped, 'cellphone@', 'cellphone_call_listen_base', 1.0);
-  }, 5000);
 });

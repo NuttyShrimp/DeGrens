@@ -338,14 +338,7 @@ class Util extends UtilShared {
 
   public getHeadingToFaceCoords = (coords: Vec3) => {
     const pedCoords = this.getPlyCoords();
-    const vector = { x: pedCoords.x - coords.x, y: pedCoords.y - coords.y };
-    let heading = Math.atan(vector.y / vector.x);
-    heading = (heading * 180) / Math.PI;
-    heading = heading + 90;
-    if (vector.x < 0) {
-      heading = Math.abs(heading) + 180;
-    }
-    return heading;
+    return this.getHeadingToFaceCoordsFromCoord(pedCoords, coords);
   };
 
   public onPlayerLoaded = (handler: (playerData: PlayerData) => void) => {
@@ -420,6 +413,14 @@ class Util extends UtilShared {
   public onCharSpawn = (handler: (isNewCharacter: boolean) => void) => {
     on('dg-chars:finishSpawn', handler);
   };
+
+  public startFirstPersonCam = (): Promise<void> => {
+    return global.exports['dg-misc'].startFirstPersonCam();
+  };
+
+  public isFirstPersonCamEnabled = (): boolean => {
+    return global.exports['dg-misc'].isFirstPersonCamEnabled();
+  };
 }
 
 export class Interiors {
@@ -454,15 +455,6 @@ export class PropAttach {
 
   public toggleProps = (state: boolean) => {
     global.exports['dg-misc'].toggleProps(state);
-  };
-}
-
-export class Particle {
-  add = (data: Particles.Particle): string => {
-    return global.exports['dg-misc'].addParticle(data);
-  };
-  remove = (id: string) => {
-    global.exports['dg-misc'].removeParticle(id);
   };
 }
 
@@ -534,7 +526,6 @@ export default {
   Util: new Util(),
   Interiors: new Interiors(),
   PropAttach: new PropAttach(),
-  Particle: new Particle(),
   Animations: new Animations(),
   SyncedObjects: new SyncedObjects(),
 };

@@ -12,6 +12,7 @@ import './modules/reputation';
 import './modules/rental/controller.rental';
 import './modules/objectManager/controller.objectmanager';
 import './modules/arena';
+import './modules/propremover';
 import './services/laptop';
 import './services/config';
 import './services/boatanchor';
@@ -22,8 +23,8 @@ import './services/seats';
 import './services/idlist';
 import './services/walkstyles';
 import './services/convars';
-import './services/parachute';
-import './services/scubagear';
+import './services/useables';
+import './services/news';
 import './controllers';
 
 setImmediate(() => {

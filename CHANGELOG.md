@@ -7,15 +7,45 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+### Changed
+
+### Fixed
+
+## [1.1.4]
+
 ## Added
+- Re-added custom MRPD/Pillbox textures
+- Een item in je inventory probeert nu in zijn huidige rotatie te blijven wanneer je dit quickmoved
+- Enkele extra checks toegevoegd op het maken van een 112
+- First Person Cam die gebruikt werd bij pdcam en verrekijker verplaatst naar eigen module om makkelijker opnieuw te gebruiken
+- Je kan nu rechtstreeks fotos maken met de PD Camera
+- Nieuws gerelateerde items toegevoegd
+- Keypad UI toegevoegd
+- Mogelijkheid toegevoegd om particles te creeren op serverside
+- DGX class voor NPCs om geen explicit exports te hoeven gebruiken
+- Paleto heist toegevoegd
+- Extra impound reden toegevoegd
+- ATM overval toegevoegd
 
 ## Changed
 - Veel item decaysnelheiden verlaagd
 - Enkele crafting recipe requirements verlaagd
 - Hoeveel materiaal je krijgt voor sommige methods verhoogd
+- Ambulance ziet meer info bij het inchecken zodat ze een tegenmelding kunnen sturen
+- Hogere kans om specialloot te krijgen uit storerobbery kluis
+- Politie voertuigtrackers herwerkt zodat deze niet naar het verkeerd voertuig refereren
+- Verbandjes gaan langer mee
+- Redelijk wat luxury-voertuighandlingen aangepast
 
 ## Fixed
 - Fixed vehicle plate thread getting stuck on non-existing vehicles
+- Er wordt nu wel een sound afgespeeld bij important dispatch meldingen 
+- Fix items die naar positie 0 gaan wanneer inventory vol is tijdens het moven van meerdere items
+- Items verdwijnen nu wel visueel als je je inventory open hebt wanneer een item gedestroyed wordt
+- Radiotower timeout randomization gefixt
+- Wapentinting werkt weer na de move naar serverside weapon setters
 
 ## [1.1.3]
 
@@ -104,6 +134,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Schotmeldingen toegevoegd
 - Wrapper toegevoegd voor geloopte animaties zodat deze elkaar niet onderbreken
 - Placeable synced objects toegevoegd
+- Je kan nu aankopen doen in de shop bij otto's garage
 
 ### Changed
 - Meer feedback bij start van fleecaoverval

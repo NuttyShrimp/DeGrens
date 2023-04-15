@@ -1,27 +1,31 @@
 import { UI, Util } from '@dgx/client';
 
-let activeId: string | null = null;
-let activePromiseResolve: ((value: boolean) => void) | null = null;
+let active: { id: string; resolve: (value: boolean) => void } | null = null;
 
 export const startGridGame = async (gameData: Minigames.GridGame.GenericGameData) => {
-  if (activeId !== null) return;
+  if (active !== null) return;
 
-  activeId = Util.uuidv4();
+  const id = Util.uuidv4();
   UI.openApplication('gridgame', {
-    id: activeId,
+    id,
     ...gameData,
   });
 
-  const result = await new Promise<boolean>(res => (activePromiseResolve = res));
+  const result = await new Promise<boolean>(res => {
+    active = { id, resolve: res };
+  });
   return result;
 };
 
 export const finishGridGame = (id: string, success: boolean) => {
-  if (id !== activeId) return;
-  if (activePromiseResolve === null) return;
-  activePromiseResolve(success);
-  activePromiseResolve = null;
-  activeId = null;
+  if (active === null || active.id !== id) return;
+
+  active.resolve(success);
+  active = null;
 };
 
-export const getActiveGridGameId = () => activeId;
+export const forceFinishGridGame = () => {
+  if (active === null) return;
+  active.resolve(false);
+  active = null;
+};

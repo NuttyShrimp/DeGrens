@@ -1,5 +1,6 @@
 declare namespace Sanddigging {
   type Config = {
+    sandAmount: [number, number];
     specialItemChance: {
       min: number;
       max: number;

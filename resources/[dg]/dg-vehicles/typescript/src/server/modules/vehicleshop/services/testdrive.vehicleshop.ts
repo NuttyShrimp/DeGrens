@@ -109,30 +109,7 @@ Events.onNet('vehicles:shop:testdrive:start', async (plyId: number, model: strin
   }
   keyManager.addKey(vehVin, plyId);
 
-  // time limit
-  const timeout = setTimeout(async () => {
-    const testDriveData = activeTestDrives.get(cid);
-    if (!testDriveData || testDriveData.vin !== vehVin) return; // If already finished or started new one then dont cancel
-    if (testDriveData.byEmployee) return;
-
-    const netId = Vehicles.getNetIdOfVin(testDriveData.vin);
-    if (!netId) return;
-
-    const charName = await Util.getCharName(cid);
-    testDriveData.timeLimitReached = true;
-    Notifications.add(plyId, 'Je tijdlimiet is verstreken', 'error');
-    Police.createDispatchCall({
-      title: 'Mogelijkse Voertuig Diefstal',
-      description:
-        'PDM meldt dat een getestritte wagen niet is teruggebracht. Bekijk GPS voor actuele locatie van de wagen.',
-      vehicle: vehEnt,
-      tag: '10-37',
-      entries: {
-        'id-card': `${charName} - ${cid}`,
-      },
-    });
-    Police.addTrackerToVehicle(netId, 2000);
-  }, shopConfig.testDrive.time * 1000);
+  const timeout = startTimeLimitTimeout(plyId, cid, vehVin);
 
   activeTestDrives.set(cid, {
     vin: vehVin,
@@ -156,6 +133,34 @@ Events.onNet('vehicles:shop:testdrive:start', async (plyId: number, model: strin
     plyId
   );
 });
+
+const startTimeLimitTimeout = (plyId: number, cid: number, vin: string) => {
+  const timeLimit = getVehicleShopConfig().testDrive.time * 1000;
+  return setTimeout(async () => {
+    const testDriveData = activeTestDrives.get(cid);
+    if (!testDriveData || testDriveData.vin !== vin) return; // If already finished or started new one then dont cancel
+    if (testDriveData.byEmployee) return;
+
+    const netId = Vehicles.getNetIdOfVin(testDriveData.vin);
+    if (!netId) return;
+    const veh = NetworkGetEntityFromNetworkId(netId);
+    if (!veh || !DoesEntityExist(veh)) return;
+
+    const charName = await Util.getCharName(cid);
+    testDriveData.timeLimitReached = true;
+    Notifications.add(plyId, 'Je tijdlimiet is verstreken', 'error');
+    Police.createDispatchCall({
+      title: 'Mogelijkse Voertuig Diefstal',
+      description: 'PDM meldt dat een testvoertuig niet is teruggebracht. Bekijk GPS voor actuele locatie.',
+      vehicle: veh,
+      tag: '10-37',
+      entries: {
+        'id-card': `${charName} - ${cid}`,
+      },
+    });
+    Police.addTrackerToVehicle(veh, 2000);
+  }, timeLimit);
+};
 
 RPC.register('vehicles:shop:testdrive:returnVehicle', (plyId: number, vehNetId: number) => {
   const cid = Util.getCID(plyId);

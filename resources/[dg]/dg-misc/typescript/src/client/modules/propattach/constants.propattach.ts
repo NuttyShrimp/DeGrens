@@ -531,4 +531,102 @@ export const PROPS: Record<string, PropAttach.PropInfo> = {
       z: 8.4,
     },
   },
+  news_microphone: {
+    model: 'p_ing_microphonel_01',
+    boneId: 60309,
+    position: {
+      x: 0.055,
+      y: 0.05,
+      z: 0,
+    },
+    rotation: {
+      x: 240,
+      y: 0,
+      z: 0,
+    },
+  },
+  news_boommic: {
+    model: 'prop_v_bmike_01',
+    boneId: 28422,
+    position: {
+      x: -0.08,
+      y: 0,
+      z: 0,
+    },
+    rotation: {
+      x: 0,
+      y: 0,
+      z: 0,
+    },
+  },
+  news_camera: {
+    model: 'prop_v_cam_01',
+    boneId: 28422,
+    position: {
+      x: 0,
+      y: 0,
+      z: 0,
+    },
+    rotation: {
+      x: 0,
+      y: 0,
+      z: 0,
+    },
+  },
+  big_drill: {
+    model: 'hei_prop_heist_drill',
+    boneId: 57005,
+    position: {
+      x: 0.14,
+      y: -0.01,
+      z: -0.03,
+    },
+    rotation: {
+      x: 3.6,
+      y: 78.0,
+      z: 90.4,
+    },
+  },
+  item_blue_atm: {
+    model: 'prop_atm_02',
+    boneId: 24818,
+    position: {
+      x: -0.95,
+      y: 0.45,
+      z: 0,
+    },
+    rotation: {
+      x: -181.1,
+      y: 89.9,
+      z: 0,
+    },
+  },
+  item_red_atm: {
+    model: 'prop_atm_03',
+    boneId: 24818,
+    position: {
+      x: -0.95,
+      y: 0.45,
+      z: 0,
+    },
+    rotation: {
+      x: -181.1,
+      y: 89.9,
+      z: 0,
+    },
+  },
+  item_green_atm: {
+    model: 'prop_fleeca_atm',
+    boneId: 24818,
+    position: {
+      x: -0.95,
+      y: 0.45,
+      z: 0,
+    },
+    rotation: {
+      x: -181.1,
+      y: 89.9,
+      z: 0,
+    },
+  },
 };

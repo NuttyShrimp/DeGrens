@@ -33,6 +33,7 @@ export const setPlayerState = (state: Hospital.State, save = true) => {
     cleanDownThread();
   } else {
     startDownThread();
+    updateRespawnTime();
     Inventory.close();
     Weapons.removeWeapon(undefined, true);
   }
@@ -46,13 +47,13 @@ export const loadDownStateOnRestart = () => {
   setPlayerState(state, false);
 };
 
-const setRespawnTime = (state: Hospital.State) => {
-  if (state === 'alive') {
+const updateRespawnTime = () => {
+  if (playerState === 'alive') {
     respawnTime = 0;
     return;
   }
 
-  respawnTime = GetGameTimer() + respawnTimeConfig[state] * 1000;
+  respawnTime = GetGameTimer() + respawnTimeConfig[playerState] * 1000;
 };
 
 export const checkDeathOnDamage = (originPed: number, weaponHash: number) => {
@@ -69,7 +70,7 @@ export const checkDeathOnDamage = (originPed: number, weaponHash: number) => {
 
   // stupid edgecase...
   // we want ejections from vehicle to always be unconscious to improve gameplay
-  // most of the time hash is 'WEAPON_RUN_OVER_BY_CAR' or 'WEAPON_RAMMED_BY_CAR' but can also 'WEAPON_FALL' in rare cases
+  // most of the time hash is 'WEAPON_RUN_OVER_BY_CAR' or 'WEAPON_RAMMED_BY_CAR' but can also be 'WEAPON_FALL' in rare cases
   if (weaponHash === GetHashKey('WEAPON_FALL') >>> 0 && global.exports['dg-vehicles'].justEjected()) {
     weaponHash = GetHashKey('WEAPON_RAMMED_BY_CAR');
   }
@@ -81,9 +82,6 @@ export const checkDeathOnDamage = (originPed: number, weaponHash: number) => {
   const downType = damageTypeData.type;
   const weight = getWeightOfState(downType);
   const currentWeight = getWeightOfState(playerState);
-
-  // if was alive, use new state, is was already down, always use dead time
-  setRespawnTime(playerState === 'alive' ? downType : 'dead');
 
   if (currentWeight >= weight) return;
 
@@ -118,8 +116,6 @@ const resurrectWhenRagdollFinished = async () => {
 };
 
 const startDownThread = () => {
-  setRespawnTime(playerState);
-
   if (downThread !== null || playerState === 'alive') return;
 
   downThread = setInterval(() => {
@@ -198,6 +194,8 @@ export const respawnButtonReleased = () => {
 };
 
 const respawnPlayer = async () => {
+  if (playerState === 'alive') return;
+
   // If unconsious just revive
   if (playerState === 'unconscious') {
     doNormalRevive();
@@ -215,7 +213,7 @@ const respawnPlayer = async () => {
     Events.emitNet('hospital:down:respawnToBed');
   } else {
     SetEntityCoords(ped, respawnPosition.x, respawnPosition.y, respawnPosition.z, false, false, false, false);
-    setRespawnTime(playerState);
+    updateRespawnTime();
     Events.emitNet('hospital:down:respawnToHospital');
   }
 };

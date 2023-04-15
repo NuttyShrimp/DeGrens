@@ -44,7 +44,7 @@ Events.onNet('materials:radiotower:disable', (src: number, towerId: string) => {
   });
 
   const configTimeout = getConfig().radiotowers.timeout;
-  const timeout = Util.getRndInteger(configTimeout - 30, configTimeout + 30);
+  const timeout = Util.getRndInteger(configTimeout - 5, configTimeout + 5);
   setTimeout(() => {
     resetTowerState(towerId, false);
   }, timeout * 60 * 1000);
@@ -70,14 +70,7 @@ Events.onNet('materials:radiotowers:override', (src: number, towerId: string, ke
 
     const soundPosition = getConfig().radiotowers.towers[towerId].actions.find(a => a.action === key)?.position;
     if (soundPosition) {
-      const soundName = overrideSuccess ? 'Keycard_Success' : 'Keycard_Fail';
-      Sounds.playFromCoord(
-        `radiotower_${key}_${towerId}`,
-        soundName,
-        'DLC_HEISTS_BIOLAB_FINALE_SOUNDS',
-        soundPosition,
-        10
-      );
+      Sounds.playSuccessSoundFromCoord(soundPosition, overrideSuccess);
     }
 
     if (!overrideSuccess) {

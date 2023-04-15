@@ -51,6 +51,10 @@ if (GetCurrentResourceName() === 'ts-shared') {
           // @ts-ignore
           return Minigames.keygameCustom(...data);
         }
+        case 'keypad': {
+          // @ts-ignore
+          return Minigames.keypad(...data);
+        }
         default:
           return false;
       }

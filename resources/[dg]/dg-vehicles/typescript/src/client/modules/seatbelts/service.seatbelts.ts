@@ -90,9 +90,9 @@ export const disableHarnassHUD = () => {
 
 export const tryEjectAfterCrash = (oldSpeed: number, newSpeed: number, oldVelocity: Vec3) => {
   if (currentSeatbelt === 'harness') return; // no eject when harnass
-  if (newSpeed > oldSpeed * 0.75) return; // need atleast 25% diff in speed
+  if (newSpeed > oldSpeed * 0.65) return; // need atleast 35% diff in speed
 
-  const maxSafeSpeed = currentSeatbelt === 'none' ? 80 : 160;
+  const maxSafeSpeed = currentSeatbelt === 'none' ? 100 : 180;
   if (oldSpeed < maxSafeSpeed) return;
 
   ejectFromVehicle(oldVelocity);

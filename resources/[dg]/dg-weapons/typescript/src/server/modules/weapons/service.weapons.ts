@@ -63,8 +63,9 @@ export const registerUseableWeapons = () => {
     if (!weaponConfig) return;
 
     const weaponData: Weapons.WeaponItem = {
-      ...DEFAULT_SHARED_WEAPON_CONFIG,
       ...itemState,
+      ...DEFAULT_SHARED_WEAPON_CONFIG,
+      ...weaponConfig,
       hash: GetHashKey(itemState.name) >>> 0,
     };
 

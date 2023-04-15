@@ -1,4 +1,4 @@
-import { Events, Inventory, Jobs, Notifications, RPC, Taskbar, Util } from '@dgx/server';
+import { Events, Inventory, Jobs, Notifications, RPC, Taskbar, UI, Util } from '@dgx/server';
 import { BLOCKED_CASINGS_WEAPONS } from './constants.evidence';
 import { addBloodDrop, addEvidence, getAllEvidenceInArea, getCidOfDNA, takeEvidence } from './service.evidence';
 
@@ -78,7 +78,7 @@ Inventory.registerUseable('dna_swab', async src => {
 });
 
 Inventory.registerUseable('evidence_dna', async (src, item) => {
-  emitNet('dg-ui:SendAppEvent', src, 'copy', item.metadata.dna);
+  UI.addToClipboard(src, item.metadata.dna);
 
   // TODO: Remove this as its a temporary solution
   // Currently police have NO way of getting a persons name if he doesnt have an ID

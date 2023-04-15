@@ -22,7 +22,7 @@ declare global {
     Inventory: typeof Classes.Inventory;
     PropAttach: typeof Classes.PropAttach;
     Storage: typeof Classes.Storage;
-    Particle: typeof Classes.Particle;
+    Particles: typeof Classes.Particles;
     Sounds: typeof Classes.Sounds;
     HUD: typeof Classes.HUD;
     Business: typeof Classes.Business;
@@ -37,6 +37,7 @@ declare global {
     BaseEvents: typeof Classes.BaseEvents;
     BlipManager: typeof Classes.BlipManager;
     SyncedObjects: typeof Classes.SyncedObjects;
+    Npcs: typeof Classes.Npcs;
   };
   var asyncExports: any;
 }
