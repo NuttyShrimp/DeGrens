@@ -1,5 +1,5 @@
 import { Util } from '@dgx/client';
-import { MAX_FOV, MIN_FOV, SPEED_X, SPEED_Y, ZOOM_SPEED } from './constants.heli';
+import { MAX_FOV, MIN_FOV, SPEED_X, SPEED_Y, WHITELISTED_HELIS, ZOOM_SPEED } from './constants.heli';
 
 let inPoliceHeli = false;
 let heliCamOn = false;
@@ -113,4 +113,9 @@ export const changeVision = () => {
     SetSeethrough(false);
     visionState = 0;
   }
+};
+
+export const isPoliceHeli = (vehicle: number) => {
+  const model = GetEntityModel(vehicle);
+  return WHITELISTED_HELIS.indexOf(model) !== -1;
 };

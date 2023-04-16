@@ -1,6 +1,5 @@
 import { BaseEvents, Keys } from '@dgx/client';
-import { WHITELISTED_HELIS } from './constants.heli';
-import { changeVision, isHeliCamOn, isInPoliceHeli, setHeliCamOn, setInPoliceHeli } from './service.heli';
+import { changeVision, isHeliCamOn, isInPoliceHeli, isPoliceHeli, setHeliCamOn, setInPoliceHeli } from './service.heli';
 import { isCuffed } from 'modules/interactions/modules/cuffs';
 
 // Only register as in popo heli when engine on and in passenger seat
@@ -10,9 +9,8 @@ BaseEvents.onVehicleEngineStateChange((vehicle, engineState) => {
     return;
   }
 
-  if (isInPoliceHeli()) return;
-  const model = GetEntityModel(vehicle);
-  if (!WHITELISTED_HELIS.includes(model)) return;
+  // check if already in police vehicle && model is a police heli
+  if (isInPoliceHeli() || !isPoliceHeli(vehicle)) return;
 
   const ped = PlayerPedId();
   if (GetPedInVehicleSeat(vehicle, 0) !== ped) return;
@@ -24,7 +22,7 @@ BaseEvents.onVehicleSeatChange((vehicle, newSeat, oldSeat) => {
   if (oldSeat === 0 && isInPoliceHeli()) {
     setInPoliceHeli(false);
   }
-  if (newSeat === 0 && !isInPoliceHeli() && GetIsVehicleEngineRunning(vehicle)) {
+  if (newSeat === 0 && !isInPoliceHeli() && isPoliceHeli(vehicle) && GetIsVehicleEngineRunning(vehicle)) {
     setInPoliceHeli(true);
   }
 });

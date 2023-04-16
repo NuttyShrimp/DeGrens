@@ -124,8 +124,7 @@ const disassembleVehicle = async (vehicle: number) => {
     canCancel: true,
     cancelOnDeath: true,
     cancelOnMove: true,
-    disarm: true,
-    disableInventory: true,
+    disablePeek: true,
     controlDisables: {
       movement: true,
       carMovement: true,
