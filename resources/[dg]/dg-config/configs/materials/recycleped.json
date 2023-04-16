@@ -42,6 +42,7 @@
     "volt_meter": ["material_aluminum", "material_plastic"],
     "rgb_controller": ["material_electronics"],
     "laptop": ["material_electronics"],
-    "radio": ["material_electronics"]
+    "radio": ["material_electronics"],
+    "hand_cuffs": ["refined_iron", "refined_steel"]
   }
 }
