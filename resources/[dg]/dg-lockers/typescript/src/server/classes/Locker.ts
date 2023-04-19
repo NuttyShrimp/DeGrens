@@ -82,7 +82,7 @@ export class Locker {
       'DG Real Estate',
       undefined,
       'lockers:server:lockerDefaulted',
-      14
+      7
     );
     this.updatePaymentDate();
     this.logger.silly(`Given maintenance fee to owner ${this.owner}`);
