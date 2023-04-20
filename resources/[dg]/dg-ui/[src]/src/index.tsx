@@ -13,7 +13,7 @@ import '@degrens-21/fa-6/css/all.css';
 
 if (!isDevel()) {
   Sentry.init({
-    dsn: 'https://ecf541af25474c54917d8e2445317213@sentry.nuttyshrimp.me/10',
+    dsn: 'https://0bc1faba50b14e49a85259c0b3b05dc8@sentry.nuttyshrimp.me/3',
     integrations: [
       // @ts-ignore
       new BrowserTracing({

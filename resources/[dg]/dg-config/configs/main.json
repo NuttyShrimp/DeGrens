@@ -6,8 +6,8 @@
   "devLogServer": "https://graylog.nuttyshrimp.me/gelf",
   "panelEndpoint": "https://panel.degrensrp.be",
   "sentry": {
-    "publicKey": "e2eda5e17b104dc3bdb2e2d6bd001475",
-    "privateKey": "e6928187e7c74dc290c2423ea27d6b65",
-    "projectId": "6"
+    "publicKey": "47836ea9173b4e52b8820a05996cf549",
+    "privateKey": "5ea5307d3277403192a2b3733edddd07",
+    "projectId": "2"
   }
 }

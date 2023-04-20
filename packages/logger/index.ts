@@ -5,7 +5,7 @@ import winstonSentry from 'winston-sentry-log';
 
 import mainJSON from '../../resources/[dg]/dg-config/configs/main.json';
 
-const SENTRY_DSN = 'https://ca666003b9db4baeb7bf5b1aab7bc6d1@sentry.nuttyshrimp.me/9';
+const SENTRY_DSN = 'https://47836ea9173b4e52b8820a05996cf549@sentry.nuttyshrimp.me/2';
 
 // Needed to manually apply a color to componenent property of log
 const manualColorize = (strToColor: string): string => `[\x1b[35m${strToColor}\x1b[0m]`;

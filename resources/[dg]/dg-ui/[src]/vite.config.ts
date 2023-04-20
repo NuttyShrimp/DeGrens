@@ -34,9 +34,9 @@ export default defineConfig(({ mode }) => ({
     }),
     viteSentry({
       url: 'https://sentry.nuttyshrimp.me',
-      authToken: 'f6efd5c0ab184f3a9b108519f5e9aee4be7f1dd9363d44bd9efd0e16c98f4a0b',
+      authToken: '5e2d7e8c0d6a42348a0c50dbf655896524c8414752804c8ea1ca04e357be9cd8',
       org: 'nutty',
-      project: 'dg-ui',
+      project: 'degrens-ui',
       debug: true,
       deploy: {
         env: mode === 'production' ? 'production' : 'development',
