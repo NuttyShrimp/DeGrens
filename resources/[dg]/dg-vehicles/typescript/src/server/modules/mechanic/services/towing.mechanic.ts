@@ -83,6 +83,7 @@ export const tryAcceptingJob = (src: number, vin: string) => {
     Notifications.add(src, 'Iemand was je voor!', 'error');
     return;
   }
+  clearTimeout(jobInfo.timeoutInfo);
   jobInfo.targets.forEach(srvId => {
     emitNet('dg-phone:client:notification:remove', srvId, `tow-request-${vin}`);
   });
