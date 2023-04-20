@@ -1,4 +1,4 @@
-import { Util, UI, Notifications, RPC, Sounds } from '@dgx/client';
+import { Util, UI, Notifications, RPC, Sounds, Events } from '@dgx/client';
 import { Vector3 } from '@dgx/shared';
 import { isPoliceVehicle } from 'services/vehicles';
 
@@ -13,6 +13,7 @@ const activeData = {
   plate: '--------',
   flagged: false,
   locked: false,
+  veh: 0,
 };
 
 const plateHistory: { plate: string; flagged: boolean; time: number }[] = [];
@@ -61,11 +62,11 @@ const startRadarThread = () => {
 
   radarThread = setInterval(async () => {
     const vehicle = GetVehiclePedIsIn(ped, false);
-    const targetVehicle = findTargetVehicle(vehicle);
+    activeData.veh = findTargetVehicle(vehicle);
 
-    if (DoesEntityExist(targetVehicle) && IsEntityAVehicle(targetVehicle)) {
-      const targetSpeed = Math.round(GetEntitySpeed(targetVehicle) * 3.6);
-      const targetPlate = String(GetVehicleNumberPlateText(targetVehicle));
+    if (DoesEntityExist(activeData.veh) && IsEntityAVehicle(activeData.veh)) {
+      const targetSpeed = Math.round(GetEntitySpeed(activeData.veh) * 3.6);
+      const targetPlate = String(GetVehicleNumberPlateText(activeData.veh));
 
       // Only update UI speed if we dont have a plate locked or target veh is the locked vehicle
       if (lockedPlate === null || lockedPlate === targetPlate) {
@@ -93,6 +94,7 @@ const startRadarThread = () => {
       }
     } else {
       activeData.currentSpeed = 0;
+      activeData.veh = 0;
     }
 
     updateDataToUI();
@@ -124,7 +126,7 @@ const findTargetVehicle = (playerVehicle: number) => {
 };
 
 export const lockPlate = () => {
-  if (activeData.plate === '--------') return;
+  if (activeData.plate === '--------' || activeData.veh === 0) return;
   if (lockedPlate !== null) {
     lockedPlate = null;
     Notifications.add('Nummerplaat unlocked');
@@ -132,7 +134,7 @@ export const lockPlate = () => {
   }
 
   lockedPlate = activeData.plate;
-  Notifications.add(`Nummerplaat locked: ${lockedPlate}`);
+  Events.emitNet('police:showVehicleInfo', NetworkGetNetworkIdFromEntity(activeData.veh));
 };
 
 export const resetRadar = () => {
@@ -140,6 +142,7 @@ export const resetRadar = () => {
   activeData.topSpeed = 0;
   activeData.plate = '--------';
   activeData.flagged = false;
+  activeData.veh = 0;
   lockedPlate = null;
   updateDataToUI();
 };
