@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Je ziet de instel optie niet langer als je een doos vast hebt in het methlab
 - Support heeft nu ook de fill-needs admin optie
+- Opbrengst van enkele criminele activiteiten aangepast
 
 ### Fixed
 - De driver bij een ATM robbery hoeft niet langer uit te stappen voordat hij de ATM van de muur kan trekken

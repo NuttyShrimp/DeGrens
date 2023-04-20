@@ -41,9 +41,12 @@ Inventory.registerUseable(
 
     const cash = Util.getRndInteger(minCash, maxCash + 1);
     const rolls = Util.getRndInteger(minRolls, maxRolls + 1);
-
     Financials.addCash(plyId, cash, 'atm-robbery');
     Inventory.addItemToPlayer(plyId, 'money_roll', rolls);
+    if (Math.random() <= lootConfig.specialItem.chance) {
+      const item = lootConfig.specialItem.pool[Util.getRndInteger(0, lootConfig.specialItem.pool.length)]
+      Inventory.addItemToPlayer(plyId, item, 1);
+    }
 
     const logMsg = `${Util.getName(plyId)}(${plyId}) heeft een ATM berooft (cash: ${cash}, rolls: ${rolls})`;
     atmLogger.info(logMsg);

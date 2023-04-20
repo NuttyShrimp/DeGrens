@@ -1,15 +1,11 @@
 {
-  "whitelistedModels": [
-    "bison"
-  ],
+  "whitelistedModels": ["bison"],
   "loot": {
-    "cash": [
-      250,
-      750
-    ],
-    "rolls": [
-      10,
-      20
-    ]
+    "cash": [750, 1500],
+    "rolls": [15, 25],
+    "specialItem": {
+      "pool": ["material_electronics"],
+      "chance": 0.05
+    }
   }
 }

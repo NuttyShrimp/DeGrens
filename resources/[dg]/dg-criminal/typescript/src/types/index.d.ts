@@ -78,6 +78,10 @@ declare namespace Criminal {
       loot: {
         cash: [number, number];
         rolls: [number, number];
+        specialItem: {
+          pool: string[];
+          chance: number;
+        };
       };
     };
 
