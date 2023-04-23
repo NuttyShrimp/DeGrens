@@ -27,6 +27,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Decals die niet aangepast/weggingen bij outfits gefixed
 - Emotemenu enabled niet alle controls meer
 - Het laden van businesses throwed geen errors meer als businesstype niet bestaat
+- Speling rond maintenance fee schedule toegevoegd om te voorkomen dat deze niet berekend wordt
 
 ## [1.1.4]
 
