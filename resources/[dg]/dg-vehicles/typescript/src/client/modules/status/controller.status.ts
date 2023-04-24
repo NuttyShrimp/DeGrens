@@ -82,11 +82,11 @@ Events.onNet('vehicles:status:useRepairKit', async (itemId: string) => {
   const heading = Util.getHeadingToFaceEntity(entity);
   await Util.goToCoords({ ...Util.getPlyCoords(), w: heading }, 2000);
 
-  Sync.executeNative('setVehicleDoorOpen', entity, 4, true);
+  Sync.executeAction('setVehicleDoorOpen', entity, 4, true);
 
   const success = await Minigames.keygame(10, 7, 15);
   if (!success) {
-    Sync.executeNative('setVehicleDoorOpen', entity, 4, false);
+    Sync.executeAction('setVehicleDoorOpen', entity, 4, false);
     return;
   }
 
@@ -108,7 +108,7 @@ Events.onNet('vehicles:status:useRepairKit', async (itemId: string) => {
       flags: 1,
     },
   });
-  Sync.executeNative('setVehicleDoorOpen', entity, 4, false);
+  Sync.executeAction('setVehicleDoorOpen', entity, 4, false);
 
   if (canceled) return;
 

@@ -1,4 +1,4 @@
-import { Keys, Notifications, Util } from '@dgx/client';
+import { Keys, Notifications, Util, Vehicles } from '@dgx/client';
 import { getCurrentVehicle, isDriver } from '@helpers/vehicle';
 
 let limiterOn = false;
@@ -19,13 +19,13 @@ Keys.onPressDown('toggle-speedlimiter', () => {
     return;
   }
 
-  const vehSpeed = Util.getVehicleSpeed(veh);
+  const vehSpeed = Vehicles.getVehicleSpeed(veh);
   if (vehSpeed < MINIMUM_SPEED) {
     Notifications.add(`Minimum snelheid: ${MINIMUM_SPEED}km/u`, 'error');
     return;
   }
 
-  Notifications.add(`Snelheidsbegrenzer ingeschakeld op ${Util.getVehicleSpeed(veh)}km/u`, 'success');
+  Notifications.add(`Snelheidsbegrenzer ingeschakeld op ${vehSpeed}km/u`, 'success');
   SetVehicleMaxSpeed(veh, GetEntitySpeed(veh));
   limiterOn = true;
 });

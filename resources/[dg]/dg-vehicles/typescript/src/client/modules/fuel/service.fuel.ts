@@ -97,7 +97,7 @@ export const doRefuel = async (netId: number, usingJerryCan = false) => {
     // Calculate the chance on a engine explosion
     const chance = Util.getRndInteger(1, 101);
     if (chance < 10) {
-      Sync.executeNative('NetworkExplodeVehicle', veh, true, false, false);
+      Sync.executeAction('NetworkExplodeVehicle', veh, true, false, false);
     }
   }
   Events.emitNet('vehicles:fuel:doRefuel', netId, usingJerryCan);

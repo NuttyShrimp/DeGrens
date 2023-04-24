@@ -2450,7 +2450,7 @@ function UIMenu.New(Title, Subtitle, X, Y, TxtDictionary, TxtName)
             ResetCursorOnOpen = false,
             MouseControlsEnabled = false,
             MouseEdgeEnabled = false,
-            ControlDisablingEnabled = true,
+            ControlDisablingEnabled = false,
             Audio = {
                 Library = "HUD_FRONTEND_DEFAULT_SOUNDSET",
                 UpDown = "NAV_UP_DOWN",

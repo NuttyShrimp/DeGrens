@@ -972,7 +972,8 @@
     "size": {
       "x": 3,
       "y": 2
-    }
+    },
+    "markedForSeizure": true
   },
   {
     "name": "id_card",

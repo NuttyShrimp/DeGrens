@@ -1,4 +1,4 @@
-import { RPC, Util } from '@dgx/server';
+import { RPC, Util, Vehicles } from '@dgx/server';
 import { insertVehicleStatus } from 'db/repository';
 import { addWaxedVehicle } from 'modules/carwash/service.carwash';
 import { setVehicleNosAmount } from 'modules/nos/service.nos';
@@ -99,7 +99,7 @@ export const spawnVehicle = async (
   const newPlate = plate ?? plateManager.generatePlate();
   vehState.set('plate', newPlate, true);
   plateManager.registerPlate(newPlate);
-  Util.setVehicleNumberPlate(veh, newPlate);
+  Vehicles.setVehicleNumberPlate(veh, newPlate);
 
   if (upgrades) {
     applyUpgradesToVeh(vehNetId, upgrades);

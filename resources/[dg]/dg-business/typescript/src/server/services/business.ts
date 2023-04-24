@@ -25,11 +25,11 @@ export const seedBusinessTypes = async () => {
       id: bt.id,
       name: bt.name,
       permissions: Object.keys(config.permissions.base).concat(
-        config.types[bt.name].sort((p1, p2) => {
+        config.types[bt.name]?.sort((p1, p2) => {
           const p1Mask = config.permissions.extra?.[p1] ?? 0;
           const p2Mask = config.permissions.extra?.[p2] ?? 0;
           return p1Mask - p2Mask;
-        })
+        }) ?? []
       ),
     };
     mainLogger.debug(`Loaded business type: ${bType.name}`);

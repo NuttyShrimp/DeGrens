@@ -1,4 +1,4 @@
-import { Events, RPC, Util } from '../classes';
+import { Events, RPC, Util, Vehicles } from '../classes';
 
 if (GetCurrentResourceName() === 'ts-shared') {
   onNet('dgx:requestEnv', () => {
@@ -47,5 +47,11 @@ if (GetCurrentResourceName() === 'ts-shared') {
     const entity = NetworkGetEntityFromNetworkId(netId);
     if (!entity || !DoesEntityExist(entity)) return;
     DeleteEntity(entity);
+  });
+
+  Events.onNet('dgx:vehicles:setLock', (_, netId: number, locked: boolean) => {
+    const entity = NetworkGetEntityFromNetworkId(netId);
+    if (!entity || !DoesEntityExist(entity)) return;
+    Vehicles.setVehicleDoorsLocked(entity, locked);
   });
 }

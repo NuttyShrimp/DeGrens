@@ -189,6 +189,19 @@ export const startAFKThread = () => {
     clearInterval(AFKThread);
   }
   AFKThread = setInterval(() => {
+    const plyCoords = Util.getPlyCoords();
+    const plyHeading = GetGameplayCamRelativeHeading();
+    const closeToOldCoord = plyCoords.distance(AFKInfo.lastCoords) < 1;
+    const closeToOldHeading = Math.abs(AFKInfo.camHeading - plyHeading) < 1;
+    const isDown = Hospital.isDown();
+    const isCuffed = Police.isCuffed();
+
+    if (closeToOldCoord && closeToOldHeading && !isDown && !isCuffed) {
+      AFKInfo.tick++;
+    } else {
+      AFKInfo.tick = 0;
+    }
+
     switch (AFKInfo.tick) {
       case 5: {
         Notifications.add('Je bent al 5 minuten AFK geflagged');
@@ -212,18 +225,6 @@ export const startAFKThread = () => {
       }
     }
 
-    const plyCoords = Util.getPlyCoords();
-    const plyHeading = GetGameplayCamRelativeHeading();
-    const closeToOldCoord = plyCoords.distance(AFKInfo.lastCoords) < 1;
-    const closeToOldHeading = Math.abs(AFKInfo.camHeading - plyHeading) < 1;
-    const isDown = Hospital.isDown();
-    const isCuffed = Police.isCuffed();
-
-    if (closeToOldCoord && closeToOldHeading && !isDown && !isCuffed) {
-      AFKInfo.tick++;
-    } else {
-      AFKInfo.tick = 0;
-    }
     AFKInfo.camHeading = plyHeading;
     AFKInfo.lastCoords = plyCoords;
   }, 60000);

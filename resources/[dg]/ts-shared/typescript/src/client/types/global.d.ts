@@ -38,6 +38,7 @@ declare global {
     BlipManager: typeof Classes.BlipManager;
     SyncedObjects: typeof Classes.SyncedObjects;
     Npcs: typeof Classes.Npcs;
+    Vehicles: typeof Classes.Vehicles;
   };
   var asyncExports: any;
 }

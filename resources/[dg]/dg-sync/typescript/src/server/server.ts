@@ -1,7 +1,7 @@
 import { startCoordsThread } from 'modules/coords/controller.coords';
 
 import './modules/coords';
-import './modules/natives';
+import './modules/actions';
 import './modules/scopes';
 
 setImmediate(() => {

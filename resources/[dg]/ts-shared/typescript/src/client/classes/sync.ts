@@ -1,9 +1,28 @@
 import { Events } from './index';
 
 class Sync {
-  executeNative<T extends keyof Sync.Natives>(native: T, entity: number, ...args: Sync.Natives[T]) {
-    global.exports['dg-sync'].syncExecution(native, entity, ...args);
+  private readonly actionsToUnregister: Set<string>;
+
+  constructor() {
+    this.actionsToUnregister = new Set();
+
+    on('onResourceStop', (resourceName: string) => {
+      if (GetCurrentResourceName() !== resourceName) return;
+      this.actionsToUnregister.forEach(action => {
+        global.exports['dg-sync'].unregisterActionHandler(action);
+      });
+    });
   }
+
+  public registerActionHandler = (action: string, handler: Sync.ActionHandler) => {
+    global.exports['dg-sync'].registerActionHandler(action, handler);
+    this.actionsToUnregister.add(action);
+  };
+
+  public executeAction = (action: string, entity: number, ...args: unknown[]) => {
+    global.exports['dg-sync'].executeAction(action, entity, ...args);
+  };
+
   setPlayerInvincible(isEnabled: boolean) {
     Events.emitNet('auth:anticheat:native:setPlayerInvincible', isEnabled);
   }

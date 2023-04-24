@@ -1,4 +1,4 @@
-import { Sync, Util, BlipManager } from '@dgx/client';
+import { Sync, Util, BlipManager, Vehicles } from '@dgx/client';
 import { drawText3d } from '../modules/util/service.util';
 import { getPlayerName } from './names';
 
@@ -22,7 +22,7 @@ export const enableBlips = () => {
       let coords: Vec3;
       if (vehicle && DoesEntityExist(vehicle)) {
         coords = Util.getEntityCoords(vehicle);
-        const seat = Util.getSeatPedIsIn(vehicle, ped);
+        const seat = Vehicles.getSeatPedIsIn(vehicle, ped);
         coords.z += (seat + 2) * 0.6;
       } else {
         coords = Util.getEntityCoords(ped);

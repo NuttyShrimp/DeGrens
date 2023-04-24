@@ -1,5 +1,3 @@
-import { Util } from '@dgx/server';
-
 const scopes: Map<number, Scopes.Scope> = new Map();
 
 const getPlayerInfo = (plyId: number): Scopes.Player => ({

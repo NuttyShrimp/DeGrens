@@ -14,6 +14,7 @@ import storage from './storage';
 import sync from './sync';
 import ui from './ui';
 import util from './util';
+import vehicles from './vehicles';
 import weapons from './weapons';
 import weather from './weather';
 
@@ -34,3 +35,4 @@ export const { BlipManager } = blipmanager;
 export const { Sounds } = sounds;
 export const { Particles } = particles;
 export const { Npcs } = npcs;
+export const { Vehicles } = vehicles;

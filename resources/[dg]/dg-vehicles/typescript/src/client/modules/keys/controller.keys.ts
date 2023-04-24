@@ -1,6 +1,5 @@
-import { Events, Hospital, Keys, Minigames, Peek, Police, Util } from '@dgx/client';
+import { Events, Hospital, Keys, Minigames, Peek, Police, Util, Vehicles } from '@dgx/client';
 import { getCurrentVehicle } from '@helpers/vehicle';
-
 import { setClassesWithoutLock, toggleVehicleLock } from './service.keys';
 import { hasVehicleKeys } from './cache.keys';
 
@@ -55,7 +54,7 @@ const lockpickAnimations = {
     },
     stop: () => {
       const ped = PlayerPedId();
-      const vehData = Util.getCurrentVehicleInfo(); // the animcancel SOMEHOW tps ped out of veh
+      const vehData = Vehicles.getCurrentVehicleInfo(); // the animcancel SOMEHOW tps ped out of veh
       StopAnimTask(ped, 'anim@amb@clubhouse@tutorial@bkr_tut_ig3@', 'machinic_loop_mechandplayer', 1);
       if (vehData) {
         SetPedIntoVehicle(ped, vehData.vehicle, vehData.seat);

@@ -119,7 +119,7 @@ const disassembleVehicle = async (vehicle: number) => {
     return;
   }
 
-  Sync.executeNative('setVehicleDoorOpen', vehicle, closestDoorId, true);
+  Sync.executeAction('setVehicleDoorOpen', vehicle, closestDoorId, true);
   const [canceled] = await Taskbar.create('wrench', 'Demonteren', 10000, {
     canCancel: true,
     cancelOnDeath: true,

@@ -59,7 +59,7 @@ Weapons.onShotFired(weaponItem => {
   const model = GetEntityModel(entity);
   if (!ALL_ANIMAL_MODELS.has(model)) return;
 
-  Sync.executeNative('SetEntityHealth', entity, 0);
+  Sync.executeAction('SetEntityHealth', entity, 0);
 });
 
 PolyZone.onEnter('jobs_huntingzone', enteredHuntingZone);
