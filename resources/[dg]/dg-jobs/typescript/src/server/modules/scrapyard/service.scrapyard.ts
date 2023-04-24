@@ -69,7 +69,7 @@ export const assignLocationToGroup = async (ownerId: number) => {
     return;
   }
 
-  SetVehicleDoorsLocked(vehicle, 2);
+  Vehicles.setVehicleDoorsLocked(vehicle, true);
 
   activeGroups.set(group.id, {
     ...location,

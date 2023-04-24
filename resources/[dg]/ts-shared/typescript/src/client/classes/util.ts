@@ -72,18 +72,6 @@ class Util extends UtilShared {
     return this.awaitCondition(() => HasAnimSetLoaded(set));
   };
 
-  getVehicleVin = (vehicle?: number): Promise<string | null> => {
-    return global.exports['dg-vehicles'].getVehicleVin(vehicle);
-  };
-
-  getVehicleVinWithoutValidation = (vehicle?: number): string | null => {
-    return global.exports['dg-vehicles'].getVehicleVinWithoutValidation(vehicle);
-  };
-
-  getVehicleSpeed = (veh: number) => {
-    return Math.ceil(GetEntitySpeed(veh) * 3.6);
-  };
-
   /**
    * Spawns ped that will attack all players
    */
@@ -253,33 +241,6 @@ class Util extends UtilShared {
     const owner = NetworkGetEntityOwner(ped);
     return ped === GetPlayerPed(owner) ? GetPlayerServerId(owner) : 0;
   }
-
-  getSeatPedIsIn = (vehicle: number, ped?: number) => {
-    if (!ped) {
-      ped = PlayerPedId();
-    }
-    const model = GetEntityModel(vehicle);
-    const numSeats = GetVehicleModelNumberOfSeats(model);
-    let seat = -1;
-    for (let i = -1; i < numSeats - 1; i++) {
-      if (GetPedInVehicleSeat(vehicle, i) !== ped) continue;
-      seat = i;
-      break;
-    }
-    return seat;
-  };
-
-  getCurrentVehicleInfo = () => {
-    const ped = PlayerPedId();
-    const vehicle = GetVehiclePedIsIn(ped, false);
-    if (vehicle === 0 || !DoesEntityExist(vehicle)) return;
-    const seat = this.getSeatPedIsIn(vehicle, ped);
-    return {
-      vehicle,
-      seat,
-      class: GetVehicleClass(vehicle),
-    };
-  };
 
   getPedMovementClipset = (ped: number): string | undefined => {
     //@ts-ignore

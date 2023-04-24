@@ -1,4 +1,4 @@
-import { Events, Keys, Util, Inventory, Police, Weapons, RPC, Jobs, Animations } from '@dgx/client';
+import { Events, Keys, Util, Inventory, Police, Weapons, RPC, Jobs, Animations, Vehicles } from '@dgx/client';
 import { setBleedAmount, setHealth } from 'modules/health/service.health';
 import { ENABLED_CONTROLS, DOWN_ANIMATIONS, NO_TP_VEHICLE_CLASSES } from './constants.down';
 import { doGetUpAnimation, getWeightOfState, resetPedFlagsAfterDown, setPedFlagsOnDown, setText } from './helpers.down';
@@ -104,7 +104,7 @@ const resurrectWhenRagdollFinished = async () => {
 
   const coords = Util.getEntityCoords(ped);
   const heading = GetEntityHeading(ped);
-  const vehData = Util.getCurrentVehicleInfo(); // resurrect tps ped out of veh
+  const vehData = Vehicles.getCurrentVehicleInfo(); // resurrect tps ped out of veh
   NetworkResurrectLocalPlayer(coords.x, coords.y, coords.z, heading, false, false);
   setPedFlagsOnDown();
   if (vehData && !NO_TP_VEHICLE_CLASSES.includes(vehData.class)) {

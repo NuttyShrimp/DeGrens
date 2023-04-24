@@ -1,4 +1,4 @@
-import { Events, Notifications, RayCast, RPC, Sync, UI, Util } from '@dgx/client';
+import { Events, Notifications, RayCast, RPC, Sync, UI, Util, Vehicles } from '@dgx/client';
 import { Vector3, Export, ExportRegister } from '@dgx/shared';
 import { TYPES_WITH_OPEN_ANIMATION } from '../constants';
 import { canOpenInventory, doCloseAnimation, doLookAnimation, doOpenAnimation } from '../util';
@@ -36,7 +36,7 @@ class ContextManager extends Util.Singleton<ContextManager>() {
 
     if (this.closingData) {
       if (this.closingData.type === 'trunk') {
-        Sync.executeNative('setVehicleDoorOpen', this.closingData.data as number, 5, false);
+        Sync.executeAction('setVehicleDoorOpen', this.closingData.data as number, 5, false);
       }
       if (TYPES_WITH_OPEN_ANIMATION.includes(this.closingData.type)) {
         doCloseAnimation();
@@ -61,7 +61,7 @@ class ContextManager extends Util.Singleton<ContextManager>() {
 
     const ped = PlayerPedId();
     if (IsPedInAnyVehicle(ped, false)) {
-      const vin = await Util.getVehicleVin();
+      const vin = await Vehicles.getVehicleVin();
       if (vin) {
         doLookAnimation();
         return { type: 'glovebox', identifier: vin };
@@ -86,10 +86,10 @@ class ContextManager extends Util.Singleton<ContextManager>() {
 
         const distance = Util.getPlyCoords().distance(trunkPosition);
         if (distance < 2) {
-          const vin = await Util.getVehicleVin(entityAimingAt);
+          const vin = await Vehicles.getVehicleVin(entityAimingAt);
           if (vin) {
             const vehicleClass = GetVehicleClass(entityAimingAt);
-            Sync.executeNative('setVehicleDoorOpen', entityAimingAt, 5, true);
+            Sync.executeAction('setVehicleDoorOpen', entityAimingAt, 5, true);
             doOpenAnimation();
             this.closingData = { type: 'trunk', data: entityAimingAt };
             return { type: 'trunk', identifier: vin, data: vehicleClass };

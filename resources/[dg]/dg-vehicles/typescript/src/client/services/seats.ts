@@ -1,4 +1,4 @@
-import { Events, Notifications, Util } from '@dgx/client';
+import { Events, Notifications, Util, Vehicles } from '@dgx/client';
 import { getCurrentVehicle } from '@helpers/vehicle';
 import { isSeatbeltOn } from 'modules/seatbelts/service.seatbelts';
 
@@ -24,7 +24,7 @@ export const moveToSeat = (vehicle: number, seatIndex: number) => {
     Notifications.add(`Je hebt je gordel nog aan`, 'error');
     return;
   }
-  if (Util.getVehicleSpeed(vehicle) > 30) {
+  if (Vehicles.getVehicleSpeed(vehicle) > 30) {
     Notifications.add(`Het voertuig gaat te snel`, 'error');
     return;
   }

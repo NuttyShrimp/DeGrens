@@ -1,4 +1,4 @@
-import { Events, RPC, Sounds, Util } from '@dgx/client';
+import { Events, RPC, Sounds, Util, Vehicles } from '@dgx/client';
 
 import { getCurrentVehicle, isDriver } from '../../helpers/vehicle';
 
@@ -245,12 +245,12 @@ export const startVehicleCrashThread = (vehicle: number) => {
   stopVehicleCrashThread();
 
   let oldVelocity = Util.getEntityVelocity(vehicle);
-  let oldSpeed = Util.getVehicleSpeed(vehicle);
+  let oldSpeed = Vehicles.getVehicleSpeed(vehicle);
   let oldHealth = GetVehicleBodyHealth(vehicle);
 
   vehicleCrashThread = setInterval(() => {
     const newHealth = GetVehicleBodyHealth(vehicle);
-    const newSpeed = Util.getVehicleSpeed(vehicle);
+    const newSpeed = Vehicles.getVehicleSpeed(vehicle);
 
     if (oldHealth - newHealth > 1) {
       // console.log(`Vehicle crashed | speed: ${oldSpeed} -> ${newSpeed} | health: ${oldHealth} -> ${newHealth}`);

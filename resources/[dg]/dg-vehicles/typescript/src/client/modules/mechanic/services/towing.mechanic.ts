@@ -175,6 +175,6 @@ export const unattachVehicleFromTowVehicle = async (towVehicleNetId: number, att
     true
   );
   DetachEntity(attachVehicle, true, true);
-  Sync.executeNative('setVehicleOnGround', attachVehicle);
+  Sync.executeAction('setVehicleOnGround', attachVehicle);
   Notifications.add('Voertuig losgelaten');
 };

@@ -11,18 +11,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Feedback notificatie toegevoegd aan ATM robbery
 - Staff kan nu een tijdelijke evenement blip plaatsen
 - Enkele items recyclebaar gemaakt
+- Extra carwashes toegevoegd
 
 ### Changed
 - Je ziet de instel optie niet langer als je een doos vast hebt in het methlab
 - Support heeft nu ook de fill-needs admin optie
 - Opbrengst van enkele criminele activiteiten aangepast
 - Plate lock toont nu meer informatie over het voertuig
+- Enkele items als 'marked for seizure' aangeduid
 
 ### Fixed
 - De driver bij een ATM robbery hoeft niet langer uit te stappen voordat hij de ATM van de muur kan trekken
 - Voertuig slot is nu wel deftig toggleble de eerste keer dat je dit probeerd
 - Er wordt nu effectief gechecked of een voertuig een politie heli is om helicam te activeren
 - Decals die niet aangepast/weggingen bij outfits gefixed
+- Emotemenu enabled niet alle controls meer
+- Het laden van businesses throwed geen errors meer als businesstype niet bestaat
 
 ## [1.1.4]
 

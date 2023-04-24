@@ -93,6 +93,33 @@ class Vehicles {
   doAdminFix = (vehicle: number) => {
     global.exports['dg-vehicles'].doAdminFix(vehicle);
   };
+
+  // When setting num plate at spawn it will not work otherwise
+  // A player needs to be inscope for this to resolve!
+  setVehicleNumberPlate = (vehicle: number, plate: string) => {
+    return new Promise<void>(res => {
+      const plateInterval = setInterval(() => {
+        if (!DoesEntityExist(vehicle)) {
+          clearInterval(plateInterval);
+          res();
+          return;
+        }
+
+        const plateText = GetVehicleNumberPlateText(vehicle).trim();
+        if (plateText === plate) {
+          clearInterval(plateInterval);
+          res();
+          return;
+        }
+
+        SetVehicleNumberPlateText(vehicle, plate);
+      }, 50);
+    });
+  };
+
+  setVehicleDoorsLocked = (vehicle: number, locked: boolean) => {
+    SetVehicleDoorsLocked(vehicle, locked ? 2 : 1);
+  };
 }
 
 export default {

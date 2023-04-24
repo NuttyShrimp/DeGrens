@@ -1,4 +1,4 @@
-import { Events, HUD, Util } from '@dgx/client';
+import { Events, HUD, Util, Vehicles } from '@dgx/client';
 import { MINIMUM_STRESS_FOR_ICON } from './constants.hud';
 import { getMaxUnderwaterTime } from 'services/scubagear';
 
@@ -46,7 +46,7 @@ export const doSpeedStress = () => {
   const vehicle = GetVehiclePedIsIn(ped, false);
   if (!vehicle || !DoesEntityExist(vehicle)) return;
 
-  const speed = Util.getVehicleSpeed(vehicle);
+  const speed = Vehicles.getVehicleSpeed(vehicle);
   const isSeatbeltOn = global.exports['dg-vehicles'].isSeatbeltOn();
   if (speed >= config.speed.minimum * (isSeatbeltOn ? 1.3 : 1)) {
     Events.emitNet('hud:server:changeStress', Util.getRndInteger(1, 3) / 20);

@@ -239,28 +239,6 @@ class Util extends UtilShared {
     return this.getOffsetFromEntity(GetPlayerPed(String(plyId)), offset);
   };
 
-  // When setting num plate at spawn it will not work otherwise
-  // A player needs to be inscope for this to resolve!
-  setVehicleNumberPlate = (vehicle: number, plate: string) => {
-    return new Promise<void>(res => {
-      const plateInterval = setInterval(() => {
-        try {
-          const plateText = GetVehicleNumberPlateText(vehicle).trim();
-          if (!DoesEntityExist(vehicle) || plateText === plate) {
-            clearInterval(plateInterval);
-            res();
-            return;
-          }
-          SetVehicleNumberPlateText(vehicle, plate);
-        } catch (e) {
-          clearInterval(plateInterval);
-          res();
-          console.error(e)
-        }
-      }, 50);
-    });
-  };
-
   setWaypoint = (plyId: number, coords: Vec2) => {
     emitNet('dgx:client:setWaypoint', plyId, coords);
   };

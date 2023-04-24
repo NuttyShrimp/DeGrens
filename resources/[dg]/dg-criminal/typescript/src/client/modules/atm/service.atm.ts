@@ -1,4 +1,4 @@
-import { Events, Keys, Notifications, Particles, Police, Taskbar, UI, Util } from '@dgx/client';
+import { Events, Keys, Notifications, Particles, Police, Taskbar, UI, Util, Vehicles } from '@dgx/client';
 import { Vector3 } from '@dgx/shared';
 import { REQUIRED_PULLS, REQUIRED_PULL_LENGTH, ROPE_LENGTH } from './constants.atm';
 import { getBackCoordsOfEntity } from './helpers.atm';
@@ -292,7 +292,7 @@ export const startActiveRobberyVehicleDriverThread = (vehicle: number) => {
     const [ropeExists] = DoesRopeExist(rope);
     if (!ropeExists) return;
 
-    const vehSpeed = Util.getVehicleSpeed(vehicle);
+    const vehSpeed = Vehicles.getVehicleSpeed(vehicle);
     const ropeLength = RopeGetDistanceBetweenEnds(rope);
     if (ropeLength < ROPE_LENGTH * 0.9) {
       speedBeforePulling = vehSpeed;

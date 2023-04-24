@@ -3,10 +3,11 @@
 
 import { Util } from '@dgx/client';
 
-export const ACTIONS = {
+export const DEFAULT_ACTIONS: Record<string, (entity: number, ...args: any[]) => void> = {
   SetVehicleFuelLevel,
   NetworkExplodeVehicle,
   SetEntityVisible,
+  SetEntityHealth,
   setVehicleOnGround: (vehicle: number) => {
     if (!vehicle || !DoesEntityExist(vehicle)) return;
     const success = SetVehicleOnGroundProperly(vehicle);
@@ -26,5 +27,4 @@ export const ACTIONS = {
       SetVehicleDoorShut(vehicle, doorId, false);
     }
   },
-  SetEntityHealth,
 };

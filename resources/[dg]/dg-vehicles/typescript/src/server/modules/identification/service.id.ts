@@ -1,4 +1,4 @@
-import { Inventory, Notifications, SQL, Taskbar, Util } from '@dgx/server';
+import { Inventory, Notifications, SQL, Taskbar, Util, Vehicles } from '@dgx/server';
 import { updateVehicleFakeplate } from 'db/repository';
 
 import { getVinForNetId, setEngineState } from '../../helpers/vehicle';
@@ -108,7 +108,7 @@ export const applyFakePlate = async (src: number, netId: number, plate: string) 
     return false;
   }
   vehState.set('fakePlate', plate, true);
-  Util.setVehicleNumberPlate(vehicle, plate);
+  Vehicles.setVehicleNumberPlate(vehicle, plate);
   return true;
 };
 
@@ -144,7 +144,7 @@ export const removeFakePlate = async (src: number, netId: number) => {
     },
   });
   if (wasCancelled) return;
-  Util.setVehicleNumberPlate(vehicle, vehState.plate);
+  Vehicles.setVehicleNumberPlate(vehicle, vehState.plate);
   Inventory.addItemToPlayer(src, 'fakeplate', 1, { plate: vehState.fakePlate });
   vehState.set('fakePlate', undefined, true);
   updateVehicleFakeplate(vin, null);

@@ -1,4 +1,4 @@
-import { Config, Events, Inventory, Notifications, Police, RayCast, RPC, Util } from '@dgx/server';
+import { Config, Events, Inventory, Notifications, Police, RayCast, RPC, Util, Vehicles } from '@dgx/server';
 import { getConfigByEntity } from 'modules/info/service.info';
 
 import { getVinForVeh, setEngineState } from '../../helpers/vehicle';
@@ -29,11 +29,11 @@ export const handleVehicleLock = async (vehicle: number, vehicleClass?: number) 
   const noDoorlock = vehicleClass !== undefined ? NO_LOCK_CLASSES.door.indexOf(vehicleClass) !== -1 : false;
 
   if (hasNPCDriver || noDoorlock) {
-    SetVehicleDoorsLocked(vehicle, 1);
+    Vehicles.setVehicleDoorsLocked(vehicle, false);
     return;
   }
 
-  SetVehicleDoorsLocked(vehicle, 2);
+  Vehicles.setVehicleDoorsLocked(vehicle, true);
 };
 
 // region Lockpicking
@@ -160,7 +160,7 @@ export const handleFail = (src: number, id: string) => {
 export const handleDoorSuccess = (src: number, id: string) => {
   if (validateId(src, id)) {
     const vehicle = activeLockPickers.get(src)!.vehicle;
-    SetVehicleDoorsLocked(vehicle, 0);
+    Vehicles.setVehicleDoorsLocked(vehicle, false);
     Notifications.add(src, 'Lockpicken van voertuig gelukt!', 'success');
   }
   activeLockPickers.delete(src);

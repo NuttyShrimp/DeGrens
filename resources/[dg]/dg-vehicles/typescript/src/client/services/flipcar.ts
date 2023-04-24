@@ -37,7 +37,7 @@ const flipVehicle = async (vehicle: number) => {
     },
   });
   if (canceled) return;
-  Sync.executeNative('setVehicleOnGround', vehicle);
+  Sync.executeAction('setVehicleOnGround', vehicle);
 };
 
 Peek.addGlobalEntry('vehicle', {

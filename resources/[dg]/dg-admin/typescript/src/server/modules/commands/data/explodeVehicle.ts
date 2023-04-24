@@ -21,7 +21,7 @@ export const explodeVehicle: CommandData = {
       vehicle = GetVehiclePedIsIn(GetPlayerPed(String(plyId)), false);
     }
 
-    Sync.executeNative('NetworkExplodeVehicle', vehicle, true, false, false);
+    Sync.executeAction('NetworkExplodeVehicle', vehicle, true, false, false);
   },
   UI: {
     title: 'Explode Vehicle',
