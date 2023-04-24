@@ -757,7 +757,7 @@
         "hand_cuffs",
         "container_weapons"
       ],
-      "visibleReputationLimit": 100
+      "visibleReputationLimit": 500
     },
     "weapon_bench_B": {
       "items": [
@@ -774,7 +774,7 @@
         "hand_cuffs",
         "container_weapons"
       ],
-      "visibleReputationLimit": 100
+      "visibleReputationLimit": 500
     },
     "weapon_bench_C": {
       "items": [
@@ -791,7 +791,7 @@
         "hand_cuffs",
         "container_weapons"
       ],
-      "visibleReputationLimit": 100
+      "visibleReputationLimit": 500
     },
     "mechanic_bench": {
       "items": ["repair_kit", "tire_repair_kit", "weapon_petrolcan"],
