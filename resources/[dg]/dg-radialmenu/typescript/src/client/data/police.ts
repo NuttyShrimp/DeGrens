@@ -1,4 +1,4 @@
-import { Police, RPC } from '@dgx/client';
+import { Jobs, Police, RPC } from '@dgx/client';
 
 export const police: RadialMenu.Entry[] = [
   {
@@ -105,5 +105,17 @@ export const police: RadialMenu.Entry[] = [
     type: 'client',
     event: 'police:openAng',
     shouldClose: true,
+  },
+  {
+    title: 'Verzorgen',
+    icon: 'kit-medical',
+    type: 'dgxServer',
+    event: 'hospital:job:heal',
+    shouldClose: true,
+    minimumPlayerDistance: 2,
+    isEnabled: ({ currentVehicle }) => {
+      if (!!currentVehicle) return false;
+      return Jobs.getAmountForJob('ambulance') === 0;
+    },
   },
 ];

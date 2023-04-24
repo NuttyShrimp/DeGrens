@@ -79,14 +79,17 @@ Events.onNet('hospital:job:checkin', async (src: number) => {
   }, bedTimeout * 0.75);
 });
 
-Events.onNet('hospital:job:heal', (src: number) => {
-  if (Jobs.getCurrentJob(src) !== 'ambulance') {
-    Notifications.add(src, 'Je bent geen dokter', 'error');
-    mainLogger.warn(`${Util.getName(src)} tried to heal player but was not a doctor`);
+Events.onNet('hospital:job:heal', (plyId: number) => {
+  const plyJob = Jobs.getCurrentJob(plyId);
+  const amountOfAmbu = Jobs.getAmountForJob('ambulance');
+
+  if (plyJob !== 'ambulance' && (plyJob !== 'police' || amountOfAmbu > 0)) {
+    Notifications.add(plyId, 'Je kan dit niet', 'error');
+    mainLogger.warn(`${Util.getName(plyId)}(${plyId}) tried to heal player but was not a doctor`);
     return;
   }
 
-  healClosestPlayer(src);
+  healClosestPlayer(plyId);
 });
 
 Events.onNet('hospital:job:assistence', (src: number) => {

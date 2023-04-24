@@ -27,7 +27,12 @@ export const healClosestPlayer = async (plyId: number) => {
   });
   if (canceled) return;
 
-  Util.Log('hospital:job:heal', { target }, `${Util.getName(plyId)} has healed ${Util.getName(target)}`, plyId);
+  Util.Log(
+    'hospital:job:heal',
+    { target },
+    `${Util.getName(plyId)}(${plyId}) has healed ${Util.getName(target)}(${target})}`,
+    plyId
+  );
 
   revivePlayer(target);
 };
