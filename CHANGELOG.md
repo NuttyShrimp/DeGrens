@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Staff kan nu een tijdelijke evenement blip plaatsen
 - Enkele items recyclebaar gemaakt
 - Extra carwashes toegevoegd
+- Enkele aangevraagde job kledingstukken toegevoegd
 
 ### Changed
 - Je ziet de instel optie niet langer als je een doos vast hebt in het methlab
@@ -19,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Opbrengst van enkele criminele activiteiten aangepast
 - Plate lock toont nu meer informatie over het voertuig
 - Enkele items als 'marked for seizure' aangeduid
+- Textures van Otto's geupdate naar business specifieke varianten
 
 ### Fixed
 - De driver bij een ATM robbery hoeft niet langer uit te stappen voordat hij de ATM van de muur kan trekken
@@ -28,6 +30,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Emotemenu enabled niet alle controls meer
 - Het laden van businesses throwed geen errors meer als businesstype niet bestaat
 - Speling rond maintenance fee schedule toegevoegd om te voorkomen dat deze niet berekend wordt
+- R32 en M5 F10 hebben opnieuw audio
 
 ## [1.1.4]
 
