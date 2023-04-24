@@ -18,9 +18,11 @@ export const createDispatchCall = async (job: 'ambulance' | 'police', call: Disp
   call.timestamp = Date.now();
 
   if (call.coords) {
-    // shift the coords randomly between 0 and 20 coords
-    call.coords.x += Util.getRndInteger(-20, 20);
-    call.coords.y += Util.getRndInteger(-20, 20);
+    if (!call.skipCoordsRandomization) {
+      // shift the coords randomly between 0 and 20 coords
+      call.coords.x += Util.getRndInteger(-20, 20);
+      call.coords.y += Util.getRndInteger(-20, 20);
+    }
     const streetName = await RPC.execute('dispatch:getLocationName', Number(GetPlayerFromIndex(0)), call.coords);
     if (!call.entries) call.entries = {};
     if (streetName) {
@@ -74,8 +76,9 @@ export const createDispatchCall = async (job: 'ambulance' | 'police', call: Disp
   const playerIds = Jobs.getPlayersForJob(job);
   playerIds.forEach(id => {
     Events.emitNet('dg-dispatch:addCall', id, prepareCall(storedCall.id, storedCall));
+
     // TODO: Make louder, cant be heared by other players because so quiet
-    if (call.important) {
+    if (call.syncedSoundAlert) {
       const soundId = `dispatch-imp-${storedCall.id}-${id}`;
       Sounds.playOnEntity(
         soundId,

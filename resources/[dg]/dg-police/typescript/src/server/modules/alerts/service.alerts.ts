@@ -5,6 +5,7 @@ export const doEmergencyButton = (plyId: number) => {
   Police.createDispatchCall({
     title: 'Noodknop',
     description: `Een collega heeft zijn noodknop ingedrukt`,
+    syncedSoundAlert: true,
     important: true,
     coords: plyCoords,
     officer: plyId,

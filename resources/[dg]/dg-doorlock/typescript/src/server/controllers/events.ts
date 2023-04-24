@@ -34,6 +34,7 @@ Events.onNet('doorlock:server:triedLockpickingDoor', async (src: number, doorId:
       title: 'Poging tot inbraak',
       description: 'Er was een verdacht persoon aan een deur aan het prutsen',
       coords: data.coords,
+      skipCoordsRandomization: true,
       criminal: src,
       blip: {
         sprite: 102,

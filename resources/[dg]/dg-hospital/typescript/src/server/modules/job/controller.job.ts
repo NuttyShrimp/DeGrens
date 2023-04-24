@@ -42,6 +42,7 @@ Events.onNet('hospital:job:checkin', async (src: number) => {
         charInfo?.lastname ?? 'Person'
       }(${src}) heeft ingechecked aan de balie`,
       coords: checkinLocation,
+      skipCoordsRandomization: true,
     });
     Notifications.add(src, 'Er is een dokter opgeroepen, neem plaats in de wachtzaal', 'success');
     return;
@@ -104,6 +105,7 @@ Events.onNet('hospital:job:assistence', (src: number) => {
     title: 'Assistentie Gevraagd',
     description: `Een personeelslid van het ziekenhuis vraagt om politie assistentie`,
     coords: plyCoords,
+    skipCoordsRandomization: true,
     officer: src,
     tag: '10-78',
     blip: {

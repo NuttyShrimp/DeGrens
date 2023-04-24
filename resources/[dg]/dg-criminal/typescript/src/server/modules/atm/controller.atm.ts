@@ -1,4 +1,4 @@
-import { Events, Financials, Inventory, Minigames, Notifications, Police, Taskbar, Util } from '@dgx/server';
+import { Events, Financials, Inventory, Minigames, Notifications, Police, Util } from '@dgx/server';
 import { pickupAtm, startRobbery, unattachAtmFromWall } from './service.atm';
 import { ATMS } from '../../../shared/atm/constants.atm';
 import config from 'services/config';
@@ -20,6 +20,7 @@ Events.onNet('criminal:atm:dispatch', (plyId: number) => {
       color: 1,
     },
     coords: plyCoords,
+    important: true,
   });
 });
 

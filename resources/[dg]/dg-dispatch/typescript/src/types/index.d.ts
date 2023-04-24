@@ -6,10 +6,13 @@ declare namespace Dispatch {
     // entry with no icon
     description?: string;
     important?: boolean;
+    // Plays synced sound alert
+    syncedSoundAlert?: boolean;
     // FA-icon onto text besides it
     entries?: Record<string, string>;
     // Adds model and car color to call, should be server entity id (NOT NETWORK!)
     vehicle?: number;
+    skipCoordsRandomization?: boolean;
     coords?: Vec3;
     // If call is from an officer/EMS with a callsign. use that as a tag
     officer?: number;

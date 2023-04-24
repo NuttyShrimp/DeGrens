@@ -165,6 +165,7 @@ export class PaletoManager implements Heists.TypeManager {
           color: 1,
         },
         coords: Util.getPlyCoords(plyId),
+        skipCoordsRandomization: true,
         entries: {
           'camera-cctv': config.locations.paleto.cams.join(', '),
         },

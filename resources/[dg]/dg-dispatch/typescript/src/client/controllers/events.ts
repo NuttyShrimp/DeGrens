@@ -70,7 +70,7 @@ Events.onNet('dg-dispatch:addCall', (call: Dispatch.UICall) => {
   flashNewCalls();
   setLastCallId(call.id);
 
-  if (!call.important) {
+  if (call.important && !call.syncedSoundAlert) {
     PlaySound(-1, 'Event_Start_Text', 'GTAO_FM_Events_Soundset', false, 0, true);
   }
 });

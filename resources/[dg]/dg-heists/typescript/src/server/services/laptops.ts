@@ -49,6 +49,7 @@ export const registerLaptopUsageHandlers = () => {
         color: 1,
       },
       coords: locationData.laptopCoords,
+      skipCoordsRandomization: true,
       entries: {
         'camera-cctv': locationData.cams.join(', '),
       },

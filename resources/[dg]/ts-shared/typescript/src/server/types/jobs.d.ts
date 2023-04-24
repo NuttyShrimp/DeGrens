@@ -53,11 +53,14 @@ declare namespace NPolice {
     title: string;
     // entry with no icon
     description?: string;
+    // Plays synced sound alert
+    syncedSoundAlert?: boolean;
     important?: boolean;
     // FA-icon onto text besides it
     entries?: Record<string, string | number>;
     // Adds model and car color to call, should be server entity id (NOT NETWORK!)
     vehicle?: number;
+    skipCoordsRandomization?: boolean;
     coords?: Vec3;
     // If call is from an officer/EMS with a callsign. use that as a tag
     officer?: number;

@@ -33,6 +33,7 @@ Events.onNet('blackout:server:setStationHit', (src: number, stationId: number) =
       sprite: 354,
       color: 5,
     },
+    important: true,
   });
 });
 

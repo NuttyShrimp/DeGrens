@@ -58,6 +58,7 @@ Events.onNet('hospital:down:respawnToHospital', (src: number) => {
     title: 'Gewonde persoon binnengebracht',
     description: 'Er heeft iemand een gewonde persoon binnengebracht onderaan het ziekenhuis.',
     coords: getHospitalConfig().health.respawnPosition,
+    skipCoordsRandomization: true,
   });
 });
 
