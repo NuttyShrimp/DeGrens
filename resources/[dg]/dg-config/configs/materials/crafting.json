@@ -112,7 +112,7 @@
       "items": [
         {
           "name": "refined_copper",
-          "amount": 2
+          "amount": 1
         },
         {
           "name": "material_glass",
@@ -125,7 +125,7 @@
       "items": [
         {
           "name": "refined_copper",
-          "amount": 3
+          "amount": 2
         },
         {
           "name": "material_glass",
@@ -138,7 +138,7 @@
       "items": [
         {
           "name": "refined_copper",
-          "amount": 4
+          "amount": 3
         },
         {
           "name": "material_glass",
@@ -176,7 +176,7 @@
       ]
     },
     "container_weapons": {
-      "requiredReputation": 195,
+      "requiredReputation": 99,
       "items": [
         {
           "name": "refined_copper",
@@ -794,7 +794,11 @@
       "visibleReputationLimit": 500
     },
     "mechanic_bench": {
-      "items": ["repair_kit", "tire_repair_kit", "weapon_petrolcan"],
+      "items": [
+        "repair_kit",
+        "tire_repair_kit",
+        "weapon_petrolcan"
+      ],
       "reputation": "mechanic_crafting"
     }
   }

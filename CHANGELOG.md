@@ -26,6 +26,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Ophanging gaat minder snel kapot
 - Minder shotmeldingen wanneer je wapen een suppressor heeft
 - Het restaurant leftover buy menu sluit niet meer wanneer je iets koopt
+- Enkele crafting requirements verlaagd
 
 ### Fixed
 - De driver bij een ATM robbery hoeft niet langer uit te stappen voordat hij de ATM van de muur kan trekken
