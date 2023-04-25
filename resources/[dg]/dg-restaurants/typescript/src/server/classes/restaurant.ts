@@ -649,6 +649,7 @@ export class Restaurant {
         menuEntries.push({
           title: `${data.label} | €${taxedPrice}`,
           callbackURL: 'restaurant/buyLeftover',
+          preventCloseOnClick: true,
           data: {
             restaurantId: this.id,
             item,
