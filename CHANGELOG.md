@@ -34,6 +34,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Het laden van businesses throwed geen errors meer als businesstype niet bestaat
 - Speling rond maintenance fee schedule toegevoegd om te voorkomen dat deze niet berekend wordt
 - R32 en M5 F10 hebben opnieuw audio
+- Je ziet nu de prijs incl tax bij de voertuigrental
 
 ## [1.1.4]
 

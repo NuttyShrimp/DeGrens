@@ -1,4 +1,4 @@
-import { Admin, Config, Financials, Inventory, Notifications, Phone, UI, Util, Vehicles } from '@dgx/server';
+import { Admin, Config, Financials, Inventory, Notifications, Phone, TaxIds, UI, Util, Vehicles } from '@dgx/server';
 
 import { rentalLogger } from './logger.rental';
 
@@ -34,7 +34,7 @@ export const openRentList = (src: number, id: string) => {
     vehicles.map(v => ({
       id: `rent-${v.model}`,
       title: Vehicles.getConfigByModel(v.model)?.name ?? v.model,
-      description: `price: €${v.price}`,
+      description: `price: €${Financials.getTaxedPrice(v.price, TaxIds.Goederen).taxPrice}`,
       submenu: [
         {
           title: 'Cash',
@@ -81,7 +81,7 @@ export const rentVehicle = async (src: number, model: string, locId: string, pay
     return;
   }
   const vehName = Vehicles.getConfigByModel(vehRentInfo.model)?.name ?? vehRentInfo.model;
-  const { taxPrice } = Financials.getTaxedPrice(vehRentInfo.price, 6);
+  const { taxPrice } = Financials.getTaxedPrice(vehRentInfo.price, TaxIds.Goederen);
 
   const spawnLoc = getSpawnLocation(locId);
   if (!spawnLoc) {
@@ -111,7 +111,13 @@ export const rentVehicle = async (src: number, model: string, locId: string, pay
       rentalLogger.warn(`${Util.getName(src)}(${src}|${plyCid}) doesn't have a standard bankaccount`);
       return;
     }
-    const success = await Financials.purchase(plyAccId, plyCid, vehRentInfo.price, `Verhuur: ${vehName}`, 6);
+    const success = await Financials.purchase(
+      plyAccId,
+      plyCid,
+      vehRentInfo.price,
+      `Verhuur: ${vehName}`,
+      TaxIds.Goederen
+    );
     if (!success) {
       Phone.showNotification(src, {
         id: `rent-request-${locId}-${model}-fail`,
@@ -156,7 +162,7 @@ export const rentVehicle = async (src: number, model: string, locId: string, pay
       vin: vehVin,
       payed: taxPrice,
     },
-    `${Util.getName(src)} rented a ${model}`,
+    `${Util.getName(src)}(${src}) rented a ${model}`,
     src
   );
 };
