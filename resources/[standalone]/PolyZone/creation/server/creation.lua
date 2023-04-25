@@ -36,16 +36,35 @@ end
 
 function parsePoly(zone)
   local printout = printoutHeader(zone.name)
-  printout = printout .. "PolyZone:Create({\n"
+
+  local jsonObj = {
+    vectors = {},
+    options = {
+      minZ = zone.minZ and round(zone.minZ, 2) or nil,
+      maxZ = zone.maxZ and round(zone.maxZ, 2) or nil,
+    }
+  }
+
   for i = 1, #zone.points do
-    if i ~= #zone.points then
-      printout = printout .. "  vector2(" .. tostring(zone.points[i].x) .. ", " .. tostring(zone.points[i].y) .. "),\n"
-    else
-      printout = printout .. "  vector2(" .. tostring(zone.points[i].x) .. ", " .. tostring(zone.points[i].y) .. ")\n"
-    end
+    jsonObj.vectors[#jsonObj.vectors+1] = {
+      x = round(zone.points[i].x, 2),
+      y = round(zone.points[i].y, 2)
+    }
   end
-  printout = printout ..
-      "}, {\n  name=\"" .. zone.name .. "\",\n  --minZ = " .. zone.minZ .. ",\n  --maxZ = " .. zone.maxZ .. "\n})\n"
+
+  printout = printout .. json.encode(jsonObj, { 
+    indent = true, 
+    keyorder = {
+      "vectors",
+      "options",
+      "x",
+      "y",
+      "z",
+      "minZ",
+      "maxZ"
+    } 
+  })
+
   if zone.houseOffset then
     for _, zone in pairs(zone.points) do
       zone.points = zone.points - zone.houseOffset
@@ -53,53 +72,86 @@ function parsePoly(zone)
     zone.minZ = zone.minZ - zone.houseOffset.z
     zone.maxZ = zone.maxZ - zone.houseOffset.z
     zone.houseOffset = nil
-    printout = printout .. "-- Instanced PolyZone\n" .. parsePoly(zone)
+    printout = printout .. "\n// Instanced PolyZone\n" .. parsePoly(zone)
   end
-  return printout .. "\n"
+  return printout .. "\n\n"
 end
 
 function parseCircle(zone)
   local printout = printoutHeader(zone.name)
-  printout = printout .. "CircleZone:Create("
-  printout = printout ..
-      "vector3(" ..
-      tostring(round(zone.center.x, 2)) ..
-      ", " .. tostring(round(zone.center.y, 2)) .. ", " .. tostring(round(zone.center.z, 2)) .. "), "
-  printout = printout .. tostring(zone.radius) .. ", "
-  printout = printout ..
-      "{\n  name=\"" .. zone.name .. "\",\n  useZ=" .. tostring(zone.useZ) .. ",\n  --debugPoly=true\n})\n"
+
+  local jsonObj = {
+    center = {
+      x = round(zone.center.x, 2),
+      y = round(zone.center.y, 2),
+      z = round(zone.center.z, 2),
+    },
+    radius = round(zone.radius, 2),
+    options = {
+      useZ = zone.useZ,
+    }
+  }
+
+  printout = printout .. json.encode(jsonObj, { 
+    indent = true, 
+    keyorder = {
+      "center",
+      "radius",
+      "options",
+      "x",
+      "y",
+      "z"
+    } 
+  })
+
   if zone.houseOffset then
     zone.center = zone.center - zone.houseOffset
     zone.houseOffset = nil
-    printout = printout .. "-- Instanced CircleZone\n" .. parseCircle(zone)
+    printout = printout .. "\n// Instanced CircleZone\n" .. parseCircle(zone)
   end
-  return printout .. "\n"
+  return printout .. "\n\n"
 end
 
 function parseBox(zone)
   local printout = printoutHeader(zone.name)
-  printout = printout .. "BoxZone:Create("
-  printout = printout ..
-      "vector3(" ..
-      tostring(round(zone.center.x, 2)) ..
-      ", " .. tostring(round(zone.center.y, 2)) .. ", " .. tostring(round(zone.center.z, 2)) .. "), "
-  printout = printout .. tostring(zone.width) .. ", "
-  printout = printout .. tostring(zone.length) .. ", "
 
-  printout = printout .. "{\n  name=\"" .. zone.name .. "\",\n  heading=" .. zone.heading .. ",\n  --debugPoly=true"
-  if zone.minZ then
-    printout = printout .. ",\n  minZ=" .. tostring(round(zone.minZ, 2))
-  end
-  if zone.maxZ then
-    printout = printout .. ",\n  maxZ=" .. tostring(round(zone.maxZ, 2))
-  end
-  printout = printout .. "\n})\n"
+  local jsonObj = {
+    center = {
+      x = round(zone.center.x, 2),
+      y = round(zone.center.y, 2),
+      z = round(zone.center.z, 2),
+    },
+    width = round(zone.length, 2), -- WE SOMEHWERE SWAPPED THESE TWO WTF
+    length = round(zone.width, 2),
+    options = {
+      heading = zone.heading,
+      minZ = zone.minZ and round(zone.minZ, 2) or nil,
+      maxZ = zone.maxZ and round(zone.maxZ, 2) or nil,
+    }
+  }
+
+  printout = printout .. json.encode(jsonObj, { 
+    indent = true, 
+    keyorder = {
+      "center",
+      "width",
+      "length",
+      "options",
+      "x",
+      "y",
+      "z",
+      "heading",
+      "minZ",
+      "maxZ"
+    } 
+  })
+
   if zone.houseOffset then
     zone.center = zone.center - zone.houseOffset
     zone.minZ = zone.minZ - zone.houseOffset.z
     zone.maxZ = zone.maxZ - zone.houseOffset.z
     zone.houseOffset = nil
-    printout = printout .. "-- Instanced CircleZone\n" .. parseBox(zone)
+    printout = printout .. "\n// Instanced BoxZone\n" .. parseBox(zone)
   end
-  return printout .. "\n"
+  return printout .. "\n\n"
 end
