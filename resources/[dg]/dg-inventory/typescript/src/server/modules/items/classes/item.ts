@@ -130,6 +130,7 @@ export class Item {
 
     this.position = position;
     this.rotated = rotated;
+    this.isDirty = true;
 
     // handle inv switchinhS
     if (oldInv.id !== newInv.id) {
@@ -145,8 +146,6 @@ export class Item {
     }
 
     newInv.setGridSpacesOccupied(true, this.position, itemSize, this.rotated);
-
-    this.isDirty = true;
 
     return syncToEmitter;
   };

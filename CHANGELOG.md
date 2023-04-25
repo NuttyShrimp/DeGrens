@@ -39,6 +39,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Je ziet nu de prijs incl tax bij de voertuigrental
 - Je voertuig zal niet meer stallen door een meleehit
 - Fix Vehicles error wanneer dg-config gerestart
+- Fix items die niet opgeslagen werden wanneer ze gemoved werden naar inventories die niet geopend zijn door speler
 
 ## [1.1.4]
 
