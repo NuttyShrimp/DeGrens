@@ -153,8 +153,8 @@ export const startStatusThread = async (vehicle: number) => {
 
       // Suspension
       const avgSuspCompress = Util.average(suspCompress);
-      if (avgSuspCompress > 0.15) {
-        const suspDecrease = avgSuspCompress / 35;
+      if (avgSuspCompress > 0.18) {
+        const suspDecrease = avgSuspCompress / 45;
         vehicleService.info.suspension = Math.max(vehicleService.info.suspension - suspDecrease, 0);
       }
 

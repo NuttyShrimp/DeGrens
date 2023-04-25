@@ -23,6 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Enkele items als 'marked for seizure' aangeduid
 - Textures van Otto's geupdate naar business specifieke varianten
 - Verschillende types important dispatch meldingen toegevoegd
+- Ophanging gaat minder snel kapot
 
 ### Fixed
 - De driver bij een ATM robbery hoeft niet langer uit te stappen voordat hij de ATM van de muur kan trekken
