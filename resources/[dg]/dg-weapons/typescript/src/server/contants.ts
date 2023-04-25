@@ -103,7 +103,7 @@ export const ALL_WEAPONS: Weapons.WeaponConfig[] = [
     name: 'weapon_pistol',
     durabilityMultiplier: 0.01,
     attachments: {
-      pistol_suppressor: 'COMPONENT_AT_PI_SUPP_02',
+      // pistol_suppressor: 'COMPONENT_AT_PI_SUPP_02',
       // 'pistol_extendedclip': 'COMPONENT_PISTOL_CLIP_02',
       // 'flashlight': 'COMPONENT_AT_PI_FLSH',
     },

@@ -78,16 +78,15 @@ const startWeaponThread = () => {
         shotFired = true;
       }
 
-      if (
-        !justDoneDispatchAlert &&
-        currentWeaponData.dispatchAlertChance !== 0 &&
-        Util.getRndInteger(1, 101) < currentWeaponData.dispatchAlertChance
-      ) {
-        justDoneDispatchAlert = true;
-        setTimeout(() => {
-          justDoneDispatchAlert = false;
-        }, 10000);
-        Events.emitNet('weapons:server:dispatchAlert');
+      if (!justDoneDispatchAlert && currentWeaponData.dispatchAlertChance !== 0) {
+        const chanceModifier = IsPedCurrentWeaponSilenced(ped) ? 0.1 : 1;
+        if (Util.getRndInteger(1, 101) < currentWeaponData.dispatchAlertChance * chanceModifier) {
+          justDoneDispatchAlert = true;
+          setTimeout(() => {
+            justDoneDispatchAlert = false;
+          }, 10000);
+          Events.emitNet('weapons:server:dispatchAlert');
+        }
       }
     }
 
