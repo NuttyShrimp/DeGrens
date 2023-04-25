@@ -1,8 +1,7 @@
-import { Config, Events, RPC, Util } from '@dgx/server';
+import { Events, RPC, Util } from '@dgx/server';
 import { doPurchase, getStoreItems, loadConfigInfo, receivePurchasedItems, restorePurchase } from './service.laptop';
 
-setImmediate(async () => {
-  await Config.awaitConfigLoad();
+setImmediate(() => {
   loadConfigInfo();
 });
 

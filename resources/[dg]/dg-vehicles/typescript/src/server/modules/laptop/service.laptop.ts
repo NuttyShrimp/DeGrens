@@ -14,6 +14,7 @@ const pendingPickups: Record<
 export const getStoreItems = () => storeItems;
 
 export const loadConfigInfo = async () => {
+  await Config.awaitConfigLoad();
   pickupZones = Config.getConfigValue<Laptop.Bennys.PickUp[]>('vehicles.laptop.pickup');
   const laptopItemsConfig =
     Config.getConfigValue<Record<string, Omit<Laptop.Bennys.Item, 'image' | 'category'>[]>>('vehicles.laptop.items');
