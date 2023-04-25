@@ -255,7 +255,7 @@ export const startVehicleCrashThread = (vehicle: number) => {
     if (oldHealth - newHealth > 1) {
       // console.log(`Vehicle crashed | speed: ${oldSpeed} -> ${newSpeed} | health: ${oldHealth} -> ${newHealth}`);
       tryEjectAfterCrash(oldSpeed, newSpeed, oldVelocity);
-      tryToStallVehicle(vehicle, newHealth, oldHealth);
+      tryToStallVehicle(vehicle, newHealth, oldHealth, newSpeed, oldSpeed);
     }
 
     oldVelocity = Util.getEntityVelocity(vehicle);
@@ -271,9 +271,17 @@ export const stopVehicleCrashThread = () => {
   vehicleCrashThread = null;
 };
 
-export const tryToStallVehicle = (vehicle: number, newHealth: number, oldHealth: number) => {
+export const tryToStallVehicle = (
+  vehicle: number,
+  newHealth: number,
+  oldHealth: number,
+  newSpeed: number,
+  oldSpeed: number
+) => {
   if (!isDriver()) return;
   if (!GetIsVehicleEngineRunning(vehicle)) return;
+
+  if (newSpeed > oldSpeed * 0.85) return; // need atleast 15% diff in speed, to prevent a kick stalling veh
 
   const healthDecrease = oldHealth - newHealth;
   if (healthDecrease < MINIMUM_DAMAGE_FOR_STALL) return;
