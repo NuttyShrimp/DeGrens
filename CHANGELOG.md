@@ -46,6 +46,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fix items die niet opgeslagen werden wanneer ze gemoved werden naar inventories die niet geopend zijn door speler
 - Het craften van een reservewiel werkt weer als mechanic
 - Houserobbery deurzone spamt geen warnings meer in je console
+- Fix error wanneer meerdere mensen samen een ATM willen opnemen
 
 ## [1.1.4]
 

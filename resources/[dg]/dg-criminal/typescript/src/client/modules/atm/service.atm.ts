@@ -356,5 +356,7 @@ export const pickupAtm = async (atmEntity: number) => {
   });
   if (canceled) return;
 
+  if (!DoesEntityExist(atmEntity)) return;
+
   Events.emitNet('criminal:atm:pickup', NetworkGetNetworkIdFromEntity(atmEntity));
 };
