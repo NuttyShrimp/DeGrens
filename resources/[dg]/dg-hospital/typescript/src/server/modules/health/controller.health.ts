@@ -7,6 +7,7 @@ export const registerHealItems = () => {
 
   Inventory.registerUseable(Object.keys(healItems), async (plyId, itemState) => {
     const healItem = healItems[itemState.name];
+    if (!healItem) return;
 
     const [canceled] = await Taskbar.create(
       plyId,
@@ -21,7 +22,7 @@ export const registerHealItems = () => {
         controlDisables: {
           combat: true,
         },
-        animation: healItem.animation,
+        animation: healItem.taskbar.animation,
       }
     );
     if (canceled) return;
@@ -32,7 +33,7 @@ export const registerHealItems = () => {
       return;
     }
 
-    Events.emitNet('hospital:health:useHeal', plyId, healItem.health ?? 0, healItem.bleed ?? 0);
+    Events.emitNet('hospital:health:useHealItem', plyId, healItem.effects);
   });
 };
 

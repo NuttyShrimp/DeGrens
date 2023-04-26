@@ -1,5 +1,5 @@
 import { Config, Events, Financials, Inventory, Notifications, Police, Reputations, RPC, SQL, Util } from '@dgx/server';
-import { randomSellBlackMoney } from 'modules/blackmoney/service.blackmoney';
+import { tryCleanBlackMoney } from 'modules/blackmoney/service.blackmoney';
 import { addSaleToHeatmap, calculatePrice, getSellableItems } from './service.cornerselling';
 import config from 'services/config';
 
@@ -53,9 +53,9 @@ Events.onNet('criminal:cornersell:sell', async (plyId: number, zone: string) => 
   const cid = Util.getCID(plyId);
   Reputations.setReputation(cid, 'cornersell', rep => rep + 1);
 
-  // Chance to sell blackmoney
-  if (enoughPolice && Util.getRndInteger(1, 101) <= config.cornerselling.cleanChance) {
-    randomSellBlackMoney(plyId);
+  // only sell blackmoney if enough police
+  if (enoughPolice) {
+    tryCleanBlackMoney(plyId, 'cornersell');
   }
 
   // Chance for dispatch alert

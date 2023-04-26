@@ -1,21 +1,55 @@
 import { Util, Financials, Inventory } from '@dgx/server';
 import config from 'services/config';
+import { blackmoneyLogger } from './logger.blackmoney';
 
-export const randomSellBlackMoney = async (plyId: number) => {
-  const items = config.blackmoney.items;
-  const itemNames = Util.shuffleArray(Object.keys(items));
+export const tryCleanBlackMoney = async (plyId: number, originAction: string) => {
+  const originActionData = config.blackmoney.originActions[originAction];
+  if (!originActionData) {
+    blackmoneyLogger.error(`Provided invalid origin action: ${originAction}`);
+    return;
+  }
+
+  if (Util.getRndInteger(0, 101) > originActionData.chance) return;
+
   const playerItems = await Inventory.getPlayerItems(plyId);
-  const itemToSell = playerItems.find(i => itemNames.includes(i.name));
-  if (!itemToSell) return;
+  const maxItemsAmount = Util.getRndInteger(1, originActionData.maxItemsAmount + 1);
 
-  Inventory.destroyItem(itemToSell.id);
+  let choosenSellItemName: string | null = null;
+  let itemIdsToSell: string[] = [];
+  for (const item of playerItems) {
+    const sellableData = config.blackmoney.items[item.name];
+    if (!sellableData) continue; // item is not sellable
 
-  const price = items[itemToSell.name].value;
+    if (choosenSellItemName === null || item.name === choosenSellItemName) {
+      choosenSellItemName ??= item.name;
+      itemIdsToSell.push(item.id);
+    }
+
+    if (itemIdsToSell.length >= Math.min(maxItemsAmount, sellableData.maxItemsPerSale ?? Number.POSITIVE_INFINITY))
+      break;
+  }
+
+  if (choosenSellItemName === null) return;
+
+  const removed = await Inventory.removeItemsByIdsFromPlayer(plyId, itemIdsToSell);
+  if (!removed) return;
+
+  const price = config.blackmoney.items[choosenSellItemName].value * itemIdsToSell.length;
   Financials.addCash(plyId, price, 'randomsell-blackmoney');
+
+  const logMsg = `${Util.getName(plyId)}(${plyId}) has randomly sold ${
+    itemIdsToSell.length
+  }x ${choosenSellItemName} for ${price}$`;
+  blackmoneyLogger.silly(logMsg);
   Util.Log(
     'blackmoney:randomSell',
-    { plyId, itemId: itemToSell.id, name: itemToSell.name, price },
-    `${Util.getName(plyId)} has randomly sold ${itemToSell.name} for ${price}$`,
+    {
+      plyId,
+      itemId: itemIdsToSell,
+      name: choosenSellItemName,
+      price,
+    },
+    logMsg,
     plyId
   );
 };

@@ -1,14 +1,23 @@
 import { Events } from '@dgx/client';
-import { getBleedAmount, getHealth, setBleedAmount, setHealth } from './service.health';
+import { getBleedAmount, getHealth, setBleedAmount, setHealth, temporarilyPreventBleeding } from './service.health';
 
-Events.onNet('hospital:health:useHeal', (healthIncrease: number, bleedDecrease: number) => {
-  // increase health
-  const currentHealth = getHealth();
-  setHealth(currentHealth + healthIncrease);
+Events.onNet('hospital:health:useHealItem', (effect: Hospital.HealItem['effects']) => {
+  // Handle health restore effect
+  if (effect.healthRestore) {
+    const currentHealth = getHealth();
+    setHealth(currentHealth + effect.healthRestore);
+  }
 
-  // lower bleed
-  const currentBleed = getBleedAmount();
-  setBleedAmount(currentBleed - bleedDecrease);
+  // Handle bleeding decrease effect
+  if (effect.bleedingDecrease) {
+    const currentBleed = getBleedAmount();
+    setBleedAmount(currentBleed - effect.bleedingDecrease);
+  }
+
+  // Handle preventing bleed effect
+  if (effect.preventBleeding) {
+    temporarilyPreventBleeding(effect.preventBleeding);
+  }
 });
 
 onNet('dg-chars:client:finishSpawn', () => {

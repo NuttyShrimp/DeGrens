@@ -1,0 +1,108 @@
+{
+  "jobPayout": {
+    "min": 10,
+    "max": 40,
+    "groupPercent": 0
+  },
+  "receiveOxyChance": 25,
+  "deliveriesPerRun": 10,
+  "dispatchChance": 25,
+  "locations": [
+    {
+      "center": {
+        "x": -70.4,
+        "y": -77.81,
+        "z": 58.06
+      },
+      "width": 20.4,
+      "length": 28.6,
+      "options": {
+        "heading": 346,
+        "minZ": 56.66,
+        "maxZ": 61.86
+      }
+    },
+    {
+      "center": {
+        "x": -215.23,
+        "y": -51.64,
+        "z": 49.85
+      },
+      "width": 24.4,
+      "length": 30.0,
+      "options": {
+        "heading": 340,
+        "minZ": 47.85,
+        "maxZ": 54.85
+      }
+    },
+    {
+      "center": {
+        "x": 348.14,
+        "y": 103.02,
+        "z": 102.53
+      },
+      "width": 27.8,
+      "length": 29.4,
+      "options": {
+        "heading": 340,
+        "minZ": 97.38,
+        "maxZ": 107.78
+      }
+    },
+    {
+      "center": {
+        "x": 368.78,
+        "y": -234.85,
+        "z": 54.21
+      },
+      "width": 31.4,
+      "length": 42.6,
+      "options": {
+        "heading": 340,
+        "minZ": 51.21,
+        "maxZ": 59.61
+      }
+    },
+    {
+      "center": {
+        "x": -590.22,
+        "y": -362.5,
+        "z": 35.02
+      },
+      "width": 22.4,
+      "length": 30.6,
+      "options": {
+        "heading": 0,
+        "minZ": 33.07,
+        "maxZ": 38.47
+      }
+    },
+    {
+      "center": {
+        "x": -637.27,
+        "y": -694.88,
+        "z": 30.7
+      },
+      "width": 33.0,
+      "length": 34.6,
+      "options": {
+        "heading": 0,
+        "minZ": 26.7,
+        "maxZ": 34.7
+      }
+    },
+    {
+      "center": {
+        "x": -1106.05,
+        "y": -733.12,
+        "z": 19.96
+      },
+      "width": 36.8,
+      "length": 41.8,
+      "options": {
+        "heading": 41
+      }
+    }
+  ]
+}

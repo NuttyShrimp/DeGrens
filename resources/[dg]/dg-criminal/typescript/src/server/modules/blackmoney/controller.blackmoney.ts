@@ -1,3 +1,3 @@
-import { randomSellBlackMoney } from './service.blackmoney';
+import { tryCleanBlackMoney } from './service.blackmoney';
 
-global.asyncExports('randomSellBlackmoney', randomSellBlackMoney);
+global.asyncExports('tryCleanBlackMoney', tryCleanBlackMoney);

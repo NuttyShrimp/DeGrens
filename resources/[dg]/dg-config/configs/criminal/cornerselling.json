@@ -18,7 +18,6 @@
     }
   },
   "decayTime": 7,
-  "cleanChance": 100,
   "maxModifier": 3,
   "modifierIncreasePerSale": 0.01
 }

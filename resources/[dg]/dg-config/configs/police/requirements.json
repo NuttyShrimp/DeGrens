@@ -28,5 +28,8 @@
   },
   "atm_robbery": {
     "police": 3
+  },
+  "oxyrun": {
+    "police": 1
   }
 }
