@@ -29,6 +29,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Het restaurant leftover buy menu sluit niet meer wanneer je iets koopt
 - Enkele crafting requirements verlaagd
 - 'Gemarkeerd voor inbeslagname' staat nu in een kleur in je inventory om het duidelijker te maken
+- Je kijkt nu altijd vooruit na het nemen van een lift
 
 ### Fixed
 - De driver bij een ATM robbery hoeft niet langer uit te stappen voordat hij de ATM van de muur kan trekken

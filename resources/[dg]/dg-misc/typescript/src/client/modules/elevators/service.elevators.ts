@@ -1,4 +1,4 @@
-import { Business, Gangs, Jobs, PolyTarget, RPC, Taskbar, UI } from '@dgx/client';
+import { Business, Gangs, Jobs, PolyTarget, Taskbar, UI } from '@dgx/client';
 
 let elevators: Elevators.Config;
 
@@ -112,6 +112,7 @@ export const goToLevel = async (elevatorId: string, levelId: string) => {
     const spawn = elevators[elevatorId].levels[levelId].spawn;
     SetEntityCoords(ped, spawn.x, spawn.y, spawn.z - 0.95, false, false, false, false);
     SetEntityHeading(ped, spawn.w);
+    SetGameplayCamRelativeHeading(0);
     DoScreenFadeIn(500);
   }, 500);
 };

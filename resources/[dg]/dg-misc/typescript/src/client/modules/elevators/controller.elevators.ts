@@ -19,6 +19,4 @@ UI.RegisterUICallback('elevator/goToLevel', (data: { elevatorId: string; levelId
   cb({ data: {}, meta: { ok: true, message: 'done' } });
 });
 
-Events.onNet('elevators:client:set', (elevators: Elevators.Config) => {
-  loadElevators(elevators);
-});
+Events.onNet('misc:elevators:load', loadElevators);
