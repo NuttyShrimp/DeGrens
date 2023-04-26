@@ -15,10 +15,17 @@ export const loadCrafting = async () => {
   configRecipes.forEach(([itemName, recipe]) => {
     const info = Inventory.getItemData(itemName);
     if (!info) return;
-    const requirements = recipe.items.map(r => {
-      const reqInfo = Inventory.getItemData(r.name);
-      return { ...r, label: reqInfo?.label ?? 'Undefined' };
-    });
+
+    const requirements: Materials.Crafting.Recipes.RecipeItem['requirements']['items'] = [];
+
+    for (const recipeItem of recipe.items) {
+      if (requirements.some(r => r.name === recipeItem.name)) {
+        console.error(`Duplicate item in recipe ${itemName}`);
+        continue;
+      }
+      requirements.push({ ...recipeItem, label: Inventory.getItemData(recipeItem.name).label });
+    }
+
     const UIData: Materials.Crafting.Recipes.RecipeItem = {
       name: itemName,
       label: info.label,
