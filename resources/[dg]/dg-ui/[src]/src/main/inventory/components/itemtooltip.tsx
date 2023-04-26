@@ -1,5 +1,6 @@
 import React, { FC, useCallback, useMemo } from 'react';
 import { Divider } from '@mui/material';
+import { baseStyle } from '@src/base.styles';
 import { useMainStore } from '@src/lib/stores/useMainStore';
 
 const capitalize = (text: string): string => {
@@ -82,7 +83,12 @@ export const ItemTooltip: FC<Inventory.Item> = ({
           )}
           {(quality || markedForSeizure) && <Divider />}
           {quality && <em className='data text'>Kwaliteit: {Math.round(quality)}%</em>}
-          {markedForSeizure && <em className='data text'> | Gemarkeerd voor inbeslagname </em>}
+          {markedForSeizure && (
+            <em className='data text'>
+              <span> | </span>
+              <span style={{ color: baseStyle.tertiary.light }}>Gemarkeerd voor inbeslagname</span>
+            </em>
+          )}
         </>
       ) : (
         <>
