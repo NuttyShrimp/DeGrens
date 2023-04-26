@@ -5,6 +5,7 @@ declare namespace Criminal {
     blackmoney: Blackmoney.Config;
     fence: Fence.Config;
     atm: ATM.Config;
+    oxyrun: Oxyrun.Config;
   };
 
   namespace Weed {
@@ -54,7 +55,6 @@ declare namespace Criminal {
         }
       >;
       decayTime: number;
-      cleanChance: number;
       maxModifier: number;
       modifierIncreasePerSale: number;
     };
@@ -62,7 +62,18 @@ declare namespace Criminal {
 
   namespace Blackmoney {
     type Config = {
-      items: Record<string, { value: number }>;
+      items: Record<string, Item>;
+      originActions: Record<string, OriginAction>;
+    };
+
+    type Item = {
+      value: number;
+      maxItemsPerSale?: number;
+    };
+
+    type OriginAction = {
+      chance: number;
+      maxItemsAmount: number;
     };
   }
 
@@ -94,6 +105,36 @@ declare namespace Criminal {
       coords: Vec3;
       rotation: Vec3;
       model: number;
+    };
+  }
+
+  namespace Oxyrun {
+    type Config = {
+      jobPayout: NonNullable<Jobs.Job['payout']>;
+      receiveOxyChance: number;
+      deliveriesPerRun: number;
+      dispatchChance: number;
+      locations: Location[];
+    };
+
+    type ActiveRun = {
+      cid: number;
+      locationId: number;
+      currentVin: string | null;
+      currentStep: 'pickup' | 'delivery';
+      counter: number;
+      payoutLevel: number;
+    };
+
+    type Location = {
+      center: Vec3;
+      width: number;
+      length: number;
+      options: {
+        heading: number;
+        minZ: number;
+        maxZ: number;
+      };
     };
   }
 }

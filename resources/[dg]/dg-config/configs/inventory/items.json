@@ -1709,6 +1709,7 @@
     "useable": true,
     "name": "bandage",
     "label": "Verband",
+    "description": "Helpt om je weer beter te voelen en bloedingen te stoppen",
     "image": "bandage.png",
     "decayRate": 14400,
     "size": {
@@ -2260,5 +2261,29 @@
     },
     "useable": true,
     "decayRate": 1440
+  },
+  {
+    "name": "oxyrun_box",
+    "label": "Doos met pillen",
+    "image": "oxyrun_box.png",
+    "size": {
+      "x": 4,
+      "y": 4
+    },
+    "decayRate": 60,
+    "markedForSeizure": true
+  },
+  {
+    "useable": true,
+    "name": "oxy_pills",
+    "label": "Oxy",
+    "description": "Pillen om toekomstige bloedingen te voorkomen",
+    "image": "oxy_pills.png",
+    "decayRate": 43200,
+    "size": {
+      "x": 1,
+      "y": 2
+    },
+    "markedForSeizure": true
   }
 ]

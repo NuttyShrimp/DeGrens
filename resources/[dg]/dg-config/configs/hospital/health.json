@@ -13,15 +13,33 @@
       "taskbar": {
         "icon": "bandage",
         "label": "Verbanden",
-        "time": 5000
+        "time": 4000,
+        "animation": {
+          "animDict": "anim@amb@business@weed@weed_inspecting_high_dry@",
+          "anim": "weed_inspecting_high_base_inspector",
+          "flags": 49
+        }
       },
-      "animation": {
-        "animDict": "anim@amb@business@weed@weed_inspecting_high_dry@",
-        "anim": "weed_inspecting_high_base_inspector",
-        "flags": 49
+      "effects": {
+        "healthRestore": 30,
+        "bleedingDecrease": 10
+      }
+    },
+    "oxy_pills": {
+      "taskbar": {
+        "icon": "pills",
+        "label": "Innemen",
+        "time": 3000,
+        "animation": {
+          "animDict": "mp_suicide",
+          "anim": "pill",
+          "flags": 49
+        }
       },
-      "health": 25,
-      "bleed": 20
+      "effects": {
+        "bleedingDecrease": 100,
+        "preventBleeding": 120
+      }
     }
   }
 }

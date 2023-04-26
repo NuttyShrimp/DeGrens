@@ -6,6 +6,9 @@ import { applyScreenBlur } from './helpers.health';
 let bleedAmount = 0;
 let bleedThread: NodeJS.Timer | null = null;
 
+let bleedingPrevented = false;
+let bleedPreventTimeout: NodeJS.Timeout | null = null;
+
 let movementOverrideClearTime = 0;
 let movementOverrideThread: NodeJS.Timer | null = null;
 
@@ -47,6 +50,17 @@ export const setBleedAmount = (amount: number) => {
   }
 };
 
+export const temporarilyPreventBleeding = (duration: number) => {
+  if (bleedPreventTimeout !== null) {
+    clearTimeout(bleedPreventTimeout);
+  }
+
+  bleedingPrevented = true;
+  bleedPreventTimeout = setTimeout(() => {
+    bleedingPrevented = false;
+  }, duration * 1000);
+};
+
 const startBleedThread = () => {
   if (bleedThread !== null) return;
 
@@ -75,8 +89,8 @@ export const processDamage = (weaponHash: number) => {
       applyScreenBlur();
       break;
     case 'UPPERBODY':
-      if (bleedDamageTypes.has(weaponHash)) {
-        const amount = Util.getRndInteger(5, 10);
+      if (bleedDamageTypes.has(weaponHash) && !bleedingPrevented) {
+        const amount = Util.getRndInteger(3, 8);
         setBleedAmount(bleedAmount + amount);
       }
       break;

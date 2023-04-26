@@ -30,13 +30,16 @@ declare namespace Hospital {
       icon: string;
       label: string;
       time: number;
+      animation: {
+        animDict: string;
+        anim: string;
+        flags: number;
+      };
     };
-    animation: {
-      animDict: string;
-      anim: string;
-      flags: number;
+    effects: {
+      healthRestore?: number;
+      bleedingDecrease?: number;
+      preventBleeding?: number; // seconds
     };
-    health?: number;
-    bleed?: number;
   };
 }

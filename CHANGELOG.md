@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Extra carwashes toegevoegd
 - Enkele aangevraagde job kledingstukken toegevoegd
 - Politie kan nu mensen rechthelpen als er geen ambulance is
+- Nieuwe criminele activiteit toegevoegd
 
 ### Changed
 - Je ziet de instel optie niet langer als je een doos vast hebt in het methlab

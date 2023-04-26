@@ -205,6 +205,14 @@
         "animDict": "anim@heists@box_carry@",
         "anim": "idle"
       }
+    },
+    "oxyrun_box": {
+      "propName": "cardbox",
+      "position": "primary",
+      "animData": {
+        "animDict": "anim@heists@box_carry@",
+        "anim": "idle"
+      }
     }
   }
 }

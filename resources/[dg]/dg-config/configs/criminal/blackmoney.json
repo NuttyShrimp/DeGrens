@@ -4,7 +4,18 @@
       "value": 75
     },
     "marked_bills": {
-      "value": 750
+      "value": 750,
+      "maxItemsPerSale": 3
+    }
+  },
+  "originActions": {
+    "cornersell": {
+      "chance": 50,
+      "maxItemsAmount": 1
+    },
+    "oxyrun": {
+      "chance": 75,
+      "maxItemsAmount": 5
     }
   }
 }
