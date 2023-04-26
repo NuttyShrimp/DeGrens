@@ -67,7 +67,7 @@ class Inventory extends UtilShared.Singleton<Inventory>() {
   /**
    * Make sure to await load when using this in resource start function
    */
-  public getItemData = (itemName: string): Inventory.ItemData | undefined => {
+  public getItemData = (itemName: string): Inventory.ItemData => {
     return global.exports['dg-inventory'].getItemData(itemName);
   };
 
