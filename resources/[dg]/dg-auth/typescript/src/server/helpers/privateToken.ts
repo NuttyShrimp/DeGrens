@@ -1,9 +1,11 @@
 import { createJWSHandlers } from 'modules/authTokens/service';
 import { createPanelJWSHandlers } from 'services/panelTokens';
 
-export let PRIVATE_TOKEN = 'bozo-1';
+let PRIVATE_TOKEN = 'bozo-1';
 
 export const setPrivateToken = (token: string) => {
+  if (PRIVATE_TOKEN === token) return;
+
   PRIVATE_TOKEN = token;
   createJWSHandlers();
   createPanelJWSHandlers();
