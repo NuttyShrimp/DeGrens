@@ -174,13 +174,13 @@ class PolyZone {
   private zonesNamesToDelete: Set<{ name: string; id: string | number }> = new Set();
 
   constructor() {
-    on('dg-polyzone:enter', (name: string, data: any, center: number[]) => {
+    on('dg-polyzone:enter', (name: string, data: any, center: Vec3) => {
       if (!this.enterHandlers.has(name)) return;
-      this.enterHandlers.get(name)!.forEach(handler => handler(name, data, Util.ArrayToVector3(center)));
+      this.enterHandlers.get(name)!.forEach(handler => handler(name, data, center));
     });
-    on('dg-polyzone:exit', (name: string, data: any, center: number[]) => {
+    on('dg-polyzone:exit', (name: string, data: any, center: Vec3) => {
       if (!this.exitHandlers.has(name)) return;
-      this.exitHandlers.get(name)!.forEach(handler => handler(name, data, Util.ArrayToVector3(center)));
+      this.exitHandlers.get(name)!.forEach(handler => handler(name, data, center));
     });
     on('onResourceStop', (res: string) => {
       if (res !== GetCurrentResourceName()) return;
@@ -275,13 +275,13 @@ class PolyTarget {
   private zonesNamesToDelete: Set<{ name: string; id: string | number }> = new Set();
 
   constructor() {
-    on('dg-polytarget:enter', (name: string, data: any, center: number[]) => {
+    on('dg-polytarget:enter', (name: string, data: any, center: Vec3) => {
       if (!this.enterHandlers.has(name)) return;
-      this.enterHandlers.get(name)!.forEach(handler => handler(name, data, Util.ArrayToVector3(center)));
+      this.enterHandlers.get(name)!.forEach(handler => handler(name, data, center));
     });
-    on('dg-polytarget:exit', (name: string, data: any, center: number[]) => {
+    on('dg-polytarget:exit', (name: string, data: any, center: Vec3) => {
       if (!this.exitHandlers.has(name)) return;
-      this.exitHandlers.get(name)!.forEach(handler => handler(name, data, Util.ArrayToVector3(center)));
+      this.exitHandlers.get(name)!.forEach(handler => handler(name, data, center));
     });
     on('onResourceStop', (res: string) => {
       if (res !== GetCurrentResourceName()) return;

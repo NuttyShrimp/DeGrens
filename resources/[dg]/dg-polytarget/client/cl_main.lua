@@ -1,10 +1,8 @@
--- This is very lookalike to polyzone but is specific for dg-peek targets
+-- This is an almost straight copy of polyzone but is specific for dg-peek targets
 local DEBUG_ENABLED = false
 local DEBUG_MAX_DISTANCE = 300.0
-
-IsInVehicle = false
-targetZone = nil
-local createdTargetZones = {}
+local targetZone = nil
+local createdZones = {}
 
 local function addToTargetZone(zone)
   if targetZone ~= nil then
@@ -20,7 +18,11 @@ local function addToTargetZone(zone)
     end, function(isPointInside, point, insideZones, enteredZones, leftZones)
       if leftZones ~= nil then
         for i = 1, #leftZones do
-          TriggerEvent("dg-polytarget:exit", leftZones[i].name, leftZones[i].data, exports['dg-lib']:vectorToTable(leftZones[i].center))
+          TriggerEvent("dg-polytarget:exit", leftZones[i].name, leftZones[i].data, {
+            x = leftZones[i].center.x, 
+            y = leftZones[i].center.y, 
+            z = leftZones[i].center.z
+          })
           if DEBUG_ENABLED then
 						debugPrint('[dg-polytarget] Left zone | name: %s | data: %s | center: %s', leftZones[i].name, leftZones[i].data, leftZones[i].center)
           end
@@ -28,7 +30,11 @@ local function addToTargetZone(zone)
       end
       if enteredZones ~= nil then
         for i = 1, #enteredZones do
-          TriggerEvent("dg-polytarget:enter", enteredZones[i].name, enteredZones[i].data, exports['dg-lib']:vectorToTable(enteredZones[i].center))
+          TriggerEvent("dg-polytarget:enter", enteredZones[i].name, enteredZones[i].data, {
+            x = enteredZones[i].center.x, 
+            y = enteredZones[i].center.y, 
+            z = enteredZones[i].center.z
+          })
           if DEBUG_ENABLED then
             debugPrint('[dg-polytarget] Entered zone | name: %s | data: %s | center: %s', enteredZones[i].name, enteredZones[i].data, enteredZones[i].center)
           end
@@ -39,16 +45,17 @@ local function addToTargetZone(zone)
 end
 
 local function doCreateZone(options)
+  local key = options.name
   if options.data and options.data.id then
-    local key = options.name .. "_" .. tostring(options.data.id)
-    if not createdTargetZones[key] then
-      createdTargetZones[key] = true
-      return true
-    else
-      print('polytarget with name/id already added, skipping: ', key)
-      return false
-    end
+    key = ('%s_%s'):format(options.name, tostring(options.data.id))
   end
+
+  if createdZones[key] then
+    print('polytarget with name/id already added, skipping: ', key)
+    return false
+  end
+
+  createdZones[key] = true
   return true
 end
 
@@ -116,33 +123,32 @@ exports('getTargetZones', function()
   return zones
 end)
 
--- IMPORTANT: This removes all zones under this name
 exports('removeZone', function(name, id)
-  local zones = {}
   if not targetZone then return end
+
+  -- Copy zones table
+  local zones = {}
   for i, zone in pairs(targetZone.zones) do
     zones[#zones + 1] = zone
   end
+
+  local isCorrectZone = function(zone)
+    return zone.name == name and (id == nil or zone.data.id == id)
+  end
+
   for i, zone in pairs(zones) do
-    if zone.name == name and (id == nil or zone.data.id == id) then
-      targetZone:RemoveZone(name)
-      local id = ('%s_%s'):format(name, zone.data.id)
-      createdTargetZones[id] = nil
+    if isCorrectZone(zone) then
+      targetZone:RemoveZone(isCorrectZone)
+      local id = zone.data and zone.data.id and ('%s_%s'):format(name, zone.data.id) or name
+      createdZones[id] = nil
       zone:destroy()
     end
   end
 end)
 
-DGX.BaseEvents.onEnteredVehicle(function()
-  IsInVehicle = true
-end)
-
-DGX.BaseEvents.onLeftVehicle(function()
-  IsInVehicle = false
-end)
-
-function toggleTargetDebug(toggle)
+local function toggleDebug(toggle)
   DEBUG_ENABLED = toggle
+  print('polytarget debug: ' .. tostring(DEBUG_ENABLED))
   if (DEBUG_ENABLED and targetZone ~= nil) then
     Citizen.CreateThread(function()
       while DEBUG_ENABLED do
@@ -156,12 +162,11 @@ function toggleTargetDebug(toggle)
       end
     end)
   end
-  print('polytarget debug: ' .. tostring(DEBUG_ENABLED))
 end
 
 DGX.Events.onNet('polytarget:debug:toggle', function(toggle)
   if DEBUG_ENABLED == toggle then return end
-  toggleTargetDebug(toggle)
+  toggleDebug(toggle)
 end)
 
 debugPrint = function(msg, ...)

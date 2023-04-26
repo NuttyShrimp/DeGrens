@@ -1,9 +1,9 @@
 local DEBUG_ENABLED = false
 local DEBUG_MAX_DISTANCE = 300.0
-targetZone = nil
+local targetZone = nil
 local createdZones = {}
 
-local function addToComboZone(zone)
+local function addToTargetZone(zone)
   if targetZone ~= nil then
     targetZone:AddZone(zone)
   else
@@ -11,23 +11,29 @@ local function addToComboZone(zone)
     targetZone:onPlayerInOutExhaustive(function(isPointInside, point, insideZones, enteredZones, leftZones)
       if leftZones ~= nil then
         for i = 1, #leftZones do
-          TriggerEvent("dg-polyzone:exit", leftZones[i].name, leftZones[i].data, leftZones[i].center)
+          TriggerEvent("dg-polyzone:exit", leftZones[i].name, leftZones[i].data, {
+            x = leftZones[i].center.x, 
+            y = leftZones[i].center.y, 
+            z = leftZones[i].center.z
+          })
           if DEBUG_ENABLED then
-            debugPrint('[dg-polyzone] Left zone | name: %s | data: %s | center: %s', leftZones[i].name, leftZones[i].data,
-              leftZones[i].center)
+            debugPrint('[dg-polyzone] Left zone | name: %s | data: %s | center: %s', leftZones[i].name, leftZones[i].data, leftZones[i].center)
           end
         end
       end
       if enteredZones ~= nil then
         for i = 1, #enteredZones do
-          TriggerEvent("dg-polyzone:enter", enteredZones[i].name, enteredZones[i].data, enteredZones[i].center)
+          TriggerEvent("dg-polyzone:enter", enteredZones[i].name, enteredZones[i].data, {
+            x = enteredZones[i].center.x, 
+            y = enteredZones[i].center.y, 
+            z = enteredZones[i].center.z
+          })
           if DEBUG_ENABLED then
-            debugPrint('[dg-polyzone] Entered zone | name: %s | data: %s | center: %s', enteredZones[i].name,
-              enteredZones[i].data, enteredZones[i].center)
+            debugPrint('[dg-polyzone] Entered zone | name: %s | data: %s | center: %s', enteredZones[i].name, enteredZones[i].data, enteredZones[i].center)
           end
         end
       end
-    end, 500)
+    end, 250)
   end
 end
 
@@ -57,7 +63,7 @@ exports("AddBoxZone", function(name, vectors, length, width, options)
   end
   local boxCenter = type(vectors) ~= 'vector3' and vector3(vectors.x, vectors.y, vectors.z) or vectors
   local zone = BoxZone:Create(boxCenter, length, width, options)
-  addToComboZone(zone)
+  addToTargetZone(zone)
 end)
 
 exports("AddCircleZone", function(name, center, radius, options)
@@ -71,7 +77,7 @@ exports("AddCircleZone", function(name, center, radius, options)
   end
   local circleCenter = type(center) ~= 'vector3' and vector3(center.x, center.y, center.z) or center
   local zone = CircleZone:Create(circleCenter, radius, options)
-  addToComboZone(zone)
+  addToTargetZone(zone)
 end)
 
 exports("AddPolyZone", function(name, pVectors, options)
@@ -90,10 +96,10 @@ exports("AddPolyZone", function(name, pVectors, options)
     return
   end
   local zone = PolyZone:Create(vectors ~= nil and vectors or pVectors, options)
-  addToComboZone(zone)
+  addToTargetZone(zone)
 end)
 
-exports('getComboZones', function()
+exports('getTargetZones', function()
   if (targetZone == nil) then
     return {}
   end
@@ -110,21 +116,23 @@ exports('getComboZones', function()
   return zones
 end)
 
--- IMPORTANT: This removes all zones under this name
 exports('removeZone', function(name, id)
+  if not targetZone then return end
+
   -- Copy zones table
   local zones = {}
-  if not targetZone then return end
   for i, zone in pairs(targetZone.zones) do
     zones[#zones + 1] = zone
   end
+
+  local isCorrectZone = function(zone)
+    return zone.name == name and (id == nil or zone.data.id == id)
+  end
+
   for i, zone in pairs(zones) do
-    if zone.name == name and (id == nil or zone.data.id == id) then
-      targetZone:RemoveZone(name)
-      local id = name
-      if zone.data and zone.data.id then
-        id = ('%s_%s'):format(name, zone.data.id)
-      end
+    if isCorrectZone(zone) then
+      targetZone:RemoveZone(isCorrectZone)
+      local id = zone.data and zone.data.id and ('%s_%s'):format(name, zone.data.id) or name
       createdZones[id] = nil
       zone:destroy()
     end

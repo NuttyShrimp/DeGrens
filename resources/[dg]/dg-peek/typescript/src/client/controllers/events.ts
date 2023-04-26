@@ -45,8 +45,8 @@ RayCast.onEntityChange((entity, coords) => {
   stateManager.forceRefreshList();
 });
 
-on('dg-polytarget:enter', (name: string, data: any, center: number[]) => {
-  activateZone(name, data, Util.ArrayToVector3(center));
+on('dg-polytarget:enter', (name: string, data: any, center: Vec3) => {
+  activateZone(name, data, center);
   stateManager.forceRefreshZones(name, data);
   stateManager.createCheckThread();
 });
