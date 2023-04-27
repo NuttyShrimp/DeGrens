@@ -283,7 +283,7 @@
     "name": "Callisto Apartments",
     "levels": {
       "entrance": {
-        "floor": "Ingang",
+        "name": "Ingang",
         "interact": {"x":391.7398,"y":2.9376,"z":92.3434},
         "spawn": {"x":391.0301,"y":3.3593,"z":91.7039,"w":57.0847}
       },
