@@ -8,6 +8,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+
+### Changed
+
+### Fixed
+
+## [1.1.5]
+
+### Added
 - Feedback notificatie toegevoegd aan ATM robbery
 - Staff kan nu een tijdelijke evenement blip plaatsen
 - Enkele items recyclebaar gemaakt
