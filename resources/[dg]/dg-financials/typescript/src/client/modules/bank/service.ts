@@ -49,8 +49,11 @@ export const registerPeekZones = () => {
         label: 'ATM',
         icon: 'fas fa-university',
         action: interactWithATM,
-        canInteract: ent =>
-          !!ent && DoesEntityExist(ent) && !IsEntityAMissionEntity(ent) && !NetworkGetEntityIsNetworked(ent),
+        canInteract: ent => {
+          // we only want to check the missions/networked for entity entries, not for zone entries
+          if (!ent || !DoesEntityExist(ent)) return true;
+          return !IsEntityAMissionEntity(ent) && !NetworkGetEntityIsNetworked(ent);
+        },
       },
     ],
     distance: 2,

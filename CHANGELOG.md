@@ -47,6 +47,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Het craften van een reservewiel werkt weer als mechanic
 - Houserobbery deurzone spamt geen warnings meer in je console
 - Fix error wanneer meerdere mensen samen een ATM willen opnemen
+- Je kan weer zones based ATMs accessen
 
 ## [1.1.4]
 
