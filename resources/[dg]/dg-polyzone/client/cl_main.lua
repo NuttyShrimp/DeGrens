@@ -3,6 +3,23 @@ local DEBUG_MAX_DISTANCE = 300.0
 local targetZone = nil
 local createdZones = {}
 
+-- When zone is polyzone, the center property of zone is a vec2, we calculate z coord using min and max z
+local getZoneCenter = function(zone)
+  local zCoord = 0
+  if type(zone.center) == 'vector3' then
+    zCoord = zone.center.z
+  else
+    local minZ = zone.minZ or 0
+    local maxZ = zone.maxZ or 0
+    zCoord = ((maxZ - minZ) / 2) + minZ
+  end
+  return {
+    x = zone.center.x, 
+    y = zone.center.y, 
+    z = zCoord
+  }
+end
+
 local function addToTargetZone(zone)
   if targetZone ~= nil then
     targetZone:AddZone(zone)
@@ -11,11 +28,7 @@ local function addToTargetZone(zone)
     targetZone:onPlayerInOutExhaustive(function(isPointInside, point, insideZones, enteredZones, leftZones)
       if leftZones ~= nil then
         for i = 1, #leftZones do
-          TriggerEvent("dg-polyzone:exit", leftZones[i].name, leftZones[i].data, {
-            x = leftZones[i].center.x, 
-            y = leftZones[i].center.y, 
-            z = leftZones[i].center.z
-          })
+          TriggerEvent("dg-polyzone:exit", leftZones[i].name, leftZones[i].data, getZoneCenter(leftZones[i]))
           if DEBUG_ENABLED then
             debugPrint('[dg-polyzone] Left zone | name: %s | data: %s | center: %s', leftZones[i].name, leftZones[i].data, leftZones[i].center)
           end
@@ -23,11 +36,7 @@ local function addToTargetZone(zone)
       end
       if enteredZones ~= nil then
         for i = 1, #enteredZones do
-          TriggerEvent("dg-polyzone:enter", enteredZones[i].name, enteredZones[i].data, {
-            x = enteredZones[i].center.x, 
-            y = enteredZones[i].center.y, 
-            z = enteredZones[i].center.z
-          })
+          TriggerEvent("dg-polyzone:enter", enteredZones[i].name, enteredZones[i].data, getZoneCenter(enteredZones[i]))
           if DEBUG_ENABLED then
             debugPrint('[dg-polyzone] Entered zone | name: %s | data: %s | center: %s', enteredZones[i].name, enteredZones[i].data, enteredZones[i].center)
           end
@@ -181,3 +190,4 @@ debugPrint = function(msg, ...)
 
 	print((msg):format(table.unpack(params)))
 end
+
