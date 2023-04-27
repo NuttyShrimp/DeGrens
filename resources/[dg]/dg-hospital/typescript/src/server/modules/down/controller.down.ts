@@ -1,4 +1,4 @@
-import { Events, Hospital, Inventory, Police, RPC, Screenshot, Status, Util } from '@dgx/server';
+import { Events, Hospital, Inventory, Jobs, Police, RPC, Screenshot, Status, Util } from '@dgx/server';
 import { getHospitalConfig } from 'services/config';
 import { downLogger } from './logger.down';
 import { sendToAvailableBed } from 'modules/beds/service.beds';
@@ -64,7 +64,11 @@ Events.onNet('hospital:down:respawnToHospital', (src: number) => {
 
 Events.onNet('hospital:down:respawnToBed', async (src: number) => {
   Util.Log('hospital:down:respawnToBed', {}, `${Util.getName(src)} has respawned to a bed`, src);
-  Inventory.clearPlayerInventory(src);
+
+  // dont clear police inv
+  if (Jobs.getCurrentJob(src) !== 'police') {
+    Inventory.clearPlayerInventory(src);
+  }
 
   await Police.forceUncuff(src);
   await Police.forceStopInteractions(src);
