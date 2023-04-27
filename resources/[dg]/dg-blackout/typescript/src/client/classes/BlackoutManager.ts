@@ -1,44 +1,48 @@
 import { Util } from '@dgx/client';
 
 class BlackoutManager extends Util.Singleton<BlackoutManager>() {
-  private _state = false;
-  private _inSafezone = false;
+  private statebag: Blackout.Statebag;
+  private lightsDisabled: boolean;
+  private inSafezone: boolean;
 
-  get state() {
-    return this._state;
+  constructor() {
+    super();
+    this.statebag = {
+      blackout: false,
+      safezones: false,
+    };
+    this.lightsDisabled = false;
+    this.inSafezone = false;
   }
 
-  set state(value: boolean) {
-    this._state = value;
-    this.disableLights(this.state);
-  }
+  public loadStateBag = (statebag: Blackout.Statebag) => {
+    this.statebag = statebag;
+    this.disableLights(this.shouldDisableLights());
+  };
 
-  get inSafezone() {
-    return this._inSafezone;
-  }
-
-  set inSafezone(value: boolean) {
-    this._inSafezone = value;
-    this.disableLights(this.state);
-  }
+  public setInSafeZone = (inSafezone: boolean) => {
+    this.inSafezone = inSafezone;
+    this.disableLights(this.shouldDisableLights());
+  };
 
   private disableLights = (state: boolean) => {
-    SetArtificialLightsState(state);
+    if (this.lightsDisabled === state) return;
+
+    this.lightsDisabled = state;
+    SetArtificialLightsState(this.lightsDisabled);
     SetArtificialLightsStateAffectsVehicles(false);
   };
 
-  flicker = () => {
+  public flicker = () => {
     if (!this.inSafezone) return;
+
     this.disableLights(true);
     setTimeout(() => {
-      if (!this.inSafezone || !this.state) return;
-      this.disableLights(false);
+      this.disableLights(this.shouldDisableLights());
     }, 300);
   };
 
-  public loadState = () => {
-    this.state = GlobalState.blackout;
-  };
+  private shouldDisableLights = () => this.statebag.blackout && !(this.statebag.safezones && this.inSafezone);
 }
 
 const blackoutManager = BlackoutManager.getInstance();

@@ -1,8 +1,11 @@
 import blackoutManager from 'classes/BlackoutManager';
+import { loadConfig } from './services/config';
 
+import './services/config';
 import './controllers';
 
-setImmediate(() => {
-  // initialize as no blackout
-  blackoutManager.setStatebag(false);
+setImmediate(async () => {
+  await loadConfig();
+
+  blackoutManager.initiate();
 });

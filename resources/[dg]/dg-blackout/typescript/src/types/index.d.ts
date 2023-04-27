@@ -1,20 +1,19 @@
-declare interface ZoneData {
-  vectors: Vec2[];
-  options: {
-    data: { id: string };
-    minZ: number;
-    maxZ: number;
+declare namespace Blackout {
+  type Config = {
+    duration: number;
+    safezoneDelay: number;
+    powerstations: Powerstation[];
+    safezones: Safezone[];
   };
-}
 
-declare interface PowerstationData {
-  center: Vec3;
-  width: number;
-  length: number;
-  camId: number;
-  options: {
-    heading: number;
-    minZ: number;
-    maxZ: number;
+  type Powerstation = { camId: number } & Zones.Box;
+
+  type Safezone = Zones.Poly<{ id: string }>;
+
+  type LocationType = 'powerstation' | 'safezone';
+
+  type Statebag = {
+    blackout: boolean;
+    safezones: boolean;
   };
 }

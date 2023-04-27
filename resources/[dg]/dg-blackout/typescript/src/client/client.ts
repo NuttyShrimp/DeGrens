@@ -1,6 +1,12 @@
 import blackoutManager from 'classes/BlackoutManager';
+
 import './controllers';
 
 setImmediate(() => {
-  blackoutManager.loadState();
+  blackoutManager.loadStateBag(
+    GlobalState.blackoutState ?? {
+      blackout: false,
+      safezones: false,
+    }
+  );
 });

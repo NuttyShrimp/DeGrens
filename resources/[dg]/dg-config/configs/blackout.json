@@ -1,4 +1,6 @@
 {
+  "duration": 20,
+  "safezoneDelay": 5,
   "powerstations": [
     {
       "center": {
