@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- Duidelijke melding wanneer je begint met bloeden
 
 ### Changed
 - Politie verliest zijn spullen niet meer door het respawnen
