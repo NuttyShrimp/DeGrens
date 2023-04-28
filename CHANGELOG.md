@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 - Politie verliest zijn spullen niet meer door het respawnen
+- Minder lang plaatsen van groenten
 
 ### Fixed
 
