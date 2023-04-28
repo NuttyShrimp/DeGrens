@@ -109,6 +109,8 @@ JS linting:
     - pnpm lint
 
 TS dev build:
+  tags:
+    - amd64
   extends:
     - .node_mod_installation
     - .cache_modules
@@ -118,6 +120,8 @@ TS dev build:
     - pnpm build:dev --force
 
 TS prod build:
+  tags:
+    - amd64
   extends:
     - .node_mod_installation
     - .cache_modules
