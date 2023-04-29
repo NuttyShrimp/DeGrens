@@ -141,6 +141,6 @@ export const startPaycheckInterval = () => {
       queryParams
     );
 
-    paycheckLogger.info(`Updated paycheck for ${players.length} players`);
+    paycheckLogger.debug(`Updated paycheck for ${players.length} players`);
   }, 60 * 1000);
 };

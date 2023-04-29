@@ -20,7 +20,7 @@ export const startNeedsThread = () => {
       player.Functions.SetMetaData('needs', needs);
       emitNet('hud:client:UpdateNeeds', player.PlayerData.source, needs.hunger, needs.thirst);
     }
-    needsLogger.info('Depleting needs for all players');
+    needsLogger.debug('Depleting needs for all players');
   }, needsConfig.interval * 1000);
 };
 
