@@ -12,7 +12,7 @@ import {
 Events.onNet('criminal:oxyrun:start', startOxyrunForPlayer);
 RPC.register('criminal:oxyrun:registerVehicle', registerOxyrunVehicle);
 Events.onNet('criminal:oxyrun:takeBox', giveOxyrunBoxToPlayer);
-Events.onNet('criminal:oxyrun:resetVehicle', resetOxyrunVehicle);
+RPC.register('criminal:oxyrun:resetVehicle', resetOxyrunVehicle);
 
 Util.onCharSpawn(plyId => {
   restoreOxyrunForPlayer(plyId);

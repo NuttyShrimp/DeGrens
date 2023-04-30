@@ -1,9 +1,10 @@
-import { BlipManager, Events, Notifications, PolyZone, RPC, Sync, Util } from '@dgx/client';
+import { BlipManager, Notifications, PolyZone, RPC, Sync, Util } from '@dgx/client';
 
 let doingOxyRun = false;
 let atLocation = false;
 let buyerVehicle: number | null = null;
 let buyerVehicleThread: NodeJS.Timer | null = null;
+let inSchedulingTimeout = false;
 
 const vehiclesSoldTo = new Set<number>();
 
@@ -31,8 +32,9 @@ export const buildLocationZone = (location: Criminal.Oxyrun.Location) => {
   });
 };
 
-export const destroyLocationZone = () => {
+export const cleanupOxyrun = () => {
   doingOxyRun = false;
+  clearBuyerVehicleThread();
   PolyZone.removeZone('oxyrun_location');
   BlipManager.removeCategory('oxyrun');
 };
@@ -41,8 +43,11 @@ export const handleEnterLocation = () => {
   if (!doingOxyRun || atLocation) return;
 
   atLocation = true;
-  scheduleFindBuyer();
   Notifications.add('Je bent aangekomen op de verkoopplaats', 'success');
+
+  if (!inSchedulingTimeout) {
+    scheduleFindBuyer();
+  }
 };
 
 export const handleLeaveLocation = () => {
@@ -55,7 +60,7 @@ export const handleLeaveLocation = () => {
 const scheduleFindBuyer = async () => {
   await Util.Delay(500);
 
-  if (!doingOxyRun || !atLocation) return;
+  if (!doingOxyRun || !atLocation || buyerVehicle !== null) return;
 
   const vehicle = getVehicleAtLocation();
   if (!vehicle) {
@@ -74,27 +79,41 @@ const scheduleFindBuyer = async () => {
   buyerVehicle = vehicle;
   Sync.executeAction('oxyrun:doVehicleAction', vehicle);
 
+  clearBuyerVehicleThread();
+
   buyerVehicleThread = setInterval(() => {
-    if (
-      doingOxyRun &&
-      buyerVehicle &&
-      DoesEntityExist(buyerVehicle) &&
-      PolyZone.isPointInside(Util.getEntityCoords(buyerVehicle), 'oxyrun_location')
-    )
+    if (!doingOxyRun) return;
+
+    if (!buyerVehicle) {
+      clearBuyerVehicleThread();
+      console.error(`[Oxyrun] buyerVehicle variable was somehow changed`);
       return;
-
-    Events.emitNet('criminal:oxyrun:resetVehicle');
-    buyerVehicle = null;
-    scheduleFindBuyer();
-
-    if (buyerVehicleThread) {
-      clearInterval(buyerVehicleThread);
     }
 
-    if (Util.isDevEnv()) {
-      console.log(`[Oxyrun] Vehicle has been reset`);
+    // if buyervehicle got removed or is not at location anymore, reset vehicle and find another buyer
+    if (
+      !DoesEntityExist(buyerVehicle) ||
+      !PolyZone.isPointInside(Util.getEntityCoords(buyerVehicle), 'oxyrun_location')
+    ) {
+      clearBuyerVehicleThread();
+      buyerVehicle = null;
+
+      RPC.execute<boolean>('criminal:oxyrun:resetVehicle').then(success => {
+        if (!success) return;
+        scheduleFindBuyer();
+      });
+
+      if (Util.isDevEnv()) {
+        console.log(`[Oxyrun] Vehicle has been reset`);
+      }
     }
   }, 100);
+};
+
+const clearBuyerVehicleThread = () => {
+  if (buyerVehicleThread === null) return;
+  clearInterval(buyerVehicleThread);
+  buyerVehicleThread = null;
 };
 
 const getVehicleAtLocation = () => {
@@ -119,10 +138,6 @@ const getVehicleAtLocation = () => {
   }
 };
 
-export const cleanupOxyrun = () => {
-  destroyLocationZone();
-};
-
 export const finishBuyer = (finishedJob: boolean) => {
   if (buyerVehicle === null) return;
 
@@ -130,14 +145,14 @@ export const finishBuyer = (finishedJob: boolean) => {
 
   Sync.executeAction('oxyrun:clearVehicle', buyerVehicle);
 
-  if (buyerVehicleThread) {
-    clearInterval(buyerVehicleThread);
-  }
+  clearBuyerVehicleThread();
   buyerVehicle = null;
 
   if (!finishedJob) {
+    inSchedulingTimeout = true;
     setTimeout(() => {
       scheduleFindBuyer();
+      inSchedulingTimeout = false;
     }, 15000);
   } else {
     cleanupOxyrun();
