@@ -8,7 +8,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
-- /neemvest commando toegevoegd om je huidige vest uit te trekken zodat je deze terug in je zakken hebt
 - Duidelijke melding wanneer je begint met bloeden
 
 ### Changed
@@ -16,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Minder lang plaatsen van groenten
 
 ### Fixed
+- Lag tijdens het uitvoeren van oxyrun opgelost
 
 ## [1.1.5]
 
