@@ -1,9 +1,10 @@
 import { RewriteFrames } from '@sentry/integrations';
 import * as Sentry from '@sentry/node';
 import winston from 'winston';
-import winstonSentry from 'winston-sentry-log';
 
 import mainJSON from '../../resources/[dg]/dg-config/configs/main.json';
+
+import SentryTransport from './sentry-transport';
 
 const SENTRY_DSN = 'https://47836ea9173b4e52b8820a05996cf549@sentry.nuttyshrimp.me/2';
 
@@ -47,14 +48,11 @@ export const generateLogger = (name: string, packageInfo: Record<string, any>, l
   });
   if (mainJSON.production) {
     logger.add(
-      new winstonSentry({
-        name: packageInfo.name,
+      new SentryTransport({
         level: 'error',
-        isClientInitialized: true,
-        sentryClient: Sentry,
-        config: {
+        skipSentryInit: true,
+        sentry: {
           dsn: packageInfo.sentry_dsn,
-          logger: packageInfo.name,
           release: packageInfo.version,
         },
       })

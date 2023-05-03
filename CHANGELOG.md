@@ -22,6 +22,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Minder lang plaatsen van groenten
 - Minder stress wanneer je in een wagen zit
 - YTD's van enkele voertuigen gedownsized
+- winston-sentry-log dependency vervangen door in-house (fixed sentry type getting confused with v6 vs v7)
 
 ### Fixed
 
