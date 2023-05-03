@@ -37,7 +37,10 @@ const discordRequest = async (method: string, endpoint: string, data?: any) => {
       status: result.status,
       statusText: result.statusText,
     };
-  } catch (e) {
+  } catch (e: any) {
+    if (e.response && e.response.status === 404) {
+      return;
+    }
     console.error(e);
     mainLogger.error('Failed to make request to discord API');
   }
