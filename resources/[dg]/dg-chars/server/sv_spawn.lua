@@ -92,6 +92,7 @@ DGX.RPC.register('dg-chars:server:getSpawns', function(src)
 end)
 
 DGX.RPC.register('dg-chars:server:spawn', function(src, idx)
+  local Player = charModule.getPlayer(src)
   local spawn = getPlySpawns(src)[idx]
   if not spawn then
     return 'Kon spawn niet vinden, probeer opnieuw of rejoin de server.'
@@ -122,6 +123,7 @@ DGX.RPC.register('dg-chars:server:spawn', function(src, idx)
       resetInside = true,
     }
   end
+  DGX.Util.Log("chars:spawn", { spawn = spawn }, ("%s(%d) has spawned at %s"):format(DGX.Util.getName(src), Player.citizenid, spawn.label), src)
   TriggerClientEvent('dg-chars:client:finishSpawn', src, false)
   return returnOptions
 end)
