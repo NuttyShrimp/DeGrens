@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - Duidelijke melding wanneer je begint met bloeden
+- Replace our stripped down QBCore with an in-house player mgmt resource
 
 ### Changed
 - Politie verliest zijn spullen niet meer door het respawnen
