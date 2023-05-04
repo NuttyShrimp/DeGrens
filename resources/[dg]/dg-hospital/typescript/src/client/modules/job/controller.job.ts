@@ -21,7 +21,7 @@ Peek.addZoneEntry('hospital_locker', {
       icon: 'fas fa-shelves',
       job: 'ambulance',
       action: () => {
-        const cid = DGCore.Functions.GetPlayerData().citizenid;
+        const cid = LocalPlayer.state.citizenid;
         const stashId = `hospital_locker_${cid}`;
         Inventory.openStash(stashId, 50);
       },

@@ -16,6 +16,7 @@ local PtfxNotif = false
 local PtfxPrompt = false
 local PtfxWait = 500
 local PtfxNoProp = false
+local charModule = exports['dg-core']:getModule('characters')
 
 DGX.Keys.register('cancelEmote', '(emotes) cancel emote', 'X');
 DGX.Keys.onPressDown('cancelEmote', function()
@@ -25,7 +26,7 @@ end);
 Citizen.CreateThread(function()
   while true do
     if (IsPedShooting(PlayerPedId()) and IsInAnimation) or
-        (isLoggedIn and PlayerData.metadata['isdead'] and IsInAnimation) then
+        (isLoggedIn and charModule.getMetadata().downState ~= "alive" and IsInAnimation) then
       EmoteCancel()
     end
 
@@ -218,7 +219,7 @@ function pairsByKeys(t, f)
     table.insert(a, n)
   end
   table.sort(a, f)
-  local i = 0 -- iterator variable
+  local i = 0             -- iterator variable
   local iter = function() -- iterator function
     i = i + 1
     if a[i] == nil then
@@ -328,7 +329,7 @@ function AddPropToPlayer(prop1, bone, off1, off2, off3, rot1, rot2, rot3)
 
   prop = CreateObject(GetHashKey(prop1), x, y, z + 0.2, true, true, true)
   AttachEntityToEntity(prop, Player, GetPedBoneIndex(Player, bone), off1, off2, off3, rot1, rot2, rot3, true, true, false
-    , true, 1, true)
+  , true, 1, true)
   table.insert(PlayerProps, prop)
   PlayerHasProp = true
   SetModelAsNoLongerNeeded(prop1)

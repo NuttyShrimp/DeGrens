@@ -1,7 +1,7 @@
-import { Events } from '@dgx/server';
+import { Core, Events } from '@dgx/server';
 
 Events.onNet('misc:walkstyles:save', (plyId: number, set: string) => {
-  const player = DGCore.Functions.GetPlayer(plyId);
+  const player = Core.getPlayer(plyId);
   if (!player) return;
-  player.Functions.SetMetaData('walkstyle', set);
+  player.updateMetadata('walkStyle', set);
 });

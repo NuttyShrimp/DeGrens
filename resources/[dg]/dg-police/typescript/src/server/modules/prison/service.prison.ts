@@ -1,4 +1,4 @@
-import { Events, Financials, Inventory, Jobs, Notifications, Util } from '@dgx/server';
+import { Core, Events, Financials, Inventory, Jobs, Notifications, Util } from '@dgx/server';
 import { forceUncuff } from 'modules/interactions/modules/cuffs';
 
 // plyid to month
@@ -11,8 +11,8 @@ export const moveAllPlayerItemsToPrisonStash = (plyId: number) => {
 };
 
 export const sendPlayerToPrison = (plyId: number, months: number) => {
-  const player = DGCore.Functions.GetPlayer(plyId);
-  player.Functions.SetMetaData('jailMonths', months);
+  const player = Core.getPlayer(plyId);
+  player.updateMetadata('jailMonths', months);
   Events.emitNet('police:prison:goToPrison', plyId);
   const thread = setInterval(() => {
     setPlayerMonths(plyId, old => old - 1);
@@ -35,12 +35,12 @@ export const cleanupPlayerInJail = (plyId: number) => {
 };
 
 export const setPlayerMonths = (plyId: number, cb: (old: number) => number) => {
-  const player = DGCore.Functions.GetPlayer(plyId);
+  const player = Core.getPlayer(plyId);
   const jailData = playersInPrison.get(plyId);
   if (!player || !jailData) return;
-  const oldMonths = Math.max(player.PlayerData.metadata.jailMonths, 1);
+  const oldMonths = Math.max(player.metadata.jailMonths, 1);
   const newMonths = cb(oldMonths);
-  player.Functions.SetMetaData('jailMonths', newMonths);
+  player.updateMetadata('jailMonths', newMonths);
   jailData.months = newMonths;
 };
 
@@ -56,14 +56,14 @@ export const leavePrison = (plyId: number) => {
 };
 
 export const restoreAllPlayerSentences = () => {
-  const playerIds = DGCore.Functions.GetPlayers();
-  playerIds.forEach(plyId => restorePlayerSentence(plyId));
+  const charModule = Core.getModule('characters');
+  Object.keys(charModule.getAllPlayers()).forEach(plyId => restorePlayerSentence(Number(plyId)));
 };
 
 export const restorePlayerSentence = (plyId: number) => {
-  const player = DGCore.Functions.GetPlayer(plyId);
+  const player = Core.getPlayer(plyId);
   if (!player) return;
-  const months = player.PlayerData.metadata.jailMonths;
+  const months = player.metadata.jailMonths;
   if (months === -1) return;
 
   Events.emitNet('police:prison:restoreSentence', plyId);
@@ -77,7 +77,7 @@ export const restorePlayerSentence = (plyId: number) => {
 export const getAllPlayersInPrison = () => {
   const ids = Array.from(playersInPrison.keys());
   return ids.map(id => {
-    const charInfo = DGCore.Functions.GetPlayer(id)?.PlayerData.charinfo;
+    const charInfo = Core.getPlayer(id).charinfo;
     const name = `${charInfo?.firstname ?? 'Unknown'} ${charInfo?.lastname ?? 'Person'}`;
     return { id, name: name, months: playersInPrison.get(id)!.months };
   });

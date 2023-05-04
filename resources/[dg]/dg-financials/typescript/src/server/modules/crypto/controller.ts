@@ -1,4 +1,4 @@
-import { RPC, Util } from '@dgx/server';
+import { Core, RPC } from '@dgx/server';
 import cryptoManager from './classes/CryptoManager';
 
 import { CryptoWallet } from './classes/CryptoWallet';
@@ -20,7 +20,7 @@ RegisterCommand(
   true
 );
 
-Util.onPlayerLoaded(playerData => {
+Core.onPlayerLoaded(playerData => {
   cryptoManager.loadPlayerWallet(playerData.citizenid);
 });
 
@@ -49,8 +49,8 @@ RPC.register(
     }
   ) => {
     cryptoLogger.silly(`Callback: transfer: coin: ${data.coin} | target: ${data.target} | amount: ${data.amount}`);
-    const Player = DGCore.Functions.GetPlayer(src);
-    const wallet = cryptoManager.getWallet(Player.PlayerData.citizenid, data.coin) as CryptoWallet;
+    const Player = Core.getPlayer(src);
+    const wallet = cryptoManager.getWallet(Player.citizenid, data.coin) as CryptoWallet;
     const success = await wallet.transfer(src, data.target, data.amount);
     cryptoLogger.silly(`Callback: transfer: success: ${success}`);
     return success;
@@ -59,8 +59,8 @@ RPC.register(
 
 RPC.register('financials:server:crypto:buy', async (src, data: { coin: string; amount: number }) => {
   cryptoLogger.silly(`Callback: buy: coin: ${data.coin} | amount: ${data.amount}`);
-  const Player = DGCore.Functions.GetPlayer(src);
-  const wallet = cryptoManager.getWallet(Player.PlayerData.citizenid, data.coin) as CryptoWallet;
+  const Player = Core.getPlayer(src);
+  const wallet = cryptoManager.getWallet(Player.citizenid, data.coin) as CryptoWallet;
   const success = await wallet.buy(data.amount);
   cryptoLogger.silly(`Callback: buy: success: ${success}`);
   return success;

@@ -1,6 +1,7 @@
-import { Inventory, Util } from '@dgx/server';
+import { Core, Inventory, Util } from '@dgx/server';
 import winston from 'winston';
 import { groupLogger } from '../logger';
+import { charModule } from 'helpers/core';
 
 // Manages the name that is used in the groups for the current player
 class NameManager extends Util.Singleton<NameManager>() {
@@ -12,13 +13,13 @@ class NameManager extends Util.Singleton<NameManager>() {
     this.players = new Map();
     this.logger = groupLogger.child({ module: 'NameManager' });
 
-    Util.onPlayerLoaded((playerData: PlayerData) => {
+    Core.onPlayerLoaded(playerData => {
       nameManager.updatePlayerName(playerData.citizenid);
     });
   }
 
   public async updatePlayerName(cid: number) {
-    const player = DGCore.Functions.GetPlayerByCitizenId(cid);
+    const player = charModule.getPlayerByCitizenId(cid);
     const hasVPN = await Inventory.doesInventoryHaveItems('player', String(cid), 'vpn'); // this version is more performant if you already have cid
 
     // If current name is already a custom generated and we about to update to another generated then just keep old.
@@ -27,11 +28,9 @@ class NameManager extends Util.Singleton<NameManager>() {
     const playerNameData = this.players.get(cid);
     if (playerNameData && playerNameData.isVPNName === hasVPN) return;
 
-    const name = hasVPN
-      ? Util.generateName()
-      : `${player.PlayerData.charinfo.firstname} ${player.PlayerData.charinfo.lastname}`;
-    this.logger.debug(`Update name for ${player.PlayerData.name}(${cid}) to ${name}`);
-    this.players.set(player.PlayerData.citizenid, { name, isVPNName: hasVPN });
+    const name = hasVPN ? Util.generateName() : `${player.charinfo.firstname} ${player.charinfo.lastname}`;
+    this.logger.debug(`Update name for ${player.name}(${cid}) to ${name}`);
+    this.players.set(player.citizenid, { name, isVPNName: hasVPN });
   }
 
   public getName(cid: number): string {
@@ -45,12 +44,8 @@ class NameManager extends Util.Singleton<NameManager>() {
 
   // Generate names for all players in server on resource start
   public generateAllPlayerNames = () => {
-    (
-      Object.values({
-        ...DGCore.Functions.GetQBPlayers(),
-      }) as Player[]
-    ).forEach((ply: Player) => {
-      this.updatePlayerName(ply.PlayerData.citizenid);
+    Object.values(charModule.getAllPlayers()).forEach(ply => {
+      this.updatePlayerName(ply.citizenid);
     });
   };
 }

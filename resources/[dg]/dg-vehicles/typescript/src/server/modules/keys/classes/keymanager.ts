@@ -4,6 +4,7 @@ import winston from 'winston';
 
 import vinManager from '../../identification/classes/vinmanager';
 import { keyLogger } from '../logger.keys';
+import { charModule } from 'helpers/core';
 
 class KeyManager extends Util.Singleton<KeyManager>() {
   /**
@@ -111,7 +112,7 @@ class KeyManager extends Util.Singleton<KeyManager>() {
     }
     this.logger.debug(`Removing all car keys for ${pVin}`);
     keys.forEach(cid => {
-      const plyId = DGCore.Functions.getPlyIdForCid(cid);
+      const plyId = charModule.getServerIdFromCitizenId(cid);
       if (!plyId) return;
       Events.emitNet('vehicles:keys:removeFromCache', plyId, pVin);
     });

@@ -1,4 +1,4 @@
-import { Events, Inventory, Peek, PolyZone, UI, Util } from '@dgx/client';
+import { Core, Events, Inventory, Peek, PolyZone, UI, Util } from '@dgx/client';
 import { cleanupJail, enterPrison, isInPrison, leavePrison, restoreSentence } from './service.prison';
 
 global.exports('isInPrison', isInPrison);
@@ -86,7 +86,7 @@ Events.onNet('police:prison:goToPrison', () => {
   enterPrison();
 });
 
-Util.onPlayerUnloaded(() => {
+Core.onPlayerUnloaded(() => {
   cleanupJail();
 });
 

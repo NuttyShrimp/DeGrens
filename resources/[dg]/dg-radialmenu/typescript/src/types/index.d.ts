@@ -10,7 +10,7 @@ declare namespace RadialMenu {
   }
 
   interface Context {
-    playerData: PlayerData;
+    playerData: Core.Characters.PlayerData;
     job: {
       name: string | null;
       rank: number | null;

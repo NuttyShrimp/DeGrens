@@ -8,6 +8,7 @@ import itemDataManager from 'classes/itemdatamanager';
 import itemManager from '../manager.items';
 import locationManager from 'modules/locations/manager.locations';
 import contextManager from 'classes/contextmanager';
+import { charModule } from 'services/core';
 
 export class Item {
   private readonly logger: winston.Logger;
@@ -52,7 +53,7 @@ export class Item {
         // This can happen when adding item to stash by script (mechanic crafting for exampel)
         if (this.inventory.type === 'player') {
           const cid = Inventory.splitId(this.inventory.id).identifier;
-          const plyId = DGCore.Functions.getPlyIdForCid(Number(cid));
+          const plyId = charModule.getServerIdFromCitizenId(Number(cid));
 
           if (plyId) {
             const coords = Util.getPlyCoords(plyId);
@@ -250,7 +251,7 @@ export class Item {
 
     if (!noItemBox && originalInvType === 'player') {
       const image = itemDataManager.get(this.name).image;
-      const plyId = DGCore.Functions.getPlyIdForCid(Number(originalInvIdentifier));
+      const plyId = charModule.getServerIdFromCitizenId(Number(originalInvIdentifier));
       if (plyId) {
         emitNet('inventory:addItemBox', plyId, 'Verwijderd', image);
       }

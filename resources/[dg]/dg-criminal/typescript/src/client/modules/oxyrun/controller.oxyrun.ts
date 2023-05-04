@@ -1,4 +1,4 @@
-import { BlipManager, Events, Peek, PolyZone, Sync, Util, Vehicles } from '@dgx/client';
+import { BlipManager, Core, Events, Peek, PolyZone, Sync, Util, Vehicles } from '@dgx/client';
 import {
   buildLocationZone,
   cleanupOxyrun,
@@ -37,7 +37,7 @@ Events.onNet('criminal:oxyrun:cleanup', cleanupOxyrun);
 PolyZone.onEnter('oxyrun_location', handleEnterLocation);
 PolyZone.onLeave('oxyrun_location', handleLeaveLocation);
 
-Util.onPlayerUnloaded(() => {
+Core.onPlayerUnloaded(() => {
   cleanupOxyrun();
 });
 

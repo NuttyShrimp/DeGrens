@@ -7,4 +7,8 @@ declare namespace Decorators {
   interface Export extends Base {
     async?: boolean;
   }
+  interface Event extends Base {
+    net?: boolean;
+    dgx?: boolean;
+  }
 }

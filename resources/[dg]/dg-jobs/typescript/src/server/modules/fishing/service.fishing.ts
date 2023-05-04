@@ -3,6 +3,7 @@ import jobManager from 'classes/jobManager';
 import { changeJob, disbandGroup, getGroupByCid, getGroupById, getGroupByServerId } from 'modules/groups/service';
 import { VEHICLE_FOR_JOBTYPE } from './constants.fishing';
 import { fishingLogger } from './logger.fishing';
+import { charModule } from 'helpers/core';
 
 let fishingConfig: Fishing.Config;
 const activeGroups = new Map<string, Fishing.Job>();
@@ -161,7 +162,7 @@ export const finishFishingJob = (plyId: number, netId: number) => {
   }
 
   for (const [cid, fishAmount] of active.fishPerCid) {
-    const plyId = DGCore.Functions.getPlyIdForCid(cid);
+    const plyId = charModule.getServerIdFromCitizenId(cid);
     if (!plyId) {
       fishingLogger.warn(`Could not pay ${cid} for fishing, player is not in server`);
       continue;

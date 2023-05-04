@@ -1,4 +1,4 @@
-import { Chat, Jobs, Notifications, Util } from '@dgx/server';
+import { Chat, Core, Jobs, Notifications, Util } from '@dgx/server';
 import stateManager from 'classes/StateManager';
 import { startPlayerPickingThread } from './services/grouppicker';
 import { loadConfig } from 'services/config';
@@ -22,8 +22,8 @@ setImmediate(async () => {
 });
 
 Chat.registerCommand('houserobbery:startJob', '', [], 'developer', (src: number) => {
-  const Player = DGCore.Functions.GetPlayer(src);
-  const cid = Player.PlayerData.citizenid;
+  const Player = Core.getPlayer(src);
+  const cid = Player.citizenid;
   const location = stateManager.getUnusedLocation();
   if (!location) return;
   stateManager.startJobForPly(cid, location);

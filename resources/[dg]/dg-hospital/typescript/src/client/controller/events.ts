@@ -1,4 +1,4 @@
-import { BlipManager, Events, Util } from '@dgx/client';
+import { BlipManager, Core, Events, Util } from '@dgx/client';
 import {
   doNormalRevive,
   checkDeathOnDamage,
@@ -37,13 +37,13 @@ Events.onNet('hospital:client:revive', async () => {
   setBleedAmount(0);
 });
 
-Util.onPlayerLoaded(playerData => {
+Core.onPlayerLoaded(playerData => {
   setPlayerState(playerData.metadata.downState, false);
   startNeedsThread();
   loadPedFlags();
 });
 
-Util.onPlayerUnloaded(() => {
+Core.onPlayerUnloaded(() => {
   setPlayerState('alive', false);
   setBleedAmount(0);
   cleanNeedsThread();

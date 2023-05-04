@@ -11,6 +11,7 @@ import {
   setEquippedWeapon,
 } from './service.weapons';
 import { UNARMED_HASH } from './constants.weapons';
+import { charModule } from 'services/core';
 
 // Give weapon to ped and set attachments/tint
 Events.onNet('weapons:setWeapon', async (src: number, itemId: string) => {
@@ -88,7 +89,7 @@ Inventory.onInventoryUpdate(
     if (!weaponConfig) return;
     if (weaponConfig.oneTimeUse) return;
 
-    const targetId = DGCore.Functions.getPlyIdForCid(Number(identifier));
+    const targetId = charModule.getServerIdFromCitizenId(Number(identifier));
     if (!targetId) return;
     Events.emitNet('weapons:client:removeWeapon', targetId, itemState.id);
   },

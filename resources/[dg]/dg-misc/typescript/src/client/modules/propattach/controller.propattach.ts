@@ -1,4 +1,4 @@
-import { BaseEvents, Events, Util } from '@dgx/client';
+import { BaseEvents, Core, Events, Util } from '@dgx/client';
 import {
   addProp,
   handlePlayerStateUpdate,
@@ -51,6 +51,6 @@ AddStateBagChangeHandler(
   }
 );
 
-Util.onPlayerUnloaded(() => {
+Core.onPlayerUnloaded(() => {
   resetProps();
 });

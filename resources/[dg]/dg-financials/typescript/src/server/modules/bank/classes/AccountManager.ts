@@ -8,6 +8,7 @@ import { createDefaultAccount } from '../helpers/accounts';
 import { bankLogger, sortAccounts } from '../utils';
 
 import { Account } from './Account';
+import { charModule } from 'helpers/core';
 
 @RPCRegister()
 class AccountManager extends Util.Singleton<AccountManager>() {
@@ -30,7 +31,7 @@ class AccountManager extends Util.Singleton<AccountManager>() {
     this.logger.info(`loaded ${this.accounts.length} accounts from database`);
     this.loaded = true;
 
-    DGCore.Functions.GetPlayers().forEach(ply => createDefaultAccount(ply)); // Load accounts for players
+    Object.keys(charModule.getAllPlayers()).forEach(ply => createDefaultAccount(Number(ply))); // Load accounts for players
     scheduleBankTaxes();
   }
 
@@ -258,7 +259,7 @@ class AccountManager extends Util.Singleton<AccountManager>() {
     }
 
     // Check if targetCid exists
-    const targetPlayer = await DGCore.Functions.GetOfflinePlayerByCitizenId(targetCid);
+    const targetPlayer = await charModule.getOfflinePlayer(targetCid);
     if (targetPlayer == undefined) {
       Notifications.add(src, 'Er is niemand met deze CID!', 'error');
       return;

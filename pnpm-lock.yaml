@@ -457,6 +457,33 @@ importers:
         specifier: workspace:*
         version: link:../../../../packages/tsconfig
 
+  resources/[dg]/dg-core/typescript:
+    devDependencies:
+      '@dgx/client':
+        specifier: workspace:*
+        version: link:../../ts-shared/typescript/src/client
+      '@dgx/server':
+        specifier: workspace:*
+        version: link:../../ts-shared/typescript/src/server
+      '@dgx/shared':
+        specifier: workspace:*
+        version: link:../../ts-shared/typescript/src/shared
+      dayjs:
+        specifier: '*'
+        version: 1.11.7
+      db:
+        specifier: workspace:*
+        version: link:../../../../packages/db
+      esbuild:
+        specifier: '*'
+        version: 0.15.18
+      logger:
+        specifier: workspace:*
+        version: link:../../../../packages/logger
+      tsconfig:
+        specifier: workspace:*
+        version: link:../../../../packages/tsconfig
+
   resources/[dg]/dg-criminal/typescript:
     devDependencies:
       '@dgx/client':
@@ -7715,7 +7742,6 @@ packages:
 
   /dayjs@1.11.7:
     resolution: {integrity: sha512-+Yw9U6YO5TQohxLcIkrXBeY73WP3ejHWVvx8XCk3gxvQDCTEmS48ZrSZCKciI7Bhl/uCMyxYtE9UqRILmFphkQ==}
-    dev: false
 
   /de-indent@1.0.2:
     resolution: {integrity: sha512-e/1zu3xH5MQryN2zdVaF0OrdNLUbvWxzMbi+iNA6Bky7l1RoP8a2fIbRocyHclXt/arDrrR6lL3TqFD9pMQTsg==}

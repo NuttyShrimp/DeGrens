@@ -8,6 +8,7 @@ import {
   sellOxyToBuyer,
   startOxyrunForPlayer,
 } from './service.oxyrun';
+import { charModule } from 'services/core';
 
 Events.onNet('criminal:oxyrun:start', startOxyrunForPlayer);
 RPC.register('criminal:oxyrun:registerVehicle', registerOxyrunVehicle);
@@ -30,7 +31,7 @@ Inventory.onInventoryUpdate(
 
     const cid = Number(identifier);
     if (isNaN(cid)) return;
-    const plyId = DGCore.Functions.getPlyIdForCid(cid);
+    const plyId = charModule.getServerIdFromCitizenId(cid);
     if (!plyId) return;
 
     // timeout to look nicer in trunk

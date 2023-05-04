@@ -178,7 +178,7 @@ export const stopKeyThread = () => {
 
 export const enterBennys = async (fromAdminMenu = false) => {
   if (fromAdminMenu) {
-    const cid = DGCore.Functions.GetPlayerData().citizenid;
+    const cid = LocalPlayer.state.citizenid;
     setCurrentBennys(`bennys_admin_${cid}`);
   }
 

@@ -1,11 +1,16 @@
+import { getPlayer } from '../helpers/core';
 import { Util as UtilShared } from '../../shared/classes/util';
 import { firstNames, lastNames } from '../data/names';
 
-import { Config, Events, RPC } from './index';
+import { Config, Core, Events, RPC } from './index';
 
 class Util extends UtilShared {
+  private charModule: Core.ServerModules.CharacterModule | undefined;
   constructor() {
     super();
+    setImmediate(() => {
+      this.charModule = Core.getModule('characters');
+    });
   }
 
   generateName = (): string => {
@@ -17,15 +22,15 @@ class Util extends UtilShared {
   Log(type: string, data: { [k: string]: any }, message: string, src?: number, isDevImportant = false) {
     try {
       if (src && src > 0) {
-        const ply = DGCore.Functions.GetPlayer(src);
+        const ply = getPlayer(src);
         if (ply) {
           data = {
             ...data,
             plyInfo: {
-              cid: ply.PlayerData.citizenid,
-              serverId: ply.PlayerData.source,
-              name: ply.PlayerData.name,
-              steamId: ply.PlayerData.steamid,
+              cid: ply.citizenid,
+              serverId: ply.serverId,
+              name: ply.name,
+              steamId: ply.steamId,
             },
           };
         } else {
@@ -84,8 +89,8 @@ class Util extends UtilShared {
    * @returns citizenid of player associated with playerid
    */
   getCID(src: number, ignoreUndefined = false): number {
-    const Player = DGCore.Functions.GetPlayer(src);
-    const cid = Player?.PlayerData?.citizenid;
+    const Player = getPlayer(src);
+    const cid = Player?.citizenid;
     if (!ignoreUndefined && cid === undefined)
       throw new Error('Tried to get CID of player that is not known to server');
     return cid;
@@ -96,8 +101,8 @@ class Util extends UtilShared {
   }
 
   async getCharName(cid: number) {
-    const player = await DGCore.Functions.GetOfflinePlayerByCitizenId(cid);
-    return `${player.PlayerData.charinfo.firstname} ${player.PlayerData.charinfo.lastname}`;
+    const player = await this.charModule?.getOfflinePlayer(cid);
+    return player ? `${player.charinfo.firstname} ${player.charinfo.lastname}` : '';
   }
 
   getClosestPlayer = (src: number, maxDistance = 2) => {
@@ -241,14 +246,6 @@ class Util extends UtilShared {
 
   setWaypoint = (plyId: number, coords: Vec2) => {
     emitNet('dgx:client:setWaypoint', plyId, coords);
-  };
-
-  public onPlayerLoaded = (handler: (playerData: PlayerData) => void) => {
-    on('DGCore:server:playerLoaded', handler);
-  };
-
-  public onPlayerUnloaded = (handler: (plyId: number, cid: number, playerData: PlayerData) => void) => {
-    on('DGCore:server:playerUnloaded', handler);
   };
 
   public isPlayerInWater = (plyId: number) => {

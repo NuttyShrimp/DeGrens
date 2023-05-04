@@ -1,4 +1,4 @@
-import { Auth, Events, Util } from '@dgx/server';
+import { Auth, Core, Events, Util } from '@dgx/server';
 import config from 'services/config';
 import {
   awaitLabsLoaded,
@@ -46,7 +46,7 @@ Events.onNet('labs:server:left', (plyId: number, labId: number) => {
   handlePlayerLeftLab(plyId, labId);
 });
 
-Util.onPlayerUnloaded(plyId => {
+Core.onPlayerUnloaded(plyId => {
   const labId = getLabIdPlayerIsIn(plyId);
   if (labId === undefined) return;
   handlePlayerLeftLab(plyId, labId);

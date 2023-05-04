@@ -1,4 +1,4 @@
-import { SQL } from '@dgx/server';
+import { Core, SQL } from '@dgx/server';
 import { getRoleListForPlayer, getRolesForPlayer } from 'helpers/roles';
 import { registerRoute } from 'sv_routes';
 
@@ -47,14 +47,16 @@ registerRoute('GET', '/info/players', async (req, res) => {
 });
 
 registerRoute('GET', '/info/active', (_, res) => {
-  const players = Object.values(DGCore.Functions.GetQBPlayers()) as Player[];
+  const characterModule = Core.getModule('characters');
+  const players = Object.values(characterModule.getAllPlayers());
   res(
     200,
-    players.map(p => ({ cid: p.PlayerData.citizenid, serverId: p.PlayerData.source }))
+    players.map(p => ({ cid: p.citizenid, serverId: p.serverId }))
   );
 });
 
 registerRoute('GET', '/info/:steamId/active', async (req, res) => {
+  const charModule = Core.getModule('characters');
   const steamId = String(req.params.steamId);
   if (!steamId || !steamId.startsWith('steam:')) {
     res(400, {
@@ -62,9 +64,9 @@ registerRoute('GET', '/info/:steamId/active', async (req, res) => {
     });
     return;
   }
-  const player: { PlayerData: PlayerData } = await global.exports['dg-core'].GetPlayer(steamId);
+  const player = charModule.getPlayerBySteamId(steamId);
   return res(200, {
-    cid: player?.PlayerData?.citizenid ?? 0,
+    cid: player?.citizenid ?? 0,
   });
 });
 

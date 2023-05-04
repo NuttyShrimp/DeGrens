@@ -1,7 +1,7 @@
-import { Events, UI, Util } from '@dgx/client';
+import { Core, Events, UI, Util } from '@dgx/client';
 import { openRadio, setFreq, stopRadioAnimation, toggleRadio } from './service.radio';
 
-Util.onPlayerUnloaded(() => {
+Core.onPlayerUnloaded(() => {
   toggleRadio(false);
 });
 

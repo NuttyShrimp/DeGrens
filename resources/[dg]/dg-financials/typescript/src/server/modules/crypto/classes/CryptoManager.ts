@@ -6,6 +6,7 @@ import winston from 'winston';
 import { cryptoLogger } from '../util';
 
 import { CryptoWallet } from './CryptoWallet';
+import { charModule } from 'helpers/core';
 
 class CryptoManager extends Util.Singleton<CryptoManager>() {
   private coinsLoaded: boolean;
@@ -27,8 +28,8 @@ class CryptoManager extends Util.Singleton<CryptoManager>() {
     this.coinsLoaded = false;
 
     await this.loadCoins();
-    Object.values(DGCore.Functions.GetQBPlayers()).forEach(p => {
-      this.loadPlayerWallet(p.PlayerData.citizenid);
+    Object.values(charModule.getAllPlayers()).forEach(p => {
+      this.loadPlayerWallet(p.citizenid);
     });
     this.logger.info('Initalisation succesful');
   }
@@ -111,7 +112,7 @@ class CryptoManager extends Util.Singleton<CryptoManager>() {
 
   public async createWallet(cid: number, coin: string): Promise<boolean> {
     await Util.awaitCondition(() => this.coinsLoaded);
-    const plyId = DGCore.Functions.getPlyIdForCid(cid);
+    const plyId = charModule.getPlayerByCitizenId(cid);
     if (!plyId) {
       this.logger.warn(`No player found for ${cid}`);
       return false;

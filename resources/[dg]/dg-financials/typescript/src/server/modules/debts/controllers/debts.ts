@@ -1,4 +1,4 @@
-import { RPC } from '@dgx/server';
+import { Core, RPC } from '@dgx/server';
 import dayjs from 'dayjs';
 import accountManager from 'modules/bank/classes/AccountManager';
 
@@ -37,11 +37,11 @@ global.asyncExports('removeDebt', async (debtId: number | number[]) => {
 
 RPC.register('financials:server:debts:get', async src => {
   debtLogger.silly(`getDebts | src: ${src}`);
-  const Player = DGCore.Functions.GetPlayer(src);
+  const Player = Core.getPlayer(src);
   if (!Player) {
     return [];
   }
-  const debts = await debtManager.getDebtsByCid(Player.PlayerData.citizenid);
+  const debts = await debtManager.getDebtsByCid(Player.citizenid);
   debtLogger.silly(`getDebts: ${debts.length}`);
   return debts.map(d => {
     const date = dayjs
@@ -59,7 +59,7 @@ RPC.register('financials:server:debts:get', async src => {
 
 RPC.register('financials:server:debts:pay', async (src, debtId: number, percentage = 100) => {
   debtLogger.silly(`payDebt: ${debtId} | perc: ${percentage}% | src: ${src}`);
-  const Player = DGCore.Functions.GetPlayer(src);
+  const Player = Core.getPlayer(src);
   if (!Player) {
     debtLogger.warn(`payDebt: Player not found | src: ${src}`);
     return false;

@@ -1,4 +1,4 @@
-import { Events, Sounds, RPC, Notifications, UI, Util, Jobs, Inventory, Police, Hospital } from '@dgx/server';
+import { Events, Sounds, RPC, Notifications, UI, Util, Jobs, Inventory, Police, Hospital, Core } from '@dgx/server';
 import { getPoliceConfig } from 'services/config';
 import { forceStopInteractions, isPlayerInActiveInteraction } from '../service.interactions';
 
@@ -143,7 +143,7 @@ Events.onNet('police:interactions:showCuffLogs', (src: number) => {
   UI.openContextMenu(src, menu);
 });
 
-Util.onPlayerUnloaded((plyId, cid) => {
+Core.onPlayerUnloaded((plyId, cid) => {
   if (!isPlayerCuffed(plyId)) return;
   Util.Log('police:interactions:droppedWithCuffs', { plyId, cid }, `Player ${cid} unloaded while cuffed`);
   cuffedPlayers.delete(plyId);

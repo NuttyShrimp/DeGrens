@@ -1,4 +1,4 @@
-import { Util } from '@dgx/server';
+import { Core, Util } from '@dgx/server';
 import { RPCEvent, RPCRegister } from '@dgx/server/decorators';
 import repository from 'services/repository';
 import { mainLogger } from 'sv_logger';
@@ -9,11 +9,13 @@ import { Gang } from './gang';
 class GangManager extends Util.Singleton<GangManager>() {
   private readonly logger: winston.Logger;
   private readonly gangs: Map<Gangs.Gang['name'], Gang>;
+  private readonly charModule: Core.ServerModules.CharacterModule;
 
   constructor() {
     super();
     this.logger = mainLogger.child({ module: 'GangManager' });
     this.gangs = new Map();
+    this.charModule = Core.getModule('characters');
   }
 
   public loadAllGangs = async () => {
@@ -237,7 +239,7 @@ class GangManager extends Util.Singleton<GangManager>() {
     if (!this.checkActionPerms(gang, plyCid)) return false;
     if (gang.isMember(targetCid)) return false;
 
-    const targetPlyId = DGCore.Functions.getPlyIdForCid(targetCid);
+    const targetPlyId = this.charModule.getServerIdFromCitizenId(targetCid);
     if (!targetPlyId) {
       this.logger.warn(`${plyCid} tried to add offline member with cid ${targetCid}`);
       return false;

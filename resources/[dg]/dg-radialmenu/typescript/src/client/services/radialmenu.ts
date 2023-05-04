@@ -3,6 +3,7 @@ import { MAXIMUM_ENTRIES_PER_MENU } from '../constants';
 
 // @ts-ignore
 import { entries as entryArray } from '../data/*.ts';
+import { charModule } from './core';
 
 const entries: Record<string, RadialMenu.Entry[]> = {};
 
@@ -31,7 +32,7 @@ export const handleRadialMenuClose = () => {
 
 const generateEntries = async () => {
   const ped = PlayerPedId();
-  const playerData = DGCore.Functions.GetPlayerData();
+  const playerData = charModule.getPlayerData();
 
   let vehicle: number | undefined = GetVehiclePedIsIn(ped, false);
   if (vehicle === 0) vehicle = undefined;

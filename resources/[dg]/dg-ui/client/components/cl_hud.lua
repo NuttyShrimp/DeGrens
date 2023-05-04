@@ -139,10 +139,10 @@ AddStateBagChangeHandler('radioChannel', ('player:%s'):format(GetPlayerServerId(
   end)
 
 DGX.UI.onLoad(function()
-  local plyData = DGCore.Functions.GetPlayerData()
-  if (plyData and plyData.metadata) then
-    state.values.hunger = plyData.metadata.needs.hunger
-    state.values.thirst = plyData.metadata.needs.thirst
+  local plyMetadata = charModule.getMetadata()
+  if (plyMetadata and plyMetadata) then
+    state.values.hunger = plyMetadata.needs.hunger
+    state.values.thirst = plyMetadata.needs.thirst
   end
   state.voice.channel = LocalPlayer.state.radioChannel
   state.voice.range = LocalPlayer.state.proximity.index or 2
@@ -230,7 +230,7 @@ startValueLoop = function()
   if threads.values then
     return
   end
-  
+
   CreateThread(function()
     threads.values = true
     while isLoggedIn do

@@ -1,4 +1,4 @@
-import { Admin, Events, Util } from '@dgx/server';
+import { Admin, Core, Events, Util } from '@dgx/server';
 import { DGXEvent, EventListener, Export, ExportRegister, LocalEvent } from '@dgx/server/decorators';
 import { handleCommandExecution } from 'helpers/commands';
 
@@ -12,8 +12,9 @@ class CommandManager extends Util.Singleton<CommandManager>() {
     super();
     this.commands = new Map();
 
-    Util.onPlayerLoaded(playerData => {
-      this.specificRefresh(playerData.source);
+    Core.onPlayerLoaded(playerData => {
+      if (!playerData.serverId) return;
+      this.specificRefresh(playerData.serverId);
     });
   }
 

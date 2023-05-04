@@ -1,4 +1,4 @@
-import { Admin, Auth, Events, RPC, Jobs, Config, Util } from '@dgx/server';
+import { Admin, Auth, Events, RPC, Jobs, Config, Util, Core } from '@dgx/server';
 import { handlePlayerLeftFishingGroup, syncFishingJobToClient } from 'modules/fishing/service.fishing';
 import { handlePlayerLeftSanitationGroup, syncSanitationJobToClient } from 'modules/sanitation/service.sanitation';
 import { handlePlayerLeftScrapyardGroup, syncScrapyardJobToClient } from 'modules/scrapyard/service.scrapyard';
@@ -49,16 +49,17 @@ Jobs.onJobUpdate(() => {
 });
 
 // #region Jobs
-Util.onPlayerLoaded(playerData => {
+Core.onPlayerLoaded(playerData => {
   const group = Jobs.getGroupByCid(playerData.citizenid);
   if (group) {
     // wait a few sec to ensure everything has properly loaded for the player like phone, inventory etc
     setTimeout(() => {
-      syncFishingJobToClient(group.id, playerData.source);
-      syncScrapyardJobToClient(group.id, playerData.source);
-      syncSanitationJobToClient(group.id, playerData.source);
-      syncPostOPJobToClient(group.id, playerData.source);
-      syncSanddiggingJobToClient(group.id, playerData.source);
+      if (!playerData.serverId) return;
+      syncFishingJobToClient(group.id, playerData.serverId);
+      syncScrapyardJobToClient(group.id, playerData.serverId);
+      syncSanitationJobToClient(group.id, playerData.serverId);
+      syncPostOPJobToClient(group.id, playerData.serverId);
+      syncSanddiggingJobToClient(group.id, playerData.serverId);
     }, 5000);
   }
 });
@@ -80,6 +81,6 @@ Jobs.onGroupLeave((plyId, _, groupId) => {
   finishHuntingJobForPlayer(plyId);
 });
 
-Util.onPlayerUnloaded(plyId => {
+Core.onPlayerUnloaded(plyId => {
   finishHuntingJobForPlayer(plyId);
 });

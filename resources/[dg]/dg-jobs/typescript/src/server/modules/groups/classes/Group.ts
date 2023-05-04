@@ -1,4 +1,4 @@
-import { Events, Notifications, Phone, Util } from '@dgx/server';
+import { Core, Events, Notifications, Phone, Util } from '@dgx/server';
 import jobManager from 'classes/jobManager';
 import signedInManager from 'classes/signedinmanager';
 import winston from 'winston';
@@ -7,6 +7,7 @@ import { groupLogger } from '../logger';
 
 import groupManager from './GroupManager';
 import nameManager from './NameManager';
+import { charModule } from 'helpers/core';
 
 export class Group {
   private readonly id: string;
@@ -119,7 +120,7 @@ export class Group {
   }
 
   private addOwnerAsMember = () => {
-    const ownerServerId = DGCore.Functions.getPlyIdForCid(this.owner);
+    const ownerServerId = charModule.getServerIdFromCitizenId(this.owner);
     if (!ownerServerId) return;
     const ownerMember: Groups.Member = {
       serverId: ownerServerId,
@@ -151,16 +152,16 @@ export class Group {
   };
 
   public addMember(cid: number) {
-    const plyId = DGCore.Functions.getPlyIdForCid(cid);
+    const plyId = charModule.getServerIdFromCitizenId(cid);
     if (!plyId) return;
 
     if (signedInManager.isPlayerBlockedFromJoiningGroup(plyId)) {
       Phone.showNotification(plyId, {
-        id: "group-join-error",
+        id: 'group-join-error',
         icon: 'jobcenter',
-        title: "Kan groep niet joinen",
-        description: "Je moet off-duty zijn om een groep te joinen"
-      })
+        title: 'Kan groep niet joinen',
+        description: 'Je moet off-duty zijn om een groep te joinen',
+      });
       return;
     }
 
@@ -252,7 +253,7 @@ export class Group {
       // TODO: add graylog
       return;
     }
-    const plyId = DGCore.Functions.getPlyIdForCid(cid);
+    const plyId = charModule.getServerIdFromCitizenId(cid);
     if (!plyId) return;
     const clientMembers: JobGroupMember[] = this.getMemberForClient();
     Events.emitNet('dg-jobs:client:groups:updateStore', plyId, {
@@ -318,7 +319,7 @@ export class Group {
   }
 
   public async requestToJoin(src: number) {
-    const player = DGCore.Functions.GetPlayer(src);
+    const player = Core.getPlayer(src);
     if (!player) {
       // TODO: log this event exception, add way so player get forced unloaded back into char screen
       return;
@@ -342,12 +343,12 @@ export class Group {
     const isAccepted = await Phone.notificationRequest(ownerServerId, {
       id: `jobcenter-groups-${this.requestId++}`,
       title: 'Jobcenter',
-      description: `Request to join - ${nameManager.getName(player.PlayerData.citizenid)}`,
+      description: `Request to join - ${nameManager.getName(player.citizenid)}`,
       icon: 'jobcenter',
       timer: 30,
     });
     if (!isAccepted) return;
-    this.addMember(player.PlayerData.citizenid);
+    this.addMember(player.citizenid);
     this.activeRequests = this.activeRequests.filter(r => r !== src);
   }
 

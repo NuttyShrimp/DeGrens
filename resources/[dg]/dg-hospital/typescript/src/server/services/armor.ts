@@ -1,4 +1,4 @@
-import { Inventory, Notifications, Taskbar, Util } from '@dgx/server';
+import { Core, Inventory, Notifications, Taskbar, Util } from '@dgx/server';
 
 Inventory.registerUseable(['armor', 'pd_armor'], async (plyId, itemState) => {
   const [canceled] = await Taskbar.create(plyId, 'vest', 'Aantrekken', 5000, {
@@ -23,22 +23,23 @@ Inventory.registerUseable(['armor', 'pd_armor'], async (plyId, itemState) => {
   setArmor(plyId, max);
 });
 
-Util.onPlayerLoaded(playerData => {
+Core.onPlayerLoaded(playerData => {
   setTimeout(() => {
     const armor = playerData?.metadata?.armor ?? 0;
-    setArmor(playerData.source, armor, true);
+    if (!playerData.serverId) return;
+    setArmor(playerData.serverId, armor, true);
   }, 5000);
 });
 
 export const setArmor = (plyId: number, armor: number, doNotSave = false) => {
-  const player = DGCore.Functions.GetPlayer(plyId);
+  const player = Core.getPlayer(plyId);
   if (!player) return;
 
   const ped = GetPlayerPed(String(plyId));
   SetPedArmour(ped, armor);
 
   if (!doNotSave) {
-    player.Functions.SetMetaData('armor', armor);
+    player.updateMetadata('armor', armor);
   }
 };
 global.exports('setArmor', setArmor);

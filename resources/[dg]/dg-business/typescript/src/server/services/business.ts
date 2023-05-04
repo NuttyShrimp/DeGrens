@@ -1,4 +1,4 @@
-import { Events, Financials, SQL, Util } from '@dgx/server';
+import { Core, Events, Financials, SQL, Util } from '@dgx/server';
 import { Business } from 'classes/Business';
 import { getBitmaskForPermissions, getConfig } from './config';
 import { mainLogger } from '../sv_logger';
@@ -145,10 +145,11 @@ export const createBusiness = async (name: string, label: string, owner: number,
 export const deleteBusiness = (id: number) => {
   const business = businesses.get(id);
   if (!business) return;
+  const charModule = Core.getModule('characters');
   business.getEmployees().forEach(e => {
-    let ply = DGCore.Functions.GetPlayerByCitizenId(e.citizenid);
-    if (!ply) return;
-    dispatchAllBusinessPermissionsToClientCache(ply.PlayerData.source);
+    let ply = charModule.getPlayerByCitizenId(e.citizenid);
+    if (!ply || !ply.serverId) return;
+    dispatchAllBusinessPermissionsToClientCache(ply.serverId);
   });
   businesses.delete(id);
 };
@@ -197,7 +198,8 @@ export const getBusinessEmployees = (id: number): Business.UI.Employee[] => {
  * @param name Business Name
  */
 export const dispatchBusinessPermissionsToClientCache = (cid: number, action: 'add' | 'remove', name: string) => {
-  const plyId = DGCore.Functions.getPlyIdForCid(cid);
+  const charModule = Core.getModule('characters');
+  const plyId = charModule.getServerIdFromCitizenId(cid);
   if (plyId == undefined) return;
   const business = getBusinessByName(name);
   if (!business) return;

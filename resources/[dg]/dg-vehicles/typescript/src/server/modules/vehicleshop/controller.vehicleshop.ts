@@ -1,4 +1,4 @@
-import { Auth, Config, Events, Notifications, RPC, UI, Util } from '@dgx/server';
+import { Auth, Config, Core, Events, Notifications, RPC, UI, Util } from '@dgx/server';
 import { getConfigByModel, getVehicleModels } from '../info/service.info';
 import shopManager from './classes/ShopManager';
 import { getVehicleShopConfig } from './services/config.vehicleshop';
@@ -12,7 +12,7 @@ Auth.onAuth(async plyId => {
   Events.emitNet('vehicles:shop:buildZone', plyId, shopZone, vehicleSpawnLocation);
 });
 
-Util.onPlayerUnloaded(plyId => {
+Core.onPlayerUnloaded(plyId => {
   if (!shopManager.playersInShop.has(plyId)) return;
   shopManager.setPlayerActive(plyId, false);
 });

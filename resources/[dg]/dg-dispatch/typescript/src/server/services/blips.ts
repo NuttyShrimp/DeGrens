@@ -1,4 +1,4 @@
-import { Events, Jobs } from '@dgx/server';
+import { Core, Events, Jobs } from '@dgx/server';
 
 let blipPlys: number[] = [];
 let disabledPlys: Set<number> = new Set();
@@ -15,14 +15,14 @@ export const syncBlips = () => {
     const job = Jobs.getCurrentJob(ply);
     if (!job) return;
 
-    const playerData = DGCore.Functions.GetPlayer(ply)?.PlayerData;
-    if (!playerData) return;
+    const player = Core.getPlayer(ply);
+    if (!player) return;
 
     const jobLabel = job === 'police' ? 'Agent' : 'Dokter';
-    const plyName = `${playerData.charinfo.lastname} ${playerData.charinfo.firstname.charAt(0)}.`;
+    const plyName = `${player.charinfo.lastname} ${player.charinfo.firstname.charAt(0)}.`;
     blipInfo[ply] = {
       job,
-      text: `${jobLabel} | [${playerData.metadata.callsign}] - ${plyName}`,
+      text: `${jobLabel} | [${player.metadata.callsign}] - ${plyName}`,
     };
   });
   blipPlys.forEach(ply => {

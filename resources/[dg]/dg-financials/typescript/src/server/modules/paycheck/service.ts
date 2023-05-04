@@ -2,6 +2,7 @@ import { Jobs, Notifications, SQL, Util } from '@dgx/server';
 import { getConfig } from 'helpers/config';
 import accountManager from 'modules/bank/classes/AccountManager';
 import { paycheckLogger } from './util';
+import { charModule } from 'helpers/core';
 
 const paycheckCache: Map<number, number> = new Map();
 
@@ -24,8 +25,8 @@ export const seedPlyInCache = async (cid: number) => {
 export const seedCache = async () => {
   paycheckCache.clear();
 
-  (Object.values(DGCore.Functions.GetQBPlayers()) as Player[]).forEach(ply => {
-    seedPlyInCache(ply.PlayerData.citizenid);
+  Object.values(charModule.getAllPlayers()).forEach(ply => {
+    seedPlyInCache(ply.citizenid);
   });
 };
 
@@ -35,7 +36,7 @@ export const addAmountToPaycheck = (cid: number, amount: number, comment: string
   paycheckCache.set(cid, plyTotalPaycheck);
   updateDBPaycheck(cid, plyTotalPaycheck);
 
-  const plyId = DGCore.Functions.getPlyIdForCid(cid);
+  const plyId = charModule.getServerIdFromCitizenId(cid);
   const plyName = plyId != undefined ? Util.getName(plyId) : 'Unknown';
   Util.Log(
     'financials:paycheck:add',
@@ -122,16 +123,17 @@ export const startPaycheckInterval = () => {
     const queryParams: number[] = [];
 
     // this only gets plys with active characters compared to Util.getAllPlayers
-    const players = Object.values(DGCore.Functions.GetQBPlayers()) as Player[];
+    const players = Object.values(charModule.getAllPlayers());
     if (players.length === 0) return;
 
     for (const player of players) {
-      const job = String(Jobs.getCurrentJob(player.PlayerData.source));
+      if (!player.serverId) return;
+      const job = String(Jobs.getCurrentJob(player.serverId));
       const amount = paycheckConfig[job] ?? 0;
-      const plyTotalPaycheck = (paycheckCache.get(player.PlayerData.citizenid) ?? 0) + amount;
+      const plyTotalPaycheck = (paycheckCache.get(player.citizenid) ?? 0) + amount;
 
-      paycheckCache.set(player.PlayerData.citizenid, plyTotalPaycheck);
-      queryParams.push(player.PlayerData.citizenid, plyTotalPaycheck);
+      paycheckCache.set(player.citizenid, plyTotalPaycheck);
+      queryParams.push(player.citizenid, plyTotalPaycheck);
     }
 
     SQL.query(

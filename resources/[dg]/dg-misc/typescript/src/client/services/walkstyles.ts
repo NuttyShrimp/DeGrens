@@ -1,4 +1,5 @@
 import { Events, Util } from '@dgx/client';
+import { charModule } from 'helpers/core';
 
 on('misc:walkstyles:set', (data: any) => {
   const walkstyle = data.walk;
@@ -20,9 +21,9 @@ global.exports('setWalkstyle', setWalkstyle);
 Util.onCharSpawn(isNewChar => {
   if (isNewChar) return;
 
-  const plyData = DGCore.Functions.GetPlayerData();
-  if (!plyData) return;
-  setWalkstyle(plyData.metadata.walkstyle, false);
+  const plyMetadata = charModule.getMetadata();
+  if (!plyMetadata?.walkStyle) return;
+  setWalkstyle(plyMetadata.walkStyle, false);
 });
 
 on('misc:expressions:set', async (data: { expression: string }) => {

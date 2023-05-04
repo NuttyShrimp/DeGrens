@@ -1,7 +1,6 @@
 fx_version "cerulean"
-games {"gta5"}
+games { "gta5" }
 
-shared_script '@dg-core/import.js'
 
 ui_page 'html/index.html'
 

@@ -6,18 +6,18 @@ local characterInfo = {}
 seedCharData = function()
   -- I suspect this can sometimes not correctly get items or job as those also get loaded from playerLoaded evt
   CreateThread(function()
-    local PlyData = DGCore.Functions.GetPlayerData()
+    local plyCharInfo = charModule.getCharinfo()
 
     local newCharacterInfo = {
-      cid = PlyData.citizenid,
-      firstname = PlyData.charinfo.firstname,
-      lastname = PlyData.charinfo.lastname,
+      cid = LocalPlayer.state.citizenid,
+      firstname = plyCharInfo.firstname,
+      lastname = plyCharInfo.lastname,
       job = DGX.RPC.execute('jobs:server:getCurrentJob'),
-      phone = PlyData.charinfo.phone,
+      phone = plyCharInfo.phone,
       server_id = GetPlayerServerId(PlayerId()),
       hasVPN = DGX.Inventory.doesPlayerHaveItems('vpn'),
       hasPhone = DGX.Inventory.doesPlayerHaveItems("phone"),
-      cash = PlyData.charinfo.cash,
+      cash = plyCharInfo.cash,
       isAdmin = DGX.RPC.execute('admin:permissions:hasPermission', 'support')
     }
 
@@ -29,7 +29,7 @@ seedCharData = function()
   end)
 end
 
-DGX.Util.onPlayerLoaded(function()
+DGX.Core.onPlayerLoaded(function()
   seedCharData()
 end)
 
