@@ -1,9 +1,7 @@
 {
   "type": "maze",
   "label": "Maze Bank",
-  "cams": [
-    0
-  ],
+  "cams": [0],
   "zone": {
     "points": [
       {

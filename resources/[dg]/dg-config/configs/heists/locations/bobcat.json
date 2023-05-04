@@ -1,9 +1,7 @@
 {
   "type": "bobcat",
   "label": "Bobcat Wapendepot",
-  "cams": [
-    0
-  ],
+  "cams": [0],
   "zone": {
     "points": [
       {

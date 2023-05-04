@@ -790,11 +790,7 @@
       "visibleReputationLimit": 500
     },
     "mechanic_bench": {
-      "items": [
-        "repair_kit",
-        "tire_repair_kit",
-        "weapon_petrolcan"
-      ],
+      "items": ["repair_kit", "tire_repair_kit", "weapon_petrolcan"],
       "reputation": "mechanic_crafting"
     }
   }

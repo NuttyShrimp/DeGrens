@@ -1,9 +1,7 @@
 {
   "type": "paleto",
   "label": "Paleto Bank",
-  "cams": [
-    9
-  ],
+  "cams": [9],
   "zone": {
     "points": [
       {

@@ -1,9 +1,7 @@
 {
   "type": "fleeca",
   "label": "Fleeca Bank Del Perro Blvd",
-  "cams": [
-    13
-  ],
+  "cams": [13],
   "zone": {
     "points": [
       {

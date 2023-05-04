@@ -14,12 +14,10 @@
     "options": {
       "heading": 0,
       "minZ": 25.21,
-      "maxZ": 29.30
+      "maxZ": 29.3
     }
   },
-  "vehicle_types": [
-    "land"
-  ],
+  "vehicle_types": ["land"],
   "parking_spots": [
     {
       "type": "land",

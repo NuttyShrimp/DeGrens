@@ -1,9 +1,7 @@
 {
   "type": "pacific",
   "label": "Pacific bank",
-  "cams": [
-    0
-  ],
+  "cams": [0],
   "zone": {
     "points": [
       {

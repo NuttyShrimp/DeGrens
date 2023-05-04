@@ -72,9 +72,7 @@ export const DebtList: FC<{}> = () => {
   const list = useDebtAppStore(s => s.list);
   return (
     <div>
-      {list.find(entry => entry.type === 'debt') && (
-        <Typography variant='subtitle1'>Debts</Typography>
-      )}
+      {list.find(entry => entry.type === 'debt') && <Typography variant='subtitle1'>Debts</Typography>}
       {list
         .filter(entry => entry.type === 'debt')
         .map(entry => (

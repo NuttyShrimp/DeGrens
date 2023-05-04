@@ -1,5 +1,5 @@
-import { startAllModules, stopAllModules } from "moduleController";
-import "./controllers/exports";
+import { startAllModules, stopAllModules } from 'moduleController';
+import './controllers/exports';
 
 setImmediate(() => {
   startAllModules();

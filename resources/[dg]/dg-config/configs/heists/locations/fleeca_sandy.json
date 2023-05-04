@@ -1,9 +1,7 @@
 {
   "type": "fleeca",
   "label": "Fleeca Bank Route 68",
-  "cams": [
-    15
-  ],
+  "cams": [15],
   "zone": {
     "points": [
       {

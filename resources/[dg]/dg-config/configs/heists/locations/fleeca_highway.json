@@ -1,9 +1,7 @@
 {
   "type": "fleeca",
   "label": "Fleeca Bank Great Ocean Hwy",
-  "cams": [
-    14
-  ],
+  "cams": [14],
   "zone": {
     "points": [
       {

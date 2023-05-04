@@ -1,10 +1,5 @@
 {
-  "attachmentItems": [
-    "luxuryfinish",
-    "smg_extendedclip",
-    "pistol_suppressor",
-    "pistol_flashlight"
-  ],
+  "attachmentItems": ["luxuryfinish", "smg_extendedclip", "pistol_suppressor", "pistol_flashlight"],
   "ammo": {
     "pistol_ammo": {
       "ammoType": "AMMO_PISTOL",

@@ -1,9 +1,7 @@
 {
   "type": "fleeca",
   "label": "Fleeca Bank Rockford Plaza",
-  "cams": [
-    12
-  ],
+  "cams": [12],
   "zone": {
     "points": [
       {
