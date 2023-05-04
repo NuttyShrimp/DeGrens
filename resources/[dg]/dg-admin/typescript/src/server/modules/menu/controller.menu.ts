@@ -1,4 +1,4 @@
-import { Events, Financials, Inventory, RPC, SQL, Util, Weather } from '@dgx/server';
+import { Core, Events, Financials, Inventory, RPC, SQL, Util, Weather } from '@dgx/server';
 import { getUICommands } from 'modules/commands/service.commands';
 import { getPointsForSteamId } from 'modules/penaltyPoints/service.penaltyPoints';
 
@@ -138,14 +138,15 @@ Events.onNet('admin:bind:check', (src, binds: Record<Binds.bindNames, string | n
 });
 
 RPC.register('admin:menu:getPlayers', async () => {
-  return Promise.all(Object.values(DGCore.Functions.GetQBPlayers()).map<Promise<UI.Player>>(async (ply: Player) => ({
-    name: ply.PlayerData.name,
-    cid: ply.PlayerData.citizenid,
-    serverId: ply.PlayerData.source,
-    steamId: ply.PlayerData.steamid,
-    firstName: ply.PlayerData.charinfo.firstname,
-    lastName: ply.PlayerData.charinfo.lastname,
-    points: getPointsForSteamId(ply.PlayerData.steamid),
+  const characters = Core.getModule("characters");
+  return Promise.all(Object.values(characters.getAllPlayers()).map<Promise<UI.Player>>(async ply => ({
+    name: ply.name,
+    cid: ply.citizenid,
+    serverId: ply.serverId!,
+    steamId: ply.steamId,
+    firstName: ply.charinfo.firstname,
+    lastName: ply.charinfo.lastname,
+    points: getPointsForSteamId(ply.steamId),
   })));
 });
 

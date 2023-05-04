@@ -1,4 +1,4 @@
-import { Business, Events, Financials, Inventory, Notifications, Phone, TaxIds, UI, Util } from '@dgx/server';
+import { Business, Core, Events, Financials, Inventory, Notifications, Phone, TaxIds, UI, Util } from '@dgx/server';
 import config from 'services/config';
 import { mainLogger } from 'sv_logger';
 import winston from 'winston';
@@ -716,7 +716,7 @@ export class Restaurant {
         disabled: true,
       },
       ...[...this.signedInPlayers].map(plyId => {
-        const charInfo = DGCore.Functions.GetPlayer(plyId)?.PlayerData?.charinfo;
+        const charInfo = Core.getPlayer(plyId)?.charinfo;
         const plyName = `${charInfo ? `${charInfo.firstname} ${charInfo.lastname}` : 'Offline'} | ${plyId}`;
 
         return {

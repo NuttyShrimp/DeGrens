@@ -1,4 +1,4 @@
-import { Util, Events, Inventory, Notifications, TaxIds } from '@dgx/server';
+import { Util, Events, Inventory, Notifications, TaxIds, Core } from '@dgx/server';
 import { isPlyInLoc } from '../bank/helpers/location';
 import { addAmountToPaycheck, givePaycheck, seedCache, seedPlyInCache } from './service';
 import accountManager from 'modules/bank/classes/AccountManager';
@@ -16,7 +16,7 @@ RegisterCommand(
   true
 );
 
-Util.onPlayerLoaded(playerData => {
+Core.onPlayerLoaded(playerData => {
   seedPlyInCache(playerData.citizenid);
 });
 

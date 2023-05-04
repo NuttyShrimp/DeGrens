@@ -1,4 +1,4 @@
-import { Financials, Phone, SQL, Util } from '@dgx/server';
+import { Core, Financials, Phone, SQL, Util } from '@dgx/server';
 import { dispatchBusinessPermissionsToClientCache } from 'services/business';
 import { getBitmaskForPermissions, getPermissions, permissionsFromBitmask } from 'services/config';
 import { mainLogger } from 'sv_logger';
@@ -8,6 +8,7 @@ export class Business {
   private info: Business.Info;
   private roles: Business.Role[];
   private employees: Business.Employee[];
+  private charModule: Core.ServerModules.CharacterModule;
   logger: winston.Logger;
 
   constructor(pInfo: Business.Info) {
@@ -16,6 +17,7 @@ export class Business {
     this.employees = [];
     this.loadBusinessInfo();
     this.logger = mainLogger.child({ module: pInfo.label });
+    this.charModule = Core.getModule('characters');
   }
 
   private getOwnerCid = () => {
@@ -172,7 +174,7 @@ export class Business {
       throw new Error('Missing permissions');
     }
     if (this.employees.find(e => e.citizenid === targetCID)) throw new Error('Already hired');
-    const target = await DGCore.Functions.GetOfflinePlayerByCitizenId(targetCID);
+    const target = await this.charModule.getOfflinePlayer(targetCID);
     if (!target) throw new Error('Invalid CID');
     const roleId = this.roles.find(r => r.name === roleName)?.id;
     if (!roleId) throw new Error('Invalid role');
@@ -182,7 +184,7 @@ export class Business {
       [targetCID, roleId, this.info.id]
     );
     if (!employeeId) throw new Error('Failed to save');
-    const employeeName = `${target.PlayerData.charinfo.firstname} ${target.PlayerData.charinfo.lastname}`;
+    const employeeName = `${target.charinfo.firstname} ${target.charinfo.lastname}`;
     this.setEmployees([
       ...this.employees,
       {
@@ -250,8 +252,7 @@ export class Business {
           targetCID,
           permissions,
         },
-        `${Util.getName(src)} tried to update the bank access for ${targetCID} for ${
-          this.info.label
+        `${Util.getName(src)} tried to update the bank access for ${targetCID} for ${this.info.label
         } but doesn't have the right permission`,
         src
       );
@@ -285,8 +286,7 @@ export class Business {
         {
           targetCID,
         },
-        `${Util.getName(src)} tried to assign ${roleName} to ${targetCID} for ${
-          this.info.label
+        `${Util.getName(src)} tried to assign ${roleName} to ${targetCID} for ${this.info.label
         } but doesn't have the right permission`,
         src
       );
@@ -334,8 +334,7 @@ export class Business {
           permissions,
           name,
         },
-        `${Util.getName(src)} tried to create a new business role for ${
-          this.info.label
+        `${Util.getName(src)} tried to create a new business role for ${this.info.label
         } but doesn't have the right permission`,
         src
       );
@@ -390,8 +389,7 @@ export class Business {
           permissions,
           name,
         },
-        `${Util.getName(src)} tried to update a business role for ${
-          this.info.label
+        `${Util.getName(src)} tried to update a business role for ${this.info.label
         } but doesn't have the right permission`,
         src
       );
@@ -451,8 +449,7 @@ export class Business {
           permissions: getPermissions(),
           name,
         },
-        `${Util.getName(src)} tried to delete a business role for ${
-          this.info.label
+        `${Util.getName(src)} tried to delete a business role for ${this.info.label
         } but doesn't have the right permission`,
         src
       );
@@ -526,8 +523,7 @@ export class Business {
           price,
           comment,
         },
-        `${Util.getName(src)} tried pay ${targetCID} (Extern) from ${
-          this.info.label
+        `${Util.getName(src)} tried pay ${targetCID} (Extern) from ${this.info.label
         } but doesn't have the right permission`,
         src
       );
@@ -594,8 +590,7 @@ export class Business {
           price,
           comment,
         },
-        `${Util.getName(src)} requested charge to ${targetCID} as extern for ${price} to ${
-          this.info.label
+        `${Util.getName(src)} requested charge to ${targetCID} as extern for ${price} to ${this.info.label
         }'s bank account was rejected`,
         src
       );
@@ -628,19 +623,19 @@ export class Business {
       src,
       success
         ? {
-            id: `chargeExtern-${this.info.id}-${src}-${targetCID}-${price}-${Date.now()}`,
-            app: 'business',
-            title: 'Betaalverzoek geaccepteerd',
-            description: `${targetCID} heeft €${price} betaald`,
-            icon: 'business',
-          }
+          id: `chargeExtern-${this.info.id}-${src}-${targetCID}-${price}-${Date.now()}`,
+          app: 'business',
+          title: 'Betaalverzoek geaccepteerd',
+          description: `${targetCID} heeft €${price} betaald`,
+          icon: 'business',
+        }
         : {
-            id: `chargeExtern-${this.info.id}-${src}-${targetCID}-${price}-${Date.now()}`,
-            app: 'business',
-            title: 'Betaalverzoek afkeured',
-            description: `${targetCID} - €${price}`,
-            icon: 'business',
-          }
+          id: `chargeExtern-${this.info.id}-${src}-${targetCID}-${price}-${Date.now()}`,
+          app: 'business',
+          title: 'Betaalverzoek afkeured',
+          description: `${targetCID} - €${price}`,
+          icon: 'business',
+        }
     );
   }
 
@@ -654,8 +649,7 @@ export class Business {
           price,
           comment,
         },
-        `${Util.getName(src)} tried charge ${targetCID} (Extern) for ${
-          this.info.label
+        `${Util.getName(src)} tried charge ${targetCID} (Extern) for ${this.info.label
         } but doesn't have the right permission`,
         src
       );
@@ -663,7 +657,7 @@ export class Business {
     }
     targetCID = Number(targetCID);
 
-    const targetServerId = DGCore.Functions.getPlyIdForCid(targetCID);
+    const targetServerId = this.charModule.getServerIdFromCitizenId(targetCID);
     if (!targetServerId) throw new Error(`${targetCID} is an invalid CID`);
 
     this.chargePhoneHelper(src, targetServerId, targetCID, price, comment);

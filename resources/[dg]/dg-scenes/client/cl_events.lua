@@ -1,9 +1,7 @@
 AddEventHandler('onResourceStart', function(resourceName)
     if resourceName ~= GetCurrentResourceName() then return end
 
-    DGCore.Functions.TriggerCallback('dg-scenes:server:GetScenes', function(scenes)
-        allScenes = scenes
-    end)
+    allScenes = DGX.RPC.execute('dg-scenes:server:GetAllScenes')
 end)
 
 RegisterNetEvent('dg-scenes:client:UpdateAllScenes', function(scenes)

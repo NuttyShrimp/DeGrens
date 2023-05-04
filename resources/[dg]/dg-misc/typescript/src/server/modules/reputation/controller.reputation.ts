@@ -1,11 +1,10 @@
-import { Util } from '@dgx/server';
+import { Core } from '@dgx/server';
 import { getReputation, loadPlayerReputation, setReputation, unloadPlayerReputation } from './service.reputation';
 
-Util.onPlayerLoaded(playerData => {
+Core.onPlayerLoaded(playerData => {
   loadPlayerReputation(playerData.citizenid);
 });
-
-Util.onPlayerUnloaded((_, cid) => {
+Core.onPlayerUnloaded((_, cid) => {
   unloadPlayerReputation(cid);
 });
 

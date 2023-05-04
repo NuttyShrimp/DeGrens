@@ -4,7 +4,6 @@ games { "gta5" }
 description "DeGrens Lib"
 
 shared_script {
-  '@dg-core/import.lua',
   '@ts-shared/shared/lib.lua',
   'shared/sh_*.lua',
 }

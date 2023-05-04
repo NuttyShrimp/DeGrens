@@ -1,4 +1,4 @@
-import { Auth, Events, Notifications, Sounds, Util, Vehicles } from '@dgx/server';
+import { Auth, Core, Events, Notifications, Sounds, Util, Vehicles } from '@dgx/server';
 import { getVinForNetId } from '../../helpers/vehicle';
 import { keyManager } from './classes/keymanager';
 import { handleDoorSuccess, handleFail, handleHotwireSuccess, startVehicleLockpick } from './service.keys';
@@ -26,9 +26,10 @@ Events.onNet('vehicles:keys:finishLockPick', (src, type: string, id: string, isS
   }
 });
 
-Util.onPlayerLoaded(playerData => {
-  const keys = keyManager.getAllPlayerKeys(playerData.source);
-  Events.emitNet('vehicles:keys:initCache', playerData.source, keys);
+Core.onPlayerLoaded(playerData => {
+  if (!playerData.serverId) return;
+  const keys = keyManager.getAllPlayerKeys(playerData.serverId);
+  Events.emitNet('vehicles:keys:initCache', playerData.serverId, keys);
 });
 
 global.exports('giveKeysToPlayer', (plyId: number, vehNetId: number) => {

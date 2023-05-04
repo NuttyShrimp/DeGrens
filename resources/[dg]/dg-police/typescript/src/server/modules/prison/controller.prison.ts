@@ -1,4 +1,4 @@
-import { Chat, Jobs, Notifications, Inventory, Events, Util, UI, Police } from '@dgx/server';
+import { Chat, Jobs, Notifications, Inventory, Events, Util, UI, Police, Core } from '@dgx/server';
 import { getPoliceConfig } from 'services/config';
 import {
   cleanupPlayerInJail,
@@ -66,12 +66,12 @@ Chat.registerCommand(
 );
 
 // We preload the prison stash inventory for each player to ensure there are no allowed items
-Util.onPlayerLoaded(playerData => {
+Core.onPlayerLoaded(playerData => {
   const stashId = `prison_items_${playerData.citizenid}`;
   Inventory.createScriptedStash(stashId, 40, []); // Same size as player inventory!
 });
 
-Util.onPlayerUnloaded(plyId => {
+Core.onPlayerUnloaded(plyId => {
   cleanupPlayerInJail(plyId);
 });
 

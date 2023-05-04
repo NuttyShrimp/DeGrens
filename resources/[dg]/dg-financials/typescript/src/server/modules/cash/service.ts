@@ -1,17 +1,17 @@
-import { Events, Util } from '@dgx/server';
+import { Core, Events, Util } from '@dgx/server';
 import { cashLogger } from './util';
 
 const cashCache: Map<number, number> = new Map();
 
-const updateMetadata = (ply: Player) => {
-  const cid = ply.PlayerData.citizenid;
+const updateMetadata = (ply: Core.Characters.Player) => {
+  const cid = ply.citizenid;
   const cash = cashCache.get(cid);
   if (cash === undefined) return;
-  ply.Functions.setCash(cash);
+  ply.updateMetadata('cash', cash);
 };
 
 export const getCash = (src: number | string): number => {
-  const playerData = DGCore.Functions.GetPlayer(src)?.PlayerData;
+  const playerData = Core.getPlayer(Number(src));
   if (!playerData) {
     cashLogger.error(`getCash: Player not found for ${src}`);
     return 0;
@@ -29,7 +29,7 @@ export const getCash = (src: number | string): number => {
 };
 
 export const removeCash = (src: number | string, amount: number, reason: string) => {
-  const Player = DGCore.Functions.GetPlayer(src);
+  const Player = Core.getPlayer(Number(src));
   if (!Player) {
     cashLogger.error(`removeCash: Player not found for ${src}`);
     return false;
@@ -39,7 +39,7 @@ export const removeCash = (src: number | string, amount: number, reason: string)
     cashLogger.error(`removeCash: No reason provided | src: ${src} | amount: ${amount}`);
     return false;
   }
-  const cid = Player.PlayerData.citizenid;
+  const cid = Player.citizenid;
   const cash = getCash(src);
   amount = Number(amount.toFixed(0));
   if (cash < amount) {
@@ -64,7 +64,7 @@ export const removeCash = (src: number | string, amount: number, reason: string)
 };
 
 export const addCash = (src: number | string, amount: number, reason: string) => {
-  const Player = DGCore.Functions.GetPlayer(src);
+  const Player = Core.getPlayer(Number(src));
   if (!Player) {
     cashLogger.error(`addCash: Player not found for ${src}`);
     return false;
@@ -74,7 +74,7 @@ export const addCash = (src: number | string, amount: number, reason: string) =>
     cashLogger.error(`addCash: No reason provided | src: ${src} | amount: ${amount}`);
     return false;
   }
-  const cid = Player.PlayerData.citizenid;
+  const cid = Player.citizenid;
   const cash = getCash(src);
   amount = Number(amount.toFixed(0));
   cashLogger.silly(`Player ${cid} has ${cash} cash, adding ${amount}`);

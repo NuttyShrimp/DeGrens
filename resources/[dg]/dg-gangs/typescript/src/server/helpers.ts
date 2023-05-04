@@ -1,21 +1,19 @@
-import { Events } from '@dgx/server';
+import { Core, Events } from '@dgx/server';
 import gangManager from 'classes/gangmanager';
 
 // Dispatch to client to keep cache of current gang
 export const dispatchCurrentGangToClient = (cid: number, newGang: string | null) => {
-  const plyId = DGCore.Functions.getPlyIdForCid(cid);
+  let charModule = Core.getModule('characters');
+  const plyId = charModule.getServerIdFromCitizenId(cid);
   if (!plyId) return;
   Events.emitNet('gangs:client:updateCurrentGang', plyId, newGang);
 };
 
 export const dispatchCurrentGangToAllClients = () => {
-  (
-    Object.values({
-      ...DGCore.Functions.GetQBPlayers(),
-    }) as Player[]
-  ).forEach((ply: Player) => {
-    const gang = gangManager.getPlayerGang(ply.PlayerData.citizenid);
+  let charModule = Core.getModule('characters');
+  Object.values(charModule.getAllPlayers()).forEach(ply => {
+    const gang = gangManager.getPlayerGang(ply.citizenid);
     if (!gang) return;
-    dispatchCurrentGangToClient(ply.PlayerData.citizenid, gang.name);
+    dispatchCurrentGangToClient(ply.citizenid, gang.name);
   });
 };

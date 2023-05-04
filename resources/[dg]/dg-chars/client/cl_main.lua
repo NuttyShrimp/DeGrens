@@ -12,14 +12,14 @@ setupCharMenu = function()
     print('DGX session started')
     local ped = PlayerPedId()
     setPlayerToWaitLoc()
-    DGCore.Functions.TriggerCallback('dg-chars:server:setupClient')
+    DGX.RPC.execute('dg-chars:server:setupClient')
     while not HasCollisionLoadedAroundEntity(ped) do
       Wait(10)
       ped = PlayerPedId()
       debug("Waiting for collision to load around ped...")
     end
     createPlayerSeats()
-    plyChars = DGCore.Functions.TriggerCallback('dg-chars:server:getChars')
+    plyChars = DGX.RPC.execute('dg-chars:server:getChars')
     spawnCharPeds()
     Cam.createCam(Config.Cam.coords, Config.Cam.rot, 60.0)
     while not nuiMounted do

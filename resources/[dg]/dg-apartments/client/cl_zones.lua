@@ -1,22 +1,22 @@
 Citizen.CreateThread(function()
-	for i,v in ipairs(Config.Locations) do
-		local zone = v.enter
-		zone.options.data = zone.options.data or {}
-		zone.options.data.id = v.name
-		DGX.PolyZone.addBoxZone("apartment", zone.center, zone.length, zone.width, zone.options)
+  for i, v in ipairs(Config.Locations) do
+    local zone = v.enter
+    zone.options.data = zone.options.data or {}
+    zone.options.data.id = v.name
+    DGX.PolyZone.addBoxZone("apartment", zone.center, zone.length, zone.width, zone.options)
 
-		locBlip = AddBlipForCoord(zone.center)
+    locBlip = AddBlipForCoord(zone.center)
 
-		SetBlipSprite (locBlip, 475)
-		SetBlipDisplay(locBlip, 4)
-		SetBlipScale  (locBlip, 0.7)
-		SetBlipAsShortRange(locBlip, true)
-		SetBlipColour(locBlip, 6)
+    SetBlipSprite(locBlip, 475)
+    SetBlipDisplay(locBlip, 4)
+    SetBlipScale(locBlip, 0.7)
+    SetBlipAsShortRange(locBlip, true)
+    SetBlipColour(locBlip, 6)
 
-		BeginTextCommandSetBlipName("STRING")
-		AddTextComponentSubstringPlayerName(("Appartement (%s)"):format(v.label))
-		EndTextCommandSetBlipName(locBlip)
-	end
+    BeginTextCommandSetBlipName("STRING")
+    AddTextComponentSubstringPlayerName(("Appartement (%s)"):format(v.label))
+    EndTextCommandSetBlipName(locBlip)
+  end
 end)
 
 RegisterNetEvent('dg-polyzone:enter')
@@ -31,31 +31,30 @@ end)
 
 RegisterNetEvent('dg-polyzone:exit')
 AddEventHandler('dg-polyzone:exit', function(name)
-	inZone = false
-	if (name == "apartment" ) then
-		exports['dg-ui']:hideInteraction()
-		exports["dg-ui"]:closeApplication('contextmenu')
+  inZone = false
+  if (name == "apartment") then
+    exports['dg-ui']:hideInteraction()
+    exports["dg-ui"]:closeApplication('contextmenu')
   end
 end)
 
 RegisterNetEvent('dg-lib:keyEvent')
 AddEventHandler('dg-lib:keyEvent', function(name, isDown)
-	if (not inZone or not isDown) then return end
-	if name == "GeneralUse" then
-		if (inZone == "apartment") then
-			DGCore.Functions.TriggerCallback('dg-apartments:server:getApartmentMenu', function(menu)
-				exports["dg-ui"]:openApplication('contextmenu',menu);
-			end)
-		end
-	end
+  if (not inZone or not isDown) then return end
+  if name == "GeneralUse" then
+    if (inZone == "apartment") then
+      local menu = DGX.RPC.execute('dg-apartments:server:getApartmentMenu')
+      exports["dg-ui"]:openApplication('contextmenu', menu);
+    end
+  end
 end)
 
 -- Interactions
 
 getInfoByType = function(type)
-	for i,v in ipairs(Config.Locations) do
-		if (v.name == type) then
-			return v
-		end
-	end
+  for i, v in ipairs(Config.Locations) do
+    if (v.name == type) then
+      return v
+    end
+  end
 end

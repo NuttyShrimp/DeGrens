@@ -1,4 +1,4 @@
-import { Auth, Config, Events, Util } from '@dgx/server';
+import { Auth, Config, Core, Events, Util } from '@dgx/server';
 import heistManager from 'classes/heistmanager';
 import config from 'services/config';
 
@@ -18,6 +18,6 @@ Auth.onAuth(async plyId => {
   Events.emitNet('heists:client:init', plyId, initData);
 });
 
-Util.onPlayerUnloaded(plyId => {
+Core.onPlayerUnloaded(plyId => {
   heistManager.leaveCurrentLocation(plyId);
 });

@@ -1,40 +1,36 @@
 RegisterUICallback('phone/contacts/getContacts', function(data, cb)
-	DGCore.Functions.TriggerCallback('dg-phone:server:getContacts', function(contacts)
-		if contacts.error then
-			cb({data = {}, meta={ok=false, message=contacts.message or 'Unknown error'}})
-			return
-		end
-		cb({data = contacts, meta={ok=true, message="done"}})
-	end)
+  local contacts = DGX.RPC.execute('dg-phone:server:getContacts')
+  if contacts.error then
+    cb({ data = {}, meta = { ok = false, message = contacts.message or 'Unknown error' } })
+    return
+  end
+  cb({ data = contacts, meta = { ok = true, message = "done" } })
 end)
 
 RegisterUICallback('phone/contacts/update', function(data, cb)
-	DGCore.Functions.TriggerCallback('dg-phone:server:updateContact', function()
-		cb({data = {}, meta={ok=true, message="done"}})
-	end, data)
+  DGX.RPC.execute('dg-phone:server:updateContact', data)
+  cb({ data = {}, meta = { ok = true, message = "done" } })
 end)
 
 RegisterUICallback('phone/contacts/add', function(data, cb)
-	DGCore.Functions.TriggerCallback('dg-phone:server:addContact', function()
-		cb({data = {}, meta={ok=true, message="done"}})
-	end, data)
+  DGX.RPC.execute('dg-phone:server:addContact', data)
+  cb({ data = {}, meta = { ok = true, message = "done" } })
 end)
 
 RegisterUICallback('phone/contacts/delete', function(data, cb)
-	DGCore.Functions.TriggerCallback('dg-phone:server:deleteContact', function()
-		cb({data = {}, meta={ok=true, message="done"}})
-	end, data)
+  DGX.RPC.execution('dg-phone:server:deleteContact', data)
+  cb({ data = {}, meta = { ok = true, message = "done" } })
 end)
 
 RegisterNetEvent('dg-phone:server:contacts:shareNumber:accept', function(data)
-	SendAppEvent('phone',{
-		appName = "contacts",
-		action = "openNewContactModal",
-		data = {
-			phone = data.phone
-		}
-	})
-	if getState('state') == 0 then
-		openPhone()
-	end
+  SendAppEvent('phone', {
+    appName = "contacts",
+    action = "openNewContactModal",
+    data = {
+      phone = data.phone
+    }
+  })
+  if getState('state') == 0 then
+    openPhone()
+  end
 end)

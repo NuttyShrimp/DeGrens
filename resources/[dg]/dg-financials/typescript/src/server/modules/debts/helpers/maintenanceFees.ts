@@ -20,12 +20,12 @@ dayjs.utc();
 let maintenanceSchedule: Dayjs;
 
 export const isMaintenanceFeesInWeekOrLess = () => {
-  return maintenanceSchedule.isBefore(dayjs().add(7, "d"));
-}
+  return maintenanceSchedule.isBefore(dayjs().add(7, 'd'));
+};
 
 export const getMaintenanceFeeSchedule = () => {
   return maintenanceSchedule;
-}
+};
 
 export const scheduleMaintenanceFees = async () => {
   const maintenceConfig = getConfig().debts.maintenance;
@@ -64,8 +64,8 @@ export const scheduleMaintenanceFees = async () => {
     const missedDays = now.diff(last_date, 'day');
     const missedLogs = Math.floor(missedDays / 21);
     const new_last = last_date.add(missedLogs, 'day');
-    SQL.query('INSERT INTO maintenance_fee_log (date) VALUES (FROM_UNIXTIME(?))', [new_last.unix()]);
-    registerMaintenanceFees();
+    await SQL.query('INSERT INTO maintenance_fee_log (date) VALUES (FROM_UNIXTIME(?))', [new_last.unix()]);
+    await registerMaintenanceFees();
     scheduleMaintenanceFees();
     return;
   }
@@ -85,7 +85,7 @@ export const calculateMaintenceFees = async (cids?: number[]) => {
 
   const fees: IFinancials.MaintenanceFee[] = await global.exports['dg-vehicles'].generateFees(cids);
 
-  return fees
+  return fees;
 };
 
 const registerMaintenanceFees = async () => {
@@ -93,16 +93,16 @@ const registerMaintenanceFees = async () => {
   const fees = await calculateMaintenceFees();
 
   // Check if fees for debts[].reason exist
-  const feeIds = await SQL.query("SELECT id FROM debts WHERE reason IN (?)", [fees.map(f => f.reason).join(",")]);
+  const feeIds = await SQL.query('SELECT id FROM debts WHERE reason IN (?)', [fees.map(f => f.reason).join(',')]);
   if (feeIds > 0) {
-    await debtManager.removeDebts(feeIds)
+    await debtManager.removeDebts(feeIds);
   }
 
   await SQL.query(`
     INSERT INTO maintenance_fee_log (date)
     VALUES (NOW());
   `);
-}
+};
 
 export const removeMaintenanceFees = async (src: number) => {
   const cid = Util.getCID(src);

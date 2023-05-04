@@ -3,6 +3,7 @@ import signedInManager from 'classes/signedinmanager';
 import { v4 } from 'uuid';
 
 import { Group } from './Group';
+import { charModule } from 'helpers/core';
 
 class GroupManager extends Util.Singleton<GroupManager>() {
   /**
@@ -29,11 +30,11 @@ class GroupManager extends Util.Singleton<GroupManager>() {
     const ownerCid = Util.getCID(src);
     if (signedInManager.isPlayerBlockedFromJoiningGroup(src)) {
       Phone.showNotification(src, {
-        id: "group-join-error",
+        id: 'group-join-error',
         icon: 'jobcenter',
-        title: "Kan groep niet aanmaken",
-        description: "Je moet off-duty zijn om een groep te maken"
-      })
+        title: 'Kan groep niet aanmaken',
+        description: 'Je moet off-duty zijn om een groep te maken',
+      });
       return;
     }
     const group = new Group(ownerCid, groupId);
@@ -67,7 +68,7 @@ class GroupManager extends Util.Singleton<GroupManager>() {
         members,
       },
       `${group.owner}'s job group was disbanded`,
-      DGCore.Functions.getPlyIdForCid(group.owner)
+      charModule.getServerIdFromCitizenId(group.owner)
     );
     this.groups.delete(groupId);
   }

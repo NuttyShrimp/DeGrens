@@ -1,4 +1,4 @@
-import { Events, Jobs, Config } from '@dgx/server';
+import { Events, Jobs, Config, Core } from '@dgx/server';
 
 let config: HUD.Config;
 
@@ -16,13 +16,13 @@ export const loadStress = (plyId: number, amount: number) => {
 };
 
 export const changeStress = (plyId: number, amount: number) => {
-  const player = DGCore.Functions.GetPlayer(plyId);
+  const player = Core.getPlayer(plyId);
   if (!player) return;
   if (Jobs.getCurrentJob(plyId) === 'police') {
     amount *= 0.6;
   }
-  const newStress = Math.max(0, Math.min(100, (player.PlayerData.metadata.stress ?? 0) + amount));
+  const newStress = Math.max(0, Math.min(100, (player.metadata.stress ?? 0) + amount));
   const roundedNewStress = Math.round(newStress * 10) / 10;
-  player.Functions.SetMetaData('stress', roundedNewStress);
+  player.updateMetadata('stress', roundedNewStress);
   Player(plyId).state.stressAmount = roundedNewStress;
 };

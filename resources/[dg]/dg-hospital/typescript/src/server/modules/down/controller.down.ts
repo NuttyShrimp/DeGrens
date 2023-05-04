@@ -1,4 +1,4 @@
-import { Events, Hospital, Inventory, Jobs, Police, RPC, Screenshot, Status, Util } from '@dgx/server';
+import { Core, Events, Hospital, Inventory, Jobs, Police, RPC, Screenshot, Status, Util } from '@dgx/server';
 import { getHospitalConfig } from 'services/config';
 import { downLogger } from './logger.down';
 import { sendToAvailableBed } from 'modules/beds/service.beds';
@@ -30,12 +30,10 @@ Events.onNet('hospital:down:playerDied', async (src: number, cause: string, kill
 });
 
 Events.onNet('hospital:down:changeState', (src: number, state: Hospital.State) => {
-  const player = DGCore.Functions.GetPlayer(src);
-  player.Functions.SetMetaData('downState', state);
+  const player = Core.getPlayer(src);
+  player.updateMetadata('downState', state);
 
-  downLogger.info(
-    `${player.PlayerData.charinfo.firstname} ${player.PlayerData.charinfo.lastname}'s down state has changed to ${state}`
-  );
+  downLogger.info(`${player.charinfo.firstname} ${player.charinfo.lastname}'s down state has changed to ${state}`);
   Util.Log(
     'hospital:down:stageChanged',
     {
@@ -81,12 +79,12 @@ Events.onNet('hospital:down:respawnToBed', async (src: number) => {
   }, bedTimeout * 0.75);
 });
 
-Util.onPlayerUnloaded((plyId, cid, playerData) => {
+Core.onPlayerUnloaded((plyId, cid, playerData) => {
   const downState = playerData.metadata.downState;
   if (downState === 'alive') return;
   Util.Log(
     'hospital:down:loggedOut',
     { cid, plyId, downState },
-    `${playerData.name}(${playerData.source}) has logged out while being ${downState}`
+    `${playerData.name}(${playerData.serverId}) has logged out while being ${downState}`
   );
 });

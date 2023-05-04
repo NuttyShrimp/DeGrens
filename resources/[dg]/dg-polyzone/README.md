@@ -16,4 +16,4 @@ onder dezelfde naam maar ze toch elke identificeren. Deze id zal er ook voor zor
 worden mocht u bv. het script herstarten
 
 ## Important
-When building polyzones in DGCore:client:playerLoaded event, make sure to provide routingBucket as the current player bucket will get used which is not always the default (0)!
+When building polyzones in core:characters:unloaded event, make sure to provide routingBucket as the current player bucket will get used which is not always the default (0)!

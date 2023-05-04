@@ -1,3 +1,5 @@
+charModule = exports['dg-core']:getModule('characters')
+
 CreateThread(function()
   TriggerEvent('__dg_ui:Ready')
 end)

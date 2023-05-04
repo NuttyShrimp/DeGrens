@@ -8,16 +8,16 @@ createPlayerSeats = function()
 
   RequestModel(chairHash)
   while not HasModelLoaded(chairHash) do
-  Citizen.Wait(0)
+    Citizen.Wait(0)
   end
   for k, v in ipairs(Config.SeatLoc) do
-  if (v.spawn == false) then
-  goto continue
-  end
-  local _chair = CreateObject(chairHash, v.coords.x, v.coords.y, v.coords.z, false, true, false)
-  SetEntityRotation(_chair, v.rot.x, v.rot.y, v.rot.z, 2, true)
-  entityCache.objects[#entityCache+1] = _chair
-  :: continue ::
+    if (v.spawn == false) then
+      goto continue
+    end
+    local _chair = CreateObject(chairHash, v.coords.x, v.coords.y, v.coords.z, false, true, false)
+    SetEntityRotation(_chair, v.rot.x, v.rot.y, v.rot.z, 2, true)
+    entityCache.objects[#entityCache + 1] = _chair
+    :: continue ::
   end
 end
 
@@ -48,7 +48,7 @@ setPedOnChair = function(ped, chairIdx)
 end
 
 spawnCharPeds = function()
-  local chars = DGCore.Shared.copyTbl(plyChars)
+  local chars = copyTbl(plyChars)
   if #chars ~= 5 then
     chars[#chars + 1] = {
       model = `mp_m_freemode_01`,
@@ -192,7 +192,8 @@ end
 
 CapturePed = function(plycoords, trgcoords)
   local ped = PlayerPedId()
-  local raycast = StartExpensiveSynchronousShapeTestLosProbe(plycoords.x, plycoords.y, plycoords.z, trgcoords.x, trgcoords.y, trgcoords.z, 8, ped, 0)
+  local raycast = StartExpensiveSynchronousShapeTestLosProbe(plycoords.x, plycoords.y, plycoords.z, trgcoords.x,
+  trgcoords.y, trgcoords.z, 8, ped, 0)
   local retval, hit, endCoords, surfaceNormal, entity = GetShapeTestResult(raycast)
   return hit, endCoords, entity
 end

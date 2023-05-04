@@ -11,6 +11,7 @@ import contextManager from 'classes/contextmanager';
 import { getContainerInfo } from 'modules/containers/service.containers';
 import objectsUtility from 'classes/objectsutility';
 import { Item } from 'modules/items/classes/item';
+import { charModule } from 'services/core';
 
 // conflicted with Inventory types namespace so I went with the good old Inv
 export class Inv {
@@ -125,7 +126,7 @@ export class Inv {
 
     if (this.type !== 'player') return;
 
-    const serverId = DGCore.Functions.getPlyIdForCid(Number(this.identifier));
+    const serverId = charModule.getServerIdFromCitizenId(Number(this.identifier));
     if (serverId) {
       emitNet('inventory:updateCache', serverId, action, itemState.name);
 

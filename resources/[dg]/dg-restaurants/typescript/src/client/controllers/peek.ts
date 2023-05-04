@@ -26,7 +26,7 @@ Peek.addZoneEntry('restaurant_management', {
       label: 'Locker',
       icon: 'fas fa-box',
       action: option => {
-        const cid = DGCore.Functions.GetPlayerData().citizenid;
+        const cid = LocalPlayer.state.citizenid;
         if (!cid) return;
         const stashId = `${option.data.id}_${cid}`;
         Inventory.openStash(stashId, 8);

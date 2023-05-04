@@ -1,4 +1,4 @@
-import { Config, Notifications, Events, Util, UI } from '@dgx/server';
+import { Config, Notifications, Events, Util, UI, Core } from '@dgx/server';
 import { mainLogger } from 'sv_logger';
 import whitelistManager from './whitelistmanager';
 import { DGXEvent, EventListener, Export, ExportRegister, RPCEvent, RPCRegister } from '@dgx/server/decorators';
@@ -21,13 +21,14 @@ class SignedInManager extends Util.Singleton<SignedInManager>() {
     this.signedIn = new Map();
     this.jobsToRestore = new Map();
 
-    Util.onPlayerLoaded(playerData => {
+    Core.onPlayerLoaded(playerData => {
       const jobName = this.jobsToRestore.get(playerData.citizenid);
       if (!jobName) return;
-      this.signIn(playerData.source, jobName);
+      if (!playerData.serverId) return;
+      this.signIn(playerData.serverId, jobName);
     });
 
-    Util.onPlayerUnloaded((plyId, cid) => {
+    Core.onPlayerUnloaded((plyId, cid) => {
       const plyJob = this.getPlayerJob(plyId);
       if (!plyJob) return;
       this.signOut(plyId, plyJob);

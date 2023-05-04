@@ -1,12 +1,12 @@
 import { getShellTypes } from 'services/config';
 import stateManager from '../classes/StateManager';
-import { Config, Util, Jobs, Auth, Events } from '@dgx/server';
+import { Config, Util, Jobs, Auth, Events, Core } from '@dgx/server';
 
 Jobs.onGroupLeave(plyId => {
   stateManager.cleanupPlayer(plyId);
 });
 
-Util.onPlayerUnloaded((plyId, cid) => {
+Core.onPlayerUnloaded((plyId, cid) => {
   stateManager.handlePlayerLeft(plyId, cid);
 });
 

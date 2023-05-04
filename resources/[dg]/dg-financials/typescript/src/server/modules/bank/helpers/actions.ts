@@ -1,6 +1,7 @@
 import { Notifications } from '@dgx/server';
 import accountManager from '../classes/AccountManager';
 import { bankLogger } from '../utils';
+import { charModule } from 'helpers/core';
 
 export const deposit = async (
   accountId: string,
@@ -10,7 +11,7 @@ export const deposit = async (
 ): Promise<boolean> => {
   const account = accountManager.getAccountById(accountId);
   if (!account) {
-    const plyId = DGCore.Functions.getPlyIdForCid(triggerCid);
+    const plyId = charModule.getServerIdFromCitizenId(triggerCid);
     if (plyId) {
       Notifications.add(plyId, `Geen account gevonden voor ${accountId}`, 'error');
     }
@@ -28,7 +29,7 @@ export const withdraw = async (
 ): Promise<boolean> => {
   const account = accountManager.getAccountById(accountId);
   if (!account) {
-    const plyId = DGCore.Functions.getPlyIdForCid(triggerCid);
+    const plyId = charModule.getServerIdFromCitizenId(triggerCid);
     if (plyId) {
       Notifications.add(plyId, `Geen account gevonden voor ${accountId}`, 'error');
     }
@@ -49,7 +50,7 @@ export const transfer = async (
 ): Promise<boolean> => {
   const account = accountManager.getAccountById(accountId);
   if (!account) {
-    const plyId = DGCore.Functions.getPlyIdForCid(triggerCid);
+    const plyId = charModule.getServerIdFromCitizenId(triggerCid);
     if (plyId) {
       Notifications.add(plyId, `Geen account gevonden voor ${accountId}`, 'error');
     }
@@ -68,7 +69,7 @@ export const purchase = async (
 ): Promise<boolean> => {
   const account = accountManager.getAccountById(accountId);
   if (!account) {
-    const plyId = DGCore.Functions.getPlyIdForCid(triggerCid);
+    const plyId = charModule.getServerIdFromCitizenId(triggerCid);
     if (plyId) {
       Notifications.add(plyId, `Geen account gevonden voor ${accountId}`, 'error');
     }
@@ -81,7 +82,7 @@ export const purchase = async (
 export const paycheck = async (accountId: string, triggerCid: number, amount: number): Promise<boolean> => {
   const account = accountManager.getAccountById(accountId);
   if (!account) {
-    const plyId = DGCore.Functions.getPlyIdForCid(triggerCid);
+    const plyId = charModule.getServerIdFromCitizenId(triggerCid);
     if (plyId) {
       Notifications.add(plyId, `Geen account gevonden voor ${accountId}`, 'error');
     }
@@ -101,7 +102,7 @@ export const mobile_transaction = async (
 ): Promise<boolean> => {
   const account = accountManager.getAccountById(accountId);
   if (!account) {
-    const plyId = DGCore.Functions.getPlyIdForCid(triggerCid);
+    const plyId = charModule.getServerIdFromCitizenId(triggerCid);
     if (plyId) {
       Notifications.add(plyId, `Geen account gevonden voor ${accountId}`, 'error');
     }

@@ -1,4 +1,4 @@
-import { Business, Config, Events, Inventory, Notifications, Util, UI } from '@dgx/server';
+import { Business, Config, Events, Inventory, Notifications, Util, UI, Core } from '@dgx/server';
 import { DGXEvent, EventListener, RPCEvent, RPCRegister } from '@dgx/server/decorators';
 import { getPlayerVehicleInfo, insertNewVehicle, setVehicleState } from 'db/repository';
 import { spawnOwnedVehicle } from 'helpers/vehicle';
@@ -11,6 +11,7 @@ import winston from 'winston';
 
 import { doVehicleShopTransaction, getVehicleTaxedPrice } from '../helpers.vehicleshop';
 import { getVehicleShopConfig } from '../services/config.vehicleshop';
+import { charModule } from 'helpers/core';
 
 @RPCRegister()
 @EventListener()
@@ -92,7 +93,7 @@ class ShopManager extends Util.Singleton<ShopManager>() {
   private getPlayerSelectorOptions = () => {
     const options: { label: string; value: string }[] = [];
     for (const plyId of this.playersInShop) {
-      const plyData = DGCore.Functions.GetPlayer(plyId)?.PlayerData;
+      const plyData = Core.getPlayer(plyId);
       if (!plyData) continue;
       options.push({
         label: `${plyData.charinfo.firstname} ${plyData.charinfo.lastname} | ${plyData.citizenid}`,
@@ -250,7 +251,7 @@ class ShopManager extends Util.Singleton<ShopManager>() {
     }
 
     if (employeeWhoSold) {
-      const employeeId = DGCore.Functions.getPlyIdForCid(employeeWhoSold);
+      const employeeId = charModule.getServerIdFromCitizenId(employeeWhoSold);
       if (employeeId) {
         const ticketPrice = modelData.price * ((getVehicleShopConfig()?.employeePercentage ?? 0) / 100);
         Inventory.addItemToPlayer(employeeId, 'sales_ticket', 1, {

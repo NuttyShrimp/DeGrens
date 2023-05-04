@@ -18,6 +18,7 @@ import minigames from './minigames';
 import sounds from './sounds';
 import doorlock from './doorlock';
 import particles from './particles';
+import core from './core';
 
 export const { Events, RPC, SQL, API, Auth } = events;
 export const { Util, Status, Reputations, SyncedObjects, PropRemover } = util;
@@ -39,3 +40,4 @@ export const { Minigames } = minigames;
 export const { Sounds } = sounds;
 export const { DoorLock } = doorlock;
 export const { Particles } = particles;
+export const { Core } = core;

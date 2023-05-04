@@ -1,17 +1,14 @@
 import { Util } from '@dgx/server';
 import { fetchReputationsForCid, insertDefaultForCid, updateReputationForCid } from './helpers.reputation';
 import { reputationLogger } from './logger.reputation';
+import { charModule } from 'helpers/core';
 
 // Key: cid, Value: (Key: type, Value: reputation)
 const playerReputations = new Map<number, Map<string, number>>();
 
 export const loadAllPlayerReputations = () => {
-  (
-    Object.values({
-      ...DGCore.Functions.GetQBPlayers(),
-    }) as Player[]
-  ).forEach((ply: Player) => {
-    loadPlayerReputation(ply.PlayerData.citizenid);
+  Object.values(charModule.getAllPlayers()).forEach(ply => {
+    loadPlayerReputation(ply.citizenid);
   });
 };
 

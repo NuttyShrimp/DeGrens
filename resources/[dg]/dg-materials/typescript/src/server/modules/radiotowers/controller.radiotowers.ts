@@ -1,4 +1,4 @@
-import { Events, Inventory, Notifications, Police, RPC, Sounds, Taskbar, Util } from '@dgx/server';
+import { Core, Events, Inventory, Notifications, Police, RPC, Sounds, Taskbar, Util } from '@dgx/server';
 import { getConfig } from 'services/config';
 import { mainLogger } from 'sv_logger';
 import {
@@ -143,7 +143,7 @@ Events.onNet('materials:radiotower:despawnPeds', (plyId, pedNetIds: number[]) =>
   }, 10 * 60 * 1000);
 });
 
-Util.onPlayerUnloaded(plyId => {
+Core.onPlayerUnloaded(plyId => {
   const towerId = getTowerPlyAt(plyId);
   if (!towerId) return;
   playerLeftTower(towerId, plyId);

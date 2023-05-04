@@ -1,4 +1,4 @@
-import { Events, Notifications, Status, Util, Hospital, Jobs, Police, Taskbar } from '@dgx/server';
+import { Events, Notifications, Status, Util, Hospital, Jobs, Police, Taskbar, Core } from '@dgx/server';
 import { getHospitalConfig } from 'services/config';
 import { mainLogger } from 'sv_logger';
 import { healClosestPlayer } from './service.job';
@@ -35,7 +35,7 @@ Events.onNet('hospital:job:checkin', async (src: number) => {
   Util.Log('hospital:job:checkin', { anyAmbulance }, `${Util.getName(src)} has checked in to hospital`, src);
 
   if (anyAmbulance) {
-    const charInfo = DGCore.Functions.GetPlayer(src)?.PlayerData?.charinfo;
+    const charInfo = Core.getPlayer(src)?.charinfo;
     Hospital.createDispatchCall({
       title: 'Incheckbalie',
       description: `${charInfo?.firstname ?? 'Unknown'} ${

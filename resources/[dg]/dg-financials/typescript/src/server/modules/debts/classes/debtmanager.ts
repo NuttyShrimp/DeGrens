@@ -1,4 +1,4 @@
-import { Events, Notifications, SQL, Util } from '@dgx/server';
+import { Core, Events, Notifications, SQL, Util } from '@dgx/server';
 import dayjs, { Dayjs } from 'dayjs';
 import { getConfig } from 'helpers/config';
 import accountManager from 'modules/bank/classes/AccountManager';
@@ -170,12 +170,12 @@ class DebtManager extends Util.Singleton<DebtManager>() {
   }
 
   public async payDebt(src: number, id: number, percentage = 100): Promise<boolean> {
-    const Player = DGCore.Functions.GetPlayer(src);
+    const Player = Core.getPlayer(src);
     if (!Player) {
       debtLogger.error(`payDebt called for unknown player ${src}`);
       return false;
     }
-    const cid = Player.PlayerData.citizenid;
+    const cid = Player.citizenid;
     const debt = this.getDebtById(id);
     if (!debt) {
       debtLogger.warn(`Failed to pay debt | id: ${id} | cid: ${cid}`);

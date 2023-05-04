@@ -1,4 +1,4 @@
-import { Config, Events, RPC, SQL, UI, Util } from '@dgx/server';
+import { Config, Core, Events, RPC, SQL, UI } from '@dgx/server';
 
 import { getIdentifierForPlayer } from '../../helpers/identifiers';
 
@@ -21,24 +21,31 @@ on('dg-config:moduleLoaded', (module: string, data: Penalty.Config) => {
   penaltyInfoManager.setInfo(data.classes, data.reasons);
 });
 
-Util.onPlayerLoaded(async data => {
-  const warns = await SQL.query<{ penaltyId: number, reason: string, points: number }[]>("SELECT * FROM admin_unannounced_warns as aaw LEFT JOIN penalties p ON p.id = aaw.penaltyid WHERE aaw.steamid = ?", [data.steamid]);
+Core.onPlayerLoaded(async data => {
+  const warns = await SQL.query<{ penaltyId: number; reason: string; points: number }[]>(
+    'SELECT * FROM admin_unannounced_warns as aaw LEFT JOIN penalties p ON p.id = aaw.penaltyid WHERE aaw.steamid = ?',
+    [data.steamId]
+  );
   if (warns.length < 1) return;
-  const missedWarns = warns.reduce((cur, w) => `${cur}${w.reason}(${w.points}) | `, "").replace(/ | $/, "")
-  UI.openInput(data.source, {
-    header: "Gemiste warns",
-    inputs: [{
-      label: "Volgende warns heb je ontvangen toen je offline was:",
-      name: "subheader",
-      type: "display"
-    }, {
-      label: missedWarns,
-      name: "warns",
-      type: "display",
-    }]
-  })
-  await SQL.query("DELETE FROM admin_unannounced_warns WHERE steamid = ?", [data.steamid]);
-})
+  const missedWarns = warns.reduce((cur, w) => `${cur}${w.reason}(${w.points}) | `, '').replace(/ | $/, '');
+  if (!data.serverId) return;
+  UI.openInput(data.serverId, {
+    header: 'Gemiste warns',
+    inputs: [
+      {
+        label: 'Volgende warns heb je ontvangen toen je offline was:',
+        name: 'subheader',
+        type: 'display',
+      },
+      {
+        label: missedWarns,
+        name: 'warns',
+        type: 'display',
+      },
+    ],
+  });
+  await SQL.query('DELETE FROM admin_unannounced_warns WHERE steamid = ?', [data.steamId]);
+});
 
 Events.onNet('admin:penalties:penalisePlayer', (src, data: Penalty.IncomingData) => {
   switch (data.type) {

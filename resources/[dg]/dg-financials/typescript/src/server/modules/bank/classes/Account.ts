@@ -10,6 +10,7 @@ import { ActionPermission, bankLogger, generateSplittedInfo, sortTransactions } 
 import accountManager from './AccountManager';
 
 import { PermissionsManager } from './PermissionsManager';
+import { charModule } from 'helpers/core';
 
 export class Account {
   private readonly account_id: string;
@@ -106,10 +107,10 @@ export class Account {
             .getMembers()
             .filter(m => m.cid !== accountOwnerCid)
             .map(async m => {
-              const player = await DGCore.Functions.GetOfflinePlayerByCitizenId(m.cid);
+              const player = await charModule.getOfflinePlayer(m.cid);
               let name = 'Unknown Person';
-              if (player?.PlayerData?.charinfo != undefined) {
-                name = `${player.PlayerData.charinfo?.firstname} ${player.PlayerData.charinfo.lastname}`;
+              if (player?.charinfo != undefined) {
+                name = `${player.charinfo?.firstname} ${player.charinfo.lastname}`;
               }
               return {
                 cid: m.cid,
@@ -232,7 +233,7 @@ export class Account {
       targetPhone?: string;
     } = {}
   ): Promise<boolean> {
-    const triggerPlayer = await DGCore.Functions.GetOfflinePlayerByCitizenId(triggerCid);
+    const triggerPlayer = await charModule.getOfflinePlayer(triggerCid);
     const infoStr = generateSplittedInfo({
       cid: triggerCid,
       account: this.account_id,
@@ -260,12 +261,30 @@ export class Account {
         this.logger.warn(`${type}: invalid player | ${infoStr}`);
         return false;
       }
-      const triggerPlyId = triggerPlayer.PlayerData.source;
+      const triggerPlyId = triggerPlayer.serverId;
+      if (!triggerPlyId) {
+        Util.Log(
+          'financials:invalidPlayer',
+          {
+            cid: triggerCid,
+            action: type,
+            account: this.account_id,
+            amount,
+            plyType: 'target',
+            ...extra,
+          },
+          `${triggerCid} tried to ${type} ${amount} to ${this.name} (${this.account_id}) but was not found in the core as a valid player`,
+          undefined,
+          true
+        );
+        this.logger.warn(`${type}: invalid player | ${infoStr}`);
+        return false;
+      }
 
       // Check if target is phonenumber
       if (extra.targetPhone) {
         const phoneNumber = Number(extra.targetPhone);
-        const targetPlayer = await DGCore.Functions.GetOfflinePlayerByPhone(phoneNumber);
+        const targetPlayer = await charModule.getOfflinePlayer(phoneNumber);
         if (!targetPlayer) {
           Util.Log(
             'financials:invalidPlayer',
@@ -286,7 +305,7 @@ export class Account {
           this.logger.warn(`${type}: invalid player | ${infoStr}`);
           return false;
         }
-        extra.acceptorCid = targetPlayer.PlayerData.citizenid;
+        extra.acceptorCid = targetPlayer.citizenid;
         const acceptorAccount = accountManager.getDefaultAccount(extra.acceptorCid);
         if (!acceptorAccount) {
           Util.Log(
@@ -313,7 +332,7 @@ export class Account {
 
       // Check if acceptorCid exists
       if (extra.acceptorCid && extra.acceptorCid !== triggerCid) {
-        const acceptorPlayer = await DGCore.Functions.GetOfflinePlayerByCitizenId(extra.acceptorCid);
+        const acceptorPlayer = await charModule.getOfflinePlayer(extra.acceptorCid);
         if (!acceptorPlayer) {
           Util.Log(
             'financials:invalidPlayer',
@@ -400,7 +419,7 @@ export class Account {
           e,
           ...extra,
         },
-        `${triggerPlayer.PlayerData.name} tried to ${type} ${amount} to ${this.name} (${this.account_id}) but the amount could not be parsed to a valid value`,
+        `${triggerPlayer.name} tried to ${type} ${amount} to ${this.name} (${this.account_id}) but the amount could not be parsed to a valid value`,
         undefined,
         true
       );
@@ -413,7 +432,7 @@ export class Account {
     const isValid = await this.actionValidation('deposit', triggerCid, amount);
     if (!isValid) return false;
 
-    const triggerPlyId = DGCore.Functions.getPlyIdForCid(triggerCid);
+    const triggerPlyId = charModule.getServerIdFromCitizenId(triggerCid);
     if (!triggerPlyId) return false;
 
     amount = parseInt(String(amount));
@@ -450,7 +469,7 @@ export class Account {
     const isValid = await this.actionValidation('withdraw', triggerCid, amount, { balanceDecrease: true });
     if (!isValid) return false;
 
-    const triggerPlyId = DGCore.Functions.getPlyIdForCid(triggerCid);
+    const triggerPlyId = charModule.getServerIdFromCitizenId(triggerCid);
     if (!triggerPlyId) return false;
 
     amount = parseInt(String(amount));
@@ -573,7 +592,7 @@ export class Account {
     const isValid = await this.actionValidation('purchase', triggerCid, amount, { balanceDecrease: true });
     if (!isValid) return false;
 
-    const triggerPlyId = DGCore.Functions.getPlyIdForCid(triggerCid);
+    const triggerPlyId = charModule.getServerIdFromCitizenId(triggerCid);
     if (!triggerPlyId) return false;
 
     amount = parseInt(String(amount));
@@ -606,7 +625,7 @@ export class Account {
     const isValid = await this.actionValidation('paycheck', triggerCid, amount);
     if (!isValid) return 0;
 
-    const triggerPlyId = DGCore.Functions.getPlyIdForCid(triggerCid);
+    const triggerPlyId = charModule.getServerIdFromCitizenId(triggerCid);
     if (!triggerPlyId) return 0;
 
     // Check if standard account
@@ -667,10 +686,10 @@ export class Account {
     });
     if (!isValid) return false;
 
-    const triggerPlyId = DGCore.Functions.getPlyIdForCid(triggerCid);
+    const triggerPlyId = charModule.getServerIdFromCitizenId(triggerCid);
     if (!triggerPlyId) return false;
 
-    const acceptorCid = (await DGCore.Functions.GetOfflinePlayerByPhone(Number(targetPhone)))?.PlayerData?.citizenid;
+    const acceptorCid = (await charModule.getPlayerByPhone(targetPhone))?.citizenid;
     if (!acceptorCid) return false;
     const targetAccount = accountManager.getDefaultAccount(acceptorCid);
     if (!targetAccount) return false;
@@ -787,7 +806,7 @@ export class Account {
     const originAccountName = accountManager.getAccountById(originAccountId)?.getName() ?? 'Unknown Account';
     const targetAccountName = accountManager.getAccountById(targetAccountId)?.getName() ?? 'Unknown Account';
 
-    const triggerPlayerData = (await DGCore.Functions.GetOfflinePlayerByCitizenId(trigger_cid))?.PlayerData;
+    const triggerPlayerData = await charModule.getOfflinePlayer(trigger_cid);
     const triggerName =
       triggerPlayerData !== undefined
         ? `${triggerPlayerData.charinfo.firstname} ${triggerPlayerData.charinfo.lastname}`
@@ -795,7 +814,7 @@ export class Account {
 
     let acceptorName: string | null = null;
     if (acceptor_cid !== undefined) {
-      const acceptorPlayerData = (await DGCore.Functions.GetOfflinePlayerByCitizenId(acceptor_cid))?.PlayerData;
+      const acceptorPlayerData = await charModule.getOfflinePlayer(acceptor_cid);
       acceptorName =
         acceptorPlayerData !== undefined
           ? `${acceptorPlayerData.charinfo.firstname} ${acceptorPlayerData.charinfo.lastname}`

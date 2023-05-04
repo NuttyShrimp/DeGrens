@@ -1,6 +1,7 @@
 export * from './blip';
 import baseevents from './baseevents';
 import blipmanager from './blipmanager';
+import core from './core';
 import events from './events';
 import interaction from './interaction';
 import inventory from './inventory';
@@ -36,3 +37,4 @@ export const { Sounds } = sounds;
 export const { Particles } = particles;
 export const { Npcs } = npcs;
 export const { Vehicles } = vehicles;
+export const { Core } = core;

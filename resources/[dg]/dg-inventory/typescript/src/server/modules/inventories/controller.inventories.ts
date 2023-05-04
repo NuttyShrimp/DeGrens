@@ -1,10 +1,11 @@
-import { Admin, RPC, Util, Inventory } from '@dgx/server';
+import { Admin, RPC, Util, Inventory, Core } from '@dgx/server';
 import contextManager from 'classes/contextmanager';
 import locationManager from 'modules/locations/manager.locations';
 import shopManager from 'modules/shops/shopmanager';
 import { getConfig } from 'services/config';
 import { validateIdBuildData } from './service.inventories';
 import inventoryManager from './manager.inventories';
+import { charModule } from 'services/core';
 
 RPC.register(
   'inventory:server:open',
@@ -91,20 +92,16 @@ RPC.register(
 );
 
 export const preloadActivePlayerInventories = () => {
-  (
-    Object.values({
-      ...DGCore.Functions.GetQBPlayers(),
-    }) as Player[]
-  ).forEach((ply: Player) => {
-    inventoryManager.get(Inventory.concatId('player', ply.PlayerData.citizenid));
+  Object.values(charModule.getAllPlayers()).forEach(ply => {
+    inventoryManager.get(Inventory.concatId('player', ply.citizenid));
   });
 };
 
-Util.onPlayerLoaded(playerData => {
+Core.onPlayerLoaded(playerData => {
   inventoryManager.get(Inventory.concatId('player', playerData.citizenid));
 });
 
-Util.onPlayerUnloaded((plyId, cid) => {
+Core.onPlayerUnloaded((plyId, cid) => {
   contextManager.playerClosed(plyId, true);
   inventoryManager.unload(Inventory.concatId('player', cid));
 });

@@ -1,4 +1,4 @@
-import { Events, Notifications, Util, Jobs, Inventory, Financials } from '@dgx/server';
+import { Events, Notifications, Util, Jobs, Inventory, Financials, Core } from '@dgx/server';
 import { getPoliceConfig } from 'services/config';
 
 Events.onNet('police:interactions:seizeCash', (src: number) => {
@@ -15,14 +15,14 @@ Events.onNet('police:interactions:seizeCash', (src: number) => {
   if (!success) return;
   Inventory.addItemToPlayer(src, 'seized_cash', 1, { amount: cash });
 
-  const targetPlayer = DGCore.Functions.GetPlayer(target);
+  const targetPlayer = Core.getPlayer(target);
   Util.Log(
     'police:interactions:seizedCash',
     {
-      cid: targetPlayer.PlayerData.citizenid,
-      serverId: targetPlayer.PlayerData.source,
-      name: targetPlayer.PlayerData.name,
-      steamId: targetPlayer.PlayerData.steamid,
+      cid: targetPlayer.citizenid,
+      serverId: targetPlayer.serverId,
+      name: targetPlayer.name,
+      steamId: targetPlayer.steamId
     },
     `${Util.getName(src)} has seized a players cash`,
     src
@@ -80,14 +80,14 @@ Events.onNet('police:interactions:search', async (src: number) => {
   Events.emitNet('police:interactions:searchPlayer', src, target);
   Notifications.add(target, 'Een agent is je aan het fouilleren', 'error');
 
-  const targetPlayer = DGCore.Functions.GetPlayer(target);
+  const targetPlayer = Core.getPlayer(target);
   Util.Log(
     'police:interactions:searchedPlayer',
     {
-      cid: targetPlayer.PlayerData.citizenid,
-      serverId: targetPlayer.PlayerData.source,
-      name: targetPlayer.PlayerData.name,
-      steamId: targetPlayer.PlayerData.steamid,
+      cid: targetPlayer.citizenid,
+      serverId: targetPlayer.serverId,
+      name: targetPlayer.name,
+      steamId: targetPlayer.steamId,
     },
     `${Util.getName(src)} has searched a player`,
     src

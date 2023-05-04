@@ -2,7 +2,6 @@ import { Vector3 as Vector3Class, Vector4 as Vector4Class } from '../../shared';
 import * as Classes from '../classes';
 
 declare global {
-  let DGCore: Client;
   let DGX: {
     UI: typeof Classes.UI;
     Vector3: typeof Vector3Class;
@@ -39,6 +38,7 @@ declare global {
     SyncedObjects: typeof Classes.SyncedObjects;
     Npcs: typeof Classes.Npcs;
     Vehicles: typeof Classes.Vehicles;
+    Core: typeof Classes.Core;
   };
   var asyncExports: any;
 }

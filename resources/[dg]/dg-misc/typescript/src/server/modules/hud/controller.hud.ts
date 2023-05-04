@@ -1,4 +1,4 @@
-import { Events, Util } from '@dgx/server';
+import { Core, Events, Util } from '@dgx/server';
 import { changeStress, loadStress } from './service.hud';
 
 Events.onNet('hud:server:changeStress', (plyId, amount: number) => {
@@ -9,6 +9,7 @@ global.exports('changeStress', (plyId: number, amount: number) => {
   changeStress(plyId, amount);
 });
 
-Util.onPlayerLoaded(playerData => {
-  loadStress(playerData.source, playerData.metadata?.stress ?? 0);
+Core.onPlayerLoaded(playerData => {
+  if (!playerData.serverId) return;
+  loadStress(playerData.serverId, playerData.metadata?.stress ?? 0);
 });
