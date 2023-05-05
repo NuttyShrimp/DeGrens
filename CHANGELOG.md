@@ -25,6 +25,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Lag tijdens het uitvoeren van oxyrun opgelost
 - Loading spinner in UI wordt nu treffelijk geplaats in zijn modals
+- Serverside local dgx events worden nu wel geregistreert
 
 ## [1.1.5]
 

@@ -20,10 +20,9 @@ class Distributor {
   private readonly rpcToResource: Map<string, string>;
 
   // Resource name to handler
-  // This acts the same as 5m exports but get cached at resource start instead of first call
-  private readonly netEventHandlers: Record<string, Function>;
-  private readonly localEventHandlers: Record<string, Function>;
-  private readonly rpcHandlers: Record<string, Function>;
+  private readonly netEventHandlers: Record<string, Events['netEventHandler']>;
+  private readonly localEventHandlers: Record<string, Events['localEventHandler']>;
+  private readonly rpcHandlers: Record<string, RPC['handleIncomingRequest']>;
 
   constructor() {
     this.netEventToResources = new Map();
@@ -34,6 +33,9 @@ class Distributor {
     this.localEventHandlers = {};
     this.rpcHandlers = {};
 
+    global.exports('isDistributorLoaded', () => this.isLoaded);
+
+    // Handlers for the actual events
     onNet('__dgx_event:ServerNetEvent', (data: DGXEvents.ServerNetEvtData) => {
       this.distributeNetEvent(source, data);
     });
@@ -44,23 +46,20 @@ class Distributor {
       this.distributeRPC(source, data);
     });
 
-    global.exports('registerNetEvent', this.registerNetEvent);
-    global.exports('registerLocalEvent', this.registerLocalEvent);
-    global.exports('registerRPC', this.registerRPC);
+    // Register event names to resource
+    on('__dgx:registerNetEvent', this.registerNetEvent);
+    on('__dgx:registerLocalEvent', this.registerLocalEvent);
+    on('__dgx:registerRPC', this.registerRPC);
 
-    global.exports('isDistributorLoaded', () => this.isLoaded);
-
-    // Get handlers when a resource starts using makeshift exports
-    on('onServerResourceStart', (resource: string) => {
-      emit(`__dgx:${resource}:getServerNetEventHandler`, (handler: Function) => {
-        this.netEventHandlers[resource] = handler;
-      });
-      emit(`__dgx:${resource}:getServerLocalEventHandler`, (handler: Function) => {
-        this.localEventHandlers[resource] = handler;
-      });
-      emit(`__dgx:${resource}:getRPCHandler`, (handler: Function) => {
-        this.rpcHandlers[resource] = handler;
-      });
+    // Get handlers for each resource
+    on('__dgx:setServerNetEventHandler', (resource: string, handler: Events['netEventHandler']) => {
+      this.netEventHandlers[resource] = handler;
+    });
+    on('__dgx:setServerLocalEventHandler', (resource: string, handler: Events['localEventHandler']) => {
+      this.localEventHandlers[resource] = handler;
+    });
+    on('__dgx:setRPCHandler', (resource: string, handler: RPC['handleIncomingRequest']) => {
+      this.rpcHandlers[resource] = handler;
     });
   }
 
@@ -92,7 +91,17 @@ class Distributor {
 
     const resource = this.rpcToResource.get(data.name);
     if (!resource) return;
-    this.rpcHandlers[resource](src, data);
+
+    try {
+      this.rpcHandlers[resource](src, data);
+    } catch (e: any) {
+      if (e.message === 'BUFFER_SHORTAGE') {
+        console.log('BUFFER_SHORTAGE error in RPC handler');
+        // TODO: Fix how to actually fix this shit
+      } else {
+        console.error(e);
+      }
+    }
   };
 
   private registerNetEvent = (evtName: string, resource: string) => {
@@ -116,14 +125,15 @@ class Distributor {
   };
 
   private registerRPC = (evtName: string, resource: string) => {
-    this.rpcToResource.set(evtName, resource);
-    if (this.rpcToResource.has(evtName)) {
+    if (!this.rpcToResource.has(evtName)) {
       onNet(evtName, () => {
         Admin.ACBan(source, 'emitted RPC event', {
           evtName,
         });
       });
     }
+
+    this.rpcToResource.set(evtName, resource);
   };
 
   public static awaitLoad = () => {
@@ -163,11 +173,11 @@ class Events {
   constructor() {
     this.resName = GetCurrentResourceName();
 
-    on(`__dgx:${this.resName}:getServerNetEventHandler`, (setCB: (func: typeof this.netEventHandler) => void) => {
-      setCB(this.netEventHandler);
-    });
-    on(`__dgx:${this.resName}:getServerLocalEventHandler`, (setCB: (func: typeof this.localEventHandler) => void) => {
-      setCB(this.localEventHandler);
+    // dispatch local handlers to dgx distributor
+    on('onServerResourceStart', (resName: string) => {
+      if (resName !== 'ts-shared' && resName !== this.resName) return;
+      emit('__dgx:setServerNetEventHandler', this.resName, this.netEventHandler);
+      emit('__dgx:setServerLocalEventHandler', this.resName, this.localEventHandler);
     });
 
     if (this.resName === 'ts-shared') {
@@ -360,7 +370,7 @@ class Events {
     this.on(evtName, handler);
 
     Distributor.awaitLoad().then(() => {
-      global.exports['ts-shared'].registerNetEvent(evtName, this.resName);
+      emit('__dgx:registerNetEvent', evtName, this.resName);
     });
   }
 
@@ -373,7 +383,7 @@ class Events {
     this.localEventHandlers.set(evtName, clientHandlers);
 
     Distributor.awaitLoad().then(() => {
-      global.exports['ts-shared'].registerNetEvent(evtName, this.resName);
+      emit('__dgx:registerLocalEvent', evtName, this.resName);
     });
   }
 
@@ -417,8 +427,10 @@ class RPC {
     this.token = '';
     this.generateToken();
 
-    on(`__dgx:${this.resourceName}:getRPCHandler`, (setCB: (func: typeof this.handleIncomingRequest) => void) => {
-      setCB(this.handleIncomingRequest);
+    // dispatch local handler to dgx distributor
+    on('onServerResourceStart', (resName: string) => {
+      if (resName !== 'ts-shared' && resName !== this.resourceName) return;
+      emit('__dgx:setRPCHandler', this.resourceName, this.handleIncomingRequest);
     });
 
     if (this.resourceName === 'ts-shared') {
@@ -625,7 +637,7 @@ class RPC {
     this.registeredHandlers.set(name, handler);
 
     Distributor.awaitLoad().then(() => {
-      global.exports['ts-shared'].registerRPC(name, this.resourceName);
+      emit('__dgx:registerRPC', name, this.resourceName);
     });
   }
 }
