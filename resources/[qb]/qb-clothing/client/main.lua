@@ -1770,17 +1770,9 @@ AddEventHandler('qb-clothing:client:loadOutfit', function(oData)
 
   -- Accessory
   if data["accessory"] ~= nil then
-    if charModule.getMetadata().tracker then
-      SetPedComponentVariation(ped, 7, 13, 0, 0)
-    else
-      SetPedComponentVariation(ped, 7, data["accessory"].item, data["accessory"].texture, 0)
-    end
+    SetPedComponentVariation(ped, 7, data["accessory"].item, data["accessory"].texture, 0)
   else
-    if charModule.getMetadata().tracker then
-      SetPedComponentVariation(ped, 7, 13, 0, 0)
-    else
-      SetPedComponentVariation(ped, 7, -1, 0, 2)
-    end
+    SetPedComponentVariation(ped, 7, -1, 0, 2)
   end
 
   -- Mask

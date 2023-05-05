@@ -14,10 +14,6 @@ declare namespace Core {
       armor: number;
       stress: number;
       callsign: string;
-      tracker: boolean;
-      licences: {
-        driver: boolean;
-      };
       inside: {
         house?: string;
         apartment: {
@@ -69,9 +65,9 @@ declare namespace Core {
       characters: CharacterModule;
     };
     type CharacterModule = {
-      getMetadata: () => Characters.Metadata;
-      getCharinfo: () => Characters.Charinfo;
-      getPlayerData: () => Characters.PlayerData;
+      getMetadata: () => Characters.Metadata | null;
+      getCharinfo: () => Characters.Charinfo | null;
+      getPlayerData: () => Characters.PlayerData | null;
     };
   }
 
@@ -82,20 +78,21 @@ declare namespace Core {
     };
     type UserModule = {
       getPlyIdentifiers: (src: number) => Record<string, string>;
-      getServerIdFromIdentifier: (key: string, identifier: string) => number;
+      getServerIdFromIdentifier: (key: string, identifier: string) => number | undefined;
       saveUser: (src: number) => Promise<void>;
     };
     type CharacterModule = {
-      selectCharacter: (src: number, cid: number) => Promise<void>;
+      selectCharacter: (src: number, cid: number) => Promise<boolean>;
       logout: (src: number) => Promise<void>;
       getAllPlayers: () => Record<number, Characters.Player>;
       loadPlayer: (src: number) => void;
-      getPlayer: (src: number) => Characters.Player;
-      getPlayerByCitizenId: (cid: number) => Characters.Player;
+      createCharacter: (src: number, charData: Omit<Core.Characters.Charinfo, 'cash' | 'phone'>) => Promise<boolean>;
+      getPlayer: (src: number) => Characters.Player | undefined;
+      getPlayerByCitizenId: (cid: number) => Characters.Player | undefined;
       getPlayerByPhone: (phone: string) => Characters.Player | undefined;
       getPlayerBySteamId: (steamId: string) => Characters.Player | undefined;
-      getOfflinePlayer: (cid: number) => Promise<Characters.Player>;
-      getServerIdFromCitizenId: (cid: number) => number;
+      getOfflinePlayer: (cid: number) => Promise<Characters.Player | undefined>;
+      getServerIdFromCitizenId: (cid: number) => number | undefined;
       getCitizenIdsFromSteamId: (steamid: string) => number[];
     };
   }

@@ -33,6 +33,7 @@ export const handleRadialMenuClose = () => {
 const generateEntries = async () => {
   const ped = PlayerPedId();
   const playerData = charModule.getPlayerData();
+  if (!playerData) return [];
 
   let vehicle: number | undefined = GetVehiclePedIsIn(ped, false);
   if (vehicle === 0) vehicle = undefined;

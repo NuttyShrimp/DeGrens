@@ -23,6 +23,7 @@ setImmediate(async () => {
 
 Chat.registerCommand('houserobbery:startJob', '', [], 'developer', (src: number) => {
   const Player = Core.getPlayer(src);
+  if (!Player) return;
   const cid = Player.citizenid;
   const location = stateManager.getUnusedLocation();
   if (!location) return;

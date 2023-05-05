@@ -18,6 +18,7 @@ const baseCommands: Server.Command[] = [
     handler: (src, _, args) => {
       const senderCoords = Util.ArrayToVector3(GetEntityCoords(GetPlayerPed(String(src))));
       const plyObj = Core.getPlayer(src);
+      if (!plyObj) return;
       const msg: Shared.Message = {
         prefix: `OOC (${plyObj.charinfo.firstname} ${plyObj.charinfo.lastname} | ${src}): `,
         message: args.join(' '),
@@ -54,6 +55,7 @@ const baseCommands: Server.Command[] = [
     permissionLevel: 'user',
     handler: (src, _, args) => {
       const plyObj = Core.getPlayer(src);
+      if (!plyObj) return;
       const msg: Shared.Message = {
         prefix: `OOCG (${plyObj.charinfo.firstname} ${plyObj.charinfo.lastname} | ${src}): `,
         message: args.join(' '),

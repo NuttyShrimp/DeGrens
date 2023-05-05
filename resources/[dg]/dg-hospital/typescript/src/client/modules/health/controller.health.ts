@@ -21,8 +21,10 @@ Events.onNet('hospital:health:useHealItem', (effect: Hospital.HealItem['effects'
 });
 
 onNet('dg-chars:client:finishSpawn', () => {
-  let charModule = Core.getModule("characters");
-  const health = charModule.getMetadata().health - 100;
+  const charModule = Core.getModule('characters');
+  const metadata = charModule.getMetadata();
+  if (!metadata) return;
+  const health = metadata.health - 100;
   setHealth(Math.max(1, Math.min(100, health)));
   // armor gets restored on serverside in services/armor.ts
 });

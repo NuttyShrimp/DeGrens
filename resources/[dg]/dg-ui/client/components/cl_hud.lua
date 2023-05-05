@@ -140,7 +140,7 @@ AddStateBagChangeHandler('radioChannel', ('player:%s'):format(GetPlayerServerId(
 
 DGX.UI.onLoad(function()
   local plyMetadata = charModule.getMetadata()
-  if (plyMetadata and plyMetadata) then
+  if plyMetadata then
     state.values.hunger = plyMetadata.needs.hunger
     state.values.thirst = plyMetadata.needs.thirst
   end

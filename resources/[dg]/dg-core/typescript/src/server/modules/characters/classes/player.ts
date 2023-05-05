@@ -1,8 +1,7 @@
-import { SQL, Util } from '@dgx/server';
-import { Vector3 } from '@dgx/shared';
+import { SQL, Util, Sync } from '@dgx/server';
 import { getModule } from 'moduleController';
 import { characterLogger } from '../logger.character';
-import { defaultMetadata, generateDNA, generatePhone } from '../helpers.character';
+import { defaultCharinfo, defaultMetadata, generateDNA, generatePhone } from '../helpers.character';
 import { mainLogger } from 'sv_logger';
 
 export class Player {
@@ -13,32 +12,31 @@ export class Player {
   charinfo: Core.Characters.Charinfo;
   position: Vec3;
   metadata: Core.Characters.Metadata;
-  private loaded = false;
 
-  constructor(cid: number) {
+  constructor(
+    cid: number,
+    steamId: string,
+    charinfo: Core.Characters.Charinfo,
+    metadata: Core.Characters.Metadata,
+    position: Vec3
+  ) {
     this.citizenid = cid;
+    this.steamId = steamId;
+    this.serverId = undefined;
     this.name = '';
-    this.steamId = '';
-    this.charinfo = {
-      firstname: 'John',
-      lastname: 'Doe',
-      birthdate: '1990-01-01',
-      nationality: 'Belg',
-      gender: 0,
-      cash: 500,
-      phone: '0123456789',
-    };
-    this.position = new Vector3(0, 0, 0);
-    this.metadata = { ...defaultMetadata };
-    this.initiate();
+    this.charinfo = charinfo;
+    this.metadata = metadata;
+    this.position = position;
+
+    this.validateMetadata();
   }
 
   private async validateMetadata() {
-    for (let key in defaultMetadata) {
-      if (this.metadata?.[key as keyof Core.Characters.Metadata] === undefined) {
+    for (const key of Object.keys(defaultMetadata) as (keyof Core.Characters.Metadata)[]) {
+      if (this.metadata?.[key] === undefined) {
         if (key === 'dna') {
           this.metadata.dna = await generateDNA();
-          return;
+          continue;
         }
         // @ts-ignore TS being a bitch
         this.metadata[key] = defaultMetadata[key];
@@ -46,62 +44,39 @@ export class Player {
     }
   }
 
-  private async initiate() {
-    const dbData = await SQL.scalar('SELECT * FROM all_character_data WHERE citizenid = ?', [this.citizenid]);
-    if (!dbData) {
-      mainLogger.warn(`Failed to load player: ${this.citizenid}`);
-      return;
-    }
-    if (!dbData.metadata) {
-      this.charinfo.phone = await generatePhone();
-      this.metadata.dna = await generateDNA();
-      return;
-    }
-    this.steamId = dbData.steamid;
-    this.charinfo.firstname = dbData.firstname;
-    this.charinfo.lastname = dbData.lastname;
-    this.charinfo.birthdate = dbData.birthdate;
-    this.charinfo.nationality = dbData.nationality;
-    this.charinfo.gender = dbData.gender;
-    this.charinfo.cash = dbData.cash;
-    this.charinfo.phone = dbData.phone;
-
-    this.position = JSON.parse(dbData.position);
-    this.metadata = JSON.parse(dbData.metadata) as Core.Characters.Metadata;
-    this.loaded = true;
-    this.validateMetadata();
-  }
-
-  isLoaded = () => this.loaded;
-
   linkUser = (src: number) => {
     this.serverId = src;
     this.name = GetPlayerName(String(src));
   };
 
   save = async () => {
-    if (!this.serverId) {
-      return;
-    }
-    const ped = GetPlayerPed(String(this.serverId));
-    if (ped) {
-      this.updateMetadata('health', Math.max(GetEntityHealth(ped), 100));
-      this.updateMetadata('armor', GetPedArmour(ped));
-      this.position = Util.getPlyCoords(this.serverId);
-    }
+    if (this.serverId) {
+      // This makes it still save last coords when ply leaves server
+      const plyCoords = Sync.getPlayerCoords(this.serverId);
+      if (plyCoords) {
+        this.position = plyCoords;
+      }
 
-    const userModule = getModule('users');
-    await userModule.saveUser(this.serverId);
+      const ped = GetPlayerPed(String(this.serverId));
+      if (ped) {
+        this.updateMetadata('health', Math.max(GetEntityHealth(ped), 100));
+        this.updateMetadata('armor', GetPedArmour(ped));
+        this.position = Util.getPlyCoords(this.serverId);
+      }
+
+      const userModule = getModule('users');
+      await userModule.saveUser(this.serverId);
+    }
 
     const charResult = await SQL.query(
       `
       INSERT INTO characters (citizenid, steamid, last_updated) VALUES (?, ?, NOW())
       ON DUPLICATE KEY UPDATE last_updated = NOW()
     `,
-      [this.citizenid, userModule.getPlyIdentifiers(this.serverId).steam]
+      [this.citizenid, this.steamId]
     );
     if (charResult.affectedRows === 0) {
-      characterLogger.warn(`Failed to save character for ${this.name}(${this.serverId})`);
+      characterLogger.warn(`Failed to save character ${this.citizenid} | ${this.name}(${this.serverId})`);
       return;
     }
 
@@ -113,7 +88,7 @@ export class Player {
       [this.citizenid, JSON.stringify(this.position), JSON.stringify(this.metadata)]
     );
     if (charDataResult.affectedRows === 0) {
-      characterLogger.warn(`Failed to save character data for ${this.name}(${this.serverId})`);
+      characterLogger.warn(`Failed to save character data ${this.citizenid} | ${this.name}(${this.serverId})`);
       return;
     }
 
@@ -141,14 +116,51 @@ export class Player {
       ]
     );
     if (charInfoResult.affectedRows === 0) {
-      characterLogger.warn(`Failed to save character info for ${this.name}(${this.serverId})`);
+      characterLogger.warn(`Failed to save character info ${this.citizenid} | ${this.name}(${this.serverId})`);
       return;
     }
-    characterLogger.info(`Saved character for ${this.name}(${this.serverId})`);
+    characterLogger.info(`Saved character ${this.citizenid} | ${this.name}(${this.serverId})`);
   };
 
   updateMetadata = <T extends keyof Core.Characters.Metadata>(key: T, value: Core.Characters.Metadata[T]) => {
     this.metadata[key] = value;
-    emitNet('core:characters:metadata:update', this.serverId, key, value);
+    if (this.serverId) {
+      emitNet('core:characters:metadata:update', this.serverId, key, value);
+    }
+  };
+
+  static build = async (citizenid: number, overwriteChardata?: Omit<Core.Characters.Charinfo, 'cash' | 'phone'>) => {
+    const dbData = await SQL.scalar('SELECT * FROM all_character_data WHERE citizenid = ?', [citizenid]);
+    if (!dbData || Object.keys(dbData).length === 0) {
+      mainLogger.warn(`Failed to load player: ${citizenid}`);
+      return;
+    }
+
+    const charinfo = {} as Core.Characters.Charinfo;
+    for (const key of Object.keys(defaultCharinfo) as (keyof Core.Characters.Charinfo)[]) {
+      if (key === 'phone') {
+        charinfo.phone = dbData.phone ?? (await generatePhone());
+        continue;
+      }
+
+      if (overwriteChardata && key in overwriteChardata) {
+        //@ts-ignore
+        charinfo[key] = overwriteChardata[key];
+        continue;
+      }
+
+      //@ts-ignore
+      charinfo[key] = dbData[key] ?? defaultCharinfo[key];
+    }
+
+    const metadata: Core.Characters.Metadata = !dbData.metadata
+      ? { ...defaultMetadata, dna: await generateDNA() }
+      : (JSON.parse(dbData.metadata) as Core.Characters.Metadata);
+
+    const position: Vec3 = !dbData.position ? { x: 0, y: 0, z: 0 } : JSON.parse(dbData.position);
+
+    const ply = new Player(citizenid, dbData.steamid, charinfo, metadata, position);
+
+    return ply;
   };
 }

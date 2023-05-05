@@ -35,7 +35,8 @@ RegisterNetEvent('dg-phone:load', function()
     name = 'phone',
     icon = 'hashtag',
     getter = function()
-      return charModule.getCharinfo().phone
+      local charInfo = charModule.getCharinfo()
+      return charInfo and charInfo.phone or 0
     end,
   })
   registerInfoEntry({

@@ -5,10 +5,11 @@ let needsThread: NodeJS.Timer | null = null;
 
 export const startNeedsThread = () => {
   if (needsThread !== null) return;
-  let charModule = Core.getModule('characters');
+  const charModule = Core.getModule('characters');
 
   needsThread = setInterval(() => {
-    const needs = charModule.getMetadata().needs;
+    const needs = charModule.getMetadata()?.needs;
+    if (!needs) return;
     if (Object.values(needs).every(n => n > 0)) return;
     const health = getHealth();
     setHealth(health - Util.getRndInteger(5, 10));

@@ -37,6 +37,7 @@ export const takeEvidence = (plyId: number, evidenceId: string) => {
 
 export const addBloodDrop = (plyId: number) => {
   const player = Core.getPlayer(plyId);
+  if (!player) return;
   const plyCoords = Util.getPlyCoords(plyId);
   addEvidence({ x: plyCoords.x, y: plyCoords.y, z: plyCoords.z - 0.95 }, 'blood', player.metadata.dna);
 };

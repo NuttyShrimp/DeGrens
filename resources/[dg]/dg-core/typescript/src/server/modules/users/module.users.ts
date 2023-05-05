@@ -4,7 +4,7 @@ import { userManager } from './managers/userManager';
 import { mainLogger } from '../../sv_logger';
 import winston from 'winston';
 
-export class UserModule implements Modules.ServerModule {
+export class UserModule implements Modules.ServerModule, Core.ServerModules.UserModule {
   private identifierManager = identifierManager;
   private userManager = userManager;
   private logger: winston.Logger;
@@ -29,7 +29,8 @@ export class UserModule implements Modules.ServerModule {
 
   getPlyIdentifiers = (src: number) => this.identifierManager.getIdentifiers(src);
 
-  getServerIdFromSteamId = (steamId: string) => this.identifierManager.getServerIdFromIdentifier("steam", steamId);
+  getServerIdFromIdentifier = (key: string, identifier: string) =>
+    this.identifierManager.getServerIdFromIdentifier(key, identifier);
 
   saveUser = async (src: number) => {
     const identifiers = this.getPlyIdentifiers(src);
@@ -53,5 +54,5 @@ export class UserModule implements Modules.ServerModule {
     if (localResult.affectedRows === 0) {
       this.logger.warn(`Failed to save user data for ${userData.name}(${src})`);
     }
-  }
+  };
 }

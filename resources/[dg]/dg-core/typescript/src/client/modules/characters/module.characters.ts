@@ -1,8 +1,8 @@
 import { Events } from '@dgx/client';
-import { DGXEvent, EventListener } from '@dgx/client/decorators';
+import { DGXEvent, Event, EventListener } from '@dgx/client/decorators';
 
 @EventListener()
-export class CharacterModule implements Modules.Module {
+export class CharacterModule implements Modules.Module, Core.ClientModules.CharacterModule {
   private metadata: Core.Characters.Metadata | null = null;
   private charinfo: Core.Characters.Charinfo | null = null;
 
@@ -19,18 +19,23 @@ export class CharacterModule implements Modules.Module {
     this.charinfo = charinfo;
   }
 
-  @DGXEvent('core:character:set:metadata')
-  private updateMetadata(metadata: Core.Characters.Metadata) {
-    this.metadata = metadata;
-  }
+  @Event('core:characters:metadata:update')
+  private updateMetadata = <T extends keyof Core.Characters.Metadata>(key: T, value: Core.Characters.Metadata[T]) => {
+    if (this.metadata === null) return;
+    this.metadata[key] = value;
+  };
 
   getMetadata = () => this.metadata;
 
   getCharinfo = () => this.charinfo;
 
-  getPlayerData = () => ({
-    citizenid: LocalPlayer.state.citizenid,
-    charinfo: this.charinfo,
-    metadata: this.metadata,
-  });
+  getPlayerData = () => {
+    const citizenid = LocalPlayer.state.citizenid as number | undefined;
+    if (!citizenid || this.charinfo === null || this.metadata === null) return null;
+    return {
+      citizenid,
+      charinfo: this.charinfo,
+      metadata: this.metadata,
+    };
+  };
 }

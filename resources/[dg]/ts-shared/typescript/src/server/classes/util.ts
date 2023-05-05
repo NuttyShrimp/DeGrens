@@ -93,7 +93,7 @@ class Util extends UtilShared {
     const cid = Player?.citizenid;
     if (!ignoreUndefined && cid === undefined)
       throw new Error('Tried to get CID of player that is not known to server');
-    return cid;
+    return cid!;
   }
 
   getName(src: number | string) {

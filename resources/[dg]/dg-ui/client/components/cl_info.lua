@@ -7,6 +7,9 @@ seedCharData = function()
   -- I suspect this can sometimes not correctly get items or job as those also get loaded from playerLoaded evt
   CreateThread(function()
     local plyCharInfo = charModule.getCharinfo()
+    if not plyCharInfo then
+      print('Charinfo was not loaded while seeding UI chardata')
+    end
 
     local newCharacterInfo = {
       cid = LocalPlayer.state.citizenid,

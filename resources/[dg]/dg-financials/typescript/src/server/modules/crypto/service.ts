@@ -6,6 +6,7 @@ import { cryptoLogger } from './util';
 // Will get all the wallets in object form for this player
 export const getPlayerInfo = (src: number): NCrypto.Wallet[] => {
   const Player = Core.getPlayer(src);
+  if (!Player) return [];
   const wallets = cryptoManager.getWallet(Player.citizenid) as CryptoWallet[];
   return wallets.map(wallet => {
     return wallet.getClientVersion();
