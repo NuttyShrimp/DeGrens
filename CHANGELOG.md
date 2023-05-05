@@ -19,6 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Politie verliest zijn spullen niet meer door het respawnen
 - Minder lang plaatsen van groenten
 - Minder stress wanneer je in een wagen zit
+- YTD's van enkele voertuigen gedownsized
 
 ### Fixed
 
