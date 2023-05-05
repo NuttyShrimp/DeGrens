@@ -88,12 +88,14 @@ class Util extends UtilShared {
    * @param ignoreUndefined if true an error will not get thrown whenever the citizenid was not found
    * @returns citizenid of player associated with playerid
    */
-  getCID(src: number, ignoreUndefined = false): number {
+  getCID(src: number, ignoreUndefined?: false): number;
+  getCID(src: number, ignoreUndefined: true): number | undefined;
+  getCID(src: number, ignoreUndefined = false) {
     const Player = getPlayer(src);
     const cid = Player?.citizenid;
     if (!ignoreUndefined && cid === undefined)
       throw new Error('Tried to get CID of player that is not known to server');
-    return cid!;
+    return cid;
   }
 
   getName(src: number | string) {
