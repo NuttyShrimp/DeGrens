@@ -1,4 +1,4 @@
-import { Core, Events, Financials, Inventory, RPC, SQL, Util, Weather } from '@dgx/server';
+import { Core, Events, Financials, Inventory, RPC, Util, Weather } from '@dgx/server';
 import { getUICommands } from 'modules/commands/service.commands';
 import { getPointsForSteamId } from 'modules/penaltyPoints/service.penaltyPoints';
 
@@ -137,9 +137,9 @@ Events.onNet('admin:bind:check', (src, binds: Record<Binds.bindNames, string | n
   checkBinds(src, binds);
 });
 
-RPC.register('admin:menu:getPlayers', async () => {
-  const characters = Core.getModule("characters");
-  return Promise.all(Object.values(characters.getAllPlayers()).map<Promise<UI.Player>>(async ply => ({
+RPC.register('admin:menu:getPlayers', () => {
+  const characters = Core.getModule('characters');
+  return Object.values(characters.getAllPlayers()).map<UI.Player>(ply => ({
     name: ply.name,
     cid: ply.citizenid,
     serverId: ply.serverId!,
@@ -147,7 +147,7 @@ RPC.register('admin:menu:getPlayers', async () => {
     firstName: ply.charinfo.firstname,
     lastName: ply.charinfo.lastname,
     points: getPointsForSteamId(ply.steamId),
-  })));
+  }));
 });
 
 RPC.register('admin:menu:getAvailableActions', (src): UI.Entry[] =>
