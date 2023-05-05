@@ -19,6 +19,9 @@ RPC.register('police:interactions:canRobPlayer', (src: number, target: number): 
 });
 
 Events.onNet('police:interactions:robbedPlayer', (src: number, target: number) => {
+  const targetPlayer = Core.getPlayer(target);
+  if (!targetPlayer) return;
+
   const cash = Financials.getCash(target);
   const success = Financials.removeCash(target, cash, 'robbed-by-player');
   if (!success) return;
@@ -26,7 +29,6 @@ Events.onNet('police:interactions:robbedPlayer', (src: number, target: number) =
   Notifications.add(src, `Je hebt €${cash} afgenomen`);
   Notifications.add(target, `Je bent berooft van €${cash}`);
 
-  const targetPlayer = Core.getPlayer(target);
   Util.Log(
     'police:interactions:robbedPlayer',
     {

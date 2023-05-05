@@ -14,6 +14,7 @@ import {
   leaveGroup,
   seedPlyGroupUIStore,
 } from './service';
+import { charModule } from 'helpers/core';
 
 global.exports('createGroup', createGroup);
 global.exports('getGroupById', getGroupById);
@@ -32,7 +33,9 @@ Inventory.onInventoryUpdate(
   'player',
   identifier => {
     const cid = Number(identifier);
-    nameManager.updatePlayerName(cid);
+    const player = charModule.getPlayerByCitizenId(cid);
+    if (!player) return;
+    nameManager.updatePlayerName(player);
   },
   'vpn'
 );

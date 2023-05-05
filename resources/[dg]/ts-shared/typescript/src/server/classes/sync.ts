@@ -17,6 +17,10 @@ class Sync {
   public getAmountOfPlayers = () => {
     return GetNumPlayerIndices();
   };
+
+  public getPlayerCoords = (plyId: number): Vec3 | undefined => {
+    return global.exports['dg-sync'].getPlayerCoords(plyId);
+  };
 }
 
 export default {

@@ -15,7 +15,7 @@ let downAnimLoopId: number | null = null;
 let respawnTimeConfig: Hospital.Config['health']['respawnTime'];
 let damageTypesConfig: Record<number, { cause: string; type: Hospital.DownType }> = {};
 
-let charModule = Core.getModule("characters");
+let charModule = Core.getModule('characters');
 
 export const setDownConfig = (resConfig: typeof respawnTimeConfig, weapons: Hospital.Config['damagetypes']) => {
   respawnTimeConfig = resConfig;
@@ -44,7 +44,7 @@ export const setPlayerState = (state: Hospital.State, save = true) => {
 };
 
 export const loadDownStateOnRestart = () => {
-  const state = charModule.getMetadata().downState;
+  const state = charModule.getMetadata()?.downState;
   if (!state) return;
   setPlayerState(state, false);
 };

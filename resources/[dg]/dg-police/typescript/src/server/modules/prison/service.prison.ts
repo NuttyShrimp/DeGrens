@@ -12,6 +12,7 @@ export const moveAllPlayerItemsToPrisonStash = (plyId: number) => {
 
 export const sendPlayerToPrison = (plyId: number, months: number) => {
   const player = Core.getPlayer(plyId);
+  if (!player) return;
   player.updateMetadata('jailMonths', months);
   Events.emitNet('police:prison:goToPrison', plyId);
   const thread = setInterval(() => {
@@ -77,7 +78,7 @@ export const restorePlayerSentence = (plyId: number) => {
 export const getAllPlayersInPrison = () => {
   const ids = Array.from(playersInPrison.keys());
   return ids.map(id => {
-    const charInfo = Core.getPlayer(id).charinfo;
+    const charInfo = Core.getPlayer(id)?.charinfo;
     const name = `${charInfo?.firstname ?? 'Unknown'} ${charInfo?.lastname ?? 'Person'}`;
     return { id, name: name, months: playersInPrison.get(id)!.months };
   });

@@ -3,11 +3,10 @@ import { DGXEvent, EventListener } from '@dgx/server/decorators';
 import { getModule } from 'moduleController';
 import { Player } from './classes/player';
 import { characterLogger } from './logger.character';
-import { generatePhone } from './helpers.character';
 import { userManager } from 'modules/users/managers/userManager';
 
 @EventListener()
-export class CharacterModule implements Modules.ServerModule {
+export class CharacterModule implements Modules.ServerModule, Core.ServerModules.CharacterModule {
   private characterOwners: Record<string, number[]> = {};
   // ServerId to character
   private activeCharacters: Record<number, Player> = {};
@@ -20,11 +19,12 @@ export class CharacterModule implements Modules.ServerModule {
       'SELECT citizenid, steamid FROM characters'
     );
     steamIdToCid.forEach(e => {
-      if (!this.characterOwners[e.steamid]) {
-        this.characterOwners[e.steamid] = [];
-      }
-      this.characterOwners[e.steamid].push(e.citizenid);
+      this.addCharacterToOwner(e.steamid, e.citizenid);
     });
+  }
+
+  private addCharacterToOwner(steamId: string, cid: number) {
+    (this.characterOwners[steamId] ??= []).push(cid);
   }
 
   private doesUserOwnCharacter(src: number, cid: number) {
@@ -54,8 +54,14 @@ export class CharacterModule implements Modules.ServerModule {
       Admin.ACBan(src, "Trying to login as a character you don't own");
       return false;
     }
+
+    const ply = await Player.build(cid);
+    if (!ply) {
+      characterLogger.error(`Failed to load character ${cid}`);
+      return false;
+    }
+
     characterLogger.info(`Player ${src} is logging in as ${cid}`);
-    const ply = new Player(cid);
     global.Player(src).state.set('isLoggedIn', true, true);
     global.Player(src).state.set('citizenid', cid, true);
     ply.linkUser(src);
@@ -72,27 +78,35 @@ export class CharacterModule implements Modules.ServerModule {
     return true;
   };
 
-  createCharacter = async (src: number, charData: Omit<Core.Characters.Charinfo, 'cash' | 'phone'>) => {
+  createCharacter = async (
+    src: number,
+    charData: Omit<Core.Characters.Charinfo, 'cash' | 'phone'>
+  ): Promise<boolean> => {
     const userModule = getModule('users');
     const steamid = userModule.getPlyIdentifiers(src).steam;
-    if (!steamid) DropPlayer(String(src), 'Unable to find steamId while creating new character');
+    if (!steamid) {
+      DropPlayer(String(src), 'Unable to find steamId while creating new character');
+      return false;
+    }
     const result = await SQL.query<{ citizenid: number }[]>(
-      'INSERT INTO characters (steamid) VALUES = ? RETURNING citizenid',
+      'INSERT INTO characters (steamid) VALUES (?) RETURNING citizenid',
       [steamid]
     );
     if (!result || !result[0]) {
       characterLogger.error(`Failed to insert a new character`, { steamid });
-      return 'Failed to assign a citizenid';
+      return false;
     }
     const cid = result[0].citizenid;
-    const ply = new Player(cid);
-    ply.charinfo = {
-      ...charData,
-      cash: 500,
-      phone: await generatePhone(),
-    };
+    const ply = await Player.build(cid, charData);
+    if (!ply) {
+      characterLogger.error(`Failed to load newly created character`, { steamid });
+      return false;
+    }
+    ply.linkUser(src); // we link to get proper logs in the save function
     await ply.save();
+    this.addCharacterToOwner(steamid, cid);
     this.selectCharacter(src, cid);
+    return true;
   };
 
   logout = async (src: number) => {
@@ -121,7 +135,7 @@ export class CharacterModule implements Modules.ServerModule {
       characterLogger.warn(`${Util.getName(src)}(${src}) tried to delete an unexisting character: ${cid}`);
       return;
     }
-    ply?.save();
+    // ply?.save(); dont need to save to db when we are deleting it right??
     this.logout(src);
     await SQL.query('DELETE FROM characters WHERE citizenid = ?', [cid]);
     Util.Log(
@@ -142,10 +156,10 @@ export class CharacterModule implements Modules.ServerModule {
   loadPlayer(src: number) {
     const ply = this.activeCharacters[src];
     if (!ply) return;
-    Events.emitNet('core:character:set:metadata', src, ply.metadata);
+    Events.emitNet('core:character:set', src, ply.metadata, ply.charinfo);
   }
 
-  getPlayer = (src: number) => {
+  getPlayer = (src: number): Player | undefined => {
     return this.activeCharacters[src];
   };
 
@@ -167,16 +181,20 @@ export class CharacterModule implements Modules.ServerModule {
   };
 
   getOfflinePlayer = async (cid: number) => {
-    const ply = new Player(cid);
-    await Util.awaitCondition(() => ply.isLoaded());
+    const serverId = this.getServerIdFromCitizenId(cid);
+    if (serverId) {
+      return this.activeCharacters[serverId];
+    }
+
+    const ply = await Player.build(cid);
     return ply;
   };
 
-  getServerIdFromCitizenId = (cid: number) => {
+  getServerIdFromCitizenId = (cid: number): number | undefined => {
     return this.cidToServerId[cid];
   };
 
   getCitizenIdsFromSteamId = (steamid: string) => {
-    return this.characterOwners[steamid];
+    return this.characterOwners[steamid] ?? [];
   };
 }

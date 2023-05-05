@@ -10,19 +10,21 @@ Events.onNet('police:interactions:seizeCash', (src: number) => {
     return;
   }
 
+  const targetPlayer = Core.getPlayer(target);
+  if (!targetPlayer) return;
+
   const cash = Financials.getCash(target);
   const success = Financials.removeCash(target, cash, 'robbed-by-player');
   if (!success) return;
   Inventory.addItemToPlayer(src, 'seized_cash', 1, { amount: cash });
 
-  const targetPlayer = Core.getPlayer(target);
   Util.Log(
     'police:interactions:seizedCash',
     {
       cid: targetPlayer.citizenid,
       serverId: targetPlayer.serverId,
       name: targetPlayer.name,
-      steamId: targetPlayer.steamId
+      steamId: targetPlayer.steamId,
     },
     `${Util.getName(src)} has seized a players cash`,
     src
@@ -75,12 +77,14 @@ Events.onNet('police:interactions:search', async (src: number) => {
     return;
   }
 
+  const targetPlayer = Core.getPlayer(target);
+  if (!targetPlayer) return;
+
   const cash = Financials.getCash(target);
   Notifications.add(src, `De persoon heeft €${cash} opzak`);
   Events.emitNet('police:interactions:searchPlayer', src, target);
   Notifications.add(target, 'Een agent is je aan het fouilleren', 'error');
 
-  const targetPlayer = Core.getPlayer(target);
   Util.Log(
     'police:interactions:searchedPlayer',
     {

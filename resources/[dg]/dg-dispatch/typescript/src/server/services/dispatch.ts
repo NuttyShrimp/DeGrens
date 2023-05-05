@@ -42,7 +42,7 @@ export const createDispatchCall = async (job: 'ambulance' | 'police', call: Disp
 
   if (call.officer) {
     const DGPlayer = Core.getPlayer(call.officer);
-    if (DGPlayer.metadata.callsign) {
+    if (DGPlayer?.metadata.callsign) {
       call.officer = DGPlayer.metadata.callsign as unknown as number; // fuckoff typescript
     }
   }

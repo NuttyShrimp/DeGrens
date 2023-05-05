@@ -2,7 +2,7 @@ class Core {
   getModule<T extends keyof Core.ServerModules.List>(name: T): Core.ServerModules.List[T] {
     return global.exports['dg-core'].getModule(name);
   }
-  getPlayer(src: number): Core.Characters.Player {
+  getPlayer(src: number): Core.Characters.Player | undefined {
     return global.exports['dg-core'].getPlayer(src);
   }
 

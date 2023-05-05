@@ -87,6 +87,7 @@ export const ON_CREATE: Record<string, (plyId?: number) => { [key: string]: any 
   id_card: (plyId?: number) => {
     if (!plyId) return {};
     const player = Core.getPlayer(plyId);
+    if (!player) return {};
     return {
       cid: player.citizenid,
       firstName: player.charinfo.firstname,

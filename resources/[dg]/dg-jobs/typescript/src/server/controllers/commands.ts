@@ -13,6 +13,7 @@ Chat.registerCommand(
   (src, _, args) => {
     const callsign = args.join(' ');
     const player = Core.getPlayer(src);
+    if (!player) return;
     player.updateMetadata('callsign', callsign);
   }
 );

@@ -31,6 +31,8 @@ Events.onNet('hospital:down:playerDied', async (src: number, cause: string, kill
 
 Events.onNet('hospital:down:changeState', (src: number, state: Hospital.State) => {
   const player = Core.getPlayer(src);
+  if (!player) return;
+
   player.updateMetadata('downState', state);
 
   downLogger.info(`${player.charinfo.firstname} ${player.charinfo.lastname}'s down state has changed to ${state}`);

@@ -11,6 +11,6 @@ export const syncCoords = () => {
   emitNet('sync:coords:sync', -1, allPlayerCoords);
 };
 
-export const getPlayerCoords = (plyId: number) => {
+export const getPlayerCoords = (plyId: number): Vec3 | undefined => {
   return allPlayerCoords[plyId];
 };

@@ -241,26 +241,27 @@ export class Account {
       ...extra,
     });
 
+    // Check if trigger player exists
+    if (!triggerPlayer) {
+      Util.Log(
+        'financials:invalidPlayer',
+        {
+          cid: triggerCid,
+          action: type,
+          account: this.account_id,
+          amount,
+          plyType: 'target',
+          ...extra,
+        },
+        `${triggerCid} tried to ${type} ${amount} to ${this.name} (${this.account_id}) but was not found in the core as a valid player`,
+        undefined,
+        true
+      );
+      this.logger.warn(`${type}: invalid player | ${infoStr}`);
+      return false;
+    }
+
     try {
-      // Check if trigger player exists
-      if (!triggerPlayer) {
-        Util.Log(
-          'financials:invalidPlayer',
-          {
-            cid: triggerCid,
-            action: type,
-            account: this.account_id,
-            amount,
-            plyType: 'target',
-            ...extra,
-          },
-          `${triggerCid} tried to ${type} ${amount} to ${this.name} (${this.account_id}) but was not found in the core as a valid player`,
-          undefined,
-          true
-        );
-        this.logger.warn(`${type}: invalid player | ${infoStr}`);
-        return false;
-      }
       const triggerPlyId = triggerPlayer.serverId;
       if (!triggerPlyId) {
         Util.Log(

@@ -62,9 +62,7 @@ DGX.RPC.register('dg-chars:server:loadPly', function(src, cid)
 end)
 
 DGX.RPC.register('dg-chars:server:createCharacter', function(src, data)
-  local newData = {}
-  newData.charinfo = data
-  if charModule.createCharacter(src, newData) then
+  if charModule.createCharacter(src, data) then
     -- TODO: replace with a colored logger
     print(('%s is creating a new character!'):format(GetPlayerName(src)))
     exports['dg-chat']:refreshCommands(src)
