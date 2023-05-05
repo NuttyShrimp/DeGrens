@@ -111,7 +111,7 @@ export class QueueModule implements Modules.ServerModule {
     }
 
     deferrals.update(`Welcome ${name}!, checking your allowlist status`);
-    const whitelisted = await exports['dg-admin'].isPlayerWhitelisted(src);
+    const whitelisted = await Admin.isWhitelisted(src);
     if (!whitelisted) {
       finishDeferrals(
         "It seems like you'r not allowlisted for this server.\nAre your steam and discord open?\nTry restarting your fiveM client and try again"
