@@ -1,4 +1,4 @@
-import { SQL } from '@dgx/server';
+import { SQL, Util } from '@dgx/server';
 import { identifierManager } from './managers/IdentifierManager';
 import { userManager } from './managers/userManager';
 import { mainLogger } from '../../sv_logger';
@@ -14,17 +14,20 @@ export class UserModule implements Modules.ServerModule, Core.ServerModules.User
   }
 
   onStart() {
-    // Load identifiers for all joined players
+    for (const src of Util.getAllPlayers()) {
+      this.identifierManager.loadIdentifiers(src);
+      this.userManager.registerUser(src);
+    }
   }
 
   onPlayerJoining(src: number) {
     this.identifierManager.loadIdentifiers(src);
-    this.userManager.registerUser(src);
+    // if we register user here, we wouldnt be able to join because queue module would think someone with same identifiers is already in server
   }
 
   onPlayerJoined(src: number, oldSrc: number) {
     this.identifierManager.moveIdentifiers(oldSrc, src);
-    userManager.registerUser(src);
+    this.userManager.registerUser(src);
   }
 
   getPlyIdentifiers = (src: number) => this.identifierManager.getIdentifiers(src);

@@ -1,13 +1,15 @@
-import { identifierManager } from "./IdentifierManager";
+import { identifierManager } from './IdentifierManager';
 
 class UserManager {
-  private userData: Core.Users.UserData[] = [];
+  private readonly userData = new Map<number, Core.Users.UserData>();
 
   getUserByIdentifier(identifier: string) {
-    return this.userData.find(u => {
-      const identifiers = identifierManager.getIdentifiers(u.serverId);
-      return Object.values(identifiers).includes(identifier);
-    });
+    for (const [serverId, userData] of this.userData) {
+      const identifiers = identifierManager.getIdentifiers(serverId);
+      if (Object.values(identifiers).includes(identifier)) {
+        return userData;
+      }
+    }
   }
 
   registerUser(src: number) {
@@ -17,11 +19,11 @@ class UserManager {
       name: GetPlayerName(String(src)),
       steamId: identifiers.steam,
     };
-    this.userData.push(userData);
+    this.userData.set(src, userData);
   }
 
   getUserData(src: number) {
-    return this.userData.find(u => u.serverId === src);
+    return this.userData.get(src);
   }
 }
 
