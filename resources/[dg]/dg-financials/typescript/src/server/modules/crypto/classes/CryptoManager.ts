@@ -112,7 +112,7 @@ class CryptoManager extends Util.Singleton<CryptoManager>() {
 
   public async createWallet(cid: number, coin: string): Promise<boolean> {
     await Util.awaitCondition(() => this.coinsLoaded);
-    const plyId = charModule.getPlayerByCitizenId(cid);
+    const plyId = charModule.getServerIdFromCitizenId(cid);
     if (!plyId) {
       this.logger.warn(`No player found for ${cid}`);
       return false;

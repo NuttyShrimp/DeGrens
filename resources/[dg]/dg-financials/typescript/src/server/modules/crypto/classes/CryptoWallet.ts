@@ -88,7 +88,7 @@ export class CryptoWallet {
   }
 
   public async add(amount: number, comment: string): Promise<boolean> {
-    const plyId = charModule.getPlayerByCitizenId(this.cid);
+    const plyId = charModule.getServerIdFromCitizenId(this.cid);
     if (!plyId) {
       this.logger.debug(`Add: Player not found | cid: ${this.cid}`);
       return false;

@@ -4,7 +4,7 @@ fetchEmails = function(cid)
 end
 
 addOfflineMail = function(cid, subject, sender, message)
-  local plySource = charModule.getPlayerByCitizenId(cid)
+  local plySource = charModule.getServerIdFromCitizenId(cid)
   if plySource then
     TriggerClientEvent('dg-phone:client:addNewMail', plySource, subject, sender, message)
     return
