@@ -1,5 +1,5 @@
 declare namespace Core {
-  declare namespace Users {
+  namespace Users {
     type UserData = {
       serverId: number;
       steamId: string;
@@ -7,7 +7,7 @@ declare namespace Core {
     };
   }
 
-  declare namespace Characters {
+  namespace Characters {
     type Metadata = {
       cash: number;
       health: number;
@@ -60,7 +60,7 @@ declare namespace Core {
     };
   }
 
-  declare namespace ClientModules {
+  namespace ClientModules {
     type List = {
       characters: CharacterModule;
     };
@@ -71,7 +71,7 @@ declare namespace Core {
     };
   }
 
-  declare namespace ServerModules {
+  namespace ServerModules {
     type List = {
       users: UserModule;
       characters: CharacterModule;
