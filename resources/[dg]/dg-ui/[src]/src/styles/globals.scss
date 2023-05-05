@@ -1,5 +1,6 @@
 .emptylist {
   text-align: center;
+
   & > i {
     padding: 2vh 0;
     font-size: 3em;
@@ -10,6 +11,15 @@
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  margin-top: .5vh;
+  margin-top: 0.5vh;
   width: 100%;
+}
+
+.centered-container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }

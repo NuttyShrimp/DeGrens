@@ -23,6 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Lag tijdens het uitvoeren van oxyrun opgelost
+- Loading spinner in UI wordt nu treffelijk geplaats in zijn modals
 
 ## [1.1.5]
 
