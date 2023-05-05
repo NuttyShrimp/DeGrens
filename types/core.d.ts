@@ -37,7 +37,6 @@ declare namespace Core {
       gender: number;
       nationality: string;
       phone: string;
-      cash: number;
     };
 
     type Player = {

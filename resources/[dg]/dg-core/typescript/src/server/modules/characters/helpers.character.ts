@@ -56,6 +56,5 @@ export const defaultCharinfo: Core.Characters.Charinfo = {
   birthdate: '1990-01-01',
   nationality: 'Belg',
   gender: 0,
-  cash: 500,
   phone: '',
 };

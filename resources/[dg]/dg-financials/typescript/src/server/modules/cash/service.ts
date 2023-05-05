@@ -23,7 +23,7 @@ export const getCash = (src: number | string): number => {
     return cash;
   }
   cashLogger.debug(`getCash: Player ${cid} not found in cashCache - fetching from PlayerData`);
-  const newCash = playerData.charinfo?.cash ?? 0;
+  const newCash = playerData.metadata?.cash ?? 0;
   cashCache.set(cid, newCash);
   return newCash;
 };

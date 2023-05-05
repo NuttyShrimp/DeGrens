@@ -146,7 +146,6 @@ model character_info {
   gender       Int
   nationality  String     @db.Text
   phone        String     @db.VarChar(255)
-  cash         BigInt?    @default(0)
   last_updated DateTime   @default(now()) @db.Timestamp(0)
   created_at   DateTime   @default(now()) @db.Timestamp(0)
   characters   characters @relation(fields: [citizenid], references: [citizenid], onDelete: Cascade, map: "character_info_ibfk_1")

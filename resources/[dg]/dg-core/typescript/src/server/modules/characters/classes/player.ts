@@ -94,14 +94,13 @@ export class Player {
 
     const charInfoResult = await SQL.query(
       `
-      INSERT INTO character_info (citizenid, firstname, lastname, birthdate, gender, nationality, phone, cash) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+      INSERT INTO character_info (citizenid, firstname, lastname, birthdate, gender, nationality, phone) VALUES (?, ?, ?, ?, ?, ?, ?)
       ON DUPLICATE KEY UPDATE firstname = VALUES(firstname),
                               lastname = VALUES(lastname),
                               birthdate = VALUES(birthdate),
                               gender = VALUES(gender),
                               nationality = VALUES(nationality),
                               phone = VALUES(phone),
-                              cash = VALUES(cash),
                               last_updated = NOW()
     `,
       [
@@ -112,7 +111,6 @@ export class Player {
         this.charinfo.gender,
         this.charinfo.nationality,
         this.charinfo.phone,
-        this.charinfo.cash,
       ]
     );
     if (charInfoResult.affectedRows === 0) {

@@ -25,7 +25,7 @@ async function main() {
     data: {
       citizenid: 1000,
       metadata:
-        '{"downState":"alive","dna":"VS188j77ZZe1093","needs":{"hunger":91,"thirst":91},"stress":0,"callsign":"NO CALLSIGN","inside":{"apartment":[]},"licences":{"driver":true},"jailMonths":-1,"armor":0}',
+        '{"downState":"alive","dna":"VS188j77ZZe1093","needs":{"hunger":91,"thirst":91},"stress":0,"callsign":"NO CALLSIGN","inside":{"apartment":[]},"licences":{"driver":true},"jailMonths":-1,"armor":0,"cash":500}',
       position: '{"x":105.639,"y":-776.808,"z":31.436}',
     },
   });
@@ -38,7 +38,6 @@ async function main() {
       gender: 0,
       nationality: 'Belg',
       phone: '0473626283',
-      cash: 500,
     },
   });
   await prisma.permissions.createMany({
@@ -120,7 +119,7 @@ async function devEnv() {
     data: {
       citizenid: 1001,
       metadata:
-        '{"downState":"alive","dna":"VS188j77ZZe1093","needs":{"hunger":91,"thirst":91},"stress":0,"callsign":"NO CALLSIGN","inside":{"apartment":[]},"licences":{"driver":true},"jailMonths":-1,"armor":0}',
+        '{"downState":"alive","dna":"VS188j77ZZe1093","needs":{"hunger":91,"thirst":91},"stress":0,"callsign":"NO CALLSIGN","inside":{"apartment":[]},"licences":{"driver":true},"jailMonths":-1,"armor":0,"cash":500}',
       position: '{"x":105.639,"y":-776.808,"z":31.436}',
     },
   });
@@ -133,7 +132,6 @@ async function devEnv() {
       gender: 0,
       nationality: 'Belg',
       phone: '0474640132',
-      cash: 500,
     },
   });
   await prisma.bank_accounts.createMany({
