@@ -14,7 +14,7 @@ declare namespace Permissions {
 declare interface UserData {
   source: number;
   name: string;
-  cid: number;
+  cid?: number;
   steamId: string;
 }
 

@@ -1,3 +1,4 @@
+import { Notifications } from '@dgx/server';
 import { Inputs } from '../../../enums/inputs';
 
 interface SetJobData {
@@ -23,8 +24,11 @@ export const addjobwhitelist: CommandData = {
       cid = Number(args.cid);
     } else if (args?.Target?.cid) {
       cid = args.Target.cid;
-    } else {
+    } else if (caller.cid) {
       cid = caller.cid;
+    } else {
+      Notifications.add(caller.source, 'failed to find a valid target to give the job whitelist');
+      return;
     }
 
     global.exports['dg-jobs'].addWhitelist(caller.source, args.WhitelistedJobs.name, Number(args.rank), cid);
