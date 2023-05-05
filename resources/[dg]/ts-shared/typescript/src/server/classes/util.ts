@@ -1,18 +1,9 @@
-import { getPlayer } from '../helpers/core';
 import { Util as UtilShared } from '../../shared/classes/util';
 import { firstNames, lastNames } from '../data/names';
 
 import { Config, Core, Events, RPC } from './index';
 
 class Util extends UtilShared {
-  private charModule: Core.ServerModules.CharacterModule | undefined;
-  constructor() {
-    super();
-    setImmediate(() => {
-      this.charModule = Core.getModule('characters');
-    });
-  }
-
   generateName = (): string => {
     const firstName = firstNames[this.getRndInteger(0, firstNames.length - 1)];
     const lastName = lastNames[this.getRndInteger(0, lastNames.length - 1)];
@@ -22,7 +13,7 @@ class Util extends UtilShared {
   Log(type: string, data: { [k: string]: any }, message: string, src?: number, isDevImportant = false) {
     try {
       if (src && src > 0) {
-        const ply = getPlayer(src);
+        const ply = Core.getPlayer(src);
         if (ply) {
           data = {
             ...data,
@@ -91,7 +82,7 @@ class Util extends UtilShared {
   getCID(src: number, ignoreUndefined?: false): number;
   getCID(src: number, ignoreUndefined: true): number | undefined;
   getCID(src: number, ignoreUndefined = false) {
-    const Player = getPlayer(src);
+    const Player = Core.getPlayer(src);
     const cid = Player?.citizenid;
     if (!ignoreUndefined && cid === undefined)
       throw new Error('Tried to get CID of player that is not known to server');
@@ -103,7 +94,8 @@ class Util extends UtilShared {
   }
 
   async getCharName(cid: number) {
-    const player = await this.charModule?.getOfflinePlayer(cid);
+    let charModule = Core.getModule('characters');
+    const player = await charModule?.getOfflinePlayer(cid);
     return player ? `${player.charinfo.firstname} ${player.charinfo.lastname}` : '';
   }
 

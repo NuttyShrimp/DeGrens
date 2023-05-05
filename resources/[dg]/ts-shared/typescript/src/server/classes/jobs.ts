@@ -1,4 +1,5 @@
-import { getPlayer } from '../helpers/core';
+import { Core } from './index';
+
 class Jobs {
   onGroupLeave = (handler: (plyId: number | null, cid: number, groupId: string) => void) => {
     on('dg-jobs:server:groups:playerLeft', handler);
@@ -219,7 +220,7 @@ class Hospital {
   };
 
   public isDown = (plyId: number) => {
-    const player = getPlayer(plyId);
+    const player = Core.getPlayer(plyId);
     return player?.metadata?.downState !== 'alive' ?? false;
   };
 }
