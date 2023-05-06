@@ -142,6 +142,11 @@
         "name": "big_drill",
         "amount": 25,
         "price": 500
+      },
+      {
+        "name": "lawnchair",
+        "amount": 200,
+        "price": 50
       }
     ],
     "fishing": [

@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Log when choosing a spawn location
 - Re-added husky + pretty-quick for code formatting before commit
 - Report menu icon btns hebben nu een tooltip met verduidelijking voor de knop
+- Kampeerstoel toegevoegd
 
 ### Changed
 

@@ -629,4 +629,18 @@ export const PROPS: Record<string, PropAttach.PropInfo> = {
       z: 0,
     },
   },
+  lawn_chair: {
+    model: 'prop_skid_chair_02',
+    boneId: 6442,
+    position: {
+      x: 0,
+      y: -0.15,
+      z: -0.1,
+    },
+    rotation: {
+      x: 0,
+      y: 88.0,
+      z: 96.0,
+    },
+  },
 };

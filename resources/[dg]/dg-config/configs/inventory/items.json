@@ -2285,5 +2285,16 @@
       "y": 2
     },
     "markedForSeizure": true
+  },
+  {
+    "name": "lawnchair",
+    "label": "Kampstoel",
+    "image": "lawnchair.png",
+    "size": {
+      "x": 4,
+      "y": 4
+    },
+    "useable": true,
+    "decayRate": 43200
   }
 ]
