@@ -1,5 +1,5 @@
 import React from 'react';
-import { Divider, Typography } from '@mui/material';
+import { Divider, Tooltip, Typography } from '@mui/material';
 import { Stack } from '@mui/system';
 import { IconButton } from '@src/components/button';
 import { Icon } from '@src/components/icon';
@@ -33,38 +33,44 @@ export const ReportContainer = () => {
       <div className='reports-container-header'>
         <Stack direction={'row'} spacing={0.3}>
           {titleInfo.back && (
-            <IconButton.Primary
-              size='small'
-              onClick={() => {
-                selectReport(0);
-                setTab('list');
-              }}
-            >
-              <Icon name='chevron-left' size='1rem' />
-            </IconButton.Primary>
+            <Tooltip title='Back'>
+              <IconButton.Primary
+                size='small'
+                onClick={() => {
+                  selectReport(0);
+                  setTab('list');
+                }}
+              >
+                <Icon name='chevron-left' size='1rem' />
+              </IconButton.Primary>
+            </Tooltip>
           )}
           <Typography variant='h6'>{titleInfo.title}</Typography>
         </Stack>
         <div>
           {titleInfo.add && (
-            <IconButton.Primary
-              size='small'
-              onClick={() => {
-                setTab('new');
-              }}
-            >
-              <Icon name='plus' size='1rem' />
-            </IconButton.Primary>
+            <Tooltip title='Create'>
+              <IconButton.Primary
+                size='small'
+                onClick={() => {
+                  setTab('new');
+                }}
+              >
+                <Icon name='plus' size='1rem' />
+              </IconButton.Primary>
+            </Tooltip>
           )}
           {titleInfo.close && (
-            <IconButton.Primary
-              size='small'
-              onClick={() => {
-                closeReport();
-              }}
-            >
-              <Icon name='xmark' size='1rem' />
-            </IconButton.Primary>
+            <Tooltip title='Close report'>
+              <IconButton.Primary
+                size='small'
+                onClick={() => {
+                  closeReport();
+                }}
+              >
+                <Icon name='xmark' size='1rem' />
+              </IconButton.Primary>
+            </Tooltip>
           )}
         </div>
       </div>
