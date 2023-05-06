@@ -3530,5 +3530,166 @@
       }
     ],
     "authorized": {}
+  },
+  {
+    "description": "Taxi Jacky - Interior right",
+    "locked": true,
+    "distance": 2,
+    "doors": [
+      {
+        "model": "v_ilev_rc_door2",
+        "coords": {
+          "x": 903.571533203125,
+          "y": -152.1612091064453,
+          "z": 74.33624267578125
+        }
+      }
+    ],
+    "authorized": {
+      "business": [
+        "taxijacky"
+      ]
+    }
+  },
+  {
+    "description": "Taxi Jacky - Interior left",
+    "locked": true,
+    "distance": 2,
+    "doors": [
+      {
+        "model": "v_ilev_rc_door2",
+        "coords": {
+          "x": 900.7322998046875,
+          "y": -164.69110107421875,
+          "z": 74.33624267578125
+        }
+      }
+    ],
+    "authorized": {
+      "business": [
+        "taxijacky"
+      ]
+    }
+  },
+  {
+    "description": "Taxi Jacky -  Interior left 2",
+    "locked": true,
+    "distance": 2,
+    "doors": [
+      {
+        "model": "v_ilev_rc_door2",
+        "coords": {
+          "x": 898.5288696289062,
+          "y": -163.306396484375,
+          "z": 74.33624267578125
+        }
+      }
+    ],
+    "authorized": {
+      "business": [
+        "taxijacky"
+      ]
+    }
+  },
+  {
+    "description": "Taxi Jacky - Intrerior 1st floor",
+    "locked": true,
+    "distance": 2,
+    "doors": [
+      {
+        "model": "xm_prop_x17_tem_control_01",
+        "coords": {
+          "x": 372.1149597167969,
+          "y": 4827.50390625,
+          "z": -58.469970703125
+        }
+      }
+    ],
+    "authorized": {
+      "business": [
+        "taxijacky"
+      ]
+    }
+  },
+  {
+    "description": "Taxi Jacky - Outside left",
+    "locked": true,
+    "distance": 2,
+    "doors": [
+      {
+        "model": "v_ilev_rc_door2",
+        "coords": {
+          "x": 893.7596435546875,
+          "y": -180.4167022705078,
+          "z": 74.85623931884766
+        }
+      }
+    ],
+    "authorized": {
+      "business": [
+        "taxijacky"
+      ]
+    }
+  },
+  {
+    "description": "Taxi Jacky - Outside left 2",
+    "locked": true,
+    "distance": 2,
+    "doors": [
+      {
+        "model": "v_ilev_rc_door2",
+        "coords": {
+          "x": 895.1224975585938,
+          "y": -178.2061004638672,
+          "z": 74.85623931884766
+        }
+      }
+    ],
+    "authorized": {
+      "business": [
+        "taxijacky"
+      ]
+    }
+  },
+  {
+    "description": "Taxi Jacky - outside back",
+    "locked": true,
+    "distance": 2,
+    "doors": [
+      {
+        "model": "v_ilev_rc_door2",
+        "coords": {
+          "x": 895.2413330078125,
+          "y": -144.86509704589844,
+          "z": 77.0450439453125
+        }
+      }
+    ],
+    "authorized": {
+      "business": [
+        "taxijacky"
+      ]
+    }
+  },
+  {
+    "description": "Taxi Jacky - Outside garagedoor",
+    "locked": true,
+    "distance": 10,
+    "playSound": true,
+    "doors": [
+      {
+        "model": "prop_ataxidoor",
+        "coords": {
+          "x": 899.5858764648438,
+          "y": -148.62896728515625,
+          "z": 78.96862030029297
+        }
+      }
+    ],
+    "authorized": {
+      "business": [
+        "taxijacky"
+      ]
+    }
   }
 ]
