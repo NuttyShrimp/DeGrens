@@ -38,7 +38,7 @@ declare type RayCastHit = {
 
 declare type StatusName = 'alcohol' | 'gsw' | 'gsr' | 'bruises' | 'burns' | 'drowned' | 'stabwound';
 
-declare type ReputationType = 'crafting' | 'ammo_crafting' | 'mechanic_crafting' | 'cornersell';
+declare type ReputationType = 'crafting' | 'ammo_crafting' | 'mechanic_crafting' | 'cornersell' | 'blazeit_crafting';
 
 declare type BadgeType = 'police';
 

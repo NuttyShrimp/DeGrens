@@ -1,5 +1,5 @@
-import { Events, Notifications, Phone, Util, Inventory } from '@dgx/server';
-import { getActiveMechanics, getMechanicConfig } from '../service.mechanic';
+import { Events, Notifications, Phone, Util, Inventory, Business } from '@dgx/server';
+import { getMechanicConfig } from '../service.mechanic';
 import vinManager from 'modules/identification/classes/vinmanager';
 
 const pendingJobs = new Map<string, { targets: number[]; origin: number; timeoutInfo: NodeJS.Timeout }>();
@@ -34,16 +34,15 @@ export const sendTowJob = (src: number, vin: string) => {
     },
     onAccept: 'vehicles:mechanic:acceptTowJob',
   };
-  const activeMechanics = getActiveMechanics();
-  const targets = Object.values(activeMechanics).reduce((targets, srvIds) => targets.concat(srvIds), []);
+  const activeMechanics = Business.getSignedInPlayersForType('mechanic');
   pendingJobs.set(vin, {
-    targets: targets,
+    targets: activeMechanics,
     origin: src,
     timeoutInfo: setTimeout(() => {
       Notifications.add(src, 'Er was geen reactie op je takel aanvraag...');
     }, 30000),
   });
-  targets.forEach(srvId => {
+  activeMechanics.forEach(srvId => {
     Phone.showNotification(srvId, notification);
   });
 };

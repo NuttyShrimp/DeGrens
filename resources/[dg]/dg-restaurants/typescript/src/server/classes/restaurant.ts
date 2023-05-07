@@ -1,17 +1,14 @@
-import { Business, Core, Events, Financials, Inventory, Notifications, Phone, TaxIds, UI, Util } from '@dgx/server';
+import { Business, Financials, Inventory, Notifications, Phone, TaxIds, UI, Util } from '@dgx/server';
 import config from 'services/config';
 import { mainLogger } from 'sv_logger';
 import winston from 'winston';
-import repository from './repository';
 
 export class Restaurant {
   private readonly logger: winston.Logger;
   private readonly _id: string;
   private readonly label: string;
-  private readonly playersInside: Set<number>;
-  private readonly signedInPlayers: Set<number>;
 
-  private readonly menuItems: Record<string, Restaurants.MenuItem>;
+  private readonly menuItems: Record<string, Omit<Restaurants.MenuItem, 'price'>>;
   private readonly orders: Restaurants.Order[];
 
   constructor(id: string) {
@@ -19,8 +16,6 @@ export class Restaurant {
 
     this._id = id;
     this.label = restaurantConfig.label;
-    this.playersInside = new Set();
-    this.signedInPlayers = new Set();
     this.menuItems = {};
     this.orders = [];
 
@@ -32,7 +27,15 @@ export class Restaurant {
     this.logger = mainLogger.child({ module: this.label });
     this.logger.info('Loaded');
 
-    this.loadItems();
+    // Load items
+    for (const [item, data] of Object.entries(config.restaurants[this.id].items)) {
+      this.menuItems[item] = {
+        item,
+        label: Inventory.getItemData(item).label,
+        requiredItems: data.requiredItems,
+        isLeftover: data.isLeftover ?? false,
+      };
+    }
   }
 
   public get id() {
@@ -40,40 +43,6 @@ export class Restaurant {
   }
 
   private buildRegisterInventoryId = (registerId: number) => `register_${this.id}_${registerId}`;
-
-  private loadItems = async () => {
-    const configItems = config.restaurants[this.id].items;
-    const configItemNames = Object.keys(config.restaurants[this.id].items);
-    const itemsToRemove: string[] = [];
-
-    const dbItemPrices = await repository.getItemPrices(this.id);
-    for (const { item, price } of dbItemPrices) {
-      if (configItemNames.indexOf(item) === -1) {
-        itemsToRemove.push(item);
-        continue;
-      }
-      this.menuItems[item] = {
-        item,
-        price,
-        label: Inventory.getItemData(item)?.label ?? 'Unknown Item',
-        requiredItems: configItems[item].requiredItems,
-        isLeftover: configItems[item].isLeftover ?? false,
-      };
-    }
-
-    for (const item of configItemNames) {
-      if (this.menuItems[item]) continue;
-      this.menuItems[item] = {
-        item,
-        price: 0,
-        label: Inventory.getItemData(item)?.label ?? 'Unknown Item',
-        requiredItems: configItems[item].requiredItems,
-        isLeftover: configItems[item].isLeftover ?? false,
-      };
-    }
-
-    repository.deleteItemPrices(this.id, itemsToRemove);
-  };
 
   private logAction = (plyId: number, logType: string, logMessage: string, data: Record<string, any> = {}) => {
     const fullLogMessage = `${Util.getName(plyId)}(${plyId}) ${logMessage}`;
@@ -90,70 +59,28 @@ export class Restaurant {
   };
 
   private validateBusinessEmployee = (plyId: number, perm?: string) => {
-    const cid = Util.getCID(plyId);
-    if (!Business.isPlyEmployed(this.id, cid)) return false;
+    if (!Business.isPlayerSignedIn(plyId, this.id)) return false;
     if (perm) {
+      const cid = Util.getCID(plyId);
       return Business.hasPlyPermission(this.id, cid, perm);
     }
     return true;
   };
 
-  public playerEntered = (plyId: number) => {
-    this.playersInside.add(plyId);
-    this.logger.silly(`${Util.getName(plyId)}(${plyId}) entered`);
-  };
-
-  public playerLeft = (plyId: number) => {
-    this.playersInside.delete(plyId);
-
-    // sign out when leaving restaurant
-    if (this.signedInPlayers.has(plyId)) {
-      this.signOut(plyId);
+  public getMenuItems = () => {
+    const menuItemsWithPrices: Record<string, Restaurants.MenuItem> = {};
+    for (const [item, data] of Object.entries(this.menuItems)) {
+      menuItemsWithPrices[item] = {
+        ...data,
+        price: this.getMenuItemPrice(item),
+      };
     }
-
-    this.logger.silly(`${Util.getName(plyId)}(${plyId}) left`);
+    return menuItemsWithPrices;
   };
 
-  public isPlayerInside = (plyId: number) => {
-    return this.playersInside.has(plyId);
+  private getMenuItemPrice = (item: string) => {
+    return Business.getItemPrice(this.id, item) ?? 0;
   };
-
-  public isSignedIn = (plyId: number) => {
-    return this.signedInPlayers.has(plyId);
-  };
-
-  public signIn = (plyId: number) => {
-    const isEmployee = this.validateBusinessEmployee(plyId);
-    if (!isEmployee) return;
-
-    if (!this.playersInside.has(plyId)) return;
-    if (this.isSignedIn(plyId)) {
-      Notifications.add(plyId, 'Je bent hier al ingeklokt', 'error');
-      return;
-    }
-
-    this.signedInPlayers.add(plyId);
-    Events.emitNet('restaurants:location:setSignedIn', plyId, this.id, true);
-
-    this.logAction(plyId, 'signIn', 'has signed in');
-  };
-
-  public signOut = (plyId: number) => {
-    const isEmployee = this.validateBusinessEmployee(plyId);
-    if (!isEmployee) return;
-
-    if (!this.isSignedIn(plyId)) {
-      Notifications.add(plyId, 'Je bent hier niet ingeklokt', 'error');
-      return;
-    }
-
-    this.signedInPlayers.delete(plyId);
-    Events.emitNet('restaurants:location:setSignedIn', plyId, this.id, false);
-
-    this.logAction(plyId, 'signOut', 'has signed out');
-  };
-
-  public getMenuItems = () => this.menuItems;
 
   private getOrderByRegisterId = (registerId: number) => {
     return this.orders.find(o => o.registerId === registerId);
@@ -165,7 +92,7 @@ export class Restaurant {
 
   private calculateOrderPrice = (order: Restaurants.Order) => {
     return order.items.reduce((acc, cur) => {
-      return acc + (this.menuItems[cur.item]?.price ?? 0);
+      return acc + this.getMenuItemPrice(cur.item);
     }, 0);
   };
 
@@ -183,7 +110,8 @@ export class Restaurant {
     for (const item of order.items) {
       const menuItem = this.menuItems[item.item];
       if (!menuItem) continue;
-      const taxedPrice = Financials.getTaxedPrice(menuItem.price, TaxIds.Goederen).taxPrice;
+      const itemPrice = this.getMenuItemPrice(item.item);
+      const taxedPrice = Financials.getTaxedPrice(itemPrice, TaxIds.Goederen).taxPrice;
       orderItemEntries.push({
         disabled: true,
         title: `${menuItem.label} | €${taxedPrice}`,
@@ -372,7 +300,8 @@ export class Restaurant {
       registerId,
     });
 
-    this.signedInPlayers.forEach(employee => {
+    const signedInPlayers = Business.getSignedInPlayers(this.id);
+    signedInPlayers.forEach(employee => {
       Inventory.addItemToPlayer(employee, 'sales_ticket', 1, {
         origin: 'generic',
         amount: employee === plyId ? ticketPrice : sharedPrice,
@@ -441,54 +370,6 @@ export class Restaurant {
     UI.openContextMenu(plyId, menuEntries);
 
     return true;
-  };
-
-  public openPriceMenu = async (plyId: number) => {
-    const isEmployee = this.validateBusinessEmployee(plyId, 'change_role');
-    if (!isEmployee) return;
-
-    const itemOptions: UI.Input.SelectInput['options'] = [];
-    for (const [item, data] of Object.entries(this.menuItems)) {
-      const itemData = Inventory.getItemData(item);
-      if (!itemData) continue;
-      itemOptions.push({
-        label: `${itemData.label} | Huidig: €${data.price}`,
-        value: item,
-      });
-    }
-
-    const result = await UI.openInput<{ item: string; price: string }>(plyId, {
-      header: 'Verander de menuitem prijzen',
-      inputs: [
-        {
-          type: 'select',
-          label: 'Item',
-          name: 'item',
-          options: itemOptions,
-        },
-        {
-          type: 'number',
-          label: 'Nieuwe prijs',
-          name: 'price',
-          value: '0',
-        },
-      ],
-    });
-    if (!result.accepted) return;
-
-    const newPrice = Number(result.values.price);
-    if (isNaN(newPrice)) return;
-    const itemName = result.values.item;
-    const menuItem = this.menuItems[itemName];
-    if (!menuItem) return;
-
-    menuItem.price = newPrice;
-    repository.updateItemPrice(this.id, itemName, newPrice);
-
-    this.logAction(plyId, 'changeItemPrice', `has changed item ${itemName} to ${newPrice}`, {
-      itemName,
-      price: newPrice,
-    });
   };
 
   public doCooking = async (plyId: number, fromItem: string) => {
@@ -626,7 +507,7 @@ export class Restaurant {
 
     // send notif to everyone if whole order is complete
     if (this.orders[orderIdx].items.every(i => i.made)) {
-      this.signedInPlayers.forEach(ply => {
+      Business.getSignedInPlayers(this.id).forEach(ply => {
         Notifications.add(ply, `Order aan kassa #${registerId + 1} is volledig!`, 'success');
       });
     }
@@ -642,10 +523,11 @@ export class Restaurant {
       },
     ];
 
-    if (this.signedInPlayers.size === 0) {
+    if (!Business.isAnyPlayerSignedIn(this.id)) {
       for (const [item, data] of Object.entries(this.menuItems)) {
         if (!data.isLeftover) continue;
-        const taxedPrice = Financials.getTaxedPrice(data.price, TaxIds.Goederen).taxPrice;
+
+        const taxedPrice = Financials.getTaxedPrice(this.getMenuItemPrice(item), TaxIds.Goederen).taxPrice;
         menuEntries.push({
           title: `${data.label} | €${taxedPrice}`,
           callbackURL: 'restaurant/buyLeftover',
@@ -692,7 +574,7 @@ export class Restaurant {
       business.info.bank_account_id,
       cid,
       cid,
-      menuItem.price,
+      this.getMenuItemPrice(item),
       `${this.label} betaling (leftover)`,
       TaxIds.Goederen
     );
@@ -703,40 +585,5 @@ export class Restaurant {
     }
 
     Inventory.addItemToPlayer(plyId, item, 1, { quality: 50 });
-  };
-
-  public openSignedInList = (plyId: number) => {
-    const isEmployee = this.validateBusinessEmployee(plyId, 'change_role');
-    if (!isEmployee) return;
-
-    const menuEntries: ContextMenu.Entry[] = [
-      {
-        title: 'Huidige Werknemers',
-        description: 'Klik op een persoon om deze uit dienst te zetten',
-        disabled: true,
-      },
-      ...[...this.signedInPlayers].map(plyId => {
-        const charInfo = Core.getPlayer(plyId)?.charinfo;
-        const plyName = `${charInfo ? `${charInfo.firstname} ${charInfo.lastname}` : 'Offline'} | ${plyId}`;
-
-        return {
-          title: plyName,
-          callbackURL: 'restaurant/forceOffDuty',
-          data: {
-            restaurantId: this.id,
-            plyId,
-          },
-        };
-      }),
-    ];
-
-    UI.openContextMenu(plyId, menuEntries);
-  };
-
-  public forceOffDuty = (plyId: number, employeeId: number) => {
-    const isEmployee = this.validateBusinessEmployee(plyId, 'change_role');
-    if (!isEmployee) return;
-
-    this.signOut(employeeId);
   };
 }

@@ -1,0 +1,114 @@
+{
+  "businessZone": {
+    "center": {
+      "x": 362.56,
+      "y": -1257.76,
+      "z": 32.59
+    },
+    "width": 14.8,
+    "length": 29.6,
+    "options": {
+      "heading": 320,
+      "minZ": 30.99,
+      "maxZ": 42.79
+    }
+  },
+  "managementZone": {
+    "center": {
+      "x": 362.26,
+      "y": -1258.74,
+      "z": 32.59
+    },
+    "width": 1.55,
+    "length": 3.4,
+    "options": {
+      "heading": 49,
+      "minZ": 32.19,
+      "maxZ": 33.19
+    }
+  },
+  "blip": {
+    "sprite": 140,
+    "color": 25,
+    "coords": {
+      "x": 362.56,
+      "y": -1257.76,
+      "z": 32.59
+    }
+  },
+  "stashZone": {
+    "center": {
+      "x": 356.47,
+      "y": -1245.45,
+      "z": 32.59
+    },
+    "width": 0.8,
+    "length": 2.8,
+    "options": {
+      "heading": 321,
+      "minZ": 31.39,
+      "maxZ": 33.79
+    }
+  },
+  "registers": {
+    "employeePercentage": 0.5,
+    "zones": [
+      {
+        "center": {
+          "x": 370.18,
+          "y": -1269.74,
+          "z": 32.59
+        },
+        "width": 0.6,
+        "length": 0.6,
+        "options": {
+          "heading": 50,
+          "minZ": 32.39,
+          "maxZ": 32.99
+        }
+      }
+    ]
+  },
+  "extraZones": [
+    {
+      "name": "blazeit_vending",
+      "isTarget": true,
+      "zone": {
+        "center": {
+          "x": 364.47,
+          "y": -1264.99,
+          "z": 32.59
+        },
+        "width": 4.6,
+        "length": 1.2,
+        "options": {
+          "heading": 320,
+          "minZ": 31.59,
+          "maxZ": 33.79
+        }
+      }
+    },
+    {
+      "name": "blazeit_crafting",
+      "isTarget": true,
+      "zone": {
+        "center": {
+          "x": 364.8,
+          "y": -1254.65,
+          "z": 32.59
+        },
+        "width": 2.2,
+        "length": 1.1,
+        "options": {
+          "heading": 321,
+          "minZ": 32.39,
+          "maxZ": 32.99
+        }
+      }
+    }
+  ],
+  "priceItems": ["blazeit_joint", "blazeit_brownie", "blazeit_cookie", "blazeit_gummy", "blazeit_oil", "blazeit_stick"],
+  "extraConfig": {
+    "bagsPerBud": 15
+  }
+}

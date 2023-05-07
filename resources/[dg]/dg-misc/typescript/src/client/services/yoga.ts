@@ -30,7 +30,7 @@ const startYogaSes = async (data: Option, entity: number | undefined) => {
     return;
   }
 
-  Events.emitNet('hud:server:changeStress', -20);
+  Events.emitNet('hud:server:changeStress', -10);
 };
 
 Peek.addModelEntry(yogaModels, {

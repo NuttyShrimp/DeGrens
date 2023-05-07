@@ -7,6 +7,7 @@ declare namespace Config {
 
   interface Config {
     permissions: Permissions;
-    types: Record<string, string[]>;
+    types: Record<string, Business.BusinessTypeConfig>;
+    businesses: Record<string, Business.BusinessConfig>;
   }
 }

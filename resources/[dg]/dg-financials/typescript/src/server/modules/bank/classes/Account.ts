@@ -263,24 +263,27 @@ export class Account {
 
     try {
       const triggerPlyId = triggerPlayer.serverId;
-      if (!triggerPlyId) {
-        Util.Log(
-          'financials:invalidPlayer',
-          {
-            cid: triggerCid,
-            action: type,
-            account: this.account_id,
-            amount,
-            plyType: 'target',
-            ...extra,
-          },
-          `${triggerCid} tried to ${type} ${amount} to ${this.name} (${this.account_id}) but was not found in the core as a valid player`,
-          undefined,
-          true
-        );
-        this.logger.warn(`${type}: invalid player | ${infoStr}`);
-        return false;
-      }
+      const triggerPlyName = !triggerPlyId ? triggerPlayer.citizenid : Util.getName(triggerPlyId);
+
+      // With this, there is currently no way to transfer by script from for ex business to ply when owner is not online
+      // if (!triggerPlyId) {
+      //   Util.Log(
+      //     'financials:invalidPlayer',
+      //     {
+      //       cid: triggerCid,
+      //       action: type,
+      //       account: this.account_id,
+      //       amount,
+      //       plyType: 'target',
+      //       ...extra,
+      //     },
+      //     `${triggerCid} tried to ${type} ${amount} to ${this.name} (${this.account_id}) but was not found in the core as a valid player`,
+      //     undefined,
+      //     true
+      //   );
+      //   this.logger.warn(`${type}: invalid player | ${infoStr}`);
+      //   return false;
+      // }
 
       // Check if target is phonenumber
       if (extra.targetPhone) {
@@ -297,9 +300,7 @@ export class Account {
               plyType: 'acceptor',
               ...extra,
             },
-            `${Util.getName(triggerPlyId)} tried to ${type} ${amount} to ${this.name} (${
-              this.account_id
-            }) but targeted invalid player`,
+            `${triggerPlyName} tried to ${type} ${amount} to ${this.name} (${this.account_id}) but targeted invalid player`,
             triggerPlyId,
             true
           );
@@ -319,9 +320,7 @@ export class Account {
               plyType: 'acceptor',
               ...extra,
             },
-            `${Util.getName(triggerPlyId)} tried to ${type} ${amount} to ${this.name} (${
-              this.account_id
-            }) but could not find default account for target`,
+            `${triggerPlyName} tried to ${type} ${amount} to ${this.name} (${this.account_id}) but could not find default account for target`,
             triggerPlyId,
             true
           );
@@ -345,9 +344,7 @@ export class Account {
               plyType: 'acceptor',
               ...extra,
             },
-            `${Util.getName(triggerPlyId)} tried to ${type} ${amount} to ${this.name} (${
-              this.account_id
-            }) but was invalid player`,
+            `${triggerPlyName} tried to ${type} ${amount} to ${this.name} (${this.account_id}) but was invalid player`,
             triggerPlyId,
             true
           );
@@ -358,7 +355,9 @@ export class Account {
 
       // Check if trigger player has perms for this account
       if (!this.permsManager.hasPermission(triggerCid, ActionPermission[type])) {
-        Notifications.add(triggerPlyId, 'Je hebt geen toegang tot deze account', 'error');
+        if (triggerPlyId) {
+          Notifications.add(triggerPlyId, 'Je hebt geen toegang tot deze account', 'error');
+        }
         Util.Log(
           'financials:missingPermissions',
           {
@@ -367,9 +366,7 @@ export class Account {
             account: this.account_id,
             ...extra,
           },
-          `${Util.getName(triggerPlyId)} tried to ${type} ${amount} of ${this.name} (${
-            this.account_id
-          }) but did not have the permissions`,
+          `${triggerPlyName} tried to ${type} ${amount} of ${this.name} (${this.account_id}) but did not have the permissions`,
           triggerPlyId
         );
         this.logger.info(`${type}: missing permissions | ${infoStr}`);
@@ -388,9 +385,7 @@ export class Account {
             amount,
             ...extra,
           },
-          `${Util.getName(triggerPlyId)} tried to ${type} ${amount} from ${this.name} (${
-            this.account_id
-          }) but gave an invalid amount (negative)`,
+          `${triggerPlyName} tried to ${type} ${amount} from ${this.name} (${this.account_id}) but gave an invalid amount (negative)`,
           triggerPlyId
         );
         this.logger.info(`${type}: invalid amount | ${infoStr}`);
@@ -401,7 +396,9 @@ export class Account {
       const balanceDecrease = extra.balanceDecrease ?? false;
       const canBeNegative = extra.canBeNegative ?? this.isSeededAccount;
       if (balanceDecrease && !canBeNegative && this.balance - amount < 0) {
-        Notifications.add(triggerPlyId, 'Niet genoeg geld in bankaccount', 'error');
+        if (triggerPlyId) {
+          Notifications.add(triggerPlyId, 'Niet genoeg geld in bankaccount', 'error');
+        }
         this.logger.debug(`${type}: amount higher than account balance | ${infoStr}`);
         return false;
       }

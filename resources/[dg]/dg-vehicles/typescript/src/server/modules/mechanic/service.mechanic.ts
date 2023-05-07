@@ -1,11 +1,7 @@
-import { Config, Events, Notifications } from '@dgx/server';
+import { Business, Config, Events } from '@dgx/server';
 import { setTowOffsets } from './services/towing.mechanic';
 
-// Object of all shops and their clocked in employees
-const activeMechanics: Record<string, number[]> = {};
 let config: Mechanic.Config;
-
-export const getAmountOfActiveMechanics = () => new Array<number>().concat(...Object.values(activeMechanics)).length;
 
 // region Config
 export const loadConfig = async () => {
@@ -18,36 +14,16 @@ export const loadConfig = async () => {
 export const getMechanicConfig = () => config;
 
 export const loadZones = (src: number) => {
-  Events.emitNet('vehicles:mechanic:client:loadConfig', src, config.shops, Object.keys(config.towVehicles));
+  Events.emitNet('vehicles:mechanic:client:loadConfig', src, Object.keys(config.towVehicles));
 };
 // endregion
 
-// region Clock-in
-export const clockPlayerIn = (src: number, shop: string) => {
-  const plyShop = getShopForPlayer(src);
-  if (plyShop) {
-    Notifications.add(src, `Je bent al ingeclocked ergens anders!`, 'error');
-    return;
-  }
-  if (!activeMechanics[shop]) {
-    activeMechanics[shop] = [];
-  }
-  activeMechanics[shop].push(src);
-};
+// Returns the mechanic business the player is inside and signed into
+export const getCurrentMechanicBusiness = (plyId: number) => {
+  const inside = Business.getBusinessPlayerIsInsideOf(plyId);
+  if (!inside || inside.type !== 'mechanic') return;
 
-export const clockPlayerOut = (src: number) => {
-  for (const shop in activeMechanics) {
-    activeMechanics[shop] = activeMechanics[shop].filter(serverId => serverId !== Number(src));
-  }
-};
+  if (!Business.isPlayerSignedIn(plyId, inside.name)) return;
 
-export const getActiveMechanics = () => activeMechanics;
-
-export const getShopForPlayer = (src: number) => {
-  for (const shop in activeMechanics) {
-    if (activeMechanics[shop].includes(src)) {
-      return shop;
-    }
-  }
+  return inside.name;
 };
-// endregion

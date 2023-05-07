@@ -1,0 +1,38 @@
+{
+  "mechanic": {
+    "permissions": ["stash", "property_access", "garage_access", "crafting"],
+    "signin": {
+      "signOutWhenLeavingZone": false
+    },
+    "lockers": {
+      "size": 8
+    }
+  },
+  "showroom": {
+    "permissions": ["property_access"]
+  },
+  "restaurant": {
+    "permissions": ["stash", "property_access"],
+    "signin": {
+      "signOutWhenLeavingZone": true
+    },
+    "lockers": {
+      "size": 8
+    }
+  },
+  "taxi": {
+    "permissions": ["garage_access"]
+  },
+  "cbd_shop": {
+    "permissions": ["stash", "garage_access", "property_access"],
+    "signin": {
+      "signOutWhenLeavingZone": true
+    },
+    "lockers": {
+      "size": 8
+    }
+  },
+  "used_vehicle_shop": {
+    "permissions": ["garage_access"]
+  }
+}
