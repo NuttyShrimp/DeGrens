@@ -52,6 +52,8 @@ declare namespace Core {
       updateMetadata: <T extends keyof Metadata>(key: T, value: Metadata[T]) => void;
     };
 
+    type OnlinePlayer = Omit<Player, 'serverId'> & { serverId: number };
+
     type PlayerData = {
       citizenid: number;
       charinfo: Charinfo;
@@ -83,13 +85,13 @@ declare namespace Core {
     type CharacterModule = {
       selectCharacter: (src: number, cid: number) => Promise<boolean>;
       logout: (src: number) => Promise<void>;
-      getAllPlayers: () => Record<number, Characters.Player>;
+      getAllPlayers: () => Record<number, Characters.OnlinePlayer>;
       loadPlayer: (src: number) => void;
       createCharacter: (src: number, charData: Omit<Core.Characters.Charinfo, 'cash' | 'phone'>) => Promise<boolean>;
-      getPlayer: (src: number) => Characters.Player | undefined;
-      getPlayerByCitizenId: (cid: number) => Characters.Player | undefined;
-      getPlayerByPhone: (phone: string) => Characters.Player | undefined;
-      getPlayerBySteamId: (steamId: string) => Characters.Player | undefined;
+      getPlayer: (src: number) => Characters.OnlinePlayer | undefined;
+      getPlayerByCitizenId: (cid: number) => Characters.OnlinePlayer | undefined;
+      getPlayerByPhone: (phone: string) => Characters.OnlinePlayer | undefined;
+      getPlayerBySteamId: (steamId: string) => Characters.OnlinePlayer | undefined;
       getOfflinePlayer: (cid: number) => Promise<Characters.Player | undefined>;
       getServerIdFromCitizenId: (cid: number) => number | undefined;
       getCitizenIdsFromSteamId: (steamid: string) => number[];

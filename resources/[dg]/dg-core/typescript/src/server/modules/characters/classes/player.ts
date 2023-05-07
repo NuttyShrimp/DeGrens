@@ -4,7 +4,7 @@ import { characterLogger } from '../logger.character';
 import { defaultCharinfo, defaultMetadata, generateDNA, generatePhone } from '../helpers.character';
 import { mainLogger } from 'sv_logger';
 
-export class Player {
+export class Player implements Core.Characters.Player {
   name: string;
   steamId: string;
   serverId?: number;

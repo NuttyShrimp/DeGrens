@@ -9,7 +9,7 @@ import { userManager } from 'modules/users/managers/userManager';
 export class CharacterModule implements Modules.ServerModule, Core.ServerModules.CharacterModule {
   private characterOwners: Record<string, number[]> = {};
   // ServerId to character
-  private activeCharacters: Record<number, Player> = {};
+  private activeCharacters: Record<number, Core.Characters.OnlinePlayer> = {};
   // CID to serverId
   private cidToServerId: Record<number, number> = {};
   private saveIntervals: Record<number, NodeJS.Timeout> = {};
@@ -66,7 +66,7 @@ export class CharacterModule implements Modules.ServerModule, Core.ServerModules
     global.Player(src).state.set('citizenid', cid, true);
     ply.linkUser(src);
 
-    this.activeCharacters[src] = ply;
+    this.activeCharacters[src] = ply as Core.Characters.OnlinePlayer;
     this.cidToServerId[cid] = src;
 
     emit('core:characters:loaded', ply);
@@ -159,7 +159,7 @@ export class CharacterModule implements Modules.ServerModule, Core.ServerModules
     Events.emitNet('core:character:set', src, ply.metadata, ply.charinfo);
   }
 
-  getPlayer = (src: number): Player | undefined => {
+  getPlayer = (src: number) => {
     return this.activeCharacters[src];
   };
 
