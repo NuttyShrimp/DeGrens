@@ -125,7 +125,7 @@ const validateAccessToGarage = (src: number) => {
     return;
   }
   const garageInfo = thread.getGarage();
-  if (!garageInfo?.garage_id || !doesCidHasAccess(Player(src).state.cid, garageInfo.garage_id)) {
+  if (!garageInfo?.garage_id || !doesCidHasAccess(Util.getCID(src), garageInfo.garage_id)) {
     return;
   }
   return garageInfo;
@@ -227,7 +227,7 @@ export const takeVehicleOutGarage = async (src: number, vin: string): Promise<nu
   if (!garageInfo) return;
   const parkingSpot = parkingSpotThreads.get(src)?.getCurrentParkingSpot();
   if (!parkingSpot) return;
-  const cid = Player(src).state.cid;
+  const cid = Util.getCID(src);
 
   // Things to check
   // - Is vehicle in same garaga Id
@@ -309,7 +309,7 @@ export const storeVehicleInGarage = async (src: number, entity: number) => {
     return;
   }
   const { garage_id, shared } = garage;
-  const cid = Player(src).state.cid;
+  const cid = Util.getCID(src);
   const vin = getVinForNetId(NetworkGetNetworkIdFromEntity(entity));
   if (!vin) {
     garageLogger.warn(`Could not find vin for vehicle ${entity}`);

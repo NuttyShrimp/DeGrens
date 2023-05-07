@@ -120,7 +120,7 @@ export class CharacterModule implements Modules.ServerModule, Core.ServerModules
     Events.emitNet('core:characters:unloaded', src, ply.citizenid);
     await ply.save();
     global.Player(src).state.set('isLoggedIn', false, true);
-    global.Player(src).state.set('cid', null, true);
+    global.Player(src).state.set('citizenid', null, true);
     delete this.cidToServerId[ply.citizenid];
     delete this.activeCharacters[src];
   };
