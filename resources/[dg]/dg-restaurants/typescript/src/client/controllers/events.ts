@@ -1,10 +1,48 @@
-import { Events } from '@dgx/client';
-import { loadRestaurants, setIsSignedIn } from 'services/locations';
+import { Business, Events } from '@dgx/client';
+import {
+  buildRestaurantZones,
+  buildRestaurantEmployeeZones,
+  cacheRestaurantConfig,
+  destroyRestaurantEmployeeZones,
+  destroyRestaurantZones,
+} from 'services/locations';
 
-Events.onNet('restaurants:client:init', (restaurants: Restaurants.Config['restaurants']) => {
-  loadRestaurants(restaurants);
+Events.onNet('restaurants:client:cacheConfig', (restaurants: Restaurants.Config['restaurants']) => {
+  cacheRestaurantConfig(restaurants);
 });
 
-Events.onNet('restaurants:location:setSignedIn', (restaurantId: string, signedIn: boolean) => {
-  setIsSignedIn(restaurantId, signedIn);
-});
+Business.onSignIn(
+  businessName => {
+    buildRestaurantEmployeeZones(businessName);
+  },
+  {
+    businessType: 'restaurant',
+  }
+);
+
+Business.onSignOut(
+  () => {
+    destroyRestaurantEmployeeZones();
+  },
+  {
+    businessType: 'restaurant',
+  }
+);
+
+Business.onEnterBusinessZone(
+  businessName => {
+    buildRestaurantZones(businessName);
+  },
+  {
+    businessType: 'restaurant',
+  }
+);
+
+Business.onLeaveBusinessZone(
+  () => {
+    destroyRestaurantZones();
+  },
+  {
+    businessType: 'restaurant',
+  }
+);

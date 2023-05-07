@@ -13,6 +13,10 @@ export const setConfig = async (data: Config.Config) => {
   validatePermissions();
 };
 
+export const getExtraConfig = <T extends Business.BusinessConfig['extraConfig']>(businessName: string) => {
+  return config.businesses[businessName]?.extraConfig as T | undefined;
+};
+
 const validatePermissions = () => {
   // Check labels
   const allPermissions = Object.keys(config.permissions.base).concat(Object.keys(config.permissions.extra));
@@ -23,7 +27,7 @@ const validatePermissions = () => {
   }
   // check if types don include non-existing permissions
   for (const businessType of Object.keys(config.types)) {
-    const missingPermissions = config.types[businessType].filter(t => !allPermissions.includes(t));
+    const missingPermissions = config.types[businessType].permissions.filter(t => !allPermissions.includes(t));
     if (missingPermissions.length > 0) {
       throw new Error(
         `${businessType} business type has unkown special permissions assigned: ${missingPermissions.join(',')}`

@@ -183,6 +183,9 @@ class Inventory extends UtilShared.Singleton<Inventory>() {
   public moveItemToInventory = async (type: Inventory.Type, identifier: string, itemId: string) => {
     await global.exports['dg-inventory'].moveItemToInventory(type, identifier, itemId);
   };
+  public moveItemToPlayer = async (plyId: number, itemId: string) => {
+    await this.moveItemToInventory('player', this.getPlyIdentifier(plyId), itemId);
+  };
 
   public getItemsInInventory = (type: Inventory.Type, identifier: string): Promise<Inventory.ItemState[]> => {
     return global.exports['dg-inventory'].getItemsInInventory(type, identifier);
@@ -280,6 +283,10 @@ class Inventory extends UtilShared.Singleton<Inventory>() {
   public getItemByIdFromPlayer = (plyId: number, itemId: string) => {
     const cid = String(Util.getCID(plyId));
     return this.getItemByIdFromInventory('player', cid, itemId);
+  };
+
+  public showItemBox = (plyId: number, itemName: string, label: string) => {
+    global.exports['dg-inventory'].showItemBox(plyId, itemName, label);
   };
 }
 

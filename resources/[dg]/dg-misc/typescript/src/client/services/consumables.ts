@@ -1,4 +1,4 @@
-import { Events, Util, Sync } from '@dgx/client';
+import { Events, Util, Sync, Notifications } from '@dgx/client';
 import { FxBlackOut } from './fx';
 
 declare type EffectName = Config.EffectConsumable['effect'];
@@ -7,7 +7,7 @@ let emotedEffect: { timer: NodeJS.Timer; type: EffectName } | undefined = undefi
 
 const randomDrivingActions = [7, 8, 10, 11, 32];
 
-const activeDrugs: Record<EffectName, boolean> = {
+const activeDrugs: Record<EffectName | 'stress', boolean> = {
   stress: false,
   speed: false,
   damage: false,
@@ -27,28 +27,6 @@ const fxState: Consumables.CState = {
 };
 
 const effects: Record<EffectName, (duration: number) => void> = {
-  stress: () => {
-    const ped = PlayerPedId();
-    activeDrugs.stress = true;
-    if (IsPedInAnyVehicle(ped, false)) {
-      emit('animations:client:EmoteCommandStart', ['smoke3']);
-    } else {
-      emit('animations:client:EmoteCommandStart', ['smokeweed']);
-    }
-    let cycle = 0;
-    emotedEffect = {
-      timer: setInterval(() => {
-        cycle++;
-        if (cycle >= 25) {
-          activeDrugs.stress = false;
-          clearInterval(emotedEffect?.timer);
-          return;
-        }
-        Events.emitNet('hud:server:changeStress', Util.getRndInteger(1, 5) * -1);
-      }, 2000),
-      type: 'stress',
-    };
-  },
   damage: async duration => {
     activeDrugs.damage = true;
     Sync.setPlayerInvincible(true);
@@ -103,6 +81,46 @@ Events.onNet('misc:consumables:applyEffect', (effectName: EffectName, duration: 
 Events.onNet('misc:consumables:applyAlcohol', (strength: number) => {
   fxState.alcohol.count = Math.min(fxState.alcohol.count + strength, 6);
   startDrunkThread();
+});
+
+Events.onNet('misc:consumables:applyStress', (consumable: Config.StressConsumable) => {
+  if (activeDrugs.stress) {
+    Notifications.add('Je bent nog aan het ontstressen', 'error');
+    return;
+  }
+
+  const ped = PlayerPedId();
+
+  if ('scenario' in consumable.animation) {
+    const scenario = consumable.animation.scenario;
+    Util.startScenarioInPlace(scenario);
+    setTimeout(() => {
+      if (!IsPedUsingScenario(ped, scenario)) return;
+      ClearPedTasks(ped);
+    }, consumable.animation.duration);
+  } else {
+    const { name: animName, dict: animDict, flag: animFlag } = consumable.animation;
+    Util.loadAnimDict(animDict).then(() => {
+      TaskPlayAnim(ped, animDict, animName, 8.0, 8.0, -1, animFlag, 0, false, false, false);
+      setTimeout(() => {
+        StopAnimTask(ped, animDict, animName, 1);
+      }, consumable.animation.duration);
+    });
+  }
+
+  activeDrugs.stress = true;
+  const decreasePerTick = Math.floor(consumable.decrease / (consumable.duration / 2000));
+  let decreaseLeft = consumable.decrease;
+  const decreaseInterval = setInterval(() => {
+    if (decreaseLeft <= 0) {
+      activeDrugs.stress = false;
+      clearInterval(decreaseInterval);
+      return;
+    }
+
+    decreaseLeft -= decreasePerTick;
+    Events.emitNet('hud:server:changeStress', decreasePerTick * -1);
+  }, 2000);
 });
 
 // INFO: If we ever create a seperate FX service/module, move it there

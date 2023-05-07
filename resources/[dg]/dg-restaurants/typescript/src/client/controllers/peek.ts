@@ -1,61 +1,5 @@
 import { Business, Events, Inventory, Peek } from '@dgx/client';
-import { getIsSignedIn } from 'services/locations';
 import { openRegisterMenu } from 'services/order';
-
-Peek.addZoneEntry('restaurant_management', {
-  options: [
-    {
-      label: 'Inklokken',
-      icon: 'fas fa-right-to-bracket',
-      action: option => {
-        Events.emitNet('restaurants:location:signIn', option.data.id);
-      },
-      canInteract: (_, __, option) => {
-        return Business.isEmployee(option.data.id) && !getIsSignedIn();
-      },
-    },
-    {
-      label: 'Uitklokken',
-      icon: 'fas fa-right-from-bracket',
-      action: option => {
-        Events.emitNet('restaurants:location:signOut', option.data.id);
-      },
-      canInteract: getIsSignedIn,
-    },
-    {
-      label: 'Locker',
-      icon: 'fas fa-box',
-      action: option => {
-        const cid = LocalPlayer.state.citizenid;
-        if (!cid) return;
-        const stashId = `${option.data.id}_${cid}`;
-        Inventory.openStash(stashId, 8);
-      },
-      canInteract: getIsSignedIn,
-    },
-    {
-      label: 'Wijzig Prijzen',
-      icon: 'fas fa-money-check-dollar-pen',
-      action: option => {
-        Events.emitNet('restaurants:location:openPriceMenu', option.data.id);
-      },
-      canInteract: (_, __, option) => {
-        return getIsSignedIn() && Business.isEmployee(option.data.id, ['change_role']);
-      },
-    },
-    {
-      label: 'Toon Werknemers',
-      icon: 'fas fa-list',
-      action: option => {
-        Events.emitNet('restaurants:location:openSignedInList', option.data.id);
-      },
-      canInteract: (_, __, option) => {
-        return getIsSignedIn() && Business.isEmployee(option.data.id, ['change_role']);
-      },
-    },
-  ],
-  distance: 2,
-});
 
 Peek.addZoneEntry('restaurant_stash', {
   options: [...new Array(5)].map((_, idx) => ({
@@ -87,7 +31,7 @@ Peek.addZoneEntry('restaurant_register', {
       action: option => {
         openRegisterMenu(option.data.restaurantId, option.data.registerId);
       },
-      canInteract: getIsSignedIn,
+      canInteract: (_, __, option) => Business.isSignedIn(option.data.restaurantId),
     },
     {
       label: 'Betalen',

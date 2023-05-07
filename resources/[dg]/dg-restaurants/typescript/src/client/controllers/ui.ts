@@ -52,8 +52,3 @@ UI.RegisterUICallback('restaurant/buyLeftover', (data: { restaurantId: string; i
   Events.emitNet('restaurants:location:buyLeftover', data.restaurantId, data.item);
   cb({ data: {}, meta: { ok: true, message: 'done' } });
 });
-
-UI.RegisterUICallback('restaurant/forceOffDuty', (data: { restaurantId: string; plyId: number }, cb) => {
-  Events.emitNet('restaurants:location:forceOffDuty', data.restaurantId, data.plyId);
-  cb({ data: {}, meta: { ok: true, message: 'done' } });
-});

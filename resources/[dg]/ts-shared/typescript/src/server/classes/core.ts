@@ -13,6 +13,13 @@ class Core {
   onPlayerUnloaded = (handler: (plyId: number, cid: number, playerData: Core.Characters.Player) => void) => {
     on('core:characters:unloaded', handler);
   };
+
+  onModuleStarted = (moduleName: keyof Core.ServerModules.List, handler: () => void) => {
+    on('core:module:started', (mod: keyof Core.ServerModules.List) => {
+      if (mod !== moduleName) return;
+      handler();
+    });
+  };
 }
 
 export default {

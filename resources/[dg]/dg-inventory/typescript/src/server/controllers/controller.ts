@@ -1,4 +1,4 @@
-import { Util, RPC, Inventory, Core } from '@dgx/server';
+import { Util, RPC, Inventory } from '@dgx/server';
 import inventoryManager from 'modules/inventories/manager.inventories';
 import itemDataManager from 'classes/itemdatamanager';
 import itemManager from 'modules/items/manager.items';
@@ -265,6 +265,11 @@ const getItemByIdFromInventory = (type: Inventory.Type, identifier: string, item
   return itemState;
 };
 
+const showItemBox = (plyId: number, itemName: string, label: string) => {
+  const itemData = itemDataManager.get(itemName);
+  emitNet('inventory:addItemBox', plyId, label, itemData.image);
+};
+
 // Exports
 global.asyncExports('hasObject', hasObject);
 global.exports('giveStarterItems', giveStarterItems);
@@ -284,6 +289,7 @@ global.exports('moveAllItemsToInventory', moveAllItemsToInventory);
 global.asyncExports('getItemStateFromDatabase', getItemStateFromDatabase);
 global.asyncExports('doesInventoryHaveItemWithId', doesInventoryHaveItemWithId);
 global.exports('getItemByIdFromInventory', getItemByIdFromInventory);
+global.exports('showItemBox', showItemBox);
 
 // Events for client
 RPC.register('inventory:server:doesPlayerHaveItems', (plyId, names: string | string[]) => {

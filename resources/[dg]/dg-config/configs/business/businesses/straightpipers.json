@@ -1,0 +1,59 @@
+{
+  "businessZone": {
+    "center": {
+      "x": 830.7,
+      "y": -816.26,
+      "z": 26.33
+    },
+    "width": 28.6,
+    "length": 13.6,
+    "options": {
+      "heading": 0,
+      "minZ": 24.93,
+      "maxZ": 31.33
+    }
+  },
+  "managementZone": {
+    "center": {
+      "x": 835.37,
+      "y": -829.92,
+      "z": 26.33
+    },
+    "width": 1.0,
+    "length": 2.4,
+    "options": {
+      "heading": 0,
+      "minZ": 25.93,
+      "maxZ": 26.73
+    }
+  },
+  "blip": {
+    "sprite": 446,
+    "color": 5,
+    "coords": {
+      "x": 830.56,
+      "y": -812.2,
+      "z": 22.33
+    }
+  },
+  "extraZones": [
+    {
+      "name": "mechanic_bench",
+      "isTarget": true,
+      "zone": {
+        "center": {
+          "x": 836.96,
+          "y": -819.46,
+          "z": 25.44
+        },
+        "width": 0.9,
+        "length": 2.2,
+        "options": {
+          "heading": 269,
+          "minZ": 25.44,
+          "maxZ": 26.64
+        }
+      }
+    }
+  ]
+}

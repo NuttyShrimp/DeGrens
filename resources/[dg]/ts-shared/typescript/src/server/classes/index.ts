@@ -19,13 +19,15 @@ import sounds from './sounds';
 import doorlock from './doorlock';
 import particles from './particles';
 import core from './core';
+import business from './business';
 
 export const { Events, RPC, SQL, API, Auth } = events;
 export const { Util, Status, Reputations, SyncedObjects, PropRemover } = util;
 export const { Phone } = phone;
 export const { Chat, RayCast } = interaction;
 export const { Config } = config;
-export const { Jobs, Business, Gangs, Police, Hospital } = jobs;
+export const { Jobs, Gangs, Police, Hospital } = jobs;
+export const { Business } = business;
 export const { Admin } = admin;
 export const { UI, Taskbar, Notifications } = ui;
 export const { Inventory } = inventory;

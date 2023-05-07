@@ -1,2 +1,2 @@
-import './controllers/events';
-import './service/permscache';
+import './controllers';
+import './modules/blazeit';

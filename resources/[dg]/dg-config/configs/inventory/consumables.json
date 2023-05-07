@@ -68,11 +68,6 @@
   ],
   "drugs": [
     {
-      "name": "joint",
-      "effect": "stress",
-      "duration": 20000
-    },
-    {
       "name": "coke_bag",
       "effect": "damage",
       "duration": 10000
@@ -81,6 +76,88 @@
       "name": "meth_bag",
       "effect": "speed",
       "duration": 12000
+    }
+  ],
+  "stress": [
+    {
+      "name": "joint",
+      "decrease": 50,
+      "duration": 30000,
+      "uses": 1,
+      "animation": {
+        "scenario": "WORLD_HUMAN_DRUG_DEALER",
+        "duration": 30000
+      }
+    },
+    {
+      "name": "blazeit_joint",
+      "decrease": 50,
+      "duration": 30000,
+      "uses": 1,
+      "animation": {
+        "scenario": "WORLD_HUMAN_DRUG_DEALER",
+        "duration": 30000
+      }
+    },
+    {
+      "name": "blazeit_brownie",
+      "decrease": 50,
+      "duration": 15000,
+      "uses": 2,
+      "animation": {
+        "dict": "mp_suicide",
+        "name": "pill",
+        "flags": 49,
+        "duration": 3000
+      }
+    },
+    {
+      "name": "blazeit_cookie",
+      "decrease": 50,
+      "duration": 15000,
+      "uses": 2,
+      "animation": {
+        "dict": "mp_suicide",
+        "name": "pill",
+        "flags": 49,
+        "duration": 3000
+      }
+    },
+    {
+      "name": "blazeit_gummy",
+      "decrease": 50,
+      "duration": 15000,
+      "uses": 3,
+      "animation": {
+        "dict": "mp_suicide",
+        "name": "pill",
+        "flags": 49,
+        "duration": 3000
+      }
+    },
+    {
+      "name": "blazeit_oil",
+      "decrease": 50,
+      "duration": 10000,
+      "uses": 5,
+      "animation": {
+        "dict": "mp_suicide",
+        "name": "pill",
+        "flags": 49,
+        "duration": 3000
+      }
+    },
+    {
+      "name": "blazeit_stick",
+      "decrease": 50,
+      "duration": 10000,
+      "uses": 5,
+      "animation": {
+        "dict": "mp_suicide",
+        "name": "pill",
+        "flags": 49,
+        "duration": 3000
+      }
     }
   ]
 }

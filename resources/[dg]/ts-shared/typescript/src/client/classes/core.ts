@@ -12,6 +12,13 @@ class Core {
   onPlayerUnloaded = (handler: (cid: number) => void) => {
     Events.onNet('core:characters:unloaded', handler);
   };
+
+  onModuleStarted = (moduleName: keyof Core.ClientModules.List, handler: () => void) => {
+    on('core:module:started', (mod: keyof Core.ClientModules.List) => {
+      if (mod !== moduleName) return;
+      handler();
+    });
+  };
 }
 
 export default {

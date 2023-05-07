@@ -1,7 +1,7 @@
 export * from './blip';
 import baseevents from './baseevents';
 import blipmanager from './blipmanager';
-import core from './core';
+import business from './business';
 import events from './events';
 import interaction from './interaction';
 import inventory from './inventory';
@@ -18,12 +18,14 @@ import util from './util';
 import vehicles from './vehicles';
 import weapons from './weapons';
 import weather from './weather';
+import core from './core';
 
 export const { Events, RPC } = events;
 export const { Peek, RayCast, PolyZone, Keys, PolyTarget } = interaction;
 export const { Util, Interiors, PropAttach, Animations, SyncedObjects } = util;
 export const { UI, Taskbar, Notifications, HUD } = ui;
-export const { Jobs, Business, Gangs, Police, Hospital } = jobs;
+export const { Jobs, Gangs, Police, Hospital } = jobs;
+export const { Business } = business;
 export const { Storage } = storage;
 export const { Sync } = sync;
 export const { Inventory } = inventory;

@@ -2296,5 +2296,87 @@
     },
     "useable": true,
     "decayRate": 43200
+  },
+  {
+    "name": "cbd_bag",
+    "label": "CBD Zakje",
+    "image": "cbd_bag.png",
+    "decayRate": 86400,
+    "size": {
+      "x": 1,
+      "y": 1
+    }
+  },
+  {
+    "name": "blazeit_joint",
+    "label": "CBD Joint",
+    "image": "blazeit_joint.png",
+    "description": "BlazeIt CBD product om al je zorgen achter je te laten!",
+    "decayRate": 20160,
+    "size": {
+      "x": 1,
+      "y": 2
+    },
+    "useable": true
+  },
+  {
+    "name": "blazeit_brownie",
+    "label": "CBD Brownie",
+    "image": "blazeit_brownie.png",
+    "description": "BlazeIt CBD product om al je zorgen achter je te laten!",
+    "decayRate": 20160,
+    "size": {
+      "x": 2,
+      "y": 1
+    },
+    "useable": true
+  },
+  {
+    "name": "blazeit_cookie",
+    "label": "CBD Cookie",
+    "image": "blazeit_cookie.png",
+    "description": "BlazeIt CBD product om al je zorgen achter je te laten!",
+    "decayRate": 20160,
+    "size": {
+      "x": 2,
+      "y": 1
+    },
+    "useable": true
+  },
+  {
+    "name": "blazeit_gummy",
+    "label": "CBD Bears",
+    "image": "blazeit_gummy.png",
+    "description": "BlazeIt CBD product om al je zorgen achter je te laten!",
+    "decayRate": 20160,
+    "size": {
+      "x": 2,
+      "y": 2
+    },
+    "useable": true
+  },
+  {
+    "name": "blazeit_oil",
+    "label": "CBD Olie",
+    "image": "blazeit_oil.png",
+    "description": "BlazeIt CBD product om al je zorgen achter je te laten!",
+    "decayRate": 20160,
+    "size": {
+      "x": 2,
+      "y": 3
+    },
+    "useable": true
+  },
+  {
+    "name": "blazeit_stick",
+    "label": "CBD Balm",
+    "image": "blazeit_stick.png",
+    "description": "BlazeIt CBD product om al je zorgen achter je te laten!",
+    "decayRate": 20160,
+    "size": {
+      "x": 1,
+      "y": 4
+    },
+    "useable": true
   }
 ]
