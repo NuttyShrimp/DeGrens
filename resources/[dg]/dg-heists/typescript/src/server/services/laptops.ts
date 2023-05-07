@@ -89,9 +89,7 @@ Events.onNet('heists:laptops:finishHack', async (plyId, success: boolean) => {
     return;
   }
 
-  const removed = await Inventory.removeItemByIdFromPlayer(plyId, hackData.itemId);
-  if (!removed) return;
-
+  Inventory.destroyItem(hackData.itemId);
   heistManager.finishHackAtLocation(hackData.locationId, true);
 
   const hackDuration = Util.isDevEnv() ? 0 : config.laptops.hackDuration;
