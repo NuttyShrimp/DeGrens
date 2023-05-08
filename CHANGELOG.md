@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Mechanics kunnen nu weer in hun business stash
 - Users worden nu wel gesaved wanneer ze server leaven
+- Prison item retreival stashes kunnen weer geaccessed worden
 
 ## [1.2.0]
 
