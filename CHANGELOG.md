@@ -13,6 +13,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Methbrick van uiterlijk veranderd
+
 ### Fixed
 
 - Mechanics kunnen nu weer in hun business stash

@@ -841,7 +841,7 @@
   {
     "markedForSeizure": true,
     "name": "meth_brick",
-    "label": "Meth Brick",
+    "label": "Zak Meth",
     "useable": true,
     "decayRate": 10080,
     "image": "meth_brick.png",

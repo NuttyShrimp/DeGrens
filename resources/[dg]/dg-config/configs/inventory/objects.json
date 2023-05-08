@@ -217,6 +217,10 @@
     "container_blackmoney": {
       "propName": "duffle_bag",
       "position": "centerBack"
+    },
+    "meth_brick": {
+      "propName": "item_meth_brick",
+      "position": "leftShoulder"
     }
   }
 }

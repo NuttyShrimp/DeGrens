@@ -657,4 +657,18 @@ export const PROPS: Record<string, PropAttach.PropInfo> = {
       z: -13.4,
     },
   },
+  item_meth_brick: {
+    model: 'bkr_prop_meth_smallbag_01a',
+    boneId: 24816,
+    position: {
+      x: -0.2,
+      y: -0.11,
+      z: 0.07,
+    },
+    rotation: {
+      x: 0,
+      y: 70,
+      z: -95,
+    },
+  },
 };
