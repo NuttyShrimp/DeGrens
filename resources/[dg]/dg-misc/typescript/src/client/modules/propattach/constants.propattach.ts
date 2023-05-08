@@ -643,4 +643,18 @@ export const PROPS: Record<string, PropAttach.PropInfo> = {
       z: 96.0,
     },
   },
+  duffle_bag: {
+    model: 'hei_p_m_bag_var22_arm_s',
+    boneId: 24818,
+    position: {
+      x: -0.29,
+      y: 0.05,
+      z: -0.02,
+    },
+    rotation: {
+      x: -183.9,
+      y: 93,
+      z: -13.4,
+    },
+  },
 };

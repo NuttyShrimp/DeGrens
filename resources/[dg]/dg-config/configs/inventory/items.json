@@ -2378,5 +2378,16 @@
       "y": 4
     },
     "useable": true
+  },
+  {
+    "name": "container_blackmoney",
+    "label": "Geldzak",
+    "image": "container_blackmoney.png",
+    "size": {
+      "x": 6,
+      "y": 4
+    },
+    "useable": true,
+    "markedForSeizure": true
   }
 ]
