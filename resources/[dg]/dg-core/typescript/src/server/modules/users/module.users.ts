@@ -52,7 +52,7 @@ export class UserModule implements Modules.ServerModule, Core.ServerModules.User
                                 discord      = VALUES(discord),
                                 last_updated = NOW()
       `,
-      [userData.name, identifiers.steam, identifiers.fivem, identifiers.discord]
+      [userData.name, identifiers.steam, identifiers.license, identifiers.discord]
     );
     if (localResult.affectedRows === 0) {
       this.logger.warn(`Failed to save user data for ${userData.name}(${src})`);
