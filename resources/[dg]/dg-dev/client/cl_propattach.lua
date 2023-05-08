@@ -113,7 +113,9 @@ pz = 0.0;
 
 bone = nil;
 
-tol = 0.05;
+local lastAction = 'move'
+local moveSpeed = 0.05;
+local rotateSpeed = 5
 
 RegisterCommand("co", function(source, args, rawCommand)
   if not args then return end
@@ -165,94 +167,112 @@ RegisterCommand("cd", function(source, args, rawCommand)
 	DeleteObject(object)
 end)
 
-RegisterCommand("cst", function(source, args, rawCommand)
-	tol = tonumber(args[1]);
-end)
-
 -- position
 RegisterCommand("plusz", function(source, args, rawCommand)
-	z = z + tol;
+	z = z + moveSpeed;
 	changeCoords();
+  lastAction = 'move'
 end, false)
 RegisterKeyMapping('plusz', '+ Z', 'keyboard', 'up')
 
 RegisterCommand("minusz", function(source, args, rawCommand)
-	z = z - tol;
+	z = z - moveSpeed;
 	changeCoords();
+  lastAction = 'move'
 end, false)
 RegisterKeyMapping('minusz', '- Z', 'keyboard', 'down')
 
 RegisterCommand("plusy", function(source, args, rawCommand)
-	y = y + tol;
+	y = y + moveSpeed;
 	changeCoords();
+  lastAction = 'move'
 end, false)
 RegisterKeyMapping('plusy', '+ Y', 'keyboard', 'left')
 
 RegisterCommand("minusy", function(source, args, rawCommand)
-	y = y - tol;
+	y = y - moveSpeed;
 	changeCoords();
+  lastAction = 'move'
 end, false)
 RegisterKeyMapping('minusy', '- Y', 'keyboard', 'right')
 
 RegisterCommand("plusx", function(source, args, rawCommand)
-	x = x + tol;
+	x = x + moveSpeed;
 	changeCoords();
+  lastAction = 'move'
 end, false)
 RegisterKeyMapping('plusx', '+ X', 'keyboard', 'numpad5')
 
 RegisterCommand("minusx", function(source, args, rawCommand)
-	x = x - tol;
+	x = x - moveSpeed;
 	changeCoords();
+  lastAction = 'move'
 end, false)
 RegisterKeyMapping('minusx', '- X', 'keyboard', 'numpad8')
 
 -- Rotation
 RegisterCommand("pluspz", function(source, args, rawCommand)
-	pz = pz + tol * 10;
+	pz = pz + rotateSpeed;
 	changeCoords();
+  lastAction = 'rotate'
 end, false)
 RegisterKeyMapping('pluspz', '+ PZ', 'keyboard', 'numpad9')
 
 RegisterCommand("minuspz", function(source, args, rawCommand)
-	pz = pz - tol * 10;
+	pz = pz - rotateSpeed;
 	changeCoords();
+  lastAction = 'rotate'
 end, false)
 RegisterKeyMapping('minuspz', '- PZ', 'keyboard', 'numpad7')
 
 RegisterCommand("pluspy", function(source, args, rawCommand)
-	py = py + tol * 10;
+	py = py + rotateSpeed;
 	changeCoords();
+  lastAction = 'rotate'
 end, false)
 RegisterKeyMapping('pluspy', '+ PY', 'keyboard', 'numpad6')
 
 RegisterCommand("minuspy", function(source, args, rawCommand)
-	py = py - tol * 10;
+	py = py - rotateSpeed;
 	changeCoords();
+  lastAction = 'rotate'
 end, false)
 RegisterKeyMapping('minuspy', '- PY', 'keyboard', 'numpad4')
 
 RegisterCommand("pluspx", function(source, args, rawCommand)
-	px = px + tol * 10;
+	px = px + rotateSpeed;
 	changeCoords();
+  lastAction = 'rotate'
 end, false)
 RegisterKeyMapping('pluspx', '+ PX', 'keyboard', 'numpad3')
 
 RegisterCommand("minuspx", function(source, args, rawCommand)
-	px = px - tol * 10;
+	px = px - rotateSpeed;
 	changeCoords();
+  lastAction = 'rotate'
 end, false)
 RegisterKeyMapping('minuspx', '- PX', 'keyboard', 'numpad1')
 
 -- amount
+local updateSpeed = function(mod)
+  if lastAction == 'move' then
+    newAmount = moveSpeed + (0.01 * mod)
+    if newAmount <= 0 then return end
+    moveSpeed = newAmount
+  elseif lastAction == 'rotate' then
+    newAmount = rotateSpeed + (1 * mod)
+    if newAmount <= 0 then return end
+    rotateSpeed = newAmount
+  end
+end
+
 RegisterCommand("plustol", function(source, args, rawCommand)
-	tol = tol + 0.02;
-  if tol < 0 then tol = 0 end
+  updateSpeed(1)
 end, false)
 RegisterKeyMapping('plustol', '+ TOL', 'keyboard', 'add')
 
 RegisterCommand("minustol", function(source, args, rawCommand)
-	tol = tol - 0.02;
-  if tol < 0 then tol = 0 end
+  updateSpeed(-1)
 end, false)
 RegisterKeyMapping('minustol', '- TOL', 'keyboard', 'subtract')
 
