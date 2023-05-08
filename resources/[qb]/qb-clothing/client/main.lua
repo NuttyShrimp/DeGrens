@@ -5,7 +5,7 @@ local zoom = "character"
 local isLoggedIn = false
 local previousSkinData = {}
 local FromChars = false
-local charModule = exports['dg-core']:getModule('Characters')
+local charModule = exports['dg-core']:getModule('characters')
 
 local skinData = {
   ["face"] = {
