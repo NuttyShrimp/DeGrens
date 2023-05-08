@@ -29,7 +29,7 @@ export const enableBlips = () => {
         coords.z += 1.0;
       }
       const serverId = GetPlayerServerId(ply);
-      drawText3d(`${isTalking ? '~g~' : ''}${getPlayerName(serverId)}(${serverId})`, coords, 0.4);
+      Util.drawText3d(`${isTalking ? '~g~' : ''}${getPlayerName(serverId)}(${serverId})`, coords, 0.4);
     });
   }, 1);
 

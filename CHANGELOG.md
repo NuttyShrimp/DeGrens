@@ -26,6 +26,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Prison item retreival stashes kunnen weer geaccessed worden
 - Mobiele payconiq betalingen werken weer
 - Phone messages worden nu wel gemarkeerd als gelezen
+- Nummers boven personen hun hoofd worden nu altijd getoond ipv soms als er veel personen op 1 plaats waren
 
 ## [1.2.0]
 

@@ -1,5 +1,4 @@
 import { Keys, RPC, UI, Util } from '@dgx/client';
-import { drawText3d } from 'helpers/util';
 
 let isOpen = false;
 
@@ -63,7 +62,7 @@ const openMenu = async () => {
     }
 
     for (const ply of players) {
-      drawText3d(`${ply.id}`, ply.coords, 0.4);
+      Util.drawText3d(`${ply.id}`, ply.coords, 0.4);
     }
 
     // Handle moving up and down

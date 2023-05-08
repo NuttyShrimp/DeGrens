@@ -1,7 +1,6 @@
 import { Util, Weapons } from '@dgx/client';
 import { Vector3 } from '@dgx/shared';
 
-import { drawText3d } from '../util/service.util';
 import { isDevModeEnabled } from 'helpers/devmode';
 import { getForwardVector } from './helpers.selector';
 import { getNoclipCamData } from 'service/noclip';
@@ -17,7 +16,7 @@ const showEntityInfo = () => {
   if (!selectedEntity) return;
   const selectedEntityCoords = Util.getEntityCoords(selectedEntity);
   if (selectedEntityType === 1) {
-    drawText3d(
+    Util.drawText3d(
       `~r~(${GetEntityHealth(selectedEntity)}/${GetPedMaxHealth(selectedEntity)}) ~b~(${GetPedArmour(
         selectedEntity
       )}/${GetPlayerMaxArmour(selectedEntity)})`,
@@ -52,14 +51,14 @@ const showEntityInfo = () => {
       false
     );
   } else if (selectedEntityType && [2, 3].includes(selectedEntityType)) {
-    drawText3d(
+    Util.drawText3d(
       `~r~(${GetEntityHealth(selectedEntity)}/${GetEntityMaxHealth(selectedEntity)})`,
       Vector3.add(selectedEntityCoords, new Vector3(0, 0, 1.4)),
       0.5
     );
   }
   if (selectedEntityType && [1, 2, 3].includes(selectedEntityType)) {
-    drawText3d(
+    Util.drawText3d(
       `~q~${selectedEntity} ~o~${GetEntityArchetypeName(selectedEntity)} ~g~${selectedEntityCoords.x.toFixed(
         2
       )}, ${selectedEntityCoords.y.toFixed(2)}, ${selectedEntityCoords.z.toFixed(2)}`,
