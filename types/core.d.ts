@@ -85,6 +85,7 @@ declare namespace Core {
       getPlayerByPhone: (phone: string) => Characters.OnlinePlayer | undefined;
       getPlayerBySteamId: (steamId: string) => Characters.OnlinePlayer | undefined;
       getOfflinePlayer: (cid: number) => Promise<Characters.Player | undefined>;
+      getOfflinePlayerByPhone: (phone: string) => Promise<Characters.Player | undefined>;
       getServerIdFromCitizenId: (cid: number) => number | undefined;
       getCitizenIdsFromSteamId: (steamid: string) => number[];
     };
