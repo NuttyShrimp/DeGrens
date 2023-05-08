@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Users worden nu wel gesaved wanneer ze server leaven
 - Prison item retreival stashes kunnen weer geaccessed worden
 - Mobiele payconiq betalingen werken weer
+- Phone messages worden nu wel gemarkeerd als gelezen
 
 ## [1.2.0]
 
