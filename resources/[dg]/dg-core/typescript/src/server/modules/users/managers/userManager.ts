@@ -1,34 +1,29 @@
 import { identifierManager } from './IdentifierManager';
 
 class UserManager {
-  private readonly userData = new Map<number, Core.Users.UserData>();
+  private readonly onlineUsers = new Set<number>(); // online ply ids
+  private readonly names = new Map<number, string>(); // serverId to names of all players who joined since restart
 
   getUserByIdentifier(identifier: string) {
-    for (const [serverId, userData] of this.userData) {
+    for (const serverId of this.onlineUsers) {
       const identifiers = identifierManager.getIdentifiers(serverId);
       if (Object.values(identifiers).includes(identifier)) {
-        return userData;
+        return serverId;
       }
     }
   }
 
   registerUser(src: number) {
-    const identifiers = identifierManager.getIdentifiers(src);
-    const userData: Core.Users.UserData = {
-      serverId: src,
-      name: GetPlayerName(String(src)),
-      steamId: identifiers.steam,
-    };
-    this.userData.set(src, userData);
+    this.onlineUsers.add(src);
+    this.names.set(src, GetPlayerName(String(src)));
   }
 
   removeUser(src: number) {
-    if (!this.userData.get(src)) return;
-    this.userData.delete(src);
+    this.onlineUsers.delete(src);
   }
 
-  getUserData(src: number) {
-    return this.userData.get(src);
+  getUserName(src: number) {
+    return this.names.get(src);
   }
 }
 

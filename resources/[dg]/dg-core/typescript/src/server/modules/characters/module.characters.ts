@@ -171,8 +171,8 @@ export class CharacterModule implements Modules.ServerModule, Core.ServerModules
 
   getPlayerBySteamId = (steamid: string) => {
     const serverId = userManager.getUserByIdentifier(steamid);
-    if (!serverId?.serverId) return;
-    return this.activeCharacters[serverId.serverId];
+    if (!serverId) return;
+    return this.activeCharacters[serverId];
   };
 
   getPlayerByPhone = (phone: string) => {

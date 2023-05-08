@@ -1,12 +1,4 @@
 declare namespace Core {
-  namespace Users {
-    type UserData = {
-      serverId: number;
-      steamId: string;
-      name: string;
-    };
-  }
-
   namespace Characters {
     type Metadata = {
       cash: number;
