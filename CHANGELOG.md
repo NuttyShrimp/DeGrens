@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Geldcontainer toegevoegd
+- Extra anticheat bans waar nodig toegevoegd
 
 ### Changed
 

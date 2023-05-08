@@ -1,4 +1,4 @@
-import { Core, Events, Util } from '@dgx/server';
+import { Admin, Core, Events, Util } from '@dgx/server';
 import { cashLogger } from './util';
 
 const cashCache: Map<number, number> = new Map();
@@ -35,8 +35,13 @@ export const removeCash = (src: number | string, amount: number, reason: string)
     return false;
   }
   if (!reason || reason.length === 0) {
-    // TODO: Add cheat detection banning/flagging BS
     cashLogger.error(`removeCash: No reason provided | src: ${src} | amount: ${amount}`);
+    if (Number(src) > 0) {
+      Admin.ACBan(Number(src), `Transferring cash via a non-official way`, {
+        amount,
+        reason,
+      });
+    }
     return false;
   }
   const cid = Player.citizenid;
@@ -70,8 +75,13 @@ export const addCash = (src: number | string, amount: number, reason: string) =>
     return false;
   }
   if (!reason || reason.length === 0) {
-    // TODO: Add cheat detection banning/flagging BS
     cashLogger.error(`addCash: No reason provided | src: ${src} | amount: ${amount}`);
+    if (Number(src) > 0) {
+      Admin.ACBan(Number(src), `Transferring cash via a non-official way`, {
+        amount,
+        reason,
+      });
+    }
     return false;
   }
   const cid = Player.citizenid;
