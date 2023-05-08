@@ -9,6 +9,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+### Changed
+
+### Fixed
+
+## [1.2.0]
+
+### Added
+
 - Duidelijke melding wanneer je begint met bloeden
 - Replace our stripped down QBCore with an in-house player mgmt resource
 - Log when choosing a spawn location
