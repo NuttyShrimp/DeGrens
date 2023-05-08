@@ -97,6 +97,13 @@ class Distributor {
     } catch (e: any) {
       if (e.message === 'BUFFER_SHORTAGE') {
         console.log('BUFFER_SHORTAGE error in RPC handler');
+        Sentry.captureException(e, {
+          extra: {
+            event: data.name,
+            resource: data.resource,
+            args: data.args,
+          },
+        });
         // TODO: Fix how to actually fix this shit
       } else {
         console.error(e);
