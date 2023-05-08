@@ -5,7 +5,7 @@ import { userManager } from 'modules/users/managers/userManager';
 import winston from 'winston';
 import { mainLogger } from 'sv_logger';
 
-export class QueueModule implements Modules.ServerModule {
+export class QueueModule implements Modules.ServerModule, Core.ServerModules.QueueModule {
   private manager = queueManager;
   private logger: winston.Logger;
 
@@ -15,13 +15,17 @@ export class QueueModule implements Modules.ServerModule {
     });
   }
 
+  getQueue() {
+    return queueManager.getQueuedPlayers();
+  }
+
   onStart() {
     this.manager.loadDBPower();
   }
 
   onPlayerJoined = async (src: number, oldSource: number) => {
     this.manager.finishQueue(src, oldSource);
-  }
+  };
 
   onPlayerDropped = async (src: number, _reason: string) => {
     const userModule = getModule('users');
@@ -34,7 +38,7 @@ export class QueueModule implements Modules.ServerModule {
       return;
     }
     if (!this.manager.isInQueue(steamId)) return;
-  }
+  };
 
   onPlayerJoining = async (
     src: number,
@@ -119,5 +123,5 @@ export class QueueModule implements Modules.ServerModule {
       return;
     }
     queueManager.joinQueue(src, name, steamId, deferrals);
-  }
+  };
 }

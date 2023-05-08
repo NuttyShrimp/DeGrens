@@ -9,7 +9,7 @@ import { UserModule } from 'modules/users/module.users';
 
 class QueueManager {
   private queue: string[] = [];
-  private queueEntryInfo: Map<string, { identifiers: Record<string, string>; source: number }> = new Map();
+  private queueEntryInfo: Map<string, Core.Queue.EntryInfo> = new Map();
   private queueInterval: Map<string, NodeJS.Timer> = new Map();
   private power: Record<string, number> = {};
   private tempPower: Record<string, number> = {};
@@ -63,6 +63,12 @@ class QueueManager {
     }
   }
 
+  getQueuedPlayers() {
+    return this.queue
+      .map(id => this.queueEntryInfo.get(id))
+      .filter(entry => entry !== undefined) as Core.Queue.EntryInfo[];
+  }
+
   isInQueue(steamId: string) {
     return this.queue.find(s => s === steamId);
   }
@@ -97,6 +103,7 @@ class QueueManager {
     this.queueEntryInfo.set(steamId, {
       identifiers: this.userModule!.getPlyIdentifiers(src),
       source: src,
+      name,
     });
     this.cleanupSteamId(steamId);
     const startPos = await this.getStartPosition(steamId);

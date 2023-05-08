@@ -53,6 +53,14 @@ declare namespace Core {
     };
   }
 
+  namespace Queue {
+    type EntryInfo = {
+      identifiers: Record<string, string>;
+      source: number;
+      name: string;
+    };
+  }
+
   namespace ClientModules {
     type List = {
       characters: CharacterModule;
@@ -68,6 +76,10 @@ declare namespace Core {
     type List = {
       users: UserModule;
       characters: CharacterModule;
+      queue: QueueModule;
+    };
+    type QueueModule = {
+      getQueue: () => Queue.EntryInfo[];
     };
     type UserModule = {
       getPlyIdentifiers: (src: number) => Record<string, string>;

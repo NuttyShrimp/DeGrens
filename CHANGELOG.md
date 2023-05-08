@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Methbrick van uiterlijk veranderd
 - Prijzen voor S & X voertuigen bepaald
+- Info endpoint bezit nu ook informatie over de queue
 
 ### Fixed
 
