@@ -457,6 +457,18 @@
   },
   {
     "category": "vans",
+    "model": "burrito",
+    "brand": "Declasse",
+    "name": "Burrito BlazeIt",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 8000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "vans",
     "model": "burrito3",
     "brand": "Declasse",
     "name": "Burrito",
