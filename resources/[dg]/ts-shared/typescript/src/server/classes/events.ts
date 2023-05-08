@@ -72,7 +72,26 @@ class Distributor {
     if (!resources) return;
 
     for (const resource of resources) {
-      this.netEventHandlers[resource](src, eventName, data);
+      try {
+        this.netEventHandlers[resource](src, eventName, data);
+      } catch (e: any) {
+        if (e.message === 'BUFFER_SHORTAGE') {
+          console.log('BUFFER_SHORTAGE error in net event');
+          Sentry.captureException(e, {
+            extra: {
+              event: eventName,
+              resource: {
+                target: resource,
+                origin: data.origin,
+              },
+              args: data.args,
+            },
+          });
+          // TODO: Fix how to actually fix this shit
+        } else {
+          console.error(e);
+        }
+      }
     }
   };
 
@@ -100,7 +119,10 @@ class Distributor {
         Sentry.captureException(e, {
           extra: {
             event: data.name,
-            resource: data.resource,
+            resource: {
+              target: resource,
+              origin: data.resource,
+            },
             args: data.args,
           },
         });
