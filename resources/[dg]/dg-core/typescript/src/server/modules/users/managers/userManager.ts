@@ -22,6 +22,11 @@ class UserManager {
     this.userData.set(src, userData);
   }
 
+  removeUser(src: number) {
+    if (!this.userData.get(src)) return;
+    this.userData.delete(src);
+  }
+
   getUserData(src: number) {
     return this.userData.get(src);
   }
