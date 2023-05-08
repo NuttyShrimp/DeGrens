@@ -13,6 +13,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Mechanics kunnen nu weer in hun business stash
+
 ## [1.2.0]
 
 ### Added
