@@ -4,6 +4,7 @@ import winston from 'winston';
 
 import { cryptoLogger } from '../util';
 import cryptoManager from './CryptoManager';
+import { charModule } from 'helpers/core';
 
 export class CryptoWallet {
   private readonly cid: number;
@@ -51,7 +52,7 @@ export class CryptoWallet {
       this.logger.debug(`Buy: ${this.cname} can't be bought | cid: ${this.cid}`);
       return false;
     }
-    if (!DGCore.Functions.getPlyIdForCid(this.cid)) {
+    if (!charModule.getPlayerByCitizenId(this.cid)) {
       this.logger.debug(`Buy: Player not found | cid: ${this.cid}`);
       return false;
     }
@@ -87,7 +88,7 @@ export class CryptoWallet {
   }
 
   public async add(amount: number, comment: string): Promise<boolean> {
-    const plyId = DGCore.Functions.getPlyIdForCid(this.cid);
+    const plyId = charModule.getServerIdFromCitizenId(this.cid);
     if (!plyId) {
       this.logger.debug(`Add: Player not found | cid: ${this.cid}`);
       return false;
@@ -113,7 +114,7 @@ export class CryptoWallet {
   }
 
   public async transfer(src: number, target: number, amount: number): Promise<boolean> {
-    if (!DGCore.Functions.getPlyIdForCid(target)) {
+    if (!charModule.getPlayerByCitizenId(target)) {
       this.logger.debug(`Transfer: Target not found | cid: ${this.cid}`);
       return false;
     }
@@ -145,7 +146,7 @@ export class CryptoWallet {
   }
 
   public async remove(amount: number): Promise<boolean> {
-    if (!DGCore.Functions.getPlyIdForCid(this.cid)) {
+    if (!charModule.getPlayerByCitizenId(this.cid)) {
       this.logger.debug(`Remove: Player not found | cid: ${this.cid}`);
       return false;
     }

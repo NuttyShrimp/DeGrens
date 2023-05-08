@@ -1,6 +1,7 @@
-import { Financials, Phone, SQL, Util } from '@dgx/server';
+import { Events, Financials, Notifications, Phone, SQL, Util, UI, TaxIds, Inventory } from '@dgx/server';
 import { dispatchBusinessPermissionsToClientCache } from 'services/business';
-import { getBitmaskForPermissions, getPermissions, permissionsFromBitmask } from 'services/config';
+import { getBitmaskForPermissions, getConfig, getPermissions, permissionsFromBitmask } from 'services/config';
+import { charModule } from 'services/core';
 import { mainLogger } from 'sv_logger';
 import winston from 'winston';
 
@@ -10,12 +11,21 @@ export class Business {
   private employees: Business.Employee[];
   logger: winston.Logger;
 
+  private readonly playersInside: Set<number>;
+  private readonly signedInPlayers: Set<number>;
+  private readonly registers: Map<number, { price: number; employeeCid: number; orderId: string; items?: string[] }>;
+  private readonly priceItems: Map<string, { label: string; price: number }>;
+
   constructor(pInfo: Business.Info) {
     this.info = pInfo;
     this.roles = [];
     this.employees = [];
-    this.loadBusinessInfo();
     this.logger = mainLogger.child({ module: pInfo.label });
+
+    this.playersInside = new Set();
+    this.signedInPlayers = new Set();
+    this.registers = new Map();
+    this.priceItems = new Map();
   }
 
   private getOwnerCid = () => {
@@ -38,7 +48,7 @@ export class Business {
     this.employees = employees;
   }
 
-  private async loadBusinessInfo() {
+  public async loadBusinessInfo(dispatchPermsToEmployees = false) {
     // Load roles
     this.roles = await SQL.query<Business.Role[]>(
       'SELECT id, name, permissions FROM business_role WHERE business_id = ?',
@@ -66,10 +76,74 @@ export class Business {
       })
     );
 
-    DBEmployees.forEach(e => {
-      dispatchBusinessPermissionsToClientCache(e.citizenid, 'add', this.info.name);
-    });
+    await this.loadPriceItems();
+
+    // Make sure owner has permissions to bankaccount. This is needed to be able to make transfers from business acc to third party
+    const ownerCid = this.getOwnerCid();
+    if (!ownerCid) {
+      const logMsg = `${this.info.label} does not have an owner`;
+      Util.Log('business:noOwner', { ...this.info }, logMsg, undefined, true);
+      mainLogger.error(logMsg);
+    } else {
+      const perms = Financials.getPermissions(this.info.bank_account_id, ownerCid);
+
+      if (!Object.values(perms).every(Boolean)) {
+        Financials.setPermissions(this.info.bank_account_id, ownerCid, {
+          transactions: true,
+          transfer: true,
+          deposit: true,
+          withdraw: true,
+        });
+      }
+    }
+
+    // event doesnt work on resource start, so we skip and dispatch in onAuth handler
+    if (dispatchPermsToEmployees) {
+      DBEmployees.forEach(e => {
+        dispatchBusinessPermissionsToClientCache(e.citizenid, 'add', this.info.id);
+      });
+    }
   }
+
+  private loadPriceItems = async () => {
+    const configPriceItems = getConfig().businesses?.[this.info.name]?.priceItems;
+    if (!configPriceItems) return;
+
+    const existingItems = await SQL.query<{ item: string; price: number }[]>(
+      `SELECT item, price FROM business_item_prices WHERE business_id = ?`,
+      [this.info.id]
+    );
+    const itemsToRemove: string[] = [];
+
+    for (const existingItem of existingItems) {
+      // if no longer in config, remove from db
+      if (configPriceItems.indexOf(existingItem.item) === -1) {
+        itemsToRemove.push(existingItem.item);
+      }
+    }
+
+    for (const item of configPriceItems) {
+      let price = existingItems.find(i => i.item === item)?.price;
+
+      // insert if in config but not in db
+      if (price === undefined) {
+        price = 0;
+        await SQL.query<{ price: number }[]>(
+          'INSERT INTO business_item_prices (business_id, item, price) VALUES (?, ?, ?)',
+          [
+            this.info.id,
+            item,
+            0, // default price to 0
+          ]
+        );
+      }
+
+      this.priceItems.set(item, {
+        price: price,
+        label: Inventory.getItemData(item).label,
+      });
+    }
+  };
 
   // Check if an array of perissions doesn't include
   // non-assignable permissions within this business
@@ -99,6 +173,14 @@ export class Business {
       ...e,
       role: this.roles.find(r => r.id === e.role)?.name ?? 'Unknown role',
     }));
+  }
+
+  getSignedInPlayers() {
+    return this.signedInPlayers;
+  }
+
+  getInsidePlayers() {
+    return this.playersInside;
   }
 
   getRoles(): Record<string, string[]> {
@@ -166,13 +248,15 @@ export class Business {
           targetCID,
           role: roleName,
         },
-        `${Util.getName(src)} tried to hire ${targetCID} for ${this.info.label} but doesn't have the right permission`,
+        `${Util.getName(src)}(${src}) tried to hire ${targetCID} for ${
+          this.info.label
+        } but doesn't have the right permission`,
         src
       );
       throw new Error('Missing permissions');
     }
     if (this.employees.find(e => e.citizenid === targetCID)) throw new Error('Already hired');
-    const target = await DGCore.Functions.GetOfflinePlayerByCitizenId(targetCID);
+    const target = await charModule.getOfflinePlayer(targetCID);
     if (!target) throw new Error('Invalid CID');
     const roleId = this.roles.find(r => r.name === roleName)?.id;
     if (!roleId) throw new Error('Invalid role');
@@ -182,7 +266,7 @@ export class Business {
       [targetCID, roleId, this.info.id]
     );
     if (!employeeId) throw new Error('Failed to save');
-    const employeeName = `${target.PlayerData.charinfo.firstname} ${target.PlayerData.charinfo.lastname}`;
+    const employeeName = `${target.charinfo.firstname} ${target.charinfo.lastname}`;
     this.setEmployees([
       ...this.employees,
       {
@@ -201,11 +285,11 @@ export class Business {
         role: roleName,
         id: employeeId,
       },
-      `${Util.getName(src)} hired ${targetCID} for ${this.info.label} with role: ${roleName}`,
+      `${Util.getName(src)}(${src}) hired ${targetCID} for ${this.info.label} with role: ${roleName}`,
       src
     );
     this.logAction(cid, 'hire', `${await Util.getCharName(targetCID)}(${targetCID}) aangenomen onder ${roleName}`);
-    dispatchBusinessPermissionsToClientCache(targetCID, 'add', this.info.name);
+    dispatchBusinessPermissionsToClientCache(targetCID, 'add', this.info.id);
     return employeeName;
   }
 
@@ -217,7 +301,9 @@ export class Business {
         {
           targetCID,
         },
-        `${Util.getName(src)} tried to fire ${targetCID} for ${this.info.label} but doesn't have the right permission`,
+        `${Util.getName(src)}(${src}) tried to fire ${targetCID} for ${
+          this.info.label
+        } but doesn't have the right permission`,
         src
       );
       throw new Error('Missing permissions');
@@ -233,12 +319,17 @@ export class Business {
       {
         targetCID,
       },
-      `${Util.getName(src)} fired ${targetCID} for ${this.info.label}`,
+      `${Util.getName(src)}(${src}) fired ${targetCID} for ${this.info.label}`,
       src
     );
     this.logAction(cid, 'fire', `${await Util.getCharName(targetCID)}(${targetCID}) ontslagen`);
-    dispatchBusinessPermissionsToClientCache(targetCID, 'remove', this.info.name);
+    dispatchBusinessPermissionsToClientCache(targetCID, 'remove', this.info.id);
     emit('business:playerFired', this.info.id, this.info.name, targetCID);
+
+    const firedPlyId = charModule.getServerIdFromCitizenId(targetCID);
+    if (firedPlyId && this.isSignedIn(firedPlyId)) {
+      this.signOut(firedPlyId);
+    }
   }
 
   async changeBankPermission(src: number, targetCID: number, permissions: IFinancials.Permissions) {
@@ -250,7 +341,7 @@ export class Business {
           targetCID,
           permissions,
         },
-        `${Util.getName(src)} tried to update the bank access for ${targetCID} for ${
+        `${Util.getName(src)}(${src}) tried to update the bank access for ${targetCID} for ${
           this.info.label
         } but doesn't have the right permission`,
         src
@@ -267,7 +358,7 @@ export class Business {
         targetCID,
         permissions,
       },
-      `${Util.getName(src)} changed ${targetCID} bank's permissions for ${this.info.label}`,
+      `${Util.getName(src)}(${src}) changed ${targetCID} bank's permissions for ${this.info.label}`,
       src
     );
     this.logAction(
@@ -285,7 +376,7 @@ export class Business {
         {
           targetCID,
         },
-        `${Util.getName(src)} tried to assign ${roleName} to ${targetCID} for ${
+        `${Util.getName(src)}(${src}) tried to assign ${roleName} to ${targetCID} for ${
           this.info.label
         } but doesn't have the right permission`,
         src
@@ -314,7 +405,7 @@ export class Business {
       {
         targetCID,
       },
-      `${Util.getName(src)} assigned ${targetCID} to ${roleName} for ${this.info.label}`,
+      `${Util.getName(src)}(${src}) assigned ${targetCID} to ${roleName} for ${this.info.label}`,
       src
     );
     this.logAction(
@@ -322,7 +413,7 @@ export class Business {
       'role',
       `${await Util.getCharName(targetCID)}(${targetCID}) zijn rol aangepast naar ${roleName}`
     );
-    dispatchBusinessPermissionsToClientCache(targetCID, 'add', this.info.name);
+    dispatchBusinessPermissionsToClientCache(targetCID, 'add', this.info.id);
   }
 
   async createRole(src: number, name: string, permissions: string[]) {
@@ -334,7 +425,7 @@ export class Business {
           permissions,
           name,
         },
-        `${Util.getName(src)} tried to create a new business role for ${
+        `${Util.getName(src)}(${src}) tried to create a new business role for ${
           this.info.label
         } but doesn't have the right permission`,
         src
@@ -349,7 +440,9 @@ export class Business {
           allowedPermissions: this.info.business_type.permissions,
           name,
         },
-        `${Util.getName(src)} tried to create a new business role for ${this.info.label} with invalid permissions`,
+        `${Util.getName(src)}(${src}) tried to create a new business role for ${
+          this.info.label
+        } with invalid permissions`,
         src
       );
       throw new Error('Invalid permissions');
@@ -374,7 +467,7 @@ export class Business {
         permissions,
         roleId,
       },
-      `${Util.getName(src)} created a new role for ${this.info.label} named ${name}`,
+      `${Util.getName(src)}(${src}) created a new role for ${this.info.label} named ${name}`,
       src
     );
     this.logAction(cid, 'role', `de ${name} rol aangemaakt`);
@@ -390,7 +483,7 @@ export class Business {
           permissions,
           name,
         },
-        `${Util.getName(src)} tried to update a business role for ${
+        `${Util.getName(src)}(${src}) tried to update a business role for ${
           this.info.label
         } but doesn't have the right permission`,
         src
@@ -405,7 +498,7 @@ export class Business {
           allowedPermissions: this.info.business_type.permissions,
           name,
         },
-        `${Util.getName(src)} tried to update a business role for ${this.info.label} with invalid permissions`,
+        `${Util.getName(src)}(${src}) tried to update a business role for ${this.info.label} with invalid permissions`,
         src
       );
       throw new Error('Invalid permissions');
@@ -432,12 +525,12 @@ export class Business {
         name,
         permissions,
       },
-      `${Util.getName(src)} update the ${name} role for ${this.info.label}`,
+      `${Util.getName(src)}(${src}) update the ${name} role for ${this.info.label}`,
       src
     );
     this.logAction(cid, 'role', `de ${name} rol aangepast`);
     this.employees.forEach(e => {
-      dispatchBusinessPermissionsToClientCache(e.citizenid, 'add', this.info.name);
+      dispatchBusinessPermissionsToClientCache(e.citizenid, 'add', this.info.id);
     });
     return newPerms;
   }
@@ -451,7 +544,7 @@ export class Business {
           permissions: getPermissions(),
           name,
         },
-        `${Util.getName(src)} tried to delete a business role for ${
+        `${Util.getName(src)}(${src}) tried to delete a business role for ${
           this.info.label
         } but doesn't have the right permission`,
         src
@@ -468,7 +561,7 @@ export class Business {
       {
         name,
       },
-      `${Util.getName(src)} deleted the ${name} role for ${this.info.label}`,
+      `${Util.getName(src)}(${src}) deleted the ${name} role for ${this.info.label}`,
       src
     );
     this.logAction(cid, 'role', `de ${name} rol verwijderd`);
@@ -484,7 +577,9 @@ export class Business {
           price,
           comment,
         },
-        `${Util.getName(src)} tried pay ${targetCID} from ${this.info.label} but doesn't have the right permission`,
+        `${Util.getName(src)}(${src}) tried pay ${targetCID} from ${
+          this.info.label
+        } but doesn't have the right permission`,
         src
       );
       throw new Error('Missing permissions');
@@ -510,7 +605,9 @@ export class Business {
         price,
         comment,
       },
-      `${Util.getName(src)} payed ${employee.citizenid} as employee ${price} from ${this.info.label}'s bank account'`,
+      `${Util.getName(src)}(${src}) payed ${employee.citizenid} as employee ${price} from ${
+        this.info.label
+      }'s bank account'`,
       src
     );
     return success;
@@ -526,7 +623,7 @@ export class Business {
           price,
           comment,
         },
-        `${Util.getName(src)} tried pay ${targetCID} (Extern) from ${
+        `${Util.getName(src)}(${src}) tried pay ${targetCID} (Extern) from ${
           this.info.label
         } but doesn't have the right permission`,
         src
@@ -552,7 +649,7 @@ export class Business {
         price,
         comment,
       },
-      `${Util.getName(src)} payed ${targetCID} as extern ${price} from ${this.info.label}'s bank account`,
+      `${Util.getName(src)}(${src}) payed ${targetCID} as extern ${price} from ${this.info.label}'s bank account`,
       src
     );
     return success;
@@ -594,7 +691,7 @@ export class Business {
           price,
           comment,
         },
-        `${Util.getName(src)} requested charge to ${targetCID} as extern for ${price} to ${
+        `${Util.getName(src)}(${src}) requested charge to ${targetCID} as extern for ${price} to ${
           this.info.label
         }'s bank account was rejected`,
         src
@@ -621,7 +718,7 @@ export class Business {
         price,
         comment,
       },
-      `${Util.getName(src)} payed ${targetCID} as extern ${price} from ${this.info.label}'s bank account`,
+      `${Util.getName(src)}(${src}) payed ${targetCID} as extern ${price} from ${this.info.label}'s bank account`,
       src
     );
     Phone.showNotification(
@@ -654,7 +751,7 @@ export class Business {
           price,
           comment,
         },
-        `${Util.getName(src)} tried charge ${targetCID} (Extern) for ${
+        `${Util.getName(src)}(${src}) tried charge ${targetCID} (Extern) for ${
           this.info.label
         } but doesn't have the right permission`,
         src
@@ -663,10 +760,417 @@ export class Business {
     }
     targetCID = Number(targetCID);
 
-    const targetServerId = DGCore.Functions.getPlyIdForCid(targetCID);
+    const targetServerId = charModule.getServerIdFromCitizenId(targetCID);
     if (!targetServerId) throw new Error(`${targetCID} is an invalid CID`);
 
     this.chargePhoneHelper(src, targetServerId, targetCID, price, comment);
     return true;
   }
+
+  public isSignedIn = (plyId: number) => {
+    return this.signedInPlayers.has(plyId);
+  };
+
+  public getTypeConfig = () => {
+    const typeName = this.info.business_type.name;
+    return getConfig().types[typeName];
+  };
+
+  public isOptedInToModule = (module: Exclude<keyof Business.BusinessTypeConfig, 'permissions'>) => {
+    const type = this.getTypeConfig();
+    if (!type) return false;
+    return module in type;
+  };
+
+  public signIn = (plyId: number) => {
+    if (!this.isOptedInToModule('signin')) {
+      this.logger.warn(
+        `${Util.getName(plyId)}(${plyId}) tried to do signin at ${
+          this.info.label
+        } but business is not opted in to module`
+      );
+      return;
+    }
+
+    const cid = Util.getCID(plyId);
+    const isEmployee = this.isEmployee(cid);
+    if (!isEmployee) return;
+
+    if (this.isSignedIn(plyId)) {
+      Notifications.add(plyId, 'Je bent hier al ingeklokt', 'error');
+      return;
+    }
+
+    this.signedInPlayers.add(plyId);
+    Events.emitNet('business:client:addSignedIn', plyId, this.info);
+
+    const logMsg = `${Util.getName(plyId)}(${plyId}) has signed in at ${this.info.label}`;
+    this.logger.silly(logMsg);
+    Util.Log(
+      'business:signIn',
+      {
+        businessName: this.info.name,
+      },
+      logMsg,
+      plyId
+    );
+  };
+
+  public signOut = (plyId: number) => {
+    if (!this.isOptedInToModule('signin')) {
+      this.logger.warn(
+        `${Util.getName(plyId)}(${plyId}) tried to do signout at ${
+          this.info.label
+        } but business is not opted in to module`
+      );
+      return;
+    }
+
+    if (!this.isSignedIn(plyId)) {
+      Notifications.add(plyId, 'Je bent hier niet ingeklokt', 'error');
+      return;
+    }
+
+    this.signedInPlayers.delete(plyId);
+    Events.emitNet('business:client:removeSignedIn', plyId, this.info);
+
+    const logMsg = `${Util.getName(plyId)}(${plyId}) has signed out at ${this.info.label}`;
+    this.logger.silly(logMsg);
+    Util.Log(
+      'business:signOut',
+      {
+        businessName: this.info.name,
+      },
+      logMsg,
+      plyId
+    );
+  };
+
+  public openSignedInList = (plyId: number) => {
+    if (!this.isOptedInToModule('signin')) {
+      this.logger.warn(
+        `${Util.getName(plyId)}(${plyId}) tried to do signout at ${
+          this.info.label
+        } but business is not opted in to module`
+      );
+      return;
+    }
+
+    const cid = Util.getCID(plyId);
+    const hasRequiredPerms = this.hasPermission(cid, 'change_role');
+    if (!hasRequiredPerms) return;
+
+    const menuEntries: ContextMenu.Entry[] = [
+      {
+        title: 'Huidige Werknemers',
+        description: 'Klik op een persoon om deze uit dienst te zetten',
+        disabled: true,
+      },
+      ...[...this.signedInPlayers].map(plyId => {
+        const charInfo = charModule.getPlayer(plyId)?.charinfo;
+        const plyName = `${charInfo ? `${charInfo.firstname} ${charInfo.lastname}` : 'Offline'} | ${plyId}`;
+
+        return {
+          title: plyName,
+          callbackURL: 'business/forceOffDuty',
+          data: {
+            businessId: this.info.id,
+            plyId,
+          },
+        };
+      }),
+    ];
+
+    UI.openContextMenu(plyId, menuEntries);
+  };
+
+  public forceOffDuty = (plyId: number, targetId: number) => {
+    if (!this.isOptedInToModule('signin')) {
+      this.logger.warn(
+        `${Util.getName(plyId)}(${plyId}) tried to do signout at ${
+          this.info.label
+        } but business is not opted in to module`
+      );
+      return;
+    }
+
+    const cid = Util.getCID(plyId);
+    const hasRequiredPerms = this.hasPermission(cid, 'change_role');
+    if (!hasRequiredPerms) return;
+
+    this.signOut(targetId);
+  };
+
+  public isPlayerInside = (plyId: number) => {
+    return this.playersInside.has(plyId);
+  };
+
+  public playerEntered = (plyId: number) => {
+    this.playersInside.add(plyId);
+    this.logger.silly(`${Util.getName(plyId)}(${plyId}) entered`);
+  };
+
+  public playerLeft = (plyId: number) => {
+    this.playersInside.delete(plyId);
+
+    // sign out when leaving restaurant
+    if (
+      this.signedInPlayers.has(plyId) &&
+      getConfig().types[this.info.business_type.name]?.signin?.signOutWhenLeavingZone
+    ) {
+      this.signOut(plyId);
+    }
+
+    this.logger.silly(`${Util.getName(plyId)}(${plyId}) left`);
+  };
+
+  public trySetRegister = async (plyId: number, registerIdx: number) => {
+    if (!this.isSignedIn(plyId)) return;
+
+    if (this.registers.has(registerIdx)) {
+      Notifications.add(plyId, 'Er staat nog een rekening open op deze kassa', 'error');
+      return;
+    }
+
+    if (this.priceItems.size > 0) {
+      const priceItems: Business.ClientPricedItems = Object.fromEntries(this.priceItems.entries());
+      Events.emitNet('business:client:startPricedItemOrder', plyId, this.info.id, registerIdx, priceItems);
+      return;
+    }
+
+    // if no prices items are present, we just use inputmenu to get price
+    const result = await UI.openInput<{ price: string }>(plyId, {
+      header: 'Prijs Instellen',
+      inputs: [
+        {
+          type: 'number',
+          name: 'price',
+          label: 'Prijs',
+        },
+      ],
+    });
+    if (!result.accepted) return;
+
+    const price = Number(result.values.price);
+    if (isNaN(price)) {
+      Notifications.add(plyId, 'Prijs moet een nummer zijn', 'error');
+      return;
+    }
+
+    this.setRegister(plyId, registerIdx, price);
+  };
+
+  public setRegister = (plyId: number, registerIdx: number, data: number | string[]) => {
+    if (!this.isSignedIn(plyId)) return;
+
+    if (this.registers.has(registerIdx)) {
+      Notifications.add(plyId, 'Er staat nog een rekening open op deze kassa', 'error');
+      return;
+    }
+
+    let price = 0;
+    let items: string[] | undefined = undefined;
+    if (typeof data === 'number') {
+      price = data;
+    } else {
+      price = data.reduce((acc, cur) => acc + (this.priceItems.get(cur)?.price ?? 0), 0);
+      items = data;
+    }
+
+    this.registers.set(registerIdx, {
+      price,
+      employeeCid: Util.getCID(plyId),
+      orderId: Util.uuidv4(),
+      items,
+    });
+
+    this.signedInPlayers.forEach(emp => {
+      Notifications.add(emp, `Kassa ${registerIdx + 1} | €${price}`, 'success');
+    });
+
+    this.logger.silly(`${Util.getName(plyId)}(${plyId}) has set register ${registerIdx + 1} to ${price}`);
+  };
+
+  public cancelRegister = (plyId: number, registerIdx: number) => {
+    if (!this.isSignedIn(plyId)) return;
+
+    if (!this.registers.has(registerIdx)) {
+      Notifications.add(plyId, 'Er staat geen rekening open op deze kassa', 'error');
+      return;
+    }
+
+    this.registers.delete(registerIdx);
+
+    this.signedInPlayers.forEach(emp => {
+      Notifications.add(emp, `Kassa ${registerIdx + 1} | Geannuleerd`, 'success');
+    });
+
+    this.logger.silly(`${Util.getName(plyId)}(${plyId}) has canceled register ${registerIdx + 1}`);
+  };
+
+  public checkRegister = (plyId: number, registerIdx: number) => {
+    const register = this.registers.get(registerIdx);
+    if (!register) {
+      Notifications.add(plyId, 'Er hoeft momenteel niks betaald te worden', 'error');
+      return;
+    }
+
+    const taxedPrice = Financials.getTaxedPrice(register.price, TaxIds.Goederen).taxPrice;
+
+    const itemEntries: ContextMenu.Entry[] = [];
+    for (const item of register.items ?? []) {
+      const priceItem = this.priceItems.get(item);
+      if (!priceItem) continue;
+      itemEntries.push({
+        title: `${priceItem.label} | €${Financials.getTaxedPrice(priceItem.price, TaxIds.Goederen).taxPrice}`,
+        disabled: true,
+      });
+    }
+
+    const menuEntries: ContextMenu.Entry[] = [
+      {
+        title: `Bestelling | Kassa #${registerIdx + 1}`,
+        disabled: true,
+      },
+      ...itemEntries,
+      {
+        title: 'Betaal',
+        description: `Totaalprijs: €${taxedPrice}`,
+        callbackURL: 'business/register/pay',
+        data: {
+          businessId: this.info.id,
+          registerIdx,
+          orderId: register.orderId, // use to check if register info does not change while menu is open
+        },
+      },
+    ];
+
+    UI.openContextMenu(plyId, menuEntries);
+  };
+
+  public payRegister = async (plyId: number, registerIdx: number, orderId: string) => {
+    const register = this.registers.get(registerIdx);
+    if (!register || register.orderId !== orderId) {
+      Notifications.add(plyId, 'Een medewerker heeft de rekening geannuleerd', 'error');
+      return;
+    }
+
+    const cid = Util.getCID(plyId);
+    const accId = Financials.getDefaultAccountId(cid);
+    if (!accId) {
+      Notifications.add(plyId, 'Je hebt geen bankaccount', 'error');
+      return;
+    }
+
+    const success = await Financials.transfer(
+      accId,
+      this.info.bank_account_id,
+      cid,
+      cid,
+      register.price,
+      `${this.info.label} kassa betaling`,
+      TaxIds.Goederen
+    );
+    const notifMessage = success ? 'Successvol betaald' : 'Je hebt niet genoeg op je rekening';
+    Phone.showNotification(plyId, {
+      id: `${this.info.name}-payment-${Date.now()}`,
+      title: notifMessage,
+      description: '',
+      icon: 'info',
+    });
+
+    if (!success) return;
+
+    this.signedInPlayers.forEach(emp => {
+      Notifications.add(emp, `Kassa ${registerIdx + 1} | Betaald`, 'success');
+    });
+
+    this.registers.delete(registerIdx);
+
+    // Give percentage to employee
+    const employeePercentage = Math.min(1, getConfig().businesses[this.info.name]?.registers?.employeePercentage ?? 0);
+    if (employeePercentage !== 0) {
+      const employeeAccountId = Financials.getDefaultAccountId(register.employeeCid);
+      const ownerCid = this.getOwnerCid();
+      if (employeeAccountId && ownerCid) {
+        Financials.transfer(
+          this.info.bank_account_id,
+          employeeAccountId,
+          ownerCid,
+          register.employeeCid,
+          register.price * employeePercentage,
+          `${this.info.label} kassa betaling | Bediende percentage`
+        );
+      }
+    }
+
+    const logMsg = `${Util.getName(plyId)}(${plyId}) has paid register ${registerIdx + 1} for €${register.price}`;
+    this.logger.silly(logMsg);
+    Util.Log('business:payRegister', { ...register, registerIdx: registerIdx + 1 }, logMsg, plyId);
+  };
+
+  public openPriceMenu = async (plyId: number) => {
+    const cid = Util.getCID(plyId);
+    const hasRequiredPerms = this.hasPermission(cid, 'change_role');
+    if (!hasRequiredPerms) return;
+
+    const itemOptions: UI.Input.SelectInput['options'] = [];
+    for (const [item, data] of this.priceItems) {
+      const itemData = Inventory.getItemData(item);
+      if (!itemData) continue;
+      itemOptions.push({
+        label: `${itemData.label} | Huidig: €${data.price}`,
+        value: item,
+      });
+    }
+
+    const result = await UI.openInput<{ item: string; price: string }>(plyId, {
+      header: 'Verander de menuitem prijzen',
+      inputs: [
+        {
+          type: 'select',
+          label: 'Item',
+          name: 'item',
+          options: itemOptions,
+        },
+        {
+          type: 'number',
+          label: 'Nieuwe prijs',
+          name: 'price',
+          value: '0',
+        },
+      ],
+    });
+    if (!result.accepted) return;
+
+    const newPrice = Number(result.values.price);
+    if (isNaN(newPrice)) return;
+    const itemName = result.values.item;
+
+    const priceItem = this.priceItems.get(itemName);
+    if (!priceItem) return;
+
+    priceItem.price = newPrice;
+    SQL.query('UPDATE business_item_prices SET price = ? WHERE business_id = ? AND item = ?', [
+      newPrice,
+      this.info.id,
+      itemName,
+    ]);
+
+    const logMsg = `${Util.getName(plyId)}(${plyId}) has changed the price of ${itemName} to €${newPrice}`;
+    this.logger.silly(logMsg);
+    Util.Log(
+      'business:changeItemPrice',
+      {
+        item: itemName,
+        price: newPrice,
+      },
+      logMsg,
+      plyId
+    );
+  };
+
+  public getPriceItems = () => {
+    return this.priceItems;
+  };
 }

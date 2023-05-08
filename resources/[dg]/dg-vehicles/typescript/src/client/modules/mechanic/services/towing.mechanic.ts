@@ -1,7 +1,6 @@
-import { Notifications, Taskbar, Util, Sync, Events } from '@dgx/client';
+import { Notifications, Taskbar, Util, Sync, Events, Business } from '@dgx/client';
 import { getVehHalfLength } from '@helpers/vehicle';
 import { getVehicleVinWithoutValidation } from 'modules/identification/service.identification';
-import { isClockedIn } from '../service.mechanic';
 
 let towVehicle: number;
 let jobBlip: number;
@@ -9,7 +8,7 @@ let jobVin: string | null = null;
 
 export const canTow = (veh: number) => {
   if (!towVehicle || towVehicle === veh) return false;
-  if (!isClockedIn()) return false;
+  if (!Business.isSignedInAtAnyOfType('mechanic')) return false;
   if (!DoesEntityExist(towVehicle)) {
     towVehicle = 0;
     return false;

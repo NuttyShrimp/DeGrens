@@ -350,7 +350,7 @@ class StateManager extends Util.Singleton<StateManager>() {
       return false;
     }
 
-    const plyId = DGCore.Functions.getPlyIdForCid(cid);
+    const plyId = group.members.find(m => m.cid)?.serverId;
     if (!plyId) {
       mainLogger.debug(`player ${cid} was no longer online to start job`);
       return false;

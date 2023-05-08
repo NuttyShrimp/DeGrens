@@ -1,4 +1,4 @@
-import { Util } from '@dgx/server';
+import { Core, Util } from '@dgx/server';
 
 export const getIdentifierForPlayer = (source: number, identifier: string) => {
   const src = String(source);
@@ -31,7 +31,8 @@ export const getServerIdForSteamId = (steamId: string) => {
 };
 
 export const getPlayerForSteamId = (steamId: string): UserData | null => {
-  const ply = Object.values(DGCore.Functions.GetQBPlayers()).find((ply: Player) => ply.PlayerData.steamid === steamId);
+  const userModule = Core.getModule("users");
+  const ply = userModule.getServerIdFromIdentifier("steam", steamId);
   if (!ply) return null;
-  return getUserData(ply.PlayerData.source);
+  return getUserData(ply);
 };

@@ -1,4 +1,4 @@
-import { Inventory, SQL, Util } from '@dgx/server';
+import { Core, Inventory, SQL, Util } from '@dgx/server';
 import { Vector3 } from '@dgx/shared';
 
 const evidence: Police.Evidence.Evidence[] = [];
@@ -36,9 +36,10 @@ export const takeEvidence = (plyId: number, evidenceId: string) => {
 };
 
 export const addBloodDrop = (plyId: number) => {
-  const player = DGCore.Functions.GetPlayer(plyId);
+  const player = Core.getPlayer(plyId);
+  if (!player) return;
   const plyCoords = Util.getPlyCoords(plyId);
-  addEvidence({ x: plyCoords.x, y: plyCoords.y, z: plyCoords.z - 0.95 }, 'blood', player.PlayerData.metadata.dna);
+  addEvidence({ x: plyCoords.x, y: plyCoords.y, z: plyCoords.z - 0.95 }, 'blood', player.metadata.dna);
 };
 
 export const getCidOfDNA = async (dna: string): Promise<number | undefined> => {

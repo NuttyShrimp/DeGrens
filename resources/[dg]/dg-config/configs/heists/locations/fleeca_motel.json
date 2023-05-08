@@ -1,9 +1,7 @@
 {
   "type": "fleeca",
   "label": "Fleeca Bank Hawick Ave",
-  "cams": [
-    10
-  ],
+  "cams": [10],
   "zone": {
     "points": [
       {
@@ -39,7 +37,7 @@
     "coords": {
       "x": 312.36,
       "y": -282.73,
-      "z": 54.30
+      "z": 54.3
     },
     "heading": {
       "open": 149.866,

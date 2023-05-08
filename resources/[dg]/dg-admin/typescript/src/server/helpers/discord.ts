@@ -37,7 +37,10 @@ const discordRequest = async (method: string, endpoint: string, data?: any) => {
       status: result.status,
       statusText: result.statusText,
     };
-  } catch (e) {
+  } catch (e: any) {
+    if (e.response && e.response.status === 404) {
+      return;
+    }
     console.error(e);
     mainLogger.error('Failed to make request to discord API');
   }
@@ -53,19 +56,23 @@ const testSettings = async () => {
   mainLogger.debug(`Made successful connection to discord API for role checking. Active on ${guild.data?.name} `);
 };
 
-export const getPlayerDiscordRoles = async (src: number): Promise<string[]> => {
-  const identifier = getIdentifierForPlayer(src, 'discord');
-  if (!identifier) return [];
-  const discordId = identifier.replace('discord:', '');
-  if (!discordId) return [];
+export const getPlayerDiscordRoles = async (discordId: string): Promise<string[]> => {
   const endpoint = `guilds/${config.guildId}/members/${discordId}`;
   const member = await discordRequest('GET', endpoint);
   if (!member) return [];
   return member.status !== 200 ? [] : member.data.roles;
 };
 
+export const GetPlyDiscordRolesByServerId = async (src: number) => {
+  const identifier = getIdentifierForPlayer(src, 'discord');
+  if (!identifier) return [];
+  const discordId = identifier.replace('discord:', '');
+  if (!discordId) return [];
+  return getPlayerDiscordRoles(discordId);
+};
+
 export const doesPlayerHaveWhitelistedRole = async (src: number): Promise<boolean> => {
   if (!config.whitelist.enabled) return false;
-  const roles = await getPlayerDiscordRoles(src);
+  const roles = await GetPlyDiscordRolesByServerId(src);
   return Object.values(config.whitelist.roles).some(role => roles.includes(String(role)));
 };

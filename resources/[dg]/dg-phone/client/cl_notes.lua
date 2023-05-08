@@ -4,32 +4,32 @@ RegisterUICallback('phone/notes/enterEdit', function(data, cb)
 end)
 
 RegisterUICallback('phone/notes/get', function(data, cb)
-  local notes = DGCore.Functions.TriggerCallback('dg-phone:server:notes:get', nil)
+  local notes = DGX.RPC.execute('dg-phone:server:notes:get')
   cb({ data = notes, meta = { ok = true, message = 'done' } })
 end)
 
 RegisterUICallback('phone/notes/new', function(data, cb)
-  local note = DGCore.Functions.TriggerCallback('dg-phone:server:notes:new', nil, data)
+  local note = DGX.RPC.execute('dg-phone:server:notes:new', data)
   cb({ data = note, meta = { ok = true, message = 'done' } })
 end)
 
 RegisterUICallback('phone/notes/save', function(data, cb)
-  local note = DGCore.Functions.TriggerCallback('dg-phone:server:notes:save', nil, data)
-  cb({ data = note, meta = { ok = true, message = 'done' } })
+  DGX.Events.emitNet('dg-phone:server:notes:save', data)
+  cb({ data = "ok", meta = { ok = true, message = 'done' } })
 end)
 
 RegisterUICallback('phone/notes/delete', function(data, cb)
-  DGCore.Functions.TriggerCallback('dg-phone:server:notes:delete', nil, data)
+  DGX.Events.emitNet('dg-phone:server:notes:delete', data)
   cb({ data = {}, meta = { ok = true, message = 'done' } })
 end)
 
 RegisterUICallback('phone/notes/share', function(data, cb)
-  DGCore.Functions.TriggerCallback('dg-phone:server:notes:share', nil, data)
+  DGX.Events.emitNet('dg-phone:server:notes:share', data)
   cb({ data = {}, meta = { ok = true, message = 'done' } })
 end)
 
 RegisterUICallback('phone/notes/resolveShare', function(data, cb)
-  local id = DGCore.Functions.TriggerCallback('dg-phone:server:notes:resolve', nil, data)
+  local id = DGX.RPC.execute('dg-phone:server:notes:resolve', data)
   if id == nil then
     cb({ data = {}, meta = { ok = true, message = 'done' } })
   elseif type(id) == 'string' then

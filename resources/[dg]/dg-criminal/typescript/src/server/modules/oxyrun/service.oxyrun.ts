@@ -277,16 +277,17 @@ export const sellOxyToBuyer = async (plyId: number, vin: string, itemState: Inve
   );
 };
 
-export const resetOxyrunVehicle = (plyId: number) => {
+export const resetOxyrunVehicle = (plyId: number): boolean => {
   const group = Jobs.getGroupByServerId(plyId);
-  if (!group) return;
+  if (!group) return false;
 
   const activeRun = activeRuns.get(group.id);
-  if (!activeRun) return;
+  if (!activeRun) return false;
 
-  if (activeRun.currentStep !== 'delivery') return;
+  if (activeRun.currentStep !== 'delivery') return false;
 
   activeRun.currentVin = null;
-
   oxyrunLogger.debug(`vehicle has been reset for oxyrun of ${Util.getName(plyId)}(${plyId})`);
+
+  return true;
 };

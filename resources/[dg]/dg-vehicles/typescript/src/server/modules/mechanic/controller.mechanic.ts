@@ -1,6 +1,6 @@
 import { Auth, Events, Inventory, RPC } from '@dgx/server';
 
-import { clockPlayerIn, clockPlayerOut, loadConfig, loadZones } from './service.mechanic';
+import { loadConfig, loadZones } from './service.mechanic';
 import { openPartsMenu, getOrderMenu, finishOrder, craftPart } from './services/parts.mechanic';
 import { attachVehicleToTowVehicle, removeVehicleFromTowVehicle, tryAcceptingJob } from './services/towing.mechanic';
 
@@ -10,10 +10,6 @@ setImmediate(() => {
 
 Auth.onAuth(src => {
   loadZones(src);
-});
-
-Events.onNet('vehicles:mechanic:setClockStatus', (src, shop: string, isClockedIn: boolean) => {
-  isClockedIn ? clockPlayerIn(src, shop) : clockPlayerOut(src);
 });
 
 Events.onNet('vehicles:mechanic:server:acceptTowJob', tryAcceptingJob);

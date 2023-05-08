@@ -17,9 +17,7 @@
       "maxZ": 27.2
     }
   },
-  "vehicle_types": [
-    "land"
-  ],
+  "vehicle_types": ["land"],
   "parking_spots": [
     {
       "type": "land",
@@ -27,7 +25,7 @@
       "distance": 1.8,
       "heading": 267,
       "coords": {
-        "x": -687.10,
+        "x": -687.1,
         "y": -884.84,
         "z": 24.49
       }

@@ -4,6 +4,7 @@ import winston from 'winston';
 
 import vinManager from '../../identification/classes/vinmanager';
 import { keyLogger } from '../logger.keys';
+import { charModule } from 'helpers/core';
 
 class KeyManager extends Util.Singleton<KeyManager>() {
   /**
@@ -27,7 +28,7 @@ class KeyManager extends Util.Singleton<KeyManager>() {
    * @param source
    */
   public addKey(pVin: string, source: number): void {
-    const cid = Player(source).state.cid;
+    const cid = Util.getCID(source);
     if (!this.keys.has(pVin)) {
       this.logger.debug(`addKey: Adding ${pVin} to map | CID: ${cid}`);
       this.keys.set(pVin, []);
@@ -55,7 +56,7 @@ class KeyManager extends Util.Singleton<KeyManager>() {
    * @returns True if the player has a key for the plate
    */
   public hasKey(pVin: string, src: number): boolean {
-    const cid = Player(src).state.cid;
+    const cid = Util.getCID(src);
     if (!this.keys.has(pVin)) {
       this.logger.debug(`hasKey: No key for vin ${pVin} | CID: ${cid}`);
       return false;
@@ -86,7 +87,7 @@ class KeyManager extends Util.Singleton<KeyManager>() {
    * @param src
    */
   public removeKey(pVin: string, src: number): void {
-    const cid = Player(src).state.cid;
+    const cid = Util.getCID(src);
     if (!this.keys.has(pVin)) {
       return;
     }
@@ -111,7 +112,7 @@ class KeyManager extends Util.Singleton<KeyManager>() {
     }
     this.logger.debug(`Removing all car keys for ${pVin}`);
     keys.forEach(cid => {
-      const plyId = DGCore.Functions.getPlyIdForCid(cid);
+      const plyId = charModule.getServerIdFromCitizenId(cid);
       if (!plyId) return;
       Events.emitNet('vehicles:keys:removeFromCache', plyId, pVin);
     });

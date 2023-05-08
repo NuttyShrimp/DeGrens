@@ -704,6 +704,60 @@
           "amount": 1
         }
       ]
+    },
+    "blazeit_joint": {
+      "requiredReputation": 0,
+      "items": [
+        {
+          "name": "cbd_bag",
+          "amount": 1
+        }
+      ]
+    },
+    "blazeit_brownie": {
+      "requiredReputation": 3,
+      "items": [
+        {
+          "name": "cbd_bag",
+          "amount": 2
+        }
+      ]
+    },
+    "blazeit_cookie": {
+      "requiredReputation": 3,
+      "items": [
+        {
+          "name": "cbd_bag",
+          "amount": 2
+        }
+      ]
+    },
+    "blazeit_gummy": {
+      "requiredReputation": 10,
+      "items": [
+        {
+          "name": "cbd_bag",
+          "amount": 3
+        }
+      ]
+    },
+    "blazeit_oil": {
+      "requiredReputation": 15,
+      "items": [
+        {
+          "name": "cbd_bag",
+          "amount": 5
+        }
+      ]
+    },
+    "blazeit_stick": {
+      "requiredReputation": 15,
+      "items": [
+        {
+          "name": "cbd_bag",
+          "amount": 5
+        }
+      ]
     }
   },
   "benches": {
@@ -790,12 +844,12 @@
       "visibleReputationLimit": 500
     },
     "mechanic_bench": {
-      "items": [
-        "repair_kit",
-        "tire_repair_kit",
-        "weapon_petrolcan"
-      ],
+      "items": ["repair_kit", "tire_repair_kit", "weapon_petrolcan"],
       "reputation": "mechanic_crafting"
+    },
+    "blazeit_bench": {
+      "items": ["blazeit_joint", "blazeit_brownie", "blazeit_cookie", "blazeit_gummy", "blazeit_oil", "blazeit_stick"],
+      "reputation": "blazeit_crafting"
     }
   }
 }

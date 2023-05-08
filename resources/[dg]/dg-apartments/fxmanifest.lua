@@ -3,7 +3,6 @@ game 'gta5'
 
 shared_script {
   "@ts-shared/shared/lib.lua",
-  '@dg-core/import.lua', 
   'config.lua'
 }
 

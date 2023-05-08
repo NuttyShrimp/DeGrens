@@ -1,4 +1,4 @@
-import { Events, UI, Util } from '@dgx/client';
+import { Core, Events, UI, Util } from '@dgx/client';
 import contextManager from 'classes/contextmanager';
 import itemDataManager from 'classes/itemdatamanager';
 import { doDropAnimation } from './../util';
@@ -35,6 +35,6 @@ Events.onNet('inventory:itemdata:seed', (itemData: Record<string, Inventory.Item
   itemDataManager.seed(itemData);
 });
 
-Util.onPlayerUnloaded(() => {
+Core.onPlayerUnloaded(() => {
   clearItemCache();
 });

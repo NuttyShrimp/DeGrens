@@ -8,13 +8,13 @@ CreateThread(function()
 end)
 
 seedJob = function(job)
-  for plySrvId, player in pairs(DGCore.Functions.GetQBPlayers()) do
+  for plySrvId, player in pairs(charModule.getAllPlayers()) do
     local plyJob = DGX.Jobs.getCurrentJob(plySrvId)
     if plyJob == job then
       table.insert(registered[job], {
         srvId = plySrvId,
-        name = player.PlayerData.charinfo.firstname .. " " .. player.PlayerData.charinfo.lastname,
-        phone = player.PlayerData.charinfo.phone,
+        name = player.charinfo.firstname .. " " .. player.charinfo.lastname,
+        phone = player.charinfo.phone,
         available = Config.justice.availableOnLogin
       })
     end
@@ -52,20 +52,19 @@ RegisterNetEvent('jobs:server:signin:update', function(src, job)
       return
     end
   end
-  local Player = DGCore.Functions.GetPlayer(src)
+  local Player = charModule.getPlayer(src)
   table.insert(registered[job], {
     srvId = src,
-    name = Player.PlayerData.charinfo.firstname .. " " .. Player.PlayerData.charinfo.lastname,
-    phone = Player.PlayerData.charinfo.phone,
+    name = Player.charinfo.firstname .. " " .. Player.charinfo.lastname,
+    phone = Player.charinfo.phone,
     available = Config.justice.availableOnLogin
   })
 end)
 
-DGCore.Functions.CreateCallback('dg-phone:server:justice:get', function(src, cb)
-  cb(registered)
+DGX.RPC.register('dg-phone:server:justice:get', function(src)
+  return registered
 end)
 
-DGCore.Functions.CreateCallback('dg-phone:server:justice:setAvailable', function(src, cb, data)
+DGX.Events.onNet('dg-phone:server:justice:setAvailable', function(src, data)
   setPlyAvailable(src, data.available)
-  cb('ok')
 end)

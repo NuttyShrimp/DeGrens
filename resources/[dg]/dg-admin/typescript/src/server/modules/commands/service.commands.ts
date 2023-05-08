@@ -9,31 +9,6 @@ export const commands: CommandData[] = [];
 
 const interactingPlayersForPlayer: Record<number, number[]> = {};
 
-const generateCaller = (source: number): UserData => {
-  return {
-    source,
-    name: GetPlayerName(String(source)),
-    cid: Player(source).state.cid ?? 0,
-    steamId: Player(source).state.steamId,
-  };
-};
-
-const getCommandHandler = (src: number, cmd: string) => {
-  const command = commands.find(c => c.name === cmd);
-  if (!command) return;
-  if (!command.handler) return;
-  const caller = generateCaller(src);
-  Util.Log(
-    `admin:command:${command.name}`,
-    {
-      command: cmd,
-    },
-    `${caller.name} executed following admin command ${command.name}`,
-    src
-  );
-  command.handler(caller);
-};
-
 export const loadCommands = () => {
   const importAll = (r: [string, any][]) => {
     r.forEach(([_, cmdData]) => {

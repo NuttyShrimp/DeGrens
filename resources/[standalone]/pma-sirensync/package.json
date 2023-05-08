@@ -1,6 +1,6 @@
 {
   "name": "pma-sirensync",
-  "version": "1.1.5",
+  "version": "1.2.0",
   "description": "pma-sirensync",
   "main": "index.js",
   "license": "",

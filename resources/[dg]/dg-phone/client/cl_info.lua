@@ -3,7 +3,7 @@ local entries = {}
 
 -- First remove old one if exists with name but need forloopke because we use array to keep order
 registerInfoEntry = function(data)
-  local keyToReplace = #entries+1
+  local keyToReplace = #entries + 1
 
   -- if entry with name already exists then use that key to replace old
   for k, v in pairs(entries) do
@@ -28,15 +28,15 @@ RegisterNetEvent('dg-phone:load', function()
     icon = 'id-card',
     prefix = '#',
     getter = function()
-      return DGCore.Functions.GetPlayerData().citizenid
+      return LocalPlayer.state.citizenid
     end,
   })
   registerInfoEntry({
     name = 'phone',
     icon = 'hashtag',
     getter = function()
-      local plyData = DGCore.Functions.GetPlayerData()
-      return plyData.charinfo.phone
+      local charInfo = charModule.getCharinfo()
+      return charInfo and charInfo.phone or 0
     end,
   })
   registerInfoEntry({
@@ -66,7 +66,7 @@ RegisterUICallback("phone/info/fetchInfo", function(data, cb)
   local uiEntries = {}
   for _, v in pairs(entries) do
     local value = v.getter()
-    uiEntries[#uiEntries+1] = {
+    uiEntries[#uiEntries + 1] = {
       name = v.name,
       icon = v.icon,
       color = v.color,

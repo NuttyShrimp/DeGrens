@@ -1,11 +1,15 @@
-import { Chat, Events, RPC, Util } from '@dgx/server';
+import { Events, RPC, Util, Chat, Auth, Core } from '@dgx/server';
 import { getConfig, setConfig } from '../services/config';
 import {
-  createBusiness,
   dispatchAllBusinessPermissionsToClientCache,
   getBusinessById,
   getBusinessEmployees,
+  getAllBusinessesInfo,
   getBusinessesForPlayer,
+  awaitBusinessesLoaded,
+  getBusinessByName,
+  leaveCurrentBusiness,
+  createBusiness,
 } from '../services/business';
 
 onNet('dg-config:moduleLoaded', (module: string, data: Config.Config) => {
@@ -13,9 +17,26 @@ onNet('dg-config:moduleLoaded', (module: string, data: Config.Config) => {
   setConfig(data);
 });
 
-Util.onPlayerLoaded(playerData => {
-  Events.emitNet('business:client:setPermLabels', playerData.source, getConfig().permissions.labels);
-  dispatchAllBusinessPermissionsToClientCache(playerData.source);
+Auth.onAuth(async plyId => {
+  await awaitBusinessesLoaded();
+
+  const config = getConfig();
+  Events.emitNet('business:client:setPermLabels', plyId, config.permissions.labels);
+  Events.emitNet('business:client:loadBusinesses', plyId, config.businesses, config.types, getAllBusinessesInfo());
+
+  // Only happens when restarting resource
+  if (Player(plyId).state.isLoggedIn) {
+    dispatchAllBusinessPermissionsToClientCache(plyId);
+  }
+});
+
+Core.onPlayerLoaded(playerData => {
+  if (!playerData.serverId) return;
+  dispatchAllBusinessPermissionsToClientCache(playerData.serverId);
+});
+
+Core.onPlayerUnloaded(plyId => {
+  leaveCurrentBusiness(plyId);
 });
 
 RPC.register('business:server:getAll', src => {
@@ -162,4 +183,114 @@ RPC.register('business:server:getLogs', async (src, id: number, offset: number) 
     business.logger.error(`Failed to get logs, ${src} offset: ${offset}: ${e}`);
     return [];
   }
+});
+
+setImmediate(() => {
+  if (!Util.isDevEnv()) return;
+
+  Chat.registerCommand(
+    'createBusiness',
+    'Create a new business',
+    [
+      {
+        name: 'name',
+        description: 'Name of business',
+        required: true,
+      },
+      {
+        name: 'label',
+        description: 'label of business',
+        required: true,
+      },
+      {
+        name: 'cid',
+        description: 'CitizenID of owner',
+        required: true,
+      },
+      {
+        name: 'type',
+        description: 'name of business type',
+        required: true,
+      },
+    ],
+    'developer',
+    (src, _, params) => {
+      if (Number.isNaN(parseInt(params[2]))) {
+        throw new Error('CitizenId should be a valid integer');
+      }
+      createBusiness(params[0], params[1], Number(params[2]), params[3]);
+    }
+  );
+});
+
+Events.onNet('business:server:signIn', (plyId, businessName: string) => {
+  const business = getBusinessByName(businessName);
+  if (!business) return;
+  business.signIn(plyId);
+});
+
+Events.onNet('business:server:signOut', (plyId, businessName: string) => {
+  const business = getBusinessByName(businessName);
+  if (!business) return;
+  business.signOut(plyId);
+});
+
+Events.onNet('business:server:openSignedInList', (plyId, businessName: string) => {
+  const business = getBusinessByName(businessName);
+  if (!business) return;
+  business.openSignedInList(plyId);
+});
+
+Events.onNet('business:server:forceOffDuty', (plyId: number, businessId: number, targetId: number) => {
+  const business = getBusinessById(businessId);
+  if (!business) return;
+  business.forceOffDuty(plyId, targetId);
+});
+
+Events.onNet('business:server:enterBusiness', (plyId, businessName: string) => {
+  const business = getBusinessByName(businessName);
+  if (!business) return;
+  business.playerEntered(plyId);
+});
+
+Events.onNet('business:server:leaveBusiness', (plyId, businessName: string) => {
+  const business = getBusinessByName(businessName);
+  if (!business) return;
+  business.playerLeft(plyId);
+});
+
+Events.onNet('business:server:trySetRegister', (plyId, businessName: string, registerIdx: number) => {
+  const business = getBusinessByName(businessName);
+  if (!business) return;
+  business.trySetRegister(plyId, registerIdx);
+});
+
+Events.onNet('business:server:setRegister', (plyId, businessId: number, registerIdx: number, items: string[]) => {
+  const business = getBusinessById(businessId);
+  if (!business) return;
+  business.setRegister(plyId, registerIdx, items);
+});
+
+Events.onNet('business:server:cancelRegister', (plyId, businessName: string, registerIdx: number) => {
+  const business = getBusinessByName(businessName);
+  if (!business) return;
+  business.cancelRegister(plyId, registerIdx);
+});
+
+Events.onNet('business:server:checkRegister', (plyId, businessName: string, registerIdx: number) => {
+  const business = getBusinessByName(businessName);
+  if (!business) return;
+  business.checkRegister(plyId, registerIdx);
+});
+
+Events.onNet('business:server:payRegister', (plyId, businessId: number, registerIdx: number, orderId: string) => {
+  const business = getBusinessById(businessId);
+  if (!business) return;
+  business.payRegister(plyId, registerIdx, orderId);
+});
+
+Events.onNet('business:server:openPriceMenu', (plyId, businessName: string) => {
+  const business = getBusinessByName(businessName);
+  if (!business) return;
+  business.openPriceMenu(plyId);
 });

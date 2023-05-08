@@ -11,8 +11,8 @@ local getApartmentInfo = function(type)
 end
 
 getPlayerApartment = function(src)
-  local Player = DGCore.Functions.GetPlayer(src);
-  local result = exports['dg-sql']:query('SELECT id FROM apartments WHERE citizenid = ?', { Player.PlayerData.citizenid })
+  local Player = exports['dg-core']:getPlayer(src)
+  local result = exports['dg-sql']:query('SELECT id FROM apartments WHERE citizenid = ?', { Player.citizenid })
   if (result == nil or result[1] == nil or result[1].id == nil) then
     createPlayerApartment(src)
     return getPlayerApartment(src)
@@ -21,16 +21,16 @@ getPlayerApartment = function(src)
 end
 
 createPlayerApartment = function(src)
-  local Player = DGCore.Functions.GetPlayer(src);
-  return exports['dg-sql']:insert('INSERT INTO apartments (citizenid) VALUES (?) ', { Player.PlayerData.citizenid })
+  local Player = exports['dg-core']:getPlayer(src)
+  return exports['dg-sql']:insert('INSERT INTO apartments (citizenid) VALUES (?) ', { Player.citizenid })
 end
 
 setInsideMeta = function(src, aId)
-  local Player = DGCore.Functions.GetPlayer(src)
-  local insideMeta = Player.PlayerData.metadata["inside"]
+  local Player = exports['dg-core']:getPlayer(src)
+  local insideMeta = Player.metadata["inside"]
   insideMeta.apartment.id = aId > 0 and aId or nil
   insideMeta.house = nil
-  Player.Functions.SetMetaData("inside", insideMeta)
+  Player.updateMetadata("inside", insideMeta)
 end
 
 RegisterNetEvent('dg-apartments:server:setInsideMeta', function(aId)
@@ -128,7 +128,9 @@ RegisterNetEvent('dg-apartments:server:toggleLockDown', function()
     -- TODO add ban for injection
   end
   state.isInLockdown = not state.isInLockdown
-  DGX.Notifications.add(source, state.isInLockdown and 'Dit appartementsblok is nu onder lockdown' or 'Dit appartementsblok is niet meer onder lockdown')
+  DGX.Notifications.add(source,
+    state.isInLockdown and 'Dit appartementsblok is nu onder lockdown' or
+    'Dit appartementsblok is niet meer onder lockdown')
 end)
 
 RegisterNetEvent('dg-apartments:server:inviteApartment')
@@ -162,7 +164,7 @@ RegisterServerEvent('dg-apartments:server:toggleApartmentLock', function()
 end)
 
 -- Callbacks
-DGCore.Functions.CreateCallback('dg-apartments:server:getApartmentMenu', function(src, cb)
+DGX.RPC.register('dg-apartments:server:getApartmentMenu', function(src)
   local plyJob = DGX.Jobs.getCurrentJob(src)
   local ownedApartId = getPlayerApartment(src)
   local invApart = getInvitedApartments(src)
@@ -233,22 +235,22 @@ DGCore.Functions.CreateCallback('dg-apartments:server:getApartmentMenu', functio
     }
   end
 
-  cb(menu)
+  return menu
 end)
 
-DGCore.Functions.CreateCallback('dg-apartments:server:getCurrentApartment', function(src, cb)
+DGX.RPC.register('dg-apartments:server:getCurrentApartment', function(src)
   local apartment = getCurrentApartment(src)
-  cb(apartment and apartment.id or nil)
+  return apartment and apartment.id or nil
 end)
 
-DGCore.Functions.CreateCallback('dg-apartments:server:getApartmentInvites', function(src, cb)
+DGX.RPC.register('dg-apartments:server:getApartmentInvites', function(src)
   local apartment = getCurrentApartment(src)
   local invites = getApartmentInvites(apartment.id, src)
   local menu = {}
   for k, v in pairs(invites) do
-    local Player = DGCore.Functions.GetPlayer(tonumber(v))
+    local Player = exports['dg-core']:getPlayer(tonumber(v))
     menu[#menu + 1] = {
-      title = ('%s %s(%s)'):format(Player.PlayerData.charinfo.firstname, Player.PlayerData.charinfo.lastname, v),
+      title = ('%s %s(%s)'):format(Player.charinfo.firstname, Player.charinfo.lastname, v),
       description = "Uitnodiging verwijderen",
       callbackURL = "dg-apartments:client:removeInvite",
       data = {
@@ -261,5 +263,5 @@ DGCore.Functions.CreateCallback('dg-apartments:server:getApartmentInvites', func
       title = "Geen uitgenodigden",
     }
   end
-  cb(menu)
+  return menu
 end)

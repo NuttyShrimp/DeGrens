@@ -1435,9 +1435,7 @@
     "description": "PDM Linkse deur",
     "locked": true,
     "authorized": {
-      "business": [
-        "pdm"
-      ]
+      "business": ["pdm"]
     },
     "distance": 2,
     "doors": [
@@ -1455,9 +1453,7 @@
     "description": "PDM Rechtse deur",
     "locked": true,
     "authorized": {
-      "business": [
-        "pdm"
-      ]
+      "business": ["pdm"]
     },
     "distance": 2,
     "doors": [
@@ -3133,9 +3129,7 @@
       }
     ],
     "authorized": {
-      "business": [
-        "upnatom"
-      ]
+      "business": ["upnatom"]
     }
   },
   {
@@ -3161,9 +3155,7 @@
       }
     ],
     "authorized": {
-      "business": [
-        "upnatom"
-      ]
+      "business": ["upnatom"]
     }
   },
   {
@@ -3181,9 +3173,7 @@
       }
     ],
     "authorized": {
-      "business": [
-        "upnatom"
-      ]
+      "business": ["upnatom"]
     }
   },
   {
@@ -3201,9 +3191,7 @@
       }
     ],
     "authorized": {
-      "business": [
-        "upnatom"
-      ]
+      "business": ["upnatom"]
     },
     "hideInteraction": true
   },
@@ -3222,9 +3210,7 @@
       }
     ],
     "authorized": {
-      "business": [
-        "upnatom"
-      ]
+      "business": ["upnatom"]
     }
   },
   {
@@ -3242,9 +3228,7 @@
       }
     ],
     "authorized": {
-      "business": [
-        "upnatom"
-      ]
+      "business": ["upnatom"]
     }
   },
   {
@@ -3262,9 +3246,7 @@
       }
     ],
     "authorized": {
-      "business": [
-        "upnatom"
-      ]
+      "business": ["upnatom"]
     }
   },
   {
@@ -3282,9 +3264,7 @@
       }
     ],
     "authorized": {
-      "business": [
-        "lowsantos"
-      ]
+      "business": ["lowsantos"]
     }
   },
   {
@@ -3302,9 +3282,7 @@
       }
     ],
     "authorized": {
-      "business": [
-        "lowsantos"
-      ]
+      "business": ["lowsantos"]
     },
     "playSound": true
   },
@@ -3323,9 +3301,7 @@
       }
     ],
     "authorized": {
-      "business": [
-        "lowsantos"
-      ]
+      "business": ["lowsantos"]
     },
     "playSound": true
   },
@@ -3344,9 +3320,7 @@
       }
     ],
     "authorized": {
-      "business": [
-        "lowsantos"
-      ]
+      "business": ["lowsantos"]
     },
     "playSound": true
   },
@@ -3365,9 +3339,7 @@
       }
     ],
     "authorized": {
-      "business": [
-        "lowsantos"
-      ]
+      "business": ["lowsantos"]
     }
   },
   {
@@ -3442,9 +3414,7 @@
       }
     ],
     "authorized": {
-      "business": [
-        "straightpipers"
-      ]
+      "business": ["straightpipers"]
     }
   },
   {
@@ -3462,9 +3432,7 @@
       }
     ],
     "authorized": {
-      "business": [
-        "straightpipers"
-      ]
+      "business": ["straightpipers"]
     }
   },
   {
@@ -3530,5 +3498,275 @@
       }
     ],
     "authorized": {}
+  },
+  {
+    "description": "Taxi Jacky - Interior right",
+    "locked": true,
+    "distance": 2,
+    "doors": [
+      {
+        "model": "v_ilev_rc_door2",
+        "coords": {
+          "x": 903.571533203125,
+          "y": -152.1612091064453,
+          "z": 74.33624267578125
+        }
+      }
+    ],
+    "authorized": {
+      "business": [
+        "taxijacky"
+      ]
+    }
+  },
+  {
+    "description": "Taxi Jacky - Interior left",
+    "locked": true,
+    "distance": 2,
+    "doors": [
+      {
+        "model": "v_ilev_rc_door2",
+        "coords": {
+          "x": 900.7322998046875,
+          "y": -164.69110107421875,
+          "z": 74.33624267578125
+        }
+      }
+    ],
+    "authorized": {
+      "business": [
+        "taxijacky"
+      ]
+    }
+  },
+  {
+    "description": "Taxi Jacky -  Interior left 2",
+    "locked": true,
+    "distance": 2,
+    "doors": [
+      {
+        "model": "v_ilev_rc_door2",
+        "coords": {
+          "x": 898.5288696289062,
+          "y": -163.306396484375,
+          "z": 74.33624267578125
+        }
+      }
+    ],
+    "authorized": {
+      "business": [
+        "taxijacky"
+      ]
+    }
+  },
+  {
+    "description": "Taxi Jacky - Intrerior 1st floor",
+    "locked": true,
+    "distance": 2,
+    "doors": [
+      {
+        "model": "xm_prop_x17_tem_control_01",
+        "coords": {
+          "x": 372.1149597167969,
+          "y": 4827.50390625,
+          "z": -58.469970703125
+        }
+      }
+    ],
+    "authorized": {
+      "business": [
+        "taxijacky"
+      ]
+    }
+  },
+  {
+    "description": "Taxi Jacky - Outside left",
+    "locked": true,
+    "distance": 2,
+    "doors": [
+      {
+        "model": "v_ilev_rc_door2",
+        "coords": {
+          "x": 893.7596435546875,
+          "y": -180.4167022705078,
+          "z": 74.85623931884766
+        }
+      }
+    ],
+    "authorized": {
+      "business": [
+        "taxijacky"
+      ]
+    }
+  },
+  {
+    "description": "Taxi Jacky - Outside left 2",
+    "locked": true,
+    "distance": 2,
+    "doors": [
+      {
+        "model": "v_ilev_rc_door2",
+        "coords": {
+          "x": 895.1224975585938,
+          "y": -178.2061004638672,
+          "z": 74.85623931884766
+        }
+      }
+    ],
+    "authorized": {
+      "business": [
+        "taxijacky"
+      ]
+    }
+  },
+  {
+    "description": "Taxi Jacky - outside back",
+    "locked": true,
+    "distance": 2,
+    "doors": [
+      {
+        "model": "v_ilev_rc_door2",
+        "coords": {
+          "x": 895.2413330078125,
+          "y": -144.86509704589844,
+          "z": 77.0450439453125
+        }
+      }
+    ],
+    "authorized": {
+      "business": [
+        "taxijacky"
+      ]
+    }
+  },
+  {
+    "description": "Taxi Jacky - Outside garagedoor",
+    "locked": true,
+    "distance": 10,
+    "playSound": true,
+    "doors": [
+      {
+        "model": "prop_ataxidoor",
+        "coords": {
+          "x": 899.5858764648438,
+          "y": -148.62896728515625,
+          "z": 78.96862030029297
+        }
+      }
+    ],
+    "authorized": {
+      "business": [
+        "taxijacky"
+      ]
+    }
+  },
+  {
+    "description": "blazeit front door",
+    "locked": false,
+    "distance": 2,
+    "doors": [
+      {
+        "model": "portaverdeshop",
+        "coords": {
+          "x": 373.3509826660156,
+          "y": -1267.86767578125,
+          "z": 32.7459831237793
+        }
+      }
+    ],
+    "authorized": {
+      "business": ["blazeit"]
+    }
+  },
+  {
+    "description": "blazeit shop to hallway",
+    "locked": true,
+    "distance": 2,
+    "doors": [
+      {
+        "model": "bi_door_01a",
+        "coords": {
+          "x": 365.9967346191406,
+          "y": -1261.7637939453125,
+          "z": 32.910499572753906
+        }
+      }
+    ],
+    "authorized": {
+      "business": ["blazeit"]
+    }
+  },
+  {
+    "description": "blazeit hallway to stair",
+    "locked": true,
+    "distance": 2,
+    "doors": [
+      {
+        "model": "bi_door_01a",
+        "coords": {
+          "x": 365.53857421875,
+          "y": -1258.9677734375,
+          "z": 32.832576751708984
+        }
+      }
+    ],
+    "authorized": {
+      "business": ["blazeit"]
+    }
+  },
+  {
+    "description": "blazeit garage to hallway",
+    "locked": true,
+    "distance": 2,
+    "doors": [
+      {
+        "model": "bi_door_01b",
+        "coords": {
+          "x": 362.24945068359375,
+          "y": -1253.1552734375,
+          "z": 32.90979766845703
+        }
+      }
+    ],
+    "authorized": {
+      "business": ["blazeit"]
+    }
+  },
+  {
+    "description": "blazeit garagedoor",
+    "locked": true,
+    "distance": 10,
+    "doors": [
+      {
+        "model": "bi_garage_door_01",
+        "coords": {
+          "x": 351.3834533691406,
+          "y": -1248.4200439453125,
+          "z": 33.269100189208984
+        }
+      }
+    ],
+    "authorized": {
+      "business": ["blazeit"]
+    },
+    "playSound": true
+  },
+  {
+    "description": "blazeit door to roof",
+    "locked": false,
+    "distance": 2,
+    "doors": [
+      {
+        "model": "portaverdeshop",
+        "coords": {
+          "x": 364.50244140625,
+          "y": -1255.679931640625,
+          "z": 36.643226623535156
+        }
+      }
+    ],
+    "authorized": {
+      "business": ["blazeit"]
+    }
   }
 ]

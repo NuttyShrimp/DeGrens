@@ -3,7 +3,6 @@ fx_version 'adamant'
 game 'gta5'
 
 shared_scripts {
-    '@dg-core/import.lua',
     '@ts-shared/shared/lib.lua'
 }
 

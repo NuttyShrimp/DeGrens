@@ -302,14 +302,6 @@ class Util extends UtilShared {
     return this.getHeadingToFaceCoordsFromCoord(pedCoords, coords);
   };
 
-  public onPlayerLoaded = (handler: (playerData: PlayerData) => void) => {
-    onNet('DGCore:client:playerLoaded', handler);
-  };
-
-  public onPlayerUnloaded = (handler: (cid: number) => void) => {
-    onNet('DGCore:client:playerUnloaded', handler);
-  };
-
   public getPreferences = (): Record<string, any> => {
     return global.exports['dg-misc'].getPreferences();
   };

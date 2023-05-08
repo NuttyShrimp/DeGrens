@@ -1,5 +1,6 @@
 import { Events, Inventory, Notifications } from '@dgx/server';
 import { lootAnimal, sellItem, startHuntingJobForPlayer, tryToPlaceBait } from './service.hunting';
+import { charModule } from 'helpers/core';
 
 Events.onNet('jobs:hunting:signIn', (src: number) => {
   startHuntingJobForPlayer(src);
@@ -25,7 +26,7 @@ Inventory.onInventoryUpdate(
   (identifier, _, itemState) => {
     if (itemState.inventory !== Inventory.concatId('stash', 'hunting_sell')) return;
     const cid = Number(identifier);
-    const plyId = DGCore.Functions.getPlyIdForCid(cid);
+    const plyId = charModule.getServerIdFromCitizenId(cid);
     if (!plyId) return;
     sellItem(plyId, itemState);
   },

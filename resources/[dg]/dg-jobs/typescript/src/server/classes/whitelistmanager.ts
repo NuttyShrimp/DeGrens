@@ -4,6 +4,7 @@ import { AsyncExport, Export, ExportRegister } from '@dgx/shared/decorators';
 import { mainLogger } from 'sv_logger';
 import winston from 'winston';
 import signedInManager from './signedinmanager';
+import { charModule } from 'helpers/core';
 
 @RPCRegister()
 @ExportRegister()
@@ -274,7 +275,7 @@ class WhitelistManager extends Util.Singleton<WhitelistManager>() {
     if (!job) return;
     const jobConfig = this.config.get(job.job);
     if (!jobConfig) return;
-    const wasHC = this.hasSpeciality(src, "HC", job.name);
+    const wasHC = this.hasSpeciality(src, 'HC', job.name);
     const result = await SQL.query('DELETE FROM whitelist_jobs WHERE cid = ? AND job = ?', [cid, jobName]);
     if (result.affectedRows < 1) {
       Notifications.add(
@@ -298,7 +299,10 @@ class WhitelistManager extends Util.Singleton<WhitelistManager>() {
       });
       if (!success) {
         this.logger.error(`Failed to set bank permissions for ${cid} after being fired`);
-        Notifications.add(src, `Failed to take removed member bank permissions: ${cid}, Maak een ticket aan in discord!`)
+        Notifications.add(
+          src,
+          `Failed to take removed member bank permissions: ${cid}, Maak een ticket aan in discord!`
+        );
       }
     }
   };
@@ -428,7 +432,7 @@ class WhitelistManager extends Util.Singleton<WhitelistManager>() {
     }
     if (type === 'add') {
       entry.speciality |= jobConfig.specialities[speciality];
-      if (jobConfig.bankAccount && this.hasSpeciality(target, "HC", job)) {
+      if (jobConfig.bankAccount && this.hasSpeciality(target, 'HC', job)) {
         const success = Financials.setPermissions(jobConfig.bankAccount, cid, {
           deposit: true,
           transfer: true,
@@ -437,13 +441,16 @@ class WhitelistManager extends Util.Singleton<WhitelistManager>() {
         });
         if (!success) {
           this.logger.error(`Failed to set bank permissions for ${cid} after retrieving HC role`);
-          Notifications.add(src, `Failed to give set the member's bank permissions: ${cid}, Maak een ticket aan in discord!`)
+          Notifications.add(
+            src,
+            `Failed to give set the member's bank permissions: ${cid}, Maak een ticket aan in discord!`
+          );
         }
       }
     } else {
-      const hasHCBefore = this.hasSpeciality(target, "HC", job);
+      const hasHCBefore = this.hasSpeciality(target, 'HC', job);
       entry.speciality &= ~jobConfig.specialities[speciality];
-      const hasHCAfter = this.hasSpeciality(target, "HC", job);
+      const hasHCAfter = this.hasSpeciality(target, 'HC', job);
       if (jobConfig.bankAccount && hasHCBefore && !hasHCAfter) {
         const success = Financials.setPermissions(jobConfig.bankAccount, cid, {
           deposit: false,
@@ -453,7 +460,10 @@ class WhitelistManager extends Util.Singleton<WhitelistManager>() {
         });
         if (!success) {
           this.logger.error(`Failed to set bank permissions for ${cid} after removing HC role`);
-          Notifications.add(src, `Failed to set the member's bank permissions: ${cid}, Maak een ticket aan in discord!`)
+          Notifications.add(
+            src,
+            `Failed to set the member's bank permissions: ${cid}, Maak een ticket aan in discord!`
+          );
         }
       }
     }
@@ -494,7 +504,7 @@ class WhitelistManager extends Util.Singleton<WhitelistManager>() {
 
   @AsyncExport('isSteamIdWhitelisted')
   private _isSteamIdWhitelisted = async (steamId: string, job: string) => {
-    const cids = await DGCore.Functions.GetCidsForSteamId(steamId);
+    const cids = charModule.getCitizenIdsFromSteamId(steamId);
     return cids.some(cid => !!this.getPlayerInfoForJob(cid, job));
   };
 

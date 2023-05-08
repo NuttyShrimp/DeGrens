@@ -2,8 +2,6 @@ fx_version 'cerulean'
 game 'gta5'
 
 shared_script {
-  '@dg-core/import.lua',
-  '@dg-core/import.js',
   '@ts-shared/shared/lib.lua'
 }
 

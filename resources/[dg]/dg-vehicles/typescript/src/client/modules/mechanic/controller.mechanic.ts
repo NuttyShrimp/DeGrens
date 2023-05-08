@@ -1,9 +1,7 @@
-import { BlipManager, Business, Events, Inventory, Notifications, Peek, PolyTarget, PolyZone, UI } from '@dgx/client';
-
+import { Business, Events, Inventory, Notifications, Peek, UI } from '@dgx/client';
 import { isCloseToHood } from '@helpers/vehicle';
 import { getVehicleVinWithoutValidation } from 'modules/identification/service.identification';
 import { hasVehicleKeys } from 'modules/keys/cache.keys';
-import { isClockedIn, setClockInStatus, getCurrentWorkingShop, setRepairZone } from './service.mechanic';
 import { addToOrder, finishOrder, removeItem, clearItemOrder, openItemOrder } from './services/parts.mechanic';
 import {
   hasVehicleAttached,
@@ -15,6 +13,7 @@ import {
   attachVehicleToTowVehicle,
   unattachVehicleFromTowVehicle,
 } from './services/towing.mechanic';
+import { getCurrentMechanicBusiness } from './service.mechanic';
 
 let modelPeekIds: string[];
 
@@ -22,56 +21,7 @@ on('vehicles:mechanic:acceptTowJob', (data: { vin: string }) => {
   Events.emitNet('vehicles:mechanic:server:acceptTowJob', data.vin);
 });
 
-Events.onNet('vehicles:mechanic:client:loadConfig', (zones: Mechanic.Shops, towVehicleModels: string[]) => {
-  for (const shop in zones) {
-    const shopConfig = zones[shop];
-    PolyTarget.addBoxZone(
-      `mechanic-clock-board`,
-      shopConfig.board.coords,
-      shopConfig.board.width,
-      shopConfig.board.length,
-      {
-        data: {
-          id: shop,
-        },
-        heading: shopConfig.board.heading,
-        minZ: shopConfig.board.coords.z,
-        maxZ: shopConfig.board.coords.z + shopConfig.board.height,
-      }
-    );
-    PolyTarget.addBoxZone('mechanic-bench', shopConfig.bench.coords, shopConfig.bench.width, shopConfig.bench.length, {
-      data: {
-        id: shop,
-      },
-      heading: shopConfig.bench.heading,
-      minZ: shopConfig.bench.coords.z,
-      maxZ: shopConfig.bench.coords.z + shopConfig.bench.height,
-    });
-    PolyZone.addBoxZone(
-      'mechanic-repair',
-      shopConfig.repair.coords,
-      shopConfig.repair.width,
-      shopConfig.repair.length,
-      {
-        data: {
-          id: shop,
-        },
-        heading: shopConfig.repair.heading,
-        minZ: shopConfig.repair.coords.z,
-        maxZ: shopConfig.repair.coords.z + shopConfig.repair.height,
-      }
-    );
-    BlipManager.addBlip({
-      category: 'dg-vehicles',
-      id: `mechanic-${shop}`,
-      text: shopConfig.label,
-      coords: shopConfig.repair.coords,
-      sprite: 446,
-      color: 5,
-      scale: 0.8,
-    });
-  }
-
+Events.onNet('vehicles:mechanic:client:loadConfig', (towVehicleModels: string[]) => {
   if (modelPeekIds) {
     Peek.removeModelEntry(modelPeekIds);
   }
@@ -82,8 +32,8 @@ Events.onNet('vehicles:mechanic:client:loadConfig', (zones: Mechanic.Shops, towV
         label: 'Take Hook',
         icon: 'truck-tow',
         canInteract: ent => {
-          if (!isClockedIn()) return false;
           if (!ent) return false;
+          if (!Business.isSignedInAtAnyOfType('mechanic')) return false;
           return !hasVehicleAttached(ent);
         },
         action: (_, ent) => {
@@ -131,40 +81,17 @@ UI.RegisterUICallback('vehicles/mechanic/resetOrder', (data, cb) => {
   cb({ data: {}, meta: { ok: true, message: 'done' } });
 });
 
-Peek.addZoneEntry('mechanic-clock-board', {
-  distance: 2,
-  options: [
-    {
-      label: 'Inklokken',
-      canInteract: (_, __, data) => {
-        return Business.isEmployee(data.data.id) && !isClockedIn();
-      },
-      action: data => {
-        setClockInStatus(true, data.data.id);
-      },
-      icon: 'right-to-bracket',
-    },
-    {
-      label: 'Uitklokken',
-      canInteract: (_, __, data) => {
-        return Business.isEmployee(data.data.id) && getCurrentWorkingShop() === data.data.id;
-      },
-      action: data => {
-        setClockInStatus(false, data.data.id);
-      },
-      icon: 'right-from-bracket',
-    },
-  ],
-});
-
-Peek.addZoneEntry('mechanic-bench', {
+Peek.addZoneEntry('mechanic_bench', {
   distance: 2,
   options: [
     {
       label: 'Open Werktafel',
       icon: 'screwdriver-wrench',
       canInteract: (_, __, data) => {
-        return Business.isEmployee(data.data.id, ['crafting']) && getCurrentWorkingShop() === data.data.id;
+        return (
+          Business.isEmployee(data.data.businessName, ['crafting']) &&
+          getCurrentMechanicBusiness() === data.data.businessName
+        );
       },
       action: () => {
         Inventory.openBench('mechanic_bench');
@@ -174,7 +101,10 @@ Peek.addZoneEntry('mechanic-bench', {
       label: 'Open Stash',
       icon: 'box-open',
       canInteract: (_, __, data) => {
-        return Business.isEmployee(data.data.id, ['stash']) && getCurrentWorkingShop() === data.data.id;
+        return (
+          Business.isEmployee(data.data.businessName, ['stash']) &&
+          getCurrentMechanicBusiness() === data.data.businessName
+        );
       },
       action: data => {
         Inventory.openStash(`mechanic-shop-stash-${data.data.id}`, 100);
@@ -184,7 +114,10 @@ Peek.addZoneEntry('mechanic-bench', {
       label: 'Maak Parts',
       icon: 'toolbox',
       canInteract: (_, __, data) => {
-        return Business.isEmployee(data.data.id, ['crafting']) && getCurrentWorkingShop() === data.data.id;
+        return (
+          Business.isEmployee(data.data.businessName, ['crafting']) &&
+          getCurrentMechanicBusiness() === data.data.businessName
+        );
       },
       action: () => {
         Events.emitNet('vehicles:mechanic:openPartsMenu');
@@ -194,21 +127,13 @@ Peek.addZoneEntry('mechanic-bench', {
       label: 'Maak Order',
       icon: 'ticket',
       canInteract: (_, __, data) => {
-        return Business.isEmployee(data.data.id) && getCurrentWorkingShop() === data.data.id;
+        return getCurrentMechanicBusiness() === data.data.businessName;
       },
       action: () => {
         openItemOrder();
       },
     },
   ],
-});
-
-PolyZone.onEnter('mechanic-repair', (_, data) => {
-  setRepairZone(data.id);
-});
-
-PolyZone.onLeave('mechanic-repair', _ => {
-  setRepairZone(null);
 });
 
 Peek.addGlobalEntry('vehicle', {
@@ -218,7 +143,7 @@ Peek.addGlobalEntry('vehicle', {
       icon: 'fas fa-engine',
       action: (_, entity) => {
         if (!entity) return;
-        if (!getCurrentWorkingShop()) return;
+        if (!getCurrentMechanicBusiness()) return;
         // Validation not required because if it does not have a vin already neither would it have any upgrades
         const vin = getVehicleVinWithoutValidation(entity);
         if (!vin) {
@@ -231,7 +156,7 @@ Peek.addGlobalEntry('vehicle', {
       canInteract: veh => {
         if (!veh || !NetworkGetEntityIsNetworked(veh)) return false;
         if (GetVehicleClass(veh) === 18) return false;
-        return isCloseToHood(veh, 2, true) && hasVehicleKeys(veh) && !!getCurrentWorkingShop();
+        return isCloseToHood(veh, 2, true) && hasVehicleKeys(veh) && !!getCurrentMechanicBusiness();
       },
     },
     {

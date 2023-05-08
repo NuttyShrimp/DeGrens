@@ -1,22 +1,24 @@
-import { Admin, Events, Jobs, Util } from '@dgx/server';
+import { Admin, Core, Events, Jobs, Util } from '@dgx/server';
 
 import { handleCommandExecution } from './commands';
 
-const specialTarget: { [k: string]: (PlayerData: PlayerData) => boolean } = {
-  police: data => Jobs.getCurrentJob(data.source) === 'police',
-  ambulance: data => Jobs.getCurrentJob(data.source) === 'ambulance',
-  admin: data => Admin.hasPermission(data.source, 'support') && Admin.isInDevMode(data.source),
+const specialTarget: { [k: string]: (PlayerData: Core.Characters.Player) => boolean } = {
+  police: data => !!data.serverId && Jobs.getCurrentJob(data.serverId) === 'police',
+  ambulance: data => !!data.serverId && Jobs.getCurrentJob(data.serverId) === 'ambulance',
+  admin: data => !!data.serverId && Admin.hasPermission(data.serverId, 'support') && Admin.isInDevMode(data.serverId),
 };
+
+let charModule: Core.ServerModules.CharacterModule;
+
+setImmediate(() => {
+  charModule = Core.getModule('characters');
+});
 
 export const sendMessage = (target: number | keyof typeof specialTarget, data: Shared.Message) => {
   if (typeof target === 'string') {
-    (
-      Object.values({
-        ...DGCore.Functions.GetQBPlayers(),
-      }) as Player[]
-    ).forEach(plyObj => {
-      if (!specialTarget[target]?.(plyObj.PlayerData)) return;
-      Events.emitNet('chat:addNuiMessage', plyObj.PlayerData.source, data);
+    Object.values(charModule.getAllPlayers()).forEach(plyObj => {
+      if (!specialTarget[target]?.(plyObj) || !plyObj.serverId) return;
+      Events.emitNet('chat:addNuiMessage', plyObj.serverId, data);
     });
     return;
   }

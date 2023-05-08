@@ -1,4 +1,4 @@
-import { Admin, Events, Notifications, Util } from '@dgx/server';
+import { Admin, Core, Events, Notifications, Util } from '@dgx/server';
 
 import commandManager from '../classes/commandManager';
 
@@ -17,9 +17,10 @@ const baseCommands: Server.Command[] = [
     permissionLevel: 'user',
     handler: (src, _, args) => {
       const senderCoords = Util.ArrayToVector3(GetEntityCoords(GetPlayerPed(String(src))));
-      const plyObj = DGCore.Functions.GetPlayer(src);
+      const plyObj = Core.getPlayer(src);
+      if (!plyObj) return;
       const msg: Shared.Message = {
-        prefix: `OOC (${plyObj.PlayerData.charinfo.firstname} ${plyObj.PlayerData.charinfo.lastname} | ${src}): `,
+        prefix: `OOC (${plyObj.charinfo.firstname} ${plyObj.charinfo.lastname} | ${src}): `,
         message: args.join(' '),
       };
       Util.Log(
@@ -30,7 +31,7 @@ const baseCommands: Server.Command[] = [
         `${Util.getName(src)} heeft een lokaal OOC bericht verstuurd`,
         src
       );
-      DGCore.Functions.GetPlayers().forEach(player => {
+      Util.getAllPlayers().forEach(player => {
         let shouldShow = Admin.hasPermission(player, 'support') && Admin.isInDevMode(player);
         if (!shouldShow) {
           // Some more expensive shit so we hide it behind an extra check
@@ -53,9 +54,10 @@ const baseCommands: Server.Command[] = [
     ],
     permissionLevel: 'user',
     handler: (src, _, args) => {
-      const plyObj = DGCore.Functions.GetPlayer(src);
+      const plyObj = Core.getPlayer(src);
+      if (!plyObj) return;
       const msg: Shared.Message = {
-        prefix: `OOCG (${plyObj.PlayerData.charinfo.firstname} ${plyObj.PlayerData.charinfo.lastname} | ${src}): `,
+        prefix: `OOCG (${plyObj.charinfo.firstname} ${plyObj.charinfo.lastname} | ${src}): `,
         message: args.join(' '),
       };
       Util.Log(
@@ -66,7 +68,7 @@ const baseCommands: Server.Command[] = [
         `${Util.getName(src)} heeft een globaal OOC bericht verstuurd`,
         src
       );
-      DGCore.Functions.GetPlayers().forEach(player => {
+      Util.getAllPlayers().forEach(player => {
         sendMessage(player, msg);
       });
     },
@@ -92,7 +94,7 @@ const baseCommands: Server.Command[] = [
         `${Util.getName(src)} heeft een /me bericht verstuurd`,
         src
       );
-      DGCore.Functions.GetPlayers().forEach(player => {
+      Util.getAllPlayers().forEach(player => {
         const plyCoords = Util.ArrayToVector3(GetEntityCoords(GetPlayerPed(String(player))));
         const shouldShow = senderCoords.subtract(plyCoords).Length <= 25;
         if (!shouldShow) return;

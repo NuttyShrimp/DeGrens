@@ -1,4 +1,4 @@
-import { Inventory, Notifications } from '@dgx/server';
+import { Core, Inventory, Notifications } from '@dgx/server';
 import { getConfig } from 'services/config';
 
 let items: Materials.RecyclePed.Items;
@@ -9,8 +9,9 @@ export const initializeRecyclePed = async () => {
 };
 
 export const addItemToRecycle = (plyIdentifier: string, sellItem: Inventory.ItemState) => {
+  const charModule = Core.getModule('characters');
   if (sellItem.quality === undefined || sellItem.quality > getConfig().recycleped.maximumPercentage) {
-    const plyId = DGCore.Functions.getPlyIdForCid(Number(plyIdentifier));
+    const plyId = charModule.getServerIdFromCitizenId(Number(plyIdentifier));
     if (plyId !== undefined) {
       Notifications.add(plyId, 'Dit is nog niet kapot genoeg', 'error');
     }

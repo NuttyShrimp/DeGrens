@@ -50,9 +50,26 @@ declare namespace Config {
 
   interface EffectConsumable {
     name: string;
-    effect: 'speed' | 'stress' | 'damage';
+    effect: 'speed' | 'damage';
     duration: number;
   }
+
+  type StressConsumable = {
+    name: string;
+    decrease: number;
+    duration: number;
+    uses: number;
+    animation: (
+      | {
+          dict: string;
+          name: string;
+          flag: number;
+        }
+      | { scenario: string }
+    ) & {
+      duration: number;
+    };
+  };
 
   interface Consumables {
     drink: {
@@ -60,8 +77,8 @@ declare namespace Config {
       alcohol: Consumable[];
     };
     food: Consumable[];
-
     drugs: EffectConsumable[];
+    stress: StressConsumable[];
   }
 
   namespace Seats {

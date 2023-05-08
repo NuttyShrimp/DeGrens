@@ -11,7 +11,5 @@
     "../../../../ts-shared/typescript/src/server/types/*.d.ts",
     "../../../../../../types"
   ],
-  "exclude": [
-    "**/node_modules"
-  ]
+  "exclude": ["**/node_modules"]
 }

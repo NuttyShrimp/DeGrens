@@ -1,0 +1,36 @@
+{
+  "garage_id": "blazeit",
+  "name": "Garage Blaze It",
+  "type": "business",
+  "shared": true,
+  "location": {
+    "vector": {
+      "x": 354.51,
+      "y": -1250.98,
+      "z": 32.59
+    },
+    "width": 7.6,
+    "length": 4.6,
+    "options": {
+      "heading": 50,
+      "minZ": 31.49,
+      "maxZ": 34.89
+    }
+  },
+  "vehicle_types": [
+    "land"
+  ],
+  "parking_spots": [
+    {
+      "type": "land",
+      "size": 2.0,
+      "distance": 1.8,
+      "heading": 53.289,
+      "coords": {
+        "x": 354.4657,
+        "y": -1250.7623,
+        "z": 31.594
+      }
+    }
+  ]
+}

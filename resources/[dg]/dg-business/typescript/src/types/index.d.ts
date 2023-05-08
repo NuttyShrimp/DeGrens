@@ -57,4 +57,53 @@ declare namespace Business {
       action: string;
     }
   }
+
+  type BusinessConfig = {
+    businessZone: Zones.Box | Zones.Poly; // Zone of business
+    managementZone: Zones.Box | Zones.Circle; // Zone to access duty options, lockers, etc
+    // Optional blip for business
+    blip?: {
+      sprite: number;
+      color: number;
+      coords: Vec3;
+    };
+    // Optional registers for business to handle payments by filling in amount (if itemPrices defined, inputmenu will be repliced by making an order out of those items)
+    registers?: {
+      employeePercentage: number;
+      zones: (Zones.Box | Zones.Circle)[];
+    };
+    // Optional stash for business for all employees
+    stashZone?: Zones.Box | Zones.Circle;
+    // Optional items that can be priced by business employees
+    priceItems?: string[];
+    // These peek zones get build when entering businessZone, to be used in other resources
+    extraZones?: {
+      name: string;
+      isTarget: boolean;
+      zone: Zones.Box | Zones.Circle | Zones.Poly;
+      data?: Record<string, any>;
+    }[];
+    // Optional extra config for business to be used in other resources/specific module
+    extraConfig?: Record<string, any>;
+  };
+
+  type BusinessTypeConfig = {
+    permissions: string[];
+    // if property is defined for type, we opt in to use onduty system
+    signin?: {
+      signOutWhenLeavingZone: boolean;
+    };
+    // if property is defined for type, we opt in to have lockers for employees
+    lockers?: {
+      size: number;
+    };
+  };
+
+  type ClientPricedItems = Record<
+    string,
+    {
+      label: string;
+      price: number;
+    }
+  >;
 }

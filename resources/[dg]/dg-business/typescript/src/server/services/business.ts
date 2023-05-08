@@ -1,36 +1,44 @@
-import { Events, Financials, SQL, Util } from '@dgx/server';
+import { Core, Events, Financials, SQL, Util } from '@dgx/server';
 import { Business } from 'classes/Business';
 import { getBitmaskForPermissions, getConfig } from './config';
 import { mainLogger } from '../sv_logger';
+import { charModule } from './core';
 
 let businesses: Map<number, Business> = new Map();
 let businessTypes: Map<number, Business.Type> = new Map();
+let businessesLoaded = false;
+
+export const areBusinessesLoaded = () => businessesLoaded;
+export const awaitBusinessesLoaded = () => Util.awaitCondition(() => businessesLoaded, 600000);
 
 export const seedBusinessTypes = async () => {
   const config = getConfig();
   let bTypes = await SQL.query<{ name: string; id: number }[]>('SELECT name, id FROM business_type');
   const bTypesToInsert = Object.keys(config.types)
-    .filter(type => !Object.values(bTypes).find(et => et.name === type))
+    .filter(type => !bTypes.some(t => t.name === type))
     .map(type => ({ name: type }));
   if (bTypesToInsert.length > 0) {
     await SQL.insertValues('business_type', bTypesToInsert);
     const newBTypes = await SQL.query<{ name: string; id: number }[]>(
       'SELECT name, id FROM business_type WHERE name IN (?)',
-      [bTypesToInsert.join(',')]
+      [bTypesToInsert.map(x => x.name).join(',')]
     );
     bTypes = bTypes.concat(newBTypes);
   }
+  const basePermissions = Object.keys(config.permissions.base);
   bTypes.forEach(bt => {
+    const typePermissions = config.types[bt.name]?.permissions ?? [];
     const bType: Business.Type = {
       id: bt.id,
       name: bt.name,
-      permissions: Object.keys(config.permissions.base).concat(
-        config.types[bt.name]?.sort((p1, p2) => {
+      permissions: [
+        ...basePermissions,
+        ...typePermissions.sort((p1, p2) => {
           const p1Mask = config.permissions.extra?.[p1] ?? 0;
           const p2Mask = config.permissions.extra?.[p2] ?? 0;
           return p1Mask - p2Mask;
-        }) ?? []
-      ),
+        }),
+      ],
     };
     mainLogger.debug(`Loaded business type: ${bType.name}`);
     businessTypes.set(bt.id, bType);
@@ -41,23 +49,27 @@ export const seedBusinesses = async () => {
   const DBBusinesses = await SQL.query<(Business.Info & { business_type: number })[]>(
     'SELECT id, name, label, business_type, bank_account_id FROM business'
   );
-  DBBusinesses.forEach(bInfo => {
-    const business = new Business({
-      ...bInfo,
-      business_type: businessTypes.get(bInfo.business_type)!,
-    });
-    mainLogger.info(`Loaded business: ${bInfo.label} (${bInfo.id})`);
-    businesses.set(bInfo.id, business);
-  });
+  await Promise.all(
+    DBBusinesses.map(async bInfo => {
+      const business = new Business({
+        ...bInfo,
+        business_type: businessTypes.get(bInfo.business_type)!,
+      });
+      await business.loadBusinessInfo();
+      mainLogger.info(`Loaded business: ${bInfo.label} (${bInfo.id})`);
+      businesses.set(bInfo.id, business);
+    })
+  );
+
+  businessesLoaded = true;
 };
 
-const findBusinessTypeByName = (pType: string) => {
-  for (const typeId of businessTypes.keys()) {
-    if (businessTypes.get(typeId)?.name === pType) {
-      return businessTypes.get(typeId);
+const findBusinessTypeByName = (name: string) => {
+  for (const bType of businessTypes.values()) {
+    if (bType.name === name) {
+      return bType;
     }
   }
-  return null;
 };
 
 export const createBusiness = async (name: string, label: string, owner: number, bTypeName: string) => {
@@ -139,16 +151,16 @@ export const createBusiness = async (name: string, label: string, owner: number,
     label,
     bank_account_id: accountId,
   });
+  await business.loadBusinessInfo(true);
   businesses.set(businessId, business);
 };
 
 export const deleteBusiness = (id: number) => {
   const business = businesses.get(id);
   if (!business) return;
+  const charModule = Core.getModule('characters');
   business.getEmployees().forEach(e => {
-    let ply = DGCore.Functions.GetPlayerByCitizenId(e.citizenid);
-    if (!ply) return;
-    dispatchAllBusinessPermissionsToClientCache(ply.PlayerData.source);
+    dispatchBusinessPermissionsToClientCache(e.citizenid, 'remove', id);
   });
   businesses.delete(id);
 };
@@ -194,15 +206,14 @@ export const getBusinessEmployees = (id: number): Business.UI.Employee[] => {
  * Dispatch player permissions for specific business to client
  * @param cid Player CID (gets checked if online)
  * @param action Wether to add or remove permissions of this business to/from client
- * @param name Business Name
  */
-export const dispatchBusinessPermissionsToClientCache = (cid: number, action: 'add' | 'remove', name: string) => {
-  const plyId = DGCore.Functions.getPlyIdForCid(cid);
-  if (plyId == undefined) return;
-  const business = getBusinessByName(name);
+export const dispatchBusinessPermissionsToClientCache = (cid: number, action: 'add' | 'remove', businessId: number) => {
+  const plyId = charModule.getServerIdFromCitizenId(cid);
+  if (!plyId) return;
+  const business = getBusinessById(businessId);
   if (!business) return;
   const permissions = business.getClientInfo(cid)?.permissions ?? [];
-  Events.emitNet('business:client:updateCache', plyId, action, name, permissions);
+  Events.emitNet('business:client:updateCache', plyId, action, business.getInfo().name, permissions);
 };
 
 /**
@@ -211,4 +222,45 @@ export const dispatchBusinessPermissionsToClientCache = (cid: number, action: 'a
 export const dispatchAllBusinessPermissionsToClientCache = (plyId: number) => {
   const businesses = getBusinessesForPlayer(plyId).map(b => ({ name: b.name, permissions: b.permissions }));
   Events.emitNet('business:client:setCache', plyId, businesses);
+};
+
+export const getAllBusinessesInfo = () => {
+  const businessesInfo: Record<string, Business.Info> = {};
+  for (const [_, business] of businesses) {
+    const info = business.getInfo();
+    businessesInfo[info.name] = info;
+  }
+  return businessesInfo;
+};
+
+export const getBusinessPlayerIsInsideOf = (plyId: number) => {
+  for (const [_, business] of businesses) {
+    if (business.isPlayerInside(plyId)) {
+      return business;
+    }
+  }
+};
+
+export const getSignedInPlayersForBusinessType = (businessType: string) => {
+  const plys = new Set<number>();
+  for (const [_, business] of businesses) {
+    if (business.getInfo().business_type.name !== businessType) continue;
+    business.getSignedInPlayers().forEach(p => plys.add(p));
+  }
+  return [...plys];
+};
+
+export const isPlayerSignedInAtAnyOfBusinessType = (plyId: number, businessType: string) => {
+  for (const [_, business] of businesses) {
+    if (business.getInfo().business_type.name === businessType && business.isSignedIn(plyId)) {
+      return true;
+    }
+  }
+  return false;
+};
+
+export const leaveCurrentBusiness = (plyId: number) => {
+  const business = getBusinessPlayerIsInsideOf(plyId);
+  if (!business) return;
+  business.playerLeft(plyId);
 };

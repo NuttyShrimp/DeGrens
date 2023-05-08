@@ -26,7 +26,7 @@ stopSounds = function(id)
 end
 
 RegisterUICallback('phone/startCall', function(data, cb)
-  local soundId = DGCore.Functions.TriggerCallback('dg-phone:server:startCall', nil, data)
+  local soundId = DGX.RPC.execute('dg-phone:server:startCall', data)
   if soundId then
     playSound('dial', soundId)
   end
@@ -35,18 +35,18 @@ RegisterUICallback('phone/startCall', function(data, cb)
 end)
 
 RegisterUICallback('phone/dispatchEndCall', function(data, cb)
-  DGCore.Functions.TriggerCallback('dg-phone:server:endCall', nil, data)
+  DGX.RPC.execute('dg-phone:server:endCall', data)
   setState("inCall", false)
   cb({ data = {}, meta = { ok = true, message = "done" } })
 end)
 
 RegisterUICallback('phone/acceptCall', function(data, cb)
-  DGCore.Functions.TriggerCallback('dg-phone:server:initiateCall', nil, data)
+  DGX.RPC.execute('dg-phone:server:initiateCall', data)
   cb({ data = {}, meta = { ok = true, message = "done" } })
 end)
 
 RegisterUICallback('phone/declineCall', function(data, cb)
-  DGCore.Functions.TriggerCallback('dg-phone:server:endCall', nil, data)
+  DGX.RPC.execute('dg-phone:server:endCall', data)
   cb({ data = {}, meta = { ok = true, message = "done" } })
 end)
 
@@ -132,7 +132,7 @@ Citizen.CreateThread(function()
 end)
 
 exports('prisonCall', function()
-  local contacts = DGCore.Functions.TriggerCallback('dg-phone:server:getContacts')
+  local contacts = DGX.RPC.execute('dg-phone:server:getContacts')
   local options = {}
   for _, v in pairs(contacts) do
     table.insert(options, { label = v.label, value = v.phone })

@@ -68,14 +68,15 @@ model bench_levels {
 }
 
 model business {
-  id                                                  Int                 @id @default(autoincrement())
-  label                                               String              @db.VarChar(255)
+  id                                                  Int                    @id @default(autoincrement())
+  label                                               String                 @db.VarChar(255)
   business_type                                       Int
-  bank_account_id                                     String?             @db.VarChar(255)
-  name                                                String              @unique(map: "name") @db.VarChar(255)
-  bank_accounts                                       bank_accounts?      @relation(fields: [bank_account_id], references: [account_id], onDelete: Cascade, map: "fk_business_bank_account")
-  business_type_business_business_typeTobusiness_type business_type       @relation("business_business_typeTobusiness_type", fields: [business_type], references: [id], onDelete: Cascade, map: "fk_business_business_type")
+  bank_account_id                                     String?                @db.VarChar(255)
+  name                                                String                 @unique(map: "name") @db.VarChar(255)
+  bank_accounts                                       bank_accounts?         @relation(fields: [bank_account_id], references: [account_id], onDelete: Cascade, map: "fk_business_bank_account")
+  business_type_business_business_typeTobusiness_type business_type          @relation("business_business_typeTobusiness_type", fields: [business_type], references: [id], onDelete: Cascade, map: "fk_business_business_type")
   business_employee                                   business_employee[]
+  business_item_prices                                business_item_prices[]
   business_log                                        business_log[]
   business_role                                       business_role[]
 
@@ -146,7 +147,6 @@ model character_info {
   gender       Int
   nationality  String     @db.Text
   phone        String     @db.VarChar(255)
-  cash         BigInt?    @default(0)
   last_updated DateTime   @default(now()) @db.Timestamp(0)
   created_at   DateTime   @default(now()) @db.Timestamp(0)
   characters   characters @relation(fields: [citizenid], references: [citizenid], onDelete: Cascade, map: "character_info_ibfk_1")
@@ -158,6 +158,7 @@ model character_reputations {
   ammo_crafting     Int        @default(0)
   mechanic_crafting Int        @default(0)
   cornersell        Int        @default(0)
+  blazeit_crafting  Int        @default(0)
   characters        characters @relation(fields: [citizenid], references: [citizenid], onDelete: Cascade, map: "character_reputations_ibfk_1")
 }
 
@@ -649,14 +650,6 @@ model whitelist_jobs {
   @@id([cid, job])
 }
 
-model restaurant_prices {
-  restaurant String @db.VarChar(255)
-  item       String @db.VarChar(255)
-  price      Int    @default(0)
-
-  @@id([restaurant, item])
-}
-
 model active_labs {
   type        lab_type @id()
   id          Int
@@ -687,6 +680,16 @@ model synced_objects {
   vectors String @db.Text
   flags   String
   placer  String @db.VarChar(255)
+}
+
+model business_item_prices {
+  business_id Int
+  item        String   @db.VarChar(255)
+  price       Int      @default(0)
+  business    business @relation(fields: [business_id], references: [id], onDelete: Cascade, map: "fk_business_item_prices_business")
+
+  @@id([business_id, item])
+  @@index([business_id], map: "fk_business_item_prices_business")
 }
 
 enum bank_accounts_type {

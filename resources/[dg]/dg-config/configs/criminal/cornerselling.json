@@ -3,18 +3,12 @@
     "weed_bag": {
       "basePrice": 40,
       "requiredReputation": 0,
-      "sellAmount": [
-        3,
-        6
-      ]
+      "sellAmount": [3, 6]
     },
     "meth_bag": {
       "basePrice": 80,
       "requiredReputation": 250,
-      "sellAmount": [
-        1,
-        2
-      ]
+      "sellAmount": [1, 2]
     }
   },
   "decayTime": 7,

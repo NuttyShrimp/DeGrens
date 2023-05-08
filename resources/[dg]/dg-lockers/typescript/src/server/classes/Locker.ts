@@ -1,4 +1,4 @@
-import { Util, Financials, UI, Notifications, Phone } from '@dgx/server';
+import { Util, Financials, UI, Notifications, Phone, Core } from '@dgx/server';
 import config from 'services/config';
 import { mainLogger } from 'sv_logger';
 import winston from 'winston';
@@ -258,6 +258,7 @@ export class Locker {
   };
 
   public transferOwnership = async (plyId: number) => {
+    const charModule = Core.getModule('characters');
     const currentOwner = this.owner;
     if (currentOwner !== Util.getCID(plyId)) {
       const logMsg = `${Util.getName(plyId)}(${plyId}) tried to transfer ownership for locker ${
@@ -283,7 +284,7 @@ export class Locker {
     const newOwner = Number(result.values.cid);
     if (isNaN(newOwner)) return;
 
-    const ownerServerId = DGCore.Functions.getPlyIdForCid(newOwner);
+    const ownerServerId = charModule.getServerIdFromCitizenId(newOwner);
     if (!ownerServerId) {
       Notifications.add(plyId, 'Deze persoon is niet in de stad', 'error');
       return;

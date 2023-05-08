@@ -1,23 +1,4 @@
 declare namespace Mechanic {
-  namespace NConfig {
-    interface BoxZone {
-      coords: Vec3;
-      width: number;
-      length: number;
-      height: number;
-      heading: number;
-    }
-
-    interface Locations {
-      label: string;
-      board: BoxZone;
-      bench: BoxZone;
-      repair: BoxZone;
-    }
-  }
-
-  type Shops = Record<string, NConfig.Locations>;
-
   interface Config {
     towingTicketPrice: number;
     reputationPerClass: number;
@@ -33,7 +14,6 @@ declare namespace Mechanic {
       };
       classModifier: Record<CarClass, number>;
     };
-    shops: Shops;
   }
 
   type PartType = 'repair' | 'tune';

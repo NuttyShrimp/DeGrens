@@ -1,13 +1,13 @@
-import { Notifications, Reputations, Inventory, UI, Util } from '@dgx/server';
+import { Notifications, Reputations, Inventory, UI, Util, Business } from '@dgx/server';
 import { CAR_CLASSES } from 'sv_constants';
 import { REPAIR_PARTS } from '../../../../shared/status/constants.status';
 import { TUNE_PARTS } from '../../../../shared/upgrades/constants.upgrades';
 import { buildPartLabel } from '../../../../shared/mechanic/helpers.mechanic';
 import { MATERIALS_FOR_PART } from '../constants.mechanic';
-import { getMechanicConfig, getShopForPlayer } from '../service.mechanic';
+import { getCurrentMechanicBusiness, getMechanicConfig } from '../service.mechanic';
 
 export const finishOrder = async (plyId: number, order: Mechanic.PartItem[]) => {
-  const shop = getShopForPlayer(plyId);
+  const shop = getCurrentMechanicBusiness(plyId);
   if (!shop) {
     Notifications.add(plyId, 'Je bent niet ingeclocked!', 'error');
     return;
@@ -97,7 +97,7 @@ const getCountsInShopStash = async (shop: string) => {
 };
 
 export const openPartsMenu = async (plyId: number) => {
-  const shop = getShopForPlayer(plyId);
+  const shop = getCurrentMechanicBusiness(plyId);
   if (!shop) {
     Notifications.add(plyId, 'Je bent niet in een mechanic shop', 'error');
     return;
@@ -148,7 +148,7 @@ export const openPartsMenu = async (plyId: number) => {
 };
 
 export const craftPart = async (plyId: number, partItem: Mechanic.PartItem) => {
-  const shop = getShopForPlayer(plyId);
+  const shop = getCurrentMechanicBusiness(plyId);
   if (!shop) {
     Notifications.add(plyId, 'Je bent niet in een mechanic shop', 'error');
     return;
@@ -199,7 +199,7 @@ export const craftPart = async (plyId: number, partItem: Mechanic.PartItem) => {
 };
 
 export const getOrderMenu = async (plyId: number) => {
-  const shop = getShopForPlayer(plyId);
+  const shop = getCurrentMechanicBusiness(plyId);
   if (!shop) {
     Notifications.add(plyId, 'Je bent niet in een mechanic shop', 'error');
     return;

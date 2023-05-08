@@ -1,18 +1,7 @@
 {
-  "partItems": [
-    "vehicle_door",
-    "vehicle_bonnet",
-    "vehicle_boot"
-  ],
-  "lootAmount": [
-    4,
-    6
-  ],
-  "loot": [
-    "material_iron",
-    "material_aluminum",
-    "material_steel"
-  ],
+  "partItems": ["vehicle_door", "vehicle_bonnet", "vehicle_boot"],
+  "lootAmount": [4, 6],
+  "loot": ["material_iron", "material_aluminum", "material_steel"],
   "returnZone": {
     "x": 2336.4429,
     "y": 3043.9409,

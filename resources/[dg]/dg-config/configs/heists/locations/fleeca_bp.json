@@ -1,9 +1,7 @@
 {
   "type": "fleeca",
   "label": "Fleeca Bank Legion Square",
-  "cams": [
-    11
-  ],
+  "cams": [11],
   "zone": {
     "points": [
       {

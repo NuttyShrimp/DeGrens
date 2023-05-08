@@ -10,6 +10,7 @@ import {
 import { getGarageById } from '../modules/garages/service.garages';
 import vinManager from '../modules/identification/classes/vinmanager';
 import { getConfigByModel } from '../modules/info/service.info';
+import { charModule } from 'helpers/core';
 
 Events.onNet('vehicles:server:app:trackVehicle', async (src, vin: string) => {
   if (!vinManager.doesVinExist(vin) || !vinManager.isVinFromPlayerVeh(vin)) {
@@ -42,7 +43,7 @@ Events.onNet('vehicles:server:app:sellVehicle', async (src, targetCID: number, v
   if (!vinManager.doesVinExist(vin) || !vinManager.isVinFromPlayerVeh(vin)) {
     return;
   }
-  const targetServerId = DGCore.Functions.getPlyIdForCid(targetCID);
+  const targetServerId = charModule.getServerIdFromCitizenId(targetCID);
   if (!targetServerId) return;
   const vehicle = await getPlayerVehicleInfo(vin);
   if (!vehicle) return;

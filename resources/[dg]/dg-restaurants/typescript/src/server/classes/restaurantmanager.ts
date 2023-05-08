@@ -1,4 +1,4 @@
-import { Notifications, Util } from '@dgx/server';
+import { Business, Notifications, Util } from '@dgx/server';
 import { DGXEvent, EventListener, RPCEvent, RPCRegister } from '@dgx/server/decorators';
 import { mainLogger } from 'sv_logger';
 import winston from 'winston';
@@ -33,7 +33,7 @@ class RestaurantManager extends Util.Singleton<RestaurantManager>() {
   private getRestaurantAndValidatePlayer = (plyId: number, restaurantId: string, logAction: string) => {
     const restaurant = this.getRestaurant(restaurantId);
     if (!restaurant) return;
-    if (!restaurant.isPlayerInside(plyId)) {
+    if (!Business.isPlayerInside(plyId, restaurant.id)) {
       const logMsg = `${Util.getName(plyId)}(${plyId}) tried '${logAction}' at ${restaurant} but was not inside`;
       this.logger.warn(logMsg);
       Util.Log('restaurants:notInRestaurant', { restaurantId }, logMsg, plyId, true);
@@ -43,49 +43,11 @@ class RestaurantManager extends Util.Singleton<RestaurantManager>() {
     return restaurant;
   };
 
-  private getRestaurantPlayerIsIn = (plyId: number) => {
-    return Object.values(this.restaurants).find(r => r.isPlayerInside(plyId));
-  };
-
   public loadRestaurants = () => {
     for (const id of Object.keys(config.restaurants)) {
       const restaurant = new Restaurant(id);
       this.restaurants[id] = restaurant;
     }
-  };
-
-  public leaveCurrentRestaurant = (plyId: number) => {
-    const restaurant = this.getRestaurantPlayerIsIn(plyId);
-    if (!restaurant) return;
-    restaurant.playerLeft(plyId);
-  };
-
-  @DGXEvent('restaurants:location:entered')
-  private _enteredRestaurant = (plyId: number, restaurantId: string) => {
-    const restaurant = this.getRestaurant(restaurantId);
-    if (!restaurant) return;
-    restaurant.playerEntered(plyId);
-  };
-
-  @DGXEvent('restaurants:location:left')
-  private _leftRestaurant = (plyId: number, restaurantId: string) => {
-    const restaurant = this.getRestaurant(restaurantId);
-    if (!restaurant) return;
-    restaurant.playerLeft(plyId);
-  };
-
-  @DGXEvent('restaurants:location:signIn')
-  private _signIn = (plyId: number, restaurantId: string) => {
-    const restaurant = this.getRestaurantAndValidatePlayer(plyId, restaurantId, 'sign in');
-    if (!restaurant) return;
-    restaurant.signIn(plyId);
-  };
-
-  @DGXEvent('restaurants:location:signOut')
-  private _signOut = (plyId: number, restaurantId: string) => {
-    const restaurant = this.getRestaurantAndValidatePlayer(plyId, restaurantId, 'sign out');
-    if (!restaurant) return;
-    restaurant.signOut(plyId);
   };
 
   @DGXEvent('restaurants:register:checkBill')
@@ -130,13 +92,6 @@ class RestaurantManager extends Util.Singleton<RestaurantManager>() {
     restaurant.finishRegisterOrder(plyId, registerId);
   };
 
-  @DGXEvent('restaurants:location:openPriceMenu')
-  private _openPriceMenu = (plyId: number, restaurantId: string) => {
-    const restaurant = this.getRestaurantAndValidatePlayer(plyId, restaurantId, 'open price menu');
-    if (!restaurant) return;
-    restaurant.openPriceMenu(plyId);
-  };
-
   @RPCEvent('restaurant:location:getMenuItems')
   private _getMenuItems = (plyId: number, restaurantId: string) => {
     const restaurant = this.getRestaurantAndValidatePlayer(plyId, restaurantId, 'get menu items');
@@ -150,14 +105,6 @@ class RestaurantManager extends Util.Singleton<RestaurantManager>() {
     if (!restaurant) return false;
     const shown = restaurant.showActiveOrder(plyId, registerId);
     return shown;
-  };
-
-  // signout when fired
-  public handlePlayerFired = (plyId: number, restaurantId: string) => {
-    const restaurant = this.restaurants[restaurantId];
-    if (!restaurant) return;
-    if (!restaurant.isSignedIn(plyId)) return;
-    restaurant.signOut(plyId);
   };
 
   @DGXEvent('restaurants:location:cook')
@@ -193,20 +140,6 @@ class RestaurantManager extends Util.Singleton<RestaurantManager>() {
     const restaurant = this.getRestaurantAndValidatePlayer(plyId, restaurantId, 'buying leftovers');
     if (!restaurant) return;
     restaurant.buyLeftover(plyId, item);
-  };
-
-  @DGXEvent('restaurants:location:openSignedInList')
-  private _openSignedInList = (plyId: number, restaurantId: string) => {
-    const restaurant = this.getRestaurantAndValidatePlayer(plyId, restaurantId, 'opening signedin menu');
-    if (!restaurant) return;
-    restaurant.openSignedInList(plyId);
-  };
-
-  @DGXEvent('restaurants:location:forceOffDuty')
-  private _forceOffDuty = (plyId: number, restaurantId: string, targetId: number) => {
-    const restaurant = this.getRestaurantAndValidatePlayer(plyId, restaurantId, 'forcing off duty');
-    if (!restaurant) return;
-    restaurant.forceOffDuty(plyId, targetId);
   };
 }
 

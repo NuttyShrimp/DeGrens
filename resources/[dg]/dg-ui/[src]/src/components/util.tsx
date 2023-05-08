@@ -17,4 +17,8 @@ export const ConfirmationModal: FC<
   />
 );
 
-export const Loader: FC<React.PropsWithChildren<unknown>> = () => <BounceLoader size={60} color={'white'} />;
+export const Loader: FC<React.PropsWithChildren<unknown>> = () => (
+  <div className='centered-container'>
+    <BounceLoader size={60} color={'white'} />
+  </div>
+);

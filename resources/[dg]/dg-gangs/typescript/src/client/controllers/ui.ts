@@ -1,7 +1,7 @@
 import { RPC, UI } from '@dgx/client';
 
 UI.RegisterUICallback('laptop/gang/fetch', async (_, cb) => {
-  const cid = DGCore.Functions.GetPlayerData().citizenid;
+  const cid = LocalPlayer.state.citizenid;
   const clientVersion = await RPC.execute<GangData | null>('gangs:server:getClientVersion');
   // generate some extra fields for easy usage in ui
   let data = null;

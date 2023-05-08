@@ -1,14 +1,8 @@
 import { Config, Events, Hospital, Inventory, Minigames, Notifications, Taskbar } from '@dgx/server';
 
+let config: Config.Consumables;
+
 const effects: Record<Config.EffectConsumable['effect'], (target: number, duration: number, itemId: string) => void> = {
-  stress: async (target, duration, itemId) => {
-    const success = await Inventory.removeItemByIdFromPlayer(target, itemId);
-    if (!success) {
-      Notifications.add(target, 'Item is verdwenen?..');
-      return;
-    }
-    Events.emitNet('misc:consumables:applyEffect', target, 'stress', duration);
-  },
   speed: async (target, duration, itemId) => {
     let success = await Minigames.keygame(target, 1, 4, 18);
     if (!success) return;
@@ -67,15 +61,16 @@ const effects: Record<Config.EffectConsumable['effect'], (target: number, durati
 
 setImmediate(async () => {
   await Config.awaitConfigLoad();
-  const config = await Config.getConfigValue('inventory.consumables');
-  registerUsables(config);
+  config = await Config.getConfigValue('inventory.consumables');
+  registerUsables();
 });
 
-const registerUsables = (config: Config.Consumables) => {
+const registerUsables = () => {
   config.food.forEach(food => registerFood(food));
   config.drink.normal.forEach(drink => registerDrink(drink));
   config.drink.alcohol.forEach(drink => registerAlcoholDrink(drink));
   config.drugs.forEach(drug => registerDrug(drug));
+  registerStressConsumables(config.stress);
 };
 
 const registerFood = (info: Config.Consumable) => {
@@ -148,6 +143,30 @@ const registerDrug = (info: Config.EffectConsumable) => {
   Inventory.registerUseable(info.name, async (src, item) => {
     effects[info.effect](src, info.duration, item.id);
   });
+};
+
+const registerStressConsumables = (stressConsumables: Config.StressConsumable[]) => {
+  Inventory.registerUseable(
+    stressConsumables.map(s => s.name),
+    async (plyId, itemState) => {
+      const consumable = config.stress.find(s => s.name === itemState.name);
+      if (!consumable) return;
+
+      if (GetVehiclePedIsIn(GetPlayerPed(String(plyId)), false)) {
+        Notifications.add(plyId, 'Je kan dit niet vanuit een voertuig', 'error');
+        return;
+      }
+
+      if (consumable.uses === 1) {
+        Inventory.destroyItem(itemState.id);
+      } else {
+        Inventory.setQualityOfItem(itemState.id, oldQuality => {
+          return oldQuality - Math.ceil(100 / consumable.uses);
+        });
+      }
+      Events.emitNet('misc:consumables:applyStress', plyId, consumable);
+    }
+  );
 };
 
 // quality of metadata can influence gain, we scale from 25-100 to always get a bit at least

@@ -25,3 +25,7 @@ Inventory.registerUseable('id_card', (plyId, itemState) => {
 Inventory.registerUseable('binoculars', plyId => {
   Events.emitNet('misc:binoculars:use', plyId);
 });
+
+Inventory.registerUseable('lawnchair', plyId => {
+  Events.emitNet('misc:lawnchair:use', plyId);
+});

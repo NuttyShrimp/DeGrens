@@ -1,4 +1,4 @@
-import { Chat, RPC, Util } from '@dgx/server';
+import { Chat, Core, RPC, Util } from '@dgx/server';
 import gangManager from 'classes/gangmanager';
 import { dispatchCurrentGangToClient } from 'helpers';
 
@@ -36,7 +36,7 @@ RPC.register('gangs:server:getClientVersion', async (plyId: number): Promise<Gan
   return await gang.getClientVersion();
 });
 
-Util.onPlayerLoaded(playerData => {
+Core.onPlayerLoaded(playerData => {
   const gang = gangManager.getPlayerGang(playerData.citizenid);
   if (!gang) return;
   dispatchCurrentGangToClient(playerData.citizenid, gang.name);

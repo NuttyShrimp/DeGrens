@@ -1,4 +1,4 @@
-import { Events, Inventory, Notifications, Police, RPC, Util, Minigames, Phone } from '@dgx/server';
+import { Events, Inventory, Notifications, Police, RPC, Util, Minigames, Phone, Core } from '@dgx/server';
 import stateManager from 'classes/StateManager';
 import { getConfig } from 'helpers/config';
 import { mainLogger } from 'sv_logger';
@@ -109,6 +109,6 @@ Events.onNet('storerobbery:safes:cancelHack', (plyId: number, storeId: Storerobb
   handlePlayerCanceledHack(plyId);
 });
 
-Util.onPlayerUnloaded(plyId => {
+Core.onPlayerUnloaded(plyId => {
   handlePlayerCanceledHack(plyId);
 });

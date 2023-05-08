@@ -4,7 +4,7 @@ fetchEmails = function(cid)
 end
 
 addOfflineMail = function(cid, subject, sender, message)
-  local plySource = DGCore.Functions.getPlyIdForCid(cid)
+  local plySource = charModule.getServerIdFromCitizenId(cid)
   if plySource then
     TriggerClientEvent('dg-phone:client:addNewMail', plySource, subject, sender, message)
     return
@@ -16,10 +16,10 @@ exports('addOfflineMail', addOfflineMail)
 
 RegisterNetEvent('dg-phone:load', function()
   local src = source
-  local Players = DGCore.Functions.GetPlayer(src)
-  if not Players then return end
+  local Player = charModule.getPlayer(src)
+  if not Player then return end
 
-  local cid = Players.PlayerData.citizenid
+  local cid = Player.citizenid
   local mails = fetchEmails(cid)
   for _, mail in ipairs(mails) do
     TriggerClientEvent('dg-phone:client:addNewMail', src, mail.subject, mail.sender, mail.message)

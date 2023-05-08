@@ -1,4 +1,4 @@
-import { Events, Keys, Util, Inventory, Police, Weapons, RPC, Jobs, Animations, Vehicles } from '@dgx/client';
+import { Core, Events, Keys, Util, Inventory, Police, Weapons, RPC, Jobs, Animations, Vehicles } from '@dgx/client';
 import { setBleedAmount, setHealth } from 'modules/health/service.health';
 import { ENABLED_CONTROLS, DOWN_ANIMATIONS, NO_TP_VEHICLE_CLASSES } from './constants.down';
 import { doGetUpAnimation, getWeightOfState, resetPedFlagsAfterDown, setPedFlagsOnDown, setText } from './helpers.down';
@@ -14,6 +14,8 @@ let downAnimLoopId: number | null = null;
 
 let respawnTimeConfig: Hospital.Config['health']['respawnTime'];
 let damageTypesConfig: Record<number, { cause: string; type: Hospital.DownType }> = {};
+
+let charModule = Core.getModule('characters');
 
 export const setDownConfig = (resConfig: typeof respawnTimeConfig, weapons: Hospital.Config['damagetypes']) => {
   respawnTimeConfig = resConfig;
@@ -42,7 +44,7 @@ export const setPlayerState = (state: Hospital.State, save = true) => {
 };
 
 export const loadDownStateOnRestart = () => {
-  const state = DGCore.Functions.GetPlayerData()?.metadata?.downState;
+  const state = charModule.getMetadata()?.downState;
   if (!state) return;
   setPlayerState(state, false);
 };

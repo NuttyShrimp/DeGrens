@@ -37,6 +37,21 @@ export class Util {
     return Math.random() * (maximum - minimum) + minimum;
   };
 
+  getRndString(len: number, includeNums: boolean) {
+    let result = '';
+    let characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+    if (includeNums) {
+      characters = `${characters}0123456789`;
+    }
+    const charactersLength = characters.length;
+    let counter = 0;
+    while (counter < len) {
+      result += characters.charAt(Math.floor(Math.random() * charactersLength));
+      counter += 1;
+    }
+    return result;
+  }
+
   round = (number: number, decimals: number) => {
     const multiplier = Math.pow(10, decimals);
     return Math.round(number * multiplier) / multiplier;
@@ -167,5 +182,32 @@ export class Util {
 
   getChunkForPos(pos: Vec2, chunk_size = 256): number {
     return global.exports['dg-misc'].getChunkForPos(pos, chunk_size);
+  }
+
+  splitStr(str: string, delimiter: string) {
+    str.split(delimiter);
+  }
+
+  getAllClassMethods(obj: any) {
+    let props: string[] = [];
+
+    do {
+      const l = Object.getOwnPropertyNames(obj)
+        .concat(Object.getOwnPropertySymbols(obj).map(s => s.toString()))
+        .sort()
+        .filter(
+          (p, i, arr) =>
+            typeof obj[p] === 'function' && //only the methods
+            p !== 'constructor' && //not the constructor
+            (i == 0 || p !== arr[i - 1]) && //not overriding in this prototype
+            props.indexOf(p) === -1 //not overridden in a child
+        );
+      props = props.concat(l);
+    } while (
+      (obj = Object.getPrototypeOf(obj)) && //walk-up the prototype chain
+      Object.getPrototypeOf(obj) //not the the Object prototype methods (hasOwnProperty, etc...)
+    );
+
+    return props;
   }
 }

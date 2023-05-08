@@ -3,8 +3,6 @@ game 'gta5'
 name 'dg-ui'
 
 shared_scripts {
-  '@dg-core/import.lua',
-  '@dg-core/import.js',
   '@ts-shared/shared/lib.lua',
 }
 

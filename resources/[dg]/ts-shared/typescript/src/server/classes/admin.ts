@@ -9,7 +9,7 @@ class Admin {
     return global.exports['dg-admin'].hasSteamIdPermission(steamId, role);
   }
   isWhitelisted(source: number): Promise<boolean> {
-    return global.exports['dg-admin'].isplayerwhitelisted(source);
+    return global.exports['dg-admin'].isPlayerWhitelisted(source);
   }
   isBanned(steamId: string): Promise<{ isBanned: boolean; reason: string }> {
     return global.exports['dg-admin'].isPlayerBanned(steamId);

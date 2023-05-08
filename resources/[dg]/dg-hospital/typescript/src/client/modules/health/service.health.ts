@@ -1,4 +1,4 @@
-import { HUD, Util } from '@dgx/client';
+import { HUD, Notifications, Util } from '@dgx/client';
 import { checkDeathOnDamage } from 'modules/down/service.down';
 import { BLEED_DAMAGE_TYPES, BONES } from './constants.health';
 import { applyScreenBlur } from './helpers.health';
@@ -35,7 +35,13 @@ export const getBleedAmount = () => bleedAmount;
  * @param amount Value gets clamped 0 - 100
  */
 export const setBleedAmount = (amount: number) => {
+  const wasNoBleeding = bleedAmount === 0;
+
   bleedAmount = Math.min(100, Math.max(0, amount));
+
+  if (wasNoBleeding && bleedAmount > 0) {
+    Notifications.add('Je bent aan het bloeden!', 'info');
+  }
 
   const isBleeding = bleedAmount !== 0;
   HUD.toggleEntry('bleed', isBleeding);

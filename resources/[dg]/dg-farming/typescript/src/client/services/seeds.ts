@@ -81,7 +81,7 @@ export const findSeedCoords = async (entityModel: string, zOffset: number) => {
   const targetCoords = Util.getOffsetFromCoords({ ...plantCoords, w: plyHeading }, { x: 0, y: -0.5, z: 0 });
   await Util.goToCoords({ ...targetCoords, w: plyHeading }, 2000);
 
-  const [canceled] = await Taskbar.create('shovel', 'Planten', 10000, {
+  const [canceled] = await Taskbar.create('shovel', 'Planten', 4000, {
     canCancel: true,
     cancelOnDeath: true,
     cancelOnMove: true,

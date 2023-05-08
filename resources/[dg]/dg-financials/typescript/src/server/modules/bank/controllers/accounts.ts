@@ -1,4 +1,4 @@
-import { Chat, Events, Financials, Notifications, RPC, Util } from '@dgx/server';
+import { Core, Events, Notifications, RPC, Util } from '@dgx/server';
 
 import { getCash } from '../../cash/service';
 import accountManager from '../classes/AccountManager';
@@ -34,8 +34,9 @@ global.exports('removePermissions', (accountId: string, cid: number) => removePe
 global.exports('getPermissions', (accountId: string, cid: number) => getPermissions(accountId, cid));
 global.exports('buildPermissions', (level: number) => buildPermissions(level));
 
-Util.onPlayerLoaded(playerData => {
-  createDefaultAccount(playerData.source);
+Core.onPlayerLoaded(playerData => {
+  if (!playerData.serverId) return;
+  createDefaultAccount(playerData.serverId);
 });
 
 // endregion

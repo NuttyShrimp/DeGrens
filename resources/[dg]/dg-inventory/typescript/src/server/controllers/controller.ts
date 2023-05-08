@@ -5,6 +5,7 @@ import itemManager from 'modules/items/manager.items';
 import { getConfig } from 'services/config';
 import repository from 'services/repository';
 import { Item } from 'modules/items/classes/item';
+import { charModule } from 'services/core';
 
 const hasObject = async (plyId: number) => {
   const cid = Util.getCID(plyId);
@@ -52,7 +53,7 @@ const addItemToInventory = async (
   const createdIds: string[] = [];
   const invId = Inventory.concatId(type, identifier);
   // If item gets added to playerinv, get plyId to build metadata and send itembox event
-  const plyId = type === 'player' ? DGCore.Functions.getPlyIdForCid(Number(identifier)) : undefined;
+  const plyId = type === 'player' ? charModule.getServerIdFromCitizenId(Number(identifier)) : undefined;
   metadata = metadata ?? itemManager.buildInitialMetadata(plyId, name);
 
   for (let i = 0; i < amount; i++) {
@@ -117,7 +118,7 @@ const removeItemsByNamesFromInventory = async (
   }
 
   if (type === 'player') {
-    const plyId = DGCore.Functions.getPlyIdForCid(Number(identifier));
+    const plyId = charModule.getServerIdFromCitizenId(Number(identifier));
     if (plyId) {
       // group same names for itemboxes
       const counts: Record<string, number> = {};
@@ -164,7 +165,7 @@ const removeItemsByIdsFromInventory = async (
   }
 
   if (type === 'player') {
-    const plyId = DGCore.Functions.getPlyIdForCid(Number(identifier));
+    const plyId = charModule.getServerIdFromCitizenId(Number(identifier));
     if (plyId) {
       for (const [n, c] of Object.entries(removeCounts)) {
         const image = itemDataManager.get(n).image;
@@ -264,6 +265,11 @@ const getItemByIdFromInventory = (type: Inventory.Type, identifier: string, item
   return itemState;
 };
 
+const showItemBox = (plyId: number, itemName: string, label: string) => {
+  const itemData = itemDataManager.get(itemName);
+  emitNet('inventory:addItemBox', plyId, label, itemData.image);
+};
+
 // Exports
 global.asyncExports('hasObject', hasObject);
 global.exports('giveStarterItems', giveStarterItems);
@@ -283,6 +289,7 @@ global.exports('moveAllItemsToInventory', moveAllItemsToInventory);
 global.asyncExports('getItemStateFromDatabase', getItemStateFromDatabase);
 global.asyncExports('doesInventoryHaveItemWithId', doesInventoryHaveItemWithId);
 global.exports('getItemByIdFromInventory', getItemByIdFromInventory);
+global.exports('showItemBox', showItemBox);
 
 // Events for client
 RPC.register('inventory:server:doesPlayerHaveItems', (plyId, names: string | string[]) => {

@@ -1,4 +1,4 @@
-import { Events, Jobs, RPC, Sounds, Util } from '@dgx/server';
+import { Core, Events, Jobs, RPC, Sounds, Util } from '@dgx/server';
 
 import { addCall } from './store';
 
@@ -41,9 +41,9 @@ export const createDispatchCall = async (job: 'ambulance' | 'police', call: Disp
   }
 
   if (call.officer) {
-    const DGPlayer = DGCore.Functions.GetPlayer(call.officer);
-    if (DGPlayer?.PlayerData.metadata.callsign) {
-      call.officer = DGPlayer.PlayerData.metadata.callsign as unknown as number; // fuckoff typescript
+    const DGPlayer = Core.getPlayer(call.officer);
+    if (DGPlayer?.metadata.callsign) {
+      call.officer = DGPlayer.metadata.callsign as unknown as number; // fuckoff typescript
     }
   }
 

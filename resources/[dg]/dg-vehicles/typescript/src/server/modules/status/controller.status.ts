@@ -1,10 +1,9 @@
-import { Auth, Events, Inventory, Notifications, RPC, Config, Util, UI } from '@dgx/server';
+import { Auth, Events, Inventory, Notifications, RPC, Config, Util, UI, Business } from '@dgx/server';
 import { getConfigByEntity } from '../info/service.info';
 import { getServiceStatus, seedServiceStatuses, updateServiceStatus } from './services/store';
 import { calculateNeededParts, setPercentagePerPart, useRepairPart } from './service.status';
 import { getTyreState } from './helpers.status';
 import { getVinForVeh, setNativeStatus } from 'helpers/vehicle';
-import { getShopForPlayer } from 'modules/mechanic/service.mechanic';
 import { SERVICE_CONDITIONS } from './constants.status';
 import { getPerformance } from 'modules/upgrades/service.upgrades';
 import { REPAIR_PARTS } from '../../../shared/status/constants.status';
@@ -46,7 +45,7 @@ Events.onNet('vehicles:service:showOverview', async (plyId: number, netId: numbe
   if (!serviceStatus) return;
 
   const partMenu: ContextMenu.Entry[] = [];
-  const plyShop = getShopForPlayer(plyId);
+  const isActiveMechanic = Business.isPlayerSignedInAtAnyOfType(plyId, 'mechanic');
 
   for (const part in serviceStatus) {
     const partState = serviceStatus[part as Service.Part];
@@ -56,7 +55,7 @@ Events.onNet('vehicles:service:showOverview', async (plyId: number, netId: numbe
 
     partMenu.push({
       title: REPAIR_PARTS[part as Service.Part].label,
-      description: plyShop
+      description: isActiveMechanic
         ? `${partPercentage.toFixed(2)}% | ${Math.ceil(partsNeeded) || 'geen'} parts nodig`
         : `${serviceCondition?.label} condition`,
     });
@@ -72,7 +71,7 @@ Events.onNet('vehicles:service:showOverview', async (plyId: number, netId: numbe
   ];
 
   // Only show perf tunes to mechanic
-  if (plyShop) {
+  if (isActiveMechanic) {
     const upgrades = await getPerformance(vin);
     infoMenu.push(
       ...[

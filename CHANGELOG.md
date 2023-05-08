@@ -13,9 +13,36 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+## [1.2.0]
+
+### Added
+
+- Duidelijke melding wanneer je begint met bloeden
+- Replace our stripped down QBCore with an in-house player mgmt resource
+- Log when choosing a spawn location
+- Re-added husky + pretty-quick for code formatting before commit
+- Report menu icon btns hebben nu een tooltip met verduidelijking voor de knop
+- Kampeerstoel toegevoegd
+
+### Changed
+
+- Politie verliest zijn spullen niet meer door het respawnen
+- Minder lang plaatsen van groenten
+- Minder stress wanneer je in een wagen zit
+- YTD's van enkele voertuigen gedownsized
+- winston-sentry-log dependency vervangen door in-house (fixed sentry type getting confused with v6 vs v7)
+
+### Fixed
+
+- Lag tijdens het uitvoeren van oxyrun opgelost
+- Loading spinner in UI wordt nu treffelijk geplaats in zijn modals
+- Serverside local dgx events worden nu wel geregistreert
+- Een laptophack failed nu niet als je laptop kapot gaat tijdens de hack
+
 ## [1.1.5]
 
 ### Added
+
 - Feedback notificatie toegevoegd aan ATM robbery
 - Staff kan nu een tijdelijke evenement blip plaatsen
 - Enkele items recyclebaar gemaakt
@@ -25,6 +52,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Nieuwe criminele activiteit toegevoegd
 
 ### Changed
+
 - Je ziet de instel optie niet langer als je een doos vast hebt in het methlab
 - Support heeft nu ook de fill-needs admin optie
 - Opbrengst van enkele criminele activiteiten aangepast
@@ -40,6 +68,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Je kijkt nu altijd vooruit na het nemen van een lift
 
 ### Fixed
+
 - De driver bij een ATM robbery hoeft niet langer uit te stappen voordat hij de ATM van de muur kan trekken
 - Voertuig slot is nu wel deftig toggleble de eerste keer dat je dit probeerd
 - Er wordt nu effectief gechecked of een voertuig een politie heli is om helicam te activeren
@@ -60,6 +89,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [1.1.4]
 
 ## Added
+
 - Re-added custom MRPD/Pillbox textures
 - Een item in je inventory probeert nu in zijn huidige rotatie te blijven wanneer je dit quickmoved
 - Enkele extra checks toegevoegd op het maken van een 112
@@ -74,6 +104,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - ATM overval toegevoegd
 
 ## Changed
+
 - Veel item decaysnelheiden verlaagd
 - Enkele crafting recipe requirements verlaagd
 - Hoeveel materiaal je krijgt voor sommige methods verhoogd
@@ -84,8 +115,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Redelijk wat luxury-voertuighandlingen aangepast
 
 ## Fixed
+
 - Fixed vehicle plate thread getting stuck on non-existing vehicles
-- Er wordt nu wel een sound afgespeeld bij important dispatch meldingen 
+- Er wordt nu wel een sound afgespeeld bij important dispatch meldingen
 - Fix items die naar positie 0 gaan wanneer inventory vol is tijdens het moven van meerdere items
 - Items verdwijnen nu wel visueel als je je inventory open hebt wanneer een item gedestroyed wordt
 - Radiotower timeout randomization gefixt
@@ -94,7 +126,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [1.1.3]
 
 ## Added
-- Liften en stoeltjes in Maze Bank Arena bruikbaar gemaakt. 
+
+- Liften en stoeltjes in Maze Bank Arena bruikbaar gemaakt.
 - Je krijgt het serienummer van een wapen op je clipboard wanneer je het gebruikt
 - Aangenamere scrapyard locaties toegevoegd
 - Je kan nu items in je inventory selecteren om deze snel te veplaatsen
@@ -103,6 +136,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Inbeslagname reden toegevoegd
 
 ## Changed
+
 - Straightpipers op nieuwe locatie
 - Groter verschil tussen methlab settings
 - Koffer afstand check voor te openen verhoogd
@@ -119,6 +153,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Bandage goedkoper gemaakt voor ambulance
 
 ## Fixed
+
 - Fix speedbans wanneer je uit wagen vliegt of onder de grond valt
 - Je kan niet meer zandgraven terwijl je in een voertuig zit
 - Je groep stopt nu correct na het uitvoeren van scrapyard job
@@ -130,6 +165,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [1.1.2]
 
 ### Added
+
 - Parking toegevoegd voor taxi bedrijf
 - Scheduled maintenance fees zijn zichtbaar in de app 1 week voordat ze effectief betaald moeten worden
 - Mazebank Arena interior toegevoegd met mogelijkheid om te veranderen door staff
@@ -138,6 +174,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add taxi als businesstype
 
 ### Changed
+
 - Porto crafting requirement aangepast
 - Je wordt nu losgelaten wanneer je gerevived wordt
 - Calculaties voor voertuig maintenance fees aangepast
@@ -146,6 +183,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Materialen van gerecyclede items aangepast
 
 ### Fixed
+
 - Je kan weer vissen nadat je een vis hebt gevangen
 - PDM medewerkers kunnen nu wel voertuigen verkopen met lage klasse zonder ze opnieuw te moeten selecteren
 - Sanddigging UI interactions overwriten elkaar nu deftig
@@ -164,6 +202,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [1.1.1]
 
 ### Added
+
 - Leefloon toegevoegd
 - Gemeentehuis is nu zichtbaar op je map
 - Heel wat nieuwe garages toegevoegd
@@ -181,6 +220,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Je kan nu aankopen doen in de shop bij otto's garage
 
 ### Changed
+
 - Meer feedback bij start van fleecaoverval
 - Enkele decayrates en prijzen van shopitems aangepast
 - Crafting level systeem herwerkt voor sommige type benches
@@ -197,6 +237,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Moved winston logger logic/creation to a seperate package to reduce code duplication
 
 ### Fixed
+
 - Fix group job change export name
 - Fix container die onder water zat
 - Fix electronica lootplek dat overlapt met andere peekoption
@@ -205,7 +246,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Je kan nu advanced parts in een materiaalcontainer steken
 - Vegetable container is nu buyable
 - Phone notificatie keybinds werken nu wel
-- Fix  hoge resource usage wanneer je wapen vasthebt
+- Fix hoge resource usage wanneer je wapen vasthebt
 - Paychecks worden nu wel opgeslagen
 - Reset local itemcache na characterswitch
 - Je kan sneller bennys repair gebruiken
@@ -214,6 +255,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [1.1.0]
 
 ### Added
+
 - Phone app payout level heeft nu wel effect bij sanddigging
 - Pistol flashlight voor politie toegevoegd
 - Admin penalise optie via selector
@@ -227,12 +269,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Je krijgt nu meer geld voor de eerste jobs die je doet per dag.
 - F1 Menu opties toegevoegd om snel porto te switchen voor politie/ambulance
 - Politie kan nu makkelijk weten van wie DNA is doormiddels van DNA te gebruiken
-- Je krijgt nu een beetje cash wanneer je naar de gevangenis wordt gestuurd om eten/drinken te kopen 
+- Je krijgt nu een beetje cash wanneer je naar de gevangenis wordt gestuurd om eten/drinken te kopen
 - Mails worden nu teruggezet als je UI restart
 - Je kan nu altijd cornersellen maar met prijsvermindering in bepaalde situaties
 - Je kan voertuigen nu ook recoveren via de garage lijst. Dit kan enkel wanneer je voertuig uit staat maar nergens meer op de map te vinden is
 
 ### Changed
+
 - Mogelijkheid om verschillende verkoop aantallen per item te bepalen bij cornersell
 - Minimum tijd voor bennys repair taskbar
 - Voertuig lockstatus check gebeurd nu ook op einde van taskbar bij in/uit voertuig interacties
@@ -251,6 +294,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Heistsysteem opniew gemaakt
 
 ### Fixed
+
 - Hoogte van camera en verrekijker gefixt
 - Je kan weer met een baseballbat targetten
 - Uncuff stopt als persoon tijdens uncuff actie weg is gelopen
@@ -263,12 +307,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fix anti space spam consistency
 - Ontboeien checkt nu correct afstand tot target
 - Mazebank bankingzone juist gezet
-- Fix client dg-logs errors 
+- Fix client dg-logs errors
 - Fix duplicate asyncExports helper throwing error for dg-lib scriptload
 
 ## [1.0.10]
 
 ### Added
+
 - Phone Garage App bevat nu knop om verdwenen voertuigen terug in de garage te plaatsen
 - Speedometer blijft staan als je maar 1 melding hebt
 - Enkele stoelen toegevoegd om op te zitten
@@ -282,6 +327,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - EMS ziet nu ook antwoorden op 112's
 
 ### Changed
+
 - Bait price aangepast
 - Politie kan dna swab enkel gebruiken als er geen ambu is
 - Nodige materialen voor te verwerken aangepast
@@ -304,6 +350,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Reputatie voor meth verkoop verlaagd
 
 ### Fixed
+
 - Je kan weer smelten als je meer dan de nodige items opzak hebt
 - Fixed cursed date formatting for ban + properly get ban creation time
 - Keycard toegevoegd aan crafting table
@@ -399,7 +446,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Je kan niet langer sprinten/springen als je een item object vast hebt
 - Weedplanten voeden werkt nu hetzelfde als farmingplanten
 - Spawnnaam van taxi gefixt
-- Minder stress bij het oogsten van weed 
+- Minder stress bij het oogsten van weed
 - Je gaat nu naar yogamat bij begin van anim ipv einde
 - Stressicon komt nu pas vanaf een bepaalde waarde
 - Moeilijkheid lockpicken per voertuigklassen
@@ -420,6 +467,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Bij het inleveren van tickets krijg je de juiste prijs tezien als notificatie
 
 ## [1.0.7]
+
 ### Added
 
 - Feedback aan admin sendMessage command voor uitvoerder
@@ -430,6 +478,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Bij admin resource start worden all AFK kick gecleared uit de DB
 
 ### Changed
+
 - Gain less stress from stress/speedzones
 - Permissies voor fixScreenFadeout veranderd van dev naar staff
 - Sticky notificaties worden nu gerestored na UI reset
@@ -443,6 +492,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fieldmaster is buyable voor Joran x
 
 ### Fixed
+
 - poly(zone|target) debug prints do not check for `is_production` convar
 - fixed citizenid field in `chars:select` log
 - Check op null stance state
@@ -462,11 +512,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [1.0.6]
 
 ### Added
+
 - Added some suggested clothing
 - Added a fall-off timer implementation for points
 - Added some suggested clothing
 
 ### Changed
+
 - Doorlocks worden nu altijd gezet op server en niet op client
 - Stancing gebruikt nu statebag handlers
 - Labos herschreven in de superieure taal
@@ -590,7 +642,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Restaurant extra opslag, locker en kledingkast, tweaked taskbar times
 - Plantvoeding heeft nu meerdere usages
-- Je kan nu een huidige sanitation locatie skippen als je de vuilzak niet vindt 
+- Je kan nu een huidige sanitation locatie skippen als je de vuilzak niet vindt
 - Admin kan nu een individueel bericht naar een persoon sturen
 - Extra message before AC tries to ban user
 - Extra bennys locaties
@@ -672,7 +724,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fuel goedkoper gemaakt
 - Lockpicks goedkoper en gaan langer mee
 - Goedkopere seeds en meer loot per farming plant
-- Goedkopere bennys reparages 
+- Goedkopere bennys reparages
 - Minder stress gain door speed
 - Je krijgt betaald volgens payout level in het begin van je job
 - Ook een waypoint naar getracked voertuig met langere blip

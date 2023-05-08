@@ -4,86 +4,6 @@
   "restaurants": {
     "upnatom": {
       "label": "Up-n-Atom",
-      "restaurantZone": {
-        "points": [
-          {
-            "x": 90.054252624512,
-            "y": 272.20550537109
-          },
-          {
-            "x": 92.608360290527,
-            "y": 279.49465942383
-          },
-          {
-            "x": 91.811164855957,
-            "y": 280.00137329102
-          },
-          {
-            "x": 93.378952026367,
-            "y": 284.353515625
-          },
-          {
-            "x": 94.808738708496,
-            "y": 284.08676147461
-          },
-          {
-            "x": 95.624740600586,
-            "y": 286.2673034668
-          },
-          {
-            "x": 93.463119506836,
-            "y": 286.97610473633
-          },
-          {
-            "x": 94.978721618652,
-            "y": 287.88098144531
-          },
-          {
-            "x": 98.253204345703,
-            "y": 294.95739746094
-          },
-          {
-            "x": 81.24925994873,
-            "y": 301.044921875
-          },
-          {
-            "x": 78.506660461426,
-            "y": 293.8173828125
-          },
-          {
-            "x": 80.233741760254,
-            "y": 293.21157836914
-          },
-          {
-            "x": 77.146118164062,
-            "y": 285.13482666016
-          },
-          {
-            "x": 75.759635925293,
-            "y": 285.6845703125
-          },
-          {
-            "x": 73.167167663574,
-            "y": 278.45135498047
-          }
-        ],
-        "minZ": 106.55,
-        "maxZ": 115.1882
-      },
-      "managementZone": {
-        "center": {
-          "x": 81.23,
-          "y": 298.13,
-          "z": 110.22
-        },
-        "length": 0.4,
-        "width": 4.8,
-        "options": {
-          "heading": 340,
-          "minZ": 109.17,
-          "maxZ": 111.77
-        }
-      },
       "stashZone": {
         "center": {
           "x": 82.65,
@@ -204,7 +124,9 @@
             }
           },
           "peekLabel": "Milkshake maken",
-          "requiredItems": ["farming_milk"]
+          "requiredItems": [
+            "farming_milk"
+          ]
         },
         "upnatom_icecream": {
           "zone": {
@@ -240,7 +162,9 @@
             }
           },
           "peekLabel": "Frieten bakken",
-          "requiredItems": ["farming_potato"]
+          "requiredItems": [
+            "farming_potato"
+          ]
         },
         "upnatom_burger": {
           "zone": {
@@ -258,7 +182,13 @@
             }
           },
           "peekLabel": "Burger maken",
-          "requiredItems": ["farming_tomato", "farming_lettuce", "farming_onion", "farming_wheat", "restaurant_burger"],
+          "requiredItems": [
+            "farming_tomato",
+            "farming_lettuce",
+            "farming_onion",
+            "farming_wheat",
+            "restaurant_burger"
+          ],
           "isLeftover": true
         },
         "upnatom_cheeseburger": {

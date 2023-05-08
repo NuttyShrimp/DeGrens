@@ -293,7 +293,6 @@ export class PaletoManager implements Heists.TypeManager {
   };
 
   public canHack = () => {
-    console.log({ done: this.isDone(), actions: this.actionsDone });
     return !this.isDone() && Object.values(this.actionsDone).every(v => v);
   };
 }

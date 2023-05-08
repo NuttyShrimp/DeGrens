@@ -1,4 +1,4 @@
-import { Events, Inventory, Jobs, Notifications, RPC, Taskbar, UI, Util } from '@dgx/server';
+import { Core, Events, Inventory, Jobs, Notifications, RPC, Taskbar, UI, Util } from '@dgx/server';
 import { BLOCKED_CASINGS_WEAPONS } from './constants.evidence';
 import { addBloodDrop, addEvidence, getAllEvidenceInArea, getCidOfDNA, takeEvidence } from './service.evidence';
 
@@ -72,12 +72,13 @@ Inventory.registerUseable('dna_swab', async src => {
   });
   if (canceled) return;
 
-  const player = DGCore.Functions.GetPlayer(target);
+  const player = Core.getPlayer(target);
   if (!player) return;
-  Inventory.addItemToPlayer(src, 'evidence_dna', 1, { dna: player.PlayerData.metadata.dna });
+  Inventory.addItemToPlayer(src, 'evidence_dna', 1, { dna: player.metadata.dna });
 });
 
 Inventory.registerUseable('evidence_dna', async (src, item) => {
+  let charModule = Core.getModule('characters');
   UI.addToClipboard(src, item.metadata.dna);
 
   // TODO: Remove this as its a temporary solution
@@ -89,11 +90,11 @@ Inventory.registerUseable('evidence_dna', async (src, item) => {
   const cid = await getCidOfDNA(item.metadata.dna);
   if (!cid) return;
 
-  const targetPlayer = await DGCore.Functions.GetOfflinePlayerByCitizenId(cid);
+  const targetPlayer = await charModule.getOfflinePlayer(cid);
   if (!targetPlayer) return;
 
   Notifications.add(
     src,
-    `DNA behoort tot ${targetPlayer.PlayerData.charinfo.firstname} ${targetPlayer.PlayerData.charinfo.lastname} (CID: ${targetPlayer.PlayerData.citizenid})`
+    `DNA behoort tot ${targetPlayer.charinfo.firstname} ${targetPlayer.charinfo.lastname} (CID: ${targetPlayer.citizenid})`
   );
 });

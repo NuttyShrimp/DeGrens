@@ -1,4 +1,12 @@
-import { createBusiness, deleteBusiness, getBusinessById, getBusinessByName } from 'services/business';
+import {
+  createBusiness,
+  deleteBusiness,
+  getBusinessById,
+  getBusinessByName,
+  getBusinessPlayerIsInsideOf,
+  getSignedInPlayersForBusinessType,
+  isPlayerSignedInAtAnyOfBusinessType,
+} from 'services/business';
 import { getPermissions, permissionsFromBitmask } from 'services/config';
 
 global.exports('getBusinessById', (id: number) => getBusinessById(id));
@@ -43,4 +51,44 @@ global.exports('updateOwner', (id: number, newOwner: number) => {
   business.updateOwner(newOwner);
 });
 
-asyncExports("createBusiness", createBusiness)
+asyncExports('createBusiness', createBusiness);
+
+global.exports('isPlayerSignedInAtBusiness', (plyId: number, name: string) => {
+  const business = getBusinessByName(name);
+  if (!business) return [];
+  return business.isSignedIn(plyId);
+});
+
+global.exports('getSignedInPlayersForBusiness', (name: string): number[] => {
+  const business = getBusinessByName(name);
+  if (!business) return [];
+  return [...business.getSignedInPlayers()];
+});
+
+global.exports('isPlayerSignedInAtAnyOfBusinessType', isPlayerSignedInAtAnyOfBusinessType);
+global.exports('getSignedInPlayersForBusinessType', getSignedInPlayersForBusinessType);
+
+global.exports('isPlayerInsideBusiness', (plyId: number, name: string) => {
+  const business = getBusinessByName(name);
+  if (!business) return [];
+  return business.isPlayerInside(plyId);
+});
+
+global.exports('getPlayersInsideBusiness', (name: string) => {
+  const business = getBusinessByName(name);
+  if (!business) return [];
+  return [...business.getInsidePlayers()];
+});
+
+global.exports('getBusinessPlayerIsInsideOf', (plyId: number) => {
+  const business = getBusinessPlayerIsInsideOf(plyId);
+  if (!business) return;
+  const businessInfo = business.getInfo();
+  return { name: businessInfo.name, type: businessInfo.business_type.name };
+});
+
+global.exports('getItemPrice', (name: string, item: string) => {
+  const business = getBusinessByName(name);
+  if (!business) return;
+  return business.getPriceItems().get(item)?.price;
+});

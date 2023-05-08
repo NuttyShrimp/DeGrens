@@ -1,4 +1,4 @@
-import { Util, Vehicles } from '@dgx/server';
+import { Core, Util, Vehicles } from '@dgx/server';
 
 const generateWeaponSerial = () => {
   return (
@@ -86,14 +86,15 @@ export const ON_CREATE: Record<string, (plyId?: number) => { [key: string]: any 
   weapon_petrolcan: () => ({ hiddenKeys: ['ammo'] }),
   id_card: (plyId?: number) => {
     if (!plyId) return {};
-    const playerData = DGCore.Functions.GetPlayer(plyId).PlayerData;
+    const player = Core.getPlayer(plyId);
+    if (!player) return {};
     return {
-      cid: playerData.citizenid,
-      firstName: playerData.charinfo.firstname,
-      lastName: playerData.charinfo.lastname,
-      dob: playerData.charinfo.birthdate,
-      gender: playerData.charinfo.gender == 0 ? 'M' : 'V',
-      nationality: playerData.charinfo.nationality.toUpperCase().slice(0, 3),
+      cid: player.citizenid,
+      firstName: player.charinfo.firstname,
+      lastName: player.charinfo.lastname,
+      dob: player.charinfo.birthdate,
+      gender: player.charinfo.gender == 0 ? 'M' : 'V',
+      nationality: player.charinfo.nationality.toUpperCase().slice(0, 3),
     };
   },
   fakeplate: () => ({ plate: Vehicles.generatePlate() }),

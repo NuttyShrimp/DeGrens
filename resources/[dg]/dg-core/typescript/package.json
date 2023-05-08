@@ -1,0 +1,25 @@
+{
+  "name": "dg-core",
+  "version": "1.2.0",
+  "main": "index.js",
+  "author": "NuttyShrimp",
+  "license": "MIT",
+  "sentry_dsn": "https://ca666003b9db4baeb7bf5b1aab7bc6d1@sentry.nuttyshrimp.me/9",
+  "scripts": {
+    "build": "node ../../../../scripts/build.js --client --server",
+    "build:dev": "node ../../../../scripts/build.js --client --server --dev",
+    "watch": "node ../../../../scripts/watch --server --client",
+    "lint": "eslint --fix --ext .js,.ts ./src",
+    "format": "prettier --write --no-error-on-unmatched-pattern src/**/*.{js,ts,json,md}"
+  },
+  "devDependencies": {
+    "@dgx/client": "workspace:*",
+    "@dgx/server": "workspace:*",
+    "@dgx/shared": "workspace:*",
+    "dayjs": "*",
+    "db": "workspace:*",
+    "esbuild": "*",
+    "logger": "workspace:*",
+    "tsconfig": "workspace:*"
+  }
+}

@@ -1,4 +1,4 @@
-import { Config, Financials, Jobs, Notifications, Phone, SQL, UI, Util } from '@dgx/server';
+import { Business, Config, Financials, Jobs, Notifications, Phone, SQL, UI, Util } from '@dgx/server';
 import {
   checkVehicleStrikes,
   doVehicleForfeiture,
@@ -15,7 +15,6 @@ import { deleteVehicle, getVinForVeh, spawnOwnedVehicle } from 'helpers/vehicle'
 import vinManager from 'modules/identification/classes/vinmanager';
 import { getConfigByModel } from 'modules/info/service.info';
 import { keyManager } from 'modules/keys/classes/keymanager';
-import { getAmountOfActiveMechanics } from 'modules/mechanic/service.mechanic';
 import { isPlayerAssigned, finishJob, overwriteTowJob, sendTowJob } from 'modules/mechanic/services/towing.mechanic';
 
 let config: Depot.Config;
@@ -109,19 +108,22 @@ export const requestImpound = async (src: number, title: string, veh: number, in
     return;
   }
   keyManager.removeKeys(vin);
-  if (getAmountOfActiveMechanics() > 0) {
-    // Create a tow request
-    if (pendingImpounds.has(vin)) {
-      Notifications.add(src, 'Vorig aanvraag is overschreden...');
-      pendingImpounds.set(vin, reason);
-      overwriteTowJob(src, vin);
-      return;
-    }
-    pendingImpounds.set(vin, reason);
-    sendTowJob(src, vin);
+
+  if (!Business.isAnyPlayerSignedInForType('mechanic')) {
+    Notifications.add(src, 'Er is momenteel geen takeldienst beschikbaar...');
     return;
   }
-  Notifications.add(src, 'Er is momenteel geen takeldienst beschikbaar...');
+
+  // Create a tow request
+  if (pendingImpounds.has(vin)) {
+    Notifications.add(src, 'Vorig aanvraag is overschreden...');
+    pendingImpounds.set(vin, reason);
+    overwriteTowJob(src, vin);
+    return;
+  }
+
+  pendingImpounds.set(vin, reason);
+  sendTowJob(src, vin);
 };
 
 export const finishImpound = (src: number, veh: number) => {

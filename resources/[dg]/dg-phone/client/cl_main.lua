@@ -58,11 +58,11 @@ RegisterNetEvent('dg-phone:client:togglePhone', function(toggle)
   end
 end)
 
-DGX.Util.onPlayerLoaded(function()
+DGX.Core.onPlayerLoaded(function()
   setState('characterLoaded', true)
 end)
 
-DGX.Util.onPlayerUnloaded(function()
+DGX.Core.onPlayerUnloaded(function()
   closePhone()
   setState('isDisabled', true)
   setState('characterLoaded', false)
@@ -70,12 +70,19 @@ end)
 
 RegisterNetEvent('onResourceStart', function(res)
   if res == GetCurrentResourceName() then
-    while (not DGCore) do Wait(10) end
-    if DGCore.Functions.GetPlayerData() ~= nil then
-      initPhone()
-      setState('characterLoaded', true)
-    end
+    if not LocalPlayer.state.isLoggedIn then return end
+    initPhone()
+    setState('characterLoaded', true)
   end
+end)
+
+AddStateBagChangeHandler('isLoggedIn', ('player:%s'):format(GetPlayerServerId(PlayerId())), function(bag, key, value)
+  if value then
+    initPhone()
+  else
+    unloadPhone()
+  end
+  setState('characterLoaded', value)
 end)
 
 RegisterNetEvent('onResourceStop', function(res)

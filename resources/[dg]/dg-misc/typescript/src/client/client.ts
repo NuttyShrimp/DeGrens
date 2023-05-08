@@ -31,7 +31,7 @@ import './services/spacespam';
 import './services/parachute';
 import './services/scubagear';
 import './services/grid';
-import './services/binoculars';
+import './services/useables';
 import './services/news';
 
 import { setDiscordRichPresence } from 'modules/discord/service.discord';

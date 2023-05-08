@@ -7,12 +7,6 @@ declare namespace Restaurants {
 
   type RestaurantConfig = {
     label: string;
-    restaurantZone: {
-      points: Vec2[];
-      minZ: number;
-      maxZ: number;
-    };
-    managementZone: BoxZone;
     stashZone: BoxZone;
     registerZones: BoxZone[];
     cooking: {

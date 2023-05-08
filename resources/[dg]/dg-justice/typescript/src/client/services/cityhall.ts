@@ -33,6 +33,7 @@ export const buildCityHallZones = () => {
     id: 'cityhall',
     sprite: 438,
     color: 2,
+    scale: 0.7,
     coords: ZONES[0].coords,
     text: 'Gemeentehuis',
   });

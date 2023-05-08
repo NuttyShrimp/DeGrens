@@ -1,3 +1,5 @@
+local charModule = exports['dg-core']:getModule('characters')
+
 -- action is 'add' | 'remove'
 -- If add we 100% sure players has one so no need to doublecheck
 -- If remove then check if there are still more of the item remaining
@@ -6,7 +8,7 @@ DGX.Inventory.onInventoryUpdate('player', function(identifier, action)
   if action == 'remove' then
     hasVPN = DGX.Inventory.doesInventoryHaveItems('player', identifier, 'vpn')
   end
-  local plySource = DGCore.Functions.getPlyIdForCid(tonumber(identifier))
+  local plySource = charModule.getServerIdFromCitizenId(tonumber(identifier))
   TriggerClientEvent('dg-ui:SendAppEvent', plySource, 'character', {
     hasVPN = hasVPN,
   })
@@ -17,7 +19,7 @@ DGX.Inventory.onInventoryUpdate('player', function(identifier, action)
   if action == 'remove' then
     hasPhone = DGX.Inventory.doesInventoryHaveItems('player', identifier, 'phone')
   end
-  local plySource = DGCore.Functions.getPlyIdForCid(tonumber(identifier))
+  local plySource = charModule.getServerIdFromCitizenId(tonumber(identifier))
   TriggerClientEvent('dg-ui:SendAppEvent', plySource, 'character', {
     hasPhone = hasPhone,
   })
@@ -31,8 +33,8 @@ AddEventHandler('onResourceStop', function(res)
 
     Restart server to properly restart UI.
     New players will not be able to join!
-    
+
     --------------------------------------
-  
+
   ]])
 end)

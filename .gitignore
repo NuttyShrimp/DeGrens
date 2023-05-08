@@ -7,6 +7,7 @@ server.cfg
 .yarn.installed
 vehiclesmodels.json
 *.bat
+*.sh
 !sv.template.bat
 seed.sql
 *-Coords.txt
@@ -277,4 +278,3 @@ polyzone_created_zones.txt
 
 # Mac thing
 .DS_Store
-

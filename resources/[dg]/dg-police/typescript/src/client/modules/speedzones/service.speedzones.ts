@@ -1,5 +1,5 @@
-import { Events, Jobs, PolyZone } from '@dgx/client';
-import { EXCLUDED_JOBS } from './constants.speedzones';
+import { Events, Jobs, PolyZone, Vehicles } from '@dgx/client';
+import { EXCLUDED_JOBS, MINIMUM_STRESS_INCREASE, SPEED_LIMIT, STRESS_PER_KPH } from './constants.speedzones';
 
 export const buildSpeedZones = (zones: Police.Speedzones.Config) => {
   for (const [name, data] of Object.entries(zones)) {
@@ -16,8 +16,15 @@ export const buildSpeedZones = (zones: Police.Speedzones.Config) => {
 
 export const enteredSpeedZone = () => {
   if (EXCLUDED_JOBS.includes(Jobs.getCurrentJob().name ?? '')) return;
-  const speedOverLimit = Math.min(Math.round(GetEntitySpeed(PlayerPedId()) * 3.6), 300) - 100; // limit to 300kph than subtract minimum of 100kph
+
+  const vehicle = GetVehiclePedIsIn(PlayerPedId(), false);
+  if (!vehicle || !DoesEntityExist(vehicle)) return;
+
+  const vehicleSpeed = Vehicles.getVehicleSpeed(vehicle);
+  const speedOverLimit = vehicleSpeed - SPEED_LIMIT;
   if (speedOverLimit <= 0) return;
-  const increase = 5 + 8 * (speedOverLimit / 200); // Limit is 0 - 200 so get percentage
-  Events.emitNet('hud:server:changeStress', increase);
+
+  Events.emitNet('hud:server:changeStress', calculateStressIncrease(speedOverLimit));
 };
+
+const calculateStressIncrease = (speed: number) => MINIMUM_STRESS_INCREASE + speed * STRESS_PER_KPH;
