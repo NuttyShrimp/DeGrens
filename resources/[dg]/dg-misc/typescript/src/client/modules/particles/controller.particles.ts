@@ -2,7 +2,7 @@ import { Events, RPC, Util } from '@dgx/client';
 import { addParticle, getIsLooped, removeParticle } from './service.particles';
 
 // Looped are NOT networked by 5M, nonlooped are networked by 5M
-const addParticleHandler = (particle: Particles.Particle) => {
+export const addParticleHandler = (particle: Particles.Particle) => {
   const data: Required<Particles.Particle> = {
     offset: { x: 0, y: 0, z: 0 },
     rotation: { x: 0, y: 0, z: 0 },
