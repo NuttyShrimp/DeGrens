@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Methbrick van uiterlijk veranderd
+- Prijzen voor S & X voertuigen bepaald
 
 ### Fixed
 
