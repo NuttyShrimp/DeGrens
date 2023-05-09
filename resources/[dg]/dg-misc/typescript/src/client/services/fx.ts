@@ -1,4 +1,4 @@
-import { Util } from '@dgx/client';
+import { Animations, Util } from '@dgx/client';
 import { addParticleHandler } from 'modules/particles/controller.particles';
 import { removeParticle } from 'modules/particles/service.particles';
 
@@ -25,14 +25,23 @@ export const FxBlackOut = async () => {
 };
 
 export const fxPuke = async () => {
+  console.log(PlayerPedId());
   const pfxId = addParticleHandler({
-    dict: 'scr_family5',
+    dict: 'scr_paletoscore',
     name: 'scr_trev_puke',
-    boneName: 'SKEL_Head',
+    boneIndex: 31086,
     netId: NetworkGetNetworkIdFromEntity(PlayerPedId()),
     looped: true,
-    coords: { x: 0, y: 0, z: 0 },
+  });
+  const animId = Animations.startAnimLoop({
+    disableAllControls: true,
+    animation: {
+      dict: 'missheistpaletoscore1leadinout',
+      name: 'trv_puking_leadout',
+      flag: 1,
+    },
   });
   await Util.Delay(3500);
   removeParticle(pfxId);
+  Animations.stopAnimLoop(animId);
 };
