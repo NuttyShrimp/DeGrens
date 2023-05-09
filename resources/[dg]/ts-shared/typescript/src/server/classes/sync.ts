@@ -10,7 +10,7 @@ class Sync {
     return global.exports['dg-auth'].setPlayerVisible(src, isVisible);
   };
 
-  public getPlayerScope = (plyId: number): { current: Sync.ScopePlayer[]; recent: Sync.ScopePlayer[] } => {
+  public getPlayerScope = (plyId: number): Sync.Scopes.PlayerScope => {
     return global.exports['dg-sync'].getPlayerScope(plyId);
   };
 

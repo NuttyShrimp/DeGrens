@@ -1,6 +1,6 @@
 const scopes: Map<number, Scopes.Scope> = new Map();
 
-const getPlayerInfo = (plyId: number): Scopes.Player => ({
+const getPlayerInfo = (plyId: number): Sync.Scopes.Player => ({
   source: plyId,
   steamId: Player(plyId).state.steamId,
 });
@@ -86,17 +86,17 @@ export const playerDropped = (droppedPlayer: number) => {
 export const getPlayerScope = (plyId: number) => {
   const scope = getScope(plyId);
 
-  const scopeInfo: Record<Scopes.ClientType, Scopes.Player[]> = {
+  const scopeInfo: Sync.Scopes.PlayerScope = {
     current: [],
     recent: [],
+    dropped: [],
   };
 
   for (const info of Object.values(scope)) {
-    const type: Scopes.ClientType = info.type === 'current' ? 'current' : 'recent';
-    scopeInfo[type].push({ source: info.source, steamId: info.steamId });
+    scopeInfo[info.type].push({ source: info.source, steamId: info.steamId });
 
     // sort newest first
-    scopeInfo[type].sort((a, b) => scope[b.source].timestamp - scope[a.source].timestamp);
+    scopeInfo[info.type].sort((a, b) => scope[b.source].timestamp - scope[a.source].timestamp);
   }
 
   return scopeInfo;

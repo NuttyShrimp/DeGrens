@@ -3,12 +3,5 @@ declare namespace IdList {
     source: number;
     steamId: string;
   }
-  interface ScopeInfo {
-    current: ScopePlayer[];
-    recent: ScopePlayer[];
-  }
-  type State = ScopeInfo;
-  interface StateActions {
-    setList: (data: ScopeInfo) => void;
-  }
+  type ScopeInfo = Record<string, ScopePlayer[]>;
 }

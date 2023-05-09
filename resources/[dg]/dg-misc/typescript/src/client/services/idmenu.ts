@@ -1,4 +1,4 @@
-import { Keys, RPC, UI, Util } from '@dgx/client';
+import { Events, Keys, RPC, UI, Util } from '@dgx/client';
 
 let isOpen = false;
 
@@ -79,6 +79,7 @@ const openMenu = async () => {
 
 const closeMenu = () => {
   UI.closeApplication('idlist');
+  Events.emitNet('misc:idlist:close');
   isOpen = false;
 };
 

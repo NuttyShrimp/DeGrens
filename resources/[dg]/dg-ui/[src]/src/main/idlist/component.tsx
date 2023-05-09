@@ -2,13 +2,18 @@ import React, { useCallback, useRef, useState } from 'react';
 import AppWrapper from '@components/appwrapper';
 import { Divider } from '@mui/material';
 
-import { useIdListStore } from './stores/useIdlistStore';
 import config from './_config';
 
 import './styles/idlist.scss';
 
+const typeToLabel = {
+  current: 'in scope',
+  recent: 'recently seen',
+  dropped: 'left server',
+};
+
 const Component: AppFunction = props => {
-  const [current, recent, setList] = useIdListStore(s => [s.current, s.recent, s.setList]);
+  const [list, setList] = useState<IdList.ScopeInfo>({});
   const [selectedEntry, setSelectedEntry] = useState(0);
   const self = useRef({});
   const saveRef = (key: number) => (r: any) => {
@@ -33,7 +38,10 @@ const Component: AppFunction = props => {
           break;
         }
         case 'down': {
-          const newEntry = Math.min(selectedEntry + 1, current.length + recent.length - 1);
+          const newEntry = Math.min(
+            selectedEntry + 1,
+            Object.values(list).reduce((num, plys) => num + plys.length, 0) - 1
+          );
           self.current[newEntry]?.scrollIntoView({
             block: 'center',
           });
@@ -45,49 +53,49 @@ const Component: AppFunction = props => {
         }
       }
     },
-    [current, recent, selectedEntry]
+    [list, selectedEntry]
   );
 
-  const anyCurrent = current.length !== 0;
-  const anyRecent = recent.length !== 0;
+  const generateFromList = () => {
+    const elements: JSX.Element[] = [];
+
+    let idx = 0;
+    Object.entries(list).map(([scopeType, scopePlayers], listIdx) => {
+      if (listIdx !== 0) {
+        elements.push(
+          <div className='id-list-divider' key={`divider_${listIdx}`}>
+            <Divider />
+          </div>
+        );
+      }
+
+      elements.push(
+        <div className='id-list-label' key={`label_${listIdx}`}>
+          {typeToLabel[scopeType] ?? 'Unknown Type'}
+        </div>
+      );
+
+      for (const scopePlayer of scopePlayers) {
+        const elementIdx = idx;
+        elements.push(
+          <div
+            ref={saveRef(elementIdx)}
+            className={`id-list-entry ${selectedEntry === elementIdx ? 'selected' : ''}`}
+            key={`entry_${elementIdx}`}
+          >
+            ({scopePlayer.source}): {scopePlayer.steamId}
+          </div>
+        );
+        idx++;
+      }
+    });
+
+    return elements;
+  };
 
   return (
     <AppWrapper appName={config.name} onShow={handleShow} onHide={handleHide} onEvent={handleEvent} unSelectable full>
-      <div className='id-list-wrapper'>
-        {anyCurrent && (
-          <>
-            <div className='id-list-label'>in scope</div>
-            {current.map((entry, idx) => (
-              <div
-                ref={saveRef(idx)}
-                className={`id-list-entry ${selectedEntry === idx ? 'selected' : ''}`}
-                key={entry.source}
-              >
-                ({entry.source}): {entry.steamId}
-              </div>
-            ))}
-          </>
-        )}
-        {anyCurrent && anyRecent && (
-          <div className='id-list-divider'>
-            <Divider />
-          </div>
-        )}
-        {anyRecent && (
-          <div>
-            <div className='id-list-label'>recently seen</div>
-            {recent.map((entry, idx) => (
-              <div
-                ref={saveRef(idx + current.length)}
-                className={`id-list-entry ${selectedEntry === idx + current.length ? 'selected' : ''}`}
-                key={`recent-${entry.source}`}
-              >
-                ({entry.source}): {entry.steamId}
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
+      <div className='id-list-wrapper'>{generateFromList()}</div>
     </AppWrapper>
   );
 };
