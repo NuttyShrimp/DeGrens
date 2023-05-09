@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Inventory items kunnen niet langer over de Y limiet gaan tijdens het RMB'en
 - Voertuig kleur informatie in dispatch melding wordt nu correct getoond wanneer voertuig custom kleuren heeft
+- Koperpaal aan HB weggehaald wegens problemen met de ladder
 
 ## [1.2.1]
 
