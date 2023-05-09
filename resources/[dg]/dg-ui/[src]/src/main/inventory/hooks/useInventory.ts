@@ -33,7 +33,7 @@ export const useInventory = () => {
         updateInventoryStore(s => ({ selectedItems: s.selectedItems.filter(id => id !== item.id) }));
       }
 
-      const isRotated = rotated !== undefined ? rotated : originalRotation;
+      const isRotated = rotated ?? originalRotation;
 
       // For shop/crafting we handle this in backend, ui will get updated using the itemsync evt anyway
       if (item.amount !== undefined) {

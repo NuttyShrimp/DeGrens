@@ -101,7 +101,7 @@ export const areSpacesNotOccupied = (
     if (!column) return false;
 
     for (let y = position.y; y < maxY; y++) {
-      if (column[y]) return false;
+      if (column[y] || column[y] === undefined) return false;
     }
   }
   return true;
