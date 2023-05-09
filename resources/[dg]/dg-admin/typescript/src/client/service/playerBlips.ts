@@ -1,5 +1,4 @@
 import { Sync, Util, BlipManager, Vehicles } from '@dgx/client';
-import { drawText3d } from '../modules/util/service.util';
 import { getPlayerName } from './names';
 
 let blipsEnabled = false;
