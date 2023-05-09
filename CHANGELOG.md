@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Je kan personen niet meer op de bestuurdersstoel zetten
+
 ### Fixed
 
 - Inventory items kunnen niet langer over de Y limiet gaan tijdens het RMB'en
