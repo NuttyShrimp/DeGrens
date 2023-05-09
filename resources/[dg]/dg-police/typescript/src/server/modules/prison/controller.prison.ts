@@ -1,4 +1,4 @@
-import { Chat, Jobs, Notifications, Inventory, Events, Util, UI, Police, Core } from '@dgx/server';
+import { Chat, Jobs, Notifications, Inventory, Events, Util, UI, Police, Core, Hospital } from '@dgx/server';
 import { getPoliceConfig } from 'services/config';
 import {
   cleanupPlayerInJail,
@@ -11,6 +11,7 @@ import {
   sendPlayerToPrison,
 } from './service.prison';
 import { isPlayerCuffed } from 'modules/interactions/modules/cuffs';
+import { isPlayerBeingCarried, isPlayerInCarryDuo } from 'modules/interactions/modules/carry';
 
 Chat.registerCommand(
   'jail',
@@ -186,8 +187,10 @@ Events.onNet('police:prison:leftPrisonZone', (src: number) => {
     'police:prison:leftZone',
     {
       cuffed: isPlayerCuffed(src),
+      carried: isPlayerBeingCarried(src),
+      dead: Hospital.isDown(src),
     },
-    `${Util.getName(src)} has left the prison zone while jailed`,
+    `${Util.getName(src)}(${src}) has left the prison zone while jailed`,
     src
   );
   const coords = Util.getPlyCoords(src);

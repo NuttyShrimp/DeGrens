@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Meer data toegevoegd aan prison leave log
+
 ### Changed
 
 - Je kan personen niet meer op de bestuurdersstoel zetten
