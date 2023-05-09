@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Je kan personen niet meer op de bestuurdersstoel zetten
+- Meer kans op specialitem bij ATM robbery
 
 ### Fixed
 
