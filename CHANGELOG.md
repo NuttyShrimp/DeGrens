@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Voertuig kleur informatie in dispatch melding wordt nu correct getoond wanneer voertuig custom kleuren heeft
 - Koperpaal aan HB weggehaald wegens problemen met de ladder
 - Crypto Transfers werken weer
+- Idlist ids distance check werkt weer
 
 ## [1.2.1]
 
