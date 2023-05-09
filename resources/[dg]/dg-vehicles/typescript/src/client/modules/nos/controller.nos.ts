@@ -57,8 +57,8 @@ Keys.onPressDown('cycleFlowrate', () => {
   cycleFlowrate();
 });
 
-Events.onNet('vehicles:nos:update', (netId: number) => {
+Events.onNet('vehicles:nos:update', (netId: number, amount: number) => {
   const vehicle = NetworkGetEntityFromNetworkId(netId);
   if (!DoesEntityExist(vehicle)) return;
-  updateVehicleNosAmount(vehicle);
+  updateVehicleNosAmount(vehicle, amount);
 });
