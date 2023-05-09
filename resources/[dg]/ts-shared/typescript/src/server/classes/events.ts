@@ -75,8 +75,8 @@ class Distributor {
       try {
         this.netEventHandlers[resource](src, eventName, data);
       } catch (e: any) {
-        if (e.message === 'BUFFER_SHORTAGE') {
-          console.log('BUFFER_SHORTAGE error in net event');
+        if (e.message !== 'BUFFER_SHORTAGE') {
+          console.error(e);
           Sentry.captureException(e, {
             extra: {
               event: eventName,
@@ -87,9 +87,6 @@ class Distributor {
               args: data.args,
             },
           });
-          // TODO: Fix how to actually fix this shit
-        } else {
-          console.error(e);
         }
       }
     }
@@ -114,8 +111,8 @@ class Distributor {
     try {
       this.rpcHandlers[resource](src, data);
     } catch (e: any) {
-      if (e.message === 'BUFFER_SHORTAGE') {
-        console.log('BUFFER_SHORTAGE error in RPC handler');
+      if (e.message !== 'BUFFER_SHORTAGE') {
+        console.error(e);
         Sentry.captureException(e, {
           extra: {
             event: data.name,
@@ -126,9 +123,6 @@ class Distributor {
             args: data.args,
           },
         });
-        // TODO: Fix how to actually fix this shit
-      } else {
-        console.error(e);
       }
     }
   };

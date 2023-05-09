@@ -92,6 +92,10 @@
     "container_vegetables": {
       "size": 75,
       "allowedItems": ["farming_tomato", "farming_lettuce", "farming_onion", "farming_wheat", "farming_potato"]
+    },
+    "container_blackmoney": {
+      "size": 25,
+      "allowedItems": ["money_roll", "marked_bills"]
     }
   }
 }

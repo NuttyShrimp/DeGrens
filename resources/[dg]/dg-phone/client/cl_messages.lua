@@ -9,7 +9,7 @@ RegisterUICallback('phone/messages/send', function(data, cb)
 end)
 
 RegisterUICallback('phone/messages/set-read', function(data, cb)
-  DGX.Events.emitNet('dg-phone:server:message:setRead', nil, data)
+  DGX.Events.emitNet('dg-phone:server:message:setRead', data)
   cb({ data = result, meta = { ok = true, message = "done" } })
 end)
 

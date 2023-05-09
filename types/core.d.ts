@@ -1,12 +1,4 @@
 declare namespace Core {
-  namespace Users {
-    type UserData = {
-      serverId: number;
-      steamId: string;
-      name: string;
-    };
-  }
-
   namespace Characters {
     type Metadata = {
       cash: number;
@@ -61,6 +53,14 @@ declare namespace Core {
     };
   }
 
+  namespace Queue {
+    type EntryInfo = {
+      identifiers: Record<string, string>;
+      source: number;
+      name: string;
+    };
+  }
+
   namespace ClientModules {
     type List = {
       characters: CharacterModule;
@@ -76,6 +76,10 @@ declare namespace Core {
     type List = {
       users: UserModule;
       characters: CharacterModule;
+      queue: QueueModule;
+    };
+    type QueueModule = {
+      getQueue: () => Queue.EntryInfo[];
     };
     type UserModule = {
       getPlyIdentifiers: (src: number) => Record<string, string>;
@@ -93,6 +97,7 @@ declare namespace Core {
       getPlayerByPhone: (phone: string) => Characters.OnlinePlayer | undefined;
       getPlayerBySteamId: (steamId: string) => Characters.OnlinePlayer | undefined;
       getOfflinePlayer: (cid: number) => Promise<Characters.Player | undefined>;
+      getOfflinePlayerByPhone: (phone: string) => Promise<Characters.Player | undefined>;
       getServerIdFromCitizenId: (cid: number) => number | undefined;
       getCitizenIdsFromSteamId: (steamid: string) => number[];
     };

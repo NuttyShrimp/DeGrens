@@ -171,8 +171,8 @@ export class CharacterModule implements Modules.ServerModule, Core.ServerModules
 
   getPlayerBySteamId = (steamid: string) => {
     const serverId = userManager.getUserByIdentifier(steamid);
-    if (!serverId?.serverId) return;
-    return this.activeCharacters[serverId.serverId];
+    if (!serverId) return;
+    return this.activeCharacters[serverId];
   };
 
   getPlayerByPhone = (phone: string) => {
@@ -188,6 +188,26 @@ export class CharacterModule implements Modules.ServerModule, Core.ServerModules
 
     const ply = await Player.build(cid);
     return ply;
+  };
+
+  getOfflinePlayerByPhone = async (phone: string) => {
+    const existingPlayer = this.getPlayerByPhone(phone);
+    if (existingPlayer) {
+      return existingPlayer;
+    }
+
+    if (typeof phone !== 'string') {
+      phone = String(phone);
+    }
+
+    // If no player with phone is loaded, try building new if it exists in db
+    const result = await SQL.query<{ citizenid: number }[]>('SELECT citizenid FROM character_info WHERE phone = ?', [
+      phone,
+    ]);
+    const cid: number | undefined = result?.[0]?.citizenid;
+    if (!cid) return;
+
+    return await Player.build(cid);
   };
 
   getServerIdFromCitizenId = (cid: number): number | undefined => {

@@ -41,8 +41,8 @@ export class UserModule implements Modules.ServerModule, Core.ServerModules.User
 
   saveUser = async (src: number) => {
     const identifiers = this.getPlyIdentifiers(src);
-    const userData = this.userManager.getUserData(src);
-    if (!userData) {
+    const userName = this.userManager.getUserName(src);
+    if (!userName) {
       this.logger.warn(`Tried to save user data for ${src} but no user data was found`);
       return;
     }
@@ -56,10 +56,10 @@ export class UserModule implements Modules.ServerModule, Core.ServerModules.User
                                 discord      = VALUES(discord),
                                 last_updated = NOW()
       `,
-      [userData.name, identifiers.steam, identifiers.license, identifiers.discord]
+      [userName, identifiers.steam, identifiers.license, identifiers.discord]
     );
     if (localResult.affectedRows === 0) {
-      this.logger.warn(`Failed to save user data for ${userData.name}(${src})`);
+      this.logger.warn(`Failed to save user data for ${userName}(${src})`);
     }
   };
 }

@@ -23,7 +23,7 @@ Peek.addZoneEntry('prison_item_retrieval', {
       label: 'Spullen Terugnemen',
       icon: 'fas fa-box-open-full',
       action: () => {
-        const cid = LocalPlayer.state?.cid;
+        const cid = LocalPlayer.state?.citizenid;
         if (!cid) return;
         const stashId = `prison_items_${cid}`;
         Inventory.openStash(stashId, 40); // Slots same as player inventory!

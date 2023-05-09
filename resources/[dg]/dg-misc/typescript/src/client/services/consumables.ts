@@ -1,5 +1,5 @@
 import { Events, Util, Sync, Notifications } from '@dgx/client';
-import { FxBlackOut } from './fx';
+import { FxBlackOut, fxPuke } from './fx';
 
 declare type EffectName = Config.EffectConsumable['effect'];
 
@@ -202,8 +202,7 @@ const startDrunkThread = async () => {
     }
 
     if (fxState.alcohol.traits.puke && fxState.alcohol.traits.puke < curTime) {
-      // TODO: do actually a synced particle thing for the puke
-      // Events.emitNet('misc:fx:puke');
+      fxPuke();
       fxState.alcohol.traits.puke = curTime + Util.getRndInteger(60, 106);
     }
 
@@ -229,3 +228,11 @@ const startDrunkThread = async () => {
     fxState.alcohol.count = Math.max(0, fxState.alcohol.count - 0.01); // Drunk for hella long time :)
   }, 1000);
 };
+
+RegisterCommand(
+  'test-puke',
+  () => {
+    fxPuke();
+  },
+  false
+);

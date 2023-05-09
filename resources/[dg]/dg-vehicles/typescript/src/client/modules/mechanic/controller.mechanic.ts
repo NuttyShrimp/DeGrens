@@ -107,7 +107,7 @@ Peek.addZoneEntry('mechanic_bench', {
         );
       },
       action: data => {
-        Inventory.openStash(`mechanic-shop-stash-${data.data.id}`, 100);
+        Inventory.openStash(`mechanic-shop-stash-${data.data.businessName}`, 100);
       },
     },
     {

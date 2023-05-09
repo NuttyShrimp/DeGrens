@@ -3,16 +3,16 @@ import { getRoleListForPlayer, getRolesForPlayer } from 'helpers/roles';
 import { registerRoute } from 'sv_routes';
 
 registerRoute('GET', '/info', (req, res) => {
+  const queueModule = Core.getModule('queue');
+  const queueInfo = queueModule.getQueue();
   const info = {
     activePlayers: GetNumPlayerIndices(),
-    // TODO: Actually implement shit for queue
-    queuedPlayers: 0,
-    queue: [] as any[],
+    queuedPlayers: queueInfo.length,
+    queue: queueInfo,
   };
   res(200, info);
 });
 
-// INFO: For this to be performant. We should move metadata and all the fast-changing data to seperate tables
 registerRoute('GET', '/info/players', async (req, res) => {
   // FetcH ALL players
   const lastUpdated = req.params.lastUpdated ?? 0;

@@ -1,6 +1,5 @@
 import { Events, Util } from '@dgx/client';
 import { Vector3 } from '@dgx/shared';
-import { drawText3d } from 'helpers/util';
 
 const messages: Record<number, { msg: string; id: number }[]> = {};
 let id = 0;
@@ -17,7 +16,7 @@ const createShowThread = () => {
         const inLos = HasEntityClearLosToEntity(ped, trgtPed, 13);
         if (inLos) {
           trgtCoords = (trgtCoords as Vector3).add({ x: 0, y: 0, z: 0.2 * Number(idx) });
-          drawText3d(messages[target][idx].msg, trgtCoords, 0.4, true, 4);
+          Util.drawText3d(messages[target][idx].msg, trgtCoords, 0.4, true, 4);
         }
       }
     }

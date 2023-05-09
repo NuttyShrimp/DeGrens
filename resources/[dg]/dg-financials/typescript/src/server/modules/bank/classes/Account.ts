@@ -287,8 +287,7 @@ export class Account {
 
       // Check if target is phonenumber
       if (extra.targetPhone) {
-        const phoneNumber = Number(extra.targetPhone);
-        const targetPlayer = await charModule.getOfflinePlayer(phoneNumber);
+        const targetPlayer = await charModule.getOfflinePlayerByPhone(extra.targetPhone);
         if (!targetPlayer) {
           Util.Log(
             'financials:invalidPlayer',

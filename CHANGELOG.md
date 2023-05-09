@@ -13,6 +13,29 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+## [1.2.1]
+
+### Added
+
+- Geldcontainer toegevoegd
+- Extra anticheat bans waar nodig toegevoegd
+- Je moet nu ook overgeven als je teveel gedronken hebt
+
+### Changed
+
+- Methbrick van uiterlijk veranderd
+- Prijzen voor S & X voertuigen bepaald
+- Info endpoint bezit nu ook informatie over de queue
+
+### Fixed
+
+- Mechanics kunnen nu weer in hun business stash
+- Users worden nu wel gesaved wanneer ze server leaven
+- Prison item retreival stashes kunnen weer geaccessed worden
+- Mobiele payconiq betalingen werken weer
+- Phone messages worden nu wel gemarkeerd als gelezen
+- Nummers boven personen hun hoofd worden nu altijd getoond ipv soms als er veel personen op 1 plaats waren
+
 ## [1.2.0]
 
 ### Added

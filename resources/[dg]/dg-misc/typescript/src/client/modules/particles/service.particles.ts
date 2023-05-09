@@ -45,21 +45,17 @@ export const addParticle = async (id: string, data: Required<Particles.Particle>
         false
       );
     }
-  } else if ('boneName' in data) {
+  } else if ('boneName' in data || 'boneIndex' in data) {
     // // BONE
     const entity = NetworkGetEntityFromNetworkId(data.netId);
-    const boneIndex = GetEntityBoneIndexByName(entity, data.boneName);
-    const bonePos = Util.ArrayToVector3(GetWorldPositionOfEntityBone(entity, boneIndex));
-    const boneOffset = Util.ArrayToVector3(
-      GetOffsetFromEntityGivenWorldCoords(entity, bonePos.x, bonePos.y, bonePos.z)
-    );
-    data.offset = boneOffset.add(data.offset);
-    if (data.ignoreBoneRotation !== true) {
-      const boneRot = Util.ArrayToVector3(GetEntityBoneRotationLocal(entity, boneIndex));
-      data.rotation = boneRot.add(data.rotation);
+    let boneIndex: number;
+    if ('boneName' in data) {
+      boneIndex = GetEntityBoneIndexByName(entity, data.boneName);
+    } else {
+      boneIndex = GetPedBoneIndex(entity, data.boneIndex);
     }
     if (data.looped) {
-      ptfx = StartParticleFxLoopedOnEntity(
+      ptfx = StartParticleFxLoopedOnEntityBone(
         data.name,
         entity,
         data.offset.x,
@@ -68,13 +64,14 @@ export const addParticle = async (id: string, data: Required<Particles.Particle>
         data.rotation.x,
         data.rotation.y,
         data.rotation.z,
+        boneIndex,
         data.scale,
         false,
         false,
         false
       );
     } else {
-      StartNetworkedParticleFxNonLoopedOnEntity(
+      StartNetworkedParticleFxNonLoopedOnEntityBone(
         data.name,
         entity,
         data.offset.x,
@@ -83,6 +80,7 @@ export const addParticle = async (id: string, data: Required<Particles.Particle>
         data.rotation.x,
         data.rotation.y,
         data.rotation.z,
+        boneIndex,
         data.scale,
         false,
         false,
@@ -125,7 +123,7 @@ export const addParticle = async (id: string, data: Required<Particles.Particle>
     }
   }
 
-  RemoveNamedPtfxAsset(data.dict);
+  // RemoveNamedPtfxAsset(data.dict);
   activeParticles.set(id, { ...data, ptfx });
 };
 

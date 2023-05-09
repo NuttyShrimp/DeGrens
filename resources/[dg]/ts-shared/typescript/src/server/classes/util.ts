@@ -306,6 +306,7 @@ class SyncedObjects {
     this.objectsToRemove = new Set();
     on('onResourceStop', (res: string) => {
       if (res !== GetCurrentResourceName()) return;
+      if (this.objectsToRemove.size === 0) return;
       global.exports['dg-misc'].removeSyncedObject([...this.objectsToRemove]);
     });
   }

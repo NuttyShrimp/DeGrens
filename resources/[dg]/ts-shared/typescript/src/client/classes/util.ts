@@ -374,6 +374,26 @@ class Util extends UtilShared {
   public isFirstPersonCamEnabled = (): boolean => {
     return global.exports['dg-misc'].isFirstPersonCamEnabled();
   };
+
+  drawText3d = (text: string, origin: Vec3, scale: number, hasBackground = false, textFont = 6) => {
+    const [onScreen, x, y] = GetScreenCoordFromWorldCoord(origin.x, origin.y, origin.z);
+    if (!onScreen) return;
+
+    SetTextScale(scale, scale);
+    SetTextFont(textFont);
+    SetTextProportional(true);
+    SetTextOutline();
+    SetTextDropShadow();
+    SetTextColour(255, 255, 255, 255);
+    BeginTextCommandDisplayText('STRING');
+    SetTextCentre(true);
+    AddTextComponentSubstringPlayerName(text);
+    DrawText(x, y);
+    if (hasBackground) {
+      const factor = text.length / 370;
+      DrawRect(x, y + 0.0125, 0.017 + factor, 0.03, 0, 0, 0, 75);
+    }
+  };
 }
 
 export class Interiors {
