@@ -9,6 +9,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+### Changed
+
+### Fixed
+
+## [1.2.1]
+
+### Added
+
 - Geldcontainer toegevoegd
 - Extra anticheat bans waar nodig toegevoegd
 - Je moet nu ook overgeven als je teveel gedronken hebt

@@ -2,7 +2,7 @@
   "name": "@dgx/server",
   "main": "./index.ts",
   "types": "./index.ts",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "dependencies": {
     "dg-shared": "*"
   }
