@@ -103,13 +103,13 @@ RPC.register('dispatch:getVehicleInfo', (vehNetId: number) => {
     const gtaColor = getDataOfGTAColorById(vehCosmetic.primaryColor)!;
     colorInfo.primary = gtaColor.name;
   } else {
-    colorInfo.primary = getNearestColorFromHex(vehCosmetic.primaryColor);
+    colorInfo.primary = getNearestColorFromHex(vehCosmetic.primaryColor)?.name;
   }
   if (typeof vehCosmetic.secondaryColor === 'number') {
     const gtaColor = getDataOfGTAColorById(vehCosmetic.secondaryColor)!;
     colorInfo.secondary = gtaColor.name;
   } else {
-    colorInfo.secondary = getNearestColorFromHex(vehCosmetic.secondaryColor);
+    colorInfo.secondary = getNearestColorFromHex(vehCosmetic.secondaryColor)?.name;
   }
   return colorInfo;
 });
