@@ -1,4 +1,6 @@
-class BaseEvents {
+import { BaseEvents as SharedBaseEvents } from '../../shared/classes/baseevents';
+
+class BaseEvents extends SharedBaseEvents {
   public onPedChange = (handler: () => void) => {
     on('baseevents:playerPedChanged', handler);
   };
