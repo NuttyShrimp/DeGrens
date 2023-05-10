@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Je kan personen niet meer op de bestuurdersstoel zetten
 - Meer kans op specialitem bij ATM robbery
 - Je ziet nu enkel wie recent de server heeft verlaten terwijl hij in je buurt zat in de idlist
+- Paycheck van politie/ambulance verhoogt
 
 ### Fixed
 
