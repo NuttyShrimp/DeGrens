@@ -19,6 +19,7 @@ import vehicles from './vehicles';
 import weapons from './weapons';
 import weather from './weather';
 import core from './core';
+import statebags from './statebags';
 
 export const { Events, RPC } = events;
 export const { Peek, RayCast, PolyZone, Keys, PolyTarget } = interaction;
@@ -40,3 +41,4 @@ export const { Particles } = particles;
 export const { Npcs } = npcs;
 export const { Vehicles } = vehicles;
 export const { Core } = core;
+export const { Statebags } = statebags;

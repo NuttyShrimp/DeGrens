@@ -1,6 +1,7 @@
-import { BaseEvents, Core, Events, Util } from '@dgx/client';
+import { BaseEvents, Core, Events, Statebags } from '@dgx/client';
 import {
   addProp,
+  handlePlayerLeftScope,
   handlePlayerStateUpdate,
   isEnabled,
   moveProp,
@@ -27,29 +28,17 @@ BaseEvents.onPedChange(() => {
   }, 250);
 });
 
-// handler gets called twice when changing own state on client, we only need handler calls with fromOwnClient param as 'false'
-// this is how it happens when other players state gets changed or we change state from server
-AddStateBagChangeHandler(
+Statebags.addEntityStateBagChangeHandler<Record<number, PropAttach.Prop>>(
+  'player',
   'propattach',
-  //@ts-ignore
-  null,
-  (bagName: string, keyName: string, value: any, _: any, fromOwnClient: boolean) => {
-    if (fromOwnClient) return;
-    if (keyName !== 'propattach') return;
-    const serverId = Number(bagName.replace('player:', ''));
-    if (!serverId) return;
-
-    // we cache local id to make sure ply for serverid is still same after timeout
-    // this can happen when noclipping and ply quickly moves in/out of scope
-    const cachedLocalId = GetPlayerFromServerId(serverId);
-
-    // when entering scope, ped will not exist instantly
-    setTimeout(() => {
-      if (GetPlayerFromServerId(serverId) !== cachedLocalId) return;
-      handlePlayerStateUpdate(serverId, value);
-    }, 250);
+  (plyId, ped, value) => {
+    handlePlayerStateUpdate(plyId, ped, value);
   }
 );
+
+BaseEvents.onPlayerLeftScope(plyId => {
+  handlePlayerLeftScope(plyId);
+});
 
 Core.onPlayerUnloaded(() => {
   resetProps();

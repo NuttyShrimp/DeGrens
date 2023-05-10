@@ -88,9 +88,11 @@ export const toggleProps = (toggle: boolean) => {
   updateState();
 };
 
-export const handlePlayerStateUpdate = (plyId: number, newPlayerProps: Record<number, PropAttach.Prop>) => {
-  const ped = GetPlayerPed(GetPlayerFromServerId(plyId));
-
+export const handlePlayerStateUpdate = (
+  plyId: number,
+  ped: number,
+  newPlayerProps: Record<number, PropAttach.Prop>
+) => {
   // first remove old props that are no longer in new state
   const oldPlayerProps = (propsPerPlayer[plyId] ??= {});
   for (const key of Object.keys(oldPlayerProps)) {
@@ -143,20 +145,15 @@ export const deleteAllEntities = () => {
   propsPerPlayer = {};
 };
 
-export const startPropattachScopeThread = () => {
-  setInterval(() => {
-    for (const key in propsPerPlayer) {
-      const plyId = Number(key);
-      // returns -1 if player with serverid is out of scope
-      if (GetPlayerFromServerId(plyId) !== -1) continue;
+export const handlePlayerLeftScope = (plyId: number) => {
+  const props = propsPerPlayer[plyId];
+  if (!props) return;
 
-      for (const propId in propsPerPlayer[plyId]) {
-        deleteEntity(propsPerPlayer[plyId][propId]);
-      }
+  for (const propId in propsPerPlayer[plyId]) {
+    deleteEntity(propsPerPlayer[plyId][propId]);
+  }
 
-      delete propsPerPlayer[plyId];
-    }
-  }, 250);
+  delete propsPerPlayer[plyId];
 };
 
 export const handlePropattachModuleResourceStop = () => {

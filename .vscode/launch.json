@@ -227,6 +227,27 @@
     },
     {
       "type": "node-terminal",
+      "name": "dev-ts:build prod",
+      "request": "launch",
+      "command": "pnpm run build",
+      "cwd": "${workspaceFolder}/resources/[dg]/dg-dev-ts/typescript"
+    },
+    {
+      "type": "node-terminal",
+      "name": "dev-ts:build dev",
+      "request": "launch",
+      "command": "pnpm run build:dev",
+      "cwd": "${workspaceFolder}/resources/[dg]/dg-dev-ts/typescript"
+    },
+    {
+      "type": "node-terminal",
+      "name": "dev-ts:watch",
+      "request": "launch",
+      "command": "pnpm run watch",
+      "cwd": "${workspaceFolder}/resources/[dg]/dg-dev-ts/typescript"
+    },
+    {
+      "type": "node-terminal",
       "name": "dgx:build prod",
       "request": "launch",
       "command": "pnpm run build",

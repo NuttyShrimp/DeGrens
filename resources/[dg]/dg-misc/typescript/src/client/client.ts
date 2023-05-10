@@ -36,7 +36,6 @@ import './services/news';
 
 import { setDiscordRichPresence } from 'modules/discord/service.discord';
 import { setGTABehaviour } from 'modules/gtabehaviour/service.gtabehaviour';
-import { startPropattachScopeThread } from 'modules/propattach/service.propattach';
 import { startLadderThread } from 'services/ladders';
 import { startPlayerBlipCoordSaveThread } from 'modules/blipmanager/service.blipmanager';
 import { schedulePropRemoval } from 'modules/propremover/service.propremover';
@@ -44,7 +43,6 @@ import { schedulePropRemoval } from 'modules/propremover/service.propremover';
 setImmediate(() => {
   setDiscordRichPresence();
   setGTABehaviour();
-  startPropattachScopeThread();
   startLadderThread();
   startPlayerBlipCoordSaveThread();
   schedulePropRemoval();
