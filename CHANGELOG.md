@@ -25,6 +25,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Crypto Transfers werken weer
 - Idlist ids distance check werkt weer
 - Tax op lockers is terug
+- Nieuwsitems verdwijnen nu als ze uit je inventory verdwijnen
 
 ## [1.2.1]
 
