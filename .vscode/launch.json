@@ -185,6 +185,27 @@
     },
     {
       "type": "node-terminal",
+      "name": "core:build prod",
+      "request": "launch",
+      "command": "pnpm run build",
+      "cwd": "${workspaceFolder}/resources/[dg]/dg-core/typescript"
+    },
+    {
+      "type": "node-terminal",
+      "name": "core:build dev",
+      "request": "launch",
+      "command": "pnpm run build:dev",
+      "cwd": "${workspaceFolder}/resources/[dg]/dg-core/typescript"
+    },
+    {
+      "type": "node-terminal",
+      "name": "core:watch",
+      "request": "launch",
+      "command": "pnpm run watch",
+      "cwd": "${workspaceFolder}/resources/[dg]/dg-core/typescript"
+    },
+    {
+      "type": "node-terminal",
       "name": "criminal:build prod",
       "request": "launch",
       "command": "pnpm run build",
@@ -399,6 +420,27 @@
       "request": "launch",
       "command": "pnpm run watch",
       "cwd": "${workspaceFolder}/resources/[dg]/dg-houserobbery/typescript"
+    },
+    {
+      "type": "node-terminal",
+      "name": "imager:build prod",
+      "request": "launch",
+      "command": "pnpm run build",
+      "cwd": "${workspaceFolder}/resources/[dg]/dg-imager/typescript"
+    },
+    {
+      "type": "node-terminal",
+      "name": "imager:build dev",
+      "request": "launch",
+      "command": "pnpm run build:dev",
+      "cwd": "${workspaceFolder}/resources/[dg]/dg-imager/typescript"
+    },
+    {
+      "type": "node-terminal",
+      "name": "imager:watch",
+      "request": "launch",
+      "command": "pnpm run watch",
+      "cwd": "${workspaceFolder}/resources/[dg]/dg-imager/typescript"
     },
     {
       "type": "node-terminal",
