@@ -1511,8 +1511,7 @@ function SaveSkin()
   TriggerServerEvent("qb-clothing:saveSkin", model, clothing)
 end
 
-RegisterNetEvent('qb-clothes:client:CreateFirstCharacter')
-AddEventHandler('qb-clothes:client:CreateFirstCharacter', function()
+RegisterNetEvent('qb-clothes:client:CreateFirstCharacter', function(gender)
   local skin = "mp_m_freemode_01"
   openMenu({
     { menu = "character",   label = "Character",   selected = true },
@@ -1522,7 +1521,7 @@ AddEventHandler('qb-clothes:client:CreateFirstCharacter', function()
 
   FromChars = true
 
-  if charModule.getCharinfo().gender == 1 then
+  if gender == 1 then
     skin = "mp_f_freemode_01"
   end
 
