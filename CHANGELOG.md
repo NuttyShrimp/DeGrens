@@ -28,6 +28,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Nieuwsitems verdwijnen nu als ze uit je inventory verdwijnen
 - Resume looped anim on ragdoll
 - Nieuwe mensen kunnen weer characters maken
+- Je kan weer characters deleten
 
 ## [1.2.1]
 
