@@ -131,7 +131,7 @@ TS prod build:
       - main
   stage: build
   script:
-    - pnpm build
+    - SENTRY_UPLOAD_SOURCEMAPS=true pnpm build
 
 rebase UPD:
   variables:

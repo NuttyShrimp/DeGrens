@@ -28,11 +28,9 @@ const buildServerDev = async () => {
 };
 
 const buildServer = async () => {
-  await build({
-    ...serverConfig,
-    sourcemap: true,
-    plugins: [
-      ...serverConfig.plugins,
+  const plugins = [...serverConfig.plugins];
+  if (process.env.SENTRY_UPLOAD_SOURCEMAPS) {
+    plugins.push(
       sentryEsbuildPlugin({
         include: '../server',
         ignore: ['node_modules'],
@@ -43,8 +41,13 @@ const buildServer = async () => {
         url: 'https://sentry.nuttyshrimp.me/',
         org: 'nutty',
         project: 'degrens-cfx',
-      }),
-    ],
+      })
+    );
+  }
+  await build({
+    ...serverConfig,
+    sourcemap: true,
+    plugins,
   });
   console.log(`[${findResourceName(path.resolve('.'))}] [Server] Successfully built`);
 };

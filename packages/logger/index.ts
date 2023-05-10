@@ -23,16 +23,18 @@ const formatLogs = (log: winston.Logform.TransformableInfo): string => {
 };
 
 export const generateLogger = (name: string, packageInfo: Record<string, any>, logLevelOverwrite?: string) => {
-  Sentry.init({
-    dsn: SENTRY_DSN,
-    integrations: [new RewriteFrames()],
-    release: packageInfo.version,
-    environment: mainJSON.production ? 'production' : 'development',
-    // Set tracesSampleRate to 1.0 to capture 100%
-    // of transactions for performance monitoring.
-    // We recommend adjusting this value in production
-    tracesSampleRate: 1.0,
-  });
+  if (mainJSON.production) {
+    Sentry.init({
+      dsn: SENTRY_DSN,
+      integrations: [new RewriteFrames()],
+      release: packageInfo.version,
+      environment: mainJSON.production ? 'production' : 'development',
+      // Set tracesSampleRate to 1.0 to capture 100%
+      // of transactions for performance monitoring.
+      // We recommend adjusting this value in production
+      tracesSampleRate: 1.0,
+    });
+  }
   const logger = winston.createLogger({
     level: logLevelOverwrite ?? mainJSON.loglevel,
     transports: [
