@@ -1,24 +1,24 @@
 import { Events } from '@dgx/server';
 import { ARENA_TYPES, ARENA_COORDS, ARENA_IPL } from './constants.arena';
 
-export type ArenaType = keyof typeof ARENA_TYPES;
+type ArenaType = keyof typeof ARENA_TYPES;
 
 let currentType: ArenaType | null;
 
 const buildCurrentInteriorData = (): Arena.Interior | undefined => {
   if (currentType === null) return;
 
-  const entitySets = ARENA_TYPES[currentType]?.entitySets;
-  if (!entitySets) return;
+  const arenaType = ARENA_TYPES[currentType];
+  if (!arenaType) return;
 
   return {
     ipl: ARENA_IPL,
     coords: ARENA_COORDS,
-    entitySets,
+    type: arenaType,
   };
 };
 
-export const getPossibleArenaTypes = () => {
+export const getArenaTypes = () => {
   return Object.keys(ARENA_TYPES) as ArenaType[];
 };
 

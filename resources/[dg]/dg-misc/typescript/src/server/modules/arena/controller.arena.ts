@@ -1,33 +1,40 @@
-import { Auth, Chat, Notifications, UI } from '@dgx/server';
-import { ArenaType, dispatchInteriorToClients, getPossibleArenaTypes, setCurrentArenaType } from './service.arena';
+import { Auth, Chat, Events, UI } from '@dgx/server';
+import { dispatchInteriorToClients, getArenaTypes, setCurrentArenaType } from './service.arena';
+import { typeToLabel } from './helpers.arena';
 
 Auth.onAuth(plyId => {
   dispatchInteriorToClients(plyId);
 });
 
-Chat.registerCommand(
-  'setArenaInterior',
-  'Set Arena Interior',
-  [{ name: 'type', description: 'Type', required: false }],
-  'support',
-  (plyId, _, args) => {
-    const newType = args[0] as ArenaType | undefined;
-    if (newType === undefined) {
-      setCurrentArenaType(null);
-      Notifications.add(plyId, 'Arena type gereset');
-      return;
-    }
+Events.onNet('misc:arena:changeInterior', (plyId, arenaType: string | null) => {
+  setCurrentArenaType(arenaType);
+});
 
-    const possibleTypes = getPossibleArenaTypes();
-    if (!possibleTypes) return;
+global.exports('openArenaInteriorTypeSelector', (plyId: number) => {
+  const menuEntries: ContextMenu.Entry[] = [
+    {
+      title: 'Kies Arena Interieur',
+      disabled: true,
+      icon: 'list',
+    },
+    {
+      title: 'Reset',
+      callbackURL: 'arena/changeInterior',
+      data: {
+        arenaType: null,
+      },
+    },
+  ];
 
-    if (possibleTypes.indexOf(newType) === -1) {
-      UI.addToClipboard(plyId, JSON.stringify(possibleTypes));
-      Notifications.add(plyId, `${newType} is geen geldige type. Alle types staat in je clipboard`, 'error');
-      return;
-    }
-
-    setCurrentArenaType(newType);
-    Notifications.add(plyId, `Arena type veranderd naar ${newType}`);
+  for (const arenaType of getArenaTypes()) {
+    menuEntries.push({
+      title: typeToLabel(arenaType),
+      callbackURL: 'arena/changeInterior',
+      data: {
+        arenaType,
+      },
+    });
   }
-);
+
+  UI.openContextMenu(plyId, menuEntries);
+});
