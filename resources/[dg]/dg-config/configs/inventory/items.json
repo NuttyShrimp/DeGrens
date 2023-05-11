@@ -1711,7 +1711,7 @@
     "label": "Verband",
     "description": "Helpt om je weer beter te voelen en bloedingen te stoppen",
     "image": "bandage.png",
-    "decayRate": 14400,
+    "decayRate": 28800,
     "size": {
       "x": 2,
       "y": 1
