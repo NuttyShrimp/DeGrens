@@ -32,6 +32,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Resume looped anim on ragdoll
 - Nieuwe mensen kunnen weer characters maken
 - Je kan weer characters deleten
+- Admin penalty module wat opgekuist en gepolijst tegen sneaky bugs
 
 ## [1.2.1]
 

@@ -165,7 +165,9 @@ export const isPlayerBanned = async (steamId: string) => {
 
 export const ACBan = (target: number, reason: string, data?: Record<string, any>) => {
   penaltyLogger.warn('Going to ban someone with anticheat: ', 'reason', reason, 'data', data);
-  banPlayer(-1, target, [`Anticheat: ${reason}`], 30, -1, data);
+  // To prevent the typeof check from doing weird shit
+  const targetSteamId = getIdentifierForPlayer(Number(target), 'steam')!;
+  banPlayer(-1, targetSteamId, [`Anticheat: ${reason}`], 30, -1, data);
 };
 
 // ensure config has been loaded before calling
