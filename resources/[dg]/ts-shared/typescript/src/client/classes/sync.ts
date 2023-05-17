@@ -45,6 +45,10 @@ class Sync {
   public getAmountOfPlayers = () => {
     return Object.keys(this.getAllPlayerCoords()).length;
   };
+
+  public getCurrentRoutingBucket = (): number => {
+    return global.exports['dg-lib'].getRoutingBucket();
+  };
 }
 
 export default {

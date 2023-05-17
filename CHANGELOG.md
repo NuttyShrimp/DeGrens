@@ -34,6 +34,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Nieuwe mensen kunnen weer characters maken
 - Je kan weer characters deleten
 - Admin penalty module wat opgekuist en gepolijst tegen sneaky bugs
+- Probleem waarbij zones niet goed ingeladen werden opgelost
 
 ## [1.2.1]
 
