@@ -22,6 +22,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Paycheck van politie/ambulance verhoogt
 - Verbandjes gaan minder snel kapot
 - Geupdate naar nieuwe Gabz versie
+- Financials laad transactionIds voor accounts niet meer 1 per 1 maar in bulk
 
 ### Fixed
 

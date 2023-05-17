@@ -9,6 +9,7 @@ import { bankLogger, sortAccounts } from '../utils';
 
 import { Account } from './Account';
 import { charModule } from 'helpers/core';
+import { loadCache } from '../helpers/transactionCache';
 
 @RPCRegister()
 class AccountManager extends Util.Singleton<AccountManager>() {
@@ -26,6 +27,7 @@ class AccountManager extends Util.Singleton<AccountManager>() {
 
   public async init() {
     this.seededAccountIds = getConfig().accounts.toSeed.map(s => s.id);
+    await loadCache();
     await this.registerAccountsFromDatabase();
     await this.seedAccounts();
     this.logger.info(`loaded ${this.accounts.length} accounts from database`);

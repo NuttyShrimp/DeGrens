@@ -11,6 +11,7 @@ import accountManager from './AccountManager';
 
 import { PermissionsManager } from './PermissionsManager';
 import { charModule } from 'helpers/core';
+import { getTransactionIdsForAccount } from '../helpers/transactionCache';
 
 export class Account {
   private readonly account_id: string;
@@ -55,9 +56,7 @@ export class Account {
     // fetch all transactionids for this account
     // We only fetch ids so the cache is not overfilled with data which could slow down the resource
     // When getting transactions for client we fetch all data
-    this.getAllTransactionsFromDatabase().then(transactionIds => {
-      this.transactionsIds = transactionIds ?? [];
-    });
+    this.transactionsIds = getTransactionIdsForAccount(this.account_id);
   }
 
   // Create new account and insert into db
@@ -174,18 +173,6 @@ export class Account {
       transaction.date,
       transaction.type,
     ]);
-  }
-
-  // Fetch all unique transaction ids where this account is referenced
-  private async getAllTransactionsFromDatabase(): Promise<string[]> {
-    const query = `
-      SELECT DISTINCT transaction_id
-      FROM transaction_log
-      WHERE origin_account_id = ?
-         OR target_account_id = ?
-      ORDER BY date DESC
-    `;
-    return SQL.query(query, [this.account_id, this.account_id]);
   }
 
   private async getTransactionsFromDatabase(
