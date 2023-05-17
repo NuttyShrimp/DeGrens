@@ -7,6 +7,7 @@ const gasStationZones: {
   length: number;
   minZ: number;
   maxZ: number;
+  type: Vehicle.VehicleType;
 }[] = [
   {
     center: {
@@ -19,6 +20,7 @@ const gasStationZones: {
     heading: 0,
     minZ: 17.92,
     maxZ: 22.72,
+    type: 'land',
   },
   {
     center: {
@@ -31,6 +33,7 @@ const gasStationZones: {
     heading: 335,
     minZ: 17.1,
     maxZ: 22.5,
+    type: 'land',
   },
   {
     center: {
@@ -43,6 +46,7 @@ const gasStationZones: {
     heading: 0,
     minZ: 28.17,
     maxZ: 34.97,
+    type: 'land',
   },
   {
     center: {
@@ -55,6 +59,7 @@ const gasStationZones: {
     heading: 340,
     minZ: 27.71,
     maxZ: 34.31,
+    type: 'land',
   },
   {
     center: {
@@ -67,6 +72,7 @@ const gasStationZones: {
     heading: 0,
     minZ: 25.15,
     maxZ: 32.75,
+    type: 'land',
   },
   {
     center: {
@@ -79,6 +85,7 @@ const gasStationZones: {
     heading: 315,
     minZ: 34.03,
     maxZ: 41.63,
+    type: 'land',
   },
   {
     center: {
@@ -91,6 +98,7 @@ const gasStationZones: {
     heading: 10,
     minZ: 67.98,
     maxZ: 72.98,
+    type: 'land',
   },
   {
     center: {
@@ -103,6 +111,7 @@ const gasStationZones: {
     heading: 310,
     minZ: 44.86,
     maxZ: 51.26,
+    type: 'land',
   },
   {
     center: {
@@ -115,6 +124,7 @@ const gasStationZones: {
     heading: 354,
     minZ: 12.04,
     maxZ: 16.64,
+    type: 'land',
   },
   {
     center: {
@@ -127,6 +137,7 @@ const gasStationZones: {
     heading: 0,
     minZ: 102.06,
     maxZ: 106.06,
+    type: 'land',
   },
   {
     center: {
@@ -139,6 +150,7 @@ const gasStationZones: {
     heading: 43,
     minZ: 137.13,
     maxZ: 142.53,
+    type: 'land',
   },
   {
     center: {
@@ -151,6 +163,7 @@ const gasStationZones: {
     heading: 357,
     minZ: 107.46,
     maxZ: 110.46,
+    type: 'land',
   },
   {
     center: {
@@ -163,6 +176,7 @@ const gasStationZones: {
     heading: 19,
     minZ: 36.94,
     maxZ: 40.94,
+    type: 'land',
   },
   {
     center: {
@@ -175,6 +189,7 @@ const gasStationZones: {
     heading: 315,
     minZ: 36.81,
     maxZ: 40.81,
+    type: 'land',
   },
   {
     center: {
@@ -187,6 +202,7 @@ const gasStationZones: {
     heading: 10,
     minZ: 43.98,
     maxZ: 47.98,
+    type: 'land',
   },
   {
     center: {
@@ -199,6 +215,7 @@ const gasStationZones: {
     heading: 323,
     minZ: 56.88,
     maxZ: 60.88,
+    type: 'land',
   },
   {
     center: {
@@ -211,6 +228,7 @@ const gasStationZones: {
     heading: 4,
     minZ: 32.06,
     maxZ: 36.66,
+    type: 'land',
   },
   {
     center: {
@@ -223,6 +241,7 @@ const gasStationZones: {
     heading: 30,
     minZ: 40.06,
     maxZ: 44.06,
+    type: 'land',
   },
   {
     center: {
@@ -235,6 +254,7 @@ const gasStationZones: {
     heading: 331,
     minZ: 54.04,
     maxZ: 59.24,
+    type: 'land',
   },
   {
     center: {
@@ -247,6 +267,7 @@ const gasStationZones: {
     heading: 325,
     minZ: 41.09,
     maxZ: 45.09,
+    type: 'land',
   },
   {
     center: {
@@ -259,6 +280,7 @@ const gasStationZones: {
     heading: 335,
     minZ: 31.6,
     maxZ: 35.6,
+    type: 'land',
   },
   {
     center: {
@@ -271,6 +293,7 @@ const gasStationZones: {
     heading: 10,
     minZ: 30.85,
     maxZ: 36.05,
+    type: 'land',
   },
   {
     center: {
@@ -283,6 +306,7 @@ const gasStationZones: {
     heading: 45,
     minZ: 30.29,
     maxZ: 34.89,
+    type: 'land',
   },
   {
     center: { x: 2006.37, y: 3773.87, z: 32.18 },
@@ -291,6 +315,7 @@ const gasStationZones: {
     heading: 30,
     minZ: 30.98,
     maxZ: 36.98,
+    type: 'land',
   },
   {
     center: { x: -319.85, y: -1471.37, z: 30.55 },
@@ -299,6 +324,7 @@ const gasStationZones: {
     heading: 30,
     minZ: 28.55,
     maxZ: 34.98,
+    type: 'land',
   },
   {
     center: { x: 810.19, y: -789.76, z: 26.21 },
@@ -307,6 +333,111 @@ const gasStationZones: {
     heading: 0,
     minZ: 25.11,
     maxZ: 29.31,
+    type: 'land',
+  },
+  {
+    center: {
+      x: -1113.01,
+      y: -2883.5,
+      z: 13.94,
+    },
+    width: 16.4,
+    length: 15.2,
+    heading: 330,
+    minZ: 12.94,
+    maxZ: 19.34,
+    type: 'air',
+  },
+  {
+    center: {
+      x: -1145.88,
+      y: -2864.46,
+      z: 13.95,
+    },
+    width: 16.14,
+    length: 16.34,
+    heading: 330,
+    minZ: 12.94,
+    maxZ: 19.34,
+    type: 'air',
+  },
+  {
+    center: {
+      x: -1178.4,
+      y: -2845.72,
+      z: 13.95,
+    },
+    width: 16.4,
+    length: 16.4,
+    heading: 330,
+    minZ: 12.94,
+    maxZ: 19.34,
+    type: 'air',
+  },
+  {
+    center: {
+      x: 481.84,
+      y: -982.26,
+      z: 41.01,
+    },
+    width: 11.0,
+    length: 10.6,
+    heading: 0,
+    minZ: 39.69,
+    maxZ: 44.49,
+    type: 'air',
+  },
+  {
+    center: {
+      x: 352.13,
+      y: -587.88,
+      z: 74.16,
+    },
+    width: 15.0,
+    length: 15.0,
+    heading: 0,
+    minZ: 73.16,
+    maxZ: 77.16,
+    type: 'air',
+  },
+  {
+    center: {
+      x: 1770.37,
+      y: 3239.77,
+      z: 42.14,
+    },
+    width: 16.2,
+    length: 17.0,
+    heading: 14,
+    minZ: 41.14,
+    maxZ: 45.54,
+    type: 'air',
+  },
+  {
+    center: {
+      x: 1853.12,
+      y: 3706.09,
+      z: 33.97,
+    },
+    width: 14.0,
+    length: 14.0,
+    heading: 30,
+    minZ: 32.97,
+    maxZ: 38.57,
+    type: 'air',
+  },
+  {
+    center: {
+      x: -475.18,
+      y: 5988.49,
+      z: 31.34,
+    },
+    width: 17.6,
+    length: 18.4,
+    heading: 315,
+    minZ: 30.34,
+    maxZ: 36.34,
+    type: 'air',
   },
 ];
 

@@ -1,0 +1,45 @@
+{
+  "garage_id": "mrpd_heli",
+  "name": "MRPD Heli garage",
+  "type": "police",
+  "shared": true,
+  "location": {
+    "vector": {
+      "x": 465.06,
+      "y": -983.77,
+      "z": 41.01
+    },
+    "width": 21.2,
+    "length": 47.8,
+    "options": {
+      "heading": 0,
+      "minZ": 39.01,
+      "maxZ": 50.41
+    }
+  },
+  "vehicle_types": ["air"],
+  "parking_spots": [
+    {
+      "type": "air",
+      "size": 4.0,
+      "distance": 1.0,
+      "heading": 90.0,
+      "coords": {
+        "x": 481.84,
+        "y": -982.26,
+        "z": 41.01
+      }
+    },
+    {
+      "type": "air",
+      "size": 5.0,
+      "distance": 1.0,
+      "heading": 90.0,
+      "coords": {
+        "x": 449.45,
+        "y": -981.13,
+        "z": 43.69
+      }
+    }
+  ]
+}
