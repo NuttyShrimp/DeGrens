@@ -127,4 +127,6 @@ export const ON_CREATE: Record<string, (plyId?: number) => { [key: string]: any 
   // radios
   radio: () => ({ frequency: 0 }),
   pd_radio: () => ({ frequency: 0 }),
+  armor: () => ({ health: 100 }),
+  pd_armor: () => ({ health: 100 }),
 };

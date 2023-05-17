@@ -26,4 +26,15 @@ export const citizen: RadialMenu.Entry[] = [
     icon: 'face-smile',
     subMenu: 'expressions',
   },
+  {
+    title: 'Armor afdoen',
+    icon: 'shield',
+    shouldClose: true,
+    type: 'dgxServer',
+    event: 'hospital:armor:retrieve',
+    isEnabled: () => {
+      const ped = PlayerPedId();
+      return GetPedArmour(ped) > 0;
+    },
+  },
 ];
