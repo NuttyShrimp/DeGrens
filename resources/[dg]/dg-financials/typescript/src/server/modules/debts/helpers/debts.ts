@@ -80,7 +80,7 @@ export const scheduleOverDueDebt = (debtId: number) => {
     if (scheduledDebts.has(debtId)) {
       scheduledDebts.delete(debtId);
     }
-  }, dayjs().diff(overDueDate!, 'ms'));
+  }, Math.max(0, dayjs().diff(overDueDate!, 'ms')));
   scheduledDebts.set(debtId, timeout);
 };
 
@@ -117,7 +117,7 @@ export const scheduleDebtDefaulting = (debtId: number) => {
     if (scheduledDebts.has(debtId)) {
       scheduledDebts.delete(debtId);
     }
-  }, secDiff);
+  }, Math.max(secDiff, 0));
   scheduledDebts.set(debtId, timeout);
 };
 
