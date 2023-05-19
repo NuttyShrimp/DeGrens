@@ -9,6 +9,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+### Changed
+
+### Fixed
+
+## [1.2.2]
+
+### Added
+
 - Meer data toegevoegd aan prison leave log
 - General statebag handler wrappers added to avoid code duplication
 - Tankstations + garages voor helikopter/vliegtuig toegevoegd
