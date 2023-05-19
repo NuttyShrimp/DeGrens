@@ -26,9 +26,9 @@ export const generateShopItems = (
     for (let y = 0; y < 1000; y++) {
       for (let x = 0; x < maxXToCheck; x++) {
         let freeSpace: { position: Inventory.XY; rotated: boolean } | undefined = undefined;
-        if (areSpacesNotOccupied(occupiedSpaces, { x, y }, itemSize, false)) {
+        if (areSpacesNotOccupied(occupiedSpaces, { x, y }, itemSize, false, true)) {
           freeSpace = { position: { x, y }, rotated: false };
-        } else if (areSpacesNotOccupied(occupiedSpaces, { x, y }, itemSize, true)) {
+        } else if (areSpacesNotOccupied(occupiedSpaces, { x, y }, itemSize, true, true)) {
           freeSpace = { position: { x, y }, rotated: true };
         }
 
@@ -92,7 +92,8 @@ export const areSpacesNotOccupied = (
   occupiedSpaces: boolean[][],
   position: Inventory.XY,
   size: Inventory.XY,
-  rotated = false
+  rotated = false,
+  allowOverflow = false // when using to determine shop item position, we want to allow overflow to determine inventory size
 ) => {
   const maxX = position.x + size[rotated ? 'y' : 'x'];
   const maxY = position.y + size[rotated ? 'x' : 'y'];
@@ -101,7 +102,7 @@ export const areSpacesNotOccupied = (
     if (!column) return false;
 
     for (let y = position.y; y < maxY; y++) {
-      if (column[y] || column[y] === undefined) return false;
+      if (column[y] || (!allowOverflow && column[y] === undefined)) return false;
     }
   }
   return true;
