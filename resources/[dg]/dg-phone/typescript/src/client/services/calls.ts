@@ -1,6 +1,6 @@
 import { Events, Peek, Police, RPC, UI } from '@dgx/client';
 import { playSound, stopSound } from 'services/sound';
-import { setState } from 'services/state';
+import { canOpenPhone, setState } from 'services/state';
 
 import { CallType } from '../../shared/enums/callType';
 
@@ -29,6 +29,7 @@ UI.RegisterUICallback('phone/declineCall', async (_, cb) => {
 });
 
 Events.onNet('phone:calls:incoming', (call: Calls.IncomingCall) => {
+  if (!canOpenPhone()) return;
   playSound('ring', call.soundId);
   UI.SendAppEvent('phone', {
     appName: 'phone',
@@ -40,6 +41,7 @@ Events.onNet('phone:calls:incoming', (call: Calls.IncomingCall) => {
 Events.onNet('phone:calls:endCurrent', (soundId: number) => {
   StopSound(soundId);
   setState('inCall', false);
+  if (!canOpenPhone()) return;
   UI.SendAppEvent('phone', {
     appName: 'phone',
     action: 'endCurrentCall',
