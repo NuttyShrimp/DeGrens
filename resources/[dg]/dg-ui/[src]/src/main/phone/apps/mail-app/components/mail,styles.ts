@@ -25,6 +25,10 @@ export const styles = makeStyles({
       marginBottom: '1vh',
     },
   },
+  header: {
+    display: 'flex',
+    justifyContent: 'space-between',
+  },
   body: {
     fontSize: '.8rem',
     '&.small': {

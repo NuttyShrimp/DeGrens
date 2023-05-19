@@ -58,10 +58,11 @@ export const SimpleForm: FC<React.PropsWithChildren<SimpleForm.Form>> = props =>
           {props.header}
         </Typography>
       )}
-      {props.elements.map(e => (
+      {props.elements.map((e, i) => (
         <div key={e.name} className={'simpleform-element'}>
           {e.render({
             name: e.name,
+            autoFocus: i === 0,
             value: values[e.name] ?? '',
             onChange: (val: string) => handleChange(e.name, String(val)),
             required: e.required ?? true,

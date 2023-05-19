@@ -286,6 +286,14 @@ Input.Contact = props => {
       icon={props.icon ?? 'mobile'}
       inputValue={selValue}
       options={contacts.map(c => ({ label: c.label, value: c.phone }))}
+      filterOptions={(options, state) => {
+        const filtered = options.filter(
+          o =>
+            o.label.toLowerCase().includes(state.inputValue.toLowerCase()) ||
+            o.value.toLowerCase().includes(state.inputValue.toLowerCase())
+        );
+        return filtered;
+      }}
       onChange={onChangeCapture}
       label={props.label ?? 'TelefoonNr'}
       freeSolo

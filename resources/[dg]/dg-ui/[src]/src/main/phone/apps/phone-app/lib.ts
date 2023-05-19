@@ -23,15 +23,15 @@ const addCallEntry = (name: string, number: string, date: number, incoming: bool
 const phoneCallNotiId = `__internal_phone_call_noti__`;
 let incoming = false;
 
-export const startPhoneCall = (nr: string, isAnon = false) => {
+export const startPhoneCall = (nr: string, type = 0) => {
   nuiAction('phone/startCall', {
     phone: nr,
-    isAnon,
+    type,
   });
   usePhoneStore.setState({
     callMeta: {
       number: nr,
-      isAnon,
+      type,
     },
   });
   addNotification({
@@ -52,7 +52,6 @@ export const endPhoneCall = () => {
   updateNotification(phoneCallNotiId, {
     description: 'Call ended',
   });
-  nuiAction('phone/endcall');
   removeNotification(phoneCallNotiId);
   const callMeta = usePhoneStore.getState().callMeta;
   const contact = getContact(callMeta.number);
@@ -65,13 +64,13 @@ export const endPhoneCall = () => {
   incoming = false;
 };
 
-export const setIncomingCall = (data: { label: string; isAnon: boolean }) => {
+export const setIncomingCall = (data: { label: string; type: number }) => {
   incoming = true;
-  const contact = getContact(data.label);
+  const contact = data.label.startsWith('0') ? getContact(data.label) : { label: data.label };
   usePhoneStore.setState({
     callMeta: {
       number: data.label,
-      isAnon: data.isAnon,
+      type: data.type,
     },
   });
   addNotification({

@@ -25,7 +25,7 @@ export const styles = makeStyles({
       padding: '.5vh .5vw',
       color: baseStyle.gray.lighter,
       backgroundColor: baseStyle.primaryDarker.dark,
-      borderBottom: `.5vh solid ${baseStyle.gray.lighter}`,
+      borderBottom: `.4vh solid ${baseStyle.gray.lighter}`,
       boxShadow: '0px 3px 5px 0px black',
       borderRadius: '1vh',
       pointerEvents: 'all',

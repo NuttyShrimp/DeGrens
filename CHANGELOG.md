@@ -37,6 +37,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Nieuwe mensen kunnen weer characters maken
 - Je kan weer characters deleten
 - Admin penalty module wat opgekuist en gepolijst tegen sneaky bugs
+- Telefoon notities permanent delen is betekend dat je in een gedeelde notitie gestoken worden waar je iedereen hun wijzigingen kan zien (Geldt enkel voor nieuwe notities)
 - Probleem waarbij zones niet goed ingeladen werden opgelost
 - Je kan terug de laatste locatie kiezen om te spawnen als je binnen de noden hiervoor valt
 - Overdue debts worden nu weer vanzelf verwijderd
