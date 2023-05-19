@@ -122,6 +122,7 @@ export class CharacterModule implements Modules.ServerModule, Core.ServerModules
     if (!ply) return;
     emit('core:characters:unloaded', src, ply.citizenid, ply);
     Events.emitNet('core:characters:unloaded', src, ply.citizenid);
+    global.exports['dg-chars'].addDroppedPlayer(ply.citizenid);
     await ply.save();
     global.Player(src).state.set('isLoggedIn', false, true);
     global.Player(src).state.set('citizenid', null, true);
