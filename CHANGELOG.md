@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Je kunt nu niet meer gebeld worden als je je telefoon niet bij hebt
+- Inventories waarvan de hoogte niet kloppen zijn opgelost
 
 ## [1.2.2]
 

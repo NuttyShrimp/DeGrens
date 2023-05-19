@@ -1,5 +1,6 @@
 import { Admin } from '@dgx/server';
 import { INVENTORY_TYPES } from '../../constants';
+import { Inv } from './classes/inv';
 
 export const validateIdBuildData = (plyId: number, data: IdBuildData) => {
   // Players needs staff perms to be able to use override
@@ -14,4 +15,20 @@ export const validateIdBuildData = (plyId: number, data: IdBuildData) => {
   if (data.identifier === undefined && data.data === undefined) return false;
 
   return true;
+};
+
+export const calculateSizeBasedOnItems = (inv: Inv, items: { size: Vec2 }[]) => {
+  items.forEach(item => {
+    if (inv.size < item.size.y) {
+      inv.setSize(item.size.y);
+    }
+    let posInfo = inv.getFirstAvailablePosition(item.size);
+    let timeout = 0;
+    while (!posInfo || timeout >= 10) {
+      inv.setSize(inv.size + 1);
+      posInfo = inv.getFirstAvailablePosition(item.size);
+      timeout++;
+    }
+    inv.setSize(posInfo.position.y + item.size.y);
+  });
 };
