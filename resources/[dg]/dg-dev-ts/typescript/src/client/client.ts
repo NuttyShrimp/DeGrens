@@ -1,0 +1,3 @@
+setImmediate(() => {
+  console.log('TEST');
+});

@@ -1711,7 +1711,7 @@
     "label": "Verband",
     "description": "Helpt om je weer beter te voelen en bloedingen te stoppen",
     "image": "bandage.png",
-    "decayRate": 14400,
+    "decayRate": 28800,
     "size": {
       "x": 2,
       "y": 1
@@ -2312,7 +2312,7 @@
     "label": "CBD Joint",
     "image": "blazeit_joint.png",
     "description": "BlazeIt CBD product om al je zorgen achter je te laten!",
-    "decayRate": 20160,
+    "decayRate": 43200,
     "size": {
       "x": 1,
       "y": 2
@@ -2324,7 +2324,7 @@
     "label": "CBD Brownie",
     "image": "blazeit_brownie.png",
     "description": "BlazeIt CBD product om al je zorgen achter je te laten!",
-    "decayRate": 20160,
+    "decayRate": 43200,
     "size": {
       "x": 2,
       "y": 1
@@ -2336,7 +2336,7 @@
     "label": "CBD Cookie",
     "image": "blazeit_cookie.png",
     "description": "BlazeIt CBD product om al je zorgen achter je te laten!",
-    "decayRate": 20160,
+    "decayRate": 43200,
     "size": {
       "x": 2,
       "y": 1
@@ -2348,7 +2348,7 @@
     "label": "CBD Bears",
     "image": "blazeit_gummy.png",
     "description": "BlazeIt CBD product om al je zorgen achter je te laten!",
-    "decayRate": 20160,
+    "decayRate": 43200,
     "size": {
       "x": 2,
       "y": 2
@@ -2360,7 +2360,7 @@
     "label": "CBD Olie",
     "image": "blazeit_oil.png",
     "description": "BlazeIt CBD product om al je zorgen achter je te laten!",
-    "decayRate": 20160,
+    "decayRate": 43200,
     "size": {
       "x": 2,
       "y": 3
@@ -2372,7 +2372,7 @@
     "label": "CBD Balm",
     "image": "blazeit_stick.png",
     "description": "BlazeIt CBD product om al je zorgen achter je te laten!",
-    "decayRate": 20160,
+    "decayRate": 43200,
     "size": {
       "x": 1,
       "y": 4

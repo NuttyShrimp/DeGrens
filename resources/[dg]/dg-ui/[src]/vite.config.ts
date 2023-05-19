@@ -39,7 +39,7 @@ export default defineConfig(({ mode }) => ({
       project: 'degrens-ui',
       debug: true,
       deploy: {
-        env: mode === 'production' ? 'production' : 'development',
+        env: mode === 'production' || process.env.SENTRY_UPLOAD_SOURCEMAPS ? 'production' : 'development',
       },
       setCommits: {
         auto: true,

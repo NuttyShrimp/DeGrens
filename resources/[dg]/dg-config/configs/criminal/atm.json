@@ -4,8 +4,13 @@
     "cash": [750, 1500],
     "rolls": [15, 25],
     "specialItem": {
-      "pool": ["material_electronics"],
-      "chance": 0.05
+      "pool": [
+        {
+          "item": "material_electronics",
+          "amount": [2, 6]
+        }
+      ],
+      "chance": 0.5
     }
   }
 }

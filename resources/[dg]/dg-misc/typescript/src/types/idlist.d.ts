@@ -1,9 +1,6 @@
 declare namespace IdList {
   type Data = {
-    scopeInfo: {
-      current: Sync.ScopePlayer[];
-      recent: Sync.ScopePlayer[];
-    };
+    scopeInfo: Partial<Record<Sync.Scopes.Type, Sync.Scopes.Player[]>>;
     isAdmin: boolean;
     hiddenPlys: number[];
   };

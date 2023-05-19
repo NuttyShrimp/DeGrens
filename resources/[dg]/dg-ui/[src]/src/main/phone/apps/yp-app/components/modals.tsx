@@ -13,11 +13,12 @@ export const NewAd: FC<React.PropsWithChildren<{ onAccept: Function; ad: Phone.Y
         name: 'text',
         render: props => <Input.TextField {...props} icon={'text'} />,
         defaultValue: props?.ad?.text ?? '',
+        required: false,
       },
     ]}
     onAccept={vals => {
       showLoadModal();
-      if (vals.text.trim() === '') {
+      if (vals.text || vals.text.trim() === '') {
         nuiAction('phone/yellowpages/remove');
       } else {
         nuiAction('phone/yellowpages/new', vals);

@@ -38,7 +38,7 @@ class Phone {
   }
 
   sendMail(target: number, subject: string, sender: string, mail: string) {
-    emitNet('dg-phone:client:addNewMail', target, subject, sender, mail);
+    emitNet('phone:mail:add', target, subject, sender, mail);
   }
 
   sendOfflineMail(cid: number, subject: string, sender: string, message: string): Promise<void> {

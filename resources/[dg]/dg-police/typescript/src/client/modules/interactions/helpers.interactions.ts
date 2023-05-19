@@ -13,13 +13,13 @@ export const isAnyPlayerInVehicle = (vehicle: number) => {
   return false;
 };
 
-export const getClosestSeatId = (vehicle: number) => {
+export const getClosestSeatId = (vehicle: number, skipDriverSeat = false) => {
   const plyCoords = Util.getPlyCoords();
 
   let closestDistance = 2.0;
   let closestSeat: number | undefined = undefined;
 
-  for (let i = 0; i < 4; i++) {
+  for (let i = skipDriverSeat ? 1 : 0; i < 4; i++) {
     if (!GetIsDoorValid(vehicle, i)) continue;
     const [x, y, z] = GetEntryPositionOfDoor(vehicle, i);
     const distance = plyCoords.distance({ x, y, z });

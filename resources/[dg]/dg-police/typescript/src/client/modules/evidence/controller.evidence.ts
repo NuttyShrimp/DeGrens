@@ -46,7 +46,7 @@ on('entityDamaged', (entity: number, origin: number) => {
   if (color === undefined) {
     if (GetIsVehiclePrimaryColourCustom(entity)) {
       const [r, g, b] = GetVehicleCustomPrimaryColour(entity);
-      color = getNearestColorFromHex({ r, g, b }) as string;
+      color = getNearestColorFromHex({ r, g, b })?.name;
     } else {
       const colorId = GetVehicleColours(entity)[0];
       color = getDataOfGTAColorById(colorId)?.name ?? 'Unknown Color';

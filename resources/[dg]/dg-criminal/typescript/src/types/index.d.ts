@@ -90,7 +90,10 @@ declare namespace Criminal {
         cash: [number, number];
         rolls: [number, number];
         specialItem: {
-          pool: string[];
+          pool: {
+            item: string;
+            amount: [number, number];
+          }[];
           chance: number;
         };
       };

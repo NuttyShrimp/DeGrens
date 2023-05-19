@@ -53,6 +53,7 @@ const Component = () => {
       },
       devData.tweets
     );
+    if (!newTweets || newTweets.length === 0) return;
     updateStore({
       tweets: [...tweets, ...newTweets.reverse()],
       requestAmount: requestAmount + 1,

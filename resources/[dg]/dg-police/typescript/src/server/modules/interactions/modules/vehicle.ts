@@ -95,7 +95,7 @@ Events.onNet(
 
     // If closest wasnt free, check every other seat starting from back
     if (targetSeat === null) {
-      for (let i = amountOfSeats - 2; i >= -1; i--) {
+      for (let i = amountOfSeats - 2; i >= 0; i--) {
         const pedInSeat = GetPedInVehicleSeat(vehicle, i);
         if (pedInSeat === 0) {
           targetSeat = i;

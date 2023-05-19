@@ -1,4 +1,4 @@
-import { Core, Events, Jobs, RPC, Sounds, Util } from '@dgx/server';
+import { Core, Events, Jobs, RPC, Sounds, Util, Vehicles } from '@dgx/server';
 
 import { addCall } from './store';
 
@@ -50,12 +50,11 @@ export const createDispatchCall = async (job: 'ambulance' | 'police', call: Disp
   if (call.vehicle && DoesEntityExist(call.vehicle)) {
     let vehEntryText = '';
     const vehNetid = NetworkGetNetworkIdFromEntity(call.vehicle);
-    const vehColors = await RPC.execute<Record<'primary' | 'secondary', string>>(
+    const vehColors = await Util.sendRPCtoEntityOwner<Record<'primary' | 'secondary', string>>(
+      call.vehicle,
       'dispatch:getVehicleInfo',
-      NetworkGetEntityOwner(call.vehicle),
       vehNetid
     );
-    const vehConfig = global.exports['dg-vehicles'].getConfigByEntity(call.vehicle);
     if (vehColors) {
       if (vehColors.primary) {
         vehEntryText += vehColors.primary;
@@ -64,6 +63,7 @@ export const createDispatchCall = async (job: 'ambulance' | 'police', call: Disp
         vehEntryText += ` en ${vehColors.secondary}`;
       }
     }
+    const vehConfig = Vehicles.getConfigByEntity(call.vehicle);
     if (vehConfig) {
       vehEntryText += ` ${vehConfig.brand} ${vehConfig.name}`;
     }

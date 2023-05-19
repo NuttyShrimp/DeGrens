@@ -50,8 +50,16 @@ export const getPlayerCarrying = (plyId: number) => {
   return carryDuos.find(duo => duo.target === plyId)?.carrier;
 };
 
+export const isPlayerBeingCarried = (plyId: number) => {
+  return !!getPlayerCarrying(plyId);
+};
+
+export const isPlayerCarrying = (plyId: number) => {
+  return !!getPlayerBeingCarried(plyId);
+};
+
 export const isPlayerInCarryDuo = (plyId: number) => {
-  return carryDuos.find(duo => duo.carrier === plyId || duo.target === plyId) !== undefined;
+  return isPlayerCarrying(plyId) || isPlayerBeingCarried(plyId);
 };
 
 export const stopCarryDuo = (plyId: number) => {
@@ -63,7 +71,7 @@ export const stopCarryDuo = (plyId: number) => {
     const carrierPed = GetPlayerPed(String(carrier));
     const targetPed = GetPlayerPed(String(target));
 
-    const coords = Util.getOffsetFromPlayer(carrier, { x: 1, y: 0, z: -0.9 });
+    const coords = Util.getOffsetFromPlayer(carrier, { x: 1.5, y: 0, z: -0.9 });
 
     setImmediate(() => {
       ClearPedTasksImmediately(carrierPed);

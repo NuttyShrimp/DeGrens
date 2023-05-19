@@ -3,7 +3,7 @@ export const citizen: RadialMenu.Entry[] = [
     title: 'Geef Telefoonnummer',
     icon: 'address-book',
     type: 'dgxServer',
-    event: 'dg-phone:server:contacts:shareNumber',
+    event: 'phone:contacts:shareNumber',
     shouldClose: true,
     minimumPlayerDistance: 2,
     items: ['phone'],
@@ -25,5 +25,16 @@ export const citizen: RadialMenu.Entry[] = [
     title: 'Expression',
     icon: 'face-smile',
     subMenu: 'expressions',
+  },
+  {
+    title: 'Armor afdoen',
+    icon: 'shield',
+    shouldClose: true,
+    type: 'dgxServer',
+    event: 'hospital:armor:retrieve',
+    isEnabled: () => {
+      const ped = PlayerPedId();
+      return GetPedArmour(ped) > 0;
+    },
   },
 ];

@@ -228,11 +228,3 @@ const startDrunkThread = async () => {
     fxState.alcohol.count = Math.max(0, fxState.alcohol.count - 0.01); // Drunk for hella long time :)
   }, 1000);
 };
-
-RegisterCommand(
-  'test-puke',
-  () => {
-    fxPuke();
-  },
-  false
-);

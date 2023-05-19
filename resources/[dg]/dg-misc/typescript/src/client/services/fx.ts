@@ -1,6 +1,4 @@
-import { Animations, Util } from '@dgx/client';
-import { addParticleHandler } from 'modules/particles/controller.particles';
-import { removeParticle } from 'modules/particles/service.particles';
+import { Animations, Particles, Util } from '@dgx/client';
 
 export const FxBlackOut = async () => {
   AnimpostfxPlay('MinigameTransitionIn', 300, true);
@@ -25,8 +23,7 @@ export const FxBlackOut = async () => {
 };
 
 export const fxPuke = async () => {
-  console.log(PlayerPedId());
-  const pfxId = addParticleHandler({
+  const pfxId = Particles.add({
     dict: 'scr_paletoscore',
     name: 'scr_trev_puke',
     boneIndex: 31086,
@@ -42,6 +39,6 @@ export const fxPuke = async () => {
     },
   });
   await Util.Delay(3500);
-  removeParticle(pfxId);
+  Particles.remove(pfxId);
   Animations.stopAnimLoop(animId);
 };

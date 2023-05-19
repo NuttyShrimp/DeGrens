@@ -59,7 +59,7 @@ Inventory.registerUseable('nos', async src => {
     await updateVehicleNos(vin, refillAmount);
   }
 
-  Events.emitNet('vehicles:nos:update', src, netId);
+  Events.emitNet('vehicles:nos:update', src, netId, refillAmount);
 
   nosLogger.info(`NOS for ${vin} has been installed`);
   Util.Log(

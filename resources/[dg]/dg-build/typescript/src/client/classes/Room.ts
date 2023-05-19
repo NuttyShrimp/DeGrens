@@ -106,6 +106,7 @@ export class Room {
           label,
           name: i.name,
         },
+        routingBucket: Sync.getCurrentRoutingBucket(),
         useZ: true,
       });
       PolyZone.onEnter(`${this.planName}_interact_${i.name}`, (zone, data) => {
@@ -130,17 +131,21 @@ export class Room {
     if (!this.plan.targetZone) return;
     this.plan.targetZone.forEach((i, idx) => {
       const zoneName = `${this.planName}_peekInteraction_${idx}`;
+      const options = {
+        ...i.options,
+        routingBucket: Sync.getCurrentRoutingBucket(),
+      };
       if ('radius' in i) {
         // Circle targetZone
-        PolyTarget.addCircleZone(zoneName, this.roomOrigin.add(i.offset), i.radius, i.options, true);
+        PolyTarget.addCircleZone(zoneName, this.roomOrigin.add(i.offset), i.radius, options, true);
       } else {
-        const options = {
-          ...i.options,
+        const boxOptions = {
+          ...options,
           minZ: i.options.minZ! + this.roomOrigin.z,
           maxZ: i.options.maxZ! + this.roomOrigin.z,
         };
         // Box targetZone
-        PolyTarget.addBoxZone(zoneName, this.roomOrigin.add(i.offset), i.width, i.length, options, true);
+        PolyTarget.addBoxZone(zoneName, this.roomOrigin.add(i.offset), i.width, i.length, boxOptions, true);
       }
       this.peekZoneIds.push(
         ...Peek.addZoneEntry(

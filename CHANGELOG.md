@@ -13,6 +13,43 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+## [1.2.2]
+
+### Added
+
+- Meer data toegevoegd aan prison leave log
+- General statebag handler wrappers added to avoid code duplication
+- Tankstations + garages voor helikopter/vliegtuig toegevoegd
+- Je kan nu je armor terug afdoen via F1 of het `/retrieveArmor` command
+
+### Changed
+
+- Je kan personen niet meer op de bestuurdersstoel zetten
+- Meer kans op specialitem bij ATM robbery
+- Je ziet nu enkel wie recent de server heeft verlaten terwijl hij in je buurt zat in de idlist
+- Paycheck van politie/ambulance verhoogt
+- Verbandjes gaan minder snel kapot
+- Geupdate naar nieuwe Gabz versie
+- Financials laad transactionIds voor accounts niet meer 1 per 1 maar in bulk
+
+### Fixed
+
+- Inventory items kunnen niet langer over de Y limiet gaan tijdens het RMB'en
+- Voertuig kleur informatie in dispatch melding wordt nu correct getoond wanneer voertuig custom kleuren heeft
+- Koperpaal aan HB weggehaald wegens problemen met de ladder
+- Crypto Transfers werken weer
+- Idlist ids distance check werkt weer
+- Tax op lockers is terug
+- Nieuwsitems verdwijnen nu als ze uit je inventory verdwijnen
+- Resume looped anim on ragdoll
+- Nieuwe mensen kunnen weer characters maken
+- Je kan weer characters deleten
+- Admin penalty module wat opgekuist en gepolijst tegen sneaky bugs
+- Telefoon notities permanent delen is betekend dat je in een gedeelde notitie gestoken worden waar je iedereen hun wijzigingen kan zien (Geldt enkel voor nieuwe notities)
+- Probleem waarbij zones niet goed ingeladen werden opgelost
+- Je kan terug de laatste locatie kiezen om te spawnen als je binnen de noden hiervoor valt
+- Overdue debts worden nu weer vanzelf verwijderd
+
 ## [1.2.1]
 
 ### Added

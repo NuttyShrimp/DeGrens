@@ -85,7 +85,7 @@ export const canRefuel = (veh: number): boolean => {
   if (!isInZone() && !isHoldingJerryCan()) return false;
   if (IsPedInAnyVehicle(PlayerPedId(), false)) return false;
   const vehClass = GetVehicleClass(veh);
-  if ([13, 14, 15, 16].includes(vehClass)) {
+  if (13 === vehClass) {
     return false;
   }
   return Math.min(Util.getBoneDistance(veh, 'wheel_lr'), Util.getBoneDistance(veh, 'wheel_rr')) <= 1.2;

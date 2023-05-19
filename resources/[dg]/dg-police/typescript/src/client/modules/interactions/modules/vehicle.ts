@@ -112,7 +112,7 @@ const putInVehicle = async (vehicle: number) => {
 
   const netId = NetworkGetNetworkIdFromEntity(vehicle);
   const amountOfSeats = GetVehicleModelNumberOfSeats(GetEntityModel(vehicle));
-  let closestSeat = getClosestSeatId(vehicle);
+  let closestSeat = getClosestSeatId(vehicle, true);
   // if motorcycle, force backseat
   if (GetVehicleClass(vehicle) === 8) {
     closestSeat = Math.max(-1, amountOfSeats - 2);

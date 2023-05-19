@@ -4,4 +4,4 @@ export const events: Phone.Events = {};
 events.endCurrentCall = endPhoneCall;
 events.incomingCall = setIncomingCall;
 events.setCallActive = setActiveCall;
-events.startAnonCall = (nr: string) => startPhoneCall(nr, true);
+events.startCall = ({ target, type }: { target: string; type: number }) => startPhoneCall(target, type);

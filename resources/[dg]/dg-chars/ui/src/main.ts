@@ -22,23 +22,25 @@ import './vendor/quasar/animate/slideOutUp.css';
 
 const app = createApp(App);
 
-Sentry.init({
-  app,
-  dsn: 'https://8505c6e164a24f0a9b25e6df4543a12b@sentry.nuttyshrimp.me/6',
-  integrations: [
-    // @ts-ignore
-    new BrowserTracing({
+if (import.meta.env.PROD) {
+  Sentry.init({
+    app,
+    dsn: 'https://8505c6e164a24f0a9b25e6df4543a12b@sentry.nuttyshrimp.me/6',
+    integrations: [
       // @ts-ignore
-      tracingOrigins: [`https://${GetParentResourceName()}`],
-    }),
-  ],
-  // Set tracesSampleRate to 1.0 to capture 100%
-  // of transactions for performance monitoring.
-  // We recommend adjusting this value in production
-  release: '1.0.0',
-  attachStacktrace: true,
-  tracesSampleRate: 1.0,
-});
+      new BrowserTracing({
+        // @ts-ignore
+        tracingOrigins: [`https://${GetParentResourceName()}`],
+      }),
+    ],
+    // Set tracesSampleRate to 1.0 to capture 100%
+    // of transactions for performance monitoring.
+    // We recommend adjusting this value in production
+    release: '1.0.0',
+    attachStacktrace: true,
+    tracesSampleRate: 1.0,
+  });
+}
 
 app.use(store, key);
 // @ts-ignore

@@ -1,14 +1,8 @@
 import { Core, Util } from '@dgx/server';
 
 export const getIdentifierForPlayer = (source: number, identifier: string) => {
-  const src = String(source);
-  const identifierNum = GetNumPlayerIdentifiers(src);
-  for (let i = 0; i < identifierNum; i++) {
-    const id = GetPlayerIdentifier(src, i);
-    if (id.startsWith(identifier)) {
-      return id;
-    }
-  }
+  const userModule = Core.getModule('users');
+  return userModule.getPlyIdentifiers(source)[identifier];
 };
 
 export const getUserData = (src: number): UserData => {
@@ -31,8 +25,8 @@ export const getServerIdForSteamId = (steamId: string) => {
 };
 
 export const getPlayerForSteamId = (steamId: string): UserData | null => {
-  const userModule = Core.getModule("users");
-  const ply = userModule.getServerIdFromIdentifier("steam", steamId);
+  const userModule = Core.getModule('users');
+  const ply = userModule.getServerIdFromIdentifier('steam', steamId);
   if (!ply) return null;
   return getUserData(ply);
 };

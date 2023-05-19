@@ -20,8 +20,8 @@
     ]
   },
   "paycheck": {
-    "police": 20,
-    "ambulance": 20,
+    "police": 26,
+    "ambulance": 26,
     "realestate": 18,
     "null": 1.5
   },

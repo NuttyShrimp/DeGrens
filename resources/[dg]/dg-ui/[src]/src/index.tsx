@@ -11,7 +11,7 @@ import './styles/main.scss';
 import 'animate.css';
 import '@degrens-21/fa-6/css/all.css';
 
-if (!isDevel()) {
+if (!isDevel() && !isGameDevel()) {
   Sentry.init({
     dsn: 'https://0bc1faba50b14e49a85259c0b3b05dc8@sentry.nuttyshrimp.me/3',
     integrations: [
@@ -22,7 +22,7 @@ if (!isDevel()) {
       }),
     ],
     release: '1.0.0',
-    environment: isGameDevel() ? 'development' : 'production',
+    environment: 'production',
     // It's high but players are not going to give u shit when an error pops :)
     normalizeDepth: 10,
     attachStacktrace: true,

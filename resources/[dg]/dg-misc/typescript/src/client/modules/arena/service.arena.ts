@@ -1,7 +1,10 @@
 let currentInterior: Arena.Interior | null = null;
 
 const loadAndGetInterior = (ipl: string, coords: Vec3) => {
-  RequestIpl(ipl);
+  if (!IsIplActive(ipl)) {
+    RequestIpl(ipl);
+  }
+
   const interiorId = GetInteriorAtCoords(coords.x, coords.y, coords.z);
   if (!IsValidInterior(interiorId)) {
     console.error(`Failed to load arena interior | ${JSON.stringify(currentInterior)}`);
@@ -16,8 +19,14 @@ export const unloadCurrentArenaInterior = () => {
   const interiorId = loadAndGetInterior(currentInterior.ipl, currentInterior.coords);
   if (!interiorId) return;
 
-  for (const entitySet of currentInterior.entitySets) {
+  for (const entitySet of currentInterior.type.entitySets) {
+    if (!IsInteriorPropEnabled(interiorId, entitySet)) continue;
     DisableInteriorProp(interiorId, entitySet);
+  }
+
+  for (const exteriorIpl of currentInterior.type.exteriorIpls) {
+    if (!IsIplActive(exteriorIpl)) continue;
+    RemoveIpl(exteriorIpl);
   }
 
   RefreshInterior(interiorId);
@@ -32,16 +41,23 @@ export const loadArenaInterior = (interior: Arena.Interior) => {
     return;
   }
 
-  const interiorId = loadAndGetInterior(interior.ipl, interior.coords);
+  currentInterior = interior;
+
+  const interiorId = loadAndGetInterior(currentInterior.ipl, currentInterior.coords);
   if (!interiorId) return;
 
-  for (const entitySet of interior.entitySets) {
+  for (const entitySet of currentInterior.type.entitySets) {
+    if (IsInteriorPropEnabled(interiorId, entitySet)) continue;
     EnableInteriorProp(interiorId, entitySet);
+  }
+
+  for (const exteriorIpl of currentInterior.type.exteriorIpls) {
+    if (IsIplActive(exteriorIpl)) continue;
+    RequestIpl(exteriorIpl);
   }
 
   RefreshInterior(interiorId);
 
-  currentInterior = interior;
   console.log('[ARENA] Loaded interior');
 };
 

@@ -674,7 +674,7 @@ class SQL {
     return global.exports['dg-sql'].scalar(query, params, cb);
   }
 
-  async insert(query: string, params: any[] = [], cb?: (result: any) => void) {
+  async insert(query: string, params: any[] = [], cb?: (result: any) => void): Promise<number | undefined> {
     return global.exports['dg-sql'].insert(query, params, cb);
   }
 

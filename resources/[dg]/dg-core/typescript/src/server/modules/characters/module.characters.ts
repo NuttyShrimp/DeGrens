@@ -122,6 +122,7 @@ export class CharacterModule implements Modules.ServerModule, Core.ServerModules
     if (!ply) return;
     emit('core:characters:unloaded', src, ply.citizenid, ply);
     Events.emitNet('core:characters:unloaded', src, ply.citizenid);
+    global.exports['dg-chars'].addDroppedPlayer(ply.citizenid);
     await ply.save();
     global.Player(src).state.set('isLoggedIn', false, true);
     global.Player(src).state.set('citizenid', null, true);
@@ -134,12 +135,13 @@ export class CharacterModule implements Modules.ServerModule, Core.ServerModules
       Admin.ACBan(src, "Trying to delete a character you don't own", { cid });
       return;
     }
-    const ply = this.getPlayerByCitizenId(cid);
+    const ply = await this.getOfflinePlayer(cid);
     if (!ply) {
       characterLogger.warn(`${Util.getName(src)}(${src}) tried to delete an unexisting character: ${cid}`);
       return;
     }
-    // ply?.save(); dont need to save to db when we are deleting it right??
+    const userModule = getModule('users');
+    userModule.saveUser(src);
     this.logout(src);
     await SQL.query('DELETE FROM characters WHERE citizenid = ?', [cid]);
     Util.Log(
@@ -184,7 +186,7 @@ export class CharacterModule implements Modules.ServerModule, Core.ServerModules
     return ply;
   };
 
-  getOfflinePlayer = async (cid: number) => {
+  getOfflinePlayer = async (cid: number): Promise<Core.Characters.Player | undefined> => {
     const serverId = this.getServerIdFromCitizenId(cid);
     if (serverId) {
       return this.activeCharacters[serverId];

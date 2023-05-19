@@ -1,0 +1,34 @@
+{
+  "garage_id": "sandy_police_heli",
+  "name": "Sandy Police Station Heli garage",
+  "type": "police",
+  "shared": true,
+  "location": {
+    "vector": {
+      "x": 1853.41,
+      "y": 3706.32,
+      "z": 33.97
+    },
+    "width": 10.8,
+    "length": 10.8,
+    "options": {
+      "heading": 300,
+      "minZ": 32.97,
+      "maxZ": 37.97
+    }
+  },
+  "vehicle_types": ["air"],
+  "parking_spots": [
+    {
+      "type": "air",
+      "size": 4.0,
+      "distance": 1.0,
+      "heading": 0.0,
+      "coords": {
+        "x": 1853.41,
+        "y": 3706.32,
+        "z": 33.97
+      }
+    }
+  ]
+}

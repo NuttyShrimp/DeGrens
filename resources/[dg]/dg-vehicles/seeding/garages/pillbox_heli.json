@@ -1,0 +1,34 @@
+{
+  "garage_id": "pilbox_heli",
+  "name": "Pillbox Heli garage",
+  "type": "ambulance",
+  "shared": true,
+  "location": {
+    "vector": {
+      "x": 352.13,
+      "y": -587.88,
+      "z": 74.16
+    },
+    "width": 11.4,
+    "length": 11.2,
+    "options": {
+      "heading": 345,
+      "minZ": 73.16,
+      "maxZ": 77.76
+    }
+  },
+  "vehicle_types": ["air"],
+  "parking_spots": [
+    {
+      "type": "air",
+      "size": 4.0,
+      "distance": 1.0,
+      "heading": 0.0,
+      "coords": {
+        "x": 352.13,
+        "y": -587.88,
+        "z": 74.16
+      }
+    }
+  ]
+}

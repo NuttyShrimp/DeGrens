@@ -4,6 +4,7 @@ import cryptoManager from './classes/CryptoManager';
 import { CryptoWallet } from './classes/CryptoWallet';
 import { addCrypto, buyCrypto, getCryptoAmount, getPlayerInfo, removeCrypto } from './service';
 import { cryptoLogger } from './util';
+import { charModule } from 'helpers/core';
 
 global.asyncExports('cryptoBuy', (src: number, coin: string, amount: number) => buyCrypto(src, coin, amount));
 global.asyncExports('cryptoAdd', (src: number, coin: string, amount: number, comment: string) =>
@@ -51,6 +52,10 @@ RPC.register(
     cryptoLogger.silly(`Callback: transfer: coin: ${data.coin} | target: ${data.target} | amount: ${data.amount}`);
     const Player = Core.getPlayer(src);
     if (!Player) return false;
+
+    const targetCid = charModule.getPlayerByPhone(String(data.target))?.citizenid;
+    if (!targetCid) return false;
+
     const wallet = cryptoManager.getWallet(Player.citizenid, data.coin) as CryptoWallet;
     const success = await wallet.transfer(src, data.target, data.amount);
     cryptoLogger.silly(`Callback: transfer: success: ${success}`);

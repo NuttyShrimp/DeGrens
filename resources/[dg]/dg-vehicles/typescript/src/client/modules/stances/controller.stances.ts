@@ -1,11 +1,10 @@
-import { Events, Notifications, UI } from '@dgx/client';
+import { Events, Notifications, Statebags, UI } from '@dgx/client';
 import { getCurrentVehicle, isDriver } from '@helpers/vehicle';
-
 import {
   getAppliedStance,
-  handleStanceStateUpdate,
   removeInfoNotif,
   roundOffset,
+  setCloseVehicleStance,
   updateInfoNotif,
 } from './service.stances';
 
@@ -129,17 +128,6 @@ UI.RegisterUICallback('stance/cycleStep', (_, cb) => {
   cb({ data: {}, meta: { ok: true, message: '' } });
 });
 
-//@ts-ignore
-AddStateBagChangeHandler('stance', null, (bagName: string, _, stanceData: Stance.Data | null) => {
-  if (!bagName.startsWith('entity:')) return;
-  const netId = Number(bagName.replace('entity:', ''));
-  if (Number.isNaN(netId)) return;
-
-  // handler function checks if entity exists, when this handler gets fired its possible entity doesnt exit yet for client so we try agian in timeout
-  const success = handleStanceStateUpdate(netId, stanceData);
-  if (!success) {
-    setTimeout(() => {
-      handleStanceStateUpdate(netId, stanceData);
-    }, 2000);
-  }
+Statebags.addEntityStateBagChangeHandler<Stance.Data | null>('entity', 'stance', (_, vehicle, stanceData) => {
+  setCloseVehicleStance(vehicle, stanceData);
 });

@@ -1,4 +1,4 @@
-import { Keys, RPC, UI, Util } from '@dgx/client';
+import { Events, Keys, RPC, UI, Util } from '@dgx/client';
 
 let isOpen = false;
 
@@ -31,7 +31,7 @@ const openMenu = async () => {
 
     players = [];
     const ownPed = PlayerPedId();
-    // const ownCoords = Util.getEntityCoords(ownPed);
+    const ownCoords = Util.getEntityCoords(ownPed);
     for (const ply of GetActivePlayers()) {
       const plyId = GetPlayerServerId(ply);
       if (hiddenPlys.includes(plyId)) continue;
@@ -39,15 +39,13 @@ const openMenu = async () => {
       const ped = GetPlayerPed(ply);
       const coords = Util.getEntityCoords(ped);
       if (ped !== ownPed && !isAdmin) {
-        // If LOS proves to not be a good way
+        // Check by distance
+        const distance = ownCoords.distance(coords);
+        if (distance > 20) continue;
 
         // Check by LOS
         const hasLos = HasEntityClearLosToEntity(ownPed, ped, 17);
         if (!hasLos) continue;
-
-        // Check by distance
-        // const distance = ownCoords.distance(coords);
-        // if (distance > 20) continue;
       }
 
       coords.z += 1.0;
@@ -81,6 +79,7 @@ const openMenu = async () => {
 
 const closeMenu = () => {
   UI.closeApplication('idlist');
+  Events.emitNet('misc:idlist:close');
   isOpen = false;
 };
 

@@ -1,0 +1,15 @@
+{
+  "extends": "tsconfig/client.json",
+  "compilerOptions": {
+    "baseUrl": "./"
+  },
+  "include": [
+    "./**/*",
+    "../shared/**/*",
+    "../types",
+    "../../../../../../types",
+    "../../../../ts-shared/typescript/src/shared/types/*.d.ts",
+    "../../../../ts-shared/typescript/src/client/types/*.d.ts"
+  ],
+  "exclude": ["**/node_modules"]
+}

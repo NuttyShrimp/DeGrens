@@ -8,4 +8,5 @@ const colors = colorNameList.reduce(
   {}
 );
 
-export const getNearestColorFromHex = nearestColor.from(colors);
+export const getNearestColorFromHex: (color: { r: number; g: number; b: number } | `#${string}`) => { name: string } =
+  nearestColor.from(colors);

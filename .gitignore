@@ -18,6 +18,7 @@ node_modules/
 logtypes.json
 .env
 !.env.template
+.replxx_history
 
 
 positions.txt

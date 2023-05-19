@@ -69,7 +69,7 @@ DGX.RPC.register('dg-chars:server:createCharacter', function(src, data)
     DGX.Util.Log('chars:created', { data = data },
       ("%s (%d) is creating a new character (%s %s)"):format(DGX.Util.getName(plyId), src, data.firstname, data.lastname),
       src)
-    TriggerClientEvent('qb-clothes:client:CreateFirstCharacter', src)
+    TriggerClientEvent('qb-clothes:client:CreateFirstCharacter', src, data.gender)
   end
 end)
 

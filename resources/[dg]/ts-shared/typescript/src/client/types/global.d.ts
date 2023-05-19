@@ -39,6 +39,7 @@ declare global {
     Npcs: typeof Classes.Npcs;
     Vehicles: typeof Classes.Vehicles;
     Core: typeof Classes.Core;
+    Statebags: typeof Classes.Statebags;
   };
   var asyncExports: any;
 }

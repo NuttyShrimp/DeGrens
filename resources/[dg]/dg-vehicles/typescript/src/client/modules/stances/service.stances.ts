@@ -4,16 +4,6 @@ import { NOTIFICATION_ID } from './constants.stances';
 const closeVehicles: Map<number, Stance.Data> = new Map();
 let stancingThread: NodeJS.Timer | null = null;
 
-export const handleStanceStateUpdate = (netId: number, stanceData: Stance.Data | null) => {
-  // handler fires before entity exists for client. This handler is used for current vehicle only so we dont need to await
-  if (!NetworkDoesNetworkIdExist(netId) || !NetworkDoesEntityExistWithNetworkId(netId)) return false;
-  const veh = NetworkGetEntityFromNetworkId(netId);
-  if (!DoesEntityExist(veh)) return false;
-
-  setCloseVehicleStance(veh, stanceData);
-  return true;
-};
-
 export const setCloseVehicleStance = (vehicle: number, stanceData: Stance.Data | null) => {
   if (!stanceData) {
     closeVehicles.delete(vehicle);

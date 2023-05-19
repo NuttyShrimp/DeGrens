@@ -1,0 +1,6 @@
+/client/*.js
+/client/*.js.*
+/server/*.js
+/server/*.js.*
+/dist/typescript
+node_modules

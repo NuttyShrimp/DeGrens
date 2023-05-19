@@ -1,14 +1,6 @@
 declare namespace Scopes {
-  type ClientType = 'current' | 'recent';
-  type Type = ClientType | 'dropped';
-
-  type Player = {
-    source: number;
-    steamId: string;
-  };
-
-  type Info = Player & {
-    type: Type;
+  type Info = Sync.Scopes.Player & {
+    type: Sync.Scopes.Type;
     recentTimeout?: NodeJS.Timeout;
     timestamp: number;
   };

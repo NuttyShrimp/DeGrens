@@ -79,7 +79,7 @@ const startThreads = () => {
       const holdingDoor = IsPedOpeningADoor(ped); // case of another native anim that gets looped
 
       // Otherwise will not resume
-      if (ragdolling && !wasRagdolling) {
+      if (!ragdolling && wasRagdolling) {
         StopAnimTask(ped, animDict, animName, 1.0);
       }
 

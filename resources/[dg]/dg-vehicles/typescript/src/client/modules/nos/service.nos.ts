@@ -21,8 +21,8 @@ const ptfxIds: { purge: Set<string>; nos: Set<string> } = { purge: new Set(), no
 
 let hudIconShown = false;
 
-export const updateVehicleNosAmount = (vehicle: number) => {
-  nosAmount = Entity(vehicle).state?.nos ?? 0;
+export const updateVehicleNosAmount = (vehicle: number, overrideAmount?: number) => {
+  nosAmount = overrideAmount ?? Entity(vehicle).state?.nos ?? 0;
 };
 
 export const doesVehicleHaveNos = (veh: number) => nosAmount !== 0;

@@ -195,6 +195,10 @@ declare namespace Phone {
     interface State {
       mails: Mail[];
     }
+
+    type StateActions = {
+      removeMail: (id: string) => void;
+    };
   }
   namespace YellowPages {
     interface Ad {

@@ -97,7 +97,7 @@ declare interface RootState {
   dispatch: Dispatch.State;
   policeradar: null;
   badge: Badge.State;
-  idlist: IdList.State;
+  idlist: null;
   reports: Reports.State;
   'reports-indicator': ReportIndicator.State;
   keypad: null;
