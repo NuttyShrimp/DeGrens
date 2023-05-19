@@ -32,6 +32,7 @@ global.exports('setEngineState', setEngineState);
 global.asyncExports('giveNewVehicle', async (model: string, owner: number) => {
   const vin = vinManager.generateVin();
   const plate = plateManager.generatePlate();
+  vinManager.addPlayerVin(vin);
   await insertNewVehicle(vin, owner, model, plate);
   return true;
 });
