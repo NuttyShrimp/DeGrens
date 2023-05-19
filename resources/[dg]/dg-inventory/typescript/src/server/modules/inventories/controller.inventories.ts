@@ -3,10 +3,9 @@ import contextManager from 'classes/contextmanager';
 import locationManager from 'modules/locations/manager.locations';
 import shopManager from 'modules/shops/shopmanager';
 import { getConfig } from 'services/config';
-import { calculateSizeBasedOnItems, validateIdBuildData } from './service.inventories';
+import { validateIdBuildData } from './service.inventories';
 import inventoryManager from './manager.inventories';
 import { charModule } from 'services/core';
-import itemDataManager from 'classes/itemdatamanager';
 
 RPC.register(
   'inventory:server:open',
@@ -66,23 +65,11 @@ RPC.register(
     let secondary: OpeningData['secondary'];
     if (secondaryInv.type === 'shop') {
       const shopItems = shopManager.getItems(secondaryInv.identifier);
-      if (secondaryInv.size === 0) {
-        calculateSizeBasedOnItems(secondaryInv, shopItems);
-      }
-      secondary = { id: secondaryInv.id, shopItems, size: secondaryInv.size };
+      secondary = { id: secondaryInv.id, shopItems };
     } else if (secondaryInv.type === 'bench') {
       const items: Shops.Item[] = global.exports['dg-materials'].getBenchItems(src, secondaryInv.identifier) ?? [];
-      if (secondaryInv.size === 0) {
-        calculateSizeBasedOnItems(secondaryInv, items);
-      }
-      secondary = { id: secondaryInv.id, shopItems: items, size: secondaryInv.size };
+      secondary = { id: secondaryInv.id, shopItems: items };
     } else {
-      if (secondaryInv.size === 0) {
-        calculateSizeBasedOnItems(
-          secondaryInv,
-          secondaryInv.getItemStates().map(is => itemDataManager.get(is.name))
-        );
-      }
       secondary = { id: secondaryInv.id, size: secondaryInv.size, allowedItems: secondaryInv.allowedItems };
     }
 
