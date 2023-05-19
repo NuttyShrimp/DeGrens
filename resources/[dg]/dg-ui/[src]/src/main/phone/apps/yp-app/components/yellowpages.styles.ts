@@ -15,7 +15,7 @@ export const styles = makeStyles({
     flexDirection: 'column',
     backgroundColor: '#e2cf1c',
     color: baseStyle.gray.dark,
-    border: `0.1vh solid ${baseStyle.gray.dark}`,
+    //border: `0.1vh solid ${baseStyle.gray.dark}`,
     borderRadius: '.5vh',
     boxShadow: '0px 3px 5px 0px black',
     textAlign: 'center',
@@ -24,7 +24,7 @@ export const styles = makeStyles({
     },
     '& > div': {
       padding: '.3vh .5vh',
-      borderBottom: `0.1vh solid ${baseStyle.gray.dark}`,
+      borderBottom: `0.1vh solid ${baseStyle.gray.dark}40`,
     },
     '& > .title': {
       fontSize: '1.1rem',
@@ -38,15 +38,17 @@ export const styles = makeStyles({
     flexDirection: 'row',
     fontSize: '0.8rem',
     textAlign: 'left',
+    color: `${baseStyle.gray.dark}d0`,
   },
   btn: {
     width: '50%',
     display: 'flex',
     alignItems: 'center',
+    justifyContent: 'center',
     cursor: 'pointer',
     padding: '.3vh .5vh',
     '&:not(:last-child)': {
-      borderRight: `0.1vh solid ${baseStyle.gray.dark}`,
+      borderRight: `0.1vh solid ${baseStyle.gray.dark}40`,
     },
     '& > .MuiIcon-root': {
       marginRight: '0.5vh',

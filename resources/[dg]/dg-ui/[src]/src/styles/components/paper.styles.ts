@@ -34,7 +34,7 @@ export const styles = makeStyles({
     padding: '0 0.5vh',
     position: 'absolute',
     width: '100%',
-    height: '100%',
+    height: 'calc(100% + 0.2vh)',
     top: '0',
     left: '0',
     backgroundColor: 'rgba(0,0,0,0.75)',

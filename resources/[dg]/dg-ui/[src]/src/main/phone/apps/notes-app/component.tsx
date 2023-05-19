@@ -11,6 +11,7 @@ const Component = () => {
   const [setList, current] = useNotesAppStore(s => [s.setList, s.current]);
   const fetchNotes = async () => {
     const _notes = await nuiAction<Phone.Notes.Note[]>('phone/notes/get', {}, devData.notes);
+    if (!_notes) return;
     const sortedNotes = _notes.sort((n1, n2) => n1.date - n2.date);
 
     setList(sortedNotes);

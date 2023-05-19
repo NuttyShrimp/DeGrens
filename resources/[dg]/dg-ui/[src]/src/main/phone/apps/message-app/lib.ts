@@ -10,7 +10,7 @@ export const addMessage = (
   place?: 'append' | 'prepend',
   reset?: boolean
 ) => {
-  const messages = useMessageStoreApp.getState().messages;
+  const messages = { ...useMessageStoreApp.getState().messages };
   if (reset) {
     messages[phoneNr] = pMessages;
   } else {
@@ -28,7 +28,7 @@ export const addMessage = (
       }
     }
   }
-  useMessageStoreApp.setState({ messages });
+  useMessageStoreApp.setState({ messages: messages });
 };
 
 export const openConversation = async (phoneNr: string) => {

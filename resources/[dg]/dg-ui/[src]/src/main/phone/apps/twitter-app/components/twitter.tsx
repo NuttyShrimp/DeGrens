@@ -1,5 +1,5 @@
 import React, { FC, useState } from 'react';
-import { IconButton } from '@mui/material';
+import { Divider, IconButton } from '@mui/material';
 import { useMainStore } from '@src/lib/stores/useMainStore';
 
 import { Button } from '../../../../../components/button';
@@ -27,6 +27,7 @@ export const Tweet: FC<
         <p>{tweet.sender_name}</p>
         <p>{formatRelativeTime(tweet.date)}</p>
       </div>
+      <Divider />
       <div className={classes.body}>
         <Textwrapper>{tweet.tweet}</Textwrapper>
       </div>

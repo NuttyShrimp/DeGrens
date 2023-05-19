@@ -29,3 +29,9 @@ events.newMail = (mailData: Phone.Mail.MailData) => {
     app: 'mail',
   });
 };
+
+events.restore = (mails: Phone.Mail.MailData[]) => {
+  useMailAppStore.setState(s => ({
+    mails: [...mails.map(m => ({ ...m, id: `mail-${mailId++}`, date: Date.now() })), ...s.mails],
+  }));
+};

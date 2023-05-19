@@ -1,0 +1,23 @@
+{
+  "name": "dg-phone",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "NuttyShrimp",
+  "license": "MIT",
+  "scripts": {
+    "build": "node ../../../../scripts/build.js --server --client",
+    "build:dev": "node ../../../../scripts/build.js --server --client --dev",
+    "watch": "node ../../../../scripts/watch.js --server --client",
+    "lint": "eslint --fix --ext .js,.ts ./src",
+    "format": "prettier --write --no-error-on-unmatched-pattern src/**/*.{js,ts,json,md}"
+  },
+  "devDependencies": {
+    "@dgx/client": "workspace:*",
+    "@dgx/server": "workspace:*",
+    "@dgx/shared": "workspace:*",
+    "db": "workspace:*",
+    "esbuild": "*",
+    "logger": "workspace:*",
+    "tsconfig": "workspace:*"
+  }
+}

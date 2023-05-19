@@ -3,7 +3,7 @@ export const citizen: RadialMenu.Entry[] = [
     title: 'Geef Telefoonnummer',
     icon: 'address-book',
     type: 'dgxServer',
-    event: 'dg-phone:server:contacts:shareNumber',
+    event: 'phone:contacts:shareNumber',
     shouldClose: true,
     minimumPlayerDistance: 2,
     items: ['phone'],
