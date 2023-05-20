@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Je kunt nu niet meer gebeld worden als je je telefoon niet bij hebt
+- Je spawnt nu weer altijd in je appartment als je nieuwe karakter aanmaakt
 
 ## [1.2.2]
 

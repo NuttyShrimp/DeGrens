@@ -272,7 +272,7 @@ const showItemBox = (plyId: number, itemName: string, label: string) => {
 
 // Exports
 global.asyncExports('hasObject', hasObject);
-global.exports('giveStarterItems', giveStarterItems);
+global.asyncExports('giveStarterItems', giveStarterItems);
 global.exports('clearInventory', clearInventory);
 global.asyncExports('addItemToInventory', addItemToInventory);
 global.asyncExports('doesInventoryHaveItems', doesInventoryHaveItems);
