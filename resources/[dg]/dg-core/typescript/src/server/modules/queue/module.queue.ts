@@ -15,9 +15,9 @@ export class QueueModule implements Modules.ServerModule, Core.ServerModules.Que
     });
   }
 
-  getQueue() {
+  getQueue = () => {
     return queueManager.getQueuedPlayers();
-  }
+  };
 
   onStart() {
     this.manager.loadDBPower();
