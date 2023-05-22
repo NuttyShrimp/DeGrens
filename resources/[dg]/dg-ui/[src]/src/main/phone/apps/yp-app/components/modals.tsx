@@ -18,7 +18,7 @@ export const NewAd: FC<React.PropsWithChildren<{ onAccept: Function; ad: Phone.Y
     ]}
     onAccept={vals => {
       showLoadModal();
-      if (vals.text || vals.text.trim() === '') {
+      if (!vals.text || vals.text.trim() === '') {
         nuiAction('phone/yellowpages/remove');
       } else {
         nuiAction('phone/yellowpages/new', vals);
