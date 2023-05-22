@@ -1,12 +1,12 @@
 import { RPC, UI } from '@dgx/client';
 
-UI.RegisterUICallback('phone/debts/get', (_, cb) => {
-  const debts = RPC.execute('financials:server:debts:get');
+UI.RegisterUICallback('phone/debts/get', async (_, cb) => {
+  const debts = await RPC.execute('financials:server:debts:get');
   cb({ data: debts, meta: { ok: true, message: 'done' } });
 });
 
-UI.RegisterUICallback('phone/debts/pay', (data, cb) => {
-  const success = RPC.execute('financials:server:debts:pay', data.id, data.percentage ?? 100);
+UI.RegisterUICallback('phone/debts/pay', async (data, cb) => {
+  const success = await RPC.execute('financials:server:debts:pay', data.id, data.percentage ?? 100);
   cb({ data: success, meta: { ok: true, message: 'done' } });
 });
 

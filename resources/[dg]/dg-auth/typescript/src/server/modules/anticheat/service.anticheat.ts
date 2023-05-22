@@ -79,8 +79,8 @@ export const flagUser = (src: number, flag: string, data?: any) => {
 // endregion
 
 // region Validators
-export const validateWeaponInfo = (src: number, info: AntiCheat.WeaponInfo) => {
-  const valid = RPC.execute('auth:anticheat:confirmWeaponInfo', src, info);
+export const validateWeaponInfo = async (src: number, info: AntiCheat.WeaponInfo) => {
+  const valid = await RPC.execute('auth:anticheat:confirmWeaponInfo', src, info);
   if (!valid) {
     Events.emitNet('auth:anticheat:forceSyncWeaponInfo', src);
     return;
