@@ -28,8 +28,6 @@ export const showOrderMenu = () => {
     return;
   }
 
-  console.log(current);
-
   const itemEntries: ContextMenu.Entry[] = current.orderItems.map((item, idx) => ({
     title: generateMenuItemLabel(item),
     description: 'Klik om te verwijderen',

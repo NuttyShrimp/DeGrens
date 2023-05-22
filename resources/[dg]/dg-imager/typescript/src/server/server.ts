@@ -188,22 +188,22 @@ Events.onNet('dg-imager:finishImgureScreenshot', (src, token: string, data: stri
   }
 });
 
-RegisterCommand(
-  'imager:imgur',
-  async (src: number) => {
-    const imgurLink = await global.exports['dg-imager'].requestClientImgurScreenshot(src);
-    console.log(imgurLink);
-  },
-  false
-);
+// RegisterCommand(
+//   'imager:imgur',
+//   async (src: number) => {
+//     const imgurLink = await global.exports['dg-imager'].requestClientImgurScreenshot(src);
+//     console.log(imgurLink);
+//   },
+//   false
+// );
 
-RegisterCommand(
-  'imager:minio',
-  async (src: number) => {
-    const fileName = await global.exports['dg-imager'].generateMinioFilename();
-    console.log(fileName);
-    const filePath = await global.exports['dg-imager'].requestClientMinioScreenshot(src, { fileName });
-    console.log(filePath);
-  },
-  false
-);
+// RegisterCommand(
+//   'imager:minio',
+//   async (src: number) => {
+//     const fileName = await global.exports['dg-imager'].generateMinioFilename();
+//     console.log(fileName);
+//     const filePath = await global.exports['dg-imager'].requestClientMinioScreenshot(src, { fileName });
+//     console.log(filePath);
+//   },
+//   false
+// );

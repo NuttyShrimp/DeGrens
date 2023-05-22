@@ -82,7 +82,6 @@ export const RolePermsModal: FC<{
         })),
       ]}
       onAccept={async (vals: { name: string }) => {
-        console.log(vals, selectedRole, selectedPermissions);
         if (!selectedRole && vals?.name.trim() === '') return;
         showLoadModal();
         await onSubmit(vals?.name.trim() === '' ? selectedRole : vals.name, selectedPermissions);
