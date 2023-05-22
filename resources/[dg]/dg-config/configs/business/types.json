@@ -21,7 +21,7 @@
     }
   },
   "taxi": {
-    "permissions": ["garage_access"]
+    "permissions": ["garage_access", "property_access"]
   },
   "cbd_shop": {
     "permissions": ["stash", "garage_access", "property_access"],

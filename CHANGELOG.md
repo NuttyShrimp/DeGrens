@@ -19,6 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Je spawnt nu weer altijd in je appartment als je nieuwe karakter aanmaakt
 - Je bankrekening wordt gecapped op 2 cijfers na de komma
 - Advertenties werken weer
+- Taxi bedrijven hebben nu ook de mogelijkheid om eigendom access te geven aan business roles
 
 ## [1.2.2]
 
