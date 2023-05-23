@@ -22,6 +22,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Taxi bedrijven hebben nu ook de mogelijkheid om eigendom access te geven aan business roles
 - Beltoon problemen met telefoon zijn opgelost
 - Je kan terug contact gegevens delen
+- De persoon die gebelt wordt ziet terug treffelijk door wie hij gebeld wordt
 
 ## [1.2.2]
 
