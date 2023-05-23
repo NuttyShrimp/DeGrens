@@ -20,8 +20,7 @@ export const styles = makeStyles({
   },
   header: {
     display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    flexDirection: 'column',
     alignItems: 'start',
     fontSize: '0.9rem',
     '& > p:last-child': {
