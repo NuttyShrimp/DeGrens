@@ -3,7 +3,7 @@ import { canOpenPhone, getState, setState } from './state';
 import { abortCameraThread } from '../modules/camera/controller.camera';
 import { disablePauseMenu } from './controls';
 import { abortAllAnimations } from './animations';
-import { stopAllSounds } from './sound';
+import { stopAllPhoneSounds } from './sound';
 import { cleanInfoEntries } from './info';
 
 export const openPhone = () => {
@@ -41,6 +41,6 @@ export const unloadPhone = () => {
   abortCameraThread();
   closePhone();
   abortAllAnimations();
-  stopAllSounds();
+  stopAllPhoneSounds();
   cleanInfoEntries();
 };

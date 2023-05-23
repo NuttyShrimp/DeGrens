@@ -1,5 +1,5 @@
 import { Events, Peek, Police, RPC, UI } from '@dgx/client';
-import { playSound, stopSound } from 'services/sound';
+import { playPhoneSound, stopPhoneSound } from 'services/sound';
 import { canOpenPhone, setState } from 'services/state';
 
 import { CallType } from '../../shared/enums/callType';
@@ -7,7 +7,7 @@ import { CallType } from '../../shared/enums/callType';
 UI.RegisterUICallback('phone/startCall', async (data: { phone: string; isAnon: CallType }, cb) => {
   const soundId = await RPC.execute('phone:calls:start', data);
   if (soundId) {
-    playSound('dial', soundId);
+    playPhoneSound('dial', soundId);
   }
   cb({ data: {}, meta: { ok: true, message: 'done' } });
 });
@@ -30,7 +30,7 @@ UI.RegisterUICallback('phone/declineCall', async (_, cb) => {
 
 Events.onNet('phone:calls:incoming', (call: Calls.IncomingCall) => {
   if (!canOpenPhone()) return;
-  playSound('ring', call.soundId);
+  playPhoneSound('ring', call.soundId);
   UI.SendAppEvent('phone', {
     appName: 'phone',
     action: 'incomingCall',
@@ -39,7 +39,7 @@ Events.onNet('phone:calls:incoming', (call: Calls.IncomingCall) => {
 });
 
 Events.onNet('phone:calls:endCurrent', (soundId: number) => {
-  StopSound(soundId);
+  stopPhoneSound(soundId);
   setState('inCall', false);
   if (!canOpenPhone()) return;
   UI.SendAppEvent('phone', {
@@ -50,7 +50,7 @@ Events.onNet('phone:calls:endCurrent', (soundId: number) => {
 });
 
 Events.onNet('phone:calls:initiate', soundId => {
-  stopSound(soundId);
+  stopPhoneSound(soundId);
   setState('inCall', true);
   UI.SendAppEvent('phone', {
     appName: 'phone',
