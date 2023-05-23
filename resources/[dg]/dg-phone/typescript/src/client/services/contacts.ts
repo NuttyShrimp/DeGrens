@@ -1,4 +1,4 @@
-import { Events, RPC, UI } from '@dgx/client';
+import { RPC, UI } from '@dgx/client';
 import { getState } from './state';
 import { openPhone } from './mgmt';
 
@@ -25,7 +25,7 @@ UI.RegisterUICallback('phone/contacts/delete', async (data, cb) => {
   cb({ data: {}, meta: { ok: true, message: 'done' } });
 });
 
-Events.onNet('phone:contacts:shareNumber:accept', data => {
+on('phone:contacts:shareNumber:accept', (data: { phone: string }) => {
   UI.SendAppEvent('phone', {
     appName: 'contacts',
     action: 'openNewContactModal',
