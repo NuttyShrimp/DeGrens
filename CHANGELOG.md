@@ -10,8 +10,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Requested ped added
+- Extra kleding voor businesses toegevoegd
 
 ### Changed
+
+- Engine & brakes upgrade impact is gelijk getrokken voor alle addon wagens met een custom modkit
+- Oversized textures van meerdere kleren zijn gereduced voor betere FPS
 
 ### Fixed
 
