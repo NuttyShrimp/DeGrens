@@ -68,7 +68,7 @@ export class QueueModule implements Modules.ServerModule, Core.ServerModules.Que
             },
           ],
           $schema: 'http://adaptivecards.io/schemas/adaptive-card.json',
-          version: '1.5',
+          version: '1.4',
         })
       );
     };
