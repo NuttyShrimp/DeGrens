@@ -58,10 +58,10 @@ export const spawnVehicle = async (
       0x00000000,
       CREATE_AUTOMOBILE,
       modelHash,
-      position.x,
-      position.y,
-      position.z,
-      position.w
+      position.x + 0.001,
+      position.y + 0.001,
+      position.z + 0.001,
+      position.w + 0.001
     );
   } else {
     veh = CreateVehicle(modelHash, position.x, position.y, position.z, position.w, true, true);
@@ -80,7 +80,6 @@ export const spawnVehicle = async (
     `Spawn vehicle: spawned | model: ${model} | entity: ${veh} | netId: ${vehNetId} | owner: ${entityOwner}`
   );
 
-  SetEntityHeading(veh, position.w);
   // If model is not yet loaded for entityowner, this heading native will not work
   // we still try because it sometimes fixed vehicles spawning at wrong place because 0 heading can be inside a wall
   if (entityOwner > 0) {
