@@ -56,10 +56,15 @@ class QueueManager {
 
   private cleanupSteamId(steamId: string) {
     this.queue = this.queue.filter(s => s !== steamId);
+    const qInfo = this.queueEntryInfo.get(steamId);
+    this.queueEntryInfo.delete(steamId);
     SetConvarServerInfo('queueSize', String(this.queue.length));
     const qInterval = this.queueInterval.get(steamId);
     if (qInterval) {
       clearInterval(qInterval);
+    }
+    if (qInfo) {
+      this.userModule?.onPlayerDropped(qInfo?.source);
     }
   }
 

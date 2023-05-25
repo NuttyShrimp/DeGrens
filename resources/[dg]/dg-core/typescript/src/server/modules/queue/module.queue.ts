@@ -50,6 +50,7 @@ export class QueueModule implements Modules.ServerModule, Core.ServerModules.Que
     const userModule = getModule('users');
     const plyIdentifiers = userModule.getPlyIdentifiers(src);
     const finishDeferrals = (msg: string) => {
+      userModule.onPlayerDropped(src);
       deferrals.presentCard(
         JSON.stringify({
           type: 'AdaptiveCard',

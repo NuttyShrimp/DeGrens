@@ -32,6 +32,7 @@ export class UserModule implements Modules.ServerModule, Core.ServerModules.User
 
   onPlayerDropped(src: number) {
     this.userManager.removeUser(src);
+    this.identifierManager.removeIdentifiers(src);
   }
 
   getPlyIdentifiers = (src: number) => this.identifierManager.getIdentifiers(src);

@@ -30,6 +30,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Tijd van twitter terug onder naam verplaatst
 - Fix rotatie van voertuig is direct correct bij het spawnen hiervan
 - Enkele scuffed garage spots gefixed
+- Probleem met caching van bepaalde info opgelost. (zou kick/ban problemen moeten oplossen)
 
 ## [1.2.2]
 
