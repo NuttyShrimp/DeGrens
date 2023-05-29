@@ -15,16 +15,16 @@
     "@dgx/client": "workspace:*",
     "@dgx/server": "workspace:*",
     "@dgx/shared": "workspace:*",
-    "@types/minio": "^7.0.18",
-    "esbuild": "*",
+    "@types/minio": "^7.1.0",
+    "esbuild": "^0.17.19",
     "logger": "workspace:*",
     "tsconfig": "workspace:*"
   },
   "dependencies": {
     "@citizenfx/http-wrapper": "^0.2.2",
-    "@fastify/multipart": "^7.5.0",
-    "fastify": "^4.15.0",
+    "@fastify/multipart": "^7.6.0",
+    "fastify": "^4.17.0",
     "fastify-plugin": "^4.5.0",
-    "minio": "^7.0.33"
+    "minio": "^7.1.1"
   }
 }

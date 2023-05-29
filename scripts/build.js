@@ -41,6 +41,9 @@ const buildServer = async () => {
         url: 'https://sentry.nuttyshrimp.me/',
         org: 'nutty',
         project: 'degrens-cfx',
+        sourcemaps: {
+          assets: '../server/**',
+        },
       })
     );
   }

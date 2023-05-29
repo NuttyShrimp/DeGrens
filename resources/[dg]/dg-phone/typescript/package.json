@@ -16,7 +16,7 @@
     "@dgx/server": "workspace:*",
     "@dgx/shared": "workspace:*",
     "db": "workspace:*",
-    "esbuild": "*",
+    "esbuild": "^0.17.19",
     "logger": "workspace:*",
     "tsconfig": "workspace:*"
   }

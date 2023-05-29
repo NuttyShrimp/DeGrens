@@ -18,8 +18,8 @@
     "@dgx/client": "workspace:*",
     "@dgx/server": "workspace:*",
     "@dgx/shared": "workspace:*",
+    "esbuild": "^0.17.19",
     "logger": "workspace:*",
-    "tsconfig": "workspace:*",
-    "esbuild": "*"
+    "tsconfig": "workspace:*"
   }
 }

@@ -12,6 +12,6 @@
   "license": "ISC",
   "dependencies": {
     "@citizenfx/three": "^0.100.0",
-    "esbuild": "*"
+    "esbuild": "^0.17.19"
   }
 }

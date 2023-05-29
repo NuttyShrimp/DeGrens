@@ -18,9 +18,9 @@
     "@dgx/client": "workspace:*",
     "@dgx/server": "workspace:*",
     "@dgx/shared": "workspace:*",
-    "logger": "workspace:*",
     "@types/uuid": "^9.0.0",
-    "tsconfig": "workspace:*",
-    "esbuild": "*"
+    "esbuild": "^0.17.19",
+    "logger": "workspace:*",
+    "tsconfig": "workspace:*"
   }
 }

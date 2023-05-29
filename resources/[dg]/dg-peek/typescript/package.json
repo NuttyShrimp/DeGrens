@@ -14,7 +14,7 @@
   "devDependencies": {
     "@dgx/client": "workspace:*",
     "@dgx/shared": "workspace:*",
-    "tsconfig": "workspace:*",
-    "esbuild": "*"
+    "esbuild": "^0.17.19",
+    "tsconfig": "workspace:*"
   }
 }
