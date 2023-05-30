@@ -8,15 +8,15 @@ export const DEFAULT_SERVICE_STATUS: Service.Status = {
 export const SERVICE_CONDITIONS = [
   {
     label: 'Excellent',
-    percentage: 95,
-  },
-  {
-    label: 'Good',
     percentage: 80,
   },
   {
-    label: 'Bad',
+    label: 'Good',
     percentage: 50,
+  },
+  {
+    label: 'Bad',
+    percentage: 20,
   },
   {
     label: 'Terrible',

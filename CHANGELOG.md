@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Engine & brakes upgrade impact is gelijk getrokken voor alle addon wagens met een custom modkit
 - Oversized textures van meerdere kleren zijn gereduced voor betere FPS
+- Tweak service status labels
 
 ### Fixed
 
