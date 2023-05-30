@@ -54,12 +54,9 @@
     "turbo": "^1.9.9"
   },
   "lint-staged": {
-    "*.{ts,tsx,scss,css,md,vue,json}": "eslint --fix --resolve-plugins-relative-to ./ --ext .ts,.tsx,.jsx,.json,.vue ./resources/[dg]/ --cache"
+    "*.{ts,tsx,vue,json}": "eslint --fix --resolve-plugins-relative-to ./ --ext .ts,.tsx,.json,.vue ./resources/[dg]/ --cache"
   },
-  "workspaces": [
-    "resources/**",
-    "packages/*"
-  ],
+  "workspaces": ["resources/**", "packages/*"],
   "prisma": {
     "seed": "ts-node -P packages/db/tsconfig.json packages/db/seed.ts"
   },
