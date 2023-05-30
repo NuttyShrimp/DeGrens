@@ -33,6 +33,7 @@ declare namespace IFinancials {
     date: number;
     event?: string;
     reason?: string;
+    // This will prevent overdue being accounted on the fine and will set the exact date of expiration
     pay_term?: number;
   }
 
