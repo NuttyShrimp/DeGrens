@@ -535,8 +535,8 @@ Config.ClothingRooms = {
   {requiredBusiness = "upnatom", coords = vector3(82.5859, 296.0225, 110.2168)},
   {requiredBusiness = "straightpipers", coords = vector3(840.3638, -824.5843, 26.3326)},
   {requiredBusiness = "lowsantos", coords = vector3(-1424.8824, -457.3434, 35.9097)},
-  {requiredBusiness = "blazeit", coords = vectir3(364.8433, -1256.7444, 32.594)},
-  {requiredBusiness = "taxijacky", coords = vectir3(893.537, -162.3032, 76.8911)},
+  {requiredBusiness = "blazeit", coords = vector3(364.8433, -1256.7444, 32.594)},
+  {requiredBusiness = "taxijacky", coords = vector3(893.537, -162.3032, 76.8911)},
 }
 
 Config.Outfits = {}
