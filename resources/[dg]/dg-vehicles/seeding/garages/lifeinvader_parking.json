@@ -1,0 +1,78 @@
+{
+  "garage_id": "lifeinvader_garage",
+  "name": "Lifeinvader Garage",
+  "type": "public",
+  "shared": false,
+  "location": {
+    "vector": {
+      "x": -1057.28,
+      "y": -224.84,
+      "z": 38.18
+    },
+    "width": 7.8,
+    "length": 30.6,
+    "options": {
+      "heading": 25,
+      "minZ": 36.78,
+      "maxZ": 40.78
+    }
+  },
+  "vehicle_types": ["land"],
+  "parking_spots": [
+    {
+      "type": "land",
+      "size": 2.0,
+      "distance": 1.8,
+      "heading": 62.4733,
+      "coords": {
+        "x": -1065.5758,
+        "y": -228.9327,
+        "z": 38.1588
+      }
+    },
+    {
+      "type": "land",
+      "size": 2.0,
+      "distance": 1.8,
+      "heading": 62.4733,
+      "coords": {
+        "x": -1062.2041,
+        "y": -226.6691,
+        "z": 38.1455
+      }
+    },
+    {
+      "type": "land",
+      "size": 2.0,
+      "distance": 1.8,
+      "heading": 62.4733,
+      "coords": {
+        "x": -1058.092,
+        "y": -224.6281,
+        "z": 38.1407
+      }
+    },
+    {
+      "type": "land",
+      "size": 2.0,
+      "distance": 1.8,
+      "heading": 62.4733,
+      "coords": {
+        "x": -1053.9944,
+        "y": -222.5829,
+        "z": 38.0806
+      }
+    },
+    {
+      "type": "land",
+      "size": 2.0,
+      "distance": 1.8,
+      "heading": 62.4733,
+      "coords": {
+        "x": -1050.0637,
+        "y": -220.3415,
+        "z": 37.9487
+      }
+    }
+  ]
+}
