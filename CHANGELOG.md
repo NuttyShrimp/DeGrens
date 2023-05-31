@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Requested ped added
 - Extra kleding voor businesses toegevoegd
 - Kleerkast voor Taxi Jacky en BlazeIt toegevoegd.
+- Sommige garagepoorten worden nu open geforced 
 
 ### Changed
 
