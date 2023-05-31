@@ -1,6 +1,6 @@
 {
-  "maxPerTicket": 125,
-  "sharedPercentage": 0.2,
+  "maxPerTicket": 1000,
+  "sharedPercentage": 0.5,
   "restaurants": {
     "upnatom": {
       "label": "Up-n-Atom",

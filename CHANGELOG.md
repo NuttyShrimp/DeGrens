@@ -19,6 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Oversized textures van meerdere kleren zijn gereduced voor betere FPS
 - Tweak service status labels
 - Fleeca & Paleto opbrengst gebuffed
+- Restaurant payout voor werknemers verhoogd
 
 ### Fixed
 
