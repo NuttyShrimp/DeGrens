@@ -3290,7 +3290,7 @@
   },
   {
     "description": "lowsantos poort midden",
-    "locked": false,
+    "locked": true,
     "distance": 10,
     "doors": [
       {
