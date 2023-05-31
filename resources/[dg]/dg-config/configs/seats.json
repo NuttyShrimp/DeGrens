@@ -327,6 +327,30 @@
         "z": -0.1
       },
       "model": "gabz_mba_prop_chair_01"
+    },
+    {
+      "offset": {
+        "x": 0,
+        "y": -0.5,
+        "z": -0.1
+      },
+      "model": "prop_waiting_seat_01"
+    },
+    {
+      "offset": {
+        "x": 0,
+        "y": -0.5,
+        "z": -0.05
+      },
+      "model": "prop_wait_bench_01"
+    },
+    {
+      "offset": {
+        "x": 0,
+        "y": -0.5,
+        "z": -0.05
+      },
+      "model": "v_ilev_exball_blue"
     }
   ]
 }
