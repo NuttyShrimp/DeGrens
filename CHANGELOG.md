@@ -23,6 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fleeca & Paleto opbrengst gebuffed
 - Restaurant payout voor werknemers verhoogd
 - Classes + prijzen herbeken van voertuigen
+- Remmen gaan langer mee op voertuigen met slechte remmen
 
 ### Fixed
 
