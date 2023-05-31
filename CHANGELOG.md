@@ -21,6 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Tweak service status labels
 - Fleeca & Paleto opbrengst gebuffed
 - Restaurant payout voor werknemers verhoogd
+- Classes + prijzen herbeken van voertuigen
 
 ### Fixed
 
@@ -38,6 +39,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Probleem met caching van bepaalde info opgelost. (zou kick/ban problemen moeten oplossen)
 - Je wordt niet meer gebanned door sommige animal ped models
 - Probleem ivm lockers die opeens geunassigned werden is opgelost
+- Flatbed toegevoegd aan PDM
 
 ## [1.2.2]
 
