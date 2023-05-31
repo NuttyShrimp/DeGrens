@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Kleerkast voor Taxi Jacky en BlazeIt toegevoegd.
 - Sommige garagepoorten worden nu open geforced
 - Lifeinvader mlo + relaed business items added
+- Brandweervoertuigen toegevoegd
 
 ### Changed
 

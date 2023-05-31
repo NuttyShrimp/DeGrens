@@ -11,7 +11,7 @@ import { mainLogger } from 'sv_logger';
 
 const jobToVehList: Record<string, string[]> = {
   police: ['pt6', 'lpgolf', 'pa6', 'lpoutlaw', 'lpmoto', 'fpskoda', 'fpx5', 'wpv90'],
-  ambulance: ['ambusprinter1', 'ambusprinter2', 'mug', 'mug2'],
+  ambulance: ['ambusprinter1', 'ambusprinter2', 'mug', 'mug2', 'brvito', 'brblus'],
 };
 
 const jobToGarages: Record<string, string> = {

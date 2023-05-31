@@ -7078,5 +7078,29 @@
     "price": 1500000,
     "shop": "nfs",
     "type": "air"
+  },
+  {
+    "category": "emergency",
+    "model": "brblus",
+    "brand": "MAN",
+    "name": "Trakker",
+    "class": "C",
+    "defaultStock": 10,
+    "restockTime": 10,
+    "price": 200000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "emergency",
+    "model": "brvito",
+    "brand": "Mercedes",
+    "name": "Vito",
+    "class": "C",
+    "defaultStock": 10,
+    "restockTime": 10,
+    "price": 75000,
+    "shop": "nfs",
+    "type": "land"
   }
 ]
