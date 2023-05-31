@@ -4,13 +4,13 @@
       "types": {
         "cash": {
           "itemName": "marked_bills",
-          "amount": [20, 25],
+          "amount": [25, 30],
           "spawnChance": 100
         },
         "gold": {
           "itemName": "gold_bar",
           "amount": [2, 5],
-          "spawnChance": 20
+          "spawnChance": 50
         }
       },
       "specialItem": {
@@ -24,13 +24,13 @@
       "types": {
         "cash": {
           "itemName": "marked_bills",
-          "amount": [15, 20],
+          "amount": [30, 40],
           "spawnChance": 100
         },
         "gold": {
           "itemName": "gold_bar",
           "amount": [2, 5],
-          "spawnChance": 50
+          "spawnChance": 100
         }
       },
       "specialItem": {

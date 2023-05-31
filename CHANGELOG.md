@@ -11,13 +11,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Requested ped added
 - Extra kleding voor businesses toegevoegd
-- Kleerkast voor Taxi Jacky en BlazeIt toegevoegd. 
+- Kleerkast voor Taxi Jacky en BlazeIt toegevoegd.
 
 ### Changed
 
 - Engine & brakes upgrade impact is gelijk getrokken voor alle addon wagens met een custom modkit
 - Oversized textures van meerdere kleren zijn gereduced voor betere FPS
 - Tweak service status labels
+- Fleeca & Paleto opbrengst gebuffed
 
 ### Fixed
 
