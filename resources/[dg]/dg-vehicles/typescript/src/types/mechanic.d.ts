@@ -9,7 +9,7 @@ declare namespace Mechanic {
         parts: Record<Service.Part, number>;
       };
       tune: {
-        parts: Record<Upgrades.Tune, number>;
+        parts: Record<Vehicles.Upgrades.Tune, number>;
         stageModifier: Record<number, number>;
       };
       classModifier: Record<CarClass, number>;
@@ -20,7 +20,7 @@ declare namespace Mechanic {
 
   type PartItem = { class: CarClass } & (
     | { type: 'repair'; part: Service.Part }
-    | { type: 'tune'; part: Upgrades.Tune; stage: number }
+    | { type: 'tune'; part: Vehicles.Upgrades.Tune; stage: number }
   );
 
   type TicketMetadata = {

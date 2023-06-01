@@ -18,24 +18,24 @@ declare namespace Bennys {
       }
 
       interface Color {
-        name: keyof Upgrades.Cosmetic;
+        name: keyof Vehicles.Upgrades.Cosmetic;
         equipped: RGB | number;
       }
     }
 
     interface GenericChange {
-      name: keyof Upgrades.AllCosmeticModIds;
+      name: keyof Vehicles.Upgrades.AllCosmeticModIds;
       data: number;
     }
 
     interface ColorChange {
       name: 'colors';
-      data: Upgrades.Cosmetic;
+      data: Vehicles.Upgrades.Cosmetic;
     }
 
     interface WheelChange {
       name: 'wheels';
-      data: Upgrades.Cosmetic['wheels'];
+      data: Vehicles.Upgrades.Cosmetic['wheels'];
     }
 
     interface ExtraChange {

@@ -1,5 +1,5 @@
 export const TUNE_PARTS: Record<
-  Upgrades.Tune,
+  Vehicles.Upgrades.Tune,
   {
     amount: number;
     label: string;
@@ -33,7 +33,7 @@ export const TUNE_PARTS: Record<
   },
 };
 
-export const cosmeticKeysToId: Record<keyof Upgrades.CosmeticModIds, number> = {
+export const cosmeticKeysToId: Record<keyof Vehicles.Upgrades.CosmeticModIds, number> = {
   spoiler: 0,
   frontBumper: 1,
   rearBumper: 2,

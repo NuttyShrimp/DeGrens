@@ -25,10 +25,10 @@ const getQuicksellPrice = async (vin: string) => {
   const quicksellConfig = getVehicleShopConfig().quicksell;
   const allowedUpgrades = new Set(quicksellConfig.allowedUpgrades);
   const boughtUpgrades = Object.fromEntries(
-    (Object.entries(allUpgrades) as [keyof Upgrades.Cosmetic, any][]).filter(
+    (Object.entries(allUpgrades) as [keyof Vehicles.Upgrades.Cosmetic, any][]).filter(
       ([key, value]) => allowedUpgrades.has(key) && value !== -1
     )
-  ) as Partial<Upgrades.Cosmetic>;
+  ) as Partial<Vehicles.Upgrades.Cosmetic>;
 
   const upgradesPrice = getPriceForUpgrades(vehicle, boughtUpgrades);
 

@@ -14,7 +14,7 @@ declare namespace VehicleShop {
     employeePercentage: number;
     quicksell: {
       percentage: number;
-      allowedUpgrades: (keyof Upgrades.Cosmetic)[];
+      allowedUpgrades: (keyof Vehicles.Upgrades.Cosmetic)[];
     };
   };
 

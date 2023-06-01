@@ -10,7 +10,8 @@ let bennysMenuOpen = false;
 let currentBennys: string | null = null;
 let locations: Record<string, Bennys.Location> = {};
 let keyThread: number | null = null;
-let equippedUpgradesOnEnter: Upgrades.Cosmetic;
+let equippedUpgradesOnEnter: Vehicles.Upgrades.Cosmetic;
+let blockedUpgrades: Partial<Record<keyof Vehicles.Upgrades.Cosmetic, number[]>> = {};
 const enableKeys = [0, 1, 2, 3, 4, 5, 6, 46, 249];
 
 let modelStanceData: Stance.Model[] = [];
@@ -52,6 +53,7 @@ export const getRepairData = (plyVeh: number): Bennys.RepairInfo | null => {
 };
 
 export const getEquippedUpgradesOnEnter = () => equippedUpgradesOnEnter;
+export const getBlockedUpgrades = () => blockedUpgrades;
 // endregion
 
 export const handleVehicleRepair = async () => {
@@ -97,12 +99,17 @@ export const handleVehicleRepair = async () => {
   }
 };
 
-export const openUI = async (upgrades: Upgrades.Cosmetic, price: number | null = null) => {
+export const openUI = async (upgrades: Vehicles.Upgrades.Cosmetic, price: number | null = null) => {
   const plyVeh = getCurrentVehicle();
   if (!plyVeh) return;
   if (!isDriver()) return;
   equippedUpgradesOnEnter = upgrades;
   modelStanceData = (await RPC.execute('vehicles:stance:getModelData', GetEntityModel(plyVeh))) ?? [];
+  blockedUpgrades =
+    (await RPC.execute<Partial<Record<keyof Vehicles.Upgrades.Cosmetic, number[]>>>(
+      'vehicles:bennys:getBlockedUpgrades',
+      GetEntityModel(plyVeh)
+    )) ?? {};
   originalStance = getAppliedStance(plyVeh);
   setEngineState(plyVeh, false, true);
   DisplayRadar(false);

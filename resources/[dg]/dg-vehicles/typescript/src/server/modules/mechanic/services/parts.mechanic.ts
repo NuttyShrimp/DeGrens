@@ -275,7 +275,7 @@ const generatePartMenuEntries = (
         const partItem: Mechanic.PartItem = {
           type: 'tune',
           class: carClass,
-          part: part as Upgrades.Tune,
+          part: part as Vehicles.Upgrades.Tune,
           stage,
         };
 

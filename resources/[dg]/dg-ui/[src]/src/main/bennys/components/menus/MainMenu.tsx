@@ -42,16 +42,16 @@ export const MainMenuEntry: FC<{ title: string; selected: boolean }> = ({ title,
 
 const findSelectableMenu = (
   active: Bennys.SelectableMenu[],
-  current: Bennys.SelectableMenu,
+  current: Bennys.SelectableMenu | null,
   offset: -1 | 1
-): Bennys.SelectableMenu => {
+): Bennys.SelectableMenu | null => {
   const data: { id: number; name: Bennys.SelectableMenu }[] = active.map(name => ({
     id: selectableMenuTypeToId[name],
     name,
   }));
   if (data.length < 2) return current;
   const maxId = data[data.length - 1].id + 1;
-  let newId = modulo(selectableMenuTypeToId[current] + offset, maxId);
+  let newId = modulo(selectableMenuTypeToId[current ?? 'colors'] + offset, maxId);
   let found: Bennys.SelectableMenu | null = null;
   while (!found) {
     const menuForId = data.find(d => d.id === newId);
@@ -65,7 +65,7 @@ const findSelectableMenu = (
 };
 
 export const MainMenu = () => {
-  const [selectedMenu, setSelectedMenu] = useState<Bennys.SelectableMenu>('colors'); // colors for ingame, cart for browser
+  const [selectedMenu, setSelectedMenu] = useState<Bennys.SelectableMenu | null>(null); // colors for ingame, cart for browser
   const [activeMenus, setActiveMenus] = useState<Bennys.SelectableMenu[]>([]);
   const { useEventRegister } = useKeyEvents();
   const [cart, setPrice, currectCost, setMenu] = useBennyStore(s => [s.cart, s.setBarPrice, s.currentCost, s.setMenu]);
@@ -104,6 +104,7 @@ export const MainMenu = () => {
   useEventRegister('ArrowRight', moveRight);
 
   const enterMenu = useCallback(() => {
+    if (!selectedMenu) return;
     setMenu(selectedMenu as Bennys.Menu);
   }, [selectedMenu, setMenu]);
   useEventRegister('Enter', enterMenu);

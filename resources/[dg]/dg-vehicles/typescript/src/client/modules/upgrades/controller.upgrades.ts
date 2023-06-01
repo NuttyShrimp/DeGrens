@@ -7,7 +7,6 @@ import {
   getCosmeticUpgradePossibilities,
   getCosmeticUpgrades,
   getPerformanceUpgradePossibilities,
-  getPerformanceUpgrades,
 } from './service.upgrades';
 import { hasVehicleKeys } from 'modules/keys/cache.keys';
 
@@ -24,7 +23,7 @@ RPC.register('vehicles:upgrades:getCosmetic', async (vehNetId?: number) => {
   return getCosmeticUpgrades(veh);
 });
 
-Events.onNet('vehicles:upgrades:apply', async (vehNetId: number, upgrades: Partial<Upgrades.All>) => {
+Events.onNet('vehicles:upgrades:apply', async (vehNetId: number, upgrades: Partial<Vehicles.Upgrades.All>) => {
   // Vehicle handles gets changed sometimes for no fucking apparent reason when just spawned, check netid
   const exists = await Util.awaitEntityExistence(vehNetId, true);
   if (!exists) return;

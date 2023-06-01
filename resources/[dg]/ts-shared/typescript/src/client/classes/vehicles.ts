@@ -43,6 +43,14 @@ class Vehicles {
   public setVehicleDoorsLocked = (vehicle: number, locked: boolean) => {
     Events.emitNet('dgx:vehicles:setLock', NetworkGetNetworkIdFromEntity(vehicle), locked);
   };
+
+  applyNewCosmeticUpgrades = (vehicle: number, upgrades: Partial<Vehicles.Upgrades.All>) => {
+    Events.emitNet('vehicles:upgrades:update', NetworkGetNetworkIdFromEntity(vehicle), upgrades);
+  };
+
+  getCosmeticUpgrades = (vehicle: number): Vehicles.Upgrades.Cosmetic | undefined => {
+    return global.exports['dg-vehicles'].getCosmeticUpgrades(vehicle);
+  };
 }
 
 export default {

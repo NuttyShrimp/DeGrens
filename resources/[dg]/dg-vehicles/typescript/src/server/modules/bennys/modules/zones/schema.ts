@@ -1,7 +1,7 @@
 import { Schema, Validator } from 'jsonschema';
 
-import { vectorSchema } from '../../helpers/schema';
-import { garageLogger } from '../garages/logger.garages';
+import { vectorSchema } from '../../../../helpers/schema';
+import { garageLogger } from '../../../garages/logger.garages';
 
 const v = new Validator();
 

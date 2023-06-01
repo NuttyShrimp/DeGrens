@@ -1,9 +1,9 @@
 import fs from 'fs';
 
-import { garageLogger } from '../garages/logger.garages';
+import { garageLogger } from '../../../garages/logger.garages';
 
-import { bennysLogger } from './logger.bennys';
-import { isSchemaValid } from './schema.bennys';
+import { bennysLogger } from '../../logger.bennys';
+import { isSchemaValid } from './schema';
 
 const root = GetResourcePath(GetCurrentResourceName());
 const bennyLocations: Map<string, Bennys.Location> = new Map();

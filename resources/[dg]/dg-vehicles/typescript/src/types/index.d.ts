@@ -57,7 +57,7 @@ declare namespace Bennys {
     player: number;
     vin: string;
     entity: number;
-    upgrades: Upgrades.Cosmetic;
+    upgrades: Vehicles.Upgrades.Cosmetic;
     repair: Bennys.RepairInfo;
   }
 }

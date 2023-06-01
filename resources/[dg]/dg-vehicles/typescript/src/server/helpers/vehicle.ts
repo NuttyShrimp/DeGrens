@@ -31,7 +31,7 @@ export const spawnVehicle = async (
   owner?: number,
   vin?: string,
   plate?: string,
-  upgrades?: Partial<Upgrades.All>
+  upgrades?: Partial<Vehicles.Upgrades.All>
 ) => {
   // First we check model if model is vehicle on client
   let modelCheckPlayer = owner;
