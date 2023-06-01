@@ -4,7 +4,7 @@
     "baseUrl": "./",
     "paths": {
       "@helpers/*": ["./helpers/*"],
-      "@shared/*": ["../shared/*"],
+      "@shared/*": ["../shared/*"]
     }
   },
   "include": [
