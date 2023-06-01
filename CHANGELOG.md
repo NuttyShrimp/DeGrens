@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Sommige garagepoorten worden nu open geforced
 - Lifeinvader mlo + relaed business items added
 - Brandweervoertuigen toegevoegd
+- UC voertuigen toegevoegd
 
 ### Changed
 
@@ -25,6 +26,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Restaurant payout voor werknemers verhoogd
 - Classes + prijzen herbeken van voertuigen
 - Remmen gaan langer mee op voertuigen met slechte remmen
+- Siren systeem herwerkt om UC voertuigen te ondersteunen
+- Agenten kunnen via een toggle siren spot aan/uit zetten op ondersteunde voertuigen
 
 ### Fixed
 

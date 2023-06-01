@@ -118,4 +118,15 @@ export const police: RadialMenu.Entry[] = [
       return Jobs.getAmountForJob('ambulance') === 0;
     },
   },
+  {
+    title: 'Toggle Sirens',
+    icon: 'siren',
+    type: 'client',
+    event: 'police:toggleSiren',
+    data: {},
+    shouldClose: true,
+    isEnabled: ({ currentVehicle }) => {
+      return global.exports['dg-police'].canToggleSiren(currentVehicle);
+    },
+  },
 ];

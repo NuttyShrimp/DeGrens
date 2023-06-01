@@ -16,3 +16,4 @@ import './services/requirements';
 import './services/vehicles';
 import './services/ang';
 import './services/camera';
+import './services/sirenToggle';
