@@ -136,7 +136,7 @@ export class Spot {
       return;
     }
 
-    const stock = await RPC.execute<number>('vehicles:info:getModeltock', this.model);
+    const stock = await RPC.execute<number>('vehicles:info:getModelstock', this.model);
     if ((stock ?? 0) <= 0) {
       Notifications.add('Dit voertuig is niet op stock!', 'error');
       return;

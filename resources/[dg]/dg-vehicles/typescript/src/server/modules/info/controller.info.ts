@@ -7,6 +7,6 @@ global.exports('getConfigByHash', getConfigByHash);
 global.exports('getConfigByEntity', getConfigByEntity);
 global.exports('getVehicleModels', getVehicleModels);
 
-RPC.register('vehicles:info:getModeltock', (src: number, model: string) => {
+RPC.register('vehicles:info:getModelstock', (src: number, model: string) => {
   return getModelStock(model);
 });
