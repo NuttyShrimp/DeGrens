@@ -4,7 +4,6 @@ import { WeedPlant } from './weedplant';
 import winston from 'winston';
 import { mainLogger } from 'sv_logger';
 import { getCurrentSeconds } from '../service.weed';
-import config from 'services/config';
 
 @EventListener()
 class WeedPlantManager extends Util.Singleton<WeedPlantManager>() {
@@ -18,10 +17,25 @@ class WeedPlantManager extends Util.Singleton<WeedPlantManager>() {
   }
 
   public fetchAll = async () => {
+    // This is purely to migrate old data to the new system, we set food and water to avoid people receiving nothing
+    await SQL.query(
+      `UPDATE weed_plants SET plant_time = ?, food_type = 'deluxe', water_time = 1290 WHERE plant_time = 0`,
+      [getCurrentSeconds()]
+    );
+
     const result: Criminal.Weed.DBPlant[] = await SQL.query('SELECT * FROM weed_plants');
     if (!result) return;
 
+    const currentSeconds = getCurrentSeconds();
+    const idsToDelete: number[] = [];
+
     for (const plantData of result) {
+      // if plant has existed more than 7 days, destroy
+      if (plantData.plant_time + 7 * 24 * 60 * 60 < currentSeconds) {
+        idsToDelete.push(plantData.id);
+        continue;
+      }
+
       const coords: Vec3 = JSON.parse(plantData.coords);
       const rotation: Vec3 = JSON.parse(plantData.rotation);
       const newWeedPlant = new WeedPlant(
@@ -29,49 +43,41 @@ class WeedPlantManager extends Util.Singleton<WeedPlantManager>() {
         coords,
         rotation,
         plantData.gender,
-        plantData.stage,
-        plantData.food,
-        plantData.cut_time,
-        plantData.grow_time,
+        plantData.plant_time,
         plantData.cid ?? 0,
-        plantData.times_cut ?? 0
+        plantData.food_type,
+        plantData.water_time
       );
       this.weedPlants.set(plantData.id, newWeedPlant);
+    }
+
+    if (idsToDelete.length > 0) {
+      await SQL.query(`DELETE FROM weed_plants WHERE id IN (${idsToDelete.join(', ')})`);
     }
   };
 
   public addNew = async (plyId: number, coords: Vec3, rotation: Vec3, gender: Criminal.Weed.Gender) => {
     const cid = Util.getCID(plyId);
-    const currentTime = Math.round(Date.now() / 1000);
-    const result: Omit<Criminal.Weed.DBPlant, 'coords' | 'rotation' | 'gender'>[] = await SQL.query(
-      `INSERT INTO weed_plants (coords, rotation, gender, grow_time, cut_time, cid)
-                                    VALUES (?, ?, ?, ?, ?, ?) 
-                                    RETURNING id, stage, food, grow_time, cut_time`,
-      [JSON.stringify(coords), JSON.stringify(rotation), gender, currentTime, currentTime, cid]
+    const currentTime = getCurrentSeconds();
+
+    // foodtype & watertime get handled by defaults
+    const result = await SQL.query<Pick<Criminal.Weed.DBPlant, 'id'>[]>(
+      `INSERT INTO weed_plants (coords, rotation, gender, plant_time, cid) VALUES (?, ?, ?, ?, ?) RETURNING id`,
+      [JSON.stringify(coords), JSON.stringify(rotation), gender, currentTime, cid]
     );
 
-    const data = result?.[0];
-    if (!data) {
+    const plantId = result?.[0]?.id;
+    if (!plantId) {
       this.logger.error('Failed to insert new plant data');
       return;
     }
 
-    const newWeedPlant = new WeedPlant(
-      data.id,
-      coords,
-      rotation,
-      gender,
-      data.stage,
-      data.food,
-      data.cut_time,
-      data.grow_time,
-      cid
-    );
-    this.weedPlants.set(data.id, newWeedPlant);
+    const newWeedPlant = new WeedPlant(plantId, coords, rotation, gender, currentTime, cid);
+    this.weedPlants.set(plantId, newWeedPlant);
 
     const logMessage = `${Util.getName(plyId)}(${plyId}) has planted a weed plant`;
     this.logger.silly(logMessage);
-    Util.Log('weed:planted', { gender, coords, rotation, plantId: data.id, ownerCid: cid }, logMessage, plyId);
+    Util.Log('weed:planted', { gender, coords, rotation, plantId, ownerCid: cid }, logMessage, plyId);
   };
 
   @DGXEvent('criminal:weed:viewPlant')
@@ -82,10 +88,17 @@ class WeedPlantManager extends Util.Singleton<WeedPlantManager>() {
   };
 
   @DGXEvent('criminal:weed:feed')
-  private _feedWeedPlant = (plyId: number, weedPlantId: number, deluxe: boolean) => {
+  private _feedWeedPlant = (plyId: number, weedPlantId: number, itemName: string) => {
     const weedPlant = this.weedPlants.get(weedPlantId);
     if (!weedPlant) return;
-    weedPlant.feed(plyId, deluxe);
+    weedPlant.feed(plyId, itemName);
+  };
+
+  @DGXEvent('criminal:weed:water')
+  private _waterWeedPlant = (plyId: number, weedPlantId: number) => {
+    const weedPlant = this.weedPlants.get(weedPlantId);
+    if (!weedPlant) return;
+    weedPlant.water(plyId);
   };
 
   @DGXEvent('criminal:weed:destroy')
@@ -108,28 +121,13 @@ class WeedPlantManager extends Util.Singleton<WeedPlantManager>() {
 
   public startThreads = () => {
     // Growing loop
-    const growTime = config.weed.growTime * 60 * 60;
     setInterval(() => {
       this.logger.silly('Plant grow interval fired');
 
-      const currentSeconds = getCurrentSeconds();
-      for (const weedPlant of this.weedPlants.values()) {
-        if (weedPlant.isFullyGrown()) continue;
-        if (currentSeconds < weedPlant.growTime + growTime) continue;
-        weedPlant.grow(currentSeconds);
+      for (const [_, weedPlant] of this.weedPlants) {
+        weedPlant.checkGrowth();
       }
     }, 10 * 60 * 1000);
-
-    // Food depletion loop
-    setInterval(() => {
-      this.logger.silly('Plant food depletion interval fired');
-
-      for (const weedPlant of this.weedPlants.values()) {
-        weedPlant.depleteFood();
-      }
-
-      SQL.query('UPDATE weed_plants SET food = food - 1');
-    }, config.weed.food.decayTime * 60 * 1000);
   };
 }
 

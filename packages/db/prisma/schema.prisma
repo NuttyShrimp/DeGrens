@@ -629,16 +629,14 @@ model vehicle_upgrades {
 }
 
 model weed_plants {
-  id        Int                @id @default(autoincrement())
-  stage     Int?               @default(0) @db.SmallInt
-  coords    String?            @db.Text
-  rotation  String?            @db.Text
-  gender    weed_plants_gender
-  food      Int?               @default(100)
-  grow_time BigInt?
-  cut_time  BigInt?
-  times_cut Int?               @default(0)
-  cid       Int?               @default(0)
+  id         Int                    @id @default(autoincrement())
+  coords     String                 @db.Text
+  rotation   String                 @db.Text
+  gender     weed_plants_gender
+  plant_time BigInt?                @default(0)
+  food_type  weed_plants_food_type? @default(none)
+  water_time BigInt?                @default(0)
+  cid        Int?                   @default(0)
 }
 
 model whitelist {
@@ -713,6 +711,12 @@ enum penalties_penalty {
 enum weed_plants_gender {
   male
   female
+}
+
+enum weed_plants_food_type {
+  none
+  normal
+  deluxe
 }
 
 enum vehicle_garage_logs_action {

@@ -1,17 +1,11 @@
 {
-  "growTime": 12,
-  "cut": {
-    "timeout": 24,
-    "breakChance": 25,
-    "maxTimes": 4
-  },
-  "food": {
-    "decayTime": 30,
-    "amount": {
-      "normal": 40,
-      "deluxe": 70
-    }
-  },
+  "feedTime": 60,
+  "growTime": 1440,
   "fertilizerDecrease": 20,
-  "destroyMailChance": 40
+  "idealWaterTime": 43,
+  "foodModifier": {
+    "none": 0.1,
+    "normal": 0.6,
+    "deluxe": 1
+  }
 }
