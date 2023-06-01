@@ -8,6 +8,8 @@ import { doVehicleShopTransaction, getTestDriveDeposit } from '../helpers.vehicl
 import { vehicleshopLogger } from '../logger.vehicleshop';
 import { getVehicleShopConfig } from '../services/config.vehicleshop';
 import { getConfigByModel } from 'modules/info/service.info';
+import { applyUpgrades } from 'modules/upgrades/service.upgrades';
+import { generateBaseUpgrades } from '@shared/upgrades/service.upgrades';
 
 const activeTestDrives: Map<
   number,
@@ -107,6 +109,7 @@ Events.onNet('vehicles:shop:testdrive:start', async (plyId: number, model: strin
     }
     return;
   }
+  await applyUpgrades(vehVin, generateBaseUpgrades(vehEnt));
   keyManager.addKey(vehVin, plyId);
 
   const timeout = startTimeLimitTimeout(plyId, cid, vehVin);

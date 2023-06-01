@@ -1,4 +1,4 @@
-import { Events, Notifications, Peek, PolyZone, RPC, UI, Util } from '@dgx/client';
+import { Events, Notifications, Peek, PolyZone, RPC, UI, Util, Vehicles } from '@dgx/client';
 
 import { requestTestDrive } from '../services/testdrive.vehicleshop';
 
@@ -85,6 +85,7 @@ export class Spot {
     FreezeEntityPosition(this.vehicle, true);
     SetVehicleDoorsLocked(this.vehicle, 3);
     SetVehicleNumberPlateText(this.vehicle, `PDMSPOT${this.id}`);
+    Vehicles.applyNewCosmeticUpgrades(this.vehicle, Vehicles.getBaseUpgrades(this.vehicle) ?? {});
 
     this.vehiclePeekIds = Peek.addEntityEntry(this.vehicle, {
       options: [

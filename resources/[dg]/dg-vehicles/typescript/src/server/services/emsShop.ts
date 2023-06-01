@@ -1,10 +1,11 @@
 import { Business, Events, Jobs, Notifications, UI, Util } from '@dgx/server';
+import { generateBaseUpgrades } from '@shared/upgrades/service.upgrades';
 import { getPlayerVehicleInfo, insertNewVehicle } from 'db/repository';
 import { deleteVehicle, spawnOwnedVehicle } from 'helpers/vehicle';
 import plateManager from 'modules/identification/classes/platemanager';
 import vinManager from 'modules/identification/classes/vinmanager';
 import { decreaseModelStock, getConfigByModel, getModelStock } from 'modules/info/service.info';
-import { generateBaseUpgrades, saveCosmeticUpgrades } from 'modules/upgrades/service.upgrades';
+import { saveCosmeticUpgrades } from 'modules/upgrades/service.upgrades';
 import { doVehicleShopTransaction, getVehicleTaxedPrice } from 'modules/vehicleshop/helpers.vehicleshop';
 import { getVehicleShopConfig } from 'modules/vehicleshop/services/config.vehicleshop';
 import { mainLogger } from 'sv_logger';

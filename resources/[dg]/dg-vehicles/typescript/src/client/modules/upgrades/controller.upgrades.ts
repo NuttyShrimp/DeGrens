@@ -9,8 +9,11 @@ import {
   getPerformanceUpgradePossibilities,
 } from './service.upgrades';
 import { hasVehicleKeys } from 'modules/keys/cache.keys';
+import { generateBaseUpgrades } from '@shared/upgrades/service.upgrades';
 
 global.exports('getCosmeticUpgrades', getCosmeticUpgrades);
+global.exports('generateBaseUpgrades', generateBaseUpgrades);
+global.exports('applyUpgrades', applyUpgrades);
 
 RPC.register('vehicles:upgrades:getCosmetic', async (vehNetId?: number) => {
   let veh = getCurrentVehicle();
