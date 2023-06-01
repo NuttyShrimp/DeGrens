@@ -6,7 +6,7 @@ export const allowedModels: Record<string, (veh: number) => boolean> = {
   brvito: () => true,
   brblus: () => true,
   fpskoda: () => true,
-  fpx5: () => true,
+  fpm5: () => true,
   wpv90: () => true,
   lpgolf: () => true,
   lpmoto: () => true,

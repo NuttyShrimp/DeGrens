@@ -6781,9 +6781,9 @@
   },
   {
     "category": "emergency",
-    "model": "fpx5",
+    "model": "fpm5",
     "brand": "BMW",
-    "name": "X5",
+    "name": "M5",
     "class": "A",
     "defaultStock": 10,
     "restockTime": 10,
