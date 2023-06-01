@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Lifeinvader mlo + relaed business items added
 - Brandweervoertuigen toegevoegd
 - UC voertuigen toegevoegd
+- Benny locaties voor lucht voertuigen toegevoed (Grote hangaar LSIA & Fort Zancudo)
 
 ### Changed
 
@@ -28,6 +29,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Remmen gaan langer mee op voertuigen met slechte remmen
 - Siren systeem herwerkt om UC voertuigen te ondersteunen
 - Agenten kunnen via een toggle siren spot aan/uit zetten op ondersteunde voertuigen
+- Lucht voertuigen + fietsen hebben geen mechanic services meer (enkel repairs in bennys nodig)
 
 ### Fixed
 

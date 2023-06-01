@@ -4,7 +4,7 @@ import { fixVehicle } from 'modules/status/service.status';
 import { getCosmeticUpgrades } from 'modules/upgrades/service.upgrades';
 import { setEngineState } from 'services/engine';
 
-import { getCurrentVehicle, isDriver } from '../../helpers/vehicle';
+import { getCurrentVehicle, getVehicleConfig, isDriver } from '../../helpers/vehicle';
 
 let bennysMenuOpen = false;
 let currentBennys: string | null = null;
@@ -192,19 +192,25 @@ export const enterBennys = async (fromAdminMenu = false) => {
   const currentBennys = getCurrentBennys();
   if (!currentBennys) return;
 
-  let currentSpotData: Pick<Bennys.Location, 'vector' | 'heading'> | undefined = locations[currentBennys];
-  if (!currentSpotData) {
-    currentSpotData = {
-      vector: Util.getPlyCoords(),
-      heading: GetEntityHeading(PlayerPedId()),
-    };
-  }
-
   const plyVeh = getCurrentVehicle();
   if (!plyVeh || !isDriver()) return;
 
   const isSpotFree = await RPC.execute<boolean>('vehicles:bennys:isSpotFree', currentBennys);
   if (!isSpotFree) return;
+
+  const vehConfig = await getVehicleConfig(plyVeh);
+
+  let currentSpotData: Pick<Bennys.Location, 'vector' | 'heading' | 'vehicleType'> | undefined =
+    locations[currentBennys];
+  if (!currentSpotData) {
+    currentSpotData = {
+      vector: Util.getPlyCoords(),
+      heading: GetEntityHeading(PlayerPedId()),
+      vehicleType: vehConfig?.type ?? 'land',
+    };
+  }
+
+  if (!vehConfig || (currentSpotData && currentSpotData.vehicleType !== vehConfig.type)) return;
 
   SetEntityCoords(
     plyVeh,

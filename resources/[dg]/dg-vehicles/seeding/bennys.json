@@ -9,6 +9,7 @@
     "length": 6.5,
     "width": 8,
     "heading": 225,
+    "vehicleType": "land",
     "data": {
       "minZ": 30.79,
       "maxZ": 35.19
@@ -24,6 +25,7 @@
     "length": 6.5,
     "width": 8,
     "heading": 0,
+    "vehicleType": "land",
     "data": {
       "minZ": 36.75,
       "maxZ": 40.75
@@ -39,6 +41,7 @@
     "length": 12,
     "width": 14,
     "heading": 272.24,
+    "vehicleType": "land",
     "data": {
       "minZ": 29.89,
       "maxZ": 33.89
@@ -54,6 +57,7 @@
     "length": 6.5,
     "width": 8,
     "heading": 315,
+    "vehicleType": "land",
     "data": {
       "minZ": 12.17,
       "maxZ": 16.17
@@ -69,6 +73,7 @@
     "length": 6.5,
     "width": 8,
     "heading": 80,
+    "vehicleType": "land",
     "data": {
       "minZ": 38.01,
       "maxZ": 44.01
@@ -84,6 +89,7 @@
     "length": 6.5,
     "width": 8,
     "heading": 90,
+    "vehicleType": "land",
     "data": {
       "minZ": 21.17,
       "maxZ": 25.17
@@ -99,6 +105,7 @@
     "length": 3,
     "width": 10,
     "heading": 88.7198,
+    "vehicleType": "land",
     "data": {
       "minZ": 23.7,
       "maxZ": 29.7
@@ -115,9 +122,42 @@
     "length": 10,
     "width": 10,
     "heading": 266.0387,
+    "vehicleType": "land",
     "data": {
       "minZ": 51.46,
       "maxZ": 59.46
+    }
+  },
+  {
+    "vector": {
+      "x": -1833.2,
+      "y": 2978.7,
+      "z": 32.81
+    },
+    "name": "bennys_fort_zancudo",
+    "length": 40,
+    "width": 40,
+    "heading": 60,
+    "vehicleType": "air",
+    "data": {
+      "minZ": 31.81,
+      "maxZ": 46.61
+    }
+  },
+  {
+    "vector": {
+      "x": -971.94,
+      "y": -2999.72,
+      "z": 13.95
+    },
+    "name": "bennys_LSIA",
+    "length": 40,
+    "width": 40,
+    "heading": 330,
+    "vehicleType": "air",
+    "data": {
+      "minZ": 12.95,
+      "maxZ": 31.15
     }
   }
 ]

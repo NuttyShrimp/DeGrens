@@ -24,7 +24,7 @@ Events.onNet('vehicles:shop:openVehicleMenu', (src: number, spotId: number, cate
   }
 
   // Categorize vehicles
-  const categorizedVehicles = getVehicleModels().reduce<Record<string, Config.Car[]>>((all, model) => {
+  const categorizedVehicles = getVehicleModels().reduce<Record<string, Config.CarSchema[]>>((all, model) => {
     if (model.shop !== 'pdm') return all; // Only pdm vehicles
     if (!all[model[categorisation]]) {
       all[model[categorisation]] = [];

@@ -1,4 +1,4 @@
-import { Util } from '@dgx/client';
+import { RPC, Util } from '@dgx/client';
 import { Vector3 } from '@dgx/shared';
 
 import { doorBones, wheelBones } from './../constant';
@@ -106,4 +106,13 @@ export const isCloseToADoor = (vehicle: number, maxDistance: number) => {
 export const isVehicleUpsideDown = (vehicle: number) => {
   const vehRoll = GetEntityRoll(vehicle);
   return vehRoll > 65 || vehRoll < -65;
+};
+
+export const getVehicleConfig = async (ent: number): Promise<Config.Car | null> => {
+  const config = Entity(ent).state.config;
+  if (!config) {
+    RPC.execute('vehicles:info:assignConfig', NetworkGetNetworkIdFromEntity(ent));
+    return getVehicleConfig(ent);
+  }
+  return config;
 };

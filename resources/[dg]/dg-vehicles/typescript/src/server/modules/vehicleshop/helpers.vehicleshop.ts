@@ -68,7 +68,7 @@ export const getCategoryLabel = (categorisation: ModelCategorisation, category: 
   }
 };
 
-export const buildVehicleContextMenuEntry = (vehicle: Config.Car): ContextMenu.Entry => {
+export const buildVehicleContextMenuEntry = (vehicle: Config.CarSchema): ContextMenu.Entry => {
   const stock = getModelStock(vehicle.model);
   return {
     title: `${vehicle.brand} ${vehicle.name}`,

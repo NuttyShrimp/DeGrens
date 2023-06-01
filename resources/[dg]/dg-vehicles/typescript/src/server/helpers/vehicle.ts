@@ -14,6 +14,7 @@ import { applyFakePlate, validateVehicleVin } from '../modules/identification/se
 import { keyManager } from '../modules/keys/classes/keymanager';
 import { CREATE_AUTOMOBILE } from '../sv_constants';
 import { mainLogger } from '../sv_logger';
+import { assignModelConfig, getConfigByHash } from 'modules/info/service.info';
 
 /**
  * Spawn a vehicle
@@ -128,6 +129,8 @@ export const spawnVehicle = async (
       clearInterval(npcDriverDeleteThread);
     }
   }, 250);
+
+  assignModelConfig(veh, modelHash);
 
   return veh;
 };

@@ -23,6 +23,10 @@ const bennysSchema: Schema = {
     heading: {
       type: 'number',
     },
+    vehicleType: {
+      type: 'string',
+      enum: ['land', 'air', 'sea'],
+    },
     data: {
       type: 'object',
       properties: {
