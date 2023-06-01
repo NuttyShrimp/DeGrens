@@ -47,10 +47,7 @@ declare namespace Labs {
       rewards: string[];
       dry: {
         timeout: number;
-        amount: {
-          min: number;
-          max: number;
-        };
+        maxAmount: number;
       };
     };
   }

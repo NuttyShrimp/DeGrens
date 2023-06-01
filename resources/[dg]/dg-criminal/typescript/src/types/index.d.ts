@@ -10,37 +10,25 @@ declare namespace Criminal {
 
   namespace Weed {
     type Config = {
-      food: {
-        decayTime: number;
-        amount: {
-          normal: number;
-          deluxe: number;
-        };
-      };
-      growTime: number;
-      cut: {
-        timeout: number;
-        breakChance: number;
-        maxTimes: number;
-      };
-      fertilizerDecrease: number;
-      destroyMailChance: number;
+      feedTime: number; // time in minutes player has to feed plant
+      growTime: number; // time in minutes player has to wait after feeding time has finished
+      fertilizerDecrease: number; // percentage of quality deducted from fertilizer when feeding
+      idealWaterTime: number; // time in minutes after planting that the plant needs to be watered for 100% quality
+      foodModifier: Record<FoodType, number>; // modifier on quality
     };
 
     type Gender = 'male' | 'female';
-    type Stage = 0 | 1 | 2 | 3;
+    type FoodType = 'none' | 'normal' | 'deluxe';
 
     type DBPlant = {
       id: number;
       coords: string;
       rotation: string;
       gender: Gender;
-      stage: Stage;
-      food: number;
-      cut_time: number;
-      grow_time: number;
-      times_cut: number;
+      plant_time: number;
       cid: number | null;
+      food_type: FoodType;
+      water_time: number;
     };
   }
 

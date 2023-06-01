@@ -19,6 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Benny locaties voor lucht voertuigen toegevoed (Grote hangaar LSIA & Fort Zancudo)
 - Extra kleuren voor stethoscoop toegevoegd
 - Badge voor ambulance toegevoegd
+- Weedplanten systeem herwerkt
 
 ### Changed
 
