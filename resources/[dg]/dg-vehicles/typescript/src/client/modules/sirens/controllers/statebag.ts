@@ -4,7 +4,6 @@ import { stateBagWrapper } from '../helpers/util';
 stateBagWrapper('horn', toggleHornSound);
 
 stateBagWrapper('lights', (veh, toggle: boolean) => {
-  console.log(veh, toggle);
   SetVehicleHasMutedSirens(veh, true);
   SetVehicleSiren(veh, toggle);
 });
