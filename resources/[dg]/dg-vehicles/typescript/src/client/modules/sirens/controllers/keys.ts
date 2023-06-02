@@ -29,21 +29,6 @@ Keys.onPressDown('siren_sound_cycle', () => {
 
 Keys.register('siren_sound_cycle', 'Cycle through vehicle siren sounds (when lights are on)', 'COMMA');
 
-Keys.onPressDown('siren_sound_2_cycle', () => {
-  const ped = PlayerPedId();
-  const veh = GetVehiclePedIsIn(ped, false);
-
-  if (!isSirensAllowed(veh, ped)) return;
-
-  PlaySoundFrontend(-1, 'NAV_UP_DOWN', 'HUD_FRONTEND_DEFAULT_SOUNDSET', true);
-
-  updateStateBag(veh, 'siren2', true);
-  updateStateBag(veh, 'siren2Mode', 1);
-  pushStateChange(veh);
-});
-
-Keys.register('siren_sound_2_cycle', 'Cycle through secondary siren sounds', 'UP');
-
 Keys.onPressDown('siren_lights_toggle', () => {
   const ped = PlayerPedId();
   const veh = GetVehiclePedIsIn(ped, false);
@@ -60,7 +45,6 @@ Keys.onPressDown('siren_lights_toggle', () => {
     return;
   }
 
-  updateStateBag(veh, 'siren2', false, sirenState);
   updateStateBag(veh, 'siren', false, sirenState);
   updateStateBag(veh, 'sirenMode', 0, sirenState);
   pushStateChange(veh);
@@ -75,9 +59,7 @@ Keys.onPressDown('siren_sound_off', () => {
   if (!isSirensAllowed(veh, ped)) return;
 
   updateStateBag(veh, 'siren', false);
-  updateStateBag(veh, 'siren2', false);
   updateStateBag(veh, 'sirenMode', 0);
-  updateStateBag(veh, 'siren2Mode', 0);
   pushStateChange(veh);
 });
 
@@ -91,7 +73,7 @@ Keys.onPressDown('sirens_mode_hold', () => {
 
   const sirenState: Sirens.State = Entity(veh).state.sirenState;
 
-  if ((sirenState.siren || sirenState.siren2) && sirenState.lights) return;
+  if (sirenState.siren && sirenState.lights) return;
 
   updateStateBag(veh, 'sirenMode', 1, sirenState);
   pushStateChange(veh);
