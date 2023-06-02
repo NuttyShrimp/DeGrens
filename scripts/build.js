@@ -32,11 +32,9 @@ const buildServer = async () => {
   if (process.env.SENTRY_UPLOAD_SOURCEMAPS) {
     plugins.push(
       sentryEsbuildPlugin({
-        include: '../server',
         ignore: ['node_modules'],
         release: version,
-        urlPrefix: findResourceName(path.resolve('.')),
-        token: '5e2d7e8c0d6a42348a0c50dbf655896524c8414752804c8ea1ca04e357be9cd8',
+        authToken: '5e2d7e8c0d6a42348a0c50dbf655896524c8414752804c8ea1ca04e357be9cd8',
         dsn: 'https://47836ea9173b4e52b8820a05996cf549@sentry.nuttyshrimp.me/2',
         url: 'https://sentry.nuttyshrimp.me/',
         org: 'nutty',
