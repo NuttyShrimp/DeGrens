@@ -127,11 +127,14 @@ export const getModelStock = (model: string) => modelStock.get(model) ?? 0;
 export const assignModelConfig = (ent: number, modelHash: number) => {
   const modelConfig: any = getConfigByHash(modelHash);
   if (modelConfig) {
-    delete modelConfig.hash;
-    delete modelConfig.defaultStock;
-    delete modelConfig.restockTime;
-    delete modelConfig.shop;
-    delete modelConfig.price;
-    Entity(ent).state.set('config', modelConfig, true);
+    const strippedConfig: Config.Car = {
+      brand: modelConfig.brand,
+      category: modelConfig.category,
+      class: modelConfig.class,
+      model: modelConfig.model,
+      name: modelConfig.name,
+      type: modelConfig.type,
+    };
+    Entity(ent).state.set('config', strippedConfig, true);
   }
 };
