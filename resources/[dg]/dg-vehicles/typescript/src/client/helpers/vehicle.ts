@@ -111,7 +111,7 @@ export const isVehicleUpsideDown = (vehicle: number) => {
 export const getVehicleConfig = async (ent: number): Promise<Config.Car | null> => {
   const config = Entity(ent).state.config;
   if (!config) {
-    RPC.execute('vehicles:info:assignConfig', NetworkGetNetworkIdFromEntity(ent));
+    await RPC.execute('vehicles:info:assignConfig', NetworkGetNetworkIdFromEntity(ent));
     return getVehicleConfig(ent);
   }
   return config;
