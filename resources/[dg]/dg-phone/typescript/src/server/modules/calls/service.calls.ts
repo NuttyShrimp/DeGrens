@@ -65,7 +65,7 @@ export const startCall = async (plyId: number, phoneNr: string, type: CallType) 
   }
 
   setTimeout(() => {
-    if (calls[call.id].state !== 'outgoing') return;
+    if (!calls[call.id] || calls[call.id].state !== 'outgoing') return;
     endCall(call.id);
   }, 10000);
 
