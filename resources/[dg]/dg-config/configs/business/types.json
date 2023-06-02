@@ -34,5 +34,8 @@
   },
   "used_vehicle_shop": {
     "permissions": ["garage_access"]
+  },
+  "generic": {
+    "permissions": ["stash", "property_access", "garage_access"]
   }
 }
