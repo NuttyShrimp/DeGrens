@@ -3284,7 +3284,9 @@
     "authorized": {
       "business": ["lowsantos"]
     },
-    "playSound": true
+    "playSound": true,
+    "forceOpen": true,
+    "allowThroughWalls": true
   },
   {
     "description": "lowsantos poort midden",
@@ -3303,7 +3305,9 @@
     "authorized": {
       "business": ["lowsantos"]
     },
-    "playSound": true
+    "playSound": true,
+    "forceOpen": true,
+    "allowThroughWalls": true
   },
   {
     "description": "lowsantos poort rechts",
@@ -3322,7 +3326,9 @@
     "authorized": {
       "business": ["lowsantos"]
     },
-    "playSound": true
+    "playSound": true,
+    "forceOpen": true,
+    "allowThroughWalls": true
   },
   {
     "description": "lowsantos deur binnen",
@@ -3514,9 +3520,7 @@
       }
     ],
     "authorized": {
-      "business": [
-        "taxijacky"
-      ]
+      "business": ["taxijacky"]
     }
   },
   {
@@ -3534,9 +3538,7 @@
       }
     ],
     "authorized": {
-      "business": [
-        "taxijacky"
-      ]
+      "business": ["taxijacky"]
     }
   },
   {
@@ -3554,9 +3556,7 @@
       }
     ],
     "authorized": {
-      "business": [
-        "taxijacky"
-      ]
+      "business": ["taxijacky"]
     }
   },
   {
@@ -3574,9 +3574,7 @@
       }
     ],
     "authorized": {
-      "business": [
-        "taxijacky"
-      ]
+      "business": ["taxijacky"]
     }
   },
   {
@@ -3594,9 +3592,7 @@
       }
     ],
     "authorized": {
-      "business": [
-        "taxijacky"
-      ]
+      "business": ["taxijacky"]
     }
   },
   {
@@ -3614,9 +3610,7 @@
       }
     ],
     "authorized": {
-      "business": [
-        "taxijacky"
-      ]
+      "business": ["taxijacky"]
     }
   },
   {
@@ -3634,9 +3628,7 @@
       }
     ],
     "authorized": {
-      "business": [
-        "taxijacky"
-      ]
+      "business": ["taxijacky"]
     }
   },
   {
@@ -3655,9 +3647,7 @@
       }
     ],
     "authorized": {
-      "business": [
-        "taxijacky"
-      ]
+      "business": ["taxijacky"]
     }
   },
   {
@@ -3768,5 +3758,192 @@
     "authorized": {
       "business": ["blazeit"]
     }
+  },
+  {
+    "description": "cobrastudios front entrance L",
+    "locked": true,
+    "distance": 2,
+    "doors": [
+      {
+        "model": "v_ilev_fb_door01",
+        "coords": {
+          "x": -1083.6201171875,
+          "y": -260.4166564941406,
+          "z": 38.186702728271484
+        }
+      }
+    ],
+    "authorized": {
+      "business": ["cobrastudios"]
+    },
+    "playSound": true
+  },
+  {
+    "description": "cobrastudios front entrance R",
+    "locked": true,
+    "distance": 2,
+    "doors": [
+      {
+        "model": "v_ilev_fb_door02",
+        "coords": {
+          "x": -1080.974365234375,
+          "y": -259.0203552246094,
+          "z": 38.186702728271484
+        }
+      }
+    ],
+    "authorized": {
+      "business": ["cobrastudios"]
+    },
+    "playSound": true
+  },
+  {
+    "description": "cobrastudios garagedoor front",
+    "locked": true,
+    "distance": 10,
+    "doors": [
+      {
+        "model": "life_porteg",
+        "coords": {
+          "x": -1096.1041259765625,
+          "y": -254.81182861328125,
+          "z": 38.296016693115234
+        }
+      }
+    ],
+    "authorized": {
+      "business": ["cobrastudios"]
+    }
+  },
+  {
+    "description": "cobrastudios garagedoor side",
+    "locked": true,
+    "distance": 10,
+    "doors": [
+      {
+        "model": "life_porte",
+        "coords": {
+          "x": -1053.3875732421875,
+          "y": -246.34246826171875,
+          "z": 38.88994216918945
+        }
+      }
+    ],
+    "authorized": {
+      "business": ["cobrastudios"]
+    }
+  },
+  {
+    "description": "cobrastudios side entrance",
+    "locked": true,
+    "distance": 2,
+    "doors": [
+      {
+        "model": "v_ilev_gtdoor02",
+        "coords": {
+          "x": -1042.5181884765625,
+          "y": -240.69154357910156,
+          "z": 38.117958068847656
+        }
+      }
+    ],
+    "authorized": {
+      "business": ["cobrastudios"]
+    }
+  },
+  {
+    "description": "cobrastudios back entrance l",
+    "locked": true,
+    "distance": 2,
+    "doors": [
+      {
+        "model": "v_ilev_fb_doorshortl",
+        "coords": {
+          "x": -1045.119873046875,
+          "y": -232.0039520263672,
+          "z": 39.43793869018555
+        }
+      }
+    ],
+    "authorized": {
+      "business": ["cobrastudios"]
+    },
+    "playSound": true
+  },
+  {
+    "description": "cobrastudios back entrance R",
+    "locked": true,
+    "distance": 2,
+    "doors": [
+      {
+        "model": "v_ilev_fb_doorshortr",
+        "coords": {
+          "x": -1046.5162353515625,
+          "y": -229.35806274414062,
+          "z": 39.43793869018555
+        }
+      }
+    ],
+    "authorized": {
+      "business": ["cobrastudios"]
+    },
+    "playSound": true
+  },
+  {
+    "description": "straightpiper garage left",
+    "locked": false,
+    "distance": 10,
+    "doors": [
+      {
+        "model": "prop_id2_11_gdoor",
+        "coords": {
+          "x": 823.8389892578125,
+          "y": -805.58203125,
+          "z": 27.395458221435547
+        }
+      }
+    ],
+    "authorized": {},
+    "hideInteraction": true,
+    "playSound": true,
+    "forceOpen": true
+  },
+  {
+    "description": "straightpiper garage mid",
+    "locked": false,
+    "distance": 10,
+    "doors": [
+      {
+        "model": "prop_id2_11_gdoor",
+        "coords": {
+          "x": 823.8389892578125,
+          "y": -812.9501953125,
+          "z": 27.395458221435547
+        }
+      }
+    ],
+    "authorized": {},
+    "hideInteraction": true,
+    "playSound": true,
+    "forceOpen": true
+  },
+  {
+    "description": "straightpiper garage right",
+    "locked": false,
+    "distance": 10,
+    "doors": [
+      {
+        "model": "prop_id2_11_gdoor",
+        "coords": {
+          "x": 823.8390502929688,
+          "y": -820.27099609375,
+          "z": 27.395458221435547
+        }
+      }
+    ],
+    "authorized": {},
+    "hideInteraction": true,
+    "playSound": true,
+    "forceOpen": true
   }
 ]

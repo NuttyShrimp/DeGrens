@@ -1,13 +1,10 @@
 {
   "harvestDelay": 15,
   "timeout": 60,
-  "rewardChance": 50,
+  "rewardChance": 75,
   "rewards": ["weed_seed"],
   "dry": {
     "timeout": 48,
-    "amount": {
-      "min": 4,
-      "max": 8
-    }
+    "maxAmount": 15
   }
 }

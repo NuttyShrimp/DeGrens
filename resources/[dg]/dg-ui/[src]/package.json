@@ -1,6 +1,6 @@
 {
   "name": "dg-ui",
-  "version": "1.2.2",
+  "version": "1.2.3",
   "license": "MIT",
   "scripts": {
     "start": "vite --mode development",
@@ -21,11 +21,11 @@
     "@mui/system": "^5.11.15",
     "@sentry/react": "^7.46.0",
     "@sentry/tracing": "^7.46.0",
-    "@tiptap/core": "2.0.1",
-    "@tiptap/extension-placeholder": "2.0.1",
+    "@tiptap/core": "2.0.3",
+    "@tiptap/extension-placeholder": "2.0.3",
     "@tiptap/pm": "^2.0.1",
-    "@tiptap/react": "2.0.1",
-    "@tiptap/starter-kit": "2.0.1",
+    "@tiptap/react": "2.0.3",
+    "@tiptap/starter-kit": "2.0.3",
     "animate.css": "^4.1.1",
     "dayjs": "*",
     "deepmerge": "^4.3.1",
@@ -42,7 +42,7 @@
     "sass": "^1.60.0",
     "sentry-zustand-middleware": "^3.0.2",
     "urijs": "^1.19.11",
-    "zustand": "^4.3.7"
+    "zustand": "^4.3.8"
   },
   "devDependencies": {
     "@surma/rollup-plugin-off-main-thread": "^2.2.3",
@@ -52,10 +52,10 @@
     "@typescript-eslint/parser": "^5.57.0",
     "@vitejs/plugin-react-swc": "^3.1.0",
     "typescript": "^5.0.3",
-    "vite": "4.2.1",
-    "vite-plugin-checker": "^0.5.3",
+    "vite": "4.3.3",
+    "vite-plugin-checker": "^0.6.0",
     "vite-plugin-sentry": "^1.1.7",
-    "vite-plugin-svgr": "^2.4.0",
+    "vite-plugin-svgr": "^3.2.0",
     "vite-tsconfig-paths": "^4.0.7"
   }
 }

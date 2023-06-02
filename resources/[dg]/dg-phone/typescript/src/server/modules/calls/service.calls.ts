@@ -12,10 +12,10 @@ export const getCallIdForPly = (plyId: number) => {
   return plyToCallId[plyId];
 };
 
-const getLabelForCalltype = (target: Core.Characters.Player, type: CallType) => {
+const getLabelForCalltype = (ply: Core.Characters.Player, type: CallType) => {
   switch (type) {
     case CallType.NORMAL:
-      return target.charinfo.phone;
+      return ply.charinfo.phone;
     case CallType.ANON:
       return 'UNKNOWN NUMBER';
     case CallType.PRISON:
@@ -56,7 +56,7 @@ export const startCall = async (plyId: number, phoneNr: string, type: CallType) 
   plyToCallId[plyId] = call.id;
   if (targetPly) {
     plyToCallId[targetPly.serverId] = call.id;
-    const label = getLabelForCalltype(targetPly, type);
+    const label = getLabelForCalltype(player, type);
     Events.emitNet('phone:calls:incoming', targetPly.serverId, {
       label,
       type,

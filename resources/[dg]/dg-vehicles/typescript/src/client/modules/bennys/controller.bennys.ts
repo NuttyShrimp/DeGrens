@@ -1,7 +1,7 @@
 import { BlipManager, Events, Keys, PolyZone, UI } from '@dgx/client';
 import { Vector3 } from '@dgx/shared';
 
-import { getCurrentVehicle, isDriver } from '../../helpers/vehicle';
+import { getCurrentVehicle, getVehicleConfig, isDriver } from '../../helpers/vehicle';
 
 import {
   closeUI,
@@ -20,6 +20,7 @@ Events.onNet('vehicles:bennys:load', (locations: Bennys.Location[]) => {
       ...l.data,
       data: {
         id: l.name,
+        type: l.vehicleType,
       },
       heading: l.heading,
     });
@@ -40,9 +41,12 @@ Events.onNet('vehicles:bennys:load', (locations: Bennys.Location[]) => {
   console.log(`[Bennys] Loaded ${locations.length} locations`);
 });
 
-PolyZone.onEnter('benny', (_, data) => {
+PolyZone.onEnter<{ id: string; type: Vehicle.VehicleType }>('benny', async (_, data) => {
   setCurrentBennys(data.id);
-  if (!getCurrentVehicle() || !isDriver()) return;
+  const veh = getCurrentVehicle();
+  if (!veh || !isDriver()) return;
+  const vehConfig = await getVehicleConfig(veh);
+  if (!vehConfig || (data.type && data.type !== vehConfig.type)) return;
   UI.showInteraction(`${Keys.getBindedKey('+GeneralUse')} - Bennys`);
 });
 

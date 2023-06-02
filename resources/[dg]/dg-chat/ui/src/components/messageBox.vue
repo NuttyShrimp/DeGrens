@@ -32,7 +32,7 @@
   </div>
 </template>
 <script setup lang="ts">
-  import { computed, defineProps, onMounted, PropType, watchPostEffect } from 'vue';
+  import { computed, onMounted, PropType, watchPostEffect } from 'vue';
 
   import { testMessages } from '../lib/devdata';
   import { useStore } from '../lib/store';

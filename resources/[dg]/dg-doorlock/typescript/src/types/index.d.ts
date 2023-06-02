@@ -12,7 +12,18 @@ declare namespace Doorlock {
     coords: Vec3;
     linkedIds: number[];
   } & Pick<DoorConfig, 'authorized' | 'polyzone' | 'thermiteable' | 'name'> &
-    Required<Pick<DoorConfig, 'distance' | 'hideInteraction' | 'noAnimation' | 'playSound' | 'lockpickable'>>;
+    Required<
+      Pick<
+        DoorConfig,
+        | 'distance'
+        | 'hideInteraction'
+        | 'noAnimation'
+        | 'playSound'
+        | 'lockpickable'
+        | 'forceOpen'
+        | 'allowThroughWalls'
+      >
+    >;
 
   type DoorConfig = {
     description?: string; // not used, just a description for ease of editing JSON
@@ -31,6 +42,8 @@ declare namespace Doorlock {
     playSound?: boolean;
     hideInteraction?: boolean;
     noAnimation?: boolean;
+    forceOpen?: boolean;
+    allowThroughWalls?: boolean;
 
     // Makes door lockpickable (Defaults to false)
     lockpickable?: boolean;

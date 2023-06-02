@@ -3,12 +3,14 @@
   "compilerOptions": {
     "baseUrl": "./",
     "paths": {
-      "@helpers/*": ["./helpers/*"]
+      "@helpers/*": ["./helpers/*"],
+      "@shared/*": ["../shared/*"]
     }
   },
   "include": [
     "./**/*",
     "../types",
+    "../shared/**/*",
     "../../../../ts-shared/typescript/src/shared/types/*.d.ts",
     "../../../../ts-shared/typescript/src/client/types/*.d.ts",
     "../../../../../../types"

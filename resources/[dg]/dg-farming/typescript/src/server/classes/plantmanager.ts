@@ -45,7 +45,9 @@ class PlantManager extends Util.Singleton<PlantManager>() {
     const bucketItem = bucketItems.find(i => i.metadata.liter > 0);
     if (!bucketItem) return;
 
-    Inventory.setMetadataOfItem(bucketItem.id, oldMetadata => ({ liter: oldMetadata.liter - 1 }));
+    Inventory.setMetadataOfItem(bucketItem.id, oldMetadata => ({
+      liter: Number((oldMetadata.liter - 0.2).toFixed(1)),
+    }));
     plant.setAction('water');
 
     Util.Log(

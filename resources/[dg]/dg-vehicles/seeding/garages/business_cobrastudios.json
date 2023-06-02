@@ -1,0 +1,89 @@
+{
+  "garage_id": "cobrastudios",
+  "name": "Garage Cobra Studios",
+  "type": "business",
+  "shared": true,
+  "location": {
+    "vector": {
+      "x": -1063.39,
+      "y": -232.93,
+      "z": 33.36
+    },
+    "width": 39.2,
+    "length": 14.6,
+    "options": {
+      "heading": 300,
+      "minZ": 32.3167,
+      "maxZ": 36.3167
+    }
+  },
+  "vehicle_types": ["land"],
+  "parking_spots": [
+    {
+      "type": "land",
+      "size": 2.0,
+      "distance": 1.8,
+      "heading": 196.5861,
+      "coords": {
+        "x": -1076.2441,
+        "y": -235.6526,
+        "z": 33.3637
+      }
+    },
+    {
+      "type": "land",
+      "size": 2.0,
+      "distance": 1.8,
+      "heading": 0.0,
+      "coords": {
+        "x": -1070.0354,
+        "y": -231.5789,
+        "z": 33.3637
+      }
+    },
+    {
+      "type": "land",
+      "size": 2.0,
+      "distance": 1.8,
+      "heading": 0.0,
+      "coords": {
+        "x": -1059.8496,
+        "y": -226.6764,
+        "z": 33.3637
+      }
+    },
+    {
+      "type": "land",
+      "size": 2.0,
+      "distance": 1.8,
+      "heading": 0.0,
+      "coords": {
+        "x": -1053.7118,
+        "y": -223.2225,
+        "z": 33.3637
+      }
+    },
+    {
+      "type": "land",
+      "size": 2.0,
+      "distance": 1.8,
+      "heading": 0.0,
+      "coords": {
+        "x": -1053.7118,
+        "y": -223.2225,
+        "z": 33.3637
+      }
+    },
+    {
+      "type": "land",
+      "size": 2.0,
+      "distance": 1.8,
+      "heading": 0.0,
+      "coords": {
+        "x": -1049.9025,
+        "y": -221.8577,
+        "z": 33.3637
+      }
+    }
+  ]
+}

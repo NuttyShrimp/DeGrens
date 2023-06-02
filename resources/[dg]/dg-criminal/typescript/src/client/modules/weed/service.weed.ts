@@ -8,7 +8,7 @@ export const registerWeedPlantModels = (models: string[]) => {
   }
 };
 
-export const feedWeedPlant = async (weedPlantId: number, objectId: string, deluxe: boolean) => {
+export const feedWeedPlant = async (weedPlantId: number, objectId: string, itemName: string) => {
   const entity = SyncedObjects.getEntityForObjectId(objectId);
   if (!entity) return;
 
@@ -34,20 +34,48 @@ export const feedWeedPlant = async (weedPlantId: number, objectId: string, delux
   });
   if (canceled) return;
 
-  Events.emitNet('criminal:weed:feed', weedPlantId, deluxe);
+  Events.emitNet('criminal:weed:feed', weedPlantId, itemName);
 };
 
-export const destroyWeedPlant = async (weedPlantId: number, objectId: string) => {
+export const waterWeedPlant = async (weedPlantId: number, objectId: string) => {
   const entity = SyncedObjects.getEntityForObjectId(objectId);
   if (!entity) return;
 
   const heading = Util.getHeadingToFaceEntity(entity);
   await Util.goToCoords({ ...Util.getPlyCoords(), w: heading });
 
-  const destroyTime = Jobs.getCurrentJob()?.name === 'police' ? 20 : 120;
+  const [canceled] = await Taskbar.create('droplet', 'Water Geven', 5000, {
+    canCancel: true,
+    cancelOnDeath: true,
+    cancelOnMove: true,
+    disableInventory: true,
+    disablePeek: true,
+    controlDisables: {
+      movement: true,
+      carMovement: true,
+      combat: true,
+    },
+    animation: {
+      animDict: 'timetable@gardener@filling_can',
+      anim: 'gar_ig_5_filling_can',
+      flags: 16,
+    },
+  });
+  if (canceled) return;
 
-  // lil bithces die ze destroyen mogen gwn 2 min per plant wachten
-  const [canceled] = await Taskbar.create('hammer-crash', 'Kapot maken', destroyTime * 1000, {
+  Events.emitNet('criminal:weed:water', weedPlantId);
+};
+
+export const destroyWeedPlant = async (weedPlantId: number, objectId: string) => {
+  const entity = SyncedObjects.getEntityForObjectId(objectId);
+  if (!entity) return;
+
+  if (Jobs.getCurrentJob()?.name !== 'police') return;
+
+  const heading = Util.getHeadingToFaceEntity(entity);
+  await Util.goToCoords({ ...Util.getPlyCoords(), w: heading });
+
+  const [canceled] = await Taskbar.create('hammer-crash', 'Kapot maken', 10000, {
     canCancel: true,
     cancelOnDeath: true,
     cancelOnMove: true,

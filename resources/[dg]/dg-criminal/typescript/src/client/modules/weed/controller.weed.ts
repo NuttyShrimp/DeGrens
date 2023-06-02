@@ -6,6 +6,7 @@ import {
   destroyWeedPlant,
   feedWeedPlant,
   registerWeedPlantModels,
+  waterWeedPlant,
 } from './service.weed';
 
 let isPlacing = false;
@@ -124,8 +125,13 @@ Peek.addFlagEntry('weedPlantId', {
   ],
 });
 
-UI.RegisterUICallback('criminal/weed/feed', (data: { plantId: number; objectId: string; deluxe: boolean }, cb) => {
-  feedWeedPlant(data.plantId, data.objectId, data.deluxe);
+UI.RegisterUICallback('criminal/weed/feed', (data: { plantId: number; objectId: string; itemName: string }, cb) => {
+  feedWeedPlant(data.plantId, data.objectId, data.itemName);
+  cb({ data: {}, meta: { ok: true, message: 'done' } });
+});
+
+UI.RegisterUICallback('criminal/weed/water', (data: { plantId: number; objectId: string }, cb) => {
+  waterWeedPlant(data.plantId, data.objectId);
   cb({ data: {}, meta: { ok: true, message: 'done' } });
 });
 

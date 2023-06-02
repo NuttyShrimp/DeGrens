@@ -9,8 +9,8 @@ end)
 DGX.Util.onCharSpawn(function(plyId, isNewCharacter)
   if not isNewCharacter then return end
 
-  DGX.Inventory.giveStarterItems(plyId)
   exports['dg-apartments']:enterApartment(plyId)
+  DGX.Inventory.giveStarterItems(plyId)
 end)
 
 AddEventHandler("core:modules:started", function()

@@ -20,9 +20,12 @@ declare namespace Config {
     name: string;
     brand: string;
     model: string;
-    hash: number;
     category: Category;
     class: CarClass;
+    type: Vehicle.VehicleType;
+  }
+  type CarSchema = Car & {
+    hash: number;
     price: number;
     defaultStock: number;
     /**
@@ -30,7 +33,7 @@ declare namespace Config {
      */
     restockTime: number;
     shop: Shop;
-  }
+  };
 }
 
 declare namespace Bennys {
@@ -46,6 +49,7 @@ declare namespace Bennys {
     width: number;
     length: number;
     heading: number;
+    vehicleType: Vehicle.VehicleType;
     data: {
       minZ: number;
       maxZ: number;
@@ -57,7 +61,7 @@ declare namespace Bennys {
     player: number;
     vin: string;
     entity: number;
-    upgrades: Upgrades.Cosmetic;
+    upgrades: Vehicles.Upgrades.Cosmetic;
     repair: Bennys.RepairInfo;
   }
 }

@@ -173,7 +173,6 @@ class ScreenshotUI {
   }
 
   handleRequest(request: ScreenshotRequest) {
-    console.log('Handling reuqest');
     // read the screenshot
     const read = new Uint8Array(window.innerWidth * window.innerHeight * 4);
     this.renderer.readRenderTargetPixels(this.rtTexture, 0, 0, window.innerWidth, window.innerHeight, read);

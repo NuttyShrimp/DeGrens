@@ -1,6 +1,6 @@
 {
   "name": "dg-misc",
-  "version": "1.2.2",
+  "version": "1.2.3",
   "main": "index.js",
   "author": "NuttyShrimp",
   "license": "MIT",
@@ -15,12 +15,12 @@
     "@dgx/client": "workspace:*",
     "@dgx/server": "workspace:*",
     "@dgx/shared": "workspace:*",
-    "@types/three": "^0.150.1",
-    "esbuild": "*",
+    "@types/three": "^0.152.1",
+    "esbuild": "^0.17.19",
     "logger": "workspace:*",
     "tsconfig": "workspace:*"
   },
   "dependencies": {
-    "three": "^0.151.3"
+    "three": "^0.152.2"
   }
 }

@@ -1,5 +1,6 @@
 import { Events, Notifications, UI } from '@dgx/client';
 import { getDoorId } from 'helpers/doors';
+import { getDoorState } from 'services/doors';
 
 global.exports('toggleEntityDoorState', (entity: number) => {
   if (!entity || GetEntityType(entity) !== 3) {
@@ -11,7 +12,7 @@ global.exports('toggleEntityDoorState', (entity: number) => {
     Notifications.add('Dit is geen deur', 'error');
     return;
   }
-  Events.emitNet('doorlock:server:changeDoorState', doorId, !DoorSystemGetDoorState(doorId));
+  Events.emitNet('doorlock:server:changeDoorState', doorId, !getDoorState(doorId));
 });
 
 global.exports('registerDoor', async (entity: number) => {
@@ -84,6 +85,26 @@ global.exports('registerDoor', async (entity: number) => {
       { type: 'text', label: 'Whitelisted Job (split met ;)', name: 'job' },
       { type: 'text', label: 'Whitelisted Business (split met ;)', name: 'business' },
       { type: 'text', label: 'Whitelisted Gang (split met ;)', name: 'gang' },
+      {
+        type: 'select',
+        label: 'Force Open/Dicht ipv lock (Default: Nee)',
+        name: 'forceOpen',
+        value: 'false',
+        options: [
+          { label: 'Ja', value: 'true' },
+          { label: 'Nee', value: 'false' },
+        ],
+      },
+      {
+        type: 'select',
+        label: 'Raycast door muren (Default: Nee)',
+        name: 'allowThroughWalls',
+        value: 'false',
+        options: [
+          { label: 'Ja', value: 'true' },
+          { label: 'Nee', value: 'false' },
+        ],
+      },
     ],
   });
   if (!result.accepted) return;
@@ -124,6 +145,12 @@ global.exports('registerDoor', async (entity: number) => {
   }
   if (result.values.gang) {
     doorConfig.authorized.gang = result.values.gang.split(';');
+  }
+  if (result.values.forceOpen === 'true') {
+    doorConfig.forceOpen = true;
+  }
+  if (result.values.allowThroughWalls === 'true') {
+    doorConfig.allowThroughWalls = true;
   }
 
   Notifications.add(

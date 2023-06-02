@@ -85,7 +85,6 @@ Peek.addZoneEntry('lab_action', {
 });
 
 UI.RegisterUICallback('sliders/close', (data: { settings: Labs.Meth.Settings }, cb) => {
-  console.log(data.settings);
   setMethStationSettings(data.settings);
   cb({ data: {}, meta: { ok: true, message: 'done' } });
 });

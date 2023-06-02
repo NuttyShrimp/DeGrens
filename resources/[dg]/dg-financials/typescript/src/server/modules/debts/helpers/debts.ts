@@ -38,8 +38,8 @@ export const scheduleOverDueDebt = (debtId: number) => {
     debtLogger.error(`Debt with id ${debtId} not found`);
     return;
   }
-  if (debt.type === 'maintenance') return;
-  const daysUntilDefault = debt.pay_term ?? getDaysUntilDue(debt.debt);
+  if (debt.type === 'maintenance' || debt.pay_term) return;
+  const daysUntilDefault = getDaysUntilDue(debt.debt);
   const dueDate = dayjs.unix(debt.date).add(daysUntilDefault, 'day');
   const secDiff = dueDate.diff(dayjs(), 'millisecond');
   // Debt not overdue skip
@@ -91,7 +91,7 @@ export const scheduleDebtDefaulting = (debtId: number) => {
     return;
   }
   if (debt.type === 'maintenance') return;
-  const extDate = dayjs.unix(debt.date).add((debt.pay_term ?? getDaysUntilDue(debt.debt)) * 1.5, 'day');
+  const extDate = dayjs.unix(debt.date).add(debt.pay_term ?? getDaysUntilDue(debt.debt) * 1.5, 'day');
   const secDiff = extDate.diff(dayjs(), 'millisecond');
   // Check en schedule overdue debt (last day of term)
   if (secDiff < 0) {

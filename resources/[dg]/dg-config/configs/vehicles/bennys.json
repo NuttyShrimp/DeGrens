@@ -1,0 +1,13 @@
+{
+  "blockedUpgrades": {
+    "a6": {
+      "extras": [1]
+    },
+    "drafter": {
+      "extras": [1]
+    },
+    "22m5": {
+      "extras": [1]
+    }
+  }
+}

@@ -7,7 +7,7 @@ import { getConfigByEntity } from 'modules/info/service.info';
 import { serverConfig } from '../../../config';
 
 import { upgradesLogger } from './logger.upgrades';
-import { cosmeticKeysToId, TUNE_PARTS } from '../../../shared/upgrades/constants.upgrades';
+import { TUNE_PARTS } from '../../../shared/upgrades/constants.upgrades';
 
 let upgradePrices: Config.Prices;
 
@@ -18,7 +18,7 @@ const seedPrices = () => {
 /**
  * Get cosmetic from db, initialize data if none was found in db. NOTE: vehicle needs to exist!
  */
-export const getCosmetic = async (vin: string): Promise<Upgrades.Cosmetic | undefined> => {
+export const getCosmetic = async (vin: string): Promise<Vehicles.Upgrades.Cosmetic | undefined> => {
   let currentUpgrades = await getVehicleCosmeticUpgrades(vin);
   if (currentUpgrades === null) {
     const netId = vinManager.getNetId(vin);
@@ -26,6 +26,9 @@ export const getCosmetic = async (vin: string): Promise<Upgrades.Cosmetic | unde
     currentUpgrades = await getCosmeticUpgradesForVeh(netId);
     if (!currentUpgrades) {
       throw new Error('Failed to get cosmetic upgrades of vehicle');
+    }
+    if (!vinManager.isVinFromPlayerVeh(vin)) {
+      return currentUpgrades;
     }
     await updateVehicleUpgrades(vin, currentUpgrades);
     upgradesLogger.info(`Initialized cosmetic upgrades for vehicle ${vin}`);
@@ -44,7 +47,7 @@ export const getCosmetic = async (vin: string): Promise<Upgrades.Cosmetic | unde
 /**
  * Build performance updates from items in inventory. NOTE: vehicle needs to exist!
  */
-export const getPerformance = async (vin: string): Promise<Upgrades.Performance | undefined> => {
+export const getPerformance = async (vin: string): Promise<Vehicles.Upgrades.Performance | undefined> => {
   const netId = vinManager.getNetId(vin);
   if (!netId) return;
 
@@ -54,7 +57,7 @@ export const getPerformance = async (vin: string): Promise<Upgrades.Performance 
   const vehicleConfig = getConfigByEntity(vehicle);
   if (!vehicleConfig) return;
 
-  const upgrades: Upgrades.Performance = {
+  const upgrades: Vehicles.Upgrades.Performance = {
     armor: -1,
     brakes: -1,
     engine: -1,
@@ -76,11 +79,11 @@ export const getPerformance = async (vin: string): Promise<Upgrades.Performance 
       // honestly dont know how to type this
       if (data.amount === 1) {
         //@ts-ignore
-        upgrades[part as Upgrades.Tune] = true;
+        upgrades[part as Vehicles.Upgrades.Tune] = true;
       } else {
-        if ((upgrades[part as Upgrades.Tune] as number) < stage) {
+        if ((upgrades[part as Vehicles.Upgrades.Tune] as number) < stage) {
           //@ts-ignore
-          upgrades[part as Upgrades.Tune] = stage;
+          upgrades[part as Vehicles.Upgrades.Tune] = stage;
         }
       }
     }
@@ -89,7 +92,11 @@ export const getPerformance = async (vin: string): Promise<Upgrades.Performance 
   return upgrades;
 };
 
-export const saveCosmeticUpgrades = async (vin: string, newUpgrades?: Partial<Upgrades.Cosmetic>) => {
+export const saveCosmeticUpgrades = async (vin: string, newUpgrades?: Partial<Vehicles.Upgrades.Cosmetic>) => {
+  if (!vinManager.isVinFromPlayerVeh(vin)) {
+    upgradesLogger.debug(`Skipped saving cosmetic upgrades for non-player vehicle ${vin}`);
+    return;
+  }
   const currentUpgrades = await getCosmetic(vin);
   if (!currentUpgrades) {
     upgradesLogger.error(`Could not get cosmetic upgrades for vehicle ${vin}`);
@@ -107,13 +114,13 @@ export const saveCosmeticUpgrades = async (vin: string, newUpgrades?: Partial<Up
   );
 };
 
-export const applyUpgrades = async (vin: string) => {
+export const applyUpgrades = async (vin: string, extraUpgrades: Partial<Vehicles.Upgrades.All> = {}) => {
   const netId = vinManager.getNetId(vin);
   if (!netId) return;
 
   const cosmeticUpgrades = await getCosmetic(vin);
   const performanceUpgrades = await getPerformance(vin);
-  applyUpgradesToVeh(netId, { ...cosmeticUpgrades, ...performanceUpgrades });
+  applyUpgradesToVeh(netId, { ...cosmeticUpgrades, ...performanceUpgrades, ...extraUpgrades });
 };
 
 export const getUpgradePrices = (veh: number) => {
@@ -144,7 +151,7 @@ export const getUpgradePrices = (veh: number) => {
   return prices;
 };
 
-export const getPriceForUpgrades = (veh: number, upgrades: Partial<Upgrades.Cosmetic>) => {
+export const getPriceForUpgrades = (veh: number, upgrades: Partial<Vehicles.Upgrades.Cosmetic>) => {
   const prices = getUpgradePrices(veh);
   if (prices === undefined) {
     upgradesLogger.error(
@@ -158,7 +165,7 @@ export const getPriceForUpgrades = (veh: number, upgrades: Partial<Upgrades.Cosm
       const enabledExtras = upgrades[upgrade]?.filter(e => e.enabled).length ?? 0;
       price += (prices?.extras ?? 0) * enabledExtras;
     } else {
-      price += prices[upgrade as keyof Upgrades.AllCosmeticModIds] ?? 0;
+      price += prices[upgrade as keyof Vehicles.Upgrades.AllCosmeticModIds] ?? 0;
     }
   }
   return price;
@@ -166,50 +173,10 @@ export const getPriceForUpgrades = (veh: number, upgrades: Partial<Upgrades.Cosm
 
 export const getCosmeticUpgradesForVeh = (netId: number) => {
   const entity = NetworkGetEntityFromNetworkId(netId);
-  return Util.sendRPCtoEntityOwner<Upgrades.Cosmetic>(entity, 'vehicles:upgrades:getCosmetic', netId);
+  return Util.sendRPCtoEntityOwner<Vehicles.Upgrades.Cosmetic>(entity, 'vehicles:upgrades:getCosmetic', netId);
 };
 
-export const applyUpgradesToVeh = (netId: number, upgrades: Partial<Upgrades.All>) => {
+export const applyUpgradesToVeh = (netId: number, upgrades: Partial<Vehicles.Upgrades.All>) => {
   const entity = NetworkGetEntityFromNetworkId(netId);
   Util.sendEventToEntityOwner(entity, 'vehicles:upgrades:apply', netId, upgrades);
 };
-
-export const generateBaseUpgrades = (ent?: number): Upgrades.Cosmetic => {
-  const [prim, sec] = ent ? GetVehicleColours(ent) : [0, 0];
-  const [pearlescentColor, wheelColor] = ent ? GetVehicleExtraColours(ent) : [0,0];
-  const idUpgrades: Partial<Record<keyof Upgrades.Cosmetic, number>> = {};
-  (Object.keys(cosmeticKeysToId) as (keyof Upgrades.CosmeticModIds)[]).forEach(k => {
-    idUpgrades[k] = -1;
-  });
-  return {
-    ...idUpgrades,
-    xenon: {
-      active: false,
-      color: -1
-    },
-    tyreSmokeColor: -1,
-    wheels: {
-      id: -1,
-      custom: false,
-      type: ent && DoesEntityExist(ent) ? GetVehicleWheelType(ent) : 0,
-    },
-    neon: {
-      enabled: [0, 1, 2, 3].map(id => ({ id, toggled: false})),
-      color: {
-        r: 255,
-        g: 0,
-        b: 255
-      }
-    },
-    primaryColor: prim,
-    secondaryColor: sec,
-    interiorColor: ent ? GetVehicleInteriorColour(ent) : 0,
-    dashboardColor: ent ? GetVehicleDashboardColour(ent) : 0,
-    pearlescentColor,
-    wheelColor,
-    extras: [],
-    livery: -1,
-    plateColor: ent ? GetVehicleNumberPlateTextIndex(ent) : 0,
-    windowTint: 0,
-  } as Upgrades.Cosmetic;
-}

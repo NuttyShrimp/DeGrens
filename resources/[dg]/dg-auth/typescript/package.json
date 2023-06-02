@@ -1,6 +1,6 @@
 {
   "name": "dg-auth",
-  "version": "1.2.2",
+  "version": "1.2.3",
   "main": "index.js",
   "author": "NuttyShrimp",
   "license": "MIT",
@@ -12,13 +12,13 @@
     "format": "prettier  --write --no-error-on-unmatched-pattern src/**/*.{js,ts,json,md}"
   },
   "dependencies": {
-    "fast-jwt": "^2.2.1"
+    "fast-jwt": "^3.0.0"
   },
   "devDependencies": {
     "@dgx/client": "workspace:*",
     "@dgx/server": "workspace:*",
     "@dgx/shared": "workspace:*",
-    "esbuild": "*",
+    "esbuild": "^0.17.19",
     "logger": "workspace:*",
     "tsconfig": "workspace:*"
   }

@@ -18,6 +18,7 @@ import './modules/vehicleshop';
 import './modules/impound/controller.impound';
 import './modules/mechanic/controller.mechanic';
 import './modules/identification';
+import './modules/sirens';
 import './services';
 
 setImmediate(() => {

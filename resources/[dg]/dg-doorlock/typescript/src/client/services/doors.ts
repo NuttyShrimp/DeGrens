@@ -1,13 +1,14 @@
-import { Events, Keys, PolyZone, Util, UI, Minigames, Inventory, Particles } from '@dgx/client';
+import { Events, Keys, PolyZone, Util, UI, Minigames, Inventory, Particles, RayCast } from '@dgx/client';
 import { doDoorAnimation, getDoorId, isAuthorized } from 'helpers/doors';
 
-let doors: Doorlock.ClientData;
+let doors: Doorlock.ClientData = {};
 let currentDoor: { id: number; coords: Vec3; state: boolean } | null = null;
 let interactionVisible = false;
 let isInPolyZone = false;
 
 let activeDoorEntity: number | undefined = undefined;
 let debounceTimeout: NodeJS.Timeout | null = null;
+let doorThread: NodeJS.Timer | null = null;
 
 export const loadDoors = (doorData: Doorlock.ClientData) => {
   doors = doorData;
@@ -21,7 +22,15 @@ export const loadDoors = (doorData: Doorlock.ClientData) => {
 
     AddDoorToSystem(id, door.model, door.coords.x, door.coords.y, door.coords.z, false, false, false);
     const state = door.locked ? 1 : 0;
-    DoorSystemSetDoorState(id, state, false, true);
+
+    if (doors[id].forceOpen) {
+      DoorSystemSetDoorState(id, 1, false, true);
+      setTimeout(() => {
+        DoorSystemSetOpenRatio(id, state ? 0.001 : 1, true, true);
+      }, 1000); // need to wait till door state is synced or whatever
+    } else {
+      DoorSystemSetDoorState(id, state ? 1 : 0, false, true);
+    }
 
     if (door.polyzone) {
       PolyZone.addBoxZone('doorlock', door.polyzone.center, door.polyzone.length, door.polyzone.width, {
@@ -39,16 +48,33 @@ export const loadDoors = (doorData: Doorlock.ClientData) => {
 };
 
 export const handleToggleKeyPress = () => {
-  if (currentDoor === null) return;
+  let { id: doorId, state: doorState } = currentDoor ?? {};
 
-  const data = doors[currentDoor.id];
+  // if not in polyzone or currently aiming at door, try to find door that is blocked (garage door in ceiling for example)
+  if (!doorId) {
+    const raycastHit = RayCast.doRaycast(10, 16); // flag only intersects with entities to allow toggling of garage doors which are fully hidden
+    if (raycastHit.entity && GetEntityType(raycastHit.entity) === 3) {
+      const id = getDoorId(raycastHit.entity);
+      if (id && doors[id]?.allowThroughWalls) {
+        doorId = id;
+      }
+    }
+  }
+
+  if (!doorId) return;
+
+  if (doorState === undefined) {
+    doorState = getDoorState(doorId);
+  }
+
+  const data = doors[doorId];
   if (!isAuthorized(data)) return;
 
   if (!data.noAnimation) {
     doDoorAnimation();
   }
 
-  Events.emitNet('doorlock:server:changeDoorState', currentDoor.id, !currentDoor.state);
+  Events.emitNet('doorlock:server:changeDoorState', doorId, !doorState);
 };
 
 export const changeDoorState = (doorId: number, state: boolean) => {
@@ -58,8 +84,12 @@ export const changeDoorState = (doorId: number, state: boolean) => {
   }
 
   doors[doorId].locked = state;
-  DoorSystemSetAutomaticRate(doorId, 1, false, false);
-  DoorSystemSetDoorState(doorId, state ? 1 : 0, false, true);
+
+  if (doors[doorId].forceOpen) {
+    DoorSystemSetOpenRatio(doorId, state ? 0.001 : 1, true, true);
+  } else {
+    DoorSystemSetDoorState(doorId, state ? 1 : 0, false, true);
+  }
 
   if (doorId === currentDoor?.id) {
     currentDoor.state = state;
@@ -101,45 +131,49 @@ export const handleEntityChange = (entity: number | undefined) => {
     clearTimeout(debounceTimeout);
   }
 
-  const timeout = entity === undefined ? 1500 : 0;
-  debounceTimeout = setTimeout(() => {
-    if (entity && GetEntityType(entity) === 3) {
+  debounceTimeout = setTimeout(
+    () => {
+      hideInteraction();
+
       const doorId = getDoorId(entity);
-      if (doorId) {
-        const data = doors[doorId];
-        if (data) {
-          activeDoorEntity = entity;
-
-          // Distance thread
-          const thread = setInterval(() => {
-            if (activeDoorEntity === undefined) {
-              clearInterval(thread);
-              return;
-            }
-            const doorData = {
-              id: doorId,
-              coords: Util.getEntityCoords(entity),
-              state: DoorSystemGetDoorState(doorId) !== 0,
-            };
-            const distance = Util.getPlyCoords().distance(doorData.coords);
-            if (distance <= data.distance && !interactionVisible) {
-              currentDoor = doorData;
-              showInteraction();
-            } else if (distance > data.distance && interactionVisible) {
-              currentDoor = null;
-              hideInteraction();
-            }
-          }, 10);
-
-          return;
-        }
+      if (!entity || !doorId || !doors[doorId]) {
+        activeDoorEntity = undefined;
+        currentDoor = null;
+        return;
       }
-    }
 
-    activeDoorEntity = undefined;
-    currentDoor = null;
-    hideInteraction();
-  }, timeout);
+      const maxDistance = doors[doorId].distance;
+      activeDoorEntity = entity;
+
+      if (doorThread !== null) {
+        clearInterval(doorThread);
+      }
+
+      // Distance thread
+      doorThread = setInterval(() => {
+        if (activeDoorEntity !== entity) return;
+
+        const doorCoords = Util.getEntityCoords(entity);
+        const distance = Util.getPlyCoords().distance(doorCoords);
+        if (distance <= maxDistance) {
+          currentDoor = {
+            id: doorId,
+            coords: doorCoords,
+            state: getDoorState(doorId),
+          };
+          if (!interactionVisible) {
+            showInteraction();
+          }
+        } else {
+          currentDoor = null;
+          if (interactionVisible) {
+            hideInteraction();
+          }
+        }
+      }, 10);
+    },
+    entity === undefined ? 1500 : 0
+  );
 };
 
 export const enterDoorPolyZone = (doorId: number, coords: Vec3) => {
@@ -148,7 +182,7 @@ export const enterDoorPolyZone = (doorId: number, coords: Vec3) => {
   currentDoor = {
     id: doorId,
     coords,
-    state: DoorSystemGetDoorState(doorId) !== 0,
+    state: getDoorState(doorId),
   };
 
   if (!interactionVisible) {
@@ -334,4 +368,12 @@ export const tryToThermiteDoor = async () => {
     DeleteEntity(thermiteObject);
   }
   NetworkStopSynchronisedScene(scene);
+};
+
+export const getDoorState = (doorId: number) => {
+  if (doors[doorId]?.forceOpen) {
+    return doors[doorId].locked;
+  }
+
+  return DoorSystemGetDoorState(doorId) !== 0;
 };

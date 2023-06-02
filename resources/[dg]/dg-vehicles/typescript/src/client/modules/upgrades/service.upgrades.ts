@@ -9,7 +9,7 @@ import {
 } from './constants.upgrades';
 import { getVehicleVinWithoutValidation } from 'modules/identification/service.identification';
 
-export const getCosmeticUpgrades = (veh: number): Upgrades.Cosmetic | undefined => {
+export const getCosmeticUpgrades = (veh: number): Vehicles.Upgrades.Cosmetic | undefined => {
   if (!DoesEntityExist(veh)) {
     console.error('Cannot get cosmetic upgrades on non-exisiting vehicle');
     return;
@@ -36,8 +36,8 @@ export const getCosmeticUpgrades = (veh: number): Upgrades.Cosmetic | undefined 
   const neonColors: number[] = GetVehicleNeonLightsColour(veh);
   const [pearlescentColor, wheelColor] = GetVehicleExtraColours(veh);
 
-  const upgrades: Partial<Record<keyof Upgrades.Cosmetic, number>> = {};
-  (Object.keys(cosmeticKeysToId) as (keyof Upgrades.CosmeticModIds)[]).forEach(k => {
+  const upgrades: Partial<Record<keyof Vehicles.Upgrades.Cosmetic, number>> = {};
+  (Object.keys(cosmeticKeysToId) as (keyof Vehicles.Upgrades.CosmeticModIds)[]).forEach(k => {
     upgrades[k] = GetVehicleMod(veh, cosmeticKeysToId[k]);
   });
 
@@ -65,7 +65,7 @@ export const getCosmeticUpgrades = (veh: number): Upgrades.Cosmetic | undefined 
     dashboardColor: GetVehicleDashboardColour(veh),
     pearlescentColor: pearlescentColor,
     wheelColor: wheelColor,
-    extras: [...Array(14)].reduce<Upgrades.Cosmetic['extras']>((extras, _, i) => {
+    extras: [...Array(14)].reduce<Vehicles.Upgrades.Cosmetic['extras']>((extras, _, i) => {
       const id = i + 1; // Extras are 1 indexed
       if (!DoesExtraExist(veh, id)) return extras;
       //@ts-ignore Returns 0 or 1, not boolean
@@ -76,30 +76,30 @@ export const getCosmeticUpgrades = (veh: number): Upgrades.Cosmetic | undefined 
     livery: GetVehicleLiveryCount(veh) == -1 ? GetVehicleMod(veh, 48) : GetVehicleLivery(veh) - 1,
     plateColor: GetVehicleNumberPlateTextIndex(veh),
     windowTint: GetVehicleWindowTint(veh),
-  } as Upgrades.Cosmetic;
+  } as Vehicles.Upgrades.Cosmetic;
 };
 
-export const getPerformanceUpgrades = (veh: number): Upgrades.Performance | undefined => {
+export const getPerformanceUpgrades = (veh: number): Vehicles.Upgrades.Performance | undefined => {
   if (!DoesEntityExist(veh)) {
     console.error('Cannot get performance upgrades on non-exisiting vehicle');
     return;
   }
   SetVehicleModKit(veh, 0);
-  const upgrades: Partial<Record<keyof Upgrades.Performance, number>> = {};
+  const upgrades: Partial<Record<keyof Vehicles.Upgrades.Performance, number>> = {};
   Object.entries(performanceKeysToId).forEach(([key, id]) => {
-    upgrades[key as keyof Upgrades.Performance] = GetVehicleMod(veh, id);
+    upgrades[key as keyof Vehicles.Upgrades.Performance] = GetVehicleMod(veh, id);
   });
   return {
     ...upgrades,
     //@ts-ignore
     turbo: IsToggleModOn(veh, 18) === 1,
-  } as Upgrades.Performance;
+  } as Vehicles.Upgrades.Performance;
 };
 
-export const applyUpgrade = <T extends keyof Upgrades.Cosmetic, R extends keyof Upgrades.Performance>(
+export const applyUpgrade = <T extends keyof Vehicles.Upgrades.Cosmetic, R extends keyof Vehicles.Upgrades.Performance>(
   veh: number,
   key: T | R,
-  value: DeepPartial<Upgrades.Cosmetic[T] | Upgrades.Performance[R]>
+  value: DeepPartial<Vehicles.Upgrades.Cosmetic[T] | Vehicles.Upgrades.Performance[R]>
 ) => {
   if (!DoesEntityExist(veh)) {
     console.error('Cannot apply upgrade on non-exisiting vehicle');
@@ -107,11 +107,11 @@ export const applyUpgrade = <T extends keyof Upgrades.Cosmetic, R extends keyof 
   }
   SetVehicleModKit(veh, 0);
   if (Object.keys(cosmeticKeysToId).includes(key)) {
-    SetVehicleMod(veh, cosmeticKeysToId[key as keyof Upgrades.CosmeticModIds], value as number, false);
+    SetVehicleMod(veh, cosmeticKeysToId[key as keyof Vehicles.Upgrades.CosmeticModIds], value as number, false);
     return;
   }
   if (Object.keys(performanceKeysToId).includes(key)) {
-    const modId = performanceKeysToId[key as keyof Upgrades.Performance];
+    const modId = performanceKeysToId[key as keyof Vehicles.Upgrades.Performance];
     if (!modId) return;
     SetVehicleMod(veh, modId, value as number, false);
     return;
@@ -126,14 +126,14 @@ export const applyUpgrade = <T extends keyof Upgrades.Cosmetic, R extends keyof 
   cosmeticUpgradeAppliers[key as T]!(veh, value as any);
 };
 
-export const applyUpgrades = (veh: number, upgrades: Partial<Upgrades.All>) => {
+export const applyUpgrades = (veh: number, upgrades: Partial<Vehicles.Upgrades.All>) => {
   // Assign the VehicleMods by Id
   Object.entries(upgrades).forEach(([key, data]) => {
-    applyUpgrade(veh, key as keyof Upgrades.All, data);
+    applyUpgrade(veh, key as keyof Vehicles.Upgrades.All, data);
   });
 };
 
-export const getCosmeticUpgradePossibilities = (veh: number): Upgrades.MaxedCosmetic | undefined => {
+export const getCosmeticUpgradePossibilities = (veh: number): Vehicles.Upgrades.MaxedCosmetic | undefined => {
   if (!DoesEntityExist(veh)) {
     console.error('Cannot get cosmetic upgrade possibilities on non-exisiting vehicle');
     return;
@@ -144,7 +144,7 @@ export const getCosmeticUpgradePossibilities = (veh: number): Upgrades.MaxedCosm
     maxVehicleModIds[key] = GetNumVehicleMods(veh, data);
   });
   return {
-    ...(maxVehicleModIds as Record<keyof Upgrades.CosmeticModIds, number>),
+    ...(maxVehicleModIds as Record<keyof Vehicles.Upgrades.CosmeticModIds, number>),
     wheels: getWheelPossibilities(veh),
     extras: [...Array(14)].reduce((amount, _, i) => {
       if (!DoesExtraExist(veh, i + 1)) return amount;
@@ -156,7 +156,7 @@ export const getCosmeticUpgradePossibilities = (veh: number): Upgrades.MaxedCosm
   };
 };
 
-export const getPerformanceUpgradePossibilities = (veh: number): Upgrades.Performance | undefined => {
+export const getPerformanceUpgradePossibilities = (veh: number): Vehicles.Upgrades.Performance | undefined => {
   if (!DoesEntityExist(veh)) {
     console.error('Cannot get performance upgrade possibilities on non-exisiting vehicle');
     return;
@@ -193,7 +193,7 @@ const getWheelPossibilities = (veh: number) => {
   return possibilities;
 };
 
-const getWheelUpgrade = (vehicle: number): Upgrades.Cosmetic['wheels'] => {
+const getWheelUpgrade = (vehicle: number): Vehicles.Upgrades.Cosmetic['wheels'] => {
   return {
     id: GetVehicleMod(vehicle, 23),
     custom: GetVehicleModVariation(vehicle, 23),
@@ -215,7 +215,7 @@ export const checkIllegalTunes = (vehicle: number) => {
     return;
   }
   let isLegal = true;
-  for (const key of Object.keys(upgrades) as (keyof Upgrades.Performance)[]) {
+  for (const key of Object.keys(upgrades) as (keyof Vehicles.Upgrades.Performance)[]) {
     const maxValue = typeof maxUpgrades[key] === 'boolean' ? 1 : (maxUpgrades[key] as number) - 1;
     // we check max value, for example a motorcycle max susp is 0 so max legal is would be -1 which would cause it to always be marked as illegal
     if (maxValue < 0) continue;
@@ -229,3 +229,8 @@ export const checkIllegalTunes = (vehicle: number) => {
   }
   Notifications.add(`Dit voertuig is ${isLegal ? 'NIET' : ''} illegaal getuned`, isLegal ? 'success' : 'error');
 };
+
+export const updateNewCosmeticUpgrades = <T extends keyof Vehicles.Upgrades.Cosmetic>(
+  vehicle: number,
+  upgrades: Partial<Vehicles.Upgrades.Cosmetic>
+) => {};

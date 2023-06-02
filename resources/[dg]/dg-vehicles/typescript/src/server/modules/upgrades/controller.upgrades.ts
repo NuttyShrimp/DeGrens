@@ -7,6 +7,7 @@ import { upgradeItems, windowTintMenuEntries } from './constants.upgrades';
 import { upgradesLogger } from './logger.upgrades';
 import { applyUpgradesToVeh, getPerformance, saveCosmeticUpgrades } from './service.upgrades';
 import { TUNE_PARTS } from '../../../shared/upgrades/constants.upgrades';
+import { applyUpgrades } from './service.upgrades';
 
 const tunesInventoryUpdateTimeouts: Record<string, NodeJS.Timeout> = {};
 
@@ -134,12 +135,21 @@ Inventory.registerUseable('rgb_controller', async plyId => {
 
 Events.onNet(
   'vehicles:itemupgrades:saveChanges',
-  async (plyId: number, netId: number, upgrades: Partial<Upgrades.Cosmetic>) => {
+  async (plyId: number, netId: number, upgrades: Partial<Vehicles.Upgrades.Cosmetic>) => {
     const vin = getVinForNetId(netId);
     if (!vin) return;
     const isInZone = await RPC.execute<boolean>('vehicles:itemupgrades:isInZone', plyId);
     if (!isInZone) return;
     saveCosmeticUpgrades(vin, upgrades);
+  }
+);
+
+Events.onNet(
+  'vehicles:upgrades:update',
+  async (plyId: number, netid: number, upgrades: Partial<Vehicles.Upgrades.All>) => {
+    const vin = getVinForNetId(netid);
+    if (!vin) return;
+    await applyUpgrades(vin, upgrades);
   }
 );
 
@@ -173,7 +183,7 @@ Inventory.registerUseable('window_tint', async plyId => {
 });
 
 global.exports('getTuneItemNames', (): string[] => {
-  return (Object.keys(TUNE_PARTS) as Upgrades.Tune[]).map(tune => `tune_${tune}`);
+  return (Object.keys(TUNE_PARTS) as Vehicles.Upgrades.Tune[]).map(tune => `tune_${tune}`);
 });
 
 // when spawning car, all tune items would get loaded which would trigger handler like 5 times after eachother
@@ -194,10 +204,14 @@ Inventory.onInventoryUpdate('tunes', (vin: string) => {
     if (!performanceUpgrades) return;
 
     applyUpgradesToVeh(netId, performanceUpgrades);
-    Util.Log("vehicles:upgrades:performace", {
-      vin,
-      performanceUpgrades,
-    }, `new performace upgrades for ${vin} have been added`)
+    Util.Log(
+      'vehicles:upgrades:performace',
+      {
+        vin,
+        performanceUpgrades,
+      },
+      `new performace upgrades for ${vin} have been added`
+    );
   }, 500);
   tunesInventoryUpdateTimeouts[vin] = newTimeout;
 });

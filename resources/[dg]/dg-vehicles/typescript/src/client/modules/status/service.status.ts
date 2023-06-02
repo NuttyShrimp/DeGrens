@@ -111,7 +111,7 @@ export const startStatusThread = async (vehicle: number) => {
 
   const netId = NetworkGetNetworkIdFromEntity(vehicle);
   const vin = await getVehicleVin(vehicle);
-  if (!netId || !vin) return;
+  if (!netId || !vin || [13, 14, 15, 16].includes(GetVehicleClass(vehicle))) return;
 
   const info = await RPC.execute('vehicles:service:getStatus', netId);
   const state = {
@@ -147,7 +147,7 @@ export const startStatusThread = async (vehicle: number) => {
         } else {
           const brakeDecrease = (avgBrakePressure * multipliers.brake) / 50;
           vehicleService.info.brakes = Math.max(vehicleService.info.brakes - brakeDecrease, 0);
-          multipliers.brake += 0.05;
+          multipliers.brake = Math.max(multipliers.brake - 0.05, 0);
         }
       }
 

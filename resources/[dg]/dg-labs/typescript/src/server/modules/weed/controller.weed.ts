@@ -61,24 +61,24 @@ Events.onNet('labs:weed:package', async (plyId, labId: number) => {
   const items = await Inventory.getPlayerItems(plyId);
 
   let hasBud = false;
-  let budItemId: string | undefined;
+  let budItem: Inventory.ItemState | undefined;
   for (const item of items) {
     if (item.name !== 'weed_bud') continue;
     hasBud = true; // just to determine notif
 
     if (item.metadata.createTime + dryConfig.timeout * 60 * 60 < currentTime) {
-      budItemId = item.id;
+      budItem = item;
       break;
     }
   }
-  if (!budItemId) {
+  if (!budItem) {
     Notifications.add(plyId, hasBud ? 'Dit is nog niet droog' : 'Wat wil je verpakken?', 'error');
     return;
   }
 
   const bagItem = items.find(i => i.name === 'empty_bags');
   if (!bagItem) {
-    Notifications.add(plyId, 'Waar ge je dit insteken?', 'error');
+    Notifications.add(plyId, 'Waar ga je dit insteken?', 'error');
     return;
   }
 
@@ -102,14 +102,16 @@ Events.onNet('labs:weed:package', async (plyId, labId: number) => {
   });
   if (canceled) return;
 
-  const removedItems = await Inventory.removeItemsByIdsFromPlayer(plyId, [bagItem.id, budItemId]);
+  const removedItems = await Inventory.removeItemsByIdsFromPlayer(plyId, [bagItem.id, budItem.id]);
   if (!removedItems) {
     Notifications.add(plyId, 'Je hebt de items niet meer', 'error');
     return;
   }
 
-  const amount = Util.getRndInteger(dryConfig.amount.min, dryConfig.amount.max + 1);
-  Inventory.addItemToPlayer(plyId, 'weed_bag', amount);
+  const strainOfBud = budItem.metadata?.strain ?? 0;
+  const amount = Math.ceil(dryConfig.maxAmount * (strainOfBud / 100));
+
+  Inventory.addItemToPlayer(plyId, 'weed_bag', Math.max(1, amount));
 });
 
 Events.onNet('labs:weed:roll', async (plyId, labId: number) => {

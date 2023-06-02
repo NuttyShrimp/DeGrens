@@ -5,13 +5,14 @@ import { spawnOwnedVehicle } from 'helpers/vehicle';
 import plateManager from 'modules/identification/classes/platemanager';
 import vinManager from 'modules/identification/classes/vinmanager';
 import { decreaseModelStock, getConfigByModel, getModelStock, isInfoLoaded } from 'modules/info/service.info';
-import { applyUpgradesToVeh, generateBaseUpgrades, saveCosmeticUpgrades } from 'modules/upgrades/service.upgrades';
+import { applyUpgradesToVeh, saveCosmeticUpgrades } from 'modules/upgrades/service.upgrades';
 import { mainLogger } from 'sv_logger';
 import winston from 'winston';
 
 import { doVehicleShopTransaction, getVehicleTaxedPrice } from '../helpers.vehicleshop';
 import { getVehicleShopConfig } from '../services/config.vehicleshop';
 import { charModule } from 'helpers/core';
+import { generateBaseUpgrades } from '@shared/upgrades/service.upgrades';
 
 @RPCRegister()
 @EventListener()

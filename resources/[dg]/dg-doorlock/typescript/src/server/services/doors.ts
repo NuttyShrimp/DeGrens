@@ -35,6 +35,8 @@ export const loadDoors = async () => {
           playSound: doorConfig.playSound ?? false,
           hideInteraction: doorConfig.hideInteraction ?? false,
           noAnimation: doorConfig.noAnimation ?? false,
+          forceOpen: doorConfig.forceOpen ?? false,
+          allowThroughWalls: doorConfig.allowThroughWalls ?? false,
           lockpickable: doorConfig.lockpickable ?? false,
           thermiteable: doorConfig.thermiteable,
           linkedIds: [...doorIds], // This array includes all the ids of doors to change state (including itself)

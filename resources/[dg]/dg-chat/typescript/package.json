@@ -1,6 +1,6 @@
 {
   "name": "dg-chat-resource",
-  "version": "1.2.2",
+  "version": "1.2.3",
   "main": "index.js",
   "author": "NuttyShrimp",
   "license": "MIT",
@@ -15,7 +15,7 @@
     "@dgx/client": "workspace:*",
     "@dgx/server": "workspace:*",
     "@dgx/shared": "workspace:*",
-    "tsconfig": "workspace:*",
-    "esbuild": "*"
+    "esbuild": "^0.17.19",
+    "tsconfig": "workspace:*"
   }
 }

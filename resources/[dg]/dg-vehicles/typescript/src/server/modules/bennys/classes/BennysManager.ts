@@ -60,7 +60,7 @@ class BennysManager extends Util.Singleton<BennysManager>() {
     plyId: number,
     spotId: string,
     vehNetId: number,
-    upgrades: Upgrades.Cosmetic,
+    upgrades: Vehicles.Upgrades.Cosmetic,
     repair: Bennys.RepairInfo
   ) => {
     const veh = NetworkGetEntityFromNetworkId(vehNetId);
@@ -130,7 +130,7 @@ class BennysManager extends Util.Singleton<BennysManager>() {
   private _buyUpgrades = async (
     plyId: number,
     spotId: string,
-    cart: { component: keyof Upgrades.Cosmetic; data: any }[]
+    cart: { component: keyof Vehicles.Upgrades.Cosmetic; data: any }[]
   ) => {
     const spotData = this.spotData.get(spotId);
     if (!spotData) {
@@ -139,7 +139,7 @@ class BennysManager extends Util.Singleton<BennysManager>() {
     }
     if (!this.isSpotFromPlayer(spotId, plyId)) return;
 
-    const upgrades: Partial<Upgrades.Cosmetic> = {};
+    const upgrades: Partial<Vehicles.Upgrades.Cosmetic> = {};
     cart.forEach(({ component, data }) => {
       if (component.startsWith('extra_')) {
         if (!upgrades.extras) upgrades.extras = [];

@@ -14,6 +14,7 @@ import { applyFakePlate, validateVehicleVin } from '../modules/identification/se
 import { keyManager } from '../modules/keys/classes/keymanager';
 import { CREATE_AUTOMOBILE } from '../sv_constants';
 import { mainLogger } from '../sv_logger';
+import { assignModelConfig, getConfigByHash } from 'modules/info/service.info';
 
 /**
  * Spawn a vehicle
@@ -31,7 +32,7 @@ export const spawnVehicle = async (
   owner?: number,
   vin?: string,
   plate?: string,
-  upgrades?: Partial<Upgrades.All>
+  upgrades?: Partial<Vehicles.Upgrades.All>
 ) => {
   // First we check model if model is vehicle on client
   let modelCheckPlayer = owner;
@@ -58,10 +59,10 @@ export const spawnVehicle = async (
       0x00000000,
       CREATE_AUTOMOBILE,
       modelHash,
-      position.x,
-      position.y,
-      position.z,
-      position.w
+      position.x + 0.001,
+      position.y + 0.001,
+      position.z + 0.001,
+      position.w + 0.001
     );
   } else {
     veh = CreateVehicle(modelHash, position.x, position.y, position.z, position.w, true, true);
@@ -80,7 +81,6 @@ export const spawnVehicle = async (
     `Spawn vehicle: spawned | model: ${model} | entity: ${veh} | netId: ${vehNetId} | owner: ${entityOwner}`
   );
 
-  SetEntityHeading(veh, position.w);
   // If model is not yet loaded for entityowner, this heading native will not work
   // we still try because it sometimes fixed vehicles spawning at wrong place because 0 heading can be inside a wall
   if (entityOwner > 0) {
@@ -129,6 +129,8 @@ export const spawnVehicle = async (
       clearInterval(npcDriverDeleteThread);
     }
   }, 250);
+
+  assignModelConfig(veh, modelHash);
 
   return veh;
 };

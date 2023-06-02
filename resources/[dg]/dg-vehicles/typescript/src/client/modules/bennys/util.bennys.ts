@@ -14,7 +14,11 @@ export const getLiveryLabels = (veh: number) => {
   return labels;
 };
 
-export const getLabelsForModId = (veh: number, modKey: keyof Upgrades.AllCosmeticModIds, amount: number): string[] => {
+export const getLabelsForModId = (
+  veh: number,
+  modKey: keyof Vehicles.Upgrades.AllCosmeticModIds,
+  amount: number
+): string[] => {
   const labels: string[] = ['Standard'];
   const modId = allCosmeticKeysToId[modKey];
   for (let i = 0; i < amount; i++) {

@@ -1,6 +1,6 @@
 {
-  "maxPerTicket": 125,
-  "sharedPercentage": 0.2,
+  "maxPerTicket": 1000,
+  "sharedPercentage": 0.5,
   "restaurants": {
     "upnatom": {
       "label": "Up-n-Atom",
@@ -124,9 +124,7 @@
             }
           },
           "peekLabel": "Milkshake maken",
-          "requiredItems": [
-            "farming_milk"
-          ]
+          "requiredItems": ["farming_milk"]
         },
         "upnatom_icecream": {
           "zone": {
@@ -162,9 +160,7 @@
             }
           },
           "peekLabel": "Frieten bakken",
-          "requiredItems": [
-            "farming_potato"
-          ]
+          "requiredItems": ["farming_potato"]
         },
         "upnatom_burger": {
           "zone": {
@@ -182,13 +178,7 @@
             }
           },
           "peekLabel": "Burger maken",
-          "requiredItems": [
-            "farming_tomato",
-            "farming_lettuce",
-            "farming_onion",
-            "farming_wheat",
-            "restaurant_burger"
-          ],
+          "requiredItems": ["farming_tomato", "farming_lettuce", "farming_onion", "farming_wheat", "restaurant_burger"],
           "isLeftover": true
         },
         "upnatom_cheeseburger": {

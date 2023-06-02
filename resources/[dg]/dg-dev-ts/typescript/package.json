@@ -1,6 +1,6 @@
 {
   "name": "dg-dev-ts",
-  "version": "1.2.2",
+  "version": "1.2.3",
   "main": "index.js",
   "author": "DragonwinQ",
   "license": "MIT",
@@ -15,7 +15,7 @@
     "@dgx/client": "workspace:*",
     "@dgx/server": "workspace:*",
     "@dgx/shared": "workspace:*",
-    "esbuild": "*",
+    "esbuild": "^0.17.19",
     "logger": "workspace:*",
     "tsconfig": "workspace:*"
   }

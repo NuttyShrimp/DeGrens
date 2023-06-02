@@ -261,7 +261,7 @@ export const insertVehicleParkLog = async (vin: string, cid: number, action: str
   await SQL.insertValues('vehicle_garage_logs', [{ vin, cid, action, state }]);
 };
 
-export const getVehicleCosmeticUpgrades = async (vin: string): Promise<Upgrades.Cosmetic | null> => {
+export const getVehicleCosmeticUpgrades = async (vin: string): Promise<Vehicles.Upgrades.Cosmetic | null> => {
   const query = `SELECT cosmetic
                  FROM vehicle_upgrades
                  WHERE vin = ?`;
@@ -270,7 +270,7 @@ export const getVehicleCosmeticUpgrades = async (vin: string): Promise<Upgrades.
   return JSON.parse(result.cosmetic);
 };
 
-export const updateVehicleUpgrades = async (vin: string, upgrades: Upgrades.Cosmetic) => {
+export const updateVehicleUpgrades = async (vin: string, upgrades: Vehicles.Upgrades.Cosmetic) => {
   const query = `INSERT INTO vehicle_upgrades (vin, cosmetic)
                  VALUES (?, ?)
                  ON DUPLICATE KEY UPDATE cosmetic = VALUES(cosmetic)`;

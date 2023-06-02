@@ -45,7 +45,7 @@ export const upgradeableCategories = {
   extras: ['extras'],
 };
 
-export const ModNameTitle: Record<keyof Upgrades.Cosmetic, string> = {
+export const ModNameTitle: Record<keyof Vehicles.Upgrades.Cosmetic, string> = {
   spoiler: 'Spoiler',
   // id = 1
   frontBumper: 'Front Bumper',

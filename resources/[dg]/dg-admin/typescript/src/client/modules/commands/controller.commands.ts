@@ -243,7 +243,7 @@ Events.onNet('admin:commands:addEventBlip', (coords: Vec3, time: number) => {
   SetBlipScale(blip, 1.1);
   SetBlipAsShortRange(blip, false);
   BeginTextCommandSetBlipName('STRING');
-  AddTextComponentString('Eventement');
+  AddTextComponentString('Evenement');
   EndTextCommandSetBlipName(blip);
 
   setTimeout(() => {

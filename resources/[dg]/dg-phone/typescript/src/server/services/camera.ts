@@ -21,8 +21,6 @@ RPC.register('phone:camera:take', async src => {
     }
 
     const result = await SQL.query('INSERT INTO phone_images (cid, link) VALUES (?, ?)', [cid, minioLink]);
-    // TODO: check result so we can create the return expr
-    console.log(result);
     return !!result;
   } catch (e) {
     console.error(e);

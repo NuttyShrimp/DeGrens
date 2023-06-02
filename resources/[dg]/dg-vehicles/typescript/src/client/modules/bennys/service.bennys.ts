@@ -4,13 +4,14 @@ import { fixVehicle } from 'modules/status/service.status';
 import { getCosmeticUpgrades } from 'modules/upgrades/service.upgrades';
 import { setEngineState } from 'services/engine';
 
-import { getCurrentVehicle, isDriver } from '../../helpers/vehicle';
+import { getCurrentVehicle, getVehicleConfig, isDriver } from '../../helpers/vehicle';
 
 let bennysMenuOpen = false;
 let currentBennys: string | null = null;
 let locations: Record<string, Bennys.Location> = {};
 let keyThread: number | null = null;
-let equippedUpgradesOnEnter: Upgrades.Cosmetic;
+let equippedUpgradesOnEnter: Vehicles.Upgrades.Cosmetic;
+let blockedUpgrades: Partial<Record<keyof Vehicles.Upgrades.Cosmetic, number[]>> = {};
 const enableKeys = [0, 1, 2, 3, 4, 5, 6, 46, 249];
 
 let modelStanceData: Stance.Model[] = [];
@@ -52,6 +53,7 @@ export const getRepairData = (plyVeh: number): Bennys.RepairInfo | null => {
 };
 
 export const getEquippedUpgradesOnEnter = () => equippedUpgradesOnEnter;
+export const getBlockedUpgrades = () => blockedUpgrades;
 // endregion
 
 export const handleVehicleRepair = async () => {
@@ -97,12 +99,17 @@ export const handleVehicleRepair = async () => {
   }
 };
 
-export const openUI = async (upgrades: Upgrades.Cosmetic, price: number | null = null) => {
+export const openUI = async (upgrades: Vehicles.Upgrades.Cosmetic, price: number | null = null) => {
   const plyVeh = getCurrentVehicle();
   if (!plyVeh) return;
   if (!isDriver()) return;
   equippedUpgradesOnEnter = upgrades;
   modelStanceData = (await RPC.execute('vehicles:stance:getModelData', GetEntityModel(plyVeh))) ?? [];
+  blockedUpgrades =
+    (await RPC.execute<Partial<Record<keyof Vehicles.Upgrades.Cosmetic, number[]>>>(
+      'vehicles:bennys:getBlockedUpgrades',
+      GetEntityModel(plyVeh)
+    )) ?? {};
   originalStance = getAppliedStance(plyVeh);
   setEngineState(plyVeh, false, true);
   DisplayRadar(false);
@@ -185,19 +192,25 @@ export const enterBennys = async (fromAdminMenu = false) => {
   const currentBennys = getCurrentBennys();
   if (!currentBennys) return;
 
-  let currentSpotData: Pick<Bennys.Location, 'vector' | 'heading'> | undefined = locations[currentBennys];
-  if (!currentSpotData) {
-    currentSpotData = {
-      vector: Util.getPlyCoords(),
-      heading: GetEntityHeading(PlayerPedId()),
-    };
-  }
-
   const plyVeh = getCurrentVehicle();
   if (!plyVeh || !isDriver()) return;
 
   const isSpotFree = await RPC.execute<boolean>('vehicles:bennys:isSpotFree', currentBennys);
   if (!isSpotFree) return;
+
+  const vehConfig = await getVehicleConfig(plyVeh);
+
+  let currentSpotData: Pick<Bennys.Location, 'vector' | 'heading' | 'vehicleType'> | undefined =
+    locations[currentBennys];
+  if (!currentSpotData) {
+    currentSpotData = {
+      vector: Util.getPlyCoords(),
+      heading: GetEntityHeading(PlayerPedId()),
+      vehicleType: vehConfig?.type ?? 'land',
+    };
+  }
+
+  if (!vehConfig || (currentSpotData && currentSpotData.vehicleType !== vehConfig.type)) return;
 
   SetEntityCoords(
     plyVeh,

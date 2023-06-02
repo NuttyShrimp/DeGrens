@@ -18,7 +18,6 @@ Inventory.onInventoryUpdate(
       hasPhone = await Inventory.doesInventoryHaveItems('player', identifier, 'phone');
     }
     const plySource = charModule.getServerIdFromCitizenId(Number(identifier));
-    console.log(hasPhone, plySource);
     if (!plySource) return;
     Events.emitNet('phone:client:setState', plySource, 'hasPhone', hasPhone);
   },

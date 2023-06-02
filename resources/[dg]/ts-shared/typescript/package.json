@@ -1,6 +1,6 @@
 {
   "name": "dg-shared",
-  "version": "1.2.2",
+  "version": "1.2.3",
   "sentry_dsn": "https://47836ea9173b4e52b8820a05996cf549@sentry.nuttyshrimp.me/2",
   "scripts": {
     "build": "node ../../../../scripts/build.js --client --server --index",
@@ -11,15 +11,15 @@
   },
   "dependencies": {
     "cli-table3": "^0.6.2",
-    "color-name-list": "^10.7.0",
-    "core-js": "^3.25.0",
+    "color-name-list": "^10.8.0",
+    "core-js": "^3.30.2",
     "nearest-color": "^0.4.4",
     "reflect-metadata": "^0.1.13"
   },
   "devDependencies": {
-    "@sentry/types": "^7.46.0",
+    "@sentry/types": "^7.53.1",
     "@types/core-js": "^2.5.5",
     "db": "*",
-    "esbuild": "*"
+    "esbuild": "^0.17.19"
   }
 }

@@ -1,6 +1,6 @@
 {
   "name": "dg-phone",
-  "version": "1.2.2",
+  "version": "1.2.3",
   "main": "index.js",
   "author": "NuttyShrimp",
   "license": "MIT",
@@ -16,7 +16,7 @@
     "@dgx/server": "workspace:*",
     "@dgx/shared": "workspace:*",
     "db": "workspace:*",
-    "esbuild": "*",
+    "esbuild": "^0.17.19",
     "logger": "workspace:*",
     "tsconfig": "workspace:*"
   }

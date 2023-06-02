@@ -1,7 +1,7 @@
 import { Schema, Validator } from 'jsonschema';
 
-import { vectorSchema } from '../../helpers/schema';
-import { garageLogger } from '../garages/logger.garages';
+import { vectorSchema } from '../../../../helpers/schema';
+import { garageLogger } from '../../../garages/logger.garages';
 
 const v = new Validator();
 
@@ -22,6 +22,10 @@ const bennysSchema: Schema = {
     },
     heading: {
       type: 'number',
+    },
+    vehicleType: {
+      type: 'string',
+      enum: ['land', 'air', 'sea'],
     },
     data: {
       type: 'object',

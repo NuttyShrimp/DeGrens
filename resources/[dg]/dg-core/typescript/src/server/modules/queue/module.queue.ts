@@ -15,9 +15,9 @@ export class QueueModule implements Modules.ServerModule, Core.ServerModules.Que
     });
   }
 
-  getQueue() {
+  getQueue = () => {
     return queueManager.getQueuedPlayers();
-  }
+  };
 
   onStart() {
     this.manager.loadDBPower();
@@ -50,6 +50,7 @@ export class QueueModule implements Modules.ServerModule, Core.ServerModules.Que
     const userModule = getModule('users');
     const plyIdentifiers = userModule.getPlyIdentifiers(src);
     const finishDeferrals = (msg: string) => {
+      userModule.onPlayerDropped(src);
       deferrals.presentCard(
         JSON.stringify({
           type: 'AdaptiveCard',
@@ -68,7 +69,7 @@ export class QueueModule implements Modules.ServerModule, Core.ServerModules.Que
             },
           ],
           $schema: 'http://adaptivecards.io/schemas/adaptive-card.json',
-          version: '1.5',
+          version: '1.4',
         })
       );
     };

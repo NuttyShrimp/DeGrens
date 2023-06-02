@@ -1,4 +1,4 @@
-import { SQL, SyncedObjects, UI, Util, Inventory, Notifications, Phone, Jobs, Core } from '@dgx/server';
+import { SQL, SyncedObjects, UI, Util, Inventory, Notifications, Jobs } from '@dgx/server';
 import { MODELS_PER_STAGE } from '../constants.weed';
 import config from 'services/config';
 import { mainLogger } from 'sv_logger';
@@ -7,53 +7,28 @@ import { getCurrentSeconds } from '../service.weed';
 import weedPlantManager from './weedplantmanager';
 
 export class WeedPlant {
-  private readonly id: number;
-  private readonly coords: Vec3;
-  private readonly rotation: Vec3;
-  private objectId: string | null;
-  private readonly gender: Criminal.Weed.Gender;
-  public stage: Criminal.Weed.Stage;
-  public food: number;
-  private cutTime: number;
-  public growTime: number;
-  private cid: number;
-  private timesCut: number;
-
+  private object: { id: string; stage: number } | null;
   private logger: winston.Logger;
 
   constructor(
-    id: number,
-    coords: Vec3,
-    rotation: Vec3,
-    gender: Criminal.Weed.Gender,
-    stage: Criminal.Weed.Stage,
-    food: number,
-    cutTime: number,
-    growTime: number,
-    cid: number,
-    timesCut = 0
+    private readonly id: number,
+    private readonly coords: Vec3,
+    private readonly rotation: Vec3,
+    private readonly gender: Criminal.Weed.Gender,
+    public readonly plantTime: number,
+    private cid: number,
+    private foodType: Criminal.Weed.FoodType = 'none',
+    private waterTime: number = 0
   ) {
-    this.id = id;
-    this.coords = coords;
-    this.rotation = rotation;
-    this.objectId = null;
-    this.gender = gender;
-    this.stage = stage;
-    this.food = food;
-    this.cutTime = cutTime;
-    this.growTime = growTime;
-    this.cid = cid;
-    this.timesCut = timesCut;
+    this.object = null;
     this.logger = mainLogger.child({ module: `WeedPlant #${this.id}` });
 
     this.spawnObject();
   }
 
-  private spawnObject = async () => {
-    await this.destroyObject();
-
+  private spawnObject = async (stage: number = this.getStage()) => {
     const [objectId] = await SyncedObjects.add({
-      model: MODELS_PER_STAGE[this.stage],
+      model: MODELS_PER_STAGE[stage],
       coords: this.coords,
       rotation: this.rotation,
       flags: {
@@ -61,27 +36,27 @@ export class WeedPlant {
       },
       skipStore: true,
     });
-    this.objectId = objectId;
+    this.object = {
+      id: objectId,
+      stage,
+    };
   };
 
   private destroyObject = async () => {
-    if (this.objectId == null) return;
-    await SyncedObjects.remove(this.objectId);
-    this.objectId = null;
-  };
+    if (this.object == null) return;
 
-  private save = () => {
-    SQL.query(`UPDATE weed_plants SET stage = ?, food = ?, grow_time = ?, cut_time = ?, times_cut = ? WHERE id = ?`, [
-      this.stage,
-      this.food,
-      this.growTime,
-      this.cutTime,
-      this.timesCut,
-      this.id,
-    ]);
+    await SyncedObjects.remove(this.object.id);
+    this.object = null;
   };
 
   public view = async (plyId: number) => {
+    if (!this.object) return;
+
+    const stage = this.getStage();
+
+    const ageInMinutes = Math.floor((getCurrentSeconds() - this.plantTime) / 60);
+    const ageLabel = `${Math.floor(ageInMinutes / 60)}h ${ageInMinutes % 60}m`;
+
     const menuEntries: ContextMenu.Entry[] = [
       {
         title: `Gender: ${this.gender === 'male' ? 'Mannelijk' : 'Vrouwelijk'}`,
@@ -89,68 +64,92 @@ export class WeedPlant {
         icon: 'venus-mars',
       },
       {
-        title: `Voedsel: ${this.food} percent`,
+        title: `Leeftijd: ${ageLabel}`,
         disabled: true,
         icon: 'droplet-percent',
       },
-      {
+    ];
+
+    // only police can destroy
+    if (Jobs.getCurrentJob(plyId) === 'police') {
+      menuEntries.push({
         title: 'Kapot Maken',
         icon: 'hammer-crash',
         callbackURL: 'criminal/weed/destroy',
         data: {
           plantId: this.id,
-          objectId: this.objectId,
+          objectId: this.object.id,
         },
-      },
-    ];
+      });
+    }
 
-    if (this.canFeed()) {
+    if (stage === 0 && (this.foodType === 'none' || this.waterTime === 0)) {
       const plyItems = await Inventory.getPlayerItems(plyId);
-      const hasFertilizer = plyItems.some(i => i.name === 'farming_fertilizer');
-      const hasDeluxeFertilizer = plyItems.some(i => i.name === 'farming_fertilizer_deluxe');
 
-      const feedSubmenuEntries: ContextMenu.Entry[] = [];
-      if (hasFertilizer) {
-        feedSubmenuEntries.push({
-          title: 'Plantenvoeding',
-          callbackURL: 'criminal/weed/feed',
-          data: {
-            plantId: this.id,
-            objectId: this.objectId,
-            deluxe: false,
-          },
-        });
+      // only if not fed yet
+      if (this.foodType === 'none') {
+        const hasFertilizer = plyItems.some(i => i.name === 'farming_fertilizer');
+        const hasDeluxeFertilizer = plyItems.some(i => i.name === 'farming_fertilizer_deluxe');
+
+        const feedSubmenuEntries: ContextMenu.Entry[] = [];
+        if (hasFertilizer) {
+          feedSubmenuEntries.push({
+            title: 'Plantenvoeding',
+            callbackURL: 'criminal/weed/feed',
+            data: {
+              plantId: this.id,
+              objectId: this.object.id,
+              itemName: 'farming_fertilizer',
+            },
+          });
+        }
+
+        if (hasDeluxeFertilizer) {
+          feedSubmenuEntries.push({
+            title: 'Deluxe Plantenvoeding',
+            callbackURL: 'criminal/weed/feed',
+            data: {
+              plantId: this.id,
+              objectId: this.object.id,
+              itemName: 'farming_fertilizer_deluxe',
+            },
+          });
+        }
+
+        if (feedSubmenuEntries.length !== 0) {
+          menuEntries.push({
+            title: 'Voeding Geven',
+            submenu: feedSubmenuEntries,
+            icon: 'oil-can',
+          });
+        }
       }
 
-      if (hasDeluxeFertilizer) {
-        feedSubmenuEntries.push({
-          title: 'Deluxe Plantenvoeding',
-          callbackURL: 'criminal/weed/feed',
-          data: {
-            plantId: this.id,
-            objectId: this.objectId,
-            deluxe: true,
-          },
-        });
-      }
-
-      if (feedSubmenuEntries.length !== 0) {
-        menuEntries.push({
-          title: 'Voeding Geven',
-          submenu: feedSubmenuEntries,
-          icon: 'oil-can',
-        });
+      // If water not done and valid bucket in inventory, allow watering
+      if (this.waterTime === 0) {
+        const hasWaterBucket = plyItems.some(i => i.name === 'farming_bucket' && i.metadata.liter > 0);
+        if (hasWaterBucket) {
+          menuEntries.push({
+            title: 'Water Geven',
+            icon: 'droplet',
+            callbackURL: 'criminal/weed/water',
+            data: {
+              plantId: this.id,
+              objectId: this.object.id,
+            },
+          });
+        }
       }
     }
 
-    if (this.canCut()) {
+    if (stage === 3) {
       menuEntries.push({
         title: 'Knippen',
         icon: 'scissors',
         callbackURL: 'criminal/weed/cut',
         data: {
           plantId: this.id,
-          objectId: this.objectId,
+          objectId: this.object.id,
         },
       });
     }
@@ -158,12 +157,7 @@ export class WeedPlant {
     UI.openContextMenu(plyId, menuEntries);
   };
 
-  private canFeed = () => {
-    return this.food < 90;
-  };
-
-  public feed = async (plyId: number, deluxe: boolean) => {
-    const itemName = deluxe ? 'farming_fertilizer_deluxe' : 'farming_fertilizer';
+  public feed = async (plyId: number, itemName: string) => {
     const itemState = await Inventory.getFirstItemOfNameOfPlayer(plyId, itemName);
     if (!itemState) return;
 
@@ -173,100 +167,117 @@ export class WeedPlant {
 
     Notifications.add(plyId, 'Je hebt de plant gevoed', 'success');
 
-    const foodIncrease = deluxe ? weedConfig.food.amount.deluxe : weedConfig.food.amount.normal;
-    this.food = Math.min(this.food + foodIncrease, 100);
-    this.save();
+    this.foodType = itemName === 'farming_fertilizer_deluxe' ? 'deluxe' : 'normal';
+    SQL.query(`UPDATE weed_plants SET food_type = ? WHERE id = ?`, [this.foodType, this.id]);
 
-    const logMessage = `${Util.getName(plyId)}(${plyId}) has fed a weed plant with ${
-      deluxe ? 'normal' : 'deluxe'
-    } fertilizer`;
+    const logMessage = `${Util.getName(plyId)}(${plyId}) has fed a weed plant with ${itemName}`;
     this.logger.silly(logMessage);
-    Util.Log('weed:feed', { plantId: this.id, deluxe, ownerCid: this.cid }, logMessage, plyId);
+    Util.Log('weed:feed', { plantId: this.id, itemName, ownerCid: this.cid }, logMessage, plyId);
+  };
+
+  public water = async (plyId: number) => {
+    const cid = Util.getCID(plyId);
+    const bucketItems = (await Inventory.getItemsWithNameInInventory('player', String(cid), 'farming_bucket')) ?? [];
+    const bucketItem = bucketItems.find(i => i.metadata.liter > 0);
+    if (!bucketItem) return;
+
+    if (this.waterTime !== 0) {
+      Notifications.add(plyId, 'Deze plant heeft al water gekregen', 'error');
+      return;
+    }
+
+    Inventory.setMetadataOfItem(bucketItem.id, oldMetadata => ({
+      liter: Number((oldMetadata.liter - 0.2).toFixed(1)),
+    }));
+
+    Notifications.add(plyId, 'Je hebt de plant water gegeven', 'success');
+    this.waterTime = getCurrentSeconds() - this.plantTime;
+    SQL.query(`UPDATE weed_plants SET water_time = ? WHERE id = ?`, [this.waterTime, this.id]);
+
+    const logMessage = `${Util.getName(plyId)}(${plyId}) has watered a weed plant`;
+    this.logger.silly(logMessage);
+    Util.Log('weed:feed', { plantId: this.id, ownerCid: this.cid }, logMessage, plyId);
   };
 
   // destroy is for ply destroy action
   public destroy = (plyId: number) => {
-    this.destroyObject();
-    SQL.query('DELETE FROM weed_plants WHERE id = ?', [this.id]);
-    weedPlantManager.unregisterWeedPlant(this.id);
+    if (Jobs.getCurrentJob(plyId) !== 'police') return;
+
+    this.remove();
 
     const logMessage = `${Util.getName(plyId)}(${plyId}) has destroyed a weed plant`;
     this.logger.silly(logMessage);
     Util.Log('weed:destroy', { plantId: this.id, ownerCid: this.cid }, logMessage, plyId);
-
-    if (
-      this.cid &&
-      Util.getRndInteger(0, 101) < config.weed.destroyMailChance &&
-      Jobs.getCurrentJob(plyId) !== 'police'
-    ) {
-      const charInfo = Core.getPlayer(plyId)?.charinfo;
-      const charName = `${charInfo?.firstname ?? 'Onbekende'} ${charInfo?.lastname ?? 'Persoon'}`;
-
-      Phone.sendOfflineMail(
-        this.cid,
-        'Plant Informatie',
-        'Walter Green',
-        `Een contact van mij wist te vertellen dat hij '${charName}' je plant heeft zien kapotmaken.`
-      );
-    }
   };
 
-  // remove is for scriptwise deleting plant
   public remove = () => {
     this.destroyObject();
     SQL.query('DELETE FROM weed_plants WHERE id = ?', [this.id]);
     weedPlantManager.unregisterWeedPlant(this.id);
-
-    const logMessage = `weed plant ${this.id} has been removed`;
-    this.logger.silly(logMessage);
-    Util.Log('weed:remove', { plantId: this.id, ownerCid: this.cid }, logMessage);
-  };
-
-  public canCut = () => {
-    if (!this.isFullyGrown()) return false;
-    if (this.food < 90) return false;
-
-    const currentTime = getCurrentSeconds();
-    return currentTime >= this.cutTime + config.weed.cut.timeout * 60 * 60; // config value is in hours
   };
 
   public cut = (plyId: number) => {
-    if (!this.canCut()) return;
+    if (this.getStage() !== 3) return;
 
-    const item = this.gender === 'male' ? 'weed_seed' : 'weed_bud';
-    Inventory.addItemToPlayer(plyId, item, 1);
-    this.cutTime = getCurrentSeconds();
-    this.timesCut++;
+    const strain = this.calculateStrain();
+
+    if (this.gender === 'male') {
+      // for male, strain determines chance to get seed
+      if (Util.getRndInteger(0, 101) <= strain) {
+        Inventory.addItemToPlayer(plyId, 'weed_seed', 1);
+      } else {
+        Notifications.add(plyId, 'Te slechte kwaliteit...', 'error');
+      }
+    } else {
+      // for female, strain determines amount of bags out of bud
+      Inventory.addItemToPlayer(plyId, 'weed_bud', 1, { strain });
+    }
+
+    this.remove();
 
     const logMessage = `${Util.getName(plyId)}(${plyId}) has cut a weed plant`;
     this.logger.silly(logMessage);
     Util.Log('weed:cut', { plantId: this.id, ownerCid: this.cid }, logMessage, plyId);
+  };
 
-    const removePlant =
-      this.timesCut > config.weed.cut.maxTimes || Util.getRndInteger(1, 101) <= config.weed.cut.breakChance;
-    if (removePlant) {
-      this.remove();
-      Notifications.add(plyId, 'De plant is gestorven', 'error');
-    } else {
-      this.save();
+  public checkGrowth = async () => {
+    const stage = this.getStage();
+    if (stage === this.object?.stage) return;
+
+    if (this.object != null) {
+      await this.destroyObject();
     }
+
+    this.spawnObject(stage);
   };
 
-  public grow = (currentSeconds: number) => {
-    this.stage = Math.min(3, this.stage + 1) as Criminal.Weed.Stage;
-    this.growTime = currentSeconds;
-    this.save();
-    this.spawnObject();
+  /**
+   * @returns stage 0: can feed, stage 1 | 2: growing, stage 3: can cut
+   */
+  public getStage = () => {
+    const currentSeconds = getCurrentSeconds();
+    if (currentSeconds < this.plantTime) throw new Error('plantTime is in the future');
+
+    // check if still at feeding stage
+    const maxFeedingTime = this.plantTime + config.weed.feedTime * 60;
+    if (currentSeconds < maxFeedingTime) return 0;
+
+    const timeGrown = currentSeconds - maxFeedingTime;
+    const percentageGrown = (timeGrown / (config.weed.growTime * 60)) * 100;
+
+    if (percentageGrown >= 100) return 3;
+    return percentageGrown > 50 ? 2 : 1;
   };
 
-  public depleteFood = () => {
-    this.food--;
-    if (this.food <= 0) {
-      this.remove();
-    }
-  };
+  private calculateStrain = () => {
+    if (this.waterTime === 0) return 0;
 
-  public isFullyGrown = () => {
-    return this.stage === 3;
+    const idealWaterTime = config.weed.idealWaterTime * 60;
+    const maxDiffToIdeal = Math.max(idealWaterTime, config.weed.feedTime * 60 - idealWaterTime);
+    const diffToIdeal = Math.abs(idealWaterTime - this.waterTime);
+    const strain = 100 - (diffToIdeal / maxDiffToIdeal) * 100;
+    const modifiedStrain = Math.round(strain * config.weed.foodModifier[this.foodType] ?? 0);
+
+    return Math.max(0, Math.min(100, modifiedStrain));
   };
 }

@@ -7,11 +7,13 @@ import {
   getCosmeticUpgradePossibilities,
   getCosmeticUpgrades,
   getPerformanceUpgradePossibilities,
-  getPerformanceUpgrades,
 } from './service.upgrades';
 import { hasVehicleKeys } from 'modules/keys/cache.keys';
+import { generateBaseUpgrades } from '@shared/upgrades/service.upgrades';
 
 global.exports('getCosmeticUpgrades', getCosmeticUpgrades);
+global.exports('generateBaseUpgrades', generateBaseUpgrades);
+global.exports('applyUpgrades', applyUpgrades);
 
 RPC.register('vehicles:upgrades:getCosmetic', async (vehNetId?: number) => {
   let veh = getCurrentVehicle();
@@ -24,7 +26,7 @@ RPC.register('vehicles:upgrades:getCosmetic', async (vehNetId?: number) => {
   return getCosmeticUpgrades(veh);
 });
 
-Events.onNet('vehicles:upgrades:apply', async (vehNetId: number, upgrades: Partial<Upgrades.All>) => {
+Events.onNet('vehicles:upgrades:apply', async (vehNetId: number, upgrades: Partial<Vehicles.Upgrades.All>) => {
   // Vehicle handles gets changed sometimes for no fucking apparent reason when just spawned, check netid
   const exists = await Util.awaitEntityExistence(vehNetId, true);
   if (!exists) return;
@@ -87,14 +89,14 @@ Peek.addGlobalEntry('vehicle', {
   distance: 2,
 });
 
-RegisterCommand(
-  'checkTunes',
-  () => {
-    const veh = GetVehiclePedIsIn(PlayerPedId(), false);
-    if (!veh) return;
-    const tunes = getPerformanceUpgrades(veh);
-    if (!tunes) return;
-    console.log(tunes);
-  },
-  false
-);
+// RegisterCommand(
+//   'checkTunes',
+//   () => {
+//     const veh = GetVehiclePedIsIn(PlayerPedId(), false);
+//     if (!veh) return;
+//     const tunes = getPerformanceUpgrades(veh);
+//     if (!tunes) return;
+//     console.log(tunes);
+//   },
+//   false
+// );

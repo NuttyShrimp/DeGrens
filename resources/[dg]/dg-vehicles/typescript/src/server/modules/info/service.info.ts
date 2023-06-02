@@ -8,7 +8,7 @@ import { isSchemaValid } from './schema.info';
 import { mainLogger } from 'sv_logger';
 
 // key: modelhash, value: config
-const vehicleInfo: Map<number, Config.Car> = new Map();
+const vehicleInfo: Map<number, Config.CarSchema> = new Map();
 const modelStock: Map<string, number> = new Map();
 const root = GetResourcePath(GetCurrentResourceName());
 
@@ -20,7 +20,7 @@ export const loadVehicleInfo = () => {
   try {
     const data = fs.readFileSync(`${root}/seeding/vehicles.json`, 'utf-8');
     if (!isSchemaValid(data)) return;
-    const info: Config.Car[] = JSON.parse(data);
+    const info: Config.CarSchema[] = JSON.parse(data);
     info.forEach(car => {
       const hash = GetHashKey(car.model);
       vehicleInfo.set(hash, { ...car, hash });
@@ -123,3 +123,15 @@ export const decreaseModelStock = (model: string) => {
 };
 
 export const getModelStock = (model: string) => modelStock.get(model) ?? 0;
+
+export const assignModelConfig = (ent: number, modelHash: number) => {
+  const modelConfig: any = getConfigByHash(modelHash);
+  if (modelConfig) {
+    delete modelConfig.hash;
+    delete modelConfig.defaultStock;
+    delete modelConfig.restockTime;
+    delete modelConfig.shop;
+    delete modelConfig.price;
+    Entity(ent).state.set('config', modelConfig, true);
+  }
+};

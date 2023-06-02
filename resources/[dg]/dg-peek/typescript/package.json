@@ -1,6 +1,6 @@
 {
   "name": "dg-peek",
-  "version": "1.2.2",
+  "version": "1.2.3",
   "main": "index.js",
   "author": "NuttyShrimp",
   "license": "MIT",
@@ -14,7 +14,7 @@
   "devDependencies": {
     "@dgx/client": "workspace:*",
     "@dgx/shared": "workspace:*",
-    "tsconfig": "workspace:*",
-    "esbuild": "*"
+    "esbuild": "^0.17.19",
+    "tsconfig": "workspace:*"
   }
 }

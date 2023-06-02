@@ -22,7 +22,7 @@ UI.onApplicationClose(() => {
       return;
     }
     const upgrades = getCosmeticUpgrades(veh);
-    const newUpgrades: Partial<Upgrades.Cosmetic> = { neon: upgrades?.neon, xenon: upgrades?.xenon };
+    const newUpgrades: Partial<Vehicles.Upgrades.Cosmetic> = { neon: upgrades?.neon, xenon: upgrades?.xenon };
     Events.emitNet('vehicles:itemupgrades:saveChanges', NetworkGetNetworkIdFromEntity(veh), newUpgrades);
   }
   resetWindowTint();

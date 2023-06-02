@@ -9,13 +9,58 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Requested ped added
-
 ### Changed
 
 ### Fixed
 
+## [1.2.3]
+
+### Added
+
+- Requested ped added
+- Extra kleding voor businesses toegevoegd
+- Kleerkast voor Taxi Jacky en BlazeIt toegevoegd.
+- Sommige garagepoorten worden nu open geforced
+- Lifeinvader mlo + relaed business items added
+- Brandweervoertuigen toegevoegd
+- UC voertuigen toegevoegd
+- Benny locaties voor lucht voertuigen toegevoed (Grote hangaar LSIA & Fort Zancudo)
+- Extra kleuren voor stethoscoop toegevoegd
+- Badge voor ambulance toegevoegd
+- Weedplanten systeem herwerkt
+
+### Changed
+
+- Engine & brakes upgrade impact is gelijk getrokken voor alle addon wagens met een custom modkit
+- Oversized textures van meerdere kleren zijn gereduced voor betere FPS
+- Tweak service status labels
+- Fleeca & Paleto opbrengst gebuffed
+- Restaurant payout voor werknemers verhoogd
+- Classes + prijzen herbeken van voertuigen
+- Remmen gaan langer mee op voertuigen met slechte remmen
+- Siren systeem herwerkt om UC voertuigen te ondersteunen
+- Agenten kunnen via een toggle siren spot aan/uit zetten op ondersteunde voertuigen
+- Lucht voertuigen + fietsen hebben geen mechanic services meer (enkel repairs in bennys nodig)
+- Federale politie X5 is vervangen door een M5 wegens optimalisatie problemen
+- Handlings van overheids voertuigen aangepast
+
+### Fixed
+
 - Je kunt nu niet meer gebeld worden als je je telefoon niet bij hebt
+- Je spawnt nu weer altijd in je appartment als je nieuwe karakter aanmaakt
+- Je bankrekening wordt gecapped op 2 cijfers na de komma
+- Advertenties werken weer
+- Taxi bedrijven hebben nu ook de mogelijkheid om eigendom access te geven aan business roles
+- Beltoon problemen met telefoon zijn opgelost
+- Je kan terug contact gegevens delen
+- De persoon die gebelt wordt ziet terug treffelijk door wie hij gebeld wordt
+- Tijd van twitter terug onder naam verplaatst
+- Fix rotatie van voertuig is direct correct bij het spawnen hiervan
+- Enkele scuffed garage spots gefixed
+- Probleem met caching van bepaalde info opgelost. (zou kick/ban problemen moeten oplossen)
+- Je wordt niet meer gebanned door sommige animal ped models
+- Probleem ivm lockers die opeens geunassigned werden is opgelost
+- Flatbed toegevoegd aan PDM
 
 ## [1.2.2]
 

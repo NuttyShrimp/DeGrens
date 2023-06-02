@@ -10,7 +10,7 @@ class Vehicles {
     owner?: number,
     vin?: string,
     plate?: string,
-    upgrades?: any // Partial<Upgrades.All>
+    upgrades?: any // Partial<Vehicles.Upgrades.All>
   ): Promise<number | undefined> => {
     return global.exports['dg-vehicles'].spawnVehicle(model, position, owner, vin, plate, upgrades);
   };
