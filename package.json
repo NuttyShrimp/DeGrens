@@ -56,11 +56,14 @@
   "lint-staged": {
     "*.{ts,tsx,vue,json}": "eslint --fix --resolve-plugins-relative-to ./ --ext .ts,.tsx,.json,.vue ./resources/[dg]/ --cache"
   },
-  "workspaces": ["resources/**", "packages/*"],
+  "workspaces": [
+    "resources/**",
+    "packages/*"
+  ],
   "prisma": {
     "seed": "ts-node -P packages/db/tsconfig.json packages/db/seed.ts"
   },
-  "version": "1.2.2",
+  "version": "1.2.3",
   "pnpm": {
     "patchedDependencies": {
       "vite-plugin-sentry@1.2.0": "patches/vite-plugin-sentry@1.2.0.patch"
