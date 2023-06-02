@@ -34,6 +34,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Agenten kunnen via een toggle siren spot aan/uit zetten op ondersteunde voertuigen
 - Lucht voertuigen + fietsen hebben geen mechanic services meer (enkel repairs in bennys nodig)
 - Federale politie X5 is vervangen door een M5 wegens optimalisatie problemen
+- Handlings van overheids voertuigen aangepast
 
 ### Fixed
 
