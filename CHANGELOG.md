@@ -13,6 +13,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Je kan geen debts meer betalen als je het geld er niet voor hebt
+
 ## [1.2.3]
 
 ### Added

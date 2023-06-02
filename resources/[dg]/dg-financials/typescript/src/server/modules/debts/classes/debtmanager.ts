@@ -200,7 +200,7 @@ class DebtManager extends Util.Singleton<DebtManager>() {
     }
 
     const amount = (debt.debt - debt.payed) * (percentage / 100);
-    const success = await account.transfer(debt.target_account, cid, cid, amount, debt.reason, true);
+    const success = await account.transfer(debt.target_account, cid, cid, amount, debt.reason, false);
     if (success) {
       Util.Log('financials:debt:pay', { id, cid, debt }, `Successfully paid debt of ${amount}`);
       if (percentage === 100) {
