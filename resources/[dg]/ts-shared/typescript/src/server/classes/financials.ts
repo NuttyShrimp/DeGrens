@@ -33,6 +33,10 @@ class Financials {
     return fexp.getAccountBalance(accId);
   }
 
+  setAccountBalance(accId: string, balance: number) {
+    return fexp.setAccountBalance(accId, balance);
+  }
+
   // Can be ALOT of data!
   getAllAccounts(): IFinancials.Account[] {
     return fexp.getAllAccounts();
