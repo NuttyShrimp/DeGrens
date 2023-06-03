@@ -8,12 +8,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- Developer optie toegevoegd om item metadata aan te passen
 
 ### Changed
 
 ### Fixed
 
 - Je kan geen debts meer betalen als je het geld er niet voor hebt
+- Fix vehicle siren error wanneer het voertuig waar je inzit gedelete wordt
+- Phone notificaties worden nu automatisch gedeclined wanneer je geen phone hebt om problemen te voorkomen
 
 ## [1.2.3]
 
