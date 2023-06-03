@@ -91,7 +91,7 @@ export const rentVehicle = async (src: number, model: string, locId: string, pay
 
   if (payMethod === 'bank') {
     const payed = await Phone.notificationRequest(src, {
-      id: `rent-request-${locId}-${model}`,
+      id: `rent-request-${locId}-${model}-${Date.now()}`,
       title: `Huur ${vehName}`,
       description: `Prijs: €${taxPrice}`,
       icon: {
