@@ -16,6 +16,9 @@ BaseEvents.onEnteredVehicle(veh => {
 BaseEvents.onLeftVehicle((veh, seat) => {
   cleanupKeyThread();
   if (seat !== -1) return;
+
+  if (!DoesEntityExist(veh)) return; // prevent error when exiting vehicle because it got deleted
+
   const sirenState: Sirens.State = Entity(veh).state.sirenState;
   sirenState.sirenMode = 0;
   sirenState.siren = false;
