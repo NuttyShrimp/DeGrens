@@ -1,4 +1,4 @@
-import { Admin, Core, Events, Notifications, Util } from '@dgx/server';
+import { Admin, Core, Events, Notifications, Sync, Util } from '@dgx/server';
 
 import commandManager from '../classes/commandManager';
 
@@ -94,12 +94,7 @@ const baseCommands: Server.Command[] = [
         `${Util.getName(src)} heeft een /me bericht verstuurd`,
         src
       );
-      Util.getAllPlayers().forEach(player => {
-        const plyCoords = Util.ArrayToVector3(GetEntityCoords(GetPlayerPed(String(player))));
-        const shouldShow = senderCoords.subtract(plyCoords).Length <= 25;
-        if (!shouldShow) return;
-        Events.emitNet('dg-misc:me:show', player, src, msg);
-      });
+      Sync.show3dText(src, msg);
     },
   },
   {
@@ -131,6 +126,41 @@ const baseCommands: Server.Command[] = [
         prefix: 'ID: ',
         type: 'system',
       });
+    },
+  },
+  {
+    name: 'dice',
+    description: 'Gooi een of meerdere dobbelstenen',
+    parameters: [
+      {
+        name: 'amount',
+        description: 'Aantal dobbelstenen [1-20]',
+        required: true,
+      },
+      {
+        name: 'sides',
+        description: 'Aantal kanten/ogen op 1 dobbelsteen',
+        required: true,
+      },
+    ],
+    permissionLevel: 'user',
+    handler: (src, _, args) => {
+      let amount = Number(args[0]);
+      if (Number.isNaN(amount)) {
+        Notifications.add(src, `${amount} is geen geldig aantal dobbelstenen`, 'error');
+        return;
+      }
+      const sides = Number(args[0]);
+      if (Number.isNaN(sides)) {
+        Notifications.add(src, `${sides} is geen geldig aantal ogen`, 'error');
+        return;
+      }
+      amount = Math.min(amount, 20);
+      const results: string[] = [];
+      for (let i = 0; i < amount; i++) {
+        results.push(`${Util.getRndInteger(1, sides)}/${sides}`);
+      }
+      Sync.show3dText(src, `Roll: ${results.join(' ')}`);
     },
   },
 ];
