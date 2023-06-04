@@ -150,7 +150,7 @@ const baseCommands: Server.Command[] = [
         Notifications.add(src, `${amount} is geen geldig aantal dobbelstenen`, 'error');
         return;
       }
-      const sides = Number(args[0]);
+      const sides = Number(args[1]);
       if (Number.isNaN(sides)) {
         Notifications.add(src, `${sides} is geen geldig aantal ogen`, 'error');
         return;
