@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Developer optie toegevoegd om item metadata aan te passen
 - API endpoint om account balance te veranderen
 - `/dice` command toegevoegd
+- Pride clothing
 
 ### Changed
 
@@ -20,6 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Je kan geen debts meer betalen als je het geld er niet voor hebt
 - Fix vehicle siren error wanneer het voertuig waar je inzit gedelete wordt
 - Phone notificaties worden nu automatisch gedeclined wanneer je geen phone hebt om problemen te voorkomen
+- Invisible collision bij Up-n-atom parking
 
 ## [1.2.3]
 
