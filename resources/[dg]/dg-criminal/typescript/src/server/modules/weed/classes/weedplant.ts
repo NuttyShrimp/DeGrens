@@ -276,7 +276,7 @@ export class WeedPlant {
     const maxDiffToIdeal = Math.max(idealWaterTime, config.weed.feedTime * 60 - idealWaterTime);
     const diffToIdeal = Math.abs(idealWaterTime - this.waterTime);
     const strain = 100 - (diffToIdeal / maxDiffToIdeal) * 100;
-    const modifiedStrain = Math.round(strain * config.weed.foodModifier[this.foodType] ?? 0);
+    const modifiedStrain = Math.round(strain * (config.weed.foodModifier[this.foodType] ?? 0));
 
     return Math.max(0, Math.min(100, modifiedStrain));
   };
