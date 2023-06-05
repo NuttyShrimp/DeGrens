@@ -50,13 +50,14 @@ class VinManager extends Util.Singleton<VinManager>() {
     return this.playerVins.has(vin);
   }
 
-  attachVinToEntId(vin: string, vehId: number) {
+  attachEntityToVin(vin: string, vehId: number) {
     this.logger.debug(`Attaching vin ${vin} to veh id ${vehId}`);
     if (!DoesEntityExist(vehId)) {
       throw new Error(`Failed to set vin ${vin} to veh id ${vehId} - entity not found`);
     }
     this.registeredVins.add(vin);
     this.vinToEntId.set(vin, vehId);
+    Entity(vehId).state.set('vin', vin, true);
   }
 
   @Export('getNetIdOfVin')
@@ -72,15 +73,10 @@ class VinManager extends Util.Singleton<VinManager>() {
     return vehNetId;
   }
 
-  generateVin(entId?: number): string {
-    let vin = Util.generateRndChar(17).toUpperCase();
+  generateVin(): string {
+    const vin = Util.generateRndChar(17).toUpperCase();
     while (this.doesVinExist(vin)) {
-      vin = Util.generateRndChar(17).toUpperCase();
-    }
-    if (entId) {
-      this.logger.debug(`Generated vin ${vin} for entId ${entId}`);
-      this.registeredVins.add(vin);
-      this.vinToEntId.set(vin, entId);
+      return this.generateVin();
     }
     return vin;
   }

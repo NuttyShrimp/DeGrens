@@ -66,7 +66,7 @@ declare namespace Bennys {
   }
 }
 
-declare interface modelInfo {
+declare interface ModelInfo {
   valid: boolean;
   automobile: boolean;
 }

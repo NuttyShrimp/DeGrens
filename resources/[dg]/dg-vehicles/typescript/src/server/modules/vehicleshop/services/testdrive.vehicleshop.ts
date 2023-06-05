@@ -101,7 +101,7 @@ Events.onNet('vehicles:shop:testdrive:start', async (plyId: number, model: strin
   }
 
   const vehVin = vinManager.generateVin();
-  const vehEnt = await spawnVehicle(model, shopConfig.vehicleSpawnLocation, plyId, vehVin, `XXJENSXX`);
+  const vehEnt = await spawnVehicle(model, shopConfig.vehicleSpawnLocation, vehVin, `XXJENSXX`);
   if (!vehEnt) {
     Notifications.add(plyId, 'Kon voertuig niet testritten', 'error');
     if (!byEmployee) {

@@ -1,8 +1,7 @@
-import { Events, RPC, Util } from '@dgx/client';
-
+import { RPC, Util } from '@dgx/client';
 import { isCloseToADoor, isCloseToAWheel, isCloseToHood } from '../helpers/vehicle';
 
-RPC.register('vehicle:checkModel', (model: string): modelInfo => {
+RPC.register('vehicle:checkModel', (model: string): ModelInfo => {
   return {
     valid: IsModelValid(model) && IsModelAVehicle(model),
     automobile: IsThisModelACar(model),

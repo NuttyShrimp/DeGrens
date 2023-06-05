@@ -61,7 +61,7 @@ global.exports(
         Notifications.add(plyId, 'Geen voertuig geselecteerd', 'error');
         return;
       }
-      const ent = await spawnVehicle(model, position, plyId, vin);
+      const ent = await spawnVehicle(model, position, vin);
       if (!ent) {
         Notifications.add(plyId, 'Could not spawn new vehicle', 'error');
         return;

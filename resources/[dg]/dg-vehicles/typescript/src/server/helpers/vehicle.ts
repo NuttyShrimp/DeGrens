@@ -14,7 +14,8 @@ import { applyFakePlate, validateVehicleVin } from '../modules/identification/se
 import { keyManager } from '../modules/keys/classes/keymanager';
 import { CREATE_AUTOMOBILE } from '../sv_constants';
 import { mainLogger } from '../sv_logger';
-import { assignModelConfig, getConfigByHash } from 'modules/info/service.info';
+import { assignModelConfig } from 'modules/info/service.info';
+import { Vector4 } from '@dgx/shared';
 
 /**
  * Spawn a vehicle
@@ -29,27 +30,24 @@ import { assignModelConfig, getConfigByHash } from 'modules/info/service.info';
 export const spawnVehicle = async (
   model: string,
   position: Vec4,
-  owner?: number,
   vin?: string,
   plate?: string,
   upgrades?: Partial<Vehicles.Upgrades.All>
 ) => {
   // First we check model if model is vehicle on client
-  let modelCheckPlayer = owner;
+  const modelCheckPlayer = Number(GetPlayerFromIndex(0));
   if (!modelCheckPlayer) {
-    const firstPlayer = Number(GetPlayerFromIndex(0));
-    if (!firstPlayer) {
-      mainLogger.error(`No players available to check model for 'spawnVehicle'`);
-      return;
-    }
-    modelCheckPlayer = firstPlayer;
-    mainLogger.info(`No owner provided for 'spawnVehicle', using first found player to check model.`);
-  }
-  const modelInfo = await RPC.execute<modelInfo>('vehicle:checkModel', modelCheckPlayer, model);
-  if (!modelInfo || !modelInfo.valid) {
-    mainLogger.error(`Spawn vehicle: invalid model ${model} | modelCheckPlayer: ${modelCheckPlayer}`);
+    mainLogger.error(`No players available to check model for 'spawnVehicle'`);
     return;
   }
+  const modelInfo = await RPC.execute<ModelInfo>('vehicle:checkModel', modelCheckPlayer, model);
+  if (!modelInfo || !modelInfo.valid) {
+    mainLogger.error(`Spawn vehicle: invalid model ${model}`);
+    return;
+  }
+
+  // force to be floats
+  position = Vector4.create(position).add(0.001);
 
   let veh: number;
   const modelHash = GetHashKey(model);
@@ -59,10 +57,10 @@ export const spawnVehicle = async (
       0x00000000,
       CREATE_AUTOMOBILE,
       modelHash,
-      position.x + 0.001,
-      position.y + 0.001,
-      position.z + 0.001,
-      position.w + 0.001
+      position.x,
+      position.y,
+      position.z,
+      position.w
     );
   } else {
     veh = CreateVehicle(modelHash, position.x, position.y, position.z, position.w, true, true);
@@ -87,13 +85,10 @@ export const spawnVehicle = async (
     emitNet('vehicle:setHeading', entityOwner, vehNetId, position.w);
   }
 
-  if (!vin) {
-    vin = vinManager.generateVin(veh);
-  } else {
-    vinManager.attachVinToEntId(vin, veh);
-  }
   const vehState = Entity(veh).state;
-  vehState.set('vin', vin, true);
+
+  const newVin = vin ?? vinManager.generateVin();
+  vinManager.attachEntityToVin(newVin, veh);
   fuelManager.registerVehicle(veh);
 
   const newPlate = plate ?? plateManager.generatePlate();
@@ -139,7 +134,6 @@ export const spawnOwnedVehicle = async (src: number, vehicleInfo: Vehicle.Vehicl
   const vehicle = await spawnVehicle(
     vehicleInfo.model,
     { ...position, z: position.z + 0.5 },
-    src,
     vehicleInfo.vin,
     vehicleInfo.plate
   );
