@@ -23,6 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Phone notificaties worden nu automatisch gedeclined wanneer je geen phone hebt om problemen te voorkomen
 - Invisible collision bij Up-n-atom parking
 - Jobs zonder loon blijven hun leefloon krijgen
+- Het is minder makkelijk om samen hetzelfde voertuig uit te halen
 
 ## [1.2.3]
 
