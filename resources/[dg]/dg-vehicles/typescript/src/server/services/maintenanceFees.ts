@@ -26,10 +26,7 @@ const generateFees = async (cids: number[]) => {
 
     vehicles.forEach(async veh => {
       const vehConfig = getConfigByModel(veh.model)!;
-
-      const minDebtPrice = Math.round(vehConfig.price * (baseRate - 0.01) * vehMultiplier);
-      const maxDebtPrice = Math.round(vehConfig.price * (baseRate + 0.01) * vehMultiplier);
-      const debtPrice = Util.getRndInteger(minDebtPrice, maxDebtPrice);
+      const debtPrice = vehConfig.price * baseRate * vehMultiplier
       // Little abuse of origin-name right here
       fees.push({
         cid,

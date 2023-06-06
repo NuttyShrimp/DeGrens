@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Pride clothing
 
 ### Changed
+- Randomization van maintenance fees weggehaald om veranderende waardes bij toekomstige fees te voorkomen
 
 ### Fixed
 
