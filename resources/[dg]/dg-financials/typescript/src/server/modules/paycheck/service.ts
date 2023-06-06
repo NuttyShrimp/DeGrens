@@ -129,7 +129,7 @@ export const startPaycheckInterval = () => {
     for (const player of players) {
       if (!player.serverId) return;
       const job = String(Jobs.getCurrentJob(player.serverId));
-      const amount = paycheckConfig[job] ?? 0;
+      const amount = paycheckConfig.jobs[job] ?? paycheckConfig.default;
       const plyTotalPaycheck = (paycheckCache.get(player.citizenid) ?? 0) + amount;
 
       paycheckCache.set(player.citizenid, plyTotalPaycheck);

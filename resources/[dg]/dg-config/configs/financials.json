@@ -20,10 +20,12 @@
     ]
   },
   "paycheck": {
-    "police": 26,
-    "ambulance": 26,
-    "realestate": 18,
-    "null": 1.5
+    "jobs": {
+      "police": 26,
+      "ambulance": 26,
+      "realestate": 18
+    },
+    "default": 1.5
   },
   "cryptoCoins": [
     {

@@ -22,6 +22,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fix vehicle siren error wanneer het voertuig waar je inzit gedelete wordt
 - Phone notificaties worden nu automatisch gedeclined wanneer je geen phone hebt om problemen te voorkomen
 - Invisible collision bij Up-n-atom parking
+- Jobs zonder loon blijven hun leefloon krijgen
 
 ## [1.2.3]
 
