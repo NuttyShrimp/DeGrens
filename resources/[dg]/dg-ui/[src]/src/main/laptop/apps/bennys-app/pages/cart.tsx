@@ -24,7 +24,7 @@ const CartItem: FC<{ itemName: string; amount: number }> = props => {
             onError={() => console.log(`No image found with filename '${itemInfo.image}'`)}
           />
         </div>
-        {props.itemName} ({props.amount}x) - {props.amount * itemInfo.price} Suliro
+        {itemInfo.label} ({props.amount}x) - {props.amount * itemInfo.price} Suliro
       </div>
       <Button
         label={'Remove from Cart'}

@@ -25,6 +25,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Invisible collision bij Up-n-atom parking
 - Jobs zonder loon blijven hun leefloon krijgen
 - Het is minder makkelijk om samen hetzelfde voertuig uit te halen
+- Bennys laptopapp gebruikt nu itemlabel ipv itemname in cartlist
 
 ## [1.2.3]
 
