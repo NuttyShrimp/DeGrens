@@ -7,6 +7,8 @@ const cuffedPlayers = new Map<number, Police.CuffType>();
 // Key: cid
 const cuffLogs = new Map<number, { time: number; name: string }[]>();
 
+const playersInCuffAction = new Set<number>();
+
 export const isPlayerCuffed = (plyId: number) => {
   return cuffedPlayers.has(plyId);
 };
@@ -23,6 +25,7 @@ const setCuffState = async (plyId: number, state: Police.CuffType | null, replic
   }
 
   cuffedPlayers.set(plyId, state);
+  playersInCuffAction.delete(plyId);
 };
 
 const insertCuffLog = async (cuffedPlayer: number, cuffingPlayer: number) => {
@@ -45,17 +48,15 @@ global.asyncExports('forceUncuff', forceUncuff);
 
 global.exports('cycleCuffs', (plyId: number) => {
   const cuffState = cuffedPlayers.get(plyId);
-  if (!cuffState) {
-    Events.emitNet('police:interactions:forceCuff', plyId);
-  } else {
-    setCuffState(plyId, cuffState === 'hard' ? 'soft' : null, true);
-  }
+  setCuffState(plyId, getNextCuffState(cuffState), true);
 });
 
 Events.onNet('police:interactions:tryToCuff', async (src: number, target: number) => {
   // Check if has cuffitem or is cop
   const hasCuffs = Jobs.getCurrentJob(src) === 'police' || (await Inventory.doesPlayerHaveItems(src, 'hand_cuffs'));
   if (!hasCuffs) return;
+
+  if (playersInCuffAction.has(target)) return;
 
   // Player cannot be in interaction or be down/cuffed
   if (isPlayerCuffed(src) || Hospital.isDown(src) || isPlayerInActiveInteraction(src)) return;
@@ -72,44 +73,45 @@ Events.onNet('police:interactions:tryToCuff', async (src: number, target: number
     if (Util.getPlyCoords(src).distance(targetCoords) > 3) return;
 
     const targetPed = GetPlayerPed(String(target));
+    playersInCuffAction.add(target);
 
+    // do uncuffing if already cuffed
     const cuffState = cuffedPlayers.get(target);
-    if (!cuffState) {
-      const originPed = GetPlayerPed(String(src));
-      const coords = Util.getOffsetFromPlayer(src, { x: 0, y: 0.5, z: -0.9 });
-      const heading = GetEntityHeading(originPed);
-
-      Events.emitNet('police:interactions:doCuff', src);
-      Events.emitNet('police:interactions:getCuffed', target, { ...coords, w: heading });
-
-      insertCuffLog(target, src);
-      Util.Log('police:interactions:cuff', { target }, `${Util.getName(src)} has cuffed a player`, src);
-
-      const soundId = `cuff-sound-${target}`;
-      Sounds.playOnEntity(soundId, 'cuff', 'DLC_NUTTY_SOUNDS', NetworkGetNetworkIdFromEntity(targetPed));
-      setTimeout(() => {
-        Sounds.stop(soundId);
-      }, 2000);
-    } else {
-      setTimeout(() => {
-        const soundId = `uncuff-sound-${target}`;
-        Sounds.playOnEntity(soundId, 'uncuff', 'DLC_NUTTY_SOUNDS', NetworkGetNetworkIdFromEntity(targetPed));
-        setTimeout(() => {
-          Sounds.stop(soundId);
-        }, 500);
-      }, 1500);
+    if (cuffState) {
+      playCuffSound('uncuff', targetPed, 1500, 500);
 
       const success = await RPC.execute<boolean>('police:interactions:doUncuff', src, target);
-      if (success) {
-        setCuffState(target, cuffState === 'hard' ? 'soft' : null, true);
-      }
-      Util.Log('police:interactions:uncuff', { target }, `${Util.getName(src)} has uncuffed a player once`, src);
-    }
-  }, timeout);
-});
+      playersInCuffAction.delete(target);
+      if (!success) return;
 
-Events.onNet('police:interactions:setCuffState', (plyId: number, state: Police.CuffType | null) => {
-  setCuffState(plyId, state);
+      const newCuffState = getNextCuffState(cuffState);
+      setCuffState(target, newCuffState, true);
+      Util.Log(
+        'police:interactions:uncuff',
+        { target, newCuffState },
+        `${Util.getName(src)}(${src}) has uncuffed a player once`,
+        src
+      );
+      return;
+    }
+
+    const originPed = GetPlayerPed(String(src));
+    const coords = Util.getOffsetFromPlayer(src, { x: 0, y: 0.5, z: -0.9 });
+    const heading = GetEntityHeading(originPed);
+
+    playCuffSound('cuff', targetPed, 0, 2000);
+
+    // only interaction for cuffing player is animation
+    Events.emitNet('police:interactions:doCuff', src);
+
+    const success = await RPC.execute<boolean>('police:interactions:getCuffed', target, { ...coords, w: heading });
+    playersInCuffAction.delete(target);
+    if (!success) return;
+
+    setCuffState(target, 'hard');
+    insertCuffLog(target, src);
+    Util.Log('police:interactions:cuff', { target }, `${Util.getName(src)}(${src}) has cuffed a player`, src);
+  }, timeout);
 });
 
 Events.onNet('police:interactions:showCuffLogs', (src: number) => {
@@ -148,3 +150,18 @@ Core.onPlayerUnloaded((plyId, cid) => {
   Util.Log('police:interactions:droppedWithCuffs', { plyId, cid }, `Player ${cid} unloaded while cuffed`);
   cuffedPlayers.delete(plyId);
 });
+
+const playCuffSound = (sound: 'cuff' | 'uncuff', entity: number, startTimeout: number, endTimeout: number) => {
+  setTimeout(() => {
+    const soundId = `cuff-sound-${entity}`;
+    Sounds.playOnEntity(soundId, sound, 'DLC_NUTTY_SOUNDS', NetworkGetNetworkIdFromEntity(entity));
+    setTimeout(() => {
+      Sounds.stop(soundId);
+    }, endTimeout);
+  }, startTimeout);
+};
+
+const getNextCuffState = (oldCuffState: Police.CuffType | null | undefined) => {
+  if (!oldCuffState) return 'hard';
+  return oldCuffState === 'hard' ? 'soft' : null;
+};

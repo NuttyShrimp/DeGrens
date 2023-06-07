@@ -19,6 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Randomization van maintenance fees weggehaald om veranderende waardes bij toekomstige fees te voorkomen
 - Police heli geallowlist voor camera
 
+
 ### Fixed
 
 - Je kan geen debts meer betalen als je het geld er niet voor hebt
@@ -29,6 +30,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Het is minder makkelijk om samen hetzelfde voertuig uit te halen
 - Bennys laptopapp gebruikt nu itemlabel ipv itemname in cartlist
 - Random tick in siren weggehaald
+- Je kan niet meer cuffen wanneer iemand al gecuffed wordt
 
 ## [1.2.3]
 
