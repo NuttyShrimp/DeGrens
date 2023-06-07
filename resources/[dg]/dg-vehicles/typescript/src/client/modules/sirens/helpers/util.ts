@@ -36,7 +36,7 @@ export const stateBagWrapper = async (stateKey: string, handler: StateBagHandler
         if (timeout < GetGameTimer()) return;
       }
 
-      if (!oldState || oldState[stateKey] === value[stateKey]) return;
+      if (oldState && oldState[stateKey] === value[stateKey]) return;
       const amOwner = NetworkGetEntityOwner(veh) == PlayerId();
 
       // If we're the owner we want to use local (more responsive)
