@@ -95,20 +95,17 @@ export const startJobForGroup = async (plyId: number) => {
   const payoutLevel = jobManager.getJobPayoutLevel('sanitation');
   if (!payoutLevel) return;
 
-  const vehicle = await Vehicles.spawnVehicle('trash', sanitationConfig.vehicleLocation, plyId);
-  if (!vehicle) {
+  const spawnedVehicle = await Vehicles.spawnVehicle({
+    model: 'trash',
+    position: sanitationConfig.vehicleLocation,
+    keys: plyId,
+    fuel: 100,
+  });
+  if (!spawnedVehicle) {
     Notifications.add(plyId, 'Kon het voertuig niet uithalen', 'error');
     return;
   }
-  const vin = Vehicles.getVinForVeh(vehicle);
-  const netId = NetworkGetNetworkIdFromEntity(vehicle);
-  if (!vin || !netId) {
-    Notifications.add(plyId, 'Kon het voertuig niet registreren', 'error');
-    return;
-  }
-
-  Vehicles.giveKeysToPlayer(plyId, netId);
-  Vehicles.setFuelLevel(vehicle, 100);
+  const { vehicle, netId, vin } = spawnedVehicle;
 
   const locationSequence = generateLocationSequence();
   const jobGroup: Sanitation.Job = {

@@ -57,17 +57,15 @@ export const assignLocationToGroup = async (ownerId: number) => {
   if (!jobAssigned) return;
 
   const model = getRandomModel();
-  const vehicle = await Vehicles.spawnVehicle(model, location.vehicleLocation, ownerId);
-  if (!vehicle) {
-    Notifications.add(ownerId, 'Er is een probleem opgetreden', 'error');
+  const spawnedVehicle = await Vehicles.spawnVehicle({
+    model,
+    position: location.vehicleLocation,
+  });
+  if (!spawnedVehicle) {
+    Notifications.add(ownerId, 'Kon het voertuig niet uithalen', 'error');
     return;
   }
-  const vin = Vehicles.getVinForVeh(vehicle);
-  const netId = NetworkGetNetworkIdFromEntity(vehicle);
-  if (!vin || !netId) {
-    Notifications.add(ownerId, 'Kon het voertuig niet registreren', 'error');
-    return;
-  }
+  const { vehicle, netId, vin } = spawnedVehicle;
 
   Vehicles.setVehicleDoorsLocked(vehicle, true);
 

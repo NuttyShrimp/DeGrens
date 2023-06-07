@@ -100,22 +100,28 @@ Events.onNet('vehicles:shop:testdrive:start', async (plyId: number, model: strin
     }
   }
 
-  const vehVin = vinManager.generateVin();
-  const vehEnt = await spawnVehicle(model, shopConfig.vehicleSpawnLocation, vehVin, `XXJENSXX`);
-  if (!vehEnt) {
+  const spawnedVehicle = await spawnVehicle({
+    model,
+    position: shopConfig.vehicleSpawnLocation,
+    plate: `XXJENSXX`,
+    keys: plyId,
+    fuel: 100,
+  });
+  if (!spawnedVehicle) {
     Notifications.add(plyId, 'Kon voertuig niet testritten', 'error');
     if (!byEmployee) {
       Financials.addCash(plyId, depositAmount, `canceling-testdrive`);
     }
     return;
   }
-  await applyUpgrades(vehVin, generateBaseUpgrades(vehEnt));
-  keyManager.addKey(vehVin, plyId);
 
-  const timeout = startTimeLimitTimeout(plyId, cid, vehVin);
+  const { vehicle, vin } = spawnedVehicle;
+  await applyUpgrades(vin, generateBaseUpgrades(vehicle));
+
+  const timeout = startTimeLimitTimeout(plyId, cid, vin);
 
   activeTestDrives.set(cid, {
-    vin: vehVin,
+    vin: vin,
     deposit: depositAmount,
     timeLimitReached: false,
     byEmployee,
