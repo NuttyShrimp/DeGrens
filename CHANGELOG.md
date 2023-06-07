@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - API endpoint om account balance te veranderen
 - `/dice` command toegevoegd
 - Pride clothing
+- Chat melding voor wanneer er een nieuw report wordt gemaakt
 
 ### Changed
 - Randomization van maintenance fees weggehaald om veranderende waardes bij toekomstige fees te voorkomen
