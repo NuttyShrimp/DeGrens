@@ -16,7 +16,11 @@ CHANGELOG_PLACEHOLDER="""
 
 TYPESCRIPT_FOLDERS = [
   'typescript',
-  '*src*'
+  '*src*',
+  'ui-project',
+  'src/client',
+  'src/server',
+  'src/shared',
 ]
 
 def statMainPackage():
