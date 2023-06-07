@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 - Randomization van maintenance fees weggehaald om veranderende waardes bij toekomstige fees te voorkomen
+- Police heli geallowlist voor camera
 
 ### Fixed
 
