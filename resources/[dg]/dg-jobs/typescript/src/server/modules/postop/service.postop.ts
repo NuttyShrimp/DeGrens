@@ -77,27 +77,20 @@ export const startJobForGroup = async (plyId: number, jobType: PostOP.JobType) =
   if (!payoutLevel) return;
 
   const vehicleModel = postopConfig.types[jobType].model;
-  const vehicle = await Vehicles.spawnVehicle(
-    vehicleModel,
-    postopConfig.vehicleLocation,
-    plyId,
-    undefined,
-    `POSTOP${Util.getRndInteger(10, 99)}`,
-    vehicleModel === 'mule' ? MULE_UPGRADES : undefined
-  );
-  if (!vehicle) {
+
+  const spawnedVehicle = await Vehicles.spawnVehicle({
+    model: vehicleModel,
+    position: postopConfig.vehicleLocation,
+    plate: `POSTOP${Util.getRndInteger(10, 99)}`,
+    upgrades: vehicleModel === 'mule' ? MULE_UPGRADES : undefined,
+    keys: plyId,
+    fuel: 100,
+  });
+  if (!spawnedVehicle) {
     Notifications.add(plyId, 'Kon het voertuig niet uithalen', 'error');
     return;
   }
-  const vin = Vehicles.getVinForVeh(vehicle);
-  const netId = NetworkGetNetworkIdFromEntity(vehicle);
-  if (!vin || !netId) {
-    Notifications.add(plyId, 'Kon het voertuig niet registreren', 'error');
-    return;
-  }
-
-  Vehicles.giveKeysToPlayer(plyId, netId);
-  Vehicles.setFuelLevel(vehicle, 100);
+  const { netId, vin } = spawnedVehicle;
 
   const locationSequence = generateLocationSequence(jobType);
   const targetLocation = getRandomTargetLocation(jobType, locationSequence[0]);

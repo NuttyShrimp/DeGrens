@@ -26,20 +26,17 @@ Events.onNet('jobs:sanddigging:signIn', async (src: number) => {
   const payoutLevel = jobManager.getJobPayoutLevel('sanddigging');
   if (!payoutLevel) return;
 
-  const vehicle = await Vehicles.spawnVehicle('caddy3', vehicleLocation, src);
-  if (!vehicle) {
+  const spawnedVehicle = await Vehicles.spawnVehicle({
+    model: 'caddy3',
+    position: vehicleLocation,
+    keys: src,
+    fuel: 100,
+  });
+  if (!spawnedVehicle) {
     Notifications.add(src, 'Kon het voertuig niet uithalen', 'error');
     return;
   }
-  const vin = Vehicles.getVinForVeh(vehicle);
-  const netId = NetworkGetNetworkIdFromEntity(vehicle);
-  if (!vin || !netId) {
-    Notifications.add(src, 'Kon het voertuig niet registreren', 'error');
-    return;
-  }
-
-  Vehicles.giveKeysToPlayer(src, netId);
-  Vehicles.setFuelLevel(vehicle, 100);
+  const { netId, vin } = spawnedVehicle;
 
   Util.Log(
     'jobs:sanddigging:start',

@@ -62,15 +62,28 @@ class VinManager extends Util.Singleton<VinManager>() {
 
   @Export('getNetIdOfVin')
   getNetId(vin: string): number | null {
+    const vehId = this.getEntity(vin);
+    if (!vehId) return null;
+    return NetworkGetNetworkIdFromEntity(vehId);
+  }
+
+  @Export('getVehicleOfVin')
+  getEntity(vin: string): number | null {
     const vehId = this.vinToEntId.get(vin);
-    if (!vehId || !DoesEntityExist(vehId) || !Entity(vehId).state?.vin || Entity(vehId).state.vin !== vin) {
+    if (!vehId || !DoesEntityExist(vehId)) {
       this.logger.debug(`Deleting registered vin ${vin} because entity does not exist anymore`);
       this.vinToEntId.delete(vin);
       return null;
     }
 
-    const vehNetId = NetworkGetNetworkIdFromEntity(vehId);
-    return vehNetId;
+    const stateVin = Entity(vehId).state?.vin;
+    if (!stateVin || stateVin !== vin) {
+      this.logger.debug(`Deleting registered vin ${vin} because state vin is different ${stateVin}`);
+      this.vinToEntId.delete(vin);
+      return null;
+    }
+
+    return vehId;
   }
 
   generateVin(): string {

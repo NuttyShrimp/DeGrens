@@ -141,8 +141,14 @@ export const rentVehicle = async (src: number, model: string, locId: string, pay
 
   const vehVin = Vehicles.generateVin();
   const vehPlate = Vehicles.generatePlate();
-  const rentVeh = await Vehicles.spawnVehicle(model, spawnLoc, src, vehVin, vehPlate);
-  if (!rentVeh) {
+  const spawnedVehicle = await Vehicles.spawnVehicle({
+    model,
+    position: spawnLoc,
+    vin: vehVin,
+    plate: vehPlate,
+    fuel: 100,
+  });
+  if (!spawnedVehicle) {
     Notifications.add(src, 'Kon voertuig niet uithalen', 'error');
     Financials.addCash(src, taxPrice, 'rent-payback-veh-no-spawn');
     return;
