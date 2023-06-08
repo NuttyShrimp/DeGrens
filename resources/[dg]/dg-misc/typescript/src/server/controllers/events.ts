@@ -2,21 +2,22 @@ import { Auth } from '@dgx/server';
 import { BLACKLISTED_MODELS } from '../constants';
 import { dispatchHudConfigToPlayer } from 'modules/hud/service.hud';
 
-const checkEntityBlacklisted = (entity: number) => {
+const isModelBlacklisted = (entity: number) => {
+  if (!DoesEntityExist(entity)) return false;
   const model = GetEntityModel(entity) >>> 0;
-  if (BLACKLISTED_MODELS.has(model)) {
-    CancelEvent();
-  }
+  return BLACKLISTED_MODELS.has(model);
 };
 
 on('entityCreating', (entity: number) => {
-  if (DoesEntityExist(entity)) {
-    checkEntityBlacklisted(entity);
-  } else {
-    setTimeout(() => {
-      checkEntityBlacklisted(entity);
-    }, 250);
-  }
+  const blacklisted = isModelBlacklisted(entity);
+  if (!blacklisted) return;
+  CancelEvent();
+});
+
+on('entityCreated', (entity: number) => {
+  const blacklisted = isModelBlacklisted(entity);
+  if (!blacklisted) return;
+  DeleteEntity(entity);
 });
 
 Auth.onAuth(plyId => {

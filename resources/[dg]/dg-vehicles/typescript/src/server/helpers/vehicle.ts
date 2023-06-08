@@ -12,7 +12,6 @@ import plateManager from '../modules/identification/classes/platemanager';
 import vinManager from '../modules/identification/classes/vinmanager';
 import { applyFakePlate, validateVehicleVin } from '../modules/identification/service.id';
 import { keyManager } from '../modules/keys/classes/keymanager';
-import { CREATE_AUTOMOBILE } from '../sv_constants';
 import { mainLogger } from '../sv_logger';
 import { assignModelConfig } from 'modules/info/service.info';
 import { Vector4 } from '@dgx/shared';
@@ -37,41 +36,28 @@ export const spawnVehicle: Vehicles.SpawnVehicleFunction = async data => {
   }
 
   // First we check model if model is vehicle on client
-  const modelCheckPlayer = Number(GetPlayerFromIndex(0));
+  const modelCheckPlayer = +GetPlayerFromIndex(0);
   if (!modelCheckPlayer) {
     mainLogger.error(`No players available to check model for 'spawnVehicle'`);
     return;
   }
-  const modelInfo = await RPC.execute<ModelInfo>('vehicle:checkModel', modelCheckPlayer, data.model);
-  if (!modelInfo || !modelInfo.valid) {
+  const modelType = await RPC.execute<string | undefined>('vehicles:getModelType', modelCheckPlayer, data.model);
+  if (!modelType) {
     mainLogger.error(`Spawn vehicle: invalid model ${data.model}`);
     return;
   }
 
   // force to be floats
   const position = Vector4.create({ w: 0, ...data.position }).add(0.001);
-
-  let vehicle: number;
   const modelHash = GetHashKey(data.model);
-  if (modelInfo.automobile) {
-    console.log('Using automobile rommel');
-    // Cheeky little hack to get this func working
-    vehicle = (Citizen as any).invokeNativeByHash(
-      0x00000000,
-      CREATE_AUTOMOBILE,
-      modelHash,
-      position.x,
-      position.y,
-      position.z,
-      position.w
-    );
-  } else {
-    vehicle = CreateVehicle(modelHash, position.x, position.y, position.z, position.w, true, true);
-  }
+  const vehicle = CreateVehicleServerSetter(modelHash, modelType, position.x, position.y, position.z, position.w);
+
+  // entityCreated event does not get emitted when using the serversetter. We emulate this event to catch blacklisted models
+  emit('entityCreated', vehicle);
 
   const doesExist = await Util.awaitEntityExistence(vehicle);
   if (!doesExist) {
-    mainLogger.error(`Spawn vehicle: vehicle didn't spawn | model: ${data.model}`);
+    mainLogger.error(`Spawn vehicle: vehicle didn't spawn (or was deleted during creation) | model: ${data.model}`);
     return;
   }
 
