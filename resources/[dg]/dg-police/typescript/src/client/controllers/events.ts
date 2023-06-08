@@ -5,7 +5,7 @@ import { buildSpeedZones } from 'modules/speedzones/service.speedzones';
 import { loadLockers } from 'services/lockers';
 import { setRequirements } from 'services/requirements';
 import { buildSafeZones } from 'services/safe';
-import { isPoliceVehicle, setPoliceVehicles } from 'services/vehicles';
+import { isPoliceVehicle, setPoliceVehicles } from '@shared/services/vehicles';
 
 Events.onNet('police:client:init', (config: Police.Config) => {
   buildSpeedZones(config.speedzones);

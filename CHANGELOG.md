@@ -16,9 +16,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Chat melding voor wanneer er een nieuw report wordt gemaakt
 
 ### Changed
+
 - Randomization van maintenance fees weggehaald om veranderende waardes bij toekomstige fees te voorkomen
 - Police heli geallowlist voor camera
-
+- Je kunt geen politie voertuigen meer in beslag nemen
 
 ### Fixed
 
