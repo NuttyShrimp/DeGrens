@@ -11,7 +11,7 @@ const getBlipSettings = (info: Dispatch.BlipInfo): NBlip.Settings => {
       color: 3,
       heading: true,
       text: info.text,
-      category: 69,
+      category: 7,
     };
   }
   if (info.job === 'ambulance') {
@@ -19,7 +19,7 @@ const getBlipSettings = (info: Dispatch.BlipInfo): NBlip.Settings => {
       color: 23,
       heading: true,
       text: info.text,
-      category: 70,
+      category: 7,
     };
   }
   return {};
@@ -28,12 +28,12 @@ const getBlipSettings = (info: Dispatch.BlipInfo): NBlip.Settings => {
 const addBlip = (plyId: number, info: Dispatch.BlipInfo) => {
   const blipSettings = getBlipSettings(info);
   const plyCoords = Sync.getPlayerCoords(plyId);
-  BlipManager.addPlayerBlip(plyId, blipSettings, plyCoords);
+  BlipManager.addPlayerBlip(plyId, 'dispatch', blipSettings, plyCoords);
   playersWithBlips.add(plyId);
 };
 
 export const clearBlips = () => {
-  BlipManager.deletePlayerBlip([...playersWithBlips]);
+  BlipManager.deletePlayerBlip([...playersWithBlips], 'dispatch');
   playersWithBlips.clear();
   blipsEnabled = false;
 };
@@ -48,7 +48,7 @@ export const syncBlips = (plys: Record<number, Dispatch.BlipInfo>) => {
   for (const plyId of oldPlyIds) {
     if (newPlyIds.has(plyId)) continue;
 
-    BlipManager.deletePlayerBlip(plyId);
+    BlipManager.deletePlayerBlip(plyId, 'dispatch');
     playersWithBlips.delete(plyId);
   }
 

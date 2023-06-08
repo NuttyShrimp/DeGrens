@@ -3,7 +3,7 @@ import { EntityBlip, Util, Sync } from '@dgx/client';
 const blips: Record<string, NBlipManager.Info & { category: string; handle: number | null }> = {};
 const disabledCategory = new Set<string>();
 
-const playerBlips = new Map<number, EntityBlip>();
+const playerBlips = new Map<number, { blip: EntityBlip; context: string }>();
 
 const createBlip = (id: string, info: NBlipManager.Info) => {
   let newBlip: number;
@@ -91,23 +91,23 @@ export const removeCategory = (category: string) => {
   }
 };
 
-export const addPlayerBlip = (plyId: number, settings: NBlip.Settings, startCoords: Vec3) => {
+export const addPlayerBlip = (plyId: number, context: string, settings: NBlip.Settings, startCoords: Vec3) => {
   if (playerBlips.has(plyId)) return;
 
   const blip = new EntityBlip('player', plyId, settings, startCoords);
-  playerBlips.set(plyId, blip);
+  playerBlips.set(plyId, { blip, context });
 };
 
-export const deletePlayerBlip = (plyId: number | number[]) => {
+export const deletePlayerBlip = (plyId: number | number[], context: string) => {
   if (Array.isArray(plyId)) {
-    plyId.forEach(deletePlayerBlip);
+    plyId.forEach(id => deletePlayerBlip(id, context));
     return;
   }
 
-  const playerBlip = playerBlips.get(plyId);
-  if (!playerBlip) return;
+  const plyBlipInfo = playerBlips.get(plyId);
+  if (!plyBlipInfo || plyBlipInfo.context !== context) return;
 
-  playerBlip.destroy();
+  plyBlipInfo.blip.destroy();
   playerBlips.delete(plyId);
 };
 
@@ -115,32 +115,32 @@ export const handlePlayerEnteredScope = (plyId: number, localId: number) => {
   const playerBlip = playerBlips.get(plyId);
   if (!playerBlip) return;
 
-  playerBlip.checkMode();
+  playerBlip.blip.checkMode();
 };
 
 export const handlePlayerLeftScope = (plyId: number) => {
   const playerBlip = playerBlips.get(plyId);
   if (!playerBlip) return;
 
-  playerBlip.checkMode();
+  playerBlip.blip.checkMode();
 };
 
 export const updatePlayerBlipCoords = (plyId: number, coords: Vec3) => {
   const playerBlip = playerBlips.get(plyId);
   if (!playerBlip) return;
-  playerBlip.updateCoords(coords);
+  playerBlip.blip.updateCoords(coords);
 };
 
 export const changePlayerBlipSprite = (plyId: number, sprite: number) => {
   const playerBlip = playerBlips.get(plyId);
   if (!playerBlip) return;
-  playerBlip.changeSprite(sprite);
+  playerBlip.blip.changeSprite(sprite);
 };
 
 export const startPlayerBlipCoordSaveThread = () => {
   setInterval(() => {
-    for (const [_, playerBlip] of playerBlips) {
-      playerBlip.saveCoords();
+    for (const [_, { blip }] of playerBlips) {
+      blip.saveCoords();
     }
   }, 1000);
 };

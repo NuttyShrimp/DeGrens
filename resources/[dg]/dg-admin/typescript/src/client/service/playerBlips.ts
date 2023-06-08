@@ -38,7 +38,7 @@ export const enableBlips = () => {
 };
 
 export const disableBlips = () => {
-  BlipManager.deletePlayerBlip([...playersWithBlips]);
+  BlipManager.deletePlayerBlip([...playersWithBlips], 'admin');
   playersWithBlips.clear();
   blipsEnabled = false;
 };
@@ -51,7 +51,7 @@ const handlePlayerCoordsUpdate = (plyCoords: Record<number, Vec3>) => {
   for (const plyId of playersWithBlips) {
     if (plyCoords[plyId]) continue;
 
-    BlipManager.deletePlayerBlip(plyId);
+    BlipManager.deletePlayerBlip(plyId, 'admin');
     playersWithBlips.delete(plyId);
   }
 
@@ -63,6 +63,7 @@ const handlePlayerCoordsUpdate = (plyCoords: Record<number, Vec3>) => {
 
     BlipManager.addPlayerBlip(
       plyId,
+      'admin',
       {
         sprite: 1,
         color: 0,

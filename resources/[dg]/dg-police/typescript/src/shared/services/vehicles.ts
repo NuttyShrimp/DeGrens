@@ -6,6 +6,7 @@ export const setPoliceVehicles = (vehicles: string[]) => {
 
 export const isPoliceVehicle = (vehicle: number) => {
   if (!DoesEntityExist(vehicle)) return false;
+  // @ts-ignore
   if (!IsDuplicityVersion() && !IsEntityAVehicle(vehicle)) {
     return false;
   }
