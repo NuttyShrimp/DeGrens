@@ -32,6 +32,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Bennys laptopapp gebruikt nu itemlabel ipv itemname in cartlist
 - Random tick in siren weggehaald
 - Je kan niet meer cuffen wanneer iemand al gecuffed wordt
+- Crash wanneer je knop indrukt tijdens het inladen opgelost
 
 ## [1.2.3]
 
