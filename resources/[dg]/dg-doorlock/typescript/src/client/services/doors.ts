@@ -29,6 +29,7 @@ export const loadDoors = (doorData: Doorlock.ClientData) => {
         DoorSystemSetOpenRatio(id, state ? 0.001 : 1, true, true);
       }, 1000); // need to wait till door state is synced or whatever
     } else {
+      // DoorSystemSetAutomaticRate(id, 1, false, false);
       DoorSystemSetDoorState(id, state ? 1 : 0, false, true);
     }
 
@@ -88,6 +89,7 @@ export const changeDoorState = (doorId: number, state: boolean) => {
   if (doors[doorId].forceOpen) {
     DoorSystemSetOpenRatio(doorId, state ? 0.001 : 1, true, true);
   } else {
+    DoorSystemSetAutomaticRate(doorId, 1, false, false);
     DoorSystemSetDoorState(doorId, state ? 1 : 0, false, true);
   }
 

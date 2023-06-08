@@ -33,7 +33,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Random tick in siren weggehaald
 - Je kan niet meer cuffen wanneer iemand al gecuffed wordt
 - Crash wanneer je knop indrukt tijdens het inladen opgelost
-- Admin blips en dispatch blips hebben geen last meer van 
+- Admin blips en dispatch blips hebben geen last meer van blips die elkaar overschreven
+- Normale deuren sluiten weer automatisch wanneer je ze op slot doet
 
 ## [1.2.3]
 
