@@ -15,12 +15,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Pride clothing
 - Chat melding voor wanneer er een nieuw report wordt gemaakt
 - Advocaten kunnen nu facturen versturen vanuit de jusitie app
+- Voertuig class modes toegevoegd
+- Enkele extra liveries toegevoegd aan: V90 (politie), Rago (politie), a6 (politie)
 
 ### Changed
 
 - Randomization van maintenance fees weggehaald om veranderende waardes bij toekomstige fees te voorkomen
 - Police heli geallowlist voor camera
 - Je kunt geen politie voertuigen meer in beslag nemen
+- Handlings van politie voertuigen gebuffed voor andere voertuigen beter te kunnen bijhouden
+- Scuffed livery van Porsche GT3 verwijderd
 
 ### Fixed
 
@@ -37,6 +41,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Admin blips en dispatch blips hebben geen last meer van blips die elkaar overschreven
 - Normale deuren sluiten weer automatisch wanneer je ze op slot doet
 - Minder kans op false flags van anticheat
+- Politie interventieband beweegt niet meer in de wind
+- Scuffed windowtint van RAM 2500
 
 ## [1.2.3]
 
