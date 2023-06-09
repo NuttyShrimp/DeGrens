@@ -4,7 +4,7 @@ declare namespace Service {
   type Status = Record<Part, number>;
 
   interface Degradation {
-    name: string;
+    name: Vehicles.Handlings.HandlingEntry;
     percent: number;
   }
 

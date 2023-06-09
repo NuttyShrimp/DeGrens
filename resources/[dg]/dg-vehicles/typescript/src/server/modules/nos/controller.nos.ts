@@ -73,12 +73,6 @@ Inventory.registerUseable('nos', async src => {
   );
 });
 
-Auth.onAuth(async plyId => {
-  await Config.awaitConfigLoad();
-  const config = Config.getConfigValue('vehicles.config.nos');
-  Events.emitNet('vehicles:nos:setConfig', plyId, config);
-});
-
 Events.onNet('vehicles:nos:save', (src: number, netId: number, amount: number) => {
   const vin = getVinForNetId(netId);
   if (!vin || !vinManager.isVinFromPlayerVeh(vin)) return;

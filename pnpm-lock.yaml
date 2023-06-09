@@ -1377,17 +1377,9 @@ importers:
         specifier: ^0.17.19
         version: 0.17.19
 
-  resources/[dg]/ts-shared/typescript/src/client:
-    dependencies:
-      dg-shared:
-        specifier: '*'
-        version: link:../..
+  resources/[dg]/ts-shared/typescript/src/client: {}
 
-  resources/[dg]/ts-shared/typescript/src/server:
-    dependencies:
-      dg-shared:
-        specifier: '*'
-        version: link:../..
+  resources/[dg]/ts-shared/typescript/src/server: {}
 
   resources/[dg]/ts-shared/typescript/src/shared: {}
 

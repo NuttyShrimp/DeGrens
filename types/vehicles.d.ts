@@ -189,4 +189,42 @@ declare namespace Vehicles {
       wheels: Record<number, number>;
     };
   }
+
+  declare namespace Handlings {
+    type HandlingEntry =
+      | 'fBrakeForce'
+      | 'fBrakeBiasFront'
+      | 'fClutchChangeRateScaleDownShift'
+      | 'fClutchChangeRateScaleUpShift'
+      | 'fCollisionDamageMult'
+      | 'fDeformationDamageMult'
+      | 'fDriveBiasFront'
+      | 'fDriveInertia'
+      | 'fEngineDamageMult'
+      | 'fHandBrakeForce'
+      | 'fInitialDragCoeff'
+      | 'fInitialDriveForce'
+      | 'fInitialDriveMaxFlatVel'
+      | 'fLowSpeedTractionLossMult'
+      | 'fSteeringLock'
+      | 'fSuspensionCompDamp'
+      | 'fSuspensionForce'
+      | 'fSuspensionReboundDamp'
+      | 'fTractionBiasFront'
+      | 'fTractionCurveMax'
+      | 'fTractionCurveMin'
+      | 'fTractionLossMult';
+    type Handling = Record<HandlingEntry, number>;
+
+    type ModifierType = 'add' | 'multiplier' | 'fixed';
+
+    type Multiplier = {
+      value: number;
+      type: ModifierType;
+      // differantiate between nitro, vehicle modes, stall,...
+      priority: number;
+    };
+
+    type Multipliers = Record<HandlingEntry, Record<string, Multiplier>>;
+  }
 }

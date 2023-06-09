@@ -52,11 +52,6 @@ setImmediate(async () => {
   }
 });
 
-Auth.onAuth(async plyId => {
-  await Util.awaitCondition(() => areGaragesLoaded());
-  emitNet('vehicles:garages:load', plyId, GetGarages());
-});
-
 Events.onNet('dg-vehicles:garages:open', (src: number) => {
   showPlayerGarage(src);
 });

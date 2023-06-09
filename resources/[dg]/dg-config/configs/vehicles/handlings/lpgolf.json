@@ -1,0 +1,15 @@
+{
+  "s": {
+    "fInitialDragCoeff": -2.0,
+    "fInitialDriveForce": 0.02,
+    "fInitialDriveMaxFlatVel": 15.0,
+    "fSteeringLock": 5.0,
+    "fTractionCurveMax": 0.3,
+    "fTractionCurveMin": 0.2
+  },
+  "a+": {
+    "fInitialDragCoeff": -2.0,
+    "fInitialDriveForce": 0.02,
+    "fTractionCurveMin": -0.4
+  }
+}
