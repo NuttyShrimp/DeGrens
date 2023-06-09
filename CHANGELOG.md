@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `/dice` command toegevoegd
 - Pride clothing
 - Chat melding voor wanneer er een nieuw report wordt gemaakt
+- Advocaten kunnen nu facturen versturen vanuit de jusitie app
 
 ### Changed
 
