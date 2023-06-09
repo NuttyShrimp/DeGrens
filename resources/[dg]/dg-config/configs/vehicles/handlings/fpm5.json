@@ -1,0 +1,15 @@
+{
+  "s": {
+    "fInitialDriveForce": 0.035,
+    "fDriveInertia": -0.1,
+    "fClutchChangeRateScaleUpShift": -1.0,
+    "fClutchChangeRateScaleDownShift": -1.0,
+    "fInitialDriveMaxFlatVel": 10.0,
+    "fBrakeForce": 0.0,
+    "fBrakeBiasFront": 0.025,
+    "fHandBrakeForce": 0.2,
+    "fSteeringLock": -3.0,
+    "fTractionCurveMax": 0.2,
+    "fTractionCurveMin": -0.2
+  }
+}

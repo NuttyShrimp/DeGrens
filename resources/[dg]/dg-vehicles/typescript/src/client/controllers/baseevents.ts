@@ -13,6 +13,7 @@ import {
 } from '../modules/status/service.status';
 import { BaseEvents } from '@dgx/client';
 import { disableHarnassHUD, updateHarnassHUD } from 'modules/seatbelts/service.seatbelts';
+import { driverThread } from 'threads/driver';
 
 BaseEvents.onEnteringVehicle(vehicle => {
   SetVehicleNeedsToBeHotwired(vehicle, false);
@@ -34,6 +35,7 @@ BaseEvents.onEnteredVehicle((vehicle, seat) => {
   startVehicleCrashThread(vehicle);
 
   if (seat === -1) {
+    driverThread.start();
     startStatusThread(vehicle);
     updateVehicleNosAmount(vehicle);
     startVehicleRolloverThread(vehicle);
@@ -45,6 +47,7 @@ BaseEvents.onLeftVehicle((vehicle, seat) => {
   DisplayRadar(false);
 
   if (seat === -1) {
+    driverThread.stop();
     cleanFuelThread(vehicle);
     disableSpeedLimiter(vehicle);
     clearVehicleRolloverThread();
@@ -62,6 +65,7 @@ BaseEvents.onVehicleSeatChange((vehicle, newSeat, oldSeat) => {
   setCurrentVehicle(vehicle, newSeat === -1);
 
   if (oldSeat === -1) {
+    driverThread.stop();
     cleanFuelThread(vehicle);
     resetNos(vehicle);
     disableSpeedLimiter(vehicle);
@@ -70,6 +74,7 @@ BaseEvents.onVehicleSeatChange((vehicle, newSeat, oldSeat) => {
   }
 
   if (newSeat === -1) {
+    driverThread.start();
     startFuelThread(vehicle);
     updateVehicleNosAmount(vehicle);
     startVehicleRolloverThread(vehicle);

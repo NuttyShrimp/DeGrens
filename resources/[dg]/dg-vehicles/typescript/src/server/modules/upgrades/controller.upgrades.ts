@@ -69,18 +69,6 @@ Events.onNet('vehicles:upgrades:installItem', async (src: number, netId: number,
   );
 });
 
-Auth.onAuth(async (plyId: number) => {
-  await Config.awaitConfigLoad();
-  const zone = Config.getConfigValue<{
-    itemUpgradesZone: { center: Vec3; length: number; width: number; heading: number };
-  }>('vehicles.config')?.itemUpgradesZone;
-  if (!zone) {
-    upgradesLogger.error('Could not load item upgrades zone config');
-    return;
-  }
-  Events.emitNet('vehicles:itemupgrades:loadZone', plyId, zone);
-});
-
 Inventory.registerUseable('rgb_controller', async plyId => {
   const ped = GetPlayerPed(String(plyId));
   const veh = GetVehiclePedIsIn(ped, false);

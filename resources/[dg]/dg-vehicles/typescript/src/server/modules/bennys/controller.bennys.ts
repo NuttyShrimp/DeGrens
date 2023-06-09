@@ -10,10 +10,6 @@ setImmediate(() => {
   loadBlockedUpgrades();
 });
 
-Auth.onAuth(src => {
-  Events.emitNet('vehicles:bennys:load', src, getZones());
-});
-
 on('playerDropped', () => {
   bennysManager.playerDropped(source);
 });

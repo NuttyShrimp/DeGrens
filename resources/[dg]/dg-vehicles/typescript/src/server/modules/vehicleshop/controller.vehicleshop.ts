@@ -6,12 +6,6 @@ import { CATEGORY_LABEL, MODEL_CATEGORISATION, ModelCategorisation } from './con
 import { buildVehicleContextMenuEntry, getCategoryLabel, getVehicleTaxedPrice } from './helpers.vehicleshop';
 import { vehicleshopLogger } from './logger.vehicleshop';
 
-Auth.onAuth(async plyId => {
-  await Config.awaitConfigLoad();
-  const { shopZone, vehicleSpawnLocation } = getVehicleShopConfig();
-  Events.emitNet('vehicles:shop:buildZone', plyId, shopZone, vehicleSpawnLocation);
-});
-
 Core.onPlayerUnloaded(plyId => {
   if (!shopManager.playersInShop.has(plyId)) return;
   shopManager.setPlayerActive(plyId, false);

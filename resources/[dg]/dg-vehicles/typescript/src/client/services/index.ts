@@ -6,3 +6,5 @@ import './speedlimiter';
 import './seats';
 import './flipcar';
 import './emsShop';
+import './handling';
+import './vehicleModes';
