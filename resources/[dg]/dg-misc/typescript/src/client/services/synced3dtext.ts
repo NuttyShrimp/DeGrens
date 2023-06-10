@@ -23,7 +23,7 @@ const createShowThread = () => {
   }, 1);
 };
 
-Events.onNet('dg-misc:me:show', (target: number, msg: string) => {
+Events.onNet('misc:synced3dtext:add', (target: number, msg: string) => {
   const ply = GetPlayerFromServerId(target);
   if (!ply) return;
   if (!messages[ply]) {

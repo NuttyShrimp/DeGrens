@@ -47,28 +47,6 @@ const tryToCuff = () => {
   }, 5000);
 };
 
-const cuff = async (canBreakOut = true) => {
-  if (cuffType !== null) return;
-
-  if (canBreakOut) {
-    const success = await Minigames.keygame(1, cuffSpeed, 10);
-    if (success) {
-      cuffSpeed = Math.min(20, cuffSpeed + 2);
-      setTimeout(() => {
-        cuffSpeed = Math.max(10, cuffSpeed - 2);
-      }, 10 * 60 * 1000);
-      ClearPedTasks(PlayerPedId());
-      return;
-    }
-
-    await Util.Delay(2000);
-  }
-
-  Weapons.removeWeapon(undefined, true);
-  setCuffType('hard');
-  Events.emitNet('police:interactions:setCuffState', cuffType);
-};
-
 // Radialmenu option
 on('police:tryToCuff', () => {
   tryToCuff();
@@ -109,7 +87,7 @@ RPC.register('police:interactions:doUncuff', async (targetServerId: number) => {
   return success;
 });
 
-Events.onNet('police:interactions:getCuffed', async (coords: Vec4) => {
+RPC.register('police:interactions:getCuffed', async (coords: Vec4) => {
   const ped = PlayerPedId();
   SetEntityCoords(ped, coords.x, coords.y, coords.z, false, false, false, false);
   SetEntityHeading(ped, coords.w);
@@ -119,20 +97,31 @@ Events.onNet('police:interactions:getCuffed', async (coords: Vec4) => {
   TaskPlayAnim(ped, 'mp_arrest_paired', 'crook_p2_back_right', 3.0, 3.0, -1, 0, 0, false, false, false);
   RemoveAnimDict('mp_arrest_paired');
 
-  setTimeout(() => {
-    cuff();
-  }, 750);
+  await Util.Delay(750);
+
+  const success = await Minigames.keygame(1, cuffSpeed, 10);
+  if (success) {
+    cuffSpeed = Math.min(20, cuffSpeed + 2);
+    setTimeout(() => {
+      cuffSpeed = Math.max(10, cuffSpeed - 2);
+    }, 10 * 60 * 1000);
+    ClearPedTasks(PlayerPedId());
+    return false;
+  }
+
+  await Util.Delay(2000);
+
+  setCuffType('hard');
+  return true;
 });
 
 Events.onNet('police:interactions:setCuffState', (state: Police.CuffType | null) => {
   setCuffType(state);
 });
 
-Events.onNet('police:interactions:forceCuff', () => {
-  cuff(false);
-});
-
 const setCuffType = (state: Police.CuffType | null) => {
+  if (cuffType === state) return;
+
   if (state === null) {
     if (cuffAnimLoopId !== null) {
       Animations.stopAnimLoop(cuffAnimLoopId);
@@ -143,6 +132,7 @@ const setCuffType = (state: Police.CuffType | null) => {
   }
 
   cuffType = state;
+  Weapons.removeWeapon(undefined, true);
 
   const animLoop: AnimLoops.Anim = {
     animation: {

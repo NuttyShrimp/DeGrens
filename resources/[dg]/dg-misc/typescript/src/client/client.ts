@@ -19,7 +19,7 @@ import './services/config';
 import './services/boatanchor';
 import './services/minimap';
 import './services/idmenu';
-import './services/me';
+import './services/synced3dtext';
 import './services/editor';
 import './services/point';
 import './services/tackle';

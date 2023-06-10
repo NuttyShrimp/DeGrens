@@ -1,4 +1,4 @@
-import { Auth, Events, Inventory, Notifications, RPC, Config, Util, UI, Business } from '@dgx/server';
+import { Events, Inventory, Notifications, RPC, Config, Util, UI, Business } from '@dgx/server';
 import { getConfigByEntity } from '../info/service.info';
 import { getServiceStatus, seedServiceStatuses, updateServiceStatus } from './services/store';
 import { calculateNeededParts, setPercentagePerPart, useRepairPart } from './service.status';
@@ -19,12 +19,6 @@ setImmediate(() => {
 
 Events.onNet('vehicles:service:saveStatus', (plyId: number, vin: string, status: Service.Status) => {
   updateServiceStatus(vin, status);
-});
-
-Auth.onAuth(async plyId => {
-  await Config.awaitConfigLoad();
-  const config = Config.getConfigValue<Service.Config>('vehicles.service');
-  Events.emitNet('vehicles:service:setDegradationValues', plyId, config.degradationValues);
 });
 
 RPC.register('vehicles:service:getStatus', (src: number, vehNetId: number) => {

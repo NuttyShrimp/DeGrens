@@ -9,11 +9,9 @@ BaseEvents.onEnteredVehicle((src, vehNetId) => {
     'sirenState',
     {
       sirenMode: 0,
-      siren2Mode: 0,
       horn: false,
       lights: false,
       siren: false,
-      siren2: false,
     },
     true
   );

@@ -1,4 +1,4 @@
-import { Events, Jobs, RPC } from '@dgx/server';
+import { Events, Financials, Jobs, Notifications, RPC } from '@dgx/server';
 import { charModule } from 'helpers/core';
 import { mainLogger } from 'sv_logger';
 
@@ -70,4 +70,22 @@ RPC.register('phone:justice:get', () => {
 
 Events.onNet('phone:justice:setAvailable', (src, data: { available: boolean }) => {
   setPlyAvailable(src, data.available);
+});
+
+Events.onNet('phone:justice:giveFine', (src, data: { citizenid: string; amount: string; comment?: string }) => {
+  const plyJob = Jobs.getCurrentJob(src);
+  if (!plyJob || !registered[plyJob]) return;
+
+  const cid = Player(src).state.citizenid;
+  const recvAccId = Financials.getDefaultAccountId(cid);
+  if (!recvAccId) return;
+
+  Financials.giveFine(
+    Number(data.citizenid),
+    recvAccId,
+    Number(data.amount),
+    `Jusitie kosten: ${data?.comment ?? 'No comment'}`,
+    'Justitie DeGrens',
+    cid
+  );
 });

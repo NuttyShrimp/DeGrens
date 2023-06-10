@@ -18,6 +18,10 @@ Events.onNet('auth:panel:openReports', async () => {
 
 Events.onNet('auth:panel:announceNewReportMessage', async (reportId: number) => {
   Sounds.playLocalSound('beep', 0.7);
+  emit('chat:addMessage', {
+    author: 'Reports:',
+    template: 'a new report has been created',
+  });
   UI.SendAppEvent('reports-indicator', {
     action: 'announce',
     data: reportId,

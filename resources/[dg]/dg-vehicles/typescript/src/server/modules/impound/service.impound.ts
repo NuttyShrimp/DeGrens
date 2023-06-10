@@ -1,4 +1,4 @@
-import { Business, Config, Financials, Jobs, Notifications, Phone, SQL, UI, Util } from '@dgx/server';
+import { Business, Config, Financials, Jobs, Notifications, Phone, Police, SQL, UI, Util } from '@dgx/server';
 import {
   checkVehicleStrikes,
   doVehicleForfeiture,
@@ -89,6 +89,12 @@ export const requestImpound = async (src: number, title: string, veh: number, in
     }
     return;
   }
+
+  if (Police.isPoliceVehicle(veh)) {
+    Notifications.add(src, 'Dees voertuig kunde nie in beslag nemen!', 'error');
+    return;
+  }
+
   if (inSpot) {
     impoundVehicle(src, reason, veh);
     return;

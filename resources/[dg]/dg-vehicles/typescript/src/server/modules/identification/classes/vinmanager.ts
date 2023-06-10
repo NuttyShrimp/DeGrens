@@ -50,37 +50,46 @@ class VinManager extends Util.Singleton<VinManager>() {
     return this.playerVins.has(vin);
   }
 
-  attachVinToEntId(vin: string, vehId: number) {
+  attachEntityToVin(vin: string, vehId: number) {
     this.logger.debug(`Attaching vin ${vin} to veh id ${vehId}`);
     if (!DoesEntityExist(vehId)) {
       throw new Error(`Failed to set vin ${vin} to veh id ${vehId} - entity not found`);
     }
     this.registeredVins.add(vin);
     this.vinToEntId.set(vin, vehId);
+    Entity(vehId).state.set('vin', vin, true);
   }
 
   @Export('getNetIdOfVin')
   getNetId(vin: string): number | null {
+    const vehId = this.getEntity(vin);
+    if (!vehId) return null;
+    return NetworkGetNetworkIdFromEntity(vehId);
+  }
+
+  @Export('getVehicleOfVin')
+  getEntity(vin: string): number | null {
     const vehId = this.vinToEntId.get(vin);
-    if (!vehId || !DoesEntityExist(vehId) || !Entity(vehId).state?.vin || Entity(vehId).state.vin !== vin) {
+    if (!vehId || !DoesEntityExist(vehId)) {
       this.logger.debug(`Deleting registered vin ${vin} because entity does not exist anymore`);
       this.vinToEntId.delete(vin);
       return null;
     }
 
-    const vehNetId = NetworkGetNetworkIdFromEntity(vehId);
-    return vehNetId;
+    const stateVin = Entity(vehId).state?.vin;
+    if (!stateVin || stateVin !== vin) {
+      this.logger.debug(`Deleting registered vin ${vin} because state vin is different ${stateVin}`);
+      this.vinToEntId.delete(vin);
+      return null;
+    }
+
+    return vehId;
   }
 
-  generateVin(entId?: number): string {
-    let vin = Util.generateRndChar(17).toUpperCase();
+  generateVin(): string {
+    const vin = Util.generateRndChar(17).toUpperCase();
     while (this.doesVinExist(vin)) {
-      vin = Util.generateRndChar(17).toUpperCase();
-    }
-    if (entId) {
-      this.logger.debug(`Generated vin ${vin} for entId ${entId}`);
-      this.registeredVins.add(vin);
-      this.vinToEntId.set(vin, entId);
+      return this.generateVin();
     }
     return vin;
   }

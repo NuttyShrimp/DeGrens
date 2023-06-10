@@ -1,7 +1,10 @@
 shouldExecute = true
 modifierPressed = false
 
-exports('registerKeyMapping', function(name, description, onKeyDownCommand, onKeyUpCommand, default, event, type)
+registeredKeyMaps = {}
+hasStarted = false
+
+function registerKeyMap(name, description, onKeyDownCommand, onKeyUpCommand, default, event, type)
   if not default then default = "" end
   if not type then type = "keyboard" end
   if not description then
@@ -19,35 +22,66 @@ exports('registerKeyMapping', function(name, description, onKeyDownCommand, onKe
 
   RegisterCommand(cmdStringDown, function()
     if not shouldExecute then
-      if event then 
-        TriggerEvent("dg-lib:keyEvent:disabled", name, true) 
+      if event then
+        TriggerEvent("dg-lib:keyEvent:disabled", name, true)
       end
       return
     end
-    if event then 
-      TriggerEvent("dg-lib:keyEvent", name, true) 
+    if event then
+      TriggerEvent("dg-lib:keyEvent", name, true)
     end
     ExecuteCommand(onKeyDownCommand)
   end, false)
   RegisterCommand(cmdStringUp, function()
     if not shouldExecute then
-      if event then 
-        TriggerEvent("dg-lib:keyEvent:disabled", name, false) 
+      if event then
+        TriggerEvent("dg-lib:keyEvent:disabled", name, false)
       end
       return
     end
-    if event then 
-      TriggerEvent("dg-lib:keyEvent", name, false) 
+    if event then
+      TriggerEvent("dg-lib:keyEvent", name, false)
     end
     ExecuteCommand(onKeyUpCommand)
   end, false)
   RegisterKeyMapping(cmdStringDown, description, type, default)
+end
+
+function registerKeyMaps()
+  for _, map in ipairs(registeredKeyMaps) do
+    registerKeyMap(
+      map.name,
+      map.description,
+      map.onKeyDownCommand,
+      map.onKeyUpCommand,
+      map.default,
+      map.event,
+      map.type
+    )
+  end
+  LocalPlayer.state:set("keybindsLoaded", true)
+  hasStarted = true
+end
+
+exports('registerKeyMapping', function(name, description, onKeyDownCommand, onKeyUpCommand, default, event, type)
+  table.insert(registeredKeyMaps, {
+    name = name,
+    description = description,
+    onKeyDownCommand = onKeyDownCommand,
+    onKeyUpCommand = onKeyUpCommand,
+    default = default,
+    event = event,
+    type = type,
+  })
+  if not hasStarted then return end
+  registerKeyMap(name, description, onKeyDownCommand, onKeyUpCommand, default, event, type)
 end)
 
 function setShouldExecuteKeyMaps(execute)
   debug("shouldExecuteKeyMaps: " .. tostring(execute))
   shouldExecute = execute
 end
+
 exports('shouldExecuteKeyMaps', function(execute)
   setShouldExecuteKeyMaps(execute)
 end)
@@ -67,6 +101,9 @@ exports('modifierKeyPressed', function()
 end)
 
 Citizen.CreateThread(function()
+  if LocalPlayer.state.keybindsLoaded then
+    TriggerEvent("lib:keys:registerKeyMaps")
+  end
   RegisterCommand('+GeneralUse', function() end, false)
   RegisterCommand('-GeneralUse', function() end, false)
   exports["dg-lib"]:registerKeyMapping('GeneralUse', 'General interaction button', '+GeneralUse', '-GeneralUse', 'e',
@@ -90,4 +127,6 @@ Citizen.CreateThread(function()
   end, false)
   exports["dg-lib"]:registerKeyMapping('ModifierKey', '(a) Secondary key (shift,ctrl,alt)', '+ModifierKey',
     '-ModifierKey', 'LSHIFT', true)
+  Wait(500)
+  registerKeyMaps()
 end)

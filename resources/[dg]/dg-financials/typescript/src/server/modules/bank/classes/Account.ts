@@ -136,6 +136,14 @@ export class Account {
     };
   }
 
+  public setBalance(amount: number): void {
+    amount = Number(amount.toFixed(2));
+    this.logger.info(`setBalance | amount: ${amount}`);
+    this.balance = amount;
+    this.lastOperation = Date.now();
+    this.updateBalance();
+  }
+
   public changeBalance(amount: number): void {
     amount = Number(amount.toFixed(2));
     this.logger.info(`changeBalance | amount: ${amount}`);

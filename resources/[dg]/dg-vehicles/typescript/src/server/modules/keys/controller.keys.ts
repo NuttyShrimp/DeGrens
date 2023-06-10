@@ -80,10 +80,6 @@ Events.onNet('vehicles:keys:shareToClosest', (src: number, netId: number, number
   }
 });
 
-Auth.onAuth(plyId => {
-  Events.emitNet('vehicles:keys:setClassesWithoutLock', plyId, NO_LOCK_CLASSES.door);
-});
-
 Events.onNet('vehicles:keys:toggleLock', (plyId: number, netId: number) => {
   const vehicle = NetworkGetEntityFromNetworkId(netId);
   if (!vehicle || !DoesEntityExist(vehicle)) return;

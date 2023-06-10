@@ -1,28 +1,35 @@
-import { UI, Util } from '@dgx/client';
+import { UI } from '@dgx/client';
 import { getState } from './state';
 
 // used to restore sticky notifs on reload
 const stickyNotifCache: Record<string, Phone.Notification> = {}; // key: notifId, value: notifData
 
 UI.RegisterUICallback('phone/notifications/event', (data: { event: string; isAccept: boolean; data: any }, cb) => {
-  const event = data.event;
-  const isAccept = data.isAccept;
-  const eventData = data.data;
+  emitNotificationEvent(data.event, data.isAccept, data.data);
+
+  cb({ data: {}, meta: { ok: true, message: 'done' } });
+});
+
+const emitNotificationEvent = (event: string, isAccept: boolean, eventData: unknown) => {
   // check if events starts with server:
   if (event.startsWith('server:')) {
     emitNet(event.replace('server:', ''), eventData, isAccept);
   } else {
     emit(event, eventData, isAccept);
   }
-
-  cb({ data: {}, meta: { ok: true, message: 'done' } });
-});
+};
 
 // function addNotification
 // Adds notification to phone (normally stays for 8 seconds
 // if action is needed time will be extended to 30 seconds)
 const addNotification = (notification: Phone.Notification) => {
-  if (!getState('hasPhone')) return;
+  if (!getState('hasPhone')) {
+    // if player doesn't have phone, auto decline
+    if (notification.onDecline) {
+      emitNotificationEvent(notification.onDecline, false, {});
+    }
+    return;
+  }
   if (notification.onAccept || notification.onDecline) {
     PlaySound(-1, 'Click_Fail', 'WEB_NAVIGATION_SOUNDS_PHONE', false, 0, true);
   }

@@ -187,7 +187,10 @@ export const toggleAllowedMod = async (src: number, mod: string, isAllowed: bool
 // this is to avoid false flags because of latency
 export const setPlayerInvincible = async (src: number, isEnabled: boolean) => {
   if (!isEnabled) {
+    const ping = GetPlayerPing(String(src));
     SetPlayerInvincible(String(src), false);
+    // Sync delay
+    await Util.Delay(ping);
   }
 
   await toggleAllowedMod(src, 'invincible', isEnabled);
@@ -198,7 +201,10 @@ export const setPlayerInvincible = async (src: number, isEnabled: boolean) => {
 };
 export const setPlayerVisible = async (src: number, isVisible: boolean) => {
   if (isVisible) {
+    const ping = GetPlayerPing(String(src));
     await RPC.execute('auth:anticheat:setVisible', src, true);
+    // Sync delay
+    await Util.Delay(ping);
   }
 
   await toggleAllowedMod(src, 'invisible', !isVisible);

@@ -88,7 +88,10 @@ declare interface Config {
     }[];
     defaultBalance: number;
   };
-  paycheck: Record<string, number>;
+  paycheck: {
+    jobs: Record<string, number>;
+    default: string;
+  };
   cryptoCoins: NCrypto.Config[];
   taxes: {
     cats: Taxes.Tax[];

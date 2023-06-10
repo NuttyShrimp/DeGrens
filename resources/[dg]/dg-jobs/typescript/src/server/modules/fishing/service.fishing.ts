@@ -59,20 +59,17 @@ export const startJobForGroup = async (plyId: number, jobType: Fishing.JobType) 
   const payoutLevel = jobManager.getJobPayoutLevel('fishing');
   if (!payoutLevel) return;
 
-  const vehicle = await Vehicles.spawnVehicle(VEHICLE_FOR_JOBTYPE[jobType], vehicleLocation, plyId);
-  if (!vehicle) {
+  const spawnedVehicle = await Vehicles.spawnVehicle({
+    model: VEHICLE_FOR_JOBTYPE[jobType],
+    position: vehicleLocation,
+    fuel: 100,
+    keys: plyId,
+  });
+  if (!spawnedVehicle) {
     Notifications.add(plyId, 'Kon het voertuig niet uithalen', 'error');
     return;
   }
-  const vin = Vehicles.getVinForVeh(vehicle);
-  const netId = NetworkGetNetworkIdFromEntity(vehicle);
-  if (!vin || !netId) {
-    Notifications.add(plyId, 'Kon het voertuig niet registreren', 'error');
-    return;
-  }
-
-  Vehicles.giveKeysToPlayer(plyId, netId);
-  Vehicles.setFuelLevel(vehicle, 100);
+  const { vehicle, netId, vin } = spawnedVehicle;
 
   if (jobType === 'boat') {
     global.exports['dg-misc'].toggleBoatAnchor(vehicle);

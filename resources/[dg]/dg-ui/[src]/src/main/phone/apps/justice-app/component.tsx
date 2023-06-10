@@ -3,9 +3,11 @@ import { useMainStore } from '@src/lib/stores/useMainStore';
 
 import { devData } from '../../../../lib/devdata';
 import { nuiAction } from '../../../../lib/nui-comms';
+import { showFormModal } from '../../lib';
 import { AppContainer } from '../../os/appcontainer/appcontainer';
 
 import { Justice } from './components/justice';
+import { FineModal } from './components/modals';
 import { useJusticeAppStore } from './stores/useJusticeAppStore';
 const whitelistedJobs = ['judge', 'lawyer'];
 
@@ -35,31 +37,36 @@ const Component = () => {
     <AppContainer
       primaryActions={
         whitelistedJobs.includes(job)
-          ? available === true
-            ? [
-                {
-                  title: 'Zet onbeschikbaar',
-                  icon: 'handshake-slash',
-                  onClick: async () => {
-                    await nuiAction('phone/justice/setAvailable', {
-                      available: false,
-                    });
-                    await fetchList();
-                  },
+          ? [
+              {
+                title: 'Factureer',
+                icon: 'file-invoice-dollar',
+                onClick: () => {
+                  showFormModal(<FineModal />);
                 },
-              ]
-            : [
-                {
-                  title: 'Zet beschikbaar',
-                  icon: 'handshake',
-                  onClick: async () => {
-                    await nuiAction('phone/justice/setAvailable', {
-                      available: true,
-                    });
-                    await fetchList();
+              },
+              available === true
+                ? {
+                    title: 'Zet onbeschikbaar',
+                    icon: 'handshake-slash',
+                    onClick: async () => {
+                      await nuiAction('phone/justice/setAvailable', {
+                        available: false,
+                      });
+                      await fetchList();
+                    },
+                  }
+                : {
+                    title: 'Zet beschikbaar',
+                    icon: 'handshake',
+                    onClick: async () => {
+                      await nuiAction('phone/justice/setAvailable', {
+                        available: true,
+                      });
+                      await fetchList();
+                    },
                   },
-                },
-              ]
+            ]
           : []
       }
     >

@@ -3,16 +3,8 @@ class Vehicles {
     on('vehicles:lockpick', handler);
   };
 
-  // See dg-vehicles types for upgrades type
-  spawnVehicle = (
-    model: string,
-    position: Vec4,
-    owner?: number,
-    vin?: string,
-    plate?: string,
-    upgrades?: any // Partial<Vehicles.Upgrades.All>
-  ): Promise<number | undefined> => {
-    return global.exports['dg-vehicles'].spawnVehicle(model, position, owner, vin, plate, upgrades);
+  spawnVehicle: Vehicles.SpawnVehicleFunction = data => {
+    return global.exports['dg-vehicles'].spawnVehicle(data);
   };
 
   deleteVehicle = (vehicle: number) => {
@@ -53,6 +45,10 @@ class Vehicles {
 
   getNetIdOfVin = (vin: string): number | null => {
     return global.exports['dg-vehicles'].getNetIdOfVin(vin);
+  };
+
+  getVehicleOfVin = (vin: string): number | null => {
+    return global.exports['dg-vehicles'].getVehicleOfVin(vin);
   };
 
   getCidFromVin = (vin: string): Promise<number | undefined> => {

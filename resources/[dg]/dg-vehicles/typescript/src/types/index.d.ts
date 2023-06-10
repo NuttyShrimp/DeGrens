@@ -66,11 +66,6 @@ declare namespace Bennys {
   }
 }
 
-declare interface modelInfo {
-  valid: boolean;
-  automobile: boolean;
-}
-
 declare namespace Stance {
   type Data = {
     frontLeft: number;

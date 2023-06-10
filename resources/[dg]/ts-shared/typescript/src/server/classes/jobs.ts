@@ -164,6 +164,10 @@ class Police {
   public getPlayerBeingEscorted = (plyId: number): number | undefined => {
     return global.exports['dg-police'].getPlayerBeingEscorted(plyId);
   };
+
+  isPoliceVehicle = (entity: number): boolean => {
+    return global.exports['dg-police'].isPoliceVehicle(entity);
+  };
 }
 
 class Hospital {

@@ -1,6 +1,6 @@
 import { Util, UI, Notifications, RPC, Sounds, Events } from '@dgx/client';
 import { Vector3 } from '@dgx/shared';
-import { isPoliceVehicle } from 'services/vehicles';
+import { isPoliceVehicle } from '@shared/services/vehicles';
 
 let radarActive = false;
 let radarThread: NodeJS.Timer | null = null;

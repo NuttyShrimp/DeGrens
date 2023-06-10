@@ -252,12 +252,15 @@ export const takeVehicleOutGarage = async (src: number, vin: string): Promise<nu
       `${cid} tried to retrieve vehicle ${vin} from garage ${garageInfo.name} but didn't met the requirements`,
       src
     );
+    Notifications.add(src, 'Dat is precies niet mogelijk!', 'error');
     return;
   }
 
+  await setVehicleState(vin, 'out');
   const hasMaintenanceFees = await hasVehicleMaintenanceFees(vehicleInfo.vin);
   if (hasMaintenanceFees) {
     Notifications.add(src, 'Je moet eerst je maintenance fees betalen!', 'error');
+    await setVehicleState(vin, 'parked');
     return;
   }
 
@@ -266,9 +269,11 @@ export const takeVehicleOutGarage = async (src: number, vin: string): Promise<nu
     z: parkingSpot.coords.z + 0.5,
     w: parkingSpot.heading,
   });
-  if (!veh) return;
+  if (!veh) {
+    await setVehicleState(vin, 'parked');
+    return;
+  }
 
-  await setVehicleState(vin, 'out');
   addVehicleGarageLog(vin, cid, false, vehicleInfo.status);
   Util.Log(
     'vehicle:garage:retrieve:success',
