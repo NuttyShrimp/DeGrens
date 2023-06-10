@@ -9,6 +9,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+### Changed
+
+### Fixed
+
+## [1.2.4]
+
+### Added
+
 - Developer optie toegevoegd om item metadata aan te passen
 - API endpoint om account balance te veranderen
 - `/dice` command toegevoegd
