@@ -12,9 +12,9 @@ import plateManager from '../modules/identification/classes/platemanager';
 import vinManager from '../modules/identification/classes/vinmanager';
 import { applyFakePlate, validateVehicleVin } from '../modules/identification/service.id';
 import { keyManager } from '../modules/keys/classes/keymanager';
-import { CREATE_AUTOMOBILE } from '../sv_constants';
 import { mainLogger } from '../sv_logger';
-import { assignModelConfig, getConfigByHash } from 'modules/info/service.info';
+import { assignModelConfig } from 'modules/info/service.info';
+import { Vector4 } from '@dgx/shared';
 
 /**
  * Spawn a vehicle
@@ -26,99 +26,92 @@ import { assignModelConfig, getConfigByHash } from 'modules/info/service.info';
  * @param upgrades
  * @returns Entity Id of spawned vehicle
  */
-export const spawnVehicle = async (
-  model: string,
-  position: Vec4,
-  owner?: number,
-  vin?: string,
-  plate?: string,
-  upgrades?: Partial<Vehicles.Upgrades.All>
-) => {
-  // First we check model if model is vehicle on client
-  let modelCheckPlayer = owner;
-  if (!modelCheckPlayer) {
-    const firstPlayer = Number(GetPlayerFromIndex(0));
-    if (!firstPlayer) {
-      mainLogger.error(`No players available to check model for 'spawnVehicle'`);
+export const spawnVehicle: Vehicles.SpawnVehicleFunction = async data => {
+  if (data.vin) {
+    const exisitingVehicleWithVin = vinManager.getEntity(data.vin);
+    if (exisitingVehicleWithVin) {
+      mainLogger.error(`Spawn vehicle: vin already in use | vin: ${data.vin} | model: ${data.model}`);
       return;
     }
-    modelCheckPlayer = firstPlayer;
-    mainLogger.info(`No owner provided for 'spawnVehicle', using first found player to check model.`);
   }
-  const modelInfo = await RPC.execute<modelInfo>('vehicle:checkModel', modelCheckPlayer, model);
-  if (!modelInfo || !modelInfo.valid) {
-    mainLogger.error(`Spawn vehicle: invalid model ${model} | modelCheckPlayer: ${modelCheckPlayer}`);
+
+  // First we check model if model is vehicle on client
+  const modelCheckPlayer = +GetPlayerFromIndex(0);
+  if (!modelCheckPlayer) {
+    mainLogger.error(`No players available to check model for 'spawnVehicle'`);
+    return;
+  }
+  const modelType = await RPC.execute<string | undefined>('vehicles:getModelType', modelCheckPlayer, data.model);
+  if (!modelType) {
+    mainLogger.error(`Spawn vehicle: invalid model ${data.model}`);
     return;
   }
 
-  let veh: number;
-  const modelHash = GetHashKey(model);
-  if (modelInfo.automobile) {
-    // Cheeky little hack to get this func working
-    veh = (Citizen as any).invokeNativeByHash(
-      0x00000000,
-      CREATE_AUTOMOBILE,
-      modelHash,
-      position.x + 0.001,
-      position.y + 0.001,
-      position.z + 0.001,
-      position.w + 0.001
-    );
-  } else {
-    veh = CreateVehicle(modelHash, position.x, position.y, position.z, position.w, true, true);
-  }
+  // force to be floats
+  const position = Vector4.create({ w: 0, ...data.position }).add(0.001);
+  const modelHash = GetHashKey(data.model);
+  const vehicle = CreateVehicleServerSetter(modelHash, modelType, position.x, position.y, position.z, position.w);
 
-  const doesExist = await Util.awaitEntityExistence(veh);
+  // entityCreated event does not get emitted when using the serversetter. We emulate this event to catch blacklisted models
+  emit('entityCreated', vehicle);
+
+  const doesExist = await Util.awaitEntityExistence(vehicle);
   if (!doesExist) {
-    mainLogger.error(`Spawn vehicle: vehicle didn't spawn | model: ${model}`);
+    mainLogger.error(`Spawn vehicle: vehicle didn't spawn (or was deleted during creation) | model: ${data.model}`);
     return;
   }
 
-  const entityOwner = NetworkGetEntityOwner(veh);
-  const vehNetId = NetworkGetNetworkIdFromEntity(veh);
+  const entityOwner = NetworkGetEntityOwner(vehicle);
+  const netId = NetworkGetNetworkIdFromEntity(vehicle);
+  const vehState = Entity(vehicle).state;
 
   mainLogger.debug(
-    `Spawn vehicle: spawned | model: ${model} | entity: ${veh} | netId: ${vehNetId} | owner: ${entityOwner}`
+    `Spawn vehicle: spawned | model: ${data.model} | entity: ${vehicle} | netId: ${netId} | owner: ${entityOwner}`
   );
 
   // If model is not yet loaded for entityowner, this heading native will not work
   // we still try because it sometimes fixed vehicles spawning at wrong place because 0 heading can be inside a wall
   if (entityOwner > 0) {
-    emitNet('vehicle:setHeading', entityOwner, vehNetId, position.w);
+    emitNet('vehicle:setHeading', entityOwner, netId, position.w);
   }
 
-  if (!vin) {
-    vin = vinManager.generateVin(veh);
-  } else {
-    vinManager.attachVinToEntId(vin, veh);
+  // setting vin
+  const vin = data.vin ?? vinManager.generateVin();
+  vinManager.attachEntityToVin(vin, vehicle);
+
+  // setting plate
+  const plate = data.plate ?? plateManager.generatePlate();
+  vehState.set('plate', plate, true);
+  plateManager.registerPlate(plate);
+  Vehicles.setVehicleNumberPlate(vehicle, plate);
+
+  // setting fuel
+  fuelManager.registerVehicle(vehicle, data.fuel);
+
+  // add keys
+  if (data.keys !== undefined) {
+    keyManager.addKey(vin, data.keys);
   }
-  const vehState = Entity(veh).state;
-  vehState.set('vin', vin, true);
-  fuelManager.registerVehicle(veh);
 
-  const newPlate = plate ?? plateManager.generatePlate();
-  vehState.set('plate', newPlate, true);
-  plateManager.registerPlate(newPlate);
-  Vehicles.setVehicleNumberPlate(veh, newPlate);
-
-  if (upgrades) {
-    applyUpgradesToVeh(vehNetId, upgrades);
+  // applying upgrades
+  if (data.upgrades) {
+    applyUpgradesToVeh(netId, data.upgrades);
   }
 
   // in certain zones gta will spawn population peds in vehicles (had this happen multiple times at vehicle rental near pillbox)
   let npcDriverDeleteCounter = 20;
   const npcDriverDeleteThread = setInterval(() => {
-    const exists = DoesEntityExist(veh);
+    const exists = DoesEntityExist(vehicle);
     if (!exists) {
       clearInterval(npcDriverDeleteThread);
       return;
     }
 
     // wait till someone is in scope
-    if (NetworkGetEntityOwner(veh) === -1) return;
+    if (NetworkGetEntityOwner(vehicle) === -1) return;
 
     npcDriverDeleteCounter--;
-    const pedInDriverSeat = GetPedInVehicleSeat(veh, -1);
+    const pedInDriverSeat = GetPedInVehicleSeat(vehicle, -1);
     if (pedInDriverSeat && DoesEntityExist(pedInDriverSeat) && !IsPedAPlayer(pedInDriverSeat)) {
       DeleteEntity(pedInDriverSeat);
       clearInterval(npcDriverDeleteThread);
@@ -130,32 +123,37 @@ export const spawnVehicle = async (
     }
   }, 250);
 
-  assignModelConfig(veh, modelHash);
+  assignModelConfig(vehicle, modelHash);
 
-  return veh;
+  return {
+    vehicle,
+    netId,
+    vin,
+    plate,
+  };
 };
 
 export const spawnOwnedVehicle = async (src: number, vehicleInfo: Vehicle.Vehicle, position: Vec4) => {
-  const vehicle = await spawnVehicle(
-    vehicleInfo.model,
-    { ...position, z: position.z + 0.5 },
-    src,
-    vehicleInfo.vin,
-    vehicleInfo.plate
-  );
-  if (!vehicle) return;
-  keyManager.addKey(vehicleInfo.vin, src);
-
-  const vehNetId = NetworkGetNetworkIdFromEntity(vehicle);
-  fuelManager.setFuelLevel(vehicle, vehicleInfo.status.fuel ?? 100);
+  const spawnedVehicle = await spawnVehicle({
+    model: vehicleInfo.model,
+    position: {
+      ...position,
+      z: position.z + 0.5,
+    },
+    vin: vehicleInfo.vin,
+    plate: vehicleInfo.plate,
+    keys: src,
+  });
+  if (!spawnedVehicle) return;
+  const { vehicle, netId, vin, plate } = spawnedVehicle;
 
   // If status is all null generate a perfect status and save it
   if (Object.values(vehicleInfo.status).every(v => v === null)) {
     // this really should never happen because we insert status when inserting new vehicle
     setImmediate(async () => {
-      vehicleInfo.status = await getNativeStatus(vehicle, vehicleInfo.vin);
+      vehicleInfo.status = await getNativeStatus(vehicle, vin);
       vehicleInfo.status.fuel = 100;
-      await insertVehicleStatus(vehicleInfo.vin, vehicleInfo.status);
+      await insertVehicleStatus(vin, vehicleInfo.status);
     });
   } else {
     // Without timeout it does not wanna apply, probably because also doing mods at same moment
@@ -166,23 +164,23 @@ export const spawnOwnedVehicle = async (src: number, vehicleInfo: Vehicle.Vehicl
   }
 
   if (vehicleInfo.fakeplate) {
-    Util.awaitCondition(
-      () => DoesEntityExist(vehicle) && GetVehicleNumberPlateText(vehicle).trim() === vehicleInfo.plate
-    ).then(() => {
-      applyFakePlate(src, vehNetId, vehicleInfo.fakeplate);
-    });
+    Util.awaitCondition(() => DoesEntityExist(vehicle) && GetVehicleNumberPlateText(vehicle).trim() === plate).then(
+      () => {
+        applyFakePlate(src, netId, vehicleInfo.fakeplate);
+      }
+    );
   }
   if (vehicleInfo.stance) {
     setVehicleStance(vehicle, vehicleInfo.stance);
   }
   if (vehicleInfo.wax) {
-    addWaxedVehicle(vehicleInfo.vin, vehicleInfo.wax);
+    addWaxedVehicle(vin, vehicleInfo.wax);
   }
 
   setVehicleNosAmount(vehicle, vehicleInfo.nos);
   setVehicleHarnessUses(vehicle, vehicleInfo.harness);
 
-  await applyUpgrades(vehicleInfo.vin);
+  await applyUpgrades(vin);
 
   return vehicle;
 };

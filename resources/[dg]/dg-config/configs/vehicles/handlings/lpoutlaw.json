@@ -1,0 +1,7 @@
+{
+  "a+": {
+    "fInitialDragCoeff": 0.6,
+    "fInitialDriveForce": 0.02,
+    "fInitialDriveMaxFlatVel": 10.0
+  }
+}

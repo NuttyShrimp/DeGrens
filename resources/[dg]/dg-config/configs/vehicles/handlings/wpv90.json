@@ -1,0 +1,9 @@
+{
+  "s": {
+    "fInitialDragCoeff": 1.0,
+    "fInitialDriveForce": 0.06,
+    "fBrakeForce": -0.2,
+    "fTractionCurveMax": 0.4,
+    "fTractionCurveMin": 0.4
+  }
+}

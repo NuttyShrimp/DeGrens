@@ -334,29 +334,14 @@ class Util extends UtilShared {
     return MATERIAL_HASH_ENUM[materialHash];
   };
 
-  public awaitEntityExistence = (entity: number, isNetId = false): Promise<boolean> => {
-    return new Promise<boolean>(resolve => {
-      let attempts = 0;
-      const interval = setInterval(() => {
-        attempts++;
-
-        // entity is netid here
-        if (isNetId) {
-          if (!NetworkDoesNetworkIdExist(entity)) return;
-          if (!NetworkDoesEntityExistWithNetworkId(entity)) return;
-        }
-
-        const ent = isNetId ? NetworkGetEntityFromNetworkId(entity) : entity;
-        if (attempts > 50) {
-          clearInterval(interval);
-          resolve(false);
-        }
-        if (DoesEntityExist(ent)) {
-          clearInterval(interval);
-          resolve(true);
-        }
-      }, 100);
+  public awaitEntityExistence = async (entity: number, isNetId = false): Promise<boolean> => {
+    const exists = await this.awaitCondition(() => {
+      // entity is netid here
+      if (isNetId && (!NetworkDoesNetworkIdExist(entity) || !NetworkDoesEntityExistWithNetworkId(entity))) return false;
+      const ent = isNetId ? NetworkGetEntityFromNetworkId(entity) : entity;
+      return DoesEntityExist(ent);
     });
+    return exists;
   };
 
   public average = (arr: number[]) => {

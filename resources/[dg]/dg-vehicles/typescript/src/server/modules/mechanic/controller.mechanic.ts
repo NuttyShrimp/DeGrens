@@ -8,10 +8,6 @@ setImmediate(() => {
   loadConfig();
 });
 
-Auth.onAuth(src => {
-  loadZones(src);
-});
-
 Events.onNet('vehicles:mechanic:server:acceptTowJob', tryAcceptingJob);
 
 global.exports('calculateSalesTicketsPrice', async (ticketItem: Inventory.ItemState) => {

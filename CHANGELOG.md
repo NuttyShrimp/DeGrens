@@ -13,6 +13,45 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+## [1.2.4]
+
+### Added
+
+- Developer optie toegevoegd om item metadata aan te passen
+- API endpoint om account balance te veranderen
+- `/dice` command toegevoegd
+- Pride clothing
+- Chat melding voor wanneer er een nieuw report wordt gemaakt
+- Advocaten kunnen nu facturen versturen vanuit de jusitie app
+- Voertuig class modes toegevoegd
+- Enkele extra liveries toegevoegd aan: V90 (politie), Rago (politie), a6 (politie)
+
+### Changed
+
+- Randomization van maintenance fees weggehaald om veranderende waardes bij toekomstige fees te voorkomen
+- Police heli geallowlist voor camera
+- Je kunt geen politie voertuigen meer in beslag nemen
+- Handlings van politie voertuigen gebuffed voor andere voertuigen beter te kunnen bijhouden
+- Scuffed livery van Porsche GT3 verwijderd
+
+### Fixed
+
+- Je kan geen debts meer betalen als je het geld er niet voor hebt
+- Fix vehicle siren error wanneer het voertuig waar je inzit gedelete wordt
+- Phone notificaties worden nu automatisch gedeclined wanneer je geen phone hebt om problemen te voorkomen
+- Invisible collision bij Up-n-atom parking
+- Jobs zonder loon blijven hun leefloon krijgen
+- Het is minder makkelijk om samen hetzelfde voertuig uit te halen
+- Bennys laptopapp gebruikt nu itemlabel ipv itemname in cartlist
+- Random tick in siren weggehaald
+- Je kan niet meer cuffen wanneer iemand al gecuffed wordt
+- Crash wanneer je knop indrukt tijdens het inladen opgelost
+- Admin blips en dispatch blips hebben geen last meer van blips die elkaar overschreven
+- Normale deuren sluiten weer automatisch wanneer je ze op slot doet
+- Minder kans op false flags van anticheat
+- Politie interventieband beweegt niet meer in de wind
+- Scuffed windowtint van RAM 2500
+
 ## [1.2.3]
 
 ### Added

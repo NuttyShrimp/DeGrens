@@ -33,6 +33,9 @@ global.exports('setPermissions', (accountId: string, cid: number, permissions: I
 global.exports('removePermissions', (accountId: string, cid: number) => removePermissions(accountId, cid));
 global.exports('getPermissions', (accountId: string, cid: number) => getPermissions(accountId, cid));
 global.exports('buildPermissions', (level: number) => buildPermissions(level));
+global.exports('setAccountBalance', (accId: string, balance: number) => {
+  return accountManager.getAccountById(accId)?.setBalance(balance);
+});
 
 Core.onPlayerLoaded(playerData => {
   if (!playerData.serverId) return;

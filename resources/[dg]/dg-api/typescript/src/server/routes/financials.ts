@@ -2,18 +2,18 @@ import { Financials, Util } from '@dgx/server';
 import { tokenManager } from 'classes/tokenManager';
 import { registerRoute } from 'sv_routes';
 
-const originInfo: Record<string, {name: string, reason: string, accountId: string}> = {
+const originInfo: Record<string, { name: string; reason: string; accountId: string }> = {
   police: {
     name: 'Politiekorps DG',
     reason: 'Boete',
-    accountId: "BE2"
+    accountId: 'BE2',
   },
   ambulance: {
-    name: "AZDG",
+    name: 'AZDG',
     reason: 'Ziekte kosten',
-    accountId: "BE3"
-  }
-}
+    accountId: 'BE3',
+  },
+};
 
 registerRoute('POST', '/financials/giveFine', (req, res) => {
   if (!req.body.cid || !req.body.price || !req.body.origin) {
@@ -55,4 +55,14 @@ registerRoute('POST', '/financials/giveFine', (req, res) => {
       error: 'er is iets fout gelopen tijdens het verwerken van je fine, kloppen alle velden?',
     });
   }
+});
+
+registerRoute('PATCH', '/financials/updateBalance', (req, res) => {
+  if (!req.body.accountId || req.body.balance === undefined) {
+    return res(400, { error: 'missing info' });
+  }
+
+  Financials.setAccountBalance(req.body.accountId, req.body.balance);
+
+  res(200, {});
 });

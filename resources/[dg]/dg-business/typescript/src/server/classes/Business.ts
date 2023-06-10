@@ -662,7 +662,6 @@ export class Business {
     price: number,
     comment: string
   ) {
-    const cid = Util.getCID(src);
     const hasAccepted = await Phone.notificationRequest(targetSource, {
       icon: {
         name: 'euro-sign',

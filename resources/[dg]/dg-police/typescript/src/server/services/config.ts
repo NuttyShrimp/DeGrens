@@ -1,4 +1,5 @@
 import { Config, Util } from '@dgx/server';
+import { setPoliceVehicles } from '@shared/services/vehicles';
 
 let policeConfig: Police.Config | null = null;
 
@@ -23,4 +24,6 @@ export const loadPoliceConfig = async () => {
       }
     }
   }
+
+  setPoliceVehicles(policeConfig.vehicles);
 };

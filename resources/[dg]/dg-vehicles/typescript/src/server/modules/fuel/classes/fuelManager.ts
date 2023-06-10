@@ -36,8 +36,8 @@ class FuelManager extends Util.Singleton<FuelManager>() {
   };
 
   // Register new vehicles that dont have fuel registered yet
-  registerVehicle(vehicle: number) {
-    const fuelLevel = Util.getRndInteger(40, 81);
+  registerVehicle(vehicle: number, amount?: number) {
+    const fuelLevel = amount ?? Util.getRndInteger(40, 81);
     this.setFuelLevel(vehicle, fuelLevel);
     fuelLogger.debug(`Registering ${vehicle} with ${fuelLevel}% in tank`);
   }

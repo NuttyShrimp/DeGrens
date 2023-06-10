@@ -7,6 +7,7 @@ import { fuelManager } from '../fuel/classes/fuelManager';
 import vinManager from './classes/vinmanager';
 import { idLogger } from './logger.id';
 import { handleVehicleLock } from 'modules/keys/service.keys';
+import plateManager from './classes/platemanager';
 
 // set gets filled by vehicles without vin on entering, to disable engine when entered
 const vehiclesToDisableEngine = new Set<number>();
@@ -16,9 +17,13 @@ export const validateVehicleVin = (vehicle: number, vehicleClass?: number) => {
   if (vehicleState.vin && vinManager.doesVinMatch(vehicleState.vin, vehicle)) return;
 
   // This is for vehicles new to the server
-  const vin = vinManager.generateVin(vehicle);
-  vehicleState.set('vin', vin, true);
-  vehicleState.set('plate', GetVehicleNumberPlateText(vehicle).trim(), true);
+  const vin = vinManager.generateVin();
+  vinManager.attachEntityToVin(vin, vehicle);
+
+  const vehiclePlate = GetVehicleNumberPlateText(vehicle).trim();
+  vehicleState.set('plate', vehiclePlate, true);
+  plateManager.registerPlate(vehiclePlate);
+
   fuelManager.registerVehicle(vehicle);
 
   handleVehicleLock(vehicle, vehicleClass);

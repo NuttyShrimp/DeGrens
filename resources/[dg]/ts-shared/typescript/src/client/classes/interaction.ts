@@ -357,11 +357,14 @@ class Keys {
 
   private handlerId: number;
 
+  private registedKeys: Set<{ name: string; description: string; defaultKey: string; type?: string }>;
+
   constructor() {
     this.handlerId = 0;
 
     this.listeners = new Map();
     this.disabledListeners = new Map();
+    this.registedKeys = new Set();
 
     on('dg-lib:keyEvent', (name: string, isDown: boolean) => {
       if (this.listeners.has(name)) {
@@ -377,9 +380,23 @@ class Keys {
         });
       }
     });
+    on('lib:keys:registerKeyMaps', () => {
+      this.registedKeys.forEach(keyInfo => {
+        global.exports['dg-lib'].registerKeyMapping(
+          keyInfo.name,
+          keyInfo.description,
+          `+${keyInfo.name}`,
+          `-${keyInfo.name}`,
+          keyInfo.defaultKey,
+          true,
+          keyInfo.type
+        );
+      });
+    });
   }
 
   register(name: string, description: string, defaultKey = '', type?: string) {
+    this.registedKeys.add({ name, description, defaultKey, type });
     global.exports['dg-lib'].registerKeyMapping(name, description, `+${name}`, `-${name}`, defaultKey, true, type);
   }
 

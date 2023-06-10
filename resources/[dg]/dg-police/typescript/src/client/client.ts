@@ -13,7 +13,7 @@ import './modules/interactions';
 import './modules/prison';
 import './modules/heli';
 import './services/requirements';
-import './services/vehicles';
 import './services/ang';
 import './services/camera';
 import './services/sirenToggle';
+import '@shared/services/vehicles';

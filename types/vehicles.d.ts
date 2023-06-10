@@ -1,4 +1,22 @@
 declare namespace Vehicles {
+  type SpawnVehicleFunction = (data: {
+    model: string;
+    position: Vec3 | Vec4;
+    vin?: string;
+    plate?: string;
+    upgrades?: Partial<Vehicles.Upgrades.All>;
+    fuel?: number;
+    keys?: number;
+  }) => Promise<
+    | {
+        vehicle: number;
+        netId: number;
+        vin: string;
+        plate: string;
+      }
+    | undefined
+  >;
+
   /**
    * Ids with number as result are received with GetVehicleMod
    * Ids with boolean as result are received with IsToggleModOn
@@ -170,5 +188,43 @@ declare namespace Vehicles {
       extras: number;
       wheels: Record<number, number>;
     };
+  }
+
+  declare namespace Handlings {
+    type HandlingEntry =
+      | 'fBrakeForce'
+      | 'fBrakeBiasFront'
+      | 'fClutchChangeRateScaleDownShift'
+      | 'fClutchChangeRateScaleUpShift'
+      | 'fCollisionDamageMult'
+      | 'fDeformationDamageMult'
+      | 'fDriveBiasFront'
+      | 'fDriveInertia'
+      | 'fEngineDamageMult'
+      | 'fHandBrakeForce'
+      | 'fInitialDragCoeff'
+      | 'fInitialDriveForce'
+      | 'fInitialDriveMaxFlatVel'
+      | 'fLowSpeedTractionLossMult'
+      | 'fSteeringLock'
+      | 'fSuspensionCompDamp'
+      | 'fSuspensionForce'
+      | 'fSuspensionReboundDamp'
+      | 'fTractionBiasFront'
+      | 'fTractionCurveMax'
+      | 'fTractionCurveMin'
+      | 'fTractionLossMult';
+    type Handling = Record<HandlingEntry, number>;
+
+    type ModifierType = 'add' | 'multiplier' | 'fixed';
+
+    type Multiplier = {
+      value: number;
+      type: ModifierType;
+      // differantiate between nitro, vehicle modes, stall,...
+      priority: number;
+    };
+
+    type Multipliers = Record<HandlingEntry, Record<string, Multiplier>>;
   }
 }

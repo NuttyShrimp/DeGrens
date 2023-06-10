@@ -291,7 +291,7 @@ export class Locker {
     }
 
     const ownerAccepted = await Phone.notificationRequest(ownerServerId, {
-      id: `locker_request_${this.id}_${ownerServerId}`,
+      id: `locker_request_${this.id}_${ownerServerId}-${Date.now()}`,
       title: 'Lockers',
       description: 'Aanvaard Eigenaarschap',
       icon: 'info',

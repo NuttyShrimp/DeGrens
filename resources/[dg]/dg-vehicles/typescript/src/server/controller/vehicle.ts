@@ -1,4 +1,4 @@
-import { Chat, Events, Inventory, Notifications, RPC, Util } from '@dgx/server';
+import { Inventory, Notifications, RPC, Util } from '@dgx/server';
 import { Vector4 } from '@dgx/shared';
 import { getPlayerVehicleInfo, insertNewVehicle } from 'db/repository';
 import { fuelManager } from 'modules/fuel/classes/fuelManager';
@@ -33,6 +33,7 @@ global.asyncExports('giveNewVehicle', async (model: string, owner: number) => {
   const vin = vinManager.generateVin();
   const plate = plateManager.generatePlate();
   vinManager.addPlayerVin(vin);
+  plateManager.addPlayerPlate(plate);
   await insertNewVehicle(vin, owner, model, plate);
   return true;
 });
@@ -61,14 +62,14 @@ global.exports(
         Notifications.add(plyId, 'Geen voertuig geselecteerd', 'error');
         return;
       }
-      const ent = await spawnVehicle(model, position, plyId, vin);
-      if (!ent) {
+      const spawnedVehicle = await spawnVehicle({ model, position, vin });
+      if (!spawnedVehicle) {
         Notifications.add(plyId, 'Could not spawn new vehicle', 'error');
         return;
       }
       keyManager.addKey(vin, plyId);
-      fuelManager.setFuelLevel(ent, 100);
-      vehicle = ent;
+      fuelManager.setFuelLevel(spawnedVehicle.vehicle, 100);
+      vehicle = spawnedVehicle.vehicle;
     }
 
     // This is some cursed shit lol

@@ -59,7 +59,7 @@ Events.onNet('vehicles:server:app:sellVehicle', async (src, targetCID: number, v
   }
   const vehicleInfo = getConfigByModel(vehicle.model)!;
   const accepted = await Phone.notificationRequest(targetServerId, {
-    id: `sell-vehicle-${vin}-${price}`,
+    id: `sell-vehicle-${vin}-${price}-${Date.now()}`,
     title: 'Buy Vehicle',
     description: `${vehicleInfo.name} - €${price}`,
     icon: 'garage',

@@ -20,6 +20,7 @@ import './modules/mechanic/controller.mechanic';
 import './modules/identification';
 import './modules/sirens';
 import './services';
+import './threads';
 
 setImmediate(() => {
   loadCarwashZones();

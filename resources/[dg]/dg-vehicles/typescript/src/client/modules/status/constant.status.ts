@@ -1,6 +1,6 @@
 export const degradationValues: Record<
   keyof Service.Status,
-  (Service.Degradation & { step: number; bottom: number })[]
+  (Service.Degradation & { step: number })[]
 > = {
   engine: [],
   axle: [],
@@ -14,7 +14,6 @@ export const setDegradationValues = (config: Service.DegradationConfig) => {
       degradationValues[part as keyof Service.Status].push({
         ...value,
         step: 0,
-        bottom: 0,
       });
     }
   }

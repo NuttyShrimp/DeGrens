@@ -21,10 +21,6 @@ on('dg-config:moduleLoaded', (key: string) => {
   loadImpoundConfig();
 });
 
-Auth.onAuth(src => {
-  Events.emitNet('vehicles:depot:loadZones', src, getZones());
-});
-
 Events.onNet('vehicles:depot:server:openSelectionMenu', (src, vehNetID: number) => {
   openReasonSelectionMenu(src, vehNetID);
 });

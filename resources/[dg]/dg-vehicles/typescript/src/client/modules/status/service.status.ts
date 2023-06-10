@@ -13,6 +13,11 @@ import { getVehicleVin } from 'modules/identification/service.identification';
 import { tryEjectAfterCrash } from 'modules/seatbelts/service.seatbelts';
 import { setEngineState } from 'services/engine';
 import { hasVehicleKeys } from 'modules/keys/cache.keys';
+import {
+  applyHandlingMultipliers,
+  resetHandlingContextMultiplier,
+  setHandlingContextMultiplier,
+} from 'services/handling';
 
 let vehicleService: {
   vehicle: number;
@@ -25,7 +30,6 @@ let vehicleService: {
   };
   info: Service.Status;
   state: Record<'engine' | 'body', number>;
-  originalHandling: Record<string, number>;
 } | null = null;
 
 const multipliers = {
@@ -34,48 +38,12 @@ const multipliers = {
 
 let vehicleCrashThread: NodeJS.Timer | null = null;
 
-let overrideThreads: NodeJS.Timer[] = [];
-const clearOverrideThreads = () => {
-  overrideThreads.forEach(t => clearInterval(t));
-  overrideThreads = [];
-};
-
 // region Service status
-const getOriginalHandlingValues = (vehicle: number) => {
-  // if already in statebag, use those. else get from native and save in statebag
-  const entState = Entity(vehicle).state;
-  const handlingValuesFromState = entState.handlingValues;
-  if (handlingValuesFromState) return handlingValuesFromState;
 
-  const originalHandling: Record<string, number> = {};
-
+const calculateDegrationSteps = () => {
   for (const part in degradationValues) {
     for (const value of degradationValues[part as keyof Service.Status]) {
-      const isOverride = !!handlingOverrideFunctions[value.name];
-      const original = isOverride ? 1 : GetVehicleHandlingFloat(vehicle, 'CHandlingData', value.name);
-      originalHandling[value.name] = original;
-    }
-  }
-
-  entState.set('handlingValues', originalHandling, false);
-
-  return originalHandling;
-};
-
-const applyHandlingValues = (vehicle: number, handlingValues: Record<string, number>) => {
-  for (const [key, value] of Object.entries(handlingValues)) {
-    if (handlingOverrideFunctions[key]) return;
-    SetVehicleHandlingFloat(vehicle, 'CHandlingData', key, Number(value));
-  }
-  clearOverrideThreads();
-};
-
-const calculateDegrationSteps = (handlingValues: Record<string, number>) => {
-  for (const part in degradationValues) {
-    for (const value of degradationValues[part as keyof Service.Status]) {
-      const original = handlingValues[value.name];
-      value.bottom = original * value.percent;
-      value.step = (original - value.bottom) / 1000;
+      value.step = (1 - value.percent) / 1000;
     }
   }
 };
@@ -83,23 +51,15 @@ const calculateDegrationSteps = (handlingValues: Record<string, number>) => {
 const setVehicleDegradation = (veh: number) => {
   if (!vehicleService) return;
 
-  clearOverrideThreads();
-
   for (const part in vehicleService.info) {
     for (const value of degradationValues[part as keyof Service.Status]) {
       const partValue = Math.max(0, vehicleService.info[part as keyof Service.Status]);
-      const newValue = value.bottom + value.step * partValue;
-      if (handlingOverrideFunctions[value.name]) {
-        overrideThreads.push(
-          setInterval(() => {
-            handlingOverrideFunctions[value.name](veh, newValue);
-          }, 1)
-        );
-      } else {
-        SetVehicleHandlingFloat(veh, 'CHandlingData', value.name, newValue);
-      }
+      const newValue = 1 + value.step * (1000 - partValue);
+      setHandlingContextMultiplier(veh, value.name, 'degradation', 'multiplier', newValue, 0);
     }
   }
+
+  applyHandlingMultipliers(veh);
 };
 
 // Thread gets started whenever player entered driver seat of a vehicle
@@ -119,10 +79,8 @@ export const startStatusThread = async (vehicle: number) => {
     body: GetVehicleBodyHealth(vehicle),
   };
 
-  const originalHandling = getOriginalHandlingValues(vehicle);
-
   // Calc handling values
-  calculateDegrationSteps(originalHandling);
+  calculateDegrationSteps();
   setVehicleDegradation(vehicle);
 
   const threads = {
@@ -196,7 +154,6 @@ export const startStatusThread = async (vehicle: number) => {
     threads,
     info,
     state,
-    originalHandling,
   };
 
   // init degradation
@@ -209,7 +166,8 @@ export const cleanStatusThread = () => {
   Events.emitNet('vehicles:service:saveStatus', vehicleService.vin, vehicleService.info);
 
   if (DoesEntityExist(vehicleService.vehicle)) {
-    applyHandlingValues(vehicleService.vehicle, vehicleService.originalHandling);
+    resetHandlingContextMultiplier(vehicleService.vehicle, 'degradation');
+    applyHandlingMultipliers(vehicleService.vehicle);
   }
 
   if (vehicleService.threads) {
