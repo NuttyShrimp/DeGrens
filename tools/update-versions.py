@@ -14,15 +14,6 @@ CHANGELOG_PLACEHOLDER="""
 ### Fixed
 """
 
-TYPESCRIPT_FOLDERS = [
-  'typescript',
-  '*src*',
-  'ui-project',
-  'src/client',
-  'src/server',
-  'src/shared',
-]
-
 def statMainPackage():
     assert os.path.exists(
         "./package.json"), "this should be run with CWD in root"
@@ -39,22 +30,16 @@ def updateVersionInFile(version, p):
         f.truncate()
         f.write(json.dumps(mainCfg, indent=2))
 
-def findPackageJsons(root, depth=0):
-  if depth > 3:
-    return
-
-  entries = [x for x in os.scandir(root) if "node_modules" not in str(x)]
-  for entry in entries:
-    if entry.is_file() and entry.name == "package.json":
-      updateVersionInFile(newVersion, entry.path)
-    elif entry.is_dir():
-      findPackageJsons(entry.path, depth+1)
-
 
 def updateVersions(version):
-    for tsFolder in TYPESCRIPT_FOLDERS:
-        for path in Path("resources/[dg]/").resolve().glob(f'*/{tsFolder}'):
-            findPackageJsons(path)
+    for path in Path("resources").rglob('package.json'):
+        if "node_modules" in str(path):
+            continue
+        updateVersionInFile(version, path)
+    for path in Path("packages").rglob('package.json'):
+        if "node_modules" in str(path):
+            continue
+        updateVersionInFile(version, path)
     updateVersionInFile(version, "./package.json")
     updateVersionInFile(version, "./resources/[dg]/dg-config/configs/main.json")
 
