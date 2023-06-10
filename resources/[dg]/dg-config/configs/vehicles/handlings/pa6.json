@@ -1,13 +1,13 @@
 {
   "s": {
-    "fInitialDriveForce": 0.028,
+    "fInitialDriveForce": 0.01,
     "fInitialDriveMaxFlatVel": 15.0,
     "fBrakeForce": 0.2,
     "fTractionCurveMax": 0.4,
     "fTractionCurveMin": 0.2
   },
   "a+": {
-    "fInitialDriveForce": -0.002,
+    "fInitialDriveForce": -0.02,
     "fInitialDriveMaxFlatVel": 10.0
   }
 }

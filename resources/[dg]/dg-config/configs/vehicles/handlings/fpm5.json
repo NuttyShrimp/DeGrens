@@ -1,6 +1,6 @@
 {
   "s": {
-    "fInitialDriveForce": 0.035,
+    "fInitialDriveForce": 0.02,
     "fDriveInertia": -0.1,
     "fClutchChangeRateScaleUpShift": -1.0,
     "fClutchChangeRateScaleDownShift": -1.0,

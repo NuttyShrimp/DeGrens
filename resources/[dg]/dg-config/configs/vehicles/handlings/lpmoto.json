@@ -2,7 +2,6 @@
   "a+": {
     "fInitialDragCoeff": -2.0,
     "fInitialDriveForce": -0.03,
-    "fInitialDriveMaxFlatVel": 10.0,
-    "fBrakeForce": 0.2
+    "fInitialDriveMaxFlatVel": 10.0
   }
 }
