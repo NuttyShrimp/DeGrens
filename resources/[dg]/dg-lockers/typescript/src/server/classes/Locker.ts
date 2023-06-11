@@ -1,4 +1,4 @@
-import { Util, Financials, UI, Notifications, Phone, Core } from '@dgx/server';
+import { Util, Financials, UI, Notifications, Phone, Core, Events, Inventory } from '@dgx/server';
 import config from 'services/config';
 import { mainLogger } from 'sv_logger';
 import winston from 'winston';
@@ -173,6 +173,7 @@ export class Locker {
       }, 5 * 60 * 1000);
 
       Notifications.add(plyId, 'Je hebt toegang voor 5 minuten', 'success');
+      Events.emitNet('lockers:client:doAnimation', plyId);
     }
 
     const menu: ContextMenu.Entry[] = [
@@ -207,6 +208,11 @@ export class Locker {
     UI.openContextMenu(plyId, menu);
     Util.Log('lockers:open', { id: this.id }, `${Util.getName(plyId)} opened locker ${this.id}`, plyId);
     this.logger.silly(`${Util.getName(plyId)} opened locker ${this.id}`);
+  };
+
+  public openStash = (plyId: number) => {
+    const stashId = `locker_${this.id}`;
+    Inventory.openStash(plyId, stashId, config.inventorySize);
   };
 
   public changePassword = async (plyId: number) => {

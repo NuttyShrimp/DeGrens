@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 - Item craft requirements verlaagd, payouts getweaked om aangenamere experience te geven
+- Locker animatie speelt enkel wanneer je de eerste keer het wachtwoord ingeeft
 
 ### Fixed
 

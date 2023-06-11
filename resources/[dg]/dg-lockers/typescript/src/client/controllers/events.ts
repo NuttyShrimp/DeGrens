@@ -98,11 +98,10 @@ Events.onNet('lockers:client:add', (lockers: Lockers.BuildData[]) => {
   buildLockers(lockers);
 });
 
-Events.onNet('lockers:client:open', async (stashId: string, size: number) => {
+Events.onNet('lockers:client:doAnimation', async () => {
   const ped = PlayerPedId();
   await Util.loadAnimDict('missarmenian2');
   TaskPlayAnim(ped, 'missarmenian2', 'open_garage_franklin', 8.0, 8.0, -1, 0, 0, false, false, false);
   await Util.Delay(3500);
-  Inventory.openStash(stashId, size);
   ClearPedTasks(ped);
 });

@@ -1,4 +1,4 @@
-import { Events, RPC, Taskbar, Util, Inventory } from '@dgx/client';
+import { Events, RPC, Taskbar, Util } from '@dgx/client';
 
 const getPlayerToRob = async () => {
   const closestPly = Util.getClosestPlayerInDistanceAndOutsideVehicle(2);
@@ -43,6 +43,5 @@ on('police:robPlayer', async () => {
 
   const target = await getPlayerToRob();
   if (!target) return;
-  Inventory.openOtherPlayer(target);
-  Events.emitNet('police:interactions:robbedPlayer', target);
+  Events.emitNet('police:interactions:robPlayer', target);
 });

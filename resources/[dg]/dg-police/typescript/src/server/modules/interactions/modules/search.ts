@@ -82,7 +82,7 @@ Events.onNet('police:interactions:search', async (src: number) => {
 
   const cash = Financials.getCash(target);
   Notifications.add(src, `De persoon heeft €${cash} opzak`);
-  Events.emitNet('police:interactions:searchPlayer', src, target);
+  Inventory.openOtherPlayer(src, target);
   Notifications.add(target, 'Een agent is je aan het fouilleren', 'error');
 
   Util.Log(

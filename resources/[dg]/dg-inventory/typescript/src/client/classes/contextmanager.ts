@@ -1,9 +1,11 @@
-import { Events, Notifications, RayCast, RPC, Sync, UI, Util, Vehicles } from '@dgx/client';
+import { Events, Notifications, RayCast, Sync, UI, Util, Vehicles } from '@dgx/client';
+import { DGXEvent, EventListener } from '@dgx/client/decorators';
 import { Vector3, Export, ExportRegister } from '@dgx/shared';
 import { TYPES_WITH_OPEN_ANIMATION } from '../constants';
 import { canOpenInventory, doCloseAnimation, doLookAnimation, doOpenAnimation } from '../util';
 
 @ExportRegister()
+@EventListener()
 class ContextManager extends Util.Singleton<ContextManager>() {
   public isInventoryOpen = false;
   private forceSecondary: IdBuildData | null;
@@ -19,6 +21,7 @@ class ContextManager extends Util.Singleton<ContextManager>() {
   private _isOpen = () => this.isInventoryOpen;
 
   @Export('open')
+  @DGXEvent('inventory:client:open')
   public openInventory = (sec?: IdBuildData) => {
     if (this.isInventoryOpen || !canOpenInventory()) {
       Notifications.add('Je kan dit momenteel niet', 'error');
