@@ -14,8 +14,8 @@
         "max": 3
       },
       "locationsAmount": {
-        "min": 2,
-        "max": 3
+        "min": 1,
+        "max": 2
       }
     },
     "big": {
@@ -26,8 +26,8 @@
         "max": 5
       },
       "locationsAmount": {
-        "min": 4,
-        "max": 6
+        "min": 3,
+        "max": 4
       }
     }
   },

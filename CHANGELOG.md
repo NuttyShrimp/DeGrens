@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 ### Changed
+- Item craft requirements verlaagd, payouts getweaked om aangenamere experience te geven
 
 ### Fixed
 

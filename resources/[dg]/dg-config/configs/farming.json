@@ -1,6 +1,6 @@
 {
   "bucketFillAmount": 10,
-  "amountPerPlant": 2,
+  "amountPerPlant": 3,
   "fertilizerDecrease": 10,
   "defaultPlant": {
     "model": "bkr_prop_weed_01_small_01a",

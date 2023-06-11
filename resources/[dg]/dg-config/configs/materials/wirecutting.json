@@ -1,7 +1,7 @@
 {
   "cutTimeout": 35,
   "qualityDecrease": 5,
-  "itemAmount": 4,
+  "itemAmount": 6,
   "locations": [
     {
       "x": 531.2772,
