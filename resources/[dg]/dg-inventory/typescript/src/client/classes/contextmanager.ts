@@ -74,21 +74,7 @@ class ContextManager extends Util.Singleton<ContextManager>() {
     const { entity: entityAimingAt } = RayCast.doRaycast();
     if (entityAimingAt && IsEntityAVehicle(entityAimingAt) && NetworkGetEntityIsNetworked(entityAimingAt)) {
       if (GetVehicleDoorLockStatus(entityAimingAt) < 2) {
-        let trunkPosition: Vector3;
-
-        // If a trunkBone was found we check on the position of that bone. Useful for determining frontengine cars.
-        // else we use the modeldimensions to check if players is at the back. Useful for motorcycles.
-        const boneIndex = GetEntityBoneIndexByName(entityAimingAt, 'boot');
-        if (boneIndex !== -1) {
-          trunkPosition = Util.ArrayToVector3(GetWorldPositionOfEntityBone(entityAimingAt, boneIndex));
-        } else {
-          const [min, max] = GetModelDimensions(GetEntityModel(entityAimingAt));
-          const carLength = max[1] - min[1];
-          trunkPosition = Util.ArrayToVector3(GetOffsetFromEntityInWorldCoords(entityAimingAt, 0, -carLength / 2, 0));
-        }
-
-        const distance = Util.getPlyCoords().distance(trunkPosition);
-        if (distance < 2) {
+        if (Vehicles.isNearVehiclePlace(entityAimingAt, 'boot', 2)) {
           const vin = await Vehicles.getVehicleVin(entityAimingAt);
           if (vin) {
             const vehicleClass = GetVehicleClass(entityAimingAt);

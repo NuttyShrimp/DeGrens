@@ -1,5 +1,5 @@
-import { Events, Peek, RPC, Util } from '@dgx/client';
-import { getCurrentVehicle, isCloseToHood } from '@helpers/vehicle';
+import { Events, Peek, RPC, Util, Vehicles } from '@dgx/client';
+import { getCurrentVehicle } from '@helpers/vehicle';
 
 import {
   applyUpgrades,
@@ -69,7 +69,7 @@ Peek.addGlobalEntry('vehicle', {
       },
       canInteract: ent => {
         if (!ent || !NetworkGetEntityIsNetworked(ent)) return false;
-        return isCloseToHood(ent, 2) && hasVehicleKeys(ent);
+        return Vehicles.isNearVehiclePlace(ent, 'bonnet', 2) && hasVehicleKeys(ent);
       },
     },
     {
@@ -82,7 +82,7 @@ Peek.addGlobalEntry('vehicle', {
       },
       canInteract: veh => {
         if (!veh || !NetworkGetEntityIsNetworked(veh)) return false;
-        return isCloseToHood(veh, 2, true);
+        return Vehicles.isNearVehiclePlace(veh, 'bonnet', 2, true);
       },
     },
   ],

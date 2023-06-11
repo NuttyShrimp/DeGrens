@@ -1,6 +1,5 @@
-import { Events, Notifications, Peek, UI } from '@dgx/client';
+import { Events, Notifications, Peek, UI, Vehicles } from '@dgx/client';
 import { getVehicleVin, getVehicleVinWithoutValidation } from './service.identification';
-import { isCloseToBoot, isCloseToHood } from '@helpers/vehicle';
 import { hasVehicleKeys } from 'modules/keys/cache.keys';
 
 global.asyncExports('getVehicleVin', getVehicleVin);
@@ -21,7 +20,7 @@ Peek.addGlobalEntry('vehicle', {
         if (!hasVehicleKeys(veh)) return false;
         const vehState = Entity(veh).state;
         if (vehState.fakePlate) return false;
-        return isCloseToBoot(veh, 2);
+        return Vehicles.isNearVehiclePlace(veh, 'boot', 2);
       },
     },
     {
@@ -36,7 +35,7 @@ Peek.addGlobalEntry('vehicle', {
         if (!hasVehicleKeys(veh)) return false;
         const vehState = Entity(veh).state;
         if (!vehState?.fakePlate) return false;
-        return isCloseToBoot(veh, 2);
+        return Vehicles.isNearVehiclePlace(veh, 'boot', 2);
       },
     },
     {
@@ -51,7 +50,7 @@ Peek.addGlobalEntry('vehicle', {
       },
       canInteract: ent => {
         if (!ent || !NetworkGetEntityIsNetworked(ent)) return false;
-        return isCloseToHood(ent, 2, true);
+        return Vehicles.isNearVehiclePlace(ent, 'bonnet', 2, true);
       },
     },
   ],
