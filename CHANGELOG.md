@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- Mogelijkheid om lockers toe te voegen die geen animatie afspelen
 
 ### Changed
 - Item craft requirements verlaagd, payouts getweaked om aangenamere experience te geven

@@ -288,6 +288,7 @@ model lockers {
   x           Float       @db.Float
   y           Float       @db.Float
   z           Float       @db.Float
+  doAnimation Boolean     @default(true)
   radius      Float       @db.Float
   owner       Int?
   password    String?     @db.VarChar(255)

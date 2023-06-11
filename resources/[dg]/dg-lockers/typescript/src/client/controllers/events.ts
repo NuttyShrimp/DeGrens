@@ -1,8 +1,8 @@
-import { Events, UI, RayCast, Util, Notifications, Inventory } from '@dgx/client';
+import { Events, UI, RayCast, Util, Notifications } from '@dgx/client';
 import { buildLockers } from 'services/lockers';
 
 Events.onNet('lockers:client:place', async () => {
-  const result = await UI.openInput({
+  const result = await UI.openInput<{ id: string; price: string; doAnimation: string }>({
     header: 'Locker plaatsen',
     inputs: [
       {
@@ -15,12 +15,27 @@ Events.onNet('lockers:client:place', async () => {
         name: 'price',
         label: 'Prijs',
       },
+      {
+        type: 'select',
+        name: 'doAnimation',
+        label: 'Animatie Bij Openen',
+        value: 'yes',
+        options: [
+          {
+            label: 'Ja',
+            value: 'yes',
+          },
+          {
+            label: 'Nee',
+            value: 'no',
+          },
+        ],
+      },
     ],
   });
   if (!result.accepted) return;
 
-  const id = result.values.id;
-  const price = Number(result.values.price);
+  const price = +result.values.price;
   if (isNaN(price)) {
     Notifications.add('Geen geldige prijs', 'error');
     return;
@@ -86,9 +101,10 @@ Events.onNet('lockers:client:place', async () => {
   const size = Util.round(selection.size, 2);
 
   const locker: Lockers.BuildData = {
-    id,
+    id: result.values.id,
     coords,
     radius: size,
+    doAnimation: result.values.doAnimation === 'yes',
   };
 
   Events.emitNet('lockers:server:place', locker, Math.round(price));

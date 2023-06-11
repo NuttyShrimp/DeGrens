@@ -16,6 +16,7 @@ export class Locker {
   private password: string | null;
   private price: number;
   private paymentDay: number;
+  private doAnimation: boolean;
 
   private activePlayers: Set<number>;
 
@@ -29,6 +30,7 @@ export class Locker {
     this.password = data.password;
     this.price = data.price;
     this.paymentDay = data.paymentDay;
+    this.doAnimation = data.doAnimation;
 
     this.activePlayers = new Set();
   }
@@ -45,6 +47,7 @@ export class Locker {
       password: this.password,
       price: this.price,
       paymentDay: this.paymentDay,
+      doAnimation: this.doAnimation,
     };
   }
 
@@ -173,7 +176,9 @@ export class Locker {
       }, 5 * 60 * 1000);
 
       Notifications.add(plyId, 'Je hebt toegang voor 5 minuten', 'success');
-      Events.emitNet('lockers:client:doAnimation', plyId);
+      if (this.doAnimation) {
+        Events.emitNet('lockers:client:doAnimation', plyId);
+      }
     }
 
     const menu: ContextMenu.Entry[] = [
