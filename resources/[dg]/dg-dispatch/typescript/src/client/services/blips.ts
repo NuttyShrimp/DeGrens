@@ -11,7 +11,7 @@ const getBlipSettings = (info: Dispatch.BlipInfo): NBlip.Settings => {
       color: 3,
       heading: true,
       text: info.text,
-      category: 7,
+      category: 10,
     };
   }
   if (info.job === 'ambulance') {
@@ -19,7 +19,7 @@ const getBlipSettings = (info: Dispatch.BlipInfo): NBlip.Settings => {
       color: 23,
       heading: true,
       text: info.text,
-      category: 7,
+      category: 11,
     };
   }
   return {};

@@ -103,6 +103,10 @@ export const setGTABehaviour = async () => {
 
   SetWeaponsNoAutoswap(true);
 
+  AddTextEntry('BLIP_OTHPLYR', 'Spelers');
+  AddTextEntry('BLIP_PROPCAT', 'Politie');
+  AddTextEntry('BLIP_APARTCAT', 'Ambulance');
+
   // EVERY FRAME LOOP
   setInterval(() => {
     // Perma disable controls
