@@ -13,7 +13,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Item craft requirements verlaagd, payouts getweaked om aangenamere experience te geven
+- Houserobbery en storerobbery payout verhoogd
+- Aantal materialen dat je krijgt bij veel activiteiten verhoogd
+- PostOP aantal locaties per route veranderd
+- Crafting reputatie requirement van startitems verlaagd
 - Locker animatie speelt enkel wanneer je de eerste keer het wachtwoord ingeeft
 - Voertuig upgrades volledig herwerkt om fouten met applyen van upgrades tegen te gaan en voor aangenamere developer experience
 - Volume van de normale sirene is weer wat verhoogd
