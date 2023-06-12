@@ -25,6 +25,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - melding van /me en /dice komt nu niet meer op je scherm als je niet in line of sight bent van de sender
+- Garagethreads worden gestopt wanneer je de server verlaat
 
 ## [1.2.4]
 
