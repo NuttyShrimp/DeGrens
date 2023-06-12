@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Item craft requirements verlaagd, payouts getweaked om aangenamere experience te geven
 - Locker animatie speelt enkel wanneer je de eerste keer het wachtwoord ingeeft
+- Voertuig upgrades volledig herwerkt om fouten met applyen van upgrades tegen te gaan en voor aangenamere developer experience
 
 ### Fixed
 
@@ -36,6 +37,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Je kunt geen politie voertuigen meer in beslag nemen
 - Handlings van politie voertuigen gebuffed voor andere voertuigen beter te kunnen bijhouden
 - Scuffed livery van Porsche GT3 verwijderd
+
 
 ### Fixed
 

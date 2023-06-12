@@ -246,22 +246,20 @@ class Util extends UtilShared {
     return RPC.execute('dgx:util:isInWater', plyId);
   };
 
-  public awaitEntityExistence = (entity: number, isNetId = false): Promise<boolean> => {
-    return new Promise<boolean>(resolve => {
-      let attempts = 0;
-      const interval = setInterval(() => {
-        const ent = isNetId ? NetworkGetEntityFromNetworkId(entity) : entity;
-        attempts++;
-        if (attempts > 50) {
-          clearInterval(interval);
-          resolve(false);
-        }
-        if (DoesEntityExist(ent)) {
-          clearInterval(interval);
-          resolve(true);
-        }
-      }, 100);
+  public awaitEntityExistence = async (entity: number, isNetId = false): Promise<boolean> => {
+    const exists = await this.awaitCondition(() => {
+      const ent = isNetId ? NetworkGetEntityFromNetworkId(entity) : entity;
+      return DoesEntityExist(ent);
     });
+    return exists;
+  };
+
+  public awaitOwnership = async (entity: number) => {
+    await this.awaitCondition(() => !DoesEntityExist(entity) || NetworkGetEntityOwner(entity) > 0, false, 100);
+    if (!DoesEntityExist(entity)) return;
+    const owner = NetworkGetEntityOwner(entity);
+    if (owner <= 0) return;
+    return owner;
   };
 
   public onCharSpawn = (handler: (plyId: number, isNewCharacter: boolean) => void) => {

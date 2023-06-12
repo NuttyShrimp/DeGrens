@@ -5,14 +5,11 @@ import { spawnOwnedVehicle } from 'helpers/vehicle';
 import plateManager from 'modules/identification/classes/platemanager';
 import vinManager from 'modules/identification/classes/vinmanager';
 import { decreaseModelStock, getConfigByModel, getModelStock, isInfoLoaded } from 'modules/info/service.info';
-import { applyUpgradesToVeh, saveCosmeticUpgrades } from 'modules/upgrades/service.upgrades';
 import { mainLogger } from 'sv_logger';
 import winston from 'winston';
-
 import { doVehicleShopTransaction, getVehicleTaxedPrice } from '../helpers.vehicleshop';
 import { getVehicleShopConfig } from '../services/config.vehicleshop';
 import { charModule } from 'helpers/core';
-import { generateBaseUpgrades } from '@shared/upgrades/service.upgrades';
 
 @RPCRegister()
 @EventListener()
@@ -225,6 +222,17 @@ class ShopManager extends Util.Singleton<ShopManager>() {
       return;
     }
 
+    // require spawn position to be empty
+    const spawnPosition = getVehicleShopConfig().vehicleSpawnLocation;
+    if (Util.isAnyVehicleInRange(spawnPosition, 4)) {
+      Notifications.add(
+        src,
+        'Er staat een voertuig in de weg, verplaats de wagen om de aankoop te kunnen voltooien',
+        'error'
+      );
+      return;
+    }
+
     const saleSpotData = this.spotsForSale.get(spotId);
     const employeeWhoSold = saleSpotData?.employee;
     const sellerCid = employeeWhoSold ?? Business.getBusinessOwner(getVehicleShopConfig().businessName)?.citizenid;
@@ -270,6 +278,7 @@ class ShopManager extends Util.Singleton<ShopManager>() {
     await insertNewVehicle(vin, cid, model, plate);
     vinManager.addPlayerVin(vin);
     plateManager.addPlayerPlate(plate);
+
     const taxedPrice = getVehicleTaxedPrice(model);
     decreaseModelStock(model);
     Util.Log(
@@ -281,22 +290,14 @@ class ShopManager extends Util.Singleton<ShopManager>() {
     this.logger.info(`Player ${cid} bought a vehicle (${model}) for ${taxedPrice}`);
     Notifications.add(src, `Je ${modelData.brand} ${modelData.name} staat op je te wachten in de garage!`, 'success');
 
-    // Check if any vehicle at spawnpos, if so alert player to check garage else spawn vehicle
-    const spawnPosition = getVehicleShopConfig().vehicleSpawnLocation;
-    let vehicle: number | undefined = undefined;
-    if (!Util.isAnyVehicleInRange(spawnPosition, 4)) {
-      const vehicleInfo = await getPlayerVehicleInfo(vin);
-      vehicle = await spawnOwnedVehicle(src, vehicleInfo, spawnPosition);
+    const vehicleInfo = await getPlayerVehicleInfo(vin);
+    const vehicle = await spawnOwnedVehicle(src, vehicleInfo, spawnPosition);
+    if (!vehicle) {
+      Notifications.add(src, 'Kon je voertuig niet uithalen. Bekijk de Vehiclesapp om je voertuig te vinden', 'error');
+      return;
     }
 
-    const upgrades = generateBaseUpgrades(vehicle);
-    if (vehicle !== undefined) {
-      await setVehicleState(vin, 'out');
-      applyUpgradesToVeh(NetworkGetNetworkIdFromEntity(vehicle), upgrades);
-    } else {
-      Notifications.add(src, 'Kon je voertuig niet uithalen. Bekijk de Vehiclesapp om je voertuig te vinden', 'error');
-    }
-    saveCosmeticUpgrades(vin, upgrades);
+    await setVehicleState(vin, 'out');
   };
 
   public getModelAtSpot = (spotId: number) => {

@@ -1,17 +1,16 @@
 import { Events, Notifications, RPC, Sounds, Taskbar, UI, Util } from '@dgx/client';
 import { getAppliedStance } from 'modules/stances/service.stances';
 import { fixVehicle } from 'modules/status/service.status';
-import { getCosmeticUpgrades } from 'modules/upgrades/service.upgrades';
 import { setEngineState } from 'services/engine';
-
 import { getCurrentVehicle, getVehicleConfig, isDriver } from '../../helpers/vehicle';
+import upgradesManager from 'modules/upgrades/classes/manager.upgrades';
 
 let bennysMenuOpen = false;
 let currentBennys: string | null = null;
 let locations: Record<string, Bennys.Location> = {};
 let keyThread: number | null = null;
-let equippedUpgradesOnEnter: Vehicles.Upgrades.Cosmetic;
-let blockedUpgrades: Partial<Record<keyof Vehicles.Upgrades.Cosmetic, number[]>> = {};
+let equippedUpgradesOnEnter: Vehicles.Upgrades.Cosmetic.Upgrades;
+let blockedUpgrades: Partial<Record<Vehicles.Upgrades.Cosmetic.Key, number[]>> = {};
 const enableKeys = [0, 1, 2, 3, 4, 5, 6, 46, 249];
 
 let modelStanceData: Stance.Model[] = [];
@@ -97,32 +96,6 @@ export const handleVehicleRepair = async () => {
     Sounds.playLocalSound('airwrench', 0.08);
     fixVehicle(plyVeh, true, false);
   }
-};
-
-export const openUI = async (upgrades: Vehicles.Upgrades.Cosmetic, price: number | null = null) => {
-  const plyVeh = getCurrentVehicle();
-  if (!plyVeh) return;
-  if (!isDriver()) return;
-  equippedUpgradesOnEnter = upgrades;
-  modelStanceData = (await RPC.execute('vehicles:stance:getModelData', GetEntityModel(plyVeh))) ?? [];
-  blockedUpgrades =
-    (await RPC.execute<Partial<Record<keyof Vehicles.Upgrades.Cosmetic, number[]>>>(
-      'vehicles:bennys:getBlockedUpgrades',
-      GetEntityModel(plyVeh)
-    )) ?? {};
-  originalStance = getAppliedStance(plyVeh);
-  setEngineState(plyVeh, false, true);
-  DisplayRadar(false);
-  startKeyThread();
-  UI.openApplication(
-    'bennys',
-    {
-      repairCost: price,
-    },
-    true
-  );
-  UI.SetUIFocusCustom(true, false);
-  bennysMenuOpen = true;
 };
 
 export const closeUI = () => {
@@ -225,8 +198,9 @@ export const enterBennys = async (fromAdminMenu = false) => {
   SetEntityHeading(plyVeh, currentSpotData.heading);
   FreezeEntityPosition(plyVeh, true);
 
-  const currentUpgrades = getCosmeticUpgrades(plyVeh);
+  const currentUpgrades = upgradesManager.get('cosmetic', plyVeh);
   if (!currentUpgrades) return;
+
   const repairData = getRepairData(plyVeh);
   const entered = await RPC.execute<boolean>(
     'vehicles:bennys:enterSpot',
@@ -235,10 +209,32 @@ export const enterBennys = async (fromAdminMenu = false) => {
     currentUpgrades,
     repairData
   );
-  if (entered) {
-    UI.hideInteraction();
-    openUI(currentUpgrades, repairData?.price);
-  } else {
+  if (!entered) {
     FreezeEntityPosition(plyVeh, false);
+    return;
   }
+
+  equippedUpgradesOnEnter = currentUpgrades;
+  modelStanceData = (await RPC.execute('vehicles:stance:getModelData', GetEntityModel(plyVeh))) ?? [];
+  originalStance = getAppliedStance(plyVeh);
+  blockedUpgrades =
+    (await RPC.execute<Partial<Record<Vehicles.Upgrades.Cosmetic.Key, number[]>>>(
+      'vehicles:bennys:getBlockedUpgrades',
+      GetEntityModel(plyVeh) >>> 0
+    )) ?? {};
+  bennysMenuOpen = true;
+
+  UI.hideInteraction();
+  setEngineState(plyVeh, false, true);
+  DisplayRadar(false);
+  startKeyThread();
+
+  UI.openApplication(
+    'bennys',
+    {
+      repairCost: repairData?.price ?? null,
+    },
+    true
+  );
+  UI.SetUIFocusCustom(true, false);
 };

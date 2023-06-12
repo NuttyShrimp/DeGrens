@@ -1,6 +1,7 @@
 import { Events, Notifications, Peek, PolyZone, RPC, UI, Util, Vehicles } from '@dgx/client';
 
 import { requestTestDrive } from '../services/testdrive.vehicleshop';
+import { spawnLocalVehicle } from '@helpers/vehicle';
 
 export class Spot {
   public readonly id: number;
@@ -63,29 +64,21 @@ export class Spot {
       this.despawnVehicle();
     }
 
-    const hash = GetHashKey(modelToSpawn);
-    await Util.loadModel(hash);
-    if (!HasModelLoaded(hash)) {
-      this.log(`Failed to load vehicle model ${modelToSpawn}`);
-      return;
-    }
-
-    if (this.model !== modelToSpawn) {
-      this.log('Spotvehicle has been changed while the previous model was loading');
-      return;
-    }
-
-    this.vehicle = CreateVehicle(hash, this.position.x, this.position.y, this.position.z, this.heading, false, true);
-    if (this.vehicle === 0) {
+    this.vehicle = await spawnLocalVehicle({
+      model: modelToSpawn,
+      position: { w: this.heading, ...this.position },
+      plate: `PDMSPOT${this.id}`,
+      doorLockState: 3,
+      invincible: true,
+      frozen: true,
+      validateAfterModelLoad: () => {
+        return this.model === modelToSpawn;
+      },
+    });
+    if (!this.vehicle) {
       this.log(`Failed to spawn vehicle at spot ${this.id}`);
       return;
     }
-    SetModelAsNoLongerNeeded(hash);
-    SetEntityInvincible(this.vehicle, true);
-    FreezeEntityPosition(this.vehicle, true);
-    SetVehicleDoorsLocked(this.vehicle, 3);
-    SetVehicleNumberPlateText(this.vehicle, `PDMSPOT${this.id}`);
-    Vehicles.applyNewCosmeticUpgrades(this.vehicle, Vehicles.getBaseUpgrades(this.vehicle) ?? {});
 
     this.vehiclePeekIds = Peek.addEntityEntry(this.vehicle, {
       options: [

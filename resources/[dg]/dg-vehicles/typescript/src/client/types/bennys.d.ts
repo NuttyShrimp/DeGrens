@@ -1,51 +1,59 @@
 declare namespace Bennys {
+  type Category = 'colors' | 'interior' | 'exterior' | 'wheels' | 'extras';
+  type ColorKey =
+    | 'primaryColor'
+    | 'secondaryColor'
+    | 'pearlescentColor'
+    | 'interiorColor'
+    | 'dashboardColor'
+    | 'wheelColor';
+
   namespace UI {
     namespace Components {
-      interface Generic {
+      type Generic = {
         name: string;
         // Which id is equipped (-1-indexed)
         equipped: number;
         // Name of the component for each id (e.g. "Front Wheel #1")
         componentNames: string[];
-      }
+      };
 
-      interface Wheels {
-        equipped: {
-          type: number;
-          id: number;
-        };
-        categories: (Omit<Generic, 'name' | 'equipped'> & { id: number; label: string })[];
-      }
-
-      interface Color {
-        name: keyof Vehicles.Upgrades.Cosmetic;
+      type Color = {
+        name: Extract<Vehicles.Upgrades.Key, ColorKey>;
         equipped: RGB | number;
-      }
-    }
-
-    interface GenericChange {
-      name: keyof Vehicles.Upgrades.AllCosmeticModIds;
-      data: number;
-    }
-
-    interface ColorChange {
-      name: 'colors';
-      data: Vehicles.Upgrades.Cosmetic;
-    }
-
-    interface WheelChange {
-      name: 'wheels';
-      data: Vehicles.Upgrades.Cosmetic['wheels'];
-    }
-
-    interface ExtraChange {
-      name: string;
-      data: {
-        id: number;
-        enabled: boolean;
       };
     }
 
-    type Change = GenericChange | ColorChange | WheelChange | ExtraChange;
+    type WheelsCategories = (Omit<Generic, 'name' | 'equipped'> & { id: number; label: string })[];
+
+    // type GenericChange = {
+    //   name: Exclude<Vehicles.Upgrades.Key, 'colors', 'wheels', 'extras'>;
+    //   data: number;
+    // };
+
+    // type ColorChange = {
+    //   name: 'colors';
+    //   data: Vehicles.Upgrades.Cosmetic;
+    // };
+
+    // type WheelChange = {
+    //   name: 'wheels';
+    //   data: Vehicles.Upgrades.Cosmetic['wheels'];
+    // };
+
+    // type ExtraChange = {
+    //   name: 'extras';
+    //   data: {
+    //     id: number;
+    //     enabled: boolean;
+    //   };
+    // };
+
+    type Change<T extends Vehicles.Upgrades.Cosmetic.Key = Vehicles.Upgrades.Cosmetic.Key> = {
+      name: T;
+      data: Vehicles.Upgrades.Cosmetic.Upgrades[T];
+    };
+
+    // type Change = GenericChange | ColorChange | WheelChange | ExtraChange;
   }
 }

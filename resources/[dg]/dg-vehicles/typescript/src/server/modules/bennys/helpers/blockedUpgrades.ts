@@ -1,15 +1,15 @@
 import { Config } from '@dgx/server';
 
-let blockedUpgrades: Record<string, Partial<Record<keyof Vehicles.Upgrades.Cosmetic, number[]>>> | null = null;
+let blockedUpgrades: Record<string, Partial<Record<Vehicles.Upgrades.Cosmetic.Key, number[]>>> | null = null;
 
 export const loadBlockedUpgrades = () => {
   const bUpgradesToModel = Config.getConfigValue<{
-    blockedUpgrades: Record<string, Partial<Record<keyof Vehicles.Upgrades.Cosmetic, number[]>>>;
+    blockedUpgrades: Record<string, Partial<Record<Vehicles.Upgrades.Cosmetic.Key, number[]>>>;
   }>('vehicles.bennys')?.blockedUpgrades;
   if (!bUpgradesToModel) return;
   blockedUpgrades = {};
   for (const [model, upgrades] of Object.entries(bUpgradesToModel)) {
-    blockedUpgrades[String(GetHashKey(model))] = upgrades;
+    blockedUpgrades[String(GetHashKey(model) >>> 0)] = upgrades;
   }
 };
 

@@ -5,16 +5,16 @@ import { setVehicleNosAmount } from 'modules/nos/service.nos';
 import { setVehicleHarnessUses } from 'modules/seatbelts/service.seatbelts';
 import { setVehicleStance } from 'modules/stances/service.stance';
 import { getNativeStatus } from 'modules/status/service.status';
-import { applyUpgrades, applyUpgradesToVeh } from 'modules/upgrades/service.upgrades';
-
 import { fuelManager } from '../modules/fuel/classes/fuelManager';
 import plateManager from '../modules/identification/classes/platemanager';
 import vinManager from '../modules/identification/classes/vinmanager';
-import { applyFakePlate, validateVehicleVin } from '../modules/identification/service.id';
+import { validateVehicleVin } from '../modules/identification/service.id';
 import { keyManager } from '../modules/keys/classes/keymanager';
 import { mainLogger } from '../sv_logger';
 import { assignModelConfig } from 'modules/info/service.info';
 import { Vector4 } from '@dgx/shared';
+import upgradesManager from 'modules/upgrades/classes/manager.upgrades';
+import { generateBaseCosmeticUpgrades, generateBasePerformanceUpgrades } from '@shared/upgrades/service.upgrades';
 
 /**
  * Spawn a vehicle
@@ -47,23 +47,26 @@ export const spawnVehicle: Vehicles.SpawnVehicleFunction = async data => {
     return;
   }
 
+  // 'entityCreated' event does not get emitted when using the serversetter. We manually check to catch blacklisted models
+  const modelIsBlacklisted = global.exports['dg-misc'].isModelBlacklisted(data.model);
+  if (modelIsBlacklisted) {
+    mainLogger.error(`Spawn vehicle: blacklisted | model: ${data.model}`);
+    return;
+  }
+
   // force to be floats
   const position = Vector4.create({ w: 0, ...data.position }).add(0.001);
   const modelHash = GetHashKey(data.model);
   const vehicle = CreateVehicleServerSetter(modelHash, modelType, position.x, position.y, position.z, position.w);
 
-  // entityCreated event does not get emitted when using the serversetter. We emulate this event to catch blacklisted models
-  emit('entityCreated', vehicle);
-
   const doesExist = await Util.awaitEntityExistence(vehicle);
   if (!doesExist) {
-    mainLogger.error(`Spawn vehicle: vehicle didn't spawn (or was deleted during creation) | model: ${data.model}`);
+    mainLogger.error(`Spawn vehicle: vehicle didn't spawn | model: ${data.model}`);
     return;
   }
 
   const entityOwner = NetworkGetEntityOwner(vehicle);
   const netId = NetworkGetNetworkIdFromEntity(vehicle);
-  const vehState = Entity(vehicle).state;
 
   mainLogger.debug(
     `Spawn vehicle: spawned | model: ${data.model} | entity: ${vehicle} | netId: ${netId} | owner: ${entityOwner}`
@@ -81,9 +84,8 @@ export const spawnVehicle: Vehicles.SpawnVehicleFunction = async data => {
 
   // setting plate
   const plate = data.plate ?? plateManager.generatePlate();
-  vehState.set('plate', plate, true);
   plateManager.registerPlate(plate);
-  Vehicles.setVehicleNumberPlate(vehicle, plate);
+  Vehicles.setNumberPlate(vehicle, plate, data.isFakePlate);
 
   // setting fuel
   fuelManager.registerVehicle(vehicle, data.fuel);
@@ -93,37 +95,23 @@ export const spawnVehicle: Vehicles.SpawnVehicleFunction = async data => {
     keyManager.addKey(vin, data.keys);
   }
 
-  // applying upgrades
-  if (data.upgrades) {
-    applyUpgradesToVeh(netId, data.upgrades);
-  }
+  assignModelConfig(vehicle);
 
-  // in certain zones gta will spawn population peds in vehicles (had this happen multiple times at vehicle rental near pillbox)
-  let npcDriverDeleteCounter = 20;
-  const npcDriverDeleteThread = setInterval(() => {
-    const exists = DoesEntityExist(vehicle);
-    if (!exists) {
-      clearInterval(npcDriverDeleteThread);
-      return;
-    }
+  Util.awaitOwnership(vehicle).then(owner => {
+    if (!owner) return;
 
-    // wait till someone is in scope
-    if (NetworkGetEntityOwner(vehicle) === -1) return;
+    // at this point, the first ownership has been taken
+    // sync module will take care of any other ownership changes
+    startNPCDriverDeletionThread(vehicle);
 
-    npcDriverDeleteCounter--;
-    const pedInDriverSeat = GetPedInVehicleSeat(vehicle, -1);
-    if (pedInDriverSeat && DoesEntityExist(pedInDriverSeat) && !IsPedAPlayer(pedInDriverSeat)) {
-      DeleteEntity(pedInDriverSeat);
-      clearInterval(npcDriverDeleteThread);
-      return;
-    }
-
-    if (npcDriverDeleteCounter <= 0) {
-      clearInterval(npcDriverDeleteThread);
-    }
-  }, 250);
-
-  assignModelConfig(vehicle, modelHash);
+    // upgrades
+    const mergedUpgrades = {
+      ...generateBaseCosmeticUpgrades(true),
+      ...generateBasePerformanceUpgrades(),
+      ...data.upgrades,
+    };
+    upgradesManager.apply(vehicle, mergedUpgrades);
+  });
 
   return {
     vehicle,
@@ -134,6 +122,8 @@ export const spawnVehicle: Vehicles.SpawnVehicleFunction = async data => {
 };
 
 export const spawnOwnedVehicle = async (src: number, vehicleInfo: Vehicle.Vehicle, position: Vec4) => {
+  const upgrades = await upgradesManager.getFull(vehicleInfo.vin);
+
   const spawnedVehicle = await spawnVehicle({
     model: vehicleInfo.model,
     position: {
@@ -141,11 +131,13 @@ export const spawnOwnedVehicle = async (src: number, vehicleInfo: Vehicle.Vehicl
       z: position.z + 0.5,
     },
     vin: vehicleInfo.vin,
-    plate: vehicleInfo.plate,
+    plate: vehicleInfo.fakeplate ?? vehicleInfo.plate,
+    isFakePlate: !!vehicleInfo.fakeplate,
     keys: src,
+    upgrades,
   });
   if (!spawnedVehicle) return;
-  const { vehicle, netId, vin, plate } = spawnedVehicle;
+  const { vehicle, vin } = spawnedVehicle;
 
   // If status is all null generate a perfect status and save it
   if (Object.values(vehicleInfo.status).every(v => v === null)) {
@@ -163,13 +155,6 @@ export const spawnOwnedVehicle = async (src: number, vehicleInfo: Vehicle.Vehicl
     }, 500);
   }
 
-  if (vehicleInfo.fakeplate) {
-    Util.awaitCondition(() => DoesEntityExist(vehicle) && GetVehicleNumberPlateText(vehicle).trim() === plate).then(
-      () => {
-        applyFakePlate(src, netId, vehicleInfo.fakeplate);
-      }
-    );
-  }
   if (vehicleInfo.stance) {
     setVehicleStance(vehicle, vehicleInfo.stance);
   }
@@ -179,8 +164,6 @@ export const spawnOwnedVehicle = async (src: number, vehicleInfo: Vehicle.Vehicl
 
   setVehicleNosAmount(vehicle, vehicleInfo.nos);
   setVehicleHarnessUses(vehicle, vehicleInfo.harness);
-
-  await applyUpgrades(vin);
 
   return vehicle;
 };
@@ -207,13 +190,13 @@ export const getVinForNetId = (netId: number): string | null => {
   return getVinForVeh(veh);
 };
 
-export const isDriver = (ply: number): boolean => {
-  const plyPed = GetPlayerPed(String(ply));
-  if (!plyPed) return false;
-  const plyVeh = GetVehiclePedIsIn(plyPed, false);
-  if (!plyVeh) return false;
-  const vehDriverPed = GetPedInVehicleSeat(plyVeh, -1);
-  return plyPed === vehDriverPed;
+export const getCurrentVehicle = (plyId: number, mustBeDriver = false): number | undefined => {
+  const ped = GetPlayerPed(String(plyId));
+  if (!ped) return;
+  const vehicle = GetVehiclePedIsIn(ped, false);
+  if (!vehicle || !DoesEntityExist(vehicle)) return;
+  if (mustBeDriver && ped !== GetPedInVehicleSeat(vehicle, -1)) return;
+  return vehicle;
 };
 
 export const teleportInSeat = async (src: string, entity: number, seat = -1) => {
@@ -249,4 +232,26 @@ export const setNativeStatus = (vehicle: number, status: Partial<Omit<Vehicle.Ve
 export const setEngineState = (vehicle: number, state: boolean, instantly = false) => {
   const netId = NetworkGetNetworkIdFromEntity(vehicle);
   Util.sendEventToEntityOwner(vehicle, 'vehicles:setEngineState', netId, state, instantly);
+};
+
+const startNPCDriverDeletionThread = (vehicle: number) => {
+  let counter = 20;
+  const thread = setInterval(() => {
+    if (counter <= 0) {
+      clearInterval(thread);
+      return;
+    }
+    counter--;
+
+    if (!DoesEntityExist(vehicle)) {
+      clearInterval(thread);
+      return;
+    }
+
+    const pedInDriverSeat = GetPedInVehicleSeat(vehicle, -1);
+    if (pedInDriverSeat && DoesEntityExist(pedInDriverSeat) && !IsPedAPlayer(pedInDriverSeat)) {
+      DeleteEntity(pedInDriverSeat);
+      clearInterval(thread);
+    }
+  }, 250);
 };
