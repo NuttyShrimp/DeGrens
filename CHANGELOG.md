@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Item craft requirements verlaagd, payouts getweaked om aangenamere experience te geven
 - Locker animatie speelt enkel wanneer je de eerste keer het wachtwoord ingeeft
 - Voertuig upgrades volledig herwerkt om fouten met applyen van upgrades tegen te gaan en voor aangenamere developer experience
+- Volume van de normale sirene is weer wat verhoogd
 
 ### Fixed
 
