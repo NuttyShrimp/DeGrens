@@ -1,43 +1,11 @@
-import { Events, Notifications, Peek, UI, Vehicles } from '@dgx/client';
+import { Notifications, Peek, UI, Vehicles } from '@dgx/client';
 import { getVehicleVin, getVehicleVinWithoutValidation } from './service.identification';
-import { hasVehicleKeys } from 'modules/keys/cache.keys';
 
 global.asyncExports('getVehicleVin', getVehicleVin);
 global.exports('getVehicleVinWithoutValidation', getVehicleVinWithoutValidation);
 
 Peek.addGlobalEntry('vehicle', {
   options: [
-    {
-      label: 'Vervang nummerplaat',
-      icon: 'fas fa-screwdriver',
-      items: 'fakeplate',
-      action: (_, entity) => {
-        if (!entity) return;
-        Events.emitNet('vehicles:plate:useFakePlate', NetworkGetNetworkIdFromEntity(entity));
-      },
-      canInteract(veh) {
-        if (!veh || !NetworkGetEntityIsNetworked(veh)) return false;
-        if (!hasVehicleKeys(veh)) return false;
-        const vehState = Entity(veh).state;
-        if (vehState.fakePlate) return false;
-        return Vehicles.isNearVehiclePlace(veh, 'boot', 2);
-      },
-    },
-    {
-      label: 'Verwijder nummerplaat',
-      icon: 'fas fa-screwdriver',
-      action: (_, entity) => {
-        if (!entity) return;
-        Events.emitNet('vehicles:plate:removeFakePlate', NetworkGetNetworkIdFromEntity(entity));
-      },
-      canInteract(veh) {
-        if (!veh || !NetworkGetEntityIsNetworked(veh)) return false;
-        if (!hasVehicleKeys(veh)) return false;
-        const vehState = Entity(veh).state;
-        if (!vehState?.fakePlate) return false;
-        return Vehicles.isNearVehiclePlace(veh, 'boot', 2);
-      },
-    },
     {
       label: 'Lees VIN',
       icon: 'fas fa-barcode',

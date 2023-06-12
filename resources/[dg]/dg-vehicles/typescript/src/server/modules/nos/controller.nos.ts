@@ -1,11 +1,11 @@
-import { Auth, Config, Events, Inventory, Notifications, RPC, Taskbar, Util } from '@dgx/server';
+import { Auth, Config, Events, Inventory, Notifications, Taskbar, Util } from '@dgx/server';
 import { updateVehicleNos } from 'db/repository';
 import { getVinForNetId } from 'helpers/vehicle';
 import vinManager from 'modules/identification/classes/vinmanager';
 import { keyManager } from 'modules/keys/classes/keymanager';
-import { getPerformance } from 'modules/upgrades/service.upgrades';
 import { nosLogger } from './logger.nos';
 import { setVehicleNosAmount } from './service.nos';
+import upgradesManager from 'modules/upgrades/classes/manager.upgrades';
 
 Inventory.registerUseable('nos', async src => {
   const ped = GetPlayerPed(String(src));
@@ -29,7 +29,7 @@ Inventory.registerUseable('nos', async src => {
     return;
   }
 
-  const hasTurbo = (await getPerformance(vin))?.turbo ?? false;
+  const hasTurbo = (await upgradesManager.getPerformance(vin))?.turbo ?? false;
   if (!hasTurbo) {
     Notifications.add(src, 'Geen turbo aanwezig op voertuig', 'error');
     return;

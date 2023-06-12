@@ -4,61 +4,61 @@ const sirenToggles: Record<string, { on: (veh: number) => void; off: (veh: numbe
   a6: {
     on: veh => {
       const currentUpgrades = Vehicles.getCosmeticUpgrades(veh);
-      const extras: Vehicles.Upgrades.Cosmetic['extras'] = currentUpgrades?.extras || [];
+      const extras: Vehicles.Upgrades.Cosmetic.Upgrades['extras'] = currentUpgrades?.extras || [];
       const extra = extras.find(e => e.id == 1);
       if (extra) {
         extra.enabled = true;
       } else {
         extras.push({ id: 1, enabled: true });
       }
-      Vehicles.applyNewCosmeticUpgrades(veh, { extras });
+      Vehicles.applyUpgrades(veh, { extras });
     },
     off: veh => {
       const currentUpgrades = Vehicles.getCosmeticUpgrades(veh);
-      const extras: Vehicles.Upgrades.Cosmetic['extras'] = currentUpgrades?.extras || [];
+      const extras: Vehicles.Upgrades.Cosmetic.Upgrades['extras'] = currentUpgrades?.extras || [];
       const sirenExtraIdx = extras.findIndex(e => e.id === 1);
       extras[sirenExtraIdx].enabled = false;
-      Vehicles.applyNewCosmeticUpgrades(veh, { extras });
+      Vehicles.applyUpgrades(veh, { extras });
     },
   },
   '22m5': {
     on: veh => {
       const currentUpgrades = Vehicles.getCosmeticUpgrades(veh);
-      const extras: Vehicles.Upgrades.Cosmetic['extras'] = currentUpgrades?.extras || [];
+      const extras: Vehicles.Upgrades.Cosmetic.Upgrades['extras'] = currentUpgrades?.extras || [];
       const extra = extras.find(e => e.id == 1);
       if (extra) {
         extra.enabled = true;
       } else {
         extras.push({ id: 1, enabled: true });
       }
-      Vehicles.applyNewCosmeticUpgrades(veh, { extras });
+      Vehicles.applyUpgrades(veh, { extras });
     },
     off: veh => {
       const currentUpgrades = Vehicles.getCosmeticUpgrades(veh);
-      const extras: Vehicles.Upgrades.Cosmetic['extras'] = currentUpgrades?.extras || [];
+      const extras: Vehicles.Upgrades.Cosmetic.Upgrades['extras'] = currentUpgrades?.extras || [];
       const sirenExtraIdx = extras.findIndex(e => e.id === 1);
       extras[sirenExtraIdx].enabled = false;
-      Vehicles.applyNewCosmeticUpgrades(veh, { extras });
+      Vehicles.applyUpgrades(veh, { extras });
     },
   },
   drafter: {
     on: veh => {
       const currentUpgrades = Vehicles.getCosmeticUpgrades(veh);
-      const extras: Vehicles.Upgrades.Cosmetic['extras'] = currentUpgrades?.extras || [];
+      const extras: Vehicles.Upgrades.Cosmetic.Upgrades['extras'] = currentUpgrades?.extras || [];
       const extra = extras.find(e => e.id == 1);
       if (extra) {
         extra.enabled = true;
       } else {
         extras.push({ id: 1, enabled: true });
       }
-      Vehicles.applyNewCosmeticUpgrades(veh, { extras });
+      Vehicles.applyUpgrades(veh, { extras });
     },
     off: veh => {
       const currentUpgrades = Vehicles.getCosmeticUpgrades(veh);
-      const extras: Vehicles.Upgrades.Cosmetic['extras'] = currentUpgrades?.extras || [];
+      const extras: Vehicles.Upgrades.Cosmetic.Upgrades['extras'] = currentUpgrades?.extras || [];
       const sirenExtraIdx = extras.findIndex(e => e.id === 1);
       extras[sirenExtraIdx].enabled = false;
-      Vehicles.applyNewCosmeticUpgrades(veh, { extras });
+      Vehicles.applyUpgrades(veh, { extras });
     },
   },
 };

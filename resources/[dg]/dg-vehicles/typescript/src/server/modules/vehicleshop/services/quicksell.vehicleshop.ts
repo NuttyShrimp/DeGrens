@@ -1,39 +1,41 @@
-import { Financials, Notifications, RPC, Util } from '@dgx/server';
-import { deleteOwnedVehicle, getPlayerVehicleInfo, updateVehicleStock } from 'db/repository';
+import { Financials, Notifications, RPC, TaxIds, Util } from '@dgx/server';
+import {
+  deleteOwnedVehicle,
+  getPlayerVehicleInfo,
+  getVehicleCosmeticUpgrades,
+  updateVehicleStock,
+} from 'db/repository';
 import { deleteVehicle, getVinForNetId } from 'helpers/vehicle';
 import vinManager from 'modules/identification/classes/vinmanager';
 import { isPlayerVehicleOwner } from 'modules/identification/service.id';
 import { getConfigByModel } from 'modules/info/service.info';
-import { getCosmetic, getPriceForUpgrades } from 'modules/upgrades/service.upgrades';
-
 import { getVehicleShopConfig } from './config.vehicleshop';
+import upgradesManager from 'modules/upgrades/classes/manager.upgrades';
 
 const getQuicksellPrice = async (vin: string) => {
   if (!vinManager.isVinFromPlayerVeh(vin)) return;
 
-  const netId = vinManager.getNetId(vin);
-  if (!netId) return;
-  const vehicle = NetworkGetEntityFromNetworkId(netId);
   const vehicleInfo = await getPlayerVehicleInfo(vin);
+  if (!vehicleInfo) return;
 
-  const modelBasePrice = getConfigByModel(vehicleInfo.model)?.price;
-  if (!modelBasePrice) return;
+  const modelConfig = getConfigByModel(vehicleInfo.model);
+  if (!modelConfig) return;
 
-  const allUpgrades = await getCosmetic(vin);
+  const allUpgrades = await getVehicleCosmeticUpgrades(vin);
   if (!allUpgrades) return;
 
   const quicksellConfig = getVehicleShopConfig().quicksell;
   const allowedUpgrades = new Set(quicksellConfig.allowedUpgrades);
   const boughtUpgrades = Object.fromEntries(
-    (Object.entries(allUpgrades) as [keyof Vehicles.Upgrades.Cosmetic, any][]).filter(
+    (Object.entries(allUpgrades) as ObjEntries<typeof allUpgrades>).filter(
       ([key, value]) => allowedUpgrades.has(key) && value !== -1
     )
-  ) as Partial<Vehicles.Upgrades.Cosmetic>;
+  ) as Partial<Vehicles.Upgrades.Cosmetic.Upgrades>;
 
-  const upgradesPrice = getPriceForUpgrades(vehicle, boughtUpgrades);
+  const upgradesPrice = upgradesManager.calculatePriceForUpgrades(modelConfig.class, boughtUpgrades);
 
-  const price = (upgradesPrice + modelBasePrice) * quicksellConfig.percentage;
-  return Financials.getTaxedPrice(price, 2, true).taxPrice;
+  const price = (upgradesPrice + modelConfig.price) * quicksellConfig.percentage;
+  return Financials.getTaxedPrice(price, TaxIds.Vehicles, true).taxPrice;
 };
 
 RPC.register('vehicles:quicksell:getPrice', async (src, netId: number) => {

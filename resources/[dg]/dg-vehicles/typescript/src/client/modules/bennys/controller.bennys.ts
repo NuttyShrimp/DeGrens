@@ -1,8 +1,5 @@
 import { BlipManager, Events, Keys, PolyZone, UI } from '@dgx/client';
-import { Vector3 } from '@dgx/shared';
-
 import { getCurrentVehicle, getVehicleConfig, isDriver } from '../../helpers/vehicle';
-
 import {
   closeUI,
   enterBennys,

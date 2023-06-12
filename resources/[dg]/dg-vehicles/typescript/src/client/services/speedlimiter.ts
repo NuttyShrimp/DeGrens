@@ -1,4 +1,4 @@
-import { Keys, Notifications, Util, Vehicles } from '@dgx/client';
+import { Keys, Notifications, Vehicles } from '@dgx/client';
 import { getCurrentVehicle, isDriver } from '@helpers/vehicle';
 
 let limiterOn = false;
