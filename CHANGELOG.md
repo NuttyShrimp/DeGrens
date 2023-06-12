@@ -8,15 +8,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+
 - Mogelijkheid om lockers toe te voegen die geen animatie afspelen
 
 ### Changed
+
 - Item craft requirements verlaagd, payouts getweaked om aangenamere experience te geven
 - Locker animatie speelt enkel wanneer je de eerste keer het wachtwoord ingeeft
 - Voertuig upgrades volledig herwerkt om fouten met applyen van upgrades tegen te gaan en voor aangenamere developer experience
 - Volume van de normale sirene is weer wat verhoogd
 
 ### Fixed
+
+- melding van /me en /dice komt nu niet meer op je scherm als je niet in line of sight bent van de sender
 
 ## [1.2.4]
 
@@ -38,7 +42,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Je kunt geen politie voertuigen meer in beslag nemen
 - Handlings van politie voertuigen gebuffed voor andere voertuigen beter te kunnen bijhouden
 - Scuffed livery van Porsche GT3 verwijderd
-
 
 ### Fixed
 
