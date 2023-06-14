@@ -18,13 +18,13 @@
     "police": 5
   },
   "bench_container_enter": {
-    "players": 20
+    "players": 10
   },
   "labs_meth": {
-    "players": 15
+    "players": 10
   },
   "labs_weed": {
-    "players": 5
+    "players": 1
   },
   "atm_robbery": {
     "police": 3

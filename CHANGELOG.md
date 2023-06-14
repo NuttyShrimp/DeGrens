@@ -22,6 +22,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Voertuig upgrades volledig herwerkt om fouten met applyen van upgrades tegen te gaan en voor aangenamere developer experience
 - Volume van de normale sirene is weer wat verhoogd
 - Blips categorieen opgesplitst naar spelers(voor admins), politie en ambulance
+- Player requirements van enkele activiteiten aangepast
 
 ### Fixed
 
