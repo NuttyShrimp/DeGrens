@@ -107,3 +107,29 @@ export const spawnLocalVehicle: Vehicles.SpawnLocalVehicleFunction = async data 
 
   return vehicle;
 };
+
+export const useDummyVehicle = async <T extends Record<string, any>>(
+  model: string | number,
+  func: (vehicle: number) => T | Promise<T>
+): Promise<T> => {
+  const modelHash = typeof model === 'string' ? GetHashKey(model) : model;
+  await Util.loadModel(modelHash);
+
+  const coords = Util.getPlyCoords();
+  const vehicle = CreateVehicle(modelHash, coords.x, coords.y, coords.z + 4, 0, false, false);
+
+  await Util.awaitEntityExistence(vehicle);
+
+  FreezeEntityPosition(vehicle, true);
+  SetEntityInvincible(vehicle, true);
+  SetEntityCompletelyDisableCollision(vehicle, false, true);
+  SetEntityVisible(vehicle, false, false);
+
+  const result = func(vehicle);
+  if (result instanceof Promise) await result;
+
+  DeleteEntity(vehicle);
+  SetModelAsNoLongerNeeded(modelHash);
+
+  return result;
+};

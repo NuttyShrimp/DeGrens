@@ -4,7 +4,6 @@ import {
   closeUI,
   enterBennys,
   getCurrentBennys,
-  getOriginalStance,
   setBennysMenuOpen,
   setCurrentBennys,
   setLocations,
@@ -63,10 +62,6 @@ UI.onUIReload(() => {
   }
   closeUI();
   setBennysMenuOpen(false);
-  const veh = getCurrentVehicle();
-  if (veh) {
-    Entity(veh).state.set('stance', getOriginalStance(), true);
-  }
 });
 
 Events.onNet('vehicles:bennys:adminEnter', () => {

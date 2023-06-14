@@ -1,9 +1,6 @@
-import { Inventory, Notifications, RPC, Util } from '@dgx/server';
+import { Notifications, RPC, Util } from '@dgx/server';
 import { Vector4 } from '@dgx/shared';
 import { getPlayerVehicleInfo, insertNewVehicle } from 'db/repository';
-import { fuelManager } from 'modules/fuel/classes/fuelManager';
-import { keyManager } from 'modules/keys/classes/keymanager';
-
 import {
   deleteVehicle,
   getVinForNetId,
@@ -15,7 +12,6 @@ import {
 } from '../helpers/vehicle';
 import vinManager from '../modules/identification/classes/vinmanager';
 import { mainLogger } from '../sv_logger';
-import { getConfigByEntity, getConfigByModel } from 'modules/info/service.info';
 import plateManager from 'modules/identification/classes/platemanager';
 import { TUNE_PARTS } from '../../shared/upgrades/constants.upgrades';
 
@@ -46,10 +42,11 @@ global.exports(
 
     let vehicle: number | null = null;
     if (vin) {
-      if (!vinManager.isVinFromPlayerVeh(vin)) {
-        Notifications.add(plyId, 'VIN does not belong to player vehicle', 'error');
-      }
       const vehicleInfo = await getPlayerVehicleInfo(vin);
+      if (!vehicleInfo) {
+        Notifications.add(plyId, 'VIN does not belong to player vehicle', 'error');
+        return;
+      }
       const ent = await spawnOwnedVehicle(plyId, vehicleInfo, position);
       if (!ent) {
         Notifications.add(plyId, 'Could not spawn owned vehicle', 'error');
@@ -91,8 +88,8 @@ global.exports(
 );
 
 global.asyncExports('getPlateForVin', async (vin: string) => {
-  if (!vinManager.isVinFromPlayerVeh(vin)) return;
   const info = await getPlayerVehicleInfo(vin);
+  if (!info) return;
   return info.plate;
 });
 

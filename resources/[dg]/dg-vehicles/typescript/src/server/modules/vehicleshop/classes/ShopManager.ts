@@ -291,7 +291,7 @@ class ShopManager extends Util.Singleton<ShopManager>() {
     Notifications.add(src, `Je ${modelData.brand} ${modelData.name} staat op je te wachten in de garage!`, 'success');
 
     const vehicleInfo = await getPlayerVehicleInfo(vin);
-    const vehicle = await spawnOwnedVehicle(src, vehicleInfo, spawnPosition);
+    const vehicle = await spawnOwnedVehicle(src, vehicleInfo!, spawnPosition);
     if (!vehicle) {
       Notifications.add(src, 'Kon je voertuig niet uithalen. Bekijk de Vehiclesapp om je voertuig te vinden', 'error');
       return;

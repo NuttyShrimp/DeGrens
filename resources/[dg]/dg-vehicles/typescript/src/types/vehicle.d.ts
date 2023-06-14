@@ -23,7 +23,7 @@ declare namespace Vehicle {
     doors: boolean[];
   }
 
-  interface Vehicle<StatusType = VehicleStatus, StanceType = Stance.Data | null> {
+  interface Vehicle<StatusType = VehicleStatus, StanceType = Stances.Stance | null> {
     vin: string;
     cid: number;
     model: string;

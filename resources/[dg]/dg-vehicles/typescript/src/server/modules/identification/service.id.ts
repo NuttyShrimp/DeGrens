@@ -1,11 +1,8 @@
-import { Inventory, Notifications, SQL, Taskbar, Util, Vehicles } from '@dgx/server';
-import { getPlayerVehicleInfo, updateVehicleFakeplate } from 'db/repository';
-
-import { getVinForNetId, setEngineState } from '../../helpers/vehicle';
+import { SQL, Util } from '@dgx/server';
+import { getPlayerVehicleInfo } from 'db/repository';
+import { setEngineState } from '../../helpers/vehicle';
 import { fuelManager } from '../fuel/classes/fuelManager';
-
 import vinManager from './classes/vinmanager';
-import { idLogger } from './logger.id';
 import { handleVehicleLock } from 'modules/keys/service.keys';
 import plateManager from './classes/platemanager';
 import { getConfigByEntity, getConfigByModel } from 'modules/info/service.info';
@@ -68,8 +65,8 @@ export const getClassOfVehicleWithVin = async (vin: string): Promise<CarClass | 
   }
 
   // if no entity exists and its not a known vin, means vin is invalid
-  if (!vinManager.isVinFromPlayerVeh(vin)) return;
-
   const vehicleInfo = await getPlayerVehicleInfo(vin);
+  if (!vehicleInfo) return;
+
   return getConfigByModel(vehicleInfo.model)?.class;
 };

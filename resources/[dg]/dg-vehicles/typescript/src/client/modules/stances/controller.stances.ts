@@ -1,133 +1,119 @@
-import { Events, Notifications, Statebags, UI } from '@dgx/client';
-import { getCurrentVehicle, isDriver } from '@helpers/vehicle';
+import { Events, Keys, Notifications, Statebags, UI } from '@dgx/client';
 import {
-  getAppliedStance,
-  removeInfoNotif,
-  roundOffset,
+  cycleChangeStep,
+  getChangeStep,
+  getVehicleStance,
+  handleStanceMenuClose,
+  openStanceMenu,
+  revertOriginalStance,
   setCloseVehicleStance,
-  updateInfoNotif,
+  setVehicleStance,
+  validateStanceMenuButtonAction,
 } from './service.stances';
+import { roundOffset, updateInfoNotif } from './helpers.stances';
+import { WHEELS } from './constants.stances';
 
-let stanceMenuOpen = false;
-let changeStep = 0.005;
+let finishCamMoving: (() => void) | null = null;
 
-export const isStanceMenuOpen = () => stanceMenuOpen;
+Statebags.addEntityStateBagChangeHandler<Stances.Stance | null>('entity', 'stance', (_, vehicle, stanceData) => {
+  setCloseVehicleStance(vehicle, stanceData);
+});
 
 UI.onUIReload(() => {
-  stanceMenuOpen = false;
+  handleStanceMenuClose();
 });
 
 UI.onApplicationClose(() => {
-  if (!stanceMenuOpen) return;
-
-  stanceMenuOpen = false;
-  removeInfoNotif();
-  changeStep = 0.005;
-  const veh = getCurrentVehicle();
-  if (!veh || !isDriver()) {
-    Notifications.add('Kon stance niet opslaan...', 'error');
-    return;
-  }
-  if (!Entity(veh).state.stance) return;
-  Events.emitNet('vehicles:stance:save', NetworkGetNetworkIdFromEntity(veh));
+  handleStanceMenuClose();
 }, 'contextmenu');
 
-Events.onNet('vehicles:stance:openMenu', () => {
-  const veh = getCurrentVehicle();
-  if (!veh || !isDriver()) {
-    Notifications.add('Je zit niet in een voertuig als bestuurder', 'error');
-    return;
-  }
+Events.onNet('vehicles:stances:openMenu', openStanceMenu);
 
-  stanceMenuOpen = true;
+UI.RegisterUICallback('stances/change', (data: { wheel: Stances.Wheel; action: 'increase' | 'decrease' }, cb) => {
+  const vehicle = validateStanceMenuButtonAction();
+  if (!vehicle) return;
 
-  const getSubmenu = (wheel: string): ContextMenu.Entry[] => {
-    return [
-      {
-        title: 'Cycle Step',
-        description: 'Change amount of increase/decrese on each step',
-        callbackURL: 'stance/cycleStep',
-        preventCloseOnClick: true,
-      },
-      {
-        title: 'Increase',
-        callbackURL: 'stance/change',
-        preventCloseOnClick: true,
-        data: {
-          wheel,
-          action: 'increase',
-        },
-      },
-      {
-        title: 'Decrease',
-        callbackURL: 'stance/change',
-        preventCloseOnClick: true,
-        data: {
-          wheel,
-          action: 'decrease',
-        },
-      },
-    ];
-  };
-
-  const menuData: ContextMenu.Entry[] = [
-    {
-      title: 'Stancing Menu',
-      description: 'Change stancing of corresponding wheel',
-    },
-    {
-      title: 'Front Left',
-      submenu: getSubmenu('frontLeft'),
-    },
-    {
-      title: 'Front Right',
-      submenu: getSubmenu('frontRight'),
-    },
-    {
-      title: 'Back Left',
-      submenu: getSubmenu('backLeft'),
-    },
-    {
-      title: 'Back Right',
-      submenu: getSubmenu('backRight'),
-    },
-  ];
-
-  UI.openApplication('contextmenu', menuData);
-});
-
-UI.RegisterUICallback('stance/change', (data: { wheel: keyof Stance.Data; action: 'increase' | 'decrease' }, cb) => {
-  if (!stanceMenuOpen) return;
-  const veh = getCurrentVehicle();
-  if (!veh || !isDriver()) {
-    Notifications.add('Je zit niet in een voertuig als bestuurder', 'error');
-    return;
-  }
-  const offset = changeStep * (data.action === 'increase' ? 1 : -1);
-  const vehState = Entity(veh).state;
-  const oldStanceData: Stance.Data = vehState.stance ?? getAppliedStance(veh);
-  const newOffset = roundOffset(oldStanceData[data.wheel] + offset);
+  const offset = getChangeStep() * (data.action === 'increase' ? 1 : -1);
+  const stance = getVehicleStance(vehicle);
+  const newOffset = roundOffset(stance[data.wheel] + offset);
   updateInfoNotif(`Value: ${newOffset}`);
-  vehState.set('stance', { ...oldStanceData, [data.wheel]: newOffset }, true);
-  cb({ data: {}, meta: { ok: true, message: '' } });
-});
-
-UI.RegisterUICallback('stance/cycleStep', (_, cb) => {
-  if (!stanceMenuOpen) return;
-  const veh = getCurrentVehicle();
-  if (!veh || !isDriver()) {
-    Notifications.add('Je zit niet in een voertuig als bestuurder', 'error');
-    return;
-  }
-  const steps = [0.005, 0.01, 0.05];
-  const currentIndex = steps.findIndex(s => s === changeStep);
-  const newIndex = ((currentIndex === -1 ? 0 : currentIndex) + 1) % steps.length;
-  changeStep = steps[newIndex];
-  updateInfoNotif(`Step: ${changeStep}`);
+  setVehicleStance(vehicle, { ...stance, [data.wheel]: newOffset });
 
   cb({ data: {}, meta: { ok: true, message: '' } });
 });
 
-Statebags.addEntityStateBagChangeHandler<Stance.Data | null>('entity', 'stance', (_, vehicle, stanceData) => {
-  setCloseVehicleStance(vehicle, stanceData);
+UI.RegisterUICallback('stances/cycleStep', (_, cb) => {
+  if (!validateStanceMenuButtonAction()) return;
+
+  const newStep = cycleChangeStep();
+  updateInfoNotif(`Step: ${newStep}`);
+
+  cb({ data: {}, meta: { ok: true, message: '' } });
+});
+
+UI.RegisterUICallback('stances/copy', (data: { wheel: Stances.Wheel }, cb) => {
+  const vehicle = validateStanceMenuButtonAction();
+  if (!vehicle) return;
+
+  const stance = getVehicleStance(vehicle);
+  const linkedWheel = WHEELS.find(w => w.name === data.wheel)?.linked;
+  if (!linkedWheel) throw new Error('Invalid wheel');
+
+  setVehicleStance(vehicle, { ...stance, [linkedWheel]: stance[data.wheel] });
+
+  cb({ data: {}, meta: { ok: true, message: '' } });
+});
+
+UI.RegisterUICallback('stances/reset', (_, cb) => {
+  const vehicle = validateStanceMenuButtonAction();
+  if (!vehicle) return;
+
+  Notifications.add('Stance has been reset', 'info');
+  revertOriginalStance(vehicle);
+
+  cb({ data: {}, meta: { ok: true, message: '' } });
+});
+
+UI.RegisterUICallback('stances/moveCam', (_, cb) => {
+  const vehicle = validateStanceMenuButtonAction();
+  if (!vehicle) return;
+
+  FreezeEntityPosition(vehicle, true);
+  UI.showInteraction(`${Keys.getBindedKey('+GeneralUse')} - Reopen`);
+
+  new Promise<boolean>(res => {
+    const timeout = setTimeout(() => {
+      Notifications.add('Camera movement timed out...', 'error');
+      res(false);
+    }, 5000);
+    finishCamMoving = () => {
+      clearTimeout(timeout);
+      res(true);
+    };
+  }).then(resume => {
+    FreezeEntityPosition(vehicle, false);
+    if (resume) {
+      openStanceMenu();
+    }
+    UI.hideInteraction();
+  });
+
+  cb({ data: {}, meta: { ok: true, message: '' } });
+});
+
+UI.RegisterUICallback('stances/clipboard', (_, cb) => {
+  const vehicle = validateStanceMenuButtonAction();
+  if (!vehicle) return;
+
+  const stance = getVehicleStance(vehicle);
+  UI.addToClipboard(JSON.stringify(stance));
+  Notifications.add('Stance copied to clipboard', 'info');
+
+  cb({ data: {}, meta: { ok: true, message: '' } });
+});
+
+Keys.onPressDown('GeneralUse', () => {
+  if (finishCamMoving === null) return;
+  finishCamMoving();
+  finishCamMoving = null;
 });

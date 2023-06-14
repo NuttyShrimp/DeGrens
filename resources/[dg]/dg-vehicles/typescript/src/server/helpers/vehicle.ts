@@ -3,7 +3,7 @@ import { insertVehicleStatus } from 'db/repository';
 import { addWaxedVehicle } from 'modules/carwash/service.carwash';
 import { setVehicleNosAmount } from 'modules/nos/service.nos';
 import { setVehicleHarnessUses } from 'modules/seatbelts/service.seatbelts';
-import { setVehicleStance } from 'modules/stances/service.stance';
+import { loadStance } from 'modules/stances/service.stances';
 import { getNativeStatus } from 'modules/status/service.status';
 import { fuelManager } from '../modules/fuel/classes/fuelManager';
 import plateManager from '../modules/identification/classes/platemanager';
@@ -95,6 +95,13 @@ export const spawnVehicle: Vehicles.SpawnVehicleFunction = async data => {
     keyManager.addKey(vin, data.keys);
   }
 
+  loadStance({
+    vin,
+    vehicle,
+    overrideStance: data.overrideStance,
+    checkOverrideStance: false,
+  });
+
   assignModelConfig(vehicle);
 
   Util.awaitOwnership(vehicle).then(owner => {
@@ -135,6 +142,7 @@ export const spawnOwnedVehicle = async (src: number, vehicleInfo: Vehicle.Vehicl
     isFakePlate: !!vehicleInfo.fakeplate,
     keys: src,
     upgrades,
+    overrideStance: vehicleInfo.stance ?? undefined,
   });
   if (!spawnedVehicle) return;
   const { vehicle, vin } = spawnedVehicle;
@@ -155,9 +163,6 @@ export const spawnOwnedVehicle = async (src: number, vehicleInfo: Vehicle.Vehicl
     }, 500);
   }
 
-  if (vehicleInfo.stance) {
-    setVehicleStance(vehicle, vehicleInfo.stance);
-  }
   if (vehicleInfo.wax) {
     addWaxedVehicle(vin, vehicleInfo.wax);
   }

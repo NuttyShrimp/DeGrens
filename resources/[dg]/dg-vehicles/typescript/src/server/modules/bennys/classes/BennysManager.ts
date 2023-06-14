@@ -1,13 +1,14 @@
 import { Financials, TaxIds, Util } from '@dgx/server';
 import { DGXEvent, EventListener, LocalEvent, RPCEvent, RPCRegister } from '@dgx/server/decorators';
-import { deleteVehicle, getVinForVeh } from 'helpers/vehicle';
+import { getVinForVeh } from 'helpers/vehicle';
 import vinManager from 'modules/identification/classes/vinmanager';
 import { getConfigByEntity } from 'modules/info/service.info';
-import { saveStance } from 'modules/stances/service.stance';
 import upgradesManager from 'modules/upgrades/classes/manager.upgrades';
 import { saveCosmeticUpgrades } from 'modules/upgrades/service.upgrades';
 import { mainLogger } from 'sv_logger';
 import winston from 'winston';
+
+import { handleStanceOnCosmeticChange, loadStance } from 'modules/stances/service.stances';
 
 @RPCRegister()
 @EventListener()
@@ -68,7 +69,8 @@ class BennysManager extends Util.Singleton<BennysManager>() {
     spotId: string,
     vehNetId: number,
     upgrades: Vehicles.Upgrades.Cosmetic.Upgrades,
-    repair: Bennys.RepairInfo
+    repair: Bennys.RepairInfo,
+    originalStance: Stances.Stance
   ) => {
     const veh = NetworkGetEntityFromNetworkId(vehNetId);
     if (!veh || !DoesEntityExist(veh)) {
@@ -87,6 +89,7 @@ class BennysManager extends Util.Singleton<BennysManager>() {
       entity: veh,
       upgrades,
       repair,
+      originalStance,
     });
     Util.Log(
       'bennys:entered',
@@ -119,6 +122,13 @@ class BennysManager extends Util.Singleton<BennysManager>() {
     // for some reason when ply drops, he will still be owner when this function executes so reset will not happen
     setTimeout(
       () => {
+        loadStance({
+          vin: spotData.vin,
+          vehicle: spotData.entity,
+          checkOverrideStance: true,
+          upgrades: spotData.upgrades,
+          original: spotData.originalStance,
+        });
         upgradesManager.apply(spotData.entity, spotData.upgrades);
       },
       timeout ? 2000 : 0
@@ -175,11 +185,8 @@ class BennysManager extends Util.Singleton<BennysManager>() {
 
     if (vinManager.isVinFromPlayerVeh(spotData.vin)) {
       saveCosmeticUpgrades(spotData.vin, upgrades);
-      const netId = vinManager.getNetId(spotData.vin);
-      if (netId) {
-        upgradesManager.apply(spotData.entity, upgrades);
-        saveStance(netId);
-      }
+      upgradesManager.apply(spotData.entity, upgrades);
+      handleStanceOnCosmeticChange(spotData.vin, spotData.entity, upgrades);
     }
 
     Util.Log(

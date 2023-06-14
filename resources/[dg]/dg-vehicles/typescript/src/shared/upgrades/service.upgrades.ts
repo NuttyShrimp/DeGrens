@@ -13,8 +13,6 @@ const RANDOM_COLORS = [
   64,
   // light blue
   70,
-  // pink
-  135,
   // green
   53,
   // lime
