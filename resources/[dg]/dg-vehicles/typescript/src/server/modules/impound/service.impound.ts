@@ -239,6 +239,7 @@ export const unbailVehicle = async (src: number, vin: string) => {
 // region Perma Impound and Sale
 const permaImpoundVehicle = async (vin: string) => {
   const vehicleInfo = await getPlayerVehicleInfo(vin);
+  if (!vehicleInfo) return;
   await doVehicleForfeiture(vin);
   Phone.sendOfflineMail(
     vehicleInfo.cid,

@@ -1,5 +1,4 @@
 import { Events } from '@dgx/server';
-
 import { Inputs } from '../../../enums/inputs';
 
 interface OpenStanceMenuData {
@@ -17,7 +16,7 @@ export const openStanceMenu: CommandData = {
     if (plyId === caller.source) {
       Events.emitNet('admin:menu:forceClose', caller.source);
     }
-    Events.emitNet('vehicles:stance:openMenu', plyId);
+    Events.emitNet('vehicles:stances:openMenu', plyId);
   },
   UI: {
     title: 'Open Stance Menu',

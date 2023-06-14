@@ -7,13 +7,14 @@ RPC.register('vehicles:getModelType', (model: string): string | undefined => {
   // why the fuck is the getVehicletype native only on serverside, now i need to use this cancerous method
   // returns the type arg accepted in CreateVehicleServerSetter
   if (IsThisModelACar(model)) return 'automobile';
-  if (IsThisModelABike(model)) return 'bike';
+  if (IsThisModelABike(model) || IsThisModelAQuadbike(model)) return 'bike';
   if (IsThisModelABoat(model)) return 'boat';
   if (IsThisModelAHeli(model)) return 'heli';
   if (IsThisModelAPlane(model)) return 'plane';
   if (IsThisModelASubmersible(model)) return 'submarine';
-  if (IsThisModelATrain(model)) return 'trailer';
   if (IsThisModelATrain(model)) return 'train';
+  // default to automobile
+  return 'automobile';
 });
 
 RPC.register('vehicle:getArchType', (netId: number): string => {

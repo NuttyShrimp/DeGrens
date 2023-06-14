@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Mogelijkheid om lockers toe te voegen die geen animatie afspelen
+- Meer stancing mogelijkheden en extra modellen toegevoegd met standaard stancing
 
 ### Changed
 

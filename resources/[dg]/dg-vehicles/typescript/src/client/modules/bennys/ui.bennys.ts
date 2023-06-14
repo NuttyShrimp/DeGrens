@@ -1,15 +1,13 @@
 import { Events, RPC, Sounds, UI } from '@dgx/client';
 import { getCurrentVehicle } from '@helpers/vehicle';
-import { applyModelStance } from 'modules/stances/service.stances';
 import { PlateColorLabels, TyreSmokeLabels, UPGRADEABLE_CATEGORIES } from './constant.bennys';
 import {
   closeUI,
   getBlockedUpgrades,
   getCurrentBennys,
   getEquippedUpgradesOnEnter,
-  getModelStanceData,
-  getOriginalStance,
   handleVehicleRepair,
+  tryToApplyBennysModelStance,
 } from './service.bennys';
 import { getLabelsForModId, getLiveryLabels, getWheelTypeComponents, isEMSVehicle } from './util.bennys';
 import upgradesManager from 'modules/upgrades/classes/manager.upgrades';
@@ -167,8 +165,7 @@ UI.RegisterUICallback('bennys:preview', (data: Bennys.UI.Change, cb) => {
 
   upgradesManager.setByKey(plyVeh, data.name, data.data);
 
-  // Try to apply stance related to upgrades
-  applyModelStance(plyVeh, data.name, data.data as number, getModelStanceData(), getOriginalStance());
+  tryToApplyBennysModelStance(plyVeh, data.name, data.data);
 
   cb({ data: {}, meta: { ok: true, message: '' } });
 });
@@ -197,14 +194,7 @@ UI.RegisterUICallback(
       upgradesManager.setByKey(plyVeh, data.component, equippedData[data.component]);
     }
 
-    // Try to apply stance related to upgrades
-    applyModelStance(
-      plyVeh,
-      data.component,
-      equippedData[data.component] as number,
-      getModelStanceData(),
-      getOriginalStance()
-    );
+    tryToApplyBennysModelStance(plyVeh, data.component, equippedData[data.component]);
 
     cb({ data: {}, meta: { ok: true, message: '' } });
   }

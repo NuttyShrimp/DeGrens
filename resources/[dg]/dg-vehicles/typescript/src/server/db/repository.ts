@@ -83,7 +83,7 @@ export const getPlayerSharedVehicles = async (cid: number, garageId: string): Pr
 export const getPlayerVehicleInfo = async (
   vin: string,
   checkGarage?: { cid: number; garageId: string; isSharedGarage: boolean }
-): Promise<Vehicle.Vehicle> => {
+): Promise<Vehicle.Vehicle | undefined> => {
   const args: any[] = [vin];
   let query = `SELECT pv.*,
                       JSON_OBJECT('body', vs.body, 'engine', vs.engine, 'fuel', vs.fuel, 'wheels', vs.wheels,
@@ -100,7 +100,9 @@ export const getPlayerVehicleInfo = async (
     }
   }
 
-  const info = await SQL.scalar(query, args);
+  const result = await SQL.query<Vehicle.Vehicle<string, string>[]>(query, args);
+  const info = result?.[0];
+  if (!info) return;
   return {
     ...info,
     stance: info.stance !== null ? JSON.parse(info.stance) : null,
@@ -148,6 +150,7 @@ export const getImpoundedVehicle = async (cid: number, vin: string) => {
 export const doVehicleForfeiture = async (vin: string) => {
   const vehicle = await getPlayerVehicleInfo(vin);
   await deleteOwnedVehicle(vin);
+  if (!vehicle) return;
   await SQL.insertValues('vehicle_resale', [
     {
       vin,
@@ -213,7 +216,7 @@ export const insertNewVehicle = async (
   state: Garage.GarageState = 'parked',
   garageId = 'alta_apartments',
   harness = 0,
-  stance: Stance.Data | null = null,
+  stance: Stances.Stance | null = null,
   wax: number | null = null,
   nos = 0,
   upgrades?: Vehicles.Upgrades.Cosmetic.Upgrades
@@ -290,7 +293,7 @@ export const updateVehicleHarness = async (vin: string, uses: number) => {
   await SQL.query(query, [uses, vin]);
 };
 
-export const updateVehicleStance = async (vin: string, stanceData: Stance.Data) => {
+export const updateVehicleStance = async (vin: string, stanceData: Stances.Stance | null) => {
   const query = `UPDATE player_vehicles
                  SET stance = ?
                  WHERE vin = ?`;

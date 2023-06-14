@@ -1,9 +1,9 @@
 import { Events, Notifications, RPC, Sounds, Taskbar, UI, Util } from '@dgx/client';
-import { getAppliedStance } from 'modules/stances/service.stances';
 import { fixVehicle } from 'modules/status/service.status';
 import { setEngineState } from 'services/engine';
 import { getCurrentVehicle, getVehicleConfig, isDriver } from '../../helpers/vehicle';
 import upgradesManager from 'modules/upgrades/classes/manager.upgrades';
+import { applyModelStance, getStanceConfigForModel, getOriginalStance } from 'modules/stances/service.stances';
 
 let bennysMenuOpen = false;
 let currentBennys: string | null = null;
@@ -11,16 +11,11 @@ let locations: Record<string, Bennys.Location> = {};
 let keyThread: number | null = null;
 let equippedUpgradesOnEnter: Vehicles.Upgrades.Cosmetic.Upgrades;
 let blockedUpgrades: Partial<Record<Vehicles.Upgrades.Cosmetic.Key, number[]>> = {};
+let modelStanceConfig: Stances.Model | null = null;
 const enableKeys = [0, 1, 2, 3, 4, 5, 6, 46, 249];
-
-let modelStanceData: Stance.Model[] = [];
-let originalStance: Stance.Data;
 
 export const isBennysMenuOpen = () => bennysMenuOpen;
 export const setBennysMenuOpen = (open: boolean) => (bennysMenuOpen = open);
-
-export const getModelStanceData = () => modelStanceData;
-export const getOriginalStance = () => originalStance;
 
 // region getters and setters
 export const setLocations = (locs: Bennys.Location[]) => {
@@ -202,12 +197,14 @@ export const enterBennys = async (fromAdminMenu = false) => {
   if (!currentUpgrades) return;
 
   const repairData = getRepairData(plyVeh);
+  const originalStance = await getOriginalStance(plyVeh);
   const entered = await RPC.execute<boolean>(
     'vehicles:bennys:enterSpot',
     currentBennys,
     NetworkGetNetworkIdFromEntity(plyVeh),
     currentUpgrades,
-    repairData
+    repairData,
+    originalStance
   );
   if (!entered) {
     FreezeEntityPosition(plyVeh, false);
@@ -215,8 +212,7 @@ export const enterBennys = async (fromAdminMenu = false) => {
   }
 
   equippedUpgradesOnEnter = currentUpgrades;
-  modelStanceData = (await RPC.execute('vehicles:stance:getModelData', GetEntityModel(plyVeh))) ?? [];
-  originalStance = getAppliedStance(plyVeh);
+  modelStanceConfig = await getStanceConfigForModel(plyVeh);
   blockedUpgrades =
     (await RPC.execute<Partial<Record<Vehicles.Upgrades.Cosmetic.Key, number[]>>>(
       'vehicles:bennys:getBlockedUpgrades',
@@ -237,4 +233,18 @@ export const enterBennys = async (fromAdminMenu = false) => {
     true
   );
   UI.SetUIFocusCustom(true, false);
+};
+
+export const tryToApplyBennysModelStance = (vehicle: number, component: string, value: unknown) => {
+  if (modelStanceConfig === null) return;
+
+  const numberValue = Number(value);
+  if (isNaN(numberValue)) return;
+
+  applyModelStance({
+    model: modelStanceConfig,
+    vehicle,
+    component,
+    value: numberValue,
+  });
 };

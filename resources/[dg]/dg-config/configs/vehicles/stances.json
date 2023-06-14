@@ -1,0 +1,98 @@
+{
+  "gt86": {
+    "upgrade": {
+      "component": "sideSkirt",
+      "possibilities": [
+        {
+          "value": 0,
+          "stance": {
+            "frontLeft": 0.8,
+            "frontRight": 0.8,
+            "backLeft": 0.82,
+            "backRight": 0.82
+          }
+        },
+        {
+          "value": 1,
+          "stance": {
+            "frontLeft": 0.815,
+            "frontRight": 0.815,
+            "backLeft": 0.83,
+            "backRight": 0.83
+          }
+        },
+        {
+          "value": 2,
+          "stance": {
+            "frontLeft": 0.8,
+            "frontRight": 0.8,
+            "backLeft": 0.835,
+            "backRight": 0.835
+          }
+        }
+      ]
+    }
+  },
+  "sultan": {
+    "defaultStance": {
+      "frontLeft": 0.75,
+      "frontRight": 0.75,
+      "backLeft": 0.745,
+      "backRight": 0.745
+    }
+  },
+  "cp9a": {
+    "defaultStance": {
+      "frontLeft": 0.775,
+      "frontRight": 0.775,
+      "backLeft": 0.79,
+      "backRight": 0.79
+    },
+    "upgrade": {
+      "component": "sideSkirt",
+      "possibilities": [
+        {
+          "value": [0, 1, 2],
+          "stance": {
+            "frontLeft": 0.775,
+            "frontRight": 0.775,
+            "backLeft": 0.81,
+            "backRight": 0.81
+          }
+        }
+      ]
+    }
+  },
+  "calico": {
+    "upgrade": {
+      "component": "leftFenders",
+      "possibilities": [
+        {
+          "value": [0, 1, 2],
+          "stance": {
+            "frontLeft": 0.775,
+            "frontRight": 0.775,
+            "backLeft": 0.815,
+            "backRight": 0.815
+          }
+        }
+      ]
+    }
+  },
+  "focusrs": {
+    "defaultStance": {
+      "frontLeft": 0.765,
+      "frontRight": 0.765,
+      "backLeft": 0.75,
+      "backRight": 0.75
+    }
+  },
+  "fd": {
+    "defaultStance": {
+      "frontLeft": 0.75,
+      "frontRight": 0.755,
+      "backLeft": 0.745,
+      "backRight": 0.745
+    }
+  }
+}
