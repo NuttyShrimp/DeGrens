@@ -14,7 +14,7 @@
         }
       },
       "specialItem": {
-        "chance": 30,
+        "chance": 50,
         "item": "drive_v2"
       }
     }

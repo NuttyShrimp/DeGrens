@@ -23,6 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Volume van de normale sirene is weer wat verhoogd
 - Blips categorieen opgesplitst naar spelers(voor admins), politie en ambulance
 - Player requirements van enkele activiteiten aangepast
+- Kans op speciaal item uit banken aangepast
 
 ### Fixed
 
