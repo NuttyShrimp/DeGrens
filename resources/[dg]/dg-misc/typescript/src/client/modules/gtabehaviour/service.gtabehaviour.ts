@@ -98,8 +98,12 @@ export const setGTABehaviour = async () => {
   // RemoveVehiclesFromGeneratorsInArea(2781.76, -4470.42, -290.0, 3381.76, -4470.42, 315.26, 0); // Vliegdek schip
 
   // Suppress models
-  BLACKLISTED_PED_MODELS.forEach(m => SetPedModelIsSuppressed(GetHashKey(m), true));
-  BLACKLISTED_VEHICLE_MODELS.forEach(m => SetVehicleModelIsSuppressed(GetHashKey(m), true));
+  Object.entries(BLACKLISTED_PED_MODELS).forEach(
+    ([m, { suppress }]) => suppress && SetPedModelIsSuppressed(GetHashKey(m), true)
+  );
+  Object.entries(BLACKLISTED_VEHICLE_MODELS).forEach(
+    ([m, { suppress }]) => suppress && SetVehicleModelIsSuppressed(GetHashKey(m), true)
+  );
 
   SetWeaponsNoAutoswap(true);
 
