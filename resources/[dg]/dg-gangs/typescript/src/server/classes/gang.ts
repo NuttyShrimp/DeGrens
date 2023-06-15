@@ -1,8 +1,10 @@
-import { Events, Phone, Util } from '@dgx/server';
+import { Phone, Util } from '@dgx/server';
 import { dispatchCurrentGangToClient } from 'helpers';
+import { charModule } from 'services/core';
 import repository from 'services/repository';
 import { mainLogger } from 'sv_logger';
 import winston from 'winston';
+import gangManager from './gangmanager';
 
 export class Gang {
   private readonly logger: winston.Logger;
@@ -94,8 +96,8 @@ export class Gang {
     );
   };
 
-  public getClientVersion = async (): Promise<GangData> => {
-    const members: GangData['members'] = [];
+  public getData = async (): Promise<Gangs.Data> => {
+    const members: Gangs.Data['members'] = [];
     for (const member of Array.from(this.members.values())) {
       const charName = await Util.getCharName(member.cid);
       members.push({
@@ -104,6 +106,26 @@ export class Gang {
         hasPerms: this.hasPerms(member.cid),
       });
     }
-    return { name: this.name, label: this.label, owner: this.owner, members };
+    return {
+      name: this.name,
+      label: this.label,
+      owner: this.owner,
+      members,
+      feedMessages: this.getFeedMessages(),
+    };
+  };
+
+  public getOnlineMembers = () => {
+    const plyIds: number[] = [];
+    for (const [cid] of this.members) {
+      const plyId = charModule.getServerIdFromCitizenId(cid);
+      if (!plyId) continue;
+      plyIds.push(plyId);
+    }
+    return plyIds;
+  };
+
+  public getFeedMessages = (offset = 0) => {
+    return gangManager.getFeedMessagesForGang(this.name, offset);
   };
 }

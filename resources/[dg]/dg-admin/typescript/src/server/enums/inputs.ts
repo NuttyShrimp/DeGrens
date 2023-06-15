@@ -6,4 +6,5 @@ export enum Inputs {
   BankAccount = 'BankAccount',
   Jobs = 'WhitelistedJobs',
   Weather = 'WeatherType',
+  Gang = 'Gang',
 }

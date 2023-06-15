@@ -4,5 +4,6 @@ export const useGangApp = create<Laptop.Gang.State & Store.UpdateStore<Laptop.Ga
   name: '',
   label: '',
   members: [],
+  feedMessages: [],
   updateStore: nState => set(s => (typeof nState === 'function' ? nState(s) : nState)),
 }));

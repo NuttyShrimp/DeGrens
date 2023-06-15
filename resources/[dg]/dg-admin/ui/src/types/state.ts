@@ -2,6 +2,7 @@ import {
   Action,
   BankAccount,
   BaseAction,
+  Gang,
   Item,
   MenuTab,
   Player,
@@ -21,6 +22,7 @@ export interface DataStore {
   playerData: PlayerData;
   items: Item[];
   weatherTypes: WeatherType[];
+  gangs: Gang[];
 }
 
 export interface PenaltyStore {

@@ -48,7 +48,7 @@ const Component: AppFunction = props => {
   return (
     <AppWrapper appName={config.name} onShow={showLaptop} onHide={hideLaptop} hideOnEscape full center>
       <DndProvider backend={TouchBackend} options={{ enableMouseEvents: true }}>
-        <Laptop {...props} />
+        <Laptop />
       </DndProvider>
     </AppWrapper>
   );

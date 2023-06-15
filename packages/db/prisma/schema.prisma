@@ -252,10 +252,11 @@ model debts {
 }
 
 model gang_info {
-  name         String         @id @db.VarChar(255)
-  label        String         @db.VarChar(255)
-  owner        Int
-  gang_members gang_members[]
+  name               String               @id @db.VarChar(255)
+  label              String               @db.VarChar(255)
+  owner              Int
+  gang_members       gang_members[]
+  gang_feed_messages gang_feed_messages[]
 }
 
 model gang_members {
@@ -267,6 +268,17 @@ model gang_members {
   characters characters @relation(fields: [citizenid], references: [citizenid], onDelete: Cascade, map: "gang_members_ibfk_2")
 
   @@index([citizenid], map: "citizenid")
+  @@index([gang], map: "gang")
+}
+
+model gang_feed_messages {
+  id        Int        @id @default(autoincrement())
+  gang      String?    @db.VarChar(255)
+  title     String     @db.VarChar(255)
+  content   String     @db.LongText
+  date      BigInt?    @default(0)
+  gang_info gang_info? @relation(fields: [gang], references: [name], onDelete: Cascade, map: "gang_feed_messages_ibfk_1")
+
   @@index([gang], map: "gang")
 }
 

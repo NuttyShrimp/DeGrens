@@ -43,6 +43,21 @@ class Repository extends Util.Singleton<Repository>() {
     const query = `UPDATE gang_info SET owner = ? WHERE name = ?`;
     await SQL.query(query, [owner, gang]);
   };
+
+  public getAllFeedMessages = async (): Promise<Gangs.Feed.Message[]> => {
+    const result = await SQL.query<Gangs.Feed.Message[]>('SELECT * FROM gang_feed_messages ORDER BY date ASC');
+    if (!result) return [];
+    return result;
+  };
+
+  public insertFeedMessage = async (newMessage: Gangs.Feed.NewMessage): Promise<Gangs.Feed.Message | undefined> => {
+    const result = await SQL.query<Gangs.Feed.Message[]>(
+      'INSERT INTO gang_feed_messages (title, content, gang, date) VALUES (?, ?, ?, ?) RETURNING *',
+      [newMessage.title, newMessage.content, newMessage.gang ?? null, Date.now()]
+    );
+    if (!result) return;
+    return result[0];
+  };
 }
 
 const repository = Repository.getInstance();
