@@ -96,8 +96,7 @@ export const canEnterContainer = async (plyId: number, containerId: string) => {
   }
 
   const cid = Util.getCID(plyId);
-  const isInGang = !!Gangs.getPlayerGangName(cid);
-  if (!isInGang) {
+  if (!Gangs.isPlayerInGang(cid)) {
     const logMsg = `${Util.getName(plyId)}(${plyId}) tried to enter container (${containerId}) but is not in a gang`;
     containersLogger.silly(logMsg);
     Util.Log('materials:containers:couldNotEnter', { containerId }, logMsg, plyId);
@@ -150,8 +149,7 @@ export const linkContainerKeyItemId = (containerId: string, itemId: string) => {
 // Gives mold to player for container without key
 export const tryGivingKeyMold = async (plyId: number) => {
   const cid = Util.getCID(plyId);
-  const isInGang = !!Gangs.getPlayerGangName(cid);
-  if (!isInGang) {
+  if (!Gangs.isPlayerInGang(cid)) {
     const logMsg = `${Util.getName(plyId)}(${plyId}) could not receive mold because he was not in a gang`;
     containersLogger.silly(logMsg);
     Util.Log('materials:containers:noGangForMold', {}, logMsg, plyId);

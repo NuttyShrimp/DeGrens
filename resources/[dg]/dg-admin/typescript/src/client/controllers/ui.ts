@@ -46,6 +46,11 @@ RegisterUICallback('getWhitelistedJobs', async (_, cb) => {
   cb({ meta: { ok: true, message: 'done' }, data: jobs ?? [] });
 });
 
+RegisterUICallback('getGangs', async (_, cb) => {
+  const gangs = await RPC.execute<Gangs.Gang[]>('gangs:server:getForAdmin');
+  cb({ meta: { ok: true, message: 'done' }, data: gangs ?? [] });
+});
+
 RegisterUICallback('getItems', async (_, cb) => {
   const items = await RPC.execute('admin:menu:getItems');
   cb({ meta: { ok: true, message: 'done' }, data: items ?? [] });

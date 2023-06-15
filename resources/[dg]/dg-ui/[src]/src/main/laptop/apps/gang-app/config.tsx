@@ -16,7 +16,6 @@ const config: Laptop.Config.Config = {
     column: 0,
   },
   requiresVPN: true,
-  blockedJobs: ['police'],
 };
 
 export default config;

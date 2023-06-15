@@ -66,3 +66,9 @@ export interface Item {
 export interface WeatherType {
   name: string;
 }
+
+export interface Gang {
+  name: string;
+  label: string;
+  owner: number;
+}

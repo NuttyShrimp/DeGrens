@@ -28,13 +28,6 @@ declare namespace Particles {
   type Data = Required<Particle> & { ptfx?: number };
 }
 
-declare type GangData = {
-  name: string;
-  label: string;
-  owner: number;
-  members: { name: string; cid: number; hasPerms: boolean }[];
-};
-
 declare type RayCastHit = {
   entity?: number;
   coords?: Vec3;

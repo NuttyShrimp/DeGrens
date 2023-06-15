@@ -99,12 +99,20 @@ class Jobs {
 }
 
 class Gangs {
-  public getGangByName = (gangName: string): Promise<GangData | undefined> => {
+  public getGangByName = (gangName: string): Promise<Gangs.Data | undefined> => {
     return global.exports['dg-gangs'].getGangByName(gangName);
   };
 
   public getPlayerGangName = (cid: number): string | undefined => {
     return global.exports['dg-gangs'].getPlayerGangName(cid);
+  };
+
+  public isPlayerInGang = (cid: number): boolean => {
+    return !!this.getPlayerGangName(cid);
+  };
+
+  public addFeedMessage = (newMessage: Gangs.Feed.NewMessage) => {
+    global.exports['dg-gangs'].addFeedMessage(newMessage);
   };
 }
 
