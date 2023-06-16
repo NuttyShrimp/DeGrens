@@ -10,14 +10,3 @@ setImmediate(async () => {
   await gangManager.fetchFeedMessages();
   dispatchCurrentGangToAllClients();
 });
-
-RegisterCommand(
-  'addfeedmessage',
-  () => {
-    gangManager.addFeedMessage({
-      title: 'Test',
-      content: 'Test',
-    });
-  },
-  false
-);
