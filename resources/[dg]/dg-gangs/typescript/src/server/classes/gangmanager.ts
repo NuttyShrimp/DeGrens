@@ -272,6 +272,15 @@ class GangManager extends Util.Singleton<GangManager>() {
     this.logger.debug(`Registered feed message with id ${feedMessage.id}`);
   };
 
+  public deleteFeedMessage = async (id: number) => {
+    const success = await repository.removeFeedMessage(id);
+    if (!success) return false;
+    const msgIdx = this.feedMessages.findIndex(m => m.id === id);
+    if (msgIdx === -1) return true;
+    this.feedMessages.splice(msgIdx);
+    return true;
+  };
+
   public fetchFeedMessages = async () => {
     const feedMessages = await repository.getAllFeedMessages();
     for (const feedMessage of feedMessages) {

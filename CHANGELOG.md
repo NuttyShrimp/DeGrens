@@ -25,6 +25,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Blips categorieen opgesplitst naar spelers(voor admins), politie en ambulance
 - Player requirements van enkele activiteiten aangepast
 - Kans op speciaal item uit banken aangepast
+- Container keys gaan minder lang mee
 
 ### Fixed
 

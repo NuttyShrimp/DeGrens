@@ -1471,7 +1471,7 @@
     "label": "Sleutel",
     "description": "Onafgewerkte sleutel met scherpe randen",
     "image": "container_key.png",
-    "decayRate": 129600,
+    "decayRate": 43200,
     "size": {
       "x": 3,
       "y": 2

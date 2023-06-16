@@ -3,6 +3,7 @@ import { dispatchCurrentGangToAllClients } from 'helpers';
 
 import './controllers';
 import './services/core';
+import './services/keys';
 
 setImmediate(async () => {
   await gangManager.loadAllGangs();

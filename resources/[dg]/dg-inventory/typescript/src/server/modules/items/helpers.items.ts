@@ -1,4 +1,4 @@
-import { Core, Util, Vehicles } from '@dgx/server';
+import { Core, Gangs, Util, Vehicles } from '@dgx/server';
 
 const generateWeaponSerial = () => {
   return (
@@ -129,4 +129,9 @@ export const ON_CREATE: Record<string, (plyId?: number) => { [key: string]: any 
   pd_radio: () => ({ frequency: 0 }),
   armor: () => ({ health: 100 }),
   pd_armor: () => ({ health: 100 }),
+  container_key: () => global.exports['dg-gangs'].removeContainerKeyNotice(),
+};
+
+export const ON_DELETE: Record<string, (item: Inventory.ItemState) => { [key: string]: any }> = {
+  container_key: () => global.exports['dg-gangs'].addContainerKeyNotice(),
 };

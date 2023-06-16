@@ -58,6 +58,11 @@ class Repository extends Util.Singleton<Repository>() {
     if (!result) return;
     return result[0];
   };
+
+  public removeFeedMessage = async (messageId: number) => {
+    const results = await SQL.query('DELETE FROM gang_feed_messages WHERE id=?', [messageId]);
+    return results.affectedRows < 1;
+  };
 }
 
 const repository = Repository.getInstance();

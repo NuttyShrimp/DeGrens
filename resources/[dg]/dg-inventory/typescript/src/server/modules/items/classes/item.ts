@@ -9,6 +9,7 @@ import itemManager from '../manager.items';
 import locationManager from 'modules/locations/manager.locations';
 import contextManager from 'classes/contextmanager';
 import { charModule } from 'services/core';
+import { ON_DELETE } from '../helpers.items';
 
 export class Item {
   private readonly logger: winston.Logger;
@@ -248,6 +249,11 @@ export class Item {
       },
       logMsg
     );
+
+    const onDeleteFunc = ON_DELETE[this.name];
+    if (onDeleteFunc) {
+      onDeleteFunc(this.state);
+    }
 
     if (!noItemBox && originalInvType === 'player') {
       const image = itemDataManager.get(this.name).image;
