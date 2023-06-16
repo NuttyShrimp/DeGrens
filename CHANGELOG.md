@@ -30,6 +30,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - melding van /me en /dice komt nu niet meer op je scherm als je niet in line of sight bent van de sender
 - Garagethreads worden gestopt wanneer je de server verlaat
+- Je ziet nu je telefoon notities weer na een restart
+- Je kan weer telefoon notities delen met elkaar
+- Je ziet meteen een nieuwe notitie in plaats van je app opnieuw te moeten openen
 
 ## [1.2.4]
 

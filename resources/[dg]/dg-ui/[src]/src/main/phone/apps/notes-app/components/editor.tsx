@@ -39,7 +39,6 @@ export const Document: FC<{}> = () => {
         nuiAction('phone/notes/share', {
           type: 'local',
           id: note.id,
-          duration: 0,
         });
       },
     },
@@ -50,7 +49,6 @@ export const Document: FC<{}> = () => {
         nuiAction('phone/notes/share', {
           type: 'permanent',
           id: note.id,
-          duration: 0,
         });
       },
     },
