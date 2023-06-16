@@ -277,7 +277,7 @@ class GangManager extends Util.Singleton<GangManager>() {
     if (!success) return false;
     const msgIdx = this.feedMessages.findIndex(m => m.id === id);
     if (msgIdx === -1) return true;
-    this.feedMessages.splice(msgIdx);
+    this.feedMessages.splice(msgIdx, 1);
     return true;
   };
 
