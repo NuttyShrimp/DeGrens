@@ -111,7 +111,7 @@
       return;
     }
     if (penaltyPoints.value < 0) return;
-    if (banLength.value <= -1) return;
+    if (banLength.value < -1) return;
     nuiAction('penalisePlayer', {
       type: 'ban',
       target: banTarget.value?.steamId,
