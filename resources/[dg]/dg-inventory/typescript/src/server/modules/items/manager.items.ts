@@ -142,7 +142,7 @@ class ItemManager extends Util.Singleton<ItemManager>() {
   public buildInitialMetadata = (plyId: number | undefined, itemName: string) => {
     const onCreateFunc = ON_CREATE[itemName];
     if (!onCreateFunc) return {};
-    return onCreateFunc(plyId);
+    return onCreateFunc(plyId) ?? {};
   };
 
   @Export('setMetadataOfItem')
