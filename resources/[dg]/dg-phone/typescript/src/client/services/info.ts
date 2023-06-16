@@ -57,7 +57,7 @@ on('dg-phone:load', () => {
     color: '#64b5f6',
     getter: async () => {
       const acc = await RPC.execute('financials:getDefaultAccount');
-      return acc?.balance ?? 0;
+      return Math.round(acc?.balance ?? 0);
     },
   });
 });

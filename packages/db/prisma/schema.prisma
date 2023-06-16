@@ -380,20 +380,23 @@ model phone_messages {
 }
 
 model phone_notes {
-  id    Int    @id @default(autoincrement())
-  title String @db.VarChar(255)
-  note  String @db.LongText
-  date  BigInt
+  id                 Int                  @id @default(autoincrement())
+  title              String               @db.VarChar(255)
+  note               String               @db.LongText
+  date               BigInt
+  phone_notes_access phone_notes_access[]
 }
 
 model phone_notes_access {
-  note_id    Int
-  cid        Int
-  owner      Boolean    @default(false)
-  characters characters @relation(fields: [cid], references: [citizenid], onDelete: Cascade, map: "fk_phone_notes_access_cid")
+  note_id     Int
+  cid         Int
+  owner       Boolean     @default(false)
+  characters  characters  @relation(fields: [cid], references: [citizenid], onDelete: Cascade, map: "fk_phone_notes_access_cid")
+  phone_notes phone_notes @relation(fields: [note_id], references: [id], onDelete: Cascade, map: "fk_phone_notes_access_note_id")
 
   @@id([note_id, cid])
   @@index([cid], map: "fk_phone_notes_access_cid")
+  @@index([note_id], map: "fk_phone_notes_access_note_id")
 }
 
 model phone_tweets {

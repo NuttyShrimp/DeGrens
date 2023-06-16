@@ -37,6 +37,8 @@ declare type Note = {
   readonly?: boolean;
 };
 
+declare type NoteShareType = 'local' | 'permanent';
+
 declare type PendingNoteShare = {
   id: string;
   noteId: number;

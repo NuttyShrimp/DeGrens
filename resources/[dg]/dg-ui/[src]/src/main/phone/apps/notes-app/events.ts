@@ -5,21 +5,19 @@ import { setCurrentNote } from './lib';
 
 export const events: Phone.Events = {};
 
-events.share = (data: { note: Phone.Notes.Note; id: number }) => {
+events.share = (data: { id: number }) => {
   addNotification({
     id: `note-${data.id}`,
     icon: 'notes',
     title: 'View Note',
     description: `a note is being shared`,
-    onAccept: async (notiData: { id: number; note: Phone.Notes.Note }) => {
-      const noteId = await nuiAction('phone/notes/resolveShare', {
+    onAccept: async (notiData: { id: number }) => {
+      const note = await nuiAction('phone/notes/resolveShare', {
         id: notiData.id,
         accepted: true,
       });
-      if (typeof noteId === 'number') {
-        notiData.note.id = noteId;
-      }
-      setCurrentNote(notiData.note);
+      if (!note) return;
+      setCurrentNote(note);
       changeApp('notes');
     },
     onDecline: (notiData: { id: number }) => {
@@ -31,7 +29,6 @@ events.share = (data: { note: Phone.Notes.Note; id: number }) => {
     timer: 30,
     _data: {
       id: data.id,
-      note: data.note,
     },
   });
 };
