@@ -34,6 +34,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Je ziet nu je telefoon notities weer na een restart
 - Je kan weer telefoon notities delen met elkaar
 - Je ziet meteen een nieuwe notitie in plaats van je app opnieuw te moeten openen
+- Voertuig degradatie zorgt nu weer effectief voor mindere goeie voertuig performance
 
 ## [1.2.4]
 
