@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { Paper } from '@src/components/paper';
 import { AppContainer } from '@src/main/phone/os/appcontainer/appcontainer';
 

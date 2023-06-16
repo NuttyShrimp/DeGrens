@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import { FC } from 'react';
 import QuestionMarkIcon from '@mui/icons-material/QuestionMark';
 import { Divider, Tooltip } from '@mui/material';
 

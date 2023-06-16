@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { showFormModal } from '../../lib';
 
 import { ContactModal } from './components/modals';

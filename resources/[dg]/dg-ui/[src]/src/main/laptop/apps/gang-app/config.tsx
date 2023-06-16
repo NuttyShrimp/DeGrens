@@ -1,4 +1,3 @@
-import React from 'react';
 import { ReactComponent as Icon } from '@assets/laptop/icons/gang-app.svg';
 
 import { Component } from './component';

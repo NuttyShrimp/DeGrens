@@ -1,4 +1,4 @@
-import React, { CSSProperties, FC, useCallback, useEffect, useRef, useState } from 'react';
+import { CSSProperties, FC, useCallback, useEffect, useRef, useState } from 'react';
 import { useDrop } from 'react-dnd';
 
 import { useLaptopConfigStore } from '../../stores/useLaptopConfigStore';

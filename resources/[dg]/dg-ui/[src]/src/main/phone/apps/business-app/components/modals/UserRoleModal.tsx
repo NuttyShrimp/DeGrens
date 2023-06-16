@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import { FC } from 'react';
 import { Input } from '@src/components/inputs';
 import { SimpleForm } from '@src/components/simpleform';
 import { showLoadModal } from '@src/main/phone/lib';

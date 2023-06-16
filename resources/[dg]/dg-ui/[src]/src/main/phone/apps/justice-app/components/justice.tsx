@@ -1,4 +1,3 @@
-import React from 'react';
 import { Badge, Divider, IconButton, Tooltip } from '@mui/material';
 
 import { Icon } from '../../../../../components/icon';

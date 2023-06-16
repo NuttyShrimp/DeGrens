@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useMainStore } from '@src/lib/stores/useMainStore';
 
 import { devData } from '../../../../lib/devdata';

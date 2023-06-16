@@ -1,4 +1,3 @@
-import React from 'react';
 import { Slider as MUISlider } from '@mui/material';
 
 const Slider = (props: { value: number[]; onChange: Function; minRange: number }) => {

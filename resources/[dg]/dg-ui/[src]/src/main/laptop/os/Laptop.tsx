@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import { FC } from 'react';
 import { useConfigmenuStore } from '@src/main/configmenu/stores/useConfigmenuStore';
 
 import defaultWallpaper from '../../../assets/laptop/wallpaper.jpg';

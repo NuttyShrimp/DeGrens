@@ -1,4 +1,4 @@
-import React, { FC, MouseEvent, useState } from 'react';
+import { FC, MouseEvent, useState } from 'react';
 import { HexColorPicker } from 'react-colorful';
 import { Button } from '@components/button';
 import { Input } from '@components/inputs';

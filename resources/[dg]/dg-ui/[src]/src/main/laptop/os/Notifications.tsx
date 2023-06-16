@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import { FC } from 'react';
 import { animated, Transition } from 'react-spring';
 
 import { LaptopIcon } from '../components/LaptopIcon';

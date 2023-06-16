@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import { FC } from 'react';
 import { baseStyle } from '@src/base.styles';
 
 export const Gridcell: FC<Gridgame.Cell & { onClick: Gridgame.ClickHandler }> = props => {

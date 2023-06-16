@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import { FC } from 'react';
 
 import { StoreItem } from '../components/StoreItem';
 import { useBennyAppStore } from '../stores/useBennyAppStore';

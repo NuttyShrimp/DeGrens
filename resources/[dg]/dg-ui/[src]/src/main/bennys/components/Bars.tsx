@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import { FC } from 'react';
 import { Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import NumberFormat from '@src/components/numberformat';

@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import { FC, useState } from 'react';
 import { Button, Divider } from '@mui/material';
 import { Stack } from '@mui/system';
 import { devData } from '@src/lib/devdata';

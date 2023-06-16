@@ -1,4 +1,4 @@
-import React, { FC, MouseEvent } from 'react';
+import { FC, MouseEvent } from 'react';
 
 import { Button } from '../../../../../components/button';
 import { List } from '../../../../../components/list';

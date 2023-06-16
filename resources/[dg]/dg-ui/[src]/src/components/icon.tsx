@@ -1,4 +1,5 @@
-import React, { FC, MouseEventHandler, useEffect, useState } from 'react';
+import { FC, MouseEventHandler, useEffect, useState } from 'react';
+import * as React from 'react';
 import { animated, easings, useSpring } from 'react-spring';
 import useMeasure from 'react-use-measure';
 import MUIIcon from '@mui/material/Icon';

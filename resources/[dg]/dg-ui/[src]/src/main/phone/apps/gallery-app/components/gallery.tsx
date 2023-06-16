@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import { FC } from 'react';
 
 import { Icon } from '../../../../../components/icon';
 import { Paper } from '../../../../../components/paper';

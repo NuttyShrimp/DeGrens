@@ -1,4 +1,4 @@
-import React, { createContext, FC, PropsWithChildren, useCallback, useContext, useEffect, useRef } from 'react';
+import { createContext, FC, PropsWithChildren, useCallback, useContext, useEffect, useRef } from 'react';
 import { addLog } from '@main/debuglogs/lib';
 import * as Sentry from '@sentry/react';
 import { events } from '@src/lib/events';

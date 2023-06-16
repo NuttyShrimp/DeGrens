@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import { FC } from 'react';
 import { getImg } from '@src/lib/util';
 
 export const ItemImage: FC<{ width: number; height: number; itemState: Inventory.Item }> = ({

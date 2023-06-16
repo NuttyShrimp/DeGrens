@@ -1,4 +1,5 @@
-import React, { FC, forwardRef, MouseEvent, useMemo } from 'react';
+import { FC, forwardRef, MouseEvent, useMemo } from 'react';
+import * as React from 'react';
 import { animated, easings, useTransition } from 'react-spring';
 import { Button } from '@mui/material';
 import { styled } from '@mui/material/styles';

@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import { FC, useState } from 'react';
 import { useCallback } from 'react';
 import { useEditor } from '@src/lib/hooks/useEditor';
 import { EditorContent } from '@tiptap/react';

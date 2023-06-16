@@ -1,4 +1,5 @@
-import React, { FC, useMemo, useState } from 'react';
+import { FC, useMemo, useState } from 'react';
+import * as React from 'react';
 import { Badge, Tooltip } from '@mui/material';
 import { usePhoneStore } from '@src/main/phone/stores/usePhoneStore';
 

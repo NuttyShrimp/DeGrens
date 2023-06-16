@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import { FC } from 'react';
 import { Stack, Typography } from '@mui/material';
 import { Button } from '@src/components/button';
 import { List } from '@src/components/list';

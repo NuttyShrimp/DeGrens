@@ -1,4 +1,5 @@
-import React, { FC, useEffect, useRef, useState } from 'react';
+import { FC, useEffect, useRef, useState } from 'react';
+import * as React from 'react';
 import { Tooltip } from '@mui/material';
 import { red } from '@mui/material/colors';
 

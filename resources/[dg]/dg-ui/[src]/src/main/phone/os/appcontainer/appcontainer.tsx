@@ -1,4 +1,5 @@
-import React, { FC, MouseEventHandler, useCallback, useEffect, useRef, useState } from 'react';
+import { FC, MouseEventHandler, useCallback, useEffect, useRef, useState } from 'react';
+import * as React from 'react';
 import { useVhToPixel } from '@lib/hooks/useVhToPixel';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import { Fade, ListItemIcon, Menu, MenuItem, Tooltip, Typography } from '@mui/material';

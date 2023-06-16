@@ -1,4 +1,4 @@
-import React, { FC, useCallback, useMemo } from 'react';
+import { FC, useCallback, useMemo } from 'react';
 import useMeasure from 'react-use-measure';
 
 import { hexToRGB, modulo } from '../../../../lib/util';

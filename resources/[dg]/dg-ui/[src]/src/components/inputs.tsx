@@ -1,4 +1,5 @@
-import React, { ChangeEvent, FC, FocusEvent, forwardRef, KeyboardEvent, SyntheticEvent, useState } from 'react';
+import { ChangeEvent, FC, FocusEvent, forwardRef, KeyboardEvent, SyntheticEvent, useState } from 'react';
+import * as React from 'react';
 import Autocomplete, { AutocompleteProps as AutocompletePropsMUI } from '@mui/material/Autocomplete';
 import Checkbox, { CheckboxProps } from '@mui/material/Checkbox';
 import FormControlLabel from '@mui/material/FormControlLabel';

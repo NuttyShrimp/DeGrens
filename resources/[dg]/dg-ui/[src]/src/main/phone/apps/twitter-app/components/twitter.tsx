@@ -1,4 +1,5 @@
-import React, { FC, useState } from 'react';
+import { FC, useState } from 'react';
+import * as React from 'react';
 import { Divider, IconButton } from '@mui/material';
 import { useMainStore } from '@src/lib/stores/useMainStore';
 

@@ -1,4 +1,4 @@
-import React, { FC, useCallback, useMemo } from 'react';
+import { FC, useCallback, useMemo } from 'react';
 import { Divider } from '@mui/material';
 import { baseStyle } from '@src/base.styles';
 import { useMainStore } from '@src/lib/stores/useMainStore';

@@ -1,4 +1,4 @@
-import React, { FC, PropsWithChildren, useCallback, useMemo } from 'react';
+import { FC, PropsWithChildren, useCallback, useMemo } from 'react';
 import { Box } from '@mui/material';
 
 import { useBennyStore } from '../../stores/useBennyStore';

@@ -1,4 +1,4 @@
-import React, { CSSProperties, FC, useMemo } from 'react';
+import { CSSProperties, FC, useMemo } from 'react';
 import { Typography } from '@mui/material';
 
 import { LaptopIcon } from '../components/LaptopIcon';

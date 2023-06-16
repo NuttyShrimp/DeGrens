@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import { FC } from 'react';
 import { animated, easings, Transition } from 'react-spring';
 import { useVhToPixel } from '@lib/hooks/useVhToPixel';
 

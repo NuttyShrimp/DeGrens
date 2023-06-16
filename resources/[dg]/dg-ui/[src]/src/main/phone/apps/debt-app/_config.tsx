@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { ConfigObject, defaultConfigObject } from '../../config';
 
 import Container from './component';

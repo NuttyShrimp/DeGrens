@@ -1,4 +1,5 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import * as React from 'react';
 import { nuiAction } from '@lib/nui-comms';
 import makeStyles from '@mui/styles/makeStyles';
 import * as Sentry from '@sentry/react';

@@ -1,4 +1,3 @@
-import React from 'react';
 import Icon from '@assets/bennys/bennysmotorwork-logo.png';
 
 import { Component } from './component';

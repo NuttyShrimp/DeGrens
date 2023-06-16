@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { flushSync } from 'react-dom';
 
 import { devData } from '../../../../lib/devdata';

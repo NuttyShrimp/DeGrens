@@ -1,4 +1,5 @@
-import React, { FC } from 'react';
+import { FC } from 'react';
+import * as React from 'react';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 
 import { Paper } from '../../../../../components/paper';

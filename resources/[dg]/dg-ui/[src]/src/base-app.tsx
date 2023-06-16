@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 
 import { AppContainer } from './components/appcontainer';
 import { isDevel, isGameDevel } from './lib/env';

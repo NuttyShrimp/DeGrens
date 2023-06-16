@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useState } from 'react';
+import { ChangeEvent, useState } from 'react';
 import RadioPng from '@assets/radio/radio.png';
 import { Tooltip } from '@mui/material';
 

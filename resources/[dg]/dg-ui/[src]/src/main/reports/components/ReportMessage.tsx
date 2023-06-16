@@ -1,4 +1,3 @@
-import React from 'react';
 import { useEditor } from '@src/lib/hooks/useEditor';
 import { EditorContent } from '@tiptap/react';
 

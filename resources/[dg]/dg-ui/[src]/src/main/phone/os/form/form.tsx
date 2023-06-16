@@ -1,4 +1,5 @@
-import React, { FC, isValidElement } from 'react';
+import { FC, isValidElement } from 'react';
+import * as React from 'react';
 
 import { usePhoneFormStore } from '../../stores/usePhoneFormStore';
 

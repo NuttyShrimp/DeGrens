@@ -1,4 +1,3 @@
-import React from 'react';
 import { ReactComponent as EyeLogo } from '@assets/peek/eye.svg';
 import { SvgIcon } from '@mui/material';
 

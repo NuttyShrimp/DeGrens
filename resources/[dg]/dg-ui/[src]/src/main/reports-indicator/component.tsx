@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import { useCallback } from 'react';
 import { animated, useSpring } from 'react-spring';
 import { Badge } from '@mui/material';
 import AppWrapper from '@src/components/appwrapper';

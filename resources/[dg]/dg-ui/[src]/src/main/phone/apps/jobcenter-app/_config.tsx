@@ -1,4 +1,3 @@
-import React from 'react';
 import Icon from '@assets/phone/icons/jobcenter.svg';
 
 import { ConfigObject, defaultConfigObject } from '../../config';

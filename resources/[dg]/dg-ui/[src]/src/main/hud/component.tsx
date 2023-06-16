@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import AppWrapper from '@components/appwrapper';
 import { devData } from '@src/lib/devdata';
 import { isDevel } from '@src/lib/env';

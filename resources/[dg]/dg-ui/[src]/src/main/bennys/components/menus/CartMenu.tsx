@@ -1,4 +1,4 @@
-import React, { FC, useCallback, useEffect, useState } from 'react';
+import { FC, useCallback, useEffect, useState } from 'react';
 import { Box, Typography } from '@mui/material';
 import { nuiAction } from '@src/lib/nui-comms';
 import { modulo } from '@src/lib/util';

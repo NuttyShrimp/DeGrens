@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useMainStore } from '@src/lib/stores/useMainStore';
 import { AppContainer } from '@src/main/phone/os/appcontainer/appcontainer';
 
