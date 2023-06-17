@@ -19,5 +19,5 @@ RPC.register('vehicles:info:getModelstock', (src: number, model: string) => {
 RPC.register('vehicles:info:assignConfig', (src, netId: number) => {
   const veh = NetworkGetEntityFromNetworkId(netId);
   if (!veh || !DoesEntityExist(veh)) return;
-  assignModelConfig(veh);
+  return assignModelConfig(veh);
 });
