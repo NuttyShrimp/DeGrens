@@ -1,7 +1,12 @@
 import { Util, Gangs, Inventory, Police } from '@dgx/server';
 import { Vector3 } from '@dgx/shared';
 import { getConfig } from 'services/config';
-import { fetchContainerKeyItems, updateContainerKeyItemId } from './helpers.containers';
+import {
+  doesGangHaveContainerKey,
+  fetchContainerKeyItems,
+  updateContainerKeyGang,
+  updateContainerKeyItemId,
+} from './helpers.containers';
 import { containersLogger } from './logger.containers';
 
 const containers = new Map<string, Materials.Containers.Container>();
@@ -139,20 +144,33 @@ export const getContainerIdWhereKeyIs = (itemId: string | null) => {
   });
 };
 
-export const linkContainerKeyItemId = (containerId: string, itemId: string) => {
+export const linkContainerKeyItemId = async (containerId: string, itemId: string, gang?: string) => {
   const container = getContainerById(containerId);
   if (!container || container.public) return;
   containers.set(containerId, { ...container, keyItemId: itemId });
-  updateContainerKeyItemId(containerId, itemId);
+  await updateContainerKeyItemId(containerId, itemId);
+
+  if (gang) {
+    updateContainerKeyGang(containerId, gang);
+  }
 };
 
 // Gives mold to player for container without key
 export const tryGivingKeyMold = async (plyId: number) => {
   const cid = Util.getCID(plyId);
-  if (!Gangs.isPlayerInGang(cid)) {
+  const gang = Gangs.getPlayerGangName(cid);
+  if (!gang) {
     const logMsg = `${Util.getName(plyId)}(${plyId}) could not receive mold because he was not in a gang`;
     containersLogger.silly(logMsg);
     Util.Log('materials:containers:noGangForMold', {}, logMsg, plyId);
+    return;
+  }
+
+  const gangHasKey = await doesGangHaveContainerKey(gang);
+  if (gangHasKey) {
+    const logMsg = `${Util.getName(plyId)}(${plyId}) could not receive mold because his gang already has a key`;
+    containersLogger.silly(logMsg);
+    Util.Log('materials:containers:alreadyHasKey', {}, logMsg, plyId);
     return;
   }
 
@@ -160,6 +178,6 @@ export const tryGivingKeyMold = async (plyId: number) => {
   if (!containerId) return;
   const [moldItemId] = await Inventory.addItemToPlayer(plyId, 'key_mold', 1);
   setTimeout(() => {
-    linkContainerKeyItemId(containerId, moldItemId);
+    linkContainerKeyItemId(containerId, moldItemId, gang);
   }, 1000);
 };

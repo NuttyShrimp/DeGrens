@@ -202,9 +202,12 @@ model characters {
 model container_benches {
   containerId     String           @id @db.VarChar(50)
   keyItemId       String?          @db.VarChar(36)
+  gang            String?          @db.VarChar(255)
   inventory_items inventory_items? @relation(fields: [keyItemId], references: [id], map: "container_benches_ibfk_1")
+  gang_info       gang_info?       @relation(fields: [gang], references: [name], onDelete: SetNull, map: "container_benches_ibfk_2")
 
   @@index([keyItemId], map: "keyItemId")
+  @@index([gang], map: "gang")
 }
 
 model cornerselling_sales {
@@ -258,6 +261,7 @@ model gang_info {
   owner              Int
   gang_members       gang_members[]
   gang_feed_messages gang_feed_messages[]
+  container_benches  container_benches[]
 }
 
 model gang_members {

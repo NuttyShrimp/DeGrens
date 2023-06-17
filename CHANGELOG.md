@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - Standaard prijs van items van nieuwe business is niet meer 0
 - Foutmelding bij unlocken van voertuig opgelost
+- Een gang kan niet langer een bepaald item meermaals vinden
 
 ## [1.2.5]
 
