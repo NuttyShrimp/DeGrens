@@ -4,6 +4,7 @@ import { Vector3 } from '@dgx/shared';
 import { doorBones, wheelBones } from './../constant';
 import upgradesManager from 'modules/upgrades/classes/manager.upgrades';
 import { generateBaseCosmeticUpgrades, generateBasePerformanceUpgrades } from '@shared/upgrades/service.upgrades';
+import { STANDARD_EXTRA_UPGRADES } from '@shared/upgrades/constants.upgrades';
 
 let currentVehicle: number | null = null;
 let isTheDriver = false;
@@ -26,6 +27,22 @@ export const getVehHalfLength = (pEntity: number) => {
   const [min, max] = GetModelDimensions(GetEntityModel(pEntity));
   const carLength = max[1] - min[1];
   return carLength / 2;
+};
+
+export const getModelType = (model: string | number) => {
+  if (!IsModelValid(model) || !IsModelAVehicle(model)) return;
+
+  // why the fuck is the getVehicletype native only on serverside, now i need to use this cancerous method
+  // returns the type arg accepted in CreateVehicleServerSetter
+  if (IsThisModelACar(model)) return 'automobile';
+  if (IsThisModelABike(model) || IsThisModelAQuadbike(model)) return 'bike';
+  if (IsThisModelABoat(model)) return 'boat';
+  if (IsThisModelAHeli(model)) return 'heli';
+  if (IsThisModelAPlane(model)) return 'plane';
+  if (IsThisModelASubmersible(model)) return 'submarine';
+  if (IsThisModelATrain(model)) return 'train';
+  // default to automobile
+  return 'automobile';
 };
 
 export const isCloseToAWheel = (pEntity: number, pDistance: number) => {
@@ -95,9 +112,11 @@ export const spawnLocalVehicle: Vehicles.SpawnLocalVehicleFunction = async data 
     SetVehicleNumberPlateText(vehicle, data.plate);
   }
 
+  const modelType = getModelType(data.model) ?? 'automobile';
+
   // upgrades
   const mergedUpgrades = {
-    ...generateBaseCosmeticUpgrades(true),
+    ...generateBaseCosmeticUpgrades(true, STANDARD_EXTRA_UPGRADES.includes(modelType)),
     ...generateBasePerformanceUpgrades(),
     ...data.upgrades,
   };

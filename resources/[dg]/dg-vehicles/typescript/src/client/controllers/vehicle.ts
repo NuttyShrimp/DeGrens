@@ -1,20 +1,8 @@
 import { RPC, Util, Vehicles } from '@dgx/client';
-import { isCloseToADoor, isCloseToAWheel } from '../helpers/vehicle';
+import { getModelType, isCloseToADoor, isCloseToAWheel } from '../helpers/vehicle';
 
 RPC.register('vehicles:getModelType', (model: string): string | undefined => {
-  if (!IsModelValid(model) || !IsModelAVehicle(model)) return;
-
-  // why the fuck is the getVehicletype native only on serverside, now i need to use this cancerous method
-  // returns the type arg accepted in CreateVehicleServerSetter
-  if (IsThisModelACar(model)) return 'automobile';
-  if (IsThisModelABike(model) || IsThisModelAQuadbike(model)) return 'bike';
-  if (IsThisModelABoat(model)) return 'boat';
-  if (IsThisModelAHeli(model)) return 'heli';
-  if (IsThisModelAPlane(model)) return 'plane';
-  if (IsThisModelASubmersible(model)) return 'submarine';
-  if (IsThisModelATrain(model)) return 'train';
-  // default to automobile
-  return 'automobile';
+  return getModelType(model);
 });
 
 RPC.register('vehicle:getArchType', (netId: number): string => {

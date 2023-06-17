@@ -21,7 +21,10 @@ const RANDOM_COLORS = [
   102,
 ];
 
-export const generateBaseCosmeticUpgrades = (randomColor = false): Vehicles.Upgrades.Cosmetic.Upgrades => {
+export const generateBaseCosmeticUpgrades = (
+  randomColor = false,
+  enableExtras = false
+): Vehicles.Upgrades.Cosmetic.Upgrades => {
   const primaryColor = randomColor ? RANDOM_COLORS[Math.floor(Math.random() * RANDOM_COLORS.length)] : 0;
   return {
     ...(Object.keys(NORMAL_COSMETIC_KEYS_TO_ID) as Vehicles.Upgrades.Cosmetic.NormalKey[]).reduce((acc, k) => {
@@ -54,7 +57,7 @@ export const generateBaseCosmeticUpgrades = (randomColor = false): Vehicles.Upgr
     wheelColor: 0,
     extras: [...Array(14)].map((_, i) => ({
       id: i + 1,
-      enabled: false,
+      enabled: enableExtras,
     })),
     livery: -1,
     plateColor: -1,

@@ -15,6 +15,7 @@ import { assignModelConfig } from 'modules/info/service.info';
 import { Vector4 } from '@dgx/shared';
 import upgradesManager from 'modules/upgrades/classes/manager.upgrades';
 import { generateBaseCosmeticUpgrades, generateBasePerformanceUpgrades } from '@shared/upgrades/service.upgrades';
+import { STANDARD_EXTRA_UPGRADES } from '@shared/upgrades/constants.upgrades';
 
 /**
  * Spawn a vehicle
@@ -113,7 +114,7 @@ export const spawnVehicle: Vehicles.SpawnVehicleFunction = async data => {
 
     // upgrades
     const mergedUpgrades = {
-      ...generateBaseCosmeticUpgrades(true),
+      ...generateBaseCosmeticUpgrades(true, STANDARD_EXTRA_UPGRADES.includes(modelType)),
       ...generateBasePerformanceUpgrades(),
       ...data.upgrades,
     };

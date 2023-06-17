@@ -93,3 +93,5 @@ export const PERFORMANCE_KEYS_TO_ID: Record<Vehicles.Upgrades.Performance.Key, n
   ...NORMAL_PERFORMANCE_KEYS_TO_ID,
   turbo: 18,
 };
+
+export const STANDARD_EXTRA_UPGRADES = ['plane', 'heli', 'boat', 'submarine', 'train'];

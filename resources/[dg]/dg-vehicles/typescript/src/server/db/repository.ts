@@ -1,4 +1,5 @@
-import { SQL } from '@dgx/server';
+import { RPC, SQL } from '@dgx/server';
+import { STANDARD_EXTRA_UPGRADES } from '@shared/upgrades/constants.upgrades';
 import { generateBaseCosmeticUpgrades } from '@shared/upgrades/service.upgrades';
 
 // We stringify the different vehicle_status columns when inserting them,
@@ -245,7 +246,19 @@ export const insertNewVehicle = async (
 
   insertVehicleTransferLog(vin, 0, cid);
 
-  updateVehicleCosmeticUpgrades(vin, upgrades ?? generateBaseCosmeticUpgrades(true));
+  let modelType = 'automobile';
+  if (!upgrades) {
+    const modelCheckPlayer = +GetPlayerFromIndex(0);
+    if (modelCheckPlayer) {
+      modelType =
+        (await RPC.execute<string | undefined>('vehicles:getModelType', modelCheckPlayer, model)) ?? 'automobile';
+    }
+  }
+
+  updateVehicleCosmeticUpgrades(
+    vin,
+    upgrades ?? generateBaseCosmeticUpgrades(true, STANDARD_EXTRA_UPGRADES.includes(modelType))
+  );
 };
 
 export const insertVehicleStatus = (vin: string, status: Vehicle.VehicleStatus): Promise<any> => {
