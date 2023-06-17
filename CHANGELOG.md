@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 ### Fixed
+- Standaard prijs van items van nieuwe business is niet meer 0
 
 ## [1.2.5]
 
