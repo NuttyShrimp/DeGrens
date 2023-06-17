@@ -29,18 +29,26 @@ const buildServerDev = async () => {
 
 const buildServer = async () => {
   const plugins = [...serverConfig.plugins];
+  const resName = findResourceName(path.resolve('.'));
   if (process.env.SENTRY_UPLOAD_SOURCEMAPS) {
     plugins.push(
       sentryEsbuildPlugin({
         ignore: ['node_modules'],
-        release: version,
+        release: {
+          name: version,
+          cleanArtifacts: true,
+          setCommits: {
+            auto: true,
+          },
+        },
         authToken: '5e2d7e8c0d6a42348a0c50dbf655896524c8414752804c8ea1ca04e357be9cd8',
-        dsn: 'https://47836ea9173b4e52b8820a05996cf549@sentry.nuttyshrimp.me/2',
+        // dsn: 'https://47836ea9173b4e52b8820a05996cf549@sentry.nuttyshrimp.me/2',
         url: 'https://sentry.nuttyshrimp.me/',
         org: 'nutty',
         project: 'degrens-cfx',
         sourcemaps: {
           assets: '../server/**',
+          rewriteSources: source => `@${resName}/server/${path.basename(source)}`,
         },
       })
     );
@@ -50,7 +58,7 @@ const buildServer = async () => {
     sourcemap: true,
     plugins,
   });
-  console.log(`[${findResourceName(path.resolve('.'))}] [Server] Successfully built`);
+  console.log(`[${resName}] [Server] Successfully built`);
 };
 
 if (process.argv.includes('--server')) {
