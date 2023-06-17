@@ -11,9 +11,6 @@ class Inventory {
   public openStash = (stashId: string, size?: number): void =>
     global.exports['dg-inventory'].open({ type: 'stash', identifier: stashId, data: size });
 
-  public openOtherPlayer = (plyId: number): void =>
-    global.exports['dg-inventory'].open({ type: 'player', data: plyId });
-
   public openShop = (shopId: string): void => global.exports['dg-inventory'].open({ type: 'shop', identifier: shopId });
 
   public openTunes = (vin: string) => {

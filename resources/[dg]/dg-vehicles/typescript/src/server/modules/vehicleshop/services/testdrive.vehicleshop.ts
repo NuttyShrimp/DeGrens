@@ -1,15 +1,10 @@
 import { Business, Events, Financials, Notifications, Police, RPC, Util, Vehicles } from '@dgx/server';
 import { deleteVehicle, spawnVehicle } from 'helpers/vehicle';
-import vinManager from 'modules/identification/classes/vinmanager';
-import { keyManager } from 'modules/keys/classes/keymanager';
-
 import shopManager from '../classes/ShopManager';
 import { doVehicleShopTransaction, getTestDriveDeposit } from '../helpers.vehicleshop';
 import { vehicleshopLogger } from '../logger.vehicleshop';
 import { getVehicleShopConfig } from '../services/config.vehicleshop';
 import { getConfigByModel } from 'modules/info/service.info';
-import { applyUpgrades } from 'modules/upgrades/service.upgrades';
-import { generateBaseUpgrades } from '@shared/upgrades/service.upgrades';
 
 const activeTestDrives: Map<
   number,
@@ -114,9 +109,7 @@ Events.onNet('vehicles:shop:testdrive:start', async (plyId: number, model: strin
     }
     return;
   }
-
-  const { vehicle, vin } = spawnedVehicle;
-  await applyUpgrades(vin, generateBaseUpgrades(vehicle));
+  const { vin } = spawnedVehicle;
 
   const timeout = startTimeLimitTimeout(plyId, cid, vin);
 

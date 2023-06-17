@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { baseStyle } from '@src/base.styles';
 import AppWrapper, { closeApplication } from '@src/components/appwrapper';
 import { nuiAction } from '@src/lib/nui-comms';

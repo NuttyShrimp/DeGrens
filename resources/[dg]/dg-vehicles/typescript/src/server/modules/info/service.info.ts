@@ -5,7 +5,6 @@ import * as fs from 'fs';
 import { VEHICLE_TYPE_MAP } from './constants.info';
 import { infoLogger } from './logger.info';
 import { isSchemaValid } from './schema.info';
-import { mainLogger } from 'sv_logger';
 
 // key: modelhash, value: config
 const vehicleInfo: Map<number, Config.CarSchema> = new Map();
@@ -33,13 +32,9 @@ export const loadVehicleInfo = () => {
   }
 };
 
-export const getConfigByHash = (hash: number) => {
-  return vehicleInfo.get(hash);
-};
-
-export const getConfigByModel = (model: string) => {
-  const modelHash = GetHashKey(model);
-  return getConfigByHash(modelHash);
+export const getConfigByModel = (model: string | number) => {
+  const modelHash = typeof model === 'string' ? GetHashKey(model) : model;
+  return vehicleInfo.get(modelHash);
 };
 
 export const getConfigByEntity = (entity: number) => {
@@ -49,7 +44,7 @@ export const getConfigByEntity = (entity: number) => {
   }
 
   const modelHash = GetEntityModel(entity);
-  const config = getConfigByHash(modelHash);
+  const config = getConfigByModel(modelHash);
 
   if (!config) {
     Util.sendRPCtoEntityOwner<string>(entity, 'vehicle:getArchType', NetworkGetNetworkIdFromEntity(entity)).then(
@@ -124,17 +119,17 @@ export const decreaseModelStock = (model: string) => {
 
 export const getModelStock = (model: string) => modelStock.get(model) ?? 0;
 
-export const assignModelConfig = (ent: number, modelHash: number) => {
-  const modelConfig: any = getConfigByHash(modelHash);
-  if (modelConfig) {
-    const strippedConfig: Config.Car = {
-      brand: modelConfig.brand,
-      category: modelConfig.category,
-      class: modelConfig.class,
-      model: modelConfig.model,
-      name: modelConfig.name,
-      type: modelConfig.type,
-    };
-    Entity(ent).state.set('config', strippedConfig, true);
-  }
+export const assignModelConfig = (vehicle: number) => {
+  const modelConfig: any = getConfigByEntity(vehicle);
+  if (!modelConfig) return;
+
+  const strippedConfig: Config.Car = {
+    brand: modelConfig.brand,
+    category: modelConfig.category,
+    class: modelConfig.class,
+    model: modelConfig.model,
+    name: modelConfig.name,
+    type: modelConfig.type,
+  };
+  Entity(vehicle).state.set('config', strippedConfig, true);
 };

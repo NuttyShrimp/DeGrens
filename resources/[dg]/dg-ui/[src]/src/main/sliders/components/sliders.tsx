@@ -1,4 +1,5 @@
-import React, { FC } from 'react';
+import { FC } from 'react';
+import * as React from 'react';
 import { Button } from '@components/button';
 import { Divider, Paper, Stack } from '@mui/material';
 import { baseStyle } from '@src/base.styles';

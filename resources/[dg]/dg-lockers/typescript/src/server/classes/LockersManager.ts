@@ -4,8 +4,6 @@ import { mainLogger } from 'sv_logger';
 import { Admin, Events, Financials, Notifications, Util } from '@dgx/server';
 import repository from './Repository';
 import { Locker } from './Locker';
-import config from 'services/config';
-import { getCurrentDay } from 'helpers';
 
 @EventListener()
 class LockersManager extends Util.Singleton<LockersManager>() {
@@ -115,8 +113,7 @@ class LockersManager extends Util.Singleton<LockersManager>() {
   private _open = (plyId: number, id: Lockers.Locker['id']) => {
     const locker = this.getLocker(id);
     if (!locker) return;
-    const stashId = `locker_${locker.id}`;
-    Events.emitNet('lockers:client:open', plyId, stashId, config.inventorySize);
+    locker.openStash(plyId);
   };
 
   @DGXEvent('lockers:server:changePassword')

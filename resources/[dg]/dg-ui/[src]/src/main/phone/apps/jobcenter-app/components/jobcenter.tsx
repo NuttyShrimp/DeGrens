@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import { FC, useState } from 'react';
 import { Tab, Tabs } from '@mui/material';
 import { AppContainer } from '@src/main/phone/os/appcontainer/appcontainer';
 

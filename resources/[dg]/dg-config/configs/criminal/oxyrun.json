@@ -4,9 +4,9 @@
     "max": 40,
     "groupPercent": 0
   },
-  "receiveOxyChance": 25,
+  "receiveOxyChance": 35,
   "deliveriesPerRun": 10,
-  "dispatchChance": 25,
+  "dispatchChance": 35,
   "locations": [
     {
       "center": {

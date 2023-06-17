@@ -25,6 +25,7 @@ import './services/walkstyles';
 import './services/convars';
 import './services/useables';
 import './services/news';
+import './services/modelblacklist';
 import './controllers';
 
 setImmediate(() => {

@@ -1,14 +1,36 @@
-import { cosmeticKeysToId } from './constants.upgrades';
+import { NORMAL_COSMETIC_KEYS_TO_ID } from './constants.upgrades';
 
-export const generateBaseUpgrades = (ent?: number): Vehicles.Upgrades.Cosmetic => {
-  const [prim, sec] = ent ? GetVehicleColours(ent) : [0, 0];
-  const [pearlescentColor, wheelColor] = ent ? GetVehicleExtraColours(ent) : [0, 0];
-  const idUpgrades: Partial<Record<keyof Vehicles.Upgrades.Cosmetic, number>> = {};
-  (Object.keys(cosmeticKeysToId) as (keyof Vehicles.Upgrades.CosmeticModIds)[]).forEach(k => {
-    idUpgrades[k] = -1;
-  });
+const RANDOM_COLORS = [
+  // black
+  0,
+  // gray
+  4,
+  // red
+  27,
+  // orange
+  38,
+  // dark blue
+  64,
+  // light blue
+  70,
+  // green
+  53,
+  // lime
+  92,
+  // brown
+  102,
+];
+
+export const generateBaseCosmeticUpgrades = (
+  randomColor = false,
+  enableExtras = false
+): Vehicles.Upgrades.Cosmetic.Upgrades => {
+  const primaryColor = randomColor ? RANDOM_COLORS[Math.floor(Math.random() * RANDOM_COLORS.length)] : 0;
   return {
-    ...idUpgrades,
+    ...(Object.keys(NORMAL_COSMETIC_KEYS_TO_ID) as Vehicles.Upgrades.Cosmetic.NormalKey[]).reduce((acc, k) => {
+      acc[k] = -1;
+      return acc;
+    }, {} as Pick<Vehicles.Upgrades.Cosmetic.Upgrades, Vehicles.Upgrades.Cosmetic.NormalKey>),
     xenon: {
       active: false,
       color: -1,
@@ -17,7 +39,7 @@ export const generateBaseUpgrades = (ent?: number): Vehicles.Upgrades.Cosmetic =
     wheels: {
       id: -1,
       custom: false,
-      type: ent && DoesEntityExist(ent) ? GetVehicleWheelType(ent) : 0,
+      type: 0,
     },
     neon: {
       enabled: [0, 1, 2, 3].map(id => ({ id, toggled: false })),
@@ -27,18 +49,27 @@ export const generateBaseUpgrades = (ent?: number): Vehicles.Upgrades.Cosmetic =
         b: 255,
       },
     },
-    primaryColor: prim,
-    secondaryColor: sec,
-    interiorColor: ent ? GetVehicleInteriorColour(ent) : 0,
-    dashboardColor: ent ? GetVehicleDashboardColour(ent) : 0,
-    pearlescentColor,
-    wheelColor,
+    primaryColor,
+    secondaryColor: 0,
+    interiorColor: 0,
+    dashboardColor: 0,
+    pearlescentColor: 0,
+    wheelColor: 0,
     extras: [...Array(14)].map((_, i) => ({
       id: i + 1,
-      enabled: false,
+      enabled: enableExtras,
     })),
     livery: -1,
-    plateColor: ent ? GetVehicleNumberPlateTextIndex(ent) : 0,
+    plateColor: -1,
     windowTint: 0,
-  } as Vehicles.Upgrades.Cosmetic;
+  };
 };
+
+export const generateBasePerformanceUpgrades = (): Vehicles.Upgrades.Performance.Upgrades => ({
+  armor: -1,
+  brakes: -1,
+  engine: -1,
+  transmission: -1,
+  turbo: false,
+  suspension: -1,
+});

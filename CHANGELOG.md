@@ -13,6 +13,43 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+## [1.2.5]
+
+### Added
+
+- Mogelijkheid om lockers toe te voegen die geen animatie afspelen
+- Meer stancing mogelijkheden en extra modellen toegevoegd met standaard stancing
+- Een nieuwe tab toegevoegd in de gang app, be sure to check it out
+- Nieuwe business toegevoegd met bijhorende job
+- Er zijn bomen rond het eiland geplant
+- De Vespucci market is opengegaan
+- Extra pride schoenen
+- Kleding voor kingsmen
+
+### Changed
+
+- Houserobbery en storerobbery payout verhoogd
+- Aantal materialen dat je krijgt bij veel activiteiten verhoogd
+- PostOP aantal locaties per route veranderd
+- Crafting reputatie requirement van startitems verlaagd
+- Locker animatie speelt enkel wanneer je de eerste keer het wachtwoord ingeeft
+- Voertuig upgrades volledig herwerkt om fouten met applyen van upgrades tegen te gaan en voor aangenamere developer experience
+- Volume van de normale sirene is weer wat verhoogd
+- Blips categorieen opgesplitst naar spelers(voor admins), politie en ambulance
+- Player requirements van enkele activiteiten aangepast
+- Kans op speciaal item uit banken aangepast
+- Container keys gaan minder lang mee
+
+### Fixed
+
+- melding van /me en /dice komt nu niet meer op je scherm als je niet in line of sight bent van de sender
+- Garagethreads worden gestopt wanneer je de server verlaat
+- Je ziet nu je telefoon notities weer na een restart
+- Je kan weer telefoon notities delen met elkaar
+- Je ziet meteen een nieuwe notitie in plaats van je app opnieuw te moeten openen
+- Voertuig degradatie zorgt nu weer effectief voor mindere goeie voertuig performance
+- Heli, vliegtuigen, boten en submarines spawnen weer met alle componenten
+
 ## [1.2.4]
 
 ### Added

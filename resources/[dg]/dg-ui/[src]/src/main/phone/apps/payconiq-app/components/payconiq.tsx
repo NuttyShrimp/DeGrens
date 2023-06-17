@@ -1,4 +1,3 @@
-import React from 'react';
 import { useMainStore } from '@src/lib/stores/useMainStore';
 
 import { Paper } from '../../../../../components/paper';

@@ -8,3 +8,6 @@ import './flipcar';
 import './emsShop';
 import './handling';
 import './vehicleModes';
+import './windowtint';
+import './itemupgrades';
+import './fakeplate';

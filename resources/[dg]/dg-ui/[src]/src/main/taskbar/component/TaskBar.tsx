@@ -1,4 +1,3 @@
-import React from 'react';
 import { FillableIcon } from '@src/components/icon';
 
 import { useTaskbarStore } from '../stores/useTaskbarStore';

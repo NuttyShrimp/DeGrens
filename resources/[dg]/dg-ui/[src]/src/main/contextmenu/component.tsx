@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import { useCallback } from 'react';
 import AppWrapper from '@components/appwrapper';
 
 import { uuidv4 } from '../../lib/util';

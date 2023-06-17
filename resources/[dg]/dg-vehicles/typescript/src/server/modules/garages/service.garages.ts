@@ -1,7 +1,6 @@
 import { Business, Gangs, Jobs, Notifications, UI, Util } from '@dgx/server';
 import { VehicleStateTranslation } from 'helpers/enums';
 import { getConfigByModel, getVehicleType } from 'modules/info/service.info';
-
 import {
   getPlayerOwnedVehiclesAtGarage,
   getPlayerSharedVehicles,
@@ -15,7 +14,6 @@ import { deleteVehicle, getVinForNetId, spawnOwnedVehicle } from '../../helpers/
 import vinmanager from '../identification/classes/vinmanager';
 import { getCidFromVin } from '../identification/service.id';
 import { getNativeStatus } from '../status/service.status';
-
 import { GarageThread } from './classes/parkingSpotThread';
 import { garageLogger } from './logger.garages';
 import { addVehicleGarageLog, getVehicleGarageLog } from './services/logs.garages';
@@ -320,17 +318,17 @@ export const storeVehicleInGarage = async (src: number, entity: number) => {
     garageLogger.warn(`Could not find vin for vehicle ${entity}`);
     return;
   }
-  if (!vinmanager.isVinFromPlayerVeh(vin)) {
+  const vehicleInfo = await getPlayerVehicleInfo(vin);
+  if (!vehicleInfo) {
     Notifications.add(src, 'Je kunt dit voertuig hier niet parkeren', 'error');
     return;
   }
-  const { cid: vehOwner } = await getPlayerVehicleInfo(vin);
-  if (!shared && cid !== vehOwner) {
+  if (!shared && cid !== vehicleInfo.cid) {
     garageLogger.silly(`Cannot store other peoples car in public garage`);
     Notifications.add(src, 'Enkel de eigenaar kan het voertuig in deze garage plaatsen', 'error');
     return;
   }
-  if (!doesCidHasAccess(vehOwner, garage_id)) {
+  if (!doesCidHasAccess(vehicleInfo.cid, garage_id)) {
     garageLogger.silly(`Player does not have access to garage`);
     Notifications.add(src, 'De eigenaar van dit voertuig heeft geen toegang tot deze garage', 'error');
     return;

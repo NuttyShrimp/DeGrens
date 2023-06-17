@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useMemo, useState } from 'react';
+import { FC, useEffect, useMemo, useState } from 'react';
 import { Input } from '@src/components/inputs';
 import { SimpleForm } from '@src/components/simpleform';
 import { showLoadModal } from '@src/main/phone/lib';

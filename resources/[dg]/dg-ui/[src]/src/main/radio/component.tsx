@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { animated, easings, useSpring } from 'react-spring';
 import AppWrapper from '@components/appwrapper';
 

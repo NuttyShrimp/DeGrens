@@ -1,19 +1,8 @@
-import { RPC, Util } from '@dgx/client';
-import { isCloseToADoor, isCloseToAWheel, isCloseToHood } from '../helpers/vehicle';
+import { RPC, Util, Vehicles } from '@dgx/client';
+import { getModelType, isCloseToADoor, isCloseToAWheel } from '../helpers/vehicle';
 
 RPC.register('vehicles:getModelType', (model: string): string | undefined => {
-  if (!IsModelValid(model) || !IsModelAVehicle(model)) return;
-
-  // why the fuck is the getVehicletype native only on serverside, now i need to use this cancerous method
-  // returns the type arg accepted in CreateVehicleServerSetter
-  if (IsThisModelACar(model)) return 'automobile';
-  if (IsThisModelABike(model)) return 'bike';
-  if (IsThisModelABoat(model)) return 'boat';
-  if (IsThisModelAHeli(model)) return 'heli';
-  if (IsThisModelAPlane(model)) return 'plane';
-  if (IsThisModelASubmersible(model)) return 'submarine';
-  if (IsThisModelATrain(model)) return 'trailer';
-  if (IsThisModelATrain(model)) return 'train';
+  return getModelType(model);
 });
 
 RPC.register('vehicle:getArchType', (netId: number): string => {
@@ -30,7 +19,7 @@ RPC.register('vehicle:getClass', (vehNetId: number) => {
 RPC.register('vehicles:isNearEngine', (vehNetId: number, distance: number, mustBeOpen = false) => {
   const veh = NetworkGetEntityFromNetworkId(vehNetId);
   if (!veh || !DoesEntityExist(veh)) return false;
-  return isCloseToHood(veh, distance, mustBeOpen);
+  return Vehicles.isNearVehiclePlace(veh, 'bonnet', distance, mustBeOpen);
 });
 
 RPC.register('vehicles:isNearWheel', (vehNetId: number, distance: number) => {

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { devData } from '@src/lib/devdata';
 
 import { nuiAction } from '../../../../lib/nui-comms';

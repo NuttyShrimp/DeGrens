@@ -1,4 +1,4 @@
-import React, { FC, useCallback, useEffect, useState } from 'react';
+import { FC, useCallback, useEffect, useState } from 'react';
 import { useKeyboardKey } from '@src/lib/hooks/useKeyboardKey';
 
 import { devData } from '../../../../lib/devdata';
@@ -89,7 +89,7 @@ export const ExtrasMenu: FC<{ goToMainMenu: () => void }> = ({ goToMainMenu }) =
     setIsInCart(cartItem?.enabled === onEnableOption);
     nuiAction('bennys:preview', {
       name: 'extras',
-      data: { id: extra.id, enabled: onEnableOption },
+      data: [{ id: extra.id, enabled: onEnableOption }],
     });
   }, [currentExtraId, onEnableOption, extrasData, cart]);
 
@@ -122,10 +122,12 @@ export const ExtrasMenu: FC<{ goToMainMenu: () => void }> = ({ goToMainMenu }) =
     const enabled = cartItem ?? extrasData[currentExtraId].enabled;
     nuiAction('bennys:preview', {
       name: 'extras',
-      data: {
-        id: extraId,
-        enabled,
-      },
+      data: [
+        {
+          id: extraId,
+          enabled,
+        },
+      ],
     });
   }, [extrasData, currentExtraId]);
 

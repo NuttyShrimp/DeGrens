@@ -1,4 +1,4 @@
-import React, { FC, useCallback, useEffect, useState } from 'react';
+import { FC, useCallback, useEffect, useState } from 'react';
 import { flushSync } from 'react-dom';
 import { animated, useTransition } from 'react-spring';
 import useMeasure from 'react-use-measure';

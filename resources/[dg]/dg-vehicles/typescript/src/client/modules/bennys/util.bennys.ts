@@ -1,6 +1,5 @@
-import { allCosmeticKeysToId } from 'modules/upgrades/constants.upgrades';
-
-import { ModNameTitle, WheelTypeLabels } from './constant.bennys';
+import { COSMETIC_KEYS_TO_ID } from '@shared/upgrades/constants.upgrades';
+import { ModNameTitle, WHEEL_TYPE_LABELS } from './constant.bennys';
 
 export const getLiveryLabels = (veh: number) => {
   const labels = [];
@@ -16,11 +15,11 @@ export const getLiveryLabels = (veh: number) => {
 
 export const getLabelsForModId = (
   veh: number,
-  modKey: keyof Vehicles.Upgrades.AllCosmeticModIds,
+  modKey: Vehicles.Upgrades.Cosmetic.ExtendedKey,
   amount: number
 ): string[] => {
   const labels: string[] = ['Standard'];
-  const modId = allCosmeticKeysToId[modKey];
+  const modId = COSMETIC_KEYS_TO_ID[modKey];
   for (let i = 0; i < amount; i++) {
     let label = GetLabelText(GetModTextLabel(veh, modId, i));
     if (label === 'NULL') {
@@ -32,24 +31,16 @@ export const getLabelsForModId = (
 };
 
 export const getWheelTypeComponents = (amountPerCategory: Record<number, number>) => {
-  const categories: Bennys.UI.Components.Wheels['categories'] = [];
-  WheelTypeLabels.forEach((label, category) => {
-    if (!amountPerCategory[category]) return;
+  const categories: Bennys.UI.WheelsCategories = [];
+  for (let idx = 0; idx < WHEEL_TYPE_LABELS.length; idx++) {
+    if (!amountPerCategory[idx] || amountPerCategory[idx] === 0) continue;
     categories.push({
-      id: category,
-      label,
-      componentNames: getWheelLabels(amountPerCategory[category], label),
+      id: idx,
+      label: WHEEL_TYPE_LABELS[idx],
+      componentNames: [...new Array(amountPerCategory[idx])].map((_, i) => `${WHEEL_TYPE_LABELS[idx]} #${i + 1}`),
     });
-  });
-  return categories;
-};
-
-const getWheelLabels = (amount: number, categoryLabel: string) => {
-  const labels: string[] = [];
-  for (let i = 0; i < amount; i++) {
-    labels.push(`${categoryLabel} #${i + 1}`);
   }
-  return labels;
+  return categories;
 };
 
 export const isEMSVehicle = (vehicle: number) => {

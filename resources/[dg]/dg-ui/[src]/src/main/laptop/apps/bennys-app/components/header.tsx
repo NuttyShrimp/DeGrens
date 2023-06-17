@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import { FC } from 'react';
 import { Badge } from '@mui/material';
 import { useMainStore } from '@src/lib/stores/useMainStore';
 

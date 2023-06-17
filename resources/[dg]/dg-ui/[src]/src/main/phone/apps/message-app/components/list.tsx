@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 
 import { Paper } from '../../../../../components/paper';
 import { devData } from '../../../../../lib/devdata';

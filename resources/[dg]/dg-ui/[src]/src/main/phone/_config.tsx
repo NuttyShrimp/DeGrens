@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { usePhoneStore } from './stores/usePhoneStore';
 import Container from './component';
 

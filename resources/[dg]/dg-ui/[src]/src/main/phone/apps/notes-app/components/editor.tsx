@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import { FC, useState } from 'react';
 import { useCallback } from 'react';
 import { useEditor } from '@src/lib/hooks/useEditor';
 import { EditorContent } from '@tiptap/react';
@@ -39,7 +39,6 @@ export const Document: FC<{}> = () => {
         nuiAction('phone/notes/share', {
           type: 'local',
           id: note.id,
-          duration: 0,
         });
       },
     },
@@ -50,7 +49,6 @@ export const Document: FC<{}> = () => {
         nuiAction('phone/notes/share', {
           type: 'permanent',
           id: note.id,
-          duration: 0,
         });
       },
     },

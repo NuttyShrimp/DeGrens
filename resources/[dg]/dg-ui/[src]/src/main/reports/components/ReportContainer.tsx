@@ -1,4 +1,3 @@
-import React from 'react';
 import { Divider, Tooltip, Typography } from '@mui/material';
 import { Stack } from '@mui/system';
 import { IconButton } from '@src/components/button';

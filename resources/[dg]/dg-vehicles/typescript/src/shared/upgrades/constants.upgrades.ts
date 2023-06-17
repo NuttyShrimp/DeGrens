@@ -33,7 +33,8 @@ export const TUNE_PARTS: Record<
   },
 };
 
-export const cosmeticKeysToId: Record<keyof Vehicles.Upgrades.CosmeticModIds, number> = {
+// Only cosmetic upgrades that can be applyed using SetVehicleMod
+export const NORMAL_COSMETIC_KEYS_TO_ID: Record<Vehicles.Upgrades.Cosmetic.NormalKey, number> = {
   spoiler: 0,
   frontBumper: 1,
   rearBumper: 2,
@@ -70,3 +71,27 @@ export const cosmeticKeysToId: Record<keyof Vehicles.Upgrades.CosmeticModIds, nu
   tank: 45,
   door: 46,
 };
+
+export const COSMETIC_KEYS_TO_ID: Record<Vehicles.Upgrades.Cosmetic.ExtendedKey, number> = {
+  ...NORMAL_COSMETIC_KEYS_TO_ID,
+  tyreSmokeColor: 20,
+  wheels: 23,
+  livery: 48,
+  xenon: 22,
+};
+
+// Only performance upgrades that can be applyed using setvehiclemod
+export const NORMAL_PERFORMANCE_KEYS_TO_ID: Record<Vehicles.Upgrades.Performance.NormalKey, number> = {
+  armor: 16,
+  brakes: 12,
+  engine: 11,
+  transmission: 13,
+  suspension: 15,
+};
+
+export const PERFORMANCE_KEYS_TO_ID: Record<Vehicles.Upgrades.Performance.Key, number> = {
+  ...NORMAL_PERFORMANCE_KEYS_TO_ID,
+  turbo: 18,
+};
+
+export const STANDARD_EXTRA_UPGRADES = ['plane', 'heli', 'boat', 'submarine', 'train'];

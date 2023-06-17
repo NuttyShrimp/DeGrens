@@ -1,4 +1,3 @@
-import React from 'react';
 import { ReactComponent as Icon } from '@assets/laptop/icons/gang-app.svg';
 
 import { Component } from './component';
@@ -16,7 +15,6 @@ const config: Laptop.Config.Config = {
     column: 0,
   },
   requiresVPN: true,
-  blockedJobs: ['police'],
 };
 
 export default config;

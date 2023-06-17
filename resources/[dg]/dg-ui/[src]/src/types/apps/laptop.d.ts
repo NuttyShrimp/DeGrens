@@ -80,6 +80,7 @@ declare namespace Laptop {
       name: string;
       label: string;
       members: Member[];
+      feedMessages: Gangs.Feed.Message[];
     };
 
     type Member = {
@@ -90,7 +91,7 @@ declare namespace Laptop {
       isPlayer: boolean; // indicates if it is urself
     };
 
-    type Tab = 'home' | 'members';
+    type Tab = 'home' | 'members' | 'feed';
   }
 
   namespace Confirm {

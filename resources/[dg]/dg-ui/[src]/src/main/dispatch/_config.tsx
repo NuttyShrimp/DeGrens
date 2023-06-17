@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { useDispatchStore } from './stores/useDispatchStore';
 import Container from './component';
 

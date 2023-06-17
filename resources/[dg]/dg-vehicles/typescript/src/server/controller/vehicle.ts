@@ -1,9 +1,6 @@
-import { Inventory, Notifications, RPC, Util } from '@dgx/server';
+import { Notifications, RPC, Util } from '@dgx/server';
 import { Vector4 } from '@dgx/shared';
 import { getPlayerVehicleInfo, insertNewVehicle } from 'db/repository';
-import { fuelManager } from 'modules/fuel/classes/fuelManager';
-import { keyManager } from 'modules/keys/classes/keymanager';
-
 import {
   deleteVehicle,
   getVinForNetId,
@@ -15,7 +12,6 @@ import {
 } from '../helpers/vehicle';
 import vinManager from '../modules/identification/classes/vinmanager';
 import { mainLogger } from '../sv_logger';
-import { getConfigByEntity } from 'modules/info/service.info';
 import plateManager from 'modules/identification/classes/platemanager';
 import { TUNE_PARTS } from '../../shared/upgrades/constants.upgrades';
 
@@ -43,11 +39,14 @@ global.exports(
   async (plyId: number, model?: string, vin?: string, applyMods?: boolean) => {
     const ped = GetPlayerPed(String(plyId));
     const position = Vector4.createFromVec3(Util.getEntityCoords(ped), GetEntityHeading(ped));
-    let vehicle: number | null = null;
-    if (vin && vinManager.isVinFromPlayerVeh(vin)) {
-      const vehicleInfo = await getPlayerVehicleInfo(vin);
-      const position: Vec4 = { ...Util.getPlyCoords(plyId), w: GetEntityHeading(GetPlayerPed(String(plyId))) };
 
+    let vehicle: number | null = null;
+    if (vin) {
+      const vehicleInfo = await getPlayerVehicleInfo(vin);
+      if (!vehicleInfo) {
+        Notifications.add(plyId, 'VIN does not belong to player vehicle', 'error');
+        return;
+      }
       const ent = await spawnOwnedVehicle(plyId, vehicleInfo, position);
       if (!ent) {
         Notifications.add(plyId, 'Could not spawn owned vehicle', 'error');
@@ -55,37 +54,33 @@ global.exports(
       }
       vehicle = ent;
     } else {
-      if (!vin) {
-        vin = vinManager.generateVin();
-      }
       if (!model) {
         Notifications.add(plyId, 'Geen voertuig geselecteerd', 'error');
         return;
       }
-      const spawnedVehicle = await spawnVehicle({ model, position, vin });
+
+      let upgrades: Vehicles.Upgrades.Performance.Upgrades | undefined = undefined;
+      if (applyMods) {
+        upgrades = (Object.entries(TUNE_PARTS) as ObjEntries<typeof TUNE_PARTS>).reduce((acc, [key, tune]) => {
+          // @ts-ignore
+          acc[key] = tune.amount === 1 ? true : tune.amount - 1;
+          return acc;
+        }, {} as Vehicles.Upgrades.Performance.Upgrades);
+      }
+
+      const spawnedVehicle = await spawnVehicle({
+        model,
+        position,
+        vin,
+        upgrades,
+        keys: plyId,
+        fuel: 100,
+      });
       if (!spawnedVehicle) {
         Notifications.add(plyId, 'Could not spawn new vehicle', 'error');
         return;
       }
-      keyManager.addKey(vin, plyId);
-      fuelManager.setFuelLevel(spawnedVehicle.vehicle, 100);
       vehicle = spawnedVehicle.vehicle;
-    }
-
-    // This is some cursed shit lol
-    if (applyMods) {
-      setTimeout(() => {
-        if (!vehicle || !vin) return;
-        const vehClass = getConfigByEntity(vehicle)?.class;
-        if (!vehClass) return;
-
-        for (const tune of Object.values(TUNE_PARTS)) {
-          Inventory.addItemToInventory('tunes', vin, tune.itemName, 1, {
-            class: vehClass,
-            stage: tune.amount,
-          });
-        }
-      }, 1000);
     }
 
     teleportInSeat(String(plyId), vehicle);
@@ -93,8 +88,8 @@ global.exports(
 );
 
 global.asyncExports('getPlateForVin', async (vin: string) => {
-  if (!vinManager.isVinFromPlayerVeh(vin)) return;
   const info = await getPlayerVehicleInfo(vin);
+  if (!info) return;
   return info.plate;
 });
 

@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import { FC, useState } from 'react';
 import { InputAdornment } from '@mui/material';
 import { Input } from '@src/components/inputs';
 import { SimpleForm } from '@src/components/simpleform';

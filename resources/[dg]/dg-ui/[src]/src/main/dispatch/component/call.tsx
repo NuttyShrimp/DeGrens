@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import { FC } from 'react';
 import { Chip, Typography } from '@mui/material';
 import { Icon } from '@src/components/icon';
 import { nuiAction } from '@src/lib/nui-comms';

@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Button } from '@src/components/button';
 import { Paper } from '@src/components/paper';
 import { Loader } from '@src/components/util';

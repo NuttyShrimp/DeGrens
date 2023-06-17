@@ -129,4 +129,18 @@ export const ON_CREATE: Record<string, (plyId?: number) => { [key: string]: any 
   pd_radio: () => ({ frequency: 0 }),
   armor: () => ({ health: 100 }),
   pd_armor: () => ({ health: 100 }),
+  container_key: () => {
+    global.exports['dg-gangs'].removeContainerKeyNotice();
+    return {}; // empty metadata
+  },
+};
+
+const ON_DELETE: Record<string, (item: Inventory.ItemState) => void> = {
+  container_key: () => {
+    global.exports['dg-gangs'].addContainerKeyNotice();
+  },
+};
+
+export const handleOnDelete = (itemState: Inventory.ItemState) => {
+  ON_DELETE[itemState.name]?.(itemState);
 };

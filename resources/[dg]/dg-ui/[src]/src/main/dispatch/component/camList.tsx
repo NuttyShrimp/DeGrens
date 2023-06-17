@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import { FC } from 'react';
 import Typography from '@mui/material/Typography';
 import { IconButton } from '@src/components/button';
 import { Icon } from '@src/components/icon';

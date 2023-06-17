@@ -1,4 +1,4 @@
-import React, { FC, useCallback, useEffect, useState } from 'react';
+import { FC, useCallback, useEffect, useState } from 'react';
 
 import { modulo } from '../../../../lib/util';
 import { useKeyEvents } from '../../hooks/useKeyEvents';

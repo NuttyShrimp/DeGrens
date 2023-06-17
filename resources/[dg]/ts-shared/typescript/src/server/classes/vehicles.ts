@@ -66,11 +66,7 @@ class Vehicles {
     return global.exports['dg-vehicles'].getConfigByEntity(vehicle);
   };
 
-  getConfigByHash = (hash: number): NVehicles.Config | undefined => {
-    return global.exports['dg-vehicles'].getConfigByHash(hash);
-  };
-
-  getConfigByModel = (model: string): NVehicles.Config | undefined => {
+  getConfigByModel = (model: string | number): NVehicles.Config | undefined => {
     return global.exports['dg-vehicles'].getConfigByModel(model);
   };
 
@@ -90,27 +86,11 @@ class Vehicles {
     global.exports['dg-vehicles'].doAdminFix(vehicle);
   };
 
-  // When setting num plate at spawn it will not work otherwise
-  // A player needs to be inscope for this to resolve!
-  setVehicleNumberPlate = (vehicle: number, plate: string) => {
-    return new Promise<void>(res => {
-      const plateInterval = setInterval(() => {
-        if (!DoesEntityExist(vehicle)) {
-          clearInterval(plateInterval);
-          res();
-          return;
-        }
-
-        const plateText = GetVehicleNumberPlateText(vehicle).trim();
-        if (plateText === plate) {
-          clearInterval(plateInterval);
-          res();
-          return;
-        }
-
-        SetVehicleNumberPlateText(vehicle, plate);
-      }, 50);
-    });
+  setNumberPlate = (vehicle: number, plate: string, isFakePlate = false) => {
+    SetVehicleNumberPlateText(vehicle, plate);
+    const entState = Entity(vehicle).state;
+    entState.set('plate', plate, true);
+    entState.set('isFakePlate', isFakePlate, true);
   };
 
   setVehicleDoorsLocked = (vehicle: number, locked: boolean) => {

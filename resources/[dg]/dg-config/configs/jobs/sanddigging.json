@@ -1,8 +1,8 @@
 {
-  "sandAmount": [1, 2],
+  "sandAmount": [1, 3],
   "specialItemChance": {
     "min": 10,
-    "max": 35
+    "max": 30
   },
   "specialItems": ["gold_nugget"],
   "vehicle": {

@@ -1,13 +1,11 @@
-import { Inventory, Notifications, SQL, Taskbar, Util, Vehicles } from '@dgx/server';
-import { updateVehicleFakeplate } from 'db/repository';
-
-import { getVinForNetId, setEngineState } from '../../helpers/vehicle';
+import { SQL, Util } from '@dgx/server';
+import { getPlayerVehicleInfo } from 'db/repository';
+import { setEngineState } from '../../helpers/vehicle';
 import { fuelManager } from '../fuel/classes/fuelManager';
-
 import vinManager from './classes/vinmanager';
-import { idLogger } from './logger.id';
 import { handleVehicleLock } from 'modules/keys/service.keys';
 import plateManager from './classes/platemanager';
+import { getConfigByEntity, getConfigByModel } from 'modules/info/service.info';
 
 // set gets filled by vehicles without vin on entering, to disable engine when entered
 const vehiclesToDisableEngine = new Set<number>();
@@ -42,119 +40,6 @@ export const doesVehicleHaveVin = (vehicle: number) => {
   return vin != undefined && vinManager.doesVinMatch(vin, vehicle);
 };
 
-export const applyFakePlateItem = async (src: number, netId: number) => {
-  const vin = getVinForNetId(netId);
-  if (!vin) return;
-  const vehicle = NetworkGetEntityFromNetworkId(netId);
-  // Check if near vehicle
-  if (Util.getDistanceBetweenEntities(GetPlayerPed(String(src)), vehicle) > 4) {
-    Notifications.add(src, 'Je staat niet dicht genoeg bij het voertuig', 'error');
-    return;
-  }
-  const [wasCancelled] = await Taskbar.create(src, 'screwdriver', 'Monteren', 7500, {
-    canCancel: true,
-    cancelOnDeath: true,
-    disableInventory: true,
-    controlDisables: {
-      movement: true,
-      combat: true,
-    },
-    animation: {
-      animDict: 'anim@amb@clubhouse@tutorial@bkr_tut_ig3@',
-      anim: 'machinic_loop_mechandplayer',
-      flags: 1,
-    },
-  });
-  if (wasCancelled) return;
-  const plateItem = await Inventory.getFirstItemOfNameOfPlayer(src, 'fakeplate');
-  if (!plateItem?.metadata.plate) {
-    Notifications.add(src, 'Je hebt geen nummerplaat', 'error');
-    return;
-  }
-  const isSuccess = applyFakePlate(src, netId, plateItem.metadata.plate);
-  if (!isSuccess) {
-    Notifications.add(src, 'De nummerplaat kon niet worden toegepast', 'error');
-    return;
-  }
-  updateVehicleFakeplate(vin, plateItem.metadata.plate);
-  Inventory.destroyItem(plateItem.id);
-  Util.Log(
-    'vehicles:fakeplate:applied',
-    {
-      vin,
-      fakePlate: plateItem.metadata.plate,
-      plate: GetVehicleNumberPlateText(vehicle).trim(),
-    },
-    `${GetPlayerName(String(src))} applied a fake plate ${plateItem.metadata.plate} to vehicle with VIN ${vin}`
-  );
-};
-
-export const applyFakePlate = async (src: number, netId: number, plate: string) => {
-  const vin = getVinForNetId(netId);
-  if (!vin) {
-    return false;
-  }
-  const vehicle = NetworkGetEntityFromNetworkId(netId);
-  if (!vehicle) {
-    return false;
-  }
-  const vehState = Entity(vehicle).state;
-  if (!vehState) {
-    return false;
-  }
-  if (vehState.fakePlate) {
-    idLogger.warn(
-      `${GetPlayerName(
-        String(src)
-      )} tried to apply a fake plate to vehicle with VIN ${vin} but it already has a fake plate, old: ${
-        vehState.fakePlate
-      } | new: ${plate}`
-    );
-    return false;
-  }
-  vehState.set('fakePlate', plate, true);
-  Vehicles.setVehicleNumberPlate(vehicle, plate);
-  return true;
-};
-
-export const removeFakePlate = async (src: number, netId: number) => {
-  const vin = getVinForNetId(netId);
-  if (!vin) return;
-  const vehicle = NetworkGetEntityFromNetworkId(netId);
-  if (Util.getDistanceBetweenEntities(GetPlayerPed(String(src)), vehicle) > 4) {
-    Notifications.add(src, 'Je staat niet dicht genoeg bij het voertuig', 'error');
-    return;
-  }
-  const vehState = Entity(vehicle).state;
-  if (!vehState.plate || vehState.plate.trim() === '') {
-    // Vehicle not registered -->
-    return;
-  }
-  if (!vehState.fakePlate || vehState.fakePlate.trim() === '') {
-    Notifications.add(src, 'Dit voertuig heeft geen valse nummerplaat', 'error');
-    return;
-  }
-  const [wasCancelled] = await Taskbar.create(src, 'screwdriver', 'Schroeven losdraaien', 7500, {
-    canCancel: true,
-    cancelOnDeath: true,
-    disableInventory: true,
-    controlDisables: {
-      movement: true,
-      combat: true,
-    },
-    animation: {
-      animDict: 'anim@amb@clubhouse@tutorial@bkr_tut_ig3@',
-      anim: 'machinic_loop_mechandplayer',
-      flags: 1,
-    },
-  });
-  if (wasCancelled) return;
-  Vehicles.setVehicleNumberPlate(vehicle, vehState.plate);
-  Inventory.addItemToPlayer(src, 'fakeplate', 1, { plate: vehState.fakePlate });
-  vehState.set('fakePlate', undefined, true);
-  updateVehicleFakeplate(vin, null);
-};
-
 export const getCidFromVin = async (vin: string) => {
   const result = await SQL.scalar(
     `SELECT *
@@ -170,4 +55,18 @@ export const isPlayerVehicleOwner = async (playerId: number, vin: string) => {
   const ownerCid = await getCidFromVin(vin);
   const playerCid = Util.getCID(playerId);
   return ownerCid === playerCid;
+};
+
+export const getClassOfVehicleWithVin = async (vin: string): Promise<CarClass | undefined> => {
+  // Try to get it from model of existing vehicle entity
+  const vehicle = vinManager.getEntity(vin);
+  if (vehicle) {
+    return getConfigByEntity(vehicle)?.class;
+  }
+
+  // if no entity exists and its not a known vin, means vin is invalid
+  const vehicleInfo = await getPlayerVehicleInfo(vin);
+  if (!vehicleInfo) return;
+
+  return getConfigByModel(vehicleInfo.model)?.class;
 };

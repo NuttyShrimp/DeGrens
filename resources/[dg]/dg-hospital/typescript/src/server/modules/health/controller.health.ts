@@ -1,5 +1,6 @@
 import { Events, Inventory, Notifications, Police, Status, Taskbar, Util } from '@dgx/server';
 import { getHospitalConfig } from 'services/config';
+import { isPlayerFillingArmor, startRefillingArmorForPlayer } from '../../services/armor';
 import { getOnDamageStatusFromWeapon } from './service.health';
 
 export const registerHealItems = () => {
@@ -8,6 +9,11 @@ export const registerHealItems = () => {
   Inventory.registerUseable(Object.keys(healItems), async (plyId, itemState) => {
     const healItem = healItems[itemState.name];
     if (!healItem) return;
+
+    if (healItem.effects.fillArmor && isPlayerFillingArmor(plyId)) {
+      Notifications.add(plyId, 'Je hebt dit net gebruikt', 'error');
+      return;
+    }
 
     const [canceled] = await Taskbar.create(
       plyId,
@@ -27,10 +33,17 @@ export const registerHealItems = () => {
     );
     if (canceled) return;
 
-    const removed = await Inventory.removeItemByIdFromPlayer(plyId, itemState.id);
-    if (!removed) {
-      Notifications.add(plyId, 'Je heb dit niet', 'error');
+    const stillHasItem = await Inventory.doesPlayerHaveItemWithId(plyId, itemState.id);
+    if (!stillHasItem) {
+      Notifications.add(plyId, 'Je heb dit niet meer', 'error');
       return;
+    }
+
+    const qualityDecrease = 100 / (healItem.uses ?? 1);
+    Inventory.setQualityOfItem(itemState.id, oldQuality => oldQuality - qualityDecrease);
+
+    if (healItem.effects.fillArmor) {
+      startRefillingArmorForPlayer(plyId, healItem.effects.fillArmor);
     }
 
     Events.emitNet('hospital:health:useHealItem', plyId, healItem.effects);

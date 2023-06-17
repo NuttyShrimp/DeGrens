@@ -1,5 +1,4 @@
-import { Business, Events, Inventory, Notifications, Peek, UI } from '@dgx/client';
-import { isCloseToHood } from '@helpers/vehicle';
+import { Business, Events, Inventory, Notifications, Peek, UI, Vehicles } from '@dgx/client';
 import { getVehicleVinWithoutValidation } from 'modules/identification/service.identification';
 import { hasVehicleKeys } from 'modules/keys/cache.keys';
 import { addToOrder, finishOrder, removeItem, clearItemOrder, openItemOrder } from './services/parts.mechanic';
@@ -156,7 +155,9 @@ Peek.addGlobalEntry('vehicle', {
       canInteract: veh => {
         if (!veh || !NetworkGetEntityIsNetworked(veh)) return false;
         if (GetVehicleClass(veh) === 18) return false;
-        return isCloseToHood(veh, 2, true) && hasVehicleKeys(veh) && !!getCurrentMechanicBusiness();
+        return (
+          Vehicles.isNearVehiclePlace(veh, 'bonnet', 2, true) && hasVehicleKeys(veh) && !!getCurrentMechanicBusiness()
+        );
       },
     },
     {
@@ -168,7 +169,7 @@ Peek.addGlobalEntry('vehicle', {
       },
       canInteract: ent => {
         if (!ent || !NetworkGetEntityIsNetworked(ent)) return false;
-        return isCloseToHood(ent, 2, true);
+        return Vehicles.isNearVehiclePlace(ent, 'bonnet', 2, true);
       },
     },
     {

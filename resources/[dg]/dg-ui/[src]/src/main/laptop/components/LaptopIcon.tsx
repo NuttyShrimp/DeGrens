@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import { FC } from 'react';
 import { Icon } from '@components/icon';
 
 export const LaptopIcon: FC<Laptop.Config.Icon & { dim: number }> = props => {

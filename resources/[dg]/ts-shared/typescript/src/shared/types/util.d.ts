@@ -28,13 +28,6 @@ declare namespace Particles {
   type Data = Required<Particle> & { ptfx?: number };
 }
 
-declare type GangData = {
-  name: string;
-  label: string;
-  owner: number;
-  members: { name: string; cid: number; hasPerms: boolean }[];
-};
-
 declare type RayCastHit = {
   entity?: number;
   coords?: Vec3;
@@ -42,7 +35,13 @@ declare type RayCastHit = {
 
 declare type StatusName = 'alcohol' | 'gsw' | 'gsr' | 'bruises' | 'burns' | 'drowned' | 'stabwound';
 
-declare type ReputationType = 'crafting' | 'ammo_crafting' | 'mechanic_crafting' | 'cornersell' | 'blazeit_crafting';
+declare type ReputationType =
+  | 'crafting'
+  | 'ammo_crafting'
+  | 'mechanic_crafting'
+  | 'cornersell'
+  | 'blazeit_crafting'
+  | 'kingpills_crafting';
 
 declare type BadgeType = 'police';
 

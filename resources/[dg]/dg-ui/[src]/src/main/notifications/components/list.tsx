@@ -1,4 +1,3 @@
-import React from 'react';
 import { animated, easings, Transition } from 'react-spring';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import ErrorIcon from '@mui/icons-material/Error';

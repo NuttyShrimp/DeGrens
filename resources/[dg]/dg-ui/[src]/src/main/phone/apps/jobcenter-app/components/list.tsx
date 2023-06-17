@@ -1,4 +1,4 @@
-import React, { FC, useEffect } from 'react';
+import { FC, useEffect } from 'react';
 import { Button } from '@components/button';
 import { Divider, Typography } from '@mui/material';
 import { Icon } from '@src/components/icon';

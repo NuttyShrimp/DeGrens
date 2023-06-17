@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import { FC } from 'react';
 
 export const InfoDisplay: FC<Gridgame.InfoDisplay & { size: number }> = props => {
   return (

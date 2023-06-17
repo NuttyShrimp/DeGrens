@@ -1,4 +1,4 @@
-import React, { FC, useCallback, useEffect, useState } from 'react';
+import { FC, useCallback, useEffect, useState } from 'react';
 import { useDragDropManager } from 'react-dnd';
 import { useVhToPixel } from '@src/lib/hooks/useVhToPixel';
 import { useVisibleStore } from '@src/lib/stores/useVisibleStore';

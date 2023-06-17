@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import { FC, useState } from 'react';
 import { flushSync } from 'react-dom';
 
 import { Icon } from '../../../../../components/icon';

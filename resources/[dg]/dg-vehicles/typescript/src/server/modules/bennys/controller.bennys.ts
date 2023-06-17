@@ -1,9 +1,10 @@
 import { Auth, Events, RPC } from '@dgx/server';
-import { getUpgradePrices } from 'modules/upgrades/service.upgrades';
 
 import bennysManager from './classes/BennysManager';
 import { getZones, loadZones } from './modules/zones';
 import { getBlockedUpgrades, loadBlockedUpgrades } from './helpers/blockedUpgrades';
+import { getConfigByEntity } from 'modules/info/service.info';
+import upgradesManager from 'modules/upgrades/classes/manager.upgrades';
 
 setImmediate(() => {
   loadZones();
@@ -15,9 +16,13 @@ on('playerDropped', () => {
 });
 
 RPC.register('vehicles:bennys:getPrices', (src, spotId: string) => {
+  if (bennysManager.isNoChargeSpot(spotId)) {
+    return upgradesManager.getPricesForClass({ free: true });
+  }
+
   const spotData = bennysManager.getSpotData(spotId);
-  if (!spotData) return;
-  return getUpgradePrices(spotData.entity);
+  const carClass = (spotData?.entity && getConfigByEntity(spotData.entity)?.class) || 'D';
+  return upgradesManager.getPricesForClass({ carClass, includeTax: true });
 });
 
 RPC.register('vehicles:bennys:getBlockedUpgrades', (src, vehModel: number) => {

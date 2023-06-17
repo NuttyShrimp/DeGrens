@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import { FC } from 'react';
 import { Slider, Typography } from '@mui/material';
 
 import { useConfigmenuStore } from '../stores/useConfigmenuStore';

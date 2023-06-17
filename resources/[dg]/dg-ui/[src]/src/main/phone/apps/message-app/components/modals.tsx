@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { Input } from '../../../../../components/inputs';
 import { SimpleForm } from '../../../../../components/simpleform';
 import { hideFormModal } from '../../../lib';

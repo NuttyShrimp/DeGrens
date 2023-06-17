@@ -1,4 +1,5 @@
-import React, { FC } from 'react';
+import { FC } from 'react';
+import * as React from 'react';
 import { Typography } from '@mui/material';
 
 import { WeatherIcons } from '../../enum';

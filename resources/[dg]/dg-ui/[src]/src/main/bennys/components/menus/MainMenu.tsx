@@ -1,4 +1,4 @@
-import React, { FC, useCallback, useEffect, useState } from 'react';
+import { FC, useCallback, useEffect, useState } from 'react';
 import { animated, useSpring } from 'react-spring';
 import useMeasure from 'react-use-measure';
 import Logo from '@assets/bennys/bennysmotorwork-logo.png';

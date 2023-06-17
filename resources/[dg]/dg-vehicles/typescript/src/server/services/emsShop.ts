@@ -1,11 +1,8 @@
 import { Business, Events, Jobs, Notifications, UI, Util } from '@dgx/server';
-import { generateBaseUpgrades } from '@shared/upgrades/service.upgrades';
-import { getPlayerVehicleInfo, insertNewVehicle } from 'db/repository';
-import { deleteVehicle, spawnOwnedVehicle } from 'helpers/vehicle';
+import { insertNewVehicle } from 'db/repository';
 import plateManager from 'modules/identification/classes/platemanager';
 import vinManager from 'modules/identification/classes/vinmanager';
 import { decreaseModelStock, getConfigByModel, getModelStock } from 'modules/info/service.info';
-import { saveCosmeticUpgrades } from 'modules/upgrades/service.upgrades';
 import { doVehicleShopTransaction, getVehicleTaxedPrice } from 'modules/vehicleshop/helpers.vehicleshop';
 import { getVehicleShopConfig } from 'modules/vehicleshop/services/config.vehicleshop';
 import { mainLogger } from 'sv_logger';
@@ -98,6 +95,7 @@ Events.onNet('vehicles:emsShop:buy', async (src, model: string) => {
   await insertNewVehicle(vin, cid, model, plate, undefined, undefined, jobToGarages?.[plyJob]);
   vinManager.addPlayerVin(vin);
   plateManager.addPlayerPlate(plate);
+
   const taxedPrice = getVehicleTaxedPrice(model);
   decreaseModelStock(model);
   Util.Log(
@@ -108,20 +106,4 @@ Events.onNet('vehicles:emsShop:buy', async (src, model: string) => {
   );
   mainLogger.info(`Player ${cid} bought a vehicle (${model}) for ${taxedPrice}`);
   Notifications.add(src, `Je ${modelData.brand} ${modelData.name} staat op je te wachten in de garage!`, 'success');
-
-  const plyPosition = Util.getPlyCoords(src);
-  const spawnPosition = { x: plyPosition.x, y: plyPosition.y, z: 0, w: 0 };
-  const vehicleInfo = await getPlayerVehicleInfo(vin);
-  const vehicle = await spawnOwnedVehicle(src, vehicleInfo, spawnPosition);
-  if (vehicle) {
-    SetEntityCoords(vehicle, spawnPosition.x, spawnPosition.y, spawnPosition.z, true, false, false, false);
-    FreezeEntityPosition(vehicle, true);
-  }
-
-  const upgrades = generateBaseUpgrades(vehicle);
-  await saveCosmeticUpgrades(vin, upgrades);
-
-  if (vehicle !== undefined) {
-    deleteVehicle(vehicle);
-  }
 });

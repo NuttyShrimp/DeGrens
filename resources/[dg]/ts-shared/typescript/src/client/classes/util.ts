@@ -75,7 +75,7 @@ class Util extends UtilShared {
   /**
    * Spawns ped that will attack all players
    */
-  spawnAggressivePed = async (model: string, position: Vec4) => {
+  spawnAggressivePed = async (model: string, position: Vec3 | Vec4) => {
     const pedModel = GetHashKey(model);
     const { entity: ped } = await this.createPedOnServer(model, position);
     if (!ped) return;
@@ -189,7 +189,7 @@ class Util extends UtilShared {
 
   createObjectOnServer = (
     model: string | number,
-    coords: Vec3,
+    coords: Vec3 | Vec4,
     routingBucket?: number,
     stateBags?: Record<string, any>
   ) => {

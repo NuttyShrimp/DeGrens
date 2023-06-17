@@ -1,10 +1,11 @@
-import React, { FC, useCallback, useEffect, useMemo, useState } from 'react';
+import { FC, useCallback, useEffect, useMemo, useState } from 'react';
 import { Button, Divider, Tooltip } from '@mui/material';
 import { devData } from '@src/lib/devdata';
 import { nuiAction } from '@src/lib/nui-comms';
 
 import { AppWindow } from '../../os/windows/AppWindow';
 
+import { Feed } from './pages/feed';
 import { Home } from './pages/home';
 import { MemberList } from './pages/memberlist';
 import { useGangApp } from './stores/useGangAppStore';
@@ -16,6 +17,7 @@ import '../../styles/gang.scss';
 const TABS: Record<Laptop.Gang.Tab, { label: string; requiredPerms: boolean }> = {
   home: { label: 'info', requiredPerms: false },
   members: { label: 'leden', requiredPerms: true },
+  feed: { label: 'feed', requiredPerms: false },
 };
 
 export const Component: FC = () => {
@@ -47,6 +49,8 @@ export const Component: FC = () => {
         );
       case 'members':
         return <MemberList gangName={name} members={members} fetchGangData={fetchGangData} />;
+      case 'feed':
+        return <Feed />;
       default:
         return null;
     }

@@ -1,10 +1,8 @@
-import { Util } from '@dgx/server';
+import { Util, Events } from '@dgx/server';
 
-export const executeAction = (action: string, entity: number, ...args: any[]) => {
-  if (!action || !DoesEntityExist(entity)) {
-    console.error(`[Sync] Failed executing of '${action}' because entity did not exist`);
-    return;
-  }
+export const executeAction = async (action: string, entity: number, ...args: any[]) => {
+  const owner = await Util.awaitOwnership(entity);
+  if (!owner) return;
 
-  Util.sendEventToEntityOwner(entity, 'sync:execute', action, NetworkGetNetworkIdFromEntity(entity), ...args);
+  Events.emitNet('sync:execute', owner, action, NetworkGetNetworkIdFromEntity(entity), args);
 };

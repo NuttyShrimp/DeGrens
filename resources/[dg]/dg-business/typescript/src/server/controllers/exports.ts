@@ -90,5 +90,5 @@ global.exports('getBusinessPlayerIsInsideOf', (plyId: number) => {
 global.exports('getItemPrice', (name: string, item: string) => {
   const business = getBusinessByName(name);
   if (!business) return;
-  return business.getPriceItems().get(item)?.price;
+  return business.getItemPrice(item);
 });

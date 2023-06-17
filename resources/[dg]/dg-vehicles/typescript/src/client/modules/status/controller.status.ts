@@ -1,8 +1,8 @@
-import { Events, Minigames, Notifications, RPC, RayCast, Sync, Taskbar, Util } from '@dgx/client';
+import { Events, Minigames, Notifications, RPC, RayCast, Sync, Taskbar, Util, Vehicles } from '@dgx/client';
 
 import { setDegradationValues } from './constant.status';
 import { fixVehicle } from './service.status';
-import { isCloseToAWheel, isCloseToHood } from '@helpers/vehicle';
+import { isCloseToAWheel } from '@helpers/vehicle';
 import { getWindowState, getDoorState, getTyreState } from './helpers.status';
 
 // Completes the server side function for natives that are client sided only
@@ -74,7 +74,7 @@ Events.onNet('vehicles:status:useRepairKit', async (itemId: string) => {
     return;
   }
 
-  if (!isCloseToHood(entity, 2)) {
+  if (!Vehicles.isNearVehiclePlace(entity, 'bonnet', 2)) {
     Notifications.add('Je staat niet bij de motorkap', 'error');
     return;
   }

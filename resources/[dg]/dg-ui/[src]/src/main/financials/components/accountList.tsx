@@ -1,4 +1,5 @@
-import React, { FC, MouseEvent } from 'react';
+import { FC, MouseEvent } from 'react';
+import * as React from 'react';
 import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
 import { Button, IconButton } from '@mui/material';
 import { useMainStore } from '@src/lib/stores/useMainStore';

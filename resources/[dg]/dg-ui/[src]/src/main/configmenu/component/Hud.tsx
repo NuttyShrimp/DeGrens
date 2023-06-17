@@ -1,4 +1,3 @@
-import React from 'react';
 import { Slider, Typography } from '@mui/material';
 
 import { Input } from '../../../components/inputs';

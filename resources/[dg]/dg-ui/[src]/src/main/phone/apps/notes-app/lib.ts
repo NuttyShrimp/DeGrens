@@ -9,23 +9,18 @@ export const setCurrentNote = (note: Phone.Notes.Note | null) => {
 };
 
 export const addNewNote = async () => {
-  const newNote = await nuiAction('phone/notes/new', {
-    title: 'New Note',
-    note: '',
-    date: Date.now(),
-  });
-  const appState = useNotesAppStore.getState();
-  appState.list.unshift(newNote);
-  appState.current = newNote;
-  useNotesAppStore.setState(appState);
+  const newNote = await nuiAction('phone/notes/new');
+  useNotesAppStore.setState(s => ({
+    list: [newNote, ...s.list],
+    current: newNote,
+  }));
 };
 
 export const removeCurrentNote = () => {
-  const appState = useNotesAppStore.getState();
-  if (!appState.current) return;
-  appState.list = appState.list.filter(n => n.id !== appState.current?.id);
-  appState.current = null;
-  useNotesAppStore.setState(appState);
+  useNotesAppStore.setState(s => ({
+    list: s.list.filter(n => n.id !== s.current?.id),
+    current: null,
+  }));
 };
 
 export const updateNote = (id: number, title: string, text: string) => {

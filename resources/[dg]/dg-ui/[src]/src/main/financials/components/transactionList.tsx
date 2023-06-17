@@ -1,4 +1,5 @@
-import React, { FC, useMemo, useState } from 'react';
+import { FC, useMemo, useState } from 'react';
+import * as React from 'react';
 import { Button } from '@src/components/button';
 
 import Numberformat from '../../../components/numberformat';

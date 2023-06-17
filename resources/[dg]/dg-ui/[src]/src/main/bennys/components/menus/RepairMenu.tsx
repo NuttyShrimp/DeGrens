@@ -1,4 +1,4 @@
-import React, { FC, useCallback, useEffect } from 'react';
+import { FC, useCallback, useEffect } from 'react';
 
 import { nuiAction } from '../../../../lib/nui-comms';
 import { useGuide } from '../../hooks/useInformationBar';

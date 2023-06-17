@@ -101,7 +101,10 @@ export class Util {
   /**
    * @returns true if condition fulfilled, false if timed out
    */
-  awaitCondition = async (condition: () => boolean, timeout = 5000) => {
+  awaitCondition: {
+    (condition: () => boolean, timeout?: number, interval?: number): Promise<boolean>;
+    (condition: () => boolean, timeout: false, interval?: number): Promise<boolean>;
+  } = async (condition: () => boolean, timeout = 5000, interval = 10) => {
     return new Promise<boolean>(res => {
       // do check first to avoid initial delay if condition already fulfilled
       if (condition()) {
@@ -110,9 +113,11 @@ export class Util {
       }
 
       let timedOut = false;
-      setTimeout(() => {
-        timedOut = true;
-      }, timeout);
+      if (timeout !== false) {
+        setTimeout(() => {
+          timedOut = true;
+        }, timeout);
+      }
 
       const thread = setInterval(() => {
         const fulfilled = condition();
@@ -121,7 +126,7 @@ export class Util {
           res(fulfilled);
           return;
         }
-      }, 10);
+      }, interval);
     });
   };
 

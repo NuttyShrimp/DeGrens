@@ -1,77 +1,23 @@
-import { Events, Peek, RPC, Util } from '@dgx/client';
-import { getCurrentVehicle, isCloseToHood } from '@helpers/vehicle';
+import { Peek, Sync, Vehicles } from '@dgx/client';
+import { checkIllegalTunes } from './service.upgrades';
+import upgradesManager from './classes/manager.upgrades';
 
-import {
-  applyUpgrades,
-  checkIllegalTunes,
-  getCosmeticUpgradePossibilities,
-  getCosmeticUpgrades,
-  getPerformanceUpgradePossibilities,
-} from './service.upgrades';
-import { hasVehicleKeys } from 'modules/keys/cache.keys';
-import { generateBaseUpgrades } from '@shared/upgrades/service.upgrades';
+global.exports('getCosmeticUpgrades', (vehicle: number) => {
+  return upgradesManager.get('cosmetic', vehicle);
+});
+global.exports('applyUpgrades', (vehicle: number, upgrades: Partial<Vehicles.Upgrades.Upgrades>) => {
+  Sync.executeAction('vehicles:upgrades:apply', vehicle, upgrades);
+});
 
-global.exports('getCosmeticUpgrades', getCosmeticUpgrades);
-global.exports('generateBaseUpgrades', generateBaseUpgrades);
-global.exports('applyUpgrades', applyUpgrades);
-
-RPC.register('vehicles:upgrades:getCosmetic', async (vehNetId?: number) => {
-  let veh = getCurrentVehicle();
-  if (vehNetId) {
-    const exists = await Util.awaitEntityExistence(vehNetId, true);
-    if (!exists) return;
-    veh = NetworkGetEntityFromNetworkId(vehNetId);
+Sync.registerActionHandler(
+  'vehicles:upgrades:apply',
+  (vehicle: number, upgrades: Partial<Vehicles.Upgrades.Upgrades>) => {
+    upgradesManager.set(vehicle, upgrades);
   }
-  if (!veh) return;
-  return getCosmeticUpgrades(veh);
-});
-
-Events.onNet('vehicles:upgrades:apply', async (vehNetId: number, upgrades: Partial<Vehicles.Upgrades.All>) => {
-  // Vehicle handles gets changed sometimes for no fucking apparent reason when just spawned, check netid
-  const exists = await Util.awaitEntityExistence(vehNetId, true);
-  if (!exists) return;
-  applyUpgrades(NetworkGetEntityFromNetworkId(vehNetId), upgrades);
-});
-
-RPC.register('vehicles:upgrades:getAllUpgradePossibilities', (vehNetId: number) => {
-  const veh = NetworkGetEntityFromNetworkId(vehNetId);
-  if (!veh) return;
-  const perfUpgrades = getPerformanceUpgradePossibilities(veh);
-  const cosmUpgrades = getCosmeticUpgradePossibilities(veh);
-  return {
-    ...perfUpgrades,
-    ...cosmUpgrades,
-  };
-});
+);
 
 Peek.addGlobalEntry('vehicle', {
   options: [
-    {
-      label: 'Plaats Neon',
-      icon: 'fas fa-lightbulb',
-      items: 'neon_strip',
-      action: (_, entity) => {
-        if (!entity) return;
-        Events.emitNet('vehicles:upgrades:installItem', NetworkGetNetworkIdFromEntity(entity), 'neon');
-      },
-      canInteract: veh => {
-        if (!veh || !NetworkGetEntityIsNetworked(veh)) return false;
-        return hasVehicleKeys(veh);
-      },
-    },
-    {
-      label: 'Installeer Xenon',
-      icon: 'fas fa-lightbulb',
-      items: 'xenon_lights',
-      action: (_, entity) => {
-        if (!entity) return;
-        Events.emitNet('vehicles:upgrades:installItem', NetworkGetNetworkIdFromEntity(entity), 'xenon');
-      },
-      canInteract: ent => {
-        if (!ent || !NetworkGetEntityIsNetworked(ent)) return false;
-        return isCloseToHood(ent, 2) && hasVehicleKeys(ent);
-      },
-    },
     {
       label: 'Controlleer Tuning',
       icon: 'fas fa-magnifying-glass',
@@ -82,21 +28,12 @@ Peek.addGlobalEntry('vehicle', {
       },
       canInteract: veh => {
         if (!veh || !NetworkGetEntityIsNetworked(veh)) return false;
-        return isCloseToHood(veh, 2, true);
+        return Vehicles.isNearVehiclePlace(veh, 'bonnet', 2, true);
       },
     },
   ],
-  distance: 2,
+  // higher distance because dist to boot gets checked in canInteract
+  // this prevents entry not being enabled because we use raycast hit coord on entity for distancecheck
+  // which can scuff when moving around vehicle while keeping raycast center on vehicle
+  distance: 10,
 });
-
-// RegisterCommand(
-//   'checkTunes',
-//   () => {
-//     const veh = GetVehiclePedIsIn(PlayerPedId(), false);
-//     if (!veh) return;
-//     const tunes = getPerformanceUpgrades(veh);
-//     if (!tunes) return;
-//     console.log(tunes);
-//   },
-//   false
-// );

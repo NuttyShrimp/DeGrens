@@ -1,4 +1,4 @@
-import { Util } from './index';
+import { Events, Util } from './index';
 import { Util as UtilShared } from '../../shared';
 
 class Inventory extends UtilShared.Singleton<Inventory>() {
@@ -287,6 +287,14 @@ class Inventory extends UtilShared.Singleton<Inventory>() {
 
   public showItemBox = (plyId: number, itemName: string, label: string) => {
     global.exports['dg-inventory'].showItemBox(plyId, itemName, label);
+  };
+
+  public openStash = (plyId: number, stashId: string, size?: number): void => {
+    Events.emitNet('inventory:client:open', plyId, { type: 'stash', identifier: stashId, data: size });
+  };
+
+  public openOtherPlayer = (plyId: number, otherPlayer: number): void => {
+    Events.emitNet('inventory:client:open', plyId, { type: 'player', data: otherPlayer });
   };
 }
 

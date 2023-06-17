@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import { useCallback, useState } from 'react';
 import AppWrapper from '@components/appwrapper';
 
 import { CallList } from './component/callList';

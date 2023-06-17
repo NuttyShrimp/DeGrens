@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import { FC } from 'react';
 import { useMainStore } from '@src/lib/stores/useMainStore';
 
 import { TITLE_OF_TYPE } from '../constants';

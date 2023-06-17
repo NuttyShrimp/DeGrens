@@ -1,5 +1,6 @@
 // Components to make life easier with TS
-import React, { FC } from 'react';
+import { FC } from 'react';
+import * as React from 'react';
 import BounceLoader from 'react-spinners/BounceLoader';
 
 import { SimpleForm } from './simpleform';

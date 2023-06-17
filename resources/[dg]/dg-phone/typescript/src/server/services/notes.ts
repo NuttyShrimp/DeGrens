@@ -25,18 +25,20 @@ const getNote = async (id: number): Promise<Note | null> => {
   `,
     [id]
   );
-  return result?.[1] ?? null;
+  return result?.[0] ?? null;
 };
 
-const addNote = async (cid: number, title: string, note: string, date: number) => {
+const addNote = async (cid: number): Promise<Note | undefined> => {
   let query = `
 		INSERT INTO phone_notes (title, note, date)
 		VALUES (?, ?, ?)
+    RETURNING *
   `;
-  const insertId = await SQL.insert(query, [title, note, date]);
-  if (!insertId) return;
-  await addNoteAccess(cid, insertId, true);
-  return insertId;
+  const result = await SQL.query<Note[]>(query, ['New Note', '', Date.now()]);
+  const note = result?.[0];
+  if (!note) return;
+  await addNoteAccess(cid, note.id, true);
+  return note;
 };
 
 const addNoteAccess = async (cid: number, id: number, owner: boolean) => {
@@ -105,50 +107,48 @@ RPC.register('dg-phone:server:notes:get', async (src: number) => {
   return await getNotes(player.citizenid);
 });
 
-RPC.register('dg-phone:server:notes:new', async (src: number, data: Note) => {
+RPC.register('dg-phone:server:notes:new', async (src: number) => {
   const player = charModule.getPlayer(src);
   if (!player) return;
-  const id = await addNote(player.citizenid, data.title, data.note, data.date);
-  if (!id) {
+
+  const newNote = await addNote(player.citizenid);
+  if (!newNote) {
     Notifications.add(src, 'Er is iets fout gelopen bij het opslaan van de notitie', 'error');
     return;
   }
-  data.id = id;
-  return data;
+  return newNote;
 });
 
-Events.onNet('dg-phone:server:notes:save', async (src, data) => {
+Events.onNet('dg-phone:server:notes:save', async (src, data: Pick<Note, 'id' | 'note' | 'title'>) => {
   const player = charModule.getPlayer(src);
   if (!player) return;
   await updateNote(player.citizenid, data.id, data.note, data.title);
 });
 
-Events.onNet('dg-phone:server:notes:delete', async (src, data) => {
+Events.onNet('dg-phone:server:notes:delete', async (src, noteId: number) => {
   const player = charModule.getPlayer(src);
   if (!player) return;
-  await deleteNote(player.citizenid, data.id);
+  await deleteNote(player.citizenid, noteId);
 });
 
-Events.onNet('dg-phone:server:notes:share', async (src: number, data: { id: number; type: 'local' | 'permanent' }) => {
+Events.onNet('dg-phone:server:notes:share', async (src: number, noteId: number, shareType: NoteShareType) => {
   const player = charModule.getPlayer(src);
   if (!player) return;
   // get note
-  const note = await getNote(data.id);
+  const note = await getNote(noteId);
   if (!note) return;
 
   const targets = Util.getAllPlayersInRange(src, 5);
   targets.forEach(target => {
-    if (target == src) return;
     const promiseId = getAvailablePromId();
     notePromises.set(promiseId, {
       id: Util.uuidv4(),
       noteId: note.id,
       origin: player.serverId,
       target,
-      type: data.type,
+      type: shareType,
     });
-    note.readonly = data.type == 'local';
-    emitNet('dg-phone:client:notes:share', target, note, promiseId);
+    emitNet('dg-phone:client:notes:share', target, promiseId);
     setTimeout(() => {
       notePromises.delete(promiseId);
     }, 30000);
@@ -156,20 +156,24 @@ Events.onNet('dg-phone:server:notes:share', async (src: number, data: { id: numb
 });
 
 RPC.register('dg-phone:server:notes:resolve', async (src, data: { id: string; accepted: string }) => {
+  if (!data.accepted) return;
+  const player = charModule.getPlayer(src);
+  if (!player) return;
   const promise = notePromises.get(data.id);
   if (!promise) {
     return 'Promise not found';
   }
-  let retval: number | undefined = undefined;
-  if (data.accepted && promise.type == 'permanent') {
-    const player = charModule.getPlayer(src);
-    if (!player) return;
-    const note = await getNote(promise.noteId);
-    if (!note) {
-      return 'Shared note not found';
-    }
+  const note = await getNote(promise.noteId);
+  if (!note) {
+    return 'Shared note not found';
+  }
+
+  let retval: Note = { ...note };
+  if (promise.type == 'permanent') {
     await addNoteAccess(player.citizenid, note.id, false);
-    retval = note.id;
+    retval.readonly = false;
+  } else {
+    retval.readonly = true;
   }
   notePromises.delete(data.id);
   return retval;

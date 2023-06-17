@@ -14,9 +14,10 @@ declare namespace Lockers {
     password: string | null;
     price: number;
     paymentDay: number;
+    doAnimation: boolean;
   };
 
   type DBLocker = Omit<Locker, 'coords' | 'paymentDay'> & Vec3 & { payment_day: number };
 
-  type BuildData = Pick<Locker, 'id' | 'coords' | 'radius'>;
+  type BuildData = Pick<Locker, 'id' | 'coords' | 'radius' | 'doAnimation'>;
 }

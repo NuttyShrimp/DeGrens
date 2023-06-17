@@ -1,6 +1,6 @@
 import { Events, HUD, Sounds, Taskbar, Util } from '@dgx/client';
 import { Vector3 } from '@dgx/shared';
-import { getCurrentVehicle } from '@helpers/vehicle';
+import { getCurrentVehicle, getVehHalfLength } from '@helpers/vehicle';
 
 let currentSeatbelt: 'none' | 'seatbelt' | 'harness' = 'none';
 let keyThread: NodeJS.Timer | null = null;
@@ -103,9 +103,8 @@ const ejectFromVehicle = (vehicleVelocity: Vec3) => {
   const veh = getCurrentVehicle();
   if (!ped || !veh) return;
 
-  const [min, max] = GetModelDimensions(GetEntityModel(veh));
-  const vehLength = max[1] - min[1];
-  const coords = Util.ArrayToVector3(GetOffsetFromEntityInWorldCoords(veh, 0.0, vehLength / 2 - 1, 1.0));
+  const vehHalfLength = getVehHalfLength(veh);
+  const coords = Util.ArrayToVector3(GetOffsetFromEntityInWorldCoords(veh, 0.0, vehHalfLength - 1, 1.0));
   SetEntityCoords(ped, coords.x, coords.y, coords.z, true, false, false, false);
 
   setTimeout(() => {

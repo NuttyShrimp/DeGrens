@@ -1,4 +1,3 @@
-import React from 'react';
 import { animated, Transition } from 'react-spring';
 import { Typography } from '@mui/material';
 

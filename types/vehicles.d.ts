@@ -4,9 +4,11 @@ declare namespace Vehicles {
     position: Vec3 | Vec4;
     vin?: string;
     plate?: string;
-    upgrades?: Partial<Vehicles.Upgrades.All>;
+    upgrades?: Partial<Vehicles.Upgrades.Upgrades>;
     fuel?: number;
     keys?: number;
+    isFakePlate?: boolean;
+    overrideStance?: Stances.Stance;
   }) => Promise<
     | {
         vehicle: number;
@@ -17,178 +19,164 @@ declare namespace Vehicles {
     | undefined
   >;
 
-  /**
-   * Ids with number as result are received with GetVehicleMod
-   * Ids with boolean as result are received with IsToggleModOn
-   */
+  type SpawnLocalVehicleFunction = (data: {
+    model: string | number;
+    position: Vec3 | Vec4;
+    plate?: string;
+    upgrades?: Partial<Vehicles.Upgrades.Upgrades>;
+    invincible?: boolean;
+    frozen?: boolean;
+    doorLockState?: number;
+    validateAfterModelLoad?: () => boolean; // this function will get called after the model has loaded, if it returns false, the vehicle will not be spawned. can be used to cancel spawning
+  }) => Promise<vehicle | undefined>;
 
   declare namespace Upgrades {
-    type CosmeticUpgradeApplier<T extends keyof Cosmetic> = (
-      veh: number,
-      value: DeepPartial<Upgrades.Cosmetic[T]>
-    ) => void;
+    type Tune = Exclude<Performance.Key, 'armor'>;
 
-    type Tune = keyof Omit<Performance, 'armor'>;
+    namespace Performance {
+      /**
+       *  Normal is ones that can be applyed using SetVehicleMod
+       * */
+      type NormalKey = 'armor' | 'brakes' | 'engine' | 'transmission' | 'suspension';
 
-    interface Performance {
-      // id = 16
-      armor: number;
-      // id = 12
-      brakes: number;
-      // id = 11
-      engine: number;
-      // id = 13
-      transmission: number;
-      // id = 18
-      turbo: boolean;
-      // id = 15
-      suspension: number;
+      // we use interface to properly override keys with custom type if they exist in NormalKey
+      interface Upgrades extends Record<NormalKey, number> {
+        turbo: boolean;
+      }
+
+      type Key = keyof Upgrades;
     }
 
-    interface CosmeticModIds {
-      // id = 0
-      spoiler: number;
-      // id = 1
-      frontBumper: number;
-      // id = 2
-      rearBumper: number;
-      // id = 3
-      sideSkirt: number;
-      // id = 4
-      exhaust: number;
-      // id = 5
-      frame: number;
-      // id = 6
-      grille: number;
-      // id = 7
-      hood: number;
-      // id = 8
-      leftFenders: number;
-      // id = 9
-      rightFenders: number;
-      // id = 10
-      roof: number;
-      // id = 14
-      horn: number;
-      // id = 19
-      subwoofer: number;
-      // id = 25
-      plateHolder: number;
-      // id = 26
-      vanityPlate: number;
-      // id = 27
-      trimA: number;
-      // id = 28
-      ornaments: number;
-      // id = 29
-      dashboard: number;
-      // id = 30
-      dial: number;
-      // id = 31
-      doorSpeakers: number;
-      // id = 32
-      seats: number;
-      // id = 33
-      steeringWheel: number;
-      // id = 34
-      shiftLever: number;
-      // id = 35
-      plaques: number;
-      // id = 36
-      speakers: number;
-      // id = 37
-      trunk: number;
-      // id = 44
-      trimB: number;
-      // id = 38
-      engineHydraulics: number;
-      // id = 39
-      engineBlock: number;
-      // id = 40
-      airFilter: number;
-      // id = 41
-      struts: number;
-      // id = 42
-      archCover: number;
-      // id = 43
-      aerials: number;
-      // id = 45
-      tank: number;
-      // id = 46
-      // In core labeled as window, in native enum it is a door
-      door: number;
+    namespace Cosmetic {
+      /**
+       *  Normal is ones that can be applyed using SetVehicleMod
+       * */
+      type NormalKey =
+        | 'spoiler'
+        | 'frontBumper'
+        | 'rearBumper'
+        | 'sideSkirt'
+        | 'exhaust'
+        | 'frame'
+        | 'grille'
+        | 'hood'
+        | 'leftFenders'
+        | 'rightFenders'
+        | 'roof'
+        | 'horn'
+        | 'subwoofer'
+        | 'plateHolder'
+        | 'vanityPlate'
+        | 'trimA'
+        | 'ornaments'
+        | 'dashboard'
+        | 'dial'
+        | 'doorSpeakers'
+        | 'seats'
+        | 'steeringWheel'
+        | 'shiftLever'
+        | 'plaques'
+        | 'speakers'
+        | 'trunk'
+        | 'trimB'
+        | 'engineHydraulics'
+        | 'engineBlock'
+        | 'airFilter'
+        | 'struts'
+        | 'archCover'
+        | 'aerials'
+        | 'tank'
+        | 'door';
+
+      /**
+       * Extended still have a SetVehicleMod id but have special getters/setters
+       * does not matter if they use custom getter/setter data
+       * */
+      type ExtendedKey = NormalKey | 'tyreSmokeColor' | 'wheels' | 'livery' | 'xenon';
+
+      // we use interface to properly override keys with custom type if they exist in NormalKey
+      interface Upgrades extends Record<ExtendedKey, number> {
+        xenon: {
+          active: boolean;
+          color: number;
+        };
+        wheels: {
+          id: number;
+          custom: boolean;
+          type: number;
+        };
+        neon: {
+          enabled: {
+            id: number;
+            toggled: boolean;
+          }[];
+          color: RGB;
+        };
+        primaryColor: RGB | number;
+        secondaryColor: RGB | number;
+        extras: {
+          id: number;
+          enabled: boolean;
+        }[];
+        interiorColor: number;
+        dashboardColor: number;
+        pearlescentColor: number;
+        wheelColor: number;
+        plateColor: number;
+        windowTint: number;
+      }
+
+      type Key = keyof Upgrades;
     }
 
-    interface AllCosmeticModIds extends CosmeticModIds {
-      // id = 20
-      tyreSmokeColor: number;
-      // id = 23
-      wheels: number;
-      // id = 48
-      livery: number;
-    }
+    type Upgrades = Cosmetic.Upgrades & Performance.Upgrades;
+    type Key = Cosmetic.Key | Performance.Key;
 
-    interface Cosmetic extends CosmeticModIds {
-      xenon: {
-        // id = 22
-        active: boolean;
-        // Actual color is received with GetVehicleXenonLightsColour
-        color: number;
-      };
-      // id = 23
-      wheels: {
-        id: number;
-        // GetVehicleModVariation
-        custom: boolean;
-        type: number;
-      };
-      neon: {
-        enabled: { id: number; toggled: boolean }[];
-        // GetVehicleNeonLightsColour
-        color: RGB;
-      };
-      // GetVehicleColours + colorIdToRGB
-      primaryColor: RGB | number;
-      secondaryColor: RGB | number;
-      // GetVehicleInteriorColor
-      interiorColor: number;
-      // GetVehicleDashboardColor
-      dashboardColor: number;
-      // GetVehicleExtraColours
-      pearlescentColor: number;
-      wheelColor: number;
-      extras: { id: number; enabled: boolean }[];
-      // id = 48 or new native
-      livery: number;
-      // GetVehicleNumberPlateTextIndex
-      plateColor: number;
-      // id = 20
-      tyreSmokeColor: number;
-      // GetVehicleWindowTint
-      windowTint: number;
-    }
+    type PartialValue<T extends Key> = Upgrades[T] extends Record<string, any> ? Partial<Upgrades[T]> : Upgrades[T];
 
-    type All = Cosmetic & Performance;
-
-    type MaxedCosmetic = Omit<
-      Cosmetic,
-      | 'primaryColor'
-      | 'secondaryColor'
-      | 'interiorColor'
-      | 'dashboardColor'
-      | 'pearlescentColor'
-      | 'wheelColor'
-      | 'neon'
-      | 'xenon'
-      | 'tyreSmokeColor'
-      | 'extras'
-      | 'wheels'
-      | 'windowTint'
-    > & {
-      extras: number;
-      wheels: Record<number, number>;
+    type TypeToKeys = {
+      cosmetic: Vehicles.Upgrades.Cosmetic.Key[];
+      performance: Vehicles.Upgrades.Performance.Key[];
     };
+    type Type = 'cosmetic' | 'performance';
+
+    type Amount = Record<
+      Exclude<
+        Key,
+        | 'primaryColor'
+        | 'secondaryColor'
+        | 'interiorColor'
+        | 'dashboardColor'
+        | 'pearlescentColor'
+        | 'wheelColor'
+        | 'neon'
+        | 'xenon'
+        | 'tyreSmokeColor'
+        | 'wheels'
+        | 'windowTint'
+        | 'turbo'
+        | 'extras'
+      >,
+      number
+    > & {
+      wheels: Record<number, number>;
+      turbo: boolean;
+    };
+
+    type AmountKey = keyof Amount;
+
+    namespace Prices {
+      type Category = keyof AllCosmeticModIds | 'extras';
+      type Prices = Record<Category, number>;
+
+      type Config = {
+        categories: CategoryPrices;
+        classMultiplier: Record<CarClass, number>;
+      };
+    }
   }
+
+  type ItemUpgrade = Extract<Upgrades.Key, 'neon' | 'xenon'>;
 
   declare namespace Handlings {
     type HandlingEntry =

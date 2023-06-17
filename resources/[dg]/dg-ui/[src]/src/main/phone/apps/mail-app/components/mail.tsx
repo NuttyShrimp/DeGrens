@@ -1,4 +1,5 @@
-import React, { FC, useState } from 'react';
+import { FC, useState } from 'react';
+import * as React from 'react';
 import { IconButton } from '@src/components/button';
 import { Icon } from '@src/components/icon';
 import { nuiAction } from '@src/lib/nui-comms';

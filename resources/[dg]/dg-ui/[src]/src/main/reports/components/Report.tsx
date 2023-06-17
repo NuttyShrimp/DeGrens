@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
 import { Divider } from '@mui/material';
 import { IconButton } from '@src/components/button';
 import { Icon } from '@src/components/icon';

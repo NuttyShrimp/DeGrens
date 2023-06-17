@@ -1,11 +1,12 @@
 import { SQL, Util } from '@dgx/server';
+import { handleOnDelete } from 'modules/items/helpers.items';
 import { mainLogger } from 'sv_logger';
 import winston from 'winston';
 
 class Repository extends Util.Singleton<Repository>() {
   private logger: winston.Logger;
 
-  private queuedQueries: { query: string; params: Repository.UpdateParameters }[];
+  private queuedQueries: { query: string; params?: Repository.UpdateParameters }[];
   private queuedQueryExecuting: boolean;
 
   constructor() {
@@ -55,6 +56,11 @@ class Repository extends Util.Singleton<Repository>() {
     this.addQueryToQueue(query, [id]);
   };
 
+  public deleteMultipleItems = async (ids: string[]) => {
+    const query = `DELETE FROM inventory_items WHERE id IN (${ids.map(id => `'${id}'`).join(', ')})`;
+    this.addQueryToQueue(query);
+  };
+
   public updateItems = (itemStates: Inventory.ItemState[]) => {
     const amount = itemStates.length;
     const params: Repository.UpdateParameters = [];
@@ -73,15 +79,23 @@ class Repository extends Util.Singleton<Repository>() {
 
   // Does not need to be queued, only gets used on server start and gets awaited
   public deleteNonPersistent = async () => {
-    const query = `DELETE FROM inventory_items WHERE inventory = 'nonpersistent' RETURNING id`;
-    const result: unknown[] = await SQL.query(query);
-    if (result.length === 0) return;
+    const items = await this.fetchItems('nonpersistent');
+    if (items.length === 0) return;
+
+    // Still need to handle deletion when they get deleted because of being in non persistent inventory
+    for (const item of items) {
+      handleOnDelete(item);
+    }
+
+    const ids = items.map(i => i.id);
+    this.deleteMultipleItems(ids);
+
     Util.Log(
       'inventory:deleteNonPersistent',
-      { items: result },
-      `${result.length} items have been deleted because they were in a nonpersistent inventory`
+      { itemId: ids },
+      `${ids.length} items have been deleted because they were in a nonpersistent inventory`
     );
-    this.logger.info(`${result.length} items have been deleted because they were in a nonpersistent inventory`);
+    this.logger.info(`${ids.length} items have been deleted because they were in a nonpersistent inventory`);
   };
 
   // Function to be used by other resources
@@ -95,19 +109,26 @@ class Repository extends Util.Singleton<Repository>() {
   // Does not need to be queued, only gets used on server start and gets awaited
   public deleteByDestroyDate = async () => {
     const currentMinutes = Math.floor(Date.now() / (1000 * 60));
-    const query = `DELETE FROM inventory_items WHERE destroyDate < ? RETURNING id`;
-    const result: unknown[] = await SQL.query(query, [currentMinutes]);
+
+    const query = `DELETE FROM inventory_items WHERE destroyDate < ? RETURNING *`;
+    const result = await SQL.query<Repository.FetchResult[]>(query, [currentMinutes]);
     if (result.length === 0) return;
+
+    // Still need to handle deletion when they get deleted because of being decayed
+    const deletedItems = result.map(this.resultToState);
+    for (const item of deletedItems) {
+      handleOnDelete(item);
+    }
 
     Util.Log(
       'inventory:deleteByDestroyDate',
-      { items: result },
+      { itemId: deletedItems.map(i => i.id) },
       `${result.length} items have been deleted because their destroydate has passed`
     );
     this.logger.info(`${result.length} items have been deleted because their destroydate has passed`);
   };
 
-  private addQueryToQueue = (query: string, params: Repository.UpdateParameters) => {
+  private addQueryToQueue = (query: string, params?: Repository.UpdateParameters) => {
     this.queuedQueries.push({ query, params });
     this.executeQeueudQuery();
   };

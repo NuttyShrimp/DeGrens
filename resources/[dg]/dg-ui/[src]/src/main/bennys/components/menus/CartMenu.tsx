@@ -1,4 +1,4 @@
-import React, { FC, useCallback, useEffect, useState } from 'react';
+import { FC, useCallback, useEffect, useState } from 'react';
 import { Box, Typography } from '@mui/material';
 import { nuiAction } from '@src/lib/nui-comms';
 import { modulo } from '@src/lib/util';
@@ -55,7 +55,7 @@ export const CartMenu: FC<{ goToMainMenu: () => void }> = ({ goToMainMenu }) => 
       removeItemFromCart(item.component);
       setSelectedItem(modulo(id, cart.length - 1));
 
-      let previewData: { component: string; data?: any };
+      let previewData: { component: string; data?: number };
       if (item.component.startsWith('extra_')) {
         previewData = { component: 'extras', data: item.data.id };
       } else {

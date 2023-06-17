@@ -1,4 +1,3 @@
-import React from 'react';
 import map from '@assets/phone/map.png';
 
 import { ConfigObject, defaultConfigObject } from '../../config';

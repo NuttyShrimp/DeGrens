@@ -1,4 +1,5 @@
-import React, { FC, useEffect, useMemo, useState } from 'react';
+import { FC, useEffect, useMemo, useState } from 'react';
+import * as React from 'react';
 import { useDrag } from 'react-dnd';
 import { alpha, Tooltip } from '@mui/material';
 import { baseStyle } from '@src/base.styles';

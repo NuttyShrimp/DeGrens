@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { NumberFormat } from '../../../components/numberformat';
 import { useFinancialsStore } from '../stores/useFinancialsStore';
 

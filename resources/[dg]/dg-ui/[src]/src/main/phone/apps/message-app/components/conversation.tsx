@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { animated, Spring } from 'react-spring';
 import { formatRelativeTime } from '@lib/util';
 import SendIcon from '@mui/icons-material/Send';

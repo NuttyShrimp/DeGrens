@@ -5,8 +5,8 @@ import { calculateNeededParts, setPercentagePerPart, useRepairPart } from './ser
 import { getTyreState } from './helpers.status';
 import { getVinForVeh, setNativeStatus } from 'helpers/vehicle';
 import { SERVICE_CONDITIONS } from './constants.status';
-import { getPerformance } from 'modules/upgrades/service.upgrades';
 import { REPAIR_PARTS } from '../../../shared/status/constants.status';
+import upgradesManager from 'modules/upgrades/classes/manager.upgrades';
 
 setImmediate(() => {
   seedServiceStatuses();
@@ -66,7 +66,7 @@ Events.onNet('vehicles:service:showOverview', async (plyId: number, netId: numbe
 
   // Only show perf tunes to mechanic
   if (isActiveMechanic) {
-    const upgrades = await getPerformance(vin);
+    const upgrades = await upgradesManager.getPerformance(vin);
     infoMenu.push(
       ...[
         {

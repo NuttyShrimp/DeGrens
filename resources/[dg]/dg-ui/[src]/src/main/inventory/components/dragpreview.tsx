@@ -1,4 +1,4 @@
-import React, { FC, useMemo } from 'react';
+import { FC, useMemo } from 'react';
 import { usePreview } from 'react-dnd-preview';
 import { usePreviewStateFull } from 'react-dnd-preview/dist/usePreview';
 import { alpha } from '@mui/material';

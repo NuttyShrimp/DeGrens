@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { Icon } from '../../../components/icon';
 import { nuiAction } from '../../../lib/nui-comms';
 import { usePeekStore } from '../stores/usePeekStore';

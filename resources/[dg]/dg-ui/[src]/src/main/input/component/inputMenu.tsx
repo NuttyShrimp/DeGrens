@@ -1,4 +1,4 @@
-import React, { FC, useCallback, useEffect, useState } from 'react';
+import { FC, useCallback, useEffect, useState } from 'react';
 import { Button } from '@components/button';
 import { Input } from '@components/inputs';
 import { Typography } from '@mui/material';

@@ -1,5 +1,4 @@
 import { Events, Util } from '@dgx/client';
-import { Vector3 } from '@dgx/shared';
 
 const messages: Record<number, { msg: string; id: number }[]> = {};
 let id = 0;
@@ -9,15 +8,13 @@ const createShowThread = () => {
   if (showThread) return;
   showThread = setInterval(() => {
     const ped = PlayerPedId();
+    const coords = Util.getEntityCoords(ped);
     for (let target in messages) {
       for (let idx in messages[target]) {
         const trgtPed = GetPlayerPed(Number(target));
-        let trgtCoords: Vec3 = Util.getEntityCoords(trgtPed);
-        const inLos = HasEntityClearLosToEntity(ped, trgtPed, 13);
-        if (inLos) {
-          trgtCoords = (trgtCoords as Vector3).add({ x: 0, y: 0, z: 0.2 * Number(idx) });
-          Util.drawText3d(messages[target][idx].msg, trgtCoords, 0.4, true, 4);
-        }
+        const trgtCoords = Util.getEntityCoords(trgtPed);
+        if (trgtCoords.distance(coords) > 10 || !HasEntityClearLosToEntity(ped, trgtPed, 13)) continue;
+        Util.drawText3d(messages[target][idx].msg, trgtCoords.add({ x: 0, y: 0, z: 0.2 * Number(idx) }), 0.4, true, 4);
       }
     }
   }, 1);

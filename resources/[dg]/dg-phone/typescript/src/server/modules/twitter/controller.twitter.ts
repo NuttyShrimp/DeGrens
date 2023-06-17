@@ -63,8 +63,8 @@ Events.onNet('dg-phone:server:twitter:deleteTweet', (src, tweetId: number) => {
   Util.Log('phone:tweet:deleteTweet', { tweetId: tweetId }, `${Util.getName(src)} has deleted a tweet`, src);
 });
 
-Events.onNet('dg-phone:server:twitter:newTweet', (src, message, date) => {
-  const insertId = addTweet(src, message, date);
+Events.onNet('dg-phone:server:twitter:newTweet', async (src, message, date) => {
+  const insertId = await addTweet(src, message, date);
 
   Util.Log(
     'phone:tweet:newTweet',

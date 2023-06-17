@@ -103,6 +103,11 @@ export class Business {
         dispatchBusinessPermissionsToClientCache(e.citizenid, 'add', this.info.id);
       });
     }
+
+    // Create scripted stash if this business has a shop defined to set allowed items
+    if (getConfig().businesses?.[this.info.name]?.shopZone) {
+      Inventory.createScriptedStash(`${this.info.name}_shop`, 50, [...this.priceItems.keys()]);
+    }
   }
 
   private loadPriceItems = async () => {
@@ -1169,7 +1174,81 @@ export class Business {
     );
   };
 
-  public getPriceItems = () => {
-    return this.priceItems;
+  public getItemPrice = (itemName: string) => {
+    return this.priceItems.get(itemName)?.price ?? 0;
+  };
+
+  public checkShop = (plyId: number) => {
+    if (this.signedInPlayers.size > 0) {
+      Notifications.add(plyId, 'Er is een medewerker aanwezig', 'error');
+      return;
+    }
+
+    const menuEntries: ContextMenu.Entry[] = [
+      {
+        title: 'Product Kopen',
+        icon: 'basket-shopping',
+        disabled: true,
+      },
+    ];
+
+    for (const [item, data] of this.priceItems) {
+      menuEntries.push({
+        title: `${data.label} | €${Financials.getTaxedPrice(data.price, TaxIds.Goederen).taxPrice}`,
+        callbackURL: 'business/shop/buy',
+        data: {
+          item,
+          businessId: this.info.id,
+        },
+        preventCloseOnClick: true,
+      });
+    }
+
+    UI.openContextMenu(plyId, menuEntries);
+  };
+
+  public buyFromShop = async (plyId: number, itemName: string) => {
+    if (this.signedInPlayers.size > 0) {
+      Notifications.add(plyId, 'Er is een medewerker aanwezig', 'error');
+      return;
+    }
+
+    const itemData = this.priceItems.get(itemName);
+    if (!itemData) {
+      Notifications.add(plyId, 'Dit wordt niet verkocht', 'error');
+      return;
+    }
+
+    const cid = Util.getCID(plyId);
+    const accId = Financials.getDefaultAccountId(cid);
+    if (!accId) {
+      Notifications.add(plyId, 'Je hebt geen bankaccount', 'error');
+      return;
+    }
+
+    // if stash had this item in stock, the money goes to the business else to state
+    const targetItem = await Inventory.getFirstItemOfName('stash', `${this.info.name}_shop`, itemName);
+
+    const purchaseComment = `Aankoop ${itemData.label} uit ${this.info.label} shop`;
+    if (targetItem) {
+      const transferSuccess = await Financials.transfer(
+        accId,
+        this.info.bank_account_id,
+        cid,
+        cid,
+        itemData.price,
+        purchaseComment,
+        TaxIds.Goederen
+      );
+      if (!transferSuccess) return;
+
+      Inventory.moveItemToPlayer(plyId, targetItem.id);
+      Inventory.showItemBox(plyId, targetItem.name, '1x Ontvangen');
+    } else {
+      const paymentSuccess = await Financials.purchase(accId, cid, itemData.price, purchaseComment, TaxIds.Goederen);
+      if (!paymentSuccess) return;
+
+      Inventory.addItemToPlayer(plyId, itemName, 1);
+    }
   };
 }

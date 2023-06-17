@@ -63,21 +63,6 @@ declare namespace Bennys {
     entity: number;
     upgrades: Vehicles.Upgrades.Cosmetic;
     repair: Bennys.RepairInfo;
+    originalStance: Stances.Stance;
   }
-}
-
-declare namespace Stance {
-  type Data = {
-    frontLeft: number;
-    frontRight: number;
-    backLeft: number;
-    backRight: number;
-  };
-
-  type Model = {
-    model: string;
-    component: string;
-    value: number;
-    stance: Data;
-  };
 }

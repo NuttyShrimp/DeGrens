@@ -1,4 +1,5 @@
-import React, { FC, useState } from 'react';
+import { FC, useState } from 'react';
+import * as React from 'react';
 import { Input } from '@components/inputs';
 import { Button } from '@mui/material';
 import { styled } from '@mui/material/styles';

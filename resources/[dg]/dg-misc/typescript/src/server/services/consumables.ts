@@ -6,7 +6,7 @@ const effects: Record<Config.EffectConsumable['effect'], (target: number, durati
   speed: async (target, duration, itemId) => {
     let success = await Minigames.keygame(target, 1, 4, 18);
     if (!success) return;
-    const [isCancelled] = await Taskbar.create(target, 'nose', 'sniffing drugs', 5000, {
+    const [isCancelled] = await Taskbar.create(target, 'nose', '', 5000, {
       canCancel: true,
       cancelOnDeath: true,
       controlDisables: {
@@ -33,7 +33,7 @@ const effects: Record<Config.EffectConsumable['effect'], (target: number, durati
   damage: async (target, duration, itemId) => {
     let success = await Minigames.keygame(target, 1, 6, 13);
     if (!success) return;
-    const [isCancelled] = await Taskbar.create(target, 'nose', 'sniffing drugs', 5000, {
+    const [isCancelled] = await Taskbar.create(target, 'nose', '', 5000, {
       canCancel: true,
       cancelOnDeath: true,
       controlDisables: {

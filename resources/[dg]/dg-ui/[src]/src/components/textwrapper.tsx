@@ -1,4 +1,5 @@
-import React, { FC, useEffect, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
+import * as React from 'react';
 
 import { checkImageValidity, extractLinks } from '../lib/util';
 import { styles } from '../styles/components/textwrapper.styles';

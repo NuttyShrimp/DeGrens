@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { Paper } from '@src/components/paper';
 import { ConfirmationModal } from '@src/components/util';
 import { hideFormModal, showFormModal, showLoadModal } from '@src/main/phone/lib';

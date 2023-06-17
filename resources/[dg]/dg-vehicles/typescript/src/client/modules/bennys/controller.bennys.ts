@@ -1,13 +1,9 @@
 import { BlipManager, Events, Keys, PolyZone, UI } from '@dgx/client';
-import { Vector3 } from '@dgx/shared';
-
 import { getCurrentVehicle, getVehicleConfig, isDriver } from '../../helpers/vehicle';
-
 import {
   closeUI,
   enterBennys,
   getCurrentBennys,
-  getOriginalStance,
   setBennysMenuOpen,
   setCurrentBennys,
   setLocations,
@@ -66,10 +62,6 @@ UI.onUIReload(() => {
   }
   closeUI();
   setBennysMenuOpen(false);
-  const veh = getCurrentVehicle();
-  if (veh) {
-    Entity(veh).state.set('stance', getOriginalStance(), true);
-  }
 });
 
 Events.onNet('vehicles:bennys:adminEnter', () => {

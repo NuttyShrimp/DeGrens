@@ -1,4 +1,3 @@
-import React from 'react';
 import { Input } from '@src/components/inputs';
 import { SimpleForm } from '@src/components/simpleform';
 import { nuiAction } from '@src/lib/nui-comms';

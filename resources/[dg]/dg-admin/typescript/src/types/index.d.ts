@@ -54,6 +54,8 @@ declare namespace UI {
   interface Weather {
     name: string;
   }
+
+  type Gang = Gangs.Gang;
 }
 
 declare namespace Binds {

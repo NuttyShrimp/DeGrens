@@ -1,4 +1,5 @@
-import React, { FC, useEffect, useMemo, useState } from 'react';
+import { FC, useEffect, useMemo, useState } from 'react';
+import * as React from 'react';
 import { animated, useSpring } from 'react-spring';
 import shell from '@assets/phone/shell.png';
 import { AppContainer } from '@src/components/appcontainer';

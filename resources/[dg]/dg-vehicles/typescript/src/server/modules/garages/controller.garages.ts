@@ -1,13 +1,10 @@
-import { Auth, Events, RPC } from '@dgx/server';
+import { Core, Events, RPC } from '@dgx/server';
 import { setAllVehiclesInGarage } from 'db/repository';
 import fs from 'fs';
-
 import { garageLogger } from './logger.garages';
 import { isSchemaValid } from './schema.garages';
 import {
-  areGaragesLoaded,
   doesCidHasAccess,
-  GetGarages,
   isOnParkingSpot,
   recoverNonExistentVehicle,
   registerGarage,
@@ -18,7 +15,6 @@ import {
   storeVehicleInGarage,
   takeVehicleOutGarage,
 } from './service.garages';
-import { Util } from '@dgx/shared';
 
 const root = GetResourcePath(GetCurrentResourceName());
 
@@ -76,6 +72,10 @@ Events.onNet('vehicles:garage:enteredZone', (src: number, garageId: string) => {
 
 Events.onNet('vehicles:garage:leftZone', (src: number) => {
   stopThread(src);
+});
+
+Core.onPlayerUnloaded(plyId => {
+  stopThread(plyId);
 });
 
 RPC.register('vehicles:garage:isOnParkingSpot', (src, netId: number | null) => {

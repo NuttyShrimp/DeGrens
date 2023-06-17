@@ -27,18 +27,7 @@ Events.onNet('police:showVehicleInfo', async (src: number, netId: number) => {
   }
 
   const vehicleInfo = Vehicles.getConfigByEntity(vehicle);
-  if (!vehicleInfo) {
-    const modelName = await RPC.execute<string>('vehicle:getArchType', src, NetworkGetNetworkIdFromEntity(vehicle));
-    Util.Log(
-      'vehicles:missingConfig',
-      {
-        model: modelName,
-      },
-      `Found a missing model`,
-      undefined,
-      true
-    );
-  }
+  if (!vehicleInfo) return;
 
   const plateFlagged = isPlateFlagged(plate);
 

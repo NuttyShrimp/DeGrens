@@ -54,7 +54,7 @@ const setVehicleDegradation = (veh: number) => {
   for (const part in vehicleService.info) {
     for (const value of degradationValues[part as keyof Service.Status]) {
       const partValue = Math.max(0, vehicleService.info[part as keyof Service.Status]);
-      const newValue = 1 + value.step * (1000 - partValue);
+      const newValue = 1 - value.step * (1000 - partValue);
       setHandlingContextMultiplier(veh, value.name, 'degradation', 'multiplier', newValue, 0);
     }
   }

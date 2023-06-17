@@ -1,4 +1,4 @@
-export const upgradeableCategories = {
+export const UPGRADEABLE_CATEGORIES: Record<Bennys.Category, Vehicles.Upgrades.Cosmetic.Key[]> = {
   colors: ['primaryColor', 'secondaryColor', 'pearlescentColor', 'interiorColor', 'dashboardColor', 'wheelColor'],
   interior: [
     'subwoofer',
@@ -45,7 +45,7 @@ export const upgradeableCategories = {
   extras: ['extras'],
 };
 
-export const ModNameTitle: Record<keyof Vehicles.Upgrades.Cosmetic, string> = {
+export const ModNameTitle: Record<Vehicles.Upgrades.Cosmetic.Key, string> = {
   spoiler: 'Spoiler',
   // id = 1
   frontBumper: 'Front Bumper',
@@ -131,7 +131,7 @@ export const ModNameTitle: Record<keyof Vehicles.Upgrades.Cosmetic, string> = {
 
 export const PlateColorLabels = ['Blue/White', 'Blue/White2', 'Yellow/black', 'Yellow/Blue', 'Blue/White3', 'Yankton'];
 
-export const WheelTypeLabels = [
+export const WHEEL_TYPE_LABELS = [
   // Id = 0
   'Sport',
   // Id = 1

@@ -1,54 +1,48 @@
 import { Events, RPC, Sounds, UI } from '@dgx/client';
 import { getCurrentVehicle } from '@helpers/vehicle';
-import { applyModelStance } from 'modules/stances/service.stances';
-import { applyUpgrade, getCosmeticUpgradePossibilities } from 'modules/upgrades/service.upgrades';
-
-import { PlateColorLabels, TyreSmokeLabels, upgradeableCategories } from './constant.bennys';
+import { PlateColorLabels, TyreSmokeLabels, UPGRADEABLE_CATEGORIES } from './constant.bennys';
 import {
   closeUI,
   getBlockedUpgrades,
   getCurrentBennys,
   getEquippedUpgradesOnEnter,
-  getModelStanceData,
-  getOriginalStance,
   handleVehicleRepair,
+  tryToApplyBennysModelStance,
 } from './service.bennys';
 import { getLabelsForModId, getLiveryLabels, getWheelTypeComponents, isEMSVehicle } from './util.bennys';
+import upgradesManager from 'modules/upgrades/classes/manager.upgrades';
 
-const createGenericEntry = <T extends keyof Vehicles.Upgrades.Cosmetic>(
+const createGenericEntry = <T extends Vehicles.Upgrades.Cosmetic.Key>(
   veh: number,
   key: T,
-  entry: Vehicles.Upgrades.Cosmetic[T],
+  entry: Vehicles.Upgrades.Cosmetic.Upgrades[T],
   amount?: number | Record<number, number>
 ): Bennys.UI.Components.Generic | Bennys.UI.Components.Color | null => {
-  if (upgradeableCategories.colors.includes(key)) {
-    const equipped = entry as number | RGB;
-    return { name: key, equipped };
+  if (UPGRADEABLE_CATEGORIES.colors.includes(key)) {
+    // we can cast types because the check above validates
+    return { name: key as Bennys.ColorKey, equipped: entry as number | RGB } satisfies Bennys.UI.Components.Color;
   }
 
   switch (key) {
     case 'livery': {
-      const info = entry as Vehicles.Upgrades.Cosmetic['livery'];
       return {
         name: key,
-        equipped: info,
+        equipped: entry as Vehicles.Upgrades.Cosmetic.Upgrades['livery'],
         componentNames:
           GetVehicleLiveryCount(veh) === -1 ? getLabelsForModId(veh, key, amount as number) : getLiveryLabels(veh),
       };
     }
     case 'plateColor': {
-      const info = entry as Vehicles.Upgrades.Cosmetic['plateColor'];
       return {
         name: key,
-        equipped: info,
+        equipped: entry as Vehicles.Upgrades.Cosmetic.Upgrades['plateColor'],
         componentNames: PlateColorLabels,
       };
     }
     case 'tyreSmokeColor': {
-      const info = entry as Vehicles.Upgrades.Cosmetic['tyreSmokeColor'];
       return {
         name: key,
-        equipped: info,
+        equipped: entry as Vehicles.Upgrades.Cosmetic.Upgrades['tyreSmokeColor'],
         componentNames: TyreSmokeLabels,
       };
     }
@@ -56,11 +50,10 @@ const createGenericEntry = <T extends keyof Vehicles.Upgrades.Cosmetic>(
       switch (typeof entry) {
         case 'number': {
           if (!amount) return null;
-          const modKey = key as keyof Vehicles.Upgrades.CosmeticModIds;
           return {
-            name: modKey,
+            name: key,
             equipped: entry,
-            componentNames: getLabelsForModId(veh, modKey, amount as number),
+            componentNames: getLabelsForModId(veh, key as Vehicles.Upgrades.Cosmetic.ExtendedKey, amount as number),
           };
         }
         default: {
@@ -73,32 +66,34 @@ const createGenericEntry = <T extends keyof Vehicles.Upgrades.Cosmetic>(
 
 UI.RegisterUICallback('bennys:getActiveMenus', (_, cb) => {
   const plyVeh = getCurrentVehicle();
-  if (!plyVeh) return cb({ data: Object.keys(upgradeableCategories), meta: { ok: true, message: '' } });
+  if (!plyVeh) return cb({ data: Object.keys(UPGRADEABLE_CATEGORIES), meta: { ok: true, message: '' } });
 
-  const possibilities = getCosmeticUpgradePossibilities(plyVeh);
+  const possibilities = upgradesManager.getAmounts(plyVeh);
   if (!possibilities) return cb({ data: {}, meta: { ok: false, message: 'Could not upgrade possibilities' } });
 
   // wheels is always available, exterior also bcus of plate, tyresmoke and claxons
-  const activeMenus: (keyof typeof upgradeableCategories)[] = ['exterior', 'wheels'];
+  const activeMenus: Bennys.Category[] = ['exterior', 'wheels'];
   // Colors not enabled for ems vehicles
   if (!isEMSVehicle(plyVeh)) {
     activeMenus.push('colors');
   }
 
-  Object.entries(upgradeableCategories).forEach(([type, categories]) => {
-    if (activeMenus.includes(type as keyof typeof upgradeableCategories)) return;
-    if (
-      !categories.some(key => {
-        let amount = possibilities[key as keyof typeof possibilities] ?? 0;
-        if (typeof amount === 'object') amount = 1;
-        const min = key === 'extras' ? 0 : 1;
-        amount -= getBlockedUpgrades()?.[key as keyof Vehicles.Upgrades.Cosmetic]?.length ?? 0;
-        return amount > min;
-      })
-    )
-      return;
-    activeMenus.push(type as keyof typeof upgradeableCategories);
-  });
+  (Object.entries(UPGRADEABLE_CATEGORIES) as ObjEntries<typeof UPGRADEABLE_CATEGORIES>).forEach(
+    ([type, categories]) => {
+      if (activeMenus.includes(type)) return;
+      if (
+        !categories.some(key => {
+          let amount = possibilities[key as keyof typeof possibilities] ?? 0;
+          if (typeof amount !== 'number') amount = 1;
+          const min = key === 'extras' ? 0 : 1;
+          amount -= getBlockedUpgrades()?.[key]?.length ?? 0;
+          return amount > min;
+        })
+      )
+        return;
+      activeMenus.push(type);
+    }
+  );
   cb({ data: activeMenus, meta: { ok: true, message: '' } });
 });
 
@@ -107,22 +102,22 @@ UI.RegisterUICallback('bennys:getGenericData', (data: { type: 'interior' | 'exte
   const plyVeh = getCurrentVehicle();
   if (!plyVeh) return cb({ data: {}, meta: { ok: false, message: 'Could not get your current vehicle' } });
 
-  const possibilities = getCosmeticUpgradePossibilities(plyVeh);
+  const possibilities = upgradesManager.getAmounts(plyVeh);
   if (!possibilities) return cb({ data: {}, meta: { ok: false, message: 'Could not upgrade possibilities' } });
   const entries: (Bennys.UI.Components.Generic | Bennys.UI.Components.Color)[] = [];
-  (
-    Object.keys(upgrades).filter(key =>
-      upgradeableCategories[data.type].includes(key)
-    ) as (keyof Vehicles.Upgrades.Cosmetic)[]
-  ) // neon/xenon for example cant be upgraded so filter them out
+
+  (Object.keys(upgrades) as Vehicles.Upgrades.Cosmetic.Key[])
+    // neon/xenon for example cant be upgraded so filter them out
     .forEach(key => {
+      if (!UPGRADEABLE_CATEGORIES[data.type].includes(key)) return;
+      // this shit gets filtered because of the upgradeable const so fuck ts
       const entry = createGenericEntry(
         plyVeh,
         key,
         upgrades[key],
-        possibilities[key as keyof Vehicles.Upgrades.MaxedCosmetic]
+        ((possibilities as unknown as any)[key] ?? 0) as number
       );
-      const blockedIds = getBlockedUpgrades()?.[key as keyof Vehicles.Upgrades.Cosmetic] ?? [];
+      const blockedIds = getBlockedUpgrades()?.[key] ?? [];
       if (!entry) return;
       if ('componentNames' in entry) {
         // Filter names based on blocked ids
@@ -139,33 +134,27 @@ UI.RegisterUICallback('bennys:getGenericData', (data: { type: 'interior' | 'exte
 });
 
 UI.RegisterUICallback('bennys:getWheelData', (_, cb) => {
-  const key = 'wheels' as keyof Vehicles.Upgrades.Cosmetic;
-  const info = getEquippedUpgradesOnEnter()[key] as Vehicles.Upgrades.Cosmetic['wheels'];
+  const info = getEquippedUpgradesOnEnter().wheels;
   const plyVeh = getCurrentVehicle();
   if (!plyVeh) return cb({ data: {}, meta: { ok: false, message: 'Could not get your current vehicle' } });
 
-  const possibilities = getCosmeticUpgradePossibilities(plyVeh);
-  if (!possibilities) return cb({ data: {}, meta: { ok: false, message: 'Could not upgrade possibilities' } });
-  const wheelPossibilities = possibilities[key as keyof Vehicles.Upgrades.MaxedCosmetic];
-  const blockedIds = getBlockedUpgrades()?.[key] ?? [];
+  const wheelPossibilities = upgradesManager.getAmountByKey(plyVeh, ['wheels'])?.wheels;
+  if (!wheelPossibilities) return cb({ data: {}, meta: { ok: false, message: 'Could not upgrade possibilities' } });
+
+  const blockedIds = getBlockedUpgrades()?.wheels ?? [];
   const data = {
     equipped: {
       type: info.type,
       id: info.id,
     },
-    categories: getWheelTypeComponents(wheelPossibilities as Vehicles.Upgrades.MaxedCosmetic['wheels']).filter(
-      (_, i) => !blockedIds.includes(i)
-    ),
+    categories: getWheelTypeComponents(wheelPossibilities).filter((_, i) => !blockedIds.includes(i)),
   };
   cb({ data, meta: { ok: true, message: '' } });
 });
 
 UI.RegisterUICallback('bennys:getExtraData', (_, cb) => {
-  const key = 'extras' as keyof Vehicles.Upgrades.Cosmetic;
-  const blockedIds = getBlockedUpgrades()?.[key] ?? [];
-  const info = (getEquippedUpgradesOnEnter()[key] as Vehicles.Upgrades.Cosmetic['extras']).filter(e =>
-    blockedIds.includes(e.id)
-  );
+  const blockedIds = getBlockedUpgrades()?.extras ?? [];
+  const info = getEquippedUpgradesOnEnter().extras.filter(e => !blockedIds.includes(e.id));
   cb({ data: info, meta: { ok: true, message: '' } });
 });
 
@@ -174,42 +163,42 @@ UI.RegisterUICallback('bennys:preview', (data: Bennys.UI.Change, cb) => {
   if (!plyVeh) return cb({ data: {}, meta: { ok: false, message: 'Could not get your current vehicle' } });
   if (!data) return cb({ data: {}, meta: { ok: true, message: 'No data' } });
 
-  if (data.name === 'extras') {
-    applyUpgrade(plyVeh, 'extras', [data.data]);
-  } else {
-    applyUpgrade(plyVeh, data.name as keyof Vehicles.Upgrades.AllCosmeticModIds, data.data as any);
-  }
+  upgradesManager.setByKey(plyVeh, data.name, data.data);
 
-  // Try to apply stance related to upgrades
-  applyModelStance(plyVeh, data.name, data.data as number, getModelStanceData(), getOriginalStance());
+  tryToApplyBennysModelStance(plyVeh, data.name, data.data);
 
   cb({ data: {}, meta: { ok: true, message: '' } });
 });
 
 // Used on previewing equipped when removing item from cart
-UI.RegisterUICallback('bennys:previewEquipped', (data: { component: string; data?: any }, cb) => {
-  const plyVeh = getCurrentVehicle();
-  if (!plyVeh) return cb({ data: {}, meta: { ok: false, message: 'Could not get your current vehicle' } });
-  if (!data) return cb({ data: {}, meta: { ok: true, message: 'No data' } });
+UI.RegisterUICallback(
+  'bennys:previewEquipped',
+  (
+    data: { component: 'extras'; data: number } | { component: Exclude<Vehicles.Upgrades.Cosmetic.Key, 'extras'> },
+    cb
+  ) => {
+    const plyVeh = getCurrentVehicle();
+    if (!plyVeh) return cb({ data: {}, meta: { ok: false, message: 'Could not get your current vehicle' } });
+    if (!data) return cb({ data: {}, meta: { ok: true, message: 'No data' } });
 
-  const equippedData = getEquippedUpgradesOnEnter()[data.component as keyof Vehicles.Upgrades.Cosmetic];
-  if (data.component === 'extras') {
-    const extra = (equippedData as Vehicles.Upgrades.Cosmetic['extras']).find(e => e.id === data.data)?.enabled;
-    applyUpgrade(plyVeh, 'extras', [
-      {
-        id: data.data,
-        enabled: extra,
-      },
-    ]);
-  } else {
-    applyUpgrade(plyVeh, data.component as keyof Vehicles.Upgrades.Cosmetic, equippedData);
+    const equippedData = getEquippedUpgradesOnEnter();
+    if (data.component === 'extras') {
+      const extra = equippedData.extras.find(e => e.id === data.data)?.enabled ?? false;
+      upgradesManager.setByKey(plyVeh, 'extras', [
+        {
+          id: data.data,
+          enabled: extra,
+        },
+      ]);
+    } else {
+      upgradesManager.setByKey(plyVeh, data.component, equippedData[data.component]);
+    }
+
+    tryToApplyBennysModelStance(plyVeh, data.component, equippedData[data.component]);
+
+    cb({ data: {}, meta: { ok: true, message: '' } });
   }
-
-  // Try to apply stance related to upgrades
-  applyModelStance(plyVeh, data.component, equippedData as number, getModelStanceData(), getOriginalStance());
-
-  cb({ data: {}, meta: { ok: true, message: '' } });
-});
+);
 
 UI.RegisterUICallback('bennys:exit', (_, cb) => {
   Events.emitNet('vehicles:bennys:resetVehicle', getCurrentBennys());
@@ -219,7 +208,7 @@ UI.RegisterUICallback('bennys:exit', (_, cb) => {
 
 UI.RegisterUICallback(
   'bennys:buyUpgrades',
-  (cart: { upgrades: { component: keyof Vehicles.Upgrades.Cosmetic; data: any }[] }, cb) => {
+  (cart: { upgrades: { component: Vehicles.Upgrades.Cosmetic.Key; data: any }[] }, cb) => {
     Events.emitNet('vehicles:bennys:buyUpgrades', getCurrentBennys(), cart.upgrades);
     closeUI();
     cb({ data: {}, meta: { ok: true, message: '' } });
@@ -238,6 +227,6 @@ UI.RegisterUICallback('bennys:playSound', (_, cb) => {
 });
 
 UI.RegisterUICallback('bennys:getPrices', async (_, cb) => {
-  const prices = await RPC.execute('vehicles:bennys:getPrices', getCurrentBennys());
+  const prices = await RPC.execute<Vehicles.Upgrades.Prices.Prices>('vehicles:bennys:getPrices', getCurrentBennys());
   cb({ data: prices, meta: { ok: true, message: '' } });
 });

@@ -1,4 +1,4 @@
-import React, { FC, useCallback, useEffect, useState } from 'react';
+import { FC, useCallback, useEffect, useState } from 'react';
 import { useKeyboardKey } from '@src/lib/hooks/useKeyboardKey';
 
 import { devData } from '../../../../lib/devdata';
@@ -74,7 +74,7 @@ export const WheelsMenu: FC<{ goToMainMenu: () => void }> = ({ goToMainMenu }) =
     const startWheel =
       (getCartItemByComponent('wheels')?.data as Bennys.Components.Wheels['equipped']) ?? data.equipped;
     const startCategoryId = data.categories.findIndex(cat => cat.id === startWheel.type);
-    setCurrentCategoryId(startCategoryId);
+    setCurrentCategoryId(startCategoryId === -1 ? 0 : startCategoryId);
     setCurrentComponentId(startWheel.id);
   };
 

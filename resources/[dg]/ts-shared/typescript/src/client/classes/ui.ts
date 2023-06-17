@@ -23,7 +23,7 @@ class UI {
     });
   }
 
-  RegisterUICallback(name: string, callback: (data: any, cb: UICallback) => void) {
+  RegisterUICallback<T = any>(name: string, callback: (data: T, cb: UICallback) => void) {
     if (!this.registered.includes(name)) {
       this.registered.push(name);
     }

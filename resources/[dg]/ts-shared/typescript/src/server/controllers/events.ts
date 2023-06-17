@@ -20,11 +20,12 @@ if (GetCurrentResourceName() === 'ts-shared') {
       }
 
       const hash = typeof model === 'string' ? GetHashKey(model) : model;
+      const heading = 'w' in coords ? coords.w : 0;
       let entity: number;
       if (entityType === 'object') {
         entity = CreateObject(hash, coords.x, coords.y, coords.z, true, false, false);
+        SetEntityHeading(entity, heading);
       } else {
-        const heading = 'w' in coords ? coords.w : 0;
         entity = CreatePed(4, hash, coords.x, coords.y, coords.z, heading, true, true);
       }
 

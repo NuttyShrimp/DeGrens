@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { AppContainer } from '../../os/appcontainer/appcontainer';
 
 const Component: AppFunction = () => {

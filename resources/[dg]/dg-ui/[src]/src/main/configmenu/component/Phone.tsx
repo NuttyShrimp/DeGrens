@@ -1,4 +1,3 @@
-import React from 'react';
 import { setBackground } from '@src/main/phone/lib';
 
 import { Input } from '../../../components/inputs';

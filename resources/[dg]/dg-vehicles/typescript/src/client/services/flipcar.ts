@@ -1,12 +1,11 @@
-import { Taskbar, Sync, Peek } from '@dgx/client';
-import { isVehicleUpsideDown } from '@helpers/vehicle';
+import { Taskbar, Sync, Peek, Vehicles } from '@dgx/client';
 
 // Disables being able to roll vehicle over
 let rolloverThread: NodeJS.Timer | null = null;
 
 export const startVehicleRolloverThread = (vehicle: number) => {
   rolloverThread = setInterval(() => {
-    if (GetEntitySpeed(vehicle) > 5 || !isVehicleUpsideDown(vehicle)) return;
+    if (GetEntitySpeed(vehicle) > 5 || !Vehicles.isVehicleUpsideDown(vehicle)) return;
     DisableControlAction(2, 59, true); // Disable left/right
     DisableControlAction(2, 60, true); // Disable up/down
   }, 1);
@@ -51,7 +50,7 @@ Peek.addGlobalEntry('vehicle', {
       },
       canInteract: entity => {
         if (!entity || !NetworkGetEntityIsNetworked(entity)) return false;
-        return isVehicleUpsideDown(entity);
+        return Vehicles.isVehicleUpsideDown(entity);
       },
     },
   ],

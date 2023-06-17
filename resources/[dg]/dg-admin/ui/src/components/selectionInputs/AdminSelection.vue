@@ -5,6 +5,7 @@
   <Instance :modelValue="props.modelValue" @update:modelValue="updateValue" v-if="props.type === 'Instance'" />
   <BankAccounts :modelValue="props.modelValue" @update:modelValue="updateValue" v-if="props.type === 'BankAccount'" />
   <WeatherType :modelValue="props.modelValue" @update:modelValue="updateValue" v-if="props.type === 'WeatherType'" />
+  <Gangs :modelValue="props.modelValue" @update:modelValue="updateValue" v-if="props.type === 'Gang'" />
   <WhitelistedJobs
     :modelValue="props.modelValue"
     @update:modelValue="updateValue"
@@ -13,6 +14,7 @@
 </template>
 <script setup lang="ts">
   import BankAccounts from './BankAccounts.vue';
+  import Gangs from './Gangs.vue';
   import Instance from './Instance.vue';
   import Item from './Item.vue';
   import Target from './Target.vue';

@@ -1,4 +1,5 @@
-import { PolyZone, PolyTarget } from '@dgx/client';
+import { PolyZone, PolyTarget, Peek } from '@dgx/client';
+import { isSignedInAtBusiness } from 'service/signin';
 
 export const buildAnyZone = (
   type: 'PolyZone' | 'PolyTarget',
@@ -31,5 +32,26 @@ export const buildAnyZone = (
   (type === 'PolyZone' ? PolyZone : PolyTarget).addBoxZone(name, zone.center, zone.width, zone.length, {
     ...zone.options,
     data,
+  });
+};
+
+export const addPeekEntryForBusinessZone = (
+  businessName: string,
+  zoneType: 'management' | 'register' | 'stash' | 'shop' | 'crafting',
+  mustBeSignedIn: boolean,
+  peekParams: PeekParams
+) => {
+  Peek.addZoneEntry(`business_${zoneType}`, {
+    distance: peekParams.distance,
+    options: peekParams.options.map(option => {
+      return {
+        ...option,
+        canInteract: (_, __, o) => {
+          if (o.data.id !== businessName) return false;
+          if (mustBeSignedIn && !isSignedInAtBusiness(o.data.id)) return false;
+          return option.canInteract?.(_, __, o) ?? true;
+        },
+      } satisfies PeekParams['options'][number];
+    }),
   });
 };

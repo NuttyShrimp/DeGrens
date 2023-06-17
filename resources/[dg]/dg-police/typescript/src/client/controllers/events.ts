@@ -1,4 +1,4 @@
-import { BlipManager, Events, Inventory, Jobs, Notifications, Peek, Taskbar, Util } from '@dgx/client';
+import { BlipManager, Events, Inventory, Jobs, Notifications, Peek, Taskbar, Util, Vehicles } from '@dgx/client';
 import { buildLabPeekZone } from 'modules/evidence/service.evidence';
 import { loadPrisonConfig } from 'modules/prison/service.prison';
 import { buildSpeedZones } from 'modules/speedzones/service.speedzones';
@@ -51,11 +51,7 @@ Peek.addGlobalEntry('vehicle', {
       },
       canInteract: vehicle => {
         if (!vehicle) return false;
-        const plyCoords = Util.getPlyCoords();
-        const [min, max] = GetModelDimensions(GetEntityModel(vehicle));
-        const carLength = max[1] - min[1];
-        const target = Util.ArrayToVector3(GetOffsetFromEntityInWorldCoords(vehicle, 0, -carLength / 2, 0));
-        return plyCoords.distance(target) < 1.5;
+        return Vehicles.isNearVehiclePlace(vehicle, 'back', 1.5);
       },
     },
   ],

@@ -1,5 +1,6 @@
-import { SQL } from '@dgx/server';
-import { upgradeItems } from 'modules/upgrades/constants.upgrades';
+import { RPC, SQL } from '@dgx/server';
+import { STANDARD_EXTRA_UPGRADES } from '@shared/upgrades/constants.upgrades';
+import { generateBaseCosmeticUpgrades } from '@shared/upgrades/service.upgrades';
 
 // We stringify the different vehicle_status columns when inserting them,
 // When we get them we put all table columns in json obj and parse
@@ -83,7 +84,7 @@ export const getPlayerSharedVehicles = async (cid: number, garageId: string): Pr
 export const getPlayerVehicleInfo = async (
   vin: string,
   checkGarage?: { cid: number; garageId: string; isSharedGarage: boolean }
-): Promise<Vehicle.Vehicle> => {
+): Promise<Vehicle.Vehicle | undefined> => {
   const args: any[] = [vin];
   let query = `SELECT pv.*,
                       JSON_OBJECT('body', vs.body, 'engine', vs.engine, 'fuel', vs.fuel, 'wheels', vs.wheels,
@@ -100,7 +101,9 @@ export const getPlayerVehicleInfo = async (
     }
   }
 
-  const info = await SQL.scalar(query, args);
+  const result = await SQL.query<Vehicle.Vehicle<string, string>[]>(query, args);
+  const info = result?.[0];
+  if (!info) return;
   return {
     ...info,
     stance: info.stance !== null ? JSON.parse(info.stance) : null,
@@ -148,6 +151,7 @@ export const getImpoundedVehicle = async (cid: number, vin: string) => {
 export const doVehicleForfeiture = async (vin: string) => {
   const vehicle = await getPlayerVehicleInfo(vin);
   await deleteOwnedVehicle(vin);
+  if (!vehicle) return;
   await SQL.insertValues('vehicle_resale', [
     {
       vin,
@@ -213,9 +217,10 @@ export const insertNewVehicle = async (
   state: Garage.GarageState = 'parked',
   garageId = 'alta_apartments',
   harness = 0,
-  stance: Stance.Data | null = null,
+  stance: Stances.Stance | null = null,
   wax: number | null = null,
-  nos = 0
+  nos = 0,
+  upgrades?: Vehicles.Upgrades.Cosmetic.Upgrades
 ) => {
   await SQL.insertValues('player_vehicles', [
     {
@@ -240,6 +245,20 @@ export const insertNewVehicle = async (
   ]);
 
   insertVehicleTransferLog(vin, 0, cid);
+
+  let modelType = 'automobile';
+  if (!upgrades) {
+    const modelCheckPlayer = +GetPlayerFromIndex(0);
+    if (modelCheckPlayer) {
+      modelType =
+        (await RPC.execute<string | undefined>('vehicles:getModelType', modelCheckPlayer, model)) ?? 'automobile';
+    }
+  }
+
+  updateVehicleCosmeticUpgrades(
+    vin,
+    upgrades ?? generateBaseCosmeticUpgrades(true, STANDARD_EXTRA_UPGRADES.includes(modelType))
+  );
 };
 
 export const insertVehicleStatus = (vin: string, status: Vehicle.VehicleStatus): Promise<any> => {
@@ -261,16 +280,19 @@ export const insertVehicleParkLog = async (vin: string, cid: number, action: str
   await SQL.insertValues('vehicle_garage_logs', [{ vin, cid, action, state }]);
 };
 
-export const getVehicleCosmeticUpgrades = async (vin: string): Promise<Vehicles.Upgrades.Cosmetic | null> => {
+export const getVehicleCosmeticUpgrades = async (
+  vin: string
+): Promise<Vehicles.Upgrades.Cosmetic.Upgrades | undefined> => {
   const query = `SELECT cosmetic
                  FROM vehicle_upgrades
                  WHERE vin = ?`;
-  const result = await SQL.scalar<{ cosmetic: string }>(query, [vin]);
-  if (Object.keys(result).length === 0) return null;
-  return JSON.parse(result.cosmetic);
+  const result = await SQL.query<{ cosmetic: string }[]>(query, [vin]);
+  const cosmeticJSON = result?.[0]?.cosmetic;
+  if (!cosmeticJSON) return;
+  return JSON.parse(cosmeticJSON);
 };
 
-export const updateVehicleUpgrades = async (vin: string, upgrades: Vehicles.Upgrades.Cosmetic) => {
+export const updateVehicleCosmeticUpgrades = async (vin: string, upgrades: Vehicles.Upgrades.Cosmetic.Upgrades) => {
   const query = `INSERT INTO vehicle_upgrades (vin, cosmetic)
                  VALUES (?, ?)
                  ON DUPLICATE KEY UPDATE cosmetic = VALUES(cosmetic)`;
@@ -284,7 +306,7 @@ export const updateVehicleHarness = async (vin: string, uses: number) => {
   await SQL.query(query, [uses, vin]);
 };
 
-export const updateVehicleStance = async (vin: string, stanceData: Stance.Data) => {
+export const updateVehicleStance = async (vin: string, stanceData: Stances.Stance | null) => {
   const query = `UPDATE player_vehicles
                  SET stance = ?
                  WHERE vin = ?`;
@@ -305,7 +327,7 @@ export const updateVehicleFakeplate = async (vin: string, fakeplate: string | nu
   await SQL.query(query, [fakeplate, vin]);
 };
 
-export const getVehicleItemUpgrades = async (vin: string): Promise<(keyof typeof upgradeItems)[]> => {
+export const getVehicleItemUpgrades = async (vin: string): Promise<Vehicles.ItemUpgrade[]> => {
   const query = `SELECT items
                  FROM vehicle_upgrades
                  WHERE vin = ?`;

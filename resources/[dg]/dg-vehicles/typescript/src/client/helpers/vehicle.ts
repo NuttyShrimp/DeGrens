@@ -2,6 +2,9 @@ import { RPC, Util } from '@dgx/client';
 import { Vector3 } from '@dgx/shared';
 
 import { doorBones, wheelBones } from './../constant';
+import upgradesManager from 'modules/upgrades/classes/manager.upgrades';
+import { generateBaseCosmeticUpgrades, generateBasePerformanceUpgrades } from '@shared/upgrades/service.upgrades';
+import { STANDARD_EXTRA_UPGRADES } from '@shared/upgrades/constants.upgrades';
 
 let currentVehicle: number | null = null;
 let isTheDriver = false;
@@ -11,7 +14,8 @@ export const setCurrentVehicle = (veh: number | null, driver: boolean) => {
   isTheDriver = driver;
 };
 
-export const getCurrentVehicle = () => {
+export const getCurrentVehicle = (mustBeDriver = false) => {
+  if (mustBeDriver && !isTheDriver) return null;
   return currentVehicle;
 };
 
@@ -25,50 +29,20 @@ export const getVehHalfLength = (pEntity: number) => {
   return carLength / 2;
 };
 
-export const isCloseToHood = (pEntity: number, pDistance: number, pMustBeOpen = false) => {
-  const boneIndex = GetEntityBoneIndexByName(pEntity, 'bonnet');
-  const isValidDoor = GetIsDoorValid(pEntity, 4);
+export const getModelType = (model: string | number) => {
+  if (!IsModelValid(model) || !IsModelAVehicle(model)) return;
 
-  if (pMustBeOpen && isValidDoor) {
-    const isClosed = GetVehicleDoorAngleRatio(pEntity, 4) === 0;
-    const isBrokenOff = IsVehicleDoorDamaged(pEntity, 4);
-    if (boneIndex !== -1 && !isBrokenOff && isClosed) return false;
-  }
-
-  const plyCoords = Util.getPlyCoords();
-  let coordsWithOffset: Vector3;
-  if (boneIndex !== -1) {
-    coordsWithOffset = Util.ArrayToVector3(GetWorldPositionOfEntityBone(pEntity, boneIndex));
-  } else {
-    const [min, max] = GetModelDimensions(GetEntityModel(pEntity));
-    const carLength = max[1] - min[1];
-    coordsWithOffset = Util.ArrayToVector3(GetOffsetFromEntityInWorldCoords(pEntity, 0, carLength / 2, 0));
-  }
-
-  return coordsWithOffset.distance(plyCoords) < pDistance;
-};
-
-export const isCloseToBoot = (pEntity: number, pDistance: number, pMustBeOpen = false) => {
-  const boneIndex = GetEntityBoneIndexByName(pEntity, 'boot');
-  const isValidDoor = GetIsDoorValid(pEntity, 5);
-
-  if (pMustBeOpen && isValidDoor) {
-    const isClosed = GetVehicleDoorAngleRatio(pEntity, 5) === 0;
-    const isBrokenOff = IsVehicleDoorDamaged(pEntity, 5);
-    if (boneIndex !== -1 && !isBrokenOff && isClosed) return false;
-  }
-
-  const plyCoords = Util.getPlyCoords();
-  let coordsWithOffset: Vector3;
-  if (boneIndex !== -1) {
-    coordsWithOffset = Util.ArrayToVector3(GetWorldPositionOfEntityBone(pEntity, boneIndex));
-  } else {
-    const [min, max] = GetModelDimensions(GetEntityModel(pEntity));
-    const carLength = max[1] - min[1];
-    coordsWithOffset = Util.ArrayToVector3(GetOffsetFromEntityInWorldCoords(pEntity, 0, -carLength / 2, 0));
-  }
-
-  return coordsWithOffset.subtract(plyCoords).Length < pDistance;
+  // why the fuck is the getVehicletype native only on serverside, now i need to use this cancerous method
+  // returns the type arg accepted in CreateVehicleServerSetter
+  if (IsThisModelACar(model)) return 'automobile';
+  if (IsThisModelABike(model) || IsThisModelAQuadbike(model)) return 'bike';
+  if (IsThisModelABoat(model)) return 'boat';
+  if (IsThisModelAHeli(model)) return 'heli';
+  if (IsThisModelAPlane(model)) return 'plane';
+  if (IsThisModelASubmersible(model)) return 'submarine';
+  if (IsThisModelATrain(model)) return 'train';
+  // default to automobile
+  return 'automobile';
 };
 
 export const isCloseToAWheel = (pEntity: number, pDistance: number) => {
@@ -103,11 +77,6 @@ export const isCloseToADoor = (vehicle: number, maxDistance: number) => {
   return amountOfValidDoors === 0;
 };
 
-export const isVehicleUpsideDown = (vehicle: number) => {
-  const vehRoll = GetEntityRoll(vehicle);
-  return vehRoll > 65 || vehRoll < -65;
-};
-
 export const getVehicleConfig = async (ent: number): Promise<Config.Car | null> => {
   const config = Entity(ent).state.config;
   if (!config) {
@@ -115,4 +84,71 @@ export const getVehicleConfig = async (ent: number): Promise<Config.Car | null> 
     return getVehicleConfig(ent);
   }
   return config;
+};
+
+export const spawnLocalVehicle: Vehicles.SpawnLocalVehicleFunction = async data => {
+  const modelHash = typeof data.model === 'number' ? data.model : GetHashKey(data.model);
+
+  await Util.loadModel(modelHash);
+  if (!HasModelLoaded(modelHash)) return;
+
+  if (data.validateAfterModelLoad) {
+    const validated = data.validateAfterModelLoad();
+    if (!validated) {
+      SetModelAsNoLongerNeeded(modelHash);
+      return;
+    }
+  }
+
+  // force to be floats
+  const heading = 'w' in data.position ? data.position.w : 0;
+  const vehicle = CreateVehicle(modelHash, data.position.x, data.position.y, data.position.z, heading, false, false);
+
+  SetEntityInvincible(vehicle, !!data.invincible);
+  FreezeEntityPosition(vehicle, !!data.invincible);
+  SetVehicleDoorsLocked(vehicle, data.doorLockState ?? 0);
+
+  if (data.plate) {
+    SetVehicleNumberPlateText(vehicle, data.plate);
+  }
+
+  const modelType = getModelType(data.model) ?? 'automobile';
+
+  // upgrades
+  const mergedUpgrades = {
+    ...generateBaseCosmeticUpgrades(true, STANDARD_EXTRA_UPGRADES.includes(modelType)),
+    ...generateBasePerformanceUpgrades(),
+    ...data.upgrades,
+  };
+  upgradesManager.set(vehicle, mergedUpgrades);
+
+  SetModelAsNoLongerNeeded(modelHash);
+
+  return vehicle;
+};
+
+export const useDummyVehicle = async <T extends Record<string, any>>(
+  model: string | number,
+  func: (vehicle: number) => T | Promise<T>
+): Promise<T> => {
+  const modelHash = typeof model === 'string' ? GetHashKey(model) : model;
+  await Util.loadModel(modelHash);
+
+  const coords = Util.getPlyCoords();
+  const vehicle = CreateVehicle(modelHash, coords.x, coords.y, coords.z + 4, 0, false, false);
+
+  await Util.awaitEntityExistence(vehicle);
+
+  FreezeEntityPosition(vehicle, true);
+  SetEntityInvincible(vehicle, true);
+  SetEntityCompletelyDisableCollision(vehicle, false, true);
+  SetEntityVisible(vehicle, false, false);
+
+  const result = func(vehicle);
+  if (result instanceof Promise) await result;
+
+  DeleteEntity(vehicle);
+  SetModelAsNoLongerNeeded(modelHash);
+
+  return result;
 };

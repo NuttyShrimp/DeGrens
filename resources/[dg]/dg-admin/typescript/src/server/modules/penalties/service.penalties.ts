@@ -58,7 +58,7 @@ const penalisePlayer = async (
   Util.Log(
     `admin:penalties:${type}`,
     {
-      target,
+      targetSteamId: target,
       data,
       metadata,
     },

@@ -2,7 +2,8 @@ import { checkVehicleRestocks } from 'db/repository';
 import { startWaxThread } from 'modules/carwash/service.carwash';
 import { loadVehicleInfo } from 'modules/info/service.info';
 import vinManager from './modules/identification/classes/vinmanager';
-import { loadStanceConfig } from 'modules/stances/service.stance';
+import upgradesManager from 'modules/upgrades/classes/manager.upgrades';
+import { loadModelStanceConfig } from 'modules/stances/service.stances';
 
 import './controller';
 import './modules/keys/controller.keys';
@@ -28,5 +29,7 @@ setImmediate(() => {
   checkVehicleRestocks();
   vinManager.fetchVins();
   startWaxThread();
-  loadStanceConfig();
+  upgradesManager.validatePlayerVehicleUpgrades();
+  upgradesManager.loadPrices();
+  loadModelStanceConfig();
 });

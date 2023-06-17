@@ -1,4 +1,5 @@
-import React, { FC } from 'react';
+import { FC } from 'react';
+import * as React from 'react';
 import { NumericFormat, NumericFormatProps, PatternFormat, PatternFormatProps } from 'react-number-format';
 
 import { EmptyDiv } from './emptyDiv';

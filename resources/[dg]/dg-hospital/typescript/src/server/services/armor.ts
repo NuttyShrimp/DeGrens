@@ -1,5 +1,7 @@
 import { Chat, Core, Events, Inventory, Jobs, Notifications, Taskbar } from '@dgx/server';
 
+const playersFillingArmor = new Set<number>();
+
 Inventory.registerUseable(['armor', 'pd_armor'], async (plyId, itemState) => {
   const [canceled] = await Taskbar.create(plyId, 'vest', 'Aantrekken', 5000, {
     canCancel: true,
@@ -31,15 +33,23 @@ Core.onPlayerLoaded(playerData => {
   }, 5000);
 });
 
-export const setArmor = (plyId: number, armor: number, doNotSave = false) => {
+export const setArmor = (plyId: number, armor: number | ((oldArmor: number) => number), doNotSave = false) => {
   const player = Core.getPlayer(plyId);
   if (!player) return;
 
   const ped = GetPlayerPed(String(plyId));
-  SetPedArmour(ped, armor);
+
+  let newArmor: number;
+  if (typeof armor === 'number') {
+    newArmor = armor;
+  } else {
+    newArmor = armor(+GetPedArmour(ped));
+  }
+
+  SetPedArmour(ped, +newArmor);
 
   if (!doNotSave) {
-    player.updateMetadata('armor', armor);
+    player.updateMetadata('armor', newArmor);
   }
 };
 global.exports('setArmor', setArmor);
@@ -82,3 +92,29 @@ const giveArmorAsItem = async (plyId: number) => {
 Events.onNet('hospital:armor:retrieve', giveArmorAsItem);
 
 Chat.registerCommand('retrieveArmor', 'Doe je armor af', [], 'user', giveArmorAsItem);
+
+export const startRefillingArmorForPlayer = (plyId: number, time: number) => {
+  const increasePerInteration = Math.round((100 / (time / 2)) * 10) / 10;
+  let counter = time / 2;
+  const thread = setInterval(() => {
+    setArmor(plyId, oldArmor => {
+      const newArmor = Math.min(oldArmor + increasePerInteration, 100);
+      if (newArmor >= 100) {
+        clearInterval(thread);
+        playersFillingArmor.delete(plyId);
+      }
+      return newArmor;
+    });
+
+    counter--;
+    if (counter <= 0) {
+      clearInterval(thread);
+      playersFillingArmor.delete(plyId);
+    }
+  }, 2000);
+  playersFillingArmor.add(plyId);
+};
+
+export const isPlayerFillingArmor = (plyId: number) => {
+  return playersFillingArmor.has(plyId);
+};

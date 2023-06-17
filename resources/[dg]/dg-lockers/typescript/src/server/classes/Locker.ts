@@ -1,4 +1,4 @@
-import { Util, Financials, UI, Notifications, Phone, Core } from '@dgx/server';
+import { Util, Financials, UI, Notifications, Phone, Core, Events, Inventory } from '@dgx/server';
 import config from 'services/config';
 import { mainLogger } from 'sv_logger';
 import winston from 'winston';
@@ -16,6 +16,7 @@ export class Locker {
   private password: string | null;
   private price: number;
   private paymentDay: number;
+  private doAnimation: boolean;
 
   private activePlayers: Set<number>;
 
@@ -29,6 +30,7 @@ export class Locker {
     this.password = data.password;
     this.price = data.price;
     this.paymentDay = data.paymentDay;
+    this.doAnimation = data.doAnimation;
 
     this.activePlayers = new Set();
   }
@@ -45,6 +47,7 @@ export class Locker {
       password: this.password,
       price: this.price,
       paymentDay: this.paymentDay,
+      doAnimation: this.doAnimation,
     };
   }
 
@@ -173,6 +176,9 @@ export class Locker {
       }, 5 * 60 * 1000);
 
       Notifications.add(plyId, 'Je hebt toegang voor 5 minuten', 'success');
+      if (this.doAnimation) {
+        Events.emitNet('lockers:client:doAnimation', plyId);
+      }
     }
 
     const menu: ContextMenu.Entry[] = [
@@ -207,6 +213,11 @@ export class Locker {
     UI.openContextMenu(plyId, menu);
     Util.Log('lockers:open', { id: this.id }, `${Util.getName(plyId)} opened locker ${this.id}`, plyId);
     this.logger.silly(`${Util.getName(plyId)} opened locker ${this.id}`);
+  };
+
+  public openStash = (plyId: number) => {
+    const stashId = `locker_${this.id}`;
+    Inventory.openStash(plyId, stashId, config.inventorySize);
   };
 
   public changePassword = async (plyId: number) => {

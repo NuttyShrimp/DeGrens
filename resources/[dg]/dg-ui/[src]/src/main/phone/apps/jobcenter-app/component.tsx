@@ -1,4 +1,4 @@
-import React, { FC, useEffect } from 'react';
+import { FC, useEffect } from 'react';
 import { devData } from '@src/lib/devdata';
 import { isDevel } from '@src/lib/env';
 

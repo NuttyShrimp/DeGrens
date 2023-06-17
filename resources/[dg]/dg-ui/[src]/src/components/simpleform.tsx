@@ -1,4 +1,5 @@
-import React, { FC, useEffect, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
+import * as React from 'react';
 import { Typography } from '@mui/material';
 
 import { hideFormModal } from '../main/phone/lib';

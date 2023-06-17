@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { Paper } from '../../../../../components/paper';
 import { formatRelativeTime } from '../../../../../lib/util';
 import { addNotification, showFormModal } from '../../../lib';

@@ -74,6 +74,13 @@ declare namespace Business {
     };
     // Optional stash for business for all employees
     stashZone?: Zones.Box | Zones.Circle;
+    // Optional shop zone where players can buy stuff if no employees are signed in. Employees can fill stock. If stock is present money goes to business and item gets removed from stock. If no stock present, item gets created but money goes to state
+    shopZone?: Zones.Box | Zones.Circle;
+    // Optional crafting zone where signed in players can access bench with provided id
+    crafting?: {
+      benchId: string;
+      zone: Zones.Box | Zones.Circle;
+    };
     // Optional items that can be priced by business employees
     priceItems?: string[];
     // These peek zones get build when entering businessZone, to be used in other resources

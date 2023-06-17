@@ -1,13 +1,14 @@
-import { Financials, Util } from '@dgx/server';
+import { Financials, TaxIds, Util } from '@dgx/server';
 import { DGXEvent, EventListener, LocalEvent, RPCEvent, RPCRegister } from '@dgx/server/decorators';
-import { deleteVehicle, getVinForVeh } from 'helpers/vehicle';
+import { getVinForVeh } from 'helpers/vehicle';
 import vinManager from 'modules/identification/classes/vinmanager';
-import { saveStance } from 'modules/stances/service.stance';
-import { applyUpgradesToVeh, getPriceForUpgrades, saveCosmeticUpgrades } from 'modules/upgrades/service.upgrades';
+import { getConfigByEntity } from 'modules/info/service.info';
+import upgradesManager from 'modules/upgrades/classes/manager.upgrades';
+import { saveCosmeticUpgrades } from 'modules/upgrades/service.upgrades';
 import { mainLogger } from 'sv_logger';
 import winston from 'winston';
 
-import { serverConfig } from '../../../../config';
+import { handleStanceOnCosmeticChange, loadStance } from 'modules/stances/service.stances';
 
 @RPCRegister()
 @EventListener()
@@ -28,8 +29,15 @@ class BennysManager extends Util.Singleton<BennysManager>() {
   public getSpotData = (spotId: string) => this.spotData.get(spotId);
 
   private getSpotByPlyId = (plyId: number) => {
-    const data = Object.fromEntries(this.spotData);
-    return Object.entries(data).find(([_, spotData]) => spotData.player === plyId)?.[0];
+    for (const [spotId, data] of this.spotData) {
+      if (data.player === plyId) return spotId;
+    }
+  };
+
+  private getSpotByVehicle = (vehicle: number) => {
+    for (const [spotId, data] of this.spotData) {
+      if (data.entity === vehicle) return spotId;
+    }
   };
 
   @RPCEvent('vehicles:bennys:isSpotFree')
@@ -60,8 +68,9 @@ class BennysManager extends Util.Singleton<BennysManager>() {
     plyId: number,
     spotId: string,
     vehNetId: number,
-    upgrades: Vehicles.Upgrades.Cosmetic,
-    repair: Bennys.RepairInfo
+    upgrades: Vehicles.Upgrades.Cosmetic.Upgrades,
+    repair: Bennys.RepairInfo,
+    originalStance: Stances.Stance
   ) => {
     const veh = NetworkGetEntityFromNetworkId(vehNetId);
     if (!veh || !DoesEntityExist(veh)) {
@@ -80,6 +89,7 @@ class BennysManager extends Util.Singleton<BennysManager>() {
       entity: veh,
       upgrades,
       repair,
+      originalStance,
     });
     Util.Log(
       'bennys:entered',
@@ -102,26 +112,27 @@ class BennysManager extends Util.Singleton<BennysManager>() {
   };
 
   @DGXEvent('vehicles:bennys:resetVehicle')
-  private resetVehicle = (plyId: number, spotId: string, checkOwner = false) => {
+  private resetVehicle = (_: number, spotId: string, timeout = 0) => {
     const spotData = this.spotData.get(spotId);
     if (!spotData) {
       this.logger.warn(`Could not get data of spot ${spotId} for resetting vehicle`);
       return;
     }
-    const netId = NetworkGetNetworkIdFromEntity(spotData.entity);
-    if (!checkOwner) {
-      applyUpgradesToVeh(netId, spotData.upgrades);
-    } else {
-      setTimeout(() => {
-        const owner = NetworkGetEntityOwner(spotData.entity);
-        FreezeEntityPosition(spotData.entity, false);
-        if (owner === plyId) {
-          deleteVehicle(spotData.entity);
-        } else {
-          applyUpgradesToVeh(netId, spotData.upgrades);
-        }
-      }, 2000);
-    }
+
+    // for some reason when ply drops, he will still be owner when this function executes so reset will not happen
+    setTimeout(
+      () => {
+        loadStance({
+          vin: spotData.vin,
+          vehicle: spotData.entity,
+          checkOverrideStance: true,
+          upgrades: spotData.upgrades,
+          original: spotData.originalStance,
+        });
+        upgradesManager.apply(spotData.entity, spotData.upgrades);
+      },
+      timeout ? 2000 : 0
+    );
 
     this.logger.info(`Vehicle at bennys (${spotId}) has been reset to original upgrades`);
   };
@@ -130,7 +141,7 @@ class BennysManager extends Util.Singleton<BennysManager>() {
   private _buyUpgrades = async (
     plyId: number,
     spotId: string,
-    cart: { component: keyof Vehicles.Upgrades.Cosmetic; data: any }[]
+    cart: { component: keyof Vehicles.Upgrades.Cosmetic.Upgrades; data: any }[]
   ) => {
     const spotData = this.spotData.get(spotId);
     if (!spotData) {
@@ -139,7 +150,7 @@ class BennysManager extends Util.Singleton<BennysManager>() {
     }
     if (!this.isSpotFromPlayer(spotId, plyId)) return;
 
-    const upgrades: Partial<Vehicles.Upgrades.Cosmetic> = {};
+    const upgrades: Partial<Vehicles.Upgrades.Cosmetic.Upgrades> = {};
     cart.forEach(({ component, data }) => {
       if (component.startsWith('extra_')) {
         if (!upgrades.extras) upgrades.extras = [];
@@ -149,10 +160,11 @@ class BennysManager extends Util.Singleton<BennysManager>() {
       }
     });
 
-    const price = getPriceForUpgrades(spotData.entity, upgrades);
-
+    let price = 0;
     const isNoChargeSpot = this.noChargeSpots.has(spotId);
     if (!isNoChargeSpot) {
+      const carClass = getConfigByEntity(spotData.entity)?.class ?? 'D';
+      price = upgradesManager.calculatePriceForUpgrades(carClass, upgrades);
       const plyCid = Util.getCID(plyId);
       const plyAccountId = Financials.getDefaultAccountId(plyCid);
       let purchaseSuccess = false;
@@ -162,10 +174,10 @@ class BennysManager extends Util.Singleton<BennysManager>() {
           plyCid,
           price,
           `Aankoop tuningonderdelen in Benny's voor voertuig (${spotData.vin})`,
-          serverConfig.bennys.taxId
+          TaxIds.Goederen
         );
       }
-      if (purchaseSuccess === false) {
+      if (!purchaseSuccess) {
         this.resetVehicle(plyId, spotId);
         return;
       }
@@ -173,11 +185,8 @@ class BennysManager extends Util.Singleton<BennysManager>() {
 
     if (vinManager.isVinFromPlayerVeh(spotData.vin)) {
       saveCosmeticUpgrades(spotData.vin, upgrades);
-      const netId = vinManager.getNetId(spotData.vin);
-      if (netId) {
-        applyUpgradesToVeh(netId, upgrades);
-        saveStance(netId);
-      }
+      upgradesManager.apply(spotData.entity, upgrades);
+      handleStanceOnCosmeticChange(spotData.vin, spotData.entity, upgrades);
     }
 
     Util.Log(
@@ -200,7 +209,7 @@ class BennysManager extends Util.Singleton<BennysManager>() {
       this.logger.warn(`Could not get data of spot ${spotId} for getting repair times`);
       return;
     }
-    const maxTimePerRepair = serverConfig.bennys.fullTaskBarTime / 2;
+    const maxTimePerRepair = 35000 / 2;
     return {
       body: maxTimePerRepair * (1 - repairData.body / 1000),
       engine: maxTimePerRepair * (1 - repairData.engine / 1000),
@@ -210,7 +219,7 @@ class BennysManager extends Util.Singleton<BennysManager>() {
   public playerDropped = (plyId: number) => {
     const spotId = this.getSpotByPlyId(plyId);
     if (!spotId) return;
-    this.resetVehicle(plyId, spotId, true);
+    this.resetVehicle(plyId, spotId, 2000);
     this.spotData.delete(spotId);
     this.noChargeSpots.delete(spotId);
     this.logger.info(`Player in bennys ${spotId} has left. Spot has been cleared`);
@@ -222,9 +231,7 @@ class BennysManager extends Util.Singleton<BennysManager>() {
       this.logger.warn(`Could not get data of spot ${spotId} for repairpayment`);
       return;
     }
-    if (this.noChargeSpots.has(spotId)) {
-      return true;
-    }
+    if (this.noChargeSpots.has(spotId)) return true;
     const price = this.spotData.get(spotId)?.repair?.price ?? 0;
     const paid = Financials.removeCash(plyId, price, 'bennys-repair');
     return paid;
@@ -248,10 +255,8 @@ class BennysManager extends Util.Singleton<BennysManager>() {
     );
   };
 
-  public isVehInNoChargeSpot = (veh: number) => {
-    const foundSpot = Array.from(this.spotData.entries()).find(([_, data]) => data.entity === veh);
-    if (!foundSpot) return false;
-    return this.noChargeSpots.has(foundSpot[0]);
+  public isNoChargeSpot = (spotId: string) => {
+    return this.noChargeSpots.has(spotId);
   };
 }
 

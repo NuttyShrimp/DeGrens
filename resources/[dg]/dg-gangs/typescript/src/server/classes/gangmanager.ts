@@ -1,21 +1,24 @@
-import { Core, Util } from '@dgx/server';
-import { RPCEvent, RPCRegister } from '@dgx/server/decorators';
+import { Inventory, Phone, Util } from '@dgx/server';
+import { ExportRegister, Export, RPCEvent, RPCRegister } from '@dgx/server/decorators';
 import repository from 'services/repository';
 import { mainLogger } from 'sv_logger';
 import winston from 'winston';
 import { Gang } from './gang';
+import { charModule } from 'services/core';
+import { FEED_MESSAGES_BATCH } from '../../shared/constants';
 
 @RPCRegister()
+@ExportRegister()
 class GangManager extends Util.Singleton<GangManager>() {
   private readonly logger: winston.Logger;
   private readonly gangs: Map<Gangs.Gang['name'], Gang>;
-  private readonly charModule: Core.ServerModules.CharacterModule;
+  private readonly feedMessages: Gangs.Feed.Message[]; // IN ORDER, first is oldest, last is newest
 
   constructor() {
     super();
     this.logger = mainLogger.child({ module: 'GangManager' });
     this.gangs = new Map();
-    this.charModule = Core.getModule('characters');
+    this.feedMessages = [];
   }
 
   public loadAllGangs = async () => {
@@ -42,6 +45,18 @@ class GangManager extends Util.Singleton<GangManager>() {
         return gang;
       }
     }
+  };
+
+  public getGangs = () => {
+    const gangs: Gangs.Gang[] = [];
+    for (const [name, gang] of this.gangs) {
+      gangs.push({
+        name,
+        label: gang.label,
+        owner: gang.owner,
+      });
+    }
+    return gangs;
   };
 
   //#region Helpers
@@ -239,7 +254,7 @@ class GangManager extends Util.Singleton<GangManager>() {
     if (!this.checkActionPerms(gang, plyCid)) return false;
     if (gang.isMember(targetCid)) return false;
 
-    const targetPlyId = this.charModule.getServerIdFromCitizenId(targetCid);
+    const targetPlyId = charModule.getServerIdFromCitizenId(targetCid);
     if (!targetPlyId) {
       this.logger.warn(`${plyCid} tried to add offline member with cid ${targetCid}`);
       return false;
@@ -249,6 +264,69 @@ class GangManager extends Util.Singleton<GangManager>() {
 
     return true;
   };
+  //#endregion
+
+  //#region feed messages
+  private registerFeedMessage = (feedMessage: Gangs.Feed.Message) => {
+    this.feedMessages.push(feedMessage);
+    this.logger.debug(`Registered feed message with id ${feedMessage.id}`);
+  };
+
+  public deleteFeedMessage = async (id: number) => {
+    const success = await repository.removeFeedMessage(id);
+    if (!success) return false;
+    const msgIdx = this.feedMessages.findIndex(m => m.id === id);
+    if (msgIdx === -1) return true;
+    this.feedMessages.splice(msgIdx, 1);
+    return true;
+  };
+
+  public fetchFeedMessages = async () => {
+    const feedMessages = await repository.getAllFeedMessages();
+    for (const feedMessage of feedMessages) {
+      this.registerFeedMessage(feedMessage);
+    }
+  };
+
+  @Export('addFeedMessage')
+  public addFeedMessage = async (newMessage: Gangs.Feed.NewMessage) => {
+    if (newMessage.gang && !this.gangs.has(newMessage.gang)) {
+      this.logger.error(`New feed message has unknown gang attribute (title: ${newMessage.title})`);
+      return;
+    }
+
+    const feedMessage = await repository.insertFeedMessage(newMessage);
+    if (!feedMessage) {
+      this.logger.error(`Failed to insert feed message (title: ${newMessage.title})`);
+      return;
+    }
+
+    for (const [name, gang] of this.gangs) {
+      if (feedMessage.gang && feedMessage.gang !== name) continue;
+
+      for (const memberServerId of gang.getOnlineMembers()) {
+        Inventory.doesPlayerHaveItems(memberServerId, ['laptop', 'vpn']).then(hasItems => {
+          if (!hasItems) return;
+          Phone.sendMail(
+            memberServerId,
+            'Family Activity Message',
+            'Unknown',
+            'Er is een nieuw bericht te vinden in je Family Activity app feed.'
+          );
+        });
+      }
+    }
+
+    this.registerFeedMessage(feedMessage);
+  };
+
+  public getFeedMessagesForGang = (gangName: string, offset: number): Gangs.Feed.Message[] => {
+    return this.feedMessages
+      .filter(m => !m.gang || m.gang === gangName)
+      .reverse()
+      .slice(offset, offset + FEED_MESSAGES_BATCH);
+  };
+
   //#endregion
 }
 

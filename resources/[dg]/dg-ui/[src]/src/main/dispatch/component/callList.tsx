@@ -1,4 +1,4 @@
-import React, { FC, useCallback } from 'react';
+import { FC, useCallback } from 'react';
 import { Button } from '@src/components/button';
 import { nuiAction } from '@src/lib/nui-comms';
 

@@ -1,4 +1,4 @@
-import React, { FC, useMemo } from 'react';
+import { FC, useMemo } from 'react';
 import { Icon } from '@components/icon';
 import { Stack } from '@mui/material';
 
