@@ -114,8 +114,19 @@ export const canEnterContainer = async (plyId: number, containerId: string) => {
 export const registerPlayerInContainer = (plyId: number, targetPosition: Vec3) => {
   const [containerId] = getContainerNearCoords(targetPosition) ?? [];
   if (!containerId) return;
+  const container = getContainerById(containerId);
+  if (!container) return;
 
   containerForPlayer.set(plyId, containerId);
+
+  if (!container.public) {
+    const gang = Gangs.getPlayerGangName(plyId);
+    if (gang) {
+      updateContainerKeyGang(containerId, gang);
+    } else {
+      containersLogger.error(`Player ${plyId} is not in a gang but entered a non-public container`);
+    }
+  }
 
   const logMsg = `${Util.getName(plyId)}(${plyId}) entered container (${containerId})`;
   containersLogger.silly(logMsg);
