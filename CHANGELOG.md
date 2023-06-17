@@ -13,6 +13,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Meer stancing mogelijkheden en extra modellen toegevoegd met standaard stancing
 - Een nieuwe tab toegevoegd in de gang app, be sure to check it out
 - Nieuwe business toegevoegd met bijhorende job
+- Er zijn bomen rond het eiland geplant
+- De Vespucci market is opengegaan
+- Extra pride schoenen
+- Kleding voor kingsmen
 
 ### Changed
 
