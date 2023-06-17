@@ -44,10 +44,11 @@ export default defineConfig(({ mode }) => ({
       setCommits: {
         auto: true,
       },
+      cleanArtifacts: true,
       sourceMaps: {
         include: ['../html/assets'],
         ignore: ['node_modules'],
-        urlPrefix: '~/assets',
+        urlPrefix: '/html/assets',
       },
     }),
   ],
