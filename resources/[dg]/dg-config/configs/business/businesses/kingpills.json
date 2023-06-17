@@ -1,0 +1,130 @@
+{
+  "businessZone": {
+    "center": {
+      "x": -1226.97,
+      "y": -1476.45,
+      "z": 4.34
+    },
+    "width": 6.1,
+    "length": 10.2,
+    "options": {
+      "heading": 35,
+      "minZ": 2.94,
+      "maxZ": 6.54
+    }
+  },
+  "managementZone": {
+    "center": {
+      "x": -1225.1,
+      "y": -1473.42,
+      "z": 4.37
+    },
+    "width": 1.8,
+    "length": 0.8,
+    "options": {
+      "heading": 35,
+      "minZ": 4.07,
+      "maxZ": 4.42
+    }
+  },
+  "blip": {
+    "sprite": 51,
+    "color": 1,
+    "coords": {
+      "x": -1230.629,
+      "y": -1478.1887,
+      "z": 4.3739
+    }
+  },
+  "stashZone": {
+    "center": {
+      "x": -1222.37,
+      "y": -1476.41,
+      "z": 4.37
+    },
+    "width": 2.45,
+    "length": 0.6,
+    "options": {
+      "heading": 305,
+      "minZ": 3.37,
+      "maxZ": 5.37
+    }
+  },
+  "shopZone": {
+    "center": {
+      "x": -1227.71,
+      "y": -1480.31,
+      "z": 4.37
+    },
+    "width": 4.2,
+    "length": 0.4,
+    "options": {
+      "heading": 305,
+      "minZ": 4.17,
+      "maxZ": 5.77
+    }
+  },
+  "registers": {
+    "employeePercentage": 0.5,
+    "zones": [
+      {
+        "center": {
+          "x": -1226.1,
+          "y": -1477.42,
+          "z": 4.37
+        },
+        "width": 1.45,
+        "length": 0.55,
+        "options": {
+          "heading": 35,
+          "minZ": 4.22,
+          "maxZ": 4.82
+        }
+      },
+      {
+        "center": {
+          "x": -1227.71,
+          "y": -1475.14,
+          "z": 4.37
+        },
+        "width": 1.45,
+        "length": 0.55,
+        "options": {
+          "heading": 35,
+          "minZ": 4.22,
+          "maxZ": 4.82
+        }
+      }
+    ]
+  },
+  "crafting": {
+    "benchId": "kingpills_bench",
+    "zone": {
+      "center": {
+        "x": -1224.3,
+        "y": -1477.93,
+        "z": 4.37
+      },
+      "width": 2.0,
+      "length": 0.5,
+      "options": {
+        "heading": 305,
+        "minZ": 4.12,
+        "maxZ": 4.77
+      }
+    }
+  },
+  "priceItems": ["kingpills_bandage", "kingpills_pressure_bandage", "kingpills_ferrodyn", "kingpills_antibiotics"],
+  "extraConfig": {
+    "locations": [
+      { "x": 493.9032, "y": -571.002, "z": 24.5534, "w": 256.4009 },
+      { "x": 846.0112, "y": -951.7418, "z": 26.5211, "w": 265.2247 },
+      { "x": 146.1682, "y": -1522.4923, "z": 29.1416, "w": 321.0072 },
+      { "x": 82.5323, "y": -1615.7783, "z": 29.5917, "w": 46.9484 },
+      { "x": -327.216, "y": -1296.2162, "z": 31.3761, "w": 275.3684 },
+      { "x": -936.3409, "y": -1523.5281, "z": 5.1754, "w": 109.7879 },
+      { "x": -1178.2736, "y": -371.8625, "z": 36.6256, "w": 97.4771 },
+      { "x": -710.6086, "y": -128.1421, "z": 37.8122, "w": 307.2032 }
+    ]
+  }
+}

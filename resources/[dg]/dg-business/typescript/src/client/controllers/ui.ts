@@ -152,3 +152,8 @@ UI.RegisterUICallback('business/order/confirm', (data: unknown, cb) => {
   confirmItemOrder();
   cb({ data: {}, meta: { ok: true, message: 'done' } });
 });
+
+UI.RegisterUICallback('business/shop/buy', (data: { item: string; businessId: number }, cb) => {
+  Events.emitNet('business:server:buyFromShop', data.businessId, data.item);
+  cb({ data: {}, meta: { ok: true, message: 'done' } });
+});

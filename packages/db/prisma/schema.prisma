@@ -153,13 +153,14 @@ model character_info {
 }
 
 model character_reputations {
-  citizenid         Int        @id
-  crafting          Int        @default(0)
-  ammo_crafting     Int        @default(0)
-  mechanic_crafting Int        @default(0)
-  cornersell        Int        @default(0)
-  blazeit_crafting  Int        @default(0)
-  characters        characters @relation(fields: [citizenid], references: [citizenid], onDelete: Cascade, map: "character_reputations_ibfk_1")
+  citizenid          Int        @id
+  crafting           Int        @default(0)
+  ammo_crafting      Int        @default(0)
+  mechanic_crafting  Int        @default(0)
+  cornersell         Int        @default(0)
+  blazeit_crafting   Int        @default(0)
+  kingpills_crafting Int        @default(0)
+  characters         characters @relation(fields: [citizenid], references: [citizenid], onDelete: Cascade, map: "character_reputations_ibfk_1")
 }
 
 model characters {
