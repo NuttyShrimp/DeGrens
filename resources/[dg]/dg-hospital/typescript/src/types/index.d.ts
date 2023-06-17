@@ -40,6 +40,8 @@ declare namespace Hospital {
       healthRestore?: number;
       bleedingDecrease?: number;
       preventBleeding?: number; // seconds
+      fillArmor?: number; // seconds it takes to fill
     };
+    uses?: number;
   };
 }

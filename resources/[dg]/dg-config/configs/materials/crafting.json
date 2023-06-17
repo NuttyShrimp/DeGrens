@@ -758,6 +758,50 @@
           "amount": 5
         }
       ]
+    },
+    "kingpills_bandage": {
+      "requiredReputation": 0,
+      "items": [
+        {
+          "name": "bandage",
+          "amount": 3
+        }
+      ]
+    },
+    "kingpills_pressure_bandage": {
+      "requiredReputation": 0,
+      "items": [
+        {
+          "name": "oxy_pills",
+          "amount": 1
+        }
+      ]
+    },
+    "kingpills_ferrodyn": {
+      "requiredReputation": 0,
+      "items": [
+        {
+          "name": "kingpills_folaat",
+          "amount": 1
+        },
+        {
+          "name": "kingpills_vitamine",
+          "amount": 1
+        }
+      ]
+    },
+    "kingpills_antibiotics": {
+      "requiredReputation": 0,
+      "items": [
+        {
+          "name": "material_steel",
+          "amount": 2
+        },
+        {
+          "name": "refined_plastic",
+          "amount": 1
+        }
+      ]
     }
   },
   "benches": {
@@ -850,6 +894,10 @@
     "blazeit_bench": {
       "items": ["blazeit_joint", "blazeit_brownie", "blazeit_cookie", "blazeit_gummy", "blazeit_oil", "blazeit_stick"],
       "reputation": "blazeit_crafting"
+    },
+    "kingpills_bench": {
+      "items": ["kingpills_bandage", "kingpills_pressure_bandage", "kingpills_ferrodyn", "kingpills_antibiotics"],
+      "reputation": "kingpills_crafting"
     }
   }
 }

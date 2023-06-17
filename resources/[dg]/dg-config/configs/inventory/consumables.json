@@ -75,6 +75,11 @@
     {
       "name": "meth_bag",
       "effect": "speed",
+      "duration": 18000
+    },
+    {
+      "name": "kingpills_ferrodyn",
+      "effect": "speed",
       "duration": 12000
     }
   ],

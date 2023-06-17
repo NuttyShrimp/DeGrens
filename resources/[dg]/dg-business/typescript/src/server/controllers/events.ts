@@ -294,3 +294,15 @@ Events.onNet('business:server:openPriceMenu', (plyId, businessName: string) => {
   if (!business) return;
   business.openPriceMenu(plyId);
 });
+
+Events.onNet('business:server:checkShop', (plyId, businessName: string) => {
+  const business = getBusinessByName(businessName);
+  if (!business) return;
+  business.checkShop(plyId);
+});
+
+Events.onNet('business:server:buyFromShop', async (plyId, businessId: number, item: string) => {
+  const business = getBusinessById(businessId);
+  if (!business) return;
+  business.buyFromShop(plyId, item);
+});

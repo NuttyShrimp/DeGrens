@@ -25,6 +25,23 @@
         "bleedingDecrease": 10
       }
     },
+    "kingpills_bandage": {
+      "taskbar": {
+        "icon": "bandage",
+        "label": "Verbanden",
+        "time": 4000,
+        "animation": {
+          "animDict": "anim@amb@business@weed@weed_inspecting_high_dry@",
+          "anim": "weed_inspecting_high_base_inspector",
+          "flags": 49
+        }
+      },
+      "effects": {
+        "healthRestore": 30,
+        "bleedingDecrease": 10
+      },
+      "uses": 3
+    },
     "oxy_pills": {
       "taskbar": {
         "icon": "pills",
@@ -39,6 +56,37 @@
       "effects": {
         "bleedingDecrease": 100,
         "preventBleeding": 120
+      }
+    },
+    "kingpills_pressure_bandage": {
+      "taskbar": {
+        "icon": "bandage",
+        "label": "Bloeding stoppen",
+        "time": 4000,
+        "animation": {
+          "animDict": "anim@amb@business@weed@weed_inspecting_high_dry@",
+          "anim": "weed_inspecting_high_base_inspector",
+          "flags": 49
+        }
+      },
+      "effects": {
+        "bleedingDecrease": 100,
+        "preventBleeding": 120
+      }
+    },
+    "kingpills_antibiotics": {
+      "taskbar": {
+        "icon": "pills",
+        "label": "Innemen",
+        "time": 3000,
+        "animation": {
+          "animDict": "mp_suicide",
+          "anim": "pill",
+          "flags": 49
+        }
+      },
+      "effects": {
+        "fillArmor": 90
       }
     }
   }

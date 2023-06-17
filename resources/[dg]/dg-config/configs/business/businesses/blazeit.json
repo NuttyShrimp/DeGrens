@@ -69,44 +69,37 @@
       }
     ]
   },
-  "extraZones": [
-    {
-      "name": "blazeit_vending",
-      "isTarget": true,
-      "zone": {
-        "center": {
-          "x": 364.47,
-          "y": -1264.99,
-          "z": 32.59
-        },
-        "width": 4.6,
-        "length": 1.2,
-        "options": {
-          "heading": 320,
-          "minZ": 31.59,
-          "maxZ": 33.79
-        }
-      }
+  "shopZone": {
+    "center": {
+      "x": 364.47,
+      "y": -1264.99,
+      "z": 32.59
     },
-    {
-      "name": "blazeit_crafting",
-      "isTarget": true,
-      "zone": {
-        "center": {
-          "x": 364.8,
-          "y": -1254.65,
-          "z": 32.59
-        },
-        "width": 2.2,
-        "length": 1.1,
-        "options": {
-          "heading": 321,
-          "minZ": 32.39,
-          "maxZ": 32.99
-        }
+    "width": 4.6,
+    "length": 1.2,
+    "options": {
+      "heading": 320,
+      "minZ": 31.59,
+      "maxZ": 33.79
+    }
+  },
+  "crafting": {
+    "benchId": "blazeit_bench",
+    "zone": {
+      "center": {
+        "x": 364.8,
+        "y": -1254.65,
+        "z": 32.59
+      },
+      "width": 2.2,
+      "length": 1.1,
+      "options": {
+        "heading": 321,
+        "minZ": 32.39,
+        "maxZ": 32.99
       }
     }
-  ],
+  },
   "priceItems": ["blazeit_joint", "blazeit_brownie", "blazeit_cookie", "blazeit_gummy", "blazeit_oil", "blazeit_stick"],
   "extraConfig": {
     "bagsPerBud": 15

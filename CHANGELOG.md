@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Mogelijkheid om lockers toe te voegen die geen animatie afspelen
 - Meer stancing mogelijkheden en extra modellen toegevoegd met standaard stancing
 - Een nieuwe tab toegevoegd in de gang app, be sure to check it out
+- Nieuwe business toegevoegd met bijhorende job
 
 ### Changed
 

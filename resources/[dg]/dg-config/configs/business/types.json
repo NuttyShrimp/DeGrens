@@ -37,5 +37,14 @@
   },
   "generic": {
     "permissions": ["stash", "property_access", "garage_access"]
+  },
+  "pharmacy": {
+    "permissions": ["stash", "property_access"],
+    "signin": {
+      "signOutWhenLeavingZone": true
+    },
+    "lockers": {
+      "size": 5
+    }
   }
 }

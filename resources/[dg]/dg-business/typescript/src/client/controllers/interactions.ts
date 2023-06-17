@@ -128,4 +128,42 @@ Peek.addZoneEntry('business_stash', {
   ],
   distance: 3,
 });
+
+Peek.addZoneEntry('business_shop', {
+  options: [
+    {
+      label: 'Bekijk Voorraad',
+      icon: 'fas fa-basket-shopping',
+      action: option => {
+        Events.emitNet('business:server:checkShop', option.data.id);
+      },
+    },
+    {
+      label: 'Voorraad Bijvullen',
+      icon: 'fas fa-inbox-full',
+      action: option => {
+        const stashId = `${option.data.id}_shop`;
+        Inventory.openStash(stashId);
+      },
+      canInteract: (_, __, option) => {
+        return isSignedInAtBusiness(option.data.id);
+      },
+    },
+  ],
+});
+
+Peek.addZoneEntry('business_crafting', {
+  options: [
+    {
+      label: 'Product Maken',
+      icon: 'fas fa-plus',
+      action: option => {
+        Inventory.openBench(option.data.benchId);
+      },
+      canInteract: (_, __, option) => {
+        return isSignedInAtBusiness(option.data.id);
+      },
+    },
+  ],
+});
 //#endregion

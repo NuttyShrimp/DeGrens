@@ -44,6 +44,21 @@ export const handleEnteredBusinessZone = (businessName: string, businessType: st
     });
   }
 
+  // build shop if defined
+  if (businessConfig.shopZone) {
+    buildAnyZone('PolyTarget', 'business_shop', businessConfig.shopZone, {
+      id: businessName,
+    });
+  }
+
+  // build craftingzone if defined
+  if (businessConfig.crafting) {
+    buildAnyZone('PolyTarget', 'business_crafting', businessConfig.crafting.zone, {
+      id: businessName,
+      benchId: businessConfig.crafting.benchId,
+    });
+  }
+
   // build on enter zones if they defined
   if (businessConfig.extraZones) {
     for (const extraZone of businessConfig.extraZones) {

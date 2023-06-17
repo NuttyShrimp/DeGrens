@@ -1,10 +1,11 @@
 import { Financials, Config, Inventory } from '@dgx/server';
 import { setConfig } from './services/config';
 import { seedBusinesses } from './services/business';
+import { registerKingPillsJob } from 'modules/kingpills/service.kingpills';
 
 import './controllers';
 import './modules/blazeit';
-import { initializeBlazeIt } from 'modules/blazeit/service.blazeit';
+import './modules/kingpills';
 
 setImmediate(async () => {
   // Load config
@@ -19,6 +20,6 @@ setImmediate(async () => {
 
   await seedBusinesses();
 
-  // Initialize modules
-  initializeBlazeIt();
+  // Individual modules
+  registerKingPillsJob();
 });
