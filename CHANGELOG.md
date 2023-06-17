@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 ### Changed
+- Report indicator aangepast naar iets duidelijker
 
 ### Fixed
 - Standaard prijs van items van nieuwe business is niet meer 0
