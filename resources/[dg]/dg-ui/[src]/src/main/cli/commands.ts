@@ -511,4 +511,11 @@ export const cmds: {
     app: 'keypad',
     show: false,
   },
+  {
+    cmd: 'toggle gamebg',
+    app: 'main',
+    data: {
+      event: 'gamebg',
+    },
+  },
 ];
