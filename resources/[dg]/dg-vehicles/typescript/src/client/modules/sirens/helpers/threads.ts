@@ -16,8 +16,9 @@ export const cleanupKeyThread = () => {
   keyThread = 0;
 };
 
-export const createKeyThread = () => {
+export const createKeyThread = (preventRestart = false) => {
   if (keyThread) {
+    if (preventRestart) return;
     cleanupKeyThread();
   }
   keyThread = setTick(() => {

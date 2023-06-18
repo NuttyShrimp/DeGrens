@@ -11,7 +11,6 @@ BaseEvents.onEnteredVehicle((src, vehNetId) => {
       sirenMode: 0,
       horn: false,
       lights: false,
-      siren: false,
     },
     true
   );

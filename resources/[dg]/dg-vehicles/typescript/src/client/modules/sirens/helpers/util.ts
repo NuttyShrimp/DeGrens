@@ -1,6 +1,7 @@
 import { Util } from '@dgx/client';
 
 import { allowedModels } from '../constant';
+import { createKeyThread } from './threads';
 
 type StateBagHandler = (veh: number, value: any) => void;
 
@@ -13,6 +14,7 @@ export const isSirensAllowed = (veh: number, ped: number) => {
   for (const model in allowedModels) {
     const modelHash = GetHashKey(model);
     if (vehModel === modelHash) {
+      createKeyThread(true);
       return allowedModels[model](veh);
     }
   }
