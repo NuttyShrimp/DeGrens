@@ -22,7 +22,6 @@ Keys.onPressDown('siren_sound_cycle', () => {
 
   PlaySoundFrontend(-1, 'NAV_UP_DOWN', 'HUD_FRONTEND_DEFAULT_SOUNDSET', true);
 
-  updateStateBag(veh, 'siren', true, sirenState);
   updateStateBag(veh, 'sirenMode', newSirenMode, sirenState);
   pushStateChange(veh);
 });
@@ -45,7 +44,6 @@ Keys.onPressDown('siren_lights_toggle', () => {
     return;
   }
 
-  updateStateBag(veh, 'siren', false, sirenState);
   updateStateBag(veh, 'sirenMode', 0, sirenState);
   pushStateChange(veh);
 });
@@ -58,7 +56,6 @@ Keys.onPressDown('siren_sound_off', () => {
 
   if (!isSirensAllowed(veh, ped)) return;
 
-  updateStateBag(veh, 'siren', false);
   updateStateBag(veh, 'sirenMode', 0);
   pushStateChange(veh);
 });
@@ -73,7 +70,7 @@ Keys.onPressDown('sirens_mode_hold', () => {
 
   const sirenState: Sirens.State = Entity(veh).state.sirenState;
 
-  if (sirenState.siren && sirenState.lights) return;
+  if (sirenState.sirenMode > 0 && sirenState.lights) return;
 
   updateStateBag(veh, 'sirenMode', 1, sirenState);
   pushStateChange(veh);

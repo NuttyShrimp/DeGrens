@@ -132,4 +132,5 @@ export const assignModelConfig = (vehicle: number) => {
     type: modelConfig.type,
   };
   Entity(vehicle).state.set('config', strippedConfig, true);
+  return strippedConfig;
 };

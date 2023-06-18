@@ -9,9 +9,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- UI devtools kan nu ook een IG image tonen
+
 ### Changed
 
+- Report indicator aangepast naar iets duidelijker
+
 ### Fixed
+
+- Standaard prijs van items van nieuwe business is niet meer 0
+- Foutmelding bij unlocken van voertuig opgelost
+- Een gang kan niet langer een bepaald item meermaals vinden
+- Verwijder nieuwe business zones bij verlaten van business
 
 ## [1.2.5]
 

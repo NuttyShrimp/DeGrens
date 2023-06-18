@@ -132,19 +132,15 @@ export class Business {
 
       // insert if in config but not in db
       if (price === undefined) {
-        price = 0;
+        price = 100000; // default price to 0
         await SQL.query<{ price: number }[]>(
           'INSERT INTO business_item_prices (business_id, item, price) VALUES (?, ?, ?)',
-          [
-            this.info.id,
-            item,
-            0, // default price to 0
-          ]
+          [this.info.id, item, price]
         );
       }
 
       this.priceItems.set(item, {
-        price: price,
+        price,
         label: Inventory.getItemData(item).label,
       });
     }

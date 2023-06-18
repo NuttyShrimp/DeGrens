@@ -8,6 +8,20 @@ export const events: { [appName: string]: (evt: any) => void } = {
         useMainStore.setState({
           mounted: false,
         });
+        break;
+      }
+      case 'gamebg': {
+        if (!import.meta.env.DEV) return;
+        const rootElement = document.getElementById('root');
+        if (!rootElement) return;
+        if (rootElement.style.backgroundImage === '') {
+          rootElement.style.backgroundImage =
+            'url(https://minioserver.nuttyshrimp.me/dg-image-storage/2023/6/1/0c8b5910-7c8d-408c-b4c1-9abaab76cf8c.png)';
+          rootElement.style.backgroundSize = 'cover';
+        } else {
+          rootElement.style.backgroundImage = '';
+        }
+        break;
       }
     }
   },

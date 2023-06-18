@@ -32,7 +32,7 @@ class FuelManager extends Util.Singleton<FuelManager>() {
     const vin = getVinForVeh(vehicle);
     if (!vin) return;
     if (!vinManager.isVinFromPlayerVeh(vin)) return;
-    this.updateFuelDB(vin, fuelLevel);
+    return this.updateFuelDB(vin, fuelLevel);
   };
 
   // Register new vehicles that dont have fuel registered yet

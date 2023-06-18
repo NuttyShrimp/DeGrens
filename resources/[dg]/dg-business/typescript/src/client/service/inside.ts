@@ -83,6 +83,8 @@ export const handleLeaveBusinessZone = (businessName: string) => {
   PolyTarget.removeZone('business_management');
   PolyTarget.removeZone('business_register');
   PolyTarget.removeZone('business_stash');
+  PolyTarget.removeZone('business_shop');
+  PolyTarget.removeZone('business_crafting');
 
   // destroy on enter zones if they defined
   if (businessConfig.extraZones) {

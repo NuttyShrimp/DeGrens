@@ -1,4 +1,4 @@
-import { Events, Inventory, Notifications, Police, RPC, Taskbar, Util } from '@dgx/server';
+import { Events, Inventory, Notifications, RPC, Taskbar, Util } from '@dgx/server';
 import { getConfig } from 'services/config';
 import { containersLogger } from './logger.containers';
 import {

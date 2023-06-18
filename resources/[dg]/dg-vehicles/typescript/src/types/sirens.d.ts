@@ -3,6 +3,5 @@ declare namespace Sirens {
     sirenMode: number;
     horn: boolean;
     lights: boolean;
-    siren: boolean;
   };
 }

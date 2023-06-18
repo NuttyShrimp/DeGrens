@@ -80,8 +80,8 @@ export const isCloseToADoor = (vehicle: number, maxDistance: number) => {
 export const getVehicleConfig = async (ent: number): Promise<Config.Car | null> => {
   const config = Entity(ent).state.config;
   if (!config) {
-    await RPC.execute('vehicles:info:assignConfig', NetworkGetNetworkIdFromEntity(ent));
-    return getVehicleConfig(ent);
+    const newConfig = await RPC.execute('vehicles:info:assignConfig', NetworkGetNetworkIdFromEntity(ent));
+    return newConfig;
   }
   return config;
 };

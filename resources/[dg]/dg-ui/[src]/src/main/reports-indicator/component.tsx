@@ -1,8 +1,8 @@
 import { useCallback } from 'react';
 import { animated, useSpring } from 'react-spring';
-import { Badge } from '@mui/material';
+import { Chip } from '@mui/material';
+import { baseStyle } from '@src/base.styles';
 import AppWrapper from '@src/components/appwrapper';
-import { Icon } from '@src/components/icon';
 import { useVhToPixel } from '@src/lib/hooks/useVhToPixel';
 
 import { useReportStore } from '../reports/stores/reportStore';
@@ -18,7 +18,7 @@ const Container: AppFunction = props => {
   const handleHide = useCallback(() => {
     props.hideApp();
   }, [props.hideApp]);
-  const showVh = useVhToPixel(3);
+  const showVh = useVhToPixel(0);
   const hiddenVh = useVhToPixel(-5);
 
   const springStyle = useSpring({
@@ -47,13 +47,23 @@ const Container: AppFunction = props => {
           style={{
             position: 'absolute',
             top: '30vh',
-            height: 'fit-content',
+            width: '7vh',
+            height: 'max-content',
+            backgroundColor: baseStyle.primary.dark,
+            padding: '1.5vh',
+            borderRadius: '0.7rem 0 0 0.7rem',
             ...springStyle,
           }}
         >
-          <Badge badgeContent={counter} color='error'>
-            <Icon name='message-exclamation'></Icon>
-          </Badge>
+          <p
+            style={{
+              writingMode: 'vertical-rl',
+              textOrientation: 'mixed',
+            }}
+          >
+            New Report Updates
+            <Chip size='small' label={counter} color='error' sx={{ marginTop: '.5rem' }} />
+          </p>
         </animated.div>
       )}
     </AppWrapper>

@@ -46,7 +46,7 @@ Chat.registerCommand(
     Util.Log(
       'houserobbery:scuffedLocation',
       {
-        ...house.location,
+        houseLocation: house.location,
       },
       logMsg,
       plyId,

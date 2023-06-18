@@ -21,7 +21,6 @@ BaseEvents.onLeftVehicle((veh, seat) => {
 
   const sirenState: Sirens.State = Entity(veh).state.sirenState;
   sirenState.sirenMode = 0;
-  sirenState.siren = false;
   sirenState.horn = false;
 
   Entity(veh).state.set('sirenState', sirenState, true);

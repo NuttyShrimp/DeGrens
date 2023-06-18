@@ -96,7 +96,7 @@ Events.onNet('vehicles:keys:toggleLock', (plyId: number, netId: number) => {
   Sounds.playOnEntity(`vehicles_car_key_lock_${netId}`, soundName, 'DLC_NUTTY_SOUNDS', netId);
 
   setTimeout(() => {
-    if (GetVehicleDoorLockStatus(vehicle) == (newLockStatus ? 2 : 0)) {
+    if (GetVehicleDoorLockStatus(vehicle) == (newLockStatus ? 2 : 1)) {
       const msg = newLockStatus ? 'Voertuig op slot gezet' : 'Voertuig opengedaan';
       Notifications.add(plyId, msg);
     } else {
