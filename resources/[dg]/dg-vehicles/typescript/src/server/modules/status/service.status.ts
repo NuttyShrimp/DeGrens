@@ -22,8 +22,8 @@ export const getNativeStatus = async (veh: number, vin: string): Promise<Vehicle
     doors: [],
   };
 
-  status.body = GetVehicleBodyHealth(veh);
-  status.engine = GetVehicleEngineHealth(veh);
+  status.body = Math.min(GetVehicleBodyHealth(veh), 1000);
+  status.engine = Math.min(GetVehicleEngineHealth(veh), 1000);
   status.fuel = fuelManager.getFuelLevel(veh) ?? 0;
 
   const wheelPromise = getTyreState(veh);
@@ -127,12 +127,16 @@ export const useRepairPart = async (src: number, type: Service.Part, itemState: 
   const status = getServiceStatus(vin);
   const oldPartValue = status[type];
   const newPartValue = oldPartValue + getPartRepairAmount(oldPartValue);
-  Util.Log("vehicles:status:updatePart", {
-    vin,
-    type,
-    oldPartValue,
-    newPartValue
-  }, `${Util.getName(src)} has updated a ${type} of a vehicle to ${newPartValue}`)
+  Util.Log(
+    'vehicles:status:updatePart',
+    {
+      vin,
+      type,
+      oldPartValue,
+      newPartValue,
+    },
+    `${Util.getName(src)} has updated a ${type} of a vehicle to ${newPartValue}`
+  );
   updateServiceStatus(vin, { ...status, [type]: newPartValue });
 };
 
