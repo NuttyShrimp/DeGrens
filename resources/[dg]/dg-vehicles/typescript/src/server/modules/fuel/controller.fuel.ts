@@ -6,6 +6,7 @@ Events.onNet('vehicle:fuel:overrideSet', (src: number, netId: number, fuelLevel:
   const vehicle = NetworkGetEntityFromNetworkId(netId);
   if (!vehicle || !DoesEntityExist(vehicle)) return;
   fuelManager.setFuelLevel(vehicle, fuelLevel);
+  fuelManager.handleStateChange(vehicle, fuelLevel);
 });
 
 Events.onNet('vehicles:fuel:doRefuel', (src, netId: number, usingJerryCan: boolean) => {
