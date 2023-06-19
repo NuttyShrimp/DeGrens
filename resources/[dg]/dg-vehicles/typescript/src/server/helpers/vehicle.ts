@@ -66,18 +66,9 @@ export const spawnVehicle: Vehicles.SpawnVehicleFunction = async data => {
     return;
   }
 
-  const entityOwner = NetworkGetEntityOwner(vehicle);
   const netId = NetworkGetNetworkIdFromEntity(vehicle);
 
-  mainLogger.debug(
-    `Spawn vehicle: spawned | model: ${data.model} | entity: ${vehicle} | netId: ${netId} | owner: ${entityOwner}`
-  );
-
-  // If model is not yet loaded for entityowner, this heading native will not work
-  // we still try because it sometimes fixed vehicles spawning at wrong place because 0 heading can be inside a wall
-  if (entityOwner > 0) {
-    emitNet('vehicle:setHeading', entityOwner, netId, position.w);
-  }
+  mainLogger.debug(`Spawn vehicle: spawned | model: ${data.model} | entity: ${vehicle} | netId: ${netId}`);
 
   // setting vin
   const vin = data.vin ?? vinManager.generateVin();
