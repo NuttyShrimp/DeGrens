@@ -220,6 +220,9 @@ class Events {
       name: eventName,
       op: 'client.events.net',
       description: `Incoming network event ${eventName} on server`,
+      tags: {
+        user: Player(src).state.steamId,
+      },
       data: {
         args: data.args,
         origin: Player(src).state.steamId,
@@ -238,7 +241,6 @@ class Events {
       })
       .finish();
     const span = transaction.startChild({
-      endTimestamp: new Date(data.metadata.createdAt).getTime() / 1000,
       op: 'handler',
     });
 
@@ -293,7 +295,6 @@ class Events {
       })
       .finish(data.metadata.finishedAt);
     const span = transaction.startChild({
-      endTimestamp: data.metadata.createdAt,
       op: 'handler',
     });
 
@@ -350,6 +351,7 @@ class Events {
         tags: {
           handler: 'Events',
           target: 'Client',
+          user: target !== -1 ? Player(target).state.steamId : 'everyone',
         },
       };
       // 2 spans -> receiver + handler
@@ -489,7 +491,7 @@ class RPC {
           args: data.args,
         },
         tags: {
-          origin: steamId,
+          user: steamId,
           handler: 'RPC',
         },
       },
@@ -499,16 +501,14 @@ class RPC {
 
     let spanId;
     if (traceId) {
-      spanId = sentryHandler.addSpan(steamId, traceId, {
+      sentryHandler.addSpan(steamId, traceId, {
         op: 'request',
         data: {
           processor: this.resourceName,
         },
         startTimestamp: new Date(data.metadata.request.createdAt).getTime() / 1000,
+        endTimestamp: new Date(data.metadata.request.finishedAt).getTime() / 1000,
       });
-      if (spanId) {
-        sentryHandler.finishSpan(steamId, traceId, spanId, new Date(data.metadata.request.finishedAt).getTime() / 1000);
-      }
       spanId = sentryHandler.addSpan(steamId, traceId, {
         op: 'handler',
         data: {
@@ -577,6 +577,7 @@ class RPC {
         handler: 'RPC',
         target: 'Client',
         resource: this.resourceName,
+        user: Player(target).state.steamId,
       },
     });
     Sentry.configureScope(scope => {
@@ -599,7 +600,6 @@ class RPC {
           if (!global.exports['dg-auth'].validateToken(source, data.resource, data.token)) return;
 
           if (data) {
-            data.metadata.response.finishedAt = new Date().toString();
             span.finish(new Date(data.metadata.handler.createdAt).getTime() / 1000);
             transaction.startChild({
               op: 'handler',
@@ -611,7 +611,7 @@ class RPC {
               op: 'response',
               status: 'ok',
               startTimestamp: new Date(data.metadata.response.createdAt).getTime() / 1000,
-              endTimestamp: new Date(data.metadata.response.finishedAt).getTime() / 1000,
+              endTimestamp: new Date().getTime() / 1000,
             });
           }
           res(data.result);
