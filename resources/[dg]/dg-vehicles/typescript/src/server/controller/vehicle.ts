@@ -47,7 +47,7 @@ global.exports(
         Notifications.add(plyId, 'VIN does not belong to player vehicle', 'error');
         return;
       }
-      const ent = await spawnOwnedVehicle(plyId, vehicleInfo, position);
+      const ent = await spawnOwnedVehicle(plyId, vehicleInfo, position, true);
       if (!ent) {
         Notifications.add(plyId, 'Could not spawn owned vehicle', 'error');
         return;
@@ -75,6 +75,7 @@ global.exports(
         upgrades,
         keys: plyId,
         fuel: 100,
+        engineState: true,
       });
       if (!spawnedVehicle) {
         Notifications.add(plyId, 'Could not spawn new vehicle', 'error');

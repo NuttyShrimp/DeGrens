@@ -110,6 +110,11 @@ export const spawnVehicle: Vehicles.SpawnVehicleFunction = async data => {
       ...data.upgrades,
     };
     upgradesManager.apply(vehicle, mergedUpgrades);
+
+    // engine state
+    if (data.engineState !== undefined) {
+      setEngineState(vehicle, data.engineState, true);
+    }
   });
 
   return {
@@ -120,7 +125,12 @@ export const spawnVehicle: Vehicles.SpawnVehicleFunction = async data => {
   };
 };
 
-export const spawnOwnedVehicle = async (src: number, vehicleInfo: Vehicle.Vehicle, position: Vec4) => {
+export const spawnOwnedVehicle = async (
+  src: number,
+  vehicleInfo: Vehicle.Vehicle,
+  position: Vec4,
+  engineState?: boolean
+) => {
   const upgrades = await upgradesManager.getFull(vehicleInfo.vin);
 
   const spawnedVehicle = await spawnVehicle({
@@ -135,6 +145,7 @@ export const spawnOwnedVehicle = async (src: number, vehicleInfo: Vehicle.Vehicl
     keys: src,
     upgrades,
     overrideStance: vehicleInfo.stance ?? undefined,
+    engineState,
   });
   if (!spawnedVehicle) return;
   const { vehicle, vin } = spawnedVehicle;
