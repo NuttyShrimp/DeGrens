@@ -41,7 +41,7 @@ export const loadStance = async (data: {
   ignoreUpgrades?: boolean;
 }) => {
   let vehicle = data.vehicle;
-  if (vehicle) {
+  if (!vehicle) {
     vehicle = vinManager.getEntity(data.vin) ?? 0;
   }
   if (!vehicle || !DoesEntityExist(vehicle)) {
