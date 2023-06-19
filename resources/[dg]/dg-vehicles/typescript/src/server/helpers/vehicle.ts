@@ -1,4 +1,4 @@
-import { RPC, Util, Vehicles } from '@dgx/server';
+import { RPC, Util } from '@dgx/server';
 import { insertVehicleStatus } from 'db/repository';
 import { addWaxedVehicle } from 'modules/carwash/service.carwash';
 import { setVehicleNosAmount } from 'modules/nos/service.nos';
@@ -58,17 +58,12 @@ export const spawnVehicle: Vehicles.SpawnVehicleFunction = async data => {
   // force to be floats
   const position = Vector4.create({ w: 0, ...data.position }).add(0.001);
   const modelHash = GetHashKey(data.model);
-  const vehicle = CreateVehicleServerSetter(modelHash, modelType, position.x, position.y, position.z, position.w);
+  const vehicle = CreateVehicleServerSetter(modelHash, modelType, position.x, position.y, position.z + 0.5, position.w); // 0.5 offset to avoid ground clipping
 
-  const doesExist = await Util.awaitEntityExistence(vehicle);
-  if (!doesExist) {
+  if (!vehicle || !DoesEntityExist(vehicle)) {
     mainLogger.error(`Spawn vehicle: vehicle didn't spawn | model: ${data.model}`);
     return;
   }
-
-  const netId = NetworkGetNetworkIdFromEntity(vehicle);
-
-  mainLogger.debug(`Spawn vehicle: spawned | model: ${data.model} | entity: ${vehicle} | netId: ${netId}`);
 
   // setting vin
   const vin = data.vin ?? vinManager.generateVin();
@@ -77,7 +72,7 @@ export const spawnVehicle: Vehicles.SpawnVehicleFunction = async data => {
   // setting plate
   const plate = data.plate ?? plateManager.generatePlate();
   plateManager.registerPlate(plate);
-  Vehicles.setNumberPlate(vehicle, plate, data.isFakePlate);
+  plateManager.setNumberPlate(vehicle, plate, data.isFakePlate);
 
   // setting fuel
   fuelManager.registerVehicle(vehicle, data.fuel);
@@ -117,6 +112,11 @@ export const spawnVehicle: Vehicles.SpawnVehicleFunction = async data => {
     }
   });
 
+  const netId = NetworkGetNetworkIdFromEntity(vehicle);
+  mainLogger.debug(
+    `Spawned vehicle | model: ${data.model} | entity: ${vehicle} | netId: ${netId} | vin: ${vin} | plate: ${plate}`
+  );
+
   return {
     vehicle,
     netId,
@@ -135,10 +135,7 @@ export const spawnOwnedVehicle = async (
 
   const spawnedVehicle = await spawnVehicle({
     model: vehicleInfo.model,
-    position: {
-      ...position,
-      z: position.z + 0.5,
-    },
+    position,
     vin: vehicleInfo.vin,
     plate: vehicleInfo.fakeplate ?? vehicleInfo.plate,
     isFakePlate: !!vehicleInfo.fakeplate,
@@ -207,8 +204,8 @@ export const getCurrentVehicle = (plyId: number, mustBeDriver = false): number |
   return vehicle;
 };
 
-export const teleportInSeat = async (src: string, entity: number, seat = -1) => {
-  const plyPed = GetPlayerPed(src);
+export const teleportInSeat = async (src: number, entity: number, seat = -1) => {
+  const plyPed = GetPlayerPed(String(src));
   let attempts = 0;
   while (attempts < 20 && !GetPedInVehicleSeat(entity, seat)) {
     attempts++;

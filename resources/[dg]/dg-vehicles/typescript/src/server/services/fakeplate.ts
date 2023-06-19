@@ -1,6 +1,7 @@
-import { Events, Notifications, Taskbar, Util, Inventory, Vehicles } from '@dgx/server';
+import { Events, Notifications, Taskbar, Util, Inventory } from '@dgx/server';
 import { getPlayerVehicleInfo, updateVehicleFakeplate } from 'db/repository';
 import { getVinForVeh } from 'helpers/vehicle';
+import plateManager from 'modules/identification/classes/platemanager';
 
 Events.onNet('vehicles:fakeplate:install', async (plyId, netId: number) => {
   const vehicle = NetworkGetEntityFromNetworkId(netId);
@@ -41,7 +42,7 @@ Events.onNet('vehicles:fakeplate:install', async (plyId, netId: number) => {
     return;
   }
 
-  Vehicles.setNumberPlate(vehicle, fakePlate, true);
+  plateManager.setNumberPlate(vehicle, fakePlate, true);
   Inventory.destroyItem(plateItem.id);
   updateVehicleFakeplate(vin, fakePlate);
 
@@ -89,7 +90,7 @@ Events.onNet('vehicles:fakeplate:remove', async (plyId, netId: number) => {
   });
   if (cancelled) return;
 
-  Vehicles.setNumberPlate(vehicle, vehicleInfo.plate);
+  plateManager.setNumberPlate(vehicle, vehicleInfo.plate, false);
   Inventory.addItemToPlayer(plyId, 'fakeplate', 1, { plate: oldPlate });
   updateVehicleFakeplate(vin, null);
 

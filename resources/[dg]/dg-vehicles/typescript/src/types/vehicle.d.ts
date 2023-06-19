@@ -28,7 +28,7 @@ declare namespace Vehicle {
     cid: number;
     model: string;
     plate: string;
-    fakeplate: string;
+    fakeplate: string | null;
     state: Garage.GarageState;
     garageId: string;
     status: StatusType;

@@ -49,6 +49,13 @@ export class PlateManager extends Util.Singleton<PlateManager>() {
   public isPlayerPlate = (plate: string) => {
     return this.playerPlates.has(plate);
   };
+
+  public setNumberPlate = (vehicle: number, plate: string, isFakePlate = false) => {
+    const entState = Entity(vehicle).state;
+    entState.set('plate', plate, true);
+    entState.set('isFakePlate', isFakePlate, true);
+    SetVehicleNumberPlateText(vehicle, plate);
+  };
 }
 
 const plateManager = PlateManager.getInstance();

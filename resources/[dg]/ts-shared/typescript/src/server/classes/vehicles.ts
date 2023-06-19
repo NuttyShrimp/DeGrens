@@ -86,13 +86,6 @@ class Vehicles {
     global.exports['dg-vehicles'].doAdminFix(vehicle);
   };
 
-  setNumberPlate = (vehicle: number, plate: string, isFakePlate = false) => {
-    SetVehicleNumberPlateText(vehicle, plate);
-    const entState = Entity(vehicle).state;
-    entState.set('plate', plate, true);
-    entState.set('isFakePlate', isFakePlate, true);
-  };
-
   setVehicleDoorsLocked = (vehicle: number, locked: boolean) => {
     SetVehicleDoorsLocked(vehicle, locked ? 2 : 1);
   };

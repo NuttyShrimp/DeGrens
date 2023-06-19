@@ -38,7 +38,10 @@ global.exports(
   'spawnVehicleFromAdminMenu',
   async (plyId: number, model?: string, vin?: string, applyMods?: boolean) => {
     const ped = GetPlayerPed(String(plyId));
-    const position = Vector4.createFromVec3(Util.getEntityCoords(ped), GetEntityHeading(ped));
+    const position = {
+      ...Util.getEntityCoords(ped),
+      w: GetEntityHeading(ped),
+    };
 
     let vehicle: number | null = null;
     if (vin) {
@@ -71,7 +74,6 @@ global.exports(
       const spawnedVehicle = await spawnVehicle({
         model,
         position,
-        vin,
         upgrades,
         keys: plyId,
         fuel: 100,
@@ -84,7 +86,7 @@ global.exports(
       vehicle = spawnedVehicle.vehicle;
     }
 
-    teleportInSeat(String(plyId), vehicle);
+    teleportInSeat(plyId, vehicle);
   }
 );
 

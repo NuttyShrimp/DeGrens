@@ -60,7 +60,7 @@ export const generateBaseCosmeticUpgrades = (
       enabled: enableExtras,
     })),
     livery: -1,
-    plateColor: -1,
+    plateColor: 0,
     windowTint: 0,
   };
 };
