@@ -5,6 +5,8 @@ import viteSentry from 'vite-plugin-sentry';
 import svgrPlugin from 'vite-plugin-svgr';
 import tsconfigPaths from 'vite-tsconfig-paths';
 
+import { version } from './package.json';
+
 export default defineConfig(({ mode }) => ({
   base: './',
   build: {
@@ -41,6 +43,7 @@ export default defineConfig(({ mode }) => ({
       deploy: {
         env: mode === 'production' || process.env.SENTRY_UPLOAD_SOURCEMAPS ? 'production' : 'development',
       },
+      release: version,
       setCommits: {
         auto: true,
       },
