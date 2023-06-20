@@ -21,6 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Foutmelding bij unlocken van voertuig opgelost
 - Een gang kan niet langer een bepaald item meermaals vinden
 - Verwijder nieuwe business zones bij verlaten van business
+- Wanneer je een debt betaald verdwijnt hij vanzelf uit de app
 
 ## [1.2.5]
 

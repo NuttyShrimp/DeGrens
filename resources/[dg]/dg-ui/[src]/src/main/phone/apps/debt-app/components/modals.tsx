@@ -5,7 +5,10 @@ import { SimpleForm } from '@src/components/simpleform';
 import { nuiAction } from '@src/lib/nui-comms';
 import { showCheckmarkModal, showLoadModal } from '@src/main/phone/lib';
 
+import { useDebtAppStore } from '../stores/useDebtAppStore';
+
 export const PayModal: FC<{ debt: Phone.Debt.Debt }> = ({ debt }) => {
+  const [fetchDebts] = useDebtAppStore(s => [s.fetchDebts]);
   return (
     <SimpleForm
       header={'Pay debt'}
@@ -31,13 +34,16 @@ export const PayModal: FC<{ debt: Phone.Debt.Debt }> = ({ debt }) => {
         await nuiAction(`phone/debts/pay`, {
           id: debt.id,
         });
-        showCheckmarkModal();
+        showCheckmarkModal(() => {
+          fetchDebts();
+        });
       }}
     />
   );
 };
 
 export const PayPercentageModal: FC<{ debt: Phone.Debt.Debt }> = ({ debt }) => {
+  const [fetchDebts] = useDebtAppStore(s => [s.fetchDebts]);
   const [percentage, setPercentage] = useState('100');
   const changePerc = (perct: string) => {
     const perc = Number(perct);
@@ -93,7 +99,9 @@ export const PayPercentageModal: FC<{ debt: Phone.Debt.Debt }> = ({ debt }) => {
           id: debt.id,
           percentage: Number(percentage),
         });
-        showCheckmarkModal();
+        showCheckmarkModal(() => {
+          fetchDebts();
+        });
       }}
     />
   );
