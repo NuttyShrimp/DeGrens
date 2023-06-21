@@ -1,4 +1,4 @@
-import { Events, HUD, Keys, RPC, Notifications } from '@dgx/client';
+import { Events, HUD, Keys, Notifications } from '@dgx/client';
 import { CLASS_ORDER } from '@shared/identification/constant.identification';
 import { driverThread } from 'threads/driver';
 import { applyHandlingMultipliers, resetHandlingContextMultiplier, setHandlingContextMultiplier } from './handling';

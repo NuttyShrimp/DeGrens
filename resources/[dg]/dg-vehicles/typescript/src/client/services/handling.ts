@@ -172,13 +172,15 @@ const GetHandlingMultiplier = (
     // 0 - Degradation
     // 1 - Something else
     // 2 - Nitro, vehiclemodes
-    const highestPrioModifier = Object.values(context).sort((a, b) => b.priority - a.priority)[0];
+    const sortedModifiers = Object.values(context).sort((a, b) => b.priority - a.priority);
+    const highestPrioModifier = sortedModifiers[0];
 
     if (!highestPrioModifier) return defaultValue;
 
     let multipliedValue = getModifiedHandlingValue(defaultValue, highestPrioModifier);
 
-    for (const multiplier of Object.values(context).filter(({ priority }) => priority === 0)) {
+    // by filtering out idx 0 we avoid applying highestPrioModifier twice if highest is also prio 0
+    for (const multiplier of sortedModifiers.filter(({ priority }, idx) => priority === 0 && idx !== 0)) {
       multipliedValue = getModifiedHandlingValue(multipliedValue, multiplier);
     }
 

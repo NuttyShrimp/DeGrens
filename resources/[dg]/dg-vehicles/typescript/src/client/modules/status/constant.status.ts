@@ -1,7 +1,4 @@
-export const degradationValues: Record<
-  keyof Service.Status,
-  (Service.Degradation & { step: number })[]
-> = {
+export const degradationValues: Record<keyof Service.Status, (Service.Degradation & { step: number })[]> = {
   engine: [],
   axle: [],
   brakes: [],
@@ -9,18 +6,14 @@ export const degradationValues: Record<
 };
 
 export const setDegradationValues = (config: Service.DegradationConfig) => {
-  for (const part of Object.keys(config)) {
-    for (const value of config[part as keyof Service.Status]) {
-      degradationValues[part as keyof Service.Status].push({
+  for (const part of Object.keys(config) as (keyof Service.Status)[]) {
+    for (const value of config[part]) {
+      degradationValues[part].push({
         ...value,
-        step: 0,
+        step: (1 - value.percent) / 1000,
       });
     }
   }
-};
-
-export const handlingOverrideFunctions: Record<string, (veh: number, value: number) => void> = {
-  fInitialDriveForce: (veh, val) => SetVehicleCheatPowerIncrease(veh, val),
 };
 
 export const MINIMUM_DAMAGE_FOR_GUARANTEED_STALL = 65;
