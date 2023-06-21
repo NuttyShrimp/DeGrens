@@ -21,6 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Je kan stressitems nu gebruiken in een auto
 - Mechanics maken nu items met materialen die in de businessstash zitten in plaats van je eigen inventory
 - Je kan weer springen als je iemand escorteert
+- Aantal materialen per verwerkt materiaal verdubbeld maar alle nodige verwerkte materialen in crafting recipes gehalveerd. Dit zodat je effectief inventory space kan besparen door materialen te verwerken zoals origineel de bedoeling was van het verwerkt materiaal
 
 ### Fixed
 

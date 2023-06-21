@@ -30,12 +30,12 @@
           "amount": 1
         },
         {
-          "name": "refined_plastic",
-          "amount": 1
+          "name": "material_plastic",
+          "amount": 5
         },
         {
-          "name": "refined_aluminum",
-          "amount": 1
+          "name": "material_aluminum",
+          "amount": 5
         }
       ]
     },
@@ -44,11 +44,11 @@
       "items": [
         {
           "name": "refined_iron",
-          "amount": 2
+          "amount": 1
         },
         {
           "name": "refined_aluminum",
-          "amount": 2
+          "amount": 1
         },
         {
           "name": "material_electronics",
@@ -61,15 +61,15 @@
       "items": [
         {
           "name": "refined_iron",
-          "amount": 2
-        },
-        {
-          "name": "refined_aluminum",
           "amount": 1
         },
         {
+          "name": "material_aluminum",
+          "amount": 5
+        },
+        {
           "name": "refined_steel",
-          "amount": 3
+          "amount": 2
         }
       ]
     },
@@ -81,16 +81,16 @@
           "amount": 1
         },
         {
-          "name": "refined_plastic",
-          "amount": 1
+          "name": "material_plastic",
+          "amount": 5
         },
         {
-          "name": "refined_aluminum",
-          "amount": 1
+          "name": "material_aluminum",
+          "amount": 5
         },
         {
-          "name": "refined_copper",
-          "amount": 1
+          "name": "material_copper",
+          "amount": 5
         }
       ]
     },
@@ -98,12 +98,12 @@
       "requiredReputation": 30,
       "items": [
         {
-          "name": "refined_steel",
-          "amount": 1
+          "name": "material_steel",
+          "amount": 5
         },
         {
-          "name": "refined_iron",
-          "amount": 1
+          "name": "material_iron",
+          "amount": 5
         }
       ]
     },
@@ -111,8 +111,8 @@
       "requiredReputation": 0,
       "items": [
         {
-          "name": "refined_copper",
-          "amount": 1
+          "name": "material_copper",
+          "amount": 5
         },
         {
           "name": "material_glass",
@@ -125,7 +125,7 @@
       "items": [
         {
           "name": "refined_copper",
-          "amount": 2
+          "amount": 1
         },
         {
           "name": "material_glass",
@@ -138,7 +138,11 @@
       "items": [
         {
           "name": "refined_copper",
-          "amount": 3
+          "amount": 1
+        },
+        {
+          "name": "material_copper",
+          "amount": 5
         },
         {
           "name": "material_glass",
@@ -151,11 +155,11 @@
       "items": [
         {
           "name": "refined_copper",
-          "amount": 5
+          "amount": 2
         },
         {
           "name": "refined_steel",
-          "amount": 5
+          "amount": 2
         },
         {
           "name": "material_glass",
@@ -163,15 +167,15 @@
         },
         {
           "name": "refined_iron",
-          "amount": 5
+          "amount": 2
         },
         {
           "name": "refined_plastic",
-          "amount": 4
+          "amount": 2
         },
         {
           "name": "refined_aluminum",
-          "amount": 4
+          "amount": 2
         }
       ]
     },
@@ -180,11 +184,11 @@
       "items": [
         {
           "name": "refined_copper",
-          "amount": 5
+          "amount": 3
         },
         {
           "name": "refined_steel",
-          "amount": 5
+          "amount": 3
         },
         {
           "name": "material_glass",
@@ -192,15 +196,15 @@
         },
         {
           "name": "refined_iron",
-          "amount": 5
+          "amount": 3
         },
         {
           "name": "refined_plastic",
-          "amount": 4
+          "amount": 2
         },
         {
           "name": "refined_aluminum",
-          "amount": 4
+          "amount": 2
         }
       ]
     },
@@ -209,7 +213,7 @@
       "items": [
         {
           "name": "advanced_parts",
-          "amount": 4
+          "amount": 2
         },
         {
           "name": "material_electronics",
@@ -222,7 +226,7 @@
       "items": [
         {
           "name": "advanced_parts",
-          "amount": 7
+          "amount": 4
         },
         {
           "name": "material_electronics",
@@ -235,7 +239,7 @@
       "items": [
         {
           "name": "advanced_parts",
-          "amount": 10
+          "amount": 5
         },
         {
           "name": "material_electronics",
@@ -248,7 +252,7 @@
       "items": [
         {
           "name": "advanced_parts",
-          "amount": 10
+          "amount": 5
         },
         {
           "name": "material_electronics",
@@ -261,7 +265,7 @@
       "items": [
         {
           "name": "advanced_parts",
-          "amount": 15
+          "amount": 7
         },
         {
           "name": "material_electronics",
@@ -274,7 +278,7 @@
       "items": [
         {
           "name": "advanced_parts",
-          "amount": 15
+          "amount": 7
         },
         {
           "name": "material_electronics",
@@ -287,7 +291,7 @@
       "items": [
         {
           "name": "advanced_parts",
-          "amount": 20
+          "amount": 10
         },
         {
           "name": "material_electronics",
@@ -300,7 +304,7 @@
       "items": [
         {
           "name": "advanced_parts",
-          "amount": 20
+          "amount": 10
         },
         {
           "name": "material_electronics",
@@ -313,7 +317,7 @@
       "items": [
         {
           "name": "advanced_parts",
-          "amount": 25
+          "amount": 13
         },
         {
           "name": "material_electronics",
@@ -326,7 +330,7 @@
       "items": [
         {
           "name": "advanced_parts",
-          "amount": 25
+          "amount": 13
         },
         {
           "name": "material_electronics",
@@ -339,19 +343,19 @@
       "items": [
         {
           "name": "refined_steel",
-          "amount": 5
+          "amount": 3
         },
         {
           "name": "refined_copper",
-          "amount": 5
+          "amount": 3
         },
         {
           "name": "refined_iron",
-          "amount": 5
+          "amount": 3
         },
         {
           "name": "refined_aluminum",
-          "amount": 5
+          "amount": 3
         }
       ]
     },
@@ -360,19 +364,19 @@
       "items": [
         {
           "name": "refined_steel",
-          "amount": 5
+          "amount": 2
         },
         {
           "name": "refined_copper",
-          "amount": 5
+          "amount": 2
         },
         {
           "name": "refined_iron",
-          "amount": 5
+          "amount": 2
         },
         {
           "name": "refined_aluminum",
-          "amount": 5
+          "amount": 2
         }
       ]
     },
@@ -381,19 +385,19 @@
       "items": [
         {
           "name": "refined_steel",
-          "amount": 3
+          "amount": 1
         },
         {
           "name": "refined_copper",
-          "amount": 3
+          "amount": 1
         },
         {
           "name": "refined_iron",
-          "amount": 3
+          "amount": 1
         },
         {
           "name": "refined_aluminum",
-          "amount": 3
+          "amount": 1
         }
       ]
     },
@@ -402,23 +406,23 @@
       "items": [
         {
           "name": "refined_steel",
-          "amount": 3
+          "amount": 1
         },
         {
           "name": "refined_copper",
-          "amount": 3
+          "amount": 1
         },
         {
           "name": "refined_iron",
-          "amount": 3
+          "amount": 1
         },
         {
           "name": "refined_aluminum",
-          "amount": 3
+          "amount": 1
         },
         {
           "name": "material_glass",
-          "amount": 10
+          "amount": 6
         }
       ]
     },
@@ -427,19 +431,19 @@
       "items": [
         {
           "name": "refined_steel",
-          "amount": 2
+          "amount": 1
         },
         {
           "name": "refined_copper",
-          "amount": 2
+          "amount": 1
         },
         {
           "name": "refined_iron",
-          "amount": 2
+          "amount": 1
         },
         {
           "name": "refined_aluminum",
-          "amount": 2
+          "amount": 1
         },
         {
           "name": "material_glass",
@@ -452,19 +456,19 @@
       "items": [
         {
           "name": "refined_steel",
-          "amount": 2
+          "amount": 1
         },
         {
           "name": "refined_copper",
-          "amount": 2
+          "amount": 1
         },
         {
           "name": "refined_iron",
-          "amount": 2
+          "amount": 1
         },
         {
           "name": "refined_aluminum",
-          "amount": 2
+          "amount": 1
         },
         {
           "name": "material_glass",
@@ -493,12 +497,12 @@
       "requiredReputation": 5,
       "items": [
         {
-          "name": "refined_steel",
-          "amount": 1
+          "name": "material_steel",
+          "amount": 5
         },
         {
           "name": "refined_plastic",
-          "amount": 2
+          "amount": 1
         }
       ]
     },
@@ -506,12 +510,12 @@
       "requiredReputation": 10,
       "items": [
         {
-          "name": "refined_steel",
-          "amount": 1
+          "name": "material_steel",
+          "amount": 5
         },
         {
           "name": "refined_plastic",
-          "amount": 5
+          "amount": 3
         }
       ]
     },
@@ -519,16 +523,16 @@
       "requiredReputation": 200,
       "items": [
         {
-          "name": "refined_plastic",
-          "amount": 1
+          "name": "material_plastic",
+          "amount": 5
         },
         {
           "name": "material_electronics",
           "amount": 3
         },
         {
-          "name": "refined_copper",
-          "amount": 1
+          "name": "material_copper",
+          "amount": 5
         }
       ]
     },
@@ -537,15 +541,15 @@
       "items": [
         {
           "name": "refined_iron",
-          "amount": 2
+          "amount": 1
         },
         {
           "name": "refined_copper",
-          "amount": 2
+          "amount": 1
         },
         {
           "name": "refined_aluminum",
-          "amount": 3
+          "amount": 2
         }
       ]
     },
@@ -554,11 +558,74 @@
       "items": [
         {
           "name": "refined_steel",
-          "amount": 3
+          "amount": 2
+        },
+        {
+          "name": "refined_aluminum",
+          "amount": 1
+        },
+        {
+          "name": "refined_copper",
+          "amount": 1
+        },
+        {
+          "name": "material_iron",
+          "amount": 5
+        }
+      ]
+    },
+    "weapon_switchblade": {
+      "requiredReputation": 25,
+      "items": [
+        {
+          "name": "refined_steel",
+          "amount": 1
+        },
+        {
+          "name": "refined_aluminum",
+          "amount": 1
+        },
+        {
+          "name": "refined_copper",
+          "amount": 1
+        },
+        {
+          "name": "refined_iron",
+          "amount": 1
+        }
+      ]
+    },
+    "weapon_knife": {
+      "requiredReputation": 35,
+      "items": [
+        {
+          "name": "refined_steel",
+          "amount": 2
         },
         {
           "name": "refined_aluminum",
           "amount": 2
+        },
+        {
+          "name": "refined_copper",
+          "amount": 1
+        },
+        {
+          "name": "refined_iron",
+          "amount": 1
+        }
+      ]
+    },
+    "weapon_machete": {
+      "requiredReputation": 50,
+      "items": [
+        {
+          "name": "refined_steel",
+          "amount": 2
+        },
+        {
+          "name": "refined_aluminum",
+          "amount": 1
         },
         {
           "name": "refined_copper",
@@ -570,79 +637,16 @@
         }
       ]
     },
-    "weapon_switchblade": {
-      "requiredReputation": 25,
-      "items": [
-        {
-          "name": "refined_steel",
-          "amount": 3
-        },
-        {
-          "name": "refined_aluminum",
-          "amount": 3
-        },
-        {
-          "name": "refined_copper",
-          "amount": 2
-        },
-        {
-          "name": "refined_iron",
-          "amount": 2
-        }
-      ]
-    },
-    "weapon_knife": {
-      "requiredReputation": 35,
-      "items": [
-        {
-          "name": "refined_steel",
-          "amount": 3
-        },
-        {
-          "name": "refined_aluminum",
-          "amount": 2
-        },
-        {
-          "name": "refined_copper",
-          "amount": 3
-        },
-        {
-          "name": "refined_iron",
-          "amount": 2
-        }
-      ]
-    },
-    "weapon_machete": {
-      "requiredReputation": 50,
-      "items": [
-        {
-          "name": "refined_steel",
-          "amount": 4
-        },
-        {
-          "name": "refined_aluminum",
-          "amount": 3
-        },
-        {
-          "name": "refined_copper",
-          "amount": 3
-        },
-        {
-          "name": "refined_iron",
-          "amount": 3
-        }
-      ]
-    },
     "container_weedbuds": {
       "requiredReputation": 125,
       "items": [
         {
           "name": "refined_plastic",
-          "amount": 4
+          "amount": 2
         },
         {
           "name": "refined_steel",
-          "amount": 2
+          "amount": 1
         }
       ]
     },
@@ -693,11 +697,11 @@
       "items": [
         {
           "name": "refined_plastic",
-          "amount": 3
+          "amount": 2
         },
         {
           "name": "refined_aluminum",
-          "amount": 3
+          "amount": 2
         },
         {
           "name": "refined_steel",

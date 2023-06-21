@@ -3,7 +3,7 @@ import { CAR_CLASSES } from 'sv_constants';
 import { REPAIR_PARTS } from '@shared/status/constants.status';
 import { TUNE_PARTS } from '@shared/upgrades/constants.upgrades';
 import { buildMechanicStashId, buildPartLabel } from '@shared/mechanic/helpers.mechanic';
-import { MATERIALS_FOR_PART } from '../constants.mechanic';
+import { REQUIREMENTS_FOR_PART } from '../constants.mechanic';
 import { getCurrentMechanicBusiness, getMechanicConfig } from '../service.mechanic';
 
 export const finishOrder = async (plyId: number, order: Mechanic.PartItem[]) => {
@@ -163,12 +163,15 @@ export const craftPart = async (plyId: number, partItem: Mechanic.PartItem) => {
   }
   if (amountNeeded === 0) return;
 
+  const requirementsForPart = REQUIREMENTS_FOR_PART[partItem.type];
+  amountNeeded *= requirementsForPart.amount;
+
   const mechanicStashId = buildMechanicStashId(shop);
   const items = await Inventory.getItemsInInventory('stash', mechanicStashId);
   const idsToRemove: string[] = [];
   for (const item of items) {
     if (idsToRemove.length === amountNeeded) break;
-    if (!MATERIALS_FOR_PART[partItem.type].includes(item.name)) continue;
+    if (!requirementsForPart.items.includes(item.name)) continue;
     idsToRemove.push(item.id);
   }
 
