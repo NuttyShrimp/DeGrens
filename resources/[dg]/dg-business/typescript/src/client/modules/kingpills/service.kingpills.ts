@@ -46,6 +46,6 @@ export const handlePickupEnter = async (position: Vec3) => {
 
 export const cleanupKingPillsJob = () => {
   PolyZone.removeZone('kingpills_job_zone');
-  Peek.removeEntityEntry(peekIds);
+  Peek.removeGlobalEntry(peekIds);
   BlipManager.removeBlip('kingpills_job_blip');
 };

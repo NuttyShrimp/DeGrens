@@ -32,6 +32,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Antibiotica pill refilled je armor niet meer instantly
 - Je kan enkel nog armor items retreiven, en niet langer de armor regenererende items
 - Joint smoke animatie vervangen om deze ook te kunnen gebruiken voor vrouwen
+- Peek entries worden nu deftig verwijderd bij KingPills job
 
 ## [1.2.5]
 
