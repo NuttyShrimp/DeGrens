@@ -152,10 +152,10 @@ const registerStressConsumables = (stressConsumables: Config.StressConsumable[])
       const consumable = config.stress.find(s => s.name === itemState.name);
       if (!consumable) return;
 
-      if (GetVehiclePedIsIn(GetPlayerPed(String(plyId)), false)) {
-        Notifications.add(plyId, 'Je kan dit niet vanuit een voertuig', 'error');
-        return;
-      }
+      // if (GetVehiclePedIsIn(GetPlayerPed(String(plyId)), false)) {
+      //   Notifications.add(plyId, 'Je kan dit niet vanuit een voertuig', 'error');
+      //   return;
+      // }
 
       if (consumable.uses === 1) {
         Inventory.destroyItem(itemState.id);

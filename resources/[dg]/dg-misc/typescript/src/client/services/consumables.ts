@@ -91,32 +91,32 @@ Events.onNet('misc:consumables:applyStress', (consumable: Config.StressConsumabl
 
   const ped = PlayerPedId();
 
-  if ('scenario' in consumable.animation) {
-    const scenario = consumable.animation.scenario;
-    Util.startScenarioInPlace(scenario);
-    setTimeout(() => {
-      if (!IsPedUsingScenario(ped, scenario)) return;
-      ClearPedTasks(ped);
-    }, consumable.animation.duration);
-  } else {
-    const { name: animName, dict: animDict, flag: animFlag } = consumable.animation;
-    Util.loadAnimDict(animDict).then(() => {
-      TaskPlayAnim(ped, animDict, animName, 8.0, 8.0, -1, animFlag, 0, false, false, false);
-
-      let propId: number | null = null;
-      if ('prop' in consumable.animation && consumable.animation.prop) {
-        console.log(consumable.animation.prop);
-        propId = PropAttach.add(consumable.animation.prop);
-        console.log(propId);
-      }
-
+  if (!IsPedInAnyVehicle(ped, false)) {
+    if ('scenario' in consumable.animation) {
+      const scenario = consumable.animation.scenario;
+      Util.startScenarioInPlace(scenario);
       setTimeout(() => {
-        StopAnimTask(ped, animDict, animName, 1);
-        if (propId) {
-          PropAttach.remove(propId);
-        }
+        if (!IsPedUsingScenario(ped, scenario)) return;
+        ClearPedTasks(ped);
       }, consumable.animation.duration);
-    });
+    } else {
+      const { name: animName, dict: animDict, flag: animFlag } = consumable.animation;
+      Util.loadAnimDict(animDict).then(() => {
+        TaskPlayAnim(ped, animDict, animName, 8.0, 8.0, -1, animFlag, 0, false, false, false);
+
+        let propId: number | null = null;
+        if ('prop' in consumable.animation && consumable.animation.prop) {
+          propId = PropAttach.add(consumable.animation.prop);
+        }
+
+        setTimeout(() => {
+          StopAnimTask(ped, animDict, animName, 1);
+          if (propId) {
+            PropAttach.remove(propId);
+          }
+        }, consumable.animation.duration);
+      });
+    }
   }
 
   activeDrugs.stress = true;
