@@ -1,8 +1,8 @@
 import { Notifications, Reputations, Inventory, UI, Util } from '@dgx/server';
 import { CAR_CLASSES } from 'sv_constants';
-import { REPAIR_PARTS } from '../../../../shared/status/constants.status';
-import { TUNE_PARTS } from '../../../../shared/upgrades/constants.upgrades';
-import { buildPartLabel } from '../../../../shared/mechanic/helpers.mechanic';
+import { REPAIR_PARTS } from '@shared/status/constants.status';
+import { TUNE_PARTS } from '@shared/upgrades/constants.upgrades';
+import { buildMechanicStashId, buildPartLabel } from '@shared/mechanic/helpers.mechanic';
 import { MATERIALS_FOR_PART } from '../constants.mechanic';
 import { getCurrentMechanicBusiness, getMechanicConfig } from '../service.mechanic';
 
@@ -163,7 +163,8 @@ export const craftPart = async (plyId: number, partItem: Mechanic.PartItem) => {
   }
   if (amountNeeded === 0) return;
 
-  const items = await Inventory.getPlayerItems(plyId);
+  const mechanicStashId = buildMechanicStashId(shop);
+  const items = await Inventory.getItemsInInventory('stash', mechanicStashId);
   const idsToRemove: string[] = [];
   for (const item of items) {
     if (idsToRemove.length === amountNeeded) break;
@@ -172,11 +173,11 @@ export const craftPart = async (plyId: number, partItem: Mechanic.PartItem) => {
   }
 
   if (idsToRemove.length !== amountNeeded) {
-    Notifications.add(plyId, 'Je hebt niet genoeg materialen opzak', 'error');
+    Notifications.add(plyId, 'Er zijn niet genoeg materialen aanwezig in de opslag', 'error');
     return;
   }
 
-  const removed = await Inventory.removeItemsByIdsFromPlayer(plyId, idsToRemove);
+  const removed = await Inventory.removeItemsByIdsFromInventory('stash', mechanicStashId, idsToRemove);
   if (!removed) {
     Notifications.add(plyId, 'Er is iets foutgelopen tijdens het maken', 'error');
     return;

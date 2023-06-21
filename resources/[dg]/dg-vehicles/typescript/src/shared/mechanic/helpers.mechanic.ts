@@ -7,3 +7,5 @@ export const buildPartLabel = (item: Mechanic.PartItem) => {
   const suffix = item.type === 'repair' ? ' Onderdeel' : '';
   return `${prefix}${partLabel}${suffix} (${item.class})`;
 };
+
+export const buildMechanicStashId = (businessName: string) => `mechanic-shop-stash-${businessName}`;

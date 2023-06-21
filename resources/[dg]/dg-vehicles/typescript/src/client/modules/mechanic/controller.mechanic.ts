@@ -13,6 +13,7 @@ import {
   unattachVehicleFromTowVehicle,
 } from './services/towing.mechanic';
 import { getCurrentMechanicBusiness } from './service.mechanic';
+import { buildMechanicStashId } from '@shared/mechanic/helpers.mechanic';
 
 let modelPeekIds: string[];
 
@@ -106,7 +107,7 @@ Peek.addZoneEntry('mechanic_bench', {
         );
       },
       action: data => {
-        Inventory.openStash(`mechanic-shop-stash-${data.data.businessName}`, 100);
+        Inventory.openStash(buildMechanicStashId(data.data.businessName), 100);
       },
     },
     {
