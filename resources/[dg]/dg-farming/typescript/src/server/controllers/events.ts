@@ -41,9 +41,10 @@ Inventory.registerUseable('farming_bucket', async (plyId, itemState) => {
 });
 
 Events.onNet('farming:seed:place', async (plyId: number, itemId: string, plantCoords: Vec3) => {
-  const itemState = Inventory.getItemByIdFromPlayer(plyId, itemId);
-  if (!itemState) {
-    Notifications.add(plyId, 'Je hebt geen zaadje om te planten', 'error');
+  const itemState = Inventory.getItemStateById(itemId);
+  const hasItem = await Inventory.doesPlayerHaveItemWithId(plyId, itemId);
+  if (!itemState || !hasItem) {
+    Notifications.add(plyId, 'Je hebt het zaadje niet meer', 'error');
     return;
   }
 

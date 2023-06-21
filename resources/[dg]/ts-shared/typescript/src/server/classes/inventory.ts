@@ -273,18 +273,6 @@ class Inventory extends UtilShared.Singleton<Inventory>() {
     return this.doesInventoryHaveItemWithId('player', cid, itemId);
   };
 
-  public getItemByIdFromInventory = (
-    type: Inventory.Type,
-    identifier: string,
-    itemId: string
-  ): Inventory.ItemState | undefined => {
-    return global.exports['dg-inventory'].getItemByIdFromInventory(type, identifier, itemId);
-  };
-  public getItemByIdFromPlayer = (plyId: number, itemId: string) => {
-    const cid = String(Util.getCID(plyId));
-    return this.getItemByIdFromInventory('player', cid, itemId);
-  };
-
   public showItemBox = (plyId: number, itemName: string, label: string) => {
     global.exports['dg-inventory'].showItemBox(plyId, itemName, label);
   };

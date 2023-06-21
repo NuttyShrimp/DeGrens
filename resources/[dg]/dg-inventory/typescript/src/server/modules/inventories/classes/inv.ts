@@ -166,15 +166,17 @@ export class Inv {
     return false;
   };
 
-  public getItems = () => {
+  public getItems = (ignoreContainers = false) => {
     const items: Item[] = [];
     for (const id of this.items) {
       const item = itemManager.get(id);
       if (item === undefined) continue;
       items.push(item);
     }
-    for (const [_, containerInv] of this.containerInventories) {
-      items.push(...containerInv.getItems());
+    if (!ignoreContainers) {
+      for (const [_, containerInv] of this.containerInventories) {
+        items.push(...containerInv.getItems());
+      }
     }
     return items;
   };
