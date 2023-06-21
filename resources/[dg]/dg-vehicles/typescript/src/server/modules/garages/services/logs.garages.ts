@@ -13,11 +13,17 @@ export const getVehicleGarageLog = async (vin: string) => {
   return logs;
 };
 
-export const addVehicleGarageLog = (vin: string, cid: number, isStoring: boolean, state: Vehicle.VehicleStatus) => {
+export const addVehicleGarageLog = (
+  vin: string,
+  cid: number,
+  isStoring: boolean,
+  fuelLevel: number,
+  serviceStatus: Service.Status
+) => {
   const action: SVGarage.Log['action'] = isStoring ? 'parked' : 'retrieved';
-  const stringifiedState = `Engine: ${Math.round(state.engine / 10)}% | Body: ${Math.round(
-    state.body / 10
-  )}% | Fuel: ${Math.round(state.fuel)}%`;
+
+  const averageServiceStatus = Object.values(serviceStatus).reduce((acc, v) => Math.round(acc + v / 40), 0);
+  const stringifiedState = `Status: ${averageServiceStatus}% | Fuel: ${Math.round(fuelLevel)}%`;
 
   const newLog = {
     cid,
