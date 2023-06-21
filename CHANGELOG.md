@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - UI devtools kan nu ook een IG image tonen
+- Restaurant medewerkers krijgen nu een extra paycheck wanneer ze in dienst zijn
 
 ### Changed
 

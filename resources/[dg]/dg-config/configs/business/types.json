@@ -18,6 +18,10 @@
     },
     "lockers": {
       "size": 8
+    },
+    "paycheck": {
+      "amount": 75,
+      "time": 300
     }
   },
   "taxi": {
