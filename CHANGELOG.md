@@ -19,6 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Report indicator aangepast naar iets duidelijker
 - Je kan stressitems nu gebruiken in een auto
 - Mechanics maken nu items met materialen die in de businessstash zitten in plaats van je eigen inventory
+- Je kan weer springen als je iemand escorteert
 
 ### Fixed
 
