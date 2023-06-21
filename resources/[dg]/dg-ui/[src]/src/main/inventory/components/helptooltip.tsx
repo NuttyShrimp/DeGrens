@@ -27,6 +27,10 @@ const CONTROLS: { action: string; description: string }[] = [
     action: 'Hold ctrl + Hover over item',
     description: 'selecteer de items waar je cursor overgaat',
   },
+  {
+    action: 'Hold ctrl + Hover over item + 2x LMB',
+    description: 'selecteer alle items van hetzelfde type',
+  },
 ];
 
 export const HelpTooltip: FC = () => {

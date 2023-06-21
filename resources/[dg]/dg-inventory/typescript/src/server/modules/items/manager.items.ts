@@ -205,7 +205,7 @@ class ItemManager extends Util.Singleton<ItemManager>() {
       if (!previousInventoryId) {
         previousInventoryId = item.state.inventory;
       } else if (item.state.inventory !== previousInventoryId) {
-        this.logger.error(`Not all items, when moving multiple, were in same inventory`);
+        // Can happen when quickly moving items and moved item is not synced to client yet while he emitted event to move it
         continue;
       }
 

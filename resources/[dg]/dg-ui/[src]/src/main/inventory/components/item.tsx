@@ -45,8 +45,26 @@ export const Item: FC<{ itemId: string; cellSize: number }> = ({ itemId, cellSiz
   const handleDoubleClick = e => {
     e.preventDefault();
 
-    if (holdingSelector) return;
-    doItemUsage(itemState.id);
+    if (holdingSelector && currentSelectorInventory === itemState.inventory) {
+      updateInventoryStore(s => ({
+        selectedItems: [
+          ...s.selectedItems,
+          // Add all items in same inventory && with same name to selected items
+          ...Object.entries(s.items).reduce<string[]>((acc, [iId, iState]) => {
+            if (
+              iState.inventory === itemState.inventory &&
+              iState.name === itemState.name &&
+              itemState.amount === undefined
+            ) {
+              acc.push(iId);
+            }
+            return acc;
+          }, []),
+        ],
+      }));
+    } else {
+      doItemUsage(itemState.id);
+    }
   };
 
   const handleRightClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {

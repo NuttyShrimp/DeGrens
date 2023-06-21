@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - UI devtools kan nu ook een IG image tonen
 - Restaurant medewerkers krijgen nu een extra paycheck wanneer ze in dienst zijn
 - Slot op deur in KingPills toegevoegd
+- Je kan nu alle items van een soort in 1 keer selecteren in je inventory (check het questionmark icon in je inventory)
 
 ### Changed
 
