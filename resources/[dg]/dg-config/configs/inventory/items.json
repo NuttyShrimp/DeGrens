@@ -556,6 +556,17 @@
     }
   },
   {
+    "useable": true,
+    "name": "weapon_flare",
+    "label": "Flare",
+    "image": "weapon_flare.png",
+    "decayRate": 129600,
+    "size": {
+      "x": 2,
+      "y": 1
+    }
+  },
+  {
     "markedForSeizure": true,
     "name": "vpn",
     "label": "VPN",
