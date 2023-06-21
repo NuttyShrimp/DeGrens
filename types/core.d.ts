@@ -4,6 +4,7 @@ declare namespace Core {
       cash: number;
       health: number;
       armor: number;
+      armorItem: string | null;
       stress: number;
       callsign: string;
       inside: {
