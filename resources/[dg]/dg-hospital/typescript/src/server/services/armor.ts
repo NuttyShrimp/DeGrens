@@ -46,7 +46,7 @@ export const setArmor = (plyId: number, armor: number | ((oldArmor: number) => n
     newArmor = armor(+GetPedArmour(ped));
   }
 
-  SetPedArmour(ped, +newArmor);
+  SetPedArmour(ped, Math.round(newArmor)); // cannot set decimal
 
   if (!doNotSave) {
     player.updateMetadata('armor', newArmor);

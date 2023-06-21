@@ -22,6 +22,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Een gang kan niet langer een bepaald item meermaals vinden
 - Verwijder nieuwe business zones bij verlaten van business
 - Wanneer je een debt betaald verdwijnt hij vanzelf uit de app
+- Antibiotica pill refilled je armor niet meer instantly
 
 ## [1.2.5]
 
