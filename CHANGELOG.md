@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Restaurant medewerkers krijgen nu een extra paycheck wanneer ze in dienst zijn
 - Slot op deur in KingPills toegevoegd
 - Je kan nu alle items van een soort in 1 keer selecteren in je inventory (check het questionmark icon in je inventory)
+- Items die in een container zitten, tellen nu mee als items in je inventory. Dit betekend dat je bijvoorbeeld materialen er niet meer hoeft uit een container moet halen wanneer je iets wil craften.
 
 ### Changed
 

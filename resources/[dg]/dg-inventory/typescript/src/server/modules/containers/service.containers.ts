@@ -5,6 +5,8 @@ let containers: { [key: string]: { allowedItems: string[]; size: number } };
 
 export const getContainerInfo = (name: string) => containers[name];
 
+export const isItemAContainer = (name: string) => !!containers[name];
+
 export const registerContainers = () => {
   containers = getConfig().containers;
 
