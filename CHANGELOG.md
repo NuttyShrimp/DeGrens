@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - UI devtools kan nu ook een IG image tonen
 - Restaurant medewerkers krijgen nu een extra paycheck wanneer ze in dienst zijn
+- Slot op deur in KingPills toegevoegd
 
 ### Changed
 
@@ -25,6 +26,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Wanneer je een debt betaald verdwijnt hij vanzelf uit de app
 - Antibiotica pill refilled je armor niet meer instantly
 - Je kan enkel nog armor items retreiven, en niet langer de armor regenererende items
+- Joint smoke animatie vervangen om deze ook te kunnen gebruiken voor vrouwen
 
 ## [1.2.5]
 

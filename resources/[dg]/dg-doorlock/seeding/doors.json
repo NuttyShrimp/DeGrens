@@ -3945,5 +3945,23 @@
     "hideInteraction": true,
     "playSound": true,
     "forceOpen": true
+  },
+  {
+    "description": "kingpills personeelsdeur",
+    "locked": true,
+    "distance": 2,
+    "doors": [
+      {
+        "model": "ch_chint07_casino_staff_door_03",
+        "coords": {
+          "x": -1223.627197265625,
+          "y": -1476.9527587890625,
+          "z": 4.527789115905762
+        }
+      }
+    ],
+    "authorized": {
+      "business": ["kingpills"]
+    }
   }
 ]
