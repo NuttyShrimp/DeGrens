@@ -64,6 +64,7 @@ declare namespace Config {
           dict: string;
           name: string;
           flag: number;
+          prop?: string;
         }
       | { scenario: string }
     ) & {

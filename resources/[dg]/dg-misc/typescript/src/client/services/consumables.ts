@@ -1,4 +1,4 @@
-import { Events, Util, Sync, Notifications } from '@dgx/client';
+import { Events, Util, Sync, Notifications, PropAttach } from '@dgx/client';
 import { FxBlackOut, fxPuke } from './fx';
 
 declare type EffectName = Config.EffectConsumable['effect'];
@@ -102,8 +102,19 @@ Events.onNet('misc:consumables:applyStress', (consumable: Config.StressConsumabl
     const { name: animName, dict: animDict, flag: animFlag } = consumable.animation;
     Util.loadAnimDict(animDict).then(() => {
       TaskPlayAnim(ped, animDict, animName, 8.0, 8.0, -1, animFlag, 0, false, false, false);
+
+      let propId: number | null = null;
+      if ('prop' in consumable.animation && consumable.animation.prop) {
+        console.log(consumable.animation.prop);
+        propId = PropAttach.add(consumable.animation.prop);
+        console.log(propId);
+      }
+
       setTimeout(() => {
         StopAnimTask(ped, animDict, animName, 1);
+        if (propId) {
+          PropAttach.remove(propId);
+        }
       }, consumable.animation.duration);
     });
   }

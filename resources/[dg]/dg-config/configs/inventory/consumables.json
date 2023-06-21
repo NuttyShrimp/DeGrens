@@ -90,7 +90,10 @@
       "duration": 30000,
       "uses": 1,
       "animation": {
-        "scenario": "WORLD_HUMAN_DRUG_DEALER",
+        "dict": "timetable@gardener@smoking_joint",
+        "name": "smoke_idle",
+        "flags": 1,
+        "prop": "joint_hand",
         "duration": 30000
       }
     },
@@ -100,7 +103,10 @@
       "duration": 30000,
       "uses": 1,
       "animation": {
-        "scenario": "WORLD_HUMAN_DRUG_DEALER",
+        "dict": "timetable@gardener@smoking_joint",
+        "name": "smoke_idle",
+        "flags": 1,
+        "prop": "joint_hand",
         "duration": 30000
       }
     },

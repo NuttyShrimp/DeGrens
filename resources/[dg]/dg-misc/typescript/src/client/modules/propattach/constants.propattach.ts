@@ -671,4 +671,18 @@ export const PROPS: Record<string, PropAttach.PropInfo> = {
       z: -95,
     },
   },
+  joint_hand: {
+    model: 'p_cs_joint_02',
+    boneId: 58866,
+    position: {
+      x: 0.1,
+      y: -0.03,
+      z: 0,
+    },
+    rotation: {
+      x: -40,
+      y: -50,
+      z: 0,
+    },
+  },
 };
