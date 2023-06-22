@@ -629,11 +629,11 @@ export const ALL_WEAPONS: Weapons.WeaponConfig[] = [
   //     durabilityMultiplier: 0.01,
   //     oneTimeUse: true,
   // },
-  // {
-  //     name: 'weapon_flare',
-  //     durabilityMultiplier: 0.01,
-  //     oneTimeUse: true,
-  // },
+  {
+    name: 'weapon_flare',
+    durabilityMultiplier: 0.01,
+    oneTimeUse: true,
+  },
   // {
   //     name: 'weapon_molotov',
   //     durabilityMultiplier: 0.01,

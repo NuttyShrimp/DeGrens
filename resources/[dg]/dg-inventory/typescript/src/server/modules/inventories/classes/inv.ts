@@ -1,4 +1,4 @@
-import { Events, Inventory, Util } from '@dgx/server';
+import { Events, Inventory, Util, Vehicles } from '@dgx/server';
 import itemManager from 'modules/items/manager.items';
 import locationManager from 'modules/locations/manager.locations';
 import repository from 'services/repository';
@@ -8,27 +8,31 @@ import inventoryManager from '../manager.inventories';
 import itemDataManager from 'classes/itemdatamanager';
 import { getConfig } from 'services/config';
 import contextManager from 'classes/contextmanager';
-import { getContainerInfo } from 'modules/containers/service.containers';
+import { getContainerInfo, isItemAContainer } from 'modules/containers/service.containers';
 import objectsUtility from 'classes/objectsutility';
 import { Item } from 'modules/items/classes/item';
 import { charModule } from 'services/core';
 
 // conflicted with Inventory types namespace so I went with the good old Inv
 export class Inv {
-  private logger: winston.Logger;
+  private readonly logger: winston.Logger;
   private _id!: string;
   private _type!: Inventory.Type;
   private _identifier!: string;
   private _size!: number;
-  private items!: Set<string>;
+  private readonly items: Set<string>;
   private _allowedItems?: string[];
+  private readonly containerInventories: Map<string, Inv>; // cache seperately to avoid iteration when needed
 
-  private grid: boolean[][] = [];
+  private grid: boolean[][];
 
   private _isLoaded: boolean;
 
   constructor() {
     this.logger = mainLogger.child({ module: 'Inventory' });
+    this.items = new Set();
+    this.containerInventories = new Map();
+    this.grid = [];
     this._isLoaded = false;
   }
 
@@ -37,7 +41,6 @@ export class Inv {
     const { identifier, type } = Inventory.splitId(id);
     this._type = type;
     this._identifier = identifier;
-    this.items = new Set();
 
     const fixedSizes = getConfig().amountOfSlots;
     this.setSize(fixedSizes[this.type] ?? 0);
@@ -108,6 +111,16 @@ export class Inv {
   public registerItemId = (itemState: Inventory.ItemState, checkSave = false) => {
     if (this.items.size == 0 && this.type === 'drop') locationManager.activateDrop(this.id);
     this.items.add(itemState.id);
+    if (isItemAContainer(itemState.name)) {
+      if (this.type !== 'container') {
+        inventoryManager.get(Inventory.concatId('container', itemState.id)).then(inv => {
+          if (!this.items.has(itemState.id)) return; // this ensured item was not removed while promise was resolving
+          this.containerInventories.set(itemState.id, inv);
+        });
+      } else {
+        this.logger.error(`Tried to add container ${itemState.id} to container ${this.id}`);
+      }
+    }
     this.updatedInv('add', itemState);
 
     if (checkSave && contextManager.getPlayersById(this.id).length === 0) {
@@ -118,6 +131,7 @@ export class Inv {
 
   public unregisterItemId = (itemState: Inventory.ItemState) => {
     this.items.delete(itemState.id);
+    this.containerInventories.delete(itemState.id);
     this.updatedInv('remove', itemState);
   };
 
@@ -143,39 +157,36 @@ export class Inv {
   };
 
   public hasItemId = (itemId: string) => {
-    return this.items.has(itemId);
+    if (this.items.has(itemId)) return true;
+
+    for (const [_, containerInv] of this.containerInventories) {
+      if (containerInv.hasItemId(itemId)) return true;
+    }
+
+    return false;
   };
 
-  public getItems = () => {
+  public getItems = (ignoreContainers = false) => {
     const items: Item[] = [];
     for (const id of this.items) {
       const item = itemManager.get(id);
       if (item === undefined) continue;
       items.push(item);
     }
+    if (!ignoreContainers) {
+      for (const [_, containerInv] of this.containerInventories) {
+        items.push(...containerInv.getItems());
+      }
+    }
     return items;
   };
 
   public getItemStates = () => {
-    const itemStates: Inventory.ItemState[] = [];
-    for (const id of this.items) {
-      const item = itemManager.get(id);
-      if (item === undefined) continue;
-      itemStates.push(item.state);
-    }
-    return itemStates;
+    return this.getItems().map(item => item.state);
   };
 
   public getItemStatesForName = (itemName: string) => {
-    const itemStates: Inventory.ItemState[] = [];
-    for (const id of this.items) {
-      const item = itemManager.get(id);
-      if (item === undefined) continue;
-      const itemState = item.state;
-      if (itemState.name !== itemName) continue;
-      itemStates.push(itemState);
-    }
-    return itemStates;
+    return this.getItemStates().filter(s => s.name === itemName);
   };
 
   /**
@@ -250,7 +261,7 @@ export class Inv {
     const cfg = getConfig();
     if (cfg.persistentTypes.includes(this.type)) return true;
     if (cfg.vehicleTypes.includes(this.type)) {
-      return global.exports['dg-vehicles'].isVinFromPlayerVeh(this.identifier);
+      return Vehicles.isVinFromPlayerVeh(this.identifier);
     }
     return false;
   };
@@ -268,13 +279,10 @@ export class Inv {
   public destroyAllItems = () => {
     const itemIds: string[] = [];
     const itemNames: string[] = [];
-    [...this.items].forEach(id => {
-      const item = itemManager.get(id);
-      if (item) {
-        itemIds.push(item.state.id);
-        itemNames.push(item.state.name);
-        item.destroy(true);
-      }
+    this.getItems().forEach(item => {
+      itemIds.push(item.state.id);
+      itemNames.push(item.state.name);
+      item.destroy(true);
     });
 
     Util.Log(

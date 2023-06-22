@@ -9,11 +9,33 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+### Changed
+
+### Fixed
+
+## [1.2.6]
+
+### Added
+
 - UI devtools kan nu ook een IG image tonen
+- Restaurant medewerkers krijgen nu een extra paycheck wanneer ze in dienst zijn
+- Slot op deur in KingPills toegevoegd
+- Je kan nu alle items van een soort in 1 keer selecteren in je inventory (check het questionmark icon in je inventory)
+- Items die in een container zitten, tellen nu mee als items in je inventory. Dit betekend dat je bijvoorbeeld materialen er niet meer hoeft uit een container moet halen wanneer je iets wil craften.
+- Flare item toegevoegd te gebruiken bij evenementen
+- Voetbal jersey
 
 ### Changed
 
 - Report indicator aangepast naar iets duidelijker
+- Je kan stressitems nu gebruiken in een auto
+- Mechanics maken nu items met materialen die in de businessstash zitten in plaats van je eigen inventory
+- Je kan weer springen als je iemand escorteert
+- Aantal materialen per verwerkt materiaal verdubbeld maar alle nodige verwerkte materialen in crafting recipes gehalveerd. Dit zodat je effectief inventory space kan besparen door materialen te verwerken zoals origineel de bedoeling was van het verwerkt materiaal
+- Je ziet nu de service status van een voertuig in de garagelogs
+- De extra bomen zijn veranderd naar een minder dense pack
+- Enkele textures in MRPD
+- Handlings van alle imports + enkele GTA voertuigen aangepast
 
 ### Fixed
 
@@ -21,6 +43,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Foutmelding bij unlocken van voertuig opgelost
 - Een gang kan niet langer een bepaald item meermaals vinden
 - Verwijder nieuwe business zones bij verlaten van business
+- Wanneer je een debt betaald verdwijnt hij vanzelf uit de app
+- Antibiotica pill refilled je armor niet meer instantly
+- Je kan enkel nog armor items retreiven, en niet langer de armor regenererende items
+- Joint smoke animatie vervangen om deze ook te kunnen gebruiken voor vrouwen
+- Peek entries worden nu deftig verwijderd bij KingPills job
+- Eerste sirene die je afspeelt na het joinen zul je ook weer kunnen afzetten
 
 ## [1.2.5]
 

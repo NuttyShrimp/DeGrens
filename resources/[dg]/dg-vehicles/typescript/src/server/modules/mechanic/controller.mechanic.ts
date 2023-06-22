@@ -1,6 +1,6 @@
-import { Auth, Events, Inventory, RPC } from '@dgx/server';
+import { Events, Inventory, RPC } from '@dgx/server';
 
-import { loadConfig, loadZones } from './service.mechanic';
+import { loadConfig } from './service.mechanic';
 import { openPartsMenu, getOrderMenu, finishOrder, craftPart } from './services/parts.mechanic';
 import { attachVehicleToTowVehicle, removeVehicleFromTowVehicle, tryAcceptingJob } from './services/towing.mechanic';
 

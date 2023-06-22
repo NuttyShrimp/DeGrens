@@ -31,6 +31,7 @@ export const generatePhone = async () => {
 
 export const defaultMetadata: Core.Characters.Metadata = {
   armor: 0,
+  armorItem: null,
   health: 200,
   stress: 0,
   cash: 500,

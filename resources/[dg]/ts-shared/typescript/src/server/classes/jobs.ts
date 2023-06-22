@@ -183,8 +183,8 @@ class Hospital {
     global.exports['dg-hospital'].setNeed(plyId, need, value);
   };
 
-  public setArmor = (plyId: number, armor: number) => {
-    global.exports['dg-hospital'].setArmor(plyId, armor);
+  public setArmor = (plyId: number, amount: number, itemName: string) => {
+    global.exports['dg-hospital'].setArmor(plyId, amount, itemName);
   };
 
   public createDispatchCall(call: NPolice.DispatchCall): void {

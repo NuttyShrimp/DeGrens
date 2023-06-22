@@ -63,4 +63,5 @@ export const updateStateBag = <T extends keyof Sirens.State>(
 export const pushStateChange = (veh: number) => {
   if (!pendingStateChange) return;
   Entity(veh).state.set('sirenState', pendingStateChange, true);
+  pendingStateChange = null;
 };

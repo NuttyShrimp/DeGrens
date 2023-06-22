@@ -33,11 +33,3 @@ RPC.register('vehicles:isNearDoor', (vehNetId: number, distance: number) => {
   if (!veh || !DoesEntityExist(veh)) return false;
   return isCloseToADoor(veh, distance);
 });
-
-// When spawning vehicle on server, if model is not loaded yet for owner, the setheading native on server will NOT work
-onNet('vehicle:setHeading', async (netId: number, heading: number) => {
-  const exists = await Util.awaitEntityExistence(netId, true);
-  if (!exists) return;
-  const vehicle = NetworkGetEntityFromNetworkId(netId);
-  SetEntityHeading(vehicle, heading);
-});

@@ -1,4 +1,4 @@
-export const MATERIALS_FOR_PART: Record<Mechanic.PartType, string[]> = {
-  repair: ['material_iron', 'material_steel', 'material_aluminum'],
-  tune: ['refined_iron', 'refined_steel', 'refined_aluminum'],
+export const REQUIREMENTS_FOR_PART: Record<Mechanic.PartType, { items: string[]; amount: number }> = {
+  repair: { items: ['material_iron', 'material_steel', 'material_aluminum'], amount: 1 },
+  tune: { items: ['material_iron', 'material_steel', 'material_aluminum'], amount: 5 },
 };

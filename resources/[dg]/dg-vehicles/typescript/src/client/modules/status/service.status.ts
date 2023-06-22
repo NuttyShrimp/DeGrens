@@ -1,13 +1,6 @@
 import { Events, RPC, Sounds, Util, Vehicles } from '@dgx/client';
-
-import { getCurrentVehicle, isDriver } from '../../helpers/vehicle';
-
-import {
-  MINIMUM_DAMAGE_FOR_GUARANTEED_STALL,
-  MINIMUM_DAMAGE_FOR_STALL,
-  degradationValues,
-  handlingOverrideFunctions,
-} from './constant.status';
+import { isDriver } from '../../helpers/vehicle';
+import { MINIMUM_DAMAGE_FOR_GUARANTEED_STALL, MINIMUM_DAMAGE_FOR_STALL, degradationValues } from './constant.status';
 import { getVehicleFuel, overrideSetFuel } from 'modules/fuel/service.fuel';
 import { getVehicleVin } from 'modules/identification/service.identification';
 import { tryEjectAfterCrash } from 'modules/seatbelts/service.seatbelts';
@@ -40,20 +33,12 @@ let vehicleCrashThread: NodeJS.Timer | null = null;
 
 // region Service status
 
-const calculateDegrationSteps = () => {
-  for (const part in degradationValues) {
-    for (const value of degradationValues[part as keyof Service.Status]) {
-      value.step = (1 - value.percent) / 1000;
-    }
-  }
-};
-
 const setVehicleDegradation = (veh: number) => {
   if (!vehicleService) return;
 
-  for (const part in vehicleService.info) {
-    for (const value of degradationValues[part as keyof Service.Status]) {
-      const partValue = Math.max(0, vehicleService.info[part as keyof Service.Status]);
+  for (const part of Object.keys(vehicleService.info) as (keyof Service.Status)[]) {
+    for (const value of degradationValues[part]) {
+      const partValue = Math.max(0, vehicleService.info[part]);
       const newValue = 1 - value.step * (1000 - partValue);
       setHandlingContextMultiplier(veh, value.name, 'degradation', 'multiplier', newValue, 0);
     }
@@ -80,7 +65,6 @@ export const startStatusThread = async (vehicle: number) => {
   };
 
   // Calc handling values
-  calculateDegrationSteps();
   setVehicleDegradation(vehicle);
 
   const threads = {

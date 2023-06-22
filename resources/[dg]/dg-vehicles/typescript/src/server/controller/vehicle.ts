@@ -38,7 +38,10 @@ global.exports(
   'spawnVehicleFromAdminMenu',
   async (plyId: number, model?: string, vin?: string, applyMods?: boolean) => {
     const ped = GetPlayerPed(String(plyId));
-    const position = Vector4.createFromVec3(Util.getEntityCoords(ped), GetEntityHeading(ped));
+    const position = {
+      ...Util.getEntityCoords(ped),
+      w: GetEntityHeading(ped),
+    };
 
     let vehicle: number | null = null;
     if (vin) {
@@ -47,7 +50,7 @@ global.exports(
         Notifications.add(plyId, 'VIN does not belong to player vehicle', 'error');
         return;
       }
-      const ent = await spawnOwnedVehicle(plyId, vehicleInfo, position);
+      const ent = await spawnOwnedVehicle(plyId, vehicleInfo, position, true);
       if (!ent) {
         Notifications.add(plyId, 'Could not spawn owned vehicle', 'error');
         return;
@@ -71,10 +74,10 @@ global.exports(
       const spawnedVehicle = await spawnVehicle({
         model,
         position,
-        vin,
         upgrades,
         keys: plyId,
         fuel: 100,
+        engineState: true,
       });
       if (!spawnedVehicle) {
         Notifications.add(plyId, 'Could not spawn new vehicle', 'error');
@@ -83,7 +86,7 @@ global.exports(
       vehicle = spawnedVehicle.vehicle;
     }
 
-    teleportInSeat(String(plyId), vehicle);
+    teleportInSeat(plyId, vehicle);
   }
 );
 

@@ -6,12 +6,14 @@ Inventory.registerUseable('weed_seed', (plyId, itemState) => {
   Events.emitNet('criminal:weed:plant', plyId, itemState.id, MODELS_PER_STAGE[0]);
 });
 
-Events.onNet('criminal:weed:add', (plyId: number, itemId: string, coords: Vec3, rotation: Vec3) => {
-  const itemState = Inventory.getItemByIdFromPlayer(plyId, itemId);
-  if (!itemState) {
+Events.onNet('criminal:weed:add', async (plyId: number, itemId: string, coords: Vec3, rotation: Vec3) => {
+  const itemState = Inventory.getItemStateById(itemId);
+  const hasItem = await Inventory.doesPlayerHaveItemWithId(plyId, itemId);
+  if (!itemState || !hasItem) {
     Notifications.add(plyId, 'Je hebt het zaadje niet meer', 'error');
     return;
   }
+
   Inventory.destroyItem(itemState.id);
   const gender = itemState.metadata.gender as Criminal.Weed.Gender | undefined;
   if (!gender) {

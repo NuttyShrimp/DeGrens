@@ -379,6 +379,7 @@ declare namespace Phone {
     }
 
     interface StateActions {
+      fetchDebts: () => Promise<void>;
       setList: (list: Debt[]) => void;
     }
   }

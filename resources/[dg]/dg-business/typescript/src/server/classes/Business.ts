@@ -15,6 +15,7 @@ export class Business {
   private readonly signedInPlayers: Set<number>;
   private readonly registers: Map<number, { price: number; employeeCid: number; orderId: string; items?: string[] }>;
   private readonly priceItems: Map<string, { label: string; price: number }>;
+  private paycheckThread: NodeJS.Timer | null;
 
   constructor(pInfo: Business.Info) {
     this.info = pInfo;
@@ -26,6 +27,7 @@ export class Business {
     this.signedInPlayers = new Set();
     this.registers = new Map();
     this.priceItems = new Map();
+    this.paycheckThread = null;
   }
 
   private getOwnerCid = () => {
@@ -144,6 +146,30 @@ export class Business {
         label: Inventory.getItemData(item).label,
       });
     }
+  };
+
+  private startPaycheckThread = () => {
+    if (this.paycheckThread !== null) return;
+
+    const paycheckConfig = this.getTypeConfig()?.paycheck;
+    if (!paycheckConfig) return;
+
+    this.paycheckThread = setInterval(() => {
+      this.signedInPlayers.forEach(plyId => {
+        Inventory.addItemToPlayer(plyId, 'sales_ticket', 1, {
+          origin: 'generic',
+          amount: paycheckConfig.amount,
+          hiddenKeys: ['origin', 'amount'],
+        });
+      });
+    }, paycheckConfig.time * 1000);
+  };
+
+  private stopPaycheckThread = () => {
+    if (this.paycheckThread === null) return;
+
+    clearInterval(this.paycheckThread);
+    this.paycheckThread = null;
   };
 
   // Check if an array of perissions doesn't include
@@ -804,6 +830,8 @@ export class Business {
     this.signedInPlayers.add(plyId);
     Events.emitNet('business:client:addSignedIn', plyId, this.info);
 
+    this.startPaycheckThread();
+
     const logMsg = `${Util.getName(plyId)}(${plyId}) has signed in at ${this.info.label}`;
     this.logger.silly(logMsg);
     Util.Log(
@@ -833,6 +861,10 @@ export class Business {
 
     this.signedInPlayers.delete(plyId);
     Events.emitNet('business:client:removeSignedIn', plyId, this.info);
+
+    if (this.signedInPlayers.size === 0) {
+      this.stopPaycheckThread();
+    }
 
     const logMsg = `${Util.getName(plyId)}(${plyId}) has signed out at ${this.info.label}`;
     this.logger.silly(logMsg);

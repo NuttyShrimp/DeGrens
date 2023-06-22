@@ -1,4 +1,4 @@
-import { RPC, Util, Vehicles } from '@dgx/server';
+import { RPC, Util } from '@dgx/server';
 import { insertVehicleStatus } from 'db/repository';
 import { addWaxedVehicle } from 'modules/carwash/service.carwash';
 import { setVehicleNosAmount } from 'modules/nos/service.nos';
@@ -58,25 +58,11 @@ export const spawnVehicle: Vehicles.SpawnVehicleFunction = async data => {
   // force to be floats
   const position = Vector4.create({ w: 0, ...data.position }).add(0.001);
   const modelHash = GetHashKey(data.model);
-  const vehicle = CreateVehicleServerSetter(modelHash, modelType, position.x, position.y, position.z, position.w);
+  const vehicle = CreateVehicleServerSetter(modelHash, modelType, position.x, position.y, position.z + 0.5, position.w); // 0.5 offset to avoid ground clipping
 
-  const doesExist = await Util.awaitEntityExistence(vehicle);
-  if (!doesExist) {
+  if (!vehicle || !DoesEntityExist(vehicle)) {
     mainLogger.error(`Spawn vehicle: vehicle didn't spawn | model: ${data.model}`);
     return;
-  }
-
-  const entityOwner = NetworkGetEntityOwner(vehicle);
-  const netId = NetworkGetNetworkIdFromEntity(vehicle);
-
-  mainLogger.debug(
-    `Spawn vehicle: spawned | model: ${data.model} | entity: ${vehicle} | netId: ${netId} | owner: ${entityOwner}`
-  );
-
-  // If model is not yet loaded for entityowner, this heading native will not work
-  // we still try because it sometimes fixed vehicles spawning at wrong place because 0 heading can be inside a wall
-  if (entityOwner > 0) {
-    emitNet('vehicle:setHeading', entityOwner, netId, position.w);
   }
 
   // setting vin
@@ -86,7 +72,7 @@ export const spawnVehicle: Vehicles.SpawnVehicleFunction = async data => {
   // setting plate
   const plate = data.plate ?? plateManager.generatePlate();
   plateManager.registerPlate(plate);
-  Vehicles.setNumberPlate(vehicle, plate, data.isFakePlate);
+  plateManager.setNumberPlate(vehicle, plate, data.isFakePlate);
 
   // setting fuel
   fuelManager.registerVehicle(vehicle, data.fuel);
@@ -119,7 +105,17 @@ export const spawnVehicle: Vehicles.SpawnVehicleFunction = async data => {
       ...data.upgrades,
     };
     upgradesManager.apply(vehicle, mergedUpgrades);
+
+    // engine state
+    if (data.engineState !== undefined) {
+      setEngineState(vehicle, data.engineState, true);
+    }
   });
+
+  const netId = NetworkGetNetworkIdFromEntity(vehicle);
+  mainLogger.debug(
+    `Spawned vehicle | model: ${data.model} | entity: ${vehicle} | netId: ${netId} | vin: ${vin} | plate: ${plate}`
+  );
 
   return {
     vehicle,
@@ -129,21 +125,24 @@ export const spawnVehicle: Vehicles.SpawnVehicleFunction = async data => {
   };
 };
 
-export const spawnOwnedVehicle = async (src: number, vehicleInfo: Vehicle.Vehicle, position: Vec4) => {
+export const spawnOwnedVehicle = async (
+  src: number,
+  vehicleInfo: Vehicle.Vehicle,
+  position: Vec4,
+  engineState?: boolean
+) => {
   const upgrades = await upgradesManager.getFull(vehicleInfo.vin);
 
   const spawnedVehicle = await spawnVehicle({
     model: vehicleInfo.model,
-    position: {
-      ...position,
-      z: position.z + 0.5,
-    },
+    position,
     vin: vehicleInfo.vin,
     plate: vehicleInfo.fakeplate ?? vehicleInfo.plate,
     isFakePlate: !!vehicleInfo.fakeplate,
     keys: src,
     upgrades,
     overrideStance: vehicleInfo.stance ?? undefined,
+    engineState,
   });
   if (!spawnedVehicle) return;
   const { vehicle, vin } = spawnedVehicle;
@@ -205,8 +204,8 @@ export const getCurrentVehicle = (plyId: number, mustBeDriver = false): number |
   return vehicle;
 };
 
-export const teleportInSeat = async (src: string, entity: number, seat = -1) => {
-  const plyPed = GetPlayerPed(src);
+export const teleportInSeat = async (src: number, entity: number, seat = -1) => {
+  const plyPed = GetPlayerPed(String(src));
   let attempts = 0;
   while (attempts < 20 && !GetPedInVehicleSeat(entity, seat)) {
     attempts++;

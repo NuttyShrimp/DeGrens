@@ -34,7 +34,7 @@ export const toggleHornSound = (veh: number, play: boolean) => {
 
 export const shuffleSirenSound = (veh: number, mode: number) => {
   let soundId = sirenSoundStore.get(veh);
-  if (soundId) {
+  if (soundId !== undefined) {
     cleanupSirenSound(veh, soundId);
   }
   if (mode === 0) return;

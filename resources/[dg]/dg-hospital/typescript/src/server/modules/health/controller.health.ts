@@ -43,7 +43,7 @@ export const registerHealItems = () => {
     Inventory.setQualityOfItem(itemState.id, oldQuality => oldQuality - qualityDecrease);
 
     if (healItem.effects.fillArmor) {
-      startRefillingArmorForPlayer(plyId, healItem.effects.fillArmor);
+      startRefillingArmorForPlayer(plyId, healItem.effects.fillArmor, itemState.name);
     }
 
     Events.emitNet('hospital:health:useHealItem', plyId, healItem.effects);

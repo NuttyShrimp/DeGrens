@@ -41,12 +41,14 @@ Events.onNet('misc:idlist:close', (plyId: number) => {
 
   const d = new Date();
   const closingTime = d.toLocaleString();
+  const plyCoords = Util.getPlyCoords(plyId);
 
   Util.Log(
     'idlist:use',
     {
       openingTime,
       closingTime,
+      plyCoords,
     },
     `${Util.getName(plyId)}(${plyId}) has used the idlist`,
     plyId

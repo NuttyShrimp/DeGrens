@@ -104,6 +104,10 @@ declare namespace Business {
     lockers?: {
       size: number;
     };
+    paycheck: {
+      amount: number; // amount per paycheck
+      time: number; // time in seconds between paychecks
+    };
   };
 
   type ClientPricedItems = Record<

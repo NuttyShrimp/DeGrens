@@ -240,7 +240,7 @@ const moveAllItemsToInventory = async (
   const originId = Inventory.concatId(originType, originIdentifier);
   const originInventory = await inventoryManager.get(originId);
   const targetId = Inventory.concatId(targetType, targetIdentifier);
-  const itemIds = originInventory.getItems().map(i => i.state.id);
+  const itemIds = originInventory.getItems(true).map(i => i.state.id);
   await itemManager.moveMultipleItems(0, targetId, itemIds);
 };
 
@@ -252,17 +252,6 @@ const doesInventoryHaveItemWithId = async (type: Inventory.Type, identifier: str
   const invId = Inventory.concatId(type, identifier);
   const inventory = await inventoryManager.get(invId);
   return inventory.hasItemId(itemId);
-};
-
-const getItemByIdFromInventory = (type: Inventory.Type, identifier: string, itemId: string) => {
-  const item = itemManager.get(itemId);
-  if (!item) return;
-
-  const itemState = item.state;
-  const invId = Inventory.concatId(type, identifier);
-  if (itemState.inventory !== invId) return;
-
-  return itemState;
 };
 
 const showItemBox = (plyId: number, itemName: string, label: string) => {
@@ -288,7 +277,6 @@ global.exports('createScriptedStash', createScriptedStash);
 global.exports('moveAllItemsToInventory', moveAllItemsToInventory);
 global.asyncExports('getItemStateFromDatabase', getItemStateFromDatabase);
 global.asyncExports('doesInventoryHaveItemWithId', doesInventoryHaveItemWithId);
-global.exports('getItemByIdFromInventory', getItemByIdFromInventory);
 global.exports('showItemBox', showItemBox);
 
 // Events for client

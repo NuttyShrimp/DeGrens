@@ -11,7 +11,6 @@ import {
   setVehicleState,
 } from '../../db/repository';
 import { deleteVehicle, getVinForNetId, spawnOwnedVehicle } from '../../helpers/vehicle';
-import vinmanager from '../identification/classes/vinmanager';
 import { getCidFromVin } from '../identification/service.id';
 import { getNativeStatus } from '../status/service.status';
 import { GarageThread } from './classes/parkingSpotThread';
@@ -19,6 +18,7 @@ import { garageLogger } from './logger.garages';
 import { addVehicleGarageLog, getVehicleGarageLog } from './services/logs.garages';
 import vinManager from '../identification/classes/vinmanager';
 import { fuelManager } from 'modules/fuel/classes/fuelManager';
+import { getServiceStatus } from 'modules/status/services/store';
 
 const garages: Map<string, Garage.Garage> = new Map();
 const parkingSpotThreads: Map<number, GarageThread> = new Map();
@@ -273,7 +273,8 @@ export const takeVehicleOutGarage = async (src: number, vin: string): Promise<nu
     return;
   }
 
-  addVehicleGarageLog(vin, cid, false, vehicleInfo.status);
+  const serviceStatus = await getServiceStatus(vin);
+  addVehicleGarageLog(vin, cid, false, vehicleInfo.status.fuel, serviceStatus);
   Util.Log(
     'vehicle:garage:retrieve:success',
     {
@@ -344,7 +345,8 @@ export const storeVehicleInGarage = async (src: number, entity: number) => {
   // Set vehicle as parked
   await setVehicleState(vin, 'parked');
   await setVehicleGarage(vin, garage_id);
-  addVehicleGarageLog(vin, cid, true, vehState);
+  const serviceStatus = await getServiceStatus(vin);
+  addVehicleGarageLog(vin, cid, true, fuelLevel, serviceStatus);
   Util.Log(
     'vehicle:garage:parked:success',
     {

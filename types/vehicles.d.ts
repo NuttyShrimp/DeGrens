@@ -9,6 +9,7 @@ declare namespace Vehicles {
     keys?: number;
     isFakePlate?: boolean;
     overrideStance?: Stances.Stance;
+    engineState?: boolean;
   }) => Promise<
     | {
         vehicle: number;
