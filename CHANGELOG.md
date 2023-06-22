@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Knoppen in character selection menu zijn van plaats en kleur veranderd zodat ze beter hun actie representeren
 - Je dient nu de naam van ja karakter in te typen als je deze wilt verwijderen ter confirmatie
+- De queue ziet er wat beter uit
 
 ### Fixed
 
@@ -24,6 +25,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Peek opties die items vereisten werken nu ook als het item in een container in je inventory zit
 - Je doet nu wel altijd de drop item animatie wanneer je iets op de grond legt
 - Je kan nu craften met items die in een container in je inventory zitten
+- Ja blijft niet meer vasthangen op checking banstatus etc
 
 ## [1.2.6]
 
