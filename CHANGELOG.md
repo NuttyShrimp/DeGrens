@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Je kan nu alle items van een soort in 1 keer selecteren in je inventory (check het questionmark icon in je inventory)
 - Items die in een container zitten, tellen nu mee als items in je inventory. Dit betekend dat je bijvoorbeeld materialen er niet meer hoeft uit een container moet halen wanneer je iets wil craften.
 - Flare item toegevoegd te gebruiken bij evenementen
+- Voetbal jersey
 
 ### Changed
 
@@ -24,6 +25,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Je kan weer springen als je iemand escorteert
 - Aantal materialen per verwerkt materiaal verdubbeld maar alle nodige verwerkte materialen in crafting recipes gehalveerd. Dit zodat je effectief inventory space kan besparen door materialen te verwerken zoals origineel de bedoeling was van het verwerkt materiaal
 - Je ziet nu de service status van een voertuig in de garagelogs
+- De extra bomen zijn veranderd naar een minder dense pack
+- Enkele textures in MRPD
+- Handlings van alle imports + enkele GTA voertuigen aangepast
 
 ### Fixed
 
