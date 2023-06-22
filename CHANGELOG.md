@@ -40,6 +40,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Je kan enkel nog armor items retreiven, en niet langer de armor regenererende items
 - Joint smoke animatie vervangen om deze ook te kunnen gebruiken voor vrouwen
 - Peek entries worden nu deftig verwijderd bij KingPills job
+- Eerste sirene die je afspeelt na het joinen zul je ook weer kunnen afzetten
 
 ## [1.2.5]
 
