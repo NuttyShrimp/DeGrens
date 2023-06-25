@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 - Error van doorlock tijdens inladen opgelost
+- Aantal nodige materialen bij mechanics wordt nu correct weergegeven
 
 ## [1.2.6]
 

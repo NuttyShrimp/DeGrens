@@ -135,7 +135,7 @@ export const openPartsMenu = async (plyId: number) => {
         },
         {
           title: 'Tunes',
-          description: `Benodigheden per tune per stage: ${i + 1}x verwerkt aluminium, staal of ijzer`,
+          description: `Benodigheden per tune per stage: ${(i + 1) * 5}x aluminium, staal of ijzer`,
           submenu: tuneEntries,
         },
       ],
