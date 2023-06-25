@@ -284,6 +284,10 @@ class Inventory extends UtilShared.Singleton<Inventory>() {
   public openOtherPlayer = (plyId: number, otherPlayer: number): void => {
     Events.emitNet('inventory:client:open', plyId, { type: 'player', data: otherPlayer });
   };
+
+  public forceUnloadInventory = (inventoryId: string) => {
+    global.exports['dg-inventory'].forceUnloadInventory(inventoryId);
+  };
 }
 
 export default {
