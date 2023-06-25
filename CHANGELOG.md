@@ -8,11 +8,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+
 - Admin command toegevoegd om inventories te unloaden
 
 ### Changed
 
+- Knoppen in character selection menu zijn van plaats en kleur veranderd zodat ze beter hun actie representeren
+- Je dient nu de naam van ja karakter in te typen als je deze wilt verwijderen ter confirmatie
+
 ### Fixed
+
 - Error van doorlock tijdens inladen opgelost
 - Aantal nodige materialen bij mechanics wordt nu correct weergegeven
 - Probleem bij het inladen van een inventory opgelost door case-sensitivity van inventory ids

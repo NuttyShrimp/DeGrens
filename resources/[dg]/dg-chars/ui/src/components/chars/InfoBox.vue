@@ -12,7 +12,7 @@
             </q-item-section>
             <q-item-section> Spawn </q-item-section>
           </q-item>
-          <q-item v-ripple clickable @click.stop="deleteChar">
+          <q-item v-ripple clickable @click.stop="deleteChar" v-if="!(currentCharacter?.citizenid === 1)">
             <q-item-section side>
               <q-icon name="fas fa-times" size="sm" color="red" />
             </q-item-section>
@@ -39,14 +39,20 @@
     <q-dialog v-model="deleteDialog" persistent>
       <q-card>
         <q-card-section class="row items-center">
-          <span class="q-ml-sm"
-            >Weet je zeker dat je je karakter wilt verwijderen? Dit kan niet ongedaan gemaakt worden!</span
-          >
+          <span> Weet je zeker dat je je karakter wilt verwijderen? Dit kan niet ongedaan gemaakt worden! </span>
+          <q-input
+            v-model="deleteConfirmPhrase"
+            dense
+            label="Confirm delete"
+            :placeholder="currentCharacter?.name"
+            hint="Typ hierboven de naam van je karakter"
+            autofocus
+          />
         </q-card-section>
 
         <q-card-actions align="right">
-          <q-btn v-close-popup label="Delete" color="primary" @click.prevent="confirmDelete" />
-          <q-btn v-close-popup label="Cancel" color="secondary" @click.prevent="unFreeze" />
+          <q-btn v-close-popup label="Cancel" color="primary" @click.prevent="unFreeze" />
+          <q-btn label="Delete" color="accent" @click.prevent="confirmDelete" />
         </q-card-actions>
       </q-card>
     </q-dialog>
@@ -86,8 +92,8 @@
         </q-card-section>
 
         <q-card-actions align="right">
-          <q-btn v-close-popup label="Create" color="primary" @click.prevent="confirmCreate" />
-          <q-btn v-close-popup label="Cancel" color="secondary" @click.prevent="unFreeze" />
+          <q-btn v-close-popup label="Cancel" color="primary" @click.prevent="unFreeze" />
+          <q-btn v-close-popup label="Create" color="secondary" @click.prevent="confirmCreate" />
         </q-card-actions>
       </q-card>
     </q-dialog>
@@ -95,6 +101,7 @@
 </template>
 
 <script lang="ts">
+  import { useQuasar } from 'quasar';
   import { computed, defineComponent, reactive, ref } from 'vue';
 
   import { nuiAction } from '../../lib/nui/action';
@@ -117,6 +124,7 @@
         today18Date.getDate()
       )}`;
       const store = useStore();
+      const $q = useQuasar();
       const currentCharacter = computed(() => store.state.currentCharacter);
       const isPosFrozen = computed(() => store.state.freezePosition);
       const deleteDialog = ref(false);
@@ -128,6 +136,7 @@
         birthdate: today18,
         gender: 0,
       });
+      const deleteConfirmPhrase = ref('');
 
       const dobLimit = (date: string) => {
         // Smaller or eq to today18
@@ -143,6 +152,13 @@
       };
 
       const confirmDelete = () => {
+        if (!currentCharacter.value?.name || deleteConfirmPhrase.value !== currentCharacter.value?.name) {
+          $q.notify({
+            type: 'negative',
+            message: 'The input field does not match your character name',
+          });
+          return;
+        }
         deleteDialog.value = false;
         nuiAction('deleteChar');
         store.commit('setFreezePosition', false);
@@ -178,6 +194,7 @@
           (val: string) => !!val || '* Verplicht',
           (val: string) => val.length > 2 || 'Je naam moet minstens 3 karakters lang zijn',
         ],
+        deleteConfirmPhrase,
       };
     },
   });
