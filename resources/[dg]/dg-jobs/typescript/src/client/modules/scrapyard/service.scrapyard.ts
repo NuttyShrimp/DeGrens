@@ -21,12 +21,10 @@ export const registerScrapyardStartPeekOptions = (partItems: Scrapyard.Config['p
       {
         label: 'Geef onderdeel',
         icon: 'fas fa-box',
+        items: partItems,
+        partialItems: true,
         action: () => {
           Events.emitNet('jobs:scrapyard:givePart');
-        },
-        canInteract: () => {
-          const cachedItems = Inventory.getCachedItemNames();
-          return partItems.some(part => cachedItems.indexOf(part) !== -1);
         },
       },
     ],

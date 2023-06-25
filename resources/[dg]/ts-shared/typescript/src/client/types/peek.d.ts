@@ -8,6 +8,7 @@ interface Option {
    * Array of strings, each string is the name of an item. The player must have all items to be able to see this entry
    */
   items?: string | string[];
+  partialItems?: boolean; // if true, the player only needs to have one of the items provided
   /*
    * This will be called each time the target is valid for this entry
    * This means no expensive operations should be done here

@@ -139,7 +139,7 @@ export const main: RadialMenu.Entry[] = [
     type: 'dgxServer',
     event: 'misc:server:toggleAnchor',
     shouldClose: true,
-    isEnabled: ({ job, currentVehicle, items }) => {
+    isEnabled: ({ currentVehicle }) => {
       if (!currentVehicle || GetVehicleClass(currentVehicle) !== 14) return false;
       return GetPedInVehicleSeat(currentVehicle, -1) === PlayerPedId();
     },

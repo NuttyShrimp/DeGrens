@@ -16,6 +16,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Error van doorlock tijdens inladen opgelost
 - Aantal nodige materialen bij mechanics wordt nu correct weergegeven
 - Probleem bij het inladen van een inventory opgelost door case-sensitivity van inventory ids
+- Peek opties die items vereisten werken nu ook als het item in een container in je inventory zit
+- Je doet nu wel altijd de drop item animatie wanneer je iets op de grond legt
 
 ## [1.2.6]
 

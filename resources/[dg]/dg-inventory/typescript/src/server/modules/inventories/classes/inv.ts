@@ -141,18 +141,16 @@ export class Inv {
     if (this.type !== 'player') return;
 
     const serverId = charModule.getServerIdFromCitizenId(Number(this.identifier));
-    if (serverId) {
-      emitNet('inventory:updateCache', serverId, action, itemState.name);
+    if (!serverId) return;
 
-      const newInv = await inventoryManager.get(itemState.inventory);
-      if (newInv.type === 'drop' && newInv.items.size === 0) {
-        emitNet('inventory:doDropAnimation', serverId);
-      }
+    const newInv = await inventoryManager.get(itemState.inventory);
+    if (newInv.type === 'drop' && newInv.items.size <= 1) {
+      emitNet('inventory:doDropAnimation', serverId);
+    }
 
-      // If item has associated obj
-      if (objectsUtility.config?.items[itemState.name]) {
-        Events.emitNet('inventory:client:updateObject', serverId, action, { id: itemState.id, name: itemState.name });
-      }
+    // If item has associated obj
+    if (objectsUtility.config?.items[itemState.name]) {
+      Events.emitNet('inventory:client:updateObject', serverId, action, { id: itemState.id, name: itemState.name });
     }
   };
 
