@@ -179,8 +179,8 @@ export class Inv {
     return items;
   };
 
-  public getItemStates = () => {
-    return this.getItems().map(item => item.state);
+  public getItemStates = (ignoreContainers = false) => {
+    return this.getItems(ignoreContainers).map(item => item.state);
   };
 
   public getItemStatesForName = (itemName: string) => {

@@ -18,6 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Probleem bij het inladen van een inventory opgelost door case-sensitivity van inventory ids
 - Peek opties die items vereisten werken nu ook als het item in een container in je inventory zit
 - Je doet nu wel altijd de drop item animatie wanneer je iets op de grond legt
+- Je kan nu craften met items die in een container in je inventory zitten
 
 ## [1.2.6]
 
