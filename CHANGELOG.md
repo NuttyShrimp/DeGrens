@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - Error van doorlock tijdens inladen opgelost
 - Aantal nodige materialen bij mechanics wordt nu correct weergegeven
+- Probleem bij het inladen van een inventory opgelost door case-sensitivity van inventory ids
 
 ## [1.2.6]
 
