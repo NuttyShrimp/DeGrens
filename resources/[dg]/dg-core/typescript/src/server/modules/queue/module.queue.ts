@@ -103,6 +103,6 @@ export class QueueModule implements Modules.ServerModule, Core.ServerModules.Que
     }
     setTimeout(() => {
       queueManager.joinQueue(src, name, steamId, deferrals);
-    }, 10000);
+    }, 2000);
   };
 }
