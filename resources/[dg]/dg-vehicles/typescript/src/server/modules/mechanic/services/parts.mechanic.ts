@@ -200,6 +200,17 @@ export const craftPart = async (plyId: number, partItem: Mechanic.PartItem) => {
 
   const partLabel = buildPartLabel(partItem);
   Notifications.add(plyId, `Je hebt een ${partLabel} gemaakt`);
+
+  Util.Log(
+    'vehicles/mechanic/craftPart',
+    {
+      shop,
+      itemName: partData.itemName,
+      partClass: partItem.class,
+    },
+    `${Util.getName(plyId)}(${plyId}) has crafted ${partLabel} for ${shop}`,
+    plyId
+  );
 };
 
 export const getOrderMenu = async (plyId: number) => {

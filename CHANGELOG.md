@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Admin command toegevoegd om inventories te unloaden
+- Logs toegevoegd om het maken van mechanic parts
 
 ### Changed
 
