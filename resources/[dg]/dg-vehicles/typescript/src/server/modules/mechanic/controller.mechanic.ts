@@ -14,10 +14,22 @@ global.exports('calculateSalesTicketsPrice', async (ticketItem: Inventory.ItemSt
   const { items } = ticketItem.metadata as Mechanic.TicketMetadata;
   const ticketRevenues = await Promise.all(
     items.map(async item => {
-      // only repair parts need to be used, tunes will always still exist
-      if (item.type === 'repair') {
-        const itemState = await Inventory.getItemStateFromDatabase(item.itemId);
-        if (itemState) return 0;
+      const itemState = await Inventory.getItemStateFromDatabase(item.itemId);
+
+      let priceForItem = item.amount;
+      switch (item.type) {
+        case 'repair':
+          // repair parts need to be destroyed/used to receive money
+          if (itemState) {
+            priceForItem = 0;
+          }
+          break;
+        case 'tune':
+          // tune parts need to exist and be in a tunes inventory to receive money
+          if (!itemState || Inventory.splitId(itemState.inventory).type !== 'tunes') {
+            priceForItem = 0;
+          }
+          break;
       }
       return item.amount;
     })
