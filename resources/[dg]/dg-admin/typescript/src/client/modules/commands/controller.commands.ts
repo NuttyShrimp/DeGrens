@@ -3,6 +3,7 @@ import { Events, Notifications, PropAttach, RPC, SyncedObjects, Util } from '@dg
 import { disableBlips, enableBlips } from '../../service/playerBlips';
 import { toggleLocalVis } from './service.commands';
 import { getCmdState, setCmdState } from './state.commands';
+import { toggleNoclip } from 'service/noclip';
 
 // Functiontypes fuck up when putting this in command directly because that file is serversided but function gets executed on client
 on('admin:commands:damageEntity', (ent: number) => {
@@ -204,6 +205,10 @@ Events.onNet('admin:commands:teleportInVehicle', (netId: number) => {
   if (freeSeat === undefined) {
     Notifications.add('Er is geen plaats in het voertuig', 'error');
     return;
+  }
+
+  if (getCmdState('noclip')) {
+    toggleNoclip(false);
   }
 
   TaskWarpPedIntoVehicle(PlayerPedId(), vehicle, freeSeat);

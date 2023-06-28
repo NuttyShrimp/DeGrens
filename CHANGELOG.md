@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Knoppen in character selection menu zijn van plaats en kleur veranderd zodat ze beter hun actie representeren
 - Je dient nu de naam van ja karakter in te typen als je deze wilt verwijderen ter confirmatie
 - De queue ziet er wat beter uit
+- Als je in een voertuig TPed zal je uit noclip geforceerd worden
 
 ### Fixed
 
