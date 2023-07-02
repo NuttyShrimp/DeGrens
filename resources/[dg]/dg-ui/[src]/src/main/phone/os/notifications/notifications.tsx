@@ -13,10 +13,10 @@ import { usePhoneNotiStore } from '../../stores/usePhoneNotiStore';
 import { styles } from './notification.styles';
 
 const NotificationButton = styled(Button)({
-  borderRadius: '10vh',
+  borderRadius: '0.5vh',
   fontSize: '.7em',
   color: 'white',
-  borderColor: 'white',
+  borderColor: 'transparent',
   padding: '.25vh .75vh',
 });
 
@@ -66,7 +66,7 @@ export const Notification = forwardRef<HTMLDivElement, { notification: Phone.Not
           <div className={classes.btns}>
             {notification.onAccept && (
               <div>
-                <NotificationButton variant={'outlined'} onClick={handleAccept}>
+                <NotificationButton variant={'text'} onClick={handleAccept}>
                   Accept
                 </NotificationButton>
               </div>
@@ -74,7 +74,7 @@ export const Notification = forwardRef<HTMLDivElement, { notification: Phone.Not
             {notification.onAccept && notification.onDecline && <div>|</div>}
             {notification.onDecline && (
               <div>
-                <NotificationButton variant={'outlined'} onClick={handleDecline}>
+                <NotificationButton variant={'text'} onClick={handleDecline}>
                   Decline
                 </NotificationButton>
               </div>
