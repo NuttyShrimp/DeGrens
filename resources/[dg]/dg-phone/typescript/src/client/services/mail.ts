@@ -31,11 +31,3 @@ export const restoreCachedMails = () => {
     data: cachedMails,
   });
 };
-
-// UI.RegisterUICallback('phone/mail/removeMail', (data: { id: string }, cb) => {
-//   cachedMails.splice(
-//     cachedMails.findIndex(mail => mail.id === data.id),
-//     1
-//   );
-//   cb({ data: null, meta: { ok: true, message: 'done' } });
-// });

@@ -2,7 +2,6 @@ import { FC, useState } from 'react';
 import * as React from 'react';
 import { IconButton } from '@src/components/button';
 import { Icon } from '@src/components/icon';
-import { nuiAction } from '@src/lib/nui-comms';
 
 import { formatRelativeTime, getFirstLine, sanitizeText } from '../../../../../lib/util';
 import { AppContainer } from '../../../os/appcontainer/appcontainer';
@@ -24,7 +23,6 @@ export const MailEntry: FC<React.PropsWithChildren<{ mail: Phone.Mail.Mail }>> =
             onClick={e => {
               e.stopPropagation();
               removeMail(mail.id);
-              nuiAction('phone/mail/removeMail', mail.id);
             }}
           >
             <Icon name='xmark' size='0.8rem' />
