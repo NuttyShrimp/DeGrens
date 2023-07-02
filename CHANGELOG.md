@@ -28,6 +28,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Je doet nu wel altijd de drop item animatie wanneer je iets op de grond legt
 - Je kan nu craften met items die in een container in je inventory zitten
 - Ja blijft niet meer vasthangen op checking banstatus etc
+- Problemen met impound kost opgelost
 
 ## [1.2.6]
 
