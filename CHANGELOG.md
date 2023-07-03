@@ -30,6 +30,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Ja blijft niet meer vasthangen op checking banstatus etc
 - Problemen met impound kost opgelost
 - Kapotte items worden nu wel expliciet gecheckt om ze te verwijderen na een restart
+- Notificatie tekst bij voertuig op slot zetten is nu juist
 
 ## [1.2.6]
 
