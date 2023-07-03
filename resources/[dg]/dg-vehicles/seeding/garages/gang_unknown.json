@@ -1,0 +1,45 @@
+{
+  "garage_id": "unknown",
+  "name": "Jens' Prive Garage",
+  "type": "gang",
+  "shared": true,
+  "location": {
+    "vector": {
+      "x": 460.2,
+      "y": -279.87,
+      "z": 48.63
+    },
+    "width": 8.2,
+    "length": 9.2,
+    "options": {
+      "heading": 340,
+      "minZ": 47.23,
+      "maxZ": 51.83
+    }
+  },
+  "vehicle_types": ["land"],
+  "parking_spots": [
+    {
+      "type": "land",
+      "size": 2.0,
+      "distance": 1.8,
+      "heading": 160,
+      "coords": {
+        "x": 457.666,
+        "y": -280.438,
+        "z": 47.792
+      }
+    },
+    {
+      "type": "land",
+      "size": 2.0,
+      "distance": 1.8,
+      "heading": 160,
+      "coords": {
+        "x": 461.934,
+        "y": -281.834,
+        "z": 47.507
+      }
+    }
+  ]
+}
