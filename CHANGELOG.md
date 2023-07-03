@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Je dient nu de naam van ja karakter in te typen als je deze wilt verwijderen ter confirmatie
 - De queue ziet er wat beter uit
 - Als je in een voertuig TPed zal je uit noclip geforceerd worden
+- Politie revive wanneer er geen ambulance is, extra gelimiteerd om abuse te voorkomen
 
 ### Fixed
 
