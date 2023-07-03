@@ -29,6 +29,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Je kan nu craften met items die in een container in je inventory zitten
 - Ja blijft niet meer vasthangen op checking banstatus etc
 - Problemen met impound kost opgelost
+- Kapotte items worden nu wel expliciet gecheckt om ze te verwijderen na een restart
 
 ## [1.2.6]
 

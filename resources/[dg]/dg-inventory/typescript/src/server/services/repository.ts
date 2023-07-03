@@ -108,7 +108,7 @@ class Repository extends Util.Singleton<Repository>() {
 
   // Does not need to be queued, only gets used on server start and gets awaited
   public deleteByDestroyDate = async () => {
-    const currentMinutes = Math.floor(Date.now() / (1000 * 60));
+    const currentMinutes = Math.floor(Date.now() / 1000);
 
     const query = `DELETE FROM inventory_items WHERE destroyDate < ? RETURNING *`;
     const result = await SQL.query<Repository.FetchResult[]>(query, [currentMinutes]);
