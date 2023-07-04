@@ -90,7 +90,7 @@ Events.onNet('hospital:job:heal', (plyId: number) => {
     return;
   }
 
-  healClosestPlayer(plyId);
+  healClosestPlayer(plyId, plyJob === 'police');
 });
 
 Events.onNet('hospital:job:assistence', (src: number) => {

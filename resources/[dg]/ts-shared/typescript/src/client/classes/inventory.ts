@@ -33,14 +33,6 @@ class Inventory {
     return !!(await RPC.execute<boolean>('inventory:server:removeItemById', itemId));
   };
 
-  /**
-   * Only use to do first check in things like peek, radialmenu where you dont want to call server every time
-   * Make sure to use proper server check when doing action
-   */
-  public getCachedItemNames = (): string[] => {
-    return global.exports['dg-inventory'].getCachedItemNames();
-  };
-
   public toggleObject = (itemId: string, toggle: boolean) => {
     Events.emitNet('inventory:objects:toggle', itemId, toggle);
   };
@@ -55,6 +47,11 @@ class Inventory {
 
   public close = () => {
     global.exports['dg-inventory'].close();
+  };
+
+  public getAllItemNames = async () => {
+    const items = await RPC.execute<string[]>('inventory:server:getAllItemNames');
+    return items;
   };
 }
 

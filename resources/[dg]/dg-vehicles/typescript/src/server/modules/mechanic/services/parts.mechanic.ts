@@ -135,7 +135,7 @@ export const openPartsMenu = async (plyId: number) => {
         },
         {
           title: 'Tunes',
-          description: `Benodigheden per tune per stage: ${i + 1}x verwerkt aluminium, staal of ijzer`,
+          description: `Benodigheden per tune per stage: ${(i + 1) * 5}x aluminium, staal of ijzer`,
           submenu: tuneEntries,
         },
       ],
@@ -200,6 +200,17 @@ export const craftPart = async (plyId: number, partItem: Mechanic.PartItem) => {
 
   const partLabel = buildPartLabel(partItem);
   Notifications.add(plyId, `Je hebt een ${partLabel} gemaakt`);
+
+  Util.Log(
+    'vehicles/mechanic/craftPart',
+    {
+      shop,
+      itemName: partData.itemName,
+      partClass: partItem.class,
+    },
+    `${Util.getName(plyId)}(${plyId}) has crafted ${partLabel} for ${shop}`,
+    plyId
+  );
 };
 
 export const getOrderMenu = async (plyId: number) => {

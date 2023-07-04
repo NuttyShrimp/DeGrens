@@ -41,7 +41,7 @@ class Repository extends Util.Singleton<Repository>() {
 
   // Does not need to be queued, only gets used on inv load at which point no item in that inventory could have been modified
   public fetchItems = async (invId: string): Promise<Inventory.ItemState[]> => {
-    const query = `SELECT * FROM inventory_items WHERE inventory = ?`;
+    const query = `SELECT * FROM inventory_items WHERE inventory = BINARY ?`;
     const result = await SQL.query<Repository.FetchResult[]>(query, [invId]);
     if (!result) {
       this.logger.error(`Failed to load items with id: ${invId}`);
@@ -100,7 +100,7 @@ class Repository extends Util.Singleton<Repository>() {
 
   // Function to be used by other resources
   public getItemState = async (itemId: string) => {
-    const query = `SELECT * FROM inventory_items WHERE id = ?`;
+    const query = `SELECT * FROM inventory_items WHERE id = BINARY ?`;
     const result = await SQL.scalar<Repository.FetchResult>(query, [itemId]);
     if (Object.keys(result).length === 0) return null;
     return this.resultToState(result);
@@ -108,7 +108,7 @@ class Repository extends Util.Singleton<Repository>() {
 
   // Does not need to be queued, only gets used on server start and gets awaited
   public deleteByDestroyDate = async () => {
-    const currentMinutes = Math.floor(Date.now() / (1000 * 60));
+    const currentMinutes = Math.floor(Date.now() / 1000);
 
     const query = `DELETE FROM inventory_items WHERE destroyDate < ? RETURNING *`;
     const result = await SQL.query<Repository.FetchResult[]>(query, [currentMinutes]);

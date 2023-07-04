@@ -84,21 +84,19 @@ Events.onNet('vehicles:keys:toggleLock', (plyId: number, netId: number) => {
   const vehicle = NetworkGetEntityFromNetworkId(netId);
   if (!vehicle || !DoesEntityExist(vehicle)) return;
 
-  // Sound are car_lock and car_unlock
-  // 0 == unlocked for getter on server
-  const oldLockStatus = GetVehicleDoorLockStatus(vehicle);
-  const newLockStatus = oldLockStatus !== 2;
-  const soundName = newLockStatus ? 'car_lock' : 'car_unlock';
+  const locked = !Vehicles.getVehicleDoorsLocked(vehicle);
+  const soundName = locked ? 'car_lock' : 'car_unlock';
 
   setImmediate(() => {
-    Vehicles.setVehicleDoorsLocked(vehicle, newLockStatus);
+    Vehicles.setVehicleDoorsLocked(vehicle, locked);
   });
   Sounds.playOnEntity(`vehicles_car_key_lock_${netId}`, soundName, 'DLC_NUTTY_SOUNDS', netId);
 
+  // timeout because setter needs to replicate before getter returns correct value
   setTimeout(() => {
-    if (GetVehicleDoorLockStatus(vehicle) == (newLockStatus ? 2 : 1)) {
-      const msg = newLockStatus ? 'Voertuig op slot gezet' : 'Voertuig opengedaan';
-      Notifications.add(plyId, msg);
+    const lockStatus = GetVehicleDoorLockStatus(vehicle);
+    if (lockStatus === (locked ? 2 : 0)) {
+      Notifications.add(plyId, locked ? 'Voertuig op slot gezet' : 'Voertuig opengedaan');
     } else {
       Notifications.add(plyId, 'Er is iets fout gelopen met het slotensysteem');
     }

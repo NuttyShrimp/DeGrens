@@ -1,4 +1,5 @@
 const registeredFlags: Set<string> = new Set();
+let cachedItems: string[] = [];
 
 export const getEntityCtx = (entity: number): Context => {
   const entityType = GetEntityType(entity);
@@ -44,3 +45,13 @@ export const addCtxFlag = (flag: string) => {
     registeredFlags.add(flag);
   }
 };
+
+export const setCachedItems = async (items: string[]) => {
+  cachedItems = items;
+};
+
+export const clearCachedItems = () => {
+  cachedItems = [];
+};
+
+export const getCachedItems = () => cachedItems;

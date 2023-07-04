@@ -222,8 +222,10 @@ export const useInventory = () => {
         if (playerCash < requirements.cash) return false;
       }
       if (requirements.items) {
-        let playerItemNames = Object.values(items)
-          .filter(i => i.inventory === primaryId)
+        const itemsArr = Object.values(items);
+        const containersIds = new Set(itemsArr.filter(i => i.metadata?.isContainer).map(i => `container__${i.id}`));
+        let playerItemNames = itemsArr
+          .filter(i => i.inventory === primaryId || containersIds.has(i.inventory))
           .map(i => i.name);
         for (const requiredItem of requirements.items) {
           const correspondingIndices = playerItemNames

@@ -1,4 +1,4 @@
-import { Hospital, Notifications, Police, RayCast, UI, Util } from '@dgx/client';
+import { Hospital, Inventory, Notifications, Police, RayCast, UI, Util } from '@dgx/client';
 import { Export, ExportRegister } from '@dgx/shared';
 
 import { DEFAULT_DISTANCE, DISABLED_KEYS, PEEK_TYPES } from '../cl_constant';
@@ -7,6 +7,7 @@ import { isEntryDisabled } from '../helpers/entries';
 
 import { ZoneManager } from './entryManagers/zoneManager';
 import { entryManager } from './entryManager';
+import { clearCachedItems, setCachedItems } from 'helpers/context';
 
 @ExportRegister()
 class StateManager extends Util.Singleton<StateManager>() {
@@ -40,6 +41,9 @@ class StateManager extends Util.Singleton<StateManager>() {
       return;
     }
 
+    // clear to prevent items being enabled because of stalled data
+    clearCachedItems();
+
     // We refresh entity open
     // When we look at for example a vehicle, then move around it while aiming on the vehicle, and then start peeking
     // The old coords will get distance checked, which will most of the time not show entrys because distance limit
@@ -51,6 +55,12 @@ class StateManager extends Util.Singleton<StateManager>() {
     entryManager.loadActiveEntries(true);
     this.createCheckThread();
     this.createControlThread();
+
+    Inventory.getAllItemNames().then(items => {
+      if (!items || !this.isPeeking) return;
+      setCachedItems(items);
+      this.forceRefreshList(true);
+    });
   }
 
   // Handler when button is released
@@ -189,7 +199,7 @@ class StateManager extends Util.Singleton<StateManager>() {
     }, 0);
   }
 
-  forceRefreshList() {
+  forceRefreshList(includeZones = false) {
     if (!this.isPeeking || this.isUIFocused) {
       return;
     }
@@ -198,7 +208,7 @@ class StateManager extends Util.Singleton<StateManager>() {
       entryManager.clearActiveEntries(false);
       entryManager.refreshNUIList();
     }
-    entryManager.loadActiveEntries(false);
+    entryManager.loadActiveEntries(includeZones);
   }
 
   forceRefreshZones(zoneName: string, data: any) {

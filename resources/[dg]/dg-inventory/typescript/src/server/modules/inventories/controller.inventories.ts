@@ -84,7 +84,10 @@ RPC.register(
 
     contextManager.playerOpened(src, [primaryInv.id, secondaryInv.id]);
     return {
-      items: [...primaryInv.getItemStates(), ...secondaryInv.getItemStates()],
+      items: [
+        ...primaryInv.getItemStates(!('shopItems' in secondary)), // for primary, we only need the items inside of containers when the other inventory has shopitems
+        ...secondaryInv.getItemStates(true), // for secondary, we never need the items inside of containers
+      ],
       primary: { id: primaryInv.id, size: primaryInv.size },
       secondary,
     };

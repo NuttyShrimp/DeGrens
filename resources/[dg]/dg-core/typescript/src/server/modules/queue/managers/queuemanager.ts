@@ -6,6 +6,7 @@ import { Logger } from 'winston';
 import { Emojis, discordPower, queueGracePower } from '../constant.queue';
 import dayjs from 'dayjs';
 import { UserModule } from 'modules/users/module.users';
+import { generateQueueCard } from '../util.queue';
 
 class QueueManager {
   private queue: string[] = [];
@@ -114,6 +115,8 @@ class QueueManager {
     const startPos = await this.getStartPosition(steamId);
     this.setPosition(steamId, startPos ?? this.queue.length);
     let timeInQ = dayjs(0).set('h', 0);
+
+    const showCard = generateQueueCard(deferrals);
     const qInterval = setInterval(() => {
       const pos = this.queue.findIndex(s => s === steamId);
       if (pos === -1) {
@@ -123,7 +126,7 @@ class QueueManager {
       if (!endpoint) {
         this.quitQueue(steamId);
       }
-      deferrals.update(
+      showCard(
         `Your position: ${pos + 1}/${this.queue.length} | ${Emojis[Util.getRndInteger(0, Emojis.length)]}${
           Emojis[Util.getRndInteger(0, Emojis.length)]
         }${Emojis[Util.getRndInteger(0, Emojis.length)]} | 🕒 ${timeInQ.format('HH:mm:ss')}`

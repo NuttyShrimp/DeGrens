@@ -3963,5 +3963,77 @@
     "authorized": {
       "business": ["kingpills"]
     }
+  },
+  {
+    "description": "marabunta / medellin main door",
+    "locked": true,
+    "distance": 2,
+    "doors": [
+      {
+        "model": "gabz_g_marabunta_door_03",
+        "coords": {
+          "x": 1250.22265625,
+          "y": -1583.8017578125,
+          "z": 54.739646911621094
+        }
+      }
+    ],
+    "authorized": {
+      "gang": ["medellincartel"]
+    }
+  },
+  {
+    "description": "marabunta / medellin stair door",
+    "locked": true,
+    "distance": 2,
+    "doors": [
+      {
+        "model": "gabz_g_marabunta_door_02",
+        "coords": {
+          "x": 1251.9793701171875,
+          "y": -1569.2835693359375,
+          "z": 58.93437576293945
+        }
+      }
+    ],
+    "authorized": {
+      "gang": ["medellincartel"]
+    }
+  },
+  {
+    "description": "vagos / s1lencers main door",
+    "locked": true,
+    "distance": 2,
+    "doors": [
+      {
+        "model": "gabz_g_vagos_door_01",
+        "coords": {
+          "x": 324.7153015136719,
+          "y": -1991.085693359375,
+          "z": 24.362913131713867
+        }
+      }
+    ],
+    "authorized": {
+      "gang": ["thes1lencers"]
+    }
+  },
+  {
+    "description": "vagos / s1lencers back door",
+    "locked": true,
+    "distance": 2,
+    "doors": [
+      {
+        "model": "gabz_g_vagos_door_01",
+        "coords": {
+          "x": 336.7447814941406,
+          "y": -1991.843505859375,
+          "z": 24.362913131713867
+        }
+      }
+    ],
+    "authorized": {
+      "gang": ["thes1lencers"]
+    }
   }
 ]

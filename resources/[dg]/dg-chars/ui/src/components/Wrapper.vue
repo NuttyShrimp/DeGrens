@@ -1,6 +1,7 @@
 <template>
   <CharWrapper v-if="shouldShowChar" />
   <SpawnWrapper v-if="shouldShowSpawn" />
+  <DevActions />
 </template>
 
 <script lang="ts">
@@ -9,6 +10,7 @@
   import { useStore } from '../lib/store';
 
   import CharWrapper from './chars/CharWrapper.vue';
+  import DevActions from './dev/actions.vue';
   import SpawnWrapper from './spawns/SpawnWrapper.vue';
 
   export default defineComponent({
@@ -16,6 +18,7 @@
     components: {
       CharWrapper,
       SpawnWrapper,
+      DevActions,
     },
     setup() {
       const store = useStore();

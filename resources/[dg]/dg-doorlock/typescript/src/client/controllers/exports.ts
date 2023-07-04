@@ -31,7 +31,7 @@ global.exports('registerDoor', async (entity: number) => {
     header: 'Registreer een deur',
     inputs: [
       { type: 'text', label: 'Beschrijving', name: 'description' },
-      { type: 'number', label: 'Afstand', name: 'distance' },
+      { type: 'number', label: 'Afstand (Default: 2)', name: 'distance' },
       {
         type: 'select',
         label: 'Standaard opslot (Default: Ja)',
@@ -114,7 +114,7 @@ global.exports('registerDoor', async (entity: number) => {
   const doorConfig: Doorlock.DoorConfig = {
     description: result.values.description ?? '',
     locked: result.values.locked === 'true',
-    distance: Number(result.values.distance),
+    distance: Number(result.values.distance ?? 2),
     doors: [
       {
         model: GetEntityArchetypeName(entity),

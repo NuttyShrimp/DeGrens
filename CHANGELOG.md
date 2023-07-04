@@ -13,6 +13,40 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+## [1.2.7]
+
+### Added
+
+- Admin command toegevoegd om inventories te unloaden
+- Logs toegevoegd om het maken van mechanic parts
+- Extra gang garages toegevoegd
+- Enkele doorlocks toegevoegd
+- Custom textures in townhall & sandyPD
+- Extra gang kleding
+
+### Changed
+
+- Knoppen in character selection menu zijn van plaats en kleur veranderd zodat ze beter hun actie representeren
+- Je dient nu de naam van ja karakter in te typen als je deze wilt verwijderen ter confirmatie
+- De queue ziet er wat beter uit
+- Als je in een voertuig TPed zal je uit noclip geforceerd worden
+- Politie revive wanneer er geen ambulance is, extra gelimiteerd om abuse te voorkomen
+- Cobra studios t-shirt
+
+### Fixed
+
+- Error van doorlock tijdens inladen opgelost
+- Aantal nodige materialen bij mechanics wordt nu correct weergegeven
+- Probleem bij het inladen van een inventory opgelost door case-sensitivity van inventory ids
+- Peek opties die items vereisten werken nu ook als het item in een container in je inventory zit
+- Je doet nu wel altijd de drop item animatie wanneer je iets op de grond legt
+- Je kan nu craften met items die in een container in je inventory zitten
+- Ja blijft niet meer vasthangen op checking banstatus etc
+- Problemen met impound kost opgelost
+- Kapotte items worden nu wel expliciet gecheckt om ze te verwijderen na een restart
+- Notificatie tekst bij voertuig op slot zetten is nu juist
+- Koplampen Subaru GT86
+
 ## [1.2.6]
 
 ### Added

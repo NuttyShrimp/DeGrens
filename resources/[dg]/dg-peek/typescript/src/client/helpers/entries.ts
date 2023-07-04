@@ -1,5 +1,6 @@
-import { Business, Gangs, Inventory, Jobs } from '@dgx/client';
+import { Business, Gangs, Jobs } from '@dgx/client';
 import { DEFAULT_DISTANCE } from 'cl_constant';
+import { getCachedItems } from './context';
 
 export const canEntryBeEnabled = async (entry: PeekOption, entity: number): Promise<PeekOption | undefined> => {
   if (entry.job) {
@@ -30,8 +31,12 @@ export const canEntryBeEnabled = async (entry: PeekOption, entity: number): Prom
   }
   if (entry.items) {
     const requiredItems = Array.isArray(entry.items) ? entry.items : [entry.items];
-    const items = Inventory.getCachedItemNames();
-    if (!requiredItems.every(i => items.includes(i))) return;
+    const items = getCachedItems();
+    if (entry.partialItems) {
+      if (!requiredItems.some(i => items.includes(i))) return;
+    } else {
+      if (!requiredItems.every(i => items.includes(i))) return;
+    }
   }
   if (!entry.allowInVehicle) {
     if (GetVehiclePedIsUsing(PlayerPedId())) return;

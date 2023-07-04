@@ -86,6 +86,10 @@ class Vehicles {
     global.exports['dg-vehicles'].doAdminFix(vehicle);
   };
 
+  getVehicleDoorsLocked = (vehicle: number) => {
+    return GetVehicleDoorLockStatus(vehicle) === 2;
+  };
+
   setVehicleDoorsLocked = (vehicle: number, locked: boolean) => {
     SetVehicleDoorsLocked(vehicle, locked ? 2 : 1);
   };

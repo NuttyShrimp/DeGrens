@@ -164,8 +164,9 @@ export const openImpoundList = async (src: number) => {
       const vehicleStrikes = await getVehicleStrikeAmount(v.vin);
       const vehicleConfig = getConfigByModel(vehicleInfo.model);
 
-      const daysUntilBailFinish = Math.round((v.until - Date.now() / 1000) / 86400);
-      const canBailOut = Date.now() - v.created_at > v.until - Date.now();
+      const daysUntilBailFinish = Math.max(Math.round((v.until - Date.now() / 1000) / 86400), 0);
+      // has sit out 1/3 of the time
+      const canBailOut = (v.until - v.created_at) / 3 + v.created_at <= Date.now() / 1000;
       const bailPrice =
         daysUntilBailFinish *
           config.price.earlyReleaseBase *
@@ -175,9 +176,7 @@ export const openImpoundList = async (src: number) => {
 
       return {
         title: vehicleConfig?.name ?? 'Unkown vehicle',
-        description: `${daysUntilBailFinish <= 0 ? '0 dagen' : `${daysUntilBailFinish} dagen`} | ${
-          canBailOut ? `€${bailPrice}` : 'Niet verkrijgbaar'
-        }`,
+        description: `${daysUntilBailFinish <= 0 ? '0 dagen' : `${daysUntilBailFinish} dagen`} | ${`€${bailPrice}`}`,
         submenu: canBailOut
           ? [
               {

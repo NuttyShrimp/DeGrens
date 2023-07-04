@@ -76,6 +76,7 @@ export const buildRestaurantEmployeeZones = (restaurantId: string) => {
         {
           label: c.peekLabel,
           icon: 'fas fa-oven',
+          items: c.from,
           action: option => {
             doCooking(option.data.restaurantId, c.from);
           },

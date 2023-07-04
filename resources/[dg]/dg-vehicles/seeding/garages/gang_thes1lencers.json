@@ -1,0 +1,140 @@
+{
+  "garage_id": "thes1lencers",
+  "name": "The S1lencers Garage",
+  "type": "gang",
+  "shared": true,
+  "location": {
+    "vector": [
+      {
+        "x": 349.21,
+        "y": -1963.74
+      },
+      {
+        "x": 345.58,
+        "y": -1968.4
+      },
+      {
+        "x": 356.0,
+        "y": -1977.0
+      },
+      {
+        "x": 369.51,
+        "y": -1981.92
+      },
+      {
+        "x": 371.98,
+        "y": -1976.14
+      },
+      {
+        "x": 358.73,
+        "y": -1971.08
+      }
+    ],
+    "options": {
+      "minZ": 23.4509,
+      "maxZ": 26.4509
+    }
+  },
+  "vehicle_types": ["land"],
+  "parking_spots": [
+    {
+      "type": "land",
+      "size": 2.0,
+      "distance": 1.8,
+      "heading": 160,
+      "coords": {
+        "x": 369.762,
+        "y": -1978.389,
+        "z": 23.125
+      }
+    },
+    {
+      "type": "land",
+      "size": 2.0,
+      "distance": 1.8,
+      "heading": 160,
+      "coords": {
+        "x": 366.911,
+        "y": -1977.307,
+        "z": 23.177
+      }
+    },
+    {
+      "type": "land",
+      "size": 2.0,
+      "distance": 1.8,
+      "heading": 160,
+      "coords": {
+        "x": 364.061,
+        "y": -1976.226,
+        "z": 23.229
+      }
+    },
+    {
+      "type": "land",
+      "size": 2.0,
+      "distance": 1.8,
+      "heading": 160,
+      "coords": {
+        "x": 361.2,
+        "y": -1975.145,
+        "z": 23.28
+      }
+    },
+    {
+      "type": "land",
+      "size": 2.0,
+      "distance": 1.8,
+      "heading": 160,
+      "coords": {
+        "x": 358.359,
+        "y": -1974.063,
+        "z": 23.332
+      }
+    },
+    {
+      "type": "land",
+      "size": 2.0,
+      "distance": 1.8,
+      "heading": 140,
+      "coords": {
+        "x": 355.905,
+        "y": -1972.569,
+        "z": 23.377
+      }
+    },
+    {
+      "type": "land",
+      "size": 2.0,
+      "distance": 1.8,
+      "heading": 140,
+      "coords": {
+        "x": 353.569,
+        "y": -1970.587,
+        "z": 23.414
+      }
+    },
+    {
+      "type": "land",
+      "size": 2.0,
+      "distance": 1.8,
+      "heading": 140,
+      "coords": {
+        "x": 351.233,
+        "y": -1968.605,
+        "z": 23.451
+      }
+    },
+    {
+      "type": "land",
+      "size": 2.0,
+      "distance": 1.8,
+      "heading": 140,
+      "coords": {
+        "x": 348.896,
+        "y": -1966.623,
+        "z": 23.488
+      }
+    }
+  ]
+}

@@ -1,14 +1,8 @@
-import { Events, Inventory, Minigames, Notifications, Taskbar } from '@dgx/client';
+import { Events, Inventory, Minigames, Taskbar } from '@dgx/client';
 
 export const doCooking = async (restaurantId: string, fromItem: string) => {
   const itemLabel = Inventory.getItemData(fromItem)?.label;
   if (!itemLabel) return;
-
-  const items = Inventory.getCachedItemNames(); // we use cache version because at end of minigame itll get checked on server when creating new item, prevents an event
-  if (items.indexOf(fromItem) === -1) {
-    Notifications.add(`Je mist ${itemLabel}`, 'error');
-    return;
-  }
 
   const success = await Minigames.keygame(3, 4, 10);
   if (!success) return;

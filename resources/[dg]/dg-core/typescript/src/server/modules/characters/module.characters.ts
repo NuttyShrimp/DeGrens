@@ -15,6 +15,7 @@ export class CharacterModule implements Modules.ServerModule, Core.ServerModules
   private saveIntervals: Record<number, NodeJS.Timeout> = {};
 
   private async loadCharOwnership() {
+    this.characterOwners = {};
     const steamIdToCid = await SQL.query<{ citizenid: number; steamid: string }[]>(
       'SELECT citizenid, steamid FROM characters'
     );

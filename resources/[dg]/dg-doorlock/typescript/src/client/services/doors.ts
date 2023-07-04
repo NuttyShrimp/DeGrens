@@ -1,7 +1,7 @@
 import { Events, Keys, PolyZone, Util, UI, Minigames, Inventory, Particles, RayCast } from '@dgx/client';
 import { doDoorAnimation, getDoorId, isAuthorized } from 'helpers/doors';
 
-let doors: Doorlock.ClientData = {};
+let doors: Doorlock.ClientData | undefined = undefined;
 let currentDoor: { id: number; coords: Vec3; state: boolean } | null = null;
 let interactionVisible = false;
 let isInPolyZone = false;
@@ -49,6 +49,8 @@ export const loadDoors = (doorData: Doorlock.ClientData) => {
 };
 
 export const handleToggleKeyPress = () => {
+  if (!doors) return;
+
   let { id: doorId, state: doorState } = currentDoor ?? {};
 
   // if not in polyzone or currently aiming at door, try to find door that is blocked (garage door in ceiling for example)
@@ -79,6 +81,8 @@ export const handleToggleKeyPress = () => {
 };
 
 export const changeDoorState = (doorId: number, state: boolean) => {
+  if (!doors) return;
+
   if (!doors[doorId] || !IsDoorRegisteredWithSystem(doorId)) {
     console.error(`[Doorlock] Tried to change state of door that was not registered (${doorId})`);
     return;
@@ -100,7 +104,8 @@ export const changeDoorState = (doorId: number, state: boolean) => {
 };
 
 const showInteraction = () => {
-  if (currentDoor === null) return;
+  if (!doors || currentDoor === null) return;
+
   const data = doors[currentDoor.id];
   if (data.hideInteraction) return;
 
@@ -138,7 +143,7 @@ export const handleEntityChange = (entity: number | undefined) => {
       hideInteraction();
 
       const doorId = getDoorId(entity);
-      if (!entity || !doorId || !doors[doorId]) {
+      if (!entity || !doorId || !doors?.[doorId]) {
         activeDoorEntity = undefined;
         currentDoor = null;
         return;
@@ -201,6 +206,8 @@ export const leaveDoorPolyZone = (doorId: number) => {
 };
 
 export const tryToLockpickDoor = async () => {
+  if (!doors) return;
+
   const plyCoords = Util.getPlyCoords();
   for (const key of Object.keys(doors)) {
     const id = Number(key);
@@ -218,6 +225,8 @@ export const tryToLockpickDoor = async () => {
 };
 
 export const tryToThermiteDoor = async () => {
+  if (!doors) return;
+
   const ped = PlayerPedId();
   const pedCoords = Util.getPlyCoords();
 
@@ -373,7 +382,7 @@ export const tryToThermiteDoor = async () => {
 };
 
 export const getDoorState = (doorId: number) => {
-  if (doors[doorId]?.forceOpen) {
+  if (doors?.[doorId]?.forceOpen) {
     return doors[doorId].locked;
   }
 

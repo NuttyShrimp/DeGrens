@@ -4,6 +4,7 @@ import { Admin, Util } from '@dgx/server';
 import { userManager } from 'modules/users/managers/userManager';
 import winston from 'winston';
 import { mainLogger } from 'sv_logger';
+import { generateQueueCard } from './util.queue';
 
 export class QueueModule implements Modules.ServerModule, Core.ServerModules.QueueModule {
   private manager = queueManager;
@@ -49,80 +50,59 @@ export class QueueModule implements Modules.ServerModule, Core.ServerModules.Que
     await deferrals.defer();
     const userModule = getModule('users');
     const plyIdentifiers = userModule.getPlyIdentifiers(src);
-    const finishDeferrals = (msg: string) => {
-      userModule.onPlayerDropped(src);
-      deferrals.presentCard(
-        JSON.stringify({
-          type: 'AdaptiveCard',
-          body: [
-            {
-              type: 'TextBlock',
-              text: msg,
-              wrap: true,
-            },
-          ],
-          actions: [
-            {
-              type: 'Action.OpenUrl',
-              title: 'Join our discord!',
-              url: 'https://discord.degrensrp.be',
-            },
-          ],
-          $schema: 'http://adaptivecards.io/schemas/adaptive-card.json',
-          version: '1.4',
-        })
-      );
-    };
+    const showCard = generateQueueCard(deferrals);
 
-    deferrals.update(`Welcome ${name}!, Validating your Rockstar license`);
+    showCard(`Welcome ${name}!, Validating your Rockstar license`);
     const rockstarLicense = plyIdentifiers.license;
     if (!rockstarLicense) {
-      finishDeferrals('No valid rockstar license found');
+      deferrals.done('No valid rockstar license found');
       return;
     }
 
-    deferrals.update(`Welcome ${name}!, Validating your steam ID`);
+    showCard(`Welcome ${name}!, Validating your steam ID`);
     const steamId = plyIdentifiers.steam;
     if (!steamId) {
-      finishDeferrals('No valid steam account found');
+      deferrals.done('No valid steam account found');
       return;
     }
 
-    deferrals.update(`Welcome ${name}!, Validating your discord ID`);
+    showCard(`Welcome ${name}!, Validating your discord ID`);
     if (!plyIdentifiers.discord) {
-      finishDeferrals('No valid discord account found\nPress CTRL+R in discord and restart your fivem afterwards');
+      deferrals.done('No valid discord account found\nPress CTRL+R in discord and restart your fivem afterwards');
       return;
     }
 
-    deferrals.update(`Welcome ${name}!, Checking your ban status`);
+    showCard(`Welcome ${name}!, Checking your ban status`);
     const banInfo = await Admin.isBanned(steamId);
     if (banInfo.isBanned) {
-      finishDeferrals(banInfo.reason);
+      deferrals.done(banInfo.reason);
       return;
     }
 
     if (!Util.isDevEnv()) {
-      deferrals.update(`Welcome ${name}!, checking for duplicated identifiers`);
+      showCard(`Welcome ${name}!, checking for duplicated identifiers`);
       let user = userManager.getUserByIdentifier(steamId);
       if (user) {
-        finishDeferrals('We already have an active player with this steamId');
+        deferrals.done('We already have an active player with this steamId');
         return;
       }
       user = userManager.getUserByIdentifier(rockstarLicense);
       if (user) {
-        finishDeferrals('We already have an active player with this Rockstar License');
+        deferrals.done('We already have an active player with this Rockstar License');
         return;
       }
     }
 
-    deferrals.update(`Welcome ${name}!, checking your allowlist status`);
+    showCard(`Welcome ${name}!, checking your allowlist status`);
     const whitelisted = await Admin.isWhitelisted(src);
     if (!whitelisted) {
-      finishDeferrals(
+      deferrals.done(
         "It seems like you'r not allowlisted for this server.\nAre your steam and discord open?\nTry restarting your fiveM client and try again"
       );
       return;
     }
-    queueManager.joinQueue(src, name, steamId, deferrals);
+    setTimeout(() => {
+      queueManager.joinQueue(src, name, steamId, deferrals);
+    }, 2000);
   };
 }

@@ -1,4 +1,5 @@
 import { Inventory, UI } from '@dgx/server';
+import itemManager from 'modules/items/manager.items';
 import { getConfig } from 'services/config';
 
 let containers: { [key: string]: { allowedItems: string[]; size: number } };
@@ -11,6 +12,13 @@ export const registerContainers = () => {
   containers = getConfig().containers;
 
   Inventory.registerUseable(Object.keys(containers), (plyId, state) => {
+    const item = itemManager.get(state.id);
+    if (!item) return;
+
+    // make sure every container item has the isContainer metadata entry.
+    // This is used in UI to handle crafting requirement checks when trying to use items inside containers
+    item.setMetadata(old => ({ ...old, isContainer: true }));
+
     UI.openContextMenu(plyId, [
       {
         title: 'Openen',
