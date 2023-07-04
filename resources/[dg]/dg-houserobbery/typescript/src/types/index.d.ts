@@ -23,8 +23,7 @@ declare namespace Houserobbery {
     location: Location;
     locked: boolean;
     groupId: string;
-    findTimeout: NodeJS.Timeout | null;
-    finishTimeout: NodeJS.Timeout | null;
+    failTimeout: NodeJS.Timeout;
   };
 
   namespace Interior {
