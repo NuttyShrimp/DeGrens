@@ -13,6 +13,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Logs toegevoegd om het maken van mechanic parts
 - Extra gang garages toegevoegd
 - Enkele doorlocks toegevoegd
+- Custom textures in townhall & sandyPD
+- Extra gang kleding
 
 ### Changed
 
@@ -21,6 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - De queue ziet er wat beter uit
 - Als je in een voertuig TPed zal je uit noclip geforceerd worden
 - Politie revive wanneer er geen ambulance is, extra gelimiteerd om abuse te voorkomen
+- Cobra studios t-shirt
 
 ### Fixed
 
@@ -34,6 +37,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Problemen met impound kost opgelost
 - Kapotte items worden nu wel expliciet gecheckt om ze te verwijderen na een restart
 - Notificatie tekst bij voertuig op slot zetten is nu juist
+- Koplampen Subaru GT86
 
 ## [1.2.6]
 
