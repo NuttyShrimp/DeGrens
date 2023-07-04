@@ -2701,18 +2701,6 @@
   },
   {
     "category": "super",
-    "model": "tempesta2",
-    "brand": "Pegassi",
-    "name": "Tempesta Wide Body",
-    "class": "S",
-    "defaultStock": 3,
-    "restockTime": 45,
-    "price": 650000,
-    "shop": "nfs",
-    "type": "land"
-  },
-  {
-    "category": "super",
     "model": "tezeract",
     "brand": "Pegassi",
     "name": "Tezeract",
@@ -6709,18 +6697,6 @@
   },
   {
     "category": "commercial",
-    "model": "hauler",
-    "brand": "MTL",
-    "name": "Packer",
-    "class": "C",
-    "defaultStock": 10,
-    "restockTime": 10,
-    "price": 20000,
-    "shop": "nfs",
-    "type": "land"
-  },
-  {
-    "category": "commercial",
     "model": "packer",
     "brand": "MTL",
     "name": "Packer",
@@ -6757,7 +6733,7 @@
   },
   {
     "category": "commercial",
-    "model": "pounder",
+    "model": "stockade",
     "brand": "Brute",
     "name": "Stockade",
     "class": "C",

@@ -1,4 +1,4 @@
-import { SQL, Util } from '@dgx/server';
+import { RPC, SQL, Util } from '@dgx/server';
 import { insertVehicleRestockDate, updateVehicleStock } from 'db/repository';
 import * as fs from 'fs';
 
@@ -14,6 +14,8 @@ const root = GetResourcePath(GetCurrentResourceName());
 let infoLoaded = false;
 export const isInfoLoaded = () => infoLoaded;
 
+let missingModelsChecked = false;
+
 // Reads and validates the json and stores it in a map
 export const loadVehicleInfo = () => {
   try {
@@ -21,7 +23,11 @@ export const loadVehicleInfo = () => {
     if (!isSchemaValid(data)) return;
     const info: Config.CarSchema[] = JSON.parse(data);
     info.forEach(car => {
-      const hash = GetHashKey(car.model);
+      const hash = GetHashKey(car.model) >>> 0;
+      if (vehicleInfo.has(hash)) {
+        infoLogger.warn(`Duplicate model found: ${car.model}`);
+        return;
+      }
       vehicleInfo.set(hash, { ...car, hash });
     });
     validateDBStock();
@@ -34,7 +40,7 @@ export const loadVehicleInfo = () => {
 
 export const getConfigByModel = (model: string | number) => {
   const modelHash = typeof model === 'string' ? GetHashKey(model) : model;
-  return vehicleInfo.get(modelHash);
+  return vehicleInfo.get(modelHash >>> 0);
 };
 
 export const getConfigByEntity = (entity: number) => {
@@ -133,4 +139,32 @@ export const assignModelConfig = (vehicle: number) => {
   };
   Entity(vehicle).state.set('config', strippedConfig, true);
   return strippedConfig;
+};
+
+export const checkMissingModels = async (plyId: number) => {
+  if (missingModelsChecked) return;
+
+  const clientModels = (await RPC.execute<string[]>('vehicles:getAllVehicleModels', plyId)) ?? [];
+  const allModels = clientModels.map(model => ({ hash: GetHashKey(model) >>> 0, model }));
+
+  const missingModels: string[] = [];
+  const invalidModels: string[] = [];
+
+  for (const { hash, model } of allModels) {
+    if (!!getConfigByModel(hash)) continue;
+    missingModels.push(model);
+  }
+
+  for (const [hash, { model }] of vehicleInfo) {
+    if (allModels.find(x => x.hash === hash)) continue;
+    invalidModels.push(model);
+  }
+
+  if (missingModels.length > 0 || invalidModels.length > 0) {
+    const logMsg = `Found ${missingModels.length} missing and ${invalidModels.length} invalid models`;
+    infoLogger.info(logMsg);
+    Util.Log('vehicles:modelValidation', { missingModels, invalidModels }, logMsg, undefined, true);
+  }
+
+  missingModelsChecked = true;
 };

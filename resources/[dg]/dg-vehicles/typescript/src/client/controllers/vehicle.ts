@@ -33,3 +33,5 @@ RPC.register('vehicles:isNearDoor', (vehNetId: number, distance: number) => {
   if (!veh || !DoesEntityExist(veh)) return false;
   return isCloseToADoor(veh, distance);
 });
+
+RPC.register('vehicles:getAllVehicleModels', () => GetAllVehicleModels());
