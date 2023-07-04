@@ -245,6 +245,7 @@ export const ALL_WEAPONS: Weapons.WeaponConfig[] = [
       // 'luxuryfinish': 'COMPONENT_MICROSMG_VARMOD_LUXE',
     },
     dispatchAlertChance: 25,
+    blockInVehicle: true,
   },
   {
     name: 'weapon_smg',
@@ -693,4 +694,5 @@ export const DEFAULT_SHARED_WEAPON_CONFIG: Weapons.SharedWeaponConfig = {
   damageModifier: 1,
   isMelee: false,
   dispatchAlertChance: 0,
+  blockInVehicle: false,
 };
