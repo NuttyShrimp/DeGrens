@@ -7114,5 +7114,17 @@
     "price": 5000,
     "shop": "nfs",
     "type": "land"
+  },
+  {
+    "category": "utility",
+    "model": "romero",
+    "brand": "Chariot",
+    "name": "Romero Hearse",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 5000,
+    "shop": "nfs",
+    "type": "land"
   }
 ]
