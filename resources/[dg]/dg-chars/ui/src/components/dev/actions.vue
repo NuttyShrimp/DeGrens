@@ -1,7 +1,4 @@
 <template>
-  <span>
-    {{ isDev.toString() }}
-  </span>
   <div v-if="isDev" class="fixed-bottom-left">
     <div class="q-pa-sm">
       <q-btn color="primary" @click="emulateCharLoad">Load chars</q-btn>
