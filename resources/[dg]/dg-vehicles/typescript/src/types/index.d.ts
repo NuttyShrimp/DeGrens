@@ -1,18 +1,29 @@
 type Category =
-  | 'coupes'
-  | 'offroad'
   | 'compacts'
-  | 'motorcycles'
   | 'sedans'
-  | 'sports'
-  | 'sportsclassics'
-  | 'super'
   | 'suvs'
+  | 'coupes'
   | 'muscle'
+  | 'sportsclassics'
+  | 'sports'
+  | 'super'
+  | 'motorcycles'
+  | 'offroad'
+  | 'industrial'
+  | 'utility'
   | 'vans'
   | 'cycles'
-  | 'service';
-type Shop = 'pdm' | 'luxury' | 'nfs' | 'air';
+  | 'boats'
+  | 'helicopters'
+  | 'planes'
+  | 'service'
+  | 'emergency'
+  | 'military'
+  | 'commercial'
+  | 'trains'
+  | 'openwheel';
+
+type Shop = 'pdm' | 'nfs';
 type CarClass = 'X' | 'S' | 'A+' | 'A' | 'B' | 'C' | 'D';
 
 declare namespace Config {

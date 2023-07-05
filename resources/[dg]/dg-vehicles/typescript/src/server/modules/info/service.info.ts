@@ -160,11 +160,9 @@ export const checkMissingModels = async (plyId: number) => {
     invalidModels.push(model);
   }
 
-  if (missingModels.length > 0 || invalidModels.length > 0) {
-    const logMsg = `Found ${missingModels.length} missing and ${invalidModels.length} invalid models`;
-    infoLogger.info(logMsg);
-    Util.Log('vehicles:modelValidation', { missingModels, invalidModels }, logMsg, undefined, true);
-  }
+  const logMsg = `Found ${missingModels.length} missing and ${invalidModels.length} invalid models`;
+  infoLogger.info(logMsg);
+  Util.Log('vehicles:modelValidation', { missingModels, invalidModels }, logMsg, undefined, true);
 
   missingModelsChecked = true;
 };
