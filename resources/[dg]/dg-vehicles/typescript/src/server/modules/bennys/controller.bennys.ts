@@ -1,7 +1,6 @@
-import { Auth, Events, RPC } from '@dgx/server';
-
+import { RPC } from '@dgx/server';
 import bennysManager from './classes/BennysManager';
-import { getZones, loadZones } from './modules/zones';
+import { loadZones } from './modules/zones';
 import { getBlockedUpgrades, loadBlockedUpgrades } from './helpers/blockedUpgrades';
 import { getConfigByEntity } from 'modules/info/service.info';
 import upgradesManager from 'modules/upgrades/classes/manager.upgrades';

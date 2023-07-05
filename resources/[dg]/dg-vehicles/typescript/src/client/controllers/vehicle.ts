@@ -1,4 +1,4 @@
-import { RPC, Util, Vehicles } from '@dgx/client';
+import { RPC, Vehicles } from '@dgx/client';
 import { getModelType, isCloseToADoor, isCloseToAWheel } from '../helpers/vehicle';
 
 RPC.register('vehicles:getModelType', (model: string): string | undefined => {

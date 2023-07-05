@@ -93,4 +93,7 @@ export const BLACKLISTED_VEHICLE_MODELS = {
   besra: { suppress: true, delete: true },
   barracks2: { suppress: true, delete: true },
   barracks: { suppress: true, delete: true },
+  tampa3: { suppress: true, delete: true },
+  trailersmall2: { suppress: true, delete: true },
+  dune3: { suppress: true, delete: true },
 };
