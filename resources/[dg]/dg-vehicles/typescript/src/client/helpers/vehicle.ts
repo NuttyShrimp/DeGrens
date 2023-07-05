@@ -127,7 +127,7 @@ export const spawnLocalVehicle: Vehicles.SpawnLocalVehicleFunction = async data 
   return vehicle;
 };
 
-export const useDummyVehicle = async <T extends Record<string, any>>(
+export const useDummyVehicle = async <T>(
   model: string | number,
   func: (vehicle: number) => T | Promise<T>
 ): Promise<T> => {
