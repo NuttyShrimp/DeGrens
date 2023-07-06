@@ -4,6 +4,7 @@ import { setEngineState } from 'services/engine';
 import { getCurrentVehicle, getVehicleConfig, isDriver } from '../../helpers/vehicle';
 import upgradesManager from 'modules/upgrades/classes/manager.upgrades';
 import { applyModelStance, getStanceConfigForModel, getOriginalStance } from 'modules/stances/service.stances';
+import { MINIMUM_REPAIR_PRICE } from './constant.bennys';
 
 let bennysMenuOpen = false;
 let currentBennys: string | null = null;
@@ -37,12 +38,16 @@ export const getRepairData = (plyVeh: number): Bennys.RepairInfo | null => {
   // Get body damage
   // We fetch it on client to prevent desync issues etc
   const bodyHealth = GetVehicleBodyHealth(plyVeh);
-  const engineHealh = GetVehicleEngineHealth(plyVeh);
-  if (bodyHealth > 990 && engineHealh > 990) return null;
+  const engineHealth = GetVehicleEngineHealth(plyVeh);
+  if (bodyHealth > 990 && engineHealth > 990) return null;
+
+  const damagePercentage = +((2000 - bodyHealth - engineHealth) / 2000).toFixed(2);
+  const price = Math.round(Math.max(50, Math.log10(1 + damagePercentage * 1.5) * 2000));
+
   return {
-    price: (Math.round(((2000 - bodyHealth - engineHealh) / 2) * 100) / 100) * (300 / 2000),
+    price,
     body: bodyHealth,
-    engine: engineHealh,
+    engine: engineHealth,
   };
 };
 

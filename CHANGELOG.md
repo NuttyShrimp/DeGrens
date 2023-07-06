@@ -19,6 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Voertuigparking van eigenaar geswitched
 - Density van rijdende voertuigen verminderd
 - Bennys repaired niet langer je banden, ga maar op zoek naar reservewielen ;)
+- Prijsberekening van bennys aangepast
 
 ### Fixed
 

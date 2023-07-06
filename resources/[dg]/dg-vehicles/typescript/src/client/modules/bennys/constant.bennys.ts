@@ -163,3 +163,5 @@ export const TyreSmokeLabels = [
   'Pink Tire Smoke',
   'Gray Tire Smoke',
 ];
+
+export const MINIMUM_REPAIR_PRICE = 25;
