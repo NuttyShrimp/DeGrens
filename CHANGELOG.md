@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- De blip van een agent verdwijnt van de map als die zijn noodknop niet meer in zijn inventory heeft
+
 ### Changed
 
 - UZI kan niet meer in een voertuig gebruikt worden (Balancing TOV p90)
@@ -20,6 +22,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Exploit om houserobbery timeout te skippen opgelost
 - Je kan de kleur van de Range Rover Vogue nu wel aanpassen
+- Dispatch seed enkel calls van je eigen job
 
 ## [1.2.7]
 

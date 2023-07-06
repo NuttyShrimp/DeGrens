@@ -14,7 +14,7 @@ export const prepareCall = (id: string, call: Dispatch.Call): Dispatch.UICall =>
   return UICall;
 };
 
-export const createDispatchCall = async (job: 'ambulance' | 'police', call: Dispatch.Call) => {
+export const createDispatchCall = async (job: 'ambulance' | 'police', call: Omit<Dispatch.Call, 'job'>) => {
   call.timestamp = Date.now();
 
   if (call.coords) {
@@ -71,7 +71,7 @@ export const createDispatchCall = async (job: 'ambulance' | 'police', call: Disp
     call.entries['car'] = vehEntryText;
   }
 
-  const storedCall = addCall(call);
+  const storedCall = addCall({ ...call, job });
 
   const playerIds = Jobs.getPlayersForJob(job);
   playerIds.forEach(id => {
