@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - De blip van een agent verdwijnt van de map als die zijn noodknop niet meer in zijn inventory heeft
+- De items met de laagste quality worden nu als eerste gekozen in een inventory (Bv. crafting, drugs verkopen, ...)
 
 ### Changed
 
