@@ -10,11 +10,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 ### Changed
+
 - UZI kan niet meer in een voertuig gebruikt worden (Balancing TOV p90)
 - Alle S class voertuig prijzen met een vast percentage verlaagd
 - Voertuigparking van eigenaar geswitched
+- Density van rijdende voertuigen verminderd
 
 ### Fixed
+
 - Exploit om houserobbery timeout te skippen opgelost
 - Je kan de kleur van de Range Rover Vogue nu wel aanpassen
 

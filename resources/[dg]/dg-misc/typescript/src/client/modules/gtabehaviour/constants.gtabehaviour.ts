@@ -58,8 +58,8 @@ export const DISABLED_CONTROLS = [36, 37, 81, 82, 99];
 
 export const DENSITY_SETTINGS = {
   parked: 0.8,
-  vehicle: 0.8,
-  multiplier: 0.8,
+  vehicle: 0.7,
+  multiplier: 0.7,
   peds: 0.8,
   scenario: 0.8,
 };
