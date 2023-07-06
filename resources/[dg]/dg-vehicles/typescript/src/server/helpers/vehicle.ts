@@ -4,7 +4,7 @@ import { addWaxedVehicle } from 'modules/carwash/service.carwash';
 import { setVehicleNosAmount } from 'modules/nos/service.nos';
 import { setVehicleHarnessUses } from 'modules/seatbelts/service.seatbelts';
 import { loadStance } from 'modules/stances/service.stances';
-import { getNativeStatus } from 'modules/status/service.status';
+import { getNativeStatus, setNativeStatus } from 'modules/status/service.status';
 import { fuelManager } from '../modules/fuel/classes/fuelManager';
 import plateManager from '../modules/identification/classes/platemanager';
 import vinManager from '../modules/identification/classes/vinmanager';
@@ -212,26 +212,6 @@ export const teleportInSeat = async (src: number, entity: number, seat = -1) => 
     await Util.Delay(100);
     TaskWarpPedIntoVehicle(plyPed, entity, seat);
   }
-};
-
-export const setNativeStatus = (vehicle: number, status: Partial<Omit<Vehicle.VehicleStatus, 'fuel'>>) => {
-  if (!DoesEntityExist(vehicle)) return;
-
-  if (status.body !== undefined) {
-    SetVehicleBodyHealth(vehicle, status.body);
-  }
-  if (status.doors !== undefined) {
-    status.doors.forEach((broken, doorId) => {
-      if (!broken) return;
-      SetVehicleDoorBroken(vehicle, doorId, true);
-    });
-  }
-  Util.sendEventToEntityOwner(
-    vehicle,
-    'vehicles:client:setNativeStatus',
-    NetworkGetNetworkIdFromEntity(vehicle),
-    status
-  );
 };
 
 export const setEngineState = (vehicle: number, state: boolean, instantly = false) => {

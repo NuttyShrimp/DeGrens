@@ -1,12 +1,13 @@
 import { Events, Inventory, Notifications, RPC, Config, Util, UI, Business } from '@dgx/server';
 import { getConfigByEntity } from '../info/service.info';
 import { getServiceStatus, seedServiceStatuses, updateServiceStatus } from './services/store';
-import { calculateNeededParts, setPercentagePerPart, useRepairPart } from './service.status';
+import { calculateNeededParts, setNativeStatus, setPercentagePerPart, useRepairPart } from './service.status';
 import { getTyreState } from './helpers.status';
-import { getVinForVeh, setNativeStatus } from 'helpers/vehicle';
+import { getVinForVeh } from 'helpers/vehicle';
 import { SERVICE_CONDITIONS } from './constants.status';
 import { REPAIR_PARTS } from '../../../shared/status/constants.status';
 import upgradesManager from 'modules/upgrades/classes/manager.upgrades';
+import { generatePerfectNativeStatus } from '@shared/status/helpers.status';
 
 setImmediate(() => {
   seedServiceStatuses();
@@ -127,7 +128,9 @@ global.exports('popTyre', async (vehicle: number) => {
       break;
     }
   }
-  setNativeStatus(vehicle, { wheels: wheelStatus });
+  setNativeStatus(vehicle, {
+    wheels: wheelStatus,
+  });
 });
 
 Inventory.registerUseable('repair_kit', (plyId, itemState) => {
@@ -187,7 +190,7 @@ Inventory.registerUseable('tire_repair_kit', (plyId, itemState) => {
   Events.emitNet('vehicles:status:useTireKit', plyId, itemState.id);
 });
 
-Events.onNet('vehicles:status:finishTireKit', async (plyId, itemId: string, netId: number, tyreState: number[]) => {
+Events.onNet('vehicles:status:finishTireKit', async (plyId, itemId: string, netId: number) => {
   const vehicle = NetworkGetEntityFromNetworkId(netId);
   if (!vehicle || !DoesEntityExist(vehicle)) return;
 
@@ -198,6 +201,6 @@ Events.onNet('vehicles:status:finishTireKit', async (plyId, itemId: string, netI
   }
 
   setNativeStatus(vehicle, {
-    wheels: tyreState,
+    wheels: generatePerfectNativeStatus().wheels,
   });
 });

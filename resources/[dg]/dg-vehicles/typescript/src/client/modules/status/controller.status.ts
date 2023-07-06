@@ -1,22 +1,30 @@
 import { Events, Minigames, Notifications, RPC, RayCast, Sync, Taskbar, Util, Vehicles } from '@dgx/client';
-
 import { setDegradationValues } from './constant.status';
-import { fixVehicle } from './service.status';
 import { isCloseToAWheel } from '@helpers/vehicle';
 import { getWindowState, getDoorState, getTyreState } from './helpers.status';
+import { fixVehicle } from './service.status';
 
-// Completes the server side function for natives that are client sided only
-Events.onNet(
-  'vehicles:client:setNativeStatus',
-  async (vehNetId: number, status: Partial<Omit<Vehicle.VehicleStatus, 'fuel' | 'body' | 'doors'>>) => {
-    // Vehicle handles gets changed sometimes for a fucking reason when spawning, check netid
-    const exists = await Util.awaitEntityExistence(vehNetId, true);
-    if (!exists) return;
-    const vehicle = NetworkGetEntityFromNetworkId(vehNetId);
+Sync.registerActionHandler(
+  'vehicles:statis:setNative',
+  async (vehicle, status: Partial<Omit<Vehicle.VehicleStatus, 'fuel'>>) => {
+    if (status.body !== undefined) {
+      if (status.body === 1000) {
+        SetVehicleDeformationFixed(vehicle);
+      }
+      SetVehicleBodyHealth(vehicle, status.body);
+    }
 
     if (status.engine !== undefined) {
       SetVehicleEngineHealth(vehicle, status.engine);
     }
+
+    if (status.doors !== undefined) {
+      status.doors.forEach((broken, doorId) => {
+        if (!broken) return; // no native to fix sadly
+        SetVehicleDoorBroken(vehicle, doorId, true);
+      });
+    }
+
     if (status.wheels !== undefined) {
       status.wheels.forEach((health, wheelId) => {
         if (health === -1) {
@@ -30,10 +38,14 @@ Events.onNet(
         }
       });
     }
+
     if (status.windows !== undefined) {
       status.windows.forEach((broken, windowId) => {
-        if (!broken) return;
-        SmashVehicleWindow(vehicle, windowId);
+        if (broken) {
+          SmashVehicleWindow(vehicle, windowId);
+        } else {
+          FixVehicleWindow(vehicle, windowId);
+        }
       });
     }
   }
@@ -136,10 +148,10 @@ Events.onNet('vehicles:status:useTireKit', async (itemId: string) => {
     return;
   }
 
-  const success = await Minigames.keygame(10, 7, 15);
+  const success = await Minigames.keygame(4, 7, 15);
   if (!success) return;
 
-  const [canceled] = await Taskbar.create('tire', 'Vervangen', 30000, {
+  const [canceled] = await Taskbar.create('tire', 'Vervangen', 15000, {
     canCancel: true,
     cancelOnDeath: true,
     cancelOnMove: true,
@@ -159,6 +171,5 @@ Events.onNet('vehicles:status:useTireKit', async (itemId: string) => {
   });
   if (canceled) return;
 
-  const newTyreState = oldTyreState.map(health => (health === 0 ? 0 : 1000));
-  Events.emitNet('vehicles:status:finishTireKit', itemId, NetworkGetNetworkIdFromEntity(entity), newTyreState);
+  Events.emitNet('vehicles:status:finishTireKit', itemId, NetworkGetNetworkIdFromEntity(entity));
 });

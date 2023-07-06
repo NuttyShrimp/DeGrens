@@ -78,7 +78,6 @@ export const handleVehicleRepair = async () => {
       },
     });
     Sounds.playLocalSound('airwrench', 0.08);
-    fixVehicle(plyVeh, false, true);
   }
   if (repairTimes.body > 0) {
     await Taskbar.create('car-wrench', 'Repairing Body', Math.max(1000, repairTimes.body), {
@@ -89,8 +88,9 @@ export const handleVehicleRepair = async () => {
       },
     });
     Sounds.playLocalSound('airwrench', 0.08);
-    fixVehicle(plyVeh, true, false);
   }
+
+  fixVehicle(plyVeh, true);
 };
 
 export const closeUI = () => {
