@@ -37,6 +37,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Dispatch seed enkel calls van je eigen job
 - Motor gaat nu reliable aan wanneer je via adminmenu een voertuig spawned
 - Je gaat nu correct uit dienst bij een bedrijf wanneer je de server verlaat
+- Takelopdracht blips gaan nu weg wanneer je het voertuig takelt
 
 ## [1.2.7]
 
