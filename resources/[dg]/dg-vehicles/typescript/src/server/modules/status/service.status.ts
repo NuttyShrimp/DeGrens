@@ -158,3 +158,9 @@ export const calculateNeededParts = (partValue: number) => {
   }
   return amount;
 };
+
+export const clearVehicleStalls = (vehicle: number) => {
+  const entState = Entity(vehicle).state;
+  entState.set('amountOfStalls', 0, true);
+  entState.set('undriveable', false, true);
+};

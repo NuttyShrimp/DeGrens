@@ -506,6 +506,19 @@
         }
       ]
     },
+    "advanced_repair_kit": {
+      "requiredReputation": 10,
+      "items": [
+        {
+          "name": "refined_aluminum",
+          "amount": 1
+        },
+        {
+          "name": "refined_iron",
+          "amount": 1
+        }
+      ]
+    },
     "weapon_petrolcan": {
       "requiredReputation": 10,
       "items": [

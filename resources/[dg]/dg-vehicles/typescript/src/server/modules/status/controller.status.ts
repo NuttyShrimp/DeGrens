@@ -1,10 +1,16 @@
-import { Events, Inventory, Notifications, RPC, Config, Util, UI, Business } from '@dgx/server';
+import { Events, Inventory, Notifications, RPC, Config, Util, UI, Business, Sync } from '@dgx/server';
 import { getConfigByEntity } from '../info/service.info';
 import { getServiceStatus, seedServiceStatuses, updateServiceStatus } from './services/store';
-import { calculateNeededParts, setNativeStatus, setPercentagePerPart, useRepairPart } from './service.status';
+import {
+  calculateNeededParts,
+  clearVehicleStalls,
+  setNativeStatus,
+  setPercentagePerPart,
+  useRepairPart,
+} from './service.status';
 import { getTyreState } from './helpers.status';
 import { getVinForVeh } from 'helpers/vehicle';
-import { SERVICE_CONDITIONS } from './constants.status';
+import { DEFAULT_SERVICE_STATUS, SERVICE_CONDITIONS } from './constants.status';
 import { REPAIR_PARTS } from '../../../shared/status/constants.status';
 import upgradesManager from 'modules/upgrades/classes/manager.upgrades';
 import { generatePerfectNativeStatus } from '@shared/status/helpers.status';
@@ -133,74 +139,55 @@ global.exports('popTyre', async (vehicle: number) => {
   });
 });
 
-Inventory.registerUseable('repair_kit', (plyId, itemState) => {
+Inventory.registerUseable(['repair_kit', 'advanced_repair_kit', 'tire_repair_kit'], (plyId, itemState) => {
   if (GetVehiclePedIsIn(GetPlayerPed(String(plyId)), false)) {
     Notifications.add(plyId, 'Je kan dit niet gebruiken in de wagen', 'error');
     return;
   }
-  Events.emitNet('vehicles:status:useRepairKit', plyId, itemState.id);
+  Events.emitNet('vehicles:status:useRepairItem', plyId, itemState.name, itemState.id);
 });
 
-Events.onNet('vehicles:status:finishRepairKit', async (plyId, itemId: string, netId: number, oldHealth: number) => {
-  const vehicle = NetworkGetEntityFromNetworkId(netId);
-  if (!vehicle || !DoesEntityExist(vehicle)) return;
+Events.onNet(
+  'vehicles:status:finishRepairItemUsage',
+  async (plyId, itemId: string, itemName: string, netId: number, data: Record<string, any>) => {
+    const vehicle = NetworkGetEntityFromNetworkId(netId);
+    if (!vehicle || !DoesEntityExist(vehicle)) return;
 
-  const removed = await Inventory.removeItemByIdFromPlayer(plyId, itemId);
-  if (!removed) {
-    Notifications.add(plyId, 'Je hebt geen repairkit', 'error');
-    return;
+    const removed = await Inventory.removeItemByIdFromPlayer(plyId, itemId);
+    if (!removed) {
+      Notifications.add(plyId, 'Je hebt dit niet meer', 'error');
+      return;
+    }
+
+    switch (itemName) {
+      case 'repair_kit':
+        const increase = Config.getConfigValue<number>('vehicles.config.repairKitAmount');
+        if (!increase) return;
+        clearVehicleStalls(vehicle);
+        setNativeStatus(vehicle, {
+          engine: (data.oldHealth ?? 0) + increase,
+        });
+        break;
+      case 'advanced_repair_kit':
+        clearVehicleStalls(vehicle);
+        Sync.executeAction('vehicles:status:fix', vehicle);
+        break;
+      case 'tire_repair_kit':
+        setNativeStatus(vehicle, {
+          wheels: generatePerfectNativeStatus().wheels,
+        });
+        break;
+    }
   }
-
-  const increase = Config.getConfigValue<number>('vehicles.config.repairKitAmount');
-  if (!increase) return;
-
-  // Reset stalls for every repair
-  const entState = Entity(vehicle).state;
-  entState.set('amountOfStalls', 0, true);
-  entState.set('undriveable', false, true);
-
-  setNativeStatus(vehicle, {
-    engine: oldHealth + increase,
-  });
-});
+);
 
 global.exports('clearServiceStatus', (vehicle: number) => {
   const vin = getVinForVeh(vehicle);
   if (!vin) return;
-  updateServiceStatus(vin, {
-    axle: 1000,
-    brakes: 1000,
-    engine: 1000,
-    suspension: 1000,
-  });
+  updateServiceStatus(vin, { ...DEFAULT_SERVICE_STATUS });
 });
 
 global.exports('doAdminFix', (vehicle: number) => {
-  Util.sendEventToEntityOwner(vehicle, 'vehicles:client:fixVehicle', NetworkGetNetworkIdFromEntity(vehicle));
-  const entState = Entity(vehicle).state;
-  entState.set('amountOfStalls', 0, true);
-  entState.set('undriveable', false, true);
-});
-
-Inventory.registerUseable('tire_repair_kit', (plyId, itemState) => {
-  if (GetVehiclePedIsIn(GetPlayerPed(String(plyId)), false)) {
-    Notifications.add(plyId, 'Je kan dit niet gebruiken in de wagen', 'error');
-    return;
-  }
-  Events.emitNet('vehicles:status:useTireKit', plyId, itemState.id);
-});
-
-Events.onNet('vehicles:status:finishTireKit', async (plyId, itemId: string, netId: number) => {
-  const vehicle = NetworkGetEntityFromNetworkId(netId);
-  if (!vehicle || !DoesEntityExist(vehicle)) return;
-
-  const removed = await Inventory.removeItemByIdFromPlayer(plyId, itemId);
-  if (!removed) {
-    Notifications.add(plyId, 'Je hebt geen bandenkit meer', 'error');
-    return;
-  }
-
-  setNativeStatus(vehicle, {
-    wheels: generatePerfectNativeStatus().wheels,
-  });
+  Sync.executeAction('vehicles:status:fix', vehicle);
+  clearVehicleStalls(vehicle);
 });

@@ -2055,6 +2055,17 @@
     }
   },
   {
+    "name": "advanced_repair_kit",
+    "label": "Grote Reparatie Set",
+    "image": "advanced_repair_kit.png",
+    "useable": true,
+    "decayRate": 43200,
+    "size": {
+      "x": 5,
+      "y": 3
+    }
+  },
+  {
     "name": "meth_lab_keycard",
     "label": "Lab Keycard",
     "image": "meth_lab_keycard.png",

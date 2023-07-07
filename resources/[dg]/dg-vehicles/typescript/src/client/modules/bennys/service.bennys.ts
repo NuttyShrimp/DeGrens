@@ -42,7 +42,7 @@ export const getRepairData = (plyVeh: number): Bennys.RepairInfo | null => {
   if (bodyHealth > 990 && engineHealth > 990) return null;
 
   const damagePercentage = +((2000 - bodyHealth - engineHealth) / 2000).toFixed(2);
-  const price = Math.round(Math.max(50, Math.log10(1 + damagePercentage * 1.5) * 2000));
+  const price = Math.round(Math.max(MINIMUM_REPAIR_PRICE, Math.log10(1 + damagePercentage * 1.5) * 2000));
 
   return {
     price,

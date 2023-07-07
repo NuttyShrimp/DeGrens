@@ -10,9 +10,6 @@ import {
   resetHandlingContextMultiplier,
   setHandlingContextMultiplier,
 } from 'services/handling';
-import { getVehicleFuel, overrideSetFuel } from 'modules/fuel/service.fuel';
-import { getTyreState } from './helpers.status';
-import { generatePerfectNativeStatus } from '@shared/status/helpers.status';
 
 let vehicleService: {
   vehicle: number;
@@ -250,16 +247,5 @@ export const tryToStallVehicle = (
 };
 
 export const fixVehicle = (vehicle: number, keepTyreState = false) => {
-  const tyreState = keepTyreState ? getTyreState(vehicle) : null;
-
-  setNativeStatus(vehicle, generatePerfectNativeStatus());
-
-  // SetVehicleFixed native modifies fuel
-  const fuelLevel = getVehicleFuel(vehicle);
-  SetVehicleFixed(vehicle);
-  overrideSetFuel(vehicle, fuelLevel);
-
-  if (tyreState) {
-    setNativeStatus(vehicle, { wheels: tyreState });
-  }
+  Sync.executeAction('vehicles:status:fix', vehicle, keepTyreState);
 };
