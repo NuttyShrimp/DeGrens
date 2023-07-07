@@ -2,6 +2,7 @@ import { startParticleThread } from 'modules/particles/service.particles';
 import { loadStatusData } from 'modules/status/service.status';
 import { loadAllPlayerReputations } from 'modules/reputation/service.reputation';
 import { loadHudConfig } from 'modules/hud/service.hud';
+import { initializeDutyTimesModule } from 'modules/dutytime/service.dutytime';
 
 import './modules/particles';
 import './modules/hud';
@@ -13,6 +14,7 @@ import './modules/rental/controller.rental';
 import './modules/objectManager/controller.objectmanager';
 import './modules/arena';
 import './modules/propremover';
+import './modules/dutytime';
 import './services/laptop';
 import './services/config';
 import './services/boatanchor';
@@ -33,4 +35,5 @@ setImmediate(() => {
   loadStatusData();
   loadAllPlayerReputations();
   loadHudConfig();
+  initializeDutyTimesModule();
 });

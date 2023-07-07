@@ -38,6 +38,7 @@ declare global {
     DoorLock: typeof Classes.DoorLock;
     Particles: typeof Classes.Particles;
     PropRemover: typeof Classes.PropRemover;
+    DutyTime: typeof Classes.DutyTime;
     Vector3: typeof Vector3Class;
     Vector4: typeof Vector4Class;
   };

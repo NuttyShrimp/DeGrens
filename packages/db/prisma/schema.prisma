@@ -195,6 +195,7 @@ model characters {
   vehicle_transfer_logs            vehicle_transfer_logs[]
   whitelist_jobs                   whitelist_jobs[]
   phone_notes_access               phone_notes_access[]
+  duty_times                       duty_times[]
 
   @@index([steamid], map: "steamid")
 }
@@ -717,6 +718,17 @@ model business_item_prices {
   @@index([business_id], map: "fk_business_item_prices_business")
 }
 
+model duty_times {
+  id         Int               @id @default(autoincrement())
+  cid        Int
+  context    String            @db.VarChar(255)
+  action     duty_times_action
+  time       BigInt
+  characters characters        @relation(fields: [cid], references: [citizenid], onDelete: Cascade, map: "fk_duty_times_cid")
+
+  @@index([cid], map: "fk_playerskins_cid")
+}
+
 enum bank_accounts_type {
   standard
   savings
@@ -769,4 +781,9 @@ enum lab_type {
   weed
   coke
   meth
+}
+
+enum duty_times_action {
+  start
+  stop
 }

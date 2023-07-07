@@ -1,4 +1,4 @@
-import { Config, Notifications, Events, Util, UI, Core } from '@dgx/server';
+import { Config, Notifications, Events, Util, UI, Core, DutyTime } from '@dgx/server';
 import { mainLogger } from 'sv_logger';
 import whitelistManager from './whitelistmanager';
 import { DGXEvent, EventListener, Export, ExportRegister, RPCEvent, RPCRegister } from '@dgx/server/decorators';
@@ -128,6 +128,7 @@ class SignedInManager extends Util.Singleton<SignedInManager>() {
     emitNet('jobs:client:signin:update', src, job, plyEntry.rank);
     emit('jobs:server:signin:update', src, job, plyEntry.rank);
 
+    DutyTime.addDutyTimeEntry(cid, job, 'start');
   };
 
   @DGXEvent('jobs:server:signOut')
@@ -152,6 +153,7 @@ class SignedInManager extends Util.Singleton<SignedInManager>() {
     emitNet('jobs:client:signin:update', src, null, null);
     emit('jobs:server:signin:update', src, null, null);
 
+    DutyTime.addDutyTimeEntry(cid, job, 'stop');
   };
 
   // set off duty when ply is fired

@@ -73,6 +73,18 @@ Peek.addZoneEntry('business_management', {
         return !!getBusinessConfig(option.data.id)?.priceItems; // only show if price items are defined
       },
     },
+    {
+      label: 'Toon Diensturen',
+      icon: 'fas fa-list',
+      action: option => {
+        Events.emitNet('misc:dutytime:showList', option.data.id);
+      },
+      canInteract: (_, __, option) => {
+        if (!isSignedInAtBusiness(option.data.id)) return false;
+        if (!isBusinessTypeOptedInToModule(option.data.businessType, 'signin')) return false;
+        return isEmployee(option.data.id, ['change_role']);
+      },
+    },
   ],
   distance: 3,
 });
