@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Mechanics hebben nu de mogelijkheid om wagens visueel te repareren
 - Systeem toegevoegd om in dienst tijd te kunnen tracken
 - Personen gaat nu automatisch uit dienst wanneer ze ontslagen worden van een whitelisted job
+- Business Owners en HC van whitelisted jobs kunnen nu zien hoe lang mensen in dienst zijn geweest
 
 ### Changed
 
