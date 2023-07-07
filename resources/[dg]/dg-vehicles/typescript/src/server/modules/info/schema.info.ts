@@ -43,7 +43,7 @@ const carSchema: Schema = {
     price: { type: 'number' },
     defaultStock: { type: 'number' },
     restockTime: { type: 'number' },
-    shop: { type: 'string', enum: ['pdm', 'nfs'] satisfies Shop[] },
+    shop: { type: 'string', enum: ['pdm', 'nfs'] satisfies Config.Shop[] },
     type: {
       type: 'string',
       enum: ['land', 'air', 'sea'],

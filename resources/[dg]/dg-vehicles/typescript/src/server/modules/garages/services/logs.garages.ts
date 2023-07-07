@@ -1,6 +1,6 @@
 import { getVehicleLog, insertVehicleParkLog } from 'db/repository';
 
-const garageLogs = new Map<string, SVGarage.Log[]>();
+const garageLogs = new Map<string, Garage.ParkLog[]>();
 
 export const getVehicleGarageLog = async (vin: string) => {
   let logs = garageLogs.get(vin);
@@ -20,7 +20,7 @@ export const addVehicleGarageLog = (
   fuelLevel: number,
   serviceStatus: Service.Status
 ) => {
-  const action: SVGarage.Log['action'] = isStoring ? 'parked' : 'retrieved';
+  const action: Garage.ParkLog['action'] = isStoring ? 'parked' : 'retrieved';
 
   const averageServiceStatus = Object.values(serviceStatus).reduce((acc, v) => Math.round(acc + v / 40), 0);
   const stringifiedState = `Status: ${averageServiceStatus}% | Fuel: ${Math.round(fuelLevel)}%`;
