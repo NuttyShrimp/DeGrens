@@ -290,6 +290,7 @@ class WhitelistManager extends Util.Singleton<WhitelistManager>() {
     this.logger.debug(`Removed whitelist entry for ${cid} as ${jobName}`);
     Util.Log('jobs:whitelist:removed', { job: jobName }, `Removed whitelist for ${cid} at ${job}`, src);
     Events.emitNet('jobs:whitelists:update', src, jobName, 'remove');
+    signedInManager.handleWhitelistRemoved(cid, jobName);
     if (jobConfig.bankAccount && wasHC) {
       const success = Financials.setPermissions(jobConfig.bankAccount, cid, {
         deposit: false,

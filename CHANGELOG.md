@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - De items met de laagste quality worden nu als eerste gekozen in een inventory (Bv. crafting, drugs verkopen, ...)
 - Mechanics hebben nu de mogelijkheid om wagens visueel te repareren
 - Systeem toegevoegd om in dienst tijd te kunnen tracken
+- Personen gaat nu automatisch uit dienst wanneer ze ontslagen worden van een whitelisted job
 
 ### Changed
 
