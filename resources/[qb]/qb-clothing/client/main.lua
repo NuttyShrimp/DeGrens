@@ -1954,3 +1954,23 @@ AddEventHandler("clothing:client:adjustfacewear", function(type)
   end
   ClearPedTasks(PlayerPedId())
 end)
+
+local wearingVest = true
+RegisterNetEvent('dg-clothing:client:adjustBodyArmor', function()
+    local ped = PlayerPedId()
+    loadAnimDict("clothingshirt")        
+    TaskPlayAnim(GetPlayerPed(-1), "clothingshirt", "try_shirt_positive_d", 8.0, 1.0, -1, 49, 0, 0, 0, 0)
+    Wait(1000)
+    if wearingVest then
+        if skinData["vest"] ~= nil then
+            SetPedComponentVariation(ped, 9, skinData["vest"].item, skinData["vest"].texture, 0)
+            TaskPlayAnim(ped, "clothingshirt", "exit", 8.0, 1.0, -1, 49, 0, 0, 0, 0)
+        end
+    elseif not wearingVest then
+        if skinData["vest"] ~= nil then
+            SetPedComponentVariation(ped, 9, 0, 0, 0)
+            TaskPlayAnim(ped, "clothingshirt", "exit", 8.0, 1.0, -1, 49, 0, 0, 0, 0)
+        end
+    end
+    wearingVest = not wearingVest
+end)

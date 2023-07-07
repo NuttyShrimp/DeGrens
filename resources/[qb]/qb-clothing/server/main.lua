@@ -94,14 +94,18 @@ DGX.RPC.register('qb-clothing:server:getOutfits', function(source)
   return anusVal
 end)
 
-exports['dg-chat']:registerCommand("helm", "Zet je helm op.", {}, 'user', function(source)
+exports['dg-chat']:registerCommand("helm", "Zet je helm op", {}, 'user', function(source)
   TriggerClientEvent("clothing:client:adjustfacewear", source, 1) -- Hat
 end)
 
-exports['dg-chat']:registerCommand("bril", "Zet je bril op.", {}, 'user', function(source)
+exports['dg-chat']:registerCommand("bril", "Zet je bril op", {}, 'user', function(source)
   TriggerClientEvent("clothing:client:adjustfacewear", source, 2)
 end)
 
-exports['dg-chat']:registerCommand("masker", "Zet je masker op.", {}, 'user', function(source)
+exports['dg-chat']:registerCommand("masker", "Zet je masker op", {}, 'user', function(source)
   TriggerClientEvent("clothing:client:adjustfacewear", source, 4)
+end)
+
+exports['dg-chat']:registerCommand("vest", "Trek je vest aan", {}, 'user', function(source)
+  TriggerClientEvent('dg-clothing:client:adjustBodyArmor', source)
 end)

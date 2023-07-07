@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Personen gaat nu automatisch uit dienst wanneer ze ontslagen worden van een whitelisted job
 - Business Owners en HC van whitelisted jobs kunnen nu zien hoe lang mensen in dienst zijn geweest
 - Rijden met kapotte banden beinvloed nu je voertuig status
+- Commando toegevoegd om je armor visueel te togglen (/vest)
 
 ### Changed
 
