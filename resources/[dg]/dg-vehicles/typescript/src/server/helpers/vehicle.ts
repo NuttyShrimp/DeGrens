@@ -1,4 +1,4 @@
-import { RPC, Util } from '@dgx/server';
+import { RPC, Sync, Util } from '@dgx/server';
 import { insertVehicleStatus } from 'db/repository';
 import { addWaxedVehicle } from 'modules/carwash/service.carwash';
 import { setVehicleNosAmount } from 'modules/nos/service.nos';
@@ -215,8 +215,7 @@ export const teleportInSeat = async (src: number, entity: number, seat = -1) => 
 };
 
 export const setEngineState = (vehicle: number, state: boolean, instantly = false) => {
-  const netId = NetworkGetNetworkIdFromEntity(vehicle);
-  Util.sendEventToEntityOwner(vehicle, 'vehicles:setEngineState', netId, state, instantly);
+  Sync.executeAction('vehicles:engine:setState', vehicle, state, instantly);
 };
 
 const startNPCDriverDeletionThread = (vehicle: number) => {

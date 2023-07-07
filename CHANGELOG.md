@@ -27,6 +27,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Exploit om houserobbery timeout te skippen opgelost
 - Je kan de kleur van de Range Rover Vogue nu wel aanpassen
 - Dispatch seed enkel calls van je eigen job
+- Motor gaat nu reliable aan wanneer je via adminmenu een voertuig spawned
 
 ## [1.2.7]
 
