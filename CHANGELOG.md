@@ -39,6 +39,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Motor gaat nu reliable aan wanneer je via adminmenu een voertuig spawned
 - Je gaat nu correct uit dienst bij een bedrijf wanneer je de server verlaat
 - Takelopdracht blips gaan nu weg wanneer je het voertuig takelt
+- Je kan weer extras veranderen in bennys
 
 ## [1.2.7]
 

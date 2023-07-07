@@ -156,7 +156,6 @@ declare namespace Vehicles {
         | 'wheels'
         | 'windowTint'
         | 'turbo'
-        | 'extras'
       >,
       number
     > & {

@@ -267,6 +267,7 @@ export const UPGRADES: UpgradesObj<Vehicles.Upgrades.Key> = {
         SetVehicleExtra(vehicle, extra.id, (!!extra.enabled ? 0 : 1) as unknown as boolean);
       });
     },
+    getAmount: vehicle => [...Array(14)].reduce((amount, _, i) => amount + (DoesExtraExist(vehicle, i + 1) ? 1 : 0), 0),
   },
   // we generate all the data for performance keys which use normal Get/Set-VehicleMod functions
   ...(Object.keys(NORMAL_PERFORMANCE_KEYS_TO_ID) as Vehicles.Upgrades.Performance.NormalKey[]).reduce((acc, key) => {
