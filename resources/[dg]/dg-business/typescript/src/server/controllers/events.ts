@@ -10,6 +10,7 @@ import {
   getBusinessByName,
   leaveCurrentBusiness,
   createBusiness,
+  signOutOfAllBusinesses,
 } from '../services/business';
 
 onNet('dg-config:moduleLoaded', (module: string, data: Config.Config) => {
@@ -36,6 +37,7 @@ Core.onPlayerLoaded(playerData => {
 });
 
 Core.onPlayerUnloaded(plyId => {
+  signOutOfAllBusinesses(plyId);
   leaveCurrentBusiness(plyId);
 });
 

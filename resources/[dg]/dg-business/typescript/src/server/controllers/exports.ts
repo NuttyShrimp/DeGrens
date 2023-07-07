@@ -62,7 +62,7 @@ global.exports('isPlayerSignedInAtBusiness', (plyId: number, name: string) => {
 global.exports('getSignedInPlayersForBusiness', (name: string): number[] => {
   const business = getBusinessByName(name);
   if (!business) return [];
-  return [...business.getSignedInPlayers()];
+  return business.getSignedInPlayers();
 });
 
 global.exports('isPlayerSignedInAtAnyOfBusinessType', isPlayerSignedInAtAnyOfBusinessType);

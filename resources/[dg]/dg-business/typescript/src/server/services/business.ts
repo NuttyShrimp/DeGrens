@@ -241,6 +241,16 @@ export const getBusinessPlayerIsInsideOf = (plyId: number) => {
   }
 };
 
+export const getBusinessesPlayerIsSignedInAt = (plyId: number) => {
+  const businessesSignedInAt: Business[] = [];
+  for (const [_, business] of businesses) {
+    if (business.isSignedIn(plyId)) {
+      businessesSignedInAt.push(business);
+    }
+  }
+  return businessesSignedInAt;
+};
+
 export const getSignedInPlayersForBusinessType = (businessType: string) => {
   const plys = new Set<number>();
   for (const [_, business] of businesses) {
@@ -263,4 +273,11 @@ export const leaveCurrentBusiness = (plyId: number) => {
   const business = getBusinessPlayerIsInsideOf(plyId);
   if (!business) return;
   business.playerLeft(plyId);
+};
+
+export const signOutOfAllBusinesses = (plyId: number) => {
+  const signedInBusinesses = getBusinessesPlayerIsSignedInAt(plyId);
+  for (const business of signedInBusinesses) {
+    business.signOut(plyId);
+  }
 };

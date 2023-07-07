@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - De blip van een agent verdwijnt van de map als die zijn noodknop niet meer in zijn inventory heeft
 - De items met de laagste quality worden nu als eerste gekozen in een inventory (Bv. crafting, drugs verkopen, ...)
 - Mechanics hebben nu de mogelijkheid om wagens visueel te repareren
+- Systeem toegevoegd om in dienst tijd te kunnen tracken
 
 ### Changed
 
@@ -28,6 +29,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Je kan de kleur van de Range Rover Vogue nu wel aanpassen
 - Dispatch seed enkel calls van je eigen job
 - Motor gaat nu reliable aan wanneer je via adminmenu een voertuig spawned
+- Je gaat nu correct uit dienst bij een bedrijf wanneer je de server verlaat
 
 ## [1.2.7]
 
