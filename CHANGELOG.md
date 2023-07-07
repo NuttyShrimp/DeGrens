@@ -28,6 +28,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Prijsberekening van bennys aangepast
 - Lonen van whitelisted jobs een beetje verhoogd
 - Boeien uitbreken is moeilijker geworden als je al enkele keren hebt uitgebroken
+- Geld dat mechanics krijgen per parts verhoogd om meer in lijn te liggen met verdiensten van andere jobs
 
 ### Fixed
 
