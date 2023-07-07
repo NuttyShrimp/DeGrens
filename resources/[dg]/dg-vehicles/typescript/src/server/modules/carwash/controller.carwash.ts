@@ -6,7 +6,9 @@ import { applyWaxItem, cleanVehicle } from './service.carwash';
 global.exports('cleanVehicle', cleanVehicle);
 
 Events.onNet('vehicles:carwash:clean', (plyId: number, netId: number) => {
-  cleanVehicle(netId);
+  const vehicle = NetworkGetEntityFromNetworkId(netId);
+  if (!vehicle || !DoesEntityExist(vehicle)) return;
+  cleanVehicle(vehicle);
 });
 
 RPC.register('vehicles:carwash:payForCarwash', (plyId: number) => {

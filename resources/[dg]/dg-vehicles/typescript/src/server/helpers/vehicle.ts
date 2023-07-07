@@ -1,6 +1,6 @@
 import { RPC, Sync, Util } from '@dgx/server';
 import { insertVehicleStatus } from 'db/repository';
-import { addWaxedVehicle } from 'modules/carwash/service.carwash';
+import { addWaxedVehicle, cleanVehicle } from 'modules/carwash/service.carwash';
 import { setVehicleNosAmount } from 'modules/nos/service.nos';
 import { setVehicleHarnessUses } from 'modules/seatbelts/service.seatbelts';
 import { loadStance } from 'modules/stances/service.stances';
@@ -110,6 +110,8 @@ export const spawnVehicle: Vehicles.SpawnVehicleFunction = async data => {
     if (data.engineState !== undefined) {
       setEngineState(vehicle, data.engineState, true);
     }
+
+    cleanVehicle(vehicle);
   });
 
   const netId = NetworkGetNetworkIdFromEntity(vehicle);
