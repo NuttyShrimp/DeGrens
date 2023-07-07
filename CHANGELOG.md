@@ -30,6 +30,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Boeien uitbreken is moeilijker geworden als je al enkele keren hebt uitgebroken
 - Geld dat mechanics krijgen per parts verhoogd om meer in lijn te liggen met verdiensten van andere jobs
 - Voertuigen spawnen nu altijd proper
+- Automatische stancing voor A6 toegevoegd
 
 ### Fixed
 

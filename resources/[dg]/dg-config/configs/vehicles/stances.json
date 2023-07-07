@@ -94,5 +94,39 @@
       "backLeft": 0.745,
       "backRight": 0.745
     }
+  },
+  "a6": {
+    "upgrade": {
+      "component": "rightFenders",
+      "possibilities": [
+        {
+          "value": [1, 2],
+          "stance": {
+            "frontLeft": 0.805,
+            "frontRight": 0.805,
+            "backLeft": 0.8,
+            "backRight": 0.8
+          }
+        },
+        {
+          "value": 5,
+          "stance": {
+            "frontLeft": 0.825,
+            "frontRight": 0.825,
+            "backLeft": 0.815,
+            "backRight": 0.815
+          }
+        },
+        {
+          "value": [6, 7],
+          "stance": {
+            "frontLeft": 0.83,
+            "frontRight": 0.83,
+            "backLeft": 0.835,
+            "backRight": 0.835
+          }
+        }
+      ]
+    }
   }
 }
