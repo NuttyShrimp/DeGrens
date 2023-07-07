@@ -10,6 +10,7 @@ import {
   resetHandlingContextMultiplier,
   setHandlingContextMultiplier,
 } from 'services/handling';
+import { getTyreState } from './helpers.status';
 
 let vehicleService: {
   vehicle: number;
@@ -79,6 +80,8 @@ export const startStatusThread = async (vehicle: number) => {
         suspCompress.push(GetVehicleWheelSuspensionCompression(vehicle, i));
       }
 
+      let poppedTireModifier = 1 + getTyreState(vehicle).filter(t => t === -1).length;
+
       // Brakes
       // Brake natives give wrong values when engine is off
       if (GetIsVehicleEngineRunning(vehicle)) {
@@ -109,7 +112,7 @@ export const startStatusThread = async (vehicle: number) => {
       vehicleService.state.engine = newEngine;
 
       if (bodyDelta > 0) {
-        const axleDecrease = bodyDelta / 25;
+        const axleDecrease = (bodyDelta * poppedTireModifier) / 25;
         vehicleService.info.axle = Math.max(vehicleService.info.axle - axleDecrease, 0);
       }
       if (engineDelta > 0) {
