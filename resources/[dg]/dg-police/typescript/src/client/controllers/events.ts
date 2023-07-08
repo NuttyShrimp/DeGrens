@@ -1,6 +1,17 @@
-import { BlipManager, Events, Inventory, Jobs, Notifications, Peek, Taskbar, Util, Vehicles } from '@dgx/client';
+import {
+  BaseEvents,
+  BlipManager,
+  Events,
+  Inventory,
+  Jobs,
+  Notifications,
+  Peek,
+  Taskbar,
+  Util,
+  Vehicles,
+} from '@dgx/client';
 import { buildLabPeekZone } from 'modules/evidence/service.evidence';
-import { loadPrisonConfig } from 'modules/prison/service.prison';
+import { cleanupJail, loadPrisonConfig } from 'modules/prison/service.prison';
 import { buildSpeedZones } from 'modules/speedzones/service.speedzones';
 import { loadLockers } from 'services/lockers';
 import { setRequirements } from 'services/requirements';
@@ -100,7 +111,7 @@ on('police:carStorage', async () => {
   Inventory.openStash(stashId, 8);
 });
 
-on('onResourceStop', (resourceName: string) => {
-  if (GetCurrentResourceName() !== resourceName) return;
+BaseEvents.onResourceStop(() => {
   BlipManager.removeCategory('police');
+  cleanupJail();
 });

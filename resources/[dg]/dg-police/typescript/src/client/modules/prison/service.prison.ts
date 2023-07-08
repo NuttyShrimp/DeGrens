@@ -1,4 +1,4 @@
-import { PolyTarget, PolyZone, Sounds, Util } from '@dgx/client';
+import { BlipManager, PolyTarget, PolyZone, Sounds, Util } from '@dgx/client';
 
 let prisonConfig: Police.Prison.Config;
 
@@ -37,24 +37,34 @@ export const enterPrison = async () => {
     DoScreenFadeIn(500);
   }, 2000);
 
-  inPrison = true;
-  Sounds.playLocalSound('jail', 0.3);
-  PolyTarget.addCircleZone('prison_phone', prisonConfig.jailControl, 1, { useZ: true, data: {}, routingBucket: 0 });
-  PolyTarget.addCircleZone('prison_shop', prisonConfig.shop, 2, { useZ: true, data: {}, routingBucket: 0 });
+  setInPrison();
 };
 
 export const restoreSentence = async () => {
-  await Util.awaitCondition(() => prisonConfig != undefined);
+  await Util.awaitCondition(() => prisonConfig != undefined, false);
+  setInPrison();
+};
+
+const setInPrison = () => {
   inPrison = true;
   Sounds.playLocalSound('jail', 0.3);
   PolyTarget.addCircleZone('prison_phone', prisonConfig.jailControl, 1, { useZ: true, data: {}, routingBucket: 0 });
   PolyTarget.addCircleZone('prison_shop', prisonConfig.shop, 2, { useZ: true, data: {}, routingBucket: 0 });
+  BlipManager.addBlip({
+    category: 'prison',
+    id: 'control',
+    coords: prisonConfig.jailControl,
+    text: 'Gevangenis Telefoon',
+    sprite: 1,
+    color: 2,
+  });
 };
 
 export const cleanupJail = () => {
   inPrison = false;
   PolyTarget.removeZone('prison_phone');
   PolyTarget.removeZone('prison_shop');
+  BlipManager.removeCategory('prison');
 };
 
 export const leavePrison = async () => {
