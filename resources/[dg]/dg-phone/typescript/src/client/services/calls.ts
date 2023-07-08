@@ -1,4 +1,4 @@
-import { Events, Peek, Police, RPC, UI } from '@dgx/client';
+import { Events, Notifications, Peek, Police, RPC, UI } from '@dgx/client';
 import { playPhoneSound, stopPhoneSound } from 'services/sound';
 import { canOpenPhone, setState } from 'services/state';
 
@@ -105,7 +105,12 @@ Peek.addModelEntry(
 
 asyncExports('prisonCall', async () => {
   const contacts = await RPC.execute<Contact[]>('phone:contacts:get');
-  const options = (contacts ?? []).map(c => ({ label: c.label, value: c.phone }));
+  if (!contacts || contacts.length === 0) {
+    Notifications.add('Je hebt geen contacten om te bellen', 'error');
+    return;
+  }
+
+  const options = contacts.map(c => ({ label: c.label, value: c.phone }));
 
   const result = await UI.openInput({
     header: 'Selecteer een contactpersoon',

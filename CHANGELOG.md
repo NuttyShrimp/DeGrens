@@ -41,6 +41,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Je gaat nu correct uit dienst bij een bedrijf wanneer je de server verlaat
 - Takelopdracht blips gaan nu weg wanneer je het voertuig takelt
 - Je kan weer extras veranderen in bennys
+- Error opgelost wanneer je probeert te bellen in de gevangenis als je geen contacten hebt
 
 ## [1.2.7]
 
