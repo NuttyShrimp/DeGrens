@@ -85,6 +85,14 @@ Events.onNet('vehicles:server:app:sellVehicle', async (src, targetCID: number, v
   insertVehicleTransferLog(vin, cid, targetCID);
   Notifications.add(src, 'Voertuig successvol vergekocht', 'success');
   Notifications.add(targetServerId, 'Voertuig successvol overgekocht', 'success');
+  Util.Log(
+    'vehicles:garageApp:soldVehicle',
+    {
+      vin,
+      buyerCid: targetCID,
+    },
+    `${Util.getName(src)}(${src}) has sold ${vin} to ${targetCID} for ${price}`
+  );
 });
 
 RPC.register('vehicles:server:app:getVehicles', async src => {

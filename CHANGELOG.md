@@ -18,6 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Rijden met kapotte banden beinvloed nu je voertuig status
 - Commando toegevoegd om je armor visueel te togglen (/vest)
 - Blips toegevoegd in de gevangenis om makkelijker de uitgang te vinden
+- Extra logs toegevoegd op het verkopen van een voertuig via de garage app
 
 ### Changed
 
