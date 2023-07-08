@@ -56,12 +56,12 @@ export const removeCash = (src: number | string, amount: number, reason: string)
   Util.Log(
     'cash:remove',
     {
-      cid,
       cash,
       amount,
       reason,
     },
-    `Cash has been removed from ${Util.getName(src)}`
+    `Cash has been removed from ${Util.getName(src)}`,
+    +src
   );
   updateMetadata(Player);
   Events.emitNet('financials:client:cashChange', Number(src), cash - amount, -amount);
@@ -92,12 +92,12 @@ export const addCash = (src: number | string, amount: number, reason: string) =>
   Util.Log(
     'cash:add',
     {
-      cid,
       cash,
       amount,
       reason,
     },
-    `Cash has been added to ${Util.getName(src)}`
+    `Cash has been added to ${Util.getName(src)}`,
+    +src
   );
   updateMetadata(Player);
   Events.emitNet('financials:client:cashChange', Number(src), cash + amount, amount);

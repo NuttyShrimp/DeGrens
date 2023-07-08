@@ -1,5 +1,4 @@
 import { Notifications, RPC, Util } from '@dgx/server';
-import { Vector4 } from '@dgx/shared';
 import { getPlayerVehicleInfo, insertNewVehicle } from 'db/repository';
 import {
   deleteVehicle,
