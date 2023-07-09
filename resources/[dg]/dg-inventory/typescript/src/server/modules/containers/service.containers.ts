@@ -17,7 +17,7 @@ export const registerContainers = () => {
 
     // make sure every container item has the isContainer metadata entry.
     // This is used in UI to handle crafting requirement checks when trying to use items inside containers
-    item.setMetadata(old => ({ ...old, isContainer: true, hiddenKeys: ['isContainer', ...old.hiddenKeys] }));
+    item.setMetadata(old => ({ ...old, isContainer: true, hiddenKeys: ['isContainer', ...(old.hiddenKeys ?? [])] }));
 
     UI.openContextMenu(plyId, [
       {

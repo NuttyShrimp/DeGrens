@@ -89,7 +89,7 @@ const validateDBStock = async () => {
   // First we check if any model stock exists in db but the model does not exist in config, if so remove those from db
   const modelStockToDelete: string[] = [];
   modelStock.forEach((_, model) => {
-    if (vehicleInfo.has(GetHashKey(model))) return;
+    if (vehicleInfo.has(GetHashKey(model) >>> 0)) return;
     modelStockToDelete.push(model);
   });
   modelStockToDelete.forEach(model => {
