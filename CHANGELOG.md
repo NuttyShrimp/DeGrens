@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Blips toegevoegd in de gevangenis om makkelijker de uitgang te vinden
 - Extra logs toegevoegd op het verkopen van een voertuig via de garage app
 - Meer info bij cashlogs toegevoegd
+- Phone notificatie toegevoegd wanneer er een nieuwe ad wordt geplaatst
 
 ### Changed
 
