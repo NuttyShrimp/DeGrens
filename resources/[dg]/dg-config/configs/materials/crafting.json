@@ -905,7 +905,7 @@
       "visibleReputationLimit": 500
     },
     "mechanic_bench": {
-      "items": ["repair_kit", "tire_repair_kit", "weapon_petrolcan"],
+      "items": ["repair_kit", "tire_repair_kit", "weapon_petrolcan", "advanced_repair_kit"],
       "reputation": "mechanic_crafting"
     },
     "blazeit_bench": {
