@@ -51,7 +51,7 @@ class InventoryManager extends Util.Singleton<InventoryManager>() {
   @Export('forceUnloadInventory')
   public unload = async (invId: string) => {
     const inventory = await this.get(invId);
-    inventory.getItems().forEach(item => itemManager.unloadItem(item.state.id));
+    inventory.getItems(true).forEach(item => itemManager.unloadItem(item.state.id));
     this.inventories.delete(invId);
   };
 }

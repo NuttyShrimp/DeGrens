@@ -113,7 +113,7 @@ class ItemManager extends Util.Singleton<ItemManager>() {
   private _useHotkey = async (src: number, key: Inventory.Hotkey) => {
     const invId = Inventory.concatId('player', Util.getCID(src));
     const inventory = await inventoryManager.get(invId);
-    const items = inventory.getItems();
+    const items = inventory.getItems(true);
     const itemToUse = items.find(i => i.state.hotkey === key);
     if (!itemToUse) return;
     itemToUse.use(src, true);

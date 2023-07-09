@@ -295,7 +295,7 @@ export class Inv {
   };
 
   public hasObject = () => {
-    const items = this.getItemStates();
+    const items = this.getItemStates(true);
     const objectItems = objectsUtility.config?.items ?? {};
     return items.some(item => {
       const info = objectItems[item.name];

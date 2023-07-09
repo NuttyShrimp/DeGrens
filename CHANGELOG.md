@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 ### Fixed
+- Probleem opgelost waarbij containers visueel leeg zijn nadat je reloggen met een container opzak
 
 ## [1.2.8]
 
