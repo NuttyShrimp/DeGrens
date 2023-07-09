@@ -19,7 +19,6 @@ const scheduledDebts = new Map<number, NodeJS.Timeout>();
 
 export const debtLogger = mainLogger.child({
   module: 'debts',
-  category: 'debts',
 });
 
 export const getDaysUntilDue = (debtPrice: number) => {

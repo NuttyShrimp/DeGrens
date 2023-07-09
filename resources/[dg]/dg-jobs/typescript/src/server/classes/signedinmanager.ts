@@ -1,7 +1,8 @@
-import { Config, Notifications, Events, Util, UI, Core } from '@dgx/server';
+import { Config, Notifications, Events, Util, UI, Core, DutyTime } from '@dgx/server';
 import { mainLogger } from 'sv_logger';
 import whitelistManager from './whitelistmanager';
 import { DGXEvent, EventListener, Export, ExportRegister, RPCEvent, RPCRegister } from '@dgx/server/decorators';
+import { charModule } from 'helpers/core';
 
 @EventListener()
 @ExportRegister()
@@ -111,13 +112,8 @@ class SignedInManager extends Util.Singleton<SignedInManager>() {
     if (currentPlyJob === job) {
       Notifications.add(src, `Je bent al in dienst bij ${jobConfig.name}`);
       return;
-    }
-
-    // Check if player already signed in for other job, if so remove from there
-    for (const signedInPlayers of this.signedIn.values()) {
-      const idx = signedInPlayers.findIndex(p => p.cid === cid);
-      if (idx === -1) continue;
-      signedInPlayers.splice(idx, 1);
+    } else if (currentPlyJob !== undefined) {
+      this.signOut(src, currentPlyJob);
     }
 
     let signedInJob = this.signedIn.get(job);
@@ -131,6 +127,8 @@ class SignedInManager extends Util.Singleton<SignedInManager>() {
     Notifications.add(src, `In dienst gegaan bij ${jobConfig.name}`);
     emitNet('jobs:client:signin:update', src, job, plyEntry.rank);
     emit('jobs:server:signin:update', src, job, plyEntry.rank);
+
+    DutyTime.addDutyTimeEntry(cid, job, 'start');
   };
 
   @DGXEvent('jobs:server:signOut')
@@ -154,6 +152,24 @@ class SignedInManager extends Util.Singleton<SignedInManager>() {
     Notifications.add(src, `Uit dienst gegaan bij ${jobConfig.name}`);
     emitNet('jobs:client:signin:update', src, null, null);
     emit('jobs:server:signin:update', src, null, null);
+
+    DutyTime.addDutyTimeEntry(cid, job, 'stop');
+  };
+
+  // set off duty when ply is fired
+  public handleWhitelistRemoved = (cid: number, jobName: string) => {
+    const jobToRestore = this.jobsToRestore.get(cid);
+    if (jobToRestore === jobName) {
+      this.jobsToRestore.delete(cid);
+    }
+
+    const currentJob = this.getJobByCid(cid);
+    if (!currentJob) return;
+
+    const plyId = charModule.getServerIdFromCitizenId(cid);
+    if (!plyId) return;
+
+    this.signOut(plyId, jobName);
   };
 
   @Export('getCurrentJob')
@@ -161,6 +177,10 @@ class SignedInManager extends Util.Singleton<SignedInManager>() {
   public getPlayerJob = (src: number) => {
     const cid = Util.getCID(src, true);
     if (!cid) return;
+    return this.getJobByCid(cid);
+  };
+
+  private getJobByCid = (cid: number) => {
     for (const [job, signedInJob] of this.signedIn) {
       if (signedInJob.find(i => i.cid === cid)) {
         return job;

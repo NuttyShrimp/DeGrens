@@ -1,4 +1,4 @@
-import { Core, Events, RPC, Util } from '@dgx/server';
+import { Core, Events, Phone, RPC, UI, Util } from '@dgx/server';
 import { charModule } from 'helpers/core';
 
 let ads: Ad[] = [];
@@ -32,6 +32,14 @@ Events.onNet('dg-phone:server:yp:add', (src, data) => {
     ad.text = data.text;
   }
   emitNet('dg-phone:client:yp:setAd', src, ad);
+
+  Phone.showNotification(-1, {
+    id: `yp_new_${Date.now()}`,
+    title: 'Nieuwe advertentie',
+    description: ad.text,
+    icon: 'yellowpages',
+    app: 'yellowpages',
+  });
 });
 
 Events.onNet('dg-phone:server:yp:remove', src => {

@@ -101,9 +101,9 @@ RPC.register('police:interactions:getCuffed', async (coords: Vec4) => {
 
   const success = await Minigames.keygame(1, cuffSpeed, 10);
   if (success) {
-    cuffSpeed = Math.min(20, cuffSpeed + 2);
+    cuffSpeed = Math.min(30, cuffSpeed + 3);
     setTimeout(() => {
-      cuffSpeed = Math.max(10, cuffSpeed - 2);
+      cuffSpeed = Math.max(10, cuffSpeed - 3);
     }, 10 * 60 * 1000);
     ClearPedTasks(PlayerPedId());
     return false;

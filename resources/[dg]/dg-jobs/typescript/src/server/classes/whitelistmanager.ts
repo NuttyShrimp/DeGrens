@@ -1,4 +1,4 @@
-import { SQL, Config, Notifications, Events, Util, UI, Financials } from '@dgx/server';
+import { SQL, Config, Notifications, Events, Util, UI, Financials, DutyTime } from '@dgx/server';
 import { DGXEvent, EventListener, RPCEvent, RPCRegister } from '@dgx/server/decorators';
 import { AsyncExport, Export, ExportRegister } from '@dgx/shared/decorators';
 import { mainLogger } from 'sv_logger';
@@ -111,7 +111,7 @@ class WhitelistManager extends Util.Singleton<WhitelistManager>() {
 
   // Filter is rank or speciality seperated by a dot comma.
   @DGXEvent('jobs:whitelist:server:openJobAllowlist')
-  public openAllowListMenu = (src: number, filter?: string) => {
+  public openAllowListMenu = async (src: number, filter?: string) => {
     // Get job player is currently signed in to
     const job = signedInManager.getPlayerJob(src);
     if (!job) {
@@ -168,6 +168,7 @@ class WhitelistManager extends Util.Singleton<WhitelistManager>() {
       openMenu();
       return;
     }
+
     const players = entries.filter(entry => {
       if (!filter) return true;
       return filters.some(filter => {
@@ -185,52 +186,68 @@ class WhitelistManager extends Util.Singleton<WhitelistManager>() {
       return a.name.localeCompare(b.name);
     });
 
-    players.forEach(entry => {
-      allowListMenu.push({
-        title: `${entry.name}(${entry.cid})`,
-        description: `rank: ${config.grades[entry.rank]} | speciality: ${Object.keys(config.specialities)
-          .filter(spec => (entry.speciality & config.specialities[spec]) !== 0)
-          .join(',')}`,
-        submenu: [
-          {
-            title: 'Ranks',
-            disabled: true,
-          },
-          ...config.grades.map<ContextMenu.Entry>((rank, idx) => ({
-            title: rank,
-            data: {
-              cid: entry.cid,
-              rank: idx,
+    await Promise.all(
+      players.map(async entry => {
+        const dutyTime = await DutyTime.getDutyTime(entry.cid, job);
+        const specialities =
+          Object.keys(config.specialities)
+            .filter(spec => (entry.speciality & config.specialities[spec]) !== 0)
+            .join(', ') || 'Geen';
+
+        allowListMenu.push({
+          title: `${entry.name}(${entry.cid})`,
+          description: `Rank: ${config.grades[entry.rank]} | Specialities: ${specialities}`,
+          submenu: [
+            {
+              title: dutyTime ?? 'Niet in dienst geweest',
+              description: 'Tijd in dienst de laatste 30 dagen',
+              icon: 'clock',
+              disabled: true,
             },
-            disabled: entry.rank === idx,
-            callbackURL: 'jobs:whitelist:assignRank',
-          })),
-          {
-            title: 'Specialities',
-            disabled: true,
-          },
-          ...Object.keys(config.specialities).map<ContextMenu.Entry>((spec, idx) => ({
-            title: spec,
-            data: {
-              cid: entry.cid,
-              spec,
-              type: (entry.speciality & config.specialities[spec]) !== 0 ? 'remove' : 'add',
+            {
+              title: 'Ranks',
+              description: 'Klik op een rank hieronder om te veranderen',
+              disabled: true,
+              icon: 'list',
             },
-            icon: (entry.speciality & config.specialities[spec]) !== 0 ? 'circle-check' : undefined,
-            callbackURL: 'jobs:whitelist:toggleSpeciality',
-          })),
-          {
-            title: 'Ontsla',
-            description: `Ontsla deze persoon`,
-            callbackURL: 'jobs:whitelist:fire',
-            data: {
-              cid: entry.cid,
-              job,
+            ...config.grades.map<ContextMenu.Entry>((rank, idx) => ({
+              title: rank,
+              data: {
+                cid: entry.cid,
+                rank: idx,
+              },
+              icon: entry.rank === idx ? 'circle-check' : undefined,
+              callbackURL: 'jobs:whitelist:assignRank',
+            })),
+            {
+              title: 'Specialities',
+              description: 'Klik op een specialiteit hieronder om te togglen',
+              disabled: true,
+              icon: 'sparkles',
             },
-          },
-        ],
-      });
-    });
+            ...Object.keys(config.specialities).map<ContextMenu.Entry>((spec, idx) => ({
+              title: spec,
+              data: {
+                cid: entry.cid,
+                spec,
+                type: (entry.speciality & config.specialities[spec]) !== 0 ? 'remove' : 'add',
+              },
+              icon: (entry.speciality & config.specialities[spec]) !== 0 ? 'circle-check' : undefined,
+              callbackURL: 'jobs:whitelist:toggleSpeciality',
+            })),
+            {
+              title: 'Ontsla',
+              description: `Ontsla deze persoon`,
+              callbackURL: 'jobs:whitelist:fire',
+              data: {
+                cid: entry.cid,
+                job,
+              },
+            },
+          ],
+        });
+      })
+    );
     openMenu();
   };
 
@@ -290,6 +307,7 @@ class WhitelistManager extends Util.Singleton<WhitelistManager>() {
     this.logger.debug(`Removed whitelist entry for ${cid} as ${jobName}`);
     Util.Log('jobs:whitelist:removed', { job: jobName }, `Removed whitelist for ${cid} at ${job}`, src);
     Events.emitNet('jobs:whitelists:update', src, jobName, 'remove');
+    signedInManager.handleWhitelistRemoved(cid, jobName);
     if (jobConfig.bankAccount && wasHC) {
       const success = Financials.setPermissions(jobConfig.bankAccount, cid, {
         deposit: false,

@@ -1,4 +1,33 @@
 declare namespace Bennys {
+  interface RepairInfo {
+    price: number;
+    body: number;
+    engine: number;
+  }
+
+  interface Location {
+    vector: Vec3;
+    name: string;
+    width: number;
+    length: number;
+    heading: number;
+    vehicleType: Vehicle.VehicleType;
+    data: {
+      minZ: number;
+      maxZ: number;
+    };
+    hideBlip?: boolean;
+  }
+
+  interface SpotData {
+    player: number;
+    vin: string;
+    entity: number;
+    upgrades: Vehicles.Upgrades.Cosmetic;
+    repair: Bennys.RepairInfo;
+    originalStance: Stances.Stance;
+  }
+
   type Category = 'colors' | 'interior' | 'exterior' | 'wheels' | 'extras';
   type ColorKey =
     | 'primaryColor'
@@ -26,34 +55,9 @@ declare namespace Bennys {
 
     type WheelsCategories = (Omit<Generic, 'name' | 'equipped'> & { id: number; label: string })[];
 
-    // type GenericChange = {
-    //   name: Exclude<Vehicles.Upgrades.Key, 'colors', 'wheels', 'extras'>;
-    //   data: number;
-    // };
-
-    // type ColorChange = {
-    //   name: 'colors';
-    //   data: Vehicles.Upgrades.Cosmetic;
-    // };
-
-    // type WheelChange = {
-    //   name: 'wheels';
-    //   data: Vehicles.Upgrades.Cosmetic['wheels'];
-    // };
-
-    // type ExtraChange = {
-    //   name: 'extras';
-    //   data: {
-    //     id: number;
-    //     enabled: boolean;
-    //   };
-    // };
-
     type Change<T extends Vehicles.Upgrades.Cosmetic.Key = Vehicles.Upgrades.Cosmetic.Key> = {
       name: T;
       data: Vehicles.Upgrades.Cosmetic.Upgrades[T];
     };
-
-    // type Change = GenericChange | ColorChange | WheelChange | ExtraChange;
   }
 }

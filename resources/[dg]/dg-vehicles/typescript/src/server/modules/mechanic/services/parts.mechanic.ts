@@ -202,7 +202,7 @@ export const craftPart = async (plyId: number, partItem: Mechanic.PartItem) => {
   Notifications.add(plyId, `Je hebt een ${partLabel} gemaakt`);
 
   Util.Log(
-    'vehicles/mechanic/craftPart',
+    'vehicles:mechanic:craftPart',
     {
       shop,
       itemName: partData.itemName,

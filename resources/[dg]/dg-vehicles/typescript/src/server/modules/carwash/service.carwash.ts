@@ -1,23 +1,21 @@
-import { Config, Util } from '@dgx/server';
+import { Config, Sync, Util } from '@dgx/server';
 import { updateVehicleWax } from 'db/repository';
 import vinManager from 'modules/identification/classes/vinmanager';
 
 import { carwashLogger } from './logger.carwash';
 
-const vehiclesWithWax: Map<string, { expirationDate: number; netId: number }> = new Map();
+const vehiclesWithWax: Map<string, { expirationDate: number; vehicle: number }> = new Map();
 
-export const cleanVehicle = (netId: number) => {
-  const veh = NetworkGetEntityFromNetworkId(netId);
-  if (!DoesEntityExist(veh)) return;
-  SetVehicleDirtLevel(veh, 0.0);
-  Util.sendEventToEntityOwner(veh, 'vehicles:carwash:cleanDecals', netId);
+export const cleanVehicle = (vehicle: number) => {
+  SetVehicleDirtLevel(vehicle, 0.0);
+  Sync.executeAction('vehicles:carwash:cleanDecals', vehicle);
 };
 
 export const addWaxedVehicle = (vin: string, expirationDate: number) => {
-  const netId = vinManager.getNetId(vin);
-  if (!netId) return;
-  vehiclesWithWax.set(vin, { expirationDate, netId });
-  cleanVehicle(netId);
+  const vehicle = vinManager.getEntity(vin);
+  if (!vehicle || !DoesEntityExist(vehicle)) return;
+  vehiclesWithWax.set(vin, { expirationDate, vehicle });
+  cleanVehicle(vehicle);
 };
 
 export const applyWaxItem = async (plyId: number, vin: string) => {
@@ -40,18 +38,19 @@ export const applyWaxItem = async (plyId: number, vin: string) => {
 
 export const startWaxThread = () => {
   setInterval(() => {
-    // Cache and modify vehiclesWithWax after looping
-    const waxToRemove: string[] = [];
-
     const currentData = Math.floor(Date.now() / (1000 * 60));
-    vehiclesWithWax.forEach((data, vin) => {
-      if (data.expirationDate <= currentData) {
-        waxToRemove.push(vin);
-      }
-      cleanVehicle(data.netId);
-    });
 
-    waxToRemove.forEach(vin => removeVehicleWax(vin));
+    for (const [vin, data] of vehiclesWithWax) {
+      if (!DoesEntityExist(data.vehicle)) {
+        vehiclesWithWax.delete(vin);
+        continue;
+      }
+      if (data.expirationDate <= currentData) {
+        removeVehicleWax(vin);
+        continue;
+      }
+      cleanVehicle(data.vehicle);
+    }
   }, 1000 * 30);
 };
 

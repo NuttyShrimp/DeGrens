@@ -1,6 +1,6 @@
-import { Events, Keys } from '@dgx/client';
+import { Events, Keys, Sync } from '@dgx/client';
 
-import { cleanDecals, useCarwash, useCleaningKit, useWax } from './service.carwash';
+import { useCarwash, useCleaningKit, useWax } from './service.carwash';
 import { isInCarwash } from './zones.carwash';
 
 Keys.onPressDown('GeneralUse', async () => {
@@ -16,6 +16,6 @@ Events.onNet('vehicles:carwash:useWax', () => {
   useWax();
 });
 
-Events.onNet('vehicles:carwash:cleanDecals', (netId: number) => {
-  cleanDecals(netId);
+Sync.registerActionHandler('vehicles:carwash:cleanDecals', vehicle => {
+  WashDecalsFromVehicle(vehicle, 1.0);
 });

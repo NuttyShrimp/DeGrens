@@ -1,7 +1,6 @@
-import { Auth, Config, Core, Events, Notifications, RPC, UI, Util } from '@dgx/server';
+import { Core, Events, Notifications, RPC, UI } from '@dgx/server';
 import { getConfigByModel, getVehicleModels } from '../info/service.info';
 import shopManager from './classes/ShopManager';
-import { getVehicleShopConfig } from './services/config.vehicleshop';
 import { CATEGORY_LABEL, MODEL_CATEGORISATION, ModelCategorisation } from './constants.vehicleshop';
 import { buildVehicleContextMenuEntry, getCategoryLabel, getVehicleTaxedPrice } from './helpers.vehicleshop';
 import { vehicleshopLogger } from './logger.vehicleshop';

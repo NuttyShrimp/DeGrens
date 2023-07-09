@@ -1,4 +1,4 @@
-import { Events, Financials, Notifications, Phone, SQL, Util, UI, TaxIds, Inventory } from '@dgx/server';
+import { Events, Financials, Notifications, Phone, SQL, Util, UI, TaxIds, Inventory, DutyTime } from '@dgx/server';
 import { dispatchBusinessPermissionsToClientCache } from 'services/business';
 import { getBitmaskForPermissions, getConfig, getPermissions, permissionsFromBitmask } from 'services/config';
 import { charModule } from 'services/core';
@@ -12,7 +12,7 @@ export class Business {
   logger: winston.Logger;
 
   private readonly playersInside: Set<number>;
-  private readonly signedInPlayers: Set<number>;
+  private readonly signedInPlayers: { serverId: number; cid: number }[];
   private readonly registers: Map<number, { price: number; employeeCid: number; orderId: string; items?: string[] }>;
   private readonly priceItems: Map<string, { label: string; price: number }>;
   private paycheckThread: NodeJS.Timer | null;
@@ -24,7 +24,7 @@ export class Business {
     this.logger = mainLogger.child({ module: pInfo.label });
 
     this.playersInside = new Set();
-    this.signedInPlayers = new Set();
+    this.signedInPlayers = [];
     this.registers = new Map();
     this.priceItems = new Map();
     this.paycheckThread = null;
@@ -155,8 +155,8 @@ export class Business {
     if (!paycheckConfig) return;
 
     this.paycheckThread = setInterval(() => {
-      this.signedInPlayers.forEach(plyId => {
-        Inventory.addItemToPlayer(plyId, 'sales_ticket', 1, {
+      this.signedInPlayers.forEach(({ serverId }) => {
+        Inventory.addItemToPlayer(serverId, 'sales_ticket', 1, {
           origin: 'generic',
           amount: paycheckConfig.amount,
           hiddenKeys: ['origin', 'amount'],
@@ -202,8 +202,11 @@ export class Business {
     }));
   }
 
+  /**
+   * @returns server ids
+   */
   getSignedInPlayers() {
-    return this.signedInPlayers;
+    return this.signedInPlayers.map(x => x.serverId);
   }
 
   getInsidePlayers() {
@@ -794,7 +797,7 @@ export class Business {
   }
 
   public isSignedIn = (plyId: number) => {
-    return this.signedInPlayers.has(plyId);
+    return this.signedInPlayers.some(x => x.serverId === plyId);
   };
 
   public getTypeConfig = () => {
@@ -827,8 +830,9 @@ export class Business {
       return;
     }
 
-    this.signedInPlayers.add(plyId);
+    this.signedInPlayers.push({ serverId: plyId, cid });
     Events.emitNet('business:client:addSignedIn', plyId, this.info);
+    DutyTime.addDutyTimeEntry(cid, this.info.name, 'start');
 
     this.startPaycheckThread();
 
@@ -854,15 +858,26 @@ export class Business {
       return;
     }
 
-    if (!this.isSignedIn(plyId)) {
+    let cid: number | undefined = undefined;
+    let idx: number = -1;
+    for (let i = 0; i < this.signedInPlayers.length; i++) {
+      if (this.signedInPlayers[i].serverId === plyId) {
+        idx = i;
+        cid = this.signedInPlayers[i].cid;
+        break;
+      }
+    }
+
+    if (idx === -1 || cid === undefined) {
       Notifications.add(plyId, 'Je bent hier niet ingeklokt', 'error');
       return;
     }
 
-    this.signedInPlayers.delete(plyId);
+    this.signedInPlayers.splice(idx, 1);
     Events.emitNet('business:client:removeSignedIn', plyId, this.info);
+    DutyTime.addDutyTimeEntry(cid, this.info.name, 'stop');
 
-    if (this.signedInPlayers.size === 0) {
+    if (this.signedInPlayers.length === 0) {
       this.stopPaycheckThread();
     }
 
@@ -898,16 +913,16 @@ export class Business {
         description: 'Klik op een persoon om deze uit dienst te zetten',
         disabled: true,
       },
-      ...[...this.signedInPlayers].map(plyId => {
-        const charInfo = charModule.getPlayer(plyId)?.charinfo;
-        const plyName = `${charInfo ? `${charInfo.firstname} ${charInfo.lastname}` : 'Offline'} | ${plyId}`;
+      ...this.signedInPlayers.map(({ serverId }) => {
+        const charInfo = charModule.getPlayer(serverId)?.charinfo;
+        const plyName = `${charInfo ? `${charInfo.firstname} ${charInfo.lastname}` : 'Offline'} | ${serverId}`;
 
         return {
           title: plyName,
           callbackURL: 'business/forceOffDuty',
           data: {
             businessId: this.info.id,
-            plyId,
+            plyId: serverId,
           },
         };
       }),
@@ -946,10 +961,7 @@ export class Business {
     this.playersInside.delete(plyId);
 
     // sign out when leaving restaurant
-    if (
-      this.signedInPlayers.has(plyId) &&
-      getConfig().types[this.info.business_type.name]?.signin?.signOutWhenLeavingZone
-    ) {
+    if (this.isSignedIn(plyId) && getConfig().types[this.info.business_type.name]?.signin?.signOutWhenLeavingZone) {
       this.signOut(plyId);
     }
 
@@ -1016,8 +1028,8 @@ export class Business {
       items,
     });
 
-    this.signedInPlayers.forEach(emp => {
-      Notifications.add(emp, `Kassa ${registerIdx + 1} | €${price}`, 'success');
+    this.signedInPlayers.forEach(({ serverId }) => {
+      Notifications.add(serverId, `Kassa ${registerIdx + 1} | €${price}`, 'success');
     });
 
     this.logger.silly(`${Util.getName(plyId)}(${plyId}) has set register ${registerIdx + 1} to ${price}`);
@@ -1033,8 +1045,8 @@ export class Business {
 
     this.registers.delete(registerIdx);
 
-    this.signedInPlayers.forEach(emp => {
-      Notifications.add(emp, `Kassa ${registerIdx + 1} | Geannuleerd`, 'success');
+    this.signedInPlayers.forEach(({ serverId }) => {
+      Notifications.add(serverId, `Kassa ${registerIdx + 1} | Geannuleerd`, 'success');
     });
 
     this.logger.silly(`${Util.getName(plyId)}(${plyId}) has canceled register ${registerIdx + 1}`);
@@ -1113,8 +1125,8 @@ export class Business {
 
     if (!success) return;
 
-    this.signedInPlayers.forEach(emp => {
-      Notifications.add(emp, `Kassa ${registerIdx + 1} | Betaald`, 'success');
+    this.signedInPlayers.forEach(({ serverId }) => {
+      Notifications.add(serverId, `Kassa ${registerIdx + 1} | Betaald`, 'success');
     });
 
     this.registers.delete(registerIdx);
@@ -1207,7 +1219,7 @@ export class Business {
   };
 
   public checkShop = (plyId: number) => {
-    if (this.signedInPlayers.size > 0) {
+    if (this.signedInPlayers.length > 0) {
       Notifications.add(plyId, 'Er is een medewerker aanwezig', 'error');
       return;
     }
@@ -1236,7 +1248,7 @@ export class Business {
   };
 
   public buyFromShop = async (plyId: number, itemName: string) => {
-    if (this.signedInPlayers.size > 0) {
+    if (this.signedInPlayers.length > 0) {
       Notifications.add(plyId, 'Er is een medewerker aanwezig', 'error');
       return;
     }

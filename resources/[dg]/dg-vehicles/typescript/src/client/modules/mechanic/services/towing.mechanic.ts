@@ -54,7 +54,7 @@ export const attachHook = async (vehToTow: number) => {
   if (cancelled) return;
 
   const vin = Entity(vehToTow).state?.vin;
-  if (vin && vin != jobVin) {
+  if (vin && vin === jobVin) {
     finishJob();
   }
 

@@ -74,8 +74,8 @@ class Vehicles {
     global.exports['dg-vehicles'].setEngineState(vehicle, state, instantly);
   };
 
-  cleanVehicle = (netId: number) => {
-    global.exports['dg-vehicles'].cleanVehicle(netId);
+  cleanVehicle = (vehicle: number) => {
+    global.exports['dg-vehicles'].cleanVehicle(vehicle);
   };
 
   popTyre = (vehicle: number) => {

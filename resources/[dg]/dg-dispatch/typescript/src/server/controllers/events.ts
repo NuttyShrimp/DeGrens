@@ -1,4 +1,4 @@
-import { Auth, Config, Events, Notifications, Util, Jobs } from '@dgx/server';
+import { Auth, Config, Events, Notifications, Util, Jobs, Inventory, Core } from '@dgx/server';
 import { cleanPlayer, syncBlips, togglePlayer, updateSprite } from 'services/blips';
 import { getCams, loadCams } from 'services/cams';
 import { getCall, getCalls } from 'services/store';
@@ -9,17 +9,21 @@ setImmediate(async () => {
   loadCams(config);
 });
 
-Jobs.onJobUpdate((plyId, job) => {
+Jobs.onJobUpdate(async (plyId, job) => {
   syncBlips();
 
   if (job !== 'police') {
     cleanPlayer(plyId);
-    return;
   }
 
   // seed 20 first stored dispatch calls
-  if (job !== null) {
-    Events.emitNet('dg-dispatch:addCalls', plyId, getCalls(20), true);
+  if (job === 'police' || job === ' ambulance') {
+    Events.emitNet('dg-dispatch:addCalls', plyId, getCalls(20, job), true);
+  }
+
+  if (job === 'police') {
+    const hasBtn = await Inventory.doesPlayerHaveItems(plyId, 'emergency_button');
+    togglePlayer(plyId, hasBtn);
   }
 });
 
@@ -28,8 +32,20 @@ on('dg-config:moduleLoaded', (module: string, { cams }: { cams: Dispatch.Cams.Ca
   loadCams(cams);
 });
 
+Inventory.onInventoryUpdate('player', (cid, action, itemState) => {
+  if (itemState.name !== 'emergency_button') return;
+
+  const charModule = Core.getModule('characters');
+  const plyId = charModule.getServerIdFromCitizenId(+cid);
+  if (!plyId) return;
+
+  togglePlayer(plyId, action === 'remove');
+});
+
 Events.onNet('dg-dispatch:loadMore', (src, offset: number) => {
-  const calls = getCalls(offset);
+  const plyJob = Jobs.getCurrentJob(src);
+  if (!plyJob) return;
+  const calls = getCalls(offset, plyJob);
   Events.emitNet('dg-dispatch:addCalls', src, calls);
 });
 

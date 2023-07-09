@@ -20,7 +20,7 @@ export const cleanVehicle: CommandData = {
       const plyId = args?.Target?.serverId ?? caller.source;
       vehicle = GetVehiclePedIsIn(GetPlayerPed(String(plyId)), false);
     }
-    Vehicles.cleanVehicle(NetworkGetNetworkIdFromEntity(vehicle));
+    Vehicles.cleanVehicle(vehicle);
   },
   UI: {
     title: 'Clean Vehicle',

@@ -20,6 +20,7 @@ declare namespace Weapons {
     damageModifier: number;
     isMelee: boolean;
     dispatchAlertChance: number;
+    blockInVehicle: boolean;
   };
 
   type WeaponItem = Inventory.ItemState &

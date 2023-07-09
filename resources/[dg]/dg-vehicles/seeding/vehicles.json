@@ -67,7 +67,7 @@
     "class": "S",
     "defaultStock": 3,
     "restockTime": 45,
-    "price": 650000,
+    "price": 468000,
     "shop": "pdm",
     "type": "land"
   },
@@ -120,7 +120,7 @@
     "type": "land"
   },
   {
-    "category": "coupes",
+    "category": "suvs",
     "model": "baller5",
     "brand": "Gallivanter",
     "name": "Baller LE Armored",
@@ -228,6 +228,30 @@
     "type": "land"
   },
   {
+    "category": "vans",
+    "model": "bison2",
+    "brand": "Bravado",
+    "name": "Bison Construction",
+    "class": "C",
+    "defaultStock": 10,
+    "restockTime": 10,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "vans",
+    "model": "bison3",
+    "brand": "Bravado",
+    "name": "Bison Closed",
+    "class": "C",
+    "defaultStock": 10,
+    "restockTime": 10,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
     "category": "suvs",
     "model": "bjxl",
     "brand": "Karin",
@@ -300,7 +324,7 @@
     "type": "land"
   },
   {
-    "category": "compacts",
+    "category": "sports",
     "model": "blista2",
     "brand": "Dinka",
     "name": "Blista Compact",
@@ -469,6 +493,18 @@
   },
   {
     "category": "vans",
+    "model": "burrito2",
+    "brand": "Declasse",
+    "name": "Burrito Bugstars",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "vans",
     "model": "burrito3",
     "brand": "Declasse",
     "name": "Burrito",
@@ -480,7 +516,31 @@
     "type": "land"
   },
   {
-    "category": "coupes",
+    "category": "vans",
+    "model": "burrito4",
+    "brand": "Declasse",
+    "name": "Burrito",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "vans",
+    "model": "burrito5",
+    "brand": "Declasse",
+    "name": "Burrito Snow",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "vans",
     "model": "camper",
     "brand": "Brute",
     "name": "Camper",
@@ -571,12 +631,12 @@
     "class": "S",
     "defaultStock": 3,
     "restockTime": 45,
-    "price": 605000,
+    "price": 436000,
     "shop": "pdm",
     "type": "land"
   },
   {
-    "category": "sports",
+    "category": "sportsclassics",
     "model": "cheetah2",
     "brand": "Grotti",
     "name": "Cheetah Classic",
@@ -732,14 +792,14 @@
     "type": "land"
   },
   {
-    "category": "super",
+    "category": "sports",
     "model": "coquette4",
     "brand": "Invetero",
     "name": "Coquette D10",
     "class": "S",
     "defaultStock": 3,
     "restockTime": 45,
-    "price": 635000,
+    "price": 457000,
     "shop": "pdm",
     "type": "land"
   },
@@ -751,7 +811,7 @@
     "class": "S",
     "defaultStock": 3,
     "restockTime": 45,
-    "price": 635000,
+    "price": 457000,
     "shop": "pdm",
     "type": "land"
   },
@@ -888,6 +948,54 @@
     "type": "land"
   },
   {
+    "category": "offroad",
+    "model": "dune2",
+    "brand": "Annis",
+    "name": "Space Docker",
+    "class": "C",
+    "defaultStock": 10,
+    "restockTime": 10,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "offroad",
+    "model": "dune3",
+    "brand": "Annis",
+    "name": "Dune FAV",
+    "class": "C",
+    "defaultStock": 10,
+    "restockTime": 10,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "offroad",
+    "model": "dune4",
+    "brand": "Annis",
+    "name": "Rampbuggy",
+    "class": "C",
+    "defaultStock": 10,
+    "restockTime": 10,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "offroad",
+    "model": "dune5",
+    "brand": "Annis",
+    "name": "Rampbuggy",
+    "class": "C",
+    "defaultStock": 10,
+    "restockTime": 10,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
     "category": "sportsclassics",
     "model": "dynasty",
     "brand": "Weeny",
@@ -955,7 +1063,7 @@
     "class": "S",
     "defaultStock": 3,
     "restockTime": 45,
-    "price": 640000,
+    "price": 461000,
     "shop": "pdm",
     "type": "land"
   },
@@ -967,7 +1075,7 @@
     "class": "S",
     "defaultStock": 3,
     "restockTime": 45,
-    "price": 640000,
+    "price": 461000,
     "shop": "pdm",
     "type": "land"
   },
@@ -1147,7 +1255,7 @@
     "class": "S",
     "defaultStock": 1,
     "restockTime": 60,
-    "price": 650000,
+    "price": 468000,
     "shop": "pdm",
     "type": "land"
   },
@@ -1200,7 +1308,7 @@
     "type": "land"
   },
   {
-    "category": "coupes",
+    "category": "sports",
     "model": "futo",
     "brand": "Karin",
     "name": "Futo",
@@ -1221,6 +1329,18 @@
     "restockTime": 15,
     "price": 52500,
     "shop": "pdm",
+    "type": "land"
+  },
+  {
+    "category": "vans",
+    "model": "gburrito",
+    "brand": "Declasse",
+    "name": "Burrito Gang",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
     "type": "land"
   },
   {
@@ -1255,7 +1375,7 @@
     "class": "S",
     "defaultStock": 3,
     "restockTime": 45,
-    "price": 650000,
+    "price": 468000,
     "shop": "pdm",
     "type": "land"
   },
@@ -1296,7 +1416,7 @@
     "type": "land"
   },
   {
-    "category": "offroad",
+    "category": "industrial",
     "model": "guardian",
     "brand": "Annis",
     "name": "Guardian",
@@ -1459,7 +1579,7 @@
     "class": "S",
     "defaultStock": 3,
     "restockTime": 45,
-    "price": 640000,
+    "price": 461000,
     "shop": "pdm",
     "type": "land"
   },
@@ -1471,7 +1591,7 @@
     "class": "S",
     "defaultStock": 3,
     "restockTime": 45,
-    "price": 645000,
+    "price": 464000,
     "shop": "pdm",
     "type": "land"
   },
@@ -1579,7 +1699,7 @@
     "class": "S",
     "defaultStock": 3,
     "restockTime": 45,
-    "price": 650000,
+    "price": 468000,
     "shop": "pdm",
     "type": "land"
   },
@@ -1591,7 +1711,7 @@
     "class": "S",
     "defaultStock": 3,
     "restockTime": 45,
-    "price": 650000,
+    "price": 468000,
     "shop": "pdm",
     "type": "land"
   },
@@ -1680,7 +1800,7 @@
     "type": "land"
   },
   {
-    "category": "vans",
+    "category": "muscle",
     "model": "moonbeam",
     "brand": "Declasse",
     "name": "Moonbeam",
@@ -1692,7 +1812,7 @@
     "type": "land"
   },
   {
-    "category": "vans",
+    "category": "muscle",
     "model": "moonbeam2",
     "brand": "Declasse",
     "name": "Moonbeam Custom",
@@ -1735,7 +1855,7 @@
     "class": "S",
     "defaultStock": 3,
     "restockTime": 45,
-    "price": 625000,
+    "price": 450000,
     "shop": "pdm",
     "type": "land"
   },
@@ -1759,7 +1879,7 @@
     "class": "S",
     "defaultStock": 3,
     "restockTime": 45,
-    "price": 635000,
+    "price": 457000,
     "shop": "pdm",
     "type": "land"
   },
@@ -1836,9 +1956,21 @@
     "type": "land"
   },
   {
-    "category": "sedans",
+    "category": "sports",
+    "model": "omnisegt",
+    "brand": "Obey",
+    "name": "Omnis e-GT",
+    "class": "A+",
+    "defaultStock": 10,
+    "restockTime": 15,
+    "price": 197500,
+    "shop": "pdm",
+    "type": "land"
+  },
+  {
+    "category": "coupes",
     "model": "oracle",
-    "brand": "Übermacht",
+    "brand": "Ubermacht",
     "name": "Oracle",
     "class": "B",
     "defaultStock": 10,
@@ -1850,7 +1982,7 @@
   {
     "category": "coupes",
     "model": "oracle2",
-    "brand": "Übermacht",
+    "brand": "Ubermacht",
     "name": "Oracle XS",
     "class": "B",
     "defaultStock": 10,
@@ -1867,7 +1999,7 @@
     "class": "S",
     "defaultStock": 3,
     "restockTime": 45,
-    "price": 655000,
+    "price": 472000,
     "shop": "pdm",
     "type": "land"
   },
@@ -1905,6 +2037,18 @@
     "restockTime": 30,
     "price": 150000,
     "shop": "pdm",
+    "type": "land"
+  },
+  {
+    "category": "sports",
+    "model": "paragon2",
+    "brand": "Enus",
+    "name": "Paragon R",
+    "class": "A+",
+    "defaultStock": 5,
+    "restockTime": 30,
+    "price": 150000,
+    "shop": "nfs",
     "type": "land"
   },
   {
@@ -2047,7 +2191,7 @@
     "class": "S",
     "defaultStock": 1,
     "restockTime": 60,
-    "price": 665000,
+    "price": 479000,
     "shop": "pdm",
     "type": "land"
   },
@@ -2162,7 +2306,7 @@
   {
     "category": "suvs",
     "model": "rebla",
-    "brand": "Übermacht",
+    "brand": "Ubermacht",
     "name": "Rebla GTS",
     "class": "A",
     "defaultStock": 10,
@@ -2186,7 +2330,7 @@
   {
     "category": "sports",
     "model": "revolter",
-    "brand": "Übermacht",
+    "brand": "Ubermacht",
     "name": "Revolter",
     "class": "B",
     "defaultStock": 10,
@@ -2241,6 +2385,18 @@
     "restockTime": 7,
     "price": 8000,
     "shop": "pdm",
+    "type": "land"
+  },
+  {
+    "category": "vans",
+    "model": "rumpo2",
+    "brand": "Bravado",
+    "name": "Rumpo 2",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
     "type": "land"
   },
   {
@@ -2306,7 +2462,7 @@
   {
     "category": "super",
     "model": "sc1",
-    "brand": "Übermacht",
+    "brand": "Ubermacht",
     "name": "SC1",
     "class": "A+",
     "defaultStock": 5,
@@ -2340,10 +2496,22 @@
     "type": "land"
   },
   {
-    "category": "sports",
+    "category": "sedans",
     "model": "schafter5",
     "brand": "Benefactor",
-    "name": "Schafter Armoured",
+    "name": "Schafter V12 Armoured",
+    "class": "B",
+    "defaultStock": 10,
+    "restockTime": 15,
+    "price": 50000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "sedans",
+    "model": "schafter6",
+    "brand": "Benefactor",
+    "name": "Schafter LWB Armoured",
     "class": "B",
     "defaultStock": 10,
     "restockTime": 15,
@@ -2364,7 +2532,7 @@
     "type": "land"
   },
   {
-    "category": "offroad",
+    "category": "suvs",
     "model": "seminole2",
     "brand": "Canis",
     "name": "Seminole Frontier",
@@ -2378,7 +2546,7 @@
   {
     "category": "coupes",
     "model": "sentinel",
-    "brand": "Ãœbermacht",
+    "brand": "Ubermacht",
     "name": "Sentinel",
     "class": "B",
     "defaultStock": 10,
@@ -2390,7 +2558,7 @@
   {
     "category": "coupes",
     "model": "sentinel2",
-    "brand": "Ãœbermacht",
+    "brand": "Ubermacht",
     "name": "Sentinel XS",
     "class": "B",
     "defaultStock": 10,
@@ -2400,9 +2568,9 @@
     "type": "land"
   },
   {
-    "category": "coupes",
+    "category": "sports",
     "model": "sentinel3",
-    "brand": "Ãœbermacht",
+    "brand": "Ubermacht",
     "name": "Sentinel Classic",
     "class": "A",
     "defaultStock": 10,
@@ -2433,6 +2601,42 @@
     "restockTime": 20,
     "price": 70000,
     "shop": "pdm",
+    "type": "land"
+  },
+  {
+    "category": "muscle",
+    "model": "slamvan4",
+    "brand": "Vapid",
+    "name": "Slam Van Apocalypse",
+    "class": "A",
+    "defaultStock": 7,
+    "restockTime": 20,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "muscle",
+    "model": "slamvan5",
+    "brand": "Vapid",
+    "name": "Slam Van Future Shock",
+    "class": "A",
+    "defaultStock": 7,
+    "restockTime": 20,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "muscle",
+    "model": "slamvan6",
+    "brand": "Vapid",
+    "name": "Slam Van Nightmare",
+    "class": "A",
+    "defaultStock": 7,
+    "restockTime": 20,
+    "price": 10000000,
+    "shop": "nfs",
     "type": "land"
   },
   {
@@ -2604,7 +2808,7 @@
     "type": "land"
   },
   {
-    "category": "coupes",
+    "category": "vans",
     "model": "surfer2",
     "brand": "BF",
     "name": "Surfer",
@@ -2659,7 +2863,7 @@
     "class": "S",
     "defaultStock": 3,
     "restockTime": 45,
-    "price": 635000,
+    "price": 457000,
     "shop": "pdm",
     "type": "land"
   },
@@ -2676,10 +2880,22 @@
     "type": "land"
   },
   {
-    "category": "muscle",
+    "category": "sports",
     "model": "tampa2",
     "brand": "Declasse",
     "name": "Drift Tampa",
+    "class": "A",
+    "defaultStock": 5,
+    "restockTime": 30,
+    "price": 105000,
+    "shop": "pdm",
+    "type": "land"
+  },
+  {
+    "category": "muscle",
+    "model": "tampa3",
+    "brand": "Declasse",
+    "name": "Weaponized Tampa",
     "class": "A",
     "defaultStock": 5,
     "restockTime": 30,
@@ -2695,20 +2911,8 @@
     "class": "S",
     "defaultStock": 3,
     "restockTime": 45,
-    "price": 645000,
+    "price": 464000,
     "shop": "pdm",
-    "type": "land"
-  },
-  {
-    "category": "super",
-    "model": "tempesta2",
-    "brand": "Pegassi",
-    "name": "Tempesta Wide Body",
-    "class": "S",
-    "defaultStock": 3,
-    "restockTime": 45,
-    "price": 650000,
-    "shop": "nfs",
     "type": "land"
   },
   {
@@ -2719,7 +2923,7 @@
     "class": "S",
     "defaultStock": 3,
     "restockTime": 45,
-    "price": 650000,
+    "price": 468000,
     "shop": "pdm",
     "type": "land"
   },
@@ -2731,7 +2935,7 @@
     "class": "S",
     "defaultStock": 1,
     "restockTime": 60,
-    "price": 670000,
+    "price": 482000,
     "shop": "pdm",
     "type": "land"
   },
@@ -2760,7 +2964,19 @@
     "type": "land"
   },
   {
-    "category": "offroad",
+    "category": "utility",
+    "model": "tractor",
+    "brand": "Stanley",
+    "name": "Tractor",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 13500,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "utility",
     "model": "tractor2",
     "brand": "Stanley",
     "name": "Fieldmaster",
@@ -2768,7 +2984,19 @@
     "defaultStock": 10,
     "restockTime": 7,
     "price": 13500,
-    "shop": "pdm",
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "utility",
+    "model": "tractor3",
+    "brand": "Stanley",
+    "name": "Fieldmaster Snow",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 13500,
+    "shop": "nfs",
     "type": "land"
   },
   {
@@ -2803,7 +3031,7 @@
     "class": "S",
     "defaultStock": 3,
     "restockTime": 45,
-    "price": 640000,
+    "price": 461000,
     "shop": "pdm",
     "type": "land"
   },
@@ -2815,7 +3043,7 @@
     "class": "S",
     "defaultStock": 1,
     "restockTime": 60,
-    "price": 550000,
+    "price": 396000,
     "shop": "pdm",
     "type": "land"
   },
@@ -2827,7 +3055,7 @@
     "class": "S",
     "defaultStock": 3,
     "restockTime": 45,
-    "price": 625000,
+    "price": 450000,
     "shop": "pdm",
     "type": "land"
   },
@@ -2839,7 +3067,7 @@
     "class": "S",
     "defaultStock": 1,
     "restockTime": 60,
-    "price": 650000,
+    "price": 468000,
     "shop": "pdm",
     "type": "land"
   },
@@ -2881,6 +3109,18 @@
   },
   {
     "category": "muscle",
+    "model": "vigero2",
+    "brand": "Declasse",
+    "name": "Vigero",
+    "class": "A+",
+    "defaultStock": 5,
+    "restockTime": 45,
+    "price": 195000,
+    "shop": "pdm",
+    "type": "land"
+  },
+  {
+    "category": "muscle",
     "model": "virgo",
     "brand": "Albany",
     "name": "Virgo",
@@ -2892,14 +3132,14 @@
     "type": "land"
   },
   {
-    "category": "sports",
+    "category": "super",
     "model": "visione",
     "brand": "Grotti",
     "name": "Visione",
     "class": "S",
     "defaultStock": 3,
     "restockTime": 45,
-    "price": 640000,
+    "price": 461000,
     "shop": "pdm",
     "type": "land"
   },
@@ -3067,14 +3307,14 @@
     "class": "S",
     "defaultStock": 3,
     "restockTime": 45,
-    "price": 645000,
+    "price": 464000,
     "shop": "pdm",
     "type": "land"
   },
   {
     "category": "coupes",
     "model": "zion",
-    "brand": "Ãœbermacht",
+    "brand": "Ubermacht",
     "name": "Zion",
     "class": "B",
     "defaultStock": 10,
@@ -3086,7 +3326,7 @@
   {
     "category": "coupes",
     "model": "zion2",
-    "brand": "Ãœbermacht",
+    "brand": "Ubermacht",
     "name": "Zion Cabrio",
     "class": "B",
     "defaultStock": 10,
@@ -3115,7 +3355,7 @@
     "class": "S",
     "defaultStock": 1,
     "restockTime": 60,
-    "price": 650000,
+    "price": 468000,
     "shop": "pdm",
     "type": "land"
   },
@@ -3132,9 +3372,9 @@
     "type": "land"
   },
   {
-    "category": "coupes",
+    "category": "sportsclassics",
     "model": "zion3",
-    "brand": "Ãœbermacht",
+    "brand": "Ubermacht",
     "name": "Zion Classic",
     "class": "B",
     "defaultStock": 10,
@@ -3156,7 +3396,7 @@
     "type": "land"
   },
   {
-    "category": "coupes",
+    "category": "sportsclassics",
     "model": "peyote3",
     "brand": "Vapid",
     "name": "Peyote Custom",
@@ -3168,7 +3408,7 @@
     "type": "land"
   },
   {
-    "category": "coupes",
+    "category": "muscle",
     "model": "peyote2",
     "brand": "Vapid",
     "name": "Peyote Gasser",
@@ -3211,7 +3451,7 @@
     "class": "S",
     "defaultStock": 3,
     "restockTime": 45,
-    "price": 650000,
+    "price": 468000,
     "shop": "pdm",
     "type": "land"
   },
@@ -3295,7 +3535,7 @@
     "class": "S",
     "defaultStock": 1,
     "restockTime": 60,
-    "price": 600000,
+    "price": 432000,
     "shop": "pdm",
     "type": "land"
   },
@@ -3336,7 +3576,7 @@
     "type": "land"
   },
   {
-    "category": "sports",
+    "category": "sportsclassics",
     "model": "viseris",
     "brand": "Lampadati",
     "name": "Viseris",
@@ -3420,7 +3660,19 @@
     "type": "land"
   },
   {
-    "category": "motorcycles",
+    "category": "sports",
+    "model": "veto",
+    "brand": "Dinka",
+    "name": "Veto",
+    "class": "A",
+    "defaultStock": 6,
+    "restockTime": 20,
+    "price": 120000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "sports",
     "model": "veto2",
     "brand": "Dinka",
     "name": "Veto Modern",
@@ -3435,7 +3687,55 @@
     "category": "vans",
     "model": "boxville",
     "brand": "Brute",
-    "name": "Boxville",
+    "name": "Boxville (LSDWP)",
+    "class": "C",
+    "defaultStock": 10,
+    "restockTime": 10,
+    "price": 20000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "vans",
+    "model": "boxville2",
+    "brand": "Brute",
+    "name": "Boxville (GOPostal)",
+    "class": "C",
+    "defaultStock": 10,
+    "restockTime": 10,
+    "price": 20000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "vans",
+    "model": "boxville3",
+    "brand": "Brute",
+    "name": "Boxville (HumaneLabs)",
+    "class": "C",
+    "defaultStock": 10,
+    "restockTime": 10,
+    "price": 20000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "vans",
+    "model": "boxville4",
+    "brand": "Brute",
+    "name": "Boxville (PostOP)",
+    "class": "C",
+    "defaultStock": 10,
+    "restockTime": 10,
+    "price": 20000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "vans",
+    "model": "boxville5",
+    "brand": "Brute",
+    "name": "Boxville (Armored)",
     "class": "C",
     "defaultStock": 10,
     "restockTime": 10,
@@ -3590,7 +3890,7 @@
   {
     "category": "sports",
     "model": "cypher",
-    "brand": "Ãœbermacht",
+    "brand": "Ubermacht",
     "name": "Cypher",
     "class": "A+",
     "defaultStock": 5,
@@ -3660,7 +3960,7 @@
     "type": "land"
   },
   {
-    "category": "motorcycles",
+    "category": "sports",
     "model": "raptor",
     "brand": "BF",
     "name": "Raptor",
@@ -3676,6 +3976,18 @@
     "model": "caddy",
     "brand": "Nagasaki",
     "name": "Caddy",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 5000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "utility",
+    "model": "caddy2",
+    "brand": "Nagasaki",
+    "name": "Caddy Open",
     "class": "D",
     "defaultStock": 10,
     "restockTime": 7,
@@ -3751,7 +4063,7 @@
     "class": "S",
     "defaultStock": 3,
     "restockTime": 45,
-    "price": 640000,
+    "price": 461000,
     "shop": "pdm",
     "type": "land"
   },
@@ -3768,14 +4080,14 @@
     "type": "land"
   },
   {
-    "category": "super",
+    "category": "sports",
     "model": "italirsx",
     "brand": "Grotti",
     "name": "Itali RSX",
     "class": "S",
     "defaultStock": 3,
     "restockTime": 45,
-    "price": 645000,
+    "price": 464000,
     "shop": "pdm",
     "type": "land"
   },
@@ -3787,7 +4099,7 @@
     "class": "S",
     "defaultStock": 3,
     "restockTime": 45,
-    "price": 635000,
+    "price": 457000,
     "shop": "pdm",
     "type": "land"
   },
@@ -3835,7 +4147,7 @@
     "class": "S",
     "defaultStock": 3,
     "restockTime": 45,
-    "price": 635000,
+    "price": 457000,
     "shop": "nfs",
     "type": "land"
   },
@@ -3861,6 +4173,18 @@
     "restockTime": 20,
     "price": 112000,
     "shop": "pdm",
+    "type": "land"
+  },
+  {
+    "category": "sports",
+    "model": "buffalo3",
+    "brand": "Bravado",
+    "name": "Buffalo Spunk",
+    "class": "A+",
+    "defaultStock": 5,
+    "restockTime": 30,
+    "price": 10000000,
+    "shop": "nfs",
     "type": "land"
   },
   {
@@ -3931,7 +4255,7 @@
     "class": "S",
     "defaultStock": 3,
     "restockTime": 45,
-    "price": 650000,
+    "price": 468000,
     "shop": "pdm",
     "type": "land"
   },
@@ -3979,7 +4303,7 @@
     "class": "S",
     "defaultStock": 3,
     "restockTime": 45,
-    "price": 645000,
+    "price": 464000,
     "shop": "pdm",
     "type": "land"
   },
@@ -4284,7 +4608,7 @@
     "type": "land"
   },
   {
-    "category": "super",
+    "category": "motorcycles",
     "model": "oppressor",
     "brand": "Pegassi",
     "name": "Oppressor",
@@ -4407,7 +4731,31 @@
     "category": "muscle",
     "model": "dominator4",
     "brand": "Vapid",
-    "name": "Dominator Arena",
+    "name": "Dominator Apocalypse",
+    "class": "B",
+    "defaultStock": 10,
+    "restockTime": 15,
+    "price": 50000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "muscle",
+    "model": "dominator5",
+    "brand": "Vapid",
+    "name": "Dominator Future Shock",
+    "class": "B",
+    "defaultStock": 10,
+    "restockTime": 15,
+    "price": 50000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "muscle",
+    "model": "dominator6",
+    "brand": "Vapid",
+    "name": "Dominator Nightmare",
     "class": "B",
     "defaultStock": 10,
     "restockTime": 15,
@@ -4701,7 +5049,7 @@
     "restockTime": 10,
     "price": 20000,
     "shop": "nfs",
-    "type": "land"
+    "type": "sea"
   },
   {
     "category": "offroad",
@@ -4720,6 +5068,18 @@
     "model": "freecrawler",
     "brand": "Canis",
     "name": "Freecrawler",
+    "class": "B",
+    "defaultStock": 10,
+    "restockTime": 15,
+    "price": 50000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "suvs",
+    "model": "mesa2",
+    "brand": "Canis",
+    "name": "Mesa Snow",
     "class": "B",
     "defaultStock": 10,
     "restockTime": 15,
@@ -4860,7 +5220,7 @@
     "type": "land"
   },
   {
-    "category": "offroad",
+    "category": "suvs",
     "model": "mesa",
     "brand": "Canis",
     "name": "Mesa",
@@ -4980,7 +5340,7 @@
     "type": "land"
   },
   {
-    "category": "compacts",
+    "category": "sports",
     "model": "blista3",
     "brand": "Dinka",
     "name": "Blista Go Go Monkey",
@@ -5124,7 +5484,7 @@
     "type": "land"
   },
   {
-    "category": "muscle",
+    "category": "sportsclassics",
     "model": "manana",
     "brand": "Albany",
     "name": "Manana",
@@ -5259,7 +5619,31 @@
     "category": "sportsclassics",
     "model": "tornado2",
     "brand": "Declasse",
-    "name": "Tornado Gang",
+    "name": "Tornado Convertible",
+    "class": "C",
+    "defaultStock": 10,
+    "restockTime": 10,
+    "price": 19000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "sportsclassics",
+    "model": "tornado3",
+    "brand": "Declasse",
+    "name": "Tornado Snow",
+    "class": "C",
+    "defaultStock": 10,
+    "restockTime": 10,
+    "price": 19000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "sportsclassics",
+    "model": "tornado4",
+    "brand": "Declasse",
+    "name": "Tornado Rusty",
     "class": "C",
     "defaultStock": 10,
     "restockTime": 10,
@@ -5277,6 +5661,18 @@
     "restockTime": 15,
     "price": 41500,
     "shop": "pdm",
+    "type": "land"
+  },
+  {
+    "category": "sportsclassics",
+    "model": "tornado6",
+    "brand": "Declasse",
+    "name": "Tornado Rat Rod",
+    "class": "B",
+    "defaultStock": 10,
+    "restockTime": 15,
+    "price": 41500,
+    "shop": "nfs",
     "type": "land"
   },
   {
@@ -5323,7 +5719,7 @@
     "class": "S",
     "defaultStock": 3,
     "restockTime": 45,
-    "price": 655000,
+    "price": 472000,
     "shop": "nfs",
     "type": "land"
   },
@@ -5335,7 +5731,7 @@
     "class": "S",
     "defaultStock": 3,
     "restockTime": 45,
-    "price": 640000,
+    "price": 461000,
     "shop": "pdm",
     "type": "land"
   },
@@ -5347,7 +5743,7 @@
     "class": "S",
     "defaultStock": 3,
     "restockTime": 45,
-    "price": 655000,
+    "price": 472000,
     "shop": "nfs",
     "type": "land"
   },
@@ -5449,6 +5845,18 @@
   },
   {
     "category": "vans",
+    "model": "speedo2",
+    "brand": "Vapid",
+    "name": "Speedo Clown",
+    "class": "C",
+    "defaultStock": 10,
+    "restockTime": 10,
+    "price": 16000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "vans",
     "model": "speedo4",
     "brand": "Vapid",
     "name": "Speedo Custom",
@@ -5472,7 +5880,7 @@
     "type": "land"
   },
   {
-    "category": "offroad",
+    "category": "utility",
     "model": "sadler",
     "brand": "Vapid",
     "name": "Sadler",
@@ -5484,7 +5892,19 @@
     "type": "land"
   },
   {
-    "category": "muscle",
+    "category": "utility",
+    "model": "sadler2",
+    "brand": "Vapid",
+    "name": "Sadler Snow",
+    "class": "C",
+    "defaultStock": 10,
+    "restockTime": 10,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "utility",
     "model": "slamtruck",
     "brand": "Vapid",
     "name": "Slam Truck",
@@ -5504,7 +5924,7 @@
     "defaultStock": 10,
     "restockTime": 15,
     "price": 50000,
-    "shop": "boats",
+    "shop": "nfs",
     "type": "sea"
   },
   {
@@ -5516,7 +5936,7 @@
     "defaultStock": 10,
     "restockTime": 7,
     "price": 5000,
-    "shop": "boats",
+    "shop": "nfs",
     "type": "sea"
   },
   {
@@ -5528,7 +5948,7 @@
     "defaultStock": 10,
     "restockTime": 10,
     "price": 20000,
-    "shop": "boats",
+    "shop": "nfs",
     "type": "sea"
   },
   {
@@ -5564,7 +5984,7 @@
     "defaultStock": 10,
     "restockTime": 10,
     "price": 20000,
-    "shop": "boats",
+    "shop": "nfs",
     "type": "sea"
   },
   {
@@ -5576,7 +5996,7 @@
     "defaultStock": 10,
     "restockTime": 10,
     "price": 20000,
-    "shop": "boats",
+    "shop": "nfs",
     "type": "sea"
   },
   {
@@ -5636,7 +6056,7 @@
     "defaultStock": 10,
     "restockTime": 10,
     "price": 20000,
-    "shop": "boats",
+    "shop": "nfs",
     "type": "sea"
   },
   {
@@ -5648,7 +6068,7 @@
     "defaultStock": 10,
     "restockTime": 10,
     "price": 20000,
-    "shop": "boats",
+    "shop": "nfs",
     "type": "sea"
   },
   {
@@ -5672,7 +6092,7 @@
     "defaultStock": 10,
     "restockTime": 10,
     "price": 20000,
-    "shop": "boats",
+    "shop": "nfs",
     "type": "sea"
   },
   {
@@ -5684,7 +6104,7 @@
     "defaultStock": 10,
     "restockTime": 10,
     "price": 20000,
-    "shop": "boats",
+    "shop": "nfs",
     "type": "sea"
   },
   {
@@ -5696,7 +6116,7 @@
     "defaultStock": 10,
     "restockTime": 10,
     "price": 20000,
-    "shop": "boats",
+    "shop": "nfs",
     "type": "sea"
   },
   {
@@ -5708,19 +6128,31 @@
     "defaultStock": 10,
     "restockTime": 10,
     "price": 20000,
-    "shop": "boats",
+    "shop": "nfs",
     "type": "sea"
   },
   {
     "category": "helicopters",
+    "model": "buzzard",
+    "brand": "Nagasaki",
+    "name": "Buzzard Attack Chopper",
+    "class": "X",
+    "defaultStock": 1,
+    "restockTime": 60,
+    "price": 20000000,
+    "shop": "nfs",
+    "type": "air"
+  },
+  {
+    "category": "helicopters",
     "model": "buzzard2",
-    "brand": "Unknown",
+    "brand": "Nagasaki",
     "name": "Buzzard",
     "class": "X",
     "defaultStock": 1,
     "restockTime": 60,
     "price": 20000000,
-    "shop": "air",
+    "shop": "nfs",
     "type": "air"
   },
   {
@@ -5732,7 +6164,7 @@
     "defaultStock": 1,
     "restockTime": 60,
     "price": 20000000,
-    "shop": "air",
+    "shop": "nfs",
     "type": "air"
   },
   {
@@ -5744,7 +6176,7 @@
     "defaultStock": 1,
     "restockTime": 60,
     "price": 20000000,
-    "shop": "air",
+    "shop": "nfs",
     "type": "air"
   },
   {
@@ -5756,7 +6188,7 @@
     "defaultStock": 1,
     "restockTime": 60,
     "price": 20000000,
-    "shop": "air",
+    "shop": "nfs",
     "type": "air"
   },
   {
@@ -5768,7 +6200,7 @@
     "defaultStock": 1,
     "restockTime": 60,
     "price": 20000000,
-    "shop": "air",
+    "shop": "nfs",
     "type": "air"
   },
   {
@@ -5780,7 +6212,7 @@
     "defaultStock": 1,
     "restockTime": 60,
     "price": 20000000,
-    "shop": "air",
+    "shop": "nfs",
     "type": "air"
   },
   {
@@ -5792,7 +6224,7 @@
     "defaultStock": 1,
     "restockTime": 60,
     "price": 20000000,
-    "shop": "air",
+    "shop": "nfs",
     "type": "air"
   },
   {
@@ -5804,7 +6236,7 @@
     "defaultStock": 1,
     "restockTime": 60,
     "price": 20000000,
-    "shop": "air",
+    "shop": "nfs",
     "type": "air"
   },
   {
@@ -5816,7 +6248,7 @@
     "defaultStock": 1,
     "restockTime": 60,
     "price": 20000000,
-    "shop": "air",
+    "shop": "nfs",
     "type": "air"
   },
   {
@@ -5828,7 +6260,7 @@
     "defaultStock": 1,
     "restockTime": 60,
     "price": 20000000,
-    "shop": "air",
+    "shop": "nfs",
     "type": "air"
   },
   {
@@ -5840,7 +6272,7 @@
     "defaultStock": 1,
     "restockTime": 60,
     "price": 20000000,
-    "shop": "air",
+    "shop": "nfs",
     "type": "air"
   },
   {
@@ -5852,7 +6284,7 @@
     "defaultStock": 1,
     "restockTime": 60,
     "price": 20000000,
-    "shop": "air",
+    "shop": "nfs",
     "type": "air"
   },
   {
@@ -5864,7 +6296,7 @@
     "defaultStock": 1,
     "restockTime": 60,
     "price": 20000000,
-    "shop": "air",
+    "shop": "nfs",
     "type": "air"
   },
   {
@@ -5876,7 +6308,7 @@
     "defaultStock": 1,
     "restockTime": 60,
     "price": 20000000,
-    "shop": "air",
+    "shop": "nfs",
     "type": "air"
   },
   {
@@ -5888,7 +6320,7 @@
     "defaultStock": 1,
     "restockTime": 60,
     "price": 20000000,
-    "shop": "air",
+    "shop": "nfs",
     "type": "air"
   },
   {
@@ -5900,7 +6332,7 @@
     "defaultStock": 1,
     "restockTime": 60,
     "price": 20000000,
-    "shop": "air",
+    "shop": "nfs",
     "type": "air"
   },
   {
@@ -5912,7 +6344,7 @@
     "defaultStock": 1,
     "restockTime": 60,
     "price": 20000000,
-    "shop": "air",
+    "shop": "nfs",
     "type": "air"
   },
   {
@@ -5924,7 +6356,7 @@
     "defaultStock": 1,
     "restockTime": 60,
     "price": 20000000,
-    "shop": "air",
+    "shop": "nfs",
     "type": "air"
   },
   {
@@ -5936,7 +6368,7 @@
     "defaultStock": 1,
     "restockTime": 60,
     "price": 20000000,
-    "shop": "air",
+    "shop": "nfs",
     "type": "air"
   },
   {
@@ -5948,7 +6380,7 @@
     "defaultStock": 1,
     "restockTime": 60,
     "price": 20000000,
-    "shop": "air",
+    "shop": "nfs",
     "type": "air"
   },
   {
@@ -5960,7 +6392,7 @@
     "defaultStock": 1,
     "restockTime": 60,
     "price": 20000000,
-    "shop": "air",
+    "shop": "nfs",
     "type": "air"
   },
   {
@@ -5972,7 +6404,7 @@
     "defaultStock": 1,
     "restockTime": 60,
     "price": 20000000,
-    "shop": "air",
+    "shop": "nfs",
     "type": "air"
   },
   {
@@ -5984,7 +6416,7 @@
     "defaultStock": 1,
     "restockTime": 60,
     "price": 20000000,
-    "shop": "air",
+    "shop": "nfs",
     "type": "air"
   },
   {
@@ -5996,7 +6428,7 @@
     "defaultStock": 1,
     "restockTime": 60,
     "price": 20000000,
-    "shop": "air",
+    "shop": "nfs",
     "type": "air"
   },
   {
@@ -6008,7 +6440,7 @@
     "defaultStock": 1,
     "restockTime": 60,
     "price": 20000000,
-    "shop": "air",
+    "shop": "nfs",
     "type": "air"
   },
   {
@@ -6020,7 +6452,7 @@
     "defaultStock": 1,
     "restockTime": 60,
     "price": 20000000,
-    "shop": "air",
+    "shop": "nfs",
     "type": "air"
   },
   {
@@ -6031,7 +6463,7 @@
     "class": "S",
     "defaultStock": 3,
     "restockTime": 45,
-    "price": 650000,
+    "price": 468000,
     "shop": "pdm",
     "type": "land"
   },
@@ -6043,12 +6475,12 @@
     "class": "S",
     "defaultStock": 3,
     "restockTime": 45,
-    "price": 675000,
+    "price": 486000,
     "shop": "pdm",
     "type": "land"
   },
   {
-    "category": "sports",
+    "category": "sedans",
     "model": "a6",
     "brand": "Audi",
     "name": "A6",
@@ -6079,24 +6511,24 @@
     "class": "S",
     "defaultStock": 3,
     "restockTime": 45,
-    "price": 650000,
+    "price": 468000,
     "shop": "pdm",
     "type": "land"
   },
   {
-    "category": "super",
+    "category": "sports",
     "model": "contss18",
     "brand": "Bentley",
     "name": "Continental GT",
     "class": "S",
     "defaultStock": 3,
     "restockTime": 45,
-    "price": 675000,
+    "price": 486000,
     "shop": "pdm",
     "type": "land"
   },
   {
-    "category": "coupes",
+    "category": "sportsclassics",
     "model": "ladybird6str",
     "brand": "BF",
     "name": "Ladybird 6STR",
@@ -6108,14 +6540,14 @@
     "type": "land"
   },
   {
-    "category": "sports",
+    "category": "coupes",
     "model": "m3e46",
     "brand": "BMW",
     "name": "M3 E46",
     "class": "S",
     "defaultStock": 3,
     "restockTime": 45,
-    "price": 650000,
+    "price": 468000,
     "shop": "pdm",
     "type": "land"
   },
@@ -6127,7 +6559,7 @@
     "class": "S",
     "defaultStock": 3,
     "restockTime": 45,
-    "price": 655000,
+    "price": 472000,
     "shop": "pdm",
     "type": "land"
   },
@@ -6139,7 +6571,7 @@
     "class": "S",
     "defaultStock": 3,
     "restockTime": 45,
-    "price": 665000,
+    "price": 479000,
     "shop": "pdm",
     "type": "land"
   },
@@ -6151,7 +6583,7 @@
     "class": "S",
     "defaultStock": 3,
     "restockTime": 45,
-    "price": 665000,
+    "price": 479000,
     "shop": "pdm",
     "type": "land"
   },
@@ -6187,7 +6619,7 @@
     "class": "S",
     "defaultStock": 3,
     "restockTime": 45,
-    "price": 660000,
+    "price": 475000,
     "shop": "pdm",
     "type": "land"
   },
@@ -6216,7 +6648,7 @@
     "type": "land"
   },
   {
-    "category": "super",
+    "category": "sports",
     "model": "488gtb",
     "brand": "Ferrari",
     "name": "488 Pista Spider",
@@ -6247,7 +6679,7 @@
     "class": "S",
     "defaultStock": 3,
     "restockTime": 60,
-    "price": 635000,
+    "price": 457000,
     "shop": "pdm",
     "type": "land"
   },
@@ -6276,7 +6708,7 @@
     "type": "land"
   },
   {
-    "category": "sports",
+    "category": "compacts",
     "model": "fk8",
     "brand": "Honda",
     "name": "Civic Type-R",
@@ -6288,7 +6720,7 @@
     "type": "land"
   },
   {
-    "category": "super",
+    "category": "sports",
     "model": "na1",
     "brand": "Honda",
     "name": "NSX",
@@ -6348,19 +6780,19 @@
     "type": "land"
   },
   {
-    "category": "super",
+    "category": "suvs",
     "model": "urus",
     "brand": "Lamborghini",
     "name": "Urus",
     "class": "S",
     "defaultStock": 3,
     "restockTime": 45,
-    "price": 670000,
+    "price": 482000,
     "shop": "pdm",
     "type": "land"
   },
   {
-    "category": "super",
+    "category": "sports",
     "model": "rcf",
     "brand": "Lexus",
     "name": "RC F",
@@ -6432,7 +6864,7 @@
     "type": "land"
   },
   {
-    "category": "sports",
+    "category": "sedans",
     "model": "e63amg",
     "brand": "Mercedes",
     "name": "E63 AMG",
@@ -6463,12 +6895,12 @@
     "class": "S",
     "defaultStock": 3,
     "restockTime": 45,
-    "price": 665000,
+    "price": 479000,
     "shop": "pdm",
     "type": "land"
   },
   {
-    "category": "super",
+    "category": "sports",
     "model": "mcjcw20",
     "brand": "Mini Cooper",
     "name": "GP 2020",
@@ -6499,19 +6931,19 @@
     "class": "S",
     "defaultStock": 3,
     "restockTime": 45,
-    "price": 660000,
+    "price": 475000,
     "shop": "pdm",
     "type": "land"
   },
   {
-    "category": "super",
+    "category": "sports",
     "model": "r35",
     "brand": "Nissan",
     "name": "GTR",
     "class": "S",
     "defaultStock": 3,
     "restockTime": 60,
-    "price": 615000,
+    "price": 443000,
     "shop": "pdm",
     "type": "land"
   },
@@ -6523,7 +6955,7 @@
     "class": "S",
     "defaultStock": 3,
     "restockTime": 45,
-    "price": 660000,
+    "price": 475000,
     "shop": "pdm",
     "type": "land"
   },
@@ -6535,7 +6967,7 @@
     "class": "S",
     "defaultStock": 3,
     "restockTime": 45,
-    "price": 655000,
+    "price": 472000,
     "shop": "pdm",
     "type": "land"
   },
@@ -6547,7 +6979,7 @@
     "class": "S",
     "defaultStock": 3,
     "restockTime": 45,
-    "price": 660000,
+    "price": 475000,
     "shop": "pdm",
     "type": "land"
   },
@@ -6583,7 +7015,7 @@
     "class": "S",
     "defaultStock": 3,
     "restockTime": 45,
-    "price": 660000,
+    "price": 475000,
     "shop": "pdm",
     "type": "land"
   },
@@ -6607,7 +7039,7 @@
     "class": "S",
     "defaultStock": 3,
     "restockTime": 45,
-    "price": 660000,
+    "price": 475000,
     "shop": "pdm",
     "type": "land"
   },
@@ -6619,7 +7051,7 @@
     "class": "S",
     "defaultStock": 3,
     "restockTime": 45,
-    "price": 665000,
+    "price": 479000,
     "shop": "pdm",
     "type": "land"
   },
@@ -6627,11 +7059,59 @@
     "category": "commercial",
     "model": "mule",
     "brand": "Maibatsu",
-    "name": "Mule",
+    "name": "Mule Meteorite",
     "class": "C",
     "defaultStock": 10,
     "restockTime": 15,
-    "price": 20000,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "commercial",
+    "model": "mule2",
+    "brand": "Maibatsu",
+    "name": "Mule PostOP",
+    "class": "C",
+    "defaultStock": 10,
+    "restockTime": 15,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "commercial",
+    "model": "mule3",
+    "brand": "Maibatsu",
+    "name": "Mule Custom",
+    "class": "C",
+    "defaultStock": 10,
+    "restockTime": 15,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "commercial",
+    "model": "mule4",
+    "brand": "Maibatsu",
+    "name": "Mule Custom 2",
+    "class": "C",
+    "defaultStock": 10,
+    "restockTime": 15,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "commercial",
+    "model": "mule5",
+    "brand": "Maibatsu",
+    "name": "Mule Heist",
+    "class": "C",
+    "defaultStock": 10,
+    "restockTime": 15,
+    "price": 10000000,
     "shop": "nfs",
     "type": "land"
   },
@@ -6655,18 +7135,6 @@
     "class": "C",
     "defaultStock": 10,
     "restockTime": 15,
-    "price": 20000,
-    "shop": "nfs",
-    "type": "land"
-  },
-  {
-    "category": "vans",
-    "model": "boxville4",
-    "brand": "Brute",
-    "name": "Boxville (PostOP)",
-    "class": "C",
-    "defaultStock": 10,
-    "restockTime": 10,
     "price": 20000,
     "shop": "nfs",
     "type": "land"
@@ -6709,9 +7177,9 @@
   },
   {
     "category": "commercial",
-    "model": "hauler",
-    "brand": "MTL",
-    "name": "Packer",
+    "model": "hauler2",
+    "brand": "Jobuilt",
+    "name": "Hauler Custom",
     "class": "C",
     "defaultStock": 10,
     "restockTime": 10,
@@ -6745,6 +7213,30 @@
   },
   {
     "category": "commercial",
+    "model": "phantom2",
+    "brand": "Jobuilt",
+    "name": "Phantom Wedge",
+    "class": "C",
+    "defaultStock": 10,
+    "restockTime": 10,
+    "price": 20000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "commercial",
+    "model": "phantom3",
+    "brand": "Jobuilt",
+    "name": "Phantom Custom",
+    "class": "C",
+    "defaultStock": 10,
+    "restockTime": 10,
+    "price": 20000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "commercial",
     "model": "pounder",
     "brand": "MTL",
     "name": "Pounder",
@@ -6757,9 +7249,33 @@
   },
   {
     "category": "commercial",
-    "model": "pounder",
+    "model": "pounder2",
+    "brand": "MTL",
+    "name": "Pounder Custom",
+    "class": "C",
+    "defaultStock": 10,
+    "restockTime": 10,
+    "price": 20000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "commercial",
+    "model": "stockade",
     "brand": "Brute",
     "name": "Stockade",
+    "class": "C",
+    "defaultStock": 10,
+    "restockTime": 10,
+    "price": 20000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "commercial",
+    "model": "stockade3",
+    "brand": "Brute",
+    "name": "Stockade Snow",
     "class": "C",
     "defaultStock": 10,
     "restockTime": 10,
@@ -6926,7 +7442,7 @@
   {
     "category": "sedans",
     "model": "rhinehart",
-    "brand": "Übermacht",
+    "brand": "Ubermacht",
     "name": "Rhinehart",
     "class": "A",
     "defaultStock": 5,
@@ -7035,7 +7551,19 @@
     "category": "sedans",
     "model": "emperor2",
     "brand": "Albany",
-    "name": "Emperor",
+    "name": "Emperor Rusty",
+    "class": "C",
+    "defaultStock": 10,
+    "restockTime": 10,
+    "price": 16000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "sedans",
+    "model": "emperor3",
+    "brand": "Albany",
+    "name": "Emperor Snow",
     "class": "C",
     "defaultStock": 10,
     "restockTime": 10,
@@ -7114,5 +7642,2465 @@
     "price": 5000,
     "shop": "nfs",
     "type": "land"
+  },
+  {
+    "category": "sedans",
+    "model": "romero",
+    "brand": "Chariot",
+    "name": "Romero Hearse",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 5000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "boats",
+    "model": "avisa",
+    "brand": "Kraken Submersibles",
+    "name": "Avisa",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "sea"
+  },
+  {
+    "category": "utility",
+    "model": "tanker",
+    "brand": "Trailer",
+    "name": "Tanker",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "utility",
+    "model": "tanker2",
+    "brand": "Trailer",
+    "name": "Tanker 2",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "utility",
+    "model": "armytanker",
+    "brand": "HVY",
+    "name": "Tanker Trailer",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "utility",
+    "model": "armytrailer",
+    "brand": "HVY",
+    "name": "Army Trailer",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "utility",
+    "model": "armytrailer2",
+    "brand": "HVY",
+    "name": "Army Full Trailer",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "emergency",
+    "model": "riot",
+    "brand": "Brute",
+    "name": "Police Riot",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "sedans",
+    "model": "asea2",
+    "brand": "Declasse",
+    "name": "Asea Snow",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "military",
+    "model": "barracks",
+    "brand": "HVY",
+    "name": "Barracks",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "military",
+    "model": "barracks2",
+    "brand": "HVY",
+    "name": "Barracks Semi",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "military",
+    "model": "barracks3",
+    "brand": "HVY",
+    "name": "Barracks 2",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "utility",
+    "model": "boattrailer",
+    "brand": "Declasse",
+    "name": "Boat Trailer",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "emergency",
+    "model": "ambulance",
+    "brand": "Brute",
+    "name": "Ambulance",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "utility",
+    "model": "freighttrailer",
+    "brand": "Trailer",
+    "name": "Freight Trailer",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "service",
+    "model": "coach",
+    "brand": "Brute",
+    "name": "Dashound",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "service",
+    "model": "airbus",
+    "brand": "Brute",
+    "name": "Airport Bus",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "emergency",
+    "model": "pbus",
+    "brand": "Vapid",
+    "name": "Prison Bus",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "service",
+    "model": "pbus2",
+    "brand": "Vapid",
+    "name": "Festival Bus",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "service",
+    "model": "rentalbus",
+    "brand": "Brute",
+    "name": "Shuttle Bus",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "planes",
+    "model": "cuban800",
+    "brand": "Western Company",
+    "name": "Cuban 800",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "air"
+  },
+  {
+    "category": "utility",
+    "model": "airtug",
+    "brand": "HVY",
+    "name": "Airtug",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "industrial",
+    "model": "handler",
+    "brand": "HVY",
+    "name": "Dock Handler",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "utility",
+    "model": "towtruck",
+    "brand": "Vapid",
+    "name": "Towtruck Large",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "utility",
+    "model": "towtruck2",
+    "brand": "Vapid",
+    "name": "Towtruck Small",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "vans",
+    "model": "pony",
+    "brand": "Brute",
+    "name": "Pony",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "vans",
+    "model": "pony2",
+    "brand": "Brute",
+    "name": "Pony 2",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "utility",
+    "model": "docktug",
+    "brand": "HVY",
+    "name": "Docktug",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "planes",
+    "model": "cargoplane",
+    "brand": "Western Company",
+    "name": "Cargoplane",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "air"
+  },
+  {
+    "category": "service",
+    "model": "brickade",
+    "brand": "MTL",
+    "name": "Brickade",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "offroad",
+    "model": "nightshark",
+    "brand": "HVY",
+    "name": "Nightshark",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "military",
+    "model": "barrage",
+    "brand": "HVY",
+    "name": "Barrage",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "offroad",
+    "model": "bodhi2",
+    "brand": "Canis",
+    "name": "Bodhi",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "planes",
+    "model": "blimp",
+    "brand": "BLP",
+    "name": "Atomic Blimp",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "air"
+  },
+  {
+    "category": "planes",
+    "model": "blimp2",
+    "brand": "BLP",
+    "name": "Xero Blimp",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "air"
+  },
+  {
+    "category": "planes",
+    "model": "blimp3",
+    "brand": "BLP",
+    "name": "Cola Blimp",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "air"
+  },
+  {
+    "category": "industrial",
+    "model": "bulldozer",
+    "brand": "HVY",
+    "name": "Dozer",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "super",
+    "model": "vigilante",
+    "brand": "Grotti",
+    "name": "Vigilante",
+    "class": "X",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "utility",
+    "model": "scrap",
+    "brand": "Vapid",
+    "name": "Scrap Truck",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "emergency",
+    "model": "policet",
+    "brand": "Declasse",
+    "name": "Police Transporter",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "trains",
+    "model": "cablecar",
+    "brand": "HVY",
+    "name": "Cablecar",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "industrial",
+    "model": "tiptruck",
+    "brand": "Brute",
+    "name": "Tipper",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "industrial",
+    "model": "tiptruck2",
+    "brand": "Brute",
+    "name": "Tipper II",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "utility",
+    "model": "docktrailer",
+    "brand": "Trailer",
+    "name": "Dock Trailer",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "utility",
+    "model": "trailers",
+    "brand": "Trailer",
+    "name": "Trailer",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "utility",
+    "model": "trailers2",
+    "brand": "Trailer",
+    "name": "Trailer",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "utility",
+    "model": "trailers3",
+    "brand": "Trailer",
+    "name": "Trailer",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "utility",
+    "model": "trailers4",
+    "brand": "Trailer",
+    "name": "Trailer",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "utility",
+    "model": "trailersmall",
+    "brand": "Trailer",
+    "name": "Power Trailer",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "military",
+    "model": "trailersmall2",
+    "brand": "Trailer",
+    "name": "Anti-Aircraft Trailer",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "utility",
+    "model": "trailerlarge",
+    "brand": "Trailer",
+    "name": "Mobile Operations Center",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "utility",
+    "model": "tvtrailer",
+    "brand": "Trailer",
+    "name": "Ad Trailer",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "utility",
+    "model": "proptrailer",
+    "brand": "Trailer",
+    "name": "Caravan Trailer",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "utility",
+    "model": "baletrailer",
+    "brand": "Trailer",
+    "name": "Baletrailer",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "utility",
+    "model": "trailerlogs",
+    "brand": "Trailer",
+    "name": "Logtrailer",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "utility",
+    "model": "graintrailer",
+    "brand": "Trailer",
+    "name": "Graintrailer",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "utility",
+    "model": "raketrailer",
+    "brand": "Trailer",
+    "name": "Rake",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "industrial",
+    "model": "cutter",
+    "brand": "HVY",
+    "name": "Cutter",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "boats",
+    "model": "predator",
+    "brand": "PD",
+    "name": "Police Predator",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "sea"
+  },
+  {
+    "category": "offroad",
+    "model": "draugur",
+    "brand": "Declasse",
+    "name": "Draugur",
+    "class": "A",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 75000,
+    "shop": "pdm",
+    "type": "land"
+  },
+  {
+    "category": "industrial",
+    "model": "rubble",
+    "brand": "Jobuilt",
+    "name": "Rubble",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "offroad",
+    "model": "brutus",
+    "brand": "Declasse",
+    "name": "Brutus Apocalypse",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "offroad",
+    "model": "brutus2",
+    "brand": "Declasse",
+    "name": "Brutus Future Shock",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "offroad",
+    "model": "brutus3",
+    "brand": "Declasse",
+    "name": "Brutus Nightmare",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "emergency",
+    "model": "fbi",
+    "brand": "Bravado",
+    "name": "FIB Buffalo",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "emergency",
+    "model": "fbi2",
+    "brand": "Declasse",
+    "name": "FIB Granger",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "emergency",
+    "model": "firetruk",
+    "brand": "MTL",
+    "name": "Fire Truck",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "utility",
+    "model": "forklift",
+    "brand": "HVY",
+    "name": "Forklift",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "utility",
+    "model": "tr2",
+    "brand": "Trailer",
+    "name": "Empty Cartrailer",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "utility",
+    "model": "tr3",
+    "brand": "Trailer",
+    "name": "Big Boattrailer",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "utility",
+    "model": "tr4",
+    "brand": "Trailer",
+    "name": "Full Cartrailer",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "utility",
+    "model": "trflat",
+    "brand": "Trailer",
+    "name": "Flat Trailer",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "sports",
+    "model": "corsita",
+    "brand": "Lampadati",
+    "name": "Corsita",
+    "class": "S",
+    "defaultStock": 5,
+    "restockTime": 14,
+    "price": 227000,
+    "shop": "pdm",
+    "type": "land"
+  },
+  {
+    "category": "trains",
+    "model": "freight",
+    "brand": "Train",
+    "name": "Freight",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "trains",
+    "model": "freightcar",
+    "brand": "Train",
+    "name": "Freight Car",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "trains",
+    "model": "freightcar2",
+    "brand": "Train",
+    "name": "Freight Car 2",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "trains",
+    "model": "freightcont1",
+    "brand": "Train",
+    "name": "Freight Train 1",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "trains",
+    "model": "freightcont2",
+    "brand": "Train",
+    "name": "Freight Train 2",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "trains",
+    "model": "freightgrain",
+    "brand": "Train",
+    "name": "Freight Train Grain",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "trains",
+    "model": "tankercar",
+    "brand": "Train",
+    "name": "Freight Tankercar",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "emergency",
+    "model": "lguard",
+    "brand": "Declasse",
+    "name": "Lifeguard SUV",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "military",
+    "model": "crusader",
+    "brand": "Canis",
+    "name": "Crusader",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "utility",
+    "model": "mower",
+    "brand": "Jacksheepe",
+    "name": "Lawn Mower",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "offroad",
+    "model": "monster",
+    "brand": "Vapid",
+    "name": "Liberator",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "offroad",
+    "model": "monster3",
+    "brand": "Bravado",
+    "name": "Sasquatch Apocalypse",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "offroad",
+    "model": "monster4",
+    "brand": "Bravado",
+    "name": "Sasquatch Future Shock",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "offroad",
+    "model": "monster5",
+    "brand": "Bravado",
+    "name": "Sasquatch Nightmare",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "boats",
+    "model": "patrolboat",
+    "brand": "Kurtz 31",
+    "name": "Patrol Boat",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "sea"
+  },
+  {
+    "category": "emergency",
+    "model": "police",
+    "brand": "Vapid",
+    "name": "Police Cruiser",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "emergency",
+    "model": "police2",
+    "brand": "Bravado",
+    "name": "Police Cruiser Buffalo",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "emergency",
+    "model": "police3",
+    "brand": "Vapid",
+    "name": "Police Cruiser Interceptor",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "emergency",
+    "model": "police4",
+    "brand": "Vapid",
+    "name": "Unmarked Cruiser",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "emergency",
+    "model": "policeold1",
+    "brand": "Vapid",
+    "name": "Police Rancher Snow",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "emergency",
+    "model": "policeold2",
+    "brand": "Vapid",
+    "name": "Police Roadcruiser Snow",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "emergency",
+    "model": "policeb",
+    "brand": "Western",
+    "name": "Police Bike",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "emergency",
+    "model": "pranger",
+    "brand": "Declasse",
+    "name": "Park Ranger",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "helicopters",
+    "model": "savage",
+    "brand": "Apache",
+    "name": "Savage",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "air"
+  },
+  {
+    "category": "offroad",
+    "model": "rancherxl2",
+    "brand": "Declasse",
+    "name": "Rancher Snow",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "helicopters",
+    "model": "cargobob",
+    "brand": "Western Company",
+    "name": "Cargobob",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "air"
+  },
+  {
+    "category": "helicopters",
+    "model": "cargobob2",
+    "brand": "Western Company",
+    "name": "Cargobob Jetsam",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "air"
+  },
+  {
+    "category": "helicopters",
+    "model": "cargobob3",
+    "brand": "Western Company",
+    "name": "Cargobob 3",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "air"
+  },
+  {
+    "category": "helicopters",
+    "model": "cargobob4",
+    "brand": "Western Company",
+    "name": "Cargobob 4",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "air"
+  },
+  {
+    "category": "planes",
+    "model": "miljet",
+    "brand": "Buckingham",
+    "name": "Miljet",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "air"
+  },
+  {
+    "category": "openwheel",
+    "model": "openwheel1",
+    "brand": "Benefactor",
+    "name": "BR8",
+    "class": "X",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "openwheel",
+    "model": "openwheel2",
+    "brand": "Declasse",
+    "name": "DR1",
+    "class": "X",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "openwheel",
+    "model": "formula",
+    "brand": "Progen",
+    "name": "PR4",
+    "class": "X",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "openwheel",
+    "model": "formula2",
+    "brand": "Ocelot",
+    "name": "R88",
+    "class": "X",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "commercial",
+    "model": "cerberus",
+    "brand": "MTL",
+    "name": "Cerberus Apocalypse",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "commercial",
+    "model": "cerberus2",
+    "brand": "MTL",
+    "name": "Cerberus Future Shock",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "commercial",
+    "model": "cerberus3",
+    "brand": "MTL",
+    "name": "Cerberus Nightmare",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "military",
+    "model": "rhino",
+    "brand": "MIL",
+    "name": "Rhino Tank",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "utility",
+    "model": "ripley",
+    "brand": "HVY",
+    "name": "Ripley",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "boats",
+    "model": "submersible",
+    "brand": "MIL",
+    "name": "Submersible",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "sea"
+  },
+  {
+    "category": "offroad",
+    "model": "bruiser",
+    "brand": "Benefactor",
+    "name": "Bruiser Apocalypse",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "offroad",
+    "model": "bruiser2",
+    "brand": "Benefactor",
+    "name": "Bruiser Future Shock",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "offroad",
+    "model": "bruiser3",
+    "brand": "Benefactor",
+    "name": "Bruiser Nightmare",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "helicopters",
+    "model": "annihilator",
+    "brand": "Western Company",
+    "name": "Annihilator",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "air"
+  },
+  {
+    "category": "helicopters",
+    "model": "annihilator2",
+    "brand": "Western Company",
+    "name": "Annihilator Stealth",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "air"
+  },
+  {
+    "category": "emergency",
+    "model": "sheriff",
+    "brand": "Vapid",
+    "name": "Sheriff Cruiser",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "emergency",
+    "model": "sheriff2",
+    "brand": "Declasse",
+    "name": "Sheriff SUV",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "offroad",
+    "model": "technical",
+    "brand": "Karin",
+    "name": "Technical",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "offroad",
+    "model": "technical2",
+    "brand": "Karin",
+    "name": "Technical Aqua",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "sea"
+  },
+  {
+    "category": "offroad",
+    "model": "technical3",
+    "brand": "Karin",
+    "name": "Technical Custom",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "utility",
+    "model": "utillitruck",
+    "brand": "Brute",
+    "name": "Utility Truck (Cherry Picker)",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "utility",
+    "model": "utillitruck2",
+    "brand": "Brute",
+    "name": "Utility Truck (Van)",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "utility",
+    "model": "utillitruck3",
+    "brand": "Vapid",
+    "name": "Utility Truck (Contender)",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "military",
+    "model": "chernobog",
+    "brand": "HVY",
+    "name": "Chernobog",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "planes",
+    "model": "hydra",
+    "brand": "Mammoth",
+    "name": "Hydra",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "air"
+  },
+  {
+    "category": "helicopters",
+    "model": "skylift",
+    "brand": "HVY",
+    "name": "Skylift",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "air"
+  },
+  {
+    "category": "helicopters",
+    "model": "polmav",
+    "brand": "Buckingham",
+    "name": "Police Maverick",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "air"
+  },
+  {
+    "category": "planes",
+    "model": "jet",
+    "brand": "Buckingham",
+    "name": "Jet",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "air"
+  },
+  {
+    "category": "planes",
+    "model": "titan",
+    "brand": "Buckingham",
+    "name": "Titan",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "air"
+  },
+  {
+    "category": "offroad",
+    "model": "insurgent",
+    "brand": "HVY",
+    "name": "Insurgent Pick-Up",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "offroad",
+    "model": "insurgent2",
+    "brand": "HVY",
+    "name": "Insurgent",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "offroad",
+    "model": "insurgent3",
+    "brand": "HVY",
+    "name": "Insurgent Pick-Up Custom",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "planes",
+    "model": "lazer",
+    "brand": "Jobuilt",
+    "name": "P-996 LAZER",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "air"
+  },
+  {
+    "category": "trains",
+    "model": "metrotrain",
+    "brand": "Train",
+    "name": "Metro",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "planes",
+    "model": "besra",
+    "brand": "Western Company",
+    "name": "Besra",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "air"
+  },
+  {
+    "category": "helicopters",
+    "model": "conada",
+    "brand": "Buckingham",
+    "name": "Conada",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "air"
+  },
+  {
+    "category": "military",
+    "model": "halftrack",
+    "brand": "Bravado",
+    "name": "Half-Track",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "service",
+    "model": "trash2",
+    "brand": "Jobuilt",
+    "name": "Trashmaster 2",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "sedans",
+    "model": "limo2",
+    "brand": "Benefactor",
+    "name": "Turreted Limo",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "sports",
+    "model": "zr380",
+    "brand": "Annis",
+    "name": "ZR380 Apocalypse",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "sports",
+    "model": "zr3802",
+    "brand": "Annis",
+    "name": "ZR380 Future Shock",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "sports",
+    "model": "zr3803",
+    "brand": "Annis",
+    "name": "ZR380 Nightmare",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "helicopters",
+    "model": "valkyrie",
+    "brand": "Buckingham",
+    "name": "Valkyrie",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "air"
+  },
+  {
+    "category": "helicopters",
+    "model": "valkyrie2",
+    "brand": "Buckingham",
+    "name": "Valkyrie MOD.0",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "air"
+  },
+  {
+    "category": "sedans",
+    "model": "cog552",
+    "brand": "Enus",
+    "name": "Cognoscenti 55 Armored",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "sedans",
+    "model": "cognoscenti2",
+    "brand": "Enus",
+    "name": "Cognoscenti Armored",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "suvs",
+    "model": "squaddie",
+    "brand": "Mammoth",
+    "name": "Squaddie",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "planes",
+    "model": "bombushka",
+    "brand": "Western Company",
+    "name": "RM-10 Bombushka",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "air"
+  },
+  {
+    "category": "suvs",
+    "model": "xls2",
+    "brand": "Benefactor",
+    "name": "XLS Armored",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "boats",
+    "model": "tug",
+    "brand": "Buckingham",
+    "name": "Tug",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "sea"
+  },
+  {
+    "category": "service",
+    "model": "rallytruck",
+    "brand": "HVY",
+    "name": "Dune",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "military",
+    "model": "scarab",
+    "brand": "HVY",
+    "name": "Scarab Apocalypse",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "military",
+    "model": "scarab2",
+    "brand": "HVY",
+    "name": "Scarab Future Shock",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "military",
+    "model": "scarab3",
+    "brand": "HVY",
+    "name": "Scarab Nightmare",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "boats",
+    "model": "dinghy5",
+    "brand": "Nagasaki",
+    "name": "Weaponized Dinghy",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "sea"
+  },
+  {
+    "category": "service",
+    "model": "wastelander",
+    "brand": "MTL",
+    "name": "Wastelander",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "muscle",
+    "model": "ruiner3",
+    "brand": "Imponte",
+    "name": "Ruiner Rusty",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "muscle",
+    "model": "ruiner4",
+    "brand": "Imponte",
+    "name": "Ruiner ZZ-8",
+    "class": "A",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "sports",
+    "model": "tenf",
+    "brand": "Obey",
+    "name": "10F",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "sports",
+    "model": "tenf2",
+    "brand": "Obey",
+    "name": "10F Widebody",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "muscle",
+    "model": "weevil2",
+    "brand": "BF",
+    "name": "Weevil Custom",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "military",
+    "model": "apc",
+    "brand": "HVY",
+    "name": "APC Tank",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "planes",
+    "model": "seabreeze",
+    "brand": "Western Company",
+    "name": "Seabreeze",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "air"
+  },
+  {
+    "category": "planes",
+    "model": "tula",
+    "brand": "Mammoth",
+    "name": "Tula",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "air"
+  },
+  {
+    "category": "helicopters",
+    "model": "hunter",
+    "brand": "Mammoth",
+    "name": "Hunter",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "air"
+  },
+  {
+    "category": "planes",
+    "model": "microlight",
+    "brand": "Nagasaki",
+    "name": "Ultralight",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "air"
+  },
+  {
+    "category": "planes",
+    "model": "rogue",
+    "brand": "Western Company",
+    "name": "Rogue",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "air"
+  },
+  {
+    "category": "military",
+    "model": "vetir",
+    "brand": "HVY",
+    "name": "Vetir",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "planes",
+    "model": "pyro",
+    "brand": "Buckingham",
+    "name": "Pyro",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "air"
+  },
+  {
+    "category": "planes",
+    "model": "mogul",
+    "brand": "Mammoth",
+    "name": "Mogul",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "air"
+  },
+  {
+    "category": "planes",
+    "model": "starling",
+    "brand": "Mammoth",
+    "name": "LF-22 Starling",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "air"
+  },
+  {
+    "category": "planes",
+    "model": "nokota",
+    "brand": "Mammoth",
+    "name": "P-45 Nokota",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "air"
+  },
+  {
+    "category": "planes",
+    "model": "molotok",
+    "brand": "Mammoth",
+    "name": "V-65 Molotok",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "air"
+  },
+  {
+    "category": "military",
+    "model": "khanjali",
+    "brand": "Mammoth",
+    "name": "TM-02 Khanjali Tank",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "planes",
+    "model": "volatol",
+    "brand": "Mammoth",
+    "name": "Volatol",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "air"
+  },
+  {
+    "category": "helicopters",
+    "model": "akula",
+    "brand": "Mammoth",
+    "name": "Akula",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "air"
+  },
+  {
+    "category": "emergency",
+    "model": "riot2",
+    "brand": "HVY",
+    "name": "RCV",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "planes",
+    "model": "avenger",
+    "brand": "Mammoth",
+    "name": "Avenger",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "air"
+  },
+  {
+    "category": "planes",
+    "model": "avenger2",
+    "brand": "Mammoth",
+    "name": "Avenger 2",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "air"
+  },
+  {
+    "category": "military",
+    "model": "thruster",
+    "brand": "Mammoth",
+    "name": "Thruster Jetpack",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "air"
+  },
+  {
+    "category": "sports",
+    "model": "hotring",
+    "brand": "Declasse",
+    "name": "Hotring Sabre",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "super",
+    "model": "scramjet",
+    "brand": "Declasse",
+    "name": "Scramjet",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "planes",
+    "model": "strikeforce",
+    "brand": "Mammoth",
+    "name": "B-11 Strikeforce",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "air"
+  },
+  {
+    "category": "commercial",
+    "model": "terbyte",
+    "brand": "Benefactor",
+    "name": "Terrorbyte",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "motorcycles",
+    "model": "oppressor2",
+    "brand": "Pegassi",
+    "name": "Oppressor Mk II",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "offroad",
+    "model": "menacer",
+    "brand": "HVY",
+    "name": "Menacer",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "suvs",
+    "model": "patriot2",
+    "brand": "Mammoth",
+    "name": "Patriot Stretch",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "offroad",
+    "model": "rcbandito",
+    "brand": "RC",
+    "name": "Bandito",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "offroad",
+    "model": "zhaba",
+    "brand": "Rune",
+    "name": "Zhaba",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "military",
+    "model": "minitank",
+    "brand": "RC",
+    "name": "Invade and Persuade Tank",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "planes",
+    "model": "alkonost",
+    "brand": "Western Company",
+    "name": "RO-86 Alkonost",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "air"
+  },
+  {
+    "category": "boats",
+    "model": "kosatka",
+    "brand": "Rune",
+    "name": "Kosatka Submarine",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "sea"
+  },
+  {
+    "category": "sports",
+    "model": "sentinel4",
+    "brand": "Ubermacht",
+    "name": "Sentinel Classic Widebody",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "suvs",
+    "model": "baller7",
+    "brand": "Gallivanter",
+    "name": "Baller ST",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "compacts",
+    "model": "brioso3",
+    "brand": "Grotti",
+    "name": "Brioso 300 Widebody",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "coupes",
+    "model": "kanjosj",
+    "brand": "Dinka",
+    "name": "Kanjo SJ",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "coupes",
+    "model": "postlude",
+    "brand": "Dinka",
+    "name": "Postlude",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "super",
+    "model": "torero2",
+    "brand": "Pegassi",
+    "name": "Torero XO",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "super",
+    "model": "lm87",
+    "brand": "Benefactor",
+    "name": "LM87",
+    "class": "X",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "muscle",
+    "model": "greenwood",
+    "brand": "Bravado",
+    "name": "Greenwood",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "sports",
+    "model": "sm722",
+    "brand": "Benefactor",
+    "name": "SM722",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "boats",
+    "model": "submersible2",
+    "brand": "MIL",
+    "name": "Kraken",
+    "class": "D",
+    "defaultStock": 10,
+    "restockTime": 7,
+    "price": 10000000,
+    "shop": "nfs",
+    "type": "sea"
   }
 ]

@@ -1,4 +1,4 @@
-import { Events, Notifications } from '@dgx/client';
+import { Notifications, Sync } from '@dgx/client';
 
 export const setEngineState = (vehicle: number, state: boolean, instantly = false) => {
   // when trying to start engine check if its possible
@@ -10,8 +10,4 @@ export const setEngineState = (vehicle: number, state: boolean, instantly = fals
   SetVehicleEngineOn(vehicle, state, instantly, true);
 };
 
-Events.onNet('vehicles:setEngineState', (pVehNetId: number, state: boolean, instantly?: boolean) => {
-  const vehicle = NetworkGetEntityFromNetworkId(pVehNetId);
-  if (!DoesEntityExist(vehicle)) return;
-  setEngineState(vehicle, state, instantly);
-});
+Sync.registerActionHandler('vehicles:engine:setState', setEngineState);

@@ -35,6 +35,7 @@ class StateManager extends Util.Singleton<StateManager>() {
 
       const idx = Math.floor(Math.random() * locations.length);
       if (!this.usedLocations.has(idx)) {
+        this.usedLocations.add(idx);
         return { size: choosenSize, coords: locations[idx] };
       }
     }
@@ -180,12 +181,11 @@ class StateManager extends Util.Singleton<StateManager>() {
       coords: house.location.coords,
     });
 
-    if (house.findTimeout) {
-      clearTimeout(house.findTimeout);
-      house.findTimeout = null;
+    if (house.failTimeout) {
+      clearTimeout(house.failTimeout);
     }
 
-    house.finishTimeout = setTimeout(() => {
+    house.failTimeout = setTimeout(() => {
       this.finishJob(houseId, true);
     }, getConfig().timeToRob * 60000);
   };
@@ -380,10 +380,9 @@ class StateManager extends Util.Singleton<StateManager>() {
       location,
       locked: true,
       groupId: group.id,
-      findTimeout: setTimeout(() => {
+      failTimeout: setTimeout(() => {
         this.finishJob(houseId, true);
       }, timeToFind * 60 * 1000),
-      finishTimeout: null,
     });
 
     Events.emitNet('houserobbery:client:activateLocation', -1, houseId, location);
@@ -408,11 +407,13 @@ class StateManager extends Util.Singleton<StateManager>() {
     return true;
   }
 
-  private finishJobForPly(plyId: number | null, cid: number, failed = false) {
-    this.timedOutPlayers.add(cid);
-    setTimeout(() => {
-      this.timedOutPlayers.delete(cid);
-    }, getConfig().playerCooldown * 60 * 1000);
+  public finishJobForPly(plyId: number | null, cid: number, failed = false) {
+    if (!this.timedOutPlayers.has(cid)) {
+      this.timedOutPlayers.add(cid);
+      setTimeout(() => {
+        this.timedOutPlayers.delete(cid);
+      }, getConfig().playerCooldown * 60 * 1000);
+    }
 
     if (plyId) {
       Events.emitNet('houserobbery:client:cleanup', plyId);
@@ -422,7 +423,7 @@ class StateManager extends Util.Singleton<StateManager>() {
         `Taak ${failed ? 'mislukt' : 'voltooid'}`,
         'Bert B.',
         failed
-          ? 'Je deed er te lang over! Ik zal je taak overhandige aan een echte professional'
+          ? 'Je hebt de taak niet volbracht! Ik zal je taak overhandige aan een echte professional'
           : 'Je hebt je taak volbracht, ik laat je staan op de lijst voor een nieuwe opdracht'
       );
     }
@@ -432,14 +433,8 @@ class StateManager extends Util.Singleton<StateManager>() {
     const house = this.activeHouses.get(houseId);
     if (!house) return;
 
-    if (house.findTimeout) {
-      clearTimeout(house.findTimeout);
-      house.findTimeout = null;
-    }
-
-    if (house.finishTimeout) {
-      clearTimeout(house.finishTimeout);
-      house.finishTimeout = null;
+    if (house.failTimeout) {
+      clearTimeout(house.failTimeout);
     }
 
     const group = Jobs.getGroupById(house.groupId);
@@ -463,11 +458,6 @@ class StateManager extends Util.Singleton<StateManager>() {
       this.activeHouses.delete(houseId);
       Events.emitNet('houserobbery:client:deactivateLocation', -1, houseId);
     }, 10 * 60000);
-  }
-
-  public cleanupPlayer(plyId: number | null) {
-    if (plyId == null) return;
-    Events.emitNet('houserobbery:client:cleanup', plyId);
   }
 
   public handlePlayerLeft = (plyId: number, cid: number) => {
