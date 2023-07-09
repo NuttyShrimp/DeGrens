@@ -1,4 +1,4 @@
-import { Core, Events, Inventory, Peek, PolyZone, UI, Util } from '@dgx/client';
+import { Core, Events, Inventory, Peek, PolyZone, UI } from '@dgx/client';
 import { cleanupJail, enterPrison, isInPrison, leavePrison, restoreSentence } from './service.prison';
 
 global.exports('isInPrison', isInPrison);

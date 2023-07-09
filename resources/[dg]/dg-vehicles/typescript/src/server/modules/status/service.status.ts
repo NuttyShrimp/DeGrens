@@ -1,10 +1,8 @@
-import { Inventory, Notifications, RayCast, RPC, Taskbar, Util } from '@dgx/server';
-
+import { Inventory, Notifications, RayCast, RPC, Taskbar, Util, Sync } from '@dgx/server';
 import { getVinForVeh } from '../../helpers/vehicle';
 import { fuelManager } from '../fuel/classes/fuelManager';
 import { getConfigByEntity } from '../info/service.info';
 import { getDoorState, getTyreState, getWindowState } from './helpers.status';
-
 import { getServiceStatus, updateServiceStatus } from './services/store';
 
 let percentagePerPart = 1;
@@ -37,6 +35,10 @@ export const getNativeStatus = async (veh: number, vin: string): Promise<Vehicle
   status.doors = doors;
 
   return status;
+};
+
+export const setNativeStatus = (vehicle: number, status: Partial<Omit<Vehicle.VehicleStatus, 'fuel'>>) => {
+  Sync.executeAction('vehicles:statis:setNative', vehicle, status);
 };
 
 export const useRepairPart = async (src: number, type: Service.Part, itemState: Inventory.ItemState) => {
@@ -155,4 +157,10 @@ export const calculateNeededParts = (partValue: number) => {
     amount++;
   }
   return amount;
+};
+
+export const clearVehicleStalls = (vehicle: number) => {
+  const entState = Entity(vehicle).state;
+  entState.set('amountOfStalls', 0, true);
+  entState.set('undriveable', false, true);
 };

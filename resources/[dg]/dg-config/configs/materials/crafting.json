@@ -498,10 +498,23 @@
       "items": [
         {
           "name": "material_steel",
-          "amount": 5
+          "amount": 4
         },
         {
           "name": "refined_plastic",
+          "amount": 1
+        }
+      ]
+    },
+    "advanced_repair_kit": {
+      "requiredReputation": 10,
+      "items": [
+        {
+          "name": "refined_aluminum",
+          "amount": 1
+        },
+        {
+          "name": "refined_iron",
           "amount": 1
         }
       ]

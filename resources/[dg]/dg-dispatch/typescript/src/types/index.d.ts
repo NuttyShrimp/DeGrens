@@ -3,6 +3,7 @@ declare type Direction = 'up' | 'down' | 'left' | 'right';
 declare namespace Dispatch {
   interface Call {
     title: string;
+    job: 'police' | 'ambulance';
     // entry with no icon
     description?: string;
     important?: boolean;

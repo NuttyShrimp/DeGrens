@@ -20,7 +20,7 @@ export class Inv {
   private _type!: Inventory.Type;
   private _identifier!: string;
   private _size!: number;
-  private readonly items: Set<string>;
+  private readonly items: string[]; // sorted on destroydate, sooner destroydate is lower idx
   private _allowedItems?: string[];
   private readonly containerInventories: Map<string, Inv>; // cache seperately to avoid iteration when needed
 
@@ -30,7 +30,7 @@ export class Inv {
 
   constructor() {
     this.logger = mainLogger.child({ module: 'Inventory' });
-    this.items = new Set();
+    this.items = [];
     this.containerInventories = new Map();
     this.grid = [];
     this._isLoaded = false;
@@ -109,12 +109,34 @@ export class Inv {
   // #endregion
 
   public registerItemId = (itemState: Inventory.ItemState, checkSave = false) => {
-    if (this.items.size == 0 && this.type === 'drop') locationManager.activateDrop(this.id);
-    this.items.add(itemState.id);
+    if (this.items.length == 0 && this.type === 'drop') locationManager.activateDrop(this.id);
+
+    // if item has no destroydate or is first item, just add to end
+    if (!itemState.destroyDate || this.items.length == 0) {
+      this.items.push(itemState.id);
+    } else {
+      // insert itemId behind the first item with a sooner destroydate
+      let inserted = false;
+      for (let i = this.items.length - 1; i >= 0; i--) {
+        const itemDestroyDate = itemManager.get(this.items[i])?.state.destroyDate;
+        if (!itemDestroyDate || itemState.destroyDate < itemDestroyDate) continue;
+
+        this.items.splice(i + 1, 0, itemState.id);
+        inserted = true;
+        break;
+      }
+
+      // default case if all items have a later destroydate
+      if (!inserted) {
+        this.items.unshift(itemState.id);
+      }
+    }
+
+    // check if item is container, if so add to containerInventories
     if (isItemAContainer(itemState.name)) {
       if (this.type !== 'container') {
         inventoryManager.get(Inventory.concatId('container', itemState.id)).then(inv => {
-          if (!this.items.has(itemState.id)) return; // this ensured item was not removed while promise was resolving
+          if (!this.items.includes(itemState.id)) return; // this ensured item was not removed while promise was resolving
           this.containerInventories.set(itemState.id, inv);
         });
       } else {
@@ -130,7 +152,15 @@ export class Inv {
   };
 
   public unregisterItemId = (itemState: Inventory.ItemState) => {
-    this.items.delete(itemState.id);
+    const itemIdx = this.items.indexOf(itemState.id);
+    if (itemIdx === -1) {
+      this.logger.error(
+        `Tried to remove item ${itemState.id} from inventory ${this.id} but it was not in the inventory`
+      );
+      return;
+    }
+
+    this.items.splice(itemIdx, 1);
     this.containerInventories.delete(itemState.id);
     this.updatedInv('remove', itemState);
   };
@@ -144,7 +174,7 @@ export class Inv {
     if (!serverId) return;
 
     const newInv = await inventoryManager.get(itemState.inventory);
-    if (newInv.type === 'drop' && newInv.items.size <= 1) {
+    if (newInv.type === 'drop' && newInv.items.length <= 1) {
       emitNet('inventory:doDropAnimation', serverId);
     }
 
@@ -155,7 +185,7 @@ export class Inv {
   };
 
   public hasItemId = (itemId: string) => {
-    if (this.items.has(itemId)) return true;
+    if (this.items.includes(itemId)) return true;
 
     for (const [_, containerInv] of this.containerInventories) {
       if (containerInv.hasItemId(itemId)) return true;
@@ -226,7 +256,7 @@ export class Inv {
   };
 
   public save = () => {
-    if (this.items.size == 0) {
+    if (this.items.length == 0) {
       if (locationManager.isLocationBased(this.type))
         locationManager.removeLocation(this.type as Location.Type, this.id);
       return;

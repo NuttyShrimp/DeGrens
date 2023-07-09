@@ -99,13 +99,15 @@ export const requestImpound = async (src: number, title: string, veh: number, in
     impoundVehicle(src, reason, veh);
     return;
   }
+
+  if (vin) {
+    keyManager.removeKeys(vin);
+  }
+
   // if not create request for mechanic to tow vehicle to depot spot
   if (!vin || !vinManager.isVinFromPlayerVeh(vin)) {
     // Despawn after 1 minute
     Notifications.add(src, `De lokale takeldienst komt dit voertuig halen!`);
-    if (vin) {
-      keyManager.removeKeys(vin);
-    }
     setTimeout(() => {
       if (DoesEntityExist(veh)) {
         deleteVehicle(veh);
@@ -113,7 +115,6 @@ export const requestImpound = async (src: number, title: string, veh: number, in
     }, 60000);
     return;
   }
-  keyManager.removeKeys(vin);
 
   if (!Business.isAnyPlayerSignedInForType('mechanic')) {
     Notifications.add(src, 'Er is momenteel geen takeldienst beschikbaar...');
@@ -175,7 +176,7 @@ export const openImpoundList = async (src: number) => {
         v.price;
 
       return {
-        title: vehicleConfig?.name ?? 'Unkown vehicle',
+        title: vehicleConfig?.name ?? 'Unknown vehicle',
         description: `${daysUntilBailFinish <= 0 ? '0 dagen' : `${daysUntilBailFinish} dagen`} | ${`€${bailPrice}`}`,
         submenu: canBailOut
           ? [
@@ -187,7 +188,12 @@ export const openImpoundList = async (src: number) => {
                 },
               },
             ]
-          : [],
+          : [
+              {
+                title: 'Je kan dit voertuig nog niet ophalen',
+                disabled: true,
+              },
+            ],
       };
     })
   );

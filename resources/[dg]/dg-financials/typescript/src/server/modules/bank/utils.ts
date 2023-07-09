@@ -2,7 +2,7 @@ import { mainLogger } from '../../sv_logger';
 
 import { Account } from './classes/Account';
 
-export const bankLogger = mainLogger.child({ module: 'bank', category: 'bank' });
+export const bankLogger = mainLogger.child({ module: 'bank' });
 
 export const sortAccounts = (acc: Account[]): Account[] => {
   return acc

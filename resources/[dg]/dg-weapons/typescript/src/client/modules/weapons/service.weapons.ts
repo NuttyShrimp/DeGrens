@@ -180,3 +180,13 @@ const startWeaponThread = () => {
     previousAmmoCount = ammoInWeapon;
   });
 };
+
+export const handleEnteredVehicle = () => {
+  if (!currentWeaponData?.blockInVehicle) return;
+  SetCurrentPedWeapon(PlayerPedId(), GetHashKey('WEAPON_UNARMED'), true);
+};
+
+export const handleLeftVehicle = () => {
+  if (!currentWeaponData?.blockInVehicle) return;
+  SetCurrentPedWeapon(PlayerPedId(), currentWeaponData.hash, true);
+};

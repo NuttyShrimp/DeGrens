@@ -1,7 +1,8 @@
-import { RPC } from '@dgx/server';
+import { Core, RPC } from '@dgx/server';
 
 import {
   assignModelConfig,
+  checkMissingModels,
   getConfigByEntity,
   getConfigByModel,
   getModelStock,
@@ -21,3 +22,19 @@ RPC.register('vehicles:info:assignConfig', (src, netId: number) => {
   if (!veh || !DoesEntityExist(veh)) return;
   return assignModelConfig(veh);
 });
+
+// We check for first player that is loaded
+Core.onPlayerLoaded(({ serverId }) => {
+  if (!serverId) return;
+  checkMissingModels(serverId);
+});
+
+RegisterCommand(
+  'checkMissingModels',
+  () => {
+    const plyId = +GetPlayerFromIndex(0);
+    if (!GetPlayerName(String(plyId))) return;
+    checkMissingModels(plyId);
+  },
+  true
+);

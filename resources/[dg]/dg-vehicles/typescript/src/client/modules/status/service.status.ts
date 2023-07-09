@@ -1,7 +1,6 @@
-import { Events, RPC, Sounds, Util, Vehicles } from '@dgx/client';
+import { Events, RPC, Sounds, Util, Vehicles, Sync } from '@dgx/client';
 import { isDriver } from '../../helpers/vehicle';
 import { MINIMUM_DAMAGE_FOR_GUARANTEED_STALL, MINIMUM_DAMAGE_FOR_STALL, degradationValues } from './constant.status';
-import { getVehicleFuel, overrideSetFuel } from 'modules/fuel/service.fuel';
 import { getVehicleVin } from 'modules/identification/service.identification';
 import { tryEjectAfterCrash } from 'modules/seatbelts/service.seatbelts';
 import { setEngineState } from 'services/engine';
@@ -11,6 +10,7 @@ import {
   resetHandlingContextMultiplier,
   setHandlingContextMultiplier,
 } from 'services/handling';
+import { getTyreState } from './helpers.status';
 
 let vehicleService: {
   vehicle: number;
@@ -80,6 +80,8 @@ export const startStatusThread = async (vehicle: number) => {
         suspCompress.push(GetVehicleWheelSuspensionCompression(vehicle, i));
       }
 
+      let poppedTireModifier = 1 + getTyreState(vehicle).filter(t => t === -1).length;
+
       // Brakes
       // Brake natives give wrong values when engine is off
       if (GetIsVehicleEngineRunning(vehicle)) {
@@ -110,7 +112,7 @@ export const startStatusThread = async (vehicle: number) => {
       vehicleService.state.engine = newEngine;
 
       if (bodyDelta > 0) {
-        const axleDecrease = bodyDelta / 25;
+        const axleDecrease = (bodyDelta * poppedTireModifier) / 25;
         vehicleService.info.axle = Math.max(vehicleService.info.axle - axleDecrease, 0);
       }
       if (engineDelta > 0) {
@@ -164,22 +166,8 @@ export const cleanStatusThread = () => {
 };
 // endregion
 
-export const fixVehicle = (veh: number, body = true, engine = true) => {
-  if (body) {
-    // Fuel level gets reset by the fix native, set to original after calling native
-    const fuelLevel = getVehicleFuel(veh);
-    SetVehicleBodyHealth(veh, 1000);
-    SetVehicleDeformationFixed(veh);
-    SetVehicleFixed(veh);
-    for (let i = 0; i < 6; i++) {
-      SetVehicleTyreFixed(veh, i);
-      SetTyreHealth(veh, i, 1000);
-    }
-    overrideSetFuel(veh, fuelLevel);
-  }
-  if (engine) {
-    SetVehicleEngineHealth(veh, 1000);
-  }
+export const setNativeStatus = (vehicle: number, status: Partial<Omit<Vehicle.VehicleStatus, 'fuel'>>) => {
+  Sync.executeAction('vehicles:statis:setNative', vehicle, status);
 };
 
 // Thread to be able to call functions when vehicle crashes
@@ -259,4 +247,8 @@ export const tryToStallVehicle = (
   if (amountOfStalls >= 4) {
     SetVehicleEngineHealth(vehicle, 0);
   }
+};
+
+export const fixVehicle = (vehicle: number, keepTyreState = false) => {
+  Sync.executeAction('vehicles:status:fix', vehicle, keepTyreState);
 };

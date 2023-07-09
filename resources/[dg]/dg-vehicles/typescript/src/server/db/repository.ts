@@ -111,13 +111,13 @@ export const getPlayerVehicleInfo = async (
   };
 };
 
-export const getVehicleLog = (vin: string): Promise<SVGarage.Log[]> => {
+export const getVehicleLog = (vin: string) => {
   const query = `SELECT cid, action, state
                  FROM vehicle_garage_logs
                  WHERE vin = ?
                  ORDER BY logDate DESC, id DESC
                  LIMIT 30`;
-  return SQL.query(query, [vin]);
+  return SQL.query<Garage.ParkLog[]>(query, [vin]);
 };
 
 export const getVehicleStrikeAmount = async (vin: string): Promise<number> => {

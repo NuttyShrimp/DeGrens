@@ -1,7 +1,13 @@
-import { Events, RPC, UI } from '@dgx/client';
+import { BaseEvents, Events, RPC, UI } from '@dgx/client';
 import { Util } from '@dgx/shared';
 import { holsterWeapon, unholsterWeapon, forceRemoveWeapon, showReticle } from './helpers.weapons';
-import { getCurrentWeaponData, isAnimationBusy, setCurrentWeaponData } from './service.weapons';
+import {
+  getCurrentWeaponData,
+  handleEnteredVehicle,
+  handleLeftVehicle,
+  isAnimationBusy,
+  setCurrentWeaponData,
+} from './service.weapons';
 
 // Prevents weapon usage spamming
 let isAwaitingAnim = false;
@@ -50,3 +56,6 @@ Events.onNet('weapons:client:removeWeapon', itemId => {
 global.exports('getCurrentWeaponData', getCurrentWeaponData);
 global.exports('showReticle', showReticle);
 global.exports('removeWeapon', forceRemoveWeapon);
+
+BaseEvents.onEnteredVehicle(handleEnteredVehicle);
+BaseEvents.onLeftVehicle(handleLeftVehicle);

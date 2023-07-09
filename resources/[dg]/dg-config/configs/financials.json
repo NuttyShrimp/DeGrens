@@ -21,8 +21,8 @@
   },
   "paycheck": {
     "jobs": {
-      "police": 26,
-      "ambulance": 26,
+      "police": 28,
+      "ambulance": 28,
       "realestate": 18
     },
     "default": 1.5

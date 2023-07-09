@@ -4,7 +4,7 @@ import { activateLocation, deactivateLocation, enterHouse, leaveHouse } from './
 import { getInsideHouseId } from 'modules/interior/service.interior';
 
 let selectedHouseId: string | null = null;
-let radiusBlip: any = null;
+let radiusBlip: number | null = null;
 let radiusBlipInterval: NodeJS.Timer | null = null;
 
 global.exports('lootZone', (zoneName: string, lootTableId = 0) => {
@@ -21,7 +21,10 @@ Events.onNet('houserobbery:client:cleanup', () => {
     clearInterval(radiusBlipInterval);
     radiusBlipInterval = null;
   }
-  RemoveBlip(radiusBlip);
+  if (radiusBlip !== null) {
+    RemoveBlip(radiusBlip);
+    radiusBlip = null;
+  }
 });
 
 Peek.addFlagEntry('isHouseRobSignin', {
@@ -92,6 +95,7 @@ Events.onNet('houserobbery:client:setSelectedHouse', (houseId: string, coords: V
   SetBlipHighDetail(radiusBlip, true);
 
   radiusBlipInterval = setInterval(() => {
+    if (radiusBlip === null) return;
     if (blipAlpha === 0) {
       if (radiusBlipInterval) {
         clearInterval(radiusBlipInterval);

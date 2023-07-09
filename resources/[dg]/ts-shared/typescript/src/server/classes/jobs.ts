@@ -201,9 +201,24 @@ class Hospital {
   };
 }
 
+class DutyTime {
+  public addDutyTimeEntry = (cid: number, context: string, action: 'start' | 'stop'): void => {
+    global.exports['dg-misc'].addDutyTimeEntry(cid, context, action);
+  };
+
+  public showDutyTimeList = (plyId: number, context: string): void => {
+    global.exports['dg-misc'].showDutyTimeList(plyId, context);
+  };
+
+  public getDutyTime = (cid: number, context: string): Promise<string | undefined> => {
+    return global.exports['dg-misc'].getDutyTime(cid, context);
+  };
+}
+
 export default {
   Jobs: new Jobs(),
   Gangs: new Gangs(),
   Police: new Police(),
   Hospital: new Hospital(),
+  DutyTime: new DutyTime(),
 };

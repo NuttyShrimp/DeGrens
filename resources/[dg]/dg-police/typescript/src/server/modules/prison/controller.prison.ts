@@ -11,7 +11,7 @@ import {
   sendPlayerToPrison,
 } from './service.prison';
 import { isPlayerCuffed } from 'modules/interactions/modules/cuffs';
-import { isPlayerBeingCarried, isPlayerInCarryDuo } from 'modules/interactions/modules/carry';
+import { isPlayerBeingCarried } from 'modules/interactions/modules/carry';
 
 Chat.registerCommand(
   'jail',

@@ -13,6 +13,49 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+## [1.2.8]
+
+### Added
+
+- De blip van een agent verdwijnt van de map als die zijn noodknop niet meer in zijn inventory heeft
+- De items met de laagste quality worden nu als eerste gekozen in een inventory (Bv. crafting, drugs verkopen, ...)
+- Mechanics hebben nu de mogelijkheid om wagens visueel te repareren
+- Systeem toegevoegd om in dienst tijd te kunnen tracken
+- Personen gaat nu automatisch uit dienst wanneer ze ontslagen worden van een whitelisted job
+- Business Owners en HC van whitelisted jobs kunnen nu zien hoe lang mensen in dienst zijn geweest
+- Rijden met kapotte banden beinvloed nu je voertuig status
+- Commando toegevoegd om je armor visueel te togglen (/vest)
+- Blips toegevoegd in de gevangenis om makkelijker de uitgang te vinden
+- Extra logs toegevoegd op het verkopen van een voertuig via de garage app
+- Meer info bij cashlogs toegevoegd
+- Phone notificatie toegevoegd wanneer er een nieuwe ad wordt geplaatst
+
+### Changed
+
+- UZI kan niet meer in een voertuig gebruikt worden (Balancing TOV p90)
+- Alle S class voertuig prijzen met een vast percentage verlaagd
+- Voertuigparking van eigenaar geswitched
+- Density van rijdende voertuigen verminderd
+- Bennys repaired niet langer je banden, ga maar op zoek naar reservewielen ;)
+- Prijsberekening van bennys aangepast
+- Lonen van whitelisted jobs een beetje verhoogd
+- Boeien uitbreken is moeilijker geworden als je al enkele keren hebt uitgebroken
+- Geld dat mechanics krijgen per parts verhoogd om meer in lijn te liggen met verdiensten van andere jobs
+- Voertuigen spawnen nu altijd proper
+- Automatische stancing voor A6 toegevoegd
+
+### Fixed
+
+- Exploit om houserobbery timeout te skippen opgelost
+- Je kan de kleur van de Range Rover Vogue nu wel aanpassen
+- Dispatch seed enkel calls van je eigen job
+- Motor gaat nu reliable aan wanneer je via adminmenu een voertuig spawned
+- Je gaat nu correct uit dienst bij een bedrijf wanneer je de server verlaat
+- Takelopdracht blips gaan nu weg wanneer je het voertuig takelt
+- Je kan weer extras veranderen in bennys
+- Error opgelost wanneer je probeert te bellen in de gevangenis als je geen contacten hebt
+- IsContainer metadata op containers is niet meer visible
+
 ## [1.2.7]
 
 ### Added

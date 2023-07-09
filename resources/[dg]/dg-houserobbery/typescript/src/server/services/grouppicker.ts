@@ -17,13 +17,13 @@ export const pickLuckyPlayer = (skippedCids: number[] = []) => {
   const cid = cids[Math.floor(Math.random() * cids.length)];
   if (!cid) return;
 
-  const locationIdx = stateManager.getUnusedLocation();
-  if (!locationIdx) {
+  const location = stateManager.getUnusedLocation();
+  if (!location) {
     mainLogger.info('tried picking player for houserobbery but no unused locations');
     return;
   }
 
-  const hasStarted = stateManager.startJobForPly(cid, locationIdx);
+  const hasStarted = stateManager.startJobForPly(cid, location);
 
   if (hasStarted) {
     mainLogger.info(`picked player ${cid} for houserobbery`);

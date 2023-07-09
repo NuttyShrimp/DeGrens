@@ -57,4 +57,10 @@ declare namespace Garage {
     engine: number;
     body: number;
   }
+
+  declare type ParkLog = {
+    cid: number;
+    action: 'parked' | 'retrieved';
+    state: string;
+  };
 }

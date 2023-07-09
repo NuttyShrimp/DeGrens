@@ -1,10 +1,10 @@
-import { RPC, Util } from '@dgx/server';
+import { RPC, Sync, Util } from '@dgx/server';
 import { insertVehicleStatus } from 'db/repository';
-import { addWaxedVehicle } from 'modules/carwash/service.carwash';
+import { addWaxedVehicle, cleanVehicle } from 'modules/carwash/service.carwash';
 import { setVehicleNosAmount } from 'modules/nos/service.nos';
 import { setVehicleHarnessUses } from 'modules/seatbelts/service.seatbelts';
 import { loadStance } from 'modules/stances/service.stances';
-import { getNativeStatus } from 'modules/status/service.status';
+import { getNativeStatus, setNativeStatus } from 'modules/status/service.status';
 import { fuelManager } from '../modules/fuel/classes/fuelManager';
 import plateManager from '../modules/identification/classes/platemanager';
 import vinManager from '../modules/identification/classes/vinmanager';
@@ -110,6 +110,8 @@ export const spawnVehicle: Vehicles.SpawnVehicleFunction = async data => {
     if (data.engineState !== undefined) {
       setEngineState(vehicle, data.engineState, true);
     }
+
+    cleanVehicle(vehicle);
   });
 
   const netId = NetworkGetNetworkIdFromEntity(vehicle);
@@ -214,29 +216,8 @@ export const teleportInSeat = async (src: number, entity: number, seat = -1) => 
   }
 };
 
-export const setNativeStatus = (vehicle: number, status: Partial<Omit<Vehicle.VehicleStatus, 'fuel'>>) => {
-  if (!DoesEntityExist(vehicle)) return;
-
-  if (status.body !== undefined) {
-    SetVehicleBodyHealth(vehicle, status.body);
-  }
-  if (status.doors !== undefined) {
-    status.doors.forEach((broken, doorId) => {
-      if (!broken) return;
-      SetVehicleDoorBroken(vehicle, doorId, true);
-    });
-  }
-  Util.sendEventToEntityOwner(
-    vehicle,
-    'vehicles:client:setNativeStatus',
-    NetworkGetNetworkIdFromEntity(vehicle),
-    status
-  );
-};
-
 export const setEngineState = (vehicle: number, state: boolean, instantly = false) => {
-  const netId = NetworkGetNetworkIdFromEntity(vehicle);
-  Util.sendEventToEntityOwner(vehicle, 'vehicles:setEngineState', netId, state, instantly);
+  Sync.executeAction('vehicles:engine:setState', vehicle, state, instantly);
 };
 
 const startNPCDriverDeletionThread = (vehicle: number) => {

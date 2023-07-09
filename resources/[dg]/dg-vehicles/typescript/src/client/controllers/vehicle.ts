@@ -1,4 +1,4 @@
-import { RPC, Util, Vehicles } from '@dgx/client';
+import { RPC, Vehicles } from '@dgx/client';
 import { getModelType, isCloseToADoor, isCloseToAWheel } from '../helpers/vehicle';
 
 RPC.register('vehicles:getModelType', (model: string): string | undefined => {
@@ -33,3 +33,5 @@ RPC.register('vehicles:isNearDoor', (vehNetId: number, distance: number) => {
   if (!veh || !DoesEntityExist(veh)) return false;
   return isCloseToADoor(veh, distance);
 });
+
+RPC.register('vehicles:getAllVehicleModels', () => GetAllVehicleModels());
