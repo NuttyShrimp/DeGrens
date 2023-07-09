@@ -45,6 +45,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Takelopdracht blips gaan nu weg wanneer je het voertuig takelt
 - Je kan weer extras veranderen in bennys
 - Error opgelost wanneer je probeert te bellen in de gevangenis als je geen contacten hebt
+- IsContainer metadata op containers is niet meer visible
 
 ## [1.2.7]
 
