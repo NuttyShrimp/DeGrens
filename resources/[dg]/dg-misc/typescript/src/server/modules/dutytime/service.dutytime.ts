@@ -61,7 +61,7 @@ export const showDutyTimeList = async (plyId: number, context: string) => {
 
 const formatTime = (time: number) => {
   const minutes = Math.floor(time / 60);
-  const hours = Math.floor(time / 60);
+  const hours = Math.floor(minutes / 60);
   return `${Math.floor(hours / 24)}d ${hours % 24}h ${minutes % 60}m`;
 };
 

@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - Probleem opgelost waarbij containers visueel leeg zijn nadat je reloggen met een container opzak
 - Grote Repairkit is nu wel zichtbaar in mechanic crafting bench
+- Probleem opgelost waardoor de uren hetzelfde waren als minuten bij de indienst tijd
 
 ## [1.2.8]
 
