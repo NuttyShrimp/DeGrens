@@ -469,6 +469,11 @@ class StateManager extends Util.Singleton<StateManager>() {
       this.leaveHouse(plyId, houseId);
     }
   };
+
+  public handlePlayerLeftGroup = (plyId: number | null, cid: number, groupId: string) => {
+    if (!this.getHouseIdByGroupId(groupId)) return;
+    stateManager.finishJobForPly(plyId, cid, true);
+  };
 }
 
 const stateManager = StateManager.getInstance();
