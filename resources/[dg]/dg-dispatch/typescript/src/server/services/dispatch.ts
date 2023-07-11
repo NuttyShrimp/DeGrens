@@ -2,6 +2,8 @@ import { Core, Events, Jobs, RPC, Sounds, Util, Vehicles } from '@dgx/server';
 
 import { addCall } from './store';
 
+const toggledDispatchPlayers = new Set<number>();
+
 export const prepareCall = (id: string, call: Dispatch.Call): Dispatch.UICall => {
   const UICall: Dispatch.UICall = {
     id,
@@ -91,4 +93,16 @@ export const createDispatchCall = async (job: 'ambulance' | 'police', call: Omit
       }, 4000);
     }
   });
+};
+
+export const setPlayerToggledDispatch = (plyId: number, toggle: boolean) => {
+  if (toggle) {
+    toggledDispatchPlayers.add(plyId);
+  } else {
+    toggledDispatchPlayers.delete(plyId);
+  }
+};
+
+export const hasPlayerToggledDispatch = (plyId: number) => {
+  return toggledDispatchPlayers.has(plyId);
 };

@@ -3,7 +3,7 @@ import { BlipManager, Events, Notifications, UI } from '@dgx/client';
 let isDispatchOpen = false;
 let lastCallId: string;
 let flashThread: NodeJS.Timeout | null;
-let dispatchDisabled = false;
+let dispatchNotificationsDisabled = false;
 
 export const setDispatchOpen = (toggle: boolean) => {
   isDispatchOpen = toggle;
@@ -56,22 +56,23 @@ export const addCallBlip = (call: Dispatch.UICall) => {
   }, 60000);
 };
 
-export const isDispatchDisabled = () => dispatchDisabled;
+export const areDispatchNotificationsDisabled = () => dispatchNotificationsDisabled;
 
-export const disableDispatch = () => {
-  dispatchDisabled = true;
-  UI.SendAppEvent('dispatch', {
-    action: 'addCalls',
-    calls: [],
-    refresh: true,
-  });
-  BlipManager.disableCategory('dispatch');
-  Notifications.add('Dispatch gedeactiveerd');
-};
+export const toggleDispatchNotifications = (toggle: boolean) => {
+  dispatchNotificationsDisabled = toggle;
 
-export const enableDispatch = () => {
-  dispatchDisabled = false;
-  Events.emitNet('dg-dispatch:loadMore', 0);
-  BlipManager.enableCategory('dispatch');
-  Notifications.add('Dispatch geactiveerd');
+  if (dispatchNotificationsDisabled) {
+    // remove all existing calls/blips
+    UI.SendAppEvent('dispatch', {
+      action: 'addCalls',
+      calls: [],
+      refresh: true,
+    });
+    BlipManager.disableCategory('dispatch');
+  } else {
+    Events.emitNet('dg-dispatch:loadMore', 0);
+    BlipManager.enableCategory('dispatch');
+  }
+
+  Notifications.add(`Dispatch Notificaties ${toggle ? 'gedeactiveerd' : 'geactiveerd'}`);
 };
