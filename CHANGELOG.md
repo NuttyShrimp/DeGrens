@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Tijd voor paleto hack hoger gezet
 - Je laat mensen nu los wanneer je dood gaat
+- Mechanic crafting recipes aangepast
 
 ### Fixed
 - Probleem opgelost waarbij containers visueel leeg zijn nadat je reloggen met een container opzak
