@@ -1,0 +1,122 @@
+{
+  "garage_id": "mcf",
+  "name": "MCF Garage",
+  "type": "gang",
+  "shared": true,
+  "location": {
+    "vector": {
+      "x": -229.97,
+      "y": -1483.64,
+      "z": 31.34
+    },
+    "width": 32.0,
+    "length": 7.0,
+    "options": {
+      "heading": 50,
+      "minZ": 30.34,
+      "maxZ": 34.34
+    }
+  },
+  "vehicle_types": ["land"],
+  "parking_spots": [
+    {
+      "type": "land",
+      "size": 2.0,
+      "distance": 1.8,
+      "heading": 140,
+      "coords": {
+        "x": -219.572,
+        "y": -1492.422,
+        "z": 30.262
+      }
+    },
+    {
+      "type": "land",
+      "size": 2.0,
+      "distance": 1.8,
+      "heading": 140,
+      "coords": {
+        "x": -222.149,
+        "y": -1490.291,
+        "z": 30.286
+      }
+    },
+    {
+      "type": "land",
+      "size": 2.0,
+      "distance": 1.8,
+      "heading": 140,
+      "coords": {
+        "x": -224.726,
+        "y": -1488.161,
+        "z": 30.311
+      }
+    },
+    {
+      "type": "land",
+      "size": 2.0,
+      "distance": 1.8,
+      "heading": 140,
+      "coords": {
+        "x": -227.303,
+        "y": -1486.03,
+        "z": 30.335
+      }
+    },
+    {
+      "type": "land",
+      "size": 2.0,
+      "distance": 1.8,
+      "heading": 140,
+      "coords": {
+        "x": -229.88,
+        "y": -1483.899,
+        "z": 30.359
+      }
+    },
+    {
+      "type": "land",
+      "size": 2.0,
+      "distance": 1.8,
+      "heading": 140,
+      "coords": {
+        "x": -232.458,
+        "y": -1481.769,
+        "z": 30.383
+      }
+    },
+    {
+      "type": "land",
+      "size": 2.0,
+      "distance": 1.8,
+      "heading": 140,
+      "coords": {
+        "x": -235.035,
+        "y": -1479.638,
+        "z": 30.407
+      }
+    },
+    {
+      "type": "land",
+      "size": 2.0,
+      "distance": 1.8,
+      "heading": 140,
+      "coords": {
+        "x": -237.612,
+        "y": -1477.508,
+        "z": 30.431
+      }
+    },
+    {
+      "type": "land",
+      "size": 2.0,
+      "distance": 1.8,
+      "heading": 140,
+      "coords": {
+        "x": -240.189,
+        "y": -1475.377,
+        "z": 30.455
+      }
+    }
+  ]
+}
