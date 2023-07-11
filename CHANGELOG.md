@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Probleem opgelost waardoor de uren hetzelfde waren als minuten bij de indienst tijd
 - Je krijgt geen houserobbery fail email meer wanneer je een groep verlaat
 - Cuff minigame niet langer beschikbaar wanneer je down bent
+- Probleem opgelost waardoor je UZI nog kon gebruiken in voertuig
 
 ## [1.2.8]
 
