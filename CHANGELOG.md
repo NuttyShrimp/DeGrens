@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - Ingame kofi voertuig shop toegevoegd
+- Nieuwe kleding toegevoegd
 
 ### Changed
 - Tijd voor paleto hack hoger gezet
