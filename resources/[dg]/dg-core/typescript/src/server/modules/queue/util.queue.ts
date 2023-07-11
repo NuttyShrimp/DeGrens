@@ -91,7 +91,7 @@ export const generateQueueCard = (deferrals: Record<string, any>) => {
                         text: 'Need help? Join our discord where you can ask for support in the inteded channels!',
                         wrap: true,
                         color: 'Light',
-                        spacing: "ExtraLarge"
+                        spacing: 'ExtraLarge',
                       },
                     ],
                     verticalContentAlignment: 'Center',

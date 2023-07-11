@@ -1,4 +1,4 @@
-import { Util } from "@dgx/client";
+import { Util } from '@dgx/client';
 
 export const setDiscordRichPresence = () => {
   setInterval(() => {
