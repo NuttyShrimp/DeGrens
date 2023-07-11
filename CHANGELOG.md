@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Grote Repairkit is nu wel zichtbaar in mechanic crafting bench
 - Probleem opgelost waardoor de uren hetzelfde waren als minuten bij de indienst tijd
 - Je krijgt geen houserobbery fail email meer wanneer je een groep verlaat
+- Cuff minigame niet langer beschikbaar wanneer je down bent
 
 ## [1.2.8]
 

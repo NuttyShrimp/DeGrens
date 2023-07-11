@@ -104,7 +104,13 @@ Events.onNet('police:interactions:tryToCuff', async (src: number, target: number
     // only interaction for cuffing player is animation
     Events.emitNet('police:interactions:doCuff', src);
 
-    const success = await RPC.execute<boolean>('police:interactions:getCuffed', target, { ...coords, w: heading });
+    const canBreakOut = !Hospital.isDown(target);
+    const success = await RPC.execute<boolean>(
+      'police:interactions:getCuffed',
+      target,
+      { ...coords, w: heading },
+      canBreakOut
+    );
     playersInCuffAction.delete(target);
     if (!success) return;
 
