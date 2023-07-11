@@ -36,13 +36,13 @@ Events.onNet('vehicles:shop:openVehicleMenu', (src: number, spotId: number, cate
     Notifications.add(src, 'Kon huidig model niet vinden voor deze plaats', 'error');
     return;
   }
-  const currentVehicleEntry = buildVehicleContextMenuEntry(currentVehicle);
+  const currentVehicleEntry = buildVehicleContextMenuEntry(currentVehicle, 'vehicleshop/selectModel');
 
   // Base context menu entries
   const menu: ContextMenu.Entry[] = [
     {
       title: 'Voertuig Shop',
-      description: 'Selecteer een merk om verder te gaan',
+      description: 'Selecteer een categorie om verder te gaan',
       disabled: true,
       icon: 'car',
     },
@@ -73,24 +73,9 @@ Events.onNet('vehicles:shop:openVehicleMenu', (src: number, spotId: number, cate
         title: getCategoryLabel(categorisation, category as Category),
         submenu: vehicles
           .sort((carA, carB) => carA.class.localeCompare(carB.class))
-          .map(vehicle => buildVehicleContextMenuEntry(vehicle)),
+          .map(vehicle => buildVehicleContextMenuEntry(vehicle, 'vehicleshop/selectModel')),
       });
     });
 
   UI.openContextMenu(src, menu);
-});
-
-RPC.register('vehicles:shop:getPurchaseHeader', (src: number, model: string) => {
-  const price = getVehicleTaxedPrice(model);
-  if (price === undefined) {
-    vehicleshopLogger.error(`Could not get purchase price for ${model}`);
-    return;
-  }
-  const modelData = getConfigByModel(model);
-  if (!modelData) {
-    vehicleshopLogger.error(`Could not get model data for ${model}`);
-    return;
-  }
-
-  return `Ben je zeker dat je de ${modelData.brand} ${modelData.name} wil aanschaffen voor €${price} incl. BTW?`;
 });

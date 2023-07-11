@@ -1043,5 +1043,32 @@
       "oxyRunStart": true
     },
     "scenario": "WORLD_HUMAN_CLIPBOARD"
+  },
+  {
+    "id": "kofi_vehicle_shop",
+    "model": "ig_fbisuit_01",
+    "position": {
+      "x": -69.2241,
+      "y": 63.3282,
+      "z": 71.8906
+    },
+    "heading": 150.398,
+    "distance": 150.0,
+    "settings": {
+      "invincible": true,
+      "ignore": true,
+      "freeze": true,
+      "collision": true
+    },
+    "flags": {
+      "kofiVehicleShop": true
+    },
+    "scenario": "WORLD_HUMAN_CLIPBOARD",
+    "blip": {
+      "title": "Kofi Shop",
+      "sprite": 523,
+      "color": 1,
+      "scale": 0.7
+    }
   }
 ]

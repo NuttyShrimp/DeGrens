@@ -16,6 +16,7 @@ declare namespace VehicleShop {
       percentage: number;
       allowedUpgrades: (keyof Vehicles.Upgrades.Cosmetic)[];
     };
+    kofiShopVehicleSpawn: Vec4;
   };
 
   type Spot = {

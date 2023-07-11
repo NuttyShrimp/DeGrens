@@ -135,11 +135,6 @@ export class Spot {
       return;
     }
 
-    const header = await RPC.execute<string>('vehicles:shop:getPurchaseHeader', this.model);
-    if (!header) return;
-    const result = await UI.openInput({ header });
-    if (!result.accepted) return;
-
     Events.emitNet('vehicles:shop:buyVehicle', this.id, this.model);
   };
 }

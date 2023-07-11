@@ -10102,5 +10102,29 @@
     "price": 10000000,
     "shop": "nfs",
     "type": "sea"
+  },
+  {
+    "category": "sportsclassics",
+    "model": "gxs14",
+    "brand": "Nissan",
+    "name": "S14",
+    "class": "A+",
+    "defaultStock": 5,
+    "restockTime": 14,
+    "price": 215000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "super",
+    "model": "lget",
+    "brand": "Lamborghini",
+    "name": "Gallardo",
+    "class": "X",
+    "defaultStock": 5,
+    "restockTime": 14,
+    "price": 890000,
+    "shop": "nfs",
+    "type": "land"
   }
 ]

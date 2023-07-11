@@ -68,17 +68,22 @@ export const getCategoryLabel = (categorisation: ModelCategorisation, category: 
   }
 };
 
-export const buildVehicleContextMenuEntry = (vehicle: Config.CarSchema): ContextMenu.Entry => {
-  const stock = getModelStock(vehicle.model);
+export const buildVehicleContextMenuEntry = (
+  vehicle: Config.CarSchema,
+  callbackURL: string | undefined,
+  showStock = true,
+  preventCloseOnClick = true
+): ContextMenu.Entry => {
+  const stock = showStock ? getModelStock(vehicle.model) : null;
   return {
     title: `${vehicle.brand} ${vehicle.name}`,
-    description: `Prijs: €${getVehicleTaxedPrice(vehicle.model)} incl. BTW | Klasse: ${
-      vehicle.class
-    } | Voorraad: ${stock}`,
-    callbackURL: 'vehicleshop/selectModel',
+    description: `Prijs: €${getVehicleTaxedPrice(vehicle.model)} incl. BTW | Klasse: ${vehicle.class}${
+      stock === null ? '' : ` | Voorraad: ${stock}`
+    }`,
+    callbackURL,
     data: {
       model: vehicle.model,
     },
-    preventCloseOnClick: true,
+    preventCloseOnClick,
   };
 };
