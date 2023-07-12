@@ -2,6 +2,7 @@ import { BaseEvents, Sync } from '@dgx/client';
 import {
   addBlip,
   addPlayerBlip,
+  changeBlipCoords,
   changePlayerBlipSprite,
   deletePlayerBlip,
   disableCategory,
@@ -18,6 +19,7 @@ global.exports('removeBlip', removeBlip);
 global.exports('enableCategory', enableCategory);
 global.exports('disableCategory', disableCategory);
 global.exports('removeCategory', removeCategory);
+global.exports('changeBlipCoords', changeBlipCoords);
 
 global.exports('addPlayerBlip', addPlayerBlip);
 global.exports('deletePlayerBlip', deletePlayerBlip);

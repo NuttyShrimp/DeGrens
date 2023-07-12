@@ -1,40 +1,41 @@
-import { Events, Taskbar } from '@dgx/client/classes';
+import { BlipManager, Events, Taskbar, Util } from '@dgx/client/classes';
+import { buildTrackerBlipId } from './helpers.trackers';
 
-const activeBlips = new Map<number, number>();
+const activeBlips = new Set<number>();
 
-export const setVehicleTracker = (netId: number, coords: Vec3) => {
-  const existingBlip = activeBlips.get(netId);
-  if (existingBlip !== undefined && DoesBlipExist(existingBlip)) {
-    SetBlipCoords(existingBlip, coords.x, coords.y, coords.z);
+export const setVehicleTracker = (trackerId: number, coords: Vec3) => {
+  const blipId = buildTrackerBlipId(trackerId);
+
+  if (activeBlips.has(trackerId)) {
+    BlipManager.changeBlipCoords(blipId, coords);
     return;
   }
 
-  const newBlip = AddBlipForCoord(coords.x, coords.y, coords.z);
-  SetBlipSprite(newBlip, 225);
-  SetBlipScale(newBlip, 1.0);
-  SetBlipAsShortRange(newBlip, false);
-  SetBlipColour(newBlip, 5);
-  SetBlipDisplay(newBlip, 2);
-  SetBlipFlashInterval(newBlip, 200);
-  BeginTextCommandSetBlipName('STRING');
-  AddTextComponentString('Voertuig Tracker');
-  EndTextCommandSetBlipName(newBlip);
-  activeBlips.set(netId, newBlip);
+  BlipManager.addBlip({
+    category: 'police_trackers',
+    id: blipId,
+    coords,
+    sprite: 225,
+    scale: 1,
+    color: 5,
+    text: 'Voertuig Tracker',
+    display: 2,
+    // flashInterval: 200
+  });
+  activeBlips.add(trackerId);
 };
 
-export const removeTrackerBlip = (netId: number) => {
-  const activeBlip = activeBlips.get(netId);
-  if (activeBlip === undefined) return;
-  if (DoesBlipExist(activeBlip)) {
-    RemoveBlip(activeBlip);
-  }
-  activeBlips.delete(netId);
+export const removeTrackerBlip = (trackerId: number) => {
+  if (!activeBlips.has(trackerId)) return;
+  BlipManager.removeBlip(buildTrackerBlipId(trackerId));
+  activeBlips.delete(trackerId);
 };
 
-export const doesVehicleHaveTracker = (netId: number) => activeBlips.has(netId);
+export const disableVehicleTracker = async (vehicle: number) => {
+  const trackerId = Entity(vehicle).state.trackerId;
+  if (!trackerId) return;
 
-export const disableVehicleTracker = async (netId: number) => {
-  if (!doesVehicleHaveTracker(netId)) return;
+  const heading = Util;
 
   const [canceled] = await Taskbar.create('location-dot-slash', 'Tracker Uitschakelen', 15000, {
     canCancel: true,
@@ -56,5 +57,10 @@ export const disableVehicleTracker = async (netId: number) => {
   });
   if (canceled) return;
 
-  Events.emitNet('police:trackers:disable', netId);
+  Events.emitNet('police:trackers:disable', trackerId);
+};
+
+export const removeAllTrackerBlips = () => {
+  BlipManager.removeCategory('police_trackers');
+  activeBlips.clear();
 };

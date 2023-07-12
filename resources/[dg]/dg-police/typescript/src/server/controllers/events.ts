@@ -1,4 +1,4 @@
-import { RPC, Events, Chat, Vehicles, Util, Inventory, Notifications, Status, Jobs, Auth } from '@dgx/server';
+import { Events, Chat, Vehicles, Util, Notifications, Status, Jobs, Auth } from '@dgx/server';
 import { awaitPoliceConfigLoad, getPoliceConfig } from 'services/config';
 import { isPlateFlagged } from 'services/plateflags';
 import { mainLogger } from 'sv_logger';

@@ -1,4 +1,4 @@
-import { EntityBlip, Util, Sync } from '@dgx/client';
+import { EntityBlip } from '@dgx/client';
 
 const blips: Record<string, NBlipManager.Info & { category: string; handle: number | null }> = {};
 const disabledCategory = new Set<string>();
@@ -89,6 +89,12 @@ export const removeCategory = (category: string) => {
     destroyBlip(id);
     delete blips[id];
   }
+};
+
+export const changeBlipCoords = (id: string, coords: Vec3) => {
+  const blip = blips[id];
+  if (!blip || !blip.handle) return;
+  SetBlipCoords(blip.handle, coords.x, coords.y, coords.z);
 };
 
 export const addPlayerBlip = (plyId: number, context: string, settings: NBlip.Settings, startCoords: Vec3) => {
