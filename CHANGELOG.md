@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Default stance toegevoegd voor evo9
 - Nieuwe kleine criminele activiteit toegevoegd
 - Extra loot toegevoegd aan vuilbakken doorzoeken
+- removeUiFocus commando toegevoegd om je cursor weg te halen wanneer deze vast zit op je scherm
 
 ### Changed
 - Override CID entry toegevoegd om kofi vehicles te kunnen assignen aan offline vehicles
