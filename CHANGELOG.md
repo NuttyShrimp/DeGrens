@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - KingPills Bandage crafting recipe en uses aangepast
 - Kans op regen verlaagd
 - Voertuig trackers worden nu verwijderd wanneer je uit dienst gaat of wanneer voertuig niet meer bestaat
+- Start ingame tijd op middag op dev server
 
 ### Fixed
 - Motor gaat nu uit tijdens noclip om engine sounds te voorkomen
