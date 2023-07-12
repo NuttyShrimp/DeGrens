@@ -20,7 +20,7 @@ stopSound = function(id)
 end
 exports('stopSound', stopSound)
 
-DGX.Events.onNet('nutty-sounds:playSoundOnEntity', function(id, name, bank, netId)
+RegisterNetEvent('nutty-sounds:playSoundOnEntity', function(id, name, bank, netId)
   if not NetworkDoesEntityExistWithNetworkId(netId) then return end
   local entity = NetworkGetEntityFromNetworkId(netId)
   if not DoesEntityExist(entity) then return end
@@ -43,7 +43,7 @@ DGX.Events.onNet('nutty-sounds:playSoundOnEntity', function(id, name, bank, netI
   end
 end)
 
-DGX.Events.onNet('nutty-sounds:playSoundFromCoord', function(id, name, bank, coords, range)
+RegisterNetEvent('nutty-sounds:playSoundFromCoord', function(id, name, bank, coords, range)
   -- If sound with id still exists then stop that sound before continuing
   if sounds[id] then
     clearSoundId(id)
@@ -68,7 +68,7 @@ clearSoundId = function(id)
   sounds[id] = nil
 end
 
-DGX.Events.onNet('nutty-sounds:stopSound', function(id)
+RegisterNetEvent('nutty-sounds:stopSound', function(id)
   if not sounds[id] then return end
   clearSoundId(id)
 end)
