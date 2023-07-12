@@ -18,8 +18,14 @@ Events.onNet('materials:dumpsters:finishSearch', (plyId: number, position: Vec3)
   for (const loot of getConfig().dumpsters.loot) {
     if (Math.random() > loot.chance) continue;
 
-    const [min, max] = loot.amount;
-    const amount = Util.getRndInteger(min, max + 1);
+    let amount: number;
+    if (Array.isArray(loot.amount)) {
+      const [min, max] = loot.amount;
+      amount = Util.getRndInteger(min, max + 1);
+    } else {
+      amount = loot.amount;
+    }
+
     Inventory.addItemToPlayer(plyId, loot.item, amount);
   }
 });
