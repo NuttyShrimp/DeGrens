@@ -145,6 +145,7 @@ export const spawnOwnedVehicle = async (
     upgrades,
     overrideStance: vehicleInfo.stance ?? undefined,
     engineState,
+    fuel: vehicleInfo.status.fuel,
   });
   if (!spawnedVehicle) return;
   const { vehicle, vin } = spawnedVehicle;
