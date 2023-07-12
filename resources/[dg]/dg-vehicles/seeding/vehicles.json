@@ -10102,5 +10102,65 @@
     "price": 10000000,
     "shop": "nfs",
     "type": "sea"
+  },
+  {
+    "category": "sportsclassics",
+    "model": "gxs14",
+    "brand": "Nissan",
+    "name": "S14",
+    "class": "A+",
+    "defaultStock": 5,
+    "restockTime": 14,
+    "price": 215000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "super",
+    "model": "lget",
+    "brand": "Lamborghini",
+    "name": "Gallardo",
+    "class": "X",
+    "defaultStock": 5,
+    "restockTime": 14,
+    "price": 890000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "sports",
+    "model": "r33",
+    "brand": "Nissan",
+    "name": "R33",
+    "class": "S",
+    "defaultStock": 5,
+    "restockTime": 14,
+    "price": 460000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "sports",
+    "model": "viper",
+    "brand": "Dodge",
+    "name": "Viper SRT",
+    "class": "S",
+    "defaultStock": 5,
+    "restockTime": 14,
+    "price": 460000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "suvs",
+    "model": "dbxultimate",
+    "brand": "Aston Martin",
+    "name": "DBX Ultimate",
+    "class": "S",
+    "defaultStock": 5,
+    "restockTime": 14,
+    "price": 470000,
+    "shop": "nfs",
+    "type": "land"
   }
 ]

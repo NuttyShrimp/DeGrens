@@ -12,7 +12,7 @@ registerRoute('GET', '/', (_, res) => {
   });
 });
 
-registerRoute("POST", "/post-test", (req, res) => {
-  console.log("POST PONG", req.body)
-  res(200, {})
-})
+registerRoute('POST', '/post-test', (req, res) => {
+  console.log('POST PONG', req.body);
+  res(200, {});
+});

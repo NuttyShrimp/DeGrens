@@ -87,7 +87,7 @@ RPC.register('police:interactions:doUncuff', async (targetServerId: number) => {
   return success;
 });
 
-RPC.register('police:interactions:getCuffed', async (coords: Vec4) => {
+RPC.register('police:interactions:getCuffed', async (coords: Vec4, canBreakOut: boolean) => {
   const ped = PlayerPedId();
   SetEntityCoords(ped, coords.x, coords.y, coords.z, false, false, false, false);
   SetEntityHeading(ped, coords.w);
@@ -99,14 +99,16 @@ RPC.register('police:interactions:getCuffed', async (coords: Vec4) => {
 
   await Util.Delay(750);
 
-  const success = await Minigames.keygame(1, cuffSpeed, 10);
-  if (success) {
-    cuffSpeed = Math.min(30, cuffSpeed + 3);
-    setTimeout(() => {
-      cuffSpeed = Math.max(10, cuffSpeed - 3);
-    }, 10 * 60 * 1000);
-    ClearPedTasks(PlayerPedId());
-    return false;
+  if (canBreakOut) {
+    const success = await Minigames.keygame(1, cuffSpeed, 10);
+    if (success) {
+      cuffSpeed = Math.min(30, cuffSpeed + 3);
+      setTimeout(() => {
+        cuffSpeed = Math.max(10, cuffSpeed - 3);
+      }, 10 * 60 * 1000);
+      ClearPedTasks(PlayerPedId());
+      return false;
+    }
   }
 
   await Util.Delay(2000);

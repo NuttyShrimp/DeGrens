@@ -1,1 +1,1 @@
-import './driver'
+import './driver';

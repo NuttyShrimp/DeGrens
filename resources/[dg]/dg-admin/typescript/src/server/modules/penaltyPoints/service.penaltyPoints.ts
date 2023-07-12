@@ -1,5 +1,5 @@
 import { SQL } from '@dgx/server';
-import dayjs from 'dayjs'
+import dayjs from 'dayjs';
 
 const resetTimeouts: Record<string, NodeJS.Timeout> = {};
 const adminPoints: Map<string, number> = new Map();
@@ -10,16 +10,16 @@ export const scheduleFallofs = async () => {
   );
   playerPoints.forEach(async pp => {
     const updated_at = dayjs(pp.updated_at);
-    if (updated_at.add(pp.points, "d").isBefore(dayjs())) {
+    if (updated_at.add(pp.points, 'd').isBefore(dayjs())) {
       // vervallen, remove entry
-      await SQL.query("DELETE FROM admin_points WHERE steamid = ?", [pp.steamid]);
+      await SQL.query('DELETE FROM admin_points WHERE steamid = ?', [pp.steamid]);
     }
     let shouldTimeout = updated_at.isBefore(dayjs().add(12));
     if (!shouldTimeout) return;
     resetTimeouts[pp.steamid] = setTimeout(() => {
-      SQL.query("DELETE FROM admin_points WHERE steamid = ?", [pp.steamid]);
-    }, updated_at.diff(dayjs(), "ms"))
-  })
+      SQL.query('DELETE FROM admin_points WHERE steamid = ?', [pp.steamid]);
+    }, updated_at.diff(dayjs(), 'ms'));
+  });
 };
 
 export const updatePointsReset = (steamid: string, addPoints: number) => {
@@ -28,19 +28,22 @@ export const updatePointsReset = (steamid: string, addPoints: number) => {
     // no way this timeout is happening in the same server restart
     clearTimeout(resetTimeouts[steamid]);
   }
-  SQL.query(`
+  SQL.query(
+    `
     INSERT INTO admin_points (steamid, points) VALUES (?, ?)
     ON DUPLICATE KEY UPDATE points = VALUES(points), updated_at = CURRENT_TIMESTAMP()
-  `, [steamid, addPoints]);
-    adminPoints.set(steamid, getPointsForSteamId(steamid) + addPoints)
-}
+  `,
+    [steamid, addPoints]
+  );
+  adminPoints.set(steamid, getPointsForSteamId(steamid) + addPoints);
+};
 
 export const loadPoints = async () => {
-  const pointData = await SQL.query<{points: number, steamid: string}[]>("SELECT points, steamid FROM admin_points");
+  const pointData = await SQL.query<{ points: number; steamid: string }[]>('SELECT points, steamid FROM admin_points');
   if (!pointData) return;
-  pointData.forEach(pd=> adminPoints.set(pd.steamid, pd.points));
-}
+  pointData.forEach(pd => adminPoints.set(pd.steamid, pd.points));
+};
 
 export const getPointsForSteamId = (steamId: string) => {
   return adminPoints.get(steamId) ?? 0;
-}
+};

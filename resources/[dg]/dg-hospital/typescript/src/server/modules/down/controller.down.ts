@@ -11,6 +11,7 @@ Events.onNet('hospital:down:playerDied', async (src: number, cause: string, kill
   downLogger.info(`${Util.getName(src)} has died | cause: ${cause} | killer: ${killerName}(${killer})`);
 
   global.exports['dg-phone'].brickPhone(src);
+  Police.forceStopInteractions(src);
 
   let newStatus = getHospitalConfig().damagetypes[cause].status ?? 'bruises';
   Status.addStatusToPlayer(src, newStatus);

@@ -5,12 +5,11 @@ import { areBlipsEnabled, clearBlips, syncBlips, updateSprite } from 'services/b
 import { closeCam, openCam, seedUICams } from 'services/cams';
 import {
   addCallBlip,
-  disableDispatch,
-  enableDispatch,
   flashNewCalls,
-  isDispatchDisabled,
+  areDispatchNotificationsDisabled,
   setDispatchOpen,
   setLastCallId,
+  toggleDispatchNotifications,
 } from 'services/dispatch';
 
 UI.onLoad(() => {
@@ -49,7 +48,7 @@ on('onResourceStop', (res: string) => {
 });
 
 Events.onNet('dg-dispatch:addCalls', (calls: Dispatch.UICall[], refresh: boolean) => {
-  if (isDispatchDisabled()) return;
+  if (areDispatchNotificationsDisabled()) return;
   UI.SendAppEvent('dispatch', {
     action: 'addCalls',
     calls,
@@ -61,7 +60,7 @@ Events.onNet('dg-dispatch:addCalls', (calls: Dispatch.UICall[], refresh: boolean
 });
 
 Events.onNet('dg-dispatch:addCall', (call: Dispatch.UICall) => {
-  if (isDispatchDisabled()) return;
+  if (areDispatchNotificationsDisabled()) return;
   UI.SendAppEvent('dispatch', {
     action: 'addCall',
     call,
@@ -87,10 +86,7 @@ Events.onNet('dispatch:updateSprite', (plyId: number, sprite: number) => {
   updateSprite(plyId, sprite);
 });
 
-Events.onNet('dispatch:toggleDispatchNotifications', () => {
-  Events.emitNet('dispatch:toggleDispatchBlip', isDispatchDisabled());
-  isDispatchDisabled() ? enableDispatch() : disableDispatch();
-});
+Events.onNet('dispatch:toggleNotifications', toggleDispatchNotifications);
 
 RPC.register('dispatch:getVehicleInfo', (vehNetId: number) => {
   const veh = NetworkGetEntityFromNetworkId(vehNetId);

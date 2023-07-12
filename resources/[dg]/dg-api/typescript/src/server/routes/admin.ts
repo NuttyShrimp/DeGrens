@@ -80,22 +80,22 @@ registerRoute('POST', '/admin/actions/ban', async (req, res) => {
   });
 });
 
-registerRoute("POST", '/admin/report/announce', async (req, res) => {
+registerRoute('POST', '/admin/report/announce', async (req, res) => {
   if (!req.body.id) {
     res(400, {
-      message: "missing report id in body"
-    })
+      message: 'missing report id in body',
+    });
   }
   const targets = Admin.plyInDevMode();
   targets.forEach(t => {
-    Events.emitNet("auth:panel:announceNewReportMessage", t, req.body.id)
-  })
+    Events.emitNet('auth:panel:announceNewReportMessage', t, req.body.id);
+  });
   if (req.body.receivers && Array.isArray(req.body.receivers)) {
-    req.body.receivers.forEach(async (recv: string) =>{ 
+    req.body.receivers.forEach(async (recv: string) => {
       const serverId = await global.exports['dg-auth'].getServerIdForSteamId(recv);
       if (!serverId) return;
-      Events.emitNet("auth:panel:announceNewReportMessage", serverId, req.body.id)
-    })
+      Events.emitNet('auth:panel:announceNewReportMessage', serverId, req.body.id);
+    });
   }
-  res(200, {})
-})
+  res(200, {});
+});

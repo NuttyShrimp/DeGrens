@@ -1,8 +1,22 @@
-import { Chat, Events, Util } from '@dgx/server';
-import { createDispatchCall } from 'services/dispatch';
+import { Chat, Events, Util, Inventory, Jobs, Notifications } from '@dgx/server';
+import { setPlayerAsDisabled } from 'services/blips';
 
-Chat.registerCommand('toggleDispatch', 'Toggle dispatch notifications', [], 'user', src => {
-  Events.emitNet('dispatch:toggleDispatchNotifications', src);
+import { createDispatchCall, hasPlayerToggledDispatch, setPlayerToggledDispatch } from 'services/dispatch';
+
+Chat.registerCommand('toggleDispatch', 'Toggle dispatch notifications', [], 'user', async plyId => {
+  const job = Jobs.getCurrentJob(plyId);
+  if (job !== 'police' && job !== 'ambulance') {
+    Notifications.add(plyId, 'Dit is enkel voor hulpdiensten', 'error');
+    return;
+  }
+
+  const toggledDispatch = !hasPlayerToggledDispatch(plyId);
+  setPlayerToggledDispatch(plyId, toggledDispatch);
+  Events.emitNet('dispatch:toggleNotifications', plyId, toggledDispatch);
+
+  // disable if player toggled dispatch but dont enable if he also doesnt have button
+  const hasBtn = await Inventory.doesPlayerHaveItems(plyId, 'emergency_button');
+  setPlayerAsDisabled(plyId, toggledDispatch || !hasBtn);
 });
 
 setImmediate(() => {

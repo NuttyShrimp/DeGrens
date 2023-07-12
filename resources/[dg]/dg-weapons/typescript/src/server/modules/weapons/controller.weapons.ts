@@ -1,7 +1,7 @@
 import { Events, Inventory, Notifications, Police, RPC, Util } from '@dgx/server';
 import { getWeaponAmmo, saveWeaponAmmo } from 'modules/ammo/service.ammo';
 import { getWeaponAttachments } from 'modules/attachments/service.attachments';
-import { getWeaponConfig } from 'services/config';
+import { getConfig, getWeaponConfig } from 'services/config';
 import { applyWeaponTint } from 'services/tint';
 import {
   getEquippedData,
@@ -21,10 +21,13 @@ Events.onNet('weapons:setWeapon', async (src: number, itemId: string) => {
   if (item.inventory !== Inventory.concatId('player', cid)) return; // Can happen if item gets removed during animation
   Events.emitNet('auth:anticheat:weaponDrawn', src);
 
+  const inVehicle = !!GetVehiclePedIsIn(GetPlayerPed(String(src)), false);
+  const showWeapon = !inVehicle || !getConfig().weapons[item.name].blockInVehicle;
+
   const weaponHash = GetHashKey(item.name) >>> 0;
   const ped = GetPlayerPed(String(src));
   const ammo = getWeaponAmmo(item);
-  GiveWeaponToPed(ped, weaponHash, ammo, false, true);
+  GiveWeaponToPed(ped, weaponHash, ammo, !showWeapon, showWeapon);
   setEquippedWeapon(src, weaponHash);
   Inventory.toggleObject(src, itemId, false);
 

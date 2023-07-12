@@ -1,4 +1,4 @@
-import { Core } from "@dgx/client";
+import { Core } from '@dgx/client';
 
 export let charModule: Core.ClientModules.CharacterModule;
 

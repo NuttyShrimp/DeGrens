@@ -205,6 +205,12 @@ class ShopManager extends Util.Singleton<ShopManager>() {
 
   @DGXEvent('vehicles:shop:buyVehicle')
   private _buyVehicle = async (src: number, spotId: number, model: string) => {
+    const price = getVehicleTaxedPrice(model);
+    if (price === undefined) {
+      this.logger.error(`Could not get purchase price for ${model}`);
+      return;
+    }
+
     const modelData = getConfigByModel(model);
     if (!modelData) {
       this.logger.error(`Could not get model data for ${model}`);
@@ -232,6 +238,11 @@ class ShopManager extends Util.Singleton<ShopManager>() {
       );
       return;
     }
+
+    const result = await UI.openInput(src, {
+      header: `Ben je zeker dat je de ${modelData.brand} ${modelData.name} wil aanschaffen voor €${price} incl. BTW?`,
+    });
+    if (!result.accepted) return;
 
     const saleSpotData = this.spotsForSale.get(spotId);
     const employeeWhoSold = saleSpotData?.employee;

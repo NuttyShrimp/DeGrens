@@ -128,5 +128,30 @@
         }
       ]
     }
+  },
+  "gxs14": {
+    "upgrade": {
+      "component": "leftFenders",
+      "possibilities": [
+        {
+          "value": 1,
+          "stance": {
+            "frontLeft": 0.77,
+            "frontRight": 0.77,
+            "backLeft": 0.85,
+            "backRight": 0.85
+          }
+        },
+        {
+          "value": 2,
+          "stance": {
+            "frontLeft": 0.745,
+            "frontRight": 0.745,
+            "backLeft": 0.745,
+            "backRight": 0.745
+          }
+        }
+      ]
+    }
   }
 }

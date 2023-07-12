@@ -77,11 +77,14 @@ on('onResourceStop', (res: string) => {
   cleanup();
 });
 
-
-RegisterCommand("test-ws", () => {
-  console.log("opening ws")
-  SendNUIMessage({
-    action:"open-ws",
-    id: 1,
-  })
-}, false)
+RegisterCommand(
+  'test-ws',
+  () => {
+    console.log('opening ws');
+    SendNUIMessage({
+      action: 'open-ws',
+      id: 1,
+    });
+  },
+  false
+);

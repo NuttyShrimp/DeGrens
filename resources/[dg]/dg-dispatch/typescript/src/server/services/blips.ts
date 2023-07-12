@@ -1,4 +1,5 @@
-import { Core, Events, Jobs } from '@dgx/server';
+import { Events, Jobs } from '@dgx/server';
+import { charModule } from 'helpers/core';
 
 let blipPlys: number[] = [];
 let disabledPlys: Set<number> = new Set();
@@ -15,7 +16,7 @@ export const syncBlips = () => {
     const job = Jobs.getCurrentJob(ply);
     if (!job) return;
 
-    const player = Core.getPlayer(ply);
+    const player = charModule.getPlayer(ply);
     if (!player) return;
 
     const jobLabel = job === 'police' ? 'Agent' : 'Dokter';
@@ -40,14 +41,13 @@ export const updateSprite = (src: number, sprite: number) => {
   });
 };
 
-export const togglePlayer = (src: number, shouldRemove: boolean) => {
-  if (shouldRemove) {
-    disabledPlys.delete(src);
+export const setPlayerAsDisabled = (plyId: number, toggle: boolean, dontSync = false) => {
+  if (toggle) {
+    disabledPlys.add(plyId);
   } else {
-    disabledPlys.add(src);
+    disabledPlys.delete(plyId);
   }
-};
-
-export const cleanPlayer = (src: number) => {
-  disabledPlys.delete(src);
+  if (!dontSync) {
+    syncBlips();
+  }
 };

@@ -481,15 +481,15 @@
       "items": [
         {
           "name": "material_iron",
-          "amount": 2
+          "amount": 1
         },
         {
           "name": "material_steel",
-          "amount": 2
+          "amount": 1
         },
         {
           "name": "material_plastic",
-          "amount": 2
+          "amount": 1
         }
       ]
     },
@@ -498,7 +498,7 @@
       "items": [
         {
           "name": "material_steel",
-          "amount": 4
+          "amount": 3
         },
         {
           "name": "refined_plastic",
@@ -510,12 +510,16 @@
       "requiredReputation": 10,
       "items": [
         {
-          "name": "refined_aluminum",
-          "amount": 1
+          "name": "material_iron",
+          "amount": 3
         },
         {
-          "name": "refined_iron",
-          "amount": 1
+          "name": "material_steel",
+          "amount": 3
+        },
+        {
+          "name": "material_aluminum",
+          "amount": 3
         }
       ]
     },
@@ -905,7 +909,7 @@
       "visibleReputationLimit": 500
     },
     "mechanic_bench": {
-      "items": ["repair_kit", "tire_repair_kit", "weapon_petrolcan"],
+      "items": ["repair_kit", "tire_repair_kit", "weapon_petrolcan", "advanced_repair_kit"],
       "reputation": "mechanic_crafting"
     },
     "blazeit_bench": {

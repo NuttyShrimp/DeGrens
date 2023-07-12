@@ -26,7 +26,7 @@ export const RPCEvent = (RPCName: string) => {
  */
 
 export const RPCRegister = () => {
-  return function <T extends { new(...args: any[]): any }>(constructor: T) {
+  return function <T extends { new (...args: any[]): any }>(constructor: T) {
     return class extends constructor {
       constructor(...args: any[]) {
         super(...args);

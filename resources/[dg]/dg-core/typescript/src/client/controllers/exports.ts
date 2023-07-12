@@ -1,3 +1,3 @@
-import { getModule } from "moduleController";
+import { getModule } from 'moduleController';
 
 global.exports('getModule', getModule);

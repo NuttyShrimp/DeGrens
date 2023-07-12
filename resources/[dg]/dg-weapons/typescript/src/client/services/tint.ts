@@ -75,7 +75,7 @@ Events.onNet('weapons:server:applyTint', async (weaponHash: number, tintName: st
   }
   const ped = PlayerPedId();
 
-  const fullfilled = await Util.awaitCondition(() => GetSelectedPedWeapon(ped) >>> 0 === weaponHash, 2000);
+  const fullfilled = await Util.awaitCondition(() => HasPedGotWeapon(ped, weaponHash, false), 2000);
   if (!fullfilled) return;
 
   SetPedWeaponTintIndex(ped, weaponHash, tintId);

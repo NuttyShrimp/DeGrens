@@ -13,6 +13,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+## [1.2.9]
+
+### Added
+- Ingame kofi voertuig shop toegevoegd
+- Nieuwe kleding toegevoegd
+
+### Changed
+- Tijd voor paleto hack hoger gezet
+- Je laat mensen nu los wanneer je dood gaat
+- Mechanic crafting recipes aangepast
+
+### Fixed
+- Probleem opgelost waarbij containers visueel leeg zijn nadat je reloggen met een container opzak
+- Grote Repairkit is nu wel zichtbaar in mechanic crafting bench
+- Probleem opgelost waardoor de uren hetzelfde waren als minuten bij de indienst tijd
+- Je krijgt geen houserobbery fail email meer wanneer je een groep verlaat
+- Cuff minigame niet langer beschikbaar wanneer je down bent
+- Probleem opgelost waardoor je UZI nog kon gebruiken in voertuig
+- Blip problemen van dispatch systeem opgelost
+
 ## [1.2.8]
 
 ### Added

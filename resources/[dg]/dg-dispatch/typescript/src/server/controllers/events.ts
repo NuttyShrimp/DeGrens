@@ -1,6 +1,9 @@
-import { Auth, Config, Events, Notifications, Util, Jobs, Inventory, Core } from '@dgx/server';
-import { cleanPlayer, syncBlips, togglePlayer, updateSprite } from 'services/blips';
+import { Auth, Config, Events, Notifications, Util, Jobs, Inventory } from '@dgx/server';
+import { doesJobHaveDispatch } from 'helpers';
+import { charModule } from 'helpers/core';
+import { setPlayerAsDisabled, syncBlips, updateSprite } from 'services/blips';
 import { getCams, loadCams } from 'services/cams';
+import { hasPlayerToggledDispatch } from 'services/dispatch';
 import { getCall, getCalls } from 'services/store';
 
 setImmediate(async () => {
@@ -10,21 +13,19 @@ setImmediate(async () => {
 });
 
 Jobs.onJobUpdate(async (plyId, job) => {
-  syncBlips();
-
-  if (job !== 'police') {
-    cleanPlayer(plyId);
+  if (doesJobHaveDispatch(job)) {
+    // seed 20 first stored dispatch calls
+    Events.emitNet('dg-dispatch:addCalls', plyId, getCalls(20, job!), true);
+  } else if (!hasPlayerToggledDispatch(plyId)) {
+    setPlayerAsDisabled(plyId, false, true);
   }
 
-  // seed 20 first stored dispatch calls
-  if (job === 'police' || job === ' ambulance') {
-    Events.emitNet('dg-dispatch:addCalls', plyId, getCalls(20, job), true);
-  }
-
-  if (job === 'police') {
+  if (job === 'police' && !hasPlayerToggledDispatch(plyId)) {
     const hasBtn = await Inventory.doesPlayerHaveItems(plyId, 'emergency_button');
-    togglePlayer(plyId, hasBtn);
+    setPlayerAsDisabled(plyId, !hasBtn, true);
   }
+
+  syncBlips();
 });
 
 on('dg-config:moduleLoaded', (module: string, { cams }: { cams: Dispatch.Cams.Cam[] }) => {
@@ -32,15 +33,23 @@ on('dg-config:moduleLoaded', (module: string, { cams }: { cams: Dispatch.Cams.Ca
   loadCams(cams);
 });
 
-Inventory.onInventoryUpdate('player', (cid, action, itemState) => {
-  if (itemState.name !== 'emergency_button') return;
+Inventory.onInventoryUpdate(
+  'player',
+  async (cid, action) => {
+    const plyId = charModule.getServerIdFromCitizenId(+cid);
+    if (!plyId) return;
+    if (hasPlayerToggledDispatch(plyId)) return; // dont override manual toggle
 
-  const charModule = Core.getModule('characters');
-  const plyId = charModule.getServerIdFromCitizenId(+cid);
-  if (!plyId) return;
+    // when action is add, player will always have the item, when action is remove, ply might have another
+    let hasBtn = true;
+    if (action === 'remove') {
+      hasBtn = await Inventory.doesInventoryHaveItems('player', cid, 'emergency_button');
+    }
 
-  togglePlayer(plyId, action === 'remove');
-});
+    setPlayerAsDisabled(plyId, !hasBtn);
+  },
+  'emergency_button'
+);
 
 Events.onNet('dg-dispatch:loadMore', (src, offset: number) => {
   const plyJob = Jobs.getCurrentJob(src);
@@ -58,10 +67,6 @@ Events.onNet('dispatch:server:setMarker', (src, id: string) => {
   if (!call || !call.coords) return;
   Util.setWaypoint(src, call.coords);
   Notifications.add(src, 'Locatie aangeduid op GPS');
-});
-
-Events.onNet('dispatch:toggleDispatchBlip', (src, dispatchEnabled: boolean) => {
-  togglePlayer(src, dispatchEnabled);
 });
 
 Auth.onAuth(plyId => {
