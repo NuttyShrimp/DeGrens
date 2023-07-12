@@ -89,7 +89,7 @@ export const NORMAL_PERFORMANCE_KEYS_TO_ID: Record<Vehicles.Upgrades.Performance
   suspension: 15,
 };
 
-export const PERFORMANCE_KEYS_TO_ID: Record<Vehicles.Upgrades.Performance.Key, number> = {
+export const PERFORMANCE_KEYS_TO_ID: Record<Vehicles.Upgrades.Performance.ExtendedKey, number> = {
   ...NORMAL_PERFORMANCE_KEYS_TO_ID,
   turbo: 18,
 };

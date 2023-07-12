@@ -1,5 +1,13 @@
 import { Financials, TaxIds, Util } from '@dgx/server';
-import { DGXEvent, EventListener, Export, LocalEvent, RPCEvent, RPCRegister } from '@dgx/server/decorators';
+import {
+  DGXEvent,
+  EventListener,
+  Export,
+  ExportRegister,
+  LocalEvent,
+  RPCEvent,
+  RPCRegister,
+} from '@dgx/server/decorators';
 import { getVinForVeh } from 'helpers/vehicle';
 import vinManager from 'modules/identification/classes/vinmanager';
 import { getConfigByEntity } from 'modules/info/service.info';
@@ -12,6 +20,7 @@ import { handleStanceOnCosmeticChange, loadStance } from 'modules/stances/servic
 
 @RPCRegister()
 @EventListener()
+@ExportRegister()
 class BennysManager extends Util.Singleton<BennysManager>() {
   private logger: winston.Logger;
   private spotData: Map<string, Bennys.SpotData>;

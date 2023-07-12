@@ -212,6 +212,7 @@ export const enterBennys = async (fromAdminMenu = false) => {
     originalStance
   );
   if (!entered) {
+    Notifications.add('Je kan Bennys niet betreden met dit voertuig');
     FreezeEntityPosition(plyVeh, false);
     return;
   }
