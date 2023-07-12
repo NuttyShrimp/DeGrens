@@ -153,5 +153,13 @@
         }
       ]
     }
+  },
+  "evo9": {
+    "defaultStance": {
+      "frontLeft": 0.74,
+      "frontRight": 0.74,
+      "backLeft": 0.76,
+      "backRight": 0.76
+    }
   }
 }
