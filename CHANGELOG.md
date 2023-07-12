@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Override CID entry toegevoegd om kofi vehicles te kunnen assignen aan offline vehicles
 
 ### Fixed
+- Motor gaat nu uit tijdens noclip om engine sounds te voorkomen
 
 ## [1.2.9]
 

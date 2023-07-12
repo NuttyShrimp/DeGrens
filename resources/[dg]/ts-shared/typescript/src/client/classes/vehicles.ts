@@ -103,6 +103,10 @@ class Vehicles {
     const vehRoll = GetEntityRoll(vehicle);
     return vehRoll > 65 || vehRoll < -65;
   };
+
+  setEngineState = (vehicle: number, state: boolean, instantly = false) => {
+    global.exports['dg-vehicles'].setEngineState(vehicle, state, instantly);
+  };
 }
 
 export default {
