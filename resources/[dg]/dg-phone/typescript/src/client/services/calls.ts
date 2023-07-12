@@ -2,10 +2,8 @@ import { Events, Notifications, Peek, Police, RPC, UI } from '@dgx/client';
 import { playPhoneSound, stopPhoneSound } from 'services/sound';
 import { canOpenPhone, setState } from 'services/state';
 
-import { CallType } from '../../shared/enums/callType';
-
-UI.RegisterUICallback('phone/startCall', async (data: { phone: string; isAnon: CallType }, cb) => {
-  const soundId = await RPC.execute('phone:calls:start', data);
+UI.RegisterUICallback('phone/startCall', async (data: { phone: string; type: Calls.CallType }, cb) => {
+  const soundId = await RPC.execute('phone:calls:start', { phone: data.phone, type: data.type }); // avoid sending along _metadata entry of data
   if (soundId) {
     playPhoneSound('dial', soundId);
   }
@@ -93,7 +91,7 @@ Peek.addModelEntry(
           UI.SendAppEvent('phone', {
             appName: 'phone',
             action: 'startCall',
-            data: { target: result.values.phoneNumber, type: CallType.ANON },
+            data: { target: result.values.phoneNumber, type: 'anon' satisfies Calls.CallType },
           });
         },
         canInteract: () => !Police.isInPrison(),
@@ -128,6 +126,6 @@ asyncExports('prisonCall', async () => {
   UI.SendAppEvent('phone', {
     appName: 'phone',
     action: 'startCall',
-    data: { target: result.values.phone, type: CallType.PRISON },
+    data: { target: result.values.phone, type: 'prison' satisfies Calls.CallType },
   });
 });

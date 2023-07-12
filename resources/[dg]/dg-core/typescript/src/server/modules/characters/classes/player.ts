@@ -1,7 +1,7 @@
 import { SQL, Util, Sync } from '@dgx/server';
 import { getModule } from 'moduleController';
 import { characterLogger } from '../logger.character';
-import { defaultCharinfo, defaultMetadata, generateDNA, generatePhone } from '../helpers.character';
+import { defaultCharinfo, defaultMetadata, generateDNA } from '../helpers.character';
 import { mainLogger } from 'sv_logger';
 
 export class Player implements Core.Characters.Player {
@@ -137,7 +137,7 @@ export class Player implements Core.Characters.Player {
     const charinfo = {} as Core.Characters.Charinfo;
     for (const key of Object.keys(defaultCharinfo) as (keyof Core.Characters.Charinfo)[]) {
       if (key === 'phone') {
-        charinfo.phone = dbData.phone ?? (await generatePhone());
+        charinfo.phone = dbData.phone ?? (await getModule('characters').generatePhone());
         continue;
       }
 

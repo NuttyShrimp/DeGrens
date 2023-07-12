@@ -14,4 +14,6 @@ declare namespace Calls {
     state: CallState;
     type: CallType;
   };
+
+  type CallType = 'normal' | 'anon' | 'prison';
 }

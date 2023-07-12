@@ -44,6 +44,10 @@ class Phone {
   sendOfflineMail(cid: number, subject: string, sender: string, message: string): Promise<void> {
     return global.exports['dg-phone'].addOfflineMail(cid, subject, sender, message);
   }
+
+  onPlayerCalledNumber = (cb: (plyId: number, phoneNumber: string, type: 'normal' | 'anon' | 'prison') => void) => {
+    on('phone:calls:started', cb);
+  };
 }
 
 export default {

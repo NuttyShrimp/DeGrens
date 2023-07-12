@@ -1,10 +1,8 @@
 import { RPC } from '@dgx/server';
 
-import { CallType } from '../../../shared/enums/callType';
-
 import { endCall, getCallIdForPly, initiateCall, startCall } from './service.calls';
 
-RPC.register('phone:calls:start', (plyId, data: { phone: string; type: CallType }) => {
+RPC.register('phone:calls:start', (plyId, data: { phone: string; type: Calls.CallType }) => {
   if (!data.phone) return;
   return startCall(plyId, data.phone, data.type);
 });
