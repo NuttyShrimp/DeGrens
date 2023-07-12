@@ -1,0 +1,6 @@
+{
+  "models": ["prop_parkingpay", "prop_parknmeter_01", "prop_parknmeter_02"],
+  "policeCallChance": 0.2,
+  "loot": [20, 40],
+  "lockpickQualityDecrease": 3
+}

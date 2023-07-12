@@ -6,6 +6,7 @@ declare namespace Criminal {
     fence: Fence.Config;
     atm: ATM.Config;
     oxyrun: Oxyrun.Config;
+    parkingmeters: Parkingmeters.Config;
   };
 
   namespace Weed {
@@ -126,6 +127,15 @@ declare namespace Criminal {
         minZ: number;
         maxZ: number;
       };
+    };
+  }
+
+  namespace Parkingmeters {
+    type Config = {
+      models: string[];
+      policeCallChance: number;
+      loot: [min: number, max: number];
+      lockpickQualityDecrease: number;
     };
   }
 }
