@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Bennys repair prijs berekening aangepast
 - PostOP payout getweaked
 - KingPills Bandage crafting recipe en uses aangepast
+- Kans op regen verlaagd
 
 ### Fixed
 - Motor gaat nu uit tijdens noclip om engine sounds te voorkomen

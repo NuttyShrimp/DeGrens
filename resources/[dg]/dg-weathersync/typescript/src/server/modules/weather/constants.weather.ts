@@ -18,8 +18,8 @@ export const WEATHERS: Record<
     windSpeed: 0.5,
     temperatureRange: [90, 110],
     transitions: [
-      { type: 'CLEAR', percentage: 60 },
-      { type: 'OVERCAST', percentage: 40 },
+      { type: 'CLEAR', percentage: 75 },
+      { type: 'OVERCAST', percentage: 25 },
     ],
   },
   CLEAR: {
@@ -28,10 +28,10 @@ export const WEATHERS: Record<
     temperatureRange: [80, 95],
     transitions: [
       { type: 'FOGGY', percentage: 10 },
-      { type: 'CLEAR', percentage: 20 },
-      { type: 'CLOUDS', percentage: 20 },
+      { type: 'CLEAR', percentage: 15 },
+      { type: 'CLOUDS', percentage: 15 },
       { type: 'SMOG', percentage: 10 },
-      { type: 'EXTRASUNNY', percentage: 40 },
+      { type: 'EXTRASUNNY', percentage: 50 },
     ],
   },
   CLEARING: {
@@ -39,11 +39,11 @@ export const WEATHERS: Record<
     windSpeed: 4,
     temperatureRange: [75, 85],
     transitions: [
-      { type: 'FOGGY', percentage: 10 },
+      { type: 'FOGGY', percentage: 5 },
       { type: 'CLOUDS', percentage: 15 },
-      { type: 'SMOG', percentage: 15 },
+      { type: 'SMOG', percentage: 10 },
       { type: 'CLEAR', percentage: 30 },
-      { type: 'EXTRASUNNY', percentage: 30 },
+      { type: 'EXTRASUNNY', percentage: 40 },
     ],
   },
   OVERCAST: {
@@ -52,12 +52,12 @@ export const WEATHERS: Record<
     temperatureRange: [80, 80],
     transitions: [
       { type: 'RAIN', percentage: 5 },
-      { type: 'THUNDER', percentage: 5 },
-      { type: 'CLOUDS', percentage: 10 },
-      { type: 'SMOG', percentage: 15 },
+      { type: 'THUNDER', percentage: 1 },
+      { type: 'CLOUDS', percentage: 9 },
+      { type: 'SMOG', percentage: 10 },
       { type: 'FOGGY', percentage: 15 },
       { type: 'CLEAR', percentage: 25 },
-      { type: 'EXTRASUNNY', percentage: 25 },
+      { type: 'EXTRASUNNY', percentage: 33 },
     ],
   },
   SMOG: {
