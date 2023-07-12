@@ -93,6 +93,10 @@ class Vehicles {
   setVehicleDoorsLocked = (vehicle: number, locked: boolean) => {
     SetVehicleDoorsLocked(vehicle, locked ? 2 : 1);
   };
+
+  blockVinInBennys = (vin: string) => {
+    global.exports['dg-vehicles'].blockVinInBennys(vin);
+  };
 }
 
 export default {

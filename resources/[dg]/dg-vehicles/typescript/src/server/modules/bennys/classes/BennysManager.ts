@@ -1,5 +1,5 @@
 import { Financials, TaxIds, Util } from '@dgx/server';
-import { DGXEvent, EventListener, LocalEvent, RPCEvent, RPCRegister } from '@dgx/server/decorators';
+import { DGXEvent, EventListener, Export, LocalEvent, RPCEvent, RPCRegister } from '@dgx/server/decorators';
 import { getVinForVeh } from 'helpers/vehicle';
 import vinManager from 'modules/identification/classes/vinmanager';
 import { getConfigByEntity } from 'modules/info/service.info';
@@ -16,12 +16,14 @@ class BennysManager extends Util.Singleton<BennysManager>() {
   private logger: winston.Logger;
   private spotData: Map<string, Bennys.SpotData>;
   private noChargeSpots: Set<string>; // For admin menu
+  private blockedVins: Set<string>; // vins which cant enter a bennys
 
   constructor() {
     super();
     this.logger = mainLogger.child({ module: 'BennysManager' });
     this.spotData = new Map();
     this.noChargeSpots = new Set();
+    this.blockedVins = new Set();
   }
 
   private isSpotFromPlayer = (spotId: string, playerId: number) => this.spotData.get(spotId)?.player === playerId;
@@ -81,6 +83,10 @@ class BennysManager extends Util.Singleton<BennysManager>() {
     const vin = getVinForVeh(veh);
     if (!vin) {
       this.logger.error(`${Util.getName(plyId)} tried to enter bennys with a vehicle with no vin`);
+      return false;
+    }
+    if (this.blockedVins.has(vin)) {
+      this.logger.silly(`${Util.getName(plyId)} tried to enter bennys with a blocked vin`);
       return false;
     }
     this.spotData.set(spotId, {
@@ -257,6 +263,11 @@ class BennysManager extends Util.Singleton<BennysManager>() {
 
   public isNoChargeSpot = (spotId: string) => {
     return this.noChargeSpots.has(spotId);
+  };
+
+  @Export('blockVinInBennys')
+  private blockVinInBennys = (vin: string) => {
+    this.blockedVins.add(vin);
   };
 }
 
