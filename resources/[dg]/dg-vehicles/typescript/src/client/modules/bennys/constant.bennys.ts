@@ -164,4 +164,4 @@ export const TyreSmokeLabels = [
   'Gray Tire Smoke',
 ];
 
-export const MINIMUM_REPAIR_PRICE = 25;
+export const MINIMUM_REPAIR_PRICE = 50;
