@@ -10,6 +10,7 @@ declare namespace Vehicles {
     isFakePlate?: boolean;
     overrideStance?: Stances.Stance;
     engineState?: boolean;
+    doorsLocked?: boolean;
   }) => Promise<
     | {
         vehicle: number;

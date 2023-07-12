@@ -1,4 +1,4 @@
-import { RPC, Sync, Util } from '@dgx/server';
+import { RPC, Sync, Util, Vehicles } from '@dgx/server';
 import { insertVehicleStatus } from 'db/repository';
 import { addWaxedVehicle, cleanVehicle } from 'modules/carwash/service.carwash';
 import { setVehicleNosAmount } from 'modules/nos/service.nos';
@@ -109,6 +109,11 @@ export const spawnVehicle: Vehicles.SpawnVehicleFunction = async data => {
     // engine state
     if (data.engineState !== undefined) {
       setEngineState(vehicle, data.engineState, true);
+    }
+
+    // door locks
+    if (data.doorsLocked !== undefined) {
+      Vehicles.setVehicleDoorsLocked(vehicle, data.doorsLocked);
     }
 
     cleanVehicle(vehicle);
