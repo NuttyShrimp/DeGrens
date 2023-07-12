@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 ### Changed
+- Override CID entry toegevoegd om kofi vehicles te kunnen assignen aan offline vehicles
 
 ### Fixed
 
