@@ -33,8 +33,8 @@ Events.onNet('sync:execute', async (action: string, netId: number, args: unknown
     if (DoesEntityExist(entity) && NetworkHasControlOfEntity(entity)) {
       executeActionHandler(action, entity, ...args);
 
-      // if was owner for less than 600ms, we try again. time was determined to as the least amount for good consistency
-      await Util.Delay(600);
+      // if was owner for less than 1s, we try again. time was determined to as the least amount for good consistency
+      await Util.Delay(1000);
 
       if (DoesEntityExist(entity) && NetworkHasControlOfEntity(entity)) return;
     }

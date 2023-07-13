@@ -87,9 +87,7 @@ Events.onNet('vehicles:keys:toggleLock', (plyId: number, netId: number) => {
   const locked = !Vehicles.getVehicleDoorsLocked(vehicle);
   const soundName = locked ? 'car_lock' : 'car_unlock';
 
-  setImmediate(() => {
-    Vehicles.setVehicleDoorsLocked(vehicle, locked);
-  });
+  Vehicles.setVehicleDoorsLocked(vehicle, locked);
   Sounds.playOnEntity(`vehicles_car_key_lock_${netId}`, soundName, 'DLC_NUTTY_SOUNDS', netId);
 
   // timeout because setter needs to replicate before getter returns correct value
