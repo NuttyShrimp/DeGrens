@@ -10162,5 +10162,17 @@
     "price": 470000,
     "shop": "nfs",
     "type": "land"
+  },
+  {
+    "category": "sports",
+    "model": "23m2",
+    "brand": "BMW",
+    "name": "M2 2023",
+    "class": "A+",
+    "defaultStock": 5,
+    "restockTime": 14,
+    "price": 207500,
+    "shop": "nfs",
+    "type": "land"
   }
 ]
