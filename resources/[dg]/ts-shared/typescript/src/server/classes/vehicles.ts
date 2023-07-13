@@ -91,7 +91,23 @@ class Vehicles {
   };
 
   setVehicleDoorsLocked = (vehicle: number, locked: boolean) => {
-    SetVehicleDoorsLocked(vehicle, locked ? 2 : 1);
+    let triesRemaining = 3;
+
+    const t = setInterval(() => {
+      if (triesRemaining === 0) {
+        clearInterval(t);
+        return;
+      }
+
+      const currentlyLocked = this.getVehicleDoorsLocked(vehicle);
+      if (currentlyLocked === locked) {
+        clearInterval(t);
+        return;
+      }
+
+      SetVehicleDoorsLocked(vehicle, locked ? 2 : 1);
+      triesRemaining--;
+    }, 250);
   };
 
   blockVinInBennys = (vin: string) => {
