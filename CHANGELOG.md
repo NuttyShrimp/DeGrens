@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - removeUiFocus commando toegevoegd om je cursor weg te halen wanneer deze vast zit op je scherm
 - Manier toegevoegd om intern voertuig te blokkeren uit Bennys
 - Kofi voertuigen toegevoegd
+- Serverside functions toegevoegd om map NPCs te spawnen
 
 ### Changed
 - Override CID entry toegevoegd om kofi vehicles te kunnen assignen aan offline vehicles

@@ -1,7 +1,8 @@
-import { Auth, Events } from '@dgx/server/classes';
-import { getNpcConfig } from 'services/config';
+import { Auth } from '@dgx/server/classes';
+import { awaitNpcConfigLoad } from 'services/config';
+import { dispatchAllNpcsToClient } from 'services/npcs';
 
 Auth.onAuth(async plyId => {
-  const config = await getNpcConfig();
-  Events.emitNet('npcs:client:loadConfig', plyId, config);
+  await awaitNpcConfigLoad();
+  dispatchAllNpcsToClient(plyId);
 });

@@ -20,6 +20,7 @@ import doorlock from './doorlock';
 import particles from './particles';
 import core from './core';
 import business from './business';
+import npcs from './npcs';
 
 export const { Events, RPC, SQL, API, Auth } = events;
 export const { Util, Status, Reputations, SyncedObjects, PropRemover } = util;
@@ -43,3 +44,4 @@ export const { Sounds } = sounds;
 export const { DoorLock } = doorlock;
 export const { Particles } = particles;
 export const { Core } = core;
+export const { Npcs } = npcs;

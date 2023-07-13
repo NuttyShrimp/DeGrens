@@ -1,19 +1,15 @@
-import { Auth, Events, Inventory, Notifications, Vehicles } from '@dgx/server';
+import { Config, Events, Inventory, Notifications, Vehicles } from '@dgx/server';
 
-import { getLocations, loadConfig, openRentList, rentVehicle } from './service.rental';
+import { loadConfig, openRentList, rentVehicle } from './service.rental';
 
-setImmediate(() => {
-  loadConfig();
+setImmediate(async () => {
+  await Config.awaitConfigLoad();
+  const config = Config.getModuleConfig<Rentals.Config>('rentals');
+  loadConfig(config);
 });
 
-Auth.onAuth(plyId => {
-  Events.emitNet('misc:rentals:loadLocations', plyId, getLocations());
-});
-
-on('dg-config:moduleLoaded', async (name: string) => {
-  if (name !== 'rentals') return;
-  await loadConfig();
-  Events.emitNet('misc:rentals:loadLocations', -1, getLocations());
+Config.onModuleLoad<Rentals.Config>('rentals', config => {
+  loadConfig(config);
 });
 
 Events.onNet('misc:rentals:openList', (src: number, locationId: string) => {

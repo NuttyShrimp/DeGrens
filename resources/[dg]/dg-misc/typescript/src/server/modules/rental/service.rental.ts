@@ -1,14 +1,39 @@
-import { Admin, Config, Financials, Inventory, Notifications, Phone, TaxIds, UI, Util, Vehicles } from '@dgx/server';
-
+import { Admin, Financials, Inventory, Notifications, Phone, TaxIds, UI, Util, Vehicles, Npcs } from '@dgx/server';
 import { rentalLogger } from './logger.rental';
 
 let config: Rentals.Config;
 
 export const getLocations = () => config.locations;
 
-export const loadConfig = async () => {
-  await Config.awaitConfigLoad();
-  config = Config.getModuleConfig('rentals');
+export const loadConfig = (c: Rentals.Config) => {
+  config = c;
+
+  // npcs module will handle removing dupes
+  Npcs.add(
+    config.locations.map<NpcData>(l => ({
+      id: `misc_vehiclerentals_${l.id}`,
+      model: 'cs_josef',
+      position: l.coords,
+      heading: l.coords.w,
+      distance: 50.0,
+      settings: {
+        invincible: true,
+        ignore: true,
+        freeze: true,
+        collision: true,
+      },
+      flags: {
+        isRentalDealer: true,
+        rentalSpot: l.id,
+      },
+      scenario: 'WORLD_HUMAN_CLIPBOARD',
+      blip: {
+        title: 'Vehicle Rentals',
+        sprite: 431,
+        color: 7,
+      },
+    }))
+  );
 };
 
 const getSpawnLocation = (locId: string): Vec4 | undefined => {

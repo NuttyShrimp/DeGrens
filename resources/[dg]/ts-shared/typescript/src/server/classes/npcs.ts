@@ -27,14 +27,6 @@ class Npcs {
       this.npcIdsToDelete.delete(id);
     }
   };
-
-  public getPedData = (ped: number) => {
-    return global.exports['dg-npcs'].getPedData(ped);
-  };
-
-  public setEnabled = (npcId: string, enabled: boolean) => {
-    global.exports['dg-npcs'].setNpcEnabled(npcId, enabled);
-  };
 }
 
 export default {

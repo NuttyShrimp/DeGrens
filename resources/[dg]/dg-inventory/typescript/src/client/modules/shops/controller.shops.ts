@@ -9,7 +9,7 @@ Peek.addFlagEntry('isShopKeeper', {
       action: (_, entity) => {
         if (!entity) return;
         PlayPedAmbientSpeechNative(entity, 'SHOP_GREET', 'SPEECH_PARAMS_FORCE_SHOUTED');
-        const npcId: string = Npcs.findPedData(entity)?.id;
+        const npcId: string = Npcs.getPedData(entity)?.id;
         if (!npcId) return;
         const shop = npcId.replace(/^(shop_)/, '');
         contextManager.openInventory({ type: 'shop', identifier: shop });

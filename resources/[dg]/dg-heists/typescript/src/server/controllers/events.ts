@@ -1,4 +1,4 @@
-import { Auth, Config, Core, Events, Util } from '@dgx/server';
+import { Auth, Config, Core, Events } from '@dgx/server';
 import heistManager from 'classes/heistmanager';
 import config from 'services/config';
 
