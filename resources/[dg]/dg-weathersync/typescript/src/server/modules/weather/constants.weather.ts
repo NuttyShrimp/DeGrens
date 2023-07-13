@@ -57,7 +57,7 @@ export const WEATHERS: Record<
       { type: 'SMOG', percentage: 10 },
       { type: 'FOGGY', percentage: 15 },
       { type: 'CLEAR', percentage: 25 },
-      { type: 'EXTRASUNNY', percentage: 33 },
+      { type: 'EXTRASUNNY', percentage: 35 },
     ],
   },
   SMOG: {
