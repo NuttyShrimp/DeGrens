@@ -8,7 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
-- Default stance toegevoegd voor evo9
+- Default stance toegevoegd voor evo9, rcf
 - Nieuwe kleine criminele activiteit toegevoegd
 - Extra loot toegevoegd aan vuilbakken doorzoeken
 - removeUiFocus commando toegevoegd om je cursor weg te halen wanneer deze vast zit op je scherm

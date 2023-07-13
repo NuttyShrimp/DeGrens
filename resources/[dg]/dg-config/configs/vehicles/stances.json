@@ -161,5 +161,21 @@
       "backLeft": 0.76,
       "backRight": 0.76
     }
+  },
+  "rcf": {
+    "upgrade": {
+      "component": "sideSkirt",
+      "possibilities": [
+        {
+          "value": 0,
+          "stance": {
+            "frontLeft": 0.86,
+            "frontRight": 0.86,
+            "backLeft": 0.85,
+            "backRight": 0.85
+          }
+        }
+      ]
+    }
   }
 }
