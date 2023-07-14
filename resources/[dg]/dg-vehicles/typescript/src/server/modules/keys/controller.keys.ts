@@ -1,8 +1,13 @@
-import { Auth, Core, Events, Notifications, Sounds, Util, Vehicles } from '@dgx/server';
+import { Core, Events, Notifications, Sounds, Util, Vehicles } from '@dgx/server';
 import { getVinForNetId } from '../../helpers/vehicle';
 import { keyManager } from './classes/keymanager';
-import { handleDoorSuccess, handleFail, handleHotwireSuccess, startVehicleLockpick } from './service.keys';
-import { NO_LOCK_CLASSES } from './constants.keys';
+import {
+  handleDoorSuccess,
+  handleFail,
+  handleHotwireSuccess,
+  setVehicleCannotBeLockpicked,
+  startVehicleLockpick,
+} from './service.keys';
 
 on('doorlock:server:useLockpick', (src: number, itemId: string) => {
   startVehicleLockpick(src, itemId);
@@ -100,3 +105,5 @@ Events.onNet('vehicles:keys:toggleLock', (plyId: number, netId: number) => {
     }
   }, 500);
 });
+
+global.exports('setVehicleCannotBeLockpicked', setVehicleCannotBeLockpicked);

@@ -113,6 +113,10 @@ class Vehicles {
   blockVinInBennys = (vin: string) => {
     global.exports['dg-vehicles'].blockVinInBennys(vin);
   };
+
+  setVehicleCannotBeLockpicked = (vin: string, cannotBeLockpicked: boolean, rejectMessage?: string) => {
+    global.exports['dg-vehicles'].setVehicleCannotBeLockpicked(vin, cannotBeLockpicked, rejectMessage);
+  };
 }
 
 export default {

@@ -30,6 +30,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Phone Mails blijven nu staan als je relogged tijdens dezelfde restart
 - Tweak houserobbery loot
 - Vallen bij springen verminderd
+- Optie om ervoor te zorgen dat voertuigen met bepaalde vins niet meer gelockpicked kunnen worden
 
 ### Fixed
 - Motor gaat nu uit tijdens noclip om engine sounds te voorkomen

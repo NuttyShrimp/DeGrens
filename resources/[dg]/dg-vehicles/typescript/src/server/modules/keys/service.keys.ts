@@ -22,6 +22,8 @@ const vehClassToDifficulty: Record<CarClass, { speed: number; size: number }> = 
 // Map of number onto UUID's
 const activeLockPickers = new Map<number, { id: string; vehicle: number; itemId: string }>();
 
+const nonLockpickableVins = new Map<string, string>(); // key: vin, value: reject message
+
 // handle doors of new vehicles
 export const handleVehicleLock = async (vehicle: number, vehicleClass?: number) => {
   const driver = GetPedInVehicleSeat(vehicle, -1);
@@ -93,6 +95,13 @@ export const startVehicleLockpick = async (src: number, itemId: string) => {
   // Check if already has keys
   const vin = getVinForVeh(targetVehicle);
   if (!vin) return;
+
+  const rejectMessage = nonLockpickableVins.get(vin);
+  if (rejectMessage) {
+    Notifications.add(src, rejectMessage, 'error');
+    return;
+  }
+
   if (keyManager.hasKey(vin, src)) {
     Notifications.add(src, 'Ga je je eigen voertuig lockpicken?', 'error');
     return;
@@ -176,3 +185,11 @@ export const handleHotwireSuccess = (src: number, id: string) => {
   activeLockPickers.delete(src);
 };
 // endregion
+
+export const setVehicleCannotBeLockpicked = (vin: string, cannotBeLockpicked: boolean, rejectMessage?: string) => {
+  if (cannotBeLockpicked) {
+    nonLockpickableVins.set(vin, rejectMessage ?? 'Je kan dit voertuig niet lockpicken');
+  } else {
+    nonLockpickableVins.delete(vin);
+  }
+};
