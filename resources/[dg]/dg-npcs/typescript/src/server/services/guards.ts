@@ -1,4 +1,4 @@
-import { Sync, Util } from '@dgx/server';
+import { Events, Sync, Util } from '@dgx/server';
 import { mainLogger } from 'sv_logger';
 
 const guards = new Map<string, { ped: number; deleteTimeout: NodeJS.Timeout; data: NPCs.Guard }>();
@@ -34,7 +34,7 @@ export const spawnGuard = async (guardData: NPCs.Guard) => {
 
   Sync.executeAction('npcs:guards:setup', ped, guardId, guardData);
 
-  const deleteTimeout = startDeleteTimeout(guardId, guardData.deleteTime?.default ?? 10 * 60);
+  const deleteTimeout = startDeleteTimeout(guardId, guardData.deleteTime?.alive ?? 10 * 60);
   guards.set(guardId, { ped, deleteTimeout, data: guardData });
 };
 
@@ -44,8 +44,40 @@ export const handleGuardDied = (guardId: string) => {
 
   clearTimeout(guardInfo.deleteTimeout);
 
-  const deleteTimeout = startDeleteTimeout(guardId, guardInfo.data.deleteTime?.onDead ?? 60);
+  const deleteTimeout = startDeleteTimeout(guardId, guardInfo.data.deleteTime?.dead ?? 60);
   guards.set(guardId, { ...guardInfo, deleteTimeout });
+
+  // execute onDeath handler
+  guardInfo.data.onDeath?.();
+};
+
+const handleEntityDeleted = (guardId: string) => {
+  const guardInfo = guards.get(guardId);
+  if (!guardInfo) return;
+
+  clearTimeout(guardInfo.deleteTimeout);
+  guards.delete(guardId);
+
+  // execute onDeath handler
+  guardInfo.data.onDeath?.();
+};
+
+export const transferGuardDeathCheck = async (guardId: string) => {
+  const guardInfo = guards.get(guardId);
+  if (!guardInfo) return;
+
+  if (!DoesEntityExist(guardInfo.ped)) {
+    handleEntityDeleted(guardId);
+    return;
+  }
+
+  const owner = await Util.awaitOwnership(guardInfo.ped);
+  if (!owner) {
+    handleEntityDeleted(guardId);
+    return;
+  }
+
+  Events.emitNet('npcs:guards:startDeathCheck', owner, NetworkGetNetworkIdFromEntity(guardInfo.ped), guardId);
 };
 
 const startDeleteTimeout = (guardId: string, delay: number) => {

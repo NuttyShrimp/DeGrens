@@ -29,8 +29,8 @@ export const handlePickupEnter = async (position: Vec3) => {
       isKingPillsEnemy: true,
     },
     deleteTime: {
-      default: 180,
-      onDead: 30,
+      alive: 180,
+      dead: 30,
     },
   });
 

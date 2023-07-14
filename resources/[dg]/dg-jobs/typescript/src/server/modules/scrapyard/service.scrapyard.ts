@@ -112,8 +112,8 @@ export const handleVehicleLockpick = async (plyId: number, vehicle: number) => {
     model: PED_MODELS[Math.floor(Math.random() * PED_MODELS.length)],
     position: job.pedLocation,
     deleteTime: {
-      default: 180,
-      onDead: 30,
+      alive: 180,
+      dead: 30,
     },
   });
 

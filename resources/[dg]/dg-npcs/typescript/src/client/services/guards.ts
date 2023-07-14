@@ -1,6 +1,4 @@
-import { Events } from '@dgx/client';
-
-const guards = new Map<number, string>(); // entity to guardId
+import { Events, Sync } from '@dgx/client';
 
 export const setupGuard = (ped: number, guardId: string, guardData: NPCs.Guard) => {
   SetPedRelationshipGroupHash(ped, GetHashKey('ATTACK_ALL_PLAYERS'));
@@ -29,14 +27,19 @@ export const setupGuard = (ped: number, guardId: string, guardData: NPCs.Guard) 
 
   TaskCombatPed(ped, PlayerPedId(), 0, 16);
 
-  guards.set(ped, guardId);
+  startDeathCheck(ped, guardId);
 };
 
-// only client used for setting up guard will check damage
-export const handleEntityDamaged = (victim: number, culprit: number) => {
-  const guardId = guards.get(victim);
-  if (!guardId) return;
-  if (!IsPedInjured(victim)) return;
+export const startDeathCheck = (ped: number, guardId: string) => {
+  const deathThread = setInterval(() => {
+    if (!DoesEntityExist(ped) || NetworkGetEntityOwner(ped) !== PlayerId()) {
+      Events.emitNet('npcs:guards:transferDeathCheck', guardId);
+      clearInterval(deathThread);
+    }
 
-  Events.emitNet('npcs:guards:died', guardId);
+    if (IsPedInjured(ped)) {
+      Events.emitNet('npcs:guards:died', guardId);
+      clearInterval(deathThread);
+    }
+  }, 500);
 };
