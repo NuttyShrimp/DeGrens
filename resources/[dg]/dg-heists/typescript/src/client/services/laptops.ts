@@ -57,7 +57,11 @@ Events.onNet(
     const hackSuccess = await Minigames.visiongame(laptopConfig.gridSize, laptopConfig.time);
     Events.emitNet('heists:laptops:finishHack', hackSuccess);
     if (hackSuccess) {
-      Phone.sendMail('Openen Deur', 'Hackermans', 'Ik doe er alles aan om zo snel mogelijk de deur te laten opengaan.');
+      Phone.addMail({
+        subject: 'Openen Deur',
+        sender: 'Hackermans',
+        message: 'Ik doe er alles aan om zo snel mogelijk de deur te laten opengaan.',
+      });
     }
 
     await Util.Delay(750);

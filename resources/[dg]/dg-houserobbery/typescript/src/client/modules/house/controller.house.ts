@@ -108,9 +108,9 @@ Events.onNet('houserobbery:client:setSelectedHouse', (houseId: string, coords: V
     SetBlipAlpha(radiusBlip, blipAlpha);
   }, (timeToFind * 60000) / 150);
 
-  Phone.sendMail(
-    'Huisinbraak',
-    'Bert B.',
-    `Je bent geselecteerd voor de job. Je hebt ${timeToFind}min om binnen te geraken! De locatie staat op je GPS gemarkeerd.`
-  );
+  Phone.addMail({
+    subject: 'Huisinbraak',
+    sender: 'Bert B.',
+    message: `Je bent geselecteerd voor de job. Je hebt ${timeToFind}min om binnen te geraken! De locatie staat op je GPS gemarkeerd.`,
+  });
 });

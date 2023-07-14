@@ -1,6 +1,5 @@
 import { Core, Events, UI } from '@dgx/client';
 import { cleanupPauseCheck } from 'services/controls';
-import { restoreCachedMails } from 'services/mail';
 import { closePhone, loadPhone, openPhone, unloadPhone } from 'services/mgmt';
 import { restoreStickyNotifs } from 'services/notifications';
 import { setState } from 'services/state';
@@ -43,7 +42,6 @@ UI.onUIReload(() => {
 
   setTimeout(() => {
     restoreStickyNotifs();
-    restoreCachedMails();
   }, 2000);
 });
 

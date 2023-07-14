@@ -307,12 +307,11 @@ class GangManager extends Util.Singleton<GangManager>() {
       for (const memberServerId of gang.getOnlineMembers()) {
         Inventory.doesPlayerHaveItems(memberServerId, ['laptop', 'vpn']).then(hasItems => {
           if (!hasItems) return;
-          Phone.sendMail(
-            memberServerId,
-            'Family Activity Message',
-            'Unknown',
-            'Er is een nieuw bericht te vinden in je Family Activity app feed.'
-          );
+          Phone.addMail(memberServerId, {
+            subject: 'Family Activity Message',
+            sender: 'Unknown',
+            message: 'Er is een nieuw bericht te vinden in je Family Activity app feed.',
+          });
         });
       }
     }

@@ -76,7 +76,11 @@ export const startKingPillsJob = (plyId: number) => {
     enemyPed: null,
   });
 
-  Phone.sendMail(plyId, 'Nieuwe Job', 'King Pills', 'Bekijk je GPS om de joblocatie te bekijken.');
+  Phone.addMail(plyId, {
+    subject: 'Nieuwe Job',
+    sender: 'King Pills',
+    message: 'Bekijk je GPS om de joblocatie te bekijken.',
+  });
   Events.emitNet('business:kingpills:start', plyId, locations[locationIdx]);
 
   Util.Log(

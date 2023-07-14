@@ -89,12 +89,12 @@ export const assignLocationToGroup = async (ownerId: number) => {
   group.members.forEach(member => {
     if (member.serverId === null) return;
     Events.emitNet('jobs:scrapyard:startJob', member.serverId, netId, location.vehicleLocation);
-    Phone.sendMail(
-      member.serverId,
-      'Voertuig Opdracht',
-      'Scrapyard Inc.',
-      'Het gevraagde voertuig staat op je GPS. Gelieve het voertuig naar deze werkplaats te brengen. Eenmaal je hier bent kan je bepaalde onderdelen demonteren. Geef me daarna de onderdelen om de opdracht af te ronden.'
-    );
+    Phone.addMail(member.serverId, {
+      subject: 'Voertuig Opdracht',
+      sender: 'Scrapyard Inc.',
+      message:
+        'Het gevraagde voertuig staat op je GPS. Gelieve het voertuig naar deze werkplaats te brengen. Eenmaal je hier bent kan je bepaalde onderdelen demonteren. Geef me daarna de onderdelen om de opdracht af te ronden.',
+    });
   });
 };
 

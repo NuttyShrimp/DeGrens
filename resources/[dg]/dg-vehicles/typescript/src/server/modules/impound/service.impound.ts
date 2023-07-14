@@ -246,12 +246,11 @@ const permaImpoundVehicle = async (vin: string) => {
   const vehicleInfo = await getPlayerVehicleInfo(vin);
   if (!vehicleInfo) return;
   await doVehicleForfeiture(vin);
-  Phone.sendOfflineMail(
-    vehicleInfo.cid,
-    'Permanente inbeslagname voertuig',
-    'Hof van Cassatie',
-    `Het hof van Cassatie heeft vandaag beslist dat uw voertuig met nummerplaat <strong>${vehicleInfo.plate}</strong> en voertuig identificatie nummer <strong>${vehicleInfo.vin}</strong> van op heden permanent in beslaggenome is wegens het meermaals gebruiken van het voertuig voor onwettige redenen`
-  );
+  Phone.addOfflineMail(vehicleInfo.cid, {
+    subject: 'Permanente inbeslagname voertuig',
+    sender: 'Hof van Cassatie',
+    message: `Het hof van Cassatie heeft vandaag beslist dat uw voertuig met nummerplaat <strong>${vehicleInfo.plate}</strong> en voertuig identificatie nummer <strong>${vehicleInfo.vin}</strong> van op heden permanent in beslaggenome is wegens het meermaals gebruiken van het voertuig voor onwettige redenen`,
+  });
 };
 
 export const checkPermaImpoundVehicleStock = async () => {

@@ -101,12 +101,11 @@ Events.onNet('heists:shop:buy', async (plyId, itemIdx: number) => {
   const boughtItems = (activePickups[cid] ??= []);
   boughtItems.push(shopItem.item);
 
-  Phone.sendMail(
-    plyId,
-    'Aankoop ophalen',
-    'Leverancier',
-    'Je kan je aankoop gaan ophalen bij mijn collega.<br>Hij bevindt zich nog altijd aan het afgelegen huis.'
-  );
+  Phone.addMail(plyId, {
+    subject: 'Aankoop ophalen',
+    sender: 'Leverancier',
+    message: 'Je kan je aankoop gaan ophalen bij mijn collega.<br>Hij bevindt zich nog altijd aan het afgelegen huis.',
+  });
 
   const logMsg = `${Util.getName(plyId)}(${plyId}) bought ${shopItem.item}`;
   shopLogger.silly(logMsg);

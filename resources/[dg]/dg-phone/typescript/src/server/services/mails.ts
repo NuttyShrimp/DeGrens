@@ -1,32 +1,88 @@
-import { Events, SQL } from '@dgx/server';
+import { Events, SQL, Util } from '@dgx/server';
 import { charModule } from 'helpers/core';
 
-const fetchEmails = (cid: number) => {
-  return SQL.query<Mail[]>('SELECT subject, sender, message FROM phone_mails WHERE cid=? ORDER BY id DESC', [cid]);
+const mailsPerCid = new Map<number, Phone.Mails.Mail[]>();
+
+const registerMailToCid = (cid: number, mail: Phone.Mails.Mail) => {
+  const mails = mailsPerCid.get(cid) ?? [];
+  mails.push(mail);
+  mailsPerCid.set(cid, mails);
 };
 
-const addOfflineMail = async (cid: number, subject: string, sender: string, message: string) => {
-  const plySource = charModule.getServerIdFromCitizenId(cid);
-  if (plySource) {
-    emitNet('phone:mail:add', plySource, subject, sender, message);
+const loadOfflineMails = async (cid: number) => {
+  const dbMails = await SQL.query<Phone.Mails.DBMail[]>(
+    'SELECT subject, sender, message, coords, date FROM phone_mails WHERE cid = ?',
+    [cid]
+  );
+  console.log(dbMails);
+  if (!dbMails) return;
+
+  for (const dbMail of dbMails) {
+    registerMailToCid(cid, {
+      ...dbMail,
+      id: Util.uuidv4(),
+      coords: dbMail.coords ? JSON.parse(dbMail.coords) : undefined,
+    });
   }
-  await SQL.query('INSERT INTO phone_mails (cid, sender, subject, message) VALUES (?, ?, ?, ?)', [
+
+  await SQL.query('DELETE FROM phone_mails WHERE cid = ?', [cid]);
+};
+
+const addOfflineMail = async (cid: number, mailData: Phone.Mails.MailData) => {
+  const plyId = charModule.getServerIdFromCitizenId(cid);
+  if (plyId) {
+    addMail(plyId, mailData);
+    return;
+  }
+
+  await SQL.query('INSERT INTO phone_mails (cid, sender, subject, message, coords, date) VALUES (?, ?, ?, ?, ?, ?)', [
     cid,
-    sender,
-    subject,
-    message,
+    mailData.sender,
+    mailData.subject,
+    mailData.message,
+    mailData.coords ? JSON.stringify(mailData.coords) : null,
+    Date.now(),
   ]);
 };
-asyncExports('addOfflineMail', addOfflineMail);
 
-Events.onNet('dg-phone:load', async src => {
-  const player = charModule.getPlayer(src);
-  if (!player) return;
+const addMail = (plyId: number, mailData: Phone.Mails.MailData) => {
+  const mail: Phone.Mails.Mail = {
+    ...mailData,
+    id: Util.uuidv4(),
+    date: Date.now(),
+  };
 
-  const cid = player.citizenid;
-  const mails = await fetchEmails(cid);
-  mails.forEach(mail => {
-    emitNet('phone:mail:add', src, mail.subject, mail.sender, mail.message);
-  });
-  await SQL.query('DELETE FROM phone_mails WHERE cid = ?', [cid]);
+  const cid = Util.getCID(plyId);
+  registerMailToCid(cid, mail);
+
+  Events.emitNet('phone:mails:add', plyId, mail);
+};
+
+const removeMail = (plyId: number, mailId: string) => {
+  const cid = Util.getCID(plyId);
+  const mails = mailsPerCid.get(cid);
+  if (!mails) return;
+
+  mailsPerCid.set(
+    cid,
+    mails.filter(mail => mail.id !== mailId)
+  );
+};
+
+Events.onNet('dg-phone:load', async plyId => {
+  const cid = Util.getCID(plyId);
+  if (!cid) return;
+
+  await loadOfflineMails(cid);
+
+  const mails = mailsPerCid.get(cid);
+  if (!mails) return;
+
+  Events.emitNet('phone:mails:add', plyId, mails, true);
 });
+
+Events.onNet('phone:mails:add', addMail);
+Events.onNet('phone:mails:remove', removeMail);
+
+global.asyncExports('addOfflineMail', addOfflineMail);
+global.asyncExports('addMail', addMail);

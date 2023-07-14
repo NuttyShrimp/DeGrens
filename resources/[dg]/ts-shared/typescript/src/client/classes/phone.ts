@@ -1,3 +1,5 @@
+import { Events } from './index';
+
 class Phone {
   showNotification(notification: Phone.Notification) {
     global.exports['dg-phone'].addNotification(notification);
@@ -11,8 +13,8 @@ class Phone {
     global.exports['dg-phone'].removeNotification(id, notification);
   }
 
-  sendMail(subject: string, sender: string, mail: string) {
-    global.exports['dg-phone'].sendMail(subject, sender, mail);
+  addMail(mailData: Phone.Mails.MailData) {
+    Events.emitNet('phone:mails:add', mailData);
   }
 }
 

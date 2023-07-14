@@ -37,12 +37,12 @@ class Phone {
     emitNet('dg-phone:client:notification:update', target, id, notification);
   }
 
-  sendMail(target: number, subject: string, sender: string, mail: string) {
-    emitNet('phone:mail:add', target, subject, sender, mail);
+  addMail(plyId: number, mailData: Phone.Mails.MailData) {
+    global.exports['dg-phone'].addMail(plyId, mailData);
   }
 
-  sendOfflineMail(cid: number, subject: string, sender: string, message: string): Promise<void> {
-    return global.exports['dg-phone'].addOfflineMail(cid, subject, sender, message);
+  addOfflineMail(cid: number, mailData: Phone.Mails.MailData): Promise<void> {
+    return global.exports['dg-phone'].addOfflineMail(cid, mailData);
   }
 
   onPlayerCalledNumber = (cb: (plyId: number, phoneNumber: string, type: 'normal' | 'anon' | 'prison') => void) => {

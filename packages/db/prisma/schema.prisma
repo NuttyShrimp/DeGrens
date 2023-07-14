@@ -372,6 +372,8 @@ model phone_mails {
   sender     String     @db.VarChar(255)
   subject    String     @db.VarChar(255)
   message    String     @db.LongText
+  coords     String?    @db.VarChar(255)
+  date       BigInt     @default(0)
   characters characters @relation(fields: [cid], references: [citizenid], onDelete: Cascade, map: "fk_phone_mails_cid")
 
   @@index([cid], map: "fk_phone_mails_cid")

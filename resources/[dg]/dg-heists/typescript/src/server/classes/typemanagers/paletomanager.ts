@@ -104,15 +104,18 @@ export class PaletoManager implements Heists.TypeManager {
 
     setTimeout(() => {
       this.resetCodes();
-      Phone.sendMail(plyId, 'Codes', 'Pol Etto', `Ik kreeg van een contact te horen dat de codes zijn gereset`);
+      Phone.addMail(plyId, {
+        subject: 'Codes',
+        sender: 'Pol Etto',
+        message: 'Ik kreeg van een contact te horen dat de codes zijn gereset',
+      });
     }, codeConfig.resetTime * 60 * 1000);
 
-    Phone.sendMail(
-      plyId,
-      'Codes',
-      'Pol Etto',
-      `De codes worden na ${codeConfig.resetTime} minuten gereset.<br><br>Na het ingeven heb je maar ${codeConfig.lockdownTime} minuten voordat het gebouw in lockdown gaat.`
-    );
+    Phone.addMail(plyId, {
+      subject: 'Codes',
+      sender: 'Pol Etto',
+      message: `De codes worden na ${codeConfig.resetTime} minuten gereset.<br><br>Na het ingeven heb je maar ${codeConfig.lockdownTime} minuten voordat het gebouw in lockdown gaat.`,
+    });
 
     const logMsg = `${Util.getName(plyId)}(${plyId}) has bought codes (${this.currentCode})`;
     this.logger.info(logMsg);

@@ -58,11 +58,12 @@ export const setAssignedVehicle = (veh: typeof assignedVehicle) => {
     return;
   }
 
-  Phone.sendMail(
-    'Querry Medewerker',
-    'Jan Zand',
-    'Je kan een nieuwe locatie bekijken via het voertuig. Indien je wil stoppen, gelieve het voertuig terug te zetten waar je het genomen hebt en je huidige groep te verlaten!'
-  );
+  Phone.addMail({
+    subject: 'Querry Medewerker',
+    sender: 'Jan Zand',
+    message:
+      'Je kan een nieuwe locatie bekijken via het voertuig. Indien je wil stoppen, gelieve het voertuig terug te zetten waar je het genomen hebt en je huidige groep te verlaten!',
+  });
   const { w: vehicleHeading, ...vehiclePosition } = sanddiggingLocations.vehicle;
   PolyZone.addBoxZone('sanddigging_vehicle', vehiclePosition, 10, 10, {
     heading: vehicleHeading,
