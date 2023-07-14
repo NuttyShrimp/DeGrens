@@ -27,6 +27,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Start ingame tijd op middag op dev server
 - Windowtexture dbxultimate gefixt
 - Phone Mails blijven nu staan als je relogged tijdens dezelfde restart
+- Tweak houserobbery loot
 
 ### Fixed
 - Motor gaat nu uit tijdens noclip om engine sounds te voorkomen

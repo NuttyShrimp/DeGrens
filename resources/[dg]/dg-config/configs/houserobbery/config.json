@@ -1,12 +1,12 @@
 {
   "moldChance": 0.5,
   "lootTables": [
-    ["money_roll", "camera", "gameboy", "hifi", "nintendo_switch", "nokia", "psp", "phone"],
+    ["money_roll", "camera", "gameboy", "hifi", "nintendo_switch", "nokia", "psp", "phone", "meth_key_card"],
     ["tv"],
     ["vaas"],
     ["microwave"]
   ],
-  "playerCooldown": 30,
+  "playerCooldown": 20,
   "timeToRob": 15,
   "timeToFind": 15,
   "shellInfo": {
