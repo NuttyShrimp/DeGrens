@@ -3,6 +3,7 @@ import weedPlantManager from 'modules/weed/classes/weedplantmanager';
 import { initializeCornerselling } from 'modules/cornerselling/service.cornerselling';
 import { initializeFence } from 'modules/fence/service.fence';
 import { initializeOxyrun } from 'modules/oxyrun/service.oxyrun';
+import { initializeMethRun } from 'modules/methrun/service.methrun';
 
 import './services/config';
 import './controllers';
@@ -13,6 +14,7 @@ import './modules/fence';
 import './modules/atm';
 import './modules/oxyrun';
 import './modules/parkingmeters';
+import './modules/methrun';
 
 setImmediate(async () => {
   await loadConfig();
@@ -22,4 +24,5 @@ setImmediate(async () => {
   initializeCornerselling();
   initializeFence();
   initializeOxyrun();
+  initializeMethRun();
 });

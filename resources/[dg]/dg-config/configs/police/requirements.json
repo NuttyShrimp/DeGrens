@@ -31,5 +31,8 @@
   },
   "oxyrun": {
     "police": 1
+  },
+  "methrun": {
+    "police": 5
   }
 }

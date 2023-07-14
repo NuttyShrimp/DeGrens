@@ -864,6 +864,17 @@
   },
   {
     "markedForSeizure": true,
+    "name": "processed_meth",
+    "label": "Verwerkte Meth",
+    "decayRate": 240,
+    "image": "processed_meth.png",
+    "size": {
+      "x": 9,
+      "y": 9
+    }
+  },
+  {
+    "markedForSeizure": true,
     "name": "coke_bag",
     "label": "Zakje Coke",
     "useable": true,

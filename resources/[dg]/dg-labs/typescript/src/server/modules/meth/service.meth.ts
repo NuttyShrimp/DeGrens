@@ -176,10 +176,7 @@ export const collectMethLoot = async (plyId: number) => {
   const strain = getRecipeStrain();
   const amount = Math.ceil(Math.ceil(strain) ** 1.3 / 5); // expontential amount bawed on strain
 
-  const currentTime = Math.round(Date.now() / 1000);
   Inventory.addItemToPlayer(plyId, 'meth_brick', 1, {
-    hiddenKeys: ['createTime', 'amount'],
-    createTime: currentTime,
     amount,
   });
   methState.timedOut = true;

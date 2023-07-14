@@ -7,6 +7,7 @@ declare namespace Criminal {
     atm: ATM.Config;
     oxyrun: Oxyrun.Config;
     parkingmeters: Parkingmeters.Config;
+    methrun: Methrun.Config;
   };
 
   namespace Weed {
@@ -136,6 +137,54 @@ declare namespace Criminal {
       policeCallChance: number;
       loot: [min: number, max: number];
       lockpickQualityDecrease: number;
+    };
+  }
+
+  namespace Methrun {
+    type Config = {
+      initialPayment: {
+        crypto: string;
+        amount: number;
+      };
+      delayAfterDropOff: number; // seconds
+      amountOfGuards: number;
+      trackerTime: number; // minutes
+      pricePercentage: number; // percentage you get per bag compared to when cornerselling
+      timeoutBetweenRuns: number; // minutes
+      vehicleModels: string[];
+      finishLocations: Vec4[];
+      dropOffLocations: Vec4[];
+      vehicleLocations: {
+        spawn: Vec4;
+        guards: Vec4[];
+        zone: Vec2[];
+      }[];
+    };
+
+    type ActiveRun = {
+      startCID: number;
+      finishLocation: Config['finishLocations'][number];
+      dropOffLocation: Config['dropOffLocations'][number];
+      vehicleLocation: Config['vehicleLocations'][number];
+      methAmount: number;
+      itemId: string | null;
+      playersInVehicleZone: Map<number>;
+      vehicle: {
+        vin: string | null;
+        trackerId: number | null;
+      };
+      guards: {
+        amountLeftToSpawn: number;
+        amountLeftToKill: number;
+        interval: NodeJS.Timer | null;
+      };
+      state: {
+        dropOffFinished: boolean;
+        vehicleZoneBuilt: boolean;
+        vehicleSpawned: boolean;
+        vehicleLockpicked: boolean;
+        trackerRemoved: boolean;
+      };
     };
   }
 }
