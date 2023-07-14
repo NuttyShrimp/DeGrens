@@ -2,16 +2,14 @@ import { Events, Util, Jobs, RPC } from '@dgx/server';
 import {
   handleKingPillsJobLeave,
   lootEnemy,
-  registerPedSpawned,
   restoreKingPillsJob,
-  shouldKingPillsPedSpawn,
+  handleKingPillsPickupEnter,
   startKingPillsJob,
 } from './service.kingpills';
 
 Events.onNet('business:kingpills:startJob', startKingPillsJob);
 Events.onNet('business:kingpills:loot', lootEnemy);
-Events.onNet('business:kingpills:pedSpawned', registerPedSpawned);
-RPC.register('business:kingpills:shouldSpawn', shouldKingPillsPedSpawn);
+RPC.register('business:kingpills:handlePickupEnter', handleKingPillsPickupEnter);
 
 Util.onCharSpawn(plyId => {
   restoreKingPillsJob(plyId);

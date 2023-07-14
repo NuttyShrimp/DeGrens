@@ -1,9 +1,9 @@
 import { Events } from '@dgx/server';
 
-const npcs = new Map<string, NpcData>();
+const npcs = new Map<string, NPCs.NPC>();
 const configNpcIds = new Set<string>(); // ids of npc that got added from config, these get removed when config gets reloaded
 
-export const addConfigNpcs = (npcData: NpcData[]) => {
+export const addConfigNpcs = (npcData: NPCs.NPC[]) => {
   // remove all existing config npcs that are no longer in config
   const removeIds: string[] = [];
   for (const [_, { id: existingNpcId }] of npcs) {
@@ -25,7 +25,7 @@ export const addConfigNpcs = (npcData: NpcData[]) => {
   });
 };
 
-export const addNpc = (npcData: NpcData | NpcData[]) => {
+export const addNpc = (npcData: NPCs.NPC | NPCs.NPC[]) => {
   if (Array.isArray(npcData)) {
     npcData.forEach(x => npcs.set(x.id, x));
   } else {

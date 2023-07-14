@@ -1,5 +1,4 @@
-import { Events, PolyZone, Util, UI, RPC } from '@dgx/client';
-import { PED_MODELS } from './constants.scrapyard';
+import { Events, PolyZone, UI } from '@dgx/client';
 import {
   cleanupScrapyard,
   removeVehicleBlip,
@@ -19,14 +18,6 @@ Events.onNet('jobs:scrapyard:startJob', (netId: number, location: Vec4 | undefin
   if (location) {
     setVehicleBlip(location);
   }
-});
-
-RPC.register('jobs:scrapyard:spawnPed', async (location: Vec4) => {
-  const model = PED_MODELS[Math.floor(Math.random() * PED_MODELS.length)];
-  const ped = await Util.spawnAggressivePed(model, location);
-  if (!ped) return;
-  TaskCombatPed(ped, PlayerPedId(), 0, 16);
-  return NetworkGetNetworkIdFromEntity(ped);
 });
 
 PolyZone.onEnter('scrapyard_return', () => {

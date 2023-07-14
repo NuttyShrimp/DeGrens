@@ -1,25 +1,10 @@
-import { Core, Events, Inventory, Notifications, Police, RPC, Sounds, Taskbar, Util } from '@dgx/server';
+import { Events, Inventory, Notifications, Police, RPC, Sounds, Taskbar, Util } from '@dgx/server';
 import { getConfig } from 'services/config';
 import { mainLogger } from 'sv_logger';
-import {
-  debugTowerPlayers,
-  getTowerPlyAt,
-  getTowerState,
-  playerLeftTower,
-  resetTowerState,
-  setPlayerAtTower,
-  setTowerState,
-  tryToSpawnTowerPeds,
-} from './service.radiotowers';
-import { radioTowerLogger } from './logger.radiotowers';
+import { getTowerState, resetTowerState, setTowerState, tryToSpawnTowerPeds } from './service.radiotowers';
 
-Events.onNet('materials:radiotower:entered', (plyId: number, towerId: string) => {
-  setPlayerAtTower(towerId, plyId);
-  tryToSpawnTowerPeds(towerId, plyId);
-});
-
-Events.onNet('materials:radiotower:left', (plyId: number, towerId: string) => {
-  playerLeftTower(towerId, plyId);
+Events.onNet('materials:radiotower:entered', (_, towerId: string) => {
+  tryToSpawnTowerPeds(towerId);
 });
 
 RPC.register('materials:radiotower:canDisable', (src: number, towerId: string) => {
@@ -124,35 +109,3 @@ Events.onNet('materials:radiotowers:loot', async (src: number, towerId: string) 
   Util.Log('materials:radiotower:loot', { towerId }, `${Util.getName(src)} has looted a radiotower`, src);
   mainLogger.info(`Radiotower ${towerId} has been looted by ${src}`);
 });
-
-// we delete spawned peds after 10 min
-Events.onNet('materials:radiotower:despawnPeds', (plyId, pedNetIds: number[]) => {
-  const peds = pedNetIds.map(netId => ({ netId, entity: NetworkGetEntityFromNetworkId(netId) }));
-
-  setTimeout(() => {
-    for (const ped of peds) {
-      if (
-        DoesEntityExist(ped.entity) &&
-        GetEntityType(ped.entity) === 1 &&
-        NetworkGetNetworkIdFromEntity(ped.entity) === ped.netId
-      ) {
-        DeleteEntity(ped.entity);
-        radioTowerLogger.debug(`Deleted ped for tower ${ped.netId}`);
-      }
-    }
-  }, 10 * 60 * 1000);
-});
-
-Core.onPlayerUnloaded(plyId => {
-  const towerId = getTowerPlyAt(plyId);
-  if (!towerId) return;
-  playerLeftTower(towerId, plyId);
-});
-
-RegisterCommand(
-  'radiotower:debug',
-  () => {
-    debugTowerPlayers();
-  },
-  true
-);

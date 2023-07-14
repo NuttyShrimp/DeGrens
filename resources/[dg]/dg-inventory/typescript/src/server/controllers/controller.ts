@@ -59,7 +59,7 @@ const addItemToInventory = async (
   const fullMetadata = {
     ...initialMetadata,
     ...metadata,
-    hiddenKeys: [...(initialMetadata.hiddenKeys ?? []), ...(metadata.hiddenKeys ?? [])],
+    hiddenKeys: [...(initialMetadata?.hiddenKeys ?? []), ...(metadata?.hiddenKeys ?? [])],
   };
 
   for (let i = 0; i < amount; i++) {

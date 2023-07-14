@@ -8,7 +8,7 @@ const activeJobs = new Map<
   {
     locationIdx: number;
     failTimeout: NodeJS.Timeout;
-    enemyPed: number | null;
+    someoneEntered: boolean;
   }
 >();
 
@@ -61,10 +61,6 @@ export const startKingPillsJob = (plyId: number) => {
     const active = activeJobs.get(group.id);
     if (!active) return;
 
-    if (active.enemyPed) {
-      DeleteEntity(active.enemyPed);
-    }
-
     activeJobs.delete(group.id);
     Events.emitNet('business:kingpills:cleanup', plyId);
     Notifications.add(plyId, 'De opdracht is mislukt', 'error');
@@ -73,7 +69,7 @@ export const startKingPillsJob = (plyId: number) => {
   activeJobs.set(group.id, {
     locationIdx,
     failTimeout,
-    enemyPed: null,
+    someoneEntered: false,
   });
 
   Phone.addMail(plyId, {
@@ -91,21 +87,23 @@ export const startKingPillsJob = (plyId: number) => {
   );
 };
 
-export const lootEnemy = (plyId: number) => {
+export const lootEnemy = (plyId: number, enemyNetId: number) => {
   const group = Jobs.getGroupByServerId(plyId);
   if (!group) return;
 
   const active = activeJobs.get(group.id);
   if (!active) return;
 
-  if (!active.enemyPed || !DoesEntityExist(active.enemyPed)) return;
+  const enemyPed = NetworkGetEntityFromNetworkId(enemyNetId);
+  if (!enemyPed || !DoesEntityExist(enemyPed)) return;
+  if (!Entity(enemyPed).state.isKingPillsEnemy) return;
 
   const locations = getLocations();
   const location = locations[active.locationIdx];
   if (!location) return;
 
   const plyCoords = Util.getPlyCoords(plyId);
-  const enemyCoords = Util.getEntityCoords(active.enemyPed);
+  const enemyCoords = Util.getEntityCoords(enemyPed);
   if (Math.max(plyCoords.distance(location), enemyCoords.distance(location)) > 50) {
     Notifications.add(plyId, 'Je bent niet bij de locatie', 'error');
     return;
@@ -117,27 +115,10 @@ export const lootEnemy = (plyId: number) => {
   Jobs.leaveGroup(plyId);
 };
 
-export const registerPedSpawned = (plyId: number, enemyNetId: number) => {
-  const group = Jobs.getGroupByServerId(plyId);
-  if (!group) return;
-
-  const active = activeJobs.get(group.id);
-  if (!active) return;
-
-  const enemyPed = NetworkGetEntityFromNetworkId(enemyNetId);
-  if (!enemyPed || !DoesEntityExist(enemyPed)) return;
-
-  active.enemyPed = enemyPed;
-  Entity(enemyPed).state.set('isKingPillsEnemy', true, true);
-};
-
 export const handleKingPillsJobLeave = (plyId: number | null, groupId: string) => {
   const active = activeJobs.get(groupId);
   if (!active) return;
 
-  if (active.enemyPed) {
-    DeleteEntity(active.enemyPed);
-  }
   clearInterval(active.failTimeout);
   activeJobs.delete(groupId);
 
@@ -158,11 +139,12 @@ export const restoreKingPillsJob = (plyId: number) => {
   Events.emitNet('business:kingpills:start', plyId, getLocations()[active.locationIdx]);
 };
 
-export const shouldKingPillsPedSpawn = (plyId: number) => {
+export const handleKingPillsPickupEnter = (plyId: number) => {
   const group = Jobs.getGroupByServerId(plyId);
   if (!group) return;
   const active = activeJobs.get(group.id);
   if (!active) return;
 
-  return active.enemyPed === null;
+  active.someoneEntered = true;
+  return true;
 };

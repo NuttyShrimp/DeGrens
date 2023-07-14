@@ -1,3 +1,5 @@
+import { Events } from './index';
+
 class Npcs {
   private npcIdsToDelete = new Set<string>();
 
@@ -8,7 +10,7 @@ class Npcs {
     });
   }
 
-  public add = (npcData: NpcData | NpcData[]) => {
+  public add = (npcData: NPCs.NPC | NPCs.NPC[]) => {
     global.exports['dg-npcs'].addNpc(npcData);
 
     if (Array.isArray(npcData)) {
@@ -34,6 +36,10 @@ class Npcs {
 
   public setEnabled = (npcId: string, enabled: boolean) => {
     global.exports['dg-npcs'].setNpcEnabled(npcId, enabled);
+  };
+
+  public spawnGuard = (guardData: NPCs.Guard) => {
+    Events.emitNet('npcs:guards:spawn', guardData);
   };
 }
 

@@ -45,28 +45,9 @@ export const enterTowerLocation = (towerId: string) => {
   Notifications.add('De security heeft je opgemerkt, maak dat je zo snel mogelijk weg bent!', 'error');
 };
 
-export const exitTowerLocation = (towerId: string) => {
+export const exitTowerLocation = () => {
   activeTowerId = null;
   PolyTarget.removeZone('radiotower_action');
-  Events.emitNet('materials:radiotower:left', towerId);
-};
-
-export const spawnPeds = async (towerId: string) => {
-  if (towerId !== activeTowerId) return;
-
-  const netIds = (
-    await Promise.all(
-      radiotowers[towerId].peds.map(async pos => {
-        const ped = await Util.spawnAggressivePed('s_m_y_blackops_02', { ...pos, w: 0 });
-        if (!ped) return;
-        TaskCombatPed(ped, PlayerPedId(), 0, 16);
-        SetPedAsNoLongerNeeded(ped);
-        return NetworkGetNetworkIdFromEntity(ped);
-      })
-    )
-  ).filter(Boolean) as number[];
-
-  Events.emitNet('materials:radiotower:despawnPeds', netIds);
 };
 
 export const disablePower = async (towerId: string) => {
@@ -110,24 +91,4 @@ export const disablePower = async (towerId: string) => {
   }
 
   Events.emitNet('materials:radiotower:disable', towerId);
-};
-
-export const spawnSwarm = async (towerId: string) => {
-  const tower = radiotowers[towerId];
-  const locations = [...tower.peds, ...tower.swarm];
-
-  const netIds = (
-    await Promise.all(
-      locations.map(async pos => {
-        const ped = await Util.spawnAggressivePed('s_m_y_blackops_02', { ...pos, w: 0 });
-        if (!ped) return;
-        TaskCombatPed(ped, PlayerPedId(), 0, 16);
-        GiveWeaponToPed(ped, GetHashKey('WEAPON_SPECIALCARBINE_MK2'), 250, false, true);
-        SetPedAsNoLongerNeeded(ped);
-        return NetworkGetNetworkIdFromEntity(ped);
-      })
-    )
-  ).filter(Boolean) as number[];
-
-  Events.emitNet('materials:radiotower:despawnPeds', netIds);
 };

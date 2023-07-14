@@ -8,7 +8,7 @@ class Npcs {
     });
   }
 
-  public add = (npcData: NpcData | NpcData[]) => {
+  public add = (npcData: NPCs.NPC | NPCs.NPC[]) => {
     global.exports['dg-npcs'].addNpc(npcData);
 
     if (Array.isArray(npcData)) {
@@ -26,6 +26,10 @@ class Npcs {
     } else {
       this.npcIdsToDelete.delete(id);
     }
+  };
+
+  public spawnGuard = (guardData: NPCs.Guard) => {
+    global.exports['dg-npcs'].spawnGuard(guardData);
   };
 }
 

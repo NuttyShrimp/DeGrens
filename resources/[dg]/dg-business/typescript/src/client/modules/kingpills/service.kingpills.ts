@@ -1,4 +1,4 @@
-import { Events, Notifications, Util, PolyZone, Peek, BlipManager, RPC } from '@dgx/client';
+import { Events, Notifications, Util, PolyZone, Peek, BlipManager, RPC, Npcs } from '@dgx/client';
 
 let peekIds: string[] = [];
 
@@ -17,25 +17,31 @@ export const startKingPillsJob = (zone: Vec4) => {
 export const handlePickupEnter = async (position: Vec3) => {
   Notifications.add('Je hoort iemand roepen', 'success');
 
-  const shouldSpawn = await RPC.execute<boolean>('business:kingpills:shouldSpawn');
+  const shouldSpawn = await RPC.execute<boolean>('business:kingpills:handlePickupEnter');
   if (!shouldSpawn) return;
 
-  const enemyPed = await Util.spawnAggressivePed('a_m_m_hillbilly_02', { ...position, w: 0 });
-  if (!enemyPed) return;
-
-  TaskCombatPed(enemyPed, PlayerPedId(), 0, 16);
-  GiveWeaponToPed(enemyPed, GetHashKey('WEAPON_KNIFE'), 250, false, true);
-  SetPedAsNoLongerNeeded(enemyPed);
-
-  Events.emitNet('business:kingpills:pedSpawned', NetworkGetNetworkIdFromEntity(enemyPed));
+  Npcs.spawnGuard({
+    model: 'a_m_m_hillbilly_02',
+    position: position,
+    heading: Util.getHeadingToFaceCoordsFromCoord(position, Util.getPlyCoords()),
+    weapon: 'WEAPON_KNIFE',
+    flags: {
+      isKingPillsEnemy: true,
+    },
+    deleteTime: {
+      default: 180,
+      onDead: 30,
+    },
+  });
 
   peekIds = Peek.addGlobalEntry('ped', {
     options: [
       {
         label: 'Doorzoeken',
         icon: 'fas fa-magnifying-glass',
-        action: () => {
-          Events.emitNet('business:kingpills:loot');
+        action: (_, ent) => {
+          if (!ent) return;
+          Events.emitNet('business:kingpills:loot', NetworkGetNetworkIdFromEntity(ent));
         },
         canInteract: entity =>
           !!entity && DoesEntityExist(entity) && IsEntityDead(entity) && Entity(entity).state.isKingPillsEnemy,

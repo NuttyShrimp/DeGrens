@@ -10,7 +10,7 @@ export const loadConfig = (c: Rentals.Config) => {
 
   // npcs module will handle removing dupes
   Npcs.add(
-    config.locations.map<NpcData>(l => ({
+    config.locations.map<NPCs.NPC>(l => ({
       id: `misc_vehiclerentals_${l.id}`,
       model: 'cs_josef',
       position: l.coords,

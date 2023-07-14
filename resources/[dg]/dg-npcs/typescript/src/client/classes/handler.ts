@@ -21,7 +21,7 @@ class Handler extends Util.Singleton<Handler>() {
   };
 
   @Export('addNpc')
-  public addNpc = (npcData: NpcData | NpcData[]) => {
+  public addNpc = (npcData: NPCs.NPC | NPCs.NPC[]) => {
     if (Array.isArray(npcData)) {
       npcData.forEach(this.addNpc);
       return;
