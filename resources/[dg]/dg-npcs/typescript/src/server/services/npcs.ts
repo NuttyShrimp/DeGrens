@@ -28,10 +28,8 @@ export const addConfigNpcs = (npcData: NpcData[]) => {
 export const addNpc = (npcData: NpcData | NpcData[]) => {
   if (Array.isArray(npcData)) {
     npcData.forEach(x => npcs.set(x.id, x));
-    console.log(`adding npc ${npcData.map(x => x.id).join(', ')}`);
   } else {
     npcs.set(npcData.id, npcData);
-    console.log(`adding npc ${npcData.id}`);
   }
 
   Events.emitNet('npcs:client:update', -1, { add: npcData });
@@ -40,10 +38,8 @@ export const addNpc = (npcData: NpcData | NpcData[]) => {
 export const removeNpc = (id: string | string[]) => {
   if (Array.isArray(id)) {
     id.forEach(x => npcs.delete(x));
-    console.log(`removing npc ${id.join(', ')}`);
   } else {
     npcs.delete(id);
-    console.log(`removing npc ${id}`);
   }
 
   Events.emitNet('npcs:client:update', -1, { remove: id });

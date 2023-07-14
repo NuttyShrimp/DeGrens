@@ -14,7 +14,6 @@ const loadOfflineMails = async (cid: number) => {
     'SELECT subject, sender, message, coords, date FROM phone_mails WHERE cid = ?',
     [cid]
   );
-  console.log(dbMails);
   if (!dbMails) return;
 
   for (const dbMail of dbMails) {
