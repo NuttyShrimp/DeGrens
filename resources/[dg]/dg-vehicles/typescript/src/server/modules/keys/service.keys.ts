@@ -144,7 +144,7 @@ export const startVehicleLockpick = async (src: number, itemId: string) => {
     src,
     lockpickType,
     id,
-    Math.max(keygameMinAmount, Math.ceil((vehInfo?.price ?? 0) / 200000)),
+    Util.getRndInteger(keygameMinAmount, 7),
     vehClassToDifficulty[vehInfo?.class ?? 'D']
   );
   emit('vehicles:lockpick', src, targetVehicle, lockpickType);

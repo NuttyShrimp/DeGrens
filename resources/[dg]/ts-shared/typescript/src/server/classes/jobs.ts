@@ -1,4 +1,4 @@
-import { Core } from './index';
+import { Core, Util, Jobs as JobsInstance } from './index';
 
 class Jobs {
   onGroupLeave = (handler: (plyId: number | null, cid: number, groupId: string) => void) => {
@@ -175,6 +175,17 @@ class Police {
 
   isPoliceVehicle = (entity: number): boolean => {
     return global.exports['dg-police'].isPoliceVehicle(entity);
+  };
+
+  isAnyPoliceInRange = (coords: Vec3, range: number): boolean => {
+    const players = Util.getAllPlayers();
+    for (const plyId of players) {
+      const playerCoords = Util.getPlyCoords(plyId);
+      if (playerCoords.distance(coords) <= range && JobsInstance.getCurrentJob(plyId) === 'police') {
+        return true;
+      }
+    }
+    return false;
   };
 }
 

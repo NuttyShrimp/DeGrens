@@ -133,6 +133,11 @@ export const ON_CREATE: Record<string, (plyId?: number) => { [key: string]: any 
     global.exports['dg-gangs'].removeContainerKeyNotice();
     return {}; // empty metadata
   },
+  meth_brick: () => ({
+    hiddenKeys: ['createTime', 'amount'],
+    createTime: Math.round(Date.now() / 1000),
+    amount: 0,
+  }),
 };
 
 const ON_DELETE: Record<string, (item: Inventory.ItemState) => void> = {
