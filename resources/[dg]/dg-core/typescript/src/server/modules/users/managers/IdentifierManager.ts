@@ -1,44 +1,49 @@
+import { mainLogger } from 'sv_logger';
+
 class IdentifierManager {
   private identifiers: Map<number, Record<string, string>> = new Map();
 
-  loadIdentifiers(src: number) {
-    const source = String(src);
-    const identifierNum = GetNumPlayerIdentifiers(source);
+  loadIdentifiers(src: number | string) {
+    const strSrc = String(src);
+    const identifierNum = GetNumPlayerIdentifiers(strSrc);
     const identifiers: Record<string, string> = {};
     for (let i = 0; i < identifierNum; i++) {
-      const id = GetPlayerIdentifier(source, i);
+      const id = GetPlayerIdentifier(strSrc, i);
       const key = id.replace(/\:\w+/, '');
       identifiers[key] = id;
     }
-    this.identifiers.set(Number(src), identifiers);
+    this.identifiers.set(+src, identifiers);
+    return identifiers;
   }
 
   // This will be called when a player finishes loading
-  moveIdentifiers(src: number, newSrc: number) {
-    this.identifiers.set(
-      Number(newSrc),
-      this.identifiers.get(Number(src)) || this.getIdentifiers(Number(newSrc)) || {}
-    );
-    this.identifiers.delete(Number(src));
+  moveIdentifiers(oldStrSrc: number | string, newStrSrc: number | string) {
+    const oldSrc = +oldStrSrc;
+    const newSrc = +newStrSrc;
+    this.identifiers.set(newSrc, this.identifiers.get(oldSrc) ?? this.getIdentifiers(newSrc));
+    this.identifiers.delete(oldSrc);
   }
 
-  getIdentifiers(src: number) {
-    let identifiers = this.identifiers.get(Number(src));
+  getIdentifiers(strSrc: number | string) {
+    const src = +strSrc;
+    let identifiers = this.identifiers.get(src);
     if (!identifiers) {
-      this.loadIdentifiers(src);
-      identifiers = this.identifiers.get(Number(src));
+      identifiers = this.loadIdentifiers(src);
+    }
+    if (!identifiers) {
+      mainLogger.error(`Failed to load identifiers for ${src}`);
     }
     return identifiers ?? {};
   }
 
   removeIdentifiers(src: number) {
-    this.identifiers.delete(Number(src));
+    this.identifiers.delete(+src);
   }
 
   getServerIdFromIdentifier(key: string, identifier: string) {
     for (const [src, identifiers] of this.identifiers) {
       if (identifiers[key] === identifier && src < 65535) {
-        return Number(src);
+        return +src;
       }
     }
   }

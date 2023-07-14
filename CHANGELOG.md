@@ -31,6 +31,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - Motor gaat nu uit tijdens noclip om engine sounds te voorkomen
 - Fuel wordt nu terug correct gezet wanneer je een persoonlijk voertuig uithaalt
+- Hopelijk probleem opgelost ivm mensen kicken
 
 ## [1.2.9]
 

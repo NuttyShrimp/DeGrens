@@ -73,7 +73,7 @@ export const flagUser = (src: number, flag: string, data?: any) => {
     src
   );
   if (trackedFlags[src].length >= 5) {
-    Admin.ACBan(src, 'Flagged anticheat');
+    Admin.ACBan(src, 'Flagged anticheat', { flag });
   }
 };
 // endregion
