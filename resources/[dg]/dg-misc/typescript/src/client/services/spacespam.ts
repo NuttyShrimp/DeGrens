@@ -6,11 +6,13 @@ setImmediate(() => {
   scheduleThread();
 });
 
+const AMOUNT_OF_TIMES_TO_PRESS = 7;
+
 const scheduleThread = () => {
   cleanupThread();
   checkThread = setInterval(() => {
     if (IsControlJustPressed(0, 22)) {
-      if (timesPressed > 3) {
+      if (timesPressed > AMOUNT_OF_TIMES_TO_PRESS) {
         const player = PlayerPedId();
         if (
           !IsPedRagdoll(player) &&
@@ -47,7 +49,7 @@ const scheduleThread = () => {
           timeout = setTimeout(() => {
             timesPressed = 0;
             timeout = null;
-          }, 4000);
+          }, 3000);
         } else {
           timeout.refresh();
         }

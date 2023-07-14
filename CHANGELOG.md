@@ -28,6 +28,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Windowtexture dbxultimate gefixt
 - Phone Mails blijven nu staan als je relogged tijdens dezelfde restart
 - Tweak houserobbery loot
+- Vallen bij springen verminderd
 
 ### Fixed
 - Motor gaat nu uit tijdens noclip om engine sounds te voorkomen
