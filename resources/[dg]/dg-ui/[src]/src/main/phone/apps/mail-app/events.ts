@@ -9,7 +9,7 @@ events.addMail = (data: { mail: Phone.Mail.Mail | Phone.Mail.Mail[]; skipNotific
   const newMails = Array.isArray(data.mail) ? data.mail : [data.mail];
 
   useMailAppStore.setState(s => ({
-    mails: [...newMails, ...s.mails].sort((a, b) => b.date - a.date),
+    mails: [...new Map([...newMails, ...s.mails].map(x => [x.id, x])).values()].sort((a, b) => b.date - a.date),
   }));
 
   if (!data.skipNotification) {
