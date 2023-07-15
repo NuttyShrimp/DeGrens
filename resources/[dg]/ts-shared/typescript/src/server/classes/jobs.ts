@@ -114,6 +114,18 @@ class Gangs {
   public addFeedMessage = (newMessage: Gangs.Feed.NewMessage) => {
     global.exports['dg-gangs'].addFeedMessage(newMessage);
   };
+
+  public createGang = (name: string, label: string, ownerCid: number): Promise<boolean> => {
+    return global.exports['dg-gangs'].createGang(name, label, ownerCid);
+  };
+
+  public removeGang = (name: string): Promise<boolean> => {
+    return global.exports['dg-gangs'].removeGang(name);
+  };
+
+  public addMemberToGang = (name: string, targetCid: number): Promise<boolean> => {
+    return global.exports['dg-gangs'].addMemberToGang(name, targetCid);
+  };
 }
 
 class Police {

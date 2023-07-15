@@ -31,7 +31,7 @@ export const addGangFeedMessage: CommandData = {
     Notifications.add(caller.source, 'Je hebt een gang feed message uitgezonden', 'success');
   },
   UI: {
-    title: 'Add Gang Feed Message',
+    title: 'Gang - Add Feed Message',
     info: {
       inputs: [Inputs.Gang],
       overrideFields: ['title', 'content'],
