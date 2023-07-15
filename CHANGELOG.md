@@ -37,6 +37,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Motor gaat nu uit tijdens noclip om engine sounds te voorkomen
 - Fuel wordt nu terug correct gezet wanneer je een persoonlijk voertuig uithaalt
 - Hopelijk probleem opgelost ivm mensen kicken
+- Suspension gaat nu wel kapot bij wagens waar suspension visueel niet kapot gaat
 
 ## [1.2.9]
 
