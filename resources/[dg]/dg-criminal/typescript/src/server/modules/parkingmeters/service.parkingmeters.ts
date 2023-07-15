@@ -41,6 +41,11 @@ export const finishLootingParkingMeter = async (plyId: number, success: boolean)
 
   plyToParkingMeterCoords.delete(plyId);
 
+  const lockpickItem = await Inventory.getFirstItemOfNameOfPlayer(plyId, 'lockpick');
+  if (lockpickItem) {
+    Inventory.setQualityOfItem(lockpickItem.id, old => old - (config.parkingmeters.lockpickQualityDecrease ?? 0));
+  }
+
   if (!success) {
     const vecCoords = Vector3.create(coords);
     const meterIdx = lootedParkingMeters.findIndex(c => vecCoords.distance(c) < 1);
@@ -50,13 +55,10 @@ export const finishLootingParkingMeter = async (plyId: number, success: boolean)
     return;
   }
 
-  const lockpickItem = await Inventory.getFirstItemOfNameOfPlayer(plyId, 'lockpick');
-  if (!lockpickItem) {
+  if (lockpickItem) {
     Notifications.add(plyId, 'Je hebt geen lockpick', 'error');
     return;
   }
-
-  Inventory.setQualityOfItem(lockpickItem.id, old => old - (config.parkingmeters.lockpickQualityDecrease ?? 0));
 
   const [minCash, maxCash] = config.parkingmeters.loot;
   const cashAmount = Util.getRndInteger(minCash, maxCash + 1);

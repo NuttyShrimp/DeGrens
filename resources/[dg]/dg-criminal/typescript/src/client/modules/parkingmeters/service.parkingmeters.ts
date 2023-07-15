@@ -1,4 +1,5 @@
 import { Events, Minigames, Notifications, Peek, RPC, Taskbar, Util } from '@dgx/client';
+import { startParkingMeterAnimation } from './helpers.parkingmeters';
 
 let peekIds: string[] | null = null;
 
@@ -49,6 +50,8 @@ const startLootingParkingMeter = async (entity: number) => {
     return;
   }
 
+  const stopAnim = await startParkingMeterAnimation();
+
   const [canceled] = await Taskbar.create('hammer-crash', 'Openbreken', 10000, {
     canCancel: true,
     cancelOnDeath: true,
@@ -61,12 +64,10 @@ const startLootingParkingMeter = async (entity: number) => {
       carMovement: true,
       combat: true,
     },
-    animation: {
-      animDict: 'veh@break_in@0h@p_m_one@',
-      anim: 'low_force_entry_ds',
-      flags: 17,
-    },
   });
+
+  stopAnim();
+
   if (canceled) {
     Events.emitNet('criminal:parkingmeters:finish', false);
     return;
