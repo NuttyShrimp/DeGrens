@@ -60,25 +60,28 @@ export const onPlayerJoining = (
   setKickReason: (reason: string) => void,
   deferrals: Record<string, any>
 ) => {
+  const src = +source;
   Object.values(modules).forEach(mod => {
     if ('onPlayerJoining' in mod && typeof mod.onPlayerJoining === 'function') {
-      mod.onPlayerJoining(+source, name, setKickReason, deferrals);
+      mod.onPlayerJoining(src, name, setKickReason, deferrals);
     }
   });
 };
 
-export const onPlayerJoined = (oldId: number) => {
+export const onPlayerJoined = (oldId: string) => {
+  const src = +source;
   Object.values(modules).forEach(mod => {
     if ('onPlayerJoined' in mod && typeof mod.onPlayerJoined === 'function') {
-      mod.onPlayerJoined(+source, oldId);
+      mod.onPlayerJoined(src, +oldId);
     }
   });
 };
 
 export const onPlayerDropped = (reason: string) => {
+  const src = +source;
   Object.values(modules).forEach(mod => {
     if ('onPlayerDropped' in mod && typeof mod.onPlayerDropped === 'function') {
-      mod.onPlayerDropped(+source, reason);
+      mod.onPlayerDropped(src, reason);
     }
   });
 };

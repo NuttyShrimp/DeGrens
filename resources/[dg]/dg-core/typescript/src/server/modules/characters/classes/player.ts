@@ -63,9 +63,6 @@ export class Player implements Core.Characters.Player {
         this.updateMetadata('armor', GetPedArmour(ped));
         this.position = Util.getPlyCoords(this.serverId);
       }
-
-      const userModule = getModule('users');
-      await userModule.saveUser(this.serverId);
     }
 
     const charResult = await SQL.query(

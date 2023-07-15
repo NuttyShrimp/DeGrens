@@ -40,6 +40,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Hopelijk probleem opgelost ivm mensen kicken
 - Suspension gaat nu wel kapot bij wagens waar suspension visueel niet kapot gaat
 - Failed heartbeat bans opgelost wanneer speler crashed tijdens inladen
+- Probleem opgelost waardoor identifiers niet correct verwijderd worden
 
 ## [1.2.9]
 

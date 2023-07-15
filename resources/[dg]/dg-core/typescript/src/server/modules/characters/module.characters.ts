@@ -91,9 +91,6 @@ export class CharacterModule implements Modules.ServerModule, Core.ServerModules
       return false;
     }
 
-    // new players that are not registered yet, would not be able to create char because of failed steamid constraint
-    await userModule.saveUser(src);
-
     const result = await SQL.query<{ citizenid: number }[]>(
       'INSERT INTO characters (steamid) VALUES (?) RETURNING citizenid',
       [steamid]
@@ -142,8 +139,6 @@ export class CharacterModule implements Modules.ServerModule, Core.ServerModules
       characterLogger.warn(`${Util.getName(src)}(${src}) tried to delete an unexisting character: ${cid}`);
       return;
     }
-    const userModule = getModule('users');
-    userModule.saveUser(src);
     this.logout(src);
     await SQL.query('DELETE FROM characters WHERE citizenid = ?', [cid]);
     Util.Log(

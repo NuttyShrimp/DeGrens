@@ -1,7 +1,20 @@
 import { mainLogger } from 'sv_logger';
+import winston from 'winston';
 
 class IdentifierManager {
-  private identifiers: Map<number, Record<string, string>> = new Map();
+  private readonly logger: winston.Logger;
+  private readonly identifiers: Map<number, Record<string, string>> = new Map();
+
+  constructor() {
+    this.logger = mainLogger.child({ module: 'IdentifierManager' });
+    RegisterCommand(
+      'checkIdentifiers',
+      () => {
+        this.logger.info(this.identifiers);
+      },
+      true
+    );
+  }
 
   loadIdentifiers(src: number | string) {
     const strSrc = String(src);
@@ -17,27 +30,29 @@ class IdentifierManager {
   }
 
   // This will be called when a player finishes loading
-  moveIdentifiers(oldStrSrc: number | string, newStrSrc: number | string) {
-    const oldSrc = +oldStrSrc;
-    const newSrc = +newStrSrc;
-    this.identifiers.set(newSrc, this.identifiers.get(oldSrc) ?? this.getIdentifiers(newSrc));
+  moveIdentifiers(oldSrc: number, newSrc: number) {
+    const identifiers = this.identifiers.get(oldSrc);
     this.identifiers.delete(oldSrc);
+    if (!identifiers) {
+      this.logger.error(`Player ${oldSrc} does not have any identifiers to move to ${newSrc}`);
+      return;
+    }
+    this.identifiers.set(newSrc, identifiers);
   }
 
-  getIdentifiers(strSrc: number | string) {
-    const src = +strSrc;
+  getIdentifiers(src: number) {
     let identifiers = this.identifiers.get(src);
     if (!identifiers) {
       identifiers = this.loadIdentifiers(src);
     }
     if (!identifiers) {
-      mainLogger.error(`Failed to load identifiers for ${src}`);
+      this.logger.error(`Player ${src} does not have any identifiers`);
     }
     return identifiers ?? {};
   }
 
   removeIdentifiers(src: number) {
-    this.identifiers.delete(+src);
+    this.identifiers.delete(src);
   }
 
   getServerIdFromIdentifier(key: string, identifier: string) {

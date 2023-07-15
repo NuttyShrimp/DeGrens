@@ -28,9 +28,13 @@ export class UserModule implements Modules.ServerModule, Core.ServerModules.User
   onPlayerJoined(src: number, oldSrc: number) {
     this.identifierManager.moveIdentifiers(oldSrc, src);
     this.userManager.registerUser(src);
+
+    this.saveUser(src);
   }
 
-  onPlayerDropped(src: number) {
+  async onPlayerDropped(src: number) {
+    await this.saveUser(src);
+
     this.userManager.removeUser(src);
     this.identifierManager.removeIdentifiers(src);
   }
