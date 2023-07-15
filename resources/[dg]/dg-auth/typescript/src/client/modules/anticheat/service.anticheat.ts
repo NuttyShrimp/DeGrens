@@ -26,7 +26,7 @@ export const scheduleHeartBeat = () => {
   Events.emitNet('auth:heartbeat');
   heartbeat = setTimeout(() => {
     scheduleHeartBeat();
-  }, 180000);
+  }, 1.5 * 60 * 1000);
 };
 
 export const stopHeartBeat = () => {
