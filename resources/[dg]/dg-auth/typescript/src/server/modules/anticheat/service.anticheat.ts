@@ -15,6 +15,8 @@ const workingShotQueues: Set<string> = new Set();
 const queuedHits: Record<string, AntiCheat.EntityDamage[]> = {};
 const workingHitQueues: Set<string> = new Set();
 
+const awaitingFirstHeartbeats = new Set<number>();
+
 export const loadConfig = async () => {
   await Config.awaitConfigLoad();
   config = Config.getModuleConfig<AntiCheat.Config>('anticheat');
@@ -29,13 +31,23 @@ export const loadConfig = async () => {
 // region Heartbeat
 const beats: Record<number, NodeJS.Timeout> = {};
 
-export const registerHeartBeat = (src: number) => {
+export const registerHeartBeat = (src: number, fromJoining = false) => {
+  if (fromJoining) {
+    awaitingFirstHeartbeats.add(src);
+  } else {
+    awaitingFirstHeartbeats.delete(src);
+  }
   if (beats[src]) {
     clearTimeout(beats[src]);
   }
   mainLogger.debug(`received heartbeat from ${src}`);
   beats[src] = setTimeout(() => {
-    Admin.ACBan(src, 'Failed to receive heartbeat');
+    if (!GetPlayerName(String(src))) return;
+    if (awaitingFirstHeartbeats.has(src)) {
+      DropPlayer(String(src), 'Failed to receive first heartbeat');
+    } else {
+      Admin.ACBan(src, 'Failed to receive heartbeat');
+    }
   }, 4.5 * 60 * 1000);
 };
 

@@ -20,7 +20,7 @@ global.asyncExports('setPlayerVisible', setPlayerVisible);
 global.asyncExports('toggleAllowedMod', toggleAllowedMod);
 
 onNet('playerJoining', () => {
-  registerHeartBeat(source);
+  registerHeartBeat(source, true);
 });
 
 onNet('playerDropped', () => {
