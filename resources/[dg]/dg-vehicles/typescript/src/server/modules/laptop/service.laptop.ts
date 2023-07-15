@@ -1,4 +1,4 @@
-import { Config, Events, Financials, Inventory, Notifications, Phone, Util } from '@dgx/server';
+import { Config, Events, Financials, Inventory, Notifications, Util } from '@dgx/server';
 
 let storeItems: Laptop.Bennys.Item[] = [];
 let pickupZones: Laptop.Bennys.PickUp[] = [];

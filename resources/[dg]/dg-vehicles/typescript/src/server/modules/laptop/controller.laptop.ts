@@ -1,4 +1,4 @@
-import { Core, Events, RPC, Util } from '@dgx/server';
+import { Core, Events, RPC } from '@dgx/server';
 import { doPurchase, getStoreItems, loadConfigInfo, receivePurchasedItems, restorePurchase } from './service.laptop';
 
 setImmediate(() => {

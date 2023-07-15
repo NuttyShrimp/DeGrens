@@ -18,7 +18,7 @@ setImmediate(async () => {
 
   await repository.deleteNonPersistent();
   await repository.deleteByDestroyDate();
-  await itemDataManager.seed();
+  itemDataManager.seed();
   registerContainers();
   await shopManager.seed();
   preloadActivePlayerInventories();

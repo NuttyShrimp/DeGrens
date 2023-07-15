@@ -22,8 +22,7 @@ class ItemDataManager extends Util.Singleton<ItemDataManager>() {
   @Export('isItemDataLoaded')
   private _getIsLoaded = () => this.loaded;
 
-  public seed = async () => {
-    await Config.awaitConfigLoad();
+  public seed = () => {
     const data = Config.getConfigValue<Inventory.ItemData[]>('inventory.items');
     this.itemData.clear();
     data.forEach(i => {
