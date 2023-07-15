@@ -67,9 +67,9 @@ const penalisePlayer = async (
   penaltyLogger.info(
     `${targetName}(${target}) received a ${type} by ${
       src === -1 ? 'AntiCheat' : src === 0 ? 'Panel' : Util.getName(src)
-    } | ${Object.entries(metadata)
+    } | ${Object.entries({ ...metadata, ...data })
       .map(([k, v]) => `${k}: ${v}`)
-      .join('| ')}`
+      .join(' | ')}`
   );
   Chat.sendMessage('admin', {
     type: 'system',
@@ -163,7 +163,7 @@ export const isPlayerBanned = async (steamId: string) => {
 };
 
 export const ACBan = (target: number, reason: string, data?: Record<string, any>) => {
-  penaltyLogger.warn('Going to ban someone with anticheat: ', 'reason', reason, 'data', data);
+  penaltyLogger.warn(`Going to ban someone with anticheat | reason: ${reason} | data: ${JSON.stringify(data ?? {})}`);
   // To prevent the typeof check from doing weird shit
   const targetSteamId = getIdentifierForPlayer(Number(target), 'steam')!;
   banPlayer(-1, targetSteamId, [`Anticheat: ${reason}`], 30, -1, data);
