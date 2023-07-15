@@ -1,4 +1,4 @@
-import { Events, Notifications, PropAttach, RPC, SyncedObjects, Util } from '@dgx/client';
+import { Events, Notifications, PropAttach, RPC, SyncedObjects, UI, Util } from '@dgx/client';
 
 import { disableBlips, enableBlips } from '../../service/playerBlips';
 import { toggleLocalVis } from './service.commands';
@@ -43,9 +43,18 @@ on('admin:commands:toggleFreezeEntity', (ent: number) => {
   }
   Events.emitNet('admin:server:toggleFreezeEntity', NetworkGetNetworkIdFromEntity(entity), isFrozen);
 });
+on('admin:commands:copyCoords', (ent: number) => {
+  const coords: Vec4 = { ...Util.getEntityCoords(ent), w: GetEntityHeading(ent) };
+  for (const key of Object.keys(coords)) {
+    //@ts-expect-error
+    coords[key] = Util.round(coords[key], 4);
+  }
+
+  UI.addToClipboard(JSON.stringify(coords));
+});
 
 Events.onNet('admin:commands:runCmd', (handler, args: any[]) => {
-  if (args?.[1]?.entity && NetworkDoesNetworkIdExist(args[1].entity)) {
+  if (args?.[1]?.entity && NetworkGetEntityIsNetworked(args[1].entity) && NetworkDoesNetworkIdExist(args[1].entity)) {
     args[1].entity = NetworkGetEntityFromNetworkId(args[1].entity);
   }
   const parameters = args.map((_: any, i: number) => `a${i}`);
