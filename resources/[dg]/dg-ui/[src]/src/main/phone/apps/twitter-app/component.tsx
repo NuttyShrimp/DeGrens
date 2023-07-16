@@ -11,35 +11,31 @@ import { useTwitterAppStore } from './stores/useTwitterAppStore';
 const Component = () => {
   const [tweets, requestAmount, updateStore] = useTwitterAppStore(s => [s.tweets, s.requestAmount, s.updateStore]);
   // region Tweet actions
+
   const toggleLike = (tweetId: number, isLiked: boolean) => {
     nuiAction(isLiked ? 'phone/twitter/removeLike' : 'phone/twitter/addLike', { tweetId });
-    const newTweets = [...tweets];
-    const index = newTweets.findIndex(tweet => tweet.id === tweetId);
-    if (index !== -1) {
-      newTweets[index].liked = !isLiked;
-    }
-    updateStore({
-      tweets: newTweets,
-    });
+    updateStore(s => ({
+      tweets: s.tweets.map(t => ({
+        ...t,
+        liked: t.id === tweetId ? !isLiked : t.liked,
+      })),
+    }));
   };
-  const doRetweet = (tweet: Phone.Twitter.Tweet) => {
-    showFormModal(
-      <TweetModal
-        onAccept={() => {
-          nuiAction('phone/twitter/addRetweet', { tweetId: tweet.id });
-          const newTweets = [...tweets];
-          const index = newTweets.findIndex(_tweet => _tweet.id === tweet.id);
-          if (index !== -1) {
-            newTweets[index].retweeted = true;
-          }
-          updateStore({
-            tweets: newTweets,
-          });
-        }}
-        text={`RT ${tweet.sender_name}: ${tweet.tweet}`}
-      />
-    );
+
+  const doRetweet = (tweetId: number) => {
+    nuiAction('phone/twitter/addRetweet', { tweetId });
+    updateStore(s => ({
+      tweets: s.tweets.map(t => ({
+        ...t,
+        retweeted: t.id === tweetId ? true : t.retweeted,
+      })),
+    }));
   };
+
+  const doReply = (tweet: Phone.Twitter.Tweet) => {
+    showFormModal(<TweetModal text={`${tweet.sender_name} `} />);
+  };
+
   const doDelete = (tweetId: number) => {
     nuiAction('phone/twitter/deleteTweet', { tweetId });
   };
@@ -81,7 +77,13 @@ const Component = () => {
       ]}
       emptyList={tweets.length === 0}
     >
-      <Twitter toggleLike={toggleLike} doRetweet={doRetweet} doDelete={doDelete} fetchTweets={fetchTweets} />
+      <Twitter
+        toggleLike={toggleLike}
+        doRetweet={doRetweet}
+        doDelete={doDelete}
+        fetchTweets={fetchTweets}
+        doReply={doReply}
+      />
     </AppContainer>
   );
 };

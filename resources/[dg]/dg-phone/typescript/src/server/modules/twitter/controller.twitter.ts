@@ -5,6 +5,7 @@ import {
   addTweet,
   clearTweetCache,
   deleteTweet,
+  getTweetById,
   getTweets,
   isTweetCached,
   likeTweet,
@@ -39,10 +40,15 @@ Events.onNet('dg-phone:server:twitter:removeLike', (src, tweetId: number) => {
 });
 
 Events.onNet('dg-phone:server:twitter:addRetweet', (src, tweetId: number) => {
-  if (!tweetId || !isTweetCached(tweetId)) return;
+  if (!tweetId) return;
+
+  const tweet = getTweetById(tweetId);
+  if (!tweet) return;
 
   const player = charModule.getPlayer(src);
   if (!player) return;
+
+  addTweet(src, `RT ${tweet.sender_name}: ${tweet.tweet}`, Date.now());
   addRetweet(player.citizenid, tweetId);
 
   Util.Log('phone:tweet:addRetweet', { tweetId: tweetId }, `${Util.getName(src)} has added a retweet to a tweet`, src);
