@@ -38,6 +38,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Vallen bij springen verminderd
 - Optie om ervoor te zorgen dat voertuigen met bepaalde vins niet meer gelockpicked kunnen worden
 - Je wapen gaat niet meer weg wanneer je armor aandoet
+- Calico stancing gefixt
 
 ### Fixed
 - Motor gaat nu uit tijdens noclip om engine sounds te voorkomen

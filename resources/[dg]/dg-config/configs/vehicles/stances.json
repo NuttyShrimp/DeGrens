@@ -72,8 +72,8 @@
           "stance": {
             "frontLeft": 0.775,
             "frontRight": 0.775,
-            "backLeft": 0.815,
-            "backRight": 0.815
+            "backLeft": 0.755,
+            "backRight": 0.755
           }
         }
       ]
