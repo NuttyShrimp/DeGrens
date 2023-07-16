@@ -6,12 +6,16 @@ import { HeistLocation } from './heistlocation';
 import config from 'services/config';
 import { FleecaManager } from './typemanagers/fleecamanager';
 import { PaletoManager } from './typemanagers/paletomanager';
+import { JewelryManager } from './typemanagers/jewelrymanager';
 
 @EventListener()
 class HeistManager extends Util.Singleton<HeistManager>() {
   private readonly logger: winston.Logger;
   private readonly locations: Map<Heists.LocationId, HeistLocation>;
-  private readonly typeManagers: Partial<Record<Heists.HeistType, Heists.TypeManager>>;
+  private readonly typeManagers: Record<Heists.HeistType, Heists.TypeManager>;
+
+  private readonly onEnterHandlers: ((locationId: string, plyId: number) => void)[];
+  private readonly onLeaveHandlers: ((locationId: string, plyId: number) => void)[];
 
   constructor() {
     super();
@@ -20,7 +24,11 @@ class HeistManager extends Util.Singleton<HeistManager>() {
     this.typeManagers = {
       fleeca: new FleecaManager(),
       paleto: new PaletoManager(),
+      jewelry: new JewelryManager(),
     };
+
+    this.onEnterHandlers = [];
+    this.onLeaveHandlers = [];
   }
 
   private getLocation = (locationId: Heists.LocationId) => {
@@ -42,11 +50,10 @@ class HeistManager extends Util.Singleton<HeistManager>() {
     return location;
   };
 
-  public getManagerForType = (heistType: Heists.HeistType) => {
+  public getManagerForType = <T extends Heists.TypeManager = Heists.TypeManager>(heistType: Heists.HeistType): T => {
     const manager = this.typeManagers[heistType];
     if (!manager) {
       const logMsg = `Tried to get manager for heisttype ${heistType} but was not registered`;
-      this.logger.error(logMsg);
       Util.Log(
         'heists:unregisteredType',
         {
@@ -56,14 +63,18 @@ class HeistManager extends Util.Singleton<HeistManager>() {
         undefined,
         true
       );
-      return;
+      throw new Error(logMsg);
     }
-    return manager;
+    return manager as T;
   };
 
   public initialize = () => {
     // build locations
     for (const id of Object.keys(config.locations) as Heists.LocationId[]) {
+      if (!this.typeManagers[config.locations[id].type]) {
+        this.logger.silly(`Skipping location ${id} because it has an invalid type`);
+        continue;
+      }
       const location = new HeistLocation(id);
       this.locations.set(id, location);
     }
@@ -79,6 +90,7 @@ class HeistManager extends Util.Singleton<HeistManager>() {
     const location = this.getLocation(locationId);
     if (!location) return;
     location.playerEntered(plyId);
+    this.onEnterHandlers.forEach(cb => cb(locationId, plyId));
   };
 
   @DGXEvent('heists:location:leave')
@@ -86,6 +98,7 @@ class HeistManager extends Util.Singleton<HeistManager>() {
     const location = this.getLocation(locationId);
     if (!location) return;
     location.playerLeft(plyId);
+    this.onLeaveHandlers.forEach(cb => cb(locationId, plyId));
   };
 
   public getIdOfLocationPlayerIsIn = (plyId: number) => {
@@ -120,7 +133,6 @@ class HeistManager extends Util.Singleton<HeistManager>() {
     if (location.isDone()) return false;
 
     const typeManager = this.getManagerForType(location.getHeistType());
-    if (!typeManager) return false;
     return typeManager.canHack?.() ?? true;
   };
 
@@ -128,7 +140,6 @@ class HeistManager extends Util.Singleton<HeistManager>() {
     const location = this.getLocation(locationId);
     if (!location) return;
     const typeManager = this.getManagerForType(location.getHeistType());
-    if (!typeManager) return;
     typeManager.startedHack?.();
   };
 
@@ -136,7 +147,6 @@ class HeistManager extends Util.Singleton<HeistManager>() {
     const location = this.getLocation(locationId);
     if (!location) return;
     const typeManager = this.getManagerForType(location.getHeistType());
-    if (!typeManager) return;
 
     if (success) {
       location.setDone();
@@ -204,6 +214,26 @@ class HeistManager extends Util.Singleton<HeistManager>() {
     const logMsg = `${Util.getName(plyId)}(${plyId}) has reset the door of location ${locationId}`;
     this.logger.silly(logMsg);
     Util.Log('heists:resetDoor', { locationId }, logMsg, plyId);
+  };
+
+  public getPlayersAtLocation = (locationId: Heists.LocationId) => {
+    const location = this.getLocation(locationId);
+    if (!location) return [];
+    return location.getPlayersInside();
+  };
+
+  public getAmountOfPlayersInLocation = (locationId: Heists.LocationId) => {
+    const location = this.getLocation(locationId);
+    if (!location) return 0;
+    return location.getAmountOfPlayersInside();
+  };
+
+  public onLocationEnter = (cb: (typeof this.onEnterHandlers)[number]) => {
+    this.onEnterHandlers.push(cb);
+  };
+
+  public onLocationLeave = (cb: (typeof this.onLeaveHandlers)[number]) => {
+    this.onLeaveHandlers.push(cb);
   };
 }
 

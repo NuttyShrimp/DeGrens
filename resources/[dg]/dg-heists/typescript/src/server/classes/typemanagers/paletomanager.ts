@@ -2,7 +2,6 @@ import {
   DoorLock,
   Financials,
   Inventory,
-  Jobs,
   Minigames,
   Notifications,
   Particles,

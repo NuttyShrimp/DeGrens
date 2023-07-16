@@ -1282,12 +1282,7 @@
     "hideInteraction": true,
     "thermiteable": {
       "grid": 5,
-      "amount": 5,
-      "ped": {
-        "x": 149.03,
-        "y": -1047.16,
-        "heading": 157.5
-      }
+      "amount": 5
     },
     "distance": 2,
     "doors": [
@@ -1308,12 +1303,7 @@
     "hideInteraction": true,
     "thermiteable": {
       "grid": 5,
-      "amount": 5,
-      "ped": {
-        "x": 313.33,
-        "y": -285.51,
-        "heading": 161.5
-      }
+      "amount": 5
     },
     "distance": 2,
     "doors": [
@@ -1334,12 +1324,7 @@
     "hideInteraction": true,
     "thermiteable": {
       "grid": 5,
-      "amount": 5,
-      "ped": {
-        "x": -351.65,
-        "y": -56.34,
-        "heading": 159.5
-      }
+      "amount": 5
     },
     "distance": 2,
     "doors": [
@@ -1360,12 +1345,7 @@
     "hideInteraction": true,
     "thermiteable": {
       "grid": 5,
-      "amount": 5,
-      "ped": {
-        "x": -1208.53,
-        "y": -335.7,
-        "heading": 206
-      }
+      "amount": 5
     },
     "distance": 2,
     "doors": [
@@ -1386,12 +1366,7 @@
     "hideInteraction": true,
     "thermiteable": {
       "grid": 5,
-      "amount": 5,
-      "ped": {
-        "x": -2956.21,
-        "y": 484.09,
-        "heading": 268
-      }
+      "amount": 5
     },
     "distance": 2,
     "doors": [
@@ -1412,12 +1387,7 @@
     "hideInteraction": true,
     "thermiteable": {
       "grid": 5,
-      "amount": 5,
-      "ped": {
-        "x": 1173.66,
-        "y": 2713.14,
-        "heading": 0.5
-      }
+      "amount": 5
     },
     "distance": 2,
     "doors": [
@@ -4034,6 +4004,53 @@
     ],
     "authorized": {
       "gang": ["thes1lencers"]
+    }
+  },
+  {
+    "description": "jewelry double door",
+    "locked": true,
+    "distance": 2,
+    "doors": [
+      {
+        "model": "p_jewel_door_l",
+        "coords": {
+          "x": -631.9553833007812,
+          "y": -236.33326721191406,
+          "z": 38.2065315246582
+        }
+      },
+      {
+        "model": "p_jewel_door_r1",
+        "coords": {
+          "x": -630.426513671875,
+          "y": -238.4375457763672,
+          "z": 38.2065315246582
+        }
+      }
+    ],
+    "authorized": {},
+    "hideInteraction": true,
+    "name": "jewelry_entrance"
+  },
+  {
+    "description": "jewelry interior door",
+    "locked": true,
+    "distance": 2,
+    "doors": [
+      {
+        "model": "v_ilev_j2_door",
+        "coords": {
+          "x": -629.1338500976562,
+          "y": -230.15170288085938,
+          "z": 38.20658493041992
+        }
+      }
+    ],
+    "authorized": {},
+    "hideInteraction": true,
+    "thermiteable": {
+      "grid": 6,
+      "amount": 4
     }
   }
 ]

@@ -4,7 +4,6 @@ declare namespace Doorlock {
   type Thermite = {
     grid: number; // Gridsize
     amount: number; // Length of hack
-    ped: Vec2 & { heading: number }; // Ped X Y postion and heading (Manually allign to properly fit door)
   };
 
   type DoorData = {

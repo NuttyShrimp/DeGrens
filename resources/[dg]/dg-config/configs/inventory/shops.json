@@ -256,6 +256,11 @@
         "name": "dna_swab",
         "amount": 100,
         "price": 25
+      },
+      {
+        "name": "detcord",
+        "amount": 25,
+        "price": 500
       }
     ],
     "prison_shop": [
