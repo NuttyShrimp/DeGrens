@@ -1086,5 +1086,35 @@
       "isMethrunStart": true
     },
     "scenario": "WORLD_HUMAN_STAND_IMPATIENT"
+  },
+  {
+    "id": "jewelry_start",
+    "model": "hc_hacker",
+    "position": { "x": -1806.9663, "y": -402.6116, "z": 44.6275, "w": 233.7504 },
+    "distance": 100.0,
+    "settings": {
+      "invincible": true,
+      "ignore": true,
+      "freeze": true,
+      "collision": true
+    },
+    "flags": {
+      "isJewelryStart": true
+    }
+  },
+  {
+    "id": "jewelry_reset",
+    "model": "u_m_m_jewelsec_01",
+    "position": { "x": -616.7598, "y": -236.3383, "z": 38.057, "w": 47.5748 },
+    "distance": 40.0,
+    "settings": {
+      "invincible": true,
+      "ignore": true,
+      "freeze": true,
+      "collision": true
+    },
+    "flags": {
+      "isJewelryReset": true
+    }
   }
 ]

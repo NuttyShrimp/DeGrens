@@ -2,6 +2,9 @@ import { Events, Npcs, PolyZone, Util } from '@dgx/client';
 
 let currentLocation: Heists.LocationId | null;
 
+const locationEnterHandlers: ((locationId: Heists.LocationId) => void)[] = [];
+const locationLeaveHandlers: ((locationId: Heists.LocationId) => void)[] = [];
+
 export const getCurrentLocation = () => currentLocation;
 
 export const buildLocations = (locations: Heists.InitData['locations']) => {
@@ -41,12 +44,22 @@ export const buildLocations = (locations: Heists.InitData['locations']) => {
 
 export const handlePlayerEnteredLocation = (locationId: Heists.LocationId) => {
   currentLocation = locationId;
+  locationEnterHandlers.forEach(cb => cb(locationId));
   Events.emitNet('heists:location:enter', locationId);
 };
 
 export const handlePlayerLeftLocation = (locationId: Heists.LocationId) => {
   currentLocation = null;
+  locationLeaveHandlers.forEach(cb => cb(locationId));
   Events.emitNet('heists:location:leave', locationId);
+};
+
+export const onEnterHeistLocation = (cb: (locationId: Heists.LocationId) => void) => {
+  locationEnterHandlers.push(cb);
+};
+
+export const onLeaveHeistLocation = (cb: (locationId: Heists.LocationId) => void) => {
+  locationLeaveHandlers.push(cb);
 };
 
 export const setDoorState = async (doorConfig: Heists.Door.Config, state: Heists.Door.State) => {

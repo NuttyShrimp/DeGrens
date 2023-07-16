@@ -12,6 +12,9 @@
     "microwave": 550,
     "gold_nugget": 85,
     "phone": 100,
-    "gold_bar": 2000
+    "gold_bar": 2000,
+    "jewelry_ring": 250,
+    "jewelry_bracelet": 500,
+    "jewelry_necklace": 1250
   }
 }

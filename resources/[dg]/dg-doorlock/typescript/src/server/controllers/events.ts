@@ -1,5 +1,4 @@
-import { Auth, Config, Events, Inventory, Police, RPC } from '@dgx/server';
-import { Util } from '@dgx/shared';
+import { Auth, Config, Events, Inventory, Jobs, Notifications, Police, Util } from '@dgx/server';
 import { areDoorsLoaded, changeDoorState, getAllDoors, getDoorById, registerNewDoor } from 'services/doors';
 
 // Client and server event emit
@@ -10,6 +9,15 @@ Inventory.registerUseable('lockpick', (src, item) => {
 
 Inventory.registerUseable('thermite', src => {
   Events.emitNet('doorlock:client:useThermite', src);
+});
+
+Inventory.registerUseable('detcord', plyId => {
+  if (Jobs.getCurrentJob(plyId) !== 'police') {
+    Notifications.add(plyId, 'Dit is enkel voor overheidsdiensten', 'error');
+    return;
+  }
+
+  Events.emitNet('doorlock:client:useDetcord', plyId);
 });
 
 Auth.onAuth(async plyId => {
@@ -46,4 +54,8 @@ Events.onNet('doorlock:server:triedLockpickingDoor', async (src: number, doorId:
 
 Events.onNet('doorlock:server:registerNew', (src: number, config: Doorlock.DoorConfig) => {
   registerNewDoor(config);
+});
+
+Events.onNet('doorlock:server:logDetcord', async (plyId: number) => {
+  Util.Log('doorlock:detcord', {}, `${Util.getName(plyId)}(${plyId}) has detcorded a door`, plyId);
 });

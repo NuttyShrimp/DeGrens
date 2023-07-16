@@ -7,6 +7,7 @@ import {
   hideInteraction,
   leaveDoorPolyZone,
   loadDoors,
+  tryToDetcordDoor,
   tryToLockpickDoor,
   tryToThermiteDoor,
 } from 'services/doors';
@@ -38,8 +39,8 @@ on('onResourceStop', (resourceName: string) => {
   hideInteraction();
 });
 
-RayCast.onEntityChange(entity => {
-  handleEntityChange(entity);
+RayCast.onEntityChange((entity, coords) => {
+  handleEntityChange(entity, coords);
 });
 
 PolyZone.onEnter<{ id: number }>('doorlock', (_, data, center) => {
@@ -56,6 +57,10 @@ Events.onNet('doorlock:client:useLockpick', () => {
 
 Events.onNet('doorlock:client:useThermite', () => {
   tryToThermiteDoor();
+});
+
+Events.onNet('doorlock:client:useDetcord', () => {
+  tryToDetcordDoor();
 });
 
 Events.onNet('doorlock:client:loadDoors', loadDoors);
