@@ -11,7 +11,6 @@ Inventory.registerUseable(['armor', 'pd_armor'], async (plyId, itemState) => {
     cancelOnDeath: true,
     disableInventory: true,
     disablePeek: true,
-    disarm: true,
     controlDisables: {
       combat: true,
     },
