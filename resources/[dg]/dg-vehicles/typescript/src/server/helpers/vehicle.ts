@@ -16,6 +16,7 @@ import { Vector4 } from '@dgx/shared';
 import upgradesManager from 'modules/upgrades/classes/manager.upgrades';
 import { generateBaseCosmeticUpgrades, generateBasePerformanceUpgrades } from '@shared/upgrades/service.upgrades';
 import { STANDARD_EXTRA_UPGRADES } from '@shared/upgrades/constants.upgrades';
+import { setVehicleEngineSound } from 'services/enginesounds';
 
 /**
  * Spawn a vehicle
@@ -173,6 +174,10 @@ export const spawnOwnedVehicle = async (
 
   if (vehicleInfo.wax) {
     addWaxedVehicle(vin, vehicleInfo.wax);
+  }
+
+  if (vehicleInfo.engineSound) {
+    setVehicleEngineSound(vehicle, vehicleInfo.engineSound);
   }
 
   setVehicleNosAmount(vehicle, vehicleInfo.nos);

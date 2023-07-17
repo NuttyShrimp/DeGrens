@@ -36,5 +36,6 @@ declare namespace Vehicle {
     stance: StanceType;
     wax: number | null;
     nos: number;
+    engineSound: string | null;
   }
 }

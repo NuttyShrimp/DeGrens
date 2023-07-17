@@ -418,3 +418,10 @@ export const hasVehicleMaintenanceFees = async (vin: string) => {
   const debtCount = await SQL.query('SELECT COUNT(*) as count FROM debts WHERE reason = ?', [`veh_${vin}`]);
   return (debtCount?.[0]?.count ?? 0) !== 0 ?? false;
 };
+
+export const updateVehicleEngineSound = async (vin: string, soundHash: string | null) => {
+  const query = `UPDATE player_vehicles
+                 SET engineSound = ?
+                 WHERE vin = ?`;
+  await SQL.query(query, [soundHash, vin]);
+};

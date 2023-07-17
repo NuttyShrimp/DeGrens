@@ -117,6 +117,10 @@ class Vehicles {
   setVehicleCannotBeLockpicked = (vin: string, cannotBeLockpicked: boolean, rejectMessage?: string) => {
     global.exports['dg-vehicles'].setVehicleCannotBeLockpicked(vin, cannotBeLockpicked, rejectMessage);
   };
+
+  openEngineSoundMenu = (plyId: number) => {
+    global.exports['dg-vehicles'].openEngineSoundMenu(plyId);
+  };
 }
 
 export default {

@@ -225,4 +225,10 @@ declare namespace Vehicles {
 
     type Multipliers = Record<HandlingEntry, Record<string, Multiplier>>;
   }
+
+  type EngineSoundConfig = {
+    label: string;
+    soundHash: string;
+    custom: boolean;
+  };
 }

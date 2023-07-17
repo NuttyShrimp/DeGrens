@@ -23,6 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Manier toegevoegd om als politie deuren te openen
 - Admin command op coordinaten van objecten te kopieren toegevoegd
 - Nieuwe overval toegevoegd
+- Mogelijkheid toegevoegd om ingame voertuig engine sounds aan te passen
 
 ### Changed
 - Override CID entry toegevoegd om kofi vehicles te kunnen assignen aan offline vehicles

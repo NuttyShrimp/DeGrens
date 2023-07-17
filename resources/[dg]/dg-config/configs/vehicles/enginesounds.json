@@ -1,0 +1,277 @@
+[
+  {
+    "label": "Ferrari 488",
+    "soundHash": "488sound",
+    "custom": true
+  },
+  {
+    "label": "Koenigsegg Agera RS",
+    "soundHash": "agerasound",
+    "custom": true
+  },
+  {
+    "label": "Gumpert Apollo V8",
+    "soundHash": "apollosv8",
+    "custom": true
+  },
+  {
+    "label": "Avesv ???",
+    "soundHash": "avesv",
+    "custom": true
+  },
+  {
+    "label": "Avesv ??? V12",
+    "soundHash": "avesvv12",
+    "custom": true
+  },
+  {
+    "label": "BMW B85",
+    "soundHash": "b58b30",
+    "custom": true
+  },
+  {
+    "label": "Brabus 850",
+    "soundHash": "brabus850",
+    "custom": true
+  },
+  {
+    "label": "Corvette C6 V8",
+    "soundHash": "c6v8sound",
+    "custom": true
+  },
+  {
+    "label": "Lamborghini Diablo V12",
+    "soundHash": "diablov12",
+    "custom": true
+  },
+  {
+    "label": "Elegy X",
+    "soundHash": "elegyx",
+    "custom": true
+  },
+  {
+    "label": "Lancer Evo 9",
+    "soundHash": "evoixsound",
+    "custom": true
+  },
+  {
+    "label": "Ferrari F40 V8",
+    "soundHash": "f40v8",
+    "custom": true
+  },
+  {
+    "label": "Ferrari F50 V12",
+    "soundHash": "f50v12",
+    "custom": true
+  },
+  {
+    "label": "Ferrari F430 V8",
+    "soundHash": "f430v8",
+    "custom": true
+  },
+  {
+    "label": "Ferrari F12",
+    "soundHash": "ferrarif12",
+    "custom": true
+  },
+  {
+    "label": "Lamborghini Gallardo V10",
+    "soundHash": "gallardov10",
+    "custom": true
+  },
+  {
+    "label": "Porsche GT3 Flat 6",
+    "soundHash": "gt3flat6",
+    "custom": true
+  },
+  {
+    "label": "Spania GTA Spano V10",
+    "soundHash": "gtaspanov10",
+    "custom": true
+  },
+  {
+    "label": "Harley V Twin",
+    "soundHash": "harleyvtwin",
+    "custom": true
+  },
+  {
+    "label": "Challenger Hellcat",
+    "soundHash": "hellcatsound",
+    "custom": true
+  },
+  {
+    "label": "Honda K20A",
+    "soundHash": "k20a",
+    "custom": true
+  },
+  {
+    "label": "Honda K20C",
+    "soundHash": "k20c",
+    "custom": true
+  },
+  {
+    "label": "Ferrari LaFerrari V12",
+    "soundHash": "laferrarisound",
+    "custom": true
+  },
+  {
+    "label": "Lamborghini Huracan V10",
+    "soundHash": "lambov10",
+    "custom": true
+  },
+  {
+    "label": "Lexus LFA V10",
+    "soundHash": "lfasound",
+    "custom": true
+  },
+  {
+    "label": "LG28 CST 26B",
+    "soundHash": "lg28cst26b",
+    "custom": true
+  },
+  {
+    "label": "LG29 CST 26BTRB",
+    "soundHash": "lg29cst26btrb",
+    "custom": true
+  },
+  {
+    "label": "LGCY02 B16FF",
+    "soundHash": "lgcy02b16ff",
+    "custom": true
+  },
+  {
+    "label": "Pagani Huayra V12",
+    "soundHash": "m158huayra",
+    "custom": true
+  },
+  {
+    "label": "Pagani Zonda V12",
+    "soundHash": "m297zonda",
+    "custom": true
+  },
+  {
+    "label": "Mazda RX7 FD",
+    "soundHash": "mazrx7fb",
+    "custom": true
+  },
+  {
+    "label": "Mclaren V8",
+    "soundHash": "mclarenv8",
+    "custom": true
+  },
+  {
+    "label": "Mercedes M113",
+    "soundHash": "mercedesm113",
+    "custom": true
+  },
+  {
+    "label": "Mercedes M155",
+    "soundHash": "mercedesm155",
+    "custom": true
+  },
+  {
+    "label": "Lamborghini Murcielago V12",
+    "soundHash": "murciev12",
+    "custom": true
+  },
+  {
+    "label": "Ford Mustang V8",
+    "soundHash": "musv8",
+    "custom": true
+  },
+  {
+    "label": "Lamborghini Aventador SVJ Novitec",
+    "soundHash": "novitecsvj",
+    "custom": true
+  },
+  {
+    "label": "BMW P60B40",
+    "soundHash": "p60b40",
+    "custom": true
+  },
+  {
+    "label": "Lamborghini Huracan Performante V10",
+    "soundHash": "perfov10",
+    "custom": true
+  },
+  {
+    "label": "Ford Predator V8",
+    "soundHash": "predatorv8",
+    "custom": true
+  },
+  {
+    "label": "Nissan GTR R35",
+    "soundHash": "r35sound",
+    "custom": true
+  },
+  {
+    "label": "Nissan RB26 DETT",
+    "soundHash": "rb26dett",
+    "custom": true
+  },
+  {
+    "label": "RX7 Rotary",
+    "soundHash": "rotary7",
+    "custom": true
+  },
+  {
+    "label": "Nissan Silvia S15",
+    "soundHash": "s15sound",
+    "custom": true
+  },
+  {
+    "label": "Lamborghini Sesto Elemento V10",
+    "soundHash": "sestov10",
+    "custom": true
+  },
+  {
+    "label": "Shonen",
+    "soundHash": "shonen",
+    "custom": true
+  },
+  {
+    "label": "Toyota Supra MK4",
+    "soundHash": "toysupmk4",
+    "custom": true
+  },
+  {
+    "label": "Lamborghini Twin Turbo Huracan",
+    "soundHash": "twinhuracan",
+    "custom": true
+  },
+  {
+    "label": "Lamborghini Urus V8",
+    "soundHash": "urusv8",
+    "custom": true
+  },
+  {
+    "label": "Bugatti Veyron W16",
+    "soundHash": "veyronsound",
+    "custom": true
+  },
+  {
+    "label": "Dodge Viper V10",
+    "soundHash": "viperv10",
+    "custom": true
+  },
+  {
+    "label": "Nissan VR38 DETT V6",
+    "soundHash": "vr38dettv6",
+    "custom": true
+  },
+  {
+    "label": "BMW N55",
+    "soundHash": "n55b30t0",
+    "custom": true
+  },
+  {
+    "label": "BMW S55",
+    "soundHash": "s55b30",
+    "custom": true
+  },
+  {
+    "label": "Adder",
+    "soundHash": "adder",
+    "custom": false
+  }
+]

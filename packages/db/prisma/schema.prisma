@@ -483,6 +483,7 @@ model player_vehicles {
   wax                    Int?
   nos                    Int                     @default(0) @db.SmallInt
   characters             characters              @relation(fields: [cid], references: [citizenid], onDelete: Cascade, map: "player_vehicles_ibfk_1")
+  engineSound            String?                 @db.VarChar(255)
   vehicle_depot_info     vehicle_depot_info[]
   vehicle_garage_logs    vehicle_garage_logs[]
   vehicle_service_status vehicle_service_status?
