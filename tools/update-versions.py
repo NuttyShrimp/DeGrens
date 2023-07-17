@@ -32,44 +32,44 @@ def updateVersionInFile(version, p):
 
 
 def updateVersions(version):
-    # try:
-    #   for path in Path("resources").rglob('package.json'):
-    #     if "node_modules" in str(path):
-    #         continue
-    #     updateVersionInFile(version, path)
-    # except:
-    #   print("An exception occurred") 
+    try:
+      for path in Path("resources").rglob('package.json'):
+        if "node_modules" in str(path):
+            continue
+        updateVersionInFile(version, path)
+    except:
+      print("An exception occurred") 
 
-    # try:
-    #   for path in Path("packages").rglob('package.json'):
-    #     if "node_modules" in str(path):
-    #         continue
-    #     updateVersionInFile(version, path)
-    # except:
-    #   print("An exception occurred") 
+    try:
+      for path in Path("packages").rglob('package.json'):
+        if "node_modules" in str(path):
+            continue
+        updateVersionInFile(version, path)
+    except:
+      print("An exception occurred") 
 
-    # updateVersionInFile(version, "./package.json")
-    # updateVersionInFile(version, "./resources/[dg]/dg-config/configs/main.json")
+    updateVersionInFile(version, "./package.json")
+    updateVersionInFile(version, "./resources/[dg]/dg-config/configs/main.json")
 
-    # with open("./CHANGELOG.md", "r+") as f:
-    #   changelog = f.readlines();
+    with open("./CHANGELOG.md", "r+") as f:
+      changelog = f.readlines();
       
-    #   versionLine = 0
-    #   for line in changelog:
-    #     if line.startswith("## [Unreleased]"):
-    #       break
-    #     versionLine += 1
+      versionLine = 0
+      for line in changelog:
+        if line.startswith("## [Unreleased]"):
+          break
+        versionLine += 1
 
-    #   if versionLine == 0:
-    #     print("No '##[Unreleased] gevonden in de CHANGELOG.md file'")
-    #     return
+      if versionLine == 0:
+        print("No '##[Unreleased] gevonden in de CHANGELOG.md file'")
+        return
 
-    #   changelog[versionLine] = f"## [{newVersion}]\n"
-    #   changelog.insert(versionLine-1, CHANGELOG_PLACEHOLDER)
+      changelog[versionLine] = f"## [{newVersion}]\n"
+      changelog.insert(versionLine-1, CHANGELOG_PLACEHOLDER)
 
-    #   f.seek(0)
-    #   f.truncate()
-    #   f.write("".join(changelog))
+      f.seek(0)
+      f.truncate()
+      f.write("".join(changelog))
 
     
     repo = Repo(".")
