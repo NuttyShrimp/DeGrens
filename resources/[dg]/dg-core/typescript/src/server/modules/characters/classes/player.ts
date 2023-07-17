@@ -130,7 +130,7 @@ export class Player implements Core.Characters.Player {
       characterLogger.warn(`Failed to save character info ${this.citizenid} | ${this.name}(${this.serverId})`);
       return;
     }
-    characterLogger.info(`Saved character ${this.citizenid} | ${this.name}(${this.serverId})`);
+    characterLogger.silly(`Saved character ${this.citizenid} | ${this.name}(${this.serverId})`);
   };
 
   updateMetadata = <T extends keyof Core.Characters.Metadata>(key: T, value: Core.Characters.Metadata[T]) => {

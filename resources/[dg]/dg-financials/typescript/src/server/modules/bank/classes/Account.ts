@@ -146,7 +146,7 @@ export class Account {
 
   public changeBalance(amount: number): void {
     amount = Number(amount.toFixed(2));
-    this.logger.info(`changeBalance | amount: ${amount}`);
+    this.logger.debug(`changeBalance | amount: ${amount}`);
     this.balance += amount;
     this.lastOperation = Date.now();
     this.updateBalance();

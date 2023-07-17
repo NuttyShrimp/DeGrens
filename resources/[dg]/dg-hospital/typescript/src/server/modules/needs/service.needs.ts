@@ -35,7 +35,7 @@ export const setNeed = (plyId: number, need: CharacterNeed, cb: (old: number) =>
   needs[need] = clampedValue;
   player.updateMetadata('needs', needs);
   emitNet('hud:client:UpdateNeeds', plyId, needs.hunger, needs.thirst);
-  needsLogger.info(`Changed ${need} to ${clampedValue} for ${Util.getName(plyId)}`);
+  needsLogger.silly(`Changed ${need} to ${clampedValue} for ${Util.getName(plyId)}`);
 };
 
 export const getNeed = (plyId: number, need: CharacterNeed) => {
