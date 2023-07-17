@@ -9,7 +9,7 @@ import {
 
 Events.onNet('business:kingpills:startJob', startKingPillsJob);
 Events.onNet('business:kingpills:loot', lootEnemy);
-RPC.register('business:kingpills:handlePickupEnter', handleKingPillsPickupEnter);
+Events.onNet('business:kingpills:handlePickupEnter', handleKingPillsPickupEnter);
 
 Util.onCharSpawn(plyId => {
   restoreKingPillsJob(plyId);

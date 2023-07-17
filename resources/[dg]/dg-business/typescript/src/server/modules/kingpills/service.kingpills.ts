@@ -1,4 +1,4 @@
-import { Events, Notifications, Phone, Util, Inventory, Jobs } from '@dgx/server';
+import { Events, Notifications, Phone, Util, Inventory, Jobs, Npcs, Taskbar } from '@dgx/server';
 import { getBusinessByName } from 'services/business';
 import { getExtraConfig } from 'services/config';
 import { KINGPILLS_JOB_LOOT } from './constants.kingpills';
@@ -7,8 +7,8 @@ const activeJobs = new Map<
   string,
   {
     locationIdx: number;
-    failTimeout: NodeJS.Timeout;
-    someoneEntered: boolean;
+    pedSpawned: boolean;
+    isLooted: boolean;
   }
 >();
 
@@ -37,12 +37,6 @@ export const registerKingPillsJob = () => {
 };
 
 export const startKingPillsJob = (plyId: number) => {
-  const changedJob = Jobs.changeJobOfPlayerGroup(plyId, 'kingpills');
-  if (!changedJob) return;
-
-  const group = Jobs.getGroupByServerId(plyId);
-  if (!group) return; // should never happen because changeJob checks this but to keep ts happy
-
   const cid = Util.getCID(plyId);
   const business = getBusinessByName('kingpills');
   if (!business?.isEmployee(cid)) {
@@ -50,56 +44,67 @@ export const startKingPillsJob = (plyId: number) => {
     return;
   }
 
-  const locations = getLocations();
-  const locationIdx = getInactiveLocationIdx(locations);
-  if (locationIdx === undefined) {
-    Notifications.add(plyId, 'Er zijn geen jobs beschikbaar', 'error');
-    return;
-  }
+  const changedJob = Jobs.changeJobOfPlayerGroup(plyId, 'kingpills');
+  if (!changedJob) return;
 
-  const failTimeout = setTimeout(() => {
-    const active = activeJobs.get(group.id);
-    if (!active) return;
-
-    activeJobs.delete(group.id);
-    Events.emitNet('business:kingpills:cleanup', plyId);
-    Notifications.add(plyId, 'De opdracht is mislukt', 'error');
-  }, 15 * 60 * 1000);
-
-  activeJobs.set(group.id, {
-    locationIdx,
-    failTimeout,
-    someoneEntered: false,
-  });
+  assignLocationForKingPillsJob(plyId);
 
   Phone.addMail(plyId, {
     subject: 'Nieuwe Job',
     sender: 'King Pills',
-    message: 'Bekijk je GPS om de joblocatie te bekijken.',
+    message:
+      'Bekijk je GPS om de ophaallocatie te bekijken.<br>Na de spullen op te halen krijg je automatisch een nieuwe locatie.<br>Je kan de job stoppen door je groep te verlaten',
   });
-  Events.emitNet('business:kingpills:start', plyId, locations[locationIdx]);
+};
+
+const assignLocationForKingPillsJob = (plyId: number) => {
+  const group = Jobs.getGroupByServerId(plyId);
+  if (!group) return;
+
+  const locations = getLocations();
+  const locationIdx = getInactiveLocationIdx(locations);
+  if (locationIdx === undefined) {
+    Notifications.add(plyId, 'Er zijn geen jobs meer beschikbaar', 'error');
+    activeJobs.delete(group.id);
+    group.members.forEach(member => {
+      if (!member.serverId) return;
+      Events.emitNet('business:kingpills:destroy', member.serverId);
+    });
+    return;
+  }
+
+  activeJobs.set(group.id, {
+    locationIdx,
+    pedSpawned: false,
+    isLooted: false,
+  });
+
+  const location = locations[locationIdx];
+  group.members.forEach(member => {
+    if (!member.serverId) return;
+    Events.emitNet('business:kingpills:build', plyId, location);
+  });
 
   Util.Log(
-    'kingpills:startJob',
-    { locationIdx },
-    `${Util.getName(plyId)}(${plyId}) has started a kingpills job`,
+    'kingpills:doJob',
+    { location },
+    `${Util.getName(plyId)}(${plyId}) has received a kingpills job location`,
     plyId
   );
 };
 
-export const lootEnemy = (plyId: number, enemyNetId: number) => {
+export const lootEnemy = async (plyId: number, enemyNetId: number) => {
   const group = Jobs.getGroupByServerId(plyId);
   if (!group) return;
 
   const active = activeJobs.get(group.id);
-  if (!active) return;
+  if (!active || !active.pedSpawned) return;
 
   const enemyPed = NetworkGetEntityFromNetworkId(enemyNetId);
   if (!enemyPed || !DoesEntityExist(enemyPed)) return;
   if (!Entity(enemyPed).state.isKingPillsEnemy) return;
 
-  const locations = getLocations();
-  const location = locations[active.locationIdx];
+  const location = getLocations()[active.locationIdx];
   if (!location) return;
 
   const plyCoords = Util.getPlyCoords(plyId);
@@ -109,22 +114,49 @@ export const lootEnemy = (plyId: number, enemyNetId: number) => {
     return;
   }
 
+  if (active.isLooted) return;
+
+  active.isLooted = true;
+  const [canceled] = await Taskbar.create(plyId, 'magnifying-glass', 'Doorzoeken', 5000, {
+    canCancel: true,
+    cancelOnDeath: true,
+    cancelOnMove: true,
+    disarm: true,
+    disableInventory: true,
+    controlDisables: {
+      movement: true,
+      carMovement: true,
+      combat: true,
+    },
+    animation: {
+      animDict: 'missexile3',
+      anim: 'ex03_dingy_search_case_a_michael',
+      flags: 1,
+    },
+  });
+  if (canceled) {
+    active.isLooted = false;
+    return;
+  }
+
   const itemName = KINGPILLS_JOB_LOOT[Math.floor(Math.random() * KINGPILLS_JOB_LOOT.length)];
   Inventory.addItemToPlayer(plyId, itemName, 1);
 
-  Jobs.leaveGroup(plyId);
+  assignLocationForKingPillsJob(plyId);
 };
 
 export const handleKingPillsJobLeave = (plyId: number | null, groupId: string) => {
   const active = activeJobs.get(groupId);
   if (!active) return;
 
-  clearInterval(active.failTimeout);
-  activeJobs.delete(groupId);
-
   if (plyId) {
-    Events.emitNet('business:kingpills:cleanup', plyId);
+    Events.emitNet('business:kingpills:destroy', plyId);
   }
+
+  const group = Jobs.getGroupById(groupId);
+  if (group && group.members.length > 0) return;
+
+  activeJobs.delete(groupId);
 
   Util.Log('kingpills:finish', {}, `finished kingpills job for group ${groupId}`, plyId ?? undefined);
 };
@@ -136,15 +168,36 @@ export const restoreKingPillsJob = (plyId: number) => {
   const active = activeJobs.get(group.id);
   if (!active) return;
 
-  Events.emitNet('business:kingpills:start', plyId, getLocations()[active.locationIdx]);
+  Events.emitNet('business:kingpills:build', plyId, getLocations()[active.locationIdx]);
 };
 
 export const handleKingPillsPickupEnter = (plyId: number) => {
   const group = Jobs.getGroupByServerId(plyId);
   if (!group) return;
   const active = activeJobs.get(group.id);
-  if (!active) return;
+  if (!active || active.pedSpawned) return;
+  const position = getLocations()[active.locationIdx];
+  if (!position) return;
 
-  active.someoneEntered = true;
-  return true;
+  Npcs.spawnGuard({
+    model: 'a_m_m_hillbilly_02',
+    position,
+    heading: Util.getHeadingToFaceCoordsFromCoord(position, Util.getPlyCoords(plyId)),
+    weapon: 'WEAPON_KNIFE',
+    flags: {
+      isKingPillsEnemy: true,
+    },
+    deleteTime: {
+      alive: 180,
+      dead: 30,
+    },
+  });
+  Notifications.add(plyId, 'Je hoort iemand roepen');
+
+  active.pedSpawned = true;
+
+  group.members.forEach(member => {
+    if (!member.serverId) return;
+    Events.emitNet('business:kingpills:destroy', member.serverId);
+  });
 };

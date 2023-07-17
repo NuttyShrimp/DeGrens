@@ -1,7 +1,7 @@
-import { Events, PolyZone, Core, BaseEvents } from '@dgx/client';
+import { Events, PolyZone, Core, BaseEvents, Peek } from '@dgx/client';
 import { addPeekEntryForBusinessZone } from 'helpers';
 import { isEmployee } from 'service/permscache';
-import { cleanupKingPillsJob, handlePickupEnter, startKingPillsJob } from './service.kingpills';
+import { destroyKingPillsJobZone, buildKingPillsJobZone } from './service.kingpills';
 
 addPeekEntryForBusinessZone('kingpills', 'crafting', false, {
   options: [
@@ -16,17 +16,32 @@ addPeekEntryForBusinessZone('kingpills', 'crafting', false, {
   ],
 });
 
-Events.onNet('business:kingpills:start', startKingPillsJob);
-Events.onNet('business:kingpills:cleanup', cleanupKingPillsJob);
+Peek.addGlobalEntry('ped', {
+  options: [
+    {
+      label: 'Doorzoeken',
+      icon: 'fas fa-magnifying-glass',
+      action: (_, ent) => {
+        if (!ent) return;
+        Events.emitNet('business:kingpills:loot', NetworkGetNetworkIdFromEntity(ent));
+      },
+      canInteract: entity =>
+        !!entity && DoesEntityExist(entity) && IsEntityDead(entity) && Entity(entity).state.isKingPillsEnemy,
+    },
+  ],
+});
 
-PolyZone.onEnter('kingpills_job_zone', (_, __, center) => {
-  handlePickupEnter(center);
+Events.onNet('business:kingpills:build', buildKingPillsJobZone);
+Events.onNet('business:kingpills:destroy', destroyKingPillsJobZone);
+
+PolyZone.onEnter('kingpills_job_zone', () => {
+  Events.emitNet('business:kingpills:handlePickupEnter');
 });
 
 Core.onPlayerUnloaded(() => {
-  cleanupKingPillsJob();
+  destroyKingPillsJobZone();
 });
 
 BaseEvents.onResourceStop(() => {
-  cleanupKingPillsJob();
+  destroyKingPillsJobZone();
 });

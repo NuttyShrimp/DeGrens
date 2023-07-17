@@ -40,6 +40,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Optie om ervoor te zorgen dat voertuigen met bepaalde vins niet meer gelockpicked kunnen worden
 - Je wapen gaat niet meer weg wanneer je armor aandoet
 - Calico stancing gefixt
+- KingPills job kan nu meerdere locaties na elkaar doen
 
 ### Fixed
 - Motor gaat nu uit tijdens noclip om engine sounds te voorkomen
