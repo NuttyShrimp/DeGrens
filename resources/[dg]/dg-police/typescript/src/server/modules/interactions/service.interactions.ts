@@ -1,7 +1,12 @@
-import { Events } from '@dgx/server';
 import { Util } from '@dgx/shared';
 import { isPlayerInCarryDuo, stopCarryDuo } from './modules/carry';
-import { getPlayerEscorting, isPlayerBeingEscorted, isPlayerEscorting, stopEscorting } from './modules/escort';
+import {
+  getPlayerBeingEscorted,
+  getPlayerEscorting,
+  isPlayerBeingEscorted,
+  isPlayerEscorting,
+  stopEscorting,
+} from './modules/escort';
 
 // This means in carry duo, escorting or getting escorted
 export const isPlayerInActiveInteraction = (plyId: number) => {
@@ -17,11 +22,19 @@ export const forceStopInteractions = async (plyId: number) => {
     await Util.Delay(100); // Needed because carry tps player which can cause issues
   }
 
-  // Then we check escorting
+  // Then we check if we are escorting anyone
+  const escortedPlayer = getPlayerBeingEscorted(plyId);
+  if (escortedPlayer) {
+    stopEscorting(plyId, true);
+
+    const plyPed = GetPlayerPed(String(escortedPlayer));
+    await Util.awaitCondition(() => GetEntityAttachedTo(plyPed) === 0);
+  }
+
+  // Then we check if we are getting escorted
   const escortingPlayer = getPlayerEscorting(plyId);
   if (escortingPlayer) {
-    stopEscorting(escortingPlayer);
-    Events.emitNet('police:interactions:overrideStoppedEscort', escortingPlayer);
+    stopEscorting(escortingPlayer, true);
     const plyPed = GetPlayerPed(String(plyId));
     await Util.awaitCondition(() => GetEntityAttachedTo(plyPed) === 0);
   }

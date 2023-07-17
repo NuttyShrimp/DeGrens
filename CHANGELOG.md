@@ -50,6 +50,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Probleem opgelost waardoor identifiers niet correct verwijderd worden
 - Probleem opgelost dat je laatste locatie out of bounds kan zijn
 - Er kan weer een takelopdracht gemaakt worden voor politievoertuigen
+- Je wordt nu wel losgelaten wanneer diegene dat je escort down gaat
 
 ## [1.2.9]
 
