@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 - Fix engine sound hash of mazrx7fd
+- Foute notificatie dat je geen lockpick hebt opgelost bij parkeermeters
 
 ## [1.2.10]
 

@@ -55,7 +55,7 @@ export const finishLootingParkingMeter = async (plyId: number, success: boolean)
     return;
   }
 
-  if (lockpickItem) {
+  if (!lockpickItem) {
     Notifications.add(plyId, 'Je hebt geen lockpick', 'error');
     return;
   }
