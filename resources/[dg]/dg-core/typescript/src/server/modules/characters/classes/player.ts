@@ -65,6 +65,22 @@ export class Player implements Core.Characters.Player {
       }
     }
 
+    // default to appartments if out of bounds (values gotten by map limits for each axis)
+    if (
+      this.position.x < -5000 ||
+      this.position.x > 6000 ||
+      this.position.y < -6000 ||
+      this.position.y > 9000 ||
+      this.position.z < -100 ||
+      this.position.z > 1500
+    ) {
+      this.position = {
+        x: -263.6605,
+        y: -966.7111,
+        z: 31.2177,
+      };
+    }
+
     const charResult = await SQL.query(
       `
       INSERT INTO characters (citizenid, steamid, last_updated) VALUES (?, ?, NOW())

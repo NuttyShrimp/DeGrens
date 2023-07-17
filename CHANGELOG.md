@@ -47,6 +47,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Suspension gaat nu wel kapot bij wagens waar suspension visueel niet kapot gaat
 - Failed heartbeat bans opgelost wanneer speler crashed tijdens inladen
 - Probleem opgelost waardoor identifiers niet correct verwijderd worden
+- Probleem opgelost dat je laatste locatie out of bounds kan zijn
 
 ## [1.2.9]
 
