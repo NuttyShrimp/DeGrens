@@ -41,14 +41,8 @@ export const doesVehicleHaveVin = (vehicle: number) => {
 };
 
 export const getCidFromVin = async (vin: string) => {
-  const result = await SQL.scalar(
-    `SELECT *
-                                   FROM player_vehicles
-                                   WHERE vin = ?`,
-    [vin]
-  );
-  if (!result) return undefined;
-  return result.cid;
+  const result = await SQL.query<{ cid: number }[]>(`SELECT cid FROM player_vehicles WHERE vin = ?`, [vin]);
+  return result?.[0]?.cid;
 };
 
 export const isPlayerVehicleOwner = async (playerId: number, vin: string) => {
