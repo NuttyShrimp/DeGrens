@@ -81,7 +81,7 @@ class LocationManager extends Util.Singleton<LocationManager>() {
       const inventory = await inventoryManager.get(id);
       inventory.destroyAllItems();
       this.removeLocation('drop', id);
-      this.logger.info(`Drop (${id}) and its contents have been destroyed`);
+      this.logger.debug(`Drop (${id}) and its contents have been destroyed`);
     }, dropRemoveTime * 60 * 1000);
 
     this.locations.drop.set(id, {

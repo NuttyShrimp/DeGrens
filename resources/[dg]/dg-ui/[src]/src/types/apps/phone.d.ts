@@ -179,6 +179,8 @@ declare namespace Phone {
       number?: string;
       isAnon?: boolean;
     }
+
+    type CallType = 'normal' | 'anon' | 'prison';
   }
   namespace Mail {
     type Mail = {

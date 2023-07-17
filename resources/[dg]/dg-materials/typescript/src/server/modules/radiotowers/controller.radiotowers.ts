@@ -106,6 +106,8 @@ Events.onNet('materials:radiotowers:loot', async (src: number, towerId: string) 
 
   setTowerState(towerId, 'looted', true);
   Inventory.addItemToPlayer(src, 'material_electronics', getConfig().radiotowers.amountOfItems);
-  Util.Log('materials:radiotower:loot', { towerId }, `${Util.getName(src)} has looted a radiotower`, src);
-  mainLogger.info(`Radiotower ${towerId} has been looted by ${src}`);
+
+  const logMsg = `${Util.getName(src)} has looted a radiotower ${towerId}`;
+  Util.Log('materials:radiotower:loot', { towerId }, logMsg, src);
+  mainLogger.info(logMsg);
 });

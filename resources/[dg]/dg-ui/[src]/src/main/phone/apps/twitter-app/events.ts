@@ -9,9 +9,7 @@ import { changeTweetStatus } from './lib';
 export const events: Phone.Events = {};
 
 events.newTweet = (tweet: Phone.Twitter.Tweet) => {
-  const tweets = useTwitterAppStore.getState().tweets;
-  tweets.unshift(tweet);
-  useTwitterAppStore.setState({ tweets });
+  useTwitterAppStore.setState(s => ({ tweets: [tweet, ...s.tweets] }));
 
   const characterState = useMainStore.getState().character;
   if (`${characterState.firstname}_${characterState.lastname}`.replace(' ', '_') === tweet.sender_name) return;

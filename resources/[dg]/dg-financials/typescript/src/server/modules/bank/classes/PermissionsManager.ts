@@ -93,7 +93,7 @@ export class PermissionsManager {
     if (!perms) {
       perms = this.buildPermissions(member.access_level);
     }
-    this.logger.info(`hasPermission | cid: ${cid} | ${permission}: ${perms[permission]}`);
+    this.logger.debug(`hasPermission | cid: ${cid} | ${permission}: ${perms[permission]}`);
     return perms[permission];
   }
 
