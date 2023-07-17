@@ -25,21 +25,6 @@ It's possible to add an entry to the info app by using the following export
 exports["dg-phone"]:registerInfoEntry(name, getter, icon, color, prefix)
 ```
 
-## Mail
-Send a mail to a player by using the following export or event:
-```lua
--- Client sided
-exports["dg-phone"]:sendMail(subject, sender, mail)
-
--- Server sided
-TriggerClientEvent('dg-phone:client:addNewMail', target, subject, sender, mail)
-```
-Sending an email to a player to save if they are not online
-```lua 
--- Server Sided
-exports["dg-phone"]:sendOfflineMail(cid, subject, sender, mail)
-```
-
 ## Notifications
 Sendout a new notifications
 ```lua

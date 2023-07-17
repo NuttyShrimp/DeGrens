@@ -1,57 +1,72 @@
-import { Events, Jobs, Sounds } from '@dgx/server';
+import { Events, Jobs, Sounds, Util } from '@dgx/server';
 import { trackersLogger } from './logger.trackers';
+import { buildTrackerSoundId } from './helpers.trackers';
 
-const activeTrackers = new Map<number, NodeJS.Timer>();
+let currentTrackerId = 1;
+const activeTrackers = new Map<number, { vehicle: number; interval: NodeJS.Timer }>();
 
 export const addTrackerToVehicle = (vehicle: number, delay: number) => {
-  if (!DoesEntityExist(vehicle)) {
-    trackersLogger.warn(`Tried to add tracker to nonexistent vehicle ${vehicle}`);
-    return;
+  const trackerId = currentTrackerId++;
+
+  // first check if vehicle already has tracker, and remove
+  for (const [tId, t] of activeTrackers) {
+    if (t.vehicle !== vehicle) continue;
+    removeTrackerFromVehicle(tId);
+    break;
   }
 
-  const existingTrackerInterval = activeTrackers.get(vehicle);
-  if (existingTrackerInterval) {
-    clearInterval(existingTrackerInterval);
-    trackersLogger.silly(`Removing tracker from vehicle to add a new tracker ${vehicle}`);
-  }
-
-  emitTrackerLocationToPolice(vehicle);
   const interval = setInterval(() => {
-    emitTrackerLocationToPolice(vehicle);
+    emitTrackerLocationToPolice(trackerId);
   }, delay);
 
-  activeTrackers.set(vehicle, interval);
-  trackersLogger.silly(`Adding tracker to vehicle ${vehicle}`);
+  Entity(vehicle).state.set('trackerId', trackerId, true);
+  activeTrackers.set(trackerId, {
+    vehicle,
+    interval,
+  });
+  trackersLogger.silly(`Adding tracker ${trackerId} to vehicle ${vehicle}`);
+
+  // force emit location after adding active tracker to skip initial delay of interval
+  emitTrackerLocationToPolice(trackerId);
+
+  return trackerId;
 };
 
-const emitTrackerLocationToPolice = (vehicle: number) => {
-  if (!DoesEntityExist(vehicle)) {
-    removeTrackerFromVehicle(vehicle);
+const emitTrackerLocationToPolice = (trackerId: number) => {
+  const vehicle = activeTrackers.get(trackerId)?.vehicle;
+  if (!vehicle || !DoesEntityExist(vehicle)) {
+    removeTrackerFromVehicle(trackerId);
     return;
   }
 
-  const netId = NetworkGetNetworkIdFromEntity(vehicle);
-
-  const coordsArray = GetEntityCoords(vehicle);
+  const coords = Util.getEntityCoords(vehicle);
   Jobs.getPlayersForJob('police').forEach(plyId => {
-    emitNet('police:trackers:setTrackerCoords', plyId, netId, ...coordsArray);
+    emitNet('police:trackers:setCoords', plyId, trackerId, coords);
   });
 
   // Replace with custom single beep sound that is louder, this one works fine but enginesound makes it unhearable
-  Sounds.playOnEntity(`police_tracker_sound_${netId}`, 'PIN_BUTTON', 'ATM_SOUNDS', netId);
+  const netId = NetworkGetNetworkIdFromEntity(vehicle);
+  Sounds.playOnEntity(buildTrackerSoundId(trackerId), 'PIN_BUTTON', 'ATM_SOUNDS', netId);
 };
 
-export const removeTrackerFromVehicle = (vehicle: number) => {
-  const existingTrackerInterval = activeTrackers.get(vehicle);
-  if (!existingTrackerInterval) return;
-
-  clearInterval(existingTrackerInterval);
-  trackersLogger.silly(`Removing tracker from vehicle ${vehicle}`);
-
-  if (DoesEntityExist(vehicle)) {
-    const netId = NetworkGetNetworkIdFromEntity(vehicle);
-    Jobs.getPlayersForJob('police').forEach(plyId => {
-      Events.emitNet('police:trackers:removeTracker', plyId, netId);
-    });
+export const removeTrackerFromVehicle = (trackerId: number) => {
+  const tracker = activeTrackers.get(trackerId);
+  if (!tracker) {
+    trackersLogger.warn(`Tried to remove unknown tracker ${trackerId}`);
+    return;
   }
+
+  Sounds.stop(buildTrackerSoundId(trackerId));
+  if (DoesEntityExist(tracker.vehicle)) {
+    Entity(tracker.vehicle).state.set('trackerId', null, true);
+  }
+
+  clearInterval(tracker.interval);
+  trackersLogger.silly(`Removing tracker ${trackerId} from vehicle ${tracker.vehicle}`);
+
+  Jobs.getPlayersForJob('police').forEach(plyId => {
+    Events.emitNet('police:trackers:remove', plyId, trackerId);
+  });
 };
+
+export const getAmountOfActiveTrackers = () => activeTrackers.size;

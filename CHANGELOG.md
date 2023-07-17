@@ -13,6 +13,56 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+## [1.2.10]
+
+### Added
+- Default stance toegevoegd voor evo9, rcf
+- Nieuwe kleine criminele activiteit toegevoegd
+- Extra loot toegevoegd aan vuilbakken doorzoeken
+- removeUiFocus commando toegevoegd om je cursor weg te halen wanneer deze vast zit op je scherm
+- Manier toegevoegd om intern voertuig te blokkeren uit Bennys
+- Kofi voertuigen toegevoegd
+- Serverside functions toegevoegd om map NPCs te spawnen
+- Optionele locatie knop toegevoegd aan phone mails
+- Nieuw guard spawning systeem toegevoegd om makkelijker en beter enemy NPCs te spawnen
+- Nieuwe criminele drugs activiteit toegevoegd
+- Commands toegevoegd om gangs te creeren/verwijderen
+- Verschil tussen twitter reply en retweet toegevoegd
+- Manier toegevoegd om als politie deuren te openen
+- Admin command op coordinaten van objecten te kopieren toegevoegd
+- Nieuwe overval toegevoegd
+- Mogelijkheid toegevoegd om ingame voertuig engine sounds aan te passen
+- Politie badge kledingstuk toegevoegd
+- Nieuwe ped toegevoegd
+
+### Changed
+- Override CID entry toegevoegd om kofi vehicles te kunnen assignen aan offline vehicles
+- Bennys repair prijs berekening aangepast
+- PostOP payout getweaked
+- KingPills Bandage crafting recipe en uses aangepast
+- Kans op regen verlaagd
+- Voertuig trackers worden nu verwijderd wanneer je uit dienst gaat of wanneer voertuig niet meer bestaat
+- Start ingame tijd op middag op dev server
+- Windowtexture dbxultimate gefixt
+- Phone Mails blijven nu staan als je relogged tijdens dezelfde restart
+- Tweak houserobbery loot
+- Vallen bij springen verminderd
+- Optie om ervoor te zorgen dat voertuigen met bepaalde vins niet meer gelockpicked kunnen worden
+- Je wapen gaat niet meer weg wanneer je armor aandoet
+- Calico stancing gefixt
+- KingPills job kan nu meerdere locaties na elkaar doen
+
+### Fixed
+- Motor gaat nu uit tijdens noclip om engine sounds te voorkomen
+- Fuel wordt nu terug correct gezet wanneer je een persoonlijk voertuig uithaalt
+- Hopelijk probleem opgelost ivm mensen kicken
+- Suspension gaat nu wel kapot bij wagens waar suspension visueel niet kapot gaat
+- Failed heartbeat bans opgelost wanneer speler crashed tijdens inladen
+- Probleem opgelost waardoor identifiers niet correct verwijderd worden
+- Probleem opgelost dat je laatste locatie out of bounds kan zijn
+- Er kan weer een takelopdracht gemaakt worden voor politievoertuigen
+- Je wordt nu wel losgelaten wanneer diegene dat je escort down gaat
+
 ## [1.2.9]
 
 ### Added

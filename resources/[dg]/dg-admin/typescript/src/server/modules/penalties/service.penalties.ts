@@ -1,10 +1,9 @@
 import { Chat, Config, Notifications, SQL, Util } from '@dgx/server';
 import dayjs from 'dayjs';
 import { updatePointsReset } from 'modules/penaltyPoints/service.penaltyPoints';
-
-import { getIdentifierForPlayer, getPlayerForSteamId, getServerIdForSteamId } from '../../helpers/identifiers';
-
+import { getIdentifierForPlayer } from '../../helpers/identifiers';
 import { dropBySteamId, penaltyLogger } from './util.penalties';
+import { userModule } from 'helpers/core';
 
 const penalisePlayer = async (
   type: 'ban' | 'kick' | 'warn',
@@ -15,7 +14,7 @@ const penalisePlayer = async (
   length?: number,
   data?: Record<string, any>
 ) => {
-  const targetSrvId = getServerIdForSteamId(target);
+  const targetSrvId = userModule.getServerIdFromIdentifier('steam', target);
   const targetName = targetSrvId ? Util.getName(targetSrvId) : String(targetSrvId);
   const metadata = {
     reason: reasons.join(' | '),
@@ -68,9 +67,9 @@ const penalisePlayer = async (
   penaltyLogger.info(
     `${targetName}(${target}) received a ${type} by ${
       src === -1 ? 'AntiCheat' : src === 0 ? 'Panel' : Util.getName(src)
-    } | ${Object.entries(metadata)
+    } | ${Object.entries({ ...metadata, ...data })
       .map(([k, v]) => `${k}: ${v}`)
-      .join('| ')}`
+      .join(' | ')}`
   );
   Chat.sendMessage('admin', {
     type: 'system',
@@ -122,12 +121,12 @@ export const warnPlayer = async (src: number, target: string | number, reasons: 
     Notifications.add(src, 'Failed to warn player, try again');
     return;
   }
-  const targetData = getPlayerForSteamId(target);
-  if (!targetData) {
+  const targetServerId = userModule.getServerIdFromIdentifier('steam', target);
+  if (!targetServerId) {
     await SQL.query('INSERT INTO admin_unnanounced_warns (steamid, penaltyid) VALUES (?, ?)', [target, penaltyId]);
     return;
   }
-  Chat.sendMessage(targetData.source, {
+  Chat.sendMessage(targetServerId, {
     type: 'warning',
     message: `Je bent gewaarschuwd voor: ${reasons.join(' | ')}`,
     prefix: 'Admin: ',
@@ -164,7 +163,7 @@ export const isPlayerBanned = async (steamId: string) => {
 };
 
 export const ACBan = (target: number, reason: string, data?: Record<string, any>) => {
-  penaltyLogger.warn('Going to ban someone with anticheat: ', 'reason', reason, 'data', data);
+  penaltyLogger.warn(`Going to ban someone with anticheat | reason: ${reason} | data: ${JSON.stringify(data ?? {})}`);
   // To prevent the typeof check from doing weird shit
   const targetSteamId = getIdentifierForPlayer(Number(target), 'steam')!;
   banPlayer(-1, targetSteamId, [`Anticheat: ${reason}`], 30, -1, data);

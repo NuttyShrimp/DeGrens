@@ -15,8 +15,8 @@ class FuelManager extends Util.Singleton<FuelManager>() {
     }
   }
 
-  getFuelLevel(vehicle: number): number | undefined {
-    const fuelLevel = Entity(vehicle).state.fuelLevel;
+  getFuelLevel(vehicle: number): number {
+    const fuelLevel = Entity(vehicle).state?.fuelLevel ?? 0;
     fuelLogger.debug(`Getting fuelLevel for ${vehicle}: ${fuelLevel}`);
     return fuelLevel;
   }
@@ -30,9 +30,8 @@ class FuelManager extends Util.Singleton<FuelManager>() {
   // Fired when fuelLevel statebag of a vehicle has changed
   public handleStateChange = (vehicle: number, fuelLevel: number) => {
     const vin = getVinForVeh(vehicle);
-    if (!vin) return;
-    if (!vinManager.isVinFromPlayerVeh(vin)) return;
-    return this.updateFuelDB(vin, fuelLevel);
+    if (!vin || !vinManager.isVinFromPlayerVeh(vin)) return;
+    this.updateFuelDB(vin, fuelLevel);
   };
 
   // Register new vehicles that dont have fuel registered yet

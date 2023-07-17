@@ -1,6 +1,10 @@
 class DoorLock {
-  public changeDoorState = (doorId: string, locked: boolean) => {
-    global.exports['dg-doorlock'].changeDoorState(doorId, locked);
+  public changeDoorState = (doorName: string, locked: boolean) => {
+    global.exports['dg-doorlock'].changeDoorState(doorName, locked);
+  };
+
+  public getDoorCoordsByName = (doorName: string): Vec3 => {
+    return global.exports['dg-doorlock'].getDoorCoordsByName(doorName);
   };
 }
 

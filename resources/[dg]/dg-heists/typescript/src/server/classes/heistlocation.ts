@@ -92,4 +92,8 @@ export class HeistLocation {
     spawnTrolleys(this.id);
     this.logger.debug('Spawning trolleys');
   };
+
+  public getPlayersInside = () => [...this.insidePlayers];
+
+  public getAmountOfPlayersInside = () => this.insidePlayers.size;
 }

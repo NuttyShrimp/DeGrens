@@ -864,6 +864,17 @@
   },
   {
     "markedForSeizure": true,
+    "name": "processed_meth",
+    "label": "Verwerkte Meth",
+    "decayRate": 240,
+    "image": "processed_meth.png",
+    "size": {
+      "x": 9,
+      "y": 9
+    }
+  },
+  {
+    "markedForSeizure": true,
     "name": "coke_bag",
     "label": "Zakje Coke",
     "useable": true,
@@ -2475,5 +2486,56 @@
       "y": 3
     },
     "decayRate": 20160
+  },
+  {
+    "name": "detcord",
+    "label": "Detcord",
+    "useable": true,
+    "decayRate": 20160,
+    "image": "detcord.png",
+    "size": {
+      "x": 4,
+      "y": 3
+    }
+  },
+  {
+    "name": "jewelry_sd_card",
+    "label": "SD Kaartje",
+    "decayRate": 4320,
+    "image": "jewelry_sd_card.png",
+    "size": {
+      "x": 2,
+      "y": 2
+    }
+  },
+  {
+    "name": "jewelry_ring",
+    "label": "Angelico Ring",
+    "decayRate": 2880,
+    "image": "jewelry_ring.png",
+    "size": {
+      "x": 1,
+      "y": 1
+    }
+  },
+  {
+    "name": "jewelry_bracelet",
+    "label": "Angelico Armband",
+    "decayRate": 2880,
+    "image": "jewelry_bracelet.png",
+    "size": {
+      "x": 3,
+      "y": 2
+    }
+  },
+  {
+    "name": "jewelry_necklace",
+    "label": "Angelico Ketting",
+    "decayRate": 2880,
+    "image": "jewelry_necklace.png",
+    "size": {
+      "x": 2,
+      "y": 2
+    }
   }
 ]

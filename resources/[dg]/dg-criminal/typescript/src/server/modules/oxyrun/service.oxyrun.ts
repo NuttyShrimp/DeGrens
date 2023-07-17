@@ -99,12 +99,11 @@ export const startOxyrunForPlayer = (plyId: number) => {
 
   sendOutStartEventToPlayer(plyId, activeRun, location);
 
-  Phone.sendMail(
-    plyId,
-    'Levering Pillen',
-    'Waltuh Blue',
-    `Ik heb ${activeRun.counter} dozen voor je, vergeet ze niet!<br><br>Eenmaal aangekomen op de locatie zullen de geinteresseerde kopers zich duidelijk kenbaar maken.<br><br>Leg telkens 1 doos in de koffer van de koper om het te verkopen.<br><br>Veel succes!`
-  );
+  Phone.addMail(plyId, {
+    subject: 'Levering Pillen',
+    sender: 'Waltuh Blue',
+    message: `Ik heb ${activeRun.counter} dozen voor je, vergeet ze niet!<br><br>Eenmaal aangekomen op de locatie zullen de geinteresseerde kopers zich duidelijk kenbaar maken.<br><br>Leg telkens 1 doos in de koffer van de koper om het te verkopen.<br><br>Veel succes!`,
+  });
 
   const logMsg = `${Util.getName(plyId)}(${plyId}) has started an oxyrun`;
   oxyrunLogger.info(logMsg);

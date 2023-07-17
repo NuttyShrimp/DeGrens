@@ -1,19 +1,24 @@
 import { Events, Jobs } from '@dgx/server';
 import { trackersLogger } from './logger.trackers';
-import { addTrackerToVehicle, removeTrackerFromVehicle } from './service.trackers';
+import { addTrackerToVehicle, getAmountOfActiveTrackers, removeTrackerFromVehicle } from './service.trackers';
 
 global.exports('addTrackerToVehicle', addTrackerToVehicle);
 global.exports('removeTrackerFromVehicle', removeTrackerFromVehicle);
 
-Events.onNet('police:trackers:disable', (src: number, netId: number) => {
-  const job = Jobs.getCurrentJob(src);
+Events.onNet('police:trackers:disable', (plyId: number, trackerId: number) => {
+  const job = Jobs.getCurrentJob(plyId);
   if (job !== 'police') {
-    trackersLogger.error(`Player ${src} tried to remove tracker from vehicle but was not police`);
+    trackersLogger.error(`Player ${plyId} tried to remove tracker from vehicle but was not police`);
     return;
   }
 
-  const vehicle = NetworkGetEntityFromNetworkId(netId);
-  if (!vehicle || !DoesEntityExist(vehicle)) return;
+  removeTrackerFromVehicle(trackerId);
+});
 
-  removeTrackerFromVehicle(vehicle);
+// remove all trackers when player goes off duty
+Jobs.onJobUpdate((plyId, job) => {
+  if (!!job) return;
+  if (getAmountOfActiveTrackers() === 0) return;
+
+  Events.emitNet('police:trackers:removeAll', plyId);
 });

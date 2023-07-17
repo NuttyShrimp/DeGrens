@@ -26,7 +26,7 @@ export const scheduleHeartBeat = () => {
   Events.emitNet('auth:heartbeat');
   heartbeat = setTimeout(() => {
     scheduleHeartBeat();
-  }, 180000);
+  }, 1.5 * 60 * 1000);
 };
 
 export const stopHeartBeat = () => {
@@ -163,16 +163,23 @@ export const schedulePedThread = () => {
 
   pedMods = setInterval(() => {
     const inNoclip = global.exports['dg-admin'].inNoclip();
-    const ped = PlayerPedId();
+
     if (!inNoclip) {
-      if (GetEntityAlpha(ped) !== 255 && !allowed.includes('invisible')) {
-        Events.emitNet('auth:anticheat:addFlag', 'alpha');
-        SetEntityAlpha(ped, 255, false);
+      const ped = PlayerPedId();
+      const isDown = Hospital.isDown();
+      const isCuffed = Police.isCuffed();
+
+      if (!isDown && !isCuffed) {
+        if (GetEntityAlpha(ped) !== 255 && !allowed.includes('invisible')) {
+          SetEntityAlpha(ped, 255, false);
+          Events.emitNet('auth:anticheat:addFlag', 'alpha');
+        }
+        if (!IsEntityVisible(ped) && !allowed.includes('invisible')) {
+          SetEntityVisible(ped, true, true);
+          Events.emitNet('auth:anticheat:addFlag', 'visible');
+        }
       }
-      if (!IsEntityVisible(ped) && !allowed.includes('invisible')) {
-        SetEntityVisible(ped, true, true);
-        Events.emitNet('auth:anticheat:addFlag', 'visible');
-      }
+
       if (GetPlayerInvincible(ped) && !allowed.includes('invincible')) {
         SetEntityInvincible(ped, false);
         Events.emitNet('auth:anticheat:addFlag', 'invincible');

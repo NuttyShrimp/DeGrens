@@ -17,6 +17,9 @@
   "heist_paleto": {
     "police": 5
   },
+  "heist_jewelry": {
+    "police": 5
+  },
   "bench_container_enter": {
     "players": 16
   },
@@ -31,5 +34,8 @@
   },
   "oxyrun": {
     "police": 1
+  },
+  "methrun": {
+    "police": 5
   }
 }

@@ -30,13 +30,33 @@ class GangManager extends Util.Singleton<GangManager>() {
     this.logger.info(`${gangData.length} gang(s) has/have been initiated`);
   };
 
-  public createGang = async (name: string, label: string, owner: number) => {
+  @Export('createGang')
+  private _createGang = async (name: string, label: string, owner: number) => {
+    if (this.gangs.has(name)) return false;
+    if (this.getPlayerGang(owner)) return false;
     const newGang = new Gang(name, label, owner);
     this.gangs.set(newGang.name, newGang);
     await repository.insertNewGang(name, label, owner);
     newGang.addMember(owner, true);
     this.logger.info(`A new gang ${name} with owner ${owner} has been created`);
     Util.Log('gangs:create', { name, label, owner }, `A new gang ${name} with owner ${owner} has been created`);
+    return true;
+  };
+
+  @Export('removeGang')
+  private _removeGang = async (name: string) => {
+    const gang = this.getGang(name);
+    if (!gang) return false;
+
+    await repository.removeGang(name);
+    gang.removeAllMember();
+    this.gangs.delete(name);
+
+    const logMsg = `Gang ${name} has been removed`;
+    this.logger.info(logMsg);
+    Util.Log('gangs:remove', { name }, logMsg);
+
+    return true;
   };
 
   public getPlayerGang = (cid: number) => {
@@ -264,6 +284,30 @@ class GangManager extends Util.Singleton<GangManager>() {
 
     return true;
   };
+
+  @Export('addMemberToGang')
+  private _forceAddMember = async (adminServerId: number, gangName: string, targetCid: number) => {
+    const gang = this.getGang(gangName);
+    if (!gang) return false;
+    if (gang.isMember(targetCid)) return false;
+
+    gang.addMember(targetCid);
+
+    const logMsg = `${Util.getName(adminServerId)}(${adminServerId}) has force added ${targetCid} to gang ${gang.name}`;
+    this.logger.info(logMsg);
+    Util.Log(
+      'gangs:addMember',
+      {
+        targetCid,
+        gangName: gang.name,
+      },
+      logMsg,
+      adminServerId
+    );
+
+    return true;
+  };
+
   //#endregion
 
   //#region feed messages
@@ -307,12 +351,11 @@ class GangManager extends Util.Singleton<GangManager>() {
       for (const memberServerId of gang.getOnlineMembers()) {
         Inventory.doesPlayerHaveItems(memberServerId, ['laptop', 'vpn']).then(hasItems => {
           if (!hasItems) return;
-          Phone.sendMail(
-            memberServerId,
-            'Family Activity Message',
-            'Unknown',
-            'Er is een nieuw bericht te vinden in je Family Activity app feed.'
-          );
+          Phone.addMail(memberServerId, {
+            subject: 'Family Activity Message',
+            sender: 'Unknown',
+            message: 'Er is een nieuw bericht te vinden in je Family Activity app feed.',
+          });
         });
       }
     }

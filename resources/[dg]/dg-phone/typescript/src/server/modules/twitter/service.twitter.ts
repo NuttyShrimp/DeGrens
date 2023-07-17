@@ -6,6 +6,10 @@ const TWEET_BATCH_SIZE = 20;
 // Build based on users askings
 let tweetCache: Record<number, StoredTweet> = {};
 
+export const getTweetById = (tweetId: number): StoredTweet | undefined => {
+  return tweetCache[tweetId];
+};
+
 export const isTweetCached = (tweetId: number): boolean => {
   return tweetCache[tweetId] !== undefined;
 };

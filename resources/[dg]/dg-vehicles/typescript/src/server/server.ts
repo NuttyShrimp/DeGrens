@@ -4,6 +4,7 @@ import { loadVehicleInfo } from 'modules/info/service.info';
 import vinManager from './modules/identification/classes/vinmanager';
 import upgradesManager from 'modules/upgrades/classes/manager.upgrades';
 import { loadModelStanceConfig } from 'modules/stances/service.stances';
+import { loadEngineSounds } from 'services/enginesounds';
 
 import './controller';
 import './modules/keys/controller.keys';
@@ -32,4 +33,5 @@ setImmediate(() => {
   upgradesManager.validatePlayerVehicleUpgrades();
   upgradesManager.loadPrices();
   loadModelStanceConfig();
+  loadEngineSounds();
 });

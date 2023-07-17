@@ -47,6 +47,7 @@ export class Gang {
   public hasPerms = (cid: number) => this.isOwner(cid) || (this.members.get(cid)?.hasPerms ?? false);
 
   public addMember = (cid: number, hasPerms = false) => {
+    if (this.members.has(cid)) return;
     this.members.set(cid, { cid, hasPerms });
     repository.insertNewMember(this.name, cid, hasPerms);
     dispatchCurrentGangToClient(cid, this.name);
@@ -56,6 +57,12 @@ export class Gang {
     this.members.delete(cid);
     repository.deleteMember(this.name, cid);
     dispatchCurrentGangToClient(cid, null);
+  };
+
+  public removeAllMember = () => {
+    this.members.forEach(member => {
+      this.removeMember(member.cid);
+    });
   };
 
   public modifyMemberPerms = (cid: number, hasPerms: boolean) => {

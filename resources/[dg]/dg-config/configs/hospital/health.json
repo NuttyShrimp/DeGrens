@@ -40,7 +40,7 @@
         "healthRestore": 30,
         "bleedingDecrease": 10
       },
-      "uses": 3
+      "uses": 5
     },
     "oxy_pills": {
       "taskbar": {

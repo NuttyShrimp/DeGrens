@@ -5,33 +5,26 @@ import { useMailAppStore } from './stores/useMailAppStore';
 
 export const events: Phone.Events = {};
 
-let mailId = 0;
-
-events.newMail = (mailData: Phone.Mail.MailData) => {
-  const newMail = {
-    ...mailData,
-    id: `mail-${mailId++}`,
-    date: Date.now(),
-  };
+events.addMail = (data: { mail: Phone.Mail.Mail | Phone.Mail.Mail[]; skipNotification: boolean }) => {
+  const newMails = Array.isArray(data.mail) ? data.mail : [data.mail];
 
   useMailAppStore.setState(s => ({
-    mails: [newMail, ...s.mails],
+    mails: [...new Map([...newMails, ...s.mails].map(x => [x.id, x])).values()].sort((a, b) => b.date - a.date),
   }));
 
-  if (!isAppActive('mail')) {
-    usePhoneStore.setState(s => ({ appNotifications: [...s.appNotifications, 'mail'] }));
+  if (!data.skipNotification) {
+    if (!isAppActive('mail')) {
+      usePhoneStore.setState(s => ({ appNotifications: [...s.appNotifications, 'mail'] }));
+    }
+
+    for (const m of newMails) {
+      addNotification({
+        id: `mail_${m.id}`,
+        icon: 'mail',
+        title: `Email`,
+        description: m.subject,
+        app: 'mail',
+      });
+    }
   }
-  addNotification({
-    id: `mail_${newMail.id}`,
-    icon: 'mail',
-    title: `Email`,
-    description: newMail.subject ?? 'New email',
-    app: 'mail',
-  });
-};
-
-events.restore = (mails: Phone.Mail.MailData[]) => {
-  useMailAppStore.setState(s => ({
-    mails: [...mails.map(m => ({ ...m, id: `mail-${mailId++}`, date: Date.now() })), ...s.mails],
-  }));
 };

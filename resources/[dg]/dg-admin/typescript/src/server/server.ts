@@ -8,3 +8,5 @@ import './modules/penaltyPoints/controller.penaltyPoints';
 import './services/selector';
 import './services/staffchat';
 import './services/names';
+import './helpers/core';
+import './helpers/discord';

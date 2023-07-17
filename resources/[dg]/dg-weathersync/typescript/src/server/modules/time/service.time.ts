@@ -1,12 +1,17 @@
+import { Util } from '@dgx/server';
 import { HOURS_PER_DAY } from './constants.time';
 
 let currentTime = 0;
 
 export const initializeTime = () => {
-  // Start time at current irl time
-  const date = new Date();
-  const seconds = date.getHours() * 60 + date.getMinutes();
-  setCurrentTime(seconds);
+  // Start time at current irl time or 12h if devserver
+  if (Util.isDevEnv()) {
+    setCurrentTime(500);
+  } else {
+    const date = new Date();
+    const minutes = date.getHours() * 60 + date.getMinutes();
+    setCurrentTime(minutes);
+  }
 
   // Start time thread
   const milliSecondsPerGameMinute = (60 / (24 / HOURS_PER_DAY)) * 1000;

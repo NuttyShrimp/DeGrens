@@ -4,6 +4,16 @@
       "item": "material_plastic",
       "amount": [2, 4],
       "chance": 1
+    },
+    {
+      "item": "lockpick",
+      "amount": 1,
+      "chance": 0.1
+    },
+    {
+      "item": "meth_lab_keycard",
+      "amount": 1,
+      "chance": 0.02
     }
   ],
   "refillTime": 60

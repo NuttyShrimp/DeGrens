@@ -1,7 +1,8 @@
-import { Events, Notifications, Phone, Util, Vehicles, Inventory, RPC, Config } from '@dgx/server';
+import { Events, Notifications, Phone, Util, Vehicles, Inventory, RPC, Config, Npcs } from '@dgx/server';
 import jobManager from 'classes/jobManager';
 import { changeJob, disbandGroup, getGroupById, getGroupByServerId } from 'modules/groups/service';
 import { scrapyardLogger } from './logger.scrapyard';
+import { PED_MODELS } from './constants.scrapyard';
 
 let scrapyardConfig: Scrapyard.Config;
 export const getScrapyardConfig = () => scrapyardConfig;
@@ -72,7 +73,7 @@ export const assignLocationToGroup = async (ownerId: number) => {
   activeGroups.set(group.id, {
     ...location,
     vin,
-    pedHandle: null,
+    pedSpawned: false,
     doorsDone: [],
   });
 
@@ -89,12 +90,12 @@ export const assignLocationToGroup = async (ownerId: number) => {
   group.members.forEach(member => {
     if (member.serverId === null) return;
     Events.emitNet('jobs:scrapyard:startJob', member.serverId, netId, location.vehicleLocation);
-    Phone.sendMail(
-      member.serverId,
-      'Voertuig Opdracht',
-      'Scrapyard Inc.',
-      'Het gevraagde voertuig staat op je GPS. Gelieve het voertuig naar deze werkplaats te brengen. Eenmaal je hier bent kan je bepaalde onderdelen demonteren. Geef me daarna de onderdelen om de opdracht af te ronden.'
-    );
+    Phone.addMail(member.serverId, {
+      subject: 'Voertuig Opdracht',
+      sender: 'Scrapyard Inc.',
+      message:
+        'Het gevraagde voertuig staat op je GPS. Gelieve het voertuig naar deze werkplaats te brengen. Eenmaal je hier bent kan je bepaalde onderdelen demonteren. Geef me daarna de onderdelen om de opdracht af te ronden.',
+    });
   });
 };
 
@@ -102,15 +103,21 @@ export const handleVehicleLockpick = async (plyId: number, vehicle: number) => {
   const plyGroup = getGroupByServerId(plyId);
   if (!plyGroup) return;
   const job = activeGroups.get(plyGroup.id);
-  if (!job) return;
+  if (!job || job.pedSpawned) return;
 
   const vin = Vehicles.getVinForVeh(vehicle);
   if (vin !== job.vin) return;
-  if (job.pedHandle !== null) return;
 
-  const pedNetId = await RPC.execute('jobs:scrapyard:spawnPed', plyId, job.pedLocation);
-  const pedHandle = NetworkGetEntityFromNetworkId(pedNetId);
-  activeGroups.set(plyGroup.id, { ...job, pedHandle: DoesEntityExist(pedHandle) ? pedHandle : null });
+  Npcs.spawnGuard({
+    model: PED_MODELS[Math.floor(Math.random() * PED_MODELS.length)],
+    position: job.pedLocation,
+    deleteTime: {
+      alive: 180,
+      dead: 30,
+    },
+  });
+
+  activeGroups.set(plyGroup.id, { ...job, pedSpawned: true });
 
   plyGroup.members.forEach(member => {
     if (member.serverId === null) return;
@@ -217,12 +224,7 @@ export const syncScrapyardJobToClient = (groupId: string, plyId: number) => {
   }
 
   scrapyardLogger.silly(`Syncing active job to plyId ${plyId}`);
-  Events.emitNet(
-    'jobs:scrapyard:startJob',
-    plyId,
-    netId,
-    active.pedHandle === null ? active.vehicleLocation : undefined
-  );
+  Events.emitNet('jobs:scrapyard:startJob', plyId, netId, !active.pedSpawned ? active.vehicleLocation : undefined);
 };
 
 export const handlePlayerLeftScrapyardGroup = (groupId: string, plyId: number | null) => {
@@ -237,10 +239,6 @@ export const handlePlayerLeftScrapyardGroup = (groupId: string, plyId: number | 
   if (group && group.members.length > 0) return;
 
   activeGroups.delete(groupId);
-
-  if (active.pedHandle && DoesEntityExist(active.pedHandle)) {
-    DeleteEntity(active.pedHandle);
-  }
 
   setTimeout(
     (vin: string) => {

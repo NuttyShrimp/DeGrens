@@ -1,5 +1,6 @@
-import { Auth, Config, Core, Events, Util } from '@dgx/server';
+import { Auth, Config, Core, Events } from '@dgx/server';
 import heistManager from 'classes/heistmanager';
+import { JewelryManager } from 'classes/typemanagers/jewelrymanager';
 import config from 'services/config';
 
 Auth.onAuth(async plyId => {
@@ -13,6 +14,7 @@ Auth.onAuth(async plyId => {
       policeDoorReset: location.policeDoorReset,
     })),
     paletoActions: config.paleto.actions,
+    jewelry: heistManager.getManagerForType<JewelryManager>('jewelry').getInitData(),
   };
 
   Events.emitNet('heists:client:init', plyId, initData);

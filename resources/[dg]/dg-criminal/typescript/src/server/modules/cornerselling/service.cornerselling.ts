@@ -56,3 +56,8 @@ export const calculatePrice = (
   const modifier = getModifierFromSalesHeatmap(zone);
   return Math.floor(basePrice * modifier);
 };
+
+export const getMaxCornersellPriceOfItem = (itemName: string) => {
+  const basePrice = config.cornerselling.sellableItems[itemName]?.basePrice ?? 0;
+  return Math.floor(basePrice * config.cornerselling.maxModifier);
+};

@@ -7,13 +7,13 @@ export const styles = makeStyles({
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
+    gap: '1vh',
   },
   entry: {
     width: '100%',
     backgroundColor: baseStyle.primary.darker,
     borderBottom: `.2vh solid ${baseStyle.gray.light}`,
-    borderRadius: '.5vh',
-    boxShadow: '0px 3px 5px 0px black',
+    borderRadius: '.4vh',
   },
   textWrapper: {
     fontSize: '.9rem',
@@ -22,7 +22,7 @@ export const styles = makeStyles({
     flexDirection: 'column',
     borderBottom: `.1vh solid ${baseStyle.gray.light}`,
     '& > *': {
-      marginBottom: '1vh',
+      marginBottom: '0.8vh',
     },
   },
   header: {
@@ -40,6 +40,6 @@ export const styles = makeStyles({
   date: {
     textAlign: 'center',
     fontSize: '.8rem',
-    marginBottom: '1vh',
+    marginBottom: '0.8vh',
   },
 });

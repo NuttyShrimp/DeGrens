@@ -1,4 +1,4 @@
-import { RPC, Sync, Util } from '@dgx/server';
+import { RPC, Sync, Util, Vehicles } from '@dgx/server';
 import { insertVehicleStatus } from 'db/repository';
 import { addWaxedVehicle, cleanVehicle } from 'modules/carwash/service.carwash';
 import { setVehicleNosAmount } from 'modules/nos/service.nos';
@@ -16,6 +16,7 @@ import { Vector4 } from '@dgx/shared';
 import upgradesManager from 'modules/upgrades/classes/manager.upgrades';
 import { generateBaseCosmeticUpgrades, generateBasePerformanceUpgrades } from '@shared/upgrades/service.upgrades';
 import { STANDARD_EXTRA_UPGRADES } from '@shared/upgrades/constants.upgrades';
+import { setVehicleEngineSound } from 'services/enginesounds';
 
 /**
  * Spawn a vehicle
@@ -111,6 +112,11 @@ export const spawnVehicle: Vehicles.SpawnVehicleFunction = async data => {
       setEngineState(vehicle, data.engineState, true);
     }
 
+    // door locks
+    if (data.doorsLocked !== undefined) {
+      Vehicles.setVehicleDoorsLocked(vehicle, data.doorsLocked);
+    }
+
     cleanVehicle(vehicle);
   });
 
@@ -145,6 +151,7 @@ export const spawnOwnedVehicle = async (
     upgrades,
     overrideStance: vehicleInfo.stance ?? undefined,
     engineState,
+    fuel: vehicleInfo.status.fuel,
   });
   if (!spawnedVehicle) return;
   const { vehicle, vin } = spawnedVehicle;
@@ -167,6 +174,10 @@ export const spawnOwnedVehicle = async (
 
   if (vehicleInfo.wax) {
     addWaxedVehicle(vin, vehicleInfo.wax);
+  }
+
+  if (vehicleInfo.engineSound) {
+    setVehicleEngineSound(vehicle, vehicleInfo.engineSound);
   }
 
   setVehicleNosAmount(vehicle, vehicleInfo.nos);

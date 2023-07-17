@@ -1,7 +1,7 @@
 import { SQL, Util, Sync } from '@dgx/server';
 import { getModule } from 'moduleController';
 import { characterLogger } from '../logger.character';
-import { defaultCharinfo, defaultMetadata, generateDNA, generatePhone } from '../helpers.character';
+import { defaultCharinfo, defaultMetadata, generateDNA } from '../helpers.character';
 import { mainLogger } from 'sv_logger';
 
 export class Player implements Core.Characters.Player {
@@ -63,9 +63,22 @@ export class Player implements Core.Characters.Player {
         this.updateMetadata('armor', GetPedArmour(ped));
         this.position = Util.getPlyCoords(this.serverId);
       }
+    }
 
-      const userModule = getModule('users');
-      await userModule.saveUser(this.serverId);
+    // default to appartments if out of bounds (values gotten by map limits for each axis)
+    if (
+      this.position.x < -5000 ||
+      this.position.x > 6000 ||
+      this.position.y < -6000 ||
+      this.position.y > 9000 ||
+      this.position.z < -100 ||
+      this.position.z > 1500
+    ) {
+      this.position = {
+        x: -263.6605,
+        y: -966.7111,
+        z: 31.2177,
+      };
     }
 
     const charResult = await SQL.query(
@@ -137,7 +150,7 @@ export class Player implements Core.Characters.Player {
     const charinfo = {} as Core.Characters.Charinfo;
     for (const key of Object.keys(defaultCharinfo) as (keyof Core.Characters.Charinfo)[]) {
       if (key === 'phone') {
-        charinfo.phone = dbData.phone ?? (await generatePhone());
+        charinfo.phone = dbData.phone ?? (await getModule('characters').generatePhone());
         continue;
       }
 

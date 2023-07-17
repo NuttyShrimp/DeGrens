@@ -6,3 +6,4 @@ import './sirens';
 import './windowtint';
 import './itemupgrades';
 import './fakeplate';
+import './enginesounds';

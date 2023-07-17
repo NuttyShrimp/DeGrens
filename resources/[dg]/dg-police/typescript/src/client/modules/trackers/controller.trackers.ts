@@ -1,34 +1,23 @@
 import { Events, Peek } from '@dgx/client/classes';
-import {
-  doesVehicleHaveTracker,
-  disableVehicleTracker,
-  setVehicleTracker,
-  removeTrackerBlip,
-} from './service.trackers';
+import { disableVehicleTracker, setVehicleTracker, removeTrackerBlip, removeAllTrackerBlips } from './service.trackers';
 
-onNet('police:trackers:setTrackerCoords', (netId: number, x: number, y: number, z: number) => {
-  setVehicleTracker(netId, { x, y, z });
-});
-
-Events.onNet('police:trackers:removeTracker', (netId: number) => {
-  removeTrackerBlip(netId);
-});
+onNet('police:trackers:setCoords', setVehicleTracker);
+Events.onNet('police:trackers:remove', removeTrackerBlip);
+Events.onNet('police:trackers:removeAll', removeAllTrackerBlips);
 
 Peek.addGlobalEntry('vehicle', {
   options: [
     {
-      label: 'Tracker uitschakelen',
+      label: 'Tracker Uitschakelen',
       icon: 'fas fa-location-dot-slash',
       job: 'police',
       action: (_, vehicle) => {
         if (!vehicle) return;
-        const netId = NetworkGetNetworkIdFromEntity(vehicle);
-        disableVehicleTracker(netId);
+        disableVehicleTracker(vehicle);
       },
       canInteract: vehicle => {
         if (!vehicle) return false;
-        const netId = NetworkGetNetworkIdFromEntity(vehicle);
-        return doesVehicleHaveTracker(netId);
+        return !!Entity(vehicle).state.trackerId;
       },
     },
   ],

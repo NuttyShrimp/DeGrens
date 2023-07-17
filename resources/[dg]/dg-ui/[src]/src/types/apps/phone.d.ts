@@ -184,12 +184,10 @@ declare namespace Phone {
     type Mail = {
       id: string;
       date: number;
-    } & MailData;
-
-    type MailData = {
       sender: string;
       subject: string;
       message: string;
+      coords?: Vec3;
     };
 
     interface State {
@@ -200,6 +198,7 @@ declare namespace Phone {
       removeMail: (id: string) => void;
     };
   }
+
   namespace YellowPages {
     interface Ad {
       id: number;

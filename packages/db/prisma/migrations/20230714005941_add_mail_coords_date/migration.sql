@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE `phone_mails` ADD COLUMN `coords` VARCHAR(255) NULL,
+    ADD COLUMN `date` BIGINT NOT NULL DEFAULT 0;

@@ -101,6 +101,7 @@ declare namespace Core {
       getOfflinePlayerByPhone: (phone: string) => Promise<Characters.Player | undefined>;
       getServerIdFromCitizenId: (cid: number) => number | undefined;
       getCitizenIdsFromSteamId: (steamid: string) => number[];
+      generatePhone: (markAsUsed?: boolean) => Promise<string>;
     };
   }
 }

@@ -1,12 +1,12 @@
 import { Events, Peek, PolyZone } from '@dgx/client';
-import { disablePower, enterTowerLocation, exitTowerLocation, spawnPeds, spawnSwarm } from './service.radiotowers';
+import { disablePower, enterTowerLocation, exitTowerLocation } from './service.radiotowers';
 
 PolyZone.onEnter<{ id: string }>('radiotower', (_, data) => {
   enterTowerLocation(data.id);
 });
 
-PolyZone.onLeave<{ id: string }>('radiotower', (_, data) => {
-  exitTowerLocation(data.id);
+PolyZone.onLeave('radiotower', () => {
+  exitTowerLocation();
 });
 
 Peek.addZoneEntry('radiotower_action', {
@@ -49,12 +49,4 @@ Peek.addZoneEntry('radiotower_action', {
     },
   ],
   distance: 2.0,
-});
-
-Events.onNet('materials:radiotower:spawnPed', (towerId: string) => {
-  spawnPeds(towerId);
-});
-
-Events.onNet('materials:radiotower:spawnSwarm', (towerId: string) => {
-  spawnSwarm(towerId);
 });

@@ -13,6 +13,7 @@ export class CharacterModule implements Modules.ServerModule, Core.ServerModules
   // CID to serverId
   private cidToServerId: Record<number, number> = {};
   private saveIntervals: Record<number, NodeJS.Timeout> = {};
+  private phoneNumbersMarkedAsUsed = new Set<string>(); // set contains phone numbers that got marked as used by other resources
 
   private async loadCharOwnership() {
     this.characterOwners = {};
@@ -90,9 +91,6 @@ export class CharacterModule implements Modules.ServerModule, Core.ServerModules
       return false;
     }
 
-    // new players that are not registered yet, would not be able to create char because of failed steamid constraint
-    await userModule.saveUser(src);
-
     const result = await SQL.query<{ citizenid: number }[]>(
       'INSERT INTO characters (steamid) VALUES (?) RETURNING citizenid',
       [steamid]
@@ -141,8 +139,6 @@ export class CharacterModule implements Modules.ServerModule, Core.ServerModules
       characterLogger.warn(`${Util.getName(src)}(${src}) tried to delete an unexisting character: ${cid}`);
       return;
     }
-    const userModule = getModule('users');
-    userModule.saveUser(src);
     this.logout(src);
     await SQL.query('DELETE FROM characters WHERE citizenid = ?', [cid]);
     Util.Log(
@@ -223,5 +219,24 @@ export class CharacterModule implements Modules.ServerModule, Core.ServerModules
 
   getCitizenIdsFromSteamId = (steamid: string) => {
     return this.characterOwners[steamid] ?? [];
+  };
+
+  generatePhone = async (markAsUsed = false) => {
+    let uniqueFound = false;
+    let phone = `04${Util.getRndInteger(70, 100)}${Util.getRndInteger(100000, 999999)}`;
+    while (uniqueFound) {
+      const result = await SQL.query('SELECT COUNT(*) as count FROM character_info WHERE phone LIKE ?', [phone]);
+      if (result?.[0].count == 0 && !this.phoneNumbersMarkedAsUsed.has(phone)) {
+        uniqueFound = true;
+      } else {
+        phone = `04${Util.getRndInteger(70, 100)}${Util.getRndInteger(100000, 999999)}`;
+      }
+    }
+
+    if (markAsUsed) {
+      this.phoneNumbersMarkedAsUsed.add(phone);
+    }
+
+    return phone;
   };
 }

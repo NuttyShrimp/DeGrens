@@ -19,6 +19,10 @@ class BlipManager {
     global.exports['dg-misc'].removeCategory(category);
   };
 
+  public changeBlipCoords = (id: string, coords: Vec3) => {
+    global.exports['dg-misc'].changeBlipCoords(id, coords);
+  };
+
   public addPlayerBlip = (plyId: number, context: string, settings: NBlip.Settings, startCoords: Vec3) => {
     global.exports['dg-misc'].addPlayerBlip(plyId, context, settings, startCoords);
   };

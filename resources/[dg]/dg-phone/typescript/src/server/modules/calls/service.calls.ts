@@ -2,8 +2,6 @@ import { Core, Events, Inventory, Notifications } from '@dgx/server';
 import { charModule } from 'helpers/core';
 import { mainLogger } from 'sv_logger';
 
-import { CallType } from '../../../shared/enums/callType';
-
 const calls: Record<number, Calls.Call> = {};
 const plyToCallId: Record<number, number> = {};
 let callId = 1;
@@ -12,22 +10,22 @@ export const getCallIdForPly = (plyId: number) => {
   return plyToCallId[plyId];
 };
 
-const getLabelForCalltype = (ply: Core.Characters.Player, type: CallType) => {
+const getLabelForCalltype = (ply: Core.Characters.Player, type: Calls.CallType) => {
   switch (type) {
-    case CallType.NORMAL:
+    case 'normal':
       return ply.charinfo.phone;
-    case CallType.ANON:
+    case 'anon':
       return 'UNKNOWN NUMBER';
-    case CallType.PRISON:
+    case 'prison':
       return 'BOLINGBROKE PENITENTIARY';
   }
 };
 
-export const startCall = async (plyId: number, phoneNr: string, type: CallType) => {
+export const startCall = async (plyId: number, phoneNr: string, type: Calls.CallType) => {
   const player = Core.getPlayer(plyId);
   if (!player) return;
   const hasPhone = await Inventory.doesPlayerHaveItems(plyId, 'phone');
-  if (type == CallType.NORMAL && !hasPhone) {
+  if (type == 'normal' && !hasPhone) {
     mainLogger.warn(`${player?.name} tried to call without a phone`);
     return;
   }
@@ -63,6 +61,8 @@ export const startCall = async (plyId: number, phoneNr: string, type: CallType) 
       soundId: call.id,
     });
   }
+
+  emit('phone:calls:started', plyId, phoneNr, type);
 
   setTimeout(() => {
     if (!calls[call.id] || calls[call.id].state !== 'outgoing') return;

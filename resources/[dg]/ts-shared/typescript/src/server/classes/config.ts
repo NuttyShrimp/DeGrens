@@ -20,6 +20,13 @@ class Config {
   getConfigValue<T = any>(pathToValue: string): T {
     return global.exports['dg-config'].getConfigValue(pathToValue);
   }
+
+  onModuleLoad = <T>(moduleKey: string, cb: (config: T) => void) => {
+    on('dg-config:moduleLoaded', (module: string, config: T) => {
+      if (module !== moduleKey) return;
+      cb(config);
+    });
+  };
 }
 
 export default {

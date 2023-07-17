@@ -1,4 +1,4 @@
-import { Events, Financials, Jobs, Notifications, RPC } from '@dgx/server';
+import { Events, Financials, Jobs, RPC } from '@dgx/server';
 import { charModule } from 'helpers/core';
 import { mainLogger } from 'sv_logger';
 

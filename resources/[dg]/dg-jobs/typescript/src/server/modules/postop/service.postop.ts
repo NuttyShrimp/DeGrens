@@ -18,8 +18,8 @@ export const initializePostop = () => {
     location: { x: -424.2247, y: -2789.7656 },
     // this is payout per package, gets multiplied by amount of packages player has delivered
     payout: {
-      min: 35,
-      max: 45,
+      min: 45,
+      max: 65,
       groupPercent: 25, // Can only do with 2 people so high percentage isnt a problem
     },
   });

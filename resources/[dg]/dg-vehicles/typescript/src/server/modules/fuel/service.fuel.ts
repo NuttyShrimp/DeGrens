@@ -26,7 +26,7 @@ export const openRefuelMenu = (plyId: number, netId: number) => {
 };
 
 const getFuelPrice = (vehicle: number) => {
-  const fuelLevel = 100 - (fuelManager.getFuelLevel(vehicle) ?? 0);
+  const fuelLevel = 100 - fuelManager.getFuelLevel(vehicle);
   const taxPrice = Financials.getTaxedPrice(FUEL_PRICE_PER_LVL * fuelLevel, TaxIds.Gas).taxPrice;
   const price = Math.round(taxPrice * 100) / 100;
   return { price, fuel: fuelLevel };

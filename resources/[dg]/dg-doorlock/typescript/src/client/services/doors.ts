@@ -1,12 +1,13 @@
-import { Events, Keys, PolyZone, Util, UI, Minigames, Inventory, Particles, RayCast } from '@dgx/client';
+import { Events, Keys, PolyZone, Util, UI, Minigames, Inventory, Particles, RayCast, Sounds } from '@dgx/client';
 import { doDoorAnimation, getDoorId, isAuthorized } from 'helpers/doors';
+import { doThermiteOnDoorAnimScene, findAnimScenePositionForDoor } from 'helpers/scenes';
 
 let doors: Doorlock.ClientData | undefined = undefined;
 let currentDoor: { id: number; coords: Vec3; state: boolean } | null = null;
 let interactionVisible = false;
 let isInPolyZone = false;
 
-let activeDoorEntity: number | undefined = undefined;
+let activeDoorRaycast: { entity: number; coords: Vec3 } | undefined = undefined;
 let debounceTimeout: NodeJS.Timeout | null = null;
 let doorThread: NodeJS.Timer | null = null;
 
@@ -131,7 +132,7 @@ export const hideInteraction = () => {
   interactionVisible = false;
 };
 
-export const handleEntityChange = (entity: number | undefined) => {
+export const handleEntityChange = (entity: number | undefined, coords: Vec3 | undefined) => {
   if (isInPolyZone) return;
 
   if (debounceTimeout !== null) {
@@ -143,14 +144,14 @@ export const handleEntityChange = (entity: number | undefined) => {
       hideInteraction();
 
       const doorId = getDoorId(entity);
-      if (!entity || !doorId || !doors?.[doorId]) {
-        activeDoorEntity = undefined;
+      if (!entity || !coords || !doorId || !doors?.[doorId]) {
+        activeDoorRaycast = undefined;
         currentDoor = null;
         return;
       }
 
       const maxDistance = doors[doorId].distance;
-      activeDoorEntity = entity;
+      activeDoorRaycast = { entity, coords };
 
       if (doorThread !== null) {
         clearInterval(doorThread);
@@ -158,7 +159,7 @@ export const handleEntityChange = (entity: number | undefined) => {
 
       // Distance thread
       doorThread = setInterval(() => {
-        if (activeDoorEntity !== entity) return;
+        if (activeDoorRaycast?.entity !== entity) return;
 
         const doorCoords = Util.getEntityCoords(entity);
         const distance = Util.getPlyCoords().distance(doorCoords);
@@ -208,157 +209,43 @@ export const leaveDoorPolyZone = (doorId: number) => {
 export const tryToLockpickDoor = async () => {
   if (!doors) return;
 
-  const plyCoords = Util.getPlyCoords();
-  for (const key of Object.keys(doors)) {
-    const id = Number(key);
-    const door = doors[id];
-    if (!door.lockpickable) continue;
-    if (!door.locked) continue;
-    if (plyCoords.distance(door.coords) > 1.5) continue;
-    const success = await Minigames.keygame(3, 1, 5);
-    Events.emitNet('dg-doorlock:server:triedLockpickingDoor', id);
-    if (success) {
-      Events.emitNet('doorlock:server:changeDoorState', id, false);
-    }
-    break;
+  const doorEntity = activeDoorRaycast?.entity;
+  const doorId = getDoorId(doorEntity);
+  if (!doorId) return;
+
+  if (!doors[doorId].lockpickable || !doors[doorId].locked) return;
+
+  const success = await Minigames.keygame(3, 1, 5);
+  Events.emitNet('dg-doorlock:server:triedLockpickingDoor', doorId);
+  if (success) {
+    Events.emitNet('doorlock:server:changeDoorState', doorId, false);
   }
 };
 
 export const tryToThermiteDoor = async () => {
   if (!doors) return;
 
-  const ped = PlayerPedId();
-  const pedCoords = Util.getPlyCoords();
+  // we use the normal active door as targetdoor
+  if (!activeDoorRaycast) return;
 
-  let doorId: number | null = null;
-  for (const key of Object.keys(doors)) {
-    const id = Number(key);
-    const door = doors[id];
-    if (!door.thermiteable) continue;
-    if (!door.locked) continue;
-    if (pedCoords.distance(door.coords) > 1.5) continue;
-    doorId = id;
-    break;
-  }
-  if (doorId === null) return;
+  const { entity: doorEntity, coords: raycastHitCoords } = activeDoorRaycast;
+  const doorId = getDoorId(doorEntity);
+  if (!doorId) return;
 
   const thermiteData = doors[doorId].thermiteable;
+  if (!thermiteData || !doors[doorId].locked) return;
+
+  const scenePosition = findAnimScenePositionForDoor(doorEntity, raycastHitCoords);
+  if (!scenePosition) return;
+
   const removed = await Inventory.removeItemByNameFromPlayer('thermite');
-  if (!removed || !thermiteData) return;
+  if (!removed) return;
 
-  await Util.loadModel('hei_p_m_bag_var22_arm_s');
-  await Util.loadModel('hei_prop_heist_thermite');
-  await Util.loadAnimDict('anim@heists@ornate_bank@thermal_charge');
+  const thermiteObject = await doThermiteOnDoorAnimScene(scenePosition);
+  if (!thermiteObject) return;
 
-  SetEntityCoords(ped, thermiteData.ped.x, thermiteData.ped.y, pedCoords.z - 0.9, false, false, false, false);
-  const position = Util.getPlyCoords();
-  const rotation = Util.ArrayToVector3(GetEntityRotation(ped, 0));
-  const scene = NetworkCreateSynchronisedScene(
-    position.x,
-    position.y,
-    position.z,
-    rotation.x,
-    rotation.y,
-    thermiteData.ped.heading,
-    2,
-    false,
-    false,
-    1065353216,
-    0,
-    1.3
-  );
-
-  const bagObject = CreateObject(`hei_p_m_bag_var22_arm_s`, position.x, position.y, position.z, true, true, false);
-  SetEntityCollision(bagObject, false, true);
-  NetworkAddPedToSynchronisedScene(
-    ped,
-    scene,
-    'anim@heists@ornate_bank@thermal_charge',
-    'thermal_charge',
-    1.5,
-    -4.0,
-    1,
-    16,
-    1148846080,
-    0
-  );
-  NetworkAddEntityToSynchronisedScene(
-    bagObject,
-    scene,
-    'anim@heists@ornate_bank@thermal_charge',
-    'bag_thermal_charge',
-    4.0,
-    -8.0,
-    1
-  );
-  NetworkStartSynchronisedScene(scene);
-
-  await Util.Delay(1500);
-
-  const thermiteObject = CreateObject(
-    `hei_prop_heist_thermite`,
-    position.x,
-    position.y,
-    position.z + 0.2,
-    true,
-    true,
-    true
-  );
-  SetEntityCollision(thermiteObject, false, true);
-  AttachEntityToEntity(
-    thermiteObject,
-    ped,
-    GetPedBoneIndex(ped, 28422),
-    0,
-    0,
-    0,
-    0,
-    0,
-    200.0,
-    true,
-    true,
-    false,
-    true,
-    1,
-    true
-  );
-
-  await Util.Delay(4000);
-
-  DeleteObject(bagObject);
-  DetachEntity(thermiteObject, true, true);
-  FreezeEntityPosition(thermiteObject, true);
-
-  TaskPlayAnim(
-    ped,
-    'anim@heists@ornate_bank@thermal_charge',
-    'cover_eyes_intro',
-    8.0,
-    8.0,
-    1000,
-    36,
-    1,
-    false,
-    false,
-    false
-  );
-  await Util.Delay(1000);
-  TaskPlayAnim(
-    ped,
-    'anim@heists@ornate_bank@thermal_charge',
-    'cover_eyes_loop',
-    8.0,
-    8.0,
-    3000,
-    49,
-    1,
-    false,
-    false,
-    false
-  );
-
-  const success = await Minigames.sequencegame(thermiteData.grid, thermiteData.amount, 5);
-
+  // const success = await Minigames.sequencegame(thermiteData.grid, thermiteData.amount, 5);
+  const success = await Minigames.sequencegame(thermiteData.grid, 1, 5);
   if (success) {
     const netId = NetworkGetNetworkIdFromEntity(thermiteObject);
     const particleId = Particles.add({
@@ -374,11 +261,42 @@ export const tryToThermiteDoor = async () => {
     Events.emitNet('doorlock:server:changeDoorState', doorId, false);
   }
 
-  ClearPedTasks(ped);
-  if (DoesEntityExist(thermiteObject)) {
-    DeleteEntity(thermiteObject);
-  }
-  NetworkStopSynchronisedScene(scene);
+  Util.deleteEntity(thermiteObject);
+};
+
+export const tryToDetcordDoor = async () => {
+  if (!doors) return;
+
+  // we use the normal active door as targetdoor
+  if (!activeDoorRaycast) return;
+
+  const { entity: doorEntity, coords: raycastHitCoords } = activeDoorRaycast;
+  const doorId = getDoorId(doorEntity);
+  if (!doorId) return;
+
+  const scenePosition = findAnimScenePositionForDoor(doorEntity, raycastHitCoords);
+  if (!scenePosition) return;
+
+  const removed = await Inventory.removeItemByNameFromPlayer('detcord');
+  if (!removed) return;
+
+  const thermiteObject = await doThermiteOnDoorAnimScene(scenePosition);
+  if (!thermiteObject) return;
+
+  const success = await Minigames.sequencegame(4, 5, 5);
+  if (!success) return;
+
+  const soundId = `detcord_${Math.round(Date.now() / 1000)}`;
+  Sounds.playOnEntity(soundId, 'Explosion_Countdown', 'GTAO_FM_Events_Soundset', thermiteObject);
+  await Util.Delay(10000);
+
+  const thermiteObjCoords = Util.getEntityCoords(thermiteObject);
+  AddExplosion(thermiteObjCoords.x, thermiteObjCoords.y, thermiteObjCoords.z + 0.5, 2, 1, true, false, 1);
+  Sounds.stop(soundId);
+  Events.emitNet('doorlock:server:changeDoorState', doorId, false);
+  Events.emitNet('doorlock:server:logDetcord');
+
+  Util.deleteEntity(thermiteObject);
 };
 
 export const getDoorState = (doorId: number) => {

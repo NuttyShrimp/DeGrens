@@ -21,6 +21,10 @@ RegisterCommand('getUiFocus', function()
   SetNuiFocus(true, true)
 end)
 
+RegisterCommand('removeUiFocus', function()
+  SetNuiFocus(false, false)
+end)
+
 RegisterNUICallback('reload', function(data, cb)
   reloadUI()
   cb({ data = {}, meta = { ok = true, message = 'UI reloaded' } })

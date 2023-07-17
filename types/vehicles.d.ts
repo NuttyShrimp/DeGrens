@@ -10,6 +10,7 @@ declare namespace Vehicles {
     isFakePlate?: boolean;
     overrideStance?: Stances.Stance;
     engineState?: boolean;
+    doorsLocked?: boolean;
   }) => Promise<
     | {
         vehicle: number;
@@ -32,7 +33,7 @@ declare namespace Vehicles {
   }) => Promise<vehicle | undefined>;
 
   declare namespace Upgrades {
-    type Tune = Exclude<Performance.Key, 'armor'>;
+    type Tune = Exclude<Performance.Key, 'armor' | 'bulletProofTires'>;
 
     namespace Performance {
       /**
@@ -40,9 +41,16 @@ declare namespace Vehicles {
        * */
       type NormalKey = 'armor' | 'brakes' | 'engine' | 'transmission' | 'suspension';
 
+      /**
+       * Extended still have a SetVehicleMod id but have special getters/setters
+       * does not matter if they use custom getter/setter data
+       * */
+      type ExtendedKey = NormalKey | 'turbo';
+
       // we use interface to properly override keys with custom type if they exist in NormalKey
       interface Upgrades extends Record<NormalKey, number> {
         turbo: boolean;
+        bulletProofTires: boolean;
       }
 
       type Key = keyof Upgrades;
@@ -156,11 +164,13 @@ declare namespace Vehicles {
         | 'wheels'
         | 'windowTint'
         | 'turbo'
+        | 'bulletProofTires'
       >,
       number
     > & {
       wheels: Record<number, number>;
       turbo: boolean;
+      bulletProofTires: boolean;
     };
 
     type AmountKey = keyof Amount;
@@ -215,4 +225,10 @@ declare namespace Vehicles {
 
     type Multipliers = Record<HandlingEntry, Record<string, Multiplier>>;
   }
+
+  type EngineSoundConfig = {
+    label: string;
+    soundHash: string;
+    custom: boolean;
+  };
 }

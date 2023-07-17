@@ -72,8 +72,8 @@
           "stance": {
             "frontLeft": 0.775,
             "frontRight": 0.775,
-            "backLeft": 0.815,
-            "backRight": 0.815
+            "backLeft": 0.755,
+            "backRight": 0.755
           }
         }
       ]
@@ -149,6 +149,30 @@
             "frontRight": 0.745,
             "backLeft": 0.745,
             "backRight": 0.745
+          }
+        }
+      ]
+    }
+  },
+  "evo9": {
+    "defaultStance": {
+      "frontLeft": 0.74,
+      "frontRight": 0.74,
+      "backLeft": 0.76,
+      "backRight": 0.76
+    }
+  },
+  "rcf": {
+    "upgrade": {
+      "component": "sideSkirt",
+      "possibilities": [
+        {
+          "value": 0,
+          "stance": {
+            "frontLeft": 0.86,
+            "frontRight": 0.86,
+            "backLeft": 0.85,
+            "backRight": 0.85
           }
         }
       ]

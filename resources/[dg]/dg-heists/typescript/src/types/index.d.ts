@@ -6,6 +6,7 @@ declare namespace Heists {
     types: Partial<Record<HeistType, Type>>;
     fleeca: Fleeca.Config;
     paleto: Paleto.Config;
+    jewelry: Jewelry.Config;
   };
 
   type InitData = {
@@ -14,14 +15,15 @@ declare namespace Heists {
       id: LocationId;
     } & Pick<Location, 'zone' | 'policeDoorReset'>)[];
     paletoActions: Paleto.Config['actions'];
+    jewelry: Jewelry.InitData;
   };
 
-  type HeistType = 'fleeca' | 'paleto' | 'maze' | 'pacific' | 'jewelry' | 'bobcat';
+  type HeistType = 'fleeca' | 'paleto' | 'jewelry'; //| 'maze' | 'pacific' | 'bobcat';
   type Type = {
     trolley: Trolley.Config;
   };
 
-  type LocationId = Fleeca.Id | 'paleto' | 'maze' | 'pacific' | 'jewelry' | 'bobcat';
+  type LocationId = Fleeca.Id | 'paleto' | 'jewelry'; //| 'maze' | 'pacific' | 'bobcat';
   type Location = {
     type: HeistType;
     label: string;
@@ -31,7 +33,7 @@ declare namespace Heists {
       minZ: number;
       maxZ: number;
     };
-    door: Door.Config;
+    door?: Door.Config;
     laptopCoords?: Vec4;
     trolleys?: {
       coords: Vec4;

@@ -43,12 +43,12 @@ Events.onNet('storerobbery:safes:hack', async (plyId: number, storeId: Storerobb
     return;
   }
 
-  Phone.sendMail(
-    plyId,
-    'Decodering Kluis',
-    'Hackerman',
-    'Het decoderen van de kluis zal even duren. <br><br>Geef me 5 minuten. <br><br>Ga niet uit de winkel of de verbinding zal verbreken!'
-  );
+  Phone.addMail(plyId, {
+    subject: 'Decodering Kluis',
+    sender: 'Hackerman',
+    message:
+      'Het decoderen van de kluis zal even duren. <br><br>Geef me 5 minuten. <br><br>Ga niet uit de winkel of de verbinding zal verbreken!',
+  });
 
   stateManager.safeHackers.set(plyId, storeId);
   Events.emitNet('storerobbery:safes:setIsHacker', plyId, true);

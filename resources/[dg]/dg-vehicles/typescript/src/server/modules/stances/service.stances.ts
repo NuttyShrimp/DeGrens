@@ -86,8 +86,8 @@ export const loadStance = async (data: {
   if (data.original) {
     vehState.set('stance', data.original, true);
     setTimeout(() => {
-      const currentStance = vehState.stance;
-      if (!isSameStance(currentStance, data.original!)) return; // make sure stance hasnt been modified in meantime
+      const currentStance: Stances.Stance | undefined = vehState?.stance;
+      if (!currentStance || !isSameStance(currentStance, data.original!)) return; // make sure stance hasnt been modified in meantime
       vehState.set('stance', null, true);
     }, 2000);
     return;

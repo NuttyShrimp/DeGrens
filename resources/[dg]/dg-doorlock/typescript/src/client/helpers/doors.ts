@@ -40,17 +40,20 @@ export const isAuthorized = (doorData: Doorlock.ClientData[number]) => {
   return false;
 };
 
+const getDoorsOfDoorSystem = () => {
+  try {
+    return DoorSystemGetActive() as [number, number][];
+  } catch (_) {}
+  return [];
+};
+
 // Sadly the findexistingdoor native does not work, so were back to iterating
 export const getDoorId = (entity: number | undefined) => {
   if (!entity) return;
   if (GetEntityType(entity) !== 3) return;
 
-  try {
-    const doors: [number, number][] = DoorSystemGetActive();
-    return doors.find(([_, handle]) => handle === entity)?.[0];
-  } catch (e) {
-    //
-  }
+  const doors = getDoorsOfDoorSystem();
+  return doors.find(([_, handle]) => handle === entity)?.[0];
 };
 
 export const doDoorAnimation = async () => {

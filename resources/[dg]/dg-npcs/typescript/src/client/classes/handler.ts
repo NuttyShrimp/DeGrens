@@ -1,23 +1,14 @@
-import { Util } from '@dgx/client';
+import { BaseEvents, Util } from '@dgx/client';
 import { Export, ExportRegister } from '@dgx/shared';
 import { Npc } from './npc';
 
 @ExportRegister()
 class Handler extends Util.Singleton<Handler>() {
   private npcs: Map<string, Npc> = new Map();
-  private configNpcs: Set<string> = new Set(); // ids of npc that got added from config, these get removed when config gets reloaded
-
-  private getNpc = (id: string) => {
-    if (!id) {
-      throw new Error(`[NPCS] Tried to get NPC without providing id`);
-    }
-    return this.npcs.get(id);
-  };
 
   constructor() {
     super();
-    on('onResourceStop', (resourceName: string) => {
-      if (GetCurrentResourceName() !== resourceName) return;
+    BaseEvents.onResourceStop(() => {
       this.npcs.forEach(npc => {
         npc.delete();
         npc.removeBlip();
@@ -25,36 +16,40 @@ class Handler extends Util.Singleton<Handler>() {
     });
   }
 
-  public loadConfig = (npcData: NpcData[]) => {
-    // Delete all existing npcs originated from config
-    this.configNpcs.forEach(id => {
-      this.removeNpc(id);
-    });
-    npcData.forEach(data => {
-      this.addNpc(data);
-      this.configNpcs.add(data.id);
-    });
+  private getNpc = (id: string) => {
+    return this.npcs.get(id);
   };
 
   @Export('addNpc')
-  private addNpc = (npcData: NpcData) => {
-    if (this.getNpc(npcData.id)) {
-      throw new Error(`[NPCS] Tried to add NPC with already registered id: ${npcData.id}`);
+  public addNpc = (npcData: NPCs.NPC | NPCs.NPC[]) => {
+    if (Array.isArray(npcData)) {
+      npcData.forEach(this.addNpc);
+      return;
     }
+
+    // remove if already exists with id
+    this.removeNpc(npcData.id);
+
     const npc = new Npc(npcData);
     this.npcs.set(npcData.id, npc);
   };
 
   @Export('removeNpc')
-  private removeNpc = (id: string) => {
+  public removeNpc = (id: string | string[]) => {
+    if (Array.isArray(id)) {
+      id.forEach(this.removeNpc);
+      return;
+    }
+
     const npc = this.getNpc(id);
     if (!npc) return;
+
     npc.delete();
     npc.removeBlip();
     this.npcs.delete(id);
   };
 
-  @Export('findPedData')
+  @Export('getPedData')
   private _getNpcData = (ped: number) => {
     const npc = [...this.npcs.values()].find(npc => npc.entity === ped);
     if (!npc) return;

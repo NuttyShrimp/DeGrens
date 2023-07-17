@@ -1,21 +1,18 @@
-import { Config, Events } from '@dgx/server';
+import { Config } from '@dgx/server';
 import { Util } from '@dgx/shared';
+import { addConfigNpcs } from './npcs';
 
-let config: NpcData[] | null = null;
+let configLoaded = false;
 
-export const getNpcConfig = async () => {
-  await Util.awaitCondition(() => config != null);
-  if (config == null) throw new Error('Failed to get config');
-  return config;
-};
+export const awaitNpcConfigLoad = () => Util.awaitCondition(() => configLoaded);
 
 export const loadNpcConfig = async () => {
   await Config.awaitConfigLoad();
-  config = Config.getModuleConfig('npcs');
+  const npcConfig = Config.getModuleConfig<NPCs.NPC[]>('npcs');
+  addConfigNpcs(npcConfig);
+  configLoaded = true;
 };
 
-on('dg-config:moduleLoaded', (module: string, npcData: NpcData[]) => {
-  if (module !== 'npcs') return;
-  config = npcData;
-  Events.emitNet('npcs:client:loadConfig', -1, npcData);
+Config.onModuleLoad<NPCs.NPC[]>('npcs', npcConfig => {
+  addConfigNpcs(npcConfig);
 });

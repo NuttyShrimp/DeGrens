@@ -17,11 +17,12 @@ export const isDoingHuntingJob = () => doingHuntingJob;
 
 export const startHuntingJob = () => {
   if (doingHuntingJob) return;
-  Phone.sendMail(
-    'Jagen',
-    'Jan Ger',
-    'Je bent nu bevoegd om te jagen in de jaaggebieden rondt Chiliad Mountain State Wilderness. Ik koop enkel huiden van everzwijnen, herten, coyotes en poemas.'
-  );
+  Phone.addMail({
+    subject: 'Jagen',
+    sender: 'Jan Ger',
+    message:
+      'Je bent nu bevoegd om te jagen in de jaaggebieden rondt Chiliad Mountain State Wilderness. Ik koop enkel huiden van everzwijnen, herten, coyotes en poemas.',
+  });
   doingHuntingJob = true;
   overrideDensitySettings();
 };

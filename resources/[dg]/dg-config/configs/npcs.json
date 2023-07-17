@@ -44,11 +44,11 @@
     "id": "houserobbery_signin",
     "model": "g_m_y_famfor_01",
     "position": {
-      "x": -983.1816,
-      "y": -270.4632,
-      "z": 38.2851
+      "x": -180.6361,
+      "y": 164.0927,
+      "z": 70.3284
     },
-    "heading": 243.1224,
+    "heading": 76.8075,
     "distance": 50.0,
     "settings": {
       "invincible": true,
@@ -65,11 +65,11 @@
     "id": "fence",
     "model": "mp_m_exarmy_01",
     "position": {
-      "x": -291.7782,
-      "y": 2528.7451,
-      "z": 74.6061
+      "x": 661.6752,
+      "y": 1286.3158,
+      "z": 360.2957
     },
-    "heading": 179.0889,
+    "heading": 212.5403,
     "distance": 250.0,
     "settings": {
       "invincible": true,
@@ -1069,6 +1069,52 @@
       "sprite": 523,
       "color": 1,
       "scale": 0.7
+    }
+  },
+  {
+    "id": "methrun_start",
+    "model": "a_m_m_rurmeth_01",
+    "position": { "x": -219.688, "y": -272.8284, "z": 48.9635, "w": 78.4404 },
+    "distance": 200.0,
+    "settings": {
+      "invincible": true,
+      "ignore": true,
+      "freeze": true,
+      "collision": true
+    },
+    "flags": {
+      "isMethrunStart": true
+    },
+    "scenario": "WORLD_HUMAN_STAND_IMPATIENT"
+  },
+  {
+    "id": "jewelry_start",
+    "model": "hc_hacker",
+    "position": { "x": -1806.9663, "y": -402.6116, "z": 44.6275, "w": 233.7504 },
+    "distance": 100.0,
+    "settings": {
+      "invincible": true,
+      "ignore": true,
+      "freeze": true,
+      "collision": true
+    },
+    "flags": {
+      "isJewelryStart": true
+    }
+  },
+  {
+    "id": "jewelry_reset",
+    "model": "u_m_m_jewelsec_01",
+    "position": { "x": -616.7598, "y": -236.3383, "z": 38.057, "w": 47.5748 },
+    "distance": 40.0,
+    "settings": {
+      "invincible": true,
+      "ignore": true,
+      "freeze": true,
+      "collision": true
+    },
+    "flags": {
+      "isJewelryReset": true
     }
   }
 ]

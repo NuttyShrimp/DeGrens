@@ -338,15 +338,19 @@ export const storeVehicleInGarage = async (src: number, entity: number) => {
   // Save state
   const vehState = await getNativeStatus(entity, vin);
   await insertVehicleStatus(vin, vehState);
-  const fuelLevel = Entity(entity).state.fuelLevel;
-  await fuelManager.handleStateChange(entity, fuelLevel);
+
   // Delete vehicle
   deleteVehicle(entity);
+
   // Set vehicle as parked
   await setVehicleState(vin, 'parked');
   await setVehicleGarage(vin, garage_id);
+
+  // get values needed to insert garage log
   const serviceStatus = await getServiceStatus(vin);
+  const fuelLevel = fuelManager.getFuelLevel(entity);
   addVehicleGarageLog(vin, cid, true, fuelLevel, serviceStatus);
+
   Util.Log(
     'vehicle:garage:parked:success',
     {

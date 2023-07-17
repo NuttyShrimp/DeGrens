@@ -8,7 +8,8 @@ class Inventory extends UtilShared.Singleton<Inventory>() {
 
   constructor() {
     super();
-    this.isLoaded = GetResourceState('dg-inventory') === 'started' && global.exports['dg-inventory']?.isLoaded?.();
+    this.isLoaded =
+      GetResourceState('dg-inventory') === 'started' && (global.exports['dg-inventory']?.isLoaded?.() ?? false);
     this.usageHandlers = new Map();
     this.updateHandlers = new Map();
     on('inventory:usedItem', (src: number, state: Inventory.ItemState) => {
@@ -231,7 +232,7 @@ class Inventory extends UtilShared.Singleton<Inventory>() {
   };
 
   public awaitLoad = async () => {
-    await Util.awaitCondition(() => this.isLoaded, 60000);
+    await Util.awaitCondition(() => this.isLoaded, false);
   };
 
   public createScriptedStash = (identifier: string, size: number, allowedItems?: string[]) => {

@@ -418,14 +418,13 @@ class StateManager extends Util.Singleton<StateManager>() {
     if (plyId) {
       Events.emitNet('houserobbery:client:cleanup', plyId);
 
-      Phone.sendMail(
-        plyId,
-        `Taak ${failed ? 'mislukt' : 'voltooid'}`,
-        'Bert B.',
-        failed
+      Phone.addMail(plyId, {
+        subject: `Taak ${failed ? 'mislukt' : 'voltooid'}`,
+        sender: 'Bert B.',
+        message: failed
           ? 'Je hebt de taak niet volbracht! Ik zal je taak overhandige aan een echte professional'
-          : 'Je hebt je taak volbracht, ik laat je staan op de lijst voor een nieuwe opdracht'
-      );
+          : 'Je hebt je taak volbracht, ik laat je staan op de lijst voor een nieuwe opdracht',
+      });
     }
   }
 

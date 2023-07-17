@@ -1,7 +1,7 @@
 import { Util } from '@dgx/client';
 
 export class Npc {
-  private _data!: NpcData;
+  private _data!: NPCs.NPC;
   private _entity!: number | null;
   private _enabled!: boolean;
   private blip: number | null;
@@ -10,7 +10,7 @@ export class Npc {
   get data() {
     return this._data;
   }
-  private set data(value: NpcData) {
+  private set data(value: NPCs.NPC) {
     this._data = value;
   }
   get entity() {
@@ -27,7 +27,7 @@ export class Npc {
   }
   // #endregion
 
-  constructor(npcData: NpcData) {
+  constructor(npcData: NPCs.NPC) {
     this.data = npcData;
     if (typeof this.data.model === 'string') {
       this.data.model = GetHashKey(this.data.model);
@@ -58,13 +58,21 @@ export class Npc {
     }
 
     await Util.loadModel(this.data.model);
+
+    let heading = 0;
+    if ('w' in this.data.position) {
+      heading = this.data.position.w;
+    } else if (this.data.heading) {
+      heading = this.data.heading;
+    }
+
     this.entity = CreatePed(
       4,
       this.data.model,
       this.data.position.x,
       this.data.position.y,
       this.data.position.z,
-      this.data.heading,
+      heading,
       false,
       false
     );
@@ -104,7 +112,7 @@ export class Npc {
   }
 
   private setFlags = () => {
-    if (!this.entity) return;
+    if (!this.entity || !this.data.flags) return;
     const entState = Entity(this.entity).state;
     for (const [flag, data] of Object.entries(this.data.flags)) {
       entState.set(flag, data, false);
@@ -113,11 +121,11 @@ export class Npc {
 
   private setSettings = () => {
     for (const [setting, active] of Object.entries(this.data.settings)) {
-      this.setSetting(setting as keyof NpcData['settings'], active);
+      this.setSetting(setting as keyof NPCs.NPC['settings'], active);
     }
   };
 
-  private setSetting(setting: keyof NpcData['settings'], active: boolean) {
+  private setSetting(setting: keyof NPCs.NPC['settings'], active: boolean) {
     if (!this.entity) return;
 
     switch (setting) {

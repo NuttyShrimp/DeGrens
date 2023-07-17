@@ -1,4 +1,4 @@
-import { Events, Notifications, PropAttach, RPC, SyncedObjects, Util } from '@dgx/client';
+import { Events, Notifications, PropAttach, RPC, SyncedObjects, UI, Util } from '@dgx/client';
 
 import { disableBlips, enableBlips } from '../../service/playerBlips';
 import { toggleLocalVis } from './service.commands';
@@ -42,6 +42,15 @@ on('admin:commands:toggleFreezeEntity', (ent: number) => {
     return;
   }
   Events.emitNet('admin:server:toggleFreezeEntity', NetworkGetNetworkIdFromEntity(entity), isFrozen);
+});
+on('admin:commands:copyCoords', (ent: number) => {
+  const coords: Vec4 = { ...Util.getEntityCoords(ent), w: GetEntityHeading(ent) };
+  for (const key of Object.keys(coords)) {
+    //@ts-expect-error
+    coords[key] = Util.round(coords[key], 4);
+  }
+
+  UI.addToClipboard(JSON.stringify(coords));
 });
 
 Events.onNet('admin:commands:runCmd', (handler, args: any[]) => {

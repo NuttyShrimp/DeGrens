@@ -1,4 +1,4 @@
-import { Keys, Notifications, PropAttach, Util } from '@dgx/client';
+import { Keys, Notifications, PropAttach, Util, Vehicles } from '@dgx/client';
 import { getCmdState, setCmdState } from 'modules/commands/state.commands';
 
 let noclipThread: NodeJS.Timer | null = null;
@@ -55,6 +55,10 @@ export const toggleNoclip = (toggle: boolean) => {
 
   PropAttach.toggleProps(false);
   DisplayRadar(true);
+
+  if (IsEntityAVehicle(noclipEnt)) {
+    Vehicles.setEngineState(noclipEnt, false, true);
+  }
 
   const plyId = PlayerId();
   noclipThread = setInterval(() => {
@@ -146,8 +150,10 @@ const cleanupNoclip = () => {
     PropAttach.toggleProps(true);
   }
 
-  // disable radar if not in a vehicle
-  if (!IsPedInAnyVehicle(PlayerPedId(), true)) {
+  const vehiclePedIsIn = GetVehiclePedIsIn(PlayerPedId(), false);
+  if (vehiclePedIsIn && DoesEntityExist(vehiclePedIsIn)) {
+    Vehicles.setEngineState(vehiclePedIsIn, true, true);
+  } else {
     DisplayRadar(false);
   }
 };

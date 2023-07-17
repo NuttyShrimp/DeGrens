@@ -15,12 +15,6 @@ declare type JusticeState = {
   available: boolean;
 };
 
-declare type Mail = {
-  subject: string;
-  sender: string;
-  message: string;
-};
-
 declare type Message = {
   id: number;
   message: string;

@@ -106,3 +106,7 @@ const generateDoorId = () => {
   }
   return newId;
 };
+
+export const getDoorCoords = (doorId: number) => {
+  return doors.get(doorId)?.coords;
+};

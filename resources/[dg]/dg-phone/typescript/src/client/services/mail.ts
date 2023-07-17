@@ -1,33 +1,20 @@
-import { UI } from '@dgx/client';
+import { Events, Notifications, UI, Util } from '@dgx/client';
 
-const cachedMails: Mail[] = [];
-
-const sendMail = (subject: string, sender: string, message: string, dontCache = true) => {
-  const mailData: Mail = {
-    subject: subject,
-    sender: sender,
-    message: message,
-  };
-
-  if (!dontCache) {
-    cachedMails.push(mailData);
-  }
-
+Events.onNet('phone:mails:add', (mail: Phone.Mails.Mail | Phone.Mails.Mail[], skipNotification?: boolean) => {
   UI.SendAppEvent('phone', {
     appName: 'mail',
-    action: 'newMail',
-    data: mailData,
+    action: 'addMail',
+    data: { mail, skipNotification },
   });
-};
+});
 
-exports('sendMail', sendMail);
+UI.RegisterUICallback('phone/mails/remove', (data: { id: string }, cb) => {
+  Events.emitNet('phone:mails:remove', data.id);
+  cb({ data: {}, meta: { ok: true, message: 'done' } });
+});
 
-onNet('phone:mail:add', sendMail);
-
-export const restoreCachedMails = () => {
-  UI.SendAppEvent('phone', {
-    appName: 'mail',
-    action: 'restore',
-    data: cachedMails,
-  });
-};
+UI.RegisterUICallback('phone/mails/setLocation', (data: { coords: Vec3 }, cb) => {
+  Util.setWaypoint(data.coords);
+  Notifications.add('Locatie is aangeduid op je GPS');
+  cb({ data: {}, meta: { ok: true, message: 'done' } });
+});

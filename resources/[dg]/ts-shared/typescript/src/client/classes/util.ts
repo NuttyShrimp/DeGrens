@@ -72,26 +72,6 @@ class Util extends UtilShared {
     return this.awaitCondition(() => HasAnimSetLoaded(set));
   };
 
-  /**
-   * Spawns ped that will attack all players
-   */
-  spawnAggressivePed = async (model: string, position: Vec3 | Vec4) => {
-    const pedModel = GetHashKey(model);
-    const { entity: ped } = await this.createPedOnServer(model, position);
-    if (!ped) return;
-    SetPedRelationshipGroupHash(ped, GetHashKey('ATTACK_ALL_PLAYERS'));
-    SetPedDropsWeaponsWhenDead(ped, false);
-    StopPedWeaponFiringWhenDropped(ped);
-    RemoveAllPedWeapons(ped, false);
-    SetPedCombatAbility(ped, 2);
-    SetPedCombatAttributes(ped, 46, true);
-    SetPedCombatAttributes(ped, 5, true);
-    SetPedCombatMovement(ped, 2);
-    SetPedCombatRange(ped, 2);
-    SetModelAsNoLongerNeeded(pedModel);
-    return ped;
-  };
-
   goToCoords = async (position: Vec4, timeout = 5000, targetPed?: number) => {
     let ped = PlayerPedId();
     if (targetPed) {

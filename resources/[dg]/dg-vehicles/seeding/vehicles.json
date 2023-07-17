@@ -2900,7 +2900,7 @@
     "defaultStock": 5,
     "restockTime": 30,
     "price": 105000,
-    "shop": "pdm",
+    "shop": "nfs",
     "type": "land"
   },
   {
@@ -10160,6 +10160,90 @@
     "defaultStock": 5,
     "restockTime": 14,
     "price": 470000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "sports",
+    "model": "23m2",
+    "brand": "BMW",
+    "name": "M2 2023",
+    "class": "A+",
+    "defaultStock": 5,
+    "restockTime": 14,
+    "price": 207500,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "sports",
+    "model": "rmodm3e36",
+    "brand": "BMW",
+    "name": "M3 E36",
+    "class": "S",
+    "defaultStock": 5,
+    "restockTime": 14,
+    "price": 475000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "sports",
+    "model": "mgt18lb",
+    "brand": "Masarati",
+    "name": "GranTurismo LB",
+    "class": "S",
+    "defaultStock": 5,
+    "restockTime": 14,
+    "price": 480000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "sports",
+    "model": "bmwm5e392002wb",
+    "brand": "BMW",
+    "name": "M5 E39 2002",
+    "class": "S",
+    "defaultStock": 5,
+    "restockTime": 14,
+    "price": 475000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "super",
+    "model": "mc20h",
+    "brand": "Masarati",
+    "name": "MC20",
+    "class": "S",
+    "defaultStock": 5,
+    "restockTime": 14,
+    "price": 490000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "sports",
+    "model": "m3tou",
+    "brand": "BMW",
+    "name": "M3 G81 Touring",
+    "class": "S",
+    "defaultStock": 5,
+    "restockTime": 14,
+    "price": 485000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "sports",
+    "model": "cls63",
+    "brand": "Mercedes",
+    "name": "CLS 63",
+    "class": "S",
+    "defaultStock": 5,
+    "restockTime": 14,
+    "price": 485000,
     "shop": "nfs",
     "type": "land"
   }

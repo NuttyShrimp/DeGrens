@@ -51,10 +51,13 @@ Events.onNet('police:interactions:stopEscort', (src: number) => {
   stopEscorting(src);
 });
 
-export const stopEscorting = (plyId: number) => {
+export const stopEscorting = (plyId: number, emitOverrideEvent = false) => {
   const player = escortingPlayers.get(plyId);
   if (!player) return;
   Events.emitNet('police:interactions:detachEscorted', player);
+  if (emitOverrideEvent) {
+    Events.emitNet('police:interactions:overrideStoppedEscort', plyId);
+  }
   escortingPlayers.delete(plyId);
   Util.Log(
     'police:interactions:stopEscort',

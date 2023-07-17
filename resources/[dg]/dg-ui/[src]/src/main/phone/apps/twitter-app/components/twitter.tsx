@@ -14,8 +14,9 @@ export const Tweet: FC<
   React.PropsWithChildren<
     { tweet: Phone.Twitter.Tweet } & {
       toggleLike: (tweetId: number, isLiked: boolean) => void;
-      doRetweet: (tweet: Phone.Twitter.Tweet) => void;
+      doRetweet: (tweetId: number) => void;
       doDelete: (tweetId: number) => void;
+      doReply: (tweet: Phone.Twitter.Tweet) => void;
     }
   >
 > = ({ tweet, ...props }) => {
@@ -45,13 +46,24 @@ export const Tweet: FC<
           </IconButton>
           {tweet.like_count}
         </div>
+        <div className={'reply'}>
+          <IconButton
+            size={'small'}
+            sx={{
+              color: '#fff',
+            }}
+            onClick={() => props.doReply(tweet)}
+          >
+            <i className='fas fa-reply' />
+          </IconButton>
+        </div>
         <div className={'retweet'}>
           <IconButton
             size={'small'}
             sx={{
               color: tweet.retweeted ? '#2ecc71' : '#fff',
             }}
-            onClick={() => (tweet.retweeted ? {} : props.doRetweet(tweet))}
+            onClick={() => (tweet.retweeted ? {} : props.doRetweet(tweet.id))}
           >
             {tweet.retweeted ? <i className='fas fa-retweet' /> : <i className='fal fa-retweet' />}
           </IconButton>
@@ -78,8 +90,9 @@ export const Tweet: FC<
 export const Twitter: FC<
   React.PropsWithChildren<{
     toggleLike: (tweetId: number, isLiked: boolean) => void;
-    doRetweet: (tweet: Phone.Twitter.Tweet) => void;
+    doRetweet: (tweetId: number) => void;
     doDelete: (tweetId: number) => void;
+    doReply: (tweet: Phone.Twitter.Tweet) => void;
     fetchTweets: () => Promise<void>;
   }>
 > = props => {
@@ -103,6 +116,7 @@ export const Twitter: FC<
           toggleLike={props.toggleLike}
           doDelete={props.doDelete}
           doRetweet={props.doRetweet}
+          doReply={props.doReply}
         />
       ))}
       <Button.Primary disabled={disableLoad} onClick={loadMore}>

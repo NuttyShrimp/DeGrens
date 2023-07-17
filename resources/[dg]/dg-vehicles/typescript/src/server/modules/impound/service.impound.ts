@@ -13,6 +13,7 @@ import {
 } from 'db/repository';
 import { deleteVehicle, getVinForVeh, spawnOwnedVehicle } from 'helpers/vehicle';
 import vinManager from 'modules/identification/classes/vinmanager';
+import { getCidFromVin } from 'modules/identification/service.id';
 import { getConfigByModel } from 'modules/info/service.info';
 import { keyManager } from 'modules/keys/classes/keymanager';
 import { isPlayerAssigned, finishJob, overwriteTowJob, sendTowJob } from 'modules/mechanic/services/towing.mechanic';
@@ -51,6 +52,11 @@ export const impoundVehicle = async (src: number, reason: Depot.Reason, veh: num
   // delete vehicle and move vehicle state to depot
   const vin = getVinForVeh(veh);
   if (vin && vinManager.isVinFromPlayerVeh(vin)) {
+    const ownerCid = await getCidFromVin(vin);
+    if (ownerCid === 1000) {
+      Notifications.add(src, 'Dit overheidsvoertuig kan niet in beslag worden genomen', 'error');
+      return;
+    }
     await putVehicleInImpound(vin, reason);
     const strikes = await getVehicleStrikeAmount(vin);
     if (strikes > config.strikes.permImpound) {
@@ -87,11 +93,6 @@ export const requestImpound = async (src: number, title: string, veh: number, in
     if (vin && vinManager.isVinFromPlayerVeh(vin)) {
       setVehicleState(vin, 'parked');
     }
-    return;
-  }
-
-  if (Police.isPoliceVehicle(veh)) {
-    Notifications.add(src, 'Dees voertuig kunde nie in beslag nemen!', 'error');
     return;
   }
 
@@ -246,12 +247,11 @@ const permaImpoundVehicle = async (vin: string) => {
   const vehicleInfo = await getPlayerVehicleInfo(vin);
   if (!vehicleInfo) return;
   await doVehicleForfeiture(vin);
-  Phone.sendOfflineMail(
-    vehicleInfo.cid,
-    'Permanente inbeslagname voertuig',
-    'Hof van Cassatie',
-    `Het hof van Cassatie heeft vandaag beslist dat uw voertuig met nummerplaat <strong>${vehicleInfo.plate}</strong> en voertuig identificatie nummer <strong>${vehicleInfo.vin}</strong> van op heden permanent in beslaggenome is wegens het meermaals gebruiken van het voertuig voor onwettige redenen`
-  );
+  Phone.addOfflineMail(vehicleInfo.cid, {
+    subject: 'Permanente inbeslagname voertuig',
+    sender: 'Hof van Cassatie',
+    message: `Het hof van Cassatie heeft vandaag beslist dat uw voertuig met nummerplaat <strong>${vehicleInfo.plate}</strong> en voertuig identificatie nummer <strong>${vehicleInfo.vin}</strong> van op heden permanent in beslaggenome is wegens het meermaals gebruiken van het voertuig voor onwettige redenen`,
+  });
 };
 
 export const checkPermaImpoundVehicleStock = async () => {
