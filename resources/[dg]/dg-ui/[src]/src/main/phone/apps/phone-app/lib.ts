@@ -23,7 +23,7 @@ const addCallEntry = (name: string, number: string, date: number, incoming: bool
 const phoneCallNotiId = `__internal_phone_call_noti__`;
 let incoming = false;
 
-export const startPhoneCall = (nr: string, type = 0) => {
+export const startPhoneCall = (nr: string, type: Phone.Phone.CallType = 'normal') => {
   nuiAction('phone/startCall', {
     phone: nr,
     type,
