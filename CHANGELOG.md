@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fix engine sound hash of mazrx7fd
 - Foute notificatie dat je geen lockpick hebt opgelost bij parkeermeters
 - Je kan weer mensen opbellen via je telefoon
+- Nieuwe twitter berichten worden nu wel gedisplayed zonder dat je app opnieuw moet openen
 
 ## [1.2.10]
 
