@@ -19,6 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Nieuwe twitter berichten worden nu wel gedisplayed zonder dat je app opnieuw moet openen
 - Geen log meer wanneer er geen missing/invalid vehicle models zijn
 - Enkele scuffed houserobbery locaties verwijderd
+- Important log verwijderd bij inleveren van testvoertuig wanneer geen testrit actief is
 
 ## [1.2.10]
 
