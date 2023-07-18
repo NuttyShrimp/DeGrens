@@ -16,6 +16,13 @@ class IdentifierManager {
     );
   }
 
+  private isTemporaryServerId = (plyId: number) => plyId >= 65535;
+
+  private setStatebagSteamId = (plyId: number, steamId: string) => {
+    if (this.isTemporaryServerId(plyId)) return;
+    Player(plyId).state.set('steamId', steamId, false);
+  };
+
   loadIdentifiers(src: number | string) {
     const strSrc = String(src);
     const identifierNum = GetNumPlayerIdentifiers(strSrc);
@@ -26,6 +33,7 @@ class IdentifierManager {
       identifiers[key] = id;
     }
     this.identifiers.set(+src, identifiers);
+    this.setStatebagSteamId(+src, identifiers.steam);
     return identifiers;
   }
 
@@ -37,6 +45,7 @@ class IdentifierManager {
       this.logger.error(`Player ${oldSrc} does not have any identifiers to move to ${newSrc}`);
       return;
     }
+    this.setStatebagSteamId(newSrc, identifiers.steam);
     this.identifiers.set(newSrc, identifiers);
   }
 
@@ -57,7 +66,7 @@ class IdentifierManager {
 
   getServerIdFromIdentifier(key: string, identifier: string) {
     for (const [src, identifiers] of this.identifiers) {
-      if (identifiers[key] === identifier && src < 65535) {
+      if (identifiers[key] === identifier && !this.isTemporaryServerId(src)) {
         return +src;
       }
     }
