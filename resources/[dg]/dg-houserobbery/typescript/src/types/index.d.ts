@@ -1,10 +1,10 @@
 declare namespace Houserobbery {
-  type FullConfig = { config: Config } & Types;
+  type FullConfig = { config: Config } & Locations;
 
   type Config = {
     // Used if we want to specify specific loot at a spot
     // Will default to index 0 if not specified
-    lootTables: string[][];
+    lootTable: Loot[];
     // Time in minutes after a ply finished/failed a job that it cannot get any jobs
     playerCooldown: number;
     // Time in minutes a player can enter a house after it first interaction
@@ -13,6 +13,12 @@ declare namespace Houserobbery {
     timeToFind: number;
     shellInfo: Partial<Record<Interior.Size, Interior.Data>>;
     moldChance: number;
+  };
+
+  type Loot = {
+    itemName: string;
+    weight: number;
+    lootTableId: number;
   };
 
   type Locations = Record<Interior.Size, Vec4[]>;
