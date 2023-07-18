@@ -228,10 +228,18 @@ class HeistManager extends Util.Singleton<HeistManager>() {
     return location.getAmountOfPlayersInside();
   };
 
+  /**
+   * Do not use this function inside a typemanagers constructor (those get called before heistmanager constructor is finished)
+   * Instead use in initialize funciton of typemanager
+   */
   public onLocationEnter = (cb: (typeof this.onEnterHandlers)[number]) => {
     this.onEnterHandlers.push(cb);
   };
 
+  /**
+   * Do not use this function inside a typemanagers constructor (those get called before heistmanager constructor is finished)
+   * Instead use in initialize funciton of typemanager
+   */
   public onLocationLeave = (cb: (typeof this.onLeaveHandlers)[number]) => {
     this.onLeaveHandlers.push(cb);
   };

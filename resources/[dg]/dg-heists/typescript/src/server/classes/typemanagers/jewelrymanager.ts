@@ -46,7 +46,7 @@ export class JewelryManager implements Heists.TypeManager {
 
     this.inTimeout = false;
 
-    this.awaitingEmptyLocation = true;
+    this.awaitingEmptyLocation = false;
     this.emptyLocationTimeout = null;
 
     this.generatePinCode();
@@ -69,9 +69,9 @@ export class JewelryManager implements Heists.TypeManager {
   public initialize = () => {
     this.spawnLaptop();
 
-    heistManager.onLocationEnter(locationId => {
+    heistManager.onLocationEnter((locationId, plyId) => {
       if (locationId !== 'jewelry') return;
-      this.handleJewelryEnter();
+      this.handleJewelryEnter(plyId);
     });
 
     heistManager.onLocationLeave(locationId => {
@@ -387,7 +387,7 @@ export class JewelryManager implements Heists.TypeManager {
       return;
     }
 
-    const timeout = config.jewelry.overrideTimeout;
+    const timeout = config.jewelry.overrideDuration;
     this.sendMail(plyId, `Het zal ongeveer ${timeout} minuten duren om het alarm uit te schakelen`);
 
     setTimeout(() => {
@@ -411,10 +411,13 @@ export class JewelryManager implements Heists.TypeManager {
     this.log(plyId, 'warn', 'resetScuff', `has scuff reset jewelry heist`, {}, true);
   };
 
-  private handleJewelryEnter = () => {
-    if (!this.emptyLocationTimeout) return;
-    clearTimeout(this.emptyLocationTimeout);
-    this.emptyLocationTimeout = null;
+  private handleJewelryEnter = (plyId: number) => {
+    Events.emitNet('heists:jewelry:smashVitrine', plyId, [...this.lootedVitrines.keys()]);
+
+    if (this.emptyLocationTimeout) {
+      clearTimeout(this.emptyLocationTimeout);
+      this.emptyLocationTimeout = null;
+    }
   };
 
   private handleJewelryLeave = () => {
@@ -423,10 +426,11 @@ export class JewelryManager implements Heists.TypeManager {
 
     if (this.emptyLocationTimeout) clearTimeout(this.emptyLocationTimeout);
 
+    const timeout = config.jewelry.emptyLocationRequirementTime;
     this.emptyLocationTimeout = setTimeout(() => {
       this.emptyLocationTimeout = null;
       this.startResetTimeout();
-    }, 15 * 1000);
+    }, timeout * 60 * 1000);
   };
 
   private startResetTimeout = () => {
@@ -463,10 +467,5 @@ export class JewelryManager implements Heists.TypeManager {
     playersAtLocations.forEach(target => {
       Events.emitNet('heists:jewelry:smashVitrine', target, vitrineId);
     });
-  };
-
-  @RPCEvent('heists:jewelry:getLootedVitrines')
-  private _getLootedVitrines = () => {
-    return [...this.lootedVitrines];
   };
 }

@@ -12,7 +12,8 @@ declare namespace Jewelry {
       inputTime: number;
     };
     doorOpenTime: number; // seconds
-    overrideTimeout: number; // minutes
+    overrideDuration: number; // minutes
+    emptyLocationRequirementTime: number; // minutes
     resetTime: number; // minutes
     loot: { itemName: string; amount: [number, number] }[];
     laptopLocations: Vec4[];

@@ -11,7 +11,8 @@
     "inputTime": 6
   },
   "doorOpenTime": 10,
-  "overrideTimeout": 5,
+  "overrideDuration": 5,
+  "emptyLocationRequirementTime": 10,
   "resetTime": 60,
   "loot": [
     {
