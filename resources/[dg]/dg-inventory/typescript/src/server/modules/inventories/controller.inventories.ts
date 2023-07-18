@@ -32,9 +32,11 @@ RPC.register(
       secondaryId = secondaryBuildData.override;
     } else {
       if (locationManager.isLocationBased(secondaryBuildData.type)) {
+        const dropData = secondaryBuildData.data as { coords: Vec3; inNoDropZone: boolean };
         secondaryId = locationManager.getLocation(
           secondaryBuildData.type as Location.Type,
-          secondaryBuildData.data as Vec3
+          dropData.coords,
+          dropData.inNoDropZone // when in no dropzones, disable checking others so player also cant pick anything up while inside no dropzone
         );
       } else if (secondaryBuildData.type === 'player') {
         secondaryId = Inventory.concatId(secondaryBuildData.type, Util.getCID(secondaryBuildData.data as number));
@@ -59,6 +61,14 @@ RPC.register(
           secondaryInv.setSize((secondaryBuildData.data as number) ?? 10);
         }
       }
+    }
+
+    if (
+      'type' in secondaryBuildData &&
+      secondaryBuildData.type === 'drop' &&
+      (secondaryBuildData.data as { inNoDropZone: boolean }).inNoDropZone
+    ) {
+      secondaryInv.allowedItems = [];
     }
 
     // If shoptype get shopdata

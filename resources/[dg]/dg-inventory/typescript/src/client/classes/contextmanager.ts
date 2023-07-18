@@ -3,6 +3,7 @@ import { DGXEvent, EventListener } from '@dgx/client/decorators';
 import { Vector3, Export, ExportRegister } from '@dgx/shared';
 import { TYPES_WITH_OPEN_ANIMATION } from '../constants';
 import { canOpenInventory, doCloseAnimation, doLookAnimation, doOpenAnimation } from '../util';
+import { isInNoDropZone } from 'services/nodropzones';
 
 @ExportRegister()
 @EventListener()
@@ -91,7 +92,13 @@ class ContextManager extends Util.Singleton<ContextManager>() {
 
     doLookAnimation();
     const [x, y, z] = GetOffsetFromEntityInWorldCoords(PlayerPedId(), 0, 0.5, 0);
-    return { type: 'drop', data: { x, y, z } };
+    return {
+      type: 'drop',
+      data: {
+        coords: { x, y, z },
+        inNoDropZone: isInNoDropZone(),
+      },
+    };
   };
 }
 

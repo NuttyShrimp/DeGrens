@@ -2,6 +2,7 @@ import { Core, Events, UI } from '@dgx/client';
 import contextManager from 'classes/contextmanager';
 import itemDataManager from 'classes/itemdatamanager';
 import { doDropAnimation } from './../util';
+import { buildNoDropZones } from 'services/nodropzones';
 
 UI.onUIReload(() => {
   contextManager.close();
@@ -33,3 +34,5 @@ Events.onNet('inventory:client:openOverride', (invId: string) => {
 Events.onNet('inventory:itemdata:seed', (itemData: Record<string, Inventory.ItemData>) => {
   itemDataManager.seed(itemData);
 });
+
+Events.onNet('inventory:nodropzones:build', buildNoDropZones);
