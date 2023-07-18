@@ -22,7 +22,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Enkele scuffed houserobbery locaties verwijderd
 - Important log verwijderd bij inleveren van testvoertuig wanneer geen testrit actief is
 - Juwelier vitrines laden nu wel correct in als ze al kapot zijn wanneer je binnen gaat
-- Gesloten wagens waar spelers in rijden kunnen niet meer geselecteerd worden als oxy koper
+- NPC wagens waar spelers in rijden kunnen niet meer geselecteerd worden als oxy koper
+- Oxyrunvoertuig toeter is nu altijd hoorbaar voor speler die oxyrun doet
 
 ## [1.2.10]
 

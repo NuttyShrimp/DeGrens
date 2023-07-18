@@ -42,7 +42,6 @@ Core.onPlayerUnloaded(() => {
 });
 
 Sync.registerActionHandler('oxyrun:doVehicleAction', async (vehicle: number) => {
-  doHornJingleForVehicle(vehicle);
   SetVehicleUndriveable(vehicle, true);
   BringVehicleToHalt(vehicle, 3.0, 1000, false);
   Vehicles.setVehicleDoorsLocked(vehicle, false);
