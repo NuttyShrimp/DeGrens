@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 ### Changed
+- Loot changes van dumpsters getweaked
 
 ### Fixed
 - Fix engine sound hash of mazrx7fd
