@@ -162,7 +162,9 @@ export const checkMissingModels = async (plyId: number) => {
 
   const logMsg = `Found ${missingModels.length} missing and ${invalidModels.length} invalid models`;
   infoLogger.info(logMsg);
-  Util.Log('vehicles:modelValidation', { missingModels, invalidModels }, logMsg, undefined, true);
+  if (missingModels.length > 0 || invalidModels.length > 0) {
+    Util.Log('vehicles:modelValidation', { missingModels, invalidModels }, logMsg, undefined, true);
+  }
 
   missingModelsChecked = true;
 };
