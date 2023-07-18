@@ -296,8 +296,7 @@ export class Account {
               ...extra,
             },
             `${triggerPlyName} tried to ${type} ${amount} to ${this.name} (${this.account_id}) but targeted invalid player`,
-            triggerPlyId,
-            true
+            triggerPlyId
           );
           this.logger.warn(`${type}: invalid player | ${infoStr}`);
           return false;
