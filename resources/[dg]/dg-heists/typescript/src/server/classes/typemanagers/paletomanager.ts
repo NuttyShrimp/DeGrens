@@ -84,7 +84,7 @@ export class PaletoManager implements Heists.TypeManager {
 
   @DGXEvent('heists:paleto:buyCodes')
   private _buyCodes = async (plyId: number) => {
-    if (this.currentCode !== null || this.inLockdown || this.isDone()) {
+    if (this.currentCode !== null || this.inLockdown || this.isDone() || heistManager.isGlobalTimeoutActive()) {
       Notifications.add(plyId, 'Ik heb niks meer', 'error');
       return;
     }

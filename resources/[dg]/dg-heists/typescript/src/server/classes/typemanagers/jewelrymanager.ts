@@ -194,7 +194,7 @@ export class JewelryManager implements Heists.TypeManager {
       return;
     }
 
-    if (!Police.canDoActivity('heist_jewelry') || this.inTimeout) {
+    if (!Police.canDoActivity('heist_jewelry') || this.inTimeout || heistManager.isGlobalTimeoutActive()) {
       Notifications.add(plyId, 'Ik kan je nog niet genoeg info geven', 'error');
       return;
     }
@@ -320,13 +320,15 @@ export class JewelryManager implements Heists.TypeManager {
   private _startLootingVitrine = (plyId: number, vitrineId: number) => {
     if (this.inTimeout || this.lootedVitrines.has(vitrineId)) return false;
 
-    if (!this.state.started && !Police.canDoActivity('heist_jewelry')) return false;
+    if (!this.state.started && (!Police.canDoActivity('heist_jewelry') || heistManager.isGlobalTimeoutActive()))
+      return false;
 
     this.lootedVitrines.set(vitrineId, plyId);
 
-    // on first vitrine, start alarm and dispatch notif
+    // on first vitrine start alarm, dispatch notif & global timeout
     if (this.lootedVitrines.size === 1) {
       this.dispatchAlarmToClients();
+      heistManager.startGlobalTimeout();
 
       this.dispatchAlert(
         'Angelico Juwelier Overval',

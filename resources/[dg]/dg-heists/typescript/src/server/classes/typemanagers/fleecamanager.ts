@@ -1,6 +1,7 @@
 import { Police, Util, UI, Inventory } from '@dgx/server';
 import { DGXEvent, EventListener, RPCEvent, RPCRegister } from '@dgx/server/decorators';
 import { Vector3 } from '@dgx/shared';
+import heistManager from 'classes/heistmanager';
 import config from 'services/config';
 import { mainLogger } from 'sv_logger';
 import winston from 'winston';
@@ -34,7 +35,7 @@ export class FleecaManager implements Heists.TypeManager {
 
   private getPowerLocationPercentage = (location: Vec3) => {
     if (this.powerLocation === null) return -1;
-    if (!Police.canDoActivity('heist_fleeca')) return -1;
+    if (!Police.canDoActivity('heist_fleeca') || heistManager.isGlobalTimeoutActive()) return -1;
 
     const distance = Vector3.create(this.powerLocation).distance(location);
     if (distance < 2) return 100;

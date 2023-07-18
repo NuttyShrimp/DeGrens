@@ -17,6 +17,8 @@ class HeistManager extends Util.Singleton<HeistManager>() {
   private readonly onEnterHandlers: ((locationId: string, plyId: number) => void)[];
   private readonly onLeaveHandlers: ((locationId: string, plyId: number) => void)[];
 
+  private globalTimeoutTimeout: NodeJS.Timeout | null;
+
   constructor() {
     super();
     this.logger = mainLogger.child({ module: 'Manager' });
@@ -29,6 +31,8 @@ class HeistManager extends Util.Singleton<HeistManager>() {
 
     this.onEnterHandlers = [];
     this.onLeaveHandlers = [];
+
+    this.globalTimeoutTimeout = null;
   }
 
   private getLocation = (locationId: Heists.LocationId, supressError = false) => {
@@ -152,6 +156,7 @@ class HeistManager extends Util.Singleton<HeistManager>() {
 
     if (success) {
       location.setDone();
+      this.startGlobalTimeout();
     }
 
     typeManager.finishedHack?.(success);
@@ -244,6 +249,18 @@ class HeistManager extends Util.Singleton<HeistManager>() {
    */
   public onLocationLeave = (cb: (typeof this.onLeaveHandlers)[number]) => {
     this.onLeaveHandlers.push(cb);
+  };
+
+  public isGlobalTimeoutActive = () => this.globalTimeoutTimeout !== null;
+
+  public startGlobalTimeout = () => {
+    if (this.globalTimeoutTimeout) {
+      clearTimeout(this.globalTimeoutTimeout);
+    }
+
+    this.globalTimeoutTimeout = setTimeout(() => {
+      this.globalTimeoutTimeout = null;
+    }, 20 * 60 * 1000);
   };
 }
 
