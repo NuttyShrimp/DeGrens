@@ -120,11 +120,12 @@ export const registerPlayerInContainer = (plyId: number, targetPosition: Vec3) =
   containerForPlayer.set(plyId, containerId);
 
   if (!container.public) {
-    const gang = Gangs.getPlayerGangName(plyId);
+    const cid = Util.getCID(plyId);
+    const gang = Gangs.getPlayerGangName(cid);
     if (gang) {
       updateContainerKeyGang(containerId, gang);
     } else {
-      containersLogger.error(`Player ${plyId} is not in a gang but entered a non-public container`);
+      containersLogger.error(`Player ${cid} is not in a gang but entered a non-public container`);
     }
   }
 

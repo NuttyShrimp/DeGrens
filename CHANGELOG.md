@@ -24,6 +24,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Juwelier vitrines laden nu wel correct in als ze al kapot zijn wanneer je binnen gaat
 - NPC wagens waar spelers in rijden kunnen niet meer geselecteerd worden als oxy koper
 - Oxyrunvoertuig toeter is nu altijd hoorbaar voor speler die oxyrun doet
+- Fix verkeerd verkrijgen van playergang bij enteren van container
 
 ## [1.2.10]
 
