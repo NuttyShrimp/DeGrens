@@ -31,21 +31,23 @@ class HeistManager extends Util.Singleton<HeistManager>() {
     this.onLeaveHandlers = [];
   }
 
-  private getLocation = (locationId: Heists.LocationId) => {
+  private getLocation = (locationId: Heists.LocationId, supressError = false) => {
     const location = this.locations.get(locationId);
     if (!location) {
-      const logMsg = `Tried to get invalid location by id ${locationId}`;
-      this.logger.error(logMsg);
-      Util.Log(
-        'heists:unknownLocation',
-        {
-          locationId,
-        },
-        logMsg,
-        undefined,
-        true
-      );
-      return;
+      if (!supressError) {
+        const logMsg = `Tried to get invalid location by id ${locationId}`;
+        this.logger.error(logMsg);
+        Util.Log(
+          'heists:unknownLocation',
+          {
+            locationId,
+          },
+          logMsg,
+          undefined,
+          true
+        );
+        return;
+      }
     }
     return location;
   };
@@ -87,7 +89,7 @@ class HeistManager extends Util.Singleton<HeistManager>() {
 
   @DGXEvent('heists:location:enter')
   private _enterLocation = (plyId: number, locationId: Heists.LocationId) => {
-    const location = this.getLocation(locationId);
+    const location = this.getLocation(locationId, true);
     if (!location) return;
     location.playerEntered(plyId);
     this.onEnterHandlers.forEach(cb => cb(locationId, plyId));
@@ -95,7 +97,7 @@ class HeistManager extends Util.Singleton<HeistManager>() {
 
   @DGXEvent('heists:location:leave')
   private leaveLocation = (plyId: number, locationId: Heists.LocationId) => {
-    const location = this.getLocation(locationId);
+    const location = this.getLocation(locationId, true);
     if (!location) return;
     location.playerLeft(plyId);
     this.onLeaveHandlers.forEach(cb => cb(locationId, plyId));
