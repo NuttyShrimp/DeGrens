@@ -1,5 +1,6 @@
 import { Events, Util } from '@dgx/client';
 import { showReticle } from './helpers.weapons';
+import { setCanShoulderSwap } from 'services/shoulderswap';
 
 let currentWeaponData: Weapons.WeaponItem | null = null;
 let weaponTick: number | null = null;
@@ -149,6 +150,8 @@ const startWeaponThread = () => {
         emit('weapons:startedFreeAiming', currentWeaponData);
       }
 
+      setCanShoulderSwap(true);
+
       isFreeAiming = true;
     } else {
       if (viewModeReset && IsPedInAnyVehicle(ped, false)) {
@@ -167,6 +170,8 @@ const startWeaponThread = () => {
       if (isFreeAiming) {
         emit('weapons:stoppedFreeAiming', currentWeaponData);
       }
+
+      setCanShoulderSwap(false);
 
       isFreeAiming = false;
     }
