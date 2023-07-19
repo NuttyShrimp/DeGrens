@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Loot changes van dumpsters getweaked
 - Durability handboeien verhoogd
 - Dispatch blip grootte aangepast
+- Politie kan niet langer zomaar mensen rechtzetten
 
 ### Fixed
 - Fix engine sound hash of mazrx7fd

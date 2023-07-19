@@ -82,15 +82,14 @@ Events.onNet('hospital:job:checkin', async (src: number) => {
 
 Events.onNet('hospital:job:heal', (plyId: number) => {
   const plyJob = Jobs.getCurrentJob(plyId);
-  const amountOfAmbu = Jobs.getAmountForJob('ambulance');
 
-  if (plyJob !== 'ambulance' && (plyJob !== 'police' || amountOfAmbu > 0)) {
+  if (plyJob !== 'ambulance') {
     Notifications.add(plyId, 'Je kan dit niet', 'error');
     mainLogger.warn(`${Util.getName(plyId)}(${plyId}) tried to heal player but was not a doctor`);
     return;
   }
 
-  healClosestPlayer(plyId, plyJob === 'police');
+  healClosestPlayer(plyId);
 });
 
 Events.onNet('hospital:job:assistence', (src: number) => {
