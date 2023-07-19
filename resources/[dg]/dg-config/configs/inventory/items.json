@@ -1631,7 +1631,7 @@
     "name": "hand_cuffs",
     "label": "Handboeien",
     "image": "hand_cuffs.png",
-    "decayRate": 20160,
+    "decayRate": 43200,
     "size": {
       "x": 2,
       "y": 2
