@@ -32,6 +32,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Error opgelost bij atm robbery
 - Filter steamname color prefixes in admin names cache
 - Repair items cancelen wanneer je de minigame failed
+- Juwelier camera IDs in dispatch meldingen gefixt
 
 ## [1.2.10]
 
