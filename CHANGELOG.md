@@ -18,6 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Dispatch blip grootte aangepast
 - Politie kan niet langer zomaar mensen rechtzetten
 - Koperknippen minigame aangepast
+- Voertuiglock houdt niet langer rekening met nieuwe state om notificatie te betalen
 
 ### Fixed
 - Fix engine sound hash of mazrx7fd
