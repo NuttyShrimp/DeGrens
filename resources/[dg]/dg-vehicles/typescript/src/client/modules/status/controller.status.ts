@@ -134,6 +134,7 @@ Events.onNet('vehicles:status:useRepairItem', async (itemName: string, itemId: s
     if (openedBonnet) {
       Sync.executeAction('setVehicleDoorOpen', vehicle, 4, false);
     }
+    return;
   }
 
   const [canceled] = await Taskbar.create(

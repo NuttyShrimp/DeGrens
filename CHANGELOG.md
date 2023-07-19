@@ -30,6 +30,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fix errors bij enteren van heistlocations zonder geregistreerde manager
 - Error opgelost bij atm robbery
 - Filter steamname color prefixes in admin names cache
+- Repair items cancelen wanneer je de minigame failed
 
 ## [1.2.10]
 
