@@ -28,6 +28,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Oxyrunvoertuig toeter is nu altijd hoorbaar voor speler die oxyrun doet
 - Fix verkeerd verkrijgen van playergang bij enteren van container
 - Fix errors bij enteren van heistlocations zonder geregistreerde manager
+- Error opgelost bij atm robbery
 
 ## [1.2.10]
 

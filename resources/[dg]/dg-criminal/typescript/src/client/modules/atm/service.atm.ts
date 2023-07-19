@@ -157,6 +157,8 @@ export const stopAttaching = () => {
 };
 
 const createRopeForActiveRobbery = (robberyIdx: number, vehicle: number, atm: number) => {
+  if (!activeRobberies[robberyIdx]) return;
+
   const [atmDimensionMin, atmDimensionMax] = GetModelDimensions(GetEntityModel(atm));
   const atmHalfHeight = (atmDimensionMax[2] - atmDimensionMin[2]) / 2;
   const atmCoords = Util.ArrayToVector3(GetOffsetFromEntityInWorldCoords(atm, 0.0, 0.2, atmHalfHeight));
@@ -287,7 +289,7 @@ export const startActiveRobberyVehicleDriverThread = (vehicle: number) => {
   let pullStartTime = 0;
 
   activeRobberyVehicleDriverThread = setInterval(() => {
-    const rope = activeRobberies[robberyIdx].rope;
+    const rope = activeRobberies[robberyIdx]?.rope;
     if (!rope) return;
     const [ropeExists] = DoesRopeExist(rope);
     if (!ropeExists) return;
