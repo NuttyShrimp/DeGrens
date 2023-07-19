@@ -7416,18 +7416,6 @@
     "type": "land"
   },
   {
-    "category": "emergency",
-    "model": "mug2",
-    "brand": "Volvo",
-    "name": "Mug V90",
-    "class": "C",
-    "defaultStock": 10,
-    "restockTime": 10,
-    "price": 120000,
-    "shop": "nfs",
-    "type": "land"
-  },
-  {
     "category": "industrial",
     "model": "flatbed",
     "brand": "MTL",

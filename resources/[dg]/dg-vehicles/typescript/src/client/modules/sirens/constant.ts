@@ -2,7 +2,6 @@ export const allowedModels: Record<string, (veh: number) => boolean> = {
   ambusprinter1: () => true,
   ambusprinter2: () => true,
   mug: () => true,
-  mug2: () => true,
   brvito: () => true,
   brblus: () => true,
   fpskoda: () => true,
