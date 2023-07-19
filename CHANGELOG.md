@@ -29,6 +29,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fix verkeerd verkrijgen van playergang bij enteren van container
 - Fix errors bij enteren van heistlocations zonder geregistreerde manager
 - Error opgelost bij atm robbery
+- Filter steamname color prefixes in admin names cache
 
 ## [1.2.10]
 
