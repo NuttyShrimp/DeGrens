@@ -12,8 +12,9 @@ import {
   Phone,
   Sounds,
   Animations,
+  BlipManager,
 } from '@dgx/client';
-import { getDistanceToFurthestCoord, getPropAttachItem, isAnyBackDoorOpen } from './helpers.postop';
+import { getPropAttachItem, isAnyBackDoorOpen } from './helpers.postop';
 
 let assignedVehicle: number | null = null;
 let vehiclePeekIds: string[] = [];
@@ -24,7 +25,6 @@ let returnBlip: number = 0;
 let inReturnZone = false;
 
 let targetLocation: PostOP.TargetLocation | null = null;
-let targetBlip = 0;
 let atDropoff: number | null = null;
 
 let hasPackage = false;
@@ -118,20 +118,10 @@ export const setTargetLocation = (location: typeof targetLocation) => {
 
   // Clean up previous loc
   PolyZone.removeZone('jobs_postop_dropoff');
-  if (DoesBlipExist(targetBlip)) {
-    RemoveBlip(targetBlip);
-    targetBlip = 0;
-  }
+  BlipManager.removeCategory('jobs_postop_dropoff');
 
   // If new is null do nothing
   if (targetLocation === null) return;
-
-  // Add blip
-  const radius = getDistanceToFurthestCoord(targetLocation.center, targetLocation.dropoffs) + 15;
-  targetBlip = AddBlipForRadius(targetLocation.center.x, targetLocation.center.y, targetLocation.center.z, radius);
-  SetBlipColour(targetBlip, 15);
-  SetBlipAlpha(targetBlip, 180);
-  SetBlipHighDetail(targetBlip, true);
   Util.setWaypoint(targetLocation.center);
 
   // Build doors
@@ -141,6 +131,12 @@ export const setTargetLocation = (location: typeof targetLocation) => {
       data: {
         id: idx,
       },
+    });
+    BlipManager.addBlip({
+      category: 'jobs_postop_dropoff',
+      id: `jobs_postop_dropoff_${idx}`,
+      coords: targetLocation.dropoffs[idx],
+      sprite: 351,
     });
   }
 };

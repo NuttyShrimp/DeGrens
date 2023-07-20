@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Zones toegevoegd waar niks op de grond gelegd kan worden
 - Tijd toegevoegd aan gangfeed bericht
 - Er kan geen nieuwe overval meer gestart worden als er net een andere is gestart
+- Blips toegevoegd aan PostOP dropoff locaties
 
 ### Changed
 - Loot changes van dumpsters getweaked
