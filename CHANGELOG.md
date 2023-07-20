@@ -19,6 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Politie kan niet langer zomaar mensen rechtzetten
 - Koperknippen minigame aangepast
 - Voertuiglock houdt niet langer rekening met nieuwe state om notificatie te betalen
+- Je steekt je wapen niet meer weg bij het disablen van radiotowers
 
 ### Fixed
 - Fix engine sound hash of mazrx7fd
