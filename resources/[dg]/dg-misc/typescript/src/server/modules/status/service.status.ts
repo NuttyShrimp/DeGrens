@@ -81,7 +81,13 @@ const removeStatusFromPlayer = (plyId: number, name: Status.Name) => {
 };
 
 export const checkRemovalMethods = (plyId: number, method: Status.RemovalMethod) => {
-  const cid = Util.getCID(plyId);
+  const cid = Util.getCID(plyId, true);
+  if (!cid) {
+    statusLogger.warn(
+      `Tried to check removal methods for player ${plyId}(${typeof plyId}) but could not get cid | ${cid}`
+    );
+    return;
+  }
   const playerStatuses = allPlayerStatuses.get(cid);
   if (!playerStatuses) return;
 
