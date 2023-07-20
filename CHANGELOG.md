@@ -39,6 +39,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Repair items cancelen wanneer je de minigame failed
 - Juwelier camera IDs in dispatch meldingen gefixt
 - Error bij cleared van status na revive opgelost
+- Doorzoeken peek optie wordt niet meer getoond op NPCs die niet bij een job horen
 
 ## [1.2.10]
 

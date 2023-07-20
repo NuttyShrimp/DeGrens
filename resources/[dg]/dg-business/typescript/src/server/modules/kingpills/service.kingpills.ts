@@ -29,7 +29,7 @@ const getInactiveLocationIdx = (locations: KingPills.Config['locations']) => {
 
 export const registerKingPillsJob = () => {
   Jobs.registerJob('kingpills', {
-    title: 'KingPills Job',
+    title: 'KingPills',
     icon: 'pills',
     legal: false,
     size: 1,
@@ -141,6 +141,10 @@ export const lootEnemy = async (plyId: number, enemyNetId: number) => {
 
   const itemName = KINGPILLS_JOB_LOOT[Math.floor(Math.random() * KINGPILLS_JOB_LOOT.length)];
   Inventory.addItemToPlayer(plyId, itemName, 1);
+
+  if (DoesEntityExist(enemyPed)) {
+    Entity(enemyPed).state.set('isKingPillsEnemy', false, true);
+  }
 
   assignLocationForKingPillsJob(plyId);
 };

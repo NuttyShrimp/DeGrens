@@ -26,7 +26,7 @@ Peek.addGlobalEntry('ped', {
         Events.emitNet('business:kingpills:loot', NetworkGetNetworkIdFromEntity(ent));
       },
       canInteract: entity =>
-        !!entity && DoesEntityExist(entity) && IsEntityDead(entity) && Entity(entity).state.isKingPillsEnemy,
+        !!entity && DoesEntityExist(entity) && IsEntityDead(entity) && !!Entity(entity).state.isKingPillsEnemy,
     },
   ],
 });
