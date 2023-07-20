@@ -137,7 +137,7 @@ const getVehicleAtLocation = () => {
     if (!PolyZone.isPointInside(vehicleCoords, 'oxyrun_location')) continue;
 
     const driver = GetPedInVehicleSeat(vehicle, -1);
-    if (DoesEntityExist(driver) && IsPedAPlayer(driver)) continue;
+    if (!DoesEntityExist(driver) || IsPedAPlayer(driver)) continue;
 
     return vehicle;
   }

@@ -1,4 +1,4 @@
-import { BlipManager, Core, Events, Peek, PolyZone, Sync, Util, Vehicles } from '@dgx/client';
+import { BaseEvents, BlipManager, Core, Events, Peek, PolyZone, Sync, Vehicles } from '@dgx/client';
 import {
   buildLocationZone,
   cleanupOxyrun,
@@ -7,7 +7,6 @@ import {
   handleLeaveLocation,
   isDoingOxyRun,
 } from './service.oxyrun';
-import { doHornJingleForVehicle } from './helpers.oxyrun';
 
 Peek.addFlagEntry('oxyRunStart', {
   options: [
@@ -52,7 +51,6 @@ Sync.registerActionHandler('oxyrun:clearVehicle', async (vehicle: number) => {
   StopBringVehicleToHalt(vehicle);
 });
 
-on('onResourceStop', (resourceName: string) => {
-  if (resourceName !== GetCurrentResourceName()) return;
+BaseEvents.onResourceStop(() => {
   BlipManager.removeCategory('oxyrun');
 });
