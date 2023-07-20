@@ -6,6 +6,7 @@ import { entries as entryArray } from '../data/*.ts';
 import { charModule } from './core';
 
 const entries: Record<string, RadialMenu.Entry[]> = {};
+let radialMenuOpen = false;
 
 export const loadEntries = () => {
   const importAll = (r: [string, any][]) => {
@@ -17,6 +18,9 @@ export const loadEntries = () => {
 };
 
 export const openRadialMenu = async () => {
+  if (radialMenuOpen) return;
+
+  radialMenuOpen = true;
   const entries = await generateEntries();
 
   SetCursorLocation(0.5, 0.5);
@@ -28,6 +32,7 @@ export const openRadialMenu = async () => {
 
 export const handleRadialMenuClose = () => {
   SetNuiFocus(false, false);
+  radialMenuOpen = false;
 };
 
 const generateEntries = async () => {
