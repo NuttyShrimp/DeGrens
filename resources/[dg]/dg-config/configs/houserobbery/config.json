@@ -1,7 +1,6 @@
 {
   "moldChance": 0.5,
   "lootTable": [
-    { "itemName": "money_roll", "weight": 2, "lootTableId": 0 },
     { "itemName": "camera", "weight": 2, "lootTableId": 0 },
     { "itemName": "gameboy", "weight": 2, "lootTableId": 0 },
     { "itemName": "hifi", "weight": 2, "lootTableId": 0 },
