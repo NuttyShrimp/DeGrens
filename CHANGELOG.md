@@ -42,6 +42,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Error bij cleared van status na revive opgelost
 - Doorzoeken peek optie wordt niet meer getoond op NPCs die niet bij een job horen
 - Radialmenu zou niet meer op je scherm mogen te komen vaststaan
+- Nieuwe items die je krijgt wanneer je inventory vol zit, liggen nu niet meer op elkaar op de grond
 
 ## [1.2.10]
 
