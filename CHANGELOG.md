@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Koperknippen minigame aangepast
 - Voertuiglock houdt niet langer rekening met nieuwe state om notificatie te betalen
 - Je steekt je wapen niet meer weg bij het disablen van radiotowers
+- Scrapyard maakt nu gebruik van mail ipv blip om locatie aan speler te geven
 
 ### Fixed
 - Fix engine sound hash of mazrx7fd
