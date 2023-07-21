@@ -44,6 +44,11 @@ Sync.registerActionHandler('oxyrun:doVehicleAction', async (vehicle: number) => 
   SetVehicleUndriveable(vehicle, true);
   BringVehicleToHalt(vehicle, 3.0, 1000, false);
   Vehicles.setVehicleDoorsLocked(vehicle, false);
+
+  // idk maybe setting locally helps
+  setTimeout(() => {
+    SetVehicleDoorsLocked(vehicle, 1);
+  }, 2000);
 });
 
 Sync.registerActionHandler('oxyrun:clearVehicle', async (vehicle: number) => {
