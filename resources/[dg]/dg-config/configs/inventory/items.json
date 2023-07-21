@@ -2570,5 +2570,15 @@
       "y": 2
     },
     "useable": true
+  },
+  {
+    "name": "krikke_vin",
+    "label": "Krikke Vin",
+    "decayRate": 43200,
+    "image": "krikke_vin.png",
+    "size": {
+      "x": 1,
+      "y": 2
+    }
   }
 ]
