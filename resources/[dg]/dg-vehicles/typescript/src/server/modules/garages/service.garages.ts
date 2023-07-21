@@ -339,6 +339,9 @@ export const storeVehicleInGarage = async (src: number, entity: number) => {
   const vehState = await getNativeStatus(entity, vin);
   await insertVehicleStatus(vin, vehState);
 
+  // get fuel before deleting vehicle
+  const fuelLevel = fuelManager.getFuelLevel(entity);
+
   // Delete vehicle
   deleteVehicle(entity);
 
@@ -348,7 +351,6 @@ export const storeVehicleInGarage = async (src: number, entity: number) => {
 
   // get values needed to insert garage log
   const serviceStatus = await getServiceStatus(vin);
-  const fuelLevel = fuelManager.getFuelLevel(entity);
   addVehicleGarageLog(vin, cid, true, fuelLevel, serviceStatus);
 
   Util.Log(
