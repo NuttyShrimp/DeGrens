@@ -351,6 +351,22 @@
         "z": -0.05
       },
       "model": "v_ilev_exball_blue"
+    },
+    {
+      "offset": {
+        "x": 0,
+        "y": -0.5,
+        "z": -0.05
+      },
+      "model": "imp_prop_impexp_offchair_01a"
+    },
+    {
+      "offset": {
+        "x": 0,
+        "y": -0.5,
+        "z": -0.05
+      },
+      "model": "gabz_pdprops_chair04"
     }
   ]
 }
