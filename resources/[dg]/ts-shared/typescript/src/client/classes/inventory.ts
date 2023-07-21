@@ -49,9 +49,8 @@ class Inventory {
     global.exports['dg-inventory'].close();
   };
 
-  public getAllItemNames = async () => {
-    const items = await RPC.execute<string[]>('inventory:server:getAllItemNames');
-    return items;
+  public getPlayerItemNames = async (): Promise<string[]> => {
+    return global.exports['dg-inventory'].getPlayerItemNames();
   };
 }
 

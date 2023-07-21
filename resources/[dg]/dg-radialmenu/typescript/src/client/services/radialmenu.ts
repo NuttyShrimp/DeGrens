@@ -49,7 +49,7 @@ const generateEntries = async () => {
     entity = undefined;
   }
 
-  const items = (await Inventory.getAllItemNames()) ?? [];
+  const items = await Inventory.getPlayerItemNames();
 
   // If down then use down entries else use main
   const startMenuName = Hospital.isDown() ? 'down' : 'main';

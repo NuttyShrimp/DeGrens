@@ -173,6 +173,8 @@ export class Inv {
     const serverId = charModule.getServerIdFromCitizenId(Number(this.identifier));
     if (!serverId) return;
 
+    emitNet('inventory:cache:setDirty', serverId);
+
     const newInv = await inventoryManager.get(itemState.inventory);
     if (newInv.type === 'drop' && newInv.items.length <= 1) {
       emitNet('inventory:doDropAnimation', serverId);
@@ -218,7 +220,7 @@ export class Inv {
   };
 
   /**
-   * @param oldRotation Used to prefer new position being same rotation
+   * @param preferedRotation Used to prefer new position being same rotation
    */
   public getFirstAvailablePosition = (itemSize: Vec2, preferedRotation = false) => {
     const cellsPerRow = getConfig().cellsPerRow;
