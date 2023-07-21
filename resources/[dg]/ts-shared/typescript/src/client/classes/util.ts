@@ -282,11 +282,11 @@ class Util extends UtilShared {
     return this.getHeadingToFaceCoordsFromCoord(pedCoords, coords);
   };
 
-  public getPreferences = (): Record<string, any> => {
+  public getPreferences = <T extends Record<string, any>>(): DeepPartial<T> => {
     return global.exports['dg-misc'].getPreferences();
   };
 
-  public onPreferenceChange = (handler: (preferences: Record<string, any>) => void) => {
+  public onPreferenceChange = <T extends Record<string, any>>(handler: (preferences: DeepPartial<T>) => void) => {
     on('dg-misc:configChanged', handler);
   };
 

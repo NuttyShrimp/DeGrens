@@ -150,13 +150,6 @@ const startBlockShootingInterval = () => {
   return interval;
 };
 
-export const showReticle = (show: boolean) => {
-  SendNUIMessage({
-    action: 'showReticle',
-    show,
-  });
-};
-
 export const forceRemoveWeapon = async (itemId?: string, skipAnimation?: boolean) => {
   const currentWeaponData = getCurrentWeaponData();
   if (currentWeaponData === null) return;

@@ -23,7 +23,7 @@ export const findSeedCoords = async (entityModel: string, zOffset: number) => {
   }
 
   UI.showInteraction('Spatie om te plaatsen');
-  Weapons.showReticle(true);
+  Weapons.setCrosshairEnabled(true, false, true);
   isPlacing = true;
 
   // Logic to select a valid location using raycasts, materials and display entity
@@ -69,7 +69,7 @@ export const findSeedCoords = async (entityModel: string, zOffset: number) => {
   });
 
   UI.hideInteraction();
-  Weapons.showReticle(false);
+  Weapons.setCrosshairEnabled(false);
 
   if (!isValid) {
     isPlacing = false;
