@@ -2331,6 +2331,17 @@
     "decayRate": 43200
   },
   {
+    "name": "lawntable",
+    "label": "Kampeertafel",
+    "image": "lawntable.png",
+    "size": {
+      "x": 5,
+      "y": 3
+    },
+    "useable": true,
+    "decayRate": 43200
+  },
+  {
     "name": "cbd_bag",
     "label": "CBD Zakje",
     "image": "cbd_bag.png",

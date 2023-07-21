@@ -152,6 +152,11 @@
         "name": "lawnchair",
         "amount": 200,
         "price": 50
+      },
+      {
+        "name": "lawntable",
+        "amount": 50,
+        "price": 250
       }
     ],
     "fishing": [

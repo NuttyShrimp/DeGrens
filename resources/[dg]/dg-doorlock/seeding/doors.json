@@ -3162,8 +3162,7 @@
     ],
     "authorized": {
       "business": ["upnatom"]
-    },
-    "hideInteraction": true
+    }
   },
   {
     "description": "Up-n-Atom achterdeur",

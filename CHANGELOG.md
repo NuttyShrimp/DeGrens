@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Mogelijkheid om een BMX vast te nemen
 - Haarnetje item toegevoegd
 - Kleine paycheck voor laywers/judge toegevoegd
+- Kampeertafel item toegevoegd
 
 ### Changed
 - Loot changes van dumpsters getweaked
