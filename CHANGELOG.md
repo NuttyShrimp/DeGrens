@@ -18,6 +18,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Haarnetje item toegevoegd
 - Kleine paycheck voor laywers/judge toegevoegd
 - Kampeertafel item toegevoegd
+- Nieuwe handlingen voor meerdere kofi vehicles
+- Reclame borden en vlaggen aangepast
 
 ### Changed
 - Loot changes van dumpsters getweaked
@@ -30,6 +32,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Scrapyard maakt nu gebruik van mail ipv blip om locatie aan speler te geven
 - Aantal CBD zakjes per weedbud verhoogd
 - Aantal server calls om player items te cachen verminderd
+- Amerikaanse politielogos op kleding vervangen door belgische
 
 
 ### Fixed
@@ -56,6 +59,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fuellevel bij in garage zetten wordt nu correct in de garagelogs geplaatst
 - Beschikbaarheid van laywers/judges worden nu wel correct weergegeven na het te togglen
 - Voertuig enginestatus hud icoontje gaat weer weg als de wagen gemaakt is
+- GXS14 Voertuig seating position gefixt
 
 ## [1.2.10]
 
