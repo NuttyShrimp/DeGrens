@@ -21,6 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Nieuwe handlingen voor meerdere kofi vehicles
 - Reclame borden en vlaggen aangepast
 - Je kan nu zitten op de stoelen in het stadshuis
+- Parking en kledingkast toegevoegd aan SandyPD
 
 ### Changed
 - Loot changes van dumpsters getweaked
