@@ -75,9 +75,7 @@ class ItemManager extends Util.Singleton<ItemManager>() {
     const prevInvId = item.state.inventory;
     if (!byScript) {
       const openIds = contextManager.getIdsByPlayer(src);
-      if (!openIds) throw new Error(`Player tried to move item ${id} but does not have his inventory open`);
-      if (prevInvId !== openIds[0] && prevInvId !== openIds[1])
-        throw new Error(`Player tried to move item ${id} but does not have the original inventory id open`);
+      if (!openIds || (prevInvId !== openIds[0] && prevInvId !== openIds[1])) return; // can happen when moving and insta closing i guess
     }
 
     const inv = await inventoryManager.get(invId);
@@ -218,9 +216,7 @@ class ItemManager extends Util.Singleton<ItemManager>() {
 
     if (!byScript) {
       const openIds = contextManager.getIdsByPlayer(src);
-      if (!openIds) throw new Error(`Player tried to move multiple items but does not have his inventory open`);
-      if (previousInventoryId !== openIds[0] && previousInventoryId !== openIds[1])
-        throw new Error(`Player tried to move multiple items but does not have the original inventory id open`);
+      if (!openIds || (previousInventoryId !== openIds[0] && previousInventoryId !== openIds[1])) return; // can happen when moving and insta closing i guess
     }
 
     const inv = await inventoryManager.get(inventoryId);
