@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Je kan nu sommige verkeersborden meenemen
 - Mogelijkheid om een BMX vast te nemen
 - Haarnetje item toegevoegd
+- Kleine paycheck voor laywers/judge toegevoegd
 
 ### Changed
 - Loot changes van dumpsters getweaked
@@ -28,6 +29,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Scrapyard maakt nu gebruik van mail ipv blip om locatie aan speler te geven
 - Aantal CBD zakjes per weedbud verhoogd
 - Aantal server calls om player items te cachen verminderd
+
 
 ### Fixed
 - Fix engine sound hash of mazrx7fd
@@ -51,6 +53,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Radialmenu zou niet meer op je scherm mogen te komen vaststaan
 - Nieuwe items die je krijgt wanneer je inventory vol zit, liggen nu niet meer op elkaar op de grond
 - Fuellevel bij in garage zetten wordt nu correct in de garagelogs geplaatst
+- Beschikbaarheid van laywers/judges worden nu wel correct weergegeven na het te togglen
 
 ## [1.2.10]
 

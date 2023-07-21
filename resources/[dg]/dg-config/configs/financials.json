@@ -23,7 +23,9 @@
     "jobs": {
       "police": 28,
       "ambulance": 28,
-      "realestate": 18
+      "realestate": 18,
+      "lawyer": 15,
+      "judge": 15
     },
     "default": 1.5
   },

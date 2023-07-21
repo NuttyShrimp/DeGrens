@@ -1,4 +1,4 @@
-import { Events, Financials, Jobs, RPC } from '@dgx/server';
+import { Events, Financials, Jobs, Notifications, RPC, Inventory } from '@dgx/server';
 import { charModule } from 'helpers/core';
 import { mainLogger } from 'sv_logger';
 
@@ -39,21 +39,24 @@ const setPlyAvailable = (src: number, isAvailable: boolean) => {
     plyState.available = isAvailable;
   });
 };
-on('jobs:server:signin:update', (src: number, job: string) => {
-  removeFromRegistered(src);
-  if (!registered[job]) return;
+
+Jobs.onJobUpdate((plyId, job) => {
+  removeFromRegistered(plyId);
+  if (!job || !registered[job]) return;
+
   // If somehow the player is already registered for this job update the available
   let updated = false;
   registered[job].forEach(state => {
-    if (state.srvId === src) {
+    if (state.srvId === plyId) {
       state.available = false;
       updated = true;
     }
   });
   if (updated) return;
-  const ply = charModule.getPlayer(src);
+
+  const ply = charModule.getPlayer(plyId);
   if (!ply) {
-    mainLogger.warn(`Failed to register player(${src}) as active ${job} in justice app`);
+    mainLogger.warn(`Failed to register player(${plyId}) as active ${job} in justice app`);
     return;
   }
   registered[job].push({
@@ -68,24 +71,41 @@ RPC.register('phone:justice:get', () => {
   return registered;
 });
 
-Events.onNet('phone:justice:setAvailable', (src, data: { available: boolean }) => {
-  setPlyAvailable(src, data.available);
+RPC.register('phone:justice:setAvailable', (src, available: boolean) => {
+  setPlyAvailable(src, available);
 });
 
-Events.onNet('phone:justice:giveFine', (src, data: { citizenid: string; amount: string; comment?: string }) => {
-  const plyJob = Jobs.getCurrentJob(src);
-  if (!plyJob || !registered[plyJob]) return;
+Events.onNet(
+  'phone:justice:giveFine',
+  (src, strTargetCid: number | string, strAmount: number | string, comment?: string) => {
+    const targetCid = +strTargetCid;
+    const amount = +strAmount;
+    if (isNaN(targetCid) || isNaN(amount)) {
+      Notifications.add(src, 'CID of aantal was geen nummer', 'error');
+      return;
+    }
 
-  const cid = Player(src).state.citizenid;
-  const recvAccId = Financials.getDefaultAccountId(cid);
-  if (!recvAccId) return;
+    const plyJob = Jobs.getCurrentJob(src);
+    if (!plyJob || !registered[plyJob]) {
+      Notifications.add(src, 'Je bent niet in dienst bij een job die hier toegang tot heeft', 'error');
+      return;
+    }
 
-  Financials.giveFine(
-    Number(data.citizenid),
-    recvAccId,
-    Number(data.amount),
-    `Jusitie kosten: ${data?.comment ?? 'No comment'}`,
-    'Justitie DeGrens',
-    cid
-  );
-});
+    const cid = Player(src).state.citizenid;
+    const recvAccId = Financials.getDefaultAccountId(cid);
+    if (!recvAccId) {
+      Notifications.add(src, 'Je hebt geen bankrekening', 'error');
+      return;
+    }
+
+    Financials.giveFine(
+      targetCid,
+      recvAccId,
+      amount,
+      `Jusitie kosten: ${comment ?? 'No comment'}`,
+      'Justitie DeGrens',
+      cid
+    );
+    Notifications.add(src, 'Betaalverzoek verzonden', 'success');
+  }
+);
