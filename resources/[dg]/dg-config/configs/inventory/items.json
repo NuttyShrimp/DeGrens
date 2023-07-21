@@ -2537,5 +2537,16 @@
       "x": 2,
       "y": 2
     }
+  },
+  {
+    "name": "road_sign",
+    "label": "Verkeersbord",
+    "decayRate": 2880,
+    "image": "road_sign.png",
+    "size": {
+      "x": 4,
+      "y": 7
+    },
+    "useable": true
   }
 ]

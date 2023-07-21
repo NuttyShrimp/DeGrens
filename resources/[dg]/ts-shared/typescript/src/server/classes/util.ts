@@ -342,7 +342,7 @@ class PropRemover {
     });
   }
 
-  public remove = (model: number, coords: Vec2): number => {
+  public remove = (model: number, coords: Vec3): number => {
     const propId = global.exports['dg-misc'].addRemovedProp({ model, coords });
     this.objectsToRestore.add(propId);
     return propId;
