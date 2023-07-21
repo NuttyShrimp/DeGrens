@@ -55,6 +55,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Nieuwe items die je krijgt wanneer je inventory vol zit, liggen nu niet meer op elkaar op de grond
 - Fuellevel bij in garage zetten wordt nu correct in de garagelogs geplaatst
 - Beschikbaarheid van laywers/judges worden nu wel correct weergegeven na het te togglen
+- Voertuig enginestatus hud icoontje gaat weer weg als de wagen gemaakt is
 
 ## [1.2.10]
 
