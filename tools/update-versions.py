@@ -49,7 +49,7 @@ def updateVersions(version):
       print("An exception occurred") 
 
     updateVersionInFile(version, "./package.json")
-    updateVersionInFile(version, "./resources/[dg]/dg-config/configs/main.json")
+    # updateVersionInFile(version, "./resources/[dg]/dg-config/configs/main.json")
 
     with open("./CHANGELOG.md", "r+") as f:
       changelog = f.readlines();

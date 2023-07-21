@@ -8,6 +8,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+
+### Changed
+
+### Fixed
+
+## [1.2.11]
+
+### Added
 - Zones toegevoegd waar niks op de grond gelegd kan worden
 - Tijd toegevoegd aan gangfeed bericht
 - Er kan geen nieuwe overval meer gestart worden als er net een andere is gestart
