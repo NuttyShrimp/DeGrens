@@ -1959,7 +1959,7 @@ local wearingVest = true
 RegisterNetEvent('dg-clothing:client:adjustBodyArmor', function()
     local ped = PlayerPedId()
     loadAnimDict("clothingshirt")        
-    TaskPlayAnim(GetPlayerPed(-1), "clothingshirt", "try_shirt_positive_d", 8.0, 1.0, -1, 49, 0, 0, 0, 0)
+    TaskPlayAnim(ped, "clothingshirt", "try_shirt_positive_d", 8.0, 1.0, -1, 49, 0, 0, 0, 0)
     Wait(1000)
     if wearingVest then
         if skinData["vest"] ~= nil then
@@ -1973,4 +1973,26 @@ RegisterNetEvent('dg-clothing:client:adjustBodyArmor', function()
         end
     end
     wearingVest = not wearingVest
+end)
+
+local wearingHairnet = false
+RegisterNetEvent('dg-clothing:client:equipHairnet', function()
+  local ped = PlayerPedId()
+
+  local animDict = "mp_masks@on_foot"
+  local animName = "put_on_mask"
+
+  loadAnimDict(animDict)        
+  TaskPlayAnim(ped, animDict, animName, 8.0, 8.0, -1, 48, 0, false, false, false)
+  Wait(700)
+
+  if wearingHairnet then
+    if skinData["hair"] ~= nil then
+      SetPedComponentVariation(ped, 2, skinData["hair"].item, 0, 0)
+    end
+  elseif not wearingHairnet then
+    SetPedComponentVariation(ped, 2, 1, 0, 0)
+  end
+
+  wearingHairnet = not wearingHairnet
 end)

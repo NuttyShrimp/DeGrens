@@ -109,3 +109,7 @@ end)
 exports['dg-chat']:registerCommand("vest", "Trek je vest aan", {}, 'user', function(source)
   TriggerClientEvent('dg-clothing:client:adjustBodyArmor', source)
 end)
+
+DGX.Inventory.registerUseable('hairnet', function(plyId) 
+  TriggerClientEvent('dg-clothing:client:equipHairnet', plyId)
+end) 

@@ -2548,5 +2548,16 @@
       "y": 7
     },
     "useable": true
+  },
+  {
+    "name": "hairnet",
+    "label": "Haarnetje",
+    "decayRate": 86400,
+    "image": "hairnet.png",
+    "size": {
+      "x": 2,
+      "y": 2
+    },
+    "useable": true
   }
 ]
