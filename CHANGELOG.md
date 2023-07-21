@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Blips toegevoegd aan PostOP dropoff locaties
 - Optie om je crosshair uit te zetten via /config menu
 - Je kan nu sommige verkeersborden meenemen
+- Mogelijkheid om een BMX vast te nemen
 
 ### Changed
 - Loot changes van dumpsters getweaked
