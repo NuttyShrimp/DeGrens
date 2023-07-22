@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - Confirmatie menu toegevoegd bij aankopen van laptops
+- Triple click item om itemId te kopieren (enkel als admin)
 
 ### Changed
 

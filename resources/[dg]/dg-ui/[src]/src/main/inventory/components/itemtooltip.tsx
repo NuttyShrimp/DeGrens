@@ -21,9 +21,8 @@ export const ItemTooltip: FC<Inventory.Item> = ({
   const isAdmin = useMainStore(s => s?.character?.isAdmin ?? false);
 
   const isMetadataEmpty = useMemo(() => {
-    const hiddenKeys: string[] | undefined = metadata.hiddenKeys;
-    if (!hiddenKeys) return Object.keys(metadata).length === 0;
-    return Object.keys(metadata).filter(key => !hiddenKeys.some(hidden => key === hidden)).length === 0;
+    const hiddenKeys: string[] = metadata.hiddenKeys ?? [];
+    return Object.keys(metadata).filter(key => key !== 'hiddenKeys' && !hiddenKeys.includes(key)).length === 0;
   }, [metadata]);
 
   const formatMetadata = useCallback(() => {
@@ -69,25 +68,29 @@ export const ItemTooltip: FC<Inventory.Item> = ({
       )}
       {requirements === undefined ? (
         <>
-          {(description || !isMetadataEmpty) && (
+          {description && (
             <>
               <Divider />
-              {description && <p className='description text'>{description}</p>}
-              {!isMetadataEmpty && (
-                <>
-                  <Divider />
-                  <p className='data text'>{formatMetadata()}</p>
-                </>
-              )}
+              <p className='description text'>{description}</p>
             </>
           )}
-          {(quality || markedForSeizure) && <Divider />}
-          {quality && <em className='data text'>Kwaliteit: {Math.round(quality)}%</em>}
-          {markedForSeizure && (
-            <em className='data text'>
-              <span> | </span>
-              <span style={{ color: baseStyle.tertiary.light }}>Gemarkeerd voor inbeslagname</span>
-            </em>
+          {!isMetadataEmpty && (
+            <>
+              <Divider />
+              <p className='data text'>{formatMetadata()}</p>
+            </>
+          )}
+          {(quality || markedForSeizure) && (
+            <>
+              <Divider />
+              {quality && <em className='data text'>Kwaliteit: {Math.round(quality)}%</em>}
+              {markedForSeizure && (
+                <em className='data text'>
+                  {quality && <span> | </span>}
+                  <span style={{ color: baseStyle.tertiary.light }}>Gemarkeerd voor inbeslagname</span>
+                </em>
+              )}
+            </>
           )}
         </>
       ) : (
