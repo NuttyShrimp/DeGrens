@@ -94,7 +94,7 @@ class Vehicles {
     let triesRemaining = 3;
 
     const t = setInterval(() => {
-      if (triesRemaining === 0) {
+      if (triesRemaining === 0 || !DoesEntityExist(vehicle)) {
         clearInterval(t);
         return;
       }
