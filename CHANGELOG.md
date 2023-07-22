@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - Probleem opgelost waardoor sommige inventory containers niet geopened konden worden
 - Je kan geen BMXen uit PDM meer vastnemen
+- Je kan terug dumpster inventories openen
 
 ## [1.2.11]
 
