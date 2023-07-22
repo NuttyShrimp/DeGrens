@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 ### Fixed
+- Probleem opgelost waardoor sommige inventory containers niet geopened konden worden
 
 ## [1.2.11]
 

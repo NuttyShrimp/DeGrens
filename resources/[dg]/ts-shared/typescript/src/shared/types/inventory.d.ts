@@ -2,19 +2,19 @@ declare namespace Inventory {
   type Item = ItemState & ItemData;
 
   // dynamic item state
-  interface ItemState {
+  type ItemState<T extends Record<string, any> = Record<string, any>> = {
     id: string;
     name: string;
     inventory: string;
     position: Vec2;
     rotated: boolean;
     hotkey: Hotkey | null;
-    metadata: { [key: string]: any };
+    metadata: { hiddenKeys: string[] } & T;
     // the unix timestamp when an item is going to break (sec)
     destroyDate: number | null;
     requirements?: Requirements;
     quality?: number;
-  }
+  };
 
   interface Requirements {
     cash?: number;

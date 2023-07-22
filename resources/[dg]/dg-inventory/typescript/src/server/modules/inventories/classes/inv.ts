@@ -47,9 +47,10 @@ export class Inv {
 
     if (this.type === 'container') {
       // Item manager only contains items from loaded inventories, when opening containerinv using admin menu. The item might possibly not be loaded
-      const containerItem = await Inventory.getItemStateFromDatabase(this.identifier);
+      const containerItem =
+        itemManager.get(this.identifier)?.state || (await Inventory.getItemStateFromDatabase(this.identifier));
       if (!containerItem) {
-        this.logger.error('`Tried to open container inventory but container item does not exist`');
+        this.logger.error('Tried to open container inventory but container item does not exist');
         Util.Log(
           'inventory:invalidContainer',
           {

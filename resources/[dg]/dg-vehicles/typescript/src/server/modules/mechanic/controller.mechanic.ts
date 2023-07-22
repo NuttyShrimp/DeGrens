@@ -10,8 +10,8 @@ setImmediate(() => {
 
 Events.onNet('vehicles:mechanic:server:acceptTowJob', tryAcceptingJob);
 
-global.exports('calculateSalesTicketsPrice', async (ticketItem: Inventory.ItemState) => {
-  const { items } = ticketItem.metadata as Mechanic.TicketMetadata;
+global.exports('calculateSalesTicketsPrice', async (ticketItem: Inventory.ItemState<Mechanic.TicketMetadata>) => {
+  const { items } = ticketItem.metadata;
   const ticketRevenues = await Promise.all(
     items.map(async item => {
       const itemState = await Inventory.getItemStateFromDatabase(item.itemId);
