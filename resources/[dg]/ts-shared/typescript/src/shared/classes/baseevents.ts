@@ -4,7 +4,7 @@ export class BaseEvents {
    */
   public onResourceStart = (
     handler: (resourceName: string) => void,
-    filterResource: string | 'any' = GetCurrentResourceName()
+    filterResource: 'any' | (string & {}) = GetCurrentResourceName()
   ) => {
     on('onResourceStart', (name: string) => {
       if (filterResource !== 'any' && name !== filterResource) return;
@@ -17,7 +17,7 @@ export class BaseEvents {
    */
   public onResourceStop = (
     handler: (resourceName: string) => void,
-    filterResource: string | 'any' = GetCurrentResourceName()
+    filterResource: 'any' | (string & {}) = GetCurrentResourceName()
   ) => {
     on('onResourceStop', (name: string) => {
       if (filterResource !== 'any' && name !== filterResource) return;

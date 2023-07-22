@@ -3,8 +3,8 @@ class Weapons {
     return global.exports['dg-weapons'].getCurrentWeaponData();
   };
 
-  showReticle = (show: boolean) => {
-    global.exports['dg-weapons'].showReticle(show);
+  setCrosshairEnabled = (enabled: boolean, useNative?: boolean, ignoreConfig?: boolean) => {
+    global.exports['dg-weapons'].setCrosshairEnabled(enabled, useNative, ignoreConfig);
   };
 
   removeWeapon = (itemId?: string, skipAnimation = false) => {

@@ -1,4 +1,5 @@
 import { BlipManager, Notifications, PolyZone, RPC, Sync, Util } from '@dgx/client';
+import { doHornJingleForVehicle } from './helpers.oxyrun';
 
 let doingOxyRun = false;
 let atLocation = false;
@@ -78,6 +79,7 @@ const scheduleFindBuyer = async () => {
 
   buyerVehicle = vehicle;
   Sync.executeAction('oxyrun:doVehicleAction', vehicle);
+  doHornJingleForVehicle(vehicle); // is not networked but only choosing player needs to hear it anyway
 
   clearBuyerVehicleThread();
 
@@ -133,6 +135,9 @@ const getVehicleAtLocation = () => {
 
     const vehicleCoords = Util.getEntityCoords(vehicle);
     if (!PolyZone.isPointInside(vehicleCoords, 'oxyrun_location')) continue;
+
+    const driver = GetPedInVehicleSeat(vehicle, -1);
+    if (!DoesEntityExist(driver) || IsPedAPlayer(driver)) continue;
 
     return vehicle;
   }

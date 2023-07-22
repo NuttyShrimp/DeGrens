@@ -9,6 +9,7 @@ import { registerContainers } from 'modules/containers/service.containers';
 import shopManager from 'modules/shops/shopmanager';
 import { loadConfig } from 'services/config';
 import { preloadActivePlayerInventories } from 'modules/inventories/controller.inventories';
+import { loadNoDropZones } from 'services/nodropzones';
 
 let isLoaded = false;
 
@@ -22,6 +23,7 @@ setImmediate(async () => {
   registerContainers();
   await shopManager.seed();
   preloadActivePlayerInventories();
+  loadNoDropZones();
 
   isLoaded = true;
   emit('inventory:loaded');

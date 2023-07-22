@@ -685,4 +685,18 @@ export const PROPS: Record<string, PropAttach.PropInfo> = {
       z: 0,
     },
   },
+  road_sign: {
+    model: 'prop_sign_road_01a', // default but should get overwritten using the overrideModel param when creating
+    boneId: 6286,
+    position: {
+      x: -0.36,
+      y: -1.21,
+      z: -0.53,
+    },
+    rotation: {
+      x: 30,
+      y: 65,
+      z: -265,
+    },
+  },
 };

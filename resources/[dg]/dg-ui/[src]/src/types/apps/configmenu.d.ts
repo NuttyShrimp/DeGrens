@@ -23,6 +23,7 @@ declare namespace ConfigMenu {
       show: boolean;
       fps: number;
     };
+    crosshair: boolean;
   }
 
   interface Clicks {

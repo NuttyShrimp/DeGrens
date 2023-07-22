@@ -89,12 +89,13 @@ export const assignLocationToGroup = async (ownerId: number) => {
 
   group.members.forEach(member => {
     if (member.serverId === null) return;
-    Events.emitNet('jobs:scrapyard:startJob', member.serverId, netId, location.vehicleLocation);
+    Events.emitNet('jobs:scrapyard:setVehicle', member.serverId, netId);
     Phone.addMail(member.serverId, {
       subject: 'Voertuig Opdracht',
       sender: 'Scrapyard Inc.',
       message:
-        'Het gevraagde voertuig staat op je GPS. Gelieve het voertuig naar deze werkplaats te brengen. Eenmaal je hier bent kan je bepaalde onderdelen demonteren. Geef me daarna de onderdelen om de opdracht af te ronden.',
+        'De locatie van het voertuig zit bij deze mail.<br>Gelieve het voertuig naar deze werkplaats te brengen.<br>Eenmaal je hier bent kan je bepaalde onderdelen demonteren. Geef me daarna de onderdelen om de opdracht af te ronden.',
+      coords: location.vehicleLocation,
     });
   });
 };
@@ -118,11 +119,6 @@ export const handleVehicleLockpick = async (plyId: number, vehicle: number) => {
   });
 
   activeGroups.set(plyGroup.id, { ...job, pedSpawned: true });
-
-  plyGroup.members.forEach(member => {
-    if (member.serverId === null) return;
-    Events.emitNet('jobs:scrapyard:removeBlip', member.serverId);
-  });
 };
 
 export const getLootFromVehicle = (plyId: number, netId: number, doorId: number) => {
@@ -224,7 +220,7 @@ export const syncScrapyardJobToClient = (groupId: string, plyId: number) => {
   }
 
   scrapyardLogger.silly(`Syncing active job to plyId ${plyId}`);
-  Events.emitNet('jobs:scrapyard:startJob', plyId, netId, !active.pedSpawned ? active.vehicleLocation : undefined);
+  Events.emitNet('jobs:scrapyard:setVehicle', plyId, netId);
 };
 
 export const handlePlayerLeftScrapyardGroup = (groupId: string, plyId: number | null) => {

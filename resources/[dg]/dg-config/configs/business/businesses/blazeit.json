@@ -102,6 +102,6 @@
   },
   "priceItems": ["blazeit_joint", "blazeit_brownie", "blazeit_cookie", "blazeit_gummy", "blazeit_oil", "blazeit_stick"],
   "extraConfig": {
-    "bagsPerBud": 15
+    "bagsPerBud": 25
   }
 }

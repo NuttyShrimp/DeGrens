@@ -7,7 +7,7 @@ const plyNames: Record<number, string> = {};
 on('playerJoining', () => {
   const src = source;
   const name = Util.getName(src);
-  plyNames[src] = name;
+  plyNames[src] = name.replace(/(\~.\~)/g, '');
 
   Util.getAllPlayers().forEach(ply => {
     if (!hasPlayerPermission(ply, 'support') || ply === src) return;

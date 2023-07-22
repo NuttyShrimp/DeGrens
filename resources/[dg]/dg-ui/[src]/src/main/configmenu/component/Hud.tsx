@@ -79,6 +79,16 @@ export const Hud = () => {
           }
         />
       </Section>
+      <Section title={'Crosshair'}>
+        <Input.Checkbox
+          onChange={e => {
+            updateConfig('hud', { crosshair: e.currentTarget.checked });
+          }}
+          checked={state.crosshair}
+          label={'Enable crosshair'}
+          name={'toggleCrosshair'}
+        />
+      </Section>
     </div>
   );
 };

@@ -33,10 +33,7 @@ export const moveToSeat = (vehicle: number, seatIndex: number) => {
 
 Events.onNet('vehicles:seat:set', (seatIndex: number) => {
   const vehicle = getCurrentVehicle();
-  if (!vehicle) {
-    Notifications.add('Je zit niet in een voertuig', 'error');
-    return;
-  }
+  if (!vehicle) return;
   moveToSeat(vehicle, seatIndex);
 });
 

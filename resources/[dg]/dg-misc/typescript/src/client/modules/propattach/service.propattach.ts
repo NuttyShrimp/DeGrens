@@ -16,7 +16,7 @@ const updateState = () => {
   LocalPlayer.state.set('propattach', attachedProps, true);
 };
 
-export const addProp = (name: string, offset?: Vec3) => {
+export const addProp = (name: string, offset?: Vec3, overrideModel?: string | number) => {
   offset = offset ?? { x: 0, y: 0, z: 0 };
 
   currentId++;
@@ -26,12 +26,14 @@ export const addProp = (name: string, offset?: Vec3) => {
     attachedProps[currentId] = {
       name,
       offset,
+      overrideModel,
     };
     updateState();
   } else {
     toggledProps[currentId] = {
       name,
       offset,
+      overrideModel,
     };
   }
 
@@ -122,10 +124,12 @@ export const handlePlayerStateUpdate = (
 
     // This object will get mutated when moving/entity has been created to we first create it before assiging it to propsperplayer
     // this is to fix when new items get created instantly and previous promise has not resolved
+    const model = newProp.overrideModel ?? PROPS[newProp.name].model;
+    const modelHash = typeof model === 'number' ? model : GetHashKey(model);
     const propData: PropAttach.ActiveProp = {
       ...newProp,
       entity: null,
-      hash: GetHashKey(PROPS[newProp.name].model) >>> 0,
+      hash: modelHash >>> 0,
       deleted: false,
     };
     propsPerPlayer[plyId][propId] = propData;

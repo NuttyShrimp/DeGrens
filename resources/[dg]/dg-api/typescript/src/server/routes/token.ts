@@ -17,7 +17,7 @@ registerRoute('GET', '/tokens/info/:token', async (req, res) => {
       message: 'No token found to check',
     });
   }
-  const steamId: string | null = await global.exports['dg-auth'].getSteamIdFromPanelToken(req.params.token);
+  const steamId: string | null = global.exports['dg-auth'].getSteamIdFromPanelToken(req.params.token);
   if (!steamId) {
     res(404, {
       message: 'No valid steamId found in token',

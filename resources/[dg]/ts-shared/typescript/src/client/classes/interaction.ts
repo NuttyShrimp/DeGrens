@@ -267,6 +267,34 @@ class PolyZone {
   removeZone(pName: string, pId?: string) {
     global.exports['dg-polyzone'].removeZone(pName, pId);
   }
+
+  buildAnyZone = (name: string, zone: Zones.Poly | Zones.Circle | Zones.Box, data: Record<string, any> = {}) => {
+    // if vectors is defined, we build polyzone
+    if ('vectors' in zone) {
+      this.addPolyZone(name, zone.vectors, {
+        ...zone.options,
+        data,
+      });
+      return;
+    }
+
+    if (!('center' in zone)) throw new Error(`Zone ${name} has no center or vectors property`);
+
+    // if radius is defined, we build circlezone
+    if ('radius' in zone) {
+      this.addCircleZone(name, zone.center, zone.radius, {
+        ...zone.options,
+        data,
+      });
+      return;
+    }
+
+    // if no vectors or radius, we build box
+    this.addBoxZone(name, zone.center, zone.width, zone.length, {
+      ...zone.options,
+      data,
+    });
+  };
 }
 
 class PolyTarget {
@@ -349,6 +377,27 @@ class PolyTarget {
   removeZone(pName: string, pId?: string) {
     global.exports['dg-polytarget'].removeZone(pName, pId);
   }
+
+  buildAnyZone = (name: string, zone: Zones.Poly | Zones.Circle | Zones.Box, data: Record<string, any> = {}) => {
+    // if vectors is defined, we build polyzone
+    if ('vectors' in zone) throw new Error('Tried to build PolyTarget polyzone');
+    if (!('center' in zone)) throw new Error(`Zone ${name} has no center property`);
+
+    // if radius is defined, we build circlezone
+    if ('radius' in zone) {
+      this.addCircleZone(name, zone.center, zone.radius, {
+        ...zone.options,
+        data,
+      });
+      return;
+    }
+
+    // if no vectors or radius, we build box
+    this.addBoxZone(name, zone.center, zone.width, zone.length, {
+      ...zone.options,
+      data,
+    });
+  };
 }
 
 class Keys {

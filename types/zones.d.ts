@@ -28,4 +28,6 @@ declare namespace Zones {
       data: T;
     };
   };
+
+  type Zone<T extends Record<string, any> | undefined = undefined> = Box<T> | Circle<T> | Poly<T>;
 }

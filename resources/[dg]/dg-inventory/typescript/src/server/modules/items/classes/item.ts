@@ -39,50 +39,48 @@ export class Item {
 
     const itemSize = itemDataManager.get(this.name).size;
 
-    let finalPosition: Vec2 = state.position ?? { x: 0, y: 0 };
-    let finalRotated = state.rotated ?? false;
+    this.position = state.position ?? { x: 0, y: 0 };
+    this.rotated = state.rotated ?? false;
 
-    // position logic if item is new
-    if (isNew && (!state.position || !this.inventory.isGridSpotFree(state.position, itemSize, state.rotated))) {
-      const availablePosition = this.inventory.getFirstAvailablePosition(itemSize, state.rotated);
+    if (isNew) {
+      // position logic if item is new
+      if (!state.position || !this.inventory.isGridSpotFree(state.position, itemSize, state.rotated)) {
+        const availablePosition = this.inventory.getFirstAvailablePosition(itemSize, state.rotated);
 
-      if (availablePosition) {
-        finalPosition = availablePosition.position;
-        finalRotated = availablePosition.rotated;
-      } else {
-        // This can happen when adding item to stash by script (mechanic crafting for exampel)
-        if (this.inventory.type === 'player') {
-          const cid = Inventory.splitId(this.inventory.id).identifier;
-          const plyId = charModule.getServerIdFromCitizenId(Number(cid));
+        if (availablePosition) {
+          this.position = availablePosition.position;
+          this.rotated = availablePosition.rotated;
+        } else {
+          // This can happen when adding item to stash by script (mechanic crafting for exampel)
+          if (this.inventory.type === 'player') {
+            const cid = Inventory.splitId(this.inventory.id).identifier;
+            const plyId = charModule.getServerIdFromCitizenId(Number(cid));
 
-          if (plyId) {
-            const coords = Util.getPlyCoords(plyId);
+            if (plyId) {
+              const coords = Util.getPlyCoords(plyId);
 
-            let dropId = locationManager.getLocation('drop', coords);
-            this.inventory = await inventoryManager.get(dropId);
-            const availableInDrop = this.inventory.getFirstAvailablePosition(itemSize, state.rotated);
-
-            // if somehow the drop is also full, we add it to a new drop at position
-            if (!availableInDrop) {
-              dropId = locationManager.getLocation('drop', coords, true);
+              let dropId = locationManager.getLocation('drop', coords);
               this.inventory = await inventoryManager.get(dropId);
-              this.position = { x: 0, y: 0 };
-            } else {
-              this.position = availableInDrop.position;
-              this.rotated = availableInDrop.rotated;
-            }
+              const availableInDrop = this.inventory.getFirstAvailablePosition(itemSize, state.rotated);
 
-            Notifications.add(plyId, 'Voorwerp ligt op de grond, je zakken zitten vol', 'error');
+              // if somehow the drop is also full, we add it to a new drop at position
+              if (!availableInDrop) {
+                dropId = locationManager.getLocation('drop', coords, true);
+                this.inventory = await inventoryManager.get(dropId);
+                this.position = { x: 0, y: 0 };
+                this.rotated = false;
+              } else {
+                this.position = availableInDrop.position;
+                this.rotated = availableInDrop.rotated;
+              }
+
+              Notifications.add(plyId, 'Voorwerp ligt op de grond, je zakken zitten vol', 'error');
+            }
           }
         }
       }
-    }
 
-    this.position = finalPosition;
-    this.rotated = finalRotated;
-
-    // save when item is new
-    if (isNew) {
+      // save when item is new
       // When adding new item to nonpresistent inventory, start inv as nonpersistent.
       const dbInventory = this.inventory.isPersistent() ? this.state.inventory : 'nonpersistent';
       repository.updateItems([{ ...this.state, inventory: dbInventory }]);

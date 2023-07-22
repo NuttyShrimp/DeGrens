@@ -20,7 +20,7 @@ Events.onNet('criminal:weed:plant', async (itemId: string, model: string) => {
   }
 
   UI.showInteraction('Spatie om te plaatsen');
-  Weapons.showReticle(true);
+  Weapons.setCrosshairEnabled(true, false, true);
   isPlacing = true;
 
   // Logic to select a valid location using raycasts, materials and display entity
@@ -73,7 +73,7 @@ Events.onNet('criminal:weed:plant', async (itemId: string, model: string) => {
   });
 
   UI.hideInteraction();
-  Weapons.showReticle(false);
+  Weapons.setCrosshairEnabled(false);
 
   if (!isValid) {
     isPlacing = false;

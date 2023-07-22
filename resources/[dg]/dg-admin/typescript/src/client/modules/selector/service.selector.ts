@@ -73,7 +73,7 @@ export const activateSelector = async () => {
 
   isActive = true;
   handleRayCastChange(undefined);
-  Weapons.showReticle(true);
+  Weapons.setCrosshairEnabled(true, false, true);
   selectorRayInterval = setInterval(() => {
     if (!isActive) {
       if (selectorRayInterval) {
@@ -93,7 +93,7 @@ export const stopSelector = () => {
     clearInterval(selectorRayInterval);
     selectorRayInterval = null;
   }
-  Weapons.showReticle(false);
+  Weapons.setCrosshairEnabled(false);
 };
 
 export const handleRayCastChange = (entity?: number) => {

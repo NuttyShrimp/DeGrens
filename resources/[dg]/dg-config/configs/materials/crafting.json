@@ -22,6 +22,19 @@
         }
       ]
     },
+    "container_blackmoney": {
+      "requiredReputation": 250,
+      "items": [
+        {
+          "name": "refined_plastic",
+          "amount": 10
+        },
+        {
+          "name": "refined_aluminum",
+          "amount": 3
+        }
+      ]
+    },
     "vpn": {
       "requiredReputation": 20,
       "items": [
@@ -839,7 +852,8 @@
         "advanced_parts",
         "big_explosive",
         "armor",
-        "atm_rope"
+        "atm_rope",
+        "container_blackmoney"
       ],
       "reputation": "crafting"
     },

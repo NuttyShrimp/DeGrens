@@ -12,10 +12,64 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 ### Fixed
+
+## [1.2.11]
+
+### Added
+- Zones toegevoegd waar niks op de grond gelegd kan worden
+- Tijd toegevoegd aan gangfeed bericht
+- Er kan geen nieuwe overval meer gestart worden als er net een andere is gestart
+- Blips toegevoegd aan PostOP dropoff locaties
+- Optie om je crosshair uit te zetten via /config menu
+- Je kan nu sommige verkeersborden meenemen
+- Mogelijkheid om een BMX vast te nemen
+- Haarnetje item toegevoegd
+- Kleine paycheck voor laywers/judge toegevoegd
+- Kampeertafel item toegevoegd
+- Nieuwe handlingen voor meerdere kofi vehicles
+- Reclame borden en vlaggen aangepast
+- Je kan nu zitten op de stoelen in het stadshuis
+- Parking en kledingkast toegevoegd aan SandyPD
+
+### Changed
+- Loot changes van dumpsters getweaked
+- Durability handboeien verhoogd
+- Dispatch blip grootte aangepast
+- Politie kan niet langer zomaar mensen rechtzetten
+- Koperknippen minigame aangepast
+- Voertuiglock houdt niet langer rekening met nieuwe state om notificatie te betalen
+- Je steekt je wapen niet meer weg bij het disablen van radiotowers
+- Scrapyard maakt nu gebruik van mail ipv blip om locatie aan speler te geven
+- Aantal CBD zakjes per weedbud verhoogd
+- Aantal server calls om player items te cachen verminderd
+- Amerikaanse politielogos op kleding vervangen door belgische
+
+
+### Fixed
 - Fix engine sound hash of mazrx7fd
 - Foute notificatie dat je geen lockpick hebt opgelost bij parkeermeters
 - Je kan weer mensen opbellen via je telefoon
 - Nieuwe twitter berichten worden nu wel gedisplayed zonder dat je app opnieuw moet openen
+- Geen log meer wanneer er geen missing/invalid vehicle models zijn
+- Enkele scuffed houserobbery locaties verwijderd
+- Important log verwijderd bij inleveren van testvoertuig wanneer geen testrit actief is
+- Juwelier vitrines laden nu wel correct in als ze al kapot zijn wanneer je binnen gaat
+- NPC wagens waar spelers in rijden kunnen niet meer geselecteerd worden als oxy koper
+- Oxyrunvoertuig toeter is nu altijd hoorbaar voor speler die oxyrun doet
+- Fix verkeerd verkrijgen van playergang bij enteren van container
+- Fix errors bij enteren van heistlocations zonder geregistreerde manager
+- Error opgelost bij atm robbery
+- Filter steamname color prefixes in admin names cache
+- Repair items cancelen wanneer je de minigame failed
+- Juwelier camera IDs in dispatch meldingen gefixt
+- Error bij cleared van status na revive opgelost
+- Doorzoeken peek optie wordt niet meer getoond op NPCs die niet bij een job horen
+- Radialmenu zou niet meer op je scherm mogen te komen vaststaan
+- Nieuwe items die je krijgt wanneer je inventory vol zit, liggen nu niet meer op elkaar op de grond
+- Fuellevel bij in garage zetten wordt nu correct in de garagelogs geplaatst
+- Beschikbaarheid van laywers/judges worden nu wel correct weergegeven na het te togglen
+- Voertuig enginestatus hud icoontje gaat weer weg als de wagen gemaakt is
+- GXS14 Voertuig seating position gefixt
 
 ## [1.2.10]
 

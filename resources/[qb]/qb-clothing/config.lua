@@ -531,6 +531,7 @@ Config.Stores = {
 
 Config.ClothingRooms = {
   {requiredJob = "police", coords = vector3(462.2585, -996.6691, 30.6896)},
+  {requiredJob = "police", coords = vector3(1841.5909, 3679.4114, 34.1891)},
   {requiredJob = "ambulance", coords = vector3(300.6396, -597.5565, 43.284)},  
   {requiredBusiness = "upnatom", coords = vector3(82.5859, 296.0225, 110.2168)},
   {requiredBusiness = "straightpipers", coords = vector3(840.3638, -824.5843, 26.3326)},

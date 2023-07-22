@@ -9,6 +9,7 @@ declare namespace PropAttach {
   type Prop = {
     name: string;
     offset: Vec3;
+    overrideModel?: string | number;
   };
 
   type ActiveProp = Prop & {

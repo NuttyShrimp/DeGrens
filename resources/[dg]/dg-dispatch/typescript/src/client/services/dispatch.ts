@@ -49,7 +49,7 @@ export const addCallBlip = (call: Dispatch.UICall) => {
     text: call.title,
     coords: call.coords,
     ...call.blip,
-    scale: 1.5,
+    scale: 1.2,
   });
   setTimeout(() => {
     BlipManager.removeBlip(call.id);

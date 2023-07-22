@@ -107,18 +107,6 @@ export const police: RadialMenu.Entry[] = [
     shouldClose: true,
   },
   {
-    title: 'Verzorgen',
-    icon: 'kit-medical',
-    type: 'dgxServer',
-    event: 'hospital:job:heal',
-    shouldClose: true,
-    minimumPlayerDistance: 2,
-    isEnabled: ({ currentVehicle }) => {
-      if (!!currentVehicle) return false;
-      return Jobs.getAmountForJob('ambulance') === 0;
-    },
-  },
-  {
     title: 'Toggle Sirens',
     icon: 'siren',
     type: 'client',

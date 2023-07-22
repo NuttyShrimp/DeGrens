@@ -1,5 +1,4 @@
-import { Events, PolyTarget } from '@dgx/client';
-import { buildAnyZone } from 'helpers';
+import { Events, PolyTarget, PolyZone } from '@dgx/client';
 import { getBusinessConfig } from './businesses';
 
 let insideBusiness: { name: string; type: string } | null = null;
@@ -20,7 +19,7 @@ export const handleEnteredBusinessZone = (businessName: string, businessType: st
   };
   Events.emitNet('business:server:enterBusiness', businessName);
 
-  buildAnyZone('PolyTarget', 'business_management', businessConfig.managementZone, {
+  PolyTarget.buildAnyZone('business_management', businessConfig.managementZone, {
     id: businessName,
     businessType,
   });
@@ -29,7 +28,7 @@ export const handleEnteredBusinessZone = (businessName: string, businessType: st
   if (businessConfig.registers) {
     for (let i = 0; i < businessConfig.registers.zones.length; i++) {
       const register = businessConfig.registers.zones[i];
-      buildAnyZone('PolyTarget', 'business_register', register, {
+      PolyTarget.buildAnyZone('business_register', register, {
         id: `${businessName}_${i}`,
         registerIdx: i,
         businessName,
@@ -39,21 +38,21 @@ export const handleEnteredBusinessZone = (businessName: string, businessType: st
 
   // build stash if defined
   if (businessConfig.stashZone) {
-    buildAnyZone('PolyTarget', 'business_stash', businessConfig.stashZone, {
+    PolyTarget.buildAnyZone('business_stash', businessConfig.stashZone, {
       id: businessName,
     });
   }
 
   // build shop if defined
   if (businessConfig.shopZone) {
-    buildAnyZone('PolyTarget', 'business_shop', businessConfig.shopZone, {
+    PolyTarget.buildAnyZone('business_shop', businessConfig.shopZone, {
       id: businessName,
     });
   }
 
   // build craftingzone if defined
   if (businessConfig.crafting) {
-    buildAnyZone('PolyTarget', 'business_crafting', businessConfig.crafting.zone, {
+    PolyTarget.buildAnyZone('business_crafting', businessConfig.crafting.zone, {
       id: businessName,
       benchId: businessConfig.crafting.benchId,
     });
@@ -62,7 +61,7 @@ export const handleEnteredBusinessZone = (businessName: string, businessType: st
   // build on enter zones if they defined
   if (businessConfig.extraZones) {
     for (const extraZone of businessConfig.extraZones) {
-      buildAnyZone(extraZone.isTarget ? 'PolyTarget' : 'PolyZone', extraZone.name, extraZone.zone, {
+      (extraZone.isTarget ? PolyTarget : PolyZone).buildAnyZone(extraZone.name, extraZone.zone, {
         ...extraZone.data,
         businessName,
       });
@@ -89,7 +88,7 @@ export const handleLeaveBusinessZone = (businessName: string) => {
   // destroy on enter zones if they defined
   if (businessConfig.extraZones) {
     for (const extraZone of businessConfig.extraZones) {
-      PolyTarget.removeZone(extraZone.name);
+      (extraZone.isTarget ? PolyTarget : PolyZone).removeZone(extraZone.name);
     }
   }
 };

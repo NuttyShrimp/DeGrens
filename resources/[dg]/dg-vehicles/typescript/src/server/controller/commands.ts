@@ -36,6 +36,12 @@ Chat.registerCommand(
       return;
     }
 
+    const vehicle = GetVehiclePedIsIn(GetPlayerPed(String(src)), false);
+    if (!vehicle) {
+      Notifications.add(src, 'Je zit niet in een voertuig', 'error');
+      return;
+    }
+
     Events.emitNet('vehicles:seat:set', src, seatIndex);
   }
 );

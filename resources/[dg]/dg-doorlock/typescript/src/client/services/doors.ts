@@ -245,7 +245,7 @@ export const tryToThermiteDoor = async () => {
   if (!thermiteObject) return;
 
   // const success = await Minigames.sequencegame(thermiteData.grid, thermiteData.amount, 5);
-  const success = await Minigames.sequencegame(thermiteData.grid, 1, 5);
+  const success = await Minigames.sequencegame(thermiteData.grid, thermiteData.amount, 5);
   if (success) {
     const netId = NetworkGetNetworkIdFromEntity(thermiteObject);
     const particleId = Particles.add({

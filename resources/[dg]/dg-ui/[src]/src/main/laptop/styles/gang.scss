@@ -93,12 +93,22 @@
       border-radius: 0.4vh;
       padding: 1vh 2vh 1vh 2vh;
 
-      &-title {
-        font-size: 1.8vh;
+      &-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        &-title {
+          font-size: 1.7vh;
+        }
+
+        &-date {
+          font-size: 1vh;
+        }
       }
 
       &-content {
-        font-size: 1.4vh;
+        font-size: 1.3vh;
       }
     }
 

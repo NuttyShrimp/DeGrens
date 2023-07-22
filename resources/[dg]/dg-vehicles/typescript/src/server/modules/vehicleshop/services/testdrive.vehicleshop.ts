@@ -170,15 +170,6 @@ RPC.register('vehicles:shop:testdrive:returnVehicle', (plyId: number, vehNetId: 
   if (!testDriveData) {
     vehicleshopLogger.silly(`player ${plyId} tried to return testdrive vehicle but no testdrive was active`);
     Notifications.add(plyId, 'Je bent geen testrit aan het doen!', 'error');
-    Util.Log(
-      'vehicleshop:testdrive:failedReturn',
-      {
-        plyId,
-      },
-      `${Util.getName(plyId)}(${plyId}) tried to return vehicle but no testdrive was active`,
-      plyId,
-      true
-    );
     return false;
   }
 

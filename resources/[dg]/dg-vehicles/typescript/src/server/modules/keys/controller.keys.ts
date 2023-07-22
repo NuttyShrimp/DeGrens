@@ -95,15 +95,7 @@ Events.onNet('vehicles:keys:toggleLock', (plyId: number, netId: number) => {
   Vehicles.setVehicleDoorsLocked(vehicle, locked);
   Sounds.playOnEntity(`vehicles_car_key_lock_${netId}`, soundName, 'DLC_NUTTY_SOUNDS', netId);
 
-  // timeout because setter needs to replicate before getter returns correct value
-  setTimeout(() => {
-    const lockStatus = GetVehicleDoorLockStatus(vehicle);
-    if (lockStatus === (locked ? 2 : 0)) {
-      Notifications.add(plyId, locked ? 'Voertuig op slot gezet' : 'Voertuig opengedaan');
-    } else {
-      Notifications.add(plyId, 'Er is iets fout gelopen met het slotensysteem');
-    }
-  }, 500);
+  Notifications.add(plyId, locked ? 'Voertuig op slot gezet' : 'Voertuig opengedaan');
 });
 
 global.exports('setVehicleCannotBeLockpicked', setVehicleCannotBeLockpicked);

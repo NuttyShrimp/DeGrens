@@ -1,6 +1,6 @@
 import { getPrivateToken } from '../../helpers/privateToken';
 import { mainLogger } from '../../sv_logger';
-import { getPlySteamId } from '../../sv_util';
+import { getPlySteamId } from '../../services/steamids';
 import { createSigner, createVerifier } from 'fast-jwt';
 import { isResourceKnown } from 'helpers/resources';
 import { Admin } from '@dgx/server';

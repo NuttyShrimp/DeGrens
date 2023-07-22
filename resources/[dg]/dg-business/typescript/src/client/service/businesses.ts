@@ -1,5 +1,4 @@
-import { BlipManager } from '@dgx/client';
-import { buildAnyZone } from 'helpers';
+import { BlipManager, PolyZone } from '@dgx/client';
 
 let businessesConfig: Record<string, Business.BusinessConfig> = {};
 let typesConfig: Record<string, Business.BusinessTypeConfig> = {};
@@ -25,7 +24,7 @@ export const loadBusinesses = (
     if (!businessInfo) continue;
 
     // build general businesszone
-    buildAnyZone('PolyZone', 'business', businessConfig.businessZone, {
+    PolyZone.buildAnyZone('business', businessConfig.businessZone, {
       id: businessName,
       businessType: businessInfo.business_type.name,
     });

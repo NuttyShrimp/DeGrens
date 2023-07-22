@@ -1,4 +1,4 @@
-import { Core, Events, Util } from '@dgx/client';
+import { Core, Events } from '@dgx/client';
 import { cleanupSanddigging, loadSanddiggingConfig } from 'modules/sanddigging/service.sanddigging';
 import { buildFishingReturnZone, cleanupFishingJob } from 'modules/fishing/service.fishing';
 import {

@@ -3,6 +3,7 @@ import { Config } from '@dgx/server';
 let config: Houserobbery.Config | null = null;
 let locations: Houserobbery.Locations | null = null;
 let shellTypes: Record<string, string> | null = null;
+const itemsPerLootTable = new Map<number, string[]>();
 
 const setConfig = (newConfig: Houserobbery.FullConfig) => {
   const { config: c, ...l } = newConfig;
@@ -17,6 +18,14 @@ const setConfig = (newConfig: Houserobbery.FullConfig) => {
     },
     {}
   );
+
+  for (const loot of c.lootTable) {
+    const items = itemsPerLootTable.get(loot.lootTableId) ?? [];
+    for (let i = 0; i < loot.weight; i++) {
+      items.push(loot.itemName);
+    }
+    itemsPerLootTable.set(loot.lootTableId, items);
+  }
 };
 
 export const loadConfig = async () => {
@@ -50,3 +59,5 @@ export const getShellTypes = () => {
   }
   return shellTypes;
 };
+
+export const getItemsForLootTable = (lootTableId: number) => itemsPerLootTable.get(lootTableId) ?? [];

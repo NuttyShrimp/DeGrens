@@ -1,6 +1,6 @@
 import { BaseEvents, Events, RPC, UI } from '@dgx/client';
 import { Util } from '@dgx/shared';
-import { holsterWeapon, unholsterWeapon, forceRemoveWeapon, showReticle } from './helpers.weapons';
+import { holsterWeapon, unholsterWeapon, forceRemoveWeapon } from './helpers.weapons';
 import {
   getCurrentWeaponData,
   handleEnteredVehicle,
@@ -54,7 +54,6 @@ Events.onNet('weapons:client:removeWeapon', itemId => {
 });
 
 global.exports('getCurrentWeaponData', getCurrentWeaponData);
-global.exports('showReticle', showReticle);
 global.exports('removeWeapon', forceRemoveWeapon);
 
 BaseEvents.onEnteredVehicle(handleEnteredVehicle);

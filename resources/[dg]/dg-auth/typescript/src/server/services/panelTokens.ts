@@ -2,7 +2,7 @@ import { Events, Util } from '@dgx/server';
 import { getPrivateToken } from 'helpers/privateToken';
 import { createSigner, createVerifier } from 'fast-jwt';
 import { mainLogger } from 'sv_logger';
-import { getPlyServerId } from 'sv_util';
+import { getPlyServerId } from './steamids';
 
 const revokedTokens = new Set<string>();
 let signer: any;
@@ -49,7 +49,7 @@ export const removePanelToken = (token: string) => {
   mainLogger.debug(`revoked panel token: ${token}`);
 };
 
-export const getSteamIdFromPanelToken = async (token: string) => {
+export const getSteamIdFromPanelToken = (token: string) => {
   try {
     if (revokedTokens.has(token)) {
       console.log(`${token} is revoken`);
@@ -58,7 +58,7 @@ export const getSteamIdFromPanelToken = async (token: string) => {
     const panelObject = verifier(token);
     if (!panelObject) return null;
     const { steamId } = panelObject;
-    let serverId = await getPlyServerId(steamId);
+    let serverId = getPlyServerId(steamId);
     if (!serverId) return null;
     return steamId;
   } catch (e) {

@@ -3,8 +3,6 @@ import { DOOR_BONES } from './constants.scrapyard';
 
 let inReturnZone = false;
 let vehiclePeekIds: string[] = [];
-
-let vehicleBlip: number | null = null;
 let vehicleNetId: number | null = null;
 
 export const registerScrapyardStartPeekOptions = (partItems: Scrapyard.Config['partItems']) => {
@@ -41,7 +39,7 @@ export const buildScrapyardReturnZone = (returnZone: Vec4) => {
   });
 };
 
-export const setVehicleNetId = (netId: typeof vehicleNetId) => {
+export const setScrapyardVehicleNetId = (netId: typeof vehicleNetId) => {
   if (vehicleNetId === netId) return;
 
   vehicleNetId = netId;
@@ -68,28 +66,8 @@ export const setVehicleNetId = (netId: typeof vehicleNetId) => {
   });
 };
 
-export const setInReturnZone = (isIn: boolean) => {
+export const setInScrapyardReturnZone = (isIn: boolean) => {
   inReturnZone = isIn;
-};
-
-export const setVehicleBlip = (position: Vec3) => {
-  removeVehicleBlip();
-  vehicleBlip = AddBlipForCoord(position.x, position.y, position.z);
-  SetBlipSprite(vehicleBlip, 227);
-  SetBlipColour(vehicleBlip, 6);
-  SetBlipDisplay(vehicleBlip, 2);
-  SetBlipScale(vehicleBlip, 1.1);
-  SetBlipAsShortRange(vehicleBlip, false);
-  BeginTextCommandSetBlipName('STRING');
-  AddTextComponentString('Scrapyard Voertuig');
-  EndTextCommandSetBlipName(vehicleBlip);
-};
-
-export const removeVehicleBlip = () => {
-  if (vehicleBlip === null) return;
-  if (!DoesBlipExist(vehicleBlip)) return;
-  RemoveBlip(vehicleBlip);
-  vehicleBlip = null;
 };
 
 const disassembleVehicle = async (vehicle: number) => {
@@ -140,6 +118,5 @@ const disassembleVehicle = async (vehicle: number) => {
 };
 
 export const cleanupScrapyard = () => {
-  removeVehicleBlip();
-  setVehicleNetId(null);
+  setScrapyardVehicleNetId(null);
 };

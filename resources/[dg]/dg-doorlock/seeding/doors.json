@@ -3162,8 +3162,7 @@
     ],
     "authorized": {
       "business": ["upnatom"]
-    },
-    "hideInteraction": true
+    }
   },
   {
     "description": "Up-n-Atom achterdeur",
@@ -4051,6 +4050,24 @@
     "thermiteable": {
       "grid": 6,
       "amount": 4
+    }
+  },
+  {
+    "description": "kingsmen door beach",
+    "locked": true,
+    "distance": 2,
+    "doors": [
+      {
+        "model": "v_ilev_trev_doorfront",
+        "coords": {
+          "x": -1149.7088623046875,
+          "y": -1521.087890625,
+          "z": 10.782670974731445
+        }
+      }
+    ],
+    "authorized": {
+      "gang": ["kingsmen"]
     }
   }
 ]

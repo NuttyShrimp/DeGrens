@@ -296,7 +296,7 @@ function startCarLoop()
 
       local engineUnderThreshold = GetVehicleEngineHealth(car) < 500
       if engineUnderThreshold ~= state.car.indicator.engine then
-        state.car.indicator.engine = not engineHealth
+        state.car.indicator.engine = engineUnderThreshold
         isCarDirty = true
       end
 

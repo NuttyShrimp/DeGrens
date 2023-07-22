@@ -6,12 +6,11 @@ export const debug = (msg: string) => {
 };
 
 export const deleteEntity = (propInfo: PropAttach.ActiveProp) => {
-  // console.log(propInfo, DoesEntityExist(propInfo.entity), propInfo.hash, GetEntityModel(propInfo.entity));
   if (
     propInfo.entity &&
     NetworkGetEntityIsLocal(propInfo.entity) &&
     DoesEntityExist(propInfo.entity) &&
-    propInfo.hash == GetEntityModel(propInfo.entity) >>> 0
+    propInfo.hash === GetEntityModel(propInfo.entity) >>> 0
   ) {
     SetEntityAsMissionEntity(propInfo.entity, true, true);
     DeleteEntity(propInfo.entity);

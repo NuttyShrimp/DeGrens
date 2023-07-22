@@ -28,6 +28,7 @@ import './services/convars';
 import './services/useables';
 import './services/news';
 import './services/modelblacklist';
+import './services/roadsigns';
 import './controllers';
 
 setImmediate(() => {

@@ -15,6 +15,7 @@ export const useConfigmenuStore = create<ConfigMenu.State & ConfigMenu.StateActi
       fps: 15,
       show: true,
     },
+    crosshair: true,
   },
   phone: {
     background: {

@@ -1,7 +1,7 @@
 import { Events, Jobs, Notifications, Phone, Taskbar, Util, Inventory, Police, Minigames } from '@dgx/server';
 import { DGXEvent, EventListener, RPCEvent, RPCRegister } from '@dgx/server/decorators';
 import { mainLogger } from '../sv_logger';
-import { getConfig, getLocations } from 'services/config';
+import { getConfig, getItemsForLootTable, getLocations } from 'services/config';
 
 @RPCRegister()
 @EventListener()
@@ -260,7 +260,7 @@ class StateManager extends Util.Singleton<StateManager>() {
   };
 
   @DGXEvent('houserobbery:server:doLootZone')
-  private _doLootZone = async (plyId: number, houseId: string, zoneName: string, lootTableId = 0) => {
+  private _doLootZone = async (plyId: number, houseId: string, zoneName: string, lootTableId: number) => {
     const house = this.activeHouses.get(houseId);
     if (!house) return;
 
@@ -306,8 +306,8 @@ class StateManager extends Util.Singleton<StateManager>() {
 
     const enoughPoliceForFullPrice = Police.canDoActivity('houserobbery');
 
-    const lootTable = getConfig().lootTables[lootTableId];
-    const item = lootTable[Math.floor(Math.random() * lootTable.length)];
+    const possibleItems = getItemsForLootTable(lootTableId);
+    const item = possibleItems[Math.floor(Math.random() * possibleItems.length)];
     const [itemId] = await Inventory.addItemToPlayer(plyId, item, 1, {
       priceMultiplier: enoughPoliceForFullPrice ? 1 : 0.5,
       hiddenKeys: ['priceMultiplier'],

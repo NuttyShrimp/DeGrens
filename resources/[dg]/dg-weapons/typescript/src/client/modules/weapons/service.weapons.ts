@@ -1,5 +1,6 @@
 import { Events, Util } from '@dgx/client';
-import { showReticle } from './helpers.weapons';
+import { setCanShoulderSwap } from 'services/shoulderswap';
+import { setCrosshairEnabled } from 'services/crosshair';
 
 let currentWeaponData: Weapons.WeaponItem | null = null;
 let weaponTick: number | null = null;
@@ -17,7 +18,7 @@ export const setCurrentWeaponData = (data: typeof currentWeaponData) => {
   if (weaponTick !== null) {
     clearTick(weaponTick);
     weaponTick = null;
-    showReticle(false);
+    setCrosshairEnabled(false);
   }
 
   if (data !== null) {
@@ -30,7 +31,6 @@ const startWeaponThread = () => {
 
   const playerId = PlayerId();
 
-  let reticleEnabled = false;
   let previousViewMode = 1;
   let viewModeReset = false;
 
@@ -137,17 +137,12 @@ const startWeaponThread = () => {
         }
       }
 
-      if (!reticleEnabled) {
-        reticleEnabled = true;
-        showReticle(true);
-        if (currentWeaponData.useNativeReticle) {
-          global.exports['dg-misc'].setDefaultReticleEnabled(true);
-        }
-      }
-
       if (!isFreeAiming) {
         emit('weapons:startedFreeAiming', currentWeaponData);
       }
+
+      setCrosshairEnabled(true, currentWeaponData.useNativeReticle);
+      setCanShoulderSwap(true);
 
       isFreeAiming = true;
     } else {
@@ -156,17 +151,12 @@ const startWeaponThread = () => {
         viewModeReset = false;
       }
 
-      if (reticleEnabled) {
-        reticleEnabled = false;
-        showReticle(false);
-        if (currentWeaponData.useNativeReticle) {
-          global.exports['dg-misc'].setDefaultReticleEnabled(false);
-        }
-      }
-
       if (isFreeAiming) {
         emit('weapons:stoppedFreeAiming', currentWeaponData);
       }
+
+      setCrosshairEnabled(false);
+      setCanShoulderSwap(false);
 
       isFreeAiming = false;
     }

@@ -80,6 +80,11 @@
         "name": "container_vegetables",
         "amount": 5,
         "price": 700
+      },
+      {
+        "name": "hairnet",
+        "amount": 50,
+        "price": 35
       }
     ],
     "hardware": [
@@ -147,6 +152,11 @@
         "name": "lawnchair",
         "amount": 200,
         "price": 50
+      },
+      {
+        "name": "lawntable",
+        "amount": 50,
+        "price": 250
       }
     ],
     "fishing": [

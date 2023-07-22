@@ -41,7 +41,7 @@ class StateManager extends Util.Singleton<StateManager>() {
       return;
     }
 
-    // clear to prevent items being enabled because of stalled data
+    // clear to prevent items being enabled because of stale data
     clearCachedItems();
 
     // We refresh entity open
@@ -56,8 +56,8 @@ class StateManager extends Util.Singleton<StateManager>() {
     this.createCheckThread();
     this.createControlThread();
 
-    Inventory.getAllItemNames().then(items => {
-      if (!items || !this.isPeeking) return;
+    Inventory.getPlayerItemNames().then(items => {
+      if (!this.isPeeking) return;
       setCachedItems(items);
       this.forceRefreshList(true);
     });

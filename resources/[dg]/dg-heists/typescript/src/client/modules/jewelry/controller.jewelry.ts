@@ -4,7 +4,6 @@ import {
   buildVitrineZones,
   destroyVitrineZones,
   getInteractPositionOfVitrine,
-  loadAllVitrineOverrides,
   lootVitrine,
   restoreAllVitrineModels,
   setVitrineOverrideModel,
@@ -15,7 +14,6 @@ import { WHITELISTED_WEAPONS } from './constants.jewelry';
 onEnterHeistLocation(locationId => {
   if (locationId !== 'jewelry') return;
   buildVitrineZones();
-  loadAllVitrineOverrides();
 });
 
 onLeaveHeistLocation(locationId => {
@@ -118,6 +116,6 @@ Peek.addFlagEntry('isJewelryReset', {
 });
 
 Events.onNet('heists:jewelry:toggleAlarm', toggleAlarm);
-Events.onNet('heists:jewelry:smashVitrine', (vitrineId: number) => {
+Events.onNet('heists:jewelry:smashVitrine', (vitrineId: number | number[]) => {
   setVitrineOverrideModel(vitrineId, true);
 });

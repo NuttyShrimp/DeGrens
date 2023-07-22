@@ -112,7 +112,12 @@ export const toggleAlarm = (toggle: boolean) => {
   }
 };
 
-export const setVitrineOverrideModel = (vitrineId: number, override: boolean) => {
+export const setVitrineOverrideModel = (vitrineId: number | number[], override: boolean) => {
+  if (Array.isArray(vitrineId)) {
+    vitrineId.forEach(id => setVitrineOverrideModel(id, override));
+    return;
+  }
+
   const vitrineData = VITRINE_MODEL_DATA[vitrines[vitrineId].modelIdx];
   if (!vitrineData) return;
 

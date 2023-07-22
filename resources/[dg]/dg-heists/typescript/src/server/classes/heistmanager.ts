@@ -17,6 +17,8 @@ class HeistManager extends Util.Singleton<HeistManager>() {
   private readonly onEnterHandlers: ((locationId: string, plyId: number) => void)[];
   private readonly onLeaveHandlers: ((locationId: string, plyId: number) => void)[];
 
+  private globalTimeoutTimeout: NodeJS.Timeout | null;
+
   constructor() {
     super();
     this.logger = mainLogger.child({ module: 'Manager' });
@@ -29,23 +31,27 @@ class HeistManager extends Util.Singleton<HeistManager>() {
 
     this.onEnterHandlers = [];
     this.onLeaveHandlers = [];
+
+    this.globalTimeoutTimeout = null;
   }
 
-  private getLocation = (locationId: Heists.LocationId) => {
+  private getLocation = (locationId: Heists.LocationId, supressError = false) => {
     const location = this.locations.get(locationId);
     if (!location) {
-      const logMsg = `Tried to get invalid location by id ${locationId}`;
-      this.logger.error(logMsg);
-      Util.Log(
-        'heists:unknownLocation',
-        {
-          locationId,
-        },
-        logMsg,
-        undefined,
-        true
-      );
-      return;
+      if (!supressError) {
+        const logMsg = `Tried to get invalid location by id ${locationId}`;
+        this.logger.error(logMsg);
+        Util.Log(
+          'heists:unknownLocation',
+          {
+            locationId,
+          },
+          logMsg,
+          undefined,
+          true
+        );
+        return;
+      }
     }
     return location;
   };
@@ -87,7 +93,7 @@ class HeistManager extends Util.Singleton<HeistManager>() {
 
   @DGXEvent('heists:location:enter')
   private _enterLocation = (plyId: number, locationId: Heists.LocationId) => {
-    const location = this.getLocation(locationId);
+    const location = this.getLocation(locationId, true);
     if (!location) return;
     location.playerEntered(plyId);
     this.onEnterHandlers.forEach(cb => cb(locationId, plyId));
@@ -95,7 +101,7 @@ class HeistManager extends Util.Singleton<HeistManager>() {
 
   @DGXEvent('heists:location:leave')
   private leaveLocation = (plyId: number, locationId: Heists.LocationId) => {
-    const location = this.getLocation(locationId);
+    const location = this.getLocation(locationId, true);
     if (!location) return;
     location.playerLeft(plyId);
     this.onLeaveHandlers.forEach(cb => cb(locationId, plyId));
@@ -150,6 +156,7 @@ class HeistManager extends Util.Singleton<HeistManager>() {
 
     if (success) {
       location.setDone();
+      this.startGlobalTimeout();
     }
 
     typeManager.finishedHack?.(success);
@@ -228,12 +235,32 @@ class HeistManager extends Util.Singleton<HeistManager>() {
     return location.getAmountOfPlayersInside();
   };
 
+  /**
+   * Do not use this function inside a typemanagers constructor (those get called before heistmanager constructor is finished)
+   * Instead use in initialize funciton of typemanager
+   */
   public onLocationEnter = (cb: (typeof this.onEnterHandlers)[number]) => {
     this.onEnterHandlers.push(cb);
   };
 
+  /**
+   * Do not use this function inside a typemanagers constructor (those get called before heistmanager constructor is finished)
+   * Instead use in initialize funciton of typemanager
+   */
   public onLocationLeave = (cb: (typeof this.onLeaveHandlers)[number]) => {
     this.onLeaveHandlers.push(cb);
+  };
+
+  public isGlobalTimeoutActive = () => this.globalTimeoutTimeout !== null;
+
+  public startGlobalTimeout = () => {
+    if (this.globalTimeoutTimeout) {
+      clearTimeout(this.globalTimeoutTimeout);
+    }
+
+    this.globalTimeoutTimeout = setTimeout(() => {
+      this.globalTimeoutTimeout = null;
+    }, 20 * 60 * 1000);
   };
 }
 

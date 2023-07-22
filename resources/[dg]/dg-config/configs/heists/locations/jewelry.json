@@ -1,7 +1,7 @@
 {
   "type": "jewelry",
   "label": "Vangelico Juwelier",
-  "cams": [0],
+  "cams": [4, 5, 6, 7],
   "zone": {
     "points": [
       { "x": -627.81, "y": -241.7 },
