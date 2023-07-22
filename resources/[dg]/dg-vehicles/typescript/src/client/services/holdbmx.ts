@@ -27,6 +27,7 @@ Keys.onPressDown('GeneralUse', () => {
 const canHoldBMX = (vehicle: number): boolean => {
   if (holdingBMXVehicle) return false;
   if (!DoesEntityExist(vehicle)) return false;
+  if (!NetworkGetEntityIsNetworked(vehicle)) return false;
   const driverPed = GetPedInVehicleSeat(vehicle, -1);
   if (driverPed && DoesEntityExist(driverPed)) return false;
   const holder = GetEntityAttachedTo(vehicle);
