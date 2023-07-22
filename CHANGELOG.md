@@ -18,6 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Probleem opgelost waardoor sommige inventory containers niet geopened konden worden
 - Je kan geen BMXen uit PDM meer vastnemen
 - Je kan terug dumpster inventories openen
+- Rotatie van trolley in sandy fleeca veranderd
 
 ## [1.2.11]
 
