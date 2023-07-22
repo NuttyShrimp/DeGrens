@@ -12,6 +12,11 @@ Events.onNet('misc:roadsigns:take', (plyId, entityModel: number, entityCoords: V
 });
 
 Inventory.registerUseable('road_sign', (plyId, itemState) => {
+  if (GetVehiclePedIsIn(GetPlayerPed(String(plyId)), false)) {
+    Notifications.add(plyId, 'Je kan dit niet in een voertuig', 'error');
+    return;
+  }
+
   const holdingItemId = holdingPlayers.get(plyId);
   const itemModel = itemState.metadata?.model;
   if (!itemModel) {
