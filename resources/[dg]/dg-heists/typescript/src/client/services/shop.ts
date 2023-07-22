@@ -39,7 +39,16 @@ Peek.addFlagEntry('heistShopNPC', {
   distance: 2.0,
 });
 
-UI.RegisterUICallback('heists/shop/buy', async (data: { itemIdx: number }, cb) => {
-  Events.emitNet('heists:shop:buy', data.itemIdx);
+UI.RegisterUICallback('heists/shop/buy', async (data: { itemIdx: number; doConfirmation: boolean }, cb) => {
   cb({ data: {}, meta: { ok: true, message: 'done' } });
+
+  if (data.doConfirmation) {
+    const result = await UI.openInput({
+      header:
+        'Weet je zeker dat je dit wilt kopen? Ik kan momenteel niet garanderen dat je het item zal kunnen gebruiken',
+    });
+    if (!result.accepted) return;
+  }
+
+  Events.emitNet('heists:shop:buy', data.itemIdx);
 });

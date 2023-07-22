@@ -74,6 +74,7 @@ declare namespace Heists {
       item: string;
       price: number;
       requiredItem?: string;
+      activityName?: string;
     };
   }
 

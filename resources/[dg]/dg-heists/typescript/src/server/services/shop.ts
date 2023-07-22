@@ -1,4 +1,4 @@
-import { Events, Financials, Inventory, Notifications, Phone, RPC, Reputations, UI, Util } from '@dgx/server';
+import { Events, Financials, Inventory, Notifications, Phone, Police, RPC, Reputations, UI, Util } from '@dgx/server';
 import config from './config';
 import { mainLogger } from 'sv_logger';
 
@@ -23,12 +23,14 @@ Events.onNet('heists:shop:open', async (plyId: number) => {
     if (shopItem.requiredItem && playerItems.findIndex(i => i.name === shopItem.requiredItem) === -1) continue;
 
     const label = Inventory.getItemData(shopItem.item)?.label ?? 'Unknown Item';
+    const canDoActivity = !shopItem.activityName || Police.canDoActivity(shopItem.activityName);
 
     menuData.push({
       title: label,
       callbackURL: 'heists/shop/buy',
       data: {
         itemIdx: i,
+        doConfirmation: !canDoActivity,
       },
     });
   }
