@@ -27,7 +27,13 @@ class ItemManager extends Util.Singleton<ItemManager>() {
     if (!isNew && this.items.has(state.id!)) {
       const logMsg = `Tried to create item with already existing id ${state.id}`;
       this.logger.error(logMsg);
-      Util.Log('inventory:item:duplicateId', { itemId: state.id, state }, logMsg, undefined, true);
+      Util.Log(
+        'inventory:item:duplicateId',
+        { itemId: state.id, newItem: state, existingItem: this.items.get(state.id!)! },
+        logMsg,
+        undefined,
+        true
+      );
       return;
     }
 
