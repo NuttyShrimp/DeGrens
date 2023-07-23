@@ -2579,7 +2579,8 @@
     "size": {
       "x": 1,
       "y": 2
-    }
+    },
+    "useable": true
   },
   {
     "name": "medbag",

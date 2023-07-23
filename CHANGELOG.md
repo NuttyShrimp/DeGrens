@@ -23,6 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Enkele scuffed houserobbery locaties verwijderd
 - "Querry" hernoemd naar "Groeve"
 - Methlab log types gecorrigeerd
+- Je kan Krikkes wijn nu wel effectief drinken
 
 ## [1.2.11]
 
