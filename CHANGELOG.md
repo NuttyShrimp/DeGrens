@@ -21,6 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Rotatie van trolley in sandy fleeca veranderd
 - Enkele scuffed houserobbery locaties verwijderd
 - "Querry" hernoemd naar "Groeve"
+- Methlab log types gecorrigeerd
 
 ## [1.2.11]
 
