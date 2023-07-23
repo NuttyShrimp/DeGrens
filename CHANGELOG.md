@@ -19,6 +19,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Je kan geen BMXen uit PDM meer vastnemen
 - Je kan terug dumpster inventories openen
 - Rotatie van trolley in sandy fleeca veranderd
+- Enkele scuffed houserobbery locaties verwijderd
+- "Querry" hernoemd naar "Groeve"
 
 ## [1.2.11]
 
