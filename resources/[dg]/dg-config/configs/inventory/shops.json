@@ -310,6 +310,11 @@
         "name": "scuba_gear",
         "amount": 10,
         "price": 150
+      },
+      {
+        "name": "medbag",
+        "amount": 10,
+        "price": 250
       }
     ],
     "hunting_shop": [

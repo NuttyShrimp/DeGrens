@@ -2580,5 +2580,16 @@
       "x": 1,
       "y": 2
     }
+  },
+  {
+    "name": "medbag",
+    "label": "Medische tas",
+    "decayRate": 86400,
+    "image": "medbag.png",
+    "size": {
+      "x": 3,
+      "y": 3
+    },
+    "useable": true
   }
 ]

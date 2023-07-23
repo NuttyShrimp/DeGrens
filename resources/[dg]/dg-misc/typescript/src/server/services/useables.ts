@@ -50,3 +50,25 @@ Events.onNet('misc:lawntable:pickup', (plyId, objId: string) => {
   SyncedObjects.remove(objId);
   Inventory.addItemToPlayer(plyId, 'lawntable', 1);
 });
+
+
+Inventory.registerUseable('medbag', (plyId, itemState) => {
+  const plyPed = GetPlayerPed(String(plyId));
+  const plyCoords = Util.getEntityCoords(plyPed);
+  const plyHeading = GetEntityHeading(plyPed);
+  const offset = Util.getOffsetFromCoords({ ...plyCoords, w: plyHeading }, { x: 0, y: 1, z: -1.0 });
+  SyncedObjects.add({
+    model: 'xm_prop_x17_bag_med_01a',
+    coords: offset,
+    rotation: { x: 0, y: 0, z: plyHeading },
+    flags: {
+      isMedBag: true,
+    },
+  });
+  Inventory.destroyItem(itemState.id);
+});
+
+Events.onNet('misc:medbag:pickup', (plyId, objId: string) => {
+  SyncedObjects.remove(objId);
+  Inventory.addItemToPlayer(plyId, 'medbag', 1);
+});
