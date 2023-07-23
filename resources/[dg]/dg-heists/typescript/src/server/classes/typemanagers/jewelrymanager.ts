@@ -56,7 +56,6 @@ export class JewelryManager implements Heists.TypeManager {
 
     this.state = {
       doorOpen: false,
-      started: false,
       alarmOverridden: false,
     };
 
@@ -293,7 +292,6 @@ export class JewelryManager implements Heists.TypeManager {
     this.setActionBusy('laptopHack', false);
     if (!success) return;
 
-    this.state.started = true;
     this.setDoor(true);
 
     this.dispatchAlert(
@@ -320,7 +318,10 @@ export class JewelryManager implements Heists.TypeManager {
   private _startLootingVitrine = (plyId: number, vitrineId: number) => {
     if (this.inTimeout || this.lootedVitrines.has(vitrineId)) return false;
 
-    if (!this.state.started && (!Police.canDoActivity('heist_jewelry') || heistManager.isGlobalTimeoutActive()))
+    if (
+      this.lootedVitrines.size === 0 &&
+      (!Police.canDoActivity('heist_jewelry') || heistManager.isGlobalTimeoutActive())
+    )
       return false;
 
     this.lootedVitrines.set(vitrineId, plyId);
@@ -369,7 +370,7 @@ export class JewelryManager implements Heists.TypeManager {
 
   @DGXEvent('heists:jewelry:overrideAlarm')
   private _overrideAlarm = async (plyId: number) => {
-    if (!this.state.started || this.state.alarmOverridden) {
+    if (this.lootedVitrines.size === 0 || this.state.alarmOverridden) {
       Notifications.add(plyId, 'Het alarm staat niet aan', 'error');
       return;
     }

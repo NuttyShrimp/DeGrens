@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 - Je kan niet langer een bord vastnemen als je in een voertuig zit
+- Politie requirements check bij juwelier aangepast om vitrines open te breken
 
 ### Fixed
 - Probleem opgelost waardoor sommige inventory containers niet geopened konden worden
