@@ -1,4 +1,4 @@
-import { Events, Notifications, Peek, PropAttach, Util } from '@dgx/client';
+import { Events, Notifications, PropAttach, Util } from '@dgx/client';
 
 let charObj = 0;
 
@@ -63,35 +63,4 @@ Events.onNet('misc:lawnchair:use', async () => {
       }
     }, 250);
   }, 1000);
-});
-
-Peek.addFlagEntry('isLawnTable', {
-  options: [
-    {
-      label: 'Opvouwen',
-      icon: 'fas fa-mountain-sun',
-      action: (_, ent) => {
-        if (!ent || !DoesEntityExist(ent)) return;
-        const objId: string = Entity(ent).state.objId;
-        if (!objId) return;
-        Events.emitNet('misc:lawntable:pickup', objId);
-      },
-    },
-  ],
-});
-
-
-Peek.addFlagEntry('isMedBag', {
-  options: [
-    {
-      label: 'Meenemen',
-      icon: 'fas fa-mountain-sun',
-      action: (_, ent) => {
-        if (!ent || !DoesEntityExist(ent)) return;
-        const objId: string = Entity(ent).state.objId;
-        if (!objId) return;
-        Events.emitNet('misc:medbag:pickup', objId);
-      },
-    },
-  ],
 });

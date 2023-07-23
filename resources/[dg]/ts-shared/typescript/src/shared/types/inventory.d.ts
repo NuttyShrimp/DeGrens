@@ -48,7 +48,10 @@ declare namespace Inventory {
     | 'tunes'
     | 'bench';
 
-  type UsageHandler = (src: number, state: Inventory.ItemState) => void;
+  type UsageHandler<T extends Record<string, any> = Record<string, any>> = (
+    src: number,
+    state: Inventory.ItemState<T>
+  ) => void;
 
   type UpdateHandlerData = {
     handler: (identifier: string, action: 'add' | 'remove', itemState: Inventory.ItemState) => void;

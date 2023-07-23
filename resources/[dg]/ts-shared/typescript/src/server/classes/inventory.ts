@@ -3,7 +3,7 @@ import { Util as UtilShared } from '../../shared';
 
 class Inventory extends UtilShared.Singleton<Inventory>() {
   private isLoaded: boolean;
-  private readonly usageHandlers: Map<string, Inventory.UsageHandler[]>;
+  private readonly usageHandlers: Map<string, Inventory.UsageHandler<any>[]>;
   private readonly updateHandlers: Map<Inventory.Type, Inventory.UpdateHandlerData[]>;
 
   constructor() {
@@ -47,7 +47,10 @@ class Inventory extends UtilShared.Singleton<Inventory>() {
     };
   };
 
-  public registerUseable = (items: string | string[], handler: Inventory.UsageHandler): void => {
+  public registerUseable = <T extends Record<string, any> = Record<string, any>>(
+    items: string | string[],
+    handler: Inventory.UsageHandler<T>
+  ): void => {
     if (Array.isArray(items)) {
       items.forEach(item => this.addUsageHandler(item, handler));
       return;
@@ -55,7 +58,10 @@ class Inventory extends UtilShared.Singleton<Inventory>() {
     this.addUsageHandler(items, handler);
   };
 
-  private addUsageHandler = (item: string, handler: Inventory.UsageHandler) => {
+  private addUsageHandler = <T extends Record<string, any> = Record<string, any>>(
+    item: string,
+    handler: Inventory.UsageHandler<T>
+  ) => {
     const allHandlers = this.usageHandlers.get(item) ?? [];
     allHandlers.push(handler);
     this.usageHandlers.set(item, allHandlers);
