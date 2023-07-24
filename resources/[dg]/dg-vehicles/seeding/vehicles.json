@@ -10234,5 +10234,77 @@
     "price": 485000,
     "shop": "nfs",
     "type": "land"
+  },
+  {
+    "category": "super",
+    "model": "pts21",
+    "brand": "Porsche",
+    "name": "911 Turbo S",
+    "class": "S",
+    "defaultStock": 5,
+    "restockTime": 14,
+    "price": 490000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "super",
+    "model": "911r",
+    "brand": "Porsche",
+    "name": "911 R",
+    "class": "S",
+    "defaultStock": 5,
+    "restockTime": 14,
+    "price": 490000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "sportsclassics",
+    "model": "is300",
+    "brand": "Lexus",
+    "name": "IS300",
+    "class": "A",
+    "defaultStock": 5,
+    "restockTime": 14,
+    "price": 150000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "super",
+    "model": "gemera",
+    "brand": "Koenigsegg",
+    "name": "Gemera",
+    "class": "X",
+    "defaultStock": 5,
+    "restockTime": 14,
+    "price": 925000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "sports",
+    "model": "ikx3abt20",
+    "brand": "Audi",
+    "name": "RS7-R ABT",
+    "class": "S",
+    "defaultStock": 5,
+    "restockTime": 14,
+    "price": 475000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "sports",
+    "model": "ft1c",
+    "brand": "Toyora",
+    "name": "FT1 Concept",
+    "class": "S",
+    "defaultStock": 5,
+    "restockTime": 14,
+    "price": 475000,
+    "shop": "nfs",
+    "type": "land"
   }
 ]
