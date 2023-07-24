@@ -419,6 +419,8 @@ Citizen.CreateThread(function()
                 canAccess = plyJob and plyJob == v.requiredJob
               elseif v.requiredBusiness then
                 canAccess = DGX.Business.isEmployee(v.requiredBusiness)
+              elseif v.requiredGang then
+                canAccess = DGX.Gangs.getCurrentGang() == v.requiredGang
               end
 
               if canAccess then

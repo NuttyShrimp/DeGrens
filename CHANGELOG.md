@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Confirmatie menu toegevoegd bij aankopen van laptops
 - Triple click item om itemId te kopieren (enkel als admin)
 - Ambulance personeel kan nu een medbag op de grond plaatsen
+- Mogelijkheid om kledingkasten voor gangs te plaatsen
 
 ### Changed
 - Je kan niet langer een bord vastnemen als je in een voertuig zit
