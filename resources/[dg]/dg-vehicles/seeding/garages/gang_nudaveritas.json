@@ -1,0 +1,44 @@
+{
+  "garage_id": "nudaveritas",
+  "name": "Naakte Waarheid Garage",
+  "type": "gang",
+  "shared": true,
+  "location": {
+    "vector": {
+      "x": 1407.66,
+      "y": 1118.4,
+      "z": 114.83
+    },
+    "width": 7.8,
+    "length": 18.6,
+    "options": {
+      "heading": 0,
+      "minZ": 113.83,
+      "maxZ": 117.83
+    }
+  },
+  "vehicle_types": ["land"],
+  "parking_spots": [
+    {
+      "type": "land",
+      "size": 2.0,
+      "distance": 1.8,
+      "heading": 90,
+      "coords": { "x": 1413.6233, "y": 1118.5651, "z": 114.8379 }
+    },
+    {
+      "type": "land",
+      "size": 2.0,
+      "distance": 1.8,
+      "heading": 90,
+      "coords": { "x": 1408.3048, "y": 1118.5438, "z": 114.8377 }
+    },
+    {
+      "type": "land",
+      "size": 2.0,
+      "distance": 1.8,
+      "heading": 90,
+      "coords": { "x": 1401.8848, "y": 1118.5399, "z": 114.8377 }
+    }
+  ]
+}
