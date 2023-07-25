@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Triple click item om itemId te kopieren (enkel als admin)
 - Ambulance personeel kan nu een medbag op de grond plaatsen
 - Mogelijkheid om kledingkasten voor gangs te plaatsen
+- Nieuwe ped toegevoegd
 
 ### Changed
 - Je kan niet langer een bord vastnemen als je in een voertuig zit
