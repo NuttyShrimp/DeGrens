@@ -20,7 +20,7 @@ Events.onNet('misc:rentals:rent', (src: number, data: { model: string; id: strin
   rentVehicle(src, data.model, data.id, data.pay);
 });
 
-Inventory.registerUseable('rent_papers', (src, itemState) => {
+Inventory.registerUseable<{ vin: string }>('rent_papers', (src, itemState) => {
   if (!itemState.metadata?.vin) return;
   const vehNetId = Vehicles.getNetIdOfVin(itemState.metadata.vin);
   if (!vehNetId) {

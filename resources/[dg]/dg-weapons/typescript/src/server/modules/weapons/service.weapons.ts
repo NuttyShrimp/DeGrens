@@ -74,7 +74,7 @@ export const registerUseableWeapons = () => {
 };
 
 export const getWeaponItemState = (itemId: string) => {
-  const itemState = Inventory.getItemStateById(itemId);
+  const itemState = Inventory.getItemStateById<Weapons.WeaponItemMetadata>(itemId);
   if (!itemState) {
     mainLogger.error(`Could not find weaponitem with id ${itemId}`);
     Util.Log('weapons:couldNotFindItem', { itemId }, `Could not find weaponitem with id ${itemId}`, undefined, true);

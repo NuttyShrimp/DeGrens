@@ -2,16 +2,21 @@ import { Core, Events, Inventory, Jobs, Notifications, RPC, Taskbar, UI, Util } 
 import { BLOCKED_CASINGS_WEAPONS } from './constants.evidence';
 import { addBloodDrop, addEvidence, getAllEvidenceInArea, getCidOfDNA, takeEvidence } from './service.evidence';
 
-global.exports('addBulletCasings', (plyId: number, itemState: Inventory.ItemState, shotFirePositions: Vec3[]) => {
-  const vehicle = GetVehiclePedIsIn(GetPlayerPed(String(plyId)), false);
-  const type = GetVehicleType(vehicle);
-  if (vehicle !== 0 && type !== 'bike') return;
-  if (BLOCKED_CASINGS_WEAPONS.has(GetHashKey(itemState.name) >>> 0)) return;
+global.exports(
+  'addBulletCasings',
+  (plyId: number, itemState: Inventory.ItemState<{ serialnumber: string }>, shotFirePositions: Vec3[]) => {
+    const vehicle = GetVehiclePedIsIn(GetPlayerPed(String(plyId)), false);
+    const type = GetVehicleType(vehicle);
+    if (vehicle !== 0 && type !== 'bike') return;
+    if (BLOCKED_CASINGS_WEAPONS.has(GetHashKey(itemState.name) >>> 0)) return;
+    const serialNumber = itemState.metadata.serialnumber;
+    if (!serialNumber) return;
 
-  shotFirePositions.forEach(pos => {
-    addEvidence({ x: pos.x, y: pos.y, z: pos.z - 0.95 }, 'bullet', itemState.metadata.serialnumber);
-  });
-});
+    shotFirePositions.forEach(pos => {
+      addEvidence({ x: pos.x, y: pos.y, z: pos.z - 0.95 }, 'bullet', serialNumber);
+    });
+  }
+);
 
 global.exports('addBloodDrop', addBloodDrop);
 Events.onNet('police:evidence:addBloodDrop', addBloodDrop);
@@ -34,7 +39,7 @@ Events.onNet('police:evidence:take', (src: number, evidenceId: string) => {
 
 Events.onNet('police:evidence:researchBlood', async (src: number) => {
   if (Jobs.getCurrentJob(src) !== 'ambulance') return;
-  const itemState = await Inventory.getFirstItemOfNameOfPlayer(src, 'evidence_blood');
+  const itemState = await Inventory.getFirstItemOfNameOfPlayer<{ dna: string }>(src, 'evidence_blood');
   if (!itemState) return;
   Inventory.destroyItem(itemState.id);
   Inventory.addItemToPlayer(src, 'evidence_dna', 1, { dna: itemState.metadata.dna });
@@ -77,9 +82,12 @@ Inventory.registerUseable('dna_swab', async src => {
   Inventory.addItemToPlayer(src, 'evidence_dna', 1, { dna: player.metadata.dna });
 });
 
-Inventory.registerUseable('evidence_dna', async (src, item) => {
+Inventory.registerUseable<{ dna: string }>('evidence_dna', async (src, item) => {
+  const dna = item.metadata.dna;
+  if (!dna) return;
+
   let charModule = Core.getModule('characters');
-  UI.addToClipboard(src, item.metadata.dna);
+  UI.addToClipboard(src, dna);
 
   // TODO: Remove this as its a temporary solution
   // Currently police have NO way of getting a persons name if he doesnt have an ID
@@ -87,7 +95,7 @@ Inventory.registerUseable('evidence_dna', async (src, item) => {
   const job = Jobs.getCurrentJob(src);
   if (job !== 'police') return;
 
-  const cid = await getCidOfDNA(item.metadata.dna);
+  const cid = await getCidOfDNA(dna);
   if (!cid) return;
 
   const targetPlayer = await charModule.getOfflinePlayer(cid);

@@ -170,7 +170,7 @@ const registerStressConsumables = (stressConsumables: Config.StressConsumable[])
 };
 
 // quality of metadata can influence gain, we scale from 25-100 to always get a bit at least
-const calculateGain = (info: Config.Consumable, item: Inventory.ItemState) => {
+const calculateGain = (info: Config.Consumable, item: Inventory.ItemState<{ quality: number }>) => {
   let gain = info.gain;
   if (info.checkQuality) {
     const quality = item.metadata.quality;

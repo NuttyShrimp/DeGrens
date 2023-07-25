@@ -14,7 +14,7 @@ Inventory.registerUseable('id_card', (plyId, itemState: Inventory.ItemState<Chat
   const plyInRadius = Util.getAllPlayersInRange(plyId, 5);
   const chatMessage: Chat.Message = {
     type: 'idcard',
-    message: itemState.metadata,
+    message: itemState.metadata as Chat.CardMessage['message'],
   };
   Chat.sendMessage(plyId, chatMessage);
   plyInRadius.forEach(ply => {

@@ -12,6 +12,7 @@ Events.onNet('vehicles:mechanic:server:acceptTowJob', tryAcceptingJob);
 
 global.exports('calculateSalesTicketsPrice', async (ticketItem: Inventory.ItemState<Mechanic.TicketMetadata>) => {
   const { items } = ticketItem.metadata;
+  if (!items) return;
   const ticketRevenues = await Promise.all(
     items.map(async item => {
       const itemState = await Inventory.getItemStateFromDatabase(item.itemId);

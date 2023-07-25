@@ -71,7 +71,7 @@ Events.onNet('labs:meth:collect', (plyId, labId: number) => {
 Inventory.registerUseable<{ createTime: number; amount: number }>('meth_brick', async (plyId, itemState) => {
   const currentTime = Math.round(Date.now() / 1000);
   const dryTime = config.meth.dryTime * 60 * 60;
-  if (itemState.metadata.createTime + dryTime > currentTime) {
+  if (!itemState.metadata.createTime || itemState.metadata.createTime + dryTime > currentTime) {
     Notifications.add(plyId, 'Dit is nog niet droog', 'error');
     return;
   }
@@ -94,7 +94,7 @@ Inventory.registerUseable<{ createTime: number; amount: number }>('meth_brick', 
 
 Events.onNet('labs:meth:unpackBrick', async (plyId, itemId: string) => {
   const cid = Util.getCID(plyId);
-  const methBrick = Inventory.getItemStateById(itemId);
+  const methBrick = Inventory.getItemStateById<{ amount: number }>(itemId);
   if (!methBrick || methBrick.inventory !== Inventory.concatId('player', cid)) {
     Notifications.add(plyId, 'Je hebt deze meth niet meer opzak', 'error');
     return;
@@ -108,7 +108,7 @@ Events.onNet('labs:meth:unpackBrick', async (plyId, itemId: string) => {
 
   Inventory.destroyItem(methBrick.id);
 
-  const amountOfBags: number = methBrick.metadata.amount;
+  const amountOfBags: number = methBrick.metadata.amount ?? 0;
   if (amountOfBags > 0) {
     Inventory.addItemToPlayer(plyId, 'meth_bag', amountOfBags);
   } else {

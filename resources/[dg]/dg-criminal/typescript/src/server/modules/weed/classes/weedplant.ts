@@ -127,7 +127,9 @@ export class WeedPlant {
 
       // If water not done and valid bucket in inventory, allow watering
       if (this.waterTime === 0) {
-        const hasWaterBucket = plyItems.some(i => i.name === 'farming_bucket' && i.metadata.liter > 0);
+        const hasWaterBucket = plyItems.some(
+          (i: Inventory.ItemState<{ liter?: number }>) => i.name === 'farming_bucket' && (i.metadata.liter ?? 0) > 0
+        );
         if (hasWaterBucket) {
           menuEntries.push({
             title: 'Water Geven',
@@ -177,8 +179,9 @@ export class WeedPlant {
 
   public water = async (plyId: number) => {
     const cid = Util.getCID(plyId);
-    const bucketItems = (await Inventory.getItemsWithNameInInventory('player', String(cid), 'farming_bucket')) ?? [];
-    const bucketItem = bucketItems.find(i => i.metadata.liter > 0);
+    const bucketItems =
+      (await Inventory.getItemsWithNameInInventory<{ liter: number }>('player', String(cid), 'farming_bucket')) ?? [];
+    const bucketItem = bucketItems.find(i => (i.metadata.liter ?? 0) > 0);
     if (!bucketItem) return;
 
     if (this.waterTime !== 0) {

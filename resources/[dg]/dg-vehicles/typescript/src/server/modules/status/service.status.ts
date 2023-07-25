@@ -41,7 +41,11 @@ export const setNativeStatus = (vehicle: number, status: Partial<Omit<Vehicle.Ve
   Sync.executeAction('vehicles:status:setNative', vehicle, status);
 };
 
-export const useRepairPart = async (src: number, type: Service.Part, itemState: Inventory.ItemState) => {
+export const useRepairPart = async (
+  src: number,
+  type: Service.Part,
+  itemState: Inventory.ItemState<{ class: CarClass }>
+) => {
   const { entity: veh } = await RayCast.doRaycast(src);
   if (!veh || GetEntityType(veh) !== 2) {
     Notifications.add(src, 'Er is geen voertuig in de buurt', 'error');

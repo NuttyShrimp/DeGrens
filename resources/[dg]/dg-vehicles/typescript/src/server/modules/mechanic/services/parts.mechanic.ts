@@ -13,7 +13,10 @@ export const finishOrder = async (plyId: number, order: Mechanic.PartItem[]) => 
     return;
   }
 
-  const stashItems = await Inventory.getItemsInInventory('stash', `mechanic-shop-parts-${shop}`);
+  const stashItems = await Inventory.getItemsInInventory<{ class: CarClass; stage?: number }>(
+    'stash',
+    `mechanic-shop-parts-${shop}`
+  );
 
   // this is gonna be ticket item metadata with all data to calc
   const ticketItems: Mechanic.TicketMetadata['items'] = [];
@@ -21,7 +24,7 @@ export const finishOrder = async (plyId: number, order: Mechanic.PartItem[]) => 
   // Get items from mech stash
   const itemIds = new Set<string>();
   for (const orderItem of order) {
-    let findCb: (i: Inventory.ItemState) => boolean;
+    let findCb: (i: (typeof stashItems)[number]) => boolean;
     if (orderItem.type === 'repair') {
       findCb = i => i.name === REPAIR_PARTS[orderItem.part]?.itemName && i.metadata.class === orderItem.class;
     } else {
@@ -83,13 +86,15 @@ const getRevenueForItem = (item: Mechanic.PartItem) => {
 };
 
 const getCountsInShopStash = async (shop: string) => {
-  const stashItems = await Inventory.getItemsInInventory('stash', `mechanic-shop-parts-${shop}`);
+  const stashItems = await Inventory.getItemsInInventory<{ class: CarClass; stage?: number }>(
+    'stash',
+    `mechanic-shop-parts-${shop}`
+  );
   const itemCounts: Record<string, number> = {};
   for (const item of stashItems) {
-    const carClass: CarClass = item.metadata.class;
-    if (!carClass) continue;
+    if (!item.metadata.class) continue;
     const stage = item.metadata.stage;
-    const idxName = `${item.name}_${carClass}${stage ? `_${stage}` : ''}`;
+    const idxName = `${item.name}_${item.metadata.class}${stage ? `_${stage}` : ''}`;
     const amount = itemCounts[idxName] ?? 0;
     itemCounts[idxName] = amount + 1;
   }

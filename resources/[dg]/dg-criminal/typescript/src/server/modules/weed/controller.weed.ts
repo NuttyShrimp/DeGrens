@@ -7,7 +7,7 @@ Inventory.registerUseable('weed_seed', (plyId, itemState) => {
 });
 
 Events.onNet('criminal:weed:add', async (plyId: number, itemId: string, coords: Vec3, rotation: Vec3) => {
-  const itemState = Inventory.getItemStateById(itemId);
+  const itemState = Inventory.getItemStateById<{ gender: Criminal.Weed.Gender }>(itemId);
   const hasItem = await Inventory.doesPlayerHaveItemWithId(plyId, itemId);
   if (!itemState || !hasItem) {
     Notifications.add(plyId, 'Je hebt het zaadje niet meer', 'error');
@@ -15,10 +15,10 @@ Events.onNet('criminal:weed:add', async (plyId: number, itemId: string, coords: 
   }
 
   Inventory.destroyItem(itemState.id);
-  const gender = itemState.metadata.gender as Criminal.Weed.Gender | undefined;
-  if (!gender) {
+
+  if (!itemState.metadata.gender) {
     Notifications.add(plyId, 'Dit zaadje is kapot', 'error');
     return;
   }
-  weedPlantManager.addNew(plyId, coords, rotation, gender);
+  weedPlantManager.addNew(plyId, coords, rotation, itemState.metadata.gender);
 });

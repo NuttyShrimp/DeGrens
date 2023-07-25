@@ -31,14 +31,14 @@ Events.onNet('police:interactions:seizeCash', (src: number) => {
   );
 });
 
-Inventory.registerUseable('seized_cash', (src, itemState) => {
+Inventory.registerUseable<{ amount: number }>('seized_cash', (src, itemState) => {
   if (Jobs.isWhitelisted(src, 'police')) {
     Notifications.add(src, 'Dit is niet de bedoeling e', 'error');
     return;
   }
 
   Inventory.destroyItem(itemState.id);
-  const amount = itemState.metadata.amount;
+  const amount = itemState.metadata.amount ?? 0;
   Financials.addCash(src, amount, 'opened-seized-cash');
   Util.Log(
     'police:interactions:openedSeizedCash',

@@ -107,7 +107,7 @@ export const lootAnimal = (plyId: number, animalNetId: number) => {
   Util.Log('jobs:hunting:lootAnimal', {}, `${Util.getName(plyId)}(${plyId}) has skinned an animal`, plyId);
 };
 
-export const sellItem = (plyId: number, itemState: Inventory.ItemState) => {
+export const sellItem = (plyId: number, itemState: Inventory.ItemState<{ fromBait: boolean }>) => {
   if (!(itemState.name in huntingConfig.sellables)) {
     huntingLogger.error('Tried to sell item that was not a sellable');
     return;

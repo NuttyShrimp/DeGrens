@@ -10,6 +10,6 @@ export const getAttachmentNameFromComponent = (weaponName: string, component: st
   }
 };
 
-export const getAttachmentStashId = (itemState: Inventory.ItemState) => {
+export const getAttachmentStashId = (itemState: Inventory.ItemState<Weapons.WeaponItemMetadata>) => {
   return `weapon_${itemState.metadata?.serialnumber}`;
 };

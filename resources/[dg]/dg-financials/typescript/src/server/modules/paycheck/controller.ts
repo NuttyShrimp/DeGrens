@@ -30,7 +30,11 @@ onNet('financials:server:paycheck:give', () => {
 
 Events.onNet('financials:tickets:trade', async (plyId: number) => {
   const cid = Util.getCID(plyId);
-  const tickets = await Inventory.getItemsWithNameInInventory('player', String(cid), 'sales_ticket');
+  const tickets = await Inventory.getItemsWithNameInInventory<{ origin: string; amount: number }>(
+    'player',
+    String(cid),
+    'sales_ticket'
+  );
   if (tickets.length === 0) {
     Notifications.add(plyId, 'Je hebt geen salestickets opzak', 'error');
     return;
@@ -47,7 +51,7 @@ Events.onNet('financials:tickets:trade', async (plyId: number) => {
         revenueOfTicket = (await global.exports['dg-vehicles'].calculateSalesTicketsPrice(ticket)) ?? 0;
         break;
       case 'generic':
-        revenueOfTicket = ticket.metadata.amount;
+        revenueOfTicket = ticket.metadata.amount ?? 0;
         break;
     }
 

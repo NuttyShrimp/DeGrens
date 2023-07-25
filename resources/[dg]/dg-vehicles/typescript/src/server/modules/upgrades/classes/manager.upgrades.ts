@@ -97,7 +97,7 @@ class UpgradesManager extends Util.Singleton<UpgradesManager>() {
       return upgrades;
     }
 
-    const items = await Inventory.getItemsInInventory('tunes', vin);
+    const items = await Inventory.getItemsInInventory<{ class: CarClass; stage: number }>('tunes', vin);
     for (const item of items) {
       if (item.metadata?.class !== vehicleClass) continue;
 

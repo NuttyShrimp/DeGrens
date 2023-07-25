@@ -148,7 +148,7 @@ const startMethRun = async (plyId: number) => {
 export const handleItemAddedToDropOffStash = (itemId: string, originalInventory: string) => {
   if (!activeRun) return;
 
-  const itemState = Inventory.getItemStateById(itemId);
+  const itemState = Inventory.getItemStateById<{ amount: number }>(itemId);
   if (!itemState || itemState.inventory !== originalInventory) return; // item got removed manually during timeout
 
   // dont destroy to be able to refund easily

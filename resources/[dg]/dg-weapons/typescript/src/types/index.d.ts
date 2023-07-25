@@ -23,7 +23,7 @@ declare namespace Weapons {
     blockInVehicle: boolean;
   };
 
-  type WeaponItem = Inventory.ItemState &
+  type WeaponItem = Inventory.ItemState<WeaponItemMetadata> &
     SharedWeaponConfig & {
       hash: number;
     };
@@ -32,4 +32,6 @@ declare namespace Weapons {
     removeTimeout: NodeJS.Timeout | null;
     weaponHash: number;
   };
+
+  type WeaponItemMetadata = { serialnumber: string; ammo?: number; tint?: string };
 }
