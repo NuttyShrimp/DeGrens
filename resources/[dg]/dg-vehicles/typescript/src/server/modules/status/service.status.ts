@@ -38,7 +38,7 @@ export const getNativeStatus = async (veh: number, vin: string): Promise<Vehicle
 };
 
 export const setNativeStatus = (vehicle: number, status: Partial<Omit<Vehicle.VehicleStatus, 'fuel'>>) => {
-  Sync.executeAction('vehicles:statis:setNative', vehicle, status);
+  Sync.executeAction('vehicles:status:setNative', vehicle, status);
 };
 
 export const useRepairPart = async (src: number, type: Service.Part, itemState: Inventory.ItemState) => {
