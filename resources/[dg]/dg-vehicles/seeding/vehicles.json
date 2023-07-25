@@ -10306,5 +10306,29 @@
     "price": 475000,
     "shop": "nfs",
     "type": "land"
+  },
+  {
+    "category": "sedans",
+    "model": "gxpanamera",
+    "brand": "Porsche",
+    "name": "Panamera",
+    "class": "S",
+    "defaultStock": 5,
+    "restockTime": 14,
+    "price": 480000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "sports",
+    "model": "gtrnismo17",
+    "brand": "Nissan",
+    "name": "GTR Nismo 17",
+    "class": "S",
+    "defaultStock": 5,
+    "restockTime": 14,
+    "price": 480000,
+    "shop": "nfs",
+    "type": "land"
   }
 ]

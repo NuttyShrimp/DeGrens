@@ -126,6 +126,6 @@ Events.onNet('vehicles:shop:buyKofiVehicle', async (plyId, model: string) => {
 
   const taxedPrice = getVehicleTaxedPrice(model);
   const logMsg = `${Util.getName(plyId)}(${plyId}) bought a kofi vehicle (${model}) for ${taxedPrice}`;
-  Util.Log('vehiclesshop:kofi:buy', { model, vin, plate, taxedPrice }, logMsg, plyId);
+  Util.Log('vehicleshop:kofi:buy', { model, vin, plate, taxedPrice }, logMsg, plyId);
   mainLogger.info(logMsg);
 });
