@@ -19,6 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Politie requirements check bij juwelier aangepast om vitrines open te breken
 - Zand past nu in een materiaaldoos
 - Extras van rago kunnen niet meer aangepast worden
+- Je kan nu de kwaliteit van een methzak zien zonder deze te openen
 
 ### Fixed
 - Probleem opgelost waardoor sommige inventory containers niet geopened konden worden

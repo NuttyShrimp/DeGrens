@@ -88,3 +88,8 @@ UI.RegisterUICallback('sliders/close', (data: { settings: Labs.Meth.Settings }, 
   setMethStationSettings(data.settings);
   cb({ data: {}, meta: { ok: true, message: 'done' } });
 });
+
+UI.RegisterUICallback('methbrick/unpack', (data: { itemId: string }, cb) => {
+  Events.emitNet('labs:meth:unpackBrick', data.itemId);
+  cb({ data: {}, meta: { ok: true, message: 'done' } });
+});

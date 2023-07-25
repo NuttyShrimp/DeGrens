@@ -47,7 +47,7 @@ class Inventory extends UtilShared.Singleton<Inventory>() {
     };
   };
 
-  public registerUseable = <T extends Record<string, any> = Record<string, any>>(
+  public registerUseable = <T extends Record<string, unknown> = Record<string, unknown>>(
     items: string | string[],
     handler: Inventory.UsageHandler<T>
   ): void => {
@@ -58,7 +58,7 @@ class Inventory extends UtilShared.Singleton<Inventory>() {
     this.addUsageHandler(items, handler);
   };
 
-  private addUsageHandler = <T extends Record<string, any> = Record<string, any>>(
+  private addUsageHandler = <T extends Record<string, unknown> = Record<string, unknown>>(
     item: string,
     handler: Inventory.UsageHandler<T>
   ) => {
