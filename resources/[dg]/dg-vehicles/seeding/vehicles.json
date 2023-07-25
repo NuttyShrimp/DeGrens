@@ -10168,10 +10168,10 @@
     "model": "rmodm3e36",
     "brand": "BMW",
     "name": "M3 E36",
-    "class": "S",
+    "class": "A+",
     "defaultStock": 5,
     "restockTime": 14,
-    "price": 475000,
+    "price": 205000,
     "shop": "nfs",
     "type": "land"
   },
