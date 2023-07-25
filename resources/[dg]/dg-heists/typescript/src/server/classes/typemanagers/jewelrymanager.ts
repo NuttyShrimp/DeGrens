@@ -193,7 +193,7 @@ export class JewelryManager implements Heists.TypeManager {
       return;
     }
 
-    if (!Police.canDoActivity('heist_jewelry') || this.inTimeout || heistManager.isGlobalTimeoutActive()) {
+    if (!Police.canDoActivity('heist_jewelry') || this.inTimeout) {
       Notifications.add(plyId, 'Ik kan je nog niet genoeg info geven', 'error');
       return;
     }
@@ -226,6 +226,7 @@ export class JewelryManager implements Heists.TypeManager {
     if (
       !Police.canDoActivity('heist_jewelry') ||
       this.inTimeout ||
+      heistManager.isGlobalTimeoutActive() ||
       (this.lootedVitrines.size > 0 && !this.state.alarmOverridden)
     ) {
       Notifications.add(plyId, 'De laptop staat momenteel uit', 'error');
