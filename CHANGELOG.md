@@ -18,6 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Je kan niet langer een bord vastnemen als je in een voertuig zit
 - Politie requirements check bij juwelier aangepast om vitrines open te breken
 - Zand past nu in een materiaaldoos
+- Extras van rago kunnen niet meer aangepast worden
 
 ### Fixed
 - Probleem opgelost waardoor sommige inventory containers niet geopened konden worden
