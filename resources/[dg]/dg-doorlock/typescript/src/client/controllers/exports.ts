@@ -114,7 +114,7 @@ global.exports('registerDoor', async (entity: number) => {
   const doorConfig: Doorlock.DoorConfig = {
     description: result.values.description ?? '',
     locked: result.values.locked === 'true',
-    distance: Number(result.values.distance ?? 2),
+    distance: Number(result.values.distance || 2),
     doors: [
       {
         model: GetEntityArchetypeName(entity),

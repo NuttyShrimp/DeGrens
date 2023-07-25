@@ -4069,5 +4069,179 @@
     "authorized": {
       "gang": ["kingsmen"]
     }
+  },
+  {
+    "description": "fuenteblanca near garages",
+    "locked": true,
+    "distance": 2,
+    "doors": [
+      {
+        "model": "v_ilev_ra_door1_l",
+        "coords": {
+          "x": 1401.5904541015625,
+          "y": 1128.314208984375,
+          "z": 114.48359680175781
+        }
+      },
+      {
+        "model": "v_ilev_ra_door1_r",
+        "coords": {
+          "x": 1399.3929443359375,
+          "y": 1128.314208984375,
+          "z": 114.48359680175781
+        }
+      }
+    ],
+    "authorized": {
+      "gang": ["nudaveritas"]
+    }
+  },
+  {
+    "description": "fuenteblance front right",
+    "locked": true,
+    "distance": 2,
+    "doors": [
+      {
+        "model": "v_ilev_ra_door1_l",
+        "coords": {
+          "x": 1390.665771484375,
+          "y": 1131.1170654296875,
+          "z": 114.48084259033203
+        }
+      },
+      {
+        "model": "v_ilev_ra_door1_r",
+        "coords": {
+          "x": 1390.665771484375,
+          "y": 1133.3172607421875,
+          "z": 114.48084259033203
+        }
+      }
+    ],
+    "authorized": {
+      "gang": ["nudaveritas"]
+    }
+  },
+  {
+    "description": "fuenteblance front main",
+    "locked": true,
+    "distance": 2,
+    "doors": [
+      {
+        "model": "v_ilev_ra_door4r",
+        "coords": {
+          "x": 1395.919921875,
+          "y": 1140.70458984375,
+          "z": 114.79020690917969
+        }
+      },
+      {
+        "model": "v_ilev_ra_door4l",
+        "coords": {
+          "x": 1395.9202880859375,
+          "y": 1142.904052734375,
+          "z": 114.79020690917969
+        }
+      }
+    ],
+    "authorized": {
+      "gang": ["nudaveritas"]
+    }
+  },
+  {
+    "description": "fuenteblance front left",
+    "locked": true,
+    "distance": 2,
+    "doors": [
+      {
+        "model": "v_ilev_ra_door1_l",
+        "coords": {
+          "x": 1390.4114990234375,
+          "y": 1161.24072265625,
+          "z": 114.48725128173828
+        }
+      },
+      {
+        "model": "v_ilev_ra_door1_r",
+        "coords": {
+          "x": 1390.4244384765625,
+          "y": 1163.437744140625,
+          "z": 114.48725128173828
+        }
+      }
+    ],
+    "authorized": {
+      "gang": ["nudaveritas"]
+    }
+  },
+  {
+    "description": "fuenteblance back room left",
+    "locked": true,
+    "distance": 2,
+    "doors": [
+      {
+        "model": "v_ilev_ra_door1_r",
+        "coords": {
+          "x": 1408.16552734375,
+          "y": 1165.833740234375,
+          "z": 114.48725128173828
+        }
+      },
+      {
+        "model": "v_ilev_ra_door1_l",
+        "coords": {
+          "x": 1408.1705322265625,
+          "y": 1163.6328125,
+          "z": 114.48725128173828
+        }
+      }
+    ],
+    "authorized": {
+      "gang": ["nudaveritas"]
+    }
+  },
+  {
+    "description": "fuenteblance back room right",
+    "locked": true,
+    "distance": 2,
+    "doors": [
+      {
+        "model": "v_ilev_ra_door1_r",
+        "coords": {
+          "x": 1408.16748046875,
+          "y": 1161.15478515625,
+          "z": 114.48725128173828
+        }
+      },
+      {
+        "model": "v_ilev_ra_door1_l",
+        "coords": {
+          "x": 1408.157470703125,
+          "y": 1158.955810546875,
+          "z": 114.48725128173828
+        }
+      }
+    ],
+    "authorized": {
+      "gang": ["nudaveritas"]
+    }
+  },
+  {
+    "description": "fuenteblance basement",
+    "locked": true,
+    "distance": 2,
+    "doors": [
+      {
+        "model": "v_ilev_ra_door4r",
+        "coords": {
+          "x": 1407.5465087890625,
+          "y": 1128.3287353515625,
+          "z": 114.4854507446289
+        }
+      }
+    ],
+    "authorized": {
+      "gang": ["nudaveritas"]
+    }
   }
 ]

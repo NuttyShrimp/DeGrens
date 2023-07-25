@@ -1,6 +1,6 @@
 {
   "name": "dg-auth",
-  "version": "1.2.11",
+  "version": "1.2.12",
   "main": "index.js",
   "author": "NuttyShrimp",
   "license": "MIT",

@@ -11,7 +11,7 @@ export const initializeFence = async () => {
   Inventory.createScriptedStash(FENCE_INVENTORY_NAME, 10, Object.keys(itemPrices));
 };
 
-export const sellItem = (itemState: Inventory.ItemState) => {
+export const sellItem = (itemState: Inventory.ItemState<{ priceMultiplier?: number }>) => {
   if (!(itemState.name in itemPrices)) {
     fenceLogger.error('Tried to sell unsellable item');
     return;

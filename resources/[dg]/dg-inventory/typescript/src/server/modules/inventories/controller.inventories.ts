@@ -32,7 +32,7 @@ RPC.register(
       secondaryId = secondaryBuildData.override;
     } else {
       if (locationManager.isLocationBased(secondaryBuildData.type)) {
-        const dropData = secondaryBuildData.data as { coords: Vec3; inNoDropZone: boolean };
+        const dropData = secondaryBuildData.data as { coords: Vec3; inNoDropZone?: boolean };
         secondaryId = locationManager.getLocation(
           secondaryBuildData.type as Location.Type,
           dropData.coords,

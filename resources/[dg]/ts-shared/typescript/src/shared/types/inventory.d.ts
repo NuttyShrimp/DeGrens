@@ -2,19 +2,19 @@ declare namespace Inventory {
   type Item = ItemState & ItemData;
 
   // dynamic item state
-  interface ItemState {
+  type ItemState<T extends Record<string, unknown> = {}> = {
     id: string;
     name: string;
     inventory: string;
     position: Vec2;
     rotated: boolean;
     hotkey: Hotkey | null;
-    metadata: { [key: string]: any };
+    metadata: { hiddenKeys: string[] } & Partial<T>;
     // the unix timestamp when an item is going to break (sec)
     destroyDate: number | null;
     requirements?: Requirements;
     quality?: number;
-  }
+  };
 
   interface Requirements {
     cash?: number;
@@ -48,7 +48,7 @@ declare namespace Inventory {
     | 'tunes'
     | 'bench';
 
-  type UsageHandler = (src: number, state: Inventory.ItemState) => void;
+  type UsageHandler<T extends Record<string, unknown> = {}> = (src: number, state: Inventory.ItemState<T>) => void;
 
   type UpdateHandlerData = {
     handler: (identifier: string, action: 'add' | 'remove', itemState: Inventory.ItemState) => void;

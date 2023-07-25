@@ -146,6 +146,10 @@ export const increaseStationAmount = (plyId: number, stationId: number) => {
   const station = getStation(stationId);
   station.amount++;
 
+  if (isStationFull(stationId)) {
+    Notifications.add(plyId, 'Dit zit nu vol', 'success');
+  }
+
   const logMsg = `${Util.getName(plyId)}(${plyId}) has increased meth station ${stationId} amount`;
   methLogger.debug(logMsg);
   Util.Log('labs:meth:increaseStation', { station }, logMsg, plyId);
@@ -164,7 +168,7 @@ export const setStationSettings = (plyId: number, stationId: number, settings: L
 
   const logMsg = `${Util.getName(plyId)}(${plyId}) has changed meth station ${stationId} settings`;
   methLogger.debug(logMsg);
-  Util.Log('labs:meth:increaseStation', { station }, logMsg, plyId);
+  Util.Log('labs:meth:changeSettings', { station }, logMsg, plyId);
 };
 
 export const collectMethLoot = async (plyId: number) => {
@@ -193,7 +197,7 @@ export const collectMethLoot = async (plyId: number) => {
 
   const logMsg = `${Util.getName(plyId)}(${plyId}) has collected meth`;
   methLogger.debug(logMsg);
-  Util.Log('labs:meth:increaseStation', { strain, amount }, logMsg, plyId);
+  Util.Log('labs:meth:collect', { strain, amount }, logMsg, plyId);
 };
 
 const getRecipeStrain = () => {

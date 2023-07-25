@@ -27,7 +27,7 @@ Events.onNet('vehicles:fakeplate:install', async (plyId, netId: number) => {
   });
   if (cancelled) return;
 
-  const plateItem = await Inventory.getFirstItemOfNameOfPlayer(plyId, 'fakeplate');
+  const plateItem = await Inventory.getFirstItemOfNameOfPlayer<{ plate: string }>(plyId, 'fakeplate');
   if (!plateItem) {
     Notifications.add(plyId, 'Je hebt geen nummerplaat', 'error');
     return;

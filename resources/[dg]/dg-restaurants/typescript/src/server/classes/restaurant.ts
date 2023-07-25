@@ -469,7 +469,7 @@ export class Restaurant {
 
     if (itemsLeftToRemove.length !== 0) {
       const idsToRemove: string[] = [];
-      const allPlayerItems = await Inventory.getPlayerItems(plyId);
+      const allPlayerItems = await Inventory.getPlayerItems<{ quality: number }>(plyId);
       for (const itemState of allPlayerItems) {
         // try early exit if already found all items
         if (itemsLeftToRemove.length === 0) break;

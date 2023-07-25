@@ -3,7 +3,7 @@ import { Util as UtilShared } from '../../shared';
 
 class Inventory extends UtilShared.Singleton<Inventory>() {
   private isLoaded: boolean;
-  private readonly usageHandlers: Map<string, Inventory.UsageHandler[]>;
+  private readonly usageHandlers: Map<string, Inventory.UsageHandler<any>[]>;
   private readonly updateHandlers: Map<Inventory.Type, Inventory.UpdateHandlerData[]>;
 
   constructor() {
@@ -47,7 +47,10 @@ class Inventory extends UtilShared.Singleton<Inventory>() {
     };
   };
 
-  public registerUseable = (items: string | string[], handler: Inventory.UsageHandler): void => {
+  public registerUseable = <T extends Record<string, unknown> = {}>(
+    items: string | string[],
+    handler: Inventory.UsageHandler<T>
+  ): void => {
     if (Array.isArray(items)) {
       items.forEach(item => this.addUsageHandler(item, handler));
       return;
@@ -55,7 +58,10 @@ class Inventory extends UtilShared.Singleton<Inventory>() {
     this.addUsageHandler(items, handler);
   };
 
-  private addUsageHandler = (item: string, handler: Inventory.UsageHandler) => {
+  private addUsageHandler = <T extends Record<string, unknown> = {}>(
+    item: string,
+    handler: Inventory.UsageHandler<T>
+  ) => {
     const allHandlers = this.usageHandlers.get(item) ?? [];
     allHandlers.push(handler);
     this.usageHandlers.set(item, allHandlers);
@@ -169,7 +175,9 @@ class Inventory extends UtilShared.Singleton<Inventory>() {
     return this.getAmountInInventory('player', this.getPlyIdentifier(plyId), name);
   };
 
-  public getItemStateById = (id: string): Inventory.ItemState | undefined => {
+  public getItemStateById = <T extends Record<string, unknown> = {}>(
+    id: string
+  ): Inventory.ItemState<T> | undefined => {
     return global.exports['dg-inventory'].getItemStateById(id);
   };
 
@@ -188,31 +196,37 @@ class Inventory extends UtilShared.Singleton<Inventory>() {
     await this.moveItemToInventory('player', this.getPlyIdentifier(plyId), itemId);
   };
 
-  public getItemsInInventory = (type: Inventory.Type, identifier: string): Promise<Inventory.ItemState[]> => {
+  public getItemsInInventory = <T extends Record<string, unknown> = {}>(
+    type: Inventory.Type,
+    identifier: string
+  ): Promise<Inventory.ItemState<T>[]> => {
     return global.exports['dg-inventory'].getItemsInInventory(type, identifier);
   };
 
-  public getPlayerItems = (plyId: number) => {
+  public getPlayerItems = <T extends Record<string, unknown> = {}>(plyId: number) => {
     const cid = String(Util.getCID(plyId));
-    return this.getItemsInInventory('player', cid);
+    return this.getItemsInInventory<T>('player', cid);
   };
 
-  public getItemsWithNameInInventory = (
+  public getItemsWithNameInInventory = <T extends Record<string, unknown> = {}>(
     type: Inventory.Type,
     identifier: string,
     name: string
-  ): Promise<Inventory.ItemState[]> => {
+  ): Promise<Inventory.ItemState<T>[]> => {
     return global.exports['dg-inventory'].getItemsWithNameInInventory(type, identifier, name);
   };
 
-  public getFirstItemOfName = (
+  public getFirstItemOfName = <T extends Record<string, unknown> = {}>(
     type: Inventory.Type,
     identifier: string,
     name: string
-  ): Promise<Inventory.ItemState | undefined> => {
+  ): Promise<Inventory.ItemState<T> | undefined> => {
     return global.exports['dg-inventory'].getFirstItemOfName(type, identifier, name);
   };
-  public getFirstItemOfNameOfPlayer = (plyId: number, name: string): Promise<Inventory.ItemState | undefined> => {
+  public getFirstItemOfNameOfPlayer = <T extends Record<string, unknown> = {}>(
+    plyId: number,
+    name: string
+  ): Promise<Inventory.ItemState<T> | undefined> => {
     return this.getFirstItemOfName('player', this.getPlyIdentifier(plyId), name);
   };
 
@@ -254,7 +268,9 @@ class Inventory extends UtilShared.Singleton<Inventory>() {
    * Only use this function if you are not sure the item you want to get is in a loaded inventory.
    * Example: you save itemids to later check if they still exist. Use this function for that because those items might be in unloaded inventories
    */
-  public getItemStateFromDatabase = (itemId: string): Promise<Inventory.ItemState | null> => {
+  public getItemStateFromDatabase = <T extends Record<string, unknown> = {}>(
+    itemId: string
+  ): Promise<Inventory.ItemState<T> | null> => {
     return global.exports['dg-inventory'].getItemStateFromDatabase(itemId);
   };
 

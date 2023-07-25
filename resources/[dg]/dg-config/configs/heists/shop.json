@@ -18,12 +18,14 @@
     {
       "item": "laptop_v1",
       "price": 10,
-      "requiredItem": "drive_v1"
+      "requiredItem": "drive_v1",
+      "activityName": "heist_fleeca"
     },
     {
       "item": "laptop_v2",
       "price": 20,
-      "requiredItem": "drive_v2"
+      "requiredItem": "drive_v2",
+      "activityName": "heist_paleto"
     },
     {
       "item": "laptop_v3",

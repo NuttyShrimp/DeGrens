@@ -27,7 +27,6 @@ declare namespace Jewelry {
 
   type State = {
     doorOpen: boolean;
-    started: boolean;
     alarmOverridden: boolean;
   };
 

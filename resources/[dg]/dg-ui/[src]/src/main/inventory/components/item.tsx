@@ -1,8 +1,10 @@
-import { FC, useEffect, useMemo, useState } from 'react';
+import { FC, useEffect, useMemo, useRef, useState } from 'react';
 import * as React from 'react';
 import { useDrag } from 'react-dnd';
 import { alpha, Tooltip } from '@mui/material';
 import { baseStyle } from '@src/base.styles';
+import { useMainStore } from '@src/lib/stores/useMainStore';
+import { copyToClipboard } from '@src/lib/util';
 
 import { useInventory } from '../hooks/useInventory';
 import { useInventoryStore } from '../stores/useInventoryStore';
@@ -18,6 +20,9 @@ export const Item: FC<{ itemId: string; cellSize: number }> = ({ itemId, cellSiz
   );
   const [hotkeyPressed, setHotkeyPressed] = useState<number | null>(null);
   const { bindItemToKey, doItemUsage, unbindItem, toggleItemRotation, switchItemsToOtherInventory } = useInventory();
+  const isAdmin = useMainStore(s => s.character?.isAdmin ?? false);
+
+  const clickTimeoutRef = useRef<NodeJS.Timeout>();
 
   const isSelected = useMemo(() => {
     return selectedItems.indexOf(itemId) !== -1;
@@ -42,9 +47,24 @@ export const Item: FC<{ itemId: string; cellSize: number }> = ({ itemId, cellSiz
     [itemState.amount, itemState.rotated, holdingSelector]
   );
 
-  const handleDoubleClick = e => {
+  const handleClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     e.preventDefault();
 
+    if (clickTimeoutRef.current) {
+      clearTimeout(clickTimeoutRef.current);
+      clickTimeoutRef.current = undefined;
+    }
+
+    clickTimeoutRef.current = setTimeout(() => {
+      if (e.detail === 2) {
+        doDoubleClickAction();
+      } else if (e.detail === 3) {
+        doTripleClickAction();
+      }
+    }, 200);
+  };
+
+  const doDoubleClickAction = () => {
     if (holdingSelector && currentSelectorInventory === itemState.inventory) {
       updateInventoryStore(s => ({
         selectedItems: [
@@ -65,6 +85,12 @@ export const Item: FC<{ itemId: string; cellSize: number }> = ({ itemId, cellSiz
     } else {
       doItemUsage(itemState.id);
     }
+  };
+
+  const doTripleClickAction = () => {
+    if (!isAdmin) return;
+    copyToClipboard(itemState.id);
+    console.log(`itemId has been copied to clipboard`);
   };
 
   const handleRightClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
@@ -181,7 +207,7 @@ export const Item: FC<{ itemId: string; cellSize: number }> = ({ itemId, cellSiz
           display: isDragging ? 'none' : 'initial',
         }}
         onContextMenu={handleRightClick}
-        onDoubleClick={handleDoubleClick}
+        onClick={handleClick}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
       >

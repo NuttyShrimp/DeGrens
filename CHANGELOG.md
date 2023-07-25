@@ -13,6 +13,36 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+## [1.2.12]
+
+### Added
+- Confirmatie menu toegevoegd bij aankopen van laptops
+- Triple click item om itemId te kopieren (enkel als admin)
+- Ambulance personeel kan nu een medbag op de grond plaatsen
+- Mogelijkheid om kledingkasten voor gangs te plaatsen
+- Nieuwe ped toegevoegd
+- Er zijn wat verbouwingen gebeurd in grapeseed
+- Nieuwe kofi voertuigen toegevoegd
+
+### Changed
+- Je kan niet langer een bord vastnemen als je in een voertuig zit
+- Politie requirements check bij juwelier aangepast om vitrines open te breken
+- Zand past nu in een materiaaldoos
+- Extras van rago kunnen niet meer aangepast worden
+- Je kan nu de kwaliteit van een methzak zien zonder deze te openen
+- Streamfest reclame toegevoegd aan ingame bussen
+
+### Fixed
+- Probleem opgelost waardoor sommige inventory containers niet geopened konden worden
+- Je kan geen BMXen uit PDM meer vastnemen
+- Je kan terug dumpster inventories openen
+- Rotatie van trolley in sandy fleeca veranderd
+- Enkele scuffed houserobbery locaties verwijderd
+- "Querry" hernoemd naar "Groeve"
+- Methlab log types gecorrigeerd
+- Je kan Krikkes wijn nu wel effectief drinken
+- Voertuig suspension gaat weer kapot
+
 ## [1.2.11]
 
 ### Added

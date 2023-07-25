@@ -5,7 +5,7 @@ const playersFillingArmor = new Set<number>();
 
 const RETRIEVABLE_ARMOR = ['armor', 'pd_armor'];
 
-Inventory.registerUseable(['armor', 'pd_armor'], async (plyId, itemState) => {
+Inventory.registerUseable<{ health: number }>(['armor', 'pd_armor'], async (plyId, itemState) => {
   const [canceled] = await Taskbar.create(plyId, 'vest', 'Aantrekken', 5000, {
     canCancel: true,
     cancelOnDeath: true,

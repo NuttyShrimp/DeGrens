@@ -34,7 +34,7 @@ class Repository extends Util.Singleton<Repository>() {
     return {
       ...state,
       rotated: state.rotated === 1,
-      metadata: JSON.parse(state.metadata) as { [key: string]: any },
+      metadata: JSON.parse(state.metadata) as Inventory.ItemState['metadata'],
       position: JSON.parse(state.position) as Vec2,
     };
   };

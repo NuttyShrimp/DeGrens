@@ -18,7 +18,7 @@ export class Item {
   private position!: Vec2;
   private rotated!: boolean;
   private hotkey!: Inventory.Hotkey | null;
-  private metadata!: { [key: string]: any };
+  private metadata!: Inventory.ItemState['metadata'];
   private destroyDate!: number | null;
 
   public isDirty: boolean;
@@ -35,7 +35,7 @@ export class Item {
     this.inventory = await inventoryManager.get(state.inventory, false);
     this.hotkey = state.hotkey ?? null;
     this.destroyDate = state.destroyDate ?? itemDataManager.getInitialDestroyDate(state.name);
-    this.metadata = state.metadata;
+    this.metadata = { ...state.metadata, hiddenKeys: [...(state.metadata?.hiddenKeys ?? [])] }; // ensure hiddenKeys exists
 
     const itemSize = itemDataManager.get(this.name).size;
 
@@ -194,7 +194,7 @@ export class Item {
     return true;
   };
 
-  public setMetadata = (cb: (old: { [key: string]: any }) => { [key: string]: any }) => {
+  public setMetadata = (cb: (old: Inventory.ItemState['metadata']) => Inventory.ItemState['metadata']) => {
     this.metadata = cb(this.getMetadata());
     this.isDirty = true;
   };

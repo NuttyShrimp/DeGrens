@@ -55,13 +55,7 @@ const addItemToInventory = async (
   // If item gets added to playerinv, get plyId to build metadata and send itembox event
   const plyId = type === 'player' ? charModule.getServerIdFromCitizenId(Number(identifier)) : undefined;
 
-  const initialMetadata = itemManager.buildInitialMetadata(plyId, name);
-  const fullMetadata = {
-    ...initialMetadata,
-    ...metadata,
-    hiddenKeys: [...(initialMetadata?.hiddenKeys ?? []), ...(metadata?.hiddenKeys ?? [])],
-  };
-
+  const fullMetadata = itemManager.buildInitialMetadata(plyId, name, metadata);
   for (let i = 0; i < amount; i++) {
     const createdItem = await itemManager.create({ inventory: invId, name, metadata: fullMetadata });
     if (!createdItem) continue;

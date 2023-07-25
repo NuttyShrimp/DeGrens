@@ -38,10 +38,14 @@ export const getNativeStatus = async (veh: number, vin: string): Promise<Vehicle
 };
 
 export const setNativeStatus = (vehicle: number, status: Partial<Omit<Vehicle.VehicleStatus, 'fuel'>>) => {
-  Sync.executeAction('vehicles:statis:setNative', vehicle, status);
+  Sync.executeAction('vehicles:status:setNative', vehicle, status);
 };
 
-export const useRepairPart = async (src: number, type: Service.Part, itemState: Inventory.ItemState) => {
+export const useRepairPart = async (
+  src: number,
+  type: Service.Part,
+  itemState: Inventory.ItemState<{ class: CarClass }>
+) => {
   const { entity: veh } = await RayCast.doRaycast(src);
   if (!veh || GetEntityType(veh) !== 2) {
     Notifications.add(src, 'Er is geen voertuig in de buurt', 'error');

@@ -8,7 +8,7 @@ export const registerUseableAmmo = () => {
   });
 };
 
-export const getWeaponAmmo = (itemState: Inventory.ItemState) => {
+export const getWeaponAmmo = (itemState: Inventory.ItemState<Weapons.WeaponItemMetadata>) => {
   const weaponConfig = getWeaponConfig(itemState.name);
   if (!weaponConfig) return 0;
 

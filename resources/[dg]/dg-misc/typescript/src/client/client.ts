@@ -34,6 +34,7 @@ import './services/grid';
 import './services/useables';
 import './services/news';
 import './services/roadsigns';
+import './services/placeableObjectItems';
 
 import { setDiscordRichPresence } from 'modules/discord/service.discord';
 import { setGTABehaviour } from 'modules/gtabehaviour/service.gtabehaviour';

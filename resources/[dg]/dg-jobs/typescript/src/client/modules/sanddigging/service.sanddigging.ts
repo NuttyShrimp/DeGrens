@@ -59,7 +59,7 @@ export const setAssignedVehicle = (veh: typeof assignedVehicle) => {
   }
 
   Phone.addMail({
-    subject: 'Querry Medewerker',
+    subject: 'Groeve Medewerker',
     sender: 'Jan Zand',
     message:
       'Je kan een nieuwe locatie bekijken via het voertuig. Indien je wil stoppen, gelieve het voertuig terug te zetten waar je het genomen hebt en je huidige groep te verlaten!',

@@ -58,15 +58,15 @@ Events.onNet('labs:weed:package', async (plyId, labId: number) => {
 
   const currentTime = Math.round(Date.now() / 1000);
   const dryConfig = config.weed.dry;
-  const items = await Inventory.getPlayerItems(plyId);
+  const items = await Inventory.getPlayerItems<{ createTime: number; strain: number }>(plyId);
 
   let hasBud = false;
-  let budItem: Inventory.ItemState | undefined;
+  let budItem: (typeof items)[number] | undefined;
   for (const item of items) {
     if (item.name !== 'weed_bud') continue;
     hasBud = true; // just to determine notif
 
-    if (item.metadata.createTime + dryConfig.timeout * 60 * 60 < currentTime) {
+    if (item.metadata.createTime && item.metadata.createTime + dryConfig.timeout * 60 * 60 < currentTime) {
       budItem = item;
       break;
     }

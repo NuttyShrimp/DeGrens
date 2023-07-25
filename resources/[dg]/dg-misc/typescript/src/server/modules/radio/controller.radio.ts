@@ -29,7 +29,7 @@ Jobs.onJobUpdate((src, job) => {
   global.exports['pma-voice'].setPlayerRadio(src, 0);
 });
 
-Inventory.registerUseable(['radio', 'pd_radio'], async (src: number, state: Inventory.ItemState) => {
+Inventory.registerUseable<{ frequency: number }>(['radio', 'pd_radio'], async (src, state) => {
   let radioFreq = state.metadata?.frequency ?? 0;
   Inventory.setMetadataOfItem(state.id, data => ({
     ...data,

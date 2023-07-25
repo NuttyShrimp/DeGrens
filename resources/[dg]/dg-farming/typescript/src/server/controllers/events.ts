@@ -9,7 +9,7 @@ Auth.onAuth(plyId => {
   Events.emitNet('farming:client:init', plyId, config.farmingZones, plantModels);
 });
 
-Inventory.registerUseable('farming_bucket', async (plyId, itemState) => {
+Inventory.registerUseable<{ liter: number }>('farming_bucket', async (plyId, itemState) => {
   const maxLiter = config.bucketFillAmount;
   if (itemState.metadata.liter === maxLiter) {
     Notifications.add(plyId, 'De emmer zit al vol', 'error');
@@ -59,7 +59,9 @@ Events.onNet('farming:plant:view', async (plyId, plantId: number) => {
   const itemLabel = Inventory.getItemData(plant.seed.replace('_seed', ''))?.label;
   const plyItems = await Inventory.getPlayerItems(plyId);
 
-  const hasWaterBucket = plyItems.some(i => i.name === 'farming_bucket' && i.metadata.liter > 0);
+  const hasWaterBucket = plyItems.some(
+    (i: Inventory.ItemState<{ liter: number }>) => i.name === 'farming_bucket' && (i.metadata.liter ?? 0) > 0
+  );
   const hasFertilizer = plyItems.some(i => i.name === 'farming_fertilizer');
   const hasDeluxeFertilizer = plyItems.some(i => i.name === 'farming_fertilizer_deluxe');
 

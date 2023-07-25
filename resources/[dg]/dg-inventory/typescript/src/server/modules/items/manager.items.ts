@@ -27,7 +27,13 @@ class ItemManager extends Util.Singleton<ItemManager>() {
     if (!isNew && this.items.has(state.id!)) {
       const logMsg = `Tried to create item with already existing id ${state.id}`;
       this.logger.error(logMsg);
-      Util.Log('inventory:item:duplicateId', { itemId: state.id, state }, logMsg, undefined, true);
+      Util.Log(
+        'inventory:item:duplicateId',
+        { itemId: state.id, newItem: state, existingItem: this.items.get(state.id!)! },
+        logMsg,
+        undefined,
+        true
+      );
       return;
     }
 
@@ -137,14 +143,24 @@ class ItemManager extends Util.Singleton<ItemManager>() {
     item.unbind(src);
   };
 
-  public buildInitialMetadata = (plyId: number | undefined, itemName: string) => {
-    const onCreateFunc = ON_CREATE[itemName];
-    if (!onCreateFunc) return {};
-    return onCreateFunc(plyId) ?? {};
+  public buildInitialMetadata = (
+    plyId: number | undefined,
+    itemName: string,
+    extraMetadata?: Record<string, any>
+  ): Inventory.ItemState['metadata'] => {
+    const initialMetadata = ON_CREATE?.[itemName]?.(plyId) ?? {};
+    return {
+      ...initialMetadata,
+      ...(extraMetadata ?? {}),
+      hiddenKeys: [...(initialMetadata.hiddenKeys ?? []), ...(extraMetadata?.hiddenKeys ?? [])],
+    };
   };
 
   @Export('setMetadataOfItem')
-  private _setMetadata = (id: string, cb: (old: { [key: string]: any }) => { [key: string]: any }) => {
+  private _setMetadata = (
+    id: string,
+    cb: (old: Inventory.ItemState['metadata']) => Inventory.ItemState['metadata']
+  ) => {
     const item = this.get(id);
     if (!item) {
       this.logger.warn(`Could not get item ${id}, broke while getting item to set metadata`);

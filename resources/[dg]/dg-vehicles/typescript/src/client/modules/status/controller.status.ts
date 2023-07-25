@@ -7,7 +7,7 @@ import { generatePerfectNativeStatus } from '@shared/status/helpers.status';
 import { getVehicleFuel, overrideSetFuel } from 'modules/fuel/service.fuel';
 
 Sync.registerActionHandler(
-  'vehicles:statis:setNative',
+  'vehicles:status:setNative',
   async (vehicle, status: Partial<Omit<Vehicle.VehicleStatus, 'fuel'>>) => {
     if (status.body !== undefined) {
       if (status.body === 1000) {

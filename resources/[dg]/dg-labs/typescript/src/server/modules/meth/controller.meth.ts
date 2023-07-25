@@ -1,4 +1,4 @@
-import { Events, RPC, Inventory, Notifications, Util } from '@dgx/server';
+import { Events, RPC, Inventory, Notifications, Util, UI } from '@dgx/server';
 import {
   collectMethLoot,
   getStationSettings,
@@ -68,25 +68,47 @@ Events.onNet('labs:meth:collect', (plyId, labId: number) => {
   collectMethLoot(plyId);
 });
 
-Inventory.registerUseable('meth_brick', async (plyId, itemState) => {
-  const emptyBagsItem = await Inventory.getFirstItemOfNameOfPlayer(plyId, 'empty_bags');
-
-  if (!emptyBagsItem) {
-    Notifications.add(plyId, 'Waar ga je dit insteken?', 'error');
-    return;
-  }
-
+Inventory.registerUseable<{ createTime: number; amount: number }>('meth_brick', async (plyId, itemState) => {
   const currentTime = Math.round(Date.now() / 1000);
   const dryTime = config.meth.dryTime * 60 * 60;
-  if (itemState.metadata.createTime + dryTime > currentTime) {
+  if (!itemState.metadata.createTime || itemState.metadata.createTime + dryTime > currentTime) {
     Notifications.add(plyId, 'Dit is nog niet droog', 'error');
     return;
   }
 
-  Inventory.destroyItem(emptyBagsItem.id);
-  Inventory.destroyItem(itemState.id);
+  UI.openContextMenu(plyId, [
+    {
+      title: 'Zak Meth',
+      description: `Inhoud: ${itemState.metadata.amount}`,
+      disabled: true,
+    },
+    {
+      title: 'Verpakken',
+      callbackURL: 'methbrick/unpack',
+      data: {
+        itemId: itemState.id,
+      },
+    },
+  ]);
+});
 
-  const amountOfBags: number = itemState.metadata.amount;
+Events.onNet('labs:meth:unpackBrick', async (plyId, itemId: string) => {
+  const cid = Util.getCID(plyId);
+  const methBrick = Inventory.getItemStateById<{ amount: number }>(itemId);
+  if (!methBrick || methBrick.inventory !== Inventory.concatId('player', cid)) {
+    Notifications.add(plyId, 'Je hebt deze meth niet meer opzak', 'error');
+    return;
+  }
+
+  const removedEmptyBags = await Inventory.removeItemByNameFromPlayer(plyId, 'empty_bags');
+  if (!removedEmptyBags) {
+    Notifications.add(plyId, 'Waar ga je dit insteken?', 'error');
+    return;
+  }
+
+  Inventory.destroyItem(methBrick.id);
+
+  const amountOfBags: number = methBrick.metadata.amount ?? 0;
   if (amountOfBags > 0) {
     Inventory.addItemToPlayer(plyId, 'meth_bag', amountOfBags);
   } else {
@@ -95,5 +117,5 @@ Inventory.registerUseable('meth_brick', async (plyId, itemState) => {
 
   const logMsg = `${Util.getName(plyId)}(${plyId}) has made meth brick into bags`;
   methLogger.debug(logMsg);
-  Util.Log('labs:meth:useBrick', { itemId: itemState.id }, logMsg, plyId);
+  Util.Log('labs:meth:useBrick', { itemId: methBrick.id }, logMsg, plyId);
 });

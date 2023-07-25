@@ -538,6 +538,7 @@ Config.ClothingRooms = {
   {requiredBusiness = "lowsantos", coords = vector3(-1424.8824, -457.3434, 35.9097)},
   {requiredBusiness = "blazeit", coords = vector3(364.8433, -1256.7444, 32.594)},
   {requiredBusiness = "taxijacky", coords = vector3(893.537, -162.3032, 76.8911)},
+  {requiredGang = "medellincartel", coords = vector3(1253.8843, -1571.0618, 58.7463)},
 }
 
 Config.Outfits = {}

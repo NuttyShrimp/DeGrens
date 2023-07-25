@@ -29,6 +29,7 @@ import './services/useables';
 import './services/news';
 import './services/modelblacklist';
 import './services/roadsigns';
+import './services/placeableObjectItems';
 import './controllers';
 
 setImmediate(() => {
