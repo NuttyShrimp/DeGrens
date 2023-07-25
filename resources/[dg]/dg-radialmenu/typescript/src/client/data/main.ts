@@ -73,7 +73,7 @@ export const main: RadialMenu.Entry[] = [
     },
   },
   {
-    title: 'Voertuig Inbeslagnemen',
+    title: 'Takeldienst',
     icon: 'truck-pickup',
     type: 'dgxClient',
     event: 'vehicles:depot:client:openSelectionMenu',
