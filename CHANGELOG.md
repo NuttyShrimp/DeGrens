@@ -13,6 +13,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Ambulance personeel kan nu een medbag op de grond plaatsen
 - Mogelijkheid om kledingkasten voor gangs te plaatsen
 - Nieuwe ped toegevoegd
+- Er zijn wat verbouwingen gebeurd in grapeseed
+- Nieuwe kofi voertuigen toegevoegd
 
 ### Changed
 - Je kan niet langer een bord vastnemen als je in een voertuig zit
@@ -20,6 +22,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Zand past nu in een materiaaldoos
 - Extras van rago kunnen niet meer aangepast worden
 - Je kan nu de kwaliteit van een methzak zien zonder deze te openen
+- Streamfest reclame toegevoegd aan ingame bussen
 
 ### Fixed
 - Probleem opgelost waardoor sommige inventory containers niet geopened konden worden
