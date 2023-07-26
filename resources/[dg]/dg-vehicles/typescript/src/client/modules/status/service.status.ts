@@ -167,7 +167,7 @@ export const cleanStatusThread = () => {
 // endregion
 
 export const setNativeStatus = (vehicle: number, status: Partial<Omit<Vehicle.VehicleStatus, 'fuel'>>) => {
-  Sync.executeAction('vehicles:statis:setNative', vehicle, status);
+  Sync.executeAction('vehicles:status:setNative', vehicle, status);
 };
 
 // Thread to be able to call functions when vehicle crashes
