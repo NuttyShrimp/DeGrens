@@ -1,4 +1,4 @@
-import { Events, Util } from '@dgx/client';
+import { Util } from '@dgx/client';
 import {
   validateActionHandlerExistence,
   registerActionHandler,
@@ -10,7 +10,7 @@ import {
 // than we do if we get assigned by server (ent might not exist, keep track of netId to respond)
 
 global.exports('executeAction', (action: string, entity: number, ...args: unknown[]) => {
-  validateActionHandlerExistence(action);
+  if (!validateActionHandlerExistence(action)) return;
 
   // if we initiate from client, entity should exist (how you gonna get an entity handle otherwise bruv?)
   if (!DoesEntityExist(entity)) {
@@ -21,19 +21,20 @@ global.exports('executeAction', (action: string, entity: number, ...args: unknow
   if (NetworkHasControlOfEntity(entity)) {
     executeActionHandler(action, entity, ...args);
   } else {
-    Events.emitNet('sync:request', action, NetworkGetNetworkIdFromEntity(entity), args);
+    emitNet('sync:request', action, NetworkGetNetworkIdFromEntity(entity), args);
   }
 });
 
-Events.onNet('sync:execute', async (action: string, netId: number, args: unknown[]) => {
-  validateActionHandlerExistence(action);
+onNet('sync:execute', async (action: string, netId: number, args: unknown[]) => {
+  if (!validateActionHandlerExistence(action)) return;
 
   if (NetworkDoesEntityExistWithNetworkId(netId)) {
     const entity = NetworkGetEntityFromNetworkId(netId);
     if (DoesEntityExist(entity) && NetworkHasControlOfEntity(entity)) {
-      executeActionHandler(action, entity, ...args);
+      const result = executeActionHandler(action, entity, ...args);
+      if (result instanceof Promise) await result;
 
-      // if was owner for less than 1s, we try again. time was determined to as the least amount for good consistency
+      // if was owner for less than 1s, we try again. time was determined as the least amount for good consistency
       await Util.Delay(1000);
 
       if (DoesEntityExist(entity) && NetworkHasControlOfEntity(entity)) return;
@@ -44,7 +45,7 @@ Events.onNet('sync:execute', async (action: string, netId: number, args: unknown
   // retries when we execute by assignation from server should rarely happen.
   // but can happen when no one is owner and new owner quickly moves out of scope again
   setTimeout(() => {
-    Events.emitNet('sync:request', action, netId, args);
+    emitNet('sync:request', action, netId, args);
   }, 200);
 });
 

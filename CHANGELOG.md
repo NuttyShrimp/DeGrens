@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Meth cornersell reputatie vereiste verlaagd
 
 ### Fixed
+- Werking van spikestrips verbeterd op schuine ondergronden
 
 ## [1.2.12]
 
