@@ -37,7 +37,7 @@
       },
       {
         "name": "krikke_vin",
-        "gain": 50
+        "gain": 0.5
       }
     ]
   },
