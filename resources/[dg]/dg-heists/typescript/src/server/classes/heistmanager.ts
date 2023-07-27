@@ -260,7 +260,7 @@ class HeistManager extends Util.Singleton<HeistManager>() {
 
     this.globalTimeoutTimeout = setTimeout(() => {
       this.globalTimeoutTimeout = null;
-    }, 20 * 60 * 1000);
+    }, 15 * 60 * 1000);
   };
 }
 

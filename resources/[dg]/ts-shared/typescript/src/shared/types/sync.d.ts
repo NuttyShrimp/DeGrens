@@ -10,5 +10,5 @@ declare namespace Sync {
     type PlayerScope = Record<Type, Player[]>;
   }
 
-  type ActionHandler = (entity: number, ...args: any[]) => void;
+  type ActionHandler = (entity: number, ...args: any[]) => Promise<void> | void;
 }

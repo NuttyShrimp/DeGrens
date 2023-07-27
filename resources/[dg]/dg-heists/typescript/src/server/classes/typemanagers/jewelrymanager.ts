@@ -223,14 +223,16 @@ export class JewelryManager implements Heists.TypeManager {
       return;
     }
 
-    if (
-      !Police.canDoActivity('heist_jewelry') ||
-      this.inTimeout ||
-      heistManager.isGlobalTimeoutActive() ||
-      (this.lootedVitrines.size > 0 && !this.state.alarmOverridden)
-    ) {
-      Notifications.add(plyId, 'De laptop staat momenteel uit', 'error');
-      return;
+    if (this.lootedVitrines.size === 0) {
+      if (!Police.canDoActivity('heist_jewelry') || heistManager.isGlobalTimeoutActive() || this.inTimeout) {
+        Notifications.add(plyId, 'De laptop staat momenteel uit', 'error');
+        return;
+      }
+    } else {
+      if (!this.state.alarmOverridden) {
+        Notifications.add(plyId, 'Het alarm van de juwelier staat nog aan', 'error');
+        return;
+      }
     }
 
     const dist = Util.getPlyCoords(plyId).distance(this.laptopLocation);

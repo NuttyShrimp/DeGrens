@@ -21,8 +21,9 @@ export const unregisterActionHandler = (action: string) => {
 };
 
 export const validateActionHandlerExistence = (action: string) => {
-  if (action in registeredActions) return;
-  throw new Error(`[Sync] Provided invalid action: '${action}'`);
+  if (action in registeredActions) return true;
+  console.error(`[Sync] Provided invalid action: '${action}'`);
+  return false;
 };
 
 export const executeActionHandler = (action: string, entity: number, ...args: unknown[]) => {
@@ -31,5 +32,5 @@ export const executeActionHandler = (action: string, entity: number, ...args: un
       `[Sync] Executing '${action}' on entity ${entity} with args: ${args.map(a => JSON.stringify(a)).join(', ')}`
     );
   }
-  registeredActions[action](entity, ...args);
+  return registeredActions[action](entity, ...args);
 };

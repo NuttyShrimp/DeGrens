@@ -212,10 +212,11 @@ export const unbailVehicle = async (src: number, vin: string) => {
   const vehicleStrikes = await getVehicleStrikeAmount(vin);
   const vehicleConfig = getConfigByModel(vehicleInfo.model);
 
-  const canBailOut = Date.now() - impoundedVehicle.created_at > impoundedVehicle.until - Date.now();
+  const unixTime = Date.now();
+  const canBailOut = unixTime - impoundedVehicle.created_at > impoundedVehicle.until - unixTime;
   if (!canBailOut) return;
 
-  const daysUntilBailFinish = Math.round((impoundedVehicle.until - Date.now() / 1000) / 86400);
+  const daysUntilBailFinish = Math.round((impoundedVehicle.until - unixTime / 1000) / 86400);
   const bailPrice =
     daysUntilBailFinish *
       config.price.earlyReleaseBase *
@@ -223,18 +224,22 @@ export const unbailVehicle = async (src: number, vin: string) => {
       (1 + vehicleStrikes / 100) +
     impoundedVehicle.price;
 
-  const defaultAccountId = Financials.getDefaultAccountId(cid);
-  if (!defaultAccountId) return;
-  const success = await Financials.purchase(
-    defaultAccountId,
-    cid,
-    bailPrice,
-    `${vehicleConfig?.name} ${vehicleConfig?.brand} (${vehicleInfo.plate}) uit beslag gehaald`
-  );
-  if (!success) {
-    Notifications.add(src, 'Betaling van prijs is gefaald');
-    return;
+  // purchase will fail if price is 0
+  if (bailPrice > 0) {
+    const defaultAccountId = Financials.getDefaultAccountId(cid);
+    if (!defaultAccountId) return;
+    const success = await Financials.purchase(
+      defaultAccountId,
+      cid,
+      bailPrice,
+      `${vehicleConfig?.name} ${vehicleConfig?.brand} (${vehicleInfo.plate}) uit beslag gehaald`
+    );
+    if (!success) {
+      Notifications.add(src, 'Betaling van prijs is gefaald');
+      return;
+    }
   }
+
   removeVehicleFromImpound(vin);
 
   await spawnOwnedVehicle(src, vehicleInfo, config.locations.retrieveSpot);

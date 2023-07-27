@@ -10216,10 +10216,10 @@
     "model": "m3tou",
     "brand": "BMW",
     "name": "M3 G81 Touring",
-    "class": "S",
+    "class": "A+",
     "defaultStock": 5,
     "restockTime": 14,
-    "price": 485000,
+    "price": 210000,
     "shop": "nfs",
     "type": "land"
   },

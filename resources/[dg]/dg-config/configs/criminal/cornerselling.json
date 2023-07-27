@@ -7,7 +7,7 @@
     },
     "meth_bag": {
       "basePrice": 80,
-      "requiredReputation": 250,
+      "requiredReputation": 200,
       "sellAmount": [1, 2]
     }
   },
