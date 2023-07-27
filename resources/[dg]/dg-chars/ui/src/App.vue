@@ -15,7 +15,6 @@
   };
 
   onMounted(() => {
-    console.log(import.meta.env);
     window.addEventListener('message', msgListener);
     nuiAction('nui_mounted');
   });
