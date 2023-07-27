@@ -13,12 +13,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Meth cornersell reputatie vereiste verlaagd
 - Inventory Itemlabel grootte verminderd
+- Meerdere handlingen getweaked
 
 ### Fixed
 - Werking van spikestrips verbeterd op schuine ondergronden
 - Juwelier hack is weer mogelijk als er een andere overval begonnen is 
 - Je kan niet langer starten met escorteren terwijl je in een voertuig stapt
 - Probleem opgelost waardoor je geen voertuigen uit depot kon als de prijs 0 is
+- Lampen evo9 gefixt
 
 ## [1.2.12]
 
