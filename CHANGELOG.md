@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- Dev command toegevoegd om voertuig despawnen te kunnen debuggen
 
 ### Changed
 - Meth cornersell reputatie vereiste verlaagd
