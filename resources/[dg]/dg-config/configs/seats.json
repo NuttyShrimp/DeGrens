@@ -367,6 +367,14 @@
         "z": -0.05
       },
       "model": "gabz_pdprops_chair04"
+    },
+    {
+      "offset": {
+        "x": 0,
+        "y": -0.5,
+        "z": -0.05
+      },
+      "model": "prop_table_03b_chr"
     }
   ]
 }
