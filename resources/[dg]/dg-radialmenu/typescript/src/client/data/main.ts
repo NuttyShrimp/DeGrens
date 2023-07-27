@@ -105,7 +105,7 @@ export const main: RadialMenu.Entry[] = [
     shouldClose: true,
     minimumPlayerDistance: 2,
     isEnabled: async ({ currentVehicle }) => {
-      if (currentVehicle) return false;
+      if (currentVehicle || IsPedInAnyVehicle(PlayerPedId(), true)) return false;
       const playerToEscort = await Police.getPlayerToEscort();
       return playerToEscort != undefined;
     },

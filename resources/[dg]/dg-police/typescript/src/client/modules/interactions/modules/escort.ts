@@ -16,6 +16,11 @@ const getPlayerToEscort = async () => {
 
 // Radialmenu option
 on('police:startEscorting', async () => {
+  if (IsPedInAnyVehicle(PlayerPedId(), true)) {
+    Notifications.add('Je kan dit niet in een voertuig', 'error');
+    return;
+  }
+
   const target = await getPlayerToEscort();
   if (!target) {
     Notifications.add('Er is niemand in de buurt', 'error');

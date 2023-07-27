@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - Werking van spikestrips verbeterd op schuine ondergronden
 - Juwelier hack is weer mogelijk als er een andere overval begonnen is 
+- Je kan niet langer starten met escorteren terwijl je in een voertuig stapt
 
 ## [1.2.12]
 
