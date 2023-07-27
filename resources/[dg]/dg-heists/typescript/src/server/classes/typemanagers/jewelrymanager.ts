@@ -223,8 +223,13 @@ export class JewelryManager implements Heists.TypeManager {
       return;
     }
 
+    if (this.inTimeout) {
+      Notifications.add(plyId, 'De laptop staat momenteel uit', 'error');
+      return;
+    }
+
     if (this.lootedVitrines.size === 0) {
-      if (!Police.canDoActivity('heist_jewelry') || heistManager.isGlobalTimeoutActive() || this.inTimeout) {
+      if (!Police.canDoActivity('heist_jewelry') || heistManager.isGlobalTimeoutActive()) {
         Notifications.add(plyId, 'De laptop staat momenteel uit', 'error');
         return;
       }
