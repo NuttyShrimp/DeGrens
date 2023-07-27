@@ -466,6 +466,9 @@ export class JewelryManager implements Heists.TypeManager {
       this.setActionBusy('laptopHack', false);
       this.setActionBusy('overridingAlarm', false);
 
+      // relock thermiteable door
+      DoorLock.changeDoorState('jewelry_office', true);
+
       this.log(undefined, 'info', 'reset', `Jewelry has been reset`);
     }, config.jewelry.resetTime * 60 * 1000);
   };
