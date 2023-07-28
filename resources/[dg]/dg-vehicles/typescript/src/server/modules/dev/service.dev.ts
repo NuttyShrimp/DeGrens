@@ -5,7 +5,8 @@ import { mainLogger } from 'sv_logger';
 type Event = { message: string; timestamp: string };
 
 export const startVehicleExistenceThread = (plyId: number) => {
-  const vehicle = GetVehiclePedIsIn(plyId, false);
+  const ped = GetPlayerPed(String(plyId));
+  const vehicle = GetVehiclePedIsIn(ped, false);
   if (!vehicle || !DoesEntityExist(vehicle)) {
     Notifications.add(plyId, 'You are not in a vehicle', 'error');
     return;

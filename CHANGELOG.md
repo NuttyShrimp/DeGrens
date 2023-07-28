@@ -21,6 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Je kan niet langer starten met escorteren terwijl je in een voertuig stapt
 - Probleem opgelost waardoor je geen voertuigen uit depot kon als de prijs 0 is
 - Lampen evo9 gefixt
+- Juwelier office deur gaat terug vast wanneer heist reset
 
 ## [1.2.12]
 
