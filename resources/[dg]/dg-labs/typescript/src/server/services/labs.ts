@@ -34,9 +34,9 @@ export const initiateLabs = async () => {
     let newId: number | null = null;
     while (newId === null) {
       const generatedId = Math.floor(Math.random() * config.locations.length);
-      if (!config.locations[generatedId]?.disabled && !getLabTypeFromId(generatedId)) {
-        newId = generatedId;
-      }
+      if (getLabTypeFromId(generatedId)) continue; // check if generated id isnt already an active lab
+      if (!config.locations[generatedId].allowedTypes.includes(type)) continue; // check if location allows this interior type
+      newId = generatedId;
     }
 
     activeLabs[type] = buildActiveLabData(type, newId);
