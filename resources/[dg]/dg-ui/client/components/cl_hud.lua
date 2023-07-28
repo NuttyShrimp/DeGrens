@@ -86,12 +86,12 @@ end)
 
 AddEventHandler('vehicles:seatbelt:toggle', function(toggle)
   state.car.indicator.belt = not toggle
-  isDirty = true
+  isCarDirty = true
 end)
 
 AddEventHandler('vehicles:fuel:change', function(value)
   state.car.fuel = value
-  isDirty = true
+  isCarDirty = true
 end)
 
 RegisterNetEvent("pma-voice:radioActive", function(radioActive)
