@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Meth cornersell reputatie vereiste verlaagd
 - Inventory Itemlabel grootte verminderd
 - Meerdere handlingen getweaked
+- Vehicle status effects gerebalanced
 
 ### Fixed
 - Werking van spikestrips verbeterd op schuine ondergronden

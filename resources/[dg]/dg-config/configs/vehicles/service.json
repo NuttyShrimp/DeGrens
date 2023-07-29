@@ -3,31 +3,31 @@
     "engine": [
       {
         "name": "fInitialDriveForce",
-        "percent": 0.25
+        "percent": 0.5
       }
     ],
     "axle": [
       {
         "name": "fTractionCurveLateral",
-        "percent": 0.55
+        "percent": 0.65
       },
       {
         "name": "fTractionSpringDeltaMax",
-        "percent": 0.4
+        "percent": 0.5
       }
     ],
     "brakes": [
       {
         "name": "fBrakeForce",
-        "percent": 0.3
+        "percent": 0.4
       }
     ],
     "suspension": [
       {
         "name": "fSteeringLock",
-        "percent": 0.4
+        "percent": 0.7
       }
     ]
   },
-  "repairPercentagePerPart": 0.6
+  "repairPercentagePerPart": 0.65
 }
