@@ -47,6 +47,10 @@ if (GetCurrentResourceName() === 'ts-shared') {
           // @ts-ignore
           return Minigames.visiongame(...data);
         }
+        case 'binarysudoku': {
+          // @ts-ignore
+          return Minigames.binarysudoku(...data);
+        }
         case 'keygameCustom': {
           // @ts-ignore
           return Minigames.keygameCustom(...data);

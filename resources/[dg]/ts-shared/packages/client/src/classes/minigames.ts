@@ -56,6 +56,11 @@ class Minigames {
     return global.exports['dg-minigames'].gridgame(data);
   };
 
+  public binarysudoku = (gridSize: number, time: number): Promise<boolean> => {
+    const data: Minigames.GridGame.BinarySudoku = { game: 'binarysudoku', gridSize, time };
+    return global.exports['dg-minigames'].gridgame(data);
+  };
+
   public keypad = (data: Minigames.Keypad.Data): Promise<boolean> => {
     return global.exports['dg-minigames'].keypad(data);
   };

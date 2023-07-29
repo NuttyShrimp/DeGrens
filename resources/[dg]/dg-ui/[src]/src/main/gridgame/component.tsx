@@ -3,6 +3,7 @@ import { baseStyle } from '@src/base.styles';
 import AppWrapper, { closeApplication } from '@src/components/appwrapper';
 import { nuiAction } from '@src/lib/nui-comms';
 
+import { BinarySudoku } from './components/games/binarysudoku';
 import { OrderGame } from './components/games/ordergame';
 import { SequenceGame } from './components/games/sequencegame';
 import { VisionGame } from './components/games/visiongame';
@@ -75,6 +76,8 @@ const Component: AppFunction = props => {
         return <SequenceGame gridSize={gridSize} {...(data as Gridgame.SequenceGameData)} finishGame={finishGame} />;
       case 'vision':
         return <VisionGame gridSize={gridSize} {...(data as Gridgame.VisionGameData)} finishGame={finishGame} />;
+      case 'binarysudoku':
+        return <BinarySudoku gridSize={gridSize} {...(data as Gridgame.VisionGameData)} finishGame={finishGame} />;
       default:
         return null;
     }

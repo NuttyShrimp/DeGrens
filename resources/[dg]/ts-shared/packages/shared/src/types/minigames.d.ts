@@ -1,11 +1,10 @@
 declare namespace Minigames {
-  type Game = 'keygame' | 'sequence' | 'order' | 'vision' | 'keypad';
-
   type HandlerParams =
     | ['keygame', number, number, number]
     | ['sequence', number, number, number]
     | ['order', number, number, number, number, number]
     | ['vision', number, number]
+    | ['binarysudoku', number, number]
     | ['keygameCustom', Keygame.Cycle[]]
     | ['keypad', Keypad.Data];
 
@@ -17,7 +16,7 @@ declare namespace Minigames {
   }
 
   namespace GridGame {
-    type Game = 'sequence' | 'order' | 'vision';
+    type Game = GenericGameData['game'];
 
     type BaseGameData = {
       gridSize: number;
@@ -42,7 +41,12 @@ declare namespace Minigames {
       time: number;
     };
 
-    type GenericGameData = OrderGameData | VisionGameData | SequenceGameData;
+    type BinarySudoku = BaseGameData & {
+      game: 'binarysudoku';
+      time: number;
+    };
+
+    type GenericGameData = OrderGameData | VisionGameData | SequenceGameData | BinarySudoku;
   }
 
   namespace Keypad {
