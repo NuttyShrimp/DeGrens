@@ -33,6 +33,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Seatbelt icoontje wordt nu ook geupdate wanneer je stil staat
 - Typo in voertuigapp gefixt
 - Je kan niet meer in een voertuig wanneer je een BMX vast hebt
+- Ontvanger krijgt nu wel effectief crypto bij transfer
 
 ## [1.2.12]
 
