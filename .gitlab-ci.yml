@@ -166,24 +166,26 @@ TS prod build:
 Unschedule deploy:
   stage: housekeeping
   image: alpine:latest
-  variables:
-    CURL_COMMAND: 'curl --request PUT --header "PRIVATE-TOKEN: $API_TOKEN" --form "value=false" https://gitlab.pieter557.dscloud.me/api/v4/projects/26/pipeline_schedules/1/variables/SHOULD_DEPLOY | jq'
   before_script:
     - apk add --no-cache curl jq
   script:
-    - 'eval "$CURL_COMMAND"'
+    # Force ownership
+    - 'curl --request POST --header "PRIVATE-TOKEN: $API_TOKEN" https://gitlab.pieter557.dscloud.me/api/v4/projects/26/pipeline_schedules/1/take_ownership | jq'
+    # unschedule deploy
+    - 'curl --request PUT --header "PRIVATE-TOKEN: $API_TOKEN" --form "value=false" https://gitlab.pieter557.dscloud.me/api/v4/projects/26/pipeline_schedules/1/variables/SHOULD_DEPLOY | jq'
   rules:
     - if: $CI_PIPELINE_SOURCE == "schedule" && $CI_COMMIT_BRANCH == "main"
 
 Schedule deploy:
   stage: deploy
   image: alpine:latest
-  variables:
-    CURL_COMMAND: 'curl --request PUT --header "PRIVATE-TOKEN: $API_TOKEN" --form "value=true" https://gitlab.pieter557.dscloud.me/api/v4/projects/26/pipeline_schedules/1/variables/SHOULD_DEPLOY | jq'
   before_script:
     - apk add --no-cache curl jq
   script:
-    - 'eval "$CURL_COMMAND"'
+    # Force ownership
+    - 'curl --request POST --header "PRIVATE-TOKEN: $API_TOKEN" https://gitlab.pieter557.dscloud.me/api/v4/projects/26/pipeline_schedules/1/take_ownership | jq'
+    # schedule deploy
+    - 'curl --request PUT --header "PRIVATE-TOKEN: $API_TOKEN" --form "value=true" https://gitlab.pieter557.dscloud.me/api/v4/projects/26/pipeline_schedules/1/variables/SHOULD_DEPLOY | jq'
   rules:
     - if: $CI_PIPELINE_SOURCE == "schedule"
       when: never
