@@ -28,6 +28,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Juwelier office deur gaat terug vast wanneer heist reset
 - Seatbelt icoontje wordt nu ook geupdate wanneer je stil staat
 - Typo in voertuigapp gefixt
+- Je kan niet meer in een voertuig wanneer je een BMX vast hebt
 
 ## [1.2.12]
 
