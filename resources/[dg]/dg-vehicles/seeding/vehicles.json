@@ -10330,5 +10330,65 @@
     "price": 480000,
     "shop": "nfs",
     "type": "land"
+  },
+  {
+    "category": "sports",
+    "model": "mbc63",
+    "brand": "Mercedes",
+    "name": "C63",
+    "class": "S",
+    "defaultStock": 5,
+    "restockTime": 14,
+    "price": 475000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "sedans",
+    "model": "silver67",
+    "brand": "Rolls-Royce",
+    "name": "Silver Shadow",
+    "class": "A",
+    "defaultStock": 5,
+    "restockTime": 14,
+    "price": 120000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "sedans",
+    "model": "aurs4",
+    "brand": "Audi",
+    "name": "RS4",
+    "class": "S",
+    "defaultStock": 5,
+    "restockTime": 14,
+    "price": 470000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "super",
+    "model": "apollos",
+    "brand": "Gumpert",
+    "name": "Apollo",
+    "class": "S",
+    "defaultStock": 5,
+    "restockTime": 14,
+    "price": 470000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "super",
+    "model": "lfa",
+    "brand": "Lexus",
+    "name": "LFA",
+    "class": "X",
+    "defaultStock": 2,
+    "restockTime": 14,
+    "price": 890000,
+    "shop": "nfs",
+    "type": "land"
   }
 ]
