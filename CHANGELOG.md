@@ -8,20 +8,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+
 - Dev command toegevoegd om voertuig despawnen te kunnen debuggen
 - Mogelijkheid om voor elk drugslabs de toegestane interieren te bepalen
 - Kofi vehicles toegevoegd
 - Outfit tab toegevoegd aan "give clothing menu"
+- Extra intern event gecaptured waarmee we meer errors kunnen zien
 
 ### Changed
+
 - Meth cornersell reputatie vereiste verlaagd
 - Inventory Itemlabel grootte verminderd
 - Meerdere handlingen getweaked
 - Vehicle status effects gerebalanced
 
 ### Fixed
+
 - Werking van spikestrips verbeterd op schuine ondergronden
-- Juwelier hack is weer mogelijk als er een andere overval begonnen is 
+- Juwelier hack is weer mogelijk als er een andere overval begonnen is
 - Je kan niet langer starten met escorteren terwijl je in een voertuig stapt
 - Probleem opgelost waardoor je geen voertuigen uit depot kon als de prijs 0 is
 - Lampen evo9 gefixt
@@ -33,6 +37,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [1.2.12]
 
 ### Added
+
 - Confirmatie menu toegevoegd bij aankopen van laptops
 - Triple click item om itemId te kopieren (enkel als admin)
 - Ambulance personeel kan nu een medbag op de grond plaatsen
@@ -42,6 +47,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Nieuwe kofi voertuigen toegevoegd
 
 ### Changed
+
 - Je kan niet langer een bord vastnemen als je in een voertuig zit
 - Politie requirements check bij juwelier aangepast om vitrines open te breken
 - Zand past nu in een materiaaldoos
@@ -50,6 +56,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Streamfest reclame toegevoegd aan ingame bussen
 
 ### Fixed
+
 - Probleem opgelost waardoor sommige inventory containers niet geopened konden worden
 - Je kan geen BMXen uit PDM meer vastnemen
 - Je kan terug dumpster inventories openen
@@ -63,6 +70,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [1.2.11]
 
 ### Added
+
 - Zones toegevoegd waar niks op de grond gelegd kan worden
 - Tijd toegevoegd aan gangfeed bericht
 - Er kan geen nieuwe overval meer gestart worden als er net een andere is gestart
@@ -79,6 +87,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Parking en kledingkast toegevoegd aan SandyPD
 
 ### Changed
+
 - Loot changes van dumpsters getweaked
 - Durability handboeien verhoogd
 - Dispatch blip grootte aangepast
@@ -91,8 +100,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Aantal server calls om player items te cachen verminderd
 - Amerikaanse politielogos op kleding vervangen door belgische
 
-
 ### Fixed
+
 - Fix engine sound hash of mazrx7fd
 - Foute notificatie dat je geen lockpick hebt opgelost bij parkeermeters
 - Je kan weer mensen opbellen via je telefoon
@@ -121,6 +130,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [1.2.10]
 
 ### Added
+
 - Default stance toegevoegd voor evo9, rcf
 - Nieuwe kleine criminele activiteit toegevoegd
 - Extra loot toegevoegd aan vuilbakken doorzoeken
@@ -141,6 +151,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Nieuwe ped toegevoegd
 
 ### Changed
+
 - Override CID entry toegevoegd om kofi vehicles te kunnen assignen aan offline vehicles
 - Bennys repair prijs berekening aangepast
 - PostOP payout getweaked
@@ -158,6 +169,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - KingPills job kan nu meerdere locaties na elkaar doen
 
 ### Fixed
+
 - Motor gaat nu uit tijdens noclip om engine sounds te voorkomen
 - Fuel wordt nu terug correct gezet wanneer je een persoonlijk voertuig uithaalt
 - Hopelijk probleem opgelost ivm mensen kicken
@@ -171,15 +183,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [1.2.9]
 
 ### Added
+
 - Ingame kofi voertuig shop toegevoegd
 - Nieuwe kleding toegevoegd
 
 ### Changed
+
 - Tijd voor paleto hack hoger gezet
 - Je laat mensen nu los wanneer je dood gaat
 - Mechanic crafting recipes aangepast
 
 ### Fixed
+
 - Probleem opgelost waarbij containers visueel leeg zijn nadat je reloggen met een container opzak
 - Grote Repairkit is nu wel zichtbaar in mechanic crafting bench
 - Probleem opgelost waardoor de uren hetzelfde waren als minuten bij de indienst tijd

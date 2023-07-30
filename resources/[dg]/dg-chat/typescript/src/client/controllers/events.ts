@@ -40,6 +40,10 @@ on('chat:addMessage', addOldMessage);
 
 on('chat:addSuggestion', addOldSuggestion);
 
+onNet('__cfx_internal:serverPrint', (msg: string) => {
+  console.log(msg);
+});
+
 AddStateBagChangeHandler(
   'isLoggedIn',
   `player:${GetPlayerServerId(PlayerId())}`,
