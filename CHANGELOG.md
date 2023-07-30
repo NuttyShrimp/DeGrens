@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Dev command toegevoegd om voertuig despawnen te kunnen debuggen
 - Mogelijkheid om voor elk drugslabs de toegestane interieren te bepalen
 - Kofi vehicles toegevoegd
+- Outfit tab toegevoegd aan "give clothing menu"
 
 ### Changed
 - Meth cornersell reputatie vereiste verlaagd
