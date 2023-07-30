@@ -23,7 +23,7 @@ def statMainPackage():
 
 
 def updateVersionInFile(version, p):
-    with open(p, "r+") as f:
+    with open(p, "r+U") as f:
         mainCfg = json.loads("".join(f.readlines()))
         mainCfg["version"] = version
         f.seek(0)
