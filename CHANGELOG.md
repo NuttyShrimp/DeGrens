@@ -38,6 +38,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Typo in voertuigapp gefixt
 - Je kan niet meer in een voertuig wanneer je een BMX vast hebt
 - Ontvanger krijgt nu wel effectief crypto bij transfer
+- Je kan geen locker meer transferen naar een speler die al een locker in bezit heeft
 
 ## [1.2.12]
 

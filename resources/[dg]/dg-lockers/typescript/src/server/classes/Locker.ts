@@ -109,7 +109,7 @@ export class Locker {
 
     if (priceWithTax > 0) {
       // only do check if locker has a price
-      if (lockersManager.doesPlayerOwnLocker(plyId)) {
+      if (lockersManager.doesPlayerOwnLocker(cid)) {
         Notifications.add(plyId, 'Je bent al eigenaar van een storage unit', 'error');
         return;
       }
@@ -319,6 +319,11 @@ export class Locker {
 
     const newOwner = Number(result.values.cid);
     if (isNaN(newOwner)) return;
+
+    if (lockersManager.doesPlayerOwnLocker(newOwner)) {
+      Notifications.add(plyId, 'Deze persoon is al eigenaar van een locker', 'error');
+      return;
+    }
 
     const ownerServerId = charModule.getServerIdFromCitizenId(newOwner);
     if (!ownerServerId) {

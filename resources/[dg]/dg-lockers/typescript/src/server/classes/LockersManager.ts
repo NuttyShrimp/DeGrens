@@ -104,15 +104,12 @@ class LockersManager extends Util.Singleton<LockersManager>() {
     locker.view(src);
   };
 
-  public doesPlayerOwnLocker = (plyId: number, includeFreeLockers = false) => {
-    const cid = Util.getCID(plyId);
-
+  public doesPlayerOwnLocker = (cid: number, includeFreeLockers = false) => {
     for (const [_, l] of this.lockers) {
       if (l.data.owner !== cid) continue;
       if (l.data.price <= 0 && !includeFreeLockers) continue;
       return true;
     }
-
     return false;
   };
 
