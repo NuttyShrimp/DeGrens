@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Outfit tab toegevoegd aan "give clothing menu"
 - Mogelijkheid tot het printen van flyers aan de printers
 - Extra intern event gecaptured waarmee we meer errors kunnen zien
+- Locker naam toegevoegd aan lockers/debts om makkelijker de correcte locker te vinden
 
 ### Changed
 

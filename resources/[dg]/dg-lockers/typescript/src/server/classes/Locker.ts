@@ -17,6 +17,7 @@ export class Locker {
   private price: number;
   private paymentDay: number;
   private doAnimation: boolean;
+  private readonly label: string;
 
   private activePlayers: Set<number>;
 
@@ -31,6 +32,14 @@ export class Locker {
     this.price = data.price;
     this.paymentDay = data.paymentDay;
     this.doAnimation = data.doAnimation;
+
+    this.label = this.id
+      .split('_')
+      .map(s => {
+        const [firstChar, ...rest] = s;
+        return `${firstChar.toUpperCase()}${rest.join('').toLocaleLowerCase()}`;
+      })
+      .join(' ');
 
     this.activePlayers = new Set();
   }
@@ -81,7 +90,7 @@ export class Locker {
       this.owner,
       'BE1',
       debtPrice,
-      'Locker Onderhoudskosten',
+      `Locker Onderhoudskosten - ${this.label}`,
       'DG Real Estate',
       undefined,
       'lockers:server:lockerDefaulted',
@@ -182,6 +191,11 @@ export class Locker {
     }
 
     const menu: ContextMenu.Entry[] = [
+      {
+        title: this.label,
+        disabled: true,
+        icon: 'warehouse',
+      },
       {
         title: 'Open',
         callbackURL: 'lockers/open',
