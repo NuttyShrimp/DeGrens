@@ -8,7 +8,7 @@ export const initializeDutyTimesModule = async () => {
   // clear entries older than 30 days
   const time = Math.floor(Date.now() / 1000);
   const result = await SQL.query('DELETE FROM duty_times WHERE time < ?', [time - 86400 * 30]);
-  dutyTimeLogger.info(`Removed ${result.affectedRows} old duty time entries`);
+  dutyTimeLogger.info(`Removed ${result?.affectedRows ?? 0} old duty time entries`);
 };
 
 export const addDutyTimeEntry = async (cid: number, context: string, action: 'start' | 'stop') => {
