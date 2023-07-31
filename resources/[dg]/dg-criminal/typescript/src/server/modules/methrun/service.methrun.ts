@@ -480,7 +480,7 @@ export const finishMethRun = async (plyId: number) => {
   Vehicles.deleteVehicle(vehicle);
   Financials.addCash(plyId, price, 'methrun_payout');
   sendMethRunMail([activeRun.startCID, Util.getCID(plyId)], `Het was goed zaken met je te doen`);
-  Inventory.clearInventory('stash', 'stash__methrun_backup');
+  Inventory.clearInventory('stash', 'methrun_backup');
 
   methrunLoggerWrapper(plyId, 'info', 'finish', `has finished the methrun for ${price}`, {
     price,
