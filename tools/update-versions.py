@@ -1,6 +1,7 @@
 import os
 import json
 import re
+import io
 from git.repo import Repo
 from pathlib import Path
 
@@ -23,7 +24,7 @@ def statMainPackage():
 
 
 def updateVersionInFile(version, p):
-    with open(p, "r+U") as f:
+    with io.open(p, "r+", newline='') as f:
         mainCfg = json.loads("".join(f.readlines()))
         mainCfg["version"] = version
         f.seek(0)
