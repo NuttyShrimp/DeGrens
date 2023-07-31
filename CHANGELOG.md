@@ -18,6 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Locker naam toegevoegd aan lockers/debts om makkelijker de correcte locker te vinden
 - Mogelijkheid om stashes toe te voegen aan ganggebeiden
 - Metadata aan een debt
+- Add nuttys tailscale API as an allowed domain for the internal API
 
 ### Changed
 
