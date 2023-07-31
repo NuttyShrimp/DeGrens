@@ -412,27 +412,46 @@ const buildVehicleGarageLogMenuEntries = async (vin: string): Promise<ContextMen
   }));
 };
 
-export const recoverNonExistentVehicle = async (plyId: number, vin: string) => {
+// This function puts back a vehicle into a garage when it is currently out but not existing OR in a garage the player has no access to
+export const recoverVehicle = async (plyId: number, vin: string) => {
   if (!vinManager.doesVinExist(vin) || !vinManager.isVinFromPlayerVeh(vin)) return;
 
   const vehicleInfo = await getPlayerVehicleInfo(vin);
-  if (!vehicleInfo || vehicleInfo.state !== 'out') return;
+  if (!vehicleInfo) return;
 
-  const netId = vinManager.getNetId(vin);
-  if (netId) {
-    Notifications.add(plyId, 'Je voertuig staat nog ergens uit. Probeer het te tracken', 'error');
-    return;
+  const cid = Util.getCID(plyId);
+  if (vehicleInfo.state === 'parked' && !doesCidHasAccess(cid, vehicleInfo.garageId)) {
+    // vehicle is in inaccessible (invalid) garage so move to alta
+    setVehicleGarage(vin, 'alta_apartments');
+    Notifications.add(plyId, 'Het voertuig is teruggezet aan Alta Apartments', 'success');
+
+    Util.Log(
+      'vehicles:garage:recover',
+      {
+        vin,
+        garageId: vehicleInfo.garageId,
+      },
+      `${Util.getName(plyId)}(${plyId}) has recovered inaccessible vehicle (${vin})`,
+      plyId
+    );
+  } else if (vehicleInfo.state === 'out') {
+    // vehicle is out but entity does not exist so mark as parked
+    const netId = vinManager.getNetId(vin);
+    if (netId) {
+      Notifications.add(plyId, 'Je voertuig staat nog ergens uit. Probeer het te tracken', 'error');
+      return;
+    }
+
+    setVehicleState(vin, 'parked');
+    Notifications.add(plyId, 'Je voertuig staat terug in de garage', 'success');
+
+    Util.Log(
+      'vehicles:garage:recover',
+      {
+        vin,
+      },
+      `${Util.getName(plyId)}(${plyId}) has recovered nonexistent vehicle (${vin})`,
+      plyId
+    );
   }
-
-  setVehicleState(vin, 'parked');
-  Notifications.add(plyId, 'Je voertuig staat terug in de garage', 'success');
-
-  Util.Log(
-    'vehicles:garage:recover',
-    {
-      vin,
-    },
-    `${Util.getName(plyId)}(${plyId}) has recovered nonexistent vehicle (${vin})`,
-    plyId
-  );
 };

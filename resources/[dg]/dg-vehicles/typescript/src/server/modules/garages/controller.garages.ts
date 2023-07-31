@@ -6,7 +6,7 @@ import { isSchemaValid } from './schema.garages';
 import {
   doesCidHasAccess,
   isOnParkingSpot,
-  recoverNonExistentVehicle,
+  recoverVehicle,
   registerGarage,
   setGaragesLoaded,
   showPlayerGarage,
@@ -83,5 +83,5 @@ RPC.register('vehicles:garage:isOnParkingSpot', (src, netId: number | null) => {
 });
 
 Events.onNet('vehicles:garage:recoverVehicle', async (plyId, vin: string) => {
-  recoverNonExistentVehicle(plyId, vin);
+  recoverVehicle(plyId, vin);
 });
