@@ -16,6 +16,7 @@ Events.onNet('vehicles:carwash:useWax', () => {
   useWax();
 });
 
-Sync.registerActionHandler('vehicles:carwash:cleanDecals', vehicle => {
+Sync.registerActionHandler('vehicles:carwash:clean', vehicle => {
+  SetVehicleDirtLevel(vehicle, 0.0);
   WashDecalsFromVehicle(vehicle, 1.0);
 });
