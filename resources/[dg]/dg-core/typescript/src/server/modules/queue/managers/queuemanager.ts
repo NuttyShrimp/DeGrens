@@ -9,6 +9,7 @@ import { UserModule } from 'modules/users/module.users';
 import { generateQueueCard } from '../util.queue';
 
 class QueueManager {
+  // Sorted array of steamIds
   private queue: string[] = [];
   private queueEntryInfo: Map<string, Core.Queue.EntryInfo> = new Map();
   private queueInterval: Map<string, NodeJS.Timer> = new Map();
@@ -32,23 +33,12 @@ class QueueManager {
   }
 
   private async getStartPosition(steamId: string) {
-    const power = this.power[steamId];
-    const plyInfo = this.queueEntryInfo.get(steamId);
-    if (!plyInfo) return;
-    const discordId = plyInfo.identifiers?.discord?.replace(/discord:/, '');
-    if (!discordId) {
-      DropPlayer(String(plyInfo.source), 'Failed to get discord Id while trying to assign queue position');
-      return;
-    }
-    const discordRoles: string[] = await exports['dg-admin'].getPlyDiscordRoles(discordId);
+    let power = this.queueEntryInfo.get(steamId)?.power ?? 0;
     let position = this.queue.length;
     for (let ply of this.queue) {
-      let plyPower = [
-        this.power[ply] ?? 0,
-        this.tempPower[ply] ?? 0,
-        ...discordRoles.filter(id => discordPower?.[id]).map(id => discordPower[id]),
-      ].reduce((prev, cur) => Math.max(prev, cur), 0);
-      if (power < plyPower) {
+      let plyInfo = this.queueEntryInfo.get(ply);
+      let plyPower = plyInfo?.power ?? 0;
+      if (power <= plyPower) {
         return position;
       }
       position--;
@@ -67,6 +57,10 @@ class QueueManager {
     if (qInfo) {
       this.userModule?.onPlayerDropped(qInfo?.source);
     }
+  }
+
+  private isSlotAvailable() {
+    return this.serverSize - GetNumPlayerIndices() != 0;
   }
 
   getQueuedPlayers() {
@@ -96,7 +90,7 @@ class QueueManager {
   }
 
   async joinQueue(src: number, name: string, steamId: string, deferrals: Record<string, any>) {
-    if (this.serverSize - GetNumPlayerIndices() != 0) {
+    if (this.isSlotAvailable() && this.queue.length === 0) {
       deferrals.done();
       return;
     }
@@ -106,14 +100,25 @@ class QueueManager {
       deferrals.done('A client with the same steamId is already in the queue');
       return;
     }
-    this.queueEntryInfo.set(steamId, {
-      identifiers: this.userModule!.getPlyIdentifiers(src),
-      source: src,
-      name,
-    });
+    let queueInfo = this.queueEntryInfo
+      .set(steamId, {
+        identifiers: this.userModule!.getPlyIdentifiers(src),
+        source: src,
+        name,
+        power: 0,
+      })
+      .get(steamId);
+    if (!queueInfo) {
+      DropPlayer(String(src), 'Failed to join the queue, try again');
+      return;
+    }
+    queueInfo.power = (await this.getCurrentBoost(steamId)) ?? 0;
+
     this.cleanupSteamId(steamId);
+
     const startPos = await this.getStartPosition(steamId);
     this.setPosition(steamId, startPos ?? this.queue.length);
+
     let timeInQ = dayjs(0).set('h', 0);
 
     const showCard = generateQueueCard(deferrals);
@@ -131,6 +136,9 @@ class QueueManager {
           Emojis[Util.getRndInteger(0, Emojis.length)]
         }${Emojis[Util.getRndInteger(0, Emojis.length)]} | 🕒 ${timeInQ.format('HH:mm:ss')}`
       );
+      if (pos === 0 && this.isSlotAvailable()) {
+        deferrals.done();
+      }
       timeInQ = timeInQ.add(1, 's');
     }, 1000);
     this.queueInterval.set(steamId, qInterval);
@@ -150,7 +158,7 @@ class QueueManager {
     this.cleanupSteamId(steamId);
     this.giveTempBoost(steamId);
     setTimeout(() => {
-      if (this.getCurrentBoost(steamId) === queueGracePower) {
+      if (!this.isInQueue(steamId)) {
         this.giveTempBoost(steamId, 0);
       }
     }, 5 * 60000);
@@ -166,12 +174,16 @@ class QueueManager {
     }
   }
 
-  getCurrentBoost(steamId: string) {
-    let boost = this.tempPower[steamId];
-    if (!boost) {
-      boost = this.power[steamId];
-    }
-    return boost ?? 0;
+  async getCurrentBoost(steamId: string) {
+    const plyInfo = this.queueEntryInfo.get(steamId);
+    if (!plyInfo) return;
+    const discordId = plyInfo.identifiers?.discord?.replace(/discord:/, '');
+    const discordRoles: string[] = await exports['dg-admin'].getPlyDiscordRoles(discordId);
+    return [
+      this.power[steamId] ?? 0,
+      this.tempPower[steamId] ?? 0,
+      ...discordRoles.filter(id => discordPower?.[String(id)]).map(id => discordPower[String(id)]),
+    ].reduce((prev, cur) => Math.max(prev, cur), 0);
   }
 }
 

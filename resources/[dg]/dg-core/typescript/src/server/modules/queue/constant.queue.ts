@@ -1,4 +1,4 @@
-export const queueGracePower = 25;
+export const queueGracePower = 6;
 
 export const discordPower: Record<string, number> = {
   // Supporter

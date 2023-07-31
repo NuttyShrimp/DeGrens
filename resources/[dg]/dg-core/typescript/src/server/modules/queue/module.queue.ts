@@ -38,7 +38,6 @@ export class QueueModule implements Modules.ServerModule, Core.ServerModules.Que
       );
       return;
     }
-    if (!this.manager.isInQueue(steamId)) return;
   };
 
   onPlayerJoining = async (

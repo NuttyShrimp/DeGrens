@@ -59,6 +59,7 @@ declare namespace Core {
       identifiers: Record<string, string>;
       source: number;
       name: string;
+      power: number;
     };
   }
 
