@@ -85,6 +85,9 @@ export class Locker {
     if (this.owner === null) return;
     if (currentDay < this.paymentDay) return;
 
+    // no fines if price is 0
+    if (this.price <= 0) return;
+
     const debtPrice = Financials.getTaxedPrice(this.price * config.debtPercentage, config.taxId).taxPrice;
     Financials.giveFine(
       this.owner,
@@ -101,32 +104,40 @@ export class Locker {
   };
 
   private tryToBuy = async (plyId: number) => {
+    const cid = Util.getCID(plyId);
     const priceWithTax = Financials.getTaxedPrice(this.price, config.taxId)?.taxPrice;
 
-    const result = await UI.openInput<{}>(plyId, {
-      header: `Wil je deze storage unit aankopen voor €${priceWithTax}?\nElke ${
-        config.debtIntervalInDays
-      } dagen zal er een onderhoudskost aangerekend worden van ${Math.round(
-        config.debtPercentage * 100
-      )}% van dit bedrag.`,
-    });
-    if (!result.accepted) return;
+    if (priceWithTax > 0) {
+      // only do check if locker has a price
+      if (lockersManager.doesPlayerOwnLocker(plyId)) {
+        Notifications.add(plyId, 'Je bent al eigenaar van een storage unit', 'error');
+        return;
+      }
 
-    if (lockersManager.doesPlayerOwnLocker(plyId)) {
-      Notifications.add(plyId, 'Je bent al eigenaar van een storage unit', 'error');
-      return;
+      const result = await UI.openInput<{}>(plyId, {
+        header: `Wil je deze storage unit aankopen voor €${priceWithTax}?\nElke ${
+          config.debtIntervalInDays
+        } dagen zal er een onderhoudskost aangerekend worden van ${Math.round(
+          config.debtPercentage * 100
+        )}% van dit bedrag.`,
+      });
+      if (!result.accepted) return;
+
+      const accId = Financials.getDefaultAccountId(cid);
+      if (!accId) return;
+      const succesfullyPaid = await Financials.purchase(accId, cid, this.price, `Aankoop storage unit`, config.taxId);
+      if (!succesfullyPaid) {
+        Notifications.add(plyId, 'Er is iets misgelopen met de aankoop', 'error');
+        return;
+      }
+    } else {
+      const result = await UI.openInput<{}>(plyId, {
+        header: `Ben je zeker dat je deze storage wil claimen?`,
+      });
+      if (!result.accepted) return;
     }
 
-    const cid = Util.getCID(plyId);
-    const accId = Financials.getDefaultAccountId(cid);
-    if (!accId) return;
-    const succesfullyPaid = await Financials.purchase(accId, cid, this.price, `Aankoop storage unit`, config.taxId);
-    if (!succesfullyPaid) {
-      Notifications.add(plyId, 'Er is iets misgelopen met de aankoop', 'error');
-      return;
-    }
-
-    Notifications.add(plyId, 'Je hebt deze storage unit aangekocht', 'success');
+    Notifications.add(plyId, 'Deze storage staat nu op jouw naam, het standaard paswoord is leeg', 'success');
     this.owner = cid;
     repository.updateOwner(this.id, cid);
 

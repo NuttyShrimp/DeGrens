@@ -104,9 +104,16 @@ class LockersManager extends Util.Singleton<LockersManager>() {
     locker.view(src);
   };
 
-  public doesPlayerOwnLocker = (plyId: number) => {
+  public doesPlayerOwnLocker = (plyId: number, includeFreeLockers = false) => {
     const cid = Util.getCID(plyId);
-    return [...this.lockers.values()].some(l => l.data.owner === cid);
+
+    for (const [_, l] of this.lockers) {
+      if (l.data.owner !== cid) continue;
+      if (l.data.price <= 0 && !includeFreeLockers) continue;
+      return true;
+    }
+
+    return false;
   };
 
   @DGXEvent('lockers:server:open')
