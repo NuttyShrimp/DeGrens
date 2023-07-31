@@ -28,7 +28,7 @@ class DebtManager extends Util.Singleton<DebtManager>() {
 		`;
     this.debts = await SQL.query<(Omit<Debts.Debt, 'metadata'> & { metadata: string })[]>(query).then(ds =>
       ds.map(d => {
-        d.metadata = JSON.parse(d.metadata);
+        d.metadata = d.metadata !== '' ? JSON.parse(d.metadata) : {};
         return d as unknown as Debts.Debt;
       })
     );
@@ -105,7 +105,7 @@ class DebtManager extends Util.Singleton<DebtManager>() {
     if (metadata?.payTerm) delete metadata.payTerm;
     if (metadata?.cbEvt) delete metadata.cbEvt;
     if (metadata?.givenBy) delete metadata.givenBy;
-    debt.metadata = metadata;
+    debt.metadata = metadata ?? {};
     const query = `
 			INSERT INTO debts (cid, debt, target_account, type, given_by, origin_name, reason, date, event, pay_term, metadata)
 			VALUES (?, ?, ?, ?, ?, ?, ?, FROM_UNIXTIME(?), ?, ?, ?)
