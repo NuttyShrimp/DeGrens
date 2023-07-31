@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Mogelijkheid om voor elk drugslabs de toegestane interieren te bepalen
 - Kofi vehicles toegevoegd
 - Outfit tab toegevoegd aan "give clothing menu"
+- Mogelijkheid tot het printen van flyers aan de printers
 - Extra intern event gecaptured waarmee we meer errors kunnen zien
 
 ### Changed

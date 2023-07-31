@@ -2591,5 +2591,16 @@
       "y": 3
     },
     "useable": true
+  },
+  {
+    "name": "flyer",
+    "label": "Infokaartje",
+    "image": "flyer.png",
+    "size": {
+      "x": 1,
+      "y": 2
+    },
+    "useable": true,
+    "decayRate": 129600
   }
 ]

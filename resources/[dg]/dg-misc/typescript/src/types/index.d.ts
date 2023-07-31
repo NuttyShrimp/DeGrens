@@ -12,3 +12,13 @@ declare namespace Consumables {
     };
   }
 }
+
+declare namespace Flyers {
+  interface Flyer {
+    id: number;
+    cid: number;
+    link: string;
+    approved: number;
+  }
+  type UIFlyer = { type: 'police'; name: string } | { link: string };
+}

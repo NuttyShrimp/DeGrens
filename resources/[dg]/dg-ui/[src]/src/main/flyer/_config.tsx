@@ -1,7 +1,7 @@
 import Container from './component';
 
 const config: ConfigObject = {
-  name: 'badge',
+  name: 'flyer',
   render: p => <Container {...p} />,
   type: 'passive',
 };

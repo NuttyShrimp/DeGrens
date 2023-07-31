@@ -197,6 +197,7 @@ model characters {
   phone_notes_access               phone_notes_access[]
   duty_times                       duty_times[]
   kofi_vehicleshop                 kofi_vehicleshop[]
+  flyer_request                    flyer_request[]
 
   @@index([steamid], map: "steamid")
 }
@@ -740,6 +741,14 @@ model kofi_vehicleshop {
   characters characters @relation(fields: [cid], references: [citizenid], onDelete: Cascade, map: "fk_kofi_vehicleshop_cid")
 
   @@index([cid], map: "fk_kofi_vehicleshop_cid")
+}
+
+model flyer_request {
+  id         Int        @id @default(autoincrement())
+  cid        Int
+  link       String     @db.LongText
+  approved   Boolean    @default(false)
+  characters characters @relation(fields: [cid], references: [citizenid], onDelete: Cascade, map: "fk_flyer_request_cid")
 }
 
 enum bank_accounts_type {

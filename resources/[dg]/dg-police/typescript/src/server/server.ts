@@ -8,7 +8,6 @@ import './services/requirements';
 import './services/camera';
 import './modules/trackers';
 import './modules/spikestrips';
-import './modules/badges';
 import './modules/evidence';
 import './modules/alerts';
 import './modules/interactions';

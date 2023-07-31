@@ -141,10 +141,6 @@ class Police {
     global.exports['dg-police'].removeTrackerFromVehicle(trackerId);
   };
 
-  public showBadge = (plyId: number, type: BadgeType) => {
-    global.exports['dg-police'].showBadge(plyId, type);
-  };
-
   public isCuffed = (plyId: number) => {
     return global.exports['dg-police'].isCuffed(plyId);
   };

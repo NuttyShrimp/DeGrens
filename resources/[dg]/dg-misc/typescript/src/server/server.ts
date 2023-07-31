@@ -31,6 +31,7 @@ import './services/modelblacklist';
 import './services/roadsigns';
 import './services/placeableObjectItems';
 import './controllers';
+import './services/flyers';
 
 setImmediate(() => {
   startParticleThread();
