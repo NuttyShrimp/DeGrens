@@ -249,6 +249,7 @@ model debts {
   reason                                String        @db.LongText
   event                                 String?       @db.VarChar(255)
   pay_term                              Float?        @db.Float
+  metadata                              String        @db.LongText
   bank_accounts                         bank_accounts @relation(fields: [target_account], references: [account_id], onDelete: Cascade, map: "fk_debts_acc_id")
   characters_debts_cidTocharacters      characters    @relation("debts_cidTocharacters", fields: [cid], references: [citizenid], onDelete: Cascade, map: "fk_debts_cid")
   characters_debts_given_byTocharacters characters?   @relation("debts_given_byTocharacters", fields: [given_by], references: [citizenid], onDelete: Cascade, map: "fk_debts_origin_cid")

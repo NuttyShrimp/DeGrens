@@ -89,16 +89,11 @@ export class Locker {
     if (this.price <= 0) return;
 
     const debtPrice = Financials.getTaxedPrice(this.price * config.debtPercentage, config.taxId).taxPrice;
-    Financials.giveFine(
-      this.owner,
-      'BE1',
-      debtPrice,
-      `Locker Onderhoudskosten - ${this.label}`,
-      'DG Real Estate',
-      undefined,
-      'lockers:server:lockerDefaulted',
-      7
-    );
+    Financials.giveFine(this.owner, 'BE1', debtPrice, `Locker Onderhoudskosten - ${this.label}`, 'DG Real Estate', {
+      payTerm: 7,
+      cbEvt: 'lockers:server:lockerDefaulted',
+      lockerId: this.id,
+    });
     this.updatePaymentDate();
     this.logger.silly(`Given maintenance fee to owner ${this.owner}`);
   };

@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Extra intern event gecaptured waarmee we meer errors kunnen zien
 - Locker naam toegevoegd aan lockers/debts om makkelijker de correcte locker te vinden
 - Mogelijkheid om stashes toe te voegen aan ganggebeiden
+- Metadata aan een debt
 
 ### Changed
 

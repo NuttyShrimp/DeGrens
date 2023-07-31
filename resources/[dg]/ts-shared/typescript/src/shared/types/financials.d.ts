@@ -32,7 +32,7 @@ declare namespace Financials {
 
   namespace Debts {
     type Type = 'debt' | 'maintenance';
-    interface Debt {
+    interface Debt<T = Record<string, any> | undefined> {
       id: number;
       cid: number;
       target_account: string;
@@ -45,6 +45,7 @@ declare namespace Financials {
       event?: string;
       reason?: string;
       pay_term?: number;
+      metadata: T;
     }
   }
 }

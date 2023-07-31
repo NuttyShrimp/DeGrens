@@ -29,7 +29,7 @@ export const getMaintenanceFeeSchedule = () => {
 
 export const scheduleMaintenanceFees = async () => {
   const maintenceConfig = getConfig().debts.maintenance;
-  // if (Util.isDevEnv()) return;
+  if (Util.isDevEnv()) return;
 
   // get last logs
   const last_logs = await SQL.query<DB.IMaintenanceLog[]>(

@@ -21,22 +21,6 @@ declare namespace IFinancials {
     transactions: boolean;
   }
 
-  interface Debt {
-    id: number;
-    cid: number;
-    target_account: string;
-    debt: number;
-    payed: number;
-    type: 'debt' | 'maintenance';
-    given_by: number;
-    origin_name: string;
-    date: number;
-    event?: string;
-    reason?: string;
-    // This will prevent overdue being accounted on the fine and will set the exact date of expiration
-    pay_term?: number;
-  }
-
   interface MaintenanceFee {
     cid: number;
     target_account: string;
