@@ -121,6 +121,14 @@ class Vehicles {
   openEngineSoundMenu = (plyId: number) => {
     global.exports['dg-vehicles'].openEngineSoundMenu(plyId);
   };
+
+  setVehicleHasBulletProofTires = (vehicle: number, toggled: boolean) => {
+    global.exports['dg-vehicles'].setVehicleHasBulletProofTires(vehicle, toggled);
+  };
+
+  getVehicleHasBulletProofTires = (vehicle: number): boolean => {
+    return global.exports['dg-vehicles'].getVehicleHasBulletProofTires(vehicle);
+  };
 }
 
 export default {

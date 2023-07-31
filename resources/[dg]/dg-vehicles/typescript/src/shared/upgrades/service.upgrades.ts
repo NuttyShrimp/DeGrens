@@ -71,6 +71,5 @@ export const generateBasePerformanceUpgrades = (): Vehicles.Upgrades.Performance
   engine: -1,
   transmission: -1,
   turbo: false,
-  bulletProofTires: false,
   suspension: -1,
 });

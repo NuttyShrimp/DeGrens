@@ -247,7 +247,6 @@ const spawnMethRunVehicle = async (plyId: number) => {
     upgrades: {
       primaryColor: 0,
       armor: 4,
-      bulletProofTires: true,
     },
     fuel: 15,
     doorsLocked: true,
@@ -261,6 +260,7 @@ const spawnMethRunVehicle = async (plyId: number) => {
   activeRun.vehicle.vin = spawnedVehicle.vin;
   Vehicles.blockVinInBennys(spawnedVehicle.vin);
   Vehicles.setVehicleCannotBeLockpicked(spawnedVehicle.vin, true, 'Het is nog niet veilig genoeg');
+  Vehicles.setVehicleHasBulletProofTires(spawnedVehicle.vehicle, true);
 
   if (!activeRun.itemId) {
     const itemIds = await Inventory.addItemToInventory('trunk', spawnedVehicle.vin, 'processed_meth', 1);

@@ -33,7 +33,7 @@ declare namespace Vehicles {
   }) => Promise<vehicle | undefined>;
 
   declare namespace Upgrades {
-    type Tune = Exclude<Performance.Key, 'armor' | 'bulletProofTires'>;
+    type Tune = Exclude<Performance.Key, 'armor'>;
 
     namespace Performance {
       /**
@@ -50,7 +50,6 @@ declare namespace Vehicles {
       // we use interface to properly override keys with custom type if they exist in NormalKey
       interface Upgrades extends Record<NormalKey, number> {
         turbo: boolean;
-        bulletProofTires: boolean;
       }
 
       type Key = keyof Upgrades;
@@ -164,13 +163,11 @@ declare namespace Vehicles {
         | 'wheels'
         | 'windowTint'
         | 'turbo'
-        | 'bulletProofTires'
       >,
       number
     > & {
       wheels: Record<number, number>;
       turbo: boolean;
-      bulletProofTires: boolean;
     };
 
     type AmountKey = keyof Amount;

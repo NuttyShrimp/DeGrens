@@ -107,6 +107,10 @@ class Vehicles {
   setEngineState = (vehicle: number, state: boolean, instantly = false) => {
     global.exports['dg-vehicles'].setEngineState(vehicle, state, instantly);
   };
+
+  getVehicleHasBulletProofTires = (vehicle: number): boolean => {
+    return global.exports['dg-vehicles'].getVehicleHasBulletProofTires(vehicle);
+  };
 }
 
 export default {
