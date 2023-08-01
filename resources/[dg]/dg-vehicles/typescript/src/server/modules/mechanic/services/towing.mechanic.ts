@@ -120,14 +120,15 @@ export const removeVehicleFromTowVehicle = (towVehicleNetId: number) => {
   const towVehicle = NetworkGetEntityFromNetworkId(towVehicleNetId);
   if (!DoesEntityExist(towVehicle)) return;
 
-  const attachVehicle = Entity(towVehicle).state.attachedVehicle;
-  if (!attachVehicle) return;
-
+  const attachedVehicle = Entity(towVehicle).state.attachedVehicle;
   Entity(towVehicle).state.set('attachedVehicle', null, true);
+
+  if (!attachedVehicle || !DoesEntityExist(attachedVehicle)) return;
+
   Util.sendEventToEntityOwner(
-    attachVehicle,
+    attachedVehicle,
     'vehicles:towing:unattach',
     towVehicleNetId,
-    NetworkGetNetworkIdFromEntity(attachVehicle)
+    NetworkGetNetworkIdFromEntity(attachedVehicle)
   );
 };

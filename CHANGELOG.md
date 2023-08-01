@@ -50,6 +50,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Probleem opgelost waardoor dispatchmeldingen met voertuig soms niet doorkwamen
 - Standaardwaarde van voertuigextras worden nu wel correct gezet
 - Extras op industriele/commerciele voertuigen worden nu wel standaard geenabled
+- Error opgelost wanneer je een verwijderd voertuig probeert van een flatbed te halen
 
 ## [1.2.12]
 
