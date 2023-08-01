@@ -27,6 +27,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Meerdere handlingen getweaked
 - Vehicle status effects gerebalanced
 - Je kan nu je voertuig recoveren als het in een garage staat waar je niet aankan (Bv na ontslag, ...)
+- Alle wapens herbalanced
 
 ### Fixed
 
