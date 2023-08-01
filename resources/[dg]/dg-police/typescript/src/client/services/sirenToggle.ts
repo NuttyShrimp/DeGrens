@@ -1,108 +1,57 @@
 import { RPC, Vehicles } from '@dgx/client';
 
-const sirenToggles: Record<string, { on: (veh: number) => void; off: (veh: number) => void }> = {
-  a6: {
-    on: veh => {
-      const currentUpgrades = Vehicles.getCosmeticUpgrades(veh);
-      const extras: Vehicles.Upgrades.Cosmetic.Upgrades['extras'] = currentUpgrades?.extras || [];
-      const extra = extras.find(e => e.id == 1);
-      if (extra) {
-        extra.enabled = true;
-      } else {
-        extras.push({ id: 1, enabled: true });
-      }
-      Vehicles.applyUpgrades(veh, { extras });
+const sirenToggles: Record<number, { extraId?: number; on?: (veh: number) => void; off?: (veh: number) => void }> =
+  Object.entries({
+    a6: {
+      extraId: 1,
     },
-    off: veh => {
-      const currentUpgrades = Vehicles.getCosmeticUpgrades(veh);
-      const extras: Vehicles.Upgrades.Cosmetic.Upgrades['extras'] = currentUpgrades?.extras || [];
-      const sirenExtraIdx = extras.findIndex(e => e.id === 1);
-      extras[sirenExtraIdx].enabled = false;
-      Vehicles.applyUpgrades(veh, { extras });
+    '22m5': {
+      extraId: 1,
     },
-  },
-  '22m5': {
-    on: veh => {
-      const currentUpgrades = Vehicles.getCosmeticUpgrades(veh);
-      const extras: Vehicles.Upgrades.Cosmetic.Upgrades['extras'] = currentUpgrades?.extras || [];
-      const extra = extras.find(e => e.id == 1);
-      if (extra) {
-        extra.enabled = true;
-      } else {
-        extras.push({ id: 1, enabled: true });
-      }
-      Vehicles.applyUpgrades(veh, { extras });
+    drafter: {
+      extraId: 1,
     },
-    off: veh => {
-      const currentUpgrades = Vehicles.getCosmeticUpgrades(veh);
-      const extras: Vehicles.Upgrades.Cosmetic.Upgrades['extras'] = currentUpgrades?.extras || [];
-      const sirenExtraIdx = extras.findIndex(e => e.id === 1);
-      extras[sirenExtraIdx].enabled = false;
-      Vehicles.applyUpgrades(veh, { extras });
-    },
-  },
-  drafter: {
-    on: veh => {
-      const currentUpgrades = Vehicles.getCosmeticUpgrades(veh);
-      const extras: Vehicles.Upgrades.Cosmetic.Upgrades['extras'] = currentUpgrades?.extras || [];
-      const extra = extras.find(e => e.id == 1);
-      if (extra) {
-        extra.enabled = true;
-      } else {
-        extras.push({ id: 1, enabled: true });
-      }
-      Vehicles.applyUpgrades(veh, { extras });
-    },
-    off: veh => {
-      const currentUpgrades = Vehicles.getCosmeticUpgrades(veh);
-      const extras: Vehicles.Upgrades.Cosmetic.Upgrades['extras'] = currentUpgrades?.extras || [];
-      const sirenExtraIdx = extras.findIndex(e => e.id === 1);
-      extras[sirenExtraIdx].enabled = false;
-      Vehicles.applyUpgrades(veh, { extras });
-    },
-  },
-};
-const toggeableVehicles: number[] = [];
-
-setImmediate(() => {
-  Object.keys(sirenToggles).forEach(model => {
-    const hash = GetHashKey(model);
-    if (hash === 0) {
-      console.error(`[SIREN] Model ${model} does not exist`);
-      return;
-    }
-    toggeableVehicles.push(hash);
-  });
-});
+  }).reduce((acc, [key, value]) => ({ ...acc, [GetHashKey(key)]: value }), {});
 
 const canToggleSiren = (veh: number): boolean => {
+  if (!veh || !DoesEntityExist(veh)) return false;
+  const ped = PlayerPedId();
+  if (GetPedInVehicleSeat(veh, -1) !== ped) return false;
   const model = GetEntityModel(veh);
-  return toggeableVehicles.includes(model);
-};
-
-const getModelForHash = (hash: number): string | null => {
-  const keyIdx = toggeableVehicles.indexOf(hash);
-  if (keyIdx === -1) return null;
-  return Object.keys(sirenToggles)[keyIdx];
+  return !!sirenToggles[model];
 };
 
 on('police:toggleSiren', async () => {
   const veh = GetVehiclePedIsIn(PlayerPedId(), false);
-  if (!veh) return;
   if (!canToggleSiren(veh)) return;
   const isToggled = Entity(veh).state.sirenToggled;
-  if (isToggled === undefined || isToggled === null) {
+  if (isToggled == undefined) {
     await RPC.execute('lib:state:ensureReplicated', NetworkGetNetworkIdFromEntity(veh), 'sirenToggled', false);
   }
   const modelHash = GetEntityModel(veh);
-  const model = getModelForHash(modelHash);
-  if (!model || !sirenToggles[model]) return;
+  const modelData = sirenToggles[modelHash];
+  if (!modelData) return;
+
+  Entity(veh).state.set('sirenToggled', !isToggled, true);
+
+  // If the modeldata has an extraId, use that instead of the on/off functions
+  if (modelData.extraId !== undefined) {
+    const currentUpgrades = Vehicles.getCosmeticUpgrades(veh);
+    const extras = currentUpgrades?.extras || [];
+    const extraIdx = extras.findIndex(e => e.id == modelData.extraId);
+    if (extraIdx === -1) {
+      extras.push({ id: modelData.extraId, enabled: !isToggled });
+    } else {
+      extras[extraIdx].enabled = !isToggled;
+    }
+    Vehicles.applyUpgrades(veh, { extras });
+  }
+
+  // can be used if vehicle siren isnt an extra or more actions need to be done
   if (isToggled) {
-    sirenToggles[model].off(veh);
-    Entity(veh).state.set('sirenToggled', false, true);
+    modelData.off?.(veh);
   } else {
-    sirenToggles[model].on(veh);
-    Entity(veh).state.set('sirenToggled', true, true);
+    modelData.on?.(veh);
   }
 });
 
