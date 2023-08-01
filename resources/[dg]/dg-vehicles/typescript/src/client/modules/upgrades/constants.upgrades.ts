@@ -296,3 +296,5 @@ export const KEYS_BY_TYPE: Vehicles.Upgrades.TypeToKeys = {
 };
 
 export const AMOUNT_KEYS = KEYS.filter(k => 'getAmount' in UPGRADES[k]) as Vehicles.Upgrades.AmountKey[];
+
+export const STANDARD_EXTRA_UPGRADES: number[] = [10, 11, 14, 15, 16, 17, 20, 21, 22];

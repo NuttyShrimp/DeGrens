@@ -73,3 +73,30 @@ export const generateBasePerformanceUpgrades = (): Vehicles.Upgrades.Performance
   turbo: false,
   suspension: -1,
 });
+
+/**
+ * @param upgrades order from low to high priority
+ */
+export const mergeUpgrades = <T extends Partial<Vehicles.Upgrades.Upgrades>>(
+  ...upgrades: Partial<Vehicles.Upgrades.Upgrades>[]
+): T => {
+  const mergedUpgrades: Partial<Vehicles.Upgrades.Upgrades> = { extras: [], ...upgrades[0] };
+  for (let i = 1; i < upgrades.length; i++) {
+    for (const key of Object.keys(upgrades[i]) as Partial<Vehicles.Upgrades.Key>[]) {
+      if (key === 'extras') {
+        for (const newExtra of upgrades[i][key] ?? []) {
+          const extraIdx = (mergedUpgrades.extras ??= []).findIndex(e => e.id === newExtra.id) ?? -1;
+          if (extraIdx === -1) {
+            mergedUpgrades.extras.push(newExtra);
+          } else {
+            mergedUpgrades.extras[extraIdx].enabled = newExtra.enabled;
+          }
+        }
+      } else {
+        //@ts-expect-error
+        mergedUpgrades[key] = upgrades[i][key];
+      }
+    }
+  }
+  return mergedUpgrades as T;
+};

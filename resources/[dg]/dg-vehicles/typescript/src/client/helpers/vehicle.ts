@@ -1,10 +1,11 @@
 import { RPC, Util } from '@dgx/client';
-import { Vector3 } from '@dgx/shared';
-
 import { doorBones, wheelBones } from './../constant';
 import upgradesManager from 'modules/upgrades/classes/manager.upgrades';
-import { generateBaseCosmeticUpgrades, generateBasePerformanceUpgrades } from '@shared/upgrades/service.upgrades';
-import { STANDARD_EXTRA_UPGRADES } from '@shared/upgrades/constants.upgrades';
+import {
+  generateBaseCosmeticUpgrades,
+  generateBasePerformanceUpgrades,
+  mergeUpgrades,
+} from '@shared/upgrades/service.upgrades';
 
 let currentVehicle: number | null = null;
 let isTheDriver = false;
@@ -112,14 +113,12 @@ export const spawnLocalVehicle: Vehicles.SpawnLocalVehicleFunction = async data 
     SetVehicleNumberPlateText(vehicle, data.plate);
   }
 
-  const modelType = getModelType(data.model) ?? 'automobile';
-
   // upgrades
-  const mergedUpgrades = {
-    ...generateBaseCosmeticUpgrades(true, STANDARD_EXTRA_UPGRADES.includes(modelType)),
+  const mergedUpgrades = mergeUpgrades({
+    ...generateBaseCosmeticUpgrades(true, upgradesManager.doesVehicleHaveDefaultExtras(vehicle)),
     ...generateBasePerformanceUpgrades(),
     ...data.upgrades,
-  };
+  });
   upgradesManager.set(vehicle, mergedUpgrades);
 
   SetModelAsNoLongerNeeded(modelHash);

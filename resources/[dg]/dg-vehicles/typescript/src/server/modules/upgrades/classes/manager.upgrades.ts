@@ -1,10 +1,16 @@
 import { Util, Inventory, Financials, Config, TaxIds, Sync, SQL } from '@dgx/server';
 import { TUNE_PARTS } from '@shared/upgrades/constants.upgrades';
-import { generateBaseCosmeticUpgrades, generateBasePerformanceUpgrades } from '@shared/upgrades/service.upgrades';
+import {
+  generateBaseCosmeticUpgrades,
+  generateBasePerformanceUpgrades,
+  mergeUpgrades,
+} from '@shared/upgrades/service.upgrades';
 import { getVehicleCosmeticUpgrades } from 'db/repository';
 import { getClassOfVehicleWithVin } from 'modules/identification/service.id';
 import { mainLogger } from 'sv_logger';
 import winston from 'winston';
+import { getConfigByModel } from 'modules/info/service.info';
+import { STANDARD_EXTRA_UPGRADES } from '../constants.upgrades';
 
 class UpgradesManager extends Util.Singleton<UpgradesManager>() {
   private readonly logger: winston.Logger;
@@ -85,7 +91,9 @@ class UpgradesManager extends Util.Singleton<UpgradesManager>() {
   };
 
   public getCosmetic = async (vin: string): Promise<Vehicles.Upgrades.Cosmetic.Upgrades> => {
-    return (await getVehicleCosmeticUpgrades(vin)) ?? generateBaseCosmeticUpgrades();
+    const baseUpgrades = generateBaseCosmeticUpgrades();
+    const dbUpgrades = await getVehicleCosmeticUpgrades(vin);
+    return mergeUpgrades<Vehicles.Upgrades.Cosmetic.Upgrades>(baseUpgrades, dbUpgrades ?? {});
   };
 
   public getPerformance = async (vin: string): Promise<Vehicles.Upgrades.Performance.Upgrades> => {
@@ -127,6 +135,13 @@ class UpgradesManager extends Util.Singleton<UpgradesManager>() {
 
   public apply = (vehicle: number, upgrades: Partial<Vehicles.Upgrades.Upgrades>) => {
     Sync.executeAction('vehicles:upgrades:apply', vehicle, upgrades);
+  };
+
+  public doesModelHaveDefaultExtras = (model: string | number): boolean => {
+    const modelConfig = getConfigByModel(model);
+    if (!modelConfig) return false;
+    if (modelConfig.type !== 'land') return true;
+    return STANDARD_EXTRA_UPGRADES.includes(modelConfig.category);
   };
 }
 

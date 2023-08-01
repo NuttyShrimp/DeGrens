@@ -14,8 +14,11 @@ import { mainLogger } from '../sv_logger';
 import { assignModelConfig } from 'modules/info/service.info';
 import { Vector4 } from '@dgx/shared';
 import upgradesManager from 'modules/upgrades/classes/manager.upgrades';
-import { generateBaseCosmeticUpgrades, generateBasePerformanceUpgrades } from '@shared/upgrades/service.upgrades';
-import { STANDARD_EXTRA_UPGRADES } from '@shared/upgrades/constants.upgrades';
+import {
+  generateBaseCosmeticUpgrades,
+  generateBasePerformanceUpgrades,
+  mergeUpgrades,
+} from '@shared/upgrades/service.upgrades';
 import { setVehicleEngineSound } from 'services/enginesounds';
 
 /**
@@ -100,11 +103,11 @@ export const spawnVehicle: Vehicles.SpawnVehicleFunction = async data => {
     startNPCDriverDeletionThread(vehicle);
 
     // upgrades
-    const mergedUpgrades = {
-      ...generateBaseCosmeticUpgrades(true, STANDARD_EXTRA_UPGRADES.includes(modelType)),
-      ...generateBasePerformanceUpgrades(),
-      ...data.upgrades,
-    };
+    const mergedUpgrades = mergeUpgrades(
+      generateBaseCosmeticUpgrades(true, upgradesManager.doesModelHaveDefaultExtras(modelHash)),
+      generateBasePerformanceUpgrades(),
+      data.upgrades ?? {}
+    );
     upgradesManager.apply(vehicle, mergedUpgrades);
 
     // engine state

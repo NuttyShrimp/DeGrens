@@ -40,7 +40,22 @@ export const loadVehicleInfo = () => {
 
 export const getConfigByModel = (model: string | number) => {
   const modelHash = typeof model === 'string' ? GetHashKey(model) : model;
-  return vehicleInfo.get(modelHash >>> 0);
+  const info = vehicleInfo.get(modelHash >>> 0);
+
+  if (!info) {
+    Util.Log(
+      'vehicles:missingConfig',
+      {
+        model,
+      },
+      `Found a missing model`,
+      undefined,
+      true
+    );
+    infoLogger.warn(`Found a missing model: ${model}`);
+  }
+
+  return info;
 };
 
 export const getConfigByEntity = (entity: number) => {

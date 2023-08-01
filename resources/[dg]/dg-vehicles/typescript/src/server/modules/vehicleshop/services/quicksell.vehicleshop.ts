@@ -21,7 +21,7 @@ const getQuicksellPrice = async (vin: string) => {
   const modelConfig = getConfigByModel(vehicleInfo.model);
   if (!modelConfig) return;
 
-  const allUpgrades = await getVehicleCosmeticUpgrades(vin);
+  const allUpgrades = await upgradesManager.getCosmetic(vin);
   if (!allUpgrades) return;
 
   const quicksellConfig = getVehicleShopConfig().quicksell;

@@ -1,5 +1,5 @@
 import { Util } from '@dgx/client';
-import { AMOUNT_KEYS, KEYS_BY_TYPE, UPGRADES } from '../constants.upgrades';
+import { AMOUNT_KEYS, KEYS_BY_TYPE, STANDARD_EXTRA_UPGRADES, UPGRADES } from '../constants.upgrades';
 
 class UpgradesManager extends Util.Singleton<UpgradesManager>() {
   constructor() {
@@ -75,6 +75,11 @@ class UpgradesManager extends Util.Singleton<UpgradesManager>() {
       amounts[key] = UPGRADES[key].getAmount(vehicle);
     }
     return amounts;
+  };
+
+  public doesVehicleHaveDefaultExtras = (vehicle: number): boolean => {
+    const vehicleClass = GetVehicleClass(vehicle);
+    return STANDARD_EXTRA_UPGRADES.includes(vehicleClass);
   };
 }
 

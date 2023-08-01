@@ -47,6 +47,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Probleem opgelost waardoor server crashete door refreshen van inaccessible drugslab
 - RS7 ABT gaat minder snel visueel kapot
 - Probleem opgelost waardoor dispatchmeldingen met voertuig soms niet doorkwamen
+- Standaardwaarde van voertuigextras worden nu wel correct gezet
+- Extras op industriele/commerciele voertuigen worden nu wel standaard geenabled
 
 ## [1.2.12]
 
