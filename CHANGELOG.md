@@ -45,6 +45,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Je kan geen locker meer transferen naar een speler die al een locker in bezit heeft
 - Niet joinen in queue + boost van queue
 - Probleem opgelost waardoor server crashete door refreshen van inaccessible drugslab
+- RS7 ABT gaat minder snel visueel kapot
 
 ## [1.2.12]
 
