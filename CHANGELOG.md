@@ -42,6 +42,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Ontvanger krijgt nu wel effectief crypto bij transfer
 - Je kan geen locker meer transferen naar een speler die al een locker in bezit heeft
 - Niet joinen in queue + boost van queue
+- Probleem opgelost waardoor server crashete door refreshen van inaccessible drugslab
 
 ## [1.2.12]
 
