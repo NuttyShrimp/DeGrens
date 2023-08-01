@@ -38,7 +38,7 @@ export const ambulance: RadialMenu.Entry[] = [
     shouldClose: true,
   },
   {
-    title: 'Open ANG',
+    title: 'Open MEOS',
     icon: 'tablet',
     type: 'client',
     event: 'hospital:openAng',
