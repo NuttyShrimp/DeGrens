@@ -2468,7 +2468,7 @@
   },
   {
     "name": "kingpills_antibiotics",
-    "label": "Intraveneus Antibiotica",
+    "label": "Per Os Antibiotica",
     "image": "kingpills_antibiotics.png",
     "size": {
       "x": 2,
