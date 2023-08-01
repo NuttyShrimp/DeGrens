@@ -29,6 +29,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Je kan nu je voertuig recoveren als het in een garage staat waar je niet aankan (Bv na ontslag, ...)
 - Alle wapens herbalanced
 - Minder kans dat een heartbeat event gedropped wordt
+- Native class van bmw m5 e39 aangepast
 
 ### Fixed
 
