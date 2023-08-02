@@ -49,13 +49,13 @@ export const loadDownStateOnRestart = () => {
   setPlayerState(state, false);
 };
 
-const updateRespawnTime = () => {
+const updateRespawnTime = (overrideAmount?: number) => {
   if (playerState === 'alive') {
     respawnTime = 0;
     return;
   }
 
-  respawnTime = GetGameTimer() + respawnTimeConfig[playerState] * 1000;
+  respawnTime = GetGameTimer() + (overrideAmount ?? respawnTimeConfig[playerState]) * 1000;
 };
 
 export const checkDeathOnDamage = (originPed: number, weaponHash: number) => {
@@ -215,7 +215,7 @@ const respawnPlayer = async () => {
     Events.emitNet('hospital:down:respawnToBed');
   } else {
     SetEntityCoords(ped, respawnPosition.x, respawnPosition.y, respawnPosition.z, false, false, false, false);
-    updateRespawnTime();
+    updateRespawnTime(60);
     Events.emitNet('hospital:down:respawnToHospital');
   }
 };

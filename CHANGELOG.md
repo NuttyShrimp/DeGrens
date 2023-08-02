@@ -30,6 +30,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Alle wapens herbalanced
 - Minder kans dat een heartbeat event gedropped wordt
 - Native class van bmw m5 e39 aangepast
+- Je kan nu sneller opnieuw respawnen indien ambulance je niet komt halen in het ziekenhuis
 
 ### Fixed
 
