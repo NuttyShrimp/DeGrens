@@ -247,11 +247,7 @@ class Util extends UtilShared {
   };
 
   public awaitEntityExistence = async (entity: number, isNetId = false): Promise<boolean> => {
-    const exists = await this.awaitCondition(() => {
-      const ent = isNetId ? NetworkGetEntityFromNetworkId(entity) : entity;
-      return DoesEntityExist(ent);
-    });
-    return exists;
+    return await this.awaitCondition(() => DoesEntityExist(isNetId ? NetworkGetEntityFromNetworkId(entity) : entity));
   };
 
   public awaitOwnership = async (entity: number) => {
