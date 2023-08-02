@@ -19,6 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Mogelijkheid om stashes toe te voegen aan ganggebeiden
 - Metadata aan een debt
 - Add nuttys tailscale API as an allowed domain for the internal API
+- `voice-r` command to reconnect to the mumble/voice server
 
 ### Changed
 

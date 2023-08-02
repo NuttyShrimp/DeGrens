@@ -66,3 +66,32 @@ end, false)
 if gameVersion == 'fivem' then
 	RegisterKeyMapping('cycleproximity', 'Cycle Proximity', 'keyboard', GetConvar('voice_defaultCycle', 'F11'))
 end
+
+PrintDebugInfo = function(msg)
+  local str = [[
+  --------------------
+  %s
+  Active: %s | Connected: %s | Channel: %s
+  --------------------]]
+  --
+  local isActive = MumbleIsActive()
+  local isConnected = MumbleIsConnected()
+  local channel = MumbleGetVoiceChannelFromServerId(GetPlayerServerId(PlayerId()))
+
+  print((str):format(msg, isActive, isConnected, channel))
+end
+
+RegisterCommand("voice-r", function()
+  PrintDebugInfo("Reconnecting Mumble")
+
+  local endpoint = GetCurrentServerEndpoint()
+  local info = {}
+
+  for match in string.gmatch(endpoint, "[^:]+") do
+    info[#info + 1] = match
+  end
+
+  MumbleSetServerAddress(info[1], tonumber(info[2]))
+
+  PrintDebugInfo("Reconnected Mumble")
+end)
