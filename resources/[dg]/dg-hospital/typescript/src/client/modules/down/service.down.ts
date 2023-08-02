@@ -208,16 +208,18 @@ const respawnPlayer = async () => {
   if (!respawnPosition) return;
 
   const ped = PlayerPedId();
-  const isNearRespawn = Util.getPlyCoords().distance(respawnPosition) < 3;
-  const isInWater = IsEntityInWater(ped);
-  const anyAmbuOnline = Jobs.getAmountForJob('ambulance') > 0;
-  if (isNearRespawn || isInWater || !anyAmbuOnline) {
+  if (
+    Util.getPlyCoords().distance(respawnPosition) < 3 ||
+    IsEntityInWater(ped) ||
+    Jobs.getAmountForJob('ambulance') === (Jobs.getCurrentJob()?.name === 'ambulance' ? 1 : 0)
+  ) {
     Events.emitNet('hospital:down:respawnToBed');
-  } else {
-    SetEntityCoords(ped, respawnPosition.x, respawnPosition.y, respawnPosition.z, false, false, false, false);
-    updateRespawnTime(60);
-    Events.emitNet('hospital:down:respawnToHospital');
+    return;
   }
+
+  SetEntityCoords(ped, respawnPosition.x, respawnPosition.y, respawnPosition.z, false, false, false, false);
+  updateRespawnTime(60);
+  Events.emitNet('hospital:down:respawnToHospital');
 };
 
 export const loadPedFlags = () => {
