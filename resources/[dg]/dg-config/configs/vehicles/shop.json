@@ -47,7 +47,7 @@
   },
   "timeForSale": 180,
   "classesThatNeedEmployee": ["X", "S", "A+"],
-  "employeePercentage": 0.5,
+  "employeePercentage": 2,
   "quicksell": {
     "percentage": 0.5,
     "allowedUpgrades": [
