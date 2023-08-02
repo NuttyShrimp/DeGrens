@@ -55,6 +55,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Standaardwaarde van voertuigextras worden nu wel correct gezet
 - Extras op industriele/commerciele voertuigen worden nu wel standaard geenabled
 - Error opgelost wanneer je een verwijderd voertuig probeert van een flatbed te halen
+- Keybinds die enkel een event moeten emitten zullen geen command meer executen, dit lost de event overflow op bij het spammen van o.a. `e`
 
 ## [1.2.12]
 

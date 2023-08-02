@@ -29,8 +29,9 @@ function registerKeyMap(name, description, onKeyDownCommand, onKeyUpCommand, def
     end
     if event then
       TriggerEvent("dg-lib:keyEvent", name, true)
+    else
+      ExecuteCommand(onKeyDownCommand)
     end
-    ExecuteCommand(onKeyDownCommand)
   end, false)
   RegisterCommand(cmdStringUp, function()
     if not shouldExecute then
@@ -41,8 +42,9 @@ function registerKeyMap(name, description, onKeyDownCommand, onKeyUpCommand, def
     end
     if event then
       TriggerEvent("dg-lib:keyEvent", name, false)
+    else
+      ExecuteCommand(onKeyUpCommand)
     end
-    ExecuteCommand(onKeyUpCommand)
   end, false)
   RegisterKeyMapping(cmdStringDown, description, type, default)
 end
@@ -104,18 +106,10 @@ Citizen.CreateThread(function()
   if LocalPlayer.state.keybindsLoaded then
     TriggerEvent("lib:keys:registerKeyMaps")
   end
-  RegisterCommand('+GeneralUse', function() end, false)
-  RegisterCommand('-GeneralUse', function() end, false)
   exports["dg-lib"]:registerKeyMapping('GeneralUse', 'General interaction button', '+GeneralUse', '-GeneralUse', 'e',
     true)
-
-  RegisterCommand('+housingMain', function() end, false)
-  RegisterCommand('-housingMain', function() end, false)
   exports["dg-lib"]:registerKeyMapping("housingMain", "Housing interaction Main", "+housingMain", "-housingMain", "H",
     true)
-
-  RegisterCommand('+housingSecondary', function() end, false)
-  RegisterCommand('-housingSecondary', function() end, false)
   exports["dg-lib"]:registerKeyMapping("housingSecondary", "Housing interaction Secondary", "+housingSecondary",
     "-housingSecondary", "G", true)
 
@@ -126,7 +120,8 @@ Citizen.CreateThread(function()
     modifierPressed = false
   end, false)
   exports["dg-lib"]:registerKeyMapping('ModifierKey', '(a) Secondary key (shift,ctrl,alt)', '+ModifierKey',
-    '-ModifierKey', 'LSHIFT', true)
+    '-ModifierKey', 'LSHIFT')
+
   Wait(500)
   registerKeyMaps()
 end)
