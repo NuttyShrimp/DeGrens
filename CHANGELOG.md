@@ -57,6 +57,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Extras op industriele/commerciele voertuigen worden nu wel standaard geenabled
 - Error opgelost wanneer je een verwijderd voertuig probeert van een flatbed te halen
 - Keybinds die enkel een event moeten emitten zullen geen command meer executen, dit lost de event overflow op bij het spammen van o.a. `e`
+- Mogelijke fix dat enginesounds van voertuigen die in je buurt zijn wanneer je inlaad, niet geapplied worden
 
 ## [1.2.12]
 

@@ -1,6 +1,7 @@
 import { Events, Statebags, UI } from '@dgx/client';
 
 Statebags.addEntityStateBagChangeHandler('entity', 'engineSound', (_, vehicle, engineSound) => {
+  PreloadVehicleAudio(GetEntityModel(vehicle));
   ForceVehicleEngineAudio(vehicle, engineSound);
 });
 
