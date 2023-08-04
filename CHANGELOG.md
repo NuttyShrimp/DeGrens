@@ -58,6 +58,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Error opgelost wanneer je een verwijderd voertuig probeert van een flatbed te halen
 - Keybinds die enkel een event moeten emitten zullen geen command meer executen, dit lost de event overflow op bij het spammen van o.a. `e`
 - Mogelijke fix dat enginesounds van voertuigen die in je buurt zijn wanneer je inlaad, niet geapplied worden
+- Tweets die je binnenkrijgt als de app niet openstaat krijg je niet meer dubbel te zien
 
 ## [1.2.12]
 

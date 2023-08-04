@@ -2,6 +2,7 @@ import { useMainStore } from '@src/lib/stores/useMainStore';
 import { useConfigmenuStore } from '@src/main/configmenu/stores/useConfigmenuStore';
 
 import { addNotification } from '../../lib';
+import { usePhoneStore } from '../../stores/usePhoneStore';
 
 import { useTwitterAppStore } from './stores/useTwitterAppStore';
 import { changeTweetStatus } from './lib';
@@ -9,7 +10,10 @@ import { changeTweetStatus } from './lib';
 export const events: Phone.Events = {};
 
 events.newTweet = (tweet: Phone.Twitter.Tweet) => {
-  useTwitterAppStore.setState(s => ({ tweets: [tweet, ...s.tweets] }));
+  // only if app is open
+  if (usePhoneStore.getState().activeApp === 'twitter') {
+    useTwitterAppStore.setState(s => ({ tweets: [tweet, ...s.tweets] }));
+  }
 
   const characterState = useMainStore.getState().character;
   if (`${characterState.firstname}_${characterState.lastname}`.replace(' ', '_') === tweet.sender_name) return;
