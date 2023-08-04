@@ -88,7 +88,7 @@
       "strike": 0,
       "time": 0,
       "price": 0,
-      "allowBurger": true
+      "allowBurger": false
     }
   ],
   "strikes": {
