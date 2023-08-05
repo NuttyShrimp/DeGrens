@@ -36,6 +36,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - PDM medewerker krijgt meer van een verkoop
 - Scuff impound optie weggehaald voor burgers door abuse...
 - Text size van chat is nu "responsive" gebasseerd op de aantal pixels in de hoogte van je game
+- Distance toegevoegd aan carry + escort logs
 
 ### Fixed
 

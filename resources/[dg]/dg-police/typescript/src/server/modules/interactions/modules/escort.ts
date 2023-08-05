@@ -44,7 +44,12 @@ RPC.register('police:interactions:canEscortPlayer', (src: number, target: number
 Events.onNet('police:interactions:escort', (src: number, target: number) => {
   escortingPlayers.set(src, target);
   Events.emitNet('police:interactions:getEscorted', target, src);
-  Util.Log('police:interactions:escort', { target }, `${Util.getName(src)} has started escorting a player`, src);
+  Util.Log(
+    'police:interactions:escort',
+    { target, distance: Util.getDistanceToPlayer(src, target) },
+    `${Util.getName(src)} has started escorting a player`,
+    src
+  );
 });
 
 Events.onNet('police:interactions:stopEscort', (src: number) => {

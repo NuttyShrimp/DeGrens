@@ -263,6 +263,12 @@ class Util extends UtilShared {
       handler(source, isNewCharacter);
     });
   };
+
+  getDistanceToPlayer = (src: number, targetSrvId: number) => {
+    const srcCoords = this.getPlyCoords(src);
+    const targetCoords = this.getPlyCoords(targetSrvId);
+    return srcCoords.distance(targetCoords);
+  };
 }
 
 export class Status {
