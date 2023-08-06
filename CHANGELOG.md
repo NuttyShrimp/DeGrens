@@ -20,6 +20,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Metadata aan een debt
 - Add nuttys tailscale API as an allowed domain for the internal API
 - `voice-r` command to reconnect to the mumble/voice server
+- DSU zomer training camp
+- Cobra studios livery voor burrito
+- King pills polo texture
+- Politie arm band voor vrouwen
+- Politie M5 heeft nu ook de battenburg livery
 
 ### Changed
 
@@ -37,6 +42,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Scuff impound optie weggehaald voor burgers door abuse...
 - Text size van chat is nu "responsive" gebasseerd op de aantal pixels in de hoogte van je game
 - Distance toegevoegd aan carry + escort logs
+- Enkele textures binnen MRPD zijn opgefrist
+- SRT livery van Politie V90 aangepast
 
 ### Fixed
 
@@ -62,6 +69,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Mogelijke fix dat enginesounds van voertuigen die in je buurt zijn wanneer je inlaad, niet geapplied worden
 - Tweets die je binnenkrijgt als de app niet openstaat krijg je niet meer dubbel te zien
 - De lijst van de message app werkt terug
+- Politie A6 en M5E39 hun zitplaatsen zijn gecorigeerd
 
 ## [1.2.12]
 
