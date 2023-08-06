@@ -1,4 +1,4 @@
-import { SQL, Util } from '@dgx/server';
+import { Admin, SQL, Util } from '@dgx/server';
 import { queue_priority } from 'db';
 import { getModule } from 'moduleController';
 import { mainLogger } from 'sv_logger';
@@ -60,7 +60,7 @@ class QueueManager {
   }
 
   private isSlotAvailable() {
-    return this.serverSize - GetNumPlayerIndices() != 0;
+    return this.serverSize - GetNumPlayerIndices() > 0;
   }
 
   getQueuedPlayers() {
@@ -90,7 +90,12 @@ class QueueManager {
   }
 
   async joinQueue(src: number, name: string, steamId: string, deferrals: Record<string, any>) {
-    if (this.isSlotAvailable() && this.queue.length === 0) {
+    // NOTE: This is disabled because if 2 players join at the same time with 1 slot open, our server will go over the limit
+    // if (this.isSlotAvailable() && this.queue.length === 0) {
+    //   deferrals.done();
+    //   return;
+    // }
+    if (Admin.hasSteamIdPermission(steamId, 'developer')) {
       deferrals.done();
       return;
     }
