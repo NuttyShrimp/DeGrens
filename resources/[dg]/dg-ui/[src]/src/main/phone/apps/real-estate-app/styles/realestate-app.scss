@@ -1,0 +1,10 @@
+.realestate-app {
+  &-buy-tab {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 15vh;
+    & > * {
+      margin-bottom: 0.5vh;
+    }
+  }
+}

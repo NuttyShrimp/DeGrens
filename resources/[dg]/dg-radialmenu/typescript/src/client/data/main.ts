@@ -144,4 +144,12 @@ export const main: RadialMenu.Entry[] = [
       return GetPedInVehicleSeat(currentVehicle, -1) === PlayerPedId();
     },
   },
+  {
+    title: 'Enter property',
+    icon: 'door-open',
+    type: 'dgxClient',
+    event: 'realestate:tryEnterProperty',
+    shouldClose: true,
+    isEnabled: () => global.exports['dg-real-estate'].atPropertyDoor(),
+  },
 ];

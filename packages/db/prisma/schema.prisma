@@ -164,10 +164,10 @@ model character_reputations {
 }
 
 model characters {
-  citizenid                        Int                     @id @default(autoincrement())
-  steamid                          String                  @db.VarChar(255)
-  last_updated                     DateTime                @default(now()) @db.Timestamp(0)
-  created_at                       DateTime                @default(now()) @db.Timestamp(0)
+  citizenid                        Int                          @id @default(autoincrement())
+  steamid                          String                       @db.VarChar(255)
+  last_updated                     DateTime                     @default(now()) @db.Timestamp(0)
+  created_at                       DateTime                     @default(now()) @db.Timestamp(0)
   apartments                       apartments[]
   bank_accounts_access             bank_accounts_access[]
   business_employee                business_employee[]
@@ -175,10 +175,10 @@ model characters {
   character_data                   character_data?
   character_info                   character_info?
   character_reputations            character_reputations?
-  users                            users                   @relation(fields: [steamid], references: [steamid], onDelete: Cascade, map: "characters_ibfk_1")
+  users                            users                        @relation(fields: [steamid], references: [steamid], onDelete: Cascade, map: "characters_ibfk_1")
   crypto_wallets                   crypto_wallets[]
-  debts_debts_cidTocharacters      debts[]                 @relation("debts_cidTocharacters")
-  debts_debts_given_byTocharacters debts[]                 @relation("debts_given_byTocharacters")
+  debts_debts_cidTocharacters      debts[]                      @relation("debts_cidTocharacters")
+  debts_debts_given_byTocharacters debts[]                      @relation("debts_given_byTocharacters")
   gang_members                     gang_members[]
   lockers                          lockers[]
   phone_contacts                   phone_contacts[]
@@ -198,6 +198,7 @@ model characters {
   duty_times                       duty_times[]
   kofi_vehicleshop                 kofi_vehicleshop[]
   flyer_request                    flyer_request[]
+  realestate_location_access       realestate_location_access[]
 
   @@index([steamid], map: "steamid")
 }
@@ -750,6 +751,26 @@ model flyer_request {
   link       String     @db.LongText
   approved   Boolean    @default(false)
   characters characters @relation(fields: [cid], references: [citizenid], onDelete: Cascade, map: "fk_flyer_request_cid")
+}
+
+model realestate_locations {
+  id                         Int                          @id @default(autoincrement())
+  name                       String                       @unique
+  garage                     String?
+  stash                      String?
+  logout                     String?
+  clothing                   String?
+  realestate_location_access realestate_location_access[]
+}
+
+model realestate_location_access {
+  location_id Int
+  cid         Int
+  owner       Boolean              @default(false)
+  location    realestate_locations @relation(fields: [location_id], references: [id], onDelete: Cascade, onUpdate: Cascade, map: "fk_realestate_location_access_id")
+  character   characters           @relation(fields: [cid], references: [citizenid], onDelete: Cascade, onUpdate: Cascade, map: "fk_realestate_location_access_access_cid")
+
+  @@id([location_id, cid])
 }
 
 enum bank_accounts_type {

@@ -24,6 +24,7 @@ export const SimpleForm: FC<React.PropsWithChildren<SimpleForm.Form>> = props =>
     setBtnsDisabled(true);
     if (props.onDecline) {
       props.onDecline();
+      return;
     }
     hideFormModal();
   };

@@ -1,6 +1,6 @@
 let currentSpotBox: NodeJS.Timer;
 
-export const createCurrentSpotBox = (spot: Garage.ParkingSpot) => {
+export const createCurrentSpotBox = (spot: Vehicles.Garages.ParkingSpot) => {
   if (currentSpotBox) {
     clearInterval(currentSpotBox);
   }

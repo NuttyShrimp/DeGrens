@@ -678,8 +678,13 @@ class SQL {
     return global.exports['dg-sql'].insert(query, params, cb);
   }
 
-  async insertValues(table: string, values: { [k: string]: any }[] = [], cb?: (result: any) => void) {
-    return global.exports['dg-sql'].insertValues(table, values, cb);
+  async insertValues(
+    table: string,
+    values: { [k: string]: any }[] = [],
+    cb?: (result: any) => void,
+    ignoreDuplicates?: boolean
+  ) {
+    return global.exports['dg-sql'].insertValues(table, values, cb, ignoreDuplicates);
   }
 }
 

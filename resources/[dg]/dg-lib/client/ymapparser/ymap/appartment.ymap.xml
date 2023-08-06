@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CMapData>
+  <name>appartment</name>
+  <parent />
+  <flags value="0" />
+  <contentFlags value="1" />
+  <streamingExtentsMin x="-207.887955" y="-206.981674" z="-202.65509" />
+  <streamingExtentsMax x="206.2805" y="206.905273" z="203.8335" />
+  <entitiesExtentsMin x="-7.887959" y="-6.98167467" z="-2.65508819" />
+  <entitiesExtentsMax x="6.280498" y="6.905273" z="3.833496" />
+  <entities>
+    <Item type="CEntityDef">
+      <archetypeName>appartment</archetypeName>
+      <flags value="32" />
+      <guid value="0" />
+      <position x="0" y="0" z="0" />
+      <rotation x="0" y="0" z="0" w="1" />
+      <scaleXY value="1" />
+      <scaleZ value="1" />
+      <parentIndex value="-1" />
+      <lodDist value="200" />
+      <childLodDist value="0" />
+      <lodLevel>LODTYPES_DEPTH_ORPHANHD</lodLevel>
+      <numChildren value="0" />
+      <priorityLevel>PRI_REQUIRED</priorityLevel>
+      <extensions />
+      <ambientOcclusionMultiplier value="255" />
+      <artificialAmbientOcclusion value="255" />
+      <tintValue value="0" />
+    </Item>
+  </entities>
+</CMapData>

@@ -1512,3 +1512,91 @@ devData.reportMessages = [
     },
   },
 ];
+
+devData.realEstateProperties = [
+  {
+    name: 'San Andreas Drive 1',
+    locked: false,
+    owned: true,
+    accessList: [
+      {
+        cid: 1001,
+        name: 'Dev Looper',
+      },
+      {
+        cid: 1002,
+        name: 'Benny Van Der Meers with a way to long name omega lul',
+      },
+      {
+        cid: 1003,
+        name: 'Benny Van Der Meers',
+      },
+      {
+        cid: 1004,
+        name: 'Benny Van Der Meers',
+      },
+      {
+        cid: 1005,
+        name: 'Benny Van Der Meers',
+      },
+      {
+        cid: 1006,
+        name: 'Benny Van Der Meers',
+      },
+      {
+        cid: 1007,
+        name: 'Benny Van Der Meers',
+      },
+      {
+        cid: 1008,
+        name: 'Benny Van Der Meers',
+      },
+      {
+        cid: 1009,
+        name: 'Benny Van Der Meers',
+      },
+      {
+        cid: 1010,
+        name: 'Benny Van Der Meers',
+      },
+    ],
+    flags: {
+      garage: true,
+      locations: true,
+    },
+    metadata: {
+      maxKeys: 5,
+    },
+  },
+  {
+    name: 'Houston Crossing 15',
+    locked: false,
+    accessList: [],
+    // Adding some data that should not be available but we magically got it
+    flags: {
+      garage: true,
+    },
+  },
+  {
+    name: 'Rodeo Drive 1',
+    locked: false,
+    owned: true,
+    accessList: [
+      {
+        cid: 1001,
+        name: 'Dev Looper',
+      },
+      {
+        cid: 1002,
+        name: 'Benny Van Der Meers',
+      },
+    ],
+    flags: {
+      garage: false,
+      locations: true,
+    },
+    metadata: {
+      maxKeys: 5,
+    },
+  },
+] as Phone.RealEstate.Property[];

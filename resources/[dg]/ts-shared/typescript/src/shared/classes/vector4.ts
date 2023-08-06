@@ -21,8 +21,8 @@ export class Vector4 implements Vec4 {
     return new Vector4(v1.x + v2.x, v1.y + v2.y, v1.z + v2.z, v1.w + v2.w);
   }
 
-  public static subtract(v1: Vec4, v2: Vec4): Vector4 {
-    return new Vector4(v1.x - v2.x, v1.y - v2.y, v1.z - v2.z, v1.w - v2.w);
+  public static subtract(v1: Vec4, v2: Vec4 | Vec3): Vector4 {
+    return new Vector4(v1.x - v2.x, v1.y - v2.y, v1.z - v2.z, 'w' in v2 ? v1.w - v2.w : 0);
   }
 
   public static multiply(v1: Vec4, v2: Vec4 | number): Vector4 {
@@ -63,7 +63,7 @@ export class Vector4 implements Vec4 {
    * @param v Vector4 to find Euclidean magnitude between.
    * @returns Euclidean magnitude with another vector.
    */
-  public distanceSquared(v: Vec4): number {
+  public distanceSquared(v: Vec4 | Vec3): number {
     const w: Vector4 = this.subtract(v);
     return Vector4.dotProduct(w, w);
   }
@@ -74,7 +74,7 @@ export class Vector4 implements Vec4 {
    * @param v Vector4 to find distance between.
    * @returns Distance between this and another vector.
    */
-  public distance(v: Vec4): number {
+  public distance(v: Vec4 | Vec3): number {
     return Math.sqrt(this.distanceSquared(v));
   }
 
@@ -90,7 +90,7 @@ export class Vector4 implements Vec4 {
     return Vector4.add(this, v);
   }
 
-  public subtract(v: Vec4): Vector4 {
+  public subtract(v: Vec4 | Vec3): Vector4 {
     return Vector4.subtract(this, v);
   }
 

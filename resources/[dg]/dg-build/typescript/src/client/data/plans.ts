@@ -589,3 +589,138 @@ Plans.tihulu_kafi_motel = {
     },
   ],
 };
+
+Plans.caravan_shell = {
+  shell: 'caravan_shell',
+  saveToCache: true,
+  origin: false,
+  spawnOffset: new Vector4(-1.41339135, -2.07207727, -1.01500738, 0),
+  modulo: {
+    xLimit: 20,
+    yLimit: 20,
+    multi: {
+      x: 15.0,
+      y: 15.0,
+      z: -5.0,
+    },
+  },
+  interactZone: [
+    {
+      offset: new Vector3(-1.41, -2.07, -1.61),
+      dist: 1.5,
+      name: 'exit',
+      GeneralUse: {
+        label: 'Exit',
+        event: 'realestate:leaveProperty',
+      },
+    },
+  ],
+};
+
+Plans.playerhouse_tier1 = {
+  shell: 'playerhouse_tier1',
+  saveToCache: true,
+  origin: false,
+  spawnOffset: new Vector4(3.69772673, -15.4950533, 0.195482731, 0.0),
+  modulo: {
+    xLimit: 20,
+    yLimit: 25,
+    multi: {
+      x: 15.0,
+      y: 15.0,
+      z: -5.0,
+    },
+  },
+  interactZone: [
+    {
+      offset: new Vector3(3.7, -15.5, -0.4),
+      dist: 1.5,
+      name: 'exit',
+      GeneralUse: {
+        label: 'Exit',
+        event: 'realestate:leaveProperty',
+      },
+    },
+  ],
+};
+
+Plans.appartment = {
+  shell: 'appartment',
+  saveToCache: true,
+  origin: false,
+  spawnOffset: new Vector4(4.5716095, -6.40091848, -2.32000947, 0),
+  modulo: {
+    xLimit: 18,
+    yLimit: 18,
+    multi: {
+      x: 15.0,
+      y: 15.0,
+      z: -5.0,
+    },
+  },
+  interactZone: [
+    {
+      offset: new Vector3(4.57, -6.4, -1.66),
+      dist: 1.5,
+      name: 'exit',
+      GeneralUse: {
+        label: 'Exit',
+        event: 'realestate:leaveProperty',
+      },
+    },
+  ],
+};
+
+Plans.franklin = {
+  shell: 'franklin',
+  saveToCache: true,
+  origin: false,
+  spawnOffset: new Vector4(10.857358, 7.91889524, 1.34843779, -125.0),
+  modulo: {
+    xLimit: 40,
+    yLimit: 25,
+    multi: {
+      x: 15.0,
+      y: 15.0,
+      z: -5.0,
+    },
+  },
+  interactZone: [
+    {
+      offset: new Vector3(10.86, 7.92, 2.0),
+      dist: 1.5,
+      name: 'exit',
+      GeneralUse: {
+        label: 'Exit',
+        event: 'realestate:leaveProperty',
+      },
+    },
+  ],
+};
+
+Plans.playerhouse_tier3 = {
+  shell: 'playerhouse_tier3',
+  saveToCache: true,
+  origin: false,
+  spawnOffset: new Vector4(-22.07004, -0.332697839, 6.69178629, 90.0),
+  modulo: {
+    xLimit: 35,
+    yLimit: 22,
+    multi: {
+      x: 15.0,
+      y: 15.0,
+      z: -15.0,
+    },
+  },
+  interactZone: [
+    {
+      offset: new Vector3(-22.08, -0.34, 7.21),
+      dist: 1.5,
+      name: 'exit',
+      GeneralUse: {
+        label: 'Exit',
+        event: 'realestate:leaveProperty',
+      },
+    },
+  ],
+};

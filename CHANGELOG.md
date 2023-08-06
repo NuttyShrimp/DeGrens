@@ -25,6 +25,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - King pills polo texture
 - Politie arm band voor vrouwen
 - Politie M5 heeft nu ook de battenburg livery
+- Add real estate (currently no decoration yet)
 
 ### Changed
 

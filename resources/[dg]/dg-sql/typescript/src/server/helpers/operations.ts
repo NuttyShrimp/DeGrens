@@ -1,7 +1,7 @@
 import handler from '../classes/handler';
 import { OkPacket } from 'mysql2';
 
-const prepareInsertStatement = (table: string, values: any[]) => {
+const prepareInsertStatement = (table: string, values: any[], ignoreDuplicates: boolean) => {
   if (values.length < 1) {
     throw new Error('No values to insert');
   }
@@ -9,7 +9,7 @@ const prepareInsertStatement = (table: string, values: any[]) => {
     throw new Error('Values must be an array of objects');
   }
   const keys = Object.keys(values[0]);
-  let sql = `INSERT INTO ${table} (${keys.join(', ')})
+  let sql = `INSERT${ignoreDuplicates ? ' IGNORE' : ''} INTO ${table} (${keys.join(', ')})
              VALUES `;
   values.forEach((value, index) => {
     sql += `(${keys.map(() => `?`).join(', ')})`;
@@ -54,14 +54,19 @@ export const doInsert = async (query: string, params: any[] = [], cb?: (result: 
   return result.insertId ?? null;
 };
 
-export const doInsertValues = async (table: string, values: any[] = [], cb?: (result: any) => void) => {
+export const doInsertValues = async (
+  table: string,
+  values: any[] = [],
+  cb?: (result: any) => void,
+  ignoreDuplicates = false
+) => {
   if (values.length === 0) {
     if (cb) {
       cb(null);
     }
     return;
   }
-  const query = prepareInsertStatement(table, values);
+  const query = prepareInsertStatement(table, values, ignoreDuplicates);
   const result = (await doQuery(
     query,
     values.reduce((acc, valObj) => {

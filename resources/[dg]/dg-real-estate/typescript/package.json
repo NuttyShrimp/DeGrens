@@ -1,0 +1,22 @@
+{
+  "name": "dg-realestate",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "NuttyShrimp",
+  "license": "MIT",
+  "scripts": {
+    "build": "node ../../../../scripts/build.js --client --server",
+    "build:dev": "node ../../../../scripts/build.js --client --server --dev",
+    "watch": "node ../../../../scripts/watch --client --server",
+    "lint": "eslint --fix --ext .js,.ts ./src",
+    "format": "prettier --write --no-error-on-unmatched-pattern src/**/*.{js,ts,json,md}"
+  },
+  "devDependencies": {
+    "@dgx/client": "workspace:*",
+    "@dgx/server": "workspace:*",
+    "@dgx/shared": "workspace:*",
+    "esbuild": "*",
+    "logger": "workspace:*",
+    "tsconfig": "workspace:*"
+  }
+}

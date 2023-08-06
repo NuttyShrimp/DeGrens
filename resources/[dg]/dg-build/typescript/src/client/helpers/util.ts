@@ -31,7 +31,7 @@ export const OffsetsModulo = (vect: Vector3, pModulo: Buildplan['modulo'], multi
 };
 
 export const getGeneratorFromRoom = (plan: Buildplan, multi: number) => {
-  let generator = new Vector3(100.0, 100.0, -100.0);
+  let generator = Vector3.clone(Util.getPlyCoords().add(new Vector3(0, 0, -100)));
 
   if (plan.generator) {
     generator = new Vector3(plan.generator.x, plan.generator.y, plan.generator.z);

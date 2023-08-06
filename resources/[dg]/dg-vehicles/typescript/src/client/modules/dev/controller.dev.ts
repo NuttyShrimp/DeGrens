@@ -3,7 +3,7 @@ import { createCurrentSpotBox, removeCurrentSpotBox } from './service.dev';
 
 setImmediate(() => {
   if (Util.isDevEnv()) {
-    onNet('vehicles:dev:currentSpot', (spot: Garage.ParkingSpot) => {
+    onNet('vehicles:dev:currentSpot', (spot: Vehicles.Garages.ParkingSpot) => {
       if (spot) {
         createCurrentSpotBox(spot);
         return;

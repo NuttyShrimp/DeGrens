@@ -11,7 +11,6 @@ import { PhoneList } from './components/list';
 const Component = () => {
   const [tab, setTab] = useState(0);
 
-  // TODO: add slide transition
   return (
     <AppContainer>
       <Tabs value={tab} onChange={(e, v) => setTab(v)} variant='fullWidth'>

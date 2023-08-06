@@ -57,9 +57,10 @@ declare namespace Peek {
 declare interface Buildplan {
   shell: string;
   saveToCache: boolean;
+  // Is shell somewhere placed on the map where we can preload it?
   origin: Vec3 | false;
   // Random location where a duplicate of the instance will be copied to
-  generator: Vec3;
+  generator?: Vec3;
   spawnOffset: Vec4;
   modulo?: {
     multi: Coords;

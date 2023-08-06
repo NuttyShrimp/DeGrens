@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CMapData>
+  <name>playerhouse_tier3</name>
+  <parent />
+  <flags value="0" />
+  <contentFlags value="1" />
+  <streamingExtentsMin x="-222.719315" y="-203.978027" z="-200.000214" />
+  <streamingExtentsMax x="209.6521" y="214.8798" z="209.698151" />
+  <entitiesExtentsMin x="-22.71931" y="-3.978034" z="-0.000218" />
+  <entitiesExtentsMax x="9.652101" y="14.87981" z="9.698149" />
+  <entities>
+    <Item type="CEntityDef">
+      <archetypeName>playerhouse_tier3</archetypeName>
+      <flags value="32" />
+      <guid value="0" />
+      <position x="0" y="0" z="0" />
+      <rotation x="0" y="0" z="0" w="1" />
+      <scaleXY value="1" />
+      <scaleZ value="1" />
+      <parentIndex value="-1" />
+      <lodDist value="200" />
+      <childLodDist value="0" />
+      <lodLevel>LODTYPES_DEPTH_ORPHANHD</lodLevel>
+      <numChildren value="0" />
+      <priorityLevel>PRI_REQUIRED</priorityLevel>
+      <extensions />
+      <ambientOcclusionMultiplier value="255" />
+      <artificialAmbientOcclusion value="255" />
+      <tintValue value="0" />
+    </Item>
+  </entities>
+</CMapData>

@@ -129,6 +129,18 @@ class Vehicles {
   getVehicleHasBulletProofTires = (vehicle: number): boolean => {
     return global.exports['dg-vehicles'].getVehicleHasBulletProofTires(vehicle);
   };
+
+  registerGarage = (garage: Omit<Vehicles.Garages.Garage, 'runtime'>) => {
+    global.exports['dg-vehicles'].registerGarage(garage);
+  };
+
+  unregisterGarage = (garageId: string) => {
+    global.exports['dg-vehicles'].unregisterGarage(garageId);
+  };
+
+  openGarage = (plyId: number, garageId: string, shared = false): Promise<void> => {
+    return global.exports['dg-vehicles'].openGarage(plyId, garageId, shared);
+  };
 }
 
 export default {

@@ -116,12 +116,12 @@ export const showCheckmarkModal = (payload?: Function) => {
   }, 2000);
 };
 
-export const showWarningModal = (payload?: Function) => {
+export const showWarningModal = (payload?: Function, message?: string) => {
   usePhoneFormStore.setState({
     visible: false,
     checkmark: false,
     element: null,
-    warning: true,
+    warning: message ?? true,
   });
   setTimeout(() => {
     hideFormModal();
