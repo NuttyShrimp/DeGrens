@@ -61,6 +61,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Keybinds die enkel een event moeten emitten zullen geen command meer executen, dit lost de event overflow op bij het spammen van o.a. `e`
 - Mogelijke fix dat enginesounds van voertuigen die in je buurt zijn wanneer je inlaad, niet geapplied worden
 - Tweets die je binnenkrijgt als de app niet openstaat krijg je niet meer dubbel te zien
+- De lijst van de message app werkt terug
 
 ## [1.2.12]
 
