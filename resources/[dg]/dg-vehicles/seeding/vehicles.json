@@ -10462,5 +10462,17 @@
     "price": 475000,
     "shop": "nfs",
     "type": "land"
+  },
+  {
+    "category": "sedans",
+    "model": "er34",
+    "brand": "Nissan",
+    "name": "R34 Drift",
+    "class": "A",
+    "defaultStock": 5,
+    "restockTime": 14,
+    "price": 150000,
+    "shop": "nfs",
+    "type": "land"
   }
 ]
