@@ -16,18 +16,6 @@ class Inventory extends UtilShared.Singleton<Inventory>() {
       if (!this.usageHandlers.has(state.name)) return;
       this.usageHandlers.get(state.name)!.forEach(handler => handler(src, state));
     });
-    on(
-      'inventory:inventoryUpdated',
-      (type: Inventory.Type, identifier: string, action: 'add' | 'remove', itemState: Inventory.ItemState) => {
-        const handlerData = this.updateHandlers.get(type);
-        if (!handlerData) return;
-        handlerData.forEach(data => {
-          if (data.item && data.item !== itemState.name) return;
-          if (data.action && data.action !== action) return;
-          data.handler(identifier, action, itemState);
-        });
-      }
-    );
     on('inventory:loaded', () => {
       this.isLoaded = true;
     });
@@ -243,6 +231,20 @@ class Inventory extends UtilShared.Singleton<Inventory>() {
     const allHandlerData = this.updateHandlers.get(type) ?? [];
     allHandlerData.push({ handler, item, action });
     this.updateHandlers.set(type, allHandlerData);
+    if (allHandlerData.length === 1) {
+      on(
+        'inventory:inventoryUpdated',
+        (type: Inventory.Type, identifier: string, action: 'add' | 'remove', itemState: Inventory.ItemState) => {
+          const handlerData = this.updateHandlers.get(type);
+          if (!handlerData) return;
+          handlerData.forEach(data => {
+            if (data.item && data.item !== itemState.name) return;
+            if (data.action && data.action !== action) return;
+            data.handler(identifier, action, itemState);
+          });
+        }
+      );
+    }
   };
 
   public awaitLoad = async () => {
