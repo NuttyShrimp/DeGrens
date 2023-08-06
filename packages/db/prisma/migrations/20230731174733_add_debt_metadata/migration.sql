@@ -5,4 +5,4 @@
 
 */
 -- AlterTable
-ALTER TABLE `debts` ADD COLUMN `metadata` LONGTEXT NOT NULL;
+ALTER TABLE `debts` ADD COLUMN `metadata` LONGTEXT NOT NULL DEFAULT '{}';
