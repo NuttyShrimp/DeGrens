@@ -13,12 +13,6 @@ export const police: RadialMenu.Entry[] = [
     },
   },
   {
-    title: 'Toon Badge',
-    icon: 'id-badge',
-    type: 'dgxServer',
-    event: 'police:badges:showPoliceBadge',
-  },
-  {
     title: 'Open Locker',
     icon: 'box-archive',
     type: 'client',
